@@ -11,6 +11,8 @@ import java.util.Map;
 import javax.persistence.Embedded;
 import javax.persistence.Transient;
 
+import org.json.JSONArray;
+
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.EmailTemplates;
@@ -84,7 +86,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(TwitterQueue.class);
 	ObjectifyService.register(Log.class);
 	ObjectifyService.register(URLShortener.class);
-        ObjectifyService.register(Trigger.class);
+	ObjectifyService.register(Trigger.class);
 
 	ObjectifyService.register(Widget.class);
 
@@ -131,6 +133,33 @@ public class ObjectifyGenericDao<T> extends DAOBase
     public void deleteKeys(Iterable<Key<T>> keys)
     {
 	ofy().delete(keys);
+    }
+
+    // MC - Delete keys by Ids
+    public void deleteByIds(JSONArray ids)
+    {
+
+	List<Key<T>> keys = new ArrayList<Key<T>>();
+
+	// Add keys
+	for (int i = 0; i < ids.length(); i++)
+	{
+	    try
+	    {
+		String keyString = ids.getString(i);
+		Long key = Long.parseLong(keyString);
+
+		// Add to keys list
+		keys.add(new Key<T>(clazz, key));
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+
+	// Delete all
+	deleteKeys(keys);
     }
 
     public T get(Long id) throws EntityNotFoundException
