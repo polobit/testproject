@@ -2,7 +2,6 @@ package com.agilecrm.core.api;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -15,10 +14,11 @@ import org.codehaus.jackson.map.ObjectMapper;
 import com.agilecrm.activities.Task;
 import com.agilecrm.campaign.Campaign;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Note;
 import com.agilecrm.deals.Opportunity;
 import com.sun.jersey.api.json.JSONWithPadding;
 
-@Path("api/js/api")
+@Path("core/js/api")
 public class JSAPI
 {
     // This method is called if TEXT_PLAIN is request
@@ -294,27 +294,6 @@ public class JSAPI
 	contact.subtractScore(score);
 	return true;
 
-    }
-
-    // New Task
-    @Path("js/tasks")
-    @POST
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Task createTask(Task task)
-    {
-	task.save();
-	return task;
-    }
-
-    @Path("js/opportunity")
-    @POST
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Opportunity createOpportunity(Opportunity opportunity)
-    {
-	opportunity.save();
-	return opportunity;
     }
 
     // Campaign

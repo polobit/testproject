@@ -201,7 +201,7 @@ function propertyJSON(name, id, type) {
 
 function agile_createContact(data)
 {
-	 var properties = [];
+ var properties = [];
 	 
 	 for (var key in data) {
 		  if (data.hasOwnProperty(key)) {
@@ -210,16 +210,12 @@ function agile_createContact(data)
 		  }
 		}
 	 
-	 //properties.push(propertyJSON('first_name', 'fname'));
-	 //properties.push(propertyJSON('last_name', 'lname'));
-	 //properties.push(propertyJSON('email', 'api@jsapi.com'));
-	 
 	 var model = {};
 	 model.properties = properties;
-	    
-	 // Post
+	 
+	 // Get
 	 var agile_url = "http://localhost:8888/core/js/api/contacts?callback=?&contact=" + encodeURIComponent(JSON.stringify(model));
-	 	
+	 
 	 getJSON(agile_url,function(data){
 	 	    var success = data.flag === 'successful';
 	 	    if(success) {
@@ -230,21 +226,16 @@ function agile_createContact(data)
 
 function agile_addNote(data)
 {
- var properties = [];
-	 
-	 for (var key in data) {
-		  if (data.hasOwnProperty(key)) {
-		    //alert(key + " -> " + p[key]);
-			  properties.push(propertyJSON(key, data[key]));
-		  }
-		}
-	 
-	 var model = {};
-	 model.properties = properties;
-	    
-	 // Post
-	 var agile_url = "http://localhost:8888/core/js/api/js/note?callback=?&note=" + encodeURIComponent(JSON.stringify(model));
-	 	
+	if(!data.email)
+	{
+		console.log("Email not found.Note is not added.");
+		return;
+	}
+	var params ="email={0}&note={1}".format(encodeURIComponent(data.email), encodeURIComponent(data[1]));
+	
+	 // Get
+	 var agile_url = "http://localhost:8888/core/js/api/js/note?callback=?& " + params ;
+	 console.log(agile_url);
 	 getJSON(agile_url,function(data){
 	 	    var success = data.flag === 'successful';
 	 	    if(success) {
@@ -255,21 +246,16 @@ function agile_addNote(data)
 
 function agile_addTask(data)
 {
- var properties = [];
-	 
-	 for (var key in data) {
-		  if (data.hasOwnProperty(key)) {
-		    //alert(key + " -> " + p[key]);
-			  properties.push(propertyJSON(key, data[key]));
-		  }
-		}
-	 
-	 var model = {};
-	 model.properties = properties;
-	    
-	 // Post
-	 var agile_url = "http://localhost:8888/core/js/api/js/task?callback=?&task=" + encodeURIComponent(JSON.stringify(model));
-	 	
+	if(!data.email)
+	{
+		console.log("Email not found.Task is not added.");
+		return;
+	}
+	var params ="email={0}&task={1}".format(encodeURIComponent(data.email), encodeURIComponent(data[1]));
+	
+	 // Get
+	 var agile_url = "http://localhost:8888/core/js/api/js/task?callback=?& " + params;
+	 	console.log(agile_url);
 	 getJSON(agile_url,function(data){
 	 	    var success = data.flag === 'successful';
 	 	    if(success) {
@@ -280,21 +266,16 @@ function agile_addTask(data)
 
 function agile_addDeal(data)
 {
- var properties = [];
-	 
-	 for (var key in data) {
-		  if (data.hasOwnProperty(key)) {
-		    //alert(key + " -> " + p[key]);
-			  properties.push(propertyJSON(key, data[key]));
-		  }
-		}
-	 
-	 var model = {};
-	 model.properties = properties;
-	    
-	 // Post
-	 var agile_url = "http://localhost:8888/core/js/api/js/opportunity?callback=?&opportunity=" + encodeURIComponent(JSON.stringify(model));
-	 	
+	if(!data.email)
+	{
+		console.log("Email not found.Deal is not added.");
+		return;
+	}
+	var params ="email={0}&opportunity={1}".format(encodeURIComponent(data.email), encodeURIComponent(data[1]));
+	
+	 // Get
+	 var agile_url = "http://localhost:8888/core/js/api/js/opportunity?callback=?&" + params;
+	 console.log(agile_url);
 	 getJSON(agile_url,function(data){
 	 	    var success = data.flag === 'successful';
 	 	    if(success) {
