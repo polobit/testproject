@@ -1,10 +1,10 @@
 <script id="settings-email-templates-collection-template" type="text/html">
 	
 	<div class="row">
-		<div class="span9">
+		<div class="span12">
 			<div class="page-header">
     			<h1>List of Emails</h1>
-				<a href="#email-template-add" class="btn right" id="addEmailTemplate" style='top:-25px;position:relative'>
+				<a href="#email-template-add" class="btn right" id="addEmailTemplate" style='top:-30px;position:relative'>
 				   <span><i class='icon-plus-sign'/></span> Add Email Template</a>
 	  		</div>
 		</div>
@@ -15,6 +15,7 @@
 			<table class="table table-bordered table-striped" >
 				<thead>
     				<tr>
+						<th></th>
       					<th>Id</th>
       					<th>subject</th>
      				 	<th>description</th>
@@ -27,12 +28,34 @@
 		</div>
 		<div class='span3'>
 			<div class="well">
+				<h3>
+					Export to CSV
+				</h3><br/>
+				<p>
+					You can use workflow to automate most of your follow-ups. It's marketing and sales automation tool.
+				</p>
+				<p>
+					Eg: you can send an email to all users who have signed up on your site. And then based on their behavior in the control panel, you can send them targetted messages periodically.
+				</p>
+
+				<br/>
+				<h3>
+					What is marketing automation?
+				</h3><br/>
+				<p>
+					You can use workflow to automate most of your follow-ups. It's marketing and sales automation tool.
+				</p>
+				<p>
+					Eg: you can send an email to all users who have signed up on your site. And then based on their behavior in the control panel, you can send them targetted messages periodically.
+				</p>
 			</div>
 		</div>
 	</div>
 </script>
 
 <script id="settings-email-templates-model-template" type="text/html">
+<td><icon class='edit icon-remove-circle'></icon></td>
+
 <td>{{id}}</td>
 
 <td>{{subject}}</td>

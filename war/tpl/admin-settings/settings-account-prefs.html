@@ -25,20 +25,20 @@
 
 		 	<div class="control-group">
 				<div id="account_prefs" messg="User image has been uploaded">
-				<div class="controls">
+					<div class="controls">
 						<div class="imgholder">
 							{{#if logo}}
 								<img src="{{logo}}" height="100" width="100"/>
-							{{/if}}							
-						</div>
-						<input type="hidden" id="account_prefs_url" name="logo">  
-							<input class="upload_s3 submit" type="submit" id="account_prefs_image" value="Upload">
+							{{/if}}													
+						</div>					
+						<p><br/></p><p><input type="hidden" id="account_prefs_url" name="logo">  
+							<input class="upload_s3 submit" type="submit" id="account_prefs_image" value="Upload"></p>
 				</div>
 			</div>
 
 			<div class="form-actions">
             	<a href="#" type="submit" class="save btn btn-primary">Save changes</a> 
-				<a href="#admin" class="btn ">Close</a>
+				<a href="#admin" class="btn ">Cancel</a>
 			</div>
 		</fieldset>
 	</form>
