@@ -1,0 +1,276 @@
+package com.agilecrm.db;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.persistence.Embedded;
+import javax.persistence.Transient;
+
+import com.agilecrm.account.APIKey;
+import com.agilecrm.account.AccountPrefs;
+import com.agilecrm.account.EmailTemplates;
+import com.agilecrm.account.Opportunity;
+import com.agilecrm.activities.Event;
+import com.agilecrm.activities.Task;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactView;
+import com.agilecrm.contact.CustomFieldDef;
+import com.agilecrm.contact.Note;
+import com.agilecrm.contact.Tag;
+import com.agilecrm.core.DomainUser;
+import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.IMAPEmailPrefs;
+import com.agilecrm.user.NotificationPrefs;
+import com.agilecrm.user.SocialPrefs;
+import com.agilecrm.user.UserPrefs;
+import com.agilecrm.widgets.Widget;
+import com.agilecrm.workflows.Workflow;
+import com.campaignio.TwitterQueue;
+import com.campaignio.URLShortener;
+import com.campaignio.cron.Cron;
+import com.campaignio.logger.Log;
+import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.Query;
+import com.googlecode.objectify.util.DAOBase;
+
+public class ObjectifyGenericDao<T> extends DAOBase
+{
+
+	static final int BAD_MODIFIERS = Modifier.FINAL | Modifier.STATIC | Modifier.TRANSIENT;
+
+	static
+	{
+		ObjectifyService.register(Contact.class);
+		ObjectifyService.register(CustomFieldDef.class);
+		ObjectifyService.register(ContactView.class);
+		
+		
+		ObjectifyService.register(Note.class);
+		ObjectifyService.register(UserPrefs.class);
+		ObjectifyService.register(AgileUser.class);
+		ObjectifyService.register(DomainUser.class);
+		ObjectifyService.register(Tag.class);
+		ObjectifyService.register(SocialPrefs.class);
+		ObjectifyService.register(AccountPrefs.class);
+		ObjectifyService.register(NotificationPrefs.class);
+		
+		ObjectifyService.register(Task.class);
+		ObjectifyService.register(Event.class);
+		ObjectifyService.register(Workflow.class);
+		ObjectifyService.register(IMAPEmailPrefs.class);
+		ObjectifyService.register(EmailTemplates.class);
+		ObjectifyService.register(APIKey.class);
+		ObjectifyService.register(Opportunity.class);
+		ObjectifyService.register(Widget.class);
+		
+		
+		// Campaign
+		ObjectifyService.register(Cron.class);
+		ObjectifyService.register(TwitterQueue.class);
+		ObjectifyService.register(Log.class);
+		ObjectifyService.register(URLShortener.class);
+		
+	}
+
+	protected Class<T> clazz;
+
+	/**
+	 * We've got to get the associated domain class somehow
+	 * 
+	 * @param clazz
+	 */
+	public ObjectifyGenericDao(Class<T> clazz)
+	{
+		this.clazz = clazz;
+	}
+
+	public Key<T> put(T entity)
+
+	{
+		return ofy().put(entity);
+	}
+
+	public Map<Key<T>, T> putAll(Iterable<T> entities)
+	{
+		return ofy().put(entities);
+	}
+
+	public void delete(T entity)
+	{
+		ofy().delete(entity);
+	}
+
+	public void deleteKey(Key<T> entityKey)
+	{
+		ofy().delete(entityKey);
+	}
+
+	public void deleteAll(Iterable<T> entities)
+	{
+		ofy().delete(entities);
+	}
+
+	public void deleteKeys(Iterable<Key<T>> keys)
+	{
+		ofy().delete(keys);
+	}
+
+	public T get(Long id) throws EntityNotFoundException
+	{
+		return ofy().get(this.clazz, id);
+	}
+
+	public T get(Key<T> key) throws EntityNotFoundException
+	{
+		return ofy().get(key);
+	}
+
+	/**
+	 * Convenience method to get all objects matching a single property
+	 * 
+	 * @param propName
+	 * @param propValue
+	 * @return T matching Object
+	 */
+	public T getByProperty(String propName, Object propValue)
+	{
+		Query<T> q = ofy().query(clazz);
+		q.filter(propName, propValue);
+		return q.get();
+	}
+	
+	public T getByProperty(Map<String, Object> map)
+	{
+		Query<T> q = ofy().query(clazz);
+		for (String propName : map.keySet())
+		{
+			q.filter(propName, map.get(propName));
+		}
+		return q.get();
+	}
+
+	public List<T> listByProperty(String propName, Object propValue)
+	{
+		Query<T> q = ofy().query(clazz);
+		q.filter(propName, propValue);
+		return asList(q.fetch());
+	}
+
+	public List<T> listByProperty(Map<String, Object> map)
+	{
+		Query<T> q = ofy().query(clazz);
+		for (String propName : map.keySet())
+		{
+			q.filter(propName, map.get(propName));
+		}
+
+		return asList(q.fetch());
+	}
+
+	public List<T> fetchAll()
+	{
+
+		Query<T> q = ofy().query(clazz);
+		return asList(q.fetch());
+	}
+
+	public List<Key<T>> listKeysByProperty(String propName, Object propValue)
+	{
+		Query<T> q = ofy().query(clazz);
+		q.filter(propName, propValue);
+		return asKeyList(q.fetchKeys());
+	}
+	
+	public List<Key<T>> listKeysByProperty(Map<String, Object> map)
+	{
+		Query<T> q = ofy().query(clazz);
+		for (String propName : map.keySet())
+		{
+			q.filter(propName, map.get(propName));
+		}
+		return asKeyList(q.fetchKeys());
+	}
+	
+	
+
+	public T getByExample(T exampleObj)
+	{
+		Query<T> queryByExample = buildQueryByExample(exampleObj);
+		Iterable<T> iterableResults = queryByExample.fetch();
+		Iterator<T> i = iterableResults.iterator();
+		T obj = i.next();
+		if (i.hasNext())
+			throw new RuntimeException("Too many results");
+		return obj;
+	}
+
+	public List<T> listByExample(T exampleObj)
+	{
+		Query<T> queryByExample = buildQueryByExample(exampleObj);
+		return asList(queryByExample.fetch());
+	}
+
+	private List<T> asList(Iterable<T> iterable)
+	{
+		ArrayList<T> list = new ArrayList<T>();
+		for (T t : iterable)
+		{
+			list.add(t);
+		}
+		return list;
+	}
+
+	private List<Key<T>> asKeyList(Iterable<Key<T>> iterableKeys)
+	{
+		ArrayList<Key<T>> keys = new ArrayList<Key<T>>();
+		for (Key<T> key : iterableKeys)
+		{
+			keys.add(key);
+		}
+		return keys;
+	}
+
+	private Query<T> buildQueryByExample(T exampleObj)
+	{
+		Query<T> q = ofy().query(clazz);
+
+		// Add all non-null properties to query filter
+		for (Field field : clazz.getDeclaredFields())
+		{
+			// Ignore transient, embedded, array, and collection properties
+			if (field.isAnnotationPresent(Transient.class) || (field.isAnnotationPresent(Embedded.class))
+					|| (field.getType().isArray()) || (Collection.class.isAssignableFrom(field.getType()))
+					|| ((field.getModifiers() & BAD_MODIFIERS) != 0))
+				continue;
+
+			field.setAccessible(true);
+
+			Object value;
+			try
+			{
+				value = field.get(exampleObj);
+			}
+			catch (IllegalArgumentException e)
+			{
+				throw new RuntimeException(e);
+			}
+			catch (IllegalAccessException e)
+			{
+				throw new RuntimeException(e);
+			}
+			if (value != null)
+			{
+				q.filter(field.getName(), value);
+			}
+		}
+
+		return q;
+	}
+}

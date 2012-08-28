@@ -1,0 +1,140 @@
+<!-- New (Activity) Modal views -->
+	<div class="modal hide" id="activityModal">
+		<div class="modal-header">
+			<button class="close" data-dismiss="modal">x</button>
+			<h3>Add New Activity</h3>
+		</div>
+		
+		<div class="modal-body">
+			<a href="#" id="event" style="border-right: 1px solid #BFBFBF; padding-right: 8px; color:black;">
+			   Event (Calendar)</a>
+			<a href="#" id="task" style="padding-left: 8px;">Task (To-do)</a>
+			<input type="hidden" value="event" id="hiddentask" /><br /> <br /> 
+			
+			<div id="relatedEvent" >
+				<p><i><i class="icon-calendar"></i> Events are time based such as
+					meetings. They show up in calendar.</i></p><br/> 	 	
+				
+				<!--Event form  -->
+				<form id='activityForm' name="activityForm" method="post">
+					<fieldset>
+						
+						<div id="addEvent" class="control-group">
+							<label class="control-label"><b>Event Name:</b></label>
+							<div class="controls">
+								<input id="title" placeholder='Name of the event' type="text" name="title" class="required">
+							</div>
+						</div>
+			       	
+			       	<div class="row">
+				       	<div class="control-group span3">
+	                    	<label class="control-label"><b>Start Date:</b></label>
+							<div class="controls">
+								<input type="text" name="start" placeholder="mm-dd-yyyy" id="event-date-1">							
+							</div>
+						</div>
+						<div class="control-group span2">
+	                    	<label class="control-label"><b>Start Time:</b></label>
+							<div class="controls">
+								<input type="text" name ="start_time" class="timepicker" id="event-time-1" style="width:65px" placeholder="time">		
+							</div>
+						</div>
+					</div>
+					<div class="row">
+					<div class="control-group span3">
+                    	<label class="control-label"><b>End Date:</b></label>
+						<div class="controls">
+							<input type="text" name="end" placeholder="mm-dd-yyyy" id="event-date-2">									
+						</div>
+					</div>
+					<div class="control-group span2">
+                    	<label class="control-label"><b>End Time:</b></label>
+						<div class="controls">							
+							<input type="text" name ="end_time" class="timepicker" id="event-time-2" style="width:65px" placeholder="time"><br />		
+						</div>
+					</div>			 						
+				 	</div>
+				 	<div class="control-group">                    	
+						<div class="controls">
+						<label class="checkbox">
+							<input type="checkbox" name="alldayevent" id="alldayevent">						
+						<span style="vertical-align:bottom; display:inline;">All day event</span></label>
+						</div>
+					</div>				
+					</fieldset>				
+				</form>
+				
+			</div>
+			
+			<div id="relatedtask" style="display:none">
+				<div>
+					<p><i><i class="icon-tasks"></i> Tasks are like to-dos. Result
+						oriented. You can assign a category such as call, <br/>email etc</i></p><br/>
+				</div>
+			    
+			    <!--Task form -->
+				<form id='taskForm' name="taskForm" method="post">
+					<fieldset>
+						<div class="row">
+							<div id="addTask" class="span3 control-group">
+								<label for="subject" class="control-label"> <b>Task:</b> <span class="field_req">*</span></label>
+								<div class="controls"><span class="input "><input id="subject" type="text"
+							  		  name="subject" size="40" class="required"> </span>
+							  	</div>
+							</div>
+							<div id="taskCategory" class="span2 control-group">					
+								<label for="type" class="control-label"><b> Category: </b><span class="field_req">*</span></label>
+								<div class="controls">
+									<span class="input">
+									<select name="type" id="type" size="1" class="input-small required">
+										<option></option>
+										<option value="CALL">Call</option>
+										<option value="EMAIL">Email</option>
+										<option value="FOLLOW_UP">Follow-up</option>
+										<option value="MEETING">Meeting</option>
+										<option value="MILESTONE">Milestone</option>
+										<option value="SEND">Send</option>
+										<option value="TWEET">Tweet</option>
+									</select> </span>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+					    	<div class="span3 control-group">
+								<label for="due" class="control-label"><b>Date (Due):</b></label>
+								<div class="controls">
+									<input type="text" name="due" class="" placeholder="mm-dd-yyyy" id="task-date-1">
+								</div>
+							</div>
+							<div class="span2 control-group" >
+								<label for="priority_type" class="control-label"><b>Priority: </b><span class="field_req">*</span></label>
+								<div class="controls"> 
+									<span class="input ">
+									<select	name="priority_type" id="priority_type" size="1" class="input-small required">
+										<option></option>
+										<option value="DEFAULT">Default</option>
+										<option value="HIGH">High</option>
+										<option value="MEDIMUM">Medium</option>
+										<option value="LOW">Low</option>
+									</select> </span>
+								</div>
+							</div>
+						</div> 
+						<div class="row" id="addRelation">
+						    <div class="span3 control-group">
+								<label for="relation" class="control-label"><b> Related To: </b></label> 
+								<div class="controls">
+									<span class="input "><input id="relation" type="text" name="Relation" size="40"> </span>
+								</div>
+						    </div>
+						</div>
+					</fieldset>				
+				</form>	
+				
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="btn btn-primary" id="task_event_validate">Save changes</a>
+			</div>
+		</div>
+	</div>	
+	<!-- End of Modal views -->

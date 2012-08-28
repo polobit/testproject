@@ -1,0 +1,41 @@
+<script id="admin-settings-api-key-model-template" type="text/html">
+
+<!-- -->
+
+<div class="row">
+	<div class="span7">
+<pre class="prettyprint linenums " ">
+&lt;script type="text/javascript" &gt;
+var _agile = _agile || [];
+_agile.push(['_setAccount', '{{api_key}}']);
+_agile.push(['_setEmail', 'manohar@invox.com']);
+_agile.push(['_trackPageview']);
+var aj = document.createElement('script'); 
+aj.type = 'text/javascript'; 
+aj.async = true;    
+aj.src = '/stats/min/agile-min.js';
+var s = document.getElementsByTagName('script')[0]; 
+s.parentNode.insertBefore(aj, s);
+&lt;/script&gt;
+</pre>
+	</div>
+</div>
+
+<!-- -->
+
+<div class="row">
+	<div class="span7">
+<pre class="prettyprint linenums">
+&lt;script type="text/javascript" &gt;
+var agile = {{api_key}};
+var socket = io.connect('http://stats.agilecrm.com:80');
+socket.on('connect', function () {
+socket.emit('subscribe', { agile_id: agile });
+});
+socket.on('browsing', function (data) {
+});
+&lt;/script&gt;
+</pre>
+	</div>
+</div>
+</script>

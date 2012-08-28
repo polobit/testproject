@@ -1,0 +1,220 @@
+/* simple css-based tooltip */
+.tooltip {
+	background-color:#787878;
+	/*border:1px solid #fff;
+	font-size:12px;
+	*/	
+	padding:12px ;
+	width:200px;
+	display:none;
+	color:#fff;
+	text-align:left;
+	z-index:10000;
+	/* outline radius for mozilla/firefox only */
+	-moz-box-shadow:0 0 10px #000;
+	-webkit-box-shadow:0 0 10px #000;
+}
+
+
+.tooltip_style{
+	width:200px;
+	text-align:left;
+	-moz-box-shadow:0 0 10px #000;
+	-webkit-box-shadow:0 0 10px #000;
+	padding:10px 15px;
+	
+	}
+
+	
+.tooltip_textstyle{
+font-size:1.0em;
+font-weight:bold;
+line-height:22px;
+
+}
+
+.tooltip_button{
+padding:3px 15px;
+margin-left:20px;
+}
+/* Start   (yasin/03-09-10) */
+
+/* Wizard Steps CSS */
+
+.wizard_steptext {
+   float: right;
+   margin-right: 10px;
+}
+
+.wizard_step1_panel {
+    position: absolute; 
+	top: 40px;
+	left: 79px; 
+	display: block;
+}
+
+
+.wizard_step2_img {
+ /*  width: 28%; 
+     padding-top:10px; */
+     float: left;
+}
+
+.wizard_step2_content {
+  width: 65%; 
+  float: right;
+}
+
+.wizard_step3_img {
+ /* width: 30%; 
+  padding-top:10px;*/
+  float: left;
+  
+}
+
+.wizard_step3_content {
+
+  float: right;
+  width:50%; 
+  font-size:1.5em;
+  font-weight:bold;
+  line-height:30px;
+}
+
+.wizard_step3_save{
+ background-color:#787878;
+ padding:12px ;
+ width:400px;
+	display:none;
+	color:#fff;
+	text-align:left;
+	font-size:12px;
+	z-index:10000;
+	-moz-box-shadow:0 0 10px #000;
+	-webkit-box-shadow:0 0 10px #000;
+}
+
+
+/* Designer Toolbar  (yasin/08-09-10) */
+
+.toolbar_content {
+/*	margin:  5px; */
+   margin:0 5px 5px 5px ;
+}
+
+.wizard_step1_img {
+float:left;
+padding-top:20px;
+}
+.wizard_step1_content {
+float:right;
+width:78%;
+}
+
+.wizard_step2_imgnew{
+	
+	float:left;
+	
+	}
+.wizard_step2_contentnew{
+float:right;
+width:85%;
+}
+/* End of Designer Toolbar  (yasin/08-09-10) */
+
+/* End   (yasin/03-09-10) */
+
+
+
+/* Changes (Yasin(23-09-10))*/
+
+.wizard_welcome_text{
+
+width: 75%; 
+float: right;
+font-weight:bold;
+line-height:30px;
+padding:5px 10px 0;
+font-size:1.5em;
+}
+
+.wizard_manage_text{
+
+width: 75%; 
+float: right;
+font-weight:bold;
+line-height:30px;
+padding:5px 10px 0;
+font-size:1.5em;
+
+}
+
+.wizard_manage_style{
+
+font-weight:bold;
+line-height:30px;
+padding:5px 10px 0;
+font-size:1.5em;
+
+}
+
+.wizard_next{
+
+font-weight: bold;
+float: right;
+}
+
+.wizard_skipthis{
+
+color: #B3B3B3;
+font-weight: normal;
+padding-left:30px
+}
+
+
+.wizard_d2d_nodes{
+
+font-weight:bold;
+line-height:30px;
+float:right;
+width:75%;
+padding:5px 10px 0;
+font-size:1.5em;
+
+}
+
+.wizard_rewards_text{
+
+	width: 70%; 
+  float: right;
+  font-size:1.5em;
+  font-weight:bold;
+  line-height:30px;
+}
+
+/* wizard portlets popup(Yasin/04-10-10) */
+.wizard_portlets {
+
+  float: right;
+  font-size:1.5em;
+  font-weight:bold;
+  line-height:30px;
+  padding:15px
+}
+.wizardpadding{
+	padding :10px 5px;
+	
+	}
+
+/* End wizard portlets popup(Yasin/04-10-10) */
+
+/* Wizard Headings in popup(Yasin/13-10-10) */
+
+.widgetHeadings{
+	float:left;
+/*	color:#FABC72; */
+	color:#62BCE4;
+	font-size:1.7em;
+	padding-left:10px;
+	text-decoration:underline;
+}

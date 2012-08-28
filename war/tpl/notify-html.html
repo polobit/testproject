@@ -1,0 +1,13 @@
+<script id="notify-html-template" type="text/html">
+
+<div class="popover agile-notification"  style='display:block;position:relative'>
+            <h3 class="popover-title" style='padding-right:2px'>Browsing Alert</h3>
+            <div class="popover-content">
+             <img  class='thumbnail' src="{{gravatarurl properties 50}}" width="50" height="50" style='display:inline'/>			
+			<span style='padding-left:5px'>
+			<b>{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</b><br/>
+			{{getPropertyValue properties "title"}} {{getPropertyValue properties "company"}}		
+			</span>
+					</div>
+          </div>
+</script>

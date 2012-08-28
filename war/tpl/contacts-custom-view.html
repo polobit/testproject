@@ -1,0 +1,106 @@
+<script id="contacts-grid-model-template" type="text/html">
+
+<div class='span3'>
+<div style='border: 1px solid #DDD;'>
+<a href='#contact/{{id}}'>
+  <img src="{{gravatarurl properties 50}}" width='50px' height='50px'>
+<br/>
+  {{getPropertyValue properties "email"}}
+ {{getPropertyValue properties "first_name"}}
+  {{getPropertyValue properties "last_name"}}
+ <br/>
+  {{#each tags}}
+  <b>{{this}}</b>
+  {{/each}}
+<br/>
+</a>
+</div>
+</div>
+</script>
+	
+
+<script id="contacts-custom-view-model-template" type="text/html">
+
+
+
+<!--
+{{#each fields_set}}
+	{{#equals "image" this}}
+		 <td><img src="{{gravatarurl properties 40}}" width='40px' height='40px'></td>
+	{{/equals}}
+			<td>{{getPropertyFieldValue .. this}}</td>
+{{/each}}
+
+-->
+</script>
+	
+	
+
+<script id="contacts-custom-view-collection-template" type="text/html">
+
+ <div class="row" >
+
+<div class="span12">
+ <div class="page-header">
+    <h1>Contacts <small>persons & companies</small>
+	</h1>
+
+<div id= "view-list">
+
+</div>
+
+<!--
+<ul class="nav nav-tabs right" style="top:-18px;position:relative;border-bottom:0px" id='contacts-tabs'>
+                        <li class="active">
+                            <a href="#all" data-toggle="tab">All</a>
+                        </li>
+                        <li class="">
+                            <a href="#persons" data-toggle="tab">Persons</a>
+                        </li>
+                        <li class="">
+                            <a href="#companies" data-toggle="tab">Companies</a>
+                        </li>
+					 <li class="">
+                            <a href="#recent" data-toggle="tab">Recent</a>
+                        </li>
+                    </ul>
+-->
+  </div>
+</div>
+</div>
+
+
+<div class="row">
+
+<div class="span3">
+
+<div class="well" id='tasks'>
+<div id='tagslist'></div>
+</div>
+</div>
+
+<div class="span9"'>
+
+
+
+<table id='contacts' class="table table-striped" style='overflow:scroll'>
+<thead>
+    <tr>
+	<th>{{name}}</th>
+    </tr>
+  </thead>
+  
+  <tbody id='contacts-custom-view-model-list' style='overflow:scroll'>
+  </tbody>
+  
+</table>
+
+
+</div>
+
+
+
+</div>
+
+</div>
+</script>

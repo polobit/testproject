@@ -1,0 +1,43 @@
+<script id="contact-list-view-collection-template" type="text/html">
+
+	<div class="row">
+		<div class="span12">
+			<div class="page-header">
+    			<h1>List of Views</h1>
+				<a href="#contact-view-add" class="btn right" id="addView" style='top:-25px;position:relative'><span><i class='icon-plus-sign'/></span> Add View</a>
+	  		</div>
+		</div>
+	</div>
+	<div class="row">
+ 		<div class="span9"> 
+			<table class="table table-bordered" >
+				<thead>
+    				<tr>
+    		   	    	<th></th>
+      					<th>Name</th>
+      					<th>Fields</th>
+    				</tr>
+  				</thead>
+  
+  				<tbody id='contact-list-view-model-list'>
+  				</tbody>
+			</table>
+		</div>
+
+		<div class='span3'>
+			<div class="well" id='addview'>
+			</div>
+		</div>
+
+	</div>
+</script>
+<script id="contact-list-view-model-template" type="text/html">
+<td><icon class='delete icon-remove-circle'></icon></td>  	
+<td> {{name}} </td>
+<td>
+  {{#each fields_set}}
+	 {{this}}</br> 
+  {{/each}}
+</td>
+<br/>
+</script>

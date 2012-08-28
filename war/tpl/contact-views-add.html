@@ -1,0 +1,38 @@
+
+<script id="contact-view-template" type="text/html">
+	<div class="span9">
+		<div class="well">
+			<form id="opportunityform" class="form-horizontal">
+		  		<fieldset>
+					<div class="control-group">			
+						<legend>Contact View</legend>	
+						<label class="control-label"><b>View Name</b><span>*</span></label>
+						<div class="controls">
+							<input id="name" name="name" type="text" class="input span3 required" placeholder="Name of View" /><br/>
+			  			</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label"><b>Fields</b><span>*</span></label>
+						<div class="controls" id="contactTypeAhead">
+							<select id="multipleSelect" class="required" name="fields_set" multiple="multiple">
+								<option value="first_name">First Name</option>
+								<option value="last_name">Last Name</option>
+								<option value="email">Email</option>
+								<option value="company">Company</option>
+								<option value="tags">Tags</option>
+								<option value="title">Title</option>
+								<option value="created_time">Created Time</option>
+								<option value="updated_time">Updated_Time</option>
+								<option value="image">Image</option>
+							</select>
+			  			</div>
+					</div>
+				</fieldset>
+			</form>
+			<div class="form-actions">          
+          		<a href="#" type="submit" class="save btn btn-primary" id="contactView">Save</a>
+				<a href="#contact-views" class="btn ">Close</a>
+			</div>
+			</div>
+		</div>
+</script>

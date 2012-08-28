@@ -1,0 +1,46 @@
+<script id="admin-settings-users-collection-template" type="text/html">
+	
+	<div class="row">
+		<div class="span12">
+			<div class="page-header">
+    			<h1>List of Users</h1>
+				<a href="#users-add" class="btn right" id="addUser" style='top:-25px;position:relative'><span><i class='icon-plus-sign'/></span> Add User</a>
+	  		</div>
+		</div>
+	</div>
+
+	<div class="row">
+ 		<div class="span9"> 
+ 
+			<table class="table table-bordered" >
+				<thead>
+    				<tr>
+    		   	    	<th></th>
+      					<th>Id</th>
+      					<th>Is Admin</th>
+      					<th>User Name</th>
+						<th>Is Disabled</th>
+    				</tr>
+  				</thead>
+  
+  				<tbody id='admin-settings-users-model-list'>
+  				</tbody>
+			</table>
+		</div>
+
+		<div class='span3'>
+			<div class="well" id='adduser'>
+			</div>
+		</div>
+
+	</div>
+</script>
+
+<script id="admin-settings-users-model-template" type="text/html">
+<td><icon class='edit icon-remove-circle'></icon></td>  	
+  <td>{{id}} </td>
+  <td>{{is_admin}} </td>
+  <td>{{email}}</td>
+<td>{{is_disabled}}</td>
+<br/>
+</script>

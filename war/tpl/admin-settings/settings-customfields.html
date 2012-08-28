@@ -1,0 +1,67 @@
+<script id="admin-settings-customfields-collection-template" type="text/html">
+	
+	<div class="row">
+		<div class="span9">
+			<div class="page-header">
+    			<h1>List of CustomFields</h1>
+				<ul class="nav right">
+					<li class="dropdown" id="menu2">
+						<a href="#custom-fields-add" class="dropdown-toggle btn right" data-toggle="dropdown" id="addUser" style='top:-25px;position:relative'>
+						   <span><i class='icon-plus-sign'/></span> Add Custom Field</a>
+						<ul class="dropdown-menu">
+							<li><a href="#textModal"  class = "fieldmodal" id="text">Text
+								Field</a>
+							</li>
+							<li><a href="#dateModal" class = "fieldmodal"   id ="date">Date
+								Field</a>
+							</li>
+							<li><a href="#listModal" class = "fieldmodal" id="list">List
+								Field</a>
+							</li>
+							<li><a href="#checkboxModal"  class="fieldmodal" id="check">Check
+								Box Field</a>
+							</li>
+							<li><a href="#linkModal"  class="fieldmodal" id="link">Generated
+								Link</a>
+							</li>
+						</ul>
+					</li>
+	  			</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+ 		<div class="span9"> 
+ 
+			<table class="table table-bordered" >
+				<thead>
+    				<tr>
+      					<th>Field Label</th>
+      					<th>Field Description</th>
+      					<th>Field Type</th>
+    				</tr>
+  				</thead>
+  
+  				<tbody id='admin-settings-customfields-model-list'>
+  				</tbody>
+			</table>
+		</div>
+
+		<div class='span3'>
+			
+			</div>
+		</div>
+		
+		<div id= "custom-field-modal">
+		</div>
+
+	</div>
+</script>
+
+<script id="admin-settings-customfields-model-template" type="text/html">
+  <td>{{field_label}} </td>
+  <td>{{field_description}} </td>
+  <td>{{field_type}}</td>
+<br/>
+</script>

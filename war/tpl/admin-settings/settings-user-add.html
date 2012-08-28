@@ -1,0 +1,51 @@
+<script id="admin-settings-user-add-template" type="text/html">
+	<div class="row">
+		<div class="span9">
+		<div class="well">
+	
+			<form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
+				<fieldset>
+					<legend>New User Details</legend>
+					<br/>
+                	<div class="control-group">
+						<label class="control-label" for="cname">Name</label> 
+                		<div class="controls">
+							<input type="text" id="cname" name="name" class="required" placeholder="Name"/>
+						</div>
+					</div> 
+				
+					<div class="control-group">
+						<label class="control-label for="eaddress">Email Address</label> 
+                		<div class="controls">
+							<input type="text" id="eaddress" class="email required" name='email' placeholder="Email address"/> 
+						</div>
+					</div>
+				
+					<div class="control-group">
+						<div class="controls">
+							<label class="checkbox">
+								<input type="checkbox" id="Admin" name='is_admin' value='true'/> 
+                        		Allow this user to configure the account and invite or remove users
+							</label>
+						</div>
+					</div>
+
+					<div class="control-group">
+						<div class="controls">
+							<label class="checkbox">
+								<input type="checkbox" id="Disabled" name='is_disabled' value='true'/> 
+                        		Disable this user
+							</label>
+						</div>
+					</div>
+
+					<div class="form-actions">
+            			<button type="submit" class="save btn btn-primary">Save changes</button>
+            			<a type="reset" href='#users' class="btn">Cancel</a>
+          			</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</div>
+</script>

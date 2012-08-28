@@ -1,0 +1,133 @@
+<script id="contact-detail-template" type="text/html">
+
+<div class="row">
+
+<div class="span12">
+ <div class="page-header">
+    <h2>	<img  class='thumbnail' src="{{gravatarurl properties 50}}" width="50" height="50" style='display:inline'/>
+			{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}<small></small></h2>
+	
+	<div class="btn-group right" style='top:-18px;position:relative;padding-right:20px'>
+				<a class="btn" href="#"><i class="icon-print"></i></a>
+				<button class="btn">Actions</button>
+  				<button class="btn dropdown-toggle" data-toggle="dropdown">
+    				<span class="caret"></span>
+  				</button>  			
+  				<ul class="dropdown-menu">
+					<li><a href='#edit'>Edit</a></li>
+					<li><a href='#' id='contact-actions-delete'>Delete</a></li>
+					<li class='divider'></li>
+					<li><a href='#add-note' data-toggle="modal" id="newNote">Add Note</a></li> 
+					<li><a href='#'>Add Task</a></li>   	
+					<li><a href='#'>Add Opportunity</a></li>   				
+					<li><a href='#'>Duplicate</a></li>
+				
+					<li><a href='#'>Import Contacts from CSV</a></li>
+  				</ul>
+			</div>		
+  </div>
+</div>
+</div>
+
+<div class="row">
+	
+<div class="span9">
+
+<div class="subnav" >
+		    <ul class="nav nav-pills" id="contactDetailsTab">
+      			<li class=""><a data-toggle="tab" href="#notes">Notes</a></li>
+      			<li class=""><a data-toggle="tab" href="#logs">Logs</a></li>
+      			<li class=""><a data-toggle="tab" href="#messages">Messages</a></li>
+      			<li class=""><a data-toggle="tab" href="#deals">Deals</a></li>
+				<li class=""><a data-toggle="tab" href="#events">Events</a></li>
+				<li class=""><a data-toggle="tab" href="#campaigns">Campaigns</a></li>
+      			<li class=""><a data-toggle="tab" href="#details">Details</a></li>
+      			<li class="active"><a data-toggle="tab" href="#activities">Activity <sup><span class="badge badge-success">3</span></sup> </a></li>
+      			<li class=""><a data-toggle="tab" href="#mail">Mail</a></li>
+    		</ul>
+
+<div class="tab-content">
+  <div class="tab-pane" id="notes">...</div>
+  <div class="tab-pane" id="logs">...</div>
+  <div class="tab-pane" id="messages">...</div>
+  <div class="tab-pane" id="deals">...</div>
+  <div class="tab-pane" id="events">...</div>
+  <div class="tab-pane" id="campaigns">...</div>
+  <div class="tab-pane" id="mail">...</div>
+  <div class="tab-pane active" id="activities">...</div>
+</div>
+
+  		</div>
+
+</div>
+
+
+<!-- Contact Details -->
+	<div class="span3">
+		<div class='border-rect'>
+		
+			<div>
+				<span class='bottom-line'><i class="icon-user "></i> Contact details</span>
+			</div>
+			<br/>
+		
+			<div>
+				<!--<div style='float: left;height:auto;padding-right:10px;'>
+					<img  class='thumbnail' src="{{gravatarurl properties 50}}" width="50" height="50"/>
+				</div>-->		
+				<div>
+					<!--<span>{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}
+					</span>-->
+					{{#if title}}
+						<span>{{getPropertyValue properties "title"}}</span>
+					{{/if}}
+					{{#if company}}
+			 			<span>{{getPropertyValue properties "company"}}</span>
+					{{/if}}
+			 	</div>
+			</div>
+		
+			<div class='clearfix'></div>	
+			<div>	
+				<br/>
+				{{#if tags}}
+					<i class="icon-tags"></i>
+					{{#each tags}}		
+						<span class="label" onmouseover="$(this).children().addClass('icon-remove')"
+						onmouseout="$(this).children().removeClass('icon-remove')">
+						{{this}}</span>
+  					{{/each}}
+					<a href="#"><i class="icon-plus-sign"></i></a>
+				{{/if}}
+			</div>
+
+			<div class='clearfix'></div>	
+			
+			<br/>
+			<br/>		
+	
+ 			{{#each properties}}
+     			<span style='display:inline'><icon class="{{icons name}}"></icon> <small>{{name}}</small></span> 
+				{{#if subtype}}
+					({{subtype}})
+				{{/if}}
+				{{value}} 
+				<br/>     
+				{{/each}}
+				<br/><br/>
+
+		<div id="widgets">
+		</div>
+
+	
+		</div>
+
+	
+		<div style='float:right;'>
+			<a href='#add-widget'>+ Add widget</>
+		</div>
+
+
+		</div>
+	</div>
+</script>

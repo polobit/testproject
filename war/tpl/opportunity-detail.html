@@ -1,0 +1,86 @@
+<script id="opportunity-detail-template" type="text/html">
+	<div class="row">
+		<div class="span12">
+			<div class="page-header">
+				<h1>
+					{{name}}
+					<div class="btn-group" style='float:right;display:inline'>
+						<button class="btn" style="border-radius:3px">More</button>
+  						<button class="btn dropdown-toggle" data-toggle="dropdown">
+    						<span class="caret"></span>
+  						</button>
+  						<ul class="dropdown-menu" style="font-size:12px">
+							<li><a href='#edit' id="editOpportunity">Edit</a></li>
+							<li><a href='#' class="delete">Delete</a></li>
+						</ul>
+					</div>
+					<div class="btn-group" style='float:right;display:inline'>
+						<button class="btn" style="border-radius:3px">Move</button>
+						<button class="btn dropdown-toggle" data-toggle="dropdown">
+    						<span class="caret"></span>
+  						</button>
+						<ul class="dropdown-menu" id="move" style="font-size:12px">
+							<li><a href='#'  id="loss" >loss</a></li>
+							<li ><a href='#' id="progress" >progress</a></li>
+							<li ><a href='#' id="won" >won</a></li>
+						</ul>
+					</div>
+				</h1>
+  			</div>
+			<div class="span3">
+				<div class="well" display:>
+					<b>Deal Name<b>       : {{name}}<br/>
+					<b>Descreption <b>    : {{description}}
+				</div >
+				<div class="well" >
+					Owner :{{owner}}</br>
+					Email :{{email}}
+				</div>
+			</div>
+			<div class="span6"  >
+				<div class="row">
+					<div class="span7 well">
+						<div class="span1" style="display:inline; "><span style="font-size:14px; font-weight:bold ">value</span><br/>
+							<span style="font-size:13px" >$ {{expected_value}}</span>
+						</div>
+						<div class="span1"style="display:inline; margin-left:50px ">
+							<span style="font-size:14px; font-weight:bold ">probability</span>
+							<br/>
+							<span style="font-size:13px" >{{probability}} %</span>
+						</div>
+						<div class="span2" style="display:inline; margin-left:32px">
+							<span style="font-size:14px; font-weight:bold ">milestone</span>
+							<br/>
+							<span style="font-size:13px" >{{milestone}}</span>
+						</div>
+						<div class="span2" style="display:inline; margin-left:30px">
+							<span style="font-size:14px; font-weight:bold ">pipeline</span><br/>
+							<span style="font-size:13px" >$ {{calculatePipeline expected_value probability pipeline}}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="span3">
+					<label><b>Relates To :<b></label>  
+					<span style="margin-left:8px">{{relatesTo}}</span>
+					<br/>
+					<span>pipeline :</span>
+					<span style="margin-left:8px"> $ {{calculatePipeline expected_value probability pipeline}}</span>
+					<br/><br/>
+					<span>close date :</span>
+					<span style="margin-left:8px"> {{epochToHumanDate "mm-dd-yy" close_date}}</span>
+					<br/><br/>
+					<span>Task:{{note}}</span>
+					<br/><br/>
+					<span>Note:{{task}}</span>
+			</div>
+		</div>
+	</div>
+
+	<div class="row" style="margin-top:5%">
+		<div class="span10 well" style="margin-left:5%">
+			<button class="btn btn-large"> Note </button>
+			<button class="btn btn-large" style="margin-left:5%"> Task </button>
+		</div>
+	</div>
+</script>

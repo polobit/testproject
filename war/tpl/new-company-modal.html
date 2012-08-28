@@ -1,0 +1,38 @@
+<!-- New (Contact) Modal views -->
+	<div class="modal hide" id="companyModal">
+		<div class="modal-header">
+			<button class="close" data-dismiss="modal">x</button>
+			<h3>Add Company</h3>
+		</div>
+		<div class="modal-body">
+			<form id='companyForm' name="companyForm" method="post">
+				<fieldset>
+					<p>
+					<div class="control-group">
+                    	<label class="control-label"><b>Company:</b> <span class="field_req">*</span></label>
+						<div class="controls">
+							<input name="cmpany" type="text" class="required" id="cmpany" placeholder="Company"
+							style="width:150px;" />
+						</div>
+					</div>				
+					<div class="control-group">
+                    	<label class="control-label"><b>URL:</b> <span class="field_req">*</span></label>
+						<div class="controls">
+							<div class="input-prepend"">
+								<span class="add-on">http://</span><input class="span2 required" name="url"
+									type="text" id="url" placeholder="www." style="width:100px;" />
+							</div>
+						</div>
+					</div>				
+				</fieldset>
+			</form>
+		</div>
+		<div class="modal-footer">
+			<a href="#continue-company" class="btn" id="continue-company">Continue
+				Editing</a> <a href="#" class="btn btn-primary" id="company_validate">Save
+				changes</a>
+		</div>
+
+	</div>
+	<!-- End of Modal views -->
+	

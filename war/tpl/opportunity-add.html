@@ -1,0 +1,110 @@
+<script id="opportunity-add-template" type="text/html">
+	<div class="span8">
+		<div class="well">
+			<form id="opportunityform" class="form-horizontal">
+		  		<fieldset>
+					<div class="control-group">			
+						<legend>Add Deal</legend>	
+						<label class="control-label">Name <span class="field_req">*</span></label>
+						<div class="controls">
+							<input id="name" name="name" type="text" class="span4 required" 
+								   placeholder="Name of deal" Style="width:301px"/>
+			  			</div>
+					</div>
+					
+					<div class="control-group">
+						<label class="control-label">Related To <span class="field_req">*</span></label>
+						<div class="controls" id="contactTypeAhead">
+							<div>
+								<div class="pull-left">
+									<ul name= "contacts" id="contact-tags"></ul>
+								</div>
+									<input type="text" id = "relates_to" class="typeahead typeahead_contacts" data-provide="typeahead" data-mode="multiple" />
+							</div>	
+							<span class="help-inline">Some help line for Related To</span>
+			  			</div>
+					</div>
+					
+					<div class="control-group">
+						<label class="control-label">Description</label>
+						<div class="controls">
+							<textarea id="description" name= "description" rows="3" class="input span4" 
+									  style="width:301px" placeholder="Add comment"></textarea>					
+			  			</div>
+					</div>
+					
+					<div class="control-group">
+               			<label class="control-label">Value <span class="field_req">*</span></label>
+                		<div class="controls"> 
+							<input type="text" name="expected_value" class="input-small required" 
+								   placeholder="Value of deal"/>
+						</div>
+					</div>
+					
+					<div class="control-group">				
+						<label class="control-label">Milestone <span class="field_req">*</span></label>
+						<div class="controls">
+							<select id="milestone" name="milestone" class="input-small required" 
+									Style="width:100px">
+								<option value="">Select..</option>
+								<option value="loss">Loss</option>
+								<option value="progress">Progress</option>
+								<option value="won">Won</option>
+							</select>	
+							<span class="help-inline">Some help line for Mlestone</span>				
+			  			</div>
+					</div>
+					
+					<div class="control-group">	
+						<label class="control-label">Probability (%) <span class="field_req">*</span></label>
+						<div class="controls">
+							<input type="text" id="probability" name="probability" class="input-small required" placeholder="Probability %"/>				
+			  			</div>
+					</div>
+					
+					<div class="control-group">
+						<label class="control-label">Close Date <span class="field_req">*</span></label>
+						<div class="controls">
+							{{#if close_date}}
+								<input id="close_date" name="close_date" class="input required" placeholder="MM/DD/YY"/>				
+								{{else}}
+									<input id="close_date" name="close_date" class="input required" placeholder="MM/DD/YY"/>	
+							{{/if}}
+						</div>
+					</div>
+					
+					<div id="owner">				
+						
+						
+					</div>
+					{{#if id}}
+						<input type="text" name="id" class="hide" value={{id}}>
+					{{/if}}
+
+					<div class="form-actions">          
+          				<a href="#" type="submit" id="opportunityAdd" class="save btn btn-primary">Save changes</a> 
+						<a href="#deals" class="btn ">Close</a>
+					</div>
+		  		</fieldset>
+			</form>
+			
+		</div>
+	</div>
+</script>
+
+
+<!-- Popuplate Owners options  -->
+
+<script id="owners-collection-template" type="text/html">
+ 	<div class="control-group">
+	<label class="control-label">Owner <span class="field_req">*</span></label>
+		<div class="controls">
+			<select id='owners-model-list' class="required" name="owner">
+  				<option value="">Select..</option>
+			</select>
+		</div>
+	</div>
+</script>
+<Script id="owners-model-template" type="text/html">
+	{{name}}
+</Script>

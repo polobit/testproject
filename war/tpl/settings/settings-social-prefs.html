@@ -1,0 +1,28 @@
+<script id="settings-social-prefs-template" type="text/html">
+<div class='span3 well'>
+
+{{#if id}}	
+	<legend>{{service}}</legend>
+	{{#if picture}}
+	<i class="media-grid">
+		<img class="thumbnail" src='{{gravatarurl properties 75}}' width="75px" height="75px"/> </a>
+	</i>
+	{{/if}}	
+	{{#if email}}
+	<i class="media-grid">
+		<img class="thumbnail" src='{{picture}}' width="50px" height="50px"/> </a>
+	</i>
+	{{/if}}
+	<br/>
+	<label>{{name}}</label>
+	<br /> 
+    <a href="#social-prefs" class="btn btn-primary delete">Revoke</a> 
+{{else}}
+	<legend><i class="media-grid">
+		
+	</i><span>{{service}}</span><br/></legend>
+<img class="thumbnail" src='img/{{service}}-logo-small.png'/> </a>
+<br/> Allow access <a href='/scribe?service={{service}}'>here</a>
+{{/if}}	
+</div>
+</script>

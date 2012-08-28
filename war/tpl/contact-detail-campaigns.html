@@ -1,0 +1,47 @@
+ <script id="campaigns-collection-template" type="text/html">
+ 	</br>
+	<h1>List of Workflows</h1>
+ 
+	<!--<div class="btn-group right" style='top:-18px;position:relative;padding-right:20px'>
+				<a class="btn" href="#"><i class="icon-print"></i></a>
+				<button class="btn">Actions</button>
+  				<button class="btn dropdown-toggle" data-toggle="dropdown">
+    				<span class="caret"></span>
+  				</button>  			
+  				<ul id='campaignSelect' class="dropdown-menu">
+					
+  				</ul>
+			</div>--!>
+	<table class="table table-bordered" >
+		<thead>
+    		<tr>
+     			<th></th>
+      			<th>Id</th>
+      			<th>Name</th>
+      			<th>Creator</th>
+    		</tr>
+  		</thead>
+  
+ 	 	<tbody id='workflows-model-list'>
+  		</tbody>
+  
+	</table>
+
+	<div >
+		<select class="campaignSelect" id='campaignSelect'  name="campaignSelect">
+  			<option class="emailSelectOptions" value="">Select..</option>
+		</select>
+	</div>
+
+</script>
+
+<script id="campaigns-model-template" type="text/html">
+
+
+<td><icon class='deleteWorkflow icon-remove-circle'></icon></td>  	
+  <td>{{id}}</td>
+  <td>{{name}}</td>
+  <td>{{creator}}</td>
+<br/>
+	
+</script>

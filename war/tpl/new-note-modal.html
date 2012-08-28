@@ -1,0 +1,31 @@
+<!-- New (Note) Modal views -->
+	<div class="modal hide fade" id="noteModal">
+		<div class="modal-header">
+			<button class="close" data-dismiss="modal">x</button>
+			<h3>Add Note</h3>
+		</div>
+		<div class="modal-body">
+			<form id='noteForm' name="noteForm" method="post">
+				<fieldset>
+					<div class="control-group">
+                    	<label class="control-label"><b>Description</b></label>
+						<div class="controls">
+							<textarea rows="3" id="description" placeholder="Description"></textarea>
+						</div>
+					</div>
+					<div class="control-group">
+                    	<label class="control-label"><b>About</b></label>
+						<div class="controls">
+							<input name="about" type="text" id="about" placeholder="About" />
+						</div>
+					</div>					
+				</fieldset>
+			</form>
+		</div>
+		<div class="modal-footer">
+			<a href="#" class="btn btn-primary" id="note_validate">Save
+				changes</a>
+		</div>
+
+	</div>
+	<!-- End of Modal views -->

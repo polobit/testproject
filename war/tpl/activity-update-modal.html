@@ -1,0 +1,32 @@
+<div class="modal hide" id="updateActivityModal">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">x</button>
+		<h3>Update Activity</h3>
+	</div>
+	<div class="modal-body">
+        	<div id="newrelatedEvent">
+				<span class="alert alert-info" style="font-size:11px">Events are time based such as
+					meetings. They show up in calendar.</span> <br /> <br /> 
+			 	
+			 	<form id='updateActivityForm' name="newactivityForm"  method="post"> 
+			 		<div class="row">	
+						<div id="updateEvent" class="span6">
+							<label for="title"> Event<span>*</span> </label>
+							<span class="input "><input id="title" type="text" name="title" size="40" class="required"> </span>
+						</div>
+			       	</div>
+				    <input type="text" name="start" class="span2" placeholder="start date(mm-dd-yyyy)" id="update-event-date-1">
+					<input type="text" name ="start_time" class="timepicker" id="update-event-time-1" style="width:65px" placeholder="start time">&nbsp;to&nbsp;
+				 	<input type="text" name="end" class="span2" placeholder="end date(mm-dd-yyyy)" id="update-event-date-2">
+					<input type="text" name ="end_time" class="timepicker" id="update-event-time-2" style="width:65px" placeholder="end time"><br />
+					<input type="checkbox" name="alldayevent" id="alldayevent">&nbsp;
+					<span style="vertical-align:bottom">All day event</span>
+			   </form>
+			   
+			</div>
+		<div class="modal-footer">
+			<a href="#" class="btn btn-primary" id="task_event_validate">Update</a>&nbsp;
+			<a href="#" class="btn btn-danger" id="event_delete">Delete</a>
+	    </div>
+	</div>
+</div>

@@ -1,0 +1,85 @@
+<script id="opportunities-collection-template" type="text/html">
+
+<div class="row">
+	<div class="span12">
+		<div class="page-header">
+    		<h1>Deals <small>Opportunities</small></h1>
+			<a href='#deals-add' class='btn right' style='top:-18px;position:relative'><i class='icon-plus-sign'/>Add Deal</a>
+	  		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="span9">
+
+<div id ='total-pipeline-chart' style='width:100%; height:300px'></div>
+
+<br/><br/>
+
+		<table class="table table-bordered" >
+			<thead>
+    			<tr>
+  					<th>Opportunity</th>
+					<th>Value</th>
+  					<th>Milestone</th>
+  					<th>Close Date</th>
+  					<th>Owner</th>
+    			</tr>
+  			</thead>  
+  			<tbody id='opportunities-model-list'>
+  			</tbody>
+		</table>
+
+	
+	</div>
+	<div class="span3">
+		
+<div class="well">
+<div id ='pie-deals-chart' style='width:100%; height:300px'></div>
+
+<h3>
+Export to CSV
+</h3><br/>
+<p>
+You can use workflow to automate most of your follow-ups. It's marketing and sales automation tool.
+</p>
+<p>
+Eg: you can send an email to all users who have signed up on your site. And then based on their behavior in the control panel, you can send them targetted messages periodically.
+</p>
+
+<br/>
+<h3>
+What is marketing automation?
+</h3><br/>
+<p>
+You can use workflow to automate most of your follow-ups. It's marketing and sales automation tool.
+</p>
+<p>
+Eg: you can send an email to all users who have signed up on your site. And then based on their behavior in the control panel, you can send them targetted messages periodically.
+</p>
+
+
+</div>
+	</div>
+</div>
+</script>
+
+<script id="opportunities-model-template" type="text/html">
+<td leads='{{id}}' class='leads'>
+	<div style='display:inline;padding-right:10px;height:auto;'>
+		<img src="{{gravatarurl properties 40}}" width='40px' height='40px'>
+	</div>
+	<div style='height:auto;display:inline-block;vertical-align:text-top;'>
+		<b> 
+			{{name}} <br/>
+ 			{{relatesTo}}</br>
+ 			{{description}}
+		</b>
+	</div>
+</td>  	
+
+	<td>$ {{expected_value}}</td>
+	<td>{{milestone}}({{probability}}%) </td>
+	<td>{{epochToHumanDate "mm-dd-yy" close_date}}</td>
+	<td>{{owner}}
+</td>
+</script>

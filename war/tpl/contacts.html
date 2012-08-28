@@ -1,0 +1,127 @@
+<script id="contacts-grid-model-template" type="text/html">
+<div class='span3'>
+<div style='border: 1px solid #DDD;'>
+<a href='#contact/{{id}}'>
+  <img class='thumbnail' src="{{gravatarurl properties 50}}" width='50px' height='50px' style='display:inline'>
+<br/>
+  {{getPropertyValue properties "email"}}
+ {{getPropertyValue properties "first_name"}}
+  {{getPropertyValue properties "last_name"}}
+ <br/>
+  {{#each tags}}
+  <b>{{this}}</b>
+  {{/each}}
+<br/>
+</a>
+</div>
+</div>
+</script>
+	
+<script id="contacts-model-template" type="text/html">
+	<td class='data' data='{{id}}'>
+<div style='display:inline;padding-right:10px;height:auto;'>
+ <img class='thumbnail' src="{{gravatarurl properties 40}}" width='40px' height='40px' style='display:inline'>
+</div>
+<div style='height:auto;display:inline-block;vertical-align:text-top;'>
+<b>
+{{getPropertyValue properties "first_name"}}
+  {{getPropertyValue properties "last_name"}}
+</b>
+<br/>
+  {{getPropertyValue properties "email"}}
+</div>
+<div style='float:right'></div>
+</td>  	
+  	<td>{{getPropertyValue properties "title"}}<br/>
+{{getPropertyValue properties "company"}}</td>
+  	<td> {{#each tags}}
+  <b><span class="label">{{this}}</span></b>
+  {{/each}}</td>
+	<td> Lead Score</td>
+</script>
+	
+	
+
+<script id="contacts-collection-template" type="text/html">
+
+ <div class="row" >
+
+<div class="span12">
+ <div class="page-header">
+    <h1>Contacts <small>persons & companies</small>
+	</h1>
+
+<div class="btn-group right" style='top:-18px;position:relative'>
+<div id ="view-list">
+  <button class="btn">All Contacts</button>
+  <button class="btn dropdown-toggle" data-toggle="dropdown" id="viewList"><span class="caret" ></span>
+  </button>
+  <ul class="dropdown-menu" id= "view-list">
+    <li>
+	<a href='#contacts-only'>Contacts</a>
+	</li>
+	<li>
+		<a href='#companies-only'>Companies</a>	
+	</li>
+
+<li>
+<a href='#contact-views'>Add/Edit View</a>
+	</li>
+
+  </ul>
+</div>
+</div>
+
+<!--
+<ul class="nav nav-tabs right" style="top:-18px;position:relative;border-bottom:0px" id='contacts-tabs'>
+                        <li class="active">
+                            <a href="#all" data-toggle="tab">All</a>
+                        </li>
+                        <li class="">
+                            <a href="#persons" data-toggle="tab">Persons</a>
+                        </li>
+                        <li class="">
+                            <a href="#companies" data-toggle="tab">Companies</a>
+                        </li>
+					 <li class="">
+                            <a href="#recent" data-toggle="tab">Recent</a>
+                        </li>
+                    </ul>
+-->
+  </div>
+</div>
+</div>
+
+
+<div class="row">
+
+<div class="span3">
+
+<div class="well" id='tasks'>
+<div id='tagslist'></div>
+</div>
+</div>
+
+<div class="span9"'>
+
+
+
+<table id='contacts' class="table table-striped" style='overflow:scroll'>
+<thead>
+    <tr>
+    
+      <th>Name</th>
+      <th>Work</th>
+      <th>Tags</th>
+	  <th>Lead Score</th>
+    </tr>
+  </thead>
+  
+  <tbody id='contacts-model-list' style='overflow:scroll'>
+  </tbody>
+  
+</table>
+</div>
+</div>
+</div>
+</script>

@@ -1,0 +1,386 @@
+#maincontainer {
+
+height:100%;
+overflow:hidden;
+position:fixed;
+width:100%;
+
+}
+
+#designercontainer {
+
+height:100%;
+overflow:auto;
+position:absolute;
+width:100%;
+
+}
+
+#designer {
+
+width:100000px;
+height:100000px;
+overflow:hidden;
+
+}
+
+#paintarea {
+
+position:relative;
+left:0px;
+top:-7px;
+width:100000px;
+height:100000px;
+
+}
+.circle {
+	margin:0 0 0 0;
+	padding:0;
+	text-align:center;
+	width:100%;
+    height:auto;
+	cursor:crosshair;
+	color:#fff;
+	text-align:center;
+-moz-border-radius:5px;
+-webkit-border-radius:5px;
+border-radius:5px;
+/*
+Jan 13 - Image Cleanup
+behavior:url(border-radius.htc);*/
+}
+.circleIE {
+	margin:0 0 0 0;
+	padding:0;
+	text-align:center;
+	width:100%;
+    height:auto;
+	cursor:crosshair;
+	color:#fff;
+	text-align:center;
+-moz-border-radius:5px;
+-webkit-border-radius:5px;
+border-radius:5px;
+
+}
+.circleChrome {
+	margin:0 0 0 0;
+	padding:0;
+	text-align:center;
+	width:100%;
+    height:auto;
+	cursor:crosshair;
+	color:#fff;
+	text-align:center;
+-moz-border-radius:3px;
+-webkit-border-radius:3px;
+
+}
+.curved {
+	margin:0 0 0 0;
+	padding:0;
+	text-align:center;
+	width:100%;
+    height:auto;
+	background:#DB0303;
+	border:#BFD7E2 solid 1px;
+	
+	color:#fff;
+	text-align:center;
+-moz-border-radius:5px;
+-webkit-border-radius:5px;
+/*  Jan 13 - Image Cleanupbehavior:url(border-radius.htc); */
+}
+
+.curvedHelp {
+	margin:0 0 0 0;
+	padding:0;
+	text-align:center;
+	width:auto;
+	height:auto;
+	
+	border:#B8CFE1 solid 1px;
+	
+	
+	
+-moz-border-radius:5px;
+-webkit-border-radius:5px;
+/*  Jan 13 - Image Cleanup behavior:url(border-radius.htc); */
+}
+.curvedNode {
+	margin:0 0 0 0;
+	padding:0;
+	text-align:center;
+	width:auto;
+	height:auto;
+	background:#F7F7F7;
+	border:#BFD7E2 solid 1px;
+	
+	color:#21529C;
+	text-align:center;
+-moz-border-radius:5px;
+-webkit-border-radius:5px;
+/*  Jan 13 - Image Cleanup behavior:url(border-radius.htc); */
+}
+.curvedDynamicNode {
+	margin:0 0 0 0;
+	padding:0;
+	text-align:center;
+	width:auto;
+	height:auto;
+	background:#B7E0FA;
+	border:#BFD7E2 solid 1px;
+	
+	color:#21529C;
+	text-align:center;
+-moz-border-radius:5px;
+-webkit-border-radius:5px;
+/*  Jan 13 - Image Cleanup behavior:url(border-radius.htc); */
+}
+.curvedIE {
+	margin:0 0 0 0;
+	padding:0;
+	text-align:center;
+	width:100%;
+    height:auto;
+	background:#DB0303;
+	border:#C5C5BD solid 1px;
+	
+	color:#fff;
+	text-align:center;
+-moz-border-radius:5px;
+-webkit-border-radius:5px;
+
+}
+
+
+.curvedNodeIE {
+	margin:0 0 0 0;
+	padding:0;
+	text-align:center;
+	width:auto;
+	height:auto;
+	background:#F7F7F7;
+	border:#DEDCDC solid 1px;
+	
+	color:#21529C;
+	text-align:center;
+-moz-border-radius:5px;
+-webkit-border-radius:5px;
+}
+.curvedDynamicNodeIE {
+	margin:0 0 0 0;
+	padding:0;
+	text-align:center;
+	width:auto;
+	height:auto;
+	background:#FFF8D3;
+	border:#DEDCDC solid 1px;
+	
+	color:#21529C;
+	text-align:center;
+-moz-border-radius:5px;
+-webkit-border-radius:5px;
+
+}
+
+ .mouseoverClass{
+
+background: transparent url(../images/draw2d/mouseoverImage.gif);
+position:relative;
+cursor:pointer;
+color:#FFFFFF;
+width:14px;
+height:14px;
+  }
+
+
+
+.nodedisplaynamestyle {
+ 
+ 	font-family: Arial,Helvetica,sans-serif;
+	font-weight: bold;
+	font-size: 11px;
+	color: #FFFFFF;
+	white-space:nowrap;
+	letter-spacing:1px;
+
+}
+
+.style1 {
+	font-family: Arial,Helvetica,sans-serif;
+	font-weight: bold;
+	font-size: 11px;
+	color: #FFFFFF;
+	white-space:nowrap;
+	letter-spacing:1px;
+
+}
+
+.nodeItem {
+margin : 0;        
+padding : 0;
+outline : none;        
+border : 0px;        
+cursor : default;
+position : absolute;
+}
+
+.nodeTable {
+margin : 0;        
+padding : 0;
+outline : none;        
+border : 0px;        
+cursor : default;
+position : relative;
+left: 0;
+top: 0;
+}
+
+.nodeLabelLeft {
+width:11px;
+background:url(../../images/draw2d/lable-left-1.png) no-repeat center center;
+height:27px;
+}
+
+.nodeLabelbg {
+
+background: url(../../images/draw2d/lable-bg-1.png) repeat-x center center;
+
+
+}
+
+.nodeLabelRight {
+width:11px;
+background:url(../../images/draw2d/lable-right-1.png) no-repeat center center;
+height:27px;
+}
+
+.startLabelLeft {
+width:12px;
+background:url(images/draw2d/start-lable-left.png) no-repeat center center;
+height:25px;
+}
+
+.startLabelbg {
+
+background: url(images/draw2d/start-lable-mid-bg.png) repeat-x center center;
+
+
+}
+
+.startLabelRight {
+width:11px;
+background:url(images/draw2d/start-lable-right.png) no-repeat center center;
+height:27px;
+}
+
+.editImage {
+background-position : -7px -7px;
+position:absolute;
+z-index:300;
+}
+
+.deleteImage {
+background-position : -7px -35px;
+position:absolute;
+z-index:300;
+}
+
+.draw2dBottomMargin {
+   height: 10px;
+}
+
+.extensionLineSpacing {
+width: 80px;
+white-space: nowrap;
+}
+
+.extensionLine {
+width:80px;
+height:1px;
+border-top:1px solid #000000
+}
+
+.portLabelLeft {
+width: 2px;
+height: 21px;
+background: url(../images/draw2d/yes-no-left.gif) no-repeat center center;
+}
+
+.portLabelbgHeight {
+height: 21px;
+}
+
+.portLabelbg {
+white-space: nowrap;
+vertical-align: middle;
+background: url(../images/draw2d/yes-no-bg.gif) repeat-x center center;
+padding:0px 10px 0px 10px;
+}
+
+.portLabelsSpacing {
+white-space: nowrap;
+vertical-align: middle;
+}
+
+.portLabelRight {
+width: 2px;
+height: 21px;
+background: url(../images/draw2d/yes-no-right.gif) no-repeat center center;
+}
+
+.extensionLinePorts {
+width:1px;
+height:22px;
+border-left:1px solid #000000;
+}
+
+.portStyle{
+
+line-height:24px;
+
+}
+
+.contextMenuForNode {
+	
+	 -moz-user-select: none;
+	-khtml-user-select: none;
+
+}
+.contextMenuForDyanmicNode {
+	 -moz-user-select: none;
+	-khtml-user-select: none;
+}
+
+.addExtension{
+
+background-image:url(../images/draw2d/addExtension.png);
+cursor:pointer;
+height:24px;
+width:24px;
+background-repeat:no-repeat;
+
+}
+
+.extension-small { 
+
+background-image:url(../images/draw2d/extension-small.png); 
+width: 41px; 
+height: 36px; 
+
+} 
+
+.nodeIconClass {
+
+ height: 36px;
+ width: 46px;
+
+}
+
+.extensionIconClass {
+
+ height: 63px;
+ width: 72px;
+
+}

@@ -1,0 +1,89 @@
+ul.toolbar {
+	list-style-type: none;
+	background-color: #f0e7d7;
+	border-width: 1px;
+	border-color: #ffe #aaab9c #ccc #fff;
+	border-style: solid;
+	margin: 0px;
+	padding: 0px;
+	
+}
+ul.verticaltoolbar {
+	width: 50px;
+	padding-left: 1px;
+}
+ul.horizontaltoolbar {
+	height: 25px;	
+	padding-top: 1px;
+	overflow: hidden;				
+}
+
+ul.toolbar li {
+	display: block;
+}
+ul.horizontaltoolbar li {
+	float: left;
+}
+
+ul.toolbar li.button {
+	height: 47px;
+	width: 47px;
+}
+
+ul.toolbar li.button a {
+	text-decoration: none;
+	color: #000;
+}
+
+ul.toolbar li.button a img,
+ul.toolbar li.button a b {
+	/*height: 22px;
+	width: 22px;*/
+	
+	height: 45px;
+	width: 45px;
+	
+	text-align: center;
+	vertical-align: middle;
+	display: block;
+	border-width: 1px;
+	border-color: #f0e7d7;
+	border-style: solid;
+}
+ul.verticaltoolbar li.button a img,
+ul.verticaltoolbar li.button a b {
+	margin: 1px 0px;
+}
+ul.horizontaltoolbar li.button a img,
+ul.horizontaltoolbar li.button a b {
+	margin: 0px 1px;
+}
+ul.toolbar li.button a img:hover,
+ul.toolbar li.button a b:hover {
+	border-color: #ffe #aaab9c #ccc #fff;
+	background: #f7f2ea;
+}
+ul.toolbar li.button a img:active,
+ul.toolbar li.button a img.active,
+ul.toolbar li.button a b:active,
+ul.toolbar li.button a b.active {
+	border-color: #aaab9c #fff #fff #ccc;
+	background: #f7f2ea;
+}
+
+ul.toolbar li label {
+	display: block;
+	font-family: Arial;
+	font-size: 12px;
+	color: #000;
+	margin-top: 1px;
+	margin-right: 6px;
+	vertical-align: baseline;
+}
+ul.toolbar li label input,
+ul.toolbar li input,
+ul.toolbar li label select,
+ul.toolbar li select {
+	font-size: 11px;
+	color: #000;
+}

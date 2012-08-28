@@ -1,0 +1,28 @@
+<html>
+<head>
+
+</head>
+<body>
+
+Socket Testing
+
+<script src="http://stats.agilecrm.com/socket.io/socket.io.js"></script>
+<script>
+
+var agile = "UA-XXXXX-X";
+var socket = io.connect('http://stats.agilecrm.com:80');
+  
+socket.on('connect', function () {
+	    console.log();
+	    socket.emit('subscribe', { agile_id: agile });
+	  });
+  
+socket.on('browsing', function (data) {
+	console.log('browsing');
+    console.log(data);
+});
+</script>
+
+
+
+</body>

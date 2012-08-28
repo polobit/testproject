@@ -1,0 +1,27 @@
+<script id="search-model-template" type="text/html">
+<li>
+<a href='#contact/{{id}}'>
+  <img src="{{gravatarurl properties 50}}">
+<br/>
+  {{getPropertyValue properties "email"}}
+ {{getPropertyValue properties "first_name"}}
+  {{getPropertyValue properties "last_name"}}
+ <br/>
+  {{#each tags}}
+  <b>{{this}}</b>
+  {{/each}}
+<br/>
+</a>
+</li>
+</script>
+
+
+
+<script id="search-collection-template" type="text/html">
+<ul id='search-model-list' class="dropdown-menu" ></ul>
+</script>
+
+
+
+
+	
