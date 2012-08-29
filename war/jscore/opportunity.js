@@ -5,7 +5,7 @@ $(function () {
         var data = $(this).find('.leads').attr('leads');
 
         if (data) {
-            app.navigate("deals/" + data, {
+            Backbone.history.navigate("deals/" + data, {
                 trigger: true
             });
         }

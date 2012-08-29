@@ -109,7 +109,7 @@ $(function () {
         newWidgetModel.save();
         
         // Navigate back to the contact id form
-        app.navigate("contact/" + app.contactDetailView.model.id, { trigger: true });
+        Backbone.history.navigate("contact/" + App_Contacts.contactDetailView.model.id, { trigger: true });
         
     })
 });
@@ -121,13 +121,13 @@ function addSocial(socialEl) {
     var socialServices = ["TWITTER", "LINKEDIN"];
 
     $.each(socialServices, function (index, value) {
-        var url = "/core/api/social/" + value + "/" + app.contactDetailView.model.id
+        var url = "/core/api/social/" + value + "/" + App_Contacts.contactDetailView.model.id
       
         var socialResults = new SocialSearchesListView();
         socialResults.collection.url = url;
 
         // Check if the results are present in local Storage 
-        var key = value + '-' + app.contactDetailView.model.id;
+        var key = value + '-' + App_Contacts.contactDetailView.model.id;
 
         // Store the key for list to retrieve
         socialResults.key = key;
@@ -153,7 +153,7 @@ function agile_crm_update_contact(propertyName, value)
 {
 	
 	// Get Current Contact Model
-	var contact_model =  app.contactDetailView.model;
+	var contact_model =  App_Contacts.contactDetailView.model;
 	
 	var properties = contact_model.toJSON()['properties'];
 
@@ -185,14 +185,14 @@ function agile_crm_add_note(sub, description)
 
 function agile_crm_get_contact ()
 {
-	return app.contactDetailView.model.toJSON();
+	return App_Contacts.contactDetailView.model.toJSON();
 		
 }
 
 // Finds whether property name exists 
 function agile_crm_get_contact_property(propertyName) {
 	
-	var contact_model =  app.contactDetailView.model;
+	var contact_model =  App_Contacts.contactDetailView.model;
 	
 	var properties = contact_model.get('properties');
 	var property;
@@ -231,7 +231,7 @@ function agile_crm_get_plugin_prefs(pluginName)
 function agile_crm_save_widget_property(propertyName, value) {
 	
 	// Get Current Contact Model
-	var contact_model =  app.contactDetailView.model;
+	var contact_model =  App_Contacts.contactDetailView.model;
 	
 	// Get WidgetProperties from Contact Model
 	var widgetProperties = contact_model.get('widgetProperties');
@@ -258,7 +258,7 @@ function agile_crm_save_widget_property(propertyName, value) {
 function agile_crm_get_widget_property(propertyName) {
 	
 	// Get Current Contact Model
-	var contact_model =  app.contactDetailView.model;
+	var contact_model =  App_Contacts.contactDetailView.model;
 	
 	// Get WidgetProperties from Contact Model
 	var widgetProperties = contact_model.get('widgetProperties');
@@ -280,7 +280,7 @@ function agile_crm_get_widget_property(propertyName) {
 function agile_crm_delete_widget_property(propertyName) {
 	
 	// Get Current Contact Model
-	var contact_model =  app.contactDetailView.model;
+	var contact_model =  App_Contacts.contactDetailView.model;
 	
 	// Get WidgetProperties from Contact Model
 	var widgetProperties = contact_model.get('widgetProperties');
