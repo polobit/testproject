@@ -36,7 +36,6 @@ $("#editOpportunity").live("click", function (e) {
         url: 'core/api/opportunity',
         model: app.opportunityCollectionView.currentDeal,
         template: "opportunity-add",
-        isNew: true,
         window: 'deals',
         postRenderCallback: function(el){
             	populateUsers("owner", el);

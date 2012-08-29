@@ -2,6 +2,7 @@ function serializeForm(form_id) {
 	
 	var arr = $('#' + form_id).serializeArray(),
         obj = {};
+	
     // Checkboxes are not serialized
     arr = arr.concat(
     $('#' + form_id + ' input[type=checkbox]:not(:checked)').map(
@@ -22,12 +23,14 @@ function serializeForm(form_id) {
     	    }).get());
     
     // Serialize tags
-    arr = arr.concat( $('#' + form_id + ' ul').map(
+    arr = arr.concat( $('#' + form_id + ' .tags').map(
     		 function () {
     			 var values = [];
     			 
+    			 if(!isArray($(this).children()));
+    			 	
     			 $.each($(this).children(), function(index, data) { 
- 	            	values.push(($(data).val()).toString())
+    				 values.push(($(data).val()).toString())
  	            	
  	            });
     			 
@@ -38,16 +41,17 @@ function serializeForm(form_id) {
         	    }).get() );
     
     
-    // Multiple select
-    arr = arr.concat({"name": $('#' + form_id + ' select').attr('name'), "value": $('#' + form_id + ' select').val()})
+    // Multiple select 
+    if($('#' + form_id + ' select').attr('id')  == "multipleSelect")  
+    	arr = arr.concat({"name": $('#' + form_id + ' select').attr('name'), "value": $('#' + form_id + ' select').val()})
 
+    
     
     // Convert array into JSON
     for (var i = 0; i < arr.length; ++i)  {
     	obj[arr[i].name] = arr[i].value;
     }
-    
-    
+
   //  obj[ $('#' + form_id + ' select').attr('name') ] = $('#' + form_id + ' select').val();
     return obj;
 }
@@ -87,37 +91,32 @@ function deserializeForm(data, form)
 	               }
 	               
 	           }
-	           
-	           // Deserailize contact tags
-	           else if(fel.attr('id') && tag == "ul")
-	           {
-	        	   var tag_value;
-	        	   var tag_name;
-	        	   if(isArray(el)) 
-	        	   {
-	        		   $.each(el, function(index, element) {
-	        			  id=element.id;
-	        			   $.each(element.properties, function(index, element){
-	        				  if(element.name == "first_name")
-	        					  {
-	        					  	tag_name = element.value;
-	        					  }
-	        			   });
-	        			  $('#' + fel.attr('id'),form).append('<li class="contact_tags label label-warning" value='+tag_value+' >'+tag_name+'<a class="icon-remove" id="remove_tag"></a></li>');
-	        		   });
-	        	   }
-	        	   else
-	        	   {
-	        		   var tag_value = el.id;
-	        		   $.each(el.properties, function(index, element){
-	        			   if(element.name == "first_name")
-     					  {
-     					  	tag_name = element.value;
-     					  }
-	        		   })
-	        		   $('#' + fel.attr('id'),form).append('<li class="contact_tags label label-warning" value='+tag_value+' >'+tag_name+'<a class="icon-remove" id="remove_tag"></a></li>');
-	        	   }
+	    
+	           // Deserialize tags
+	           else if(fel.hasClass('tags') && tag == "ul")
+	          {
+	        	   if(!isArray(el))
+	        		   {
+	        		   		el = [el];
+	        		   }
+	        	  
+	        	   $.each(el, function(index, contact){
+	        		   var tag_name;
+	        		   var tag_id = contact.id;
+	        		   $.each(contact.properties, function(index, property){
+	        			   if(property.name == "first_name")
+	        				   {
+	        				   	tag_name = property.value;
+	        				   }
+	        			   if(property.name == "last_name")
+	        				   {
+	        				   	tag_name = tag_name.concat(" "+property.value);
+	        				   }
+	        		  }) ;
+	        		   $('#' + fel.attr('id'), form).append('<li class="contact_tags label label-warning" value='+tag_id+' >'+tag_name+'<a class="icon-remove" id="remove_tag"></a></li>');
+	        	   });
 	           }
+
 	         }
 
 	});

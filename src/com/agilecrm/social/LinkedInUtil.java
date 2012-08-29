@@ -8,10 +8,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
 import com.agilecrm.widgets.Widget;
 import com.google.code.linkedinapi.client.LinkedInApiClient;
 import com.google.code.linkedinapi.client.LinkedInApiClientFactory;
 import com.google.code.linkedinapi.client.enumeration.ProfileField;
+import com.google.code.linkedinapi.client.enumeration.ProfileType;
 import com.google.code.linkedinapi.client.enumeration.SearchParameter;
 import com.google.code.linkedinapi.schema.People;
 import com.google.code.linkedinapi.schema.Person;
@@ -109,7 +111,12 @@ public class LinkedInUtil {
 		final LinkedInApiClient client = factory.createLinkedInApiClient(
 				widget.getProperty("token"), widget.getProperty("secret"));
 
-		Person person = client.getProfileById(id);
+		Person person = client.getProfileById(id, EnumSet.of(
+				ProfileField.PICTURE_URL, ProfileField.FIRST_NAME,
+				ProfileField.LAST_NAME, ProfileField.SUMMARY,
+				ProfileField.HEADLINE, ProfileField.LOCATION_NAME,
+				ProfileField.NUM_CONNECTIONS, ProfileField.PUBLIC_PROFILE_URL,
+				ProfileField.ID));
 
 		SocialSearchResult result = new SocialSearchResult();
 

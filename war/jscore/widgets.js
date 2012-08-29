@@ -13,7 +13,6 @@ function pickWidget() {
         Catalog_Widgets_View.collection.fetch();
     }
     $('#content').html(Catalog_Widgets_View.el);
-    console.log($("#content").html());
 }
 
 // Load Widgets
@@ -145,12 +144,12 @@ function addSocial(socialEl) {
 }
 
 
-
-
 /*
  * THIRD PARTY SCRIPTS - PLUGINS - INTEGRATION POINTS
  */
-function agile_crm_update_contact_property(propertyName, value)
+
+//Updates the current contact
+function agile_crm_update_contact(propertyName, value)
 {
 	
 	// Get Current Contact Model
@@ -158,21 +157,19 @@ function agile_crm_update_contact_property(propertyName, value)
 	
 	var properties = contact_model.toJSON()['properties'];
 
-	properties.push({"name" : propertyName, "value" : value});
+	properties.push({"name":propertyName,"value":value});
 	
 
-	// Update the property	
+	// Update the property
+	
 	contact_model.set("properties", properties);
 	
 	// Set URL - is this required?
 	contact_model.url = 'core/api/contacts'
-	
 	// Save model
 	contact_model.save();
 }
 
-
-// Add note to contact
 function agile_crm_add_note(sub, description)
 {
 	// Add Note to Notes Collection
@@ -186,13 +183,34 @@ function agile_crm_add_note(sub, description)
 	
 }
 
-// To get the current id
 function agile_crm_get_contact ()
 {
 	return App_Contacts.contactDetailView.model.toJSON();
 		
 }
 
+// Finds whether property name exists 
+function agile_crm_get_contact_property(propertyName) {
+	
+	var contact_model =  App_Contacts.contactDetailView.model;
+	
+	var properties = contact_model.get('properties');
+	var property;
+	
+	$.each(properties,function(key,value){
+		if(value.name == propertyName){
+			property = value;
+		}
+	});
+	
+	if(!property) {
+		var object = agile_crm_get_widget_property("Twitter");
+		//$.getJSON("/core/api/widget/contact/TWITTER/" + object.Twitter +"/" + plugin_id, function (data) {
+	}
+		
+	return property;
+
+}
 
 // Get Plugin Id
 function agile_crm_get_plugin_id(pluginName)
@@ -204,7 +222,7 @@ function agile_crm_get_plugin_id(pluginName)
 // Get Plugin Prefs
 function agile_crm_get_plugin_prefs(pluginName)
 {
-	// We store the plugin data during the fetch in the data object
+	
 	return $('#' + pluginName).data('model').toJSON().prefs;
 }
 
@@ -216,24 +234,24 @@ function agile_crm_save_widget_property(propertyName, value) {
 	var contact_model =  App_Contacts.contactDetailView.model;
 	
 	// Get WidgetProperties from Contact Model
-	var widget_properties = contact_model.get('widget_properties');
+	var widgetProperties = contact_model.get('widgetProperties');
 		
 	// If widgetProperties are null
-	if(!widget_properties)
-		widget_properties = {};
+	if(!widgetProperties)
+		widgetProperties = {};
+	
 	else
-		widget_properties = JSON.parse(widget_properties);
+		widgetProperties = JSON.parse(widgetProperties);
 
-	widget_properties[propertyName] = value;
+	widgetProperties[propertyName] = value;
 	
-	console.log(widget_properties);
-	
-	contact_model.set("widget_properties", JSON.stringify(widget_properties));
+	contact_model.set("widgetProperties" , JSON.stringify(widgetProperties));
 	
 	contact_model.url = 'core/api/contacts'
 		
 	// Save model
-	contact_model.save();	
+	contact_model.save()
+	
 }
 
 // Get widget by property name
@@ -243,7 +261,7 @@ function agile_crm_get_widget_property(propertyName) {
 	var contact_model =  App_Contacts.contactDetailView.model;
 	
 	// Get WidgetProperties from Contact Model
-	var widgetProperties = contact_model.get('widget_properties');
+	var widgetProperties = contact_model.get('widgetProperties');
 	
 	// If widget-properties are null return 
 	if(!widgetProperties)
@@ -252,7 +270,37 @@ function agile_crm_get_widget_property(propertyName) {
 	// Convert JSON string to JSON Object
 	widgetProperties = JSON.parse(widgetProperties);
 	
-	console.log(widgetProperties);
+	
+	
 	
 	return widgetProperties[propertyName];
+}
+
+// Delete widget property
+function agile_crm_delete_widget_property(propertyName) {
+	
+	// Get Current Contact Model
+	var contact_model =  App_Contacts.contactDetailView.model;
+	
+	// Get WidgetProperties from Contact Model
+	var widgetProperties = contact_model.get('widgetProperties');
+	
+	// If widget-properties are null return 
+	if(!widgetProperties)
+		return;
+
+	widgetProperties = JSON.parse(widgetProperties);
+	
+	console.log(widgetProperties[propertyName]);
+	
+	delete  widgetProperties[propertyName];
+	
+	console.log(widgetProperties);
+	
+	contact_model.set("widgetProperties" , JSON.stringify(widgetProperties));
+	
+	contact_model.url = 'core/api/contacts'
+		
+	// Save model
+	contact_model.save()
 }

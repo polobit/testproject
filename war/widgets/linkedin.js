@@ -1,5 +1,5 @@
 var LINKEDIN_PLUGIN_NAME = "Linkedin";
-
+var LINKEDIN_PLUGIN_HEADER = '<div style="margin-top:20px" class="bottom-line"><img src="widgets/linkedin-logo-small.png" style="padding-right:5px; padding-bottom:1px; height:15px;"></img><label style="display:inline">Linkedin</label></div><br/>'
 
 
 $(function () {
@@ -43,40 +43,54 @@ function setupLinkedinOAuth(plugin_id)
 
     var path = "widgets/linkedin.js"
     var url = '/scribe?service=linkedin&return_url=' + encodeURIComponent(callbackURL) + '&plugin_id=' + encodeURIComponent(plugin_id);
-    $('#Linkedin').append("<div><button class='btn'><a href=" + url + ">SetUp</button></div>");
+    $('#Linkedin').html(LINKEDIN_PLUGIN_HEADER + "<button class='btn'><a href=" + url + ">SetUp</button>");
 }
 
 function showLinkedinMatchingProfiles(plugin_id)
 {
-	$('#Linkedin').html('<div style="margin-left:-8px; margin-top:10px"><img src="widgets/linkedin-logo-small.png" style="margin-right:10px"></img><label class="bottom-line" style="display:inline">Linkedin</label></div><br/><img src=\"img/1-0.gif\"></img>');
+	// Show loading of linkedin matching profiles
+	$('#Linkedin').html(LINKEDIN_PLUGIN_HEADER + '<img src=\"img/1-0.gif\"></img>');
+	
+	// Fetch matching profiles and displays
 	$.getJSON("/core/api/widgets/linkedin/" + agile_crm_get_contact()['id'] + "/" + plugin_id, function (data) {
-         var el = '<div style="margin-left:-8px; margin-top:10px"><img src="widgets/linkedin-logo-small.png" style="margin-right:10px"></img><label class="bottom-line" style="display:inline">Linkedin</label></div>';
-         if (data != null) {
+			
+		// Widget header
+         var el = LINKEDIN_PLUGIN_HEADER;
+         
+         // If no matches found display message
+         if (data == null) {
+        	 $('#Linkedin').html(el.concat("No Matches Found"));
+        	 return;
+         }
+         
+         // If matched found
              $.each(data, function (key, value) {
-                 if (value.length === undefined) {
-                	 if(value.picture != undefined)
-                		 el = el.concat("<img  rel=\"popover\" data-content=\"Location : "+value.location+"<br/>connection :"+value.summary+" \" data-original-title=\""+value.name+"\" class=\"linkedinImage thumbnail \" id=" + value.id + " src =\" "+ value.picture +" \" style=\"width: 50px;height: 50px\"></img>");
-                	 else
-                		 el = el.concat("<img  rel=\"popover\" data-content=\"Location : "+value.location+"<br/>connection :"+value.summary+" \" data-original-title=\""+value.name+"\" class=\"linkedinImage thumbnail \" id=" + value.id + " src =\" http://wiseheartdesign.com/page_attachments/0000/0062/default-avatar.png \"style=\"width: 50px;height: 50px;display:inline-block;\"></img>");
-                 } else {
-                     $.each(value, function (index, object) {
-                    	 if(object.picture != undefined)
-                    		 el = el.concat("<img rel=\"popover\" data-content=\"Location : "+object.location+"<br/>connection :"+object.summary+" \" data-original-title=\""+object.name+"\"  class=\"linkedinImage thumbnail \" id=" + object.id + " src =\" "+ object.picture +" \" style=\"width: 50px;height: 50px;display:inline-block;\" ></img>");
-                    	 else
-                    		 el = el.concat("<img  rel=\"popover\" data-content=\"Location : "+object.location+"<br/>connection :"+object.summary+" \" data-original-title=\""+object.name+"\"class=\"twitterImage thumbnail \" class=\"linkedinImage thumbnail \" id=" + object.id + " src =\" http://wiseheartdesign.com/page_attachments/0000/0062/default-avatar.png \" style=\"width: 50px;height: 50px; display:inline-block;\"></img>");
-                         
-                     });
-                 }
-             });
+            	 
+            	 if(!isArray(value))
+            		 value = [value];
+            	 
+            	 // Iterates through each profile
+            	 $.each(value, function (index, object) {
+            		 object.picture = 'https:' + object.picture.split(':')[1];
+                	 console.log(object.picture);
+            		 if(object.picture == null)
+                		 {
+                		 	object.picture = 'https://contactuswidget.appspot.com/images/pic.png';
+                		 }
+                	 
+                	 //Converts http picture links to https
+                	 object.picture = convertHttptoHttps(object.picture);
+                	 
+                	 el = el.concat("<img  rel=\"popover\" data-content=\"Location : "+object.location+"<br/>connection :"+object.summary+" \" data-original-title=\""+object.name+"\"class=\"linkedinImage thumbnail \" class=\"linkedinImage thumbnail \" id=" + object.id + " src =\" http://wiseheartdesign.com/page_attachments/0000/0062/default-avatar.png \" style=\"width: 50px;height: 50px; display:inline-block; cursor:pointer; color: #FF00FF\"></img>");
+                     
+                 });
+              });
             
              $('#Linkedin').html(el);
-         }
-         else {
-        	 $('#Linkedin').html('<div style="margin-left:-8px; margin-top:10px"><img src="widgets/linkedin-logo-small.png" style="margin-right:10px"></img><label class="bottom-line" style="display:inline">Linkedin</label></div><br/>No Matches Found');
-        }
+         
      });
 	
-	// Display to Twitter profile details on mouseover and saves on click
+	// Display to Linkedin profile details on mouseover and saves on click
 	$(".linkedinImage").die().live('mouseover' ,function() {
 		
 		 var id = $(this).attr('id');
@@ -87,7 +101,7 @@ function showLinkedinMatchingProfiles(plugin_id)
 			 $('#'+id).popover('hide');
 			    if (id) 
 			    	{
-			    		agile_crm_save_widget_property(LINKEDIN_PLUGIN_NAME, id);
+			    		//agile_crm_save_widget_property(LINKEDIN_PLUGIN_NAME, id);
 			    		showLinkedinProfile(id, plugin_id)
 			    	}
 		 });
@@ -95,24 +109,36 @@ function showLinkedinMatchingProfiles(plugin_id)
 	});
 }
 
+// Shows saved Linkedin profile
 function showLinkedinProfile(linkedin_id, plugin_id)
 {
-	$('#Linkedin').html('<div style="margin-left:-8px"><img src="widgets/linkedin-logo-small.png" style="margin-right:10px"></img><label class="bottom-line" style="display:inline">Linkedin</label></div><br/><img src=\"img/1-0.gif\"></img>');
+	// Shows loading before fetching matching profiles
+	$('#Linkedin').html(LINKEDIN_PLUGIN_HEADER  + '<img src=\"img/1-0.gif\"></img>');
+	
+	// Fetches matching profiles
     $.getJSON("/core/api/widgets/contact/LINKEDIN/" + linkedin_id +"/" + plugin_id, function (data) {
-    	if(data.picture != null)
-        	$('#Linkedin').html('<div style="margin-left:-8px; margin-bottom:10px; margin-top:10px"><img src="widgets/linkedin-logo-small.png" style="margin-right:10px"></img><label class="bottom-line" style="display:inline">Linkedin</label></div><div class="page-header" style="display:inline;  line-height:12px;"><div class="row-fluid " style="color:gray; background:#f5f5f5; margin-top:0px;margin-left:-8px; width:200px; border-top:5px solid whitesmoke;"><div class="3"><img src=' + data.picture + ' width="50px" height="50px" style="display:inline; float:left; margin-right:2px; margin-top:2px; padding:0px 5px; "/></div><div class="span8"><h4 style="color:blue">@' + data.name + '</h4><span style="font-size:10px;">' + data.summary + ',<br/> ' + data.location + ',<br/></span><br/><br/></div></div><a href="#" class= "addLinkedinImage" id='+ data.picture+'>Add Image To Profile</a>');
-    	else
-    		$('#Linkedin').html('<div style="margin-left:-8px; margin-bottom:10px; margin-top:10px"><img src="widgets/linkedin-logo-small.png" style="margin-right:10px"></img><label class="bottom-line" style="display:inline">Linkedin</label></div><div class="page-header" style="display:inline;  line-height:12px;"><div class="row-fluid " style="color:gray; background:#f5f5f5; margin-top:0px;margin-left:-8px; width:200px; border-top:5px solid whitesmoke;"><div class="3"><img src="http://wiseheartdesign.com/page_attachments/0000/0062/default-avatar.png" width="50px" height="50px" style="display:inline; float:left; margin-right:2px; margin-top:2px; padding:0px 5px; "/></div><div class="span8"><h4 style="color:blue">' + data.name + '</h4><span style="font-size:10px;">' + data.summary + ',<br/> ' + data.location + ',<br/></span><br/><br/></div></div>');    	
+    	if(data.picture == null)
+    		{
+    			data.picture = 'https://contactuswidget.appspot.com/images/pic.png';
+    		}
+    	
+    	// Convert http image url to https url
+    	data.picture  = convertHttptoHttps(data.picture);
+    	
+    	$('#Linkedin').html('<div style="margin-top:20px" class="bottom-line"><img src="widgets/linkedin-logo-small.png" style="padding-right:5px; padding-bottom:1px; height:15px;"></img><label style="display:inline">Linkedin</label><a class="icon-remove pull-right" id="linkedin_plugin_delete"></a></div><br/><div  style="display:inline;  line-height:12px;"><a>&times;</a><div class="row-fluid well" style="margin-top:-8px; width:200px; border-top:5px solid whitesmoke;"><a id="linkedin_profile_delete" class="Linkedin btn  pull-right">&times;</a><div class="span3" style="margin-left:-8%; margin-top:-8%; margin-right:3%"><img src=' + data.picture + ' style=" display:inline; float:left; margin-right:2px; margin-top:5px; padding:0px 5px;"/></div><div class="span8" style="margin-top:-8%; width:79%;"><h4 style="color:blue"><a href=\"' + data.url + '\" target="_blank">' + data.name + '</a></h4><span style="font-size:10px; margin-bottom:2px;">' + data.summary + ',<br/> ' + data.location +',<br/>' + data.num_connections + '+ connections ,<br/></span><br/><br/></div></div>');
     });	
     
     
-    $('.addLinkedinImage').die().live('click',function(e){
-    	e.preventDefault();
-    	alert("clicked");
-    	 var id = $(this).attr('id');
-    	 agile_crm_update_contact("image", id);
+    // delete linkedin profile
+    $('#linkedin_plugin_delete').die().live('click',function(event){
+    	 event.preventDefault();
+    	 agile_crm_delete_widget_property(LINKEDIN_PLUGIN_NAME);
     	 
     });
 }
 
-
+function convertHttptoHttps(url) {
+	
+	url = 'https:'+url.split(':')[1];
+	return url;
+}
