@@ -173,7 +173,6 @@ var ContactsRouter = Backbone.Router.extend({
         contactDuplicate.save(json,{
         	success: function(data)
         	{
-        		console.log("dulicate created");
         	}
         });
     },
