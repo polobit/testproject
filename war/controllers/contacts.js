@@ -250,6 +250,7 @@ var ContactsRouter = Backbone.Router.extend({
     		$('#content').html(getTemplate('filter-contacts', {}));
     		$("#secondSelect").chained("#firstSelect"); 
     		$("#thirdSelect").chained("#secondSelect");
+    		$("#fourthSelect").remoteChained("#secondSelect","/core/api/filter-tags");
     	})
     },
     
