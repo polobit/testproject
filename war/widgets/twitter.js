@@ -90,6 +90,7 @@ function showTwitterMatchingProfiles(plugin_id)
 			    	//	$('<body>').append($(modal).html());
 			    		
 			    		
+			    	
 			    	//	$('#modal-form-dom').show();
 			    		
 			    		
@@ -108,7 +109,7 @@ function showTwitterProfile(twitter_id, plugin_id)
 {
 	$('#Twitter').html('<div style=" margin-bottom:10px " class="bottom-line" style="display:inline-block;"><img src="widgets/twitter-logo-small.png" style="padding-right:5px; padding-bottom:1px; height:15px;"></img><label style="display:inline">Twitter</label><span id="twitter_plugin_delete" class="icon-remove pull-right"></span></div><img src=\"img/1-0.gif\"></img>');
     $.getJSON("/core/api/widgets/contact/TWITTER/" + twitter_id +"/" + plugin_id, function (data) {
-        $('#Twitter').html('<div style=" margin-bottom:20px " class="bottom-line" style="display:inline-block;"><img src="widgets/twitter-logo-small.png" style="padding-right:5px; padding-bottom:1px; height:15px;"></img><label style="display:inline">Twitter</label><a class="icon-remove pull-right" id="twitter_plugin_delete"></a></div><div  style="display:inline;  line-height:12px;"><div class="row-fluid well" style="margin-top:10px; width:200px; border-top:5px solid whitesmoke;"><div class="span3" style="margin-left:-8%; margin-top:-8%; margin-right:3%"><img src=' + data.picture + ' style=" display:inline; float:left; margin-right:2px; margin-top:5px; padding:0px 5px; cursor:pointer; color: #FF00FF "/></div><div class="span8" style="margin-top:-8%; width:79%;"><h4 style="color:blue"><a href=\"' + data.url + '\" target="_blank">@' + data.name + '</a></h4><span style="font-size:10px; margin-bottom:2px;">' + data.summary + ',<br/> ' + data.location +',<br/>' + data.num_connections + '+ connections ,<br/></span><br/><br/></div></div>');
+        $('#Twitter').html('<div style=" margin-bottom:20px " class="bottom-line" style="display:inline-block;"><img src="widgets/twitter-logo-small.png" style="padding-right:5px; padding-bottom:1px; height:15px;"></img><label style="display:inline">Twitter</label><a class="icon-remove pull-right" id="twitter_plugin_delete"></a></div><div  style="display:inline;  line-height:12px;"><div class="row-fluid well" style="margin-top:-10px; width:200px; border-top:5px solid whitesmoke;"><div class="span3" style="margin-left:-8%; margin-top:-8%; margin-right:3%"><img src=' + data.picture + ' style=" display:inline; float:left; margin-right:2px; margin-top:5px; padding:0px 5px; cursor:pointer; color: #FF00FF "/></div><div class="span8" style="margin-top:-8%; width:79%;"><h4 style="color:blue"><a href=\"' + data.url + '\" target="_blank">@' + data.name + '</a></h4><span style="font-size:10px; margin-bottom:2px;">' + data.summary + ',<br/> ' + data.location +',<br/>' + data.num_connections + '+ connections ,<br/></span><br/><br/></div></div>');
     });	
     
     // Delete twitter profile
