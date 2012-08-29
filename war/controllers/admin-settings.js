@@ -9,6 +9,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
         "analytics-code": "analyticsCode",
         "api": "api",
         "admin": "adminSettings", // Yaswanth - 08/03/12,
+        "milestones": "milestones"
     },
     
     adminSettings: function()
@@ -99,5 +100,14 @@ var AdminSettingsRouter = Backbone.Router.extend({
     	                }); 
     	            $('#content').html(view.el);
     	    	  });
-    } 
+    },
+    milestones: function () {
+        var view = new Base_Model_View({
+        	url: '/core/api/milestone',
+        	template: "admin-settings-milestones",
+        	reload: true
+        });
+        
+        $('#content').html(view.render().el);
+        },
 });

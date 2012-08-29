@@ -1,4 +1,4 @@
-// To Enable Console in IE
+// To Enable Console in IE - MC
 $(function(){
 	var alertFallback = false;
 	if (typeof console === "undefined" || typeof console.log === "undefined") {
@@ -2882,6 +2882,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
         "analytics-code": "analyticsCode",
         "api": "api",
         "admin": "adminSettings", // Yaswanth - 08/03/12,
+        "milestones": "milestones"
     },
     
     adminSettings: function()
@@ -2972,7 +2973,16 @@ var AdminSettingsRouter = Backbone.Router.extend({
     	                }); 
     	            $('#content').html(view.el);
     	    	  });
-    } 
+    },
+    milestones: function () {
+        var view = new Base_Model_View({
+        	url: '/core/api/milestone',
+        	template: "admin-settings-milestones",
+        	reload: true
+        });
+        
+        $('#content').html(view.render().el);
+        },
 });
 // All Routers are global
 var App_Contacts, App_Workflows, App_Deals, App_Admin_Settings, App_Calendar, App_Settings;
@@ -3318,8 +3328,7 @@ function setupTags(cel) {
     	 /* Deals/Opportunity */
         "deals": "deals",
         "deals-add": "dealsAdd",
-        "deals/:id": "dealsDetails", 
-        "milestones": "milestones",
+        "deals/:id": "dealsDetails"
     },
     deals: function () {
     	this.opportunityCollectionView = new Base_Collection_View({
@@ -3385,16 +3394,7 @@ function setupTags(cel) {
         
         var el = this.dealsDetailView.render().el;
         $('#content').html(el);
-    },
-    milestones: function () {
-        var view = new Base_Model_View({
-        	url: '/core/api/milestone',
-        	template: "milestones-add",
-        	reload: true
-        });
-        
-        $('#content').html(view.render().el);
-        },
+    }
 });
     var SettingsRouter = Backbone.Router.extend({
 

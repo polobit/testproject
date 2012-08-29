@@ -36,6 +36,12 @@
 			AgileCrm API.<br /> <br /><br /><br /> </br>
 			<a class='btn btn-primary' href='#api'>Go</a>
 		</div>	
+		<div class="span3 offset well" style="height:180px">
+			<legend>Milestones</legend>	
+			Configure your milestones for your deals.<br /> <br /><br /><br /> </br>
+			<a class='btn btn-primary' href='#milestones'>Go</a>
+		</div>	
+	
 	</div>
 	
 
@@ -397,7 +403,7 @@ API-KEY  {{api_key}}
   <td>{{field_description}} </td>
   <td>{{field_type}}</td>
 <br/>
-</script><script id="milestones-add-template" type="text/html">
+</script><script id="admin-settings-milestones-template" type="text/html">
 
 <div class='span8 well'>
 	<form id="milestonesForm" class="form-horizontal">
@@ -414,8 +420,8 @@ API-KEY  {{api_key}}
 		</div> 
 		
 		<div class="form-actions">
-		<a href="#admin" class="btn ">Close</a>
 		<a href="#" type="submit" class="save btn btn-primary">Save</a>
+		<a href="#admin" class="btn ">Close</a>
 		</div>
 		<fieldset>
 	</form>

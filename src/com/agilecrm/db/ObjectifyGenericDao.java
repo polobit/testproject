@@ -14,6 +14,7 @@ import javax.persistence.Transient;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.EmailTemplates;
+import com.agilecrm.account.Milestone;
 import com.agilecrm.account.Opportunity;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
@@ -68,6 +69,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		ObjectifyService.register(EmailTemplates.class);
 		ObjectifyService.register(APIKey.class);
 		ObjectifyService.register(Opportunity.class);
+		ObjectifyService.register(Milestone.class);
 		ObjectifyService.register(Widget.class);
 		
 		

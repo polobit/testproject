@@ -9,7 +9,6 @@ import javax.ws.rs.core.MediaType;
 
 import com.agilecrm.account.Milestone;
 
-// Milestone API
 @Path("/api/milestone")
 public class MilestoneAPI {
 
@@ -20,11 +19,20 @@ public class MilestoneAPI {
 		milestone.save();
 		return null;
 	}
-	
+
 	@GET
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Milestone getMilestone() {
+		Milestone milestone = Milestone.getMilestones();
+		return milestone;
+	}
+	
+	@Path("/tokens")
+	@GET
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Milestone getMilestoneAsTokens() {
 		Milestone milestone = Milestone.getMilestones();
 		String str = milestone.milestones;
 		String noSpacestr = str.replaceAll("\\s+", "");
