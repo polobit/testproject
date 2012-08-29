@@ -9,6 +9,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.agilecrm.account.Milestone;
 
+// Milestone API
 @Path("/api/milestone")
 public class MilestoneAPI {
 
