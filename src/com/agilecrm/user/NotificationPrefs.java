@@ -3,6 +3,9 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.google.appengine.api.users.User;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -17,19 +20,19 @@ public class NotificationPrefs {
 	public Long id;
 
 	@Parent
-	private Key<AgileUser> user;
+	public Key<AgileUser> user;
 	
 	
 	// The client checks if the key is not present.. So all default should be true
 	
 	@NotSaved(IfDefault.class)
-	public boolean contat_browsing = true;
+	public boolean contact_browsing = true;
 
 	@NotSaved(IfDefault.class)
-	public boolean contat_assigned_browsing = true;
+	public boolean contact_assigned_browsing = true;
 	
 	@NotSaved(IfDefault.class)
-	public boolean contat_assigned_starred_browsing = true;
+	public boolean contact_assigned_starred_browsing = true;
 	
 	@NotSaved(IfDefault.class)
 	public boolean contact_opened_email = true;
@@ -58,13 +61,13 @@ public class NotificationPrefs {
 	private static ObjectifyGenericDao<NotificationPrefs> dao = new ObjectifyGenericDao<NotificationPrefs>(NotificationPrefs.class);
 
 
-	NotificationPrefs(Long userId, boolean contat_browsing, boolean contat_assigned_browsing, boolean contat_assigned_starred_browsing, boolean contact_opened_email,
-				  boolean contact_assigned_opened_email,boolean contact_assigned_starred_opened_email, boolean contact_clicked_link, boolean contact_is_updated,
+	NotificationPrefs(Long userId, boolean contact_browsing, boolean contact_assigned_browsing, boolean contact_assigned_starred_browsing, boolean contact_opened_email,
+				  boolean contact_assigned_opened_email,boolean contact_assigned_starred_opened_email, boolean contact_clicked_link,
 				  boolean contact_assigned_clicked_link, boolean contact_assigned_starred_clicked_link, boolean deal_created, boolean deal_closed)
 	{
-		this.contat_browsing = contat_browsing;
-		this.contat_assigned_browsing = contat_assigned_browsing;
-		this.contat_assigned_starred_browsing = contat_assigned_starred_browsing;
+		this.contact_browsing = contact_browsing;
+		this.contact_assigned_browsing = contact_assigned_browsing;
+		this.contact_assigned_starred_browsing = contact_assigned_starred_browsing;
 		this.contact_opened_email = contact_opened_email;
 		this.contact_assigned_opened_email = contact_assigned_opened_email;
 		this.contact_assigned_starred_opened_email = contact_assigned_starred_opened_email;
@@ -107,7 +110,7 @@ public class NotificationPrefs {
 
 	private static NotificationPrefs getDefaultNotifications(AgileUser agileUser)
 	{
-		NotificationPrefs notifications = new NotificationPrefs(agileUser.id, true, true, false, true, true, true, true, true, true, true, true, true);
+		NotificationPrefs notifications = new NotificationPrefs(agileUser.id, false, true, true, false, false, false, false, true, true, false, true);
 		notifications.save();
 		return notifications;
 	}

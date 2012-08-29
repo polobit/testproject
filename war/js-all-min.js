@@ -275,7 +275,6 @@ var Base_Model_View = Backbone.View.extend({
             }
         });
     },
-
     render: function () {
     	if(!this.model.isNew() || this.options.isNew || !$.isEmptyObject(this.model.toJSON()))
     	{
@@ -781,72 +780,78 @@ $(function(){
 	    $('#content').html(view.render().el);
 		
 	});
-});
+});// To save map of key: first_name and value: contact id 
+var CONTACT = [];
+	
 function contactsTypeAhead(id, el) {
 	
-	// To save map of key: first_name and value: contact id 
-	var CONTACT = [];
 	
 	$('#' + id, el).typeahead({
 		source : function(query, process) {
 			
 			// Get data on query
-			$.getJSON( "core/api/contacts/search/" + query,
+			$.getJSON("core/api/contacts/search/" + query,
 				function(data) {
 				// If not null process data to show	
 				if(data != null)
 					{
-						var contact_list = [];
+						var contact_names_list = [];
 						
 						// If result is multiple contacts (Array)
-						if(isArray(data.contact))
-						{
+						if(!isArray(data.contact))
+							data.contact = [data.contact];
+						
 							$.each(data.contact, function(index, contact ){
+								var contact_name;
+								
 								$.each(contact.properties, function (index, property) {
 									if (property.name == "first_name")
 									{
-										contact_list.push(property.value);
-										CONTACT[property.value] = contact;
+										contact_name = property.value;
+									}
+									if(property.name == "last_name")
+									{
+										contact_name = contact_name.concat(" "+property.value);
+										
 									}
 								});
+								
+								CONTACT[contact_name] = contact;
+								contact_names_list.push(contact_name);
 							});
-						}
-						else
-						{
-							$.each(data.contact.properties, function (index, property) {
-								if (property.name == "first_name")
-								{
-									contact_list.push(property.value);
-									CONTACT[property.value] = data.contact;
-								}
-							});
-						}
-						
+							
+							
 						// Call Process on list of names(Strings)
-						process(contact_list)
+						process(contact_names_list);
 					}
 				});
 		},
 		updater: function (items) {
-			// If contact tag already exists returns 
-			if($('#contact-tags',el).find('li').attr('value') == CONTACT[items].id)
-				return;
 			
-			// Else add tag 
-			else
-			 $('#contact-tags',el).append('<li class="contact_tags label label-warning" value='+CONTACT[items].id+' >'+items+'<a class="icon-remove" id="remove_tag"></a></li>');
+			var tag_not_exist = true;
+			
+			// If contact tag already exists, returns 
+			$.each($('#contact-tags', el).children('li'), function(index, tag) {
+				if($(tag).attr('value') == CONTACT[items].id)
+					{
+						tag_not_exist = false;
+						return;
+					}
+			})
+			
+			// Add tag 
+			if(tag_not_exist)
+				$('#contact-tags', el).append('<li class="contact_tags label label-warning" value=' + CONTACT[items].id+' >'+items + '<a class="icon-remove" id="remove_tag"></a></li>');
 		},
 		minLength : 2
 	})
 }
 
-
-
 // Remove tags 
 $('#remove_tag').die().live('click', function(event){
 	event.preventDefault();
 	$(this).parent().remove();
-})
+});
 
 $(function(){
 	$('#contacts-model-list > tr').live('click', function(e){
@@ -1173,6 +1178,7 @@ function isValidRange(startDate, endDate){
 	
 	var arr = $('#' + form_id).serializeArray(),
         obj = {};
+	
     // Checkboxes are not serialized
     arr = arr.concat(
     $('#' + form_id + ' input[type=checkbox]:not(:checked)').map(
@@ -1193,12 +1199,14 @@ function isValidRange(startDate, endDate){
     	    }).get());
     
     // Serialize tags
-    arr = arr.concat( $('#' + form_id + ' ul').map(
+    arr = arr.concat( $('#' + form_id + ' .tags').map(
     		 function () {
     			 var values = [];
     			 
+    			 if(!isArray($(this).children()));
+    			 	
     			 $.each($(this).children(), function(index, data) { 
- 	            	values.push(($(data).val()).toString())
+    				 values.push(($(data).val()).toString())
  	            	
  	            });
     			 
@@ -1209,16 +1217,17 @@ function isValidRange(startDate, endDate){
         	    }).get() );
     
     
-    // Multiple select
-    arr = arr.concat({"name": $('#' + form_id + ' select').attr('name'), "value": $('#' + form_id + ' select').val()})
+    // Multiple select 
+    if($('#' + form_id + ' select').attr('id')  == "multipleSelect")  
+    	arr = arr.concat({"name": $('#' + form_id + ' select').attr('name'), "value": $('#' + form_id + ' select').val()})
 
+    
     
     // Convert array into JSON
     for (var i = 0; i < arr.length; ++i)  {
     	obj[arr[i].name] = arr[i].value;
     }
-    
-    
+
   //  obj[ $('#' + form_id + ' select').attr('name') ] = $('#' + form_id + ' select').val();
     return obj;
 }
@@ -1258,37 +1267,33 @@ function deserializeForm(data, form)
 	               }
 	               
 	           }
-	           
-	           // Deserailize contact tags
-	           else if(fel.attr('id') && tag == "ul")
-	           {
-	        	   var tag_value;
-	        	   var tag_name;
-	        	   if(isArray(el)) 
-	        	   {
-	        		   $.each(el, function(index, element) {
-	        			  id=element.id;
-	        			   $.each(element.properties, function(index, element){
-	        				  if(element.name == "first_name")
-	        					  {
-	        					  	tag_name = element.value;
-	        					  }
-	        			   });
-	        			  $('#' + fel.attr('id'),form).append('<li class="contact_tags label label-warning" value='+tag_value+' >'+tag_name+'<a class="icon-remove" id="remove_tag"></a></li>');
-	        		   });
-	        	   }
-	        	   else
-	        	   {
-	        		   var tag_value = el.id;
-	        		   $.each(el.properties, function(index, element){
-	        			   if(element.name == "first_name")
-     					  {
-     					  	tag_name = element.value;
-     					  }
-	        		   })
-	        		   $('#' + fel.attr('id'),form).append('<li class="contact_tags label label-warning" value='+tag_value+' >'+tag_name+'<a class="icon-remove" id="remove_tag"></a></li>');
-	        	   }
+	    
+	           // Deserialize tags
+	           else if(fel.hasClass('tags') && tag == "ul")
+	          {
+	        	   if(!isArray(el))
+	        		   {
+	        		   		el = [el];
+	        		   }
+	        	  
+	        	   $.each(el, function(index, contact){
+	        		   var tag_name;
+	        		   var tag_id = contact.id;
+	        		   $.each(contact.properties, function(index, property){
+	        			   if(property.name == "first_name")
+	        				   {
+	        				   	tag_name = property.value;
+	        				   }
+	        			   if(property.name == "last_name")
+	        				   {
+	        				   	tag_name = tag_name.concat(" "+property.value);
+	        				   }
+	        		  });
+	        		   
+	        		   $('#' + fel.attr('id'), form).append('<li class="contact_tags label label-warning" value='+tag_id+' >'+tag_name+'<a class="icon-remove" id="remove_tag"></a></li>');
+	        	   });
 	           }
+
 	         }
 
 	});
@@ -2104,7 +2109,6 @@ $("#editOpportunity").live("click", function (e) {
         url: 'core/api/opportunity',
         model: app.opportunityCollectionView.currentDeal,
         template: "opportunity-add",
-        isNew: true,
         window: 'deals',
         postRenderCallback: function(el){
             	populateUsers("owner", el);
@@ -2419,7 +2423,8 @@ function _setup(el)
 	});	
 }$(function(){ 
 
-	$(".upload_s3").live('click', function(){
+	$(".upload_s3").live('click', function(e){
+		e.preventDefault();
 		uploadImage("account_prefs");
 	});
 	
@@ -2427,7 +2432,7 @@ function _setup(el)
 
 function uploadImage(id)
 {
-	var newwindow = window.open("upload.jsp?id=" + id,'name','height=500,width=500');
+	var newwindow = window.open("upload.jsp?id=" + id,'name','height=310,width=500');
 	if (window.focus)
 	{
 		newwindow.focus();
@@ -2525,7 +2530,6 @@ function pickWidget() {
         Catalog_Widgets_View.collection.fetch();
     }
     $('#content').html(Catalog_Widgets_View.el);
-    console.log($("#content").html());
 }
 
 // Load Widgets
@@ -2657,12 +2661,12 @@ function addSocial(socialEl) {
 }
 
 
-
-
 /*
  * THIRD PARTY SCRIPTS - PLUGINS - INTEGRATION POINTS
  */
-function agile_crm_update_contact_property(propertyName, value)
+
+//Updates the current contact
+function agile_crm_update_contact(propertyName, value)
 {
 	
 	// Get Current Contact Model
@@ -2670,21 +2674,19 @@ function agile_crm_update_contact_property(propertyName, value)
 	
 	var properties = contact_model.toJSON()['properties'];
 
-	properties.push({"name" : propertyName, "value" : value});
+	properties.push({"name":propertyName,"value":value});
 	
 
-	// Update the property	
+	// Update the property
+	
 	contact_model.set("properties", properties);
 	
 	// Set URL - is this required?
 	contact_model.url = 'core/api/contacts'
-	
 	// Save model
 	contact_model.save();
 }
 
-
-// Add note to contact
 function agile_crm_add_note(sub, description)
 {
 	// Add Note to Notes Collection
@@ -2698,13 +2700,34 @@ function agile_crm_add_note(sub, description)
 	
 }
 
-// To get the current id
 function agile_crm_get_contact ()
 {
 	return App_Contacts.contactDetailView.model.toJSON();
 		
 }
 
+// Finds whether property name exists 
+function agile_crm_get_contact_property(propertyName) {
+	
+	var contact_model =  App_Contacts.contactDetailView.model;
+	
+	var properties = contact_model.get('properties');
+	var property;
+	
+	$.each(properties,function(key,value){
+		if(value.name == propertyName){
+			property = value;
+		}
+	});
+	
+	if(!property) {
+		var object = agile_crm_get_widget_property("Twitter");
+		//$.getJSON("/core/api/widget/contact/TWITTER/" + object.Twitter +"/" + plugin_id, function (data) {
+	}
+		
+	return property;
+
+}
 
 // Get Plugin Id
 function agile_crm_get_plugin_id(pluginName)
@@ -2716,7 +2739,7 @@ function agile_crm_get_plugin_id(pluginName)
 // Get Plugin Prefs
 function agile_crm_get_plugin_prefs(pluginName)
 {
-	// We store the plugin data during the fetch in the data object
+	
 	return $('#' + pluginName).data('model').toJSON().prefs;
 }
 
@@ -2728,24 +2751,24 @@ function agile_crm_save_widget_property(propertyName, value) {
 	var contact_model =  App_Contacts.contactDetailView.model;
 	
 	// Get WidgetProperties from Contact Model
-	var widget_properties = contact_model.get('widget_properties');
+	var widgetProperties = contact_model.get('widgetProperties');
 		
 	// If widgetProperties are null
-	if(!widget_properties)
-		widget_properties = {};
+	if(!widgetProperties)
+		widgetProperties = {};
+	
 	else
-		widget_properties = JSON.parse(widget_properties);
+		widgetProperties = JSON.parse(widgetProperties);
 
-	widget_properties[propertyName] = value;
+	widgetProperties[propertyName] = value;
 	
-	console.log(widget_properties);
-	
-	contact_model.set("widget_properties", JSON.stringify(widget_properties));
+	contact_model.set("widgetProperties" , JSON.stringify(widgetProperties));
 	
 	contact_model.url = 'core/api/contacts'
 		
 	// Save model
-	contact_model.save();	
+	contact_model.save()
+	
 }
 
 // Get widget by property name
@@ -2755,7 +2778,7 @@ function agile_crm_get_widget_property(propertyName) {
 	var contact_model =  App_Contacts.contactDetailView.model;
 	
 	// Get WidgetProperties from Contact Model
-	var widgetProperties = contact_model.get('widget_properties');
+	var widgetProperties = contact_model.get('widgetProperties');
 	
 	// If widget-properties are null return 
 	if(!widgetProperties)
@@ -2764,9 +2787,39 @@ function agile_crm_get_widget_property(propertyName) {
 	// Convert JSON string to JSON Object
 	widgetProperties = JSON.parse(widgetProperties);
 	
-	console.log(widgetProperties);
+	
+	
 	
 	return widgetProperties[propertyName];
+}
+
+// Delete widget property
+function agile_crm_delete_widget_property(propertyName) {
+	
+	// Get Current Contact Model
+	var contact_model =  App_Contacts.contactDetailView.model;
+	
+	// Get WidgetProperties from Contact Model
+	var widgetProperties = contact_model.get('widgetProperties');
+	
+	// If widget-properties are null return 
+	if(!widgetProperties)
+		return;
+
+	widgetProperties = JSON.parse(widgetProperties);
+	
+	console.log(widgetProperties[propertyName]);
+	
+	delete  widgetProperties[propertyName];
+	
+	console.log(widgetProperties);
+	
+	contact_model.set("widgetProperties" , JSON.stringify(widgetProperties));
+	
+	contact_model.url = 'core/api/contacts'
+		
+	// Save model
+	contact_model.save()
 }$(function(){
 	
 	 // Save Workflow
@@ -3433,6 +3486,7 @@ function setupTags(cel) {
     	var view = new Base_Model_View({
             url: '/core/api/email/templates',
             template: "settings-email-template-add",
+            navigate: 'settings',
             postRenderCallback: function(el){
            	 // Setup HTML Editor
             	console.log("rendering html");

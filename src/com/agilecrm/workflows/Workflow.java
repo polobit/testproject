@@ -3,9 +3,13 @@ package com.agilecrm.workflows;
 import java.util.List;
 
 import javax.persistence.Id;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.UserPrefs;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -25,6 +29,9 @@ public class Workflow
 	@NotSaved(IfDefault.class)
 	public String rules = null;
 
+	@NotSaved(IfDefault.class)
+	private Key<AgileUser> creator_key = null; 
+
 	
 	// Dao
 	private static ObjectifyGenericDao<Workflow> dao = new ObjectifyGenericDao<Workflow>(Workflow.class);
@@ -42,6 +49,9 @@ public class Workflow
 
 	public void save()
 	{
+		AgileUser agileUser = AgileUser.getCurrentAgileUser();
+		creator_key = new Key<AgileUser>(AgileUser.class, agileUser.id);
+		
 		dao.put(this);
 	}
 
@@ -72,5 +82,18 @@ public class Workflow
 	public String toString()
 	{
 		return "Name: " + name + " Rules: " + rules;
+	}
+	
+	@XmlElement(name = "creator")
+	public String getCreatorName() throws Exception
+	{
+		Objectify ofy = ObjectifyService.begin();
+		
+		UserPrefs userPrefs = ofy.query(UserPrefs.class).ancestor(creator_key).get();
+		
+		if(userPrefs != null)
+			return userPrefs.name;
+		
+		return "";
 	}
 }

@@ -1,4 +1,3 @@
-
 // To save map of key: first_name and value: contact id 
 var CONTACT = [];
 	
@@ -46,9 +45,10 @@ function contactsTypeAhead(id, el) {
 				});
 		},
 		updater: function (items) {
+			
 			var tag_not_exist = true;
 			
-			// If contact tag already exists returns 
+			// If contact tag already exists, returns 
 			$.each($('#contact-tags', el).children('li'), function(index, tag) {
 				if($(tag).attr('value') == CONTACT[items].id)
 					{
@@ -57,9 +57,9 @@ function contactsTypeAhead(id, el) {
 					}
 			})
 			
-			//add tag 
+			// Add tag 
 			if(tag_not_exist)
-				$('#contact-tags',el).append('<li class="contact_tags label label-warning" value='+CONTACT[items].id+' >'+items+'<a class="icon-remove" id="remove_tag"></a></li>');
+				$('#contact-tags', el).append('<li class="contact_tags label label-warning" value=' + CONTACT[items].id+' >'+items + '<a class="icon-remove" id="remove_tag"></a></li>');
 		},
 		minLength : 2
 	})

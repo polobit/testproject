@@ -29,6 +29,7 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 
+@SuppressWarnings("serial")
 public class Cron extends HttpServlet {
 	// Key
 	@Id
@@ -361,6 +362,8 @@ public class Cron extends HttpServlet {
 		// are using
 		ObjectifyGenericDao<AgileUser> dao = new ObjectifyGenericDao<AgileUser>(
 				AgileUser.class);
+		System.out.println(dao.getClass());
+		
 
 		try {
 			// Dequeue Tasks
@@ -378,6 +381,7 @@ public class Cron extends HttpServlet {
 
 }
 
+@SuppressWarnings("serial")
 class CronDeferredTask implements DeferredTask {
 
 	String wakeupOrInterrupt;

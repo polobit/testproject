@@ -1,6 +1,7 @@
 $(function(){ 
 
-	$(".upload_s3").live('click', function(){
+	$(".upload_s3").live('click', function(e){
+		e.preventDefault();
 		uploadImage("account_prefs");
 	});
 	

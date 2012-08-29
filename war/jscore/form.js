@@ -112,7 +112,8 @@ function deserializeForm(data, form)
 	        				   {
 	        				   	tag_name = tag_name.concat(" "+property.value);
 	        				   }
-	        		  }) ;
+	        		  });
+	        		   
 	        		   $('#' + fel.attr('id'), form).append('<li class="contact_tags label label-warning" value='+tag_id+' >'+tag_name+'<a class="icon-remove" id="remove_tag"></a></li>');
 	        	   });
 	           }
