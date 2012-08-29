@@ -5,7 +5,7 @@ $(function () {
         var data = $(this).find('.leads').attr('leads');
 
         if (data) {
-            Backbone.history.navigate("deals/" + data, {
+            app.navigate("deals/" + data, {
                 trigger: true
             });
         }
@@ -36,7 +36,6 @@ $("#editOpportunity").live("click", function (e) {
         url: 'core/api/opportunity',
         model: app.opportunityCollectionView.currentDeal,
         template: "opportunity-add",
-        isNew: true,
         window: 'deals',
         postRenderCallback: function(el){
             	populateUsers("owner", el);
