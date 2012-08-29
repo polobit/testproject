@@ -6,7 +6,7 @@ var DealsRouter = Backbone.Router.extend({
         "deals": "deals",
         "deals-add": "dealsAdd",
         "deals/:id": "dealsDetails", 
-        "milestones": "Milestones",
+        "milestones": "milestones",
     },
     deals: function () {
     	this.opportunityCollectionView = new Base_Collection_View({
@@ -73,7 +73,7 @@ var DealsRouter = Backbone.Router.extend({
         var el = this.dealsDetailView.render().el;
         $('#content').html(el);
     },
-    Milestones: function () {
+    milestones: function () {
         var view = new Base_Model_View({
         	url: '/core/api/milestone',
         	template: "milestones-add",
