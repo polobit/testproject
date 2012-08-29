@@ -5,7 +5,7 @@ var DealsRouter = Backbone.Router.extend({
     	 /* Deals/Opportunity */
         "deals": "deals",
         "deals-add": "dealsAdd",
-        "deals/:id": "dealsDetails",   
+        "deals/:id": "dealsDetails"
     },
     deals: function () {
     	this.opportunityCollectionView = new Base_Collection_View({
@@ -39,8 +39,12 @@ var DealsRouter = Backbone.Router.extend({
             window: 'deals',
             postRenderCallback: function(el){
             	populateUsers("owner", el);
+<<<<<<< HEAD
             	agile_type_ahead("relates_to", el, contacts_typeahead);
             	
+=======
+            	agile_type(el);
+>>>>>>> a1be267395d3dbe5052e02aacf51bd3d0177d75d
             	
             	// Enable the datepicker
                 $('#close_date', el).datepicker({
@@ -72,6 +76,6 @@ var DealsRouter = Backbone.Router.extend({
         
         var el = this.dealsDetailView.render().el;
         $('#content').html(el);
-    },
+    }
 });
     

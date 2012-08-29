@@ -85,6 +85,10 @@ public class LinkedInUtil {
 			result.url = person.getPublicProfileUrl();
 			result.summary = person.getHeadline();
 
+			// Change http to https to avoid client side warnings by browser
+			if (result.url != null)
+				result.url = result.url.replace("http:", "https:");
+
 			if (person.getNumConnections() != null)
 				result.num_connections = person.getNumConnections().toString();
 			else
@@ -125,6 +129,10 @@ public class LinkedInUtil {
 		result.picture = person.getPictureUrl();
 		result.url = person.getPublicProfileUrl();
 		result.summary = person.getHeadline();
+
+		// Change http to https to avoid client side warnings by browser
+		if (result.url != null)
+			result.url = result.url.replace("http:", "https:");
 
 		System.out.println("Linkedin profiles :" + result);
 		return result;

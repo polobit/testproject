@@ -40,16 +40,17 @@
 								</td>
 
 								<td>
+
 								  <select id="secondSelect" name=" ">	
-									<option value="EQUALS" class="tag org_tag">is</option>
+									
 									<option value="TYPEEQUALS" class="class">is</option>
 									<option value="COUNTRYEQUALS" class="country">is</option>
 									<option value="NAME..EQUALS" class="name jobtitle email phone city state postalCode createdOn updatedOn lastContactOn org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
-									<option value="NOTEQUALS" class="tag org_tag">isn't</option>
+									
 									<option value="COUNTRYNOTEQUALS" class="country">isn't</option>
 									<option value="NAME..NOTEQUALS" class="name jobtitle email phone city state postalCode createdOn org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
 									<option value="TYPENOTEQUALS" class="class">isn't</option>
-									<option value="ANYOF" class="tag">is any of</option>
+									
 									<option value="AFTER" class="createdOn updatedOn lastContactOn">is after</option>
 									<option value="BEFORE" class="createdOn updatedOn lastContactOn">is before</option>
 									<option value="WITHINLAST" class="createdOn updatedOn lastContactOn">is within last</option>
@@ -59,26 +60,19 @@
 									<option value="CONTAINS" class="name jobtitle email phone city state postalCode org_name">contains</option>
 									<option value="YES" class="hasEmailAddress hasAddress hasEmployees hasTags lastImport">yes</option>
 									<option value="No" class="hasEmailAddress hasAddress hasEmployees hasTags lastImport">No</option>	
+					<option value="EQUALS" class="tag org_tag">is</option>
+<option value="NOTEQUALS" class="tag org_tag">isn't</option>
+<option value="ANYOF" class="tag">is any of</option>	  
+
 								  </select>
 								</td>
 
+								
 								<td>
+
 								  <select id="thirdSelect" name="">
 									<option value="" class="selected"></option>
-									<option value="CEO" class="EQUALS NOTEQUALS ANYOF">CEO</option>
-									<option value="CEO10" class="EQUALS NOTEQUALS ANYOF">CEO10</option>
-									<option value="CEO2" class="EQUALS NOTEQUALS ANYOF">CEO2</option>
-									<option value="CEO3" class="EQUALS NOTEQUALS ANYOF">CEO3</option>
-									<option value="CEO4" class="EQUALS NOTEQUALS ANYOF">CEO4</option>
-									<option value="CEO5" class="EQUALS NOTEQUALS ANYOF">CEO5</option>
-									<option value="CEO5 CEO6 CEO7 CEO8 CEO9" class="EQUALS NOTEQUALS ANYOF">CEO5 CEO6 CEO7 CEO8 CEO9</option>
-									<option value="CEO5, CEO6, CEO7, CEO8, CEO9" class="EQUALS NOTEQUALS ANYOF">CEO5, CEO6, CEO7, CEO8, CEO9</option>
-									<option value="CEO6" class="EQUALS NOTEQUALS ANYOF">CEO6</option>
-									<option value="CEO7" class="EQUALS NOTEQUALS ANYOF">CEO7</option>
-									<option value="CEO8" class="EQUALS NOTEQUALS ANYOF">CEO8</option>
-									<option value="CEO9" class="EQUALS NOTEQUALS ANYOF">CEO9</option>
-									<option value="Customer" class="EQUALS NOTEQUALS ANYOF">Customer</option>
-									<option value="Lead" class="EQUALS NOTEQUALS ANYOF">Lead</option>
+									
 									<option value="Person" class="TYPEEQUALS TYPENOTEQUALS">Person</option>
 									<option value="Organization" class="TYPEEQUALS TYPENOTEQUALS">Organization</option>
 									<option value="AF" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Afghanistan</option>
@@ -331,7 +325,25 @@
 									<option value="YE" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Yemen</option>
 									<option value="ZM" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Zambia</option>
 									<option value="ZW" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Zimbabwe</option>
-								  </select>
+								  </select>&nbsp;
+
+								</td>
+
+
+<td>
+	<select id="fourthSelect" name="">
+		<option value="" class="EQUALS">--</option>
+<option value="" class="NOTEQUALS">--</option>
+<option value="" class="ANYOF">--</option>
+	</select>
+</td>
+
+								<td>
+									<i class="filter-contacts-multiple-add icon-plus"></i>
+								</td>&nbsp;&nbsp;
+
+								<td>
+									<i class="filter-contacts-multiple-remove icon-remove-circle" style="display: none"></i>
 								</td>
 							</tr>
 						</tbody>

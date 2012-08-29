@@ -36,7 +36,7 @@
 		<div class="span12">
  			<div class="page-header">
    				<h1>Calendar <small></small></h1>
-				<a href="#activityModal" class="btn right" data-toggle="modal" style='top:-25px;position:relative'>
+				<a href="#activityModal" class="btn right" data-toggle="modal" style='top:-30px;position:relative'>
 				   <span><i class='icon-plus-sign'/></span> Add Task</a>
   			</div>
 		</div>
@@ -83,6 +83,12 @@
   		</tbody>
   
 	</table>
+
+	<div class="row">
+		<div class="span3  enroll-success">
+						
+		</div>
+	</div>
 
 	<div >
 		<select class="campaignSelect" id='campaignSelect'  name="campaignSelect">
@@ -325,7 +331,7 @@
 					<li><a href='#add-note' data-toggle="modal" id="newNote">Add Note</a></li> 
 					<li><a href='#'>Add Task</a></li>   	
 					<li><a href='#'>Add Opportunity</a></li>   				
-					<li><a href='#'>Duplicate</a></li>
+					<li><a href='#contact-duplicate'>Duplicate</a></li>
 				
 					<li><a href='#'>Import Contacts from CSV</a></li>
   				</ul>
@@ -828,16 +834,17 @@
 								</td>
 
 								<td>
+
 								  <select id="secondSelect" name=" ">	
-									<option value="EQUALS" class="tag org_tag">is</option>
+									
 									<option value="TYPEEQUALS" class="class">is</option>
 									<option value="COUNTRYEQUALS" class="country">is</option>
 									<option value="NAME..EQUALS" class="name jobtitle email phone city state postalCode createdOn updatedOn lastContactOn org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
-									<option value="NOTEQUALS" class="tag org_tag">isn't</option>
+									
 									<option value="COUNTRYNOTEQUALS" class="country">isn't</option>
 									<option value="NAME..NOTEQUALS" class="name jobtitle email phone city state postalCode createdOn org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
 									<option value="TYPENOTEQUALS" class="class">isn't</option>
-									<option value="ANYOF" class="tag">is any of</option>
+									
 									<option value="AFTER" class="createdOn updatedOn lastContactOn">is after</option>
 									<option value="BEFORE" class="createdOn updatedOn lastContactOn">is before</option>
 									<option value="WITHINLAST" class="createdOn updatedOn lastContactOn">is within last</option>
@@ -847,26 +854,19 @@
 									<option value="CONTAINS" class="name jobtitle email phone city state postalCode org_name">contains</option>
 									<option value="YES" class="hasEmailAddress hasAddress hasEmployees hasTags lastImport">yes</option>
 									<option value="No" class="hasEmailAddress hasAddress hasEmployees hasTags lastImport">No</option>	
+					<option value="EQUALS" class="tag org_tag">is</option>
+<option value="NOTEQUALS" class="tag org_tag">isn't</option>
+<option value="ANYOF" class="tag">is any of</option>	  
+
 								  </select>
 								</td>
 
+								
 								<td>
+
 								  <select id="thirdSelect" name="">
 									<option value="" class="selected"></option>
-									<option value="CEO" class="EQUALS NOTEQUALS ANYOF">CEO</option>
-									<option value="CEO10" class="EQUALS NOTEQUALS ANYOF">CEO10</option>
-									<option value="CEO2" class="EQUALS NOTEQUALS ANYOF">CEO2</option>
-									<option value="CEO3" class="EQUALS NOTEQUALS ANYOF">CEO3</option>
-									<option value="CEO4" class="EQUALS NOTEQUALS ANYOF">CEO4</option>
-									<option value="CEO5" class="EQUALS NOTEQUALS ANYOF">CEO5</option>
-									<option value="CEO5 CEO6 CEO7 CEO8 CEO9" class="EQUALS NOTEQUALS ANYOF">CEO5 CEO6 CEO7 CEO8 CEO9</option>
-									<option value="CEO5, CEO6, CEO7, CEO8, CEO9" class="EQUALS NOTEQUALS ANYOF">CEO5, CEO6, CEO7, CEO8, CEO9</option>
-									<option value="CEO6" class="EQUALS NOTEQUALS ANYOF">CEO6</option>
-									<option value="CEO7" class="EQUALS NOTEQUALS ANYOF">CEO7</option>
-									<option value="CEO8" class="EQUALS NOTEQUALS ANYOF">CEO8</option>
-									<option value="CEO9" class="EQUALS NOTEQUALS ANYOF">CEO9</option>
-									<option value="Customer" class="EQUALS NOTEQUALS ANYOF">Customer</option>
-									<option value="Lead" class="EQUALS NOTEQUALS ANYOF">Lead</option>
+									
 									<option value="Person" class="TYPEEQUALS TYPENOTEQUALS">Person</option>
 									<option value="Organization" class="TYPEEQUALS TYPENOTEQUALS">Organization</option>
 									<option value="AF" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Afghanistan</option>
@@ -1119,7 +1119,25 @@
 									<option value="YE" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Yemen</option>
 									<option value="ZM" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Zambia</option>
 									<option value="ZW" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Zimbabwe</option>
-								  </select>
+								  </select>&nbsp;
+
+								</td>
+
+
+<td>
+	<select id="fourthSelect" name="">
+		<option value="" class="EQUALS">--</option>
+<option value="" class="NOTEQUALS">--</option>
+<option value="" class="ANYOF">--</option>
+	</select>
+</td>
+
+								<td>
+									<i class="filter-contacts-multiple-add icon-plus"></i>
+								</td>&nbsp;&nbsp;
+
+								<td>
+									<i class="filter-contacts-multiple-remove icon-remove-circle" style="display: none"></i>
 								</td>
 							</tr>
 						</tbody>
@@ -1184,7 +1202,7 @@
 <div class="btn-group right" style='top:-18px;position:relative'>
 <div id ="view-list">
   <button class="btn">All Contacts</button>
-  <button class="btn dropdown-toggle" data-toggle="dropdown" id="viewList"><span class="caret" ></span>
+  <button class="btn dropdown-toggle" data-toggle="dropdown" id="viewList" style="margin-left: -5px"><span class="caret" ></span>
   </button>
   <ul class="dropdown-menu" id= "view-list">
     <li>
@@ -1193,6 +1211,7 @@
 	<li>
 		<a href='#companies-only'>Companies</a>	
 	</li>
+	<li class="divider"></li>
 
 <li>
 <a href='#contact-views'>Add/Edit View</a>
@@ -1540,8 +1559,8 @@
                     	<label class="control-label"><b>URL:</b> <span class="field_req">*</span></label>
 						<div class="controls">
 							<div class="input-prepend"">
-								<span class="add-on">http://</span><input class="span2 required" name="url"
-									type="text" id="url" placeholder="www." style="width:100px;" />
+								<span class="add-on">http://</span><input class="input-large required" name="url"
+									type="text" id="url" placeholder="www." />
 							</div>
 						</div>
 					</div>				
@@ -1636,16 +1655,17 @@
 							 <input name="tags" type="text" id="tags-new-person" class="tags-typeahead"/>
 						</div>
 					</div>	
-					<div>
-						<a href="#import" data-dismiss="modal" id="import-link">Click here to import multiple contacts from a file</a>
-					</div>	
-											
+					<div class="control-group">                    	
+						<div class="controls">
+							<span style="display:inline;"><i class='icon-arrow-right'></i></span><a href="#import" data-dismiss="modal" id="import-link"> Click here to import multiple contacts from a file</a>
+						</div>	
+					</div>						
 				</fieldset>
 			</form>
 		</div>
 		<div class="modal-footer">
 			<a href="#continue-contact" class="btn" id='continue-contact'>Continue
-				Editing</a> <a href="#" class="btn btn-primary" id="person_validate">Save
+				Editing</a> <a href="#" class="save btn btn-primary" id="person_validate">Save
 				changes</a>
 		</div>
 
@@ -1677,24 +1697,24 @@
    <td>{{note}}</td>
 <br/>
 </script><script id="notify-html-template" type="text/html">
-
-<div class="popover agile-notification"  style='display:block;position:relative'>
-            <h3 class="popover-title" style='padding-right:2px'>Browsing Alert</h3>
-            <div class="popover-content">
-             <img  class='thumbnail' src="{{gravatarurl properties 50}}" width="50" height="50" style='display:inline'/>			
-			<span style='padding-left:5px'>
+<div class="well" style="background:white;margin-bottom:0px; color:black">	
+		<div>
+		<img  class='thumbnail' src="{{gravatarurl properties 50}}" width="50" height="50" style='display:inline'/>			
+		<span style='padding-left:5px'>
 			<b>{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</b><br/>
 			{{getPropertyValue properties "title"}} {{getPropertyValue properties "company"}}		
-			</span>
-					</div>
-          </div>
+		</span>
+		</div>
+		is browsing..
+
+</div>
 </script><script id="opportunities-collection-template" type="text/html">
 
 <div class="row">
 	<div class="span12">
 		<div class="page-header">
     		<h1>Deals <small>Opportunities</small></h1>
-			<a href='#deals-add' class='btn right' style='top:-18px;position:relative'><i class='icon-plus-sign'/>Add Deal</a>
+			<a href='#deals-add' class='btn right' style='top:-30px;position:relative'><i class='icon-plus-sign'/> Add Deal</a>
 	  		</div>
 	</div>
 </div>
@@ -1791,7 +1811,7 @@ Eg: you can send an email to all users who have signed up on your site. And then
 						<div class="controls" id="contactTypeAhead">
 							<div>
 								<div class="pull-left">
-									<ul name= "contacts" id="contact-tags"></ul>
+									<ul name= "contacts" class= "tags" id="contact-tags"></ul>
 								</div>
 									<input type="text" id = "relates_to" class="typeahead typeahead_contacts" data-provide="typeahead" data-mode="multiple" />
 							</div>	
@@ -1821,9 +1841,7 @@ Eg: you can send an email to all users who have signed up on your site. And then
 							<select id="milestone" name="milestone" class="input-small required" 
 									Style="width:100px">
 								<option value="">Select..</option>
-								<option value="loss">Loss</option>
-								<option value="progress">Progress</option>
-								<option value="won">Won</option>
+
 							</select>	
 							<span class="help-inline">Some help line for Mlestone</span>				
 			  			</div>
@@ -2084,20 +2102,30 @@ Eg: you can send an email to all users who have signed up on your site. And then
 
 <div class='row'>
 
-<div class='span12'>
+	<div class='span12'>
 
-<div class='well'>
-<div class="control-group">
-<label class="control-label"><b>Name of workflow:</b></label>
-<div class="controls">
-<input type="text" id='workflow-name' class="span3 required"></div></div>
+	<div class='well'>
 
-<IFRAME SRC="designer.html" id='designer' frameBorder='0' name='designer' WIDTH=100% HEIGHT=900px></IFRAME>
-<br/>
-<button class='btn btn-primary' id='saveWorkflow'>Save</button>
-<br/>
-</div>
-</div>
+<form id="workflowform">
+		  		<fieldset>
+		<div class="control-group">
+			<label class="control-label"><b>Name of workflow:</b> <span class="field_req">*</span></label>
+			<div class="controls">
+				<input type="text" id='workflow-name' class="span3 required" placeholder="Name of workflow">
+			</div>
+		</div>
+
+		<IFRAME SRC="designer.html" id='designer' frameBorder='0' name='designer' WIDTH=100% HEIGHT=900px></IFRAME>
+		<br/>
+		<br/>
+		<button class='btn btn-primary' id='saveWorkflow'>Save Workflow</button>
+		<a href="#workflows" class='btn'>Cancel</a>
+		
+		<br/>
+</fieldset>
+</form>
+	</div>
+	</div>
 </div>
 </script><script id="workflows-model-template" type="text/html">
 
@@ -2105,7 +2133,7 @@ Eg: you can send an email to all users who have signed up on your site. And then
 <td><icon class='deleteWorkflow icon-remove-circle'></icon></td>  	
   <td>{{id}}</td>
   <td><a href='#workflow/{{id}}'>{{name}}</a></td>
-  <td></td>
+  <td>{{creator}}</td>
   <td></td>
 <br/>
 	
@@ -2121,8 +2149,8 @@ Eg: you can send an email to all users who have signed up on your site. And then
 <div class="span12">
  
 <div class="page-header">
-    <h1>Workflows <small>campaigns</small>
-	<a href="#workflow-add" class="btn right" id="addWorkflow">Add Workflow</a> </h1>
+    <h1>Campaigns <small>Workflows</small></h1>
+	<a href="#workflow-add" class="btn right" id="addWorkflow" style='top:-30px;position:relative'><i class='icon-plus-sign'/> Add Workflow</i></a>
   </div>
 
 </div>

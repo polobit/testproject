@@ -31,9 +31,9 @@ public class NotificationsAPI {
 			NotificationPrefs notifications = NotificationPrefs
 					.getCurrentUserNotificationPrefs();
 
-			notifications.contat_browsing = notify.contat_browsing;
-			notifications.contat_assigned_browsing = notify.contat_assigned_browsing;
-			notifications.contat_assigned_starred_browsing = notify.contat_assigned_starred_browsing;
+			notifications.contact_browsing = notify.contact_browsing;
+			notifications.contact_assigned_browsing = notify.contact_assigned_browsing;
+			notifications.contact_assigned_starred_browsing = notify.contact_assigned_starred_browsing;
 			notifications.contact_opened_email = notify.contact_opened_email;
 			notifications.contact_assigned_opened_email = notify.contact_assigned_opened_email;
 			notifications.contact_assigned_starred_opened_email = notify.contact_assigned_starred_opened_email;

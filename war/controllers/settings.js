@@ -101,15 +101,14 @@ var SettingsRouter = Backbone.Router.extend({
     emailTemplateAdd: function () {
     	var view = new Base_Model_View({
             url: '/core/api/email/templates',
-            template: "settings-email-template-add",
-            navigate: 'settings',
+            template: "settings-email-template-add", 
+            window: 'settings',
             postRenderCallback: function(el){
            	 // Setup HTML Editor
-            	console.log("rendering html");
                setupHTMLEditor($('#email-template-html'));
            }
          });
-        $('#content').html(view.render().el);
+        $('#content').html(view.render().el);       
     },
     
     notificationPrefs: function(){

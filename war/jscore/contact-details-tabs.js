@@ -72,8 +72,8 @@ $(function(){
 	$('#contactDetailsTab a[href="#campaigns"]').live('click', function (e){
 		e.preventDefault();
 		var campaignsView = new Base_Collection_View({
-			url: '/core/api/workflows',
-            restKey: "workflow",
+			url: '/core/api/logs/contact/' + App_Contacts.contactDetailView.model.id,
+            restKey: "logs",
             templateKey: "campaigns",
             individual_tag_name: 'tr'
         });
@@ -122,7 +122,9 @@ $(function(){
 		var contact_id = App_Contacts.contactDetailView.model.id;
 		var url = '/core/api/campaigns/enroll/' + contact_id + '/' + workflow_id;
 
-		$.get(url);
+		$.get(url, function(data){
+    		$(".enroll-success").html('<div class="alert alert-success"><a class="close" data-dismiss="alert" href="#">×</a>Enrolled successfully.</div>'); 
+	   });
 	});
 
 });		

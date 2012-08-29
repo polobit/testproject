@@ -9,33 +9,39 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="span3 offset well">	
+		<div class="span3 offset well" style="height:180px">	
 			<legend>Account Preferences</legend>
 			Choose your plan, upload your company logo or set your company name.<br /> <br /> <br /><br/>
 			<a class='btn btn-primary' href='#account-prefs'>Go</a>
 		</div>
-		<div class="span3 offset well">
+		<div class="span3 offset well" style="height:180px">
 			<legend>Users</legend>
 			Add, edit or delete users who can access your CRM. <br /><br /> <br /> <br/> 
 			<a class='btn btn-primary' href='#users'>Go</a>
 		</div>
-		<div class="span3 offset well">
+		<div class="span3 offset well" style="height:180px">
 			<legend>Custom Fields</legend>	
 			Collect custom information about contact, company, deal or activity. <br /><br /><br /> <br />
 			<a class='btn btn-primary' href='#custom-fields'>Go</a>
 		</div>
 	</div>
 	<div class="row">
-		<div class="span3 offset well">
+		<div class="span3 offset well" style="height:180px">
 			<legend>Analytics </legend>	
 			Get script to place in your website . <br /><br /><br /> </br><br />
 			<a class='btn btn-primary' href='#analytics-code'>Go</a>
 		</div>	
-		<div class="span3 offset well">
+		<div class="span3 offset well" style="height:180px">
 			<legend>Developers API</legend>	
 			AgileCrm API.<br /> <br /><br /><br /> </br>
 			<a class='btn btn-primary' href='#api'>Go</a>
 		</div>	
+		<div class="span3 offset well" style="height:180px">
+			<legend>Milestones</legend>	
+			Configure your milestones for your deals.<br /> <br /><br /><br /> </br>
+			<a class='btn btn-primary' href='#milestones'>Go</a>
+		</div>	
+	
 	</div>
 	
 
@@ -397,6 +403,29 @@ API-KEY  {{api_key}}
   <td>{{field_description}} </td>
   <td>{{field_type}}</td>
 <br/>
+</script><script id="admin-settings-milestones-template" type="text/html">
+
+<div class='span8 well'>
+	<form id="milestonesForm" class="form-horizontal">
+		<fieldset>
+		{{#if id}}
+			<input type="text" name="id" class="hide" value={{id}}>
+		{{/if}} 		
+		<legend>Milestones</legend>
+		<div class="control-group">  	 
+			<label class="control-label">Milestones <span class="field_req">*</span></label>
+    		<div class="controls">
+				<input name="milestones" type="text" class="required" value="{{milestones}}" />
+			</div>
+		</div> 
+		
+		<div class="form-actions">
+		<a href="#" type="submit" class="save btn btn-primary">Save</a>
+		<a href="#admin" class="btn ">Close</a>
+		</div>
+		<fieldset>
+	</form>
+</div>
 </script><script id="admin-settings-user-add-template" type="text/html">
 	<div class="row">
 		<div class="span9">

@@ -72,7 +72,7 @@ function serializeAndSaveContinueContact(e, form_id , continueContact) {
     	},
     	error: function(model,response)
     	{
-    		$("#personModal").find(".duplicate-email").append('<div class="alert alert-error" style="display:none"><a class="close" data-dismiss="alert" href="#">×</a>Please change email. A contact already exists with this email.</div>'); 
+    		$("#personModal").find(".duplicate-email").html('<div class="alert alert-error" style="display:none"><a class="close" data-dismiss="alert" href="#">×</a>Please change email. A contact already exists with this email.</div>'); 
 			
     		$("#personModal").find(".alert").show();
     	}
@@ -154,4 +154,5 @@ $(function () {
             trigger: true
         });
     });
+    
 });

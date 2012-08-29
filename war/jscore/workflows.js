@@ -3,6 +3,12 @@ $(function(){
 	 // Save Workflow
     $('#saveWorkflow').live('click', function () {
 
+    	// Check if the form is valid
+    	if (!isValidForm('#workflowform')) {
+    		$('#workflowform').find("input").focus();
+    		return false;
+    	}
+    	
         // Get Designer JSON
         var designerJSON = window.frames.designer.serializePhoneSystem();
 

@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
@@ -14,6 +16,7 @@ import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.condition.IfDefault;
 
 @XmlRootElement
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserPrefs
 {
 

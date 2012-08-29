@@ -2,19 +2,29 @@
 
 <div class='row'>
 
-<div class='span12'>
+	<div class='span12'>
 
-<div class='well'>
-<div class="control-group">
-<label class="control-label"><b>Name of workflow:</b></label>
-<div class="controls">
-<input type="text" id='workflow-name' class="span3 required"></div></div>
+	<div class='well'>
 
-<IFRAME SRC="designer.html" id='designer' frameBorder='0' name='designer' WIDTH=100% HEIGHT=900px></IFRAME>
-<br/>
-<button class='btn btn-primary' id='saveWorkflow'>Save</button>
-<br/>
-</div>
-</div>
+<form id="workflowform">
+		  		<fieldset>
+		<div class="control-group">
+			<label class="control-label"><b>Name of workflow:</b> <span class="field_req">*</span></label>
+			<div class="controls">
+				<input type="text" id='workflow-name' class="span3 required" placeholder="Name of workflow">
+			</div>
+		</div>
+
+		<IFRAME SRC="designer.html" id='designer' frameBorder='0' name='designer' WIDTH=100% HEIGHT=900px></IFRAME>
+		<br/>
+		<br/>
+		<button class='btn btn-primary' id='saveWorkflow'>Save Workflow</button>
+		<a href="#workflows" class='btn'>Cancel</a>
+		
+		<br/>
+</fieldset>
+</form>
+	</div>
+	</div>
 </div>
 </script>

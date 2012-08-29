@@ -1,4 +1,4 @@
-// To Enable Console in IE
+// To Enable Console in IE - MC
 $(function(){
 	var alertFallback = false;
 	if (typeof console === "undefined" || typeof console.log === "undefined") {
