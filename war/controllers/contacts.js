@@ -66,7 +66,8 @@ var ContactsRouter = Backbone.Router.extend({
           this.contactsListView.collection.fetch({
               success: function (collection, response) {
                   setupTags(cel);
-
+                  setupViews(cel);
+                		  
                   // Set the cursor
                   //console.log("Cursor " + response.cursor);
                   collection.cursor = response.cursor;
@@ -108,6 +109,7 @@ var ContactsRouter = Backbone.Router.extend({
         		
         			// Call Contact Details again
         			App_Contacts.contactDetails(id, model);
+        			
         	}});
         	
         	
@@ -175,6 +177,7 @@ var ContactsRouter = Backbone.Router.extend({
     contactViewAdd: function(){
     	var view = new Base_Model_View({
     		url: 'core/api/contact-view',
+    		isNew: true,
     		window: "contact-views",
     		 template: "contact-view",
     	});

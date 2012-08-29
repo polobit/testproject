@@ -7,14 +7,15 @@ function serializeForm(form_id) {
     arr = arr.concat(
     $('#' + form_id + ' input[type=checkbox]:not(:checked)').map(
     function () {
-        return {
+
+    	return {
             "name": this.name,
             "value": false	
         }
     }).get());
     
     // Change the dates properly from human readable strings to epoch
-    arr = arr.concat($('#' + form_id + ' input[type=date]').map(
+    arr = arr.concat($('#' + form_id + ' input[type=date_input]').map(
    	    function () {
     	     return {
     	            "name" : this.name,
@@ -113,7 +114,7 @@ function deserializeForm(data, form)
 	        				   	tag_name = tag_name.concat(" "+property.value);
 	        				   }
 	        		  }) ;
-	        		   $('#' + fel.attr('id'), form).append('<li class="contact_tags label label-warning" value='+tag_id+' >'+tag_name+'<a class="icon-remove" id="remove_tag"></a></li>');
+	        		   $('#' + fel.attr('id'), form).append('<li class="label label-warning" value="'+tag_id+'" style="display: inline-block; vertical-align: middle; margin-right:3px; ">'+tag_name+'<a class="icon-remove" id="remove_tag"></a></li>');
 	        	   });
 	           }
 
