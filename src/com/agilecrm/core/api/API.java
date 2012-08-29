@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
 import com.agilecrm.contact.ContactView;
+import com.agilecrm.contact.Tag;
 import com.agilecrm.core.DomainUser;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.IMAPEmailPrefs;
@@ -284,4 +285,5 @@ public class API {
 	public JSONObject getStats() {
 		return Util.getNamespaceCount();
 	}
+	
 }

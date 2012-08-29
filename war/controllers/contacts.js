@@ -10,6 +10,7 @@ var ContactsRouter = Backbone.Router.extend({
         "import": "importContacts",
         "add-widget": "addWidget",
         "contact-edit":"editContact",
+        "contact-duplicate":"duplicateContact",
         "tags/:tag": "contacts",
         "contacts-filter": "filterContacts",
         "send-email": "sendEmail",
@@ -152,6 +153,29 @@ var ContactsRouter = Backbone.Router.extend({
      	deserializeContact(contact.toJSON())
      	
     },
+    
+    duplicateContact: function () {
+    	
+      	 // Takes back to contacts if contacts list view is not defined
+     	 if (!this.contactDetailView || !this.contactDetailView.model.id || !this.contactsListView || this.contactsListView.collection.length == 0) {
+              this.navigate("contacts", {
+                  trigger: true
+              });
+              return;
+         }
+     	 	
+      	// Contact Duplicate
+      	var contact = this.contactsListView.collection.get(this.contactDetailView.model.id);
+      	var json = contact.toJSON();
+      	delete json.id;
+        var contactDuplicate = new Backbone.Model();
+        contactDuplicate.url = 'core/api/contacts';
+        contactDuplicate.save(json,{
+        	success: function(data)
+        	{
+        	}
+        });
+    },
     continueContact: function () {
         $('#content').html(getTemplate('continue-contact', {}));
     },
@@ -225,6 +249,7 @@ var ContactsRouter = Backbone.Router.extend({
     		$('#content').html(getTemplate('filter-contacts', {}));
     		$("#secondSelect").chained("#firstSelect"); 
     		$("#thirdSelect").chained("#secondSelect");
+    		$("#fourthSelect").remoteChained("#secondSelect","/core/api/tags/filter-tags");
     	})
     },
     
