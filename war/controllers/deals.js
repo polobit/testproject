@@ -39,7 +39,7 @@ var DealsRouter = Backbone.Router.extend({
             window: 'deals',
             postRenderCallback: function(el){
             	populateUsers("owner", el);
-            	setupTypeAhead(el);
+            	agile_type(el);
             	
             	// Enable the datepicker
                 $('#close_date', el).datepicker({

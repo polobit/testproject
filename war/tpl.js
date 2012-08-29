@@ -2118,8 +2118,9 @@ Eg: you can send an email to all users who have signed up on your site. And then
 		<IFRAME SRC="designer.html" id='designer' frameBorder='0' name='designer' WIDTH=100% HEIGHT=900px></IFRAME>
 		<br/>
 		<br/>
-		<a href="#workflows" class='btn'>Cancel</a>
 		<button class='btn btn-primary' id='saveWorkflow'>Save Workflow</button>
+		<a href="#workflows" class='btn'>Cancel</a>
+		
 		<br/>
 </fieldset>
 </form>
