@@ -18,8 +18,8 @@ function populateUsers(id, el) {
 	// Users
 	 var users = new Base_Collection_View({
          url: '/core/api/deal-owners',
-         restKey: "userPrefs",
-         templateKey: "owners",
+         restKey: 'userPrefs',
+         templateKey: 'owners',
          individual_tag_name: 'option'
      });
 	users.collection.fetch();
@@ -32,14 +32,13 @@ function populateUsers(id, el) {
      
      var model = new milestone_model();
      model.fetch({ success: function(data) { 
- 		var jsonModel = data.toJSON();
- 		var milestones = jsonModel.milestones;
- 		var array = milestones.split(",");
- 	    $("#milestone").empty().append('<option>Select...</option>');
- 	    $.each(array,function(index, element){
- 	    	$("#milestone").append('<option value=' + '"' + element +'">' + element + '</option>');
- 	    });
-     }});
+ 						var jsonModel = data.toJSON();
+ 						var milestones = jsonModel.milestones;
+ 						var array = milestones.split(",");
+ 						var selectId = "milestone";
+ 						fillTokenizedSelect(selectId, array)
+     			   }
+     });
      return el;
 }
 
