@@ -286,23 +286,4 @@ public class API {
 		return Util.getNamespaceCount();
 	}
 	
-
-	// Remote tags
-	@Path("filter-tags")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public String getTagsTOFilterContacts() {
-		List<Tag> tags = Tag.getTags();
-		JSONObject result = new JSONObject();
-
-		// Iterate
-		try {
-		for (Tag tag : tags) {
-			result.put(tag.tag, tag.tag);
-		} 
-		return result.toString();
-		}catch (Exception e) {
-			return "";
-		}
-	}
 }
