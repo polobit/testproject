@@ -1,7 +1,6 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page import="com.agilecrm.user.UserPrefs"%>
 <%@page import="java.util.Date"%>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -111,22 +110,10 @@ function validateFileExtension()
 </head>
 
 
-<body>
+<body  class="center">
 
-<div id="hld" style='padding:10px'>
-<div class="wrapper" style='min-width:450px;'><!-- wrapper begins -->
-
-<div class="block small" style="width:100%; float:left;">
-
-
-<div class="block_head">
-<div class="bheadl"></div>
-<div class="bheadr"></div>
-
-</div>
-<!-- .block_head ends -->
-
-<div class="block_content well center">
+<br/>
+<div class="well">
 
 <legend>Upload Image</legend>
 
@@ -149,40 +136,16 @@ function validateFileExtension()
 <input type="hidden" name="acl" value="public-read" /> 
 <input type="hidden" name="content-type" value="image/*" />
 
-<input type="hidden" name="success_action_redirect" value="<%=request.getRequestURL()%>" /> 
+<input type="hidden" name="success_action_redirect" value="http://localhost:8888/upload.jsp" /> 
 
 <input type="hidden" name="AWSAccessKeyId" value="AKIAJ62OAFOKCJTDANVA" />
 
-
-<%
-/* Production 
-String policy = "ewogICJleHBpcmF0aW9uIjogIjIwMjAtMDEtMDFUMTI6MDA6MDAuMDAwWiIsCiAgImNvbmRpdGlvbnMiOiBbCiAgICB7ImJ1Y2tldCI6ICJhZ2lsZWNybSIgfSwKICAgIHsiYWNsIjogInB1YmxpYy1yZWFkIiB9LAogICAgIFsic3RhcnRzLXdpdGgiLCAiJGtleSIsICJwYW5lbC91cGxvYWRlZC1sb2dvIl0sCiAgICAgeyJzdWNjZXNzX2FjdGlvbl9yZWRpcmVjdCI6ICJodHRwOi8vbG9jYWxob3N0Ojg4ODgvdXBsb2FkLmpzcCJ9LAogICAgIFsic3RhcnRzLXdpdGgiLCAiJENvbnRlbnQtVHlwZSIsICJpbWFnZS8iXSwKICBdCn0=";
-String signature = "3RcvbEnh5oQncA7CbR3WA0qFyKY=";
-*/
-%>
-
-<input type="hidden" name="policy" value="ewogICJleHBpcmF0aW9uIjogIjIwMjAtMDEtMDFUMTI6MDA6MDAuMDAwWiIsCiAgImNvbmRpdGlvbnMiOiBbCiAgICB7ImJ1Y2tldCI6ICJhZ2lsZWNybSIgfSwKICAgIHsiYWNsIjogInB1YmxpYy1yZWFkIiB9LAogICAgWyJzdGFydHMtd2l0aCIsICIka2V5IiwgInBhbmVsL3VwbG9hZGVkLWxvZ28iXSwKICAgIFsic3RhcnRzLXdpdGgiLCAiJENvbnRlbnQtVHlwZSIsICJpbWFnZS8iXSwKICAgIFsgImNvbnRlbnQtbGVuZ3RoLXJhbmdlIiwgNTEyLCA0MTk0MzA0XSwKICAgIFsic3RhcnRzLXdpdGgiLCAiJHN1Y2Nlc3NfYWN0aW9uX3JlZGlyZWN0IiwgIiIgXQogIF0KfQ==" />
-<input type="hidden" name="signature" value="8yRCXZwztrYAYZO2xk38Efp9Nj4=" />
-
-
-
+<input type="hidden" name="policy" value="ewogICJleHBpcmF0aW9uIjogIjIwMjAtMDEtMDFUMTI6MDA6MDAuMDAwWiIsCiAgImNvbmRpdGlvbnMiOiBbCiAgICB7ImJ1Y2tldCI6ICJhZ2lsZWNybSIgfSwKICAgIHsiYWNsIjogInB1YmxpYy1yZWFkIiB9LAogICAgIFsic3RhcnRzLXdpdGgiLCAiJGtleSIsICJwYW5lbC91cGxvYWRlZC1sb2dvIl0sCiAgICAgeyJzdWNjZXNzX2FjdGlvbl9yZWRpcmVjdCI6ICJodHRwOi8vbG9jYWxob3N0Ojg4ODgvdXBsb2FkLmpzcCJ9LAogICAgIFsic3RhcnRzLXdpdGgiLCAiJENvbnRlbnQtVHlwZSIsICJpbWFnZS8iXSwKICBdCn0=" />
+<input type="hidden" name="signature" value="3RcvbEnh5oQncA7CbR3WA0qFyKY=" />
 <input name="file" id='fileextension' type="file" />
-<br/><br/><br/>
+<br/><br/>
 <input name="submit" value="Upload" class='submit' type="submit" /> 
 </form> 
-
-				
-
 </div>
-<!-- .block_content ends -->
-
-<div class="bendl"></div>
-<div class="bendr"></div>
-
-</div>
-
-</div>
-<!-- wrapper ends --></div>
-<!-- #hld ends -->
 </body>
 </html>

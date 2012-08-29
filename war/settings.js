@@ -4,12 +4,13 @@
 <br/>
 
 <div class="row">
-	<div class="span9">
+	<div class="span12">
 		<div class="page-header">
+			<h1>Email Template Add</h1>
 			<ul class="nav right">
 					<li class="dropdown" id="menu3">
 						<span class="dropdown-toggle btn right" id="mergefield" data-toggle="dropdown" style='top:-25px;position:relative'>
-						   Merge Field</span>
+						   <i class='icon-plus-sign'/> Add Merge Field</i></span>
 						<ul class="dropdown-menu">
 							<li><a href="#" name="{First Name}" id="field">&nbsp;First Name</a></li>
 							<li><a name="{Last Name}" id="field">&nbsp;Last Name</a></li>
@@ -21,25 +22,25 @@
 		</div>
 	</div>
 </div>
-<div class="span8">
+<div class="span9">
 	<div class="well">
 	<form id="templatePrefs" class="form-horizontal">
 	<div class="control-group">
 	<label class="control-label">Subject <span class="field_req">*</span>
 				</label>
 	<div class="controls">
-	<input type="text" class="required" name="subject"/></div>
+	<input type="text" class="required" name="subject" placeholder="subject"/></div>
 	</div>
 	<div class="control-group">
 	<label class="control-label">Text <span class="field_req">*</span>
 				</label>
 	<div class="controls">
-	<textarea class="span6 required" rows="10" name="text" id="email-template-html"></textarea>
+	<textarea class="span7 required" rows="15" name="text" id="email-template-html" placeholder="email template html"></textarea>
 	</div>
 	</div>
 	<div class="form-actions">
      <a href="#" type="submit" class="save btn btn-primary">Save changes</a> 
-     <a href="#admin" class="btn ">Close</a>
+     <a href="#settings" class="btn ">Cancel</a>
 					</div>
 	
 	</form>
@@ -48,10 +49,10 @@
 </script><script id="settings-email-templates-collection-template" type="text/html">
 	
 	<div class="row">
-		<div class="span9">
+		<div class="span12">
 			<div class="page-header">
     			<h1>List of Emails</h1>
-				<a href="#email-template-add" class="btn right" id="addEmailTemplate" style='top:-25px;position:relative'>
+				<a href="#email-template-add" class="btn right" id="addEmailTemplate" style='top:-30px;position:relative'>
 				   <span><i class='icon-plus-sign'/></span> Add Email Template</a>
 	  		</div>
 		</div>
@@ -62,6 +63,7 @@
 			<table class="table table-bordered table-striped" >
 				<thead>
     				<tr>
+						<th></th>
       					<th>Id</th>
       					<th>subject</th>
      				 	<th>description</th>
@@ -74,12 +76,34 @@
 		</div>
 		<div class='span3'>
 			<div class="well">
+				<h3>
+					Export to CSV
+				</h3><br/>
+				<p>
+					You can use workflow to automate most of your follow-ups. It's marketing and sales automation tool.
+				</p>
+				<p>
+					Eg: you can send an email to all users who have signed up on your site. And then based on their behavior in the control panel, you can send them targetted messages periodically.
+				</p>
+
+				<br/>
+				<h3>
+					What is marketing automation?
+				</h3><br/>
+				<p>
+					You can use workflow to automate most of your follow-ups. It's marketing and sales automation tool.
+				</p>
+				<p>
+					Eg: you can send an email to all users who have signed up on your site. And then based on their behavior in the control panel, you can send them targetted messages periodically.
+				</p>
 			</div>
 		</div>
 	</div>
 </script>
 
 <script id="settings-email-templates-model-template" type="text/html">
+<td><icon class='edit icon-remove-circle'></icon></td>
+
 <td>{{id}}</td>
 
 <td>{{subject}}</td>
@@ -156,6 +180,7 @@
 				<fieldset>
 					<legend>Notifications</legend>
 					<input name="id" type="hidden" value="{{id}}" /> 
+					<label><b>Browsing:</b></label>
 					<div class="control-group">
 						<div class="controls">
 							<label class="checkbox">
@@ -182,7 +207,9 @@
 							</label>
 						</div>
 					</div>
-
+					<legend></legend>
+					<p></p>
+					<label><b>Email:</b></label>
 					<div class="control-group">
 						<div class="controls">
 							<label class="checkbox">
@@ -209,7 +236,9 @@
 							</label>
 						</div>
 					</div>
-
+					<legend></legend>
+					<p></p>
+					<label><b>Link:</b></label>
 					<div class="control-group">
 						<div class="controls">
 							<label class="checkbox">
@@ -236,7 +265,9 @@
 							</label>
 						</div>
 					</div>
-
+					<legend></legend>
+					<p></p>
+					<label><b>Deal:</b></label>
 					<div class="control-group">
 						<div class="controls">
 							<label class="checkbox">
@@ -256,9 +287,9 @@
 						</div>
 					</div>
 					
-					<div class="form-actions">
-						<a href="#" class="btn ">Close</a>
+					<div class="form-actions">						
             			<button type="submit" class="save btn btn-primary">Save changes</button>
+						<a href="#settings" class="btn ">Cancel</a>
           			</div>
 				</fieldset>
 			</form>
@@ -508,7 +539,7 @@
 			</div>
 			<div class="form-actions">
 				<a href="#" type="submit" class="save btn btn-primary">Save changes</a>
-				<a href="#settings" class="btn ">Close</a>
+				<a href="#settings" class="btn ">Cancel</a>
 			</div>
 		</fieldset>
 	</form>
@@ -528,12 +559,8 @@
 <div class="row">
 	<div class="span3 offset well">
 		<legend>Personal Preferences</legend>
-		Set your name, email signature and choose from the various color schemes.<br /> <br /><br />
+		Set your name, email signature and choose from the various color schemes.<br /> <br /><br /><br/>
 		<a class='btn btn-primary' href='#user-prefs'>Go</a>
-	</div>
-	<div class="span3 offset well">
-		<legend>Social Preferences</legend>
-		Configure your Twitter, Linkedin etc. to retrieve social profile of your prospect.<br /> <br /> <br /><a class='btn btn-primary' href='#social-prefs'>Go</a>
 	</div>
 
 	<div class="span3 offset well">
@@ -541,19 +568,20 @@
 		Associate your email to/fro with your contact.	<br /> <br /> <br /> <br/>
 		<a class='btn btn-primary' href='#email'>Go</a>
 	</div>
+
+	<div class="span3 offset well">
+		<legend>Email Templates</legend>
+		Add, edit or delete your email templates.<br /><br/><br/>
+		<br /> <br /> <a class='btn btn-primary' href='#email-templates'>Go</a>
+	</div>
 </div>
 
 <div class="row">
-	<div class="span3 offset well">
-		<legend>Email Templates</legend>
-		Add, edit or delete your email templates.<br />
-		<br /> <br /> <a class='btn btn-primary' href='#email-templates'>Go</a>
-	</div>
 
 <div class="span3 offset well">
 		<legend>Notifications</legend>
 		Receive notifications real-time when your contact is created or browing your website<br />
-		<br /> <br /> <a class='btn btn-primary' href='#notification-prefs'>Go</a>
+		<br/> <br /> <br /> <a class='btn btn-primary' href='#notification-prefs'>Go</a>
 	</div>
 
 </div>

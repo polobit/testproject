@@ -11,7 +11,7 @@
 	<div class="row">
 		<div class="span3 offset well">	
 			<legend>Account Preferences</legend>
-			Choose your plan, upload your company logo or set your company name.<br /> <br /> <br />
+			Choose your plan, upload your company logo or set your company name.<br /> <br /> <br /><br/>
 			<a class='btn btn-primary' href='#account-prefs'>Go</a>
 		</div>
 		<div class="span3 offset well">
@@ -33,7 +33,7 @@
 		</div>	
 		<div class="span3 offset well">
 			<legend>Developers API</legend>	
-			AgileCrm API.<br /> <br /><br /><br /> </br><br />
+			AgileCrm API.<br /> <br /><br /><br /> </br>
 			<a class='btn btn-primary' href='#api'>Go</a>
 		</div>	
 	</div>
@@ -115,20 +115,20 @@ API-KEY  {{api_key}}
 
 		 	<div class="control-group">
 				<div id="account_prefs" messg="User image has been uploaded">
-				<div class="controls">
+					<div class="controls">
 						<div class="imgholder">
 							{{#if logo}}
 								<img src="{{logo}}" height="100" width="100"/>
-							{{/if}}							
-						</div>
-						<input type="hidden" id="account_prefs_url" name="logo">  
-							<input class="upload_s3 submit" type="submit" id="account_prefs_image" value="Upload">
+							{{/if}}													
+						</div>					
+						<p><br/></p><p><input type="hidden" id="account_prefs_url" name="logo">  
+							<input class="upload_s3 submit" type="submit" id="account_prefs_image" value="Upload"></p>
 				</div>
 			</div>
 
 			<div class="form-actions">
             	<a href="#" type="submit" class="save btn btn-primary">Save changes</a> 
-				<a href="#admin" class="btn ">Close</a>
+				<a href="#admin" class="btn ">Cancel</a>
 			</div>
 		</fieldset>
 	</form>
@@ -311,9 +311,9 @@ API-KEY  {{api_key}}
 <!-- End of (Generated Link) Modal views --><script id="admin-settings-customfields-collection-template" type="text/html">
 	
 	<div class="row">
-		<div class="span9">
+		<div class="span12">
 			<div class="page-header">
-    			<h1>List of CustomFields</h1>
+    			<h1>Custom Fields</h1>
 				<ul class="nav right">
 					<li class="dropdown" id="menu2">
 						<a href="#custom-fields-add" class="dropdown-toggle btn right" data-toggle="dropdown" id="addUser" style='top:-25px;position:relative'>
@@ -359,13 +359,36 @@ API-KEY  {{api_key}}
 		</div>
 
 		<div class='span3'>
-			
+				
+			<div class="well">
+				<h3>
+					Export to CSV
+				</h3><br/>
+				<p>
+					You can use workflow to automate most of your follow-ups. It's marketing and sales automation tool.
+				</p>
+				<p>
+					Eg: you can send an email to all users who have signed up on your site. And then based on their behavior in the control panel, you can send them targetted messages periodically.
+				</p>
+
+				<br/>
+				<h3>
+					What is marketing automation?
+				</h3><br/>
+				<p>
+					You can use workflow to automate most of your follow-ups. It's marketing and sales automation tool.
+				</p>
+				<p>
+					Eg: you can send an email to all users who have signed up on your site. And then based on their behavior in the control panel, you can send them targetted messages periodically.
+				</p>
+
+			</div>		
 			</div>
 		</div>
 		
 		<div id= "custom-field-modal">
 		</div>
-
+		
 	</div>
 </script>
 
@@ -417,7 +440,7 @@ API-KEY  {{api_key}}
 
 					<div class="form-actions">
             			<button type="submit" class="save btn btn-primary">Save changes</button>
-            			<a type="reset" href='#users' class="btn">Cancel</a>
+            			<a type="reset" href='#admin' class="btn">Cancel</a>
           			</div>
 				</fieldset>
 			</form>
@@ -456,6 +479,27 @@ API-KEY  {{api_key}}
 
 		<div class='span3'>
 			<div class="well" id='adduser'>
+				<h3>
+					Export to CSV
+				</h3><br/>
+				<p>
+					You can use workflow to automate most of your follow-ups. It's marketing and sales automation tool.
+				</p>
+				<p>
+					Eg: you can send an email to all users who have signed up on your site. And then based on their behavior in the control panel, you can send them targetted messages periodically.
+				</p>
+
+				<br/>
+				<h3>
+					What is marketing automation?
+				</h3><br/>
+				<p>
+					You can use workflow to automate most of your follow-ups. It's marketing and sales automation tool.
+				</p>
+				<p>
+					Eg: you can send an email to all users who have signed up on your site. And then based on their behavior in the control panel, you can send them targetted messages periodically.
+				</p>
+
 			</div>
 		</div>
 

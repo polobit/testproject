@@ -92,7 +92,6 @@ var Base_Model_View = Backbone.View.extend({
             }
         });
     },
-
     render: function () {
     	if(!this.model.isNew() || this.options.isNew || !$.isEmptyObject(this.model.toJSON()))
     	{

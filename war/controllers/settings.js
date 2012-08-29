@@ -102,6 +102,7 @@ var SettingsRouter = Backbone.Router.extend({
     	var view = new Base_Model_View({
             url: '/core/api/email/templates',
             template: "settings-email-template-add",
+            navigate: 'settings',
             postRenderCallback: function(el){
            	 // Setup HTML Editor
             	console.log("rendering html");

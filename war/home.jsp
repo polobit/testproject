@@ -414,8 +414,8 @@ padding: 0px
 <script src='lib/headjs-min.js'></script>
 	
 	<script>
-	// var LIB_PATH = "https://d1uqbqkiqv27mb.cloudfront.net/panel/js/";
-	var LIB_PATH = "/";
+	var LIB_PATH = "https://d1uqbqkiqv27mb.cloudfront.net/panel/js/";
+	//var LIB_PATH = "/";
 	
 	<!-- JQUery Core and UI CDN -->	
 	<!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->
@@ -460,7 +460,5 @@ padding: 0px
 	<!--  HTML Editor -->
 	<link rel='stylesheet' type='text/css' href='<%=CSS_PATH%>css/bootstrap-wysihtml5-min.css' />
 	
-	
-
 </body>
 </html>
