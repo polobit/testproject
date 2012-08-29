@@ -146,6 +146,8 @@ function isValidForm(form) {
 	        }
 	    })*/
 	
+	console.log("Validating form");
+	
 	$('form').validate({
 	    errorClass:'error',
 	    validClass:'success',

@@ -55,16 +55,20 @@ function loadWidgets(el, contact, user) {
 
                     // Store the save
                     $('.widget-sortable li').each(function (index) {
-                        var modelId = $(this).find('.widget-add').attr('id');
+                        var model_name = $(this).find('.widget-add').attr('id');
+                        
+                        // Get Model
+                        var model = $('#' + model_name).data('model');
+                        
                         // console.log(modelId);
-                        models.push({id: modelId, position: index});
+                        models.push({id: model.get("id"), position: index});
                     });
                     
                     // Store the positions at server
                     $.ajax({
                         type: 'POST',
                         url: '/core/api/widgets/positions',
-                        data: JSON.stringify({widget:models}),
+                        data: JSON.stringify(models),
                         contentType: "application/json; charset=utf-8",
                         success: function (data) {
                            // console.log("Positions Saved Successfully");
