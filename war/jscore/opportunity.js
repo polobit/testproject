@@ -24,6 +24,22 @@ function populateUsers(id, el) {
      });
 	users.collection.fetch();
      $('#owner',el).html(users.el);
+     
+     // Fill milestones select options
+     var milestone_model = Backbone.Model.extend({
+    	 url: '/core/api/milestone'
+ 		});
+     
+     var model = new milestone_model();
+     model.fetch({ success: function(data) { 
+ 		var jsonModel = data.toJSON();
+ 		var milestones = jsonModel.milestones;
+ 		var array = milestones.split(",");
+ 	    $("#milestone").empty().append('<option>Select...</option>');
+ 	    $.each(array,function(index, element){
+ 	    	$("#milestone").append('<option value=' + '"' + element +'">' + element + '</option>');
+ 	    });
+     }});
      return el;
 }
 
