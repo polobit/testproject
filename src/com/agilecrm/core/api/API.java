@@ -286,6 +286,7 @@ public class API {
 		return Util.getNamespaceCount();
 	}
 	
+
 	// Remote tags
 	@Path("filter-tags")
 	@GET
