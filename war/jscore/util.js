@@ -65,6 +65,14 @@ function btnDropDown(contact_id, workflow_id){
 
 }
 
-
+// Delete contact properties
+function delete_contact_property(contact, propertyName)
+{
+	for(var index = 0; index < contact.properties.length; index++){
+		if(contact.properties[index].name == propertyName)
+			delete contact.properties[index];
+	}
+	return contact;
+}
 
  
