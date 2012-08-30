@@ -1,1 +1,14 @@
-/.settings/
+WEB-INF
+.project
+vaio.ppk
+.externalToolBuilders
+.classpath
+.DS_Store
+.gitignore
+util
+war/js-all-min.js
+war/tpl.js
+war/admin-settings.js
+war/continue.js
+war/settings.js
+
