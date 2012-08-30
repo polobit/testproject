@@ -6,10 +6,12 @@ function contactTableView(base_model) {
     });
 
     var modelData = this.options.modelData;
-
+    
     var data = modelData['fields_set'];
 
     var json = base_model.toJSON();
+    
+  //  $(this.el).html(getTemplate((this.options.templateKey + '-collection'), this.options.modelData));
     
     $('#contacts-custom-view-model-template').empty();
 
@@ -19,6 +21,8 @@ function contactTableView(base_model) {
 
     $(('#contacts-custom-view-model-list'), this.el).append(itemView.render().el);
 
+    
+    
 }
 
 
@@ -37,7 +41,7 @@ function setupViews(cel) {
    App_Contacts.customView.collection.fetch({
 	  	success: function(){
 	  		$("#view-list",cel).html(App_Contacts.customView.render().el);
-	  	}	
+	  	}
     })
 }
 
@@ -50,12 +54,12 @@ $(function(){
 		var id = $(this).attr('id');
 		
 		// Gets Model of selected contact-view
-		var contactViewModel = App_Contacts.customView.collection.get(id).toJSON();
+		App_Contacts.contactViewModel = App_Contacts.customView.collection.get(id).toJSON();
 		
 	    var view = new Base_Collection_View({
             url: '/core/api/contacts',
             restKey: "contact",
-            modelData: contactViewModel,
+            modelData: App_Contacts.contactViewModel ,
             templateKey: "contacts-custom-view",
             individual_tag_name: 'tr'
         });

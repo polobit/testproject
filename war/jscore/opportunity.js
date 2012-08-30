@@ -63,7 +63,14 @@ $("#editOpportunity").live("click", function (e) {
             	populateUsers("owner", el);
             	
             	// Call setupTypeAhead to get tags
-            	agile_type_ahead("relates_to", el, contacts_typeahead);         	
+            	agile_type_ahead("relates_to", el, contacts_typeahead);   
+            	
+            	
+            	// Enable the datepicker
+                $('#close_date', el).datepicker({
+                   format: 'mm-dd-yyyy'
+                });
+            	
             },
     	});
     

@@ -68,6 +68,11 @@ function getPropertyValue(items, name) {
     }
 }
 
+function ucfirst(value) {
+	return (value && typeof value === 'string') ? (value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()) : '';
+	
+}
+
 $(function() {
 
 
@@ -231,5 +236,18 @@ $(function() {
 		var pipeline = parseInt(value)*parseInt(probability)/100;
 		return pipeline;	
 	});
-    
-});
+	
+	Handlebars.registerHelper('contactTableHeadings', function(item){
+		
+		var el = "";
+		$.each(App_Contacts.contactViewModel[item], function(index, element){
+
+			element = element.replace("_"," ")
+			
+			el = el.concat('<th>'+ ucfirst(element) +'</th>');
+			
+		});
+		
+		return  new Handlebars.SafeString(el)
+	});
+});  

@@ -79,6 +79,13 @@ $(function(){
 			    // Time Picker
 			    $('.timepicker').timepicker({defaultTime: 'current', showMeridian: false, template: 'modal'});
 			    
+			    
+			    // Set the time picker when the modal is shown
+			    $('#activityModal').on('show', function () {
+			    	$('.timepicker').val(getHHMM());			    	
+			    	//$('.timepicker').val("05:30");		    	
+			    });
+			    
 			    // Switch Task and Event: changing color and font-weight
 			    $("#task").click(function (e) {
 			        $("#hiddentask").val("task");
@@ -112,4 +119,21 @@ function isValidRange(startDate, endDate){
 		  return true;
 	  else
 		  return false;		  
+}
+
+
+// Get Hours and Mins for the current time. It will be padded for 15 mins
+function getHHMM() {
+	
+	
+	var hours = new Date().getHours();
+	var minutes = new Date().getMinutes();
+	
+    if (minutes % 15 != 0)
+     minutes = minutes - (minutes % 15);
+    
+    if (hours   < 10) {hours   = "0"+hours;}
+    if (minutes < 10) {minutes = "0"+minutes;}
+    
+    return hours + ':' + minutes;
 }
