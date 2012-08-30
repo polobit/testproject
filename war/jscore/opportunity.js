@@ -31,12 +31,19 @@ function populateUsers(id, el) {
  		});
      
      var model = new milestone_model();
-     model.fetch({ success: function(data) { 
+     model.fetch({ 
+    			 success: function(data) 
+    			 { 
  						var jsonModel = data.toJSON();
  						var milestones = jsonModel.milestones;
- 						var array = milestones.split(",");
- 						var selectId = "milestone";
- 						fillTokenizedSelect(selectId, array)
+ 						
+ 						// Split , and trim
+ 						var array = [];
+ 						$.each(milestones.split(","), function(){
+ 							array.push($.trim(this));
+ 						});
+ 						
+ 						fillTokenizedSelect('milestone', array)
      			   }
      });
      return el;

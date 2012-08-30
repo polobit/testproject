@@ -54,7 +54,7 @@ public class CampaignsAPI {
 	}
 
 	// Campaign
-	@Path("/logs/{campaign-id}")
+	@Path("logs/{campaign-id}")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Log> getCampaignLogs(

@@ -110,24 +110,21 @@ function validateFileExtension()
 </head>
 
 
-<body  class="center">
+<body class='center'>
 
 <br/>
-<div class="well">
 
-<legend>Upload Image</legend>
+<div class="well span6">
 
-
-<h4>Upload Image for Agent (image files)</h4>
-<p></p><p></p>
-<p>For best results, we recommend you upload png files. You can also upload jpg or gif files also.</p>
+<legend>Upload your image file</legend>
 
 
+<p>For best results, we recommend you upload png files. You can also upload jpg or gif files also.</i></p>
+
+<br/>
 <form action="https://agilecrm.s3.amazonaws.com/" method="post" enctype="multipart/form-data" onsubmit="return validateFileExtension();""> 
 <div id='fileerror' style='display:none;'><div class='alert alert-error'><a class='close' data-dismiss='alert' href='#'>×</a><p></p></div></div>
 
-							
-<scrpit>
     
 	 <input type="hidden" name="key" value="panel/uploaded-logo/<%=new Date().getTime()%>" /> 
 	 
@@ -144,8 +141,9 @@ function validateFileExtension()
 <input type="hidden" name="signature" value="3RcvbEnh5oQncA7CbR3WA0qFyKY=" />
 <input name="file" id='fileextension' type="file" />
 <br/><br/>
-<input name="submit" value="Upload" class='submit' type="submit" /> 
+<input name="submit" value="Upload" class='submit btn btn-primary' type="submit" /> 
 </form> 
 </div>
+
 </body>
 </html>

@@ -269,8 +269,8 @@ public class Opportunity {
 	}
 
 	// Contacts related with deals Author : Yaswanth 08-24-2012
-	@XmlElement(name = "contacts")
-	public List<Contact> getRelatedContacts() {
+	@XmlElement
+	public List<Contact> getContacts() {
 
 		Objectify ofy = ObjectifyService.begin();
 		List<Contact> contacts_list = new ArrayList<Contact>();

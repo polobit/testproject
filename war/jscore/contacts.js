@@ -28,3 +28,10 @@ $(function(){
 	});
 	
 });
+
+
+function delete_contact_property(contact, propertyName)
+{
+
+	
+}

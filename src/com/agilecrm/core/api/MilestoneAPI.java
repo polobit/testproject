@@ -27,18 +27,4 @@ public class MilestoneAPI {
 		Milestone milestone = Milestone.getMilestones();
 		return milestone;
 	}
-	
-	@Path("/tokens")
-	@GET
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Milestone getMilestoneAsTokens() {
-		Milestone milestone = Milestone.getMilestones();
-		String str = milestone.milestones;
-		String noSpacestr = str.replaceAll("\\s+", "");
-		milestone.milestones = noSpacestr;
-		// return noSpacestr;
-		 return milestone;
-	}
-	
 }

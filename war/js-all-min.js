@@ -1000,7 +1000,14 @@ $(function(){
 		
 	});
 	
-});// Serailize and save continue contact
+});
+
+
+function delete_contact_property(contact, propertyName)
+{
+
+	
+}// Serailize and save continue contact
 function serializeAndSaveContinueContact(e, form_id , continueContact) {
 
     e.preventDefault();
@@ -1258,7 +1265,7 @@ $(function(){
 			    });
 			    
 			    // Time Picker
-			    $('.timepicker').timepicker({defaultTime:false, showMeridian: false});
+			    $('.timepicker').timepicker({defaultTime: 'current', showMeridian: false, template: 'modal'});
 			    
 			    // Switch Task and Event: changing color and font-weight
 			    $("#task").click(function (e) {
@@ -1363,6 +1370,7 @@ function deserializeForm(data, form)
 	       if (fel.length > 0) {
 	    	   
 	           tag = fel[0].tagName.toLowerCase();
+	           
 	           if (tag == "select" || tag == "textarea") { //...
 	              $(fel).val(el);
 	           }
@@ -1385,7 +1393,6 @@ function deserializeForm(data, form)
 	               else if (type == "radio") {
 	                   fel.filter('[value="'+el+'"]').attr("checked", "checked"); 
 	               }
-	               
 	           }
 	    
 	           // Deserialize tags
@@ -1396,23 +1403,13 @@ function deserializeForm(data, form)
 	        		   		el = [el];
 	        		   }
 	        	  
-	        	   $.each(el, function(index, contact){
-	        		   var tag_name;
-	        		   var tag_id = contact.id;
-	        		   $.each(contact.properties, function(index, property){
-	        			   if(property.name == "first_name")
-	        				   {
-	        				   	tag_name = property.value;
-	        				   }
-	        			   if(property.name == "last_name")
-	        				   {
-	        				   	tag_name = tag_name.concat(" " + property.value);
-	        				   }
-	        		  })
-	        		   $('#' + fel.attr('id'), form).append('<li class="label label-warning" value="'+tag_id+'" style="display: inline-block; vertical-align: middle; margin-right:3px; ">'+tag_name+'<a class="icon-remove" id="remove_tag"></a></li>');
-	        	   });
+	        	  $.each(el, function(index, contact){
+	                   var tag_name;
+	                   var tag_id = contact.id;
+	                   tag_name = getPropertyValue(contact.properties, "first_name") + getPropertyValue(contact.properties, "last_name");
+	                   $('#' + fel.attr('id'), form).append('<li class="label label-warning" value="'+tag_id+'" style="display: inline-block; vertical-align: middle; margin-right:3px; ">'+tag_name+'<a class="icon-remove" id="remove_tag"></a></li>');
+	                  });	        	    
 	           }
-
 	         }
 
 	});
@@ -1421,40 +1418,25 @@ function deserializeForm(data, form)
 
 function isValidForm(form) {
     
-	 //console.log($(form).html());
+	 console.log($(form).html());
+	 console.log("Validating form");
     
-	    /*$(form).validate({
+	 
+	    $(form).validate({
 	        debug: true,
 	        errorElement: 'span',
 	        errorClass: 'help-inline',
-	        highlight: function (element, errorClass) {
-	
-	            console.log($(element).html());
-	            $(element).parent().parent().addClass('error');
+	        highlight: function (element, errorClass) {     
+	  	      $(element).closest(".control-group").addClass('error'); 
 	        },
 	        unhighlight: function (element, errorClass) {
-	            $(element).parent().parent().removeClass('error');
+	        	 $(element).closest(".control-group").removeClass('error'); 
 	        },
 	        invalidHandler: function (form, validator) {
 	            var errors = validator.numberOfInvalids();
-	            // alert("errors " + errors);
 	        }
-	    })*/
+	    })	
 	
-	console.log("Validating form");
-	
-	$('form').validate({
-	    errorClass:'error',
-	    validClass:'success',
-	    errorElement:'span',
-	    highlight: function (element, errorClass, validClass) { 
-	        $(element).parents("div[class='clearfix']").addClass(errorClass).removeClass(validClass); 
-	    }, 
-	    unhighlight: function (element, errorClass, validClass) { 
-	        $(element).parents(".error").removeClass(errorClass).addClass(validClass); 
-	    }
-	});	
-
     return $(form).valid();
 }
 
@@ -2225,12 +2207,19 @@ function populateUsers(id, el) {
  		});
      
      var model = new milestone_model();
-     model.fetch({ success: function(data) { 
+     model.fetch({ 
+    			 success: function(data) 
+    			 { 
  						var jsonModel = data.toJSON();
  						var milestones = jsonModel.milestones;
- 						var array = milestones.split(",");
- 						var selectId = "milestone";
- 						fillTokenizedSelect(selectId, array)
+ 						
+ 						// Split , and trim
+ 						var array = [];
+ 						$.each(milestones.split(","), function(){
+ 							array.push($.trim(this));
+ 						});
+ 						
+ 						fillTokenizedSelect('milestone', array)
      			   }
      });
      return el;
@@ -2648,7 +2637,7 @@ function loadWidgets(el, contact, user) {
                     // Store the save
                     $('.widget-sortable li').each(function (index) {
 
-                    	var model_name = $(this).find('.widget-add').attr('id');
+                    	var model_name = $(this).find('.widget').attr('id');
                         
                         // Get Model
                         var model = $('#' + model_name).data('model');
@@ -3271,21 +3260,17 @@ var ContactsRouter = Backbone.Router.extend({
         
         this.contactDetailView = new Base_Model_View({
             model: contact,
-            template: "contact-detail"
+            template: "contact-detail",
+            postRenderCallback: function(el) {
+                loadWidgets(el, contact.toJSON());
+               }
         });
         
        
         var el = this.contactDetailView.render().el;
-       
-        //$('#contact-details-list').html(el);
+      
         $('#content').html(el);
        
-        var socialEl = this.el;
-        //addSocial(socialEl);
-
-        // Add Widgets (RHS)
-        //alert("Loading widgets");
-        loadWidgets(el, contact.toJSON());
     },
     editContact: function () {
     	
@@ -3316,8 +3301,16 @@ var ContactsRouter = Backbone.Router.extend({
      	 	
       	// Contact Duplicate
       	var contact = this.contactsListView.collection.get(this.contactDetailView.model.id);
+      	contact = contact.clone();
+      	
+      	// Delete email as well as it has to be unique
+      	delete_contact_property(contact, 'email');
+      	
+      	
       	var json = contact.toJSON();
       	delete json.id;
+      	
+      	
         var contactDuplicate = new Backbone.Model();
         contactDuplicate.url = 'core/api/contacts';
         contactDuplicate.save(json,{

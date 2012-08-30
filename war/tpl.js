@@ -608,19 +608,19 @@
 </script>
 
 <script id="contact-view-template" type="text/html">
-	<div class="span9">
+	<div class="span7">
 		<div class="well">
 			<form id="opportunityform" class="form-horizontal">
 		  		<fieldset>
 					<div class="control-group">			
 						<legend>Contact View</legend>	
-						<label class="control-label"><b>View Name</b><span>*</span></label>
+						<label class="control-label">View Name <span>*</span></label>
 						<div class="controls">
 							<input id="name" name="name" type="text" class="input span3 required" placeholder="Name of View" /><br/>
 			  			</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label"><b>Fields</b><span>*</span></label>
+						<label class="control-label">Fields <span>*</span></label>
 						<div class="controls" id="contactTypeAhead">
 							<select id="multipleSelect" class="required" name="fields_set" multiple="multiple">
 								<option value="first_name">First Name</option>
@@ -635,12 +635,13 @@
 							</select>
 			  			</div>
 					</div>
+					<div class="form-actions">          
+          				<a href="#" type="submit" class="save btn btn-primary" id="contactView">Save</a>
+						<a href="#contact-views" class="btn ">Close</a>
+					</div>
 				</fieldset>
 			</form>
-			<div class="form-actions">          
-          		<a href="#" type="submit" class="save btn btn-primary" id="contactView">Save</a>
-				<a href="#contact-views" class="btn ">Close</a>
-			</div>
+			
 			</div>
 		</div>
 </script><script id="contact-list-view-collection-template" type="text/html">
@@ -2066,11 +2067,13 @@ Eg: you can send an email to all users who have signed up on your site. And then
 
 </script>
 <script id="widgets-model-template" type="text/html">
-<span class="widget-add" id='{{name}}'>  
+<span class="widget" id='{{name}}'>  
 {{name}}
 
 
 </span>
+
+<br/>
 </script>
 
 <script id="widgets-collection-template" type="text/html">

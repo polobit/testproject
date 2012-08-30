@@ -56,7 +56,7 @@ function loadWidgets(el, contact, user) {
                     // Store the save
                     $('.widget-sortable li').each(function (index) {
 
-                    	var model_name = $(this).find('.widget-add').attr('id');
+                    	var model_name = $(this).find('.widget').attr('id');
                         
                         // Get Model
                         var model = $('#' + model_name).data('model');
