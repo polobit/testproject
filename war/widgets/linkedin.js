@@ -1,6 +1,7 @@
 var LINKEDIN_PLUGIN_NAME = "Linkedin";
 var LINKEDIN_PLUGIN_HEADER = '<div style="margin-top:20px" class="bottom-line"><img src="widgets/linkedin-logo-small.png" style="padding-right:5px; padding-bottom:1px; height:15px;"></img><label style="display:inline">Linkedin</label></div><br/>'
 
+
 $(function () {
 	
 	// Get the Plugin id
@@ -77,7 +78,7 @@ function showLinkedinMatchingProfiles(plugin_id)
             			  	object.picture = 'https://contactuswidget.appspot.com/images/pic.png';
                 		 }
                 	 
-                	 el = el.concat('<img  rel="popover" data-content="'+object.location+'<br/>'+object.summary+'"  data-original-title="'+object.name+'" class="linkedinImage thumbnail " class="linkedinImage thumbnail " id=' + object.id + ' src =" '+ object.picture +' " style="display:inline-block;  width: 50px;height: 50px; margin:2px;cursor:pointer; color: #FF00FF"></img>');
+                	 el = el.concat('<img  rel="popover" data-content="'+object.location+'<br/>'+object.summary+'"  data-original-title="'+object.name+'" class="linkedinImage thumbnail " class="linkedinImage thumbnail " id=' + object.id + ' src =" '+ object.picture +' " style="display:inline-block;  width: 50px;height: 50px; margin-right:2px; margin-bottom:2px; cursor:pointer; color: #FF00FF"></img>');
                      
                  });
               });
@@ -90,18 +91,30 @@ function showLinkedinMatchingProfiles(plugin_id)
 	$(".linkedinImage").die().live('mouseover' ,function() {
 		
 		 var id = $(this).attr('id');
-
+		 var image = $(this).attr('src');
+		 
 		 $('#'+id).popover({placement:'left'});
 		 
 		 $('#'+id).die().live('click', function(){
 			 $('#'+id).popover('hide');
 			    if (id) 
-			    	{
-			    		agile_crm_save_widget_property(LINKEDIN_PLUGIN_NAME, id);
-			    		showLinkedinProfile(id, plugin_id)
-			    	}
+			    {
+			    	var modal =$('<div id="linkedin-image-save-modal" class="modal fade in" ><div class="modal-header" ><a href="#" data-dismiss="modal" class="close">&times;</a><h3>Add Image</h3></div><div class="modal-body"><p>You are about to add Image to contact</p><p>Do you want to proceed?</p></div><div class="modal-footer"><a href="#" id="save_linkedin_image" class="btn btn-primary">Yes</a><a  href="#" class="btn close" data-dismiss="modal" >No</a></div></div>');
+			    	
+			    	$('#content').append(modal);
+			    	$('#linkedin-image-save-modal').modal('show');		   
+			    	agile_crm_save_widget_property(LINKEDIN_PLUGIN_NAME, id);
+			    	showTwitterProfile(id, plugin_id)
+			    }
 		 });
-		 
+ 
+		 // Confirmation for saving image to contact 
+		 $('#save_linkedin_image').die().live('click', function(e){
+			 e.preventDefault();
+			 
+			 agile_crm_update_contact("image", image);
+			 $('#linkedin-image-save-modal').modal('hide');
+		 });
 	});
 }
 
@@ -119,7 +132,7 @@ function showLinkedinProfile(linkedin_id, plugin_id)
     			data.picture = 'https://contactuswidget.appspot.com/images/pic.png';
     		}
     	    	
-    	$('#Linkedin').html('<div style="margin-top:20px" class="bottom-line"><img src="widgets/linkedin-logo-small.png" style="padding-right:5px; padding-bottom:1px; height:15px;"></img><label style="display:inline">Linkedin</label><a class="icon-remove pull-right" id="linkedin_plugin_delete" style="cursor:pointer; color: #FF00FF"></a></div><br/><div  style="display:inline;  line-height:12px;"><div class="row-fluid well" style="margin-top:-10px; width:200px;"><div class="span3" style="margin-left:-8%; margin-top:-8%; margin-right:3%"><img src=' + data.picture + ' style=" display:inline; float:left; margin-right:2px; margin-top:5px; padding:0px 5px;"/></div><div class="span8" style="margin-top:-8%; width:79%;"><h4 style="color:blue"><a href=\"' + data.url + '\" target="_blank">' + data.name + '</a></h4><span style="font-size:10px; margin-bottom:2px;">' + data.summary + ',<br/> ' + data.location +',<br/>' + data.num_connections + '+ connections ,<br/></span><br/><br/></div></div>');
+    	$('#Linkedin').html('<div style="margin-top:20px" class="bottom-line"><img src="widgets/linkedin-logo-small.png" style="padding-right:5px; padding-bottom:1px; height:15px;"></img><label style="display:inline">Linkedin</label><a class="icon-remove pull-right" id="linkedin_plugin_delete" style="cursor:pointer; color: #FF00FF"></a></div><br/><div  style="display:inline;  line-height:12px;"><div class="row-fluid well" style="margin-top:-10px; width:200px"><div class="span3" style="margin-left:-8%; margin-top:-8%; margin-right:3%"><img src=' + data.picture + ' style=" display:inline; float:left; margin-right:2px; margin-top:5px; padding:0px 5px;"/></div><div class="span8" style="margin-top:-8%; width:79%;"><h4 style="color:blue"><a href=\"' + data.url + '\" target="_blank">' + data.name + '</a></h4><span style="font-size:10px; margin-bottom:2px;">' + data.summary + ',<br/> ' + data.location +',<br/>' + data.num_connections + '+ connections ,<br/></span><br/><br/></div></div>');
     });	
     
     

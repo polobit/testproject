@@ -162,7 +162,7 @@ function agile_crm_update_contact(propertyName, value)
 	
 	var properties = contact_model.toJSON()['properties'];
 
-	properties.push({"name":propertyName,"value":value});
+	properties.push({"name":propertyName, "value":value});
 	
 
 	// Update the property
