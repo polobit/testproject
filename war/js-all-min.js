@@ -84,7 +84,109 @@ $('#remove_tag').die().live('click', function(event){
 	$(this).parent().remove();
 });
 
-var BaseModel = Backbone.Model.extend({});
+// To save map of key: first_name and value: contact id 
+var TAGS = [];
+	
+function agile_type_ahead(id, el, callback) {
+	
+	$('#' + id, el).typeahead({
+		source : function(query, process) {
+			
+			// Get data on query
+			$.getJSON("core/api/contacts/search/" + query,
+				function(data) {
+					var items_list = [] ;
+				
+					// Customize data for type ahead
+					if (callback && typeof(callback) === "function")
+						{
+							items_list = callback(data);							
+						}
+
+					// For other tags we have to write else for processing data.. items_list = data...
+					
+					// To save map of key: tag_name and value: id 
+					$.each(data, function(index, item){
+						
+						tag_name = items_list[index];
+						
+						TAGS[tag_name] = item.id; 
+					});
+					
+					process(items_list);
+		
+				});
+		},
+		updater: function (items) {
+			var tag_not_exist = true;		
+			
+			// If tag already exists returns 
+			$.each($('#tags', el).children('li'), function(index, tag) {
+				
+				if($(tag).attr('value') == TAGS[items])
+					{
+						tag_not_exist = false;
+						return;
+					}
+			});
+
+			//add tag 
+			if(tag_not_exist)				
+				$('#tags',el).append('<li class="label label-warning"  style="display: inline-block; vertical-align: middle; margin-right:3px;" value="'+ TAGS[items]+'">'+items+'<a class="icon-remove" id="remove_tag"></a></li>');
+		},
+		minLength : 2
+	})
+}
+
+// Remove tags 
+$('#remove_tag').die().live('click', function(event){
+	event.preventDefault();
+	$(this).parent().remove();
+});
+
+
+
+/*
+ * Customization of Type-Ahead data  
+ */
+
+
+// Returns list of contacts names for type ahead
+function contacts_typeahead(data){
+	if(data != null)
+	{
+		var contact_names_list = [];
+		var CONTACT = [];
+		
+		// If result is multiple contacts (Array)
+		if(!isArray(data))
+			data = [data];
+		
+			$.each(data, function(index, contact ){
+				var contact_name;
+				
+				$.each(contact.properties, function (index, property) {
+					if (property.name == "first_name")
+					{
+						contact_name = property.value;
+					}
+					if(property.name == "last_name")
+					{
+						contact_name = contact_name.concat(" "+property.value);
+						
+					}
+				});
+				
+				CONTACT[contact_name] = contact;
+				contact_names_list.push(contact_name);
+			});
+
+			return contact_names_list;
+	}
+	
+}
+
+				var BaseModel = Backbone.Model.extend({});
 
 var BaseCollection = Backbone.Collection.extend({
     model: BaseModel,
@@ -367,7 +469,7 @@ var Base_Model_View = Backbone.View.extend({
     	}
     	else
     	{
-    		$(this.el).html('<img src= "img/loading-model.gif"></img>');
+    		$(this.el).html('<img src= "img/21-0.gif"></img>');
     	}
     	return this;
     }
@@ -1200,14 +1302,15 @@ function isValidRange(startDate, endDate){
     arr = arr.concat(
     $('#' + form_id + ' input[type=checkbox]:not(:checked)').map(
     function () {
-        return {
+
+    	return {
             "name": this.name,
             "value": false	
         }
     }).get());
     
     // Change the dates properly from human readable strings to epoch
-    arr = arr.concat($('#' + form_id + ' input[type=date]').map(
+    arr = arr.concat($('#' + form_id + ' input[type=date_input]').map(
    	    function () {
     	     return {
     	            "name" : this.name,
@@ -1303,11 +1406,10 @@ function deserializeForm(data, form)
 	        				   }
 	        			   if(property.name == "last_name")
 	        				   {
-	        				   	tag_name = tag_name.concat(" "+property.value);
+	        				   	tag_name = tag_name.concat(" " + property.value);
 	        				   }
-	        		  });
-	        		   
-	        		   $('#' + fel.attr('id'), form).append('<li class="contact_tags label label-warning" value='+tag_id+' >'+tag_name+'<a class="icon-remove" id="remove_tag"></a></li>');
+	        		  })
+	        		   $('#' + fel.attr('id'), form).append('<li class="label label-warning" value="'+tag_id+'" style="display: inline-block; vertical-align: middle; margin-right:3px; ">'+tag_name+'<a class="icon-remove" id="remove_tag"></a></li>');
 	        	   });
 	           }
 
@@ -2141,14 +2243,14 @@ $("#editOpportunity").live("click", function (e) {
     
     var view = new Base_Model_View({
         url: 'core/api/opportunity',
-        model: app.opportunityCollectionView.currentDeal,
+        model: App_Deals.opportunityCollectionView.currentDeal,
         template: "opportunity-add",
         window: 'deals',
         postRenderCallback: function(el){
             	populateUsers("owner", el);
             	
             	// Call setupTypeAhead to get tags
-            	contactsTypeAhead("relates_to", el);         	
+            	agile_type_ahead("relates_to", el, contacts_typeahead);         	
             },
     	});
     
@@ -2160,13 +2262,13 @@ $("#editOpportunity").live("click", function (e) {
 $('#move li a').live('click', function (e) {
 
     e.preventDefault();
-    var opportunity = app.opportunityCollectionView.currentDeal;
+    var opportunity = App_Deals.opportunityCollectionView.currentDeal;
     opportunity.set('milestone',this.id);
     
     //opportunity.milestone = this.id;
     opportunity.url = 'core/api/opportunity';
     opportunity.save();
-    app.opportunityCollectionView.collection.add(opportunity);
+    App_Deals.opportunityCollectionView.collection.add(opportunity);
 });
 $(function(){
 	
@@ -2545,7 +2647,8 @@ function loadWidgets(el, contact, user) {
 
                     // Store the save
                     $('.widget-sortable li').each(function (index) {
-                        var model_name = $(this).find('.widget-add').attr('id');
+
+                    	var model_name = $(this).find('.widget-add').attr('id');
                         
                         // Get Model
                         var model = $('#' + model_name).data('model');
@@ -2739,12 +2842,12 @@ function agile_crm_save_widget_property(propertyName, value) {
 
 	widget_properties[propertyName] = value;
 	
-	contact_model.set("widget_properties" , JSON.stringify(widget_properties));
+	contact_model.set({"widget_properties" : JSON.stringify(widget_properties)},{silent: true});
 	
 	contact_model.url = 'core/api/contacts'
 		
 	// Save model
-	contact_model.save()
+		contact_model.save()
 	
 }
 
@@ -2787,10 +2890,10 @@ function agile_crm_delete_widget_property(propertyName) {
 	
 	delete  widget_properties[propertyName];
 	
-	contact_model.set("widget_properties" , JSON.stringify(widget_properties));
+	contact_model.set({"widget_properties" : JSON.stringify(widget_properties)},{silent: true});
 	
-	contact_model.url = 'core/api/contacts'
-		
+	contact_model.url = 'core/api/contacts';
+	
 	// Save model
 	contact_model.save()
 }$(function(){
@@ -3112,7 +3215,8 @@ var ContactsRouter = Backbone.Router.extend({
           this.contactsListView.collection.fetch({
               success: function (collection, response) {
                   setupTags(cel);
-
+                  setupViews(cel);
+                		  
                   // Set the cursor
                   //console.log("Cursor " + response.cursor);
                   collection.cursor = response.cursor;
@@ -3154,6 +3258,7 @@ var ContactsRouter = Backbone.Router.extend({
         		
         			// Call Contact Details again
         			App_Contacts.contactDetails(id, model);
+        			
         	}});
         	
         	
@@ -3244,6 +3349,7 @@ var ContactsRouter = Backbone.Router.extend({
     contactViewAdd: function(){
     	var view = new Base_Model_View({
     		url: 'core/api/contact-view',
+    		isNew: true,
     		window: "contact-views",
     		 template: "contact-view",
     	});
@@ -3362,7 +3468,8 @@ function setupTags(cel) {
             window: 'deals',
             postRenderCallback: function(el){
             	populateUsers("owner", el);
-            	setupTypeAhead(el);
+
+            	agile_type_ahead("relates_to", el, contacts_typeahead);
             	
             	// Enable the datepicker
                 $('#close_date', el).datepicker({

@@ -549,7 +549,6 @@
 <script id = "contacts-custom-view-first_name-template" type="text/html">
 	<td class='data' data='{{id}}'>
 		<b>
-		test
 		{{getPropertyValue properties "last_name"}}
 		</b>
 	</td>
@@ -738,22 +737,7 @@
 
 </div>
 
-<!--
-<ul class="nav nav-tabs right" style="top:-18px;position:relative;border-bottom:0px" id='contacts-tabs'>
-                        <li class="active">
-                            <a href="#all" data-toggle="tab">All</a>
-                        </li>
-                        <li class="">
-                            <a href="#persons" data-toggle="tab">Persons</a>
-                        </li>
-                        <li class="">
-                            <a href="#companies" data-toggle="tab">Companies</a>
-                        </li>
-					 <li class="">
-                            <a href="#recent" data-toggle="tab">Recent</a>
-                        </li>
-                    </ul>
--->
+
   </div>
 </div>
 </div>
@@ -1199,8 +1183,7 @@
     <h1>Contacts <small>persons & companies</small>
 	</h1>
 
-<div class="btn-group right" style='top:-18px;position:relative'>
-<div id ="view-list">
+<div class="btn-group right" id ="view-list" style='top:-18px;position:relative'>
   <button class="btn">All Contacts</button>
   <button class="btn dropdown-toggle" data-toggle="dropdown" id="viewList" style="margin-left: -5px"><span class="caret" ></span>
   </button>
@@ -1218,7 +1201,6 @@
 	</li>
 
   </ul>
-</div>
 </div>
 
 <!--
@@ -1810,8 +1792,8 @@ Eg: you can send an email to all users who have signed up on your site. And then
 						<label class="control-label">Related To <span class="field_req">*</span></label>
 						<div class="controls" id="contactTypeAhead">
 							<div>
-								<div class="pull-left">
-									<ul name= "contacts" class= "tags" id="contact-tags"></ul>
+								<div class="pull-left" style="margin-left:-25px">
+									<ul name= "contacts" class= "tags" id="tags"></ul>
 								</div>
 									<input type="text" id = "relates_to" class="typeahead typeahead_contacts" data-provide="typeahead" data-mode="multiple" />
 							</div>	
@@ -1858,9 +1840,9 @@ Eg: you can send an email to all users who have signed up on your site. And then
 						<label class="control-label">Close Date <span class="field_req">*</span></label>
 						<div class="controls">
 							{{#if close_date}}
-								<input id="close_date" name="close_date" class="input required" placeholder="MM/DD/YY"/>				
+								<input id="close_date" type= "date_input" name="close_date" class="input required" placeholder="MM/DD/YY"/>				
 								{{else}}
-									<input id="close_date" name="close_date" class="input required" placeholder="MM/DD/YY"/>	
+									<input id="close_date" type= "date_input" name="close_date" class="input required" placeholder="MM/DD/YY"/>	
 							{{/if}}
 						</div>
 					</div>

@@ -53,5 +53,14 @@ public class CampaignsAPI {
 		return Log.getCampaignSubscriberLog(campaignId, contactId);
 	}
 
-	
+	// Campaign
+	@Path("/logs/{campaign-id}")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<Log> getCampaignLogs(
+			@PathParam("campaign-id") String campaignId) {
+
+		return Log.getCampaignLog(campaignId);
+	}
+
 }

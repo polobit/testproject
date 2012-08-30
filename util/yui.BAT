@@ -1,3 +1,3 @@
-cd C:\Users\invox-4\projects-github\agile-java-server\war
-type jscore\*.js controllers\*.js util.js > C:\Users\invox-4\projects-github\agile-java-server\war\js-all-min.js
-cd C:\Users\invox-4\projects-github\agile-java-server\util
+cd D:\agile\AgileCRM\war
+type jscore\*.js controllers\*.js util.js > D:\agile\AgileCRM\war\js-all-min.js
+cd D:\agile\AgileCRM\util

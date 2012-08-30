@@ -111,16 +111,10 @@ function deserializeForm(data, form)
 	        				   }
 	        			   if(property.name == "last_name")
 	        				   {
-	        				   	tag_name = tag_name.concat(" "+property.value);
+	        				   	tag_name = tag_name.concat(" " + property.value);
 	        				   }
-<<<<<<< HEAD
-	        		  }) ;
+	        		  })
 	        		   $('#' + fel.attr('id'), form).append('<li class="label label-warning" value="'+tag_id+'" style="display: inline-block; vertical-align: middle; margin-right:3px; ">'+tag_name+'<a class="icon-remove" id="remove_tag"></a></li>');
-=======
-	        		  });
-	        		   
-	        		   $('#' + fel.attr('id'), form).append('<li class="contact_tags label label-warning" value='+tag_id+' >'+tag_name+'<a class="icon-remove" id="remove_tag"></a></li>');
->>>>>>> a1be267395d3dbe5052e02aacf51bd3d0177d75d
 	        	   });
 	           }
 
