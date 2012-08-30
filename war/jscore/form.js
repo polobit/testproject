@@ -7,14 +7,15 @@ function serializeForm(form_id) {
     arr = arr.concat(
     $('#' + form_id + ' input[type=checkbox]:not(:checked)').map(
     function () {
-        return {
+
+    	return {
             "name": this.name,
             "value": false	
         }
     }).get());
     
     // Change the dates properly from human readable strings to epoch
-    arr = arr.concat($('#' + form_id + ' input[type=date]').map(
+    arr = arr.concat($('#' + form_id + ' input[type=date_input]').map(
    	    function () {
     	     return {
     	            "name" : this.name,
@@ -67,6 +68,7 @@ function deserializeForm(data, form)
 	       if (fel.length > 0) {
 	    	   
 	           tag = fel[0].tagName.toLowerCase();
+	           
 	           if (tag == "select" || tag == "textarea") { //...
 	              $(fel).val(el);
 	           }
@@ -89,7 +91,6 @@ function deserializeForm(data, form)
 	               else if (type == "radio") {
 	                   fel.filter('[value="'+el+'"]').attr("checked", "checked"); 
 	               }
-	               
 	           }
 	    
 	           // Deserialize tags
@@ -100,24 +101,13 @@ function deserializeForm(data, form)
 	        		   		el = [el];
 	        		   }
 	        	  
-	        	   $.each(el, function(index, contact){
-	        		   var tag_name;
-	        		   var tag_id = contact.id;
-	        		   $.each(contact.properties, function(index, property){
-	        			   if(property.name == "first_name")
-	        				   {
-	        				   	tag_name = property.value;
-	        				   }
-	        			   if(property.name == "last_name")
-	        				   {
-	        				   	tag_name = tag_name.concat(" "+property.value);
-	        				   }
-	        		  });
-	        		   
-	        		   $('#' + fel.attr('id'), form).append('<li class="contact_tags label label-warning" value='+tag_id+' >'+tag_name+'<a class="icon-remove" id="remove_tag"></a></li>');
-	        	   });
+	        	  $.each(el, function(index, contact){
+	                   var tag_name;
+	                   var tag_id = contact.id;
+	                   tag_name = getPropertyValue(contact.properties, "first_name") + getPropertyValue(contact.properties, "last_name");
+	                   $('#' + fel.attr('id'), form).append('<li class="label label-warning" value="'+tag_id+'" style="display: inline-block; vertical-align: middle; margin-right:3px; ">'+tag_name+'<a class="icon-remove" id="remove_tag"></a></li>');
+	                  });	        	    
 	           }
-
 	         }
 
 	});
@@ -126,38 +116,25 @@ function deserializeForm(data, form)
 
 function isValidForm(form) {
     
-	 //console.log($(form).html());
+	 console.log($(form).html());
+	 console.log("Validating form");
     
-	    /*$(form).validate({
+	 
+	    $(form).validate({
 	        debug: true,
 	        errorElement: 'span',
 	        errorClass: 'help-inline',
-	        highlight: function (element, errorClass) {
-	
-	            console.log($(element).html());
-	            $(element).parent().parent().addClass('error');
+	        highlight: function (element, errorClass) {     
+	  	      $(element).closest(".control-group").addClass('error'); 
 	        },
 	        unhighlight: function (element, errorClass) {
-	            $(element).parent().parent().removeClass('error');
+	        	 $(element).closest(".control-group").removeClass('error'); 
 	        },
 	        invalidHandler: function (form, validator) {
 	            var errors = validator.numberOfInvalids();
-	            // alert("errors " + errors);
 	        }
-	    })*/
+	    })	
 	
-	$('form').validate({
-	    errorClass:'error',
-	    validClass:'success',
-	    errorElement:'span',
-	    highlight: function (element, errorClass, validClass) { 
-	        $(element).parents("div[class='clearfix']").addClass(errorClass).removeClass(validClass); 
-	    }, 
-	    unhighlight: function (element, errorClass, validClass) { 
-	        $(element).parents(".error").removeClass(errorClass).addClass(validClass); 
-	    }
-	});	
-
     return $(form).valid();
 }
 

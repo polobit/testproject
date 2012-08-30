@@ -58,7 +58,7 @@ function showLinkedinMatchingProfiles(plugin_id)
          var el = LINKEDIN_PLUGIN_HEADER;
          
          // If no matches found display message
-         if (data == null) {
+         if (data.length == 0) {
         	 $('#Linkedin').html(el.concat("No Matches Found"));
         	 return;
          }
@@ -71,17 +71,14 @@ function showLinkedinMatchingProfiles(plugin_id)
             	 
             	 // Iterates through each profile
             	 $.each(value, function (index, object) {
-            		 object.picture = 'https:' + object.picture.split(':')[1];
-                	 console.log(object.picture);
+            		 
+            		 // If profile picture is null assign default profile pic 
             		 if(object.picture == null)
                 		 {
-                		 	object.picture = 'https://contactuswidget.appspot.com/images/pic.png';
+            			  	object.picture = 'https://contactuswidget.appspot.com/images/pic.png';
                 		 }
                 	 
-                	 //Converts http picture links to https
-                	 object.picture = convertHttptoHttps(object.picture);
-                	 
-                	 el = el.concat("<img  rel=\"popover\" data-content=\"Location : "+object.location+"<br/>connection :"+object.summary+" \" data-original-title=\""+object.name+"\"class=\"linkedinImage thumbnail \" class=\"linkedinImage thumbnail \" id=" + object.id + " src =\" http://wiseheartdesign.com/page_attachments/0000/0062/default-avatar.png \" style=\"width: 50px;height: 50px; display:inline-block; cursor:pointer; color: #FF00FF\"></img>");
+                	 el = el.concat('<img  rel="popover" data-content="'+object.location+'<br/>'+object.summary+'"  data-original-title="'+object.name+'" class="linkedinImage thumbnail " class="linkedinImage thumbnail " id=' + object.id + ' src =" '+ object.picture +' " style="display:inline-block;  width: 50px;height: 50px; cursor:pointer; color: #FF00FF"></img>');
                      
                  });
               });
@@ -101,7 +98,7 @@ function showLinkedinMatchingProfiles(plugin_id)
 			 $('#'+id).popover('hide');
 			    if (id) 
 			    	{
-			    		//agile_crm_save_widget_property(LINKEDIN_PLUGIN_NAME, id);
+			    		agile_crm_save_widget_property(LINKEDIN_PLUGIN_NAME, id);
 			    		showLinkedinProfile(id, plugin_id)
 			    	}
 		 });
@@ -117,15 +114,13 @@ function showLinkedinProfile(linkedin_id, plugin_id)
 	
 	// Fetches matching profiles
     $.getJSON("/core/api/widgets/contact/LINKEDIN/" + linkedin_id +"/" + plugin_id, function (data) {
+    	
     	if(data.picture == null)
     		{
     			data.picture = 'https://contactuswidget.appspot.com/images/pic.png';
     		}
-    	
-    	// Convert http image url to https url
-    	data.picture  = convertHttptoHttps(data.picture);
-    	
-    	$('#Linkedin').html('<div style="margin-top:20px" class="bottom-line"><img src="widgets/linkedin-logo-small.png" style="padding-right:5px; padding-bottom:1px; height:15px;"></img><label style="display:inline">Linkedin</label><a class="icon-remove pull-right" id="linkedin_plugin_delete"></a></div><br/><div  style="display:inline;  line-height:12px;"><a>&times;</a><div class="row-fluid well" style="margin-top:-8px; width:200px; border-top:5px solid whitesmoke;"><a id="linkedin_profile_delete" class="Linkedin btn  pull-right">&times;</a><div class="span3" style="margin-left:-8%; margin-top:-8%; margin-right:3%"><img src=' + data.picture + ' style=" display:inline; float:left; margin-right:2px; margin-top:5px; padding:0px 5px;"/></div><div class="span8" style="margin-top:-8%; width:79%;"><h4 style="color:blue"><a href=\"' + data.url + '\" target="_blank">' + data.name + '</a></h4><span style="font-size:10px; margin-bottom:2px;">' + data.summary + ',<br/> ' + data.location +',<br/>' + data.num_connections + '+ connections ,<br/></span><br/><br/></div></div>');
+    	    	
+    	$('#Linkedin').html('<div style="margin-top:20px" class="bottom-line"><img src="widgets/linkedin-logo-small.png" style="padding-right:5px; padding-bottom:1px; height:15px;"></img><label style="display:inline">Linkedin</label><a class="icon-remove pull-right" id="linkedin_plugin_delete"></a></div><br/><div  style="display:inline;  line-height:12px;"><div class="row-fluid well" style="margin-top:-10px; width:200px; border-top:5px solid whitesmoke;"><div class="span3" style="margin-left:-8%; margin-top:-8%; margin-right:3%"><img src=' + data.picture + ' style=" display:inline; float:left; margin-right:2px; margin-top:5px; padding:0px 5px;"/></div><div class="span8" style="margin-top:-8%; width:79%;"><h4 style="color:blue"><a href=\"' + data.url + '\" target="_blank">' + data.name + '</a></h4><span style="font-size:10px; margin-bottom:2px;">' + data.summary + ',<br/> ' + data.location +',<br/>' + data.num_connections + '+ connections ,<br/></span><br/><br/></div></div>');
     });	
     
     
@@ -135,10 +130,4 @@ function showLinkedinProfile(linkedin_id, plugin_id)
     	 agile_crm_delete_widget_property(LINKEDIN_PLUGIN_NAME);
     	 
     });
-}
-
-function convertHttptoHttps(url) {
-	
-	url = 'https:'+url.split(':')[1];
-	return url;
 }

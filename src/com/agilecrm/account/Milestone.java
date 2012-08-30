@@ -1,6 +1,7 @@
 package com.agilecrm.account;
 
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -33,7 +34,17 @@ public class Milestone {
 
 	public static Milestone getMilestones() {
 		Objectify ofy = ObjectifyService.begin();
-		return ofy.query(Milestone.class).get();
-		// return null;
+		Milestone milestone =  ofy.query(Milestone.class).get();
+		if(milestone == null)
+			return getDefaultMilestone();
+		
+		return milestone;
+	}
+	
+	public static Milestone getDefaultMilestone()
+	{
+		Milestone milestone = new Milestone("Lost, Open, Won, Stage 1");
+		milestone.save();
+		return milestone;
 	}
 }

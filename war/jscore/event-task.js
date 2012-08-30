@@ -77,7 +77,7 @@ $(function(){
 			    });
 			    
 			    // Time Picker
-			    $('.timepicker').timepicker({defaultTime:false, showMeridian: false});
+			    $('.timepicker').timepicker({defaultTime: 'current', showMeridian: false, template: 'modal'});
 			    
 			    // Switch Task and Event: changing color and font-weight
 			    $("#task").click(function (e) {

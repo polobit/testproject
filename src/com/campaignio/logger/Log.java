@@ -134,7 +134,7 @@ public class Log
 	}
 
 	// Get Log
-	public List<Log> getCampaignLog(String campaignId)
+	public static List<Log> getCampaignLog(String campaignId)
 	{
 		return dao.listByProperty("campaign_id", campaignId);
 	}

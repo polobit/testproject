@@ -3,6 +3,7 @@ package com.agilecrm.workflows;
 import java.util.List;
 
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -25,7 +26,13 @@ public class Workflow
 	public Long id;
 
 	public String name;
-	
+
+	// Created/Updated Time
+	public Long created_time = 0L;
+
+	@NotSaved(IfDefault.class)
+	public Long updated_time = 0L;
+
 	@NotSaved(IfDefault.class)
 	public String rules = null;
 
@@ -45,6 +52,18 @@ public class Workflow
 	{
 		this.name = name;
 		this.rules = rules;
+	}
+
+	@PrePersist
+	private void PrePersist()
+	{
+		// Store Created and Last Updated Time
+		if (created_time == 0L)
+		{
+			created_time = System.currentTimeMillis();
+		}
+		else
+			updated_time = System.currentTimeMillis();
 	}
 
 	public void save()
@@ -81,7 +100,7 @@ public class Workflow
 	
 	public String toString()
 	{
-		return "Name: " + name + " Rules: " + rules;
+		return "Name: " + name + " Rules: " + rules + " created_time: " + created_time + " updated_time" + updated_time;
 	}
 	
 	@XmlElement(name = "creator")

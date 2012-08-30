@@ -55,16 +55,21 @@ function loadWidgets(el, contact, user) {
 
                     // Store the save
                     $('.widget-sortable li').each(function (index) {
-                        var modelId = $(this).find('.widget-add').attr('id');
+
+                    	var model_name = $(this).find('.widget').attr('id');
+                        
+                        // Get Model
+                        var model = $('#' + model_name).data('model');
+                        
                         // console.log(modelId);
-                        models.push({id: modelId, position: index});
+                        models.push({id: model.get("id"), position: index});
                     });
                     
                     // Store the positions at server
                     $.ajax({
                         type: 'POST',
                         url: '/core/api/widgets/positions',
-                        data: JSON.stringify({widget:models}),
+                        data: JSON.stringify(models),
                         contentType: "application/json; charset=utf-8",
                         success: function (data) {
                            // console.log("Positions Saved Successfully");
@@ -234,23 +239,23 @@ function agile_crm_save_widget_property(propertyName, value) {
 	var contact_model =  App_Contacts.contactDetailView.model;
 	
 	// Get WidgetProperties from Contact Model
-	var widgetProperties = contact_model.get('widgetProperties');
+	var widget_properties = contact_model.get('widget_properties');
 		
-	// If widgetProperties are null
-	if(!widgetProperties)
-		widgetProperties = {};
+	// If widget_properties are null
+	if(!widget_properties)
+		widget_properties = {};
 	
 	else
-		widgetProperties = JSON.parse(widgetProperties);
+		widget_properties = JSON.parse(widget_properties);
 
-	widgetProperties[propertyName] = value;
+	widget_properties[propertyName] = value;
 	
-	contact_model.set("widgetProperties" , JSON.stringify(widgetProperties));
+	contact_model.set({"widget_properties" : JSON.stringify(widget_properties)},{silent: true});
 	
 	contact_model.url = 'core/api/contacts'
 		
 	// Save model
-	contact_model.save()
+		contact_model.save()
 	
 }
 
@@ -261,19 +266,19 @@ function agile_crm_get_widget_property(propertyName) {
 	var contact_model =  App_Contacts.contactDetailView.model;
 	
 	// Get WidgetProperties from Contact Model
-	var widgetProperties = contact_model.get('widgetProperties');
+	var widget_properties = contact_model.get('widget_properties');
 	
 	// If widget-properties are null return 
-	if(!widgetProperties)
+	if(!widget_properties)
 		return;
 	
 	// Convert JSON string to JSON Object
-	widgetProperties = JSON.parse(widgetProperties);
+	widget_properties = JSON.parse(widget_properties);
 	
 	
 	
 	
-	return widgetProperties[propertyName];
+	return widget_properties[propertyName];
 }
 
 // Delete widget property
@@ -283,24 +288,20 @@ function agile_crm_delete_widget_property(propertyName) {
 	var contact_model =  App_Contacts.contactDetailView.model;
 	
 	// Get WidgetProperties from Contact Model
-	var widgetProperties = contact_model.get('widgetProperties');
+	var widget_properties = contact_model.get('widget_properties');
 	
 	// If widget-properties are null return 
-	if(!widgetProperties)
+	if(!widget_properties)
 		return;
 
-	widgetProperties = JSON.parse(widgetProperties);
+	widget_properties = JSON.parse(widget_properties);
 	
-	console.log(widgetProperties[propertyName]);
+	delete  widget_properties[propertyName];
 	
-	delete  widgetProperties[propertyName];
+	contact_model.set({"widget_properties" : JSON.stringify(widget_properties)},{silent: true});
 	
-	console.log(widgetProperties);
+	contact_model.url = 'core/api/contacts';
 	
-	contact_model.set("widgetProperties" , JSON.stringify(widgetProperties));
-	
-	contact_model.url = 'core/api/contacts'
-		
 	// Save model
 	contact_model.save()
 }

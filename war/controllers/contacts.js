@@ -67,7 +67,8 @@ var ContactsRouter = Backbone.Router.extend({
           this.contactsListView.collection.fetch({
               success: function (collection, response) {
                   setupTags(cel);
-
+                  setupViews(cel);
+                		  
                   // Set the cursor
                   //console.log("Cursor " + response.cursor);
                   collection.cursor = response.cursor;
@@ -109,6 +110,7 @@ var ContactsRouter = Backbone.Router.extend({
         		
         			// Call Contact Details again
         			App_Contacts.contactDetails(id, model);
+        			
         	}});
         	
         	
@@ -121,21 +123,17 @@ var ContactsRouter = Backbone.Router.extend({
         
         this.contactDetailView = new Base_Model_View({
             model: contact,
-            template: "contact-detail"
+            template: "contact-detail",
+            postRenderCallback: function(el) {
+                loadWidgets(el, contact.toJSON());
+               }
         });
         
        
         var el = this.contactDetailView.render().el;
-       
-        //$('#contact-details-list').html(el);
+      
         $('#content').html(el);
        
-        var socialEl = this.el;
-        //addSocial(socialEl);
-
-        // Add Widgets (RHS)
-        //alert("Loading widgets");
-        loadWidgets(el, contact.toJSON());
     },
     editContact: function () {
     	
@@ -166,8 +164,16 @@ var ContactsRouter = Backbone.Router.extend({
      	 	
       	// Contact Duplicate
       	var contact = this.contactsListView.collection.get(this.contactDetailView.model.id);
+      	contact = contact.clone();
+      	
+      	// Delete email as well as it has to be unique
+      	delete_contact_property(contact, 'email');
+      	
+      	
       	var json = contact.toJSON();
       	delete json.id;
+      	
+      	
         var contactDuplicate = new Backbone.Model();
         contactDuplicate.url = 'core/api/contacts';
         contactDuplicate.save(json,{
@@ -199,6 +205,7 @@ var ContactsRouter = Backbone.Router.extend({
     contactViewAdd: function(){
     	var view = new Base_Model_View({
     		url: 'core/api/contact-view',
+    		isNew: true,
     		window: "contact-views",
     		 template: "contact-view",
     	});
