@@ -21,9 +21,13 @@
 	// Download the template the user likes
 	String template = UserPrefs.getCurrentUserPrefs().template;
 	// template = "default";
-%>
+	%>
 
-<% String CSS_PATH = "https://d1uqbqkiqv27mb.cloudfront.net/panel/"; %>
+<% 
+
+String CSS_PATH = "/";
+/* String CSS_PATH = "https://d1uqbqkiqv27mb.cloudfront.net/panel/"; */
+%>
 	
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-responsive.min.css" media="screen, projection" />
