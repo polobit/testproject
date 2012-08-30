@@ -55,11 +55,16 @@ function loadWidgets(el, contact, user) {
 
                     // Store the save
                     $('.widget-sortable li').each(function (index) {
+<<<<<<< HEAD
+                    	
+                        var modelId = $(this).find('.widget-add').attr('id');
+=======
                         var model_name = $(this).find('.widget-add').attr('id');
                         
                         // Get Model
                         var model = $('#' + model_name).data('model');
                         
+>>>>>>> a1be267395d3dbe5052e02aacf51bd3d0177d75d
                         // console.log(modelId);
                         models.push({id: model.get("id"), position: index});
                     });
@@ -249,12 +254,12 @@ function agile_crm_save_widget_property(propertyName, value) {
 
 	widget_properties[propertyName] = value;
 	
-	contact_model.set("widget_properties" , JSON.stringify(widget_properties));
+	contact_model.set({"widget_properties" : JSON.stringify(widget_properties)},{silent: true});
 	
 	contact_model.url = 'core/api/contacts'
 		
 	// Save model
-	contact_model.save()
+		contact_model.save()
 	
 }
 
@@ -297,10 +302,10 @@ function agile_crm_delete_widget_property(propertyName) {
 	
 	delete  widget_properties[propertyName];
 	
-	contact_model.set("widget_properties" , JSON.stringify(widget_properties));
+	contact_model.set({"widget_properties" : JSON.stringify(widget_properties)},{silent: true});
 	
-	contact_model.url = 'core/api/contacts'
-		
+	contact_model.url = 'core/api/contacts';
+	
 	// Save model
 	contact_model.save()
 }

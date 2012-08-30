@@ -52,8 +52,15 @@ function showTwitterMatchingProfiles(plugin_id)
 	
 	$.getJSON("/core/api/widgets/twitter/" + agile_crm_get_contact()['id'] + "/" + plugin_id, function (data) {
 		var el =  TWITTER_PLUGIN_HEADER;
+
+		// If no matching profiles found
+	     if (data.length == 0) {
+	      	 $('#Twitter').html(TWITTER_PLUGIN_HEADER  + "No Matches Found");
+	       	 return;
+	      }
+		
 		// If matching profiles available
-		if (data != null) {
+		
              $.each(data, function (key, value) {
                  
             	 if (!isArray(value)) 
@@ -64,10 +71,8 @@ function showTwitterMatchingProfiles(plugin_id)
                  });
              });
              $('#Twitter').html(el);
-		}
-        else {
-        	 $('#Twitter').html(TWITTER_PLUGIN_HEADER  + "No Matches Found");
-        }
+		
+
      });
 	
 
@@ -83,17 +88,22 @@ function showTwitterMatchingProfiles(plugin_id)
 			 
 			 $('#'+id).popover('hide');
 			    if (id) 
-			    	{			    		
+			    	{
 			    	
-			    	//	var modal =$('<div id="modal-from-dom" class="modal hide fade"><div class="modal-header"><a href="#" class="close">&times;</a><h3>Add Image</h3></div><div class="modal-body"><p>You are about to add Image to contact</p><p>Do you want to proceed?</p></div><div class="modal-footer"><a href="#" class="btn danger">Yes</a><a  class="btn secondary">No</a></div></div>');
+			    	// To ask user to add profile pic to contact image
+			    	
+			    	/*
+			    		var modal =$('<div id="modal-from-dom" class="modal hide fade"><div class="modal-header"><a href="#" data-dismiss="modal" class="close">&times;</a><h3>Add Image</h3></div><div class="modal-body"><p>You are about to add Image to contact</p><p>Do you want to proceed?</p></div><div class="modal-footer"><a href="#" class="btn danger">Yes</a><a  class="btn secondary">No</a></div></div>');
 			    		
-			    	//	$('<body>').append($(modal).html());
+			    		$('#content').html($(modal).html());
+			    		
+
+			    		   $('#modal-from-dom').data('id', id).modal('show');
 			    		
 			    		
 			    	
-			    	//	$('#modal-form-dom').show();
-			    		
-			    		
+			    		$('#modal-form-dom').show({backdrop: true});
+			    	*/
 			    		
 			    		agile_crm_save_widget_property(TWITTER_PLUGIN_NAME, id);
 			    		showTwitterProfile(id, plugin_id)

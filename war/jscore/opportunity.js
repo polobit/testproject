@@ -49,14 +49,14 @@ $("#editOpportunity").live("click", function (e) {
     
     var view = new Base_Model_View({
         url: 'core/api/opportunity',
-        model: app.opportunityCollectionView.currentDeal,
+        model: App_Deals.opportunityCollectionView.currentDeal,
         template: "opportunity-add",
         window: 'deals',
         postRenderCallback: function(el){
             	populateUsers("owner", el);
             	
             	// Call setupTypeAhead to get tags
-            	contactsTypeAhead("relates_to", el);         	
+            	agile_type_ahead("relates_to", el, contacts_typeahead);         	
             },
     	});
     
@@ -68,11 +68,11 @@ $("#editOpportunity").live("click", function (e) {
 $('#move li a').live('click', function (e) {
 
     e.preventDefault();
-    var opportunity = app.opportunityCollectionView.currentDeal;
+    var opportunity = App_Deals.opportunityCollectionView.currentDeal;
     opportunity.set('milestone',this.id);
     
     //opportunity.milestone = this.id;
     opportunity.url = 'core/api/opportunity';
     opportunity.save();
-    app.opportunityCollectionView.collection.add(opportunity);
+    App_Deals.opportunityCollectionView.collection.add(opportunity);
 });
