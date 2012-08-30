@@ -58,7 +58,7 @@ function showLinkedinMatchingProfiles(plugin_id)
          var el = LINKEDIN_PLUGIN_HEADER;
          
          // If no matches found display message
-         if (!data.length > 0) {
+         if (data.length == 0) {
         	 $('#Linkedin').html(el.concat("No Matches Found"));
         	 return;
          }

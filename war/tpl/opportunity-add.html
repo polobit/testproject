@@ -16,8 +16,8 @@
 						<label class="control-label">Related To <span class="field_req">*</span></label>
 						<div class="controls" id="contactTypeAhead">
 							<div>
-								<div class="pull-left">
-									<ul name= "contacts" class= "tags" id="contact-tags"></ul>
+								<div class="pull-left" style="margin-left:-25px">
+									<ul name= "contacts" class= "tags" id="tags"></ul>
 								</div>
 									<input type="text" id = "relates_to" class="typeahead typeahead_contacts" data-provide="typeahead" data-mode="multiple" />
 							</div>	
@@ -64,9 +64,9 @@
 						<label class="control-label">Close Date <span class="field_req">*</span></label>
 						<div class="controls">
 							{{#if close_date}}
-								<input id="close_date" name="close_date" class="input required" placeholder="MM/DD/YY"/>				
+								<input id="close_date" type= "date_input" name="close_date" class="input required" placeholder="MM/DD/YY"/>				
 								{{else}}
-									<input id="close_date" name="close_date" class="input required" placeholder="MM/DD/YY"/>	
+									<input id="close_date" type= "date_input" name="close_date" class="input required" placeholder="MM/DD/YY"/>	
 							{{/if}}
 						</div>
 					</div>
