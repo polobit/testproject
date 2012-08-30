@@ -1,4 +1,4 @@
-package com.agilecrm.account;
+package com.agilecrm.deals;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

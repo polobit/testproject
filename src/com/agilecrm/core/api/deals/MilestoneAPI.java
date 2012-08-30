@@ -1,4 +1,4 @@
-package com.agilecrm.core.api;
+package com.agilecrm.core.api.deals;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -7,7 +7,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.agilecrm.account.Milestone;
+import com.agilecrm.deals.Milestone;
 
 @Path("/api/milestone")
 public class MilestoneAPI {

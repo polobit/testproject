@@ -1,4 +1,4 @@
-package com.agilecrm.core.api;
+package com.agilecrm.core.api.deals;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.agilecrm.account.Opportunity;
+import com.agilecrm.deals.Opportunity;
 
 @Path("/api/opportunity")
 public class DealsAPI {

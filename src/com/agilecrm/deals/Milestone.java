@@ -1,4 +1,4 @@
-package com.agilecrm.account;
+package com.agilecrm.deals;
 
 import javax.persistence.Id;
 import javax.persistence.PrePersist;

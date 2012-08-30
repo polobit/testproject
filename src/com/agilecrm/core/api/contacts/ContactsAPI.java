@@ -23,10 +23,10 @@ import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.agilecrm.account.Opportunity;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactCursorResult;
 import com.agilecrm.contact.Note;
+import com.agilecrm.deals.Opportunity;
 import com.agilecrm.util.Util;
 
 @Path("/api/contacts")

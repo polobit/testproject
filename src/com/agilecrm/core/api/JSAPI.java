@@ -12,10 +12,10 @@ import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
-import com.agilecrm.account.Opportunity;
 import com.agilecrm.activities.Task;
 import com.agilecrm.campaign.Campaign;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.deals.Opportunity;
 import com.sun.jersey.api.json.JSONWithPadding;
 
 @Path("api/js/api")
