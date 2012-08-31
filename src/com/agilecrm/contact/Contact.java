@@ -139,10 +139,10 @@ public class Contact
 		if (created_time == 0L)
 		{
 			System.out.println("New Entity");
-			created_time = System.currentTimeMillis();
+			created_time = System.currentTimeMillis()/1000;
 		}
 		else
-			updated_time = System.currentTimeMillis();
+			updated_time = System.currentTimeMillis()/1000;
 
 		// Create Search Keyword Values
 		Set<String> tokens = new HashSet<String>();

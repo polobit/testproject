@@ -55,9 +55,9 @@ public class Workflow {
 	private void PrePersist() {
 		// Store Created and Last Updated Time
 		if (created_time == 0L) {
-			created_time = System.currentTimeMillis();
+			created_time = System.currentTimeMillis()/1000;
 		} else
-			updated_time = System.currentTimeMillis();
+			updated_time = System.currentTimeMillis()/1000;
 	}
 
 	public void save() {

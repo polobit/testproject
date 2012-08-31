@@ -72,7 +72,7 @@ $(function(){
 	$('#contactDetailsTab a[href="#campaigns"]').live('click', function (e){
 		e.preventDefault();
 		var campaignsView = new Base_Collection_View({
-			url: '/core/api/logs/contact/' + App_Contacts.contactDetailView.model.id,
+			url: '/core/api/campaigns/logs/contact/' + App_Contacts.contactDetailView.model.id,
             restKey: "logs",
             templateKey: "campaigns",
             individual_tag_name: 'tr'

@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
+import javax.ws.rs.Produces;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -165,6 +166,7 @@ public class Log
 	}
 	
 	@XmlElement
+	@Produces("application/json")
 	public String getLogs() throws Exception
 	{
 		//System.out.println(logs);
