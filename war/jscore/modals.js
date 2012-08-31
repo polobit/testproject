@@ -2,6 +2,9 @@ $(function(){
 	   
 		// Person Form
 	    $('#person_validate').live('click', function (e) {
+	    	if (!isValidForm('#personForm')) {
+	    		return false;
+	    	}
 	    	serializeAndSaveContinueContact(e, 'personForm');	        
 	    });
 	    

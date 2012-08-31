@@ -68,11 +68,6 @@ function getPropertyValue(items, name) {
     }
 }
 
-function ucfirst(value) {
-	return (value && typeof value === 'string') ? (value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()) : '';
-	
-}
-
 $(function() {
 
 
@@ -237,17 +232,15 @@ $(function() {
 		return pipeline;	
 	});
 	
-	Handlebars.registerHelper('contactTableHeadings', function(item){
-		
-		var el = "";
-		$.each(App_Contacts.contactViewModel[item], function(index, element){
-
-			element = element.replace("_"," ")
-			
-			el = el.concat('<th>'+ ucfirst(element) +'</th>');
-			
-		});
-		
-		return  new Handlebars.SafeString(el)
+	// Get required log from logs
+	Handlebars.registerHelper('getRequiredLog', function(logArrayString, name) {
+		var logArray = JSON.parse(logArrayString);
+		if(name == "t")
+		{
+			var readableTime = new Date(logArray[0][name]);
+			return readableTime;
+		}
+		return logArray[0][name];
 	});
-});  
+    
+});

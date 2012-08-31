@@ -98,8 +98,26 @@ $(function(){
 		var templateModel = new emailTemplatesModel();
 			templateModel.fetch({success: function(data){
 				var model = data.toJSON();
-				$("#emailForm").find( 'input[name="subject"]' ).val(model.subject);
-				$("#emailForm").find( 'textarea[name="body"]' ).val(model.text);
+				
+				// Get Current Contact
+				var contact = App_Contacts.contactDetailView.model;
+				var json = contact.toJSON();
+				
+				console.log(json);
+				console.log(model);
+				
+				// Get Contact properties json
+				var json = getPropertyJSON(json);
+				
+				// Templatize it
+				var template = Handlebars.compile(model.subject);
+				var subject =  template(json);
+				
+				template = Handlebars.compile(model.text);
+				var text =  template(json);
+						
+				$("#emailForm").find( 'input[name="subject"]' ).val(subject);
+				$("#emailForm").find( 'textarea[name="body"]' ).val(text);
 			}});
 		    
 	});
@@ -127,4 +145,18 @@ $(function(){
 	   });
 	});
 
-});		
+});	
+
+
+// Return contact properties in a json
+function getPropertyJSON(contactJSON)
+{	
+	var properties = contactJSON.properties;
+    var json = {};
+	$.each(properties, function(i, val)
+			{
+				json[this.name] = this.value;
+			});
+	
+	return json;
+}

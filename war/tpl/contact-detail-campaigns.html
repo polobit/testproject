@@ -1,28 +1,16 @@
  <script id="campaigns-collection-template" type="text/html">
  	</br>
 	<h1>List of Workflows</h1>
- 
-	<!--<div class="btn-group right" style='top:-18px;position:relative;padding-right:20px'>
-				<a class="btn" href="#"><i class="icon-print"></i></a>
-				<button class="btn">Actions</button>
-  				<button class="btn dropdown-toggle" data-toggle="dropdown">
-    				<span class="caret"></span>
-  				</button>  			
-  				<ul id='campaignSelect' class="dropdown-menu">
-					
-  				</ul>
-			</div>--!>
 	<table class="table table-bordered" >
 		<thead>
     		<tr>
      			<th></th>
-      			<th>Id</th>
-      			<th>Name</th>
-      			<th>Creator</th>
+      			<th>Message</th>
+				<th>Time</th>
     		</tr>
   		</thead>
   
- 	 	<tbody id='workflows-model-list'>
+ 	 	<tbody id="campaigns-model-list">
   		</tbody>
   
 	</table>
@@ -45,9 +33,9 @@
 
 
 <td><icon class='deleteWorkflow icon-remove-circle'></icon></td>  	
-  <td>{{id}}</td>
-  <td>{{name}}</td>
-  <td>{{creator}}</td>
+  <td>{{getRequiredLog logs "m"}}</td>
+  <td>{{getRequiredLog logs "t"}}</td>
+	
 <br/>
 	
 </script>

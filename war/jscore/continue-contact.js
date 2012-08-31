@@ -138,6 +138,9 @@ $(function () {
     
     // Continue editing in the new-person-modal Rammohan 03-08-2012.
     $('#continue-contact').click( function (e) {
+    	if (!isValidForm('#personForm')) {
+    		return false;
+    	}
     	var model = serializeAndSaveContinueContact(e, 'personForm' , true);
     });
     
