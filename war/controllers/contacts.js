@@ -205,6 +205,15 @@ var ContactsRouter = Backbone.Router.extend({
     		isNew: true,
     		window: "contact-views",
     		 template: "contact-view",
+    		postRenderCallback: function(el) {
+    			
+    			head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+    			
+    				$('#multipleSelect', el).multiSelect();
+    				$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").sortable();
+    			});
+    		}
+    		 
     	});
     	$('#content').html(view.render().el);
     },

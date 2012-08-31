@@ -43,9 +43,21 @@ function serializeForm(form_id) {
     
     
     // Multiple select 
-    if($('#' + form_id + ' select').attr('id')  == "multipleSelect")  
-    	arr = arr.concat({"name": $('#' + form_id + ' select').attr('name'), "value": $('#' + form_id + ' select').val()})
+    arr = arr.concat( $('#' + form_id + ' .multiSelect').map( 
+    		function() {
+       			var fields_set = [];
+       			
+    			// Get list of options
+    			$.each($(this).children('li'), function(index, data) { 
+    				fields_set.push(($(data).attr('ms-value')))
+	            });
 
+    			return {
+    			"name" : $(this).attr('name'),
+    			"value" : fields_set
+    			};
+    		}).get() );
+    
     
     
     // Convert array into JSON

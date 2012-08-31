@@ -42,9 +42,17 @@
 
 
 <style>
+@media (min-width: 900px) {
 body {
 	padding-top: 60px;
+	//background-color: whitesmoke;
 	}
+	
+.navbar-search{
+ 	padding-left: 10%
+}
+	
+}
 
 </style>
 

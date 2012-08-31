@@ -2,8 +2,6 @@ package com.agilecrm.contact;
 
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
-
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -26,7 +24,7 @@ public class ContactView {
 
 	// List of fields
 	@NotSaved(IfDefault.class)
-	public Set<String> fields_set = new LinkedHashSet<String> ();
+	public LinkedHashSet<String> fields_set = new LinkedHashSet<String> ();
 	
 	// Dao
 	private static ObjectifyGenericDao<ContactView> dao = new ObjectifyGenericDao<ContactView> (
@@ -37,7 +35,7 @@ public class ContactView {
 
 	}
 
-	public ContactView(String view_name, Set<String> fields_set)  {
+	public ContactView(String view_name, LinkedHashSet<String> fields_set)  {
 
 		this.name = view_name;
 		this.fields_set = fields_set;
@@ -46,6 +44,7 @@ public class ContactView {
 
 	// Get list of contact views
 	public static List<ContactView> getContactViewList()  {
+		System.out.println(dao.fetchAll());
 		return dao.fetchAll();
 	}
 
@@ -64,6 +63,7 @@ public class ContactView {
 	}
 
 	public void save()  {
+		System.out.println(this);
 		dao.put(this);
 	}
 

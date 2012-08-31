@@ -38,6 +38,11 @@ body {
 	padding-top: 60px;
 	//background-color: whitesmoke;
 	}
+	
+.navbar-search{
+ 	padding-left: 10%
+}
+	
 }
 
 .agilecrm-profile-dropdown:hover {
@@ -324,14 +329,15 @@ padding:10px;
 		<div class="navbar-inner">
 			<div class="container">
 				<a class="btn btn-navbar" data-toggle="collapse"
-					data-target=".nav-collapse"> </a>
+					data-target=".nav-collapse"> 
 					<span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
+            </a>
 					 <a
 					class="brand" href="#dashboard">Agile CRM</a>
 				<div class="nav-collapse">
-					<ul class="nav">
+					<ul class="nav agile-menu">
 						<li id="homemenu" class="active">
 						<li id="contactsmenu"><a href="#contacts">Contacts</a>
 						<li id="calendarmenu"><a href="#calendar">Calendar</a>
@@ -348,11 +354,11 @@ padding:10px;
 					%>
 					
 					
-					<div style="padding-left:42%">
+					
 					<form id="searchForm" class=" navbar-search">
                     <input id="searchText" type="text" class="search-query" placeholder="Search"/>
               		</form>	
-					</div>
+					
 
 
 					<ul class="nav pull-right">
@@ -360,7 +366,7 @@ padding:10px;
 					
 					<li class="dropdown" id="menu1"><a class="dropdown-toggle"
 							data-toggle="dropdown" href="#menu1">Add New <i class='caret'></i></a>
-							<ul class="dropdown-menu">
+							<ul class="dropdown-menu agile-menu">
 								<li><a href="#personModal" data-toggle="modal" id="person">Person</a>
 								</li>
 								<li><a href="#companyModal" data-toggle="modal"
@@ -384,7 +390,7 @@ padding:10px;
 						<li id="fat-menu" class="dropdown"><a href=""
 							class="dropdown-toggle" data-toggle="dropdown"><i
 								class="agilecrm-profile-dropdown"></i> </a>
-							<ul class="dropdown-menu">
+							<ul class="dropdown-menu agile-menu">
 								<li>
 									<a href='#settings'><%=user.getEmail()%></a>
 											</li>
@@ -474,6 +480,10 @@ padding:10px;
 	
 	<!--  HTML Editor -->
 	<link rel='stylesheet' type='text/css' href='<%=CSS_PATH%>css/bootstrap-wysihtml5-min.css' />
+	
+	<!--  Multiselect for Custom views add -->
+	<link rel='stylesheet' type='text/css' href='<%=CSS_PATH%>css/multi-select.css' />
+	
 	
 </body>
 </html>
