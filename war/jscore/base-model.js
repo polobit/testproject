@@ -111,7 +111,7 @@ var Base_Model_View = Backbone.View.extend({
     	}
     	else
     	{
-    		$(this.el).html('<img src= "img/21-0.gif"></img>');
+    		$(this.el).html(LOADING_HTML);
     	}
     	return this;
     }

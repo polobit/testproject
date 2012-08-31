@@ -30,6 +30,9 @@ var SettingsRouter = Backbone.Router.extend({
                 setupHTMLEditor($('#WYSItextarea'));
             }
         });
+        
+        // Set to user time zone if it is null
+        
 
         $('#content').html(view.render().el);
         

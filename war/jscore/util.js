@@ -1,3 +1,6 @@
+var LOADING_HTML = '<img class="loading" style="padding-right:5px" src= "img/21-0.gif"></img>';
+
+
 // Read a page's GET URL variables and return them as an associative array.
 function getUrlVars() {
     var vars = [],
@@ -26,13 +29,22 @@ function fillSelect(selectId, url, parseKey, callback, template)
 	           return response;
 	    	    }
 	   });
-	
+	 
+	// Prepend Loading
+	$loading = $(LOADING_HTML);
+	 $("#" + selectId).after($loading);
+	 
 	 var collection = new collection_def();
 	 collection.fetch({
 	       success: function () {
 	    	   console.log(collection.models);
 	    	   console.log(collection.toJSON());
 	       	
+	    	   
+	    	   // Remove loading
+	    	   $loading.remove();
+	    	   
+	    	   
 	       	  // Delete prev options if any
 	       	  $("#" + selectId).empty().append('<option>Select...</option>');
 	       		
