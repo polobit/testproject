@@ -33,11 +33,12 @@ String CSS_PATH = "/";
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-responsive.min.css" media="screen, projection" />
 
 <style>
+@media (min-width: 900px) {
 body {
 	padding-top: 60px;
 	//background-color: whitesmoke;
 	}
-
+}
 
 .agilecrm-profile-dropdown:hover {
 	background: url(../img/menu-sprite.png) no-repeat top left;
@@ -323,7 +324,11 @@ padding:10px;
 		<div class="navbar-inner">
 			<div class="container">
 				<a class="btn btn-navbar" data-toggle="collapse"
-					data-target=".nav-collapse"> </a> <a
+					data-target=".nav-collapse"> </a>
+					<span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+					 <a
 					class="brand" href="#dashboard">Agile CRM</a>
 				<div class="nav-collapse">
 					<ul class="nav">
