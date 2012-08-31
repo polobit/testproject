@@ -3,9 +3,6 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.google.appengine.api.users.User;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -20,7 +17,7 @@ public class NotificationPrefs {
 	public Long id;
 
 	@Parent
-	public Key<AgileUser> user;
+	private Key<AgileUser> user;
 	
 	
 	// The client checks if the key is not present.. So all default should be true

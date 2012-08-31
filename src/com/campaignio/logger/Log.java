@@ -16,6 +16,8 @@ import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.util.DBUtil;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -172,5 +174,20 @@ public class Log
 		//System.out.println(logs);
 		return logs.toString();
 	}
+	
+	@XmlElement
+	public String getContactName() throws Exception
+	{
+		if(subscriber_id != null)
+		{
+			Contact contact = Contact.getContact(Long.parseLong(subscriber_id));
+			if(contact != null)
+				return contact.getContactFieldValue(Contact.FIRST_NAME) + " " + contact.getContactFieldValue(Contact.LAST_NAME); 
+		}
+		
+		return "?";
+	}
+	
+	
 
 }
