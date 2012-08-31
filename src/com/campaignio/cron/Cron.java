@@ -367,9 +367,9 @@ public class Cron extends HttpServlet {
 
 		try {
 			// Dequeue Tasks
-			System.out.println("Cron init");
+			System.out.println("Cron init - ");
 			wakeupOldTasks();
-			System.out.println("Cron done");
+			System.out.println("Cron done - ");
 			return;
 		} catch (Exception e) {
 			e.printStackTrace();

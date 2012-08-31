@@ -51,24 +51,9 @@ public class Widget {
 
 	// Agile User
 	@Parent
-	private Key<AgileUser> user = null;
+	private Key<AgileUser> user;
 
-	public static List<Widget> DefaultWidgets = new ArrayList<Widget>();
-
-	static {
-		DefaultWidgets
-				.add(new Widget(
-						"Linkedin",
-						"Linked For one year, in 1906, Felix Feneon re-wrote the news for a column in the French newspaper Le Matin, 'Novellas in three lines.' In a sparse sentence or two - only three lines in a single newspaper column - he captured the march of industrialization, the scourge of rural disease and the randomness of death. He showed acts of violence and charity throughout France.",
-						"/widgets/linkedin.js", "/img/plugins/linkedin.png",
-						null));
-		DefaultWidgets
-				.add(new Widget(
-						"Twitter",
-						"Twitter For one year, in 1906, Felix Feneon re-wrote the news for a column in the French newspaper Le Matin, 'Novellas in three lines.' In a sparse sentence or two - only three lines in a single newspaper column - he captured the march of industrialization, the scourge of rural disease and the randomness of death. He showed acts of violence and charity throughout France.",
-						"/widgets/twitter.js", "/img/plugins/twitter.jpg", null));
-		System.out.println(DefaultWidgets + "Blah Blah");
-	}
+	public static List<Widget> DefaultWidgets = null;
 
 	Widget() {
 
@@ -82,10 +67,27 @@ public class Widget {
 		this.url = url;
 		this.logo_url = logo;
 		this.fav_ico_url = fav_ico;
-		this.user = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);
+		this.user = new Key<AgileUser>(AgileUser.class,
+				AgileUser.getCurrentAgileUser().id);
 	}
 
 	public static List<Widget> getDefaultWidgets() {
+
+		if (DefaultWidgets == null) {
+			DefaultWidgets
+					.add(new Widget(
+							"Linkedin",
+							"Linked For one year, in 1906, Felix Feneon re-wrote the news for a column in the French newspaper Le Matin, 'Novellas in three lines.' In a sparse sentence or two - only three lines in a single newspaper column - he captured the march of industrialization, the scourge of rural disease and the randomness of death. He showed acts of violence and charity throughout France.",
+							"/widgets/linkedin.js",
+							"/img/plugins/linkedin.png", null));
+			DefaultWidgets
+					.add(new Widget(
+							"Twitter",
+							"Twitter For one year, in 1906, Felix Feneon re-wrote the news for a column in the French newspaper Le Matin, 'Novellas in three lines.' In a sparse sentence or two - only three lines in a single newspaper column - he captured the march of industrialization, the scourge of rural disease and the randomness of death. He showed acts of violence and charity throughout France.",
+							"/widgets/twitter.js", "/img/plugins/twitter.jpg",
+							null));
+			System.out.println(DefaultWidgets + "Blah Blah");
+		}
 
 		return DefaultWidgets;
 	}

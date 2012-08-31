@@ -70,7 +70,6 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		ObjectifyService.register(APIKey.class);
 		ObjectifyService.register(Opportunity.class);
 		ObjectifyService.register(Milestone.class);
-		ObjectifyService.register(Widget.class);
 		
 		
 		// Campaign
@@ -78,6 +77,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		ObjectifyService.register(TwitterQueue.class);
 		ObjectifyService.register(Log.class);
 		ObjectifyService.register(URLShortener.class);
+		
+		ObjectifyService.register(Widget.class);
+		
 		
 	}
 
