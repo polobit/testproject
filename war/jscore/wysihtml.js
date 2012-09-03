@@ -11,10 +11,11 @@ function setupHTMLEditor(selector)
 $(function () {
 	   
     // Code for Merge fields in Email Template
-    $("#field").die().live('click', function(e){  
-    	
+    $(".merge-field").die().live('click', function(e){  
     	
     	e.preventDefault();
+    	
+    	console.log("Merge field");
     	
     	// Get Selected Value
     	var fieldContent = $(this).attr("name");
@@ -26,8 +27,12 @@ $(function () {
     	var wysihtml5 = $('#email-template-html').data('wysihtml5');
     	if(wysihtml5)
     	{
+    		// console.log("Setting content ");
+    		// console.log(fieldContent);
+        	
+    		
     		//wysihtml5.editor.setValue(fieldcontent + " " + val, true);
-    		wysihtml5.editor.composer.commands.exec("insertHTML", fieldContent);
+    		wysihtml5.editor.composer.commands.exec("insertHTML", '{{' + fieldContent + '}}');
     	} 	
     });
     
