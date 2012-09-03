@@ -401,6 +401,7 @@ class CronDeferredTask implements DeferredTask {
 		this.nodeJSONString = nodeJSONString;
 		this.wakeupOrInterrupt = wakeupOrInterrupt;
 		this.customDataString = customDataString;
+		this.namespace = namespace;
 	}
 
 	@Override

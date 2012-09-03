@@ -353,13 +353,9 @@ padding:10px;
 						String logoutURL = userService.createLogoutURL("/login");
 					%>
 					
-					
-					
 					<form id="searchForm" class=" navbar-search">
                     <input id="searchText" type="text" class="search-query" placeholder="Search"/>
               		</form>	
-					
-
 
 					<ul class="nav pull-right">
 					

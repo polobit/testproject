@@ -85,6 +85,9 @@ var ContactsRouter = Backbone.Router.extend({
 
 
           $('#content').html(this.contactsListView.render().el);
+          
+          $(".active").removeClass("active");
+          $("#contactsmenu").addClass("active");    
          
     },
 

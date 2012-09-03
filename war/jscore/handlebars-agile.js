@@ -45,7 +45,7 @@ function getTemplate(templateName, context, download)
 
 function downloadSynchronously(url)
 {
-	console.log(url);
+	// console.log(url);
 	var urlContent;
 	jQuery.ajax({
         url: url,

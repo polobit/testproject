@@ -279,7 +279,7 @@ public class API {
 	}
 
 	// Get Stats
-	@Path("stats")
+	@Path("stats2")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public JSONObject getStats() {

@@ -7,8 +7,10 @@ import java.io.StringReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.Vector;
@@ -18,10 +20,12 @@ import org.json.JSONObject;
 
 import au.com.bytecode.opencsv.CSVReader;
 
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Query;
+import com.google.gdata.data.Kind;
 
 public class Util {
 
@@ -169,7 +173,7 @@ public class Util {
 
 	// Change Number
 	public static String changeNumber(String number) {
-		
+
 		// Add if it does not start with 1 or +
 		if (number.startsWith("+"))
 			return number;
@@ -183,15 +187,13 @@ public class Util {
 	// Get Name space count
 	public static JSONObject getNamespaceCount() {
 
-		
-		
-		
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
-		
-		Entity globalStat = datastore.prepare(new Query("__Stat_Total__")).asSingleEntity();
+
+		Entity globalStat = datastore.prepare(new Query("__Stat_Total__"))
+				.asSingleEntity();
 		Long totalBytes = (Long) globalStat.getProperty("bytes");
-		Long totalEntities = (Long) globalStat.getProperty("count");		
+		Long totalEntities = (Long) globalStat.getProperty("count");
 
 		JSONObject statsJSON = new JSONObject();
 
@@ -208,4 +210,13 @@ public class Util {
 		return statsJSON;
 	}
 
+	public static void deleteNamespace(String namespace) {
+
+		// Get all elements in namespace
+
+		//
+
+	}
+
+	
 }
