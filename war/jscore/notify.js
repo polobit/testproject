@@ -109,7 +109,7 @@ function fetchContactAndNotify(email)
 		
 		  // Show picture, name, title, company
 		//JSON.stringify(data.toJSON())
-	    notify('success', html, 'bottom-right', true);	
+	    notify('success1', html, 'bottom-right', true);	
 	}});
 	
 }

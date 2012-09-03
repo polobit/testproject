@@ -1,13 +1,18 @@
 <script id="notify-html-template" type="text/html">
-<div class="well" style="background:white;margin-bottom:0px; color:black">	
-		<div>
-		<img  class='thumbnail' src="{{gravatarurl properties 50}}" width="50" height="50" style='display:inline'/>			
-		<span style='padding-left:5px'>
-			<b>{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</b><br/>
-			{{getPropertyValue properties "title"}} {{getPropertyValue properties "company"}}		
-		</span>
-		</div>
-		is browsing..
 
+<div class=''>
+	<div class="popover" style='display:inline;position:relative;color:#333'>
+            <h3 class="popover-title">Browsing Notification</h3>
+            <div class="popover-content">
+				<div>
+				<img  class='thumbnail' src="{{gravatarurl properties 50}}" width="50" height="50" style='display:inline'/>			
+				<span style='padding-left:5px'>
+					<b>{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</b><br/>
+					{{getPropertyValue properties "title"}} {{getPropertyValue properties "company"}}		
+				</span>
+				</div>             
+			</div>
+   </div>
 </div>
+
 </script>

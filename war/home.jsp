@@ -289,7 +289,8 @@ z-index: 9999
 }
 
 .notifications > .alert{
-padding: 0px
+padding: 0px;
+margin: 0px
 }
 
 /* Widget */
