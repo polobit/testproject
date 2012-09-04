@@ -49,7 +49,7 @@ public class Widget {
 	private static ObjectifyGenericDao<Widget> dao = new ObjectifyGenericDao<Widget>(
 			Widget.class);
 
-	// Agile User
+	// Private Agile User
 	@Parent
 	private Key<AgileUser> user;
 
