@@ -44,5 +44,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/twitter4j-appengine-2.2.5.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/twitter4j-core-2.2.5.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-json-1.7.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jettison-1.1.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

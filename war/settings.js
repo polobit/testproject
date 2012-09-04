@@ -9,13 +9,13 @@
 			<h1>New Email Template</h1>
 			<ul class="nav right">
 					<li class="dropdown" id="menu3">
-						<span class="dropdown-toggle btn right" id="mergefield" data-toggle="dropdown" style='top:-25px;position:relative'>
+						<span class="dropdown-toggle btn right" id="merge-field" data-toggle="dropdown" style='top:-25px;position:relative'>
 						   <i class='icon-plus-sign'/> Add Merge Field</i></span>
 						<ul class="dropdown-menu">
-							<li><a href="#" name="{First Name}" id="field">&nbsp;First Name</a></li>
-							<li><a name="{Last Name}" id="field">&nbsp;Last Name</a></li>
-							<li><a name="{Title}" id="field">&nbsp;Title</a></li>
-							<li><a name="{Company}" id="field">&nbsp;Company</a></li>							
+							<li><a href="#" name="first_name" class="merge-field">&nbsp;First Name</a></li>
+							<li><a name="last_name" class="merge-field">&nbsp;Last Name</a></li>
+							<li><a name="email" class="merge-field">&nbsp;Email</a></li>
+							<li><a name="company" class="merge-field">&nbsp;Company</a></li>							
 						</ul>
 					</li>
 	  			</ul>
@@ -35,7 +35,7 @@
 	<label class="control-label">Text <span class="field_req">*</span>
 				</label>
 	<div class="controls">
-	<textarea class="span7 required" rows="15" name="text" id="email-template-html" placeholder="Email template html"></textarea>
+	<textarea class="span6 required" rows="15" name="text" id="email-template-html" placeholder="Email template html"></textarea>
 	</div>
 	</div>
 	<div class="form-actions">
@@ -491,31 +491,43 @@
 </div>
 
 <div class="row">
-	<div class="span3 offset well" style="height:180px">
+	<div class="span3 offset well">
+		<div class="textheight" style="height:100px">
 		<legend>Personal Preferences</legend>
-		Set your name, email signature and choose from the various color schemes.<br /> <br /><br /><br/>
+			Set your name, email signature and choose from the various color schemes.
+		</div>
+		<div style="height:60px;"></div>
 		<a class='btn btn-primary' href='#user-prefs'>Go</a>
 	</div>
 
-	<div class="span3 offset well" style="height:180px">
+	<div class="span3 offset well">
+		<div class="textheight" style="height:100px">
 		<legend>Email</legend>	
-		Associate your email to/fro with your contact.	<br /> <br /> <br /> <br/>
+			Associate your email to/fro with your contact.
+		</div>
+		<div style="height:60px;"></div>
 		<a class='btn btn-primary' href='#email'>Go</a>
 	</div>
 
-	<div class="span3 offset well" style="height:180px">
+	<div class="span3 offset well">
+		<div class="textheight" style="height:100px">
 		<legend>Email Templates</legend>
-		Add, edit or delete your email templates.<br /><br/><br/>
-		<br /> <br /> <a class='btn btn-primary' href='#email-templates'>Go</a>
+			Add, edit or delete your email templates.
+		</div>
+		<div style="height:60px;"></div>
+		<a class='btn btn-primary' href='#email-templates'>Go</a>
 	</div>
 </div>
 
 <div class="row">
 
-<div class="span3 offset well" style="height:180px">
+<div class="span3 offset well">
+		<div class="textheight" style="height:100px">
 		<legend>Notifications</legend>
-		Receive notifications real-time when your contact is created or browing your website<br />
-		<br/> <br /> <br /> <a class='btn btn-primary' href='#notification-prefs'>Go</a>
+			Receive notifications real-time when your contact is created or browing your website
+		</div>
+		<div style="height:60px;"></div>
+		 <a class='btn btn-primary' href='#notification-prefs'>Go</a>
 	</div>
 
 </div>

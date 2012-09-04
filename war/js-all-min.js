@@ -84,7 +84,24 @@ $('#remove_tag').die().live('click', function(event){
 	$(this).parent().remove();
 });
 
-// To save map of key: first_name and value: contact id 
+$(function()
+{
+	// Collapses the menu on a mobile device
+	// Without this, the user has to click the collapsible button to remove the menu
+	$('.agile-menu > li').click(function(e){
+	    
+		console.log("Collapsing before ul");
+		
+		console.log($(this).html());
+		
+		if($(this).find('ul').length == 0)
+	      {
+	    	  console.log("Collapsing");
+	    	  //$('.nav-collapse').collapse('hide');
+	      }
+	     });
+});
+		// To save map of key: first_name and value: contact id 
 var TAGS = [];
 	
 function agile_type_ahead(id, el, callback) {
@@ -469,7 +486,7 @@ var Base_Model_View = Backbone.View.extend({
     	}
     	else
     	{
-    		$(this.el).html('<img src= "img/21-0.gif"></img>');
+    		$(this.el).html(LOADING_HTML);
     	}
     	return this;
     }
@@ -804,7 +821,7 @@ function pieDetails()
 	$('#contactDetailsTab a[href="#campaigns"]').live('click', function (e){
 		e.preventDefault();
 		var campaignsView = new Base_Collection_View({
-			url: '/core/api/logs/contact/' + App_Contacts.contactDetailView.model.id,
+			url: '/core/api/campaigns/logs/contact/' + App_Contacts.contactDetailView.model.id,
             restKey: "logs",
             templateKey: "campaigns",
             individual_tag_name: 'tr'
@@ -830,8 +847,26 @@ function pieDetails()
 		var templateModel = new emailTemplatesModel();
 			templateModel.fetch({success: function(data){
 				var model = data.toJSON();
-				$("#emailForm").find( 'input[name="subject"]' ).val(model.subject);
-				$("#emailForm").find( 'textarea[name="body"]' ).val(model.text);
+				
+				// Get Current Contact
+				var contact = App_Contacts.contactDetailView.model;
+				var json = contact.toJSON();
+				
+				console.log(json);
+				console.log(model);
+				
+				// Get Contact properties json
+				var json = getPropertyJSON(json);
+				
+				// Templatize it
+				var template = Handlebars.compile(model.subject);
+				var subject =  template(json);
+				
+				template = Handlebars.compile(model.text);
+				var text =  template(json);
+						
+				$("#emailForm").find( 'input[name="subject"]' ).val(subject);
+				$("#emailForm").find( 'textarea[name="body"]' ).val(text);
 			}});
 		    
 	});
@@ -859,7 +894,21 @@ function pieDetails()
 	   });
 	});
 
-});		$(function(){
+});	
+
+
+// Return contact properties in a json
+function getPropertyJSON(contactJSON)
+{	
+	var properties = contactJSON.properties;
+    var json = {};
+	$.each(properties, function(i, val)
+			{
+				json[this.name] = this.value;
+			});
+	
+	return json;
+}$(function(){
 	$('#contact-actions-delete').live('click', function(e){
 		
 		e.preventDefault();
@@ -889,10 +938,12 @@ function pieDetails()
     });
 
     var modelData = this.options.modelData;
-
+    
     var data = modelData['fields_set'];
 
     var json = base_model.toJSON();
+    
+  //  $(this.el).html(getTemplate((this.options.templateKey + '-collection'), this.options.modelData));
     
     $('#contacts-custom-view-model-template').empty();
 
@@ -902,6 +953,8 @@ function pieDetails()
 
     $(('#contacts-custom-view-model-list'), this.el).append(itemView.render().el);
 
+    
+    
 }
 
 
@@ -920,7 +973,7 @@ function setupViews(cel) {
    App_Contacts.customView.collection.fetch({
 	  	success: function(){
 	  		$("#view-list",cel).html(App_Contacts.customView.render().el);
-	  	}	
+	  	}
     })
 }
 
@@ -933,12 +986,12 @@ $(function(){
 		var id = $(this).attr('id');
 		
 		// Gets Model of selected contact-view
-		var contactViewModel = App_Contacts.customView.collection.get(id).toJSON();
+		App_Contacts.contactViewModel = App_Contacts.customView.collection.get(id).toJSON();
 		
 	    var view = new Base_Collection_View({
             url: '/core/api/contacts',
             restKey: "contact",
-            modelData: contactViewModel,
+            modelData: App_Contacts.contactViewModel ,
             templateKey: "contacts-custom-view",
             individual_tag_name: 'tr'
         });
@@ -1147,6 +1200,9 @@ $(function () {
     
     // Continue editing in the new-person-modal Rammohan 03-08-2012.
     $('#continue-contact').click( function (e) {
+    	if (!isValidForm('#personForm')) {
+    		return false;
+    	}
     	var model = serializeAndSaveContinueContact(e, 'personForm' , true);
     });
     
@@ -1165,21 +1221,22 @@ $(function () {
     });
     
 });// Adding custom fields Author: Yaswanth  08-10-2012
+
+
 $(function(){
-	$('.fieldmodal').die().live('click',function(event){
+	$(".fieldmodal").die().live('click', function(event){
 		event.preventDefault();
-		
 		var modal_id = $(this).attr('id');
-		alert(modal_id);
 		//Creating model for bootstrap-modal
 		var modelView = new Base_Model_View({
 			url: '/core/api/custom-fields',
 			template: 'custom-field-'+modal_id+'-modal',
 			window: 'custom-fields',
 			modal: '#'+modal_id+'Modal',
-			postRenderCallback: function(el){
-				alert('showing modal');
-				$('#'+modal_id+'Modal').modal('show');
+			isNew: true,
+			postRenderCallback: function(el){ 
+				
+				$('#'+modal_id+'Modal',el).modal('show');
 				}
 			});
 
@@ -1267,6 +1324,13 @@ $(function(){
 			    // Time Picker
 			    $('.timepicker').timepicker({defaultTime: 'current', showMeridian: false, template: 'modal'});
 			    
+			    
+			    // Set the time picker when the modal is shown
+			    $('#activityModal').on('show', function () {
+			    	$('.timepicker').val(getHHMM());			    	
+			    	//$('.timepicker').val("05:30");		    	
+			    });
+			    
 			    // Switch Task and Event: changing color and font-weight
 			    $("#task").click(function (e) {
 			        $("#hiddentask").val("task");
@@ -1300,6 +1364,23 @@ function isValidRange(startDate, endDate){
 		  return true;
 	  else
 		  return false;		  
+}
+
+
+// Get Hours and Mins for the current time. It will be padded for 15 mins
+function getHHMM() {
+	
+	
+	var hours = new Date().getHours();
+	var minutes = new Date().getMinutes();
+	
+    if (minutes % 15 != 0)
+     minutes = minutes - (minutes % 15);
+    
+    if (hours   < 10) {hours   = "0"+hours;}
+    if (minutes < 10) {minutes = "0"+minutes;}
+    
+    return hours + ':' + minutes;
 }function serializeForm(form_id) {
 	
 	var arr = $('#' + form_id).serializeArray(),
@@ -1345,9 +1426,21 @@ function isValidRange(startDate, endDate){
     
     
     // Multiple select 
-    if($('#' + form_id + ' select').attr('id')  == "multipleSelect")  
-    	arr = arr.concat({"name": $('#' + form_id + ' select').attr('name'), "value": $('#' + form_id + ' select').val()})
+    arr = arr.concat( $('#' + form_id + ' .multiSelect').map( 
+    		function() {
+       			var fields_set = [];
+       			
+    			// Get list of options
+    			$.each($(this).children('li'), function(index, data) { 
+    				fields_set.push(($(data).attr('ms-value')))
+	            });
 
+    			return {
+    			"name" : $(this).attr('name'),
+    			"value" : fields_set
+    			};
+    		}).get() );
+    
     
     
     // Convert array into JSON
@@ -1487,7 +1580,7 @@ function getTemplate(templateName, context, download)
 
 function downloadSynchronously(url)
 {
-	console.log(url);
+	// console.log(url);
 	var urlContent;
 	jQuery.ajax({
         url: url,
@@ -1509,6 +1602,13 @@ function getPropertyValue(items, name) {
         if (items[i].name == name) return items[i].value;
     }
 }
+
+
+function ucfirst(value) {
+	return (value && typeof value === 'string') ? (value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()) : '';
+	
+}
+
 
 $(function() {
 
@@ -1672,6 +1772,32 @@ $(function() {
 	
 		var pipeline = parseInt(value)*parseInt(probability)/100;
 		return pipeline;	
+	});
+	
+	// Get required log from logs
+	Handlebars.registerHelper('getRequiredLog', function(logArrayString, name) {
+		var logArray = JSON.parse(logArrayString);
+		if(name == "t")
+		{
+			var readableTime = new Date(logArray[0][name]);
+			return readableTime;
+		}
+		return logArray[0][name];
+	});
+	
+	// Table headings for custom contacts list view
+	Handlebars.registerHelper('contactTableHeadings', function(item){
+		
+		var el = "";
+		$.each(App_Contacts.contactViewModel[item], function(index, element){
+
+			element = element.replace("_"," ")
+			
+			el = el.concat('<th>'+ ucfirst(element) +'</th>');
+			
+		});
+		
+		return  new Handlebars.SafeString(el);
 	});
     
 });$(function(){
@@ -2027,6 +2153,9 @@ $(function(){
 	   
 		// Person Form
 	    $('#person_validate').live('click', function (e) {
+	    	if (!isValidForm('#personForm')) {
+	    		return false;
+	    	}
 	    	serializeAndSaveContinueContact(e, 'personForm');	        
 	    });
 	    
@@ -2146,7 +2275,7 @@ function fetchContactAndNotify(email)
 		
 		  // Show picture, name, title, company
 		//JSON.stringify(data.toJSON())
-	    notify('success', html, 'bottom-right', true);	
+	    notify('success1', html, 'bottom-right', true);	
 	}});
 	
 }
@@ -2239,7 +2368,14 @@ $("#editOpportunity").live("click", function (e) {
             	populateUsers("owner", el);
             	
             	// Call setupTypeAhead to get tags
-            	agile_type_ahead("relates_to", el, contacts_typeahead);         	
+            	agile_type_ahead("relates_to", el, contacts_typeahead);   
+            	
+            	
+            	// Enable the datepicker
+                $('#close_date', el).datepicker({
+                   format: 'mm-dd-yyyy'
+                });
+            	
             },
     	});
     
@@ -2510,76 +2646,92 @@ function setImageURL(url)
 	}
 
 
+var LOADING_HTML = '<img class="loading" style="padding-right:5px" src= "img/21-0.gif"></img>';
+
 // Read a page's GET URL variables and return them as an associative array.
 function getUrlVars() {
-    var vars = [],
-        hash;
-    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-    for (var i = 0; i < hashes.length; i++) {
-        hash = hashes[i].split('=');
-        vars.push(hash[0]);
-        vars[hash[0]] = hash[1];
-    }
+	var vars = [], hash;
+	var hashes = window.location.href.slice(
+			window.location.href.indexOf('?') + 1).split('&');
+	for ( var i = 0; i < hashes.length; i++) {
+		hash = hashes[i].split('=');
+		vars.push(hash[0]);
+		vars[hash[0]] = hash[1];
+	}
 
-    return vars;
+	return vars;
 }
 
-
-function fillSelect(selectId, url, parseKey, callback, template)
-{
+function fillSelect(selectId, url, parseKey, callback, template) {
 	// Fetch Collection from URL
 	var collection_def = Backbone.Collection.extend({
-	       url: url,
-	       parse: function (response) {
-	    	   
-	    	   if (response && response[parseKey]) 
-	           	return response[parseKey];
-	           
-	           return response;
-	    	    }
-	   });
-	
-	 var collection = new collection_def();
-	 collection.fetch({
-	       success: function () {
-	    	   console.log(collection.models);
-	    	   console.log(collection.toJSON());
-	       	
-	       	  // Delete prev options if any
-	       	  $("#" + selectId).empty().append('<option>Select...</option>');
-	       		
-	       	  $.each(collection.toJSON(), function(index, model){
-	       		
-	       			// Convert template into HTML
-	       			var modelTemplate = Handlebars.compile(template);
-	       			var optionsHTML = modelTemplate(model);
-	       			$("#"  + selectId).append(optionsHTML);
-	       			
-	       			 if (callback && typeof(callback) === "function") {
-	       	        	// execute the callback, passing parameters as necessary
-	       	        	callback();
-	       	        }	
-	       		});
-	       	 }
-	   	
-	   });
+		url : url,
+		parse : function(response) {
+
+			if (response && response[parseKey])
+				return response[parseKey];
+
+			return response;
+		}
+	});
+
+	// Prepend Loading
+	$loading = $(LOADING_HTML);
+	$("#" + selectId).after($loading);
+
+	var collection = new collection_def();
+	collection.fetch({
+		success : function() {
+			console.log(collection.models);
+			console.log(collection.toJSON());
+
+			// Remove loading
+			$loading.remove();
+
+			// Delete prev options if any
+			$("#" + selectId).empty().append('<option>Select...</option>');
+
+			$.each(collection.toJSON(), function(index, model) {
+
+				// Convert template into HTML
+				var modelTemplate = Handlebars.compile(template);
+				var optionsHTML = modelTemplate(model);
+				$("#" + selectId).append(optionsHTML);
+
+				if (callback && typeof (callback) === "function") {
+					// execute the callback, passing parameters as necessary
+					callback();
+				}
+			});
+		}
+
+	});
 }
 
-//Fill selects with tokenized data
-function fillTokenizedSelect(selectId, array){
+// Fill selects with tokenized data
+function fillTokenizedSelect(selectId, array) {
 	$("#" + selectId).empty().append('<option>Select...</option>');
-		$.each(array,function(index, element){
-			$("#" + selectId).append('<option value=' + '"' + element +'">' + element + '</option>');
-		});
+	$.each(array, function(index, element) {
+		$("#" + selectId)
+				.append(
+						'<option value=' + '"' + element + '">' + element
+								+ '</option>');
+	});
 }
 
-function btnDropDown(contact_id, workflow_id){
+function btnDropDown(contact_id, workflow_id) {
 
 }
 
-
-
- var Catalog_Widgets_View = null;
+// Delete contact properties
+function delete_contact_property(contact, propertyName) {
+	for ( var index = 0; index < contact.properties.length; index++) {
+		if (contact.properties[index].name == propertyName)
+			delete contact.properties[index];
+	}
+	return contact;
+}
+var Catalog_Widgets_View = null;
 
 // Show when Add widget is selected by user in contact view
 function pickWidget() {
@@ -2743,7 +2895,7 @@ function agile_crm_update_contact(propertyName, value)
 	
 	var properties = contact_model.toJSON()['properties'];
 
-	properties.push({"name":propertyName,"value":value});
+	properties.push({"name":propertyName, "value":value});
 	
 
 	// Update the property
@@ -2941,10 +3093,11 @@ function agile_crm_delete_widget_property(propertyName) {
 $(function () {
 	   
     // Code for Merge fields in Email Template
-    $("#field").die().live('click', function(e){  
-    	
+    $(".merge-field").die().live('click', function(e){  
     	
     	e.preventDefault();
+    	
+    	console.log("Merge field");
     	
     	// Get Selected Value
     	var fieldContent = $(this).attr("name");
@@ -2956,8 +3109,12 @@ $(function () {
     	var wysihtml5 = $('#email-template-html').data('wysihtml5');
     	if(wysihtml5)
     	{
+    		// console.log("Setting content ");
+    		// console.log(fieldContent);
+        	
+    		
     		//wysihtml5.editor.setValue(fieldcontent + " " + val, true);
-    		wysihtml5.editor.composer.commands.exec("insertHTML", fieldContent);
+    		wysihtml5.editor.composer.commands.exec("insertHTML", '{{' + fieldContent + '}}');
     	} 	
     });
     
@@ -3222,6 +3379,9 @@ var ContactsRouter = Backbone.Router.extend({
 
 
           $('#content').html(this.contactsListView.render().el);
+          
+          $(".active").removeClass("active");
+          $("#contactsmenu").addClass("active");    
          
     },
 
@@ -3301,16 +3461,13 @@ var ContactsRouter = Backbone.Router.extend({
      	 	
       	// Contact Duplicate
       	var contact = this.contactsListView.collection.get(this.contactDetailView.model.id);
-      	contact = contact.clone();
+      	var json = contact.toJSON();
+      
       	
       	// Delete email as well as it has to be unique
-      	delete_contact_property(contact, 'email');
-      	
-      	
-      	var json = contact.toJSON();
-      	delete json.id;
-      	
-      	
+      	json = delete_contact_property(json, 'email');
+        delete json.id;	
+        
         var contactDuplicate = new Backbone.Model();
         contactDuplicate.url = 'core/api/contacts';
         contactDuplicate.save(json,{
@@ -3345,6 +3502,15 @@ var ContactsRouter = Backbone.Router.extend({
     		isNew: true,
     		window: "contact-views",
     		 template: "contact-view",
+    		postRenderCallback: function(el) {
+    			
+    			head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+    			
+    				$('#multipleSelect', el).multiSelect();
+    				$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").sortable();
+    			});
+    		}
+    		 
     	});
     	$('#content').html(view.render().el);
     },
@@ -3528,6 +3694,9 @@ function setupTags(cel) {
                 setupHTMLEditor($('#WYSItextarea'));
             }
         });
+        
+        // Set to user time zone if it is null
+        
 
         $('#content').html(view.render().el);
         
@@ -3628,6 +3797,7 @@ var WorkflowsRouter = Backbone.Router.extend({
         "workflows": "workflows",
         "workflow-add": "workflowAdd",
         "workflow/:id": "workflowEdit",
+        "logs-to-campaign/:id": "logsToCampaign",
           },
             
       workflows: function () {
@@ -3675,6 +3845,18 @@ var WorkflowsRouter = Backbone.Router.extend({
             
             // Set the name
             $('#workflow-name').val(this.workflow_model.get("name")); 
+        },
+        logsToCampaign: function (id) {
+        	 var logsListView = new Base_Collection_View({
+                 url: '/core/api/campaigns/logs/' + id,
+                 restKey: "logs",
+                 templateKey: "campaign-logs",
+                 individual_tag_name: 'tr'
+             });
+             
+           
+             logsListView.collection.fetch();
+             $('#content').html(logsListView.el); 
         }
 });function isNotValid(value) {
     if (value == undefined) return true;
