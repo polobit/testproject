@@ -316,8 +316,7 @@ var Base_Collection_View = Backbone.View.extend({
         $(('#' + this.options.templateKey + '-model-list'), this.el).append(itemView.render().el);
     },
     render: function (force_render) {
-
-    	console.log("render called on"+ this.options.templateKey +", "+ force_render );
+    	
     	// If collection in not reset
     	if(force_render == undefined) {
     		$(this.el).html(LOADING_HTML);
@@ -1041,12 +1040,12 @@ $(function(){
 
 //On click on row in contact views triggers the details of particular contact view
 $(function () {
-    $('#contact-list-view-model-list > tr').live('click', function (e) {
+    $('#contact-custom-view-model-list > tr').live('click', function (e) {
         e.preventDefault();
         var data = $(this).find('.view').attr('view');
 
         if (data) {
-            Backbone.history.navigate("contact-views-edit/" + data, {
+            Backbone.history.navigate("contact-custom-view-edit/" + data, {
                 trigger: true
             });
         }
@@ -2777,7 +2776,6 @@ function pickWidget() {
         });
 
         Catalog_Widgets_View.collection.fetch();
-        console.log(Catalog_Widgets_View.collection.toJSON());
     }
     $('#content').html(Catalog_Widgets_View.el);
 }
@@ -2807,8 +2805,7 @@ function loadWidgets(el, contact, user) {
 						var id = model.get("id");
 						var url = model.get("url");
 						$.get(url, "script");
-						
-						console.log(model);
+
 						// Set the data element in the div
 						// We can retrieve this in get plugin prefs
 						
@@ -2993,7 +2990,7 @@ function agile_crm_get_plugin_prefs(pluginName)
 }
 
 //Get Plugin Prefs
-function agile_crm_save_plugin_prefs(pluginName, prefs)
+function agile_crm_save_widget_prefs(pluginName, prefs)
 {
 	 var widget = $('#' + pluginName).data('model').toJSON();
 	 widget.prefs = prefs;
@@ -3131,10 +3128,11 @@ function agile_crm_delete_widget_property(propertyName) {
 $(function () {
 	   
     // Code for Merge fields in Email Template
-    $("#field").die().live('click', function(e){  
-    	
+    $(".merge-field").die().live('click', function(e){  
     	
     	e.preventDefault();
+    	
+    	console.log("Merge field");
     	
     	// Get Selected Value
     	var fieldContent = $(this).attr("name");
@@ -3146,8 +3144,12 @@ $(function () {
     	var wysihtml5 = $('#email-template-html').data('wysihtml5');
     	if(wysihtml5)
     	{
+    		// console.log("Setting content ");
+    		// console.log(fieldContent);
+        	
+    		
     		//wysihtml5.editor.setValue(fieldcontent + " " + val, true);
-    		wysihtml5.editor.composer.commands.exec("insertHTML", fieldContent);
+    		wysihtml5.editor.composer.commands.exec("insertHTML", '{{' + fieldContent + '}}');
     	} 	
     });
     
@@ -3346,6 +3348,7 @@ var ContactsRouter = Backbone.Router.extend({
         /* Views */
         "contact-view-add": "contactViewAdd",
         "contact-views": "contactViews",
+        "contact-custom-view-edit/:id": "editContactView",
           
         /* New Contact/Company - Full mode */
         "continue-contact": "continueContact",
@@ -3411,7 +3414,10 @@ var ContactsRouter = Backbone.Router.extend({
           });
 
 
-          $('#content').html(App_Contacts.contactsListView.render().el);
+          $('#content').html(this.contactsListView.render().el);
+          
+          $(".active").removeClass("active");
+          $("#contactsmenu").addClass("active");    
          
     },
 
@@ -3450,21 +3456,17 @@ var ContactsRouter = Backbone.Router.extend({
         
         this.contactDetailView = new Base_Model_View({
             model: contact,
-            template: "contact-detail"
+            template: "contact-detail",
+            postRenderCallback: function(el) {
+                loadWidgets(el, contact.toJSON());
+               }
         });
         
        
         var el = this.contactDetailView.render().el;
-       
-        //$('#contact-details-list').html(el);
+      
         $('#content').html(el);
        
-        var socialEl = this.el;
-        //addSocial(socialEl);
-
-        // Add Widgets (RHS)
-        //alert("Loading widgets");
-        loadWidgets(el, contact.toJSON());
     },
     editContact: function () {
     	
@@ -3496,7 +3498,12 @@ var ContactsRouter = Backbone.Router.extend({
       	// Contact Duplicate
       	var contact = this.contactsListView.collection.get(this.contactDetailView.model.id);
       	var json = contact.toJSON();
-      	delete json.id;
+      
+      	
+      	// Delete email as well as it has to be unique
+      	json = delete_contact_property(json, 'email');
+        delete json.id;	
+        
         var contactDuplicate = new Backbone.Model();
         contactDuplicate.url = 'core/api/contacts';
         contactDuplicate.save(json,{
@@ -3531,19 +3538,55 @@ var ContactsRouter = Backbone.Router.extend({
     		isNew: true,
     		window: "contact-views",
     		 template: "contact-view",
+    		postRenderCallback: function(el) {
+    			
+    			head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+    			
+    				$('#multipleSelect', el).multiSelect();
+    				$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").sortable();
+    			});
+    		}
+    		 
     	});
     	$('#content').html(view.render().el);
     },
     contactViews: function() {
-    	   var contactViewListView = new Base_Collection_View({
+    	   this.contactViewListView = new Base_Collection_View({
                url: '/core/api/contact-view',
                restKey: "contactView",
-               templateKey: "contact-list-view",
+               templateKey: "contact-custom-view",
                individual_tag_name: 'tr'
            });
-    	   contactViewListView.collection.fetch();
-    	   console.log(contactViewListView.el);
-    	   $('#content').html(contactViewListView.el);
+    	   this.contactViewListView.collection.fetch();
+    	   $('#content').html(this.contactViewListView.el);
+    },
+    editContactView: function(id) {    	
+    	
+    	if (!App_Contacts.contactViewListView || App_Contacts.contactViewListView.collection.length == 0 || App_Contacts.contactViewListView.collection.get(id) == null)
+    	{
+    		this.navigate("contact-views", {
+                trigger: true
+            });
+    	}
+    	var contact_view_model = App_Contacts.contactViewListView.collection.get(id);
+    	
+    	
+    	var contactView = new Base_Model_View({
+    		url: 'core/api/contact-view/' + id,
+    		model: contact_view_model,
+    		template: "contact-view",
+    		restKey: "contactView",
+            window: 'contact-views',
+            postRenderCallback: function(el) {
+       			head.js('lib/jquery.multi-select.js', function(){
+       					$('#multipleSelect', el).multiSelect();
+       					$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id","fields_set").sortable();
+       				});
+       			}
+
+    	});
+    	
+    	$("#content").html(contactView.render().el);
     },
     sendEmail: function(){
     	
@@ -3814,6 +3857,7 @@ var WorkflowsRouter = Backbone.Router.extend({
         "workflows": "workflows",
         "workflow-add": "workflowAdd",
         "workflow/:id": "workflowEdit",
+        "logs-to-campaign/:id": "logsToCampaign",
           },
             
       workflows: function () {
@@ -3861,6 +3905,18 @@ var WorkflowsRouter = Backbone.Router.extend({
             
             // Set the name
             $('#workflow-name').val(this.workflow_model.get("name")); 
+        },
+        logsToCampaign: function (id) {
+        	 var logsListView = new Base_Collection_View({
+                 url: '/core/api/campaigns/logs/' + id,
+                 restKey: "logs",
+                 templateKey: "campaign-logs",
+                 individual_tag_name: 'tr'
+             });
+             
+           
+             logsListView.collection.fetch();
+             $('#content').html(logsListView.el); 
         }
 });function isNotValid(value) {
     if (value == undefined) return true;

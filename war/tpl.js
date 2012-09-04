@@ -639,15 +639,15 @@
 		  		<fieldset>
 					<div class="control-group">			
 						<legend>Contact View</legend>	
-						<label class="control-label">View Name <span>*</span></label>
+						<label class="control-label">View Name <span class="field_req">*</span></label>
 						<div class="controls">
 							<input id="name" name="name" type="text" class="input span3 required" placeholder="Name of View" /><br/>
 			  			</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label">Fields <span>*</span></label>
-						<div class="controls" >
-							<select id="multipleSelect"  class="required" multiple="multiple">
+						<label class="control-label">Fields <span class="field_req">*</span></label>
+						<div class="controls" id="contactTypeAhead">
+							<select id="multipleSelect" class="required" multiple="multiple">
 								<option value="first_name">First Name</option>
 								<option value="last_name">Last Name</option>
 								<option value="email">Email</option>
@@ -660,11 +660,6 @@
 							</select>
 			  			</div>
 					</div>
-					{{#if "id"}}
-						<input class="hide" name="id" value="{{id}}"/>
-						{{else}}
-						<input class="hide" name="id"/>
-					{{/if}}
 					<div class="form-actions">          
           				<a href="#" type="submit" class="save btn btn-primary" id="contactView">Save</a>
 						<a href="#contact-views" class="btn ">Close</a>
@@ -674,7 +669,7 @@
 			
 			</div>
 		</div>
-</script><script id="contact-list-view-collection-template" type="text/html">
+</script><script id="contact-custom-view-collection-template" type="text/html">
 
 	<div class="row">
 		<div class="span12">
@@ -695,7 +690,7 @@
     				</tr>
   				</thead>
   
-  				<tbody id='contact-list-view-model-list'>
+  				<tbody id='contact-custom-view-model-list'>
   				</tbody>
 			</table>
 		</div>
@@ -707,7 +702,7 @@
 
 	</div>
 </script>
-<script id="contact-list-view-model-template" type="text/html">
+<script id="contact-custom-view-model-template" type="text/html">
 <td view='{{id}}' class='view'><icon class='delete icon-remove-circle'></icon></td>  	
 <td> {{name}} </td>
 <td>
@@ -1433,7 +1428,7 @@
 					<fieldset>
 						
 						<div id="addEvent" class="control-group">
-							<label class="control-label"><b>Event Name:</b></label>
+							<label class="control-label"><b>Event Name: </b><span class="field_req">*</span></label>
 							<div class="controls">
 								<input id="title" placeholder='Name of the event' type="text" name="title" class="required">
 							</div>
@@ -2180,6 +2175,9 @@ Eg: you can send an email to all users who have signed up on your site. And then
  
  <div class="span9"> 
  
+
+
+
  
 <table class="table table-bordered" >
 <thead>
