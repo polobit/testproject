@@ -387,7 +387,6 @@
 				<div id="content" style="padding-left:25px">
 						<legend>Continue Editing</legend>
 				</div>
-	
                 	<div class="control-group">
                 		<label class="control-label">Name</label>
 						<div class="controls">
@@ -410,23 +409,34 @@
                     	<label class="control-label">Job Description</label>
 						<div class="controls"> 
 							<input name="title" type="text" id="title" placeholder="Job title"
-								   value="{{getPropertyValue properties "title"}}"/>
+								  class="required error error" value="{{getPropertyValue properties "title"}}"/>
 						</div>
 					</div>
                    
 					<div class="control-group">
                     	<label class="control-label">Tag</label>
 						<div class="controls">
-							<input name="continue_tag" type="text" id="continue_tag" value="{{tags}}" />
+							<input name="tags" type="text" id="tags-new-person" class="tags-typeahead" value="{{tags}}"/>
 						</div>
 					</div> 
 
 					<div class="control-group">
 						<label class="control-label">Add Email<span><i class="multiple-add icon-plus"></i></span></label>
-						<div class="controls">
-							<div class="email multiple-template">
-								<input name="email" type="text" id="email" placeholder="Email"
-								   	   value="{{getPropertyValue properties "email"}}"/>
+					
+					<div class="controls hide">
+						<div class="email multiple-template" data="email">
+							<input type="text" id="email" class="required" name="email" placeholder="Email"/>
+							<select class="email-select" style="width:100px">
+								<option></option>
+								<option value="work">Work</option>
+								<option value="home">Home</option>
+							</select> <i class="multiple-remove icon-remove-circle"></i>
+						</div>
+					</div>	
+
+					<div class="controls second">
+							<div class="email multiple-template"  data="email">
+								<input type="text" id="email" class="required" name="email" placeholder="Email"/>
 								<select class="email-select" style="width:100px">
 									<option></option>
 									<option value="work">Work</option>
@@ -438,13 +448,27 @@
 					
 					<div class="control-group">
 						<label class="control-label">Add Phone<span><i class="multiple-add icon-plus"></i></span></label>
-						<div class="controls">
-							<div class="phone multiple-template">
-								<input type="text" name="phone" id="phone" placeholder="Phone number"
-								       value="{{getPropertyValue properties "phone"}}"/>
+						<div class="controls hide">
+							<div class="phone multiple-template" data="phone">
+								<input type="text" id="phone" name="phone" class="required" placeholder="Phone number"/>
 								<select class="phone-select" style="width:100px">
 									<option></option>
 									<option value="work">Work</option>
+									<option value="home">Home</option>
+									<option value="mobile">Mobile</option>
+									<option value="main">Main</option>
+									<option value="home fax">Home fax</option>
+									<option value="work fax">Work fax</option>
+									<option value="other">Other</option>
+								</select> <i class="multiple-remove icon-remove-circle"></i>
+							</div>
+						</div>
+					<div class="controls second">
+							<div class="phone multiple-template" data="phone">
+								<input type="text" id="phone" name="phone" class="required" placeholder="Phone number"/>
+								<select class="phone-select" style="width:100px">
+									<option></option>
+									<option value="work">Work test</option>
 									<option value="home">Home</option>
 									<option value="mobile">Mobile</option>
 									<option value="main">Main</option>
@@ -459,11 +483,11 @@
 					
 					<div class="control-group">
 						<label class="control-label">Website<span><i class="multiple-add icon-plus"></i></span></label>
-						<div class="controls">
-							<div class="websites multiple-template style="display:none">
-								<input type="text" name="website" id="website" style="width:105px" 
-								       placeholder="Website" value="{{getPropertyValue properties "website"}}"/> 
-								<select	class="website-select" name="website-select" style="width:100px">
+					<div class="controls hide">
+							<div class="website multiple-template style="display:none" data="website">
+								<input type="text" id="website" class="required" name="website" style="width:105px" 
+								       placeholder="Website" /> 
+								<select	class="website-select" style="width:100px">
 									<option></option>
 									<option value="URL">Website</option>
 									<option value="SKYPE">Skype</option>
@@ -477,21 +501,38 @@
 									<option value="GITHUB">GitHub</option>
 									<option value="YOUTUBE">YouTube</option>
 								</select> 
-								<select class="type-select" name="type-select" style="width:100px">
+								&nbsp;<i class="multiple-remove icon-remove-circle"></i>
+							</div>
+						</div>
+						<div class="controls second">
+							<div class="website multiple-template style="display:none" data="website">
+								<input type="text" id="website" style="width:105px" class="required" name="website" 
+								       placeholder="Website" /> 
+								<select	class="website-select" style="width:100px">
 									<option></option>
-									<option value="work">Work</option>
-									<option value="home">Home</option>
-								</select>&nbsp;<i class="multiple-remove icon-remove-circle"></i>
+									<option value="URL">Website</option>
+									<option value="SKYPE">Skype</option>
+									<option value="TWITTER">Twitter</option>
+									<option value="LINKED_IN">LinkedIn</option>
+									<option value="FACEBOOK">Facebook</option>
+									<option value="XING">Xing</option>
+									<option value="FEED">Blog</option>
+									<option value="GOOGLE_PLUS">Google+</option>
+									<option value="FLICKR">Flickr</option>
+									<option value="GITHUB">GitHub</option>
+									<option value="YOUTUBE">YouTube</option>
+								</select>
+									&nbsp;<i class="multiple-remove icon-remove-circle"></i>
 							</div>
 						</div>
 					</div>
 						<!-- End of website template -->
 
-					<div class="control-group">
+					<div class="control-group second">
 						<label class="control-label">Add Address<span><i class="multiple-add icon-plus"></i></span></label>
 						<div class="controls">
 							<div class="address multiple-template" style="display:none">
-							    <input type="text" name="address" id="address"
+							    <input type="text" id="address"
 								       placeholder="address" /> 
 						        <select class="address-type" name="address-type" style="width:100px">
 									<option></option>
@@ -753,7 +794,7 @@
 							</div>
 						</div>
 					</div>
-				<input type="text" name="id" class="hide" >
+				<input type="text" name="id" class="hide" value={{id}} >
 					<div class="form-actions">
 						<a href="#" type="submit" class="save btn btn-primary" id="update">Update</a>
 						<a href="#home" class="btn" id="close">close</a>

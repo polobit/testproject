@@ -19,6 +19,7 @@ var ContactsRouter = Backbone.Router.extend({
         /* Views */
         "contact-view-add": "contactViewAdd",
         "contact-views": "contactViews",
+        "contact-views-edit/:id": "editContactViewEdit",
           
         /* New Contact/Company - Full mode */
         "continue-contact": "continueContact",
@@ -84,10 +85,7 @@ var ContactsRouter = Backbone.Router.extend({
           });
 
 
-          $('#content').html(this.contactsListView.render().el);
-          
-          $(".active").removeClass("active");
-          $("#contactsmenu").addClass("active");    
+          $('#content').html(App_Contacts.contactsListView.render().el);
          
     },
 
@@ -126,17 +124,21 @@ var ContactsRouter = Backbone.Router.extend({
         
         this.contactDetailView = new Base_Model_View({
             model: contact,
-            template: "contact-detail",
-            postRenderCallback: function(el) {
-                loadWidgets(el, contact.toJSON());
-               }
+            template: "contact-detail"
         });
         
        
         var el = this.contactDetailView.render().el;
-      
+       
+        //$('#contact-details-list').html(el);
         $('#content').html(el);
        
+        var socialEl = this.el;
+        //addSocial(socialEl);
+
+        // Add Widgets (RHS)
+        //alert("Loading widgets");
+        loadWidgets(el, contact.toJSON());
     },
     editContact: function () {
     	
@@ -168,12 +170,7 @@ var ContactsRouter = Backbone.Router.extend({
       	// Contact Duplicate
       	var contact = this.contactsListView.collection.get(this.contactDetailView.model.id);
       	var json = contact.toJSON();
-      
-      	
-      	// Delete email as well as it has to be unique
-      	json = delete_contact_property(json, 'email');
-        delete json.id;	
-        
+      	delete json.id;
         var contactDuplicate = new Backbone.Model();
         contactDuplicate.url = 'core/api/contacts';
         contactDuplicate.save(json,{
@@ -208,15 +205,6 @@ var ContactsRouter = Backbone.Router.extend({
     		isNew: true,
     		window: "contact-views",
     		 template: "contact-view",
-    		postRenderCallback: function(el) {
-    			
-    			head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
-    			
-    				$('#multipleSelect', el).multiSelect();
-    				$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").sortable();
-    			});
-    		}
-    		 
     	});
     	$('#content').html(view.render().el);
     },

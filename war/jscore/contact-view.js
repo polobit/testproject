@@ -34,13 +34,14 @@ function setupViews(cel) {
         restKey: "contactView",
         templateKey: "contact-view",
         individual_tag_name: 'li',
+        id: 'view-list'
 
     });
     
   // Fetch collection and add to contact collection template
    App_Contacts.customView.collection.fetch({
 	  	success: function(){
-	  		$("#view-list",cel).html(App_Contacts.customView.render().el);
+	  		$("#view-list",cel).html(App_Contacts.customView.el);
 	  	}
     })
 }
@@ -70,12 +71,27 @@ $(function(){
 	    // Fetch collection and set tags and contact-views list
 	    view.collection.fetch({
 	    	success :function() {
-	    		setupViews(view.render().el);
-	    		setupTags(App_Contacts.contactsListView.el);
+	    		setupViews(view.el);
+	    		setupTags(view.el);
+	    		$('#content').html(view.el);
 	    	}
 	    });
-	   
-	    $('#content').html(view.render().el);
-		
+	    
 	});
+});
+
+
+
+//On click on row in contact views triggers the details of particular contact view
+$(function () {
+    $('#contact-list-view-model-list > tr').live('click', function (e) {
+        e.preventDefault();
+        var data = $(this).find('.view').attr('view');
+
+        if (data) {
+            Backbone.history.navigate("contact-views-edit/" + data, {
+                trigger: true
+            });
+        }
+    });
 });

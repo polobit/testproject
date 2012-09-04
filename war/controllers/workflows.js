@@ -6,7 +6,6 @@ var WorkflowsRouter = Backbone.Router.extend({
         "workflows": "workflows",
         "workflow-add": "workflowAdd",
         "workflow/:id": "workflowEdit",
-        "logs-to-campaign/:id": "logsToCampaign",
           },
             
       workflows: function () {
@@ -54,17 +53,5 @@ var WorkflowsRouter = Backbone.Router.extend({
             
             // Set the name
             $('#workflow-name').val(this.workflow_model.get("name")); 
-        },
-        logsToCampaign: function (id) {
-        	 var logsListView = new Base_Collection_View({
-                 url: '/core/api/campaigns/logs/' + id,
-                 restKey: "logs",
-                 templateKey: "campaign-logs",
-                 individual_tag_name: 'tr'
-             });
-             
-           
-             logsListView.collection.fetch();
-             $('#content').html(logsListView.el); 
         }
 });

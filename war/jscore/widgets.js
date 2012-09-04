@@ -11,6 +11,7 @@ function pickWidget() {
         });
 
         Catalog_Widgets_View.collection.fetch();
+        console.log(Catalog_Widgets_View.collection.toJSON());
     }
     $('#content').html(Catalog_Widgets_View.el);
 }
@@ -35,13 +36,13 @@ function loadWidgets(el, contact, user) {
     view.collection.fetch({
         success: function () {
         	
-        	
         	// Fetch all Widgets URL and run them through handlebars to convert {{xx} to actual values
         	  _(view.collection.models).each(function (model) { // in case collection is not empty
 						var id = model.get("id");
 						var url = model.get("url");
 						$.get(url, "script");
 						
+						console.log(model);
 						// Set the data element in the div
 						// We can retrieve this in get plugin prefs
 						
@@ -191,7 +192,6 @@ function agile_crm_add_note(sub, description)
 function agile_crm_get_contact ()
 {
 	return App_Contacts.contactDetailView.model.toJSON();
-		
 }
 
 // Finds whether property name exists 
@@ -208,12 +208,8 @@ function agile_crm_get_contact_property(propertyName) {
 		}
 	});
 	
-	if(!property) {
-		var object = agile_crm_get_widget_property("Twitter");
-		//$.getJSON("/core/api/widget/contact/TWITTER/" + object.Twitter +"/" + plugin_id, function (data) {
-	}
 		
-	return property;
+	return property.value;
 
 }
 
@@ -227,10 +223,22 @@ function agile_crm_get_plugin_id(pluginName)
 // Get Plugin Prefs
 function agile_crm_get_plugin_prefs(pluginName)
 {
-	
 	return $('#' + pluginName).data('model').toJSON().prefs;
 }
 
+//Get Plugin Prefs
+function agile_crm_save_plugin_prefs(pluginName, prefs)
+{
+	 var widget = $('#' + pluginName).data('model').toJSON();
+	 widget.prefs = prefs;
+	 
+	 var widget_model = new Backbone.Model();
+	 
+	 widget_model.url = 'core/api/widgets'
+		 
+	 widget_model.save(widget);
+	 
+}
 
  // Save widget Property 
 function agile_crm_save_widget_property(propertyName, value) {
@@ -274,10 +282,7 @@ function agile_crm_get_widget_property(propertyName) {
 	
 	// Convert JSON string to JSON Object
 	widget_properties = JSON.parse(widget_properties);
-	
-	
-	
-	
+
 	return widget_properties[propertyName];
 }
 

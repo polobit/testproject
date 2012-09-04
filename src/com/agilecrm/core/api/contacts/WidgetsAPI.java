@@ -11,11 +11,14 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.json.JSONObject;
+
 import com.agilecrm.contact.Contact;
 import com.agilecrm.social.LinkedInUtil;
 import com.agilecrm.social.SocialSearchResult;
 import com.agilecrm.social.TwitterUtil;
 import com.agilecrm.widgets.Widget;
+import com.thirdparty.rapportive.Rapleaf;
 
 @Path("/api/widgets")
 public class WidgetsAPI {
@@ -126,5 +129,11 @@ public class WidgetsAPI {
 		}
 		return null;
 	}
-
+	
+	@Path("rapleaf/{plugin-id}/{email}")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public String getRapleafDetails( @PathParam("plugin-id") String plugin_id, @PathParam("email") String email) {
+		return Rapleaf.getRapportiveValue(email, plugin_id).toString();
+	}
 }

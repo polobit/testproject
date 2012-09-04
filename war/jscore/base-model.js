@@ -24,7 +24,12 @@ var Base_Model_View = Backbone.View.extend({
         
         if(!this.options.isNew)
         	{
-        	 	this.model.fetch();
+        		var that = this;
+        	 	this.model.fetch({
+        	 		success: function(data){
+        	 				that.render(true);
+        	 		}
+        	 	});
         	}
     },
 
@@ -92,22 +97,24 @@ var Base_Model_View = Backbone.View.extend({
             }
         });
     },
-    render: function () {
-    	if(!this.model.isNew() || this.options.isNew || !$.isEmptyObject(this.model.toJSON()))
-    	{
-    		$(this.el).html(getTemplate(this.options.template, this.model.toJSON()));
+    render: function (isFetched) {
     	
-        	// Let's try to deserialize too if it is not empty
-    		if(this.options.isNew != true)
-    			deserializeForm(this.model.toJSON(), $(this.el).find('form'));
-        
-        	// Call postRenderCallback after rendering if available
+    	if(!this.model.isNew() || this.options.isNew || !$.isEmptyObject(this.model.toJSON()) || isFetched)
+    	{
+   
+    		$(this.el).html(getTemplate(this.options.template, this.model.toJSON()));
+    			
+    		// Call postRenderCallback after rendering if available
         	var callback = this.options.postRenderCallback;
         	if (callback && typeof(callback) === "function") {
         		
         		// execute the callback, passing parameters as necessary
         		callback($(this.el));
         	}
+        	
+        	// Let's try to deserialize too if it is not empty
+    		if(this.options.isNew != true)
+    			deserializeForm(this.model.toJSON(), $(this.el).find('form'));	
     	}
     	else
     	{

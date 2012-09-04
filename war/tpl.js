@@ -55,31 +55,56 @@
 		<br/>
 		</div>
 	</div>
+</script> <script id="campaign-logs-collection-template" type="text/html">
+ <div class="row">
+<div class="page-header">
+    <h1>Logs <small>Related to campaign</small></h1>
+  </div>
+
+</div>
+<div class="row span10">
+
+	<table class="table table-bordered table-stripped" >
+		<thead>
+    		<tr>
+     			<th></th>
+				<th>Contact</th>
+      			<th>Message</th>
+				<th>Time</th>
+    		</tr>
+  		</thead>
+  
+ 	 	<tbody id="campaign-logs-model-list">
+  		</tbody>
+  
+	</table>
+</div>
+</script>
+
+<script id="campaign-logs-model-template" type="text/html">
+
+
+<td><icon class='deleteWorkflow icon-remove-circle'></icon></td>  	
+  <td><a href="#contact/{{subscriber_id}}">{{contactName}}</a></td>
+  <td>{{getRequiredLog logs "m"}}</td>
+  <td>{{getRequiredLog logs "t"}}</td>
+  
+	
+<br/>
+	
 </script> <script id="campaigns-collection-template" type="text/html">
  	</br>
 	<h1>List of Workflows</h1>
- 
-	<!--<div class="btn-group right" style='top:-18px;position:relative;padding-right:20px'>
-				<a class="btn" href="#"><i class="icon-print"></i></a>
-				<button class="btn">Actions</button>
-  				<button class="btn dropdown-toggle" data-toggle="dropdown">
-    				<span class="caret"></span>
-  				</button>  			
-  				<ul id='campaignSelect' class="dropdown-menu">
-					
-  				</ul>
-			</div>--!>
 	<table class="table table-bordered" >
 		<thead>
     		<tr>
      			<th></th>
-      			<th>Id</th>
-      			<th>Name</th>
-      			<th>Creator</th>
+      			<th>Message</th>
+				<th>Time</th>
     		</tr>
   		</thead>
   
- 	 	<tbody id='workflows-model-list'>
+ 	 	<tbody id="campaigns-model-list">
   		</tbody>
   
 	</table>
@@ -102,9 +127,9 @@
 
 
 <td><icon class='deleteWorkflow icon-remove-circle'></icon></td>  	
-  <td>{{id}}</td>
-  <td>{{name}}</td>
-  <td>{{creator}}</td>
+  <td>{{getRequiredLog logs "m"}}</td>
+  <td>{{getRequiredLog logs "t"}}</td>
+	
 <br/>
 	
 </script><script id="deals-collection-template" type="text/html">
@@ -325,7 +350,7 @@
     				<span class="caret"></span>
   				</button>  			
   				<ul class="dropdown-menu">
-					<li><a href='#edit'>Edit</a></li>
+					<li><a href='#contact-edit'>Edit</a></li>
 					<li><a href='#' id='contact-actions-delete'>Delete</a></li>
 					<li class='divider'></li>
 					<li><a href='#add-note' data-toggle="modal" id="newNote">Add Note</a></li> 
@@ -621,8 +646,8 @@
 					</div>
 					<div class="control-group">
 						<label class="control-label">Fields <span>*</span></label>
-						<div class="controls" id="contactTypeAhead">
-							<select id="multipleSelect" class="required" name="fields_set" multiple="multiple">
+						<div class="controls" >
+							<select id="multipleSelect"  class="required" multiple="multiple">
 								<option value="first_name">First Name</option>
 								<option value="last_name">Last Name</option>
 								<option value="email">Email</option>
@@ -635,6 +660,11 @@
 							</select>
 			  			</div>
 					</div>
+					{{#if "id"}}
+						<input class="hide" name="id" value="{{id}}"/>
+						{{else}}
+						<input class="hide" name="id"/>
+					{{/if}}
 					<div class="form-actions">          
           				<a href="#" type="submit" class="save btn btn-primary" id="contactView">Save</a>
 						<a href="#contact-views" class="btn ">Close</a>
@@ -678,11 +708,11 @@
 	</div>
 </script>
 <script id="contact-list-view-model-template" type="text/html">
-<td><icon class='delete icon-remove-circle'></icon></td>  	
+<td view='{{id}}' class='view'><icon class='delete icon-remove-circle'></icon></td>  	
 <td> {{name}} </td>
 <td>
   {{#each fields_set}}
-	 {{this}}</br> 
+	 {{ucfirst this}}</br> 
   {{/each}}
 </td>
 <br/>
@@ -760,7 +790,7 @@
 <table id='contacts' class="table table-striped" style='overflow:scroll'>
 <thead>
     <tr>
-	<th>{{name}}</th>
+{{contactTableHeadings "fields_set"}}
     </tr>
   </thead>
   
@@ -1513,12 +1543,12 @@
 						</div>
 					</fieldset>				
 				</form>	
-				
+				</div>
 			</div>
 			<div class="modal-footer">
 				<a href="#" class="btn btn-primary" id="task_event_validate">Save changes</a>
 			</div>
-		</div>
+		
 	</div>	
 	<!-- End of Modal views -->
 <!-- New (Contact) Modal views -->
@@ -1680,17 +1710,22 @@
    <td>{{note}}</td>
 <br/>
 </script><script id="notify-html-template" type="text/html">
-<div class="well" style="background:white;margin-bottom:0px; color:black">	
-		<div>
-		<img  class='thumbnail' src="{{gravatarurl properties 50}}" width="50" height="50" style='display:inline'/>			
-		<span style='padding-left:5px'>
-			<b>{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</b><br/>
-			{{getPropertyValue properties "title"}} {{getPropertyValue properties "company"}}		
-		</span>
-		</div>
-		is browsing..
 
+<div class=''>
+	<div class="popover" style='display:inline;position:relative;color:#333'>
+            <h3 class="popover-title">Browsing Notification</h3>
+            <div class="popover-content">
+				<div>
+				<img  class='thumbnail' src="{{gravatarurl properties 50}}" width="50" height="50" style='display:inline'/>			
+				<span style='padding-left:5px'>
+					<b>{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</b><br/>
+					{{getPropertyValue properties "title"}} {{getPropertyValue properties "company"}}		
+				</span>
+				</div>             
+			</div>
+   </div>
 </div>
+
 </script><script id="opportunities-collection-template" type="text/html">
 
 <div class="row">
@@ -1794,7 +1829,7 @@ Eg: you can send an email to all users who have signed up on your site. And then
 						<div class="controls" id="contactTypeAhead">
 							<div>
 								<div class="pull-left" style="margin-left:-25px">
-									<ul name= "contacts" class= "tags" id="tags"></ul>
+									<ul name= "contacts" class= "tags" ></ul>
 								</div>
 									<input type="text" id = "relates_to" class="typeahead typeahead_contacts" data-provide="typeahead" data-mode="multiple" />
 							</div>	
@@ -2119,7 +2154,7 @@ Eg: you can send an email to all users who have signed up on your site. And then
   <td>{{id}}</td>
   <td><a href='#workflow/{{id}}'>{{name}}</a></td>
   <td>{{creator}}</td>
-  <td></td>
+  <td><a href="#logs-to-campaign/{{id}}">View Logs</a></td>
 <br/>
 	
 </script>
