@@ -31,6 +31,7 @@ public class Rapleaf
 	// URL
 	public static final String RAPPORT_URL = "https://personalize.rapleaf.com/v4/dr?email=$email&api_key=$apikey&show_available";
 
+	// Get rapportive changes
 	public static JSONObject getRapportiveValue(String email, String api_key)
 	{
 		try
