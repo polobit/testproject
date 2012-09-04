@@ -437,7 +437,7 @@ padding:10px;
 	
 	<!-- JQUery Core and UI CDN -->	
 	<!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->
-	head.js('lib/jquery.min.js', 'lib/jquery-ui.min.js', LIB_PATH +  'lib/bootstrap.min.js', LIB_PATH + 'lib/jquery.validate.min.js', LIB_PATH + 'lib/bootstrap-datepicker-min.js', LIB_PATH + 'lib/bootstrap-timepicker-min.js');
+	head.js(LIB_PATH + 'lib/jquery.min.js', LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH +  'lib/bootstrap.min.js', LIB_PATH + 'lib/jquery.validate.min.js', LIB_PATH + 'lib/bootstrap-datepicker-min.js', LIB_PATH + 'lib/bootstrap-timepicker-min.js');
 	
 	<!-- Backbone -->
 	head.js(LIB_PATH + 'lib/underscore-min.js', LIB_PATH + 'lib/backbone-min.js');

@@ -104,8 +104,7 @@ var Base_Collection_View = Backbone.View.extend({
         $(('#' + this.options.templateKey + '-model-list'), this.el).append(itemView.render().el);
     },
     render: function (force_render) {
-
-    	console.log("render called on"+ this.options.templateKey +", "+ force_render );
+    	
     	// If collection in not reset
     	if(force_render == undefined) {
     		$(this.el).html(LOADING_HTML);

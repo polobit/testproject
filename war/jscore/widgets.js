@@ -11,7 +11,6 @@ function pickWidget() {
         });
 
         Catalog_Widgets_View.collection.fetch();
-        console.log(Catalog_Widgets_View.collection.toJSON());
     }
     $('#content').html(Catalog_Widgets_View.el);
 }
@@ -41,8 +40,7 @@ function loadWidgets(el, contact, user) {
 						var id = model.get("id");
 						var url = model.get("url");
 						$.get(url, "script");
-						
-						console.log(model);
+
 						// Set the data element in the div
 						// We can retrieve this in get plugin prefs
 						
@@ -227,7 +225,7 @@ function agile_crm_get_plugin_prefs(pluginName)
 }
 
 //Get Plugin Prefs
-function agile_crm_save_plugin_prefs(pluginName, prefs)
+function agile_crm_save_widget_prefs(pluginName, prefs)
 {
 	 var widget = $('#' + pluginName).data('model').toJSON();
 	 widget.prefs = prefs;

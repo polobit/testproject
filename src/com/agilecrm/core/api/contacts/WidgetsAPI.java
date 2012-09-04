@@ -130,10 +130,10 @@ public class WidgetsAPI {
 		return null;
 	}
 	
-	@Path("rapleaf/{plugin-id}/{email}")
+	@Path("rapleaf/{apikey}/{email}")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public String getRapleafDetails( @PathParam("plugin-id") String plugin_id, @PathParam("email") String email) {
-		return Rapleaf.getRapportiveValue(email, plugin_id).toString();
+	public String getRapleafDetails( @PathParam("apikey") String apikey, @PathParam("email") String email) {
+		return Rapleaf.getRapportiveValue(email, apikey).toString();
 	}
 }

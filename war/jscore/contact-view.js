@@ -84,12 +84,12 @@ $(function(){
 
 //On click on row in contact views triggers the details of particular contact view
 $(function () {
-    $('#contact-list-view-model-list > tr').live('click', function (e) {
+    $('#contact-custom-view-model-list > tr').live('click', function (e) {
         e.preventDefault();
         var data = $(this).find('.view').attr('view');
 
         if (data) {
-            Backbone.history.navigate("contact-views-edit/" + data, {
+            Backbone.history.navigate("contact-custom-view-edit/" + data, {
                 trigger: true
             });
         }
