@@ -299,6 +299,33 @@ margin: 0px
 padding:10px;
 }
 
+/* Tags */
+.tags {
+width: auto;
+margin: 25px 0 0 10px;
+list-style: none;
+overflow: hidden;
+}
+
+.tags li {
+height: 27px;
+white-space: nowrap;
+float: left;
+margin-bottom: 10px;
+background: white url("/css/tags/tag-01.png") no-repeat;
+padding: 0 0 0 13px;
+margin-right: 10px;
+}
+
+.tags li span {
+display: block;
+height: 23px;
+padding: 2px 8px 0 2px;
+color: #369;
+background: transparent url("/css/tags/tag-02.png") no-repeat right top;
+text-decoration: none;
+}
+
 </style>
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->

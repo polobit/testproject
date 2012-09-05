@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import com.campaignio.logger.Log;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.TaskletManager;
-import com.thirdparty.rapportive.Rapleaf;
+import com.thirdparty.Rapleaf;
 
 public class Sex extends TaskletAdapter
 {

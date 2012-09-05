@@ -11,14 +11,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.json.JSONObject;
-
 import com.agilecrm.contact.Contact;
 import com.agilecrm.social.LinkedInUtil;
 import com.agilecrm.social.SocialSearchResult;
 import com.agilecrm.social.TwitterUtil;
 import com.agilecrm.widgets.Widget;
-import com.thirdparty.rapportive.Rapleaf;
+import com.thirdparty.Rapleaf;
 
 @Path("/api/widgets")
 public class WidgetsAPI {

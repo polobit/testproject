@@ -1,4 +1,4 @@
-package com.thirdparty.rapportive;
+package com.thirdparty;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,7 +58,5 @@ public class Rapleaf {
 		}
 
 		return new JSONObject();
-
 	}
-
 }

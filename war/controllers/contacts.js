@@ -16,8 +16,6 @@ var ContactsRouter = Backbone.Router.extend({
         "send-email": "sendEmail",
         "add-note": "addNoteToContact",
         "add-opportunity": "addOpportunityToContact",
-        
-
          
         /* Views */
         "contact-view-add": "contactViewAdd",
@@ -240,7 +238,7 @@ var ContactsRouter = Backbone.Router.extend({
 
     	var view = this.opportunityView.render();
      	
-        $('#content').html(view.el);
+        om$('#content').html(view.el);
     },
          
     contactViewAdd: function(){

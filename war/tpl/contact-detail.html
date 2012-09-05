@@ -92,11 +92,18 @@
 				<br/>
 				{{#if tags}}
 					<i class="icon-tags"></i>
-					{{#each tags}}		
-						<span class="label" onmouseover="$(this).children().addClass('icon-remove')"
-						onmouseout="$(this).children().removeClass('icon-remove')">
-						{{this}}</span>
+
+					<ul class="tags">
+
+					
+					{{#each tags}}	
+
+				<li><span><a href='#tags/{{this}}'>{{this}}</a></span>
+</li>
   					{{/each}}
+
+					</ul>
+
 					<a href="#"><i class="icon-plus-sign"></i></a>
 				{{/if}}
 			</div>

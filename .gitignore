@@ -8,3 +8,6 @@ war/yui.js
 war/settings.js
 war/admin-settings.js
 util
+.externalToolBuilders
+bin
+/war/continue.js
