@@ -216,7 +216,7 @@ $(function() {
     
     // Get date string from epoch time
 	Handlebars.registerHelper('epochToHumanDate', function(format, date) {
-		var d = new Date(parseInt(date) * 1000);
+		var d = new Date(parseInt(date) );
 		return d.toLocaleDateString();
 
 		//return $.datepicker.formatDate(format , new Date( parseInt(date) * 1000));
