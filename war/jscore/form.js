@@ -94,7 +94,7 @@ function deserializeForm(data, form)
 	               else if (type == "checkbox") {
 	            	   if (el)
 		                  {  
-		                	  if(el == "true")
+		                	  if(el == true)
 		                		  fel.attr("checked", "checked"); 
 		                  
 		                	  // Set all values as true by default for serialization to work
