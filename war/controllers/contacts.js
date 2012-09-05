@@ -14,6 +14,9 @@ var ContactsRouter = Backbone.Router.extend({
         "tags/:tag": "contacts",
         "contacts-filter": "filterContacts",
         "send-email": "sendEmail",
+        "add-note": "addNoteToContact",
+        "add-opportunity": "addOpportunityToContact",
+        
 
          
         /* Views */
@@ -203,6 +206,43 @@ var ContactsRouter = Backbone.Router.extend({
 
     },
     
+    addNoteToContact: function() {
+    	var noteView = new Base_Model_View({
+    		url: 'core/api/notes',
+    		model: this.contactDetailView.model,
+    		template: 'contact-note',
+    		modal: 'noteModal',
+    		postRenderCallback: function(el){ 
+				$('#noteModal',el).modal('show');
+				}
+    	});
+    	
+    	//$('#content').html(noteView.render().el);
+    },
+    addOpportunityToContact: function() {
+    	this.opportunityView = new Base_Model_View({
+            url: 'core/api/opportunity',
+            template: "opportunity-add",
+            isNew: true,
+            window: 'deals',
+            postRenderCallback: function(el){
+            	populateUsers("owner", el);
+            	var json = App_Contacts.contactDetailView.model.toJSON();
+            	var contact_name = json.properties[0].value + " " + json.properties[1].value;
+            	$('.tags',el).append('<li class="label label-warning"  style="display: inline-block; vertical-align: middle; margin-right:3px;" value="'+ json.id +'">'+contact_name+'</li>');
+
+            	// Enable the datepicker
+                $('#close_date', el).datepicker({
+                    format: 'mm-dd-yyyy'
+                });
+            }
+        });
+
+    	var view = this.opportunityView.render();
+     	
+        $('#content').html(view.el);
+    },
+         
     contactViewAdd: function(){
     	var view = new Base_Model_View({
     		url: 'core/api/contact-view',
