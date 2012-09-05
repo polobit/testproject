@@ -53,6 +53,7 @@ public class Widget {
 	@Parent
 	private Key<AgileUser> user;
 
+	
 	public static List<Widget> DefaultWidgets = null;
 
 	Widget() {
@@ -74,6 +75,8 @@ public class Widget {
 	public static List<Widget> getDefaultWidgets() {
 
 		if (DefaultWidgets == null) {
+			System.out.println("adding widgets");
+			DefaultWidgets = new ArrayList<Widget>();
 			DefaultWidgets
 					.add(new Widget(
 							"Linkedin",
@@ -86,6 +89,12 @@ public class Widget {
 							"Twitter For one year, in 1906, Felix Feneon re-wrote the news for a column in the French newspaper Le Matin, 'Novellas in three lines.' In a sparse sentence or two - only three lines in a single newspaper column - he captured the march of industrialization, the scourge of rural disease and the randomness of death. He showed acts of violence and charity throughout France.",
 							"/widgets/twitter.js", "/img/plugins/twitter.jpg",
 							null));
+			DefaultWidgets
+			.add(new Widget(
+					"Rapleaf",
+					"Rapleaf For one year, in 1906, Felix Feneon re-wrote the news for a column in the French newspaper Le Matin, 'Novellas in three lines.' In a sparse sentence or two - only three lines in a single newspaper column - he captured the march of industrialization, the scourge of rural disease and the randomness of death. He showed acts of violence and charity throughout France.",
+					"/widgets/rapleaf.js", "/img/plugins/twitter.jpg",
+					null));
 			System.out.println(DefaultWidgets + "Blah Blah");
 		}
 

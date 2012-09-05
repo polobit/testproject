@@ -19,6 +19,7 @@ var ContactsRouter = Backbone.Router.extend({
         /* Views */
         "contact-view-add": "contactViewAdd",
         "contact-views": "contactViews",
+        "contact-custom-view-edit/:id": "editContactView",
           
         /* New Contact/Company - Full mode */
         "continue-contact": "continueContact",
@@ -221,15 +222,42 @@ var ContactsRouter = Backbone.Router.extend({
     	$('#content').html(view.render().el);
     },
     contactViews: function() {
-    	   var contactViewListView = new Base_Collection_View({
+    	   this.contactViewListView = new Base_Collection_View({
                url: '/core/api/contact-view',
                restKey: "contactView",
-               templateKey: "contact-list-view",
+               templateKey: "contact-custom-view",
                individual_tag_name: 'tr'
            });
-    	   contactViewListView.collection.fetch();
-    	   console.log(contactViewListView.el);
-    	   $('#content').html(contactViewListView.el);
+    	   this.contactViewListView.collection.fetch();
+    	   $('#content').html(this.contactViewListView.el);
+    },
+    editContactView: function(id) {    	
+    	
+    	if (!App_Contacts.contactViewListView || App_Contacts.contactViewListView.collection.length == 0 || App_Contacts.contactViewListView.collection.get(id) == null)
+    	{
+    		this.navigate("contact-views", {
+                trigger: true
+            });
+    	}
+    	var contact_view_model = App_Contacts.contactViewListView.collection.get(id);
+    	
+    	
+    	var contactView = new Base_Model_View({
+    		url: 'core/api/contact-view/' + id,
+    		model: contact_view_model,
+    		template: "contact-view",
+    		restKey: "contactView",
+            window: 'contact-views',
+            postRenderCallback: function(el) {
+       			head.js('lib/jquery.multi-select.js', function(){
+       					$('#multipleSelect', el).multiSelect();
+       					$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id","fields_set").sortable();
+       				});
+       			}
+
+    	});
+    	
+    	$("#content").html(contactView.render().el);
     },
     sendEmail: function(){
     	

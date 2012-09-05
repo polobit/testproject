@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -37,11 +38,7 @@ public class API {
 	public String sayPlainTextHello() {
 		return "Invalid Path";
 	}
-	
 
-	
-	
-	
 	// Send Current User Info
 	@Path("current-user")
 	@GET
@@ -56,9 +53,6 @@ public class API {
 			return null;
 		}
 	}
-
-	
-
 
 	// Logs
 
@@ -86,9 +80,6 @@ public class API {
 		return result;
 	}
 
-	
-	
-	
 	@Path("send-email")
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -131,6 +122,27 @@ public class API {
 	public ContactView createContactView(ContactView contact_view) {
 		contact_view.save();
 		return contact_view;
+
+	}
+
+	// Contact view Save Author: Yaswanth 08-10-2012
+	@Path("contact-view")
+	@PUT
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public ContactView updateContactView(ContactView contact_view) {
+		System.out.println("updateing view");
+		contact_view.save();
+		return contact_view;
+
+	}
+
+	// Get Contact View by id Author: Yaswanth 09-02-2012
+	@Path("contact-view/{id}")
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public ContactView getContactView(@PathParam("id") String id) {
+		return ContactView.getContactView(Long.parseLong(id));
 
 	}
 
@@ -285,5 +297,5 @@ public class API {
 	public JSONObject getStats() {
 		return Util.getNamespaceCount();
 	}
-	
+
 }

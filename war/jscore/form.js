@@ -77,12 +77,13 @@ function deserializeForm(data, form)
 	          fel = form.find('*[name="' + i + '"]'),
 	          type = "", tag = "";
 	      
+	      
 	       if (fel.length > 0) {
 	    	   
 	           tag = fel[0].tagName.toLowerCase();
 	           
 	           if (tag == "select" || tag == "textarea") { //...
-	              $(fel).val(el);
+	        	   $(fel).val(el);
 	           }
 	           else if (tag == "input") 
 	           {
@@ -117,10 +118,19 @@ function deserializeForm(data, form)
 	                   var tag_name;
 	                   var tag_id = contact.id;
 	                   tag_name = getPropertyValue(contact.properties, "first_name") + getPropertyValue(contact.properties, "last_name");
-	                   $('#' + fel.attr('id'), form).append('<li class="label label-warning" value="'+tag_id+'" style="display: inline-block; vertical-align: middle; margin-right:3px; ">'+tag_name+'<a class="icon-remove" id="remove_tag"></a></li>');
+	                   $('.' + fel.attr('class'), form).append('<li class="label label-warning" value="'+tag_id+'" style="display: inline-block; vertical-align: middle; margin-right:3px; ">'+tag_name+'<a class="icon-remove" id="remove_tag"></a></li>');
 	                  });	        	    
 	           }
-	         }
+	           
+	           // Deserialize multiselect
+	           else if(fel.hasClass('multiSelect') && tag == 'ul') 
+	           {
+	        		$.each(el, function(index, option){
+	        			$('#multipleSelect', form).multiSelect('select', option);
+	        	   }); 
+	           }
+	        	   
+	        }
 
 	});
 }
@@ -149,4 +159,3 @@ function isValidForm(form) {
 	
     return $(form).valid();
 }
-

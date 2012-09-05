@@ -74,8 +74,11 @@ var Base_Collection_View = Backbone.View.extend({
         });
         this.collection.url = this.options.url;
         this.collection.bind('sync', this.appendItem);
-        this.collection.bind('reset', this.render);
         
+        var that = this;
+        this.collection.bind('reset', function(){that.render(true)});
+        
+
         // Listen on scroll events if cursor is set
         if(this.options.cursor)
         {
@@ -100,7 +103,14 @@ var Base_Collection_View = Backbone.View.extend({
         });
         $(('#' + this.options.templateKey + '-model-list'), this.el).append(itemView.render().el);
     },
-    render: function () {
+    render: function (force_render) {
+    	
+    	// If collection in not reset
+    	if(force_render == undefined) {
+    		$(this.el).html(LOADING_HTML);
+    		return this;
+    	}
+    
         $(this.el).empty(); 
         $(this.el).html(getTemplate((this.options.templateKey + '-collection'), {}));
         _(this.collection.models).each(function (item) { // in case collection is not empty

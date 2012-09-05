@@ -1,7 +1,7 @@
 // To save map of key: first_name and value: contact id 
 var TAGS = [];
 	
-function agile_type_ahead(id, el, callback) {
+function agile_type_ahead(id, el, callback, isSearch) {
 	
 	$('#' + id, el).typeahead({
 		source : function(query, process) {
@@ -34,8 +34,15 @@ function agile_type_ahead(id, el, callback) {
 		updater: function (items) {
 			var tag_not_exist = true;		
 			
+			// Customize data for type ahead
+			if (isSearch && typeof(isSearch) === "function")
+				{
+					isSearch(TAGS[items]);							
+				}
+			
+			
 			// If tag already exists returns 
-			$.each($('#tags', el).children('li'), function(index, tag) {
+			$.each($('.tags', el).children('li'), function(index, tag) {
 				
 				if($(tag).attr('value') == TAGS[items])
 					{
@@ -46,7 +53,7 @@ function agile_type_ahead(id, el, callback) {
 
 			//add tag 
 			if(tag_not_exist)				
-				$('#tags',el).append('<li class="label label-warning"  style="display: inline-block; vertical-align: middle; margin-right:3px;" value="'+ TAGS[items]+'">'+items+'<a class="icon-remove" id="remove_tag"></a></li>');
+				$('.tags',el).append('<li class="label label-warning"  style="display: inline-block; vertical-align: middle; margin-right:3px;" value="'+ TAGS[items]+'">'+items+'<a class="icon-remove" id="remove_tag"></a></li>');
 		},
 		minLength : 2
 	})

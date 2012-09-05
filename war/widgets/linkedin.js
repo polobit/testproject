@@ -17,6 +17,7 @@ $(function () {
 	// If not found - first time usage - show oauth setup
 	if(plugin_prefs == undefined)
 	{
+		agile_crm_save_plugin_prefs(LINKEDIN_PLUGIN_NAME, "test");
 		setupLinkedinOAuth(plugin_id);
 		return;
 	}
@@ -27,6 +28,7 @@ $(function () {
 	// If property with Linkedin do not exist, all the matching profiles
     if (!linkedin_id) 
     {
+    	
     	showLinkedinMatchingProfiles(plugin_id);
     	return;
     }

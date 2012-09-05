@@ -29,15 +29,18 @@ public class Rapleaf
 	public static final String RAPPORTIVE_RESULT_AGE = "age";
 
 	// URL
-	public static final String RAPPORT_URL = "https://personalize.rapleaf.com/v4/dr?email=$email&api_key=15fd166425666ca2ddc857d00e777bee&show_available";
+	public static final String RAPPORT_URL = "https://personalize.rapleaf.com/v4/dr?email=$email&api_key=$apikey&show_available";
 
-	public static JSONObject getRapportiveValue(String email)
+	public static JSONObject getRapportiveValue(String email, String api_key)
 	{
 		try
 		{
 			System.out.println("Retrieving RapLeaf for " + email);
 			String url = RAPPORT_URL.replace("$email", email);
+			url = url.replace("$apikey", api_key);
+			System.out.println(url);
 			String rapleafResponse = Util.accessURL(url);
+			System.out.println(rapleafResponse);
 			JSONObject rapleafJSONObject = new JSONObject(rapleafResponse);
 			
 			System.out.println("Rapleaf Response" + rapleafJSONObject);

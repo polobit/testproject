@@ -350,7 +350,7 @@
     				<span class="caret"></span>
   				</button>  			
   				<ul class="dropdown-menu">
-					<li><a href='#edit'>Edit</a></li>
+					<li><a href='#contact-edit'>Edit</a></li>
 					<li><a href='#' id='contact-actions-delete'>Delete</a></li>
 					<li class='divider'></li>
 					<li><a href='#add-note' data-toggle="modal" id="newNote">Add Note</a></li> 
@@ -647,7 +647,7 @@
 					<div class="control-group">
 						<label class="control-label">Fields <span class="field_req">*</span></label>
 						<div class="controls" id="contactTypeAhead">
-							<select id="multipleSelect" class="required" name="fields_set" multiple="multiple">
+							<select id="multipleSelect" class="required" multiple="multiple">
 								<option value="first_name">First Name</option>
 								<option value="last_name">Last Name</option>
 								<option value="email">Email</option>
@@ -669,7 +669,7 @@
 			
 			</div>
 		</div>
-</script><script id="contact-list-view-collection-template" type="text/html">
+</script><script id="contact-custom-view-collection-template" type="text/html">
 
 	<div class="row">
 		<div class="span12">
@@ -690,7 +690,7 @@
     				</tr>
   				</thead>
   
-  				<tbody id='contact-list-view-model-list'>
+  				<tbody id='contact-custom-view-model-list'>
   				</tbody>
 			</table>
 		</div>
@@ -702,12 +702,12 @@
 
 	</div>
 </script>
-<script id="contact-list-view-model-template" type="text/html">
-<td><icon class='delete icon-remove-circle'></icon></td>  	
+<script id="contact-custom-view-model-template" type="text/html">
+<td view='{{id}}' class='view'><icon class='delete icon-remove-circle'></icon></td>  	
 <td> {{name}} </td>
 <td>
   {{#each fields_set}}
-	 {{this}}</br> 
+	 {{ucfirst this}}</br> 
   {{/each}}
 </td>
 <br/>
@@ -1824,7 +1824,7 @@ Eg: you can send an email to all users who have signed up on your site. And then
 						<div class="controls" id="contactTypeAhead">
 							<div>
 								<div class="pull-left" style="margin-left:-25px">
-									<ul name= "contacts" class= "tags" id="tags"></ul>
+									<ul name= "contacts" class= "tags" ></ul>
 								</div>
 									<input type="text" id = "relates_to" class="typeahead typeahead_contacts" data-provide="typeahead" data-mode="multiple" />
 							</div>	
@@ -2175,6 +2175,9 @@ Eg: you can send an email to all users who have signed up on your site. And then
  
  <div class="span9"> 
  
+
+
+
  
 <table class="table table-bordered" >
 <thead>
