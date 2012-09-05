@@ -42,7 +42,6 @@ public class TagsAPI {
 			return null;
 		}
 	}
-	
 
 	// Remote tags
 	@Path("filter-tags")
@@ -54,11 +53,30 @@ public class TagsAPI {
 
 		// Iterate
 		try {
-		for (Tag tag : tags) {
-			result.put(tag.tag, tag.tag);
-		} 
-		return result.toString();
-		}catch (Exception e) {
+			for (Tag tag : tags) {
+				result.put(tag.tag, tag.tag);
+			}
+			return result.toString();
+		} catch (Exception e) {
+			return "";
+		}
+	}
+
+	// Stats
+	@Path("stats")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public String getTagsStats() {
+		List<Tag> tags = Tag.getTags();
+		JSONObject result = new JSONObject();
+
+		// Iterate
+		try {
+			for (Tag tag : tags) {
+				result.put(tag.tag, Contact.getContactsCountForTag(tag.tag));
+			}
+			return result.toString();
+		} catch (Exception e) {
 			return "";
 		}
 	}
