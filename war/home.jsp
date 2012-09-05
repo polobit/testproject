@@ -326,6 +326,28 @@ background: transparent url("/css/tags/tag-02.png") no-repeat right top;
 text-decoration: none;
 }
 
+/* Sidebar Title */
+.sidebar_title {
+margin: 0;
+background: #EEE url("//s3.amazonaws.com/wrapbootstrap/live/imgs/atcblock.png") no-repeat 0 0;
+padding: 10px 10px;
+color: #444;
+text-shadow: 1px 1px 0 white;
+font-size: 16px;
+font-weight: bold;
+}
+
+.info_wrapper {
+border: 1px solid #DDD;
+margin-bottom: 15px;
+}
+
+/* Settings Content */
+.settings-content{
+	height: 100px;
+	margin-bottom:60px;
+}
+
 </style>
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
