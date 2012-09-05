@@ -88,18 +88,10 @@ $(function(){
 			    
 			    // Switch Task and Event: changing color and font-weight
 			    $("#task").click(function (e) {
-			        $("#hiddentask").val("task");
-			        $("#task").css("color", "black");
-			        $("#event").css("color", "#DD4814");
-			        $("#relatedtask").css("display", "block");
-			        $("#relatedEvent").css("display", "none");
+			    	highlightTask();	
 			    });
 			    $("#event").click( function (e) {
-			    	$("#hiddentask").val("event");
-			        $("#event").css("color", "black");
-			    	$("#task").css("color", "#DD4814");
-			    	$("#relatedtask").css("display", "none");        
-			    	$("#relatedEvent").css("display", "block");
+			    	highlightEvent();
 			   });
 			    
 			    // Tasks checked
@@ -111,14 +103,43 @@ $(function(){
 			        	completeTask(taskId, $(this))
 			        }
 			    });
+			    
+			    // Save task related to contact
+			    $('#contact-add-task').live('click', function(e){
+			    	e.preventDefault();
+			    	highlightTask();
+			        var json = App_Contacts.contactDetailView.model.toJSON();
+	            	var contact_name = json.properties[0].value + " " + json.properties[1].value;
+	            	$('#taskForm').find( 'input[name="contact_id"]' ).val(json.id);
+	            	$('#task_related_to').val(contact_name);
+	            	$("#activityModal").modal('show');
+			    });
 });
+
+// Hilight task
+function highlightTask(){
+    $("#hiddentask").val("task");
+    $("#task").css("color", "black");
+    $("#event").css("color", "#DD4814");
+    $("#relatedtask").css("display", "block");
+    $("#relatedEvent").css("display", "none");
+}
+
+// Hilight event
+function highlightEvent(){
+	$("#hiddentask").val("event");
+    $("#event").css("color", "black");
+	$("#task").css("color", "#DD4814");
+	$("#relatedtask").css("display", "none");        
+	$("#relatedEvent").css("display", "block");
+}
 
 // Validate event(start and end durations) 
 function isValidRange(startDate, endDate){
-	  if (startDate <= endDate)
-		  return true;
-	  else
-		  return false;		  
+	 if (startDate <= endDate)
+		 return true;
+	 else
+		 return false;		  
 }
 
 
