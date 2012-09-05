@@ -1,5 +1,4 @@
 <!-- New (Note) Modal views -->
-<script id="contact-note-template" type="text/html">
 	<div class="modal hide fade" id="noteModal">
 		<div class="modal-header">
 			<button class="close" data-dismiss="modal">x</button>
@@ -8,7 +7,7 @@
 		<div class="modal-body">
 			<form id='noteForm' name="noteForm" method="post">
 				<fieldset>
-					<input name="contact_id" type="hidden" value="{{id}}" />
+					<input name="contact_id" type="hidden" value="" />
 					
 					<div class="control-group">
                     	<label class="control-label"><b>Note:</b></label>
@@ -26,17 +25,16 @@
 					<div class="control-group">
                     	<label class="control-label"><b>About:</b></label>
 						<div class="controls">
-							<input name="about" type="text" id="about" placeholder="About" value="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}"/>
+							<input name="about" type="text" id="about" placeholder="About" value=""/>
 						</div>
 					</div>					
 				</fieldset>
 			</form>
 		</div>
 		<div class="modal-footer">
-			<a href="#" class="save btn btn-primary" id="note_validate">Save
+			<a href="#" class="btn btn-primary" id="note_validate">Save
 				changes</a>
 		</div>
 
 	</div>
-</script>	
 	<!-- End of Modal views -->

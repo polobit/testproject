@@ -41,7 +41,6 @@ function pieMilestones()
 		// Get JSON
 		var max = 1543842319; // Set max to really big
 		$.getJSON('/core/api/opportunity/stats/milestones', {min:0, max: max }, function(data){
-			
 			// Convert into labels and data as required by Flot
 			var pieData = [];
 			$.each(data, function(k,v)
@@ -51,8 +50,7 @@ function pieMilestones()
 						item.data = v;
 						pieData.push(item);
 					})
-					
-					_pie(pieData, $("#pie-deals-chart"));	
+				_pie(pieData, $("#pie-deals-chart"));	
 			});
 		});
 }
@@ -131,4 +129,25 @@ function pieDetails()
 		});
 			
 	});
+}
+
+//Show Pie for Tags
+function pieTags()
+{
+setupCharts(function(){
+		
+		// Get JSON
+		$.getJSON('/core/api/tags/stats', function(data){
+			// Convert into labels and data as required by Flot
+			var pieData = [];
+			$.each(data, function(k,v)
+					{
+						var item = {};
+						item.label = k;
+						item.data = v;
+						pieData.push(item);
+					})
+					_pie(pieData, $("#pie-tags-chart"));	
+			});
+		});
 }

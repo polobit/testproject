@@ -10,17 +10,16 @@ var ContactsRouter = Backbone.Router.extend({
         "import": "importContacts",
         "add-widget": "addWidget",
         "contact-edit":"editContact",
+        "add-opportunity": "addOpportunityToContact",
         "contact-duplicate":"duplicateContact",
         "tags/:tag": "contacts",
         "contacts-filter": "filterContacts",
         "send-email": "sendEmail",
-        "add-note": "addNoteToContact",
-        "add-opportunity": "addOpportunityToContact",
+
          
         /* Views */
         "contact-view-add": "contactViewAdd",
         "contact-views": "contactViews",
-        "contact-custom-view-edit/:id": "editContactView",
           
         /* New Contact/Company - Full mode */
         "continue-contact": "continueContact",
@@ -68,8 +67,8 @@ var ContactsRouter = Backbone.Router.extend({
           var collection = this.contactsListView.collection;
           this.contactsListView.collection.fetch({
               success: function (collection, response) {
-                  setupTags(cel);
-                  setupViews(cel);
+                  pieTags();
+                  // setupViews(cel);
                 		  
                   // Set the cursor
                   //console.log("Cursor " + response.cursor);
@@ -156,68 +155,6 @@ var ContactsRouter = Backbone.Router.extend({
      	deserializeContact(contact.toJSON())
      	
     },
-    
-    duplicateContact: function () {
-    	
-      	 // Takes back to contacts if contacts list view is not defined
-     	 if (!this.contactDetailView || !this.contactDetailView.model.id || !this.contactsListView || this.contactsListView.collection.length == 0) {
-              this.navigate("contacts", {
-                  trigger: true
-              });
-              return;
-         }
-     	 	
-      	// Contact Duplicate
-      	var contact = this.contactsListView.collection.get(this.contactDetailView.model.id);
-      	var json = contact.toJSON();
-      
-      	
-      	// Delete email as well as it has to be unique
-      	json = delete_contact_property(json, 'email');
-        delete json.id;	
-        
-        var contactDuplicate = new Backbone.Model();
-        contactDuplicate.url = 'core/api/contacts';
-        contactDuplicate.save(json,{
-        	success: function(data)
-        	{
-        	}
-        });
-    },
-    continueContact: function () {
-        $('#content').html(getTemplate('continue-contact', {}));
-    },
-
-    continueCompany: function () {
-        $('#content').html(getTemplate('continue-company', {}));
-    },
-    importContacts: function () {
-        $('#content').html(getTemplate("import-contacts", {}));
-        head.js('lib/fileuploader-min.js', function(){
-        	fileUploadInit();
-        });
-    },
-   
-    addWidget: function () {
-
-        pickWidget();
-
-    },
-    
-    addNoteToContact: function() {
-    	var noteView = new Base_Model_View({
-    		url: 'core/api/notes',
-    		model: this.contactDetailView.model,
-    		template: 'contact-note',
-    		modal: 'noteModal',
-    		isNew: true,
-    		postRenderCallback: function(el){ 
-				$('#noteModal',el).modal('show');
-				}
-    	});
-    	
-    	//$('#content').html(noteView.render().el);
-    },
     addOpportunityToContact: function() {
     	this.opportunityView = new Base_Model_View({
             url: 'core/api/opportunity',
@@ -241,7 +178,53 @@ var ContactsRouter = Backbone.Router.extend({
      	
         $('#content').html(view.el);
     },
-         
+     
+    duplicateContact: function () {
+    	
+      	 // Takes back to contacts if contacts list view is not defined
+     	 if (!this.contactDetailView || !this.contactDetailView.model.id || !this.contactsListView || this.contactsListView.collection.length == 0) {
+              this.navigate("contacts", {
+                  trigger: true
+              });
+              return;
+         }
+     	 	
+      	// Contact Duplicate
+      	var contact = this.contactsListView.collection.get(this.contactDetailView.model.id);
+      	var json = contact.toJSON();
+      	
+      	// Delete email as well as it has to be unique
+      	json = delete_contact_property(json, 'email');
+        delete json.id;	
+        var contactDuplicate = new Backbone.Model();
+        contactDuplicate.url = 'core/api/contacts';
+        contactDuplicate.save(json,{
+        	success: function(data)
+        	{
+        		deserializeContact(data.toJSON());
+        	}
+        });
+    },
+    continueContact: function () {
+        $('#content').html(getTemplate('continue-contact', {}));
+    },
+
+    continueCompany: function () {
+        $('#content').html(getTemplate('continue-company', {}));
+    },
+    importContacts: function () {
+        $('#content').html(getTemplate("import-contacts", {}));
+        head.js('lib/fileuploader-min.js', function(){
+        	fileUploadInit();
+        });
+    },
+   
+    addWidget: function () {
+
+        pickWidget();
+
+    },
+    
     contactViewAdd: function(){
     	var view = new Base_Model_View({
     		url: 'core/api/contact-view',
@@ -261,42 +244,15 @@ var ContactsRouter = Backbone.Router.extend({
     	$('#content').html(view.render().el);
     },
     contactViews: function() {
-    	   this.contactViewListView = new Base_Collection_View({
+    	   var contactViewListView = new Base_Collection_View({
                url: '/core/api/contact-view',
                restKey: "contactView",
-               templateKey: "contact-custom-view",
+               templateKey: "contact-list-view",
                individual_tag_name: 'tr'
            });
-    	   this.contactViewListView.collection.fetch();
-    	   $('#content').html(this.contactViewListView.el);
-    },
-    editContactView: function(id) {    	
-    	
-    	if (!App_Contacts.contactViewListView || App_Contacts.contactViewListView.collection.length == 0 || App_Contacts.contactViewListView.collection.get(id) == null)
-    	{
-    		this.navigate("contact-views", {
-                trigger: true
-            });
-    	}
-    	var contact_view_model = App_Contacts.contactViewListView.collection.get(id);
-    	
-    	
-    	var contactView = new Base_Model_View({
-    		url: 'core/api/contact-view/' + id,
-    		model: contact_view_model,
-    		template: "contact-view",
-    		restKey: "contactView",
-            window: 'contact-views',
-            postRenderCallback: function(el) {
-       			head.js('lib/jquery.multi-select.js', function(){
-       					$('#multipleSelect', el).multiSelect();
-       					$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id","fields_set").sortable();
-       				});
-       			}
-
-    	});
-    	
-    	$("#content").html(contactView.render().el);
+    	   contactViewListView.collection.fetch();
+    	   console.log(contactViewListView.el);
+    	   $('#content').html(contactViewListView.el);
     },
     sendEmail: function(){
     	
