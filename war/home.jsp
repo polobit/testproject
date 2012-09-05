@@ -164,6 +164,7 @@ padding-right:5px;
 padding-left:5px;
 }
 
+/* Rating stars in contact details */
 .rating {
   unicode-bidi: bidi-override;
   direction: rtl;
@@ -171,7 +172,6 @@ padding-left:5px;
 }
 
  .rating span.star {
-  font-family: FontAwesome;
   font-weight: normal;
   font-style: normal;
   display: inline-block;
@@ -182,18 +182,18 @@ padding-left:5px;
 }
 
 .rating span.star:before {
-  content: "\f006";
+  content: "\2606";
   padding-right: 5px;
   color: #999999;
 }
 
 .rating span.star:hover:before,
+.rating span.rating-value,
 .rating span.star:hover ~ span.star:before
 {
-  content: "\f005";
+  content: "\2605";
   color: #e3cf7a;
 }
-
 
 
 .round {
@@ -347,6 +347,65 @@ margin-bottom: 15px;
 	height: 100px;
 	margin-bottom:60px;
 }
+
+/* Clip Board Application CSS -- Beginning */
+.slate {
+text-shadow: 0 1px white;
+padding: 20px;
+background: #EBF3FB;
+-webkit-border-radius: 3px 3px;
+-moz-border-radius: 3px / 3px;
+border-radius: 3px / 3px;
+-webkit-box-shadow: 0 0 1px white inset,0 1px 1px rgba(0, 0, 0, 0.1);
+-moz-box-shadow: 0 0 1px #fff inset,0 1px 1px rgba(0,0,0,0.1);
+box-shadow: 0 0 1px white inset,0 1px 1px rgba(0, 0, 0, 0.1);
+border: 1px solid #CDE1F5;
+margin-bottom:10px;
+}
+
+.slate .slate-content::before, .slate .slate-content::after {
+display: table;
+content: "";
+}
+
+.slate .slate-content::after {
+clear: both;
+}
+
+.slate .slate-content::before, .slate .slate-content::after {
+display: table;
+content: "";
+}
+
+.slate .slate-content .box-left {
+display: block;
+float: left;
+}
+
+.slate .slate-content .box-right {
+padding-top: 4px;
+margin-left: 87px;
+}
+
+.slate .btn-slate-action {
+margin-top: 10px;
+}
+
+.blue {
+border: 1px solid #2273C4;
+background: #67A6E5;
+background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzcwYWJlNiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzQwOGZkZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+background-size: 100%;
+background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #70ABE6), color-stop(100%, #408FDE));
+background-image: -webkit-linear-gradient(top, #70ABE6,#408FDE);
+background-image: -moz-linear-gradient(top, #70ABE6,#408FDE);
+background-image: -o-linear-gradient(top, #70ABE6,#408FDE);
+background-image: linear-gradient(top, #70ABE6,#408FDE);
+color: white;
+text-shadow: 0 -1px #206EBC;
+font-weight: normal;
+}
+/* Clip Board Application CSS -- Ending */
 
 </style>
 

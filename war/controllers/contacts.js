@@ -210,6 +210,7 @@ var ContactsRouter = Backbone.Router.extend({
     		model: this.contactDetailView.model,
     		template: 'contact-note',
     		modal: 'noteModal',
+    		isNew: true,
     		postRenderCallback: function(el){ 
 				$('#noteModal',el).modal('show');
 				}
@@ -238,7 +239,7 @@ var ContactsRouter = Backbone.Router.extend({
 
     	var view = this.opportunityView.render();
      	
-        om$('#content').html(view.el);
+        $('#content').html(view.el);
     },
          
     contactViewAdd: function(){

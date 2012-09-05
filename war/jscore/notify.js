@@ -135,6 +135,6 @@ function notify(type, message, position, closable)
 $(function(){
 //	setTimeout(downloadAndRegisterForNotifications, 7000);
 	
-	fetchContactAndNotify('manohar@invox.com');
+	//fetchContactAndNotify('manohar@invox.com');
 	
 });
