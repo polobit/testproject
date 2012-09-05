@@ -86,6 +86,9 @@ var Base_Collection_View = Backbone.View.extend({
             $(window).scroll(this.checkScroll);
         }
         
+        // Call render which shows loading
+        this.render();
+        
     },
     appendItem: function (base_model) {
     	
