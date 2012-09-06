@@ -448,10 +448,10 @@ font-weight: normal;
 				<div class="nav-collapse">
 					<ul class="nav agile-menu">
 						<li id="homemenu" class="active">
-						<li id="contactsmenu"><a href="#contacts">Contacts</a>
-						<li id="calendarmenu"><a href="#calendar">Calendar</a>
-						<li id="dealsmenu"><a href="#deals">Deals</a>
-						<li id="workflowsmenu"><a href="#workflows">Campaigns</a>
+						<li id="contactsmenu"><a href="#contacts"><i class="icon-user icon-white"></i> Contacts</a>
+						<li id="calendarmenu"><a href="#calendar"><i class="icon-calendar icon-white"></i> Calendar</a>
+						<li id="dealsmenu"><a href="#deals"><i class="icon-folder-open icon-white"></i> Deals</a>
+						<li id="workflowsmenu"><a href="#workflows"><i class="icon-comment icon-white"></i> Campaigns</a>
 					
 						</li>
 					</ul>
