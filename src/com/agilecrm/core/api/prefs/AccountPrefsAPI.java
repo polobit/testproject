@@ -10,21 +10,24 @@ import javax.ws.rs.core.MediaType;
 import com.agilecrm.account.AccountPrefs;
 
 @Path("/api/account-prefs")
-public class AccountPrefsAPI {
+public class AccountPrefsAPI
+{
 
-	// Preferences
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public AccountPrefs getAccountPrefs() {
-		return AccountPrefs.getAccountPrefs();
-	}
+    // Preferences
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public AccountPrefs getAccountPrefs()
+    {
+	return AccountPrefs.getAccountPrefs();
+    }
 
-	@PUT
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public AccountPrefs updateAccountPrefs(AccountPrefs prefs) {
-		prefs.save();
-		return prefs;
-	}
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public AccountPrefs updateAccountPrefs(AccountPrefs prefs)
+    {
+	prefs.save();
+	return prefs;
+    }
 
 }

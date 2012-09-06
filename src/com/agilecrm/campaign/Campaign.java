@@ -10,130 +10,131 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.workflows.Workflow;
 import com.campaignio.tasklets.TaskletManager;
 
-
 public class Campaign
 {
 
-	// Convert Contact into JSON
-	static JSONObject getSubscriberJSON(Contact contact)
+    // Convert Contact into JSON
+    static JSONObject getSubscriberJSON(Contact contact)
+    {
+	try
 	{
-		try
-		{
-			JSONObject subscriberJSON = new JSONObject();
+	    JSONObject subscriberJSON = new JSONObject();
 
-			List<ContactField> properties = contact.getProperties();
-			for (ContactField field : properties)
-			{
-				subscriberJSON.put(field.name, field.value);
-			}
+	    List<ContactField> properties = contact.getProperties();
+	    for (ContactField field : properties)
+	    {
+		subscriberJSON.put(field.name, field.value);
+	    }
 
-			// Add Id and data
-			return new JSONObject().put("data", subscriberJSON).put("id", contact.id);
-		}
-		catch (Exception e)
-		{
-			return null;
-		}
+	    // Add Id and data
+	    return new JSONObject().put("data", subscriberJSON).put("id",
+		    contact.id);
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+    }
+
+    // Convert List of Contacts into JSONArray
+    static JSONArray convertContactIntoJSON(List<Contact> contacts)
+    {
+	JSONArray subscriberJSONArray = new JSONArray();
+
+	for (Contact contact : contacts)
+	{
+	    subscriberJSONArray.put(getSubscriberJSON(contact));
 	}
 
-	// Convert List of Contacts into JSONArray
-	static JSONArray convertContactIntoJSON(List<Contact> contacts)
+	return subscriberJSONArray;
+    }
+
+    static JSONObject getWorkflowJSON(Long workflowId)
+    {
+	try
 	{
-		JSONArray subscriberJSONArray = new JSONArray();
+	    // Get Workflow JSON
+	    Workflow workflow = Workflow.getWorkflow(workflowId);
+	    if (workflow == null)
+		return null;
 
-		for (Contact contact : contacts)
-		{
-			subscriberJSONArray.put(getSubscriberJSON(contact));
-		}
+	    // Campaign JSON
+	    JSONObject campaignJSON = new JSONObject();
+	    JSONObject workflowJSON = new JSONObject(workflow.rules);
 
-		return subscriberJSONArray;
+	    campaignJSON.put(TaskletManager.CAMPAIGN_WORKFLOW_JSON,
+		    workflowJSON);
+	    campaignJSON.put("id", workflow.id);
+
+	    return campaignJSON;
 	}
-
-	static JSONObject getWorkflowJSON(Long workflowId)
+	catch (Exception e)
 	{
-		try
-		{
-			// Get Workflow JSON
-			Workflow workflow = Workflow.getWorkflow(workflowId);
-			if (workflow == null)
-				return null;
-
-			// Campaign JSON
-			JSONObject campaignJSON = new JSONObject();
-			JSONObject workflowJSON = new JSONObject(workflow.rules);
-
-			campaignJSON.put(TaskletManager.CAMPAIGN_WORKFLOW_JSON, workflowJSON);
-			campaignJSON.put("id", workflow.id);
-			
-			return campaignJSON;
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return null;
-		}
+	    e.printStackTrace();
+	    return null;
 	}
+    }
 
-	// Subscribe list of contacts into a campaign
-	public static void subscribe(List<Contact> contacts, Long workflowId)
+    // Subscribe list of contacts into a campaign
+    public static void subscribe(List<Contact> contacts, Long workflowId)
+    {
+
+	// Convert Contacts into JSON Array
+	JSONArray subscriberJSONArray = convertContactIntoJSON(contacts);
+
+	// Get Campaign JSON
+	JSONObject campaignJSON = getWorkflowJSON(workflowId);
+	if (campaignJSON == null)
+	    return;
+
+	TaskletManager.executeCampaign(campaignJSON, subscriberJSONArray);
+    }
+
+    // Subscribe a single contact into a campaign
+    public static void subscribe(Contact contact, Long workflowId)
+    {
+	try
 	{
+	    // Convert Contacts into JSON Array
+	    JSONObject subscriberJSONObject = getSubscriberJSON(contact);
 
-		// Convert Contacts into JSON Array
-		JSONArray subscriberJSONArray = convertContactIntoJSON(contacts);
-		
-		// Get Campaign JSON
-		JSONObject campaignJSON = getWorkflowJSON(workflowId);
-		if(campaignJSON == null)
-			return;
+	    // Get Campaign JSON
+	    JSONObject campaignJSON = getWorkflowJSON(workflowId);
+	    if (campaignJSON == null)
+		return;
 
-		TaskletManager.executeCampaign(campaignJSON, subscriberJSONArray);
+	    TaskletManager.executeWorkflow(campaignJSON, subscriberJSONObject);
 	}
-
-	// Subscribe a single contact into a campaign
-	public static void subscribe(Contact contact, Long workflowId)
+	catch (Exception e)
 	{
-		try
-		{
-			// Convert Contacts into JSON Array
-			JSONObject subscriberJSONObject = getSubscriberJSON(contact);
-
-			// Get Campaign JSON
-			JSONObject campaignJSON = getWorkflowJSON(workflowId);
-			if(campaignJSON == null)
-				return;
-			
-			TaskletManager.executeWorkflow(campaignJSON, subscriberJSONObject);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+	    e.printStackTrace();
 	}
-	
-	// Subscribe a single contact into a campaign
-	public static void unsubscribe(Contact contact, Long workflowId)
+    }
+
+    // Subscribe a single contact into a campaign
+    public static void unsubscribe(Contact contact, Long workflowId)
+    {
+	try
 	{
-		try
-		{
-			// Convert Contacts into JSON Array
-			JSONObject subscriberJSONObject = getSubscriberJSON(contact);
+	    // Convert Contacts into JSON Array
+	    JSONObject subscriberJSONObject = getSubscriberJSON(contact);
 
-			// Get Campaign JSON
-			JSONObject campaignJSON = getWorkflowJSON(workflowId);
-			if(campaignJSON == null)
-				return;
-			
-			TaskletManager.executeWorkflow(campaignJSON, subscriberJSONObject);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+	    // Get Campaign JSON
+	    JSONObject campaignJSON = getWorkflowJSON(workflowId);
+	    if (campaignJSON == null)
+		return;
+
+	    TaskletManager.executeWorkflow(campaignJSON, subscriberJSONObject);
 	}
-
-	// Unsubscribe a contact into a campaign
-	public static void unsubscribe()
+	catch (Exception e)
 	{
-
+	    e.printStackTrace();
 	}
+    }
+
+    // Unsubscribe a contact into a campaign
+    public static void unsubscribe()
+    {
+
+    }
 }

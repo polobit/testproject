@@ -14,71 +14,90 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Tag;
 
 @Path("/api/tags")
-public class TagsAPI {
+public class TagsAPI
+{
 
-	// Tags
-	// Notes
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Tag> getTags() {
-		try {
-			return Tag.getTags();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+    // Tags
+    // Notes
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Tag> getTags()
+    {
+	try
+	{
+	    return Tag.getTags();
 	}
-
-	// Tags
-	// Notes
-	@Path("{tag}")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Contact> getContacts(@PathParam("tag") String tag) {
-		try {
-			return Contact.getContactsForTag(tag);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
 	}
+    }
 
-	// Remote tags
-	@Path("filter-tags")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public String getTagsTOFilterContacts() {
-		List<Tag> tags = Tag.getTags();
-		JSONObject result = new JSONObject();
-
-		// Iterate
-		try {
-			for (Tag tag : tags) {
-				result.put(tag.tag, tag.tag);
-			}
-			return result.toString();
-		} catch (Exception e) {
-			return "";
-		}
+    // Tags
+    // Notes
+    @Path("{tag}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Contact> getContacts(@PathParam("tag") String tag)
+    {
+	try
+	{
+	    return Contact.getContactsForTag(tag);
 	}
-
-	// Stats
-	@Path("stats")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public String getTagsStats() {
-		List<Tag> tags = Tag.getTags();
-		JSONObject result = new JSONObject();
-
-		// Iterate
-		try {
-			for (Tag tag : tags) {
-				result.put(tag.tag, Contact.getContactsCountForTag(tag.tag));
-			}
-			return result.toString();
-		} catch (Exception e) {
-			return "";
-		}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
 	}
+    }
+
+    // Remote tags
+    @Path("filter-tags")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getTagsTOFilterContacts()
+    {
+	List<Tag> tags = Tag.getTags();
+	JSONObject result = new JSONObject();
+
+	// Iterate
+	try
+	{
+	    for (Tag tag : tags)
+	    {
+		result.put(tag.tag, tag.tag);
+	    }
+	    return result.toString();
+	}
+	catch (Exception e)
+	{
+	    return "";
+	}
+    }
+
+    // Stats
+    @Path("stats")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getTagsStats()
+    {
+	List<Tag> tags = Tag.getTags();
+	JSONObject result = new JSONObject();
+
+	// Iterate
+	try
+	{
+	    for (Tag tag : tags)
+	    {
+		result.put(tag.tag, Contact.getContactsCountForTag(tag.tag));
+	    }
+	    return result.toString();
+	}
+	catch (Exception e)
+	{
+	    return "";
+	}
+    }
 
 }

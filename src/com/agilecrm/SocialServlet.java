@@ -9,18 +9,19 @@ import javax.servlet.http.HttpServletResponse;
 @SuppressWarnings("serial")
 public class SocialServlet extends HttpServlet
 {
-	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
-	{
-		
-		//
+    public void doGet(HttpServletRequest req, HttpServletResponse resp)
+	    throws IOException
+    {
 
-	}
-	
-	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException
-	{
-		doGet(req, resp);
+	//
 
-	}
-	
-	
+    }
+
+    public void doPost(HttpServletRequest req, HttpServletResponse resp)
+	    throws IOException
+    {
+	doGet(req, resp);
+
+    }
+
 }

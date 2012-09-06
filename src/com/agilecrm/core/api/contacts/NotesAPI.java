@@ -9,14 +9,16 @@ import javax.ws.rs.core.MediaType;
 import com.agilecrm.contact.Note;
 
 @Path("/api/notes")
-public class NotesAPI {
-	
-	// Note related to contact
-	@POST
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Note saceNote(Note note) {
-		note.save();
-		return note;
-	}
+public class NotesAPI
+{
+
+    // Note related to contact
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Note saceNote(Note note)
+    {
+	note.save();
+	return note;
+    }
 }

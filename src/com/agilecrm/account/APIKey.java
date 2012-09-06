@@ -14,53 +14,52 @@ import com.googlecode.objectify.ObjectifyService;
 public class APIKey
 {
 
-	// Key
-	@Id
-	public Long id;
+    // Key
+    @Id
+    public Long id;
 
-	// Api Key
-	public String api_key;
-	
-	// Dao
-	private static ObjectifyGenericDao<APIKey> dao = new ObjectifyGenericDao<APIKey>(APIKey.class);
-	
+    // Api Key
+    public String api_key;
 
-	APIKey()
+    // Dao
+    private static ObjectifyGenericDao<APIKey> dao = new ObjectifyGenericDao<APIKey>(
+	    APIKey.class);
+
+    APIKey()
+    {
+
+    }
+
+    APIKey(String randomNumber)
+    {
+	this.api_key = randomNumber;
+    }
+
+    // Get API Key
+    public static APIKey getAPIKey()
+    {
+	Objectify ofy = ObjectifyService.begin();
+	APIKey apiKey = ofy.query(APIKey.class).get();
+	if (apiKey == null)
 	{
-
-	}
-	
-	APIKey(String randomNumber)
-	{
-		this.api_key = randomNumber;
-	}
-	
-
-	// Get API Key
-	public static APIKey getAPIKey()
-	{
-		Objectify ofy = ObjectifyService.begin();
-		APIKey apiKey = ofy.query(APIKey.class).get();
-		if (apiKey == null)
-		{
-			// Generate API key and save
-			return generateAPIKey();
-		}
-
-		return apiKey;
+	    // Generate API key and save
+	    return generateAPIKey();
 	}
 
-	// Generaet API Key
-	private static APIKey generateAPIKey()
-	{
-		
-		SecureRandom random = new SecureRandom();
-		String randomNumber = new BigInteger(130, random).toString(32);
-		
-		APIKey apiKey = new APIKey(randomNumber);
+	return apiKey;
+    }
 
-		dao.put(apiKey);
-		return apiKey;
-	}
+    // Generaet API Key
+    private static APIKey generateAPIKey()
+    {
+
+	SecureRandom random = new SecureRandom();
+	String randomNumber = new BigInteger(130, random).toString(32);
+
+	APIKey apiKey = new APIKey(randomNumber);
+
+	dao.put(apiKey);
+	return apiKey;
+    }
 
 }

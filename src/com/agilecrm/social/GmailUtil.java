@@ -11,18 +11,19 @@ import com.agilecrm.contact.ContactField;
 public class GmailUtil
 {
 
-	public static final String API_KEY = "anonymous";
-	public static final String SECRET_KEY = "anonymous";
+    public static final String API_KEY = "anonymous";
+    public static final String SECRET_KEY = "anonymous";
 
-	public static void main(String[] args) throws Exception
-	{
+    public static void main(String[] args) throws Exception
+    {
 
-		List<ContactField> properties = new ArrayList<ContactField>();
-		properties.add(new ContactField("company", "work", "Giga Om"));
+	List<ContactField> properties = new ArrayList<ContactField>();
+	properties.add(new ContactField("company", "work", "Giga Om"));
 
-		//Contact contact = new Contact(Contact.Type.PERSON, "", "Om", "Malik", new ArrayList<String>(), properties);
-		// getLinkedInProfile(contact);
-		//getTwitterProfile(contact);
-	}
+	// Contact contact = new Contact(Contact.Type.PERSON, "", "Om", "Malik",
+	// new ArrayList<String>(), properties);
+	// getLinkedInProfile(contact);
+	// getTwitterProfile(contact);
+    }
 
 }

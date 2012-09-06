@@ -10,21 +10,24 @@ import javax.ws.rs.core.MediaType;
 import com.agilecrm.deals.Milestone;
 
 @Path("/api/milestone")
-public class MilestoneAPI {
+public class MilestoneAPI
+{
 
-	@PUT
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Milestone updateMilestone(Milestone milestone) {
-		milestone.save();
-		return null;
-	}
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Milestone updateMilestone(Milestone milestone)
+    {
+	milestone.save();
+	return null;
+    }
 
-	@GET
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Milestone getMilestone() {
-		Milestone milestone = Milestone.getMilestones();
-		return milestone;
-	}
+    @GET
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Milestone getMilestone()
+    {
+	Milestone milestone = Milestone.getMilestones();
+	return milestone;
+    }
 }

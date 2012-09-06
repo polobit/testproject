@@ -9,18 +9,19 @@ import org.codehaus.jackson.map.ObjectMapper;
 @Provider
 public class ObjectMapperProvider implements ContextResolver<ObjectMapper>
 {
-   ObjectMapper mapper;
+    ObjectMapper mapper;
 
-   public ObjectMapperProvider(){
-       mapper = new ObjectMapper();
-       mapper.configure(
-    	DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    public ObjectMapperProvider()
+    {
+	mapper = new ObjectMapper();
+	mapper.configure(
+		DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-   }
+    }
 
-   @Override
-   public ObjectMapper getContext(Class<?> type) {
-       return mapper;
-   }
+    @Override
+    public ObjectMapper getContext(Class<?> type)
+    {
+	return mapper;
+    }
 }
-

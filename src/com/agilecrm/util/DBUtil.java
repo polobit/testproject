@@ -18,133 +18,159 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 
-public class DBUtil {
+public class DBUtil
+{
 
-	// JSON - Google App Engine DB Key
-	public final static String DATASTORE_KEY_IN_JSON = "id";
+    // JSON - Google App Engine DB Key
+    public final static String DATASTORE_KEY_IN_JSON = "id";
 
-	// Get ID from JSONObject - gets id and thn $oid
-	public static String getId(JSONObject json) {
+    // Get ID from JSONObject - gets id and thn $oid
+    public static String getId(JSONObject json)
+    {
 
-		try {
-			return json.getString(DATASTORE_KEY_IN_JSON);
-		} catch (Exception e) {
-			return null;
+	try
+	{
+	    return json.getString(DATASTORE_KEY_IN_JSON);
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+    }
+
+    static List<String> getKinds(String namespace)
+    {
+
+	String old = NamespaceManager.get();
+	List<String> results = new ArrayList<String>();
+	try
+	{
+
+	    NamespaceManager.set(namespace);
+
+	    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+
+	    // this works in dev and prod, but doesn't provide an entity
+	    // count
+	    Query q = new Query(Query.KIND_METADATA_KIND);
+	    for (Entity e : ds.prepare(q).asIterable())
+	    {
+
+		String name = e.getKey().getName();
+		if (!name.startsWith("__Stat_"))
+		{
+
+		    // find out how many entities this kind has
+		    // int count = ds.prepare(new
+		    // Query(name)).countEntities(FetchOptions.Builder.withDefaults());
+
+		    // results.add(new Kind(name));
+
+		    results.add(name);
 		}
+	    }
+	}
+	finally
+	{
+	    NamespaceManager.set(old);
 	}
 
-	static List<String> getKinds(String namespace) {
+	// don't show/include/delete these, it messes up mapreduce
+	results.remove("MapReduceState");
+	results.remove("ShardState");
 
-		String old = NamespaceManager.get();
-		List<String> results = new ArrayList<String>();
-		try {
+	return results;
+    }
 
-			NamespaceManager.set(namespace);
+    static void deleteNamespace(String namespace)
+    {
+	NamespaceDeleteDeferredTask namespaceDeleteDeferredTask = new NamespaceDeleteDeferredTask(
+		namespace);
+	Queue queue = QueueFactory.getDefaultQueue();
+	queue.add(TaskOptions.Builder.withPayload(namespaceDeleteDeferredTask));
+    }
 
-			DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+    static void deleteKind(String kind)
+    {
 
-			// this works in dev and prod, but doesn't provide an entity
-			// count
-			Query q = new Query(Query.KIND_METADATA_KIND);
-			for (Entity e : ds.prepare(q).asIterable()) {
+	try
+	{
 
-				String name = e.getKey().getName();
-				if (!name.startsWith("__Stat_")) {
+	    // Get All Entity Keys in the Kind
+	    List<Key> keys = new LinkedList<Key>();
 
-					// find out how many entities this kind has
-					// int count = ds.prepare(new
-					// Query(name)).countEntities(FetchOptions.Builder.withDefaults());
+	    // Get a handle on the datastore itself
+	    DatastoreService datastore = DatastoreServiceFactory
+		    .getDatastoreService();
 
-					// results.add(new Kind(name));
+	    Query q = new Query(kind).setKeysOnly();
+	    PreparedQuery pq = datastore.prepare(q);
+	    for (Entity entity : pq.asIterable())
+	    {
+		keys.add(entity.getKey());
+	    }
 
-					results.add(name);
-				}
-			}
-		} finally {
-			NamespaceManager.set(old);
-		}
+	    System.out.println("Bulk delete ...  " + kind);
 
-		// don't show/include/delete these, it messes up mapreduce
-		results.remove("MapReduceState");
-		results.remove("ShardState");
+	    try
+	    {
+		datastore.delete(keys);
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
 
-		return results;
+	    System.out.println("Deleted sKind " + kind);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.out.println("Error deleting");
+	}
+    }
+
+    @SuppressWarnings("serial")
+    static class NamespaceDeleteDeferredTask implements DeferredTask
+    {
+
+	String namespace;
+
+	public NamespaceDeleteDeferredTask(String namespace)
+	{
+	    this.namespace = namespace;
 	}
 
-	static void deleteNamespace(String namespace) {
-		NamespaceDeleteDeferredTask namespaceDeleteDeferredTask = new NamespaceDeleteDeferredTask(namespace);
-		Queue queue = QueueFactory.getDefaultQueue();
-		queue.add(TaskOptions.Builder.withPayload(namespaceDeleteDeferredTask));
+	@Override
+	public void run()
+	{
+
+	    String oldNameSpace = NamespaceManager.get();
+
+	    NamespaceManager.set(namespace);
+	    System.out.println("Deleting namespace " + namespace);
+
+	    try
+	    {
+
+		// Get all entities
+		List<String> kinds = getKinds(namespace);
+
+		// Delete each kind
+		for (String kind : kinds)
+		    deleteKind(kind);
+
+	    }
+	    catch (Exception e)
+	    {
+		System.err.println("Exception occured in Cron "
+			+ e.getMessage());
+		e.printStackTrace();
+	    }
+
+	    NamespaceManager.set(oldNameSpace);
+
+	    System.out.println("Deleted namespace " + namespace);
 	}
-
-	static void deleteKind(String kind) {
-
-		try {
-
-			// Get All Entity Keys in the Kind
-			List<Key> keys = new LinkedList<Key>();
-
-			// Get a handle on the datastore itself
-			DatastoreService datastore = DatastoreServiceFactory
-					.getDatastoreService();
-
-			Query q = new Query(kind).setKeysOnly();
-			PreparedQuery pq = datastore.prepare(q);
-			for (Entity entity : pq.asIterable()) {
-				keys.add(entity.getKey());
-			}
-
-			System.out.println("Bulk delete ...  " + kind);
-
-			try {
-				datastore.delete(keys);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			System.out.println("Deleted sKind " + kind);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Error deleting");
-		}
-	}
-
-	@SuppressWarnings("serial")
-	static class NamespaceDeleteDeferredTask implements DeferredTask {
-
-		String namespace;
-
-		public NamespaceDeleteDeferredTask(String namespace) {
-			this.namespace = namespace;
-		}
-
-		@Override
-		public void run() {
-
-			String oldNameSpace = NamespaceManager.get();
-
-			NamespaceManager.set(namespace);
-			System.out.println("Deleting namespace " + namespace);
-			
-			try {
-
-				// Get all entities
-				List<String> kinds = getKinds(namespace);
-
-				// Delete each kind
-				for (String kind : kinds)
-					deleteKind(kind);
-
-			} catch (Exception e) {
-				System.err.println("Exception occured in Cron "
-						+ e.getMessage());
-				e.printStackTrace();
-			}
-
-			NamespaceManager.set(oldNameSpace);
-			
-
-			System.out.println("Deleted namespace " + namespace);
-		}
-	}
+    }
 }

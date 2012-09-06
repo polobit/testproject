@@ -28,67 +28,72 @@ import com.google.gdata.util.common.base.Charsets;
 public class BasicAuthFilter implements Filter
 {
 
-	public static final String PARAM_USER = "user";
-	public static final String PARAM_PASSWORD = "password";
-	public static final String PARAM_REALM = "realm";
+    public static final String PARAM_USER = "user";
+    public static final String PARAM_PASSWORD = "password";
+    public static final String PARAM_REALM = "realm";
 
-	public static String _realm = "agilecrm";
+    public static String _realm = "agilecrm";
 
-	@Override
-	public void destroy()
+    @Override
+    public void destroy()
+    {
+	// Nothing to do.
+    }
+
+    @Override
+    public void doFilter(final ServletRequest request,
+	    final ServletResponse response, final FilterChain chain)
+	    throws IOException, ServletException
+    {
+	System.out.println("Basic OAuth Filter");
+
+	final HttpServletRequest httpRequest = (HttpServletRequest) request;
+	final HttpServletResponse httpResponse = (HttpServletResponse) response;
+
+	final String auth = httpRequest.getHeader("Authorization");
+	if (auth != null)
 	{
-		// Nothing to do.
-	}
+	    final int index = auth.indexOf(' ');
+	    if (index > 0)
+	    {
+		final String[] credentials = StringUtils.split(new String(
+			Base64.decodeBase64(auth.substring(index).getBytes()),
+			Charsets.UTF_8), ':');
 
-	@Override
-	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
-			throws IOException, ServletException
-	{
-		System.out.println("Basic OAuth Filter");
-
-		final HttpServletRequest httpRequest = (HttpServletRequest) request;
-		final HttpServletResponse httpResponse = (HttpServletResponse) response;
-
-		final String auth = httpRequest.getHeader("Authorization");
-		if (auth != null)
+		if (credentials.length == 2)
 		{
-			final int index = auth.indexOf(' ');
-			if (index > 0)
-			{
-				final String[] credentials = StringUtils.split(
-						new String(Base64.decodeBase64(auth.substring(index).getBytes()), Charsets.UTF_8), ':');
+		    // Get user & password
+		    String user = credentials[0];
+		    String password = credentials[1];
 
-				if (credentials.length == 2)
-				{
-					// Get user & password
-					String user = credentials[0];
-					String password = credentials[1];
+		    // Get AgileUser
+		    DomainUser domainUser = DomainUser
+			    .getDomainUserFromEmail(user);
 
-					// Get AgileUser
-					DomainUser domainUser = DomainUser.getDomainUserFromEmail(user);
+		    // Check if ApiKey
+		    String apiKey = APIKey.getAPIKey().api_key;
 
-					// Check if ApiKey
-					String apiKey = APIKey.getAPIKey().api_key;
+		    System.out.println(user + " " + password + " " + domainUser
+			    + " " + apiKey);
 
-					System.out.println(user + " " + password + " " + domainUser + " " + apiKey);
-
-					if (domainUser != null && password.equals(apiKey))
-					{
-						chain.doFilter(httpRequest, httpResponse);
-						return;
-					}
-				}
-			}
+		    if (domainUser != null && password.equals(apiKey))
+		    {
+			chain.doFilter(httpRequest, httpResponse);
+			return;
+		    }
 		}
-
-		System.out.println("Error");
-		httpResponse.setHeader("WWW-Authenticate", "Basic realm=\"" + _realm + "\"");
-		httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+	    }
 	}
 
-	@Override
-	public void init(FilterConfig arg0) throws ServletException
-	{
-		// Nothing to do
-	}
+	System.out.println("Error");
+	httpResponse.setHeader("WWW-Authenticate", "Basic realm=\"" + _realm
+		+ "\"");
+	httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+    }
+
+    @Override
+    public void init(FilterConfig arg0) throws ServletException
+    {
+	// Nothing to do
+    }
 }

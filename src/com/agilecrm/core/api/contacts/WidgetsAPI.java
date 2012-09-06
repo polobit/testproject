@@ -19,119 +19,141 @@ import com.agilecrm.widgets.Widget;
 import com.thirdparty.Rapleaf;
 
 @Path("/api/widgets")
-public class WidgetsAPI {
+public class WidgetsAPI
+{
 
-	// Widget
-	@Path("default")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Widget> getDefaultWidgets() {
-		return Widget.getDefaultWidgets();
+    // Widget
+    @Path("default")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Widget> getDefaultWidgets()
+    {
+	return Widget.getDefaultWidgets();
+    }
+
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Widget> getWidgets()
+    {
+	return Widget.getWidgetsForCurrentUser();
+    }
+
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Widget createWidget(Widget widget)
+    {
+	widget.save();
+	return widget;
+    }
+
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Widget updateWidget(Widget widget)
+    {
+	widget.save();
+	return widget;
+    }
+
+    @Path("positions")
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public void savePositions(List<Widget> widgets)
+    {
+
+	// UI sends only ID and Position
+	for (Widget widget : widgets)
+	{
+	    Widget fullWidget = Widget.getWidget(widget.id);
+	    System.out.println(fullWidget);
+	    fullWidget.position = widget.position;
+	    fullWidget.save();
+	}
+    }
+
+    // Get widget
+    @Path("contact/{type}/{plugin-id}/{id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public SocialSearchResult getSocialProfile(@PathParam("type") String type,
+	    @PathParam("plugin-id") String socialId, @PathParam("id") String id)
+    {
+
+	Widget widget = Widget.getWidget(Long.parseLong(id));
+	if (widget == null)
+	{
+	    return null;
 	}
 
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Widget> getWidgets() {
-		return Widget.getWidgetsForCurrentUser();
+	if (widget.name.equalsIgnoreCase("LINKEDIN"))
+	{
+	    SocialSearchResult results = LinkedInUtil.getLinkedinProfileById(
+		    widget, socialId);
+	    return results;
+
 	}
+	else if (widget.name.equalsIgnoreCase("TWITTER"))
+	{
+	    SocialSearchResult results = TwitterUtil.getTwitterProfileById(
+		    widget, socialId);
+	    return results;
 
-	@POST
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Widget createWidget(Widget widget) {
-		widget.save();
-		return widget;
 	}
+	return null;
+    }
 
-	@PUT
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Widget updateWidget(Widget widget) {
-		widget.save();
-		return widget;
-	}
+    // Get matching profiles for linkedin and Twitter
+    @Path("{type}/{id}/{plugin-id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<SocialSearchResult> getSocialResults(
+	    @PathParam("type") String type, @PathParam("id") String contactId,
+	    @PathParam("plugin-id") String pluginId)
+    {
+	try
+	{
 
-	@Path("positions")
-	@POST
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public void savePositions(List<Widget> widgets) {
+	    Contact contact = Contact.getContact(Long.parseLong(contactId));
+	    System.out.println(contact);
 
-		// UI sends only ID and Position
-		for (Widget widget : widgets) {
-			Widget fullWidget = Widget.getWidget(widget.id);
-			System.out.println(fullWidget);
-			fullWidget.position = widget.position;
-			fullWidget.save();
-		}
-	}
-
-	// Get widget
-	@Path("contact/{type}/{plugin-id}/{id}")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public SocialSearchResult getSocialProfile(@PathParam("type") String type,
-			@PathParam("plugin-id") String socialId, @PathParam("id") String id) {
-
-		Widget widget = Widget.getWidget(Long.parseLong(id));
-		if (widget == null) {
-			return null;
-		}
-
-		if (widget.name.equalsIgnoreCase("LINKEDIN")) {
-			SocialSearchResult results = LinkedInUtil.getLinkedinProfileById(
-					widget, socialId);
-			return results;
-
-		} else if (widget.name.equalsIgnoreCase("TWITTER")) {
-			SocialSearchResult results = TwitterUtil.getTwitterProfileById(
-					widget, socialId);
-			return results;
-
-		}
+	    Widget widget = Widget.getWidget(Long.parseLong(pluginId));
+	    if (widget == null)
+	    {
 		return null;
+	    }
+	    System.out.println(widget);
+
+	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
+	    {
+		return LinkedInUtil.searchLinkedInProfiles(widget, contact);
+	    }
+	    else if (widget.name.equalsIgnoreCase("TWITTER"))
+	    {
+
+		List<SocialSearchResult> results = TwitterUtil
+			.searchTwitterProfiles(widget, contact);
+		System.out.println(results);
+		return results;
+	    }
+	    return null;
+
 	}
+	catch (Exception e)
+	{
 
-	// Get matching profiles for linkedin and Twitter
-	@Path("{type}/{id}/{plugin-id}")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<SocialSearchResult> getSocialResults(
-			@PathParam("type") String type, @PathParam("id") String contactId,
-			@PathParam("plugin-id") String pluginId) {
-		try {
-
-			Contact contact = Contact.getContact(Long.parseLong(contactId));
-			System.out.println(contact);
-
-			Widget widget = Widget.getWidget(Long.parseLong(pluginId));
-			if (widget == null) {
-				return null;
-			}
-			System.out.println(widget);
-
-			if (widget.name.equalsIgnoreCase("LINKEDIN")) {
-				return LinkedInUtil.searchLinkedInProfiles(widget, contact);
-			} else if (widget.name.equalsIgnoreCase("TWITTER")) {
-
-				List<SocialSearchResult> results = TwitterUtil
-						.searchTwitterProfiles(widget, contact);
-				System.out.println(results);
-				return results;
-			}
-			return null;
-
-		} catch (Exception e) {
-
-			e.printStackTrace();
-		}
-		return null;
+	    e.printStackTrace();
 	}
-	
-	@Path("rapleaf/{apikey}/{email}")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public String getRapleafDetails( @PathParam("apikey") String apikey, @PathParam("email") String email) {
-		return Rapleaf.getRapportiveValue(email, apikey).toString();
-	}
+	return null;
+    }
+
+    @Path("rapleaf/{apikey}/{email}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getRapleafDetails(@PathParam("apikey") String apikey,
+	    @PathParam("email") String email)
+    {
+	return Rapleaf.getRapportiveValue(email, apikey).toString();
+    }
 }

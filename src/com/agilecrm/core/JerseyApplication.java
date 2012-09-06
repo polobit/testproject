@@ -11,13 +11,13 @@ import com.agilecrm.core.api.campaigns.WorkflowsAPI;
 
 public class JerseyApplication extends Application
 {
-	public Set<Class<?>> getClasses()
-	{
-		Set<Class<?>> s = new HashSet<Class<?>>();
-		s.add(WorkflowsAPI.class);
-		s.add(TasksAPI.class);
-		
-		s.add(JSAPI.class);
-		return s;
-	}
+    public Set<Class<?>> getClasses()
+    {
+	Set<Class<?>> s = new HashSet<Class<?>>();
+	s.add(WorkflowsAPI.class);
+	s.add(TasksAPI.class);
+
+	s.add(JSAPI.class);
+	return s;
+    }
 }

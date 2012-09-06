@@ -15,52 +15,63 @@ import javax.ws.rs.core.MediaType;
 import com.agilecrm.contact.CustomFieldDef;
 
 @Path("/api/custom-fields")
-public class CustomFieldsAPI {
-	
-	// Custom Fields
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<CustomFieldDef> getCustomFields() {
+public class CustomFieldsAPI
+{
 
-		try {
-			return CustomFieldDef.getCustomFields();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
+    // Custom Fields
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<CustomFieldDef> getCustomFields()
+    {
 
-	// Delete Custom Field
-	@Path("/{id}")
-	@DELETE
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public void deleteCustomField(@PathParam("id") String id) {
-		try {
-			CustomFieldDef customFieldDef = CustomFieldDef.get(Long
-					.parseLong(id));
-			if (customFieldDef != null)
-				customFieldDef.delete();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	try
+	{
+	    return CustomFieldDef.getCustomFields();
 	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
 
-	// New Custom Field
-	@POST
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public CustomFieldDef createCustomField(CustomFieldDef customField) {
-		customField.save();
-		return customField;
+    // Delete Custom Field
+    @Path("/{id}")
+    @DELETE
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void deleteCustomField(@PathParam("id") String id)
+    {
+	try
+	{
+	    CustomFieldDef customFieldDef = CustomFieldDef.get(Long
+		    .parseLong(id));
+	    if (customFieldDef != null)
+		customFieldDef.delete();
 	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+    }
 
-	// Update Custom Field
-	@PUT
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public CustomFieldDef updateCustomField(CustomFieldDef customField) {
-		customField.save();
-		return customField;
-	}
+    // New Custom Field
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public CustomFieldDef createCustomField(CustomFieldDef customField)
+    {
+	customField.save();
+	return customField;
+    }
+
+    // Update Custom Field
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public CustomFieldDef updateCustomField(CustomFieldDef customField)
+    {
+	customField.save();
+	return customField;
+    }
 
 }

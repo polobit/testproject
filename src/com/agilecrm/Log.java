@@ -19,129 +19,133 @@ import com.googlecode.objectify.condition.IfDefault;
 public class Log
 {
 
-	// Key
-	@Id
-	public Long id;
+    // Key
+    @Id
+    public Long id;
 
-	public enum Type
+    public enum Type
+    {
+	CALL, NOTE, TAG, USER, CAMPAIGN, CONTACT
+    };
+
+    // Log Type
+    private Type log_type;
+
+    // Object Id
+    private String log_type_id;
+
+    // Second Log Type is stored in case of Note (where both note id an contact
+    // id are required)
+    @NotSaved(IfDefault.class)
+    private String log_type_id_2 = null;
+
+    private Long log_time = 0L;
+
+    private String text = null;
+
+    // Create ObjectifyGenericDao
+    private static ObjectifyGenericDao<Log> DAO = new ObjectifyGenericDao<Log>(
+	    Log.class);
+
+    Log()
+    {
+
+    }
+
+    Log(Type logType, String logTypeId, String text)
+    {
+	this.log_type = logType;
+	this.log_type_id = logTypeId;
+	this.text = text;
+    }
+
+    Log(Type logType, String logTypeId, String logTypeId2, String text)
+    {
+	this.log_type = logType;
+	this.log_type_id = logTypeId;
+	this.log_type_id_2 = logTypeId2;
+	this.text = text;
+    }
+
+    public String toString()
+    {
+	String objectString = "";
+
+	// Note Log
+	if (log_type.equals(Type.NOTE))
 	{
-		CALL, NOTE, TAG, USER, CAMPAIGN, CONTACT
-	};
-
-	// Log Type
-	private Type log_type;
-
-	// Object Id
-	private String log_type_id;
-
-	// Second Log Type is stored in case of Note (where both note id an contact
-	// id are required)
-	@NotSaved(IfDefault.class)
-	private String log_type_id_2 = null;
-
-	private Long log_time = 0L;
-
-	private String text = null;
-	
-	// Create ObjectifyGenericDao
-	private static ObjectifyGenericDao<Log> DAO = new ObjectifyGenericDao<Log>(Log.class);
-	
-	Log()
-	{
-
+	    // Print Note..
+	    objectString = Note.getNote(Long.parseLong(log_type_id),
+		    Long.parseLong(log_type_id_2)).toString();
 	}
 
-	Log(Type logType, String logTypeId, String text)
+	// User Log
+	if (log_type.equals(Type.USER))
 	{
-		this.log_type = logType;
-		this.log_type_id = logTypeId;
-		this.text = text;
+	    objectString = AgileUser.getUser(log_type_id).toString();
 	}
 
-	Log(Type logType, String logTypeId, String logTypeId2, String text)
+	// Contact Log
+	if (log_type.equals(Type.CALL))
 	{
-		this.log_type = logType;
-		this.log_type_id = logTypeId;
-		this.log_type_id_2 = logTypeId2;
-		this.text = text;
+	    objectString = Contact.getContact(Long.parseLong(log_type_id))
+		    .toString();
 	}
 
-	public String toString()
-	{
-		String objectString = "";
+	return "Text: " + text + " Object: " + objectString;
 
-		// Note Log
-		if (log_type.equals(Type.NOTE))
-		{
-			// Print Note..
-			objectString = Note.getNote(Long.parseLong(log_type_id), Long.parseLong(log_type_id_2)).toString();
-		}
+    }
 
-		// User Log
-		if (log_type.equals(Type.USER))
-		{
-			objectString = AgileUser.getUser(log_type_id).toString();
-		}
+    public static void addNoteLog(Long contactId, Long noteId, String text)
+    {
 
-		// Contact Log
-		if (log_type.equals(Type.CALL))
-		{
-			objectString = Contact.getContact(Long.parseLong(log_type_id)).toString();
-		}
+	// Create Log
+	Log log = new Log(Log.Type.NOTE, contactId + "", noteId + "", text);
 
-		return "Text: " + text + " Object: " + objectString;
+	// Save
+	saveNote(log);
+    }
 
-	}
+    public static void addContactLog(Long contactId, String text)
+    {
+	// Create Log
+	Log log = new Log(Log.Type.CONTACT, contactId + "", text);
 
-	public static void addNoteLog(Long contactId, Long noteId, String text)
-	{
+	// Save
+	saveNote(log);
+    }
 
-		// Create Log
-		Log log = new Log(Log.Type.NOTE, contactId +"", noteId + "", text);
+    public static Log saveNote(Log log)
+    {
+	// save it
+	DAO.put(log);
+	return log;
+    }
 
-		// Save
-		saveNote(log);
-	}
-	
-	public static void addContactLog(Long contactId, String text)
-	{
-		// Create Log
-		Log log = new Log(Log.Type.CONTACT, contactId + "", text);
+    public static List<Log> getContactLogs(Long contactId)
+    {
+	Objectify ofy = ObjectifyService.begin();
+	return ofy.query(Log.class).filter("type", Log.Type.CONTACT)
+		.filter("log_type_id", contactId).list();
+    }
 
-		// Save
-		saveNote(log);
-	}
+    // Get Note Log
+    public static void getNoteLogs(Long contactId, Long noteId)
+    {
+	Objectify ofy = ObjectifyService.begin();
+	ofy.query(Log.class).filter("type", Log.Type.NOTE)
+		.filter("log_type_id", contactId)
+		.filter("log_type_id_2", noteId).get();
+    }
 
-	public static Log saveNote(Log log)
-	{
-		// save it		
-		DAO.put(log);
-		return log;
-	}
+    // Get User Log
 
-	
+    @PrePersist
+    private void PrePersist()
+    {
+	// Store Created Time
+	log_time = System.currentTimeMillis();
 
-	public static List<Log> getContactLogs(Long contactId)
-	{
-		Objectify ofy = ObjectifyService.begin();
-		return ofy.query(Log.class).filter("type", Log.Type.CONTACT).filter("log_type_id", contactId).list();
-	}
-
-	// Get Note Log
-	public static void getNoteLogs(Long contactId, Long noteId)
-	{
-		Objectify ofy = ObjectifyService.begin();
-		ofy.query(Log.class).filter("type", Log.Type.NOTE).filter("log_type_id", contactId).filter("log_type_id_2", noteId).get();
-	}
-
-	// Get User Log
-
-	@PrePersist
-	private void PrePersist()
-	{
-		// Store Created Time
-		log_time = System.currentTimeMillis();
-
-	}
+    }
 
 }

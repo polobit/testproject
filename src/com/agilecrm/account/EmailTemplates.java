@@ -10,57 +10,61 @@ import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
 @XmlRootElement
-public class EmailTemplates {
-    
-	// Key
-	@Id
-	public Long id;
-	
-	@NotSaved(IfDefault.class)
-	public String subject = null;
-	
-	@NotSaved(IfDefault.class)
-	public String text = null;
-	
-	// Dao
-	private static ObjectifyGenericDao<EmailTemplates> dao = new ObjectifyGenericDao<EmailTemplates>(EmailTemplates.class);
-	
-	EmailTemplates(){
-		
-	}
-	
-	public EmailTemplates(String subject, String text){
-		this.subject = subject;
-		this.text = text;
-	}
-	
-	public static List<EmailTemplates> getAllEmailTemplates()
-	{
-		return dao.fetchAll();
-	}
-	
-	// Delete Contact
-	public void delete()
-	{
-		dao.delete(this);
+public class EmailTemplates
+{
 
-	}
+    // Key
+    @Id
+    public Long id;
 
-	public void save()
+    @NotSaved(IfDefault.class)
+    public String subject = null;
+
+    @NotSaved(IfDefault.class)
+    public String text = null;
+
+    // Dao
+    private static ObjectifyGenericDao<EmailTemplates> dao = new ObjectifyGenericDao<EmailTemplates>(
+	    EmailTemplates.class);
+
+    EmailTemplates()
+    {
+
+    }
+
+    public EmailTemplates(String subject, String text)
+    {
+	this.subject = subject;
+	this.text = text;
+    }
+
+    public static List<EmailTemplates> getAllEmailTemplates()
+    {
+	return dao.fetchAll();
+    }
+
+    // Delete Contact
+    public void delete()
+    {
+	dao.delete(this);
+
+    }
+
+    public void save()
+    {
+	dao.put(this);
+    }
+
+    public static EmailTemplates getEmailTemplate(Long id)
+    {
+	try
 	{
-		dao.put(this);
+	    return dao.get(id);
 	}
-	
-	public static EmailTemplates getEmailTemplate(Long id)
+	catch (Exception e)
 	{
-		try
-		{
-			return dao.get(id);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return null;
-		}
+	    e.printStackTrace();
+	    return null;
 	}
+    }
 }

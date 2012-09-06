@@ -14,46 +14,51 @@ import com.agilecrm.user.IMAPEmailPrefs;
 import com.googlecode.objectify.Key;
 
 @Path("/api/imap")
-public class IMAPAPI {
+public class IMAPAPI
+{
 
-	// IMAP CRUD
-	// This method is called if TEXT_PLAIN is request
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public IMAPEmailPrefs getIMAPPrefs() {
-		IMAPEmailPrefs prefs = IMAPEmailPrefs.getIMAPPrefs(AgileUser
-				.getCurrentAgileUser());
-		System.out.println(prefs);
-		return prefs;
-	}
+    // IMAP CRUD
+    // This method is called if TEXT_PLAIN is request
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public IMAPEmailPrefs getIMAPPrefs()
+    {
+	IMAPEmailPrefs prefs = IMAPEmailPrefs.getIMAPPrefs(AgileUser
+		.getCurrentAgileUser());
+	System.out.println(prefs);
+	return prefs;
+    }
 
-	@POST
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public IMAPEmailPrefs createIMAPEmailPrefs(IMAPEmailPrefs prefs) {
-		prefs.setAgileUser(new Key<AgileUser>(AgileUser.class,
-				AgileUser.getCurrentAgileUser().id));
-		prefs.save();
-		return prefs;
-	}
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public IMAPEmailPrefs createIMAPEmailPrefs(IMAPEmailPrefs prefs)
+    {
+	prefs.setAgileUser(new Key<AgileUser>(AgileUser.class, AgileUser
+		.getCurrentAgileUser().id));
+	prefs.save();
+	return prefs;
+    }
 
-	@PUT
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public IMAPEmailPrefs updateIMAPEmailPrefs(IMAPEmailPrefs prefs) {
-		prefs.setAgileUser(new Key<AgileUser>(AgileUser.class,
-				AgileUser.getCurrentAgileUser().id));
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public IMAPEmailPrefs updateIMAPEmailPrefs(IMAPEmailPrefs prefs)
+    {
+	prefs.setAgileUser(new Key<AgileUser>(AgileUser.class, AgileUser
+		.getCurrentAgileUser().id));
 
-		prefs.save();
-		return prefs;
-	}
+	prefs.save();
+	return prefs;
+    }
 
-	@DELETE
-	public void deleteIMAPEmailPrefs() {
-		IMAPEmailPrefs prefs = IMAPEmailPrefs.getIMAPPrefs(AgileUser
-				.getCurrentAgileUser());
-		if (prefs != null)
-			prefs.delete();
-	}
+    @DELETE
+    public void deleteIMAPEmailPrefs()
+    {
+	IMAPEmailPrefs prefs = IMAPEmailPrefs.getIMAPPrefs(AgileUser
+		.getCurrentAgileUser());
+	if (prefs != null)
+	    prefs.delete();
+    }
 
 }
