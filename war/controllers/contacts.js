@@ -324,26 +324,3 @@ var ContactsRouter = Backbone.Router.extend({
     },
     
 });
-
-
-function setupTags(cel) {
-    // Add Tags
-    var TagsCollection = Backbone.Collection.extend({
-        url: '/core/api/tags',
-        sortKey: 'tag',
-        parse: function (response) {
-            return response.tag;
-        }
-    });
-    var tagsCollection = new TagsCollection();
-    tagsCollection.fetch({
-        success: function () {
-            var tagsHTML = getTemplate('tagslist', tagsCollection.toJSON());
-            var len = $('#tagslist', cel).length;
-            $('#tagslist', cel).html(tagsHTML);
-
-            setupTagsTypeAhead(tagsCollection.models);
-        }
-    });
-
-}

@@ -13,7 +13,6 @@ function setupTagsTypeAhead(models) {
     });
 }
 
-
 function setupTags(cel) {
     // Add Tags
     var TagsCollection = Backbone.Collection.extend({
