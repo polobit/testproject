@@ -106,7 +106,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 	<br/><br/><br/>
 	<div class="row">
 
-		<div class='span5 offset4'>
+		<div class='span6 offset4'>
 			<div class="well">
 				 <h2>Sign In <br/><small>
 				 

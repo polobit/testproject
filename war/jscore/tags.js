@@ -18,10 +18,7 @@ function setupTags(cel) {
     // Add Tags
     var TagsCollection = Backbone.Collection.extend({
         url: '/core/api/tags',
-        sortKey: 'tag',
-        parse: function (response) {
-            return response.tag;
-        }
+        sortKey: 'tag'
     });
     var tagsCollection = new TagsCollection();
     tagsCollection.fetch({
