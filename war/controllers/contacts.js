@@ -67,8 +67,12 @@ var ContactsRouter = Backbone.Router.extend({
           var collection = this.contactsListView.collection;
           this.contactsListView.collection.fetch({
               success: function (collection, response) {
-                  setupTags(cel);
-                  setupViews(cel);
+                  
+            	  setupTags(cel);
+                  pieTags(cel);
+            	  setupViews(cel);
+                  
+                  
                 		  
                   // Set the cursor
                   //console.log("Cursor " + response.cursor);

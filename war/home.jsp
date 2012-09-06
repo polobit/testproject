@@ -570,7 +570,11 @@ font-weight: normal;
 	
 	<!-- Tag Handler -->
 	<link rel='stylesheet' type='text/css' href='<%=CSS_PATH%>css/jquery.taghandler-min.css'/>
+	
+	
+	<!--  
 	<link rel='stylesheet' type='text/css' href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery.ui.all.css'/>
+	-->
 	
 	<!--  Prettify -->
 	<link rel='stylesheet' type='text/css' href='<%=CSS_PATH%>css/prettify-min.css' />

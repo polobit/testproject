@@ -10,24 +10,22 @@ function showCalendar() {
         events: function (start, end, callback) {
             $.getJSON('/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000, function (doc) {
                 
-            	if(doc && doc.event)
+            	if(doc)
             	{
-            		// console.log(doc.event);
-            		
-            		// All day should be set to false
-            		$.each(doc.event, function(index, v)
+            	
+                	// All day should be set to false
+            		$.each(doc, function(index, v)
             		{
             			
-            			doc.event[index].allDay = (doc.event[index].allDay == 'true'); 
+            			doc[index].allDay = (doc[index].allDay == 'true'); 
             			
             		});
+            
+            		console.log(doc);
+                	
+                	
             		
-            		// Jersey sends it as a single element if there is only element though it is an array
-            		// We convert into array if there is only single element
-            		if(isArray(doc.event))
-            			callback(doc.event);
-            		else
-            			callback([doc.event]);
+            		callback(doc);
             	}
             });
         },

@@ -31,7 +31,10 @@ $(function(){
 });
 function fillIdAndName(formId, hiddenIdName, nameId){
 	 var json = App_Contacts.contactDetailView.model.toJSON();
- 	 var contact_name = '<span class="label">' + json.properties[0].value + " " + json.properties[1].value + '</span>';
- 	$('#' + formId).find( 'input[name=' + hiddenIdName + ']' ).val(json.id);
+ 	 //var contact_name = '<span class="label">' + json.properties[0].value + " " + json.properties[1].value + '</span>';
+ 	
+	var contact_name = json.properties[0].value + " " + json.properties[1].value;
+	 
+	 $('#' + formId).find( 'input[name=' + hiddenIdName + ']' ).val(json.id);
  	$('#' + nameId).val(contact_name);
 }
