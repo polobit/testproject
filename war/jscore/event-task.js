@@ -15,7 +15,6 @@ $(function(){
 	    	        	$('#taskForm').each (function(){
 	    	          	  this.reset();
 	    	          	});
-	    	        	 
 	    	        	var newTask = new Backbone.Model();
 	    	        	newTask.url = 'core/api/tasks';
 	    	        	newTask.save(json); 
@@ -88,7 +87,10 @@ $(function(){
 			    
 			    // Switch Task and Event: changing color and font-weight
 			    $("#task").click(function (e) {
-			    	highlightTask();	
+			     	highlightTask();
+			     	
+			        var	el = $("#taskForm");
+			    	agile_type_ahead("task_related_to", el, contacts_typeahead);
 			    });
 			    $("#event").click( function (e) {
 			    	highlightEvent();
@@ -103,20 +105,9 @@ $(function(){
 			        	completeTask(taskId, $(this))
 			        }
 			    });
-			    
-			    // Save task related to contact
-			    $('#contact-add-task').live('click', function(e){
-			    	e.preventDefault();
-			    	highlightTask();
-			        var json = App_Contacts.contactDetailView.model.toJSON();
-	            	var contact_name = json.properties[0].value + " " + json.properties[1].value;
-	            	$('#taskForm').find( 'input[name="contact_id"]' ).val(json.id);
-	            	$('#task_related_to').val(contact_name);
-	            	$("#activityModal").modal('show');
-			    });
 });
 
-// Hilight task
+// Highlight task
 function highlightTask(){
     $("#hiddentask").val("task");
     $("#task").css("color", "black");
@@ -125,7 +116,7 @@ function highlightTask(){
     $("#relatedEvent").css("display", "none");
 }
 
-// Hilight event
+// Highlight event
 function highlightEvent(){
 	$("#hiddentask").val("event");
     $("#event").css("color", "black");

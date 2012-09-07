@@ -1,13 +1,10 @@
 package com.agilecrm;
 
 import java.io.IOException;
-import java.util.Calendar;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.agilecrm.activities.Task;
 
 @SuppressWarnings("serial")
 public class AgileCRMServlet extends HttpServlet
@@ -42,15 +39,14 @@ public class AgileCRMServlet extends HttpServlet
 	 * end.getTimeInMillis()/1000, false, null, null); e.save();
 	 */
 
-	Calendar end = Calendar.getInstance();
-	end.add(Calendar.HOUR, 1);
-	Task task = new Task(Task.Type.CALL, end.getTimeInMillis() / 1000, 0L,
-		0L);
-	task.save();
-
-	end.add(Calendar.DATE, 1);
-	task = new Task(Task.Type.CALL, end.getTimeInMillis() / 1000, 0L, 0L);
-	task.save();
+	/*
+	 * Calendar end = Calendar.getInstance(); end.add(Calendar.HOUR, 1);
+	 * Task task = new Task(Task.Type.CALL, end.getTimeInMillis() / 1000,
+	 * 0L, 0L); task.save();
+	 * 
+	 * end.add(Calendar.DATE, 1); task = new Task(Task.Type.CALL,
+	 * end.getTimeInMillis() / 1000, 0L, 0L); task.save();
+	 */
 
 	// EmailTemplates emailTemplate = new EmailTemplates("test subject",
 	// "test uasdfasdf");

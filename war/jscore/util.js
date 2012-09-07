@@ -79,7 +79,10 @@ function btnDropDown(contact_id, workflow_id) {
 function delete_contact_property(contact, propertyName) {
 	for ( var index = 0; index < contact.properties.length; index++) {
 		if (contact.properties[index].name == propertyName)
-			delete contact.properties[index];
+		{	// delete contact.properties[index];
+			// Arrays have to spliced - not deleted
+			contact.properties.splice(index--, 1);
+		}
 	}
 	return contact;
 }

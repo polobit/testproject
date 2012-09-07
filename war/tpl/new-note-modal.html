@@ -1,5 +1,5 @@
 <!-- New (Note) Modal views -->
-	<div class="modal hide fade" id="noteModal">
+	<div class="modal hide fade note-modal" id="noteModal">
 		<div class="modal-header">
 			<button class="close" data-dismiss="modal">x</button>
 			<h3>Add Note</h3>
@@ -23,9 +23,14 @@
 						</div>
 					</div>
 					<div class="control-group">
-                    	<label class="control-label"><b>About:</b></label>
+                    	<label class="control-label"><b>Related To:</b></label>
 						<div class="controls">
-							<input name="about" type="text" id="about" placeholder="About" value=""/>
+							<div>
+								<div class="pull-left" style="margin-left:-14px">
+									<ul name= "contacts" class= "tags" ></ul>
+								</div>
+									<input type="text" id = "note_related_to" class="typeahead typeahead_contacts" data-provide="typeahead" data-mode="multiple" size="40"/>
+							</div>
 						</div>
 					</div>					
 				</fieldset>
