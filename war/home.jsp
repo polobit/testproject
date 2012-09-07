@@ -557,37 +557,10 @@ font-weight: normal;
 		head.js('js-all-min.js');
 	});
 	
-	
 	</script>
 	
-	
-	<!-- File upload js -->
-	<link rel='stylesheet' type='text/css' href='<%=CSS_PATH%>css/fileuploader-min.css' />
-	
-	<!-- <link rel="stylesheet" href="css/font-awesome.css"> -->
-	<link rel='stylesheet' type='text/css' href='<%=CSS_PATH%>css/fullcalendar-min.css' />
-	<link rel='stylesheet' type='text/css' href='<%=CSS_PATH %>css/fullcalendar.print-min.css' media='print' />
-	
-	<!-- 
-	<link rel='stylesheet' type='text/css' href='<%=CSS_PATH%>css/jquery.taghandler-min.css'/> 
-	<link rel='stylesheet' type='text/css' href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery.ui.all.css'/>
-	-->
-	
-	<!--  Prettify -->
-	<link rel='stylesheet' type='text/css' href='<%=CSS_PATH%>css/prettify-min.css' />
-	
-	<!--  Date & Time Picker -->
-	<link rel='stylesheet' type='text/css' href='<%=CSS_PATH%>css/datepicker-min.css' />
-	<link rel='stylesheet' type='text/css' href='<%=CSS_PATH%>css/timepicker-min.css' />
-	
-	<!-- Notify Plugin -->
-	<link rel='stylesheet' type='text/css' href='<%=CSS_PATH%>css/bootstrap-notify-min.css' />
-	
-	<!--  HTML Editor -->
-	<link rel='stylesheet' type='text/css' href='<%=CSS_PATH%>css/bootstrap-wysihtml5-min.css' />
-	
-	<!--  Multiselect for Custom views add -->
-	<link rel='stylesheet' type='text/css' href='<%=CSS_PATH%>css/multi-select.css' />
+	<!-- Unified CSS for All Lib -->
+	<link rel='stylesheet' type='text/css' href='<%=CSS_PATH%>css/lib.css' />
 	
 </body>
 </html>
