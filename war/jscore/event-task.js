@@ -85,6 +85,8 @@ $(function(){
 			    	//$('.timepicker').val("05:30");		    	
 			    });
 			    
+			    
+			    
 			    // Switch Task and Event: changing color and font-weight
 			    $("#task").click(function (e) {
 			     	highlightTask();

@@ -57,6 +57,10 @@ public class Contact
     // Creator
     public String creator = "";
 
+    // Stars
+    @NotSaved(IfDefault.class)
+    public Short star_value = 0;
+
     // Dao
     private static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(
 	    Contact.class);

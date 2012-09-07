@@ -25,12 +25,11 @@
 
 <% 
 
-String CSS_PATH = "/";
-/* String CSS_PATH = "https://d1uqbqkiqv27mb.cloudfront.net/panel/"; */
+// String CSS_PATH = "/";
+String CSS_PATH = "//d1uqbqkiqv27mb.cloudfront.net/panel/";
 %>
 	
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
-<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-responsive.min.css" media="screen, projection" />
 
 <style>
 @media (min-width: 900px) {
@@ -40,7 +39,7 @@ body {
 	}
 	
 .navbar-search{
- 	padding-left: 10%
+ 	padding-left: 5%
 }
 	
 }
@@ -524,7 +523,11 @@ font-weight: normal;
 	</div>
 
 	<div class="container">
-		<div id="content" class="" ></div>
+		<div id="content" class="" >
+		
+		<img class="loading" style="padding-right:5px" src= "img/21-0.gif"></img>
+		
+		</div>
 	</div>
 	
 	<!--  Notifications -->
@@ -540,12 +543,15 @@ font-weight: normal;
 <script src='lib/headjs-min.js'></script>
 	
 	<script>
-	//var LIB_PATH = "https://d1uqbqkiqv27mb.cloudfront.net/panel/js/";
-	var LIB_PATH = "/";
+	var LIB_PATH = "//d1uqbqkiqv27mb.cloudfront.net/panel/js/";
+	// var LIB_PATH = "/";
+	
+	var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
+	// var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
 	
 	<!-- JQUery Core and UI CDN -->	
 	<!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->
-	head.js(LIB_PATH + 'lib/jquery.min.js', LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH +  'lib/bootstrap.min.js', LIB_PATH + 'lib/jquery.validate.min.js', LIB_PATH + 'lib/bootstrap-datepicker-min.js', LIB_PATH + 'lib/bootstrap-timepicker-min.js');
+	head.js(JQUERY_LIB_PATH, LIB_PATH +  'lib/bootstrap.min.js', LIB_PATH + 'lib/jquery.validate.min.js', LIB_PATH + 'lib/bootstrap-datepicker-min.js', LIB_PATH + 'lib/bootstrap-timepicker-min.js');
 	
 	<!-- Backbone -->
 	head.js(LIB_PATH + 'lib/underscore-min.js', LIB_PATH + 'lib/backbone-min.js');
@@ -555,6 +561,8 @@ font-weight: normal;
 	
 	head.ready(function() {
 		head.js('js-all-min.js');
+		
+		$('#content').html('ready');
 	});
 	
 	</script>

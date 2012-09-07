@@ -21,7 +21,7 @@ function showCalendar() {
             			
             		});
             
-            		console.log(doc);
+            		// console.log(doc);
                 	
                 	
             		

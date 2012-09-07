@@ -14,7 +14,7 @@ var BaseCollection = Backbone.Collection.extend({
         return item.get('id');
     },
     parse: function (response) {
-        console.log("parsing " + this.restKey + " " + response[this.restKey]);
+        // console.log("parsing " + this.restKey + " " + response[this.restKey]);
         
         if (response && response[this.restKey]) 
         	return response[this.restKey];
