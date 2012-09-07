@@ -17,162 +17,192 @@ import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
 @XmlRootElement
-public class Task {
+public class Task
+{
 
-	// Category - Call etc.
-	public enum Type {
-		CALL, EMAIL, FOLLOW_UP, MEETING, MILESTONE, SEND, TWEET
-	};
+    // Category - Call etc.
+    public enum Type
+    {
+	CALL, EMAIL, FOLLOW_UP, MEETING, MILESTONE, SEND, TWEET
+    };
 
-	// Priority Type - Default
-	public enum PriorityType {
-		DEFAULT, HIGH, MEDIUM, LOW
-	};
+    // Priority Type - Default
+    public enum PriorityType
+    {
+	DEFAULT, HIGH, MEDIUM, LOW
+    };
 
-	// Key
-	@Id
-	public Long id;
-	
-	private List<Key<Contact>> related_contacts = new ArrayList<Key<Contact>>();
+    // Key
+    @Id
+    public Long id;
 
-	// Due
-	public Long due = 0L;
+    private List<Key<Contact>> related_contacts = new ArrayList<Key<Contact>>();
 
-	// Category - Call etc.
-	public Type type;
+    // Due
+    public Long due = 0L;
 
-	// If the task has been completed
-	public boolean is_complete = false;
-	
-	// List of contact id's
-	@NotSaved(IfDefault.class)
-	@Embedded
-	public List<String> contacts = null;
-	
-	// Owner
-	private Key<AgileUser> owner = null;
+    // Category - Call etc.
+    public Type type;
 
-	// Dao
-	private static ObjectifyGenericDao<Task> dao = new ObjectifyGenericDao<Task>(
-			Task.class);
+    // If the task has been completed
+    public boolean is_complete = false;
 
-	// Priority Type - Added - Ram - 08/02/12
-	public PriorityType priority_type;
+    // List of contact id's
+    @NotSaved(IfDefault.class)
+    @Embedded
+    public List<String> contacts = null;
 
-	// Subject - Added - Ram - 08/02/12
-	@NotSaved(IfDefault.class)
-	public String subject = null;
+    // Owner
+    private Key<AgileUser> owner = null;
 
-	Task() {
+    // Dao
+    private static ObjectifyGenericDao<Task> dao = new ObjectifyGenericDao<Task>(
+	    Task.class);
 
+    // Priority Type - Added - Ram - 08/02/12
+    public PriorityType priority_type;
+
+    // Subject - Added - Ram - 08/02/12
+    @NotSaved(IfDefault.class)
+    public String subject = null;
+
+    Task()
+    {
+
+    }
+
+    public Task(Type type, Long due, Long agileUserId)
+    {
+	// Get Current Agile User
+	this.type = type;
+	this.due = due;
+
+	if (agileUserId != 0)
+	    this.owner = new Key<AgileUser>(AgileUser.class, agileUserId);
+    }
+
+    @PrePersist
+    private void PrePersist()
+    {
+
+	// Create list of Contact keys
+	for (String contact_id : this.contacts)
+	{
+	    this.related_contacts.add(new Key<Contact>(Contact.class, Long
+		    .parseLong(contact_id)));
 	}
+    }
 
-	public Task(Type type, Long due, Long agileUserId) {
-		// Get Current Agile User
-		this.type = type;
-		this.due = due;
-
-		if (agileUserId != 0)
-			this.owner = new Key<AgileUser>(AgileUser.class, agileUserId);
+    // Get Event
+    public static Task getTask(Long id)
+    {
+	try
+	{
+	    return dao.get(id);
 	}
-	
-	@PrePersist
-	private void PrePersist(){
-		
-		// Create list of Contact keys
-		for (String contact_id : this.contacts) {
-			this.related_contacts.add(new Key<Contact>(Contact.class, Long
-					.parseLong(contact_id)));
-		}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
 	}
+    }
 
-	// Get Event
-	public static Task getTask(Long id) {
-		try {
-			return dao.get(id);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+    // Get Tasks
+    public static List<Task> getOverdueTasks()
+    {
+	try
+	{
+	    // Get Today's date
+	    DateUtil startDateUtil = new DateUtil();
+	    Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
+
+	    System.out.println("check for " + startTime);
+	    // Get tasks before today's time and which are not completed
+	    return dao.ofy().query(Task.class).filter("due <=", startTime)
+		    .filter("is_complete", false).list();
 	}
-
-	// Get Tasks
-	public static List<Task> getOverdueTasks() {
-		try {
-			// Get Today's date
-			DateUtil startDateUtil = new DateUtil();
-			Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
-
-			System.out.println("check for " + startTime);
-			// Get tasks before today's time and which are not completed
-			return dao.ofy().query(Task.class).filter("due <=", startTime)
-					.filter("is_complete", false).list();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
 	}
+    }
 
-	// Get All Tasks
-	public static List<Task> getAllTasks() {
-		try {
-			return dao.ofy().query(Task.class).list();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+    // Get All Tasks
+    public static List<Task> getAllTasks()
+    {
+	try
+	{
+	    return dao.ofy().query(Task.class).list();
 	}
-
-	// Get All Tasks
-	public static List<Task> getAllPendingTasks() {
-		try {
-			return dao.ofy().query(Task.class).filter("is_complete", false)
-					.list();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
 	}
+    }
 
-	// Get Event
-	public static List<Task> getPendingTasks(int numDays) {
-		try {
-			// Get Today's date
-			DateUtil startDateUtil = new DateUtil();
-			Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
-
-			// Get Date after days days
-			DateUtil endDateUtil = new DateUtil();
-			Long endTime = endDateUtil.addDays(numDays + 1).toMidnight()
-					.getTime().getTime() / 1000;
-
-			System.out.println("check for " + startTime + " " + endTime);
-
-			// Get end start and endtime
-			return dao.ofy().query(Task.class).filter("due >=", startTime)
-					.filter("due <=", endTime).filter("is_complete", false)
-					.list();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+    // Get All Tasks
+    public static List<Task> getAllPendingTasks()
+    {
+	try
+	{
+	    return dao.ofy().query(Task.class).filter("is_complete", false)
+		    .list();
 	}
-
-	// Delete Contact
-	public void delete() {
-		dao.delete(this);
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
 	}
+    }
 
-	// Save Contact
-	public void save() {
+    // Get Event
+    public static List<Task> getPendingTasks(int numDays)
+    {
+	try
+	{
+	    // Get Today's date
+	    DateUtil startDateUtil = new DateUtil();
+	    Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
 
-		dao.put(this);
+	    // Get Date after days days
+	    DateUtil endDateUtil = new DateUtil();
+	    Long endTime = endDateUtil.addDays(numDays + 1).toMidnight()
+		    .getTime().getTime() / 1000;
+
+	    System.out.println("check for " + startTime + " " + endTime);
+
+	    // Get end start and endtime
+	    return dao.ofy().query(Task.class).filter("due >=", startTime)
+		    .filter("due <=", endTime).filter("is_complete", false)
+		    .list();
 	}
-
-	// Save Contact
-	public void completeTask() {
-		is_complete = true;
-		save();
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
 	}
+    }
+
+    // Delete Contact
+    public void delete()
+    {
+	dao.delete(this);
+    }
+
+    // Save Contact
+    public void save()
+    {
+
+	dao.put(this);
+    }
+
+    // Save Contact
+    public void completeTask()
+    {
+	is_complete = true;
+	save();
+    }
 
 }

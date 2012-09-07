@@ -14,101 +14,114 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.NotSaved;
-import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.condition.IfDefault;
 
 @XmlRootElement
-public class Note {
-	// Key
-	@Id
-	public Long id;
+public class Note
+{
+    // Key
+    @Id
+    public Long id;
 
-	private List<Key<Contact>> related_contacts = new ArrayList<Key<Contact>>();
+    private List<Key<Contact>> related_contacts = new ArrayList<Key<Contact>>();
 
-	// Date
-	public Long created_time = 0L;
+    // Date
+    public Long created_time = 0L;
 
-	@NotSaved(IfDefault.class)
-	public String subject = null;
+    @NotSaved(IfDefault.class)
+    public String subject = null;
 
-	public String note;
+    public String note;
 
-	// List of contact id's
-	@NotSaved(IfDefault.class)
-	@Embedded
-	public List<String> contacts = null;
+    // List of contact id's
+    @NotSaved(IfDefault.class)
+    @Embedded
+    public List<String> contacts = null;
 
-	// Dao
-	private static ObjectifyGenericDao<Note> dao = new ObjectifyGenericDao<Note>(
-			Note.class);
+    // Dao
+    private static ObjectifyGenericDao<Note> dao = new ObjectifyGenericDao<Note>(
+	    Note.class);
 
-	public Note() {
+    public Note()
+    {
+
+    }
+
+    public Note(String subject, String note)
+    {
+	this.note = note;
+	if (subject != null)
+	    this.subject = subject;
+    }
+
+    @PrePersist
+    private void PrePersist()
+    {
+	// Create list of contact keys
+	for (String contact_id : this.contacts)
+	{
+	    this.related_contacts.add(new Key<Contact>(Contact.class, Long
+		    .parseLong(contact_id)));
+	}
+
+	// Store Created Time
+	if (created_time == 0L)
+	    created_time = System.currentTimeMillis() / 1000;
+    }
+
+    public static List<Note> getNotes(Long contactId) throws Exception
+    {
+	Objectify ofy = ObjectifyService.begin();
+	Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
+
+	return ofy.query(Note.class).ancestor(contactKey).list();
+    }
+
+    // Return note from contact id and Note Id
+    public static Note getNote(Long contactId, Long noteId)
+    {
+	Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
+
+	try
+	{
+	    return dao.get(new Key<Note>(contactKey, Note.class, noteId));
+	}
+	catch (EntityNotFoundException e)
+	{
+	    e.printStackTrace();
 
 	}
 
-	public Note(String subject, String note) {
-		this.note = note;
-		if (subject != null)
-			this.subject = subject;
-	}
-	
-	@PrePersist
-	private void PrePersist(){
-		// Create list of contact keys
-		for (String contact_id : this.contacts) {
-			this.related_contacts.add(new Key<Contact>(Contact.class, Long
-					.parseLong(contact_id)));
-		}
-		
-		// Store Created Time
-		if (created_time == 0L)	
-			created_time = System.currentTimeMillis()/1000;
-	}
+	return null;
+    }
 
-	public static List<Note> getNotes(Long contactId) throws Exception {
-		Objectify ofy = ObjectifyService.begin();
-		Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
+    public static void deleteAllNotes(Long contactId)
+    {
+	Objectify ofy = ObjectifyService.begin();
+	Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
 
-		return ofy.query(Note.class).ancestor(contactKey).list();
-	}
+	Iterable<Key<Note>> keys = ofy.query(Note.class).ancestor(contactKey)
+		.fetchKeys();
+	ofy.delete(keys);
+    }
 
-	// Return note from contact id and Note Id
-	public static Note getNote(Long contactId, Long noteId) {
-		Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
+    public static void deleteNote(Long noteId, Long contactId)
+    {
+	Objectify ofy = ObjectifyService.begin();
+	Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
+	Key<Note> noteKey = new Key<Note>(contactKey, Note.class, noteId);
+	ofy.delete(noteKey);
+    }
 
-		try {
-			return dao.get(new Key<Note>(contactKey, Note.class, noteId));
-		} catch (EntityNotFoundException e) {
-			e.printStackTrace();
+    @Override
+    public String toString()
+    {
+	return "id: " + id + " created_time: " + created_time + " subj"
+		+ subject + " note: " + note;
+    }
 
-		}
-
-		return null;
-	}
-
-	public static void deleteAllNotes(Long contactId) {
-		Objectify ofy = ObjectifyService.begin();
-		Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
-
-		Iterable<Key<Note>> keys = ofy.query(Note.class).ancestor(contactKey)
-				.fetchKeys();
-		ofy.delete(keys);
-	}
-
-	public static void deleteNote(Long noteId, Long contactId) {
-		Objectify ofy = ObjectifyService.begin();
-		Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
-		Key<Note> noteKey = new Key<Note>(contactKey, Note.class, noteId);
-		ofy.delete(noteKey);
-	}
-
-	@Override
-	public String toString() {
-		return "id: " + id + " created_time: " + created_time + " subj"
-				+ subject + " note: " + note;
-	}
-
-	public void save() {
-		dao.put(this);
-	}
+    public void save()
+    {
+	dao.put(this);
+    }
 }
