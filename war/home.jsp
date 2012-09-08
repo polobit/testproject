@@ -11,7 +11,7 @@
 <head>
 <meta charset="utf-8">
 <title>Agile CRM Dashboard</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
  <meta name="globalsign-domain-verification" content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx"/>
@@ -21,12 +21,11 @@
 	// Download the template the user likes
 	String template = UserPrefs.getCurrentUserPrefs().template;
 	// template = "default";
-	%>
+%>
 
 <% 
-
-// String CSS_PATH = "/";
-String CSS_PATH = "//d1uqbqkiqv27mb.cloudfront.net/panel/";
+String CSS_PATH = "/";
+// String CSS_PATH = "//d1uqbqkiqv27mb.cloudfront.net/panel/";
 %>
 	
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
