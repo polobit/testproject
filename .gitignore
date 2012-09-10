@@ -10,4 +10,6 @@ war/admin-settings.js
 util
 .externalToolBuilders
 bin
-/war/continue.js
+war/continue.js
+.google_apis
+*.DS_STORE
