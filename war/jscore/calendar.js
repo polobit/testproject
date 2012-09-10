@@ -11,8 +11,7 @@ function showCalendar() {
             $.getJSON('/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000, function (doc) {
                 
             	if(doc)
-            	{
-            	
+            	{           	
                 	// All day should be set to false
             		$.each(doc, function(index, v)
             		{
