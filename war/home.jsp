@@ -434,7 +434,7 @@ font-weight: normal;
 
 	<div class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
-			<div class="container">
+			<div class="container-fluid">
 				<a class="btn btn-navbar" data-toggle="collapse"
 					data-target=".nav-collapse"> 
 					<span class="icon-bar"></span>
@@ -521,7 +521,7 @@ font-weight: normal;
 		</div>
 	</div>
 
-	<div class="container">
+	<div class="container-fluid">
 		<div id="content" class="" >
 		
 		<img class="loading" style="padding-right:5px" src= "img/21-0.gif"></img>
