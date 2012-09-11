@@ -54,6 +54,9 @@ public class Widget
     @Parent
     private Key<AgileUser> user;
 
+    @NotSaved
+    public boolean is_added = false;
+
     public static List<Widget> DefaultWidgets = null;
 
     Widget()
@@ -74,7 +77,7 @@ public class Widget
 		AgileUser.getCurrentAgileUser().id);
     }
 
-    public static List<Widget> getDefaultWidgets()
+    public static List<Widget> getAvailableWidgets()
     {
 
 	if (DefaultWidgets == null)
@@ -102,12 +105,28 @@ public class Widget
 	    System.out.println(DefaultWidgets + "Blah Blah");
 	}
 
-	return DefaultWidgets;
+	@SuppressWarnings("unchecked")
+	List<Widget> availableWidgets = (List<Widget>) ((ArrayList<Widget>) DefaultWidgets)
+		.clone();
+
+	// Populate Widgets if they have already been added
+	for (Widget widget : availableWidgets)
+	{
+	    // Check if it is already added
+	    Widget currentWidget = getWidget(widget.name);
+
+	    if (currentWidget != null)
+		widget.is_added = true;
+	}
+
+	return availableWidgets;
     }
 
     public static List<Widget> getWidgetsForCurrentUser()
     {
+
 	Objectify ofy = ObjectifyService.begin();
+
 	Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class,
 		AgileUser.getCurrentAgileUser().id);
 
@@ -123,6 +142,25 @@ public class Widget
 	    Key<Widget> widgetKey = new Key<Widget>(userKey, Widget.class, id);
 
 	    return dao.get(widgetKey);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    public static Widget getWidget(String name)
+    {
+	try
+	{
+	    Objectify ofy = ObjectifyService.begin();
+
+	    Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class,
+		    AgileUser.getCurrentAgileUser().id);
+
+	    return ofy.query(Widget.class).ancestor(userKey)
+		    .filter("name", name).get();
 	}
 	catch (Exception e)
 	{

@@ -6,7 +6,7 @@ var WorkflowsRouter = Backbone.Router.extend({
         "workflows": "workflows",
         "workflow-add": "workflowAdd",
         "workflow/:id": "workflowEdit",
-        "logs-to-campaign/:id": "logsToCampaign",
+        "workflows/logs/:id": "logsToCampaign",
           },
             
       workflows: function () {

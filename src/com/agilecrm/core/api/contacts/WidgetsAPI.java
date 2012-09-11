@@ -26,9 +26,9 @@ public class WidgetsAPI
     @Path("default")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Widget> getDefaultWidgets()
+    public List<Widget> getAvailableWidgets()
     {
-	return Widget.getDefaultWidgets();
+	return Widget.getAvailableWidgets();
     }
 
     @GET
