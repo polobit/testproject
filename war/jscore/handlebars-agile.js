@@ -20,13 +20,13 @@ function getTemplate(templateName, context, download)
 
 	// If starts with settings
 	if (templateName.indexOf("settings") == 0) {
-		templateHTML = downloadSynchronously("settings.js");
+		templateHTML = downloadSynchronously("tpl/min/settings.js");
 	}
 	if (templateName.indexOf("admin-settings") == 0) {
-		templateHTML = downloadSynchronously("admin-settings.js");
+		templateHTML = downloadSynchronously("tpl/min/admin-settings.js");
 	}
 	if (templateName.indexOf("continue") == 0) {
-		templateHTML = downloadSynchronously("continue.js");
+		templateHTML = downloadSynchronously("tpl/min/continue.js");
 	}
 
 	if (templateHTML) {

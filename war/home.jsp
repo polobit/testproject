@@ -461,7 +461,7 @@ font-weight: normal;
 					%>
 					
 					<form id="searchForm" class=" navbar-search">
-                    <input id="searchText" type="text" typeahead_contacts" data-provide="typeahead" class="typeahead typeahead_contacts search-query" placeholder="Search"/>
+                    <input id="searchText" type="text" data-provide="typeahead" class="typeahead typeahead_contacts search-query" placeholder="Search"/>
               		</form>	
 
 					<ul class="nav pull-right">
@@ -559,7 +559,7 @@ font-weight: normal;
 	head.js(LIB_PATH + 'lib/handlebars-1.0.0.beta.6-min.js');
 	
 	head.ready(function() {
-		head.js('js-all-min.js');
+		head.js('jscore/min/js-all-min.js');
 		
 		$('#content').html('ready');
 	});
