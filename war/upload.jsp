@@ -11,7 +11,13 @@
 <title>Upload Image</title>
 <link rel="stylesheet" type="text/css" href="css/bootstrap-<%= UserPrefs.getCurrentUserPrefs().template%>.min.css" />
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-
+<script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
+<script type="text/javascript">
+jQuery.validator.setDefaults({
+	debug: true,
+	success: "valid"
+});;
+</script>
 <script type="text/javascript">
 
 //Get URL
@@ -59,17 +65,31 @@ function returnBack()
 
 $(function()
 {
-	// Check if this was referred back again
-	var key = getUrlVars()["key"];
-	console.log("Key" + key);
-	if(key != undefined)
-	{
-		returnBack();
-	}	
+	 $("#submit").click(function (event){
+		 event.preventDefault();
+		   if(validated()){
+
+				// Check if this was referred back again
+				var key = getUrlVars()["key"];
+				console.log("Key" + key);
+				if(key != undefined)
+				{
+					returnBack();
+				}
+			   
+		   } 
+	 });
 });
+function validated(){
+    $("#form").validate({
+        rules: {
+        		fileextension:{required:true,accept:"png|jpg|jpeg|gif"}
+               }
+   		});
+    return $("#form").valid();
+    } 
 
-
-function validateFileExtension()
+/*function validateFileExtension()
 {
 	var input = $('#fileextension').val();
 	$('#fileerror').hide();
@@ -103,9 +123,16 @@ function validateFileExtension()
 		}
 	
 	return true;
-}
+}*/
 
 </script>
+<style>
+	label.error {
+		padding-left: 16px;
+		color:red;
+		margin-left: .3em;
+	}
+</style>
 
 </head>
 
@@ -122,13 +149,12 @@ function validateFileExtension()
 <p>For best results, we recommend you upload png files. You can also upload jpg or gif files also.</i></p>
 
 <br/>
-<form action="https://agilecrm.s3.amazonaws.com/" method="post" enctype="multipart/form-data" onsubmit="return validateFileExtension();""> 
+<form id="form" action="https://agilecrm.s3.amazonaws.com/" method="post" enctype="multipart/form-data" > 
 <div id='fileerror' style='display:none;'><div class='alert alert-error'><a class='close' data-dismiss='alert' href='#'>×</a><p></p></div></div>
 
     
 	 <input type="hidden" name="key" value="panel/uploaded-logo/<%=new Date().getTime()%>" /> 
-	 
-</scrpit>	
+
 
 <input type="hidden" name="acl" value="public-read" /> 
 <input type="hidden" name="content-type" value="image/*" />
@@ -139,9 +165,9 @@ function validateFileExtension()
 
 <input type="hidden" name="policy" value="ewogICJleHBpcmF0aW9uIjogIjIwMjAtMDEtMDFUMTI6MDA6MDAuMDAwWiIsCiAgImNvbmRpdGlvbnMiOiBbCiAgICB7ImJ1Y2tldCI6ICJhZ2lsZWNybSIgfSwKICAgIHsiYWNsIjogInB1YmxpYy1yZWFkIiB9LAogICAgIFsic3RhcnRzLXdpdGgiLCAiJGtleSIsICJwYW5lbC91cGxvYWRlZC1sb2dvIl0sCiAgICAgeyJzdWNjZXNzX2FjdGlvbl9yZWRpcmVjdCI6ICJodHRwOi8vbG9jYWxob3N0Ojg4ODgvdXBsb2FkLmpzcCJ9LAogICAgIFsic3RhcnRzLXdpdGgiLCAiJENvbnRlbnQtVHlwZSIsICJpbWFnZS8iXSwKICBdCn0=" />
 <input type="hidden" name="signature" value="3RcvbEnh5oQncA7CbR3WA0qFyKY=" />
-<input name="file" id='fileextension' type="file" />
+<input name="fileextension" id='fileextension' type="file" />
 <br/><br/>
-<input name="submit" value="Upload" class='submit btn btn-primary' type="submit" /> 
+<input name="submit" id="submit" value="Upload" class='submit btn btn-primary' type="submit" /> 
 </form> 
 </div>
 

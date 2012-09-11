@@ -1,0 +1,43 @@
+<script id="help-email-form-template" type="text/html">
+	<div class="span8">
+		<div class="well">
+			<form id='helpemailForm' name="helpemailForm" class="form-horizontal">
+				<fieldset>
+					<legend>Mail For Help</legend>
+					<div class="control-group">
+                    	<label class="control-label">From</label>
+						<div class="controls">
+							<input type="text" class="span4" id="from" name="from" />
+						</div>
+					</div>
+
+					<div class="control-group">
+                    	<label class="control-label">To</label>
+						<div class="controls ">
+                            <select name="to"><option value="sukanya@invox.com">Admin</option><option value="sukanya@invox.com">Support</option><option value="praveen@invox.com">Sales</option></select>
+						</div>
+					</div>
+					
+					<div class="control-group">
+                    	<label class="control-label">Subject</label>
+						<div class="controls">
+							<input type="text" class="span4" name="subject" id="subject" placeholder="" />
+						</div>
+					</div>
+					
+					<div class="control-group">
+                    	<label class="control-label">Body</label>
+						<div class="controls">
+							<textarea class="span4" rows="8" name="body" id="body" placeholder="Description"></textarea>
+						</div>
+					</div>					
+				
+					<div class="form-actions">          
+						<a href="#contact" class="btn ">Close</a> 
+          				<a href="#"  id="helpEmail" class="btn btn-primary">Send</a>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</script>

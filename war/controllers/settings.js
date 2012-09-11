@@ -9,6 +9,9 @@ var SettingsRouter = Backbone.Router.extend({
         "email-template-add": "emailTemplateAdd",
         "email": "email",
         "notification-prefs":"notificationPrefs",
+        
+        /* contact-us help email */
+        "contact-us":"contactUsEmail"
     },
     
     settings: function () {
@@ -119,6 +122,10 @@ var SettingsRouter = Backbone.Router.extend({
     	});
     	
     	$('#content').html(view.render().el);
+    },
+    contactUsEmail:function(){
+    	$("#content").html(getTemplate("help-email-form"),{});
     }
+    
     
 });

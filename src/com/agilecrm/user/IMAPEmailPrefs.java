@@ -1,9 +1,14 @@
 package com.agilecrm.user;
 
 import javax.persistence.Id;
+import javax.persistence.PostLoad;
+import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.codec.DecoderException;
+
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.util.Util;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -103,6 +108,20 @@ public class IMAPEmailPrefs
     public void setAgileUser(Key<AgileUser> agileUser)
     {
 	this.agileUser = agileUser;
+    }
+
+    @PrePersist
+    private void PrePersist()
+    {
+	this.password = Util.encrypt(password);
+
+    }
+
+    @PostLoad
+    private void PostLoad() throws DecoderException
+    {
+	this.password = Util.decrypt(this.password);
+
     }
 
 }
