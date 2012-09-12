@@ -55,7 +55,7 @@ public class Widget
     private Key<AgileUser> user;
 
     @NotSaved
-    public boolean is_added = false;
+    public boolean is_added = true;
 
     public static List<Widget> DefaultWidgets = null;
 
@@ -115,8 +115,8 @@ public class Widget
 	    // Check if it is already added
 	    Widget currentWidget = getWidget(widget.name);
 
-	    if (currentWidget != null)
-		widget.is_added = true;
+	    if (currentWidget == null)
+		widget.is_added = false;
 	}
 
 	return availableWidgets;

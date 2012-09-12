@@ -113,15 +113,15 @@ public class IMAPEmailPrefs
     @PrePersist
     private void PrePersist()
     {
+	// Encrypt password while saving
 	this.password = Util.encrypt(password);
-
     }
 
     @PostLoad
     private void PostLoad() throws DecoderException
     {
+	// Decrypt password
 	this.password = Util.decrypt(this.password);
-
     }
 
 }

@@ -44,7 +44,7 @@ function loadWidgets(el, contact, user) {
 						// Set the data element in the div
 						// We can retrieve this in get plugin prefs
 						
-						$('#' + model.get('name')).data('model', model);						
+						$('#' + model.get('name'), el).data('model', model);						
 				}, this);
         	
             // Make widgets sortable

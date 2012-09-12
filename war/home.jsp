@@ -24,8 +24,8 @@
 %>
 
 <% 
-String CSS_PATH = "/";
-// String CSS_PATH = "//d1uqbqkiqv27mb.cloudfront.net/panel/";
+// String CSS_PATH = "/";
+String CSS_PATH = "//d13pkp0ru5xuwf.cloudfront.net/";
 %>
 	
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
@@ -536,13 +536,13 @@ font-weight: normal;
 	<div class='notifications bottom-right'></div>
 	
 	<!-- Templates -->
-	<%@ include file="tpl.js" %>	
+	<%@ include file="tpl/min/tpl.js" %>	
 	
 	
 <script src='lib/headjs-min.js'></script>
 	
 	<script>
-	var LIB_PATH = "//d1uqbqkiqv27mb.cloudfront.net/panel/js/";
+	var LIB_PATH = "//d13pkp0ru5xuwf.cloudfront.net/js/";
 	// var LIB_PATH = "/";
 	
 	var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
@@ -558,7 +558,7 @@ font-weight: normal;
 	<!-- Handle bars -->
 	head.js(LIB_PATH + 'lib/handlebars-1.0.0.beta.6-min.js');
 	
-	head.ready(function() {
+	head.ready(function() {	
 		head.js('jscore/min/js-all-min.js');
 		
 		$('#content').html('ready');
