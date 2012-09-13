@@ -2,7 +2,7 @@ $(function()
 {
 	// Collapses the menu on a mobile device
 	// Without this, the user has to click the collapsible button to remove the menu
-	$('.agile-menu > li').click(function(e){
+/*$('.agile-menu > li').click(function(e){
 	    
 		console.log("Collapsing before ul");
 		
@@ -14,5 +14,6 @@ $(function()
 	    	  //$('.nav-collapse').collapse('hide');
 	      }
 	     });
+	    */
 });
 		
