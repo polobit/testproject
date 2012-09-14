@@ -132,27 +132,7 @@ var ContactsRouter = Backbone.Router.extend({
             	
                 loadTimelineDetails(el, id);
                 
-                head.js('lib/jquery.raty.min.js', function(){
-                	
-                	var contact_model =  App_Contacts.contactDetailView.model;
-                	// Set URL - is this required?
-                	contact_model.url = 'core/api/contacts'
-                	
-                	$('#star', el).raty({
-                    	click: function(score, evt) {
-                    	   
-                    		// alert('ID: ' + $(this).attr('id') + '\nscore: ' + score + '\nevent: ' + evt);
-                    		contact_model.set('star_value', score);
-                    	
-                    		// Save model
-                       		contact_model.save();
-           
-                    	},
-                    	score: contact_model.get('star_value')
-                        
-                    });
-                    });
-                
+                starify(el);
                }
         });
         
