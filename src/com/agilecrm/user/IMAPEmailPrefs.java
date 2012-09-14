@@ -6,6 +6,7 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.codec.DecoderException;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.util.Util;
@@ -19,6 +20,8 @@ import com.googlecode.objectify.condition.IfDefault;
 @XmlRootElement
 public class IMAPEmailPrefs
 {
+    public static final String MASKED_PASSWORD = "     ";
+
     // Key
     @Id
     public Long id;
@@ -32,8 +35,11 @@ public class IMAPEmailPrefs
     @NotSaved(IfDefault.class)
     public String user_name = null;
 
+    @NotSaved
+    public String password = MASKED_PASSWORD;
+
     @NotSaved(IfDefault.class)
-    public String password = null;
+    public String encrypted_password = null;
 
     public boolean is_secure = false;
 
@@ -41,6 +47,7 @@ public class IMAPEmailPrefs
     public String smtp_port;
 
     @Parent
+    @JsonIgnore
     private Key<AgileUser> agileUser;
 
     // Dao
@@ -113,15 +120,18 @@ public class IMAPEmailPrefs
     @PrePersist
     private void PrePersist()
     {
-	// Encrypt password while saving
-	this.password = Util.encrypt(password);
+	if (!password.equalsIgnoreCase(MASKED_PASSWORD))
+	{
+	    // Encrypt password while saving
+	    encrypted_password = Util.encrypt(password);
+	}
     }
 
     @PostLoad
     private void PostLoad() throws DecoderException
     {
 	// Decrypt password
-	this.password = Util.decrypt(this.password);
+	password = Util.decrypt(encrypted_password);
     }
 
 }

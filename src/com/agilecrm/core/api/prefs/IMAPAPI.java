@@ -25,6 +25,10 @@ public class IMAPAPI
     {
 	IMAPEmailPrefs prefs = IMAPEmailPrefs.getIMAPPrefs(AgileUser
 		.getCurrentAgileUser());
+	if (prefs != null)
+	{
+	    prefs.password = prefs.MASKED_PASSWORD;
+	}
 	System.out.println(prefs);
 	return prefs;
     }
