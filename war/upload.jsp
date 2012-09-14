@@ -65,22 +65,22 @@ function returnBack()
 
 $(function()
 {
-	 $("#submit").click(function (event){
-		 event.preventDefault();
-		   if(validated()){
 
-				// Check if this was referred back again
-				var key = getUrlVars()["key"];
-				console.log("Key" + key);
-				if(key != undefined)
-				{
-					returnBack();
-				}
-			   
+	// Check if this was referred back again
+	var key = getUrlVars()["key"];
+	console.log("Key" + key);
+	if(key != undefined)
+	{
+		returnBack();
+	}
+	$("#submit").click(function (event){
+		 event.preventDefault();
+		   if(isValid()){
+
 		   } 
 	 });
 });
-function validated(){
+function isValid(){
     $("#form").validate({
         rules: {
         		fileextension:{required:true,accept:"png|jpg|jpeg|gif"}
@@ -128,9 +128,7 @@ function validated(){
 </script>
 <style>
 	label.error {
-		padding-left: 16px;
 		color:red;
-		margin-left: .3em;
 	}
 </style>
 
@@ -165,8 +163,8 @@ function validated(){
 
 <input type="hidden" name="policy" value="ewogICJleHBpcmF0aW9uIjogIjIwMjAtMDEtMDFUMTI6MDA6MDAuMDAwWiIsCiAgImNvbmRpdGlvbnMiOiBbCiAgICB7ImJ1Y2tldCI6ICJhZ2lsZWNybSIgfSwKICAgIHsiYWNsIjogInB1YmxpYy1yZWFkIiB9LAogICAgIFsic3RhcnRzLXdpdGgiLCAiJGtleSIsICJwYW5lbC91cGxvYWRlZC1sb2dvIl0sCiAgICAgeyJzdWNjZXNzX2FjdGlvbl9yZWRpcmVjdCI6ICJodHRwOi8vbG9jYWxob3N0Ojg4ODgvdXBsb2FkLmpzcCJ9LAogICAgIFsic3RhcnRzLXdpdGgiLCAiJENvbnRlbnQtVHlwZSIsICJpbWFnZS8iXSwKICBdCn0=" />
 <input type="hidden" name="signature" value="3RcvbEnh5oQncA7CbR3WA0qFyKY=" />
-<input name="fileextension" id='fileextension' type="file" />
-<br/><br/>
+<p><input name="fileextension" id='fileextension' type="file" /></p>
+<br/>
 <input name="submit" id="submit" value="Upload" class='submit btn btn-primary' type="submit" /> 
 </form> 
 </div>

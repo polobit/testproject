@@ -94,11 +94,8 @@ $(function () {
 
         var widgetName = $(this).attr('widget-name');
         if (Catalog_Widgets_View == null) {
-            alert("widgets are not loaded yet");
             return;
         }
-
-        alert("saving " + widgetName);
 
         // Get Widget Model
         var models = Catalog_Widgets_View.collection.where({
@@ -115,7 +112,21 @@ $(function () {
         // Navigate back to the contact id form
         Backbone.history.navigate("contact/" + App_Contacts.contactDetailView.model.id, { trigger: true });
         
-    })
+    });
+    
+    //Deleting widget
+    $('#delete-widget').die().live('click', function (e) {
+    	var widgetName = $(this).attr('widget-name');
+        $.ajax({
+            type: 'DELETE',
+            url: '/core/api/widgets/'+ widgetName ,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+            	Backbone.history.navigate("contact/"+ App_Contacts.contactDetailView.model.id,{trigger: true});
+            },
+            dataType: 'json'
+        });
+    });
 });
 
 

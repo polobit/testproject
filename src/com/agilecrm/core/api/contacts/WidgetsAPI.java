@@ -3,6 +3,7 @@ package com.agilecrm.core.api.contacts;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -54,6 +55,15 @@ public class WidgetsAPI
     {
 	widget.save();
 	return widget;
+    }
+
+    // Delete widget by name
+    @Path("{widget_name}")
+    @DELETE
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void deleteWidget(@PathParam("widget_name") String widget_name)
+    {
+	Widget.getWidget(widget_name).delete();
     }
 
     @Path("positions")

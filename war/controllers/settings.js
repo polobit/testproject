@@ -1,3 +1,4 @@
+
 var SettingsRouter = Backbone.Router.extend({
 
     routes: {        
@@ -27,7 +28,7 @@ var SettingsRouter = Backbone.Router.extend({
         var view = new Base_Model_View({
             url: '/core/api/user-prefs',
             template: "settings-user-prefs",
-            reload: true,
+            //reload: true,
             postRenderCallback: function(el){
             	 // Setup HTML Editor
                 setupHTMLEditor($('#WYSItextarea'));

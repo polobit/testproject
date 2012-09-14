@@ -1,10 +1,14 @@
 <script id="widgets-add-model-template" type="text/html">
 <div class="well widget-add span3">
-<img class="thumbnail" src='{{logo_url}}' style="width:250px; height:100px;"/> </a><br/>
-<h1> {{name}}</h1> <br/><br/>
-{{url}} <br/><br/>
-{{description}} <br/><br/>
-<a class='btn btn-primary add-widget' widget-name='{{name}}'>Add</a>
+	<img class="thumbnail" src='{{logo_url}}' style="width:250px; height:100px;"/> </a><br/>
+	<h1> {{name}}</h1> <br/><br/>
+	{{url}} <br/><br/>
+	{{description}} <br/><br/>
+	{{#if is_added}}
+		<a class='btn btn-primary'id="delete-widget" widget-name='{{name}}'>Delete</a>
+	{{else}}
+		<a class='btn btn-primary add-widget' widget-name='{{name}}'>Add</a>
+	{{/if}}
 </div>
 
 </script>
@@ -21,6 +25,4 @@
 <div id='widgets-add-model-list'/>
 <div class="span6"/>
 </div>
-
-
 </script>

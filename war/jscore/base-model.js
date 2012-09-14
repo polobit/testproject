@@ -90,7 +90,11 @@ var Base_Model_View = Backbone.View.extend({
             		  if(modal)
           			  {
           				$(modal).modal('hide');
-          			  } 
+          			  }
+            		else{
+                 	 $("#information").html('<div class="alert alert-success" style="display:none"><a class="close" data-dismiss="alert" href="#">×</a>saved successfully.</div>');
+                     $(".alert").show();
+                 	}
             		  
             		  
             		} 	
