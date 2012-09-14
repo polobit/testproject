@@ -135,11 +135,11 @@ function isValid(){
 </head>
 
 
-<body class='center'>
+<body class='center' style="height:90%;width:90%;padding:5px">
 
 <br/>
 
-<div class="well" style="height:205px;">
+<div class="well" style="height:195px; width:390px ">
 
 <legend>Upload your image file</legend>
 
