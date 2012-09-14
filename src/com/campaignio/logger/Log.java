@@ -157,12 +157,30 @@ public class Log
 	// Read from database
 	try
 	{
-	    System.out.println("Removing " + logs.size() + " logs");
 	    dao.deleteAll(logs);
 	}
 	catch (Exception e)
 	{
 
+	}
+
+    }
+
+    // Enqueue Task
+    public static void removeCampaignLogs(String campaignID)
+    {
+	List<Log> logs = dao.listByProperty("campaign_id", campaignID);
+	if (logs == null || logs.isEmpty())
+	    return;
+
+	// Read from database
+	try
+	{
+	    dao.deleteAll(logs);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
 	}
 
     }
@@ -192,6 +210,12 @@ public class Log
 	}
 
 	return "?";
+    }
+
+    @XmlElement
+    public String getIsLog()
+    {
+	return "log";
     }
 
 }

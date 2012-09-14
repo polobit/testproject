@@ -71,6 +71,15 @@ function fillTokenizedSelect(selectId, array) {
 	});
 }
 
+function fillMilestones(ulId, array) {
+	$("#" + ulId).empty();
+	$.each(array, function(index, element) {
+		$("#" + ulId)
+				.append(
+						'<a href="#"><li value=' + '"' + element + '">' + element
+								+ '</li></a>');
+	});
+}
 function btnDropDown(contact_id, workflow_id) {
 
 }
@@ -78,11 +87,29 @@ function btnDropDown(contact_id, workflow_id) {
 // Delete contact properties
 function delete_contact_property(contact, propertyName) {
 	for ( var index = 0; index < contact.properties.length; index++) {
-		if (contact.properties[index].name == propertyName)
-		{	// delete contact.properties[index];
-			// Arrays have to spliced - not deleted
-			contact.properties.splice(index--, 1);
+		if (contact.properties[index].name == propertyName){
+			contact.properties.splice(index, 1);
+			--index;
 		}
+	}
+	return contact;
+}
+
+// Delete contact tag
+function delete_contact_tag(contact, tagName) {
+	for ( var index = 0; index < contact.tags.length; index++) {
+		if (contact.tags[index] == tagName){
+			contact.tags.splice(index, 1);
+			break;
+		}
+	}
+	return contact;
+}
+
+// Add contact tags
+function add_contact_tags(contact, newTags) {
+	for ( var index = 0; index < newTags.length; index++) {
+		contact.tags.push(newTags[index])
 	}
 	return contact;
 }

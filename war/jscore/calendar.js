@@ -9,22 +9,24 @@ function showCalendar() {
 
         events: function (start, end, callback) {
             $.getJSON('/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000, function (doc) {
-                
+                 	
             	if(doc)
-            	{           	
-                	// All day should be set to false
+            	{
+            		
+            		// All day should be set to false
             		$.each(doc, function(index, v)
             		{
             			
             			doc[index].allDay = (doc[index].allDay == 'true'); 
             			
             		});
-            
-            		// console.log(doc);
-                	
-                	
             		
-            		callback(doc);
+            		// Jersey sends it as a single element if there is only element though it is an array
+            		// We convert into array if there is only single element
+            		if(isArray(doc))
+            			callback(doc);
+            		else
+            			callback([doc]);
             	}
             });
         },
@@ -82,7 +84,6 @@ function showCalendar() {
                 $('#event-time-2').val((end.getHours() < 10 ? "0" : "") + end.getHours() + ":" + (end.getMinutes() < 10 ? "0" : "") + end.getMinutes());
             }
             
-            
 		},
 		eventDrop: function(event1, dayDelta, minuteDelta, allDay, revertFunc) {      
 	    
@@ -109,8 +110,17 @@ function showCalendar() {
    	    eventClick: function (event) {
    	    	
    	    	// Deserialize
+   	    	deserializeForm(event, $("#updateActivityForm"));
    	    	
-   	    	
+   	    	// Set time for update Event
+            $('#update-event-time-1').val((event.start.getHours() < 10 ? "0" : "") + event.start.getHours() + ":" + (event.start.getMinutes() < 10 ? "0" : "") +event.start.getMinutes());
+            $('#update-event-time-2').val((event.end.getHours() < 10 ? "0" : "") + event.end.getHours() + ":" + (event.end.getMinutes() < 10 ? "0" : "") + event.end.getMinutes());
+           
+         // Set date for update Event
+            var dateFormat = 'mm-dd-yy';
+            $("#update-event-date-1").val($.datepicker.formatDate(dateFormat, event.start));
+            $("#update-event-date-2").val($.datepicker.formatDate(dateFormat, event.end));
+            
    	    	// Show edit modal for the event
    	    	$("#updateActivityModal").modal('show');
    	    	return false;

@@ -1,13 +1,14 @@
  <script id="campaign-logs-collection-template" type="text/html">
  <div class="row">
-<div class="page-header">
-    <h1>Logs <small>Related to campaign</small></h1>
-  </div>
-
+	<div class="span12">
+		<div class="page-header">
+    		<h1>Logs <small>Related to campaign</small></h1>
+			<a href="#" class="btn right" id="delete_campaign_logs" style='top:-25px;position:relative;padding-right:20px'>Delete All Logs</a>
+  		</div>
+	</div>
 </div>
 <div class="row span10">
-
-	<table class="table table-bordered table-stripped" >
+	<table class="table table-bordered table-stripped" id="logs-table">
 		<thead>
     		<tr>
      			<th></th>
@@ -26,7 +27,7 @@
 
 <script id="campaign-logs-model-template" type="text/html">
 
-
+<input name="id" type="hidden" value="{{campaign_id}}" />
 <td><icon class='deleteWorkflow icon-remove-circle'></icon></td>  	
   <td><a href="#contact/{{subscriber_id}}">{{contactName}}</a></td>
   <td>{{getRequiredLog logs "m"}}</td>

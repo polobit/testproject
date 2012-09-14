@@ -40,7 +40,7 @@ var DealsRouter = Backbone.Router.extend({
             postRenderCallback: function(el){
             	populateUsers("owner", el);
             	agile_type_ahead("relates_to", el, contacts_typeahead);
-            	
+            	populateMilestones(el);
             	
             	// Enable the datepicker
                 $('#close_date', el).datepicker({
@@ -67,7 +67,10 @@ var DealsRouter = Backbone.Router.extend({
 
         this.dealsDetailView = new Base_Model_View({
             model: this.opportunityCollectionView.currentDeal,
-            template: "opportunity-detail"    
+            template: "opportunity-detail",
+            postRenderCallback: function(el){
+            	populateMilestones(el, true);
+            }
         });	
         
         var el = this.dealsDetailView.render().el;
