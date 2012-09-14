@@ -21,12 +21,8 @@ function showCalendar() {
             			
             		});
             		
-            		// Jersey sends it as a single element if there is only element though it is an array
-            		// We convert into array if there is only single element
-            		if(isArray(doc))
-            			callback(doc);
-            		else
-            			callback([doc]);
+            	    callback(doc);
+            		
             	}
             });
         },

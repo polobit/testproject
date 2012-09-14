@@ -56,6 +56,8 @@ public class Milestone
     {
 	Objectify ofy = ObjectifyService.begin();
 	Milestone milestone = ofy.query(Milestone.class).get();
+
+	// Send default milestones if not available
 	if (milestone == null)
 	    return getDefaultMilestone().milestones.split(",");
 
