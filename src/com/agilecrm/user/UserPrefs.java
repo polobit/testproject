@@ -31,7 +31,7 @@ public class UserPrefs
     public String template = "default";
 
     @NotSaved(IfDefault.class)
-    public String width = "default";
+    public String width = "";
 
     @NotSaved(IfDefault.class)
     public String name = "";
@@ -95,16 +95,14 @@ public class UserPrefs
 
     private static UserPrefs getDefaultPrefs(AgileUser agileUser)
     {
-	UserPrefs userPrefs = new UserPrefs(agileUser.id, null, "default",
-		"default", "- Powered by AgileCRM", true);
+	UserPrefs userPrefs = new UserPrefs(agileUser.id, null, "default", "",
+		"- Powered by AgileCRM", true);
 	userPrefs.save();
 	return userPrefs;
     }
 
     public void save()
     {
-	System.out.println(this.width);
-	System.out.println(this.template);
 	dao.put(this);
     }
 

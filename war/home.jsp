@@ -24,10 +24,6 @@
 	
 	
 	String width = UserPrefs.getCurrentUserPrefs().width;
-	if(width.equalsIgnoreCase("fluid"))
-	    width = "-fluid";
-	else
-	    width = "";
 %>
 
 <% 
