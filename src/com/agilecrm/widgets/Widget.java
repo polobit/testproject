@@ -96,7 +96,7 @@ public class Widget
 	widgets.add(new Widget(
 		"Rapleaf",
 		"Rapleaf For one year, in 1906, Felix Feneon re-wrote the news for a column in the French newspaper Le Matin, 'Novellas in three lines.' In a sparse sentence or two - only three lines in a single newspaper column - he captured the march of industrialization, the scourge of rural disease and the randomness of death. He showed acts of violence and charity throughout France.",
-		"/widgets/rapleaf.js", "/img/plugins/twitter.jpg",
+		"/widgets/rapleaf.js", "/img/plugins/rapleaf.jpeg",
 		"/widgets/rapleaf-logo-small.jpeg", null));
 
 	return widgets;

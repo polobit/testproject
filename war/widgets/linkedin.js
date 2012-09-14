@@ -1,5 +1,5 @@
 var LINKEDIN_PLUGIN_NAME = "Linkedin";
-var LINKEDIN_PLUGIN_HEADER = '<div style=" margin-bottom:20px " class="bottom-line" style="display:inline-block;"></div>'
+var LINKEDIN_PLUGIN_HEADER = '<div></div>';
 	
 
 $(function () {
@@ -43,7 +43,7 @@ function setupLinkedinOAuth(plugin_id)
 
     var path = "widgets/linkedin.js"
     var url = '/scribe?service=linkedin&return_url=' + encodeURIComponent(callbackURL) + '&plugin_id=' + encodeURIComponent(plugin_id);
-    $('#Linkedin').html(LINKEDIN_PLUGIN_HEADER + "<button class='btn'><a href=" + url + ">SetUp</button>");
+    $('#Linkedin').html(LINKEDIN_PLUGIN_HEADER + "<p>Build and engage with your professional network. Access knowledge, insights and opportunities. <p><button class='btn'><a href=" + url + ">Link Your LinkedIn</button>");
 }
 
 function showLinkedinMatchingProfiles(plugin_id)
@@ -120,13 +120,9 @@ function showLinkedinProfile(linkedin_id, plugin_id)
     			data.picture = 'https://contactuswidget.appspot.com/images/pic.png';
     		}
     	    	
-    	$('#Linkedin').html('<div style="margin-top:20px" class="bottom-line">'
-				    			+'<img src="widgets/linkedin-logo-small.png" style="padding-right:5px; padding-bottom:1px; height:15px;"></img>'
-				    			+'<label style="display:inline">Linkedin</label>'
-				    			+'<a class="icon-remove pull-right" id="linkedin_plugin_delete"></a>'
-				    		+'</div><br/>'
-				    		+'<div  style="display:inline;  line-height:12px;">'
+    	$('#Linkedin').html('<div  style="display:inline;  line-height:12px;">'
 				    		    +'<div class="row-fluid well" style="margin-top:-10px;padding:0px; border-top:5px solid whitesmoke;">'
+				    		    +'<a class="icon-remove pull-right" id="linkedin_plugin_delete"></a>'
 				    		    +'<div class="span3" style=" margin-right:3%"><img src=' + data.picture + ' style=" display:inline; float:left; margin-right:2px; margin-top:5px; padding:0px 5px;"/></div>'
 				    			+'<div class="span8">'
 				    			       +'<h4 style="color:blue"><a href=\"' + data.url + '\" target="_blank">' + data.name + '</a></h4>'

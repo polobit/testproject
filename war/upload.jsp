@@ -139,7 +139,7 @@ function isValid(){
 
 <br/>
 
-<div class="well span6">
+<div class="well" style="height:205px;">
 
 <legend>Upload your image file</legend>
 

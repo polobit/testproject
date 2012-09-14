@@ -1,5 +1,5 @@
 var TWITTER_PLUGIN_NAME = "Twitter";
-var TWITTER_PLUGIN_HEADER = '<div style=" margin-bottom:20px " class="bottom-line" style="display:inline-block;"></div>';
+var TWITTER_PLUGIN_HEADER = '<div></div>';
 
 $(function () {
 	
@@ -43,7 +43,7 @@ function setupTwitterOAuth(plugin_id)
 
     var path = "widgets/twitter.js"
     var url = '/scribe?service=twitter&return_url=' + encodeURIComponent(callbackURL) + '&plugin_id=' + encodeURIComponent(plugin_id);
-    $('#Twitter').html(TWITTER_PLUGIN_HEADER + "<button class='btn'><a href=" + url + ">Link Your Twitter</button>");
+    $('#Twitter').html(TWITTER_PLUGIN_HEADER + "<p>Follow your friends, experts, favorite celebrities, and breaking news on TWITTER.<p><button class='btn'><a href=" + url + ">Link Your Twitter</button>");
 }
 
 function showTwitterMatchingProfiles(plugin_id)
@@ -125,22 +125,13 @@ function showTwitterMatchingProfiles(plugin_id)
 
 function showTwitterProfile(twitter_id, plugin_id)
 {
-	$('#Twitter').html('<div style=" margin-bottom:10px " class="bottom-line" style="display:inline-block;">'
-							+'<img src="widgets/twitter-logo-small.png" style="padding-right:5px; padding-bottom:1px; height:15px;"></img>'
-						+'</div>'
-						+'<label style="display:inline">Twitter</label>'
-						+'<span id="twitter_plugin_delete" class="icon-remove pull-right" style=" cursor:pointer; color: #FF00FF"></span>'
-						+'<p><img src=\"img/1-0.gif\"></img></p>');
+	$('#Twitter').html('<p><img src=\"img/1-0.gif\"></img></p>');
 	
     $.getJSON("/core/api/widgets/contact/TWITTER/" + twitter_id +"/" + plugin_id, function (data) {
     	
-        $('#Twitter').html('<div style=" margin-bottom:20px " class="bottom-line" style="display:inline-block;">'
-				        		+'<img src="widgets/twitter-logo-small.png" style="padding-right:5px; padding-bottom:1px; height:15px;"></img>'
-				        		+'<label style="display:inline">Twitter</label>'
-				        		+'<a class="icon-remove pull-right" id="twitter_plugin_delete" style=" cursor:pointer; color: #FF00FF"></a>'
-				        	+'</div>'
-				        	+'<div  style="display:inline;  line-height:12px;">'
+        $('#Twitter').html('<div  style="display:inline;  line-height:12px;">'
 				        		+'<div class="row-fluid well" style="margin-top:-10px;padding:0px;">'
+				        		+'<a class="icon-remove pull-right" id="twitter_plugin_delete" style=" cursor:pointer; color: #FF00FF"></a>'
 				        		   +'<div class="span3" style=" margin-right:3%">'
 				        		       +'<img src=' + data.picture + ' style=" display:inline; float:left; margin-right:2px; margin-top:5px; padding:0px 5px; cursor:pointer; color: #FF00FF "/>'
 				        		   +'</div>'
