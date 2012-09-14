@@ -63,7 +63,6 @@ public class ContactsAPI
 	// Throw non-200 if it exists
 	if (currentContact != null)
 	{
-
 	    throw new WebApplicationException(
 		    Response.status(Response.Status.BAD_REQUEST)
 			    .entity("Sorry, duplicate contact found with the same email address.")

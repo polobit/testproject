@@ -52,7 +52,7 @@ public class Log
 	    Log.class);
 
     @NotSaved
-    private String entity_type = "log";
+    public String entity_type = "log";
 
     Log()
     {

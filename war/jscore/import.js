@@ -95,7 +95,7 @@ $(function(){
 	            success: function (data) {
 	                //console.log("Uploaded successfully");
 	                //console.log(data);
-	            	App_Deals_contacts.contactsListView.collection.add(data.contact);
+	            	App_Contacts.contactsListView.collection.add(data.contact);
 	            },
 	            dataType: 'json'
 	        });
@@ -106,7 +106,7 @@ $(function(){
 function fileUploadInit() {
 	var uploader = new qq.FileUploader({
         element: document.getElementById('file-upload-div'),
-        action: '/core/api/upload',
+        action: '/core/api/contacts/upload',
         debug: true,
         onComplete: function (id, fileName, data) {
 

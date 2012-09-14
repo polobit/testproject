@@ -59,7 +59,8 @@ var ContactsRouter = Backbone.Router.extend({
               restKey: restKey,
               templateKey: "contacts",
               individual_tag_name: 'tr',
-              cursor: true
+              cursor: true,
+              cursor_max:true
           });
 
           // Contacts are fetched when the app loads in the initialize
@@ -67,14 +68,9 @@ var ContactsRouter = Backbone.Router.extend({
           var collection = this.contactsListView.collection;
           this.contactsListView.collection.fetch({
               success: function (collection, response) {
-                  
             	  setupTags(cel);
                   pieTags(cel);
             	  setupViews(cel);
-                  	  
-                  // Set the cursor
-                  //console.log("Cursor " + response.cursor);
-                  collection.cursor = response.cursor;
               }
           });
 

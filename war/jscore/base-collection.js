@@ -67,7 +67,7 @@ var Base_List_View = Backbone.View.extend({
 var Base_Collection_View = Backbone.View.extend({
 	
     initialize: function () {
-        _.bindAll(this, 'render', 'appendItem', 'checkScroll', 'fetchNextCursorResults');
+        _.bindAll(this, 'render', 'appendItem');
         this.collection = new BaseCollection([], {
             restKey: this.options.restKey,
             sortKey: this.options.sortKey
@@ -78,17 +78,23 @@ var Base_Collection_View = Backbone.View.extend({
         var that = this;
         this.collection.bind('reset', function(){that.render(true)});
         
-
-        // Listen on scroll events if cursor is set
-        if(this.options.cursor)
-        {
-        	// Check for Scrolling
-            $(window).scroll(this.checkScroll);
-        }
-        
         // Call render which shows loading
         this.render();
         
+
+        // Add infiniscroll
+        if(this.options.cursor)
+        {
+        	
+        	var max = this.options.max;
+        	if(!max)
+        		max = 20;
+        	
+        	// Get max
+        	console.log("Inifinite Scolling started");
+        	this.infiniScroll = new Backbone.InfiniScroll(this.collection, {success: this.appendItem, eparams: {max: 20}});	       	
+        }
+       
     },
     appendItem: function (base_model) {
     	
@@ -121,64 +127,5 @@ var Base_Collection_View = Backbone.View.extend({
         }, this);
         
        return this;
-    },
-    fetchNextCursorResults: function () {
-       
-    	var that = this;
-        
-    	// We are starting a new load of results so set isLoading to true
-        this.isLoading = true;
-       
-        // If cursor is not present, just unbind
-        if(!this.collection.cursor)
-        {
-        	//console.log("Reached end of the results");
-        	// Unbind
-            $(window).unbind('scroll', this.checkScroll);
-        	return;
-        }
-        else
-        	console.log("C=" + this.collection.cursor);
-        
-        // Fetch is Backbone.js native function for calling and parsing the collection url
-        this.collection.fetch({ 
-        	add:true,
-        	data:{c: this.collection.cursor},
-        	success: function (collection, response) {
-            
-        		//console.log(response);
-        		if (response && response.cursor && response.cursor != null) 
-        		{
-        			//console.log('updating cursor ' + response.cursor);
-        			that.collection.cursor = response.cursor;
-        			that.render();
-        		}
-        		else
-        		{
-        			that.collection.cursor = null;
-        			// Unbind
-        			$(window).unbind('scroll', this.checkScroll);
-        		}
-        	  
-        		// Now we have finished loading set isLoading back to false
-        		that.isLoading = false;
-          }
-        });      
-      },
-    checkScroll: function () {
-    	
-    	// Unbind if current route is not contacts
-    	if(!Current_Route && Current_Route != 'contacts')
-    	{
-    		//$(window).unbind('scroll', this.checkScroll);
-    		return;
-    	}
-    	
-    	// Check Scroll Position
-    	//console.log(this.el.scrollTop + " " + this.isLoading);
-        var triggerPoint = 100; // 100px from the bottom
-          if( !this.isLoading && this.el.scrollTop + this.el.clientHeight + triggerPoint > this.el.scrollHeight ) {
-            this.fetchNextCursorResults();
-          }
-      }
+    }
 });

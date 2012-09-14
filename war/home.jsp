@@ -553,7 +553,7 @@ font-weight: normal;
 	head.js(JQUERY_LIB_PATH, LIB_PATH +  'lib/bootstrap.min.js', LIB_PATH + 'lib/jquery.validate.min.js', LIB_PATH + 'lib/bootstrap-datepicker-min.js', LIB_PATH + 'lib/bootstrap-timepicker-min.js');
 	
 	<!-- Backbone -->
-	head.js(LIB_PATH + 'lib/underscore-min.js', LIB_PATH + 'lib/backbone-min.js');
+	head.js(LIB_PATH + 'lib/underscore-min.js', LIB_PATH + 'lib/backbone-min.js', LIB_PATH + 'lib/infiniscroll.js');
 	
 	<!-- Handle bars -->
 	head.js(LIB_PATH + 'lib/handlebars-1.0.0.beta.6-min.js');

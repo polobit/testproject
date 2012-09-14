@@ -41,7 +41,7 @@ function downloadSynchronously(url)
 {
 
 	// Show loading while we download
-	$('#content').html(LOADING_HTML);
+	// $('#content').html(LOADING_HTML);
 
 	// console.log(url);
 	var urlContent;
