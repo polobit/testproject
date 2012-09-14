@@ -31,6 +31,9 @@ public class UserPrefs
     public String template = "default";
 
     @NotSaved(IfDefault.class)
+    public String width = "default";
+
+    @NotSaved(IfDefault.class)
     public String name = "";
 
     @NotSaved(IfDefault.class)
@@ -49,11 +52,12 @@ public class UserPrefs
     private static ObjectifyGenericDao<UserPrefs> dao = new ObjectifyGenericDao<UserPrefs>(
 	    UserPrefs.class);
 
-    UserPrefs(Long userId, String name, String template, String signature,
-	    boolean task_reminder)
+    UserPrefs(Long userId, String name, String template, String width,
+	    String signature, boolean task_reminder)
     {
 	this.name = name;
 	this.template = template;
+	this.width = width;
 	this.signature = signature;
 	this.task_reminder = task_reminder;
 
@@ -92,13 +96,15 @@ public class UserPrefs
     private static UserPrefs getDefaultPrefs(AgileUser agileUser)
     {
 	UserPrefs userPrefs = new UserPrefs(agileUser.id, null, "default",
-		"- Powered by AgileCRM", true);
+		"default", "- Powered by AgileCRM", true);
 	userPrefs.save();
 	return userPrefs;
     }
 
     public void save()
     {
+	System.out.println(this.width);
+	System.out.println(this.template);
 	dao.put(this);
     }
 

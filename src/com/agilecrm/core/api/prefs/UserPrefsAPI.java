@@ -41,6 +41,7 @@ public class UserPrefsAPI
 	    userPrefs.name = prefs.name;
 	    userPrefs.signature = prefs.signature;
 	    userPrefs.template = prefs.template;
+	    userPrefs.width = prefs.width;
 	    userPrefs.task_reminder = prefs.task_reminder;
 	    userPrefs.timezone = prefs.timezone;
 	    userPrefs.currency = prefs.currency;

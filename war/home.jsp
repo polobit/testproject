@@ -21,6 +21,13 @@
 	// Download the template the user likes
 	String template = UserPrefs.getCurrentUserPrefs().template;
 	// template = "default";
+	
+	
+	String width = UserPrefs.getCurrentUserPrefs().width;
+	if(width.equalsIgnoreCase("fluid"))
+	    width = "-fluid";
+	else
+	    width = "";
 %>
 
 <% 
@@ -434,7 +441,7 @@ font-weight: normal;
 
 	<div class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
-			<div class="container-fluid">
+			<div class = "container<%=width%>">
 				<a class="btn btn-navbar" data-toggle="collapse"
 					data-target=".nav-collapse"> 
 					<span class="icon-bar"></span>
@@ -521,7 +528,7 @@ font-weight: normal;
 		</div>
 	</div>
 
-	<div class="container-fluid">
+	<div class="container<%=width%>">
 		<div id="content" class="" >
 		
 		<img class="loading" style="padding-right:5px" src= "img/21-0.gif"></img>
