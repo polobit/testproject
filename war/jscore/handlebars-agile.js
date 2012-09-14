@@ -279,9 +279,7 @@ $(function()
 	
 	// Timeline details
 	Handlebars.registerHelper('is_present', function(entity_type, entity_name, entity){
-		if(entity.get(entity_type) == entity_name)
-			return true;
-		return false;
+		return entity.get(entity_type) == entity_name;
 	});
 
 });

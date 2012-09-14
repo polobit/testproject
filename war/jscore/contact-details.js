@@ -29,11 +29,12 @@ $(function(){
      	
      	// Delete tag
      	json = delete_contact_tag(json, tag);
-        var contactDuplicate = new Backbone.Model();
-        contactDuplicate.url = 'core/api/contacts';
-        contactDuplicate.save(json,{
+        var contact = new Backbone.Model();
+        contact.url = 'core/api/contacts';
+        contact.save(json,{
        		success: function(data)
        			{
+       				// Also delete from Tag class if no more contacts with this tag
        				$.ajax({
        					url: 'core/api/tags/' + tag,
        					type: 'DELETE',
@@ -62,15 +63,14 @@ $(function(){
    		  	  	this.reset();
    		  	});
    			
-	    	var contactDuplicate = new Backbone.Model();
-	        contactDuplicate.url = 'core/api/contacts';
-	        contactDuplicate.save(json,{
+	    	var contact = new Backbone.Model();
+	        contact.url = 'core/api/contacts';
+	        contact.save(json,{
 	       		success: function(data)
 	       			{
 	       			// Save new tags in Tag class
 	       			$.post('core/api/tags/' + tags);
 	       			
-	       			location.reload(true);
 	       			}
 	        });
 	    }

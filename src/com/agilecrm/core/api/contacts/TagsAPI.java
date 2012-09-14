@@ -111,8 +111,7 @@ public class TagsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public void addTags(@PathParam("tags") String tags)
     {
-	System.out.println("in tags api");
-	System.out.println(tags);
+
 	String tagsArray[] = tags.split(",");
 
 	Set<String> tagsSet = new HashSet<String>();

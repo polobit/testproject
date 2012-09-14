@@ -59,7 +59,8 @@ var ContactsRouter = Backbone.Router.extend({
               restKey: restKey,
               templateKey: "contacts",
               individual_tag_name: 'tr',
-              cursor: true
+              cursor: true,
+              cursor_max:true
           });
 
           // Contacts are fetched when the app loads in the initialize
@@ -67,13 +68,9 @@ var ContactsRouter = Backbone.Router.extend({
           var collection = this.contactsListView.collection;
           this.contactsListView.collection.fetch({
               success: function (collection, response) {
-                  pieTags(cel);
             	  setupTags(cel);
-                  setupViews(cel);
-                		  
-                  // Set the cursor
-                  //console.log("Cursor " + response.cursor);
-                  collection.cursor = response.cursor;
+                  pieTags(cel);
+            	  setupViews(cel);
               }
           });
 
@@ -129,9 +126,33 @@ var ContactsRouter = Backbone.Router.extend({
         this.contactDetailView = new Base_Model_View({
             model: contact,
             template: "contact-detail",
-            postRenderCallback: function(el) {            	
-                loadWidgets(el, contact.toJSON());
-                loadTimelineDetails(el,id);
+            postRenderCallback: function(el) {
+                
+            	loadWidgets(el, contact.toJSON());
+            	
+                loadTimelineDetails(el, id);
+                
+                head.js('lib/jquery.raty.min.js', function(){
+                	
+                	var contact_model =  App_Contacts.contactDetailView.model;
+                	// Set URL - is this required?
+                	contact_model.url = 'core/api/contacts'
+                	
+                	$('#star', el).raty({
+                    	click: function(score, evt) {
+                    	   
+                    		// alert('ID: ' + $(this).attr('id') + '\nscore: ' + score + '\nevent: ' + evt);
+                    		contact_model.set('star_value', score);
+                    	
+                    		// Save model
+                       		contact_model.save();
+           
+                    	},
+                    	score: contact_model.get('star_value')
+                        
+                    });
+                    });
+                
                }
         });
         
@@ -171,10 +192,12 @@ var ContactsRouter = Backbone.Router.extend({
       	// Contact Duplicate
       	var contact = this.contactsListView.collection.get(this.contactDetailView.model.id);
       	var json = contact.toJSON();
+      
       	
       	// Delete email as well as it has to be unique
       	json = delete_contact_property(json, 'email');
-      	delete json.id;
+        delete json.id;	
+        
         var contactDuplicate = new Backbone.Model();
         contactDuplicate.url = 'core/api/contacts';
         contactDuplicate.save(json,{
@@ -309,6 +332,7 @@ var ContactsRouter = Backbone.Router.extend({
 		var optionsTemplate = "<option value='{{id}}'> {{subject}}</option>";
 		fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', undefined , optionsTemplate);
     },  
+    
     filterContacts: function()
     {
     	head.js('lib/jquery.chained.min.js', function()
@@ -321,25 +345,3 @@ var ContactsRouter = Backbone.Router.extend({
     },
     
 });
-
-
-function setupTags(cel) {
-    // Add Tags
-    var TagsCollection = Backbone.Collection.extend({
-        url: '/core/api/tags',
-        sortKey: 'tag'
-    });
-    var tagsCollection = new TagsCollection();
-    tagsCollection.fetch({
-        success: function () {
-        	console.log(tagsCollection.models);
-        	console.log(tagsCollection.toJSON());
-            var tagsHTML = getTemplate('tagslist', tagsCollection.toJSON());
-            var len = $('#tagslist', cel).length;
-            $('#tagslist', cel).html(tagsHTML);
-
-            setupTagsTypeAhead(tagsCollection.models);
-        }
-    });
-
-}
