@@ -250,9 +250,9 @@ $(function()
 	});
 
 	// Get required log from logs
-	Handlebars.registerHelper('getRequiredLog', function(logArrayString, name)
+	Handlebars.registerHelper('getRequiredLog', function(log_array_string, name)
 	{
-		var logArray = JSON.parse(logArrayString);
+		var logArray = JSON.parse(log_array_string);
 		if (name == "t") {
 			var readableTime = new Date(logArray[0][name]);
 			return readableTime;
@@ -275,6 +275,13 @@ $(function()
 		});
 
 		return new Handlebars.SafeString(el);
+	});
+	
+	// Timeline details
+	Handlebars.registerHelper('is_present', function(entity_type, entity_name, entity){
+		if(entity.get(entity_type) == entity_name)
+			return true;
+		return false;
 	});
 
 });

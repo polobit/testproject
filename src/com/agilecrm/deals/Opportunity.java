@@ -68,6 +68,9 @@ public class Opportunity
     @Embedded
     public List<String> contacts = null;
 
+    @NotSaved
+    public String entity_type = "deal";
+
     // Dao
     private static ObjectifyGenericDao<Opportunity> dao = new ObjectifyGenericDao<Opportunity>(
 	    Opportunity.class);
@@ -320,9 +323,4 @@ public class Opportunity
 	return contacts_list;
     }
 
-    @XmlElement
-    public String getIsDeal()
-    {
-	return "deal";
-    }
 }

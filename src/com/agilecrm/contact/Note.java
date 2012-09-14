@@ -38,6 +38,9 @@ public class Note
     @Embedded
     public List<String> contacts = null;
 
+    @NotSaved
+    public String entity_type = "note";
+
     // Dao
     private static ObjectifyGenericDao<Note> dao = new ObjectifyGenericDao<Note>(
 	    Note.class);
@@ -74,7 +77,8 @@ public class Note
 	Objectify ofy = ObjectifyService.begin();
 	Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
 
-	return ofy.query(Note.class).ancestor(contactKey).list();
+	return ofy.query(Note.class).filter("related_contacts = ", contactKey)
+		.list();
     }
 
     // Return note from contact id and Note Id
@@ -124,4 +128,5 @@ public class Note
     {
 	dao.put(this);
     }
+
 }

@@ -65,12 +65,14 @@
 
   		</div>
 
+<div id="time-line"></div>
+
 </div>
 
 
 <!-- Contact Details -->
 	<div class="span3">
-		<div class='info_wrapper'>
+		<div class='info_wrapper' style='padding:5px;'>
 
 		
 			<div class="">
@@ -110,14 +112,18 @@
 					
 					{{#each tags}}	
 
-				<li><span><a href='#tags/{{this}}'>{{this}}</a></span>
-</li>
+				<li><span><a href='#tags/{{this}}'>{{this}}</a></span></li>
   					{{/each}}
 
 					</ul>
-
+				{{/if}}	
 					<a href="#"><i class="icon-plus-sign"></i></a>
-				{{/if}}
+
+						<form id="addTagsForm" style="display:none">
+							<input id="addTags" type="text" style="margin-left: 10px; width: 187px" placeholder="Add tags"/>
+							<a href="#" class="btn btn-small right" id="contact-add-tags" style="margin-right: 10px">Add</a>
+						</form>
+				
 			</div>
 
 			<div class='clearfix'></div>	
@@ -143,7 +149,7 @@
 
 	
 		<div style='float:right;'>
-			<a href='#add-widget'>+ Add widget</>
+			<a href='#add-widget'>Manage widget</>
 		</div>
 
 

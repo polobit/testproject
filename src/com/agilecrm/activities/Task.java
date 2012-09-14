@@ -13,6 +13,8 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.util.DateUtil;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -29,7 +31,7 @@ public class Task
     // Priority Type - Default
     public enum PriorityType
     {
-	DEFAULT, HIGH, MEDIUM, LOW
+	HIGH, NORMAL, LOW
     };
 
     // Key
@@ -40,6 +42,8 @@ public class Task
 
     // Due
     public Long due = 0L;
+
+    public Long created_time = 0L;
 
     // Category - Call etc.
     public Type type;
@@ -66,6 +70,9 @@ public class Task
     @NotSaved(IfDefault.class)
     public String subject = null;
 
+    @NotSaved
+    public String entity_type = "task";
+
     Task()
     {
 
@@ -84,6 +91,10 @@ public class Task
     @PrePersist
     private void PrePersist()
     {
+
+	// Store Created Time
+	if (created_time == 0L)
+	    created_time = System.currentTimeMillis() / 1000;
 
 	// Create list of Contact keys
 	for (String contact_id : this.contacts)
@@ -105,6 +116,16 @@ public class Task
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+
+    // Get contact related tasks
+    public static List<Task> getContactTasks(Long contactId) throws Exception
+    {
+	Objectify ofy = ObjectifyService.begin();
+	Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
+
+	return ofy.query(Task.class).filter("related_contacts = ", contactKey)
+		.list();
     }
 
     // Get Tasks

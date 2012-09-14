@@ -1,8 +1,13 @@
 package com.agilecrm.core.api.contacts;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -98,6 +103,35 @@ public class TagsAPI
 	{
 	    return "";
 	}
+    }
+
+    @Path("{tags}")
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public void addTags(@PathParam("tags") String tags)
+    {
+	System.out.println("in tags api");
+	System.out.println(tags);
+	String tagsArray[] = tags.split(",");
+
+	Set<String> tagsSet = new HashSet<String>();
+	for (int index = 0; index < tagsArray.length; index++)
+	{
+	    tagsSet.add(tagsArray[index]);
+	}
+	// Update Tags - Create a deferred task
+	Tag.updateTags(tagsSet);
+    }
+
+    @Path("{tag}")
+    @DELETE
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void deleteTags(@PathParam("tag") String tag)
+    {
+	Set<String> tags = new HashSet<String>();
+	tags.add(tag);
+	Tag.deleteTags(tags);
     }
 
 }

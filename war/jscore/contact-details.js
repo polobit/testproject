@@ -20,4 +20,61 @@ $(function(){
 		*/
 	});
 	
+	// Delete tag from contact
+	$('.remove-tags').live('click', function(e){
+		e.preventDefault();
+		var tag = $(this).attr("id");
+		$(this).closest("li").remove();
+     	var json = App_Contacts.contactDetailView.model.toJSON();
+     	
+     	// Delete tag
+     	json = delete_contact_tag(json, tag);
+        var contactDuplicate = new Backbone.Model();
+        contactDuplicate.url = 'core/api/contacts';
+        contactDuplicate.save(json,{
+       		success: function(data)
+       			{
+       				$.ajax({
+       					url: 'core/api/tags/' + tag,
+       					type: 'DELETE',
+       				});
+       			}
+        });
+	});
+	
+	// Show form to add tags
+	$('#add-tags').live('click', function(e){
+		e.preventDefault();
+		$("#addTagsForm").css("display", "block");
+	});
+	
+	// Add tags to a contact 
+	$('#contact-add-tags').live('click', function(e){
+		e.preventDefault();
+		var tags = getTags('addTags');
+		$("#addTagsForm").css("display", "none");
+		var json = App_Contacts.contactDetailView.model.toJSON();
+	    if (tags != undefined){
+	    	json = add_contact_tags(json, tags);
+   			
+	    	// Reset form
+	    	$('#addTagsForm').each (function(){
+   		  	  	this.reset();
+   		  	});
+   			
+	    	var contactDuplicate = new Backbone.Model();
+	        contactDuplicate.url = 'core/api/contacts';
+	        contactDuplicate.save(json,{
+	       		success: function(data)
+	       			{
+	       			// Save new tags in Tag class
+	       			$.post('core/api/tags/' + tags);
+	       			
+	       			location.reload(true);
+	       			}
+	        });
+	    }
+	    
+	});
+	
 });
