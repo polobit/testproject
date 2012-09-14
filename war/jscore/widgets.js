@@ -2,7 +2,6 @@ var Catalog_Widgets_View = null;
 
 // Show when Add widget is selected by user in contact view
 function pickWidget() {
-    if (Catalog_Widgets_View == null) {
         Catalog_Widgets_View = new Base_Collection_View({
             url: '/core/api/widgets/default',
             restKey: "widget",
@@ -11,7 +10,6 @@ function pickWidget() {
         });
 
         Catalog_Widgets_View.collection.fetch();
-    }
     $('#content').html(Catalog_Widgets_View.el);
 }
 
@@ -47,6 +45,9 @@ function loadWidgets(el, contact, user) {
 						$('#' + model.get('name'), el).data('model', model);						
 				}, this);
         	
+   	  head.js('https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js',
+           function(){
+        	  
             // Make widgets sortable
             $(".widget-sortable", newEl).sortable({
                 update: function (event, ui) {                	
@@ -78,6 +79,7 @@ function loadWidgets(el, contact, user) {
                 }
             });
             $(".widget-sortable", newEl).disableSelection();
+   	  		});
         }
     });
     
@@ -92,14 +94,14 @@ $(function () {
 
     $('.add-widget').live('click', function (e) {
 
-        var widgetName = $(this).attr('widget-name');
+        var widget_name = $(this).attr('widget-name');
         if (Catalog_Widgets_View == null) {
             return;
         }
 
         // Get Widget Model
         var models = Catalog_Widgets_View.collection.where({
-            name: widgetName
+            name: widget_name
         });
         if (models.length == 0) {
             alert("Not found");
@@ -116,13 +118,19 @@ $(function () {
     
     //Deleting widget
     $('#delete-widget').die().live('click', function (e) {
-    	var widgetName = $(this).attr('widget-name');
+    	var widget_name = $(this).attr('widget-name');
+    	if(!confirm("Are you sure to delete " + widget_name))
+    		return;
+    	
         $.ajax({
             type: 'DELETE',
-            url: '/core/api/widgets/'+ widgetName ,
+            url: '/core/api/widgets/'+ widget_name ,
             contentType: "application/json; charset=utf-8",
             success: function (data) {
-            	Backbone.history.navigate("contact/"+ App_Contacts.contactDetailView.model.id,{trigger: true});
+            	
+            	// Call Fetch to update widget models
+            	Catalog_Widgets_View.collection.fetch();
+            	$('#' + widget_name + "collection").remove();
             },
             dataType: 'json'
         });
