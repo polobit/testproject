@@ -51,4 +51,16 @@ public class Milestone
 	milestone.save();
 	return milestone;
     }
+
+    public static String[] getMilestonesArray()
+    {
+	Objectify ofy = ObjectifyService.begin();
+	Milestone milestone = ofy.query(Milestone.class).get();
+
+	// Send default milestones if not available
+	if (milestone == null)
+	    return getDefaultMilestone().milestones.split(",");
+
+	return milestone.milestones.split(",");
+    }
 }

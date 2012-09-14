@@ -35,7 +35,9 @@ import com.campaignio.TwitterQueue;
 import com.campaignio.URLShortener;
 import com.campaignio.cron.Cron;
 import com.campaignio.logger.Log;
+import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.QueryResultIterator;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
@@ -181,6 +183,50 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	Query<T> q = ofy().query(clazz);
 	return asList(q.fetch());
+    }
+
+    public List<T> fetchAll(int max, String cursor)
+    {
+
+	Query<T> query = ofy().query(clazz);
+
+	if (cursor != null)
+	    query.startCursor(Cursor.fromWebSafeString(cursor));
+
+	int index = 0;
+	String newCursor = null;
+	List<T> results = new ArrayList<T>();
+
+	QueryResultIterator<T> iterator = query.iterator();
+	while (iterator.hasNext())
+	{
+
+	    T result = iterator.next();
+
+	    // Add to list
+	    results.add(result);
+
+	    // Check if we have reached the limit
+	    if (++index == max)
+	    {
+		// Set cursor for client
+		if (iterator.hasNext())
+		{
+		    Cursor cursorDb = iterator.getCursor();
+		    newCursor = cursorDb.toWebSafeString();
+
+		    // Store the cursor in the last element
+		    if (result instanceof com.agilecrm.cursor.Cursor)
+		    {
+			com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
+			agileCursor.cursor = newCursor;
+		    }
+		}
+		break;
+	    }
+	}
+
+	return results;
     }
 
     public List<Key<T>> listKeysByProperty(String propName, Object propValue)

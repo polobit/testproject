@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.util.DBUtil;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
 
 @XmlRootElement
@@ -49,6 +50,9 @@ public class Log
     // Dao
     private static ObjectifyGenericDao<Log> dao = new ObjectifyGenericDao<Log>(
 	    Log.class);
+
+    @NotSaved
+    public String entity_type = "log";
 
     Log()
     {
@@ -150,19 +154,38 @@ public class Log
     // Enqueue Task
     public static void removeLogs(String subscriberID)
     {
-	List<Log> logs = dao.listByProperty("subscriber_id", subscriberID);
+	List<Key<Log>> logs = dao.listKeysByProperty("subscriber_id",
+		subscriberID);
 	if (logs == null || logs.isEmpty())
 	    return;
 
 	// Read from database
 	try
 	{
-	    System.out.println("Removing " + logs.size() + " logs");
-	    dao.deleteAll(logs);
+	    dao.deleteKeys(logs);
 	}
 	catch (Exception e)
 	{
 
+	}
+
+    }
+
+    // Enqueue Task
+    public static void removeCampaignLogs(String campaignID)
+    {
+	List<Key<Log>> logs = dao.listKeysByProperty("campaign_id", campaignID);
+	if (logs == null || logs.isEmpty())
+	    return;
+
+	// Read from database
+	try
+	{
+	    dao.deleteKeys(logs);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
 	}
 
     }

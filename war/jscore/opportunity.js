@@ -24,28 +24,7 @@ function populateUsers(id, el) {
      });
 	users.collection.fetch();
      $('#owner',el).html(users.el);
-     
-     // Fill milestones select options
-     var milestone_model = Backbone.Model.extend({
-    	 url: '/core/api/milestone'
- 		});
-     
-     var model = new milestone_model();
-     model.fetch({ 
-    			 success: function(data) 
-    			 { 
- 						var jsonModel = data.toJSON();
- 						var milestones = jsonModel.milestones;
- 						
- 						// Split , and trim
- 						var array = [];
- 						$.each(milestones.split(","), function(){
- 							array.push($.trim(this));
- 						});
- 						
- 						fillTokenizedSelect('milestone', array)
-     			   }
-     });
+
      return el;
 }
 
@@ -60,9 +39,10 @@ $("#editOpportunity").live("click", function (e) {
         template: "opportunity-add",
         window: 'deals',
         postRenderCallback: function(el){
-            	populateUsers("owner", el);
-            	
-            	// Call setupTypeAhead to get tags
+        	console.log(el);
+        		populateUsers("owner", el);
+        		populateMilestones(el);
+             	// Call setupTypeAhead to get tags
             	agile_type_ahead("relates_to", el, contacts_typeahead);   
             	
             	
@@ -77,6 +57,34 @@ $("#editOpportunity").live("click", function (e) {
     	var view = view.render();
     	$("#content").html(view.el);   
 });
+
+function populateMilestones(el, dealsDetails){
+	 // Fill milestones in select options and ul 
+    var milestone_model = Backbone.Model.extend({
+   	 url: '/core/api/milestone'
+		});
+    
+    var model = new milestone_model();
+    model.fetch({ 
+   			 success: function(data) 
+   			 { 
+						var jsonModel = data.toJSON();
+						var milestones = jsonModel.milestones;
+						
+						// Split , and trim
+						var array = [];
+						$.each(milestones.split(","), function(){
+							array.push($.trim(this));
+						});
+						if(dealsDetails)
+						{
+							fillMilestones('move', array);
+							return;
+						}
+							fillTokenizedSelect('milestone', array);
+    			   }
+    });
+}
 
 // 	To change the progress of the deals
 $('#move li a').live('click', function (e) {

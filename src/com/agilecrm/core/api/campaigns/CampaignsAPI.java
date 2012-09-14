@@ -2,6 +2,7 @@ package com.agilecrm.core.api.campaigns;
 
 import java.util.List;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -66,6 +67,13 @@ public class CampaignsAPI
     {
 
 	return Log.getCampaignLog(campaignId);
+    }
+
+    @Path("logs/{campaign-id}")
+    @DELETE
+    public void deleteWorkflow(@PathParam("campaign-id") String id)
+    {
+	Log.removeCampaignLogs(id);
     }
 
 }

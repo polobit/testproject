@@ -24,7 +24,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.ContactCursorResult;
 import com.agilecrm.contact.Note;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.util.Util;
@@ -45,10 +44,10 @@ public class ContactsAPI
     @Path("/cursor/{count}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public ContactCursorResult getContactsByCount(
-	    @QueryParam("c") String cursor, @PathParam("count") String count)
+    public List<Contact> getContactsByCount(@QueryParam("c") String cursor,
+	    @PathParam("count") String count)
     {
-	return Contact.getAllContactsByCount(Integer.parseInt(count), cursor);
+	return Contact.getAllContacts(Integer.parseInt(count), cursor);
     }
 
     @POST
@@ -64,7 +63,6 @@ public class ContactsAPI
 	// Throw non-200 if it exists
 	if (currentContact != null)
 	{
-
 	    throw new WebApplicationException(
 		    Response.status(Response.Status.BAD_REQUEST)
 			    .entity("Sorry, duplicate contact found with the same email address.")

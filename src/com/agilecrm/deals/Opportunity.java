@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.jdo.annotations.Embedded;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -40,6 +41,8 @@ public class Opportunity
     @NotSaved(IfDefault.class)
     public Long close_date = 0L;
 
+    public Long created_time = 0L;
+
     @NotSaved(IfDefault.class)
     public String name = null;
 
@@ -70,7 +73,7 @@ public class Opportunity
 	    Opportunity.class);
 
     // Possible Milestones
-    final static String MILESTONES[] = { "loss", "progress", "won" };
+    private static String MILESTONES[] = {};
 
     Opportunity()
     {
@@ -238,6 +241,9 @@ public class Opportunity
 	// Milestones object
 	JSONObject milestonesObject = new JSONObject();
 
+	// Array of milestones
+	MILESTONES = Milestone.getMilestonesArray();
+
 	// Iterate through all possible milestones
 	for (String milestone : MILESTONES)
 	{
@@ -295,6 +301,14 @@ public class Opportunity
 	dao.put(this);
     }
 
+    @PrePersist
+    private void PrePersist()
+    {
+	// Store Created Time
+	if (created_time == 0L)
+	    created_time = System.currentTimeMillis() / 1000;
+    }
+
     // Contacts related with deals Author : Yaswanth 08-24-2012
     @XmlElement
     public List<Contact> getContacts()
@@ -306,4 +320,9 @@ public class Opportunity
 	return contacts_list;
     }
 
+    @XmlElement
+    public String getIsDeal()
+    {
+	return "deal";
+    }
 }

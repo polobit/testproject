@@ -56,5 +56,4 @@ public class WorkflowsAPI
 	if (workflow != null)
 	    workflow.delete();
     }
-
 }

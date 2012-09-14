@@ -97,7 +97,13 @@ var Base_Model_View = Backbone.View.extend({
                  	}
             		  
             		  
-            		} 	
+            		}
+            	else
+            	{
+            		$save_info = $('<div style="display:inline-block"><small><i>Saved Successfully</i></small></div>');
+            		$(".form-actions", this.el).append($save_info);
+            		$save_info.show().delay(3000).hide(1);
+            	}
             }
         });
     },

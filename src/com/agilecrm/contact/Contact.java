@@ -11,17 +11,15 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deferred.TagsDeferredTask;
 import com.agilecrm.util.Util;
-import com.google.appengine.api.datastore.Cursor;
-import com.google.appengine.api.datastore.QueryResultIterator;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
-import com.googlecode.objectify.Query;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Unindexed;
@@ -29,7 +27,7 @@ import com.googlecode.objectify.condition.IfDefault;
 
 @XmlRootElement
 @Unindexed
-public class Contact
+public class Contact extends Cursor
 {
     // Key
     @Id
@@ -208,41 +206,9 @@ public class Contact
 	return dao.fetchAll();
     }
 
-    // Map with data and cursor
-    public static ContactCursorResult getAllContactsByCount(int max,
-	    String cursor)
+    public static List<Contact> getAllContacts(int max, String cursor)
     {
-	Objectify ofy = ObjectifyService.begin();
-	Query<Contact> query = ofy.query(Contact.class);
-
-	if (cursor != null)
-	    query.startCursor(Cursor.fromWebSafeString(cursor));
-
-	int index = 0;
-	String newCursor = null;
-	List<Contact> contacts = new ArrayList<Contact>();
-
-	QueryResultIterator<Contact> iterator = query.iterator();
-	while (iterator.hasNext())
-	{
-
-	    // Add to list
-	    contacts.add(iterator.next());
-
-	    // Check if we have reached the limit
-	    if (++index == max)
-	    {
-		// Set cursor for client
-		if (iterator.hasNext())
-		{
-		    Cursor cursorDb = iterator.getCursor();
-		    newCursor = cursorDb.toWebSafeString();
-		}
-		break;
-	    }
-	}
-
-	return new ContactCursorResult(contacts, newCursor);
+	return dao.fetchAll(max, cursor);
     }
 
     public ContactField getContactField(String name)
