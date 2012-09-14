@@ -1,0 +1,23 @@
+<script id="timeline-collection-template" type="text/html">
+	<div class="span5 offset2">
+		<ul id="timeline-model-list"></ul>
+	</div>
+</script>
+<script id="timeline-model-template" type="text/html">
+	{{#if is_present "entity-type" "note" this}}
+		<span>note:</span> {{note}}
+	{{/if}}
+	
+	{{#if is_present "entity_type" "task" this}}
+		<span>task:</span> {{subject}}
+	{{/if}}
+	
+	{{#if is_present "entity_type" "deal" this}}
+		<span>deal:</span> {{description}}
+	{{/if}}
+
+	{{#if is_present "entity_type" "m" this}}
+		<span>log:</span> {{m}}
+	{{/if}}
+
+</script>

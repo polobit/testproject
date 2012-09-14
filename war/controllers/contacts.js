@@ -129,6 +129,8 @@ var ContactsRouter = Backbone.Router.extend({
             postRenderCallback: function(el) {
                 
             	loadWidgets(el, contact.toJSON());
+            	
+                loadTimelineDetails(el, id);
                 
                 head.js('lib/jquery.raty.min.js', function(){
                 	

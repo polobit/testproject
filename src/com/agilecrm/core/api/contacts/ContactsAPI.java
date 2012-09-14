@@ -23,6 +23,7 @@ import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.deals.Opportunity;
@@ -157,6 +158,23 @@ public class ContactsAPI
     {
 	System.out.println("in api of contact deals");
 	return Opportunity.getCurrentContactDeals(Long.parseLong(id));
+    }
+
+    // Notes of contact in contact details
+    @Path("/{contact-id}/tasks")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Task> getTasks(@PathParam("contact-id") String id)
+    {
+	try
+	{
+	    return Task.getContactTasks(Long.parseLong(id));
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
     }
 
     // Notes

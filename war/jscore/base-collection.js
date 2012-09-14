@@ -26,7 +26,8 @@ var BaseCollection = Backbone.Collection.extend({
 var Base_List_View = Backbone.View.extend({
     events: {
         "click .delete": "deleteItem",
-        "click .edit" : "edit"
+        "click .edit" : "edit",
+        "delete-checked .agile_delete": "deleteItem",
         
     },
     initialize: function () {
@@ -126,6 +127,8 @@ var Base_Collection_View = Backbone.View.extend({
             this.appendItem(item);
         }, this);
         
+        // Add checkboxes to specified tables by triggering this event
+        $('body').trigger('agile_collection_loaded');
        return this;
     }
 });
