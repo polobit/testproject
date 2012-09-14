@@ -35,6 +35,11 @@ public class Event
     @NotSaved(IfDefault.class)
     public String title = null;
 
+    @NotSaved(IfDefault.class)
+    public String color = null;
+
+    public Long created_time = 0L;
+
     // Related Contact
     @NotSaved(IfDefault.class)
     public Key<Contact> contact = null;
@@ -137,6 +142,10 @@ public class Event
     @PrePersist
     private void PrePersist()
     {
+	// Store Created Time
+	if (created_time == 0L)
+	    created_time = System.currentTimeMillis() / 1000;
+
 	search_range = new ArrayList<Long>();
 	search_range.add(start);
 	search_range.add(end);

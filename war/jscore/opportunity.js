@@ -41,6 +41,7 @@ $("#editOpportunity").live("click", function (e) {
         postRenderCallback: function(el){
         	console.log(el);
         		populateUsers("owner", el);
+        		populateMilestones(el);
              	// Call setupTypeAhead to get tags
             	agile_type_ahead("relates_to", el, contacts_typeahead);   
             	
