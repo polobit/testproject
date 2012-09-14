@@ -13,5 +13,10 @@ bin
 war/continue.js
 .google_apis
 *.DS_STORE
+<<<<<<< HEAD
+/war/jscore/min
+/war/tpl/min
+=======
 war/jscore/min
 war/tpl/min
+>>>>>>> f63e47ea5a673095255db5733d26b1021de20d4e

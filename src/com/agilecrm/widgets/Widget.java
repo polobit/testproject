@@ -39,6 +39,9 @@ public class Widget
     // Fav Ico
     public String fav_ico_url = null;
 
+    // Mini Logo
+    public String mini_logo_url = null;
+
     // Prefs
     @NotSaved(IfDefault.class)
     public String prefs = null;
@@ -63,7 +66,7 @@ public class Widget
     }
 
     public Widget(String name, String description, String url, String logo,
-	    String fav_ico)
+	    String mini_logo, String fav_ico)
     {
 
 	this.name = name;
@@ -71,6 +74,7 @@ public class Widget
 	this.url = url;
 	this.logo_url = logo;
 	this.fav_ico_url = fav_ico;
+	this.mini_logo_url = mini_logo;
 	this.user = new Key<AgileUser>(AgileUser.class,
 		AgileUser.getCurrentAgileUser().id);
     }
@@ -82,15 +86,18 @@ public class Widget
 	widgets.add(new Widget(
 		"Linkedin",
 		"Linked For one year, in 1906, Felix Feneon re-wrote the news for a column in the French newspaper Le Matin, 'Novellas in three lines.' In a sparse sentence or two - only three lines in a single newspaper column - he captured the march of industrialization, the scourge of rural disease and the randomness of death. He showed acts of violence and charity throughout France.",
-		"/widgets/linkedin.js", "/img/plugins/linkedin.png", null));
+		"/widgets/linkedin.js", "/img/plugins/linkedin.png",
+		"/widgets/linkedin-logo-small.png", null));
 	widgets.add(new Widget(
 		"Twitter",
 		"Twitter For one year, in 1906, Felix Feneon re-wrote the news for a column in the French newspaper Le Matin, 'Novellas in three lines.' In a sparse sentence or two - only three lines in a single newspaper column - he captured the march of industrialization, the scourge of rural disease and the randomness of death. He showed acts of violence and charity throughout France.",
-		"/widgets/twitter.js", "/img/plugins/twitter.jpg", null));
+		"/widgets/twitter.js", "/img/plugins/twitter.jpg",
+		"/widgets/twitter-logo-small.png", null));
 	widgets.add(new Widget(
 		"Rapleaf",
 		"Rapleaf For one year, in 1906, Felix Feneon re-wrote the news for a column in the French newspaper Le Matin, 'Novellas in three lines.' In a sparse sentence or two - only three lines in a single newspaper column - he captured the march of industrialization, the scourge of rural disease and the randomness of death. He showed acts of violence and charity throughout France.",
-		"/widgets/rapleaf.js", "/img/plugins/twitter.jpg", null));
+		"/widgets/rapleaf.js", "/img/plugins/rapleaf.jpeg",
+		"/widgets/rapleaf-logo-small.jpeg", null));
 
 	return widgets;
 

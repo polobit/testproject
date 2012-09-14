@@ -1,8 +1,5 @@
 var TWITTER_PLUGIN_NAME = "Twitter";
-var TWITTER_PLUGIN_HEADER = '<div style=" margin-bottom:20px " class="bottom-line" style="display:inline-block;">'
-	                            +'<img src="widgets/twitter-logo-small.png" style="padding-right:5px; padding-bottom:1px; height:15px;"></img>'
-	                            +'<label style="display:inline">Twitter</label>'
-	                        +'</div>';
+var TWITTER_PLUGIN_HEADER = '<div></div>';
 
 $(function () {
 	
@@ -46,7 +43,7 @@ function setupTwitterOAuth(plugin_id)
 
     var path = "widgets/twitter.js"
     var url = '/scribe?service=twitter&return_url=' + encodeURIComponent(callbackURL) + '&plugin_id=' + encodeURIComponent(plugin_id);
-    $('#Twitter').html(TWITTER_PLUGIN_HEADER + "<button class='btn'><a href=" + url + ">Link Your Twitter</button>");
+    $('#Twitter').html(TWITTER_PLUGIN_HEADER + "<p>Follow your friends, experts, favorite celebrities, and breaking news on TWITTER.<p><button class='btn'><a href=" + url + ">Link Your Twitter</button>");
 }
 
 function showTwitterMatchingProfiles(plugin_id)
@@ -70,13 +67,14 @@ function showTwitterMatchingProfiles(plugin_id)
                 	 value = [value]
                  
                  $.each(value, function (index, object) {
-                     el = el.concat("<img  rel=\"popover\" data-content=\" <img src=" + object.picture + "></img><div style='float:right;'><span style='text-overflow:ellipsis;'>Summary:"+object.summary+"</span><br/>Connections :" + object.num_connections + " <br/>Location :" 
-                    		 + object.location + "</div> \" data-original-title=\"" + object.name + "\"class=\"twitterImage thumbnail \" id=" + object.id + " src =\" " 
-                    		 + object.picture + " \"style=\"width: 50px;height: 50px; display:inline-block; margin-right:2px; margin-bottom:2px; cursor:pointer;\" ></img>");
+                     el = el.concat("<img  rel=\"popover\" data-content=\" <img src=" + object.picture 
+                    		 + "></img><span style='display: inline-block;text-align: justify;font-style: italic;vertical-align: middle;width: 190px;padding-left: 10px;'> Name : " 
+                    		 + object.name + " <br/>Followers : " + object.num_connections + " <br/>Location : " 
+                    		 + object.location + "</span><p style='text-align: justify;font-style: italic;'>Summary : "+ object.summary+" </p>\" data-original-title=\" Twitter Profile\"class=\"twitterImage thumbnail \" id=" 
+                    		 + object.id + " src =\" "+ object.picture + " \"style=\"width: 55px;height: 55px; display:inline-block; margin-right:2px; margin-bottom:2px; cursor:pointer;\" ></img>");
                  });
              });
              $('#Twitter').html(el);
-		
 
      });
 	
@@ -95,7 +93,7 @@ function showTwitterMatchingProfiles(plugin_id)
 			    if (id) 
 			    	{			    	
 			    		// To ask user to add profile pic to contact image
-			    		var modal =$('<div id="twitter-image-save-modal" class="modal fade in" >'
+			    		var modal = $('<div id="twitter-image-save-modal" class="modal fade in" >'
 			    				          +'<div class="modal-header" ><a href="#" data-dismiss="modal" class="close">&times;</a>'
 			    				          +'<h3>Add Image</h3></div>'
 			    				          +'<div class="modal-body"><p>You are about to add Image to contact</p>'
@@ -105,7 +103,7 @@ function showTwitterMatchingProfiles(plugin_id)
 			    				                 +'<a  href="#" class="btn close" data-dismiss="modal" >No</a>'
 			    				          +'</div>'
 			    				      +'</div>');
-			    		if($('#twitter-image-save-modal').size()==0)
+			    		if($('#twitter-image-save-modal').size() == 0)
 			    		      $('#content').append(modal);
 			    		$('#twitter-image-save-modal').modal('show');		   
 			    		agile_crm_save_widget_property(TWITTER_PLUGIN_NAME, id);
@@ -127,22 +125,13 @@ function showTwitterMatchingProfiles(plugin_id)
 
 function showTwitterProfile(twitter_id, plugin_id)
 {
-	$('#Twitter').html('<div style=" margin-bottom:10px " class="bottom-line" style="display:inline-block;">'
-							+'<img src="widgets/twitter-logo-small.png" style="padding-right:5px; padding-bottom:1px; height:15px;"></img>'
-						+'</div>'
-						+'<label style="display:inline">Twitter</label>'
-						+'<span id="twitter_plugin_delete" class="icon-remove pull-right" style=" cursor:pointer; color: #FF00FF"></span>'
-						+'<p><img src=\"img/1-0.gif\"></img></p>');
+	$('#Twitter').html('<p><img src=\"img/1-0.gif\"></img></p>');
 	
     $.getJSON("/core/api/widgets/contact/TWITTER/" + twitter_id +"/" + plugin_id, function (data) {
     	
-        $('#Twitter').html('<div style=" margin-bottom:20px " class="bottom-line" style="display:inline-block;">'
-				        		+'<img src="widgets/twitter-logo-small.png" style="padding-right:5px; padding-bottom:1px; height:15px;"></img>'
-				        		+'<label style="display:inline">Twitter</label>'
-				        		+'<a class="icon-remove pull-right" id="twitter_plugin_delete" style=" cursor:pointer; color: #FF00FF"></a>'
-				        	+'</div>'
-				        	+'<div  style="display:inline;  line-height:12px;">'
+        $('#Twitter').html('<div  style="display:inline;  line-height:12px;">'
 				        		+'<div class="row-fluid well" style="margin-top:-10px;padding:0px;">'
+				        		+'<a class="icon-remove pull-right" id="twitter_plugin_delete" style=" cursor:pointer; color: #FF00FF"></a>'
 				        		   +'<div class="span3" style=" margin-right:3%">'
 				        		       +'<img src=' + data.picture + ' style=" display:inline; float:left; margin-right:2px; margin-top:5px; padding:0px 5px; cursor:pointer; color: #FF00FF "/>'
 				        		   +'</div>'
