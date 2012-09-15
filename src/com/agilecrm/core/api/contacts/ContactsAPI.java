@@ -36,19 +36,17 @@ public class ContactsAPI
     // This method is called if TEXT_PLAIN is request
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Contact> getContacts()
+    public List<Contact> getContacts(@QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count)
     {
-	return Contact.getAllContacts();
-    }
+	if (count != null)
+	{
 
-    // This method is called if TEXT_PLAIN is request
-    @Path("/cursor/{count}")
-    @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Contact> getContactsByCount(@QueryParam("c") String cursor,
-	    @PathParam("count") String count)
-    {
-	return Contact.getAllContacts(Integer.parseInt(count), cursor);
+	    System.out.println("Fetching page by page");
+	    return Contact.getAllContacts(Integer.parseInt(count), cursor);
+	}
+
+	return Contact.getAllContacts();
     }
 
     @POST
@@ -74,19 +72,17 @@ public class ContactsAPI
 	return contact;
     }
 
-    /*
-     * @Path("/upload")
-     * 
-     * @POST
-     * 
-     * @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-     * 
-     * @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-     * public List<Contact> createMultipleContact(List<Contact> contacts) { for
-     * (Contact contact : contacts) contact.save();
-     * 
-     * return contacts; }
-     */
+    @Path("multi/upload")
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<Contact> createMultipleContact(List<Contact> contacts)
+    {
+	for (Contact contact : contacts)
+	    contact.save();
+
+	return contacts;
+    }
 
     // File Upload
     @Path("upload")

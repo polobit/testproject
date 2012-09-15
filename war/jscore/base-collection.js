@@ -81,19 +81,19 @@ var Base_Collection_View = Backbone.View.extend({
         
         // Call render which shows loading
         this.render();
-        
-
+    
         // Add infiniscroll
         if(this.options.cursor)
-        {
-        	
-        	var max = this.options.max;
-        	if(!max)
-        		max = 20;
-        	
+        {       	        
+        	this.page_size = this.options.page_size;
+        	if(!this.page_size)
+        		this.page_size = 20;
+        
         	// Get max
-        	console.log("Inifinite Scolling started");
-        	this.infiniScroll = new Backbone.InfiniScroll(this.collection, {success: this.appendItem, eparams: {max: 20}});	       	
+        	// console.log("Inifinite Scolling started");
+        	this.infiniScroll = new Backbone.InfiniScroll(this.collection, {success: this.render, untilAttr: 'cursor', param: 'cursor', strict: true, pageSize: this.page_size});	       	
+        	
+        	this.collection.url = this.collection.url + "?page_size=" + this.page_size;
         }
        
     },
@@ -120,8 +120,11 @@ var Base_Collection_View = Backbone.View.extend({
     		$(this.el).html(LOADING_HTML);
     		return this;
     	}
-    
-        $(this.el).empty(); 
+    	
+    	// Remove loading 
+    	if($(this.el).html() == LOADING_HTML)
+    		$(this.el).empty(); 
+        
         $(this.el).html(getTemplate((this.options.templateKey + '-collection'), {}));
         _(this.collection.models).each(function (item) { // in case collection is not empty
             this.appendItem(item);
@@ -129,6 +132,15 @@ var Base_Collection_View = Backbone.View.extend({
         
         // Add checkboxes to specified tables by triggering this event
         $('body').trigger('agile_collection_loaded');
+        
+        
+        // For the first time fetch, disable Scroll bar if results are lesser
+        if(this.page_size && (this.collection.length < this.page_size))
+        {
+        	console.log("Disabling infini scroll");
+        	this.infiniScroll.destroy();
+        }
+        
        return this;
     }
 });

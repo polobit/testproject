@@ -36,7 +36,7 @@ public class Event
     public String title = null;
 
     @NotSaved(IfDefault.class)
-    public String color = null;
+    public String color = "blue";
 
     public Long created_time = 0L;
 

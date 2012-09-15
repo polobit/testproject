@@ -187,7 +187,6 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
     public List<T> fetchAll(int max, String cursor)
     {
-
 	Query<T> query = ofy().query(clazz);
 
 	if (cursor != null)

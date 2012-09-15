@@ -35,7 +35,11 @@ $(function(){
 		 		$(".lname-duplicate-error").show();
 		 		return false;
 		 	}
-		   
+		 	
+		 	// Show Please wait
+		 	$waiting =  $('<div style="display:inline-block;padding-left:5px"><small><p class="text-success"><i><span id="status-message">Please wait</span></i></p></small></div>');
+    		$waiting.insertAfter($('#import-contacts'));
+    		
 	        // Iterate through all tbody tr
 	        $('#import-tbody tr').each(function () {
 	            var properties = [];
@@ -46,7 +50,7 @@ $(function(){
 	                var property = {};
 	                var name = $(this).parents('table').find('th').eq(i).find('select').val();
 	                console.log($(this));
-	                console.log("Name is " + name);
+	                //console.log("Name is " + name);
 
 
 	                if (name.indexOf("-") != -1) {
@@ -82,20 +86,33 @@ $(function(){
 
 	        });
 
-	        //console.log(models);
+	        console.log(models);
+	        
+	        
+	        // Show Updating
+	        $waiting.find('#status-message').html('Uploading to server');
 
-	        var contact = {};
-	        contact.contact = models;
+	        var contact = models;
+	        //contact.contact = models;
 
 	        $.ajax({
 	            type: 'POST',
-	            url: '/core/api/contacts/upload',
+	            url: '/core/api/contacts/multi/upload',
 	            data: JSON.stringify(contact),
 	            contentType: "application/json; charset=utf-8",
 	            success: function (data) {
-	                //console.log("Uploaded successfully");
+	                
+	            	
+	            	$waiting.find('#status-message').html('Uploaded successfully');
+	            	
+	            	Backbone.history.navigate('contacts', {
+                        trigger: true
+                    });
+	            	
+	            	console.log("Uploaded successfully");
+		            	
 	                //console.log(data);
-	            	App_Contacts.contactsListView.collection.add(data.contact);
+	            	//App_Contacts.contactsListView.collection.add(data.contact);
 	            },
 	            dataType: 'json'
 	        });

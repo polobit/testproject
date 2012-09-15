@@ -27,8 +27,8 @@
 %>
 
 <% 
-// String CSS_PATH = "/";
-String CSS_PATH = "//d13pkp0ru5xuwf.cloudfront.net/";
+String CSS_PATH = "/";
+// String CSS_PATH = "//d13pkp0ru5xuwf.cloudfront.net/";
 %>
 	
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
@@ -545,8 +545,8 @@ font-weight: normal;
 <script src='lib/headjs-min.js'></script>
 	
 	<script>
-	var LIB_PATH = "//d13pkp0ru5xuwf.cloudfront.net/js/";
-	// var LIB_PATH = "/";
+	// var LIB_PATH = "//d13pkp0ru5xuwf.cloudfront.net/js/";
+	var LIB_PATH = "/";
 	
 	var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
 	// var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';

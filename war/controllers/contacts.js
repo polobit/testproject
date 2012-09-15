@@ -44,23 +44,16 @@ var ContactsRouter = Backbone.Router.extend({
     	var max_contacts_count = 20;
     	 
     	// Tags, Search & default browse comes to the same function
-    	var url = '/core/api/contacts/cursor/' + max_contacts_count;
-    	var restKey = 'contacts';
-    	if(tag_id)
-    	{
-    		url = '/core/api/tags/' + tag_id;
-    		restKey = 'contact';
-    	}
+    	var url = '/core/api/contacts';
     	 
     	console.log("Fetching from " + url);
     	
-          this.contactsListView = new Base_Collection_View({
+        this.contactsListView = new Base_Collection_View({
               url: url,
-              restKey: restKey,
               templateKey: "contacts",
               individual_tag_name: 'tr',
               cursor: true,
-              cursor_max:true
+              page_size: 100 
           });
 
           // Contacts are fetched when the app loads in the initialize
