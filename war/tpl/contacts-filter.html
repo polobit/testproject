@@ -1,355 +1,96 @@
 <script id="filter-contacts-template" type="text/html">
-	<div class="span10">
+<div class="span10">
 		<div class="well">
-			<form id="filterContactRorm" class="form-horizontal">
-				<div class="formsection">
-					<h3 class="formheading">Filter Contacts</h3>
-					<table>
-						<tbody>
-							<tr>
-								<td>
-								  <select id="firstSelect" name="">	
-									<option value="tag">Tagged With</option>
-									<option value="class">Type</option>
-									<option value="name">Name</option>
-									<option value="jobtitle">Job Title</option>
-									<option value="email">Email Address</option>
-									<option value="phone">Phone Number</option>
-									<option value="city">Town/City</option>
-									<option value="state">State/Province</option>
-									<option value="postalCode">Postal/Zip</option>
-									<option value="country">Country</option>
-									<option value="createdOn">Added On</option>
-									<option value="updatedOn" selected="selected">Updated On</option>
-									<option value="lastContactOn">Last Contacted On</option>
-									<option value="hasEmailAddress">Has an Email Address</option>
-									<option value="hasAddress">Has an Address</option>
-									<option value="hasEmployees">Has People</option>
-									<option value="hasTags">Has Tags</option>
-									<option value="lastImport">Created in Last Import</option>
-									<option value="org_tag">Organisation.Tagged With</option>
-									<option value="org_name">Organisation.Name</option>
-									<optgroup label="Custom Fields">	
-										<option value="custom_label">label</option>
-										<option value="custom_sfsadf">sfsadf</option>
-										<option value="org_custom_label">Organisation.label</option>
-										<option value="org_custom_sfsadf">Organisation.sfsadf</option>
-									</optgroup>
-									<optgroup label="DataTags"></optgroup>
-								  </select>
-								</td>
-
-								<td>
-
-								  <select id="secondSelect" name=" ">	
-									
-									<option value="TYPEEQUALS" class="class">is</option>
-									<option value="COUNTRYEQUALS" class="country">is</option>
-									<option value="NAME..EQUALS" class="name jobtitle email phone city state postalCode createdOn updatedOn lastContactOn org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
-									
-									<option value="COUNTRYNOTEQUALS" class="country">isn't</option>
-									<option value="NAME..NOTEQUALS" class="name jobtitle email phone city state postalCode createdOn org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
-									<option value="TYPENOTEQUALS" class="class">isn't</option>
-									
-									<option value="AFTER" class="createdOn updatedOn lastContactOn">is after</option>
-									<option value="BEFORE" class="createdOn updatedOn lastContactOn">is before</option>
-									<option value="WITHINLAST" class="createdOn updatedOn lastContactOn">is within last</option>
-									<option value="WITHINNEXT" class="createdOn updatedOn lastContactOn">is within next</option>
-									<option value="OLDERTHAN" class="createdOn updatedOn lastContactOn">is older than</option>
-									<option value="STARTSWITH" class="name jobtitle email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">starts with</option>
-									<option value="CONTAINS" class="name jobtitle email phone city state postalCode org_name">contains</option>
-									<option value="YES" class="hasEmailAddress hasAddress hasEmployees hasTags lastImport">yes</option>
-									<option value="No" class="hasEmailAddress hasAddress hasEmployees hasTags lastImport">No</option>	
-					<option value="EQUALS" class="tag org_tag">is</option>
-<option value="NOTEQUALS" class="tag org_tag">isn't</option>
-<option value="ANYOF" class="tag">is any of</option>	  
-
-								  </select>
-								</td>
-
-								
-								<td>
-
-								  <select id="thirdSelect" name="">
-									<option value="" class="selected"></option>
-									
-									<option value="Person" class="TYPEEQUALS TYPENOTEQUALS">Person</option>
-									<option value="Organization" class="TYPEEQUALS TYPENOTEQUALS">Organization</option>
-									<option value="AF" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Afghanistan</option>
-									<option value="AX" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Åland Islands </option>
-									<option value="AL" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Albania</option>
-									<option value="DZ" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Algeria</option>
-									<option value="AS" class="COUNTRYEQUALS COUNTRYNOTEQUALS">American Samoa</option>
-									<option value="AD" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Andorra</option>
-									<option value="AO" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Angola</option>
-									<option value="AI" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Anguilla</option>
-									<option value="AQ" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Antarctica</option>
-									<option value="AG" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Antigua and Barbuda</option>
-									<option value="AR" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Argentina</option>
-									<option value="AM" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Armenia</option>
-									<option value="AW" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Aruba</option>
-									<option value="AU" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Australia</option>
-									<option value="AT" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Austria</option>
-									<option value="AZ" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Azerbaijan</option>
-									<option value="BS" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Bahamas</option>
-									<option value="BH" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Bahrain</option>
-									<option value="BD" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Bangladesh</option>
-									<option value="BB" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Barbados</option>
-									<option value="BY" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Belarus</option>
-									<option value="BE" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Belgium</option>
-									<option value="BZ" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Belize</option>
-									<option value="BJ" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Benin</option>
-									<option value="BM" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Bermuda</option>
-									<option value="BT" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Bhutan</option>
-									<option value="BO" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Bolivia, Plurinational State of</option>
-									<option value="BQ" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Bonaire, Sint Eustatius and Saba</option>
-									<option value="BA" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Bosnia and Herzegovina</option>
-									<option value="BW" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Botswana</option>
-									<option value="BV" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Bouvet Island</option>
-									<option value="BR" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Brazil</option>
-									<option value="IO" class="COUNTRYEQUALS COUNTRYNOTEQUALS">British Indian Ocean Territory</option>
-									<option value="BN" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Brunei Darussalam</option>
-									<option value="BG" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Bulgaria</option>
-									<option value="BF" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Burkina Faso</option>
-									<option value="BI" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Burundi</option>
-									<option value="KH" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Cambodia</option>
-									<option value="CM" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Cameroon</option>
-									<option value="CA" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Canada</option>
-									<option value="CV" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Cape Verde</option>
-									<option value="KY" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Cayman Islands</option>
-									<option value="CF" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Central African Republic</option>
-									<option value="TD" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Chad</option>
-									<option value="CL" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Chile</option>
-									<option value="CN" class="COUNTRYEQUALS COUNTRYNOTEQUALS">China</option>
-									<option value="CX" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Christmas Island</option>
-									<option value="CC" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Cocos (Keeling) Islands</option>
-									<option value="CO" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Colombia</option>
-									<option value="KM" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Comoros</option>
-									<option value="CG" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Congo</option>
-									<option value="CD" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Congo, Democratic Republic of the</option>
-									<option value="CK" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Cook Islands</option>
-									<option value="CR" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Costa Rica</option>
-									<option value="CI" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Côte d'Ivoire</option>
-									<option value="HR" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Croatia</option>
-									<option value="CU" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Cuba</option>
-									<option value="CW" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Curaçao</option>
-									<option value="CY" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Cyprus</option>
-									<option value="CZ" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Czech Republic</option>
-									<option value="DK" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Denmark</option>
-									<option value="DJ" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Djibouti</option>
-									<option value="DM" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Dominica</option>
-									<option value="DO" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Dominican Republic</option>
-									<option value="EC" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Ecuador</option>
-									<option value="EG" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Egypt</option>
-									<option value="SV" class="COUNTRYEQUALS COUNTRYNOTEQUALS">El Salvador</option>
-									<option value="GQ" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Equatorial Guinea</option>
-									<option value="ER" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Eritrea</option>
-									<option value="EE" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Estonia</option>
-									<option value="ET" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Ethiopia</option>
-									<option value="FK" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Falkland Islands (Malvinas)</option>
-									<option value="FO" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Faroe Islands</option>
-									<option value="FJ" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Fiji</option>
-									<option value="FI" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Finland</option>
-									<option value="FR" class="COUNTRYEQUALS COUNTRYNOTEQUALS">France</option>
-									<option value="GF" class="COUNTRYEQUALS COUNTRYNOTEQUALS">French Guiana</option>
-									<option value="PF" class="COUNTRYEQUALS COUNTRYNOTEQUALS">French Polynesia</option>
-									<option value="TF" class="COUNTRYEQUALS COUNTRYNOTEQUALS">French Southern Territories</option>
-									<option value="GA" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Gabon</option>
-									<option value="GM" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Gambia</option>
-									<option value="GE" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Georgia</option>
-									<option value="DE" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Germany</option>
-									<option value="GH" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Ghana</option>
-									<option value="GI" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Gibraltar</option>
-									<option value="GR" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Greece</option>
-									<option value="GL" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Greenland</option>
-									<option value="GD" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Grenada</option>
-									<option value="GP" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Guadeloupe</option>
-									<option value="GU" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Guam</option>
-									<option value="GT" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Guatemala</option>
-									<option value="GG" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Guernsey</option>
-									<option value="GN" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Guinea</option>
-									<option value="GW" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Guinea-Bissau</option>
-									<option value="GY" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Guyana</option>
-									<option value="HT" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Haiti</option>
-									<option value="HM" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Heard Island and McDonald Islands</option>
-									<option value="VA" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Holy See (Vatican City State)</option>
-									<option value="HN" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Honduras</option>
-									<option value="HK" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Hong Kong</option>
-									<option value="HU" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Hungary</option>
-									<option value="IS" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Iceland</option>
-									<option value="IN" class="COUNTRYEQUALS COUNTRYNOTEQUALS">India</option>
-									<option value="ID" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Indonesia</option>
-									<option value="IR" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Iran, Islamic Republic of</option>
-									<option value="IQ" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Iraq</option>
-									<option value="IE" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Ireland</option>
-									<option value="IM" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Isle of Man</option>
-									<option value="IL" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Israel</option>
-									<option value="IT" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Italy</option>
-									<option value="JM" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Jamaica</option>
-									<option value="JP" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Japan</option>
-									<option value="JE" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Jersey</option>
-									<option value="JO" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Jordan</option>
-									<option value="KZ" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Kazakhstan</option>
-									<option value="KE" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Kenya</option>
-									<option value="KI" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Kiribati</option>
-									<option value="KP" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Korea, Democratic People's Republic of</option>
-									<option value="KR" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Korea, Republic of</option>
-									<option value="KW" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Kuwait</option>
-									<option value="KG" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Kyrgyzstan</option>
-									<option value="LA" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Lao People's Democratic Republic</option>
-									<option value="LV" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Latvia</option>
-									<option value="LB" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Lebanon</option>
-									<option value="LS" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Lesotho</option>
-									<option value="LR" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Liberia</option>
-									<option value="LY" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Libyan Arab Jamahiriya</option>
-									<option value="LI" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Liechtenstein</option>
-									<option value="LT" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Lithuania</option>
-									<option value="LU" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Luxembourg</option>
-									<option value="MO" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Macao</option>
-									<option value="MK" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Macedonia, the former Yugoslav Republic of</option>
-									<option value="MG" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Madagascar</option>
-									<option value="MW" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Malawi</option>
-									<option value="MY" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Malaysia</option>
-									<option value="MV" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Maldives</option>
-									<option value="ML" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Mali</option>
-									<option value="MT" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Malta</option>
-									<option value="MH" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Marshall Islands</option>
-									<option value="MQ" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Martinique</option>
-									<option value="MR" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Mauritania</option>
-									<option value="MU" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Mauritius</option>
-									<option value="YT" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Mayotte</option>
-									<option value="MX" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Mexico</option>
-									<option value="FM" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Micronesia, Federated States of</option>
-									<option value="MD" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Moldova</option>
-									<option value="MC" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Monaco</option>
-									<option value="MN" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Mongolia</option>
-									<option value="ME" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Montenegro</option>
-									<option value="MS" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Montserrat</option>
-									<option value="MA" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Morocco</option>
-									<option value="MZ" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Mozambique</option>
-									<option value="MM" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Myanmar</option>
-									<option value="NA" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Namibia</option>
-									<option value="NR" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Nauru</option>
-									<option value="NP" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Nepal</option>
-									<option value="NL" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Netherlands</option>
-									<option value="AN" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Netherlands Antilles</option>
-									<option value="NC" class="COUNTRYEQUALS COUNTRYNOTEQUALS">New Caledonia</option>
-									<option value="NZ" class="COUNTRYEQUALS COUNTRYNOTEQUALS">New Zealand</option>
-									<option value="NI" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Nicaragua</option>
-									<option value="NE" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Niger</option>
-									<option value="NG" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Nigeria</option>
-									<option value="NU" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Niue</option>
-									<option value="NF" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Norfolk Island</option>
-									<option value="MP" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Northern Mariana Islands</option>
-									<option value="NO" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Norway</option>
-									<option value="OM" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Oman</option>
-									<option value="PK" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Pakistan</option>
-									<option value="PW" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Palau</option>
-									<option value="PS" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Palestinian Territory, Occupied</option>
-									<option value="PA" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Panama</option>
-									<option value="PG" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Papua New Guinea</option>
-									<option value="PY" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Paraguay</option>
-									<option value="PE" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Peru</option>
-									<option value="PH" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Philippines</option>
-									<option value="PN" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Pitcairn</option>
-									<option value="PL" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Poland</option>
-									<option value="PT" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Portugal</option>								
-									<option value="PR" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Puerto Rico</option>
-									<option value="QA" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Qatar</option>
-									<option value="RE" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Réunion</option>
-									<option value="RO" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Romania</option>
-									<option value="RU" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Russian Federation</option>
-									<option value="RW" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Rwanda</option>
-									<option value="BL" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Saint Barthélemy</option>
-									<option value="SH" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Saint Helena, Ascension and Tristan da Cunha</option>
-									<option value="KN" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Saint Kitts and Nevis</option>
-									<option value="LC" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Saint Lucia</option>
-									<option value="MF" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Saint Martin</option>
-									<option value="PM" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Saint Pierre and Miquelon</option>
-									<option value="VC" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Saint Vincent and the Grenadines</option>
-									<option value="WS" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Samoa</option>
-									<option value="SM" class="COUNTRYEQUALS COUNTRYNOTEQUALS">San Marino</option>
-									<option value="ST" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Sao Tome and Principe</option>
-									<option value="SA" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Saudi Arabia</option>
-									<option value="SN" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Senegal</option>
-									<option value="RS" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Serbia</option>
-									<option value="SC" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Seychelles</option>
-									<option value="SL" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Sierra Leone</option>
-									<option value="SG" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Singapore</option>
-									<option value="SX" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Sint Maarten (Dutch part)</option>
-									<option value="SK" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Slovakia</option>
-									<option value="SI" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Slovenia</option>
-									<option value="SB" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Solomon Islands</option>
-									<option value="SO" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Somalia</option>
-									<option value="ZA" class="COUNTRYEQUALS COUNTRYNOTEQUALS">South Africa</option>
-									<option value="GS" class="COUNTRYEQUALS COUNTRYNOTEQUALS">South Georgia and the South Sandwich Islands</option>
-									<option value="SS" class="COUNTRYEQUALS COUNTRYNOTEQUALS">South Sudan</option>
-									<option value="ES" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Spain</option>
-									<option value="LK" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Sri Lanka</option>
-									<option value="SD" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Sudan</option>
-									<option value="SR" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Suriname</option>
-									<option value="SJ" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Svalbard and Jan Mayen</option>
-									<option value="SZ" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Swaziland</option>
-									<option value="SE" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Sweden</option>
-									<option value="CH" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Switzerland</option>
-									<option value="SY" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Syrian Arab Republic</option>
-									<option value="TW" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Taiwan</option>
-									<option value="TJ" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Tajikistan</option>
-									<option value="TZ" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Tanzania, United Republic of</option>
-									<option value="TH" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Thailand</option>
-									<option value="TL" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Timor-Leste</option>
-									<option value="TG" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Togo</option>
-									<option value="TK" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Tokelau</option>
-									<option value="TO" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Tonga</option>
-									<option value="TT" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Trinidad and Tobago</option>
-									<option value="TN" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Tunisia</option>
-									<option value="TR" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Turkey</option>
-									<option value="TM" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Turkmenistan</option>
-									<option value="TC" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Turks and Caicos Islands</option>
-									<option value="TV" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Tuvalu</option>
-									<option value="UG" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Uganda</option>
-									<option value="UA" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Ukraine</option>
-									<option value="AE" class="COUNTRYEQUALS COUNTRYNOTEQUALS">United Arab Emirates</option>
-									<option value="GB" class="COUNTRYEQUALS COUNTRYNOTEQUALS">United Kingdom</option>
-									<option value="US" class="COUNTRYEQUALS COUNTRYNOTEQUALS">United States</option>
-									<option value="UM" class="COUNTRYEQUALS COUNTRYNOTEQUALS">United States Minor Outlying Islands</option>
-									<option value="UY" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Uruguay</option>
-									<option value="UZ" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Uzbekistan</option>
-									<option value="VU" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Vanuatu</option>
-									<option value="VE" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Venezuela, Bolivarian Republic of</option>
-									<option value="VN" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Viet Nam</option>
-									<option value="VG" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Virgin Islands, British</option>
-									<option value="VI" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Virgin Islands, U.S.</option>
-									<option value="WF" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Wallis and Futuna</option>
-									<option value="EH" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Western Sahara</option>
-									<option value="YE" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Yemen</option>
-									<option value="ZM" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Zambia</option>
-									<option value="ZW" class="COUNTRYEQUALS COUNTRYNOTEQUALS">Zimbabwe</option>
-								  </select>&nbsp;
-
-								</td>
-
-
-<td>
-	<select id="fourthSelect" name="">
-		<option value="" class="EQUALS">--</option>
-<option value="" class="NOTEQUALS">--</option>
-<option value="" class="ANYOF">--</option>
-	</select>
-</td>
-
-								<td>
-									<i class="filter-contacts-multiple-add icon-plus"></i>
-								</td>&nbsp;&nbsp;
-
-								<td>
-									<i class="filter-contacts-multiple-remove icon-remove-circle" style="display: none"></i>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>			
-			</form>
-		</div>
+			<form id="filterContactForm" class="form-horizontal">
+				<div name ="rules" class="formsection chainedSelect">
+					<legend class="formheading">Filter Contacts</legend>
+					<fieldset>	
+					<div class="control-group">
+						<label class="control-label">Name<span class="field_req">*</span></label>
+						<div class="controls">
+							<input type="text" name="name" class="required" />	
+			  			</div>
+					</div>
+				<div class="control-group">
+					<div class="controls">
+						<table>
+							<tbody>
+								<tr class="chained" padding-left:100%>
+									<td>
+										<div id="firstSelect" name="LHS">
+								  			<select name="temp" id="LHS">	
+												<option value="tags" selected="selected">Tagged With</option>
+												<option value="properties_first_name" >First Name</option>
+												<option value="title">Job Title</option>
+												<option value="properties_email">Email Address</option>
+												<option value="properties_phone">Phone Number</option>
+												<option value="created_time">Created</option>
+												<option value="updated_time">Updated</option>
+												<option value="organisation">Organisation.Name</option>
+								  			</select>
+										</div>
+									</td>
+									<td>
+										<div id="secondSelect" name="condition">
+										  <select name="temp" class="span2">		
+												<option value="EQUALS" class="properties_first_name properties_phone tags organisation title org_tag jobtitle properties_email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>	
+												<option value="NOTEQUALS" class="properties_first_name tags org_tag jobtitle properties_email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>											
+												<option value="EQUALS" class="updated_time created_time">on</option>
+												<option value="AFTER" class="created_time updated_time">is after</option>
+												<option value="BEFORE" class="created_time updated_time">is before</option>
+												<option value="BETWEEN" class="created_time updated_time">is between</option>
+												<option value="WITHINNEXT" class="created_time updated_time">is within next</option>
+												<option value="LAST" class="created_time updated_time">is LAST</option>
+												<option value="EQUALS" class="tag org_tag">is</option>
+												<option value="ANYOF" class="tag">is any of</option>
+										  </select>
+										</div>
+									</td>										
+									<td>
+										<div id="fourthSelect" name="RHS">
+											<input id="updated_date" type= "text" name="updated_date" class="created_time updated_time input required date span2" placeholder="MM/DD/YY"/>
+											<input type="text" name="temp" class="first_name organisation title properties_phone LAST"/>
+											<input type="text" name="tag" class="tags" style="margin: 0 0 0 0px;"/>
+											<input type="text" name="temp" class="properties_first_name properties_email"/>
+											
+										</div>
+									</td>
+									<td>
+										<div id="thirdSelect" name="RHS_NEW">
+											<input id="date_between" type="text" name="temp" class="BETWEEN input date span2" placeholder="MM/DD/YY"/>
+										</div>
+									</td>							
+									<td>
+										<i class="filter-contacts-multiple-add icon-plus" style="display:inline-block;margin-right:5px"></i><i class="filter-contacts-multiple-remove icon-remove-circle" style="display: none;"></i>
+									</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>		
+			<div class="control-group" style="padding-top: 2%">					
+				<div class="controls">
+					<label class="checkbox"> 
+						<input type="checkbox" name="isEnabled">
+						<span style="vertical-align: bottom; display: inline;">Send Me This Report</span>
+					</label> 
+					<select name="duration">
+						<option value="daily">Daily</option>
+						<option value="weekly">Weekly</option>
+						<option value="monthly">Monthly</option>
+					</select>		
+				</div>
+			</div>
+			{{#if id}}
+				<input type="text" name="id" class="hide" value={{id}} >
+			{{/if}}
+			<div class="form-actions">
+				<a href="#" type="submit" class="save btn btn-primary" id="filtersAdd">Save</a>
+				<a href="#contacts-filters" class="btn ">Close</a>
+			</div>
+			</fieldset>
+		</form>
 	</div>
+</div>
 </script>

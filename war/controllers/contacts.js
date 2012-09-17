@@ -12,7 +12,6 @@ var ContactsRouter = Backbone.Router.extend({
         "contact-edit":"editContact",
         "contact-duplicate":"duplicateContact",
         "tags/:tag": "contacts",
-        "contacts-filter": "filterContacts",
         "send-email": "sendEmail",
         "add-opportunity": "addOpportunityToContact",
          
@@ -21,6 +20,12 @@ var ContactsRouter = Backbone.Router.extend({
         "contact-views": "contactViews",
         "contact-custom-view-edit/:id": "editContactView",
           
+        /*Contact-Filters*/
+        "contact-filter-add": "filterContactsAdd",
+        "contacts-filters" :"filterContacts",
+        "contacts-filter-edit/:id" : "contactFilterEdit",
+        "contact-filter/:id" : "showFilterContacts",
+        
         /* New Contact/Company - Full mode */
         "continue-contact": "continueContact",
         "continue-company": "continueCompany",
@@ -39,12 +44,23 @@ var ContactsRouter = Backbone.Router.extend({
     dashboard: function () {
 
     },
-    contacts: function (tag_id) {
+    contacts: function (tag_id, filter_id) {
     		
     	var max_contacts_count = 20;
-    	 
-    	// Tags, Search & default browse comes to the same function
+    	
     	var url = '/core/api/contacts';
+    	// Tags, Search & default browse comes to the same function
+    	
+    	if(tag_id)
+    	{
+    		url = '/core/api/tags/' + tag_id;
+    	}
+    	
+    	// Search based on filter
+    	if(filter_id)
+    	{
+    		url = "core/api/contacts/filters/query/" + filter_id;
+    	}
     	 
     	console.log("Fetching from " + url);
     	
@@ -64,6 +80,7 @@ var ContactsRouter = Backbone.Router.extend({
             	  setupTags(cel);
                   pieTags(cel);
             	  setupViews(cel);
+            	  App_Contacts.filterContacts(cel);
               }
           });
 
@@ -82,7 +99,11 @@ var ContactsRouter = Backbone.Router.extend({
           $("#contactsmenu").addClass("active");    
          
     },
-
+    showFilterContacts: function(filter_id)
+    {
+    	if(App_Contacts)
+    		App_Contacts.contacts(undefined, filter_id);
+    },
     contactDetails: function (id, contact) {
 
     	// If hte user refreshes the contacts list view page directly - we should load from the model
@@ -304,17 +325,85 @@ var ContactsRouter = Backbone.Router.extend({
 		// Prefill the templates
 		var optionsTemplate = "<option value='{{id}}'> {{subject}}</option>";
 		fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', undefined , optionsTemplate);
-    },  
-    
-    filterContacts: function()
+    },      
+    filterContactsAdd: function()
     {
-    	head.js('lib/jquery.chained.min.js', function()
-    	{
-    		$('#content').html(getTemplate('filter-contacts', {}));
-    		$("#secondSelect").chained("#firstSelect"); 
-    		$("#thirdSelect").chained("#secondSelect");
-    		$("#fourthSelect").remoteChained("#secondSelect","/core/api/tags/filter-tags");
-    	})
+    	var contacts_filter = new Base_Model_View({
+    				url:'core/api/contacts/filters',
+    	            template: "filter-contacts",
+    	            isNew: true,
+    	            postRenderCallback: function(el) {
+       					
+    	            	head.js('lib/jquery.chained.min.js', function()
+    	           		    	{	
+    	           					var first_select, second_select, third_select, fourth_select;
+    	           					
+    	           					first_select = $("#firstSelect",el);
+    	           					second_select = $("#secondSelect",el)
+    	           					third_select = $("#thirdSelect",el)
+    	           					fourth_select = $("#fourthSelect",el)
+    	           					
+    	           					// Chaining dependencies of input fields with jquery.chained.js
+    	           					second_select.chained(first_select);
+    	           					third_select.chained(second_select);
+    	           					fourth_select.chained(first_select,third_select);
+    	            			        	            			    
+    	           		    	})
+    	               }
+    	        });
+        var el = contacts_filter.render().el;
+        $('#content').html(el);
     },
+    filterContacts: function(cel)
+    {
+    	this.contactFiltersListView = new Base_Collection_View({
+            url: '/core/api/contacts/filters',
+            restKey: "ContactFilter",
+            templateKey: "contact-filter",
+            individual_tag_name: 'li'
+        });
+    	this.contactFiltersListView.collection.fetch();
+ 	   $('#filter-list',cel).html(this.contactFiltersListView.render().el);
+    },
+    contactFilterEdit : function(id)
+    {
+    	if (!App_Contacts.contactFiltersListView || App_Contacts.contactFiltersListView.collection.length == 0 || App_Contacts.contactFiltersListView.collection.get(id) == null)
+    	{
+    		this.navigate("contacts-filters", {
+                trigger: true
+            });
+    	}
+    	
+    	var contact_filter = App_Contacts.contactFiltersListView.collection.get(id);
+    	  var ContactFilter = new Base_Model_View({
+    	        url: 'core/api/contacts/filters',
+    	        model: contact_filter,
+    	        template: "filter-contacts",
+    	        window: 'contacts-filters',
+	            postRenderCallback: function(el) {  
+	            	head.js('lib/jquery.chained.min.js', function()
+	           		    	{	
+	            				
+	            				
+	           					var first_select, second_select, third_select, fourth_select;
+	           					
+	           					first_select = $("#firstSelect",el);
+	           					second_select = $("#secondSelect",el)
+	           					third_select = $("#thirdSelect",el)
+	           					fourth_select = $("#fourthSelect",el)
+	           					
+	           					// Chaining dependencies of input fields with jquery.chained.js
+	           					second_select.chained(first_select);
+	           					third_select.chained(second_select);
+	           					fourth_select.chained(first_select);
+	            			        	            			    
+	           		    	})
+	               }
+    	    	});
+    	    
+    	    	var ContactFilter = ContactFilter.render();
+    	    	$("#content").html(ContactFilter.el); 
+    	
+    }
     
 });

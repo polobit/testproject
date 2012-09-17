@@ -125,7 +125,7 @@ var Base_Collection_View = Backbone.View.extend({
     	if($(this.el).html() == LOADING_HTML)
     		$(this.el).empty(); 
         
-        $(this.el).html(getTemplate((this.options.templateKey + '-collection'), {}));
+        $(this.el).html(getTemplate((this.options.templateKey + '-collection'), this.collection.toJSON()));
         _(this.collection.models).each(function (item) { // in case collection is not empty
             this.appendItem(item);
         }, this);
