@@ -21,9 +21,8 @@ var ContactsRouter = Backbone.Router.extend({
         "contact-custom-view-edit/:id": "editContactView",
           
         /*Contact-Filters*/
-        "contact-filter-add": "filterContactsAdd",
-        "contacts-filters" :"filterContacts",
-        "contacts-filter-edit/:id" : "contactFilterEdit",
+        "contact-filter-add": "contactFilterAdd",
+        "contact-filter-edit/:id" : "contactFilterEdit",
         "contact-filter/:id" : "showFilterContacts",
         
         /* New Contact/Company - Full mode */
@@ -69,7 +68,7 @@ var ContactsRouter = Backbone.Router.extend({
               templateKey: "contacts",
               individual_tag_name: 'tr',
               cursor: true,
-              page_size: 25 
+              page_size: 4 
           });
 
           // Contacts are fetched when the app loads in the initialize
@@ -80,7 +79,9 @@ var ContactsRouter = Backbone.Router.extend({
             	  setupTags(cel);
                   pieTags(cel);
             	  setupViews(cel);
-            	  App_Contacts.filterContacts(cel);
+            	  
+            	  // show list of filters dropdown in contacts list
+            	  setupContactFilterList(cel);
               }
           });
 
@@ -290,7 +291,7 @@ var ContactsRouter = Backbone.Router.extend({
     		restKey: "contactView",
             window: 'contact-views',
             postRenderCallback: function(el) {
-       			head.js('lib/jquery.multi-select.js', function(){
+       			head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
        					$('#multipleSelect', el).multiSelect();
        					$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id","fields_set").sortable();
        				});
@@ -326,7 +327,7 @@ var ContactsRouter = Backbone.Router.extend({
 		var optionsTemplate = "<option value='{{id}}'> {{subject}}</option>";
 		fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', undefined , optionsTemplate);
     },      
-    filterContactsAdd: function()
+    contactFilterAdd: function()
     {
     	var contacts_filter = new Base_Model_View({
     				url:'core/api/contacts/filters',
@@ -334,42 +335,33 @@ var ContactsRouter = Backbone.Router.extend({
     	            isNew: true,
     	            postRenderCallback: function(el) {
        					
-    	            	head.js('lib/jquery.chained.min.js', function()
+    	            	head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
     	           		    	{	
-    	           					var first_select, second_select, third_select, fourth_select;
+    	           					var LHS, condition, RHS, RHS_NEW;
     	           					
-    	           					first_select = $("#firstSelect",el);
-    	           					second_select = $("#secondSelect",el)
-    	           					third_select = $("#thirdSelect",el)
-    	           					fourth_select = $("#fourthSelect",el)
+    	           					LHS = $("#LHS", el);
+    	           					condition = $("#condition", el)
+    	           					RHS = $("#RHS", el)
+    	           					
+    	           					// Extra field required for (Between values condition)
+    	           					RHS_NEW = $("#RHS-NEW", el)
     	           					
     	           					// Chaining dependencies of input fields with jquery.chained.js
-    	           					second_select.chained(first_select);
-    	           					third_select.chained(second_select);
-    	           					fourth_select.chained(first_select,third_select);
+    	           					condition.chained(LHS);
+    	           					RHS_NEW.chained(condition);
+    	           					RHS.chained(LHS);
     	            			        	            			    
     	           		    	})
     	               }
     	        });
-        var el = contacts_filter.render().el;
-        $('#content').html(el);
-    },
-    filterContacts: function(cel)
-    {
-    	this.contactFiltersListView = new Base_Collection_View({
-            url: '/core/api/contacts/filters',
-            restKey: "ContactFilter",
-            templateKey: "contact-filter",
-            individual_tag_name: 'li'
-        });
-    	this.contactFiltersListView.collection.fetch();
- 	   $('#filter-list',cel).html(this.contactFiltersListView.render().el);
+    	
+        $('#content').html(contacts_filter.render().el);
     },
     contactFilterEdit : function(id)
     {
     	if (!App_Contacts.contactFiltersListView || App_Contacts.contactFiltersListView.collection.length == 0 || App_Contacts.contactFiltersListView.collection.get(id) == null)
     	{
-    		this.navigate("contacts-filters", {
+    		this.navigate("contact-filters", {
                 trigger: true
             });
     	}
@@ -379,23 +371,21 @@ var ContactsRouter = Backbone.Router.extend({
     	        url: 'core/api/contacts/filters',
     	        model: contact_filter,
     	        template: "filter-contacts",
-    	        window: 'contacts-filters',
+    	        window: 'contact-filters',
 	            postRenderCallback: function(el) {  
-	            	head.js('lib/jquery.chained.min.js', function()
+	            	head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 	           		    	{	
-	            				
-	            				
-	           					var first_select, second_select, third_select, fourth_select;
+	           					var LHS, condition, RHS, RHS_NEW;
 	           					
-	           					first_select = $("#firstSelect",el);
-	           					second_select = $("#secondSelect",el)
-	           					third_select = $("#thirdSelect",el)
-	           					fourth_select = $("#fourthSelect",el)
+	           					LHS = $("#LHS", el);
+	           					condition = $("#condition", el);
+	           					RHS = $("#RHS", el);
+	           					RHS_NEW = $("#RHS_NEW", el);
 	           					
 	           					// Chaining dependencies of input fields with jquery.chained.js
-	           					second_select.chained(first_select);
-	           					third_select.chained(second_select);
-	           					fourth_select.chained(first_select);
+	           					condition.chained(LHS);
+	           					fourth_select.chained(LHS);
+	           					RHS_NEW.chained(condition);
 	            			        	            			    
 	           		    	})
 	               }

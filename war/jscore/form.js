@@ -182,12 +182,12 @@ function deserializeForm(data, form)
 	        					$(rule_element).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
 	        					
 	        					// Load jquery chained plugin for chaining the input fields
-	        					head.js('lib/jquery.chained.min.js', function(){
+	        					head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function(){
 	        						
 	        						// Chaining dependencies of input fields with jquery.chained.js
-	        						$('#secondSelect', rule_element).chained($('#firstSelect', rule_element));
-	        						$('#thirdSelect', rule_element).chained($('#secondSelect', rule_element));
-	        						$("#fourthSelect", rule_element).chained($('#firstSelect', rule_element));
+	        						$('#condition', rule_element).chained($('#LHS', rule_element));
+	        						$("#RHS", rule_element).chained($('#LHS', rule_element));
+	        						$('#RHS-NEW', rule_element).chained($('#condition', rule_element));
 	        				
 	        						$(parent_element).append(rule_element);
 	        					});

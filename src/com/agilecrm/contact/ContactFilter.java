@@ -29,22 +29,28 @@ public class ContactFilter
     @Id
     public Long id;
 
+    // Category of report generation - daily, weekly, monthly.
+    public enum Type
+    {
+	DAILY, WEEKLY, MONTHLY
+    };
+
     @NotSaved(IfDefault.class)
     public String name = null;
 
     @Indexed
     @NotSaved(IfDefault.class)
-    public boolean isEnabled = false;
+    public boolean is_reports_enabled = false;
 
     @Indexed
     @NotSaved(IfDefault.class)
-    public String duration = null;
+    public Type duration;
 
     @NotSaved(IfDefault.class)
     public String rules[] = null;
 
     @NotSaved
-    private JSONArray rules_json = null;
+    private JSONArray rules_json_array = null;
 
     private static ObjectifyGenericDao<ContactFilter> dao = new ObjectifyGenericDao<ContactFilter>(
 	    ContactFilter.class);
@@ -54,11 +60,11 @@ public class ContactFilter
 
     }
 
-    public ContactFilter(String name, boolean isEnabled, String duration,
-	    String rules[])
+    public ContactFilter(Type duration, String name,
+	    boolean is_reports_enabled, String rules[])
     {
 	this.name = name;
-	this.isEnabled = isEnabled;
+	this.is_reports_enabled = is_reports_enabled;
 	this.duration = duration;
 	this.rules = rules;
     }
@@ -92,18 +98,22 @@ public class ContactFilter
     public List<Contact> queryContacts()
     {
 	List<Contact> contacts = new ArrayList<Contact>();
+
+	// Remaining rules after appegine valid queries completed
 	JSONArray remaining_rules = new JSONArray();
 
 	Objectify ofy = ObjectifyService.begin();
 	Query<Contact> contact_query = ofy.query(Contact.class);
 
-	for (int i = 0; i < rules_json.length(); i++)
+	for (int i = 0; i < rules_json_array.length(); i++)
 	{
 
 	    try
 	    {
 		// Get each rule from set of rules
-		JSONObject each_rule = new JSONObject(rules_json.getString(i));
+		JSONObject each_rule = new JSONObject(
+			rules_json_array.getString(i));
+
 		String LHS = each_rule.getString("LHS");
 		String condition = each_rule.getString("condition");
 		String RHS = each_rule.getString("RHS");
@@ -122,6 +132,8 @@ public class ContactFilter
 			contact_query.filter(LHS, RHS);
 		    }
 		}
+
+		// Queries on created or updated times
 		else if (LHS.contains("time"))
 		{
 		    Date date = new Date(Long.parseLong(RHS));
@@ -246,7 +258,7 @@ public class ContactFilter
     {
 	try
 	{
-	    rules_json = new JSONArray(this.rules);
+	    rules_json_array = new JSONArray(this.rules);
 	}
 	catch (JSONException e)
 	{
