@@ -12,7 +12,6 @@ var ContactsRouter = Backbone.Router.extend({
         "contact-edit":"editContact",
         "contact-duplicate":"duplicateContact",
         "tags/:tag": "contacts",
-        "contacts-filter": "filterContacts",
         "send-email": "sendEmail",
         "add-opportunity": "addOpportunityToContact",
          
@@ -21,6 +20,11 @@ var ContactsRouter = Backbone.Router.extend({
         "contact-views": "contactViews",
         "contact-custom-view-edit/:id": "editContactView",
           
+        /*Contact-Filters*/
+        "contact-filter-add": "contactFilterAdd",
+        "contact-filter-edit/:id" : "contactFilterEdit",
+        "contact-filter/:id" : "showFilterContacts",
+        
         /* New Contact/Company - Full mode */
         "continue-contact": "continueContact",
         "continue-company": "continueCompany",
@@ -39,12 +43,23 @@ var ContactsRouter = Backbone.Router.extend({
     dashboard: function () {
 
     },
-    contacts: function (tag_id) {
+    contacts: function (tag_id, filter_id) {
     		
     	var max_contacts_count = 20;
-    	 
-    	// Tags, Search & default browse comes to the same function
+    	
     	var url = '/core/api/contacts';
+    	// Tags, Search & default browse comes to the same function
+    	
+    	if(tag_id)
+    	{
+    		url = '/core/api/tags/' + tag_id;
+    	}
+    	
+    	// Search based on filter
+    	if(filter_id)
+    	{
+    		url = "core/api/contacts/filters/query/" + filter_id;
+    	}
     	 
     	console.log("Fetching from " + url);
     	
@@ -53,7 +68,7 @@ var ContactsRouter = Backbone.Router.extend({
               templateKey: "contacts",
               individual_tag_name: 'tr',
               cursor: true,
-              page_size: 25 
+              page_size: 4 
           });
 
           // Contacts are fetched when the app loads in the initialize
@@ -64,6 +79,9 @@ var ContactsRouter = Backbone.Router.extend({
             	  setupTags(cel);
                   pieTags(cel);
             	  setupViews(cel);
+            	  
+            	  // show list of filters dropdown in contacts list
+            	  setupContactFilterList(cel);
               }
           });
 
@@ -82,7 +100,11 @@ var ContactsRouter = Backbone.Router.extend({
           $("#contactsmenu").addClass("active");    
          
     },
-
+    showFilterContacts: function(filter_id)
+    {
+    	if(App_Contacts)
+    		App_Contacts.contacts(undefined, filter_id);
+    },
     contactDetails: function (id, contact) {
 
     	// If hte user refreshes the contacts list view page directly - we should load from the model
@@ -269,7 +291,7 @@ var ContactsRouter = Backbone.Router.extend({
     		restKey: "contactView",
             window: 'contact-views',
             postRenderCallback: function(el) {
-       			head.js('lib/jquery.multi-select.js', function(){
+       			head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
        					$('#multipleSelect', el).multiSelect();
        					$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id","fields_set").sortable();
        				});
@@ -304,17 +326,74 @@ var ContactsRouter = Backbone.Router.extend({
 		// Prefill the templates
 		var optionsTemplate = "<option value='{{id}}'> {{subject}}</option>";
 		fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', undefined , optionsTemplate);
-    },  
-    
-    filterContacts: function()
+    },      
+    contactFilterAdd: function()
     {
-    	head.js('lib/jquery.chained.min.js', function()
-    	{
-    		$('#content').html(getTemplate('filter-contacts', {}));
-    		$("#secondSelect").chained("#firstSelect"); 
-    		$("#thirdSelect").chained("#secondSelect");
-    		$("#fourthSelect").remoteChained("#secondSelect","/core/api/tags/filter-tags");
-    	})
+    	var contacts_filter = new Base_Model_View({
+    				url:'core/api/contacts/filters',
+    	            template: "filter-contacts",
+    	            isNew: true,
+    	            postRenderCallback: function(el) {
+       					
+    	            	head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+    	           		    	{	
+    	           					var LHS, condition, RHS, RHS_NEW;
+    	           					
+    	           					LHS = $("#LHS", el);
+    	           					condition = $("#condition", el)
+    	           					RHS = $("#RHS", el)
+    	           					
+    	           					// Extra field required for (Between values condition)
+    	           					RHS_NEW = $("#RHS-NEW", el)
+    	           					
+    	           					// Chaining dependencies of input fields with jquery.chained.js
+    	           					condition.chained(LHS);
+    	           					RHS_NEW.chained(condition);
+    	           					RHS.chained(LHS);
+    	            			        	            			    
+    	           		    	})
+    	               }
+    	        });
+    	
+        $('#content').html(contacts_filter.render().el);
     },
+    contactFilterEdit : function(id)
+    {
+    	if (!App_Contacts.contactFiltersListView || App_Contacts.contactFiltersListView.collection.length == 0 || App_Contacts.contactFiltersListView.collection.get(id) == null)
+    	{
+    		this.navigate("contact-filters", {
+                trigger: true
+            });
+    	}
+    	
+    	var contact_filter = App_Contacts.contactFiltersListView.collection.get(id);
+    	  var ContactFilter = new Base_Model_View({
+    	        url: 'core/api/contacts/filters',
+    	        model: contact_filter,
+    	        template: "filter-contacts",
+    	        window: 'contact-filters',
+	            postRenderCallback: function(el) {  
+	            	head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+	           		    	{	
+	           					var LHS, condition, RHS, RHS_NEW;
+	           					
+	           					LHS = $("#LHS", el);
+	           					condition = $("#condition", el);
+	           					RHS = $("#RHS", el);
+	           					RHS_NEW = $("#RHS_NEW", el);
+	           					
+	           					// Chaining dependencies of input fields with jquery.chained.js
+	           					condition.chained(LHS);
+	           					fourth_select.chained(LHS);
+	           					RHS_NEW.chained(condition);
+	            			        	            			    
+	           		    	})
+	               }
+    	    	});
+    	    
+    	    	var ContactFilter = ContactFilter.render();
+    	    	$("#content").html(ContactFilter.el); 
+    	
+    }
     
 });

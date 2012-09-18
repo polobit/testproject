@@ -7,6 +7,7 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.UserPrefs;
@@ -19,7 +20,7 @@ import com.googlecode.objectify.condition.IfDefault;
 
 @XmlRootElement
 @Unindexed
-public class Workflow
+public class Workflow extends Cursor
 {
     // Key
     @Id
@@ -96,6 +97,12 @@ public class Workflow
     {
 	Objectify ofy = ObjectifyService.begin();
 	return ofy.query(Workflow.class).list();
+    }
+
+    public static List<Workflow> getAllWorkflows(int max, String cursor)
+    {
+	List<Workflow> workflows = dao.fetchAll(max, cursor);
+	return workflows;
     }
 
     public String toString()

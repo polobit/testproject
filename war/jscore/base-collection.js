@@ -91,7 +91,15 @@ var Base_Collection_View = Backbone.View.extend({
         
         	// Get max
         	// console.log("Inifinite Scolling started");
-        	this.infiniScroll = new Backbone.InfiniScroll(this.collection, {success: this.render, untilAttr: 'cursor', param: 'cursor', strict: true, pageSize: this.page_size});	       	
+        	this.infiniScroll = new Backbone.InfiniScroll(this.collection, {success: this.render, untilAttr: 'cursor', param: 'cursor', strict: true, pageSize: this.page_size, 
+        		
+        		// Show loading on fetch after table 
+        		onFetch:function(){
+        			$("table").after('<div style="margin-left:50%">' + LOADING_ON_CURSOR + '</div>');
+        		}
+        	});	       	
+        	
+        	addInfiniScrollToRoute(this.infiniScroll);
         	
         	this.collection.url = this.collection.url + "?page_size=" + this.page_size;
         }
@@ -125,7 +133,7 @@ var Base_Collection_View = Backbone.View.extend({
     	if($(this.el).html() == LOADING_HTML)
     		$(this.el).empty(); 
         
-        $(this.el).html(getTemplate((this.options.templateKey + '-collection'), {}));
+        $(this.el).html(getTemplate((this.options.templateKey + '-collection'), this.collection.toJSON()));
         _(this.collection.models).each(function (item) { // in case collection is not empty
             this.appendItem(item);
         }, this);

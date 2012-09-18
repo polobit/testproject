@@ -1,4 +1,5 @@
 var LOADING_HTML = '<img class="loading" style="padding-right:5px" src= "img/21-0.gif"></img>';
+var LOADING_ON_CURSOR = '<img class="loading" style="padding-right:5px" src= "img/ajax-loader-cursor.gif"></img>';
 
 // Read a page's GET URL variables and return them as an associative array.
 function getUrlVars() {
