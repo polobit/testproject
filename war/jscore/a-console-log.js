@@ -1,5 +1,3 @@
-var IS_CONSOLE_ENABLED = false;
-
 // To Enable Console in IE - MC
 $(function(){
 	var alertFallback = false;
@@ -18,7 +16,7 @@ $(function(){
 	// Disable console.logging if disabled
 	if(!IS_CONSOLE_ENABLED)
 	{
-		// console.log("disabling");		
+		//console.log("disabling");		
 		console.log = function(){};
 	}
 });   
