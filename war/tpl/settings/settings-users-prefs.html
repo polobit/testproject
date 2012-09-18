@@ -11,7 +11,14 @@
         		<div class="controls">
 					<input name="name" type="text" class="required" value="{{name}}" />
 				</div>
-			</div>         
+			</div> 
+            <div class="control-group">
+				
+					<div class="controls">
+                        <p><input type="hidden" id="user_prefs_url" name="image">  
+							<input class="upload_s3 submit btn" type="submit" id="user_prefs_image" value="Upload  Your  Image"></p>
+				</div>
+            </div>    
         	<div class="control-group">
 				<label class="control-label">Template <span class="field_req">*</span></label> 
         		<div class="controls">
@@ -160,6 +167,13 @@
 			</div>
 		</fieldset>
 	</form>
-
 </div>
+<div id="upload-container" messg="User image has been uploaded">
+     <div class="imgholder span2 pull-right"><p><br/></p>
+		{{#if image}}		
+			<img src="{{photo}}" height="100" width="100"/>
+         {{/if}}
+						</div>	
+</div>				
+						
 </script>
