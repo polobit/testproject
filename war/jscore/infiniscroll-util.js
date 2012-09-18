@@ -1,7 +1,7 @@
 var INFINI_SCROLL_JSON = {};
 
 // Adds infini_scroll object to JSON Object with current route as key 
-function addInfiniScrolltoRoute(infini_scroll)
+function addInfiniScrollToRoute(infini_scroll)
 {
 	var current_route = window.location.hash.split("#")[1];
 	

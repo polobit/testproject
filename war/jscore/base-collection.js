@@ -99,11 +99,9 @@ var Base_Collection_View = Backbone.View.extend({
         		}
         	});	       	
         	
-        	addInfiniScrolltoRoute(this.infiniScroll);
+        	addInfiniScrollToRoute(this.infiniScroll);
         	
         	this.collection.url = this.collection.url + "?page_size=" + this.page_size;
-        	
-        	console.log(this.collection.url);
         }
        
     },

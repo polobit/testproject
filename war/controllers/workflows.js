@@ -16,7 +16,7 @@ var WorkflowsRouter = Backbone.Router.extend({
                 templateKey: "workflows",
                 individual_tag_name: 'tr',
                 cursor: true,
-                page_size: 9
+                page_size: 10
             });
             
           
