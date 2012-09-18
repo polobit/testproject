@@ -28,7 +28,7 @@ public class UserPrefs
     private Key<AgileUser> user;
 
     @NotSaved(IfDefault.class)
-    public String image = null;
+    public String pic = null;
 
     @NotSaved(IfDefault.class)
     public String template = "default";
@@ -59,7 +59,7 @@ public class UserPrefs
 	    String width, String signature, boolean task_reminder)
     {
 	this.name = name;
-	this.image = image;
+	this.pic = image;
 	this.template = template;
 	this.width = width;
 	this.signature = signature;
