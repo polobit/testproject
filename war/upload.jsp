@@ -24,19 +24,6 @@ jQuery.validator.setDefaults({
 var url = "https://s3.amazonaws.com/agilecrm/" + unescape(getUrlVars()["key"]);
 
 // Get Id
-var id = getUrlVars()["id"];
-
-function isNotValid(value)
-{
-	if(value == undefined)
-		return true;
-	
-	if(value.length == 0)
-		return true;
-	
-	return false;
-}
-
 //Read a page's GET URL variables and return them as an associative array.
 function getUrlVars() {
     var vars = [],
@@ -53,7 +40,6 @@ function getUrlVars() {
 
 function returnBack()
 {
-	 console.log(url + " " + id);
 	 
 	 if (window.opener)
 	 {
@@ -72,58 +58,18 @@ $(function()
 	if(key != undefined)
 	{
 		returnBack();
+		return;
 	}
-	$("#submit").click(function (event){
-		 event.preventDefault();
-		   if(isValid()){
-
-		   } 
-	 });
 });
 function isValid(){
     $("#form").validate({
         rules: {
-        		fileextension:{required:true,accept:"png|jpg|jpeg|gif"}
+        		file:{required:true,accept:"png|jpg|jpeg|gif"}
                }
    		});
     return $("#form").valid();
     } 
 
-/*function validateFileExtension()
-{
-	var input = $('#fileextension').val();
-	$('#fileerror').hide();
-	
-	if(isNotValid(input))
-	{
-		$('#fileerror p').text("Please enter a valid image file. We only accept png, jpg, jpeg or gif file.");
-		$('#fileerror').slideDown();
-
-		return false;	
-	}
-	
-	var extension = input.substr(input.lastIndexOf('.'));
-	
-	if(isNotValid(extension))
-	{
-		$('#fileerror p').text("Please enter a valid image file. We only accept png, jpg, jpeg or gif file.");
-		$('#fileerror').slideDown();
-
-		return false;	
-	}
-	
-	
-	if(extension.toLowerCase() != '.png' && extension.toLowerCase() != '.jpg' &&  extension.toLowerCase() != '.gif' &&  extension.toLowerCase() != '.jpeg')
-		{
-		$('#fileerror p').text("Please enter a valid image file. We only accept png, jpg, jpeg or gif file.");
-		$('#fileerror').slideDown();
-
-		return false;	
-		
-		}
-	
-	return true;
-}*/
 
 </script>
 <style>
@@ -147,8 +93,7 @@ function isValid(){
 <p>For best results, we recommend you upload png files. You can also upload jpg or gif files also.</i></p>
 
 <br/>
-<form id="form" action="https://agilecrm.s3.amazonaws.com/" method="post" enctype="multipart/form-data" > 
-<div id='fileerror' style='display:none;'><div class='alert alert-error'><a class='close' data-dismiss='alert' href='#'>×</a><p></p></div></div>
+<form id="form" action="https://agilecrm.s3.amazonaws.com/" method="post" enctype="multipart/form-data" onsubmit="return isValid();"> 
 
     
 	 <input type="hidden" name="key" value="panel/uploaded-logo/<%=new Date().getTime()%>" /> 
@@ -163,7 +108,7 @@ function isValid(){
 
 <input type="hidden" name="policy" value="ewogICJleHBpcmF0aW9uIjogIjIwMjAtMDEtMDFUMTI6MDA6MDAuMDAwWiIsCiAgImNvbmRpdGlvbnMiOiBbCiAgICB7ImJ1Y2tldCI6ICJhZ2lsZWNybSIgfSwKICAgIHsiYWNsIjogInB1YmxpYy1yZWFkIiB9LAogICAgIFsic3RhcnRzLXdpdGgiLCAiJGtleSIsICJwYW5lbC91cGxvYWRlZC1sb2dvIl0sCiAgICAgeyJzdWNjZXNzX2FjdGlvbl9yZWRpcmVjdCI6ICJodHRwOi8vbG9jYWxob3N0Ojg4ODgvdXBsb2FkLmpzcCJ9LAogICAgIFsic3RhcnRzLXdpdGgiLCAiJENvbnRlbnQtVHlwZSIsICJpbWFnZS8iXSwKICBdCn0=" />
 <input type="hidden" name="signature" value="3RcvbEnh5oQncA7CbR3WA0qFyKY=" />
-<p><input name="fileextension" id='fileextension' type="file" /></p>
+<p><input name="file" id='fileextension' type="file" /></p>
 <br/>
 <input name="submit" id="submit" value="Upload" class='submit btn btn-primary' type="submit" /> 
 </form> 
