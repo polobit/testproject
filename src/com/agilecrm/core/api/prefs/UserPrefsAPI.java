@@ -39,6 +39,7 @@ public class UserPrefsAPI
 	    // Get UserId of person who is logged in
 	    UserPrefs userPrefs = UserPrefs.getCurrentUserPrefs();
 	    userPrefs.name = prefs.name;
+	    userPrefs.pic = prefs.pic;
 	    userPrefs.signature = prefs.signature;
 	    userPrefs.template = prefs.template;
 	    userPrefs.width = prefs.width;
