@@ -3,14 +3,13 @@ function serializeForm(form_id) {
 	var arr = $('#' + form_id).serializeArray(),
         obj = {};
 	
-    // Checkboxes are not serialized
+	 // Serialize Checkbox
     arr = arr.concat(
-    $('#' + form_id + ' input[type=checkbox]:not(:checked)').map(
+    $('#' + form_id + ' input[type=checkbox]').map(
     function () {
-
     	return {
             "name": this.name,
-            "value": false	
+            "value": $(this).is(':checked')
         }
     }).get());
     
@@ -58,6 +57,38 @@ function serializeForm(form_id) {
     			};
     		}).get() );
     
+    // Serialize Filters
+    var json_array = [];
+    arr = arr.concat( $('#' + form_id + ' .chained').map(
+    		function(){
+    			
+    			var json_object = {};
+    			$.each($(this).find('div').children(), function(index, data) {
+    				// Name of 'div'
+    				var name = $(data).parent().attr('name');
+    				
+    				var value;
+    				if($(data).hasClass("date"))
+    					{
+    						value = new Date($(data).val()).getTime();
+    					}
+    				// Value of input/select
+    				else
+    					var value = $(data).val();
+    				
+    				// Set if value of input/select is valid
+    				if(value != null && value != "")
+    					json_object[name] = value;
+    			});
+    			
+    			json_array.push(JSON.stringify(json_object));
+    			
+    		return {
+    			"name" : "rules",
+    			"value" : json_array
+    			};
+    		
+    	}).get() );
     
     
     // Convert array into JSON
@@ -129,7 +160,67 @@ function deserializeForm(data, form)
 	        			$('#multipleSelect', form).multiSelect('select', option);
 	        	   }); 
 	           }
-	        	   
+	           
+	           // Deserialize chained select
+	           else if(fel.hasClass('chainedSelect'))
+	           {
+	        	   // Iterates through JSON array of rules
+	        	   $.each(el, function(index, data){
+	        		
+	        		   // Finds the rule html element
+	        		   var rule_element = ($(form).find('.chained'))[0];
+	        		
+	        		   // If more than one rule clone the fields and relate with jquery.chained.js
+	        		   if(index > 0)
+	        				{
+	        					var parent_element = $(rule_element).parent();
+	        					
+	        					// Get the Template for input and select fields 
+	        					rule_element = $(getTemplate("filter-contacts", {})).find('tr').clone();
+	        					
+	        					// Add remove icon for rule
+	        					$(rule_element).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
+	        					
+	        					// Load jquery chained plugin for chaining the input fields
+	        					head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function(){
+	        						
+	        						// Chaining dependencies of input fields with jquery.chained.js
+	        						$('#condition', rule_element).chained($('#LHS', rule_element));
+	        						$("#RHS", rule_element).chained($('#LHS', rule_element));
+	        						$('#RHS-NEW', rule_element).chained($('#condition', rule_element));
+	        				
+	        						$(parent_element).append(rule_element);
+	        					});
+	        				}
+	        		   
+	        		   $.each(JSON.parse(data), function(i, value) {
+	        			
+	        			   var input_element = ($(rule_element).find('*[name="' + i + '"]').children())[0];
+	        			
+	        			   // If input field set value for input field
+	        			   if(input_element.tagName.toLowerCase() == "input")
+	        			   {
+	        				   $(input_element).val(value);
+	        				   return;
+	        			   }
+	        			
+	        			   // Get Related Select field
+	        			   var option_element = $(input_element).children()
+	        			
+	        			   // Iterate through options in select field
+	        			   $.each(option_element, function(index, element)
+	        				{
+	        				   // Select the option
+	        				   if($(element).attr('value') == value)
+	        						{
+	        							$(element).attr("selected","selected");
+	        							$(input_element).trigger("change");
+	        							return;
+	        						}
+	        				});
+	        		   });
+	        	   })   
+	           	}   
 	        }
 
 	});

@@ -68,9 +68,9 @@ function showTwitterMatchingProfiles(plugin_id)
                  
                  $.each(value, function (index, object) {
                      el = el.concat("<img  rel=\"popover\" data-content=\" <img src=" + object.picture 
-                    		 + "></img><span style='display: inline-block;text-align: justify;font-style: italic;vertical-align: middle;width: 190px;padding-left: 10px;'> Name : " 
+                    		 + "></img><span style='display: inline-block;text-align: justify;vertical-align: middle;width: 190px;padding-left: 10px;'> Name : " 
                     		 + object.name + " <br/>Followers : " + object.num_connections + " <br/>Location : " 
-                    		 + object.location + "</span><p style='text-align: justify;font-style: italic;'>Summary : "+ object.summary+" </p>\" data-original-title=\" Twitter Profile\"class=\"twitterImage thumbnail \" id=" 
+                    		 + object.location + "</span><p style='text-align: justify;font-style: italic;'><br/>"+ object.summary+" </p>\" data-original-title=\" Twitter Profile\"class=\"twitterImage thumbnail \" id=" 
                     		 + object.id + " src =\" "+ object.picture + " \"style=\"width: 55px;height: 55px; display:inline-block; margin-right:2px; margin-bottom:2px; cursor:pointer;\" ></img>");
                  });
              });
@@ -137,7 +137,7 @@ function showTwitterProfile(twitter_id, plugin_id)
 				        		   +'</div>'
 				        		   +'<div class="span8">'
 				        		       +'<h4 style="color:blue"><a href=\"' + data.url + '\" target="_blank">@' + data.name + '</a></h4>'
-				        		       +'<span style="font-size:10px; margin-bottom:2px;">' + data.summary + ',<br/> ' + data.location +',<br/>' + data.num_connections + '+ connections ,<br/></span><br/><br/>'
+				        		       +'<span style="font-size:10px; margin-bottom:2px;">' + data.summary + ',<br/> ' + data.location +',<br/>' + data.num_connections + 'connections ,<br/></span><br/><br/>'
 				        		   +'</div>'
 				        		 +'</div>'
 				        	 +'</div>');

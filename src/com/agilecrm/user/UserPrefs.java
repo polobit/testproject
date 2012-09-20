@@ -28,6 +28,9 @@ public class UserPrefs
     private Key<AgileUser> user;
 
     @NotSaved(IfDefault.class)
+    public String pic = null;
+
+    @NotSaved(IfDefault.class)
     public String template = "default";
 
     @NotSaved(IfDefault.class)
@@ -52,10 +55,11 @@ public class UserPrefs
     private static ObjectifyGenericDao<UserPrefs> dao = new ObjectifyGenericDao<UserPrefs>(
 	    UserPrefs.class);
 
-    UserPrefs(Long userId, String name, String template, String width,
-	    String signature, boolean task_reminder)
+    UserPrefs(Long userId, String name, String image, String template,
+	    String width, String signature, boolean task_reminder)
     {
 	this.name = name;
+	this.pic = image;
 	this.template = template;
 	this.width = width;
 	this.signature = signature;
@@ -95,8 +99,8 @@ public class UserPrefs
 
     private static UserPrefs getDefaultPrefs(AgileUser agileUser)
     {
-	UserPrefs userPrefs = new UserPrefs(agileUser.id, null, "default", "",
-		"- Powered by AgileCRM", true);
+	UserPrefs userPrefs = new UserPrefs(agileUser.id, null, null,
+		"default", "", "- Powered by AgileCRM", true);
 	userPrefs.save();
 	return userPrefs;
     }

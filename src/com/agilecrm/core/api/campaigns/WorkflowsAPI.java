@@ -10,6 +10,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.agilecrm.workflows.Workflow;
@@ -22,8 +23,13 @@ public class WorkflowsAPI
     // This method is called if TEXT_PLAIN is request
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Workflow> getWorkflows()
+    public List<Workflow> getWorkflows(@QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count)
     {
+	if (count != null)
+	{
+	    return Workflow.getAllWorkflows(Integer.parseInt(count), cursor);
+	}
 	return Workflow.getAllWorkflows();
     }
 

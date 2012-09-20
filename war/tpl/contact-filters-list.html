@@ -1,0 +1,22 @@
+<script id="contact-filter-collection-template" type="text/html">
+ 
+<div class="btn-group right" style='top:-18px;position:relative'>
+	<button class="btn">Contacts Filter</button>
+	<button class="btn dropdown-toggle" data-toggle="dropdown">
+    	<span class="caret"></span>
+  	</button>
+	<ul id = "contact-filter-model-list" class="dropdown-menu">
+		<li>
+			<a href='#contact-filter-add'>Add/Edit Filter</a>
+		</li>
+		<li class="divider"></li>
+	</ul>
+</div>
+
+</script>
+
+<script id="contact-filter-model-template" type="text/html">
+<a id='{{id}}' href="#contact-filter/{{id}}">{{name}}</a>
+</script>
+
+

@@ -14,7 +14,9 @@ var WorkflowsRouter = Backbone.Router.extend({
                 url: '/core/api/workflows',
                 restKey: "workflow",
                 templateKey: "workflows",
-                individual_tag_name: 'tr'
+                individual_tag_name: 'tr',
+                cursor: true,
+                page_size: 10
             });
             
           

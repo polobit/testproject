@@ -78,8 +78,12 @@ function showLinkedinMatchingProfiles(plugin_id)
             			  	object.picture = 'https://contactuswidget.appspot.com/images/pic.png';
                 		 }
                 	 
-                	 el = el.concat('<img  rel="popover" data-content="'+object.location+'<br/>'+object.summary+'"  data-original-title="'+object.name+'" class="linkedinImage thumbnail " class="linkedinImage thumbnail " id=' + object.id + ' src =" '+ object.picture +' " style="display:inline-block;  width: 50px;height: 50px; cursor:pointer; color: #FF00FF"></img>');
-                     
+                	 el = el.concat("<img  rel=\"popover\" data-content=\" <img style='width:55px;height:55px;' src=" + object.picture 
+                    		 + "></img><span style='display: inline-block;width:185px;text-align: justify;vertical-align: middle;padding-left: 10px;'> Name : " 
+                    		 + object.name + " <br/>Connections : " + object.num_connections + " <br/>Location : " 
+                    		 + object.location + "</span><p style='text-align: justify;font-style: italic;'><br/>"+ object.summary+" </p>\" data-original-title=\" Linked Profile\"class=\"linkedinImage thumbnail \" id=" 
+                    		 + object.id + " src =\" "+ object.picture + " \"style=\"width: 55px;height: 55px; display:inline-block; margin-right:2px; margin-bottom:2px; cursor:pointer;\" ></img>");
+                 
                  });
               });
             
@@ -121,12 +125,14 @@ function showLinkedinProfile(linkedin_id, plugin_id)
     		}
     	    	
     	$('#Linkedin').html('<div  style="display:inline;  line-height:12px;">'
-				    		    +'<div class="row-fluid well" style="margin-top:-10px;padding:0px; border-top:5px solid whitesmoke;">'
-				    		    +'<a class="icon-remove pull-right" id="linkedin_plugin_delete"></a>'
-				    		    +'<div class="span3" style=" margin-right:3%"><img src=' + data.picture + ' style=" display:inline; float:left; margin-right:2px; margin-top:5px; padding:0px 5px;"/></div>'
+				    		    +'<div class="row-fluid well" style="margin-top:-10px;padding:0px;">'
+				    		    +'<a class="icon-remove pull-right" id="linkedin_plugin_delete" style="cursor:pointer; color: #FF00FF"></a>'
+				    		    +'<div class="span3" style=" margin-right:3%">'
+				    		           +'<img src=' + data.picture + ' style=" display:inline; float:left; margin-right:2px; margin-top:5px; padding:0px 5px;cursor:pointer; color: #FF00FF"/>'
+				    		    +'</div>'
 				    			+'<div class="span8">'
-				    			       +'<h4 style="color:blue"><a href=\"' + data.url + '\" target="_blank">' + data.name + '</a></h4>'
-				    			       +'<span style="font-size:10px; margin-bottom:2px;">' + data.summary + ',<br/> ' + data.location +',<br/>' + data.num_connections + '+ connections ,<br/></span><br/><br/>'
+				    			       +'<h4 style="color:blue"><a href=\"' + data.url + '\" target="_blank">@' + data.name + '</a></h4>'
+				    			       +'<span style="font-size:10px; margin-bottom:2px;">' + data.summary + ',<br/> ' + data.location +',<br/>' + data.num_connections + 'connections ,<br/></span><br/><br/>'
 				    			+'</div>'
 				    		+'</div>');
     });	
