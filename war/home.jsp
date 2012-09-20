@@ -203,6 +203,15 @@ padding-left:5px;
 border-radius: 3px;
 }
 
+/* cursor change in contact */
+#contacts-model-list > tr:hover{
+	cursor: pointer;
+}
+
+/* cursor change in deals */
+#opportunities-model-list > tr:hover{
+	cursor: pointer;
+}
 
 /* Subnav */
 .subnav {
@@ -479,12 +488,14 @@ font-weight: normal;
 									id="company">Company</a>
 								</li>
 							
-								<li><a href="#activityModal" data-toggle="modal"
-									id="activity">Activity</a>
+								<li><a href="#"
+									id="show-activity">Activity</a>
 								</li>
 								<li><a href="#deals-add" 
 									id="activity">Deal</a>
 								</li>
+								<li><a href="#" id="show-note">Note</a>
+        						</li>
 							</ul>
 							
 							<!-- 

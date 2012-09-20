@@ -71,9 +71,18 @@ public class CampaignsAPI
 
     @Path("logs/{campaign-id}")
     @DELETE
-    public void deleteWorkflow(@PathParam("campaign-id") String id)
+    public void deleteCampaignLogs(@PathParam("campaign-id") String id)
     {
 	Log.removeCampaignLogs(id);
+    }
+
+    // Bulk operations - delete
+    @Path("logs/bulk/{log-ids}")
+    @DELETE
+    public void deleteLogs(@PathParam("log-ids") String idString)
+    {
+	String id_array[] = idString.split(",");
+	Log.deleteLogsBulk(id_array);
     }
 
 }

@@ -18,6 +18,7 @@ import com.agilecrm.util.Util;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.Indexed;
@@ -299,4 +300,15 @@ public class Contact extends Cursor
 	return contact;
     }
 
+    // Delete contacts bulk
+    public static void deleteContactsBulk(String[] id_array)
+    {
+	List<Key<Contact>> contacctKeys = new ArrayList<Key<Contact>>();
+	for (String contact_id : id_array)
+	{
+	    contacctKeys.add(new Key<Contact>(Contact.class, Long
+		    .parseLong(contact_id)));
+	}
+	dao.deleteKeys(contacctKeys);
+    }
 }

@@ -1,5 +1,6 @@
 package com.agilecrm.workflows;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Id;
@@ -102,6 +103,18 @@ public class Workflow
     {
 	return "Name: " + name + " Rules: " + rules + " created_time: "
 		+ created_time + " updated_time" + updated_time;
+    }
+
+    // Delete workflows bulk
+    public static void deleteWorkflowsBulk(String[] id_array)
+    {
+	List<Key<Workflow>> worflowKeys = new ArrayList<Key<Workflow>>();
+	for (String workflow_id : id_array)
+	{
+	    worflowKeys.add(new Key<Workflow>(Workflow.class, Long
+		    .parseLong(workflow_id)));
+	}
+	dao.deleteKeys(worflowKeys);
     }
 
     @XmlElement(name = "creator")

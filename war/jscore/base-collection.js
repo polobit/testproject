@@ -79,6 +79,8 @@ var Base_Collection_View = Backbone.View.extend({
         var that = this;
         this.collection.bind('reset', function(){that.render(true)});
         
+        this.collection.bind('add', function(){that.render(true)});
+        
         // Call render which shows loading
         this.render();
     
@@ -112,6 +114,9 @@ var Base_Collection_View = Backbone.View.extend({
             tagName: this.options.individual_tag_name
         });
         $(('#' + this.options.templateKey + '-model-list'), this.el).append(itemView.render().el);
+
+        // Add model as data to it's corresponding row
+        $('#' + this.options.templateKey + '-model-list').find('tr:last').data(base_model);
     },
     render: function (force_render) {
     	
@@ -130,9 +135,9 @@ var Base_Collection_View = Backbone.View.extend({
             this.appendItem(item);
         }, this);
         
+        
         // Add checkboxes to specified tables by triggering this event
         $('body').trigger('agile_collection_loaded');
-        
         
         // For the first time fetch, disable Scroll bar if results are lesser
         if(this.page_size && (this.collection.length < this.page_size))

@@ -1,5 +1,6 @@
 package com.campaignio.logger;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -193,6 +194,17 @@ public class Log
     public void save()
     {
 	dao.put(this);
+    }
+
+    // Delete logs bulk
+    public static void deleteLogsBulk(String[] id_array)
+    {
+	List<Key<Log>> logKeys = new ArrayList<Key<Log>>();
+	for (String log_id : id_array)
+	{
+	    logKeys.add(new Key<Log>(Log.class, Long.parseLong(log_id)));
+	}
+	dao.deleteKeys(logKeys);
     }
 
     @XmlElement

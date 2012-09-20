@@ -278,8 +278,14 @@ $(function()
 	});
 	
 	// Timeline details
-	Handlebars.registerHelper('is_present', function(entity_type, entity_name, entity){
-		return entity.get(entity_type) == entity_name;
+	Handlebars.registerHelper('if_entity', function(item, options) {
+		if(this.entity_type == item)
+		{
+			return options.fn(this);
+		}
+		if(this.m)
+		{
+			return options.fn(this);
+		}
 	});
-
 });

@@ -8,10 +8,28 @@
 	</div>
 </div>
 <div class="row span10">
-	<table class="table table-bordered table-stripped" id="logs-table">
+
+<div class="slate">
+    <div class="slate-content">
+      <div class="box-left">
+        <img alt="Clipboard" src="/img/clipboard.png">
+      </div>
+
+      <div class="box-right">
+        <h3>Your project doesn't have any tasks yet.</h3>
+        <div class="text">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis. Nullam quis risus eget urna mollis ornare vel eu leo.
+        </div>
+        <a href="#">Learn more about project tasks</a>
+        <br>
+        <span class="btn blue btn-slate-action"><i class="icon-plus-sign"></i> Add the first task!</span>
+      </div>
+    </div>
+  </div>
+
+	<table class="table table-bordered table-striped showCheckboxes" id="logs-table" url="core/api/campaigns/logs/bulk">
 		<thead>
     		<tr>
-     			<th></th>
 				<th>Contact</th>
       			<th>Message</th>
 				<th>Time</th>
@@ -28,7 +46,6 @@
 <script id="campaign-logs-model-template" type="text/html">
 
 <input name="id" type="hidden" value="{{campaign_id}}" />
-<td><icon class='deleteWorkflow icon-remove-circle'></icon></td>  	
   <td><a href="#contact/{{subscriber_id}}">{{contactName}}</a></td>
   <td>{{getRequiredLog logs "m"}}</td>
   <td>{{getRequiredLog logs "t"}}</td>

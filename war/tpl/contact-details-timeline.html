@@ -4,20 +4,19 @@
 	</div>
 </script>
 <script id="timeline-model-template" type="text/html">
-	{{#if is_present "entity-type" "note" this}}
-		<span>note:</span> {{note}}
-	{{/if}}
-	
-	{{#if is_present "entity_type" "task" this}}
-		<span>task:</span> {{subject}}
-	{{/if}}
-	
-	{{#if is_present "entity_type" "deal" this}}
-		<span>deal:</span> {{description}}
-	{{/if}}
+	{{#if_entity "note"}}
+		{{note}} {{created_time}}
+	{{/if_entity}}
 
-	{{#if is_present "entity_type" "m" this}}
-		<span>log:</span> {{m}}
-	{{/if}}
+	{{#if_entity "task"}}
+		{{subject}} {{created_time}}
+	{{/if_entity}}
 
+	{{#if_entity "deal"}}
+		{{description}} {{created_time}}
+	{{/if_entity}}
+
+	{{#if_entity "m"}}
+		{{m}} {{t}}
+	{{/if_entity}}
 </script>

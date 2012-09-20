@@ -52,7 +52,6 @@ var ContactsRouter = Backbone.Router.extend({
               url: url,
               templateKey: "contacts",
               individual_tag_name: 'tr',
-              cursor: true,
               page_size: 25 
           });
 
@@ -120,7 +119,6 @@ var ContactsRouter = Backbone.Router.extend({
             model: contact,
             template: "contact-detail",
             postRenderCallback: function(el) {
-                
             	loadWidgets(el, contact.toJSON());
             	
                 loadTimelineDetails(el, id);
@@ -132,7 +130,7 @@ var ContactsRouter = Backbone.Router.extend({
        
         var el = this.contactDetailView.render().el;
       
-        $('#content').html(el);
+        $('#content').html(this.contactDetailView.el);
        
     },
     editContact: function () {
@@ -207,6 +205,7 @@ var ContactsRouter = Backbone.Router.extend({
             window: 'deals',
             postRenderCallback: function(el){
             	populateUsers("owner", el);
+            	populateMilestones(el);
             	var json = App_Contacts.contactDetailView.model.toJSON();
             	var contact_name = json.properties[0].value + " " + json.properties[1].value;
             	$('.tags',el).append('<li class="label label-warning"  style="display: inline-block; vertical-align: middle; margin-right:3px;" value="'+ json.id +'">'+contact_name+'</li>');
