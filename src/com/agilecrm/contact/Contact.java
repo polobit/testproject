@@ -44,6 +44,7 @@ public class Contact extends Cursor
     public Type type = Type.PERSON;
 
     // Created/Updated Time
+    @Indexed
     public Long created_time = 0L;
 
     @NotSaved(IfDefault.class)

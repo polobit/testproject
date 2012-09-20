@@ -14,7 +14,7 @@ import javax.ws.rs.core.MediaType;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactFilter;
 
-@Path("/api/contacts/filters")
+@Path("/api/filters")
 public class ContactFilterAPI
 {
 

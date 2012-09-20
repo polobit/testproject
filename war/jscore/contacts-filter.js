@@ -29,10 +29,11 @@ $(function(){
 	$('#contact-filter-model-list > tr').live('click', function(e){
 		
 		e.preventDefault();
+		console.log("clicked on filters list");
 		var data = $(this).find('.filter').attr('filter');
 		if(data)
 			{
-			 Backbone.history.navigate("contacts-filter-edit/" + data, {
+			 Backbone.history.navigate("contact-filter-edit/" + data, {
 		            trigger: true
 		        });
 			}
@@ -44,10 +45,10 @@ $(function(){
 // Set up filters list drop-down in contacts list
 function setupContactFilterList(cel)
 {
-	contactFiltersListView = new Base_Collection_View({
-        url: '/core/api/contacts/filters',
+	var contactFiltersListView = new Base_Collection_View({
+        url: '/core/api/filters',
         restKey: "ContactFilter",
-        templateKey: "contact-filter",
+        templateKey: "contact-filter-list",
         individual_tag_name: 'li'
     });
 	

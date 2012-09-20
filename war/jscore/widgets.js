@@ -103,16 +103,15 @@ $(function () {
         var models = Catalog_Widgets_View.collection.where({
             name: widget_name
         });
-        if (models.length == 0) {
-            alert("Not found");
-        }
-        var widgetModel = models[0];
-        var newWidgetModel = widgetModel.clone();
-        newWidgetModel.url = '/core/api/widgets';
-        newWidgetModel.save();
         
-        // Navigate back to the contact id form
-        Backbone.history.navigate("contact/" + App_Contacts.contactDetailView.model.id, { trigger: true });
+        // Save widget model
+        var widgetModel = new Backbone.Model();
+        widgetModel.url = '/core/api/widgets';
+        widgetModel.save(models[0].toJSON(), {success:function(){
+        	
+        	// Navigate back to the contact id form
+            Backbone.history.navigate("contact/" + App_Contacts.contactDetailView.model.id, { trigger: true });
+        }});
         
     });
     

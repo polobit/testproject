@@ -112,7 +112,7 @@
 </div>
 
 <div class="span9"'>
-
+{{#unless this.length}}
 <div class="slate">
     <div class="slate-content">
       <div class="box-left">
@@ -130,7 +130,8 @@
       </div>
     </div>
   </div>
-
+{{/unless}}
+{{#if this.length}}
 <table id='contacts' class="table table-striped" style='overflow:scroll'>
 <thead>
     <tr>
@@ -146,6 +147,7 @@
   </tbody>
   
 </table>
+{{/if}}
 </div>
 </div>
 </div>

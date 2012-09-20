@@ -1,0 +1,47 @@
+<script id="contact-filter-collection-template" type="text/html">
+<div class="row">
+		<div class="span12">
+			<div class="page-header">
+    			<h1>List of Views</h1>
+				<a href="#contact-filter-add" class="btn right" id="addFilter" style='top:-25px;position:relative'><span><i class='icon-plus-sign'/></span>Add Filters</a>
+	  		</div>
+		</div>
+	</div>
+	<div class="row">
+ 		<div class="span9"> 
+			<table class="table table-bordered" >
+				<thead>
+    				<tr>
+    		   	    	<th></th>
+      					<th>Name</th>
+      					<th>Relation</th>
+						<th>Duration</th>
+    				</tr>
+  				</thead>
+  
+  				<tbody id='contact-filter-model-list'>
+  				</tbody>
+			</table>
+		</div>
+
+		<div class='span3'>
+			<div class="well" id='addview'>
+			</div>
+		</div>
+
+	</div>
+</script>
+
+<script id="contact-filter-model-template" type="text/html">
+<td filter='{{id}}' class='filter'><icon class='delete icon-remove-circle'></icon></td>  	
+<td> {{name}} </td>
+<td>
+{{#each rules}}
+	{{this}}<br/>
+{{/each}}
+</td>
+<td>
+{{duration}}
+</td>
+<br/>
+</script>

@@ -20,12 +20,13 @@ function uploadImage(id)
 function setImageURL(url)
 {
 	var id = "upload-container";
+	
 	// Set the media stream
 	$('#' + id).find('.imgholder').html('');
 	$('#' + id).find('.imgholder').html('<img src="' + url + '" height="100" width="100"/>');
-
-	// Set the value of selector for Post
-	$('#' + id + '_url').attr('value', url);	
+	
+	// Set the value of selector for input
+	$('#' + id).find('#upload_url').val(url);
 }
 
 
