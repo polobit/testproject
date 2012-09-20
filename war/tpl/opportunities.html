@@ -10,7 +10,7 @@
 </div>
 <div class="row">
 	<div class="span9">
-
+{{#unless this.length}}
 <div class="slate">
     <div class="slate-content">
       <div class="box-left">
@@ -28,7 +28,9 @@
       </div>
     </div>
   </div>
+{{/unless}}
 
+{{#if this.length}}
 <div id ='total-pipeline-chart' style='width:100%; height:300px'></div>
 
 <br/><br/>
@@ -47,13 +49,12 @@
   			</tbody>
 		</table>
 
-	
+	{{/if}}
 	</div>
 	<div class="span3">
 		
 <div class="well">
 <div id ='pie-deals-chart' style='width:100%; height:300px'></div>
-
 <h3>
 Export to CSV
 </h3><br/>

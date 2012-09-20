@@ -23,6 +23,7 @@ var ContactsRouter = Backbone.Router.extend({
         /*Contact-Filters*/
         "contact-filter-add": "contactFilterAdd",
         "contact-filter-edit/:id" : "contactFilterEdit",
+        "contact-filters": "contactfilters",
         "contact-filter/:id" : "showFilterContacts",
         
         /* New Contact/Company - Full mode */
@@ -58,7 +59,7 @@ var ContactsRouter = Backbone.Router.extend({
     	// Search based on filter
     	if(filter_id)
     	{
-    		url = "core/api/contacts/filters/query/" + filter_id;
+    		url = "core/api/filters/query/" + filter_id;
     	}
     	 
     	console.log("Fetching from " + url);
@@ -327,11 +328,22 @@ var ContactsRouter = Backbone.Router.extend({
 		// Prefill the templates
 		var optionsTemplate = "<option value='{{id}}'> {{subject}}</option>";
 		fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', undefined , optionsTemplate);
-    },      
+    },
+    contactfilters: function() {
+    	this.contactFiltersList = new Base_Collection_View({
+            url: '/core/api/filters',
+            restKey: "ContactFilter",
+            templateKey: "contact-filter",
+            individual_tag_name: 'tr'
+        });
+    	
+    	this.contactFiltersList.collection.fetch();
+    	$("#content").html(this.contactFiltersList.render().el);
+    },
     contactFilterAdd: function()
     {
     	var contacts_filter = new Base_Model_View({
-    				url:'core/api/contacts/filters',
+    				url:'core/api/filters',
     	            template: "filter-contacts",
     	            isNew: true,
     	            postRenderCallback: function(el) {
@@ -360,33 +372,36 @@ var ContactsRouter = Backbone.Router.extend({
     },
     contactFilterEdit : function(id)
     {
-    	if (!App_Contacts.contactFiltersListView || App_Contacts.contactFiltersListView.collection.length == 0 || App_Contacts.contactFiltersListView.collection.get(id) == null)
+    	if (!this.contactFiltersList || this.contactFiltersList.collection.length == 0 || this.contactFiltersList.collection.get(id) == null)
     	{
     		this.navigate("contact-filters", {
                 trigger: true
             });
     	}
     	
-    	var contact_filter = App_Contacts.contactFiltersListView.collection.get(id);
+    	var contact_filter = this.contactFiltersList.collection.get(id);
     	  var ContactFilter = new Base_Model_View({
-    	        url: 'core/api/contacts/filters',
+    	        url: 'core/api/filters',
     	        model: contact_filter,
     	        template: "filter-contacts",
     	        window: 'contact-filters',
 	            postRenderCallback: function(el) {  
 	            	head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 	           		    	{	
-	           					var LHS, condition, RHS, RHS_NEW;
-	           					
-	           					LHS = $("#LHS", el);
-	           					condition = $("#condition", el);
-	           					RHS = $("#RHS", el);
-	           					RHS_NEW = $("#RHS_NEW", el);
-	           					
-	           					// Chaining dependencies of input fields with jquery.chained.js
-	           					condition.chained(LHS);
-	           					fourth_select.chained(LHS);
-	           					RHS_NEW.chained(condition);
+	            				var LHS, condition, RHS, RHS_NEW;
+       					
+	            				LHS = $("#LHS", el);
+	            				condition = $("#condition", el)
+	            				RHS = $("#RHS", el)
+       					
+	            				// Extra field required for (Between values condition)
+	            				RHS_NEW = $("#RHS-NEW", el)
+       					
+	            				// Chaining dependencies of input fields with jquery.chained.js
+	            				condition.chained(LHS);
+	            				RHS_NEW.chained(condition);
+	            				RHS.chained(LHS);
+        			        	            
 	            			        	            			    
 	           		    	})
 	               }

@@ -30,6 +30,7 @@
  
  <div class="span9"> 
  
+ {{#unless this.length}}
  <div class="slate">
     <div class="slate-content">
       <div class="box-left">
@@ -48,6 +49,8 @@
     </div>
   </div>
 
+{{/unless}}
+{{#if this.length}}
 <table class="table table-striped showCheckboxes" url="core/api/workflows/bulk" >
 <thead>
     <tr>
@@ -62,6 +65,7 @@
   
 </table>
 
+{{/if}}
 </div>
 
 
