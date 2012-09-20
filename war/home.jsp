@@ -7,6 +7,8 @@
 <%@page import="com.google.appengine.api.users.UserServiceFactory"%>
 <%@page import="com.google.appengine.api.users.User"%>
 <%@page import="com.google.appengine.api.users.UserService"%>
+
+
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -541,12 +543,21 @@ font-weight: normal;
 	<!-- Templates -->
 	<%@ include file="tpl/min/tpl.js" %>	
 	
+	<!-- Determine Console.logging - we log in local boxes -->
+	<% 
+	boolean debug = true;
+	if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
+	    debug = false;
+	%>
+	
 	
 <script src='lib/headjs-min.js'></script>
 	
 	<script>
 	// var LIB_PATH = "//d13pkp0ru5xuwf.cloudfront.net/js/";
 	var LIB_PATH = "/";
+	
+	var IS_CONSOLE_ENABLED = <%=debug%>;
 	
 	var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
 	// var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
