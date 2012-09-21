@@ -7,7 +7,6 @@ $(function(){
 			e.preventDefault();
 			highlightEvent();
 			$("#activityModal").modal('show');
-			//cloneActivityModal();
 		});
 	
 		// Save task & event - Rammohan 03-08-2012
@@ -91,7 +90,7 @@ $(function(){
 			    });
 			    
 			    // Hide event of activity modal
-			    $('#activityModal').on('hide', function () {
+			    $('#activityModal').on('hidden', function () {
 			    	  
 			    	  // Remove appended contacts from related-to
 			    	  $("#taskForm").find("li").remove();

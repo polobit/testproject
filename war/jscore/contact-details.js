@@ -46,6 +46,7 @@ $(function(){
 	// Show form to add tags
 	$('#add-tags').live('click', function(e){
 		e.preventDefault();
+		console.log("in add tags");
 		$("#addTagsForm").css("display", "block");
 	});
 	

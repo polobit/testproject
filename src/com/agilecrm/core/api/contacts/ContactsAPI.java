@@ -225,4 +225,12 @@ public class ContactsAPI
 	return Contact.searchContactByEmail(email);
     }
 
+    // Bulk operations - delete
+    @Path("bulk/{contact-ids}")
+    @DELETE
+    public void deleteContacts(@PathParam("contact-ids") String idString)
+    {
+	String id_array[] = idString.split(",");
+	Contact.deleteContactsBulk(id_array);
+    }
 }

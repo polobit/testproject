@@ -106,12 +106,15 @@ String CSS_PATH = "/";
 									id="company">Company</a>
 								</li>
 							
-								<li><a href="#activityModal" data-toggle="modal"
-									id="activity">Activity</a>
+								<li><a href="#"
+									id="show-activity">Activity</a>
 								</li>
+								
 								<li><a href="#deals-add" 
 									id="activity">Deal</a>
 								</li>
+								<li><a href="#" id="show-note">Note</a>
+        						</li>
 							</ul>
 							
 							<!-- 

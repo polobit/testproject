@@ -47,8 +47,8 @@ function loadTimelineDetails(el, contactId){
 			}
 		});
 	});	
-	timelineView.render(true);
-	$('#time-line', el).html(timelineView.render().el);	
+	//timelineView.render(true);
+	$('#time-line', el).html(timelineView.render(true).el);	
 }	
 	
 function removeLoadingImg(el){

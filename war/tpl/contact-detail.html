@@ -23,7 +23,7 @@
 					<li><a href='#contact-edit'>Edit</a></li>
 					<li><a href='#' id='contact-actions-delete'>Delete</a></li>
 					<li class='divider'></li>
-					<li><a href='#add-note'>Add Note</a></li> 
+					<li><a href='#' id="contact-add-note">Add Note</a></li> 
 					<li><a href='#' id="contact-add-task">Add Task</a></li>   	
 					<li><a href='#add-opportunity'>Add Opportunity</a></li>   				
 					<li><a href='#contact-duplicate'>Duplicate</a></li>
@@ -112,15 +112,15 @@
 					
 					{{#each tags}}	
 
-				<li><span><a href='#tags/{{this}}'>{{this}}</a></span></li>
+				<li><span><a href='#tags/{{this}}'>{{this}}</a><a href="#" class="icon-remove remove-tags" id="{{this}}"></a></span></li>
   					{{/each}}
 
 					</ul>
 				{{/if}}	
-					<a href="#"><i class="icon-plus-sign"></i></a>
+					<a href="#" id="add-tags"><i class="icon-plus-sign"></i></a>
 
 						<form id="addTagsForm" style="display:none">
-							<input id="addTags" type="text" style="margin-left: 10px; width: 187px" placeholder="Add tags"/>
+							<input id="addTags" type="text" class="span2" placeholder="Add tags"/>
 							<a href="#" class="btn btn-small right" id="contact-add-tags" style="margin-right: 10px">Add</a>
 						</form>
 				

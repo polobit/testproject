@@ -99,4 +99,14 @@ public class DealsAPI
 		Long.parseLong(max)).toString();
     }
 
+    // Bulk operations - delete
+    @Path("bulk/{opportunity-ids}")
+    @DELETE
+    public void deleteOpportunities(
+	    @PathParam("opportunity-ids") String idString)
+    {
+	String id_array[] = idString.split(",");
+	Opportunity.deleteOpportunitiesBulk(id_array);
+    }
+
 }

@@ -312,6 +312,18 @@ public class Opportunity
 	    created_time = System.currentTimeMillis() / 1000;
     }
 
+    // Delete deals bulk
+    public static void deleteOpportunitiesBulk(String[] id_array)
+    {
+	List<Key<Opportunity>> opportunityKeys = new ArrayList<Key<Opportunity>>();
+	for (String opportunity_id : id_array)
+	{
+	    opportunityKeys.add(new Key<Opportunity>(Opportunity.class, Long
+		    .parseLong(opportunity_id)));
+	}
+	dao.deleteKeys(opportunityKeys);
+    }
+
     // Contacts related with deals Author : Yaswanth 08-24-2012
     @XmlElement
     public List<Contact> getContacts()

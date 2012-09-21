@@ -62,4 +62,13 @@ public class WorkflowsAPI
 	if (workflow != null)
 	    workflow.delete();
     }
+
+    // Bulk operations - delete
+    @Path("bulk/{workflow-ids}")
+    @DELETE
+    public void deleteWorkflows(@PathParam("workflow-ids") String idString)
+    {
+	String id_array[] = idString.split(",");
+	Workflow.deleteWorkflowsBulk(id_array);
+    }
 }

@@ -68,7 +68,7 @@ var ContactsRouter = Backbone.Router.extend({
               url: url,
               templateKey: "contacts",
               individual_tag_name: 'tr',
-              cursor: true,
+             // cursor: true,
               page_size: 4 
           });
 
@@ -230,6 +230,7 @@ var ContactsRouter = Backbone.Router.extend({
             window: 'deals',
             postRenderCallback: function(el){
             	populateUsers("owner", el);
+            	populateMilestones(el);
             	var json = App_Contacts.contactDetailView.model.toJSON();
             	var contact_name = json.properties[0].value + " " + json.properties[1].value;
             	$('.tags',el).append('<li class="label label-warning"  style="display: inline-block; vertical-align: middle; margin-right:3px;" value="'+ json.id +'">'+contact_name+'</li>');

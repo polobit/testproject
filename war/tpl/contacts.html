@@ -112,6 +112,7 @@
 </div>
 
 <div class="span9"'>
+
 {{#unless this.length}}
 <div class="slate">
     <div class="slate-content">
@@ -130,9 +131,10 @@
       </div>
     </div>
   </div>
+
 {{/unless}}
 {{#if this.length}}
-<table id='contacts' class="table table-striped" style='overflow:scroll'>
+<table id='contacts' class="table table-striped showCheckboxes" url="core/api/contacts/bulk" style='overflow:scroll'>
 <thead>
     <tr>
     
