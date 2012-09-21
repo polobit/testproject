@@ -376,3 +376,14 @@ font-weight: normal;
 }
 /* Clip Board Application CSS -- Ending */
 
+/* Mouse over on Tables */
+/* cursor change in contact */
+#contacts-model-list > tr:hover{
+ cursor: pointer;
+}
+
+/* cursor change in deals */
+#opportunities-model-list > tr:hover{
+ cursor: pointer;
+}
+
