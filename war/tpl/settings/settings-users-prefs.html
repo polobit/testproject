@@ -6,19 +6,14 @@
 		<fieldset>
 			<input name="id" type="hidden" value="{{id}}" /> 		
 			<legend>Personal Preferences</legend>
+          <div class='row'>
+          <div class='span4'>
 			<div class="control-group">  	 
 				<label class="control-label">Name <span class="field_req">*</span></label>
         		<div class="controls">
 					<input name="name" type="text" class="required" value="{{name}}" />
 				</div>
 			</div> 
-            <div class="control-group">
-				
-					<div class="controls">
-                        <p><input type="hidden" id="user_prefs_url" name="image">  
-							<input class="upload_s3 submit btn" type="submit" id="user_prefs_image" value="Upload  Your  Image"></p>
-				</div>
-            </div>    
         	<div class="control-group">
 				<label class="control-label">Template <span class="field_req">*</span></label> 
         		<div class="controls">
@@ -47,6 +42,25 @@
 					</select> 
 				</div>
 			</div>
+          </div>
+          <div class="span3">
+            <div class="control-group">
+				<div id="upload-container" messg="User image has been uploaded">
+					<div class="controls">
+						<div class="imgholder">
+							{{#if pic}}
+								<img src="{{pic}}" style="height:75px!important;width:75px!important;"/>
+							{{else}}
+								<img src="https://contactuswidget.appspot.com/images/pic.png" style="height:75px!important;width:75px!important;"/>
+							{{/if}}													
+						</div>					
+						<p style="margin-top:-10px"><br/></p><p><input type="hidden" id="user_prefs_url" name="pic">  
+							<input class="upload_s3 submit btn" type="submit" id="user_prefs_image" value="Upload"></p>
+                   </div>
+				</div>
+			</div>  
+          </div>
+        </div>
 			<div class="control-group">
 				<label class="control-label">Signature</label> 
          		<div class="controls">
@@ -168,12 +182,4 @@
 		</fieldset>
 	</form>
 </div>
-<div id="upload-container" messg="User image has been uploaded">
-     <div class="imgholder span2 pull-right"><p><br/></p>
-		{{#if image}}		
-			<img src="{{photo}}" height="100" width="100"/>
-         {{/if}}
-						</div>	
-</div>				
-						
 </script>
