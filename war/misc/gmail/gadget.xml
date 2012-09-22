@@ -24,7 +24,7 @@
      in the manifest, but is still expected to be present. -->
     <Require feature="google.contentmatch">
       <Param name="extractors">
-          google.com:EmailAddressExtractor,google.com:SenderEmailExtractor</Param>
+          google.com:SenderEmailExtractor</Param>
     </Require>
 
   </ModulePrefs>

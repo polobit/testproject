@@ -23,15 +23,25 @@
   <!-- Show this link in Google's universal navigation for all users -->
   <Extension id="navLink" type="link">
     <Name>Agile CRM</Name>
-    <Url>http://redirect.agilecrm.com?from=google&amp;domain=${DOMAIN_NAME}</Url>
+    <Url>https://login.agilecrm.com/google-apps?hd=${DOMAIN_NAME}</Url>
   </Extension>
 
   <!-- Declare our OpenID realm so our app is white listed -->
   <Extension id="realm" type="openIdRealm">
-    <Url>http://login.agilecrm.com</Url>
+    <Url>https://*.agilecrm.com</Url>
   </Extension>
 
 <!-- EXTRACTOR -->
+
+<Extension id="FromEmailAddressExtractor" type="contextExtractor">
+  <Name>Email ids in From</Name>
+  <Url>google.com:SenderEmailExtractor</Url>
+  <Param name="sender_email" value=".*"/>
+  <Triggers ref="AgileCRMGadget"/>
+  <Scope ref="emailFrom"/>
+  <Container name="mail"/>
+</Extension>
+
 <Extension id="SubjectBodyEmailAddressExtractor" type="contextExtractor">
   <Name>Email ids in Subject or body</Name>
   <Url>google.com:EmailAddressExtractor</Url>
@@ -42,21 +52,12 @@
   <Container name="mail"/>
 </Extension>
 
-<Extension id="FromEmailAddressExtractor" type="contextExtractor">
-  <Name>Email ids in From</Name>
-  <Url>google.com:SenderEmailExtractor</Url>
-  <Param name="recipient_to_email" value=".*"/>
-  <Triggers ref="AgileCRMGadget"/>
-  <Scope ref="emailFrom"/>
-  <Container name="mail"/>
-</Extension>
-
 
 
 <!-- GADGET -->
 <Extension id="AgileCRMGadget" type="gadget">
   <Name>AgileCRM - Built with Love for Small Businesses - contextual gadget</Name>
-  <Url>http://qmacro-contextual.appspot.com/gadgets/twitter-user-info.gadget.xml</Url>
+  <Url>https://agile-crm-cloud.appspot.com/misc/gmail/gadget.xml</Url>
   <Container name="mail"/>
 </Extension>
 

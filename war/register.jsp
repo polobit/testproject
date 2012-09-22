@@ -15,6 +15,27 @@
 		    	   response.sendRedirect("/home");
 		    	   return;
 		       }
+		 	   
+		 	   
+		 	 
+		 	   // Chcek if Google Apps
+		 	   if(request.getParameter("hd") != null)
+		 	   {
+		 	     Set<String> attributesRequest = new HashSet<String>();
+		 	     String loginRealm = "https://*.agilecrm.com"; //Important that it is exactly the same as in application-manifest.xml, watch out for trailing slashes.
+		 	     String destinationURL = request.getRequestURI();
+		 	     String federatedIdentity = null;
+		 	     String authDomain = request.getParameter("hd"); //hd is the default parameter name. Contains the google apps domain name of the user logging on. example.com for example.
+		 	     String loginUrl = userService.createLoginURL(destinationURL, federatedIdentity, authDomain, attributesRequest);
+		 	  
+		 	     System.out.println("Redirecting" + loginUrl + " " + userService.isUserLoggedIn());
+		 	    out.println("Redirecting" + loginUrl + " " + userService.isUserLoggedIn());
+			 	  
+		 	     
+		 	     //response.sendRedirect(loginUrl);
+		 	     return;
+		 	   }
+		 	   
 %>
 
 <!DOCTYPE html>
