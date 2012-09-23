@@ -23,12 +23,12 @@
   <!-- Show this link in Google's universal navigation for all users -->
   <Extension id="navLink" type="link">
     <Name>Agile CRM</Name>
-    <Url>https://login.agilecrm.com/google-apps?hd=${DOMAIN_NAME}</Url>
+    <Url>https://googleapps.agilecrm.com/login?hd=${DOMAIN_NAME}</Url>
   </Extension>
 
   <!-- Declare our OpenID realm so our app is white listed -->
   <Extension id="realm" type="openIdRealm">
-    <Url>https://*.agilecrm.com</Url>
+    <Url>https://googleapps.agilecrm.com</Url>
   </Extension>
 
 <!-- EXTRACTOR -->

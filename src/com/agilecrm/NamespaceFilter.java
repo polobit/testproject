@@ -45,19 +45,82 @@ public class NamespaceFilter implements Filter
 	// Read Subdomain
 	String subdomain = request.getServerName().split("\\.")[0];
 
+	// Lowercase
+	subdomain = subdomain.toLowerCase();
+
 	// Get Server URL without subdomain
 	String url = request.getServerName().replaceAll(subdomain, "");
 	if (url.startsWith("."))
 	    url = url.substring(1);
 
-	if (Arrays.asList(Globals.URLS).contains(url.toLowerCase()))
+	// If not agilecrm.com or helptor.com etc. - show chooseDomain
+	if (!Arrays.asList(Globals.URLS).contains(url.toLowerCase()))
 	{
-	    // Set the subdomain as name space
-	    System.out.println("Setting the domain " + subdomain);
-	    NamespaceManager.set(subdomain);
+	    redirectToChooseDomain(request, response);
+	    return false;
+	}
+
+	// If my or any special domain - support etc, choose subdomain
+	if (Arrays.asList(Globals.LOGIN_DOMAINS).contains(subdomain))
+	{
+	    redirectToChooseDomain(request, response);
+	    return false;
+	}
+
+	// Set Google Apps Namespace if googleapps
+	if (subdomain.equalsIgnoreCase(Globals.GOOGLE_APPS_DOMAIN))
+	{
+	    if (setupGoogleAppsNameSpace(request, response))
+		return true;
+	}
+
+	// Set the subdomain as name space
+	System.out.println("Setting the domain " + subdomain);
+	NamespaceManager.set(subdomain);
+	return true;
+
+    }
+
+    // Set up Google Apps
+    private boolean setupGoogleAppsNameSpace(ServletRequest request,
+	    ServletResponse response)
+    {
+
+	// Google AppEngine currently does not support wildcard realms
+	// We use a special domain googleapps.xxx.com
+
+	// Check if Session if Google Apps is present
+	String namespace = (String) request
+		.getAttribute(Globals.GOOGLE_APP_SESSION_ID);
+	if (namespace != null)
+	{
+	    NamespaceManager.set(namespace);
 	    return true;
 	}
 
+	// Check if hd is present, then set the domain
+	// Get Apps Domain - hd
+	String appsDomain = request.getParameter("hd");
+	if (appsDomain != null)
+	{
+
+	    System.out.println(appsDomain);
+	    namespace = appsDomain.split("\\.")[0];
+
+	    // Set Namespace
+	    NamespaceManager.set(namespace);
+
+	    // Set in session
+	    request.setAttribute(Globals.GOOGLE_APP_SESSION_ID, namespace);
+	    return true;
+	}
+
+	return false;
+    }
+
+    public void redirectToChooseDomain(ServletRequest request,
+	    ServletResponse response)
+    {
 	// Redirect to choose domain page if not localhost - on localhost - we
 	// do it on empty namespace
 	if (!request.getServerName().equalsIgnoreCase("localhost")
@@ -67,7 +130,6 @@ public class NamespaceFilter implements Filter
 	    {
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 		httpResponse.sendRedirect("/choose-domain.html");
-		return false;
 	    }
 	    catch (Exception e)
 	    {
@@ -75,8 +137,6 @@ public class NamespaceFilter implements Filter
 
 	    }
 	}
-
-	return true;
     }
 
     @Override

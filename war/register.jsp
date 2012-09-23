@@ -29,10 +29,10 @@
 		 	     String loginUrl = userService.createLoginURL(destinationURL, federatedIdentity, authDomain, attributesRequest);
 		 	  
 		 	     System.out.println("Redirecting" + loginUrl + " " + userService.isUserLoggedIn());
-		 	    out.println("Redirecting" + loginUrl + " " + userService.isUserLoggedIn());
+		 	     //out.println("Redirecting" + loginUrl + " " + userService.isUserLoggedIn());
 			 	  
 		 	     
-		 	     //response.sendRedirect(loginUrl);
+		 	     response.sendRedirect(loginUrl);
 		 	     return;
 		 	   }
 		 	   
