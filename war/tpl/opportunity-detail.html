@@ -26,45 +26,45 @@
 				</h1>
   			</div>
 			<div class="span3">
-				<div class="well" display:>
-					<b>Deal Name<b>       : {{name}}<br/>
-					<b>Descreption <b>    : {{description}}
+				<div class="info_wrapper">
+				   <p class="sidebar_title">Details</p><br/>
+                   <div style="padding:5px;">
+					  <b>Deal Name<b>       : {{name}}<br/>
+					  <b>Description <b>    : {{description}}
+                   </div>
 				</div >
-				<div class="well" >
-					Owner :{{owner}}</br>
-					Email :{{email}}
+				<div class="info_wrapper" >
+                   <p class="sidebar_title">Contacts</p><br/>
+                    <div style="padding:5px;">
+					  Owner :{{owner}}</br>
+					  Email :{{email}}<br/>
+                      Relates To :{{relatesTo}}
+                    </div>
 				</div>
 			</div>
-			<div class="span6"  >
+			<div class="span8"  >
 				<div class="row">
-					<div class="span7 well">
-						<div class="span1" style="display:inline; "><span style="font-size:14px; font-weight:bold ">value</span><br/>
+						<div class="span2 well" style="display:inline;padding: 10px;margin-left:20px;width:115px; ">
+                            <span style="font-size:14px; font-weight:bold ">value</span><br/>
 							<span style="font-size:13px" >$ {{expected_value}}</span>
 						</div>
-						<div class="span1"style="display:inline; margin-left:50px ">
+						<div class="span2 well"style="display:inline;padding: 10px;margin-left:20px;width:115px; ">
 							<span style="font-size:14px; font-weight:bold ">probability</span>
 							<br/>
 							<span style="font-size:13px" >{{probability}} %</span>
 						</div>
-						<div class="span2" style="display:inline; margin-left:32px">
+						<div class="span2 well" style="display:inline;padding: 10px;margin-left:20px;width:115px; ">
 							<span style="font-size:14px; font-weight:bold ">milestone</span>
 							<br/>
 							<span style="font-size:13px" >{{milestone}}</span>
 						</div>
-						<div class="span2" style="display:inline; margin-left:30px">
+						<div class="span2 well" style="display:inline;padding: 10px; margin-left:20px;width:115px; ">
 							<span style="font-size:14px; font-weight:bold ">pipeline</span><br/>
 							<span style="font-size:13px" >$ {{calculatePipeline expected_value probability pipeline}}</span>
 						</div>
-					</div>
 				</div>
 			</div>
 			<div class="span3">
-					<label><b>Relates To :<b></label>  
-					<span style="margin-left:8px">{{relatesTo}}</span>
-					<br/>
-					<span>pipeline :</span>
-					<span style="margin-left:8px"> $ {{calculatePipeline expected_value probability pipeline}}</span>
-					<br/><br/>
 					<span>close date :</span>
 					<span style="margin-left:8px"> {{epochToHumanDate "mm-dd-yy" close_date}}</span>
 					<br/><br/>

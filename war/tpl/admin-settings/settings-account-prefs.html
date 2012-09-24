@@ -1,41 +1,47 @@
 <script id="admin-settings-account-prefs-template" type="text/html">
 <!--  Contact View Detail in Detailed mode - when only one contact is shown -->
 
-<div class='span5 well'>
+<div class='span8 well'>
 
 	<form id="accountPrefs" class="form-horizontal">
 		<fieldset>
-			<div class="control-group">
-				<input name="id" type="hidden" value="{{id}}" />
-				<legend>Account Preferences</legend>
+          <input name="id" type="hidden" value="{{id}}" />
+	    	<legend>Account Preferences</legend>
+          <div class='row'>
+           <div class='span4'>
+			  <div class="control-group">
 				<label class="control-label">Plan <span class="field_req">*</span></label>
 				<div class="controls">
 					<select name="plan" class="required">
 						<option value="{{plan}}" selected>{{plan}}</option>
 					</select> 
 				</div>
-			</div>
-				
-    		<div class="control-group">
+			 </div>
+    		 <div class="control-group">
      			<label class="control-label">Company <span class="field_req">*</span></label> 
 				<div class="controls">
 					<input name="company_name" class="required" type="text" value="{{company_name}}" />
 				</div>
 			</div>
-
+         </div>
+         <div class="span2">
 		 	<div class="control-group">
 				<div id="upload-container" messg="User image has been uploaded">
 					<div class="controls">
 						<div class="imgholder">
 							{{#if logo}}
 								<img src="{{logo}}" height="100" width="100"/>
+                            {{else}}
+								<img src="https://contactuswidget.appspot.com/images/pic.png"  height="100" width="100" />
 							{{/if}}													
 						</div>					
-						<p><br/></p><p><input type="hidden" id="upload_url" name="logo"/>  
-							<input class="upload_s3 submit" type="submit" id="account_prefs_image" value="Upload"></p>
+						<p style="margin-top:-10px"><br/></p><p><input type="hidden" id="upload_url" name="logo">  
+							<input class="upload_s3 submit btn" type="submit" id="account_prefs_image" value="Upload"></p>
+                     </div>
 				</div>
 			</div>
-
+        </div>
+       </div>
 			<div class="form-actions">
             	<a href="#" type="submit" class="save btn btn-primary">Save changes</a> 
 				<a href="#admin" class="btn ">Cancel</a>
