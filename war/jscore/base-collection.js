@@ -79,7 +79,8 @@ var Base_Collection_View = Backbone.View.extend({
         var that = this;
         this.collection.bind('reset', function(){that.render(true)});
         
-        this.collection.bind('add', function(){that.render(true)});
+        // Commented as it was creating a ripple effect
+        //this.collection.bind('add', function(){that.render(true)});
         
         // Call render which shows loading
         this.render();
@@ -151,9 +152,9 @@ var Base_Collection_View = Backbone.View.extend({
         
         $(this.el).html(getTemplate((this.options.templateKey + '-collection'), this.collection.toJSON()));
         _(this.collection.models).each(function (item) { // in case collection is not empty
-            this.appendItem(item);
+        	this.appendItem(item);
         }, this);
-        
+              
         
         // Add checkboxes to specified tables by triggering this event
         $('body').trigger('agile_collection_loaded');
