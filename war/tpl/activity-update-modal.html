@@ -11,6 +11,7 @@
 				<!--Event form  -->
 				<form id='updateActivityForm' name="updateActivityForm" method="post">
 					<fieldset>
+					<input name="id" type="hidden" value="{{id}}" /> 
 					<div class="row">	
 						<div id="addEvent" class="control-group span3">
 							<label class="control-label"><b>Event Name: </b><span class="field_req">*</span></label>
@@ -24,8 +25,8 @@
 									<span class="input ">
 									<select	name="color" id="color" size="1" class="input-small">
 										<option value="red">High</option>
-										<option value="green" selected="selected">Normal</option>
-										<option value="blue">Low</option>
+										<option value="#36C" selected="selected">Normal</option>
+										<option value="green">Low</option>
 									</select> </span>
 								</div>
 						</div>

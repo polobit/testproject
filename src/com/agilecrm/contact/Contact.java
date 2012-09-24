@@ -14,6 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deferred.TagsDeferredTask;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.util.Util;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -53,6 +54,10 @@ public class Contact extends Cursor
 
     @NotSaved(IfDefault.class)
     public Long last_contacted_time = 0L;
+    
+    // Owner
+    @Indexed
+    public String lead_owner = "";
 
     // Creator
     public String creator = "";
@@ -147,9 +152,14 @@ public class Contact extends Cursor
 	{
 	    System.out.println("New Entity");
 	    created_time = System.currentTimeMillis() / 1000;
+	    
+		// Assign lead_owner
+		UserPrefs userprefs = UserPrefs.getCurrentUserPrefs();
+		lead_owner = userprefs.name;
 	}
 	else
 	    updated_time = System.currentTimeMillis() / 1000;
+	
 
 	// Create Search Keyword Values
 	Set<String> tokens = new HashSet<String>();
@@ -304,12 +314,12 @@ public class Contact extends Cursor
     // Delete contacts bulk
     public static void deleteContactsBulk(String[] id_array)
     {
-	List<Key<Contact>> contacctKeys = new ArrayList<Key<Contact>>();
+	List<Key<Contact>> contactKeys = new ArrayList<Key<Contact>>();
 	for (String contact_id : id_array)
 	{
-	    contacctKeys.add(new Key<Contact>(Contact.class, Long
+	    contactKeys.add(new Key<Contact>(Contact.class, Long
 		    .parseLong(contact_id)));
 	}
-	dao.deleteKeys(contacctKeys);
+	dao.deleteKeys(contactKeys);
     }
 }

@@ -36,19 +36,21 @@ function loadTimelineDetails(el, contactId){
 	
 	$.each(fetchContactDetails, function(index, url){
 		$('#time-line', el).html('<div><img class="loading" style="padding-right:5px" src="img/21-0.gif"></div>');
-		var view =  new Base_Collection_View({
+		var View =  Backbone.Collection.extend({
 			url: url,
 		});
-		view.collection.fetch({
+		var view = new View();
+		view.fetch({
 			success: function(){
-				timelineView.collection.add(view.collection.models);
-				if(++loading_count == fetchContactDetails.length)
+				timelineView.collection.add(view.models);
+				if(++loading_count == fetchContactDetails.length){
 					removeLoadingImg(el);
+					$('#time-line', el).html(timelineView.render(true).el);	
+				}
 			}
 		});
 	});	
-	//timelineView.render(true);
-	$('#time-line', el).html(timelineView.render(true).el);	
+	// $('#time-line', el).html(timelineView.render(true).el);	
 }	
 	
 function removeLoadingImg(el){
