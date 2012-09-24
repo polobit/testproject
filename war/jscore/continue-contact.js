@@ -21,15 +21,15 @@ function serializeAndSaveContinueContact(e, form_id, continueContact) {
     properties.push(propertyJSON('first_name', 'fname'));
     properties.push(propertyJSON('last_name', 'lname'));
 
-    if (isValidField('organization')) properties.push(propertyJSON('company', 'company'));
+    // if (isValidField('organization')) properties.push(propertyJSON('company', 'organization'));
 
-    if (isValidField('job')) properties.push(propertyJSON('title', 'title'));
+    // if (isValidField('job')) properties.push(propertyJSON('title', 'job'));
 
-    if (isValidField('company')) properties.push(propertyJSON('company', 'company'));
+    if (isValidField('contact_company')) properties.push(propertyJSON('company', 'contact_company'));
 
     if (isValidField('email')) properties.push(propertyJSON('email', 'email'));
 
-    if (isValidField('title')) properties.push(propertyJSON('title', 'title'));
+    if (isValidField('job_title')) properties.push(propertyJSON('title', 'job_title'));
 
     $('#' + form_id + ' div.multiple-template').each(function (index, element) {
         var inputElement = $(element).find('input');

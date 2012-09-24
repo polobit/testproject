@@ -6,6 +6,7 @@ function getTemplate(templateName, context, download)
 	if (source) {
 		// console.log(templateName + " " + source);
 		var template = Handlebars.compile(source);
+		//console.log(context);
 		return template(context);
 	}
 
@@ -286,6 +287,21 @@ $(function()
 		if(this.m)
 		{
 			return options.fn(this);
+		}
+	});
+	
+	// Display properties in contact details
+	Handlebars.registerHelper('if_property', function(fname, lname, company, title, options) {
+			if(this.name != fname && this.name != lname && this.name != company && this.name != title)
+			return options.fn(this);
+	});
+	
+	// Check the existence of property name and print value
+	Handlebars.registerHelper('if_propertyName', function(pname, options){
+		for(var i = 0; i < this.properties.length; i++)
+		{
+			if(this.properties[i].name == pname)
+				return options.fn(this.properties[i]);
 		}
 	});
 });
