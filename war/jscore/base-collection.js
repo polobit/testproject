@@ -103,7 +103,18 @@ var Base_Collection_View = Backbone.View.extend({
         	
         	addInfiniScrollToRoute(this.infiniScroll);
         	
-        	this.collection.url = this.collection.url + "?page_size=" + this.page_size;
+        	// Store in a variable for us to access in the custom fetch as this is different 
+        	var page_size = this.page_size;
+        	
+        	// Set the URL
+        	this.collection.fetch = function(options) {
+        		options || (options = {})
+        		options.data || (options.data = {});
+        		options.data['page_size'] = page_size;
+        	   return Backbone.Collection.prototype.fetch.call(this, options);
+              };
+        	
+        	// this.collection.url = this.collection.url + "?page_size=" + this.page_size;
         }
        
     },

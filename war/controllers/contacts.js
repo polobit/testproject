@@ -68,8 +68,8 @@ var ContactsRouter = Backbone.Router.extend({
               url: url,
               templateKey: "contacts",
               individual_tag_name: 'tr',
-             // cursor: true,
-              page_size: 4 
+              cursor: true,
+              page_size: 25 
           });
 
           // Contacts are fetched when the app loads in the initialize

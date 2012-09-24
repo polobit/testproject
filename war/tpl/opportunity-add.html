@@ -7,8 +7,8 @@
 						<legend>Add Deal</legend>	
 						<label class="control-label">Name <span class="field_req">*</span></label>
 						<div class="controls">
-							<input id="name" name="name" type="text" class="span4 required" 
-								   placeholder="Name of deal" Style="width:301px"/>
+							<input id="name" name="name" type="text" class=" required" 
+								   placeholder="Name of deal"/>
 			  			</div>
 					</div>
 					
@@ -28,15 +28,15 @@
 					<div class="control-group">
 						<label class="control-label">Description</label>
 						<div class="controls">
-							<textarea id="description" name= "description" rows="3" class="input span4" 
-									  style="width:301px" placeholder="Add comment"></textarea>					
+							<textarea id="description" name= "description" rows="3" class="input" 
+									   placeholder="Add comment"></textarea>					
 			  			</div>
 					</div>
 					
 					<div class="control-group">
                			<label class="control-label">Value <span class="field_req">*</span></label>
                 		<div class="controls"> 
-							<input type="text" name="expected_value" class="input-small required" 
+							<input type="text" name="expected_value" class="input-small required  digits" 
 								   placeholder="Value of deal"/>
 						</div>
 					</div>
@@ -49,14 +49,14 @@
 								<option value="">Select..</option>
 
 							</select>	
-							<span class="help-inline">Some help line for Mlestone</span>				
+							<span class="help-inline">Some help line for Milestone</span>				
 			  			</div>
 					</div>
 					
 					<div class="control-group">	
 						<label class="control-label">Probability (%) <span class="field_req">*</span></label>
 						<div class="controls">
-							<input type="text" id="probability" name="probability" class="input-small required" placeholder="Probability %"/>				
+							<input type="text" id="probability" name="probability" class="input-small required digits" max="100" placeholder="Probability %"/>				
 			  			</div>
 					</div>
 					

@@ -57,11 +57,14 @@
 				</div>
 							
 				<div class="error-actions">
-					<span class="btn btn-large btn-primary" onClick="history.go(-1);">
+					
+						<a href='<%= UserServiceFactory.getUserService().createLogoutURL(request.getRequestURI()) %>'><span class="btn btn-large btn-primary">
 						<i class="icon-chevron-left"></i>
 						&nbsp;
 						Continue						
-					</span>					
+					</span>	</a>					
+			
+									
 				</div> <!-- /error-actions -->			
 			</div>
 		</div>
