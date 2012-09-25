@@ -33,6 +33,13 @@ public class NamespaceFilter implements Filter
 	if (NamespaceManager.get() != null)
 	    return true;
 
+	// If Localhost - just return
+	if (request.getServerName().equalsIgnoreCase("localhost")
+		|| request.getServerName().equalsIgnoreCase("127.0.0.1"))
+	{
+	    return true;
+	}
+
 	/*
 	 * // Get User Id UserService userService =
 	 * UserServiceFactory.getUserService();
