@@ -31,7 +31,7 @@ public class Note
     @NotSaved(IfDefault.class)
     public String subject = null;
 
-    public String note;
+    public String description;
 
     // List of contact id's
     @NotSaved(IfDefault.class)
@@ -50,9 +50,9 @@ public class Note
 
     }
 
-    public Note(String subject, String note)
+    public Note(String subject, String description)
     {
-	this.note = note;
+	this.description = description;
 	if (subject != null)
 	    this.subject = subject;
     }
@@ -121,7 +121,7 @@ public class Note
     public String toString()
     {
 	return "id: " + id + " created_time: " + created_time + " subj"
-		+ subject + " note: " + note;
+		+ subject + " description: " + description;
     }
 
     public void save()

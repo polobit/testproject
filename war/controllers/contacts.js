@@ -29,6 +29,9 @@ var ContactsRouter = Backbone.Router.extend({
         /* New Contact/Company - Full mode */
         "continue-contact": "continueContact",
         "continue-company": "continueCompany",
+        
+        /* Contact bulk actions */
+        "bulk-campaigns": "campaignsBulk",
 
         /* Return back from Scribe after oauth authorization */
         "gmail": "email",
@@ -410,6 +413,13 @@ var ContactsRouter = Backbone.Router.extend({
     	    	var ContactFilter = ContactFilter.render();
     	    	$("#content").html(ContactFilter.el); 
     	
+    },
+    campaignsBulk: function(){
+    
+    	$("#content").html(getTemplate("bulk-actions-campaign", {}));
+		
+		var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+        fillSelect('campaignBulkSelect','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);  
     }
     
 });

@@ -160,6 +160,18 @@ $(function () {
     $("#update").die().live('click', function (e) {
         serializeAndSaveContinueContact(e, 'continueform');
     });
+    
+    // Close in continue-contact
+    $("#close").live('click', function (e) {
+		e.preventDefault();
+	    var id = $('#continueform input[name=id]').val();
+	    if(id)
+	    {
+	    	Backbone.history.navigate("contact/" + id, {
+	    		trigger: true
+	    	});
+	    }
+    });
 
     // Continue editing in the new-company-modal
     $('#continue-company').click(function (e) {
