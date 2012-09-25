@@ -207,6 +207,18 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	    // Add to list
 	    results.add(result);
 
+	    // Send totalCount if first time
+	    if (cursor == null && index == 0)
+	    {
+		// First time query - let's get the count
+		if (result instanceof com.agilecrm.cursor.Cursor)
+		{
+		    com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
+		    agileCursor.count = query.count();
+		}
+
+	    }
+
 	    // Check if we have reached the limit
 	    if (++index == max)
 	    {

@@ -15,23 +15,25 @@
 		    	   response.sendRedirect("/home");
 		    	   return;
 		       }
-		 	   
-		 	   
-		 	 
+		 	   		 	 
 		 	   // Chcek if Google Apps
 		 	   if(request.getParameter("hd") != null)
 		 	   {
 		 	     Set<String> attributesRequest = new HashSet<String>();
-		 	     String loginRealm = "https://*.agilecrm.com"; //Important that it is exactly the same as in application-manifest.xml, watch out for trailing slashes.
+		 	     
+		 	     // Important that it is exactly the same as in application-manifest.xml, watch out for trailing slashes.
+		 	     // NO longer makes sense. We are using subdomain - googleapps.agilecrm with namespace set to googleapps
+		 	     // We cannot provide custom realms in the createLoginURL. It has to match the returning URL
+		 	     // String loginRealm = "https://*.agilecrm.com"; 
+		 	     
 		 	     String destinationURL = request.getRequestURI();
 		 	     String federatedIdentity = null;
 		 	     String authDomain = request.getParameter("hd"); //hd is the default parameter name. Contains the google apps domain name of the user logging on. example.com for example.
 		 	     String loginUrl = userService.createLoginURL(destinationURL, federatedIdentity, authDomain, attributesRequest);
 		 	  
-		 	     System.out.println("Redirecting" + loginUrl + " " + userService.isUserLoggedIn());
+		 	     System.out.println("Redirecting - google apps - " + loginUrl + " " + userService.isUserLoggedIn());
 		 	     //out.println("Redirecting" + loginUrl + " " + userService.isUserLoggedIn());
-			 	  
-		 	     
+			 	 
 		 	     response.sendRedirect(loginUrl);
 		 	     return;
 		 	   }

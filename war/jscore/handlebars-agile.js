@@ -1,12 +1,26 @@
+// We store one template compiled - if repetitive templates are called, we save time on compilations
+var Handlebars_Compiled_Templates = {};
+	
+
 function getTemplate(templateName, context, download)
 {
 
+	// Check if it is present in templates
+	if(Handlebars_Compiled_Templates[source])
+		return Handlebars_Compiled_Templates[source](context);
+	else
+		Handlebars_Compiled_Templates = {};
+	
 	// Check if source is available in body
 	var source = $('#' + templateName + "-template").html();
 	if (source) {
 		// console.log(templateName + " " + source);
 		var template = Handlebars.compile(source);
 		//console.log(context);
+		
+		// Store it in template
+		Handlebars_Compiled_Templates[source] = template;
+		
 		return template(context);
 	}
 
@@ -117,8 +131,9 @@ $(function()
 		// Default images
 		// var img =
 		// "https://d1uqbqkiqv27mb.cloudfront.net/panel/img/default-avatar.png";
-		var img = "https://contactuswidget.appspot.com/images/pic.png";
-
+		// var img = "https://contactuswidget.appspot.com/images/pic.png";
+		var img = "http://d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png";
+		
 		var email = getPropertyValue(items, "email");
 		if (email) {
 			return 'https://secure.gravatar.com/avatar/' + MD5(email)
@@ -303,5 +318,13 @@ $(function()
 			if(this.properties[i].name == pname)
 				return options.fn(this.properties[i]);
 		}
+	});
+	
+	// Get Count
+	Handlebars.registerHelper('count', function(){
+		if(this[0] && this[0].count && (this[0].count != -1))
+			return "(" + this[0].count + " Total)";
+		else
+			return "(" + this.length + " Total)";
 	});
 });
