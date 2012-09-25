@@ -54,7 +54,7 @@ public class Contact extends Cursor
 
     @NotSaved(IfDefault.class)
     public Long last_contacted_time = 0L;
-    
+
     // Owner
     @Indexed
     public String lead_owner = "";
@@ -152,14 +152,13 @@ public class Contact extends Cursor
 	{
 	    System.out.println("New Entity");
 	    created_time = System.currentTimeMillis() / 1000;
-	    
-		// Assign lead_owner
-		UserPrefs userprefs = UserPrefs.getCurrentUserPrefs();
-		lead_owner = userprefs.name;
+
+	    // Assign lead_owner
+	    UserPrefs userprefs = UserPrefs.getCurrentUserPrefs();
+	    lead_owner = userprefs.name;
 	}
 	else
 	    updated_time = System.currentTimeMillis() / 1000;
-	
 
 	// Create Search Keyword Values
 	Set<String> tokens = new HashSet<String>();
@@ -247,7 +246,8 @@ public class Contact extends Cursor
     public static List<Contact> searchContacts(String keyword)
     {
 	Objectify ofy = ObjectifyService.begin();
-	return ofy.query(Contact.class).filter("search_tokens", keyword).list();
+	return ofy.query(Contact.class)
+		.filter("search_tokens", keyword.toLowerCase()).list();
     }
 
     // Get Contact by Email
