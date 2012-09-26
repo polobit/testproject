@@ -47,7 +47,11 @@ public class StringUtils2
     {
 	Set<String> into = new HashSet<String>(name.length() * 2);
 
-	String[] tokens = name.toLowerCase().split(" ");
+	// String[] tokens = name.toLowerCase().split(" ");
+
+	// Split all which are non-words
+	String[] tokens = name.toLowerCase().split("[\\W]");
+
 	for (String token : tokens)
 	    for (int i = 1; i <= token.length(); i++)
 		into.add(token.substring(0, i));

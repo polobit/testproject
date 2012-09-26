@@ -156,8 +156,7 @@ $(function(){
 	   });
 	});
 
-});	
-
+});
 
 // Return contact properties in a json
 function getPropertyJSON(contactJSON)

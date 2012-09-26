@@ -132,7 +132,7 @@ $(function()
 		// var img =
 		// "https://d1uqbqkiqv27mb.cloudfront.net/panel/img/default-avatar.png";
 		// var img = "https://contactuswidget.appspot.com/images/pic.png";
-		var img = "http://d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png";
+		var img = "https://d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png";
 		
 		var email = getPropertyValue(items, "email");
 		if (email) {

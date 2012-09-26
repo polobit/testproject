@@ -151,6 +151,13 @@ var Base_Collection_View = Backbone.View.extend({
     		$(this.el).empty(); 
         
         $(this.el).html(getTemplate((this.options.templateKey + '-collection'), this.collection.toJSON()));
+
+        // Add row-fluid if user prefs are set to fluid
+    	if(IS_FLUID)
+    		{
+    			$(this.el).find('div.row').removeClass('row').addClass('row-fluid');
+    		}
+    	
         _(this.collection.models).each(function (item) { // in case collection is not empty
         	this.appendItem(item);
         }, this);

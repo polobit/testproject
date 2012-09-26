@@ -51,20 +51,20 @@
 
 {{/unless}}
 {{#if this.length}}
-<table class="table table-striped showCheckboxes" url="core/api/workflows/bulk" >
-<thead>
-    <tr>
-      <th>Id</th>
-      <th>Name</th>
-      <th>Creator</th>
-    </tr>
-  </thead>
-  
-  <tbody id='workflows-model-list'>
-  </tbody>
-  
-</table>
-
+<div class="data-block">
+	  <div class="data-container">
+		<table class="table table-striped showCheckboxes" url="core/api/workflows/bulk" >
+			<thead>
+    			<tr>
+     				<th>Id</th>
+      				<th>Name</th>
+      				<th>Creator</th>
+    			</tr>
+  			</thead>
+	  		<tbody id='workflows-model-list'> </tbody>
+		</table>
+	  </div>
+</div>
 {{/if}}
 </div>
 

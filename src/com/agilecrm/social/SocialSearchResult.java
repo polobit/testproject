@@ -14,10 +14,13 @@ public class SocialSearchResult
     public String headline = "";
     public String num_connections = "";
     public String location = "";
+    public String friends = "";
+    public String tweets = "";
 
     public String toString()
     {
 	return id + " " + name + " " + picture + " " + url + " " + summary
-		+ " " + headline + " " + num_connections + " " + location;
+		+ " " + headline + " " + num_connections + " " + location + " "
+		+ friends + " " + tweets;
     }
 }

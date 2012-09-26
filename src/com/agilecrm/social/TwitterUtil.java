@@ -56,7 +56,8 @@ public class TwitterUtil
 	    result.location = user.getLocation();
 	    result.summary = user.getDescription();
 	    result.num_connections = user.getFollowersCount() + "";
-	    result.location = user.getLocation();
+	    result.friends = user.getFriendsCount() + "";
+	    result.tweets = user.getStatusesCount() + "";
 
 	    searchResults.add(result);
 	}
@@ -123,7 +124,8 @@ public class TwitterUtil
 	    result.location = user.getLocation();
 	    result.summary = user.getDescription();
 	    result.num_connections = user.getFollowersCount() + "";
-	    result.location = user.getLocation();
+	    result.friends = user.getFriendsCount() + "";
+	    result.tweets = user.getStatusesCount() + "";
 
 	    return result;
 	}

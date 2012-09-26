@@ -2,7 +2,7 @@
 
 <div class="row">
 
-<div class="span12">
+<div class="span9">
  <div class="page-header">
 
 	<div style='display:inline;padding-right:10px;height:auto;'>
@@ -30,10 +30,9 @@
 	</div>		
 	
 	<div class="btn-group right" style='position:relative;padding-right:20px'>
-
-<div id='star' style='padding-bottom:10px'></div>
+		<div id='star' style='padding-bottom:10px'></div>
 				
-<a class="btn" href="#"><i class="icon-print"></i></a>
+		<a class="btn" href="#"><i class="icon-print"></i></a>
 				<button class="btn">Actions</button>
   				<button class="btn dropdown-toggle" data-toggle="dropdown">
     				<span class="caret"></span>
@@ -46,17 +45,9 @@
 					<li><a href='#' id="contact-add-task">Add Task</a></li>   	
 					<li><a href='#add-opportunity'>Add Opportunity</a></li>   				
 					<li><a href='#contact-duplicate'>Duplicate</a></li>
-				
-					<li><a href='#'>Import Contacts from CSV</a></li>
   				</ul>
-			</div>		
-  </div>
-</div>
-</div>
-
-<div class="row">
-	
-<div class="span9">
+	</div>		
+ </div>
 
 <div class="subnav" >
 		    <ul class="nav nav-pills" id="contactDetailsTab">
@@ -71,32 +62,30 @@
       			<li class=""><a data-toggle="tab" href="#mail">Mail</a></li>
     		</ul>
 
-<div class="tab-content">
-  <div class="tab-pane" id="notes">...</div>
-  <div class="tab-pane" id="logs">...</div>
-  <div class="tab-pane" id="messages">...</div>
-  <div class="tab-pane" id="deals">...</div>
-  <div class="tab-pane" id="events">...</div>
-  <div class="tab-pane" id="campaigns">...</div>
-  <div class="tab-pane" id="mail">...</div>
-  <div class="tab-pane active" id="activities">...</div>
+			<div class="tab-content">
+  				<div class="tab-pane" id="notes">...</div>
+  				<div class="tab-pane" id="logs">...</div>
+  				<div class="tab-pane" id="messages">...</div>
+ 			 	<div class="tab-pane" id="deals">...</div>
+  				<div class="tab-pane" id="events">...</div>
+  				<div class="tab-pane" id="campaigns">...</div>
+  				<div class="tab-pane" id="mail">...</div>
+  				<div class="tab-pane active" id="activities">...</div>
+			</div>
 </div>
-
-  		</div>
 
 <div id="time-line"></div>
 
 </div>
-
-
 <!-- Contact Details -->
 	<div class="span3">
-		<div class='info_wrapper'>
+		<div class="data-block">
+			<div class='data-container'>
 
 		
-			<div class="">
-				<p class="sidebar_title"><i class="icon-user "></i> Contact details</p>
-			</div>
+			<header>
+				<h2><i class="icon-user "></i> Contact details</h2>
+			</header>
 
 			<br/>
 <div style='padding:10px;'>
@@ -163,19 +152,15 @@
 				{{/each}}
 				<br/><br/>
 		</div>
+	</div>
 </div>
 		<div id="widgets">
 		</div>
-
-	
-		</div>
-
-	
 		<div style='float:right;'>
-			<a href='#add-widget'>Manage widgets</>
+   				<a href='#add-widget'>Manage widgets</>
+  		</div>
+	
 		</div>
 
-
-		
-	</div>
+</div>
 </script>
