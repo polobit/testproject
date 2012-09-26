@@ -12,15 +12,7 @@ function showCalendar() {
                  	
             	if(doc)
             	{
-            		
-            		// All day should be set to false
-            		$.each(doc, function(index, v)
-            		{
-            			
-            			doc[index].allDay = (doc[index].allDay == 'true'); 
-            			
-            		});
-            		
+            		            		
             	    callback(doc);
             		
             	}

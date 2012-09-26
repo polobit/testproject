@@ -19,13 +19,13 @@ function fillSelect(selectId, url, parseKey, callback, template) {
 	// Fetch Collection from URL
 	var collection_def = Backbone.Collection.extend({
 		url : url,
-		parse : function(response) {
+/*		parse : function(response) {
 
 			if (response && response[parseKey])
 				return response[parseKey];
 
 			return response;
-		}
+		}*/
 	});
 
 	// Prepend Loading
@@ -45,7 +45,6 @@ function fillSelect(selectId, url, parseKey, callback, template) {
 			$("#" + selectId).empty().append('<option>Select...</option>');
 
 			$.each(collection.toJSON(), function(index, model) {
-
 				// Convert template into HTML
 				var modelTemplate = Handlebars.compile(template);
 				var optionsHTML = modelTemplate(model);

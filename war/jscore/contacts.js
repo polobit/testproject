@@ -1,5 +1,5 @@
 $(function(){
-	$('#contacts-model-list > tr').live('click', function(e){
+	/*$('#contacts-model-list > tr').live('click', function(e){
 		
 		e.preventDefault();
 		var data = $(this).find('.data').attr('data');
@@ -11,7 +11,7 @@ $(function(){
 		        });
 			}
 		
-	});
+	});*/
 	
 	$('#contacts-custom-view-model-list > tr').live('click', function(e){
 		

@@ -29,7 +29,7 @@ $(function()
 
 		$(table).find('tbody tr').prepend('<td><input class="tbody_check" type="checkbox"/></td>');
 		
-		$(table).after('</br><a href="#" class="btn left" id="delete-checked"> Delete</a>');
+		$(table).after('</br><a href="#" class="btn btn-danger left" id="delete-checked"> Delete</a>');
 	});
 	
 	// Event to trigger to delete checked entities  
@@ -50,7 +50,7 @@ $(function()
 				id_array.push($(element).closest('tr').data().get('id'));
 			}
 		});
-		bulkOperations($(table).attr('url'), id_array.join());
+		bulkOperations($(table).attr('url'), id_array);
 	});
 	
 	// Click head - click all checkboxes of table body
@@ -60,12 +60,22 @@ $(function()
 });
 
 // Bulk operations - delete function
-function bulkOperations(url, idString){
+function bulkOperations(url, id_array){
+	var json = {};
+	json.model_ids = JSON.stringify(id_array);
 	$.ajax({
+		url: url,
+		type: 'DELETE',
+		data: json,
+		success: function(){location.reload(true);
+			}
+	});
+	
+	/*$.ajax({
 		url: url + "/" + idString,
 		type: 'DELETE',
 		success: function(){//location.reload(true);
 			}
-	});
+	});*/
 }
 		
