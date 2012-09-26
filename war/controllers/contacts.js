@@ -32,7 +32,10 @@ var ContactsRouter = Backbone.Router.extend({
         
         /* Contact bulk actions */
         "bulk-campaigns": "campaignsBulk",
-
+        "bulk-tags": "tagsBulk",
+        "bulk-email": "emailBulk",
+        "bulk-owner": "ownerBulk",
+        
         /* Return back from Scribe after oauth authorization */
         "gmail": "email",
         "twitter": "socialPrefs",
@@ -312,25 +315,14 @@ var ContactsRouter = Backbone.Router.extend({
     	var model =  this.contactDetailView.model;
     	var sendEmailView = new Base_Model_View({
             model: model,
-            template: "send-email"
+            template: "send-email",
+            postRenderCallback: function(el) {
+
+            	// Populate from address and templates
+            	populateSendEmailDetails(el);
+            }
         });
     	$("#content").html(sendEmailView.render().el);
-    	
-    	 // Add From address to the form (FROM - current user email)
-		 var CurrentuserModel = Backbone.Model.extend({
-		     url: '/core/api/current-user',
-		     restKey: "domainUser"
-		});
-		 
-		var currentuserModel = new CurrentuserModel();
-		currentuserModel.fetch({success: function(data){
-				var model = data.toJSON();
-				$("#emailForm").find( 'input[name="from"]' ).val(model.email);
-		}});
-		
-		// Prefill the templates
-		var optionsTemplate = "<option value='{{id}}'> {{subject}}</option>";
-		fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', undefined , optionsTemplate);
     },
     contactfilters: function() {
     	this.contactFiltersList = new Base_Collection_View({
@@ -414,12 +406,25 @@ var ContactsRouter = Backbone.Router.extend({
     	    	$("#content").html(ContactFilter.el); 
     	
     },
+    ownerBulk: function(){
+
+    	$("#content").html(getTemplate("bulk-actions-owner", {}));
+		
+    	$('body').trigger('fill_owners');
+    },
     campaignsBulk: function(){
     
     	$("#content").html(getTemplate("bulk-actions-campaign", {}));
 		
-		var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-        fillSelect('campaignBulkSelect','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);  
+    	$('body').trigger('fill_campaigns');
+    },
+    tagsBulk: function(){
+        
+    	$("#content").html(getTemplate("bulk-actions-tags", {}));
+    },
+    emailBulk: function(){
+
+    	$("#content").html(getTemplate("send-email", {}));
+    	$('body').trigger('fill_emails');
     }
-    
 });

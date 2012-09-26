@@ -8,6 +8,9 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
@@ -21,120 +24,107 @@ import com.googlecode.objectify.condition.IfDefault;
 
 @XmlRootElement
 @Unindexed
-public class Workflow extends Cursor
-{
-    // Key
-    @Id
-    public Long id;
+public class Workflow extends Cursor {
+	// Key
+	@Id
+	public Long id;
 
-    public String name;
+	public String name;
 
-    // Created/Updated Time
-    public Long created_time = 0L;
+	// Created/Updated Time
+	public Long created_time = 0L;
 
-    @NotSaved(IfDefault.class)
-    public Long updated_time = 0L;
+	@NotSaved(IfDefault.class)
+	public Long updated_time = 0L;
 
-    @NotSaved(IfDefault.class)
-    public String rules = null;
+	@NotSaved(IfDefault.class)
+	public String rules = null;
 
-    @NotSaved(IfDefault.class)
-    private Key<AgileUser> creator_key = null;
+	@NotSaved(IfDefault.class)
+	private Key<AgileUser> creator_key = null;
 
-    // Dao
-    private static ObjectifyGenericDao<Workflow> dao = new ObjectifyGenericDao<Workflow>(
-	    Workflow.class);
+	// Dao
+	private static ObjectifyGenericDao<Workflow> dao = new ObjectifyGenericDao<Workflow>(
+			Workflow.class);
 
-    Workflow()
-    {
+	Workflow() {
 
-    }
-
-    public Workflow(String name, String rules)
-    {
-	this.name = name;
-	this.rules = rules;
-    }
-
-    @PrePersist
-    private void PrePersist()
-    {
-	// Store Created and Last Updated Time
-	if (created_time == 0L)
-	{
-	    created_time = System.currentTimeMillis() / 1000;
 	}
-	else
-	    updated_time = System.currentTimeMillis() / 1000;
-    }
 
-    public void save()
-    {
-	AgileUser agileUser = AgileUser.getCurrentAgileUser();
-	creator_key = new Key<AgileUser>(AgileUser.class, agileUser.id);
-
-	dao.put(this);
-    }
-
-    public void delete()
-    {
-	dao.delete(this);
-    }
-
-    public static Workflow getWorkflow(Long id)
-    {
-	try
-	{
-	    return dao.get(id);
+	public Workflow(String name, String rules) {
+		this.name = name;
+		this.rules = rules;
 	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
+
+	@PrePersist
+	private void PrePersist() {
+		// Store Created and Last Updated Time
+		if (created_time == 0L) {
+			created_time = System.currentTimeMillis() / 1000;
+		} else
+			updated_time = System.currentTimeMillis() / 1000;
 	}
-    }
 
-    public static List<Workflow> getAllWorkflows()
-    {
-	Objectify ofy = ObjectifyService.begin();
-	return ofy.query(Workflow.class).list();
-    }
+	public void save() {
+		AgileUser agileUser = AgileUser.getCurrentAgileUser();
+		creator_key = new Key<AgileUser>(AgileUser.class, agileUser.id);
 
-    public static List<Workflow> getAllWorkflows(int max, String cursor)
-    {
-	List<Workflow> workflows = dao.fetchAll(max, cursor);
-	return workflows;
-    }
-
-    public String toString()
-    {
-	return "Name: " + name + " Rules: " + rules + " created_time: "
-		+ created_time + " updated_time" + updated_time;
-    }
-
-    // Delete workflows bulk
-    public static void deleteWorkflowsBulk(String[] id_array)
-    {
-	List<Key<Workflow>> worflowKeys = new ArrayList<Key<Workflow>>();
-	for (String workflow_id : id_array)
-	{
-	    worflowKeys.add(new Key<Workflow>(Workflow.class, Long
-		    .parseLong(workflow_id)));
+		dao.put(this);
 	}
-	dao.deleteKeys(worflowKeys);
-    }
 
-    @XmlElement(name = "creator")
-    public String getCreatorName() throws Exception
-    {
-	Objectify ofy = ObjectifyService.begin();
-	if (creator_key != null)
-	{
-	    UserPrefs userPrefs = ofy.query(UserPrefs.class)
-		    .ancestor(creator_key).get();
-	    if (userPrefs != null)
-		return userPrefs.name;
+	public void delete() {
+		dao.delete(this);
 	}
-	return "";
-    }
+
+	public static Workflow getWorkflow(Long id) {
+		try {
+			return dao.get(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static List<Workflow> getAllWorkflows() {
+		Objectify ofy = ObjectifyService.begin();
+		return ofy.query(Workflow.class).list();
+	}
+
+	public static List<Workflow> getAllWorkflows(int max, String cursor) {
+		List<Workflow> workflows = dao.fetchAll(max, cursor);
+		return workflows;
+	}
+
+	public String toString() {
+		return "Name: " + name + " Rules: " + rules + " created_time: "
+				+ created_time + " updated_time" + updated_time;
+	}
+
+	// Delete workflows bulk
+	public static void deleteWorkflowsBulk(JSONArray workflowsJSONArray) {
+		List<Key<Workflow>> worflowKeys = new ArrayList<Key<Workflow>>();
+		for (int i = 0; i < workflowsJSONArray.length(); i++) {
+
+			try {
+				worflowKeys.add(new Key<Workflow>(Workflow.class, Long
+						.parseLong(workflowsJSONArray.getString(i))));
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+
+		dao.deleteKeys(worflowKeys);
+	}
+
+	@XmlElement(name = "creator")
+	public String getCreatorName() throws Exception {
+		Objectify ofy = ObjectifyService.begin();
+		if (creator_key != null) {
+			UserPrefs userPrefs = ofy.query(UserPrefs.class)
+					.ancestor(creator_key).get();
+			if (userPrefs != null)
+				return userPrefs.name;
+		}
+		return "";
+	}
 }

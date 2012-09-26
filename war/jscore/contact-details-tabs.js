@@ -102,7 +102,8 @@ $(function(){
 				// Get Current Contact
 				var contact = App_Contacts.contactDetailView.model;
 				var json = contact.toJSON();
-				
+				console.log(contact);
+
 				console.log(json);
 				console.log(model);
 				
@@ -167,6 +168,25 @@ function getPropertyJSON(contactJSON)
 			{
 				json[this.name] = this.value;
 			});
-	
+	console.log(json);
 	return json;
+}
+
+// Populate send email details
+function populateSendEmailDetails(el){
+	 // Add From address to the form (FROM - current user email)
+	 var CurrentuserModel = Backbone.Model.extend({
+	     url: '/core/api/current-user',
+	     restKey: "domainUser"
+	});
+	 
+	var currentuserModel = new CurrentuserModel();
+	currentuserModel.fetch({success: function(data){
+			var model = data.toJSON();
+			$("#emailForm").find( 'input[name="from"]' ).val(model.email);
+	}});
+	
+	// Prefill the templates
+	var optionsTemplate = "<option value='{{id}}'> {{subject}}</option>";
+	fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', undefined , optionsTemplate);
 }
