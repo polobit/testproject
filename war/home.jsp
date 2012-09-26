@@ -26,6 +26,8 @@
 	
 	
 	String width = UserPrefs.getCurrentUserPrefs().width;
+	
+	boolean is_fluid = !width.isEmpty();
 %>
 
 <% 
@@ -186,6 +188,8 @@ String CSS_PATH = "/";
 	var LIB_PATH = "/";
 	
 	var IS_CONSOLE_ENABLED = <%=debug%>;
+	
+	var IS_FLUID = <%=is_fluid%>;
 	
 	var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
 	// var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';

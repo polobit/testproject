@@ -85,17 +85,17 @@ public class Widget
 	List<Widget> widgets = new ArrayList<Widget>();
 	widgets.add(new Widget(
 		"Linkedin",
-		"Linked For one year, in 1906, Felix Feneon re-wrote the news for a column in the French newspaper Le Matin, 'Novellas in three lines.' In a sparse sentence or two - only three lines in a single newspaper column - he captured the march of industrialization, the scourge of rural disease and the randomness of death. He showed acts of violence and charity throughout France.",
+		"LinkedIn is a free business social networking site that allows users who register to create a professional profile visible to others. Through the site, individuals can then maintain a list of known business contacts, known as Connections. LinkedIn users can also invite anyone to join their list of connections. LinkedIn offers an effective way by which people can develop an extensive list of contacts, as your network consists of your own connections.",
 		"/widgets/linkedin.js", "/img/plugins/linkedin.png",
 		"/widgets/linkedin-logo-small.png", null));
 	widgets.add(new Widget(
 		"Twitter",
-		"Twitter For one year, in 1906, Felix Feneon re-wrote the news for a column in the French newspaper Le Matin, 'Novellas in three lines.' In a sparse sentence or two - only three lines in a single newspaper column - he captured the march of industrialization, the scourge of rural disease and the randomness of death. He showed acts of violence and charity throughout France.",
+		"Twitter is an information network that brings people closer to what’s important to them. Millions of people turn to Twitter to connect to their interests and find out what's happening in the world right now. Anyone can read, write and share messages. Businesses can influence and participate in real-time conversations on Twitter to drive consumer action with integrated paid, earned and owned campaigns, delivering results throughout the marketing funnel.",
 		"/widgets/twitter.js", "/img/plugins/twitter.jpg",
 		"/widgets/twitter-logo-small.png", null));
 	widgets.add(new Widget(
 		"Rapleaf",
-		"Rapleaf For one year, in 1906, Felix Feneon re-wrote the news for a column in the French newspaper Le Matin, 'Novellas in three lines.' In a sparse sentence or two - only three lines in a single newspaper column - he captured the march of industrialization, the scourge of rural disease and the randomness of death. He showed acts of violence and charity throughout France.",
+		"Rapleaf helps our business clients develop better relationships with their customers. We believe in the power of transparency, choice, and control when it comes to personal information online. We view privacy and security as fundamental design requirements in our technologies and services and core to our business practices and operations. OUR MISSION is to make it incredibly easy for marketers to access the data they need to personalize content for their customers.",
 		"/widgets/rapleaf.js", "/img/plugins/rapleaf.jpeg",
 		"/widgets/rapleaf-logo-small.jpeg", null));
 
