@@ -22,7 +22,10 @@
 <%
 	// Download the template the user likes
 	String template = UserPrefs.getCurrentUserPrefs().template;
-	// template = "default";
+	template = "red";
+
+	if(request.getParameter("t") != null)
+		template = request.getParameter("t");
 	
 	
 	String width = UserPrefs.getCurrentUserPrefs().width;

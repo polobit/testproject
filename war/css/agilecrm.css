@@ -105,6 +105,12 @@ padding: 13px 0px;
 border-bottom: 2px solid whiteSmoke;	
 }
 
+#tags .tag-element.last
+{
+padding: 13px 0px; 
+border-bottom: none;	
+}
+
 /* handlebars-agile.js,js-all-min.js*/
 .tag-key
 {
