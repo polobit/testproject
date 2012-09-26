@@ -68,9 +68,12 @@ function showTwitterMatchingProfiles(plugin_id)
                  
                  $.each(value, function (index, object) {
                      el = el.concat("<img  rel=\"popover\" data-content=\" <img src=" + object.picture 
-                    		 + "></img><span style='display: inline-block;text-align: justify;vertical-align: middle;width: 190px;padding-left: 10px;'> Name : " 
-                    		 + object.name + " <br/>Followers : " + object.num_connections + " <br/>Location : " 
-                    		 + object.location + "</span><p style='text-align: justify;font-style: italic;'><br/>"+ object.summary+" </p>\" data-original-title=\" Twitter Profile\"class=\"twitterImage thumbnail \" id=" 
+                    		 + "></img><span style='display: inline-block;text-align: justify;vertical-align: middle;padding-left: 10px;'><b style='color:#069;font-size:15px;'>" 
+                    		 + object.name + " </b><br/>" + object.location +"</span><p style='text-align: justify;font-style: italic;'><br/>"
+                    		 + object.summary+" </p><br/><div class='row span5'><div class='span1'style='margin-left: -15px;'>Tweets<p style='text-align:center;'>" 
+                    		 + object.tweets +"</p></div><div class='span1' style='margin-left: 0px;'>Followers<p style='text-align:center;'>" 
+                    		 + object.num_connections +"</p></div><div class='span1' style='margin-left: 15px;'>Follows<p style='text-align:center;'>"
+                    		 + object.friends +"</p></div></div>\" data-original-title=\" Twitter Profile\"class=\"twitterImage thumbnail \" id=" 
                     		 + object.id + " src =\" "+ object.picture + " \"style=\"width: 55px;height: 55px; display:inline-block; margin-right:2px; margin-bottom:2px; cursor:pointer;\" ></img>");
                  });
              });
@@ -89,7 +92,7 @@ function showTwitterMatchingProfiles(plugin_id)
 		 $('#'+id).die().live('click', function(e){
 			 e.preventDefault();
 			 
-			 $('#'+id).popover('hide');
+			 //$('#'+id).popover('hide');
 			    if (id) 
 			    	{			    	
 			    		// To ask user to add profile pic to contact image

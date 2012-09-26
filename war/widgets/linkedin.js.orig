@@ -79,9 +79,15 @@ function showLinkedinMatchingProfiles(plugin_id)
                 		 }
                 	 
                 	 el = el.concat("<img  rel=\"popover\" data-content=\" <img style='width:55px;height:55px;' src=" + object.picture 
-                    		 + "></img><span style='display: inline-block;text-align: justify;vertical-align: middle;padding-left: 10px;'><b style='color:#069;font-size:15px;'>" 
-                    		 + object.name + " </b><br/>" + object.location +"<br/>" + object.num_connections + " Connections</span><br/><p style='text-align: justify;font-style: italic;'>"
-                    		 + object.summary+" </p>\" data-original-title=\" Linked Profile\"class=\"linkedinImage thumbnail \" id=" 
+<<<<<<< HEAD
+                    		 + "></img><span style='display: inline-block;width:185px;text-align: justify;vertical-align: middle;padding-left: 10px;'> Name : " 
+                    		 + object.name + " <br/>Connections : " + object.num_connections + " <br/>Location : " 
+                    		 + object.location + "</span><p style='text-align: justify;font-style: italic;'><br/>"+ object.summary+" </p>\" data-original-title=\" Linked Profile\"class=\"linkedinImage thumbnail \" id=" 
+=======
+                    		 + "></img><span style='display: inline-block;width:185px;text-align: justify;font-style: italic;vertical-align: middle;padding-left: 10px;'> Name : " 
+                    		 + object.name + " <br/>Followers : " + object.num_connections + " <br/>Location : " 
+                    		 + object.location + "</span><p style='text-align: justify;font-style: italic;'>Summary : "+ object.summary+" </p>\" data-original-title=\" Linked Profile\"class=\"linkedinImage thumbnail \" id=" 
+>>>>>>> sukanya
                     		 + object.id + " src =\" "+ object.picture + " \"style=\"width: 55px;height: 55px; display:inline-block; margin-right:2px; margin-bottom:2px; cursor:pointer;\" ></img>");
                  
                  });
@@ -95,37 +101,16 @@ function showLinkedinMatchingProfiles(plugin_id)
 	$(".linkedinImage").die().live('mouseover' ,function() {
 		
 		 var id = $(this).attr('id');
-		 var linkedin_image = $(this).attr('src');
+
 		 $('#'+id).popover({placement:'left'});
 		 
-		 $('#'+id).die().live('click', function(e){
-			 e.preventDefault();
+		 $('#'+id).die().live('click', function(){
 			 $('#'+id).popover('hide');
 			    if (id) 
 			    	{
-				    	// To ask user to add profile pic to contact image
-			    		var modal = $('<div id="linkedin-image-save-modal" class="modal fade in" >'
-			    				          +'<div class="modal-header" ><a href="#" data-dismiss="modal" class="close">&times;</a>'
-			    				          +'<h3>Add Image</h3></div>'
-			    				          +'<div class="modal-body"><p>You are about to add Image to contact</p>'
-			    				                +'<p>Do you want to proceed?</p>'
-			    				          +'</div>'
-			    				          +'<div class="modal-footer"><a href="#" id="save_linkedin_image" class="btn btn-primary">Yes</a>'
-			    				                 +'<a  href="#" class="btn close" data-dismiss="modal" >No</a>'
-			    				          +'</div>'
-			    				      +'</div>');
-			    		if($('#linkedin-image-save-modal').size() == 0)
-			    		      $('#content').append(modal);
-			    		$('#linkedin-image-save-modal').modal('show');
 			    		agile_crm_save_widget_property(LINKEDIN_PLUGIN_NAME, id);
 			    		showLinkedinProfile(id, plugin_id)
 			    	}
-		 });
-		 // Confirmation for saving image to contact 
-		 $('#save_linkedin_image').die().live('click', function(e){
-			 e.preventDefault();
-			 agile_crm_update_contact("image", linkedin_image);
-			 $('#linkedin-image-save-modal').modal('hide');
 		 });
 		 
 	});
@@ -157,6 +142,7 @@ function showLinkedinProfile(linkedin_id, plugin_id)
 				    			+'</div>'
 				    		+'</div>');
     });	
+    
     
     // delete linkedin profile
     $('#linkedin_plugin_delete').die().live('click',function(event){
