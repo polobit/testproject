@@ -5,6 +5,7 @@ import javax.ws.rs.ext.Provider;
 
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.SerializationConfig;
 
 @Provider
 public class ObjectMapperProvider implements ContextResolver<ObjectMapper>
@@ -16,6 +17,11 @@ public class ObjectMapperProvider implements ContextResolver<ObjectMapper>
 	mapper = new ObjectMapper();
 	mapper.configure(
 		DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+	mapper.configure(SerializationConfig.Feature.WRITE_NULL_PROPERTIES,
+		false);
+	mapper.configure(SerializationConfig.Feature.WRITE_NULL_MAP_VALUES,
+		false);
 
     }
 
