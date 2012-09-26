@@ -57,6 +57,13 @@ $(function()
 	$('.thead_check').live('click', function(event){
 		$('.tbody_check').attr('checked', this.checked);
 	});	
+
+	$('#top').live('click',function(event){
+		event.preventDefault();
+		console.log("scroll to top");
+		window.scrollTo();
+	});
+	
 });
 
 // Bulk operations - delete function
