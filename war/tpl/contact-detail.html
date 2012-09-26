@@ -4,11 +4,32 @@
 
 <div class="span9">
  <div class="page-header">
-    <h2>	<img  class='thumbnail' src="{{gravatarurl properties 50}}" width="50" height="50" style='display:inline'/>
-			{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}<small></small></h2>
-			
-		<div class="btn-group right" style='top:-50px;position:relative;padding-right:20px'>
 
+	<div style='display:inline;padding-right:10px;height:auto;'>
+
+    		<img  class='thumbnail' src="{{gravatarurl properties 50}}" width="50" height="50" style='display:inline'/>
+	</div>
+	<div style='height:auto;display:inline-block;vertical-align:-23px;'>
+		<b>
+
+			{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}
+		</b></br>
+		{{#if_propertyName "email"}}
+			{{value}}</br>
+		{{/if_propertyName}}
+
+		{{#if_propertyName "title"}}
+			{{value}}
+		{{/if_propertyName}}
+
+
+		{{#if_propertyName "company"}}
+			{{value}}
+		{{/if_propertyName}}
+ 		
+	</div>		
+	
+	<div class="btn-group right" style='position:relative;padding-right:20px'>
 		<div id='star' style='padding-bottom:10px'></div>
 				
 		<a class="btn" href="#"><i class="icon-print"></i></a>
@@ -68,9 +89,9 @@
 
 			<br/>
 <div style='padding:10px;'>
-<span class="rating">
-                        <span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span>
-                    </span>
+			<div>
+				<span>Lead owner: {{lead_owner}}</span>
+			</div>
 		
 			<div>
 				<!--<div style='float: left;height:auto;padding-right:10px;'>
@@ -104,11 +125,11 @@
 
 					</ul>
 				{{/if}}	
-					<a href="#" id="add-tags"><i class="icon-plus-sign"></i></a>
+					<a href="#" id="add-tags"><i class="icon-plus-sign"></i></a> <span>Add tags</span>
 
 						<form id="addTagsForm" style="display:none">
-							<input id="addTags" type="text" class="span2" placeholder="Add tags"/>
-							<a href="#" class="btn btn-small right" id="contact-add-tags" style="margin-right: 10px">Add</a>
+							<input id="addTags" type="text" class="span2" placeholder="Enter tags"/>
+							<a href="#" class="btn right" id="contact-add-tags" style="margin-right: 10px">Add</a>
 						</form>
 				
 			</div>
@@ -119,12 +140,15 @@
 			<br/>		
 	
  			{{#each properties}}
-     			<span style='display:inline'><icon class="{{icons name}}"></icon> <small>{{name}}</small></span> 
+     			
+				{{#if_property "first_name" "last_name" "company" "title"}}
+				<span style='display:inline'><icon class="{{icons name}}"></icon> <small>{{name}}</small></span> 
 				{{#if subtype}}
 					({{subtype}})
 				{{/if}}
 				{{value}} 
-				<br/>     
+				<br/> 
+			{{/if_property}}	    
 				{{/each}}
 				<br/><br/>
 		</div>

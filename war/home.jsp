@@ -82,8 +82,6 @@ String CSS_PATH = "/";
 						<li id="calendarmenu"><a href="#calendar"><i class="icon-calendar icon-white"></i> Calendar</a>
 						<li id="dealsmenu"><a href="#deals"><i class="icon-folder-open icon-white"></i> Deals</a>
 						<li id="workflowsmenu"><a href="#workflows"><i class="icon-comment icon-white"></i> Campaigns</a>
-					
-						</li>
 					</ul>
 					
 					<%
@@ -144,9 +142,13 @@ String CSS_PATH = "/";
 									if(domainUser != null && domainUser.is_admin)
 										out.println("<li><a href='#admin'><i class='icon-fire'></i> Admin Settings</a></li>");
 									%>
+								</li>
+																					
+        							<li><a href="#contact-us"><i class="icon-pencil"></i> Contact Us</a></li>
 								<li>
 								<a href="<%=logoutURL%>"><i class="icon-off"></i> Logout</a>
 								</li>
+								
 							</ul>
 						</li>
 					</ul>
@@ -169,6 +171,8 @@ String CSS_PATH = "/";
 	<div class='notifications top-right'></div>
 	<div class='notifications bottom-left'></div>
 	<div class='notifications bottom-right'></div>
+	
+	<footer class="container"><a href="#top" id="top" class="btn btn-mini btn-flat btn-primary pull-right">Top &uarr;</a></footer>
 	
 	<!-- Templates -->
 	<%@ include file="tpl/min/tpl.js" %>	
