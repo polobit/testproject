@@ -114,15 +114,11 @@
 				<br/>
 				{{#if tags}}
 					<i class="icon-tags"></i>
-
-					<ul class="tags">
-
-					
-					{{#each tags}}	
-
-				<li><span><a href='#tags/{{this}}'>{{this}}</a><a href="#" class="icon-remove remove-tags" id="{{this}}"></a></span></li>
-  					{{/each}}
-
+					<ul class="tagsinput">
+						{{#each tags}}
+								<li style="display:inline-block;" class="tag"><span><a class="anchor" href="#tags/{{this}}">{{this}}</a><a class="close remove-tags" id="{{this}}">&times</a></span></li>
+  						{{/each}}
+					</ul>
 					</ul>
 				{{/if}}	
 					<a href="#" id="add-tags"><i class="icon-plus-sign"></i></a> <span>Add tags</span>

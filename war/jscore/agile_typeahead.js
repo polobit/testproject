@@ -53,7 +53,7 @@ function agile_type_ahead(id, el, callback, isSearch) {
 
 			//add tag 
 			if(tag_not_exist)				
-				$('.tags',el).append('<li class="label label-warning"  style="display: inline-block; vertical-align: middle; margin-right:3px;" value="'+ TAGS[items]+'">'+items+'<a class="icon-remove" id="remove_tag"></a></li>');
+				$('.tags',el).append('<li class="tag"  style="display: inline-block;" value="'+ TAGS[items]+'">'+items+'<a class="close" id="remove_tag">&times</a></li>');
 		},
 		minLength : 2
 	})
