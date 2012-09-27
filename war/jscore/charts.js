@@ -1,7 +1,7 @@
 function setupCharts(callback)
 {
 	// Download the lib
-    	head.js('http://code.highcharts.com/highcharts.js', 'http://code.highcharts.com/modules/exporting.js',
+    	head.js('/lib/flot/highcharts.js', '/lib/flot/highcharts-exporting.js',
 	       		function(){
     		 if (callback && typeof(callback) === "function") {
     			 // execute the callback, passing parameters as necessary
