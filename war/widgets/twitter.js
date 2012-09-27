@@ -67,14 +67,14 @@ function showTwitterMatchingProfiles(plugin_id)
                 	 value = [value]
                  
                  $.each(value, function (index, object) {
-                     el = el.concat("<img  rel=\"popover\" data-content=\" <img src=" + object.picture 
-                    		 + "></img><span style='display: inline-block;text-align: justify;vertical-align: middle;padding-left: 10px;'><b style='color:#069;font-size:15px;'>" 
-                    		 + object.name + " </b><br/>" + object.location +"</span><p style='text-align: justify;font-style: italic;'><br/>"
-                    		 + object.summary+" </p><br/><div class='row'><div class='span3' style='margin-left: 10px;'><div class='span1'>Tweets<p style='text-align:center;'>" 
-                    		 + object.tweets +"</p></div><div class='span1' style='margin-left: 0px;'>Followers<p style='text-align:center;'>" 
-                    		 + object.num_connections +"</p></div><div class='span1' style='margin-left: 15px;'>Follows<p style='text-align:center;'>"
-                    		 + object.friends +"</p></div></div></div>\" data-original-title=\" Twitter Profile\"class=\"twitterImage thumbnail \" id=" 
-                    		 + object.id + " src =\" "+ object.picture + " \"style=\"width: 55px;height: 55px; display:inline-block; margin-right:2px; margin-bottom:2px; cursor:pointer;\" ></img>");
+                     el = el.concat("<img  rel=\"popover\" data-content=\" <div class='span5' style='margin-left:-20px;'><div class='span1'><img src=" + object.picture 
+                    		 + "></img></div><div class='span3' style='text-align: justify;vertical-align: middle;'><b style='color:#069;font-size:15px;'>" 
+                    		 + object.name + " </b><br/>" + object.location +"</div></div><p style='text-align: justify;font-style: italic;'>"
+                    		 + object.summary+" </p><br/><div class='span5' style='margin-left:-20px;clear: both!important;float: none!important;padding-bottom: 25px;'><div class='span1'>Tweets<p>" 
+                    		 + object.tweets +"</p></div><div class='span1' style='margin-left:5px;border-left: solid 1px #EAEAEA;padding: 0px 5px;'>Followers<p>" 
+                    		 + object.num_connections +"</p></div><div class='span1'style='border-left: solid 1px #EAEAEA;padding: 0px 5px;'>Follows<p>"
+                    		 + object.friends +"</p></div></div>\" data-original-title=\" Twitter Profile\"class=\"twitterImage thumbnail \" id=" + object.id + " src =\" "
+                    		 + object.picture + " \"style=\"width: 55px;height: 55px; display:inline-block; margin-right:2px; margin-bottom:2px; cursor:pointer;\" ></img>");
                  });
              });
              $('#Twitter').html(el);
@@ -92,7 +92,7 @@ function showTwitterMatchingProfiles(plugin_id)
 		 $('#'+id).die().live('click', function(e){
 			 e.preventDefault();
 			 
-			 //$('#'+id).popover('hide');
+			 $('#'+id).popover('hide');
 			    if (id) 
 			    	{			    	
 			    		// To ask user to add profile pic to contact image

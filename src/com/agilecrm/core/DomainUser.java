@@ -37,6 +37,9 @@ public class DomainUser
     @NotSaved(IfDefault.class)
     public boolean is_disabled = false;
 
+    @NotSaved(IfDefault.class)
+    public String user_note;
+
     // Dao
     private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(
 	    DomainUser.class);

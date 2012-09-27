@@ -78,9 +78,9 @@ function showLinkedinMatchingProfiles(plugin_id)
             			  	object.picture = 'https://contactuswidget.appspot.com/images/pic.png';
                 		 }
                 	 
-                	 el = el.concat("<img  rel=\"popover\" data-content=\" <img style='width:55px;height:55px;' src=" + object.picture 
-                    		 + "></img><span style='display: inline-block;text-align: justify;vertical-align: middle;padding-left: 10px;'><b style='color:#069;font-size:15px;'>" 
-                    		 + object.name + " </b><br/>" + object.location +"<br/>" + object.num_connections + " Connections</span><br/><p style='text-align: justify;font-style: italic;'>"
+                	 el = el.concat("<img  rel=\"popover\" data-content=\" <div class='span5' style='margin-left:-20px;'><div class='span1'><img style='width:55px;height:55px;' src=" + object.picture 
+                    		 + "></img></div><div class='span3' style='text-align: justify;vertical-align: middle;'><b style='color:#069;font-size:15px;'>" 
+                    		 + object.name + " </b><br/>" + object.location +"<br/>" + object.num_connections + " Connections</div></div><br/><p style='text-align: justify;font-style: italic;'>"
                     		 + object.summary+" </p>\" data-original-title=\" Linked Profile\"class=\"linkedinImage thumbnail \" id=" 
                     		 + object.id + " src =\" "+ object.picture + " \"style=\"width: 55px;height: 55px; display:inline-block; margin-right:2px; margin-bottom:2px; cursor:pointer;\" ></img>");
                  

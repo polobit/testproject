@@ -71,6 +71,11 @@ var Base_Model_View = Backbone.View.extend({
         // Store Modal Id
         var modal = this.options.modal;
         
+        //saving alert
+        $save_info = $('<div style="display:inline-block"><img src="img/1-0.gif" height="15px" width="15px"></img></div>');
+		$(".form-actions", this.el).append($save_info);
+		$save_info.show().delay(3000).hide(1);
+        
         this.model.save([],{
         	success: function (model, response) {
         		if(reload)

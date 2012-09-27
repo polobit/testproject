@@ -125,7 +125,7 @@ var SettingsRouter = Backbone.Router.extend({
     	$('#content').html(view.render().el);
     },
     contactUsEmail:function(){
-    	$("#content").html(getTemplate("help-email-form"),{});
+    	$("#content").html(getTemplate("help-mail-form"),{});
     }
     
     

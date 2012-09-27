@@ -11,9 +11,6 @@ import com.agilecrm.contact.ContactField;
 public class GmailUtil
 {
 
-    public static final String API_KEY = "anonymous";
-    public static final String SECRET_KEY = "anonymous";
-
     public static void main(String[] args) throws Exception
     {
 

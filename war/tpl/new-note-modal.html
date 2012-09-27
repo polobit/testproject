@@ -12,13 +12,13 @@
 					<div class="control-group">
                     	<label class="control-label"><b>Subject: </b><span class="field_req">*</span></label>
 						<div class="controls">
-							<input type="text" name="subject" id="subject" class="required"/>
+							<input type="text" placeholder="About" name="subject" id="subject" class="required"/>
 						</div>
 					</div>
 					<div class="control-group">
                     	<label class="control-label"><b>Description:</b></label>
 						<div class="controls">
-							<input type="text" name="description" id="description"/>
+							<textarea rows="3" placeholder="Detailed Note" name="description" id="description"></textarea> 
 						</div>
 					</div>
 
@@ -29,7 +29,7 @@
 								<div class="pull-left" style="margin-left:-14px">
 									<ul name= "contacts" class= "tags" ></ul>
 								</div>
-									<input type="text" id = "note_related_to" class="typeahead typeahead_contacts" data-provide="typeahead" data-mode="multiple" size="40"/>
+									<input type="text" placeholder="Contact Name" id = "note_related_to" class="typeahead typeahead_contacts" data-provide="typeahead" data-mode="multiple" size="40"/>
 							</div>
 						</div>
 					</div>					

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.widgets.Widget;
 import com.google.code.linkedinapi.client.LinkedInApiClient;
@@ -18,14 +19,11 @@ import com.google.code.linkedinapi.schema.Person;
 
 public class LinkedInUtil
 {
-    public static final String LINKED_IN_API_KEY = "kuft8xqzrnfi";
-    public static final String LINKED_IN_SECRET_KEY = "BPN9L6QQvWwum7kn";
-
     public static Map<String, String> getLinkedInUserProperties(String token,
 	    String tokenSecret)
     {
 	final LinkedInApiClientFactory factory = LinkedInApiClientFactory
-		.newInstance(LINKED_IN_API_KEY, LINKED_IN_SECRET_KEY);
+		.newInstance(Globals.LINKED_IN_API_KEY, Globals.LINKED_IN_SECRET_KEY);
 	final LinkedInApiClient client = factory.createLinkedInApiClient(token,
 		tokenSecret);
 
@@ -63,7 +61,7 @@ public class LinkedInUtil
 
 	// Get Token, Secret
 	final LinkedInApiClientFactory factory = LinkedInApiClientFactory
-		.newInstance(LINKED_IN_API_KEY, LINKED_IN_SECRET_KEY);
+		.newInstance(Globals.LINKED_IN_API_KEY, Globals.LINKED_IN_SECRET_KEY);
 	final LinkedInApiClient client = factory.createLinkedInApiClient(
 		widget.getProperty("token"), widget.getProperty("secret"));
 
@@ -114,7 +112,7 @@ public class LinkedInUtil
 	    String id)
     {
 	final LinkedInApiClientFactory factory = LinkedInApiClientFactory
-		.newInstance(LINKED_IN_API_KEY, LINKED_IN_SECRET_KEY);
+		.newInstance(Globals.LINKED_IN_API_KEY, Globals.LINKED_IN_SECRET_KEY);
 	final LinkedInApiClient client = factory.createLinkedInApiClient(
 		widget.getProperty("token"), widget.getProperty("secret"));
 

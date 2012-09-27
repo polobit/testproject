@@ -13,6 +13,7 @@ import twitter4j.TwitterFactory;
 import twitter4j.User;
 import twitter4j.auth.AccessToken;
 
+import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.widgets.Widget;
@@ -20,9 +21,6 @@ import com.agilecrm.widgets.Widget;
 @XmlRootElement
 public class TwitterUtil
 {
-
-    public static final String TWITTER_API_KEY = "fhaEpuOQOJYMfDnxHFf7PQ";
-    public static final String TWITTER_SECRET_KEY = "AUoq9TJHwKRIdngQa39RBskYBzn6aZNkERqj5z753k";
 
     // Get Twitter Profile
     public static List<SocialSearchResult> searchTwitterProfiles(Widget widget,
@@ -36,7 +34,7 @@ public class TwitterUtil
 	// Get Users
 	Twitter twitter = new TwitterFactory().getInstance();
 
-	twitter.setOAuthConsumer(TWITTER_API_KEY, TWITTER_SECRET_KEY);
+	twitter.setOAuthConsumer(Globals.TWITTER_API_KEY, Globals.TWITTER_SECRET_KEY);
 	AccessToken accessToken = new AccessToken(widget.getProperty("token"),
 		widget.getProperty("secret"));
 	twitter.setOAuthAccessToken(accessToken);
@@ -72,7 +70,7 @@ public class TwitterUtil
 	// Get Users
 	Twitter twitter = new TwitterFactory().getInstance();
 
-	twitter.setOAuthConsumer(TWITTER_API_KEY, TWITTER_SECRET_KEY);
+	twitter.setOAuthConsumer(Globals.TWITTER_API_KEY, Globals.TWITTER_SECRET_KEY);
 	AccessToken accessToken = new AccessToken(token, tokenSecret);
 	twitter.setOAuthAccessToken(accessToken);
 
@@ -107,7 +105,7 @@ public class TwitterUtil
     {
 	Twitter twitter = new TwitterFactory().getInstance();
 
-	twitter.setOAuthConsumer(TWITTER_API_KEY, TWITTER_SECRET_KEY);
+	twitter.setOAuthConsumer(Globals.TWITTER_API_KEY, Globals.TWITTER_SECRET_KEY);
 	AccessToken accessToken = new AccessToken(widget.getProperty("token"),
 		widget.getProperty("secret"));
 	twitter.setOAuthAccessToken(accessToken);

@@ -2,6 +2,8 @@ $(function(){
 	$('#contact-actions-delete').live('click', function(e){
 		
 		e.preventDefault();
+		if(!confirm("Do you want to delete the contact?"))
+    		return;
 		
 		App_Contacts.contactDetailView.model.url = "core/api/contacts/" + App_Contacts.contactDetailView.model.id;
 		App_Contacts.contactDetailView.model.destroy({success: function(model, response) {

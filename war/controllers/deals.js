@@ -65,16 +65,29 @@ var DealsRouter = Backbone.Router.extend({
         this.opportunityCollectionView.collection.fetch();
         this.opportunityCollectionView.currentDeal = this.opportunityCollectionView.collection.get(id);
 
-        this.dealsDetailView = new Base_Model_View({
+        var view = new Base_Model_View({
+            url: 'core/api/opportunity',
             model: this.opportunityCollectionView.currentDeal,
-            template: "opportunity-detail",
+            template: "opportunity-add",
+            window: 'deals',
             postRenderCallback: function(el){
-            	populateMilestones(el, true);
-            }
-        });	
+            	console.log(el);
+            		populateUsers("owner", el);
+            		populateMilestones(el);
+                 	// Call setupTypeAhead to get tags
+                	agile_type_ahead("relates_to", el, contacts_typeahead);   
+                	
+                	
+                	// Enable the datepicker
+                    $('#close_date', el).datepicker({
+                       format: 'mm-dd-yyyy'
+                    });
+                	
+                },
+        	});
         
-        var el = this.dealsDetailView.render().el;
-        $('#content').html(el);
+        	var view = view.render();
+        	$("#content").html(view.el);   
     }
 });
     

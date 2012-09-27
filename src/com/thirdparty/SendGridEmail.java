@@ -4,6 +4,7 @@ import java.net.URLEncoder;
 
 import org.json.JSONObject;
 
+import com.agilecrm.Globals;
 import com.agilecrm.util.Util;
 
 public class SendGridEmail
@@ -11,14 +12,6 @@ public class SendGridEmail
 
     // Send grid REST API URL
     public static final String SENDGRID_API_POST_URL = "https://sendgrid.com/api/mail.send.json";
-
-    // API user name
-    // public static final String SENDGRID_API_USER_NAME = "shelley";
-    public static final String SENDGRID_API_USER_NAME = "naveen123";
-
-    // API key
-    // public static final String SENDGRID_API_KEY = "mantra800pbx";
-    public static final String SENDGRID_API_KEY = "mantra123";
 
     // Post param api_user
     public static final String SENDGRID_API_PARAM_API_USER = "api_user";
@@ -44,8 +37,8 @@ public class SendGridEmail
 
     // Default query string
     public static String defaultQueryString = SENDGRID_API_PARAM_API_USER + "="
-	    + SENDGRID_API_USER_NAME + "&" + SENDGRID_API_PARAM_API_KEY + "="
-	    + SENDGRID_API_KEY + "&";
+	    + Globals.SENDGRID_API_USER_NAME + "&" + SENDGRID_API_PARAM_API_KEY + "="
+	    + Globals.SENDGRID_API_KEY + "&";
 
     public static String sendMail(String fromEmail, String fromName, String to,
 	    String subject, String replyTo, String html, String text,
