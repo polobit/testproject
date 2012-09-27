@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@page import="org.apache.commons.lang.StringUtils"%>
+<%@page import="com.agilecrm.util.StringUtils2"%>
 <%@page import="com.agilecrm.core.DomainUser"%>
 <%@page import="com.agilecrm.user.AgileUser"%>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
@@ -22,14 +24,14 @@
 <%
 	// Download the template the user likes
 	String template = UserPrefs.getCurrentUserPrefs().template;
-	template = "red";
-
 	if(request.getParameter("t") != null)
 		template = request.getParameter("t");
 	
+	// Check if someone is using old -11 etc templates
+	if(StringUtils.isNumeric(template))
+	    template = "pink";
 	
-	String width = UserPrefs.getCurrentUserPrefs().width;
-	
+	String width = UserPrefs.getCurrentUserPrefs().width;	
 	boolean is_fluid = !width.isEmpty();
 %>
 
