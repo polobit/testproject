@@ -18,7 +18,7 @@ $(function(){
 	    	        	if (!isValidForm('#taskForm'))
 	    		        	return false;
 	    	        	
-    	   	        	var json = serializeForm("taskForm");
+    	   	        	var json = serializeForm("taskFooorm");
 	    	        	json.due = new Date(json.due).getTime()/1000.0;
 	    	        	$('#taskForm').each (function(){
 	    	          	  this.reset();

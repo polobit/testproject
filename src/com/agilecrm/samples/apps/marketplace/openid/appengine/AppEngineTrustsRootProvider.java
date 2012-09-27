@@ -24,30 +24,33 @@ import java.util.Collection;
 public class AppEngineTrustsRootProvider implements TrustRootsProvider
 {
 
-	private static final String CERT_FILE = "/cacerts.bin";
+    private static final String CERT_FILE = "/cacerts.bin";
 
-	private final Collection<X509Certificate> certs;
+    private final Collection<X509Certificate> certs;
 
-	@SuppressWarnings("unchecked")
-	public AppEngineTrustsRootProvider()
+    @SuppressWarnings("unchecked")
+    public AppEngineTrustsRootProvider()
+    {
+
+	try
 	{
-
-		try
-		{
-			ObjectInputStream in = new ObjectInputStream(
-					AppEngineTrustsRootProvider.class.getResourceAsStream(CERT_FILE));
-			certs = (Collection<X509Certificate>) in.readObject();
-		} catch (IOException e)
-		{
-			throw new RuntimeException(e);
-		} catch (ClassNotFoundException e)
-		{
-			throw new RuntimeException(e);
-		}
+	    ObjectInputStream in = new ObjectInputStream(
+		    AppEngineTrustsRootProvider.class
+			    .getResourceAsStream(CERT_FILE));
+	    certs = (Collection<X509Certificate>) in.readObject();
 	}
-
-	public Collection<X509Certificate> getTrustRoots()
+	catch (IOException e)
 	{
-		return certs;
+	    throw new RuntimeException(e);
 	}
+	catch (ClassNotFoundException e)
+	{
+	    throw new RuntimeException(e);
+	}
+    }
+
+    public Collection<X509Certificate> getTrustRoots()
+    {
+	return certs;
+    }
 }

@@ -9,92 +9,105 @@ import com.campaignio.tasklets.TaskletManager;
 
 public class GetMessage extends TaskletAdapter
 {
-	// Fields
-	public static String WORD_FROM = "word_from";
-	public static String VARIABLE_NAME = "variable_name";
+    // Fields
+    public static String WORD_FROM = "word_from";
+    public static String VARIABLE_NAME = "variable_name";
 
-	// Duration
-	public static String DURATION = "duration";
-	public static String DURATION_TYPE = "duration_type";
+    // Duration
+    public static String DURATION = "duration";
+    public static String DURATION_TYPE = "duration_type";
 
-	// Branches
-	public static String BRANCH_TIMEOUT = "timeout";
-	public static String BRANCH_SUCCESS = "success";
+    // Branches
+    public static String BRANCH_TIMEOUT = "timeout";
+    public static String BRANCH_SUCCESS = "success";
 
-	// From, To
-	public static String FROM = "from";
-	public static String TO = "to";
+    // From, To
+    public static String FROM = "from";
+    public static String TO = "to";
 
-	public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
-			throws Exception
+    public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
+	    JSONObject data, JSONObject nodeJSON) throws Exception
+    {
+
+	// Get Number and CallerId
+	String from = getStringValue(nodeJSON, subscriberJSON, data, FROM);
+	String to = getStringValue(nodeJSON, subscriberJSON, data, TO);
+
+	// Get Duration, Type
+	String duration = getStringValue(nodeJSON, subscriberJSON, data,
+		DURATION);
+	String durationType = getStringValue(nodeJSON, subscriberJSON, data,
+		DURATION_TYPE);
+
+	// Add ourselves to Cron Queue
+	long timeout = Cron.getTimer(duration, durationType);
+
+	// Add to cron
+	if (from != null && to != null)
+	    addToCron(campaignJSON, subscriberJSON, data, nodeJSON, timeout,
+		    Util.changeNumber(to), Util.changeNumber(from), null);
+	else
 	{
+	    System.out.println("Cannot send a message");
+	}
+    }
 
-		// Get Number and CallerId
-		String from = getStringValue(nodeJSON, subscriberJSON, data, FROM);
-		String to = getStringValue(nodeJSON, subscriberJSON, data, TO);
+    // TimeOut - Cron Job Wakes it up
+    public void interrupted(JSONObject campaignJSON, JSONObject subscriberJSON,
+	    JSONObject data, JSONObject nodeJSON, JSONObject customData)
+	    throws Exception
+    {
+	// Get Actual Message
+	String message = customData.getString("message");
 
-		// Get Duration, Type
-		String duration = getStringValue(nodeJSON, subscriberJSON, data, DURATION);
-		String durationType = getStringValue(nodeJSON, subscriberJSON, data, DURATION_TYPE);
+	// Log
+	log(campaignJSON, subscriberJSON, "Interrupted - we got new SMS - "
+		+ message);
 
-		// Add ourselves to Cron Queue
-		long timeout = Cron.getTimer(duration, durationType);
+	// Get From, Message
+	String from = getStringValue(nodeJSON, subscriberJSON, data, WORD_FROM);
+	String variableName = (String) getValue(nodeJSON, subscriberJSON, data,
+		VARIABLE_NAME);
 
-		// Add to cron
-		if (from != null && to != null)
-			addToCron(campaignJSON, subscriberJSON, data, nodeJSON, timeout, Util.changeNumber(to),
-					Util.changeNumber(from), null);
-		else
-		{
-			System.out.println("Cannot send a message");
-		}
+	// If the loop is being run for second time - variable name is update to
+	// the first time value
+	// From Second time, it would be searching for $value1 instead of
+	// $originalkey
+
+	// Remove if variable name is already available
+	if (data.has(variableName))
+	{
+	    data.remove(variableName);
+	    variableName = getStringValue(nodeJSON, subscriberJSON, data,
+		    VARIABLE_NAME);
+	    System.out.println("Duplicate found. Removing old value "
+		    + variableName + " data " + data);
 	}
 
-	// TimeOut - Cron Job Wakes it up
-	public void interrupted(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON,
-			JSONObject customData) throws Exception
-	{
-		// Get Actual Message
-		String message = customData.getString("message");
+	System.out.println("Setting Variable Name: " + variableName + " to "
+		+ message);
 
-		// Log
-		log(campaignJSON, subscriberJSON, "Interrupted - we got new SMS - " + message);
+	data.put(variableName, message);
 
-		// Get From, Message
-		String from = getStringValue(nodeJSON, subscriberJSON, data, WORD_FROM);
-		String variableName = (String) getValue(nodeJSON, subscriberJSON, data, VARIABLE_NAME);
+	// Execute Next One in Loop
+	TaskletManager.executeTasklet(campaignJSON, subscriberJSON, data,
+		nodeJSON, BRANCH_SUCCESS);
+    }
 
-		// If the loop is being run for second time - variable name is update to the first time value 
-		// From Second time, it would be searching for $value1 instead of $originalkey
-				
-		// Remove if variable name is already available
-		if (data.has(variableName))
-		{
-			data.remove(variableName);
-			variableName = getStringValue(nodeJSON, subscriberJSON, data, VARIABLE_NAME);
-			System.out.println("Duplicate found. Removing old value " + variableName + " data " + data);
-		}
+    // TimeOut - Cron Job Wakes it up
+    public void timeOutComplete(JSONObject campaignJSON,
+	    JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
+	    throws Exception
+    {
 
-		System.out.println("Setting Variable Name: " + variableName + " to " + message);
+	System.out.println("Woke up from wait. Executing Timeout Branch.");
 
-		data.put(variableName, message);
+	// Log
+	log(campaignJSON, subscriberJSON, "SMS Timeout");
 
-		// Execute Next One in Loop
-		TaskletManager.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_SUCCESS);
-	}
-
-	// TimeOut - Cron Job Wakes it up
-	public void timeOutComplete(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
-			throws Exception
-	{
-
-		System.out.println("Woke up from wait. Executing Timeout Branch.");
-
-		// Log
-		log(campaignJSON, subscriberJSON, "SMS Timeout");
-
-		// Execute Next One in Loop
-		TaskletManager.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_TIMEOUT);
-	}
+	// Execute Next One in Loop
+	TaskletManager.executeTasklet(campaignJSON, subscriberJSON, data,
+		nodeJSON, BRANCH_TIMEOUT);
+    }
 
 }
