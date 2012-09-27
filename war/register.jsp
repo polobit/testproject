@@ -59,7 +59,7 @@
 
 <!-- Le styles -->
 
-<link href="/css/bootstrap-11.min.css" rel="stylesheet">
+<link href="/css/bootstrap-red.min.css" rel="stylesheet">
 <link href="/css/bootstrap-responsive.min.css" rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="/css/openid-min.css">
 
