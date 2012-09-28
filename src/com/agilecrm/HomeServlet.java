@@ -61,7 +61,7 @@ public class HomeServlet extends HttpServlet
 
 	    // Check if the domain of the user is same as namespace. Otherwise,
 	    // Redirect
-	    if (domainUser != null
+	    if (domainUser != null && domainUser.domain != null
 		    && !domain.equalsIgnoreCase(domainUser.domain))
 	    {
 		// Probably forward to the domain again he registered
