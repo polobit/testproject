@@ -10,54 +10,59 @@ import com.campaignio.tasklets.TaskletManager;
 
 public class Menu extends TaskletAdapter
 {
-	// Fields
-	public static String GRID_KEY = "States";
+    // Fields
+    public static String GRID_KEY = "States";
 
-	public static String GRID_NO_MATCH_KEY = "Nomatch";
+    public static String GRID_NO_MATCH_KEY = "Nomatch";
 
-	public static String VARIABLE_NAME = "variable_name";
+    public static String VARIABLE_NAME = "variable_name";
 
-	public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
-			throws Exception
+    public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
+	    JSONObject data, JSONObject nodeJSON) throws Exception
+    {
+
+	// Get Various Grid Values
+	JSONArray statesJSONArray = nodeJSON.getJSONArray(GRID_KEY);
+
+	// Get Variable
+	String variableName = getStringValue(nodeJSON, subscriberJSON, data,
+		VARIABLE_NAME);
+
+	System.out.println("Checking if variableName " + variableName
+		+ " matches " + statesJSONArray);
+
+	// Iterate through all states
+	for (int i = 0; i < statesJSONArray.length(); i++)
 	{
+	    // Get State JSON
+	    JSONObject stateJSON = statesJSONArray.getJSONObject(i);
 
-		// Get Various Grid Values
-		JSONArray statesJSONArray = nodeJSON.getJSONArray(GRID_KEY);
-
-		// Get Variable
-		String variableName = getStringValue(nodeJSON, subscriberJSON, data, VARIABLE_NAME);
-
-		System.out.println("Checking if variableName " + variableName + " matches " + statesJSONArray);
-
-		// Iterate through all states
-		for (int i = 0; i < statesJSONArray.length(); i++)
+	    // Get Iterator - we iterate because key can be in lower case
+	    Iterator<String> itr = stateJSON.keys();
+	    while (itr.hasNext())
+	    {
+		// Get Property Name
+		String propertyName = itr.next();
+		if (propertyName.equalsIgnoreCase(variableName))
 		{
-			// Get State JSON
-			JSONObject stateJSON = statesJSONArray.getJSONObject(i);
+		    System.out.println("Matched " + stateJSON + " branch ");
 
-			// Get Iterator - we iterate because key can be in lower case
-			Iterator<String> itr = stateJSON.keys();
-			while (itr.hasNext())
-			{
-				// Get Property Name
-				String propertyName = itr.next();
-				if (propertyName.equalsIgnoreCase(variableName))
-				{
-					System.out.println("Matched " + stateJSON + " branch ");
-
-					// Get Next Branch
-					// Execute Next One in Loop
-					TaskletManager.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, variableName);
-					return;
-				}
-			}
+		    // Get Next Branch
+		    // Execute Next One in Loop
+		    TaskletManager.executeTasklet(campaignJSON, subscriberJSON,
+			    data, nodeJSON, variableName);
+		    return;
 		}
-
-		// Go to No Match
-		TaskletManager.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, GRID_NO_MATCH_KEY);
-
-		// Answer did not match any of the menus..
-		System.err.println("Answer did not match in menu :" + variableName + " States: " + statesJSONArray);
+	    }
 	}
+
+	// Go to No Match
+	TaskletManager.executeTasklet(campaignJSON, subscriberJSON, data,
+		nodeJSON, GRID_NO_MATCH_KEY);
+
+	// Answer did not match any of the menus..
+	System.err.println("Answer did not match in menu :" + variableName
+		+ " States: " + statesJSONArray);
+    }
 
 }

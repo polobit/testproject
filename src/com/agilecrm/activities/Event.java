@@ -31,7 +31,7 @@ public class Event
 
     @NotSaved(IfDefault.class)
     public boolean is_event_starred = false;
-    
+
     @NotSaved(IfDefault.class)
     public boolean allDay = false;
 

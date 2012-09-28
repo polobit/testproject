@@ -21,42 +21,43 @@ import java.io.Serializable;
  */
 public class UserInfo implements Serializable
 {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private String claimedId;
-	private String email;
-	private String firstName;
-	private String lastName;
+    private String claimedId;
+    private String email;
+    private String firstName;
+    private String lastName;
 
-	public UserInfo()
-	{
-	}
+    public UserInfo()
+    {
+    }
 
-	public UserInfo(String claimedId, String email, String firstName, String lastName)
-	{
-		this.claimedId = claimedId;
-		this.email = email;
-		this.firstName = firstName;
-		this.lastName = lastName;
-	}
+    public UserInfo(String claimedId, String email, String firstName,
+	    String lastName)
+    {
+	this.claimedId = claimedId;
+	this.email = email;
+	this.firstName = firstName;
+	this.lastName = lastName;
+    }
 
-	public String getClaimedId()
-	{
-		return claimedId;
-	}
+    public String getClaimedId()
+    {
+	return claimedId;
+    }
 
-	public String getEmail()
-	{
-		return email;
-	}
+    public String getEmail()
+    {
+	return email;
+    }
 
-	public String getFirstName()
-	{
-		return firstName;
-	}
+    public String getFirstName()
+    {
+	return firstName;
+    }
 
-	public String getLastName()
-	{
-		return lastName;
-	}
+    public String getLastName()
+    {
+	return lastName;
+    }
 }

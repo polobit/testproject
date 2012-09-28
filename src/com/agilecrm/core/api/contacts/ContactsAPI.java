@@ -32,204 +32,235 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.util.Util;
 
 @Path("/api/contacts")
-public class ContactsAPI {
+public class ContactsAPI
+{
 
-	// This method is called if TEXT_PLAIN is request
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Contact> getContacts(@QueryParam("cursor") String cursor,
-			@QueryParam("page_size") String count) {
-		if (count != null) {
+    // This method is called if TEXT_PLAIN is request
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Contact> getContacts(@QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count)
+    {
+	if (count != null)
+	{
 
-			System.out.println("Fetching page by page");
-			return Contact.getAllContacts(Integer.parseInt(count), cursor);
-		}
-
-		return Contact.getAllContacts();
+	    System.out.println("Fetching page by page");
+	    return Contact.getAllContacts(Integer.parseInt(count), cursor);
 	}
 
-	@POST
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Contact createContact(Contact contact) {
+	return Contact.getAllContacts();
+    }
 
-		// Check if the email exists with the current email address
-		Contact currentContact = Contact.searchContactByEmail(contact
-				.getContactFieldValue("email"));
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Contact createContact(Contact contact)
+    {
 
-		// Throw non-200 if it exists
-		if (currentContact != null) {
-			throw new WebApplicationException(
-					Response.status(Response.Status.BAD_REQUEST)
-							.entity("Sorry, duplicate contact found with the same email address.")
-							.build());
-		}
+	// Check if the email exists with the current email address
+	Contact currentContact = Contact.searchContactByEmail(contact
+		.getContactFieldValue("email"));
 
-		contact.save();
-		return contact;
+	// Throw non-200 if it exists
+	if (currentContact != null)
+	{
+	    throw new WebApplicationException(
+		    Response.status(Response.Status.BAD_REQUEST)
+			    .entity("Sorry, duplicate contact found with the same email address.")
+			    .build());
 	}
 
-	@Path("multi/upload")
-	@POST
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public List<Contact> createMultipleContact(List<Contact> contacts) {
-		for (Contact contact : contacts)
-			contact.save();
+	contact.save();
+	return contact;
+    }
 
-		return contacts;
+    @Path("multi/upload")
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<Contact> createMultipleContact(List<Contact> contacts)
+    {
+	for (Contact contact : contacts)
+	    contact.save();
+
+	return contacts;
+    }
+
+    // File Upload
+    @Path("upload")
+    // @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @POST
+    public String post(@Context HttpServletRequest request)
+    {
+	try
+	{
+
+	    String filename = request.getHeader("X-File-Name");
+	    InputStream file = request.getInputStream();
+
+	    String csv = IOUtils.toString(file);
+	    System.out.println(csv);
+
+	    JSONObject success = new JSONObject();
+	    success.put("success", true);
+
+	    Hashtable result = Util.convertCSVToJSONArray2(csv, "Email");
+	    JSONArray csvArray = (JSONArray) result.get("result");
+
+	    success.put("data", csvArray);
+
+	    return success.toString();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
 	}
 
-	// File Upload
-	@Path("upload")
-	// @Consumes(MediaType.MULTIPART_FORM_DATA)
-	@POST
-	public String post(@Context HttpServletRequest request) {
-		try {
+	return null;
+    }
 
-			String filename = request.getHeader("X-File-Name");
-			InputStream file = request.getInputStream();
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Contact updateContact(Contact contact)
+    {
+	contact.save();
+	return contact;
+    }
 
-			String csv = IOUtils.toString(file);
-			System.out.println(csv);
+    @Path("/{contact-id}")
+    @DELETE
+    public void deleteContact(@PathParam("contact-id") String id)
+    {
+	Contact contact = Contact.getContact(Long.parseLong(id));
+	if (contact != null)
+	    contact.delete();
+    }
 
-			JSONObject success = new JSONObject();
-			success.put("success", true);
+    // This method is called if XML is request
+    @Path("/{contact-id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Contact getContact(@PathParam("contact-id") String id)
+    {
+	Contact contact = Contact.getContact(Long.parseLong(id));
+	return contact;
+    }
 
-			Hashtable result = Util.convertCSVToJSONArray2(csv, "Email");
-			JSONArray csvArray = (JSONArray) result.get("result");
+    // Opportunities of contact in contact details
+    @Path("/{contact-id}/deals")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Opportunity> getCurrentContactOpportunity(
+	    @PathParam("contact-id") String id)
+    {
+	System.out.println("in api of contact deals");
+	return Opportunity.getCurrentContactDeals(Long.parseLong(id));
+    }
 
-			success.put("data", csvArray);
-
-			return success.toString();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return null;
+    // Notes of contact in contact details
+    @Path("/{contact-id}/tasks")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Task> getTasks(@PathParam("contact-id") String id)
+    {
+	try
+	{
+	    return Task.getContactTasks(Long.parseLong(id));
 	}
-
-	@PUT
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Contact updateContact(Contact contact) {
-		contact.save();
-		return contact;
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
 	}
+    }
 
-	@Path("/{contact-id}")
-	@DELETE
-	public void deleteContact(@PathParam("contact-id") String id) {
-		Contact contact = Contact.getContact(Long.parseLong(id));
-		if (contact != null)
-			contact.delete();
+    // Notes
+    @Path("/{contact-id}/notes")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Note> getNotes(@PathParam("contact-id") String id)
+    {
+	try
+	{
+	    return Note.getNotes(Long.parseLong(id));
 	}
-
-	// This method is called if XML is request
-	@Path("/{contact-id}")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Contact getContact(@PathParam("contact-id") String id) {
-		Contact contact = Contact.getContact(Long.parseLong(id));
-		return contact;
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
 	}
+    }
 
-	// Opportunities of contact in contact details
-	@Path("/{contact-id}/deals")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Opportunity> getCurrentContactOpportunity(
-			@PathParam("contact-id") String id) {
-		System.out.println("in api of contact deals");
-		return Opportunity.getCurrentContactDeals(Long.parseLong(id));
+    // Delete Notes
+    @Path("/{contact-id}/notes/{id}")
+    @DELETE
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void deleteNote(@PathParam("contact-id") String contactId,
+	    @PathParam("id") String noteId)
+    {
+	try
+	{
+	    Note.deleteNote(Long.parseLong(noteId), Long.parseLong(contactId));
 	}
-
-	// Notes of contact in contact details
-	@Path("/{contact-id}/tasks")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Task> getTasks(@PathParam("contact-id") String id) {
-		try {
-			return Task.getContactTasks(Long.parseLong(id));
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
 	}
+    }
 
-	// Notes
-	@Path("/{contact-id}/notes")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Note> getNotes(@PathParam("contact-id") String id) {
-		try {
-			return Note.getNotes(Long.parseLong(id));
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
+    // This method is called if XML is request
+    @Path("/search/{keyword}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Contact> searchContacts(@PathParam("keyword") String keyword)
+    {
+	return Contact.searchContacts(keyword);
+    }
 
-	// Delete Notes
-	@Path("/{contact-id}/notes/{id}")
-	@DELETE
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public void deleteNote(@PathParam("contact-id") String contactId,
-			@PathParam("id") String noteId) {
-		try {
-			Note.deleteNote(Long.parseLong(noteId), Long.parseLong(contactId));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    // This method is called if XML is request
+    @Path("/search/email/{email}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Contact searchContactByEmail(@PathParam("email") String email)
+    {
+	return Contact.searchContactByEmail(email);
+    }
 
-	// This method is called if XML is request
-	@Path("/search/{keyword}")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Contact> searchContacts(@PathParam("keyword") String keyword) {
-		return Contact.searchContacts(keyword);
-	}
+    // Bulk operations - delete
+    @Path("bulk")
+    @DELETE
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void deleteContacts(@FormParam("model_ids") String model_ids)
+	    throws JSONException
+    {
 
-	// This method is called if XML is request
-	@Path("/search/email/{email}")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Contact searchContactByEmail(@PathParam("email") String email) {
-		return Contact.searchContactByEmail(email);
-	}
+	JSONArray contactsJSONArray = new JSONArray(model_ids);
+	Contact.deleteContactsBulk(contactsJSONArray);
+    }
 
-	// Bulk operations - delete
-	@Path("bulk")
-	@DELETE
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public void deleteContacts(@FormParam("model_ids") String model_ids)
-			throws JSONException {
+    // Bulk operations - change owner
+    @Path("bulk/owner/{new_owner}")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void changeOwnerToContacts(
+	    @FormParam("contact_ids") String contact_ids,
+	    @PathParam("new_owner") String new_owner) throws JSONException
+    {
+	JSONArray contactsJSONArray = new JSONArray(contact_ids);
+	Contact.changeOwnerToContactsBulk(contactsJSONArray, new_owner);
+    }
 
-		JSONArray contactsJSONArray = new JSONArray(model_ids);
-		Contact.deleteContactsBulk(contactsJSONArray);
-	}
+    // Bulk operations - add tags
+    @Path("bulk/{tags}")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void addTagsTOContacts(@FormParam("contact_ids") String contact_ids,
+	    @PathParam("tags") String tagsString) throws JSONException
+    {
 
-	// Bulk operations - change owner
-	@Path("bulk/owner/{new_owner}")
-	@POST
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public void changeOwnerToContacts(
-			@FormParam("contact_ids") String contact_ids,
-			@PathParam("new_owner") String new_owner) throws JSONException {
-		JSONArray contactsJSONArray = new JSONArray(contact_ids);
-		Contact.changeOwnerToContactsBulk(contactsJSONArray, new_owner);
-	}
-
-	// Bulk operations - add tags
-	@Path("bulk/{tags}")
-	@POST
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public void addTagsTOContacts(@FormParam("contact_ids") String contact_ids,
-			@PathParam("tags") String tagsString) throws JSONException {
-
-		JSONArray contactsJSONArray = new JSONArray(contact_ids);
-		String tags_array[] = tagsString.split(",");
-		Contact.addTagsToContactsBulk(contactsJSONArray, tags_array);
-	}
+	JSONArray contactsJSONArray = new JSONArray(contact_ids);
+	String tags_array[] = tagsString.split(",");
+	Contact.addTagsToContactsBulk(contactsJSONArray, tags_array);
+    }
 }

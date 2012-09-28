@@ -36,82 +36,85 @@ import java.util.List;
 public class AppEngineHttpFetcher implements HttpFetcher
 {
 
-	private static class AppEngineFetchResponse implements FetchResponse
+    private static class AppEngineFetchResponse implements FetchResponse
+    {
+
+	private final HTTPResponse httpResponse;
+
+	public AppEngineFetchResponse(HTTPResponse httpResponse)
 	{
-
-		private final HTTPResponse httpResponse;
-
-		public AppEngineFetchResponse(HTTPResponse httpResponse)
-		{
-			this.httpResponse = httpResponse;
-		}
-
-		public byte[] getContentAsBytes()
-		{
-			return httpResponse.getContent();
-		}
-
-		public InputStream getContentAsStream()
-		{
-			return new ByteArrayInputStream(getContentAsBytes());
-		}
-
-		public String getFirstHeader(String name)
-		{
-			List<HTTPHeader> headers = httpResponse.getHeaders();
-			for (HTTPHeader header : headers)
-			{
-				if (header.getName().equalsIgnoreCase(name))
-				{
-					return header.getValue();
-				}
-			}
-			return null;
-		}
-
-		public int getStatusCode()
-		{
-			return httpResponse.getResponseCode();
-		}
+	    this.httpResponse = httpResponse;
 	}
 
-	private final URLFetchService fetchService;
-
-	public AppEngineHttpFetcher()
+	public byte[] getContentAsBytes()
 	{
-		fetchService = URLFetchServiceFactory.getURLFetchService();
+	    return httpResponse.getContent();
 	}
 
-	public FetchResponse fetch(FetchRequest request) throws FetchException
+	public InputStream getContentAsStream()
+	{
+	    return new ByteArrayInputStream(getContentAsBytes());
+	}
+
+	public String getFirstHeader(String name)
+	{
+	    List<HTTPHeader> headers = httpResponse.getHeaders();
+	    for (HTTPHeader header : headers)
+	    {
+		if (header.getName().equalsIgnoreCase(name))
+		{
+		    return header.getValue();
+		}
+	    }
+	    return null;
+	}
+
+	public int getStatusCode()
+	{
+	    return httpResponse.getResponseCode();
+	}
+    }
+
+    private final URLFetchService fetchService;
+
+    public AppEngineHttpFetcher()
+    {
+	fetchService = URLFetchServiceFactory.getURLFetchService();
+    }
+
+    public FetchResponse fetch(FetchRequest request) throws FetchException
+    {
+
+	HTTPMethod method;
+	switch (request.getMethod())
+	{
+	case POST:
+	    method = HTTPMethod.POST;
+	    break;
+	case HEAD:
+	    method = HTTPMethod.HEAD;
+	    break;
+	default:
+	    method = HTTPMethod.GET;
+	    break;
+	}
+
+	try
 	{
 
-		HTTPMethod method;
-		switch (request.getMethod())
-		{
-		case POST:
-			method = HTTPMethod.POST;
-			break;
-		case HEAD:
-			method = HTTPMethod.HEAD;
-			break;
-		default:
-			method = HTTPMethod.GET;
-			break;
-		}
+	    HTTPRequest httpRequest = new HTTPRequest(request.getUri().toURL(),
+		    method);
+	    HTTPResponse httpResponse = fetchService.fetch(httpRequest);
+	    return new AppEngineFetchResponse(httpResponse);
 
-		try
-		{
-
-			HTTPRequest httpRequest = new HTTPRequest(request.getUri().toURL(), method);
-			HTTPResponse httpResponse = fetchService.fetch(httpRequest);
-			return new AppEngineFetchResponse(httpResponse);
-
-		} catch (MalformedURLException e)
-		{
-			throw new FetchException(e);
-		} catch (IOException e)
-		{
-			throw new FetchException(e);
-		}
 	}
+	catch (MalformedURLException e)
+	{
+	    throw new FetchException(e);
+	}
+	catch (IOException e)
+	{
+	    throw new FetchException(e);
+	}
+    }
 }
