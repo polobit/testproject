@@ -62,17 +62,22 @@ function agile_type_ahead(id, el, callback, isSearch) {
 								company="";
 							if(!email)
 								email ="";
-								
-							i.find('a').append('<div><div style="display:inline;padding-right:10px;height:auto;"><img src="'+ pic +'"style="width:50px;height:50px;"></img></div><div style="height:auto;display:inline-block;vertical-align:-20px;">' + that.highlighter(fullname) + '<br/>'+ that.highlighter(email) +'<br/>'+ that.highlighter(company) +'</div></div>');
+							
+							i.find('a').append(getTemplate('typeahead-contacts',item));
+							
+							/* highlighter*/
+							//i.find('a').append('<div><div style="display:inline;padding-right:10px;height:auto;"><img src="'+ pic +'"style="width:50px;height:50px;"></img></div><div style="height:auto;display:inline-block;vertical-align:-20px;">' + that.highlighter(fullname) + '<br/>'+ that.highlighter(email) +'<br/>'+ that.highlighter(company) +'</div></div>');
 							
 					return i[0];
 				});
 
-			  	// Set first li element as active
+				
+			
+			// Set first li element as active
 				items.first().addClass('active');
 				
 				// Set the width of typeahead dropdown
-				this.$menu.css("width",250);
+				//this.$menu.css("width",300);
 				
 				// Calls show to show the dropdown
 				this.$menu.html(items).show();
