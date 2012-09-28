@@ -1,8 +1,10 @@
 <script id="tasks-collection-template" type="text/html">
 	<h3 style="margin-left:3px">Tasks</h3>
 	<hr/>
-
-
+{{#unless this.length}}
+   <img src="/img/funtime.jpg"></img>
+{{/unless}}
+{{#if this.length}}
 	<h5 style="margin-left:3px">Overdue</h5>
 	<div id='overdue' style="display: none; margin:3px"></div>
 	
@@ -15,7 +17,7 @@
 	<h5 style="margin-left:3px">Next Week</h5>
  	<div id='next-week' style="display: none; margin:3px"></div>
 	<br/>
- 
+{{/if}}
 </script>
 
 
@@ -32,7 +34,7 @@
 	<div class="span8">
 		<b>&nbsp;{{ subject}}</b>
 		{{priority_type}}
-		<span class="label">{{type}}</span>
+		<span class="label" id="label_color">{{type}}</span>
 	</div>
 
 </div>

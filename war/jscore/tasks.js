@@ -37,24 +37,28 @@ function appendTasks(base_model) {
     if (due < 0) {
         $('#overdue', this.el).append(itemView.render().el);
         $('#overdue', this.el).show();
+        $('#label_color').addClass("label-important");
     }
 
     // Today
     if (due == 0) {
         $('#today', this.el).append(itemView.render().el);
         $('#today', this.el).show();
+        $('#label_color').addClass("label-warning");
     }
 
     // Tomorrow
     if (due == 1) {
         $('#tomorrow', this.el).append(itemView.render().el);
         $('#tomorrow', this.el).show();
+        $('#label_color').addClass("label-info");
     }
 
     // Next Week
     if (due > 1) {
         $('#next-week', this.el).append(itemView.render().el);
         $('#next-week', this.el).show();
+        $('#label_color').addClass("label-inverse");
     }
 
 

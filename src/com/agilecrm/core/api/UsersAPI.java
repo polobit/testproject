@@ -44,11 +44,7 @@ public class UsersAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public DomainUser createDomainUser(DomainUser domainUser)
     {
-	if (domainUser.email != null)
-	{
-	    domainUser.save();
-	    return domainUser;
-	}
+	domainUser.save();
 	return domainUser;
     }
 
