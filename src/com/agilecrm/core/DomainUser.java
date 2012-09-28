@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.users.User;
@@ -36,6 +38,10 @@ public class DomainUser
 
     @NotSaved(IfDefault.class)
     public boolean is_disabled = false;
+
+    // Email content to be sent for the first time
+    @NotSaved
+    public String email_template = null;
 
     // Dao
     private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(
@@ -114,11 +120,17 @@ public class DomainUser
 	// Get Email
 	String email = user.getEmail();
 
+	DomainUser domainUser = null;
+
 	// Find Domain user
-	if (domain == null || domain.isEmpty())
-	    return getDomainUserFromEmail(email);
-	else
-	    return getDomainUserFromEmail(email, domain);
+	if (!StringUtils.isEmpty(domain))
+	{
+	    domainUser = getDomainUserFromEmail(email, domain);
+	    if (domainUser != null)
+		return domainUser;
+	}
+
+	return getDomainUserFromEmail(email);
 
 	/*
 	 * String oldNamespace = NamespaceManager.get();
@@ -153,6 +165,15 @@ public class DomainUser
     {
 
 	String oldNamespace = NamespaceManager.get();
+
+	// Check if old namespace is null or empty. Then, do not allow to be
+	// created
+	if (StringUtils.isEmpty(oldNamespace))
+	{
+	    System.out.println("User cannot be created in null namespace");
+	    return;
+	}
+
 	NamespaceManager.set("");
 
 	try
