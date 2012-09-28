@@ -6,15 +6,24 @@ $(function(){
     	if (!isValidForm('#noteForm'))
         	return false;
     	
-       	var json = serializeForm("noteForm");
+    	// Show loading symbol until model get saved
+        $('#noteModal').find('span.save-status').html(LOADING_HTML);
     	
-    	$('#noteForm').each (function(){
-        	  this.reset();
-        	});
+       	var json = serializeForm("noteForm");
+ 
     	$("#noteModal").modal('hide');
       	var noteModel = new Backbone.Model();
       	noteModel.url = 'core/api/notes';
-      	noteModel.save(json);
+      	noteModel.save(json,{
+    		success: function(data){
+    			$('#noteForm').each (function(){
+    	          	  this.reset();
+    	        });
+    			
+    			$('#noteModal').find('span.save-status img').remove();
+    	        $("#noteModal").modal('hide');
+    		}    
+      	});
     });
     
     // Show note modal 
@@ -30,9 +39,5 @@ $(function(){
     	
     	  // Remove appended contacts from related-to
     	  $("#noteForm").find("li").remove();
-    	  
-    	  $('#noteForm').each (function(){
-        	  this.reset();
-          });
     });
 });

@@ -18,17 +18,23 @@ $(function(){
 	    	        	if (!isValidForm('#taskForm'))
 	    		        	return false;
 	    	        	
+	    	        	// Show loading symbol until model get saved
+	    	            $('#activityModal').find('span.save-status').html(LOADING_HTML);
+	    	            
     	   	        	var json = serializeForm("taskFooorm");
 	    	        	json.due = new Date(json.due).getTime()/1000.0;
-	    	        	$('#taskForm').each (function(){
-	    	          	  this.reset();
-	    	          	});
-	    	        	$("#activityModal").modal('hide');
+	    	        	
 	    	        	var newTask = new Backbone.Model();
 	    	        	newTask.url = 'core/api/tasks';
 	    	        	newTask.save(json,{
 	    	        		success: function(data){
-	    	        			alert("hi");
+	    	        			$('#taskForm').each (function(){
+	    		    	          	  this.reset();
+	    		    	          	});
+	    	        			
+	    	        			$('#activityModal').find('span.save-status img').remove();
+	    		    	        $("#activityModal").modal('hide');
+	    	        			
 	    	        			App_Settings.navigate("calendar", {
 	    	        				trigger: true
 	    	        			});
@@ -153,6 +159,10 @@ function saveEvent(formId, modalName, isUpdate){
 	// Save functionality for event
 	if (!isValidForm('#' + formId))
     	return false;
+	
+	// Show loading symbol until model get saved
+    $('#' + modalName).find('span.save-status').html(LOADING_HTML);
+    
 	var json = serializeForm(formId);
 	console.log(JSON.stringify(json));
 	 // For validation
@@ -181,6 +191,14 @@ function saveEvent(formId, modalName, isUpdate){
     eventModel.url = 'core/api/events';
     eventModel.save(json,{
         success: function () {
+        	
+        	$('#' + formId).each (function(){
+          	  this.reset();
+          	});
+        	
+			$('#' + modalName).find('span.save-status img').remove();
+        	$('#' + modalName).modal('hide');
+
         	$('#calendar').fullCalendar( 'refetchEvents' );                
            }
        });
