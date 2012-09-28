@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -64,7 +65,9 @@ public class AgileUser
     public String toString()
     {
 	return "Id: " + id + " open id " + open_id_user_id + " "
-		+ open_id_user.getAuthDomain() + " " + open_id_user.getEmail();
+		+ open_id_user.getAuthDomain() + " " + open_id_user.getEmail()
+		+ " Name " + open_id_user.getNickname() + " Namespace : "
+		+ NamespaceManager.get();
     }
 
     public static List<AgileUser> getUsers()
