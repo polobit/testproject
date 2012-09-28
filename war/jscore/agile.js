@@ -58,13 +58,6 @@ $(function()
 	$('.thead_check').live('click', function(event){
 		$('.tbody_check').attr('checked', this.checked);
 	});	
-
-	$('#top').live('click',function(event){
-		event.preventDefault();
-		console.log("scroll to top");
-		window.scrollTo();
-	});
-	
 });
 
 // Bulk operations - delete function
@@ -85,4 +78,15 @@ function bulkOperations(url, id_array, index_array, table){
 		}
 	});
 }
+
+// Scroll to top
+$(window).load(function() {
+	  $("#top").click(function () {
+	   $("body, html").animate({
+	    scrollTop: 0
+	   }, 300);
+	   return false;
+	  }); 
+});
+
 		

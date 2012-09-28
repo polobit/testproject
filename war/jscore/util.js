@@ -1,5 +1,6 @@
 var LOADING_HTML = '<img class="loading" style="padding-right:5px" src= "img/21-0.gif"></img>';
 var LOADING_ON_CURSOR = '<img class="loading" style="padding-right:5px" src= "img/ajax-loader-cursor.gif"></img>';
+var DEFAULT_GRAVATAR_url = "https://d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png";  
 
 // Read a page's GET URL variables and return them as an associative array.
 function getUrlVars() {
@@ -62,7 +63,7 @@ function fillSelect(selectId, url, parseKey, callback, template) {
 
 // Fill selects with tokenized data
 function fillTokenizedSelect(selectId, array) {
-	$("#" + selectId).empty().append('<option>Select...</option>');
+	$("#" + selectId).empty().append('<option value="">Select...</option>');
 	$.each(array, function(index, element) {
 		$("#" + selectId)
 				.append(
