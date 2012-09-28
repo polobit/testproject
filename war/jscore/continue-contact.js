@@ -1,7 +1,6 @@
 // Serialize and save continue contact
-function serializeAndSaveContinueContact(e, form_id, continueContact) {
+function serializeAndSaveContinueContact(e, form_id, modal_id, url, continueContact, template) {
     e.preventDefault();
-    
     var $form = $('#' + form_id);
     
     // Validate Form
@@ -11,6 +10,8 @@ function serializeAndSaveContinueContact(e, form_id, continueContact) {
     	return;
     }
     
+    // Show loading symbol until model get saved
+    $('#' + modal_id).find('span.save-status').html(LOADING_HTML);
     
     // Read multiple values from continue contact
     var properties = [];
@@ -18,19 +19,23 @@ function serializeAndSaveContinueContact(e, form_id, continueContact) {
     var id = $('#' + form_id + ' input[name=id]').val();
     var obj = {};
     var properties = [];
-    properties.push(propertyJSON('first_name', 'fname'));
-    properties.push(propertyJSON('last_name', 'lname'));
-
-    // if (isValidField('organization')) properties.push(propertyJSON('company', 'organization'));
-
-    // if (isValidField('job')) properties.push(propertyJSON('title', 'job'));
-
+    
+    // Contact properties
+    if (isValidField('fname'))properties.push(propertyJSON('first_name', 'fname'));
+   
+    if (isValidField('lname'))properties.push(propertyJSON('last_name', 'lname'));
+    
     if (isValidField('contact_company')) properties.push(propertyJSON('company', 'contact_company'));
 
     if (isValidField('email')) properties.push(propertyJSON('email', 'email'));
 
     if (isValidField('job_title')) properties.push(propertyJSON('title', 'job_title'));
 
+    // Company properties
+    if (isValidField('company_name')) properties.push(propertyJSON('company_name', 'company_name'));
+    
+    if (isValidField('url')) properties.push(propertyJSON('url', 'url'));
+    
     $('#' + form_id + ' div.multiple-template').each(function (index, element) {
         var inputElement = $(element).find('input');
         var selectElement = $(element).find('select');
@@ -58,20 +63,25 @@ function serializeAndSaveContinueContact(e, form_id, continueContact) {
 
     var tags = getTags('tags-new-person');
     if (tags != undefined) obj.tags = tags;
-
+    
     // Save contact
     var contactModel = new Backbone.Model();
-    contactModel.url = 'core/api/contacts';
+    contactModel.url = url;
     contactModel.save(obj, {
         success: function (data) {
-            if (continueContact) {
-                $('#personModal').modal('hide');
-                deserializeContact(data.toJSON());
+        	
+        	// Remove loading image
+        	$('#' + modal_id).find('span.save-status img').remove();
+            
+        	if (continueContact) {
+                $('#' + modal_id).modal('hide');
+                deserializeContact(data.toJSON(), template);
             } else {
-                $('#personModal').modal('hide');
+                $('#' + modal_id).modal('hide');
+            	
                 App_Contacts.navigate("contact/" + data.id, {
-                    trigger: true
-                });
+                	trigger: true
+            	});
             }
             // Reset each element
             $('#' + form_id).each(function () {
@@ -79,9 +89,9 @@ function serializeAndSaveContinueContact(e, form_id, continueContact) {
             });
         },
         error: function (model, response) {
-            $("#personModal").find(".duplicate-email").html('<div class="alert alert-error" style="display:none"><a class="close" data-dismiss="alert" href="#">×</a>Please change email. A contact already exists with this email.</div>');
+            $('#' + modal_id).find(".duplicate-email").html('<div class="alert alert-error" style="display:none"><a class="close" data-dismiss="alert" href="#">×</a>Please change email. A contact already exists with this email.</div>');
 
-            $("#personModal").find(".alert").show();
+            $('#' + modal_id).find(".alert").show();
         }
     });
 
@@ -89,10 +99,10 @@ function serializeAndSaveContinueContact(e, form_id, continueContact) {
 }
 
 // Deserialize continue Contact
-function deserializeContact(contact) {
+function deserializeContact(contact, template) {
 
     // Shows template  
-    var form = $("#content").html(getTemplate("continue-contact", contact));
+    var form = $("#content").html(getTemplate(template, contact));
 
     // Iterates through properties and ui clones
     $.each(contact.properties, function (index, element) {
@@ -153,12 +163,12 @@ $(function () {
 
     // Continue editing in the new-person-modal Rammohan 03-08-2012.
     $('#continue-contact').click(function (e) {
-        var model = serializeAndSaveContinueContact(e, 'personForm', true);
+        var model = serializeAndSaveContinueContact(e, 'personForm','personModal', 'core/api/contacts', true, 'continue-contact');
     });
 
     // Update in continue-contact
     $("#update").die().live('click', function (e) {
-        serializeAndSaveContinueContact(e, 'continueform');
+        serializeAndSaveContinueContact(e, 'continueform', 'personModal', 'core/api/contacts');
     });
     
     // Close in continue-contact
@@ -175,11 +185,14 @@ $(function () {
 
     // Continue editing in the new-company-modal
     $('#continue-company').click(function (e) {
-        $("#companyModal").modal('hide');
-        alert("test");
-        App_Contacts.navigate("continue-company", {
-            trigger: true
-        });
+        
+        var model = serializeAndSaveContinueContact(e, 'companyForm', 'companyModal', 'core/api/companies', true, 'continue-company');
+
+    });
+    
+ // Update in continue-company
+    $("#company-update").die().live('click', function (e) {
+        serializeAndSaveContinueContact(e, 'continueCompanyForm', 'companyModal', 'core/api/companies');
     });
 
 });

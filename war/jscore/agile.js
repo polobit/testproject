@@ -41,16 +41,17 @@ $(function()
 	$('#delete-checked').live('click', function(event){
 		event.preventDefault();
 		var id_array = [];
+		var index_array = [];
 		var table = $('body').find('table.showCheckboxes');
 
 		$(table).find('tr .tbody_check').each(function(index, element){
-			
 			// If element is checked add store it's id in an array 
 			if($(element).is(':checked')){
+				index_array.push(index);
 				id_array.push($(element).closest('tr').data().get('id'));
 			}
 		});
-		bulkOperations($(table).attr('url'), id_array);
+		bulkOperations($(table).attr('url'), id_array, index_array, table);
 	});
 	
 	// Click head - click all checkboxes of table body
@@ -67,22 +68,21 @@ $(function()
 });
 
 // Bulk operations - delete function
-function bulkOperations(url, id_array){
+function bulkOperations(url, id_array, index_array, table){
 	var json = {};
 	json.model_ids = JSON.stringify(id_array);
+	var tbody = $(table).find('tbody');
+	
 	$.ajax({
 		url: url,
 		type: 'DELETE',
 		data: json,
-		success: function(){location.reload(true);
-			}
+		success: function(){
+			
+			// To remove table rows on delete 
+			for(var i = 0; i < index_array.length; i++) 
+				$(tbody).find('tr:eq(' + index_array[i] + ')').fadeOut(300, function() { $('tr:eq(' + index_array[i] + ')').remove(); });
+		}
 	});
-	
-	/*$.ajax({
-		url: url + "/" + idString,
-		type: 'DELETE',
-		success: function(){//location.reload(true);
-			}
-	});*/
 }
 		
