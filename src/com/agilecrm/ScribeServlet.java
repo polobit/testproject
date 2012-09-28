@@ -21,9 +21,6 @@ import org.scribe.model.Verb;
 import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
-import com.agilecrm.social.GmailUtil;
-import com.agilecrm.social.LinkedInUtil;
-import com.agilecrm.social.TwitterUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.widgets.Widget;
@@ -47,8 +44,8 @@ public class ScribeServlet extends HttpServlet
 		|| serviceType.equalsIgnoreCase(SERVICE_TYPE_LINKED_IN))
 	{
 	    service = new ServiceBuilder().provider(LinkedInApi.class)
-		    .callback(callback).apiKey(LinkedInUtil.LINKED_IN_API_KEY)
-		    .apiSecret(LinkedInUtil.LINKED_IN_SECRET_KEY).build();
+		    .callback(callback).apiKey(Globals.LINKED_IN_API_KEY)
+		    .apiSecret(Globals.LINKED_IN_SECRET_KEY).build();
 	    req.getSession().setAttribute("oauth.service",
 		    SERVICE_TYPE_LINKED_IN);
 	}
@@ -56,8 +53,8 @@ public class ScribeServlet extends HttpServlet
 
 	{
 	    service = new ServiceBuilder().provider(TwitterApi.class)
-		    .callback(callback).apiKey(TwitterUtil.TWITTER_API_KEY)
-		    .apiSecret(TwitterUtil.TWITTER_SECRET_KEY).build();
+		    .callback(callback).apiKey(Globals.TWITTER_API_KEY)
+		    .apiSecret(Globals.TWITTER_SECRET_KEY).build();
 	    req.getSession()
 		    .setAttribute("oauth.service", SERVICE_TYPE_TWITTER);
 	}
@@ -66,8 +63,8 @@ public class ScribeServlet extends HttpServlet
 	    service = new ServiceBuilder()
 		    .provider(GoogleApi.class)
 		    .callback(callback)
-		    .apiKey(GmailUtil.API_KEY)
-		    .apiSecret(GmailUtil.SECRET_KEY)
+		    .apiKey(Globals.GMAIL_API_KEY)
+		    .apiSecret(Globals.GMAIL_SECRET_KEY)
 		    .scope("https://mail.google.com/ https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile")
 		    .build();
 

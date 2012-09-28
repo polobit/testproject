@@ -2,6 +2,11 @@ $(function() {
 // Help mail
 $('#helpMail').die().live('click',function(e){
 	e.preventDefault();
+	
+	  if(!isValidForm($("#helpmailForm")))
+      {	
+      	return;
+      }
 	var json = serializeForm("helpmailForm");
 	var url =  'core/api/send-email?from=' + encodeURIComponent(json.from) + '&to=' + 
 	   										 encodeURIComponent(json.to) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + 

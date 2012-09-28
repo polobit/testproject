@@ -1,13 +1,13 @@
 <script id="help-mail-form-template" type="text/html">
-	<div class="span8">
+	<div class="span9">
 		<div class="well">
 			<form id='helpmailForm' name="helpmailForm" class="form-horizontal">
 				<fieldset>
 					<legend>Mail For Help</legend>
 					<div class="control-group">
-                    	<label class="control-label">From</label>
+                    	<label class="control-label">From <span class="field_req">*</span></label>
 						<div class="controls">
-							<input type="text" class="span4" id="from" name="from" />
+							<input type="text" class="span4 required email" placeholder="Your Email Id" id="from" name="from" />
 						</div>
 					</div>
 
@@ -19,22 +19,22 @@
 					</div>
 					
 					<div class="control-group">
-                    	<label class="control-label">Subject</label>
+                    	<label class="control-label">Subject <span class="field_req">*</span></label>
 						<div class="controls">
-							<input type="text" class="span4" name="subject" id="subject" placeholder="" />
+							<input type="text" class="span4 required" name="subject" id="subject" placeholder="About" />
 						</div>
 					</div>
 					
 					<div class="control-group">
-                    	<label class="control-label">Body</label>
+                    	<label class="control-label">Body <span class="field_req">*</span></label>
 						<div class="controls">
-							<textarea class="span4" rows="8" name="body" id="body" placeholder="Description"></textarea>
+							<textarea class="span4 required" rows="8" name="body" id="body" placeholder="Description"></textarea>
 						</div>
 					</div>					
 				
-					<div class="form-actions">          
-						<a href="#contact" class="btn ">Close</a> 
-          				<a href="#"  id="helpMail" class="btn btn-primary">Send</a>
+					<div class="form-actions">  
+                        <a href="#" id="helpMail" class="btn btn-primary">Send</a>        
+						<a href="#contacts" class="btn ">Close</a> 
 					</div>
 				</fieldset>
 			</form>

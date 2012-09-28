@@ -1,13 +1,10 @@
 <script id="widgets-model-template" type="text/html">
 <div class="data-block">
 <div class='data-container'id="{{name}}-container">
-	<header>
-		<h2 onmouseover="showImg();" onmouseout="hideImg();">
+	<header  style="cursor:move">
+		<h2>
 			<img src="{{mini_logo_url}}" style='width:22px;height:22px;'></img> 
 			<b>{{name}}</b>
-            <p style="padding-left:50px;display:inline-block;">
-               <i class="icon-move" id="move_img" style="display:none;"></i>
-            </p>
 		</h2>
 	</header>
 	<div style="padding:0px 0px 10px 0px;">
@@ -17,12 +14,6 @@
 </div>
 
 </script>
-
-<script type="text/javascript">
-function showImg(){ document.getElementById('move_img').style.display='inline-block'; }
-function hideImg(){ document.getElementById('move_img').style.display='none'; }
-</script>
-
 
 <script id="widgets-collection-template" type="text/html">
 

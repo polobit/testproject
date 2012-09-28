@@ -62,7 +62,7 @@ function fillSelect(selectId, url, parseKey, callback, template) {
 
 // Fill selects with tokenized data
 function fillTokenizedSelect(selectId, array) {
-	$("#" + selectId).empty().append('<option>Select...</option>');
+	$("#" + selectId).empty().append('<option value="" >Select...</option>');
 	$.each(array, function(index, element) {
 		$("#" + selectId)
 				.append(
