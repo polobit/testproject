@@ -47,6 +47,9 @@ public class HomeServlet extends HttpServlet
 	    // IF new user
 	    if (agileUser == null)
 	    {
+
+		System.out.println("Cannot find user " + agileUser);
+
 		// Register User or tell him that he is not authenticated
 		register(user, req, resp);
 		return;
@@ -55,6 +58,20 @@ public class HomeServlet extends HttpServlet
 	    // Check if the user is disabled
 	    DomainUser domainUser = DomainUser.getDomainCurrentUser();
 	    System.out.println("Domain User " + domainUser);
+
+	    // Check if the domain of the user is same as namespace. Otherwise,
+	    // Redirect
+	    if (domainUser != null && domainUser.domain != null
+		    && !domain.equalsIgnoreCase(domainUser.domain))
+	    {
+		// Probably forward to the domain again he registered
+		System.out.println("Forwarding to actual domain "
+			+ domainUser.domain);
+		resp.sendRedirect("https://" + domainUser.domain
+			+ ".agilecrm.com");
+		return;
+	    }
+
 	    if (domainUser != null && domainUser.is_disabled)
 	    {
 		req.getRequestDispatcher("/error/user-disabled.jsp").include(
@@ -102,8 +119,11 @@ public class HomeServlet extends HttpServlet
 	DomainUser domainUser = DomainUser.getDomainUserFromEmail(email);
 	if (domainUser != null)
 	{
-	    req.getRequestDispatcher("/error/wrong-user.jsp")
-		    .include(req, resp);
+	    // Probably forward to the domain again he registered
+	    resp.sendRedirect("https://" + domainUser.domain + ".agilecrm.com");
+
+	    // req.getRequestDispatcher("/error/wrong-user.jsp").include(req,
+	    // resp);
 	    return;
 	}
 
@@ -127,5 +147,4 @@ public class HomeServlet extends HttpServlet
 
 	resp.sendRedirect("/home");
     }
-
 }

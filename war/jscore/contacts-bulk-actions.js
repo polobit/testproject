@@ -1,4 +1,5 @@
 $(function(){ 
+	
 	// Bulk owner
 	$("#bulk-owner").live('click', function(e){
 		e.preventDefault();
@@ -28,6 +29,7 @@ $(function(){
 
 		});
 	});
+	
 	// Bulk campaigns
 	$("#bulk-campaigns").live('click', function(e){
 		e.preventDefault();

@@ -16,6 +16,7 @@ import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.EmailTemplates;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
+import com.agilecrm.company.Company;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactFilter;
 import com.agilecrm.contact.ContactView;
@@ -56,6 +57,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(CustomFieldDef.class);
 	ObjectifyService.register(ContactView.class);
 	ObjectifyService.register(ContactFilter.class);
+
+	ObjectifyService.register(Company.class);
 
 	ObjectifyService.register(Note.class);
 	ObjectifyService.register(UserPrefs.class);

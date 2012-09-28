@@ -28,7 +28,7 @@
 		template = request.getParameter("t");
 	
 	// Check if someone is using old -11 etc templates
-	if(StringUtils.isNumeric(template))
+	if(StringUtils.isNumeric(template) || template.equalsIgnoreCase("default"))
 	    template = "pink";
 	
 	String width = UserPrefs.getCurrentUserPrefs().width;	

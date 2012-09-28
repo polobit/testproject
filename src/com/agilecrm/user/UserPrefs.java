@@ -31,7 +31,7 @@ public class UserPrefs
     public String pic = null;
 
     @NotSaved(IfDefault.class)
-    public String template = "default";
+    public String template = "red";
 
     @NotSaved(IfDefault.class)
     public String width = "";
