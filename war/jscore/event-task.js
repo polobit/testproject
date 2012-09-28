@@ -159,16 +159,16 @@ function saveEvent(formId, modalName, isUpdate){
 	// Save functionality for event
 	if (!isValidForm('#' + formId))
     	return false;
-	
-	// Show loading symbol until model get saved
-    $('#' + modalName).find('span.save-status').html(LOADING_HTML);
-    
+	    
 	var json = serializeForm(formId);
 	console.log(JSON.stringify(json));
 	 // For validation
 	if(!isValidRange(new Date(json.start).getTime(), new Date(json.end).getTime(), (json.start_time).split(":"), (json.end_time).split(":")))
            return;
-	
+
+	// Show loading symbol until model get saved
+    $('#' + modalName).find('span.save-status').html(LOADING_HTML);
+    
   	// Appending start time to start date 
   	var startarray = (json.start_time).split(":"); 	
    	json.start = new Date(json.start).setHours(startarray[0],startarray[1])/1000.0;
