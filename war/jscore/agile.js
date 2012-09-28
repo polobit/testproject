@@ -74,7 +74,7 @@ function bulkOperations(url, id_array, index_array, table){
 			
 			// To remove table rows on delete 
 			for(var i = 0; i < index_array.length; i++) 
-				$(tbody).find('tr:eq(' + index_array[i] + ')').fadeOut(300, function() { $('tr:eq(' + index_array[i] + ')').remove(); });
+				$(tbody).find('tr:eq(' + index_array[i] + ')').fadeOut(300, function() { $(this).remove(); });
 		}
 	});
 }
