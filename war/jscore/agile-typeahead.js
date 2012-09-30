@@ -46,8 +46,9 @@ function agile_type_ahead(id, el, callback, isSearch) {
 			var that = this;
 			items = $(CONTACTS).map(function (i, item) {
 		
-							i = $(that.options.item);
-				
+							var fullname = fullname = getPropertyValue(item.properties, "first_name") + " " + getPropertyValue(item.properties, "last_name");
+
+							i = $(that.options.item).attr('data-value', fullname);
 							i.find('a').append(getTemplate('typeahead-contacts',item));
 							
 							/* highlighter*/
