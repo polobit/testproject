@@ -45,8 +45,9 @@ function agile_type_ahead(id, el, callback, isSearch) {
 		{	
 			var that = this;
 			items = $(CONTACTS).map(function (i, item) {
+		
+							i = $(that.options.item);
 				
-							// Create contacts list to show
 							i.find('a').append(getTemplate('typeahead-contacts',item));
 							
 							/* highlighter*/
@@ -57,10 +58,10 @@ function agile_type_ahead(id, el, callback, isSearch) {
 
 				
 			
-				// Set first li element as active
+			// Set first li element as active
 				items.first().addClass('active');
 				
-				// Set the width of typeahead dropdown(To maintain uniform size on list)
+				// Set the width of typeahead dropdown
 				this.$menu.css("width",300);
 				
 				// Calls show to show the dropdown
