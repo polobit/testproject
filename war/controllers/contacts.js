@@ -75,22 +75,24 @@ var ContactsRouter = Backbone.Router.extend({
               templateKey: "contacts",
               individual_tag_name: 'tr',
               cursor: true,
-              page_size: 25 
-          });
-
-          // Contacts are fetched when the app loads in the initialize
-          var cel = this.contactsListView.el;
-          var collection = this.contactsListView.collection;
-          this.contactsListView.collection.fetch({
-              success: function (collection, response) {
+              page_size: 25,
+              postRenderCallback: function(el) {
+            	  
+            	  // To set chats and view when contacts are fetch by infiniscroll
             	  setupTags(cel);
                   pieTags(cel);
             	  setupViews(cel);
             	  
             	  // show list of filters dropdown in contacts list
-            	  setupContactFilterList(cel);
-              }
+            	  setupContactFilterList(cel);            	  
+            	  
+            	  }             
           });
+
+          // Contacts are fetched when the app loads in the initialize
+          var cel = this.contactsListView.el;
+          var collection = this.contactsListView.collection;
+          this.contactsListView.collection.fetch();
 
           // Show the views collection on the actions dropdown 	
           var customView = new Base_Collection_View({

@@ -43,7 +43,7 @@ function fillSelect(selectId, url, parseKey, callback, template) {
 			$loading.remove();
 
 			// Delete prev options if any
-			$("#" + selectId).empty().append('<option>Select...</option>');
+			$("#" + selectId).empty().append('<option value="">Select...</option>');
 
 			$.each(collection.toJSON(), function(index, model) {
 				// Convert template into HTML

@@ -3,7 +3,6 @@ var TAGS = {};
 function agile_type_ahead(id, el, callback, isSearch) {
 	
 	var CONTACTS = {};
-	
 	$('#' + id, el).typeahead({
 		source : function(query, process) {
 	
@@ -46,23 +45,8 @@ function agile_type_ahead(id, el, callback, isSearch) {
 		{	
 			var that = this;
 			items = $(CONTACTS).map(function (i, item) {
-					
-							// Details of contact
-							var fullname, pic, email,company;
-							fullname = getPropertyValue(item.properties, "first_name") + " " + getPropertyValue(item.properties, "last_name");
-							pic = getPropertyValue(item.properties, "image");
-							email = getPropertyValue(item.properties, "email");
-							company = getPropertyValue(item.properties, "company");
-							
-							i = $(that.options.item).attr('data-value', fullname);
-							
-							if(!pic)
-								pic = DEFAULT_GRAVATAR_url;
-							if(!company)
-								company="";
-							if(!email)
-								email ="";
-							
+				
+							// Create contacts list to show
 							i.find('a').append(getTemplate('typeahead-contacts',item));
 							
 							/* highlighter*/
@@ -73,11 +57,11 @@ function agile_type_ahead(id, el, callback, isSearch) {
 
 				
 			
-			// Set first li element as active
+				// Set first li element as active
 				items.first().addClass('active');
 				
-				// Set the width of typeahead dropdown
-				//this.$menu.css("width",300);
+				// Set the width of typeahead dropdown(To maintain uniform size on list)
+				this.$menu.css("width",300);
 				
 				// Calls show to show the dropdown
 				this.$menu.html(items).show();

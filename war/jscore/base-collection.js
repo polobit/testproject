@@ -158,6 +158,14 @@ var Base_Collection_View = Backbone.View.extend({
     			$(this.el).find('div.row').removeClass('row').addClass('row-fluid');
     		}
     	
+		// Call postRenderCallback after rendering if available
+    	var callback = this.options.postRenderCallback;
+    	if (callback && typeof(callback) === "function") {
+    		
+    		// execute the callback, passing parameters as necessary
+    		callback($(this.el));
+    	}
+    	
         _(this.collection.models).each(function (item) { // in case collection is not empty
         	this.appendItem(item);
         }, this);
