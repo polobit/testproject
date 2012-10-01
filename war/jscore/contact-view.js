@@ -62,21 +62,28 @@ $(function(){
             restKey: "contact",
             modelData: App_Contacts.contactViewModel ,
             templateKey: "contacts-custom-view",
-            individual_tag_name: 'tr'
+            individual_tag_name: 'tr',
+            cursor: true,
+            page_size: 25,
+            postRenderCallback: function(el) {
+          
+            	// To set chats and view when contacts are fetch by infiniscroll
+            	setupTags(el);
+            	
+                pieTags(el);
+          	  	setupViews(el);
+
+          	  	// show list of filters dropdown in contacts list
+          	  	setupContactFilterList(el);        
+            }
         });
 	    
 	    // Defines appendItem for custom view 
 	    view.appendItem = contactTableView;
 	    
 	    // Fetch collection and set tags and contact-views list
-	    view.collection.fetch({
-	    	success :function() {
-	    		setupViews(view.el);
-	    		setupTags(view.el);
-	    		$('#content').html(view.el);
-	    	}
-	    });
-	    
+	    view.collection.fetch();
+	    $('#content').html(view.el);
 	});
 });
 
