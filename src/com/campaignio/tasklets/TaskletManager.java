@@ -6,6 +6,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.util.DBUtil;
+import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.DeferredTask;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 
 public class TaskletManager
 {
@@ -125,8 +130,14 @@ public class TaskletManager
 
 	    try
 	    {
-		// Check in memcache if it is already executing
-		executeWorkflow(campaignJSON, subscriberJSON);
+		// Execute it in a task queue each batch
+		// executeWorkflow(campaignJSON, subscriberJSON);
+
+		TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(
+			campaignJSON.toString(), subscriberJSON.toString());
+		Queue queue = QueueFactory.getDefaultQueue();
+		queue.add(TaskOptions.Builder
+			.withPayload(taskletWorkflowDeferredTask));
 
 	    }
 	    catch (Exception e)
@@ -236,5 +247,43 @@ public class TaskletManager
 
 	return null;
 
+    }
+}
+
+@SuppressWarnings("serial")
+class TaskletWorkflowDeferredTask implements DeferredTask
+{
+
+    String campaignJSONString, subscriberJSONString;
+
+    public TaskletWorkflowDeferredTask(String campaignJSONString,
+	    String subscriberJSONString)
+    {
+
+	this.campaignJSONString = campaignJSONString;
+	this.subscriberJSONString = subscriberJSONString;
+    }
+
+    @Override
+    public void run()
+    {
+	try
+	{
+	    System.out.println("Executing tasklet in namespace "
+		    + NamespaceManager.get());
+
+	    // Get Campaign JSON & SubscriberJSON from String
+	    JSONObject campaignJSON = new JSONObject(campaignJSONString);
+	    JSONObject subscriberJSON = new JSONObject(subscriberJSONString);
+
+	    // Check in memcache if it is already executing
+	    TaskletManager.executeWorkflow(campaignJSON, subscriberJSON);
+
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured in Cron " + e.getMessage());
+	    e.printStackTrace();
+	}
     }
 }
