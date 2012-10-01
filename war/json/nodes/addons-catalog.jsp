@@ -46,8 +46,7 @@
     for (String path : target)
     {
 		// Read each path locally from context
-		System.out.println(path);
-		
+		// System.out.println(path);
 		File f = new File(path);
 		InputStream is = new FileInputStream(f);
 
