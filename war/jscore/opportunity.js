@@ -1,7 +1,34 @@
-// On click on row in Opportunities triggers the details of particular opportunity
 $(function () {
+	
+	// On mouseover shows the popover
+	$('#opportunities-model-list > tr').live('mouseover', function () {
+        
+        var data = $(this).find('.leads').attr('leads');
+
+        var currentDeal = App_Deals.opportunityCollectionView.collection.get(data);
+       
+        //console.log(currentDeal.toJSON());
+        
+        var ele = getTemplate("opportunity-detail-popover", currentDeal.toJSON());
+        $(this).attr({
+        	"rel" : "popover",
+        	"placement" : 'left',
+        	"data-original-title" : currentDeal.toJSON().name,
+        	"data-content" :  ele
+        });
+        $(this).popover('show');
+        
+    });
+    
+	// On mouseout hides the popover
+    $('#opportunities-model-list > tr').live('mouseout', function(){
+    	 $(this).popover('hide');
+    });
+    
+    // On click on row in Opportunities triggers the details of particular opportunity to edit
     $('#opportunities-model-list > tr').live('click', function (e) {
         e.preventDefault();
+        $(this).popover('hide');
         var data = $(this).find('.leads').attr('leads');
 
         if (data) {
@@ -10,7 +37,9 @@ $(function () {
             });
         }
     });
+
 });
+
 
 
 //Populate users in options of owner input field dropdown
