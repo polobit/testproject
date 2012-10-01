@@ -138,7 +138,7 @@ function deserializeForm(data, form)
 	           }
 	    
 	           // Deserialize tags
-	           else if(fel.hasClass('tags') && tag == "ul")
+	           else if(fel.hasClass('tagsinput') && tag == "ul")
 	          {
 	        	   if(!isArray(el))
 	        		   {
@@ -148,8 +148,9 @@ function deserializeForm(data, form)
 	        	  $.each(el, function(index, contact){
 	                   var tag_name;
 	                   var tag_id = contact.id;
-	                   tag_name = getPropertyValue(contact.properties, "first_name") + getPropertyValue(contact.properties, "last_name");
-	                   $('.' + fel.attr('class'), form).append('<li class="label label-warning" value="'+tag_id+'" style="display: inline-block; vertical-align: middle; margin-right:3px; ">'+tag_name+'<a class="icon-remove" id="remove_tag"></a></li>');
+	                   tag_name = getPropertyValue(contact.properties, "first_name") + " " + getPropertyValue(contact.properties, "last_name");
+	                   console.log(tag_name);
+	                   $('.tagsinput', form).append('<li class="tag" value="'+tag_id+'" class="tag"  style="display: inline-block; ">'+tag_name+'<a class="close" id="remove_tag">&times</a></li>');
 	                  });	        	    
 	           }
 	           
