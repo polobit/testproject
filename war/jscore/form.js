@@ -23,22 +23,7 @@ function serializeForm(form_id) {
     	    }).get());
     
     // Serialize tags
-    arr = arr.concat( $('#' + form_id + ' .tags').map(
-    		 function () {
-    			 var values = [];
-    			 
-    			 if(!isArray($(this).children()));
-    			 	
-    			 $.each($(this).children(), function(index, data) { 
-    				 values.push(($(data).val()).toString())
- 	            	
- 	            });
-    			 
-        	     return {
-        	            "name" : $(this).attr('name'),
-        	            "value":values
-        	        };
-        	    }).get() );
+    arr = arr.concat(getTags(form_id));
     
     
     // Multiple select 

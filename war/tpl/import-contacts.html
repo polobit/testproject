@@ -27,11 +27,19 @@
 </script>
 
 <script id="import-contacts-2-template" type="text/html">
-
-	<label>Tags (Optional)</label>
-	<input id ='tags-import' class="tags-typeahead" name="tags" class="tags" type="text"/>
+<form id="import-contact-tags">
+<div class="control-group">
+   	<label class="control-label">Tags (Optional)</label>
+		<div class="pull-left" style="margin-top:3px">
+			<ul name="tags" class= "tagsinput tags"></ul>
+		</div>
+	<div class="controls">
+	<input id ='tags-import' class="tags-typeahead" name="tags" type="text"/>
+	</div>
+</div>
+</form>
 	<br/>		
-
+	
 	<div class="row">
 		<div class="span5">
 			<div class="alert alert-error fname-not-found-error" style="display:none">

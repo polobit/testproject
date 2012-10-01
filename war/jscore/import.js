@@ -79,8 +79,8 @@ $(function(){
 	            model.last_name = "uploaded";
 
 	            // Add Tags
-	            var tags = getTags('tags-import');
-	            if (tags != undefined) model.tags = tags;
+	            var tags = getTags('import-contact-tags');
+	            if (tags != undefined) model.tags = tags[0].value;
 
 	            models.push(model);
 

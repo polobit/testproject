@@ -59,9 +59,9 @@ function agile_type_ahead(id, el, callback, isSearch) {
 
 				
 			
-			// Set first li element as active
+				// Set first li element as active
 				items.first().addClass('active');
-				
+				items.css("overflow", "hidden");
 				// Set the width of typeahead dropdown
 				this.$menu.css("width",300);
 				
@@ -92,7 +92,7 @@ function agile_type_ahead(id, el, callback, isSearch) {
 
 			//add tag 
 			if(tag_not_exist)				
-				$('.tags',el).append('<li class="tag"  style="display: inline-block;" value="'+ TAGS[items]+'">'+items+'<a class="close" id="remove_tag">&times</a></li>');
+				$('.tags',el).append('<li class="tag"  style="display: inline-block;" data="'+ TAGS[items]+'">'+items+'<a class="close" id="remove_tag">&times</a></li>');
 		},
 		minLength : 2,
 	})
