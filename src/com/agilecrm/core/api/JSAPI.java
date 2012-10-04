@@ -155,6 +155,72 @@ public class JSAPI
 	}
     }
 
+    // Add score
+    @Path("contacts/add-score")
+    @GET
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces("application/x-javascript")
+    public JSONWithPadding addScore(@QueryParam("email") String email,
+	    @QueryParam("score") Short score,
+	    @QueryParam("callback") String jsoncallback)
+    {
+	try
+	{
+	    // Get Contact
+	    Contact contact = Contact.searchContactByEmail(email);
+	    if (contact == null)
+		return null;
+
+	    contact.lead_score = Short.parseShort(String
+		    .valueOf(contact.lead_score + score));
+	    contact.save();
+
+	    return new JSONWithPadding(new GenericEntity<Contact>(contact)
+	    {
+	    }, jsoncallback);
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    // Delete score
+    // Add score
+    @Path("contacts/delete-score")
+    @GET
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces("application/x-javascript")
+    public JSONWithPadding deleteScore(@QueryParam("email") String email,
+	    @QueryParam("score") Short score,
+	    @QueryParam("callback") String jsoncallback)
+    {
+	try
+	{
+	    // Get Contact
+	    Contact contact = Contact.searchContactByEmail(email);
+	    if (contact == null)
+		return null;
+
+	    contact.lead_score = Short.parseShort(String
+		    .valueOf(contact.lead_score - score));
+	    ;
+	    contact.save();
+
+	    return new JSONWithPadding(new GenericEntity<Contact>(contact)
+	    {
+	    }, jsoncallback);
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
     // New Task
     @Path("js/tasks")
     @POST

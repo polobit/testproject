@@ -248,10 +248,16 @@ $(function()
 	// Get task date (MM dd) from epoch time
 	Handlebars.registerHelper('epochToTaskDate', function(date)
 	{
-
-		var intMonth = new Date(parseInt(date) * 1000).getMonth();
-		var intDay = new Date(parseInt(date) * 1000).getDate();
-		var monthArray = [ "", "Jan", "Feb", "March", "April", "May", "July",
+		var intDay;
+		var intMonth;
+		if(date > 9999999999){
+			intMonth = new Date(parseInt(date)).getMonth();
+			intDay = new Date(parseInt(date)).getDate();
+		}else{
+			intMonth = new Date(parseInt(date) * 1000).getMonth();
+			intDay = new Date(parseInt(date) * 1000).getDate();
+		}
+		var monthArray = [ "", "Jan", "Feb", "March", "April", "May", "June", "July",
 				"Aug", "Sept", "Oct", "Nov", "Dec" ];
 
 		return (monthArray[intMonth] + " " + intDay);
@@ -297,9 +303,10 @@ $(function()
 	Handlebars.registerHelper('if_entity', function(item, options) {
 		if(this.entity_type == item)
 		{
+			this.created_time = this.created_time * 1000;
 			return options.fn(this);
 		}
-		if(this.m)
+		if(this[item] != undefined)
 		{
 			return options.fn(this);
 		}

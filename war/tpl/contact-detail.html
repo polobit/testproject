@@ -48,6 +48,30 @@
 	</div>		
  </div>
 
+
+
+			<div class='clearfix'></div>	
+			<div>	
+				{{#if tags}}
+					<i class="icon-tags"></i>
+					<ul class="tagsinput">
+						{{#each tags}}
+								<li style="display:inline-block;" class="tag"><span><a class="anchor" href="#tags/{{this}}">{{this}}</a><a class="close remove-tags" id="{{this}}">&times</a></span></li>
+  						{{/each}}
+					</ul>
+					</ul>
+				{{/if}}	
+					<a href="#" id="add-tags"><i class="icon-plus-sign"></i></a> <span>Add tags</span>
+
+						<form id="addTagsForm" style="display:none">
+							<input id="addTags" type="text" class="span2" style="margin-bottom: -1px" placeholder="Enter tags"/>
+							<a href="#" class="btn" id="contact-add-tags" style="margin-left: 10px">Add</a>
+						</form>
+				
+			</div></br>
+
+
+
 <div class="subnav" >
 		    <ul class="nav nav-pills" id="contactDetailsTab">
       			<li class=""><a data-toggle="tab" href="#notes">Notes</a></li>
@@ -73,7 +97,13 @@
 			</div>
 </div>
 
-<div id="time-line"></div>
+<div id="timeline">
+<div id="line-container">
+<div id="line"></div>
+
+</div>
+
+</div>
 
 </div>
 <!-- Contact Details -->
@@ -86,10 +116,13 @@
 				<h2><i class="icon-user "></i> Contact details</h2>
 			</header>
 
-			<br/>
 <div style='padding:10px;'>
 			<div>
 				<span>Lead owner: {{lead_owner}}</span>
+			</div>
+
+			<div>
+				<span>Lead score: {{lead_score}}</span>
 			</div>
 		
 			<div>
@@ -107,31 +140,7 @@
 					{{/if}}
 			 	</div>
 			</div>
-		
-			<div class='clearfix'></div>	
-			<div>	
-				<br/>
-				{{#if tags}}
-					<i class="icon-tags"></i>
-					<ul class="tagsinput">
-						{{#each tags}}
-								<li style="display:inline-block;" class="tag"><span><a class="anchor" href="#tags/{{this}}">{{this}}</a><a class="close remove-tags" id="{{this}}">&times</a></span></li>
-  						{{/each}}
-					</ul>
-					</ul>
-				{{/if}}	
-					<a href="#" id="add-tags"><i class="icon-plus-sign"></i></a> <span>Add tags</span>
 
-						<form id="addTagsForm" style="display:none">
-							<input id="addTags" type="text" class="span2" placeholder="Enter tags"/>
-							<a href="#" class="btn right" id="contact-add-tags" style="margin-right: 10px">Add</a>
-						</form>
-				
-			</div>
-
-			<div class='clearfix'></div>	
-			
-			<br/>
 			<br/>		
 	
  			{{#each properties}}
