@@ -21,9 +21,10 @@ $(function(){
 	    	        	// Show loading symbol until model get saved
 	    	            $('#activityModal').find('span.save-status').html(LOADING_HTML);
 	    	            
-    	   	        	var json = serializeForm("taskFooorm");
+    	   	        	var json = serializeForm("taskForm");
 	    	        	json.due = new Date(json.due).getTime()/1000.0;
 	    	        	
+	    	        	console.log(JSON.stringify(json));
 	    	        	var newTask = new Backbone.Model();
 	    	        	newTask.url = 'core/api/tasks';
 	    	        	newTask.save(json,{

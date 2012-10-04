@@ -59,7 +59,7 @@ public class ContactsAPI
 
 	// Check if the email exists with the current email address
 	Contact currentContact = Contact.searchContactByEmail(contact
-		.getContactFieldValue("email"));
+		.getContactFieldValue("EMAIL"));
 
 	// Throw non-200 if it exists
 	if (currentContact != null)
