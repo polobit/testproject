@@ -66,6 +66,9 @@ public class Contact extends Cursor
     @NotSaved(IfDefault.class)
     public Short star_value = 0;
 
+    // Lead score
+    public Short lead_score = 0;
+
     // Dao
     private static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(
 	    Contact.class);
