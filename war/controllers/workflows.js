@@ -68,5 +68,33 @@ var WorkflowsRouter = Backbone.Router.extend({
            
              logsListView.collection.fetch();
              $('#content').html(logsListView.el); 
-        }
+        },
+         triggers:function () {
+        	this.triggersListView = new Base_Collection_View({
+                url: '/core/api/workflows/triggers',
+                restKey: "triggers",
+                templateKey: "triggers",
+                individual_tag_name: 'tr',
+            });
+            
+          
+            this.triggersListView.collection.fetch();
+            $('#content').html(this.triggersListView.el);  
+  
+        },
+        triggerAdd:function(){
+        	this.triggerModelview = new Base_Model_View({
+        		url: 'core/api/workflows/triggers',
+                template: "trigger-add",
+                isNew: true,
+                window: 'triggers',
+                postRenderCallback:function(el){
+                var optionsTemplate = "<option value='{{name}}'>{{name}}</option>";
+                fillSelect('campaignSelect','/core/api/workflows', 'workflow', 'no-callback', optionsTemplate);
+                   }
+                 });
+        	   
+             var view = this.triggerModelview.render();
+             $('#content').html(view.el);
+           }	   
 });

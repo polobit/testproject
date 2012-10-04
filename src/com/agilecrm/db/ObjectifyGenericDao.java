@@ -32,6 +32,7 @@ import com.agilecrm.user.NotificationPrefs;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.widgets.Widget;
+import com.agilecrm.workflows.Trigger;
 import com.agilecrm.workflows.Workflow;
 import com.campaignio.TwitterQueue;
 import com.campaignio.URLShortener;
@@ -83,6 +84,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(TwitterQueue.class);
 	ObjectifyService.register(Log.class);
 	ObjectifyService.register(URLShortener.class);
+        ObjectifyService.register(Trigger.class);
 
 	ObjectifyService.register(Widget.class);
 

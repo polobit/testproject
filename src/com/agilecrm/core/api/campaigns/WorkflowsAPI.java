@@ -78,4 +78,33 @@ public class WorkflowsAPI
 
 	Workflow.deleteWorkflowsBulk(workflowsJSONArray);
     }
+    
+    // Triggers
+    @Path("triggers")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<Trigger> getTriggers()
+    {
+	return Trigger.getAllTriggers();
+    }
+
+    @Path("triggers")
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Trigger createTriggers(Trigger trigger)
+    {
+	trigger.save();
+	return trigger;
+    }
+
+    @Path("triggers")
+    @DELETE
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Trigger deleteTrigger(Trigger trigger)
+    {
+	trigger.delete();
+	return trigger;
+    }
 }

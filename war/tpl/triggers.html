@@ -1,0 +1,41 @@
+<script id="triggers-model-template" type="text/html">
+
+  <td>{{name}}</td>
+  <td>{{condition}}</td>
+  <td>{{campaign}}</td>
+<br/>
+	
+</script>
+
+
+<script id="triggers-collection-template" type="text/html">
+ 
+<div class="row">
+
+<div class="span12">
+ 
+<div class="page-header">
+    <h1>List of Triggers</h1>
+    <a href="#trigger-add" class="btn right" id="addTrigger" style='top:-30px;position:relative'><i class='icon-plus-sign'/> Add Trigger</i></a>
+</div>
+
+</div>
+</div>
+
+<div class="data-block span9">
+	  <div class="data-container">
+		<table class="table table-striped">
+			<thead>
+    			<tr>
+     				<th>Name</th>
+      				<th>Condition</th>
+      				<th>Campaign</th>
+    			</tr>
+  			</thead>
+	  		<tbody id='triggers-model-list'> </tbody>
+		</table>
+	  </div>
+</div>
+
+</div>
+</script>
