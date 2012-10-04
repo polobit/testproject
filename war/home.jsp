@@ -42,7 +42,7 @@ String CSS_PATH = "/";
 	
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/agilecrm.css" />
-
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/timeline.css" />
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
@@ -200,8 +200,8 @@ String CSS_PATH = "/";
 	
 	var IS_FLUID = <%=is_fluid%>;
 	
-	var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
-	// var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
+	//var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
+	 var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
 	
 	<!-- JQUery Core and UI CDN -->	
 	<!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->

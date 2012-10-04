@@ -1,22 +1,54 @@
-<script id="timeline-collection-template" type="text/html">
-	<div class="span5 offset2">
-		<ul id="timeline-model-list"></ul>
-	</div>
-</script>
-<script id="timeline-model-template" type="text/html">
-	{{#if_entity "note"}}
-		{{note}} {{created_time}}
-	{{/if_entity}}
+ <script id="timeline-template" type="text/x-handlebars-template">
+    <div class="item post">
+      <div class="inner">
 
-	{{#if_entity "task"}}
-		{{subject}} {{created_time}}
-	{{/if_entity}}
+		{{#if_entity "note"}}
 
-	{{#if_entity "deal"}}
-		{{description}} {{created_time}}
-	{{/if_entity}}
+        <div class="timestamp">{{created_time}}</div>
+        <div class="title"><h3>{{entity_type}}</h3></div>
+        <div class="date">{{epochToTaskDate created_time}}</div>
+        <div class="body">
+            <div class="caption">{{subject}}</div>
+            <div class="caption">{{description}}</div>
+        </div>
+		
+		{{/if_entity}}
 
-	{{#if_entity "m"}}
-		{{m}} {{t}}
-	{{/if_entity}}
-</script>
+		{{#if_entity "task"}}
+
+        <div class="timestamp">{{created_time}}</div>
+        <div class="title"><h3>{{entity_type}}</h3></div>
+        <div class="date">{{epochToTaskDate created_time}}</div>
+        <div class="body">
+            <div class="caption">{{subject}}</div>
+			<div class="caption">({{type}})</div>         
+        </div>
+		
+		{{/if_entity}}
+
+		{{#if_entity "deal"}}
+
+        <div class="timestamp">{{created_time}}</div>
+        <div class="title"><h3>{{entity_type}}</h3></div>
+        <div class="date">{{epochToTaskDate created_time}}</div>
+        <div class="body">
+            <div class="caption">{{name}}</div>
+            <div class="caption">{{description}}</div>
+        </div>
+		
+		{{/if_entity}}
+
+		{{#if_entity "m"}}
+
+        <div class="timestamp">{{t}}</div>
+        <div class="title"><h3>log</h3></div>
+        <div class="date">{{epochToTaskDate t}}</div>
+        <div class="body">
+            <div class="caption">{{m}}</div>        
+        </div>
+		
+		{{/if_entity}}
+
+      </div>
+    </div>
+  </script>

@@ -151,7 +151,7 @@ var ContactsRouter = Backbone.Router.extend({
             model: contact,
             template: "contact-detail",
             postRenderCallback: function(el) {
-                
+            	
             	loadWidgets(el, contact.toJSON());
             	
                 loadTimelineDetails(el, id);
@@ -161,7 +161,7 @@ var ContactsRouter = Backbone.Router.extend({
         });
         
        
-        var el = this.contactDetailView.render().el;
+        var el = this.contactDetailView.el;
       
         $('#content').html(el);
        
