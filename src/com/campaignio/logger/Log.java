@@ -107,8 +107,8 @@ public class Log
 	try
 	{
 	    JSONObject messageJSON = new JSONObject().put(LOG_TIME,
-		    Calendar.getInstance().getTimeInMillis()).put(LOG_MESSAGE,
-		    message);
+		    Calendar.getInstance().getTimeInMillis() / 1000).put(
+		    LOG_MESSAGE, message);
 	    log.logs.put(messageJSON);
 	    log.save();
 	}
