@@ -313,31 +313,19 @@ public class Contact extends Cursor
     }
 
     // Add score based on email
-    public static Contact addScore(String email, Integer score)
+    public void addScore(Integer score)
     {
 
-	// Get Contact
-	Contact contact = searchContactByEmail(email);
-	if (contact == null)
-	    return null;
-
-	contact.lead_score = contact.lead_score + score;
-	contact.save();
-	return contact;
+	this.lead_score = this.lead_score + score;
+	this.save();
     }
 
     // Subtract score based on email
-    public static Contact subtractScore(String email, Integer score)
+    public void subtractScore(Integer score)
     {
 
-	// Get Contact
-	Contact contact = searchContactByEmail(email);
-	if (contact == null)
-	    return null;
-
-	contact.lead_score = contact.lead_score - score;
-	contact.save();
-	return contact;
+	this.lead_score = this.lead_score - score;
+	this.save();
     }
 
     // Delete contacts bulk
