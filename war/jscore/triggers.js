@@ -1,0 +1,14 @@
+$(function(){
+	$('#triggers-model-list > tr').live('click', function(e){
+		
+		e.preventDefault();
+		var data = $(this).find('.data').attr('data');
+		if(data)
+			{
+			 Backbone.history.navigate("trigger/" + data, {
+		            trigger: true
+		        });
+			}
+		
+	});
+});

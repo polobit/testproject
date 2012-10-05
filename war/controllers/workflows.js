@@ -7,6 +7,9 @@ var WorkflowsRouter = Backbone.Router.extend({
         "workflow-add": "workflowAdd",
         "workflow/:id": "workflowEdit",
         "workflows/logs/:id": "logsToCampaign",
+        "triggers":"triggers",
+        "trigger-add":"triggerAdd",
+        "trigger/:id":"triggerEdit"
           },
             
       workflows: function () {
@@ -69,18 +72,18 @@ var WorkflowsRouter = Backbone.Router.extend({
              logsListView.collection.fetch();
              $('#content').html(logsListView.el); 
         },
-         triggers:function () {
-        	this.triggersListView = new Base_Collection_View({
+        triggers:function () {
+        	this.triggersCollectionView = new Base_Collection_View({
+
                 url: '/core/api/workflows/triggers',
                 restKey: "triggers",
                 templateKey: "triggers",
                 individual_tag_name: 'tr',
             });
-            
           
-            this.triggersListView.collection.fetch();
-            $('#content').html(this.triggersListView.el);  
-  
+            this.triggersCollectionView.collection.fetch();
+            $('#content').html(this.triggersCollectionView.el);  
+
         },
         triggerAdd:function(){
         	this.triggerModelview = new Base_Model_View({
@@ -89,12 +92,41 @@ var WorkflowsRouter = Backbone.Router.extend({
                 isNew: true,
                 window: 'triggers',
                 postRenderCallback:function(el){
-                var optionsTemplate = "<option value='{{name}}'>{{name}}</option>";
-                fillSelect('campaignSelect','/core/api/workflows', 'workflow', 'no-callback', optionsTemplate);
+
+                var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+                fillSelect('campaign-select','/core/api/workflows', 'workflow', 'no-callback', optionsTemplate);
+
                    }
                  });
         	   
              var view = this.triggerModelview.render();
              $('#content').html(view.el);
-           }	   
+
+        },
+        triggerEdit:function(id){
+            	
+        	// Send to triggers if the user refreshes it directly
+        	if (!this.triggersCollectionView || this.triggersCollectionView.collection.length == 0) {
+                this.navigate("triggers", {
+                    trigger: true
+                });
+                return;
+            }
+            var currentTrigger = this.triggersCollectionView.collection.get(id);
+
+            var view = new Base_Model_View({
+                url: 'core/api/workflows/triggers',
+                model: currentTrigger,
+                template: "trigger-add",
+                window: 'triggers',
+                postRenderCallback: function(el){
+                	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+                    fillSelect('campaign-select','/core/api/workflows', 'workflow', 'no-callback', optionsTemplate);
+                    },
+            	});
+            
+            	var view = view.render();
+            	$("#content").html(view.el);  
+        }
+         
 });

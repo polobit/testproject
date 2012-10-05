@@ -17,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.workflows.Trigger;
 import com.agilecrm.workflows.Workflow;
 
 @Path("/api/workflows")
@@ -78,7 +79,7 @@ public class WorkflowsAPI
 
 	Workflow.deleteWorkflowsBulk(workflowsJSONArray);
     }
-    
+
     // Triggers
     @Path("triggers")
     @GET
@@ -92,10 +93,44 @@ public class WorkflowsAPI
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Trigger createTriggers(Trigger trigger)
+    public Trigger createTrigger(Trigger trigger)
     {
 	trigger.save();
 	return trigger;
+    }
+
+    @Path("triggers")
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Trigger updateTrigger(Trigger trigger)
+    {
+	trigger.save();
+	return trigger;
+    }
+
+    @Path("triggers/{trigger_id}")
+    @DELETE
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public void deleteTrigger(@PathParam("trigger_id") String id)
+    {
+	Trigger trigger = Trigger.getTrigger(Long.parseLong(id));
+	if (trigger != null)
+	    trigger.delete();
+
+    }
+
+    // Bulk operations - Triggers delete
+    @Path("triggers/bulk")
+    @DELETE
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void deleteTriggers(@FormParam("model_ids") String model_ids)
+	    throws JSONException
+    {
+	JSONArray triggersJSONArray = new JSONArray(model_ids);
+
+	Trigger.deleteTriggersBulk(triggersJSONArray);
     }
 
     @Path("triggers")
