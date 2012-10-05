@@ -158,66 +158,42 @@ public class JSAPI
     // Add score
     @Path("contacts/add-score")
     @GET
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    @Produces("application/x-javascript")
-    public JSONWithPadding addScore(@QueryParam("email") String email,
-	    @QueryParam("score") Short score,
-	    @QueryParam("callback") String jsoncallback)
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public boolean addScore(@QueryParam("email") String email,
+	    @QueryParam("score") Integer score)
     {
 	try
 	{
-	    // Get Contact
-	    Contact contact = Contact.searchContactByEmail(email);
-	    if (contact == null)
-		return null;
 
-	    contact.lead_score = Short.parseShort(String
-		    .valueOf(contact.lead_score + score));
-	    contact.save();
-
-	    return new JSONWithPadding(new GenericEntity<Contact>(contact)
-	    {
-	    }, jsoncallback);
+	    Contact.addScore(email, score);
+	    return true;
 
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
-	    return null;
+	    return true;
 	}
     }
 
-    // Delete score
-    // Add score
-    @Path("contacts/delete-score")
+    // Subtract score
+    @Path("contacts/subtract-score")
     @GET
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    @Produces("application/x-javascript")
-    public JSONWithPadding deleteScore(@QueryParam("email") String email,
-	    @QueryParam("score") Short score,
-	    @QueryParam("callback") String jsoncallback)
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public boolean subtractScore(@QueryParam("email") String email,
+	    @QueryParam("score") Integer score)
     {
 	try
 	{
-	    // Get Contact
-	    Contact contact = Contact.searchContactByEmail(email);
-	    if (contact == null)
-		return null;
 
-	    contact.lead_score = Short.parseShort(String
-		    .valueOf(contact.lead_score - score));
-	    ;
-	    contact.save();
-
-	    return new JSONWithPadding(new GenericEntity<Contact>(contact)
-	    {
-	    }, jsoncallback);
+	    Contact.subtractScore(email, score);
+	    return true;
 
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
-	    return null;
+	    return true;
 	}
     }
 
