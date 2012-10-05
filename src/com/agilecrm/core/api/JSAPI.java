@@ -162,18 +162,14 @@ public class JSAPI
     public boolean addScore(@QueryParam("email") String email,
 	    @QueryParam("score") Integer score)
     {
-	try
-	{
 
-	    Contact.addScore(email, score);
+	Contact contact = Contact.searchContactByEmail(email);
+	if (contact == null)
 	    return true;
 
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return true;
-	}
+	contact.addScore(score);
+	return true;
+
     }
 
     // Subtract score
@@ -183,18 +179,15 @@ public class JSAPI
     public boolean subtractScore(@QueryParam("email") String email,
 	    @QueryParam("score") Integer score)
     {
-	try
-	{
 
-	    Contact.subtractScore(email, score);
+	// Get Contact
+	Contact contact = Contact.searchContactByEmail(email);
+	if (contact == null)
 	    return true;
 
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return true;
-	}
+	contact.subtractScore(score);
+	return true;
+
     }
 
     // New Task
