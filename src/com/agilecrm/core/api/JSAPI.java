@@ -2,7 +2,6 @@ package com.agilecrm.core.api;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -15,10 +14,11 @@ import org.codehaus.jackson.map.ObjectMapper;
 import com.agilecrm.activities.Task;
 import com.agilecrm.campaign.Campaign;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Note;
 import com.agilecrm.deals.Opportunity;
 import com.sun.jersey.api.json.JSONWithPadding;
 
-@Path("api/js/api")
+@Path("core/js/api")
 public class JSAPI
 {
     // This method is called if TEXT_PLAIN is request
@@ -72,6 +72,112 @@ public class JSAPI
 	    contact.save();
 
 	    return new JSONWithPadding(new GenericEntity<Contact>(contact)
+	    {
+	    }, jsoncallback);
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    // Add task
+    @Path("js/task")
+    @GET
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces("application/x-javascript")
+    public JSONWithPadding createTask(@QueryParam("email") String email,
+	    @QueryParam("task") String json,
+	    @QueryParam("callback") String jsoncallback)
+    {
+	try
+	{
+	    ObjectMapper mapper = new ObjectMapper();
+	    Task task = mapper.readValue(json, Task.class);
+	    System.out.println(mapper.writeValueAsString(task));
+	    System.out.println(task);
+
+	    // Get Contact
+	    Contact contact = Contact.searchContactByEmail(email);
+	    if (contact == null)
+		return null;
+
+	    task.save();
+
+	    return new JSONWithPadding(new GenericEntity<Task>(task)
+	    {
+	    }, jsoncallback);
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    // Add note
+    @Path("js/note")
+    @GET
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces("application/x-javascript")
+    public JSONWithPadding createNote(@QueryParam("email") String email,
+	    @QueryParam("note") String json,
+	    @QueryParam("callback") String jsoncallback)
+    {
+	try
+	{
+	    ObjectMapper mapper = new ObjectMapper();
+	    Note note = mapper.readValue(json, Note.class);
+	    System.out.println(mapper.writeValueAsString(note));
+	    System.out.println(note);
+
+	    // Get Contact
+	    Contact contact = Contact.searchContactByEmail(email);
+	    if (contact == null)
+		return null;
+
+	    note.save();
+
+	    return new JSONWithPadding(new GenericEntity<Note>(note)
+	    {
+	    }, jsoncallback);
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    // Add deal
+    @Path("js/opportunity")
+    @GET
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces("application/x-javascript")
+    public JSONWithPadding createOpportunity(@QueryParam("email") String email,
+	    @QueryParam("opportunity") String json,
+	    @QueryParam("callback") String jsoncallback)
+    {
+	try
+	{
+	    ObjectMapper mapper = new ObjectMapper();
+	    Opportunity opportunity = mapper.readValue(json, Opportunity.class);
+	    System.out.println(mapper.writeValueAsString(opportunity));
+	    System.out.println(opportunity);
+
+	    // Get Contact
+	    Contact contact = Contact.searchContactByEmail(email);
+	    if (contact == null)
+		return null;
+
+	    opportunity.save();
+
+	    return new JSONWithPadding(new GenericEntity<Opportunity>(
+		    opportunity)
 	    {
 	    }, jsoncallback);
 
@@ -153,27 +259,6 @@ public class JSAPI
 	    e.printStackTrace();
 	    return null;
 	}
-    }
-
-    // New Task
-    @Path("js/tasks")
-    @POST
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Task createTask(Task task)
-    {
-	task.save();
-	return task;
-    }
-
-    @Path("js/opportunity")
-    @POST
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Opportunity createOpportunity(Opportunity opportunity)
-    {
-	opportunity.save();
-	return opportunity;
     }
 
     // Campaign
