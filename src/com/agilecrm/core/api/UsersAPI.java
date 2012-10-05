@@ -10,8 +10,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.agilecrm.core.DomainUser;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.IMAPEmailPrefs;
@@ -46,15 +44,6 @@ public class UsersAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public DomainUser createDomainUser(DomainUser domainUser)
     {
-
-	// Override the domain in the domain user with the name space
-	domainUser.domain = NamespaceManager.get();
-	if (StringUtils.isEmpty(domainUser.domain))
-	{
-	    System.out.println("Domain user not created");
-	    return null;
-	}
-
 	domainUser.save();
 	return domainUser;
     }

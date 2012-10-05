@@ -166,11 +166,14 @@ public class DomainUser
 
 	String oldNamespace = NamespaceManager.get();
 
+	// Override the domain in the domain user with the name space
+	this.domain = NamespaceManager.get();
+
 	// Check if old namespace is null or empty. Then, do not allow to be
 	// created
-	if (StringUtils.isEmpty(oldNamespace))
+	if (StringUtils.isEmpty(this.domain))
 	{
-	    System.out.println("User cannot be created in null namespace");
+	    System.out.println("Domain user not created");
 	    return;
 	}
 
