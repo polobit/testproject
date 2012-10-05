@@ -83,6 +83,112 @@ public class JSAPI
 	}
     }
 
+    // Add task
+    @Path("js/task")
+    @GET
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces("application/x-javascript")
+    public JSONWithPadding createTask(@QueryParam("email") String email,
+	    @QueryParam("task") String json,
+	    @QueryParam("callback") String jsoncallback)
+    {
+	try
+	{
+	    ObjectMapper mapper = new ObjectMapper();
+	    Task task = mapper.readValue(json, Task.class);
+	    System.out.println(mapper.writeValueAsString(task));
+	    System.out.println(task);
+
+	    // Get Contact
+	    Contact contact = Contact.searchContactByEmail(email);
+	    if (contact == null)
+		return null;
+
+	    task.save();
+
+	    return new JSONWithPadding(new GenericEntity<Task>(task)
+	    {
+	    }, jsoncallback);
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    // Add note
+    @Path("js/note")
+    @GET
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces("application/x-javascript")
+    public JSONWithPadding createNote(@QueryParam("email") String email,
+	    @QueryParam("note") String json,
+	    @QueryParam("callback") String jsoncallback)
+    {
+	try
+	{
+	    ObjectMapper mapper = new ObjectMapper();
+	    Note note = mapper.readValue(json, Note.class);
+	    System.out.println(mapper.writeValueAsString(note));
+	    System.out.println(note);
+
+	    // Get Contact
+	    Contact contact = Contact.searchContactByEmail(email);
+	    if (contact == null)
+		return null;
+
+	    note.save();
+
+	    return new JSONWithPadding(new GenericEntity<Note>(note)
+	    {
+	    }, jsoncallback);
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    // Add deal
+    @Path("js/opportunity")
+    @GET
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces("application/x-javascript")
+    public JSONWithPadding createOpportunity(@QueryParam("email") String email,
+	    @QueryParam("opportunity") String json,
+	    @QueryParam("callback") String jsoncallback)
+    {
+	try
+	{
+	    ObjectMapper mapper = new ObjectMapper();
+	    Opportunity opportunity = mapper.readValue(json, Opportunity.class);
+	    System.out.println(mapper.writeValueAsString(opportunity));
+	    System.out.println(opportunity);
+
+	    // Get Contact
+	    Contact contact = Contact.searchContactByEmail(email);
+	    if (contact == null)
+		return null;
+
+	    opportunity.save();
+
+	    return new JSONWithPadding(new GenericEntity<Opportunity>(
+		    opportunity)
+	    {
+	    }, jsoncallback);
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
     @Path("contacts/add-tags")
     @GET
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })

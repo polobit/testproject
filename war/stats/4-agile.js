@@ -207,7 +207,6 @@ function agile_createContact(data)
 		  if (data.hasOwnProperty(key)) {
 		    //alert(key + " -> " + p[key]);
 			  properties.push(propertyJSON(key, data[key]));
-				 
 		  }
 		}
 	 
@@ -227,15 +226,82 @@ function agile_createContact(data)
 	 	        alert('The POST to abc.com WORKED SUCCESSFULLY');
 	 	    }
 	 	});
-	 
-	 
 }
 
-function agile_add_note()
+function agile_addNote(data)
 {
-	
+ var properties = [];
+	 
+	 for (var key in data) {
+		  if (data.hasOwnProperty(key)) {
+		    //alert(key + " -> " + p[key]);
+			  properties.push(propertyJSON(key, data[key]));
+		  }
+		}
+	 
+	 var model = {};
+	 model.properties = properties;
+	    
+	 // Post
+	 var agile_url = "http://localhost:8888/core/js/api/js/note?callback=?&note=" + encodeURIComponent(JSON.stringify(model));
+	 	
+	 getJSON(agile_url,function(data){
+	 	    var success = data.flag === 'successful';
+	 	    if(success) {
+	 	        alert('The POST to abc.com WORKED SUCCESSFULLY');
+	 	    }
+	 	});
 }
 
+function agile_addTask(data)
+{
+ var properties = [];
+	 
+	 for (var key in data) {
+		  if (data.hasOwnProperty(key)) {
+		    //alert(key + " -> " + p[key]);
+			  properties.push(propertyJSON(key, data[key]));
+		  }
+		}
+	 
+	 var model = {};
+	 model.properties = properties;
+	    
+	 // Post
+	 var agile_url = "http://localhost:8888/core/js/api/js/task?callback=?&task=" + encodeURIComponent(JSON.stringify(model));
+	 	
+	 getJSON(agile_url,function(data){
+	 	    var success = data.flag === 'successful';
+	 	    if(success) {
+	 	        alert('The POST to abc.com WORKED SUCCESSFULLY');
+	 	    }
+	 	});
+}
+
+function agile_addDeal(data)
+{
+ var properties = [];
+	 
+	 for (var key in data) {
+		  if (data.hasOwnProperty(key)) {
+		    //alert(key + " -> " + p[key]);
+			  properties.push(propertyJSON(key, data[key]));
+		  }
+		}
+	 
+	 var model = {};
+	 model.properties = properties;
+	    
+	 // Post
+	 var agile_url = "http://localhost:8888/core/js/api/js/opportunity?callback=?&opportunity=" + encodeURIComponent(JSON.stringify(model));
+	 	
+	 getJSON(agile_url,function(data){
+	 	    var success = data.flag === 'successful';
+	 	    if(success) {
+	 	        alert('The POST to abc.com WORKED SUCCESSFULLY');
+	 	    }
+	 	});
+}
 
 function _getTagsData(data)
 {
