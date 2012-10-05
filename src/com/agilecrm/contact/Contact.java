@@ -67,7 +67,7 @@ public class Contact extends Cursor
     public Short star_value = 0;
 
     // Lead score
-    public Short lead_score = 0;
+    public Integer lead_score = 0;
 
     // Dao
     private static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(
@@ -308,6 +308,34 @@ public class Contact extends Cursor
 	    contact.tags.remove(tag);
 	}
 
+	contact.save();
+	return contact;
+    }
+
+    // Add score based on email
+    public static Contact addScore(String email, Integer score)
+    {
+
+	// Get Contact
+	Contact contact = searchContactByEmail(email);
+	if (contact == null)
+	    return null;
+
+	contact.lead_score = contact.lead_score + score;
+	contact.save();
+	return contact;
+    }
+
+    // Subtract score based on email
+    public static Contact subtractScore(String email, Integer score)
+    {
+
+	// Get Contact
+	Contact contact = searchContactByEmail(email);
+	if (contact == null)
+	    return null;
+
+	contact.lead_score = contact.lead_score - score;
 	contact.save();
 	return contact;
     }
