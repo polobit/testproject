@@ -11,6 +11,8 @@
 			<form id='addTrigger' name="addTriggerForm" class="form-horizontal">
 				<fieldset>
 					<legend>Add Trigger</legend>
+
+					<input name="id" type="hidden" value="{{id}}"/> 		
 					<div class="control-group">
                     	<label class="control-label">Name <span class="field_req">*</span></label>
 						<div class="controls">
@@ -19,16 +21,16 @@
 					</div>
 
 					<div class="control-group">
-                    	<label class="control-label">Condition</label>
+                    	<label class="control-label">Condition  <span class="field_req">*</span></label>
 						<div class="controls ">
-                           <select id="condition" name="condition">
-                              <option>Select...</option>
-                              <option>Tag is added</option>
-                              <option>Tag is deleted</option>
-                              <option>Contact is added</option>
-                              <option>Contact is deleted</option>
-                              <option>Deal is added</option>
-                              <option>Deal is deleted</option>
+                           <select id="type" name="type" class="required">
+                              <option></option>
+                              <option value="TAG_IS_ADDED">Tag is added</option>
+                              <option value="TAG_IS_DELETED">Tag is deleted</option>
+                              <option value="CONTACT_IS_ADDED">Contact is added</option>
+                              <option value="CONTACT_IS_DELETED">Contact is deleted</option>
+                              <option value="DEAL_IS_ADDED">Deal is added</option>
+                              <option value="DEAL_IS_DELETED">Deal is deleted</option>
                        </select>
 						</div>
 					</div>
@@ -36,14 +38,12 @@
 					<div class="control-group">
                     	<label class="control-label">Campaign</label>
 						<div class="controls">
-							    <select id="campaignSelect" name="campaign">
-                                <option class="campaignSelectOption" value="">Select...</option>
+							    <select id="campaign-select" name="campaign_id">
+                                <option value="">Select...</option>
                                </select>
 						</div>
 					</div>
 					
-					
-				
 					<div class="form-actions">          
 				      <a href="#triggers" class="save btn btn-primary">Save</a>
                       <a href="#triggers"  id="cancel" class="btn">Cancel</a> 

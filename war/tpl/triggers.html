@@ -1,7 +1,7 @@
 <script id="triggers-model-template" type="text/html">
 
-  <td>{{name}}</td>
-  <td>{{condition}}</td>
+  <td class='data' data='{{id}}'>{{name}}</td>
+  <td>{{type}}</td>
   <td>{{campaign}}</td>
 <br/>
 	
@@ -24,7 +24,9 @@
 
 <div class="data-block span9">
 	  <div class="data-container">
-		<table class="table table-striped">
+
+		<table class="table table-striped showCheckboxes" url="core/api/workflows/triggers/bulk">
+
 			<thead>
     			<tr>
      				<th>Name</th>
