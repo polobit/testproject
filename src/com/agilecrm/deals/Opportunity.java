@@ -15,9 +15,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import net.sf.json.JSONObject;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
@@ -75,7 +72,7 @@ public class Opportunity
     public String entity_type = "deal";
 
     // Dao
-    private static ObjectifyGenericDao<Opportunity> dao = new ObjectifyGenericDao<Opportunity>(
+    public static ObjectifyGenericDao<Opportunity> dao = new ObjectifyGenericDao<Opportunity>(
 	    Opportunity.class);
 
     // Possible Milestones
@@ -313,26 +310,6 @@ public class Opportunity
 	// Store Created Time
 	if (created_time == 0L)
 	    created_time = System.currentTimeMillis() / 1000;
-    }
-
-    // Delete deals bulk
-    public static void deleteOpportunitiesBulk(JSONArray opportunitiesJSONArray)
-    {
-	List<Key<Opportunity>> opportunityKeys = new ArrayList<Key<Opportunity>>();
-	for (int i = 0; i < opportunitiesJSONArray.length(); i++)
-	{
-
-	    try
-	    {
-		opportunityKeys.add(new Key<Opportunity>(Opportunity.class,
-			Long.parseLong(opportunitiesJSONArray.getString(i))));
-	    }
-	    catch (JSONException e)
-	    {
-		e.printStackTrace();
-	    }
-	}
-	dao.deleteKeys(opportunityKeys);
     }
 
     // Contacts related with deals Author : Yaswanth 08-24-2012

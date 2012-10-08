@@ -136,7 +136,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
     }
 
     // MC - Delete keys by Ids
-    public void deleteByIds(JSONArray ids)
+    public void deleteBulkByIds(JSONArray ids)
     {
 
 	List<Key<T>> keys = new ArrayList<Key<T>>();

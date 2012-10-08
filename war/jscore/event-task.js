@@ -36,9 +36,11 @@ $(function(){
 	    	        			$('#activityModal').find('span.save-status img').remove();
 	    		    	        $("#activityModal").modal('hide');
 	    	        			
-	    	        			App_Settings.navigate("calendar", {
+	    		    	        /*App_Calendar.navigate("calendar", {
 	    	        				trigger: true
-	    	        			});
+	    	        			});*/
+	    		    	        console.log(App_Calendar.tasksListView.collection.toJSON());
+	    		    	        App_Calendar.tasksListView.collection.add(data);
 	    	        		} 
 	    	        	});
 	    	        }
@@ -73,13 +75,20 @@ $(function(){
 			    });
 			    
 			    // Time Picker
-			    $('.timepicker').timepicker({defaultTime: 'current', showMeridian: false, template: 'modal'});
+			    $('.start-timepicker').timepicker({defaultTime: 'current', showMeridian: false, template: 'modal'});
 			    
+			    $('.end-timepicker').timepicker({defaultTime: 'current', showMeridian: false, template: 'modal'});
 			    
 			    // Set the time picker when the modal is shown
-			    $('#activityModal').on('show', function () {
-			    	$('.timepicker').val(getHHMM());			    	
-			    	//$('.timepicker').val("05:30");		    	
+			    $('#activityModal').on('shown', function () {
+			    	
+			    	// Fill current time only when there is no time in the fields
+			    	if($('.start-timepicker').val() == '')
+			    		$('.start-timepicker').val(getHHMM());
+			    	
+			    	if($('.end-timepicker').val() == '')
+			    		$('.end-timepicker').val(getHHMM());
+			    	
 			    });
 			    
 			    // Switch Task and Event: changing color and font-weight
@@ -200,7 +209,11 @@ function saveEvent(formId, modalName, isUpdate){
 			$('#' + modalName).find('span.save-status img').remove();
         	$('#' + modalName).modal('hide');
 
-        	$('#calendar').fullCalendar( 'refetchEvents' );                
+        	$('#calendar').fullCalendar( 'refetchEvents' );
+        	
+        	App_Calendar.navigate("calendar", {
+				trigger: true
+			});
            }
        });
 }

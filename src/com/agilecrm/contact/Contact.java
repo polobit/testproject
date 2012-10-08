@@ -70,7 +70,7 @@ public class Contact extends Cursor
     public Integer lead_score = 0;
 
     // Dao
-    private static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(
+    public static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(
 	    Contact.class);
 
     // Search Tokens
@@ -326,26 +326,6 @@ public class Contact extends Cursor
 
 	this.lead_score = this.lead_score - score;
 	this.save();
-    }
-
-    // Delete contacts bulk
-    public static void deleteContactsBulk(JSONArray contactsJSONArray)
-    {
-	List<Key<Contact>> contactKeys = new ArrayList<Key<Contact>>();
-
-	for (int i = 0; i < contactsJSONArray.length(); i++)
-	{
-	    try
-	    {
-		contactKeys.add(new Key<Contact>(Contact.class, Long
-			.parseLong(contactsJSONArray.getString(i))));
-	    }
-	    catch (JSONException e)
-	    {
-		e.printStackTrace();
-	    }
-	}
-	dao.deleteKeys(contactKeys);
     }
 
     // Get contacts bulk

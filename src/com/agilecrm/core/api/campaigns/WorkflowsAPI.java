@@ -77,7 +77,7 @@ public class WorkflowsAPI
     {
 	JSONArray workflowsJSONArray = new JSONArray(model_ids);
 
-	Workflow.deleteWorkflowsBulk(workflowsJSONArray);
+	Workflow.dao.deleteBulkByIds(workflowsJSONArray);
     }
 
     // Triggers

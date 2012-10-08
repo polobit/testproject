@@ -1,6 +1,5 @@
 package com.campaignio.logger;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +14,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
@@ -50,7 +48,7 @@ public class Log
     public final static String LOG_MESSAGE = "m";
 
     // Dao
-    private static ObjectifyGenericDao<Log> dao = new ObjectifyGenericDao<Log>(
+    public static ObjectifyGenericDao<Log> dao = new ObjectifyGenericDao<Log>(
 	    Log.class);
 
     @NotSaved
@@ -195,26 +193,6 @@ public class Log
     public void save()
     {
 	dao.put(this);
-    }
-
-    // Delete logs bulk
-    public static void deleteLogsBulk(JSONArray logsJSONArray)
-    {
-	List<Key<Log>> logKeys = new ArrayList<Key<Log>>();
-	for (int i = 0; i < logsJSONArray.length(); i++)
-	{
-	    try
-	    {
-		logKeys.add(new Key<Log>(Log.class, Long
-			.parseLong(logsJSONArray.getString(i))));
-	    }
-	    catch (JSONException e)
-	    {
-		e.printStackTrace();
-	    }
-	}
-
-	dao.deleteKeys(logKeys);
     }
 
     @XmlElement
