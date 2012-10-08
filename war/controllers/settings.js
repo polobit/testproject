@@ -8,6 +8,7 @@ var SettingsRouter = Backbone.Router.extend({
         "social-prefs": "socialPrefs",
         "email-templates": "emailTemplates",
         "email-template-add": "emailTemplateAdd",
+        "email-template/:id": "emailTemplateEdit",
         "email": "email",
         "notification-prefs":"notificationPrefs",
         
@@ -91,15 +92,15 @@ var SettingsRouter = Backbone.Router.extend({
 
     },
     emailTemplates: function () {
-        var view = new Base_Collection_View({
+        this.emailTemplatesListView = new Base_Collection_View({
             url: '/core/api/email/templates',
             restKey: "emailTemplates",
             templateKey: "settings-email-templates",
             individual_tag_name: 'tr'
         });
-
-        view.collection.fetch();
-        $('#content').html(view.el);
+        
+        this.emailTemplatesListView.collection.fetch();
+        $('#content').html(this.emailTemplatesListView.el);
      
     },
     emailTemplateAdd: function () {
@@ -114,7 +115,27 @@ var SettingsRouter = Backbone.Router.extend({
          });
         $('#content').html(view.render().el);       
     },
-    
+    emailTemplateEdit: function(id){
+ 
+    	if (!this.emailTemplatesListView || this.emailTemplatesListView.collection.length == 0) {
+    		console.log("true");
+            this.navigate("email-templates", {
+                trigger: true
+            });
+    	}    
+            var currentTemplate = this.emailTemplatesListView.collection.get(id);
+  
+               var view = new Base_Model_View({
+                   url: '/core/api/email/templates',
+                   model: currentTemplate,
+                   template: "settings-email-template-add",
+                   window: 'email-templates',
+               });
+               
+                var view = view.render();
+                $("#content").html(view.el);  
+    	  
+    },
     notificationPrefs: function(){
     	
     	var view = new Base_Model_View({

@@ -236,7 +236,8 @@ public class ContactsAPI
     {
 
 	JSONArray contactsJSONArray = new JSONArray(model_ids);
-	Contact.deleteContactsBulk(contactsJSONArray);
+
+	Contact.dao.deleteBulkByIds(contactsJSONArray);
     }
 
     // Bulk operations - change owner

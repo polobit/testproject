@@ -15,6 +15,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import com.agilecrm.activities.Task;
 import com.agilecrm.campaign.Campaign;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Note;
 import com.agilecrm.deals.Opportunity;
 import com.sun.jersey.api.json.JSONWithPadding;
 

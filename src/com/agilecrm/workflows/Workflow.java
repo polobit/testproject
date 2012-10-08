@@ -1,15 +1,11 @@
 package com.agilecrm.workflows;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -45,7 +41,7 @@ public class Workflow extends Cursor
     private Key<AgileUser> creator_key = null;
 
     // Dao
-    private static ObjectifyGenericDao<Workflow> dao = new ObjectifyGenericDao<Workflow>(
+    public static ObjectifyGenericDao<Workflow> dao = new ObjectifyGenericDao<Workflow>(
 	    Workflow.class);
 
     Workflow()
@@ -113,27 +109,6 @@ public class Workflow extends Cursor
     {
 	return "Name: " + name + " Rules: " + rules + " created_time: "
 		+ created_time + " updated_time" + updated_time;
-    }
-
-    // Delete workflows bulk
-    public static void deleteWorkflowsBulk(JSONArray workflowsJSONArray)
-    {
-	List<Key<Workflow>> worflowKeys = new ArrayList<Key<Workflow>>();
-	for (int i = 0; i < workflowsJSONArray.length(); i++)
-	{
-
-	    try
-	    {
-		worflowKeys.add(new Key<Workflow>(Workflow.class, Long
-			.parseLong(workflowsJSONArray.getString(i))));
-	    }
-	    catch (JSONException e)
-	    {
-		e.printStackTrace();
-	    }
-	}
-
-	dao.deleteKeys(worflowKeys);
     }
 
     @XmlElement(name = "creator")

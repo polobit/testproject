@@ -7,8 +7,8 @@ $(function ()
 	App_Workflows = new WorkflowsRouter();
 	App_Deals = new DealsRouter();
 	App_Admin_Settings = new AdminSettingsRouter();
-	App_Calendar = new SettingsRouter();
-	App_Settings = new CalendarRouter();
+	App_Settings = new SettingsRouter();
+	App_Calendar = new CalendarRouter();
     
 	// For infinite page scrolling
 	Backbone.history.bind("all", currentRoute)

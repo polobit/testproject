@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -11,6 +12,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import com.agilecrm.account.EmailTemplates;
 
@@ -60,5 +64,17 @@ public class EmailTemplatesPrefsAPI
 		.parseLong(id));
 	if (email != null)
 	    email.delete();
+    }
+
+    // Bulk operations - delete
+    @Path("bulk")
+    @DELETE
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void deleteContacts(@FormParam("model_ids") String model_ids)
+	    throws JSONException
+    {
+
+	JSONArray emailsJSONArray = new JSONArray(model_ids);
+	EmailTemplates.dao.deleteBulkByIds(emailsJSONArray);
     }
 }

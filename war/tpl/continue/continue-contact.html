@@ -29,7 +29,7 @@
                     	<label class="control-label">Job Description</label>
 						<div class="controls"> 
 							<input name="title" type="text" id="job_title" placeholder="Job title"
-								  class="required error error" value="{{getPropertyValue properties "title"}}"/>
+								  class="error" value="{{getPropertyValue properties "title"}}"/>
 						</div>
 					</div>
                    
@@ -45,7 +45,7 @@
 					
 					<div class="controls hide">
 						<div class="email multiple-template" data="email">
-							<input type="text" id="email" class="required" name="email" placeholder="Email"/>
+							<input type="text" id="email" name="email" placeholder="Email"/>
 							<select class="email-select" style="width:100px">
 								<option></option>
 								<option value="work">Work</option>
@@ -56,7 +56,7 @@
 
 					<div class="controls second">
 							<div class="email multiple-template"  data="email">
-								<input type="text" id="email" class="required" name="email" placeholder="Email"/>
+								<input type="text" id="email" name="email" placeholder="Email"/>
 								<select class="email-select" style="width:100px">
 									<option></option>
 									<option value="work">Work</option>
@@ -70,7 +70,7 @@
 						<label class="control-label">Add Phone<span><i class="multiple-add icon-plus"></i></span></label>
 						<div class="controls hide">
 							<div class="phone multiple-template" data="phone">
-								<input type="text" id="phone" name="phone" class="required" placeholder="Phone number"/>
+								<input type="text" id="phone" name="phone" placeholder="Phone number"/>
 								<select class="phone-select" style="width:100px">
 									<option></option>
 									<option value="work">Work</option>
@@ -85,7 +85,7 @@
 						</div>
 					<div class="controls second">
 							<div class="phone multiple-template" data="phone">
-								<input type="text" id="phone" name="phone" class="required" placeholder="Phone number"/>
+								<input type="text" id="phone" name="phone" placeholder="Phone number"/>
 								<select class="phone-select" style="width:100px">
 									<option></option>
 									<option value="work">Work test</option>
@@ -105,7 +105,7 @@
 						<label class="control-label">Website<span><i class="multiple-add icon-plus"></i></span></label>
 					<div class="controls hide">
 							<div class="website multiple-template style="display:none" data="website">
-								<input type="text" id="website" class="required" name="website" style="width:105px" 
+								<input type="text" id="website" name="website" style="width:105px" 
 								       placeholder="Website" /> 
 								<select	class="website-select" style="width:100px">
 									<option></option>
@@ -126,7 +126,7 @@
 						</div>
 						<div class="controls second">
 							<div class="website multiple-template style="display:none" data="website">
-								<input type="text" id="website" style="width:105px" class="required" name="website" 
+								<input type="text" id="website" style="width:105px" name="website" 
 								       placeholder="Website" /> 
 								<select	class="website-select" style="width:100px">
 									<option></option>
@@ -149,9 +149,9 @@
 						<!-- End of website template -->
 
 					<div class="control-group second">
-						<label class="control-label">Add Address<span><i class="multiple-add icon-plus"></i></span></label>
+						<label class="control-label">Add Address</label>
 						<div class="controls">
-							<div class="address multiple-template" style="display:none">
+							<div class="address multiple-template">
 							    <input type="text" id="address"
 								       placeholder="address" /> 
 						        <select class="address-type" name="address-type" style="width:100px">
@@ -159,7 +159,7 @@
 									<option value="home">Home</option>
 									<option value="postal">Postal</option>
 									<option value="office">Office</option>
-							 	</select>&nbsp;<i class="multiple-remove icon-remove-circle"></i><br/>
+							 	</select><br/>
 							  	<input type="text" name="city" id="city" placeholder="city" /> <br/>
 							    <input type="text" name="state" id="state" placeholder="state" /> <br/>
 							    <input type="text" name="zip" id="zip" placeholder="zip" /><br/> 
