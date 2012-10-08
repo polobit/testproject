@@ -1,5 +1,7 @@
 package com.agilecrm.core.api;
 
+import java.util.ArrayList;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -18,7 +20,7 @@ import com.agilecrm.contact.Note;
 import com.agilecrm.deals.Opportunity;
 import com.sun.jersey.api.json.JSONWithPadding;
 
-@Path("core/js/api")
+@Path("js/api")
 public class JSAPI
 {
     // This method is called if TEXT_PLAIN is request
@@ -103,7 +105,8 @@ public class JSAPI
 	    Contact contact = Contact.searchContactByEmail(email);
 	    if (contact == null)
 		return null;
-
+	    task.contacts = new ArrayList<String>();
+	    task.contacts.add(contact.id + "");
 	    task.save();
 
 	    return new JSONWithPadding(new GenericEntity<Task>(task)
@@ -138,7 +141,8 @@ public class JSAPI
 	    Contact contact = Contact.searchContactByEmail(email);
 	    if (contact == null)
 		return null;
-
+	    note.contacts = new ArrayList<String>();
+	    note.contacts.add(contact.id + "");
 	    note.save();
 
 	    return new JSONWithPadding(new GenericEntity<Note>(note)
@@ -173,9 +177,10 @@ public class JSAPI
 	    Contact contact = Contact.searchContactByEmail(email);
 	    if (contact == null)
 		return null;
-
+	    opportunity.contacts = new ArrayList<String>();
+	    opportunity.contacts.add(contact.id + "");
 	    opportunity.save();
-
+	    System.out.println("opportunitysaved");
 	    return new JSONWithPadding(new GenericEntity<Opportunity>(
 		    opportunity)
 	    {
