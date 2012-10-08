@@ -22,10 +22,11 @@ public class Campaign
 	    JSONObject subscriberJSON = new JSONObject();
 
 	    List<ContactField> properties = contact.getProperties();
-
+	    System.out.println("List properties" + properties);
 	    for (ContactField field : properties)
 	    {
-		if (field.name != null || field.value != null)
+		System.out.println(field);
+		if (field.name != null && field.value != null)
 		    subscriberJSON.put(field.name, field.value);
 
 	    }
