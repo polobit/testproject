@@ -1,5 +1,5 @@
 function serializeForm(form_id) {
-	
+	console.log("form id in serialize: " + form_id);
 	var arr = $('#' + form_id).serializeArray(),
         obj = {};
 	
@@ -81,6 +81,7 @@ function serializeForm(form_id) {
     	obj[arr[i].name] = arr[i].value;
     }
 
+    console.log(obj);
   //  obj[ $('#' + form_id + ' select').attr('name') ] = $('#' + form_id + ' select').val();
     return obj;
 }

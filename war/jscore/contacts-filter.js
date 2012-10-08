@@ -1,5 +1,7 @@
+var filter_name;
 $(function(){
-    
+	
+	
     // Filter Contacts- Clone Multiple 
     $("i.filter-contacts-multiple-add").die().live('click', function (e) {
     	
@@ -39,6 +41,18 @@ $(function(){
 			}
 		
 	});
+	
+	// Fetch filter result without changing route
+	$('.filter').live('click',function(e){
+		e.preventDefault();
+		var filter_id = $(this).attr('id');
+		filter_name = $(this).attr('data');
+	//	App_Contacts.contacts(undefined, filter_id);
+		
+		App_Contacts.contactsListView.collection.url = "core/api/filters/query/" + filter_id;
+		App_Contacts.contactsListView.collection.fetch();
+	
+	});
     
 });
 
@@ -53,5 +67,10 @@ function setupContactFilterList(cel)
     });
 	
 	contactFiltersListView.collection.fetch();
+	
+	var filter_dropdown_element = contactFiltersListView.render().el;
+	
 	$('#filter-list', cel).html(contactFiltersListView.render().el);
 }
+
+

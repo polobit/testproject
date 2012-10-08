@@ -49,11 +49,15 @@ function setupTagsTypeAhead(models) {
     $(".tags-typeahead").bind("keydown", function(e){
 
     	var tag = $(this).val();
-    	if(e.which == 188)
+    	
+    	// To make a tag when "," keydown and check input is not empty
+    	if(e.which == 188 && tag != "")
     	{
+    		console.log($(this).val());
     		$(this).attr("value","");
     		$(this).closest(".control-group").find('ul.tags').append('<li class="tag"  style="display: inline-block;" data="'+ tag+'">'+tag+'<a class="close" id="remove_tag">&times</a></li>');
     	}
+    	console.log($(this).val());
     });
 }
 

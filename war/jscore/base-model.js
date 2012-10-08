@@ -47,22 +47,58 @@ var Base_Model_View = Backbone.View.extend({
     
     	// Valid & Serialize Form
         var formId = $(this.el).find('form').attr('id');
+        console.log($(this.el).find('form'));
         var $form = $('#' + formId);
         
-        // Validate Form
-        if(!isValidForm($form))
-        {	
-        	return;
+        var isValid;
+        var json;
+
+        // If el have multiple forms
+        if($(this.el).find('form').length > 1)
+        {
+        	json = {};
+        	$.each($(this.el).find('form'), function(index, formelement) { 
+        		
+        		// Validate Form
+        		if(!isValidForm($(formelement)))
+        		{
+        			isValid = false;
+        			return;
+        		}
+            
+        		var form_id = $(formelement).attr('id');
+        		var name = $(formelement).attr('name');
+
+        		if(name)
+        			{
+        				json[name] = serializeForm(form_id);
+        			}
+        		else
+        			{
+        				$.each(serializeForm(form_id), function(key, value){
+        					json[key] = value; 
+        				});
+        			}
+        		});
         }
+
+        	if(isValid == false || !isValidForm($form))
+    		{
+        		return;
+    		}
         
         // Clear all the values first
         this.model.clear({
             silent: true
         });
         
-        // Convert Date String to Epoch
-        var json = serializeForm(formId);
-     
+        if(!json)
+        	{
+        		 json = serializeForm(formId);
+        		console.log(json);
+        	}
+        
+     console.log(json);
         this.model.set(json);
         
         var window = this.options.window;
@@ -96,8 +132,6 @@ var Base_Model_View = Backbone.View.extend({
           			  {
           				$(modal).modal('hide');
           			  } 
-            		  
-            		  
             		}
             	else
             	{
