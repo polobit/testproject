@@ -11,7 +11,7 @@ var Translator_Path_Global = "js/translator.js";
 
 // Changed by yasin (8/12/2011)
 // Default Nodes to be populated 
-var First_Nodes_Toolbar_Global = new Array("json/nodes/email/send_email.jsp", "json/nodes/common/wait.js", "json/nodes/email/clicked.js", "json/nodes/email/ab.js", "json/nodes/email/sex.js", "json/nodes/common/score.js");
+var First_Nodes_Toolbar_Global = new Array("json/nodes/email/send_email.jsp", "json/nodes/common/wait.js", "json/nodes/email/clicked.js", "json/nodes/email/ab.js", "json/nodes/email/sex.js", "json/nodes/common/score.js", "json/nodes/crm/addnote.js");
 var Second_Nodes_Toolbar_Global = new Array("json/nodes/sms/sendmessage.js", "json/nodes/sms/getmessage.js", "json/nodes/sms/menusms.js", "json/nodes/common/transfer.js", "json/nodes/developers/jsonio.js", "json/nodes/developers/condition.js");
 
 /*

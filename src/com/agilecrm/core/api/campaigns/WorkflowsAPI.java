@@ -133,13 +133,4 @@ public class WorkflowsAPI
 	Trigger.deleteTriggersBulk(triggersJSONArray);
     }
 
-    @Path("triggers")
-    @DELETE
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Trigger deleteTrigger(Trigger trigger)
-    {
-	trigger.delete();
-	return trigger;
-    }
 }
