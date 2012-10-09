@@ -47,7 +47,6 @@ var Base_Model_View = Backbone.View.extend({
     
     	// Valid & Serialize Form
         var formId = $(this.el).find('form').attr('id');
-        console.log($(this.el).find('form'));
         var $form = $('#' + formId);
         
         var isValid;
@@ -137,8 +136,14 @@ var Base_Model_View = Backbone.View.extend({
             	{
             		$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>Saved Successfully</i></p></small></div>');
             		$(".form-actions", this.el).append($save_info);
-            		$save_info.show().delay(3000).hide(1);
             	}
+            },
+            error : function (model, response)
+            {
+            	alert("error");
+            	$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'+response.responseText+'</i></p></small></div>');
+            	$(".form-actions", this.el).append($save_info);
+            	$save_info.show().delay(3000).hide(1);
             }
         });
     },
@@ -156,10 +161,18 @@ var Base_Model_View = Backbone.View.extend({
         		// execute the callback, passing parameters as necessary
         		callback($(this.el));
         	}
-        	
-        	// Let's try to deserialize too if it is not empty
-    		if(this.options.isNew != true)
-    			deserializeForm(this.model.toJSON(), $(this.el).find('form'));	
+
+        	// Deserialization
+    		if(this.options.isNew != true )
+    			{
+    				//If el have more than 1 form deserialize all forms
+    				 if($(this.el).find('form').length > 1)
+    					deserializeMultipleForms(this.model.toJSON(), $(this.el).find('form'));
+    				
+    				//If el have one form
+    				else if($(this.el).find('form').length == 1)
+    					deserializeForm(this.model.toJSON(), $(this.el).find('form'));	
+    			}
     	}
     	else
     	{

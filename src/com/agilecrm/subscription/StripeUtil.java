@@ -66,6 +66,7 @@ public class StripeUtil
     {
 	Customer customer = new Gson().fromJson(customerJSON.toString(),
 		Customer.class);
+
 	return Customer.retrieve(customer.getId());
     }
 

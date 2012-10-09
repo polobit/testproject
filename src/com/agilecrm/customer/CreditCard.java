@@ -9,7 +9,7 @@ public class CreditCard
     public Integer cvc = null;
     public String address_line1 = "";
     public String address_line2 = "";
-    public String address_city = "";
+    public String address_state = "";
     public String address_zip = "";
     public String address_country = "";
     public String gateway = "";
@@ -22,7 +22,7 @@ public class CreditCard
     {
 	return "CreditCard: {name: " + name + ", cvc: " + cvc
 		+ ", address_line1: " + address_line1 + ", address_line2: "
-		+ address_line2 + ", address_city: " + address_city
+		+ address_line2 + ", address_city: " + address_state
 		+ ", address_zip: " + address_zip + ", address_country: "
 		+ address_country + ", gateway: " + gateway + ", number: "
 		+ number + ", exp_month: " + exp_month + ", exp_year: "

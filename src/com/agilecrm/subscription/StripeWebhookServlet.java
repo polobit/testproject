@@ -53,16 +53,22 @@ public class StripeWebhookServlet extends HttpServlet
 		    Sendmail.sendMail("praveen@invox.com", "yaswanth",
 			    AgileUser.getCurrentAgileUser().open_id_user
 				    .getEmail(), "paymentfailed",
-			    "test@invox.com", "", "your payment failed");
+			    "praveen@invox.com", "your payment failed", null);
 		}
 		else if (number_of_attempts == 2)
 		{
 		    // Send email to all admins
 		}
-		else
-		{
-		    // Delete data
-		}
+	    }
+	    else if (eventJSON.getString("type").equals(
+		    Globals.STRIPE_SUBSCRIPTION_DELETED))
+	    {
+		Sendmail.sendMail(
+			"praveen@invox.com",
+			"yaswanth",
+			AgileUser.getCurrentAgileUser().open_id_user.getEmail(),
+			"Account Deleted", "praveen@invox.com",
+			"your account deleted", null);
 	    }
 
 	}
@@ -73,8 +79,4 @@ public class StripeWebhookServlet extends HttpServlet
 	    e.printStackTrace();
 	}
     }
-    /*
-     * public void doPost(HttpServletRequest req, HttpServletResponse resp)
-     * throws ServletException, IOException { System.out.println(req); }
-     */
 }

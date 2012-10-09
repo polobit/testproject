@@ -213,13 +213,24 @@ function deserializeForm(data, form)
 	});
 }
 
+// To deserialize multiple forms in content
+function deserializeMultipleForms(data, form)
+{
+	$.each(form, function(index, form_element){
+		var key = $(form_element).attr('name');
+
+		// If form have attribute name deserialize with particular object
+		if(key && data[key])
+			{
+				deserializeForm(data[key], $(form_element));
+			}
+		
+		else
+			deserializeForm(data, $(form_element));
+	});
+}
 
 function isValidForm(form) {
-    
-	 console.log($(form).html());
-	 console.log("Validating form");
-    
-	 
 	    $(form).validate({
 	        debug: true,
 	        errorElement: 'span',

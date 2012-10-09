@@ -41,5 +41,6 @@ public class Globals
 
     // Stripe events
     public static final String STRIPE_INVOICE_PAYMENT_FAILED = "invoice.payment_failed";
+    public static final String STRIPE_SUBSCRIPTION_DELETED = "customer.subscription.deleted";
 
 }

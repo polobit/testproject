@@ -1,15 +1,16 @@
 package com.agilecrm.subscription;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.Globals;
 import com.agilecrm.billing.AgileBilling;
 import com.agilecrm.customer.CreditCard;
 import com.agilecrm.customer.Plan;
+import com.google.gson.Gson;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
@@ -51,19 +52,21 @@ public class StripeImpl implements AgileBilling
 	updateParams.put("quantity", plan.quantity);
 
 	// Update customer with changed plan
-	customer.update(updateParams);
+	customer = customer.update(updateParams);
 
 	return StripeUtil.getJSONFromCustomer(customer);
 
     }
 
     // Update customer credit card
-    public JSONObject updateCustomerCard(JSONObject stripeCustomer,
+    public JSONObject updateCreditCard(JSONObject stripeCustomer,
 	    CreditCard cardDetails) throws Exception
     {
 
 	// Get Customer to update credit card retrieves from stripe
 	Customer customer = StripeUtil.getCustomerFromJson(stripeCustomer);
+
+	System.out.println(customer);
 
 	Map<String, Object> updateParams = new HashMap<String, Object>();
 	Map<String, Object> cardParams = StripeUtil.getCardParms(cardDetails);
@@ -72,21 +75,13 @@ public class StripeImpl implements AgileBilling
 	updateParams.put("card", cardParams);
 
 	// Update customer with changed card details
-	customer.update(updateParams);
+	customer = customer.update(updateParams);
 
 	return StripeUtil.getJSONFromCustomer(customer);
     }
 
-    // Delete customer from Stripe
-    public void deleteCustomer(JSONObject stripeCustomer) throws Exception
-    {
-	Customer customer = StripeUtil.getCustomerFromJson(stripeCustomer);
-	customer.delete();
-
-    }
-
     // Get invoices of particular customer stripe id
-    public List<Invoice> getInvoices(JSONObject stripeCustomer)
+    public JSONObject getInvoices(JSONObject stripeCustomer)
 	    throws StripeException
     {
 
@@ -98,6 +93,25 @@ public class StripeImpl implements AgileBilling
 	// Fetch all invoices for given stripe id
 	invoiceCollection = Invoice.all(invoiceParams);
 
-	return invoiceCollection.getData();
+	JSONObject invoiceJSON = null;
+	try
+	{
+	    invoiceJSON = new JSONObject(new Gson().toJson(invoiceCollection));
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	return invoiceJSON;
+    }
+
+    // Delete customer from Stripe
+    public void deleteCustomer(JSONObject stripeCustomer) throws Exception
+    {
+	Customer customer = StripeUtil.getCustomerFromJson(stripeCustomer);
+	customer.delete();
+
     }
 }

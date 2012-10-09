@@ -38,7 +38,7 @@ public class Subscription
     public CreditCard card_details = null;
 
     @NotSaved(IfDefault.class)
-    private String enripted_card_details = null;
+    private String encrypted_card_details = null;
 
     public static enum Type
     {
@@ -83,15 +83,16 @@ public class Subscription
     {
 	return "Subscription: {id: " + id + ", plan: " + plan
 		+ ", card_details: " + card_details
-		+ ", enripted_card_details: " + enripted_card_details
+		+ ", enripted_card_details: " + encrypted_card_details
 		+ ", status: " + status + ", created_time: " + created_time
 		+ ", updated_time: " + updated_time + ", billing_data: "
 		+ billing_data + ", billing_data_json_string: "
 		+ billing_data_json_string + ", gateway: " + gateway + "}";
     }
 
-    public void delete()
+    public void delete() throws Exception
     {
+	deleteCustomer();
 	dao.delete(this);
     }
 
@@ -105,7 +106,7 @@ public class Subscription
     {
 	Subscription subscription = Subscription.getSubscription();
 
-	// If Subscription object is already exists update it
+	// If Subscription object already exists, update it
 	if (subscription != null)
 	    this.id = subscription.id;
 
@@ -127,10 +128,16 @@ public class Subscription
     public static Subscription updatePlan(Plan plan) throws Exception
     {
 	Subscription subscription = getSubscription();
-	subscription.plan = plan;
+
+	// If customer is already on same plan do not update
+	if (plan.plan_id.equals(subscription.plan.plan_id)
+		&& plan.quantity.equals(subscription.plan.quantity))
+	    return subscription;
 
 	subscription.billing_data = subscription.getAgileBilling().updatePlan(
 		subscription.billing_data, plan);
+
+	subscription.plan = plan;
 
 	subscription.save();
 
@@ -138,19 +145,28 @@ public class Subscription
     }
 
     // Update credit card details of customer
-    public static Subscription updateCustomerCard(CreditCard card_details)
+    public static Subscription updateCreditCard(CreditCard cardDetails)
 	    throws Exception
     {
 
 	Subscription subscription = getSubscription();
 
 	subscription.billing_data = subscription.getAgileBilling()
-		.updateCustomerCard(subscription.billing_data, card_details);
+		.updateCreditCard(subscription.billing_data, cardDetails);
+
+	subscription.card_details = cardDetails;
+
+	System.out.println(subscription);
 
 	// Save updated details
 	subscription.save();
 
 	return subscription;
+    }
+
+    public static Subscription getInvoice()
+    {
+	return null;
     }
 
     public void deleteCustomer() throws Exception
@@ -163,7 +179,8 @@ public class Subscription
     private AgileBilling getAgileBilling() throws Exception
     {
 	return (AgileBilling) Class.forName(
-		"com.agilecrm.subscription." + gateway + "Impl").newInstance();
+		"com.agilecrm.subscription." + this.gateway + "Impl")
+		.newInstance();
 
     }
 
@@ -184,11 +201,11 @@ public class Subscription
 	else
 	    updated_time = System.currentTimeMillis() / 1000;
 
-	Gson gson = new Gson();
 	try
 	{
-	    this.enripted_card_details = ClickDeskEncrytion.RSAEncrypt(gson
-		    .toJson(this.enripted_card_details).getBytes());
+	    this.encrypted_card_details = ClickDeskEncrytion
+		    .RSAEncrypt(new Gson().toJson(this.encrypted_card_details)
+			    .getBytes());
 	}
 	catch (Exception e)
 	{
@@ -209,4 +226,5 @@ public class Subscription
 	    e.printStackTrace();
 	}
     }
+
 }

@@ -327,4 +327,11 @@ $(function()
 		else
 			return "(" + this.length + " Total)";
 	});
+	
+	// Converts string into JSON
+	Handlebars.registerHelper('stringToJSON', function(detail, options){
+		
+		this.billingData = JSON.parse(this["billingData"]);
+		return options.fn(this.billingData);
+	});
 });
