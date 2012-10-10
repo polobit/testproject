@@ -1,6 +1,7 @@
 package com.agilecrm.core.api.contacts;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -225,6 +226,32 @@ public class ContactsAPI
     public Contact searchContactByEmail(@PathParam("email") String email)
     {
 	return Contact.searchContactByEmail(email);
+    }
+
+    // searching contacts by EmailList
+    @Path("/search/email")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces({ MediaType.APPLICATION_JSON })
+    public List<Contact> searchContactsByEmailList(
+	    @FormParam("email_ids") String email_ids) throws JSONException
+    {
+	JSONArray contactsJSONArray = new JSONArray(email_ids);
+	List<Contact> contacts_list = new ArrayList<Contact>();
+	for (int i = 0; i < contactsJSONArray.length(); i++)
+	{
+	    try
+	    {
+		Contact contactDetails = Contact
+			.searchContactByEmail(contactsJSONArray.getString(i));
+		contacts_list.add(contactDetails);
+	    }
+	    catch (JSONException e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+	return contacts_list;
     }
 
     // Bulk operations - delete
