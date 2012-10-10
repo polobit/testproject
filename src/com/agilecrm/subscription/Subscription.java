@@ -90,12 +90,6 @@ public class Subscription
 		+ billing_data_json_string + ", gateway: " + gateway + "}";
     }
 
-    public void delete() throws Exception
-    {
-	deleteCustomer();
-	dao.delete(this);
-    }
-
     public static Subscription getSubscription()
     {
 	Objectify ofy = ObjectifyService.begin();
@@ -156,8 +150,6 @@ public class Subscription
 
 	subscription.card_details = cardDetails;
 
-	System.out.println(subscription);
-
 	// Save updated details
 	subscription.save();
 
@@ -174,6 +166,12 @@ public class Subscription
 	getAgileBilling().deleteCustomer(billing_data);
 
 	delete();
+    }
+
+    public void delete() throws Exception
+    {
+	deleteCustomer();
+	dao.delete(this);
     }
 
     private AgileBilling getAgileBilling() throws Exception

@@ -232,15 +232,10 @@ function deserializeMultipleForms(data, form)
 
 function isValidForm(form) {
 	
-	
+	 // Credit card validation to check card is valid for next 3 months
 	 jQuery.validator.addMethod("atleastThreeMonths", function(value, element) {
-		 console.log(value);
-		 	
-		 console.log(form);
 		 
-		 var year, month
-			
-				month = $(element).siblings('select.exp_month').val();
+		 var month = $(element).siblings('select.exp_month').val(),
 				year = value;
 		 	
 		 	// date selected
@@ -248,23 +243,21 @@ function isValidForm(form) {
 		 	
 		 	var one_day = 1000*60*60*24;
 		 	
-		 	console.log(((date - (new Date().getTime()))/one_day) );
-		 	
-		    return this.optional(element) || (((date - (new Date().getTime()))/one_day) > 90);
+		    return this.optional(element) || (((date - new Date().getTime())/one_day) > 90);
 		}, "*Card should be atleast 3 months valid");
 	
 	
 	
 	
 	    $(form).validate({
-	    	 rule : {
+	    	 rules : {
 	    		 atleastThreeMonths : true
 	    	    },
 	        debug: true,
 	        errorElement: 'span',
 	        errorClass: 'help-inline',
 	        highlight: function (element, errorClass) {    
-	        	$(element).closest(".control-group").addClass('error'); 
+	        	$(element).closest(".control-group").addClass('error');
 	        },
 	        unhighlight: function (element, errorClass) {
 	        	 $(element).closest(".control-group").removeClass('error'); 
