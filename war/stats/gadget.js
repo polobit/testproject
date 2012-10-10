@@ -33,10 +33,17 @@ $(function() {
 	      {	
 	        return;
 	      }
-		  console.log($(el).serializeArray());
+		  var json = [];
+		  var obj = {};
+		  json = $(el).serializeArray();
+		  $.each(json, function(index, val){
+			 obj[val.name] = val.value;
+			});
+		  obj = JSON.stringify(obj);
+		  console.log(obj);
 		  _agile = [];
-		  _agile.push(["_createContact", {"email": "yaswanth3@invox.com", "first_name":"yaswanth2", "last_name":"chapalamadugu"}, {"tags":"tag1 tag2"}]);
-		 _agile_execute();
+		  _agile.push(["_createContact", obj, {"tags":"tag1 tag2"}]);
+		  _agile_execute();
 	});
 	
 	//Adding Note for contact
@@ -47,8 +54,19 @@ $(function() {
 	      {	
 	      	return;
 	      }
-		  console.log($(el).serializeArray());
-		  _agile.push(["_addNote", {"email": "yaswanth3@invox.com"}, {"subject":"about", "description":"details"}]);
+		  var json = [];
+		  var obj = {};
+		  var email = {};
+		  json = $(el).serializeArray();
+		  $.each(json, function(index, val){
+			  if(val.name == "email")
+				  email[val.name] = val.value;
+			  else
+			      obj[val.name] = val.value;
+			});
+		  _agile = [];
+		  _agile.push(["_addNote", email, obj]);
+		  _agile_execute();
 	});
 	
 	//Adding Task for contact
@@ -59,8 +77,19 @@ $(function() {
 	      {	
 	      	return;
 	      }
-		  console.log($(el).serializeArray());
-		  _agile.push(["_addTask", {"email": "yaswanth3@invox.com"}, {"subject":"TaskName", "type":"CALL", "due":"6989789","priority_type":"HIGH"}]);
+		  var json = [];
+		  var obj = {};
+		  var email = {};
+		  json = $(el).serializeArray();
+		  $.each(json, function(index, val){
+			  if(val.name == "email")
+				  email[val.name] = val.value;
+			  else
+			      obj[val.name] = val.value;
+			});
+		  _agile = [];
+		  _agile.push(["_addTask", email, obj]);
+		  _agile_execute();
 	});
 	
 	//Adding Deal for contact
@@ -71,8 +100,19 @@ $(function() {
 	      {	
 	      	return;
 	      }
-		  console.log($(el).serializeArray());
-		  _agile.push(["_addDeal", {"email": "yaswanth3@invox.com"}, {"name":"DealName", "expected_value":"45654", "milestone":"Open", "probability":"99", "close_date":"6256466"}]);
+		  var json = [];
+		  var obj = {};
+		  var email = {};
+		  json = $(el).serializeArray();
+		  $.each(json, function(index, val){
+			  if(val.name == "email")
+				  email[val.name] = val.value;
+			  else
+			      obj[val.name] = val.value;
+			});
+		  _agile = [];
+		  _agile.push(["_addDeal", email, obj]);
+		  _agile_execute();
 	});
 	
 	//toggle event for add note
