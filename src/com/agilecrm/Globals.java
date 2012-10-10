@@ -32,4 +32,15 @@ public class Globals
     public static final String TWITTER_API_KEY = "fhaEpuOQOJYMfDnxHFf7PQ";
     public static final String TWITTER_SECRET_KEY = "AUoq9TJHwKRIdngQa39RBskYBzn6aZNkERqj5z753k";
 
+    // Payment gateways
+    public static final String STRIPE = "Stripe";
+    public static final String PAYPAL = "Paypal";
+
+    // Stripe
+    public static final String STRIPE_API_KEY = "sk_28JToWfgk6F4wJ9o21W6e6qaNXqe5";
+
+    // Stripe events
+    public static final String STRIPE_INVOICE_PAYMENT_FAILED = "invoice.payment_failed";
+    public static final String STRIPE_SUBSCRIPTION_DELETED = "customer.subscription.deleted";
+
 }

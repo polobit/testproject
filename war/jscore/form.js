@@ -1,5 +1,5 @@
 function serializeForm(form_id) {
-	
+	console.log("form id in serialize: " + form_id);
 	var arr = $('#' + form_id).serializeArray(),
         obj = {};
 	
@@ -23,22 +23,7 @@ function serializeForm(form_id) {
     	    }).get());
     
     // Serialize tags
-    arr = arr.concat( $('#' + form_id + ' .tags').map(
-    		 function () {
-    			 var values = [];
-    			 
-    			 if(!isArray($(this).children()));
-    			 	
-    			 $.each($(this).children(), function(index, data) { 
-    				 values.push(($(data).val()).toString())
- 	            	
- 	            });
-    			 
-        	     return {
-        	            "name" : $(this).attr('name'),
-        	            "value":values
-        	        };
-        	    }).get() );
+    arr = arr.concat(getTags(form_id));
     
     
     // Multiple select 
@@ -96,6 +81,7 @@ function serializeForm(form_id) {
     	obj[arr[i].name] = arr[i].value;
     }
 
+    console.log(obj);
   //  obj[ $('#' + form_id + ' select').attr('name') ] = $('#' + form_id + ' select').val();
     return obj;
 }
@@ -138,7 +124,7 @@ function deserializeForm(data, form)
 	           }
 	    
 	           // Deserialize tags
-	           else if(fel.hasClass('tags') && tag == "ul")
+	           else if(fel.hasClass('tagsinput') && tag == "ul")
 	          {
 	        	   if(!isArray(el))
 	        		   {
@@ -148,8 +134,9 @@ function deserializeForm(data, form)
 	        	  $.each(el, function(index, contact){
 	                   var tag_name;
 	                   var tag_id = contact.id;
-	                   tag_name = getPropertyValue(contact.properties, "first_name") + getPropertyValue(contact.properties, "last_name");
-	                   $('.' + fel.attr('class'), form).append('<li class="label label-warning" value="'+tag_id+'" style="display: inline-block; vertical-align: middle; margin-right:3px; ">'+tag_name+'<a class="icon-remove" id="remove_tag"></a></li>');
+	                   tag_name = getPropertyValue(contact.properties, "first_name") + " " + getPropertyValue(contact.properties, "last_name");
+	                   console.log(tag_name);
+	                   $('.tagsinput', form).append('<li class="tag" value="'+tag_id+'" class="tag"  style="display: inline-block; ">'+tag_name+'<a class="close" id="remove_tag">&times</a></li>');
 	                  });	        	    
 	           }
 	           
@@ -226,21 +213,51 @@ function deserializeForm(data, form)
 	});
 }
 
+// To deserialize multiple forms in content
+function deserializeMultipleForms(data, form)
+{
+	$.each(form, function(index, form_element){
+		var key = $(form_element).attr('name');
+
+		// If form have attribute name deserialize with particular object
+		if(key && data[key])
+			{
+				deserializeForm(data[key], $(form_element));
+			}
+		
+		else
+			deserializeForm(data, $(form_element));
+	});
+}
 
 function isValidForm(form) {
-    
-	 console.log($(form).html());
-	 console.log("Validating form");
-	    $.validator.addMethod("noSpecialChars", function(value, element) {
-			return this.optional(element) || /^[a-z0-9\_\s]+$/i.test(value);
-		    }, "Username must contain only letters, numbers,space or underscore.");
-	 
+	
+	 // Credit card validation to check card is valid for next 3 months
+	 jQuery.validator.addMethod("atleastThreeMonths", function(value, element) {
+		 
+		 var month = $(element).siblings('select.exp_month').val(),
+				year = value;
+		 	
+		 	// date selected
+		 	var date = new Date().setFullYear(year, month-1);
+		 	
+		 	var one_day = 1000*60*60*24;
+		 	
+		    return this.optional(element) || (((date - new Date().getTime())/one_day) > 90);
+		}, "*Card should be atleast 3 months valid");
+	
+	
+	
+	
 	    $(form).validate({
+	    	 rules : {
+	    		 atleastThreeMonths : true
+	    	    },
 	        debug: true,
 	        errorElement: 'span',
 	        errorClass: 'help-inline',
-	        highlight: function (element, errorClass) {     
-	  	      $(element).closest(".control-group").addClass('error'); 
+	        highlight: function (element, errorClass) {    
+	        	$(element).closest(".control-group").addClass('error');
 	        },
 	        unhighlight: function (element, errorClass) {
 	        	 $(element).closest(".control-group").removeClass('error'); 

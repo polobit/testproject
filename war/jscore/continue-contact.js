@@ -61,8 +61,8 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, url, continueCont
     }
     if (id != null) obj['id'] = id;
 
-    var tags = getTags('tags-new-person');
-    if (tags != undefined) obj.tags = tags;
+    var tags = getTags(form_id);
+    if (tags != undefined) obj.tags = tags[0].value;
     
     // Save contact
     var contactModel = new Backbone.Model();

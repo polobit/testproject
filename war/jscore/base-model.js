@@ -49,20 +49,52 @@ var Base_Model_View = Backbone.View.extend({
         var formId = $(this.el).find('form').attr('id');
         var $form = $('#' + formId);
         
-        // Validate Form
-        if(!isValidForm($form))
-        {	
-        	return;
+        var isValid;
+        var json;
+
+        // If el have multiple forms
+        if($(this.el).find('form').length > 1)
+        {
+        	json = {};
+        	$.each($(this.el).find('form'), function(index, formelement) { 
+        		
+        		// Validate Form
+        		if(!isValidForm($(formelement)))
+        		{
+        			isValid = false;
+        			return;
+        		}
+            
+        		var form_id = $(formelement).attr('id');
+        		var name = $(formelement).attr('name');
+
+        		if(name)
+        			{
+        				json[name] = serializeForm(form_id);
+        			}
+        		else
+        			{
+        				$.each(serializeForm(form_id), function(key, value){
+        					json[key] = value; 
+        				});
+        			}
+        		});
         }
+
+        	if(isValid == false || !isValidForm($form))
+    		{
+        		return;
+    		}
         
         // Clear all the values first
         this.model.clear({
             silent: true
         });
         
-        // Convert Date String to Epoch
-        var json = serializeForm(formId);
-     
+        if(!json)
+        	json = serializeForm(formId);
+        
+     console.log(json);
         this.model.set(json);
         
         var window = this.options.window;
@@ -96,15 +128,18 @@ var Base_Model_View = Backbone.View.extend({
           			  {
           				$(modal).modal('hide');
           			  } 
-            		  
-            		  
             		}
             	else
             	{
             		$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>Saved Successfully</i></p></small></div>');
             		$(".form-actions", this.el).append($save_info);
-            		$save_info.show().delay(3000).hide(1);
             	}
+            },
+            error : function (model, response)
+            {
+            	$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'+response.responseText+'</i></p></small></div>');
+            	$(".form-actions", this.el).append($save_info);
+            	$save_info.show().delay(3000).hide(1);
             }
         });
     },
@@ -122,10 +157,18 @@ var Base_Model_View = Backbone.View.extend({
         		// execute the callback, passing parameters as necessary
         		callback($(this.el));
         	}
-        	
-        	// Let's try to deserialize too if it is not empty
-    		if(this.options.isNew != true)
-    			deserializeForm(this.model.toJSON(), $(this.el).find('form'));	
+
+        	// Deserialization
+    		if(this.options.isNew != true )
+    			{
+    				//If el have more than 1 form deserialize all forms
+    				 if($(this.el).find('form').length > 1)
+    					deserializeMultipleForms(this.model.toJSON(), $(this.el).find('form'));
+    				
+    				//If el have one form
+    				else if($(this.el).find('form').length == 1)
+    					deserializeForm(this.model.toJSON(), $(this.el).find('form'));	
+    			}
     	}
     	else
     	{

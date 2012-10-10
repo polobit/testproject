@@ -9,6 +9,7 @@ $(function ()
 	App_Admin_Settings = new AdminSettingsRouter();
 	App_Settings = new SettingsRouter();
 	App_Calendar = new CalendarRouter();
+	App_Subscription = new SubscribeRouter();
     
 	// For infinite page scrolling
 	Backbone.history.bind("all", currentRoute)

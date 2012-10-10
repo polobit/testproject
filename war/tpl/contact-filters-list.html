@@ -1,7 +1,7 @@
 <script id="contact-filter-list-collection-template" type="text/html">
  
 <div class="btn-group right" style='top:-18px;position:relative'>
-	<button class="btn">Contacts Filter</button>
+	<button class="btn filter-dropdown"><i class="icon-wrench" style="margin-right:3px"></i></button>
 	<button class="btn dropdown-toggle" data-toggle="dropdown">
     	<span class="caret"></span>
   	</button>
@@ -19,7 +19,7 @@
 </script>
 
 <script id="contact-filter-list-model-template" type="text/html">
-<a id='{{id}}' href="#contact-filter/{{id}}">{{name}}</a>
+<a id='{{id}}' class="filter" data={{name}} href="#contact-filter/{{id}}">{{name}}</a>
 </script>
 
 

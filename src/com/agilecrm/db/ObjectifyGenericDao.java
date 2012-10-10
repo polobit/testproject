@@ -28,6 +28,7 @@ import com.agilecrm.contact.Tag;
 import com.agilecrm.core.DomainUser;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.subscription.Subscription;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.IMAPEmailPrefs;
 import com.agilecrm.user.NotificationPrefs;
@@ -90,6 +91,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	ObjectifyService.register(Widget.class);
 
+	// Stripe
+	ObjectifyService.register(Subscription.class);
     }
 
     protected Class<T> clazz;
