@@ -231,12 +231,40 @@ function deserializeMultipleForms(data, form)
 }
 
 function isValidForm(form) {
+	
+	
+	 jQuery.validator.addMethod("atleastThreeMonths", function(value, element) {
+		 console.log(value);
+		 	
+		 console.log(form);
+		 
+		 var year, month
+			
+				month = $(element).siblings('select.exp_month').val();
+				year = value;
+		 	
+		 	// date selected
+		 	var date = new Date().setFullYear(year, month-1);
+		 	
+		 	var one_day = 1000*60*60*24;
+		 	
+		 	console.log(((date - (new Date().getTime()))/one_day) );
+		 	
+		    return this.optional(element) || (((date - (new Date().getTime()))/one_day) > 90);
+		}, "*Card should be atleast 3 months valid");
+	
+	
+	
+	
 	    $(form).validate({
+	    	 rule : {
+	    		 atleastThreeMonths : true
+	    	    },
 	        debug: true,
 	        errorElement: 'span',
 	        errorClass: 'help-inline',
-	        highlight: function (element, errorClass) {     
-	  	      $(element).closest(".control-group").addClass('error'); 
+	        highlight: function (element, errorClass) {    
+	        	$(element).closest(".control-group").addClass('error'); 
 	        },
 	        unhighlight: function (element, errorClass) {
 	        	 $(element).closest(".control-group").removeClass('error'); 

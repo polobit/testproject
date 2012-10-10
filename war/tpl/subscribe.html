@@ -9,9 +9,8 @@
 					<label class="control-label">Plan<span class="field_req">*</span></label>
 					<div class="controls">
 						<select class="required" name="plan_id">
-							<option value="">select</option>
-							<option value="plan10">lite</option>
-							<option value="plan20">pro</option>
+							<option value="plan10">Lite</option>
+							<option value="plan20">Pro</option>
 						</select>
 					</div>
 				</div>
@@ -20,7 +19,6 @@
 						class="field_req">*</span></label>
 					<div class="controls">
 						<select class="required" name="quantity">
-							<option value="">select</option>
 							<option value="1">1</option>
 							<option value="2">2</option>
 							<option value="3">3</option>
@@ -49,38 +47,33 @@
 					</div>
 				</div>
 
-				<div class="control-group">
+					<div class="control-group">
 					<label class="control-label">Expiry Month<span
 						class="field_req">*</span></label>
 					<div class="controls">
-						<select name="exp_month" id="exp_month"
-							class="input required  digits exp_month" placeholder="Expiry Month"></select>
+						<select name="exp_month" id= "exp_month" class="input span2 digits  exp_month"
+							placeholder="Expiry Month" style="width:94px" onchange=$("#exp_year").valid();></select>	
+						<span style="margin-left:10px;margin-right:10px" >/ </span>	
+						<select name="exp_year" id="exp_year" class="input required  digits span2 exp_year atleastThreeMonths"
+							placeholder="Expiry Year" style="width:94px"></select>
 					</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label">Expiry Year<span
-						class="field_req">*</span></label>
-					<div class="controls">
-						<select name="exp_year" id="exp_year"
-							class="input required  digits exp_year" placeholder="Expiry Year"></select>
-					</div>
-				</div>
-				<div class="control-group">
-					<label class="control-label">CVC<span class="field_req">*</span></label>
-					<div class="controls">
-						<input type="text" name="cvc" class="input required  digits"
-							placeholder="Card security code" />
-					</div>
-				</div>
-				<div class="control-group">
-					<label class="control-label">Address<span class="field_req">*</span></label>
+			<div class="control-group">
+					<label class="control-label">Address</label>
 					<div class="controls">
 						<input type="text" name="address_line1" class='required'
-							id="address1" placeholder="address" /> <br /> <br /> 
-						<input
-							type="text" name="address_line2" id="address2"
-							placeholder="address" /> <br /> <br /> <input type="text"
-							name="address_zip" class='required' id="address_zip"
+							id="address1" placeholder="address" />
+					</div>
+				</div>
+				<div class="control-group">
+					<div class="controls">
+						<input type="text" name="address_line2" id="address2"
+							placeholder="address" />
+					</div>
+				</div>
+				<div class="control-group">
+					<div class="controls">
+						<input type="text" name="address_zip" class='required' id="address_zip"
 							placeholder="zip" /><br /> <br />
 					</div>
 				</div>
@@ -156,6 +149,7 @@
 		</legend>
 
 		{{#stringToJSON "billingData"}} {{/stringToJSON}}
+
 		<table class="table table-bordered">
 			<colgroup>
 				<col class="span3">
@@ -188,7 +182,9 @@
 				<tr>
 					<td>Address</td>
 					<td>{{billingData.activeCard.addressLine1}} <br />
-						{{billingData.activeCard.addressLine2}} <br />
+						{{#if billingData.activeCard.addressLine2}}
+							{{billingData.activeCard.addressLine2}} <br />
+						{{/if}}
 						{{billingData.activeCard.addressState}} <br />
 						{{billingData.activeCard.addressCountry}}
 					</td>
