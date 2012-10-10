@@ -79,7 +79,7 @@ public class Contact extends Cursor
 
     // Tags
     @Indexed
-    Set<String> tags = new HashSet<String>();
+    public Set<String> tags = new HashSet<String>();
 
     // Properties
     // @XmlElementWrapper(name = "properties")
@@ -142,7 +142,7 @@ public class Contact extends Cursor
 
     public static List<Contact> getContactsForTag(String tag)
     {
-	System.out.println(tag);
+
 	Objectify ofy = ObjectifyService.begin();
 	return ofy.query(Contact.class).filter("tags", tag).list();
     }
