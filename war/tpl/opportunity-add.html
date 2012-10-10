@@ -13,7 +13,7 @@
 					</div>
 					
 					<div class="control-group">
-						<label class="control-label">Related To <span class="field_req">*</span></label>
+						<label class="control-label">Related To</label>
 						<div class="controls" id="contactTypeAhead">
 							<div>
 								<div class="pull-left">
@@ -64,9 +64,9 @@
 						<label class="control-label">Close Date <span class="field_req">*</span></label>
 						<div class="controls">
 							{{#if close_date}}
-								<input id="close_date" type= "date_input" name="close_date" class="input required" placeholder="MM/DD/YY"/>				
+								<input id="close_date" type= "text" name="close_date" class="input required date" placeholder="MM/DD/YY"/>				
 								{{else}}
-									<input id="close_date" type= "date_input" name="close_date" class="input required" placeholder="MM/DD/YY"/>	
+									<input id="close_date" type= "text" name="close_date" class="input required date" placeholder="MM/DD/YY"/>	
 							{{/if}}
 						</div>
 					</div>
