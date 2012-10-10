@@ -5,19 +5,19 @@
 <script type="text/javascript" src="lib/handlebars-1.0.0.beta.6-min.js"></script>
 <script type="text/javascript" src="jscore/md5.js"></script>
 <script type="text/javascript" src="jscore/handlebars-agile.js"></script>
+<script type="text/javascript" src="/stats/gadget.js"></script>
 <script type="text/javascript">
-	  var _agile = _agile || [];
-	  var aj = document.createElement('script'); aj.type = 'text/javascript';    
+     var _agile = _agile || [];
+	  _agile.push(['_setAccount', '8ve7u2kav2rgl7h4db20g5vmcl']);
+	  var aj = document.createElement('script'); aj.type = 'text/javascript';   
       aj.src = '/stats/min/agile-min.js';
       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(aj, s);
 </script>
-<script type="text/javascript" src="/stats/gadget.js"></script>
 <style>.error{color:red;}</style>
 </head>
 <body>
-<div>
-		<div id="content"></div>
-</div>
+
+   <div id="content"></div>
 
 <script id="gadget-without-both-template" type="text/html">
 {{#if id}}
@@ -234,6 +234,11 @@
 		  </form>
 		</div>
 {{/if}}
+</script>
+<script>
+$(function (){
+	getGadgetForEmail(["sukanya@invox.com","lakshmi@invox.com","jagan@invox.com","hdga@hfjh.diu"]);
+	});
 </script>
 
 </body>

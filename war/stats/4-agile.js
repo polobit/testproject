@@ -432,7 +432,7 @@ var agile_id =
 	// Enable the console(IE not support console by default)
 	agile_enable_console_logging();
 	console.log("Initing Agile-crm " + _agile);
-	getGadgetForEmail(["sukanya@invox.com","lakshmi@invox.com","jagan@invox.com","hdga@hfjh.diu"]);
+	
 	// Iterate
 	for(i=0; i < _agile.length; i++)
 	{

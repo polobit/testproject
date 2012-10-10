@@ -31,9 +31,7 @@ $(function() {
 	        return;
 	      }
 		  console.log($(el).serializeArray());
-		  //serializeAndSaveContinueContact(e, el, 'core/api/contacts');
-		  _agile.push(["_createContact", {"email": "yaswanth316@invox.com", "first_name":"yaswanth2", "last_name":"chapalamadugu"}, {"tags":"tag1 tag2"}]);
-	console.log("contact added");
+		  _agile.push(["_createContact", {"email": "yaswanth3@invox.com", "first_name":"yaswanth2", "last_name":"chapalamadugu"}, {"tags":"tag1 tag2"}]);
 	});
 	
 	//Adding Note for contact
@@ -44,6 +42,7 @@ $(function() {
 	      {	
 	      	return;
 	      }
+		  console.log($(el).serializeArray());
 		  _agile.push(["_addNote", {"email": "yaswanth3@invox.com"}, {"subject":"about", "description":"details"}]);
 	});
 	
@@ -55,6 +54,7 @@ $(function() {
 	      {	
 	      	return;
 	      }
+		  console.log($(el).serializeArray());
 		  _agile.push(["_addTask", {"email": "yaswanth3@invox.com"}, {"subject":"TaskName", "type":"CALL", "due":"6989789","priority_type":"HIGH"}]);
 	});
 	
@@ -66,6 +66,7 @@ $(function() {
 	      {	
 	      	return;
 	      }
+		  console.log($(el).serializeArray());
 		  _agile.push(["_addDeal", {"email": "yaswanth3@invox.com"}, {"name":"DealName", "expected_value":"45654", "milestone":"Open", "probability":"99", "close_date":"6256466"}]);
 	});
 	
