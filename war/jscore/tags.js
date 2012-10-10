@@ -1,7 +1,6 @@
 var TAGS;
 function setupTagsTypeAhead(models) {
     var tags = [];
-
     if(!TAGS.length)
     	{
     		var TagsCollection = Backbone.Collection.extend({
@@ -15,7 +14,7 @@ function setupTagsTypeAhead(models) {
     			TAGS = tagsCollection.models;
     			setupTagsTypeAhead(tagsCollection.models);
     		}});
-    		return;
+    		//return;
     	}
     else
     	models = TAGS;
@@ -32,13 +31,11 @@ function setupTagsTypeAhead(models) {
     $('.tags-typeahead').typeahead({
         source: tags,
         updater: function(tag) {
-        	console.log(this.$element);
-        	console.log(tag);
+        	
         	// If tag is undefined create new tag with input value
         	if(!tag)	
         		{
         			tag = $('.tags-typeahead').val();
-        			console.log(tag);
         		}
       
         	(this.$element).closest(".control-group").find('ul.tags').append('<li class="tag"  style="display: inline-block;" data="'+ tag+'">'+tag+'<a class="close" id="remove_tag">&times</a></li>');
@@ -53,11 +50,9 @@ function setupTagsTypeAhead(models) {
     	// To make a tag when "," keydown and check input is not empty
     	if(e.which == 188 && tag != "")
     	{
-    		console.log($(this).val());
     		$(this).attr("value","");
     		$(this).closest(".control-group").find('ul.tags').append('<li class="tag"  style="display: inline-block;" data="'+ tag+'">'+tag+'<a class="close" id="remove_tag">&times</a></li>');
     	}
-    	console.log($(this).val());
     });
 }
 
@@ -117,6 +112,5 @@ function getTags(id) {
            	            "value":values
            	        };
            	    }).get(); 
-    console.log(tags_json);
     return tags_json;
     }
