@@ -24,7 +24,6 @@ $(function(){
     	   	        	var json = serializeForm("taskForm");
 	    	        	json.due = new Date(json.due).getTime()/1000.0;
 	    	        	
-	    	        	console.log(JSON.stringify(json));
 	    	        	var newTask = new Backbone.Model();
 	    	        	newTask.url = 'core/api/tasks';
 	    	        	newTask.save(json,{
@@ -35,12 +34,25 @@ $(function(){
 	    	        			
 	    	        			$('#activityModal').find('span.save-status img').remove();
 	    		    	        $("#activityModal").modal('hide');
-	    	        			
-	    		    	        /*App_Calendar.navigate("calendar", {
+	    	        		    
+	    		    			// Update task to time line
+	    		    	     /* timelineView.collection.add(data);
+
+	    						// Remove and add timeline division in contact details
+    							regenerateTimelineBlock();
+    			
+	    						// Call to setup timeline
+	    						setUpTimeline(timelineView.collection.toJSON());*/
+	    						
+	    		    	        // Update task list view 
+	    		    	        if(Current_Route == 'calendar'){
+	    		    	        	App_Calendar.tasksListView.collection.add(data);
+	    		    	        	App_Calendar.tasksListView.render(true);
+	    		    	        }
+	    		    	        
+	    		    	        App_Calendar.navigate("calendar", {
 	    	        				trigger: true
-	    	        			});*/
-	    		    	        console.log(App_Calendar.tasksListView.collection.toJSON());
-	    		    	        App_Calendar.tasksListView.collection.add(data);
+	    	        			});
 	    	        		} 
 	    	        	});
 	    	        }

@@ -65,6 +65,20 @@ public class DomainUser
 	this.is_admin = isAdmin;
     }
 
+    // Get user with id
+    public static DomainUser getDomainUser(Long id)
+    {
+	try
+	{
+	    return dao.get(id);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
     // Get Users
     public static List<DomainUser> getUsers(String domain)
     {
