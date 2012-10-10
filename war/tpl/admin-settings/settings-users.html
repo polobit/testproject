@@ -12,10 +12,9 @@
 	<div class="row">
  		<div class="span9"> 
  
-			<table class="table table-bordered" >
+			<table class="table table-bordered showCheckboxes" url="core/api/users/bulk">
 				<thead>
     				<tr>
-    		   	    	<th></th>
       					<th>Id</th>
       					<th>Is Admin</th>
       					<th>User Name</th>
@@ -58,7 +57,6 @@
 </script>
 
 <script id="admin-settings-users-model-template" type="text/html">
-<td><icon class='edit icon-remove-circle'></icon></td>  	
   <td>{{id}} </td>
   <td>{{is_admin}} </td>
   <td>{{email}}</td>

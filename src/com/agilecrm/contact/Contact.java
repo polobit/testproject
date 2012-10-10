@@ -66,8 +66,11 @@ public class Contact extends Cursor
     @NotSaved(IfDefault.class)
     public Short star_value = 0;
 
+    // Lead score
+    public Integer lead_score = 0;
+
     // Dao
-    private static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(
+    public static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(
 	    Contact.class);
 
     // Search Tokens
@@ -76,7 +79,7 @@ public class Contact extends Cursor
 
     // Tags
     @Indexed
-    Set<String> tags = new HashSet<String>();
+    public Set<String> tags = new HashSet<String>();
 
     // Properties
     // @XmlElementWrapper(name = "properties")
@@ -139,7 +142,7 @@ public class Contact extends Cursor
 
     public static List<Contact> getContactsForTag(String tag)
     {
-	System.out.println(tag);
+
 	Objectify ofy = ObjectifyService.begin();
 	return ofy.query(Contact.class).filter("tags", tag).list();
     }
@@ -309,24 +312,20 @@ public class Contact extends Cursor
 	return contact;
     }
 
-    // Delete contacts bulk
-    public static void deleteContactsBulk(JSONArray contactsJSONArray)
+    // Add score based on email
+    public void addScore(Integer score)
     {
-	List<Key<Contact>> contactKeys = new ArrayList<Key<Contact>>();
 
-	for (int i = 0; i < contactsJSONArray.length(); i++)
-	{
-	    try
-	    {
-		contactKeys.add(new Key<Contact>(Contact.class, Long
-			.parseLong(contactsJSONArray.getString(i))));
-	    }
-	    catch (JSONException e)
-	    {
-		e.printStackTrace();
-	    }
-	}
-	dao.deleteKeys(contactKeys);
+	this.lead_score = this.lead_score + score;
+	this.save();
+    }
+
+    // Subtract score based on email
+    public void subtractScore(Integer score)
+    {
+
+	this.lead_score = this.lead_score - score;
+	this.save();
     }
 
     // Get contacts bulk

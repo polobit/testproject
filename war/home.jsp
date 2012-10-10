@@ -42,7 +42,7 @@ String CSS_PATH = "/";
 	
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/agilecrm.css" />
-
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/timeline.css" />
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
@@ -86,7 +86,7 @@ String CSS_PATH = "/";
 						<li id="contactsmenu"><a href="#contacts"><i class="icon-user icon-white"></i> Contacts</a>
 						<li id="calendarmenu"><a href="#calendar"><i class="icon-calendar icon-white"></i> Calendar</a>
 						<li id="dealsmenu"><a href="#deals"><i class="icon-folder-open icon-white"></i> Deals</a>
-						<li id="workflowsmenu"><a href="#workflows"><i class="icon-comment icon-white"></i> Campaigns</a>
+						<li id="workflowsmenu"><a href="#workflows"><i class="icon-sitemap icon-white"></i> Campaigns</a>
 					</ul>
 					
 					<%
@@ -200,8 +200,8 @@ String CSS_PATH = "/";
 	
 	var IS_FLUID = <%=is_fluid%>;
 	
-	var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
-	// var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
+	//var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
+	 var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
 	
 	<!-- JQUery Core and UI CDN -->	
 	<!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->

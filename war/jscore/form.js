@@ -231,7 +231,9 @@ function isValidForm(form) {
     
 	 console.log($(form).html());
 	 console.log("Validating form");
-    
+	    $.validator.addMethod("noSpecialChars", function(value, element) {
+			return this.optional(element) || /^[a-z0-9\_\s]+$/i.test(value);
+		    }, "Username must contain only letters, numbers,space or underscore.");
 	 
 	    $(form).validate({
 	        debug: true,

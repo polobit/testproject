@@ -24,7 +24,7 @@ public class EmailTemplates
     public String text = null;
 
     // Dao
-    private static ObjectifyGenericDao<EmailTemplates> dao = new ObjectifyGenericDao<EmailTemplates>(
+    public static ObjectifyGenericDao<EmailTemplates> dao = new ObjectifyGenericDao<EmailTemplates>(
 	    EmailTemplates.class);
 
     EmailTemplates()

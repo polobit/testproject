@@ -90,7 +90,7 @@ public class CampaignsAPI
 	    throws JSONException
     {
 	JSONArray logsJSONArray = new JSONArray(model_ids);
-	Log.deleteLogsBulk(logsJSONArray);
+	Log.dao.deleteBulkByIds(logsJSONArray);
     }
 
     // Bulk operations - add to campaign

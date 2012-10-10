@@ -111,7 +111,7 @@ public class DealsAPI
 	    throws JSONException
     {
 	JSONArray opportunitiesJSONArray = new JSONArray(model_ids);
-	Opportunity.deleteOpportunitiesBulk(opportunitiesJSONArray);
+	Opportunity.dao.deleteBulkByIds(opportunitiesJSONArray);
     }
 
 }

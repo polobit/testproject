@@ -21,7 +21,7 @@ $(function(){
 	    	        	// Show loading symbol until model get saved
 	    	            $('#activityModal').find('span.save-status').html(LOADING_HTML);
 	    	            
-    	   	        	var json = serializeForm("taskFooorm");
+    	   	        	var json = serializeForm("taskForm");
 	    	        	json.due = new Date(json.due).getTime()/1000.0;
 	    	        	
 	    	        	var newTask = new Backbone.Model();
@@ -34,8 +34,23 @@ $(function(){
 	    	        			
 	    	        			$('#activityModal').find('span.save-status img').remove();
 	    		    	        $("#activityModal").modal('hide');
-	    	        			
-	    	        			App_Settings.navigate("calendar", {
+	    	        		    
+	    		    			// Update task to time line
+	    		    	     /* timelineView.collection.add(data);
+
+	    						// Remove and add timeline division in contact details
+    							regenerateTimelineBlock();
+    			
+	    						// Call to setup timeline
+	    						setUpTimeline(timelineView.collection.toJSON());*/
+	    						
+	    		    	        // Update task list view 
+	    		    	        if(Current_Route == 'calendar'){
+	    		    	        	App_Calendar.tasksListView.collection.add(data);
+	    		    	        	App_Calendar.tasksListView.render(true);
+	    		    	        }
+	    		    	        
+	    		    	        App_Calendar.navigate("calendar", {
 	    	        				trigger: true
 	    	        			});
 	    	        		} 
@@ -72,13 +87,20 @@ $(function(){
 			    });
 			    
 			    // Time Picker
-			    $('.timepicker').timepicker({defaultTime: 'current', showMeridian: false, template: 'modal'});
+			    $('.start-timepicker').timepicker({defaultTime: 'current', showMeridian: false, template: 'modal'});
 			    
+			    $('.end-timepicker').timepicker({defaultTime: 'current', showMeridian: false, template: 'modal'});
 			    
 			    // Set the time picker when the modal is shown
-			    $('#activityModal').on('show', function () {
-			    	$('.timepicker').val(getHHMM());			    	
-			    	//$('.timepicker').val("05:30");		    	
+			    $('#activityModal').on('shown', function () {
+			    	
+			    	// Fill current time only when there is no time in the fields
+			    	if($('.start-timepicker').val() == '')
+			    		$('.start-timepicker').val(getHHMM());
+			    	
+			    	if($('.end-timepicker').val() == '')
+			    		$('.end-timepicker').val(getHHMM());
+			    	
 			    });
 			    
 			    // Switch Task and Event: changing color and font-weight
@@ -199,7 +221,11 @@ function saveEvent(formId, modalName, isUpdate){
 			$('#' + modalName).find('span.save-status img').remove();
         	$('#' + modalName).modal('hide');
 
-        	$('#calendar').fullCalendar( 'refetchEvents' );                
+        	$('#calendar').fullCalendar( 'refetchEvents' );
+        	
+        	App_Calendar.navigate("calendar", {
+				trigger: true
+			});
            }
        });
 }

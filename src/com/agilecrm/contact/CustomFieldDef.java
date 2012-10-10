@@ -40,7 +40,7 @@ public class CustomFieldDef
     };
 
     // Dao
-    private static ObjectifyGenericDao<CustomFieldDef> dao = new ObjectifyGenericDao<CustomFieldDef>(
+    public static ObjectifyGenericDao<CustomFieldDef> dao = new ObjectifyGenericDao<CustomFieldDef>(
 	    CustomFieldDef.class);
 
     public CustomFieldDef()

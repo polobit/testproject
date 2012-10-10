@@ -9,6 +9,7 @@
     "language": "en",
     "branches": "yes",
     "type":"voice",
+    "workflow_tasklet_class_name":"com.agilecrm.tasklets.Score",
     "category": "Utilities",
     "ui": [{
 			"label": "Type",

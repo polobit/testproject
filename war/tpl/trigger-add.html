@@ -1,0 +1,56 @@
+<script id="trigger-add-template" type="text/html">
+
+<div class='row'>
+	
+	<div class='span12'>
+	<div class="page-header">
+		<h1>New Trigger</h1>
+</div>
+<div class="span8">
+		<div class="well">
+			<form id='addTrigger' name="addTriggerForm" class="form-horizontal">
+				<fieldset>
+					<legend>Add Trigger</legend>
+
+					<input name="id" type="hidden" value="{{id}}"/> 		
+					<div class="control-group">
+                    	<label class="control-label">Name <span class="field_req">*</span></label>
+						<div class="controls">
+				    <input type="text" id="name" class="required" name="name" />
+						</div>
+					</div>
+
+					<div class="control-group">
+                    	<label class="control-label">Condition  <span class="field_req">*</span></label>
+						<div class="controls ">
+                           <select id="type" name="type" class="required">
+                              <option></option>
+                              <option value="TAG_IS_ADDED">Tag is added</option>
+                              <option value="TAG_IS_DELETED">Tag is deleted</option>
+                              <option value="CONTACT_IS_ADDED">Contact is added</option>
+                              <option value="CONTACT_IS_DELETED">Contact is deleted</option>
+                              <option value="DEAL_IS_ADDED">Deal is added</option>
+                              <option value="DEAL_IS_DELETED">Deal is deleted</option>
+                       </select>
+						</div>
+					</div>
+					
+					<div class="control-group">
+                    	<label class="control-label">Campaign</label>
+						<div class="controls">
+							    <select id="campaign-select" name="campaign_id">
+                                <option value="">Select...</option>
+                               </select>
+						</div>
+					</div>
+					
+					<div class="form-actions">          
+				      <a href="#triggers" class="save btn btn-primary">Save</a>
+                      <a href="#triggers"  id="cancel" class="btn">Cancel</a> 
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+
+</script>

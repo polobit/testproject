@@ -16,14 +16,19 @@ public class Campaign
     // Convert Contact into JSON
     static JSONObject getSubscriberJSON(Contact contact)
     {
+
 	try
 	{
 	    JSONObject subscriberJSON = new JSONObject();
 
 	    List<ContactField> properties = contact.getProperties();
+	    System.out.println("List properties" + properties);
 	    for (ContactField field : properties)
 	    {
-		subscriberJSON.put(field.name, field.value);
+		System.out.println(field);
+		if (field.name != null && field.value != null)
+		    subscriberJSON.put(field.name, field.value);
+
 	    }
 
 	    // Add Id and data
@@ -32,6 +37,7 @@ public class Campaign
 	}
 	catch (Exception e)
 	{
+
 	    return null;
 	}
     }

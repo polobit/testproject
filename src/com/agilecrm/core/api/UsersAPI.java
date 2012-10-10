@@ -2,7 +2,9 @@ package com.agilecrm.core.api;
 
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -10,7 +12,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import com.agilecrm.core.DomainUser;
 import com.agilecrm.user.AgileUser;
@@ -46,15 +49,6 @@ public class UsersAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public DomainUser createDomainUser(DomainUser domainUser)
     {
-
-	// Override the domain in the domain user with the name space
-	domainUser.domain = NamespaceManager.get();
-	if (StringUtils.isEmpty(domainUser.domain))
-	{
-	    System.out.println("Domain user not created");
-	    return null;
-	}
-
 	domainUser.save();
 	return domainUser;
     }
@@ -82,17 +76,24 @@ public class UsersAPI
 	if (userPrefs != null)
 	    userPrefs.delete();
 
-	// Delete Social Prefs
-	List<SocialPrefs> socialPrefsList = SocialPrefs.getPrefs(agileUser);
-	for (SocialPrefs socialPrefs : socialPrefsList)
+	if (agileUser != null)
 	{
-	    socialPrefs.delete();
-	}
 
-	// Delete IMAP PRefs
-	IMAPEmailPrefs imapPrefs = IMAPEmailPrefs.getIMAPPrefs(agileUser);
-	if (imapPrefs != null)
-	    imapPrefs.delete();
+	    // Delete Social Prefs
+	    List<SocialPrefs> socialPrefsList = SocialPrefs.getPrefs(agileUser);
+	    for (SocialPrefs socialPrefs : socialPrefsList)
+	    {
+		socialPrefs.delete();
+	    }
+
+	    // Delete IMAP PRefs
+	    IMAPEmailPrefs imapPrefs = IMAPEmailPrefs.getIMAPPrefs(agileUser);
+	    if (imapPrefs != null)
+		imapPrefs.delete();
+
+	    // Get and Delete AgileUser
+	    agileUser.delete();
+	}
 
 	// Delete Notification Prefs
 	NotificationPrefs notificationPrefs = NotificationPrefs
@@ -100,11 +101,29 @@ public class UsersAPI
 	if (notificationPrefs != null)
 	    notificationPrefs.delete();
 
-	// Get and Delete AgileUser
-	if (agileUser != null)
-	    agileUser.delete();
-
 	domainUser.delete();
+    }
+
+    // Bulk operation - delete
+    @Path("bulk")
+    @DELETE
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void deleteContacts(@FormParam("model_ids") String model_ids)
+	    throws JSONException
+    {
+
+	JSONArray usersJSONArray = new JSONArray(model_ids);
+
+	for (int i = 0; i < usersJSONArray.length(); i++)
+	{
+
+	    DomainUser domainuser = DomainUser.getDomainUser(Long
+		    .parseLong(usersJSONArray.getString(i)));
+
+	    deleteDomainUser(domainuser);
+
+	}
+
     }
 
 }

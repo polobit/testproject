@@ -12,10 +12,9 @@
 
 	<div class="row">
 		<div class="span9">
-			<table class="table table-bordered table-striped" >
+			<table class="table table-bordered table-striped showCheckboxes" url="core/api/email/templates/bulk" >
 				<thead>
     				<tr>
-						<th></th>
       					<th>Id</th>
       					<th>subject</th>
      				 	<th>description</th>
@@ -54,9 +53,8 @@
 </script>
 
 <script id="settings-email-templates-model-template" type="text/html">
-<td><icon class='edit icon-remove-circle'></icon></td>
 
-<td>{{id}}</td>
+<td class='data' data='{{id}}'>{{id}}</td>
 
 <td>{{subject}}</td>
 

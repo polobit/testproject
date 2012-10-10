@@ -89,6 +89,10 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, url, continueCont
             });
         },
         error: function (model, response) {
+        	
+        	// Remove loading image
+        	$('#' + modal_id).find('span.save-status img').remove();
+        	
             $('#' + modal_id).find(".duplicate-email").html('<div class="alert alert-error" style="display:none"><a class="close" data-dismiss="alert" href="#">×</a>Please change email. A contact already exists with this email.</div>');
 
             $('#' + modal_id).find(".alert").show();

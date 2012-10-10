@@ -77,7 +77,12 @@ public class NamespaceFilter implements Filter
 	// Set Google Apps Namespace if googleapps
 	if (subdomain.equalsIgnoreCase(Globals.GOOGLE_APPS_DOMAIN))
 	{
-	    if (setupGoogleAppsNameSpace(request, response))
+	    if (!setupGoogleAppsNameSpace(request, response))
+	    {
+		redirectToChooseDomain(request, response);
+		return false;
+	    }
+	    else
 		return true;
 	}
 
@@ -113,6 +118,8 @@ public class NamespaceFilter implements Filter
 
 	    System.out.println(appsDomain);
 	    namespace = appsDomain.split("\\.")[0];
+
+	    System.out.println("Setting Google Apps - Namespace " + appsDomain);
 
 	    // Set Namespace
 	    NamespaceManager.set(namespace);
