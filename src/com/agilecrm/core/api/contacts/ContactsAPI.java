@@ -228,7 +228,7 @@ public class ContactsAPI
 	return Contact.searchContactByEmail(email);
     }
 
-    // searching contacts by email list
+    // searching contacts by EmailList
     @Path("/search/email")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)

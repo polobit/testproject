@@ -15,6 +15,12 @@ function getGadgetForEmail(email_ids){
 	});
 }
 
+//validating form
+function isValidForm(form){
+	$(form).validate();
+	return $(form).valid();
+}
+
 $(function() {
 	// Adding contact from gadget
 	$('#gadget-contact-validate').die().live('click', function(e){
@@ -22,10 +28,12 @@ $(function() {
 		var el = $(this).closest("div#gadgetContactDetailsTab").find("#gadgetContactForm");
 		  if(!isValidForm($(el)))
 	      {	
-	      	return;
+	        return;
 	      }
+		  console.log($(el).serializeArray());
 		  //serializeAndSaveContinueContact(e, el, 'core/api/contacts');
-		  _agile.push(["_createContact", {"email": "yaswanth36@invox.com", "first_name":"yaswanth2", "last_name":"chapalamadugu"}, {"tags":"tag1 tag2"}]);
+		  _agile.push(["_createContact", {"email": "yaswanth316@invox.com", "first_name":"yaswanth2", "last_name":"chapalamadugu"}, {"tags":"tag1 tag2"}]);
+	console.log("contact added");
 	});
 	
 	//Adding Note for contact
@@ -36,7 +44,6 @@ $(function() {
 	      {	
 	      	return;
 	      }
-		  //serializeAndSaveContinueContact(e, 'gadgetContactForm', 'gadget-contact-details', 'core/api/contacts');
 		  _agile.push(["_addNote", {"email": "yaswanth3@invox.com"}, {"subject":"about", "description":"details"}]);
 	});
 	
@@ -48,7 +55,6 @@ $(function() {
 	      {	
 	      	return;
 	      }
-		  //serializeAndSaveContinueContact(e, 'gadgetContactForm', 'gadget-contact-details', 'core/api/contacts');
 		  _agile.push(["_addTask", {"email": "yaswanth3@invox.com"}, {"subject":"TaskName", "type":"CALL", "due":"6989789","priority_type":"HIGH"}]);
 	});
 	
@@ -60,8 +66,7 @@ $(function() {
 	      {	
 	      	return;
 	      }
-		  //serializeAndSaveContinueContact(e, 'gadgetContactForm', 'gadget-contact-details', 'core/api/contacts');
-		  _agile.push(["_addDeal", {"email": "yaswanth3@invox.com"}, {"name":"DealName", "expected_value":"45654", "milestone":"select", "probability":"99", "close_date":"6256466"}]);
+		  _agile.push(["_addDeal", {"email": "yaswanth3@invox.com"}, {"name":"DealName", "expected_value":"45654", "milestone":"Open", "probability":"99", "close_date":"6256466"}]);
 	});
 	
 	//toggle event for add note
