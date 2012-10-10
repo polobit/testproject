@@ -1,23 +1,15 @@
 <html>
 <head>
-<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
-<script type="text/javascript" src="http://jzaefferer.github.com/jquery-validation/jquery.validate.js"></script>
-<script type="text/javascript" src="lib/handlebars-1.0.0.beta.6-min.js"></script>
-<script type="text/javascript" src="jscore/md5.js"></script>
-<script type="text/javascript" src="jscore/handlebars-agile.js"></script>
-<script type="text/javascript" src="/stats/gadget.js"></script>
-<script type="text/javascript">
-     var _agile = _agile || [];
-	  _agile.push(['_setAccount', '8ve7u2kav2rgl7h4db20g5vmcl']);
-	  var aj = document.createElement('script'); aj.type = 'text/javascript';   
-      aj.src = '/stats/min/agile-min.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(aj, s);
-</script>
-<style>.error{color:red;}</style>
+
+<style>
+	.error{color:red;}
+</style>
 </head>
 <body>
 
-   <div id="content"></div>
+   <div id="content">
+   <img class="loading" style="padding-right:5px" src= "img/21-0.gif"></img>
+   </div>
 
 <script id="gadget-without-both-template" type="text/html">
 {{#if id}}
@@ -235,9 +227,26 @@
 		</div>
 {{/if}}
 </script>
+
+<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+<script type="text/javascript" src="http://jzaefferer.github.com/jquery-validation/jquery.validate.js"></script>
+<script type="text/javascript" src="/lib/handlebars-1.0.0.beta.6-min.js"></script>
+<script type="text/javascript" src="/jscore/md5.js"></script>
+<script type="text/javascript" src="/jscore/handlebars-agile.js"></script>
+<script type="text/javascript" src="/stats/gadget.js"></script>
+
+<script type="text/javascript">
+     var _agile = _agile || [];
+	  _agile.push(['_setAccount', '8ve7u2kav2rgl7h4db20g5vmcl']);
+	  var aj = document.createElement('script'); aj.type = 'text/javascript';   
+      aj.src = '/stats/min/agile-min.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(aj, s);
+</script>
+
+
 <script>
 $(function (){
-	getGadgetForEmail(["sukanya@invox.com","lakshmi@invox.com","jagan@invox.com","hdga@hfjh.diu"]);
+	getGadgetForEmail(["sukanya@invox.com","manohar@invox.com","jagan@invox.com","hdga@hfjh.diu"]);
 	});
 </script>
 

@@ -425,10 +425,8 @@ var agile_id =
 		}
 	};
 
-
-// Init Function
-(function () { 
-	 
+function _agile_execute()
+{
 	// Enable the console(IE not support console by default)
 	agile_enable_console_logging();
 	console.log("Initing Agile-crm " + _agile);
@@ -443,5 +441,9 @@ var agile_id =
 	    console.log("Executing " + _agile[i][0] + " with " + args);
 	    window["agile" + _agile[i][0]].apply(this, args);
 	}
-	 
+}
+
+// Init Function
+(function () {  
+	_agile_execute();
 })();

@@ -4,6 +4,9 @@ function getGadgetForEmail(email_ids){
 	var json = {};
 	json.email_ids = JSON.stringify(email_ids);
 	$.post(url, json, function(data){
+		// Remove loading icon
+		$("#content").html('');
+			
 		$.each(data, function(index, val){
 			if(!val)
 			{	
@@ -31,7 +34,9 @@ $(function() {
 	        return;
 	      }
 		  console.log($(el).serializeArray());
+		  _agile = [];
 		  _agile.push(["_createContact", {"email": "yaswanth3@invox.com", "first_name":"yaswanth2", "last_name":"chapalamadugu"}, {"tags":"tag1 tag2"}]);
+		 _agile_execute();
 	});
 	
 	//Adding Note for contact

@@ -162,7 +162,7 @@ var agile_session =
 	};
 agile_session.init();
 
-function getJSON(URL,success){
+function getJSON(URL, success){
     var ud = 'json'+(Math.random()*100).toString().replace(/\./g,'');
     window[ud]= function(o){
         success&&success(o);
@@ -216,7 +216,7 @@ function agile_createContact(data)
 	 // Get
 	 var agile_url = "http://localhost:8888/core/js/api/contacts?callback=?&contact=" + encodeURIComponent(JSON.stringify(model));
 	 
-	 getJSON(agile_url,function(data){
+	 getJSON(agile_url, function(data){
 	 	    var success = data.flag === 'successful';
 	 	    if(success) {
 	 	        alert('The POST to abc.com WORKED SUCCESSFULLY');
@@ -224,19 +224,19 @@ function agile_createContact(data)
 	 	});
 }
 
-function agile_addNote(email,data)
+function agile_addNote(email, data)
 {
-	if(!email)
+	if(!email.email)
 	{
-		console.log("Email not found.Note is not added.");
+		console.log("Email not found. Note is not added.");
 		return;
 	}
-	var params ="email={0}&note={1}".format(encodeURIComponent(email.email), encodeURIComponent(JSON.stringify(data)));
+	var params = "email={0}&note={1}".format(encodeURIComponent(email.email), encodeURIComponent(JSON.stringify(data)));
 	
 	 // Get
-	 var agile_url = "http://localhost:8888/core/js/api/js/note?callback=?&"+params ;
+	 var agile_url = "http://localhost:8888/core/js/api/js/note?callback=?&" + params ;
 	 
-	 getJSON(agile_url,function(data){
+	 getJSON(agile_url, function(data){
 	 	    var success = data.flag === 'successful';
 	 	    if(success) {
 	 	        alert('The POST to abc.com WORKED SUCCESSFULLY');
@@ -244,19 +244,19 @@ function agile_addNote(email,data)
 	 	});
 }
 
-function agile_addTask(email,data)
+function agile_addTask(email, data)
 {
-	if(!email)
+	if(!email.email)
 	{
-		console.log("Email not found.Task is not added.");
+		console.log("Email not found. Task is not added.");
 		return;
 	}
-	var params ="email={0}&task={1}".format(encodeURIComponent(email.email), encodeURIComponent(JSON.stringify(data)));
+	var params = "email={0}&task={1}".format(encodeURIComponent(email.email), encodeURIComponent(JSON.stringify(data)));
 	
 	 // Get
-	 var agile_url = "http://localhost:8888/core/js/api/js/task?callback=?&"+params;
+	 var agile_url = "http://localhost:8888/core/js/api/js/task?callback=?&" + params;
 	 	
-	 getJSON(agile_url,function(data){
+	 getJSON(agile_url, function(data){
 	 	    var success = data.flag === 'successful';
 	 	    if(success) {
 	 	        alert('The POST to abc.com WORKED SUCCESSFULLY');
@@ -264,19 +264,19 @@ function agile_addTask(email,data)
 	 	});
 }
 
-function agile_addDeal(email,data)
+function agile_addDeal(email, data)
 {
-	if(!email)
+	if(!email.email)
 	{
-		console.log("Email not found.Deal is not added.");
+		console.log("Email not found. Deal is not added.");
 		return;
 	}
-	var params ="email={0}&opportunity={1}".format(encodeURIComponent(email.email), encodeURIComponent(JSON.stringify(data)));
+	var params = "email={0}&opportunity={1}".format(encodeURIComponent(email.email), encodeURIComponent(JSON.stringify(data)));
 	
 	 // Get
-	 var agile_url = "http://localhost:8888/core/js/api/js/opportunity?callback=?&"+params;
+	 var agile_url = "http://localhost:8888/core/js/api/js/opportunity?callback=?&" + params;
 	 
-	 getJSON(agile_url,function(data){
+	 getJSON(agile_url, function(data){
 	 	    var success = data.flag === 'successful';
 	 	    if(success) {
 	 	        alert('The POST to abc.com WORKED SUCCESSFULLY');
@@ -305,7 +305,7 @@ function _getTagsData(data)
 		return;
 	}
 			
-	var params ="email={0}&tags={1}".format(encodeURIComponent(email), encodeURIComponent(tags));
+	var params = "email={0}&tags={1}".format(encodeURIComponent(email), encodeURIComponent(tags));
 	
 	return params;
 
@@ -318,7 +318,7 @@ function agile_addTag(data)
 		return;
 	
 	// Post
-	 var agile_url = "http://localhost:8888/core/js/api/contacts/add-tags?callback=?&"+params;
+	 var agile_url = "http://localhost:8888/core/js/api/contacts/add-tags?callback=?&" + params;
 	 
 	 getJSON(agile_url,function(data){
 	 	    var success = data.flag === 'successful';
@@ -336,7 +336,7 @@ function agile_removeTag(data)
 		return;
 	
 	// Post
-	 var agile_url = "http://localhost:8888/core/js/api/contacts/remove-tags?callback=?&"+params;
+	 var agile_url = "http://localhost:8888/core/js/api/contacts/remove-tags?callback=?&" + params;
 	 
 	 getJSON(agile_url,function(data){
 	 	    var success = data.flag === 'successful';
@@ -391,13 +391,13 @@ function agile_trackPageview()
  		else
  			document_referrer="";
 
- 		params ="guid={0}&sid={1}&url={2}&agile={3}&new=1&ref={4}".format(guid, session_id, url, agile,document_referrer);
+ 		params = "guid={0}&sid={1}&url={2}&agile={3}&new=1&ref={4}".format(guid, session_id, url, agile, document_referrer);
  	}
  	else
- 		params ="guid={0}&sid={1}&url={2}&agile={3}".format(guid, session_id, url, agile);
+ 		params = "guid={0}&sid={1}&url={2}&agile={3}".format(guid, session_id, url, agile);
  	
  	if(agile_guid.get_email())
- 		params += "&email="+encodeURIComponent(agile_guid.get_email());
+ 		params += "&email=" + encodeURIComponent(agile_guid.get_email());
  	
  	var agile_url = "http://stats.agilecrm.com/stats?callback=?&" + params;
  	
@@ -425,17 +425,14 @@ var agile_id =
 		}
 	};
 
-
-
-// Init Function
-(function () { 
-	 
+function _agile_execute()
+{
 	// Enable the console(IE not support console by default)
 	agile_enable_console_logging();
 	console.log("Initing Agile-crm " + _agile);
 	
 	// Iterate
-	for(i=0; i<_agile.length; i++)
+	for(i=0; i < _agile.length; i++)
 	{
 		var args = new Array();
 	    for (var j = 1; j < _agile[i].length; j++)
@@ -444,5 +441,9 @@ var agile_id =
 	    console.log("Executing " + _agile[i][0] + " with " + args);
 	    window["agile" + _agile[i][0]].apply(this, args);
 	}
-	 
+}
+
+// Init Function
+(function () {  
+	_agile_execute();
 })();
