@@ -427,8 +427,10 @@ var agile_id =
 		getURL: function()
 		{
 			if(this.namespace == "localhost")
-				this.namespace = "localhost:8888";
-			return "http://" + this.namespace + "/core/js/api";
+				this.namespace = "http://localhost:8888";
+			else
+				this.namespace = "https://" + this.namespace;
+			return this.namespace + "/core/js/api";
 		}
 	};
 
