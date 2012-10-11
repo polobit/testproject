@@ -146,7 +146,7 @@ function deserializeForm(data, form)
 	                   var tag_name;
 	                   var tag_id = contact.id;
 	                   tag_name = getPropertyValue(contact.properties, "first_name") + " " + getPropertyValue(contact.properties, "last_name");
-	                   $('.tagsinput', form).append('<li class="tag" value="'+tag_id+'" class="tag"  style="display: inline-block; ">'+tag_name+'<a class="close" id="remove_tag">&times</a></li>');
+	                   $('.tagsinput', form).append('<li class="tag" data="'+tag_id+'" class="tag"  style="display: inline-block; ">'+tag_name+'<a class="close" id="remove_tag">&times</a></li>');
 	                  });	        	    
 	           }
 	           
