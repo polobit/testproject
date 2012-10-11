@@ -9,6 +9,10 @@
     "language": "en",
     "branches": "yes",
     "type":"voice",
+    "phonesystem": {
+        "type": "static-vxml-form-url",
+        "url": "/vxml/wait.jsp" 
+    },
     "workflow_tasklet_class_name":"com.agilecrm.tasklets.Tags",
     "category": "Utilities",
     "ui": [{
@@ -28,9 +32,9 @@
 		},{
 			"label": "Tag",
 			"category": "Info",
-			"name": "tag_name",
-            "id":"tag_name",
-			"title": "Enter the tag value.",
+			"name": "tag_names",
+            "id":"tag_names",
+			"title": "Enter the tag values separated by comma",
 			"fieldType": "input",
             "type": "text" 
 			

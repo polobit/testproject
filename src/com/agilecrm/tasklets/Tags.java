@@ -17,7 +17,7 @@ public class Tags extends TaskletAdapter
     public static String TYPE = "type";
     public static String ADD = "add";
     public static String DELETE = "delete";
-    public static String TAG_NAME = "tag_name";
+    public static String TAG_NAMES = "tag_names";
 
     // Run
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
@@ -27,7 +27,7 @@ public class Tags extends TaskletAdapter
 	// Get Score and Type
 	String type = getStringValue(nodeJSON, subscriberJSON, data, TYPE);
 	String tagNames = getStringValue(nodeJSON, subscriberJSON, data,
-		TAG_NAME);
+		TAG_NAMES);
 
 	System.out
 		.println("Given Tag Type " + type + "and TagName " + tagNames);
@@ -53,26 +53,20 @@ public class Tags extends TaskletAdapter
 	    // Add Tags based on contact
 	    if (type.equals(ADD))
 	    {
-		for (String tag : tagsArray)
-		{
-		    contact.tags.add(tag);
-		}
-
-		contact.save();
+		contact.addTags(tagsArray);
 	    }
 	    // Delete Tags based on contact
 	    else
 	    {
+		contact.removeTags(tagsArray);
 
+		// Delete tags from Tag class
 		Set<String> tagslist = new HashSet<String>();
 		for (String tag : tagsArray)
 		{
-		    contact.tags.remove(tag);
 		    tagslist.add(tag);
 		}
 		Tag.deleteTags(tagslist);
-		contact.save();
-
 	    }
 	}
 
