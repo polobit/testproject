@@ -57,7 +57,35 @@ $(function()
 	// Click head - click all checkboxes of table body
 	$('.thead_check').live('click', function(event){
 		$('.tbody_check').attr('checked', this.checked);
+		
+		// Show bulk operations only when thead check box is checked
+		if($(this).is(':checked'))
+			$('#bulk-actions').css('display', 'block');
+		else
+			$('#bulk-actions').css('display', 'none');
 	});	
+	
+	// Stop default functionality(edit) of it's parent (tr)
+	$('.tbody_check').live('click', function(event){
+		event.stopPropagation();
+		
+		// Show bulk operations only when any of the check box is checked
+		if($(this).attr('checked') == 'checked')
+			$('body').find('#bulk-actions').css('display', 'block');
+		else{
+			var check_count = 0
+			$.each($('.tbody_check'), function(index, element){
+				if($(element).is(':checked')){
+					check_count++;
+					return false;
+				}
+				//return;
+			});
+			if(check_count == 0){
+				$('#bulk-actions').css('display', 'none');
+			}
+		}	
+	});
 });
 
 // Bulk operations - delete function

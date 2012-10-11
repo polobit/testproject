@@ -147,6 +147,7 @@ var ContactsRouter = Backbone.Router.extend({
         if(!contact)
         	contact = this.contactsListView.collection.get(id);
         
+        console.log(contact.toJSON());
         this.contactDetailView = new Base_Model_View({
             model: contact,
             template: "contact-detail",
@@ -179,7 +180,7 @@ var ContactsRouter = Backbone.Router.extend({
     	// Contact Edit - take him to continue-contact form
     	var contact = this.contactsListView.collection.get(this.contactDetailView.model.id);
      	//$('#content').html(getTemplate('continue-contact', contact.toJSON()));
-     	deserializeContact(contact.toJSON())
+     	deserializeContact(contact.toJSON(), 'continue-contact');
      	
     },
     
@@ -207,7 +208,7 @@ var ContactsRouter = Backbone.Router.extend({
         contactDuplicate.save(json,{
         	success: function(data)
         	{
-				deserializeContact(data.toJSON());
+				deserializeContact(data.toJSON(), 'continue-contact');
         	}
         });
     },
@@ -231,11 +232,16 @@ var ContactsRouter = Backbone.Router.extend({
 
     },
     addOpportunityToContact: function() {
+    	
+    	// Remove and add timeline division in contact details
+    	regenerateTimelineBlock();
+    	
+    	var id = this.contactDetailView.model.id;
     	this.opportunityView = new Base_Model_View({
             url: 'core/api/opportunity',
             template: "opportunity-add",
             isNew: true,
-            window: 'deals',
+            window: 'contact/' + id,
             postRenderCallback: function(el){
             	populateUsers("owner", el);
             	populateMilestones(el);

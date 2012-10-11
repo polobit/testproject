@@ -19,6 +19,7 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, url, continueCont
     var id = $('#' + form_id + ' input[name=id]').val();
     var obj = {};
     var properties = [];
+    var address = [];
     
     // Contact properties
     if (isValidField('fname'))properties.push(propertyJSON('first_name', 'fname'));
@@ -37,16 +38,35 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, url, continueCont
     if (isValidField('url')) properties.push(propertyJSON('url', 'url'));
     
     $('#' + form_id + ' div.multiple-template').each(function (index, element) {
-        var inputElement = $(element).find('input');
-        var selectElement = $(element).find('select');
-
-        // Checks whether fields for hidden fields (Used for clone do not save them)
-        if (!$(element).find('input').parents('div.controls').hasClass('hide'))
-        	properties.push({
+       
+    	if($(element).attr('data') == 'address'){
+    		var addressJSON = {};
+    		var subtype;
+    		$.each($(element).children(":not(br)"), function (index, subelement){
+    			if($(subelement).attr('name') == 'address-type')
+    				subtype = $(subelement).val();
+    			else
+    				addressJSON[$(subelement).attr('name')] = $(subelement).val();
+    		});
+    		
+    		properties.push({
         		"name": $(element).attr('data'),
-        		"value": inputElement.val(),
-        		"subtype": selectElement.val()
+        		"value": JSON.stringify(addressJSON),
+        		"subtype": subtype
         	})
+    	}
+    	else{
+    		var inputElement = $(element).find('input');
+    		var selectElement = $(element).find('select');
+
+    		// Checks whether fields for hidden fields (Used for clone do not save them)
+    		if (!$(element).find('input').parents('div.controls').hasClass('hide'))
+    			properties.push({
+    				"name": $(element).attr('data'),
+    				"value": inputElement.val(),
+    				"subtype": selectElement.val()
+    			})
+    	} 	
     });
 
     var propertiesList = [];
@@ -54,7 +74,7 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, url, continueCont
         "name": "properties",
         "value": properties
     });
-
+    
     // Convert array into JSON
     for (var i = 0; i < propertiesList.length; ++i) {
         obj[propertiesList[i].name] = propertiesList[i].value;
@@ -123,16 +143,27 @@ function deserializeContact(contact, template) {
 
 // Generated new field for each value in Properties  Author : Yaswanth  08/09/2012
 function fillMultiOptions(field_element, element) {
+	if(element.name == 'address'){
+		var json = JSON.parse(element.value);
+		
+		$.each($(field_element).children(":not(br)"), function (index, sub_field_element){
+			var name = $(sub_field_element).attr('name');
+			if(name == 'address-type')
+				$(sub_field_element).val(element.subtype);
+			else
+				$(sub_field_element).val(json[name]);
+		});
+	}
+	else{
+		var append_to = $(field_element).parents('div.control-group');
 
-    var append_to = $(field_element).parents('div.control-group');
+		var html_element = append_to.children().siblings("div.controls:first").clone().removeClass('hide');
 
-    var html_element = append_to.children().siblings("div.controls:first").clone().removeClass('hide');
-
-    $(html_element).find('input').val(element.value).attr('name', element.value);
-    $(html_element).find('select').val(element.subtype);
+		$(html_element).find('input').val(element.value).attr('name', element.value);
+		$(html_element).find('select').val(element.subtype);
     
-    html_element.appendTo(append_to);
-    
+		html_element.appendTo(append_to);
+	}
 }
 
 // Create a property object
