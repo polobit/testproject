@@ -32,7 +32,7 @@ $(function(){
 		
 		e.preventDefault();
 		console.log("clicked on filters list");
-		var data = $(this).find('.filter').attr('filter');
+		var data = $(this).find('.filter-edit').attr('filter');
 		if(data)
 			{
 			 Backbone.history.navigate("contact-filter-edit/" + data, {
