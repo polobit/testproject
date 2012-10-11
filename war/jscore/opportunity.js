@@ -43,15 +43,20 @@ $(function () {
 
 
 //Populate users in options of owner input field dropdown
-function populateUsers(id, el) {
+function populateUsers(id, el , value) {
 	// Users
 	 var users = new Base_Collection_View({
          url: '/core/api/deal-owners',
          restKey: 'userPrefs',
          templateKey: 'owners',
-         individual_tag_name: 'option'
+         individual_tag_name: 'option',
      });
-	users.collection.fetch();
+	 users.collection.fetch({success:function(){
+		 
+		 	// set value owner if already saved
+		 	if(value && value.owner)
+		 		$('#owner',el).find("select[name=owner]").find("option[value="+value.owner+"]").prop("selected", "selected");
+	 }});
      $('#owner',el).html(users.el);
 
      return el;
@@ -68,7 +73,6 @@ $("#editOpportunity").live("click", function (e) {
         template: "opportunity-add",
         window: 'deals',
         postRenderCallback: function(el){
-        	console.log(el);
         		populateUsers("owner", el);
         		populateMilestones(el);
              	// Call setupTypeAhead to get tags
@@ -87,7 +91,8 @@ $("#editOpportunity").live("click", function (e) {
     	$("#content").html(view.el);   
 });
 
-function populateMilestones(el, dealsDetails){
+function populateMilestones(el, dealsDetails, value){
+	
 	 // Fill milestones in select options and ul 
     var milestone_model = Backbone.Model.extend({
    	 url: '/core/api/milestone'
@@ -97,7 +102,7 @@ function populateMilestones(el, dealsDetails){
     model.fetch({ 
    			 success: function(data) 
    			 { 
-						var jsonModel = data.toJSON();
+   				 		var jsonModel = data.toJSON();
 						var milestones = jsonModel.milestones;
 						
 						// Split , and trim
@@ -110,7 +115,13 @@ function populateMilestones(el, dealsDetails){
 							fillMilestones('move', array);
 							return;
 						}
-							fillTokenizedSelect('milestone', array);
+						if(value && value.milestone)
+						{
+							fillTokenizedSelect('milestone', array, value.milestone);
+							return;
+						}
+							
+						fillTokenizedSelect('milestone', array);
     			   }
     });
 }
