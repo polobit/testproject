@@ -58,9 +58,9 @@ function showCalendar() {
             
             // Set Date for Event
             var dateFormat = 'mm-dd-yy';
-            $('#task-date-1').val($.datepicker.formatDate(dateFormat, start));
-            $("#event-date-1").val($.datepicker.formatDate(dateFormat, start));
-            $("#event-date-2").val($.datepicker.formatDate(dateFormat, end));
+            $('#task-date-1').val(start.format(dateFormat));
+            $("#event-date-1").val(start.format(dateFormat));
+            $("#event-date-2").val(end.format(dateFormat));
 
             
             // Set Time for Event
@@ -106,8 +106,8 @@ function showCalendar() {
            
          // Set date for update Event
             var dateFormat = 'mm-dd-yy';
-            $("#update-event-date-1").val($.datepicker.formatDate(dateFormat, event.start));
-            $("#update-event-date-2").val($.datepicker.formatDate(dateFormat, event.end));
+            $("#update-event-date-1").val((event.start).format(dateFormat));
+            $("#update-event-date-2").val((event.end).format(dateFormat));
             
    	    	// Show edit modal for the event
    	    	$("#updateActivityModal").modal('show');

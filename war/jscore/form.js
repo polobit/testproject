@@ -41,7 +41,7 @@ function serializeForm(form_id) {
     			};
     		}).get() );
     
-    // Serialize Filters
+    // Serialize Filters chained select
     var json_array = [];
     arr = arr.concat( $('#' + form_id + ' .chained').map(
     		function(){
@@ -102,11 +102,14 @@ function deserializeForm(data, form)
 	           else if (tag == "input") 
 	           {
 	              type = $(fel[0]).attr("type");
+	              
 	              if(fel.hasClass('date'))
 	               {
-	            	  var date = new Date(el);
+	            	  fel.val(new Date(el*1000).format('mm-dd-yyyy'));
 	            	  
-	            	 fel.val(date.getMonth() + "-" + date.getDay() + "-" + date.getFullYear());
+	            	  	fel.datepicker({
+	            	  		format: 'mm-dd-yyyy',
+	                        });
 	               } 
 	              else if (type == "text" || type == "password" || type == "hidden") {
 	            	   fel.val(el);
@@ -194,7 +197,16 @@ function deserializeForm(data, form)
 	        			   // If input field set value for input field
 	        			   if(input_element.tagName.toLowerCase() == "input")
 	        			   {
-	        				   $(input_element).val(value);
+	        				
+	        				   if($(input_element).hasClass('date'))
+	        					  {
+	        					   $(input_element).val(new Date(value).format('mm-dd-yyyy'));
+	        					   $(input_element).datepicker({
+	        					   		format: 'mm-dd-yyyy',
+	        					   	});
+	        					   	return;
+	        					  }
+	   	            	  		$(input_element).val(value);
 	        				   return;
 	        			   }
 	        			

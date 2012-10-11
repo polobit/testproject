@@ -41,10 +41,10 @@ var DealsRouter = Backbone.Router.extend({
             	populateUsers("owner", el);
             	agile_type_ahead("relates_to", el, contacts_typeahead);
             	populateMilestones(el);
-            	
+
             	// Enable the datepicker
                 $('#close_date', el).datepicker({
-                    format: 'mm-dd-yyyy'
+                    format: 'mm-dd-yyyy',
                 });
             }
         });
@@ -72,17 +72,11 @@ var DealsRouter = Backbone.Router.extend({
             window: 'deals',
             postRenderCallback: function(el){
 
-        		populateUsers("owner", el, App_Deals.opportunityCollectionView.currentDeal.toJSON());
+        			populateUsers("owner", el, App_Deals.opportunityCollectionView.currentDeal.toJSON());
             		populateMilestones(el,undefined, App_Deals.opportunityCollectionView.currentDeal.toJSON());
-                 	// Call setupTypeAhead to get tags
+                 	
+            		// Call setupTypeAhead to get tags
                 	agile_type_ahead("relates_to", el, contacts_typeahead);   
-                	
-                	
-                	// Enable the datepicker
-                    $('#close_date', el).datepicker({
-                       format: 'mm-dd-yyyy'
-                    });
-                	
                 },
         	});
         
