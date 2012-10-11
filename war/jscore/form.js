@@ -1,5 +1,4 @@
 function serializeForm(form_id) {
-	console.log("form id in serialize: " + form_id);
 	var arr = $('#' + form_id).serializeArray(),
         obj = {};
 	
@@ -14,11 +13,11 @@ function serializeForm(form_id) {
     }).get());
     
     // Change the dates properly from human readable strings to epoch
-    arr = arr.concat($('#' + form_id + ' input[type=date_input]').map(
+    arr = arr.concat($('#' + form_id + ' input.date').map(
    	    function () {
     	     return {
     	            "name" : this.name,
-    	            "value": new Date(this.value).getTime() / 1000.0	
+    	            "value": new Date(this.value).getTime()/1000
     	        };
     	    }).get());
     
@@ -42,7 +41,7 @@ function serializeForm(form_id) {
     			};
     		}).get() );
     
-    // Serialize Filters
+    // Serialize Filters chained select
     var json_array = [];
     arr = arr.concat( $('#' + form_id + ' .chained').map(
     		function(){
@@ -81,7 +80,6 @@ function serializeForm(form_id) {
     	obj[arr[i].name] = arr[i].value;
     }
 
-    console.log(obj);
   //  obj[ $('#' + form_id + ' select').attr('name') ] = $('#' + form_id + ' select').val();
     return obj;
 }
@@ -94,7 +92,6 @@ function deserializeForm(data, form)
 	          fel = form.find('*[name="' + i + '"]'),
 	          type = "", tag = "";
 	      
-	      
 	       if (fel.length > 0) {
 	    	   
 	           tag = fel[0].tagName.toLowerCase();
@@ -105,9 +102,23 @@ function deserializeForm(data, form)
 	           else if (tag == "input") 
 	           {
 	              type = $(fel[0]).attr("type");
-	               if (type == "text" || type == "password" || type == "hidden") {
-	            	   fel.val(el);
+	              
+	              if(fel.hasClass('date'))
+	               {
+	            	  fel.val(new Date(el*1000).format('mm-dd-yyyy'));
+	            	  
+	            	  	fel.datepicker({
+	            	  		format: 'mm-dd-yyyy',
+	                        });
 	               } 
+	              else if (type == "text" || type == "password" || type == "hidden") {
+	            	   fel.val(el);
+	               }
+	              else if(tag =="select")
+	              {
+	            	  console.log("test");
+	            	  fel.val(el).trigger('change');
+	              }
 	               else if (type == "checkbox") {
 	            	   if (el)
 		                  {  
@@ -135,7 +146,6 @@ function deserializeForm(data, form)
 	                   var tag_name;
 	                   var tag_id = contact.id;
 	                   tag_name = getPropertyValue(contact.properties, "first_name") + " " + getPropertyValue(contact.properties, "last_name");
-	                   console.log(tag_name);
 	                   $('.tagsinput', form).append('<li class="tag" value="'+tag_id+'" class="tag"  style="display: inline-block; ">'+tag_name+'<a class="close" id="remove_tag">&times</a></li>');
 	                  });	        	    
 	           }
@@ -187,7 +197,16 @@ function deserializeForm(data, form)
 	        			   // If input field set value for input field
 	        			   if(input_element.tagName.toLowerCase() == "input")
 	        			   {
-	        				   $(input_element).val(value);
+	        				
+	        				   if($(input_element).hasClass('date'))
+	        					  {
+	        					   $(input_element).val(new Date(value).format('mm-dd-yyyy'));
+	        					   $(input_element).datepicker({
+	        					   		format: 'mm-dd-yyyy',
+	        					   	});
+	        					   	return;
+	        					  }
+	   	            	  		$(input_element).val(value);
 	        				   return;
 	        			   }
 	        			

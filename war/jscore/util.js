@@ -62,7 +62,7 @@ function fillSelect(selectId, url, parseKey, callback, template) {
 }
 
 // Fill selects with tokenized data
-function fillTokenizedSelect(selectId, array) {
+function fillTokenizedSelect(selectId, array, value ) {
 	$("#" + selectId).empty().append('<option value="">Select...</option>');
 	$.each(array, function(index, element) {
 		$("#" + selectId)
@@ -70,6 +70,9 @@ function fillTokenizedSelect(selectId, array) {
 						'<option value=' + '"' + element + '">' + element
 								+ '</option>');
 	});
+
+	if(value)
+		$("#" + selectId).find('option[value='+value+']').attr("selected", "selected");
 }
 
 function fillMilestones(ulId, array) {

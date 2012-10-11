@@ -238,7 +238,8 @@ $(function()
 	// Get date string from epoch time
 	Handlebars.registerHelper('epochToHumanDate', function(format, date)
 	{
-		var d = new Date(parseInt(date));
+		// date form milliseconds
+		var d = new Date(parseInt(date)*1000);
 		return d.toLocaleDateString();
 
 		// return $.datepicker.formatDate(format , new Date( parseInt(date) *
