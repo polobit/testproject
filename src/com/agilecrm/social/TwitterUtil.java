@@ -34,7 +34,8 @@ public class TwitterUtil
 	// Get Users
 	Twitter twitter = new TwitterFactory().getInstance();
 
-	twitter.setOAuthConsumer(Globals.TWITTER_API_KEY, Globals.TWITTER_SECRET_KEY);
+	twitter.setOAuthConsumer(Globals.TWITTER_API_KEY,
+		Globals.TWITTER_SECRET_KEY);
 	AccessToken accessToken = new AccessToken(widget.getProperty("token"),
 		widget.getProperty("secret"));
 	twitter.setOAuthAccessToken(accessToken);
@@ -50,7 +51,7 @@ public class TwitterUtil
 
 	    result.id = user.getId() + "";
 	    result.name = user.getName();
-	    result.picture = user.getProfileImageURL().toExternalForm();
+	    result.picture = user.getProfileImageUrlHttps().toString();
 	    result.location = user.getLocation();
 	    result.summary = user.getDescription();
 	    result.num_connections = user.getFollowersCount() + "";
@@ -70,7 +71,8 @@ public class TwitterUtil
 	// Get Users
 	Twitter twitter = new TwitterFactory().getInstance();
 
-	twitter.setOAuthConsumer(Globals.TWITTER_API_KEY, Globals.TWITTER_SECRET_KEY);
+	twitter.setOAuthConsumer(Globals.TWITTER_API_KEY,
+		Globals.TWITTER_SECRET_KEY);
 	AccessToken accessToken = new AccessToken(token, tokenSecret);
 	twitter.setOAuthAccessToken(accessToken);
 
@@ -84,7 +86,7 @@ public class TwitterUtil
 	    // Get User Details - picture, name etc
 	    User user = twitter.showUser(id);
 	    String name = user.getName();
-	    String path = user.getProfileImageURL().toExternalForm();
+	    String path = user.getProfileImageUrlHttps().toString();
 
 	    properties.put("id", id);
 	    properties.put("name", name);
@@ -105,7 +107,8 @@ public class TwitterUtil
     {
 	Twitter twitter = new TwitterFactory().getInstance();
 
-	twitter.setOAuthConsumer(Globals.TWITTER_API_KEY, Globals.TWITTER_SECRET_KEY);
+	twitter.setOAuthConsumer(Globals.TWITTER_API_KEY,
+		Globals.TWITTER_SECRET_KEY);
 	AccessToken accessToken = new AccessToken(widget.getProperty("token"),
 		widget.getProperty("secret"));
 	twitter.setOAuthAccessToken(accessToken);
@@ -118,7 +121,7 @@ public class TwitterUtil
 
 	    result.id = user.getId() + "";
 	    result.name = user.getName();
-	    result.picture = user.getProfileImageURL().toExternalForm();
+	    result.picture = user.getProfileImageUrlHttps().toString();
 	    result.location = user.getLocation();
 	    result.summary = user.getDescription();
 	    result.num_connections = user.getFollowersCount() + "";
