@@ -33,17 +33,17 @@ public class JSAPIFilter implements Filter
 	final HttpServletResponse httpResponse = (HttpServletResponse) response;
 
 	String agileId = httpRequest.getParameter("id");
-
-	// Check if ApiKey
-	String apiKey = APIKey.getAPIKey().api_key;
-	if (agileId != null && agileId.equals(apiKey))
+	if (agileId != null)
 	{
-	    chain.doFilter(httpRequest, httpResponse);
-	    return;
+	    // Check if ApiKey
+	    String apiKey = APIKey.getAPIKey().api_key;
+	    if (agileId.equals(apiKey))
+	    {
+		chain.doFilter(httpRequest, httpResponse);
+		return;
+	    }
 	}
-
 	System.out.println("Error");
-	httpResponse.setHeader("WWW-Authenticate", "Namespace incorrect");
 	httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
     }
 
