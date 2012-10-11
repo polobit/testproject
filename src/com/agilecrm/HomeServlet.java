@@ -13,8 +13,6 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.users.User;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 
 @SuppressWarnings("serial")
 public class HomeServlet extends HttpServlet
@@ -32,8 +30,7 @@ public class HomeServlet extends HttpServlet
 		AgileUser.class);
 
 	// Get UserId of person who is logged in
-	UserService userService = UserServiceFactory.getUserService();
-	User user = userService.getCurrentUser(); // or req.getUserPrincipal()
+	User user = AgileUser.getCurrentUser(); // or req.getUserPrincipal()
 
 	// Get Namespace
 	String domain = NamespaceManager.get();

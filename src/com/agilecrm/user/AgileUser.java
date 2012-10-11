@@ -78,14 +78,22 @@ public class AgileUser
     public static AgileUser getCurrentAgileUser()
     {
 	// Get UserId of person who is logged in
-	UserService userService = UserServiceFactory.getUserService();
-	User user = userService.getCurrentUser();
+	User user = AgileUser.getCurrentUser();
 
 	// Agile User
 	AgileUser agileUser = AgileUser.getUser(user.getUserId());
 
 	return agileUser;
 
+    }
+
+    // Get Current User
+    public static User getCurrentUser()
+    {
+	// Get UserId of person who is logged in
+	UserService userService = UserServiceFactory.getUserService();
+	User user = userService.getCurrentUser();
+	return user;
     }
 
     // Delete Agile User

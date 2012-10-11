@@ -34,15 +34,17 @@ $(function() {
 	        return;
 	      }
 		  var json = [];
-		  var obj = {};
+		  var data = {};
+		  var tags = {};
 		  json = $(el).serializeArray();
 		  $.each(json, function(index, val){
-			 obj[val.name] = val.value;
+			  if(val.name == "tags")
+				  tags[val.name] = val.value;
+			  else
+				  data[val.name] = val.value;
 			});
-		  obj = JSON.stringify(obj);
-		  console.log(obj);
 		  _agile = [];
-		  _agile.push(["_createContact", obj, {"tags":"tag1 tag2"}]);
+		  _agile.push(["_createContact", data, tags]);
 		  _agile_execute();
 	});
 	
@@ -55,17 +57,17 @@ $(function() {
 	      	return;
 	      }
 		  var json = [];
-		  var obj = {};
+		  var data = {};
 		  var email = {};
 		  json = $(el).serializeArray();
 		  $.each(json, function(index, val){
 			  if(val.name == "email")
 				  email[val.name] = val.value;
 			  else
-			      obj[val.name] = val.value;
+				  data[val.name] = val.value;
 			});
 		  _agile = [];
-		  _agile.push(["_addNote", email, obj]);
+		  _agile.push(["_addNote", email, data]);
 		  _agile_execute();
 	});
 	
@@ -78,17 +80,17 @@ $(function() {
 	      	return;
 	      }
 		  var json = [];
-		  var obj = {};
+		  var data = {};
 		  var email = {};
 		  json = $(el).serializeArray();
 		  $.each(json, function(index, val){
 			  if(val.name == "email")
 				  email[val.name] = val.value;
 			  else
-			      obj[val.name] = val.value;
+				  data[val.name] = val.value;
 			});
 		  _agile = [];
-		  _agile.push(["_addTask", email, obj]);
+		  _agile.push(["_addTask", email, data]);
 		  _agile_execute();
 	});
 	
@@ -101,17 +103,17 @@ $(function() {
 	      	return;
 	      }
 		  var json = [];
-		  var obj = {};
+		  var data = {};
 		  var email = {};
 		  json = $(el).serializeArray();
 		  $.each(json, function(index, val){
 			  if(val.name == "email")
 				  email[val.name] = val.value;
 			  else
-			      obj[val.name] = val.value;
+				  data[val.name] = val.value;
 			});
 		  _agile = [];
-		  _agile.push(["_addDeal", email, obj]);
+		  _agile.push(["_addDeal", email, data]);
 		  _agile_execute();
 	});
 	

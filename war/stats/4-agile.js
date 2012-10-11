@@ -162,7 +162,7 @@ var agile_session =
 	};
 agile_session.init();
 
-function getJSON(URL, success){
+function agile_getJSONP(URL, success){
     var ud = 'json'+(Math.random()*100).toString().replace(/\./g,'');
     window[ud]= function(o){
         success&&success(o);
@@ -175,10 +175,10 @@ function getJSON(URL, success){
     })());
 }
 
-function agile_setAccount(id)
+function agile_setAccount(id, namespace)
 {
-	console.log("Setting account " + id);
-	agile_id.set(id);
+	console.log("Setting account " + id + " with namespace " + namespace);
+	agile_id.set(id, namespace);
 }
 
 function agile_setEmail(email)
@@ -188,7 +188,7 @@ function agile_setEmail(email)
 }
 
 
-function propertyJSON(name, id, type) {
+function agile_propertyJSON(name, id, type) {
     var json = {};
 
     if (type == undefined) json.type = "SYSTEM";
@@ -199,24 +199,24 @@ function propertyJSON(name, id, type) {
     return json;
 }
 
-function agile_createContact(data)
+function agile_createContact(data, tags)
 {
  var properties = [];
 	 
 	 for (var key in data) {
 		  if (data.hasOwnProperty(key)) {
 		    //alert(key + " -> " + p[key]);
-			  properties.push(propertyJSON(key, data[key]));
+			  properties.push(agile_propertyJSON(key, data[key]));
 		  }
 		}
 	 
 	 var model = {};
 	 model.properties = properties;
-	 
+	 //var params = "contact={0}&tags={1}".format(encodeURIComponent(data), encodeURIComponent(JSON.stringify(tags)));
 	 // Get
-	 var agile_url = "http://localhost:8888/core/js/api/contacts?callback=?&contact=" + encodeURIComponent(JSON.stringify(model));
+	 var agile_url = agile_id.getURL() + "/contacts?callback=?&id=" + agile_id.get() + "&contact=" + encodeURIComponent(JSON.stringify(model));
 	 
-	 getJSON(agile_url, function(data){
+	 agile_getJSONP(agile_url, function(data){
 	 	    var success = data.flag === 'successful';
 	 	    if(success) {
 	 	        alert('The POST to abc.com WORKED SUCCESSFULLY');
@@ -234,9 +234,9 @@ function agile_addNote(email, data)
 	var params = "email={0}&note={1}".format(encodeURIComponent(email.email), encodeURIComponent(JSON.stringify(data)));
 	
 	 // Get
-	 var agile_url = "http://localhost:8888/core/js/api/js/note?callback=?&" + params ;
+	 var agile_url = agile_id.getURL() + "/js/note?callback=?&id=" + agile_id.get() + "&" + params ;
 	 
-	 getJSON(agile_url, function(data){
+	 agile_getJSONP(agile_url, function(data){
 	 	    var success = data.flag === 'successful';
 	 	    if(success) {
 	 	        alert('The POST to abc.com WORKED SUCCESSFULLY');
@@ -254,9 +254,9 @@ function agile_addTask(email, data)
 	var params = "email={0}&task={1}".format(encodeURIComponent(email.email), encodeURIComponent(JSON.stringify(data)));
 	
 	 // Get
-	 var agile_url = "http://localhost:8888/core/js/api/js/task?callback=?&" + params;
+	 var agile_url = agile_id.getURL() + "/js/task?callback=?&id=" + agile_id.get() + "&" + params;
 	 	
-	 getJSON(agile_url, function(data){
+	 agile_getJSONP(agile_url, function(data){
 	 	    var success = data.flag === 'successful';
 	 	    if(success) {
 	 	        alert('The POST to abc.com WORKED SUCCESSFULLY');
@@ -274,9 +274,9 @@ function agile_addDeal(email, data)
 	var params = "email={0}&opportunity={1}".format(encodeURIComponent(email.email), encodeURIComponent(JSON.stringify(data)));
 	
 	 // Get
-	 var agile_url = "http://localhost:8888/core/js/api/js/opportunity?callback=?&" + params;
+	 var agile_url = agile_id.getURL() + "/js/opportunity?callback=?&id=" + agile_id.get() + "&" + params;
 	 
-	 getJSON(agile_url, function(data){
+	 agile_getJSONP(agile_url, function(data){
 	 	    var success = data.flag === 'successful';
 	 	    if(success) {
 	 	        alert('The POST to abc.com WORKED SUCCESSFULLY');
@@ -284,7 +284,7 @@ function agile_addDeal(email, data)
 	 	});
 }
 
-function _getTagsData(data)
+function agile_getTagsData(data)
 {
 	var email = data.email;
 	var tags = data.tags;
@@ -313,14 +313,14 @@ function _getTagsData(data)
 
 function agile_addTag(data)
 {
-	var params = _getTagsData(data);
+	var params = agile_getTagsData(data);
 	if(!params)
 		return;
 	
 	// Post
-	 var agile_url = "http://localhost:8888/core/js/api/contacts/add-tags?callback=?&" + params;
+	 var agile_url = agile_id.getURL() + "/contacts/add-tags?callback=?&id=" + agile_id.get() + "&" + params;
 	 
-	 getJSON(agile_url,function(data){
+	 agile_getJSONP(agile_url,function(data){
 	 	    var success = data.flag === 'successful';
 	 	    if(success) {
 	 	        alert('The POST to abc.com WORKED SUCCESSFULLY');
@@ -331,14 +331,14 @@ function agile_addTag(data)
 
 function agile_removeTag(data)
 {
-	var params = _getTagsData(data);
+	var params = agile_getTagsData(data);
 	if(!params)
 		return;
 	
 	// Post
-	 var agile_url = "http://localhost:8888/core/js/api/contacts/remove-tags?callback=?&" + params;
+	 var agile_url = agile_id.getURL() + "/contacts/remove-tags?callback=?&id=" + agile_id.get() + "&" + params;
 	 
-	 getJSON(agile_url,function(data){
+	 agile_getJSONP(agile_url,function(data){
 	 	    var success = data.flag === 'successful';
 	 	    if(success) {
 	 	        alert('The POST to abc.com WORKED SUCCESSFULLY');
@@ -401,7 +401,7 @@ function agile_trackPageview()
  	
  	var agile_url = "http://stats.agilecrm.com/stats?callback=?&" + params;
  	
- 	getJSON(agile_url,function(data){
+ 	agile_getJSONP(agile_url,function(data){
  	    var success = data.flag === 'successful';
  	    if(success) {
  	        alert('The POST to abc.com WORKED SUCCESSFULLY');
@@ -415,13 +415,20 @@ function agile_trackPageview()
 
 var agile_id = 
 	{
-		set: function(id)
+		set: function(id, namespace)
 		{
 			this.id = id;
+			this.namespace = namespace;
 		},
 		get: function()
 		{
 			return this.id;
+		},
+		getURL: function()
+		{
+			if(this.namespace == "localhost")
+				this.namespace = "localhost:8888";
+			return "http://" + this.namespace + "/core/js/api";
 		}
 	};
 

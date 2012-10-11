@@ -8,10 +8,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.user.AgileUser;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.users.User;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -120,8 +119,7 @@ public class DomainUser
     public static DomainUser getDomainCurrentUser()
     {
 	// Get UserId of person who is logged in
-	UserService userService = UserServiceFactory.getUserService();
-	User user = userService.getCurrentUser();
+	User user = AgileUser.getCurrentUser();
 
 	System.out.println("Current user " + user + " " + user.getEmail());
 	if (user == null)
