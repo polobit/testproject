@@ -55,7 +55,7 @@ function populateUsers(id, el , value) {
 		 
 		 	// set value owner if already saved
 		 	if(value && value.owner)
-		 		$('#owner',el).find("select[name=owner]").find("option[value="+value.owner+"]").prop("selected", "selected");
+		 		$('#owner',el).find("select[name=owner]").find("option:contains("+value.owner+")").prop("selected", "selected");
 	 }});
      $('#owner',el).html(users.el);
 
