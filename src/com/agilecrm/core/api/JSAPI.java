@@ -216,7 +216,11 @@ public class JSAPI
 
 	    String[] tagsArray = tags.split(" ");
 
-	    Contact contact = Contact.addTags(email, tagsArray);
+	    Contact contact = Contact.searchContactByEmail(email);
+	    if (contact == null)
+		return null;
+
+	    contact.addTags(tagsArray);
 
 	    return new JSONWithPadding(new GenericEntity<Contact>(contact)
 	    {
@@ -252,7 +256,11 @@ public class JSAPI
 
 	    String[] tagsArray = tags.split(" ");
 
-	    Contact contact = Contact.removeTags(email, tagsArray);
+	    Contact contact = Contact.searchContactByEmail(email);
+	    if (contact == null)
+		return null;
+
+	    contact.removeTags(tagsArray);
 
 	    return new JSONWithPadding(new GenericEntity<Contact>(contact)
 	    {
