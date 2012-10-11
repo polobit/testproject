@@ -17,7 +17,7 @@ function serializeForm(form_id) {
    	    function () {
     	     return {
     	            "name" : this.name,
-    	            "value": new Date(this.value).getTime()
+    	            "value": new Date(this.value).getTime()/1000
     	        };
     	    }).get());
     
@@ -111,9 +111,9 @@ function deserializeForm(data, form)
 	              else if (type == "text" || type == "password" || type == "hidden") {
 	            	   fel.val(el);
 	               }
-	              else if(type=="select")
+	              else if(tag =="select")
 	              {
-	            	  console.log("select field");
+	            	  console.log("test");
 	            	  fel.val(el).trigger('change');
 	              }
 	               else if (type == "checkbox") {
