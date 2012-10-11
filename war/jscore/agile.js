@@ -97,6 +97,7 @@ function bulkOperations(url, id_array, index_array, table){
 	$.ajax({
 		url: url,
 		type: 'DELETE',
+		Content-Type: 'application/x-www-form-urlencoded',
 		data: json,
 		success: function(){
 			
