@@ -127,7 +127,10 @@ function deserializeContact(contact, template) {
 
     // Shows template  
     var form = $("#content").html(getTemplate(template, contact));
-
+    
+    // To set typeahead for tags
+    setupTagsTypeAhead();
+    
     // Iterates through properties and ui clones
     $.each(contact.properties, function (index, element) {
 
