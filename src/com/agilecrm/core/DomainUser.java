@@ -173,8 +173,12 @@ public class DomainUser
     }
 
     // Save
-    public void save()
+    public void save() throws Exception
     {
+
+	// Check if user exists with this email
+	if (getDomainUserFromEmail(email) != null)
+	    throw new Exception("User already exists with this email address");
 
 	String oldNamespace = NamespaceManager.get();
 
@@ -186,7 +190,7 @@ public class DomainUser
 	if (StringUtils.isEmpty(this.domain))
 	{
 	    System.out.println("Domain user not created");
-	    return;
+	    throw new Exception("Domain is empty. Please login again & try.");
 	}
 
 	NamespaceManager.set("");

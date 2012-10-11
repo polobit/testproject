@@ -10,7 +10,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,8 +51,20 @@ public class UsersAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public DomainUser createDomainUser(DomainUser domainUser)
     {
-	domainUser.save();
-	return domainUser;
+	try
+	{
+	    domainUser.save();
+	    return domainUser;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.out.println(e.getMessage());
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+
     }
 
     // Users
@@ -58,8 +72,19 @@ public class UsersAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public DomainUser updateDomainUser(DomainUser domainUser)
     {
-	domainUser.save();
-	return domainUser;
+	try
+	{
+	    domainUser.save();
+	    return domainUser;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.out.println(e.getMessage());
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
     }
 
     // Users
