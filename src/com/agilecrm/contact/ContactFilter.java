@@ -52,7 +52,7 @@ public class ContactFilter
     @NotSaved
     private JSONArray rules_json_array = null;
 
-    private static ObjectifyGenericDao<ContactFilter> dao = new ObjectifyGenericDao<ContactFilter>(
+    public static ObjectifyGenericDao<ContactFilter> dao = new ObjectifyGenericDao<ContactFilter>(
 	    ContactFilter.class);
 
     public ContactFilter()
