@@ -82,8 +82,8 @@ function build_ui()
 {
      
 	 // Get Emails
-     // var emails = get_emails();
-     var emails = ["manohar@invox.com"];
+     var emails = get_emails();
+     // var emails = ["manohar@invox.com"];
      
      // Build UI
      console.log("Building UI");
@@ -108,6 +108,9 @@ function build_ui_for_emails(email_ids){
 						var individualTemplate = getTemplate('gadget', val, 'no');	
 						console.log(individualTemplate);
 						$("#content").append($(individualTemplate));
+						
+						gadgets.window.adjustHeight();
+						
 					});
 		});
 }
