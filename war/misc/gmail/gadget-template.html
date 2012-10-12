@@ -1,0 +1,228 @@
+<script id="gadget-template" type="text/html">
+{{#if id}}
+<br/>
+ <div style="" id="gadgetContactDetailsTab">
+   <span style="float:left;" >
+	   <div style='display:inline;padding-right:10px;'>
+    		<img src="{{gravatarurl properties 50}}" width="50" height="50" style='display:inline'/>
+	   </div>
+    </span>
+    <span  style='vertical-align:middle;float:left;margin-right:10px;'>
+		<b>
+			<font size="5">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</font>
+		</b><br/>
+		{{#if_propertyName "email"}}
+			{{value}}<br/>
+		{{/if_propertyName}}
+
+		{{#if_propertyName "title"}}
+			{{value}}
+		{{/if_propertyName}}
+
+		{{#if_propertyName "company"}}
+			{{value}}
+		{{/if_propertyName}}
+ 		
+     </span>		
+     	
+    <span style=''>
+		<ul style='list-style:none;color:blue;'>
+      		<li><a id="gadget-add-note">Add Note</a></li>
+      		<li><a id="gadget-add-task">Add Task</a></li>
+      		<li><a id="gadget-add-deal">Add Deal</a></li>
+    	</ul>
+    </span><br/>
+
+    <div id="showForm">
+
+        <div id="gadget-note" style="display:none;">
+			<form id='gadgetNoteForm' name="gadgetNoteForm" method="post">
+				<fieldset>
+                    <legend><b>Add Note</b></legend>
+                    <input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
+					<div>
+                    	<label><b>Subject: </b><span style='color:red;'>*</span></label>
+						<div>
+							<input type="text" name="subject" id="subject" class="required"/>
+						</div>
+					</div>
+					<div>
+                    	<label><b>Description:</b><span style='color:red;'>*</span></label>
+						<div>
+							<textarea rows="3" name="description" id="description" class="required"></textarea> 
+						</div>
+					</div>
+                    
+                   <div>
+                     <button type="submit" id="gadget-note-validate">Add Note</button>
+		             <button href="#" >Cancel</button>
+                  </div>
+				</fieldset>
+			</form>
+		 </div>
+
+  	   <div id="gadget-task" style="display:none;">
+           	<form id='gadgetTaskForm' name="gadgetTaskForm" method="post">
+					<fieldset>
+                       <legend><b>Add Task</b></legend>
+                       <input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
+						<div>
+							<div id="addTask" style="display:inline-block;margin-left:0px;">
+								<label for="subject"> <b>Task:</b> <span style='color:red;'>*</span></label>
+								<div><span><input id="subject" type="text"
+							  		  name="subject" class="required" /> </span>
+							  	</div>
+							</div>
+							<div id="taskCategory" style="display:inline-block;">					
+								<label for="type"><b> Category: </b><span style='color:red;'>*</span></label>
+								<div><span>
+									<select name="type" id="type" size="1" class="required">
+										<option value="">Select</option>
+										<option value="CALL">Call</option>
+										<option value="EMAIL">Email</option>
+										<option value="FOLLOW_UP">Follow-up</option>
+										<option value="MEETING">Meeting</option>
+										<option value="MILESTONE">Milestone</option>
+										<option value="SEND">Send</option>
+										<option value="TWEET">Tweet</option>
+									</select> </span>
+								</div>
+							</div>
+						</div>
+						<div>
+					    	 <div style="display:inline-block;margin-left:0px;">
+								<label for="due"><b>Date (Due): </b><span style='color:red;'>*</span></label>
+								<div>
+									<input type="text" name="due" id="task-date-1" class="required date" value="MM-DD-YYYY"/>
+								</div>
+							  </div>
+							  <div style="display:inline-block;">
+								 <label for="priority_type"><b>Priority: </b></label>
+								 <div> 
+									<span>
+									<select	name="priority_type" id="priority_type" size="1">
+										<option value="HIGH">High</option>
+										<option value="NORMAL" selected="selected">Normal</option>
+										<option value="LOW">Low</option>
+									</select> </span>
+								</div>
+							</div>
+						</div> 
+                        <div>
+                          <button type="submit" id="gadget-task-validate">Add Task</button>
+				          <button href="#">Cancel</button>
+                       </div>
+					</fieldset>				
+				</form>	
+        </div>
+
+  	   	<div id="gadget-deal" style="display:none;">
+			  <form id="gadgetDealForm" name="gadgetDealForm" method="post">
+		  		<fieldset>
+                    <legend><b>Add Deal</b></legend>
+                    <input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
+					<div>			
+						<label><b>Name: </b><span style='color:red;'>*</span></label>
+						<div>
+							<input id="name" name="name" type="text" class="required"/>
+			  			</div>
+					</div>
+                   <div>
+					  <div style="display:inline-block;margin-left:0px;">
+               			<label><b>Value: </b> <span style='color:red;'>*</span></label>
+                		<div> 
+							<input type="text" name="expected_value" class="required  digits"/>
+						</div>
+					  </div>
+					  <div style="display:inline-block;">				
+						<label><b>Milestone: </b> <span style='color:red;'>*</span></label>
+						<div>
+							<select id="milestone" name="milestone" class="required" 
+									Style="width:100px">
+								<option value="">Select</option>
+                                <option value="Open">Open</option>
+								<option value="Won">Won</option>
+                                <option value="Stage 1">Stage 1</option>
+                                <option value="Lost">Lost</option>
+							</select>	
+			  			</div>
+					 </div>
+                    </div>
+                    <div>
+					  <div style="display:inline-block;margin-left:0px;">	
+						<label><b>Probability (%): </b> <span style='color:red;'>*</span></label>
+						<div>
+							<input type="text" id="probability" name="probability" class="required digits" max="100" />				
+			  			</div>
+					  </div>
+					  <div style="display:inline-block;">
+						<label><b>Close Date: </b> <span style='color:red;'>*</span></label>
+						<div>
+							<input type="text" id="close_date" name="close_date" class="required date" value="MM-DD-YYYY"/>				
+						</div>
+					  </div>
+                    </div>
+                    <div>
+                        <button type="submit" id="gadget-deal-validate">Add Deal</button> 
+			            <button href="#" >Cancel</button>
+                    </div>
+		  		</fieldset>
+			</form>
+        </div>
+
+     </div>
+   </div>
+{{else}}
+   <div id="gadgetContactDetailsTab">
+			<form id='gadgetContactForm' name="gadgetContactForm" method="post">
+			  <fieldset>
+                <legend><b>Add Contact To Agile CRM</b></legend>
+				<div>
+                 		 <label ><b>Name:</b> <span style='color:red;'>*</span></label>
+				  <div>
+					<span>
+					   <input name="first_name" type="text" class="required" id="fname"/>
+					</span>
+				    <span>
+					   <input name="last_name" class="required" type="text"	id="lname"/>
+					</span>
+				  </div>
+			    </div>
+			    
+				<div>
+                  <div style="display:inline-block;margin-left:0px;">
+                   	<label><b>Email:</b><span style='color:red;'>*</span> </label>
+					<div>
+						 <span><input name="email" type="text" id="email" class="required email" value = "{{email}}"/></span>
+					</div>
+				  </div>
+                  <div style="display:inline-block;">
+                     <label><b>Tags:</b></label>
+					<div>
+						 <span><input name="tags" type="text" id="email"/></span>
+					</div>
+				  </div>
+                </div>
+				<div>
+				  <div style="display:inline-block;margin-left:0px;">
+                   	<label ><b>Company:</b></label>
+					<div>
+						<input name="company" type="text" id="contact_company" />
+					</div>
+				  </div>
+				  <div style="display:inline-block;">
+                   	<label><b>Job Description:</b></label>
+					<div>
+						<input name="title" type="text" id="job_title"  />
+					</div>
+				  </div>
+                </div>
+                <div>
+                  <button type="submit" id="gadget-contact-validate">Add Contact</button>
+                  <button href="#">Cancel</button>
+               </div>
+			</fieldset>
+		  </form>
+		</div>
+{{/if}}
+</script>
