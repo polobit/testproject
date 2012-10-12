@@ -80,9 +80,9 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, url, continueCont
         obj[propertiesList[i].name] = propertiesList[i].value;
     }
     if (id != null) obj['id'] = id;
-
-    var tags = getTags(form_id);
-    if (tags != undefined) obj.tags = tags[0].value;
+    
+	var tags = getTags(form_id);
+	if (tags != undefined && tags.length != 0) obj.tags = tags[0].value;
     
     // Save contact
     var contactModel = new Backbone.Model();
@@ -185,7 +185,6 @@ function propertyJSON(name, id, type) {
 $(function () {
     // Clone Multiple
     $("i.multiple-add").die().live('click', function (e) {
-
         // Clone the template
         $(this).parents("div.control-group").append(
         $(this).parents().siblings("div.controls:first").clone().removeClass('hide'));
