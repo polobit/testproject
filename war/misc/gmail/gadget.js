@@ -1,9 +1,5 @@
-// For 
-// var GADGET_SERVER_URL = "https://test.agilecrm.com/";
-var GADGET_SERVER_URL = "http://localhost:8888/";
-
-//var GADGET_TEMPLATE = "http://localhost:8888/misc/gmail/gadget.html";
-var GADGET_TEMPLATE = "https://googleapps.agilecrm.com/misc/gmail/gadget.html";
+// Gadget JS Libs Path
+var LIB_PATH = "http://localhost:8888/";
 
 var _agile = _agile || [];
 
@@ -12,11 +8,16 @@ function init_agile_gadget()
 {
 	
 	// Set API Key first - agile-min.js executes at the very beginning
-	_agile.push(['_setAccount', 't87mbpn15789194cojt6j0ujd5', 'localhost']);
+	// Sukanya Localhost
+	// _agile.push(['_setAccount', 't87mbpn15789194cojt6j0ujd5', 'localhost']);
 	
+	// MC Localhost
+	_agile.push(['_setAccount', 'utjhaf2h97gcdc55jh6k7qbg9', 'localhost']);
+	
+	// _agile.push(['_setAccount', 'fbl6p636276j2ff7tp2m023t0q', 'test']);
+		
 	// Download scripts and load UI
 	download_scripts(build_ui);
-	
 }
 
 function download_scripts(callback)
@@ -24,31 +25,26 @@ function download_scripts(callback)
 	
 	console.log("Downloading scripts");
 	
-	// var LIB_PATH = "https://googleapps.agilecrm.com/";
-	
-	var LIB_PATH = "http://localhost:8888/";
-	
 	var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
 	
 	<!-- Load Jquery and validate -->
-	head.js(JQUERY_LIB_PATH, LIB_PATH + 'lib/jquery.validate.min.js', LIB_PATH + 'jscore/handlebars-agile.js');
+	head.js(JQUERY_LIB_PATH, LIB_PATH + 'lib/jquery.validate.min.js', LIB_PATH + 'lib/handlebars-1.0.0.beta.6-min.js', LIB_PATH + 'jscore/handlebars-agile.js');
 	
 	<!-- Handle bars -->
-	head.js(LIB_PATH + 'lib/handlebars-1.0.0.beta.6-min.js');
+	//head.js(LIB_PATH + 'lib/handlebars-1.0.0.beta.6-min.js');
 	
 	<!-- MD5 & Handlebars -->
 	head.js(LIB_PATH + 'jscore/md5.js');
 	
 	<!-- JS API -->
-	head.js(GADGET_SERVER_URL + 'stats/min/agile-min.js');
-	
+	head.js(LIB_PATH + 'stats/min/agile-min.js');
 	
 	head.ready(function() {	
 		if (callback && typeof(callback) === "function") {
 			
 			console.log("Downloading scripts done");
 			
-    		callback();
+    		$().ready(callback);
     	}
 	});
 }
@@ -84,12 +80,13 @@ function get_emails()
 function build_ui()
 {
      
-     // Get Emails
+	 // Get Emails
      // var emails = get_emails();
      var emails = ["manohar@invox.com"];
      
      // Build UI
-     build_ui_for_emails(emails);
+     console.log("Building UI");
+ 	 build_ui_for_emails(emails);
      
      // Init Handlers
      init_handlers();
@@ -99,35 +96,19 @@ function build_ui()
 // Retrieve contact details from email list
 function build_ui_for_emails(email_ids){
 	
-	var url = GADGET_SERVER_URL + "core/api/contacts/search/email";
-	var json = {};
-	json.email_ids = JSON.stringify(email_ids);
-	
-	
-	
-	$.post(url, json, function(data){
-		
-		
-		
 		// Remove loading icon
 		$("#content").html('');
 			
-		$.each(data, function(index, val){
-			if(!val)
-			{	
-				val = {};
-				val.email = email_ids[index];
-			}
-			
-			console.log(val);
-			
-			// Add to content
-			var individualTemplate = getTemplate('gadget', val, 'no');	
-			console.log(individualTemplate);
-			$("#content").append($(individualTemplate));
+		$.each(email_ids, function(index, email){
 	
+			agile_getContact(email, function(val)
+					{
+						// Add to content
+						var individualTemplate = getTemplate('gadget', val, 'no');	
+						console.log(individualTemplate);
+						$("#content").append($(individualTemplate));
+					});
 		});
-	});
 }
 
 // Validating form
