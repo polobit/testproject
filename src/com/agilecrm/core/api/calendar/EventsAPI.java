@@ -51,9 +51,9 @@ public class EventsAPI
     @Path("{id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Event getEvent(@PathParam("id") String id)
+    public Event getEvent(@PathParam("id") Long id)
     {
-	Event event = Event.getEvent(Long.parseLong(id));
+	Event event = Event.getEvent(id);
 	return event;
     }
 
@@ -61,11 +61,11 @@ public class EventsAPI
     @Path("{id}")
     @DELETE
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void deleteEvent(@PathParam("id") String id)
+    public void deleteEvent(@PathParam("id") Long id)
     {
 	try
 	{
-	    Event event = Event.getEvent(Long.parseLong(id));
+	    Event event = Event.getEvent(id);
 	    if (event != null)
 		event.delete();
 	}

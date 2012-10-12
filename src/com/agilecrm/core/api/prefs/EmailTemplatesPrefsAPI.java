@@ -33,9 +33,9 @@ public class EmailTemplatesPrefsAPI
     @Path("/{template-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public EmailTemplates getEmailTemplate(@PathParam("template-id") String id)
+    public EmailTemplates getEmailTemplate(@PathParam("template-id") Long id)
     {
-	return EmailTemplates.getEmailTemplate(Long.parseLong(id));
+	return EmailTemplates.getEmailTemplate(id);
     }
 
     @POST
@@ -58,10 +58,9 @@ public class EmailTemplatesPrefsAPI
 
     @Path("/{email-id}")
     @DELETE
-    public void deleteEmail(@PathParam("email-id") String id)
+    public void deleteEmail(@PathParam("email-id") Long id)
     {
-	EmailTemplates email = EmailTemplates.getEmailTemplate(Long
-		.parseLong(id));
+	EmailTemplates email = EmailTemplates.getEmailTemplate(id);
 	if (email != null)
 	    email.delete();
     }

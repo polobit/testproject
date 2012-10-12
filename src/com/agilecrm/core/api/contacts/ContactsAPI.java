@@ -131,9 +131,9 @@ public class ContactsAPI
 
     @Path("/{contact-id}")
     @DELETE
-    public void deleteContact(@PathParam("contact-id") String id)
+    public void deleteContact(@PathParam("contact-id") Long id)
     {
-	Contact contact = Contact.getContact(Long.parseLong(id));
+	Contact contact = Contact.getContact(id);
 	if (contact != null)
 	    contact.delete();
     }
@@ -142,9 +142,9 @@ public class ContactsAPI
     @Path("/{contact-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Contact getContact(@PathParam("contact-id") String id)
+    public Contact getContact(@PathParam("contact-id") Long id)
     {
-	Contact contact = Contact.getContact(Long.parseLong(id));
+	Contact contact = Contact.getContact(id);
 	return contact;
     }
 
@@ -153,21 +153,20 @@ public class ContactsAPI
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Opportunity> getCurrentContactOpportunity(
-	    @PathParam("contact-id") String id)
+	    @PathParam("contact-id") Long id)
     {
-	System.out.println("in api of contact deals");
-	return Opportunity.getCurrentContactDeals(Long.parseLong(id));
+	return Opportunity.getCurrentContactDeals(id);
     }
 
     // Notes of contact in contact details
     @Path("/{contact-id}/tasks")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Task> getTasks(@PathParam("contact-id") String id)
+    public List<Task> getTasks(@PathParam("contact-id") Long id)
     {
 	try
 	{
-	    return Task.getContactTasks(Long.parseLong(id));
+	    return Task.getContactTasks(id);
 	}
 	catch (Exception e)
 	{
@@ -180,11 +179,11 @@ public class ContactsAPI
     @Path("/{contact-id}/notes")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Note> getNotes(@PathParam("contact-id") String id)
+    public List<Note> getNotes(@PathParam("contact-id") Long id)
     {
 	try
 	{
-	    return Note.getNotes(Long.parseLong(id));
+	    return Note.getNotes(id);
 	}
 	catch (Exception e)
 	{
@@ -197,12 +196,12 @@ public class ContactsAPI
     @Path("/{contact-id}/notes/{id}")
     @DELETE
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void deleteNote(@PathParam("contact-id") String contactId,
-	    @PathParam("id") String noteId)
+    public void deleteNote(@PathParam("contact-id") Long contactId,
+	    @PathParam("id") Long noteId)
     {
 	try
 	{
-	    Note.deleteNote(Long.parseLong(noteId), Long.parseLong(contactId));
+	    Note.deleteNote(noteId, contactId);
 	}
 	catch (Exception e)
 	{
