@@ -307,7 +307,7 @@ var ContactsRouter = Backbone.Router.extend({
     		restKey: "contactView",
             window: 'contact-views',
             postRenderCallback: function(el) {
-       			head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+       			head.js(LIB_PATH + 'lib/jquery.multi-select.js', LIB_PATH + 'lib/jquery-ui.min.js', function(){
        					$('#multipleSelect', el).multiSelect();
        					$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id","fields_set").sortable();
        				});
