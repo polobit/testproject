@@ -14,9 +14,9 @@ function getGadgetForEmail(email_ids){
 				val.email = email_ids[index];
 			}
 			
-			var resultHTML = downloadSynchronously(getTemplate("gadget", val));
+			var resultHTML = downloadSynchronously(getTemplate("gadget", val);
 			$("#content").append($(resultHTML));
-			//$("#content").append(getTemplate("gadget", val));
+			//$("#content").append(getTemplate("gadget-without-both", val));
 		});
 	});
 }
