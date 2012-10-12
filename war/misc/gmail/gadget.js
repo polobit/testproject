@@ -106,7 +106,7 @@ function build_ui_for_emails(email_ids){
 					{
 						// Add to content
 						var individualTemplate = getTemplate('gadget', val, 'no');	
-						console.log(individualTemplate);
+						//console.log(individualTemplate);
 						$("#content").append($(individualTemplate));
 						
 						gadgets.window.adjustHeight();
