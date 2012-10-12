@@ -19,7 +19,6 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deferred.TagsDeferredTask;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.util.Util;
-import com.agilecrm.workflows.Trigger;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -201,7 +200,6 @@ public class Contact extends Cursor
     {
 	System.out.println("contact saving:" + this);
 	dao.put(this);
-	Trigger.executeTrigger(this.id, Trigger.Type.CONTACT_IS_ADDED);
     }
 
     public static Contact getContact(Long id)
