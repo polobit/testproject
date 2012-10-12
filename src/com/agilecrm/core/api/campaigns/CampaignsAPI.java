@@ -84,7 +84,7 @@ public class CampaignsAPI
 
     // Bulk operations - delete
     @Path("logs/bulk")
-    @DELETE
+    @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void deleteLogs(@FormParam("model_ids") String model_ids)
 	    throws JSONException
