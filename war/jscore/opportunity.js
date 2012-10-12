@@ -1,7 +1,7 @@
 $(function () {
 	
 	// On mouseover shows the popover
-	$('#opportunities-model-list > tr').live('mouseover', function () {
+	$('#opportunities-model-list > tr').live('mouseenter', function () {
         
         var data = $(this).find('.leads').attr('leads');
 
@@ -21,7 +21,7 @@ $(function () {
     });
     
 	// On mouseout hides the popover
-    $('#opportunities-model-list > tr').live('mouseout', function(){
+    $('#opportunities-model-list > tr').live('mouseleave', function(){
     	 $(this).popover('hide');
     });
     
