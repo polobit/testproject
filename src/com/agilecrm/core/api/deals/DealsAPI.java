@@ -105,7 +105,7 @@ public class DealsAPI
 
     // Bulk operations - delete
     @Path("bulk")
-    @DELETE
+    @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void deleteOpportunities(@FormParam("model_ids") String model_ids)
 	    throws JSONException
