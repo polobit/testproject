@@ -185,8 +185,8 @@ String CSS_PATH = "/";
 	<!-- Determine Console.logging - we log in local boxes -->
 	<% 
 	boolean debug = true;
-	if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
-	    debug = false;
+	/*if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
+	    debug = false;*/
 	%>
 	
 	

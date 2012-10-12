@@ -35,56 +35,24 @@
     <![CDATA[
       <!-- Start with Single Sign-On -->
       <!-- <script type="text/javascript" src="http://example.com/gadgets/sso.js"></script> --> 
-      <script type="text/javascript"> 
-         
-        <!-- Fetch the array of content matches. -->
-        matches = google.contentmatch.getContentMatches();
-        var matchList = document.createElement('UL');
-        var listItem;
-        var extractedText;
-        var emails = [];
-        <!-- Iterate through the array and display output for each match. -->
-        for (var match in matches) {
-          for (var key in matches[match]) {
-            listItem = document.createElement('LI');
-            extractedText = document.createTextNode(key + ": " + matches[match][key]);
-            emails.push(extractedText);
-            listItem.appendChild(extractedText);
-            matchList.appendChild(listItem);
-          }
-        }
-        document.body.appendChild(matchList);
-        gadgets.window.adjustHeight(100);
-      </script>
-	      
-	<script type="text/javascript">
-	$(function (){
-		getGadgetForEmail(emails);
-		});
-	</script>
-	    
+  	
     <style>
-	.error{color:red;}
+		.error{color:red;}
     </style>
    
    <div id="content">
       <img class="loading" style="padding-right:5px" src= "img/21-0.gif"></img>
    </div>
 
-   <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
-   <script type="text/javascript" src="https://googleapps.agilecrm.com/lib/jquery.validate.min.js"></script>
-   <script type="text/javascript" src="https://googleapps.agilecrm.com/lib/handlebars-1.0.0.beta.6-min.js"></script>
-   <script type="text/javascript" src="https://googleapps.agilecrm.com/jscore/md5.js"></script>
-   <script type="text/javascript" src="https://googleapps.agilecrm.com/jscore/handlebars-agile.js"></script>
-   <script type="text/javascript" src="https://googleapps.agilecrm.com/misc/gmail/gadget.js"></script>
+	<script src='https://googleapps.agilecrm.com/lib/headjs-min.js'></script>
 
+   
    <script type="text/javascript">
-     var _agile = _agile || [];
-	  _agile.push(['_setAccount', 't87mbpn15789194cojt6j0ujd5', 'localhost']);
-	  var aj = document.createElement('script'); aj.type = 'text/javascript';   
-      aj.src = '/stats/min/agile-min.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(aj, s);
-   </script>
+	$(function (){
+		init_agile_gadget();   
+	});
+	</script>
+	    
     ]]>
 
   </Content>
