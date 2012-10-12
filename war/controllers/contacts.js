@@ -301,7 +301,7 @@ var ContactsRouter = Backbone.Router.extend({
     	
     	
     	var contactView = new Base_Model_View({
-    		url: 'core/api/contact-view/' + id,
+    		url: 'core/api/contact-view/',
     		model: contact_view_model,
     		template: "contact-view",
     		restKey: "contactView",
