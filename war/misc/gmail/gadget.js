@@ -2,9 +2,8 @@
 // var GADGET_SERVER_URL = "https://test.agilecrm.com/";
 var GADGET_SERVER_URL = "http://localhost:8888/";
 
-var GADGET_TEMPLATE = "http://localhost:8888/misc/gmail/gadget.html";
-//var GADGET_TEMPLATE = "https://googleapps.agilecrm.com/misc/gmail/gadget.html";
-
+//var GADGET_TEMPLATE = "http://localhost:8888/misc/gmail/gadget.html";
+var GADGET_TEMPLATE = "https://googleapps.agilecrm.com/misc/gmail/gadget.html";
 
 var _agile = _agile || [];
 
@@ -90,8 +89,8 @@ function build_ui()
      var emails = ["manohar@invox.com"];
      
      // Build UI
- 	 build_ui_for_emails(emails);
- 	 
+     build_ui_for_emails(emails);
+     
      // Init Handlers
      init_handlers();
 }
@@ -103,12 +102,12 @@ function build_ui_for_emails(email_ids){
 	var url = GADGET_SERVER_URL + "core/api/contacts/search/email";
 	var json = {};
 	json.email_ids = JSON.stringify(email_ids);
+	
+	
+	
 	$.post(url, json, function(data){
 		
 		
-		// Download Gadget Template
-		var gadget_template = downloadSynchronously(GADGET_TEMPLATE);
-		var handlebars_template = Handlebars.compile(gadget_template);
 		
 		// Remove loading icon
 		$("#content").html('');
@@ -123,7 +122,7 @@ function build_ui_for_emails(email_ids){
 			console.log(val);
 			
 			// Add to content
-			var individualTemplate = handlebars_template(val);	
+			var individualTemplate = getTemplate('gadget', val, 'no');	
 			console.log(individualTemplate);
 			$("#content").append($(individualTemplate));
 	
