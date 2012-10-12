@@ -224,6 +224,30 @@ function agile_createContact(data, tags)
 	 	});
 }
 
+
+
+function agile_getContact(email)
+{
+	// Download Gadget Template
+	var gadget_template = downloadSynchronously(GADGET_TEMPLATE);
+	var handlebars_template = Handlebars.compile(gadget_template);
+	
+	 var params = "email={0}".format(encodeURIComponent(email));
+	 // Get
+	 var agile_url = agile_id.getURL() + "/contact/email?callback=?&id=" + agile_id.get() + "&" + params ;
+	 
+	 agile_getJSONP(agile_url, function(data){
+	 	    var success = data.flag === 'successful';
+	 	    if(success) {
+	 	        alert('The POST to abc.com WORKED SUCCESSFULLY');
+	 	        // Add to content
+	 			var individualTemplate = handlebars_template(val);	
+	 			console.log(individualTemplate);
+	 			$("#content").append($(individualTemplate));
+	 	    }
+	 	});
+}
+
 function agile_addNote(email, data)
 {
 	if(!email.email)
