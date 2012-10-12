@@ -43,6 +43,8 @@ public class JSAPI
 	{
 	    Contact contact = Contact.searchContactByEmail(email);
 	    System.out.println("Contact " + contact);
+	    if (contact == null)
+		contact = new Contact();
 
 	    return new JSONWithPadding(new GenericEntity<Contact>(contact)
 	    {
