@@ -61,9 +61,9 @@ public class WorkflowsAPI
 
     @Path("{id}")
     @DELETE
-    public void deleteWorkflow(@PathParam("id") String id)
+    public void deleteWorkflow(@PathParam("id") Long id)
     {
-	Workflow workflow = Workflow.getWorkflow(Long.parseLong(id));
+	Workflow workflow = Workflow.getWorkflow(id);
 	if (workflow != null)
 	    workflow.delete();
     }
@@ -113,9 +113,9 @@ public class WorkflowsAPI
     @DELETE
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public void deleteTrigger(@PathParam("trigger_id") String id)
+    public void deleteTrigger(@PathParam("trigger_id") Long id)
     {
-	Trigger trigger = Trigger.getTrigger(Long.parseLong(id));
+	Trigger trigger = Trigger.getTrigger(id);
 	if (trigger != null)
 	    trigger.delete();
 

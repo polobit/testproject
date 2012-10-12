@@ -58,7 +58,7 @@
 		            "required": "required",
 					"title": "Enter email you need your subscribers to reply.",
 					"fieldType": "input",
-		            "type": "text"	
+		            "type": "email"	
 				},
 		        {
 		            "label": "Text",

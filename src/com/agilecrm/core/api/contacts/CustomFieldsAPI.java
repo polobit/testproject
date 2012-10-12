@@ -43,12 +43,11 @@ public class CustomFieldsAPI
     @Path("/{id}")
     @DELETE
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void deleteCustomField(@PathParam("id") String id)
+    public void deleteCustomField(@PathParam("id") Long id)
     {
 	try
 	{
-	    CustomFieldDef customFieldDef = CustomFieldDef.get(Long
-		    .parseLong(id));
+	    CustomFieldDef customFieldDef = CustomFieldDef.get(id);
 	    if (customFieldDef != null)
 		customFieldDef.delete();
 	}

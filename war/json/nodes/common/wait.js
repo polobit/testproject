@@ -18,8 +18,8 @@
             "id":"duration",
 			"title": "Enter the duration period.",
 			"fieldType": "input",
-            "type": "text"
-		},{   
+            "type": "number"
+    },{   
 			"label": "Type",
            "required": "required",
             "category": "Settings",

@@ -53,11 +53,11 @@ public class ContactFilterAPI
     @Path("{filter_id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public ContactFilter getContactFilter(@PathParam("filter_id") String id)
+    public ContactFilter getContactFilter(@PathParam("filter_id") Long id)
     {
 	try
 	{
-	    return ContactFilter.getContactFilter(Long.parseLong(id));
+	    return ContactFilter.getContactFilter(id);
 	}
 	catch (Exception e)
 	{
@@ -69,12 +69,11 @@ public class ContactFilterAPI
     @Path("/query/{filter_id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Contact> getQueryResults(@PathParam("filter_id") String id)
+    public List<Contact> getQueryResults(@PathParam("filter_id") Long id)
     {
 	try
 	{
-	    ContactFilter filter = ContactFilter.getContactFilter(Long
-		    .parseLong(id));
+	    ContactFilter filter = ContactFilter.getContactFilter(id);
 
 	    List<Contact> contacts = filter.queryContacts();
 
