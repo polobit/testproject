@@ -31,21 +31,29 @@ public class JSAPI
 	return "Invalid Path";
     }
 
-    @Path("contacts/{email}")
+    @Path("contact/email")
     @GET
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Contact getContact(@PathParam("email") String email)
+    @Produces("application/x-javascript")
+    public JSONWithPadding getContact(@QueryParam("email") String email,
+	    @QueryParam("callback") String jsoncallback)
     {
 
-	System.out.println("Searching my email in js " + email);
+	try
+	{
+	    Contact contact = Contact.searchContactByEmail(email);
+	    System.out.println("Contact " + contact);
 
-	Contact contact = Contact.searchContactByEmail(email);
+	    return new JSONWithPadding(new GenericEntity<Contact>(contact)
+	    {
+	    }, jsoncallback);
 
-	System.out.println("Contact " + contact);
-
-	// Get Contact count by email
-	return contact;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
     }
 
     @Path("contacts")
