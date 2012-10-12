@@ -10,7 +10,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.campaign.Campaign;
+import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.workflows.Trigger.Type;
+import com.google.appengine.api.taskqueue.DeferredTask;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -120,6 +127,55 @@ public class Trigger
 	    return workflow.name;
 
 	return "";
+    }
+
+    // Get Triggers based on Trigger condition
+    public static List<Trigger> getTriggersByCondition(Type condition)
+    {
+	Objectify ofy = ObjectifyService.begin();
+	return ofy.query(Trigger.class).filter("type", condition).list();
+    }
+
+    public static void executeTrigger(Long contactId, Type type)
+
+    {
+	System.out.println("Executing trigger with contactID:" + contactId
+		+ "Condition type" + type);
+
+	TriggersDeferredTask triggersDeferredTask = new TriggersDeferredTask(
+		contactId, type);
+	Queue queue = QueueFactory.getDefaultQueue();
+	queue.add(TaskOptions.Builder.withPayload(triggersDeferredTask));
+    }
+
+}
+
+
+class TriggersDeferredTask implements DeferredTask
+{
+
+    Long contactId;
+
+    Type type;
+
+    public TriggersDeferredTask(Long contactId, Type condition)
+    {
+
+	this.contactId = contactId;
+	type = condition;
+    }
+
+    public void run()
+    {
+	List<Trigger> triggers = Trigger.getTriggersByCondition(type);
+	Contact contact = Contact.getContact(contactId);
+
+	for (Trigger trigger : triggers)
+	{
+
+	    if (contact != null)
+		Campaign.subscribe(contact, Long.parseLong(trigger.campaign_id));
+	}
     }
 
 }
