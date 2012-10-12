@@ -1,12 +1,8 @@
 package com.agilecrm.tasklets;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.Tag;
 import com.agilecrm.util.DBUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.TaskletManager;
@@ -59,14 +55,6 @@ public class Tags extends TaskletAdapter
 	    else
 	    {
 		contact.removeTags(tagsArray);
-
-		// Delete tags from Tag class
-		Set<String> tagslist = new HashSet<String>();
-		for (String tag : tagsArray)
-		{
-		    tagslist.add(tag);
-		}
-		Tag.deleteTags(tagslist);
 	    }
 	}
 
