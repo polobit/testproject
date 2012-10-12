@@ -19,6 +19,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deferred.TagsDeferredTask;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.util.Util;
+import com.agilecrm.workflows.Trigger;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -79,7 +80,7 @@ public class Contact extends Cursor
 
     // Tags
     @Indexed
-    public Set<String> tags = new HashSet<String>();
+    Set<String> tags = new HashSet<String>();
 
     // Properties
     // @XmlElementWrapper(name = "properties")
@@ -200,6 +201,7 @@ public class Contact extends Cursor
     {
 	System.out.println("contact saving:" + this);
 	dao.put(this);
+	Trigger.executeTrigger(this.id, Trigger.Type.CONTACT_IS_ADDED);
     }
 
     public static Contact getContact(Long id)
@@ -274,45 +276,34 @@ public class Contact extends Cursor
 		.filter("properties.value = ", email).count();
     }
 
-    // Add tags based on email
-    public static Contact addTags(String email, String[] tags)
+    // Add tags
+    public void addTags(String[] tags)
     {
-
-	// Get Contact
-	Contact contact = searchContactByEmail(email);
-	if (contact == null)
-	    return null;
-
-	// Add Tags
 	for (String tag : tags)
 	{
-	    contact.tags.add(tag);
+	    this.tags.add(tag);
 	}
 
-	contact.save();
-	return contact;
+	this.save();
     }
 
-    // Remove tags based on email
-    public static Contact removeTags(String email, String[] tags)
+    // Remove tags
+    public void removeTags(String[] tags)
     {
-
-	// Get Contact
-	Contact contact = searchContactByEmail(email);
-	if (contact == null)
-	    return null;
-
-	// Remove Tags
+	Set<String> tagslist = new HashSet<String>();
 	for (String tag : tags)
 	{
-	    contact.tags.remove(tag);
+	    this.tags.remove(tag);
+	    tagslist.add(tag);
 	}
 
-	contact.save();
-	return contact;
+	this.save();
+
+	// Delete tags from Tag class
+	Tag.deleteTags(tagslist);
     }
 
-    // Add score based on email
+    // Add score
     public void addScore(Integer score)
     {
 
@@ -320,7 +311,7 @@ public class Contact extends Cursor
 	this.save();
     }
 
-    // Subtract score based on email
+    // Subtract score
     public void subtractScore(Integer score)
     {
 
