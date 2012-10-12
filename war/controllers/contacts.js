@@ -51,7 +51,6 @@ var ContactsRouter = Backbone.Router.extend({
 
     },
     contacts: function (tag_id, filter_id) {
-    	console.log("contacts called");
     	var max_contacts_count = 20;
     	
     	var url = '/core/api/contacts';
@@ -471,8 +470,8 @@ var ContactsRouter = Backbone.Router.extend({
             	setupTags(el);
             	
                 pieTags(el);
-                setupViews(el);
-
+                setupViews(el, view_data.name);
+                
           	  	// show list of filters dropdown in contacts list
           	  	setupContactFilterList(el);        
             }
