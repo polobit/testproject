@@ -6,9 +6,10 @@ function contactTableView(base_model) {
     });
 
     var modelData = this.options.modelData;
+
     
     var data = modelData['fields_set'];
-
+    
     var json = base_model.toJSON();
     
   //  $(this.el).html(getTemplate((this.options.templateKey + '-collection'), this.options.modelData));
@@ -22,6 +23,7 @@ function contactTableView(base_model) {
     $(('#contacts-custom-view-model-list'), this.el).append(itemView.render().el);
 
     
+    $(('#contacts-custom-view-model-list'), this.el).find('tr:last').data(base_model);
     
 }
 
@@ -29,7 +31,7 @@ function contactTableView(base_model) {
 function setupViews(cel) {
 	
     // Show the views collection on the actions dropdown 	
-   App_Contacts.customView = new Base_Collection_View({
+	var customView = new Base_Collection_View({
         url: 'core/api/contact-view',
         restKey: "contactView",
         templateKey: "contact-view",
@@ -39,55 +41,37 @@ function setupViews(cel) {
     });
     
   // Fetch collection and add to contact collection template
-   App_Contacts.customView.collection.fetch({
+   customView.collection.fetch({
 	  	success: function(){
-	  		$("#view-list",cel).html(App_Contacts.customView.el);
+	  		$("#view-list",cel).html(customView.el);
 	  	}
     })
 }
 
 
 $(function(){
+	
+	$('.DefaultView').die().live('click', function(e) {
+		e.preventDefault();
+		console.log("default view selected");
+		eraseCookie("contact_view");
+		App_Contacts.contacts();
+		
+	});
+	
 	$('.ContactView').die().live('click',function(e){
 		
 		e.preventDefault();
 		
+		// Get id of the view
 		var id = $(this).attr('id');
 		
-		// Gets Model of selected contact-view
-		App_Contacts.contactViewModel = App_Contacts.customView.collection.get(id).toJSON();
-		
-	    var view = new Base_Collection_View({
-            url: '/core/api/contacts',
-            restKey: "contact",
-            modelData: App_Contacts.contactViewModel ,
-            templateKey: "contacts-custom-view",
-            individual_tag_name: 'tr',
-            cursor: true,
-            page_size: 25,
-            postRenderCallback: function(el) {
-          
-            	// To set chats and view when contacts are fetch by infiniscroll
-            	setupTags(el);
-            	
-                pieTags(el);
-          	  	setupViews(el);
+		// Save contact_view id as cookie
+		createCookie("contact_view", id);
 
-          	  	// show list of filters dropdown in contacts list
-          	  	setupContactFilterList(el);        
-            }
-        });
-	    
-	    // Defines appendItem for custom view 
-	    view.appendItem = contactTableView;
-	    
-	    // Fetch collection and set tags and contact-views list
-	    view.collection.fetch();
-	    $('#content').html(view.el);
+		App_Contacts.customView(id);
 	});
 });
-
-
 
 //On click on row in contact views triggers the details of particular contact view
 $(function () {

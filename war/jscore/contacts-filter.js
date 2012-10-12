@@ -47,12 +47,31 @@ $(function(){
 		e.preventDefault();
 		var filter_id = $(this).attr('id');
 		filter_name = $(this).attr('data');
-	//	App_Contacts.contacts(undefined, filter_id);
-		
-		App_Contacts.contactsListView.collection.url = "core/api/filters/query/" + filter_id;
-		App_Contacts.contactsListView.collection.fetch();
 	
+		// If custom view is set then load filter results in custom view
+		if(readCookie("contact_view"))
+			{
+				// Set url to custom view to load filter results
+				App_Contacts.contact_custom_view.collection.url = "core/api/filters/query/" + filter_id;
+				App_Contacts.contact_custom_view.collection.fetch();	
+				return;
+			}
+		
+		// If contactsListView is defined (default view) then load filter results in default view 
+		if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection)
+		{	
+			// Set url to default view to load filter results
+			App_Contacts.contactsListView.collection.url = "core/api/filters/query/" + filter_id;
+			App_Contacts.contactsListView.collection.fetch();
+		}
 	});
+	
+	$('.default_filter').live('click', function(e){
+		e.preventDefault();
+		console.log("default filter");
+		App_Contacts.contacts();
+		
+	})
     
 });
 

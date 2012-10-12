@@ -51,7 +51,7 @@ var ContactsRouter = Backbone.Router.extend({
 
     },
     contacts: function (tag_id, filter_id) {
-    		
+    	console.log("contacts called");
     	var max_contacts_count = 20;
     	
     	var url = '/core/api/contacts';
@@ -63,11 +63,18 @@ var ContactsRouter = Backbone.Router.extend({
     	}
     	
     	// Search based on filter
-    	if(filter_id)
+    	if(filter_id )
     	{
     		url = "core/api/filters/query/" + filter_id;
     	}
     	 
+        // If view is set to custom view load the custom view
+      	if(readCookie("contact_view"))
+		{
+			this.customView(readCookie("contact_view"));
+			return;
+		}
+      	
     	console.log("Fetching from " + url);
     	
         this.contactsListView = new Base_Collection_View({
@@ -85,7 +92,6 @@ var ContactsRouter = Backbone.Router.extend({
             	  
             	  // show list of filters dropdown in contacts list
             	  setupContactFilterList(cel);            	  
-            	  
             	  }             
           });
 
@@ -93,15 +99,6 @@ var ContactsRouter = Backbone.Router.extend({
           var cel = this.contactsListView.el;
           var collection = this.contactsListView.collection;
           this.contactsListView.collection.fetch();
-
-          // Show the views collection on the actions dropdown 	
-          var customView = new Base_Collection_View({
-              url: 'core/api/contact-view',
-              restKey: "contactView",
-              templateKey: "contact-view",
-              individual_tag_name: 'li',
-          });
-
 
           $('#content').html(this.contactsListView.render().el);
           
@@ -434,5 +431,59 @@ var ContactsRouter = Backbone.Router.extend({
 
     	$("#content").html(getTemplate("send-email", {}));
     	$('body').trigger('fill_emails');
+    },
+    customView : function(id, view_data, url) {
+    	
+    	// If id is defined get the respective custom view object 
+    	if (id && !view_data) 
+		{
+			var view = new Backbone.Model();
+			view.url = 'core/api/contact-view/' + id;
+			view.fetch({
+				success: function(data)
+				{
+					App_Contacts.contactViewModel = data.toJSON();
+					
+					App_Contacts.customView(undefined, App_Contacts.contactViewModel, url);
+
+				}
+			});
+			return;
+		}
+    	
+    	// If url is not defined set defult url to contacts
+    	if(!url)
+		{
+			url = "core/api/contacts";
+		}
+    	
+        this.contact_custom_view = new Base_Collection_View({
+            url: url,
+            restKey: "contact",
+            modelData: view_data ,
+            templateKey: "contacts-custom-view",
+            individual_tag_name: 'tr',
+            cursor: true,
+            page_size: 25,
+            postRenderCallback: function(el) {
+          
+            	// To set chats and view when contacts are fetch by infiniscroll
+            	setupTags(el);
+            	
+                pieTags(el);
+                setupViews(el);
+
+          	  	// show list of filters dropdown in contacts list
+          	  	setupContactFilterList(el);        
+            }
+        });
+        
+        // Defines appendItem for custom view 
+        this.contact_custom_view.appendItem = contactTableView;
+        
+        // Fetch collection
+        this.contact_custom_view.collection.fetch();
+        $('#content').html(this.contact_custom_view.el);
+    	
     }
 });
