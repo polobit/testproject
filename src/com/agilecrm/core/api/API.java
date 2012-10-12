@@ -156,9 +156,9 @@ public class API
     @Path("contact-view/{id}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public ContactView getContactView(@PathParam("id") String id)
+    public ContactView getContactView(@PathParam("id") Long id)
     {
-	return ContactView.getContactView(Long.parseLong(id));
+	return ContactView.getContactView(id);
 
     }
 

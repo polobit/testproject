@@ -27,17 +27,17 @@ public class CampaignsAPI
     @Path("enroll/{contact-id}/{workflow-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public String subscribeContact(@PathParam("contact-id") String contactId,
-	    @PathParam("workflow-id") String workflowId)
+    public String subscribeContact(@PathParam("contact-id") Long contactId,
+	    @PathParam("workflow-id") Long workflowId)
     {
-	Contact contact = Contact.getContact(Long.parseLong(contactId));
+	Contact contact = Contact.getContact(contactId);
 	if (contact == null)
 	{
 	    System.out.println("Null contact");
 	    return "true";
 	}
 
-	Campaign.subscribe(contact, Long.parseLong(workflowId));
+	Campaign.subscribe(contact, workflowId);
 
 	return "true";
     }
@@ -100,7 +100,7 @@ public class CampaignsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public String subscribeContactsBulk(
 	    @FormParam("contact_ids") String contact_ids,
-	    @PathParam("workflow-id") String workflowId) throws JSONException
+	    @PathParam("workflow-id") Long workflowId) throws JSONException
     {
 
 	JSONArray contactsJSONArray = new JSONArray(contact_ids);
@@ -116,7 +116,7 @@ public class CampaignsAPI
 
 	for (Contact contact : contacts_list)
 	{
-	    Campaign.subscribe(contact, Long.parseLong(workflowId));
+	    Campaign.subscribe(contact, workflowId);
 	}
 
 	return "true";

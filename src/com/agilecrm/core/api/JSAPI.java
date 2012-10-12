@@ -313,17 +313,17 @@ public class JSAPI
     @Path("js/campaign/enroll/{contact-id}/{workflow-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Boolean subscribeContact(@PathParam("contact-id") String contactId,
-	    @PathParam("workflow-id") String workflowId)
+    public Boolean subscribeContact(@PathParam("contact-id") Long contactId,
+	    @PathParam("workflow-id") Long workflowId)
     {
-	Contact contact = Contact.getContact(Long.parseLong(contactId));
+	Contact contact = Contact.getContact(contactId);
 	if (contact == null)
 	{
 	    System.out.println("Null contact");
 	    return true;
 	}
 
-	Campaign.subscribe(contact, Long.parseLong(workflowId));
+	Campaign.subscribe(contact, workflowId);
 
 	return true;
     }

@@ -27,10 +27,11 @@
 			"label": "Value",
 			"category": "Info",
 			"name": "Value",
-            "id":"Value",
+            "id": "Value",
+            "value" : "0", 
 			"title": "Enter the value.",
 			"fieldType": "input",
-            "type": "text" 
+            "type": "number" 
 			
 		},{
             "label": "Add or subtract a score for your subscriber. You can sort your customers based on score or generate reports accordingly.",

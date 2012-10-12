@@ -56,9 +56,9 @@ public class TasksAPI
     @Path("{id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Task getTask(@PathParam("id") String id)
+    public Task getTask(@PathParam("id") Long id)
     {
-	Task task = Task.getTask(Long.parseLong(id));
+	Task task = Task.getTask(id);
 	return task;
     }
 
@@ -66,11 +66,11 @@ public class TasksAPI
     @Path("{id}")
     @DELETE
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void deleteTask(@PathParam("id") String id)
+    public void deleteTask(@PathParam("id") Long id)
     {
 	try
 	{
-	    Task task = Task.getTask(Long.parseLong(id));
+	    Task task = Task.getTask(id);
 	    if (task != null)
 		task.delete();
 	}

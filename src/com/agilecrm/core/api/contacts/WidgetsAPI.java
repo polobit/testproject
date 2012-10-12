@@ -88,10 +88,10 @@ public class WidgetsAPI
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public SocialSearchResult getSocialProfile(@PathParam("type") String type,
-	    @PathParam("plugin-id") String socialId, @PathParam("id") String id)
+	    @PathParam("plugin-id") String socialId, @PathParam("id") Long id)
     {
 
-	Widget widget = Widget.getWidget(Long.parseLong(id));
+	Widget widget = Widget.getWidget(id);
 	if (widget == null)
 	{
 	    return null;
@@ -119,16 +119,16 @@ public class WidgetsAPI
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<SocialSearchResult> getSocialResults(
-	    @PathParam("type") String type, @PathParam("id") String contactId,
-	    @PathParam("plugin-id") String pluginId)
+	    @PathParam("type") String type, @PathParam("id") Long contactId,
+	    @PathParam("plugin-id") Long pluginId)
     {
 	try
 	{
 
-	    Contact contact = Contact.getContact(Long.parseLong(contactId));
+	    Contact contact = Contact.getContact(contactId);
 	    System.out.println(contact);
 
-	    Widget widget = Widget.getWidget(Long.parseLong(pluginId));
+	    Widget widget = Widget.getWidget(pluginId);
 	    if (widget == null)
 	    {
 		return null;

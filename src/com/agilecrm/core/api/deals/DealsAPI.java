@@ -51,10 +51,9 @@ public class DealsAPI
 
     @Path("{opportunity-id}")
     @DELETE
-    public void deleteOpportunity(@PathParam("opportunity-id") String id)
+    public void deleteOpportunity(@PathParam("opportunity-id") Long id)
     {
-	Opportunity opportunity = Opportunity
-		.getOpportunity(Long.parseLong(id));
+	Opportunity opportunity = Opportunity.getOpportunity(id);
 	if (opportunity != null)
 	    opportunity.delete();
     }
@@ -63,10 +62,9 @@ public class DealsAPI
     @Path("{opportunity-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Opportunity getOpportunity(@PathParam("opportunity-id") String id)
+    public Opportunity getOpportunity(@PathParam("opportunity-id") Long id)
     {
-	Opportunity opportunity = Opportunity
-		.getOpportunity(Long.parseLong(id));
+	Opportunity opportunity = Opportunity.getOpportunity(id);
 	return opportunity;
     }
 
@@ -74,33 +72,30 @@ public class DealsAPI
     @Path("stats/milestones")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public String getDealsStatsForMilestones(@QueryParam("min") String min,
-	    @QueryParam("max") String max)
+    public String getDealsStatsForMilestones(@QueryParam("min") Long min,
+	    @QueryParam("max") Long max)
     {
-	return Opportunity.getMilestones(Long.parseLong(min),
-		Long.parseLong(max)).toString();
+	return Opportunity.getMilestones(min, max).toString();
     }
 
     // / Deals Stats - Conversions
     @Path("stats/conversions")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public String getConversions(@QueryParam("min") String min,
-	    @QueryParam("max") String max)
+    public String getConversions(@QueryParam("min") Long min,
+	    @QueryParam("max") Long max)
     {
-	return Opportunity.getConversionDetails(Long.parseLong(min),
-		Long.parseLong(max)).toString();
+	return Opportunity.getConversionDetails(min, max).toString();
     }
 
     // / Deals Stats - Conversions
     @Path("stats/details")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public String getDealsDetails(@QueryParam("min") String min,
-	    @QueryParam("max") String max)
+    public String getDealsDetails(@QueryParam("min") Long min,
+	    @QueryParam("max") Long max)
     {
-	return Opportunity.getDealsDetails(Long.parseLong(min),
-		Long.parseLong(max)).toString();
+	return Opportunity.getDealsDetails(min, max).toString();
     }
 
     // Bulk operations - delete

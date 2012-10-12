@@ -15,10 +15,7 @@ var First_Nodes_Toolbar_Global = new Array("json/nodes/email/send_email.jsp",
 		"json/nodes/email/ab.js", "json/nodes/email/sex.js",
 		"json/nodes/common/score.js", "json/nodes/crm/addnote.js",
 		"json/nodes/crm/tags.js");
-var Second_Nodes_Toolbar_Global = new Array("json/nodes/sms/sendmessage.js",
-		"json/nodes/sms/getmessage.js", "json/nodes/sms/menusms.js",
-		"json/nodes/common/transfer.js", "json/nodes/developers/jsonio.js",
-		"json/nodes/developers/condition.js");
+var Second_Nodes_Toolbar_Global = new Array("json/nodes/developers/jsonio.js", "json/nodes/developers/condition.js");
 
 /*
  * var First_Nodes_Toolbar_Global = new Array("json/nodes/sms/sendmessage.js",
