@@ -133,6 +133,7 @@ var Base_Model_View = Backbone.View.extend({
             	{
             		$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>Saved Successfully</i></p></small></div>');
             		$(".form-actions", this.el).append($save_info);
+                	$save_info.show().delay(3000).hide(1);
             	}
             },
             error : function (model, response)
