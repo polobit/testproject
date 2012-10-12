@@ -1,5 +1,6 @@
 // Gadget JS Libs Path
-var LIB_PATH = "http://localhost:8888/";
+// var LIB_PATH = "http://localhost:8888/";
+var LIB_PATH = "https://googleapps.agilecrm.com/";
 
 var _agile = _agile || [];
 
@@ -12,9 +13,9 @@ function init_agile_gadget()
 	// _agile.push(['_setAccount', 't87mbpn15789194cojt6j0ujd5', 'localhost']);
 	
 	// MC Localhost
-	_agile.push(['_setAccount', 'utjhaf2h97gcdc55jh6k7qbg9', 'localhost']);
+	//_agile.push(['_setAccount', 'utjhaf2h97gcdc55jh6k7qbg9', 'localhost']);
 	
-	// _agile.push(['_setAccount', 'fbl6p636276j2ff7tp2m023t0q', 'test']);
+	_agile.push(['_setAccount', 'fbl6p636276j2ff7tp2m023t0q', 'test']);
 		
 	// Download scripts and load UI
 	download_scripts(build_ui);
