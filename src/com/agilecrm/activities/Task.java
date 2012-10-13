@@ -60,7 +60,7 @@ public class Task
     private Key<AgileUser> owner = null;
 
     // Dao
-    private static ObjectifyGenericDao<Task> dao = new ObjectifyGenericDao<Task>(
+    public static ObjectifyGenericDao<Task> dao = new ObjectifyGenericDao<Task>(
 	    Task.class);
 
     // Priority Type - Added - Ram - 08/02/12

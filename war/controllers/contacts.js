@@ -228,10 +228,6 @@ var ContactsRouter = Backbone.Router.extend({
 
     },
     addOpportunityToContact: function() {
-    	
-    	// Remove and add timeline division in contact details
-    	regenerateTimelineBlock();
-    	
     	var id = this.contactDetailView.model.id;
     	this.opportunityView = new Base_Model_View({
             url: 'core/api/opportunity',
@@ -243,7 +239,7 @@ var ContactsRouter = Backbone.Router.extend({
             	populateMilestones(el);
             	var json = App_Contacts.contactDetailView.model.toJSON();
             	var contact_name = json.properties[0].value + " " + json.properties[1].value;
-            	$('.tags',el).append('<li class="label label-warning"  style="display: inline-block; vertical-align: middle; margin-right:3px;" value="'+ json.id +'">'+contact_name+'</li>');
+            	$('.tags',el).append('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ json.id +'">'+contact_name+'</li>');
 
             	// Enable the datepicker
                 $('#close_date', el).datepicker({

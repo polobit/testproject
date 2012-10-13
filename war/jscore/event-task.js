@@ -35,17 +35,20 @@ $(function(){
 	    	        			$('#activityModal').find('span.save-status img').remove();
 	    		    	        $("#activityModal").modal('hide');
 	    	        		    
-	    		    			// Update task to time line
-	    		    	     /* timelineView.collection.add(data);
+	    		       	        var task = data.toJSON();
+	    		       	        
+	    		       	        // Update data to temeline 
+	    		    			if(App_Contacts.contactDetailView){
+	    		    				$.each(task.contacts, function(index, contact_id){
+	    		    					if(contact_id == App_Contacts.contactDetailView.model.get('id')){
+	    		    						$('#timeline').isotope( 'insert', $(getTemplate("timeline", data.toJSON())) );
+	    		    						return false;
+	    		    					}	
 
-	    						// Remove and add timeline division in contact details
-    							regenerateTimelineBlock();
-    			
-	    						// Call to setup timeline
-	    						setUpTimeline(timelineView.collection.toJSON());*/
-	    						
-	    		    	        // Update task list view 
-	    		    	        if(Current_Route == 'calendar'){
+	    		    				});
+	    		    			}else if(Current_Route == 'calendar'){
+	    		    				
+		    		    	        // Update task list view 
 	    		    	        	App_Calendar.tasksListView.collection.add(data);
 	    		    	        	App_Calendar.tasksListView.render(true);
 	    		    	        }else{
