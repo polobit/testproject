@@ -177,8 +177,12 @@ public class DomainUser
     {
 
 	// Check if user exists with this email
-	if (getDomainUserFromEmail(email) != null)
-	    throw new Exception("User already exists with this email address");
+	DomainUser domainUser = getDomainUserFromEmail(email);
+	if ((domainUser != null) && !this.id.equals(domainUser.id))
+	{
+	    throw new Exception("User already exists with this email address "
+		    + domainUser);
+	}
 
 	String oldNamespace = NamespaceManager.get();
 
@@ -192,6 +196,11 @@ public class DomainUser
 	    System.out.println("Domain user not created");
 	    throw new Exception("Domain is empty. Please login again & try.");
 	}
+
+	// Check if three users
+	if (dao.count() >= 2)
+	    throw new Exception(
+		    "Please upgrade. You cannot add more than 2 users in the free plan");
 
 	NamespaceManager.set("");
 
@@ -214,7 +223,8 @@ public class DomainUser
     // To String
     public String toString()
     {
-	return "Email " + this.email + " " + this.domain + " " + this.is_admin;
+	return "Email " + this.email + " " + this.domain + " " + this.is_admin
+		+ " " + this.id;
 
     }
 }

@@ -4,6 +4,8 @@ var LIB_PATH = "https://googleapps.agilecrm.com/";
 
 var _agile = _agile || [];
 
+var Is_Localhost = false;
+
 // Init Agile Gadget
 function init_agile_gadget()
 {
@@ -16,6 +18,13 @@ function init_agile_gadget()
 	//_agile.push(['_setAccount', 'utjhaf2h97gcdc55jh6k7qbg9', 'localhost']);
 	
 	_agile.push(['_setAccount', 'fbl6p636276j2ff7tp2m023t0q', 'test']);
+	
+	// Check if localhost
+	console.log(window.location.host);
+	if (window.location.host.indexOf("localhost") != -1)
+		Is_Localhost = true;
+	else
+		gadgets.window.adjustHeight();
 		
 	// Download scripts and load UI
 	download_scripts(build_ui);
@@ -80,10 +89,12 @@ function get_emails()
 // Get emails
 function build_ui()
 {
-     
-	 // Get Emails
-     var emails = get_emails();
-     // var emails = ["manohar@invox.com"];
+	// Get Emails
+	var emails;
+	if(!Is_Localhost)
+		emails = get_emails();
+	else
+		emails = ["manohar@invox.com"];
      
      // Build UI
      console.log("Building UI");
@@ -92,7 +103,6 @@ function build_ui()
      // Init Handlers
      init_handlers();
 }
-
 
 // Retrieve contact details from email list
 function build_ui_for_emails(email_ids){
@@ -104,12 +114,16 @@ function build_ui_for_emails(email_ids){
 	
 			agile_getContact(email, function(val)
 					{
+				
+						val.email = email;
+						
 						// Add to content
 						var individualTemplate = getTemplate('gadget', val, 'no');	
 						//console.log(individualTemplate);
 						$("#content").append($(individualTemplate));
 						
-						gadgets.window.adjustHeight();
+						if(!Is_Localhost)
+							gadgets.window.adjustHeight();
 						
 					});
 		});

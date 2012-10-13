@@ -38,6 +38,7 @@
   	
     <style>
 		.error{color:red;}
+		body{font-size:12px}
     </style>
    
    <div id="content">

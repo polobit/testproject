@@ -224,6 +224,13 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	return asList(q.fetch());
     }
 
+    public int count()
+    {
+
+	Query<T> q = ofy().query(clazz);
+	return q.count();
+    }
+
     public List<T> fetchAll(int max, String cursor)
     {
 	Query<T> query = ofy().query(clazz);
