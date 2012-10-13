@@ -48,11 +48,11 @@ $(function(){
 	    		    	        if(Current_Route == 'calendar'){
 	    		    	        	App_Calendar.tasksListView.collection.add(data);
 	    		    	        	App_Calendar.tasksListView.render(true);
+	    		    	        }else{
+	    		    	        	App_Calendar.navigate("calendar", {
+	    		    	        		trigger: true
+	    		    	        	});
 	    		    	        }
-	    		    	        
-	    		    	        App_Calendar.navigate("calendar", {
-	    	        				trigger: true
-	    	        			});
 	    	        		} 
 	    	        	});
 	    	        }
@@ -69,6 +69,29 @@ $(function(){
 	    		
 	    		saveEvent('updateActivityForm', 'updateActivityModal');
 	    });
+	    
+	    // Delete event
+	    $('#event_delete').die().live('click', function (e) {
+	    		e.preventDefault();
+	    		var event_id = $('#updateActivityForm input[name=id]').val()
+	    		console.log(event_id);
+	    		// Show loading symbol until model get saved
+	            $('#updateActivityModal').find('span.save-status').html(LOADING_HTML);
+	    		$.ajax({
+	    			url: 'core/api/events/' + event_id,
+	    			type: 'DELETE',
+	    			success: function(){
+	        			
+	        			$('#updateActivityModal').find('span.save-status img').remove();
+	        			
+		    	        $("#updateActivityModal").modal('hide');
+	        		    
+		    	        $('#calendar').fullCalendar('rerenderEvents');
+	    				console.log("deleteddd");
+	    			}
+	    		});
+	    });
+	    
 	    		// Date Picker
 			    $('#task-date-1').datepicker({
 			        format: 'mm-dd-yyyy'
