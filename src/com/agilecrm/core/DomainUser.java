@@ -7,8 +7,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.Globals;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.util.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.users.User;
 import com.googlecode.objectify.Objectify;
@@ -21,7 +23,7 @@ public class DomainUser
 {
     // Key
     @Id
-    public Long id;
+    public Long id = null;
 
     // Domain
     public String domain;
@@ -197,10 +199,17 @@ public class DomainUser
 	    throw new Exception("Domain is empty. Please login again & try.");
 	}
 
-	// Check if three users
-	if (dao.count() >= 2)
+	// Check if new and more than three users
+	if (dao.count() >= Globals.TRIAL_USERS_COUNT && this.id == null)
 	    throw new Exception(
 		    "Please upgrade. You cannot add more than 2 users in the free plan");
+
+	// Send Email
+	if (this.id == null)
+	{
+	    SendMail.sendMail(this.email, "New User Invitation",
+		    SendMail.NEW_USER_INVITED, this);
+	}
 
 	NamespaceManager.set("");
 
