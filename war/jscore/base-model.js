@@ -93,8 +93,7 @@ var Base_Model_View = Backbone.View.extend({
         
         if(!json)
         	json = serializeForm(formId);
-        
-     console.log(json);
+
         this.model.set(json);
         
         var window = this.options.window;
@@ -103,13 +102,14 @@ var Base_Model_View = Backbone.View.extend({
         // Store Modal Id
         var modal = this.options.modal;
         
-        //saving alert
-        $save_info = $('<div style="display:inline-block"><img src="img/1-0.gif" height="15px" width="15px"></img></div>');
-		$(".form-actions", this.el).append($save_info);
-		$save_info.show().delay(3000).hide(1);
-        
+        //Loading while saving
+       $save_info = $('<div style="display:inline-block"><img src="img/1-0.gif" height="15px" width="15px"></img></div>');
+       $(".form-actions", this.el).append($save_info);
+       $save_info.show();
+		
         this.model.save([],{
         	success: function (model, response) {
+        		
         		if(reload)
             		location.reload(true);
             	else if (window)
@@ -138,6 +138,10 @@ var Base_Model_View = Backbone.View.extend({
             },
             error : function (model, response)
             {
+            	// Hide loading on error
+            	$save_info.hide();
+            	
+            	// Show cause of error in saving
             	$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'+response.responseText+'</i></p></small></div>');
             	$(".form-actions", this.el).append($save_info);
             	$save_info.show().delay(3000).hide(1);
