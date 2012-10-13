@@ -69,6 +69,9 @@ public class DomainUser
     // Get user with id
     public static DomainUser getDomainUser(Long id)
     {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
 	try
 	{
 	    return dao.get(id);
@@ -77,6 +80,10 @@ public class DomainUser
 	{
 	    e.printStackTrace();
 	    return null;
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
 	}
     }
 
@@ -200,7 +207,7 @@ public class DomainUser
 	}
 
 	// Check if new and more than three users
-	if (dao.count() >= Globals.TRIAL_USERS_COUNT && this.id == null)
+	if (count() >= Globals.TRIAL_USERS_COUNT && this.id == null)
 	    throw new Exception(
 		    "Please upgrade. You cannot add more than 2 users in the free plan");
 
@@ -227,6 +234,23 @@ public class DomainUser
     public void delete()
     {
 	dao.delete(this);
+    }
+
+    public int count()
+    {
+
+	String oldNamespace = NamespaceManager.get();
+
+	NamespaceManager.set("");
+
+	try
+	{
+	    return dao.count();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
     }
 
     // To String
