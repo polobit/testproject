@@ -90,10 +90,7 @@ table
 {
 background-color:white;
 }
-.modal 
-{
-	overflow-y: hidden;
-}
+
 /* contact.js,contact-details-actions,contact-details.html,contacts-filter.html,new-activity-modal.html,tags.html.. */
 #tags > h3
 {
@@ -369,3 +366,8 @@ font-weight: normal;
  cursor: pointer;
 }
 
+/* To solve modal header and footer distortion */
+.agile-modal 
+{
+	overflow-y: hidden;
+}
