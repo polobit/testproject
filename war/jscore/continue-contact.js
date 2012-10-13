@@ -92,6 +92,9 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, url, continueCont
         	
         	// Remove loading image
         	$('#' + modal_id).find('span.save-status img').remove();
+        	
+        	// Remove loading image
+        	$('#' + modal_id).find('img.person-img').remove();
             
         	if (continueContact) {
                 $('#' + modal_id).modal('hide');
@@ -205,6 +208,8 @@ $(function () {
 
     // Update in continue-contact
     $("#update").die().live('click', function (e) {
+    	console.log($("#continueform").find("i.multiple-add"));
+    	console.log($("#continueform i.multiple-add"));
         serializeAndSaveContinueContact(e, 'continueform', 'personModal', 'core/api/contacts');
     });
     
