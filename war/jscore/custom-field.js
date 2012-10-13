@@ -13,7 +13,7 @@ $(function(){
 			modal: '#'+modal_id+'Modal',
 			isNew: true,
 			postRenderCallback: function(el){ 
-				console.log($('.modal-backdrop').remove());
+				$('.modal-backdrop').remove();
 				
 				$('#'+modal_id+'Modal',el).modal('show');
 				}
