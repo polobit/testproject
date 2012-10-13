@@ -1,6 +1,9 @@
 package com.agilecrm.util;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
@@ -15,6 +18,7 @@ import java.util.Vector;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -24,6 +28,7 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Query;
+import com.thirdparty.SendGridEmail;
 
 public class Util
 {
@@ -277,4 +282,37 @@ public class Util
 	return output;
     }
 
+    // Read Resource from File (war)
+    public static String readResource(String path)
+    {
+	try
+	{
+	    // System.out.println(path);
+	    File f = new File(path);
+	    if (!f.exists())
+	    {
+		System.out.println("File does not exist");
+		return null;
+	    }
+
+	    InputStream is = new FileInputStream(f);
+
+	    return IOUtils.toString(is, "UTF-8");
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    // Send Email
+
+    public static String sendMail(String fromEmail, String fromName, String to,
+	    String subject, String replyTo, String html, String text)
+    {
+	return SendGridEmail.sendMail(fromEmail, fromName, to, subject,
+		replyTo, html, text, null, null);
+
+    }
 }

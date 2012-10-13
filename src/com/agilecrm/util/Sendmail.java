@@ -1,94 +1,88 @@
 package com.agilecrm.util;
 
-import java.net.URLEncoder;
+import org.codehaus.jackson.map.ObjectMapper;
 
-public class Sendmail
+import com.thirdparty.SendGridEmail;
+
+public class SendMail
 {
+    public static final String NEW_USER_INVITED = "new_user_invited";
 
-    // Send grid REST API URL
-    public static final String SENDGRID_API_POST_URL = "https://sendgrid.com/api/mail.send.json";
+    public static final String AGILE_FROM_NAME = "Agile CRM";
+    public static final String AGILE_FROM_EMAIL = "noreply@agilecrm.com";
 
-    // API user name
-    // public static final String SENDGRID_API_USER_NAME = "shelley";
-    public static final String SENDGRID_API_USER_NAME = "naveen123";
+    public static final String TEMPLATES_PATH = "misc/email/";
 
-    // API key
-    // public static final String SENDGRID_API_KEY = "mantra800pbx";
-    public static final String SENDGRID_API_KEY = "mantra123";
+    public static final String TEMPLATE_HTML_EXT = "_html.html";
+    public static final String TEMPLATE_BODY_EXT = "_body.html";
 
-    // Post param api_user
-    public static final String SENDGRID_API_PARAM_API_USER = "api_user";
-
-    // Post param api_key
-    public static final String SENDGRID_API_PARAM_API_KEY = "api_key";
-
-    // Post param to
-    public static final String SENDGRID_API_PARAM_TO = "to";
-
-    // Post param from
-    public static final String SENDGRID_API_PARAM_FROM = "from";
-    public static final String SENDGRID_API_PARAM_FROM_NAME = "fromname";
-
-    // Post param subject
-    public static final String SENDGRID_API_PARAM_SUBJECT = "subject";
-
-    // Post param text body
-    public static final String SENDGRID_API_PARAM_TEXT_BODY = "text";
-
-    // Post param html body
-    public static final String SENDGRID_API_PARAM_HTML_BODY = "html";
-
-    // Default query string
-    public static String defaultQueryString = SENDGRID_API_PARAM_API_USER + "="
-	    + SENDGRID_API_USER_NAME + "&" + SENDGRID_API_PARAM_API_KEY + "="
-	    + SENDGRID_API_KEY + "&";
-
-    public static String sendMail(String fromEmail, String fromName, String to,
-	    String subject, String replyTo, String html, String text)
+    public static void sendMail(String to, String subject, String template,
+	    Object object, String from, String fromName)
     {
+
+	System.out.println("Sending email " + template + " " + object);
+
+	// Serialize, Use ObjectMapper
+	String json = null;
 	try
 	{
-	    // Query string
-	    String queryString = "";
-
-	    queryString = defaultQueryString + SENDGRID_API_PARAM_TO + "="
-		    + URLEncoder.encode(to) + "&" + SENDGRID_API_PARAM_SUBJECT
-		    + "=" + URLEncoder.encode(subject) + "&"
-		    + SENDGRID_API_PARAM_FROM + "="
-		    + URLEncoder.encode(fromEmail) + "&"
-		    + SENDGRID_API_PARAM_FROM_NAME + "="
-		    + URLEncoder.encode(fromName);
-
-	    // Check type of email
-
-	    // Text email
-	    if (text != null)
-	    {
-		queryString += "&" + SENDGRID_API_PARAM_TEXT_BODY + "="
-			+ URLEncoder.encode(text);
-	    }
-	    // HTML email
-	    if (html != null)
-	    {
-		queryString += "&" + SENDGRID_API_PARAM_HTML_BODY + "="
-			+ URLEncoder.encode(html);
-	    }
-
-	    System.out.println("QueryString  \n" + queryString + "\n\n");
-
-	    // Send email
-	    String response = Util.accessURLUsingPost(SENDGRID_API_POST_URL,
-		    queryString);
-
-	    System.out.println("Response " + response);
-
-	    return response;
-
+	    ObjectMapper mapper = new ObjectMapper();
+	    json = mapper.writeValueAsString(object);
+	    System.out.println(json);
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
-	    return null;
+	    return;
 	}
+
+	// Read template - HTML
+	String emailHTML = handleBarsTemplatize(template + TEMPLATE_HTML_EXT,
+		json);
+
+	// Read template - Body
+	String emailBody = handleBarsTemplatize(template + TEMPLATE_BODY_EXT,
+		json);
+
+	// If both are null, nothing to be sent
+	if (emailHTML == null && emailBody == null)
+	{
+	    System.err
+		    .println("Email could not be sent as no matching templates were found "
+			    + template);
+	    return;
+	}
+
+	// Send Email
+	SendGridEmail.sendMail(from, fromName, to, subject, from, emailHTML,
+		emailBody, null, null);
+
+    }
+
+    public static void sendMail(String to, String subject, String template,
+	    Object object)
+    {
+	sendMail(to, subject, template, object, AGILE_FROM_EMAIL,
+		AGILE_FROM_NAME);
+
+    }
+
+    private static String handleBarsTemplatize(String path, String object)
+    {
+
+	// Read from path
+	String emailTemplate = Util.readResource(TEMPLATES_PATH + path);
+	if (emailTemplate == null)
+	    return null;
+
+	// Compile
+	/*
+	 * Handlebars handlebars = new Handlebars(); Template template =
+	 * handlebars.compile(emailTemplate); template.apply(object);
+	 */
+
+	// Apply
+
+	return emailTemplate;
     }
 }

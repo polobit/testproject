@@ -14,7 +14,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.Globals;
 import com.agilecrm.user.AgileUser;
-import com.agilecrm.util.Sendmail;
+import com.agilecrm.util.Util;
 
 public class StripeWebhookServlet extends HttpServlet
 {
@@ -51,10 +51,10 @@ public class StripeWebhookServlet extends HttpServlet
 
 		if (number_of_attempts == 1)
 		{
-		    Sendmail.sendMail("praveen@invox.com", "yaswanth",
-			    AgileUser.getCurrentAgileUser().open_id_user
-				    .getEmail(), "paymentfailed",
-			    "praveen@invox.com", "your payment failed", null);
+		    Util.sendMail("praveen@invox.com", "yaswanth", AgileUser
+			    .getCurrentAgileUser().open_id_user.getEmail(),
+			    "paymentfailed", "praveen@invox.com",
+			    "your payment failed", null);
 		}
 		else if (number_of_attempts == 2)
 		{
@@ -64,7 +64,7 @@ public class StripeWebhookServlet extends HttpServlet
 	    else if (eventJSON.getString("type").equals(
 		    Globals.STRIPE_SUBSCRIPTION_DELETED))
 	    {
-		Sendmail.sendMail(
+		Util.sendMail(
 			"praveen@invox.com",
 			"yaswanth",
 			AgileUser.getCurrentAgileUser().open_id_user.getEmail(),

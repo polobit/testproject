@@ -25,7 +25,6 @@ import com.agilecrm.user.IMAPEmailPrefs;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.SocialPrefs.Type;
 import com.agilecrm.user.UserPrefs;
-import com.agilecrm.util.Sendmail;
 import com.agilecrm.util.Util;
 
 @Path("/api")
@@ -97,8 +96,8 @@ public class API
     {
 	try
 	{
-	    Sendmail.sendMail(fromEmail, fromEmail, to, subject, fromEmail,
-		    body, null);
+	    Util.sendMail(fromEmail, fromEmail, to, subject, fromEmail, body,
+		    null);
 	}
 	catch (Exception e)
 	{
