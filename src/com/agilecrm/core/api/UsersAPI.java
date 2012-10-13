@@ -93,16 +93,17 @@ public class UsersAPI
     public void deleteDomainUser(DomainUser domainUser)
     {
 
-	AgileUser agileUser = AgileUser.getUser(domainUser.open_id_user
-		.getUserId());
+	AgileUser agileUser = null;
 
-	// Delete UserPrefs
-	UserPrefs userPrefs = UserPrefs.getCurrentUserPrefs();
-	if (userPrefs != null)
-	    userPrefs.delete();
+	if (domainUser.open_id_user != null)
+	    agileUser = AgileUser.getUser(domainUser.open_id_user.getUserId());
 
 	if (agileUser != null)
 	{
+	    // Delete UserPrefs
+	    UserPrefs userPrefs = UserPrefs.getCurrentUserPrefs();
+	    if (userPrefs != null)
+		userPrefs.delete();
 
 	    // Delete Social Prefs
 	    List<SocialPrefs> socialPrefsList = SocialPrefs.getPrefs(agileUser);
@@ -116,15 +117,15 @@ public class UsersAPI
 	    if (imapPrefs != null)
 		imapPrefs.delete();
 
+	    // Delete Notification Prefs
+	    NotificationPrefs notificationPrefs = NotificationPrefs
+		    .getCurrentUserNotificationPrefs();
+	    if (notificationPrefs != null)
+		notificationPrefs.delete();
+
 	    // Get and Delete AgileUser
 	    agileUser.delete();
 	}
-
-	// Delete Notification Prefs
-	NotificationPrefs notificationPrefs = NotificationPrefs
-		.getCurrentUserNotificationPrefs();
-	if (notificationPrefs != null)
-	    notificationPrefs.delete();
 
 	domainUser.delete();
     }
