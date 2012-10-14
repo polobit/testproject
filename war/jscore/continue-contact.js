@@ -22,6 +22,7 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, url, continueCont
     var address = [];
     
     // Contact Custom properties
+
     var custom_field_elements =  $('#' + form_id).find('.custom_field');
 
     $.each(custom_field_elements, function(index, element){
