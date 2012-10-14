@@ -233,19 +233,19 @@ public class DomainUser
     // Delete Contact
     public void delete()
     {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
 	dao.delete(this);
+	NamespaceManager.set(oldNamespace);
     }
 
     public int count()
     {
-
 	String oldNamespace = NamespaceManager.get();
-
 	NamespaceManager.set("");
-
 	try
 	{
-	    return dao.count();
+	    return dao.ofy().query().filter("domain", domain).count();
 	}
 	finally
 	{
