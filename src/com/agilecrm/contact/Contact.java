@@ -1,8 +1,10 @@
 package com.agilecrm.contact;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Embedded;
@@ -222,9 +224,23 @@ public class Contact extends Cursor
 	return dao.fetchAll();
     }
 
-    public static List<Contact> getAllContacts(int max, String cursor)
+    public static List<Contact> getAll(int max, String cursor)
     {
 	return dao.fetchAll(max, cursor);
+    }
+
+    public static List<Contact> getAllCompanies(int max, String cursor)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	searchMap.put("type", Type.COMPANY);
+	return dao.fetchAll(max, cursor, searchMap);
+    }
+
+    public static List<Contact> getAllContacts(int max, String cursor)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	searchMap.put("type", Type.PERSON);
+	return dao.fetchAll(max, cursor, searchMap);
     }
 
     public ContactField getContactField(String name)
