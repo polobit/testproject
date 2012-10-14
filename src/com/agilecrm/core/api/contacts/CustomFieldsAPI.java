@@ -11,7 +11,9 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -63,6 +65,16 @@ public class CustomFieldsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public CustomFieldDef createCustomField(CustomFieldDef customField)
     {
+	CustomFieldDef custom_field = CustomFieldDef.dao.ofy()
+		.query(CustomFieldDef.class)
+		.filter("field_label", customField.field_label).get();
+	if (custom_field != null)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Sorry, duplicate custom field label.").build());
+	}
+
 	customField.save();
 	return customField;
     }

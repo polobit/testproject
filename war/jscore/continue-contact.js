@@ -21,6 +21,15 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, url, continueCont
     var properties = [];
     var address = [];
     
+    // Contact Custom properties
+    var custom_field_elements =  $('#' + form_id).find('.custom_field');
+
+    $.each(custom_field_elements, function(index, element){
+    	var id = $(element).attr('id'), name = $(element).attr('name');
+    	
+    	if (isValidField(id)) properties.push(propertyJSON(name, id, 'CUSTOM'));
+    });
+    
     // Contact properties
     if (isValidField('fname'))properties.push(propertyJSON('first_name', 'fname'));
    
@@ -90,12 +99,18 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, url, continueCont
     contactModel.save(obj, {
         success: function (data) {
         	
-        	// Remove loading image
-        	$('#' + modal_id).find('span.save-status img').remove();
-            
+        	            
         	if (continueContact) {
-                $('#' + modal_id).modal('hide');
-                deserializeContact(data.toJSON(), template);
+                
+                addCustomFieldsToForm(data.toJSON(), function(contact){
+                	
+                	// Remove loading image
+                	$('#' + modal_id).find('span.save-status img').remove();
+                	$('#' + modal_id).modal('hide');
+                	deserializeContact(contact, template);
+                	
+                });
+                
             } else {
                 $('#' + modal_id).modal('hide');
             	

@@ -176,7 +176,11 @@ var ContactsRouter = Backbone.Router.extend({
     	// Contact Edit - take him to continue-contact form
     	var contact = this.contactsListView.collection.get(this.contactDetailView.model.id);
      	//$('#content').html(getTemplate('continue-contact', contact.toJSON()));
-     	deserializeContact(contact.toJSON(), 'continue-contact');
+    	
+    	addCustomFieldsToForm(contact.toJSON(), function(contact){
+    		deserializeContact(contact, 'continue-contact');
+    	});
+     	
      	
     },
     
