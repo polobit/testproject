@@ -1,5 +1,5 @@
 // Serialize and save continue contact
-function serializeAndSaveContinueContact(e, form_id, modal_id, url, continueContact, template) {
+function serializeAndSaveContinueContact(e, form_id, modal_id, url, continueContact, template, is_person) {
     e.preventDefault();
     var $form = $('#' + form_id);
     
@@ -21,6 +21,7 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, url, continueCont
     var properties = [];
     var address = [];
     
+    if(is_person){
     // Contact properties
     if (isValidField('fname'))properties.push(propertyJSON('first_name', 'fname'));
    
@@ -31,11 +32,22 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, url, continueCont
     if (isValidField('email')) properties.push(propertyJSON('email', 'email'));
 
     if (isValidField('job_title')) properties.push(propertyJSON('title', 'job_title'));
+    
+    
+	var tags = getTags(form_id);
+	if (tags != undefined && tags.length != 0) obj.tags = tags[0].value;
+    
+    }else{
 
     // Company properties
-    if (isValidField('company_name')) properties.push(propertyJSON('company_name', 'company_name'));
+    if (isValidField('name')) properties.push(propertyJSON('name', 'name'));
     
     if (isValidField('url')) properties.push(propertyJSON('url', 'url'));
+    
+    var type = $('#' + form_id + ' input[name=type]').val();
+    obj.type = type;
+
+    }
     
     $('#' + form_id + ' div.multiple-template').each(function (index, element) {
        
@@ -80,10 +92,10 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, url, continueCont
         obj[propertiesList[i].name] = propertiesList[i].value;
     }
     if (id != null) obj['id'] = id;
-    
-	var tags = getTags(form_id);
-	if (tags != undefined && tags.length != 0) obj.tags = tags[0].value;
-    
+
+	
+	console.log(properties);
+	console.log(obj);    
     // Save contact
     var contactModel = new Backbone.Model();
     contactModel.url = url;
@@ -187,7 +199,7 @@ function propertyJSON(name, id, type) {
 // UI Handlers for Continue-contact and continue-company
 $(function () {
     // Clone Multiple
-    $("i.multiple-add").die().live('click', function (e) {
+    $("span i.multiple-add").die().live('click', function (e) {
         // Clone the template
         $(this).parents("div.control-group").append(
         $(this).parents().siblings("div.controls:first").clone().removeClass('hide'));
@@ -203,14 +215,14 @@ $(function () {
 
     // Continue editing in the new-person-modal Rammohan 03-08-2012.
     $('#continue-contact').click(function (e) {
-        var model = serializeAndSaveContinueContact(e, 'personForm','personModal', 'core/api/contacts', true, 'continue-contact');
+        var model = serializeAndSaveContinueContact(e, 'personForm','personModal', 'core/api/contacts', true, 'continue-contact', true);
     });
 
     // Update in continue-contact
     $("#update").die().live('click', function (e) {
     	console.log($("#continueform").find("i.multiple-add"));
     	console.log($("#continueform i.multiple-add"));
-        serializeAndSaveContinueContact(e, 'continueform', 'personModal', 'core/api/contacts');
+        serializeAndSaveContinueContact(e, 'continueform', 'personModal', 'core/api/contacts', false, ' ', true);
     });
     
     // Close in continue-contact
@@ -228,13 +240,13 @@ $(function () {
     // Continue editing in the new-company-modal
     $('#continue-company').click(function (e) {
         
-        var model = serializeAndSaveContinueContact(e, 'companyForm', 'companyModal', 'core/api/companies', true, 'continue-company');
+        var model = serializeAndSaveContinueContact(e, 'companyForm', 'companyModal', 'core/api/contacts', true, 'continue-company', false);
 
     });
     
  // Update in continue-company
     $("#company-update").die().live('click', function (e) {
-        serializeAndSaveContinueContact(e, 'continueCompanyForm', 'companyModal', 'core/api/companies');
+        serializeAndSaveContinueContact(e, 'continueCompanyForm', 'companyModal', 'core/api/contacts', false, ' ', false);
     });
 
 });

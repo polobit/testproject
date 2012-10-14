@@ -23,13 +23,14 @@ $(function()
 		// Remove, if rendere of a collection called multiple times 
 		$(table).find('.thead_check').parent().remove();
 		$(table).find('.tbody_check').parent().remove();
+		$(this).find('.select-none').parent().remove();
 		$(this).find('#delete-checked').remove();
 		
 		$(table).find('thead tr').prepend('<th><input class="thead_check" name="" type="checkbox"/></th>');
 
 		$(table).find('tbody tr').prepend('<td><input class="tbody_check" type="checkbox"/></td>');
 		
-		$(table).after('</br><a href="#" class="btn btn-danger left" id="delete-checked"> Delete</a>');
+		$(table).after('<div class="row"><div class="span3  select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked"> Delete</a>');
 	});
 	
 	// Event to trigger to delete checked entities  
@@ -42,6 +43,7 @@ $(function()
 		event.preventDefault();
 		var id_array = [];
 		var index_array = [];
+		var checked = false;
 		var table = $('body').find('table.showCheckboxes');
 
 		$(table).find('tr .tbody_check').each(function(index, element){
@@ -49,9 +51,14 @@ $(function()
 			if($(element).is(':checked')){
 				index_array.push(index);
 				id_array.push($(element).closest('tr').data().get('id'));
+				checked = true;
 			}
 		});
-		bulkOperations($(table).attr('url'), id_array, index_array, table);
+		if(checked)
+			bulkOperations($(table).attr('url'), id_array, index_array, table);
+		else
+            $('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">×</a>You have selected no entity to delete.</div>').show().delay(3000).hide(1);
+			
 	});
 	
 	// Click head - click all checkboxes of table body
