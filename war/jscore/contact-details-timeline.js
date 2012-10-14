@@ -2,7 +2,7 @@
 // Create an empty collection to add all details
 function loadTimelineDetails(el, contactId)
 {
-	var timelineView =  new Base_Collection_View({
+		var timelineView =  new Base_Collection_View({
 		templateKey: 'timeline',
 		individual_tag_name: 'li',
 		});
@@ -197,6 +197,7 @@ $.Isotope.prototype._spineAlignResizeChanged = function() {
 	
 function removeLoadingImg(el){
 	$('#time-line', el).find('img:first').remove();
-}	
+}
+
 
 

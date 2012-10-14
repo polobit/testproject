@@ -19,10 +19,24 @@ $(function(){
     			$('#noteForm').each (function(){
     	          	  this.reset();
     	        });
-    			
+				
     			$('#noteModal').find('span.save-status img').remove();
     	        $("#noteModal").modal('hide');
-    		}    
+    			
+       	        var note = data.toJSON();
+       	        
+       	        // Update data to temeline 
+    			if(App_Contacts.contactDetailView){
+    				$.each(note.contacts, function(index, contact_id){
+    					if(contact_id == App_Contacts.contactDetailView.model.get('id')){
+    						$('#timeline').isotope( 'insert', $(getTemplate("timeline", data.toJSON())) );
+    						return false;
+    					}	
+
+    				});
+    			}
+    	      
+			}    
       	});
     });
     

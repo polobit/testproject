@@ -8,6 +8,19 @@ $(function () {
         	completeTask(taskId, $(this))
         }
     });
+	
+	$('#tasks-list').live('click', function(e){
+		this.tasksListView = new Base_Collection_View({
+            url: '/core/api/tasks',
+            restKey: "task",
+            templateKey: "tasks-list",
+            individual_tag_name: 'tr'
+        });
+		this.tasksListView.collection.fetch();
+
+        $('#content').html(this.tasksListView.el);
+
+	});
 });
 
 function getDue(due) {
