@@ -2,8 +2,6 @@ package com.agilecrm.contact;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.googlecode.objectify.Key;
-
 @XmlRootElement
 public class ContactField
 {
@@ -30,9 +28,6 @@ public class ContactField
     // Value
     public String value = null;
 
-    // Custom Field Id
-    public Key<CustomFieldDef> custom_field_id = null;
-
     public ContactField()
     {
 
@@ -51,14 +46,4 @@ public class ContactField
     {
 	return "[" + this.type + " " + this.name + " " + this.value + "] ";
     }
-
-    // Custom Field
-    public ContactField(CustomFieldDef customFieldDef, String value)
-    {
-	this.type = FieldType.CUSTOM;
-	this.custom_field_id = new Key<CustomFieldDef>(CustomFieldDef.class,
-		customFieldDef.id);
-	this.value = value;
-    }
-
 }

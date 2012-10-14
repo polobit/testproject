@@ -46,8 +46,12 @@ $(function(){
 	$('.filter').live('click',function(e){
 		e.preventDefault();
 		var filter_id = $(this).attr('id');
+		
+		// Save Filter in cookie
+		createCookie('contact_filter', filter_id)
+		
 		filter_name = $(this).attr('data');
-	
+		
 		// If custom view is set then load filter results in custom view
 		if(readCookie("contact_view"))
 			{
@@ -68,7 +72,7 @@ $(function(){
 	
 	$('.default_filter').live('click', function(e){
 		e.preventDefault();
-		console.log("default filter");
+		eraseCookie('contact_filter');
 		App_Contacts.contacts();
 		
 	})
@@ -76,13 +80,20 @@ $(function(){
 });
 
 // Set up filters list drop-down in contacts list
-function setupContactFilterList(cel)
+function setupContactFilterList(cel, filter_id)
 {
 	var contactFiltersListView = new Base_Collection_View({
         url: '/core/api/filters',
         restKey: "ContactFilter",
         templateKey: "contact-filter-list",
-        individual_tag_name: 'li'
+        individual_tag_name: 'li',
+        postRenderCallback: function(el) {
+        	if(filter_id = readCookie('contact_filter'))
+        		{
+        			var filter_name = contactFiltersListView.collection.get(filter_id).toJSON().name;
+        			console.log(el.find('.filter-dropdown').append(filter_name));
+        		}
+        }
     });
 	
 	contactFiltersListView.collection.fetch();

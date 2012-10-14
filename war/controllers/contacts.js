@@ -62,15 +62,21 @@ var ContactsRouter = Backbone.Router.extend({
     	}
     	
     	// Search based on filter
-    	if(filter_id )
+    	if(filter_id || (filter_id = readCookie('contact_filter')))
     	{
     		url = "core/api/filters/query/" + filter_id;
     	}
     	 
         // If view is set to custom view load the custom view
       	if(readCookie("contact_view"))
-		{
-			this.customView(readCookie("contact_view"));
+		{      		
+      		// If there is a filter saved in cookie then show filter results in custom view saved
+      		if(readCookie('contact_filter'))
+      		{	
+      			this.customView(readCookie("contact_view"), undefined, "core/api/filters/query/" + readCookie('contact_filter'));
+      			return;
+      		}
+			this.customView(readCookie("contact_view"), undefined);
 			return;
 		}
       	
@@ -89,7 +95,9 @@ var ContactsRouter = Backbone.Router.extend({
                   pieTags(cel);
             	  setupViews(cel);
             	  
-            	  // show list of filters dropdown in contacts list
+            	  /* Show list of filters dropdown in contacts list, If filter is saved in cookie
+            	  	 then show the filter name on dropdown button
+            	  */
             	  setupContactFilterList(cel);            	  
             	  }             
           });
@@ -176,7 +184,11 @@ var ContactsRouter = Backbone.Router.extend({
     	// Contact Edit - take him to continue-contact form
     	var contact = this.contactsListView.collection.get(this.contactDetailView.model.id);
      	//$('#content').html(getTemplate('continue-contact', contact.toJSON()));
-     	deserializeContact(contact.toJSON(), 'continue-contact');
+    	
+    	addCustomFieldsToForm(contact.toJSON(), function(contact){
+    		deserializeContact(contact, 'continue-contact');
+    	});
+     	
      	
     },
     
@@ -427,6 +439,8 @@ var ContactsRouter = Backbone.Router.extend({
     	$("#content").html(getTemplate("send-email", {}));
     	$('body').trigger('fill_emails');
     },
+    
+    // Id = custom-view-id, view_data = custom view data if already availabel, url = filter url if there is any filter
     customView : function(id, view_data, url) {
     	
     	// If id is defined get the respective custom view object 

@@ -1,19 +1,18 @@
 $(function()
 {
-	/*// Collapses the menu on a mobile device
+	// Collapses the menu on a mobile device
 	// Without this, the user has to click the collapsible button to remove the menu
 	$('.agile-menu > li').click(function(e){
 	    
 		console.log("Collapsing before ul");
-		
-		console.log($(this).html());
-		
-		if($(this).find('ul').length == 0)
-	      {
-	    	  console.log("Collapsing");
-	    	  //$('.nav-collapse').collapse('hide');
-	      }
-	});*/
+		$nav_collapse = $(this).closest('.nav-collapse');
+		console.log($nav_collapse.attr('class'));
+		if($nav_collapse.hasClass('collapse'))
+		{
+			console.log("Collapsing");
+			$nav_collapse.collapse('hide');
+		}
+	});
 	
 	// Custom event to add checkboxes to specified tables
 	$('body').live('agile_collection_loaded', function(event) {

@@ -233,7 +233,17 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
     public List<T> fetchAll(int max, String cursor)
     {
+	return fetchAll(max, cursor, null);
+    }
+
+    public List<T> fetchAll(int max, String cursor, Map<String, Object> map)
+    {
 	Query<T> query = ofy().query(clazz);
+	if (map != null)
+	    for (String propName : map.keySet())
+	    {
+		query.filter(propName, map.get(propName));
+	    }
 
 	if (cursor != null)
 	    query.startCursor(Cursor.fromWebSafeString(cursor));

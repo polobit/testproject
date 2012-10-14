@@ -35,13 +35,24 @@
                    
 					<div class="control-group">
                     	<label class="control-label">Tag</label>
-    				<div class="pull-left">
-						<ul name="tags" class= "tagsinput tags"></ul>
-					</div>
 					<div class="controls">
+						 <div class="pull-left">
+							<ul name="tags" class= "tagsinput tags"></ul>
+						</div>
 						 <input name="tags" type="text" id="tags-new-person" class="tags-typeahead"/>
 					</div>
 					</div> 
+
+					{{#each custom_fields}}
+					<div class="control-group">
+                    	<label class="control-label">{{ucfirst this.field_label}}</label>
+						<div class="controls">
+							 <input class="custom_field" id="{{this.id}}" name="{{this.field_label}}" type="text"/>
+						</div>
+					</div> 
+						
+					{{/each}}
+
 
 					<div class="control-group">
 						<label class="control-label">Add Email<span><i class="multiple-add icon-plus"></i></span></label>
