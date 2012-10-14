@@ -74,6 +74,13 @@ $(function(){
 		// Save contact_view id as cookie
 		createCookie("contact_view", id);
 
+		// If filter is send filter url to show only filter data
+		if(filter_id = readCookie('contact_filter'))
+		{
+			App_Contacts.customView(id, undefined, 'core/api/filters/query/' + filter_id);
+			return;
+		}
+		
 		App_Contacts.customView(id);
 	});
 });
