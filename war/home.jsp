@@ -83,14 +83,10 @@ String CSS_PATH = "/";
 				<div class="nav-collapse">
 					<ul class="nav agile-menu">
 						<li id="homemenu" class="active">
-						<li id="contactsmenu"><a href="#contacts" data-toggle="collapse"
-					data-target=".nav-collapse"><i class="icon-user icon-white"></i> Contacts</a>
-						<li id="calendarmenu"><a href="#calendar" data-toggle="collapse"
-					data-target=".nav-collapse"><i class="icon-calendar icon-white"></i> Calendar</a>
-						<li id="dealsmenu"><a href="#deals" data-toggle="collapse"
-					data-target=".nav-collapse"><i class="icon-folder-open icon-white"></i> Deals</a>
-						<li id="workflowsmenu"><a href="#workflows" data-toggle="collapse"
-					data-target=".nav-collapse"><i class="icon-sitemap icon-white"></i> Campaigns</a>
+						<li id="contactsmenu"><a href="#contacts"><i class="icon-user icon-white"></i> Contacts</a>
+						<li id="calendarmenu"><a href="#calendar"><i class="icon-calendar icon-white"></i> Calendar</a>
+						<li id="dealsmenu"><a href="#deals"><i class="icon-folder-open icon-white"></i> Deals</a>
+						<li id="workflowsmenu"><a href="#workflows"><i class="icon-sitemap icon-white"></i> Campaigns</a>
 					</ul>
 					
 					<%
@@ -108,7 +104,7 @@ String CSS_PATH = "/";
 					
 					<li class="dropdown" id="menu1"><a class="dropdown-toggle"
 							data-toggle="dropdown" href="#menu1">Add New <i class='caret'></i></a>
-							<ul class="dropdown-menu agile-menu">
+							<ul class="dropdown-menu">
 								<li><a href="#personModal" data-toggle="modal" id="person">Person</a>
 								</li>
 								<li><a href="#companyModal" data-toggle="modal"
@@ -135,7 +131,7 @@ String CSS_PATH = "/";
 						<li id="fat-menu" class="dropdown"><a href=""
 							class="dropdown-toggle" data-toggle="dropdown"><i
 								class="agilecrm-profile-dropdown"></i> </a>
-							<ul class="dropdown-menu agile-menu">
+							<ul class="dropdown-menu">
 								<li>
 									<a href='#settings'><%=user.getEmail()%></a>
 											</li>
