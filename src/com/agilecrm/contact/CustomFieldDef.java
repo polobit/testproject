@@ -65,8 +65,14 @@ public class CustomFieldDef
 	return ofy.query(CustomFieldDef.class).list();
     }
 
-    public void save()
+    public void save() throws Exception
     {
+	CustomFieldDef custom_field = dao.ofy().query(CustomFieldDef.class)
+		.filter("field_label", field_label).get();
+	if (custom_field != null && custom_field.id != id)
+	{
+	    throw new Exception();
+	}
 	dao.put(this);
     }
 

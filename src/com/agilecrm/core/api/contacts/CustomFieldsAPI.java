@@ -65,17 +65,16 @@ public class CustomFieldsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public CustomFieldDef createCustomField(CustomFieldDef customField)
     {
-	CustomFieldDef custom_field = CustomFieldDef.dao.ofy()
-		.query(CustomFieldDef.class)
-		.filter("field_label", customField.field_label).get();
-	if (custom_field != null)
+	try
+	{
+	    customField.save();
+	}
+	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST)
 		    .entity("Sorry, duplicate custom field label.").build());
 	}
-
-	customField.save();
 	return customField;
     }
 
@@ -85,7 +84,16 @@ public class CustomFieldsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public CustomFieldDef updateCustomField(CustomFieldDef customField)
     {
-	customField.save();
+	try
+	{
+	    customField.save();
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Sorry, duplicate custom field label.").build());
+	}
 	return customField;
     }
 
