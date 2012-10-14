@@ -94,7 +94,7 @@ var Base_Model_View = Backbone.View.extend({
         if(!json)
         	json = serializeForm(formId);
 
-        this.model.set(json);
+        this.model.set(json,{silent:true});
         
         var window = this.options.window;
         var reload = this.options.reload;
@@ -108,6 +108,7 @@ var Base_Model_View = Backbone.View.extend({
        $save_info.show();
 		
         this.model.save([],{
+        	wait:true,
         	success: function (model, response) {
         		
         		if(reload)
