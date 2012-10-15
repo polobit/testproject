@@ -1,6 +1,6 @@
 // Gadget JS Libs Path
-// var LIB_PATH = "http://localhost:8888/";
-var LIB_PATH = "https://googleapps.agilecrm.com/";
+
+var LIB_PATH;
 
 var _agile = _agile || [];
 
@@ -22,10 +22,15 @@ function init_agile_gadget()
 	// Check if localhost
 	console.log(window.location.host);
 	if (window.location.host.indexOf("localhost") != -1)
+	{
 		Is_Localhost = true;
+		LIB_PATH = "http://localhost:8888/";
+	}
 	else
+	{
+		LIB_PATH = "https://googleapps.agilecrm.com/";
 		gadgets.window.adjustHeight();
-		
+	}
 	console.log(Is_Localhost);
 	// Download scripts and load UI
 	download_scripts(build_ui);
@@ -95,7 +100,7 @@ function build_ui()
 	if(!Is_Localhost)
 		emails = get_emails();
 	else
-		emails = ["manohar@invox.com","manohar12@invox.com"];
+		emails = ["manohar565@invox.com","manohar556@invox.com"];
      
      // Build UI
      console.log("Building UI");
@@ -115,19 +120,21 @@ function build_ui_for_emails(email_ids){
 	
 			agile_getContact(email, function(val)
 					{
-				
 						val.email = email;
-						
-						// Add to content
-						var individualTemplate = getTemplate('gadget', val, 'no');	
-						//console.log(individualTemplate);
-						$("#content").append($(individualTemplate));
-						
-						if(!Is_Localhost)
-							gadgets.window.adjustHeight();
-						
+						individual_template_ui(val);
 					});
 		});
+}
+
+function individual_template_ui(val){
+	
+	// Add to content
+	var individualTemplate = getTemplate('gadget', val, 'no');	
+	//console.log(individualTemplate);
+	$("#content").append($(individualTemplate));
+	
+	if(!Is_Localhost)
+		gadgets.window.adjustHeight();
 }
 
 // Validating form
@@ -157,9 +164,11 @@ function init_handlers() {
 			  else
 				  data[val.name] = val.value;
 			});
+		  $('#status', el).show().delay(3000).hide(1);
 		  _agile = [];
 		  _agile.push(["_createContact", data, tags]);
 		  _agile_execute();
+		  build_ui();
 	});
 	
 	//Adding Note for contact
@@ -180,6 +189,7 @@ function init_handlers() {
 			  else
 				  data[val.name] = val.value;
 			});
+		  $('#status', el).show().delay(3000).hide(1);
 		  _agile = [];
 		  _agile.push(["_addNote", email, data]);
 		  _agile_execute();
@@ -203,6 +213,7 @@ function init_handlers() {
 			  else
 				  data[val.name] = val.value;
 			});
+		  $('#status', el).show().delay(3000).hide(1);
 		  _agile = [];
 		  _agile.push(["_addTask", email, data]);
 		  _agile_execute();
@@ -226,6 +237,7 @@ function init_handlers() {
 			  else
 				  data[val.name] = val.value;
 			});
+		  $('#status', el).show().delay(3000).hide(1);
 		  _agile = [];
 		  _agile.push(["_addDeal", email, data]);
 		  _agile_execute();
@@ -259,5 +271,14 @@ function init_handlers() {
 	$("#gadget-add-contact").die().live('click', function(e){
 		var el = $(this).closest("div#gadgetContactDetailsTab").find("div#showForm");
 		$("#gadget-contact", el).toggle();
+	});
+	
+	//cancel event for buttons
+	$("#cancel").die().live('click', function(e){
+		var el = $(this).closest("div#gadgetContactDetailsTab").find("div#showForm");
+		$("#gadget-contact", el).hide();
+		$("#gadget-note", el).hide();
+		$("#gadget-deal", el).hide();
+		$("#gadget-task", el).hide();
 	});
 }
