@@ -9,6 +9,7 @@ $(function(){
 			url: '/core/api/custom-fields',
 			template: 'custom-field-'+modal_id+'-modal',
 			window: 'custom-fields',
+			reload: true,
 			modal: '#'+modal_id+'Modal',
 			isNew: true,
 			postRenderCallback: function(el){ 
