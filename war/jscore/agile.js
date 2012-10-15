@@ -29,7 +29,7 @@ $(function()
 
 		$(table).find('tbody tr').prepend('<td><input class="tbody_check" type="checkbox"/></td>');
 		
-		$(table).after('<div class="row"><div class="span3  select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked"> Delete</a>');
+		$(table).after('<div class="row"><div class="span6  select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked"> Delete</a>');
 	});
 	
 	// Event to trigger to delete checked entities  
@@ -53,10 +53,15 @@ $(function()
 				checked = true;
 			}
 		});
-		if(checked)
+		if(checked){
+			
+			if(!confirm("Are you sure you want to delete?"))
+	    		return;
+			
 			bulkOperations($(table).attr('url'), id_array, index_array, table);
+		}	
 		else
-            $('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">×</a>You have selected no entity to delete.</div>').show().delay(3000).hide(1);
+            $('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">×</a>You have not selected any records to delete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
 			
 	});
 	

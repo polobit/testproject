@@ -77,7 +77,7 @@ $(function(){
 	    $('#event_delete').die().live('click', function (e) {
 	    		e.preventDefault();
 	    		var event_id = $('#updateActivityForm input[name=id]').val()
-	    		console.log(event_id);
+
 	    		// Show loading symbol until model get saved
 	            $('#updateActivityModal').find('span.save-status').html(LOADING_HTML);
 	    		$.ajax({
@@ -89,8 +89,7 @@ $(function(){
 	        			
 		    	        $("#updateActivityModal").modal('hide');
 	        		    
-		    	        $('#calendar').fullCalendar('rerenderEvents');
-	    				console.log("deleteddd");
+		    	        $('#calendar').fullCalendar('removeEvents', event_id);
 	    			}
 	    		});
 	    });
@@ -141,16 +140,6 @@ $(function(){
 			    	e.preventDefault();
 			    	highlightEvent();
 			   });
-			    
-			    // Tasks checked
-			    $('.tasks-select').live('change', function(){
-			        if($(this).is(':checked')){
-			            
-			        	// Complete
-			        	var taskId = $(this).attr('data');
-			        	completeTask(taskId, $(this))
-			        }
-			    });
 			    
 			    // Hide event of activity modal
 			    $('#activityModal').on('hidden', function () {

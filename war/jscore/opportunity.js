@@ -37,6 +37,11 @@ $(function () {
             });
         }
     });
+    
+    $('#close-deal').live('click', function(e){
+    	e.preventDefault();
+    	window.history.back();
+    });
 
 });
 

@@ -105,21 +105,22 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, url, continueCont
     contactModel.url = url;
     contactModel.save(obj, {
         success: function (data) {
+        	// Remove loading image
+        	$('#' + modal_id).find('span.save-status img').remove();
+        	$('#' + modal_id).modal('hide');
         	
+        	// Remove loading image
+        	$('#' + modal_id).find('img.person-img').remove();
         	            
         	if (continueContact) {
                 
                 addCustomFieldsToForm(data.toJSON(), function(contact){
                 	
-                	// Remove loading image
-                	$('#' + modal_id).find('span.save-status img').remove();
-                	$('#' + modal_id).modal('hide');
-                	deserializeContact(contact, template);
+                deserializeContact(contact, template);
                 	
                 });
                 
             } else {
-                $('#' + modal_id).modal('hide');
             	
                 App_Contacts.navigate("contact/" + data.id, {
                 	trigger: true
