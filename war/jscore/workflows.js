@@ -24,7 +24,13 @@ $(function(){
             workflowJSON = App_Workflows.workflow_model;
             App_Workflows.workflow_model.set("name", name);
             App_Workflows.workflow_model.set("rules", designerJSON);
-            App_Workflows.workflow_model.save();
+            App_Workflows.workflow_model.save({}, {success: function(){
+            	Backbone.history.navigate("workflows", {
+                    trigger: true
+                });
+            	
+            }});        
+            
         } else {
 
             workflowJSON.name = name;
@@ -32,11 +38,18 @@ $(function(){
 
             var workflow = new Backbone.Model(workflowJSON);
             App_Workflows.workflowsListView.collection.create(workflow);
+            
+            Backbone.history.navigate("workflows", {
+                trigger: true
+            });
         }
 
-        Backbone.history.navigate("workflows", {
-            trigger: true
-        });
+        /**/
+        
+        // Since we do save it back in collection, we are reloading the view
+       // location.reload(true);
+
+        
     });
 
     $('#delete_campaign_logs').live('click', function (e) {

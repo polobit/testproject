@@ -215,7 +215,7 @@ public class ContactsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Contact> searchContacts(@PathParam("keyword") String keyword)
     {
-	return Contact.searchContacts(keyword);
+	return Contact.searchContacts(keyword.toLowerCase());
     }
 
     // This method is called if XML is request

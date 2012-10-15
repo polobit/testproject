@@ -1,7 +1,3 @@
-// Gadget JS Libs Path
-
-var LIB_PATH;
-
 var _agile = _agile || [];
 
 var Is_Localhost = true;
@@ -124,7 +120,17 @@ function build_ui_for_emails(email_ids){
 	
 			agile_getContact(email, function(val)
 					{
+				
 						val.email = email;
+						
+						// Add to content
+						var individualTemplate = getTemplate('gadget', val, 'no');	
+						//console.log(individualTemplate);
+						$("#content").append($(individualTemplate));
+						
+						if(!Is_Localhost)
+							gadgets.window.adjustHeight();
+						
 						individual_template_ui(val);
 					});
 		});
