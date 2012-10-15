@@ -163,13 +163,15 @@ String CSS_PATH = "/";
 		</div>
 	</div>
 
-	<div class="container<%=width%>">
-		<div id="content" class="" >
+<div id="wrap">
+	<div id="main" class="container<%=width%>">
+		<div id="content" class="">
 		
 		<img class="loading" style="padding-right:5px" src= "img/21-0.gif"></img>
 		
 		</div>
 	</div>
+</div>
 	
 	<!--  Notifications -->
 	<div class='notifications top-left'></div>
