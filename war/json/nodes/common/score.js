@@ -25,15 +25,14 @@
 			"type": "select" 
 		},{
 			"label": "Value",
+			"required": "required",
 			"category": "Info",
 			"name": "Value",
             "id": "Value",
-            "value" : "0", 
-			"title": "Enter the value.",
+            "title": "Enter the value.",
 			"fieldType": "input",
-            "type": "number" 
-			
-		},{
+            "type": "number"
+            },{
             "label": "Add or subtract a score for your subscriber. You can sort your customers based on score or generate reports accordingly.",
             "category": "Help",
             "fieldType": "label",

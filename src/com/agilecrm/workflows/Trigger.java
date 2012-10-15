@@ -121,6 +121,7 @@ public class Trigger
     @XmlElement(name = "campaign")
     public String getCampaign() throws Exception
     {
+
 	Workflow workflow = Workflow.getWorkflow(Long.parseLong(campaign_id));
 
 	if (workflow != null)
@@ -150,7 +151,6 @@ public class Trigger
 
 }
 
-
 class TriggersDeferredTask implements DeferredTask
 {
 
@@ -170,11 +170,15 @@ class TriggersDeferredTask implements DeferredTask
 	List<Trigger> triggers = Trigger.getTriggersByCondition(type);
 	Contact contact = Contact.getContact(contactId);
 
-	for (Trigger trigger : triggers)
+	if (!triggers.isEmpty())
 	{
+	    for (Trigger trigger : triggers)
+	    {
 
-	    if (contact != null)
-		Campaign.subscribe(contact, Long.parseLong(trigger.campaign_id));
+		if (contact != null)
+		    Campaign.subscribe(contact,
+			    Long.parseLong(trigger.campaign_id));
+	    }
 	}
     }
 
