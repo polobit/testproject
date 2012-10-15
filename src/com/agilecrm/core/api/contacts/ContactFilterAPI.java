@@ -3,7 +3,6 @@ package com.agilecrm.core.api.contacts;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -87,7 +86,7 @@ public class ContactFilterAPI
 
     // Bulk operations - delete
     @Path("bulk")
-    @DELETE
+    @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void deleteContacts(@FormParam("model_ids") String model_ids)
 	    throws JSONException

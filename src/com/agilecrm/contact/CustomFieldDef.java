@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.annotation.Indexed;
 
 @XmlRootElement
 public class CustomFieldDef
@@ -25,6 +26,7 @@ public class CustomFieldDef
     public String field_type;
 
     // Field Label
+    @Indexed
     public String field_label;
 
     // Field Description
@@ -63,9 +65,23 @@ public class CustomFieldDef
 	return ofy.query(CustomFieldDef.class).list();
     }
 
-    public void save()
+    public void save() throws Exception
     {
+	CustomFieldDef custom_field = dao.ofy().query(CustomFieldDef.class)
+		.filter("field_label", field_label).get();
+	if (custom_field != null && custom_field.id != id)
+	{
+	    throw new Exception();
+	}
 	dao.put(this);
+    }
+
+    @Override
+    public String toString()
+    {
+	return "CustomFieldDef: {id: " + id + ", field_type: " + field_type
+		+ ", field_label: " + field_label + ", field_description: "
+		+ field_description + ", field_data: " + field_data + "}";
     }
 
     public static CustomFieldDef get(Long id)

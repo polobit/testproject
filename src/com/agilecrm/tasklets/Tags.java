@@ -39,12 +39,9 @@ public class Tags extends TaskletAdapter
 	    tags = tagNames.trim().replaceAll(" +", " ");
 
 	    // Replace ,space with space
-	    tags = tagNames.replaceAll(", ", " ");
+	    tags = tagNames.replaceAll(", ", ",");
 
-	    // Replace , with spaces
-	    tags = tagNames.replaceAll(",", " ");
-
-	    String[] tagsArray = tags.split(" ");
+	    String[] tagsArray = tags.split(",");
 
 	    // Add Tags based on contact
 	    if (type.equals(ADD))

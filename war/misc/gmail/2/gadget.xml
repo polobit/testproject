@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <ModulePrefs title="Agile Testing 2"
+    description="Custom extractor"
+    height="20"
+    author="TBD"
+    author_email="..."
+    author_location="...">
+
+  <Require feature="dynamic-height"/>
+
+  <Require feature="google.contentmatch">
+      <Param name="extractors">
+        623403448797:Agile,google.com:EmailAddressExtractor
+      </Param>
+    </Require>
+
+  </ModulePrefs>
+
+  <Content type="html" view="card">
+    <![CDATA[
+      <script type="text/javascript">
+        matches = google.contentmatch.getContentMatches();
+        var oNewNode = document.createElement("LI");
+        document.body.appendChild(oNewNode);
+        oNewNode.innerText = JSON.stringify(matches);
+        gadgets.window.adjustHeight(100);
+      </script>
+    ]]>
+  </Content>
+</Module>

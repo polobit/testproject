@@ -226,25 +226,17 @@ function agile_createContact(data, tags)
 
 
 
-function agile_getContact(email)
+function agile_getContact(email, callback)
 {
-	// Download Gadget Template
-	var gadget_template = downloadSynchronously(GADGET_TEMPLATE);
-	var handlebars_template = Handlebars.compile(gadget_template);
 	
 	 var params = "email={0}".format(encodeURIComponent(email));
 	 // Get
 	 var agile_url = agile_id.getURL() + "/contact/email?callback=?&id=" + agile_id.get() + "&" + params ;
 	 
 	 agile_getJSONP(agile_url, function(data){
-	 	    var success = data.flag === 'successful';
-	 	    if(success) {
-	 	        alert('The POST to abc.com WORKED SUCCESSFULLY');
-	 	        // Add to content
-	 			var individualTemplate = handlebars_template(val);	
-	 			console.log(individualTemplate);
-	 			$("#content").append($(individualTemplate));
-	 	    }
+	 	  if (callback && typeof(callback) === "function") {
+		 	callback(data);
+			}
 	 	});
 }
 
@@ -453,7 +445,7 @@ var agile_id =
 			if(this.namespace == "localhost")
 				this.namespace = "http://localhost:8888";
 			else
-				this.namespace = "https://" + this.namespace;
+				this.namespace = "https://" + this.namespace + ".agilecrm.com";
 			return this.namespace + "/core/js/api";
 		}
 	};

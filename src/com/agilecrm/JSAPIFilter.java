@@ -27,7 +27,6 @@ public class JSAPIFilter implements Filter
 	    final ServletResponse response, final FilterChain chain)
 	    throws IOException, ServletException
     {
-	System.out.println("JSAPI Filter");
 
 	final HttpServletRequest httpRequest = (HttpServletRequest) request;
 	final HttpServletResponse httpResponse = (HttpServletResponse) response;
@@ -43,7 +42,8 @@ public class JSAPIFilter implements Filter
 		return;
 	    }
 	}
-	System.out.println("Error");
+
+	System.out.println("Error - Key does not match for JS API");
 	httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
     }
 

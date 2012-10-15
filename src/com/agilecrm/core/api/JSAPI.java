@@ -43,6 +43,8 @@ public class JSAPI
 	{
 	    Contact contact = Contact.searchContactByEmail(email);
 	    System.out.println("Contact " + contact);
+	    if (contact == null)
+		contact = new Contact();
 
 	    return new JSONWithPadding(new GenericEntity<Contact>(contact)
 	    {
@@ -216,13 +218,10 @@ public class JSAPI
 	    // Replace multiple space with single space
 	    tags = tags.trim().replaceAll(" +", " ");
 
-	    // Replace ,space with space
-	    tags = tags.replaceAll(", ", " ");
+	    // Replace ,space with ,
+	    tags = tags.replaceAll(", ", ",");
 
-	    // Replace , with spaces
-	    tags = tags.replaceAll(",", " ");
-
-	    String[] tagsArray = tags.split(" ");
+	    String[] tagsArray = tags.split(",");
 
 	    Contact contact = Contact.searchContactByEmail(email);
 	    if (contact == null)
@@ -257,12 +256,9 @@ public class JSAPI
 	    tags = tags.trim().replaceAll(" +", " ");
 
 	    // Replace ,space with space
-	    tags = tags.replaceAll(", ", " ");
+	    tags = tags.replaceAll(", ", ",");
 
-	    // Replace , with spaces
-	    tags = tags.replaceAll(",", " ");
-
-	    String[] tagsArray = tags.split(" ");
+	    String[] tagsArray = tags.split(",");
 
 	    Contact contact = Contact.searchContactByEmail(email);
 	    if (contact == null)

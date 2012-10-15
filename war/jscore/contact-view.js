@@ -28,7 +28,7 @@ function contactTableView(base_model) {
 }
 
 
-function setupViews(cel) {
+function setupViews(cel, button_name) {
 	
     // Show the views collection on the actions dropdown 	
 	var customView = new Base_Collection_View({
@@ -36,7 +36,12 @@ function setupViews(cel) {
         restKey: "contactView",
         templateKey: "contact-view",
         individual_tag_name: 'li',
-        id: 'view-list'
+        id: 'view-list',
+        postRenderCallback: function(el)
+        {
+        	if(button_name)
+        		$(el).find('.custom_view').append(button_name);
+        }
 
     });
     
@@ -69,6 +74,13 @@ $(function(){
 		// Save contact_view id as cookie
 		createCookie("contact_view", id);
 
+		// If filter is send filter url to show only filter data
+		if(filter_id = readCookie('contact_filter'))
+		{
+			App_Contacts.customView(id, undefined, 'core/api/filters/query/' + filter_id);
+			return;
+		}
+		
 		App_Contacts.customView(id);
 	});
 });

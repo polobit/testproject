@@ -104,7 +104,7 @@ String CSS_PATH = "/";
 					
 					<li class="dropdown" id="menu1"><a class="dropdown-toggle"
 							data-toggle="dropdown" href="#menu1">Add New <i class='caret'></i></a>
-							<ul class="dropdown-menu agile-menu">
+							<ul class="dropdown-menu">
 								<li><a href="#personModal" data-toggle="modal" id="person">Person</a>
 								</li>
 								<li><a href="#companyModal" data-toggle="modal"
@@ -131,7 +131,7 @@ String CSS_PATH = "/";
 						<li id="fat-menu" class="dropdown"><a href=""
 							class="dropdown-toggle" data-toggle="dropdown"><i
 								class="agilecrm-profile-dropdown"></i> </a>
-							<ul class="dropdown-menu agile-menu">
+							<ul class="dropdown-menu">
 								<li>
 									<a href='#settings'><%=user.getEmail()%></a>
 											</li>

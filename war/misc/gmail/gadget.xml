@@ -1,17 +1,62 @@
-<html>
-<head>
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <ModulePrefs title="AgileCRM"
+    description="Built with Love for Small Businesses"
+    height="50"
+    author=""
+    author_email=""
+    author_location="US">
 
-<style>
-	.error{color:red;}
-</style>
-</head>
-<body>
+    <!-- Declare feature dependencies. -->
 
+    <!-- This one is not specific to Gmail contextual gadgets. -->
+    <Require feature="dynamic-height"/>
+
+    <!-- The next feature, Caja, is optional, and is supported for
+     use only within test domains. Uncomment the tag only for
+     non-production gadgets. -->
+    <!-- <Require feature="caja"/> -->
+
+    <!-- The next feature, google.contentmatch, is required for all
+     Gmail contextual gadgets.
+     <Param> - specify one or more comma-separated extractor IDs in
+     a param named "extractors". This line is overridden by the extractor ID
+     in the manifest, but is still expected to be present. -->
+    <Require feature="google.contentmatch">
+      <Param name="extractors">
+          google.com:SenderEmailExtractor</Param>
+    </Require>
+
+  </ModulePrefs>
+
+  <!-- Define the content type and display location. The settings
+   "html" and "card" are required for all Gmail contextual gadgets. -->
+  <Content type="html" view="card">
+    <![CDATA[
+      <!-- Start with Single Sign-On -->
+      <!-- <script type="text/javascript" src="http://example.com/gadgets/sso.js"></script> --> 
+  	
+    <style>
+		.error{color:red;}
+		body{font-size:12px}
+    </style>
+   
    <div id="content">
-   <img class="loading" style="padding-right:5px" src= "img/21-0.gif"></img>
+      <img class="loading" style="padding-right:5px" src= "https://googleapps.agilecrm.com/img/21-0.gif"></img>
    </div>
 
-<script id="gadget-without-both-template" type="text/html">
+
+
+
+	<script src='https://googleapps.agilecrm.com/lib/headjs-min.js'></script>
+
+ <script src='https://googleapps.agilecrm.com/misc/gmail/gadget.js'></script>
+   
+   <script type="text/javascript">
+		init_agile_gadget();   
+	</script>
+	
+	<script id="gadget-template" type="text/html">
 {{#if id}}
 <br/>
  <div style="" id="gadgetContactDetailsTab">
@@ -23,9 +68,9 @@
     <span  style='vertical-align:middle;float:left;margin-right:10px;'>
 		<b>
 			<font size="5">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</font>
-		</b></br>
+		</b><br/>
 		{{#if_propertyName "email"}}
-			{{value}}</br>
+			{{value}}<br/>
 		{{/if_propertyName}}
 
 		{{#if_propertyName "title"}}
@@ -52,7 +97,7 @@
 			<form id='gadgetNoteForm' name="gadgetNoteForm" method="post">
 				<fieldset>
                     <legend><b>Add Note</b></legend>
-                    <input type="hidden" name="email" value="{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}" />
+                    <input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
 					<div>
                     	<label><b>Subject: </b><span style='color:red;'>*</span></label>
 						<div>
@@ -78,12 +123,12 @@
            	<form id='gadgetTaskForm' name="gadgetTaskForm" method="post">
 					<fieldset>
                        <legend><b>Add Task</b></legend>
-                       <input type="hidden" name="email" value="{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}" />
+                       <input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
 						<div>
 							<div id="addTask" style="display:inline-block;margin-left:0px;">
 								<label for="subject"> <b>Task:</b> <span style='color:red;'>*</span></label>
 								<div><span><input id="subject" type="text"
-							  		  name="subject" class="required"> </span>
+							  		  name="subject" class="required" /> </span>
 							  	</div>
 							</div>
 							<div id="taskCategory" style="display:inline-block;">					
@@ -106,7 +151,7 @@
 					    	 <div style="display:inline-block;margin-left:0px;">
 								<label for="due"><b>Date (Due): </b><span style='color:red;'>*</span></label>
 								<div>
-									<input type="text" name="due" id="task-date-1" class="required date" value="MM-DD-YYYY">
+									<input type="text" name="due" id="task-date-1" class="required date" value="MM-DD-YYYY"/>
 								</div>
 							  </div>
 							  <div style="display:inline-block;">
@@ -133,7 +178,7 @@
 			  <form id="gadgetDealForm" name="gadgetDealForm" method="post">
 		  		<fieldset>
                     <legend><b>Add Deal</b></legend>
-                    <input type="hidden" name="email" value="{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}" />
+                    <input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
 					<div>			
 						<label><b>Name: </b><span style='color:red;'>*</span></label>
 						<div>
@@ -240,27 +285,8 @@
 {{/if}}
 </script>
 
-<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
-<script type="text/javascript" src="http://jzaefferer.github.com/jquery-validation/jquery.validate.js"></script>
-<script type="text/javascript" src="/lib/handlebars-1.0.0.beta.6-min.js"></script>
-<script type="text/javascript" src="/jscore/md5.js"></script>
-<script type="text/javascript" src="/jscore/handlebars-agile.js"></script>
-<script type="text/javascript" src="/stats/gadget.js"></script>
+	    
+    ]]>
 
-<script type="text/javascript">
-     var _agile = _agile || [];
-	  _agile.push(['_setAccount', 't87mbpn15789194cojt6j0ujd5', 'localhost']);
-	  var aj = document.createElement('script'); aj.type = 'text/javascript';   
-      aj.src = '/stats/min/agile-min.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(aj, s);
-</script>
-
-
-<script type="text/javascript">
-$(function (){
-	getGadgetForEmail(["sukanya1@invox.com","manohar@invox.com","jagan1223@invox.com","hdga@hfjh.diu"]);
-	});
-</script>
-
-</body>
-</html>
+  </Content>
+</Module>

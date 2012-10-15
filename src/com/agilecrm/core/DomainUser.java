@@ -7,8 +7,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.Globals;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.util.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.users.User;
 import com.googlecode.objectify.Objectify;
@@ -21,7 +23,7 @@ public class DomainUser
 {
     // Key
     @Id
-    public Long id;
+    public Long id = null;
 
     // Domain
     public String domain;
@@ -67,6 +69,9 @@ public class DomainUser
     // Get user with id
     public static DomainUser getDomainUser(Long id)
     {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
 	try
 	{
 	    return dao.get(id);
@@ -75,6 +80,10 @@ public class DomainUser
 	{
 	    e.printStackTrace();
 	    return null;
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
 	}
     }
 
@@ -177,8 +186,12 @@ public class DomainUser
     {
 
 	// Check if user exists with this email
-	if (getDomainUserFromEmail(email) != null)
-	    throw new Exception("User already exists with this email address");
+	DomainUser domainUser = getDomainUserFromEmail(email);
+	if ((domainUser != null) && !this.id.equals(domainUser.id))
+	{
+	    throw new Exception("User already exists with this email address "
+		    + domainUser);
+	}
 
 	String oldNamespace = NamespaceManager.get();
 
@@ -191,6 +204,18 @@ public class DomainUser
 	{
 	    System.out.println("Domain user not created");
 	    throw new Exception("Domain is empty. Please login again & try.");
+	}
+
+	// Check if new and more than three users
+	if (count() >= Globals.TRIAL_USERS_COUNT && this.id == null)
+	    throw new Exception(
+		    "Please upgrade. You cannot add more than 2 users in the free plan");
+
+	// Send Email
+	if (this.id == null)
+	{
+	    SendMail.sendMail(this.email, "New User Invitation",
+		    SendMail.NEW_USER_INVITED, this);
 	}
 
 	NamespaceManager.set("");
@@ -208,13 +233,31 @@ public class DomainUser
     // Delete Contact
     public void delete()
     {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
 	dao.delete(this);
+	NamespaceManager.set(oldNamespace);
+    }
+
+    public int count()
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+	try
+	{
+	    return dao.ofy().query().filter("domain", domain).count();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
     }
 
     // To String
     public String toString()
     {
-	return "Email " + this.email + " " + this.domain + " " + this.is_admin;
+	return "Email " + this.email + " " + this.domain + " " + this.is_admin
+		+ " " + this.id;
 
     }
 }
