@@ -335,4 +335,10 @@ $(function()
 		this.billingData = JSON.parse(this["billingData"]);
 		return options.fn(this.billingData);
 	});
+	
+	// Convert string to lower case
+	Handlebars.registerHelper('toLowerCase', function(value)
+			{
+				return value.toLowerCase();
+			});
 });
