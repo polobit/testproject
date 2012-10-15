@@ -227,7 +227,7 @@ $(function () {
 
     // Update in continue-contact
     $("#update").die().live('click', function (e) {
-        serializeAndSaveContinueContact(e, 'continueform', 'personModal', 'core/api/contacts' false, ' ', true);
+        serializeAndSaveContinueContact(e, 'continueform', 'personModal', 'core/api/contacts', false, ' ', true);
     });
     
     // Close in continue-contact

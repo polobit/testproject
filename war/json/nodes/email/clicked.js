@@ -16,10 +16,10 @@
             "category": "Info",
 			"name": "duration",
             "id":"duration",
-			"value":"1",
 			"title": "Enter the max wait time.",
 			"fieldType": "input",
-            "type": "text" 
+            "type": "number",
+            "min": "0"
 			
 		},{   
 			"label": "Type",

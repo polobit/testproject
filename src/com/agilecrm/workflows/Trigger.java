@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -121,12 +122,17 @@ public class Trigger
     @XmlElement(name = "campaign")
     public String getCampaign() throws Exception
     {
-	Workflow workflow = Workflow.getWorkflow(Long.parseLong(campaign_id));
 
-	if (workflow != null)
-	    return workflow.name;
+	if (!StringUtils.isEmpty(campaign_id))
+	{
+	    Workflow workflow = Workflow.getWorkflow(Long
+		    .parseLong(campaign_id));
 
-	return "";
+	    if (workflow != null)
+		return workflow.name;
+	}
+
+	return "?";
     }
 
     // Get Triggers based on Trigger condition
@@ -150,7 +156,6 @@ public class Trigger
 
 }
 
-
 class TriggersDeferredTask implements DeferredTask
 {
 
@@ -170,11 +175,17 @@ class TriggersDeferredTask implements DeferredTask
 	List<Trigger> triggers = Trigger.getTriggersByCondition(type);
 	Contact contact = Contact.getContact(contactId);
 
-	for (Trigger trigger : triggers)
+	if (!triggers.isEmpty())
 	{
+	    for (Trigger trigger : triggers)
+	    {
+		if (contact != null
+			&& !(StringUtils.isEmpty(trigger.campaign_id)))
 
-	    if (contact != null)
-		Campaign.subscribe(contact, Long.parseLong(trigger.campaign_id));
+		    Campaign.subscribe(contact,
+			    Long.parseLong(trigger.campaign_id));
+
+	    }
 	}
     }
 

@@ -1,22 +1,41 @@
 <script id="admin-settings-account-prefs-template" type="text/html">
 <!--  Contact View Detail in Detailed mode - when only one contact is shown -->
 
-<div class='span8 well'>
+<div class='span6 well'>
 
 	<form id="accountPrefs" class="form-horizontal">
 		<fieldset>
           <input name="id" type="hidden" value="{{id}}" />
-	    	<legend>Account Preferences</legend>
+	    	<legend>Account Preferences<a href="#subscribe" class="pull-right">Subscription</a></legend>
           <div class='row'>
-           <div class='span4'>
-			  <div class="control-group">
-				<label class="control-label">Plan <span class="field_req">*</span></label>
-				<div class="controls">
-					<select name="plan" class="required">
-						<option value="{{plan}}" selected>{{plan}}</option>
-					</select> 
+           <div class='span3'>
+
+			<div class="span4" style="margin-bottom:5px; margin-left:50px">
+				<div class="span1">	
+						<label>Plan</label> 
 				</div>
-			 </div>
+				<div class="span2" style="margin-left:10px">
+					{{#if plan.plan_id}}
+							{{plan.plan_id}}
+						{{else}}
+							Free Plan
+					{{/if}}
+				</div>
+			</div>
+	
+			<div class="span4" style="margin-bottom:5px; margin-left:50px">
+				<div class="span1">	
+					<label>Quantity</label>
+				</div>
+				<div class="span2" style="margin-left:10px">
+					{{#if plan.quantity}}
+							{{plan.quantity}}
+						{{else}}
+							1
+					{{/if}}
+				</div>
+			</div>
+
     		 <div class="control-group">
      			<label class="control-label">Company <span class="field_req">*</span></label> 
 				<div class="controls">
@@ -24,7 +43,7 @@
 				</div>
 			</div>
          </div>
-         <div class="span2">
+         <div class="span3">
 		 	<div class="control-group">
 				<div id="upload-container" messg="User image has been uploaded">
 					<div class="controls">
