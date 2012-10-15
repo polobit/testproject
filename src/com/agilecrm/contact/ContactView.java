@@ -29,7 +29,7 @@ public class ContactView
     public LinkedHashSet<String> fields_set = new LinkedHashSet<String>();
 
     // Dao
-    private static ObjectifyGenericDao<ContactView> dao = new ObjectifyGenericDao<ContactView>(
+    public static ObjectifyGenericDao<ContactView> dao = new ObjectifyGenericDao<ContactView>(
 	    ContactView.class);
 
     public ContactView()
