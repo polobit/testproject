@@ -1,33 +1,32 @@
 <script id="opportunity-detail-popover-template" type="text/html">
 	<div class='row-fluid'>
 		<div class="span12" style="margin-left:0px;">
+            <div class="span8">
+			    <p><b>Details</b></p>
+                <div style="padding:5px;">
+					  Deal Name: {{name}}<br/>
+					  Description: {{description}}
+                </div>
+                <p><b>Contacts</b></p>
+                <div style="padding:5px;">
+					  Owner: {{owner}}<br/>
+                      Related To: {{relatesTo}}
+                </div>
+            </div>
             <div class="span4" style='display:inline;padding-right:10px;height:auto;'>
 	            {{#each contacts}}
 		             <img class="thumbnail" src="{{gravatarurl properties 50}}" width='40px' height='40px'>
 	            {{/each}}
 	        </div>
-            <div class="span8">
-			    <p><b>Details</b></p>
-                <div style="padding:5px;">
-					  Deal Name       : {{name}}<br/>
-					  Description     : {{description}}
-                </div>
-                <p><b>Contacts</b></p>
-                <div style="padding:5px;">
-					  Owner :{{owner}}<br/>
-					  Email :{{email}}<br/>
-                      Related To :{{relatesTo}}
-                </div>
-            </div>
          </div>
 </div>
 <div class="row-fluid">
             <div style="border-top:1px solid whitesmoke;padding-top:5px;">
-				<div ><span><b>value : $ </b>{{expected_value}}</span></div>
-				<div><span><b>probability : </b>{{probability}} %</span></div>
-				<div><span><b>milestone : </b>{{milestone}}</span></div>
-				<div><span><b>pipeline : $ </b>{{calculatePipeline expected_value probability pipeline}}</span></div>
-			    <div><span><b>close date :  </b>{{epochToHumanDate "mm-dd-yy" close_date}}</span></div><br/>
+				<div ><span><b>Value: $ </b>{{expected_value}}</span></div>
+				<div><span><b>Probability: </b>{{probability}}%</span></div>
+				<div><span><b>Milestone: </b>{{milestone}}</span></div>
+				<div><span><b>Pipeline: $ </b>{{calculatePipeline expected_value probability pipeline}}</span></div>
+			    <div><span><b>Close Date:  </b>{{epochToHumanDate "mm-dd-yy" close_date}}</span></div><br/>
             </div>   
 </div>
 </script>
