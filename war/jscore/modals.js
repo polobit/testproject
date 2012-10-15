@@ -5,7 +5,7 @@ $(function(){
 	    	if (!isValidForm('#personForm')) {
 	    		return false;
 	    	}
-	    	serializeAndSaveContinueContact(e, 'personForm', 'personModal', 'core/api/contacts');	        
+	    	serializeAndSaveContinueContact(e, 'personForm', 'personModal', 'core/api/contacts', false, ' ', true);	        
 	    });
 	    
 	    $('#import-link').live('click', function (e) {
@@ -17,7 +17,7 @@ $(function(){
 	    	if (!isValidForm('#companyForm')) {
 	    		return false;
 	    	}
-	    	serializeAndSaveContinueContact(e, 'companyForm', 'companyModal', 'core/api/companies');	        
+	    	serializeAndSaveContinueContact(e, 'companyForm', 'companyModal', 'core/api/contacts', false, ' ', false);	        
 	    });
 });
 

@@ -232,7 +232,6 @@ function agile_getContact(email, callback)
 	 var params = "email={0}".format(encodeURIComponent(email));
 	 // Get
 	 var agile_url = agile_id.getURL() + "/contact/email?callback=?&id=" + agile_id.get() + "&" + params ;
-	 
 	 agile_getJSONP(agile_url, function(data){
 	 	  if (callback && typeof(callback) === "function") {
 		 	callback(data);

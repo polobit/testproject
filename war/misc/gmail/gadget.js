@@ -1,10 +1,9 @@
-// Gadget JS Libs Path
-
-var LIB_PATH;
-
 var _agile = _agile || [];
 
-var Is_Localhost = false;
+var Is_Localhost = true;
+
+// Global Lib Path - set automaticlaly in init based on localhost or production
+var LIB_PATH;
 
 // Init Agile Gadget
 function init_agile_gadget()
@@ -12,10 +11,10 @@ function init_agile_gadget()
 	
 	// Set API Key first - agile-min.js executes at the very beginning
 	// Sukanya Localhost
-	 _agile.push(['_setAccount', 't87mbpn15789194cojt6j0ujd5', 'localhost']);
+	// _agile.push(['_setAccount', 't87mbpn15789194cojt6j0ujd5', 'localhost']);
 	
 	// MC Localhost
-	//_agile.push(['_setAccount', 'utjhaf2h97gcdc55jh6k7qbg9', 'localhost']);
+	_agile.push(['_setAccount', 'utjhaf2h97gcdc55jh6k7qbg9', 'localhost']);
 	
 	//_agile.push(['_setAccount', 'fbl6p636276j2ff7tp2m023t0q', 'test']);
 	
@@ -28,9 +27,10 @@ function init_agile_gadget()
 	}
 	else
 	{
-		LIB_PATH = "https://googleapps.agilecrm.com/";
 		gadgets.window.adjustHeight();
+		LIB_PATH = "https://googleapps.agilecrm.com/";
 	}
+		
 	console.log(Is_Localhost);
 	// Download scripts and load UI
 	download_scripts(build_ui);
@@ -100,7 +100,7 @@ function build_ui()
 	if(!Is_Localhost)
 		emails = get_emails();
 	else
-		emails = ["manohar565@invox.com","manohar556@invox.com"];
+		emails = ["manohar@invox.com","manohar12@invox.com"];
      
      // Build UI
      console.log("Building UI");
@@ -120,7 +120,17 @@ function build_ui_for_emails(email_ids){
 	
 			agile_getContact(email, function(val)
 					{
+				
 						val.email = email;
+						
+						// Add to content
+						var individualTemplate = getTemplate('gadget', val, 'no');	
+						//console.log(individualTemplate);
+						$("#content").append($(individualTemplate));
+						
+						if(!Is_Localhost)
+							gadgets.window.adjustHeight();
+						
 						individual_template_ui(val);
 					});
 		});

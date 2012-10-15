@@ -76,7 +76,10 @@ function pieDetails()
 				            }, {
 				                name: 'Pipeline',
 				                data: pipeline.data
-				            }]
+				            }],
+				            exporting: {
+				            	enabled: false
+				            }
 				        });
 		        });
 	   });
@@ -137,7 +140,10 @@ function pieMilestones()
 		                type: 'pie',
 		                name: 'Milestone',
 		                data: pieData
-		                   }]
+		                   }],
+				            exporting: {
+				            	enabled: false
+				            }
 		        	});
 		       });
        });
@@ -157,8 +163,10 @@ function pieTags()
 	    						{
 	    			    			total_tags = total_tags + v;
 	    						});
+	    				console.log(data);
 		    			$.each(data, function(k,v)
 		    					{
+		    						
 		    						var item = [];
 		    						item.push(k);
 		    						item.push(v / total_tags * 100);
@@ -172,7 +180,7 @@ function pieTags()
 					                plotShadow: false
 					            },
 					            title: {
-					                text: 'Tags '
+					                text: ''
 					            },
 					            tooltip: {
 					        	    pointFormat: '{series.name}: <b>{point.percentage}%</b>',
@@ -192,7 +200,10 @@ function pieTags()
 					                type: 'pie',
 					                name: 'Tag',
 					                data: pieData
-					            }]
+					            }],
+					            exporting: {
+					            	enabled: false
+					            }
 				        });
 	   		     });
 	    });

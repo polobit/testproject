@@ -123,7 +123,7 @@ public class WorkflowsAPI
 
     // Bulk operations - Triggers delete
     @Path("triggers/bulk")
-    @DELETE
+    @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void deleteTriggers(@FormParam("model_ids") String model_ids)
 	    throws JSONException
