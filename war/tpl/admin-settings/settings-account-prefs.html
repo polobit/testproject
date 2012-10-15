@@ -15,8 +15,8 @@
 						<label>Plan</label> 
 				</div>
 				<div class="span2" style="margin-left:10px">
-					{{#if plan.plan_id}}
-							{{plan.plan_id}}
+					{{#if subscription_plan.plan_id}}
+							{{subscription_plan.plan_id}}
 						{{else}}
 							Free Plan
 					{{/if}}
@@ -28,8 +28,8 @@
 					<label>Quantity</label>
 				</div>
 				<div class="span2" style="margin-left:10px">
-					{{#if plan.quantity}}
-							{{plan.quantity}}
+					{{#if subscription_plan.quantity}}
+							{{subscription_plan.quantity}}
 						{{else}}
 							1
 					{{/if}}
