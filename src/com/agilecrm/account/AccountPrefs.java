@@ -1,6 +1,5 @@
 package com.agilecrm.account;
 
-import javax.jdo.annotations.Embedded;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -25,10 +24,6 @@ public class AccountPrefs
 
     @NotSaved(IfDefault.class)
     public String company_name = null;
-
-    @Embedded
-    @NotSaved
-    private Plan plan = null;
 
     // Dao
     private static ObjectifyGenericDao<AccountPrefs> dao = new ObjectifyGenericDao<AccountPrefs>(
@@ -65,7 +60,7 @@ public class AccountPrefs
     }
 
     // Contacts related with deals Author : Yaswanth 08-24-2012
-    @XmlElement
+    @XmlElement(name = "subscription_plan")
     public Plan getPlan()
     {
 	if (Subscription.getSubscription() != null)
