@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -127,7 +128,7 @@ public class Trigger
 	if (workflow != null)
 	    return workflow.name;
 
-	return "";
+	return "Workflow does not exist for this campaign id";
     }
 
     // Get Triggers based on Trigger condition
@@ -174,10 +175,12 @@ class TriggersDeferredTask implements DeferredTask
 	{
 	    for (Trigger trigger : triggers)
 	    {
+		if (contact != null
+			&& !(StringUtils.isEmpty(trigger.campaign_id)))
 
-		if (contact != null)
 		    Campaign.subscribe(contact,
 			    Long.parseLong(trigger.campaign_id));
+
 	    }
 	}
     }
