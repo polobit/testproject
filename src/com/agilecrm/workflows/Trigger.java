@@ -123,12 +123,16 @@ public class Trigger
     public String getCampaign() throws Exception
     {
 
-	Workflow workflow = Workflow.getWorkflow(Long.parseLong(campaign_id));
+	if (!StringUtils.isEmpty(campaign_id))
+	{
+	    Workflow workflow = Workflow.getWorkflow(Long
+		    .parseLong(campaign_id));
 
-	if (workflow != null)
-	    return workflow.name;
+	    if (workflow != null)
+		return workflow.name;
+	}
 
-	return "Workflow does not exist for this campaign id";
+	return "?";
     }
 
     // Get Triggers based on Trigger condition
