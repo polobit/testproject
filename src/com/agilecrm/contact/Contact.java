@@ -100,6 +100,8 @@ public class Contact extends Cursor
     public static final String EMAIL = "email";
     public static final String COMPANY = "company";
     public static final String TITLE = "title";
+    public static final String NAME = "name";
+    public static final String URL = "url";
 
     public Contact()
     {
