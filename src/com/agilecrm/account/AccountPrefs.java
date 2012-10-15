@@ -1,9 +1,13 @@
 package com.agilecrm.account;
 
+import javax.jdo.annotations.Embedded;
 import javax.persistence.Id;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.agilecrm.customer.Plan;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.subscription.Subscription;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -22,17 +26,17 @@ public class AccountPrefs
     @NotSaved(IfDefault.class)
     public String company_name = null;
 
-    @NotSaved(IfDefault.class)
-    public String plan = null;
+    @Embedded
+    @NotSaved
+    private Plan plan = null;
 
     // Dao
     private static ObjectifyGenericDao<AccountPrefs> dao = new ObjectifyGenericDao<AccountPrefs>(
 	    AccountPrefs.class);
 
-    AccountPrefs(String companyName, String plan)
+    AccountPrefs(String companyName)
     {
 	this.company_name = companyName;
-	this.plan = plan;
     }
 
     AccountPrefs()
@@ -54,10 +58,20 @@ public class AccountPrefs
 
     private static AccountPrefs getDefaultPrefs()
     {
-	AccountPrefs prefs = new AccountPrefs("My company", "Plan 1");
+	AccountPrefs prefs = new AccountPrefs("My company");
 
 	dao.put(prefs);
 	return prefs;
+    }
+
+    // Contacts related with deals Author : Yaswanth 08-24-2012
+    @XmlElement
+    public Plan getPlan()
+    {
+	if (Subscription.getSubscription() != null)
+	    return Subscription.getSubscription().plan;
+
+	return null;
     }
 
     public void save()
