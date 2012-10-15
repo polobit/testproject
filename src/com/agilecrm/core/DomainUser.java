@@ -23,7 +23,7 @@ public class DomainUser
 {
     // Key
     @Id
-    public Long id = null;
+    public Long id;
 
     // Domain
     public String domain;
@@ -185,6 +185,8 @@ public class DomainUser
     public void save() throws Exception
     {
 
+	System.out.println("Creating or updating new user " + this);
+
 	// Check if user exists with this email
 	DomainUser domainUser = getDomainUserFromEmail(email);
 	if ((domainUser != null) && !this.id.equals(domainUser.id))
@@ -245,7 +247,8 @@ public class DomainUser
 	NamespaceManager.set("");
 	try
 	{
-	    return dao.ofy().query().filter("domain", domain).count();
+	    return dao.ofy().query(DomainUser.class).filter("domain", domain)
+		    .count();
 	}
 	finally
 	{
