@@ -12,12 +12,12 @@ function init_agile_gadget()
 	
 	// Set API Key first - agile-min.js executes at the very beginning
 	// Sukanya Localhost
-	// _agile.push(['_setAccount', 't87mbpn15789194cojt6j0ujd5', 'localhost']);
+	 _agile.push(['_setAccount', 't87mbpn15789194cojt6j0ujd5', 'localhost']);
 	
 	// MC Localhost
 	//_agile.push(['_setAccount', 'utjhaf2h97gcdc55jh6k7qbg9', 'localhost']);
 	
-	_agile.push(['_setAccount', 'fbl6p636276j2ff7tp2m023t0q', 'test']);
+	//_agile.push(['_setAccount', 'fbl6p636276j2ff7tp2m023t0q', 'test']);
 	
 	// Check if localhost
 	console.log(window.location.host);
@@ -26,6 +26,7 @@ function init_agile_gadget()
 	else
 		gadgets.window.adjustHeight();
 		
+	console.log(Is_Localhost);
 	// Download scripts and load UI
 	download_scripts(build_ui);
 }
@@ -94,7 +95,7 @@ function build_ui()
 	if(!Is_Localhost)
 		emails = get_emails();
 	else
-		emails = ["manohar@invox.com"];
+		emails = ["manohar@invox.com","manohar12@invox.com"];
      
      // Build UI
      console.log("Building UI");
@@ -254,4 +255,9 @@ function init_handlers() {
 		$("#gadget-deal", el).toggle();
 	});
 	
+	//toggle event for add contact
+	$("#gadget-add-contact").die().live('click', function(e){
+		var el = $(this).closest("div#gadgetContactDetailsTab").find("div#showForm");
+		$("#gadget-contact", el).toggle();
+	});
 }

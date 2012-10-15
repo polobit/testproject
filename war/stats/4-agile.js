@@ -443,10 +443,9 @@ var agile_id =
 		getURL: function()
 		{
 			if(this.namespace == "localhost")
-				this.namespace = "http://localhost:8888";
+				return "http://localhost:8888/core/js/api";
 			else
-				this.namespace = "https://" + this.namespace + ".agilecrm.com";
-			return this.namespace + "/core/js/api";
+				return "https://" + this.namespace + ".agilecrm.com/core/js/api";
 		}
 	};
 
