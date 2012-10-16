@@ -6,6 +6,9 @@
     author="TBD"
     author_email="..."
     author_location="...">
+    
+    <Require feature="opensocial-0.9" />
+    <Require feature="osapi" />
 
   <Require feature="dynamic-height"/>
 

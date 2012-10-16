@@ -5,6 +5,7 @@ var Is_Localhost = true;
 // Global Lib Path - set automaticlaly in init based on localhost or production
 var LIB_PATH;
 
+
 // Init Agile Gadget
 function init_agile_gadget()
 {
@@ -120,28 +121,25 @@ function build_ui_for_emails(email_ids){
 	
 			agile_getContact(email, function(val)
 					{
-				
 						val.email = email;
-						
-						// Add to content
-						var individualTemplate = getTemplate('gadget', val, 'no');	
-						//console.log(individualTemplate);
-						$("#content").append($(individualTemplate));
-						
-						if(!Is_Localhost)
-							gadgets.window.adjustHeight();
-						
-						individual_template_ui(val);
+						fill_individual_template_ui(val, $('#content'));
 					});
 		});
 }
 
-function individual_template_ui(val){
+function fill_individual_template_ui(val, selector, append){
+	
+	// Default value for append is true
+	append = append || "true";
+	
+	// If not append, empty it - useful while refreshing the same div
+	if(!append)
+		selector.empty();
 	
 	// Add to content
 	var individualTemplate = getTemplate('gadget', val, 'no');	
-	//console.log(individualTemplate);
-	$("#content").append($(individualTemplate));
+	
+	selector.append($(individualTemplate));
 	
 	if(!Is_Localhost)
 		gadgets.window.adjustHeight();
@@ -168,6 +166,7 @@ function init_handlers() {
 		  var data = {};
 		  var tags = {};
 		  json = $(el).serializeArray();
+		  
 		  $.each(json, function(index, val){
 			  if(val.name == "tags")
 				  tags[val.name] = val.value;
@@ -176,12 +175,17 @@ function init_handlers() {
 			});
 		  $('#status', el).show().delay(3000).hide(1);
 		  _agile = [];
-		  _agile.push(["_createContact", data, tags]);
+		  _agile.push(["_createContact", data, tags, function(data)
+		               {
+			  				// Refresh the views
+			  				var selector = "flle this correctly";
+			  				fill_individual_template_ui(val, selector, false);
+			           }]);
 		  _agile_execute();
 		  build_ui();
 	});
 	
-	//Adding Note for contact
+	// Adding Note for contact
 	$('#gadget-note-validate').die().live('click', function(e){
 		e.preventDefault();
 		var el = $(this).closest("div#gadgetContactDetailsTab").find("#gadgetNoteForm");

@@ -230,11 +230,6 @@ float:right;
 .subnav .nav > li:last-child > a {
   border-right: 0;
 }
-.subnav .dropdown-menu {
-  -webkit-border-radius: 0 0 4px 4px;
-     -moz-border-radius: 0 0 4px 4px;
-          border-radius: 0 0 4px 4px;
-}
 
 
 /* Red compulsory fields star */
@@ -259,18 +254,7 @@ margin: 0px
 /* Widget */
 .widget
 {
-padding:10px;
-}
-
-/* Sidebar Title */
-.sidebar_title {
-margin: 0;
-background: #EEE url("//s3.amazonaws.com/wrapbootstrap/live/imgs/atcblock.png") no-repeat 0 0;
-padding: 10px 10px;
-color: #444;
-text-shadow: 1px 1px 0 white;
-font-size: 16px;
-font-weight: bold;
+	padding:10px;
 }
 
 /* Settings Content in admin-settings.html*/
@@ -329,21 +313,6 @@ margin-left: 87px;
 margin-top: 10px;
 }
 
-/* contacts.html,opportunities.html,workflows.html */
-.blue {
-border: 1px solid #2273C4;
-background: #67A6E5;
-background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjUwJSIgeTE9IjAlIiB4Mj0iNTAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzcwYWJlNiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzQwOGZkZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
-background-size: 100%;
-background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #70ABE6), color-stop(100%, #408FDE));
-background-image: -webkit-linear-gradient(top, #70ABE6,#408FDE);
-background-image: -moz-linear-gradient(top, #70ABE6,#408FDE);
-background-image: -o-linear-gradient(top, #70ABE6,#408FDE);
-background-image: linear-gradient(top, #70ABE6,#408FDE);
-color: white;
-text-shadow: 0 -1px #206EBC;
-font-weight: normal;
-}
 /* Clip Board Application CSS -- Ending */
 
 /* Mouse over on Tables */
@@ -358,19 +327,19 @@ font-weight: normal;
 }
 
 /* To solve modal header and footer distortion */
-.agile-modal 
+.agile-modal-body
 {
 	overflow-y: hidden;
 }
 
-.typeahead
+.navbar .navbar-search .typeahead
 {
 	margin-top:0px;
 }
 
 
 /* Footer to remain in botom of the page*/
-html, body {height: 100%;}
+html, body {height: 93%;}
 
 #wrap {min-height: 100%;}
 

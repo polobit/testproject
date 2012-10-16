@@ -4,6 +4,7 @@
   <style>
 		.error{color:red;}
 		body{font-size:12px}
+		h1{font-size:16px;}
     </style>
 </head>
 <body>
@@ -30,9 +31,9 @@
 	   </div>
     </div>
     <div class="span3" style='height:auto;display:inline-block;vertical-align:-23px;'>
-		<b>
-			<font size="5">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</font>
-		</b></br>
+		<h1>
+			{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}
+		</h1>
 		{{#if_propertyName "email"}}
 			{{value}}</br>
 		{{/if_propertyName}}

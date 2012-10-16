@@ -76,6 +76,9 @@ public class HomeServlet extends HttpServlet
 		return;
 	    }
 
+	    // Logged in time
+	    domainUser.logged_in_date = System.currentTimeMillis() / 1000;
+
 	    req.getRequestDispatcher("home.jsp").forward(req, resp);
 	    // resp.sendRedirect("home.jsp");
 	}

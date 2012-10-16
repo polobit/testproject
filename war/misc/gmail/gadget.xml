@@ -26,6 +26,11 @@
       <Param name="extractors">
           google.com:SenderEmailExtractor</Param>
     </Require>
+    
+    <!--  Single Sign on -->
+    <Require feature="opensocial-0.9" />
+    <Require feature="osapi" />
+    
 
   </ModulePrefs>
 
