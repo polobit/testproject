@@ -50,7 +50,7 @@ function showTwitterMatchingProfiles(plugin_id)
 {	
 	$('#Twitter').html(TWITTER_PLUGIN_HEADER + '<img src=\"img/1-0.gif\"></img>');
 	
-	$.getJSON("/core/api/widgets/twitter/" + agile_crm_get_contact()['id'] + "/" + plugin_id, function (data) {
+	getTwitterMatchingProlfiles(plugin_id, function(data){
 		var el =  TWITTER_PLUGIN_HEADER;
 
 		// If no matching profiles found
@@ -79,7 +79,6 @@ function showTwitterMatchingProfiles(plugin_id)
              });
              $('#Twitter').html(el);
 
-     });
 	
 
 	// Display to Twitter profile details on mouseover
@@ -113,7 +112,7 @@ function showTwitterMatchingProfiles(plugin_id)
 			    		showTwitterProfile(id, plugin_id)
 			    	}
 		 });
-		 
+	}); 
 		 // Confirmation for saving image to contact 
 		 $('#save_twitter_image').die().live('click', function(e){
 			 e.preventDefault();
@@ -152,5 +151,41 @@ function showTwitterProfile(twitter_id, plugin_id)
     	 agile_crm_delete_widget_property(TWITTER_PLUGIN_NAME);
     	 
     });
+}
+
+// Get twitter matching profiles from cookie or from twitter
+function getTwitterMatchingProlfiles(plugin_id, callback)
+{
+	// Get contact id to save social results of a particular id
+	var contact_id = agile_crm_get_contact()['id'];
+
+	// Read from cookie 
+	var data = localStorage.getItem('Agile_twitter_matches_' + contact_id);
+	
+	// If cookie is not available fetch results from twitter
+	if(!data)
+		{
+			$.getJSON("/core/api/widgets/twitter/" + agile_crm_get_contact()['id'] + "/" + plugin_id, function (data) {
+					
+				// Save social results in cookie of particular contact
+				localStorage.setItem('Agile_twitter_matches_' + contact_id, JSON.stringify(data));
+				
+					// Call back to show twitter matching profiles from cookie
+					if (callback && typeof(callback) === "function") {
+						
+						// execute the callback, passing parameters as necessary
+						callback(data);
+					}
+			});
+		}
+	else
+		{
+			// Call back to show twitter matching profiles from cookie
+			if (callback && typeof(callback) === "function") {
+			
+				// execute the callback, passing parameters as necessary
+				callback(JSON.parse(data));
+			}
+		}	
 }
 

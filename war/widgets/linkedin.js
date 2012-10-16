@@ -51,11 +51,10 @@ function showLinkedinMatchingProfiles(plugin_id)
 	// Show loading of linkedin matching profiles
 	$('#Linkedin').html(LINKEDIN_PLUGIN_HEADER + '<img src=\"img/1-0.gif\"></img>');
 	
-	// Fetch matching profiles and displays
-	$.getJSON("/core/api/widgets/linkedin/" + agile_crm_get_contact()['id'] + "/" + plugin_id, function (data) {
-			
+	getLinkedinMatchingProlfiles(plugin_id, function(data){
+		
 		// Widget header
-         var el = LINKEDIN_PLUGIN_HEADER;
+        var el = LINKEDIN_PLUGIN_HEADER;
          
          // If no matches found display message
          if (data.length == 0) {
@@ -165,3 +164,41 @@ function showLinkedinProfile(linkedin_id, plugin_id)
     	 
     });
 }
+
+//Get twitter matching profiles from cookie or from Linkedin
+function getLinkedinMatchingProlfiles(plugin_id, callback)
+{
+	// Get contact id to save social results of a particular id
+	var contact_id = agile_crm_get_contact()['id'];
+
+	// Read from cookie 
+	var data = localStorage.getItem('Agile_linkedin_matches_' + contact_id);
+	
+	// If cookie is not available fetch results from twitter
+	if(!data)
+		{
+			$.getJSON("/core/api/widgets/linkedin/" + agile_crm_get_contact()['id'] + "/" + plugin_id, function (data) {
+					
+				// Save social results in cookie of particular contact
+				localStorage.setItem('Agile_linkedin_matches_' + contact_id, JSON.stringify(data));
+				
+					// Call back to show twitter matching profiles from cookie
+					if (callback && typeof(callback) === "function") {
+						
+						// execute the callback, passing parameters as necessary
+						callback(data);
+					}
+			});
+		}
+	else
+		{
+			console.log("from cache");
+			// Call back to show twitter matching profiles from cookie
+			if (callback && typeof(callback) === "function") {
+			
+				// execute the callback, passing parameters as necessary
+				callback(JSON.parse(data));
+			}
+		}	
+}
+
