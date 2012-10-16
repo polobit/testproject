@@ -98,7 +98,7 @@ public class CampaignsAPI
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public String subscribeContactsBulk(
+    public void subscribeContactsBulk(
 	    @FormParam("contact_ids") String contact_ids,
 	    @PathParam("workflow-id") Long workflowId) throws JSONException
     {
@@ -111,7 +111,7 @@ public class CampaignsAPI
 	if (contacts_list.size() == 0)
 	{
 	    System.out.println("Null contact");
-	    return "true";
+	    // return "true";
 	}
 
 	for (Contact contact : contacts_list)
@@ -119,6 +119,6 @@ public class CampaignsAPI
 	    Campaign.subscribe(contact, workflowId);
 	}
 
-	return "true";
+	// return "true";
     }
 }

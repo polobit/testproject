@@ -5,9 +5,9 @@
 		  		<fieldset>
 					<div class="control-group">			
 						<legend>Change owner to contacts bulk</legend>	
-						<label class="control-label">Select owner</label>
+						<label class="control-label">Select owner <span class="field_req">*</span></label>
 						<div class="controls">
-							<select class="ownerBulkSelect" id='ownerBulkSelect'>
+							<select class="ownerBulkSelect required" id='ownerBulkSelect'>
   								<option class="ownerBulkSelectOption" value="">Select..</option>
 							</select>
 			  			</div>
@@ -16,6 +16,7 @@
 					<div class="form-actions">          
           				<a href="#" type="submit" id="changeOwnerToBulk" class="btn btn-primary">Add</a> 
 						<a href="#contacts" class="btn ">Close</a>
+						<span class="save-status"></span>
 					</div>
 				</fieldset>
 			</form>

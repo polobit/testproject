@@ -130,6 +130,9 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, url, continueCont
             $('#' + form_id).each(function () {
                 this.reset();
             });
+            
+            // Remove tags list 
+            $('.tagsinput').empty();
         },
         error: function (model, response) {
         	
