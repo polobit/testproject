@@ -10,8 +10,8 @@
                    <div class="control-group">
 						<label class="control-label"><b>Organization</b></label>
                 		<div class="controls">                     
-               				<input name="company_name" type="text"
-								id="company_name" value="{{getPropertyValue properties "company_name"}}"/>
+               				<input name="name" type="text"
+								id="name" value="{{getPropertyValue properties "name"}}"/>
 						</div>
 					</div>
                     <div class="control-group">
@@ -398,6 +398,7 @@
 						</div>
 					</div>
 				<input type="text" name="id" class="hide" value={{id}} >
+				<input type="text" name="type" class="hide" value="COMPANY" >
 					<div class="form-actions">
 						<a href="#" type="submit" class="save btn btn-primary" id="company-update">Update</a>
 						<a href="#home" class="btn" id="company-close">close</a>

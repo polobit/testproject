@@ -5,108 +5,75 @@
 	
 			<form id="notificationsForm" name="notificationsForm" class="form-horizontal">
 				<fieldset>
-					<legend>Notifications</legend>
+                    <legend>Notifications</legend>
 					<input name="id" type="hidden" value="{{id}}" /> 
-					<label><b>Browsing:</b></label>
-					<div class="control-group">
-						<div class="controls">
+                    <div class="control-group">
+					  <label class="control-label"><b>Browsing:</b></label>
+					   <div class="controls">
 							<label class="checkbox">
 								<input type="checkbox" id="contact_browsing" name='contact_browsing' value='true'/> 
                         			   Contact (any) is browsing
 							</label>
-						</div>
-					</div>
-					
-					<div class="control-group">
-						<div class="controls">
 							<label class="checkbox">
 								<input type="checkbox" id="contact_assigned_browsing" name='contact_assigned_browsing' value='true'/> 
                         			   Contact (assigned to me) is browsing
 							</label>
-						</div>
-					</div>
-
-					<div class="control-group">
-						<div class="controls">
 							<label class="checkbox">
 								<input type="checkbox" id="contact_assigned_starred_browsing" name='contact_assigned_starred_browsing' value='true'/> 
                         			   Contact (assigned to me & starred) is browsing
 							</label>
 						</div>
 					</div>
-					<legend></legend>
+					
+                    <legend></legend>
 					<p></p>
-					<label><b>Email:</b></label>
 					<div class="control-group">
-						<div class="controls">
+                       <label class="control-label"><b>Email:</b></label>
+						 <div class="controls">
 							<label class="checkbox">
 								<input type="checkbox" id="contact_opened_email" name='contact_opened_email' value='true'/> 
                         			   Contact (any) has opened email
 							</label>
-						</div>
-					</div>
-
-					<div class="control-group">
-						<div class="controls">
 							<label class="checkbox">
 								<input type="checkbox" id="contact_assigned_opened_email" name='contact_assigned_opened_email' value='true'/> 
                         			   Contact (assigned to me) has opened email
 							</label>
-						</div>
-					</div>
-
-					<div class="control-group">
-						<div class="controls">
 							<label class="checkbox">
 								<input type="checkbox" id="contact_assigned_starred_opened_email" name='contact_assigned_starred_opened_email' value='true'/> 
                         			   Contact (assigned to me & starred) has opened email
 							</label>
-						</div>
+						 </div>
 					</div>
-					<legend></legend>
+					
+                    <legend></legend>
 					<p></p>
-					<label><b>Link:</b></label>
-					<div class="control-group">
-						<div class="controls">
+                    <div class="control-group">
+					<label class="control-label"><b>Link:</b></label>
+					     <div class="controls">
 							<label class="checkbox">
 								<input type="checkbox" id="contact_clicked_link" name='contact_clicked_link' value='true'/> 
                         			   Contact (any) has clicked a link
 							</label>
-						</div>
-					</div>
-
-					<div class="control-group">
-						<div class="controls">
 							<label class="checkbox">
 								<input type="checkbox" id="contact_assigned_clicked_link" name='contact_assigned_clicked_link' value='true'/> 
                         			   Contact (assigned to me) has clicked a link
 							</label>
-						</div>
-					</div>
-					
-					<div class="control-group">
-						<div class="controls">
 							<label class="checkbox">
 								<input type="checkbox" id="contact_assigned_starred_clicked_link" name='contact_assigned_starred_clicked_link' value='true'/> 
                         			   Contact (assigned to me & starred) has clicked a link
 							</label>
-						</div>
+						  </div>
 					</div>
+
 					<legend></legend>
 					<p></p>
-					<label><b>Deal:</b></label>
-					<div class="control-group">
+                  <div class="control-group">
+					<label class="control-label"><b>Deal:</b></label>
 						<div class="controls">
 							<label class="checkbox">
 								<input type="checkbox" id="deal_created" name='deal_created' value='true'/> 
                         			   Deal is created
 							</label>
-						</div>
-					</div>
-
-					
-					<div class="control-group">
-						<div class="controls">
 							<label class="checkbox">
 								<input type="checkbox" id="deal_closed" name='deal_closed' value='true'/> 
                         			   Deal is closed
