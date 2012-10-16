@@ -74,7 +74,26 @@
 
 <div class="data">
 	<div class="dta-contatiner">
+<div class="btn-group right" id ="bulk-actions" style='position:relative; display:none'>
+  <button class="btn">Bulk Actions</button>
+  <button class="btn dropdown-toggle" data-toggle="dropdown" id="view-actions"><span class="caret" ></span>
+  </button>
+  <ul class="dropdown-menu" id= "view-actions">
+    <li>
+		<a href='#' id='bulk-owner'>Change owner</a>
+	</li>
+	<li>
+		<a href='#' id='bulk-campaigns'>Add to campaign</a>	
+	</li>
+	<li class="hide">
+		<a href='#' id='bulk-email'>Send email</a>
+	</li>
+	<li>
+		<a href='#' id='bulk-tags'>Add tags</a>
+	</li>
 
+  </ul>
+</div>
 <table id='contacts' class="table table-striped showCheckboxes" style='overflow:scroll' url="core/api/contacts">
 <thead>
     <tr>
