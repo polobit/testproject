@@ -199,9 +199,9 @@ function agile_propertyJSON(name, id, type) {
     return json;
 }
 
-function agile_createContact(data, tags)
+function agile_createContact(data, tags, callbak)
 {
- var properties = [];
+	var properties = [];
 	 
 	 for (var key in data) {
 		  if (data.hasOwnProperty(key)) {
@@ -217,10 +217,11 @@ function agile_createContact(data, tags)
 	 var agile_url = agile_id.getURL() + "/contacts?callback=?&id=" + agile_id.get() + "&contact=" + encodeURIComponent(JSON.stringify(model));
 	 
 	 agile_getJSONP(agile_url, function(data){
-	 	    var success = data.flag === 'successful';
-	 	    if(success) {
-	 	        alert('The POST to abc.com WORKED SUCCESSFULLY');
-	 	    }
+	 	   
+		 // Execute Callback
+		 if (callback && typeof(callback) === "function") {
+			 	callback(data);
+				}
 	 	});
 }
 
