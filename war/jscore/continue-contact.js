@@ -1,5 +1,5 @@
 // Serialize and save continue contact
-function serializeAndSaveContinueContact(e, form_id, modal_id, url, continueContact, template, is_person) {
+function serializeAndSaveContinueContact(e, form_id, modal_id, continueContact, is_person) {
     e.preventDefault();
     var $form = $('#' + form_id);
     
@@ -20,6 +20,7 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, url, continueCont
     var obj = {};
     var properties = [];
     var address = [];
+    var template;
     
     // Contact Custom properties
 
@@ -32,7 +33,10 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, url, continueCont
     });
     
     if(is_person){
-    // Contact properties
+    
+    	template = 'continue-contact';
+    	
+    // Person properties
     if (isValidField('fname'))properties.push(propertyJSON('first_name', 'fname'));
    
     if (isValidField('lname'))properties.push(propertyJSON('last_name', 'lname'));
@@ -45,7 +49,10 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, url, continueCont
     
     var tags = getTags(form_id);
 	if (tags != undefined && tags.length != 0) obj.tags = tags[0].value;
+	
     }else{
+    	
+    	template = 'continue-company';
 
     // Company properties
     if (isValidField('name')) properties.push(propertyJSON('name', 'name'));
@@ -102,7 +109,7 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, url, continueCont
     
     // Save contact
     var contactModel = new Backbone.Model();
-    contactModel.url = url;
+    contactModel.url = 'core/api/contacts';
     contactModel.save(obj, {
         success: function (data) {
         	// Remove loading image
@@ -120,11 +127,16 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, url, continueCont
                 	
                 });
                 
-            } else {
+            } else if(is_person){
             	
                 App_Contacts.navigate("contact/" + data.id, {
                 	trigger: true
             	});
+            }else{
+            	App_Contacts.navigate("contacts", {
+                	trigger: true
+            	});            	
+            	//$('#companies-filter').trigger('click');
             }
             // Reset each element
             $('#' + form_id).each(function () {
@@ -226,12 +238,12 @@ $(function () {
 
     // Continue editing in the new-person-modal Rammohan 03-08-2012.
     $('#continue-contact').click(function (e) {
-        var model = serializeAndSaveContinueContact(e, 'personForm','personModal', 'core/api/contacts', true, 'continue-contact', true);
+        var model = serializeAndSaveContinueContact(e, 'personForm','personModal', true, true);
     });
 
     // Update in continue-contact
     $("#update").die().live('click', function (e) {
-        serializeAndSaveContinueContact(e, 'continueform', 'personModal', 'core/api/contacts', false, ' ', true);
+        serializeAndSaveContinueContact(e, 'continueform', 'personModal', false, true);
     });
     
     // Close in continue-contact
@@ -249,13 +261,13 @@ $(function () {
     // Continue editing in the new-company-modal
     $('#continue-company').click(function (e) {
         
-        var model = serializeAndSaveContinueContact(e, 'companyForm', 'companyModal', 'core/api/companies', true, 'continue-company', false);
+        var model = serializeAndSaveContinueContact(e, 'companyForm', 'companyModal', true, false);
 
     });
     
  // Update in continue-company
     $("#company-update").die().live('click', function (e) {
-        serializeAndSaveContinueContact(e, 'continueCompanyForm', 'companyModal', 'core/api/companies', false, ' ', false);
+        serializeAndSaveContinueContact(e, 'continueCompanyForm', 'companyModal', false, false);
     });
 
 });

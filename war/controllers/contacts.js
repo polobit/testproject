@@ -148,10 +148,17 @@ var ContactsRouter = Backbone.Router.extend({
         }
 
         // If not downloaded fresh during refresh - read from collection
-        if(!contact)
+        if(!contact){
+        	this.contactsListView.collection.url = '/core/api/contacts'
         	contact = this.contactsListView.collection.get(id);
+        }
         
-        console.log(contact.toJSON());
+        // If contact is of type company just edit it.
+        if(contact.get('type') == 'COMPANY'){
+        	deserializeContact(contact.toJSON(), 'continue-company');
+        	return;
+        }
+
         this.contactDetailView = new Base_Model_View({
             model: contact,
             template: "contact-detail",
@@ -494,5 +501,5 @@ var ContactsRouter = Backbone.Router.extend({
         this.contact_custom_view.collection.fetch();
         $('#content').html(this.contact_custom_view.el);
     	
-    }
+    },
 });

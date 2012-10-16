@@ -52,6 +52,23 @@ public class ContactsAPI
 	return Contact.getAllContacts();
     }
 
+    // This method is called if TEXT_PLAIN is request
+    @Path("/companies")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Contact> getCompanies(@QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count)
+    {
+	if (count != null)
+	{
+
+	    System.out.println("Fetching companies page by page");
+	    return Contact.getAllCompanies(Integer.parseInt(count), cursor);
+	}
+
+	return Contact.getAllContacts();
+    }
+
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
