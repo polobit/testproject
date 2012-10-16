@@ -56,12 +56,12 @@ public class Tag
 
     }
 
-    public Tag()
+    Tag()
     {
 
     }
 
-    public Tag(String tag)
+    Tag(String tag)
     {
 	this.tag = tag;
     }

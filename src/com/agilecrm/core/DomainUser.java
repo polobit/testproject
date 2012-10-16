@@ -11,7 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import com.agilecrm.Globals;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
-import com.agilecrm.util.SendMail;
+import com.agilecrm.util.Sendmail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.users.User;
 import com.googlecode.objectify.Objectify;
@@ -26,11 +26,8 @@ public class DomainUser
     @Id
     public Long id;
 
-    // Created/Updated Time
+    // Created Time
     public Long created_time = 0L;
-
-    @NotSaved(IfDefault.class)
-    public Long updated_time = 0L;
 
     // Last LoggedIn Date
     public Long logged_in_date = 0L;
@@ -57,6 +54,15 @@ public class DomainUser
     // Domain UserName
     public String name = null;
 
+    // User Location
+    public String location = null;
+
+    // User Country
+    public String country = null;
+
+    // User IP address
+    public String ip = null;
+
     // Dao
     private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(
 	    DomainUser.class);
@@ -82,13 +88,10 @@ public class DomainUser
     @PrePersist
     private void PrePersist()
     {
-	// Store Created and Last Updated Time
+	// Store Created
 	if (created_time == 0L)
-	{
 	    created_time = System.currentTimeMillis() / 1000;
-	}
-	else
-	    updated_time = System.currentTimeMillis() / 1000;
+
     }
 
     // Get user with id
@@ -241,8 +244,8 @@ public class DomainUser
 	// Send Email
 	if (this.id == null)
 	{
-	    SendMail.sendMail(this.email, "New User Invitation",
-		    SendMail.NEW_USER_INVITED, this);
+	    Sendmail.sendMail(this.email, "New User Invitation",
+		    Sendmail.NEW_USER_INVITED, this);
 	}
 
 	NamespaceManager.set("");
@@ -286,8 +289,7 @@ public class DomainUser
     {
 	return "Email " + this.email + "Domain " + this.domain + "IsAdmin "
 		+ this.is_admin + "DomainId " + this.id + "Domain UserName"
-		+ name + " created_time: " + created_time + " updated_time"
-		+ updated_time;
+		+ name + " created_time: " + created_time;
 
     }
 }
