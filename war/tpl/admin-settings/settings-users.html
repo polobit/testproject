@@ -16,8 +16,11 @@
 				<thead>
     				<tr>
       					<th>Id</th>
-      					<th>Is Admin</th>
       					<th>User Name</th>
+                        <th>User Email</th>
+                        <th>Created Date</th>
+                        <th>LoggedIn Date</th>
+                        <th>Is Admin</th>
 						<th>Is Disabled</th>
     				</tr>
   				</thead>
@@ -58,8 +61,11 @@
 
 <script id="admin-settings-users-model-template" type="text/html">
   <td>{{id}} </td>
-  <td>{{is_admin}} </td>
+  <td>{{name}}</td>
   <td>{{email}}</td>
-<td>{{is_disabled}}</td>
+  <td>{{epochToTaskDate created_time}}</td>
+  <td>{{logged_in_date}}</td>
+  <td>{{is_admin}}</td>
+  <td>{{is_disabled}}</td>
 <br/>
 </script>

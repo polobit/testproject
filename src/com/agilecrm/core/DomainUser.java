@@ -3,6 +3,7 @@ package com.agilecrm.core;
 import java.util.List;
 
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
@@ -25,6 +26,15 @@ public class DomainUser
     @Id
     public Long id;
 
+    // Created/Updated Time
+    public Long created_time = 0L;
+
+    @NotSaved(IfDefault.class)
+    public Long updated_time = 0L;
+
+    // Last LoggedIn Date
+    public Long logged_in_date = 0L;
+
     // Domain
     public String domain;
 
@@ -43,6 +53,9 @@ public class DomainUser
     // Email content to be sent for the first time
     @NotSaved
     public String email_template = null;
+
+    // Domain UserName
+    public String name = null;
 
     // Dao
     private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(
@@ -64,6 +77,18 @@ public class DomainUser
 	}
 
 	this.is_admin = isAdmin;
+    }
+
+    @PrePersist
+    private void PrePersist()
+    {
+	// Store Created and Last Updated Time
+	if (created_time == 0L)
+	{
+	    created_time = System.currentTimeMillis() / 1000;
+	}
+	else
+	    updated_time = System.currentTimeMillis() / 1000;
     }
 
     // Get user with id
@@ -259,8 +284,10 @@ public class DomainUser
     // To String
     public String toString()
     {
-	return "Email " + this.email + " " + this.domain + " " + this.is_admin
-		+ " " + this.id;
+	return "Email " + this.email + "Domain " + this.domain + "IsAdmin "
+		+ this.is_admin + "DomainId " + this.id + "Domain UserName"
+		+ name + " created_time: " + created_time + " updated_time"
+		+ updated_time;
 
     }
 }

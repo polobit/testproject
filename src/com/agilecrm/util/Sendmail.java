@@ -2,6 +2,8 @@ package com.agilecrm.util;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
+import com.github.jknack.handlebars.Handlebars;
+import com.github.jknack.handlebars.Template;
 import com.thirdparty.SendGridEmail;
 
 public class SendMail
@@ -76,10 +78,16 @@ public class SendMail
 	    return null;
 
 	// Compile
-	/*
-	 * Handlebars handlebars = new Handlebars(); Template template =
-	 * handlebars.compile(emailTemplate); template.apply(object);
-	 */
+	try
+	{
+	    Handlebars handlebars = new Handlebars();
+	    Template template = handlebars.compile(emailTemplate);
+	    System.out.println(template.apply(object));
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Exception " + e);
+	}
 
 	// Apply
 
