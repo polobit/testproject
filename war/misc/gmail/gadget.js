@@ -12,10 +12,10 @@ function init_agile_gadget()
 	
 	// Set API Key first - agile-min.js executes at the very beginning
 	// Sukanya Localhost
-	// _agile.push(['_setAccount', 't87mbpn15789194cojt6j0ujd5', 'localhost']);
+	 _agile.push(['_setAccount', 't87mbpn15789194cojt6j0ujd5', 'localhost']);
 	
 	// MC Localhost
-	_agile.push(['_setAccount', 'utjhaf2h97gcdc55jh6k7qbg9', 'localhost']);
+	//_agile.push(['_setAccount', 'utjhaf2h97gcdc55jh6k7qbg9', 'localhost']);
 	
 	//_agile.push(['_setAccount', 'fbl6p636276j2ff7tp2m023t0q', 'test']);
 	
@@ -102,13 +102,15 @@ function build_ui()
 		emails = get_emails();
 	else
 		emails = ["manohar@invox.com","manohar12@invox.com"];
+	
      
      // Build UI
      console.log("Building UI");
  	 build_ui_for_emails(emails);
      
-     // Init Handlers
-     init_handlers();
+ 	// Init Handlers
+    init_handlers();
+     
 }
 
 // Retrieve contact details from email list
@@ -151,148 +153,159 @@ function isValidForm(form){
 	return $(form).valid();
 }
 
+//Validating and serialize form data
+function serializeForm(form){
+	if(!isValidForm(form))
+    {	
+      return;
+    }
+	var json = form.serializeArray();
+	return json;
+}
 
 // JQuery Handlers
 function init_handlers() {
 	// Adding contact from gadget
-	$('#gadget-contact-validate').die().live('click', function(e){
+	$('.gadget-contact-validate').die().live('click', function(e){
 		e.preventDefault();
-		var el = $(this).closest("div#gadgetContactDetailsTab").find("#gadgetContactForm");
-		  if(!isValidForm($(el)))
-	      {	
-	        return;
-	      }
+		var el = $(this).closest("div.gadget_contact_details_tab").find(".gadget_contact_form");
 		  var json = [];
 		  var data = {};
 		  var tags = {};
-		  json = $(el).serializeArray();
-		  
+		  json = serializeForm($(el));
 		  $.each(json, function(index, val){
 			  if(val.name == "tags")
 				  tags[val.name] = val.value;
 			  else
 				  data[val.name] = val.value;
 			});
-		  $('#status', el).show().delay(3000).hide(1);
 		  _agile = [];
-		  _agile.push(["_createContact", data, tags, function(data)
-		               {
-			  				// Refresh the views
-			  				var selector = "flle this correctly";
-			  				fill_individual_template_ui(val, selector, false);
+		  _agile.push(["_createContact", data, tags, function(response)
+		               {    
+			                // Refresh the views
+			  				var selector = $(this).closest("div.gadget_contact_details_tab").find(".gadget_contact");
+			  				fill_individual_template_ui(response, selector, false);
+			  				build_ui();
 			           }]);
 		  _agile_execute();
-		  build_ui();
 	});
 	
 	// Adding Note for contact
-	$('#gadget-note-validate').die().live('click', function(e){
+	$('.gadget-note-validate').die().live('click', function(e){
 		e.preventDefault();
-		var el = $(this).closest("div#gadgetContactDetailsTab").find("#gadgetNoteForm");
-		  if(!isValidForm($(el)))
-	      {	
-	      	return;
-	      }
+		var el = $(this).closest("div.gadget_contact_details_tab").find(".gadget_note_form");
 		  var json = [];
 		  var data = {};
 		  var email = {};
-		  json = $(el).serializeArray();
+		  json = serializeForm($(el));
 		  $.each(json, function(index, val){
 			  if(val.name == "email")
 				  email[val.name] = val.value;
 			  else
 				  data[val.name] = val.value;
 			});
-		  $('#status', el).show().delay(3000).hide(1);
 		  _agile = [];
-		  _agile.push(["_addNote", email, data]);
+		  _agile.push(["_addNote", email, data, function(response)
+		               {
+							// Refresh the views
+							var selector = $(this).closest("div.gadget_contact_details_tab").find(".gadget_contact");
+							$('.status', el).show().delay(3000).hide(1);
+		               }]);
 		  _agile_execute();
 	});
 	
 	//Adding Task for contact
-	$('#gadget-task-validate').die().live('click', function(e){
+	$('.gadget-task-validate').die().live('click', function(e){
 		e.preventDefault();
-		var el = $(this).closest("div#gadgetContactDetailsTab").find("#gadgetTaskForm");
-		  if(!isValidForm($(el)))
-	      {	
-	      	return;
-	      }
+		var el = $(this).closest("div.gadget_contact_details_tab").find(".gadget_task_form");
 		  var json = [];
 		  var data = {};
 		  var email = {};
-		  json = $(el).serializeArray();
+		  json = serializeForm($(el));
 		  $.each(json, function(index, val){
 			  if(val.name == "email")
 				  email[val.name] = val.value;
 			  else
 				  data[val.name] = val.value;
 			});
-		  $('#status', el).show().delay(3000).hide(1);
 		  _agile = [];
-		  _agile.push(["_addTask", email, data]);
+		  _agile.push(["_addTask", email, data, function(response)
+		               {
+							// Refresh the views
+							var selector = $(this).closest("div.gadget_contact_details_tab").find(".gadget_contact");
+							$('.status', el).show().delay(3000).hide(1);
+		               }]);
 		  _agile_execute();
 	});
 	
 	//Adding Deal for contact
-	$('#gadget-deal-validate').die().live('click', function(e){
+	$('.gadget-deal-validate').die().live('click', function(e){
 		e.preventDefault();
-		var el = $(this).closest("div#gadgetContactDetailsTab").find("#gadgetDealForm");
-		  if(!isValidForm($(el)))
-	      {	
-	      	return;
-	      }
+		var el = $(this).closest("div.gadget_contact_details_tab").find(".gadget_deal_form");
 		  var json = [];
 		  var data = {};
 		  var email = {};
-		  json = $(el).serializeArray();
+		  json = serializeForm($(el));
 		  $.each(json, function(index, val){
 			  if(val.name == "email")
 				  email[val.name] = val.value;
 			  else
 				  data[val.name] = val.value;
 			});
-		  $('#status', el).show().delay(3000).hide(1);
+		  $('.status', el).show().delay(3000).hide(1);
 		  _agile = [];
-		  _agile.push(["_addDeal", email, data]);
+		  _agile.push(["_addDeal", email, data, function(response)
+		               {
+							// Refresh the views
+							var selector = $(this).closest("div.gadget_contact_details_tab").find(".gadget_contact");
+							$('.status', el).show().delay(3000).hide(1);
+		               }]);
 		  _agile_execute();
 	});
 	
 	//toggle event for add note
-	$("#gadget-add-note").die().live('click', function(e){
-		var el = $(this).closest("div#gadgetContactDetailsTab").find("div#showForm");
-		$("#gadget-task", el).hide();
-		$("#gadget-deal", el).hide();
-		$("#gadget-note", el).toggle();
+	$(".gadget-add-note").die().live('click', function(e){
+		e.preventDefault();
+		var el = $(this).closest("div.gadget_contact_details_tab").find("div.show_form");
+		$(".gadget-task", el).hide();
+		$(".gadget-deal", el).hide();
+		$(".gadget-note", el).toggle();
 	});
 
 	//toggle event for add task
-	$("#gadget-add-task").die().live('click', function(e){
-		var el = $(this).closest("div#gadgetContactDetailsTab").find("div#showForm");
-		$("#gadget-deal", el).hide();
-		$("#gadget-note", el).hide();
-		$("#gadget-task", el).toggle();
+	$(".gadget-add-task").die().live('click', function(e){
+		e.preventDefault();
+		var el = $(this).closest("div.gadget_contact_details_tab").find("div.show_form");
+		$(".gadget-deal", el).hide();
+		$(".gadget-note", el).hide();
+		$(".gadget-task", el).toggle();
 	});
 	
 	//toggle event for add deal
-	$("#gadget-add-deal").die().live('click', function(e){
-		var el = $(this).closest("div#gadgetContactDetailsTab").find("div#showForm");
-		$("#gadget-note", el).hide();
-		$("#gadget-task", el).hide();
-		$("#gadget-deal", el).toggle();
+	$(".gadget-add-deal").die().live('click', function(e){
+		e.preventDefault();
+		var el = $(this).closest("div.gadget_contact_details_tab").find("div.show_form");
+		$(".gadget-note", el).hide();
+		$(".gadget-task", el).hide();
+		$(".gadget-deal", el).toggle();
 	});
 	
 	//toggle event for add contact
-	$("#gadget-add-contact").die().live('click', function(e){
-		var el = $(this).closest("div#gadgetContactDetailsTab").find("div#showForm");
-		$("#gadget-contact", el).toggle();
+	$(".gadget-add-contact").die().live('click', function(e){
+		e.preventDefault();
+		var el = $(this).closest("div.gadget_contact_details_tab").find("div.show_form");
+		$(".gadget-no-contact", el).toggle();
+		$(".gadget-contact", el).toggle();
 	});
 	
 	//cancel event for buttons
-	$("#cancel").die().live('click', function(e){
-		var el = $(this).closest("div#gadgetContactDetailsTab").find("div#showForm");
-		$("#gadget-contact", el).hide();
-		$("#gadget-note", el).hide();
-		$("#gadget-deal", el).hide();
-		$("#gadget-task", el).hide();
+	$(".cancel").die().live('click', function(e){
+		e.preventDefault();
+		var el = $(this).closest("div.gadget_contact_details_tab").find("div.show_form");
+		$(".gadget-contact", el).hide();
+		$(".gadget-no-contact", el).show();
+		$(".gadget-note", el).hide();
+		$(".gadget-deal", el).hide();
+		$(".gadget-task", el).hide();
 	});
 }

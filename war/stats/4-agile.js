@@ -199,7 +199,7 @@ function agile_propertyJSON(name, id, type) {
     return json;
 }
 
-function agile_createContact(data, tags, callbak)
+function agile_createContact(data, tags, callback)
 {
 	var properties = [];
 	 
@@ -240,7 +240,7 @@ function agile_getContact(email, callback)
 	 	});
 }
 
-function agile_addNote(email, data)
+function agile_addNote(email, data, callback)
 {
 	if(!email.email)
 	{
@@ -253,14 +253,14 @@ function agile_addNote(email, data)
 	 var agile_url = agile_id.getURL() + "/js/note?callback=?&id=" + agile_id.get() + "&" + params ;
 	 
 	 agile_getJSONP(agile_url, function(data){
-	 	    var success = data.flag === 'successful';
-	 	    if(success) {
-	 	        alert('The POST to abc.com WORKED SUCCESSFULLY');
-	 	    }
+		 // Execute Callback
+		 if (callback && typeof(callback) === "function") {
+			 	callback(data);
+				}
 	 	});
 }
 
-function agile_addTask(email, data)
+function agile_addTask(email, data, callback)
 {
 	if(!email.email)
 	{
@@ -273,14 +273,14 @@ function agile_addTask(email, data)
 	 var agile_url = agile_id.getURL() + "/js/task?callback=?&id=" + agile_id.get() + "&" + params;
 	 	
 	 agile_getJSONP(agile_url, function(data){
-	 	    var success = data.flag === 'successful';
-	 	    if(success) {
-	 	        alert('The POST to abc.com WORKED SUCCESSFULLY');
-	 	    }
+		 // Execute Callback
+		 if (callback && typeof(callback) === "function") {
+			 	callback(data);
+				}
 	 	});
 }
 
-function agile_addDeal(email, data)
+function agile_addDeal(email, data, callback)
 {
 	if(!email.email)
 	{
@@ -293,10 +293,10 @@ function agile_addDeal(email, data)
 	 var agile_url = agile_id.getURL() + "/js/opportunity?callback=?&id=" + agile_id.get() + "&" + params;
 	 
 	 agile_getJSONP(agile_url, function(data){
-	 	    var success = data.flag === 'successful';
-	 	    if(success) {
-	 	        alert('The POST to abc.com WORKED SUCCESSFULLY');
-	 	    }
+		 // Execute Callback
+		 if (callback && typeof(callback) === "function") {
+			 	callback(data);
+				}
 	 	});
 }
 
@@ -327,7 +327,7 @@ function agile_getTagsData(data)
 
 }
 
-function agile_addTag(data)
+function agile_addTag(data, callback)
 {
 	var params = agile_getTagsData(data);
 	if(!params)
@@ -337,15 +337,15 @@ function agile_addTag(data)
 	 var agile_url = agile_id.getURL() + "/contacts/add-tags?callback=?&id=" + agile_id.get() + "&" + params;
 	 
 	 agile_getJSONP(agile_url,function(data){
-	 	    var success = data.flag === 'successful';
-	 	    if(success) {
-	 	        alert('The POST to abc.com WORKED SUCCESSFULLY');
-	 	    }
+		 // Execute Callback
+		 if (callback && typeof(callback) === "function") {
+			 	callback(data);
+				}
 	 	});  
     
 }
 
-function agile_removeTag(data)
+function agile_removeTag(data, callback)
 {
 	var params = agile_getTagsData(data);
 	if(!params)
@@ -355,10 +355,10 @@ function agile_removeTag(data)
 	 var agile_url = agile_id.getURL() + "/contacts/remove-tags?callback=?&id=" + agile_id.get() + "&" + params;
 	 
 	 agile_getJSONP(agile_url,function(data){
-	 	    var success = data.flag === 'successful';
-	 	    if(success) {
-	 	        alert('The POST to abc.com WORKED SUCCESSFULLY');
-	 	    }
+		 // Execute Callback
+		 if (callback && typeof(callback) === "function") {
+			 	callback(data);
+				}
 	 	});  
     
 }
