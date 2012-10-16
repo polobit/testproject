@@ -78,6 +78,8 @@ public class HomeServlet extends HttpServlet
 
 	    // Logged in time
 	    domainUser.logged_in_date = System.currentTimeMillis() / 1000;
+	    // Save Logged in time
+	    domainUser.save();
 
 	    req.getRequestDispatcher("home.jsp").forward(req, resp);
 	    // resp.sendRedirect("home.jsp");

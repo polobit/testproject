@@ -44,6 +44,9 @@ public class Cron extends HttpServlet
     @Indexed
     public Long timeout = 0L;
 
+    // Time out in human readable format
+    private String timeout_string = null;
+
     // Campaign Data/ID
     @NotSaved
     public JSONObject campaign_json;
@@ -121,6 +124,7 @@ public class Cron extends HttpServlet
 	data_string = data.toString();
 	node_json_string = node_json.toString();
 	subscriber_json_string = subscriber_json.toString();
+	timeout_string = timeout.toString();
     }
 
     @PostLoad

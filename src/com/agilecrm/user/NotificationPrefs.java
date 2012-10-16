@@ -3,7 +3,15 @@ package com.agilecrm.user;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.map.ObjectMapper;
+
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.user.NotificationPrefs.Type;
+import com.agilecrm.util.Util;
+import com.google.appengine.api.taskqueue.DeferredTask;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -56,6 +64,15 @@ public class NotificationPrefs
 
     @NotSaved(IfDefault.class)
     public boolean deal_closed = true;
+
+    // Notifications
+    public enum Type
+    {
+	BROWSING, OPENED_EMAIL, CLICKED_LINK, DEAL_CREATED, DEAL_CLOSED
+    };
+
+    // Notification type
+    public Type type;
 
     private static ObjectifyGenericDao<NotificationPrefs> dao = new ObjectifyGenericDao<NotificationPrefs>(
 	    NotificationPrefs.class);
@@ -133,4 +150,62 @@ public class NotificationPrefs
     {
 	dao.delete(this);
     }
+
+    public static void executeNotification(Type type, Object object)
+
+    {
+	System.out.println("Executing notification type" + type
+		+ " and notification" + object);
+
+	NotificationsDeferredTask notificationsDeferredTask = new NotificationsDeferredTask(
+		type, object);
+	Queue queue = QueueFactory.getDefaultQueue();
+	queue.add(TaskOptions.Builder.withPayload(notificationsDeferredTask));
+    }
+
+}
+
+class NotificationsDeferredTask implements DeferredTask
+{
+
+    Type type;
+    Object object;
+    String json_data = null;
+    Long agile_id;
+    String url = null;
+
+    NotificationsDeferredTask(Type type, Object object)
+    {
+	this.type = type;
+	this.object = object;
+    }
+
+    NotificationsDeferredTask()
+    {
+	AgileUser agileUser = AgileUser.getCurrentAgileUser();
+	agile_id = agileUser.id;
+
+	// Converting object to json
+	try
+	{
+	    ObjectMapper mapper = new ObjectMapper();
+	    json_data = mapper.writeValueAsString(object);
+	    System.out.println(json_data);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return;
+	}
+    }
+
+    public void run()
+
+    {
+	url = "https://stats.agilecrm.com/push?custom=" + json_data
+		+ "&agile_id=" + agile_id + "&type=" + type;
+	String output = Util.accessURL(url);
+	System.out.println(output);
+    }
+
 }

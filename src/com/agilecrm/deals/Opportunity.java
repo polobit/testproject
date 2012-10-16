@@ -18,6 +18,7 @@ import net.sf.json.JSONObject;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.workflows.Trigger;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -286,19 +287,30 @@ public class Opportunity
     // Delete Opportunity
     public void delete()
     {
-
+	if (contacts != null)
+	{
+	    for (String contact_id : this.contacts)
+	    {
+		Trigger.executeTrigger(Long.parseLong(contact_id),
+			Trigger.Type.DEAL_IS_DELETED);
+	    }
+	}
 	dao.delete(this);
     }
 
     // Save Opportunity
     public void save()
     {
-	for (String contact_id : this.contacts)
+	if (contacts != null)
 	{
-	    this.related_contacts.add(new Key<Contact>(Contact.class, Long
-		    .parseLong(contact_id)));
+	    for (String contact_id : this.contacts)
+	    {
+		this.related_contacts.add(new Key<Contact>(Contact.class, Long
+			.parseLong(contact_id)));
+		Trigger.executeTrigger(Long.parseLong(contact_id),
+			Trigger.Type.DEAL_IS_ADDED);
+	    }
 	}
-
 	this.contacts = null;
 
 	dao.put(this);
