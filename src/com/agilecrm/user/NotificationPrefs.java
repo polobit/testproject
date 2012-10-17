@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
+import com.agilecrm.account.APIKey;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.NotificationPrefs.Type;
 import com.agilecrm.util.Util;
@@ -198,12 +199,12 @@ class NotificationsDeferredTask implements DeferredTask
     public void run()
 
     {
-	// Get agileId
-	AgileUser agileUser = AgileUser.getCurrentAgileUser();
-	agile_id = agileUser.id;
+	// Get API Key
+	APIKey api = APIKey.getAPIKey();
+	String apiKey = api.api_key;
 
 	url = "https://stats.agilecrm.com/push?custom=" + json_data
-		+ "&agile_id=" + agile_id + "&type=" + type;
+		+ "&agile_id=" + apiKey + "&type=" + type;
 
 	String output = Util.accessURL(url);
 	System.out.println(output);

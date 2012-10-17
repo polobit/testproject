@@ -14,7 +14,7 @@ $(function(){
 
         var name = $('#workflow-name').val();
         if (isNotValid(name)) {
-            alert("Name not validd");
+            alert("Name not valid");
             return;
         }
 
@@ -54,11 +54,12 @@ $(function(){
 
     $('#delete_campaign_logs').live('click', function (e) {
     	e.preventDefault();
-    	var campaign_id = $("#logs-table").find("input").val();
+    	var campaign_id = $("#logs-table").find("input.campaign").val();
+    	
     	if(!campaign_id)
     		return;
     	$.ajax({
-    	    url: 'core/api/campaigns/logs' + campaign_id,
+    	    url: 'core/api/campaigns/logs/' + campaign_id,
     	    type: 'DELETE',
     	});
     });
