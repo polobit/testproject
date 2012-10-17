@@ -120,7 +120,7 @@ var ContactsRouter = Backbone.Router.extend({
     },
     contactDetails: function (id, contact) {
 
-    	// If hte user refreshes the contacts list view page directly - we should load from the model
+    	// If user refreshes the contacts list view page directly - we should load from the model
         if(!contact)
     	if (!this.contactsListView || this.contactsListView.collection.length == 0 || this.contactsListView.collection.get(id) == null) {
         	
@@ -146,12 +146,15 @@ var ContactsRouter = Backbone.Router.extend({
         	
         	return;
         }
-
+        
         // If not downloaded fresh during refresh - read from collection
         if(!contact)
-        	contact = this.contactsListView.collection.get(id);
+        	{
+        		// Set url to core/api/contacts (If filters are loaded contacts url is changed so set it back)
+        		this.contactsListView.collection.url = "core/api/contacts";
+        		contact = this.contactsListView.collection.get(id);
+        	}
         
-        console.log(contact.toJSON());
         this.contactDetailView = new Base_Model_View({
             model: contact,
             template: "contact-detail",
@@ -171,25 +174,60 @@ var ContactsRouter = Backbone.Router.extend({
         $('#content').html(el);
        
     },
-    editContact: function () {
+    editContact: function (contact) {
+    	console.log("edit contact");
     	
-    	 // Takes back to contacts if contacts list view is not defined
-   	 if (!this.contactDetailView || !this.contactDetailView.model.id || !this.contactsListView || this.contactsListView.collection.length == 0) {
+    	// Takes back to contacts if contacts detailview is not defined
+    	if (!this.contactDetailView || !this.contactDetailView.model.id) {
             this.navigate("contacts", {
                 trigger: true
             });
             return;
         }
-   	 	
-    	// Contact Edit - take him to continue-contact form
-    	var contact = this.contactsListView.collection.get(this.contactDetailView.model.id);
-     	//$('#content').html(getTemplate('continue-contact', contact.toJSON()));
     	
-    	addCustomFieldsToForm(contact.toJSON(), function(contact){
+    	// If contact detail view is defined the get current contact model id
+    	var id = this.contactDetailView.model.id;
+
+    	// If contact list is defined the get contact to edit from the list
+    	if (this.contactsListView && this.contactsListView.collection && this.contactsListView.collection.get(id))
+    	{
+   		 	contact = this.contactsListView.collection.get(id).toJSON();
+   		}
+    	
+    	// If contacts list view is not defined happens when in custom-view route or in filter 
+    	// then get contact from contact custom view
+    	else if(this.contact_custom_view && this.contact_custom_view.collection && this.contact_custom_view.collection.get(id))
+    	{
+    		contact = this.contact_custom_view.collection.get(id).toJSON();
+    		console.log(contact);
+    	}
+    
+    	// If contact list view and custom view list is not defined then download contact
+   	 	else if(!contact)
+   		 {
+   		 	// Download contact for edit since list is not defined
+   		 	var contact_details_model = Backbone.Model.extend({
+   		 		url: function() {
+   		 			return '/core/api/contacts/'+ id;
+   		 		}
+   		 	});
+     	
+   		 	var model = new contact_details_model();
+   		 	
+   		 	model.fetch({ success: function(contact) {
+   		 		
+   		 			// Call Contact edit again with downloaded contact details
+   		 			App_Contacts.editContact(contact.toJSON());	
+   		 		}
+   		 	});
+   		 	
+   		 	return;
+   		 }
+
+   	 	// Contact Edit - take him to continue-contact form
+    	addCustomFieldsToForm(contact, function(contact){
     		deserializeContact(contact, 'continue-contact');
     	});
-     	
-     	
     },
     
     duplicateContact: function () {
