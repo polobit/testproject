@@ -126,7 +126,7 @@ function deserializeForm(data, form)
 		                		  fel.attr("checked", "checked"); 
 		                  
 		                	  // Set all values as true by default for serialization to work
-		                	  fel.val("true");
+		                	  //fel.val("true");
 		                  }
 	               }
 	               else if (type == "radio") {
