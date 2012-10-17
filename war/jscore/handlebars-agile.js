@@ -257,6 +257,19 @@ $(function()
 
 		return (monthArray[intMonth] + " " + intDay);
 	});
+	
+	// Get task color from it's priority
+	Handlebars.registerHelper('task_label_color', function(priority)
+	{
+		if(priority == 'HIGH')
+			return 'important';
+	
+		if(priority == 'NORMAL')
+			return 'info';
+		
+		if(priority == 'LOW')
+			return 'success';
+	});
 
 	// Calculate pipeline (value * probability)
 	Handlebars.registerHelper('calculatePipeline', function(value, probability)
@@ -341,4 +354,11 @@ $(function()
 			{
 				return value.toLowerCase();
 			});
+	
+	// Execute template based on contact type
+	Handlebars.registerHelper('if_contact_type', function(ctype, options){
+		if(this.type == ctype){
+			return options.fn(this);
+		}
+	});
 });

@@ -47,9 +47,19 @@ $(function(){
 	// Mails
 	$('#contactDetailsTab a[href="#mail"]').live('click', function (e){
 		e.preventDefault();
+		
+		var contact = App_Contacts.contactDetailView.model;
+		var json = contact.toJSON();
+		 
+		// Get email of the contact in contact detail
+		var email = getPropertyValue(json.properties, "email");
+		if(!email)
+			return;	
+				
 		var mailsView = new Base_Collection_View({
-			url: 'core/api/email?e=' + encodeURIComponent("manohar@invox.com") + '&c=10&o=0',
+			url: 'core/api/email?e=' + encodeURIComponent(email) + '&c=10&o=0',
             templateKey: "email-social",
+            restKey: "emails",
             individual_tag_name: 'tr'
         });
         mailsView.collection.fetch();

@@ -120,7 +120,7 @@ var ContactsRouter = Backbone.Router.extend({
     },
     contactDetails: function (id, contact) {
 
-    	// If user refreshes the contacts list view page directly - we should load from the model
+    	// If hte user refreshes the contacts list view page directly - we should load from the model
         if(!contact)
     	if (!this.contactsListView || this.contactsListView.collection.length == 0 || this.contactsListView.collection.get(id) == null) {
         	
@@ -155,6 +155,12 @@ var ContactsRouter = Backbone.Router.extend({
         		contact = this.contactsListView.collection.get(id);
         	}
         
+        // If contact is of type company just edit it.
+        if(contact.get('type') == 'COMPANY'){
+        	deserializeContact(contact.toJSON(), 'continue-company');
+        	return;
+        }
+
         this.contactDetailView = new Base_Model_View({
             model: contact,
             template: "contact-detail",

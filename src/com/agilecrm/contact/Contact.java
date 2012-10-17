@@ -199,12 +199,16 @@ public class Contact extends Cursor
 
 	// Delete Notes
 	Note.deleteAllNotes(id);
+	// Execute Trigger
+	Trigger.executeTrigger(this.id, Trigger.Type.CONTACT_IS_DELETED);
     }
 
     public void save()
     {
 	System.out.println("contact saving:" + this);
 	dao.put(this);
+
+	// Execute Trigger
 	Trigger.executeTrigger(this.id, Trigger.Type.CONTACT_IS_ADDED);
     }
 
@@ -303,6 +307,8 @@ public class Contact extends Cursor
 	}
 
 	this.save();
+	// Execute Trigger
+	Trigger.executeTrigger(this.id, Trigger.Type.TAG_IS_ADDED);
     }
 
     // Remove tags
@@ -319,6 +325,9 @@ public class Contact extends Cursor
 
 	// Delete tags from Tag class
 	Tag.deleteTags(tagslist);
+
+	// Execute Trigger
+	Trigger.executeTrigger(this.id, Trigger.Type.TAG_IS_DELETED);
     }
 
     // Add score
