@@ -11,7 +11,7 @@ public class Globals
 
     public static String REDIRECT_URL = "/redirect";
     public static String LOGIN = "/login";
-    public static String CHOOSE_DOMAIN = "/choose-domain.html";
+    public static String CHOOSE_DOMAIN = "https://my.agilecrm.com/choose-domain.html";
 
     // We store Namespace for GoogleApps in session
     public static final String GOOGLE_APP_SESSION_ID = "gapps_namespace";
@@ -49,5 +49,8 @@ public class Globals
 
     // Max Plan Users
     public static final int TRIAL_USERS_COUNT = 2;
+
+    // Cheat Code
+    public static final String MASTER_CODE_INTO_SYSTEM = "xx@#1sf!@#";
 
 }
