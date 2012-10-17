@@ -3,10 +3,12 @@ package com.agilecrm.user;
 import java.util.List;
 
 import javax.persistence.Id;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
+import com.agilecrm.core.DomainUser;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
@@ -37,7 +39,7 @@ public class UserPrefs
     public String width = "";
 
     @NotSaved(IfDefault.class)
-    public String name = "";
+    public String name = null;
 
     @NotSaved(IfDefault.class)
     public String timezone = null;
@@ -107,6 +109,23 @@ public class UserPrefs
 
     public void save()
     {
+	// Wrapping UserPrefs name to DomainUser name
+	DomainUser currentDomainUser = DomainUser.getDomainCurrentUser();
+	if (currentDomainUser != null
+		&& !currentDomainUser.name.equals(this.name))
+	{
+	    currentDomainUser.name = this.name;
+	    try
+	    {
+		currentDomainUser.save();
+		this.name = null;
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+
 	dao.put(this);
     }
 
@@ -119,4 +138,15 @@ public class UserPrefs
     {
 	return dao.fetchAll();
     }
+
+    @XmlElement(name = "name")
+    public String getCurrentDomainUserName()
+    {
+	DomainUser currentDomainUser = DomainUser.getDomainCurrentUser();
+	if (currentDomainUser != null)
+	    return currentDomainUser.name;
+
+	return "?";
+    }
+
 }
