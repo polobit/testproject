@@ -86,6 +86,7 @@ function showTwitterMatchingProfiles(plugin_id)
 		
 		 var id = $(this).attr('id');
 		 var twitter_image = $(this).attr('src');
+		 console.log($(this).attr('src'));
 		 $('#'+id).popover({placement:'left'});
 		 
 		 $('#'+id).die().live('click', function(e){
@@ -111,15 +112,15 @@ function showTwitterMatchingProfiles(plugin_id)
 			    		agile_crm_save_widget_property(TWITTER_PLUGIN_NAME, id);
 			    		showTwitterProfile(id, plugin_id)
 			    	}
-		 });
-	}); 
+		 
 		 // Confirmation for saving image to contact 
 		 $('#save_twitter_image').die().live('click', function(e){
 			 e.preventDefault();
 			 agile_crm_update_contact("image", twitter_image);
 			 $('#twitter-image-save-modal').modal('hide');
 		 });
-		 
+		 });
+	}); 
 	});
 
 	
