@@ -151,39 +151,14 @@ public class NotificationPrefs
 	dao.delete(this);
     }
 
+    // Execute Notification
     public static void executeNotification(Type type, Object object)
 
     {
+	String json_data = null;
+
 	System.out.println("Executing notification type" + type
 		+ " and notification" + object);
-
-	NotificationsDeferredTask notificationsDeferredTask = new NotificationsDeferredTask(
-		type, object);
-	Queue queue = QueueFactory.getDefaultQueue();
-	queue.add(TaskOptions.Builder.withPayload(notificationsDeferredTask));
-    }
-
-}
-
-class NotificationsDeferredTask implements DeferredTask
-{
-
-    Type type;
-    Object object;
-    String json_data = null;
-    Long agile_id;
-    String url = null;
-
-    NotificationsDeferredTask(Type type, Object object)
-    {
-	this.type = type;
-	this.object = object;
-    }
-
-    NotificationsDeferredTask()
-    {
-	AgileUser agileUser = AgileUser.getCurrentAgileUser();
-	agile_id = agileUser.id;
 
 	// Converting object to json
 	try
@@ -197,13 +172,39 @@ class NotificationsDeferredTask implements DeferredTask
 	    e.printStackTrace();
 	    return;
 	}
+
+	NotificationsDeferredTask notificationsDeferredTask = new NotificationsDeferredTask(
+		type, json_data);
+	Queue queue = QueueFactory.getDefaultQueue();
+	queue.add(TaskOptions.Builder.withPayload(notificationsDeferredTask));
+    }
+
+}
+
+class NotificationsDeferredTask implements DeferredTask
+{
+
+    Type type;
+    String json_data;
+    Long agile_id;
+    String url = null;
+
+    NotificationsDeferredTask(Type type, String json_data)
+    {
+	this.type = type;
+	this.json_data = json_data;
     }
 
     public void run()
 
     {
+	// Get agileId
+	AgileUser agileUser = AgileUser.getCurrentAgileUser();
+	agile_id = agileUser.id;
+
 	url = "https://stats.agilecrm.com/push?custom=" + json_data
 		+ "&agile_id=" + agile_id + "&type=" + type;
+
 	String output = Util.accessURL(url);
 	System.out.println(output);
     }
