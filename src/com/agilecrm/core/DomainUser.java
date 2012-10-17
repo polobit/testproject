@@ -10,10 +10,10 @@ import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.Globals;
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.user.AgileUser;
-import com.agilecrm.util.Sendmail;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.session.UserInfo;
+import com.agilecrm.util.SendMail;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.users.User;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -34,9 +34,6 @@ public class DomainUser
 
     // Domain
     public String domain;
-
-    // User
-    public User open_id_user;
 
     // Email - we store this only when the user is invited
     public String email;
@@ -72,16 +69,10 @@ public class DomainUser
 
     }
 
-    public DomainUser(User user, String domain, boolean isAdmin)
+    public DomainUser(String domain, boolean isAdmin)
     {
 	this.domain = domain;
-
-	if (user != null)
-	{
-	    this.open_id_user = user;
-	    this.email = user.getEmail();
-	}
-
+	this.email = SessionManager.get().getEmail();
 	this.is_admin = isAdmin;
     }
 
@@ -155,40 +146,9 @@ public class DomainUser
     // Get DomainUser for the current user
     public static DomainUser getDomainCurrentUser()
     {
-	// Get UserId of person who is logged in
-	User user = AgileUser.getCurrentUser();
-
-	System.out.println("Current user " + user + " " + user.getEmail());
-	if (user == null)
-	    return null;
-
-	// Get Domain - Current Namespace is the domain
-	String domain = NamespaceManager.get();
-	System.out.println("Current domain " + domain);
-
-	// Get Email
-	String email = user.getEmail();
-
-	DomainUser domainUser = null;
-
-	// Find Domain user
-	if (!StringUtils.isEmpty(domain))
-	{
-	    domainUser = getDomainUserFromEmail(email, domain);
-	    if (domainUser != null)
-		return domainUser;
-	}
-
-	return getDomainUserFromEmail(email);
-
-	/*
-	 * String oldNamespace = NamespaceManager.get();
-	 * NamespaceManager.set("");
-	 * 
-	 * try { Objectify ofy = ObjectifyService.begin(); return
-	 * ofy.query(DomainUser.class).filter("user", user).filter("domain",
-	 * domain).get(); } finally { NamespaceManager.set(oldNamespace); }
-	 */
+	// Get Current Logged In user
+	UserInfo userInfo = SessionManager.get();
+	return getDomainUserFromEmail(userInfo.getEmail());
     }
 
     // Get Users
@@ -206,7 +166,6 @@ public class DomainUser
 	{
 	    NamespaceManager.set(oldNamespace);
 	}
-
     }
 
     // Save
@@ -244,8 +203,8 @@ public class DomainUser
 	// Send Email
 	if (this.id == null)
 	{
-	    Sendmail.sendMail(this.email, "New User Invitation",
-		    Sendmail.NEW_USER_INVITED, this);
+	    SendMail.sendMail(this.email, "New User Invitation",
+		    SendMail.NEW_USER_INVITED, this);
 	}
 
 	NamespaceManager.set("");
@@ -269,9 +228,9 @@ public class DomainUser
 	NamespaceManager.set(oldNamespace);
     }
 
-    public int count()
+    public static int count()
     {
-	String oldNamespace = NamespaceManager.get();
+	String domain = NamespaceManager.get();
 	NamespaceManager.set("");
 	try
 	{
@@ -280,16 +239,16 @@ public class DomainUser
 	}
 	finally
 	{
-	    NamespaceManager.set(oldNamespace);
+	    NamespaceManager.set(domain);
 	}
     }
 
     // To String
     public String toString()
     {
-	return "Email " + this.email + "Domain " + this.domain + "IsAdmin "
-		+ this.is_admin + "DomainId " + this.id + "Domain UserName"
-		+ name + " created_time: " + created_time;
+	return "Email " + this.email + "Domain " + this.domain + " IsAdmin "
+		+ this.is_admin + " DomainId " + this.id + " Name" + name
+		+ " created_time: " + created_time;
 
     }
 }

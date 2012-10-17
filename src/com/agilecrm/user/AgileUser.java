@@ -6,10 +6,7 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.users.User;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
+import com.agilecrm.session.SessionManager;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 
@@ -20,11 +17,8 @@ public class AgileUser
     @Id
     public Long id;
 
-    // Open Id
-    public String open_id_user_id;
-
-    // User
-    public User open_id_user;
+    // Associate Outer Domain User Id
+    public Long domain_user_id;
 
     // Dao
     private static ObjectifyGenericDao<AgileUser> dao = new ObjectifyGenericDao<AgileUser>(
@@ -35,26 +29,9 @@ public class AgileUser
 
     }
 
-    public AgileUser(User openIdUser)
+    public AgileUser(Long domain_user_id)
     {
-	this.open_id_user_id = openIdUser.getUserId();
-	this.open_id_user = openIdUser;
-    }
-
-    public static AgileUser getUser(String openId)
-    {
-
-	Objectify ofy = ObjectifyService.begin();
-	try
-	{
-	    return ofy.query(AgileUser.class).filter("open_id_user_id", openId)
-		    .get();
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
+	this.domain_user_id = domain_user_id;
     }
 
     public void save()
@@ -64,10 +41,7 @@ public class AgileUser
 
     public String toString()
     {
-	return "Id: " + id + " open id " + open_id_user_id + " "
-		+ open_id_user.getAuthDomain() + " " + open_id_user.getEmail()
-		+ " Name " + open_id_user.getNickname() + " Namespace : "
-		+ NamespaceManager.get();
+	return "Id: " + id + " domain_user_id " + domain_user_id;
     }
 
     public static List<AgileUser> getUsers()
@@ -77,23 +51,17 @@ public class AgileUser
 
     public static AgileUser getCurrentAgileUser()
     {
-	// Get UserId of person who is logged in
-	User user = AgileUser.getCurrentUser();
-
-	// Agile User
-	AgileUser agileUser = AgileUser.getUser(user.getUserId());
-
-	return agileUser;
-
+	// Get User from Domain_id
+	return getCurrentAgileUserFromDomainUser(SessionManager.get()
+		.getDomainId());
     }
 
-    // Get Current User
-    public static User getCurrentUser()
+    public static AgileUser getCurrentAgileUserFromDomainUser(
+	    Long domain_user_id)
     {
-	// Get UserId of person who is logged in
-	UserService userService = UserServiceFactory.getUserService();
-	User user = userService.getCurrentUser();
-	return user;
+	Objectify ofy = ObjectifyService.begin();
+	return ofy.query(AgileUser.class)
+		.filter("domain_user_id", domain_user_id).get();
     }
 
     // Delete Agile User
@@ -101,5 +69,4 @@ public class AgileUser
     {
 	dao.delete(this);
     }
-
 }

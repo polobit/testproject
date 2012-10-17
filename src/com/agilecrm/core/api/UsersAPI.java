@@ -93,10 +93,8 @@ public class UsersAPI
     public void deleteDomainUser(DomainUser domainUser)
     {
 
-	AgileUser agileUser = null;
-
-	if (domainUser.open_id_user != null)
-	    agileUser = AgileUser.getUser(domainUser.open_id_user.getUserId());
+	AgileUser agileUser = AgileUser
+		.getCurrentAgileUserFromDomainUser(domainUser.id);
 
 	if (agileUser != null)
 	{

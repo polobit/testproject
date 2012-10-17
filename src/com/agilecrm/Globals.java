@@ -7,7 +7,11 @@ public class Globals
 
     public static String GOOGLE_APPS_DOMAIN = "googleapps";
 
-    public static String[] LOGIN_DOMAINS = { "my" };
+    public static String[] LOGIN_DOMAINS = { "my", "localhost", "127.0.0.1" };
+
+    public static String REDIRECT_URL = "/redirect";
+    public static String LOGIN = "/login";
+    public static String CHOOSE_DOMAIN = "/choose-domain.html";
 
     // We store Namespace for GoogleApps in session
     public static final String GOOGLE_APP_SESSION_ID = "gapps_namespace";

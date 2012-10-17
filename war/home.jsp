@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.session.UserInfo"%>
+<%@page import="com.agilecrm.session.SessionManager"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.util.StringUtils2"%>
 <%@page import="com.agilecrm.core.DomainUser"%>
@@ -90,9 +92,8 @@ String CSS_PATH = "/";
 					</ul>
 					
 					<%
-						UserService userService = UserServiceFactory.getUserService();
-						User user = userService.getCurrentUser(); // or req.getUserPrincipal()
-						String logoutURL = userService.createLogoutURL("/login");
+						String logoutURL = "/login";
+						UserInfo user = SessionManager.get();
 					%>
 					
 					<form id="searchForm" class=" navbar-search">

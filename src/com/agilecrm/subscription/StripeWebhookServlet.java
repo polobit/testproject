@@ -13,7 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
-import com.agilecrm.user.AgileUser;
+import com.agilecrm.core.DomainUser;
 import com.agilecrm.util.Util;
 
 public class StripeWebhookServlet extends HttpServlet
@@ -51,8 +51,8 @@ public class StripeWebhookServlet extends HttpServlet
 
 		if (number_of_attempts == 1)
 		{
-		    Util.sendMail("praveen@invox.com", "yaswanth", AgileUser
-			    .getCurrentAgileUser().open_id_user.getEmail(),
+		    Util.sendMail("praveen@invox.com", "yaswanth",
+			    DomainUser.getDomainCurrentUser().email,
 			    "paymentfailed", "praveen@invox.com",
 			    "your payment failed", null);
 		}
@@ -64,10 +64,8 @@ public class StripeWebhookServlet extends HttpServlet
 	    else if (eventJSON.getString("type").equals(
 		    Globals.STRIPE_SUBSCRIPTION_DELETED))
 	    {
-		Util.sendMail(
-			"praveen@invox.com",
-			"yaswanth",
-			AgileUser.getCurrentAgileUser().open_id_user.getEmail(),
+		Util.sendMail("praveen@invox.com", "yaswanth",
+			DomainUser.getDomainCurrentUser().email,
 			"Account Deleted", "praveen@invox.com",
 			"your account deleted", null);
 	    }

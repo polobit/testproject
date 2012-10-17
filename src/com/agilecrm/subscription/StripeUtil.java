@@ -10,9 +10,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.codehaus.jettison.json.JSONObject;
 
+import com.agilecrm.core.DomainUser;
 import com.agilecrm.customer.CreditCard;
 import com.agilecrm.customer.Plan;
-import com.agilecrm.user.AgileUser;
 import com.google.appengine.api.NamespaceManager;
 import com.google.gson.Gson;
 import com.stripe.exception.StripeException;
@@ -37,8 +37,7 @@ public class StripeUtil
 
 	// Set Description and Email for subscription
 	customerParams.put("description", NamespaceManager.get());
-	customerParams.put("email",
-		AgileUser.getCurrentAgileUser().open_id_user.getEmail());
+	customerParams.put("email", DomainUser.getDomainCurrentUser().email);
 
 	System.out.println(customerParams);
 
