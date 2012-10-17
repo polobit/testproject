@@ -11,7 +11,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.Vector;
@@ -24,10 +26,13 @@ import org.json.JSONObject;
 
 import au.com.bytecode.opencsv.CSVReader;
 
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.thirdparty.SendGridEmail;
 
 public class Util
@@ -314,5 +319,58 @@ public class Util
 	return SendGridEmail.sendMail(fromEmail, fromName, to, subject,
 		replyTo, html, text, null, null);
 
+    }
+
+    // Set Cache
+    public static void setCache(String key, Object value)
+    {
+
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+	syncCache.put(key, value);
+
+	NamespaceManager.set(oldNamespace);
+    }
+
+    // Add Cache
+    public static Object getCache(String key)
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+	Object value = syncCache.get(key);
+
+	NamespaceManager.set(oldNamespace);
+
+	return value;
+    }
+
+    // Delete Cache
+    public static void deleteCache(String key)
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+	if (syncCache.contains(key))
+	    syncCache.delete(key);
+
+	NamespaceManager.set(oldNamespace);
+    }
+
+    // Get OAuth Domain Name
+    public static String getOauthURL(String provider)
+    {
+	Map<String, String> openIdProviders = new HashMap<String, String>();
+	openIdProviders.put("google", "www.google.com/accounts/o8/id");
+	openIdProviders.put("yahoo", "yahoo.com");
+	openIdProviders.put("myspace", "myspace.com");
+	openIdProviders.put("aol", "aol.com");
+	openIdProviders.put("myopenid.com", "stats.agilecrm.com");
+
+	return openIdProviders.get(provider.toLowerCase());
     }
 }
