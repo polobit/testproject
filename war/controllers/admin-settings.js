@@ -5,6 +5,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
     	"account-prefs": "accountPrefs",
         "users": "users",
         "users-add": "usersAdd",
+        "user-edit/:id" : "userEdit",
         "custom-fields": "customFields",
         "analytics-code": "analyticsCode",
         "api": "api",
@@ -60,6 +61,30 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
         $('#content').html(view.render().el);
     	
+    },
+    userEdit: function (id) {
+    	
+    	// If users list is not defined then take back to users template
+    	if(!this.usersListView || !this.usersListView.collection.get(id))
+    		{
+    		  this.navigate("users", {
+                  trigger: true
+              });
+              return;
+    		}
+    	
+    	// Get user from the collection based on id
+    	var user = this.usersListView.collection.get(id);
+    	
+    	// Create a Model for users edit for navigate back to 'user' windown an save success 
+    	var view = new Base_Model_View({
+            url: 'core/api/users',
+            model: user,
+            template: "admin-settings-user-add",
+            window: 'users'
+        });
+
+        $('#content').html(view.render().el);
     },
     customFields: function () {
     	
