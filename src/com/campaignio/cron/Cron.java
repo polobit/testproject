@@ -2,6 +2,7 @@ package com.campaignio.cron;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -124,7 +125,8 @@ public class Cron extends HttpServlet
 	data_string = data.toString();
 	node_json_string = node_json.toString();
 	subscriber_json_string = subscriber_json.toString();
-	timeout_string = timeout.toString();
+	timeout_string = new Date(timeout * 1000).toString();
+
     }
 
     @PostLoad
