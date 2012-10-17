@@ -135,7 +135,7 @@ function deserializeForm(data, form)
 	           }
 	    
 	           // Deserialize tags
-	           else if(fel.hasClass('tagsinput') && tag == "ul")
+	           else if(fel.hasClass('tagsinput') && tag == "ul"  && fel.attr('name') == 'contacts')
 	          {
 	        	   if(!isArray(el))
 	        		   {
@@ -153,6 +153,7 @@ function deserializeForm(data, form)
 	           // Deserialize multiselect
 	           else if(fel.hasClass('multiSelect') && tag == 'ul') 
 	           {
+	        	   
 	        		$.each(el, function(index, option){
 	        			$('#multipleSelect', form).multiSelect('select', option);
 	        	   }); 

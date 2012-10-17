@@ -35,7 +35,11 @@
                     	<label class="control-label">Tag</label>
 					<div class="controls">
 						 <div class="pull-left">
-							<ul name="tags" class= "tagsinput tags"></ul>
+							<ul name="tags" class= "tagsinput tags">
+								{{#each tags}}
+									<li class="tag" style="display: inline-block;" data="{{this}}">{{this}}<a class="close" id="remove_tag">&times</a></li>
+								{{/each}}
+							</ul>
 						</div>
 						 <input name="tags" type="text" id="tags-new-person" class="tags-typeahead"/>
 					</div>
@@ -435,6 +439,7 @@
 					<div class="form-actions">
 						<a href="#" type="submit" class="save btn btn-primary" id="update">Update</a>
 						<a href="#home" class="btn" id="close">close</a>
+						<span class="save-status"></span>
 					</div>
 			  </fieldset>	
 			</form>

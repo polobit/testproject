@@ -50,17 +50,21 @@ $(function(){
 		e.preventDefault();
 		console.log("in add tags");
 		$("#addTagsForm").css("display", "block");
+		setupTagsTypeAhead();
 	});
 	
 	// Add tags to a contact 
 	$('#contact-add-tags').live('click', function(e){
 		e.preventDefault();
-		var tags = getTags('addTags');
+		var tags = getTags('addTagsForm');
+
 		$("#addTagsForm").css("display", "none");
-		var json = App_Contacts.contactDetailView.model.toJSON();
-	    if (tags != undefined){
-	    	json = add_contact_tags(json, tags);
-   			
+		
+	    if (tags[0].value.length > 0){
+	    	var json = App_Contacts.contactDetailView.model.toJSON();
+	    	for(var i = 0; i < tags[0].value.length; i++)
+	    		json.tags.push(tags[0].value[i]);
+	    	
 	    	// Reset form
 	    	$('#addTagsForm').each (function(){
    		  	  	this.reset();
@@ -71,8 +75,26 @@ $(function(){
 	        contact.save(json,{
 	       		success: function(data)
 	       			{
+	       			
+	       			// Get all existing tags for the contact
+	       			var old_tags = [];
+	       			$.each($('#added-tags-ul').children(), function(index, element){
+       					
+	       				old_tags.push($(element).attr('data'));
+       				});
+	       			
+	       			// Append to the list, when no match is found 
+	       			for(var i = 0; i < tags[0].value.length; i++){
+	       				
+	       				if ($.inArray(tags[0].value[i], old_tags) == -1) 
+	       					$('#added-tags-ul').append('<li style="display:inline-block;" class="tag" data="' + tags[0].value[i] + '"><span><a class="anchor" href="#tags/'+ tags[0].value[i] + '">'+ tags[0].value[i] + '</a><a class="close remove-tags" id="{{this}}">&times</a></span></li>');
+	       			}
+	       			
+	       			// Remove all the elements in ul
+	       			$('#ul-add-tags').empty();
+	       			
 	       			// Save new tags in Tag class
-	       			$.post('core/api/tags/' + tags);
+	       			$.post('core/api/tags/' + tags[0].value);
 	       			
 	       			}
 	        });

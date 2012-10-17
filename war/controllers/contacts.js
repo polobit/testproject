@@ -269,7 +269,8 @@ var ContactsRouter = Backbone.Router.extend({
     },
 
     continueCompany: function () {
-        $('#content').html(getTemplate('continue-company', {}));
+       // $('#content').html(getTemplate('continue-company', {}));
+    	var model = serializeAndSaveContinueContact(undefined, 'companyForm', 'companyModal', true, false);
     },
     importContacts: function () {
         $('#content').html(getTemplate("import-contacts", {}));

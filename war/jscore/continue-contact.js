@@ -1,6 +1,8 @@
 // Serialize and save continue contact
 function serializeAndSaveContinueContact(e, form_id, modal_id, continueContact, is_person) {
-    e.preventDefault();
+	if(e)
+		e.preventDefault();
+	
     var $form = $('#' + form_id);
     
     // Validate Form
@@ -128,15 +130,13 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, continueContact, 
                 });
                 
             } else if(is_person){
-            	
                 App_Contacts.navigate("contact/" + data.id, {
                 	trigger: true
             	});
             }else{
-            	App_Contacts.navigate("contacts", {
+                  	App_Contacts.navigate("contacts", {
                 	trigger: true
             	});            	
-            	//$('#companies-filter').trigger('click');
             }
             // Reset each element
             $('#' + form_id).each(function () {
@@ -259,11 +259,11 @@ $(function () {
     });
 
     // Continue editing in the new-company-modal
-    $('#continue-company').click(function (e) {
-        
+    /*$('#continue-company').click(function (e) {
+     
         var model = serializeAndSaveContinueContact(e, 'companyForm', 'companyModal', true, false);
-
-    });
+        
+    });*/
     
  // Update in continue-company
     $("#company-update").die().live('click', function (e) {
