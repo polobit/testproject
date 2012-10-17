@@ -257,6 +257,19 @@ $(function()
 
 		return (monthArray[intMonth] + " " + intDay);
 	});
+	
+	//Get Date from epoch time
+	Handlebars.registerHelper('epochToDate', function(date)
+			{
+				var	intMonth = new Date(parseInt(date) * 1000).getMonth();
+				var	intDay = new Date(parseInt(date) * 1000).getDate();
+				var intYear = new Date(parseInt(date) * 1000).getYear();
+				
+				var monthArray = [ "Jan", "Feb", "March", "April", "May", "June", "July",
+						"Aug", "Sept", "Oct", "Nov", "Dec" ];
+                
+				return (monthArray[intMonth] + " " + intDay + "," + intYear);
+			});
 
 	// Calculate pipeline (value * probability)
 	Handlebars.registerHelper('calculatePipeline', function(value, probability)
