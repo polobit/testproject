@@ -1,4 +1,4 @@
-package com.agilecrm;
+package com.agilecrm.filter;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -12,6 +12,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.agilecrm.Globals;
 import com.google.appengine.api.NamespaceManager;
 
 /*
@@ -19,13 +20,6 @@ import com.google.appengine.api.NamespaceManager;
  */
 public class NamespaceFilter implements Filter
 {
-
-    @Override
-    public void destroy()
-    {
-	// Nothing to do
-    }
-
     private boolean setNamespace(ServletRequest request,
 	    ServletResponse response)
     {
@@ -39,15 +33,6 @@ public class NamespaceFilter implements Filter
 	{
 	    return true;
 	}
-
-	/*
-	 * // Get User Id UserService userService =
-	 * UserServiceFactory.getUserService();
-	 * 
-	 * // Check if logged in if (!userService.isUserLoggedIn()) return true;
-	 * 
-	 * String userId = userService.getCurrentUser().getUserId();
-	 */
 
 	// Read Subdomain
 	String subdomain = request.getServerName().split("\\.")[0];
@@ -90,43 +75,45 @@ public class NamespaceFilter implements Filter
 	System.out.println("Setting the domain " + subdomain);
 	NamespaceManager.set(subdomain);
 	return true;
+    }
 
+    private static String getFullUrl(HttpServletRequest req)
+    {
+	String reqUrl = req.getRequestURL().toString();
+	String queryString = req.getQueryString(); // d=789
+	if (queryString != null)
+	{
+	    reqUrl += "?" + queryString;
+	}
+	return reqUrl;
     }
 
     // Set up Google Apps
     private boolean setupGoogleAppsNameSpace(ServletRequest request,
 	    ServletResponse response)
     {
-
-	// Google AppEngine currently does not support wildcard realms
-	// We use a special domain googleapps.xxx.com
-
-	// Check if Session if Google Apps is present
-	String namespace = (String) request
-		.getAttribute(Globals.GOOGLE_APP_SESSION_ID);
-	if (namespace != null)
+	try
 	{
-	    NamespaceManager.set(namespace);
-	    return true;
+	    // Using openid, we are not able to support wildcard realms
+	    String appsDomain = request.getParameter("hd");
+	    if (appsDomain != null)
+	    {
+		String namespace = appsDomain.split("\\.")[0];
+		System.out.println("Setting Google Apps - Namespace "
+			+ appsDomain);
+
+		String url = getFullUrl((HttpServletRequest) request);
+		url = url.replace(Globals.GOOGLE_APPS_DOMAIN + ".", namespace
+			+ ".");
+
+		HttpServletResponse httpResponse = (HttpServletResponse) response;
+		httpResponse.sendRedirect(url);
+		return true;
+	    }
 	}
-
-	// Check if hd is present, then set the domain
-	// Get Apps Domain - hd
-	String appsDomain = request.getParameter("hd");
-	if (appsDomain != null)
+	catch (Exception e)
 	{
-
-	    System.out.println(appsDomain);
-	    namespace = appsDomain.split("\\.")[0];
-
-	    System.out.println("Setting Google Apps - Namespace " + appsDomain);
-
-	    // Set Namespace
-	    NamespaceManager.set(namespace);
-
-	    // Set in session
-	    request.setAttribute(Globals.GOOGLE_APP_SESSION_ID, namespace);
-	    return true;
+	    e.printStackTrace();
 	}
 
 	return false;
@@ -165,8 +152,6 @@ public class NamespaceFilter implements Filter
 	    return;
 	}
 
-	// System.out.println("Setting namespace");
-
 	// Set namespace
 	boolean handled = setNamespace(request, response);
 
@@ -178,9 +163,14 @@ public class NamespaceFilter implements Filter
     @Override
     public void init(FilterConfig arg0) throws ServletException
     {
-
 	// Nothing to do
 
+    }
+
+    @Override
+    public void destroy()
+    {
+	// Nothing to do
     }
 
 }

@@ -1,4 +1,4 @@
-package com.agilecrm;
+package com.agilecrm.filter;
 
 import java.io.IOException;
 
