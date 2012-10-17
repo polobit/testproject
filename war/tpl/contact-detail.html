@@ -54,22 +54,29 @@
 			<div>	
 				{{#if tags}}
 					<i class="icon-tags"></i>
-					<ul class="tagsinput">
+					<ul id="added-tags-ul" class="tagsinput">
 						{{#each tags}}
-								<li style="display:inline-block;" class="tag"><span><a class="anchor" href="#tags/{{this}}">{{this}}</a><a class="close remove-tags" id="{{this}}">&times</a></span></li>
+								<li style="display:inline-block;" class="tag" data="{{this}}"><span><a class="anchor" href="#tags/{{this}}">{{this}}</a><a class="close remove-tags" id="{{this}}">&times</a></span></li>
   						{{/each}}
 					</ul>
 					</ul>
 				{{/if}}	
 					<a href="#" id="add-tags"><i class="icon-plus-sign"></i></a> <span>Add tags</span>
-
-						<form id="addTagsForm" style="display:none">
-							<input id="addTags" type="text" class="span2" style="margin-bottom: -1px" placeholder="Enter tags"/>
-							<a href="#" class="btn" id="contact-add-tags" style="margin-left: 10px">Add</a>
+					</br>
+						<form id="addTagsForm" style="display:none; padding-top:6px">
+							<div class="control-group">
+                   				<div class="pull-left">
+									<ul id="ul-add-tags" name="tags" class= "tagsinput tags"></ul>
+								</div>
+								<div class="controls">
+															
+									<input name="" type="text" id="addTags" class="tags-typeahead span2" style="margin-bottom: -1px" placeholder="Enter tags"/>
+									<a href="#" class="btn" id="contact-add-tags" style="margin-left: 10px">Add</a>
+								</div>
+							</div>							
 						</form>
-				
+			
 			</div></br>
-
 
 
 <div class="subnav" >
@@ -97,13 +104,13 @@
 			</div>
 </div>
 
-<div id="timeline">
-<div id="line-container">
-<div id="line"></div>
+	<div id="timeline">
+		<div id="line-container">
+			<div id="line"></div>
+		</div>
 
-</div>
+	</div>
 
-</div>
 
 </div>
 <!-- Contact Details -->

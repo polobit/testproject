@@ -107,28 +107,35 @@ $(function(){
 		e.preventDefault();
 		var id_array = getContactsBulkIds();
 		
-		var tags = getTags('addBulkTags');
+		// var tags = getTags('tagsBulkForm');
 
 		Backbone.history.navigate("bulk-tags", {
             trigger: true
         });
 		
-		
+		setupTagsTypeAhead();
 		$('#addTagsToContactsBulk').die().live('click',function(e){
 			e.preventDefault();
-			var tags = getTags('addBulkTags');
+			var tags = getTags('tagsBulkForm');
 
-			var url = '/core/api/contacts/bulk/' + tags;
+			if (tags[0].value.length > 0){
+			var url = '/core/api/contacts/bulk/' + tags[0].value;
 			var json = {};
 			json.contact_ids = JSON.stringify(id_array);
 			$.post(url, json, function(data){
+				
 				// Save new tags in Tag class
-       			$.post('core/api/tags/' + tags);
+       			$.post('core/api/tags/' + tags[0].value);
        			Backbone.history.navigate("contacts", {
        	            trigger: true
        	        });
 			});
-
+			
+			}else{
+				Backbone.history.navigate("contacts", {
+       	            trigger: true
+       	        });
+			}
 		});
         
 	});

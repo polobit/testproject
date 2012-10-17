@@ -284,7 +284,7 @@ $(function()
 	{
 		var logArray = JSON.parse(log_array_string);
 		if (name == "t") {
-			var readableTime = new Date(logArray[0][name]);
+			var readableTime = new Date(logArray[0][name] * 1000);
 			return readableTime;
 		}
 		return logArray[0][name];

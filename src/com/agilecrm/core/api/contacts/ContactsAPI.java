@@ -280,7 +280,15 @@ public class ContactsAPI
 
 	JSONArray contactsJSONArray = new JSONArray(model_ids);
 
-	Contact.dao.deleteBulkByIds(contactsJSONArray);
+	for (int i = 0; i < contactsJSONArray.length(); i++)
+	{
+	    Contact contact = Contact.getContact(Long
+		    .parseLong(contactsJSONArray.getString(i)));
+
+	    if (contact != null)
+		contact.delete();
+	}
+
     }
 
     // Bulk operations - change owner
