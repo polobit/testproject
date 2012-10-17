@@ -12,10 +12,10 @@ function init_agile_gadget()
 	
 	// Set API Key first - agile-min.js executes at the very beginning
 	// Sukanya Localhost
-	 _agile.push(['_setAccount', 't87mbpn15789194cojt6j0ujd5', 'localhost']);
+	// _agile.push(['_setAccount', 't87mbpn15789194cojt6j0ujd5', 'localhost']);
 	
 	// MC Localhost
-	//_agile.push(['_setAccount', 'utjhaf2h97gcdc55jh6k7qbg9', 'localhost']);
+	_agile.push(['_setAccount', 'utjhaf2h97gcdc55jh6k7qbg9', 'localhost']);
 	
 	//_agile.push(['_setAccount', 'fbl6p636276j2ff7tp2m023t0q', 'test']);
 	
@@ -173,6 +173,7 @@ function init_handlers() {
 		  var data = {};
 		  var tags = {};
 		  json = serializeForm($(el));
+		  
 		  $.each(json, function(index, val){
 			  if(val.name == "tags")
 				  tags[val.name] = val.value;
