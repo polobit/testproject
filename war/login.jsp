@@ -162,7 +162,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 			<div class="well">
 				
 				
-				<form id='oauth'  name='oauth' method='get'> 
+				<form id='oauth'  name='oauth' method='post'> 
 				 <h2>Sign In <br/><small>
 				
 				Login or register using existing accounts</small></h2>	
@@ -188,7 +188,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 				<div class="clearfix"></div>
 				
 				
-				<form name='agile' method='get'> 
+				<form name='agile' method='post'> 
 				 <h2><small>
 				
 				User Name and Password</small></h2>	
