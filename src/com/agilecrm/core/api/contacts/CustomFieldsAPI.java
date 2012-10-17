@@ -18,7 +18,6 @@ import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.agilecrm.contact.ContactView;
 import com.agilecrm.contact.CustomFieldDef;
 
 @Path("/api/custom-fields")
@@ -102,10 +101,10 @@ public class CustomFieldsAPI
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteContacts(@FormParam("model_ids") String model_ids)
+    public void deleteCustomFields(@FormParam("model_ids") String model_ids)
 	    throws JSONException
     {
 	JSONArray CustomFieldsJSONArray = new JSONArray(model_ids);
-	ContactView.dao.deleteBulkByIds(CustomFieldsJSONArray);
+	CustomFieldDef.dao.deleteBulkByIds(CustomFieldsJSONArray);
     }
 }
