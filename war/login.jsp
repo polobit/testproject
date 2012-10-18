@@ -105,7 +105,15 @@ body {
 }
 	
 }
-
+.openid_large_btn {
+width: 155px;
+height: 30px;
+border: 0px solid #DDD;
+margin: 3px;
+float: left;
+padding:1px 0px;
+}
+.error{color:red;}
 </style>
 
 <!-- Le fav and touch icons -->
@@ -121,6 +129,14 @@ body {
 
  <!-- JQUery Core and UI CDN -->
 <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+
+<script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
+<script type="text/javascript">
+jQuery.validator.setDefaults({
+	debug: true,
+	success: "valid"
+});;
+</script>
 <%
 String ua = request.getHeader( "User-Agent" );
 boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
@@ -163,23 +179,19 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 				
 				
 				<form id='oauth'  name='oauth' method='post'> 
-				 <h2>Sign In <br/><small>
+				 <h2>Sign In</h2>
 				
-				Login or register using existing accounts</small></h2>	
+				<h3><small>Login or register using existing accounts</small></h3>	
 				<div id="openid_btns" style="float: left;padding: 10px 0 15px;border-top: 1px dotted #CCC;border-right: none;border-left: none;">
 					
 					
-					<br/>
+					
 					<input type='hidden' name='auth' value='auth'></input>
 					<input type='hidden' name='type' value='oauth'></input>
 					<input type='hidden' name='server' id='oauth-name' value=''></input>
 					
-					<a title="log in with Google" href="#" style="background: #FFF url(img/openid-providers-en.png); background-position: 0px 0px" data='google' class="openid_large_btn"></a> 
-					<a title="log in with Yahoo" href="#" style="background: #FFF url(img/openid-providers-en.png); background-position: -100px 0px" data='yahoo' class="openid_large_btn"></a> 
-					<a title="log in with AOL" href="#" style="background: #FFF url(img/openid-providers-en.png); background-position: -200px 0px" data='aol' class="openid_large_btn"></a> 
-					<a title="log in with MyOpenID" href="#" style="background: #FFF url(img/openid-providers-en.png); background-position: -300px 0px" data='myopenid' class="openid_large_btn"></a> 
-					
-					
+					<a title="log in with Google" class="btn btn-large btn-primary openid_large_btn" type="button" href="#" data='google'><img src="/google.png" style="width:30px;height:30px;"></img>Login With Google</a> 
+					<a title="log in with Yahoo" class="btn btn-large btn-primary openid_large_btn" href="#" data='yahoo' type="button" ><img src="/yahoo.png" style="width:25px;height:25px;padding-top:3px;"></img> Login With Yahoo</a> 
 			
 				</div>
 				<br />
@@ -188,29 +200,36 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 				<div class="clearfix"></div>
 				
 				
-				<form name='agile' method='post'> 
-				 <h2><small>
+				<form name='agile' id="agile" method='post' onsubmit="return isValid();"> 
+				 <h3><small>
 				
-				User Name and Password</small></h2>	
+				User Name and Password</small></h3>	
 				<div id="openid_btns" style="float: left;padding: 10px 0 15px;border-top: 1px dotted #CCC;border-right: none;border-left: none;">
 										
 					<br/>
 					<input type='hidden' name='auth' value='auth'>
 					<input type='hidden' name='type' value='agile'>
-					<input type='text' name='email' placeholder='User name'>
-					<input type='text' name='password' placeholder='Password'>
+					<div class="input-prepend">
+                      <span class="add-on"><i class="icon-user"></i></span><input class="input-xlarge required email" name='email' type="text" placeholder="User Name">
+                    </div>
+                    <br/>
+                    <div class="input-prepend">
+                      <span class="add-on"><i class="icon-lock"></i></span><input class="input-xlarge required" name='password' type="password" placeholder="Password">
+                    </div>
 					<br/>
-					<input type='submit' class='btn btn-primary'>
+					<label class="checkbox" style="display:inline-block;"><input type="checkbox"> Keep me signed in </label>
+					<input type='submit' style="float:right;" value="Sign In" class='btn btn-large btn-primary'>
 				</div>
 				<br />
 				</form>
 				
-			
-			
-
 				<div class="clearfix"></div>
 				
 				</div>
+				<div style="text-align: center;line-height: 19px;">
+	                 Don't have an account? <a href="/register.jsp">Sign Up</a><br>
+	                  Remind <a href="#">Password</a>
+               </div>
 					
 			</div>
 		</div>
@@ -228,12 +247,14 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 				
 				e.preventDefault();
 				
-				
 			});
-			
 			
 		});
 		
+		function isValid(){
+		    $("#agile").validate();
+		    return $("#agile").valid();
+		    }
 		</script>
 </body>
 </html>

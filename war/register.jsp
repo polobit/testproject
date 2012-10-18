@@ -1,53 +1,82 @@
+<%@page import="com.agilecrm.session.UserInfo"%>
+<%@page import="java.net.URLEncoder"%>
+<%@page import="com.agilecrm.util.Util"%>
+<%@page import="com.agilecrm.Globals"%>
+<%@page import="com.agilecrm.core.DomainUser"%>
+<%@page import="com.google.appengine.api.NamespaceManager"%>
+<%@page import="com.agilecrm.session.SessionManager"%>
 <%
-			Map<String, String> openIdProviders;
-		        openIdProviders = new HashMap<String, String>();
-		        openIdProviders.put("Google", "www.google.com/accounts/o8/id");
-		        openIdProviders.put("Yahoo", "yahoo.com");
-		        openIdProviders.put("MySpace", "myspace.com");
-		        openIdProviders.put("AOL", "aol.com");
-		        openIdProviders.put("MyOpenId.com", "stats.agilecrm.com");
-		 
-		 	   Set<String> attributes = new HashSet();
-		 	   UserService userService = UserServiceFactory.getUserService();
-		 	   User user = userService.getCurrentUser(); // or req.getUserPrincipal()
-		       if(user != null)
-		       {
-		    	   response.sendRedirect("/home");
-		    	   return;
-		       }
-		 	   		 	 
-		 	   // Chcek if Google Apps
-		 	   if(request.getParameter("hd") != null)
-		 	   {
-		 	     Set<String> attributesRequest = new HashSet<String>();
-		 	     
-		 	     // Important that it is exactly the same as in application-manifest.xml, watch out for trailing slashes.
-		 	     // NO longer makes sense. We are using subdomain - googleapps.agilecrm with namespace set to googleapps
-		 	     // We cannot provide custom realms in the createLoginURL. It has to match the returning URL
-		 	     // String loginRealm = "https://*.agilecrm.com"; 
-		 	     
-		 	     String destinationURL = request.getRequestURI();
-		 	     String federatedIdentity = null;
-		 	     String authDomain = request.getParameter("hd"); //hd is the default parameter name. Contains the google apps domain name of the user logging on. example.com for example.
-		 	     String loginUrl = userService.createLoginURL(destinationURL, federatedIdentity, authDomain, attributesRequest);
-		 	  
-		 	     System.out.println("Redirecting - google apps - " + loginUrl + " " + userService.isUserLoggedIn());
-		 	     //out.println("Redirecting" + loginUrl + " " + userService.isUserLoggedIn());
-			 	 
-		 	     response.sendRedirect(loginUrl);
-		 	     return;
-		 	   }
-		 	   
+		
+// Delete Login Session
+request.getSession().removeAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
+
+// Check if the request was posted again to itself 
+if(request.getParameter("auth") != null)
+{
+    	// Get the method type
+    	String type = request.getParameter("type");
+    	if(type.equalsIgnoreCase("oauth"))
+    	{
+    	    // Get server type
+    	    String server = request.getParameter("server");
+    	    
+    	    // Get OAuth URL
+    	    String url = Util.getOauthURL(server);
+    	    
+    	    if(url == null)
+    	    {
+    			out.println("Server not found - try again");
+    			return;
+    	    }
+    	    
+    	    /*// Forward to OpenID Authenticaiton which will set the cookie and then forward it to /
+    	    response.sendRedirect("/openid?hd=" + URLEncoder.encode(url));
+    	    
+    	    return;*/
+    	}
+    	else if(type.equalsIgnoreCase("agile"))
+    	{
+    	    
+    	    // Get User Name
+    	    String email = request.getParameter("email");
+    	    
+    	    // Get Password
+    	    String password = request.getParameter("password");
+    	    
+    	    if(email== null || password == null)
+    	    {
+    			out.println("Email not found - try again");
+				return;
+    	    }
+
+    	    
+    	    // Get Domain User with this name, password - we do not check for domain as validity is verified in AuthFilter
+    	    DomainUser domainUser = DomainUser.getDomainUserFromEmail(email);
+    	    if(domainUser == null)
+    	 	{
+				out.println("Email not found - try again");
+				return;
+	    	}
+    	 
+    	    // Set Cookie and forward to /home
+    	    UserInfo userInfo = new UserInfo("agilecrm.com", email, null, null);
+    	    request.getSession().setAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
+    	    
+    	    response.sendRedirect("/home");
+    	}	
+}
+
+// Check if this subdomain even exists
+if(DomainUser.count() == 0)
+{
+    response.sendRedirect(Globals.CHOOSE_DOMAIN);
+    return;
+}
+
+
 %>
 
 <!DOCTYPE html>
-<%@page import="com.google.appengine.api.users.User"%>
-<%@page import="com.google.appengine.api.users.UserServiceFactory"%>
-<%@page import="com.google.appengine.api.users.UserService"%>
-<%@page import="java.util.HashSet"%>
-<%@page import="java.util.Set"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.Map"%>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -76,6 +105,19 @@ body {
 }
 	
 }
+.openid_large_btn {
+width: 155px;
+height: 30px;
+border: 0px solid #DDD;
+margin: 3px;
+float: left;
+padding:1px 0px;
+}
+.feild{
+height:30px!important;
+margin:8px 0px!important;
+width:97%!important;
+}
 
 </style>
 
@@ -92,6 +134,14 @@ body {
 
  <!-- JQUery Core and UI CDN -->
 <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+
+<script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
+<script type="text/javascript">
+jQuery.validator.setDefaults({
+	debug: true,
+	success: "valid"
+});;
+</script>
 <%
 String ua = request.getHeader( "User-Agent" );
 boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
@@ -126,89 +176,83 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 			</div>
 		</div>
 	</div>
-	<br/><br/><br/>
+	<br/>
 	<div class="row">
 
 		<div class='span5' style='display:block;float:none;margin:30px auto'>
 			<div class="well">
-				 <h2>Sign In <br/><small>
-				 
-				Login or register using existing accounts</small></h2>	
+				<form id='oauth'  name='oauth' method='post'> 
+				 <h2> Create Your Account </h2><br/>
+				
+				<h3><small>Login or register using existing accounts</small></h3>	
 				<div id="openid_btns" style="float: left;padding: 10px 0 15px;border-top: 1px dotted #CCC;border-right: none;border-left: none;">
 					
 					
-					<br/>
-					<a title="log in with Google" href='#' style="background: #FFF url(img/openid-providers-en.png); background-position: 0px 0px" class="google openid_large_btn"></a> 
-					<a title="log in with Yahoo" href="#" style="background: #FFF url(img/openid-providers-en.png); background-position: -100px 0px" class="yahoo openid_large_btn"></a> 
-					<a title="log in with AOL" href="#" style="background: #FFF url(img/openid-providers-en.png); background-position: -200px 0px" class="aol openid_large_btn"></a> 
-					<a title="log in with MyOpenID" href="#" style="background: #FFF url(img/openid-providers-en.png); background-position: -300px 0px" class="myopenid openid_large_btn"></a> 
-					<a title="log in with MySpace" href="#" style="background: #FFF url(img/logo_myspace_s.gif); background-repeat:no-repeat; background-size: 100px, 60px; background-position: 0px 20px" class="myspace openid_large_btn"></a>
+					
+					<input type='hidden' name='auth' value='auth'></input>
+					<input type='hidden' name='type' value='oauth'></input>
+					<input type='hidden' name='server' id='oauth-name' value=''></input>
+					
+					<a title="log in with Google" class="btn btn-large btn-primary openid_large_btn" type="button" href="#" data='google'><img src="/google.png" style="width:30px;height:30px;"></img>Login With Google</a> 
+					<a title="log in with Yahoo" class="btn btn-large btn-primary openid_large_btn" type="button" href="#" data='yahoo'><img src="/yahoo.png" style="width:25px;height:25px;padding-top:3px;"></img> Login With Yahoo</a> 
+			
 				</div>
 				<br />
-
+				</form>
+				
 				<div class="clearfix"></div>
-
+				
+				
+				<form name='agile' id="agile" method='post' onsubmit="return isValid();"> 
+				 <h3><small>Create Your Free Account</small></h3>	
+				<div id="openid_btns" style="float: left;padding: 10px 0 15px;border-top: 1px dotted #CCC;border-right: none;border-left: none;">
+										
+					<br/>
+					<input type='hidden' name='auth' value='auth'>
+					<input type='hidden' name='type' value='agile'>
+					
+					<input class="input-xlarge feild required" name='firstname' type="text" placeholder="FirstName">
+					<input class="input-xlarge feild required" name='lastname' type="text" placeholder="LastName">
+                    <input class="input-xlarge feild required email" name='email' type="text" placeholder="Email">
+                    <input class="input-xlarge feild required" name='password' type="password" placeholder="Password">
+					<div style="margin-top:15px;">
+					  <label class="checkbox" style="display:inline-block;"><input type="checkbox">  I agree with the Terms of Use.</label>
+					  <input type='submit' style="margin-left:50px;"value="Register" class='btn btn-large btn-primary'>
+				  </div>
 				</div>
+				<br />
+				</form>
+				
+				<div class="clearfix"></div>
+				
+				</div>
+				<div style="text-align: center;line-height: 19px;">
+	                 Already have an account? <a href="/login.jsp">Login</a><br>
+               </div>
+					
 			</div>
 		</div>
 		
 		<script type="text/javascript">
-		$(document).ready(function() {
+		$(document).ready(function() {			
 			
-			
-			$('.openid_large_btn').click(
-				function(e)
-				{
-					if($(this).hasClass("google"))
-						{						
-						 <%String providerUrl = openIdProviders.get("Google");
-					      String loginUrl = userService.createLoginURL(request.getRequestURI(), null, providerUrl, attributes);%>	
-						
-							window.location = "<%=loginUrl%>";
-						}
+			$('.openid_large_btn').click(function(e)
+			{
+				// Get Data
+				var data = $(this).attr('data');
+				$('#oauth-name').val(data);
 				
-					if($(this).hasClass("yahoo"))
-						{
-						
-						<%providerUrl = openIdProviders.get("Yahoo");
-					      loginUrl = userService.createLoginURL(request.getRequestURI(), null, providerUrl, attributes);%>	
-					      alert("<%=providerUrl%>");
-					      window.location = "<%=loginUrl%>";
-					 	}
-					 	
-					 	if($(this).hasClass("aol"))
-						{
-						
-						<%providerUrl = openIdProviders.get("AOL");
-					      loginUrl = userService.createLoginURL(request.getRequestURI(), null, providerUrl, attributes);%>	
-					 	window.location = "<%=loginUrl%>";
-					 	}
-					 	
-					 	if($(this).hasClass("myopenid"))
-						{
-						
-					 		
-						<%providerUrl = openIdProviders.get("MyOpenId.com");
-					      loginUrl = userService.createLoginURL(request.getRequestURI(), null, providerUrl, attributes);%>	
-					 	
-					      alert("<%=providerUrl%>");
-					      
-					      alert("<%=loginUrl%>");
-					      
-					      window.location = "<%=loginUrl%>";
-					 	}
-					 	
-					 	if($(this).hasClass("myspace"))
-						{
-						
-						<%providerUrl = openIdProviders.get("MySpace");
-					      loginUrl = userService.createLoginURL(request.getRequestURI(), null, providerUrl, attributes);%>	
-					 	window.location = "<%=loginUrl%>";
-						}
-					e.preventDefault();
-				}
-				);
+				$('#oauth').submit();
+				
+				e.preventDefault();
+				
+			});
+			
 		});
+		function isValid(){
+		    $("#agile").validate();
+		    return $("#agile").valid();
+		    }
 		</script>
 </body>
 </html>
