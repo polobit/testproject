@@ -66,7 +66,7 @@ public class OpenIdServlet extends HttpServlet
     {
 	super.init(config);
 	returnToPath = getInitParameter("return_to_path", "/openid");
-	homePath = getInitParameter("home_path", "/return-path");
+	homePath = getInitParameter("home_path", "/");
 	realm = getInitParameter("realm", "https://*.agilecrm.com");
 	ConsumerFactory factory = new ConsumerFactory(
 		new InMemoryConsumerAssociationStore());
