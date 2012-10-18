@@ -74,6 +74,13 @@ public class UsersAPI
     {
 	try
 	{
+	    if (domainUser.id == null)
+	    {
+		throw new WebApplicationException(Response
+			.status(Response.Status.BAD_REQUEST)
+			.entity("Invalid User").build());
+	    }
+
 	    domainUser.save();
 	    return domainUser;
 	}
