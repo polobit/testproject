@@ -119,7 +119,6 @@ public class UserPrefs
 		    && (!currentDomainUser.name.equals(this.name) || currentDomainUser.name == null))
 	    {
 		currentDomainUser.name = this.name;
-
 		currentDomainUser.save();
 		this.name = null;
 	    }
