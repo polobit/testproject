@@ -11,7 +11,7 @@
 request.getSession().removeAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
 
 // Check if the request was posted again to itself 
-if(request.getParameter("oauth") != null)
+if(request.getParameter("register") != null)
 {
     	// Get the method type
     	String type = request.getParameter("type");
@@ -88,10 +88,10 @@ if(DomainUser.count() == 0)
 
 <!-- Le styles -->
 
-<link href="/css/bootstrap-red.min.css" rel="stylesheet">
+<link href="/css/bootstrap-pink.min.css" rel="stylesheet">
 <link href="/css/bootstrap-responsive.min.css" rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="/css/openid-min.css">
-
+<link type="text/css" rel="stylesheet" href="/css/signin.css">
 
 <style>
 @media (min-width: 900px) {
@@ -105,11 +105,10 @@ body {
 }
 	
 }
-.feild{
+.field{
 height:30px!important;
 margin:8px 0px!important;
 }
-h1{font-size:30px;}
 .error{color:red;}
 </style>
 
@@ -170,10 +169,10 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 	</div>
 	<div class="row">
 
-		<div class='span5' style='display:block;float:none;margin:30px auto'>
-			<div class="well">
+		<div class='account-container' style='display:block;float:none;margin:30px auto'>
+			<div class="content clearfix">
 				<form id='oauth'  name='oauth' method='post' style="padding: 16px 28px 23px"> 
-				 <h1> Create Your Account </h1><br/>
+				 <h1>Create Your Account</h1><br/>
 				
 				<div id="openid_btns" style="float: left;padding:5px 0 15px;border-top: 1px dotted #CCC;border-bottom: 1px dotted #CCC;border-right: none;border-left: none;">
 				<h3><small>Login or register using existing accounts</small></h3>	
@@ -197,9 +196,9 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 					<input type='hidden' name='auth' value='auth'>
 					<input type='hidden' name='type' value='agile'>
 					
-					<input class="input-xlarge feild required" name='name' type="text" placeholder="Name">
-                    <input class="input-xlarge feild required email" name='email' type="text" placeholder="Email">
-                    <input class="input-xlarge feild required" name='password' type="password" placeholder="Password">
+					<input class="input-xlarge field required" name='name' type="text" placeholder="Name">
+                    <input class="input-xlarge field required email" name='email' type="text" placeholder="Email">
+                    <input class="input-xlarge field required" name='password' type="password" placeholder="Password">
 					<div style="margin-top:15px;">
 					  <label class="checkbox" style="display:inline-block;"><input type="checkbox" name="agree">  I agree with the Terms of Use.</label>
 					  <input type='submit' style="margin-left:5px;"value="Register" class='btn btn-large btn-primary'>
@@ -211,11 +210,11 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 				<div class="clearfix"></div>
 				
 				</div>
-				<div style="text-align: center;line-height: 19px;">
-	                 Already have an account? <a href="/login.jsp">Login</a><br>
-               </div>
 					
 			</div>
+			<div style="text-align: center;line-height: 19px;">
+	                 Already have an account? <a href="/login.jsp">Login</a><br>
+               </div>
 		</div>
 		
 		<script type="text/javascript">
