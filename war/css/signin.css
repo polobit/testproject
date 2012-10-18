@@ -1,10 +1,10 @@
 
 /** Base Body Styles **/
-body{ background: url(../../img/body-bg.png); color:#838383; font: 13px/1.7em 'Open Sans';}
+body{ background: url(../../img/body-bg.png); color:#838383; font: 13px/1.7em 'PT Sans';}
 
 
 .account-container {
-	width: 380px; 
+	width: 340px; 
 	display: block;
 	margin: 60px auto 0 auto;
 	
