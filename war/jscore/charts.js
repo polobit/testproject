@@ -118,7 +118,7 @@ function pieMilestones()
 		                plotShadow: false
 		            },
 		            title: {
-		                text: 'Milestones',
+		                text: '',
 		                align: 'left',
 		                x: 20
 		            },
