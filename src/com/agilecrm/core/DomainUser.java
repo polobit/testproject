@@ -30,15 +30,17 @@ public class DomainUser
     public Long created_time = 0L;
 
     // Last LoggedIn Date
+    @NotSaved(IfDefault.class)
     public Long logged_in_date = 0L;
 
     // Domain
     public String domain;
 
-    // Email - we store this only when the user is invited
+    // Email
     public String email;
 
     // Is Admin
+    @NotSaved(IfDefault.class)
     public boolean is_admin = true;
 
     @NotSaved(IfDefault.class)
@@ -49,16 +51,24 @@ public class DomainUser
     public String email_template = null;
 
     // Domain UserName
+    @NotSaved(IfDefault.class)
     public String name = null;
 
     // User Location
+    @NotSaved(IfDefault.class)
     public String location = null;
 
     // User Country
+    @NotSaved(IfDefault.class)
     public String country = null;
 
     // User IP address
+    @NotSaved(IfDefault.class)
     public String ip = null;
+
+    // Gadget Id
+    @NotSaved(IfDefault.class)
+    public String gadget_id = null;
 
     // Dao
     private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(
@@ -124,25 +134,6 @@ public class DomainUser
 
     }
 
-    // Get Users
-    public static DomainUser getDomainUserFromEmail(String email, String domain)
-    {
-	String oldNamespace = NamespaceManager.get();
-	NamespaceManager.set("");
-
-	try
-	{
-	    Objectify ofy = ObjectifyService.begin();
-	    return ofy.query(DomainUser.class).filter("email", email)
-		    .filter("domain", domain).get();
-	}
-	finally
-	{
-	    NamespaceManager.set(oldNamespace);
-	}
-
-    }
-
     // Get DomainUser for the current user
     public static DomainUser getDomainCurrentUser()
     {
@@ -168,6 +159,24 @@ public class DomainUser
 	}
     }
 
+    // Get Users
+    public static DomainUser getDomainUserFromGadgetId(String gadgetId)
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	try
+	{
+	    Objectify ofy = ObjectifyService.begin();
+	    return ofy.query(DomainUser.class).filter("gadget_id", gadgetId)
+		    .get();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
+
     // Save
     public void save() throws Exception
     {
@@ -182,12 +191,11 @@ public class DomainUser
 		    + domainUser);
 	}
 
-	String oldNamespace = NamespaceManager.get();
+	// Set to current namespace if it is empty
+	if (StringUtils.isEmpty(this.domain))
+	    this.domain = NamespaceManager.get();
 
-	// Override the domain in the domain user with the name space
-	this.domain = NamespaceManager.get();
-
-	// Check if old namespace is null or empty. Then, do not allow to be
+	// Check if namespace is null or empty. Then, do not allow to be
 	// created
 	if (StringUtils.isEmpty(this.domain))
 	{
@@ -207,6 +215,7 @@ public class DomainUser
 		    SendMail.NEW_USER_INVITED, this);
 	}
 
+	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set("");
 
 	try
@@ -246,9 +255,9 @@ public class DomainUser
     // To String
     public String toString()
     {
-	return "Email " + this.email + "Domain " + this.domain + " IsAdmin "
-		+ this.is_admin + " DomainId " + this.id + " Name" + name
-		+ " created_time: " + created_time;
+	return " Email: " + this.email + " Domain: " + this.domain
+		+ " IsAdmin: " + this.is_admin + " DomainId: " + this.id
+		+ " Name:" + name + " created_time: " + created_time;
 
     }
 }

@@ -62,13 +62,8 @@ public class NamespaceFilter implements Filter
 	// Set Google Apps Namespace if googleapps
 	if (subdomain.equalsIgnoreCase(Globals.GOOGLE_APPS_DOMAIN))
 	{
-	    if (!setupGoogleAppsNameSpace(request, response))
-	    {
-		redirectToChooseDomain(request, response);
-		return false;
-	    }
-	    else
-		return true;
+	    return setupGoogleAppsNameSpace(request, response);
+
 	}
 
 	// Set the subdomain as name space
@@ -102,13 +97,23 @@ public class NamespaceFilter implements Filter
 		System.out.println("Setting Google Apps - Namespace "
 			+ appsDomain);
 
+		// If Gadget Level API which does not understand redirect, we
+		// just set the namespace
+		if (request.getParameter("opensocial_owner_id") != null)
+		{
+		    // Set the namespace
+		    NamespaceManager.set(namespace);
+		    return true;
+		}
+
 		String url = getFullUrl((HttpServletRequest) request);
 		url = url.replace(Globals.GOOGLE_APPS_DOMAIN + ".", namespace
 			+ ".");
 
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
+		System.out.println("Redirecting it to " + url);
 		httpResponse.sendRedirect(url);
-		return true;
+		return false;
 	    }
 	}
 	catch (Exception e)
@@ -116,6 +121,7 @@ public class NamespaceFilter implements Filter
 	    e.printStackTrace();
 	}
 
+	redirectToChooseDomain(request, response);
 	return false;
     }
 

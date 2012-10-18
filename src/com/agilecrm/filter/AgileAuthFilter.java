@@ -41,8 +41,19 @@ public class AgileAuthFilter implements Filter
     {
 	System.out.println("Agile Auth Filter");
 
+	// Reset the thread local
+	SessionManager.set((UserInfo) null);
+
 	HttpServletRequest httpRequest = (HttpServletRequest) request;
 	HttpServletResponse httpResponse = (HttpServletResponse) response;
+
+	// If it is JS API, we will pass it through
+	if (httpRequest.getRequestURI().contains("js/api"))
+	{
+	    System.out.println("JS API - ignoring filter");
+	    chain.doFilter(request, response);
+	    return;
+	}
 
 	// If no sessions are there, redirect
 	if (httpRequest.getSession(false) == null)

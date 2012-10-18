@@ -6,18 +6,78 @@ var Is_Localhost = true;
 var LIB_PATH;
 
 
+function login() {
+   
+    var domain = gadgets.util.getUrlParameters()['parent'].match(/.+\/a\/(.+)\/html/)[1];
+    var url = 'https://googleapps.agilecrm.com/gmail?hd=' + domain;
+    console.log("Osapi from " + url);
+   
+     // Hit the server, passing in a signed request (and OpenSocial ID), to see if we know who the user is.
+     osapi.http.get({
+       'href' : url,
+       'format' : 'json',
+       'authz' : 'signed'
+     }).execute(handleLoadResponse);
+   }
+
+   function handleLoadResponse(data) {
+   
+   console.log("Returned data");
+   console.log(data);
+   
+     // User exists, OpenID must have occurred previously.
+     if (data.content.user_exists) {
+       document.getElementById('output').innerHTML = 'user exists';
+       
+       // Get API Key
+       var api_key = data.content.api_key;
+       
+       // Get Domain Key
+       var domain = data.content.domain;
+       
+       console.log("Fetched " + api_key + " " + domain);
+       
+       _agile.push(['_setAccount', api_key, domain]);
+		
+       
+     } else {
+       var url_root = data.content.popup;
+       // Retrieve the domain of the current user. gadgets.util.getUrlParameters()['parent'] returns a value
+       // of of the form: http(s)://mail.google.com/mail/domain.com/html for Gmail (other containers are similar).
+       // The example below shows a regular expression for use with Gmail. For Calendar, use this regular
+       // expression instead: /calendar\/hosted\/([^\/]+)/
+       var domain = gadgets.util.getUrlParameters()['parent'].match(/.+\/a\/(.+)\/html/)[1];
+
+       var url = url_root + '&hd=' + domain;
+
+       var button = document.createElement('a');
+       button.setAttribute('href', 'javascript:void(0);');
+       button.setAttribute('onclick', 'openPopup("' + url + '")');
+
+       var text = document.createTextNode('Associate your account - one time setup');
+       button.appendChild(text);
+
+       document.getElementById('output').appendChild(button);
+     }
+   }
+
+   function openPopup(url) {
+     var popup = window.open(url, 'OpenID','height=200,width=200');
+
+     // Check every 100 ms if the popup is closed.
+     finishedInterval = setInterval(function() {
+       // If the popup is closed, we've either finished OpenID, or the user closed it. Verify with the server in case the
+       // user closed the popup.
+       if (popup.closed) {
+	         login();
+	         clearInterval(finishedInterval);
+       }
+     }, 100);
+   }
+
 // Init Agile Gadget
 function init_agile_gadget()
 {
-	
-	// Set API Key first - agile-min.js executes at the very beginning
-	// Sukanya Localhost
-	// _agile.push(['_setAccount', 't87mbpn15789194cojt6j0ujd5', 'localhost']);
-	
-	// MC Localhost
-	_agile.push(['_setAccount', 'utjhaf2h97gcdc55jh6k7qbg9', 'localhost']);
-	
-	//_agile.push(['_setAccount', 'fbl6p636276j2ff7tp2m023t0q', 'test']);
 	
 	// Check if localhost
 	console.log(window.location.host);
@@ -25,17 +85,30 @@ function init_agile_gadget()
 	{
 		Is_Localhost = true;
 		LIB_PATH = "http://localhost:8888/";
+		
+		// Set API Key first - agile-min.js executes at the very beginning
+		// Sukanya Localhost
+		// _agile.push(['_setAccount', 't87mbpn15789194cojt6j0ujd5', 'localhost']);
+		
+		// MC Localhost
+		_agile.push(['_setAccount', 'g0ge03gebtspp3s18pa7gfeprl', 'localhost']);
+		
+		//_agile.push(['_setAccount', 'fbl6p636276j2ff7tp2m023t0q', 'test']);
+		
+		// Download scripts and load UI
+		download_scripts(build_ui);
+		
 	}
 	else
 	{
 		gadgets.window.adjustHeight();
 		LIB_PATH = "https://googleapps.agilecrm.com/";
-	}
 		
-	console.log(Is_Localhost);
-	// Download scripts and load UI
-	download_scripts(build_ui);
+		// Login - this will call download scripts if everything is good
+		login();
+	}
 }
+
 
 function download_scripts(callback)
 {	
@@ -101,7 +174,7 @@ function build_ui()
 	if(!Is_Localhost)
 		emails = get_emails();
 	else
-		emails = ["manohar@invox.com","manohar12@invox.com"];
+		emails = ["manohar@invox.com","manohar123@invox.com"];
 	
      
      // Build UI
