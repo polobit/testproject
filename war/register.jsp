@@ -11,7 +11,7 @@
 request.getSession().removeAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
 
 // Check if the request was posted again to itself 
-if(request.getParameter("auth") != null)
+if(request.getParameter("oauth") != null)
 {
     	// Get the method type
     	String type = request.getParameter("type");
@@ -105,20 +105,12 @@ body {
 }
 	
 }
-.openid_large_btn {
-width: 155px;
-height: 30px;
-border: 0px solid #DDD;
-margin: 3px;
-float: left;
-padding:1px 0px;
-}
 .feild{
 height:30px!important;
 margin:8px 0px!important;
-width:97%!important;
 }
-
+h1{font-size:30px;}
+.error{color:red;}
 </style>
 
 <!-- Le fav and touch icons -->
@@ -176,48 +168,41 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 			</div>
 		</div>
 	</div>
-	<br/>
 	<div class="row">
 
 		<div class='span5' style='display:block;float:none;margin:30px auto'>
 			<div class="well">
-				<form id='oauth'  name='oauth' method='post'> 
-				 <h2> Create Your Account </h2><br/>
+				<form id='oauth'  name='oauth' method='post' style="padding: 16px 28px 23px"> 
+				 <h1> Create Your Account </h1><br/>
 				
+				<div id="openid_btns" style="float: left;padding:5px 0 15px;border-top: 1px dotted #CCC;border-bottom: 1px dotted #CCC;border-right: none;border-left: none;">
 				<h3><small>Login or register using existing accounts</small></h3>	
-				<div id="openid_btns" style="float: left;padding: 10px 0 15px;border-top: 1px dotted #CCC;border-right: none;border-left: none;">
-					
-					
 					
 					<input type='hidden' name='auth' value='auth'></input>
 					<input type='hidden' name='type' value='oauth'></input>
 					<input type='hidden' name='server' id='oauth-name' value=''></input>
 					
-					<a title="log in with Google" class="btn btn-large btn-primary openid_large_btn" type="button" href="#" data='google'><img src="/google.png" style="width:30px;height:30px;"></img>Login With Google</a> 
-					<a title="log in with Yahoo" class="btn btn-large btn-primary openid_large_btn" type="button" href="#" data='yahoo'><img src="/yahoo.png" style="width:25px;height:25px;padding-top:3px;"></img> Login With Yahoo</a> 
-			
+					<a title="log in with Google" href='#' style="background: #FFF url(img/openid-providers-en.png); background-position: 0px 0px" class="google openid_large_btn"></a> 
+					<a title="log in with Yahoo" href="#" style="background: #FFF url(img/openid-providers-en.png); background-position: -100px 0px" class="yahoo openid_large_btn"></a>
 				</div>
-				<br />
+				
 				</form>
 				
 				<div class="clearfix"></div>
 				
-				
-				<form name='agile' id="agile" method='post' onsubmit="return isValid();"> 
+				<form name='agile' id="agile" method='post' onsubmit="return isValid();" style="padding: 16px 28px 23px"> 
 				 <h3><small>Create Your Free Account</small></h3>	
-				<div id="openid_btns" style="float: left;padding: 10px 0 15px;border-top: 1px dotted #CCC;border-right: none;border-left: none;">
-										
-					<br/>
+				<div id="openid_btns" style="float: left;padding:5px 0 15px;">
+					
 					<input type='hidden' name='auth' value='auth'>
 					<input type='hidden' name='type' value='agile'>
 					
-					<input class="input-xlarge feild required" name='firstname' type="text" placeholder="FirstName">
-					<input class="input-xlarge feild required" name='lastname' type="text" placeholder="LastName">
+					<input class="input-xlarge feild required" name='name' type="text" placeholder="Name">
                     <input class="input-xlarge feild required email" name='email' type="text" placeholder="Email">
                     <input class="input-xlarge feild required" name='password' type="password" placeholder="Password">
 					<div style="margin-top:15px;">
-					  <label class="checkbox" style="display:inline-block;"><input type="checkbox">  I agree with the Terms of Use.</label>
-					  <input type='submit' style="margin-left:50px;"value="Register" class='btn btn-large btn-primary'>
+					  <label class="checkbox" style="display:inline-block;"><input type="checkbox" name="agree">  I agree with the Terms of Use.</label>
+					  <input type='submit' style="margin-left:5px;"value="Register" class='btn btn-large btn-primary'>
 				  </div>
 				</div>
 				<br />
