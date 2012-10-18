@@ -348,7 +348,7 @@ margin-top: 10px;
 }
 
 
-/* Footer to remain in botom of the page*/
+/* Footer to remain in botom of the page
 html, body {height: 93%;}
 
 #wrap {min-height: 100%;}
@@ -356,15 +356,15 @@ html, body {height: 93%;}
 #main {
 				overflow: visible;
 				padding-bottom: 40px;				
-			}  /* must be same height as the footer */
+			}  /* must be same height as the footer 
 
 footer {
 				position: relative;
-				margin-top: -40px; /* negative value of footer height */
+				margin-top: -40px; /* negative value of footer height 
 				height: 40px;
 				clear:both;
 				border: none;
 				padding: 0px;
 	}
 	
-	
+	*/

@@ -164,23 +164,22 @@ String CSS_PATH = "/";
 		</div>
 	</div>
 
-<div id="wrap">
-	<div id="main" class="container<%=width%>">
+	<div class="container<%=width%>">
 		<div id="content" class="">
 		
 		<img class="loading" style="padding-right:5px" src= "img/21-0.gif"></img>
 		
 		</div>
 	</div>
-</div>
-	
+
+	<!-- <footer class="container"><a href="#top" id="top" class="btn btn-mini btn-flat btn-primary pull-right">Top &uarr;</a></footer>	-->
 	<!--  Notifications -->
 	<div class='notifications top-left'></div>
 	<div class='notifications top-right'></div>
 	<div class='notifications bottom-left'></div>
 	<div class='notifications bottom-right'></div>
 	
-	<footer class="container"><a href="#top" id="top" class="btn btn-mini btn-flat btn-primary pull-right">Top &uarr;</a></footer>
+	
 	
 	<!-- Templates -->
 	<%@ include file="tpl/min/tpl.js" %>	
