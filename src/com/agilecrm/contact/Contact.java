@@ -205,11 +205,13 @@ public class Contact extends Cursor
 
     public void save()
     {
-	System.out.println("contact saving:" + this);
-	dao.put(this);
 
-	// Execute Trigger
+	System.out.println("contact saving:" + this);
+	Key<Contact> contact_key = dao.put(this);
 	Trigger.executeTrigger(this.id, Trigger.Type.CONTACT_IS_ADDED);
+
+	ContactDocument.buildDocument(this, contact_key.getId());
+
     }
 
     public static Contact getContact(Long id)
