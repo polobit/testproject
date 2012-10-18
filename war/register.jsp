@@ -108,6 +108,7 @@ body {
 .field{
 height:30px!important;
 margin:8px 0px!important;
+padding-left:10px!important;
 }
 .error{color:red;}
 </style>
@@ -169,10 +170,10 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 	</div>
 	<div class="row">
 
-		<div class='account-container' style='display:block;float:none;margin:30px auto'>
+		<div class='account-container'>
 			<div class="content clearfix">
-				<form id='oauth'  name='oauth' method='post' style="padding: 16px 28px 23px"> 
-				 <h1>Create Your Account</h1><br/>
+				<form id='oauth'  name='oauth' method='post'> 
+				 <h1>SignUp</h1>
 				
 				<div id="openid_btns" style="float: left;padding:5px 0 15px;border-top: 1px dotted #CCC;border-bottom: 1px dotted #CCC;border-right: none;border-left: none;">
 				<h3><small>Login or register using existing accounts</small></h3>	
@@ -189,7 +190,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 				
 				<div class="clearfix"></div>
 				
-				<form name='agile' id="agile" method='post' onsubmit="return isValid();" style="padding: 16px 28px 23px"> 
+				<form name='agile' id="agile" method='post' onsubmit="return isValid();"> 
 				 <h3><small>Create Your Free Account</small></h3>	
 				<div id="openid_btns" style="float: left;padding:5px 0 15px;">
 					
@@ -204,7 +205,6 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 					  <input type='submit' style="margin-left:5px;"value="Register" class='btn btn-large btn-primary'>
 				  </div>
 				</div>
-				<br />
 				</form>
 				
 				<div class="clearfix"></div>
@@ -213,7 +213,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 					
 			</div>
 			<div style="text-align: center;line-height: 19px;">
-	                 Already have an account? <a href="/login.jsp">Login</a><br>
+	                 Already have an account? <a href="/login">Login</a><br>
                </div>
 		</div>
 		

@@ -106,6 +106,11 @@ body {
 }
 	
 }
+.field{
+height:30px!important;
+margin:8px 0px!important;
+padding-left:10px!important;
+}
 .error{color:red;}
 </style>
 
@@ -166,10 +171,10 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 	</div>
 	<div class="row">
 
-		<div class="account-container" style='display:block;float:none;margin:30px auto'>
+		<div class="account-container" style="width: 290px; ">
 			<div class="content clearfix">
 				
-				<form name='agile' id="agile" method='post' onsubmit="return isValid();" style="padding: 16px 28px 23px"> 
+				<form name='agile' id="agile" method='post' onsubmit="return isValid();"> 
 				 <h1>Sign In</h1>
 				 
 				 <h3><small>Sign in using your registered account:</small></h3>	
@@ -178,27 +183,24 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 					<input type='hidden' name='auth' value='auth'>
 					<input type='hidden' name='type' value='agile'>
 				
-					
-					<div class="input-prepend">
-                      <span class="add-on"><i class="icon-user"></i></span><input class="required email" name='email' type="text" placeholder="User Name">
-                    </div>
+                      <input class="required email field" name='email' type="text" placeholder="User Name">
                     <br/>
-                    <div class="input-prepend">
-                      <span class="add-on"><i class="icon-lock"></i></span><input class="required " name='password' type="password" placeholder="Password">
-                    </div>
+                      <input class="required field" name='password' type="password" placeholder="Password">
 					<br/>
-					<label class="checkbox" style="display:inline-block;"><input type="checkbox" name="signin"> Keep me signed in </label>
-					<input type='submit' style="float:right;" value="Sign In" class='btn btn-large btn-primary'>
+					<div style="margin-top:15px;">
+					   <label class="checkbox" style="display:inline-block;"><input type="checkbox" name="signin"> Keep me signed in </label>
+					   <input type='submit' style="float:right;" value="Sign In" class='btn btn-large btn-primary'>
+				   </div>
 				</div>
 				<br />
 				</form>
 				
 				<div class="clearfix"></div>
 				
-				<form id='oauth'  name='oauth' method='post' style="padding: 16px 28px 23px"> 
+				<form id='oauth'  name='oauth' method='post'> 
 				
 				<div id="openid_btns" style="float: left;padding:5px 0 15px;border-top: 1px dotted #CCC;border-bottom: 1px dotted #CCC;border-right: none;border-left: none;">
-				<h3><small>Login or register using existing accounts</small></h3>	
+				<h3><small>Login using existing accounts</small></h3>	
 					<input type='hidden' name='auth' value='auth'></input>
 					<input type='hidden' name='type' value='oauth'></input>
 					<input type='hidden' name='server' id='oauth-name' value=''></input>
@@ -212,7 +214,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 				</div>
 			</div>
 			<div style="text-align: center;line-height: 19px;">
-	                 Don't have an account? <a href="/register.jsp">Sign Up</a><br>
+	                 Don't have an account? <a href="/register">Sign Up</a><br>
 	                  Remind <a href="#">Password</a>
                </div>
 		</div>
