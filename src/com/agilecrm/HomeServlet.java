@@ -40,13 +40,13 @@ public class HomeServlet extends HttpServlet
 	    return;
 	}
 
-	// Logged in time
-	DomainUser domainUser = DomainUser.getDomainCurrentUser();
-	domainUser.logged_in_date = System.currentTimeMillis() / 1000;
-
 	// Save Logged in time
 	try
 	{
+	    // Logged in time
+	    DomainUser domainUser = DomainUser.getDomainCurrentUser();
+	    domainUser.logged_in_date = System.currentTimeMillis() / 1000;
+
 	    domainUser.save();
 	}
 	catch (Exception e)
