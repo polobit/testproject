@@ -52,15 +52,16 @@
 
 			<div class='clearfix'></div>	
 			<div>	
-				{{#if tags}}
+				
 					<i class="icon-tags"></i>
 					<ul id="added-tags-ul" class="tagsinput">
+				{{#if tags}}
 						{{#each tags}}
 								<li style="display:inline-block;" class="tag" data="{{this}}"><span><a class="anchor" href="#tags/{{this}}">{{this}}</a><a class="close remove-tags" id="{{this}}">&times</a></span></li>
   						{{/each}}
-					</ul>
-					</ul>
 				{{/if}}	
+					</ul>
+				
 					<a href="#" id="add-tags"><i class="icon-plus-sign"></i></a> <span>Add tags</span>
 					</br>
 						<form id="addTagsForm" style="display:none; padding-top:6px">

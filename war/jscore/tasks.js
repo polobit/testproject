@@ -2,10 +2,10 @@
 $(function () { 
 	$('.tasks-select').live('change', function(){
         if($(this).is(':checked')){
-            
         	// Complete
         	var taskId = $(this).attr('data');
-        	completeTask(taskId, $(this))
+        	//completeTask(taskId, $(this));
+        	completeTask(taskId, $(this).closest('tr'))
         }
     });
 	
@@ -42,6 +42,7 @@ function appendTasks(base_model) {
         model: base_model,
         "view": "inline",
         template: 'tasks-model',
+        tagName: 'tr',
        });
 
     // add to the right box - overdue, xxx
@@ -87,10 +88,16 @@ function completeTask(taskId, ui)
 	// Set is complete flag to be true
 	model.set('is_complete', true);
 	model.url = '/core/api/tasks';
-	
+
 	// Destroy and hide the task
-	model.save({success: function(model, response) {
-		ui.closest('.task-individual').slideUp('slow');
+	model.save([],{success: function(model, response) {
+		
+		// Remove model from the collection		
+		App_Calendar.tasksListView.collection.remove(model);
+		
+		//ui.closest('tr').slideUp('slow');
+		
+		ui.fadeOut(2000);
 	}}
 	);
 	

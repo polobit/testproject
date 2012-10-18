@@ -1,23 +1,30 @@
 <script id="tasks-collection-template" type="text/html">
-	<h3 style="margin-left:3px">Tasks</h3>
-	<hr/>
+	<header><h3 style="margin-left:3px"><span><i class="icon-edit"></i></span> Tasks</h3></header>
 {{#unless this.length}}
    <img src="/img/funtime.jpg"></img>
 {{/unless}}
 {{#if this.length}}
-	<h5 style="margin-left:3px">Overdue</h5>
-	<div id='overdue' style="display: none; margin:3px"></div>
-	
-	<h5 style="margin-left:3px">Today</h5>
- 	<div id='today' style="display: none; margin:3px"></div>
-
-	<h5 style="margin-left:3px">Tomorrow</h5>
-	<div id='tomorrow' style="display: none; margin:3px"></div>
-
-	<h5 style="margin-left:3px">Next Week</h5>
- 	<div id='next-week' style="display: none; margin:3px"></div>
+<section>
+<form>
+<table class="table">
+	<thead><b>Overdue</b></thead>
+	<tbody id='overdue' style="display: none; margin:3px"></tbody>
+</table>
+<table class="table">
+	<thead><b>Today</b></thead>	
+ 	<tbody id='today' style="display: none; margin:3px"></tbody>
+</table>
+<table class="table">
+	<thead><b>Tomorrow</b></thead>
+	<tbody id='tomorrow' style="display: none; margin:3px"></tbody>
+</table>
+<table class="table">
+	<thead><b>Next Week</b></thead>
+ 	<tbody id='next-week' style="display: none; margin:3px"></tbody>
+</table>
+</form>
+</section>
 	<br/>
-
 	<div>
 		<a href="#" id="tasks-list">All tasks</a>
 	</div>
@@ -27,19 +34,9 @@
 
 
 <script id="tasks-model-template" type="text/html">
-<div class='task-individual well'>
-	
-	<div class="span4">
-		<label class="checkbox">
-			<input type=checkbox data='{{id}}' class='tasks-select'> 
-			{{epochToTaskDate due}}
-		</label>
-	</div>
-	<div class="span8">
-		<b>&nbsp;{{ subject}}</b>
-		{{priority_type}}
-		<span class="label" id="label_color">{{type}}</span>
-	</div>
+	<td> <input type="checkbox" data='{{id}}' class='tasks-select'> </td>
 
-</div>
+	<td><p><span class="label">{{type}}</span> <span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span> {{ subject}}</p>
+        <span>due {{epochToTaskDate due}}</span>
+	</td>
 </script>
