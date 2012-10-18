@@ -11,44 +11,87 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
+import com.agilecrm.account.APIKey;
+import com.agilecrm.core.DomainUser;
 import com.agilecrm.session.OpenIdServlet;
+import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.util.Util;
 
 @SuppressWarnings("serial")
 public class GMailGadgetServlet extends HttpServlet
 {
-    public static final String SESSION_KEY_PARAMETER_NAME = "one_time_session_key";
+    public static final String SESSION_KEY_NAME = "one_time_session_key";
+    public static final String SESSION_GADGET_NAME = "gadget_key";
 
     public boolean validate(HttpServletRequest req, HttpServletResponse resp)
+	    throws Exception
     {
+	// Get OpenSocial ID
+	String ownerId = req.getParameter("opensocial_owner_id");
+	System.out.println("Owner Id " + ownerId);
+
 	// Get Domain User with this Social Id
+	DomainUser domainUser = DomainUser.getDomainUserFromGadgetId(ownerId);
+	if (domainUser == null)
+	    return false;
 
-	// Set in Thread Cache
+	// Get API Key
+	String apiKey = APIKey.getAPIKey().api_key;
 
-	// Setup Authentication Key
+	JSONObject result = new JSONObject();
+	result.put("user_exists", true);
+	result.put("api_key", apiKey);
+	result.put("domain", domainUser.domain);
+
+	System.out.println("Result " + result.toString());
+
+	// Setup API Key
+	resp.getWriter().println(result.toString());
 
 	return false;
-
     }
 
     public boolean save(HttpServletRequest req, HttpServletResponse resp)
 	    throws Exception
     {
 	// Get Current User
-	UserInfo user = (UserInfo) req.getSession().getAttribute("user");
+	UserInfo user = (UserInfo) req.getSession().getAttribute(
+		SessionManager.AUTH_SESSION_COOKIE_NAME);
 	resp.getWriter().println(user);
 
 	// Get Gadget Id
-	String oneTimeSessionKey = req.getParameter(SESSION_KEY_PARAMETER_NAME);
+	String oneTimeSessionKey = req.getParameter(SESSION_KEY_NAME);
 	resp.getWriter().println(oneTimeSessionKey);
 
-	// Set in Thread Cache
+	// Get Cache Id
+	String ownerId = (String) Util.getCache(oneTimeSessionKey);
+	if (ownerId == null)
+	{
+	    resp.getWriter()
+		    .println(
+			    "We are unable to find any related session. Either you have waited too long to associate your new gadget. Please refresh your GMail and try again.");
+	    return false;
+	}
+
+	resp.getWriter().println(ownerId);
 
 	// Setup Authentication Key
+	DomainUser domainUser = DomainUser.getDomainCurrentUser();
+	if (domainUser == null)
+	{
+	    resp.getWriter().println(
+		    "We are unable to find any account with this userid");
+	    return false;
+	}
+
+	// Save the gadget_id
+	domainUser.gadget_id = ownerId;
+	domainUser.save();
+
+	resp.getWriter().println("You can close the browser");
 
 	return false;
-
     }
 
     // Set Up
@@ -56,7 +99,7 @@ public class GMailGadgetServlet extends HttpServlet
 	    throws Exception
     {
 	// Get One Time Key
-	String oneTimeSessionKey = req.getParameter(SESSION_KEY_PARAMETER_NAME);
+	String oneTimeSessionKey = req.getParameter(SESSION_KEY_NAME);
 
 	// Check in cache and add to session id
 	if (Util.getCache(oneTimeSessionKey) == null)
@@ -70,9 +113,8 @@ public class GMailGadgetServlet extends HttpServlet
 	// Return back to this URL
 	req.getSession().setAttribute(
 		OpenIdServlet.RETURN_PATH_SESSION_PARAM_NAME,
-		"/gmail?" + SESSION_KEY_PARAMETER_NAME + "="
-			+ oneTimeSessionKey + "&openid=done&hd="
-			+ req.getParameter("hd"));
+		"/gmail?" + SESSION_KEY_NAME + "=" + oneTimeSessionKey
+			+ "&openid=done&hd=" + req.getParameter("hd"));
 
 	resp.sendRedirect("/openid" + "?hd=" + req.getParameter("hd"));
     }
@@ -98,7 +140,7 @@ public class GMailGadgetServlet extends HttpServlet
 	JSONObject result = new JSONObject();
 	result.put("user_exists", false);
 	result.put("popup", "https://googleapps.agilecrm.com/gmail?"
-		+ SESSION_KEY_PARAMETER_NAME + "=" + oneTimeSessionKey);
+		+ SESSION_KEY_NAME + "=" + oneTimeSessionKey);
 
 	System.out.println("Result " + result.toString());
 
@@ -127,7 +169,7 @@ public class GMailGadgetServlet extends HttpServlet
 	    }
 
 	    // If Popup or after openid auth (one time session key will be sent)
-	    if (req.getParameter(SESSION_KEY_PARAMETER_NAME) != null)
+	    if (req.getParameter(SESSION_KEY_NAME) != null)
 	    {
 
 		// Is it after openid

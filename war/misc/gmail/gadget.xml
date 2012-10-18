@@ -43,18 +43,17 @@
   	
     <style>
 		.error{color:red;}
-		body{font-size:12px}
+		body{font-size:12px;}
+		h1{font-size:20px;line-height:25px;}
+		input{height:28px;}
     </style>
    
+  <br/>
    <div id="content">
-      <img class="loading" style="padding-right:5px" src= "https://googleapps.agilecrm.com/img/21-0.gif"></img>
+   <img class="loading" style="padding-right:5px" src= "/img/21-0.gif"></img>
    </div>
-
-
-
-
-	<script src='https://googleapps.agilecrm.com/lib/headjs-min.js'></script>
-
+   
+ <script src='https://googleapps.agilecrm.com/lib/headjs-min.js'></script>
  <script src='https://googleapps.agilecrm.com/misc/gmail/gadget.js'></script>
    
    <script type="text/javascript">
@@ -63,17 +62,16 @@
 	
 	<script id="gadget-template" type="text/html">
 {{#if id}}
-{{#if id}}
-<div class="span9 well" id="gadgetContactDetailsTab">
-<br/>
-    <div class="span1" style="">
+<div class="span9 well gadget_contact_details_tab" >
+  <div class="row gadget_contact" style='margin-bottom: 5px;'> 
+    <div class="span1">
 	   <div style='display:inline;padding-right:10px;height:auto;'>
     		<img  class='thumbnail' src="{{gravatarurl properties 50}}" width="50" height="50" style='display:inline'/>
 	   </div>
     </div>
     <div class="span3" style='height:auto;display:inline-block;vertical-align:-23px;'>
 		<b>
-			<font size="5">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</font>
+			<h1>{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</h1>
 		</b></br>
 		{{#if_propertyName "email"}}
 			{{value}}</br>
@@ -91,16 +89,17 @@
      	
     <div class="span2">
 		<ul style='list-style:none;color:blue;'>
-      		<li><a id="gadget-add-note">Add Note</a></li>
-      		<li><a id="gadget-add-task">Add Task</a></li>
-      		<li><a id="gadget-add-deal">Add Deal</a></li>
+      		<li><a class="gadget-add-note" href="#">Add Note</a></li>
+      		<li><a class="gadget-add-task" href="#">Add Task</a></li>
+      		<li><a class="gadget-add-deal" href="#">Add Deal</a></li>
     	</ul>
-    </div><br/>
+    </div>
+   </div>
 
-    <div id="showForm" class="span9">
+    <div class="show_form" class="span9">
 
-        <div id="gadget-note" style="display:none;">
-			<form id='gadgetNoteForm' name="gadgetNoteForm" method="post">
+        <div class="gadget-note" style="display:none;">
+			<form class='gadget_note_form' name="gadget_note_form" method="post">
 				<fieldset>
                     <legend><b>Add Note</b></legend>
                     <input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
@@ -118,23 +117,23 @@
 					</div>
                     
                    <div>
-                     <a type="submit" class="btn" id="gadget-note-validate">Add Note</a>
-		             <a id="cancel" class="btn">Cancel</a>
-                     <span id="status" style="display:none;"><small><p class="text-success"><i>Saving</i></p></small></span> 
+                     <a type="submit" class="btn btn-primary gadget-note-validate">Add Note</a>
+		             <a class="cancel btn">Cancel</a>
+                     <span class="status" style="display:none;"><i>Successfully Saved</i></span> 
                   </div>
 				</fieldset>
 			</form>
 		 </div>
 
-  	   <div id="gadget-task" style="display:none;">
-           	<form id='gadgetTaskForm' name="gadgetTaskForm" method="post">
+  	   <div class="gadget-task" style="display:none;">
+           	<form class='gadget_task_form' name="gadget_task_form" method="post">
 					<fieldset>
                        <legend><b>Add Task</b></legend>
                        <input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
 						<div class="row">
 							<div id="addTask" class="span3 control-group">
 								<label for="subject" class="control-label"> <b>Task:</b> <span class="field_req">*</span></label>
-								<div class="controls"><span class="input "><input id="subject" type="text"
+								<div class="controls"><span class="input "><input id="subject" type="text" placeholder="Task name"
 							  		  name="subject" size="40" class="required"> </span>
 							  	</div>
 							</div>
@@ -175,16 +174,16 @@
 							</div>
 						</div> 
                         <div>
-                          <a type="submit" class="btn" id="gadget-task-validate">Add Task</a>
-				          <a id="cancel" class="btn">Cancel</a>
-                          <span id="status" style="display:none;"><small><p class="text-success"><i>Saving</i></p></small></span>
+                          <a type="submit" class="btn btn-primary gadget-task-validate">Add Task</a>
+				          <a class="cancel btn">Cancel</a>
+                          <span class="status" style="display:none;"><i>Successfully Saved</i></span>
                        </div>
 					</fieldset>				
 				</form>	
         </div>
 
-  	   	<div id="gadget-deal" style="display:none;">
-			  <form id="gadgetDealForm" name="gadgetDealForm" method="post">
+  	   	<div class="gadget-deal" style="display:none;">
+			  <form class="gadget_deal_form" name="gadget_deal_form" method="post">
 		  		<fieldset>
                     <legend><b>Add Deal</b></legend>
                     <input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
@@ -230,9 +229,9 @@
 					</div>
                     </div>
                     <div>
-                        <a type="submit" class="btn" id="gadget-deal-validate">Add Deal</a> 
-			            <a id="cancel" class="btn" >Cancel</a>
-                        <span id="status" style="display:none;"><small><p class="text-success"><i>Saving</i></p></small></span>
+                        <a type="submit" class="btn btn-primary gadget-deal-validate">Add Deal</a> 
+			            <a class="cancel btn" >Cancel</a>
+                        <span class="status" style="display:none;"><i>Successfully Saved</i></span>
                     </div>
 		  		</fieldset>
 			</form>
@@ -241,14 +240,14 @@
      </div>
    </div>
 {{else}}
-   <div id="gadgetContactDetailsTab" class="span9 well">
-    <div>
-		No Contact Found. <a style='color:blue;' id="gadget-add-contact">Add Contact</a> with {{email}}.
-    </div>
-    <div id="showForm">
-
-        <div id="gadget-contact" style="display:none;">
-			<form id='gadgetContactForm' name="gadgetContactForm" method="post">
+   <div class="span9 well gadget_contact_details_tab">
+    
+    <div class="show_form">
+        <div class="gadget-no-contact">
+		  No Contact Found. <a href="#" class="gadget-add-contact">Add Contact</a> with {{email}}.
+        </div>
+        <div class="gadget-contact" style="display:none;">
+			<form class='gadget_contact_form' name="gadget_contact_form" method="post">
 			  <fieldset>
                 <legend><b>Add Contact To Agile CRM</b></legend>
 				<div class="control-group" style="margin-top:0px;">
@@ -292,9 +291,9 @@
 				  </div>
                 </div>
                 <div>
-                  <a type="submit" class="btn" id="gadget-contact-validate">Add Contact</a>
-                  <a id="cancel" class="btn">Cancel</a>
-                  <span id="status" style="display:none;"><small><p class="text-success"><i>Saving</i></p></small></span>
+                  <a type="submit" class="btn btn-primary gadget-contact-validate">Add Contact</a>
+                  <a class="cancel btn">Cancel</a>
+                  <span class="status" style="display:none;"><i>Successfully Saved</i></span>
                </div>
 			</fieldset>
 		  </form>
@@ -304,8 +303,11 @@
 {{/if}}
 </script>
 
-	    
-    ]]>
+<div id="output"></div>  
+
+]]>
+    
+    
 
   </Content>
 </Module>
