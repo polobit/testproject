@@ -38,7 +38,7 @@ public class UserPrefs
     @NotSaved(IfDefault.class)
     public String width = "";
 
-    @NotSaved(IfDefault.class)
+    @NotSaved
     public String name = null;
 
     @NotSaved(IfDefault.class)
@@ -110,20 +110,23 @@ public class UserPrefs
     public void save()
     {
 	// Wrapping UserPrefs name to DomainUser name
+
 	DomainUser currentDomainUser = DomainUser.getDomainCurrentUser();
-	if (currentDomainUser != null
-		&& !currentDomainUser.name.equals(this.name))
+
+	try
 	{
-	    currentDomainUser.name = this.name;
-	    try
+	    if ((currentDomainUser != null)
+		    && (!currentDomainUser.name.equals(this.name) || currentDomainUser.name == null))
 	    {
+		currentDomainUser.name = this.name;
+
 		currentDomainUser.save();
 		this.name = null;
 	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
 	}
 
 	dao.put(this);

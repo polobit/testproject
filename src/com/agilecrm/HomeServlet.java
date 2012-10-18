@@ -40,6 +40,20 @@ public class HomeServlet extends HttpServlet
 	    return;
 	}
 
+	// Logged in time
+	DomainUser domainUser = DomainUser.getDomainCurrentUser();
+	domainUser.logged_in_date = System.currentTimeMillis() / 1000;
+
+	// Save Logged in time
+	try
+	{
+	    domainUser.save();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
 	req.getRequestDispatcher("home.jsp").forward(req, resp);
     }
 

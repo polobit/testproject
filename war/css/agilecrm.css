@@ -326,6 +326,16 @@ margin-top: 10px;
  cursor: pointer;
 }
 
+/*cursor change in users*/
+#admin-settings-users-model-list > tr:hover{
+ cursor: pointer;
+}
+
+/*cursor change in triggers*/
+#triggers-model-list > tr:hover{
+ cursor: pointer;
+}
+
 /* To solve modal header and footer distortion */
 .agile-modal-body
 {

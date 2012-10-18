@@ -140,7 +140,9 @@ $(function(){
 		var url =  'core/api/send-email?from=' + encodeURIComponent(json.from) + '&to=' + 
 		   										 encodeURIComponent(json.to) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + 
 		   										 encodeURIComponent(json.body);
-		$.post(url);
+		$.post(url, function(){
+			window.history.back();
+		});
 
 	});
 	

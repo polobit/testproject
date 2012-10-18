@@ -115,9 +115,17 @@ var Base_Model_View = Backbone.View.extend({
             		location.reload(true);
             	else if (window)
             		{
-            		  Backbone.history.navigate(window, {
+            		 
+            		if(window == 'back')
+            		  {  
+            		     window.history.back();
+            		  }
+            		  else
+            		  {
+            			Backbone.history.navigate(window, {
                           trigger: true
-                      });
+                          });
+            		   }
             		  
             		  // Reset each element
             		  $form.each (function(){
