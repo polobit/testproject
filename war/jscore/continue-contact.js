@@ -14,6 +14,7 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, continueContact, 
     
     // Show loading symbol until model get saved
     $('#' + modal_id).find('span.save-status').html(LOADING_HTML);
+    $('#' + form_id).find('span.save-status').html(LOADING_HTML);
     
     // Read multiple values from continue contact
     var properties = [];
@@ -115,6 +116,7 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, continueContact, 
     contactModel.save(obj, {
         success: function (data) {
         	// Remove loading image
+        	$('#' + form_id).find('span.save-status img').remove();
         	$('#' + modal_id).find('span.save-status img').remove();
         	$('#' + modal_id).modal('hide');
         	
@@ -150,6 +152,7 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, continueContact, 
         	
         	// Remove loading image
         	$('#' + modal_id).find('span.save-status img').remove();
+        	$('#' + form_id).find('span.save-status img').remove();
         	
             $('#' + modal_id).find(".duplicate-email").html('<div class="alert alert-error" style="display:none"><a class="close" data-dismiss="alert" href="#">×</a>Please change email. A contact already exists with this email.</div>');
 
