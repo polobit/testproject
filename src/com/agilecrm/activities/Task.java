@@ -96,11 +96,14 @@ public class Task
 	if (created_time == 0L)
 	    created_time = System.currentTimeMillis() / 1000;
 
-	// Create list of Contact keys
-	for (String contact_id : this.contacts)
+	if (this.contacts != null)
 	{
-	    this.related_contacts.add(new Key<Contact>(Contact.class, Long
-		    .parseLong(contact_id)));
+	    // Create list of Contact keys
+	    for (String contact_id : this.contacts)
+	    {
+		this.related_contacts.add(new Key<Contact>(Contact.class, Long
+			.parseLong(contact_id)));
+	    }
 	}
     }
 
