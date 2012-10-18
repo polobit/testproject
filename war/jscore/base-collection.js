@@ -79,6 +79,10 @@ var Base_Collection_View = Backbone.View.extend({
         var that = this;
         this.collection.bind('reset', function(){that.render(true)});
         
+        this.collection.bind('error', function(collection, response){
+        		that.render(true, response.responseText);
+        	});
+        
         // Commented as it was creating a ripple effect
         //this.collection.bind('add', function(){that.render(true)});
         
@@ -138,7 +142,7 @@ var Base_Collection_View = Backbone.View.extend({
         // Add model as data to it's corresponding row
         $('#' + this.options.templateKey + '-model-list').find('tr:last').data(base_model);
     },
-    render: function (force_render) {
+    render: function (force_render, error_message) {
     	
     	// If collection in not reset
     	if(force_render == undefined) {
@@ -150,6 +154,13 @@ var Base_Collection_View = Backbone.View.extend({
     	if($(this.el).html() == LOADING_HTML)
     		$(this.el).empty(); 
         
+    	// If error message is defined the append error message to el and return 
+    	if(error_message)
+    		{
+    			$(this.el).html('<div style="padding:10px;font-size:14px"><b>'+ error_message + '<b></div>');
+    			return;
+    		}
+    	
         $(this.el).html(getTemplate((this.options.templateKey + '-collection'), this.collection.toJSON()));
 
         // Add row-fluid if user prefs are set to fluid

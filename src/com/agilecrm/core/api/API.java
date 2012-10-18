@@ -13,7 +13,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.json.JSONObject;
 
@@ -275,22 +277,17 @@ public class API
 
 	if (url == null || jsonResult == null)
 	{
-	    try
-	    {
-		// Get Email
-		JSONObject result = new JSONObject();
-		result.put("failure", true);
-		if (url == null)
-		    result.put("reason", "Email is not configured yet");
-		else
-		    result.put("reason", "Error occurred");
+	    // If url is null throw exception to configure email prefs
+	    if (url == null)
+		throw new WebApplicationException(
+			Response.status(Response.Status.BAD_REQUEST)
+				.entity("You have not yet configured your email. Please click <a href='#email'>here</a> to get started.")
+				.build());
+	    else
+		throw new WebApplicationException(Response
+			.status(Response.Status.BAD_REQUEST)
+			.entity("No Emails.").build());
 
-		return result.toString();
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-	    }
 	}
 
 	return jsonResult;
