@@ -1,4 +1,86 @@
+<<<<<<< HEAD
 <%out.println(request.getParameter("error"));%>
+=======
+<%@page import="com.agilecrm.session.UserInfo"%>
+<%@page import="java.net.URLEncoder"%>
+<%@page import="com.agilecrm.util.Util"%>
+<%@page import="com.agilecrm.Globals"%>
+<%@page import="com.agilecrm.core.DomainUser"%>
+<%@page import="com.google.appengine.api.NamespaceManager"%>
+<%@page import="com.agilecrm.session.SessionManager"%>
+<%
+   
+final String LOGIN_ERROR_SESSION_KEY = "login_error_message";
+
+// Delete Login Session
+			request.getSession().removeAttribute(
+					SessionManager.AUTH_SESSION_COOKIE_NAME);
+
+			// Check if the request was posted again to itself 
+			if (request.getParameter("auth") != null) {
+				// Get the method type
+				String type = request.getParameter("type");
+				out.println(type);
+				if (type.equalsIgnoreCase("oauth")) {
+					// Get server type
+					String server = request.getParameter("server");
+
+					// Get OAuth URL
+					String url = Util.getOauthURL(server);
+
+					if (url == null) {
+						request.getSession().setAttribute(LOGIN_ERROR_SESSION_KEY, "Server not found - try again");
+						response.sendRedirect("/login");
+						return;
+					}
+
+					// Forward to OpenID Authenticaiton which will set the cookie and then forward it to /
+					response.sendRedirect("/openid?hd="
+							+ URLEncoder.encode(url));
+
+					return;
+				} else if (type.equalsIgnoreCase("agile")) {
+
+					// Get User Name
+					String email = request.getParameter("email");
+					out.println(email);
+					// Get Password
+					String password = request.getParameter("password");
+
+					if (email == null || password == null) {
+						out.println("Email not found - try again");
+						return;
+					}
+
+					// Get Domain User with this name, password - we do not check for domain as validity is verified in AuthFilter
+					DomainUser domainUser = DomainUser
+							.getDomainUserFromEmail(email);
+					if (domainUser == null) {
+						request.getSession().setAttribute(LOGIN_ERROR_SESSION_KEY, "No valid user is found with this Email.");
+						response.sendRedirect("/login");
+						return;
+					}
+
+					// Set Cookie and forward to /home
+					UserInfo userInfo = new UserInfo("agilecrm.com", email,
+							null, null);
+					request.getSession().setAttribute(
+							SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
+
+					response.sendRedirect("/home");
+				}
+			}
+
+			// Check if this subdomain even exists
+			if (DomainUser.count() == 0) {
+				response.sendRedirect(Globals.CHOOSE_DOMAIN);
+				return;
+			}
+			String error = request.getParameter("error");
+			
+%>
+
+>>>>>>> sukanya
 <!DOCTYPE html>
 
 <html lang="en">
@@ -22,7 +104,7 @@
 <style>
 @media ( min-width : 900px) {
 	body {
-		padding-top: 60px; //
+		padding-top: 40px; //
 		background-color: whitesmoke;
 	}
 	.navbar-search {
@@ -108,12 +190,30 @@ box-shadow: none;
 
 		<div class="account-container">
 			<div class="content clearfix">
-
-				<form name='agile' id="agile" method='post'>
-					<h1>Sign In</h1>
+			
+				<form id='oauth' name='oauth' method='post'>
+                   <h1>Sign In</h1>
                        <div class="alert alert-error login-error" style="display:none">
 							<a class="close" data-dismiss="alert" href="#">×</a>Login Error 
 						</div>
+					<div id="openid_btns" style="float: left; padding: 5px 0 15px; border-top: 1px dotted #CCC; border-bottom: 1px dotted #CCC; border-right: none; border-left: none;">
+						<h3>
+							<small>Login or register using existing accounts</small>
+						</h3>
+					  <div  style="padding-top:10px;">
+						<input type='hidden' name='auth' value='auth'></input>
+						<input type='hidden' name='type' value='oauth'></input>
+						<input type='hidden' name='server' id='oauth-name' value=''></input>
+						<a title="log in with Google" data='google' href='#' style="background: #FFF url(img/signin/openid-logos.png); background-position: -1px -1px" class="google openid_large_btn"></a>
+						<a title="log in with Yahoo" data='yahoo' href="#"	style="background: #FFF url(img/signin/openid-logos.png); background-position: -1px -63px" class="yahoo openid_large_btn"></a>
+					  </div>
+					</div>
+					<br />
+				</form>
+				<div class="clearfix"></div>
+
+				<form name='agile' id="agile" method='post' style="padding-top:5px;">
+					
 					<h3>
 						<small>Sign in using your registered account:</small>
 					</h3>
@@ -127,7 +227,11 @@ box-shadow: none;
 							<label class="checkbox" style="display: inline-block;">
 							   <input type="checkbox" name="signin"> Keep me signed in 
 							</label> 
+<<<<<<< HEAD
 							<input type='submit' id='agile-login-button' style="float: right;height:39px" value="Sign In" class='btn btn-large btn-primary'>
+=======
+							<input type='submit' style="float: right;height:39px" value="Sign In" class='btn btn-large btn-primary agile_btn'>
+>>>>>>> sukanya
 						</div>
 					</div>
 					<br />
@@ -135,6 +239,7 @@ box-shadow: none;
 
 				<div class="clearfix"></div>
 
+<<<<<<< HEAD
 				<form id='oauth' name='oauth' method='post'>
 
 					<div id="openid_btns" style="float: left; padding: 5px 0 15px; border-top: 1px dotted #CCC; border-bottom: 1px dotted #CCC; border-right: none; border-left: none;">
@@ -152,6 +257,8 @@ box-shadow: none;
 					<br />
 				</form>
 				<div class="clearfix"></div>
+=======
+>>>>>>> sukanya
 			</div>
 		</div>
 		<div style="text-align: center; line-height: 19px;">
@@ -163,11 +270,20 @@ box-shadow: none;
 	<script type="text/javascript">
 		$(document).ready(function()
 		{
+			$(".login-error").hide();
+			
+			if(<%=error%> != null)
+			{
+				$(".login-error").show();
+			}
 
 			$('.openid_large_btn').click(function(e)
 			{
+<<<<<<< HEAD
 				$(".login-error").hide();
 				
+=======
+>>>>>>> sukanya
 				// Get Data
 				var data = $(this).attr('data');
 				$('#oauth-name').val(data);
@@ -176,7 +292,20 @@ box-shadow: none;
 				e.preventDefault();
 			});
 			
+<<<<<<< HEAD
 		
+=======
+			$('.agile_btn').click(function(e)
+					{
+						if(!isValid())
+						{
+							return;
+						}
+						
+						$('#agile').submit();
+						e.preventDefault();
+					});
+>>>>>>> sukanya
 
 			});
 	

@@ -18,7 +18,7 @@
 <style>
 @media (min-width: 900px) {
 body {
-	padding-top: 60px;
+	padding-top: 40px;
 	//background-color: whitesmoke;
 	}
 	
@@ -32,7 +32,17 @@ height:30px!important;
 margin:8px 0px!important;
 padding-left:10px!important;
 }
-.error{color:red;}
+.error{
+color:red;
+}
+
+.login-page .openid_large_btn:hover {
+margin: 4px 0px 0px 6px;
+border: 2px solid #999;
+box-shadow: none;
+-moz-box-shadow: none;
+-webkit-box-shadow: none;
+}
 </style>
 
 <!-- Le fav and touch icons -->
@@ -90,7 +100,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 			</div>
 		</div>
 	</div>
-	<div class="row">
+	<div class="row login-page">
 
 		<div class='account-container'>
 			<div class="content clearfix">
@@ -99,20 +109,20 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 				
 				<div id="openid_btns" style="float: left;padding:5px 0 15px;border-top: 1px dotted #CCC;border-bottom: 1px dotted #CCC;border-right: none;border-left: none;">
 				<h3><small>Login or register using existing accounts</small></h3>	
-					
+				  <div style="padding-top:10px;">
 					<input type='hidden' name='auth' value='auth'></input>
 					<input type='hidden' name='type' value='oauth'></input>
 					<input type='hidden' name='server' id='oauth-name' value=''></input>
-					
-					<a title="log in with Google" href='#' data="google" style="background: #FFF url(img/openid-providers-en.png); background-position: 0px 0px" class="google openid_large_btn"></a> 
-					<a title="log in with Yahoo" href="#" data="yahoo" style="background: #FFF url(img/openid-providers-en.png); background-position: -100px 0px" class="yahoo openid_large_btn"></a>
+					<a title="log in with Google" data='google' href='#' style="background: #FFF url(img/signin/openid-logos.png); background-position: -1px -1px" class="google openid_large_btn"></a>
+						<a title="log in with Yahoo" data='yahoo' href="#"	style="background: #FFF url(img/signin/openid-logos.png); background-position: -1px -63px" class="yahoo openid_large_btn"></a>
+				  </div>
 				</div>
 				
 				</form>
 				
 				<div class="clearfix"></div>
 				
-				<form name='agile' id="agile" method='post' onsubmit="return isValid();"> 
+				<form name='agile' id="agile" method='post' onsubmit="return isValid();" style="padding-top:10px;"> 
 				 <h3><small>Create Your Free Account</small></h3>	
 				<div id="openid_btns" style="float: left;padding:5px 0 15px;">
 					
