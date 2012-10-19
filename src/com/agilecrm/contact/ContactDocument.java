@@ -65,14 +65,12 @@ public class ContactDocument
 	String tags = NormalizeSet(contact.tags);
 
 	// put String tags
-	// if (tags != null)
-	// fields.put("tags", tags);
-
-	for (String tag : contact.tags)
-	{
-	    doc.addField(Field.newBuilder().setName("tags").setAtom(tag));
-	}
-
+	if (tags != null)
+	    fields.put("tags", tags);
+	/*
+	 * for (String tag : contact.tags) {
+	 * doc.addField(Field.newBuilder().setName("tags").setAtom(tag)); }
+	 */
 	// Set fields to document from map
 	for (Map.Entry<String, String> e : fields.entrySet())
 	{
@@ -142,7 +140,8 @@ public class ContactDocument
 	// Concat all tags in to one string normalized and space seperated
 	for (String tag : values)
 	{
-	    normalizedString = normalizedString + " " + URLEncoder.encode(tag);
+	    normalizedString = normalizedString + " "
+		    + URLEncoder.encode(tag).replace("+", "%20");
 	}
 
 	return normalizedString;
