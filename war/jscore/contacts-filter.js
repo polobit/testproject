@@ -52,6 +52,8 @@ $(function(){
 		
 		filter_name = $(this).attr('data');
 		
+		console.log(filter_id + " , " + filter_name);
+		
 		// If custom view is set then load filter results in custom view
 		if(readCookie("contact_view"))
 			{
@@ -102,8 +104,17 @@ function setupContactFilterList(cel, filter_id)
         postRenderCallback: function(el) {
         	if(filter_id = readCookie('contact_filter'))
         		{
-        			var filter_name = contactFiltersListView.collection.get(filter_id).toJSON().name;
-        			console.log(el.find('.filter-dropdown').append(filter_name));
+        			if(filter_id.toLowerCase().indexOf('recent') >= 0)
+        				var filter_name = "Recent";
+        			
+        			else if(filter_id.toLowerCase().indexOf('lead') >= 0)
+        				var filter_name = "My Lead";
+        					
+        			// If is not system type get the name of the filter from id
+        			else if(filter_id.indexOf("system") < 0)
+        				var filter_name = contactFiltersListView.collection.get(filter_id).toJSON().name;
+        			
+        			el.find('.filter-dropdown').append(filter_name);
         		}
         }
     });

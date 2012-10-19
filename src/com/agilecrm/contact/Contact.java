@@ -31,6 +31,7 @@ import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
+import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.annotation.Unindexed;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -66,6 +67,7 @@ public class Contact extends Cursor
 
     @Indexed
     @NotSaved(IfDefault.class)
+    @Parent
     private Key<AgileUser> user;
 
     // Creator
