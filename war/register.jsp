@@ -33,8 +33,7 @@ else
 <style>
 @media (min-width: 900px) {
 body {
-	padding-top: 40px;
-	//background-color: whitesmoke;
+	padding-top: 30px;
 	}
 	
 .navbar-search{
@@ -119,7 +118,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 
 		<div class='account-container'>
 			<div class="content clearfix">
-				<form id='oauth'  name='oauth' method='post'> 
+				<form id='oauth' name='oauth' method='post'> 
 				 <h1>SignUp</h1>
 				
 				<div id="openid_btns" style="float: left;padding:5px 0 15px;border-top: 1px dotted #CCC;border-bottom: 1px dotted #CCC;border-right: none;border-left: none;">
