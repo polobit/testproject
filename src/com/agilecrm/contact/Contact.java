@@ -438,8 +438,17 @@ public class Contact extends Cursor
     public AgileUser getLeadOwner()
     {
 	if (user != null)
-	    return dao.ofy().get(user);
-
+	    // If user is deleted no user is found with key so set user to null
+	    // and return null
+	    try
+	    {
+		return dao.ofy().get(user);
+	    }
+	    catch (Exception e)
+	    {
+		user = null;
+		return null;
+	    }
 	return null;
     }
 }
