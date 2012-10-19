@@ -19,6 +19,7 @@ import org.json.JSONException;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deferred.TagsDeferredTask;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.util.Util;
 import com.agilecrm.workflows.Trigger;
@@ -60,7 +61,12 @@ public class Contact extends Cursor
 
     // Owner
     @Indexed
-    public String lead_owner = "";
+    @NotSaved(IfDefault.class)
+    private String lead_owner = null;
+
+    @Indexed
+    @NotSaved(IfDefault.class)
+    private Key<AgileUser> user;
 
     // Creator
     public String creator = "";
@@ -187,6 +193,8 @@ public class Contact extends Cursor
 	Queue queue = QueueFactory.getDefaultQueue();
 	queue.add(TaskOptions.Builder.withPayload(tagsDeferredTask));
 
+	// Get Lead Owner
+
     }
 
     // Delete Contact
@@ -195,7 +203,13 @@ public class Contact extends Cursor
 	// Delete Tags
 	Tag.deleteTags(tags);
 
+	// Store contact in temporary variable to delete its document after
+	// contact delete
+	Contact contact = this;
+
 	dao.delete(this);
+
+	ContactDocument.deleteDocument(contact);
 
 	// Delete Notes
 	Note.deleteAllNotes(id);
@@ -207,10 +221,11 @@ public class Contact extends Cursor
     {
 
 	System.out.println("contact saving:" + this);
-	Key<Contact> contact_key = dao.put(this);
+	dao.put(this);
+
 	Trigger.executeTrigger(this.id, Trigger.Type.CONTACT_IS_ADDED);
 
-	ContactDocument.buildDocument(this, contact_key.getId());
+	ContactDocument.buildDocument(this);
 
     }
 
@@ -385,9 +400,12 @@ public class Contact extends Cursor
 	    return;
 	}
 
+	Key agileUser = new Key(AgileUser.class, Long.parseLong(new_owner));
+
 	for (Contact contact : contacts_list)
 	{
-	    contact.lead_owner = new_owner;
+	    contact.user = agileUser;
+
 	    contact.save();
 	}
     }
@@ -414,4 +432,12 @@ public class Contact extends Cursor
 	}
     }
 
+    @XmlElement(name = "lead_owner")
+    public AgileUser getLeadOwner()
+    {
+	if (user != null)
+	    return dao.ofy().get(user);
+
+	return null;
+    }
 }

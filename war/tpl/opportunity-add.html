@@ -71,9 +71,11 @@
 						</div>
 					</div>
 					
-					<div id="owner">				
-						
-						
+					<div class="control-group">
+						<label class="control-label">Owner <span class="field_req">*</span></label>
+							<div class="controls" id="owners">			
+								<select id='owners-list' class="required" name="owner"></select>
+								</div>
 					</div>
 					{{#if id}}
 						<input type="text" name="id" class="hide" value={{id}}>
@@ -89,20 +91,3 @@
 		</div>
 	</div>
 </script>
-
-
-<!-- Popuplate Owners options  -->
-
-<script id="owners-collection-template" type="text/html">
- 	<div class="control-group">
-	<label class="control-label">Owner <span class="field_req">*</span></label>
-		<div class="controls">
-			<select id='owners-model-list' class="required" name="owner">
-  				<option value="">Select..</option>
-			</select>
-		</div>
-	</div>
-</script>
-<Script id="owners-model-template" type="text/html">
-	{{name}}
-</Script>

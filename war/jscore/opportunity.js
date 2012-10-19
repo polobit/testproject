@@ -50,21 +50,15 @@ $(function () {
 //Populate users in options of owner input field dropdown
 function populateUsers(id, el , value) {
 	// Users
-	 var users = new Base_Collection_View({
-         url: '/core/api/deal-owners',
-         restKey: 'userPrefs',
-         templateKey: 'owners',
-         individual_tag_name: 'option',
-     });
-	 users.collection.fetch({success:function(){
-		 
-		 	// set value owner if already saved
-		 	if(value && value.owner)
-		 		$('#owner',el).find("select[name=owner]").find("option:contains("+value.owner+")").prop("selected", "selected");
-	 }});
-     $('#owner',el).html(users.el);
-
-     return el;
+	
+	var optionsTemplate = "<option value='{{agileUser.id}}'>{{name}}</option>";
+	fillSelect('owners-list','/core/api/deal-owners', 'userPrefs', function fillOwner() {
+		
+		if(value)
+		{
+			$('#owners-list',el).find('option[value='+value.agileUser.id+']').attr("selected", "selected");;
+		}			
+	}, optionsTemplate); 
 }
 
 // To edit and update the opportunity
