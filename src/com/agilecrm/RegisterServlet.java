@@ -15,6 +15,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.util.Util;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.utils.SystemProperty;
 
 @SuppressWarnings("serial")
 public class RegisterServlet extends HttpServlet
@@ -30,23 +31,27 @@ public class RegisterServlet extends HttpServlet
 	    throws IOException, ServletException
     {
 	// Check if this domain is valid and not given out to anyone else
-	if (StringUtils.isEmpty(NamespaceManager.get())
-		|| DomainUser.count() != 0)
-	{
-	    response.sendRedirect(Globals.CHOOSE_DOMAIN);
-	    return;
-	}
+	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
+	    if (StringUtils.isEmpty(NamespaceManager.get())
+		    || DomainUser.count() != 0)
+	    {
+		response.sendRedirect(Globals.CHOOSE_DOMAIN);
+		return;
+	    }
 
 	try
 	{
 	    String type = request.getParameter("type");
-	    if (type.equalsIgnoreCase("oauth"))
+	    if (type != null)
 	    {
-		registerOAuth(request, response);
-	    }
-	    else if (type.equalsIgnoreCase("agile"))
-	    {
-		registerAgile(request, response);
+		if (type.equalsIgnoreCase("oauth"))
+		{
+		    registerOAuth(request, response);
+		}
+		else if (type.equalsIgnoreCase("agile"))
+		{
+		    registerAgile(request, response);
+		}
 	    }
 	}
 	catch (Exception e)
@@ -55,6 +60,8 @@ public class RegisterServlet extends HttpServlet
 	    request.getRequestDispatcher(
 		    "register.jsp?error=" + URLEncoder.encode(e.getMessage()))
 		    .forward(request, response);
+
+	    return;
 	}
 
 	// Return to Login Page
