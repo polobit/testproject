@@ -69,10 +69,15 @@ public class CustomFieldDef
     {
 	CustomFieldDef custom_field = dao.ofy().query(CustomFieldDef.class)
 		.filter("field_label", field_label).get();
-	if (custom_field != null && custom_field.id != id)
+
+	// Fetch all custom fields to check label duplicates
+	for (CustomFieldDef customField : dao.fetchAll())
 	{
-	    throw new Exception();
+	    if (customField.field_label.equalsIgnoreCase(this.field_label)
+		    && custom_field.id != this.id)
+		throw new Exception();
 	}
+
 	dao.put(this);
     }
 
