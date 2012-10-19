@@ -264,7 +264,7 @@ function isValidForm(form) {
 		 	var one_day = 1000*60*60*24;
 		 	
 		    return this.optional(element) || (((date - new Date().getTime())/one_day) > 90);
-		}, "*Card should be atleast 3 months valid");
+		}, "Card should be atleast 3 months valid");
 	
 	
 	
