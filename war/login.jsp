@@ -1,6 +1,6 @@
-<<<<<<< HEAD
+
 <%out.println(request.getParameter("error"));%>
-=======
+
 <%@page import="com.agilecrm.session.UserInfo"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="com.agilecrm.util.Util"%>
@@ -80,7 +80,7 @@ final String LOGIN_ERROR_SESSION_KEY = "login_error_message";
 			
 %>
 
->>>>>>> sukanya
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -104,7 +104,7 @@ final String LOGIN_ERROR_SESSION_KEY = "login_error_message";
 <style>
 @media ( min-width : 900px) {
 	body {
-		padding-top: 40px; //
+		padding-top: 40px;
 		background-color: whitesmoke;
 	}
 	.navbar-search {
@@ -227,11 +227,9 @@ box-shadow: none;
 							<label class="checkbox" style="display: inline-block;">
 							   <input type="checkbox" name="signin"> Keep me signed in 
 							</label> 
-<<<<<<< HEAD
-							<input type='submit' id='agile-login-button' style="float: right;height:39px" value="Sign In" class='btn btn-large btn-primary'>
-=======
+
 							<input type='submit' style="float: right;height:39px" value="Sign In" class='btn btn-large btn-primary agile_btn'>
->>>>>>> sukanya
+
 						</div>
 					</div>
 					<br />
@@ -239,26 +237,6 @@ box-shadow: none;
 
 				<div class="clearfix"></div>
 
-<<<<<<< HEAD
-				<form id='oauth' name='oauth' method='post'>
-
-					<div id="openid_btns" style="float: left; padding: 5px 0 15px; border-top: 1px dotted #CCC; border-bottom: 1px dotted #CCC; border-right: none; border-left: none;">
-							<h3>
-							<small>Login or register using existing accounts</small>
-						</h3>
-					  <div  style="padding-top:10px;">
-						<input type='hidden' name='auth' value='auth'></input>
-						<input type='hidden' name='type' value='oauth'></input>
-						<input type='hidden' name='server' id='oauth-name' value=''></input>
-						<a title="log in with Google" data='google' href='#' style="background: #FFF url(img/signin/openid-logos.png); background-position: -1px -1px" class="google openid_large_btn"></a>
-						<a title="log in with Yahoo" data='yahoo' href="#"	style="background: #FFF url(img/signin/openid-logos.png); background-position: -1px -63px" class="yahoo openid_large_btn"></a>
-					  </div>
-					</div>
-					<br />
-				</form>
-				<div class="clearfix"></div>
-=======
->>>>>>> sukanya
 			</div>
 		</div>
 		<div style="text-align: center; line-height: 19px;">
@@ -279,11 +257,7 @@ box-shadow: none;
 
 			$('.openid_large_btn').click(function(e)
 			{
-<<<<<<< HEAD
-				$(".login-error").hide();
-				
-=======
->>>>>>> sukanya
+
 				// Get Data
 				var data = $(this).attr('data');
 				$('#oauth-name').val(data);
@@ -291,10 +265,7 @@ box-shadow: none;
 
 				e.preventDefault();
 			});
-			
-<<<<<<< HEAD
-		
-=======
+
 			$('.agile_btn').click(function(e)
 					{
 						if(!isValid())
@@ -305,7 +276,6 @@ box-shadow: none;
 						$('#agile').submit();
 						e.preventDefault();
 					});
->>>>>>> sukanya
 
 			});
 	
