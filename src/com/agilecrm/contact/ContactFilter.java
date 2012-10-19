@@ -1,5 +1,6 @@
 package com.agilecrm.contact;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,7 +14,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.util.DateUtil;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
@@ -30,9 +33,9 @@ public class ContactFilter
     public Long id;
 
     // Category of report generation - daily, weekly, monthly.
-    public enum Type
+    public enum SystemFilter
     {
-	DAILY, WEEKLY, MONTHLY
+	LEAD, RECENT
     };
 
     @NotSaved(IfDefault.class)
@@ -41,6 +44,12 @@ public class ContactFilter
     @Indexed
     @NotSaved(IfDefault.class)
     public boolean is_reports_enabled = false;
+
+    // Category of report generation - daily, weekly, monthly.
+    public enum Type
+    {
+	DAILY, WEEKLY, MONTHLY
+    };
 
     @Indexed
     @NotSaved(IfDefault.class)
@@ -102,11 +111,15 @@ public class ContactFilter
 	// Remaining rules after appegine valid queries completed
 	JSONArray remaining_rules = new JSONArray();
 
+	System.out.println(ContactDocument.index.search("tags:"
+		+ URLEncoder.encode("paid")));
+
 	Objectify ofy = ObjectifyService.begin();
 	Query<Contact> contact_query = ofy.query(Contact.class);
 
 	for (int i = 0; i < rules_json_array.length(); i++)
 	{
+	    System.out.println("filter contacts");
 
 	    try
 	    {
@@ -264,5 +277,37 @@ public class ContactFilter
 	{
 	    e.printStackTrace();
 	}
+    }
+
+    // Get Contacts based on system filters
+    public static List<Contact> getContacts(SystemFilter type)
+    {
+	Objectify ofy = ObjectifyService.begin();
+	Query<Contact> contact_query = ofy.query(Contact.class);
+
+	if (type == SystemFilter.RECENT)
+	{
+	    DateUtil current_date = new DateUtil(new Date());
+
+	    long current_time = current_date.getTime().getTime() / 1000;
+
+	    DateUtil from_Date = current_date.removeDays(1);
+
+	    long from_time = from_Date.getTime().getTime() / 1000;
+
+	    // Get last 20 recently created
+	    return contact_query.filter("created_time < ", current_time)
+		    .order("-created_time").limit(20).list();
+	}
+
+	if (type == SystemFilter.LEAD)
+	{
+	    Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class,
+		    AgileUser.getCurrentAgileUser().id);
+	    System.out.println();
+	    return ofy.query(Contact.class).ancestor(userKey).list();
+	}
+
+	return null;
     }
 }

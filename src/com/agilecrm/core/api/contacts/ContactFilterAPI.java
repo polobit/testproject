@@ -17,6 +17,7 @@ import org.json.JSONException;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactFilter;
+import com.agilecrm.contact.ContactFilter.SystemFilter;
 
 @Path("/api/filters")
 public class ContactFilterAPI
@@ -68,11 +69,24 @@ public class ContactFilterAPI
     @Path("/query/{filter_id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Contact> getQueryResults(@PathParam("filter_id") Long id)
+    public List<Contact> getQueryResults(@PathParam("filter_id") String id)
     {
 	try
 	{
-	    ContactFilter filter = ContactFilter.getContactFilter(id);
+	    // Remove system in system-XXX
+	    id = id.split("-")[1];
+
+	    if (id.equalsIgnoreCase("RECENT"))
+	    {
+		return ContactFilter.getContacts(SystemFilter.RECENT);
+	    }
+	    else if (id.equalsIgnoreCase("LEAD"))
+	    {
+		return ContactFilter.getContacts(SystemFilter.LEAD);
+	    }
+
+	    ContactFilter filter = ContactFilter.getContactFilter(Long
+		    .parseLong(id));
 
 	    List<Contact> contacts = filter.queryContacts();
 
