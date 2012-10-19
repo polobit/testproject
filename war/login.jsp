@@ -1,86 +1,10 @@
-
-<%out.println(request.getParameter("error"));%>
-
-<%@page import="com.agilecrm.session.UserInfo"%>
-<%@page import="java.net.URLEncoder"%>
-<%@page import="com.agilecrm.util.Util"%>
-<%@page import="com.agilecrm.Globals"%>
-<%@page import="com.agilecrm.core.DomainUser"%>
-<%@page import="com.google.appengine.api.NamespaceManager"%>
-<%@page import="com.agilecrm.session.SessionManager"%>
 <%
-   
-final String LOGIN_ERROR_SESSION_KEY = "login_error_message";
-
-// Delete Login Session
-			request.getSession().removeAttribute(
-					SessionManager.AUTH_SESSION_COOKIE_NAME);
-
-			// Check if the request was posted again to itself 
-			if (request.getParameter("auth") != null) {
-				// Get the method type
-				String type = request.getParameter("type");
-				out.println(type);
-				if (type.equalsIgnoreCase("oauth")) {
-					// Get server type
-					String server = request.getParameter("server");
-
-					// Get OAuth URL
-					String url = Util.getOauthURL(server);
-
-					if (url == null) {
-						request.getSession().setAttribute(LOGIN_ERROR_SESSION_KEY, "Server not found - try again");
-						response.sendRedirect("/login");
-						return;
-					}
-
-					// Forward to OpenID Authenticaiton which will set the cookie and then forward it to /
-					response.sendRedirect("/openid?hd="
-							+ URLEncoder.encode(url));
-
-					return;
-				} else if (type.equalsIgnoreCase("agile")) {
-
-					// Get User Name
-					String email = request.getParameter("email");
-					out.println(email);
-					// Get Password
-					String password = request.getParameter("password");
-
-					if (email == null || password == null) {
-						out.println("Email not found - try again");
-						return;
-					}
-
-					// Get Domain User with this name, password - we do not check for domain as validity is verified in AuthFilter
-					DomainUser domainUser = DomainUser
-							.getDomainUserFromEmail(email);
-					if (domainUser == null) {
-						request.getSession().setAttribute(LOGIN_ERROR_SESSION_KEY, "No valid user is found with this Email.");
-						response.sendRedirect("/login");
-						return;
-					}
-
-					// Set Cookie and forward to /home
-					UserInfo userInfo = new UserInfo("agilecrm.com", email,
-							null, null);
-					request.getSession().setAttribute(
-							SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
-
-					response.sendRedirect("/home");
-				}
-			}
-
-			// Check if this subdomain even exists
-			if (DomainUser.count() == 0) {
-				response.sendRedirect(Globals.CHOOSE_DOMAIN);
-				return;
-			}
-			String error = request.getParameter("error");
-			
+String error = request.getParameter("error");
+if(error != null)
+    System.out.println(error);
+else
+    error = "";
 %>
-
-
 <!DOCTYPE html>
 
 <html lang="en">
@@ -193,9 +117,12 @@ box-shadow: none;
 			
 				<form id='oauth' name='oauth' method='post'>
                    <h1>Sign In</h1>
+                   
+                   
                        <div class="alert alert-error login-error" style="display:none">
-							<a class="close" data-dismiss="alert" href="#">×</a>Login Error 
+							<a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
 						</div>
+						
 					<div id="openid_btns" style="float: left; padding: 5px 0 15px; border-top: 1px dotted #CCC; border-bottom: 1px dotted #CCC; border-right: none; border-left: none;">
 						<h3>
 							<small>Login or register using existing accounts</small>
@@ -250,7 +177,8 @@ box-shadow: none;
 		{
 			$(".login-error").hide();
 			
-			if(<%=error%> != null)
+			var error = "<%=error%>";		
+			if(error != "")
 			{
 				$(".login-error").show();
 			}
