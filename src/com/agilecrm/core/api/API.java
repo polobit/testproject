@@ -94,7 +94,7 @@ public class API
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public void createEmail(@QueryParam("from") String fromEmail,
 	    @QueryParam("to") String to, @QueryParam("subject") String subject,
-	    @QueryParam("body`") String body)
+	    @QueryParam("body") String body)
     {
 	try
 	{
