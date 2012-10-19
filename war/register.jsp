@@ -182,8 +182,8 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 					<input type='hidden' name='type' value='oauth'></input>
 					<input type='hidden' name='server' id='oauth-name' value=''></input>
 					
-					<a title="log in with Google" href='#' style="background: #FFF url(img/openid-providers-en.png); background-position: 0px 0px" class="google openid_large_btn"></a> 
-					<a title="log in with Yahoo" href="#" style="background: #FFF url(img/openid-providers-en.png); background-position: -100px 0px" class="yahoo openid_large_btn"></a>
+					<a title="log in with Google" href='#' data="google" style="background: #FFF url(img/openid-providers-en.png); background-position: 0px 0px" class="google openid_large_btn"></a> 
+					<a title="log in with Yahoo" href="#" data="yahoo" style="background: #FFF url(img/openid-providers-en.png); background-position: -100px 0px" class="yahoo openid_large_btn"></a>
 				</div>
 				
 				</form>
@@ -201,8 +201,8 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
                     <input class="input-xlarge field required email" name='email' type="text" placeholder="Email">
                     <input class="input-xlarge field required" name='password' type="password" placeholder="Password">
 					<div style="margin-top:15px;">
-					  <label class="checkbox" style="display:inline-block;"><input type="checkbox" name="agree">  I agree with the Terms of Use.</label>
-					  <input type='submit' style="margin-left:5px;"value="Register" class='btn btn-large btn-primary'>
+					  <label class="checkbox" style="display:inline-block;"><input type="checkbox" name="agree">  I agree with the Terms of Use</label>
+					  <input type='submit' style="float:right;"value="Register" class='btn btn-large btn-primary'>
 				  </div>
 				</div>
 				</form>
