@@ -73,18 +73,22 @@ public class ContactFilterAPI
     {
 	try
 	{
+	    System.out.println("before spliting : " + id);
 	    // Remove system in system-XXX
-	    id = id.split("-")[1];
+	    //
 
-	    if (id.equalsIgnoreCase("RECENT"))
+	    if (id.contains("system"))
 	    {
-		return ContactFilter.getContacts(SystemFilter.RECENT);
+		id = id.split("-")[1];
+		if (id.equalsIgnoreCase("RECENT"))
+		{
+		    return ContactFilter.getContacts(SystemFilter.RECENT);
+		}
+		else if (id.equalsIgnoreCase("LEAD"))
+		{
+		    return ContactFilter.getContacts(SystemFilter.LEAD);
+		}
 	    }
-	    else if (id.equalsIgnoreCase("LEAD"))
-	    {
-		return ContactFilter.getContacts(SystemFilter.LEAD);
-	    }
-
 	    ContactFilter filter = ContactFilter.getContactFilter(Long
 		    .parseLong(id));
 
