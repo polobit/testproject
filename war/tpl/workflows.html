@@ -54,12 +54,13 @@
 {{#if this.length}}
 <div class="data-block">
 	  <div class="data-container">
-		<table class="table table-striped showCheckboxes" url="core/api/workflows/bulk" >
+		<table class="table table-striped showCheckboxes tablesorter" url="core/api/workflows/bulk" id="sort-table" >
 			<thead>
     			<tr>
      				<th>Id</th>
       				<th>Name</th>
       				<th>Creator</th>
+					<th>Logs</th>
     			</tr>
   			</thead>
 	  		<tbody id='workflows-model-list'> </tbody>

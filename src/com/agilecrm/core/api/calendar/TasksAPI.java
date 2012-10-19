@@ -38,6 +38,23 @@ public class TasksAPI
 	}
     }
 
+    // All Tasks
+    @Path("/all")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Task> getAllTasks()
+    {
+	try
+	{
+	    return Task.getAllTasks();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
     // Tasks
     @Path("pending/{num-days}")
     @GET
