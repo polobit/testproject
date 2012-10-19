@@ -85,7 +85,7 @@ function isValid(){
 
 <br/>
 
-<div class="well" style="height:195px; width:390px ">
+<div class="well" style="height:215px; width:390px ">
 
 <legend>Upload your image file</legend>
 
