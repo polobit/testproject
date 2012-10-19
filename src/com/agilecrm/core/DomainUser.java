@@ -14,6 +14,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.util.SendMail;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.utils.SystemProperty;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -42,6 +43,10 @@ public class DomainUser
     // Is Admin
     @NotSaved(IfDefault.class)
     public boolean is_admin = true;
+
+    // Account Owner
+    @NotSaved(IfDefault.class)
+    public boolean is_account_owner = true;
 
     @NotSaved(IfDefault.class)
     public boolean is_disabled = false;
@@ -79,11 +84,13 @@ public class DomainUser
 
     }
 
-    public DomainUser(String domain, boolean isAdmin)
+    public DomainUser(String domain, String email, String name,
+	    boolean isAdmin, boolean isAccountOwner)
     {
 	this.domain = domain;
 	this.email = SessionManager.get().getEmail();
 	this.is_admin = isAdmin;
+	this.is_account_owner = isAccountOwner;
     }
 
     @PrePersist
@@ -197,11 +204,13 @@ public class DomainUser
 
 	// Check if namespace is null or empty. Then, do not allow to be
 	// created
-	if (StringUtils.isEmpty(this.domain))
-	{
-	    System.out.println("Domain user not created");
-	    throw new Exception("Domain is empty. Please login again & try.");
-	}
+	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
+	    if (StringUtils.isEmpty(this.domain))
+	    {
+		System.out.println("Domain user not created");
+		throw new Exception(
+			"Domain is empty. Please login again & try.");
+	    }
 
 	// Check if new and more than three users
 	if (count() >= Globals.TRIAL_USERS_COUNT && this.id == null)
@@ -211,8 +220,15 @@ public class DomainUser
 	// Send Email
 	if (this.id == null)
 	{
-	    SendMail.sendMail(this.email, "New User Invitation",
-		    SendMail.NEW_USER_INVITED, this);
+	    try
+	    {
+		SendMail.sendMail(this.email, "New User Invitation",
+			SendMail.NEW_USER_INVITED, this);
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
 	}
 
 	String oldNamespace = NamespaceManager.get();
