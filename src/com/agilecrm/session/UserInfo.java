@@ -27,8 +27,7 @@ public class UserInfo implements Serializable
 
     private String claimedId;
     private String email;
-    private String firstName;
-    private String lastName;
+    private String name;
 
     private Long domainId = 0L;
 
@@ -36,13 +35,11 @@ public class UserInfo implements Serializable
     {
     }
 
-    public UserInfo(String claimedId, String email, String firstName,
-	    String lastName)
+    public UserInfo(String claimedId, String email, String name)
     {
 	this.claimedId = claimedId;
 	this.email = email;
-	this.firstName = firstName;
-	this.lastName = lastName;
+	this.name = name;
 
 	// Get Domain User for this email and store the id
 	DomainUser domainUser = DomainUser.getDomainUserFromEmail(email);
@@ -60,20 +57,14 @@ public class UserInfo implements Serializable
 	return email;
     }
 
-    public String getFirstName()
+    public String getName()
     {
-	return firstName;
-    }
-
-    public String getLastName()
-    {
-	return lastName;
+	return name;
     }
 
     public String toString()
     {
-	return firstName + " " + lastName + " (" + email + ") DomainId "
-		+ domainId;
+	return name + " (" + email + ") DomainId " + domainId;
     }
 
     public void setDomainId(Long domainId)

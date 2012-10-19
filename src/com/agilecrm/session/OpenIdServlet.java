@@ -320,10 +320,12 @@ public class OpenIdServlet extends HttpServlet
      */
     UserInfo onSuccess(AuthResponseHelper helper, HttpServletRequest request)
     {
-	return new UserInfo(helper.getClaimedId().toString(),
+	return new UserInfo(
+		helper.getClaimedId().toString(),
 		helper.getAxFetchAttributeValue(Step2.AxSchema.EMAIL),
-		helper.getAxFetchAttributeValue(Step2.AxSchema.FIRST_NAME),
-		helper.getAxFetchAttributeValue(Step2.AxSchema.LAST_NAME));
+		helper.getAxFetchAttributeValue(Step2.AxSchema.FIRST_NAME)
+			+ " "
+			+ helper.getAxFetchAttributeValue(Step2.AxSchema.LAST_NAME));
     }
 
     /**
