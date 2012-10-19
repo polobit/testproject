@@ -35,8 +35,7 @@ else
 <style>
 @media ( min-width : 900px) {
 	body {
-		padding-top: 40px;
-		background-color: whitesmoke;
+		padding-top: 30px;
 	}
 	.navbar-search {
 		padding-left: 10%
@@ -146,7 +145,7 @@ box-shadow: none;
 				</form>
 				<div class="clearfix"></div>
 
-				<form name='agile' id="agile" method='post' style="padding-top:5px;">
+				<form name='agile' id="agile" method='post' style="padding-top:5px;" onsubmit="return isValid();">
 					
 					<h3>
 						<small>Sign in using your registered account:</small>
@@ -192,7 +191,6 @@ box-shadow: none;
 
 			$('.openid_large_btn').click(function(e)
 			{
-
 				// Get Data
 				var data = $(this).attr('data');
 				$('#oauth-name').val(data);
@@ -202,17 +200,18 @@ box-shadow: none;
 			});
 
 			$('.agile_btn').click(function(e)
-					{
-						if(!isValid())
-						{
-							return;
-						}
-						
-						$('#agile').submit();
-						e.preventDefault();
-					});
-
+			{
+				$('#agile').submit();
+				e.preventDefault();
 			});
+
+		});
+		
+		function isValid()
+		{
+			$("#agile").validate();
+			return $("#agile").valid();
+		}
 	
 	</script>
 </body>

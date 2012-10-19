@@ -1,11 +1,15 @@
 package com.agilecrm.core;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.List;
 
 import javax.persistence.Id;
+import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.codec.DecoderException;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.Globals;
@@ -13,6 +17,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.util.SendMail;
+import com.agilecrm.util.Util;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
 import com.googlecode.objectify.Objectify;
@@ -23,6 +28,8 @@ import com.googlecode.objectify.condition.IfDefault;
 @XmlRootElement
 public class DomainUser
 {
+    public static final String MASKED_PASSWORD = "     ";
+
     // Key
     @Id
     public Long id;
@@ -59,6 +66,13 @@ public class DomainUser
     @NotSaved(IfDefault.class)
     public String name = null;
 
+    // Domain Password
+    @NotSaved
+    public String password = MASKED_PASSWORD;
+
+    @NotSaved(IfDefault.class)
+    public String encrypted_password = null;
+
     // User Location
     @NotSaved(IfDefault.class)
     public String location = null;
@@ -84,13 +98,44 @@ public class DomainUser
 
     }
 
-    public DomainUser(String domain, String email, String name,
-	    boolean isAdmin, boolean isAccountOwner)
+    public DomainUser(String domain, String email, String password,
+	    String name, boolean isAdmin, boolean isAccountOwner)
     {
 	this.domain = domain;
 	this.email = SessionManager.get().getEmail();
+	this.password = password;
 	this.is_admin = isAdmin;
 	this.is_account_owner = isAccountOwner;
+    }
+
+    // Generate password
+    private static DomainUser generatePassword(String email)
+    {
+	DomainUser domainuser = getDomainUserFromEmail(email);
+
+	if (email == null || domainuser == null)
+	{
+	    return null;
+	}
+	else
+	{
+	    SecureRandom random = new SecureRandom();
+	    String randomNumber = new BigInteger(130, random).toString(16);
+
+	    domainuser.password = randomNumber;
+
+	    try
+	    {
+		domainuser.save();
+	    }
+	    catch (Exception e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	    return domainuser;
+	}
+
     }
 
     @PrePersist
@@ -100,6 +145,20 @@ public class DomainUser
 	if (created_time == 0L)
 	    created_time = System.currentTimeMillis() / 1000;
 
+	// Store password
+	if (!password.equalsIgnoreCase(MASKED_PASSWORD))
+	{
+	    // Encrypt password while saving
+	    encrypted_password = Util.encrypt(password);
+	}
+
+    }
+
+    @PostLoad
+    private void PostLoad() throws DecoderException
+    {
+	// Decrypt password
+	password = Util.decrypt(encrypted_password);
     }
 
     // Get user with id
