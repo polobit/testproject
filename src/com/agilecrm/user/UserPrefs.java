@@ -10,6 +10,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import com.agilecrm.core.DomainUser;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -38,7 +39,7 @@ public class UserPrefs
     @NotSaved(IfDefault.class)
     public String width = "";
 
-    @NotSaved
+    @NotSaved(IfDefault.class)
     public String name = null;
 
     @NotSaved(IfDefault.class)
@@ -136,6 +137,20 @@ public class UserPrefs
 	dao.delete(this);
     }
 
+    public static UserPrefs getUserPrefs(Long id)
+    {
+	try
+	{
+	    return dao.get(id);
+	}
+	catch (EntityNotFoundException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
     public static List<UserPrefs> getAllUserPrefs()
     {
 	return dao.fetchAll();
@@ -151,4 +166,9 @@ public class UserPrefs
 	return "?";
     }
 
+    @XmlElement(name = "agile_user")
+    public AgileUser getAgileUser()
+    {
+	return dao.ofy().get(user);
+    }
 }

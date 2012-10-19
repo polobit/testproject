@@ -62,8 +62,11 @@ public class Opportunity
     public String track = null;
 
     // Owner
-    @NotSaved(IfDefault.class)
+    @NotSaved
     public String owner = null;
+
+    @NotSaved(IfDefault.class)
+    private Key<AgileUser> ownerKey = null;
 
     @NotSaved(IfDefault.class)
     @Embedded
@@ -322,6 +325,9 @@ public class Opportunity
 	// Store Created Time
 	if (created_time == 0L)
 	    created_time = System.currentTimeMillis() / 1000;
+
+	// Save agile user key
+	ownerKey = new Key<AgileUser>(AgileUser.class, Long.parseLong(owner));
     }
 
     // Contacts related with deals Author : Yaswanth 08-24-2012
@@ -335,4 +341,19 @@ public class Opportunity
 	return contacts_list;
     }
 
+    @XmlElement
+    public AgileUser getAgileUser()
+    {
+	if (ownerKey != null)
+	    try
+	    {
+		return dao.ofy().get(ownerKey);
+	    }
+	    catch (NullPointerException e)
+	    {
+		return null;
+	    }
+	else
+	    return null;
+    }
 }

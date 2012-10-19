@@ -52,7 +52,8 @@ final String LOGIN_ERROR_SESSION_KEY = "login_error_message";
 					DomainUser domainUser = DomainUser
 							.getDomainUserFromEmail(email);
 					if (domainUser == null) {
-						out.println("No valid user is found with this Email.");
+						request.getSession().setAttribute(LOGIN_ERROR_SESSION_KEY, "No valid user is found with this Email.");
+						response.sendRedirect("/login");
 						return;
 					}
 
@@ -112,6 +113,13 @@ final String LOGIN_ERROR_SESSION_KEY = "login_error_message";
 .error {
 	color: red;
 }
+.login-page .openid_large_btn:hover {
+margin: 4px 0px 0px 6px;
+border: 2px solid #999;
+box-shadow: none;
+-moz-box-shadow: none;
+-webkit-box-shadow: none;
+}
 </style>
 
 <!-- Le fav and touch icons -->
@@ -170,35 +178,31 @@ final String LOGIN_ERROR_SESSION_KEY = "login_error_message";
 			</div>
 		</div>
 	</div>
-	<div class="row">
+	<div class="row login-page">
 
-		<div class="account-container" style="width: 290px;">
+		<div class="account-container">
 			<div class="content clearfix">
 
-				<form name='agile' id="agile" method='post'
-					>
+				<form name='agile' id="agile" method='post'>
 					<h1>Sign In</h1>
-
+                       <div class="alert alert-error login-error" style="display:none">
+							<a class="close" data-dismiss="alert" href="#">×</a>Login Error 
+						</div>
 					<h3>
 						<small>Sign in using your registered account:</small>
 					</h3>
 					
-					
-					
 					<div id="openid_btns" style="float: left; padding: 5px 0 15px;">
 
-						<input type='hidden' name='auth' value='auth'> <input
-							type='hidden' name='type' value='agile'> <input
-							class="required email field" name='email' type="text"
-							placeholder="User Name"> <br /> <input
-							class="required field" name='password' type="password"
-							placeholder="Password"> <br />
+						<input type='hidden' name='auth' value='auth'> 
+						<input type='hidden' name='type' value='agile'>
+					    <input class="required email field input-xlarge" name='email' type="text" placeholder="User Name"> <br /> 
+					    <input class="required field input-xlarge" name='password' type="password" placeholder="Password"> <br />
 						<div style="margin-top: 15px;">
-							<label class="checkbox" style="display: inline-block;"><input
-								type="checkbox" name="signin"> Keep me signed in </label> 
-								<input
-								type='submit' style="float: right;" value="Sign In"
-								class='btn btn-large btn-primary'>
+							<label class="checkbox" style="display: inline-block;">
+							   <input type="checkbox" name="signin"> Keep me signed in 
+							</label> 
+							<input type='submit' style="float: right;height:39px" value="Sign In" class='btn btn-large btn-primary openid_large_btn'>
 						</div>
 					</div>
 					<br />
@@ -208,20 +212,17 @@ final String LOGIN_ERROR_SESSION_KEY = "login_error_message";
 
 				<form id='oauth' name='oauth' method='post'>
 
-					<div id="openid_btns"
-						style="float: left; padding: 5px 0 15px; border-top: 1px dotted #CCC; border-bottom: 1px dotted #CCC; border-right: none; border-left: none;">
+					<div id="openid_btns" style="float: left; padding: 5px 0 15px; border-top: 1px dotted #CCC; border-bottom: 1px dotted #CCC; border-right: none; border-left: none;">
 						<h3>
-							<small>Login using existing accounts</small>
+							<small>Login or register using existing accounts</small>
 						</h3>
-						<input type='hidden' name='auth' value='auth'></input> <input
-							type='hidden' name='type' value='oauth'></input> <input
-							type='hidden' name='server' id='oauth-name' value=''></input> <a
-							title="log in with Google" data='google' href='#'
-							style="background: #FFF url(img/openid-providers-en.png); background-position: 0px 0px"
-							class="google openid_large_btn"></a> <a title="log in with Yahoo"
-							data='yahoo' href="#"
-							style="background: #FFF url(img/openid-providers-en.png); background-position: -100px 0px"
-							class="yahoo openid_large_btn"></a>
+					  <div  style="padding-top:10px;">
+						<input type='hidden' name='auth' value='auth'></input>
+						<input type='hidden' name='type' value='oauth'></input>
+						<input type='hidden' name='server' id='oauth-name' value=''></input>
+						<a title="log in with Google" data='google' href='#' style="background: #FFF url(img/signin/openid-logos.png); background-position: -1px -1px" class="google openid_large_btn"></a>
+						<a title="log in with Yahoo" data='yahoo' href="#"	style="background: #FFF url(img/signin/openid-logos.png); background-position: -1px -63px" class="yahoo openid_large_btn"></a>
+					  </div>
 					</div>
 					<br />
 				</form>
@@ -230,7 +231,7 @@ final String LOGIN_ERROR_SESSION_KEY = "login_error_message";
 		</div>
 		<div style="text-align: center; line-height: 19px;">
 			Don't have an account? <a href="/register">Sign Up</a><br>
-			Remind <a href="#">Password</a>
+			Remind <a href="/forgot-password.html">Password</a>
 		</div>
 	</div>
 
@@ -240,6 +241,12 @@ final String LOGIN_ERROR_SESSION_KEY = "login_error_message";
 
 			$('.openid_large_btn').click(function(e)
 			{
+				$(".login-error").hide();
+				if(!isValid())
+				{
+					$(".login-error").show();
+					return;
+				}
 				// Get Data
 				var data = $(this).attr('data');
 				$('#oauth-name').val(data);
