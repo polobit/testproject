@@ -37,8 +37,8 @@ function login() {
        
        console.log("Fetched " + api_key + " " + domain);
        
-       _agile.push(['_setAccount', api_key, domain]);
-		
+       _agile.push(['_setAccount', api_key, domain]);      
+       download_scripts(build_ui);
        
      } else {
        var url_root = data.content.popup;
@@ -106,6 +106,8 @@ function init_agile_gadget()
 		
 		// Login - this will call download scripts if everything is good
 		login();
+		
+		 gadgets.window.adjustHeight();
 	}
 }
 
@@ -161,7 +163,7 @@ function get_emails()
     }
     document.body.appendChild(matchList);
     
-    gadgets.window.adjustHeight(100);
+    gadgets.window.adjustHeight();
     
     return emails;
 }
