@@ -1,9 +1,9 @@
-function sortTables(){
+function sortTables(table){
 	
 	head.js(LIB_PATH + "lib/jquery.tablesorter.min.js", function(){
 		console.log("sortinggg");
 		   
-		$("table#sort-table").tablesorter({ 
+		$(table).tablesorter({ 
 			
 			  // pass the headers argument and assing a object 
 	        headers: { 
