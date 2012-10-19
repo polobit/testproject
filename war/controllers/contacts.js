@@ -14,6 +14,7 @@ var ContactsRouter = Backbone.Router.extend({
         "tags/:tag": "contacts",
         "send-email": "sendEmail",
         "add-opportunity": "addOpportunityToContact",
+        "add-campaign": "addContactToCampaign",
          
         /* Views */
         "contact-view-add": "contactViewAdd",
@@ -308,6 +309,11 @@ var ContactsRouter = Backbone.Router.extend({
     	var view = this.opportunityView.render();
      	
         $('#content').html(view.el);
+    },
+    addContactToCampaign: function(){
+    	$("#content").html(getTemplate("contact-detail-campaign", {}));
+		
+    	$('body').trigger('fill_campaigns_contact');
     },
          
     contactViewAdd: function(){

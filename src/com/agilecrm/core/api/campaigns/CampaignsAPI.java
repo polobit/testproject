@@ -27,19 +27,19 @@ public class CampaignsAPI
     @Path("enroll/{contact-id}/{workflow-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public String subscribeContact(@PathParam("contact-id") Long contactId,
+    public void subscribeContact(@PathParam("contact-id") Long contactId,
 	    @PathParam("workflow-id") Long workflowId)
     {
 	Contact contact = Contact.getContact(contactId);
 	if (contact == null)
 	{
 	    System.out.println("Null contact");
-	    return "true";
+	    // return "true";
 	}
 
 	Campaign.subscribe(contact, workflowId);
 
-	return "true";
+	// return "true";
     }
 
     // Campaign

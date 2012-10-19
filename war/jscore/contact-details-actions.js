@@ -15,6 +15,62 @@ $(function(){
     	fillRelation(el);
     	$('#noteModal').modal('show');
      });
+    
+    $('#contact-add-campaign').live('click', function(e){
+    	e.preventDefault();
+    	
+    		var contact_id = App_Contacts.contactDetailView.model.id;
+    		
+    		$('body').live('fill_campaigns_contact', function(event){
+    			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+    	        fillSelect('campaign-select','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate); 
+    		});
+    		
+    		// Navigate to show form
+    		Backbone.history.navigate("add-campaign", {
+                trigger: true
+            });
+    		
+    		$('#subscribe-contact-campaign').die().live('click',function(e){
+    			e.preventDefault();
+    			
+    			var $form = $('#contactCampaignForm');
+
+    			// Validate Form
+    		    if(!isValidForm($form))
+    		    {
+    		    	
+    		    	return;
+    		    }
+    			
+    			// Show loading symbol until model get saved
+    		    $('#contactCampaignForm').find('span.save-status').html(LOADING_HTML);
+    		    
+    			var workflow_id = $('#campaign-select option:selected').attr('value');
+    						
+    			var url = '/core/api/campaigns/enroll/' + contact_id + '/' + workflow_id;
+    			
+    			$.ajax({
+    				url: url,
+    				type: 'GET',
+    				success: function(){
+    	    		//$(".enroll-success").html('<div class="alert alert-success"><a class="close" data-dismiss="alert" href="#">×</a>Enrolled successfully.</div>');
+    				
+    				console.log("in success");
+    				console.log(contact_id);
+    				// Remove loading image
+					$('#contactCampaignForm').find('span.save-status img').remove();
+					
+					Backbone.history.navigate("contacts/" + contact_id, {
+	       	            trigger: true
+	       	        });
+    				}
+    		   });
+    		});
+            
+    	});
+    	
+
 });
 
 function fillRelation(el){

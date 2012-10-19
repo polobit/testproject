@@ -34,7 +34,7 @@ $(function()
 		
 		$(table).after('<div class="row"><div class="span6  select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked"> Delete</a>');
 		
-		sortTables();
+		sortTables(table);
 	});
 	
 	// Event to trigger to delete checked entities  
