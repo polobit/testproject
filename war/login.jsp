@@ -1,4 +1,17 @@
-<%out.println(request.getParameter("error"));%>
+<%
+//Check if it is being access directly and not through servlet
+if(request.getAttribute("javax.servlet.forward.request_uri") == null)
+{
+    response.sendRedirect("/login");
+    return;
+}
+
+String error = request.getParameter("error");
+if(error != null)
+    System.out.println(error);
+else
+    error = "";
+%>
 <!DOCTYPE html>
 
 <html lang="en">
@@ -22,7 +35,7 @@
 <style>
 @media ( min-width : 900px) {
 	body {
-		padding-top: 60px; //
+		padding-top: 40px;
 		background-color: whitesmoke;
 	}
 	.navbar-search {
@@ -108,37 +121,17 @@ box-shadow: none;
 
 		<div class="account-container">
 			<div class="content clearfix">
-
-				<form name='agile' id="agile" method='post'>
-					<h1>Sign In</h1>
-                       <div class="alert alert-error login-error" style="display:none">
-							<a class="close" data-dismiss="alert" href="#">×</a>Login Error 
-						</div>
-					<h3>
-						<small>Sign in using your registered account:</small>
-					</h3>
-					
-					<div id="openid_btns" style="float: left; padding: 5px 0 15px;">
-
-						<input type='hidden' name='type' value='agile'>
-					    <input class="required email field input-xlarge" name='email' type="text" placeholder="User Name"> <br /> 
-					    <input class="required field input-xlarge" name='password' type="password" placeholder="Password"> <br />
-						<div style="margin-top: 15px;">
-							<label class="checkbox" style="display: inline-block;">
-							   <input type="checkbox" name="signin"> Keep me signed in 
-							</label> 
-							<input type='submit' id='agile-login-button' style="float: right;height:39px" value="Sign In" class='btn btn-large btn-primary'>
-						</div>
-					</div>
-					<br />
-				</form>
-
-				<div class="clearfix"></div>
-
+			
 				<form id='oauth' name='oauth' method='post'>
-
+                   <h1>Sign In</h1>
+                   
+                   
+                       <div class="alert alert-error login-error" style="display:none">
+							<a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
+						</div>
+						
 					<div id="openid_btns" style="float: left; padding: 5px 0 15px; border-top: 1px dotted #CCC; border-bottom: 1px dotted #CCC; border-right: none; border-left: none;">
-							<h3>
+						<h3>
 							<small>Login or register using existing accounts</small>
 						</h3>
 					  <div  style="padding-top:10px;">
@@ -152,6 +145,32 @@ box-shadow: none;
 					<br />
 				</form>
 				<div class="clearfix"></div>
+
+				<form name='agile' id="agile" method='post' style="padding-top:5px;">
+					
+					<h3>
+						<small>Sign in using your registered account:</small>
+					</h3>
+					
+					<div id="openid_btns" style="float: left; padding: 5px 0 15px;">
+
+						<input type='hidden' name='type' value='agile'>
+					    <input class="required email field input-xlarge" name='email' type="text" placeholder="User Name"> <br /> 
+					    <input class="required field input-xlarge" name='password' type="password" placeholder="Password"> <br />
+						<div style="margin-top: 15px;">
+							<label class="checkbox" style="display: inline-block;">
+							   <input type="checkbox" name="signin"> Keep me signed in 
+							</label> 
+
+							<input type='submit' style="float: right;height:39px" value="Sign In" class='btn btn-large btn-primary agile_btn'>
+
+						</div>
+					</div>
+					<br />
+				</form>
+
+				<div class="clearfix"></div>
+
 			</div>
 		</div>
 		<div style="text-align: center; line-height: 19px;">
@@ -163,11 +182,17 @@ box-shadow: none;
 	<script type="text/javascript">
 		$(document).ready(function()
 		{
+			$(".login-error").hide();
+			
+			var error = "<%=error%>";		
+			if(error != "")
+			{
+				$(".login-error").show();
+			}
 
 			$('.openid_large_btn').click(function(e)
 			{
-				$(".login-error").hide();
-				
+
 				// Get Data
 				var data = $(this).attr('data');
 				$('#oauth-name').val(data);
@@ -175,8 +200,17 @@ box-shadow: none;
 
 				e.preventDefault();
 			});
-			
-		
+
+			$('.agile_btn').click(function(e)
+					{
+						if(!isValid())
+						{
+							return;
+						}
+						
+						$('#agile').submit();
+						e.preventDefault();
+					});
 
 			});
 	

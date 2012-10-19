@@ -24,6 +24,14 @@
 
 <!-- Le styles -->
 <%
+		
+	//Check if it is being access directly and not through servlet
+	if(request.getAttribute("javax.servlet.forward.request_uri") == null)
+	{
+	    response.sendRedirect("/login");
+	    return;
+	}
+
 	// Download the template the user likes
 	String template = UserPrefs.getCurrentUserPrefs().template;
 	if(request.getParameter("t") != null)
@@ -187,8 +195,8 @@ String CSS_PATH = "/";
 	<!-- Determine Console.logging - we log in local boxes -->
 	<% 
 	boolean debug = true;
-	/*if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
-	    debug = false;*/
+	if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
+	    debug = false;
 	%>
 	
 	

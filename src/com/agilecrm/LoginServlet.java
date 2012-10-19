@@ -55,12 +55,13 @@ public class LoginServlet extends HttpServlet
 	}
 	catch (Exception e)
 	{
-
-	    e.printStackTrace();
+	    // e.printStackTrace();
 	    // Send to Login Page
 	    request.getRequestDispatcher(
 		    "login.jsp?error=" + URLEncoder.encode(e.getMessage()))
 		    .forward(request, response);
+
+	    return;
 	}
 
 	// Return to Login Page

@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.agilecrm.Globals;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.session.UserInfo;
 import com.google.appengine.api.NamespaceManager;
 
 /*
@@ -23,6 +25,9 @@ public class NamespaceFilter implements Filter
     private boolean setNamespace(ServletRequest request,
 	    ServletResponse response)
     {
+	// Reset the thread local
+	SessionManager.set((UserInfo) null);
+
 	// Return if already set
 	if (NamespaceManager.get() != null)
 	    return true;
