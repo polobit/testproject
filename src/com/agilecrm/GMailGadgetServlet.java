@@ -17,6 +17,7 @@ import com.agilecrm.session.OpenIdServlet;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.util.Util;
+import com.google.appengine.api.NamespaceManager;
 
 @SuppressWarnings("serial")
 public class GMailGadgetServlet extends HttpServlet
@@ -36,8 +37,12 @@ public class GMailGadgetServlet extends HttpServlet
 	if (domainUser == null)
 	    return false;
 
+	NamespaceManager.set(domainUser.domain);
+
 	// Get API Key
 	String apiKey = APIKey.getAPIKey().api_key;
+
+	System.out.println("Api Key " + apiKey + " for " + domainUser);
 
 	JSONObject result = new JSONObject();
 	result.put("user_exists", true);
