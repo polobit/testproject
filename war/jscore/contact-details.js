@@ -115,7 +115,7 @@ function starify(el){
         	click: function(score, evt) {
         	   
         		// alert('ID: ' + $(this).attr('id') + '\nscore: ' + score + '\nevent: ' + evt);
-        		contact_model.set('star_value', score);
+        		contact_model.set('star_value', score, {silent: true});
         	
         		// Save model
            		contact_model.save();

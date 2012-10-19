@@ -11,7 +11,7 @@ $(function () {
 	
 	$('#tasks-list').live('click', function(e){
 		this.tasksListView = new Base_Collection_View({
-            url: '/core/api/tasks',
+            url: '/core/api/tasks/all',
             restKey: "task",
             templateKey: "tasks-list",
             individual_tag_name: 'tr'

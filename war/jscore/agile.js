@@ -18,6 +18,9 @@ $(function()
 	$('body').live('agile_collection_loaded', function(event) {
 		var table = $(this).find('table.showCheckboxes');
 		$(table).removeClass('table-bordered');
+		$(table).closest('div.data-block').removeClass('data-block');
+		
+		//$(table).setAttribute('id', 'sort-table');
 
 		// Remove, if rendere of a collection called multiple times 
 		$(table).find('.thead_check').parent().remove();
@@ -30,6 +33,8 @@ $(function()
 		$(table).find('tbody tr').prepend('<td><input class="tbody_check" type="checkbox"/></td>');
 		
 		$(table).after('<div class="row"><div class="span6  select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked"> Delete</a>');
+		
+		sortTables();
 	});
 	
 	// Event to trigger to delete checked entities  

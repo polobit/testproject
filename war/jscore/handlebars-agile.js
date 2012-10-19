@@ -377,4 +377,15 @@ $(function()
 			return options.fn(this);
 		}
 	});
+	
+	// Return task completion status
+	Handlebars.registerHelper('task_status', function(status){
+		console.log(status);
+		if(status)
+			return true;
+		
+		// Return false as string as the template can not print boolean false  
+		return "false";
+		
+	});
 });

@@ -347,8 +347,50 @@ margin-top: 10px;
 	margin-top:0px;
 }
 
+/* Table sorting css */
+th.header { 
+    cursor: pointer; 
+}
 
-/* Footer to remain in botom of the page
+table .header:hover::after {
+visibility: visible;
+}
+
+table .header::after {
+content: "";
+float: right;
+margin-top: 7px;
+border-width: 0 4px 4px;
+border-style: solid;
+border-color: black transparent;
+visibility: hidden;
+}
+
+table .headerSortUp::after {
+border-bottom: none;
+border-left: 4px solid transparent;
+border-right: 4px solid transparent;
+border-top: 4px solid black;
+visibility: visible;
+-webkit-box-shadow: none;
+-moz-box-shadow: none;
+box-shadow: none;
+filter: alpha(opacity=60);
+-khtml-opacity: 0.6;
+-moz-opacity: 0.6;
+opacity: 0.6;
+}
+
+table .headerSortDown::after, table .headerSortDown:hover::after {
+visibility: visible;
+filter: alpha(opacity=60);
+-khtml-opacity: 0.6;
+-moz-opacity: 0.6;
+opacity: 0.6;
+}
+
+
+/* Footer to remain in botom of the page */
 html, body {height: 93%;}
 
 #wrap {min-height: 100%;}
@@ -356,15 +398,15 @@ html, body {height: 93%;}
 #main {
 				overflow: visible;
 				padding-bottom: 40px;				
-			}  /* must be same height as the footer 
+			}  /* must be same height as the footer */
 
 footer {
 				position: relative;
-				margin-top: -40px; /* negative value of footer height 
+				margin-top: -40px; /* negative value of footer height */
 				height: 40px;
 				clear:both;
 				border: none;
 				padding: 0px;
 	}
 	
-	*/
+	
