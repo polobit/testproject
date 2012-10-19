@@ -6,82 +6,80 @@
 <%@page import="com.google.appengine.api.NamespaceManager"%>
 <%@page import="com.agilecrm.session.SessionManager"%>
 <%
-		
+   
+final String LOGIN_ERROR_SESSION_KEY = "login_error_message";
+
 // Delete Login Session
-request.getSession().removeAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
+			request.getSession().removeAttribute(
+					SessionManager.AUTH_SESSION_COOKIE_NAME);
 
-// Check if the request was posted again to itself 
-if(request.getParameter("auth") != null)
-{
-    	// Get the method type
-    	String type = request.getParameter("type");
-    	if(type.equalsIgnoreCase("oauth"))
-    	{
-    	    // Get server type
-    	    String server = request.getParameter("server");
-    	    
-    	    // Get OAuth URL
-    	    String url = Util.getOauthURL(server);
-    	    
-    	    if(url == null)
-    	    {
-    			out.println("Server not found - try again");
-    			return;
-    	    }
-    	    
-    	    // Forward to OpenID Authenticaiton which will set the cookie and then forward it to /
-    	    response.sendRedirect("/openid?hd=" + URLEncoder.encode(url));
-    	    
-    	    return;
-    	}
-    	else if(type.equalsIgnoreCase("agile"))
-    	{
-    	    
-    	    // Get User Name
-    	    String email = request.getParameter("email");
-    	    
-    	    // Get Password
-    	    String password = request.getParameter("password");
-    	    
-    	    if(email== null || password == null)
-    	    {
-    			out.println("Email not found - try again");
+			// Check if the request was posted again to itself 
+			if (request.getParameter("auth") != null) {
+				// Get the method type
+				String type = request.getParameter("type");
+				if (type.equalsIgnoreCase("oauth")) {
+					// Get server type
+					String server = request.getParameter("server");
+
+					// Get OAuth URL
+					String url = Util.getOauthURL(server);
+
+					if (url == null) {
+						request.getSession().setAttribute(LOGIN_ERROR_SESSION_KEY, "Server not found - try again");
+						response.sendRedirect("/login");
+						return;
+					}
+
+					// Forward to OpenID Authenticaiton which will set the cookie and then forward it to /
+					response.sendRedirect("/openid?hd="
+							+ URLEncoder.encode(url));
+
+					return;
+				} else if (type.equalsIgnoreCase("agile")) {
+
+					// Get User Name
+					String email = request.getParameter("email");
+
+					// Get Password
+					String password = request.getParameter("password");
+
+					if (email == null || password == null) {
+						out.println("Email not found - try again");
+						return;
+					}
+
+					// Get Domain User with this name, password - we do not check for domain as validity is verified in AuthFilter
+					DomainUser domainUser = DomainUser
+							.getDomainUserFromEmail(email);
+					if (domainUser == null) {
+						out.println("No valid user is found with this Email.");
+						return;
+					}
+
+					// Set Cookie and forward to /home
+					UserInfo userInfo = new UserInfo("agilecrm.com", email,
+							null, null);
+					request.getSession().setAttribute(
+							SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
+
+					response.sendRedirect("/home");
+				}
+			}
+
+			// Check if this subdomain even exists
+			if (DomainUser.count() == 0) {
+				response.sendRedirect(Globals.CHOOSE_DOMAIN);
 				return;
-    	    }
-
-    	    
-    	    // Get Domain User with this name, password - we do not check for domain as validity is verified in AuthFilter
-    	    DomainUser domainUser = DomainUser.getDomainUserFromEmail(email);
-    	    if(domainUser == null)
-    	 	{
-				out.println("Email not found - try again");
-				return;
-	    	}
-    	 
-    	    // Set Cookie and forward to /home
-    	    UserInfo userInfo = new UserInfo("agilecrm.com", email, null, null);
-    	    request.getSession().setAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
-    	    
-    	    response.sendRedirect("/home");
-    	}	
-}
-
-// Check if this subdomain even exists
-if(DomainUser.count() == 0)
-{
-    response.sendRedirect(Globals.CHOOSE_DOMAIN);
-    return;
-}
-
-
+			}
 %>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
- <meta name="globalsign-domain-verification" content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx"/>
-<title>Register</title>
+<meta name="globalsign-domain-verification"
+	content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx" />
+<title>Login</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
@@ -95,23 +93,25 @@ if(DomainUser.count() == 0)
 
 
 <style>
-@media (min-width: 900px) {
-body {
-	padding-top: 60px;
-	//background-color: whitesmoke;
+@media ( min-width : 900px) {
+	body {
+		padding-top: 60px; //
+		background-color: whitesmoke;
 	}
-	
-.navbar-search{
- 	padding-left: 10%
+	.navbar-search {
+		padding-left: 10%
+	}
 }
-	
+
+.field {
+	height: 30px !important;
+	margin: 8px 0px !important;
+	padding-left: 10px !important;
 }
-.field{
-height:30px!important;
-margin:8px 0px!important;
-padding-left:10px!important;
+
+.error {
+	color: red;
 }
-.error{color:red;}
 </style>
 
 <!-- Le fav and touch icons -->
@@ -125,24 +125,28 @@ padding-left:10px!important;
 <link rel="apple-touch-icon-precomposed"
 	href="../assets/ico/apple-touch-icon-57-precomposed.png">
 
- <!-- JQUery Core and UI CDN -->
-<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+<!-- JQUery Core and UI CDN -->
+<script type='text/javascript'
+	src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
 
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
 <script type="text/javascript">
-jQuery.validator.setDefaults({
-	debug: true,
-	success: "valid"
-});;
+	jQuery.validator.setDefaults({
+		debug : true,
+		success : "valid"
+	});
+	;
 </script>
 <%
-String ua = request.getHeader( "User-Agent" );
-boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
+    String ua = request.getHeader("User-Agent");
+			boolean isMSIE = (ua != null && ua.indexOf("MSIE") != -1);
 %>
 
-<% if( isMSIE ){ 
-	response.sendRedirect("/error/ie-upgrade.jsp");
-} %>
+<%
+    if (isMSIE) {
+				response.sendRedirect("/error/ie-upgrade.jsp");
+			}
+%>
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
       <script src="lib/ie/html5.js"></script>
@@ -152,94 +156,108 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 
 <body>
 
-	<div class='navbar navbar-fixed-top'> 
-    	<div class='navbar-inner'> 
-    		<div class='container'> 
-    			<a class='brand' href='#dashboard'>Agile CRM</a>
-  				<div class="nav-collapse">
+	<div class='navbar navbar-fixed-top'>
+		<div class='navbar-inner'>
+			<div class='container'>
+				<a class='brand' href='#dashboard'>Agile CRM</a>
+				<div class="nav-collapse">
 					<ul class="nav pull-right">
-						<li class="">						
-						<a href="http://www.agilecrm.com" class="">
-							<i class="icon-chevron-left"></i>
-							Back to home-page
-						</a>
+						<li class=""><a href="http://www.agilecrm.com" class="">
+								<i class="icon-chevron-left"></i> Back to home-page </a>
 						</li>
 					</ul>
-  	    		</div>
+				</div>
 			</div>
 		</div>
 	</div>
 	<div class="row">
 
-		<div class="account-container" style="width: 290px; ">
+		<div class="account-container" style="width: 290px;">
 			<div class="content clearfix">
-				
-				<form name='agile' id="agile" method='post' onsubmit="return isValid();"> 
-				 <h1>Sign In</h1>
-				 
-				 <h3><small>Sign in using your registered account:</small></h3>	
-				<div id="openid_btns" style="float: left;padding:5px 0 15px;">
-										
-					<input type='hidden' name='auth' value='auth'>
-					<input type='hidden' name='type' value='agile'>
-				
-                      <input class="required email field" name='email' type="text" placeholder="User Name">
-                    <br/>
-                      <input class="required field" name='password' type="password" placeholder="Password">
-					<br/>
-					<div style="margin-top:15px;">
-					   <label class="checkbox" style="display:inline-block;"><input type="checkbox" name="signin"> Keep me signed in </label>
-					   <input type='submit' style="float:right;" value="Sign In" class='btn btn-large btn-primary'>
-				   </div>
-				</div>
-				<br />
-				</form>
-				
-				<div class="clearfix"></div>
-				
-				<form id='oauth'  name='oauth' method='post'> 
-				
-				<div id="openid_btns" style="float: left;padding:5px 0 15px;border-top: 1px dotted #CCC;border-bottom: 1px dotted #CCC;border-right: none;border-left: none;">
-				<h3><small>Login using existing accounts</small></h3>	
-					<input type='hidden' name='auth' value='auth'></input>
-					<input type='hidden' name='type' value='oauth'></input>
-					<input type='hidden' name='server' id='oauth-name' value=''></input>
+
+				<form name='agile' id="agile" method='post'
+					>
+					<h1>Sign In</h1>
+
+					<h3>
+						<small>Sign in using your registered account:</small>
+					</h3>
 					
-					<a title="log in with Google" href='#' style="background: #FFF url(img/openid-providers-en.png); background-position: 0px 0px" class="google openid_large_btn"></a> 
-					<a title="log in with Yahoo" href="#" style="background: #FFF url(img/openid-providers-en.png); background-position: -100px 0px" class="yahoo openid_large_btn"></a>
-				</div>
-				<br />
+					
+					
+					<div id="openid_btns" style="float: left; padding: 5px 0 15px;">
+
+						<input type='hidden' name='auth' value='auth'> <input
+							type='hidden' name='type' value='agile'> <input
+							class="required email field" name='email' type="text"
+							placeholder="User Name"> <br /> <input
+							class="required field" name='password' type="password"
+							placeholder="Password"> <br />
+						<div style="margin-top: 15px;">
+							<label class="checkbox" style="display: inline-block;"><input
+								type="checkbox" name="signin"> Keep me signed in </label> 
+								<input
+								type='submit' style="float: right;" value="Sign In"
+								class='btn btn-large btn-primary'>
+						</div>
+					</div>
+					<br />
+				</form>
+
+				<div class="clearfix"></div>
+
+				<form id='oauth' name='oauth' method='post'>
+
+					<div id="openid_btns"
+						style="float: left; padding: 5px 0 15px; border-top: 1px dotted #CCC; border-bottom: 1px dotted #CCC; border-right: none; border-left: none;">
+						<h3>
+							<small>Login using existing accounts</small>
+						</h3>
+						<input type='hidden' name='auth' value='auth'></input> <input
+							type='hidden' name='type' value='oauth'></input> <input
+							type='hidden' name='server' id='oauth-name' value=''></input> <a
+							title="log in with Google" data='google' href='#'
+							style="background: #FFF url(img/openid-providers-en.png); background-position: 0px 0px"
+							class="google openid_large_btn"></a> <a title="log in with Yahoo"
+							data='yahoo' href="#"
+							style="background: #FFF url(img/openid-providers-en.png); background-position: -100px 0px"
+							class="yahoo openid_large_btn"></a>
+					</div>
+					<br />
 				</form>
 				<div class="clearfix"></div>
-				</div>
 			</div>
-			<div style="text-align: center;line-height: 19px;">
-	                 Don't have an account? <a href="/register">Sign Up</a><br>
-	                  Remind <a href="#">Password</a>
-               </div>
 		</div>
-		
-		<script type="text/javascript">
-		$(document).ready(function() {			
-			
+		<div style="text-align: center; line-height: 19px;">
+			Don't have an account? <a href="/register">Sign Up</a><br>
+			Remind <a href="#">Password</a>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		$(document).ready(function()
+		{
+
 			$('.openid_large_btn').click(function(e)
 			{
 				// Get Data
 				var data = $(this).attr('data');
 				$('#oauth-name').val(data);
-				
+
 				$('#oauth').submit();
-				
+
 				e.preventDefault();
-				
+
 			});
-			
+
 		});
-		
-		function isValid(){
-		    $("#agile").validate();
-		    return $("#agile").valid();
-		    }
-		</script>
+
+		function isValid()
+		{
+			$("#agile").validate();
+			console.log($("#agile").valid());
+			return $("#agile").valid();
+		}
+	</script>
 </body>
 </html>
