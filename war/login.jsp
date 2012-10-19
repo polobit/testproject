@@ -1,4 +1,6 @@
+<%out.println(request.getParameter("error"));%>
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -125,7 +127,7 @@ box-shadow: none;
 							<label class="checkbox" style="display: inline-block;">
 							   <input type="checkbox" name="signin"> Keep me signed in 
 							</label> 
-							<input type='submit' id='agile-login-button' style="float: right;height:39px" value="Sign In" class='btn btn-large btn-primary openid_large_btn'>
+							<input type='submit' id='agile-login-button' style="float: right;height:39px" value="Sign In" class='btn btn-large btn-primary'>
 						</div>
 					</div>
 					<br />
@@ -136,7 +138,7 @@ box-shadow: none;
 				<form id='oauth' name='oauth' method='post'>
 
 					<div id="openid_btns" style="float: left; padding: 5px 0 15px; border-top: 1px dotted #CCC; border-bottom: 1px dotted #CCC; border-right: none; border-left: none;">
-						<h3>
+							<h3>
 							<small>Login or register using existing accounts</small>
 						</h3>
 					  <div  style="padding-top:10px;">
@@ -174,20 +176,7 @@ box-shadow: none;
 				e.preventDefault();
 			});
 			
-			$('#agile-login-button').click(function(e)
-					{
-						$(".login-error").hide();
-						$("#agile").validate();
-						
-						console.log($("#agile").valid());
-						
-						if(! $("#agile").valid())
-						{
-							console.log("Repvent");
-							e.preventDefault();	
-							return;
-						}
-				});
+		
 
 			});
 	
