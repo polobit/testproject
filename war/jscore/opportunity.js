@@ -49,9 +49,11 @@ $(function () {
 
 //Populate users in options of owner input field dropdown
 function populateUsers(id, el , value) {
-	// Users
 	
+	// Users
 	var optionsTemplate = "<option value='{{agileUser.id}}'>{{name}}</option>";
+	
+	// Fill owners list
 	fillSelect('owners-list','/core/api/deal-owners', 'userPrefs', function fillOwner() {
 		
 		if(value)
@@ -114,13 +116,12 @@ function populateMilestones(el, dealsDetails, value){
 							fillMilestones('move', array);
 							return;
 						}
-						if(value && value.milestone)
-						{
-							fillTokenizedSelect('milestone', array, value.milestone);
-							return;
-						}
+						fillTokenizedSelect('milestone', array, function(){
 							
-						fillTokenizedSelect('milestone', array);
+							// Quotes required for option value because milstone can have spaces in between
+							if(value && value.milestone)
+								$("#milestone",el).find('option[value=\"'+value.milestone+'\"]').attr("selected", "selected");
+						});
     			   }
     });
 }
