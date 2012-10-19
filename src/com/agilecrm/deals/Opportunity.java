@@ -349,8 +349,9 @@ public class Opportunity
 	    {
 		return dao.ofy().get(ownerKey);
 	    }
-	    catch (NullPointerException e)
+	    catch (Exception e)
 	    {
+		ownerKey = null;
 		return null;
 	    }
 	else

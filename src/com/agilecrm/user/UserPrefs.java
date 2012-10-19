@@ -169,6 +169,16 @@ public class UserPrefs
     @XmlElement(name = "agile_user")
     public AgileUser getAgileUser()
     {
-	return dao.ofy().get(user);
+	if (user != null)
+	    try
+	    {
+		return dao.ofy().get(user);
+	    }
+	    catch (Exception e)
+	    {
+		return null;
+	    }
+
+	return null;
     }
 }
