@@ -79,6 +79,9 @@ public class GMailGadgetServlet extends HttpServlet
 	    return false;
 	}
 
+	// Remove from Cache
+	Util.deleteCache(oneTimeSessionKey);
+
 	resp.getWriter().println(ownerId);
 
 	// Setup Authentication Key
