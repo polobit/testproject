@@ -17,7 +17,7 @@ public class SendMail
     public static final String TEMPLATE_BODY_EXT = "_body.html";
 
     public static void sendMail(String to, String subject, String template,
-	    Object object, String from, String fromName)
+	    Object object, String from, String fromName) throws Exception
     {
 
 	System.out.println("Sending email " + template + " " + object);
@@ -60,7 +60,7 @@ public class SendMail
     }
 
     public static void sendMail(String to, String subject, String template,
-	    Object object)
+	    Object object) throws Exception
     {
 	sendMail(to, subject, template, object, AGILE_FROM_EMAIL,
 		AGILE_FROM_NAME);
@@ -68,6 +68,7 @@ public class SendMail
     }
 
     private static String handleBarsTemplatize(String path, String object)
+	    throws Exception
     {
 
 	// Read from path
