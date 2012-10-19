@@ -28,7 +28,7 @@
 
   <!-- Declare our OpenID realm so our app is white listed -->
   <Extension id="realm" type="openIdRealm">
-    <Url>https://googleapps.agilecrm.com</Url>
+    <Url>https://*.agilecrm.com</Url>
   </Extension>
 
 <!-- EXTRACTOR -->
