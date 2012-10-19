@@ -1,3 +1,18 @@
+<%
+//Check if it is being access directly and not through servlet
+if(request.getAttribute("javax.servlet.forward.request_uri") == null)
+{
+    response.sendRedirect("/register");
+    return;
+}
+
+String error = request.getParameter("error");
+if(error != null)
+    System.out.println(error);
+else
+    error = "";
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

@@ -1,4 +1,11 @@
 <%
+//Check if it is being access directly and not through servlet
+if(request.getAttribute("javax.servlet.forward.request_uri") == null)
+{
+    response.sendRedirect("/login");
+    return;
+}
+
 String error = request.getParameter("error");
 if(error != null)
     System.out.println(error);
