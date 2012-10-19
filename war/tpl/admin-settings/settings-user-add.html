@@ -4,7 +4,9 @@
 		<div class="well">
 	
 			<form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
-<input name="id" type="hidden" value="{{id}}"/>
+			{{#if id}}
+				<input type="text" name="id" class="hide" value={{id}} >
+			{{/if}}
 				<fieldset>
 					<legend>New User Details</legend>
 					<br/>
