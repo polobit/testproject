@@ -61,6 +61,9 @@ $(function(){
     	$.ajax({
     	    url: 'core/api/campaigns/logs/' + campaign_id,
     	    type: 'DELETE',
+    	    success: function(){
+    	    	location.reload(true);
+    	    }
     	});
     });
 });
