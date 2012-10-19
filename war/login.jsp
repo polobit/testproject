@@ -1,79 +1,3 @@
-<%@page import="com.agilecrm.session.UserInfo"%>
-<%@page import="java.net.URLEncoder"%>
-<%@page import="com.agilecrm.util.Util"%>
-<%@page import="com.agilecrm.Globals"%>
-<%@page import="com.agilecrm.core.DomainUser"%>
-<%@page import="com.google.appengine.api.NamespaceManager"%>
-<%@page import="com.agilecrm.session.SessionManager"%>
-<%
-   
-final String LOGIN_ERROR_SESSION_KEY = "login_error_message";
-
-// Delete Login Session
-			request.getSession().removeAttribute(
-					SessionManager.AUTH_SESSION_COOKIE_NAME);
-
-			// Check if the request was posted again to itself 
-			if (request.getParameter("auth") != null) {
-				// Get the method type
-				String type = request.getParameter("type");
-				if (type.equalsIgnoreCase("oauth")) {
-					// Get server type
-					String server = request.getParameter("server");
-
-					// Get OAuth URL
-					String url = Util.getOauthURL(server);
-
-					if (url == null) {
-						request.getSession().setAttribute(LOGIN_ERROR_SESSION_KEY, "Server not found - try again");
-						response.sendRedirect("/login");
-						return;
-					}
-
-					// Forward to OpenID Authenticaiton which will set the cookie and then forward it to /
-					response.sendRedirect("/openid?hd="
-							+ URLEncoder.encode(url));
-
-					return;
-				} else if (type.equalsIgnoreCase("agile")) {
-
-					// Get User Name
-					String email = request.getParameter("email");
-
-					// Get Password
-					String password = request.getParameter("password");
-
-					if (email == null || password == null) {
-						out.println("Email not found - try again");
-						return;
-					}
-
-					// Get Domain User with this name, password - we do not check for domain as validity is verified in AuthFilter
-					DomainUser domainUser = DomainUser
-							.getDomainUserFromEmail(email);
-					if (domainUser == null) {
-						request.getSession().setAttribute(LOGIN_ERROR_SESSION_KEY, "No valid user is found with this Email.");
-						response.sendRedirect("/login");
-						return;
-					}
-
-					// Set Cookie and forward to /home
-					UserInfo userInfo = new UserInfo("agilecrm.com", email,
-							null, null);
-					request.getSession().setAttribute(
-							SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
-
-					response.sendRedirect("/home");
-				}
-			}
-
-			// Check if this subdomain even exists
-			if (DomainUser.count() == 0) {
-				response.sendRedirect(Globals.CHOOSE_DOMAIN);
-				return;
-			}
-%>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -194,7 +118,6 @@ box-shadow: none;
 					
 					<div id="openid_btns" style="float: left; padding: 5px 0 15px;">
 
-						<input type='hidden' name='auth' value='auth'> 
 						<input type='hidden' name='type' value='agile'>
 					    <input class="required email field input-xlarge" name='email' type="text" placeholder="User Name"> <br /> 
 					    <input class="required field input-xlarge" name='password' type="password" placeholder="Password"> <br />
@@ -202,7 +125,7 @@ box-shadow: none;
 							<label class="checkbox" style="display: inline-block;">
 							   <input type="checkbox" name="signin"> Keep me signed in 
 							</label> 
-							<input type='submit' style="float: right;height:39px" value="Sign In" class='btn btn-large btn-primary openid_large_btn'>
+							<input type='submit' id='agile-login-button' style="float: right;height:39px" value="Sign In" class='btn btn-large btn-primary openid_large_btn'>
 						</div>
 					</div>
 					<br />
@@ -242,29 +165,32 @@ box-shadow: none;
 			$('.openid_large_btn').click(function(e)
 			{
 				$(".login-error").hide();
-				if(!isValid())
-				{
-					$(".login-error").show();
-					return;
-				}
+				
 				// Get Data
 				var data = $(this).attr('data');
 				$('#oauth-name').val(data);
-
 				$('#oauth').submit();
 
 				e.preventDefault();
+			});
+			
+			$('#agile-login-button').click(function(e)
+					{
+						$(".login-error").hide();
+						$("#agile").validate();
+						
+						console.log($("#agile").valid());
+						
+						if(! $("#agile").valid())
+						{
+							console.log("Repvent");
+							e.preventDefault();	
+							return;
+						}
+				});
 
 			});
-
-		});
-
-		function isValid()
-		{
-			$("#agile").validate();
-			console.log($("#agile").valid());
-			return $("#agile").valid();
-		}
+	
 	</script>
 </body>
 </html>
