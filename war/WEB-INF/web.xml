@@ -40,7 +40,7 @@
 	
 	<servlet>
 	    <servlet-name>login</servlet-name>
-	    <jsp-file>/login.jsp</jsp-file>
+	     <servlet-class>com.agilecrm.LoginServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 	    <servlet-name>login</servlet-name>
@@ -49,7 +49,7 @@
 	
 	<servlet>
 	    <servlet-name>register</servlet-name>
-	    <jsp-file>/register.jsp</jsp-file>
+	    <servlet-class>com.agilecrm.RegisterServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 	    <servlet-name>register</servlet-name>

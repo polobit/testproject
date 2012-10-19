@@ -12,6 +12,7 @@ import com.agilecrm.core.DomainUser;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.util.Util;
+import com.google.appengine.api.utils.SystemProperty;
 
 @SuppressWarnings("serial")
 public class LoginServlet extends HttpServlet
@@ -108,7 +109,8 @@ public class LoginServlet extends HttpServlet
 	UserInfo userInfo = new UserInfo("agilecrm.com", email, domainUser.name);
 	request.getSession().setAttribute(
 		SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
-	if (!request.getRequestURL().toString().contains("localhost"))
+
+	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 	{
 	    response.sendRedirect("https://" + domainUser.domain
 		    + ".agilecrm.com/");
