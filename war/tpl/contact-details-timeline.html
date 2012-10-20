@@ -5,11 +5,11 @@
 		{{#if_entity "note"}}
 
         <div class="timestamp">{{created_time}}</div>
-        <div class="title"><h3>{{entity_type}}</h3></div>
+        <div class="title"><h3><span><i class="icon-list-alt"></i></span> Note</h3></div>
         <div class="date">{{epochToTaskDate created_time}}</div>
         <div class="body">
-            <div class="caption">{{subject}}</div>
-            <div class="caption">{{description}}</div>
+            <div class="text">{{subject}}</div>
+            <div class="text">{{description}}</div>
         </div>
 		
 		{{/if_entity}}
@@ -17,11 +17,11 @@
 		{{#if_entity "task"}}
 
         <div class="timestamp">{{created_time}}</div>
-        <div class="title"><h3>{{entity_type}}</h3></div>
+        <div class="title"><h3><span><i class="icon-tasks"></i></span> Task</h3></div>
         <div class="date">{{epochToTaskDate created_time}}</div>
         <div class="body">
-            <div class="caption">{{subject}}</div>
-			<div class="caption">({{type}})</div>         
+			<div class="caption" style="margin-top:-8px">({{type}})</div>         
+            <div class="text">{{subject}}</div>
         </div>
 		
 		{{/if_entity}}
@@ -29,11 +29,11 @@
 		{{#if_entity "deal"}}
 
         <div class="timestamp">{{created_time}}</div>
-        <div class="title"><h3>{{entity_type}}</h3></div>
+        <div class="title"><h3><span><i class="icon-money"></i></span> Deal</h3></div>
         <div class="date">{{epochToTaskDate created_time}}</div>
         <div class="body">
-            <div class="caption">{{name}}</div>
-            <div class="caption">{{description}}</div>
+            <div class="text">{{name}}</div>
+            <div class="text">{{description}}</div>
         </div>
 		
 		{{/if_entity}}
@@ -41,10 +41,10 @@
 		{{#if_entity "m"}}
 
         <div class="timestamp">{{t}}</div>
-        <div class="title"><h3>log</h3></div>
+        <div class="title"><h3><span><i class="icon-inbox"></i></span> Log</h3></div>
         <div class="date">{{epochToTaskDate t}}</div>
         <div class="body">
-            <div class="caption">{{m}}</div>        
+            <div class="text">{{m}}</div>        
         </div>
 		
 		{{/if_entity}}
@@ -52,10 +52,12 @@
 		{{#if_entity "date"}}
 
         <div class="timestamp">{{date_secs}}</div>
-        <div class="title"><h3>mail</h3></div>
+        <div class="title"><h3><span><i class="icon-envelope"></i></span> Mail</h3></div>
         <div class="date">{{epochToTaskDate date_secs}}</div>
         <div class="body">
-            <div class="caption">{{message}}</div>        
+			<div class="caption"><b>From:</b> {{from}}</div>
+			<div class="caption"><b>To:</b> {{to}}</div>
+            <div class="text"><b>Message:</b> {{message}}</div>        
         </div>
 		
 		{{/if_entity}}
