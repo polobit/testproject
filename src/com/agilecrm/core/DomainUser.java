@@ -75,7 +75,7 @@ public class DomainUser
     public String gadget_id = null;
 
     @NotSaved
-    public JSONObject info_json = new JSONObject();
+    private JSONObject info_json = new JSONObject();
 
     // Info Keys
     public static final String CREATED_TIME = "created_time";
