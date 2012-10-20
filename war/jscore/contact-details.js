@@ -104,12 +104,55 @@ $(function(){
 	
 });
 
+
+$(function(){
+	
+	// Add score
+	    $('#add').live('click', function(e){
+	    e.preventDefault();
+	    // Convert text to float
+	    var add_score = parseFloat($('#lead-score').text());
+	    
+	    add_score = add_score + 1;
+	    $('#lead-score').text(add_score);
+       
+	    var contact_model =  App_Contacts.contactDetailView.model;
+	    
+	    contact_model.url = 'core/api/contacts';
+	    contact_model.set('lead_score', add_score, {silent: true});
+	
+	    // Save model
+	    contact_model.save();
+	
+	     });
+	
+	   
+	    // Subtract score
+	    $('#minus').live('click', function(e){
+		e.preventDefault();
+		// Convert text to float
+		var sub_score = parseFloat($('#lead-score').text());
+		
+		sub_score = sub_score - 1;
+		$('#lead-score').text(sub_score);
+		
+		var contact_model =  App_Contacts.contactDetailView.model;
+			
+	    contact_model.url = 'core/api/contacts';
+		contact_model.set('lead_score', sub_score, {silent: true});
+	 
+		// Save model
+		contact_model.save();
+	    });
+});
+
+
 function starify(el){
     head.js('lib/jquery.raty.min.js', function(){
     	
     	var contact_model =  App_Contacts.contactDetailView.model;
     	// Set URL - is this required?
-    	contact_model.url = 'core/api/contacts'
+    	contact_model.url = 'core/api/contacts';
     	
     	$('#star', el).raty({
         	click: function(score, evt) {
@@ -125,4 +168,5 @@ function starify(el){
             
         });
         });
+    
 }
