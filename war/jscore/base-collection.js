@@ -14,7 +14,7 @@ var BaseCollection = Backbone.Collection.extend({
         return item.get('id');
     },
     parse: function (response) {
-        // console.log("parsing " + this.restKey + " " + response[this.restKey]);
+    	// console.log("parsing " + this.restKey + " " + response[this.restKey]);
         
         if (response && response[this.restKey]) 
         	return response[this.restKey];
@@ -163,11 +163,20 @@ var Base_Collection_View = Backbone.View.extend({
     	
         $(this.el).html(getTemplate((this.options.templateKey + '-collection'), this.collection.toJSON()));
 
+    	// If collection is Empty show some help slate
+    	if(this.collection.models.length == 0)
+    	{
+    		// Add element slate element in collection template send collection template to show slate pad
+    		fillSlate("slate", this.el);
+    	}
+        
         // Add row-fluid if user prefs are set to fluid
     	if(IS_FLUID)
     		{
     			$(this.el).find('div.row').removeClass('row').addClass('row-fluid');
     		}
+    	
+
     	
 		// Call postRenderCallback after rendering if available
     	var callback = this.options.postRenderCallback;
