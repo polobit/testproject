@@ -1,5 +1,5 @@
 <!-- New (Person) Modal views -->
-	<div class="modal hide" id="personModal">
+	<div class="modal hide fade" id="personModal">
 		<div class="modal-header">
 			<button class="close" data-dismiss="modal">x</button>
 			<h3><i class='icon-plus-sign'/></i> Add Person</h3>
@@ -8,17 +8,18 @@
 			<form id='personForm' name="personForm" method="post">
 			  <fieldset>
 				<div class="control-group">
-                 		 <label class="control-label"><b>Name:</b> <span class="field_req">*</span></label>
-				  <div class="row" style="margin-left:0px">
-					<span class="controls">
+                 	<label class="control-label"><b>Name:</b> <span class="field_req">*</span></label>
+					<div class="control-group">
+					 <span class="controls">
 					   <input name="first_name" type="text" class="required" id="fname" placeholder="First name" />
-					</span>
+					 </span>
+					</div>
+				   <div class="control-group">
 				    <span class="controls">
 					   <input name="last_name" class="required" type="text"	id="lname" placeholder="Last name" />
 					</span>
-				  </div>
-			    </div>
-			    
+				   </div>
+			   </div>
 				<div class="control-group">
                    	<label class="control-label"><b>Email:</b> </label>
 					<div class="controls">
