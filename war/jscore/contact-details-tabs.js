@@ -2,9 +2,18 @@ $(function(){
 
 	// Notes
 	var id;
+	$('#contactDetailsTab a[href="#timeline"]').live('click', function (e){
+		e.preventDefault();
+		console.log("tiem lin");
+		$('div.tab-content').find('div.active').removeClass('active');
+		
+	//	loadTimelineDetails(App_Contacts.contactDetailView.el, App_Contacts.contactDetailView.model.id);
+		$('#time-line').addClass('active');
+	});
+	
 	$('#contactDetailsTab a[href="#notes"]').live('click', function (e){
 		e.preventDefault();
-	    id = App_Contacts.contactDetailView.model.id;
+	    id = model.id;
 		var notesView = new Base_Collection_View({
             url: '/core/api/contacts/' + id + "/notes",
             restKey: "note",
@@ -85,14 +94,18 @@ $(function(){
 			url: '/core/api/campaigns/logs/contact/' + App_Contacts.contactDetailView.model.id,
             restKey: "logs",
             templateKey: "campaigns",
-            individual_tag_name: 'tr'
+            individual_tag_name: 'tr',
+            postRenderCallback: function(el) {
+            	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+                fillSelect('campaignSelect','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
+            }
         });
 		campaignsView.collection.fetch();
         $('#campaigns', this.el).html(campaignsView.el);
         
         // var optionsTemplate = "<li> <a value='{{id}}'>{{name}}</a></li>";
-        var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-        fillSelect('campaignSelect','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
+       // var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+      //  fillSelect('campaignSelect','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
 	});
 	    
 	 
@@ -158,13 +171,22 @@ $(function(){
 	});
 	
 	// Campaign select 
-	$('#campaignSelect').die().live('change',function(e){
+	$('#add-selected-campaign').die().live('click',function(e){
 		e.preventDefault();
+		
 		var workflow_id = $('#campaignSelect option:selected').attr('value');
+		console.log(workflow_id);
+		
+		if(!workflow_id){
+			console.log("nothing selected");
+			return;
+		}
+			console.log("not returned");
 		var contact_id = App_Contacts.contactDetailView.model.id;
 		var url = '/core/api/campaigns/enroll/' + contact_id + '/' + workflow_id;
 
 		$.get(url, function(data){
+			console.log("success");
     		$(".enroll-success").html('<div class="alert alert-success"><a class="close" data-dismiss="alert" href="#">×</a>Enrolled successfully.</div>'); 
 	   });
 	});

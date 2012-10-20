@@ -32,11 +32,35 @@ function loadTimelineDetails(el, contactId)
 			}
 		});
 		
+		var contact = App_Contacts.contactDetailView.model;
+		var json = contact.toJSON();
+		 
+		// Get email of the contact in contact detail
+		var email = getPropertyValue(json.properties, "email");
+		
+		// Go for emails only when the contact has
+		if(email)
+		{
+			var EmailsCollection = Backbone.Collection.extend({
+				url: 'core/api/email?e=' + encodeURIComponent(email) + '&c=10&o=0',
+			});
+			var emailsCollection = new EmailsCollection();
+			emailsCollection .fetch({
+				success: function(){
+					timelineView.collection.add(emailsCollection.toJSON()[0]['emails']);
+
+				// Call to setup timeline
+					setUpTimeline(timelineView.collection.toJSON(), el);
+				}
+			});
+		}
+		
 		// Store all details urls in an array and fetch 
 		var fetchContactDetails = ['core/api/contacts/' + contactId + '/notes', 'core/api/contacts/'+ contactId + '/deals', 'core/api/contacts/'+ contactId + '/tasks'];
 		var loading_count = 0;
 		
 		$.each(fetchContactDetails, function(index, url){
+			console.log(url);
 			// $('#timeline', el).html('<div><img class="loading" style="padding-right:5px" src="img/21-0.gif"></div>');
 			var View =  Backbone.Collection.extend({
 				url: url,
@@ -48,8 +72,11 @@ function loadTimelineDetails(el, contactId)
 					if(++loading_count == fetchContactDetails.length){
 						removeLoadingImg(el);
 						
+						// If no email for the contact call time line from here
+						if(!email){
 						// Call to setup timeline
 						setUpTimeline(timelineView.collection.toJSON(), el);
+						}
 					}
 				}
 			});

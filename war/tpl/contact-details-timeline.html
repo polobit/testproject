@@ -49,6 +49,17 @@
 		
 		{{/if_entity}}
 
+		{{#if_entity "date"}}
+
+        <div class="timestamp">{{date_secs}}</div>
+        <div class="title"><h3>mail</h3></div>
+        <div class="date">{{epochToTaskDate date_secs}}</div>
+        <div class="body">
+            <div class="caption">{{message}}</div>        
+        </div>
+		
+		{{/if_entity}}
+
       </div>
     </div>
   </script>
