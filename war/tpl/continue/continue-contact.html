@@ -47,9 +47,9 @@
 
 					{{#each custom_fields}}
 					<div class="control-group">
-                    	<label class="control-label">{{ucfirst this.field_label}}</label>
+                    	<label class="control-label">{{ucfirst this.field_label}}<span class="field_req">*</span></label>
 						<div class="controls">
-							 <input class="custom_field" id="{{this.id}}" name="{{this.field_label}}" type="{{toLowerCase this.field_type}}"/>
+							 <input class="custom_field required" id="{{this.id}}" name="{{this.field_label}}" type="{{toLowerCase this.field_type}}"/>
 						</div>
 					</div> 
 						
