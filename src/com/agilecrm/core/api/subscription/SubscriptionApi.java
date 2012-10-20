@@ -27,6 +27,23 @@ public class SubscriptionApi
 
     }
 
+    @Path("/invoice")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public String getInvoices()
+    {
+	try
+	{
+	    return Subscription.getInvoice();
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+    }
+
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })

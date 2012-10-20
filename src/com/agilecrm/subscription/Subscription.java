@@ -156,9 +156,14 @@ public class Subscription
 	return subscription;
     }
 
-    public static Subscription getInvoice()
+    public static String getInvoice() throws Exception
     {
-	return null;
+	Subscription subscription = getSubscription();
+	if (subscription == null)
+	    return null;
+
+	return subscription.getAgileBilling()
+		.getInvoices(subscription.billing_data).toString();
     }
 
     public void deleteCustomer() throws Exception
