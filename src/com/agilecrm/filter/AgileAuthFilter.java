@@ -39,7 +39,7 @@ public class AgileAuthFilter implements Filter
 	    final ServletResponse response, final FilterChain chain)
 	    throws IOException, ServletException
     {
-	System.out.println("Agile Auth Filter");
+	// System.out.println("Agile Auth Filter");
 
 	// Reset the thread local
 	SessionManager.set((UserInfo) null);
@@ -85,7 +85,8 @@ public class AgileAuthFilter implements Filter
 	// Get Namespace
 	String domain = NamespaceManager.get();
 
-	System.out.println("Domain: " + domain + " DomainUser " + domainUser);
+	// System.out.println("Domain: " + domain + " DomainUser " +
+	// domainUser);
 
 	// Send to register
 	if (domainUser == null)
@@ -115,21 +116,8 @@ public class AgileAuthFilter implements Filter
 	    return;
 	}
 
-	// Save Logged in time
-	try
-	{
-	    domainUser.logged_in_date = System.currentTimeMillis() / 1000;
-	    domainUser.save();
-	}
-	catch (Exception e)
-	{
-	    // Under localhost - this will not be possible
-	    // e.printStackTrace();
-	}
-
 	chain.doFilter(request, response);
 	return;
-
     }
 
     @Override

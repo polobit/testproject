@@ -80,7 +80,7 @@ public class RegisterServlet extends HttpServlet
 		SessionManager.AUTH_SESSION_COOKIE_NAME);
 	if (userInfo != null)
 	{
-	    DomainUser domainUser = createUser(request, response, userInfo);
+	    DomainUser domainUser = createUser(request, response, userInfo, "");
 	    response.sendRedirect("https://" + domainUser.domain
 		    + ".agilecrm.com/");
 	    return;
@@ -118,14 +118,16 @@ public class RegisterServlet extends HttpServlet
 
 	// Create User
 	UserInfo userInfo = new UserInfo("agilecrm.com", email, name);
-	DomainUser domainUser = createUser(request, response, userInfo);
+	DomainUser domainUser = createUser(request, response, userInfo,
+		password);
 
 	// Redirect to home page
 	response.sendRedirect("https://" + domainUser.domain + ".agilecrm.com/");
     }
 
     DomainUser createUser(HttpServletRequest request,
-	    HttpServletResponse response, UserInfo userInfo) throws Exception
+	    HttpServletResponse response, UserInfo userInfo, String password)
+	    throws Exception
     {
 	// Get Domain
 	String domain = NamespaceManager.get();
@@ -152,10 +154,18 @@ public class RegisterServlet extends HttpServlet
 
 	// Create Domain User, Agile User
 	domainUser = new DomainUser(domain, userInfo.getEmail(),
-		userInfo.getName(), true, true);
+		userInfo.getName(), password, true, true);
+
+	// Set IP Address
+	domainUser.setInfo(DomainUser.IP_ADDRESS, "");
+	domainUser.setInfo(DomainUser.COUNTRY,
+		request.getHeader("X-AppEngine-Country"));
+	domainUser.setInfo(DomainUser.CITY,
+		request.getHeader("X-AppEngine-City"));
+	domainUser.setInfo(DomainUser.LAT_LONG,
+		request.getHeader("X-AppEngine-CityLatLong"));
 
 	domainUser.save();
 	return domainUser;
     }
-
 }

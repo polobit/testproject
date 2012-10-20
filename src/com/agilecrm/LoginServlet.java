@@ -51,11 +51,13 @@ public class LoginServlet extends HttpServlet
 		{
 		    loginAgile(request, response);
 		}
+
+		return;
 	    }
 	}
 	catch (Exception e)
 	{
-	    // e.printStackTrace();
+	    e.printStackTrace();
 	    // Send to Login Page
 	    request.getRequestDispatcher(
 		    "login.jsp?error=" + URLEncoder.encode(e.getMessage()))

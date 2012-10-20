@@ -20,7 +20,6 @@ public class HomeServlet extends HttpServlet
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
 	    throws IOException, ServletException
     {
-
 	// First Time User
 	boolean isFirstTimeUser = false;
 
@@ -45,7 +44,8 @@ public class HomeServlet extends HttpServlet
 	{
 	    // Logged in time
 	    DomainUser domainUser = DomainUser.getDomainCurrentUser();
-	    domainUser.logged_in_date = System.currentTimeMillis() / 1000;
+	    domainUser.setInfo(DomainUser.LOGGED_IN_TIME,
+		    new Long(System.currentTimeMillis() / 1000));
 
 	    domainUser.save();
 	}

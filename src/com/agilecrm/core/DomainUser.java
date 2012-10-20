@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONObject;
 
 import com.agilecrm.Globals;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -33,13 +34,6 @@ public class DomainUser
     // Key
     @Id
     public Long id;
-
-    // Created Time
-    public Long created_time = 0L;
-
-    // Last LoggedIn Date
-    @NotSaved(IfDefault.class)
-    public Long logged_in_date = 0L;
 
     // Domain
     public String domain;
@@ -73,21 +67,24 @@ public class DomainUser
     @NotSaved(IfDefault.class)
     public String encrypted_password = null;
 
-    // User Location
+    // Misc User Info
     @NotSaved(IfDefault.class)
-    public String location = null;
+    public String info_json_string = null;
 
-    // User Country
-    @NotSaved(IfDefault.class)
-    public String country = null;
-
-    // User IP address
-    @NotSaved(IfDefault.class)
-    public String ip = null;
-
-    // Gadget Id
     @NotSaved(IfDefault.class)
     public String gadget_id = null;
+
+    @NotSaved
+    public JSONObject info_json = new JSONObject();
+
+    // Info Keys
+    public static final String CREATED_TIME = "created_time";
+    public static final String LOGGED_IN_TIME = "logged_in_time";
+    public static final String COUNTRY = "country";
+    public static final String REGION = "region";
+    public static final String CITY = "city";
+    public static final String LAT_LONG = "lat_long";
+    public static final String IP_ADDRESS = "ip_address";
 
     // Dao
     private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(
@@ -142,15 +139,17 @@ public class DomainUser
     private void PrePersist()
     {
 	// Store Created
-	if (created_time == 0L)
-	    created_time = System.currentTimeMillis() / 1000;
+	if (!hasInfo(CREATED_TIME))
+	    setInfo(CREATED_TIME, new Long(System.currentTimeMillis() / 1000));
 
 	// Store password
-	if (!password.equalsIgnoreCase(MASKED_PASSWORD))
+	if (password != null && !password.equalsIgnoreCase(MASKED_PASSWORD))
 	{
 	    // Encrypt password while saving
 	    encrypted_password = Util.encrypt(password);
 	}
+
+	info_json_string = info_json.toString();
 
     }
 
@@ -158,7 +157,17 @@ public class DomainUser
     private void PostLoad() throws DecoderException
     {
 	// Decrypt password
-	password = Util.decrypt(encrypted_password);
+	if (encrypted_password != null)
+	    password = Util.decrypt(encrypted_password);
+
+	try
+	{
+	    if (info_json != null)
+		info_json = new JSONObject(info_json_string);
+	}
+	catch (Exception e)
+	{
+	}
     }
 
     // Get user with id
@@ -332,7 +341,44 @@ public class DomainUser
     {
 	return " Email: " + this.email + " Domain: " + this.domain
 		+ " IsAdmin: " + this.is_admin + " DomainId: " + this.id
-		+ " Name:" + name + " created_time: " + created_time;
+		+ " Name:" + name + " " + " " + info_json;
 
     }
+
+    public void setInfo(String key, Object value)
+    {
+	try
+	{
+	    info_json.put(key, value);
+	}
+	catch (Exception e)
+	{
+
+	}
+    }
+
+    public Object getInfo(String key)
+    {
+	try
+	{
+	    return info_json.getString(key);
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+    }
+
+    public boolean hasInfo(String key)
+    {
+	try
+	{
+	    return info_json.has(key);
+	}
+	catch (Exception e)
+	{
+	    return false;
+	}
+    }
+
 }
