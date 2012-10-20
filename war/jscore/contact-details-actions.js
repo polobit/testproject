@@ -16,6 +16,7 @@ $(function(){
     	$('#noteModal').modal('show');
      });
     
+    // Subscribe contact to a campaign
     $('#contact-add-campaign').live('click', function(e){
     	e.preventDefault();
     	
@@ -54,23 +55,26 @@ $(function(){
     				url: url,
     				type: 'GET',
     				success: function(){
-    	    		//$(".enroll-success").html('<div class="alert alert-success"><a class="close" data-dismiss="alert" href="#">×</a>Enrolled successfully.</div>');
-    				
-    				console.log("in success");
-    				console.log(contact_id);
-    				// Remove loading image
-					$('#contactCampaignForm').find('span.save-status img').remove();
+   				
+    					// Remove loading image
+    					$('#contactCampaignForm').find('span.save-status img').remove();
 					
-					Backbone.history.navigate("contacts/" + contact_id, {
-	       	            trigger: true
-	       	        });
+    					Backbone.history.navigate("contact/" + contact_id, {
+    						trigger: true
+    					});
     				}
     		   });
     		});
+    		
+    		$('#contact-close-campaign').live('click', function(e){
+    			e.preventDefault();
+    			Backbone.history.navigate("contact/" + contact_id, {
+       	            trigger: true
+       	        });
+    	    });
             
     	});
-    	
-
+    
 });
 
 function fillRelation(el){

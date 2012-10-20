@@ -1,10 +1,9 @@
- <script id="campaigns-collection-template" type="text/html">
+<script id="campaigns-collection-template" type="text/html">
  	</br>
 	<h1>List of Workflows</h1>
-	<table class="table table-bordered" >
+	<table class="table table-striped showCheckboxes" >
 		<thead>
     		<tr>
-     			<th></th>
       			<th>Message</th>
 				<th>Time</th>
     		</tr>
@@ -15,16 +14,17 @@
   
 	</table>
 
-	<div class="row">
-		<div class="span3  enroll-success">
+	<div class="right">
+		<div class="span3  enroll-succes">
 						
 		</div>
-	</div>
+	</div><br/>
 
-	<div >
+	<div class="right">
 		<select class="campaignSelect" id='campaignSelect'  name="campaignSelect">
   			<option class="emailSelectOptions" value="">Select..</option>
 		</select>
+		<a href="#" class="btn" id="add-selected-campaign" style="margin-left: 10px; margin-bottom:9px">Add</a>	
 	</div>
 
 </script>
@@ -32,7 +32,6 @@
 <script id="campaigns-model-template" type="text/html">
 
 
-<td><icon class='deleteWorkflow icon-remove-circle'></icon></td>  	
   <td>{{getRequiredLog logs "m"}}</td>
   <td>{{getRequiredLog logs "t"}}</td>
 	

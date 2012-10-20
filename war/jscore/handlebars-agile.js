@@ -331,6 +331,11 @@ $(function()
 		}
 		if(this[item] != undefined)
 		{
+			if(this.date_secs){
+				
+				// For emails convert milliseconds into seconds
+				this.date_secs = this.date_secs / 1000;
+			}
 			return options.fn(this);
 		}
 	});
