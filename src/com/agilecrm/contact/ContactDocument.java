@@ -1,6 +1,5 @@
 package com.agilecrm.contact;
 
-import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -44,7 +43,7 @@ public class ContactDocument
 	// Set contactField objects in to map
 	for (ContactField contactField : contact.properties)
 	{
-	    String normalized_value = URLEncoder.encode(contactField.value);
+	    String normalized_value = normalizeString(contactField.value);
 
 	    System.out.println(normalized_value);
 
@@ -52,8 +51,8 @@ public class ContactDocument
 	    // value in map
 	    if (fields.containsKey(contactField.name))
 	    {
-		String value = fields.get(contactField.name) + " "
-			+ normalized_value;
+		String value = normalizeString(fields.get(contactField.name))
+			+ " " + normalized_value;
 
 		normalized_value = value;
 	    }
@@ -62,7 +61,7 @@ public class ContactDocument
 
 	}
 
-	String tags = NormalizeSet(contact.tags);
+	String tags = normalizeSet(contact.tags);
 
 	// put String tags
 	if (tags != null)
@@ -130,21 +129,30 @@ public class ContactDocument
 	if (tokens.size() != 0)
 	    search_tokens = Util.getSearchTokens(tokens);
 
-	return NormalizeSet(search_tokens);
+	return normalizeSet(search_tokens);
     }
 
-    private static String NormalizeSet(Set<String> values)
+    private static String normalizeSet(Set<String> values)
     {
 	String normalizedString = "";
 
 	// Concat all tags in to one string normalized and space seperated
 	for (String tag : values)
 	{
-	    normalizedString = normalizedString + " "
-		    + URLEncoder.encode(tag).replace("+", "%20");
+	    normalizedString += " " + normalizeString(tag);
 	}
 
-	return normalizedString;
+	return normalizedString.trim();
+    }
+
+    public static String normalizeString(String value)
+    {
+
+	// return ParserUtils.normalizePhrase("\"" + URLEncoder.encode(value)
+	// + "\"");
+	// return "\"" + (value) + "\"";
+
+	return (value).replace(" ", "");
     }
 
     public static void deleteDocument(Contact contact)

@@ -1,6 +1,5 @@
 package com.agilecrm.contact;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -111,8 +110,15 @@ public class ContactFilter
 	// Remaining rules after appegine valid queries completed
 	JSONArray remaining_rules = new JSONArray();
 
-	System.out.println(ContactDocument.index.search("tags:"
-		+ URLEncoder.encode("paid")));
+	System.out.println("Paid "
+		+ ContactDocument.index.search(
+			"tags:" + ContactDocument.normalizeString("paid"))
+			.getNumberFound());
+
+	System.out.println("not paid "
+		+ ContactDocument.index.search(
+			"tags:" + ContactDocument.normalizeString("not paid"))
+			.getNumberFound());
 
 	Objectify ofy = ObjectifyService.begin();
 	Query<Contact> contact_query = ofy.query(Contact.class);
