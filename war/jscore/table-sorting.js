@@ -1,7 +1,6 @@
 function sortTables(table){
 	
 	head.js(LIB_PATH + "lib/jquery.tablesorter.min.js", function(){
-		console.log("sortinggg");
 		   
 		$(table).tablesorter({ 
 			
