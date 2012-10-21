@@ -25,9 +25,11 @@
 					</div>
 
                     <div class="control-group">
-						<label class="control-label for="password">Password <span class="field_req">*</span></label> 
+						<label class="control-label for="password">Password </label> 
                 		<div class="controls">
-							<input type="password" id="password" class="required" name='password' placeholder="Password"/> 
+                         {{#if password}}
+							<input type="password" id="password" value="     " name='password' placeholder="Password"/> 
+                          {{/if}}
 						</div>
 					</div>
                     <div class="control-group">

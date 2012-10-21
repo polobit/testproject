@@ -159,8 +159,8 @@ box-shadow: none;
 					<div id="openid_btns" style="float: left; padding: 5px 0 15px;">
 
 						<input type='hidden' name='type' value='agile'>
-					    <input class="required email field input-xlarge" name='email' type="text" placeholder="User Name"> <br /> 
-					    <input class="required field input-xlarge" name='password' type="password" placeholder="Password"> <br />
+					    <input class="input-xlarge required email field" name='email' type="text" placeholder="User Name">
+					    <input class="input-xlarge required field " name='password' type="password" placeholder="Password">
 						<div style="margin-top: 15px;">
 							<label class="checkbox" style="display: inline-block;">
 							   <input type="checkbox" name="signin"> Keep me signed in 
