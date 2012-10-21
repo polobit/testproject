@@ -65,7 +65,7 @@ public class RegisterServlet extends HttpServlet
 	}
 
 	// Return to Login Page
-	request.getRequestDispatcher("login.jsp").forward(request, response);
+	request.getRequestDispatcher("register.jsp").forward(request, response);
     }
 
     public void registerOAuth(HttpServletRequest request,
