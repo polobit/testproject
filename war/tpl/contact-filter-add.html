@@ -20,10 +20,10 @@
 										<div id="LHS" name="LHS">
 								  			<select name="temp" id="LHS">	
 												<option value="tags" selected="selected">Tagged With</option>
-												<option value="properties_first_name" >First Name</option>
+												<option value="first_name" >First Name</option>
 												<option value="title">Job Title</option>
-												<option value="properties_email">Email Address</option>
-												<option value="properties_phone">Phone Number</option>
+												<option value="email">Email Address</option>
+												<option value="phone">Phone Number</option>
 												<option value="created_time">Created</option>
 												<option value="updated_time">Updated</option>
 												<option value="organisation">Organisation.Name</option>
@@ -33,8 +33,8 @@
 									<td>
 										<div id="condition" name="condition">
 										  <select name="temp" class="span2">		
-												<option value="EQUALS" class="properties_first_name properties_phone tags organisation title org_tag jobtitle properties_email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>	
-												<option value="NOTEQUALS" class="properties_first_name tags org_tag jobtitle properties_email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>											
+												<option value="EQUALS" class="first_name phone tags organisation title org_tag jobtitle email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>	
+												<option value="NOTEQUALS" class="first_name tags org_tag jobtitle email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>											
 												<option value="EQUALS" class="updated_time created_time">on</option>
 												<option value="AFTER" class="created_time updated_time">is after</option>
 												<option value="BEFORE" class="created_time updated_time">is before</option>
@@ -49,9 +49,9 @@
 									<td>
 										<div id="RHS" name="RHS">
 											<input id="updated_date" type= "text" name="updated_date" class="created_time updated_time input required date span2" placeholder="MM/DD/YY"/>
-											<input type="text" name="temp" class="first_name organisation title properties_phone LAST"/>
+											<input type="text" name="temp" class="first_name organisation title phone LAST"/>
 											<input type="text" name="tag" class="tags" style="margin: 0 0 0 0px;"/>
-											<input type="text" name="temp" class="properties_first_name properties_email"/>
+											<input type="text" name="temp" class="email"/>
 											
 										</div>
 									</td>
