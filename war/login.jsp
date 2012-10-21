@@ -15,7 +15,7 @@ else
 
 AccountPrefs accountPrefs = AccountPrefs.getAccountPrefs();
 String logo_url = accountPrefs.logo;
-out.println(accountPrefs + " " + logo_url);
+
 %>
 <!DOCTYPE html>
 
@@ -127,7 +127,7 @@ box-shadow: none;
 			<div class="content clearfix">
 			
 				<form id='oauth' name='oauth' method='post'>
-                   <div><h1>Sign In<img src="<%=logo_url%>" style="float:right;width:50px;height:40px;" ></img></h1></div>
+                   <div><h1>Sign In<img class="company_logo" src="<%=logo_url%>" style="float:right;width:50px;height:40px;" ></img></h1></div>
                    
                    
                        <div class="alert alert-error login-error" style="display:none">
@@ -192,6 +192,11 @@ box-shadow: none;
 			if(error != "")
 			{
 				$(".login-error").show();
+			}
+			
+			if(<%=logo_url%> == null)
+			{
+				$(".company_logo").hide();
 			}
 
 			$('.openid_large_btn').click(function(e)
