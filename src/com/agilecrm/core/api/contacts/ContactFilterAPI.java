@@ -1,5 +1,6 @@
 package com.agilecrm.core.api.contacts;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -69,7 +70,7 @@ public class ContactFilterAPI
     @Path("/query/{filter_id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Contact> getQueryResults(@PathParam("filter_id") String id)
+    public Collection<Contact> getQueryResults(@PathParam("filter_id") String id)
     {
 	try
 	{
@@ -92,7 +93,7 @@ public class ContactFilterAPI
 	    ContactFilter filter = ContactFilter.getContactFilter(Long
 		    .parseLong(id));
 
-	    List<Contact> contacts = filter.queryContacts();
+	    Collection<Contact> contacts = filter.queryContacts();
 
 	    return contacts;
 	}

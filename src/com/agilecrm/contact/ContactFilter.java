@@ -1,6 +1,10 @@
 package com.agilecrm.contact;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -8,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,6 +20,8 @@ import org.json.JSONObject;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.util.DateUtil;
+import com.google.appengine.api.search.QueryOptions;
+import com.google.appengine.api.search.ScoredDocument;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -103,25 +110,11 @@ public class ContactFilter
     }
 
     // Perform queries to fetch contacts
-    public List<Contact> queryContacts()
+    public Collection<Contact> queryContacts()
     {
 	List<Contact> contacts = new ArrayList<Contact>();
 
-	// Remaining rules after appegine valid queries completed
-	JSONArray remaining_rules = new JSONArray();
-
-	System.out.println("Paid "
-		+ ContactDocument.index.search(
-			"tags:" + ContactDocument.normalizeString("paid"))
-			.getNumberFound());
-
-	System.out.println("not paid "
-		+ ContactDocument.index.search(
-			"tags:" + ContactDocument.normalizeString("not paid"))
-			.getNumberFound());
-
-	Objectify ofy = ObjectifyService.begin();
-	Query<Contact> contact_query = ofy.query(Contact.class);
+	String query = "";
 
 	for (int i = 0; i < rules_json_array.length(); i++)
 	{
@@ -138,42 +131,78 @@ public class ContactFilter
 		String RHS = each_rule.getString("RHS");
 
 		// Build Equal queries
-		if (condition.equalsIgnoreCase("EQUALS")
-			&& !LHS.contains("time"))
+		if (!LHS.contains("time"))
 		{
-		    // Check whether to query in properties
-		    if (LHS.contains("properties"))
+		    // For equals condition
+		    if (condition.equalsIgnoreCase("EQUALS"))
 		    {
-			contact_query.filter("properties.value", RHS);
+			// If query is not empty should add AND condition
+			if (!query.isEmpty())
+			{
+			    System.out.println("in if : " + query);
+			    query = query + " AND " + LHS + ":"
+				    + ContactDocument.normalizeString(RHS);
+			}
+			else
+			{
+			    System.out.println("in else : " + query);
+			    query = query + LHS + ":"
+				    + ContactDocument.normalizeString(RHS);
+			}
 		    }
-		    else if (!LHS.contains("time"))
+		    // For not queries
+		    else
 		    {
-			contact_query.filter(LHS, RHS);
+			if (!query.isEmpty())
+			{
+			    System.out.println("in if : " + query);
+			    query = query + " NOT " + LHS + ":"
+				    + ContactDocument.normalizeString(RHS);
+			}
+			else
+			{
+
+			    query = "NOT " + LHS + ":"
+				    + ContactDocument.normalizeString(RHS);
+			    System.out.println("in else : " + query);
+			}
 		    }
 		}
 
 		// Queries on created or updated times
 		else if (LHS.contains("time"))
 		{
-		    Date date = new Date(Long.parseLong(RHS));
-		    DateUtil start_time = new DateUtil(date);
+		    Date truncatedDate = DateUtils.truncate(
+			    new Date(Long.parseLong(RHS)), Calendar.DATE);
 
-		    long start_date = start_time.getTime().getTime() / 1000;
+		    Format formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-		    long end_date = start_time.addDays(1).getTime().getTime() / 1000;
+		    // Formated to build query
+		    String date = formatter.format(truncatedDate);
+
+		    System.out.println("date string is  : " + date);
 
 		    if (condition.equalsIgnoreCase("EQUALS"))
 		    {
-			contact_query.filter(LHS + " >=", start_date).filter(
-				LHS + " <=", end_date);
+			if (!query.isEmpty())
+			    query = query + " AND " + LHS + "=" + date;
+			else
+			    query = LHS + "=" + date;
 		    }
 		    else if (condition.equalsIgnoreCase("AFTER"))
 		    {
-			contact_query.filter(LHS + " >", start_date);
+			if (!query.isEmpty())
+			    query = query + " AND " + LHS + " > " + date;
+			else
+			    query = query + LHS + " >" + date;
+
 		    }
 		    else if (condition.equalsIgnoreCase("BEFORE"))
 		    {
-			contact_query.filter(LHS + " <", start_date);
+			if (!query.isEmpty())
+			    query = query + " AND " + LHS + " < " + date;
+			else
+			    query = query + LHS + " < " + date;
 		    }
 		    else if (condition.equalsIgnoreCase("LAST"))
 		    {
@@ -182,28 +211,24 @@ public class ContactFilter
 				.removeDays(Integer.parseInt(RHS)).getTime()
 				.getTime() / 1000;
 
-			contact_query.filter(LHS + " >=", from_date);
+			query = query + LHS + " < " + date;
 		    }
 		    else if (condition.equalsIgnoreCase("BETWEEN"))
 		    {
 			String RHS_NEW = each_rule.getString("RHS_NEW");
 			if (RHS_NEW != null)
 			{
-			    Date to_date = new Date(Long.parseLong(RHS_NEW));
-			    long to_date_seconds = new DateUtil(to_date)
-				    .getTime().getTime() / 1000;
+			    String to_date = formatter.format(new Date(Long
+				    .parseLong(RHS_NEW)));
 
-			    contact_query.filter(LHS + " >=", start_date)
-				    .filter(LHS + " <=", to_date_seconds);
+			    if (!query.isEmpty())
+				query = query + " AND " + LHS + " >=" + date
+					+ " AND " + LHS + " <= " + to_date;
+			    else
+				query = query + LHS + " >=" + date + " AND "
+					+ LHS + " <= " + to_date;
 			}
 		    }
-		}
-
-		// If Not equal queries add to remaining rules for further
-		// processing
-		else
-		{
-		    remaining_rules.put(each_rule);
 		}
 	    }
 	    catch (JSONException e)
@@ -212,63 +237,33 @@ public class ContactFilter
 	    }
 	}
 
-	// Run the query and get list of contacts
-	contacts = contact_query.list();
+	// Set query options only to get id of document (enough to get get
+	// respective contacts)
+	QueryOptions options = QueryOptions.newBuilder()
+		.setFieldsToReturn("id").build();
 
-	// If remaing_rules are not null process rules
-	if (remaining_rules != null)
+	// Build query on query options
+	com.google.appengine.api.search.Query query_string = com.google.appengine.api.search.Query
+		.newBuilder().setOptions(options).build(query);
+
+	// Get results on query
+	Collection<ScoredDocument> contact_documents = ContactDocument.index
+		.search(query_string).getResults();
+
+	List<Long> contact_ids = new ArrayList<Long>();
+
+	// Iterate through contact_documents and add document ids(contact ids)
+	// to list
+	for (ScoredDocument doc : contact_documents)
 	{
-	    for (int i = 0; i < remaining_rules.length(); i++)
-	    {
-		try
-		{
-		    JSONObject each_rule = new JSONObject(
-			    remaining_rules.getString(i));
-
-		    String LHS = each_rule.getString("LHS");
-		    String RHS = each_rule.getString("RHS");
-		    String condition = each_rule.getString("condition");
-
-		    // Run not equal
-		    if (condition.equalsIgnoreCase("NOTEQUALS"))
-		    {
-			@SuppressWarnings("unchecked")
-			List<Contact> contacts_clone = (List<Contact>) ((ArrayList<Contact>) contacts)
-				.clone();
-
-			for (Contact contact : contacts_clone)
-			{
-
-			    // Check whether rule is based on properties list of
-			    // contacts
-			    if (LHS.contains("properties"))
-			    {
-				for (ContactField contactField : contact.properties)
-				{
-				    if ((contactField.value)
-					    .equalsIgnoreCase(RHS))
-				    {
-					contacts.remove(contact);
-				    }
-				}
-			    }
-			    else if (LHS.equalsIgnoreCase("tags"))
-			    {
-				if (contact.tags.contains(RHS))
-				{
-				    contacts.remove(contact);
-				}
-			    }
-			}
-		    }
-		}
-		catch (JSONException e)
-		{
-		    e.printStackTrace();
-		}
-	    }
+	    contact_ids.add(Long.parseLong(doc.getId()));
 	}
-	return contacts;
+
+	Objectify ofy = ObjectifyService.begin();
+
+	// Return result contacts
+	return ofy.get(Contact.class, contact_ids).values();
+
     }
 
     // Create JSONArray from string array on load from DB
