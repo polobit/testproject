@@ -172,6 +172,8 @@ var ContactsRouter = Backbone.Router.extend({
                 loadTimelineDetails(el, id);
                 
                 starify(el);
+                
+                showMap(el);
                }
         });
         
