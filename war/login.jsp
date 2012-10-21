@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.account.AccountPrefs"%>
 <%
 //Check if it is being access directly and not through servlet
 if(request.getAttribute("javax.servlet.forward.request_uri") == null)
@@ -11,6 +12,10 @@ if(error != null)
     System.out.println(error);
 else
     error = "";
+
+AccountPrefs accountPrefs = AccountPrefs.getAccountPrefs();
+String logo_url = accountPrefs.logo;
+out.println(accountPrefs + " " + logo_url);
 %>
 <!DOCTYPE html>
 
@@ -122,7 +127,7 @@ box-shadow: none;
 			<div class="content clearfix">
 			
 				<form id='oauth' name='oauth' method='post'>
-                   <h1>Sign In</h1>
+                   <div><h1>Sign In<img src="<%=logo_url%>" style="float:right;width:50px;height:40px;" ></img></h1></div>
                    
                    
                        <div class="alert alert-error login-error" style="display:none">
