@@ -129,6 +129,7 @@
            <url-pattern>/</url-pattern>
             <url-pattern>/core/*</url-pattern>
             <url-pattern>/scribe</url-pattern>
+            <url-pattern>/upload.jsp</url-pattern>
    </filter-mapping>
    
     <filter>
