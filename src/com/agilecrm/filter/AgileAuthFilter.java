@@ -55,14 +55,6 @@ public class AgileAuthFilter implements Filter
 	    return;
 	}
 
-	// If it is register
-	if (httpRequest.getRequestURI().contains("register"))
-	{
-	    System.out.println("Register Page");
-	    chain.doFilter(request, response);
-	    return;
-	}
-
 	// If no sessions are there, redirect
 	if (httpRequest.getSession(false) == null)
 	{
