@@ -1,5 +1,7 @@
 package com.agilecrm.core.api.subscription;
 
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -30,7 +32,7 @@ public class SubscriptionApi
     @Path("/invoice")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public String getInvoices()
+    public List getInvoices()
     {
 	try
 	{

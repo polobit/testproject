@@ -3,7 +3,8 @@ var SubscribeRouter = Backbone.Router.extend({
 	 routes: {
 		 "subscribe" : "subscribe",
 		 "updatecard": "updateCreditCard",
-		 "updateplan": "updatePlan"
+		 "updateplan": "updatePlan",
+		  "invoice" : "invoice"
 	 },
 	 
 	 
@@ -66,5 +67,18 @@ var SubscribeRouter = Backbone.Router.extend({
 		 });
 		 
 		 $('#content').html(update_plan.render().el);
+	 },
+	 invoice: function() {
+		 console.log(invoice);
+		 var invoice = new Base_Collection_View({
+			 url: "core/api/subscription/invoice",
+			 templateKey: "invoice",
+			 window: 'subscribe',
+			 individual_tag_name: 'tr'
+		 })
+		 
+		 invoice.collection.fetch();
+		 
+		 $('#content').html(invoice.render().el);
 	 }
 });

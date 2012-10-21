@@ -1,5 +1,7 @@
 package com.agilecrm.subscription;
 
+import java.util.List;
+
 import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
@@ -21,6 +23,7 @@ import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
+import com.stripe.model.Invoice;
 
 //import org.json.JSONObject;
 
@@ -156,14 +159,14 @@ public class Subscription
 	return subscription;
     }
 
-    public static String getInvoice() throws Exception
+    public static List<Invoice> getInvoice() throws Exception
     {
 	Subscription subscription = getSubscription();
 	if (subscription == null)
 	    return null;
 
-	return subscription.getAgileBilling()
-		.getInvoices(subscription.billing_data).toString();
+	return subscription.getAgileBilling().getInvoices(
+		subscription.billing_data);
     }
 
     public void deleteCustomer() throws Exception

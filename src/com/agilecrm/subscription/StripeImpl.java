@@ -1,8 +1,10 @@
 package com.agilecrm.subscription;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
@@ -81,7 +83,7 @@ public class StripeImpl implements AgileBilling
     }
 
     // Get invoices of particular customer stripe id
-    public JSONObject getInvoices(JSONObject stripeCustomer)
+    public List<Invoice> getInvoices(JSONObject stripeCustomer)
 	    throws StripeException
     {
 
@@ -91,12 +93,20 @@ public class StripeImpl implements AgileBilling
 		StripeUtil.getCustomerFromJson(stripeCustomer).getId());
 
 	// Fetch all invoices for given stripe id
-	invoiceCollection = Invoice.all(invoiceParams);
+	List<Invoice> invoice_collection = Invoice.all(invoiceParams).getData();
 
 	JSONObject invoiceJSON = null;
+	JSONArray json_array = new JSONArray();
 	try
 	{
-	    invoiceJSON = new JSONObject(new Gson().toJson(invoiceCollection));
+	    json_array.put(invoice_collection);
+	    System.out.println(json_array);
+	    for (Invoice invoice : invoice_collection)
+	    {
+		invoiceJSON = new JSONObject(new Gson().toJson(invoice));
+
+	    }
+
 	}
 	catch (JSONException e)
 	{
@@ -104,7 +114,8 @@ public class StripeImpl implements AgileBilling
 	    e.printStackTrace();
 	}
 
-	return invoiceJSON;
+	// return json_array;
+	return invoice_collection;
     }
 
     // Delete customer from Stripe
