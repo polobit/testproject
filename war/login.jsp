@@ -57,7 +57,7 @@ String logo_url = accountPrefs.logo;
 	color: red;
 }
 .login-page .openid_large_btn:hover {
-margin: 4px 0px 0px 6px;
+margin: 4px 0px 0px 4px;
 border: 2px solid #999;
 box-shadow: none;
 -moz-box-shadow: none;

@@ -51,7 +51,7 @@ color:red;
 }
 
 .login-page .openid_large_btn:hover {
-margin: 4px 0px 0px 6px;
+margin: 4px 0px 0px 4px;
 border: 2px solid #999;
 box-shadow: none;
 -moz-box-shadow: none;
@@ -128,7 +128,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 					<input type='hidden' name='type' value='oauth'></input>
 					<input type='hidden' name='server' id='oauth-name' value=''></input>
 					<a title="log in with Google" data='google' href='#' style="background: #FFF url(img/signin/openid-logos.png); background-position: -1px -1px" class="google openid_large_btn"></a>
-						<a title="log in with Yahoo" data='yahoo' href="#"	style="background: #FFF url(img/signin/openid-logos.png); background-position: -1px -63px" class="yahoo openid_large_btn"></a>
+					<a title="log in with Yahoo" data='yahoo' href="#"	style="background: #FFF url(img/signin/openid-logos.png); background-position: -1px -63px" class="yahoo openid_large_btn"></a>
 				  </div>
 				</div>
 				
