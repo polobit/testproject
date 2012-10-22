@@ -12,6 +12,13 @@ $('#helpMail').die().live('click',function(e){
 	   										 encodeURIComponent(json.to) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + 
 	   										 encodeURIComponent(json.body);
 	
+	
+    
+    //Show message 
+    $save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><p class="text-success" style="color:#008000; font-size:15px; display:inline-block"> <i>Sending mail...</i></p></span>');
+    $("#msg", this.el).append($save_info);
+	$save_info.show().delay(2000).fadeOut("slow");
+	
 	$.post(url,function(){
 		
 		// Reset form after sending email
@@ -19,11 +26,6 @@ $('#helpMail').die().live('click',function(e){
             this.reset();
         });
         
-        //Show success message 
-        $save_info = $('<span style="display:inline-block"><small><p class="text-success" style="color:#008000; font-size:14px"><i>Your mail received successfully.Thank you for contacting us.</i></p></small></span>');
-        $("#msg", this.el).append($save_info);
-    	$save_info.show().delay(2000).fadeOut("slow");
-    	
 	});
   
 });
