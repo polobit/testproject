@@ -102,7 +102,7 @@ function isValid(){
 <input type="hidden" name="acl" value="public-read" /> 
 <input type="hidden" name="content-type" value="image/*" />
 
-<input type="hidden" name="success_action_redirect" value="http://localhost:8888/upload.jsp" /> 
+<input type="hidden" name="success_action_redirect" value="<%=request.getRequestURL()%>" /> 
 
 <input type="hidden" name="AWSAccessKeyId" value="AKIAJ62OAFOKCJTDANVA" />
 
