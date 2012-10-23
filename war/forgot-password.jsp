@@ -1,3 +1,14 @@
+<%
+
+// Get parameter
+
+// If Email is present
+
+// Reset - if error, set error
+
+// If everything good - set successful 
+
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
