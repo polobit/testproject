@@ -99,7 +99,7 @@ public class DomainUser
 	    String name, boolean isAdmin, boolean isAccountOwner)
     {
 	this.domain = domain;
-	this.email = SessionManager.get().getEmail();
+	this.email = email;
 	this.password = password;
 	this.is_admin = isAdmin;
 	this.is_account_owner = isAccountOwner;
@@ -367,6 +367,10 @@ public class DomainUser
 
     public void setInfo(String key, Object value)
     {
+
+	if (value == null)
+	    return;
+
 	try
 	{
 	    info_json.put(key, value);
