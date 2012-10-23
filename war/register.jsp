@@ -1,3 +1,4 @@
+<%@page import="org.apache.commons.lang.StringUtils"%>
 <%
 //Check if it is being access directly and not through servlet
 if(request.getAttribute("javax.servlet.forward.request_uri") == null)
@@ -121,9 +122,13 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 				<form id='oauth' name='oauth' method='post'> 
 				 <h1>SignUp</h1>
 				<div id="openid_btns" style="float: left;padding:5px 0 15px;border-top: 1px dotted #CCC;border-bottom: 1px dotted #CCC;border-right: none;border-left: none;">
+				        
+				         <% if(!StringUtils.isEmpty(error)){%>
 				        <div class="alert alert-error login-error" style="display:none">
 							<a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
 						</div>
+						<%}%>
+						
 				<h3><small>Login or register using existing accounts</small></h3>	
 				  <div style="padding-top:10px;">
 					<input type='hidden' name='auth' value='auth'></input>
@@ -162,20 +167,14 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 			</div>
 			<div style="text-align: center;line-height: 19px;">
 	                 Already have an account? <a href="/login">Login</a><br>
+	                 Forgot <a href="forgot-password.jsp">Password</a>
                </div>
 		</div>
 		
 		<script type="text/javascript">
 		$(document).ready(function() {			
 			
-            $(".login-error").hide();
-			
-			var error = "<%=error%>";		
-			if(error != "")
-			{
-				$(".login-error").show();
-			}
-			
+         
 			$('.openid_large_btn').click(function(e)
 			{
 				// Get Data

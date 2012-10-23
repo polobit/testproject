@@ -1,20 +1,24 @@
+<%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.core.DomainUser"%>
 <%
 
 String error = "", success = "";
 //If Email is present
 String email = request.getParameter("email");
-DomainUser domainUser = DomainUser.generatePassword(email);
-if(domainUser == null)
+if(!StringUtils.isEmpty(email))
 {
-    error = "We are not able to find any user";
+	DomainUser domainUser = DomainUser.generatePassword(email);
+	if(domainUser == null)
+	{
+	    error = "We are not able to find any user";
+	}
+	else
+	{
+	   success = "We have sent you an email";
+	}
+	
+	System.out.println(error + " " + success);
 }
-else
-{
-   success = "We have sent you an email";
-}
-
-System.out.println(error + " " + success);
 
 %>
 <!DOCTYPE html>
@@ -108,13 +112,22 @@ jQuery.validator.setDefaults({
 								
 				<div class="clearfix"></div>
 				<h1>Forgot Password</h1>
+				
 				<form name='forgot_password' id="forgot_password" method='post' onsubmit="return isValid();" style="padding:10px 0 15px;border-top: 1px dotted #CCC;"> 
-				 <div class="alert alert-error login-error" style="display:none">
+				
+				 <% if(!StringUtils.isEmpty(error)){%>
+				 <div class="alert alert-error login-error">
 					<a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
 				</div>
-				<div class="alert alert-success login-success" style="display:none">
+				<%}%>
+				
+				 <% if(!StringUtils.isEmpty(success)){%>
+				<div class="alert alert-success login-success">
 					<a class="close" data-dismiss="alert" href="#">×</a><%=success%> 
 				</div>
+				 <%}%>
+				
+				
 				 <h3><small>Enter Your Email </small></h3>	
 				<div id="openid_btns" style="float: left;padding:5px 0 15px;">
 					
@@ -138,24 +151,9 @@ jQuery.validator.setDefaults({
 		<script type="text/javascript">
 		$(document).ready(function() {			
 			
-            $(".login-error").hide();
-            $(".login-success").hide();
-			var error = "<%=error%>";		
-			if(error != "")
-			{
-				$(".login-error").show();
-			}
-			
-			var success = "<%=success%>";		
-			if(success != "")
-			{
-				$(".login-success").show();
-			}
-			
-			$('.forgot_password_btn').click(function(e)
+          $('.forgot_password_btn').click(function(e)
 			{
 				$('#forgot_password').submit();
-
 				e.preventDefault();
 			});
 			
