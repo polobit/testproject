@@ -37,7 +37,15 @@ public class UsersAPI
 	try
 	{
 	    String domain = NamespaceManager.get();
-	    return DomainUser.getUsers(domain);
+
+	    // Get the users and update the password to the masked one
+	    List<DomainUser> users = DomainUser.getUsers(domain);
+	    for (DomainUser user : users)
+	    {
+		user.password = DomainUser.MASKED_PASSWORD;
+	    }
+
+	    return users;
 	}
 	catch (Exception e)
 	{
