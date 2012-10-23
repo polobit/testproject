@@ -20,7 +20,7 @@ import com.googlecode.objectify.condition.IfDefault;
 @XmlRootElement
 public class IMAPEmailPrefs
 {
-    public static final String MASKED_PASSWORD = "     ";
+    public static final String MASKED_PASSWORD = "PASSWORD";
 
     // Key
     @Id

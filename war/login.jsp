@@ -179,7 +179,7 @@ box-shadow: none;
 		</div>
 		<div style="text-align: center; line-height: 19px;">
 			Don't have an account? <a href="/register">Sign Up</a><br>
-			Remind <a href="/forgot-password.html">Password</a>
+			Remind <a href="/forgotpassword">Password</a>
 		</div>
 	</div>
 
@@ -194,7 +194,8 @@ box-shadow: none;
 				$(".login-error").show();
 			}
 			
-			if(<%=logo_url%> == null)
+			var logo = "<%=logo_url%>";
+			if(logo == null)
 			{
 				$(".company_logo").hide();
 			}
