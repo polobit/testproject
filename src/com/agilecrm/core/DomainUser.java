@@ -29,7 +29,7 @@ import com.googlecode.objectify.condition.IfDefault;
 @XmlRootElement
 public class DomainUser
 {
-    public static final String MASKED_PASSWORD = "     ";
+    public static final String MASKED_PASSWORD = "PASSWORD";
 
     // Key
     @Id
@@ -110,12 +110,10 @@ public class DomainUser
     {
 	DomainUser domainuser = getDomainUserFromEmail(email);
 
-	if (email == null || domainuser == null)
+	if (email != null && domainuser != null)
 	{
-	    return null;
-	}
-	else
-	{
+	    String oldNamespace = NamespaceManager.get();
+	    NamespaceManager.set("");
 	    SecureRandom random = new SecureRandom();
 	    String randomNumber = new BigInteger(130, random).toString(16);
 
@@ -130,7 +128,15 @@ public class DomainUser
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	    }
+	    finally
+	    {
+		NamespaceManager.set(oldNamespace);
+	    }
 	    return domainuser;
+	}
+	else
+	{
+	    return null;
 	}
 
     }
@@ -158,7 +164,9 @@ public class DomainUser
     {
 	// Decrypt password
 	if (encrypted_password != null)
+	{
 	    password = Util.decrypt(encrypted_password);
+	}
 
 	try
 	{
