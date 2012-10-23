@@ -82,11 +82,10 @@ public class AgileAuthFilter implements Filter
 	// Check if userinfo is valid for this namespace
 	DomainUser domainUser = DomainUser.getDomainCurrentUser();
 
+	System.out.println("Current domain user " + domainUser);
+
 	// Get Namespace
 	String domain = NamespaceManager.get();
-
-	// System.out.println("Domain: " + domain + " DomainUser " +
-	// domainUser);
 
 	// Send to register
 	if (domainUser == null)
@@ -103,6 +102,11 @@ public class AgileAuthFilter implements Filter
 	    // Probably forward to the domain again he registered
 	    System.out.println("Forwarding to actual domain "
 		    + domainUser.domain);
+
+	    // Remove from Current Session
+	    ((HttpServletRequest) request).getSession().removeAttribute(
+		    SessionManager.AUTH_SESSION_COOKIE_NAME);
+
 	    httpResponse.sendRedirect("https://" + domainUser.domain
 		    + ".agilecrm.com");
 	    return;
