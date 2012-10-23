@@ -107,6 +107,22 @@ $(function(){
 
 $(function(){
 	
+	//Saving contact image
+	$(".save_img").live('click', function(e){
+		e.preventDefault();
+		var id = $(this).closest("#upload-container").find("#upload_url");
+		var image_url = $(id).attr('value');
+		agile_crm_update_contact("image", image_url);
+	});
+	
+	//Upload contact image
+	$(".upload_pic").live('click', function(e){
+		e.preventDefault();
+		uploadImage("upload-container");
+	     $(".save_img").show();
+	});
+	
+	
 	// Add score
 	    $('#add').live('click', function(e){
 	    e.preventDefault();

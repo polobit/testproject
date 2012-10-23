@@ -179,7 +179,7 @@ box-shadow: none;
 		</div>
 		<div style="text-align: center; line-height: 19px;">
 			Don't have an account? <a href="/register">Sign Up</a><br>
-			Remind <a href="/forgotpassword">Password</a>
+			Remind <a href="forgot-password.jsp">Password</a>
 		</div>
 	</div>
 

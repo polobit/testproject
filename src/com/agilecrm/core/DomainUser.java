@@ -106,7 +106,7 @@ public class DomainUser
     }
 
     // Generate password
-    private static DomainUser generatePassword(String email)
+    public static DomainUser generatePassword(String email)
     {
 	DomainUser domainuser = getDomainUserFromEmail(email);
 

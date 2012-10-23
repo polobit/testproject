@@ -1,12 +1,26 @@
 <%
 
-// Get parameter
+//If Email is present
 
-// If Email is present
+//Reset - if error, set error
 
-// Reset - if error, set error
+//If everything good - set successful
 
-// If everything good - set successful 
+//Get User Name
+String email = request.getParameter("email");
+
+//Check if it is being access directly and not through servlet
+if(email != null && request.getAttribute("javax.servlet.forward.request_uri") == null)
+{
+	   response.sendRedirect("/forgotpassword");
+	    return;
+}
+ 
+String error = request.getParameter("error");
+if(error != null)
+    System.out.println(error);
+else
+    error = "";
 
 %>
 <!DOCTYPE html>
@@ -100,6 +114,9 @@ jQuery.validator.setDefaults({
 								
 				<div class="clearfix"></div>
 				<h1>Forgot Password</h1>
+				<div class="alert alert-error login-error" style="display:none">
+					<a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
+				</div>
 				<form name='forgot_password' id="forgot_password" method='post' onsubmit="return isValid();" style="padding:10px 0 15px;border-top: 1px dotted #CCC;"> 
 				 <h3><small>Enter Your Email </small></h3>	
 				<div id="openid_btns" style="float: left;padding:5px 0 15px;">
@@ -124,9 +141,19 @@ jQuery.validator.setDefaults({
 		<script type="text/javascript">
 		$(document).ready(function() {			
 			
+$(".login-error").hide();
+			console.log("jdhf");
+			var error = "<%=error%>";		
+			if(error != "")
+			{
+				$(".login-error").show();
+			}
+			
 			$('.forgot_password_btn').click(function(e)
 			{
-				
+				$('#forgot_password').submit();
+
+				e.preventDefault();
 			});
 			
 		});
