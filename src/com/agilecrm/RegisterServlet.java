@@ -52,6 +52,8 @@ public class RegisterServlet extends HttpServlet
 		{
 		    registerAgile(request, response);
 		}
+
+		return;
 	    }
 	}
 	catch (Exception e)
