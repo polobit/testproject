@@ -203,11 +203,10 @@ class NotificationsDeferredTask implements DeferredTask
 	APIKey api = APIKey.getAPIKey();
 	String apiKey = api.api_key;
 
-	url = "https://stats.agilecrm.com/push?custom=" + json_data
+	url = "http://stats.agilecrm.com:90/push?custom=" + json_data
 		+ "&agile_id=" + apiKey + "&type=" + type;
 
 	String output = Util.accessURL(url);
 	System.out.println(output);
     }
-
 }
