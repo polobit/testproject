@@ -65,7 +65,7 @@ public class DomainUser
     public String password = MASKED_PASSWORD;
 
     @NotSaved(IfDefault.class)
-    public String encrypted_password = null;
+    private String encrypted_password = null;
 
     // Misc User Info
     @NotSaved(IfDefault.class)
@@ -108,20 +108,27 @@ public class DomainUser
     // Generate password
     public static DomainUser generatePassword(String email)
     {
-	DomainUser domainuser = getDomainUserFromEmail(email);
+	DomainUser domainUser = getDomainUserFromEmail(email);
 
-	if (email != null && domainuser != null)
+	if (email != null && domainUser != null)
 	{
 	    String oldNamespace = NamespaceManager.get();
 	    NamespaceManager.set("");
 	    SecureRandom random = new SecureRandom();
 	    String randomNumber = new BigInteger(130, random).toString(16);
 
-	    domainuser.password = randomNumber;
+	    domainUser.password = randomNumber;
+
+	    // Send an email with the new password
+	    Util.sendMail(SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME,
+		    email, "Password has been reset",
+		    SendMail.AGILE_FROM_EMAIL,
+		    "We have successfully reset the password to "
+			    + domainUser.password, null);
 
 	    try
 	    {
-		domainuser.save();
+		domainUser.save();
 	    }
 	    catch (Exception e)
 	    {
@@ -132,7 +139,7 @@ public class DomainUser
 	    {
 		NamespaceManager.set(oldNamespace);
 	    }
-	    return domainuser;
+	    return domainUser;
 	}
 	else
 	{
@@ -154,6 +161,8 @@ public class DomainUser
 	    // Encrypt password while saving
 	    encrypted_password = Util.encrypt(password);
 	}
+
+	password = MASKED_PASSWORD;
 
 	info_json_string = info_json.toString();
 
