@@ -54,7 +54,16 @@
   				</ul>
 	</div>		
  </div>
-<div class="well right" style="margin-right:50px; padding-top:20px;"><span style='font-size:25px; display:inline-block'> Score:</span> <span id="lead-score" style="font-size:25px">{{lead_score}}</span>&nbsp;&nbsp;<div style="display:inline-block; vertical-align:middle"><span><a><i class="icon-plus" id="add"></i></a></span><br/><span><a><i class="icon-minus" id="minus"></i></a></span></div></div>
+     <div class="well right" style="height:45px; margin-right:72px; padding-top:0px; padding-bottom:17px">
+         <span style="font-size:25px; display:inline-block; padding-top:6px"> Score </span> 
+         <br/>
+          <span id="lead-score" style="font-size:25px; padding-left:12px">{{lead_score}}</span>&nbsp;
+          <div style="display:inline-block; vertical-align:middle">
+           <span><a><i class="icon-plus" id="add"></i></a></span>
+           <br/>
+           <span><a><i class="icon-minus" id="minus"></i></a></span>
+         </div>
+     </div>
 </div>
 
 			<div class='clearfix'></div>	
@@ -69,8 +78,6 @@
 				{{/if}}	
 					</ul>
 				
-					
-				    
                      <div style="display:inline-block; padding-right:10px">
 						<form id="addTagsForm" style="display:none; padding-top:6px">
 							<div class="control-group">
@@ -78,7 +85,6 @@
 									<ul id="ul-add-tags" name="tags" class= "tagsinput tags"></ul>
 								</div>
 								<div class="controls">
-															
 									<input name="" type="text" id="addTags" class="tags-typeahead span2" style="margin-bottom: -1px" placeholder="Enter tags"/>
 									<a href="#" class="btn" id="contact-add-tags" style="margin-left: 10px">Add</a>
 								</div>
