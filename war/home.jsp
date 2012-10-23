@@ -114,7 +114,7 @@ String CSS_PATH = "/";
 					<li class="dropdown" id="menu1"><a class="dropdown-toggle"
 							data-toggle="dropdown" href="#menu1">Add New <i class='caret'></i></a>
 							<ul class="dropdown-menu">
-								<li><a href="#personModal" data-toggle="modal" id="person">Person</a>
+								<li><a href="#personModal" data-toggle="modal" id="person">Contact</a>
 								</li>
 								<li><a href="#companyModal" data-toggle="modal"
 									id="company">Company</a>
