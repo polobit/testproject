@@ -2,7 +2,7 @@
 var CONTENT_JSON = {
 		"contacts": {
 			"title": "You dont have any contacts yet",
-			"description" : "You can add your contact detrails.......etc...etc",
+			"description" : "You can add your contact details.......etc...etc",
 			"learn_more" : "click here to learn more",
 			"button_text":"Add Contacts"
 		},
