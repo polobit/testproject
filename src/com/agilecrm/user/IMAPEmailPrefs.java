@@ -39,7 +39,7 @@ public class IMAPEmailPrefs
     public String password = MASKED_PASSWORD;
 
     @NotSaved(IfDefault.class)
-    public String encrypted_password = null;
+    private String encrypted_password = null;
 
     public boolean is_secure = false;
 
@@ -125,6 +125,8 @@ public class IMAPEmailPrefs
 	    // Encrypt password while saving
 	    encrypted_password = Util.encrypt(password);
 	}
+
+	password = MASKED_PASSWORD;
     }
 
     @PostLoad
