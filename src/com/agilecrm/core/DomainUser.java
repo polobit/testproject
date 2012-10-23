@@ -161,6 +161,16 @@ public class DomainUser
 	    // Encrypt password while saving
 	    encrypted_password = Util.encrypt(password);
 	}
+	else
+	{
+	    // Get password from old values
+	    if (this.id != null)
+	    {
+		// Get Old password
+		DomainUser oldDomainUser = DomainUser.getDomainUser(id);
+		this.encrypted_password = oldDomainUser.encrypted_password;
+	    }
+	}
 
 	password = MASKED_PASSWORD;
 
@@ -307,8 +317,9 @@ public class DomainUser
 
 	// Super User should always be the admin
 	if (this.is_account_owner && !this.is_admin)
-	    throw new Exception(
-		    "Account owner has to admin. Please update and try again");
+	{
+	    this.is_admin = true;
+	}
 
 	// Send Email
 	if (this.id == null)
