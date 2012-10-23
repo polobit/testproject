@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.core.DomainUser;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -107,6 +109,11 @@ public class LoginServlet extends HttpServlet
 	DomainUser domainUser = DomainUser.getDomainUserFromEmail(email);
 	if (domainUser == null)
 	    throw new Exception("We have not been able to locate any user");
+
+	// Check if Encrypted passwords are same
+	if (!StringUtils.equals(domainUser.password, Util.encrypt(password)))
+	    if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
+		throw new Exception("Incorrect password. Please try again.");
 
 	// Set Cookie and forward to /home
 	UserInfo userInfo = new UserInfo("agilecrm.com", email, domainUser.name);
