@@ -63,6 +63,13 @@ box-shadow: none;
 -moz-box-shadow: none;
 -webkit-box-shadow: none;
 }
+
+/* To move validation slides */
+#agile label
+{
+margin-bottom:0px;
+}
+
 </style>
 
 <!-- Le fav and touch icons -->
