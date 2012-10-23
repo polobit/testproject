@@ -100,6 +100,33 @@ public class UsersAPI
     public void deleteDomainUser(DomainUser domainUser)
     {
 
+	Long id = domainUser.id;
+	DomainUser domainuser = DomainUser.getDomainUser(id);
+	int count = DomainUser.count();
+
+	try
+	{
+	    // Check if only one account exists
+	    if (count == 1)
+		throw new WebApplicationException(
+			Response.status(Response.Status.BAD_REQUEST)
+				.entity("Cannot Delete Users if only one account exists")
+				.build());
+	    // Check for account owner
+	    else if (domainUser.is_account_owner)
+		throw new WebApplicationException(Response
+			.status(Response.Status.BAD_REQUEST)
+			.entity("Master account cannot be deleted").build());
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.out.println(e.getMessage());
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+
 	AgileUser agileUser = AgileUser
 		.getCurrentAgileUserFromDomainUser(domainUser.id);
 

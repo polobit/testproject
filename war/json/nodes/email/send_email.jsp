@@ -35,7 +35,7 @@
 					"category": "Info",
 					"name": "to_email",
 		            "id":"to_email",
-		            "value":"$subscriber.Email",
+		            "value":"{{email}}",
 		            "required": "required",
 					"title": "Enter your subscriber E-mail ID. If you are using a list, you can use $subscriber.Email",
 					"fieldType": "input",
