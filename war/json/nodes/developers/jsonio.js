@@ -60,7 +60,7 @@
 					[
 			           {
                           "keyName":"email",
-						  "valueName":"$subscriber.Email"
+						  "valueName":"{{email}}"
 					   }
 					 ]
 		},

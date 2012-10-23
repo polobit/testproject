@@ -20,7 +20,7 @@
             "title": "Enter a valid email ID.",
             "fieldType": "input",
             "type": "email",
-            "value": "$subscriber.Email"
+            "value": "{{email}}"
         },
         {
             "label": "ContactSpot uses Rapleaf to retrieve the gender of the subscriber based on the email address.",
