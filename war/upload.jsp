@@ -51,7 +51,6 @@ function returnBack()
 
 $(function()
 {
-
 	// Check if this was referred back again
 	var key = getUrlVars()["key"];
 	console.log("Key" + key);

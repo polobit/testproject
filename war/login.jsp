@@ -135,13 +135,11 @@ margin-bottom:0px;
 			
 				<form id='oauth' name='oauth' method='post'>
                    <div><h1>Sign In<img class="company_logo" src="<%=logo_url%>" style="float:right;width:50px;height:40px;" ></img></h1></div>
-                   
-                   
-                       <div class="alert alert-error login-error" style="display:none">
-							<a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
-						</div>
 						
 					<div id="openid_btns" style="float: left; padding: 5px 0 15px; border-top: 1px dotted #CCC; border-bottom: 1px dotted #CCC; border-right: none; border-left: none;">
+						<div class="alert alert-error login-error" style="display:none">
+							<a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
+						</div>
 						<h3>
 							<small>Login or register using existing accounts</small>
 						</h3>
@@ -186,7 +184,7 @@ margin-bottom:0px;
 		</div>
 		<div style="text-align: center; line-height: 19px;">
 			Don't have an account? <a href="/register">Sign Up</a><br>
-			Remind <a href="forgot-password.jsp">Password</a>
+			Forgot Password? <a href="forgot-password.jsp">Reset</a>
 		</div>
 	</div>
 

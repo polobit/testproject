@@ -28,5 +28,3 @@ function setImageURL(url)
 	// Set the value of selector for input
 	$('#' + id).find('#upload_url').val(url);
 }
-
-

@@ -4,22 +4,11 @@
 <div class="span9">
  <div class="page-header">
 
-	<form style='display:inline;padding-right:10px;height:auto;'>
-      <div class="control-group">
-		<div id="upload-container" messg="User image has been uploaded">
-		  <div class="controls">
-		      <div class="imgholder">
-    		    <img  class='thumbnail upload_pic' src="{{gravatarurl properties 50}}" width="50" height="50" style='display:inline'/>
-              </div>
-              <p style="margin-top:-10px"><br/></p><p><input type="hidden" id="upload_url" name="logo">  
-			  <input style="display:none;" class="save_img submit btn" type="submit" id="contact_image" value="Save"></p>
-           </div>
-		</div>
-     </div>
-	</form>
+	<div style='display:inline;padding-right:10px;height:auto;'>
+    	<img  class='thumbnail' src="{{gravatarurl properties 50}}" width="50" height="50" style='display:inline'/>
+	</div>
 	<div style='height:auto;display:inline-block;vertical-align:-23px;'>
 		<b>
-
 			<font size="5">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</font> 
 		</b></br>
 		{{#if_propertyName "email"}}
