@@ -1,7 +1,5 @@
 package com.agilecrm.core;
 
-import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.util.List;
 
 import javax.persistence.Id;
@@ -10,6 +8,7 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.codec.DecoderException;
+import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
@@ -114,8 +113,9 @@ public class DomainUser
 	{
 	    String oldNamespace = NamespaceManager.get();
 	    NamespaceManager.set("");
-	    SecureRandom random = new SecureRandom();
-	    String randomNumber = new BigInteger(130, random).toString(16);
+
+	    String randomNumber = RandomStringUtils.randomAlphanumeric(8)
+		    .toUpperCase();
 
 	    domainUser.password = randomNumber;
 
@@ -304,6 +304,11 @@ public class DomainUser
 	if (count() >= Globals.TRIAL_USERS_COUNT && this.id == null)
 	    throw new Exception(
 		    "Please upgrade. You cannot add more than 2 users in the free plan");
+
+	// Super User should always be the admin
+	if (this.is_account_owner && !this.is_admin)
+	    throw new Exception(
+		    "Account owner has to admin. Please update and try again");
 
 	// Send Email
 	if (this.id == null)
