@@ -1,16 +1,10 @@
 package com.agilecrm.util;
 
-import java.util.Map;
-
 import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.MappingJsonFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
 
-import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Template;
 import com.thirdparty.SendGridEmail;
 
 public class SendMail
@@ -54,7 +48,7 @@ public class SendMail
 	email.put("subject", subject);
 	email.put("from", from);
 	email.put("fromName", fromName);
-	email.put("body", json);
+	email.put("object", new JSONObject(json));
 	emailString = email.toString();
 
 	// Read template - HTML
@@ -100,24 +94,19 @@ public class SendMail
 
 	// Compile
 
-	try
-	{
-	    Handlebars handlebars = new Handlebars();
-	    Template template = handlebars.compile(emailTemplate);
-
-	    // Convert String to JsonNode
-	    JsonParser parser = JSON_FACTORY.createJsonParser(emailString);
-	    JsonNode jsonNode = parser.readValueAsTree();
-
-	    // Convert jsonNode to Map
-	    Map jsonMap = (Map) handlebars.toObject(jsonNode);
-	    value = template.apply(jsonMap);
-	    System.out.println("The template after applying " + value);
-	}
-	catch (Exception e)
-	{
-	    System.out.println("Exception " + e);
-	}
+	/*
+	 * try { Handlebars handlebars = new Handlebars(); Template template =
+	 * handlebars.compile(emailTemplate);
+	 * 
+	 * // Convert String to JsonNode JsonParser parser =
+	 * JSON_FACTORY.createJsonParser(emailString); JsonNode jsonNode =
+	 * parser.readValueAsTree();
+	 * 
+	 * // Convert jsonNode to Map Map jsonMap = (Map)
+	 * handlebars.toObject(jsonNode); value = template.apply(jsonMap);
+	 * System.out.println("The template after applying " + value); } catch
+	 * (Exception e) { System.out.println("Exception " + e); }
+	 */
 
 	// Apply
 
