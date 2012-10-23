@@ -120,8 +120,9 @@ public class UsersAPI
 			Response.status(Response.Status.BAD_REQUEST)
 				.entity("Cannot Delete Users if only one account exists")
 				.build());
+
 	    // Check for account owner
-	    else if (domainUser.is_account_owner)
+	    if (domainUser.is_account_owner)
 		throw new WebApplicationException(Response
 			.status(Response.Status.BAD_REQUEST)
 			.entity("Master account cannot be deleted").build());
