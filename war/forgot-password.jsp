@@ -1,26 +1,20 @@
+<%@page import="com.agilecrm.core.DomainUser"%>
 <%
 
+String error = "", success = "";
 //If Email is present
-
-//Reset - if error, set error
-
-//If everything good - set successful
-
-//Get User Name
 String email = request.getParameter("email");
-
-//Check if it is being access directly and not through servlet
-if(email != null && request.getAttribute("javax.servlet.forward.request_uri") == null)
+DomainUser domainUser = DomainUser.generatePassword(email);
+if(domainUser == null)
 {
-	   response.sendRedirect("/forgotpassword");
-	    return;
+    error = "We are not able to find any user";
 }
- 
-String error = request.getParameter("error");
-if(error != null)
-    System.out.println(error);
 else
-    error = "";
+{
+   success = "We have sent you an email";
+}
+
+System.out.println(error + " "  success);
 
 %>
 <!DOCTYPE html>

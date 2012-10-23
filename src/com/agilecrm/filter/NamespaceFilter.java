@@ -72,7 +72,8 @@ public class NamespaceFilter implements Filter
 	}
 
 	// Set the subdomain as name space
-	System.out.println("Setting the domain " + subdomain);
+	System.out.println("Setting the domain " + subdomain + " "
+		+ ((HttpServletRequest) request).getRequestURL());
 	NamespaceManager.set(subdomain);
 	return true;
     }
