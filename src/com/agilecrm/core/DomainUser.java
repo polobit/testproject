@@ -263,12 +263,12 @@ public class DomainUser
     // Save
     public void save() throws Exception
     {
-
 	System.out.println("Creating or updating new user " + this);
 
 	// Check if user exists with this email
 	DomainUser domainUser = getDomainUserFromEmail(email);
-	if ((domainUser != null) && !this.id.equals(domainUser.id))
+	if ((domainUser != null) && this.id != null
+		&& !this.id.equals(domainUser.id))
 	{
 	    throw new Exception("User already exists with this email address "
 		    + domainUser);
@@ -276,7 +276,10 @@ public class DomainUser
 
 	// Set to current namespace if it is empty
 	if (StringUtils.isEmpty(this.domain))
+	{
 	    this.domain = NamespaceManager.get();
+	    System.out.println("Domain empty - setting it to " + this.domain);
+	}
 
 	// Check if namespace is null or empty. Then, do not allow to be
 	// created
