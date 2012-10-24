@@ -41,6 +41,10 @@ public class UserInfo implements Serializable
 	this.email = email;
 	this.name = name;
 
+	// Lower case
+	if (this.email != null)
+	    this.email.toLowerCase();
+
 	// Get Domain User for this email and store the id
 	DomainUser domainUser = DomainUser.getDomainUserFromEmail(email);
 	if (domainUser != null)
