@@ -118,6 +118,8 @@ public class RegisterServlet extends HttpServlet
 	    throw new Exception(
 		    "Invalid Input. Email or password has been left blank.");
 
+	email = email.toLowerCase();
+
 	// Create User
 	UserInfo userInfo = new UserInfo("agilecrm.com", email, name);
 	DomainUser domainUser = createUser(request, response, userInfo,
