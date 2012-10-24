@@ -120,11 +120,8 @@ public class DomainUser
 	    domainUser.password = randomNumber;
 
 	    // Send an email with the new password
-	    Util.sendMail(SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME,
-		    email, "Password has been reset",
-		    SendMail.AGILE_FROM_EMAIL,
-		    "We have successfully reset the password to "
-			    + domainUser.password, null);
+	    SendMail.sendMail(email, SendMail.FORGOT_PASSWORD_SUBJECT,
+		    SendMail.FORGOT_PASSWORD, domainUser);
 
 	    try
 	    {
@@ -329,8 +326,10 @@ public class DomainUser
 	{
 	    try
 	    {
-		SendMail.sendMail(this.email, "New User Invitation",
+		SendMail.sendMail(this.email,
+			SendMail.NEW_USER_INVITED_SUBJECT,
 			SendMail.NEW_USER_INVITED, this);
+
 	    }
 	    catch (Exception e)
 	    {
