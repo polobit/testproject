@@ -176,6 +176,9 @@ public class DomainUser
 
 	info_json_string = info_json.toString();
 
+	// Lowercase
+	email = StringUtils.lowerCase(email);
+	domain = StringUtils.lowerCase(domain);
     }
 
     @PostLoad

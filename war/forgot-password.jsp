@@ -7,6 +7,9 @@ String error = "", success = "";
 String email = request.getParameter("email");
 if(!StringUtils.isEmpty(email))
 {
+    
+    email = email.toLowerCase();
+    
 	DomainUser domainUser = DomainUser.generatePassword(email);
 	if(domainUser == null)
 	{

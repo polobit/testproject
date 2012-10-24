@@ -104,6 +104,8 @@ public class LoginServlet extends HttpServlet
 	    throw new Exception(
 		    "Invalid Input. Email or password has been left blank.");
 
+	email = email.toLowerCase();
+
 	// Get Domain User with this name, password - we do not check for domain
 	// as validity is verified in AuthFilter
 	DomainUser domainUser = DomainUser.getDomainUserFromEmail(email);
