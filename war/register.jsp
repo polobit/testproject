@@ -1,3 +1,4 @@
+<%@page import="org.apache.commons.lang.StringUtils"%>
 <%
 //Check if it is being access directly and not through servlet
 if(request.getAttribute("javax.servlet.forward.request_uri") == null)
@@ -22,6 +23,8 @@ else
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1">
+
 
 <!-- Le styles -->
 
@@ -57,6 +60,12 @@ box-shadow: none;
 -moz-box-shadow: none;
 -webkit-box-shadow: none;
 }
+
+/* To move validation slides */
+#agile label
+{
+margin-bottom:0px;
+}
 </style>
 
 <!-- Le fav and touch icons -->
@@ -72,7 +81,7 @@ box-shadow: none;
 
  <!-- JQUery Core and UI CDN -->
 <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
-
+<script type="text/javascript" src="/lib/bootstrap.min.js"></script>
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
 <script type="text/javascript">
 jQuery.validator.setDefaults({
@@ -121,9 +130,13 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 				<form id='oauth' name='oauth' method='post'> 
 				 <h1>SignUp</h1>
 				<div id="openid_btns" style="float: left;padding:5px 0 15px;border-top: 1px dotted #CCC;border-bottom: 1px dotted #CCC;border-right: none;border-left: none;">
+				        
+				         <% if(!StringUtils.isEmpty(error)){%>
 				        <div class="alert alert-error login-error" style="display:none">
 							<a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
 						</div>
+						<%}%>
+						
 				<h3><small>Login or register using existing accounts</small></h3>	
 				  <div style="padding-top:10px;">
 					<input type='hidden' name='auth' value='auth'></input>
@@ -149,7 +162,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
                     <input class="input-xlarge field required email" name='email' type="text" placeholder="Email">
                     <input class="input-xlarge field required" name='password' type="password" placeholder="Password">
 					<div style="margin-top:15px;">
-					  <label class="checkbox" style="display:inline-block;"><input type="checkbox" name="agree">  I agree with the Terms of Use</label>
+					  <label class="checkbox" style="display:inline-block;">I agree with the Terms of Use<input type="checkbox" name="agree" class="required"></label>
 					  <input type='submit' style="float:right;"value="Register" class='btn btn-large btn-primary'>
 				  </div>
 				</div>
@@ -162,20 +175,14 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 			</div>
 			<div style="text-align: center;line-height: 19px;">
 	                 Already have an account? <a href="/login">Login</a><br>
+	                 Forgot <a href="forgot-password.jsp">Password</a>
                </div>
 		</div>
 		
 		<script type="text/javascript">
 		$(document).ready(function() {			
 			
-            $(".login-error").hide();
-			
-			var error = "<%=error%>";		
-			if(error != "")
-			{
-				$(".login-error").show();
-			}
-			
+         
 			$('.openid_large_btn').click(function(e)
 			{
 				// Get Data

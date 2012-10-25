@@ -76,13 +76,7 @@ function showLinkedinMatchingProfiles(plugin_id)
                 		 {
             			  	object.picture = 'https://contactuswidget.appspot.com/images/pic.png';
                 		 }
-                	 
-                	 el = el.concat("<img  rel=\"popover\" data-content=\" <div class='span5' style='margin-left:-20px;'><div class='span1'><img style='width:55px;height:55px;' src=" + object.picture 
-                    		 + "></img></div><div class='span3' style='text-align: justify;vertical-align: middle;'><b style='color:#069;font-size:15px;'>" 
-                    		 + object.name + " </b><br/>" + object.location +"<br/>" + object.num_connections + " Connections</div></div><br/><p style='text-align: justify;font-style: italic;'>"
-                    		 + object.summary+" </p>\" data-original-title=\" Linked Profile\"class=\"linkedinImage thumbnail \" id=" 
-                    		 + object.id + " src =\" "+ object.picture + " \"style=\"width: 55px;height: 55px; display:inline-block; margin-right:2px; margin-bottom:2px; cursor:pointer;\" ></img>");
-                 
+            		 el = el.concat(getTemplate("linkedin-search-result", object));
                  });
               });
             
@@ -143,18 +137,8 @@ function showLinkedinProfile(linkedin_id, plugin_id)
     		{
     			data.picture = 'https://contactuswidget.appspot.com/images/pic.png';
     		}
-    	    	
-    	$('#Linkedin').html('<div  style="display:inline;  line-height:12px;">'
-				    		    +'<div class="row-fluid well" style="margin-top:-10px;padding:0px;">'
-				    		    +'<a class="icon-remove pull-right" id="linkedin_plugin_delete" style="cursor:pointer; color: #FF00FF"></a>'
-				    		    +'<div class="span3" style=" margin-right:3%">'
-				    		           +'<img src=' + data.picture + ' style=" display:inline; float:left; margin-right:2px; margin-top:5px; padding:0px 5px;cursor:pointer; color: #FF00FF"/>'
-				    		    +'</div>'
-				    			+'<div class="span8">'
-				    			       +'<h4 style="color:blue"><a href=\"' + data.url + '\" target="_blank">@' + data.name + '</a></h4>'
-				    			       +'<span style="font-size:10px; margin-bottom:2px;">' + data.summary + ',<br/> ' + data.location +',<br/>' + data.num_connections + 'connections ,<br/></span><br/><br/>'
-				    			+'</div>'
-				    		+'</div>');
+    	
+    	$('#Linkedin').html(getTemplate("linkedin-profile", data));
     });	
     
     // delete linkedin profile

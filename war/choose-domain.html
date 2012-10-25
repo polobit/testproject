@@ -32,10 +32,6 @@ height:30px!important;
 margin:8px 0px!important;
 padding-left:10px!important;
 }
-
-.error {
-	color: red;
-}
 </style>
 
 <!-- Le fav and touch icons -->
@@ -51,13 +47,7 @@ padding-left:10px!important;
 
  <!-- JQUery Core and UI CDN -->
 <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
-<script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
-<script type="text/javascript">
-jQuery.validator.setDefaults({
-	debug: true,
-	success: "valid"
-});;
-</script>
+
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
       <script src="lib/ie/html5.js"></script>
@@ -89,25 +79,27 @@ jQuery.validator.setDefaults({
 
 			<div class="account-container">
 				<div class="content clearfix">
-				    <form id='domain' name='domain' method='post' onsubmit="return isValid();"> 
 						 <h1>Enter your domain </h1>
 						 
 						  <div style="float: left;padding: 10px 0 15px;border-top: 1px dotted #CCC;">
 						  <h3><small> Start with your subdomain at AgileCRM</small></h3>	
 						  	<div style="padding-top:10px;">
+								<div class="alert alert-error domain-error" style="display:none;">
+									<a class="close" data-dismiss="alert" href="#">×</a>Please enter a valid subdomain 
+								</div>
 						
             					<input id='subdomain' type="text" placeholder="Enter subdomain"
-								   	   class="input-medium field required" minlength="4"/><b> .agilecrm.com</b>
+								   	   class="input-medium field required"><b> .agilecrm.com</b>
 						   </div>
 						</div>
 						<div style="margin-left:30%"><input class="btn btn-large btn-primary" type="submit" value="Submit"></div>
-						</form>
+						
 							<div class="clearfix"></div>
 				
 				</div>
 			</div>
 			<div style="text-align: center; line-height: 19px;">
-			   Forgot Your Domain? <a href="#">Click Here</a>
+			   Forgot Your Domain? <a href="forgot-domain.jsp">Click Here</a>
 			</div>
 		</div>
 
@@ -115,30 +107,29 @@ jQuery.validator.setDefaults({
 	<!-- Le javascript
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	
 	<script>
 		//Init
 		$(function() {
 
 			$(".btn").click(function(e) {
-				
+				e.preventDefault();
+				$(".domain-error").hide();		
 				var subdomain = $("#subdomain").val();
 				
-				// Register the new user
-                if(subdomain != null)
+				if(subdomain == null || subdomain == "" || subdomain.length < 4)
 				{
-				  window.location = "https://" + subdomain + ".agilecrm.com/register";
+					$(".domain-error").show();
+					return false;
 				}
-				$('#domain').submit();
+				// Register the new user
+
+				window.location = "https://" + subdomain + ".agilecrm.com/register";
 				e.preventDefault();
 			});
 
 		});
-		
-		function isValid(){
-		    $("#domain").validate();
-		    return $("#domain").valid();
-		    }
 	</script>
 
 </body>

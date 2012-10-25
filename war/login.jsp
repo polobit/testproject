@@ -1,3 +1,4 @@
+<%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.account.AccountPrefs"%>
 <%
 //Check if it is being access directly and not through servlet
@@ -25,7 +26,7 @@ String logo_url = accountPrefs.logo;
 <meta name="globalsign-domain-verification"
 	content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx" />
 <title>Login</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
 
@@ -86,6 +87,7 @@ margin-bottom:0px;
 <!-- JQUery Core and UI CDN -->
 <script type='text/javascript'
 	src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+	<script type="text/javascript" src="/lib/bootstrap.min.js"></script>
 
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
 <script type="text/javascript">
@@ -134,15 +136,27 @@ margin-bottom:0px;
 			<div class="content clearfix">
 			
 				<form id='oauth' name='oauth' method='post'>
-                   <div><h1>Sign In<img class="company_logo" src="<%=logo_url%>" style="float:right;width:50px;height:40px;" ></img></h1></div>
+                   <div><h1>Sign In
+                   
+                   <% if(!StringUtils.isEmpty(logo_url) && !StringUtils.equalsIgnoreCase("yourlogourl", logo_url))
+                       {
+                       %>
+                   <img class="company_logo" src="<%=logo_url%>" style="float:right;width:50px;height:40px;" ></img>
+                   <%
+                   }
+                   %>
+                   
+                   </h1></div>
 						
 					<div id="openid_btns" style="float: left; padding: 5px 0 15px; border-top: 1px dotted #CCC; border-bottom: 1px dotted #CCC; border-right: none; border-left: none;">
-						<div class="alert alert-error login-error" style="display:none">
+					 <% if(StringUtils.isEmpty(error)){%>
+                       <div class="alert alert-error login-error" style="display:none">
+                       <%}else{%>
+                        <div class="alert alert-error login-error">
+                        <%}%>
 							<a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
 						</div>
-						<h3>
-							<small>Login or register using existing accounts</small>
-						</h3>
+						<h3><small>Login or register using existing accounts</small></h3>
 					  <div  style="padding-top:10px;">
 						<input type='hidden' name='auth' value='auth'></input>
 						<input type='hidden' name='type' value='oauth'></input>
@@ -168,7 +182,7 @@ margin-bottom:0px;
 					    <input class="input-xlarge required field " name='password' type="password" placeholder="Password">
 						<div style="margin-top: 15px;">
 							<label class="checkbox" style="display: inline-block;">
-							   <input type="checkbox" name="signin"> Keep me signed in 
+							    Keep me signed in<input type="checkbox" name="signin"> 
 							</label> 
 
 							<input type='submit' style="float: right;height:39px" value="Sign In" class='btn btn-large btn-primary agile_btn'>
@@ -184,27 +198,13 @@ margin-bottom:0px;
 		</div>
 		<div style="text-align: center; line-height: 19px;">
 			Don't have an account? <a href="/register">Sign Up</a><br>
-			Forgot Password? <a href="forgot-password.jsp">Reset</a>
+			Forgot <a href="forgot-password.jsp">Password</a>
 		</div>
 	</div>
 
 	<script type="text/javascript">
 		$(document).ready(function()
 		{
-			$(".login-error").hide();
-			
-			var error = "<%=error%>";		
-			if(error != "")
-			{
-				$(".login-error").show();
-			}
-			
-			var logo = "<%=logo_url%>";
-			if(logo == null)
-			{
-				$(".company_logo").hide();
-			}
-
 			$('.openid_large_btn').click(function(e)
 			{
 				// Get Data
