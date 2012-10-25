@@ -60,6 +60,12 @@ box-shadow: none;
 -moz-box-shadow: none;
 -webkit-box-shadow: none;
 }
+
+/* To move validation slides */
+#agile label
+{
+margin-bottom:0px;
+}
 </style>
 
 <!-- Le fav and touch icons -->
@@ -156,7 +162,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
                     <input class="input-xlarge field required email" name='email' type="text" placeholder="Email">
                     <input class="input-xlarge field required" name='password' type="password" placeholder="Password">
 					<div style="margin-top:15px;">
-					  <label class="checkbox" style="display:inline-block;"><input type="checkbox" name="agree">  I agree with the Terms of Use</label>
+					  <label class="checkbox" style="display:inline-block;">I agree with the Terms of Use<input type="checkbox" name="agree" class="required"></label>
 					  <input type='submit' style="float:right;"value="Register" class='btn btn-large btn-primary'>
 				  </div>
 				</div>

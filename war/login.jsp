@@ -147,21 +147,16 @@ margin-bottom:0px;
                    %>
                    
                    </h1></div>
-                   
-                   
-                    <% if(StringUtils.isEmpty(error)){%>
+						
+					<div id="openid_btns" style="float: left; padding: 5px 0 15px; border-top: 1px dotted #CCC; border-bottom: 1px dotted #CCC; border-right: none; border-left: none;">
+					 <% if(StringUtils.isEmpty(error)){%>
                        <div class="alert alert-error login-error" style="display:none">
                        <%}else{%>
                         <div class="alert alert-error login-error">
                         <%}%>
-                       
 							<a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
 						</div>
-						
-					<div id="openid_btns" style="float: left; padding: 5px 0 15px; border-top: 1px dotted #CCC; border-bottom: 1px dotted #CCC; border-right: none; border-left: none;">
-						<h3>
-							<small>Login or register using existing accounts</small>
-						</h3>
+						<h3><small>Login or register using existing accounts</small></h3>
 					  <div  style="padding-top:10px;">
 						<input type='hidden' name='auth' value='auth'></input>
 						<input type='hidden' name='type' value='oauth'></input>
@@ -187,7 +182,7 @@ margin-bottom:0px;
 					    <input class="input-xlarge required field " name='password' type="password" placeholder="Password">
 						<div style="margin-top: 15px;">
 							<label class="checkbox" style="display: inline-block;">
-							   <input type="checkbox" name="signin"> Keep me signed in 
+							    Keep me signed in<input type="checkbox" name="signin"> 
 							</label> 
 
 							<input type='submit' style="float: right;height:39px" value="Sign In" class='btn btn-large btn-primary agile_btn'>
