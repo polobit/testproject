@@ -40,7 +40,7 @@ function registerForSockets()
 	// Put http or https
 	//var protocol = document.location.protocol;
 	var protocol = 'https';
-	head.js(protocol + '://stats.agilecrm.com:443/socket.io/socket.io.js', function()
+	head.js(protocol + '://stats.agilecrm.com:90/socket.io/socket.io.js', function()
 	{
 		
 		// Get API Key
@@ -65,7 +65,7 @@ function _setupSockets(api_key)
 	console.log("Connecting " + api_key);
 	
 	var agile = api_key;
-	socket = io.connect('https://stats.agilecrm.com:443');
+	socket = io.connect('https://stats.agilecrm.com:90');
 	socket.on('connect', function () {
 		    console.log('socket connected');
 		    socket.emit('subscribe', { agile_id: agile });
@@ -77,9 +77,12 @@ function _setupSockets(api_key)
 	    
 	    // Get his email address
 	    var email = 'manohar@invox.com';
-	    
-	   
+	});	
+	
 	  
+	socket.on('notification', function (data) {
+		console.log('notification');
+	    console.log(data);
 	});	
 }
 
@@ -103,8 +106,6 @@ function fetchContactAndNotify(email)
 			if(!id)
 				return;
 			
-		
-		
 		var html = getTemplate('notify-html', data.toJSON());
 		
 		  // Show picture, name, title, company
@@ -133,7 +134,7 @@ function notify(type, message, position, closable)
 }
 
 $(function(){
-//	setTimeout(downloadAndRegisterForNotifications, 7000);
+	setTimeout(downloadAndRegisterForNotifications, 2000);
 	
 	//fetchContactAndNotify('manohar@invox.com');
 	
