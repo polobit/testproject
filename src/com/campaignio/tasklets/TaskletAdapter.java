@@ -113,7 +113,8 @@ public class TaskletAdapter implements Tasklet
 	JSONObject mergedJson = new JSONObject();
 
 	// Merge two jsons
-	JSONObject[] objs = new JSONObject[] { subscriberJSON, data };
+	JSONObject[] objs = new JSONObject[] {
+		subscriberJSON.getJSONObject("data"), data };
 	try
 	{
 	    for (JSONObject obj : objs)
