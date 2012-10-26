@@ -108,12 +108,12 @@ public class UsersAPI
     public void deleteDomainUser(DomainUser domainUser)
     {
 
-	Long id = domainUser.id;
-	DomainUser domainuser = DomainUser.getDomainUser(id);
-	int count = DomainUser.count();
-
 	try
 	{
+	    Long id = domainUser.id;
+	    DomainUser domainuser = DomainUser.getDomainUser(id);
+	    int count = DomainUser.count();
+
 	    // Check if only one account exists
 	    if (count == 1)
 		throw new WebApplicationException(
