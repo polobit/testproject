@@ -124,6 +124,7 @@ $(function(){
 	});
 	
 	
+	
 	// Add score
 	    $('#add').live('click', function(e){
 	    e.preventDefault();
@@ -140,7 +141,7 @@ $(function(){
 	
 	    // Save model
 	    contact_model.save();
-	
+		          
 	     });
 	
 	   
@@ -161,8 +162,10 @@ $(function(){
 		// Save model
 		contact_model.save();
 	    });
+	   
+	    $('#score').children().attr('unselectable', 'on');
+		
 });
-
 
 function starify(el){
     head.js('lib/jquery.raty.min.js', function(){
