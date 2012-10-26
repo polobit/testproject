@@ -17,6 +17,23 @@ else
 AccountPrefs accountPrefs = AccountPrefs.getAccountPrefs();
 String logo_url = accountPrefs.logo;
 
+
+//Saving cookie
+String cookieName = "email";
+Cookie cookies [] = request.getCookies ();
+Cookie emailCookie = null;
+if (cookies != null)
+{
+    for (int i = 0; i < cookies.length; i++) 
+    {
+		if (cookies [i].getName().equals (cookieName))
+		{
+		    emailCookie = cookies[i];
+			break;
+		}
+	}
+}
+
 %>
 <!DOCTYPE html>
 
@@ -179,11 +196,13 @@ margin-bottom:0px;
 					<div id="openid_btns" style="float: left; padding: 5px 0 15px;">
 
 						<input type='hidden' name='type' value='agile'>
-					    <input class="input-xlarge required email field" name='email' type="text" placeholder="User Name">
+						<input class="input-xlarge required email field" name='email' type="text" placeholder="User Name"
+						<%if (emailCookie != null) {%> value="<%=emailCookie.getValue()%>" <%}%>
+						>
 					    <input class="input-xlarge required field " name='password' type="password" placeholder="Password">
 						<div style="margin-top: 15px;">
 							<label class="checkbox" style="display: inline-block;">
-							    Keep me signed in<input type="checkbox" name="signin"> 
+							    <input type="checkbox" name="signin">Keep me signed in 
 							</label> 
 
 							<input type='submit' style="float: right;height:39px" value="Sign In" class='btn btn-large btn-primary agile_btn'>
@@ -199,15 +218,17 @@ margin-bottom:0px;
 		</div>
 		<div style="text-align: center; line-height: 19px;">
 			Don't have an account? <a href="/register">Sign Up</a><br>
-			Forgot <a href="forgot-password.jsp">Password</a>
+			Forgot <a href="forgot-password.jsp">Password </a><a href="forgot-domain.jsp">Domain</a>
 		</div>
 	</div>
 
 	<script type="text/javascript">
 		$(document).ready(function()
 		{
+			console.log("starting of login");
 			$('.openid_large_btn').click(function(e)
 			{
+				console.log("ready to oauth form");
 				// Get Data
 				var data = $(this).attr('data');
 				$('#oauth-name').val(data);
@@ -218,6 +239,7 @@ margin-bottom:0px;
 
 			$('.agile_btn').click(function(e)
 			{
+				console.log("ready to agile form");
 				$('#agile').submit();
 				e.preventDefault();
 			});

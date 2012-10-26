@@ -2,7 +2,7 @@
 <%@page import="com.agilecrm.core.DomainUser"%>
 <%
 
-String error = "", success = "" , domain = "";
+String error = "", success = "";
 //If Email is present
 String email = request.getParameter("email");
 if(!StringUtils.isEmpty(email))
@@ -17,12 +17,11 @@ if(!StringUtils.isEmpty(email))
 	}
 	else
 	{
-	   domain = domainUser.domain;
-	   success = "Redirecting to your domain";
+	   success = "Redirecting to " + domainUser.domain;
+	   response.sendRedirect("https://" + domainUser.domain + ".agilecrm.com");
 	}
 	
 	System.out.println(error + " " + success);
-	System.out.println(domain);
 }
 
 %>
@@ -119,7 +118,7 @@ jQuery.validator.setDefaults({
 				<div class="clearfix"></div>
 				<h1>Forgot Domain</h1>
 				
-				<form name='forgot_domain' id="forgot_domain" method='post' style="padding:10px 0 15px;border-top: 1px dotted #CCC;"> 
+				<form name='forgot_domain' id="forgot_domain" method='post' onsubmit="return isValid();" style="padding:10px 0 15px;border-top: 1px dotted #CCC;"> 
 				
 				 <% if(!StringUtils.isEmpty(error)){%>
 				 <div class="alert alert-error login-error">
@@ -150,7 +149,8 @@ jQuery.validator.setDefaults({
 					
 			</div>
 			<div style="text-align: center;line-height: 19px;">
-	                 Already have an account? <a href="/login">Login</a><br>
+	                 Already have an account? <a href="/login">Login</a><br/>
+	                 Forgot <a href="forgot-password.jsp">Password </a>
                </div>
 		</div>
 		
@@ -159,23 +159,9 @@ jQuery.validator.setDefaults({
 			
           $('.forgot_domain_btn').click(function(e)
 			{
-        	  if(isValid())
-        	  {
-        		  var subdomain = "<%=domain%>";
-            	  var success = "<%=success%>";
-        		  console.log(subdomain +" if "+ success);
-	              if(subdomain == null || subdomain == "" || success == "")
-	              {
-	            	  return false;
-	              }
-	              else
-	              {
-	            	  window.location = "https://" + subdomain + ".agilecrm.com/register";
-	  				  e.preventDefault();
-	              }
-        	  }
+        	    $('#forgot_domain').submit();
+				e.preventDefault();
 			});
-          
 		});
 		function isValid(){
 		    $("#forgot_domain").validate();
