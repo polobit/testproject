@@ -5,6 +5,7 @@ import java.util.Iterator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.agilecrm.util.MustacheUtil;
 import com.agilecrm.util.Util;
 import com.campaignio.cron.Cron;
 import com.campaignio.logger.Log;
@@ -109,52 +110,30 @@ public class TaskletAdapter implements Tasklet
 	    JSONObject data) throws Exception
     {
 
-	boolean replaced = false;
-	String originalString = value;
+	JSONObject mergedJson = new JSONObject();
 
-	// Modify the Keys in data
-	Iterator it = data.keys();
-	while (it.hasNext())
+	// Merge two jsons
+	JSONObject[] objs = new JSONObject[] { subscriberJSON, data };
+	try
 	{
-	    String key = (String) it.next();
-
-	    if (value.contains(key))
+	    for (JSONObject obj : objs)
 	    {
-		value = value.replace(key, data.getString(key));
-		System.out.println("Key:" + key + " Token:"
-			+ data.getString(key) + " Value:" + value + " " + data);
-
-		replaced = true;
+		Iterator it = obj.keys();
+		while (it.hasNext())
+		{
+		    String key = (String) it.next();
+		    mergedJson.put(key, obj.get(key));
+		}
 	    }
 	}
-
-	// Modify Subscriber Information
-	JSONObject subscriberDataJSON = subscriberJSON.getJSONObject("data");
-
-	Iterator it2 = subscriberDataJSON.keys();
-	while (it2.hasNext())
+	catch (Exception e)
 	{
-	    String key = (String) it2.next();
 
-	    if (value.contains("$subscriber." + key))
-	    {
-		System.out.println("Key: *" + key + "* Token: *"
-			+ "$subscriber." + key + "* Value:" + value);
-		value = value.replace("$subscriber." + key,
-			subscriberDataJSON.getString(key));
-		replaced = true;
-	    }
 	}
 
-	if (replaced)
-	{
-	    System.out.println("Replaced "
-		    + originalString.replaceAll("\n", " ")
-			    .replaceAll("\r", " ") + " with "
-		    + value.replaceAll("\n", " ").replaceAll("\r", " "));
-	}
+	// Compile
+	return MustacheUtil.compile(value, mergedJson);
 
-	return value;
     }
 
     // Replace Tokens - Tokenize the values and find $, find in data and then
