@@ -108,20 +108,21 @@ public class UsersAPI
     public void deleteDomainUser(DomainUser domainUser)
     {
 
-	Long id = domainUser.id;
-	DomainUser domainuser = DomainUser.getDomainUser(id);
-	int count = DomainUser.count();
-
 	try
 	{
+	    Long id = domainUser.id;
+	    DomainUser domainuser = DomainUser.getDomainUser(id);
+	    int count = DomainUser.count();
+
 	    // Check if only one account exists
 	    if (count == 1)
 		throw new WebApplicationException(
 			Response.status(Response.Status.BAD_REQUEST)
 				.entity("Cannot Delete Users if only one account exists")
 				.build());
+
 	    // Check for account owner
-	    else if (domainUser.is_account_owner)
+	    if (domainUser.is_account_owner)
 		throw new WebApplicationException(Response
 			.status(Response.Status.BAD_REQUEST)
 			.entity("Master account cannot be deleted").build());

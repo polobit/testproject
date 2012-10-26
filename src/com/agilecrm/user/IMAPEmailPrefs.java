@@ -10,6 +10,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.util.Util;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -125,6 +126,15 @@ public class IMAPEmailPrefs
 	    // Encrypt password while saving
 	    encrypted_password = Util.encrypt(password);
 	}
+	else
+	{
+	    if (this.id != null)
+	    {
+		// Get Old password
+		IMAPEmailPrefs oldUserPrefs = getIMAPEmailPrefs(this.id);
+		this.encrypted_password = oldUserPrefs.encrypted_password;
+	    }
+	}
 
 	password = MASKED_PASSWORD;
     }
@@ -134,6 +144,20 @@ public class IMAPEmailPrefs
     {
 	// Decrypt password
 	password = Util.decrypt(encrypted_password);
+    }
+
+    public static IMAPEmailPrefs getIMAPEmailPrefs(Long id)
+    {
+	try
+	{
+	    return dao.get(id);
+	}
+	catch (EntityNotFoundException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	    return null;
+	}
     }
 
 }

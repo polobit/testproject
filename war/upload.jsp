@@ -12,6 +12,8 @@
 <link rel="stylesheet" type="text/css" href="css/bootstrap-<%= UserPrefs.getCurrentUserPrefs().template%>.min.css" />
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
+<script type="text/javascript" src="/lib/bootstrap.min.js"></script>
+
 <script type="text/javascript">
 jQuery.validator.setDefaults({
 	debug: true,
@@ -43,7 +45,10 @@ function returnBack()
 	 
 	 if (window.opener)
 	 {
-	     window.opener.setImageURL(url);
+	     
+		 window.opener.setImageURL(url);
+	     
+	     
 	     window.close();
 	 }
 	 return;
@@ -104,9 +109,10 @@ function isValid(){
 <input type="hidden" name="success_action_redirect" value="<%=request.getRequestURL()%>" /> 
 
 <input type="hidden" name="AWSAccessKeyId" value="AKIAJ62OAFOKCJTDANVA" />
+<input type="hidden" name="policy" value="IHsKImV4cGlyYXRpb24iOiAiMjAyMC0wMS0wMVQxMjowMDowMC4wMDBaIiwKICAiY29uZGl0aW9ucyI6IFsKICAgIHsiYnVja2V0IjogImFnaWxlY3JtIiB9LAogICAgeyJhY2wiOiAicHVibGljLXJlYWQiIH0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRrZXkiLCAicGFuZWwvdXBsb2FkZWQtbG9nbyJdLAogICAgWyJzdGFydHMtd2l0aCIsICIkQ29udGVudC1UeXBlIiwgImltYWdlLyJdLAogICAgWyAiY29udGVudC1sZW5ndGgtcmFuZ2UiLCA1MTIsIDQxOTQzMDRdLAogICAgWyJzdGFydHMtd2l0aCIsICIkc3VjY2Vzc19hY3Rpb25fcmVkaXJlY3QiLCAiIiBdCiAgXQp9" />
+<input type="hidden" name="signature" value="kTLzXhH6RYKpZ/+5oToI59iSl5Q=" />
 
-<input type="hidden" name="policy" value="ewogICJleHBpcmF0aW9uIjogIjIwMjAtMDEtMDFUMTI6MDA6MDAuMDAwWiIsCiAgImNvbmRpdGlvbnMiOiBbCiAgICB7ImJ1Y2tldCI6ICJhZ2lsZWNybSIgfSwKICAgIHsiYWNsIjogInB1YmxpYy1yZWFkIiB9LAogICAgIFsic3RhcnRzLXdpdGgiLCAiJGtleSIsICJwYW5lbC91cGxvYWRlZC1sb2dvIl0sCiAgICAgeyJzdWNjZXNzX2FjdGlvbl9yZWRpcmVjdCI6ICJodHRwOi8vbG9jYWxob3N0Ojg4ODgvdXBsb2FkLmpzcCJ9LAogICAgIFsic3RhcnRzLXdpdGgiLCAiJENvbnRlbnQtVHlwZSIsICJpbWFnZS8iXSwKICBdCn0=" />
-<input type="hidden" name="signature" value="3RcvbEnh5oQncA7CbR3WA0qFyKY=" />
+
 <p><input name="file" id='fileextension' type="file" /></p>
 <br/>
 <input name="submit" id="submit" value="Upload" class='submit btn btn-primary' type="submit" /> 

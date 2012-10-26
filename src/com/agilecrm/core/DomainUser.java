@@ -120,11 +120,8 @@ public class DomainUser
 	    domainUser.password = randomNumber;
 
 	    // Send an email with the new password
-	    Util.sendMail(SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME,
-		    email, "Password has been reset",
-		    SendMail.AGILE_FROM_EMAIL,
-		    "We have successfully reset the password to "
-			    + domainUser.password, null);
+	    SendMail.sendMail(email, SendMail.FORGOT_PASSWORD_SUBJECT,
+		    SendMail.FORGOT_PASSWORD, domainUser);
 
 	    try
 	    {
@@ -161,11 +158,24 @@ public class DomainUser
 	    // Encrypt password while saving
 	    encrypted_password = Util.encrypt(password);
 	}
+	else
+	{
+	    // Get password from old values
+	    if (this.id != null)
+	    {
+		// Get Old password
+		DomainUser oldDomainUser = DomainUser.getDomainUser(id);
+		this.encrypted_password = oldDomainUser.encrypted_password;
+	    }
+	}
 
 	password = MASKED_PASSWORD;
 
 	info_json_string = info_json.toString();
 
+	// Lowercase
+	email = StringUtils.lowerCase(email);
+	domain = StringUtils.lowerCase(domain);
     }
 
     @PostLoad
@@ -307,16 +317,19 @@ public class DomainUser
 
 	// Super User should always be the admin
 	if (this.is_account_owner && !this.is_admin)
-	    throw new Exception(
-		    "Account owner has to admin. Please update and try again");
+	{
+	    this.is_admin = true;
+	}
 
 	// Send Email
 	if (this.id == null)
 	{
 	    try
 	    {
-		SendMail.sendMail(this.email, "New User Invitation",
+		SendMail.sendMail(this.email,
+			SendMail.NEW_USER_INVITED_SUBJECT,
 			SendMail.NEW_USER_INVITED, this);
+
 	    }
 	    catch (Exception e)
 	    {
