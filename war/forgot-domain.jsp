@@ -17,8 +17,8 @@ if(!StringUtils.isEmpty(email))
 	}
 	else
 	{
-	   success = "Redirecting to your domain";
 	   domain = domainUser.domain;
+	   success = "Redirecting to your domain";
 	}
 	
 	System.out.println(error + " " + success);

@@ -124,7 +124,6 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 		</div>
 	</div>
 	<div class="row login-page">
-
 		<div class='account-container'>
 			<div class="content clearfix">
 				<form id='oauth' name='oauth' method='post'> 
