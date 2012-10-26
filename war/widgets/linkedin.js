@@ -62,7 +62,7 @@ function showLinkedinMatchingProfiles(plugin_id)
         	 return;
          }
          
-         // If matched found
+             // If matched found
              $.each(data, function (key, value) {
             	 
             	 if(!isArray(value))
@@ -78,6 +78,7 @@ function showLinkedinMatchingProfiles(plugin_id)
                 		 }
             		 el = el.concat(getTemplate("linkedin-search-result", object));
                  });
+            	 
               });
             
              $('#Linkedin').html(el);

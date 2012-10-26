@@ -151,11 +151,14 @@ margin-bottom:0px;
 					<div id="openid_btns" style="float: left; padding: 5px 0 15px; border-top: 1px dotted #CCC; border-bottom: 1px dotted #CCC; border-right: none; border-left: none;">
 					 <% if(StringUtils.isEmpty(error)){%>
                        <div class="alert alert-error login-error" style="display:none">
+                          <a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
+						</div>
                        <%}else{%>
                         <div class="alert alert-error login-error">
-                        <%}%>
-							<a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
+                           <a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
 						</div>
+                        <%}%>
+							
 						<h3><small>Login or register using existing accounts</small></h3>
 					  <div  style="padding-top:10px;">
 						<input type='hidden' name='auth' value='auth'></input>
@@ -171,9 +174,7 @@ margin-bottom:0px;
 
 				<form name='agile' id="agile" method='post' style="padding-top:5px;" onsubmit="return isValid();">
 					
-					<h3>
-						<small>Sign in using your registered account:</small>
-					</h3>
+					<h3><small>Sign in using your registered account:</small></h3>
 					
 					<div id="openid_btns" style="float: left; padding: 5px 0 15px;">
 

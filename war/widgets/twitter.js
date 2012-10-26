@@ -67,9 +67,7 @@ function showTwitterMatchingProfiles(plugin_id)
                 	 value = [value]
                  
                  $.each(value, function (index, object) {
-                	 
                 	 el = el.concat(getTemplate("twitter-search-result", object));
-                     
                  });
              });
              $('#Twitter').html(el);
