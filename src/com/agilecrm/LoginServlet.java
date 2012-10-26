@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,10 +48,12 @@ public class LoginServlet extends HttpServlet
 	    {
 		if (type.equalsIgnoreCase("oauth"))
 		{
+		    System.out.println("oauth form type");
 		    loginOAuth(request, response);
 		}
 		else if (type.equalsIgnoreCase("agile"))
 		{
+		    System.out.println("agile form type");
 		    loginAgile(request, response);
 		}
 
@@ -106,6 +109,11 @@ public class LoginServlet extends HttpServlet
 
 	email = email.toLowerCase();
 
+	// Setting cookie
+	Cookie cookie = new Cookie("email", email);
+	cookie.setMaxAge(24 * 60 * 60);
+	response.addCookie(cookie);
+
 	// Get Domain User with this name, password - we do not check for domain
 	// as validity is verified in AuthFilter
 	DomainUser domainUser = DomainUser.getDomainUserFromEmail(email);
@@ -113,7 +121,8 @@ public class LoginServlet extends HttpServlet
 	    throw new Exception("We have not been able to locate any user");
 
 	// Check if Encrypted passwords are same
-	if (!StringUtils.equals(domainUser.password, Util.encrypt(password)))
+	if (!StringUtils.equals(Util.encrypt(domainUser.password),
+		Util.encrypt(password)))
 	    if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 		throw new Exception("Incorrect password. Please try again.");
 

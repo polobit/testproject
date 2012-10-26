@@ -148,7 +148,8 @@ jQuery.validator.setDefaults({
 					
 			</div>
 			<div style="text-align: center;line-height: 19px;">
-	                 Already have an account? <a href="/login">Login</a><br>
+	                 Already have an account? <a href="/login">Login</a><br/>
+	                 Forgot <a href="forgot-domain.jsp">Domain</a>
                </div>
 		</div>
 		
