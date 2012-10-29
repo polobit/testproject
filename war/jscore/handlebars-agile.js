@@ -273,12 +273,14 @@ $(function()
 	});
 
 	//Get Date from epoch time
-	Handlebars.registerHelper('epochToDate', function(date)
+	Handlebars.registerHelper('epochToDate', function(info_json, date_type)
 			{
-				console.log("New Date is " +date);
-				var	intMonth = new Date(parseInt(date) * 1000).getMonth();
-				var	intDay = new Date(parseInt(date) * 1000).getDate();
-				var intYear = new Date(parseInt(date)* 1000).getFullYear();
+				
+				var obj = JSON.parse(info_json);
+				
+				var	intMonth = new Date(parseInt(obj[date_type]) * 1000).getMonth();
+				var	intDay = new Date(parseInt(obj[date_type]) * 1000).getDate();
+				var intYear = new Date(parseInt(obj[date_type])* 1000).getFullYear();
 				
 				var monthArray = [ "Jan", "Feb", "March", "April", "May", "June", "July",
 						"Aug", "Sept", "Oct", "Nov", "Dec" ];

@@ -18,7 +18,7 @@
       					<th>User Name</th>
                         <th>User Email</th>
                         <th>Created Date</th>
-                        <th>LastLoggedIn Date</th>
+                        <th>Last LoggedIn Date</th>
                         <th>Is Admin</th>
 						<th>Is Disabled</th>
     				</tr>
@@ -61,8 +61,8 @@
 <script id="admin-settings-users-model-template" type="text/html">
   <td class='data' data='{{id}}'>{{name}}</td>
   <td>{{email}}</td>
-  <td>{{epochToDate created_time}}</td>
-  <td>{{epochToDate logged_in_date}}</td>
+  <td>{{epochToDate info_json_string "created_time"}}</td>
+  <td>{{epochToDate info_json_string "logged_in_time"}}</td>
   <td>{{is_admin}}</td>
   <td>{{is_disabled}}</td>
 <br/>

@@ -1,6 +1,5 @@
 $(function(){
 	$('#contacts-model-list > tr').live('click', function(e){
-		
 		e.preventDefault();
 		var data = $(this).find('.data').attr('data');
 		console.log(data);

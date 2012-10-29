@@ -202,8 +202,6 @@ public class Contact extends Cursor
     // Delete Contact
     public void delete()
     {
-	// Delete Tags
-	Tag.deleteTags(tags);
 
 	// Store contact in temporary variable to delete its document after
 	// contact delete
@@ -215,6 +213,10 @@ public class Contact extends Cursor
 
 	// Delete Notes
 	Note.deleteAllNotes(id);
+
+	// Delete Tags
+	Tag.deleteTags(tags);
+
 	// Execute Trigger
 	Trigger.executeTrigger(this.id, Trigger.Type.CONTACT_IS_DELETED);
     }
