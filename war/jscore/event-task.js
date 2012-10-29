@@ -227,7 +227,7 @@ function saveEvent(formId, modalName, isUpdate){
 	var eventModel = new Backbone.Model();
     eventModel.url = 'core/api/events';
     eventModel.save(json,{
-        success: function () {
+        success: function (data) {
         	
         	$('#' + formId).each (function(){
           	  this.reset();
@@ -236,7 +236,9 @@ function saveEvent(formId, modalName, isUpdate){
 			$('#' + modalName).find('span.save-status img').remove();
         	$('#' + modalName).modal('hide');
 
-        	$('#calendar').fullCalendar( 'refetchEvents' );
+        //	$('#calendar').fullCalendar( 'refetchEvents' );
+        	
+        	$('#calendar').fullCalendar( 'renderEvent', data.toJSON() );
         	
         	App_Calendar.navigate("calendar", {
 				trigger: true

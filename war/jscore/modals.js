@@ -19,5 +19,10 @@ $(function(){
 	    	}
 	    	serializeAndSaveContinueContact(e, 'companyForm', 'companyModal', false, false);	        
 	    });
+	    
+	 // Hide email alert error when the modal is shown in new-person-modal
+	    $('#personModal').on('shown', function () {
+	    	$('#personModal').find(".alert").hide();	    	
+	    });
 });
 

@@ -119,6 +119,11 @@ function bulkOperations(url, id_array, index_array, table){
 			// To remove table rows on delete 
 			for(var i = 0; i < index_array.length; i++) 
 				$(tbody).find('tr:eq(' + index_array[i] + ')').fadeOut(300, function() { $(this).remove(); });
+			
+			// Tags re-fetching
+			if(App_Contacts.contactsListView){
+				setupTags(App_Contacts.contactsListView.el);
+			}	
 		}
 	});
 }
