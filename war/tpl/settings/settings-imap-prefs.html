@@ -3,7 +3,9 @@
 
 	<form id='imap-prefs-form'>
 		<fieldset>
-			<input name="id" type="hidden" value="{{id}}" /> 	
+	{{#if id}}
+			<input name="id" type="hidden" value="{{id}}" /> 
+	{{/if}}
 			<legend>IMAP</legend>
 	
     		<div class="control-group">
