@@ -128,6 +128,7 @@ public class Contact extends Cursor
 	System.out.println(this.properties);
     }
 
+    @Override
     public String toString()
     {
 	return "id: " + id + " created_time: " + created_time + " updated_time"
@@ -163,8 +164,9 @@ public class Contact extends Cursor
     @PrePersist
     private void PrePersist()
     {
-	// Store Created and Last Updated Time
-	if (created_time == 0L)
+	// Store Created and Last Updated Time Check for id even if created time
+	// is 0(To check whether it is update request)
+	if (created_time == 0L && id == null)
 	{
 	    System.out.println("New Entity");
 	    created_time = System.currentTimeMillis() / 1000;
@@ -221,8 +223,6 @@ public class Contact extends Cursor
 
     public void save()
     {
-
-	System.out.println("contact saving:" + this);
 	dao.put(this);
 
 	Trigger.executeTrigger(this.id, Trigger.Type.CONTACT_IS_ADDED);

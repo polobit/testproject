@@ -82,6 +82,16 @@ public class ContactDocument
 	doc.addField(Field.newBuilder().setName("created_time")
 		.setDate(truncatedDate));
 
+	// Save updated time if updated time is not 0
+	if (contact.updated_time > 0L)
+	{
+	    Date updatedDate = DateUtils.truncate(new Date(
+		    contact.updated_time * 1000), Calendar.DATE);
+
+	    doc.addField(Field.newBuilder().setName("updated_time")
+		    .setDate(updatedDate));
+	}
+
 	// Other fields in contacts
 	doc.addField(Field.newBuilder().setName("lead_score")
 		.setNumber(contact.lead_score));
