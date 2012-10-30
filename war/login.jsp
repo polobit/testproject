@@ -166,15 +166,11 @@ margin-bottom:0px;
                    </h1></div>
 						
 					<div id="openid_btns" style="float: left; padding: 5px 0 15px; border-top: 1px dotted #CCC; border-bottom: 1px dotted #CCC; border-right: none; border-left: none;">
-					 <% if(StringUtils.isEmpty(error)){%>
-                       <div class="alert alert-error login-error" style="display:none">
-                          <a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
+					   <% if(!StringUtils.isEmpty(error)){%>
+				        <div class="alert alert-error login-error">
+							<a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
 						</div>
-                       <%}else{%>
-                        <div class="alert alert-error login-error">
-                           <a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
-						</div>
-                        <%}%>
+						<%}%>
 							
 						<h3><small>Login or register using existing accounts</small></h3>
 					  <div  style="padding-top:10px;">
@@ -194,12 +190,12 @@ margin-bottom:0px;
 					<h3><small>Sign in using your registered account:</small></h3>
 					
 					<div id="openid_btns" style="float: left; padding: 5px 0 15px;">
-
-						<input type='hidden' name='type' value='agile'>
+                        <input type='hidden' name='auth' value='auth'></input>
+						<input type='hidden' name='type' value='agile'></input>
 						<input class="input-xlarge required email field" name='email' type="text" placeholder="User Name"
 						<%if (emailCookie != null) {%> value="<%=emailCookie.getValue()%>" <%}%>
 						>
-					    <input class="input-xlarge required field " name='password' type="password" placeholder="Password">
+					    <input class="input-xlarge required field " maxlength="10" minlength="4" name='password' type="password" placeholder="Password">
 						<div style="margin-top: 15px;">
 							<label class="checkbox" style="display: inline-block;">
 							    <input type="checkbox" name="signin">Keep me signed in 

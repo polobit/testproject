@@ -20,10 +20,9 @@ else
 <meta charset="utf-8">
  <meta name="globalsign-domain-verification" content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx"/>
 <title>Register</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
-<meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1">
 
 
 <!-- Le styles -->
@@ -131,7 +130,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 				<div id="openid_btns" style="float: left;padding:5px 0 15px;border-top: 1px dotted #CCC;border-bottom: 1px dotted #CCC;border-right: none;border-left: none;">
 				        
 				         <% if(!StringUtils.isEmpty(error)){%>
-				        <div class="alert alert-error login-error" style="display:none">
+				        <div class="alert alert-error login-error">
 							<a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
 						</div>
 						<%}%>
@@ -154,12 +153,12 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 				 <h3><small>Create Your Free Account</small></h3>	
 				<div id="openid_btns" style="float: left;padding:5px 0 15px;">
 					
-					<input type='hidden' name='auth' value='auth'>
-					<input type='hidden' name='type' value='agile'>
+					<input type='hidden' name='auth' value='auth'></input>
+					<input type='hidden' name='type' value='agile'></input>
 					
 					<input class="input-xlarge field required" name='name' type="text" placeholder="Name">
                     <input class="input-xlarge field required email" name='email' type="text" placeholder="Email">
-                    <input class="input-xlarge field required" name='password' type="password" placeholder="Password">
+                    <input class="input-xlarge field required" maxlength="10" minlength="4" name='password' type="password" placeholder="Password">
 					<div style="margin-top:15px;">
 					  <label class="checkbox" style="display:inline-block;">I agree with the Terms of Use<input type="checkbox" name="agree" class="required"></label>
 					  <input type='submit' style="float:right;"value="Register" class='btn btn-large btn-primary'>
