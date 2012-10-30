@@ -11,8 +11,6 @@
 
 
  <script id="workflows-collection-template" type="text/html">
- 
-
 
  <div class="row">
 
@@ -30,11 +28,11 @@
  <div class="row">
  
  <div class="span9"> 
- 
-
+{{#unless this.length}}
  <div id="slate">
 
- </div>
+</div>
+{{/unless}}
 {{#if this.length}}
 <div class="data-block">
 	  <div class="data-container">
@@ -55,29 +53,31 @@
 </div>
 
 
+
+
 <div class="span3">
 
 <div class="well">
 
 <h3>
-Export to CSV
+What is Workflow Automation?
 </h3><br/>
 <p>
-You can use workflow to automate most of your follow-ups. It's marketing and sales automation tool.
+Workflow is an intelligent sales and marketing automation process for sending your contacts relevant information at the right time.Use it to automate most of your follow-up activities.
 </p>
 <p>
-Eg: you can send an email to all users who have signed up on your site. And then based on their behavior in the control panel, you can send them targetted messages periodically.
+e.g. You can send an email to all users who have signed up on your site. And then based on their behavior in the control panel, you can send them targeted messages periodically.
 </p>
 
 <br/>
 <h3>
-What is marketing automation?
+What are Triggers?
 </h3><br/>
 <p>
-You can use workflow to automate most of your follow-ups. It's marketing and sales automation tool.
+Triggers are pre-defined conditions set up by you. If the condition is satisfied, you can choose an action to follow using workflow automation.
 </p>
 <p>
-Eg: you can send an email to all users who have signed up on your site. And then based on their behavior in the control panel, you can send them targetted messages periodically.
+e.g. If a user registers on your website, you can automate the workflow to send a welcome email. The user registering on site is the trigger.
 </p>
 
 

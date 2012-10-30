@@ -52,8 +52,8 @@
   				</ul>
 	</div>		
  </div>
-     <div class="well right unselectable" id="score" unselectable="on" style="height:45px; margin-right:72px; padding-top:0px; padding-bottom:17px;" onselectstart="return false;">
-         <span style="font-size:25px; display:inline-block; padding-top:6px"> Score </span> 
+     <div class="well right unselectable" id="score" unselectable="on" style="height:45px; margin-right:72px; padding-top:0px; padding-bottom:17px;" onselectstart="return false">
+         <span style="font-size:25px; display:inline-block; padding-top:6px"   rel="tooltip" data-placement="bottom"  data-title="Lead Score" data-content="Score your leads to get high quality leads to appear on top. Manually assign scores or automate the process based on user behavior using Workflow automation." id="element-title" data-trigger="hover"> Score </span> 
          <br/>
           <span id="lead-score" style="font-size:25px; padding-left:12px">{{lead_score}}</span>&nbsp;
           <div style="display:inline-block; vertical-align:middle">
@@ -67,7 +67,7 @@
 			<div class='clearfix'></div>	
 			<div style="height:48px">	
 					
-					<ul id="added-tags-ul" class="tagsinput">
+					<ul id="added-tags-ul" class="tagsinput" style="display:inline-block;vertical-align:top;">
 				{{#if tags}}
 						{{#each tags}}
 								<li style="display:inline-block;" class="tag" data="{{this}}"><span><a class="anchor" href="#tags/{{this}}">{{this}}</a><a class="close remove-tags" id="{{this}}">&times</a></span></li>
@@ -81,14 +81,14 @@
                    				<div class="pull-left">
 									<ul id="ul-add-tags" name="tags" class= "tagsinput tags"></ul>
 								</div>
-								<div class="controls">
+								<div class="controls" style="display:inline-block">
 									<input name="" type="text" id="addTags" class="tags-typeahead span2" style="margin-bottom: -1px" placeholder="Enter tags"/>
-									<a href="#" class="btn" id="contact-add-tags" style="margin-left: 10px;margin-right: 5px">Add</a>
+									<span><a href="#" class="btn" id="contact-add-tags" style="margin-left: 10px;margin-right: 5px">Add</a></span>
 								</div>
 							</div>							
 						</form>
-			       </div>
-                   <a href="#" id="add-tags"><i class="icon-plus-sign"></i></a> <span>Add tags</span> 
+           </div>
+             <div style="display:inline-block;vertical-align:top;margin-top:6px"><a href="#" id="add-tags" rel="tooltip" data-original-title="addtag" data-placement="top"><i class="icon-plus-sign"></i></a> <span>Add tags</span></div>       
 			</div>
 
 <div class="subnav" >
