@@ -1,19 +1,20 @@
+var TASKSVIEW;
 $(function(){ 
 
-	// Notes
 	var id;
+	
 	$('#contactDetailsTab a[href="#timeline"]').live('click', function (e){
 		e.preventDefault();
-		console.log("tiem lin");
 		$('div.tab-content').find('div.active').removeClass('active');
 		
 	//	loadTimelineDetails(App_Contacts.contactDetailView.el, App_Contacts.contactDetailView.model.id);
 		$('#time-line').addClass('active');
 	});
-	
+
+	// Notes
 	$('#contactDetailsTab a[href="#notes"]').live('click', function (e){
 		e.preventDefault();
-	    id = model.id;
+	    id = App_Contacts.contactDetailView.model.id;
 		var notesView = new Base_Collection_View({
             url: '/core/api/contacts/' + id + "/notes",
             restKey: "note",
@@ -22,6 +23,20 @@ $(function(){
         });
         notesView.collection.fetch();
         $('#notes', this.el).html(notesView.el);
+	});
+	
+	// Tasks
+	$('#contactDetailsTab a[href="#tasks"]').live('click', function (e){
+		e.preventDefault();
+	    id = App_Contacts.contactDetailView.model.id;
+		TASKSVIEW = new Base_Collection_View({
+            url: '/core/api/contacts/' + id + "/tasks",
+            restKey: "task",
+            templateKey: "contact-tasks",
+            individual_tag_name: 'tr'
+        });
+		TASKSVIEW.collection.fetch();
+        $('#tasks', this.el).html(TASKSVIEW.el);
 	});
 	
 	// Deals with id
@@ -165,6 +180,13 @@ $(function(){
 
 	});
 	
+	$('#send-email-close').die().live('click',function(e){
+		e.preventDefault();
+		Backbone.history.navigate("contact/" + App_Contacts.contactDetailView.model.id, {
+            trigger: true
+        });
+	});	
+	
 	// Help mail
 	$('#helpMail').die().live('click',function(e){
 		        e.preventDefault();
@@ -181,19 +203,20 @@ $(function(){
 		e.preventDefault();
 		
 		var workflow_id = $('#campaignSelect option:selected').attr('value');
-		console.log(workflow_id);
 		
 		if(!workflow_id){
-			console.log("nothing selected");
 			return;
 		}
-			console.log("not returned");
+		
+		$('.add-campaign').find('span.save-status').html(LOADING_HTML);
+		
 		var contact_id = App_Contacts.contactDetailView.model.id;
 		var url = '/core/api/campaigns/enroll/' + contact_id + '/' + workflow_id;
 
 		$.get(url, function(data){
-			console.log("success");
-    		$(".enroll-success").html('<div class="alert alert-success"><a class="close" data-dismiss="alert" href="#">×</a>Enrolled successfully.</div>'); 
+			$('.add-campaign').find('span.save-status img').remove();
+			
+    	//	$(".enroll-success").html('<div class="alert alert-success"><a class="close" data-dismiss="alert" href="#">×</a>Enrolled successfully.</div>'); 
 	   });
 	});
 

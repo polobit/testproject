@@ -41,7 +41,16 @@ $(function(){
 	    		    			if(App_Contacts.contactDetailView){
 	    		    				$.each(task.contacts, function(index, contact_id){
 	    		    					if(contact_id == App_Contacts.contactDetailView.model.get('id')){
+	    		    						/*$('div.tab-content').find('div.active').removeClass('active');
+	    		    						$('#time-line').addClass('active');*/
+	    		    						
 	    		    						$('#timeline').isotope( 'insert', $(getTemplate("timeline", data.toJSON())) );
+	    		    						
+	    		    						// Add task to tasks collection in contact detail tabs
+	    		    						/*if(TASKSVIEW){
+	    		    							TASKSVIEW.collection.add(data);
+	    		    							TASKSVIEW.render(true);
+	    		    						}*/
 	    		    						return false;
 	    		    					}	
 

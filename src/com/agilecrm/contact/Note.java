@@ -42,7 +42,7 @@ public class Note
     public String entity_type = "note";
 
     // Dao
-    private static ObjectifyGenericDao<Note> dao = new ObjectifyGenericDao<Note>(
+    public static ObjectifyGenericDao<Note> dao = new ObjectifyGenericDao<Note>(
 	    Note.class);
 
     public Note()

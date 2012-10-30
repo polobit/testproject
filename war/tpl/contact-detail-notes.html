@@ -1,14 +1,14 @@
 <script id="notes-collection-template" type="text/html">
 	</br>
-	<h2>List of Notes</h2>
- 
-	<table class="table table-bordered" >
+<div class="page-header">
+    <h2>List of Notes</h2>
+</div>  
+	<table class="table table-striped" url="core/api/contacts/notes/bulk">
 		<thead>
     		<tr>
-     			<th></th>
-      			<th>Id</th>
-      			<th>subject</th>
-      			<th>description</th>
+      			<th>Subject</th>
+      			<th>Description</th>
+				<th>Date</th>
     		</tr>
   		</thead>
   
@@ -17,13 +17,12 @@
   
 	</table>
 	</br>
-	<a href="#noteModal" data-toggle="modal" class="btn left" id="addNote"><span><i class='icon-plus-sign'/></span> Add Note</a>
+<!-- <a href="#noteModal" data-toggle="modal" class="btn left" id="addNote"><span><i class='icon-plus-sign'/></span> Add Note</a> -->
 </script>
 
-<script id="notes-modal-template" type="text/html">
-	<td><icon class='deleteNote icon-remove-circle'></icon></td>  	
-  	<td>{{id}} </td>
+<script id="notes-model-template" type="text/html">
   	<td>{{subject}} </td>
-   	<td>{{note}}</td>
+   	<td>{{description}}</td>
+	<td>{{epochToTaskDate created_time}}</td>
 	<br/>
 </script>
