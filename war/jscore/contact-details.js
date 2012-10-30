@@ -48,7 +48,6 @@ $(function(){
 	// Show form to add tags
 	$('#add-tags').live('click', function(e){
 		e.preventDefault();
-		console.log("in add tags");
 		$("#addTagsForm").css("display", "block");
 		setupTagsTypeAhead();
 	});
@@ -164,7 +163,7 @@ $(function(){
 	    });
 	   
 	    $('#score').children().attr('unselectable', 'on');
-		
+	    
 });
 
 function starify(el){
@@ -190,3 +189,15 @@ function starify(el){
         });
     
 }
+
+$(function(){
+	  $('#element').live('mouseenter',function(e){
+	    	e.preventDefault();
+	        $(this).popover({
+	        	template:'<div class="popover"><div class="arrow"></div><div class="popover-inner"><div class="popover-content"><p></p></div></div></div>'
+	        });
+	        });
+	    $('#element-title').live('mouseenter',function(e){
+	    	e.preventDefault();
+	        $(this).popover('show');});
+});
