@@ -44,17 +44,7 @@
 						 <input name="tags" type="text" id="tags-new-person" class="tags-typeahead"/>
 					</div>
 					</div> 
-
-					{{#each custom_fields}}
-					<div class="control-group">
-                    	<label class="control-label">{{ucfirst this.field_label}}<span class="field_req">*</span></label>
-						<div class="controls">
-							 <input class="custom_field required" id="{{this.id}}" name="{{this.field_label}}" type="{{toLowerCase this.field_type}}"/>
-						</div>
-					</div> 
-						
-					{{/each}}
-
+					{{show_custom_fields custom_fields}}
 					<legend></legend>
 					   <p></p>
                     <div class="control-group">
