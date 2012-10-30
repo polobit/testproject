@@ -4,9 +4,10 @@
 <div class="span9">
  <div class="page-header">
 
-	<div style='display:inline;padding-right:10px;height:auto;'>
-    	<img  class='thumbnail' src="{{gravatarurl properties 50}}" width="50" height="50" style='display:inline'/>
-	</div>
+	<form style='display:inline;padding-right:10px;height:auto;' id="upload-container">
+    	<img  class='thumbnail upload_pic imgholder upload_s3 submit' type="submit" src="{{gravatarurl properties 50}}" width="50" height="50" style='display:inline'/>
+	    <input type="hidden" id="upload_url" name="gravatarurl"><a style="display:none;" class="save_img submit" type="submit">Save</a>  
+    </form>
 	<div style='height:auto;display:inline-block;vertical-align:-23px;'>
 		<b>
 			<font size="5">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</font> 
