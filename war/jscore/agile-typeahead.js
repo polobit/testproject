@@ -2,6 +2,8 @@
 var TAGS = {};
 function agile_type_ahead(id, el, callback, isSearch) {
 	
+	$('#' + id, el).attr("autocomplete","off");
+	
 	var CONTACTS = {};
 	$('#' + id, el).typeahead({
 		source : function(query, process) {
