@@ -96,9 +96,15 @@ var Base_Collection_View = Backbone.View.extend({
         	if(!this.page_size)
         		this.page_size = 20;
         
+        	var that = this;
+        	
         	// Get max
         	// console.log("Inifinite Scolling started");
-        	this.infiniScroll = new Backbone.InfiniScroll(this.collection, {success: this.render, untilAttr: 'cursor', param: 'cursor', strict: true, pageSize: this.page_size, 
+        	this.infiniScroll = new Backbone.InfiniScroll(this.collection, {success: function(){
+        			that.render(true)
+        		},
+        		untilAttr: 'cursor', param: 'cursor', strict: true, pageSize: this.page_size, 
+        	
         		
         		// Show loading on fetch after table 
         		onFetch:function(){
