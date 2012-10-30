@@ -39,7 +39,7 @@ public class UserPrefs
     @NotSaved(IfDefault.class)
     public String width = "";
 
-    @NotSaved(IfDefault.class)
+    @NotSaved
     public String name = null;
 
     @NotSaved(IfDefault.class)
@@ -117,7 +117,8 @@ public class UserPrefs
 	try
 	{
 	    if ((currentDomainUser != null)
-		    && (!currentDomainUser.name.equals(this.name) || currentDomainUser.name == null))
+		    && (currentDomainUser.name == null || !currentDomainUser.name
+			    .equals(this.name)))
 	    {
 		currentDomainUser.name = this.name;
 		currentDomainUser.save();
@@ -160,7 +161,7 @@ public class UserPrefs
     public String getCurrentDomainUserName()
     {
 	DomainUser currentDomainUser = DomainUser.getDomainCurrentUser();
-	if (currentDomainUser != null)
+	if (currentDomainUser != null && currentDomainUser.name != null)
 	    return currentDomainUser.name;
 
 	return "?";
