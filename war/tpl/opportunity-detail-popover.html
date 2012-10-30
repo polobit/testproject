@@ -10,7 +10,9 @@
                 <p><b>Contacts</b></p>
                 <div style="padding:5px;">
 					  Owner: {{owner}}<br/>
-                      Related To: {{relatesTo}}
+                      Related To: {{#each contacts}}
+		                            <div style="padding-left:8px;">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</div>
+	                              {{/each}}
                 </div>
             </div>
             <div class="span4" style='display:inline;padding-right:10px;height:auto;'>
