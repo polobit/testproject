@@ -121,7 +121,14 @@ var WorkflowsRouter = Backbone.Router.extend({
                 window: 'triggers',
                 postRenderCallback: function(el){
                 	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-                    fillSelect('campaign-select','/core/api/workflows', 'workflow', 'no-callback', optionsTemplate);
+                    fillSelect('campaign-select','/core/api/workflows', 'workflow', function fillCampaign() {
+                		var value = currentTrigger.toJSON();
+                		
+                		if(value)
+                		{
+                			$('#campaign-select',el).find('option[value='+value.campaign_id+']').attr('selected', 'selected');
+                		}			
+                	}, optionsTemplate);
                     },
             	});
             

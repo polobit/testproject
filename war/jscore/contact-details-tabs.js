@@ -164,6 +164,12 @@ $(function(){
 	// Send email
 	$('#sendEmail').die().live('click',function(e){
 		e.preventDefault();
+		
+		if(!isValidForm($('#emailForm')))
+	      {	
+	      	return;
+	      }
+		
 		var json = serializeForm("emailForm");
 		var url =  'core/api/send-email?from=' + encodeURIComponent(json.from) + '&to=' + 
 		   										 encodeURIComponent(json.to) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + 
