@@ -118,6 +118,13 @@ $(function(){
 	        });
 
 	    });
+	 
+	 $('#import-cancel').die().live('click', function (e) {
+		 $('#content').html(getTemplate("import-contacts", {}));
+	        head.js('lib/fileuploader-min.js', function(){
+	        	fileUploadInit();
+	        });
+	 });
 });
 
 function fileUploadInit() {
