@@ -47,6 +47,7 @@ $(function()
 		event.preventDefault();
 		var id_array = [];
 		var index_array = [];
+		var data_array = [];
 		var checked = false;
 		var table = $('body').find('table.showCheckboxes');
 
@@ -55,6 +56,7 @@ $(function()
 			if($(element).is(':checked')){
 				index_array.push(index);
 				id_array.push($(element).closest('tr').data().get('id'));
+				data_array.push($(element).closest('tr').data().toJSON());
 				checked = true;
 			}
 		});
@@ -63,7 +65,7 @@ $(function()
 			if(!confirm("Are you sure you want to delete?"))
 	    		return;
 			
-			bulkOperations($(table).attr('url'), id_array, index_array, table);
+			bulkOperations($(table).attr('url'), id_array, index_array, table, data_array);
 		}	
 		else
             $('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">×</a>You have not selected any records to delete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
@@ -105,7 +107,7 @@ $(function()
 });
 
 // Bulk operations - delete function
-function bulkOperations(url, id_array, index_array, table){
+function bulkOperations(url, id_array, index_array, table, data_array){
 	var json = {};
 	json.model_ids = JSON.stringify(id_array);
 	var tbody = $(table).find('tbody');
@@ -119,6 +121,12 @@ function bulkOperations(url, id_array, index_array, table){
 			// To remove table rows on delete 
 			for(var i = 0; i < index_array.length; i++) 
 				$(tbody).find('tr:eq(' + index_array[i] + ')').fadeOut(300, function() { $(this).remove(); });
+			
+			// Remove data from timeline
+			/*$.each(data_array, function(index, data){
+				console.log(data);
+				$('#timeline').isotope( 'remove', $(getTemplate("timeline", data)) );
+			});*/
 			
 			// Tags re-fetching
 			if(App_Contacts.contactsListView){

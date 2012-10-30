@@ -1,0 +1,29 @@
+<script id="contact-tasks-collection-template" type="text/html">
+	</br>
+<div class="page-header">
+    <h2>List of Tasks</h2>
+</div> 
+	<table class="table table-striped showCheckboxes" url="core/api/contacts/tasks/bulk">
+		<thead>
+    		<tr>
+      			<th>Subject</th>
+      			<th>Type</th>
+				<th>Priority Type</th>
+				<th>Date</th>
+    		</tr>
+  		</thead>
+  
+ 		<tbody id='contact-tasks-model-list'>
+    	</tbody>
+  
+	</table>
+	</br>
+</script>
+
+<script id="contact-tasks-model-template" type="text/html">
+  	<td>{{subject}} </td>
+   	<td>{{type}}</td>
+	<td>{{priority_type}}</td>
+	<td>{{epochToTaskDate due}}</td>
+	<br/>
+</script>

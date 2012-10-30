@@ -315,4 +315,33 @@ public class ContactsAPI
 	String tags_array[] = tagsString.split(",");
 	Contact.addTagsToContactsBulk(contactsJSONArray, tags_array);
     }
+
+    // Bulk operations - delete tasks bulk related to a contact
+    @Path("/tasks/bulk")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void deleteTasks(@FormParam("model_ids") String model_ids)
+	    throws JSONException
+    {
+
+	System.out.println("contactId for task;;;;;;;;;;;;");
+	System.out.println(model_ids);
+	JSONArray tasksJSONArray = new JSONArray(model_ids);
+	Task.dao.deleteBulkByIds(tasksJSONArray);
+    }
+
+    // Bulk operations - delete notes bulk related to a contact
+    @Path("/notes/bulk")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void deleteNotes(@PathParam("contact-id") Long contactId,
+	    @FormParam("model_ids") String model_ids) throws JSONException
+    {
+
+	System.out.println("contactId for notes;;;;;;;;;;;;");
+	System.out.println(contactId);
+	System.out.println(model_ids);
+	JSONArray notesJSONArray = new JSONArray(model_ids);
+	Note.dao.deleteBulkByIds(notesJSONArray);
+    }
 }

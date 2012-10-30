@@ -7,10 +7,9 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.agilecrm.core.DomainUser;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.user.AgileUser;
-import com.agilecrm.user.UserPrefs;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -38,7 +37,7 @@ public class Workflow extends Cursor
     public String rules = null;
 
     @NotSaved(IfDefault.class)
-    private Key<AgileUser> creator_key = null;
+    private Key<DomainUser> creator_key = null;
 
     // Dao
     public static ObjectifyGenericDao<Workflow> dao = new ObjectifyGenericDao<Workflow>(
@@ -69,8 +68,8 @@ public class Workflow extends Cursor
 
     public void save()
     {
-	AgileUser agileUser = AgileUser.getCurrentAgileUser();
-	creator_key = new Key<AgileUser>(AgileUser.class, agileUser.id);
+	DomainUser domainUser = DomainUser.getDomainCurrentUser();
+	creator_key = new Key<DomainUser>(DomainUser.class, domainUser.id);
 
 	dao.put(this);
     }
@@ -117,10 +116,9 @@ public class Workflow extends Cursor
 	Objectify ofy = ObjectifyService.begin();
 	if (creator_key != null)
 	{
-	    UserPrefs userPrefs = ofy.query(UserPrefs.class)
-		    .ancestor(creator_key).get();
-	    if (userPrefs != null)
-		return userPrefs.name;
+	    DomainUser domainUser = ofy.get(creator_key);
+	    if (domainUser != null)
+		return domainUser.name;
 	}
 	return "";
     }

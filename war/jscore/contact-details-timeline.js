@@ -60,7 +60,6 @@ function loadTimelineDetails(el, contactId)
 		var loading_count = 0;
 		
 		$.each(fetchContactDetails, function(index, url){
-			console.log(url);
 			// $('#timeline', el).html('<div><img class="loading" style="padding-right:5px" src="img/21-0.gif"></div>');
 			var View =  Backbone.Collection.extend({
 				url: url,
