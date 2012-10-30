@@ -116,7 +116,15 @@ public class Workflow extends Cursor
 	Objectify ofy = ObjectifyService.begin();
 	if (creator_key != null)
 	{
-	    DomainUser domainUser = ofy.get(creator_key);
+	    DomainUser domainUser = null;
+	    try
+	    {
+		domainUser = ofy.get(creator_key);
+	    }
+	    catch (Exception e)
+	    {
+
+	    }
 	    if (domainUser != null)
 		return domainUser.name;
 	}
