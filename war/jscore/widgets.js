@@ -45,7 +45,7 @@ function loadWidgets(el, contact, user) {
 						$('#' + model.get('name'), el).data('model', model);						
 				}, this);
         	
-   	  head.js('https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js',
+   	  head.js(LIB_PATH + 'lib/jquery-ui.min.js',
            function(){
         	  
             // Make widgets sortable
