@@ -323,9 +323,7 @@ public class ContactsAPI
     public void deleteTasks(@FormParam("model_ids") String model_ids)
 	    throws JSONException
     {
-
-	System.out.println("contactId for task;;;;;;;;;;;;");
-	System.out.println(model_ids);
+	
 	JSONArray tasksJSONArray = new JSONArray(model_ids);
 	Task.dao.deleteBulkByIds(tasksJSONArray);
     }
@@ -338,9 +336,6 @@ public class ContactsAPI
 	    @FormParam("model_ids") String model_ids) throws JSONException
     {
 
-	System.out.println("contactId for notes;;;;;;;;;;;;");
-	System.out.println(contactId);
-	System.out.println(model_ids);
 	JSONArray notesJSONArray = new JSONArray(model_ids);
 	Note.dao.deleteBulkByIds(notesJSONArray);
     }
