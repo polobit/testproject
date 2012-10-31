@@ -427,11 +427,9 @@ $(function()
 			}
 			else if(field.field_type.toLowerCase() == "checkbox")
 				field_type = "checkbox";
-			
-			console.log(field.field_type);
-				
+
 			// If not list type create text field(plain text field or date field)
-			el = el.concat('<div class="control-group">	<label class="control-label">'+ucfirst(field.field_label)+'<span class="field_req">*</span></label><div class="controls"><input type="'+field_type+'" class="'+field.field_type.toLowerCase()+' custom_field required" id='+field.id+' name='+field.field_label+'></div></div>');
+			el = el.concat('<div class="control-group">	<label class="control-label">'+ucfirst(field.field_label)+'<span class="field_req">*</span></label><div class="controls"><input type="'+field_type+'" class="'+field.field_type.toLowerCase()+'_input custom_field required" id='+field.id+' name='+field.field_label+'></div></div>');
 			
 		});
 		
