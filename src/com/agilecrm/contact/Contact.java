@@ -61,7 +61,7 @@ public class Contact extends Cursor
 
     // Owner
     @NotSaved
-    private String lead_owner;
+    public String lead_owner = null;
 
     // Domain User key(owner)
     @NotSaved(IfDefault.class)
@@ -163,16 +163,23 @@ public class Contact extends Cursor
     private void PrePersist()
     {
 
-	// Store Created and Last Updated Time Check for id even if created time
+	// Set owner only if owner_key is null
+	if (owner_key == null)
+	{
+	    // Set lead owner(current domain user)
+	    owner_key = new Key<DomainUser>(DomainUser.class, SessionManager
+		    .get().getDomainId());
+
+	}
+
+	// Store Created and Last Updated Time Check for id even if created
+	// time
 	// is 0(To check whether it is update request)
 	if (created_time == 0L && id == null)
 	{
 	    System.out.println("New Entity");
 	    created_time = System.currentTimeMillis() / 1000;
 
-	    // Set lead owner(current domain user)
-	    owner_key = new Key<DomainUser>(DomainUser.class, SessionManager
-		    .get().getDomainId());
 	}
 	else
 	    updated_time = System.currentTimeMillis() / 1000;
