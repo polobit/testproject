@@ -404,8 +404,29 @@ $(function()
 		// Create Field for each custom field
 		$.each(custom_fields, function(index, field)
 		{
-				el = el.concat('<div class="control-group">	<label class="control-label">'+ucfirst(field.field_label)+'<span class="field_req">*</span></label><div class="controls"><input type="text" class="'+field.field_type.toLowerCase()+'_input custom_field required" id='+field.id+' name='+field.field_label+'></div></div>');
-
+			// If field type is list create a select dropdown
+			if(field.field_type.toLowerCase() == "list")
+			{
+				var list_values = [],list_options = "";
+				
+				// Split values at ";" to seperate values of field_data(list options)
+				if(field.field_data)
+						list_values = field.field_data.split(";");
+					
+					// Create options based on list values
+					$.each(list_values,function(index, value){
+						list_options = list_options.concat('<option value='+value+'>'+value+'</option>');
+					});
+				
+					// Create select dropdown
+					el = el.concat('<div class="control-group">	<label class="control-label">'+ucfirst(field.field_label)+'<span class="field_req">*</span></label><div class="controls"><select class="'+field.field_type.toLowerCase()+' custom_field required" id='+field.id+' name='+field.field_label+'>'+list_options+'</select></div></div>');
+				
+				return;
+			}
+			
+			// If not list type create text field(plain text field or date field)
+			el = el.concat('<div class="control-group">	<label class="control-label">'+ucfirst(field.field_label)+'<span class="field_req">*</span></label><div class="controls"><input type="text" class="'+field.field_type.toLowerCase()+'_input custom_field required" id='+field.id+' name='+field.field_label+'></div></div>');
+			
 		});
 		
 		return new Handlebars.SafeString(el);
