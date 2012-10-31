@@ -222,6 +222,26 @@ $(function(){
 		$.get(url, function(data){
 			$('.add-campaign').find('span.save-status img').remove();
 			
+			// Fetch logs and add to timeline
+			var LogsCollection = Backbone.Collection.extend({
+				url: '/core/api/campaigns/logs/contact/' + contact_id + '/' + workflow_id,
+			});
+			var logsCollection = new LogsCollection();
+			logsCollection .fetch({
+				success: function(){
+					
+					// Activate timeline in contact detail tab and tab content
+					activateTimelineTab();
+					
+					$.each(logsCollection.toJSON(), function(index, model) {
+						
+						$.each(JSON.parse(model.logs), function(index, log_model) {
+							$('#timeline').isotope( 'insert', $(getTemplate("timeline", log_model)) );
+						});
+					});
+				
+				}
+			});
     	//	$(".enroll-success").html('<div class="alert alert-success"><a class="close" data-dismiss="alert" href="#">×</a>Enrolled successfully.</div>'); 
 	   });
 	});
@@ -258,4 +278,13 @@ function populateSendEmailDetails(el){
 	// Prefill the templates
 	var optionsTemplate = "<option value='{{id}}'> {{subject}}</option>";
 	fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', undefined , optionsTemplate);
+}
+
+//Activate timeline in contact detail tab and tab content
+function activateTimelineTab(){
+	$('#contactDetailsTab').find('li.active').removeClass('active');
+	$('#contactDetailsTab li:first-child').addClass('active');
+	
+	$('div.tab-content').find('div.active').removeClass('active');
+	$('#time-line').addClass('active');
 }

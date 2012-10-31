@@ -51,6 +51,10 @@ function loadTimelineDetails(el, contactId)
 
 				// Call to setup timeline
 					setUpTimeline(timelineView.collection.toJSON(), el);
+				},
+				error: function(){
+					console.log("error...");
+					setUpTimeline(timelineView.collection.toJSON(), el);
 				}
 			});
 		}

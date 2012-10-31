@@ -118,7 +118,6 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, continueContact, 
         	// Remove loading image
         	$('#' + form_id).find('span.save-status img').remove();
         	$('#' + modal_id).find('span.save-status img').remove();
-        	$('#' + modal_id).modal('hide');
         	
         	// Remove loading image
         	$('#' + modal_id).find('img.person-img').remove();
@@ -140,6 +139,8 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, continueContact, 
                 	trigger: true
             	});            	
             }
+        	
+        	$('#' + modal_id).modal('hide');
             // Reset each element
             $('#' + form_id).each(function () {
                 this.reset();
