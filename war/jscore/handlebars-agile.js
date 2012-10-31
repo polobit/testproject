@@ -400,14 +400,14 @@ $(function()
 	Handlebars.registerHelper('show_custom_fields', function(custom_fields){
 			
 		var el = "";
+
+		// Create Field for each custom field
 		$.each(custom_fields, function(index, field)
 		{
-			console.log(field);
-			console.log(field.field_type.toLowerCase());
-			el = el.concat('<div class="control-group">	<label class="control-label">'+ucfirst(field.field_label)+'<span class="field_req">*</span></label><div class="controls"><input class="custom_field required" id='+field.id+' name='+field.field_label+' type="'+field.field_type.toLowerCase()+'"/></div></div>');
+				el = el.concat('<div class="control-group">	<label class="control-label">'+ucfirst(field.field_label)+'<span class="field_req">*</span></label><div class="controls"><input type="text" class="'+field.field_type.toLowerCase()+'_input custom_field required" id='+field.id+' name='+field.field_label+'></div></div>');
 
 		});
-
+		
 		return new Handlebars.SafeString(el);
 		
 	});
