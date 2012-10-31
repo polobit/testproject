@@ -256,7 +256,7 @@ public class Opportunity
 	{
 
 	    int numOpportunities = getTotalNumberOfMilestones(minTime, maxTime,
-		    milestone);
+		    milestone.trim());
 	    milestonesObject.put(milestone, numOpportunities);
 	}
 

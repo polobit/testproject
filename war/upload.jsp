@@ -23,20 +23,20 @@ jQuery.validator.setDefaults({
 <script type="text/javascript">
 
 //Get URL
-var url = "https://s3.amazonaws.com/agilecrm/" + unescape(getUrlVars()["key"]);
+var url = "https://s3.amazonaws.com/agilecrm/" + unescape(getUrlVars()["key"]) + "?id=" + unescape(getUrlVars()["id"]);
 
 // Get Id
 //Read a page's GET URL variables and return them as an associative array.
 function getUrlVars() {
     var vars = [],
         hash;
+    
     var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
     for (var i = 0; i < hashes.length; i++) {
         hash = hashes[i].split('=');
         vars.push(hash[0]);
         vars[hash[0]] = hash[1];
     }
-
     return vars;
 }
 
@@ -44,11 +44,15 @@ function returnBack()
 {
 	 
 	 if (window.opener)
-	 {
-	     
-		 window.opener.setImageURL(url);
-	     
-	     
+	 {   var id = "<%=request.getParameter("id")%>";
+		 if(id == "contact-container")
+		 {
+			 window.opener.setContactImageURL(url);
+		 }
+		 else
+		 {
+			 window.opener.setImageURL(url);
+		 }
 	     window.close();
 	 }
 	 return;
@@ -58,7 +62,7 @@ $(function()
 {
 	// Check if this was referred back again
 	var key = getUrlVars()["key"];
-	console.log("Key" + key);
+	console.log("Key " + key);
 	if(key != undefined)
 	{
 		returnBack();
@@ -106,7 +110,7 @@ function isValid(){
 <input type="hidden" name="acl" value="public-read" /> 
 <input type="hidden" name="content-type" value="image/*" />
 
-<input type="hidden" name="success_action_redirect" value="<%=request.getRequestURL()%>" /> 
+<input type="hidden" name="success_action_redirect" value="<%=request.getRequestURL()%>?id=<%=request.getParameter("id")%>" /> 
 
 <input type="hidden" name="AWSAccessKeyId" value="AKIAJ62OAFOKCJTDANVA" />
 <input type="hidden" name="policy" value="IHsKImV4cGlyYXRpb24iOiAiMjAyMC0wMS0wMVQxMjowMDowMC4wMDBaIiwKICAiY29uZGl0aW9ucyI6IFsKICAgIHsiYnVja2V0IjogImFnaWxlY3JtIiB9LAogICAgeyJhY2wiOiAicHVibGljLXJlYWQiIH0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRrZXkiLCAicGFuZWwvdXBsb2FkZWQtbG9nbyJdLAogICAgWyJzdGFydHMtd2l0aCIsICIkQ29udGVudC1UeXBlIiwgImltYWdlLyJdLAogICAgWyAiY29udGVudC1sZW5ndGgtcmFuZ2UiLCA1MTIsIDQxOTQzMDRdLAogICAgWyJzdGFydHMtd2l0aCIsICIkc3VjY2Vzc19hY3Rpb25fcmVkaXJlY3QiLCAiIiBdCiAgXQp9" />
