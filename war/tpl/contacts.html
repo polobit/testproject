@@ -27,7 +27,7 @@
 	<img class='thumbnail' src="img/company.png" width='40px' height='40px' style='display:inline'>
 {{/if_contact_type}}
 </div>
-<div style='height:auto;display:inline-block;vertical-align:top;'>
+<div style='height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis'>
 
 {{#if_contact_type "PERSON"}}
 <b>	{{getPropertyValue properties "first_name"}}
@@ -61,58 +61,15 @@
 
 <div class="span12">
  <div class="page-header">
-    <h1>Contacts <small> {{count}}</small>
-	</h1>
-
-<div class="btn-group right" style='top:-18px;position:relative;margin-left:5px'>
-  <a href="#personModal" class="btn right" data-toggle="modal" style='top:-5px;position:relative'>
-				   <span><i class='icon-plus-sign'/></span> Add Contact</a>
-</div>
+    <h1>Contacts <small> {{count}}</small></h1>
 
 <div class="btn-group right" id ="view-list" style='top:-18px;position:relative'>
-  <button class="btn">All Contacts</button>
-  <button class="btn dropdown-toggle" data-toggle="dropdown" id="viewList" style="margin-left: -5px"><span class="caret" ></span>
-  </button>
-  <ul class="dropdown-menu" id= "view-list">
-    <li>
-	<a href='#contacts-only'>Contacts</a>
-	</li>
-	<li>
-		<a href='#companies-only'>Companies</a>	
-	</li>
-	<li class="divider"></li>
-
-<li>
-<a href='#contact-views'>Add/Edit View</a>
-	</li>
-
-  </ul>
 </div>
-<div class="btn-group right" id ="filter-list" style='top:-18px;position:relative;margin-right:0px'>
-  <button class="btn">All Contacts</button>
-  <button class="btn dropdown-toggle" data-toggle="dropdown" id="viewList" style="margin-left: -5px"><span class="caret" ></span>
-  </button>
 
-  </ul>
+<div class="btn-group right" id ="filter-list" style='top:-18px;position:relative;margin-right:5px'>
 </div>
-<!--
-<ul class="nav nav-tabs right" style="top:-18px;position:relative;border-bottom:0px" id='contacts-tabs'>
-                        <li class="active">
-                            <a href="#all" data-toggle="tab">All</a>
-                        </li>
-                        <li class="">
-                            <a href="#persons" data-toggle="tab">Persons</a>
-                        </li>
-                        <li class="">
-                            <a href="#companies" data-toggle="tab">Companies</a>
-                        </li>
-					 <li class="">
-                            <a href="#recent" data-toggle="tab">Recent</a>
-                        </li>
-                    </ul>
--->
-  </div>
 
+</div>
 </div>
 </div>
 
@@ -169,7 +126,7 @@
     </tr>
   </thead>
   
-  <tbody id='contacts-model-list' style='overflow:scroll;text-overflow: ellipsis'>
+  <tbody id='contacts-model-list' style='overflow:scroll;'>
   </tbody>
 </table>
 </div>
