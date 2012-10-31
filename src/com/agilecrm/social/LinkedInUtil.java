@@ -23,7 +23,8 @@ public class LinkedInUtil
 	    String tokenSecret)
     {
 	final LinkedInApiClientFactory factory = LinkedInApiClientFactory
-		.newInstance(Globals.LINKED_IN_API_KEY, Globals.LINKED_IN_SECRET_KEY);
+		.newInstance(Globals.LINKED_IN_API_KEY,
+			Globals.LINKED_IN_SECRET_KEY);
 	final LinkedInApiClient client = factory.createLinkedInApiClient(token,
 		tokenSecret);
 
@@ -61,7 +62,8 @@ public class LinkedInUtil
 
 	// Get Token, Secret
 	final LinkedInApiClientFactory factory = LinkedInApiClientFactory
-		.newInstance(Globals.LINKED_IN_API_KEY, Globals.LINKED_IN_SECRET_KEY);
+		.newInstance(Globals.LINKED_IN_API_KEY,
+			Globals.LINKED_IN_SECRET_KEY);
 	final LinkedInApiClient client = factory.createLinkedInApiClient(
 		widget.getProperty("token"), widget.getProperty("secret"));
 
@@ -85,9 +87,11 @@ public class LinkedInUtil
 	    result.url = person.getPublicProfileUrl();
 	    result.summary = person.getHeadline();
 
-	    // Change http to https to avoid client side warnings by browser
+	    // Change http to https to avoid client side warnings by browser,
+	    // Change certificate from m3 to m3-s to fix ssl broken image link
 	    if (result.picture != null)
-		result.picture = result.picture.replace("http:", "https:");
+		result.picture = result.picture.replace("http:", "https:")
+			.replace("m3", "m3-s");
 
 	    if (person.getNumConnections() != null)
 		result.num_connections = person.getNumConnections().toString();
@@ -112,7 +116,8 @@ public class LinkedInUtil
 	    String id)
     {
 	final LinkedInApiClientFactory factory = LinkedInApiClientFactory
-		.newInstance(Globals.LINKED_IN_API_KEY, Globals.LINKED_IN_SECRET_KEY);
+		.newInstance(Globals.LINKED_IN_API_KEY,
+			Globals.LINKED_IN_SECRET_KEY);
 	final LinkedInApiClient client = factory.createLinkedInApiClient(
 		widget.getProperty("token"), widget.getProperty("secret"));
 
@@ -132,8 +137,10 @@ public class LinkedInUtil
 	result.summary = person.getHeadline();
 
 	// Change http to https to avoid client side warnings by browser
+	// Change certificate from m3 to m3-s to fix ssl broken image link
 	if (result.picture != null)
-	    result.picture = result.picture.replace("http:", "https:");
+	    result.picture = result.picture.replace("http:", "https:").replace(
+		    "m3", "m3-s");
 
 	System.out.println("Linkedin profiles :" + result);
 	return result;
