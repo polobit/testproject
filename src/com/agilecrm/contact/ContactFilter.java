@@ -17,8 +17,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.core.DomainUser;
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.user.AgileUser;
 import com.agilecrm.util.DateUtil;
 import com.google.appengine.api.search.QueryOptions;
 import com.google.appengine.api.search.ScoredDocument;
@@ -303,10 +303,10 @@ public class ContactFilter
 
 	if (type == SystemFilter.LEAD)
 	{
-	    Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class,
-		    AgileUser.getCurrentAgileUser().id);
-	    System.out.println();
-	    return ofy.query(Contact.class).ancestor(userKey).list();
+	    Key<DomainUser> userKey = new Key<DomainUser>(DomainUser.class,
+		    DomainUser.getDomainCurrentUser().id);
+
+	    return ofy.query(Contact.class).filter("owner_key", userKey).list();
 	}
 
 	return null;

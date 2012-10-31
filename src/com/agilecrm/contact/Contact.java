@@ -16,11 +16,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.core.DomainUser;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deferred.TagsDeferredTask;
-import com.agilecrm.user.AgileUser;
-import com.agilecrm.user.UserPrefs;
+import com.agilecrm.session.SessionManager;
 import com.agilecrm.util.Util;
 import com.agilecrm.workflows.Trigger;
 import com.google.appengine.api.taskqueue.Queue;
@@ -31,7 +31,6 @@ import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
-import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.annotation.Unindexed;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -61,14 +60,13 @@ public class Contact extends Cursor
     public Long updated_time = 0L;
 
     // Owner
-    @Indexed
-    @NotSaved(IfDefault.class)
-    private String lead_owner = null;
+    @NotSaved
+    private String lead_owner;
 
-    @Indexed
+    // Domain User key(owner)
     @NotSaved(IfDefault.class)
-    @Parent
-    private Key<AgileUser> user;
+    @Indexed
+    private Key<DomainUser> owner_key = null;
 
     // Creator
     public String creator = "";
@@ -164,6 +162,7 @@ public class Contact extends Cursor
     @PrePersist
     private void PrePersist()
     {
+
 	// Store Created and Last Updated Time Check for id even if created time
 	// is 0(To check whether it is update request)
 	if (created_time == 0L && id == null)
@@ -171,9 +170,9 @@ public class Contact extends Cursor
 	    System.out.println("New Entity");
 	    created_time = System.currentTimeMillis() / 1000;
 
-	    // Assign lead_owner
-	    UserPrefs userprefs = UserPrefs.getCurrentUserPrefs();
-	    lead_owner = userprefs.name;
+	    // Set lead owner(current domain user)
+	    owner_key = new Key<DomainUser>(DomainUser.class, SessionManager
+		    .get().getDomainId());
 	}
 	else
 	    updated_time = System.currentTimeMillis() / 1000;
@@ -404,11 +403,11 @@ public class Contact extends Cursor
 	    return;
 	}
 
-	Key agileUser = new Key(AgileUser.class, Long.parseLong(new_owner));
+	Key agileUser = new Key(DomainUser.class, Long.parseLong(new_owner));
 
 	for (Contact contact : contacts_list)
 	{
-	    contact.user = agileUser;
+	    contact.owner_key = agileUser;
 
 	    contact.save();
 	}
@@ -437,18 +436,18 @@ public class Contact extends Cursor
     }
 
     @XmlElement(name = "lead_owner")
-    public AgileUser getLeadOwner()
+    public String getLeadOwner()
     {
-	if (user != null)
+	if (owner_key != null)
 	    // If user is deleted no user is found with key so set user to null
 	    // and return null
 	    try
 	    {
-		return dao.ofy().get(user);
+		return dao.ofy().get(owner_key).name;
 	    }
 	    catch (Exception e)
 	    {
-		user = null;
+		owner_key = null;
 		return null;
 	    }
 	return null;
