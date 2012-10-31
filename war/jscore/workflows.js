@@ -1,8 +1,8 @@
 $(function(){
 	
 	 // Save Workflow
-    $('#saveWorkflow').live('click', function () {
-
+    $('#saveWorkflow').live('click', function (e) {
+           e.preventDefault();
     	// Check if the form is valid
     	if (!isValidForm('#workflowform')) {
     		$('#workflowform').find("input").focus();
