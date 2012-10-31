@@ -14,7 +14,7 @@ function setupTagsTypeAhead(models) {
     			TAGS = tagsCollection.models;
     			setupTagsTypeAhead(tagsCollection.models);
     		}});
-    		//return;
+    		return;
     	}
     else
     	models = TAGS;
@@ -27,7 +27,8 @@ function setupTagsTypeAhead(models) {
 
     var el = $('<ul name="tags" class= "tagsinput tags" style="dispaly:inline"></ul>');
 
-    
+    $('.tags-typeahead').attr("autocomplete","off");
+
     $('.tags-typeahead').typeahead({
         source: tags,
         updater: function(tag) {

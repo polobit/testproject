@@ -1,5 +1,9 @@
 $(function(){
 	   
+		$("#personModal").on('shown', function(){
+			setupTagsTypeAhead();
+		});
+	
 		// Person Form
 	    $('#person_validate').live('click', function (e) {
 	    	if (!isValidForm('#personForm')) {
