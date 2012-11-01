@@ -1,5 +1,15 @@
 <script id="tasks-collection-template" type="text/html">
-	<header><h3 style="margin-left:3px" rel="tooltip" data-placement="right" data-content="Tasks are like to-dos. Result oriented. You can assign a category such as call, email etc and add them to your calendar." id="element" data-trigger="hover"><span><i class="icon-edit"></i></span> Tasks</h3></header>
+	<header>
+      <h3 style="margin-left:3px">
+         <span><i class="icon-edit"></i></span> 
+            Tasks
+         <span style="vertical-align:text-top;margin-left:-3px" rel="popover" data-placement="right" data-content="Tasks are like to-dos. Result oriented. You can assign a category such as call, email etc and add them to your calendar." id="element" data-trigger="hover">         
+            <img border="0" src="http://b3.caspio.com/RMA_ref/help.png" style="height:15px;vertical-align:top">
+            </span>
+      </h3>
+    </header>
+
+
 {{#unless this.length}}
    <img src="/img/funtime.jpg"></img>
 {{/unless}}

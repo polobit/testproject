@@ -51,7 +51,7 @@ $(function () {
 function populateUsers(id, el , value) {
 	
 	// Users
-	var optionsTemplate = "<option value='{{ownerName.id}}'>{{currentDomainUserName}}</option>";
+	var optionsTemplate = "<option value='{{id}}'>{{currentDomainUserName}}</option>";
 	
 	// Fill owners list
 	fillSelect('owners-list','/core/api/deal-owners', 'userPrefs', function fillOwner() {

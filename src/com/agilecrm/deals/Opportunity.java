@@ -348,7 +348,7 @@ public class Opportunity
 
     // Get Users
     @XmlElement(name = "owner")
-    public UserPrefs getOwnerName() throws Exception
+    public UserPrefs getOwner() throws Exception
     {
 	Objectify ofy = ObjectifyService.begin();
 
