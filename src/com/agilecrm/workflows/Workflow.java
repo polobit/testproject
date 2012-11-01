@@ -113,13 +113,12 @@ public class Workflow extends Cursor
     @XmlElement(name = "creator")
     public String getCreatorName() throws Exception
     {
-	Objectify ofy = ObjectifyService.begin();
 	if (creator_key != null)
 	{
 	    DomainUser domainUser = null;
 	    try
 	    {
-		domainUser = ofy.get(creator_key);
+		domainUser = DomainUser.getDomainUser(creator_key.getId());
 	    }
 	    catch (Exception e)
 	    {

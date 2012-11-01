@@ -139,9 +139,13 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, continueContact, 
                 });
                 
             } else if(is_person){
-                App_Contacts.navigate("contact/" + data.id, {
+            	
+            	// If contactsListView is defined it is getting the contact from there not the updated one
+            	App_Contacts.contactDetails(data.id, data);
+               
+            	/*App_Contacts.navigate("contact/" + data.id, {
                 	trigger: true
-            	});
+            	});*/
             }else{
                   	App_Contacts.navigate("contacts", {
                 	trigger: true
