@@ -142,7 +142,7 @@ public class NamespaceFilter implements Filter
 	    try
 	    {
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
-		httpResponse.sendRedirect("/choose-domain.html");
+		httpResponse.sendRedirect(Globals.CHOOSE_DOMAIN);
 	    }
 	    catch (Exception e)
 	    {
