@@ -128,8 +128,9 @@ $(function(){
 			    json.contact_ids = JSON.stringify(id_array);
 			    $.post(url, json, function(data){
 				
-			    	// Save new tags in Tag class
-			    	$.post('core/api/tags/' + tags[0].value);
+			    	$.each(tags[0].value, function(index, tag){
+	       				tagsCollection.add( {"tag" : tag} );
+	       			});
        			
 			    	$('#tagsBulkForm').find('span.save-status img').remove();
        			

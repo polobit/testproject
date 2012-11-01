@@ -115,6 +115,14 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, continueContact, 
     contactModel.url = 'core/api/contacts';
     contactModel.save(obj, {
         success: function (data) {
+        	
+        	if (tags != undefined && tags.length != 0)
+        		{
+        			$.each(tags[0].value,function(index, tag){
+        				tagsCollection.add( {"tag" : tag} );
+        			});
+        		}
+        	
         	// Remove loading image
         	$('#' + form_id).find('span.save-status img').remove();
         	$('#' + modal_id).find('span.save-status img').remove();
