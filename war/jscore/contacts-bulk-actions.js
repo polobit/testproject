@@ -5,8 +5,8 @@ $(function(){
 		e.preventDefault();
 		var id_array = getContactsBulkIds();
 		
-		$('body').live('fill_owners', function(event){
-			var optionsTemplate = "<option value='{{name}}'>{{name}}</option>";
+		$('body').die('fill_owners').live('fill_owners', function(event){
+			var optionsTemplate = "<option value='{{agileUser.domain_user_id}}'>{{name}}</option>";
 	        fillSelect('ownerBulkSelect','/core/api/deal-owners', 'userPrefs', 'no-callback ', optionsTemplate); 
 		});
 		
@@ -52,7 +52,7 @@ $(function(){
 		e.preventDefault();
 		var id_array = getContactsBulkIds();
 		
-		$('body').live('fill_campaigns', function(event){
+		$('body').die('fill_campaigns').live('fill_campaigns', function(event){
 			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 	        fillSelect('campaignBulkSelect','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate); 
 		});
