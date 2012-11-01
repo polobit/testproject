@@ -51,14 +51,14 @@ $(function () {
 function populateUsers(id, el , value) {
 	
 	// Users
-	var optionsTemplate = "<option value='{{agileUser.id}}'>{{name}}</option>";
+	var optionsTemplate = "<option value='{{id}}'>{{currentDomainUserName}}</option>";
 	
 	// Fill owners list
 	fillSelect('owners-list','/core/api/deal-owners', 'userPrefs', function fillOwner() {
 		
 		if(value)
 		{
-			$('#owners-list',el).find('option[value='+value.agileUser.id+']').attr("selected", "selected");;
+			$('#owners-list',el).find('option[value='+value.ownerName.id+']').attr("selected", "selected");;
 		}			
 	}, optionsTemplate); 
 }
