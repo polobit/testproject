@@ -1,17 +1,20 @@
 var TAGS;
+var tagsCollection;
+var TAGS_LIST = [];
 function setupTagsTypeAhead(models) {
-    var tags = [];
-    if(!TAGS.length)
+
+    if(!(TAGS.length >= 0))
     	{
     		var TagsCollection = Backbone.Collection.extend({
     			url: '/core/api/tags',
     			sortKey: 'tag'
     		});
     		
-    		var tagsCollection = new TagsCollection();
+    		tagsCollection = new TagsCollection();
     		
     		tagsCollection.fetch({success:function(data){
     			TAGS = tagsCollection.models;
+    			console.log(tagsCollection.toJSON());
     			setupTagsTypeAhead(tagsCollection.models);
     		}});
     		return;
@@ -22,15 +25,15 @@ function setupTagsTypeAhead(models) {
     // Iterate
     _(models).each(function (item) { // in case collection is not empty
         var tag = item.get("tag");
-        if ($.inArray(tag, tags) == -1) tags.push(tag);
+        if ($.inArray(tag, TAGS_LIST) == -1) TAGS_LIST.push(tag);
     });
 
     var el = $('<ul name="tags" class= "tagsinput tags" style="dispaly:inline"></ul>');
 
     $('.tags-typeahead').attr("autocomplete","off");
-
+ 
     $('.tags-typeahead').typeahead({
-        source: tags,
+        source: TAGS_LIST,
         updater: function(tag) {
         	
         	// If tag is undefined create new tag with input value
@@ -45,7 +48,6 @@ function setupTagsTypeAhead(models) {
     
     // If entered tag is not in typeahead source create a new tag
     $(".tags-typeahead").bind("keydown", function(e){
-
     	var tag = $(this).val();
     	
     	// To make a tag when "," keydown and check input is not empty
@@ -63,7 +65,7 @@ function setupTags(cel) {
         url: '/core/api/tags',
         sortKey: 'tag'
     });
-    var tagsCollection = new TagsCollection();
+    tagsCollection = new TagsCollection();
     tagsCollection.fetch({
         success: function () {
             var tagsHTML = getTemplate('tagslist', tagsCollection.toJSON());
@@ -71,7 +73,7 @@ function setupTags(cel) {
             $('#tagslist', cel).html(tagsHTML);
 
             TAGS = tagsCollection.models
-            setupTagsTypeAhead(TAGS);
+           setupTagsTypeAhead(TAGS);
         }
     });
 

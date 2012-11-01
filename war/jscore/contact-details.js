@@ -93,7 +93,13 @@ $(function(){
 	       			$('#ul-add-tags').empty();
 	       			
 	       			// Save new tags in Tag class
-	       			$.post('core/api/tags/' + tags[0].value);
+	       			//$.post('core/api/tags/' + tags[0].value, function(){
+	       			//	console.log(tags[0].value);
+	       				
+	       			//});
+	       			$.each(tags[0].value,function(index, tag){
+	       				tagsCollection.add( {"tag" : tag} );
+	       			});
 	       			
 	       			}
 	        });
