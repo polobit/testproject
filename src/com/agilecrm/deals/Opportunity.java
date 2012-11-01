@@ -18,6 +18,8 @@ import net.sf.json.JSONObject;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.NotificationPrefs;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.workflows.Trigger;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
@@ -66,7 +68,7 @@ public class Opportunity
     public String owner = null;
 
     @NotSaved(IfDefault.class)
-    private Key<AgileUser> ownerKey = null;
+    private Key<UserPrefs> ownerKey = null;
 
     @NotSaved(IfDefault.class)
     @Embedded
@@ -317,6 +319,8 @@ public class Opportunity
 	this.contacts = null;
 
 	dao.put(this);
+	NotificationPrefs.executeNotification(
+		NotificationPrefs.Type.DEAL_CREATED, this);
     }
 
     @PrePersist
@@ -327,7 +331,8 @@ public class Opportunity
 	    created_time = System.currentTimeMillis() / 1000;
 
 	// Save agile user key
-	ownerKey = new Key<AgileUser>(AgileUser.class, Long.parseLong(owner));
+	ownerKey = new Key<UserPrefs>(UserPrefs.class, Long.parseLong(owner));
+	System.out.println("OwnerKey" + ownerKey);
     }
 
     // Contacts related with deals Author : Yaswanth 08-24-2012
@@ -341,20 +346,34 @@ public class Opportunity
 	return contacts_list;
     }
 
-    @XmlElement
-    public AgileUser getAgileUser()
+    // Get Users
+    @XmlElement(name = "owner")
+    public UserPrefs getOwnerName() throws Exception
     {
+	Objectify ofy = ObjectifyService.begin();
+
 	if (ownerKey != null)
+	{
+	    UserPrefs users = null;
 	    try
 	    {
-		return dao.ofy().get(ownerKey);
+
+		AgileUser agileuser = AgileUser.getCurrentAgileUser();
+
+		// Get Users from data store
+		Key<AgileUser> user = new Key<AgileUser>(AgileUser.class,
+			agileuser.id);
+		users = ofy.get(new Key<UserPrefs>(user, UserPrefs.class,
+			ownerKey.getId()));
 	    }
 	    catch (Exception e)
 	    {
-		ownerKey = null;
-		return null;
+		e.printStackTrace();
 	    }
-	else
-	    return null;
+	    if (users != null)
+		return users;
+
+	}
+	return null;
     }
 }
