@@ -29,6 +29,7 @@ if (cookies != null)
 		if (cookies [i].getName().equals (cookieName))
 		{
 		    emailCookie = cookies[i];
+		    System.out.println("cookiee reteived"+emailCookie.getValue());
 			break;
 		}
 	}
@@ -214,7 +215,7 @@ margin-bottom:0px;
 		</div>
 		<div style="text-align: center; line-height: 19px;">
 			Don't have an account? <a href="/register">Sign Up</a><br>
-			Forgot <a href="forgot-password.jsp">Password </a><a href="forgot-domain.jsp">Domain</a>
+			Forgot <a href="/forgot-password">Password </a><a href="/forgot-domain">Domain</a>
 		</div>
 	</div>
 

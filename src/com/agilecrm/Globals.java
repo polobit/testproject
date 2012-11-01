@@ -11,7 +11,7 @@ public class Globals
 
     public static String REDIRECT_URL = "/redirect";
     public static String LOGIN = "/login";
-    public static String CHOOSE_DOMAIN = "https://my.agilecrm.com/choose-domain.jsp";
+    public static String CHOOSE_DOMAIN = "https://my.agilecrm.com/choose-domain";
 
     // We store Namespace for GoogleApps in session
     public static final String GOOGLE_APP_SESSION_ID = "gapps_namespace";
