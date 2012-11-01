@@ -64,6 +64,9 @@ $(function()
 			
 			if(!confirm("Are you sure you want to delete?"))
 	    		return;
+			// Customize the bulk delete operations
+			if(!custimizeBulkDelete(id_array, data_array))
+				return;
 			
 			bulkOperations($(table).attr('url'), id_array, index_array, table, data_array);
 		}	
@@ -105,6 +108,22 @@ $(function()
 		}	
 	});
 });
+
+// Customize bulk delete
+function custimizeBulkDelete(id_array, data_array){
+	if(Current_Route == 'users'){
+		$.each(data_array, function(index, model){
+			if(model.is_admin){
+				id_array.splice(id_array.indexOf(model.id), 1);
+			}	
+		});
+		if(id_array.length == 0){
+			$('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">×</a>Sorry, you can not delete user who is admin.</div>').show().delay(3000).hide(1);
+			return false;
+		}
+	 return true; 	
+	}
+}
 
 // Bulk operations - delete function
 function bulkOperations(url, id_array, index_array, table, data_array){
