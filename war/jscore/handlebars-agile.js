@@ -397,12 +397,14 @@ $(function()
 	});
 	
 	// Add Custom Fields to Forms
-	Handlebars.registerHelper('show_custom_fields', function(custom_fields){
+	Handlebars.registerHelper('show_custom_fields', function(custom_fields, properties){
 			
+
 		var el = "";
 		
 		// Text as default
 		var field_type = "text"
+			
 		// Create Field for each custom field
 		$.each(custom_fields, function(index, field)
 		{
@@ -426,15 +428,51 @@ $(function()
 				return;
 			}
 			else if(field.field_type.toLowerCase() == "checkbox")
-				field_type = "checkbox";
-
+				{
+					field_type = "checkbox";
+					el = el.concat('<div class="control-group">	<label class="control-label">'+ucfirst(field.field_label)+'</label><div class="controls"><input type="'+field_type+'" class="'+field.field_type.toLowerCase()+'_input custom_field" id='+field.id+' name='+field.field_label+'></div></div>');
+					return;
+				}
+			
 			// If not list type create text field(plain text field or date field)
 			el = el.concat('<div class="control-group">	<label class="control-label">'+ucfirst(field.field_label)+'<span class="field_req">*</span></label><div class="controls"><input type="'+field_type+'" class="'+field.field_type.toLowerCase()+'_input custom_field required" id='+field.id+' name='+field.field_label+'></div></div>');
 			
 		});
-		
-		return new Handlebars.SafeString(el);
+
+		return new Handlebars.SafeString(fillCustomFieldValues($(el), properties));
 		
 	});
+	
+	// Deserialize custom fields and return string to handlebar register helper to return as handlebars safestring
+	function fillCustomFieldValues(form, content)
+	{
+		$.each(content, function(index , property){
+			if(property.type == "CUSTOM")
+				{
+
+					var test = $(form).find('*[name="' + property.name + '"]');
+					var tagName = test[0].tagName.toLowerCase();
+					var type = test.attr("type");
+					
+					if(tagName == "input")
+						{
+							if(type == "checkbox" && property.value == "on")
+								{
+									test.attr("checked", "checked"); 
+									return;
+								}
+							
+							test.attr("value", property.value);							
+						}
+					if(tagName == "select")
+						{
+						
+							test.find('option[value='+property.value+']').attr("selected", "selected");
+						}
+				}
+				
+		});
+		return $('<div>').append(form).html();
+	}
 	
 });
