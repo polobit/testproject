@@ -79,9 +79,8 @@ function showTwitterMatchingProfiles(plugin_id)
 		
 		 var id = $(this).attr('id');
 		 var twitter_image = $(this).attr('src');
-		 console.log($(this).attr('src'));
 		 $('#'+id).popover({placement:'left'});
-		 
+		 $('#'+id).popover('show');
 		 $('#'+id).die().live('click', function(e){
 			 e.preventDefault();
 			 
