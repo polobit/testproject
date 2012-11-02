@@ -92,6 +92,8 @@ function showLinkedinMatchingProfiles(plugin_id)
 		 var linkedin_image = $(this).attr('src');
 		 $('#'+id).popover({placement:'left'});
 		 
+		 $('#'+id).popover('show');
+		 
 		 $('#'+id).die().live('click', function(e){
 			 e.preventDefault();
 			 $('#'+id).popover('hide');
