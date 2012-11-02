@@ -189,7 +189,7 @@ public class Contact extends Cursor
 	for (ContactField contactField : properties)
 	{
 	    if (contactField.value != null)
-		tokens.add(contactField.value);
+		tokens.add(contactField.value.replace(" ", ""));
 	}
 
 	if (tokens.size() != 0)

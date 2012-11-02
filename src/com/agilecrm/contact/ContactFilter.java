@@ -286,8 +286,10 @@ public class ContactFilter
 	return null;
     }
 
+    // Keyword contact search
     public static Collection<Contact> searchContacts(String keyword)
     {
+	// Decode the search keyword and remove spaces
 	keyword = URLDecoder.decode(keyword).replaceAll(" ", "");
 
 	String query = "search_tokens : " + keyword;
@@ -295,6 +297,7 @@ public class ContactFilter
 	return processQuery(query);
     }
 
+    // Build ,process query and return contacts collection
     private static Collection<Contact> processQuery(String query)
     {
 
