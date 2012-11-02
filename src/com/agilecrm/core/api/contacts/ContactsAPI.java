@@ -2,6 +2,7 @@ package com.agilecrm.core.api.contacts;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactFilter;
 import com.agilecrm.contact.Note;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.util.Util;
@@ -230,9 +232,10 @@ public class ContactsAPI
     @Path("/search/{keyword}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Contact> searchContacts(@PathParam("keyword") String keyword)
+    public Collection<Contact> searchContacts(
+	    @PathParam("keyword") String keyword)
     {
-	return Contact.searchContacts(keyword.toLowerCase());
+	return ContactFilter.searchContacts(keyword.toLowerCase());
     }
 
     // This method is called if XML is request
@@ -323,7 +326,7 @@ public class ContactsAPI
     public void deleteTasks(@FormParam("model_ids") String model_ids)
 	    throws JSONException
     {
-	
+
 	JSONArray tasksJSONArray = new JSONArray(model_ids);
 	Task.dao.deleteBulkByIds(tasksJSONArray);
     }

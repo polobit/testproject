@@ -141,12 +141,14 @@ public class ContactDocument
 	Set<String> tokens = new HashSet<String>();
 	Set<String> search_tokens = new HashSet<String>();
 
+	String token = "";
 	for (ContactField contactField : properties)
 	{
 	    if (contactField.value != null)
-		tokens.add(contactField.value);
+		token = token + contactField.value;
 	}
 
+	tokens.add(token);
 	if (tokens.size() != 0)
 	    search_tokens = Util.getSearchTokens(tokens);
 

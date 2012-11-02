@@ -1,5 +1,6 @@
 package com.agilecrm.contact;
 
+import java.net.URLDecoder;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -236,34 +237,7 @@ public class ContactFilter
 		e.printStackTrace();
 	    }
 	}
-
-	// Set query options only to get id of document (enough to get get
-	// respective contacts)
-	QueryOptions options = QueryOptions.newBuilder()
-		.setFieldsToReturn("id").build();
-
-	// Build query on query options
-	com.google.appengine.api.search.Query query_string = com.google.appengine.api.search.Query
-		.newBuilder().setOptions(options).build(query);
-
-	// Get results on query
-	Collection<ScoredDocument> contact_documents = ContactDocument.index
-		.search(query_string).getResults();
-
-	List<Long> contact_ids = new ArrayList<Long>();
-
-	// Iterate through contact_documents and add document ids(contact ids)
-	// to list
-	for (ScoredDocument doc : contact_documents)
-	{
-	    contact_ids.add(Long.parseLong(doc.getId()));
-	}
-
-	Objectify ofy = ObjectifyService.begin();
-
-	// Return result contacts
-	return ofy.get(Contact.class, contact_ids).values();
-
+	return processQuery(query);
     }
 
     // Create JSONArray from string array on load from DB
@@ -310,5 +284,46 @@ public class ContactFilter
 	}
 
 	return null;
+    }
+
+    public static Collection<Contact> searchContacts(String keyword)
+    {
+	keyword = URLDecoder.decode(keyword).replaceAll(" ", "");
+
+	String query = "search_tokens : " + keyword;
+
+	return processQuery(query);
+    }
+
+    private static Collection<Contact> processQuery(String query)
+    {
+
+	// Set query options only to get id of document (enough to get get
+	// respective contacts)
+	QueryOptions options = QueryOptions.newBuilder()
+		.setFieldsToReturn("id").build();
+
+	// Build query on query options
+	com.google.appengine.api.search.Query query_string = com.google.appengine.api.search.Query
+		.newBuilder().setOptions(options).build(query);
+
+	// Get results on query
+	Collection<ScoredDocument> contact_documents = ContactDocument.index
+		.search(query_string).getResults();
+
+	List<Long> contact_ids = new ArrayList<Long>();
+
+	// Iterate through contact_documents and add document ids(contact ids)
+	// to list
+	for (ScoredDocument doc : contact_documents)
+	{
+	    contact_ids.add(Long.parseLong(doc.getId()));
+	}
+
+	Objectify ofy = ObjectifyService.begin();
+
+	// Return result contacts
+	return ofy.get(Contact.class, contact_ids).values();
+
     }
 }
