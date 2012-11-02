@@ -323,7 +323,7 @@ public class ContactsAPI
     public void deleteTasks(@FormParam("model_ids") String model_ids)
 	    throws JSONException
     {
-	
+
 	JSONArray tasksJSONArray = new JSONArray(model_ids);
 	Task.dao.deleteBulkByIds(tasksJSONArray);
     }
@@ -338,5 +338,17 @@ public class ContactsAPI
 
 	JSONArray notesJSONArray = new JSONArray(model_ids);
 	Note.dao.deleteBulkByIds(notesJSONArray);
+    }
+
+    // Bulk operations - delete notes bulk related to a contact
+    @Path("/deals/bulk")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void deleteDeals(@PathParam("contact-id") Long contactId,
+	    @FormParam("model_ids") String model_ids) throws JSONException
+    {
+
+	JSONArray dealsJSONArray = new JSONArray(model_ids);
+	Note.dao.deleteBulkByIds(dealsJSONArray);
     }
 }
