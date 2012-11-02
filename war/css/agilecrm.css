@@ -359,7 +359,7 @@ visibility: visible;
 table .header::after {
 content: "";
 float: right;
-margin-top: 7px;
+margin-top: -5px;
 border-width: 0 4px 4px;
 border-style: solid;
 border-color: black transparent;
