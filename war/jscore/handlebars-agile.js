@@ -398,7 +398,6 @@ $(function()
 	
 	// Add Custom Fields to Forms
 	Handlebars.registerHelper('show_custom_fields', function(custom_fields, properties){
-			
 
 		var el = "";
 		
@@ -408,6 +407,9 @@ $(function()
 		// Create Field for each custom field
 		$.each(custom_fields, function(index, field)
 		{
+			//name = field.field_label.split(" ").join("_");
+			//console.log(name);
+			
 			// If field type is list create a select dropdown
 			if(field.field_type.toLowerCase() == "list")
 			{
@@ -421,22 +423,27 @@ $(function()
 					$.each(list_values,function(index, value){
 						list_options = list_options.concat('<option value='+value+'>'+value+'</option>');
 					});
-				
+					
 					// Create select dropdown
-					el = el.concat('<div class="control-group">	<label class="control-label">'+ucfirst(field.field_label)+'<span class="field_req">*</span></label><div class="controls"><select class="'+field.field_type.toLowerCase()+' custom_field required" id='+field.id+' name='+field.field_label+'>'+list_options+'</select></div></div>');
-				
+					if(field.is_required)
+						el = el.concat('<div class="control-group">	<label class="control-label">'+ucfirst(field.field_label)+'<span class="field_req">*</span></label><div class="controls"><select class="'+field.field_type.toLowerCase()+' custom_field required" id='+field.id+' name="'+field.field_label+'">'+list_options+'</select></div></div>');
+					else
+						el = el.concat('<div class="control-group">	<label class="control-label">'+ucfirst(field.field_label)+'</label><div class="controls"><select class="'+field.field_type.toLowerCase()+' custom_field" id='+field.id+' name="'+field.field_label+'">'+list_options+'</select></div></div>');
+					
 				return;
 			}
 			else if(field.field_type.toLowerCase() == "checkbox")
 				{
 					field_type = "checkbox";
-					el = el.concat('<div class="control-group">	<label class="control-label">'+ucfirst(field.field_label)+'</label><div class="controls"><input type="'+field_type+'" class="'+field.field_type.toLowerCase()+'_input custom_field" id='+field.id+' name='+field.field_label+'></div></div>');
+					el = el.concat('<div class="control-group">	<label class="control-label">'+ucfirst(field.field_label)+'</label><div class="controls"><input type="'+field_type+'" class="'+field.field_type.toLowerCase()+'_input custom_field" id='+field.id+' name="'+field.field_label+'"></div></div>');
 					return;
 				}
 			
-			// If not list type create text field(plain text field or date field)
-			el = el.concat('<div class="control-group">	<label class="control-label">'+ucfirst(field.field_label)+'<span class="field_req">*</span></label><div class="controls"><input type="'+field_type+'" class="'+field.field_type.toLowerCase()+'_input custom_field required" id='+field.id+' name='+field.field_label+'></div></div>');
-			
+			if(field.is_required)
+				// If not list type create text field(plain text field or date field)
+				el = el.concat('<div class="control-group">	<label class="control-label">'+ucfirst(field.field_label)+'<span class="field_req">*</span></label><div class="controls"><input type="'+field_type+'" class="'+field.field_type.toLowerCase()+'_input custom_field required" id='+field.id+' name="'+field.field_label+'"></div></div>');
+			else
+				el = el.concat('<div class="control-group">	<label class="control-label">'+ucfirst(field.field_label)+'</label><div class="controls"><input type="'+field_type+'" class="'+field.field_type.toLowerCase()+'_input custom_field" id='+field.id+' name="'+field.field_label+'"></div></div>');
 		});
 
 		return new Handlebars.SafeString(fillCustomFieldValues($(el), properties));

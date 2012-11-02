@@ -43,21 +43,32 @@ public class ContactDocument
 	// Set contactField objects in to map
 	for (ContactField contactField : contact.properties)
 	{
+
+	    // If CustomField is not required field then return should not be
+	    // added to document
+	    if (contactField.type.equals(ContactField.FieldType.CUSTOM)
+		    && !CustomFieldDef.getFieldByName(contactField.name).searchable)
+		return;
+
 	    String normalized_value = normalizeString(contactField.value);
+
+	    // Replace special characters with "_" in field name
+	    String field_name = contactField.name.replaceAll("[^a-zA-Z0-9_]",
+		    "_");
 
 	    System.out.println(normalized_value);
 
 	    // If key already exists append contactfield value to respective
 	    // value in map
-	    if (fields.containsKey(contactField.name))
+	    if (fields.containsKey(field_name))
 	    {
-		String value = normalizeString(fields.get(contactField.name))
-			+ " " + normalized_value;
+		String value = normalizeString(fields.get(field_name)) + " "
+			+ normalized_value;
 
 		normalized_value = value;
 	    }
 
-	    fields.put(contactField.name, normalized_value);
+	    fields.put(field_name, normalized_value);
 
 	}
 

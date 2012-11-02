@@ -35,6 +35,10 @@ public class CustomFieldDef
     // Field Data - useful for list and other custom types
     public String field_data;
 
+    public boolean is_required = false;
+
+    public boolean searchable = false;
+
     // Scope - People/Organization, ....
     public enum SCOPE
     {
@@ -51,12 +55,13 @@ public class CustomFieldDef
     }
 
     public CustomFieldDef(String fieldType, String fieldLabel,
-	    String fieldDescription, String fieldData)
+	    String fieldDescription, String fieldData, boolean is_required)
     {
 	this.field_data = fieldData;
 	this.field_description = fieldDescription;
 	this.field_type = fieldType;
 	this.field_label = fieldLabel;
+	this.is_required = is_required;
     }
 
     public static List<CustomFieldDef> getCustomFields() throws Exception
@@ -86,7 +91,9 @@ public class CustomFieldDef
     {
 	return "CustomFieldDef: {id: " + id + ", field_type: " + field_type
 		+ ", field_label: " + field_label + ", field_description: "
-		+ field_description + ", field_data: " + field_data + "}";
+		+ field_description + ", field_data: " + field_data
+		+ "is_required :" + is_required + "searchable" + searchable
+		+ "}";
     }
 
     public static CustomFieldDef get(Long id)
@@ -100,6 +107,13 @@ public class CustomFieldDef
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+
+    public static CustomFieldDef getFieldByName(String field_label)
+    {
+	System.out.println(field_label);
+	return dao.ofy().query(CustomFieldDef.class)
+		.filter("field_label", field_label).get();
     }
 
     // Delete Contact
