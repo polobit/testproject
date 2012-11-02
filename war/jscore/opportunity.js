@@ -58,7 +58,7 @@ function populateUsers(id, el , value) {
 		
 		if(value)
 		{
-			$('#owners-list',el).find('option[value='+value.ownerName.id+']').attr("selected", "selected");;
+			$('#owners-list',el).find('option[value='+value.owner.id+']').attr("selected", "selected");;
 		}			
 	}, optionsTemplate); 
 }
