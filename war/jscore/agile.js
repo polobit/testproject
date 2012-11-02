@@ -121,8 +121,8 @@ function custimizeBulkDelete(id_array, data_array){
 			$('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">×</a>Sorry, you can not delete user who is admin.</div>').show().delay(3000).hide(1);
 			return false;
 		}
-	 return true; 	
 	}
+	return true;
 }
 
 // Bulk operations - delete function
