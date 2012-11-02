@@ -234,12 +234,11 @@ margin-bottom:0px;
 				e.preventDefault();
 			});
 
-			$('.agile_btn').click(function(e)
-			{
-				console.log("ready to agile form");
-				$('#agile').submit();
-				e.preventDefault();
-			});
+			$("#agile").validate({
+				 submitHandler: function(form) {
+					   form.submit();
+					 }
+					});
 
 		});
 		
