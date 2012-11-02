@@ -31,7 +31,7 @@ function fillSelect(selectId, url, parseKey, callback, template) {
 
 	// Prepend Loading
 	$loading = $(LOADING_HTML);
-	$("#" + selectId).after($loading);
+	$("#" + selectId).after(LOADING_HTML);
 
 	var collection = new collection_def();
 	collection.fetch({
@@ -40,7 +40,7 @@ function fillSelect(selectId, url, parseKey, callback, template) {
 			console.log(collection.toJSON());
 
 			// Remove loading
-			$loading.remove();
+			$('.loading').remove();
 
 			// Delete prev options if any
 			$("#" + selectId).empty().append('<option value="">Select...</option>');

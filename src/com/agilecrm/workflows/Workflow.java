@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.agilecrm.core.DomainUser;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.session.SessionManager;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -57,6 +58,15 @@ public class Workflow extends Cursor
     @PrePersist
     private void PrePersist()
     {
+	// Set creator_key only when it is null
+	if (creator_key == null)
+	{
+	    // Set creator(current domain user)
+	    creator_key = new Key<DomainUser>(DomainUser.class, SessionManager
+		    .get().getDomainId());
+
+	}
+
 	// Store Created and Last Updated Time
 	if (created_time == 0L)
 	{
@@ -68,9 +78,6 @@ public class Workflow extends Cursor
 
     public void save()
     {
-	DomainUser domainUser = DomainUser.getDomainCurrentUser();
-	creator_key = new Key<DomainUser>(DomainUser.class, domainUser.id);
-
 	dao.put(this);
     }
 

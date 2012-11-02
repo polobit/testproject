@@ -16,6 +16,7 @@ import com.agilecrm.Globals;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.utils.SystemProperty;
 
 /*
  *  Filter set the namespace. If the url is incorrect - it will forward to choose domain page
@@ -33,11 +34,20 @@ public class NamespaceFilter implements Filter
 	    return true;
 
 	// If Localhost - just return
-	if (request.getServerName().equalsIgnoreCase("localhost")
-		|| request.getServerName().equalsIgnoreCase("127.0.0.1"))
+	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
 	{
 	    return true;
 	}
+
+	// If it is choose domain, just return
+	if (((HttpServletRequest) request).getRequestURI().contains(
+		"choose-domain"))
+	    return true;
+
+	// If it is forgot domain, just return
+	if (((HttpServletRequest) request).getRequestURI().contains(
+		"forgot-domain"))
+	    return true;
 
 	// Read Subdomain
 	String subdomain = request.getServerName().split("\\.")[0];

@@ -10,15 +10,15 @@ if(!StringUtils.isEmpty(domain))
 	if(DomainUser.count() != 0)
 	{
 	    error = "Domain already exists.";
-	    response.sendRedirect("https://" + domain + ".agilecrm.com/login");
+	    //response.sendRedirect("https://" + domain + ".agilecrm.com/login");
 	}
 	else
 	{
 	   success = "Creating " + domain;
 	   response.sendRedirect("https://" + domain + ".agilecrm.com/register");
+	   return;
 	}
 	
-	System.out.println(error + " " + success);
 }
 
 %>
@@ -133,7 +133,7 @@ padding-left:10px!important;
 		</div>
 	</div>
 	<div style="text-align: center; line-height: 19px;">
-	   Forgot Your Domain? <a href="forgot-domain.jsp">Click Here</a>
+	   Forgot Your Domain? <a href="/forgot-domain">Click Here</a>
 	</div>
 </div>
 
@@ -158,6 +158,10 @@ padding-left:10px!important;
 				}
 				$('#choose_domain').submit();
 				e.preventDefault();
+			});
+			
+			$(".close").click(function() {
+				$(".alert").hide();
 			});
 
 		});
