@@ -37,11 +37,16 @@ $(function(){
             workflowJSON.rules = designerJSON;
 
             var workflow = new Backbone.Model(workflowJSON);
-            App_Workflows.workflowsListView.collection.create(workflow);
-            
-            Backbone.history.navigate("workflows", {
-                trigger: true
+            App_Workflows.workflowsListView.collection.create(workflow,{
+            	    success:function(){  
+            	    	
+            	    	Backbone.history.navigate("workflows", {
+                        trigger: true
+            	    	
+            	    	});
+            	    }
             });
+          
         }
 
         /**/

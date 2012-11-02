@@ -1,7 +1,7 @@
 <script id="workflows-model-template" type="text/html">
 
 
-  <td>{{id}}</td>
+  <td class="hide">{{id}}</td>
   <td><a href='#workflow/{{id}}'>{{name}}</a></td>
   <td>{{creatorName}}</td>
   <td><a href="#workflows/logs/{{id}}">View Logs</a></td>
@@ -36,10 +36,10 @@
 {{#if this.length}}
 <div class="data-block">
 	  <div class="data-container">
-		<table class="table table-striped showCheckboxes tablesorter" url="core/api/workflows/bulk" id="sort-table" >
+		<table class="table table-striped showCheckboxes" url="core/api/workflows/bulk">
 			<thead>
     			<tr>
-     				<th>Id</th>
+     				<th class="hide">Id</th>
       				<th>Name</th>
       				<th>Creator</th>
 					<th>Logs</th>

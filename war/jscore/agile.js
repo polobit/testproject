@@ -65,7 +65,7 @@ $(function()
 			if(!confirm("Are you sure you want to delete?"))
 	    		return;
 			// Customize the bulk delete operations
-			if(!custimizeBulkDelete(id_array, data_array))
+			if(!customizeBulkDelete(id_array, data_array))
 				return;
 			
 			bulkOperations($(table).attr('url'), id_array, index_array, table, data_array);
@@ -110,7 +110,7 @@ $(function()
 });
 
 // Customize bulk delete
-function custimizeBulkDelete(id_array, data_array){
+function customizeBulkDelete(id_array, data_array){
 	if(Current_Route == 'users'){
 		$.each(data_array, function(index, model){
 			if(model.is_admin){

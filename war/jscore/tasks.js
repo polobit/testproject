@@ -1,6 +1,6 @@
   // Tasks
 $(function () { 
-	$('.tasks-select').live('change', function(){
+	$('.tasks-select').live('change', function(e){
         if($(this).is(':checked')){
         	// Complete
         	var taskId = $(this).attr('data');

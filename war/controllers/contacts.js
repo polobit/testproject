@@ -298,7 +298,7 @@ var ContactsRouter = Backbone.Router.extend({
             	populateUsers("owner", el);
             	populateMilestones(el);
             	var json = App_Contacts.contactDetailView.model.toJSON();
-            	var contact_name = json.properties[0].value + " " + json.properties[1].value;
+            	var contact_name = getPropertyValue(json.properties, "first_name")+ " " + getPropertyValue(json.properties, "last_name");
             	$('.tags',el).append('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ json.id +'">'+contact_name+'</li>');
 
             	// Enable the datepicker
