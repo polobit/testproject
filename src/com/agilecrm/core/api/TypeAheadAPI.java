@@ -1,5 +1,6 @@
 package com.agilecrm.core.api;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.ws.rs.GET;
@@ -11,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactFilter;
 import com.agilecrm.contact.Tag;
 
 @Path("/api/typeahead")
@@ -53,7 +55,7 @@ public class TypeAheadAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public String typeaheadContacts(@QueryParam("q") String keyword)
     {
-	List<Contact> contacts = Contact.searchContacts(keyword);
+	Collection<Contact> contacts = ContactFilter.searchContacts(keyword);
 	String[] availableTags = new String[contacts.size()];
 
 	int count = 0;
