@@ -7,8 +7,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
+import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -372,5 +375,33 @@ public class Util
 	openIdProviders.put("myopenid.com", "stats.agilecrm.com");
 
 	return openIdProviders.get(provider.toLowerCase());
+    }
+
+    // Hash function MD5 for password
+    public static String getMD5HashedPassword(String password)
+    {
+	String hashedPassword = null;
+
+	if (password == null)
+	    return null;
+	try
+	{
+
+	    // Create MessageDigest object for MD5
+	    MessageDigest digest = MessageDigest.getInstance("MD5");
+
+	    // Update input string in message digest
+	    digest.update(password.getBytes(), 0, password.length());
+
+	    // Converts message digest value in base 16
+	    hashedPassword = new BigInteger(1, digest.digest()).toString(16);
+
+	}
+	catch (NoSuchAlgorithmException e)
+	{
+
+	    e.printStackTrace();
+	}
+	return hashedPassword;
     }
 }
