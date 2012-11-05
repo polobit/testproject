@@ -65,11 +65,11 @@ $(function(){
 		
 		// If contactsListView is defined (default view) then load filter results in default view 
 		if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection)
-		{	
-			// Set url to default view to load filter results
-			App_Contacts.contactsListView.collection.url = "core/api/filters/query/" + filter_id;
-			App_Contacts.contactsListView.collection.fetch();
-		}
+			{	
+				// Set url to default view to load filter results
+				App_Contacts.contactsListView.collection.url = "core/api/filters/query/" + filter_id;
+				App_Contacts.contactsListView.collection.fetch();
+			}
 	});
 	
 	$('.default_filter').live('click', function(e){
@@ -102,15 +102,18 @@ function setupContactFilterList(cel, filter_id)
         templateKey: "contact-filter-list",
         individual_tag_name: 'li',
         postRenderCallback: function(el) {
+        	
+        	// Set saved filter name on dropdown button
         	if(filter_id = readCookie('contact_filter'))
         		{
+        			// Check whether filter contains recent of lead to set system filter names 
         			if(filter_id.toLowerCase().indexOf('recent') >= 0)
         				var filter_name = "Recent";
         			
         			else if(filter_id.toLowerCase().indexOf('lead') >= 0)
         				var filter_name = "My Lead";
         					
-        			// If is not system type get the name of the filter from id
+        			// If is not system type get the name of the filter from id(from cookie)
         			else if(filter_id.indexOf("system") < 0)
         				var filter_name = contactFiltersListView.collection.get(filter_id).toJSON().name;
         			

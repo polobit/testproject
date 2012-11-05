@@ -407,9 +407,6 @@ $(function()
 		// Create Field for each custom field
 		$.each(custom_fields, function(index, field)
 		{
-			//name = field.field_label.split(" ").join("_");
-			//console.log(name);
-			
 			// If field type is list create a select dropdown
 			if(field.field_type.toLowerCase() == "list")
 			{
@@ -458,8 +455,14 @@ $(function()
 				{
 
 					var test = $(form).find('*[name="' + property.name + '"]');
-					var tagName = test[0].tagName.toLowerCase();
-					var type = test.attr("type");
+					
+					// If custom field is deleted or not found with property name return
+					if(!test[0])
+						{
+							return;
+						}
+						var tagName = test[0].tagName.toLowerCase();
+						var type = test.attr("type");
 					
 					if(tagName == "input")
 						{
