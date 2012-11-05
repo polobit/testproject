@@ -6,21 +6,24 @@ var CONTENT_JSON = {
 			"learn_more" : "click here to learn more",
 			"button_text":"Add Contacts",
 			"route":"#",
-			"modal_id":"personModal"
+			"modal_id":"personModal",
+			"image":"/img/clipboard.png"
 		},
 		"workflows": {
 			"title": "You dont have any workflows yet",
 			"description" : "You can add your workflows details.......etc...etc",
 			"learn_more" : "click here to learn more",
 			"button_text":"Add Workflows",
-			"route":"#workflow-add"
+			"route":"#workflow-add",
+			"image":"/img/clipboard.png"
 		},
 		"deals": {
 			"title": "You dont have any deals yet",
 			"description" : "You can add your deal details.......etc...etc",
 			"learn_more" : "click here to learn more",
 			"button_text":"Add deal",
-			"route":"#deals-add"
+			"route":"#deals-add",
+			"image":"/img/clipboard.png"
 		}
 };
 
