@@ -22,4 +22,6 @@ public interface AgileBilling
     public List<Invoice> getInvoices(JSONObject billingData) throws Exception;
 
     public void deleteCustomer(JSONObject billingData) throws Exception;
+
+    public void cancelSubscription(JSONObject billingData) throws Exception;
 }

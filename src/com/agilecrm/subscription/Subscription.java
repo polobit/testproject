@@ -159,6 +159,7 @@ public class Subscription
 	return subscription;
     }
 
+    // Return list of invoices
     public static List<Invoice> getInvoice() throws Exception
     {
 	Subscription subscription = getSubscription();
@@ -169,6 +170,15 @@ public class Subscription
 		subscription.billing_data);
     }
 
+    // Cancel Subscription and delete subscription object
+    public void cancelSubscription() throws Exception
+    {
+	getAgileBilling().cancelSubscription(billing_data);
+
+	delete();
+    }
+
+    // Delete customer
     public void deleteCustomer() throws Exception
     {
 	getAgileBilling().deleteCustomer(billing_data);

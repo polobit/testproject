@@ -121,4 +121,20 @@ public class SubscriptionApi
 		    .build());
 	}
     }
+
+    @Path("/cancel/subscription")
+    @GET
+    public void cancelSubscription()
+    {
+	try
+	{
+	    Subscription.getSubscription().cancelSubscription();
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+    }
 }

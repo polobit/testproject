@@ -118,11 +118,18 @@ public class StripeImpl implements AgileBilling
 	return invoice_collection;
     }
 
-    // Delete customer from Stripe
+    // Delete customer from Stripe and cancel subscription
     public void deleteCustomer(JSONObject stripeCustomer) throws Exception
     {
 	Customer customer = StripeUtil.getCustomerFromJson(stripeCustomer);
+	customer.cancelSubscription();
 	customer.delete();
 
+    }
+
+    public void cancelSubscription(JSONObject stripeCustomer) throws Exception
+    {
+	Customer customer = StripeUtil.getCustomerFromJson(stripeCustomer);
+	customer.cancelSubscription();
     }
 }
