@@ -153,7 +153,7 @@ public class DomainUser
 	    setInfo(CREATED_TIME, new Long(System.currentTimeMillis() / 1000));
 
 	// Store password
-	if (password != null && !password.equalsIgnoreCase(MASKED_PASSWORD)
+	if (password != null && !password.equals(MASKED_PASSWORD)
 		&& !password.equals(encrypted_password))
 	{
 	    // Encrypt password while saving
