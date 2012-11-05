@@ -1,39 +1,33 @@
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.account.AccountPrefs"%>
 <%
+
+//Get User Name
+String email = request.getParameter("email");
+
+if (email != null)
+{    
+email = email.toLowerCase();
+
+request.setAttribute("agile_email", email);
+
+}
+	
 //Check if it is being access directly and not through servlet
 if(request.getAttribute("javax.servlet.forward.request_uri") == null)
 {
-    response.sendRedirect("/login");
-    return;
+  response.sendRedirect("/login");
+  return;
 }
 
 String error = request.getParameter("error");
 if(error != null)
-    System.out.println(error);
+  System.out.println(error);
 else
-    error = "";
+  error = "";
 
 AccountPrefs accountPrefs = AccountPrefs.getAccountPrefs();
 String logo_url = accountPrefs.logo;
-
-
-//Saving cookie
-String cookieName = "email";
-Cookie cookies [] = request.getCookies ();
-Cookie emailCookie = null;
-if (cookies != null)
-{
-    for (int i = 0; i < cookies.length; i++) 
-    {
-		if (cookies [i].getName().equals (cookieName))
-		{
-		    emailCookie = cookies[i];
-		    System.out.println("cookiee reteived"+emailCookie.getValue());
-			break;
-		}
-	}
-}
 
 %>
 <!DOCTYPE html>
@@ -194,7 +188,7 @@ margin-bottom:0px;
                         <input type='hidden' name='auth' value='auth'></input>
 						<input type='hidden' name='type' value='agile'></input>
 						<input class="input-xlarge required email field" name='email' type="text" placeholder="User Name"
-						<%if (emailCookie != null) {%> value="<%=emailCookie.getValue()%>" <%}%>
+						<%if(request.getAttribute("agile_email")  != null) {%> value="<%=request.getAttribute("agile_email") %>" <%}%>>
 						>
 					    <input class="input-xlarge required field " maxlength="10" minlength="4" name='password' type="password" placeholder="Password">
 						<div style="margin-top: 15px;">

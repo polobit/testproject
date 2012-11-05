@@ -157,11 +157,16 @@ jQuery.validator.setDefaults({
 		<script type="text/javascript">
 		$(document).ready(function() {			
 			
-          $('.forgot_domain_btn').click(function(e)
+			/* $('.forgot_domain_btn').click(function(e)
 			{
         	    $('#forgot_domain').submit();
 				e.preventDefault();
-			});
+			});*/
+          $("#forgot_domain").validate({
+				 submitHandler: function(form) {
+					   form.submit();
+					 }
+					});
 		});
 		function isValid(){
 		    $("#forgot_domain").validate();

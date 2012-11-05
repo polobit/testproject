@@ -192,6 +192,12 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 				e.preventDefault();
 				
 			});
+
+			$("#agile").validate({
+				 submitHandler: function(form) {
+					   form.submit();
+					 }
+					});
 			
 		});
 		function isValid(){

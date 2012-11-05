@@ -156,11 +156,17 @@ jQuery.validator.setDefaults({
 		<script type="text/javascript">
 		$(document).ready(function() {			
 			
-          $('.forgot_password_btn').click(function(e)
+			/* $('.forgot_password_btn').click(function(e)
 			{
 				$('#forgot_password').submit();
 				e.preventDefault();
-			});
+			});*/
+			
+          $("#forgot_password").validate({
+				 submitHandler: function(form) {
+					   form.submit();
+					 }
+					});
 			
 		});
 		function isValid(){
