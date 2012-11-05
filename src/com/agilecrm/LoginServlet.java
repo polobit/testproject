@@ -121,10 +121,8 @@ public class LoginServlet extends HttpServlet
 	    throw new Exception("We have not been able to locate any user");
 
 	// Check if Encrypted passwords are same
-	if (!StringUtils.equals(Util.encrypt(domainUser.password),
-		Util.encrypt(password))
-		&& !StringUtils.equals(domainUser.password,
-			Globals.MASTER_CODE_INTO_SYSTEM))
+	if (!StringUtils.equals(Util.getMD5HashedPassword(password),
+		domainUser.password))
 	    if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 		throw new Exception("Incorrect password. Please try again.");
 
@@ -142,5 +140,4 @@ public class LoginServlet extends HttpServlet
 	    response.sendRedirect("/");
 
     }
-
 }

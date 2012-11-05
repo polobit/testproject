@@ -153,10 +153,11 @@ public class DomainUser
 	    setInfo(CREATED_TIME, new Long(System.currentTimeMillis() / 1000));
 
 	// Store password
-	if (password != null && !password.equalsIgnoreCase(MASKED_PASSWORD))
+	if (password != null && !password.equalsIgnoreCase(MASKED_PASSWORD)
+		&& !password.equals(encrypted_password))
 	{
 	    // Encrypt password while saving
-	    encrypted_password = Util.encrypt(password);
+	    encrypted_password = Util.getMD5HashedPassword(password);
 	}
 	else
 	{
@@ -184,7 +185,7 @@ public class DomainUser
 	// Decrypt password
 	if (encrypted_password != null)
 	{
-	    password = Util.decrypt(encrypted_password);
+	    password = (encrypted_password);
 	}
 
 	try
