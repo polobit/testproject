@@ -20,6 +20,7 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, continueContact, 
     var properties = [];
 
     var id = $('#' + form_id + ' input[name=id]').val();
+    var created_time=$('#' + form_id + ' input[name=created_time]').val();
     var obj = {};
     var properties = [];
     var address = [];
@@ -29,6 +30,7 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, continueContact, 
 
     var custom_field_elements =  $('#' + form_id).find('.custom_field');
 
+    
     $.each(custom_field_elements, function(index, element){
     	var id = $(element).attr('id'), name = $(element).attr('name');
     	
@@ -109,6 +111,10 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, continueContact, 
         obj[propertiesList[i].name] = propertiesList[i].value;
     }
     if (id != null) obj['id'] = id;
+    obj["created_time"] = created_time;
+    
+    
+    console.log(obj);
     
     // Save contact
     var contactModel = new Backbone.Model();
