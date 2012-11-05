@@ -141,14 +141,37 @@ public class ContactDocument
 	Set<String> tokens = new HashSet<String>();
 	Set<String> search_tokens = new HashSet<String>();
 
-	String token = "";
+	// first name and last name for different combinations to search
+	String firstName = "";
+	String lastName = "";
+
+	String contactName = "";
 	for (ContactField contactField : properties)
 	{
-	    if (contactField.value != null)
-		token = token + contactField.value;
+
+	    if (contactField.name.equals("first_name"))
+	    {
+		firstName = contactField.value;
+		continue;
+	    }
+
+	    if (contactField.name.equals("last_name"))
+	    {
+		lastName = contactField.value;
+	    }
+
+	    tokens.add(normalizeString(contactField.value));
+
 	}
 
-	tokens.add(token);
+	// contact contact name first name then last name add to tokens
+	contactName = normalizeString(firstName + lastName);
+	tokens.add(contactName);
+
+	// contact contact name last name then first name add to tokens
+	contactName = normalizeString(lastName + firstName);
+	tokens.add(contactName);
+
 	if (tokens.size() != 0)
 	    search_tokens = Util.getSearchTokens(tokens);
 

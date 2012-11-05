@@ -21,7 +21,6 @@ import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deferred.TagsDeferredTask;
 import com.agilecrm.session.SessionManager;
-import com.agilecrm.util.Util;
 import com.agilecrm.workflows.Trigger;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -183,20 +182,16 @@ public class Contact extends Cursor
 	}
 	else
 	    updated_time = System.currentTimeMillis() / 1000;
-
-	// Create Search Keyword Values
-	Set<String> tokens = new HashSet<String>();
-	for (ContactField contactField : properties)
-	{
-	    if (contactField.value != null)
-		tokens.add(contactField.value.replace(" ", ""));
-	}
-
-	if (tokens.size() != 0)
-	    search_tokens = Util.getSearchTokens(tokens);
-
-	System.out.println(search_tokens);
-
+	/*
+	 * // Create Search Keyword Values Set<String> tokens = new
+	 * HashSet<String>(); for (ContactField contactField : properties) { if
+	 * (contactField.value != null)
+	 * tokens.add(contactField.value.replace(" ", "")); }
+	 * 
+	 * if (tokens.size() != 0) search_tokens = Util.getSearchTokens(tokens);
+	 * 
+	 * System.out.println(search_tokens);
+	 */
 	// Update Tags - Create a deferred task
 	TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(tags);
 
@@ -296,11 +291,11 @@ public class Contact extends Cursor
 	return null;
     }
 
-    public static List<Contact> searchContacts(String keyword)
-    {
-	Objectify ofy = ObjectifyService.begin();
-	return ofy.query(Contact.class).filter("search_tokens", keyword).list();
-    }
+    /*
+     * public static List<Contact> searchContacts(String keyword) { Objectify
+     * ofy = ObjectifyService.begin(); return
+     * ofy.query(Contact.class).filter("search_tokens", keyword).list(); }
+     */
 
     // Get Contact by Email
     public static Contact searchContactByEmail(String email)
