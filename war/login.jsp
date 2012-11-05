@@ -189,7 +189,7 @@ margin-bottom:0px;
 						<input type='hidden' name='type' value='agile'></input>
 						<input class="input-xlarge required email field" name='email' type="text" placeholder="User Name"
 						<%if(request.getAttribute("agile_email")  != null) {%> value="<%=request.getAttribute("agile_email") %>" <%}%>>
-						>
+						
 					    <input class="input-xlarge required field " maxlength="10" minlength="4" name='password' type="password" placeholder="Password">
 						<div style="margin-top: 15px;">
 							<label class="checkbox" style="display: inline-block;">
