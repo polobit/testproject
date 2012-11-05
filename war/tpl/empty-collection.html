@@ -11,7 +11,11 @@
         </div>
         <a href="#">{{learn_more}}</a>
         <br>
-        <span class="btn blue btn-slate-action"><i class="icon-plus-sign"></i>{{button_text}}!</span>
+		{{#if modal_id}}
+			<a href="{{route}}" modal_id="{{modal_id}}" class="modal-form btn blue btn-slate-action"><i class="icon-plus-sign"></i>  {{button_text}}!</a>
+		{{else}}
+ 	       <a href="{{route}}" class="btn blue btn-slate-action"><i class="icon-plus-sign"></i>  {{button_text}}!</a>
+		{{/if}}
       </div>
     </div>
   </div>
