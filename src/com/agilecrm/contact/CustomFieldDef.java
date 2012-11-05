@@ -109,9 +109,9 @@ public class CustomFieldDef
 	}
     }
 
+    // Fetch custom field by name
     public static CustomFieldDef getFieldByName(String field_label)
     {
-	System.out.println(field_label);
 	return dao.ofy().query(CustomFieldDef.class)
 		.filter("field_label", field_label).get();
     }

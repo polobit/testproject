@@ -119,8 +119,6 @@ public class ContactFilter
 
 	for (int i = 0; i < rules_json_array.length(); i++)
 	{
-	    System.out.println("filter contacts");
-
 	    try
 	    {
 		// Get each rule from set of rules
@@ -134,48 +132,34 @@ public class ContactFilter
 		// Build Equal queries
 		if (!LHS.contains("time"))
 		{
+		    // Create new query with lhs and rhs conditions to be added
+		    // further
+		    String newQuery = LHS + ":"
+			    + ContactDocument.normalizeString(RHS);
+
 		    // For equals condition
 		    if (condition.equalsIgnoreCase("EQUALS"))
 		    {
-			// If query is not empty should add AND condition
-			if (!query.isEmpty())
-			{
-			    System.out.println("in if : " + query);
-			    query = query + " AND " + LHS + ":"
-				    + ContactDocument.normalizeString(RHS);
-			}
-			else
-			{
-			    System.out.println("in else : " + query);
-			    query = query + LHS + ":"
-				    + ContactDocument.normalizeString(RHS);
-			}
+			// Build query by passing condition old query and new
+			// query
+			query = buildQuery("AND", query, newQuery);
 		    }
 		    // For not queries
 		    else
 		    {
-			if (!query.isEmpty())
-			{
-			    System.out.println("in if : " + query);
-			    query = query + " NOT " + LHS + ":"
-				    + ContactDocument.normalizeString(RHS);
-			}
-			else
-			{
-
-			    query = "NOT " + LHS + ":"
-				    + ContactDocument.normalizeString(RHS);
-			    System.out.println("in else : " + query);
-			}
+			query = buildQuery("NOT", query, newQuery);
 		    }
 		}
 
 		// Queries on created or updated times
 		else if (LHS.contains("time"))
 		{
+		    // Truncate date Document search date is without time
+		    // component
 		    Date truncatedDate = DateUtils.truncate(
 			    new Date(Long.parseLong(RHS)), Calendar.DATE);
 
+		    // Format date
 		    Format formatter = new SimpleDateFormat("yyyy-MM-dd");
 
 		    // Formated to build query
@@ -183,28 +167,25 @@ public class ContactFilter
 
 		    System.out.println("date string is  : " + date);
 
+		    // Created on date condition
 		    if (condition.equalsIgnoreCase("EQUALS"))
 		    {
-			if (!query.isEmpty())
-			    query = query + " AND " + LHS + "=" + date;
-			else
-			    query = LHS + "=" + date;
+			query = buildQuery("AND", query, LHS + "=" + date);
 		    }
+
+		    // Created after given date
 		    else if (condition.equalsIgnoreCase("AFTER"))
 		    {
-			if (!query.isEmpty())
-			    query = query + " AND " + LHS + " > " + date;
-			else
-			    query = query + LHS + " >" + date;
-
+			query = buildQuery("AND", query, LHS + " >" + date);
 		    }
+
+		    // Created before particular date
 		    else if (condition.equalsIgnoreCase("BEFORE"))
 		    {
-			if (!query.isEmpty())
-			    query = query + " AND " + LHS + " < " + date;
-			else
-			    query = query + LHS + " < " + date;
+			query = buildQuery("AND", query, LHS + " < " + date);
 		    }
+
+		    // Created in last number of days
 		    else if (condition.equalsIgnoreCase("LAST"))
 		    {
 
@@ -212,8 +193,12 @@ public class ContactFilter
 				.removeDays(Integer.parseInt(RHS)).getTime()
 				.getTime() / 1000;
 
+			query = buildQuery("AND", query, LHS + " > " + date);
+
 			query = query + LHS + " < " + date;
 		    }
+
+		    // Created Between given dates
 		    else if (condition.equalsIgnoreCase("BETWEEN"))
 		    {
 			String RHS_NEW = each_rule.getString("RHS_NEW");
@@ -222,12 +207,9 @@ public class ContactFilter
 			    String to_date = formatter.format(new Date(Long
 				    .parseLong(RHS_NEW)));
 
-			    if (!query.isEmpty())
-				query = query + " AND " + LHS + " >=" + date
-					+ " AND " + LHS + " <= " + to_date;
-			    else
-				query = query + LHS + " >=" + date + " AND "
-					+ LHS + " <= " + to_date;
+			    query = buildQuery("AND", query, LHS + " >=" + date);
+			    query = buildQuery("AND", query, LHS + " <= "
+				    + to_date);
 			}
 		    }
 		}
@@ -237,6 +219,8 @@ public class ContactFilter
 		e.printStackTrace();
 	    }
 	}
+
+	// return query results
 	return processQuery(query);
     }
 
@@ -295,6 +279,37 @@ public class ContactFilter
 	String query = "search_tokens : " + keyword;
 
 	return processQuery(query);
+    }
+
+    // Build query based on condition AND, NOT..
+    private static String buildQuery(String condition, String query,
+	    String newQuery)
+    {
+
+	// If query string is empty return simple not query
+	if (query.isEmpty() && condition.equals("NOT"))
+	{
+	    query = "NOT " + newQuery;
+	    return query;
+	}
+
+	// If query String is not empty then create And condition with old query
+	// and add not query
+	if (!query.isEmpty() && condition.equals("NOT"))
+	{
+	    query = "(" + query + ")" + " AND " + "(NOT " + newQuery + ")";
+	}
+
+	// If query is not empty should add AND condition
+	if (!query.isEmpty())
+	{
+	    query = query + " " + condition + " " + newQuery;
+	    System.out.println("query : " + query);
+	    return query;
+	}
+
+	// If query is empty and not "NOT" query return same new query
+	return newQuery;
     }
 
     // Build ,process query and return contacts collection
