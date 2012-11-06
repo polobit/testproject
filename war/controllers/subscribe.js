@@ -100,8 +100,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			 window: 'invoice',
 			 isNew: true
 		 });
-		 
-		 console.log(invoice_details.el);
+
 		 $('#content').html(invoice_details.render().el);
 	 }
 });
