@@ -96,7 +96,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		 var invoice_details = new Base_Model_View({
 		//	 url: "core/api/subscription/invoice",
 			 model:model,
-			 template: "invoice",
+			 template: "invoice-detail",
 			 window: 'invoice',
 			 isNew: true
 		 });
