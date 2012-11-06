@@ -396,6 +396,14 @@ $(function()
 		
 	});
 	
+	Handlebars.registerHelper('compare', function(value, target, options)
+	{
+		if(value == target)
+			return options.fn(this);
+		else
+			return options.inverse(this);
+	})
+	
 	// Add Custom Fields to Forms
 	Handlebars.registerHelper('show_custom_fields', function(custom_fields, properties){
 
