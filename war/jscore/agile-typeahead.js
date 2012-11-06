@@ -54,8 +54,6 @@ function agile_type_ahead(id, el, callback, isSearch) {
 							else
 								var fullname = getPropertyValue(item.properties, "first_name") + " " + getPropertyValue(item.properties, "last_name");
 							
-							console.log(item);
-							
 							i = $(that.options.item).attr('data-value', fullname);
 							
 							// returns template can be contact or company compares in template
