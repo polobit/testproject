@@ -172,8 +172,6 @@ public class DomainUser
 	    }
 	}
 
-	password = MASKED_PASSWORD;
-
 	info_json_string = info_json.toString();
 
 	// Lowercase
@@ -181,7 +179,7 @@ public class DomainUser
 	domain = StringUtils.lowerCase(domain);
     }
 
-    public String getPassword()
+    public String getPasswordString()
     {
 	return encrypted_password;
     }
@@ -286,11 +284,11 @@ public class DomainUser
     public void save() throws Exception
     {
 	System.out.println("Creating or updating new user " + this);
-
+	System.out.println(this.id);
 	// Check if user exists with this email
 	DomainUser domainUser = getDomainUserFromEmail(email);
-	if ((domainUser != null) && this.id != null
-		&& !this.id.equals(domainUser.id))
+	if ((domainUser != null)
+		&& (this.id != null && !this.id.equals(domainUser.id)))
 	{
 	    throw new Exception("User already exists with this email address "
 		    + domainUser);
