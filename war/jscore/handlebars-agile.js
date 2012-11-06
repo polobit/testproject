@@ -239,8 +239,8 @@ $(function()
 	Handlebars.registerHelper('epochToHumanDate', function(format, date)
 	{
 		// date form milliseconds
-		var d = new Date(parseInt(date)*1000);
-		return d.toLocaleDateString();
+		var d = new Date(parseInt(date)*1000).format(format);
+		return d
 
 		// return $.datepicker.formatDate(format , new Date( parseInt(date) *
 		// 1000));
