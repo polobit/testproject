@@ -1,4 +1,4 @@
-package com.agilecrm.customer;
+package com.agilecrm.billing;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
