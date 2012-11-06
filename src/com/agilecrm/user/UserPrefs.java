@@ -77,23 +77,6 @@ public class UserPrefs
 
     }
 
-    @Override
-    public String toString()
-    {
-	if (pic.isEmpty())
-	{
-	    pic = "pic";
-	}
-	if (width.isEmpty())
-	{
-	    width = "width";
-	}
-
-	return "{id: " + id + ",name: " + name + ",pic:" + pic + ",template: "
-		+ template + ",width:" + width + ",signature: " + signature
-		+ ",task_reminder: " + task_reminder + "}";
-    }
-
     public static UserPrefs getCurrentUserPrefs()
     {
 	// Agile User

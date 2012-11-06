@@ -11,7 +11,7 @@
 <%@page import="com.google.appengine.api.users.UserServiceFactory"%>
 <%@page import="com.google.appengine.api.users.User"%>
 <%@page import="com.google.appengine.api.users.UserService"%>
-<%@page import="org.codehaus.jettison.json.JSONObject"%>
+<%@page import="org.codehaus.jackson.map.ObjectMapper"%>
 
 <html lang="en">
 <head>
@@ -31,6 +31,8 @@
 	    response.sendRedirect("/login");
 	    return;
 	}
+	
+	ObjectMapper mapper = new ObjectMapper();
 	
 	// Get current user prefs
 	UserPrefs currentUserPrefs = UserPrefs.getCurrentUserPrefs();
@@ -213,6 +215,8 @@ String CSS_PATH = "/";
 	
 	var IS_FLUID = <%=is_fluid%>;
 	
+	// Get current user prefs json
+	var CURRENT_USER_PREFS = <%=mapper.writeValueAsString(currentUserPrefs)%>;
 	
 	//var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
 	 var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
