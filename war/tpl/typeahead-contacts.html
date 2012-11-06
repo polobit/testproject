@@ -1,12 +1,22 @@
 <script id="typeahead-contacts-template" type="text/html">
 <div>
 	<div style="display:inline;padding-right:10px;height:auto;">
-			<img src="{{gravatarurl properties 50}}" style="width:50px;height:50px;"></img>
-	</div>
+			{{#compare type "COMPANY"}}
+					<img src="img/company.png" style="width:50px;height:50px;"></img>
+				{{else}}
+					<img src="{{gravatarurl properties 50}}" style="width:50px;height:50px;"></img>
+			{{/compare}}
+		</div>
 	<div style="height:auto;display:inline-block;vertical-align:-20px;margin-left:2px">
 		<b>{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</b><br/>
 		{{getPropertyValue properties "email"}}</br>
 		{{getPropertyValue properties "company"}}
 	</div>
+		{{#compare type "COMPANY"}}
+			<div style="height:auto;display:inline-block;vertical-align:-10px;margin-left:2px">
+				<b>{{getPropertyValue properties "name"}}</b><br/>
+				{{getPropertyValue properties "url"}}</br>
+			</div>
+		{{/compare}}
 </div>
 </script>

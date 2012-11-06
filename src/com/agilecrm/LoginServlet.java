@@ -116,7 +116,7 @@ public class LoginServlet extends HttpServlet
 
 	// Check if Encrypted passwords are same
 	if (!StringUtils.equals(Util.getMD5HashedPassword(password),
-		domainUser.getPassword())
+		domainUser.getPasswordString())
 		&& !StringUtils.equals(password,
 			Globals.MASTER_CODE_INTO_SYSTEM))
 	    if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
@@ -127,7 +127,6 @@ public class LoginServlet extends HttpServlet
 	request.getSession().setAttribute(
 		SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
 
-	System.out.println(request.getParameter("signin"));
 	if (request.getParameter("signin") != null
 		&& request.getParameter("signin").equalsIgnoreCase("on"))
 	{

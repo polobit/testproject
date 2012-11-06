@@ -1,5 +1,5 @@
 // To save map of key: first_name and value: contact id 
-var TAGS = {};
+var TYPEHEAD_TAGS = {};
 function agile_type_ahead(id, el, callback, isSearch) {
 	
 	$('#' + id, el).attr("autocomplete","off");
@@ -29,7 +29,7 @@ function agile_type_ahead(id, el, callback, isSearch) {
 					$.each(data, function(index, item){
 						
 						tag_name = items_list[index];
-						TAGS[tag_name] = item.id; 
+						TYPEHEAD_TAGS[tag_name] = item.id; 
 						
 					});
 					
@@ -47,10 +47,16 @@ function agile_type_ahead(id, el, callback, isSearch) {
 		{	
 			var that = this;
 			items = $(CONTACTS).map(function (i, item) {
-		
-							var fullname = fullname = getPropertyValue(item.properties, "first_name") + " " + getPropertyValue(item.properties, "last_name");
 
+							// Check if item if of company type get company name instead of first name and last name of person
+							if(item.type == "COMPANY")
+								var fullname = getPropertyValue(item.properties, "name");
+							else
+								var fullname = getPropertyValue(item.properties, "first_name") + getPropertyValue(item.properties, "last_name");
+							
 							i = $(that.options.item).attr('data-value', fullname);
+							
+							// returns template can be contact or company compares in template
 							i.find('a').append(getTemplate('typeahead-contacts',item));
 							
 							/* highlighter*/
@@ -78,23 +84,25 @@ function agile_type_ahead(id, el, callback, isSearch) {
 			// Customize data for type ahead
 			if (isSearch && typeof(isSearch) === "function")
 				{
-					isSearch(TAGS[items]);							
+					isSearch(TYPEHEAD_TAGS[items]);							
 				}
 			
 			
 			// If tag already exists returns 
 			$.each($('.tags', el).children('li'), function(index, tag) {
 				
-				if($(tag).attr('value') == TAGS[items])
+				if($(tag).attr('value') == TYPEHEAD_TAGS[items])
 					{
 						tag_not_exist = false;
 						return;
 					}
 			});
-
+			
+			console.log(items);
+console.log(TYPEHEAD_TAGS);
 			//add tag 
 			if(tag_not_exist)				
-				$('.tags',el).append('<li class="tag"  style="display: inline-block;" data="'+ TAGS[items]+'">'+items+'<a class="close" id="remove_tag">&times</a></li>');
+				$('.tags',el).append('<li class="tag"  style="display: inline-block;" data="'+ TYPEHEAD_TAGS[items]+'">'+items+'<a class="close" id="remove_tag">&times</a></li>');
 		},
 		minLength : 2,
 	})
@@ -128,23 +136,18 @@ function contacts_typeahead(data){
 			$.each(data, function(index, contact ){
 				var contact_name;
 				
-				$.each(contact.properties, function (index, property) {
-					if (property.name == "first_name")
+				// If contact type is company 
+				if(contact.type == "COMPANY")
 					{
-						contact_name = property.value;
+						contact_name = getPropertyValue(contact.properties, "name");
+						contact_names_list.push(contact_name);	
+						return;
 					}
-					if(property.name == "last_name")
-					{
-						contact_name = contact_name.concat(" "+property.value);
-						
-					}
-				});
-
+				
+				contact_name = getPropertyValue(contact.properties, "first_name") + getPropertyValue(contact.properties, "last_name");
 				contact_names_list.push(contact_name);
 			});
 			return contact_names_list;
 	}
 	
 }
-
-				
