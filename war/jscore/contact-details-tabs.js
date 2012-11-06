@@ -277,7 +277,7 @@ function populateSendEmailDetails(el){
 	}});
 	
 	// Fill hidden signature field using userprefs 
-	$("#emailForm").find( 'input[name="signature"]' ).val(CURRENT_USER_PREFS.signature);
+	// $("#emailForm").find( 'input[name="signature"]' ).val(CURRENT_USER_PREFS.signature);
 	
 	// Prefill the templates
 	var optionsTemplate = "<option value='{{id}}'> {{subject}}</option>";
