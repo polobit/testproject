@@ -111,6 +111,7 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, continueContact, 
         obj[propertiesList[i].name] = propertiesList[i].value;
     }
     if (id != null) obj['id'] = id;
+    
     obj["created_time"] = created_time;
     
     
