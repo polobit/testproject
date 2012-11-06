@@ -42,11 +42,11 @@ public class DomainUser
 
     // Is Admin
     @NotSaved(IfDefault.class)
-    public boolean is_admin = true;
+    public boolean is_admin = false;
 
     // Account Owner
     @NotSaved(IfDefault.class)
-    public boolean is_account_owner = true;
+    public boolean is_account_owner = false;
 
     @NotSaved(IfDefault.class)
     public boolean is_disabled = false;
@@ -94,8 +94,8 @@ public class DomainUser
 
     }
 
-    public DomainUser(String domain, String email, String password,
-	    String name, boolean isAdmin, boolean isAccountOwner)
+    public DomainUser(String domain, String email, String name,
+	    String password, boolean isAdmin, boolean isAccountOwner)
     {
 	this.domain = domain;
 	this.email = email;
@@ -118,6 +118,7 @@ public class DomainUser
 		    .toUpperCase();
 
 	    domainUser.password = randomNumber;
+	    System.out.println(domainUser + "rest password");
 
 	    // Send an email with the new password
 	    SendMail.sendMail(email, SendMail.FORGOT_PASSWORD_SUBJECT,
@@ -126,6 +127,7 @@ public class DomainUser
 	    try
 	    {
 		domainUser.save();
+		System.out.println(domainUser + "rest password aftr saving");
 	    }
 	    catch (Exception e)
 	    {
@@ -153,7 +155,7 @@ public class DomainUser
 	    setInfo(CREATED_TIME, new Long(System.currentTimeMillis() / 1000));
 
 	// Store password
-	if (password != null && !password.equals(MASKED_PASSWORD)
+	if (password != null && !password.equalsIgnoreCase(MASKED_PASSWORD)
 		&& !password.equals(encrypted_password))
 	{
 	    // Encrypt password while saving
@@ -179,14 +181,14 @@ public class DomainUser
 	domain = StringUtils.lowerCase(domain);
     }
 
+    public String getPassword()
+    {
+	return encrypted_password;
+    }
+
     @PostLoad
     private void PostLoad() throws DecoderException
     {
-	// Decrypt password
-	if (encrypted_password != null)
-	{
-	    password = (encrypted_password);
-	}
 
 	try
 	{
@@ -327,6 +329,7 @@ public class DomainUser
 	{
 	    try
 	    {
+		System.out.println(this + "new user invitation");
 		SendMail.sendMail(this.email,
 			SendMail.NEW_USER_INVITED_SUBJECT,
 			SendMail.NEW_USER_INVITED, this);
@@ -343,6 +346,7 @@ public class DomainUser
 
 	try
 	{
+	    System.out.println(this + "while saving");
 	    dao.put(this);
 	}
 	finally
