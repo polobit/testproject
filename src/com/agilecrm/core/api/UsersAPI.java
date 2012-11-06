@@ -40,10 +40,6 @@ public class UsersAPI
 
 	    // Get the users and update the password to the masked one
 	    List<DomainUser> users = DomainUser.getUsers(domain);
-	    for (DomainUser user : users)
-	    {
-		user.password = DomainUser.MASKED_PASSWORD;
-	    }
 
 	    return users;
 	}
