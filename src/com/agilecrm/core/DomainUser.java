@@ -280,6 +280,22 @@ public class DomainUser
 	}
     }
 
+    // Get all domain users
+    public static List<DomainUser> getAllDomainUsers()
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	try
+	{
+	    return dao.fetchAll();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
+
     // Save
     public void save() throws Exception
     {

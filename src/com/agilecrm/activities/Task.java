@@ -105,6 +105,14 @@ public class Task
 			.parseLong(contact_id)));
 	    }
 	}
+
+	// Create owner key
+	if (owner == null)
+	{
+	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
+	    if (agileUser != null)
+		this.owner = new Key<AgileUser>(AgileUser.class, agileUser.id);
+	}
     }
 
     // Get Event
@@ -201,6 +209,34 @@ public class Task
 	    return dao.ofy().query(Task.class).filter("due >=", startTime)
 		    .filter("due <=", endTime).filter("is_complete", false)
 		    .list();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    public static List<Task> getPendingTasksToRemind(int numDays,
+	    Key<AgileUser> owner)
+    {
+	try
+	{
+	    // Get Today's date
+	    DateUtil startDateUtil = new DateUtil();
+	    Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
+
+	    // Get Date after days days
+	    DateUtil endDateUtil = new DateUtil();
+	    Long endTime = endDateUtil.addDays(numDays + 1).toMidnight()
+		    .getTime().getTime() / 1000;
+
+	    System.out.println("check for " + startTime + " " + endTime);
+
+	    // Get end start and endtime
+	    return dao.ofy().query(Task.class).filter("owner =", owner)
+		    .filter("due >=", startTime).filter("due <=", endTime)
+		    .filter("is_complete", false).list();
 	}
 	catch (Exception e)
 	{

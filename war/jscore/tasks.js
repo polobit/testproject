@@ -1,6 +1,7 @@
   // Tasks
 $(function () { 
 	$('.tasks-select').live('change', function(e){
+	
         if($(this).is(':checked')){
         	// Complete
         	var taskId = $(this).attr('data');
@@ -85,10 +86,23 @@ function completeTask(taskId, ui)
 	var collection = App_Calendar.tasksListView.collection;
 	var model = collection.get(taskId);
 	
+	var json = model.toJSON();
+	json.is_complete = true;
+	
+	var new_task = new Backbone.Model();
+	new_task.url = '/core/api/tasks';
+	new_task.save(json,{
+		success: function(model, response){
+			App_Calendar.tasksListView.collection.remove(model);
+			
+			ui.fadeOut(2000);
+		}
+	});
+	
 	// Set is complete flag to be true
-	model.set('is_complete', true);
-	model.url = '/core/api/tasks';
-
+	/*model.url = '/core/api/tasks';
+	model.set({'is_complete': true}, {silent: true});
+	
 	// Destroy and hide the task
 	model.save([],{success: function(model, response) {
 		
@@ -99,6 +113,6 @@ function completeTask(taskId, ui)
 		
 		ui.fadeOut(2000);
 	}}
-	);
+	);*/
 	
 }

@@ -15,7 +15,9 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
@@ -29,6 +31,7 @@ import org.json.JSONObject;
 
 import au.com.bytecode.opencsv.CSVReader;
 
+import com.agilecrm.core.DomainUser;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -211,6 +214,23 @@ public class Util
 	    return "+" + number;
 
 	return "+1" + number;
+    }
+
+    // Get all Name spaces
+    public static Set<String> getAllNamespaces()
+    {
+	List<DomainUser> domainList = DomainUser.getAllDomainUsers();
+
+	// Map<String, Long> domainMap = new HashMap<String, Long>();
+
+	Set<String> domains = new HashSet<String>();
+
+	for (DomainUser domainUser : domainList)
+	{
+	    domains.add(domainUser.domain);
+	}
+
+	return domains;
     }
 
     // Get Name space count

@@ -24,9 +24,15 @@ $(function(){
 	    	serializeAndSaveContinueContact(e, 'companyForm', 'companyModal', false, false);	        
 	    });
 	    
-	 // Hide email alert error when the modal is shown in new-person-modal
+	 // Hide email alert error when the modal is hidden in new-person-modal
 	    $('#personModal').on('hidden', function () {
-	    	$('#personModal').find(".alert").hide();	    	
+	    	
+	    	// Remove email error message
+	    	$('#personModal').find(".alert").hide();
+	    	
+	    	// Remove validation error messages
+	    	$('#personModal').find("div.control-group").removeClass("error");
+	    	$('#personModal').find("span.help-inline").remove();
 	    });
 });
 
