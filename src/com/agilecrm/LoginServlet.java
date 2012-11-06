@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -109,11 +108,6 @@ public class LoginServlet extends HttpServlet
 
 	email = email.toLowerCase();
 
-	// Setting cookie
-	Cookie cookie = new Cookie("email", email);
-	cookie.setMaxAge(24 * 60 * 60);
-	response.addCookie(cookie);
-
 	// Get Domain User with this name, password - we do not check for domain
 	// as validity is verified in AuthFilter
 	DomainUser domainUser = DomainUser.getDomainUserFromEmail(email);
@@ -122,7 +116,7 @@ public class LoginServlet extends HttpServlet
 
 	// Check if Encrypted passwords are same
 	if (!StringUtils.equals(Util.getMD5HashedPassword(password),
-		domainUser.password)
+		domainUser.getPassword())
 		&& !StringUtils.equals(password,
 			Globals.MASTER_CODE_INTO_SYSTEM))
 	    if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
@@ -132,6 +126,13 @@ public class LoginServlet extends HttpServlet
 	UserInfo userInfo = new UserInfo("agilecrm.com", email, domainUser.name);
 	request.getSession().setAttribute(
 		SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
+
+	System.out.println(request.getParameter("signin"));
+	if (request.getParameter("signin") != null
+		&& request.getParameter("signin").equalsIgnoreCase("on"))
+	{
+	    request.getSession().setMaxInactiveInterval(5 * 24 * 60 * 60);
+	}
 
 	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 	{

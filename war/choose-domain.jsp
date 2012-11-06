@@ -10,7 +10,8 @@ if(!StringUtils.isEmpty(domain))
 	if(DomainUser.count() != 0)
 	{
 	    error = "Domain already exists.";
-	    //response.sendRedirect("https://" + domain + ".agilecrm.com/login");
+	    response.sendRedirect("https://" + domain + ".agilecrm.com/login");
+	    return;
 	}
 	else
 	{
