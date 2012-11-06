@@ -58,8 +58,10 @@ $(function(){
 	    		    				});
 	    		    			}else if(Current_Route == 'calendar'){
 	    		    				
+	    		    				console.log(App_Calendar.tasksListView);
 		    		    	        // Update task list view 
 	    		    	        	App_Calendar.tasksListView.collection.add(data);
+	    		    	        	console.log(App_Calendar.tasksListView.collection.toJSON());
 	    		    	        	App_Calendar.tasksListView.render(true);
 	    		    	        }else{
 	    		    	        	App_Calendar.navigate("calendar", {
