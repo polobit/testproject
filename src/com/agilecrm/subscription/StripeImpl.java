@@ -10,8 +10,8 @@ import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.Globals;
 import com.agilecrm.billing.AgileBilling;
-import com.agilecrm.customer.CreditCard;
-import com.agilecrm.customer.Plan;
+import com.agilecrm.billing.CreditCard;
+import com.agilecrm.billing.Plan;
 import com.google.gson.Gson;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;

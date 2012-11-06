@@ -12,8 +12,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.agilecrm.customer.CreditCard;
-import com.agilecrm.customer.Plan;
+import com.agilecrm.billing.CreditCard;
+import com.agilecrm.billing.Plan;
 import com.agilecrm.subscription.Subscription;
 import com.stripe.exception.StripeException;
 
