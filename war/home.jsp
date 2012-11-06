@@ -213,7 +213,6 @@ String CSS_PATH = "/";
 	
 	var IS_FLUID = <%=is_fluid%>;
 	
-	var CURRENT_USER_PREFS = <%=new JSONObject(currentUserPrefs.toString())%>;
 	
 	//var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
 	 var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
