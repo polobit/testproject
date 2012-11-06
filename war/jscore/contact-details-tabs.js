@@ -173,8 +173,9 @@ $(function(){
 		var json = serializeForm("emailForm");
 		var url =  'core/api/send-email?from=' + encodeURIComponent(json.from) + '&to=' + 
 		   										 encodeURIComponent(json.to) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + 
-		   										 encodeURIComponent(json.body);
+		   										encodeURIComponent(json.body) + '<div>' + encodeURIComponent(json.signature) + '</div>';
 		
+		console.log(url);
 		//Show message 
 	    $save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><p class="text-success" style="color:#008000; font-size:15px; display:inline-block"> <i>Sending mail...</i></p></span>');
 	    $("#msg", this.el).append($save_info);
@@ -274,6 +275,9 @@ function populateSendEmailDetails(el){
 			var model = data.toJSON();
 			$("#emailForm").find( 'input[name="from"]' ).val(model.email);
 	}});
+	
+	// Fill hidden signature field using userprefs 
+	$("#emailForm").find( 'input[name="signature"]' ).val(CURRENT_USER_PREFS.signature);
 	
 	// Prefill the templates
 	var optionsTemplate = "<option value='{{id}}'> {{subject}}</option>";

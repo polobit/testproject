@@ -11,7 +11,7 @@
 <%@page import="com.google.appengine.api.users.UserServiceFactory"%>
 <%@page import="com.google.appengine.api.users.User"%>
 <%@page import="com.google.appengine.api.users.UserService"%>
-
+<%@page import="org.codehaus.jettison.json.JSONObject"%>
 
 <html lang="en">
 <head>
@@ -31,9 +31,12 @@
 	    response.sendRedirect("/login");
 	    return;
 	}
-
+	
+	// Get current user prefs
+	UserPrefs currentUserPrefs = UserPrefs.getCurrentUserPrefs();
+	
 	// Download the template the user likes
-	String template = UserPrefs.getCurrentUserPrefs().template;
+	String template = currentUserPrefs.template;
 	if(request.getParameter("t") != null)
 		template = request.getParameter("t");
 	
@@ -41,7 +44,7 @@
 	if(StringUtils.isNumeric(template) || template.equalsIgnoreCase("default"))
 	    template = "pink";
 	
-	String width = UserPrefs.getCurrentUserPrefs().width;	
+	String width = currentUserPrefs.width;	
 	boolean is_fluid = !width.isEmpty();
 %>
 
@@ -209,6 +212,8 @@ String CSS_PATH = "/";
 	var IS_CONSOLE_ENABLED = <%=debug%>;
 	
 	var IS_FLUID = <%=is_fluid%>;
+	
+	var CURRENT_USER_PREFS = <%=new JSONObject(currentUserPrefs.toString())%>;
 	
 	//var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
 	 var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
