@@ -26,10 +26,8 @@
 <script id="invoice-model-template" type="text/html">
 	{{#each lines.subscriptions}}
 		<td>{{this.plan.name}}</td>	
-	{{/each}}	
-	<td>{{epochToHumanDate "mm-dd-yy" periodStart}}</td>
-	<td>{{epochToHumanDate "mm-dd-yy" periodEnd}}</td>
-	{{#each lines.subscriptions}}
+		<td>{{epochToHumanDate "mm-dd-yy" period.start}}</td>
+		<td>{{epochToHumanDate "mm-dd-yy" period.end}}</td>
 		<td>{{this.plan.amount}}</td>	
 	{{/each}}	
 </script>
