@@ -418,7 +418,8 @@ $(function()
 					
 					// Create options based on list values
 					$.each(list_values,function(index, value){
-						list_options = list_options.concat('<option value='+value+'>'+value+'</option>');
+						if(value != "")
+							list_options = list_options.concat('<option value='+value+'>'+value+'</option>');
 					});
 					
 					// Create select dropdown
@@ -438,9 +439,9 @@ $(function()
 			
 			if(field.is_required)
 				// If not list type create text field(plain text field or date field)
-				el = el.concat('<div class="control-group">	<label class="control-label">'+ucfirst(field.field_label)+'<span class="field_req">*</span></label><div class="controls"><input type="'+field_type+'" class="'+field.field_type.toLowerCase()+'_input custom_field required" id='+field.id+' name="'+field.field_label+'"></div></div>');
+				el = el.concat('<div class="control-group">	<label class="control-label">'+ucfirst(field.field_label)+'<span class="field_req">*</span></label><div class="controls"><input type="text" class="'+field.field_type.toLowerCase()+'_input custom_field required" id='+field.id+' name="'+field.field_label+'"></div></div>');
 			else
-				el = el.concat('<div class="control-group">	<label class="control-label">'+ucfirst(field.field_label)+'</label><div class="controls"><input type="'+field_type+'" class="'+field.field_type.toLowerCase()+'_input custom_field" id='+field.id+' name="'+field.field_label+'"></div></div>');
+				el = el.concat('<div class="control-group">	<label class="control-label">'+ucfirst(field.field_label)+'</label><div class="controls"><input type="text" class="'+field.field_type.toLowerCase()+'_input custom_field" id='+field.id+' name="'+field.field_label+'"></div></div>');
 		});
 
 		return new Handlebars.SafeString(fillCustomFieldValues($(el), properties));
