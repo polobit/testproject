@@ -336,6 +336,11 @@ margin-top: 10px;
  cursor: pointer;
 }
 
+/* cursor change for .modal-list-cursor tables */
+.model-list-cursor > tr:hover{
+	cursor: pointer;
+}
+
 /* To solve modal header and footer distortion */
 .agile-modal-body
 {
@@ -423,5 +428,20 @@ footer {
    -ms-user-select: none;
    user-select: none;
 }
-	
+
+/* Stripe invoice */
+      .invoice-head td {
+        padding: 0 8px;
+      }
+
+      .invoice-body{
+      	background-color:transparent;
+      }
+      .invoice-thank{
+      	margin-top: 120px;
+      	padding: 5px;
+      }
+      address{
+      	margin-top:15px;
+      }
 	
