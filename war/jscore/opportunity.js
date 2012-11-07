@@ -12,7 +12,15 @@ $(function () {
         var ele = getTemplate("opportunity-detail-popover", currentDeal.toJSON());
         $(this).attr({
         	"rel" : "popover",
-        	"placement" : 'left',
+        	"data-placement" : 'right',
+        	"data-original-title" : currentDeal.toJSON().name,
+        	"data-content" :  ele
+        });
+       
+        // Check for last tr
+        $('#opportunities-model-list > tr:last').attr({
+        	"rel" : "popover",
+        	"data-placement" : 'top',
         	"data-original-title" : currentDeal.toJSON().name,
         	"data-content" :  ele
         });
@@ -51,7 +59,7 @@ $(function () {
 function populateUsers(id, el , value) {
 	
 	// Users
-	var optionsTemplate = "<option value='{{id}}'>{{currentDomainUserName}}</option>";
+	var optionsTemplate = "<option value='{{id}}'>{{agileUser.domainUser.name}}</option>";
 	
 	// Fill owners list
 	fillSelect('owners-list','/core/api/deal-owners', 'userPrefs', function fillOwner() {
