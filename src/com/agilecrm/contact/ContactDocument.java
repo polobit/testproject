@@ -44,9 +44,16 @@ public class ContactDocument
 	for (ContactField contactField : contact.properties)
 	{
 
-	    // If CustomField is not required field then return should not be
+	    CustomFieldDef customField = null;
+
+	    if (contactField.type.equals(ContactField.FieldType.CUSTOM))
+		customField = CustomFieldDef.getFieldByName(contactField.name);
+
+	    // If CustomField is not required field then return should not
+	    // be
 	    // added to document
 	    if (contactField.type.equals(ContactField.FieldType.CUSTOM)
+		    && customField != null
 		    && !CustomFieldDef.getFieldByName(contactField.name).searchable)
 		return;
 

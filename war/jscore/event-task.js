@@ -36,9 +36,14 @@ $(function(){
 	    		    	        $("#activityModal").modal('hide');
 	    	        		    
 	    		       	        var task = data.toJSON();
-	    		       	        
+	    		       	        if(Current_Route == 'calendar'){
+	    		    				
+		    		    	        // Update task list view 
+	    		    	        	App_Calendar.tasksListView.collection.add(data);
+	    		    	        	App_Calendar.tasksListView.render(true);
+	    		    	        }
 	    		       	        // Update data to temeline 
-	    		    			if(App_Contacts.contactDetailView){
+	    		       	        else if(App_Contacts.contactDetailView){
 	    		    				$.each(task.contacts, function(index, contact_id){
 	    		    					if(contact_id == App_Contacts.contactDetailView.model.get('id')){
 	    		    						
@@ -56,14 +61,12 @@ $(function(){
 	    		    					}	
 
 	    		    				});
-	    		    			}else if(Current_Route == 'calendar'){
-	    		    				
-	    		    				console.log(App_Calendar.tasksListView);
-		    		    	        // Update task list view 
-	    		    	        	App_Calendar.tasksListView.collection.add(data);
-	    		    	        	console.log(App_Calendar.tasksListView.collection.toJSON());
-	    		    	        	App_Calendar.tasksListView.render(true);
-	    		    	        }else{
+	    		    				if(Current_Route != "contact/" + App_Contacts.contactDetailView.model.get('id')){
+	    		    					App_Calendar.navigate("calendar", {
+		    		    	        		trigger: true
+		    		    	        	});
+	    		    				}
+	    		       	        }else{
 	    		    	        	App_Calendar.navigate("calendar", {
 	    		    	        		trigger: true
 	    		    	        	});
