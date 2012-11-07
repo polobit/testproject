@@ -99,6 +99,7 @@ public class DomainUser
     {
 	this.domain = domain;
 	this.email = email;
+	this.name = name;
 	this.password = password;
 	this.is_admin = isAdmin;
 	this.is_account_owner = isAccountOwner;
@@ -118,7 +119,6 @@ public class DomainUser
 		    .toUpperCase();
 
 	    domainUser.password = randomNumber;
-	    System.out.println(domainUser + "rest password");
 
 	    // Send an email with the new password
 	    SendMail.sendMail(email, SendMail.FORGOT_PASSWORD_SUBJECT,
@@ -127,7 +127,6 @@ public class DomainUser
 	    try
 	    {
 		domainUser.save();
-		System.out.println(domainUser + "rest password aftr saving");
 	    }
 	    catch (Exception e)
 	    {
@@ -155,8 +154,7 @@ public class DomainUser
 	    setInfo(CREATED_TIME, new Long(System.currentTimeMillis() / 1000));
 
 	// Store password
-	if (password != null && !password.equalsIgnoreCase(MASKED_PASSWORD)
-		&& !password.equals(encrypted_password))
+	if (password != null && !password.equals(MASKED_PASSWORD))
 	{
 	    // Encrypt password while saving
 	    encrypted_password = Util.getMD5HashedPassword(password);
@@ -187,7 +185,6 @@ public class DomainUser
     @PostLoad
     private void PostLoad() throws DecoderException
     {
-
 	try
 	{
 	    if (info_json != null)
@@ -300,15 +297,18 @@ public class DomainUser
     public void save() throws Exception
     {
 	System.out.println("Creating or updating new user " + this);
-	System.out.println(this.id);
 	// Check if user exists with this email
 	DomainUser domainUser = getDomainUserFromEmail(email);
-	if ((domainUser != null)
-		&& (this.id != null && !this.id.equals(domainUser.id)))
-	{
-	    throw new Exception("User already exists with this email address "
-		    + domainUser);
-	}
+	if (domainUser != null)
+	    // if domain user exists, not allowing to create new user
+	    if (this.id == null
+		    || (this.id != null && !this.id.equals(domainUser.id)))
+	    {
+		System.out.println(this.id + " " + domainUser.id);
+		throw new Exception(
+			"User already exists with this email address "
+				+ domainUser);
+	    }
 
 	// Set to current namespace if it is empty
 	if (StringUtils.isEmpty(this.domain))
@@ -343,7 +343,6 @@ public class DomainUser
 	{
 	    try
 	    {
-		System.out.println(this + "new user invitation");
 		SendMail.sendMail(this.email,
 			SendMail.NEW_USER_INVITED_SUBJECT,
 			SendMail.NEW_USER_INVITED, this);
@@ -360,7 +359,6 @@ public class DomainUser
 
 	try
 	{
-	    System.out.println(this + "while saving");
 	    dao.put(this);
 	}
 	finally
