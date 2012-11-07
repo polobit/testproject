@@ -106,7 +106,15 @@
     <url-pattern>/meeting</url-pattern>
   </servlet-mapping>
   
-  
+  <servlet>
+ 	<servlet-name>Reports</servlet-name>
+ 	<servlet-class>com.agilecrm.reports.ReportServlet</servlet-class>
+ </servlet>
+ 
+ <servlet-mapping>
+ 	<servlet-name>Reports</servlet-name>
+ 	<url-pattern>/cron/reports/*</url-pattern>
+ </servlet-mapping>
   
   <filter>
        <filter-name>NamespaceFilter</filter-name>
@@ -152,6 +160,7 @@
  	<filter-name>JSAPIFilter</filter-name>
  	<url-pattern>/core/js/*</url-pattern>
  </filter-mapping>
+   
    
    <welcome-file-list>
    <welcome-file>home</welcome-file>

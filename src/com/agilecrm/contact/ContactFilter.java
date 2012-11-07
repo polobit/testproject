@@ -1,5 +1,6 @@
 package com.agilecrm.contact;
 
+import java.io.Serializable;
 import java.net.URLDecoder;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -11,6 +12,7 @@ import java.util.List;
 
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
+import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.time.DateUtils;
@@ -21,6 +23,7 @@ import org.json.JSONObject;
 import com.agilecrm.core.DomainUser;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.util.DateUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.search.QueryOptions;
 import com.google.appengine.api.search.ScoredDocument;
 import com.googlecode.objectify.Key;
@@ -32,7 +35,7 @@ import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
 @XmlRootElement
-public class ContactFilter
+public class ContactFilter implements Serializable
 {
 
     // Key
@@ -53,20 +56,23 @@ public class ContactFilter
     public boolean is_reports_enabled = false;
 
     // Category of report generation - daily, weekly, monthly.
-    public enum Type
+    public static enum Duration
     {
 	DAILY, WEEKLY, MONTHLY
     };
 
     @Indexed
     @NotSaved(IfDefault.class)
-    public Type duration;
+    public Duration duration;
 
     @NotSaved(IfDefault.class)
     public String rules[] = null;
 
     @NotSaved
     private JSONArray rules_json_array = null;
+
+    @NotSaved(IfDefault.class)
+    public String domain = null;
 
     public static ObjectifyGenericDao<ContactFilter> dao = new ObjectifyGenericDao<ContactFilter>(
 	    ContactFilter.class);
@@ -76,7 +82,7 @@ public class ContactFilter
 
     }
 
-    public ContactFilter(Type duration, String name,
+    public ContactFilter(Duration duration, String name,
 	    boolean is_reports_enabled, String rules[])
     {
 	this.name = name;
@@ -105,6 +111,12 @@ public class ContactFilter
 	return dao.fetchAll();
     }
 
+    @PrePersist
+    void prePersist()
+    {
+	this.domain = NamespaceManager.get();
+    }
+
     public void save()
     {
 	dao.put(this);
@@ -114,6 +126,15 @@ public class ContactFilter
     public Collection<Contact> queryContacts()
     {
 	List<Contact> contacts = new ArrayList<Contact>();
+	try
+	{
+	    rules_json_array = new JSONArray(this.rules);
+	}
+	catch (JSONException e1)
+	{
+	    // TODO Auto-generated catch block
+	    e1.printStackTrace();
+	}
 
 	String query = "";
 
@@ -220,6 +241,8 @@ public class ContactFilter
 	    }
 	}
 
+	System.out.println("query : " + query);
+
 	// return query results
 	return processQuery(query);
     }
@@ -228,13 +251,13 @@ public class ContactFilter
     @PostLoad
     private void setRulesJson()
     {
-	try
+	// try
 	{
-	    rules_json_array = new JSONArray(this.rules);
+	    // rules_json_array = new JSONArray(this.rules);
 	}
-	catch (JSONException e)
+	// catch (JSONException e)
 	{
-	    e.printStackTrace();
+	    // e.printStackTrace();
 	}
     }
 
@@ -298,13 +321,13 @@ public class ContactFilter
 	if (!query.isEmpty() && condition.equals("NOT"))
 	{
 	    query = "(" + query + ")" + " AND " + "(NOT " + newQuery + ")";
+	    return query;
 	}
 
 	// If query is not empty should add AND condition
 	if (!query.isEmpty())
 	{
 	    query = query + " " + condition + " " + newQuery;
-	    System.out.println("query : " + query);
 	    return query;
 	}
 
@@ -343,5 +366,24 @@ public class ContactFilter
 	// Return result contacts
 	return ofy.get(Contact.class, contact_ids).values();
 
+    }
+
+    // Fetch all the filters in App with particular report duration which are
+    // reports enabled
+    public static List<ContactFilter> getAllFiltersByDuration(Duration duration)
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	try
+	{
+	    return dao.ofy().query(ContactFilter.class)
+		    .filter("is_reports_enabled", true)
+		    .filter("duration", duration).list();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
     }
 }
