@@ -2,7 +2,7 @@
 <Module>
   <ModulePrefs title="AgileCRM"
     description="Built with Love for Small Businesses"
-    height="50"
+    height="100"
     author=""
     author_email=""
     author_location="US">
@@ -50,7 +50,7 @@
    
   <br/>
    <div id="content">
-   <img class="loading" style="padding-right:5px" src= "https://googleapps.agilecrm.com/img/21-0.gif"></img>
+   <img id='loading' class="loading" style="padding-right:5px" src= "https://googleapps.agilecrm.com/img/21-0.gif"></img>
    </div>
    
  <script src='https://googleapps.agilecrm.com/lib/headjs-min.js'></script>

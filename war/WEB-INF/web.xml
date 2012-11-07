@@ -115,6 +115,34 @@
  	<servlet-name>Reports</servlet-name>
  	<url-pattern>/cron/reports/*</url-pattern>
  </servlet-mapping>
+
+<servlet>
+  <servlet-name>ForgotDomain</servlet-name> 
+  <jsp-file>/forgot-domain.jsp</jsp-file> 
+  </servlet>
+ <servlet-mapping>
+ <servlet-name>ForgotDomain</servlet-name>
+ <url-pattern>/forgot-domain</url-pattern> 
+ </servlet-mapping>
+
+<servlet>
+ <servlet-name>ForgotPassword</servlet-name> 
+ <jsp-file>/forgot-password.jsp</jsp-file> 
+ </servlet>
+ <servlet-mapping>
+ <servlet-name>ForgotPassword</servlet-name> 
+ <url-pattern>/forgot-password</url-pattern> 
+ </servlet-mapping>
+ 
+ <servlet>
+ <servlet-name>ChooseDomain</servlet-name> 
+<jsp-file>/choose-domain.jsp</jsp-file> 
+</servlet>
+
+<servlet-mapping>
+<servlet-name>ChooseDomain</servlet-name> 
+<url-pattern>/choose-domain</url-pattern> 
+</servlet-mapping>
   
   <filter>
        <filter-name>NamespaceFilter</filter-name>

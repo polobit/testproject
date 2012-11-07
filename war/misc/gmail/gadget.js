@@ -38,6 +38,10 @@ function login() {
        console.log("Fetched " + api_key + " " + domain);
        
        _agile.push(['_setAccount', api_key, domain]);      
+       
+       // Hide Loading Icon
+       document.getElementById('loading').style.display = 'block';
+       
        download_scripts(build_ui);
        
      } else {
@@ -57,7 +61,13 @@ function login() {
        var text = document.createTextNode('Associate your account - one time setup');
        button.appendChild(text);
 
+       document.getElementById('output').innerHTML ="";
        document.getElementById('output').appendChild(button);
+       
+       // Hide Loading Icon
+       document.getElementById('loading').style.display = 'none';
+       
+       gadgets.window.adjustHeight();
      }
    }
 
@@ -185,7 +195,9 @@ function build_ui()
      
  	// Init Handlers
     init_handlers();
-     
+    
+    if(!Is_Localhost)
+		gadgets.window.adjustHeight();
 }
 
 // Retrieve contact details from email list
@@ -202,6 +214,9 @@ function build_ui_for_emails(email_ids){
 						fill_individual_template_ui(val, $('#content'));
 					});
 		});
+		
+		if(!Is_Localhost)
+			gadgets.window.adjustHeight();
 }
 
 function fill_individual_template_ui(val, selector, append){
