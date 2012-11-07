@@ -131,7 +131,8 @@ public class IMAPEmailPrefs
 	    if (this.id != null)
 	    {
 		// Get Old password
-		IMAPEmailPrefs oldUserPrefs = getIMAPEmailPrefs(this.id);
+		IMAPEmailPrefs oldUserPrefs = getIMAPEmailPrefs(this.id,
+			agileUser);
 		this.encrypted_password = oldUserPrefs.encrypted_password;
 	    }
 	}
@@ -146,11 +147,12 @@ public class IMAPEmailPrefs
 	password = Util.decrypt(encrypted_password);
     }
 
-    public static IMAPEmailPrefs getIMAPEmailPrefs(Long id)
+    public static IMAPEmailPrefs getIMAPEmailPrefs(Long id, Key<AgileUser> user)
     {
 	try
 	{
-	    return dao.get(id);
+	    return dao.get(new Key<IMAPEmailPrefs>(user, IMAPEmailPrefs.class,
+		    id));
 	}
 	catch (EntityNotFoundException e)
 	{
