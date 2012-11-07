@@ -30,6 +30,9 @@ public class ReportServlet extends HttpServlet
 
 	List<ContactFilter> contactFilterList = new ArrayList<ContactFilter>();
 
+	if (duration == null)
+	    return;
+
 	// Run query to get all the filter with particular duration in name
 	// space = ""
 	if (duration.equalsIgnoreCase("DAILY"))
