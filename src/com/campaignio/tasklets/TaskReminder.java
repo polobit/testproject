@@ -36,17 +36,21 @@ public class TaskReminder extends HttpServlet
 		AgileUser agileUser = AgileUser
 			.getCurrentAgileUserFromDomainUser(domainUser.id);
 
-		UserPrefs userPrefs = UserPrefs.getUserPrefs(agileUser);
-
-		if (userPrefs.task_reminder)
+		if (agileUser != null)
 		{
-		    List<Task> taskList = Task.getPendingTasksToRemind(1,
-			    new Key<AgileUser>(AgileUser.class, agileUser.id));
+		    UserPrefs userPrefs = UserPrefs.getUserPrefs(agileUser);
 
-		    if (taskList != null)
-			Util.sendMail("test@example.com", "Ram",
-				domainUser.email, "Task Reminder",
-				"test@example.com", "html", null);
+		    if (userPrefs.task_reminder)
+		    {
+			List<Task> taskList = Task.getPendingTasksToRemind(1,
+				new Key<AgileUser>(AgileUser.class,
+					agileUser.id));
+
+			if (taskList != null)
+			    Util.sendMail("test@example.com", "Ram",
+				    domainUser.email, "Task Reminder",
+				    "test@example.com", "html", null);
+		    }
 		}
 	    }
 	}

@@ -107,13 +107,28 @@ $(function(){
 	    
 	});
 	
+	$('#contact-detail-owner').live('change', function(){
+		console.log("changed");
+		var id_array = [];
+		id_array.push(App_Contacts.contactDetailView.model.get('id'));
+		
+		var new_owner_id = $('#contact-detail-owner option:selected').val();
+		var url = '/core/api/contacts/bulk/owner/' + new_owner_id;
+		var json = {};
+		json.contact_ids = JSON.stringify(id_array);
+		$.post(url, json, function(data){
+			console.log("owner changed successfully");
+			$(".change-owner-succes").html('<div class="alert alert-success"><a class="close" data-dismiss="alert" href="#">×</a>Owner has been changed successfully.</div>');
+		});
+   	});
+	
 });
 
 
 $(function(){
 	
 	// Add score
-	    $('#add').live('click', function(e){
+	$('#add').live('click', function(e){
 	    e.preventDefault();
 	    // Convert text to float
 	    var add_score = parseFloat($('#lead-score').text());
@@ -121,19 +136,29 @@ $(function(){
 	    add_score = add_score + 1;
 	    $('#lead-score').text(add_score);
        
-	    var contact_model =  App_Contacts.contactDetailView.model;
+	    var contact_model =  App_Contacts.contactDetailView.model.toJSON();
 	    
-	    contact_model.url = 'core/api/contacts';
+	  /*contact_model.url = 'core/api/contacts';
 	    contact_model.set('lead_score', add_score, {silent: true});
 	
 	    // Save model
-	    contact_model.save();
+	    contact_model.save();*/
+	    
+	    contact_model.lead_score = add_score;
+		
+		var new_model = new Backbone.Model();
+		new_model.url = 'core/api/contacts';
+		new_model.save(contact_model,{
+			success: function(model){
+
+			}
+		});
 		          
-	     });
+	});
 	
 	   
-	    // Subtract score
-	    $('#minus').live('click', function(e){
+	// Subtract score
+	$('#minus').live('click', function(e){
 		e.preventDefault();
 		// Convert text to float
 		var sub_score = parseFloat($('#lead-score').text());
@@ -141,16 +166,26 @@ $(function(){
 		sub_score = sub_score - 1;
 		$('#lead-score').text(sub_score);
 		
-		var contact_model =  App_Contacts.contactDetailView.model;
+		var contact_model =  App_Contacts.contactDetailView.model.toJSON();
 			
-	    contact_model.url = 'core/api/contacts';
+	   /* contact_model.url = 'core/api/contacts';
 		contact_model.set('lead_score', sub_score, {silent: true});
 	 
 		// Save model
 		contact_model.save();
-	    });
+	    */
 	   
-	    $('#score').children().attr('unselectable', 'on');
+	    contact_model.lead_score = sub_score;
+		
+		var new_model = new Backbone.Model();
+		new_model.url = 'core/api/contacts';
+		new_model.save(contact_model,{
+			success: function(model){
+
+			}
+		});
+	});	
+	$('#score').children().attr('unselectable', 'on');
 	    
 });
 
@@ -176,6 +211,16 @@ function starify(el){
         });
         });
     
+}
+
+// Fill owners select dropdown
+function fillOwners(el, data){
+	var optionsTemplate = "<option value='{{agileUser.domain_user_id}}'>{{agileUser.domainUser.name}}</option>";
+    fillSelect('contact-detail-owner','/core/api/deal-owners', 'userPrefs', function presentOwner() {
+    		$('#contact-detail-owner',el).find('option.default-select').remove();
+    		if(data.domainUser)
+    			$('#contact-detail-owner',el).find('option[value='+data.domainUser.id+']').attr("selected", "selected");
+	}, optionsTemplate); 
 }
 
 $(function(){

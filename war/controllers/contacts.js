@@ -178,6 +178,8 @@ var ContactsRouter = Backbone.Router.extend({
                 starify(el);
                 
                 showMap(el);
+                
+                fillOwners(el, contact.toJSON());
                }
         });
         

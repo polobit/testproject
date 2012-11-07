@@ -253,7 +253,9 @@ function propertyJSON(name, id, type) {
 // UI Handlers for Continue-contact and continue-company
 $(function () {
     // Clone Multiple
-    $("i.multiple-add").die().live('click', function (e) {
+    $("a.multiple-add").die().live('click', function (e) {
+    	e.preventDefault();
+    	
         // Clone the template
         $(this).parents("div.control-group").append(
         $(this).parents().siblings("div.controls:first").clone().removeClass('hide'));
@@ -262,7 +264,9 @@ $(function () {
 
 
     // Remove multiple
-    $("i.multiple-remove").live('click', function (e) {
+    $("a.multiple-remove").live('click', function (e) {
+    	e.preventDefault();
+    	
         // Get closest template and remove from the container
         $(this).closest("div.multiple-template").remove();
     });
