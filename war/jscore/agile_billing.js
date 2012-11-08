@@ -86,14 +86,22 @@ $(function(){
 	$("#cancel-account").live('click', function(e){
 		e.preventDefault();
 		
-		// Make sure user really wants to delete the account
-		if(!confirm("Are you sure about canceling  your account , All the data will be permanently deleted...."))
-		{
-			return;
-		}	
+		var el = getTemplate('warning',{});
+
+		$('#content').append(el);
 		
-		// If user is sure change the id so that we add delete class and trigger click event and base model deleteitem will be called
-		$(this).attr('id',"changed");
-		$(this).addClass('delete').trigger('click');
+		$("#warning-deletion").modal('show');
+		
+		var that = this;
+		
+		$("#confirm-delete-account").live('click',function(e){
+			e.preventDefault();
+			
+			$("#warning-deletion").modal('hide');
+			
+			// If user is sure change the id so that we add delete class and trigger click event and base model deleteitem will be called
+			$(that).attr('id',"changed");
+			$(that).addClass('delete').trigger('click');
+		});
 	})
 });

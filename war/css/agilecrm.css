@@ -453,3 +453,27 @@ footer {
   display: inline-block;
   text-indent: -9999px;
 }
+
+
+.warning-dangerzone
+{
+	padding: 5px 10px;
+	margin-top;
+	margin-left;;
+	font-weight;
+	color;
+	background: url("../img/warning.png") 10px 50% no-repeat #FFFBC9;
+	border-bottom:1px solid #EDE7A3;
+}
+
+.warning-dangerzone p
+{	
+	margin-left:45px;
+	margin-top:10px;
+}
+
+.warning-header
+{
+	font: 13px Helvetica, arial, freesans, clean, sans-serif;
+	line-height: 1.4;	
+}
