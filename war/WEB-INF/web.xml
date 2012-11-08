@@ -117,6 +117,16 @@
  </servlet-mapping>
 
 <servlet>
+ 	<servlet-name>Stripe Webhook</servlet-name>
+ 	<servlet-class>com.agilecrm.subscription.StripeWebhookServlet</servlet-class>
+ </servlet>
+ 
+ <servlet-mapping>
+ 	<servlet-name>Stripe Webhook</servlet-name>
+ 	<url-pattern>/stripewebhook/*</url-pattern>
+ </servlet-mapping>
+
+<servlet>
   <servlet-name>ForgotDomain</servlet-name> 
   <jsp-file>/forgot-domain.jsp</jsp-file> 
   </servlet>

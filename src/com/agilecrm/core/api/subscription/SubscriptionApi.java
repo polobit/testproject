@@ -15,6 +15,8 @@ import javax.ws.rs.core.Response;
 import com.agilecrm.billing.CreditCard;
 import com.agilecrm.billing.Plan;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.util.DBUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.stripe.exception.StripeException;
 
 @Path("/api/subscription")
@@ -106,13 +108,18 @@ public class SubscriptionApi
 	return Subscription.updateCreditCard(card_details);
     }
 
-    @Path("/delete/customer")
     @DELETE
     public void deleteSubscription()
     {
 	try
 	{
-	    Subscription.getSubscription().deleteCustomer();
+	    Subscription subscription = Subscription.getSubscription();
+
+	    // Check if subscription is null
+	    if (subscription != null)
+		subscription.delete();
+
+	    DBUtil.deleteNamespace(NamespaceManager.get());
 	}
 	catch (Exception e)
 	{
@@ -128,7 +135,7 @@ public class SubscriptionApi
     {
 	try
 	{
-	    Subscription.getSubscription().cancelSubscription();
+	    Subscription.getSubscription().delete();
 	}
 	catch (Exception e)
 	{

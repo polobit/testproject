@@ -293,6 +293,13 @@ public class DomainUser
 	}
     }
 
+    // Get Account owners
+    public static DomainUser getDomainOwner()
+    {
+	return dao.ofy().query(DomainUser.class)
+		.filter("is_account_owner", true).get();
+    }
+
     // Save
     public void save() throws Exception
     {

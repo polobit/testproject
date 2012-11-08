@@ -82,8 +82,13 @@ public class DBUtil
 	return results;
     }
 
-    static void deleteNamespace(String namespace)
+    public static void deleteNamespace(String namespace)
     {
+	// If namespace is null or is empty return with out deleting
+	// entities
+	if (namespace == null || namespace.isEmpty())
+	    return;
+
 	NamespaceDeleteDeferredTask namespaceDeleteDeferredTask = new NamespaceDeleteDeferredTask(
 		namespace);
 	Queue queue = QueueFactory.getDefaultQueue();
@@ -95,7 +100,6 @@ public class DBUtil
 
 	try
 	{
-
 	    // Get All Entity Keys in the Kind
 	    List<Key> keys = new LinkedList<Key>();
 

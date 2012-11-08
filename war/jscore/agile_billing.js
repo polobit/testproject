@@ -81,3 +81,19 @@ function deserializeCardDetails(data, form)
 
 	});
 }
+
+$(function(){
+	$("#cancel-account").live('click', function(e){
+		e.preventDefault();
+		
+		// Make sure user really wants to delete the account
+		if(!confirm("Are you sure about canceling  your account , All the data will be permanently deleted...."))
+		{
+			return;
+		}	
+		
+		// If user is sure change the id so that we add delete class and trigger click event and base model deleteitem will be called
+		$(this).attr('id',"changed");
+		$(this).addClass('delete').trigger('click');
+	})
+});

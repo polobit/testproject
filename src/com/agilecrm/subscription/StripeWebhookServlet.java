@@ -3,6 +3,7 @@ package com.agilecrm.subscription;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServlet;
@@ -15,6 +16,7 @@ import org.json.JSONObject;
 import com.agilecrm.Globals;
 import com.agilecrm.core.DomainUser;
 import com.agilecrm.util.Util;
+import com.google.appengine.api.NamespaceManager;
 
 public class StripeWebhookServlet extends HttpServlet
 {
@@ -35,6 +37,10 @@ public class StripeWebhookServlet extends HttpServlet
 	    stripe_event_message += (line);
 	}
 
+	// If event message is empty return
+	if (stripe_event_message.isEmpty())
+	    return;
+
 	try
 	{
 	    JSONObject eventJSON = new JSONObject(stripe_event_message);
@@ -52,13 +58,20 @@ public class StripeWebhookServlet extends HttpServlet
 		if (number_of_attempts == 1)
 		{
 		    Util.sendMail("praveen@invox.com", "yaswanth",
-			    DomainUser.getDomainCurrentUser().email,
-			    "paymentfailed", "praveen@invox.com",
-			    "your payment failed", null);
+			    DomainUser.getDomainOwner().email, "paymentfailed",
+			    "praveen@invox.com", "your payment failed", null);
 		}
 		else if (number_of_attempts == 2)
 		{
-		    // Send email to all admins
+		    List<DomainUser> domainUsers = DomainUser
+			    .getUsers(NamespaceManager.get());
+		    for (DomainUser domainUser : domainUsers)
+		    {
+			Util.sendMail("praveen@invox.com", "yaswanth",
+				domainUser.email, "paymentfailed 2nd time",
+				"praveen@invox.com", "your payment failed",
+				null);
+		    }
 		}
 	    }
 	    else if (eventJSON.getString("type").equals(

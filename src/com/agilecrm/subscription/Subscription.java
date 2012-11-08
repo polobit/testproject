@@ -182,12 +182,11 @@ public class Subscription
     public void deleteCustomer() throws Exception
     {
 	getAgileBilling().deleteCustomer(billing_data);
-
-	delete();
     }
 
     public void delete() throws Exception
     {
+	// Delete the customer before deleting agile subscription object
 	deleteCustomer();
 	dao.delete(this);
     }
