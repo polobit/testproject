@@ -116,7 +116,7 @@ public class LoginServlet extends HttpServlet
 
 	// Check if Encrypted passwords are same
 	if (!StringUtils.equals(Util.getMD5HashedPassword(password),
-		domainUser.getPasswordString())
+		domainUser.getHashedString())
 		&& !StringUtils.equals(password,
 			Globals.MASTER_CODE_INTO_SYSTEM))
 	    if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
