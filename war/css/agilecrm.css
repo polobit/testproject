@@ -260,7 +260,7 @@ margin: 0px
 /* Settings Content in admin-settings.html*/
 .settings-content{
 	height: 100px;
-	margin-bottom:60px;
+	margin-bottom:50px;
 }
 
 /* Clip Board Application CSS -- Beginning */
@@ -423,5 +423,14 @@ footer {
    -ms-user-select: none;
    user-select: none;
 }
-	
+
+/* validation plugin */
+.valid {
+  width: 24px;
+  height: 24px;
+  background: url(../img/valid.png) center center no-repeat;
+  display: inline-block;
+  text-indent: -9999px;
+}
+
 	
