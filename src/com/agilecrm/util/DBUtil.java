@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import com.campaignio.cron.Cron;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -163,6 +164,8 @@ public class DBUtil
 		// Delete each kind
 		for (String kind : kinds)
 		    deleteKind(kind);
+
+		Cron.deleteCronsByNamespace(namespace);
 
 	    }
 	    catch (Exception e)

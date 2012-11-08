@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -78,6 +79,7 @@ public class Cron extends HttpServlet
     public String subscriber_id;
 
     // Store NameSpace
+    @Indexed
     public String namespace;
 
     // Duration Type
@@ -161,6 +163,13 @@ public class Cron extends HttpServlet
 	dao.delete(this);
     }
 
+    public void deleteByNameSpace(String namespace)
+    {
+	NamespaceManager.set(namespace);
+
+	dao.ofy().query(Cron.class).filter("namespace", namespace).listKeys();
+    }
+
     public void save()
     {
 
@@ -197,6 +206,21 @@ public class Cron extends HttpServlet
 	searchMap.put("campaign_id", campaignId);
 
 	return dao.listByProperty(searchMap);
+    }
+
+    // Get cron by namespace
+    public static void deleteCronsByNamespace(String namespace)
+    {
+	// If namespace is empty return
+	if (StringUtils.isEmpty(namespace))
+	    return;
+
+	// Get cron key list related to given namespace
+	List<Key<Cron>> cron_keys = dao.ofy().query(Cron.class)
+		.filter("namespace", namespace).listKeys();
+
+	// Delete crons
+	dao.ofy().delete(cron_keys);
     }
 
     // Enqueue Task
