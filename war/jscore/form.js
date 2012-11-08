@@ -277,14 +277,19 @@ function isValidForm(form) {
 	        errorElement: 'span',
 	        errorClass: 'help-inline',
 	        highlight: function (element, errorClass) {    
-	        	$(element).closest(".control-group").addClass('error');
+	        	$(element).closest(".control-group").addClass('error').removeClass('success').removeClass('valid');
 	        },
 	        unhighlight: function (element, errorClass) {
-	        	 $(element).closest(".control-group").removeClass('error'); 
+	        	 $(element).closest(".control-group").removeClass('error').removeClass('valid'); 
 	        },
 	        invalidHandler: function (form, validator) {
 	            var errors = validator.numberOfInvalids();
-	        }
+	        },
+	        success: function(element, errorClass) {
+	        	$(element)
+	        	.text('OK!').addClass('valid')
+	        	.closest('.control-group').addClass('success').removeClass('error');
+	        	}
 	    })	
 	
     return $(form).valid();

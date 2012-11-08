@@ -177,7 +177,7 @@ public class DomainUser
 	domain = StringUtils.lowerCase(domain);
     }
 
-    public String getPasswordString()
+    public String getHashedString()
     {
 	return encrypted_password;
     }
@@ -296,19 +296,35 @@ public class DomainUser
     // Save
     public void save() throws Exception
     {
-	System.out.println("Creating or updating new user " + this);
-	// Check if user exists with this email
 	DomainUser domainUser = getDomainUserFromEmail(email);
+	System.out.println("Creating or updating new user " + this);
+
+	// Check if user exists with this email
+
 	if (domainUser != null)
+	{
 	    // if domain user exists, not allowing to create new user
 	    if (this.id == null
 		    || (this.id != null && !this.id.equals(domainUser.id)))
 	    {
-		System.out.println(this.id + " " + domainUser.id);
 		throw new Exception(
 			"User already exists with this email address "
 				+ domainUser);
 	    }
+
+	    // if domain user exists,setting to name if null
+	    if (this.name == null)
+	    {
+		this.name = domainUser.name;
+	    }
+
+	    // if existing domain user is owner
+	    if (domainUser.is_account_owner)
+	    {
+		this.is_account_owner = true;
+	    }
+
+	}
 
 	// Set to current namespace if it is empty
 	if (StringUtils.isEmpty(this.domain))
@@ -394,9 +410,9 @@ public class DomainUser
     // To String
     public String toString()
     {
-	return " Email: " + this.email + " Domain: " + this.domain
-		+ " IsAdmin: " + this.is_admin + " DomainId: " + this.id
-		+ " Name:" + name + " " + " " + info_json;
+	return "\n Email: " + this.email + " Domain: " + this.domain
+		+ "\n IsAdmin: " + this.is_admin + " DomainId: " + this.id
+		+ " Name: " + this.name + "\n " + info_json;
 
     }
 

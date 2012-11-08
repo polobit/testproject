@@ -3,6 +3,23 @@ function isArray(a)
     return Object.prototype.toString.apply(a) === '[object Array]';
 }
 
+$(function(){
+
+	$("#add-task").live('click', function(e){
+		e.preventDefault();
+		$('#activityModal').modal('show');
+		highlightTask();
+	    var	el = $("#taskForm");
+		agile_type_ahead("task_related_to", el, contacts_typeahead);
+	});
+	
+	$("#add-event").live('click', function(e){
+		e.preventDefault();
+		$('#activityModal').modal('show');
+		highlightEvent();
+	});
+	
+});
 
 function showCalendar() {
     $('#calendar').fullCalendar({
