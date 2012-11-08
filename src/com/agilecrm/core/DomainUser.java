@@ -22,6 +22,7 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -45,6 +46,7 @@ public class DomainUser
     public boolean is_admin = false;
 
     // Account Owner
+    @Indexed
     @NotSaved(IfDefault.class)
     public boolean is_account_owner = false;
 
