@@ -167,7 +167,10 @@ public class Cron extends HttpServlet
     {
 	NamespaceManager.set(namespace);
 
-	dao.ofy().query(Cron.class).filter("namespace", namespace).listKeys();
+	List<Key<Cron>> cronKeys = dao.ofy().query(Cron.class)
+		.filter("namespace", namespace).listKeys();
+
+	dao.deleteKeys(cronKeys);
     }
 
     public void save()
