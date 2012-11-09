@@ -36,8 +36,6 @@ function fillSelect(selectId, url, parseKey, callback, template) {
 	var collection = new collection_def();
 	collection.fetch({
 		success : function() {
-			console.log(collection.models);
-			console.log(collection.toJSON());
 
 			// Remove loading
 			$('.loading').remove();

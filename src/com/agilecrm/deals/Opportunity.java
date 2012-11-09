@@ -25,7 +25,6 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.NotSaved;
-import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.condition.IfDefault;
 
 @XmlRootElement
@@ -35,9 +34,6 @@ public class Opportunity
     // Key
     @Id
     public Long id;
-
-    @Parent
-    private Key<AgileUser> user;
 
     private List<Key<Contact>> related_contacts = new ArrayList<Key<Contact>>();
 
@@ -68,7 +64,7 @@ public class Opportunity
     public String owner = null;
 
     @NotSaved(IfDefault.class)
-    private Key<UserPrefs> ownerKey = null;
+    private Key<AgileUser> ownerKey = null;
 
     @NotSaved(IfDefault.class)
     @Embedded
@@ -331,7 +327,7 @@ public class Opportunity
 	    created_time = System.currentTimeMillis() / 1000;
 
 	// Save agile user key
-	ownerKey = new Key<UserPrefs>(UserPrefs.class, Long.parseLong(owner));
+	ownerKey = new Key<AgileUser>(AgileUser.class, Long.parseLong(owner));
 	System.out.println("OwnerKey" + ownerKey);
     }
 
@@ -357,21 +353,16 @@ public class Opportunity
 	    UserPrefs users = null;
 	    try
 	    {
-
-		AgileUser agileuser = AgileUser.getCurrentAgileUser();
-
-		// Get Users from data store
-		Key<AgileUser> user = new Key<AgileUser>(AgileUser.class,
-			agileuser.id);
-		users = ofy.get(new Key<UserPrefs>(user, UserPrefs.class,
-			ownerKey.getId()));
+		// Get User prefs to return to access owner name , pic etc..
+		// details
+		users = ofy.query(UserPrefs.class).ancestor(ownerKey).get();
 	    }
 	    catch (Exception e)
 	    {
 		e.printStackTrace();
 	    }
-	    if (users != null)
-		return users;
+
+	    return users;
 
 	}
 	return null;
