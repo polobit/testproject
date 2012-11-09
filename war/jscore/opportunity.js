@@ -59,7 +59,7 @@ $(function () {
 function populateUsers(id, el , value) {
 
 	// Users set id of agile user to save agileuser key in opportunities
-	var optionsTemplate = "<option value='{{agileUser.id}}'>{{agileUser.domainUser.name}}</option>";
+	var optionsTemplate = "<option value='{{agile_user.id}}'>{{name}}</option>";
 	
 	// Fill owners list
 	fillSelect('owners-list','/core/api/deal-owners', 'userPrefs', function fillOwner() {
@@ -67,7 +67,7 @@ function populateUsers(id, el , value) {
 		if(value)
 		{
 			// While deserialize set agile user id from user prefs to save agile user key in opportunity 
-			$('#owners-list',el).find('option[value='+value.owner.agileUser.id+']').attr("selected", "selected");;
+			$('#owners-list',el).find('option[value='+value.owner.agile_user.id+']').attr("selected", "selected");;
 		}			
 	}, optionsTemplate); 
 }
