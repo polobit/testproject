@@ -11,19 +11,20 @@
 			<form id='addTrigger' name="addTriggerForm" class="form-horizontal">
 				<fieldset>
 					<legend>Add Trigger</legend>
-
-					<input name="id" type="hidden" value="{{id}}"/> 		
+                    {{#if id}}
+					<input name="id" type="hidden" value="{{id}}"/>
+                    {{/if}} 		
 					<div class="control-group">
                     	<label class="control-label">Name <span class="field_req">*</span></label>
 						<div class="controls">
 				    <input type="text" id="name" class="required" name="name" />
 						</div>
 					</div>
-
+                    
 					<div class="control-group">
                     	<label class="control-label">Condition  <span class="field_req">*</span></label>
 						<div class="controls ">
-                           <select id="type" name="type" class="required">
+                           <select id="trigger-type" name="type" class="required">
                               <option></option>
                               <option value="TAG_IS_ADDED">Tag is added</option>
                               <option value="TAG_IS_DELETED">Tag is deleted</option>
@@ -31,9 +32,16 @@
                               <option value="CONTACT_IS_DELETED">Contact is deleted</option>
                               <option value="DEAL_IS_ADDED">Deal is added</option>
                               <option value="DEAL_IS_DELETED">Deal is deleted</option>
+                              <option value="ADD_SCORE" id="add-score">Add score</option>
                        </select>
+                        
+                    <div style="display:inline-block">
+                      <input type="text" value="50" id="add-score-value" name="score_value" class="span2" style="display:none;margin-left:5px">
+                     </div>
 						</div>
-					</div>
+					
+                    
+                     </div>
 					
 					<div class="control-group">
                     	<label class="control-label">Campaign  <span class="field_req">*</span></label>

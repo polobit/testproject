@@ -11,4 +11,14 @@ $(function(){
 			}
 		
 	});
+	
+	$('#trigger-type').live('change',function(e){
+		e.preventDefault();
+		
+		if($('#trigger-type option:selected').val() == 'ADD_SCORE')
+		$('#add-score-value').css('display', 'inline-block');
+		else
+		$('#add-score-value').css('display','none');
+	});
+	
 });
