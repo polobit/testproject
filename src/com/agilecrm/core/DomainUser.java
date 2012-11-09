@@ -303,7 +303,7 @@ public class DomainUser
 
 	if (domainUser != null)
 	{
-	    // if domain user exists, not allowing to create new user
+	    // If domain user exists, not allowing to create new user
 	    if (this.id == null
 		    || (this.id != null && !this.id.equals(domainUser.id)))
 	    {
@@ -312,16 +312,18 @@ public class DomainUser
 				+ domainUser);
 	    }
 
-	    // if domain user exists,setting to name if null
+	    // If domain user exists,setting to name if null
 	    if (this.name == null)
 	    {
 		this.name = domainUser.name;
 	    }
 
-	    // if existing domain user is owner
+	    // If existing domain user is Super User
 	    if (domainUser.is_account_owner)
 	    {
 		this.is_account_owner = true;
+		this.is_admin = true;
+		this.is_disabled = false;
 	    }
 
 	}
@@ -347,12 +349,6 @@ public class DomainUser
 	if (count() >= Globals.TRIAL_USERS_COUNT && this.id == null)
 	    throw new Exception(
 		    "Please upgrade. You cannot add more than 2 users in the free plan");
-
-	// Super User should always be the admin
-	if (this.is_account_owner && !this.is_admin)
-	{
-	    this.is_admin = true;
-	}
 
 	// Send Email
 	if (this.id == null)

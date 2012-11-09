@@ -1,7 +1,7 @@
 <script id="opportunity-detail-popover-template" type="text/html">
 	<div class='row-fluid'>
 		<div class="span12" style="margin-left:0px;">
-            <div class="span11">
+            <div>
                 <div style="text-align: justify;font-style: italic;">
 					  {{description}}
                 </div>
@@ -9,11 +9,11 @@
                 <div style="padding:5px;">
 					  Owner: {{owner.currentDomainUserName}}<br/>
                       Related To:<br/> {{#each contacts}}
-		                            <div class="span3" style="display:inline;">
-                                       <img class="thumbnail" src="{{gravatarurl properties 50}}" width='40px' height='40px'>
-                                        <span style="text-overflow:ellipsis;white-space:nowrap;width:12em;overflow:hidden;">
+		                            <div class="span3" style="display:inline;margin-left:0px;">
+                                        <img class="thumbnail" src="{{gravatarurl properties 50}}" width='40px' height='40px'>
+                                        <div style="display:inline-block;text-overflow:ellipsis;white-space:nowrap;width:4em;overflow:hidden;">
                                            {{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}},
-                                        </span>
+                                        </div>
                                     </div>
 	                              {{/each}}
                 </div>

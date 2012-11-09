@@ -85,17 +85,17 @@ public class Widget
 	List<Widget> widgets = new ArrayList<Widget>();
 	widgets.add(new Widget(
 		"Linkedin",
-		" LinkedIn offers an effective way by which people can develop an extensive list of contacts, as your network consists of your own connections.",
+		" LinkedIn helps build professional relationships with contacts and helps keep tabs about their business interests.",
 		"/widgets/linkedin.js", "/img/plugins/linkedin.png",
 		"/widgets/linkedin-logo-small.png", null));
 	widgets.add(new Widget(
 		"Twitter",
-		" Twitter to connect to their interests and find out what's happening in the world right now. Anyone can read, write and share messages.",
+		" Twitter offers a great way of engaging with contacts in real time based on what they tweet.",
 		"/widgets/twitter.js", "/img/plugins/twitter.jpg",
 		"/widgets/twitter-logo-small.png", null));
 	widgets.add(new Widget(
 		"Rapleaf",
-		" Its MISSION is to make it incredibly easy for marketers to access the data they need to personalize content for their customers.",
+		" Rapleaf makes it incredibly easy for you to personalize content for your customers.",
 		"/widgets/rapleaf.js", "/img/plugins/rapleaf.jpeg",
 		"/widgets/rapleaf-logo-small.jpeg", null));
 
