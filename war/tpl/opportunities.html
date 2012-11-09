@@ -76,9 +76,9 @@ Deals are opportunities you can continuously track throughout its life cycle. Yo
 	<div><b>{{name}}</b></div>
 </td>  	
 
-	<td>({{owner.currency}})<br/>{{expected_value}}</td>
+	<td>({{currencySymbol owner.currency}})<br/>{{expected_value}}</td>
 	<td>{{milestone}}<br/>({{probability}}%) </td>
-    <td>({{owner.currency}})<br/>{{calculatePipeline expected_value probability pipeline}} </td>
+    <td>({{currencySymbol owner.currency}})<br/>{{calculatePipeline expected_value probability pipeline}} </td>
 	<td>{{epochToHumanDate "mm-dd-yy" close_date}}</td>
 	<td><div style='display:inline;padding-right:10px;height:auto;'>
 		<img src="{{owner.pic}}" width='40px' height='40px'>
