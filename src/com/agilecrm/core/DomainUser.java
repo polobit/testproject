@@ -331,10 +331,20 @@ public class DomainUser
 	    if (domainUser.is_account_owner)
 	    {
 		this.is_account_owner = true;
-		this.is_admin = true;
 		this.is_disabled = false;
+		if (!this.is_admin)
+		{
+		    this.is_admin = true;
+		    throw new Exception(
+			    "Super user should be Admin and cannot be disabled.");
+		}
 	    }
+	}
 
+	// User cannot be admin and disabled
+	if (this.is_admin == true && this.is_disabled == true)
+	{
+	    throw new Exception("User cannot be admin and disabled at a time.");
 	}
 
 	// Set to current namespace if it is empty
