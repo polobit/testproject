@@ -296,7 +296,13 @@ $(function()
                 
 				return (monthArray[intMonth] + " " + intDay + ", " + intYear);
 			});
-
+	
+	// Currency symbol
+	Handlebars.registerHelper('currencySymbol', function(value)
+	{
+		var symbol = value.substring(4,value.length);
+		return symbol;
+	});
 
 	// Calculate pipeline (value * probability)
 	Handlebars.registerHelper('calculatePipeline', function(value, probability)
