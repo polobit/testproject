@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -17,6 +18,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
@@ -161,6 +164,17 @@ public class API
     {
 	return ContactView.getContactView(id);
 
+    }
+
+    // Bulk delete Contact Views by id Author: Yaswanth 11-08-2012
+    @Path("contact-view/delete/bulk")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void deleteBulkContactViews(@FormParam("model_ids") String model_ids)
+	    throws JSONException
+    {
+	JSONArray ContactViewsJSONArray = new JSONArray(model_ids);
+	ContactView.dao.deleteBulkByIds(ContactViewsJSONArray);
     }
 
     // Contact view Save Author: Yaswanth 08-10-2012
