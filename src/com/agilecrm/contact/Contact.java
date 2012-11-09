@@ -75,6 +75,7 @@ public class Contact extends Cursor
     public Short star_value = 0;
 
     // Lead score
+    @Indexed
     public Integer lead_score = 0;
 
     // Dao
@@ -226,11 +227,46 @@ public class Contact extends Cursor
 
     public void save()
     {
-	dao.put(this);
+	
+    dao.put(this);
 
 	Trigger.executeTrigger(this.id, Trigger.Type.CONTACT_IS_ADDED);
-
+	
 	ContactDocument.buildDocument(this);
+	
+	// Get triggers 
+	List<Trigger> triggerslist = null;
+
+	try{
+		
+	    triggerslist = Trigger
+		    .getTriggersByCondition(Trigger.Type.ADD_SCORE);
+	    System.out.println("Triggers should execute" + triggerslist);
+	     if(triggerslist != null)
+	    {
+	    	 for(Trigger triggers: triggerslist)
+
+		{
+		   
+		    if (triggers.score_value != null)
+		    {
+		      // Fetch contacts
+		      Objectify ofy = ObjectifyService.begin();
+		      List<Contact> contacts = ofy.query(Contact.class).filter("lead_score >=", Integer.parseInt(triggers.score_value )).list();
+		
+		      // Execute trigger for contacts having score greater than given value
+		      for(Contact contactslist:contacts)
+			    Trigger.executeTrigger(contactslist.id,
+				    Trigger.Type.ADD_SCORE);
+		    }
+	    	 }
+	    }
+	}
+	
+	catch(Exception e)
+	{
+		e.printStackTrace();
+	}
 
     }
 
@@ -327,10 +363,11 @@ public class Contact extends Cursor
 	{
 	    this.tags.add(tag);
 	}
-
-	this.save();
+    this.save();
+	
 	// Execute Trigger
 	Trigger.executeTrigger(this.id, Trigger.Type.TAG_IS_ADDED);
+		
     }
 
     // Remove tags
@@ -358,6 +395,7 @@ public class Contact extends Cursor
 
 	this.lead_score = this.lead_score + score;
 	this.save();
+	
     }
 
     // Subtract score
@@ -366,6 +404,7 @@ public class Contact extends Cursor
 
 	this.lead_score = this.lead_score - score;
 	this.save();
+	
     }
 
     // Get contacts bulk

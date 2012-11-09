@@ -20,7 +20,7 @@ public class Tags extends TaskletAdapter
 	    JSONObject data, JSONObject nodeJSON) throws Exception
     {
 
-	// Get Score and Type
+	// Get Tags and Type
 	String type = getStringValue(nodeJSON, subscriberJSON, data, TYPE);
 	String tagNames = getStringValue(nodeJSON, subscriberJSON, data,
 		TAG_NAMES);

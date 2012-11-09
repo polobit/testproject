@@ -224,7 +224,8 @@ function fillOwners(el, data){
 }
 
 $(function(){
-	  $('#element').live('mouseenter',function(e){
+	  // Popover for help in contacts,tasks etc
+	    $('#element').live('mouseenter',function(e){
 	    	e.preventDefault();
 	        $(this).popover({
 	        	template:'<div class="popover"><div class="arrow"></div><div class="popover-inner"><div class="popover-content"><p></p></div></div></div>'
