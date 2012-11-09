@@ -68,6 +68,10 @@ public class ReportsUtil
 	// put in a map with its respective domain name as key
 	for (ContactFilter contactFilter : contactFilters)
 	{
+	    // Make sure domain is not null or empty
+	    if (contactFilter.domain == null || contactFilter.domain.isEmpty())
+		continue;
+
 	    // If domain name is already a key then add contact filter to
 	    // existing list
 	    if (filtersMap.containsKey(contactFilter.domain))

@@ -218,12 +218,21 @@ public class Cron extends HttpServlet
 	if (StringUtils.isEmpty(namespace))
 	    return;
 
-	// Get cron key list related to given namespace
-	List<Key<Cron>> cron_keys = dao.ofy().query(Cron.class)
-		.filter("namespace", namespace).listKeys();
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+	try
+	{
+	    // Get cron key list related to given namespace
+	    List<Key<Cron>> cron_keys = dao.ofy().query(Cron.class)
+		    .filter("namespace", namespace).listKeys();
 
-	// Delete crons
-	dao.ofy().delete(cron_keys);
+	    // Delete crons
+	    dao.ofy().delete(cron_keys);
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
     }
 
     // Enqueue Task

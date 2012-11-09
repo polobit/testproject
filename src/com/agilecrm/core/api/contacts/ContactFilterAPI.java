@@ -28,7 +28,7 @@ public class ContactFilterAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<ContactFilter> getContactFilters()
     {
-	return ContactFilter.getAllContactFilters();
+	return ContactFilter.getCurrentNamespaceFilters();
     }
 
     // Save Filter contacts

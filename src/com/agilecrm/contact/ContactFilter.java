@@ -94,6 +94,8 @@ public class ContactFilter implements Serializable
     // Get Contact Filter by id
     public static ContactFilter getContactFilter(Long id)
     {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
 	try
 	{
 	    return dao.get(id);
@@ -103,12 +105,41 @@ public class ContactFilter implements Serializable
 	    e.printStackTrace();
 	    return null;
 	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
     }
 
     // Fetch list of Contact Filters
     public static List<ContactFilter> getAllContactFilters()
     {
-	return dao.fetchAll();
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+	try
+	{
+	    return dao.fetchAll();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
+
+    // Get the list of contact filter replated to current namespace
+    public static List<ContactFilter> getCurrentNamespaceFilters()
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+	try
+	{
+	    return dao.ofy().query(ContactFilter.class)
+		    .filter("domain", oldNamespace).list();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
     }
 
     @PrePersist
@@ -119,7 +150,17 @@ public class ContactFilter implements Serializable
 
     public void save()
     {
-	dao.put(this);
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	try
+	{
+	    dao.put(this);
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
     }
 
     // Perform queries to fetch contacts
