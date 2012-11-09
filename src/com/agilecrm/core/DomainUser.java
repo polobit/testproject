@@ -20,6 +20,7 @@ import com.agilecrm.util.SendMail;
 import com.agilecrm.util.Util;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.Indexed;
@@ -394,6 +395,25 @@ public class DomainUser
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set("");
 	dao.delete(this);
+	NamespaceManager.set(oldNamespace);
+    }
+
+    // Delete domain users in a domain
+    public static void deleteDomainUsers(String namespace)
+    {
+	if (StringUtils.isEmpty(namespace))
+	    return;
+
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	// Get keys of domain users in respective domain
+	List<Key<DomainUser>> domainUserKeys = dao.ofy()
+		.query(DomainUser.class).filter("domain", namespace).listKeys();
+
+	// Delete domain users in domain
+	dao.deleteKeys(domainUserKeys);
+
 	NamespaceManager.set(oldNamespace);
     }
 
