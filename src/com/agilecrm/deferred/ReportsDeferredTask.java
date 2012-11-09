@@ -24,13 +24,10 @@ public class ReportsDeferredTask implements DeferredTask
     {
 	for (String domain : contactFilterMap.keySet())
 	{
-
-	    List<DomainUser> user = DomainUser.getUsers(domain);
-	    List<ContactFilter> contactFilter = contactFilterMap.get(domain);
-
+	    // Call send reports on map of filters to process filters and send
+	    // reports to respective domain users
 	    ReportsUtil.sendReportsToUsers(DomainUser.getUsers(domain),
 		    contactFilterMap.get(domain));
-
 	}
     }
 }
