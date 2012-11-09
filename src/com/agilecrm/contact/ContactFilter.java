@@ -12,7 +12,6 @@ import java.util.List;
 
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
-import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.time.DateUtils;
@@ -142,15 +141,9 @@ public class ContactFilter implements Serializable
 	}
     }
 
-    @PrePersist
-    void prePersist()
-    {
-	this.domain = NamespaceManager.get();
-    }
-
     public void save()
     {
-	String oldNamespace = NamespaceManager.get();
+	this.domain = NamespaceManager.get();
 	NamespaceManager.set("");
 
 	try
@@ -159,7 +152,7 @@ public class ContactFilter implements Serializable
 	}
 	finally
 	{
-	    NamespaceManager.set(oldNamespace);
+	    NamespaceManager.set(this.domain);
 	}
     }
 
