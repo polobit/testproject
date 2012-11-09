@@ -61,8 +61,14 @@
             </span>
           </span> 
          <br/>
+         
+         {{#if lead_score}}
           <span id="lead-score" style="font-size:25px; padding-left:12px">{{lead_score}}</span>&nbsp;
-          <div style="display:inline-block; vertical-align:middle">
+          {{else}}
+          <span id="lead-score" style="font-size:25px; padding-left:12px">0</span>&nbsp;
+          {{/if}}
+          
+       <div style="display:inline-block; vertical-align:middle">
            <span><a><i class="icon-plus" id="add"></i></a></span>
            <br/>
            <span><a><i class="icon-minus" id="minus"></i></a></span>

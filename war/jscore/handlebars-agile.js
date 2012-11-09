@@ -400,6 +400,14 @@ $(function()
 		}
 	});
 	
+	// Lead Score if greater than zero return
+	Handlebars.registerHelper('lead_score',function(value){
+		if(this.lead_score >0)
+			return this.lead_score;
+		else
+			return "";
+	});
+	
 	// Return task completion status
 	Handlebars.registerHelper('task_status', function(status){
 		console.log(status);

@@ -234,40 +234,7 @@ public class Contact extends Cursor
 	
 	ContactDocument.buildDocument(this);
 	
-	// Get triggers 
-	List<Trigger> triggerslist = null;
-
-	try{
-		
-	    triggerslist = Trigger
-		    .getTriggersByCondition(Trigger.Type.ADD_SCORE);
-	    System.out.println("Triggers should execute" + triggerslist);
-	     if(triggerslist != null)
-	    {
-	    	 for(Trigger triggers: triggerslist)
-
-		{
-		   
-		    if (triggers.score_value != null)
-		    {
-		      // Fetch contacts
-		      Objectify ofy = ObjectifyService.begin();
-		      List<Contact> contacts = ofy.query(Contact.class).filter("lead_score >=", Integer.parseInt(triggers.score_value )).list();
-		
-		      // Execute trigger for contacts having score greater than given value
-		      for(Contact contactslist:contacts)
-			    Trigger.executeTrigger(contactslist.id,
-				    Trigger.Type.ADD_SCORE);
-		    }
-	    	 }
-	    }
-	}
 	
-	catch(Exception e)
-	{
-		e.printStackTrace();
-	}
-
     }
 
     public static Contact getContact(Long id)
@@ -364,10 +331,7 @@ public class Contact extends Cursor
 	    this.tags.add(tag);
 	}
     this.save();
-	
-	// Execute Trigger
-	Trigger.executeTrigger(this.id, Trigger.Type.TAG_IS_ADDED);
-		
+
     }
 
     // Remove tags
@@ -385,8 +349,6 @@ public class Contact extends Cursor
 	// Delete tags from Tag class
 	Tag.deleteTags(tagslist);
 
-	// Execute Trigger
-	Trigger.executeTrigger(this.id, Trigger.Type.TAG_IS_DELETED);
     }
 
     // Add score
@@ -396,6 +358,47 @@ public class Contact extends Cursor
 	this.lead_score = this.lead_score + score;
 	this.save();
 	
+	// Get triggers
+	List<Trigger> triggerslist = null;
+
+	try
+	{
+
+	    triggerslist = Trigger
+		    .getTriggersByCondition(Trigger.Type.ADD_SCORE);
+	    System.out.println("Triggers should execute" + triggerslist);
+	    if (triggerslist != null)
+		    {
+		for (Trigger triggers : triggerslist)
+
+		{
+
+		    if (triggers.score_value != null)
+		    {
+			// Fetch contacts
+			Objectify ofy = ObjectifyService.begin();
+			List<Contact> contacts = ofy
+				.query(Contact.class)
+				.filter("lead_score >=",
+					Integer.parseInt(triggers.score_value))
+				.list();
+
+			// Execute trigger for contacts having score greater
+			// than given value
+			for (Contact contactslist : contacts)
+			    Trigger.executeTrigger(contactslist.id,
+				    Trigger.Type.ADD_SCORE);
+		    }
+		}
+		    }
+		}
+
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
+
     }
 
     // Subtract score
