@@ -441,17 +441,21 @@ public class Contact extends Cursor
     public DomainUser getDomainUser()
     {
 	if (owner_key != null)
+	{
 	    // If user is deleted no user is found with key so set user to null
 	    // and return null
 	    try
 	    {
-		return dao.ofy().get(owner_key);
+		// return dao.ofy().get(owner_key);
+		return DomainUser.getDomainUser(owner_key.getId());
 	    }
 	    catch (Exception e)
 	    {
 		owner_key = null;
 		return null;
 	    }
+	}
 	return null;
+
     }
 }

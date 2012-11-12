@@ -108,7 +108,6 @@ $(function(){
 	});
 	
 	$('#contact-detail-owner').live('change', function(){
-		console.log("changed");
 		var id_array = [];
 		id_array.push(App_Contacts.contactDetailView.model.get('id'));
 		
@@ -117,7 +116,6 @@ $(function(){
 		var json = {};
 		json.contact_ids = JSON.stringify(id_array);
 		$.post(url, json, function(data){
-			console.log("owner changed successfully");
 			$(".change-owner-succes").html('<div class="alert alert-success"><a class="close" data-dismiss="alert" href="#">×</a>Owner has been changed successfully.</div>');
 		});
    	});
@@ -215,8 +213,8 @@ function starify(el){
 
 // Fill owners select dropdown
 function fillOwners(el, data){
-	var optionsTemplate = "<option value='{{agileUser.domain_user_id}}'>{{agileUser.domainUser.name}}</option>";
-    fillSelect('contact-detail-owner','/core/api/deal-owners', 'userPrefs', function presentOwner() {
+	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+    fillSelect('contact-detail-owner','/core/api/users', 'domainUsers', function presentOwner() {
     		$('#contact-detail-owner',el).find('option.default-select').remove();
     		if(data.domainUser)
     			$('#contact-detail-owner',el).find('option[value='+data.domainUser.id+']').attr("selected", "selected");

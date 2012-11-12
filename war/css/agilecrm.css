@@ -336,6 +336,23 @@ margin-top: 10px;
  cursor: pointer;
 }
 
+/* Cursor change in calendar tasks */
+#overdue > tr:hover{
+ cursor: pointer;
+}
+
+#today > tr:hover{
+ cursor: pointer;
+}
+
+#tomorrow > tr:hover{
+ cursor: pointer;
+}
+
+#next-week > tr:hover{
+ cursor: pointer;
+}
+
 /* cursor change for .modal-list-cursor tables */
 .model-list-cursor > tr:hover{
 	cursor: pointer;

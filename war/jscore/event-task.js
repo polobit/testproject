@@ -15,71 +15,15 @@ $(function(){
 	    	       
 	    	        // Save functionality for task by checking task or not
 	    	        if ($("#hiddentask").val() == "task") { 
-	    	        	if (!isValidForm('#taskForm'))
-	    		        	return false;
 	    	        	
-	    	        	// Show loading symbol until model get saved
-	    	            $('#activityModal').find('span.save-status').html(LOADING_HTML);
-	    	            
-    	   	        	var json = serializeForm("taskForm");
-	    	        	json.due = new Date(json.due).getTime()/1000.0;
-	    	        	
-	    	        	var newTask = new Backbone.Model();
-	    	        	newTask.url = 'core/api/tasks';
-	    	        	newTask.save(json,{
-	    	        		success: function(data){
-	    	        			$('#taskForm').each (function(){
-	    		    	          	  this.reset();
-	    		    	          	});
-	    	        			
-	    	        			$('#activityModal').find('span.save-status img').remove();
-	    		    	        $("#activityModal").modal('hide');
-	    	        		    
-	    		       	        var task = data.toJSON();
-	    		       	        if(Current_Route == 'calendar'){
-	    		    				
-		    		    	        // Update task list view 
-	    		    	        	App_Calendar.tasksListView.collection.add(data);
-	    		    	        	App_Calendar.tasksListView.render(true);
-	    		    	        }
-	    		       	        // Update data to temeline 
-	    		       	        else if(App_Contacts.contactDetailView){
-	    		    				$.each(task.contacts, function(index, contact_id){
-	    		    					if(contact_id == App_Contacts.contactDetailView.model.get('id')){
-	    		    						
-	    		    						// Activate timeline in contact detail tab and tab content
-	    		    						activateTimelineTab();
-	    		    						
-	    		    						$('#timeline').isotope( 'insert', $(getTemplate("timeline", data.toJSON())) );
-	    		    						
-	    		    						// Add task to tasks collection in contact detail tabs
-	    		    						/*if(TASKSVIEW){
-	    		    							TASKSVIEW.collection.add(data);
-	    		    							TASKSVIEW.render(true);
-	    		    						}*/
-	    		    						return false;
-	    		    					}	
-
-	    		    				});
-	    		    				if(Current_Route != "contact/" + App_Contacts.contactDetailView.model.get('id')){
-	    		    					App_Calendar.navigate("calendar", {
-		    		    	        		trigger: true
-		    		    	        	});
-	    		    				}
-	    		       	        }else{
-	    		    	        	App_Calendar.navigate("calendar", {
-	    		    	        		trigger: true
-	    		    	        	});
-	    		    	        }
-	    	        		} 
-	    	        	});
+	    	        	saveTask('taskForm', 'activityModal');
 	    	        }
 	    	        else
 	    	        { 
 	    	        	// Save functionality for event
 	    	        	saveEvent('activityForm', 'activityModal');
 	    	        }
-	    	    }); //End of Task and Event Validation function
+	    }); //End of Task and Event Validation function
 	   
 	    // Update event
 	    $('#update_event_validate').die().live('click', function (e) {
@@ -107,6 +51,49 @@ $(function(){
 		    	        $('#calendar').fullCalendar('removeEvents', event_id);
 	    			}
 	    		});
+	    });
+	    
+	    // Edit task
+	    $('#overdue > tr').live('click', function(e){
+			e.preventDefault();
+			updateTask(this);
+	    });	
+	    
+	    $('#today > tr').live('click', function(e){
+			e.preventDefault();
+			updateTask(this);
+	    });
+	    
+	    $('#tomorrow > tr').live('click', function(e){
+			e.preventDefault();
+			updateTask(this);
+	    });
+	    
+	    $('#next-week > tr').live('click', function(e){
+			e.preventDefault();
+			updateTask(this);
+	    });
+	    
+	    // Update task
+	    $('#update_task_validate').click(function (e) {
+	    		e.preventDefault();
+	    		
+	    		saveTask('updateTaskForm', 'updateTaskModal', true);
+	    });
+	    
+	 // Hide event of update task modal
+	    $('#updateTaskModal').on('hidden', function () {
+	    	  
+	    	  // Remove appended contacts from related-to
+	    	  $("#updateTaskForm").find("li").remove();
+	    });
+	    
+	 // show event of update task modal
+	    $('#updateTaskModal').on('shown', function () {
+	    	
+	    	// Activate related-to field of update task form 
+			var	el = $("#updateTaskForm");
+	    	agile_type_ahead("update_task_related_to", el, contacts_typeahead);
 	    });
 	    
 	    		// Date Picker
@@ -206,6 +193,76 @@ function isValidRange(startDate, endDate, startTime, endTime){
 		return true;
 }
 
+// Save Task
+function saveTask(formId, modalId, isUpdate){
+	if (!isValidForm('#' + formId))
+    	return false;
+	
+	// Show loading symbol until model get saved
+    $('#' + modalId).find('span.save-status').html(LOADING_HTML);
+    
+   	var json = serializeForm(formId);
+   	if(!isUpdate)
+   		json.due = new Date(json.due).getTime()/1000.0;
+	
+	var newTask = new Backbone.Model();
+	newTask.url = 'core/api/tasks';
+	newTask.save(json,{
+		success: function(data){
+			$('#' + formId).each (function(){
+	          	  this.reset();
+	          	});
+			
+			$('#' + modalId).find('span.save-status img').remove();
+	        $('#' + modalId).modal('hide');
+		    
+   	        var task = data.toJSON();
+   	        if(Current_Route == 'calendar'){
+   	        	if(isUpdate)
+   	        		App_Calendar.tasksListView.collection.remove(json);
+   	        	
+    	        // Update task list view 
+	        	App_Calendar.tasksListView.collection.add(data);
+	        	App_Calendar.tasksListView.render(true);
+	        }
+   	        // Update data to temeline 
+   	        else if(App_Contacts.contactDetailView){
+				$.each(task.contacts, function(index, contact_id){
+					if(contact_id == App_Contacts.contactDetailView.model.get('id')){
+						
+						// Activate timeline in contact detail tab and tab content
+						activateTimelineTab();
+						
+						$('#timeline').isotope( 'insert', $(getTemplate("timeline", data.toJSON())) );
+						
+						// Add task to tasks collection in contact detail tabs
+						if(TASKSVIEW){
+							TASKSVIEW.collection.add(data);
+							TASKSVIEW.render(true);
+						}
+						return false;
+					}	
+
+				});
+				if(Current_Route != "contact/" + App_Contacts.contactDetailView.model.get('id')){
+					App_Calendar.navigate("calendar", {
+    	        		trigger: true
+    	        	});
+				}
+   	        }else{
+	        	App_Calendar.navigate("calendar", {
+	        		trigger: true
+	        	});
+	        }
+		} 
+	});
+}
+
+function updateTask(ele){
+	deserializeForm($(ele).data().toJSON(), $("#updateTaskForm"));
+	
+	$("#updateTaskModal").modal('show');
+}
 // Save event
 function saveEvent(formId, modalName, isUpdate){
 	// Save functionality for event
