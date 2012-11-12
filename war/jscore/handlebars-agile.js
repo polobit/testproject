@@ -245,15 +245,6 @@ $(function()
 		// return $.datepicker.formatDate(format , new Date( parseInt(date) *
 		// 1000));
 	});
-	
-	// Get date string from epoch time
-	Handlebars.registerHelper('currencySymbol', function(value)
-	{
-		// value to symbol
-		var d = value.substring(4,value.length);
-		return d;
-
-	});
 
 	// Get task date (MM dd) from epoch time
 	Handlebars.registerHelper('epochToTaskDate', function(date)
