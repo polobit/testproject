@@ -138,7 +138,7 @@ public class UsersAPI
 	if (agileUser != null)
 	{
 	    // Delete UserPrefs
-	    UserPrefs userPrefs = UserPrefs.getCurrentUserPrefs();
+	    UserPrefs userPrefs = UserPrefs.getUserPrefs(agileUser);
 	    if (userPrefs != null)
 		userPrefs.delete();
 
@@ -156,7 +156,8 @@ public class UsersAPI
 
 	    // Delete Notification Prefs
 	    NotificationPrefs notificationPrefs = NotificationPrefs
-		    .getCurrentUserNotificationPrefs();
+		    .getNotificationPrefs(agileUser);
+
 	    if (notificationPrefs != null)
 		notificationPrefs.delete();
 
