@@ -1,0 +1,27 @@
+<script id="account-stats-template" type="text/html">
+<legend>Account Stats</legend>
+{{#stringToJSON this undefined}}{{/stringToJSON}}
+<table class="table table-bordered">
+			<colgroup>
+				<col class="span3">
+				<col class="span7">
+			</colgroup>
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Details</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Data</td>
+					<td>{{this.bytes}}</td>
+				</tr>
+				<tr>
+					<td>Entities</td>
+					<td>{{this.entities}}</td>
+				</tr>
+			</tbody>
+		</table>
+<a href="#admin"  id="cancel-account" align="center" class="btn btn-danger">Cancel My Account</a>
+</script>

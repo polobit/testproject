@@ -337,4 +337,13 @@ public class API
 	return Util.getNamespaceCount();
     }
 
+    // Get Stats
+    @Path("namespace-stats")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getNamespaceStats()
+    {
+	return Util.getNamespaceStats().toString();
+    }
+
 }

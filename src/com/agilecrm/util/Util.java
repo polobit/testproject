@@ -263,6 +263,37 @@ public class Util
 	return statsJSON;
     }
 
+    // Get Name space stats
+    public static JSONObject getNamespaceStats()
+    {
+
+	DatastoreService datastore = DatastoreServiceFactory
+		.getDatastoreService();
+
+	Entity globalStat = datastore.prepare(new Query("__Stat_Ns_Total__"))
+		.asSingleEntity();
+
+	Long totalBytes = (Long) globalStat.getProperty("bytes");
+	Long totalEntities = (Long) globalStat.getProperty("count");
+
+	JSONObject statsJSON = new JSONObject();
+
+	try
+	{
+	    statsJSON.put("bytes", totalBytes);
+	    statsJSON.put("entities", totalEntities);
+	}
+	catch (Exception e)
+	{
+
+	}
+
+	System.out.println("Total Bytes: " + totalBytes);
+	System.out.println("Total Entities: " + totalEntities);
+
+	return statsJSON;
+    }
+
     public static void deleteNamespace(String namespace)
     {
 

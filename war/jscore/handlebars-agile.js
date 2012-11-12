@@ -372,10 +372,15 @@ $(function()
 	});
 	
 	// Converts string into JSON
-	Handlebars.registerHelper('stringToJSON', function(detail, options){
+	Handlebars.registerHelper('stringToJSON', function(object, key, options){
 		
-		this.billingData = JSON.parse(this["billingData"]);
-		return options.fn(this.billingData);
+		if(key)
+			{
+				object[key] = JSON.parse(object[key]);
+				return options.fn(object[key]);
+			}
+
+		return options.fn(JSON.parse(object));
 	});
 	
 	// Convert string to lower case

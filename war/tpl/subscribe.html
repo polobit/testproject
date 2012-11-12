@@ -149,7 +149,7 @@
 				class="pull-right">Update Card</a>
 		</legend>
 
-		{{#stringToJSON "billingData"}} {{/stringToJSON}}
+		{{#stringToJSON this "billingData"}} {{/stringToJSON}}
 
 		<table class="table table-bordered">
 			<colgroup>
@@ -196,8 +196,12 @@
 				<a href="#invoice" style="margin-left:32%;font-size:15px">click here for Invoices</a><br><br>
 			</div>
 			<a href="#admin" align="center" class="btn">Close</a>
-			<a href="#admin"  id="cancel-account" align="center" class="btn btn-danger">Cancel My Account</a>
 		{{/if}}
+	</div>
+</div>
+<div class="span5 well">
+	<div id="account-stats">
+		"Stats comes here"
 	</div>
 </div>
 </script>

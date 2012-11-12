@@ -17,6 +17,8 @@ var SubscribeRouter = Backbone.Router.extend({
 					 window: 'subscribe',
 					 postRenderCallback : function(el) {
 						 	
+						 	setUpAccountStats(el)
+						 
 						 	// Load date and year for card expiry
 						 	cardExpiry(el);
 						 	
@@ -64,7 +66,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		 var update_plan = new Base_Model_View({
 			 url: "core/api/subscription",
 			 template: "update-plan",
-			 window: 'subscribe',
+			 window: 'subscribe'
 		 });
 		 
 		 $('#content').html(update_plan.render().el);
