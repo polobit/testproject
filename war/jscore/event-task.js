@@ -227,8 +227,8 @@ function saveTask(formId, modalId, isUpdate){
 	        }
    	        // Update data to temeline 
    	        else if(App_Contacts.contactDetailView){
-				$.each(task.contacts, function(index, contact_id){
-					if(contact_id == App_Contacts.contactDetailView.model.get('id')){
+				$.each(task.contacts, function(index, contact){
+					if(contact.id == App_Contacts.contactDetailView.model.get('id')){
 						
 						// Activate timeline in contact detail tab and tab content
 						activateTimelineTab();
@@ -236,10 +236,10 @@ function saveTask(formId, modalId, isUpdate){
 						$('#timeline').isotope( 'insert', $(getTemplate("timeline", data.toJSON())) );
 						
 						// Add task to tasks collection in contact detail tabs
-						if(TASKSVIEW){
+						/*if(TASKSVIEW){
 							TASKSVIEW.collection.add(data);
 							TASKSVIEW.render(true);
-						}
+						}*/
 						return false;
 					}	
 
