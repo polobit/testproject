@@ -6,8 +6,8 @@ $(function(){
 		var id_array = getContactsBulkIds();
 		
 		$('body').die('fill_owners').live('fill_owners', function(event){
-			var optionsTemplate = "<option value='{{agileUser.domain_user_id}}'>{{agileUser.domainUser.name}}</option>";
-	        fillSelect('ownerBulkSelect','/core/api/deal-owners', 'userPrefs', 'no-callback ', optionsTemplate); 
+			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+	        fillSelect('ownerBulkSelect','/core/api/users', 'domainUsers', 'no-callback ', optionsTemplate); 
 		});
 		
 		// Navigate to show form

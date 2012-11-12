@@ -6,6 +6,7 @@ import java.util.List;
 import javax.jdo.annotations.Embedded;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.contact.Contact;
@@ -104,6 +105,8 @@ public class Task
 		this.related_contacts.add(new Key<Contact>(Contact.class, Long
 			.parseLong(contact_id)));
 	    }
+
+	    this.contacts = null;
 	}
 
 	// Create owner key
@@ -263,6 +266,17 @@ public class Task
     {
 	is_complete = true;
 	save();
+    }
+
+    // Contacts related with task
+    @XmlElement
+    public List<Contact> getContacts()
+    {
+
+	Objectify ofy = ObjectifyService.begin();
+	List<Contact> contacts_list = new ArrayList<Contact>();
+	contacts_list.addAll(ofy.get(this.related_contacts).values());
+	return contacts_list;
     }
 
 }
