@@ -3,7 +3,6 @@ package com.agilecrm.user;
 import java.util.List;
 
 import javax.persistence.Id;
-import javax.persistence.PostLoad;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -168,20 +167,4 @@ public class UserPrefs
 
 	return "?";
     }
-
-    @PostLoad
-    void postLoad()
-    {
-	agile_user = dao.ofy().get(user);
-	name = agile_user.getDomainUser().name;
-    }
-
-    /*
-     * @XmlElement(name = "agile_user") public AgileUser getAgileUser() { if
-     * (user != null) try { AgileUser agile_user = dao.ofy().get(user);
-     * 
-     * return agile_user; } catch (Exception e) { return null; }
-     * 
-     * return null; }
-     */
 }
