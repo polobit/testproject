@@ -147,13 +147,17 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, continueContact, 
                 
             } else if(is_person){
             	
+            	// If contactsListView is defined it is getting the contact from there not the updated one
+            	if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection.get(data.id) != null) {
+            		App_Contacts.contactsListView.collection.remove(obj);
+            	
+            		App_Contacts.contactsListView.collection.add(data);
+            	}
+            	
             	App_Contacts.navigate("contact/" + data.id, {
                 	trigger: true
             	});
-            	
-            	// If contactsListView is defined it is getting the contact from there not the updated one
-            	App_Contacts.contactDetails(data.id, data);
-               
+            	               
             }else{
                   	App_Contacts.navigate("contacts", {
                 	trigger: true
