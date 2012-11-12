@@ -1,6 +1,5 @@
 <script id="account-stats-template" type="text/html">
 <legend>Account Stats</legend>
-{{#stringToJSON this undefined}}{{/stringToJSON}}
 <table class="table table-bordered">
 			<colgroup>
 				<col class="span3">
@@ -15,11 +14,11 @@
 			<tbody>
 				<tr>
 					<td>Data</td>
-					<td>{{this.bytes}}</td>
+					<td>{{bytes}}</td>
 				</tr>
 				<tr>
 					<td>Entities</td>
-					<td>{{this.entities}}</td>
+					<td>{{entities}}</td>
 				</tr>
 			</tbody>
 		</table>
