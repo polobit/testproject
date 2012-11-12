@@ -16,6 +16,11 @@ import com.agilecrm.Globals;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.IMAPEmailPrefs;
+import com.agilecrm.user.NotificationPrefs;
+import com.agilecrm.user.SocialPrefs;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.util.SendMail;
 import com.agilecrm.util.Util;
 import com.google.appengine.api.NamespaceManager;
@@ -421,6 +426,15 @@ public class DomainUser
 	List<Key<DomainUser>> domainUserKeys = dao.ofy()
 		.query(DomainUser.class).filter("domain", namespace).listKeys();
 
+	// Delete all entities related to that domain user
+	for (Key<DomainUser> user : domainUserKeys)
+	{
+	    NamespaceManager.set(oldNamespace);
+	    deleteRelatedEntities(user.getId());
+	}
+
+	NamespaceManager.set("");
+
 	// Delete domain users in domain
 	dao.deleteKeys(domainUserKeys);
 
@@ -489,6 +503,46 @@ public class DomainUser
 	{
 	    return false;
 	}
+    }
+
+    /*
+     * Delete All the entities(AgileUser, Userprefs, Imap prefs, notification
+     * prefs) delete before deleting domain users
+     */
+    public static void deleteRelatedEntities(Long id)
+    {
+	AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(id);
+
+	if (agileUser != null)
+	{
+	    // Delete UserPrefs
+	    UserPrefs userPrefs = UserPrefs.getUserPrefs(agileUser);
+	    if (userPrefs != null)
+		userPrefs.delete();
+
+	    // Delete Social Prefs
+	    List<SocialPrefs> socialPrefsList = SocialPrefs.getPrefs(agileUser);
+	    for (SocialPrefs socialPrefs : socialPrefsList)
+	    {
+		socialPrefs.delete();
+	    }
+
+	    // Delete IMAP PRefs
+	    IMAPEmailPrefs imapPrefs = IMAPEmailPrefs.getIMAPPrefs(agileUser);
+	    if (imapPrefs != null)
+		imapPrefs.delete();
+
+	    // Delete Notification Prefs
+	    NotificationPrefs notificationPrefs = NotificationPrefs
+		    .getNotificationPrefs(agileUser);
+
+	    if (notificationPrefs != null)
+		notificationPrefs.delete();
+
+	    // Get and Delete AgileUser
+	    agileUser.delete();
+	}
+
     }
 
 }

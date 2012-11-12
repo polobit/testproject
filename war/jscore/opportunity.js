@@ -66,8 +66,10 @@ function populateUsers(id, el , value) {
 		
 		if(value)
 		{
-			// While deserialize set agile user id from user prefs to save agile user key in opportunity 
-			$('#owners-list',el).find('option[value='+value.owner.id+']').attr("selected", "selected");;
+			// If domain user is delete owner is undefined
+			if(value.owner)
+				// While deserialize set agile user id from user prefs to save agile user key in opportunity 
+				$('#owners-list',el).find('option[value='+value.owner.id+']').attr("selected", "selected");;
 		}			
 	}, optionsTemplate); 
 }
