@@ -108,13 +108,12 @@ String CSS_PATH = "/";
 						String logoutURL = "/login";
 						UserInfo user = SessionManager.get();
 					%>
-					
-					<form id="searchForm" class=" navbar-search">
-                    <input id="searchText" type="text" data-provide="typeahead" class="typeahead typeahead_contacts search-query" placeholder="Search"/>
-              		</form>	
-
+              			<form id="searchForm" class=" navbar-search" style="display:inline;">
+							<input id="searchText" type="text" data-provide="typeahead" class="typeahead typeahead_contacts search-query" placeholder="Search"></input>
+							<input id="search-results" type="image" src="img/SearchIcon.png" class="searchbox"/>
+						</form>
+						
 					<ul class="nav pull-right">
-					
 					
 					<li class="dropdown" id="menu1"><a class="dropdown-toggle"
 							data-toggle="dropdown" href="#menu1">Add New <i class='caret'></i></a>

@@ -40,7 +40,10 @@ var ContactsRouter = Backbone.Router.extend({
         /* Return back from Scribe after oauth authorization */
         "gmail": "email",
         "twitter": "socialPrefs",
-        "linkedin": "socialPrefs"
+        "linkedin": "socialPrefs",
+        	
+        /*Search results*/
+        "contacts/search/:query": "searchResults"
     },
     initialize: function () {
 
@@ -553,5 +556,40 @@ var ContactsRouter = Backbone.Router.extend({
         this.contact_custom_view.collection.fetch();
         $('#content').html(this.contact_custom_view.el);
     	
+    },
+    
+    /*search results*/
+    searchResults: function(query)
+    {
+    	var searchResultsView = new Base_Collection_View({
+            url: "core/api/contacts/search/" + query,
+            templateKey: "search",
+            individual_tag_name: 'tr',
+            cursor: true,
+      	});
+
+     // If QUERY_RESULTS is defined which are set by agile_typeahead istead of fetching again
+      if(QUERY_RESULTS)
+      {
+    	  //Create collection with results
+    	  searchResultsView.collection =  new Backbone.Collection(QUERY_RESULTS);
+    	  
+    	  // Set query parameter to show on results page
+    	  searchResultsView.collection.add({"query" : query});
+
+    	  $('#content').html(searchResultsView.render(true).el);
+      	return;
+      }
+      
+      // If in case results in different page is clicked before typeahead fetch results then fetch here
+      searchResultsView.collection.fetch({
+    	  success:function(data)
+    	  {
+    		  // Set query parameter to show on results page if page is refeshed or QUERY_RESULTS is not defined
+    		  searchResultsView.collection.add({"query" : query});
+
+    		    $('#content').html(searchResultsView.render(true).el);
+    	  }
+      });
     }
 });

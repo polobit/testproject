@@ -1,4 +1,5 @@
 // To save map of key: first_name and value: contact id 
+var QUERY_RESULTS;
 var TYPEHEAD_TAGS = {};
 function agile_type_ahead(id, el, callback, isSearch) {
 	
@@ -11,7 +12,7 @@ function agile_type_ahead(id, el, callback, isSearch) {
 			// Get data on query
 			$.getJSON("core/api/contacts/search/" + query,
 				function(data) {
-					
+					QUERY_RESULTS = data;
 					var items_list = [] ;
 					
 					// Store query results to use them in updater and render functions
@@ -52,7 +53,7 @@ function agile_type_ahead(id, el, callback, isSearch) {
 							if(item.type == "COMPANY")
 								var fullname = getPropertyValue(item.properties, "name");
 							else
-								var fullname = getPropertyValue(item.properties, "first_name") + getPropertyValue(item.properties, "last_name");
+								var fullname = getPropertyValue(item.properties, "first_name") +" "+ getPropertyValue(item.properties, "last_name");
 							
 							i = $(that.options.item).attr('data-value', fullname);
 							
@@ -98,8 +99,6 @@ function agile_type_ahead(id, el, callback, isSearch) {
 					}
 			});
 			
-			console.log(items);
-console.log(TYPEHEAD_TAGS);
 			//add tag 
 			if(tag_not_exist)				
 				$('.tags',el).append('<li class="tag"  style="display: inline-block;" data="'+ TYPEHEAD_TAGS[items]+'">'+items+'<a class="close" id="remove_tag">&times</a></li>');

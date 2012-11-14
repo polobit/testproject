@@ -494,3 +494,19 @@ footer {
 	font: 13px Helvetica, arial, freesans, clean, sans-serif;
 	line-height: 1.4;	
 }
+
+.search-query {
+border:0px; /*important*/
+background-color:transparent; /*important*/
+position:absolute; /*important*/
+}
+ 
+.searchbox {
+border:0px; /*important*/
+background-color:transparent; /*important*/
+position:absolute; /*important*/
+top:5px;
+left:265px;
+width:16px;
+height:16px;
+}
