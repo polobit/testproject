@@ -20,6 +20,7 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, continueContact, 
     var properties = [];
 
     var id = $('#' + form_id + ' input[name=id]').val();
+    var created_time=$('#' + form_id + ' input[name=created_time]').val();
     var obj = {};
     var properties = [];
     var address = [];
@@ -29,6 +30,7 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, continueContact, 
 
     var custom_field_elements =  $('#' + form_id).find('.custom_field');
 
+    
     $.each(custom_field_elements, function(index, element){
     	var id = $(element).attr('id'), name = $(element).attr('name');
     	
@@ -110,6 +112,11 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, continueContact, 
     }
     if (id != null) obj['id'] = id;
     
+    obj["created_time"] = created_time;
+    
+    
+    console.log(obj);
+    
     // Save contact
     var contactModel = new Backbone.Model();
     contactModel.url = 'core/api/contacts';
@@ -141,11 +148,16 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, continueContact, 
             } else if(is_person){
             	
             	// If contactsListView is defined it is getting the contact from there not the updated one
-            	App_Contacts.contactDetails(data.id, data);
-               
-            	/*App_Contacts.navigate("contact/" + data.id, {
+            	if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection.get(data.id) != null) {
+            		App_Contacts.contactsListView.collection.remove(obj);
+            	
+            		App_Contacts.contactsListView.collection.add(data);
+            	}
+            	
+            	App_Contacts.navigate("contact/" + data.id, {
                 	trigger: true
-            	});*/
+            	});
+            	               
             }else{
                   	App_Contacts.navigate("contacts", {
                 	trigger: true
@@ -245,7 +257,9 @@ function propertyJSON(name, id, type) {
 // UI Handlers for Continue-contact and continue-company
 $(function () {
     // Clone Multiple
-    $("i.multiple-add").die().live('click', function (e) {
+    $("a.multiple-add").die().live('click', function (e) {
+    	e.preventDefault();
+    	
         // Clone the template
         $(this).parents("div.control-group").append(
         $(this).parents().siblings("div.controls:first").clone().removeClass('hide'));
@@ -254,7 +268,9 @@ $(function () {
 
 
     // Remove multiple
-    $("i.multiple-remove").live('click', function (e) {
+    $("a.multiple-remove").live('click', function (e) {
+    	e.preventDefault();
+    	
         // Get closest template and remove from the container
         $(this).closest("div.multiple-template").remove();
     });

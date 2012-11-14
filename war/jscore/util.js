@@ -36,14 +36,12 @@ function fillSelect(selectId, url, parseKey, callback, template) {
 	var collection = new collection_def();
 	collection.fetch({
 		success : function() {
-			console.log(collection.models);
-			console.log(collection.toJSON());
 
 			// Remove loading
 			$('.loading').remove();
 
 			// Delete prev options if any
-			$("#" + selectId).empty().append('<option value="">Select...</option>');
+			$("#" + selectId).empty().append('<option class="default-select" value="">Select...</option>');
 
 			$.each(collection.toJSON(), function(index, model) {
 				// Convert template into HTML

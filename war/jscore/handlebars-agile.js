@@ -239,8 +239,8 @@ $(function()
 	Handlebars.registerHelper('epochToHumanDate', function(format, date)
 	{
 		// date form milliseconds
-		var d = new Date(parseInt(date)*1000);
-		return d.toLocaleDateString();
+		var d = new Date(parseInt(date)*1000).format(format);
+		return d
 
 		// return $.datepicker.formatDate(format , new Date( parseInt(date) *
 		// 1000));
@@ -287,7 +287,13 @@ $(function()
                 
 				return (monthArray[intMonth] + " " + intDay + ", " + intYear);
 			});
-
+	
+	// Currency symbol
+	Handlebars.registerHelper('currencySymbol', function(value)
+	{
+		var symbol = value.substring(4,value.length);
+		return symbol;
+	});
 
 	// Calculate pipeline (value * probability)
 	Handlebars.registerHelper('calculatePipeline', function(value, probability)
@@ -366,10 +372,15 @@ $(function()
 	});
 	
 	// Converts string into JSON
-	Handlebars.registerHelper('stringToJSON', function(detail, options){
+	Handlebars.registerHelper('stringToJSON', function(object, key, options){
 		
-		this.billingData = JSON.parse(this["billingData"]);
-		return options.fn(this.billingData);
+		if(key)
+			{
+				object[key] = JSON.parse(object[key]);
+				return options.fn(object[key]);
+			}
+
+		return options.fn(JSON.parse(object));
 	});
 	
 	// Convert string to lower case
@@ -385,6 +396,14 @@ $(function()
 		}
 	});
 	
+	// Lead Score if greater than zero return
+	Handlebars.registerHelper('lead_score',function(value){
+		if(this.lead_score >0)
+			return this.lead_score;
+		else
+			return "";
+	});
+	
 	// Return task completion status
 	Handlebars.registerHelper('task_status', function(status){
 		console.log(status);
@@ -395,6 +414,14 @@ $(function()
 		return "false";
 		
 	});
+	
+	Handlebars.registerHelper('compare', function(value, target, options)
+	{
+		if(value == target)
+			return options.fn(this);
+		else
+			return options.inverse(this);
+	})
 	
 	// Add Custom Fields to Forms
 	Handlebars.registerHelper('show_custom_fields', function(custom_fields, properties){
@@ -407,9 +434,6 @@ $(function()
 		// Create Field for each custom field
 		$.each(custom_fields, function(index, field)
 		{
-			//name = field.field_label.split(" ").join("_");
-			//console.log(name);
-			
 			// If field type is list create a select dropdown
 			if(field.field_type.toLowerCase() == "list")
 			{
@@ -421,7 +445,8 @@ $(function()
 					
 					// Create options based on list values
 					$.each(list_values,function(index, value){
-						list_options = list_options.concat('<option value='+value+'>'+value+'</option>');
+						if(value != "")
+							list_options = list_options.concat('<option value='+value+'>'+value+'</option>');
 					});
 					
 					// Create select dropdown
@@ -441,9 +466,9 @@ $(function()
 			
 			if(field.is_required)
 				// If not list type create text field(plain text field or date field)
-				el = el.concat('<div class="control-group">	<label class="control-label">'+ucfirst(field.field_label)+'<span class="field_req">*</span></label><div class="controls"><input type="'+field_type+'" class="'+field.field_type.toLowerCase()+'_input custom_field required" id='+field.id+' name="'+field.field_label+'"></div></div>');
+				el = el.concat('<div class="control-group">	<label class="control-label">'+ucfirst(field.field_label)+'<span class="field_req">*</span></label><div class="controls"><input type="text" class="'+field.field_type.toLowerCase()+'_input custom_field required" id='+field.id+' name="'+field.field_label+'"></div></div>');
 			else
-				el = el.concat('<div class="control-group">	<label class="control-label">'+ucfirst(field.field_label)+'</label><div class="controls"><input type="'+field_type+'" class="'+field.field_type.toLowerCase()+'_input custom_field" id='+field.id+' name="'+field.field_label+'"></div></div>');
+				el = el.concat('<div class="control-group">	<label class="control-label">'+ucfirst(field.field_label)+'</label><div class="controls"><input type="text" class="'+field.field_type.toLowerCase()+'_input custom_field" id='+field.id+' name="'+field.field_label+'"></div></div>');
 		});
 
 		return new Handlebars.SafeString(fillCustomFieldValues($(el), properties));
@@ -458,8 +483,14 @@ $(function()
 				{
 
 					var test = $(form).find('*[name="' + property.name + '"]');
-					var tagName = test[0].tagName.toLowerCase();
-					var type = test.attr("type");
+					
+					// If custom field is deleted or not found with property name return
+					if(!test[0])
+						{
+							return;
+						}
+						var tagName = test[0].tagName.toLowerCase();
+						var type = test.attr("type");
 					
 					if(tagName == "input")
 						{

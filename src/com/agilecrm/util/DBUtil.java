@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import com.agilecrm.core.DomainUser;
+import com.campaignio.cron.Cron;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -82,8 +84,13 @@ public class DBUtil
 	return results;
     }
 
-    static void deleteNamespace(String namespace)
+    public static void deleteNamespace(String namespace)
     {
+	// If namespace is null or is empty return with out deleting
+	// entities
+	if (namespace == null || namespace.isEmpty())
+	    return;
+
 	NamespaceDeleteDeferredTask namespaceDeleteDeferredTask = new NamespaceDeleteDeferredTask(
 		namespace);
 	Queue queue = QueueFactory.getDefaultQueue();
@@ -95,7 +102,6 @@ public class DBUtil
 
 	try
 	{
-
 	    // Get All Entity Keys in the Kind
 	    List<Key> keys = new LinkedList<Key>();
 
@@ -159,6 +165,10 @@ public class DBUtil
 		// Delete each kind
 		for (String kind : kinds)
 		    deleteKind(kind);
+
+		Cron.deleteCronsByNamespace(namespace);
+
+		DomainUser.deleteDomainUsers(namespace);
 
 	    }
 	    catch (Exception e)

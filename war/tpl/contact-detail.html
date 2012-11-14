@@ -54,15 +54,21 @@
 	</div>		
  </div>
      <div class="well right unselectable" id="score" unselectable="on" style="height:50px;margin-right:70px;padding-top:0px;padding-bottom:17px;padding-right:10px;margin-top:-7px;padding-left:15px" onselectstart="return false">
-         <span style="font-size:25px; display:inline-block; padding-top:6px"> 
+         <span style="font-size:25px; display:inline-block"> 
            Score 
             <span style="vertical-align:text-top;margin-left:-5px">
               <img border="0" src="/img/help.png" style="height:6px;vertical-align:middle" rel="popover" data-placement="bottom"  data-title="Lead Score" data-content="Score your leads to get high quality leads to appear on top. Manually assign scores or automate the process based on user behavior using Workflow automation." id="element" data-trigger="hover">
             </span>
           </span> 
          <br/>
+         
+         {{#if lead_score}}
           <span id="lead-score" style="font-size:25px; padding-left:12px">{{lead_score}}</span>&nbsp;
-          <div style="display:inline-block; vertical-align:middle">
+          {{else}}
+          <span id="lead-score" style="font-size:25px; padding-left:12px">0</span>&nbsp;
+          {{/if}}
+          
+       <div style="display:inline-block; vertical-align:middle">
            <span><a><i class="icon-plus" id="add"></i></a></span>
            <br/>
            <span><a><i class="icon-minus" id="minus"></i></a></span>
@@ -142,7 +148,13 @@
 
 <div style='padding:10px;'>
 			<div>
-				<span>Lead owner: {{lead_owner}}</span>
+				<div class="change-owner-succes">
+						
+				</div>
+				<span>Lead owner: <select id='contact-detail-owner' class="input-block-level">
+  									<option class="contact-detail-owner" value="">Select..</option>
+								  </select>
+				</span>
 			</div>
 
 			<div>
@@ -176,7 +188,9 @@
 				{{/each}}
 				<br/><br/>
 			
-			<div id="map"></div>
+			<div id="map" style="width: 200px; height: 200px;">
+				
+			</div>
 		</div>
 	</div>
 </div>

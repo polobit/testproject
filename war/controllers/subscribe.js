@@ -4,7 +4,8 @@ var SubscribeRouter = Backbone.Router.extend({
 		 "subscribe" : "subscribe",
 		 "updatecard": "updateCreditCard",
 		 "updateplan": "updatePlan",
-		  "invoice" : "invoice"
+		  "invoice" : "invoice",
+		  "invoice/:id":"invoiceDetails"
 	 },
 	 
 	 
@@ -16,6 +17,8 @@ var SubscribeRouter = Backbone.Router.extend({
 					 window: 'subscribe',
 					 postRenderCallback : function(el) {
 						 	
+						 	setUpAccountStats(el)
+						 
 						 	// Load date and year for card expiry
 						 	cardExpiry(el);
 						 	
@@ -63,22 +66,43 @@ var SubscribeRouter = Backbone.Router.extend({
 		 var update_plan = new Base_Model_View({
 			 url: "core/api/subscription",
 			 template: "update-plan",
-			 window: 'subscribe',
+			 window: 'subscribe'
 		 });
 		 
 		 $('#content').html(update_plan.render().el);
 	 },
 	 invoice: function() {
-		 console.log(invoice);
-		 var invoice = new Base_Collection_View({
+		 this.invoice = new Base_Collection_View({
 			 url: "core/api/subscription/invoice",
 			 templateKey: "invoice",
 			 window: 'subscribe',
 			 individual_tag_name: 'tr'
 		 })
 		 
-		 invoice.collection.fetch();
+		 this.invoice.collection.fetch();
 		 
-		 $('#content').html(invoice.render().el);
+		 $('#content').html(this.invoice.el);
+	 },
+	 invoiceDetails: function(id){
+
+		 if(!this.invoice || !this.invoice.collection || this.invoice.collection == 0 || this.invoice.collection.get(id) == null)
+			 {
+	    		this.navigate("invoice", {
+	                trigger: true
+	            });
+	    		return;
+			 }
+		 
+		 var model = this.invoice.collection.get(id);
+		 
+		 var invoice_details = new Base_Model_View({
+		//	 url: "core/api/subscription/invoice",
+			 model:model,
+			 template: "invoice-detail",
+			 window: 'invoice',
+			 isNew: true
+		 });
+
+		 $('#content').html(invoice_details.render().el);
 	 }
 });

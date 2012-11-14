@@ -10,9 +10,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.codehaus.jettison.json.JSONObject;
 
+import com.agilecrm.billing.CreditCard;
+import com.agilecrm.billing.Plan;
 import com.agilecrm.core.DomainUser;
-import com.agilecrm.customer.CreditCard;
-import com.agilecrm.customer.Plan;
 import com.google.appengine.api.NamespaceManager;
 import com.google.gson.Gson;
 import com.stripe.exception.StripeException;

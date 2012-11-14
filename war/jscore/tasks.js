@@ -1,6 +1,7 @@
   // Tasks
 $(function () { 
-	$('.tasks-select').live('change', function(e){
+	$('.tasks-select').live('click', function(e){
+		e.stopPropagation();
         if($(this).is(':checked')){
         	// Complete
         	var taskId = $(this).attr('data');
@@ -50,6 +51,7 @@ function appendTasks(base_model) {
     //console.log(due);
     if (due < 0) {
         $('#overdue', this.el).append(itemView.render().el);
+        $('#overdue', this.el).find('tr:last').data(base_model);
         $('#overdue', this.el).show();
         $('#label_color').addClass("label-important");
     }
@@ -57,6 +59,7 @@ function appendTasks(base_model) {
     // Today
     if (due == 0) {
         $('#today', this.el).append(itemView.render().el);
+        $('#today', this.el).find('tr:last').data(base_model);
         $('#today', this.el).show();
         $('#label_color').addClass("label-warning");
     }
@@ -64,6 +67,7 @@ function appendTasks(base_model) {
     // Tomorrow
     if (due == 1) {
         $('#tomorrow', this.el).append(itemView.render().el);
+        $('#tomorrow', this.el).find('tr:last').data(base_model);
         $('#tomorrow', this.el).show();
         $('#label_color').addClass("label-info");
     }
@@ -71,6 +75,7 @@ function appendTasks(base_model) {
     // Next Week
     if (due > 1) {
         $('#next-week', this.el).append(itemView.render().el);
+        $('#next-week', this.el).find('tr:last').data(base_model);
         $('#next-week', this.el).show();
         $('#label_color').addClass("label-inverse");
     }
@@ -85,10 +90,27 @@ function completeTask(taskId, ui)
 	var collection = App_Calendar.tasksListView.collection;
 	var model = collection.get(taskId);
 	
+	var json = model.toJSON();
+	
+	// Make contacts null to avoid exception in prepersist (here contacts is array of contact models)
+	// Or replace objects with respective ids
+	json.contacts = null;
+	json.is_complete = true;
+	
+	var new_task = new Backbone.Model();
+	new_task.url = '/core/api/tasks';
+	new_task.save(json,{
+		success: function(model, response){
+			App_Calendar.tasksListView.collection.remove(model);
+			
+			ui.fadeOut(2000);
+		}
+	});
+	
 	// Set is complete flag to be true
-	model.set('is_complete', true);
-	model.url = '/core/api/tasks';
-
+	/*model.url = '/core/api/tasks';
+	model.set({'is_complete': true}, {silent: true});
+	
 	// Destroy and hide the task
 	model.save([],{success: function(model, response) {
 		
@@ -99,6 +121,6 @@ function completeTask(taskId, ui)
 		
 		ui.fadeOut(2000);
 	}}
-	);
+	);*/
 	
 }

@@ -1,0 +1,16 @@
+cron:
+- description: TaskletsTimer
+  url: /cron
+  schedule: every 2 mins
+
+- description: daily reports
+  url: /cron/reports/?duration=DAILY
+  schedule: every 2 mins
+  
+- description: Monthly reports
+  url: /cron/reports/?duration=MONTHLY
+  schedule: 1st friday of month 23:55
+  
+- description: Weekly reports
+  url: /cron/reports/?duration=WEEKLY
+  schedule: every friday 23:50  

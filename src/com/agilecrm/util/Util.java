@@ -7,12 +7,17 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
+import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
@@ -26,6 +31,7 @@ import org.json.JSONObject;
 
 import au.com.bytecode.opencsv.CSVReader;
 
+import com.agilecrm.core.DomainUser;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -210,6 +216,23 @@ public class Util
 	return "+1" + number;
     }
 
+    // Get all Name spaces
+    public static Set<String> getAllNamespaces()
+    {
+	List<DomainUser> domainList = DomainUser.getAllDomainUsers();
+
+	// Map<String, Long> domainMap = new HashMap<String, Long>();
+
+	Set<String> domains = new HashSet<String>();
+
+	for (DomainUser domainUser : domainList)
+	{
+	    domains.add(domainUser.domain);
+	}
+
+	return domains;
+    }
+
     // Get Name space count
     public static JSONObject getNamespaceCount()
     {
@@ -219,6 +242,37 @@ public class Util
 
 	Entity globalStat = datastore.prepare(new Query("__Stat_Total__"))
 		.asSingleEntity();
+	Long totalBytes = (Long) globalStat.getProperty("bytes");
+	Long totalEntities = (Long) globalStat.getProperty("count");
+
+	JSONObject statsJSON = new JSONObject();
+
+	try
+	{
+	    statsJSON.put("bytes", totalBytes);
+	    statsJSON.put("entities", totalEntities);
+	}
+	catch (Exception e)
+	{
+
+	}
+
+	System.out.println("Total Bytes: " + totalBytes);
+	System.out.println("Total Entities: " + totalEntities);
+
+	return statsJSON;
+    }
+
+    // Get Name space stats
+    public static JSONObject getNamespaceStats()
+    {
+
+	DatastoreService datastore = DatastoreServiceFactory
+		.getDatastoreService();
+
+	Entity globalStat = datastore.prepare(new Query("__Stat_Ns_Total__"))
+		.asSingleEntity();
+
 	Long totalBytes = (Long) globalStat.getProperty("bytes");
 	Long totalEntities = (Long) globalStat.getProperty("count");
 
@@ -372,5 +426,33 @@ public class Util
 	openIdProviders.put("myopenid.com", "stats.agilecrm.com");
 
 	return openIdProviders.get(provider.toLowerCase());
+    }
+
+    // Hash function MD5 for password
+    public static String getMD5HashedPassword(String password)
+    {
+	String hashedPassword = null;
+
+	if (password == null)
+	    return null;
+	try
+	{
+
+	    // Create MessageDigest object for MD5
+	    MessageDigest digest = MessageDigest.getInstance("MD5");
+
+	    // Update input string in message digest
+	    digest.update(password.getBytes(), 0, password.length());
+
+	    // Converts message digest value in base 16
+	    hashedPassword = new BigInteger(1, digest.digest()).toString(16);
+
+	}
+	catch (NoSuchAlgorithmException e)
+	{
+
+	    e.printStackTrace();
+	}
+	return hashedPassword;
     }
 }

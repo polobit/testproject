@@ -12,7 +12,15 @@ $(function () {
         var ele = getTemplate("opportunity-detail-popover", currentDeal.toJSON());
         $(this).attr({
         	"rel" : "popover",
-        	"placement" : 'left',
+        	"data-placement" : 'right',
+        	"data-original-title" : currentDeal.toJSON().name,
+        	"data-content" :  ele
+        });
+       
+        // Check for last tr
+        $('#opportunities-model-list > tr:last').attr({
+        	"rel" : "popover",
+        	"data-placement" : 'top',
         	"data-original-title" : currentDeal.toJSON().name,
         	"data-content" :  ele
         });
@@ -49,16 +57,19 @@ $(function () {
 
 //Populate users in options of owner input field dropdown
 function populateUsers(id, el , value) {
-	
-	// Users
-	var optionsTemplate = "<option value='{{id}}'>{{currentDomainUserName}}</option>";
+
+	// Users set id of agile user to save agileuser key in opportunities
+	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 	
 	// Fill owners list
-	fillSelect('owners-list','/core/api/deal-owners', 'userPrefs', function fillOwner() {
+	fillSelect('owners-list','/core/api/users', 'domainUser', function fillOwner() {
 		
 		if(value)
 		{
-			$('#owners-list',el).find('option[value='+value.owner.id+']').attr("selected", "selected");;
+			// If domain user is delete owner is undefined
+			if(value.owner)
+				// While deserialize set agile user id from user prefs to save agile user key in opportunity 
+				$('#owners-list',el).find('option[value='+value.owner.id+']').attr("selected", "selected");;
 		}			
 	}, optionsTemplate); 
 }

@@ -54,29 +54,33 @@ var ContactsRouter = Backbone.Router.extend({
     contacts: function (tag_id, filter_id) {
     	var max_contacts_count = 20;
     	
+    	// Default url for contacts route
     	var url = '/core/api/contacts';
-    	// Tags, Search & default browse comes to the same function
     	
+    	// Tags, Search & default browse comes to the same function
     	if(tag_id)
     	{
     		url = '/core/api/tags/' + tag_id;
     	}
     	
-    	// Search based on filter
+    	// If contact-filter cookie is defined set url to fetch respective filter results
     	if(filter_id || (filter_id = readCookie('contact_filter')))
     	{
     		url = "core/api/filters/query/" + filter_id;
     	}
-    	 
+    	 console.log(url);
         // If view is set to custom view load the custom view
       	if(readCookie("contact_view"))
 		{      		
       		// If there is a filter saved in cookie then show filter results in custom view saved
       		if(readCookie('contact_filter'))
       		{	
+      			// Then call customview function with filter url
       			this.customView(readCookie("contact_view"), undefined, "core/api/filters/query/" + readCookie('contact_filter'));
       			return;
       		}
+      		
+      		// Else call customView function fetches results from default url : "core/api/contacts"
 			this.customView(readCookie("contact_view"), undefined);
 			return;
 		}
@@ -173,7 +177,9 @@ var ContactsRouter = Backbone.Router.extend({
                 
                 starify(el);
                 
-                showMap(el);
+                showMap(el, contact.toJSON());
+                
+                fillOwners(el, contact.toJSON());
                }
         });
         
@@ -326,7 +332,7 @@ var ContactsRouter = Backbone.Router.extend({
     		 template: "contact-view",
     		postRenderCallback: function(el) {
     			
-    			head.js(LIB_PATH + 'lib/jquery.multi-select.js', function(){
+    			head.js(LIB_PATH + 'lib/jquery.multi-select.js',LIB_PATH + 'lib/jquery-ui.min.js', function(){
     			
     				$('#multipleSelect', el).multiSelect();
     				$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").sortable();

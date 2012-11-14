@@ -1,5 +1,7 @@
 package com.agilecrm.user;
 
+import java.net.URLEncoder;
+
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -189,6 +191,7 @@ class NotificationsDeferredTask implements DeferredTask
     String json_data;
     Long agile_id;
     String url = null;
+    
 
     NotificationsDeferredTask(Type type, String json_data)
     {
@@ -201,11 +204,13 @@ class NotificationsDeferredTask implements DeferredTask
     {
 	// Get API Key
 	APIKey api = APIKey.getAPIKey();
-	String apiKey = api.api_key;
-
-	url = "http://stats.agilecrm.com:90/push?custom=" + json_data
-		+ "&agile_id=" + apiKey + "&type=" + type;
-
+	//String apiKey = api.api_key;
+    String apiKey = "8ve7u2kav2rgl7h4db20g5vmcl";
+	url = "https://stats.agilecrm.com:90/push?custom=" + URLEncoder.encode(json_data)
+		+ "&agile_id=" + URLEncoder.encode(apiKey) + "&type=" + URLEncoder.encode(type.toString());
+    
+	System.out.println("encoded url "+url);
+	
 	String output = Util.accessURL(url);
 	System.out.println(output);
     }

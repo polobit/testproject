@@ -13,8 +13,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.billing.AgileBilling;
-import com.agilecrm.customer.CreditCard;
-import com.agilecrm.customer.Plan;
+import com.agilecrm.billing.CreditCard;
+import com.agilecrm.billing.Plan;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.util.ClickDeskEncrytion;
 import com.google.gson.Gson;
@@ -159,6 +159,7 @@ public class Subscription
 	return subscription;
     }
 
+    // Return list of invoices
     public static List<Invoice> getInvoice() throws Exception
     {
 	Subscription subscription = getSubscription();
@@ -169,15 +170,23 @@ public class Subscription
 		subscription.billing_data);
     }
 
-    public void deleteCustomer() throws Exception
+    // Cancel Subscription and delete subscription object
+    public void cancelSubscription() throws Exception
     {
-	getAgileBilling().deleteCustomer(billing_data);
+	getAgileBilling().cancelSubscription(billing_data);
 
 	delete();
     }
 
+    // Delete customer
+    public void deleteCustomer() throws Exception
+    {
+	getAgileBilling().deleteCustomer(billing_data);
+    }
+
     public void delete() throws Exception
     {
+	// Delete the customer before deleting agile subscription object
 	deleteCustomer();
 	dao.delete(this);
     }

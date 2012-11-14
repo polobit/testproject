@@ -260,7 +260,7 @@ margin: 0px
 /* Settings Content in admin-settings.html*/
 .settings-content{
 	height: 100px;
-	margin-bottom:60px;
+	margin-bottom:50px;
 }
 
 /* Clip Board Application CSS -- Beginning */
@@ -334,6 +334,28 @@ margin-top: 10px;
 /*cursor change in triggers*/
 #triggers-model-list > tr:hover{
  cursor: pointer;
+}
+
+/* Cursor change in calendar tasks */
+#overdue > tr:hover{
+ cursor: pointer;
+}
+
+#today > tr:hover{
+ cursor: pointer;
+}
+
+#tomorrow > tr:hover{
+ cursor: pointer;
+}
+
+#next-week > tr:hover{
+ cursor: pointer;
+}
+
+/* cursor change for .modal-list-cursor tables */
+.model-list-cursor > tr:hover{
+	cursor: pointer;
 }
 
 /* To solve modal header and footer distortion */
@@ -423,5 +445,52 @@ footer {
    -ms-user-select: none;
    user-select: none;
 }
+
+/* Stripe invoice */
+      .invoice-head td {
+        padding: 0 8px;
+      }
+
+      .invoice-body{
+      	background-color:transparent;
+      }
+      .invoice-thank{
+      	margin-top: 120px;
+      	padding: 5px;
+      }
+      address{
+      	margin-top:15px;
+      }
 	
-	
+/* validation plugin */
+.valid {
+  width: 24px;
+  height: 24px;
+  background: url(../img/valid.png) center center no-repeat;
+  display: inline-block;
+  text-indent: -9999px;
+}
+
+
+.warning-dangerzone
+{
+	padding: 5px 10px;
+	margin-top;
+	margin-left;;
+	font-weight;
+	color;
+	background: url("../img/warning.png") 10px 50% no-repeat #FFFBC9;
+	border-bottom:1px solid #EDE7A3;
+}
+
+.warning-dangerzone p
+{	
+	margin-left:45px;
+	margin-top:10px;
+}
+
+.warning-header
+{
+	font: 13px Helvetica, arial, freesans, clean, sans-serif;
+	line-height: 1.4;	
+}

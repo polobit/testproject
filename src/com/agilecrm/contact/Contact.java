@@ -21,7 +21,6 @@ import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deferred.TagsDeferredTask;
 import com.agilecrm.session.SessionManager;
-import com.agilecrm.util.Util;
 import com.agilecrm.workflows.Trigger;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -76,6 +75,7 @@ public class Contact extends Cursor
     public Short star_value = 0;
 
     // Lead score
+    @Indexed
     public Integer lead_score = 0;
 
     // Dao
@@ -183,20 +183,16 @@ public class Contact extends Cursor
 	}
 	else
 	    updated_time = System.currentTimeMillis() / 1000;
-
-	// Create Search Keyword Values
-	Set<String> tokens = new HashSet<String>();
-	for (ContactField contactField : properties)
-	{
-	    if (contactField.value != null)
-		tokens.add(contactField.value);
-	}
-
-	if (tokens.size() != 0)
-	    search_tokens = Util.getSearchTokens(tokens);
-
-	System.out.println(search_tokens);
-
+	/*
+	 * // Create Search Keyword Values Set<String> tokens = new
+	 * HashSet<String>(); for (ContactField contactField : properties) { if
+	 * (contactField.value != null)
+	 * tokens.add(contactField.value.replace(" ", "")); }
+	 * 
+	 * if (tokens.size() != 0) search_tokens = Util.getSearchTokens(tokens);
+	 * 
+	 * System.out.println(search_tokens);
+	 */
 	// Update Tags - Create a deferred task
 	TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(tags);
 
@@ -231,12 +227,14 @@ public class Contact extends Cursor
 
     public void save()
     {
-	dao.put(this);
+	
+    dao.put(this);
 
 	Trigger.executeTrigger(this.id, Trigger.Type.CONTACT_IS_ADDED);
-
+	
 	ContactDocument.buildDocument(this);
-
+	
+	
     }
 
     public static Contact getContact(Long id)
@@ -296,11 +294,11 @@ public class Contact extends Cursor
 	return null;
     }
 
-    public static List<Contact> searchContacts(String keyword)
-    {
-	Objectify ofy = ObjectifyService.begin();
-	return ofy.query(Contact.class).filter("search_tokens", keyword).list();
-    }
+    /*
+     * public static List<Contact> searchContacts(String keyword) { Objectify
+     * ofy = ObjectifyService.begin(); return
+     * ofy.query(Contact.class).filter("search_tokens", keyword).list(); }
+     */
 
     // Get Contact by Email
     public static Contact searchContactByEmail(String email)
@@ -332,10 +330,8 @@ public class Contact extends Cursor
 	{
 	    this.tags.add(tag);
 	}
+    this.save();
 
-	this.save();
-	// Execute Trigger
-	Trigger.executeTrigger(this.id, Trigger.Type.TAG_IS_ADDED);
     }
 
     // Remove tags
@@ -353,8 +349,6 @@ public class Contact extends Cursor
 	// Delete tags from Tag class
 	Tag.deleteTags(tagslist);
 
-	// Execute Trigger
-	Trigger.executeTrigger(this.id, Trigger.Type.TAG_IS_DELETED);
     }
 
     // Add score
@@ -363,6 +357,48 @@ public class Contact extends Cursor
 
 	this.lead_score = this.lead_score + score;
 	this.save();
+	
+	// Get triggers
+	List<Trigger> triggerslist = null;
+
+	try
+	{
+
+	    triggerslist = Trigger
+		    .getTriggersByCondition(Trigger.Type.ADD_SCORE);
+	    System.out.println("Triggers should execute" + triggerslist);
+	    if (triggerslist != null)
+		    {
+		for (Trigger triggers : triggerslist)
+
+		{
+
+		    if (triggers.score_value != null)
+		    {
+			// Fetch contacts
+			Objectify ofy = ObjectifyService.begin();
+			List<Contact> contacts = ofy
+				.query(Contact.class)
+				.filter("lead_score >=",
+					Integer.parseInt(triggers.score_value))
+				.list();
+
+			// Execute trigger for contacts having score greater
+			// than given value
+			for (Contact contactslist : contacts)
+			    Trigger.executeTrigger(contactslist.id,
+				    Trigger.Type.ADD_SCORE);
+		    }
+		}
+		    }
+		}
+
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
+
     }
 
     // Subtract score
@@ -371,6 +407,7 @@ public class Contact extends Cursor
 
 	this.lead_score = this.lead_score - score;
 	this.save();
+	
     }
 
     // Get contacts bulk
@@ -442,21 +479,25 @@ public class Contact extends Cursor
 	}
     }
 
-    @XmlElement(name = "lead_owner")
-    public String getLeadOwner()
+    @XmlElement(name = "domainUser")
+    public DomainUser getDomainUser()
     {
 	if (owner_key != null)
+	{
 	    // If user is deleted no user is found with key so set user to null
 	    // and return null
 	    try
 	    {
-		return dao.ofy().get(owner_key).name;
+		// return dao.ofy().get(owner_key);
+		return DomainUser.getDomainUser(owner_key.getId());
 	    }
 	    catch (Exception e)
 	    {
 		owner_key = null;
 		return null;
 	    }
+	}
 	return null;
+
     }
 }

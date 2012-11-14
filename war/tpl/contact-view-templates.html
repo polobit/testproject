@@ -17,7 +17,7 @@
 <script id = "contacts-custom-view-first_name-template" type="text/html">
 	<td class='data' data='{{id}}'>
 		<b>
-		{{getPropertyValue properties "last_name"}}
+		{{getPropertyValue properties "first_name"}}
 		</b>
 	</td>
 </script>
@@ -65,7 +65,9 @@
 
 <script id = "contacts-custom-view-updated_time-template" type="text/html">
 	<td class='data' data='{{id}}'>
-		{{epochToHumanDate "mm-dd-yy" updated_time}}
+		{{#if updated_time}}
+			{{epochToHumanDate "mm-dd-yy" updated_time}}
+		{{/if}}
 	</td>
 </script>
 

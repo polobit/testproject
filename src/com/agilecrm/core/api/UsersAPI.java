@@ -18,11 +18,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.core.DomainUser;
-import com.agilecrm.user.AgileUser;
-import com.agilecrm.user.IMAPEmailPrefs;
-import com.agilecrm.user.NotificationPrefs;
-import com.agilecrm.user.SocialPrefs;
-import com.agilecrm.user.UserPrefs;
 import com.google.appengine.api.NamespaceManager;
 
 @Path("/api/users")
@@ -40,10 +35,6 @@ public class UsersAPI
 
 	    // Get the users and update the password to the masked one
 	    List<DomainUser> users = DomainUser.getUsers(domain);
-	    for (DomainUser user : users)
-	    {
-		user.password = DomainUser.MASKED_PASSWORD;
-	    }
 
 	    return users;
 	}
@@ -136,37 +127,7 @@ public class UsersAPI
 		    .build());
 	}
 
-	AgileUser agileUser = AgileUser
-		.getCurrentAgileUserFromDomainUser(domainUser.id);
-
-	if (agileUser != null)
-	{
-	    // Delete UserPrefs
-	    UserPrefs userPrefs = UserPrefs.getCurrentUserPrefs();
-	    if (userPrefs != null)
-		userPrefs.delete();
-
-	    // Delete Social Prefs
-	    List<SocialPrefs> socialPrefsList = SocialPrefs.getPrefs(agileUser);
-	    for (SocialPrefs socialPrefs : socialPrefsList)
-	    {
-		socialPrefs.delete();
-	    }
-
-	    // Delete IMAP PRefs
-	    IMAPEmailPrefs imapPrefs = IMAPEmailPrefs.getIMAPPrefs(agileUser);
-	    if (imapPrefs != null)
-		imapPrefs.delete();
-
-	    // Delete Notification Prefs
-	    NotificationPrefs notificationPrefs = NotificationPrefs
-		    .getCurrentUserNotificationPrefs();
-	    if (notificationPrefs != null)
-		notificationPrefs.delete();
-
-	    // Get and Delete AgileUser
-	    agileUser.delete();
-	}
+	DomainUser.deleteRelatedEntities(domainUser.id);
 
 	domainUser.delete();
     }

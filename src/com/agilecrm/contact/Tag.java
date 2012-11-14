@@ -7,7 +7,10 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.workflows.Trigger;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
 
 @XmlRootElement
 public class Tag
@@ -34,7 +37,68 @@ public class Tag
 		addTag(tagName);
 	    }
 
+
+
+	// Get triggers
+	List<Trigger> triggerslist = null;
+
+	try
+	{
+
+	    triggerslist = Trigger
+		    .getTriggersByCondition(Trigger.Type.TAG_IS_ADDED);
+	    System.out.println("Triggers should execute" + triggerslist);
+	    if (triggerslist != null)
+	    {
+		for (Trigger triggers : triggerslist)
+
+		{
+
+		    if (triggers.tags != null)
+		    {
+			System.out.println("Triggers should execute"
+				+ triggers.tags);
+			    String tagsSplit = "";
+
+			// Replace multiple space with single space
+			    tagsSplit = triggers.tags.trim().replaceAll(" +",
+				    " ");
+
+			// Replace ,space with space
+			    tagsSplit = triggers.tags.replaceAll(", ", ",");
+
+			    String[] tagsArray = tagsSplit.split(",");
+
+			    for (String taglist : tagsArray)
+			    {
+
+				if (taglist.equals(tagName))
+				{
+				    // Fetch contacts filter by tags
+			Objectify ofy = ObjectifyService.begin();
+			List<Contact> contacts = ofy.query(Contact.class)
+					    .filter("tags =", taglist).list();
+
+			System.out.println("Contacts related to tags"
+				+ contacts);
+
+			// Execute trigger for contacts having given tags
+			for (Contact contactslist : contacts)
+			    Trigger.executeTrigger(contactslist.id,
+					Trigger.Type.TAG_IS_ADDED);
+				}
+			    }
+		    }
+		}
+	    }
 	}
+
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	}
+
     }
 
     // Called when a contact is created

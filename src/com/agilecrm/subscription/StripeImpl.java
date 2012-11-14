@@ -10,8 +10,8 @@ import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.Globals;
 import com.agilecrm.billing.AgileBilling;
-import com.agilecrm.customer.CreditCard;
-import com.agilecrm.customer.Plan;
+import com.agilecrm.billing.CreditCard;
+import com.agilecrm.billing.Plan;
 import com.google.gson.Gson;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
@@ -118,11 +118,17 @@ public class StripeImpl implements AgileBilling
 	return invoice_collection;
     }
 
-    // Delete customer from Stripe
+    // Delete customer from Stripe and cancel subscription
     public void deleteCustomer(JSONObject stripeCustomer) throws Exception
     {
 	Customer customer = StripeUtil.getCustomerFromJson(stripeCustomer);
 	customer.delete();
+    }
 
+    public void cancelSubscription(JSONObject stripeCustomer) throws Exception
+    {
+	Customer customer = StripeUtil.getCustomerFromJson(stripeCustomer);
+
+	customer.cancelSubscription();
     }
 }

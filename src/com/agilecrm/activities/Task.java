@@ -6,6 +6,7 @@ import java.util.List;
 import javax.jdo.annotations.Embedded;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.contact.Contact;
@@ -104,6 +105,16 @@ public class Task
 		this.related_contacts.add(new Key<Contact>(Contact.class, Long
 			.parseLong(contact_id)));
 	    }
+
+	    this.contacts = null;
+	}
+
+	// Create owner key
+	if (owner == null)
+	{
+	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
+	    if (agileUser != null)
+		this.owner = new Key<AgileUser>(AgileUser.class, agileUser.id);
 	}
     }
 
@@ -209,6 +220,34 @@ public class Task
 	}
     }
 
+    public static List<Task> getPendingTasksToRemind(int numDays,
+	    Key<AgileUser> owner)
+    {
+	try
+	{
+	    // Get Today's date
+	    DateUtil startDateUtil = new DateUtil();
+	    Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
+
+	    // Get Date after days days
+	    DateUtil endDateUtil = new DateUtil();
+	    Long endTime = endDateUtil.addDays(numDays + 1).toMidnight()
+		    .getTime().getTime() / 1000;
+
+	    System.out.println("check for " + startTime + " " + endTime);
+
+	    // Get end start and endtime
+	    return dao.ofy().query(Task.class).filter("owner =", owner)
+		    .filter("due >=", startTime).filter("due <=", endTime)
+		    .filter("is_complete", false).list();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
     // Delete Contact
     public void delete()
     {
@@ -227,6 +266,17 @@ public class Task
     {
 	is_complete = true;
 	save();
+    }
+
+    // Contacts related with task
+    @XmlElement
+    public List<Contact> getContacts()
+    {
+
+	Objectify ofy = ObjectifyService.begin();
+	List<Contact> contacts_list = new ArrayList<Contact>();
+	contacts_list.addAll(ofy.get(this.related_contacts).values());
+	return contacts_list;
     }
 
 }

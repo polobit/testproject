@@ -1,33 +1,31 @@
 <script id="opportunity-detail-popover-template" type="text/html">
 	<div class='row-fluid'>
 		<div class="span12" style="margin-left:0px;">
-            <div class="span8">
-			    <p><b>Details</b></p>
-                <div style="padding:5px;">
-					  Deal Name: {{name}}<br/>
-					  Description: {{description}}
+            <div>
+                <div style="text-align: justify;font-style: italic;">
+					  {{description}}
                 </div>
                 <p><b>Contacts</b></p>
                 <div style="padding:5px;">
-					  Owner: {{owner.currentDomainUserName}}<br/>
-                      Related To: {{#each contacts}}
-		                            <div style="padding-left:8px;">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</div>
+					  Owner: {{owner.name}}<br/>
+                      Related To:<br/> {{#each contacts}}
+		                            <div class="span3" style="display:inline;margin-left:0px;">
+                                        <img class="thumbnail" src="{{gravatarurl properties 50}}" width='40px' height='40px'>
+                                        <div style="display:inline-block;text-overflow:ellipsis;white-space:nowrap;width:4em;overflow:hidden;">
+                                           {{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}},
+                                        </div>
+                                    </div>
 	                              {{/each}}
                 </div>
             </div>
-            <div class="span4" style='display:inline;padding-right:10px;height:auto;'>
-	            {{#each contacts}}
-		             <img class="thumbnail" src="{{gravatarurl properties 50}}" width='40px' height='40px'>
-	            {{/each}}
-	        </div>
          </div>
 </div>
 <div class="row-fluid">
             <div style="border-top:1px solid whitesmoke;padding-top:5px;">
-				<div ><span><b>Value: $ </b>{{expected_value}}</span></div>
+				<div ><span><b>Value: {{#if prefs.currency}}({{currencySymbol prefs.currency}}){{else}}($){{/if}} </b>{{expected_value}}</span></div>
 				<div><span><b>Probability: </b>{{probability}}%</span></div>
 				<div><span><b>Milestone: </b>{{milestone}}</span></div>
-				<div><span><b>Pipeline: $ </b>{{calculatePipeline expected_value probability pipeline}}</span></div>
+				<div><span><b>Pipeline: {{#if prefs.currency}}({{currencySymbol prefs.currency}}){{else}}($){{/if}} </b>{{calculatePipeline expected_value probability pipeline}}</span></div>
 			    <div><span><b>Close Date:  </b>{{epochToHumanDate "mm-dd-yy" close_date}}</span></div><br/>
             </div>   
 </div>

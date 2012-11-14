@@ -113,7 +113,7 @@
 		{{#unless id}}
 		<div class="form-actions" align="center">
 			<a href="#" type="submit" id="subscribe" class="save btn btn-primary">Subscribe</a>
-			<a href="#admin" class="btn ">Close</a>
+			<a href="#admin" class="btn">Close</a>
 		</div>
 		{{/unless}} 
 		{{#if id}}
@@ -149,7 +149,7 @@
 				class="pull-right">Update Card</a>
 		</legend>
 
-		{{#stringToJSON "billingData"}} {{/stringToJSON}}
+		{{#stringToJSON this "billingData"}} {{/stringToJSON}}
 
 		<table class="table table-bordered">
 			<colgroup>
@@ -192,9 +192,16 @@
 				</tr>
 			</tbody>
 		</table>
-		<a href="#admin" align="center" class="btn ">Close</a>
+			<div>
+				<a href="#invoice" style="margin-left:32%;font-size:15px">click here for Invoices</a><br><br>
+			</div>
+			<a href="#admin" align="center" class="btn">Close</a>
 		{{/if}}
 	</div>
 </div>
-
+<div class="span5 well">
+	<div id="account-stats">
+		"Stats comes here"
+	</div>
+</div>
 </script>

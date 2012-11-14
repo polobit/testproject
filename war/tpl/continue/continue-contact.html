@@ -48,7 +48,7 @@
 					<legend></legend>
 					   <p></p>
                     <div class="control-group">
-						<label class="control-label">Add Email<span><i class="multiple-add icon-plus"></i></span></label>
+						<label class="control-label">Add Email <span><a href="#" class="multiple-add"><i class="icon-plus"></i></a></span></label>
 					
 					<div class="controls hide">
 						<div class="email multiple-template" data="email">
@@ -57,7 +57,7 @@
 								<option></option>
 								<option value="work">Work</option>
 								<option value="home">Home</option>
-							</select> <i class="multiple-remove icon-remove-circle"></i>
+							</select> <a href="#" class="multiple-remove"><i class="icon-remove-circle"></i></a>
 						</div>
 					</div>	
 
@@ -68,13 +68,13 @@
 									<option></option>
 									<option value="work">Work</option>
 									<option value="home">Home</option>
-								</select> <i class="multiple-remove icon-remove-circle"></i>
+								</select> <a href="#" class="multiple-remove"><i class="icon-remove-circle"></i></a>
 							</div>
 						</div>
 					</div>
 					
 					<div class="control-group">
-						<label class="control-label">Add Phone<span><i class="multiple-add icon-plus"></i></span></label>
+						<label class="control-label">Add Phone <span><a href="#" class="multiple-add"><i class="icon-plus"></i></a></span></label>
 						<div class="controls hide">
 							<div class="phone multiple-template" data="phone">
 								<input type="text" id="phone" name="phone" placeholder="Phone number"/>
@@ -87,7 +87,7 @@
 									<option value="home fax">Home fax</option>
 									<option value="work fax">Work fax</option>
 									<option value="other">Other</option>
-								</select> <i class="multiple-remove icon-remove-circle"></i>
+								</select> <a href="#" class="multiple-remove"><i class="icon-remove-circle"></i></a>
 							</div>
 						</div>
 					<div class="controls second">
@@ -102,7 +102,7 @@
 									<option value="home fax">Home fax</option>
 									<option value="work fax">Work fax</option>
 									<option value="other">Other</option>
-								</select> <i class="multiple-remove icon-remove-circle"></i>
+								</select> <a href="#" class="multiple-remove"><i class="icon-remove-circle"></i></a>
 							</div>
 						</div>
 					</div>	
@@ -110,7 +110,7 @@
 					
 					
                    <div class="control-group">
-						<label class="control-label">Website<span><i class="multiple-add icon-plus"></i></span></label>
+						<label class="control-label">Website <span><a href="#" class="multiple-add"><i class="icon-plus"></i></a></span></label>
 					<div class="controls hide">
 							<div class="website multiple-template style="display:none" data="website">
 								<input type="text" id="website" name="website" style="width:105px" 
@@ -129,7 +129,7 @@
 									<option value="GITHUB">GitHub</option>
 									<option value="YOUTUBE">YouTube</option>
 								</select> 
-								&nbsp;<i class="multiple-remove icon-remove-circle"></i>
+								&nbsp;<a href="#" class="multiple-remove"><i class="icon-remove-circle"></i></a>
 							</div>
 						</div>
 						<div class="controls second">
@@ -150,7 +150,7 @@
 									<option value="GITHUB">GitHub</option>
 									<option value="YOUTUBE">YouTube</option>
 								</select>
-									&nbsp;<i class="multiple-remove icon-remove-circle"></i>
+									&nbsp;<a href="#" class="multiple-remove"><i class="icon-remove-circle"></i></a>
 							</div>
 						</div>
 					</div>
@@ -426,6 +426,7 @@
 						</div>
 					</div>
 				<input type="text" name="id" class="hide" value={{id}} >
+                <input type="text" name="created_time" class="hide" value={{created_time}}>
 					<div class="form-actions">
 						<a href="#" type="submit" class="save btn btn-primary" id="update">Update</a>
 						<a href="#home" class="btn" id="close">Close</a>

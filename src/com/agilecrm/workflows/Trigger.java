@@ -1,7 +1,9 @@
 package com.agilecrm.workflows;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlElement;
@@ -38,7 +40,7 @@ public class Trigger
     // Trigger Condition
     public enum Type
     {
-	TAG_IS_ADDED, TAG_IS_DELETED, CONTACT_IS_ADDED, CONTACT_IS_DELETED, DEAL_IS_ADDED, DEAL_IS_DELETED
+	TAG_IS_ADDED, TAG_IS_DELETED, CONTACT_IS_ADDED, CONTACT_IS_DELETED, DEAL_IS_ADDED, DEAL_IS_DELETED, ADD_SCORE
     };
 
     // Trigger Condition
@@ -46,6 +48,13 @@ public class Trigger
 
     @NotSaved(IfDefault.class)
     public String campaign_id = null;
+    
+    @NotSaved(IfDefault.class)
+    public String score_value = null;
+    
+    @NotSaved(IfDefault.class)
+    public String tags = null;
+
 
     // Dao
     private static ObjectifyGenericDao<Trigger> dao = new ObjectifyGenericDao<Trigger>(

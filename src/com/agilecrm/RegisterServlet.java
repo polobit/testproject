@@ -136,7 +136,9 @@ public class RegisterServlet extends HttpServlet
 	// Get Domain
 	String domain = NamespaceManager.get();
 	if (StringUtils.isEmpty(domain))
-	    throw new Exception("Invalid Domain. Please go to choose domain.");
+	    if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
+		throw new Exception(
+			"Invalid Domain. Please go to choose domain.");
 
 	// Get Domain User with this name, password - we do not check for domain
 	// as validity is verified in AuthFilter

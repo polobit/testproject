@@ -106,7 +106,53 @@
     <url-pattern>/meeting</url-pattern>
   </servlet-mapping>
   
-  
+  <servlet>
+ 	<servlet-name>Reports</servlet-name>
+ 	<servlet-class>com.agilecrm.reports.ReportServlet</servlet-class>
+ </servlet>
+ 
+ <servlet-mapping>
+ 	<servlet-name>Reports</servlet-name>
+ 	<url-pattern>/cron/reports/*</url-pattern>
+ </servlet-mapping>
+
+<servlet>
+ 	<servlet-name>Stripe Webhook</servlet-name>
+ 	<servlet-class>com.agilecrm.subscription.StripeWebhookServlet</servlet-class>
+ </servlet>
+ 
+ <servlet-mapping>
+ 	<servlet-name>Stripe Webhook</servlet-name>
+ 	<url-pattern>/stripewebhook/*</url-pattern>
+ </servlet-mapping>
+
+<servlet>
+  <servlet-name>ForgotDomain</servlet-name> 
+  <jsp-file>/forgot-domain.jsp</jsp-file> 
+  </servlet>
+ <servlet-mapping>
+ <servlet-name>ForgotDomain</servlet-name>
+ <url-pattern>/forgot-domain</url-pattern> 
+ </servlet-mapping>
+
+<servlet>
+ <servlet-name>ForgotPassword</servlet-name> 
+ <jsp-file>/forgot-password.jsp</jsp-file> 
+ </servlet>
+ <servlet-mapping>
+ <servlet-name>ForgotPassword</servlet-name> 
+ <url-pattern>/forgot-password</url-pattern> 
+ </servlet-mapping>
+ 
+ <servlet>
+ <servlet-name>ChooseDomain</servlet-name> 
+<jsp-file>/choose-domain.jsp</jsp-file> 
+</servlet>
+
+<servlet-mapping>
+<servlet-name>ChooseDomain</servlet-name> 
+<url-pattern>/choose-domain</url-pattern> 
+</servlet-mapping>
   
   <filter>
        <filter-name>NamespaceFilter</filter-name>
@@ -152,6 +198,7 @@
  	<filter-name>JSAPIFilter</filter-name>
  	<url-pattern>/core/js/*</url-pattern>
  </filter-mapping>
+   
    
    <welcome-file-list>
    <welcome-file>home</welcome-file>

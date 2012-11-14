@@ -1,0 +1,29 @@
+<script id="warning-template" type="text/html">
+<div id="warning-deletion" class="modal hide">
+	<div class="modal-header warning-header" style="background-color:#DA4F49">
+  		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+  		<h3 font-color="background-color:black">Make sure you want to do this</h3>
+	</div>
+	<div class="modal-body" style="padding:0px">
+		<div class="warning-dangerzone">
+			<p>
+				This is extremely important. If you don't read this, unexpected bad things will most definitely occur.
+			</p>
+		</div>
+  		<ul style="padding:10px">
+           <li>This action cannot be UNDONE.</li>
+		   <li>Data you used 
+				<ul>
+					<li>Data : {{bytes}}</li>
+					<li>Entities : {{entities}}</li>
+				</ul>
+			</li>
+           <li>All data will be DELETED.</li>
+        </ul>
+	</div>
+	<div class="modal-footer">
+  		<a href="#" class="btn" data-dismiss="modal">Close</a>
+  		<a href="#" id="confirm-delete-account"class="btn btn-danger ">Delete Account</a>
+	</div>
+</div>
+</script>

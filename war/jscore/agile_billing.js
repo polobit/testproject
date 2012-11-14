@@ -81,3 +81,4 @@ function deserializeCardDetails(data, form)
 
 	});
 }
+

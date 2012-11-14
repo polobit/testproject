@@ -1,6 +1,7 @@
 
 <script id="contact-view-template" type="text/html">
-	<div class="span7">
+	<div class="row">
+     <div class="span7">
 		<div class="well">
 			<form id="opportunityform" class="form-horizontal">
 		  		<fieldset>
@@ -29,7 +30,7 @@
 			  			</div>
 					</div>
 					{{#if id}}
-						<input name="id" class="hide" value="{{id}}"/>
+                        <input name="id" class="hide" value="{{id}}"/>
 					{{/if}}
 					<div class="form-actions">          
           				<a href="#" type="submit" class="save btn btn-primary" id="contactView">Save Changes</a>
@@ -39,4 +40,15 @@
 			</form>
 			</div>
 		</div>
+      
+       <div class='span3'>
+			<div class="well" id='addview'>
+         <h3>Customize your view</h3>
+         <br/>
+          <p>Look at contacts and companies the way you want to. Choose different fields and the order in which you would like them to appear. You can add any number of views.</p>
+			</div>
+		</div>
+
+
+</div>
 </script>

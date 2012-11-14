@@ -16,12 +16,19 @@ import com.agilecrm.Globals;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.IMAPEmailPrefs;
+import com.agilecrm.user.NotificationPrefs;
+import com.agilecrm.user.SocialPrefs;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.util.SendMail;
 import com.agilecrm.util.Util;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -42,11 +49,12 @@ public class DomainUser
 
     // Is Admin
     @NotSaved(IfDefault.class)
-    public boolean is_admin = true;
+    public boolean is_admin = false;
 
     // Account Owner
+    @Indexed
     @NotSaved(IfDefault.class)
-    public boolean is_account_owner = true;
+    public boolean is_account_owner = false;
 
     @NotSaved(IfDefault.class)
     public boolean is_disabled = false;
@@ -94,11 +102,12 @@ public class DomainUser
 
     }
 
-    public DomainUser(String domain, String email, String password,
-	    String name, boolean isAdmin, boolean isAccountOwner)
+    public DomainUser(String domain, String email, String name,
+	    String password, boolean isAdmin, boolean isAccountOwner)
     {
 	this.domain = domain;
 	this.email = email;
+	this.name = name;
 	this.password = password;
 	this.is_admin = isAdmin;
 	this.is_account_owner = isAccountOwner;
@@ -153,10 +162,10 @@ public class DomainUser
 	    setInfo(CREATED_TIME, new Long(System.currentTimeMillis() / 1000));
 
 	// Store password
-	if (password != null && !password.equalsIgnoreCase(MASKED_PASSWORD))
+	if (password != null && !password.equals(MASKED_PASSWORD))
 	{
 	    // Encrypt password while saving
-	    encrypted_password = Util.encrypt(password);
+	    encrypted_password = Util.getMD5HashedPassword(password);
 	}
 	else
 	{
@@ -169,8 +178,6 @@ public class DomainUser
 	    }
 	}
 
-	password = MASKED_PASSWORD;
-
 	info_json_string = info_json.toString();
 
 	// Lowercase
@@ -178,15 +185,14 @@ public class DomainUser
 	domain = StringUtils.lowerCase(domain);
     }
 
+    public String getHashedString()
+    {
+	return encrypted_password;
+    }
+
     @PostLoad
     private void PostLoad() throws DecoderException
     {
-	// Decrypt password
-	if (encrypted_password != null)
-	{
-	    password = Util.decrypt(encrypted_password);
-	}
-
 	try
 	{
 	    if (info_json != null)
@@ -279,18 +285,72 @@ public class DomainUser
 	}
     }
 
+    // Get all domain users
+    public static List<DomainUser> getAllDomainUsers()
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	try
+	{
+	    return dao.fetchAll();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
+
+    // Get Account owners
+    public static DomainUser getDomainOwner()
+    {
+	return dao.ofy().query(DomainUser.class)
+		.filter("is_account_owner", true).get();
+    }
+
     // Save
     public void save() throws Exception
     {
+	DomainUser domainUser = getDomainUserFromEmail(email);
 	System.out.println("Creating or updating new user " + this);
 
 	// Check if user exists with this email
-	DomainUser domainUser = getDomainUserFromEmail(email);
-	if ((domainUser != null) && this.id != null
-		&& !this.id.equals(domainUser.id))
+
+	if (domainUser != null)
 	{
-	    throw new Exception("User already exists with this email address "
-		    + domainUser);
+	    // If domain user exists, not allowing to create new user
+	    if (this.id == null
+		    || (this.id != null && !this.id.equals(domainUser.id)))
+	    {
+		throw new Exception(
+			"User already exists with this email address "
+				+ domainUser);
+	    }
+
+	    // If domain user exists,setting to name if null
+	    if (this.name == null)
+	    {
+		this.name = domainUser.name;
+	    }
+
+	    // If existing domain user is Super User
+	    if (domainUser.is_account_owner)
+	    {
+		this.is_account_owner = true;
+		this.is_disabled = false;
+		if (!this.is_admin)
+		{
+		    this.is_admin = true;
+		    throw new Exception(
+			    "Super user should be Admin and cannot be disabled.");
+		}
+	    }
+	}
+
+	// User cannot be admin and disabled
+	if (this.is_admin == true && this.is_disabled == true)
+	{
+	    throw new Exception("User cannot be admin and disabled at a time.");
 	}
 
 	// Set to current namespace if it is empty
@@ -314,12 +374,6 @@ public class DomainUser
 	if (count() >= Globals.TRIAL_USERS_COUNT && this.id == null)
 	    throw new Exception(
 		    "Please upgrade. You cannot add more than 2 users in the free plan");
-
-	// Super User should always be the admin
-	if (this.is_account_owner && !this.is_admin)
-	{
-	    this.is_admin = true;
-	}
 
 	// Send Email
 	if (this.id == null)
@@ -359,6 +413,34 @@ public class DomainUser
 	NamespaceManager.set(oldNamespace);
     }
 
+    // Delete domain users in a domain
+    public static void deleteDomainUsers(String namespace)
+    {
+	if (StringUtils.isEmpty(namespace))
+	    return;
+
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	// Get keys of domain users in respective domain
+	List<Key<DomainUser>> domainUserKeys = dao.ofy()
+		.query(DomainUser.class).filter("domain", namespace).listKeys();
+
+	// Delete all entities related to that domain user
+	for (Key<DomainUser> user : domainUserKeys)
+	{
+	    NamespaceManager.set(oldNamespace);
+	    deleteRelatedEntities(user.getId());
+	}
+
+	NamespaceManager.set("");
+
+	// Delete domain users in domain
+	dao.deleteKeys(domainUserKeys);
+
+	NamespaceManager.set(oldNamespace);
+    }
+
     public static int count()
     {
 	String domain = NamespaceManager.get();
@@ -377,9 +459,9 @@ public class DomainUser
     // To String
     public String toString()
     {
-	return " Email: " + this.email + " Domain: " + this.domain
-		+ " IsAdmin: " + this.is_admin + " DomainId: " + this.id
-		+ " Name:" + name + " " + " " + info_json;
+	return "\n Email: " + this.email + " Domain: " + this.domain
+		+ "\n IsAdmin: " + this.is_admin + " DomainId: " + this.id
+		+ " Name: " + this.name + "\n " + info_json;
 
     }
 
@@ -421,6 +503,46 @@ public class DomainUser
 	{
 	    return false;
 	}
+    }
+
+    /*
+     * Delete All the entities(AgileUser, Userprefs, Imap prefs, notification
+     * prefs) delete before deleting domain users
+     */
+    public static void deleteRelatedEntities(Long id)
+    {
+	AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(id);
+
+	if (agileUser != null)
+	{
+	    // Delete UserPrefs
+	    UserPrefs userPrefs = UserPrefs.getUserPrefs(agileUser);
+	    if (userPrefs != null)
+		userPrefs.delete();
+
+	    // Delete Social Prefs
+	    List<SocialPrefs> socialPrefsList = SocialPrefs.getPrefs(agileUser);
+	    for (SocialPrefs socialPrefs : socialPrefsList)
+	    {
+		socialPrefs.delete();
+	    }
+
+	    // Delete IMAP PRefs
+	    IMAPEmailPrefs imapPrefs = IMAPEmailPrefs.getIMAPPrefs(agileUser);
+	    if (imapPrefs != null)
+		imapPrefs.delete();
+
+	    // Delete Notification Prefs
+	    NotificationPrefs notificationPrefs = NotificationPrefs
+		    .getNotificationPrefs(agileUser);
+
+	    if (notificationPrefs != null)
+		notificationPrefs.delete();
+
+	    // Get and Delete AgileUser
+	    agileUser.delete();
+	}
+
     }
 
 }

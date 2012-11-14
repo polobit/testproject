@@ -3,7 +3,6 @@ package com.agilecrm.user;
 import java.util.List;
 
 import javax.persistence.Id;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -41,6 +40,9 @@ public class UserPrefs
 
     @NotSaved
     public String name = null;
+
+    @NotSaved
+    public AgileUser agile_user = null;
 
     @NotSaved(IfDefault.class)
     public String timezone = null;
@@ -157,7 +159,6 @@ public class UserPrefs
 	return dao.fetchAll();
     }
 
-    @XmlElement(name = "name")
     public String getCurrentDomainUserName()
     {
 	DomainUser currentDomainUser = DomainUser.getDomainCurrentUser();
@@ -165,21 +166,5 @@ public class UserPrefs
 	    return currentDomainUser.name;
 
 	return "?";
-    }
-
-    @XmlElement(name = "agile_user")
-    public AgileUser getAgileUser()
-    {
-	if (user != null)
-	    try
-	    {
-		return dao.ofy().get(user);
-	    }
-	    catch (Exception e)
-	    {
-		return null;
-	    }
-
-	return null;
     }
 }

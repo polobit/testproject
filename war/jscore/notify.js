@@ -76,13 +76,15 @@ function _setupSockets(api_key)
 	    console.log(data);
 	    
 	    // Get his email address
-	    var email = 'manohar@invox.com';
+	    //var email = 'manohar@invox.com';
+	    fetchContactAndNotify(data.email);
 	});	
 	
 	  
 	socket.on('notification', function (data) {
 		console.log('notification');
 	    console.log(data);
+	    
 	});	
 }
 

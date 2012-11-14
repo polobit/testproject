@@ -63,11 +63,11 @@ public class GMailGadgetServlet extends HttpServlet
 	// Get Current User
 	UserInfo user = (UserInfo) req.getSession().getAttribute(
 		SessionManager.AUTH_SESSION_COOKIE_NAME);
-	resp.getWriter().println(user);
+	resp.getWriter().println("Saving user " + user);
 
 	// Get Gadget Id
 	String oneTimeSessionKey = req.getParameter(SESSION_KEY_NAME);
-	resp.getWriter().println(oneTimeSessionKey);
+	resp.getWriter().println("One time session " + oneTimeSessionKey);
 
 	// Get Cache Id
 	String ownerId = (String) Util.getCache(oneTimeSessionKey);
@@ -82,16 +82,19 @@ public class GMailGadgetServlet extends HttpServlet
 	// Remove from Cache
 	Util.deleteCache(oneTimeSessionKey);
 
-	resp.getWriter().println(ownerId);
+	resp.getWriter().println("Owner Id " + ownerId);
 
 	// Setup Authentication Key
-	DomainUser domainUser = DomainUser.getDomainCurrentUser();
+	DomainUser domainUser = DomainUser.getDomainUserFromEmail(user
+		.getEmail());
 	if (domainUser == null)
 	{
 	    resp.getWriter().println(
 		    "We are unable to find any account with this userid");
 	    return false;
 	}
+
+	resp.getWriter().println("Domain User " + domainUser);
 
 	// Save the gadget_id
 	domainUser.gadget_id = ownerId;

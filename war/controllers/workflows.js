@@ -93,7 +93,19 @@ var WorkflowsRouter = Backbone.Router.extend({
                 window: 'triggers',
                 postRenderCallback:function(el){
 
-                var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+                	head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+	           		    	{	
+	           					var LHS, RHS;
+	           					
+	           					LHS = $("#LHS", el);
+	           					RHS = $("#RHS", el);
+	           					
+	           					// Chaining dependencies of input fields with jquery.chained.js
+	           					RHS.chained(LHS);
+	            			        	            			    
+	           		    	});
+	            
+	            var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
                 fillSelect('campaign-select','/core/api/workflows', 'workflow', 'no-callback', optionsTemplate);
 
                    }
@@ -120,13 +132,27 @@ var WorkflowsRouter = Backbone.Router.extend({
                 template: "trigger-add",
                 window: 'triggers',
                 postRenderCallback: function(el){
+                	
+                	head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+	           		    	{	
+	           					var LHS, RHS;
+	           					
+	           					LHS = $("#LHS", el);
+	           					RHS = $("#RHS", el);
+	           					
+	           					// Chaining dependencies of input fields with jquery.chained.js
+	           					RHS.chained(LHS);
+	            			        	            			    
+	           		    	});
+                	
+                	
                 	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
                     fillSelect('campaign-select','/core/api/workflows', 'workflow', function fillCampaign() {
                 		var value = currentTrigger.toJSON();
-                		
                 		if(value)
                 		{
                 			$('#campaign-select',el).find('option[value='+value.campaign_id+']').attr('selected', 'selected');
+                			
                 		}			
                 	}, optionsTemplate);
                     },
