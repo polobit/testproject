@@ -164,7 +164,7 @@ function contacts_typeahead(data){
 					}
 				
 				contact_name = getPropertyValue(contact.properties, "first_name") + getPropertyValue(contact.properties, "last_name");
-				contact_names_list.push(contact_name);
+				contact_names_list.push(contact_name.split(" ").join(""));
 			});
 			return contact_names_list;
 	}
