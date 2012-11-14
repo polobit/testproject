@@ -105,7 +105,10 @@ function agile_type_ahead(id, el, callback, isSearch) {
 					return;
 				}
 			
-			
+			// Return if items are not defined and it is not search in nav bar
+			if(!items)
+				return;
+				
 			// If tag already exists returns 
 			$.each($('.tags', el).children('li'), function(index, tag) {
 				
