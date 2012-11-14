@@ -10,20 +10,22 @@ $(function(){
 	
 	$("#search-results").live('click', function(e){
 		e.preventDefault();
-		
-		var query_text = $("#searchText").val();
-		
-		if(query_text == "")
-			return;
-		
-		if(!App_Contacts)
-			App_Contacts = new ContactsRouter();
-		
-		App_Contacts.navigate("contacts/search/" + query_text, {
-            trigger: true
-        });
-		
-		
+		showSearchResults();
 	});
 });
 
+
+function showSearchResults()
+{
+	var query_text = $("#searchText").val();
+	
+	if(query_text == "")
+		return;
+	
+	if(!App_Contacts)
+		App_Contacts = new ContactsRouter();
+	
+	App_Contacts.navigate("contacts/search/" + query_text, {
+        trigger: true
+    });
+}

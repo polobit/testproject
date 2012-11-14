@@ -1,6 +1,7 @@
 // To save map of key: first_name and value: contact id 
 var QUERY_RESULTS;
 var TYPEHEAD_TAGS = {};
+var RESULT_DROPDOWN_ELEMENT;
 function agile_type_ahead(id, el, callback, isSearch) {
 	
 	$('#' + id, el).attr("autocomplete","off");
@@ -66,10 +67,10 @@ function agile_type_ahead(id, el, callback, isSearch) {
 					return i[0];
 				});
 
-				
+				RESULT_DROPDOWN_ELEMENT = items;
 			
 				// Set first li element as active
-				items.first().addClass('active');
+				//items.first().addClass('active');
 				items.css("overflow", "hidden");
 				// Set the width of typeahead dropdown
 				this.$menu.css("width",300);
@@ -82,16 +83,26 @@ function agile_type_ahead(id, el, callback, isSearch) {
 		updater: function (items) {
 			var tag_not_exist = true;		
 
+			
 			// Store items in temp variable so to show first name lastname separated by space 
 			var items_temp = items;
 			
 			// Trim spaces in names to retrieve contact id from JSON 
-			items = items.split(" ").join("")
+			if(items)
+				items = items.split(" ").join("")
 			
 			// Customize data for type ahead
 			if (isSearch && typeof(isSearch) === "function")
 				{
-					isSearch(TYPEHEAD_TAGS[items]);							
+				
+					// If no item is selected then show results in different page
+					if(!items)
+					{
+						showSearchResults();
+						return;
+					}
+					isSearch(TYPEHEAD_TAGS[items]);
+					return;
 				}
 			
 			
