@@ -81,6 +81,12 @@ function agile_type_ahead(id, el, callback, isSearch) {
 		},
 		updater: function (items) {
 			var tag_not_exist = true;		
+
+			// Store items in temp variable so to show first name lastname separated by space 
+			var items_temp = items;
+			
+			// Trim spaces in names to retrieve contact id from JSON 
+			items = items.split(" ").join("")
 			
 			// Customize data for type ahead
 			if (isSearch && typeof(isSearch) === "function")
@@ -101,7 +107,7 @@ function agile_type_ahead(id, el, callback, isSearch) {
 			
 			//add tag 
 			if(tag_not_exist)				
-				$('.tags',el).append('<li class="tag"  style="display: inline-block;" data="'+ TYPEHEAD_TAGS[items]+'">'+items+'<a class="close" id="remove_tag">&times</a></li>');
+				$('.tags',el).append('<li class="tag"  style="display: inline-block;" data="'+ TYPEHEAD_TAGS[items]+'">'+items_temp+'<a class="close" id="remove_tag">&times</a></li>');
 		},
 		minLength : 2,
 	})
