@@ -4,21 +4,52 @@ var TYPEHEAD_TAGS = {};
 var RESULT_DROPDOWN_ELEMENT;
 function agile_type_ahead(id, el, callback, isSearch) {
 	
+	// Turn off browser default auto complete
 	$('#' + id, el).attr("autocomplete","off");
 	
 	var CONTACTS = {};
+	
 	$('#' + id, el).typeahead({
 		source : function(query, process) {
-	
+			
+			// Store typeahead object in temp variable
+			var that = this;
+			
+			// Loading image is not avialable in menu then append it to menu
+			if(!$(this.$menu.find('li').last()).hasClass('loading-results'))			
+				this.$menu.append('<li class="divider"></li><li class="loading-results"><p align="center">'+LOADING_ON_CURSOR+'</p></li>');
+			
+			this.shown = true;
+			
+			// Reset the results before query
+			CONTACTS = {};
+			
 			// Get data on query
 			$.getJSON("core/api/contacts/search/" + query,
 				function(data) {
-					QUERY_RESULTS = data;
+
+				// Store query results to use them in updater and render functions
+				CONTACTS = data;
+				
+				// Set results in global variable used to show results in different page
+				QUERY_RESULTS = data;
+				
+				// If no result found based on query show info in type-ahead drop-down
+				if(data.length == 0)
+				{	
+					// Call render to activate menu
+					that.render();
+					
+					// Set css and html data to be displayed
+					that.$menu.css("width",300);
+					that.$menu.html('<p align="center"><b>No Results Found</b><p>').show();
+					
+					// Return further processing data not required 
+					return;
+				}
+				
 					var items_list = [] ;
-					
-					// Store query results to use them in updater and render functions
-					CONTACTS = data;
-					
+						
 					// Customize data for type ahead
 					if (callback && typeof(callback) === "function")
 						{
@@ -48,6 +79,14 @@ function agile_type_ahead(id, el, callback, isSearch) {
 		render: function()
 		{	
 			var that = this;
+
+			// If query results are not available activate the menu to show info and return
+			if(!CONTACTS.length)
+			{
+				this.show();
+				return;
+			}
+			
 			items = $(CONTACTS).map(function (i, item) {
 
 							// Check if item if of company type get company name instead of first name and last name of person
@@ -66,7 +105,7 @@ function agile_type_ahead(id, el, callback, isSearch) {
 							
 					return i[0];
 				});
-
+			
 				RESULT_DROPDOWN_ELEMENT = items;
 			
 				// Set first li element as active
