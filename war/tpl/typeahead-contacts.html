@@ -9,13 +9,13 @@
 		</div>
 
 		{{#compare type "COMPANY"}}
-			<div style="height:auto;display:inline-block;vertical-align:-20px;margin-left:2px">
+			<div style="height:auto;display:inline-block;vertical-align:-20px;margin-left:2px;text-overflow: ellipsis; white-space: nowrap; width: 15em; overflow: hidden; vertical-align: top;">
 				<b>{{getPropertyValue properties "name"}}</b><br/>
 					{{getPropertyValue properties "email"}}</br>
 				{{getPropertyValue properties "url"}}</br>
 			</div>
 			{{else}}
-			<div style="height:auto;display:inline-block;vertical-align:-20px;margin-left:2px">
+			<div style="height:auto;display:inline-block;vertical-align:-20px;margin-left:2px;text-overflow: ellipsis; white-space: nowrap; width: 15em; overflow: hidden; vertical-align: top;">
 				<b>{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</b><br/>
 					{{getPropertyValue properties "email"}}</br>
 					{{getPropertyValue properties "company"}}

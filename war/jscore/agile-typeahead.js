@@ -1,22 +1,55 @@
 // To save map of key: first_name and value: contact id 
+var QUERY_RESULTS;
 var TYPEHEAD_TAGS = {};
+var RESULT_DROPDOWN_ELEMENT;
 function agile_type_ahead(id, el, callback, isSearch) {
 	
+	// Turn off browser default auto complete
 	$('#' + id, el).attr("autocomplete","off");
 	
 	var CONTACTS = {};
+	
 	$('#' + id, el).typeahead({
 		source : function(query, process) {
-	
+			
+			// Store typeahead object in temp variable
+			var that = this;
+			
+			// Loading image is not avialable in menu then append it to menu
+			if(!$(this.$menu.find('li').last()).hasClass('loading-results'))			
+				this.$menu.append('<li class="divider"></li><li class="loading-results"><p align="center">'+LOADING_ON_CURSOR+'</p></li>');
+			
+			this.shown = true;
+			
+			// Reset the results before query
+			CONTACTS = {};
+			
 			// Get data on query
 			$.getJSON("core/api/contacts/search/" + query,
 				function(data) {
+
+				// Store query results to use them in updater and render functions
+				CONTACTS = data;
+				
+				// Set results in global variable used to show results in different page
+				QUERY_RESULTS = data;
+				
+				// If no result found based on query show info in type-ahead drop-down
+				if(data.length == 0)
+				{	
+					// Call render to activate menu
+					that.render();
 					
+					// Set css and html data to be displayed
+					that.$menu.css("width",300);
+					that.$menu.html('<p align="center"><b>No Results Found</b><p>').show();
+					
+					// Return further processing data not required 
+					return;
+				}
+				
 					var items_list = [] ;
-					
-					// Store query results to use them in updater and render functions
-					CONTACTS = data;
-					
+						
 					// Customize data for type ahead
 					if (callback && typeof(callback) === "function")
 						{
@@ -46,13 +79,21 @@ function agile_type_ahead(id, el, callback, isSearch) {
 		render: function()
 		{	
 			var that = this;
+
+			// If query results are not available activate the menu to show info and return
+			if(!CONTACTS.length)
+			{
+				this.show();
+				return;
+			}
+			
 			items = $(CONTACTS).map(function (i, item) {
 
 							// Check if item if of company type get company name instead of first name and last name of person
 							if(item.type == "COMPANY")
 								var fullname = getPropertyValue(item.properties, "name");
 							else
-								var fullname = getPropertyValue(item.properties, "first_name") + getPropertyValue(item.properties, "last_name");
+								var fullname = getPropertyValue(item.properties, "first_name") +" "+ getPropertyValue(item.properties, "last_name");
 							
 							i = $(that.options.item).attr('data-value', fullname);
 							
@@ -64,11 +105,11 @@ function agile_type_ahead(id, el, callback, isSearch) {
 							
 					return i[0];
 				});
-
-				
+			
+				RESULT_DROPDOWN_ELEMENT = items;
 			
 				// Set first li element as active
-				items.first().addClass('active');
+				//items.first().addClass('active');
 				items.css("overflow", "hidden");
 				// Set the width of typeahead dropdown
 				this.$menu.css("width",300);
@@ -80,14 +121,33 @@ function agile_type_ahead(id, el, callback, isSearch) {
 		},
 		updater: function (items) {
 			var tag_not_exist = true;		
+
+			
+			// Store items in temp variable so to show first name lastname separated by space 
+			var items_temp = items;
+			
+			// Trim spaces in names to retrieve contact id from JSON 
+			if(items)
+				items = items.split(" ").join("")
 			
 			// Customize data for type ahead
 			if (isSearch && typeof(isSearch) === "function")
 				{
-					isSearch(TYPEHEAD_TAGS[items]);							
+				
+					// If no item is selected then show results in different page
+					if(!items)
+					{
+						showSearchResults();
+						return;
+					}
+					isSearch(TYPEHEAD_TAGS[items]);
+					return;
 				}
 			
-			
+			// Return if items are not defined and it is not search in nav bar
+			if(!items)
+				return;
+				
 			// If tag already exists returns 
 			$.each($('.tags', el).children('li'), function(index, tag) {
 				
@@ -98,11 +158,9 @@ function agile_type_ahead(id, el, callback, isSearch) {
 					}
 			});
 			
-			console.log(items);
-console.log(TYPEHEAD_TAGS);
 			//add tag 
 			if(tag_not_exist)				
-				$('.tags',el).append('<li class="tag"  style="display: inline-block;" data="'+ TYPEHEAD_TAGS[items]+'">'+items+'<a class="close" id="remove_tag">&times</a></li>');
+				$('.tags',el).append('<li class="tag"  style="display: inline-block;" data="'+ TYPEHEAD_TAGS[items]+'">'+items_temp+'<a class="close" id="remove_tag">&times</a></li>');
 		},
 		minLength : 2,
 	})
@@ -145,7 +203,7 @@ function contacts_typeahead(data){
 					}
 				
 				contact_name = getPropertyValue(contact.properties, "first_name") + getPropertyValue(contact.properties, "last_name");
-				contact_names_list.push(contact_name);
+				contact_names_list.push(contact_name.split(" ").join(""));
 			});
 			return contact_names_list;
 	}
