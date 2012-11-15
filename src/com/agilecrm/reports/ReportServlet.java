@@ -33,6 +33,8 @@ public class ReportServlet extends HttpServlet
 	if (duration == null)
 	    return;
 
+	System.out.println("duration : " + duration);
+
 	// Run query to get all the filter with particular duration in name
 	// space = ""
 	if (duration.equalsIgnoreCase("DAILY"))
@@ -51,6 +53,8 @@ public class ReportServlet extends HttpServlet
 	// filters in that domain in particular duration)
 	Map<String, List<ContactFilter>> filtersMap = ReportsUtil
 		.organizeFiltersByDomain(contactFilterList);
+
+	System.out.println("filters map : " + filtersMap);
 
 	// Created a deferred task for report generation
 	ReportsDeferredTask reportsDeferredTask = new ReportsDeferredTask(

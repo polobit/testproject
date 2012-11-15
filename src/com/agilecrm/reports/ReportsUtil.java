@@ -6,10 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactFilter;
 import com.agilecrm.core.DomainUser;
 import com.agilecrm.util.Util;
+import com.google.appengine.api.NamespaceManager;
 
 public class ReportsUtil
 {
@@ -45,13 +48,33 @@ public class ReportsUtil
 
 	Collection<Contact> contactList = new ArrayList<Contact>();
 
+	String oldNamespace = NamespaceManager.get();
+
+	System.out.println("old namespace : " + oldNamespace);
+
+	// Get the domain(namespace) in which queries need to be run
+	String newNamespace = contactFilters.get(0).domain;
+
+	// If newNamespace is empty return empty list
+	if (StringUtils.isEmpty(newNamespace))
+	    return contactList;
+
+	// Set new namespace and run the queries
+	NamespaceManager.set(newNamespace);
+
+	System.out.println("new namespace to run query: "
+		+ NamespaceManager.get());
+
 	// Iterate through each filter and add results collection
 	for (ContactFilter contactFilter : contactFilters)
 	{
 	    contactList.addAll(contactFilter.queryContacts());
 
-	    System.out.println(contactList);
+	    System.out.println("search results : " + contactList);
 	}
+
+	// Set the old namespace back
+	NamespaceManager.set(oldNamespace);
 
 	// Return results
 	return contactList;
