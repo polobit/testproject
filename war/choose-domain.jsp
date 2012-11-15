@@ -7,17 +7,18 @@ String error = "", success = "";
 String domain = request.getParameter("subdomain");
 if(!StringUtils.isEmpty(domain))
 {
-	if(DomainUser.count() != 0)
+    System.out.println(DomainUser.count());
+	if(DomainUser.count() == 0)
+	{
+	    success = "Creating " + domain;
+		response.sendRedirect("https://" + domain + ".agilecrm.com/register");
+		return;
+	}
+	else
 	{
 	    error = "Domain already exists.";
 	    response.sendRedirect("https://" + domain + ".agilecrm.com/login");
 	    return;
-	}
-	else
-	{
-	   success = "Creating " + domain;
-	   response.sendRedirect("https://" + domain + ".agilecrm.com/register");
-	   return;
 	}
 	
 }
