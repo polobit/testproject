@@ -3,7 +3,7 @@
     "thumbnail": "json/nodes/images/common/url.png",
     "icon": "json/nodes/icons/common/url.png",
     "info": "Check if the URL has been visited in a workflow",
-    "help": "ContactSpot can check if the subscriber (Email address) has visited a web page (URL).",
+    "help": "AgileCRM can check if the subscriber (Email address) has visited a web page (URL).",
     "author": "John",
     "company": "Invox",
     "language": "en",
@@ -27,7 +27,7 @@
 		    "title": "Enter a valid Identifier.",
 		    "fieldType": "input",
 		    "type": "text",
-		    "value": "$subscriber.Email"
+		    "value": "{{email}}"
 		},
 		{   
 			"label": "Type",

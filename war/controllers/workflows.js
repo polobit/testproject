@@ -125,7 +125,7 @@ var WorkflowsRouter = Backbone.Router.extend({
                 return;
             }
             var currentTrigger = this.triggersCollectionView.collection.get(id);
-
+            
             var view = new Base_Model_View({
                 url: 'core/api/workflows/triggers',
                 model: currentTrigger,
@@ -142,7 +142,11 @@ var WorkflowsRouter = Backbone.Router.extend({
 	           					
 	           					// Chaining dependencies of input fields with jquery.chained.js
 	           					RHS.chained(LHS);
-	            			        	            			    
+	           					
+	           					// To get the input values
+	           					var type = currentTrigger.toJSON()['type'];
+	           					
+	           					$('#trigger-type',el).find('option[value='+type+']').attr("selected", "selected").trigger('change');	           					
 	           		    	});
                 	
                 	
