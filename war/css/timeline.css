@@ -2,12 +2,12 @@
 
 
 #timeline{
-	width: 600px;
-	margin-top: 20px;
+	width: 700px;
+	margin-top: 40px;
 	margin-bottom: 30px;
 }
 #timeline .post{
-	width: 271px;
+	width: 317px;
 	margin: 0 0 10px 0;
 	float: left;
 }
@@ -16,7 +16,7 @@
 }
 #timeline .post .inner{
 	position: relative;
-	width: 247px;
+	width: 288px;
 	padding: 11px;
 	border: 1px #adadad solid;
 	background-color:#fff;
@@ -159,7 +159,7 @@
 	display: block;
 	float: left;
 	height: 100%;
-	left: 298px;
+	left: 345px;
 	width: 4px;
 	position: absolute;
 }
