@@ -15,6 +15,9 @@ function agile_type_ahead(id, el, callback, isSearch) {
 			// Store typeahead object in temp variable
 			var that = this;
 			
+			// Call render because menu needs to be initialized even before first result is fetched
+			this.render();
+			
 			// Loading image is not avialable in menu then append it to menu
 			if(!$(this.$menu.find('li').last()).hasClass('loading-results'))			
 				this.$menu.append('<li class="divider"></li><li class="loading-results"><p align="center">'+LOADING_ON_CURSOR+'</p></li>');
@@ -83,6 +86,7 @@ function agile_type_ahead(id, el, callback, isSearch) {
 			// If query results are not available activate the menu to show info and return
 			if(!CONTACTS.length)
 			{
+				this.$menu.css("width",300);
 				this.show();
 				return;
 			}
