@@ -7,27 +7,31 @@ function showMap(el, contact){
 		
 		if(address){
 			address = JSON.parse(address);
-		
-			try{
-				if(google.maps)
-				{
-					if(address.address || address.city || address.state || address.country)
-					googlemaps_init();
-				}		
-			}catch(err){
-				if(address.address || address.city || address.state || address.country)
-					loadGmapScript();	
+			if(address.address || address.city || address.state || address.country){
+			
+				// If google map is loaded just call initialize method else load the map
+				try{
+					if(google.maps)
+					{
+						googlemaps_init();
+					}		
+				}catch(err){
+					
+						loadGmapScript();	
+				}
 			}
 		}
 }
 
+// Load google map
 function loadGmapScript() {
 	  var script = document.createElement("script");
 	  script.type = "text/javascript";
-	  script.src = "http://maps.googleapis.com/maps/api/js?&sensor=false&callback=googlemaps_init";
+	  script.src = "https://maps.googleapis.com/maps/api/js?&sensor=false&callback=googlemaps_init";
 	  document.body.appendChild(script);
 	}
 
+// Initialize map
 function googlemaps_init(){  
     
 	geocoder = new google.maps.Geocoder();
@@ -42,6 +46,7 @@ function googlemaps_init(){
 	codeAddress('"' + address.address + ',' + address.city + ',' + address.state + ',' + address.country + '"');
 }
 
+// Get required map by sending the address
 function codeAddress(address) {
     geocoder.geocode( { 'address': address}, function(results, status) {
       if (status == google.maps.GeocoderStatus.OK) {

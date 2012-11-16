@@ -474,6 +474,12 @@ $(function()
 		return new Handlebars.SafeString(fillCustomFieldValues($(el), properties));
 		
 	});
+
+	// Return modified message for timeline logs
+	Handlebars.registerHelper('tl_log_string', function(string){
+		
+		return string.replace("Sending email From:", "Email sent From:");
+	});
 	
 	// Deserialize custom fields and return string to handlebar register helper to return as handlebars safestring
 	function fillCustomFieldValues(form, content)

@@ -38,7 +38,7 @@ function loadTimelineDetails(el, contactId)
 		// Get email of the contact in contact detail
 		var email = getPropertyValue(json.properties, "email");
 		
-		// Go for emails only when the contact has
+		// Go for mails only when the contact has email
 		if(email)
 		{
 			var EmailsCollection = Backbone.Collection.extend({
@@ -64,7 +64,7 @@ function loadTimelineDetails(el, contactId)
 		var loading_count = 0;
 		
 		$.each(fetchContactDetails, function(index, url){
-			// $('#timeline', el).html('<div><img class="loading" style="padding-right:5px" src="img/21-0.gif"></div>');
+
 			var View =  Backbone.Collection.extend({
 				url: url,
 			});
@@ -73,7 +73,6 @@ function loadTimelineDetails(el, contactId)
 				success: function(){
 					timelineView.collection.add(view.models);
 					if(++loading_count == fetchContactDetails.length){
-						removeLoadingImg(el);
 						
 						// If no email for the contact call time line from here
 						if(!email){
@@ -87,7 +86,10 @@ function loadTimelineDetails(el, contactId)
 }	
 
 function setUpTimeline(models, el) {
-
+	
+	// Remove loading image
+	removeLoadingImg(el);
+	
 	// Load plugins for timeline	
 	head.js(LIB_PATH + "lib/jquery.isotope.min.js", LIB_PATH + "lib/jquery.event.resize.js", function(){
 		 // $('#timeline').html('<div id="line-container"><div id="line"></div></div></div>');
@@ -226,8 +228,50 @@ $.Isotope.prototype._spineAlignResizeChanged = function() {
 }	
 	
 function removeLoadingImg(el){
-	$('#time-line', el).find('img:first').remove();
+	$('#time-line', el).find('.loading-img').remove();
 }
 
+$(function () {
+	
+	// Show the mail(message) details in a modal 
+	$("#tl-mail-popover").live('click',function(e){
+		e.preventDefault();
 
+		var htmlstring = $(this).closest('div.text').html();
+		htmlstring = htmlstring.replace("icon-plus", "");
+
+		// Add pre tag to the string to consider white spaces
+		$("#mail-in-detail").html("<pre>" + htmlstring + "</pre>");
+		
+		$("#timelineMailModal").modal("show");
+        
+    });
+	
+	// Show the campaign log details in a modal
+	$("#tl-log-popover").live('click',function(e){
+		e.preventDefault();
+		
+		var string = $(this).closest('div.text').text();
+		string = string.replace("From:", "</br>From:</br>").replace("To:", "</br>To:</br>").replace("Subject:", "</br>Subject:</br>").replace("Text:", "</br>Text:</br>").replace("HTML:", "");
+		
+		// Add pre tag to the string to consider white spaces
+		$("#log-in-detail").html("<pre>" + string + "</pre>");
+		
+		$("#timelineLogModal").modal("show");
+    });
+	
+	// Show the list of mails(to) as popover
+	$("#tl-mail-to-popover").live('mouseenter',function(e){
+		
+		$(this).popover({
+        	template:'<div class="popover"><div class="arrow"></div><div class="popover-inner" style="padding:1px;width:340px;border-radius:2px"><div class="popover-content"><p></p></div></div></div>'
+        });
+		
+		var string = $(this).text();
+		var html = new Handlebars.SafeString(string.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/,/g, ",</br>").replace("To:","To:</br>").replace("read more", ""));
+		$(this).attr("data-content", html);
+        $(this).popover('show');
+    });
+	
+});
 
