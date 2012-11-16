@@ -5,7 +5,7 @@ cron:
 
 - description: daily reports
   url: /backend/cron/reports/?duration=DAILY
-  schedule: every 2 mins
+  schedule: every day 23:30
   
 - description: Monthly reports
   url: /backend/cron/reports/?duration=MONTHLY

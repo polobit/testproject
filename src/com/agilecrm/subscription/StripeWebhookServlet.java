@@ -17,7 +17,6 @@ import org.json.JSONObject;
 
 import com.agilecrm.Globals;
 import com.agilecrm.core.DomainUser;
-import com.agilecrm.util.DBUtil;
 import com.agilecrm.util.SendMail;
 import com.agilecrm.util.Util;
 import com.google.appengine.api.NamespaceManager;
@@ -48,6 +47,8 @@ public class StripeWebhookServlet extends HttpServlet
 	if (stripe_event_message.isEmpty())
 	    return;
 
+	String oldNamespace = NamespaceManager.get();
+
 	try
 	{
 	    JSONObject eventJSON = new JSONObject(stripe_event_message);
@@ -67,6 +68,9 @@ public class StripeWebhookServlet extends HttpServlet
 	    if (StringUtils.isEmpty(newNamespace))
 		return;
 
+	    // Set namespace
+	    NamespaceManager.set(newNamespace);
+
 	    String eventId = eventJSON.getString("id");
 
 	    Event event;
@@ -77,8 +81,7 @@ public class StripeWebhookServlet extends HttpServlet
 	    if (eventJSON.getString("type").equals(
 		    Globals.STRIPE_INVOICE_PAYMENT_SUCCEEDED))
 	    {
-		setSubscriptionFlag(newNamespace,
-			Subscription.Type.BILLING_SUCCESS);
+		setSubscriptionFlag(Subscription.Type.BILLING_SUCCESS);
 	    }
 
 	    // If payment failed set subscription flag is set to failed and
@@ -87,14 +90,13 @@ public class StripeWebhookServlet extends HttpServlet
 		    Globals.STRIPE_INVOICE_PAYMENT_FAILED))
 	    {
 		// Get number of attempts
-		String attemp_count = eventJSON.getJSONObject("data")
+		String attempCount = eventJSON.getJSONObject("data")
 			.getJSONObject("object").getString("attempt_count");
 
-		Integer number_of_attempts = Integer.parseInt(attemp_count);
+		Integer number_of_attempts = Integer.parseInt(attempCount);
 
 		// Process webhook
-		ProcessPaymentFailedWebhooks(newNamespace, number_of_attempts,
-			event);
+		ProcessPaymentFailedWebhooks(number_of_attempts, event);
 
 	    }
 	    else if (eventJSON.getString("type").equals(
@@ -112,16 +114,16 @@ public class StripeWebhookServlet extends HttpServlet
 	    else if (eventJSON.getString("type").equals(
 		    Globals.STRIPE_CUSTOMER_DELETED))
 	    {
+		DomainUser user = DomainUser.getDomainOwner(newNamespace);
 
-		for (DomainUser user : DomainUser.getUsers(newNamespace))
-		{
-		    event = customizeEventAttributes(event, newNamespace, user);
-		    SendMail.sendMail(user.email, SendMail.ACCOUNT_DELETED,
-			    SendMail.ACCOUNT_DELETED_SUBJECT, event);
-		}
+		event = customizeEventAttributes(event, user);
+
+		// Send mail to domain user
+		SendMail.sendMail(user.email, SendMail.SUBSCRIPTION_DELETED,
+			SendMail.SUBSCRIPTION_DELETED_SUBJECT, event);
 
 		// Delete account
-		DBUtil.deleteNamespace(newNamespace);
+		Subscription.getSubscription().delete();
 	    }
 	}
 
@@ -129,6 +131,11 @@ public class StripeWebhookServlet extends HttpServlet
 	{
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
+	}
+	finally
+	{
+	    // Set back the old namespace
+	    NamespaceManager.set(oldNamespace);
 	}
     }
 
@@ -157,9 +164,6 @@ public class StripeWebhookServlet extends HttpServlet
 	// Description is set to namespace while saving
 	String namespace = customer.getDescription();
 
-	if (StringUtils.isEmpty(namespace))
-	    return null;
-
 	return namespace;
     }
 
@@ -167,11 +171,12 @@ public class StripeWebhookServlet extends HttpServlet
      * Process the payment failed webhooks calls to set subscription flags,
      * sends emails
      */
-    public void ProcessPaymentFailedWebhooks(String namespace,
-	    int attempt_count, Event event)
+    public void ProcessPaymentFailedWebhooks(int attempt_count, Event event)
     {
+	String namespace = NamespaceManager.get();
+
 	// Set subscription flag billing failed
-	setSubscriptionFlag(namespace, Subscription.Type.BILLING_FAILED);
+	setSubscriptionFlag(Subscription.Type.BILLING_FAILED);
 
 	// If number of attemps to payment is 0 or 1 the send email to domain
 	// owner
@@ -188,7 +193,7 @@ public class StripeWebhookServlet extends HttpServlet
 	    }
 
 	    // Call customize attributes based on namespace and user
-	    event = customizeEventAttributes(event, namespace, user);
+	    event = customizeEventAttributes(event, user);
 
 	    SendMail.sendMail(user.email,
 		    SendMail.SUBSCRIPTION_PAYMENT_FAILED_SUBJECT,
@@ -212,7 +217,7 @@ public class StripeWebhookServlet extends HttpServlet
 	    // Send mail to all domain users
 	    for (DomainUser user : users)
 	    {
-		event = customizeEventAttributes(event, namespace, user);
+		event = customizeEventAttributes(event, user);
 
 		SendMail.sendMail(user.email,
 			SendMail.SUBSCRIPTION_PAYMENT_FAILED_SUBJECT,
@@ -224,32 +229,22 @@ public class StripeWebhookServlet extends HttpServlet
     }
 
     /* Sets status of subscription whether billing failed of succeeded */
-    public void setSubscriptionFlag(String domain, Subscription.Type status)
+    public void setSubscriptionFlag(Subscription.Type status)
     {
-	String oldNamespace = NamespaceManager.get();
-
-	NamespaceManager.set(domain);
-
 	// Set status
-	try
-	{
-	    Subscription subscription = Subscription.getSubscription();
-	    subscription.status = status;
-	    subscription.save();
-	}
-	finally
-	{
-	    NamespaceManager.set(oldNamespace);
-	}
+	Subscription subscription = Subscription.getSubscription();
+	subscription.status = status;
+	subscription.save();
+
     }
 
     /*
      * Customize the event attributes set namespace and domain user name to use
      * in email template
      */
-    public Event customizeEventAttributes(Event event, String namespace,
-	    DomainUser user)
+    public Event customizeEventAttributes(Event event, DomainUser user)
     {
+	String namespace = NamespaceManager.get();
 
 	// Get the attibutes from event object
 	Map<String, Object> attributes = event.getData()

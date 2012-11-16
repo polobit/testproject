@@ -73,7 +73,7 @@ var SubscribeRouter = Backbone.Router.extend({
 	 },
 	 invoice: function() {
 		 this.invoice = new Base_Collection_View({
-			 url: "core/api/subscription/invoice",
+			 url: "core/api/subscription/invoices",
 			 templateKey: "invoice",
 			 window: 'subscribe',
 			 individual_tag_name: 'tr'

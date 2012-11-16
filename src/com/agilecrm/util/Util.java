@@ -294,15 +294,6 @@ public class Util
 	return statsJSON;
     }
 
-    public static void deleteNamespace(String namespace)
-    {
-
-	// Get all elements in namespace
-
-	//
-
-    }
-
     private static final String KEY = "some-secret-key-of-your-choice";
 
     public static String encrypt(final String text)

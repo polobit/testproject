@@ -160,7 +160,7 @@ public class Subscription
     }
 
     // Return list of invoices
-    public static List<Invoice> getInvoice() throws Exception
+    public static List<Invoice> getInvoices() throws Exception
     {
 	Subscription subscription = getSubscription();
 	if (subscription == null)

@@ -31,23 +31,6 @@ public class SubscriptionApi
 
     }
 
-    @Path("/invoice")
-    @GET
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List getInvoices()
-    {
-	try
-	{
-	    return Subscription.getInvoice();
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-	}
-    }
-
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -78,7 +61,7 @@ public class SubscriptionApi
 	}
     }
 
-    @Path("/changeplan")
+    @Path("/change-plan")
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -97,7 +80,7 @@ public class SubscriptionApi
 
     }
 
-    @Path("/updatecard")
+    @Path("/update-card")
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -120,6 +103,23 @@ public class SubscriptionApi
 		subscription.delete();
 
 	    DBUtil.deleteNamespace(NamespaceManager.get());
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+    }
+
+    @Path("/invoices")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List getInvoices()
+    {
+	try
+	{
+	    return Subscription.getInvoices();
 	}
 	catch (Exception e)
 	{

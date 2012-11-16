@@ -436,15 +436,6 @@ public class DomainUser
 	List<Key<DomainUser>> domainUserKeys = dao.ofy()
 		.query(DomainUser.class).filter("domain", namespace).listKeys();
 
-	// Delete all entities related to that domain user
-	for (Key<DomainUser> user : domainUserKeys)
-	{
-	    NamespaceManager.set(oldNamespace);
-	    deleteRelatedEntities(user.getId());
-	}
-
-	NamespaceManager.set("");
-
 	// Delete domain users in domain
 	dao.deleteKeys(domainUserKeys);
 

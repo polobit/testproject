@@ -20,8 +20,8 @@ public class SendMail
     public static final String SUBSCRIPTION_PAYMENT_FAILED = "payment_failed";
     public static final String SUBSCRIPTION_PAYMENT_FAILED_SUBJECT = "Your payment failed";
 
-    public static final String ACCOUNT_DELETED = "account_deleted";
-    public static final String ACCOUNT_DELETED_SUBJECT = "Your Account Deleted";
+    public static final String SUBSCRIPTION_DELETED = "subscription_deleted";
+    public static final String SUBSCRIPTION_DELETED_SUBJECT = "Your Account Deleted";
 
     public static final String AGILE_FROM_NAME = "Agile CRM";
     public static final String AGILE_FROM_EMAIL = "noreply@agilecrm.com";
