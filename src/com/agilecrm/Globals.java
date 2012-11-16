@@ -47,6 +47,8 @@ public class Globals
     public static final String STRIPE_INVOICE_PAYMENT_FAILED = "invoice.payment_failed";
     public static final String STRIPE_SUBSCRIPTION_DELETED = "customer.subscription.deleted";
     public static final String STRIPE_CUSTOMER_DELETED = "customer.deleted";
+    public static final String STRIPE_INVOICE_PAYMENT_SUCCEEDED = "invoice.payment_succeeded";
+    public static final String STRIPE_CUSTOMER_SUBSCRIPTION_UPDATED = "customer.subscription.updated";
 
     // Max Plan Users
     public static final int TRIAL_USERS_COUNT = 2;

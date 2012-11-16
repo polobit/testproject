@@ -168,7 +168,7 @@ public class NamespaceFilter implements Filter
     {
 	// If Cron, just there is no filters to do
 	String path = ((HttpServletRequest) request).getRequestURI();
-	if (path.startsWith("/cron"))
+	if (path.startsWith("/backend"))
 	{
 	    chain.doFilter(request, response);
 	    return;

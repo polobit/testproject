@@ -302,10 +302,20 @@ public class DomainUser
     }
 
     // Get Account owners
-    public static DomainUser getDomainOwner()
+    public static DomainUser getDomainOwner(String domain)
     {
-	return dao.ofy().query(DomainUser.class)
-		.filter("is_account_owner", true).get();
+	String oldNamespace = NamespaceManager.get();
+
+	NamespaceManager.set("");
+
+	DomainUser user = dao.ofy().query(DomainUser.class)
+		.filter("domain", domain).filter("is_account_owner", true)
+		.get();
+
+	NamespaceManager.set(oldNamespace);
+
+	return user;
+
     }
 
     // Save
