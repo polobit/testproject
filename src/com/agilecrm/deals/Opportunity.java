@@ -306,7 +306,7 @@ public class Opportunity
     // Save Opportunity
     public void save()
     {
-	if (contacts != null)
+	if (contacts != null && id == null)
 	{
 	    for (String contact_id : this.contacts)
 	    {
@@ -315,12 +315,15 @@ public class Opportunity
 		Trigger.executeTrigger(Long.parseLong(contact_id),
 			Trigger.Type.DEAL_IS_ADDED);
 	    }
+
+	    NotificationPrefs.executeNotification(
+		    NotificationPrefs.Type.DEAL_CREATED, this);
 	}
+
 	this.contacts = null;
 
 	dao.put(this);
-	NotificationPrefs.executeNotification(
-		NotificationPrefs.Type.DEAL_CREATED, this);
+
     }
 
     @PrePersist

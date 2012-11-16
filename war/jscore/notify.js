@@ -84,8 +84,22 @@ function _setupSockets(api_key)
 	socket.on('notification', function (data) {
 		console.log('notification');
 	    console.log(data);
+	   
+	    var parse_data = JSON.parse(data);
+	    var html = getTemplate('notify-html',parse_data);
+	    notify('success1', html, 'bottom-right', true);	
 	    
-	});	
+	    /*console.log(parse_data);
+	    for(var i=0;i<parse_data.contacts.length;i++)
+	    {
+	   // var email = getPropertyValue(parse_data.contacts[i].properties, "email");
+	    console.log(parse_data.contacts[i]);
+	    var html = getTemplate('notify-html',parse_data.contacts[i]);
+	    notify('success1', html, 'bottom-right', true);	
+	    }
+	    //fetchContactAndNotify(email);*/
+	
+	    });	
 }
 
 function fetchContactAndNotify(email)
