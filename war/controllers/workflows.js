@@ -107,7 +107,8 @@ var WorkflowsRouter = Backbone.Router.extend({
 	            
 	            var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
                 fillSelect('campaign-select','/core/api/workflows', 'workflow', 'no-callback', optionsTemplate);
-
+                
+               
                    }
                  });
         	   
@@ -143,12 +144,12 @@ var WorkflowsRouter = Backbone.Router.extend({
 	           					// Chaining dependencies of input fields with jquery.chained.js
 	           					RHS.chained(LHS);
 	           					
-	           					// To get the input values
-	           					var type = currentTrigger.toJSON()['type'];
-	           					
-	           					$('#trigger-type',el).find('option[value='+type+']').attr("selected", "selected").trigger('change');	           					
+	           						           					
 	           		    	});
-                	
+                	// To get the input values
+   					var type = currentTrigger.toJSON()['type'];
+   					
+   					$('#trigger-type',el).find('option[value='+type+']').attr("selected", "selected").trigger('change');
                 	
                 	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
                     fillSelect('campaign-select','/core/api/workflows', 'workflow', function fillCampaign() {
@@ -159,6 +160,7 @@ var WorkflowsRouter = Backbone.Router.extend({
                 			
                 		}			
                 	}, optionsTemplate);
+                    
                     },
             	});
             

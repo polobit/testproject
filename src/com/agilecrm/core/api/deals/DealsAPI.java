@@ -17,7 +17,9 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.contact.Contact;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.workflows.Trigger;
 
 @Path("/api/opportunity")
 public class DealsAPI
@@ -105,8 +107,36 @@ public class DealsAPI
     public void deleteOpportunities(@FormParam("model_ids") String model_ids)
 	    throws JSONException
     {
+	String id = null;
+
 	JSONArray opportunitiesJSONArray = new JSONArray(model_ids);
+
+	for (int i = 0; i < opportunitiesJSONArray.length(); i++)
+	{
+	    id = opportunitiesJSONArray.get(i).toString();
+	    try
+	    {
+		// Get Opportunity based on id
+		Opportunity opportunity = Opportunity.getOpportunity(Long
+			.parseLong(id));
+
+		// Get contacts related to deals
+		List<Contact> dealContacts = opportunity.getContacts();
+
+		// Execute trigger for corresponding contacts
+		for (Contact contact : dealContacts)
+		    Trigger.executeTrigger(contact.id,
+			    Trigger.Type.DEAL_IS_DELETED);
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+
+	}
+
 	Opportunity.dao.deleteBulkByIds(opportunitiesJSONArray);
+
     }
 
 }

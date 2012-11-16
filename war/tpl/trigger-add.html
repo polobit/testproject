@@ -1,12 +1,12 @@
 <script id="trigger-add-template" type="text/html">
 
 <div class='row'>
-	
 	<div class='span12'>
-	<div class="page-header">
+	
+    <div class="page-header">
 		<h1>New Trigger</h1>
     </div>
-<div class="span8">
+    <div class="span8">
 		<div class="well">
 			<form id='addTrigger' name="addTriggerForm" class="form-horizontal">
 				<fieldset>
@@ -21,14 +21,11 @@
 						</div>
 					</div>
                     
-					<div class="control-group">
-                    	<label class="control-label">Condition  <span class="field_req">*</span></label>
-						<div class="controls">
-						<table style="background-color:transparent">
-							<tbody>
-								<tr padding-left:100%">
-									<td>
-									<div id="LHS" name="LHS">
+                    
+                        <div class="control-group">
+                    	 <div id="LHS" name="LHS">
+                       <label class="control-label">Condition  <span class="field_req">*</span></label>
+                         <div class="controls">
                               <select id="trigger-type" name="type" class="required">
                               <option></option>
                               <option value="TAG_IS_ADDED">Tag is added</option>
@@ -39,30 +36,30 @@
                               <option value="DEAL_IS_DELETED">Deal is deleted</option>
                               <option value="ADD_SCORE" id="add-score">Add score</option>
                                </select>
-                                       </div>
-                                      </td>
-                                <td>
-								<div id="RHS" name="RHS">
-                                 {{#if tags}}
-                                   <input type="text" name="tags" value="{{tags}}" class="TAG_IS_ADDED TAG_IS_DELETED" style="margin-left:5px"/>
-                                 {{else}}
-                                    <input type="text" name="tags" class="TAG_IS_ADDED TAG_IS_DELETED" style="margin-left:5px"/>
-                                 {{/if}}
-								 {{#if score_value}}
-										<input type="text" value="{{score_value}}" id="add-score-value" name="score_value" class="ADD_SCORE" style="margin-left:5px">
-									{{else}}
-										<input type="text" value="50" id="add-score-value" name="score_value" class="ADD_SCORE" style="margin-left:5px">
-                                 {{/if}}
-									</div>
-								 </td>
-                                  </tr>
-							   </tbody>
-						</table>
-						</div>
-                    
-						</div>
-					
+                             </div>
+                           </div>
+                       </div>
                    
+                       
+                       <div class="control-group">
+                        <div id="RHS" name="RHS">
+                    	<label class="control-label TAG_IS_ADDED TAG_IS_DELETED ADD_SCORE">Value  <span class="field_req">*</span></label>
+                            <div class="controls">
+                              {{#if tags}}
+                                 <input type="text" value="{{tags}}" name="tags" class="TAG_IS_ADDED TAG_IS_DELETED required">
+                                {{else}}
+                                   <input type="text" value="{{tags}}" name="tags" class="TAG_IS_ADDED TAG_IS_DELETED required">
+                                 {{/if}}
+                               
+                                   {{#if score_value}}
+										<input type="text" value="{{score_value}}" id="add-score-value" name="score_value" class="ADD_SCORE required">
+									{{else}}
+										<input type="text" value="50" id="add-score-value" name="score_value" class="ADD_SCORE required">
+                                 {{/if}}
+                            
+							</div>
+						</div>
+				    </div>
 					<div class="control-group">
                     	<label class="control-label">Campaign  <span class="field_req">*</span></label>
 						<div class="controls">
@@ -73,7 +70,7 @@
 					</div>
 					
 					<div class="form-actions">          
-				      <a href="#triggers" class="save btn btn-primary">Save</a>
+				      <a href="#triggers" id="trigger-save" class="save btn btn-primary">Save</a>
                       <a href="#triggers"  id="cancel" class="btn">Cancel</a> 
 					</div>
 				</fieldset>
@@ -90,5 +87,5 @@
    </div>
 </div>
 </div>
-
+</div>
 </script>
