@@ -448,7 +448,7 @@ footer {
 
 /* Stripe invoice */
       .invoice-head td {
-        padding: 0 8px;
+        padding: 0 4px;
       }
 
       .invoice-body{

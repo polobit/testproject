@@ -280,7 +280,7 @@ function isValidForm(form) {
 	        	$(element).closest(".control-group").addClass('error').removeClass('success').removeClass('valid');
 	        },
 	        unhighlight: function (element, errorClass) {
-	        	 $(element).closest(".control-group").removeClass('error').removeClass('valid'); 
+	        	 $(element).removeClass('valid').closest(".control-group").removeClass('error'); 
 	        },
 	        invalidHandler: function (form, validator) {
 	            var errors = validator.numberOfInvalids();
