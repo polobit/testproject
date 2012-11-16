@@ -28,11 +28,12 @@ public class LinkedInUtil
 	final LinkedInApiClient client = factory.createLinkedInApiClient(token,
 		tokenSecret);
 
-	Person profile = client.getProfileForCurrentUser(EnumSet.of(
-		ProfileField.PICTURE_URL, ProfileField.FIRST_NAME,
-		ProfileField.LAST_NAME, ProfileField.ID));
+	Person profile = client
+		.getProfileForCurrentUser(EnumSet.of(ProfileField.PICTURE_URL,
+			ProfileField.FIRST_NAME, ProfileField.LAST_NAME,
+			ProfileField.ID, ProfileField.DISTANCE));
 
-	System.out.println(profile);
+	System.out.println("profile: " + profile);
 
 	// Properties
 	Map<String, String> properties = new HashMap<String, String>();
@@ -40,7 +41,7 @@ public class LinkedInUtil
 	properties.put("name",
 		profile.getFirstName() + " " + profile.getLastName());
 	properties.put("pic", profile.getPictureUrl());
-
+	properties.put("distance", profile.getDistance() + "");
 	return properties;
     }
 
@@ -74,7 +75,7 @@ public class LinkedInUtil
 		ProfileField.LAST_NAME, ProfileField.SUMMARY,
 		ProfileField.HEADLINE, ProfileField.LOCATION_NAME,
 		ProfileField.NUM_CONNECTIONS, ProfileField.PUBLIC_PROFILE_URL,
-		ProfileField.ID));
+		ProfileField.ID, ProfileField.DISTANCE));
 	System.out.println("Total search result:" + people.getPersonList()
 		+ " " + people.getPersonList().size());
 	for (Person person : people.getPersonList())
@@ -86,6 +87,7 @@ public class LinkedInUtil
 	    result.picture = person.getPictureUrl();
 	    result.url = person.getPublicProfileUrl();
 	    result.summary = person.getHeadline();
+	    result.distance = person.getDistance() + "";
 
 	    // Change http to https to avoid client side warnings by browser,
 	    // Change certificate from m3 to m3-s to fix ssl broken image link
@@ -102,6 +104,11 @@ public class LinkedInUtil
 		result.location = person.getLocation().getName();
 	    else
 		result.location = "?";
+
+	    if (person.getDistance() != null)
+		result.distance = person.getDistance().toString();
+	    else
+		result.distance = "?";
 
 	    searchResults.add(result);
 	}
@@ -126,7 +133,7 @@ public class LinkedInUtil
 		ProfileField.LAST_NAME, ProfileField.SUMMARY,
 		ProfileField.HEADLINE, ProfileField.LOCATION_NAME,
 		ProfileField.NUM_CONNECTIONS, ProfileField.PUBLIC_PROFILE_URL,
-		ProfileField.ID));
+		ProfileField.ID, ProfileField.DISTANCE));
 
 	SocialSearchResult result = new SocialSearchResult();
 
@@ -135,6 +142,7 @@ public class LinkedInUtil
 	result.picture = person.getPictureUrl();
 	result.url = person.getPublicProfileUrl();
 	result.summary = person.getHeadline();
+	result.distance = person.getDistance() + "";
 
 	// Change http to https to avoid client side warnings by browser
 	// Change certificate from m3 to m3-s to fix ssl broken image link

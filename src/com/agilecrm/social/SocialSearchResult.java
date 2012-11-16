@@ -16,11 +16,12 @@ public class SocialSearchResult
     public String location = "";
     public String friends = "";
     public String tweets = "";
+    public String distance = "";
 
     public String toString()
     {
 	return id + " " + name + " " + picture + " " + url + " " + summary
 		+ " " + headline + " " + num_connections + " " + location + " "
-		+ friends + " " + tweets;
+		+ friends + " " + tweets + " " + distance;
     }
 }

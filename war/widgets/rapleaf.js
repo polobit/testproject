@@ -33,7 +33,7 @@ $(function () {
 
 function setupRapleafOAuth(plugin_id)
 {
-    $('#Rapleaf').html(RAPLEAF_PLUGIN_HEADER +'<div><p>Rapleaf helps you learn more about your customers, provides data (age, gender, marital status, income, etc., ) on US consumer email addresses.To access <p> <p><label><b>Enter Your API key</b></label>'
+    $('#Rapleaf').html(RAPLEAF_PLUGIN_HEADER +'<div><p>Rapleaf helps you learn more about your customers, provides data (age, gender, marital status, income, etc., ) on US consumer email addresses.To access </p> <p><label><b>Enter Your API key</b></label>'
     										 +'<input type="text" id="rapleaf_api_key" class="input-medium" placeholder="API Key" value=""></input></p>'
     		                                 +'<button id="save_api_key" class="btn"><a href="+url+">Save</a></button><br/>'
     		                                 +'<p style="line-height: 25px;">Don\'t have an API key? <a href="https://www.rapleaf.com/developers/api_access"> SignUp </a></p></div>');
@@ -60,13 +60,13 @@ function showRapleafDetails(plugin_id)
 		//&fields=gender,age,education,marital_status
 		$('#Rapleaf').html(RAPLEAF_PLUGIN_HEADER + '<div></div>');
 		if(data.gender == "Female")
-			$('#Rapleaf').append('<img style="float:left;width:30px;height:30px;" src=\"img/user_female.png\"></img>' );
+			$('#Rapleaf').append('<img style="float:left;width:20px;height:20px;" src=\"img/user_female.png\"></img>' );
 		else
-			$('#Rapleaf').append('<img style="float:left;width:30px;height:30px;" src=\"img/user_male.png\"></img>' );
+			$('#Rapleaf').append('<img style="float:left;width:30px;height:30px;margin-top:-5px" src=\"img/user_male.jpg\"></img>' );
 		
 		$.each(data, function(index, value) { 
 			if(index != "result"){
-			  $('#Rapleaf').append('<li style="text-transform:capitalize;">'+ index +':'+ value +'</li>' );
+			  $('#Rapleaf').append('<li style="text-transform:capitalize;">'+ index +': '+ value +'</li>' );
 			}
 		});
 	});
