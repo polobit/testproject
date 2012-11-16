@@ -34,7 +34,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Cron</servlet-name>
-		<url-pattern>backend/cron</url-pattern>
+		<url-pattern>/backend/cron</url-pattern>
 	</servlet-mapping>
 	
 	
@@ -113,7 +113,7 @@
  
  <servlet-mapping>
  	<servlet-name>Reports</servlet-name>
- 	<url-pattern>backend/cron/reports/*</url-pattern>
+ 	<url-pattern>/backend/cron/reports/*</url-pattern>
  </servlet-mapping>
 
 <servlet>
@@ -123,7 +123,7 @@
  
  <servlet-mapping>
  	<servlet-name>Stripe Webhook</servlet-name>
- 	<url-pattern>backend/stripewebhook/*</url-pattern>
+ 	<url-pattern>/backend/stripewebhook/*</url-pattern>
  </servlet-mapping>
 
 <servlet>
