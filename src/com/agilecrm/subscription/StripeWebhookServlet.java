@@ -65,6 +65,11 @@ public class StripeWebhookServlet extends HttpServlet
 		return;
 	    }
 
+	    System.out.println("Namespace for event : " + newNamespace);
+
+	    System.out
+		    .println("Type of event : " + eventJSON.getString("type"));
+
 	    if (StringUtils.isEmpty(newNamespace))
 		return;
 
@@ -150,9 +155,6 @@ public class StripeWebhookServlet extends HttpServlet
 	    String namespace = eventJSON.getJSONObject("data")
 		    .getJSONObject("object").getString("description");
 
-	    if (StringUtils.isEmpty(namespace))
-		return null;
-
 	    return namespace;
 	}
 
@@ -171,7 +173,7 @@ public class StripeWebhookServlet extends HttpServlet
      * Process the payment failed webhooks calls to set subscription flags,
      * sends emails
      */
-    public void ProcessPaymentFailedWebhooks(int attempt_count, Event event)
+    public void ProcessPaymentFailedWebhooks(int attemptCount, Event event)
     {
 	String namespace = NamespaceManager.get();
 
@@ -180,7 +182,7 @@ public class StripeWebhookServlet extends HttpServlet
 
 	// If number of attemps to payment is 0 or 1 the send email to domain
 	// owner
-	if (attempt_count == 0 || attempt_count == 1)
+	if (attemptCount == 0 || attemptCount == 1)
 	{
 	    // Get owner of the domain
 	    DomainUser user = DomainUser.getDomainOwner(namespace);
@@ -203,7 +205,7 @@ public class StripeWebhookServlet extends HttpServlet
 
 	// If number of attempts for payment are more than 1 then send email to
 	// all the domain users in domain
-	if (attempt_count == 2)
+	if (attemptCount == 2)
 	{
 	    // Get all domain users in the namespace
 	    List<DomainUser> users = DomainUser.getUsers(namespace);
