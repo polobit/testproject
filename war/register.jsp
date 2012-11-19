@@ -43,13 +43,25 @@ body {
 }
 	
 }
-.field{
-height:30px!important;
-margin:8px 0px!important;
-padding-left:10px!important;
+.field {
+	height: 30px !important;
+	margin: 8px 0px !important;
+	padding-left: 10px !important;
+	width: 240px;
+	padding-right: 0px!important;
 }
-.error{
-color:red;
+
+.error {
+	color: red;
+}
+label.valid {
+  width: 24px;
+  height: 24px;
+  background: url(../img/valid.png) center center no-repeat;
+  display: inline-block;
+  text-indent: -9999px;
+  margin-left: 4px;
+  vertical-align: middle;
 }
 
 .login-page .openid_large_btn:hover {
@@ -156,12 +168,12 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 					<input type='hidden' name='auth' value='auth'></input>
 					<input type='hidden' name='type' value='agile'></input>
 					
-					<input class="input-xlarge field required" name='name' type="text" placeholder="Name">
-                    <input class="input-xlarge field required email" name='email' type="text" placeholder="Email">
-                    <input class="input-xlarge field required" maxlength="10" minlength="4" name='password' type="password" placeholder="Password">
+					<input class="input-xlarge field required" name='name' type="text" placeholder="Name" autocapitalize="off">
+                    <input class="input-xlarge field required email" name='email' type="text" placeholder="Email" autocapitalize="off">
+                    <input class="input-xlarge field required" maxlength="10" minlength="4" name='password' type="password" placeholder="Password" autocapitalize="off">
 					<div style="margin-top:15px;">
 					  <label class="checkbox" style="display:inline-block;">I agree with the Terms of Use<input type="checkbox" name="agree" class="required"></label>
-					  <input type='submit' style="float:right;"value="Register" class='btn btn-large btn-primary'>
+					  <input type='submit' style="float:right;margin-right: 30px;"value="Register" class='btn btn-large btn-primary'>
 				  </div>
 				</div>
 				</form>
