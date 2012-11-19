@@ -148,6 +148,9 @@ $(function(){
 			    	  
 			    	  // Remove appended contacts from related-to
 			    	  $("#taskForm").find("li").remove();
+			    	  
+			    	 // Remove validation error messages
+			    	  removeValidationErrors('activityModal');
 			    });
 });
 
