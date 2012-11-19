@@ -21,6 +21,7 @@ import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deferred.TagsDeferredTask;
 import com.agilecrm.session.SessionManager;
+import com.agilecrm.user.NotificationPrefs;
 import com.agilecrm.workflows.Trigger;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -182,8 +183,120 @@ public class Contact extends Cursor
 
 	}
 	else
+	{
 	    updated_time = System.currentTimeMillis() / 1000;
+
+	    Contact contact = Contact.getContact(id);
+	    Set<String> present_tags = contact.tags;
+	    System.out.println("Event in prepersist with present tags"
+		    + present_tags + "tags" + tags);
+	    // Check if tags of present contact equals to tags in pre-persist
+	    if (!(present_tags.containsAll(tags)))
+	    {
+		System.out.println("Event in prepersist if condition");
+		// if(tags.removeAll(old_tags).contains())
+
+		NotificationPrefs.executeNotification(
+			NotificationPrefs.Type.TAG_CREATED, this);
+
+		// Get triggers
+		List<Trigger> triggerslist = null;
+		try
+		{
+
+		    triggerslist = Trigger
+			    .getTriggersByCondition(Trigger.Type.TAG_IS_ADDED);
+		    if (triggerslist != null)
+		    {
+			for (Trigger triggers : triggerslist)
+
+			{
+
+			    // Get tags given for trigger
+			    if (triggers.tags != null)
+			    {
+				System.out
+					.println("The given tags for a trigger"
+						+ triggers.tags);
+				String tagsSplit = "";
+
+				// Replace multiple space with single space
+				tagsSplit = triggers.tags.trim().replaceAll(
+					" +", " ");
+
+				// Replace ,space with space
+				tagsSplit = triggers.tags.replaceAll(", ", ",");
+
+				String[] tagsArray = tagsSplit.split(",");
+				for (String trigger_tags : tagsArray)
+				{
+				    if (tags.contains(trigger_tags))
+					Trigger.executeTrigger(id,
+						Trigger.Type.TAG_IS_ADDED);
+				}
+			    }
+			}
+		    }
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+
+	    }
+	    if (!(tags).containsAll(present_tags))
+	    {
+		NotificationPrefs.executeNotification(
+			NotificationPrefs.Type.TAG_DELETED, this);
+
+		List<Trigger> triggerslist = null;
+		try
+		{
+
+		    triggerslist = Trigger
+			    .getTriggersByCondition(Trigger.Type.TAG_IS_DELETED);
+		    if (triggerslist != null)
+		    {
+			for (Trigger triggers : triggerslist)
+
+			{
+
+			    // Get tags given for trigger
+			    if (triggers.tags != null)
+			    {
+				System.out
+					.println("The given tags for a trigger"
+						+ triggers.tags);
+				String tagsSplit = "";
+
+				// Replace multiple space with single space
+				tagsSplit = triggers.tags.trim().replaceAll(
+					" +", " ");
+
+				// Replace ,space with space
+				tagsSplit = triggers.tags.replaceAll(", ", ",");
+
+				String[] tagsArray = tagsSplit.split(",");
+				for (String trigger_tags : tagsArray)
+				{
+				    if (present_tags.contains(trigger_tags))
+					Trigger.executeTrigger(id,
+						Trigger.Type.TAG_IS_DELETED);
+				}
+			    }
+			}
+		    }
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+	    }
+
+	}
+
 	/*
+	 * 
 	 * // Create Search Keyword Values Set<String> tokens = new
 	 * HashSet<String>(); for (ContactField contactField : properties) { if
 	 * (contactField.value != null)
@@ -211,6 +324,13 @@ public class Contact extends Cursor
 	// contact delete
 	Contact contact = this;
 
+	// Execute notification when contact is deleted
+	NotificationPrefs.executeNotification(
+		NotificationPrefs.Type.CONTACT_DELETED, this);
+
+	// Execute Trigger
+	Trigger.executeTrigger(this.id, Trigger.Type.CONTACT_IS_DELETED);
+
 	dao.delete(this);
 
 	ContactDocument.deleteDocument(contact);
@@ -221,17 +341,104 @@ public class Contact extends Cursor
 	// Delete Tags
 	Tag.deleteTags(tags);
 
-	// Execute Trigger
-	Trigger.executeTrigger(id, Trigger.Type.CONTACT_IS_DELETED);
     }
 
     public void save()
     {
 
+	// Check if contact is new
+	if (id == null)
+	{
+
+	    dao.put(this);
+
+	    NotificationPrefs.executeNotification(
+		    NotificationPrefs.Type.CONTACT_CREATED, this);
+
+	    Trigger.executeTrigger(id, Trigger.Type.CONTACT_IS_ADDED);
+
+	    // Execute trigger when tags are added along with new contact
+	    if (tags != null)
+	    {
+
+		List<Trigger> triggerslist = null;
+		try
+		{
+
+		    triggerslist = Trigger
+			    .getTriggersByCondition(Trigger.Type.TAG_IS_ADDED);
+		    if (triggerslist != null)
+		    {
+			for (Trigger triggers : triggerslist)
+
+			{
+
+			    // Get tags given for trigger
+			    if (triggers.tags != null)
+			    {
+				System.out
+					.println("The given tags for a trigger:"
+						+ triggers.tags);
+				String tagsSplit = "";
+
+				// Replace multiple space with single space
+				tagsSplit = triggers.tags.trim().replaceAll(
+					" +", " ");
+
+				// Replace ,space with space
+				tagsSplit = triggers.tags.replaceAll(", ", ",");
+
+				String[] tagsArray = tagsSplit.split(",");
+				for (String trigger_tags : tagsArray)
+				{
+				    if (tags.contains(trigger_tags))
+					Trigger.executeTrigger(id,
+						Trigger.Type.TAG_IS_ADDED);
+				}
+			    }
+			}
+		    }
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+	    }
+	}
+
+	// Execute trigger when contact score is equal to add score in trigger
+	List<Trigger> triggerslist = null;
+
+	try
+	{
+	    triggerslist = Trigger
+		    .getTriggersByCondition(Trigger.Type.ADD_SCORE);
+	    System.out.println("Triggers with condition ADD_SCORE:"
+		    + triggerslist);
+	    if (triggerslist != null)
+	    {
+		for (Trigger triggers : triggerslist)
+
+		{
+		    if (lead_score == Integer.parseInt(triggers.score_value))
+		    {
+			Trigger.executeTrigger(id, Trigger.Type.ADD_SCORE);
+		    }
+		    else
+			break;
+
+		}
+		// Avoiding further looping
+		triggerslist = null;
+	    }
+	}
+
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
 	dao.put(this);
-
-	Trigger.executeTrigger(this.id, Trigger.Type.CONTACT_IS_ADDED);
-
 	ContactDocument.buildDocument(this);
 
     }
@@ -357,46 +564,6 @@ public class Contact extends Cursor
 	this.lead_score = this.lead_score + score;
 	this.save();
 
-	// Get triggers
-	List<Trigger> triggerslist = null;
-
-	try
-	{
-
-	    triggerslist = Trigger
-		    .getTriggersByCondition(Trigger.Type.ADD_SCORE);
-	    System.out.println("Triggers should execute" + triggerslist);
-	    if (triggerslist != null)
-	    {
-		for (Trigger triggers : triggerslist)
-
-		{
-
-		    if (triggers.score_value != null)
-		    {
-			// Fetch contacts
-			Objectify ofy = ObjectifyService.begin();
-			List<Contact> contacts = ofy
-				.query(Contact.class)
-				.filter("lead_score >=",
-					Integer.parseInt(triggers.score_value))
-				.list();
-
-			// Execute trigger for contacts having score greater
-			// than given value
-			for (Contact contactslist : contacts)
-			    Trigger.executeTrigger(contactslist.id,
-				    Trigger.Type.ADD_SCORE);
-		    }
-		}
-	    }
-	}
-
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-
     }
 
     // Subtract score
@@ -469,9 +636,56 @@ public class Contact extends Cursor
 
 	for (Contact contact : contacts_list)
 	{
+
+	    NotificationPrefs.executeNotification(
+		    NotificationPrefs.Type.TAG_CREATED, contact);
+
 	    for (String tag : tags_array)
 	    {
 		contact.tags.add(tag);
+
+		List<Trigger> triggerslist = null;
+		try
+		{
+
+		    triggerslist = Trigger
+			    .getTriggersByCondition(Trigger.Type.TAG_IS_ADDED);
+		    if (triggerslist != null)
+		    {
+			for (Trigger triggers : triggerslist)
+
+			{
+
+			    // Get tags given for trigger
+			    if (triggers.tags != null)
+			    {
+				System.out
+					.println("The given tags for a trigger:"
+						+ triggers.tags);
+				String tagsSplit = "";
+
+				// Replace multiple space with single space
+				tagsSplit = triggers.tags.trim().replaceAll(
+					" +", " ");
+
+				// Replace ,space with space
+				tagsSplit = triggers.tags.replaceAll(", ", ",");
+
+				String[] tagsArray = tagsSplit.split(",");
+				for (String trigger_tag : tagsArray)
+				{
+				    if (trigger_tag.equals(tag))
+					Trigger.executeTrigger(contact.id,
+						Trigger.Type.TAG_IS_ADDED);
+				}
+			    }
+			}
+		    }
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
 	    }
 	    contact.save();
 	}
