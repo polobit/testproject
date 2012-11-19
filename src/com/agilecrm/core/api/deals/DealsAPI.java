@@ -19,6 +19,7 @@ import org.json.JSONException;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.user.NotificationPrefs;
 import com.agilecrm.workflows.Trigger;
 
 @Path("/api/opportunity")
@@ -119,6 +120,9 @@ public class DealsAPI
 		// Get Opportunity based on id
 		Opportunity opportunity = Opportunity.getOpportunity(Long
 			.parseLong(id));
+
+		NotificationPrefs.executeNotification(
+			NotificationPrefs.Type.DEAL_CLOSED, opportunity);
 
 		// Get contacts related to deals
 		List<Contact> dealContacts = opportunity.getContacts();

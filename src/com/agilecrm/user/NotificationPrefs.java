@@ -68,10 +68,22 @@ public class NotificationPrefs
     @NotSaved(IfDefault.class)
     public boolean deal_closed = true;
 
+    @NotSaved(IfDefault.class)
+    public boolean tag_created = true;
+
+    @NotSaved(IfDefault.class)
+    public boolean tag_deleted = true;
+
+    @NotSaved(IfDefault.class)
+    public boolean contact_created = true;
+
+    @NotSaved(IfDefault.class)
+    public boolean contact_deleted = true;
+
     // Notifications
     public enum Type
     {
-	BROWSING, OPENED_EMAIL, CLICKED_LINK, DEAL_CREATED, DEAL_CLOSED
+	BROWSING, OPENED_EMAIL, CLICKED_LINK, DEAL_CREATED, DEAL_CLOSED, TAG_CREATED, TAG_DELETED, CONTACT_CREATED, CONTACT_DELETED
     };
 
     // Notification type
@@ -89,7 +101,8 @@ public class NotificationPrefs
 	    boolean contact_clicked_link,
 	    boolean contact_assigned_clicked_link,
 	    boolean contact_assigned_starred_clicked_link,
-	    boolean deal_created, boolean deal_closed)
+	    boolean deal_created, boolean deal_closed, boolean contact_created,
+	    boolean contact_deleted, boolean tag_created, boolean tag_deleted)
     {
 	this.contact_browsing = contact_browsing;
 	this.contact_assigned_browsing = contact_assigned_browsing;
@@ -102,6 +115,10 @@ public class NotificationPrefs
 	this.contact_assigned_starred_clicked_link = contact_assigned_starred_clicked_link;
 	this.deal_created = deal_created;
 	this.deal_closed = deal_closed;
+	this.contact_created = contact_created;
+	this.contact_deleted = contact_deleted;
+	this.tag_created = tag_created;
+	this.tag_deleted = tag_deleted;
 
 	this.user = new Key<AgileUser>(AgileUser.class, userId);
 
@@ -139,7 +156,7 @@ public class NotificationPrefs
     {
 	NotificationPrefs notifications = new NotificationPrefs(agileUser.id,
 		false, true, true, false, false, false, false, true, true,
-		false, true);
+		false, true, true, true, true, true);
 	notifications.save();
 	return notifications;
     }
@@ -191,7 +208,6 @@ class NotificationsDeferredTask implements DeferredTask
     String json_data;
     Long agile_id;
     String url = null;
-    
 
     NotificationsDeferredTask(Type type, String json_data)
     {
@@ -204,13 +220,15 @@ class NotificationsDeferredTask implements DeferredTask
     {
 	// Get API Key
 	APIKey api = APIKey.getAPIKey();
-	//String apiKey = api.api_key;
-    String apiKey = "8ve7u2kav2rgl7h4db20g5vmcl";
-	url = "https://stats.agilecrm.com:90/push?custom=" + URLEncoder.encode(json_data)
-		+ "&agile_id=" + URLEncoder.encode(apiKey) + "&type=" + URLEncoder.encode(type.toString());
-    
-	System.out.println("encoded url "+url);
-	
+	String apiKey = api.api_key;
+
+	url = "https://stats.agilecrm.com:90/push?custom="
+		+ URLEncoder.encode(json_data) + "&agile_id="
+		+ URLEncoder.encode(apiKey) + "&type="
+		+ URLEncoder.encode(type.toString());
+
+	System.out.println("encoded url " + url);
+
 	String output = Util.accessURL(url);
 	System.out.println(output);
     }
