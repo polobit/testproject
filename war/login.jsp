@@ -64,11 +64,23 @@ String logo_url = accountPrefs.logo;
 	height: 30px !important;
 	margin: 8px 0px !important;
 	padding-left: 10px !important;
+	width: 240px;
+	padding-right: 0px!important;
 }
 
 .error {
 	color: red;
 }
+label.valid {
+  width: 24px;
+  height: 24px;
+  background: url(../img/valid.png) center center no-repeat;
+  display: inline-block;
+  text-indent: -9999px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
 .login-page .openid_large_btn:hover {
 margin: 4px 0px 0px 4px;
 border: 2px solid #999;
@@ -187,16 +199,16 @@ margin-bottom:0px;
 					<div id="openid_btns" style="float: left; padding: 5px 0 15px;">
                         <input type='hidden' name='auth' value='auth'></input>
 						<input type='hidden' name='type' value='agile'></input>
-						<input class="input-xlarge required email field" name='email' type="text" placeholder="User Name"
+						<input class="input-xlarge required email field" name='email' type="text" placeholder="User Name" autocapitalize="off"
 						<%if(request.getAttribute("agile_email")  != null) {%> value="<%=request.getAttribute("agile_email") %>" <%}%>>
 						
-					    <input class="input-xlarge required field " maxlength="10" minlength="4" name='password' type="password" placeholder="Password">
+					    <input class="input-xlarge required field " maxlength="10" minlength="4" name='password' type="password" placeholder="Password" autocapitalize="off">
 						<div style="margin-top: 15px;">
 							<label class="checkbox" style="display: inline-block;">
 							    <input type="checkbox" name="signin">Keep me signed in 
 							</label> 
 
-							<input type='submit' style="float: right;height:39px" value="Sign In" class='btn btn-large btn-primary agile_btn'>
+							<input type='submit' style="float: right;margin-right: 30px;" value="Sign In" class='btn btn-large btn-primary agile_btn'>
 
 						</div>
 					</div>

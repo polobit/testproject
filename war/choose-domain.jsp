@@ -125,7 +125,7 @@ padding-left:10px!important;
 					 <h3><small> Start with your subdomain at AgileCRM</small></h3>
 					 <div style="padding-top:10px;">
           				<input id='subdomain' type="text" placeholder="Enter subdomain"
-						   	   name="subdomain" class="input-medium field required"><b> .agilecrm.com</b>
+						   	   name="subdomain" class="input-medium field required" autocapitalize="off"><b> .agilecrm.com</b>
 				   </div>
 				</form>
 				<div style="margin-left:30%"><input class="btn btn-large btn-primary" type="submit" value="Submit"></div>
