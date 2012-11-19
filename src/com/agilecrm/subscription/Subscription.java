@@ -187,8 +187,20 @@ public class Subscription
     public void delete() throws Exception
     {
 	// Delete the customer before deleting agile subscription object
-	deleteCustomer();
-	dao.delete(this);
+	try
+	{
+	    deleteCustomer();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    // If customer object is not found in stripe still subscription
+	    // needs to be delted
+	    dao.delete(this);
+	}
     }
 
     private AgileBilling getAgileBilling() throws Exception
