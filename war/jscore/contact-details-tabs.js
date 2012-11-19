@@ -77,9 +77,11 @@ $(function(){
 		 
 		// Get email of the contact in contact detail
 		var email = getPropertyValue(json.properties, "email");
-		if(!email)
+		if(!email){
+			$('#mail', this.el).html('<div class="alert alert-error span4" style="margin-top:30px"><a class="close" data-dismiss="alert" href="#">×</a>Sorry! this contact has no email to get the mails.</div>').show().delay(3000).hide(1);
 			return;	
-				
+		}	
+			
 		var mailsView = new Base_Collection_View({
 			url: 'core/api/email?e=' + encodeURIComponent(email) + '&c=10&o=0',
             templateKey: "email-social",

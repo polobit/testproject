@@ -145,7 +145,7 @@ var ContactsRouter = Backbone.Router.extend({
         	var model = new contact_details_model();
         	model.id = id;
         	model.fetch({ success: function(data) { 
-        		
+        			
         			// Call Contact Details again
         			App_Contacts.contactDetails(id, model);
         			
@@ -171,6 +171,7 @@ var ContactsRouter = Backbone.Router.extend({
 
         this.contactDetailView = new Base_Model_View({
             model: contact,
+            isNew: true,
             template: "contact-detail",
             postRenderCallback: function(el) {
             	
@@ -187,7 +188,7 @@ var ContactsRouter = Backbone.Router.extend({
         });
         
        
-        var el = this.contactDetailView.el;
+        var el = this.contactDetailView.render().el;
       
         $('#content').html(el);
        

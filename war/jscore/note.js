@@ -46,6 +46,7 @@ $(function(){
     
     // Show note modal 
     $('#show-note').live('click', function(e){
+    	e.preventDefault();
      	$("#noteModal").modal('show');
     	
     	var	el = $("#noteForm");
@@ -57,5 +58,8 @@ $(function(){
     	
     	  // Remove appended contacts from related-to
     	  $("#noteForm").find("li").remove();
+    	  
+    	// Remove validation error messages
+    	  removeValidationErrors('noteModal');
     });
 });

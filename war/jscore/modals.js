@@ -31,8 +31,16 @@ $(function(){
 	    	$('#personModal').find(".alert").hide();
 	    	
 	    	// Remove validation error messages
-	    	$('#personModal').find("div.control-group").removeClass("error");
-	    	$('#personModal').find("span.help-inline").remove();
+	    	removeValidationErrors('personModal');
+	    });
+	    
+	    $('#companyModal').on('hidden', function () {
+	    	removeValidationErrors('companyModal');
 	    });
 });
 
+function removeValidationErrors(modalId){
+	$('#' + modalId).find("div.control-group").removeClass("error");
+	$('#' + modalId).find("div.control-group").removeClass("success");
+	$('#' + modalId).find("span.help-inline").remove();
+}

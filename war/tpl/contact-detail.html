@@ -8,7 +8,7 @@
     	<img  class='thumbnail upload_pic imgholder submit' type="submit" src="{{gravatarurl properties 50}}" width="50" height="50" style='display:inline'/>
 	    <input type="hidden" id="upload_url" name="gravatarurl"><a style="display:none;" class="save_img submit" type="submit">Save</a>  
     </form>
-	<div style='height:auto;display:inline-block;vertical-align:-23px;'>
+	<div style='height:auto;display:inline-block;vertical-align:-23px;text-overflow:ellipsis;white-space:nowrap;width:20em;overflow:hidden;'>
 		<b>
 			<font size="5">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</font> 
 		</b></br>
@@ -115,13 +115,16 @@
     		</ul>
 
 			<div class="tab-content">
-				<div class="tab-pane active" id="time-line" style="margin:auto;width:80%">
+				<div class="tab-pane active" id="time-line">
 					<div><img class="loading-img" src="img/21-0.gif"></div>
-					<div id="timeline">
-						<div id="line-container">
-							<div id="line"></div>
-						</div>
 
+					<div  style="margin:auto;width:700px">
+						<div id="timeline">
+							<div id="line-container">
+								<div id="line"></div>
+							</div>
+
+						</div>
 					</div>
 				</div>
   				<div class="tab-pane" id="notes">...</div>
@@ -188,7 +191,7 @@
 				{{/each}}
 				<br/><br/>
 			
-			<div id="map" style="width: 200px; height: 200px;">
+			<div id="map" style="width: auto; height: 200px;">
 				
 			</div>
 		</div>
