@@ -463,7 +463,7 @@ footer {
       }
 	
 /* validation plugin */
-.valid {
+span.valid {
   width: 24px;
   height: 24px;
   background: url(../img/valid.png) center center no-repeat;
