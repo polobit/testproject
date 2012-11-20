@@ -394,4 +394,29 @@ public class Opportunity
 	}
 	return null;
     }
+
+    // Get Pic
+    @XmlElement(name = "ownerpic")
+    public String getPic() throws Exception
+    {
+
+	AgileUser agileuser = null;
+	UserPrefs userprefs = null;
+
+	try
+
+	{
+	    // Get owner pic through agileuser prefs
+	    agileuser = AgileUser.getCurrentAgileUserFromDomainUser(ownerKey
+		    .getId());
+	    userprefs = UserPrefs.getUserPrefs(agileuser);
+	    return userprefs.pic;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
+	return null;
+    }
 }
