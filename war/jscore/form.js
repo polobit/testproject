@@ -266,9 +266,6 @@ function isValidForm(form) {
 		    return this.optional(element) || (((date - new Date().getTime())/one_day) > 90);
 		}, "Card should be atleast 3 months valid");
 	
-	
-	
-	
 	    $(form).validate({
 	    	 rules : {
 	    		 atleastThreeMonths : true
@@ -276,21 +273,21 @@ function isValidForm(form) {
 	        debug: true,
 	        errorElement: 'span',
 	        errorClass: 'help-inline',
-	        highlight: function (element, errorClass) {    
-	        	$(element).closest(".control-group").addClass('error').removeClass('success').removeClass('valid');
+	        highlight: function (element, errorClass, validClass) {    
+	        	$(element).closest(".control-group").addClass('error').removeClass('success').find('div > span').removeClass('valid');
 	        },
-	        unhighlight: function (element, errorClass) {
-	        	 $(element).removeClass('valid').closest(".control-group").removeClass('error'); 
+	        unhighlight: function (element, errorClass, validClass) {
+	        	 $(element).closest(".control-group").removeClass('error'); 
 	        },
 	        invalidHandler: function (form, validator) {
 	            var errors = validator.numberOfInvalids();
 	        },
-	        success: function(element, errorClass) {
+	        success: function(element) {
 	        	$(element)
-	        	.text('OK!').addClass('valid')
+	        	.addClass('valid')
 	        	.closest('.control-group').addClass('success').removeClass('error');
-	        	}
-	    })	
+	        }
+	    });	
 	
     return $(form).valid();
 }

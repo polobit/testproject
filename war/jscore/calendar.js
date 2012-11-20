@@ -5,7 +5,7 @@ function isArray(a)
 
 $(function(){
 
-	$("#add-task").live('click', function(e){
+	$(".add-task").live('click', function(e){
 		e.preventDefault();
 		$('#activityModal').modal('show');
 		highlightTask();
@@ -13,7 +13,7 @@ $(function(){
 		agile_type_ahead("task_related_to", el, contacts_typeahead);
 	});
 	
-	$("#add-event").live('click', function(e){
+	$(".add-event").live('click', function(e){
 		e.preventDefault();
 		$('#activityModal').modal('show');
 		highlightEvent();
