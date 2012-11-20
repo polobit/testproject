@@ -12,7 +12,7 @@
 					<b>{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</b><br/>
 					{{getPropertyValue properties "title"}} {{getPropertyValue properties "company"}}		
 				  </span>
-                <hr/>
+                <br>
                 
                  {{/each}}
                    
@@ -22,19 +22,10 @@
 					{{getPropertyValue properties "title"}} {{getPropertyValue properties "company"}}		
 				  </span>
 				
+                    <span> 
+                    <b>{{type}}</b> 
+                   </span>
              </div>  
-              
-            <div>
-                
-               
-              {{#if entity_type}}
-               <span> 
-                    <b>Creates a Deal {{entity_type}}</b> 
-               </span>
-                {{/if}}
-                
-                 
-               </div>
 			</div>
    </div>
 </div>

@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.json.simple.JSONObject;
 
 import com.agilecrm.account.APIKey;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -205,9 +206,10 @@ class NotificationsDeferredTask implements DeferredTask
 {
 
     Type type;
-    String json_data;
+    String json_data = null;
     Long agile_id;
     String url = null;
+    JSONObject json = null;
 
     NotificationsDeferredTask(Type type, String json_data)
     {
@@ -222,8 +224,14 @@ class NotificationsDeferredTask implements DeferredTask
 	APIKey api = APIKey.getAPIKey();
 	String apiKey = api.api_key;
 
+	// Inorder to get type along with notification
+	json = new JSONObject();
+	json.put("object", json_data);
+	json.put("type", type.toString());
+
+	System.out.println("The json after converting" + json);
 	url = "https://stats.agilecrm.com:90/push?custom="
-		+ URLEncoder.encode(json_data) + "&agile_id="
+		+ URLEncoder.encode(json.toString()) + "&agile_id="
 		+ URLEncoder.encode(apiKey) + "&type="
 		+ URLEncoder.encode(type.toString());
 

@@ -86,7 +86,13 @@ function _setupSockets(api_key)
 	    console.log(data);
 	   
 	    var parse_data = JSON.parse(data);
-	    var html = getTemplate('notify-html',parse_data);
+	    console.log(parse_data);
+	    var object = JSON.parse(parse_data.object);
+	    
+	    // Storing type into object json
+	    object.type = parse_data.type;
+	    console.log(object);
+	    var html = getTemplate('notify-html',object);
 	    notify('success1', html, 'bottom-right', true);	
 	    
 	    /*console.log(parse_data);
