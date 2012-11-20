@@ -1,9 +1,7 @@
 package com.agilecrm.workflows;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlElement;
@@ -48,13 +46,12 @@ public class Trigger
 
     @NotSaved(IfDefault.class)
     public String campaign_id = null;
-    
+
     @NotSaved(IfDefault.class)
     public String score_value = null;
-    
+
     @NotSaved(IfDefault.class)
     public String tags = null;
-
 
     // Dao
     private static ObjectifyGenericDao<Trigger> dao = new ObjectifyGenericDao<Trigger>(
