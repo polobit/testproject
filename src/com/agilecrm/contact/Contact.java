@@ -248,49 +248,6 @@ public class Contact extends Cursor
 	    {
 		NotificationPrefs.executeNotification(
 			NotificationPrefs.Type.TAG_DELETED, this);
-
-		List<Trigger> triggerslist = null;
-		try
-		{
-
-		    triggerslist = Trigger
-			    .getTriggersByCondition(Trigger.Type.TAG_IS_DELETED);
-		    if (triggerslist != null)
-		    {
-			for (Trigger triggers : triggerslist)
-
-			{
-
-			    // Get tags given for trigger
-			    if (triggers.tags != null)
-			    {
-				System.out
-					.println("The given tags for a trigger"
-						+ triggers.tags);
-				String tagsSplit = "";
-
-				// Replace multiple space with single space
-				tagsSplit = triggers.tags.trim().replaceAll(
-					" +", " ");
-
-				// Replace ,space with space
-				tagsSplit = triggers.tags.replaceAll(", ", ",");
-
-				String[] tagsArray = tagsSplit.split(",");
-				for (String trigger_tags : tagsArray)
-				{
-				    if (present_tags.contains(trigger_tags))
-					Trigger.executeTrigger(id,
-						Trigger.Type.TAG_IS_DELETED);
-				}
-			    }
-			}
-		    }
-		}
-		catch (Exception e)
-		{
-		    e.printStackTrace();
-		}
 	    }
 
 	}
@@ -327,9 +284,6 @@ public class Contact extends Cursor
 	// Execute notification when contact is deleted
 	NotificationPrefs.executeNotification(
 		NotificationPrefs.Type.CONTACT_DELETED, this);
-
-	// Execute Trigger
-	Trigger.executeTrigger(this.id, Trigger.Type.CONTACT_IS_DELETED);
 
 	dao.delete(this);
 

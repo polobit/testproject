@@ -29,9 +29,7 @@
                               <select id="trigger-type" name="type" class="required">
                               <option></option>
                               <option value="TAG_IS_ADDED">Tag is added</option>
-                              <option value="TAG_IS_DELETED">Tag is deleted</option>
                               <option value="CONTACT_IS_ADDED">Contact is added</option>
-                              <option value="CONTACT_IS_DELETED">Contact is deleted</option>
                               <option value="DEAL_IS_ADDED">Deal is added</option>
                               <option value="DEAL_IS_DELETED">Deal is deleted</option>
                               <option value="ADD_SCORE" id="add-score">Add score</option>
@@ -43,12 +41,12 @@
                        
                        <div class="control-group">
                         <div id="RHS" name="RHS">
-                    	<label class="control-label TAG_IS_ADDED TAG_IS_DELETED ADD_SCORE">Value  <span class="field_req">*</span></label>
+                    	<label class="control-label TAG_IS_ADDED ADD_SCORE">Value  <span class="field_req">*</span></label>
                             <div class="controls">
                               {{#if tags}}
-                                 <input type="text" value="{{tags}}" name="tags" class="TAG_IS_ADDED TAG_IS_DELETED required">
+                                 <input type="text" value="{{tags}}" name="tags" class="TAG_IS_ADDED required">
                                 {{else}}
-                                   <input type="text" value="{{tags}}" name="tags" class="TAG_IS_ADDED TAG_IS_DELETED required">
+                                   <input type="text" value="{{tags}}" name="tags" class="TAG_IS_ADDED required">
                                  {{/if}}
                                
                                    {{#if score_value}}
