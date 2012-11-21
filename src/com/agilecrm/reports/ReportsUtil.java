@@ -42,8 +42,8 @@ public class ReportsUtil
 
 	    // Check whether results are not empty
 	    if (!((Collection) results.get("report_results")).isEmpty())
-		SendMail.sendMail("praveen@invox.com",
-			SendMail.REPORTS_SUBJECT, SendMail.REPORTS, results);
+		SendMail.sendMail(user.email, SendMail.REPORTS_SUBJECT,
+			SendMail.REPORTS, results);
 	}
     }
 
