@@ -20,6 +20,7 @@ import com.agilecrm.core.DomainUser;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deferred.TagsDeferredTask;
+import com.agilecrm.document.ContactDocument;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.NotificationPrefs;
 import com.agilecrm.workflows.Trigger;
@@ -89,7 +90,7 @@ public class Contact extends Cursor
 
     // Tags
     @Indexed
-    Set<String> tags = new HashSet<String>();
+    public Set<String> tags = new HashSet<String>();
 
     // Properties
     // @XmlElementWrapper(name = "properties")
@@ -97,10 +98,15 @@ public class Contact extends Cursor
     @NotSaved(IfDefault.class)
     @Embedded
     @Indexed
-    List<ContactField> properties = new ArrayList<ContactField>();
+    public List<ContactField> properties = new ArrayList<ContactField>();
 
     @NotSaved(IfDefault.class)
     public String widget_properties = null;
+
+    // To make property field available for mail templates for reports(not
+    // saved)
+    @NotSaved
+    public Map<String, Object> contact_properties = null;
 
     public static final String FIRST_NAME = "first_name";
     public static final String LAST_NAME = "last_name";

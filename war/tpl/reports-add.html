@@ -1,4 +1,4 @@
-<script id="filter-contacts-template" type="text/html">
+<script id="reports-add-template" type="text/html">
 <div class="span10">
 		<div class="well">
 			<form id="filterContactForm" class="form-horizontal">
@@ -75,6 +75,29 @@
 						</div>
 					</div>
 				</div>		
+
+			<div class="control-group">					
+						<label class="control-label">Sent Report To<span class="field_req">*</span></label>
+					<div class="controls">
+						<select id ="owners" class="required" name="domain_user_id">
+						</select>		
+					</div>
+			</div>
+
+			<div class="control-group" style="padding-top: 2%">					
+				<div class="controls">
+					<label class="checkbox"> 
+						<input type="checkbox" name="is_reports_enabled"/>
+						<span style="vertical-align: bottom; display: inline;">Send Me This Report</span>
+					</label> 
+					<select name="duration">
+						<option value="DAILY">Daily</option>
+						<option value="WEEKLY">Weekly</option>
+						<option value="MONTHLY">Monthly</option>
+					</select>		
+				</div>
+			</div>
+			<input type="text" name="report_type" class="hide" value="Contact"></input>
 			{{#if id}}
 				<input type="text" name="id" class="hide" value={{id}} >
 			{{/if}}

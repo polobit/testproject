@@ -55,13 +55,14 @@ public class TypeAheadAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public String typeaheadContacts(@QueryParam("q") String keyword)
     {
-	Collection<Contact> contacts = ContactFilter.searchContacts(keyword);
+	Collection contacts = ContactFilter.searchContacts(keyword);
 	String[] availableTags = new String[contacts.size()];
 
 	int count = 0;
 	// Iterate
-	for (Contact contact : contacts)
+	for (Object contactObject : contacts)
 	{
+	    Contact contact = (Contact) contactObject;
 	    System.out.println(contact);
 	    availableTags[count++] = contact
 		    .getContactFieldValue(Contact.FIRST_NAME)
@@ -81,5 +82,4 @@ public class TypeAheadAPI
 	    return "";
 	}
     }
-
 }

@@ -29,9 +29,9 @@ import org.json.JSONObject;
 
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.ContactFilter;
 import com.agilecrm.contact.Note;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.reports.QueryDocument;
 import com.agilecrm.util.Util;
 
 @Path("/api/contacts")
@@ -232,10 +232,9 @@ public class ContactsAPI
     @Path("/search/{keyword}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Collection<Contact> searchContacts(
-	    @PathParam("keyword") String keyword)
+    public Collection searchContacts(@PathParam("keyword") String keyword)
     {
-	return ContactFilter.searchContacts(keyword.toLowerCase());
+	return QueryDocument.searchContacts(keyword.toLowerCase());
     }
 
     // This method is called if XML is request
@@ -350,7 +349,6 @@ public class ContactsAPI
     public void deleteDeals(@PathParam("contact-id") Long contactId,
 	    @FormParam("model_ids") String model_ids) throws JSONException
     {
-
 	JSONArray dealsJSONArray = new JSONArray(model_ids);
 	Note.dao.deleteBulkByIds(dealsJSONArray);
     }

@@ -1,5 +1,5 @@
 // All Routers are global
-var App_Contacts, App_Workflows, App_Deals, App_Admin_Settings, App_Calendar, App_Settings;
+var App_Contacts, App_Workflows, App_Deals, App_Admin_Settings, App_Calendar, App_Settings, App_Reports;
 
 $(function () 
 {
@@ -10,6 +10,7 @@ $(function ()
 	App_Settings = new SettingsRouter();
 	App_Calendar = new CalendarRouter();
 	App_Subscription = new SubscribeRouter();
+	App_Reports = new ReportsRouter();
     
 	// For infinite page scrolling
 	Backbone.history.bind("all", currentRoute)

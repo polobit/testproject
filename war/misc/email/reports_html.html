@@ -1,0 +1,60 @@
+<body>
+	<div>
+		<div
+			style="background-color: #8A6086; font-family: Arial, sans-serif; padding: 5px">
+
+			<div
+				style="min-height: 36px; font-size: 14px; font-weight: bold; padding-bottom: 4px">
+				<table style="display: inline; width: 100%">
+					<tbody>
+						<tr>
+							<td valign="middle" height="32px"
+								style="padding: 0; color: white">{{email_subject}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div
+				style="font-size: 13px; background-color: #fff; padding: 10px 7px 7px 7px">
+				<br> <br> Dear {{user_name}}, <br> 
+				<br>Your reports based on "{{report_name}}" generated<br> <br><br>
+				<table style="width: 100%;" border="1">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Work</th>
+							<th>Email</th>
+							<th>Lead Score</th>
+							<th>Tags</th>
+						</tr>
+					<thead>
+					<tbody>
+						{{#report_results}}
+						<tr>
+							{{#contact_properties}}
+							<td>{{first_name}}&nbsp;{{last_name}}</td>
+							<td>{{title}}<br>{{mantra}}
+							</td>
+							<td>{{email}}</td> {{/contact_properties}}
+							<td>{{lead_score}}</td>
+							<td>{{tags}}</td>
+						</tr>
+						{{/report_results}}
+					</tbody>
+				</table>
+				<br> <br> <br> <br> <br> <span
+					style="color: #898989">AgileCRM: Built with love for small
+					businesses</span>
+				<div style="text-align: right">
+					<a href="https://www.agilecrm.com" target="_blank"> <img
+						style="border: 0; margin-top: 10px"
+						src="https://ssl.gstatic.com/docs/documents/share/images/services/google_logo-1.png"
+						alt="Logo for Google Drive">
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+

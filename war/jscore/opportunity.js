@@ -56,20 +56,20 @@ $(function () {
 
 
 //Populate users in options of owner input field dropdown
-function populateUsers(id, el , value) {
+function populateUsers(id, el , value, key) {
 
 	// Users set id of agile user to save agileuser key in opportunities
 	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 	
 	// Fill owners list
-	fillSelect('owners-list','/core/api/users', 'domainUser', function fillOwner() {
+	fillSelect(id,'/core/api/users', 'domainUser', function fillOwner() {
 		
 		if(value)
 		{
 			// If domain user is delete owner is undefined
-			if(value.owner)
+			if(value[key])
 				// While deserialize set agile user id from user prefs to save agile user key in opportunity 
-				$('#owners-list',el).find('option[value='+value.owner.id+']').attr("selected", "selected");;
+				$('#' + id, el).find('option[value='+value[key].id+']').attr("selected", "selected");;
 		}			
 	}, optionsTemplate); 
 }

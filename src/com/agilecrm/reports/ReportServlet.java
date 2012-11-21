@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.agilecrm.contact.ContactFilter;
 import com.agilecrm.deferred.ReportsDeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -28,7 +27,7 @@ public class ReportServlet extends HttpServlet
 	// Get duration parameter to fetch filter for that duration
 	String duration = req.getParameter("duration");
 
-	List<ContactFilter> contactFilterList = new ArrayList<ContactFilter>();
+	List<Reports> reportsList = new ArrayList<Reports>();
 
 	if (duration == null)
 	    return;
@@ -38,27 +37,27 @@ public class ReportServlet extends HttpServlet
 	// Run query to get all the filter with particular duration in name
 	// space = ""
 	if (duration.equalsIgnoreCase("DAILY"))
-	    contactFilterList = ContactFilter
-		    .getAllFiltersByDuration(ContactFilter.Duration.DAILY);
+	    reportsList = Reports
+		    .getAllReportsByDuration(Reports.Duration.DAILY);
 
 	else if (duration.equalsIgnoreCase("WEEKLY"))
-	    contactFilterList = ContactFilter
-		    .getAllFiltersByDuration(ContactFilter.Duration.WEEKLY);
+	    reportsList = Reports
+		    .getAllReportsByDuration(Reports.Duration.WEEKLY);
 
 	else if (duration.equalsIgnoreCase("MONTHLY"))
-	    contactFilterList = ContactFilter
-		    .getAllFiltersByDuration(ContactFilter.Duration.MONTHLY);
+	    reportsList = Reports
+		    .getAllReportsByDuration(Reports.Duration.MONTHLY);
 
 	// Store contactFilters list with domain name as key(domain name,
-	// filters in that domain in particular duration)
-	Map<String, List<ContactFilter>> filtersMap = ReportsUtil
-		.organizeFiltersByDomain(contactFilterList);
+	// reports in that domain in particular duration)
+	Map<String, List<Reports>> reportsMap = ReportsUtil
+		.organizeFiltersByDomain(reportsList);
 
-	System.out.println("filters map : " + filtersMap);
+	System.out.println("Reports map : " + reportsMap);
 
 	// Created a deferred task for report generation
 	ReportsDeferredTask reportsDeferredTask = new ReportsDeferredTask(
-		filtersMap);
+		reportsMap);
 
 	Queue queue = QueueFactory.getDefaultQueue();
 

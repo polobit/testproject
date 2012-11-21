@@ -38,7 +38,7 @@ var DealsRouter = Backbone.Router.extend({
             isNew: true,
             window: 'deals',
             postRenderCallback: function(el){
-            	populateUsers("owner", el);
+            	populateUsers("owners-list", el);
             	agile_type_ahead("relates_to", el, contacts_typeahead);
             	populateMilestones(el);
 
@@ -72,7 +72,7 @@ var DealsRouter = Backbone.Router.extend({
             window: 'deals',
             postRenderCallback: function(el){
 
-        			populateUsers("owner", el, App_Deals.opportunityCollectionView.currentDeal.toJSON());
+        			populateUsers("owners-list", el, App_Deals.opportunityCollectionView.currentDeal.toJSON(), 'owner');
             		populateMilestones(el,undefined, App_Deals.opportunityCollectionView.currentDeal.toJSON());
                  	
             		// Call setupTypeAhead to get tags

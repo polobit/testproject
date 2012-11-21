@@ -16,7 +16,6 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactFilter;
 import com.agilecrm.contact.ContactFilter.SystemFilter;
 
@@ -28,7 +27,7 @@ public class ContactFilterAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<ContactFilter> getContactFilters()
     {
-	return ContactFilter.getCurrentNamespaceFilters();
+	return ContactFilter.getAllContactFilters();
     }
 
     // Save Filter contacts
@@ -70,7 +69,7 @@ public class ContactFilterAPI
     @Path("/query/{filter_id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Collection<Contact> getQueryResults(@PathParam("filter_id") String id)
+    public Collection getQueryResults(@PathParam("filter_id") String id)
     {
 	try
 	{
@@ -93,7 +92,7 @@ public class ContactFilterAPI
 	    ContactFilter filter = ContactFilter.getContactFilter(Long
 		    .parseLong(id));
 
-	    Collection<Contact> contacts = filter.queryContacts();
+	    Collection contacts = filter.queryContacts();
 
 	    return contacts;
 	}

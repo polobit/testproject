@@ -1,6 +1,7 @@
-package com.agilecrm.contact;
+package com.agilecrm.document;
 
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,6 +11,9 @@ import java.util.Set;
 
 import org.apache.commons.lang.time.DateUtils;
 
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.util.Util;
 import com.google.appengine.api.search.AddException;
 import com.google.appengine.api.search.Consistency;
@@ -20,9 +24,12 @@ import com.google.appengine.api.search.IndexSpec;
 import com.google.appengine.api.search.SearchService;
 import com.google.appengine.api.search.SearchServiceFactory;
 import com.google.appengine.api.search.StatusCode;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
 
 public class ContactDocument
 {
+
     // Get the SearchService for the default namespace
     private static SearchService searchService = SearchServiceFactory
 	    .getSearchService();
@@ -208,8 +215,16 @@ public class ContactDocument
 	return (value).replace(" ", "");
     }
 
+    public static Collection getRelatedEntities(List contact_ids)
+    {
+	Objectify ofy = ObjectifyService.begin();
+	// Return result contacts
+	return ofy.get(Contact.class, contact_ids).values();
+    }
+
     public static void deleteDocument(Contact contact)
     {
 	index.remove(contact.id.toString());
     }
+
 }

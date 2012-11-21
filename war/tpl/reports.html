@@ -1,0 +1,43 @@
+<script id="report-collection-template" type="text/html">
+<div class="row">
+		<div class="span12">
+			<div class="page-header">
+    			<h1>List of Reports</h1>
+				<a href="#report-add" class="btn right" id="addReport" style='top:-28px;position:relative'><span><i class='icon-plus-sign'/></span>  Add Report</a>
+	  		</div>
+		</div>
+	</div>
+	<div class="row">
+ 		<div class="span9"> 
+			<table class="table table-bordered showCheckboxes" url="core/api/reports/bulk">
+				<thead>
+    				<tr>
+      					<th>Name</th>
+						<th>Duration</th>
+    				</tr>
+  				</thead>
+  
+  				<tbody id='report-model-list'>
+  				</tbody>
+			</table>
+		</div>
+
+		<div class='span3'>
+			<div class="well" id='addview'>
+             <h3>
+              What are Filters?
+             </h3><br/>
+             <p>Filters are used to sort contacts with a specific criteria to find patterns. You can save your preferred filters and also have daily, weekly or monthly reports sent to you based on the filter</p>
+			</div>
+		</div>
+
+	</div>
+</script>
+
+<script id="report-model-template" type="text/html">
+<td report='{{id}}' class='report-edit' style="cursor:pointer"> {{name}} </td>
+<td>
+{{duration}}
+</td>
+<br/>
+</script>

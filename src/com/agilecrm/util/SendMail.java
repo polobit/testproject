@@ -5,6 +5,7 @@ import java.util.Iterator;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.map.MappingJsonFactory;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.thirdparty.SendGridEmail;
@@ -22,6 +23,9 @@ public class SendMail
 
     public static final String SUBSCRIPTION_DELETED = "subscription_deleted";
     public static final String SUBSCRIPTION_DELETED_SUBJECT = "Your Account Deleted";
+
+    public static final String REPORTS = "reports";
+    public static final String REPORTS_SUBJECT = "AgileCrm Reports";
 
     public static final String AGILE_FROM_NAME = "Agile CRM";
     public static final String AGILE_FROM_EMAIL = "noreply@agilecrm.com";
@@ -63,8 +67,27 @@ public class SendMail
 	    email.put("email_from", from);
 	    email.put("email_from_name", fromName);
 
-	    JSONObject mergedJSON = mergeJSONs(new JSONObject[] { email,
-		    new JSONObject(json) });
+	    JSONObject[] jsonObjectArray;
+
+	    // If object to mail template is array then data of array can be
+	    // accessed with "content" key in template
+	    if (object instanceof Object[])
+	    {
+		JSONObject content = new JSONObject();
+
+		content.put("content", new JSONArray(json));
+
+		jsonObjectArray = new JSONObject[] { email, content };
+
+	    }
+
+	    else
+	    {
+		jsonObjectArray = new JSONObject[] { email,
+			new JSONObject(json) };
+	    }
+
+	    JSONObject mergedJSON = mergeJSONs(jsonObjectArray);
 
 	    // Read template - HTML
 	    String emailHTML = handleBarsTemplatize(template
