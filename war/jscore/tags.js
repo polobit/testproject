@@ -3,7 +3,7 @@ var tagsCollection;
 var TAGS_LIST = [];
 function setupTagsTypeAhead(models) {
 
-    if(!(TAGS.length >= 0))
+    if(!TAGS)
     	{
     		var TagsCollection = Backbone.Collection.extend({
     			url: '/core/api/tags',

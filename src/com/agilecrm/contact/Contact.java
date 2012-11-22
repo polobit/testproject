@@ -188,18 +188,17 @@ public class Contact extends Cursor
 
 	    Contact contact = Contact.getContact(id);
 	    Set<String> present_tags = contact.tags;
-	    System.out.println("Event in prepersist with present tags"
-		    + present_tags + "tags" + tags);
+
 	    // Check if tags of present contact equals to tags in pre-persist
 	    if (!(present_tags.containsAll(tags)))
 	    {
-		System.out.println("Event in prepersist if condition");
+
 		// if(tags.removeAll(old_tags).contains())
 
 		NotificationPrefs.executeNotification(
 			NotificationPrefs.Type.TAG_CREATED, this);
 
-		// Get triggers
+		// Execute trigger when tags are added from contact-detail
 		List<Trigger> triggerslist = null;
 		try
 		{
@@ -211,24 +210,13 @@ public class Contact extends Cursor
 			for (Trigger triggers : triggerslist)
 
 			{
-
+			    System.out.println("The trigger tags"
+				    + triggers.tags);
 			    // Get tags given for trigger
 			    if (triggers.tags != null)
 			    {
-				System.out
-					.println("The given tags for a trigger"
-						+ triggers.tags);
-				String tagsSplit = "";
 
-				// Replace multiple space with single space
-				tagsSplit = triggers.tags.trim().replaceAll(
-					" +", " ");
-
-				// Replace ,space with space
-				tagsSplit = triggers.tags.replaceAll(", ", ",");
-
-				String[] tagsArray = tagsSplit.split(",");
-				for (String trigger_tags : tagsArray)
+				for (String trigger_tags : triggers.tags)
 				{
 				    if (tags.contains(trigger_tags))
 					Trigger.executeTrigger(id,
@@ -333,17 +321,8 @@ public class Contact extends Cursor
 				System.out
 					.println("The given tags for a trigger:"
 						+ triggers.tags);
-				String tagsSplit = "";
 
-				// Replace multiple space with single space
-				tagsSplit = triggers.tags.trim().replaceAll(
-					" +", " ");
-
-				// Replace ,space with space
-				tagsSplit = triggers.tags.replaceAll(", ", ",");
-
-				String[] tagsArray = tagsSplit.split(",");
-				for (String trigger_tags : tagsArray)
+				for (String trigger_tags : triggers.tags)
 				{
 				    if (tags.contains(trigger_tags))
 					Trigger.executeTrigger(id,
@@ -382,7 +361,7 @@ public class Contact extends Cursor
 			break;
 
 		}
-		// Avoiding further looping
+		// Avoid further looping
 		triggerslist = null;
 	    }
 	}
@@ -598,6 +577,7 @@ public class Contact extends Cursor
 	    {
 		contact.tags.add(tag);
 
+		// Execute trigger when tags are added with bulk contacts
 		List<Trigger> triggerslist = null;
 		try
 		{
@@ -616,17 +596,8 @@ public class Contact extends Cursor
 				System.out
 					.println("The given tags for a trigger:"
 						+ triggers.tags);
-				String tagsSplit = "";
 
-				// Replace multiple space with single space
-				tagsSplit = triggers.tags.trim().replaceAll(
-					" +", " ");
-
-				// Replace ,space with space
-				tagsSplit = triggers.tags.replaceAll(", ", ",");
-
-				String[] tagsArray = tagsSplit.split(",");
-				for (String trigger_tag : tagsArray)
+				for (String trigger_tag : triggers.tags)
 				{
 				    if (trigger_tag.equals(tag))
 					Trigger.executeTrigger(contact.id,

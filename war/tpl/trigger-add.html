@@ -43,12 +43,15 @@
                         <div id="RHS" name="RHS">
                     	<label class="control-label TAG_IS_ADDED ADD_SCORE">Value  <span class="field_req">*</span></label>
                             <div class="controls">
-                              {{#if tags}}
-                                 <input type="text" value="{{tags}}" name="tags" class="TAG_IS_ADDED required">
-                                {{else}}
-                                   <input type="text" value="{{tags}}" name="tags" class="TAG_IS_ADDED required">
-                                 {{/if}}
-                               
+                               <div class="pull-left">
+									<ul class= "tagsinput tags" name="trigger_tags">
+								{{#each tags}}
+									<li class="tag" style="display: inline-block;" data="{{this}}">{{this}}<a class="close" id="remove_tag">&times</a></li>
+								{{/each}}
+							    </ul>
+						        </div>
+                             <input type="text" id="addTags" class="tags-typeahead span2 TAG_IS_ADDED" style="margin-bottom: -1px" placeholder="Enter tags"/>
+                         
                                    {{#if score_value}}
 										<input type="text" value="{{score_value}}" id="add-score-value" name="score_value" class="ADD_SCORE required">
 									{{else}}

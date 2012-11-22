@@ -1,9 +1,12 @@
 package com.agilecrm.workflows;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -51,7 +54,10 @@ public class Trigger
     public String score_value = null;
 
     @NotSaved(IfDefault.class)
-    public String tags = null;
+    public Set<String> tags = new HashSet<String>();
+
+    @NotSaved
+    public String trigger_tags[] = null;
 
     // Dao
     private static ObjectifyGenericDao<Trigger> dao = new ObjectifyGenericDao<Trigger>(
@@ -67,6 +73,16 @@ public class Trigger
 	this.name = name;
 	this.type = type;
 	this.campaign_id = campaign_id;
+    }
+
+    @PrePersist
+    private void PrePersist()
+    {
+
+	// Save trigger tags in set
+	for (String trigger_tag : trigger_tags)
+	    tags.add(trigger_tag);
+	System.out.println(tags);
     }
 
     public void save()
@@ -139,6 +155,12 @@ public class Trigger
 	}
 
 	return "?";
+    }
+
+    @XmlElement(name = "tags")
+    public Set<String> getTags()
+    {
+	return tags;
     }
 
     // Get Triggers based on Trigger condition
