@@ -1,4 +1,4 @@
-package com.agilecrm.subscription;
+package com.agilecrm.subscription.stripe.webhooks;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,18 +17,28 @@ import org.json.JSONObject;
 
 import com.agilecrm.Globals;
 import com.agilecrm.core.DomainUser;
+import com.agilecrm.subscription.Subscription;
 import com.agilecrm.util.SendMail;
-import com.agilecrm.util.Util;
 import com.google.appengine.api.NamespaceManager;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
 import com.stripe.model.Event;
 
+/**
+ * The <code>StripeWebhookServlet</code> is to handle the webhooks sent by the
+ * stripe and process them to perform necessary actions on it
+ * 
+ * @author Yaswanth
+ * 
+ * @since November 2012
+ * 
+ */
+
+@SuppressWarnings("serial")
 public class StripeWebhookServlet extends HttpServlet
 {
 
-    public void service(HttpServletRequest req, HttpServletResponse res)
-	    throws IOException
+    public void service(HttpServletRequest req, HttpServletResponse res) throws IOException
     {
 	res.setContentType("text/plain;charset=UTF-8");
 
@@ -38,6 +48,8 @@ public class StripeWebhookServlet extends HttpServlet
 
 	String stripe_event_message = "";
 	String line = "";
+
+	// Read the event object from request
 	while ((line = reader.readLine()) != null)
 	{
 	    stripe_event_message += (line);
@@ -47,15 +59,19 @@ public class StripeWebhookServlet extends HttpServlet
 	if (stripe_event_message.isEmpty())
 	    return;
 
+	// Get current namespace and store it can be set back finally after
+	// required opetaions
 	String oldNamespace = NamespaceManager.get();
 
 	try
 	{
+	    // Convert event jsonstring to JSONObject
 	    JSONObject eventJSON = new JSONObject(stripe_event_message);
 
 	    String newNamespace;
 	    try
 	    {
+		// Get Namespace from event
 		newNamespace = getNamespaceFromEvent(eventJSON);
 	    }
 	    catch (StripeException e)
@@ -67,36 +83,35 @@ public class StripeWebhookServlet extends HttpServlet
 
 	    System.out.println("Namespace for event : " + newNamespace);
 
-	    System.out
-		    .println("Type of event : " + eventJSON.getString("type"));
+	    System.out.println("Type of event : " + eventJSON.getString("type"));
 
 	    if (StringUtils.isEmpty(newNamespace))
 		return;
 
-	    // Set namespace
+	    // Set namespace to do queries on subscription object
 	    NamespaceManager.set(newNamespace);
 
+	    // Get event id from event json
 	    String eventId = eventJSON.getString("id");
 
 	    Event event;
 
+	    // Get event from stripe based on stripe event id
 	    event = Event.retrieve(eventId, Globals.STRIPE_API_KEY);
 
 	    // If payment is done set subscription flag to success
-	    if (eventJSON.getString("type").equals(
-		    Globals.STRIPE_INVOICE_PAYMENT_SUCCEEDED))
+	    if (eventJSON.getString("type").equals(Globals.STRIPE_INVOICE_PAYMENT_SUCCEEDED))
 	    {
 		setSubscriptionFlag(Subscription.Type.BILLING_SUCCESS);
 	    }
 
 	    // If payment failed set subscription flag is set to failed and
 	    // mails sent to respective domain users
-	    if (eventJSON.getString("type").equals(
-		    Globals.STRIPE_INVOICE_PAYMENT_FAILED))
+	    if (eventJSON.getString("type").equals(Globals.STRIPE_INVOICE_PAYMENT_FAILED))
 	    {
 		// Get number of attempts
-		String attempCount = eventJSON.getJSONObject("data")
-			.getJSONObject("object").getString("attempt_count");
+		String attempCount = eventJSON.getJSONObject("data").getJSONObject("object")
+			.getString("attempt_count");
 
 		Integer number_of_attempts = Integer.parseInt(attempCount);
 
@@ -104,21 +119,9 @@ public class StripeWebhookServlet extends HttpServlet
 		ProcessPaymentFailedWebhooks(number_of_attempts, event);
 
 	    }
-	    else if (eventJSON.getString("type").equals(
-		    Globals.STRIPE_SUBSCRIPTION_DELETED))
+	    else if (eventJSON.getString("type").equals(Globals.STRIPE_CUSTOMER_DELETED))
 	    {
-		Util.sendMail("praveen@invox.com", "yaswanth",
-			DomainUser.getDomainOwner(newNamespace).email,
-			"subscription Deleted", "praveen@invox.com",
-			"your subscription deleted", null);
-
-		Subscription.getSubscription().delete();
-
-	    }
-
-	    else if (eventJSON.getString("type").equals(
-		    Globals.STRIPE_CUSTOMER_DELETED))
-	    {
+		// Get domain owner
 		DomainUser user = DomainUser.getDomainOwner(newNamespace);
 
 		event = customizeEventAttributes(event, user);
@@ -144,22 +147,37 @@ public class StripeWebhookServlet extends HttpServlet
 	}
     }
 
-    /* Get namespace from the webhook event to notify the users */
-    public String getNamespaceFromEvent(JSONObject eventJSON)
-	    throws JSONException, StripeException
+    /**
+     * This method process event based on type of event and return namespace
+     * (domain) to which the webhook addresses
+     * 
+     * @param eventJSON
+     *            {@link JSONObject}
+     * @return {@link String}
+     * @throws JSONException
+     * @throws StripeException
+     */
+    public String getNamespaceFromEvent(JSONObject eventJSON) throws JSONException, StripeException
     {
+	// Get event type from event json
 	String eventType = eventJSON.getString("type");
 
+	// If type is customer deletion stripe return customer object which
+	// contains description(which is set to namespace)
 	if (eventType.equals(Globals.STRIPE_CUSTOMER_DELETED))
 	{
-	    String namespace = eventJSON.getJSONObject("data")
-		    .getJSONObject("object").getString("description");
+	    // Read description from event json
+	    String namespace = eventJSON.getJSONObject("data").getJSONObject("object")
+		    .getString("description");
 
 	    return namespace;
 	}
 
-	String customerId = eventJSON.getJSONObject("data")
-		.getJSONObject("object").getString("customer");
+	// If event type is not customer deleted the we get the customer id and
+	// retieve the customer object from stripe and get
+	// description(namespace/domain)
+	String customerId = eventJSON.getJSONObject("data").getJSONObject("object")
+		.getString("customer");
 
 	Customer customer = Customer.retrieve(customerId);
 
@@ -169,9 +187,15 @@ public class StripeWebhookServlet extends HttpServlet
 	return namespace;
     }
 
-    /*
+    /**
      * Process the payment failed webhooks calls to set subscription flags,
      * sends emails
+     * 
+     * @param attemptCount
+     *            Number of payment attempts
+     * @param event
+     *            {@link Event}
+     * 
      */
     public void ProcessPaymentFailedWebhooks(int attemptCount, Event event)
     {
@@ -197,8 +221,7 @@ public class StripeWebhookServlet extends HttpServlet
 	    // Call customize attributes based on namespace and user
 	    event = customizeEventAttributes(event, user);
 
-	    SendMail.sendMail(user.email,
-		    SendMail.SUBSCRIPTION_PAYMENT_FAILED_SUBJECT,
+	    SendMail.sendMail(user.email, SendMail.SUBSCRIPTION_PAYMENT_FAILED_SUBJECT,
 		    SendMail.SUBSCRIPTION_PAYMENT_FAILED, event);
 
 	}
@@ -221,8 +244,7 @@ public class StripeWebhookServlet extends HttpServlet
 	    {
 		event = customizeEventAttributes(event, user);
 
-		SendMail.sendMail(user.email,
-			SendMail.SUBSCRIPTION_PAYMENT_FAILED_SUBJECT,
+		SendMail.sendMail(user.email, SendMail.SUBSCRIPTION_PAYMENT_FAILED_SUBJECT,
 			SendMail.SUBSCRIPTION_PAYMENT_FAILED, event);
 	    }
 
@@ -230,33 +252,42 @@ public class StripeWebhookServlet extends HttpServlet
 
     }
 
-    /* Sets status of subscription whether billing failed of succeeded */
+    /**
+     * Sets status of subscription whether billing failed of succeeded
+     * 
+     * @param status
+     *            {@link Subscription.Type}
+     */
     public void setSubscriptionFlag(Subscription.Type status)
     {
-	// Set status
+	// Set status and save subscription
 	Subscription subscription = Subscription.getSubscription();
 	subscription.status = status;
 	subscription.save();
-
     }
 
-    /*
+    /**
      * Customize the event attributes set namespace and domain user name to use
      * in email template
+     * 
+     * @param event
+     *            {@link Event}
+     * @param user
+     *            {@link DomainUser}
+     * @return {@link Event}
      */
     public Event customizeEventAttributes(Event event, DomainUser user)
     {
 	String namespace = NamespaceManager.get();
 
 	// Get the attibutes from event object
-	Map<String, Object> attributes = event.getData()
-		.getPreviousAttributes();
+	Map<String, Object> attributes = event.getData().getPreviousAttributes();
 
 	// Set custom attributes "namespace", "user_name"
 	attributes.put("domain", namespace);
-
 	attributes.put("user_name", user.name);
 
+	// set back to event object
 	event.getData().setPreviousAttributes(attributes);
 
 	// Return customized event

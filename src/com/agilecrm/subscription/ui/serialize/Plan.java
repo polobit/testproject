@@ -1,4 +1,4 @@
-package com.agilecrm.billing;
+package com.agilecrm.subscription.ui.serialize;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

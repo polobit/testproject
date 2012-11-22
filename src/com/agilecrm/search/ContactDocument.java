@@ -1,4 +1,4 @@
-package com.agilecrm.document;
+package com.agilecrm.search;
 
 import java.util.Calendar;
 import java.util.Collection;

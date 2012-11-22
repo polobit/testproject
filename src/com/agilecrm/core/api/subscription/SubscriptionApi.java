@@ -12,9 +12,9 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.agilecrm.billing.CreditCard;
-import com.agilecrm.billing.Plan;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.ui.serialize.CreditCard;
+import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.util.DBUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.stripe.exception.StripeException;

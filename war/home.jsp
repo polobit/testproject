@@ -102,6 +102,7 @@ String CSS_PATH = "/";
 						<li id="calendarmenu"><a href="#calendar"><i class="icon-calendar icon-white"></i> Calendar</a>
 						<li id="dealsmenu"><a href="#deals"><i class="icon-money icon-white"></i> Deals</a>
 						<li id="workflowsmenu"><a href="#workflows"><i class="icon-sitemap icon-white"></i> Campaigns</a>
+						<li id="reportsmenu"><a href="#reports"><i class="icon-share icon-white"></i> Reports</a>
 					</ul>
 					
 					<%

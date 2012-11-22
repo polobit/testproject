@@ -12,10 +12,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jettison.json.JSONObject;
 
-import com.agilecrm.billing.AgileBilling;
-import com.agilecrm.billing.CreditCard;
-import com.agilecrm.billing.Plan;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.subscription.ui.serialize.CreditCard;
+import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.util.ClickDeskEncrytion;
 import com.google.gson.Gson;
 import com.googlecode.objectify.Objectify;

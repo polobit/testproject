@@ -118,7 +118,7 @@
 
 <servlet>
  	<servlet-name>Stripe Webhook</servlet-name>
- 	<servlet-class>com.agilecrm.subscription.StripeWebhookServlet</servlet-class>
+ 	<servlet-class>com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet</servlet-class>
  </servlet>
  
  <servlet-mapping>

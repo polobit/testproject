@@ -14,7 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.agilecrm.document.ContactDocument;
+import com.agilecrm.search.ContactDocument;
 import com.agilecrm.util.DateUtil;
 import com.google.appengine.api.search.Index;
 import com.google.appengine.api.search.QueryOptions;
@@ -25,8 +25,7 @@ public class QueryDocument
 
     // Perform queries to fetch contacts
     @SuppressWarnings("rawtypes")
-    public static Collection queryDocuments(String[] rules,
-	    Reports.ReportType type)
+    public static Collection queryDocuments(String[] rules, Reports.ReportType type)
     {
 	JSONArray rules_json_array = null;
 	try
@@ -46,8 +45,7 @@ public class QueryDocument
 	    try
 	    {
 		// Get each rule from set of rules
-		JSONObject each_rule = new JSONObject(
-			rules_json_array.getString(i));
+		JSONObject each_rule = new JSONObject(rules_json_array.getString(i));
 
 		String LHS = each_rule.getString("LHS");
 		String condition = each_rule.getString("condition");
@@ -58,8 +56,7 @@ public class QueryDocument
 		{
 		    // Create new query with lhs and rhs conditions to be added
 		    // further
-		    String newQuery = LHS + ":"
-			    + ContactDocument.normalizeString(RHS);
+		    String newQuery = LHS + ":" + ContactDocument.normalizeString(RHS);
 
 		    // For equals condition
 		    if (condition.equalsIgnoreCase("EQUALS"))
@@ -80,8 +77,8 @@ public class QueryDocument
 		{
 		    // Truncate date Document search date is without time
 		    // component
-		    Date truncatedDate = DateUtils.truncate(
-			    new Date(Long.parseLong(RHS)), Calendar.DATE);
+		    Date truncatedDate = DateUtils.truncate(new Date(Long.parseLong(RHS)),
+			    Calendar.DATE);
 
 		    // Format date
 		    Format formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -113,8 +110,7 @@ public class QueryDocument
 		    else if (condition.equalsIgnoreCase("LAST"))
 		    {
 
-			long from_date = new DateUtil()
-				.removeDays(Integer.parseInt(RHS)).getTime()
+			long from_date = new DateUtil().removeDays(Integer.parseInt(RHS)).getTime()
 				.getTime() / 1000;
 
 			query = buildQuery("AND", query, LHS + " > " + date);
@@ -128,12 +124,10 @@ public class QueryDocument
 			String RHS_NEW = each_rule.getString("RHS_NEW");
 			if (RHS_NEW != null)
 			{
-			    String to_date = formatter.format(new Date(Long
-				    .parseLong(RHS_NEW)));
+			    String to_date = formatter.format(new Date(Long.parseLong(RHS_NEW)));
 
 			    query = buildQuery("AND", query, LHS + " >=" + date);
-			    query = buildQuery("AND", query, LHS + " <= "
-				    + to_date);
+			    query = buildQuery("AND", query, LHS + " <= " + to_date);
 			}
 		    }
 		}
@@ -151,14 +145,12 @@ public class QueryDocument
     }
 
     // Build ,process query and return contacts collection
-    public static Collection<Object> processQuery(String query,
-	    Reports.ReportType type)
+    public static Collection<Object> processQuery(String query, Reports.ReportType type)
     {
 
 	// Set query options only to get id of document (enough to get get
 	// respective contacts)
-	QueryOptions options = QueryOptions.newBuilder()
-		.setFieldsToReturn("id").build();
+	QueryOptions options = QueryOptions.newBuilder().setFieldsToReturn("id").build();
 
 	// Build query on query options
 	com.google.appengine.api.search.Query query_string = com.google.appengine.api.search.Query
@@ -168,8 +160,7 @@ public class QueryDocument
 	Index index = null;
 	try
 	{
-	    index = (Index) Class
-		    .forName("com.agilecrm.document." + type + "Document")
+	    index = (Index) Class.forName("com.agilecrm.search." + type + "Document")
 		    .getDeclaredField("index").get(null);
 
 	}
@@ -182,8 +173,7 @@ public class QueryDocument
 	if (index == null)
 	    return null;
 
-	Collection<ScoredDocument> contact_documents = index.search(
-		query_string).getResults();
+	Collection<ScoredDocument> contact_documents = index.search(query_string).getResults();
 
 	List<Long> entity_ids = new ArrayList<Long>();
 
@@ -196,10 +186,8 @@ public class QueryDocument
 
 	try
 	{
-	    return (Collection) Class
-		    .forName("com.agilecrm.document." + type + "Document")
-		    .getMethod("getRelatedEntities", List.class)
-		    .invoke(null, entity_ids);
+	    return (Collection) Class.forName("com.agilecrm.search." + type + "Document")
+		    .getMethod("getRelatedEntities", List.class).invoke(null, entity_ids);
 	}
 	catch (Exception e)
 	{
@@ -211,8 +199,7 @@ public class QueryDocument
     }
 
     // Build query based on condition AND, NOT..
-    private static String buildQuery(String condition, String query,
-	    String newQuery)
+    private static String buildQuery(String condition, String query, String newQuery)
     {
 
 	// If query string is empty return simple not query
