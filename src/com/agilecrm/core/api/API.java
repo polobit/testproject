@@ -190,8 +190,8 @@ public class API
 	String apiKey = api.api_key;
 
 	// Hit Stats Server
-	String url = "http://stats.agilecrm.com:90/get?email=manohar@invox.com&agile_id="
-		+ apiKey;
+	String url = "https://stats.agilecrm.com:90/get?email=" + searchEmail
+		+ "&agile_id=" + apiKey;
 
 	return Util.accessURL(url);
     }
