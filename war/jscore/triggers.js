@@ -12,4 +12,13 @@ $(function(){
 		
 	});
 	
+	$('#trigger-type').live('change',function(e){
+        e.preventDefault();		
+		  if($(this).val() == 'TAG_IS_ADDED')
+		  {
+			setupTagsTypeAhead();
+		  }
+	});
+	
+	
 });
