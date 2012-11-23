@@ -119,6 +119,9 @@ public class StripeWebhookServlet extends HttpServlet
 		ProcessPaymentFailedWebhooks(number_of_attempts, event);
 
 	    }
+
+	    // If Customer is deleted from stripe then delete subscription
+	    // Entity and send an email to domain owner
 	    else if (eventJSON.getString("type").equals(Globals.STRIPE_CUSTOMER_DELETED))
 	    {
 		// Get domain owner
@@ -132,6 +135,23 @@ public class StripeWebhookServlet extends HttpServlet
 
 		// Delete account
 		Subscription.getSubscription().delete();
+	    }
+
+	    // If subscription is deleted from stripe then set the status the
+	    // set subscription status flag to subscription deleted
+	    else if (eventJSON.getString("type").equals(Globals.STRIPE_SUBSCRIPTION_DELETED))
+	    {
+		// Get domain owner
+		DomainUser user = DomainUser.getDomainOwner(newNamespace);
+
+		event = customizeEventAttributes(event, user);
+
+		// Send mail to domain user
+		SendMail.sendMail(user.email, SendMail.SUBSCRIPTION_DELETED,
+			SendMail.SUBSCRIPTION_DELETED_SUBJECT, event);
+
+		// Set flag to SUBSCRIPTION_DELETED
+		setSubscriptionFlag(Subscription.Type.SUBSCRIPTION_DELETED);
 	    }
 	}
 

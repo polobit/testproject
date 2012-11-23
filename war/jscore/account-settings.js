@@ -40,7 +40,7 @@ $(function(){
 			
 			$.ajax({
 				  type: "DELETE",
-				  url: "core/api/subscription",
+				  url: "core/api/delete/account",
 				  success: function(){
 					  
 					  // Navigate to login page after delete

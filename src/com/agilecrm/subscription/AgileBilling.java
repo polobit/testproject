@@ -29,8 +29,8 @@ public interface AgileBilling
     /**
      * Create customer and return Customer as {@link JSONObject}
      * 
-     * @param CreditCard
-     *            {@link CreditCard}, Plan{@link Plan}
+     * @param cardDetails
+     *            {@link CreditCard}, plan {@link Plan}
      * 
      * @return {@link JSONObject}
      * 
@@ -41,8 +41,8 @@ public interface AgileBilling
     /**
      * Update customer plan and return Customer as {@link JSONObject}
      * 
-     * @param Customer
-     *            {@link JSONException}, Plan{@link Plan}
+     * @param billingData
+     *            {@link JSONException}, plan{@link Plan}
      * 
      * @return {@link JSONObject}
      * 
@@ -54,8 +54,8 @@ public interface AgileBilling
      * Update customer CreditCard detials and return Customer as
      * {@link JSONObject}
      * 
-     * @param Customer
-     *            as {@link JSONObject}, CreditCard {@link CreditCard}
+     * @param billingData
+     *            as {@link JSONObject}, cardDetails {@link CreditCard}
      * 
      * @return {@link JSONObject}
      * 
@@ -67,7 +67,7 @@ public interface AgileBilling
     /**
      * Get invoices of customer
      * 
-     * @param Customer
+     * @param billingData
      *            as {@link JSONObject}, CreditCard {@link CreditCard}
      * 
      * @return List of {@link JSONObject}
@@ -79,10 +79,9 @@ public interface AgileBilling
     /**
      * Delete customer from gateway
      * 
-     * @param Customer
-     *            as {@link JSONObject}, CreditCard {@link CreditCard}
+     * @param billingData
+     *            as {@link JSONObject}
      * 
-     * @return {@link Void}
      * 
      * @throws Exception
      */
@@ -91,10 +90,9 @@ public interface AgileBilling
     /**
      * Cancel customer Subscription
      * 
-     * @param Customer
+     * @param billingData
      *            as {@link JSONObject}
      * 
-     * @return {@link Void}
      * 
      * @throws Exception
      */

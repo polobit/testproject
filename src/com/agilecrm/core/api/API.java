@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -25,12 +26,15 @@ import org.json.JSONObject;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.contact.ContactView;
 import com.agilecrm.core.DomainUser;
+import com.agilecrm.subscription.Subscription;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.IMAPEmailPrefs;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.SocialPrefs.Type;
 import com.agilecrm.user.UserPrefs;
+import com.agilecrm.util.DBUtil;
 import com.agilecrm.util.Util;
+import com.google.appengine.api.NamespaceManager;
 
 @Path("/api")
 public class API
@@ -95,14 +99,12 @@ public class API
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public void createEmail(@QueryParam("from") String fromEmail,
-	    @QueryParam("to") String to, @QueryParam("subject") String subject,
-	    @QueryParam("body") String body)
+    public void createEmail(@QueryParam("from") String fromEmail, @QueryParam("to") String to,
+	    @QueryParam("subject") String subject, @QueryParam("body") String body)
     {
 	try
 	{
-	    Util.sendMail(fromEmail, fromEmail, to, subject, fromEmail, body,
-		    null);
+	    Util.sendMail(fromEmail, fromEmail, to, subject, fromEmail, body, null);
 	}
 	catch (Exception e)
 	{
@@ -190,8 +192,8 @@ public class API
 	String apiKey = api.api_key;
 
 	// Hit Stats Server
-	String url = "https://stats.agilecrm.com:90/get?email=" + searchEmail
-		+ "&agile_id=" + apiKey;
+	String url = "https://stats.agilecrm.com:90/get?email=" + searchEmail + "&agile_id="
+		+ apiKey;
 
 	return Util.accessURL(url);
     }
@@ -201,15 +203,14 @@ public class API
     @GET
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON })
-    public String getEmails(@QueryParam("e") String searchEmail,
-	    @QueryParam("c") String count, @QueryParam("o") String offset)
+    public String getEmails(@QueryParam("e") String searchEmail, @QueryParam("c") String count,
+	    @QueryParam("o") String offset)
     {
 
 	String url = null;
 
 	// Get Imap Prefs
-	IMAPEmailPrefs imapPrefs = IMAPEmailPrefs.getIMAPPrefs(AgileUser
-		.getCurrentAgileUser());
+	IMAPEmailPrefs imapPrefs = IMAPEmailPrefs.getIMAPPrefs(AgileUser.getCurrentAgileUser());
 	if (imapPrefs != null)
 	{
 	    String userName = imapPrefs.user_name;
@@ -223,25 +224,17 @@ public class API
 	    password = URLEncoder.encode(password);
 	    port = URLEncoder.encode(port);
 
-	    url = "http://stats.agilecrm.com:8080/AgileCRMEmail/imap?user_name="
-		    + userName
-		    + "&search_email="
-		    + searchEmail
-		    + "&host="
-		    + host
-		    + "&port="
-		    + port
-		    + "&offset="
-		    + offset
-		    + "&count="
-		    + count + "&command=imap_email&password=" + password;
+	    url = "http://stats.agilecrm.com:8080/AgileCRMEmail/imap?user_name=" + userName
+		    + "&search_email=" + searchEmail + "&host=" + host + "&port=" + port
+		    + "&offset=" + offset + "&count=" + count + "&command=imap_email&password="
+		    + password;
 	}
 	else
 	{
 	    // Get Gmail Social Prefs
 	    Type socialPrefsTypeEnum = SocialPrefs.Type.GMAIL;
-	    SocialPrefs gmailPrefs = SocialPrefs.getPrefs(
-		    AgileUser.getCurrentAgileUser(), socialPrefsTypeEnum);
+	    SocialPrefs gmailPrefs = SocialPrefs.getPrefs(AgileUser.getCurrentAgileUser(),
+		    socialPrefsTypeEnum);
 
 	    if (gmailPrefs != null)
 	    {
@@ -298,8 +291,7 @@ public class API
 				.entity("You have not yet configured your email. Please click <a href='#email'>here</a> to get started.")
 				.build());
 	    else
-		throw new WebApplicationException(Response
-			.status(Response.Status.BAD_REQUEST)
+		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 			.entity("No Emails.").build());
 
 	}
@@ -344,6 +336,31 @@ public class API
     public String getNamespaceStats()
     {
 	return Util.getNamespaceStats().toString();
+    }
+
+    /**
+     * Delete subscription object of the domain and deletes related customer
+     */
+    @Path("delete/account")
+    @DELETE
+    public void deleteAccount()
+    {
+	try
+	{
+	    // Get current domain subscription entity
+	    Subscription subscription = Subscription.getSubscription();
+
+	    // Check if subscription is not null
+	    if (subscription != null)
+		subscription.delete();
+
+	    DBUtil.deleteNamespace(NamespaceManager.get());
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity(e.getMessage()).build());
+	}
     }
 
 }
