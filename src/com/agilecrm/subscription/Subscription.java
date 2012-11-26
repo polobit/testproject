@@ -309,8 +309,14 @@ public class Subscription
      */
     private AgileBilling getAgileBilling() throws Exception
     {
-	return (AgileBilling) Class.forName("com.agilecrm.subscription." + this.gateway + "Impl")
-		.newInstance();
+	/*
+	 * Respective gateway implementation is expected to be in sub package of
+	 * subscription, name of package should be name of gateway and
+	 * Implementations class should be named "gateway"+Impl
+	 */
+	return (AgileBilling) Class.forName(
+		"com.agilecrm.subscription." + this.gateway.toString().toLowerCase() + "."
+			+ this.gateway + "Impl").newInstance();
 
     }
 

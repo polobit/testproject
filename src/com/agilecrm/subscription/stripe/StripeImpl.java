@@ -16,8 +16,8 @@ import com.stripe.model.Customer;
 import com.stripe.model.Invoice;
 
 /**
- * The <code>StringImpl</code> class is to connect and make transations with
- * stripe payment gateway It includes methods for creating, deleting,
+ * The <code>StringImpl</code> class is to connect and make transactions with
+ * stripe payment gateway, It includes methods for creating, deleting,
  * updating(plan, customer, creditcard) of customer and cancel subscription
  * 
  * @author Yaswanth
@@ -61,7 +61,7 @@ public class StripeImpl implements AgileBilling
 
     /**
      * Update the plan of the customer based on the customer and plan object
-     * paramerters
+     * parameters
      * 
      * @param stripeCustomer
      *            {@link Customer}, as {@link JSONObject},

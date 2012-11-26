@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.time.DateUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
@@ -27,21 +29,38 @@ import com.google.appengine.api.search.StatusCode;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 
+/**
+ * This <code>ContactDocument</code> class saves the contact object as a
+ * document and enables to search on contacts, this class contains methods to
+ * build contact document(buildDocument) and utility methods
+ * 
+ * @author Yaswanth
+ * 
+ * @since October 2012
+ */
 public class ContactDocument
 {
+    /**
+     * Initializes search service for the app
+     */
+    private static SearchService searchService = SearchServiceFactory.getSearchService();
 
-    // Get the SearchService for the default namespace
-    private static SearchService searchService = SearchServiceFactory
-	    .getSearchService();
+    /**
+     * Index for the contact Document, Required to search on contacts document
+     */
+    public static Index index = searchService.getIndex(IndexSpec.newBuilder().setName("contacts")
+	    .setConsistency(Consistency.PER_DOCUMENT));
 
-    // Get the index. If not yet created, create it.
-    public static Index index = searchService.getIndex(IndexSpec.newBuilder()
-	    .setName("contacts").setConsistency(Consistency.PER_DOCUMENT));;
-
+    /**
+     * Builds a document based on the contact given, saves each field value and
+     * keywords can be queries on the using index of the document
+     * 
+     * @param contact
+     *            {@link Contact}
+     */
     public static void buildDocument(Contact contact)
     {
-	System.out.println("contact id : " + contact.id);
-	// Get builder object
+	// Get builder object to build document
 	Document.Builder doc = Document.newBuilder();
 
 	// Map to store all the fields
@@ -50,133 +69,180 @@ public class ContactDocument
 	// Set contactField objects in to map
 	for (ContactField contactField : contact.properties)
 	{
-
 	    CustomFieldDef customField = null;
 
+	    /*
+	     * If CustomField is not required field then return should not be
+	     * added to document
+	     */
 	    if (contactField.type.equals(ContactField.FieldType.CUSTOM))
+	    {
+		// Get the custom field based on field name
 		customField = CustomFieldDef.getFieldByName(contactField.name);
 
-	    // If CustomField is not required field then return should not
-	    // be
-	    // added to document
-	    if (contactField.type.equals(ContactField.FieldType.CUSTOM)
-		    && customField != null
-		    && !CustomFieldDef.getFieldByName(contactField.name).searchable)
-		return;
+		/*
+		 * Check whether customField is not available or customfield is
+		 * not searchable continue loop, field will not be added in
+		 * document
+		 */
+		if (customField == null || !customField.searchable)
+		    continue;
+	    }
 
+	    // Trims the spaces in field value
 	    String normalized_value = normalizeString(contactField.value);
 
-	    // Replace special characters with "_" in field name
-	    String field_name = contactField.name.replaceAll("[^a-zA-Z0-9_]",
-		    "_");
+	    /*
+	     * Replace special characters with "_" in field name document search
+	     * does not allow to save special characters in value
+	     */
+	    String field_name = contactField.name.replaceAll("[^a-zA-Z0-9_]", "_");
 
-	    System.out.println(normalized_value);
-
-	    // If key already exists append contactfield value to respective
-	    // value in map
+	    /*
+	     * If key already exists append contactfield value to respective
+	     * value in map(ex: multiple email can be stored for for contact
+	     * with same field name)
+	     */
 	    if (fields.containsKey(field_name))
 	    {
-		String value = normalizeString(fields.get(field_name)) + " "
-			+ normalized_value;
+		String value = normalizeString(fields.get(field_name)) + " " + normalized_value;
 
 		normalized_value = value;
 	    }
 
+	    // If key do not exist with field_name add it to map
 	    fields.put(field_name, normalized_value);
 
 	}
 
+	/*
+	 * Remove spaces in each tag and concat all tags with space between
+	 * them(ex: ["agile dev", "clickdesk dev"] to "agiledeve clickdeskdev")
+	 */
 	String tags = normalizeSet(contact.tags);
 
 	// put String tags
 	if (tags != null)
 	    fields.put("tags", tags);
+
 	/*
-	 * for (String tag : contact.tags) {
-	 * doc.addField(Field.newBuilder().setName("tags").setAtom(tag)); }
+	 * Set fields to document from the map of contact contact fields and
+	 * field values
 	 */
-	// Set fields to document from map
 	for (Map.Entry<String, String> e : fields.entrySet())
 	{
-	    doc.addField(Field.newBuilder().setName(e.getKey())
-		    .setText(e.getValue()));
+	    doc.addField(Field.newBuilder().setName(e.getKey()).setText(e.getValue()));
 	}
 
-	// Set created date with out time component
+	// Set created date to document with out time component
 	Date truncatedDate = DateUtils.truncate(new Date(), Calendar.DATE);
-	doc.addField(Field.newBuilder().setName("created_time")
-		.setDate(truncatedDate));
+	doc.addField(Field.newBuilder().setName("created_time").setDate(truncatedDate));
 
 	// Save updated time if updated time is not 0
 	if (contact.updated_time > 0L)
 	{
-	    Date updatedDate = DateUtils.truncate(new Date(
-		    contact.updated_time * 1000), Calendar.DATE);
+	    Date updatedDate = DateUtils.truncate(new Date(contact.updated_time * 1000),
+		    Calendar.DATE);
 
-	    doc.addField(Field.newBuilder().setName("updated_time")
-		    .setDate(updatedDate));
+	    doc.addField(Field.newBuilder().setName("updated_time").setDate(updatedDate));
 	}
 
-	// Other fields in contacts
-	doc.addField(Field.newBuilder().setName("lead_score")
-		.setNumber(contact.lead_score));
+	// Add Other fields to document in contacts
+	doc.addField(Field.newBuilder().setName("lead_score").setNumber(contact.lead_score));
 
-	// Save tokends
+	/*
+	 * get tokent from contact properties and save it in document
+	 * "search_tokens"
+	 */
 	doc.addField(Field.newBuilder().setName("search_tokens")
 		.setText(getSearchTokens(contact.properties)));
 
 	// Add document to Index
 	addToIndex(doc.setId(contact.id.toString()).build());
-
-	System.out.println(doc);
     }
 
+    /**
+     * This method adds the document to Index
+     * 
+     * @param doc
+     *            {@link Document}
+     */
     private static void addToIndex(Document doc)
     {
 	try
 	{
+	    // Add document to index
 	    index.add(doc);
 
 	}
 	catch (AddException e)
 	{
-	    if (StatusCode.TRANSIENT_ERROR.equals(e.getOperationResult()
-		    .getCode()))
+	    if (StatusCode.TRANSIENT_ERROR.equals(e.getOperationResult().getCode()))
 	    {
 		// retry adding document
 	    }
 	}
     }
 
-    // Split the contact fields and send normalized string
+    /**
+     * Split the contact fields and send normalized string
+     * 
+     * @param properties
+     *            {@link List}
+     * @return {@link String}
+     */
     private static String getSearchTokens(List<ContactField> properties)
     {
 	// Create Search Keyword Values
 	Set<String> tokens = new HashSet<String>();
-	Set<String> search_tokens = new HashSet<String>();
 
-	// first name and last name for different combinations to search
+	// First name and last name for different combinations to search
 	String firstName = "";
 	String lastName = "";
 
-	String contactName = "";
+	/*
+	 * Iterate through contact properties and get fist name last name (for
+	 * combinations first_name + last_name , last_name + first_name) and
+	 * convert address string to map and save address keywords to search
+	 */
 	for (ContactField contactField : properties)
 	{
-
 	    if (contactField.name.equals("first_name"))
 	    {
 		firstName = contactField.value;
-		continue;
 	    }
 
-	    if (contactField.name.equals("last_name"))
+	    else if (contactField.name.equals("last_name"))
 	    {
 		lastName = contactField.value;
 	    }
 
+	    else if (contactField.name.equals("address"))
+	    {
+		// Create HashMap from Address JSON string
+		try
+		{
+		    // Convert address JSON string(sent so from client) to a map
+		    HashMap<String, String> addressMap = new ObjectMapper().readValue(
+			    contactField.value, new TypeReference<HashMap<String, String>>()
+			    {
+			    });
+
+		    // save the address values
+		    tokens.addAll(addressMap.values());
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+	    }
+
+	    // If field is not first_name or last_name or address directly
 	    tokens.add(normalizeString(contactField.value));
 
 	}
+
+	String contactName = "";
 
 	// contact contact name first name then last name add to tokens
 	contactName = normalizeString(firstName + lastName);
@@ -186,12 +252,24 @@ public class ContactDocument
 	contactName = normalizeString(lastName + firstName);
 	tokens.add(contactName);
 
+	// Split each token in to fragments to search based on keyword
 	if (tokens.size() != 0)
-	    search_tokens = Util.getSearchTokens(tokens);
+	    tokens = Util.getSearchTokens(tokens);
 
-	return normalizeSet(search_tokens);
+	// Rerturn normalized set
+	return normalizeSet(tokens);
     }
 
+    /**
+     * This method normalize the set values: trim spaces in the set value and
+     * concat all values space separated
+     * 
+     * ["agile dev", "clickdesk dev"] to "agiledev clickdeskdev"
+     * 
+     * @param values
+     *            {@link Set}
+     * @return {@link String}
+     */
     private static String normalizeSet(Set<String> values)
     {
 	String normalizedString = "";
@@ -205,6 +283,12 @@ public class ContactDocument
 	return normalizedString.trim();
     }
 
+    /**
+     * Remove spaces from the string
+     * 
+     * @param value
+     * @return {@link String}
+     */
     public static String normalizeString(String value)
     {
 
@@ -215,16 +299,31 @@ public class ContactDocument
 	return (value).replace(" ", "");
     }
 
-    public static Collection getRelatedEntities(List contact_ids)
+    /**
+     * Get contact related to given document ids
+     * 
+     * @param doc_ids
+     *            {@link List}
+     * @return {@link Collection}
+     */
+    public static Collection getRelatedEntities(List doc_ids)
     {
 	Objectify ofy = ObjectifyService.begin();
-	// Return result contacts
-	return ofy.get(Contact.class, contact_ids).values();
+
+	// Return contact related to doc_ids
+	return ofy.get(Contact.class, doc_ids).values();
     }
 
-    public static void deleteDocument(Contact contact)
+    /**
+     * This method delete an entity from document(called when contact is deleted
+     * then it should delete is respective entity in document)
+     * 
+     * @param contact
+     *            {@link Contact}
+     * 
+     */
+    public static void deleteDocumentEntity(Contact contact)
     {
 	index.remove(contact.id.toString());
     }
-
 }

@@ -20,22 +20,41 @@ import com.google.appengine.api.search.Index;
 import com.google.appengine.api.search.QueryOptions;
 import com.google.appengine.api.search.ScoredDocument;
 
+/**
+ * The <code>QueryDocument</code> class contains methods the build query based
+ * on rules JSON and process queries, Query string for document search are built
+ * in these methods
+ * 
+ * @author Yaswanth
+ * @since November 2012
+ * 
+ */
 public class QueryDocument
 {
-
-    // Perform queries to fetch contacts
+    /**
+     * This method queries documents based on rules given and type of the
+     * document(Contact, Opportunity..etc) and return respective results
+     * 
+     * @param rules
+     *            {@link String} array contains JSON strings
+     * @param type
+     *            {@link Reports.ReportType}
+     * 
+     * @return {@link Collection} query results of type
+     *         {@link Reports.ReportType}
+     */
     @SuppressWarnings("rawtypes")
     public static Collection queryDocuments(String[] rules, Reports.ReportType type)
     {
 	JSONArray rules_json_array = null;
 	try
 	{
+	    // Convert rules JSON string array to JSONArray object
 	    rules_json_array = new JSONArray(rules);
 	}
-	catch (JSONException e1)
+	catch (JSONException e)
 	{
-	    // TODO Auto-generated catch block
-	    e1.printStackTrace();
+	    e.printStackTrace();
 	}
 
 	String query = "";
@@ -47,24 +66,36 @@ public class QueryDocument
 		// Get each rule from set of rules
 		JSONObject each_rule = new JSONObject(rules_json_array.getString(i));
 
+		/*
+		 * Get condition parameters LHS(field_name in document) ,
+		 * condition(condition or query AND or NOT), RHS(field_value)
+		 */
 		String LHS = each_rule.getString("LHS");
 		String condition = each_rule.getString("condition");
 		String RHS = each_rule.getString("RHS");
 
-		// Build Equal queries
+		/*
+		 * Build equals and not equals queries conditions except time
+		 * based conditions
+		 */
 		if (!LHS.contains("time"))
 		{
-		    // Create new query with lhs and rhs conditions to be added
-		    // further
+		    /*
+		     * Create new query with LHS and RHS conditions to be
+		     * processed further for necessary queries
+		     */
 		    String newQuery = LHS + ":" + ContactDocument.normalizeString(RHS);
 
 		    // For equals condition
 		    if (condition.equalsIgnoreCase("EQUALS"))
 		    {
-			// Build query by passing condition old query and new
-			// query
+			/*
+			 * Build query by passing condition old query and new
+			 * query
+			 */
 			query = buildQuery("AND", query, newQuery);
 		    }
+
 		    // For not queries
 		    else
 		    {
@@ -75,12 +106,14 @@ public class QueryDocument
 		// Queries on created or updated times
 		else if (LHS.contains("time"))
 		{
-		    // Truncate date Document search date is without time
-		    // component
+		    /*
+		     * Truncate date Document search date is without time
+		     * component
+		     */
 		    Date truncatedDate = DateUtils.truncate(new Date(Long.parseLong(RHS)),
 			    Calendar.DATE);
 
-		    // Format date
+		    // Format date(formated as stored in document)
 		    Format formatter = new SimpleDateFormat("yyyy-MM-dd");
 
 		    // Formated to build query
@@ -109,7 +142,6 @@ public class QueryDocument
 		    // Created in last number of days
 		    else if (condition.equalsIgnoreCase("LAST"))
 		    {
-
 			long from_date = new DateUtil().removeDays(Integer.parseInt(RHS)).getTime()
 				.getTime() / 1000;
 
@@ -138,18 +170,26 @@ public class QueryDocument
 	    }
 	}
 
-	System.out.println("query : " + query);
-
 	// return query results
 	return processQuery(query, type);
     }
 
-    // Build ,process query and return contacts collection
+    /**
+     * Build ,process query and return contacts collection
+     * 
+     * @param query
+     *            {@link String}
+     * @param type
+     *            {@link Reports.ReportType}
+     * @return
+     */
     public static Collection<Object> processQuery(String query, Reports.ReportType type)
     {
 
-	// Set query options only to get id of document (enough to get get
-	// respective contacts)
+	/*
+	 * Set query options only to get id of document (enough to get get
+	 * respective contacts)
+	 */
 	QueryOptions options = QueryOptions.newBuilder().setFieldsToReturn("id").build();
 
 	// Build query on query options
@@ -160,19 +200,20 @@ public class QueryDocument
 	Index index = null;
 	try
 	{
+	    // Get index of document based on type of query
 	    index = (Index) Class.forName("com.agilecrm.search." + type + "Document")
 		    .getDeclaredField("index").get(null);
-
 	}
 	catch (Exception e)
 	{
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
 
+	// If index is null return without querying
 	if (index == null)
 	    return null;
 
+	// Get sorted documents
 	Collection<ScoredDocument> contact_documents = index.search(query_string).getResults();
 
 	List<Long> entity_ids = new ArrayList<Long>();
@@ -191,7 +232,6 @@ public class QueryDocument
 	}
 	catch (Exception e)
 	{
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	    return null;
 	}

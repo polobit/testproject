@@ -35,7 +35,7 @@ public class SubscriptionApi
     }
 
     /**
-     * Called from client either for new Subscription of updating user
+     * Called from client either for new Subscription or updating user
      * creditcard or plan for current domain, Based on the type of
      * request(create, update(creditcard or plan) respective methods are called)
      * 
