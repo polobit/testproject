@@ -198,45 +198,13 @@ public class Contact extends Cursor
 	    // Check if tags of present contact equals to tags in pre-persist
 	    if (!(present_tags.containsAll(tags)))
 	    {
-
-		// if(tags.removeAll(old_tags).contains())
-
+		System.out.println("Notification in prepersist");
+		// Execute notification when tag is added in contact detail
 		NotificationPrefs.executeNotification(
 			NotificationPrefs.Type.TAG_CREATED, this);
 
-		// Execute trigger when tags are added from contact-detail
-		List<Trigger> triggerslist = null;
-		try
-		{
-
-		    triggerslist = Trigger
-			    .getTriggersByCondition(Trigger.Type.TAG_IS_ADDED);
-		    if (triggerslist != null)
-		    {
-			for (Trigger triggers : triggerslist)
-
-			{
-			    System.out.println("The trigger tags"
-				    + triggers.tags);
-			    // Get tags given for trigger
-			    if (triggers.tags != null)
-			    {
-
-				for (String trigger_tags : triggers.tags)
-				{
-				    if (tags.contains(trigger_tags))
-					Trigger.executeTrigger(id,
-						Trigger.Type.TAG_IS_ADDED);
-				}
-			    }
-			}
-		    }
-		}
-		catch (Exception e)
-		{
-		    e.printStackTrace();
-		}
-
+		// Execute trigger when tag is added in contact detail
+		Trigger.executeTriggerforTags(id, tags);
 	    }
 	    if (!(tags).containsAll(present_tags))
 	    {
@@ -299,7 +267,7 @@ public class Contact extends Cursor
 	{
 
 	    dao.put(this);
-
+	    System.out.println("Notification in save when id is null");
 	    NotificationPrefs.executeNotification(
 		    NotificationPrefs.Type.CONTACT_CREATED, this);
 
@@ -309,39 +277,7 @@ public class Contact extends Cursor
 	    if (tags != null)
 	    {
 
-		List<Trigger> triggerslist = null;
-		try
-		{
-
-		    triggerslist = Trigger
-			    .getTriggersByCondition(Trigger.Type.TAG_IS_ADDED);
-		    if (triggerslist != null)
-		    {
-			for (Trigger triggers : triggerslist)
-
-			{
-
-			    // Get tags given for trigger
-			    if (triggers.tags != null)
-			    {
-				System.out
-					.println("The given tags for a trigger:"
-						+ triggers.tags);
-
-				for (String trigger_tags : triggers.tags)
-				{
-				    if (tags.contains(trigger_tags))
-					Trigger.executeTrigger(id,
-						Trigger.Type.TAG_IS_ADDED);
-				}
-			    }
-			}
-		    }
-		}
-		catch (Exception e)
-		{
-		    e.printStackTrace();
-		}
+		Trigger.executeTriggerforTags(id, tags);
 	    }
 	}
 
@@ -359,7 +295,7 @@ public class Contact extends Cursor
 		for (Trigger triggers : triggerslist)
 
 		{
-		    if (lead_score == Integer.parseInt(triggers.score_value))
+		    if (lead_score == Integer.parseInt(triggers.custom_score))
 		    {
 			Trigger.executeTrigger(id, Trigger.Type.ADD_SCORE);
 		    }
@@ -565,6 +501,7 @@ public class Contact extends Cursor
     public static void addTagsToContactsBulk(JSONArray contactsJSONArray,
 	    String[] tags_array)
     {
+
 	List<Contact> contacts_list = Contact
 		.getContactsBulk(contactsJSONArray);
 	if (contacts_list.size() == 0)
@@ -576,48 +513,11 @@ public class Contact extends Cursor
 	for (Contact contact : contacts_list)
 	{
 
-	    NotificationPrefs.executeNotification(
-		    NotificationPrefs.Type.TAG_CREATED, contact);
-
 	    for (String tag : tags_array)
 	    {
 		contact.tags.add(tag);
-
-		// Execute trigger when tags are added with bulk contacts
-		List<Trigger> triggerslist = null;
-		try
-		{
-
-		    triggerslist = Trigger
-			    .getTriggersByCondition(Trigger.Type.TAG_IS_ADDED);
-		    if (triggerslist != null)
-		    {
-			for (Trigger triggers : triggerslist)
-
-			{
-
-			    // Get tags given for trigger
-			    if (triggers.tags != null)
-			    {
-				System.out
-					.println("The given tags for a trigger:"
-						+ triggers.tags);
-
-				for (String trigger_tag : triggers.tags)
-				{
-				    if (trigger_tag.equals(tag))
-					Trigger.executeTrigger(contact.id,
-						Trigger.Type.TAG_IS_ADDED);
-				}
-			    }
-			}
-		    }
-		}
-		catch (Exception e)
-		{
-		    e.printStackTrace();
-		}
 	    }
+
 	    contact.save();
 	}
     }

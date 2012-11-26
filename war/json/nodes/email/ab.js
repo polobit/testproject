@@ -8,7 +8,7 @@
     "company": "mantra",
     "language": "en",
     "branches":"A,B",
-    "workflow_tasklet_class_name": "com.campaignio.tasklets.email.AB",
+    "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.AB",
     "category": "Email",
     "ui": [{
 			"label": "Frequency (Less than 1 - eg: 0.5)",

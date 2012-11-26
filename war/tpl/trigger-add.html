@@ -45,15 +45,15 @@
                             <div class="controls">
                                <div class="pull-left">
 									<ul class= "tagsinput tags" name="trigger_tags">
-								{{#each tags}}
+								{{#each custom_tags}}
 									<li class="tag" style="display: inline-block;" data="{{this}}">{{this}}<a class="close" id="remove_tag">&times</a></li>
 								{{/each}}
 							    </ul>
 						        </div>
                              <input type="text" id="addTags" class="tags-typeahead span2 TAG_IS_ADDED" style="margin-bottom: -1px" placeholder="Enter tags"/>
                          
-                                   {{#if score_value}}
-										<input type="text" value="{{score_value}}" id="add-score-value" name="score_value" class="ADD_SCORE required">
+                                   {{#if custom_score}}
+										<input type="text" value="{{this}}" id="add-score-value" name="score_value" class="ADD_SCORE required">
 									{{else}}
 										<input type="text" value="50" id="add-score-value" name="score_value" class="ADD_SCORE required">
                                  {{/if}}

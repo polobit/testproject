@@ -14,10 +14,10 @@ import javax.ws.rs.core.MediaType;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.agilecrm.activities.Task;
-import com.agilecrm.campaign.Campaign;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.workflows.WorkflowManager;
 import com.sun.jersey.api.json.JSONWithPadding;
 
 @Path("js/api")
@@ -327,7 +327,7 @@ public class JSAPI
 	    return true;
 	}
 
-	Campaign.subscribe(contact, workflowId);
+	WorkflowManager.subscribe(contact, workflowId);
 
 	return true;
     }

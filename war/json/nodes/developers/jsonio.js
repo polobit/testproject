@@ -8,7 +8,7 @@
     "company": "Invox",
     "language": "en",
     "branches": "failure,success",
-    "workflow_tasklet_class_name": "com.campaignio.tasklets.basic.JSONNode",
+    "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.JSONNode",
     "category": "Developers",
     "ui": [
         {

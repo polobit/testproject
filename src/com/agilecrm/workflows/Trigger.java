@@ -14,7 +14,6 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.agilecrm.campaign.Campaign;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.workflows.Trigger.Type;
@@ -28,38 +27,62 @@ import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
+/**
+ * Triggers provide the ability to automate the campaign execution with respect
+ * to conditions
+ * 
+ * @author Naresh
+ * 
+ */
+
 @XmlRootElement
 public class Trigger
 {
-    // Key
+
+    /**
+     * Trigger key
+     */
     @Id
     public Long id;
 
+    /**
+     * Save trigger name when it is not null
+     */
     @NotSaved(IfDefault.class)
     public String name = null;
 
-    // Trigger Condition
+    /**
+     * Types of Triggers
+     * 
+     */
     public enum Type
     {
-	TAG_IS_ADDED, TAG_IS_DELETED, CONTACT_IS_ADDED, CONTACT_IS_DELETED, DEAL_IS_ADDED, DEAL_IS_DELETED, ADD_SCORE
+	TAG_IS_ADDED, CONTACT_IS_ADDED, DEAL_IS_ADDED, DEAL_IS_DELETED, ADD_SCORE
     };
 
-    // Trigger Condition
     public Type type;
 
+    /**
+     * Save campaign id when it is not null
+     */
     @NotSaved(IfDefault.class)
     public String campaign_id = null;
 
+    /**
+     * Custom fields for trigger
+     */
     @NotSaved(IfDefault.class)
-    public String score_value = null;
+    public String custom_score = null;
 
     @NotSaved(IfDefault.class)
-    public Set<String> tags = new HashSet<String>();
+    public Set<String> custom_tags = new HashSet<String>();
 
     @NotSaved
     public String trigger_tags[] = null;
 
-    // Dao
+    /**
+     * Initialize DataAccessObject
+     */
     private static ObjectifyGenericDao<Trigger> dao = new ObjectifyGenericDao<Trigger>(
 	    Trigger.class);
 
@@ -68,6 +91,16 @@ public class Trigger
 
     }
 
+    /**
+     * Creates a new {@link Trigger}.
+     * 
+     * @param name
+     *            The trigger name.Required
+     * @param type
+     *            The trigger condition.Required
+     * @param campaign_id
+     *            The campaign id from campaign.Required
+     */
     public Trigger(String name, Type type, String campaign_id)
     {
 	this.name = name;
@@ -75,27 +108,43 @@ public class Trigger
 	this.campaign_id = campaign_id;
     }
 
+    /**
+     * Add custom trigger tags before save
+     */
     @PrePersist
     private void PrePersist()
     {
+	// Save trigger tags into set when not null
+	if (trigger_tags != null)
+	{
+	    for (String trigger_tag : trigger_tags)
+		custom_tags.add(trigger_tag);
+	}
 
-	// Save trigger tags in set
-	for (String trigger_tag : trigger_tags)
-	    tags.add(trigger_tag);
-	System.out.println(tags);
     }
 
+    /**
+     * Save trigger in database
+     */
     public void save()
     {
 	dao.put(this);
     }
 
+    /**
+     * Delete trigger from database
+     */
     public void delete()
     {
 	dao.delete(this);
     }
 
-    // Delete triggers bulk
+    /**
+     * Delete multiple triggers
+     * 
+     * @param triggersJSONArray
+     *            The triggers that are selected for delete
+     */
     public static void deleteTriggersBulk(JSONArray triggersJSONArray)
     {
 	List<Key<Trigger>> triggerKeys = new ArrayList<Key<Trigger>>();
@@ -116,6 +165,13 @@ public class Trigger
 	dao.deleteKeys(triggerKeys);
     }
 
+    /**
+     * The trigger locator based on id
+     * 
+     * @param id
+     *            The trigger id
+     * @return The trigger with respect to that id
+     */
     public static Trigger getTrigger(Long id)
     {
 	try
@@ -129,6 +185,9 @@ public class Trigger
 	}
     }
 
+    /**
+     * @return All triggers that are saved
+     */
     public static List<Trigger> getAllTriggers()
     {
 	Objectify ofy = ObjectifyService.begin();
@@ -141,6 +200,12 @@ public class Trigger
 		+ campaign_id;
     }
 
+    /**
+     * @return The campaign name as an Xml element based on campaign id if
+     *         exists otherwise return ?
+     * @throws Exception
+     *             When workflow doesn't exist
+     */
     @XmlElement(name = "campaign")
     public String getCampaign() throws Exception
     {
@@ -157,19 +222,79 @@ public class Trigger
 	return "?";
     }
 
-    @XmlElement(name = "tags")
+    /**
+     * @return The custom tags of a trigger as Xmlelement
+     */
+    @XmlElement
     public Set<String> getTags()
     {
-	return tags;
+	return custom_tags;
     }
 
-    // Get Triggers based on Trigger condition
+    /**
+     * @param condition
+     *            The trigger condition
+     * @return The triggers based on condition
+     */
     public static List<Trigger> getTriggersByCondition(Type condition)
     {
 	Objectify ofy = ObjectifyService.begin();
 	return ofy.query(Trigger.class).filter("type", condition).list();
     }
 
+    /**
+     * The trigger executes when tags are added for a contact
+     * 
+     * @param contact_id
+     *            The id of a contact for which tags added
+     * @param contact_tags
+     *            The tags of a contact
+     */
+    public static void executeTriggerforTags(Long contact_id,
+	    Set<String> contact_tags)
+    {
+
+	List<Trigger> triggerslist = null;
+	try
+	{
+
+	    triggerslist = Trigger
+		    .getTriggersByCondition(Trigger.Type.TAG_IS_ADDED);
+	    if (triggerslist != null)
+	    {
+		for (Trigger triggers : triggerslist)
+
+		{
+
+		    // Get custom tags given for trigger
+		    if (triggers.custom_tags != null)
+		    {
+			System.out.println("The given tags for a trigger:"
+				+ triggers.custom_tags);
+
+			// Execute trigger when tags same as custom tags are
+			// added to a contact
+			if (contact_tags.containsAll(triggers.custom_tags))
+			    Trigger.executeTrigger(contact_id,
+				    Trigger.Type.TAG_IS_ADDED);
+		    }
+		}
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+    }
+
+    /**
+     * Serialize the triggers execution with DeferredTask and Queue
+     * 
+     * @param contactId
+     *            The id of a contact
+     * @param type
+     *            The trigger condition
+     */
     public static void executeTrigger(Long contactId, Type type)
 
     {
@@ -184,6 +309,10 @@ public class Trigger
 
 }
 
+/**
+ * Execute campaign with respect to trigger
+ * 
+ */
 class TriggersDeferredTask implements DeferredTask
 {
 
@@ -191,6 +320,14 @@ class TriggersDeferredTask implements DeferredTask
 
     Type type;
 
+    /**
+     * Creates a new {@link TriggersDeferredTask}.
+     * 
+     * @param contactId
+     *            The contact id
+     * @param condition
+     *            The trigger condition
+     */
     public TriggersDeferredTask(Long contactId, Type condition)
     {
 
@@ -210,7 +347,7 @@ class TriggersDeferredTask implements DeferredTask
 		if (contact != null
 			&& !(StringUtils.isEmpty(trigger.campaign_id)))
 
-		    Campaign.subscribe(contact,
+		    WorkflowManager.subscribe(contact,
 			    Long.parseLong(trigger.campaign_id));
 
 	    }

@@ -8,7 +8,7 @@
     "company": "Invox",
     "language": "en",
     "branches": "yes",
-    "workflow_tasklet_class_name": "com.agilecrm.tasklets.AddNote",
+    "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.AddNote",
     "category": "Utilities",
     "ui": [
         {

@@ -8,7 +8,7 @@
     "company": "mantra",
     "language": "en",
     "branches": "yes",
-    "workflow_tasklet_class_name":"com.agilecrm.tasklets.Tasks",
+    "workflow_tasklet_class_name":"com.campaignio.tasklets.agile.Tasks",
     "category": "Utilities",
     "ui": [{
 			"label": "Task",

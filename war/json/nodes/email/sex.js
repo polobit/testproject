@@ -8,7 +8,7 @@
     "company": "Invox",
     "language": "en",
     "branches": "Male,Female,Unknown",
-    "workflow_tasklet_class_name": "com.campaignio.tasklets.basic.Sex",
+    "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.Sex",
     "category": "Email",
     "ui": [
         
