@@ -13,7 +13,7 @@
         "type": "static-vxml-form-url",
         "url": "/vxml/wait.jsp" 
     },
-    "workflow_tasklet_class_name":"com.agilecrm.tasklets.Tags",
+    "workflow_tasklet_class_name":"com.campaignio.tasklets.agile.Tags",
     "category": "Utilities",
     "ui": [{
 			"label": "Type",

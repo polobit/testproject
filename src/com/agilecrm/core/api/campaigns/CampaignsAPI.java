@@ -15,8 +15,8 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.agilecrm.campaign.Campaign;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.workflows.WorkflowManager;
 import com.campaignio.logger.Log;
 
 @Path("/api/campaigns")
@@ -37,7 +37,7 @@ public class CampaignsAPI
 	    // return "true";
 	}
 
-	Campaign.subscribe(contact, workflowId);
+	WorkflowManager.subscribe(contact, workflowId);
 
 	// return "true";
     }
@@ -116,7 +116,7 @@ public class CampaignsAPI
 
 	for (Contact contact : contacts_list)
 	{
-	    Campaign.subscribe(contact, workflowId);
+	    WorkflowManager.subscribe(contact, workflowId);
 	}
 
 	// return "true";

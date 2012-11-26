@@ -8,7 +8,7 @@
     "company": "mantra",
     "language": "en",
     "branches": "yes",
-    "workflow_tasklet_class_name": "com.campaignio.tasklets.basic.Wait",
+    "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.Wait",
     "category": "Utilities",
     "ui": [{
 			"label": " Duration",

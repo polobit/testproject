@@ -20,7 +20,7 @@ import com.agilecrm.core.DomainUser;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deferred.TagsDeferredTask;
-import com.agilecrm.search.ContactDocument;
+import com.agilecrm.document.ContactDocument;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.NotificationPrefs;
 import com.agilecrm.workflows.Trigger;
@@ -81,7 +81,8 @@ public class Contact extends Cursor
     public Integer lead_score = 0;
 
     // Dao
-    public static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
+    public static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(
+	    Contact.class);
 
     // Search Tokens
     @Indexed
@@ -120,7 +121,8 @@ public class Contact extends Cursor
 
     }
 
-    public Contact(Type type, String creator, Set<String> tags, List<ContactField> properties)
+    public Contact(Type type, String creator, Set<String> tags,
+	    List<ContactField> properties)
     {
 	this.type = type;
 	this.creator = creator;
@@ -134,9 +136,9 @@ public class Contact extends Cursor
     @Override
     public String toString()
     {
-	return "id: " + id + " created_time: " + created_time + " updated_time" + updated_time
-		+ " type: " + type + " creator:" + creator + " tags: " + tags + " properties: "
-		+ properties;
+	return "id: " + id + " created_time: " + created_time + " updated_time"
+		+ updated_time + " type: " + type + " creator:" + creator
+		+ " tags: " + tags + " properties: " + properties;
     }
 
     /* @XmlElement(name="properties2") */
@@ -172,7 +174,8 @@ public class Contact extends Cursor
 	if (owner_key == null)
 	{
 	    // Set lead owner(current domain user)
-	    owner_key = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
+	    owner_key = new Key<DomainUser>(DomainUser.class, SessionManager
+		    .get().getDomainId());
 
 	}
 
@@ -196,44 +199,19 @@ public class Contact extends Cursor
 	    if (!(present_tags.containsAll(tags)))
 	    {
 
-		// if(tags.removeAll(old_tags).contains())
+		System.out.println("Notification in prepersist");
+		// Execute notification when tag is added in contact detail
+		NotificationPrefs.executeNotification(
+			NotificationPrefs.Type.TAG_CREATED, this);
 
-		NotificationPrefs.executeNotification(NotificationPrefs.Type.TAG_CREATED, this);
-
-		// Execute trigger when tags are added from contact-detail
-		List<Trigger> triggerslist = null;
-		try
-		{
-
-		    triggerslist = Trigger.getTriggersByCondition(Trigger.Type.TAG_IS_ADDED);
-		    if (triggerslist != null)
-		    {
-			for (Trigger triggers : triggerslist)
-
-			{
-			    System.out.println("The trigger tags" + triggers.tags);
-			    // Get tags given for trigger
-			    if (triggers.tags != null)
-			    {
-
-				for (String trigger_tags : triggers.tags)
-				{
-				    if (tags.contains(trigger_tags))
-					Trigger.executeTrigger(id, Trigger.Type.TAG_IS_ADDED);
-				}
-			    }
-			}
-		    }
-		}
-		catch (Exception e)
-		{
-		    e.printStackTrace();
-		}
+		// Execute trigger when tag is added in contact detail
+		Trigger.executeTriggerforTags(id, tags);
 
 	    }
 	    if (!(tags).containsAll(present_tags))
 	    {
-		NotificationPrefs.executeNotification(NotificationPrefs.Type.TAG_DELETED, this);
+		NotificationPrefs.executeNotification(
+			NotificationPrefs.Type.TAG_DELETED, this);
 	    }
 
 	}
@@ -268,7 +246,8 @@ public class Contact extends Cursor
 	Contact contact = this;
 
 	// Execute notification when contact is deleted
-	NotificationPrefs.executeNotification(NotificationPrefs.Type.CONTACT_DELETED, this);
+	NotificationPrefs.executeNotification(
+		NotificationPrefs.Type.CONTACT_DELETED, this);
 
 	dao.delete(this);
 
@@ -291,7 +270,9 @@ public class Contact extends Cursor
 
 	    dao.put(this);
 
-	    NotificationPrefs.executeNotification(NotificationPrefs.Type.CONTACT_CREATED, this);
+	    System.out.println("Notification in save when id is null");
+	    NotificationPrefs.executeNotification(
+		    NotificationPrefs.Type.CONTACT_CREATED, this);
 
 	    Trigger.executeTrigger(id, Trigger.Type.CONTACT_IS_ADDED);
 
@@ -299,35 +280,8 @@ public class Contact extends Cursor
 	    if (tags != null)
 	    {
 
-		List<Trigger> triggerslist = null;
-		try
-		{
+		Trigger.executeTriggerforTags(id, tags);
 
-		    triggerslist = Trigger.getTriggersByCondition(Trigger.Type.TAG_IS_ADDED);
-		    if (triggerslist != null)
-		    {
-			for (Trigger triggers : triggerslist)
-
-			{
-
-			    // Get tags given for trigger
-			    if (triggers.tags != null)
-			    {
-				System.out.println("The given tags for a trigger:" + triggers.tags);
-
-				for (String trigger_tags : triggers.tags)
-				{
-				    if (tags.contains(trigger_tags))
-					Trigger.executeTrigger(id, Trigger.Type.TAG_IS_ADDED);
-				}
-			    }
-			}
-		    }
-		}
-		catch (Exception e)
-		{
-		    e.printStackTrace();
-		}
 	    }
 	}
 
@@ -336,14 +290,16 @@ public class Contact extends Cursor
 
 	try
 	{
-	    triggerslist = Trigger.getTriggersByCondition(Trigger.Type.ADD_SCORE);
-	    System.out.println("Triggers with condition ADD_SCORE:" + triggerslist);
+	    triggerslist = Trigger
+		    .getTriggersByCondition(Trigger.Type.ADD_SCORE);
+	    System.out.println("Triggers with condition ADD_SCORE:"
+		    + triggerslist);
 	    if (triggerslist != null)
 	    {
 		for (Trigger triggers : triggerslist)
 
 		{
-		    if (lead_score == Integer.parseInt(triggers.score_value))
+		    if (lead_score == Integer.parseInt(triggers.custom_score))
 		    {
 			Trigger.executeTrigger(id, Trigger.Type.ADD_SCORE);
 		    }
@@ -509,8 +465,8 @@ public class Contact extends Cursor
 	{
 	    try
 	    {
-		contactKeys.add(new Key<Contact>(Contact.class, Long.parseLong(contactsJSONArray
-			.getString(i))));
+		contactKeys.add(new Key<Contact>(Contact.class, Long
+			.parseLong(contactsJSONArray.getString(i))));
 	    }
 	    catch (JSONException e)
 	    {
@@ -524,9 +480,11 @@ public class Contact extends Cursor
     }
 
     // Change owner to contacts bulk
-    public static void changeOwnerToContactsBulk(JSONArray contactsJSONArray, String new_owner)
+    public static void changeOwnerToContactsBulk(JSONArray contactsJSONArray,
+	    String new_owner)
     {
-	List<Contact> contacts_list = Contact.getContactsBulk(contactsJSONArray);
+	List<Contact> contacts_list = Contact
+		.getContactsBulk(contactsJSONArray);
 	if (contacts_list.size() == 0)
 	{
 	    System.out.println("Null contact");
@@ -544,9 +502,13 @@ public class Contact extends Cursor
     }
 
     // Add tags to contacts bulk
-    public static void addTagsToContactsBulk(JSONArray contactsJSONArray, String[] tags_array)
+    public static void addTagsToContactsBulk(JSONArray contactsJSONArray,
+	    String[] tags_array)
     {
-	List<Contact> contacts_list = Contact.getContactsBulk(contactsJSONArray);
+
+	List<Contact> contacts_list = Contact
+		.getContactsBulk(contactsJSONArray);
+
 	if (contacts_list.size() == 0)
 	{
 	    System.out.println("Null contact");
@@ -556,44 +518,12 @@ public class Contact extends Cursor
 	for (Contact contact : contacts_list)
 	{
 
-	    NotificationPrefs.executeNotification(NotificationPrefs.Type.TAG_CREATED, contact);
-
 	    for (String tag : tags_array)
 	    {
 		contact.tags.add(tag);
 
-		// Execute trigger when tags are added with bulk contacts
-		List<Trigger> triggerslist = null;
-		try
-		{
-
-		    triggerslist = Trigger.getTriggersByCondition(Trigger.Type.TAG_IS_ADDED);
-		    if (triggerslist != null)
-		    {
-			for (Trigger triggers : triggerslist)
-
-			{
-
-			    // Get tags given for trigger
-			    if (triggers.tags != null)
-			    {
-				System.out.println("The given tags for a trigger:" + triggers.tags);
-
-				for (String trigger_tag : triggers.tags)
-				{
-				    if (trigger_tag.equals(tag))
-					Trigger.executeTrigger(contact.id,
-						Trigger.Type.TAG_IS_ADDED);
-				}
-			    }
-			}
-		    }
-		}
-		catch (Exception e)
-		{
-		    e.printStackTrace();
-		}
 	    }
+
 	    contact.save();
 	}
     }

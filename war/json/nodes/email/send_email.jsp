@@ -8,7 +8,7 @@
 		    "company": "mantra",
 		    "language": "en",
 		    "branches": "yes",
-		    "workflow_tasklet_class_name": "com.campaignio.tasklets.email.SendEmail",
+		    "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.SendEmail",
 		    "category": "Email",
 		    "ui": [{
 					"label": "From (Name):",

@@ -8,7 +8,7 @@
     "company": "Invox",
     "language": "en",
     "branches": "No,Yes",
-    "workflow_tasklet_class_name": "com.campaignio.tasklets.sms.Condition",
+    "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.Condition",
     "category": "Developers",
     "ui": [
         {

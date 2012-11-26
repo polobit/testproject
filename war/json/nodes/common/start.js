@@ -8,7 +8,7 @@
     "company": "Invox",
     "language": "en",
     "branches": "start",
-    "workflow_tasklet_class_name": "com.campaignio.tasklets.basic.Start",
+    "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.Start",
     "category": "Basic",
     "ui": [
          {
