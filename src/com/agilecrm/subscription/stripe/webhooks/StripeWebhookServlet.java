@@ -59,8 +59,8 @@ public class StripeWebhookServlet extends HttpServlet
 	if (stripe_event_message.isEmpty())
 	    return;
 
-	// Get current namespace and store it can be set back finally after
-	// required opetaions
+	// Get current Namespace and store it can be set back finally after
+	// required processing
 	String oldNamespace = NamespaceManager.get();
 
 	try
@@ -107,7 +107,7 @@ public class StripeWebhookServlet extends HttpServlet
 
 	    // If payment failed set subscription flag is set to failed and
 	    // mails sent to respective domain users
-	    if (eventJSON.getString("type").equals(Globals.STRIPE_INVOICE_PAYMENT_FAILED))
+	    else if (eventJSON.getString("type").equals(Globals.STRIPE_INVOICE_PAYMENT_FAILED))
 	    {
 		// Get number of attempts
 		String attempCount = eventJSON.getJSONObject("data").getJSONObject("object")
@@ -126,6 +126,8 @@ public class StripeWebhookServlet extends HttpServlet
 	    {
 		// Get domain owner
 		DomainUser user = DomainUser.getDomainOwner(newNamespace);
+
+		System.out.println("email should be sent to domain user : " + user);
 
 		event = customizeEventAttributes(event, user);
 
@@ -208,8 +210,8 @@ public class StripeWebhookServlet extends HttpServlet
     }
 
     /**
-     * Process the payment failed webhooks calls to set subscription flags,
-     * sends emails
+     * Process the payment failed webhookss calls to set subscription flags,
+     * sends email
      * 
      * @param attemptCount
      *            Number of payment attempts
@@ -221,13 +223,16 @@ public class StripeWebhookServlet extends HttpServlet
     {
 	String namespace = NamespaceManager.get();
 
-	// Set subscription flag billing failed
-	setSubscriptionFlag(Subscription.Type.BILLING_FAILED);
-
 	// If number of attemps to payment is 0 or 1 the send email to domain
 	// owner
 	if (attemptCount == 0 || attemptCount == 1)
 	{
+	    // Set subscription flag billing failed
+	    Subscription.Type flag = (attemptCount == 0) ? Subscription.Type.BILLING_FAILED_0
+		    : Subscription.Type.BILLING_FAILED_1;
+
+	    setSubscriptionFlag(flag);
+
 	    // Get owner of the domain
 	    DomainUser user = DomainUser.getDomainOwner(namespace);
 
@@ -250,6 +255,8 @@ public class StripeWebhookServlet extends HttpServlet
 	// all the domain users in domain
 	if (attemptCount == 2)
 	{
+	    setSubscriptionFlag(Subscription.Type.BILLING_FAILED_2);
+
 	    // Get all domain users in the namespace
 	    List<DomainUser> users = DomainUser.getUsers(namespace);
 

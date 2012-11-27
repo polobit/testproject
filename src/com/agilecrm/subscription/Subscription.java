@@ -63,7 +63,7 @@ public class Subscription
     /** This {@link Enum} Type represents subscription status of domain */
     public static enum Type
     {
-	BILLING_FAILED, BILLING_SUCCESS, SUBSCRIPTION_DELETED
+	BILLING_FAILED_0, BILLING_FAILED_1, BILLING_FAILED_2, BILLING_FAILED_3, BILLING_SUCCESS, SUBSCRIPTION_DELETED
     };
 
     /**
