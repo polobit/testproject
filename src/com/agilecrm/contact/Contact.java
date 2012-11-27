@@ -20,7 +20,7 @@ import com.agilecrm.core.DomainUser;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deferred.TagsDeferredTask;
-import com.agilecrm.document.ContactDocument;
+import com.agilecrm.search.ContactDocument;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.NotificationPrefs;
 import com.agilecrm.workflows.Trigger;
@@ -251,7 +251,7 @@ public class Contact extends Cursor
 
 	dao.delete(this);
 
-	ContactDocument.deleteDocument(contact);
+	ContactDocument.deleteDocumentEntity(contact);
 
 	// Delete Notes
 	Note.deleteAllNotes(id);
