@@ -23,10 +23,29 @@ import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 
 /**
- * This <code>ContactDocument</code> class saves the contact object as a
- * document and enables to search on contacts, this class contains methods to
- * build contact document(buildDocument) and utility methods to
- * process(normalize, special character handling..)
+ * <code>ContactDocument</code> class represents "Document" created based on app
+ * engine search API, It describes contact field values in the document, adds it
+ * to index and initialized search service which enables search capabilities.
+ * <p>
+ * <code>ContactDocument</code> is created whenever a contact is being saved or
+ * updated, its field values are trimmed, special characters in field values or
+ * field names are replaced with "_" before creating a doc. The type of the
+ * field is specified according to type of the field value (created/updated time
+ * are added as DATE type in document), and other fields are described in
+ * document as TEXT type. When queried on <code>ContactDocument</code> class
+ * index using to search API queries returns ContactDocument entity ids, so this
+ * class contains a method to return contacts list respective to document ids
+ * </p>
+ * <p>
+ * <blockquote>
+ * 
+ * <pre>
+ * ContactDocument.buildDocument(contact);
+ * </pre>
+ * 
+ * </blockquote> <code>ContactDocument</code> contains methods to buildDocument,
+ * and return contacts related to documents ids
+ * </p>
  * 
  * @author Yaswanth
  * 
@@ -46,8 +65,14 @@ public class ContactDocument
 	    .setConsistency(Consistency.PER_DOCUMENT));
 
     /**
-     * Builds a document based on the contact given, saves each field value and
-     * keywords can be queries on the using index of the document
+     * Describes all the contact field values in the document based on the
+     * contact given, and adds to index, created_time and update_time are saved
+     * as DATE type, remaining field values are stored as TEXT type in Document
+     * 
+     * <p>
+     * Calls normalize on each field value and also normalizes the tags set and
+     * adds to document
+     * </p>
      * 
      * @param contact
      *            {@link Contact}
@@ -97,7 +122,7 @@ public class ContactDocument
     }
 
     /**
-     * This method adds the document to Index
+     * Adds Document to index
      * 
      * @param doc
      *            {@link Document}
@@ -120,7 +145,10 @@ public class ContactDocument
     }
 
     /**
-     * Get contact related to given document ids
+     * Gets contact collection related to given document ids
+     * 
+     * Since querying on ContactDocumet returns document ids, this method
+     * returns related contacts to document ids
      * 
      * @param doc_ids
      *            {@link List}
@@ -135,8 +163,8 @@ public class ContactDocument
     }
 
     /**
-     * This method delete an entity from document(called when contact is deleted
-     * then it should delete is respective entity in document)
+     * Deletes an entity from document(called when contact is deleted then
+     * respective entity in document should be deleted)
      * 
      * @param contact
      *            {@link Contact}

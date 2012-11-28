@@ -20,9 +20,23 @@ import com.google.appengine.api.search.QueryOptions;
 import com.google.appengine.api.search.ScoredDocument;
 
 /**
- * The <code>QueryDocument</code> class contains methods the build query based
- * on rules JSON and process queries, Query string for document search are built
- * in these methods
+ * The <code>QueryDocument</code> builds and process queries based on
+ * {@link SearchRule} condition, basic and complex queries with combinations can
+ * be built using AND, NOT , OR queries and Numeric operations on numeric
+ * fields.
+ * <p>
+ * Used to process advanced search or simple search for contacts
+ * </p>
+ * 
+ * Following example explains to execute a query({@link SearchRule})
+ * 
+ * <pre>
+ * 	QueryDocument.queryDocuments({@link List} of {@link SearchRule})
+ * </pre>
+ * 
+ * <p>
+ * It contains methods queryDocuments, processQuery, buildQuery, searchContacts
+ * </p>
  * 
  * @author Yaswanth
  * @since November 2012
@@ -31,13 +45,12 @@ import com.google.appengine.api.search.ScoredDocument;
 public class QueryDocument
 {
     /**
-     * This method queries documents based on rules given and type of the
-     * document(Contact, Opportunity..etc) and return respective results
+     * Queries document based on {@link SearchRule} given and type of the
+     * document(Contact, Opportunity..etc) , Executes the query and returns
+     * collection of entities
      * 
      * @param rules
-     *            {@link String} array contains JSON strings
-     * @param type
-     *            {@link Reports.ReportType}
+     *            {@link List} of {@link SearchRule}
      * 
      * @return {@link Collection} query results of type
      *         {@link Reports.ReportType}
@@ -48,7 +61,7 @@ public class QueryDocument
 
 	String query = "";
 
-	// Set to contact by default
+	// Sets to contact by default
 	SearchRule.RuleType ruleType = RuleType.Contact;
 
 	for (SearchRule rule : rules)
@@ -160,7 +173,7 @@ public class QueryDocument
     }
 
     /**
-     * Build ,process query and return contacts collection
+     * processes query and return collection of contacts
      * 
      * @param query
      *            {@link String}
@@ -224,6 +237,17 @@ public class QueryDocument
     }
 
     // Build query based on condition AND, NOT..
+    /**
+     * Builds Query based on Conditions AND, NOT
+     * 
+     * @param condition
+     *            {@link String}
+     * @param query
+     *            {@link String}
+     * @param newQuery
+     *            {@link String}
+     * @return Returns query string built based on conditions {@link String}
+     */
     private static String buildQuery(String condition, String query, String newQuery)
     {
 
@@ -253,7 +277,14 @@ public class QueryDocument
 	return newQuery;
     }
 
-    // Keyword contact search
+    /**
+     * Queries for contacts based on keywords(Simple search). Trims spaces in
+     * the keyword and calls processQuery to execute the condition
+     * 
+     * @param keyword
+     *            {@link String}
+     * @return {@link Collection}
+     */
     public static Collection<Object> searchContacts(String keyword)
     {
 	// Decode the search keyword and remove spaces
