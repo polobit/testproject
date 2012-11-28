@@ -415,6 +415,7 @@ var ContactsRouter = Backbone.Router.extend({
     	var contacts_filter = new Base_Model_View({
     				url:'core/api/filters',
     	            template: "filter-contacts",
+    	            isNew:"true",
     	            window: "contact-filters",
     	            postRenderCallback: function(el) {
        					

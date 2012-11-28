@@ -1,6 +1,7 @@
 package com.agilecrm.reports;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -11,6 +12,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.core.DomainUser;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.search.QueryDocument;
+import com.agilecrm.search.SearchRule;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Indexed;
@@ -53,7 +56,7 @@ public class Reports implements Serializable
     public Duration duration;
 
     @NotSaved(IfDefault.class)
-    public String rules[] = null;
+    public List<SearchRule> rules = new ArrayList<SearchRule>();
 
     @NotSaved(IfDefault.class)
     public String domain = null;
@@ -65,8 +68,7 @@ public class Reports implements Serializable
     @Indexed
     private Key<DomainUser> owner_key = null;
 
-    public static ObjectifyGenericDao<Reports> dao = new ObjectifyGenericDao<Reports>(
-	    Reports.class);
+    public static ObjectifyGenericDao<Reports> dao = new ObjectifyGenericDao<Reports>(Reports.class);
 
     public Reports()
     {
@@ -74,7 +76,7 @@ public class Reports implements Serializable
     }
 
     public Reports(Duration duration, String name, boolean is_reports_enabled,
-	    String rules[])
+	    List<SearchRule> rules)
     {
 	this.name = name;
 	this.is_reports_enabled = is_reports_enabled;
@@ -88,7 +90,7 @@ public class Reports implements Serializable
      */
     public Collection generateReports()
     {
-	return QueryDocument.queryDocuments(rules, report_type);
+	return QueryDocument.queryDocuments(rules);
     }
 
     /* Get Contact Filter by id */
@@ -133,8 +135,7 @@ public class Reports implements Serializable
 	NamespaceManager.set("");
 	try
 	{
-	    return dao.ofy().query(Reports.class)
-		    .filter("domain", oldNamespace).list();
+	    return dao.ofy().query(Reports.class).filter("domain", oldNamespace).list();
 	}
 	finally
 	{
@@ -175,8 +176,7 @@ public class Reports implements Serializable
 
 	try
 	{
-	    return dao.ofy().query(Reports.class)
-		    .filter("is_reports_enabled", true)
+	    return dao.ofy().query(Reports.class).filter("is_reports_enabled", true)
 		    .filter("duration", duration).list();
 	}
 	finally

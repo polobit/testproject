@@ -65,7 +65,7 @@ function serializeForm(form_id) {
     					json_object[name] = value;
     			});
     			
-    			json_array.push(JSON.stringify(json_object));
+    			json_array.push(json_object);
     			
     		return {
     			"name" : "rules",
@@ -191,7 +191,7 @@ function deserializeForm(data, form)
 	        					});
 	        				}
 	        		   
-	        		   $.each(JSON.parse(data), function(i, value) {
+	        		   $.each(data, function(i, value) {
 	        			
 	        			   var input_element = ($(rule_element).find('*[name="' + i + '"]').children())[0];
 	        			

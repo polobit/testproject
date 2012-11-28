@@ -251,7 +251,7 @@ public class Contact extends Cursor
 
 	dao.delete(this);
 
-	ContactDocument.deleteDocumentEntity(contact);
+	ContactDocument.deleteDocument(contact);
 
 	// Delete Notes
 	Note.deleteAllNotes(id);

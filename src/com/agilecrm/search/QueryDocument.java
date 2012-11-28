@@ -1,4 +1,4 @@
-package com.agilecrm.reports;
+package com.agilecrm.search;
 
 import java.net.URLDecoder;
 import java.text.Format;
@@ -10,11 +10,10 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.time.DateUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import com.agilecrm.search.ContactDocument;
+import com.agilecrm.reports.Reports;
+import com.agilecrm.search.SearchRule.RuleType;
+import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.util.DateUtil;
 import com.google.appengine.api.search.Index;
 import com.google.appengine.api.search.QueryOptions;
@@ -44,134 +43,120 @@ public class QueryDocument
      *         {@link Reports.ReportType}
      */
     @SuppressWarnings("rawtypes")
-    public static Collection queryDocuments(String[] rules, Reports.ReportType type)
+    public static Collection queryDocuments(List<SearchRule> rules)
     {
-	JSONArray rules_json_array = null;
-	try
-	{
-	    // Convert rules JSON string array to JSONArray object
-	    rules_json_array = new JSONArray(rules);
-	}
-	catch (JSONException e)
-	{
-	    e.printStackTrace();
-	}
 
 	String query = "";
 
-	for (int i = 0; i < rules_json_array.length(); i++)
+	// Set to contact by default
+	SearchRule.RuleType ruleType = RuleType.Contact;
+
+	for (SearchRule rule : rules)
 	{
-	    try
+	    // Set type of rule(search on what?)
+	    ruleType = rule.ruleType;
+
+	    /*
+	     * Get condition parameters LHS(field_name in document) ,
+	     * condition(condition or query AND or NOT), RHS(field_value)
+	     */
+	    String LHS = rule.LHS;
+	    String condition = rule.condition;
+	    String RHS = rule.RHS;
+
+	    /*
+	     * Build equals and not equals queries conditions except time based
+	     * conditions
+	     */
+	    if (!LHS.contains("time"))
 	    {
-		// Get each rule from set of rules
-		JSONObject each_rule = new JSONObject(rules_json_array.getString(i));
-
 		/*
-		 * Get condition parameters LHS(field_name in document) ,
-		 * condition(condition or query AND or NOT), RHS(field_value)
+		 * Create new query with LHS and RHS conditions to be processed
+		 * further for necessary queries
 		 */
-		String LHS = each_rule.getString("LHS");
-		String condition = each_rule.getString("condition");
-		String RHS = each_rule.getString("RHS");
+		String newQuery = LHS + ":" + SearchUtil.normalizeString(RHS);
 
-		/*
-		 * Build equals and not equals queries conditions except time
-		 * based conditions
-		 */
-		if (!LHS.contains("time"))
+		// For equals condition
+		if (condition.equalsIgnoreCase("EQUALS"))
 		{
 		    /*
-		     * Create new query with LHS and RHS conditions to be
-		     * processed further for necessary queries
+		     * Build query by passing condition old query and new query
 		     */
-		    String newQuery = LHS + ":" + ContactDocument.normalizeString(RHS);
-
-		    // For equals condition
-		    if (condition.equalsIgnoreCase("EQUALS"))
-		    {
-			/*
-			 * Build query by passing condition old query and new
-			 * query
-			 */
-			query = buildQuery("AND", query, newQuery);
-		    }
-
-		    // For not queries
-		    else
-		    {
-			query = buildQuery("NOT", query, newQuery);
-		    }
+		    query = buildQuery("AND", query, newQuery);
 		}
 
-		// Queries on created or updated times
-		else if (LHS.contains("time"))
+		// For not queries
+		else
 		{
-		    /*
-		     * Truncate date Document search date is without time
-		     * component
-		     */
-		    Date truncatedDate = DateUtils.truncate(new Date(Long.parseLong(RHS)),
-			    Calendar.DATE);
-
-		    // Format date(formated as stored in document)
-		    Format formatter = new SimpleDateFormat("yyyy-MM-dd");
-
-		    // Formated to build query
-		    String date = formatter.format(truncatedDate);
-
-		    System.out.println("date string is  : " + date);
-
-		    // Created on date condition
-		    if (condition.equalsIgnoreCase("EQUALS"))
-		    {
-			query = buildQuery("AND", query, LHS + "=" + date);
-		    }
-
-		    // Created after given date
-		    else if (condition.equalsIgnoreCase("AFTER"))
-		    {
-			query = buildQuery("AND", query, LHS + " >" + date);
-		    }
-
-		    // Created before particular date
-		    else if (condition.equalsIgnoreCase("BEFORE"))
-		    {
-			query = buildQuery("AND", query, LHS + " < " + date);
-		    }
-
-		    // Created in last number of days
-		    else if (condition.equalsIgnoreCase("LAST"))
-		    {
-			long from_date = new DateUtil().removeDays(Integer.parseInt(RHS)).getTime()
-				.getTime() / 1000;
-
-			query = buildQuery("AND", query, LHS + " > " + date);
-
-			query = query + LHS + " < " + date;
-		    }
-
-		    // Created Between given dates
-		    else if (condition.equalsIgnoreCase("BETWEEN"))
-		    {
-			String RHS_NEW = each_rule.getString("RHS_NEW");
-			if (RHS_NEW != null)
-			{
-			    String to_date = formatter.format(new Date(Long.parseLong(RHS_NEW)));
-
-			    query = buildQuery("AND", query, LHS + " >=" + date);
-			    query = buildQuery("AND", query, LHS + " <= " + to_date);
-			}
-		    }
+		    query = buildQuery("NOT", query, newQuery);
 		}
 	    }
-	    catch (JSONException e)
+
+	    // Queries on created or updated times
+	    else if (LHS.contains("time"))
 	    {
-		e.printStackTrace();
+		/*
+		 * Truncate date Document search date is without time component
+		 */
+		Date truncatedDate = DateUtils.truncate(new Date(Long.parseLong(RHS)),
+			Calendar.DATE);
+
+		// Format date(formated as stored in document)
+		Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+		// Formated to build query
+		String date = formatter.format(truncatedDate);
+
+		System.out.println("date string is  : " + date);
+
+		// Created on date condition
+		if (condition.equalsIgnoreCase("EQUALS"))
+		{
+		    query = buildQuery("AND", query, LHS + "=" + date);
+		}
+
+		// Created after given date
+		else if (condition.equalsIgnoreCase("AFTER"))
+		{
+		    query = buildQuery("AND", query, LHS + " >" + date);
+		}
+
+		// Created before particular date
+		else if (condition.equalsIgnoreCase("BEFORE"))
+		{
+		    query = buildQuery("AND", query, LHS + " < " + date);
+		}
+
+		// Created in last number of days
+		else if (condition.equalsIgnoreCase("LAST"))
+		{
+		    long from_date = new DateUtil().removeDays(Integer.parseInt(RHS)).getTime()
+			    .getTime() / 1000;
+
+		    query = buildQuery("AND", query, LHS + " > " + date);
+
+		    query = query + LHS + " < " + date;
+		}
+
+		// Created Between given dates
+		else if (condition.equalsIgnoreCase("BETWEEN"))
+		{
+		    String RHS_NEW = rule.RHS_NEW;
+		    if (RHS_NEW != null)
+		    {
+			String to_date = formatter.format(new Date(Long.parseLong(RHS_NEW)));
+
+			query = buildQuery("AND", query, LHS + " >=" + date);
+			query = buildQuery("AND", query, LHS + " <= " + to_date);
+		    }
+		}
 	    }
 	}
 
+	System.out.println(ruleType);
+
 	// return query results
-	return processQuery(query, type);
+	return processQuery(query, ruleType);
     }
 
     /**
@@ -183,7 +168,7 @@ public class QueryDocument
      *            {@link Reports.ReportType}
      * @return
      */
-    public static Collection<Object> processQuery(String query, Reports.ReportType type)
+    public static Collection<Object> processQuery(String query, RuleType type)
     {
 
 	/*
@@ -276,7 +261,7 @@ public class QueryDocument
 
 	String query = "search_tokens : " + keyword;
 
-	return QueryDocument.processQuery(query, Reports.ReportType.Contact);
+	return QueryDocument.processQuery(query, RuleType.Contact);
     }
 
 }

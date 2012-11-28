@@ -86,7 +86,7 @@ public class ContactFilterAPI
 		}
 		else if (id.equalsIgnoreCase("LEAD"))
 		{
-		    return ContactFilter.getContacts(SystemFilter.LEAD);
+		    return ContactFilter.getContacts(SystemFilter.MY_LEAD);
 		}
 	    }
 	    ContactFilter filter = ContactFilter.getContactFilter(Long
