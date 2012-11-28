@@ -205,7 +205,8 @@ public class Contact extends Cursor
 			NotificationPrefs.Type.TAG_CREATED, this);
 
 		// Execute trigger when tag is added in contact detail
-		Trigger.executeTriggerforTags(id, tags);
+		Trigger.executeTriggerforTags(id, tags,
+			Trigger.Type.TAG_IS_ADDED);
 
 	    }
 	    if (!(tags).containsAll(present_tags))
@@ -280,43 +281,15 @@ public class Contact extends Cursor
 	    if (tags != null)
 	    {
 
-		Trigger.executeTriggerforTags(id, tags);
+		Trigger.executeTriggerforTags(id, tags,
+			Trigger.Type.TAG_IS_ADDED);
 
 	    }
 	}
 
-	// Execute trigger when contact score is equal to add score in trigger
-	List<Trigger> triggerslist = null;
-
-	try
-	{
-	    triggerslist = Trigger
-		    .getTriggersByCondition(Trigger.Type.ADD_SCORE);
-	    System.out.println("Triggers with condition ADD_SCORE:"
-		    + triggerslist);
-	    if (triggerslist != null)
-	    {
-		for (Trigger triggers : triggerslist)
-
-		{
-		    if (lead_score == Integer.parseInt(triggers.custom_score))
-		    {
-			Trigger.executeTrigger(id, Trigger.Type.ADD_SCORE);
-		    }
-		    else
-			break;
-
-		}
-		// Avoid further looping
-		triggerslist = null;
-	    }
-	}
-
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-
+	if (lead_score > 0)
+	    Trigger.executeTriggerforScore(id, lead_score,
+		    Trigger.Type.ADD_SCORE);
 	dao.put(this);
 	ContactDocument.buildDocument(this);
 
