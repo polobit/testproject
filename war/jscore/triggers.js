@@ -14,7 +14,7 @@ $(function(){
 	
 	$('#trigger-type').live('change',function(e){
         e.preventDefault();		
-		  if($(this).val() == 'TAG_IS_ADDED')
+		  if($(this).val() == 'TAG_IS_ADDED' || $(this).val() == 'TAG_IS_DELETED')
 		  {
 			setupTagsTypeAhead();
 		  }

@@ -1,7 +1,8 @@
 <script id="triggers-model-template" type="text/html">
 
   <td class='data' data='{{id}}'>{{name}}</td>
-  <td>{{type}}</td>
+  <td>{{#if_trigger_type}}{{type}}{{/if_trigger_type}}</td>
+  <td>{{#if custom_score}}{{custom_score}} {{else}} {{custom_tags}}{{/if}}</td>
   <td>{{campaign}}</td>
 <br/>
 	
@@ -30,11 +31,10 @@
       <div class="box-left">
         <img alt="Clipboard" src="/img/clipboard.png">
       </div>
-
       <div class="box-right">
         <h3>You dont have any triggers yet.</h3>
         <div class="text">
-         You can add your triggers.......etc...etc
+         You can add your triggers. But please make sure to create atleast one campaign before creating triggers.
         </div>
         <a href="#">Click here to learn more</a>
         <br>
@@ -54,6 +54,7 @@
     			<tr>
      				<th>Name</th>
       				<th>Condition</th>
+                    <th>Value</th>
       				<th>Campaign</th>
     			</tr>
   			</thead>
