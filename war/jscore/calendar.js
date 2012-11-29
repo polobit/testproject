@@ -69,7 +69,6 @@ function showCalendar() {
         	
          },
         select: function(start, end, allDay) {
-        	
         	// Show a new event
             $('#activityModal').modal('show');
             highlightEvent();
@@ -86,7 +85,7 @@ function showCalendar() {
                 $('#event-time-2').val('');
             } else {
                 $('#event-time-1').val((start.getHours() < 10 ? "0" : "") + start.getHours() + ":" + (start.getMinutes() < 10 ? "0" : "") + start.getMinutes());
-                $('#event-time-2').val((end.getHours() < 10 ? "0" : "") + end.getHours() + ":" + (end.getMinutes() < 10 ? "0" : "") + end.getMinutes());
+                $('#event-time-2').val((end.getHours() < 10 ? "0" : "") + end.getHours() + ":" + (end.getMinutes() < 10 ? "0" : "") + end.getMinutes() + 30);
             }
             
 		},

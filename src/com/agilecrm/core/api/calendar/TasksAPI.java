@@ -17,6 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.activities.Task;
+import com.agilecrm.activities.TaskUtil;
 
 @Path("/api/tasks")
 public class TasksAPI
@@ -29,7 +30,7 @@ public class TasksAPI
     {
 	try
 	{
-	    return Task.getAllPendingTasks();
+	    return TaskUtil.getAllPendingTasks();
 	}
 	catch (Exception e)
 	{
@@ -46,7 +47,7 @@ public class TasksAPI
     {
 	try
 	{
-	    return Task.getAllTasks();
+	    return TaskUtil.getAllTasks();
 	}
 	catch (Exception e)
 	{
@@ -64,7 +65,7 @@ public class TasksAPI
 
 	try
 	{
-	    return Task.getPendingTasks(Integer.parseInt(numdays));
+	    return TaskUtil.getPendingTasks(Integer.parseInt(numdays));
 	}
 	catch (Exception e)
 	{
@@ -79,7 +80,7 @@ public class TasksAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Task getTask(@PathParam("id") Long id)
     {
-	Task task = Task.getTask(id);
+	Task task = TaskUtil.getTask(id);
 	return task;
     }
 
@@ -91,7 +92,7 @@ public class TasksAPI
     {
 	try
 	{
-	    Task task = Task.getTask(id);
+	    Task task = TaskUtil.getTask(id);
 	    if (task != null)
 		task.delete();
 	}

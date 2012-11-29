@@ -28,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.activities.Task;
+import com.agilecrm.activities.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.deals.Opportunity;
@@ -185,7 +186,7 @@ public class ContactsAPI
     {
 	try
 	{
-	    return Task.getContactTasks(id);
+	    return TaskUtil.getContactTasks(id);
 	}
 	catch (Exception e)
 	{

@@ -2,7 +2,7 @@
 	<header>
       <h3 style="margin-left:3px">
          <span><i class="icon-edit"></i></span> 
-            Tasks
+            My Tasks
          <span style="vertical-align:text-top;margin-left:-3px">         
             <img border="0" src="/img/help.png" style="height:6px;vertical-align:top" rel="popover" data-placement="right" data-content="Tasks are like to-dos. Result oriented. You can assign a category such as call, email etc and add them to your calendar." id="element" data-trigger="hover">
             </span>
@@ -17,26 +17,27 @@
 <section>
 <form>
 <table class="table">
-	<thead><b>Overdue</b></thead>
+	<b id="overdue-heading" style="display: none">Overdue</b>
 	<tbody id='overdue' style="display: none; margin:3px"></tbody>
 </table>
 <table class="table">
-	<thead><b>Today</b></thead>	
+	<b id="today-heading" style="display: none">Today</b>	
  	<tbody id='today' style="display: none; margin:3px"></tbody>
 </table>
 <table class="table">
-	<thead><b>Tomorrow</b></thead>
+	<b id="tomorrow-heading" style="display: none">Tomorrow</b>
 	<tbody id='tomorrow' style="display: none; margin:3px"></tbody>
 </table>
 <table class="table">
-	<thead><b>Next Week</b></thead>
+	<b id="next-week-heading" style="display: none">Next Week</b>
  	<tbody id='next-week' style="display: none; margin:3px"></tbody>
 </table>
 </form>
 </section>
 	<br/>
 	<div>
-		<a href="#" calss="tasks-table" id="tasks-list">All tasks</a>
+		<a href="#" calss="tasks-table" id="tasks-list">All Tasks</a>
+		<div class="right add-task"><a href="#"><i class='icon-plus'/> Add New</a></div>
 	</div>
 {{/if}}
 </script>
@@ -44,9 +45,9 @@
 
 
 <script id="tasks-model-template" type="text/html">
-	<td> <input type="checkbox" data='{{id}}' class='tasks-select'> </td>
+	<td style="border-top:1px dotted #DDD"> <input type="checkbox" data='{{id}}' class='tasks-select'> </td>
 
-	<td><p><span class="label">{{type}}</span> <span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span> {{ subject}}</p>
+	<td style="border-top:1px dotted #DDD"><p><span class="label">{{ucfirst type}}</span> <span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span> {{ subject}}</p>
         <span>due {{epochToTaskDate due}}</span>
 	</td>
 </script>

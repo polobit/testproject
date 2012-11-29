@@ -29,12 +29,17 @@ $(function(){
 	    $('#update_event_validate').die().live('click', function (e) {
 	    		e.preventDefault();
 	    		
-	    		saveEvent('updateActivityForm', 'updateActivityModal');
+	    		saveEvent('updateActivityForm', 'updateActivityModal', true);
 	    });
 	    
 	    // Delete event
 	    $('#event_delete').die().live('click', function (e) {
 	    		e.preventDefault();
+	    		
+	    		// Confirmation alert to delete an event
+	    		if(!confirm("Are you sure you want to delete?"))
+		    		return;
+	    		
 	    		var event_id = $('#updateActivityForm input[name=id]').val()
 
 	    		// Show loading symbol until model get saved
@@ -126,7 +131,7 @@ $(function(){
 			    		$('.start-timepicker').val(getHHMM());
 			    	
 			    	if($('.end-timepicker').val() == '')
-			    		$('.end-timepicker').val(getHHMM());
+			    		$('.end-timepicker').val(getHHMM(true));
 			    	
 			    });
 			    
@@ -178,17 +183,17 @@ function isValidRange(startDate, endDate, startTime, endTime){
 		 return true;
 	 }
 	 else if (startDate > endDate){
-         $("#activityModal").find(".invalid-range").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">×</a>Start date should not be greater than end date. Please change.</div>');
+         $("#activityModal").find(".invalid-range").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#"></a>Start date should not be greater than end date. Please change.</div>');
 
 		 return false;
 	 }	 
 	 else if(startTime[0] > endTime[0]){
-         $("#activityModal").find(".invalid-range").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">×</a>Start time should not be greater than end time. Please change.</div>');
+         $("#activityModal").find(".invalid-range").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater than end time. Please change.</div>');
 
 		 return false;	 
 	}
 	else if(startTime[0] == endTime[0] && startTime[1] >= endTime[1]){
-        $("#activityModal").find(".invalid-range").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">×</a>Start time should not be greater or equal to end time. Please change.</div>');
+        $("#activityModal").find(".invalid-range").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater or equal to end time. Please change.</div>');
 
 		 return false;
 	} 
@@ -311,7 +316,11 @@ function saveEvent(formId, modalName, isUpdate){
 			$('#' + modalName).find('span.save-status img').remove();
         	$('#' + modalName).modal('hide');
 
-        //	$('#calendar').fullCalendar( 'refetchEvents' );
+        	//$('#calendar').fullCalendar( 'refetchEvents' );
+        	
+        	// When updating an event remove the old event
+        	if(isUpdate)
+        		$('#calendar').fullCalendar('removeEvents', json.id);
         	
         	$('#calendar').fullCalendar( 'renderEvent', data.toJSON() );
         	
@@ -323,7 +332,7 @@ function saveEvent(formId, modalName, isUpdate){
 }
 
 // Get Hours and Mins for the current time. It will be padded for 15 mins
-function getHHMM() {
+function getHHMM(end_time) {
 	
 	
 	var hours = new Date().getHours();
@@ -331,6 +340,18 @@ function getHHMM() {
 	
     if (minutes % 15 != 0)
      minutes = minutes - (minutes % 15);
+    
+    // Make end time 30 minutes more than start time
+    if(end_time){
+    	if(minutes == "30"){
+    		hours = hours + 1;
+    		minutes = 0;
+    	}else if(minutes == "45"){
+    		hours = hours + 1;
+    		minutes = 15;
+    	}else
+    		minutes = minutes + 30;
+    }	
     
     if (hours   < 10) {hours   = "0"+hours;}
     if (minutes < 10) {minutes = "0"+minutes;}

@@ -14,6 +14,28 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
+/**
+ * The <code>Event</code> class represents the events for FullCalendar based on
+ * specified time duration. Events are time based such as meetings. They show up
+ * in calendar.
+ * <p>
+ * The Event entity includes start and end time, which is also stored as search
+ * range of an event. Based on the search range we can search all the events of
+ * a particular period.For some events the duration could be the complete day,
+ * such events are also known as all day events.
+ * </p>
+ * <p>
+ * This class implements {@link AgileUser} to create key and to store the key as
+ * the event's owner.
+ * </p>
+ * <p>
+ * The <code>Event</code> class provides methods to create, delete and get the
+ * events.
+ * </p>
+ * 
+ * @author Rammohan
+ * 
+ */
 @XmlRootElement
 public class Event
 {
@@ -22,22 +44,36 @@ public class Event
     @Id
     public Long id;
 
+    /**
+     * Start time of event
+     */
     @NotSaved(IfDefault.class)
     public Long start = 0L;
 
-    // Having no end date means that it is all day event
+    /**
+     * End time of event
+     */
     @NotSaved(IfDefault.class)
     public Long end = 0L;
 
     @NotSaved(IfDefault.class)
     public boolean is_event_starred = false;
 
+    /**
+     * Having no end date means that it is all day event
+     */
     @NotSaved(IfDefault.class)
     public boolean allDay = false;
 
+    /**
+     * Name of the event
+     */
     @NotSaved(IfDefault.class)
     public String title = null;
 
+    /**
+     * Color of the event for FullCalendar based on priority type
+     */
     @NotSaved(IfDefault.class)
     public String color = "blue";
 
@@ -47,21 +83,43 @@ public class Event
     @NotSaved(IfDefault.class)
     public Key<Contact> contact = null;
 
-    // Owner
+    /**
+     * Owner key of the event
+     */
     private Key<AgileUser> owner = null;
 
-    // Range object for doing two inequality queries
+    /**
+     * Range object for doing two inequality queries
+     */
     List<Long> search_range = null;
 
     // Dao
     private static ObjectifyGenericDao<Event> dao = new ObjectifyGenericDao<Event>(
 	    Event.class);
 
+    /**
+     * Default constructor
+     */
     Event()
     {
 
     }
 
+    /**
+     * Constructs new {@link Event} with the following parameters
+     * 
+     * @param title
+     *            The event name
+     * @param start
+     *            Start time of event
+     * @param end
+     *            End time of event
+     * @param isEventStarred
+     * @param contactId
+     *            To create Contact Key, that is the event related to
+     * @param agileUserId
+     *            To create AgileUser Key, the owner of the event
+     */
     public Event(String title, Long start, Long end, boolean isEventStarred,
 	    Long contactId, Long agileUserId)
     {
@@ -77,59 +135,19 @@ public class Event
 	    this.owner = new Key<AgileUser>(AgileUser.class, agileUserId);
     }
 
-    // Get Event
-    public static Event getEvent(Long id)
-    {
-	try
-	{
-	    return dao.get(id);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-
-    // Get Event from start to end for FullCalendar
-    public static List<Event> getEvents()
-    {
-	try
-	{
-	    return dao.fetchAll();
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-
-    // Get Event from start to end for FullCalendar
-    public static List<Event> getEvents(Long start, Long end)
-    {
-	try
-	{
-	    return dao.ofy().query(Event.class)
-		    .filter("search_range >=", start)
-		    .filter("search_range <=", end).list();
-	    // return dao.ofy().query(Event.class).filter("search_range >=",
-	    // start).list();
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-
-    // Delete Contact
+    /**
+     * Deletes the event from database
+     */
     public void delete()
     {
 	dao.delete(this);
     }
 
-    // Save Contact
+    /**
+     * Saves the event entity in database
+     * 
+     * Saves the new one as well as to update the existing one
+     */
     public void save()
     {
 	dao.put(this);
@@ -140,8 +158,10 @@ public class Event
 	return ("Start " + start + "  End: " + end + " Range: " + search_range);
     }
 
-    // For search - create a range object for start and end date so that we can
-    // search between the two
+    /**
+     * Create a range object for start and end date so that we can search
+     * between the two
+     */
     @PrePersist
     private void PrePersist()
     {

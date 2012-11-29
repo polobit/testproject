@@ -15,6 +15,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import com.agilecrm.activities.Event;
+import com.agilecrm.activities.EventUtil;
 
 @Path("/api/events")
 public class EventsAPI
@@ -38,7 +39,8 @@ public class EventsAPI
 
 	try
 	{
-	    return Event.getEvents(Long.parseLong(start), Long.parseLong(end));
+	    return EventUtil.getEvents(Long.parseLong(start),
+		    Long.parseLong(end));
 	}
 	catch (Exception e)
 	{
@@ -53,7 +55,7 @@ public class EventsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Event getEvent(@PathParam("id") Long id)
     {
-	Event event = Event.getEvent(id);
+	Event event = EventUtil.getEvent(id);
 	return event;
     }
 
@@ -65,7 +67,7 @@ public class EventsAPI
     {
 	try
 	{
-	    Event event = Event.getEvent(id);
+	    Event event = EventUtil.getEvent(id);
 	    if (event != null)
 		event.delete();
 	}

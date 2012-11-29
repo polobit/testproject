@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.agilecrm.activities.Task;
+import com.agilecrm.activities.TaskUtil;
 import com.agilecrm.core.DomainUser;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.UserPrefs;
@@ -42,8 +43,8 @@ public class TaskReminder extends HttpServlet
 
 		    if (userPrefs.task_reminder)
 		    {
-			List<Task> taskList = Task.getPendingTasksToRemind(1,
-				new Key<AgileUser>(AgileUser.class,
+			List<Task> taskList = TaskUtil.getPendingTasksToRemind(
+				1, new Key<AgileUser>(AgileUser.class,
 					agileUser.id));
 
 			if (taskList != null)
