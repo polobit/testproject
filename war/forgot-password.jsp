@@ -56,22 +56,12 @@ body {
 	height: 30px !important;
 	margin: 8px 0px !important;
 	padding-left: 10px !important;
-	width: 240px;
-	padding-right: 0px!important;
 }
 
 .error {
 	color: red;
 }
-label.valid {
-  width: 24px;
-  height: 24px;
-  background: url(../img/valid.png) center center no-repeat;
-  display: inline-block;
-  text-indent: -9999px;
-  margin-left: 4px;
-  vertical-align: middle;
-}
+
 </style>
 
 <!-- Le fav and touch icons -->
@@ -147,11 +137,11 @@ jQuery.validator.setDefaults({
 				
 				
 				 <h3><small>Enter Your Email </small></h3>	
-				<div id="openid_btns" style="padding:5px 0 15px;">
+				<div id="openid_btns" style="float: left;padding:5px 0 15px;">
 					
-                    <input class="input-xlarge field required email" name='email' type="text" placeholder="Email" autocapitalize="off">
+                    <input class="input-xlarge field required email" name='email' maxlength="50" minlength="6" type="text" placeholder="Email" autocapitalize="off">
 					<div style="margin-top:15px;">
-					  <input type='submit' style="float:right;margin-right: 30px;"value="Submit" class='btn btn-large btn-primary forgot_password_btn'>
+					  <input type='submit' style="float:right;height:39px;" value="Submit" class='btn btn-large btn-primary forgot_password_btn'>
 				  </div>
 				</div>
 				</form>
