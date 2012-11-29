@@ -72,8 +72,6 @@ padding-left:10px!important;
 <link rel="apple-touch-icon-precomposed"
 	href="../assets/ico/apple-touch-icon-57-precomposed.png">
 
- <!-- JQUery Core and UI CDN -->
-<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
@@ -106,12 +104,12 @@ padding-left:10px!important;
 
 	<div class="account-container">
 		<div class="content clearfix">
-				 <h1>Enter your domain </h1>
+				 <h1>Enter your domain</h1>
 				 <form name='choose_domain' id="choose_domain" method='post' style="padding:10px 0 15px;border-top: 1px dotted #CCC;">
 						<div class="alert alert-error domain-error" style="display:none;">
-							<a class="close" data-dismiss="alert" href="#">×</a>Please enter a valid subdomain 
+							<a class="close" data-dismiss="alert" href="#">×</a>Please enter a valid domain 
 						</div>
-					<% if(!StringUtils.isEmpty(error)){%>
+						<% if(!StringUtils.isEmpty(error)){%>
 					 <div class="alert alert-error login-error">
 						<a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
 					</div>
@@ -122,9 +120,9 @@ padding-left:10px!important;
 						<a class="close" data-dismiss="alert" href="#">×</a><%=success%> 
 					</div>
 					 <%}%>
-					 <h3><small> Start with your subdomain at AgileCRM</small></h3>
+					 <h3><small> Choose your domain at AgileCRM</small></h3>
 					 <div style="padding-top:10px;">
-          				<input id='subdomain' type="text" placeholder="Enter subdomain"
+          				<input id='subdomain' type="text" placeholder="Enter domain"
 						   	   name="subdomain" class="input-medium field required" autocapitalize="off"><b> .agilecrm.com</b>
 				   </div>
 				</form>
@@ -135,15 +133,18 @@ padding-left:10px!important;
 		</div>
 	</div>
 	<div style="text-align: center; line-height: 19px;">
-	   Forgot Your Domain? <a href="/forgot-domain">Click Here</a>
+	   Already Signed Up? <a href="/login">Login</a><br/>
+	   Forgot <a href="/forgot-password">Password </a><a href="/forgot-domain">Domain</a>
 	</div>
 </div>
 
 
 	<!-- Le javascript
     ================================================== -->
+     <!-- JQUery Core and UI CDN -->
 	<!-- Placed at the end of the document so the pages load faster -->
-	
+	<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+	<script type="text/javascript" src="/lib/bootstrap.min.js"></script>
 	<script>
 		//Init
 		$(function() {
@@ -153,17 +154,13 @@ padding-left:10px!important;
 				$(".domain-error").hide();		
 				var subdomain = $("#subdomain").val();
 				
-				if(subdomain == null || subdomain == "" || subdomain.length < 4)
+				if(subdomain == null || subdomain == "" || subdomain.length < 4 || subdomain.length > 12)
 				{
 					$(".domain-error").show();
 					return false;
 				}
 				$('#choose_domain').submit();
 				e.preventDefault();
-			});
-			
-			$(".close").click(function() {
-				$(".alert").hide();
 			});
 
 		});

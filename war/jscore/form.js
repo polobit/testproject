@@ -273,19 +273,14 @@ function isValidForm(form) {
 	        debug: true,
 	        errorElement: 'span',
 	        errorClass: 'help-inline',
-	        highlight: function (element, errorClass, validClass) {    
-	        	$(element).closest(".control-group").addClass('error').removeClass('success').find('div > span').removeClass('valid');
+	        highlight: function (element, errorClass) {    
+	        	$(element).closest(".control-group").addClass('error');
 	        },
-	        unhighlight: function (element, errorClass, validClass) {
+	        unhighlight: function (element, errorClass) {
 	        	 $(element).closest(".control-group").removeClass('error'); 
 	        },
 	        invalidHandler: function (form, validator) {
 	            var errors = validator.numberOfInvalids();
-	        },
-	        success: function(element) {
-	        	$(element)
-	        	.addClass('valid')
-	        	.closest('.control-group').addClass('success').removeClass('error');
 	        }
 	    });	
 	

@@ -47,21 +47,10 @@ body {
 	height: 30px !important;
 	margin: 8px 0px !important;
 	padding-left: 10px !important;
-	width: 240px;
-	padding-right: 0px!important;
 }
 
 .error {
 	color: red;
-}
-label.valid {
-  width: 24px;
-  height: 24px;
-  background: url(../img/valid.png) center center no-repeat;
-  display: inline-block;
-  text-indent: -9999px;
-  margin-left: 4px;
-  vertical-align: middle;
 }
 
 .login-page .openid_large_btn:hover {
@@ -138,7 +127,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 		<div class='account-container'>
 			<div class="content clearfix">
 				<form id='oauth' name='oauth' method='post'> 
-				 <h1>SignUp</h1>
+				 <h1>Register</h1>
 				<div id="openid_btns" style="float: left;padding:5px 0 15px;border-top: 1px dotted #CCC;border-bottom: 1px dotted #CCC;border-right: none;border-left: none;">
 				        
 				         <% if(!StringUtils.isEmpty(error)){%>
@@ -147,7 +136,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 						</div>
 						<%}%>
 						
-				<h3><small>Login or register using existing accounts</small></h3>	
+				<h3><small>Register using existing accounts</small></h3>	
 				  <div style="padding-top:10px;">
 					<input type='hidden' name='auth' value='auth'></input>
 					<input type='hidden' name='type' value='oauth'></input>
@@ -162,18 +151,18 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 				<div class="clearfix"></div>
 				
 				<form name='agile' id="agile" method='post' onsubmit="return isValid();" style="padding-top:10px;"> 
-				 <h3><small>Create Your Free Account</small></h3>	
+				 <h3><small>Old Fashioned? Create Your Free Account</small></h3>	
 				<div id="openid_btns" style="float: left;padding:5px 0 15px;">
 					
 					<input type='hidden' name='auth' value='auth'></input>
 					<input type='hidden' name='type' value='agile'></input>
 					
-					<input class="input-xlarge field required" name='name' type="text" placeholder="Name" autocapitalize="off">
-                    <input class="input-xlarge field required email" name='email' type="text" placeholder="Email" autocapitalize="off">
+					<input class="input-xlarge field required" name='name' type="text" maxlength="50" minlength="3" placeholder="Name" autocapitalize="off">
+                    <input class="input-xlarge field required email" name='email' type="text" maxlength="50" minlength="6" placeholder="UserName (Email)" autocapitalize="off">
                     <input class="input-xlarge field required" maxlength="10" minlength="4" name='password' type="password" placeholder="Password" autocapitalize="off">
 					<div style="margin-top:15px;">
-					  <label class="checkbox" style="display:inline-block;">I agree with the Terms of Use<input type="checkbox" name="agree" class="required"></label>
-					  <input type='submit' style="float:right;margin-right: 30px;"value="Register" class='btn btn-large btn-primary'>
+					  <label class="checkbox" style="display:inline-block;">I agree with the Terms<input type="checkbox" checked="checked" name="agree" class="required"></label>
+					  <input type='submit' style="float:right;" value="Register" class='btn btn-large btn-primary'>
 				  </div>
 				</div>
 				</form>
@@ -184,7 +173,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 					
 			</div>
 			<div style="text-align: center;line-height: 19px;">
-	                 Already have an account? <a href="/login">Login</a><br>
+	                 Already have an account? <a href="/login">Login</a><br/>
 	                 Forgot <a href="/forgot-password">Password</a>
                </div>
 		</div>
