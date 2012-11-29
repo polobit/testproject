@@ -52,7 +52,7 @@
                     	<label class="control-label TAG_IS_ADDED TAG_IS_DELETED ADD_SCORE ">Value  <span class="field_req">*</span></label>
                             <div class="controls">
                                <div class="pull-left">
-									<ul class= "tagsinput tags" name="trigger_tags">
+									<ul class= "tagsinput tags" id="tags-ul" name="trigger_tags">
 								{{#each custom_tags}}
 									<li class="tag" style="display: inline-block;" data="{{this}}">{{this}}<a class="close" id="remove_tag">&times</a></li>
 								{{/each}}

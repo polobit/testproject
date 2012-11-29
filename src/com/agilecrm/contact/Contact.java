@@ -24,6 +24,7 @@ import com.agilecrm.search.ContactDocumentUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.NotificationPrefs;
 import com.agilecrm.workflows.Trigger;
+import com.agilecrm.workflows.TriggerUtil;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -196,7 +197,7 @@ public class Contact extends Cursor
 	    Set<String> present_tags = contact.tags;
 
 	    // Check if tags of present contact equals to tags in pre-persist
-	    if (!(present_tags.containsAll(tags)))
+	    if (present_tags.size() < tags.size())
 	    {
 
 		System.out.println("Notification in prepersist");
@@ -205,14 +206,21 @@ public class Contact extends Cursor
 			NotificationPrefs.Type.TAG_CREATED, this);
 
 		// Execute trigger when tag is added in contact detail
-		Trigger.executeTriggerforTags(id, tags,
+		TriggerUtil.executeTriggerforTags(id, tags,
 			Trigger.Type.TAG_IS_ADDED);
 
 	    }
-	    if (!(tags).containsAll(present_tags))
+	    if (present_tags.size() > tags.size())
 	    {
 		NotificationPrefs.executeNotification(
 			NotificationPrefs.Type.TAG_DELETED, this);
+
+		// Execute trigger when tag is deleted in contact detail
+		Set<String> tempTags = new HashSet<String>(present_tags);
+		// present_tags - tags = deleted tags
+		tempTags.removeAll(tags);
+		TriggerUtil.executeTriggerforTags(id, tempTags,
+			Trigger.Type.TAG_IS_DELETED);
 	    }
 
 	}
@@ -275,20 +283,20 @@ public class Contact extends Cursor
 	    NotificationPrefs.executeNotification(
 		    NotificationPrefs.Type.CONTACT_CREATED, this);
 
-	    Trigger.executeTrigger(id, Trigger.Type.CONTACT_IS_ADDED);
+	    TriggerUtil.executeTrigger(id, Trigger.Type.CONTACT_IS_ADDED);
 
 	    // Execute trigger when tags are added along with new contact
 	    if (tags != null)
 	    {
 
-		Trigger.executeTriggerforTags(id, tags,
+		TriggerUtil.executeTriggerforTags(id, tags,
 			Trigger.Type.TAG_IS_ADDED);
 
 	    }
 	}
 
 	if (lead_score > 0)
-	    Trigger.executeTriggerforScore(id, lead_score,
+	    TriggerUtil.executeTriggerforScore(id, lead_score,
 		    Trigger.Type.ADD_SCORE);
 	dao.put(this);
 	ContactDocumentUtil.buildDocument(this);
