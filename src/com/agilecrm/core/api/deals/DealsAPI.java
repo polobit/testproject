@@ -21,6 +21,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.user.NotificationPrefs;
 import com.agilecrm.workflows.Trigger;
+import com.agilecrm.workflows.TriggerUtil;
 
 @Path("/api/opportunity")
 public class DealsAPI
@@ -129,7 +130,7 @@ public class DealsAPI
 
 		// Execute trigger for corresponding contacts
 		for (Contact contact : dealContacts)
-		    Trigger.executeTrigger(contact.id,
+		    TriggerUtil.executeTrigger(contact.id,
 			    Trigger.Type.DEAL_IS_DELETED);
 	    }
 	    catch (Exception e)

@@ -22,6 +22,7 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.NotificationPrefs;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.workflows.Trigger;
+import com.agilecrm.workflows.TriggerUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -296,7 +297,7 @@ public class Opportunity
 	{
 	    for (String contact_id : this.contacts)
 	    {
-		Trigger.executeTrigger(Long.parseLong(contact_id),
+		TriggerUtil.executeTrigger(Long.parseLong(contact_id),
 			Trigger.Type.DEAL_IS_DELETED);
 	    }
 	}
@@ -312,7 +313,7 @@ public class Opportunity
 	    {
 		this.related_contacts.add(new Key<Contact>(Contact.class, Long
 			.parseLong(contact_id)));
-		Trigger.executeTrigger(Long.parseLong(contact_id),
+		TriggerUtil.executeTrigger(Long.parseLong(contact_id),
 			Trigger.Type.DEAL_IS_ADDED);
 	    }
 

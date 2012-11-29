@@ -1,6 +1,5 @@
 package com.agilecrm.workflows;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,25 +10,17 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.workflows.Trigger.Type;
 import com.google.appengine.api.taskqueue.DeferredTask;
-import com.google.appengine.api.taskqueue.Queue;
-import com.google.appengine.api.taskqueue.QueueFactory;
-import com.google.appengine.api.taskqueue.TaskOptions;
-import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
 /**
  * Trigger is a base class for all triggers which allow application to run
- * campaign automatically.The Trigger Object encapsulates the trigger details
+ * campaign automatically. The Trigger Object encapsulates the trigger details
  * which includes name of a trigger,type and campaign.
  * <p>
  * Trigger uses these conditions
@@ -43,7 +34,7 @@ import com.googlecode.objectify.condition.IfDefault;
  * </ul>
  * <p>
  * Some important points to consider are campaigns should not be empty while
- * creating trigger.Trigger use DeferredTask to run different trigger tasks.
+ * creating trigger. Trigger use DeferredTask to run different trigger tasks.
  * 
  * @author Naresh
  * 
@@ -137,21 +128,6 @@ public class Trigger
     }
 
     /**
-     * Add custom trigger tags before save.Save trigger_tags array into Set.
-     */
-    @PrePersist
-    private void PrePersist()
-    {
-	// Save trigger tags into set when not null
-	if (trigger_tags != null)
-	{
-	    for (String trigger_tag : trigger_tags)
-		custom_tags.add(trigger_tag);
-	}
-
-    }
-
-    /**
      * Save trigger in database
      */
     public void save()
@@ -165,74 +141,6 @@ public class Trigger
     public void delete()
     {
 	dao.delete(this);
-    }
-
-    /**
-     * Remove multiple triggers
-     * 
-     * @param triggersJSONArray
-     *            The model-ids of triggers that are selected for delete.
-     */
-    public static void deleteTriggersBulk(JSONArray triggersJSONArray)
-    {
-	List<Key<Trigger>> triggerKeys = new ArrayList<Key<Trigger>>();
-	for (int i = 0; i < triggersJSONArray.length(); i++)
-	{
-
-	    try
-	    {
-		triggerKeys.add(new Key<Trigger>(Trigger.class, Long
-			.parseLong(triggersJSONArray.getString(i))));
-	    }
-	    catch (JSONException e)
-	    {
-		e.printStackTrace();
-	    }
-	}
-
-	dao.deleteKeys(triggerKeys);
-    }
-
-    /**
-     * The trigger locator based on id
-     * 
-     * @param id
-     *            The trigger id
-     * @return The trigger with respect to that id
-     */
-    public static Trigger getTrigger(Long id)
-    {
-	try
-	{
-	    return dao.get(id);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-
-    /**
-     * Return all triggers.
-     * 
-     * @return All triggers that are saved
-     */
-    public static List<Trigger> getAllTriggers()
-    {
-	Objectify ofy = ObjectifyService.begin();
-	return ofy.query(Trigger.class).list();
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
-    public String toString()
-    {
-	return "Name: " + name + " Condition: " + type + "Campaign:"
-		+ campaign_id;
     }
 
     /**
@@ -272,128 +180,29 @@ public class Trigger
     }
 
     /**
-     * Return triggers based on condition
-     * 
-     * @param condition
-     *            The trigger condition.
-     * @return The triggers based on condition.
+     * Add custom trigger tags before save.Save trigger_tags array into Set.
      */
-    public static List<Trigger> getTriggersByCondition(Type condition)
+    @PrePersist
+    private void PrePersist()
     {
-	Objectify ofy = ObjectifyService.begin();
-	return ofy.query(Trigger.class).filter("type", condition).list();
+	// Save trigger tags into set when not null
+	if (trigger_tags != null)
+	{
+	    for (String trigger_tag : trigger_tags)
+		custom_tags.add(trigger_tag);
+	}
+
     }
 
-    /**
-     * The trigger executes when tags specified in trigger are added for a
-     * contact
+    /*
+     * (non-Javadoc)
      * 
-     * @param contact_id
-     *            The id of a contact for which tags are added
-     * @param contact_tags
-     *            The tags of a contact
+     * @see java.lang.Object#toString()
      */
-    public static void executeTriggerforTags(Long contact_id,
-	    Set<String> contact_tags, Type tag_condition)
+    public String toString()
     {
-
-	List<Trigger> triggerslist = null;
-	try
-	{
-
-	    triggerslist = Trigger.getTriggersByCondition(tag_condition);
-	    if (triggerslist != null)
-	    {
-		for (Trigger triggers : triggerslist)
-
-		{
-		    // Get custom tags given for trigger
-		    if (triggers.custom_tags != null)
-		    {
-			System.out.println("The given tags for a trigger:"
-				+ triggers.custom_tags);
-
-			// Execute trigger when tags are same as custom tags
-			// added to a contact
-			if (contact_tags.containsAll(triggers.custom_tags))
-			    Trigger.executeTrigger(contact_id, tag_condition);
-		    }
-		}
-		// Avoid further looping
-		triggerslist = null;
-	    }
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-    }
-
-    /**
-     * Trigger will execute if score of contact reaches trigger custom score
-     * 
-     * @param contact_id
-     *            The id of a contact.
-     * @param lead_score
-     *            The score of a contact.
-     * @param add_score
-     *            The custom score in trigger.
-     */
-    public static void executeTriggerforScore(Long contact_id,
-	    Integer lead_score, Type add_score)
-    {
-	// Execute trigger when contact score is within the range of trigger
-	// score E.g.trigger executes for 50 to 59.
-	List<Trigger> triggerslist = null;
-
-	try
-	{
-	    triggerslist = Trigger.getTriggersByCondition(add_score);
-	    System.out.println("Triggers with condition ADD_SCORE:"
-		    + triggerslist);
-	    if (triggerslist != null)
-	    {
-		for (Trigger triggers : triggerslist)
-
-		{
-		    if (lead_score >= triggers.custom_score
-			    && lead_score <= (triggers.custom_score + 9))
-		    {
-			Trigger.executeTrigger(contact_id,
-				Trigger.Type.ADD_SCORE);
-		    }
-
-		}
-		// Avoid further looping
-		triggerslist = null;
-	    }
-	}
-
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-    }
-
-    /**
-     * Serialize the triggers execution using DeferredTask and Queue.Builds
-     * {@link TriggersDeferredTask} for triggers
-     * 
-     * @param contactId
-     *            The id of a contact
-     * @param type
-     *            The trigger condition
-     */
-    public static void executeTrigger(Long contactId, Type type)
-
-    {
-	System.out.println("Executing trigger with contactID:" + contactId
-		+ "Condition type" + type);
-
-	TriggersDeferredTask triggersDeferredTask = new TriggersDeferredTask(
-		contactId, type);
-	Queue queue = QueueFactory.getDefaultQueue();
-	queue.add(TaskOptions.Builder.withPayload(triggersDeferredTask));
+	return "Name: " + name + " Condition: " + type + "Campaign:"
+		+ campaign_id;
     }
 
 }
@@ -403,6 +212,7 @@ public class Trigger
  * to trigger condition and contact.
  * 
  */
+@SuppressWarnings("serial")
 class TriggersDeferredTask implements DeferredTask
 {
 
@@ -428,7 +238,7 @@ class TriggersDeferredTask implements DeferredTask
 
     public void run()
     {
-	List<Trigger> triggers = Trigger.getTriggersByCondition(type);
+	List<Trigger> triggers = TriggerUtil.getTriggersByCondition(type);
 	Contact contact = Contact.getContact(contactId);
 
 	if (!triggers.isEmpty())
