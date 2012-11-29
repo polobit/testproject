@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.workflows.Trigger;
+import com.agilecrm.workflows.TriggerUtil;
 import com.agilecrm.workflows.Workflow;
 
 @Path("/api/workflows")
@@ -86,7 +87,7 @@ public class WorkflowsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public List<Trigger> getTriggers()
     {
-	return Trigger.getAllTriggers();
+	return TriggerUtil.getAllTriggers();
     }
 
     @Path("triggers")
@@ -115,7 +116,7 @@ public class WorkflowsAPI
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public void deleteTrigger(@PathParam("trigger_id") Long id)
     {
-	Trigger trigger = Trigger.getTrigger(id);
+	Trigger trigger = TriggerUtil.getTrigger(id);
 	if (trigger != null)
 	    trigger.delete();
 
@@ -130,7 +131,7 @@ public class WorkflowsAPI
     {
 	JSONArray triggersJSONArray = new JSONArray(model_ids);
 
-	Trigger.deleteTriggersBulk(triggersJSONArray);
+	TriggerUtil.deleteTriggersBulk(triggersJSONArray);
     }
 
 }
