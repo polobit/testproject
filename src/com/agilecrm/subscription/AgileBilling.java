@@ -11,11 +11,9 @@ import com.stripe.model.Invoice;
 
 /**
  * 
- * This
- * <code>AgileBilling<code> interface consists methods to be followed while implementing
- * any payment gateway
- * 
- * Consists methods createCustomer, UpdatePlan, UpdateCreditCard, getInvoices, deleteCustomer, cancelSubscription
+ * <code>AgileBilling<code> is root interface for all billing gateway Implementations,
+ * It Include methods to be followed while implementing
+ * any payment gateway. Includes methods createCustomer, UpdatePlan, UpdateCreditCard, getInvoices, deleteCustomer, cancelSubscription
  * 
  * @author Yaswanth
  * 
@@ -27,7 +25,7 @@ import com.stripe.model.Invoice;
 public interface AgileBilling
 {
     /**
-     * Create customer and return Customer as {@link JSONObject}
+     * Creates customer and return Customer as {@link JSONObject}
      * 
      * @param cardDetails
      *            {@link CreditCard}, plan {@link Plan}
@@ -39,7 +37,7 @@ public interface AgileBilling
     public JSONObject createCustomer(CreditCard cardDetails, Plan plan) throws Exception;
 
     /**
-     * Update customer plan and return Customer as {@link JSONObject}
+     * Updates customer plan and return Customer as {@link JSONObject}
      * 
      * @param billingData
      *            {@link JSONException}, plan{@link Plan}
@@ -51,7 +49,7 @@ public interface AgileBilling
     public JSONObject updatePlan(JSONObject billingData, Plan plan) throws Exception;
 
     /**
-     * Update customer CreditCard detials and return Customer as
+     * Updates customer CreditCard detials and return Customer as
      * {@link JSONObject}
      * 
      * @param billingData
@@ -65,7 +63,7 @@ public interface AgileBilling
 	    throws Exception;
 
     /**
-     * Get invoices of customer
+     * Gets list of customer subscription invoices
      * 
      * @param billingData
      *            as {@link JSONObject}, CreditCard {@link CreditCard}
@@ -77,7 +75,7 @@ public interface AgileBilling
     public List<Invoice> getInvoices(JSONObject billingData) throws Exception;
 
     /**
-     * Delete customer from gateway
+     * Deletes customer from gateway
      * 
      * @param billingData
      *            as {@link JSONObject}
@@ -88,7 +86,7 @@ public interface AgileBilling
     public void deleteCustomer(JSONObject billingData) throws Exception;
 
     /**
-     * Cancel customer Subscription
+     * Cancels customer Subscription
      * 
      * @param billingData
      *            as {@link JSONObject}

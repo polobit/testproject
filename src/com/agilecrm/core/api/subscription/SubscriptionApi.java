@@ -17,11 +17,23 @@ import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.stripe.exception.StripeException;
 
+/**
+ * <code>SubscriptionApi</code> class includes REST calls to interact with
+ * subscription class to initiate billing operations.
+ * <p>
+ * It is called from client side for new subscription, plan update, credit card
+ * details update and even for cancellation of subscription
+ * </p>
+ * 
+ * @author Yaswanth
+ * 
+ * @since November 2012
+ */
 @Path("/api/subscription")
 public class SubscriptionApi
 {
     /**
-     * Get subscription entity of current domain
+     * Gets subscription entity of current domain
      * 
      * @return {@link Subscription}
      * @throws StripeException
@@ -35,9 +47,9 @@ public class SubscriptionApi
     }
 
     /**
-     * Called from client either for new Subscription or updating user
-     * creditcard or plan for current domain, Based on the type of
-     * request(create, update(creditcard or plan) respective methods are called)
+     * Called from client either for new Subscription or updating user credit
+     * card or plan , Based on the type of request(create, update(credit card or
+     * plan) respective methods are called)
      * 
      * @param subscribe
      *            {@link Subscription}
@@ -114,8 +126,7 @@ public class SubscriptionApi
     }
 
     /**
-     * Update creditcard details of customer of current domain subscription
-     * object
+     * Updates credit card details of customer and updates subscription object
      * 
      * @param card_details
      * @return {@link Subscription}
@@ -131,6 +142,11 @@ public class SubscriptionApi
 	return Subscription.updateCreditCard(card_details);
     }
 
+    /**
+     * Fetches invoices of subscription details
+     * 
+     * @return {@link List}
+     */
     @Path("/invoices")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -148,7 +164,7 @@ public class SubscriptionApi
     }
 
     /**
-     * Delete subscription object of the domain and deletes related customer
+     * Deletes subscription object of the domain and deletes related customer
      */
     @Path("delete/account")
     @DELETE
@@ -172,7 +188,7 @@ public class SubscriptionApi
     }
 
     /**
-     * Cancel subscription from gate way but never delete {@link Subscription}
+     * Cancels subscription from gateway but never delete {@link Subscription}
      * entity
      */
     @Path("/cancel/subscription")

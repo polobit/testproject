@@ -20,7 +20,7 @@ import com.agilecrm.core.DomainUser;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deferred.TagsDeferredTask;
-import com.agilecrm.search.ContactDocument;
+import com.agilecrm.search.ContactDocumentUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.NotificationPrefs;
 import com.agilecrm.workflows.Trigger;
@@ -252,7 +252,7 @@ public class Contact extends Cursor
 
 	dao.delete(this);
 
-	ContactDocument.deleteDocument(contact);
+	ContactDocumentUtil.deleteDocument(contact);
 
 	// Delete Notes
 	Note.deleteAllNotes(id);
@@ -291,7 +291,7 @@ public class Contact extends Cursor
 	    Trigger.executeTriggerforScore(id, lead_score,
 		    Trigger.Type.ADD_SCORE);
 	dao.put(this);
-	ContactDocument.buildDocument(this);
+	ContactDocumentUtil.buildDocument(this);
 
     }
 

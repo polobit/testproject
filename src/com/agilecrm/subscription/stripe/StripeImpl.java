@@ -8,6 +8,8 @@ import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.Globals;
 import com.agilecrm.subscription.AgileBilling;
+import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.stripe.Stripe;
@@ -16,11 +18,26 @@ import com.stripe.model.Customer;
 import com.stripe.model.Invoice;
 
 /**
- * The <code>StringImpl</code> class is to connect and make transactions with
- * stripe payment gateway, It includes methods for creating, deleting,
- * updating(plan, customer, creditcard) of customer and cancel subscription
+ * <code>StringImpl</code> is implementation {@link AgileBilling}, This
+ * implementation provides all billing features specified in
+ * {@link AgileBilling} interface.
+ * <p>
+ * This class contains an API key(key provided by stripe for each account) to
+ * establish connections to stripe gateway
+ * </P>
+ * It includes methods for creating, deleting, updating(plan, customer, credit
+ * card) of a customer, canceling customer's subscription, these methods allow
+ * to make transactions with stripe account related to the API Key(specified in
+ * {@link Globals})
+ * 
+ * 
+ * This class is can be used when billing operations are to be done through
+ * stripe. Currently used from {@link Subscription} to perform billing
+ * operations
  * 
  * @author Yaswanth
+ * 
+ * @since November 2012
  * @see com.agilecrm.subscription.AgileBilling
  * @see com.agilecrm.subscription.Subscription
  * @see com.agilecrm.subscription.stripe.StripeUtil
@@ -33,8 +50,14 @@ public class StripeImpl implements AgileBilling
     }
 
     /**
-     * Create customer in Stripe subscribes the customer to plan based on plan
-     * object
+     * Creates customer in Stripe, adds subscription to the customer to
+     * according to plan chosen and processes the payment.
+     * <p>
+     * If {@link Customer} can not be created due to invalid parameters(credit
+     * card number, cvc, card expiry date), then stripe raises an exception
+     * which is propagated to methods down the stack, so user can be notified
+     * about the payment failure
+     * </p>
      * 
      * @param cardDetails
      *            {@link CreditCard}
@@ -44,9 +67,8 @@ public class StripeImpl implements AgileBilling
      * @return {@link Customer} as {@link JSONObject}
      * 
      * @throws Exception
-     *             if {@link Customer} canot be created or if any parameters are
-     *             not valid(cardnumber, cvc, expiry) should be sent to client
-     *             to show message to user
+     * 
+     * 
      */
     public JSONObject createCustomer(CreditCard cardDetails, Plan plan) throws Exception
     {
@@ -54,14 +76,17 @@ public class StripeImpl implements AgileBilling
 	// Creates customer and add subscription to it
 	Customer customer = Customer.create(StripeUtil.getCustomerParams(cardDetails, plan));
 
-	// Return Customer json
+	// Return Customer JSON
 	return StripeUtil.getJSONFromCustomer(customer);
 
     }
 
     /**
-     * Update the plan of the customer based on the customer and plan object
-     * parameters
+     * Updates the plan of the customer based on the customer(on which customer
+     * update needs to be done) and plan object parameters.
+     * <p>
+     * Plan upgrade in Stripe is pro-rated
+     * </p>
      * 
      * @param stripeCustomer
      *            {@link Customer}, as {@link JSONObject},
@@ -73,15 +98,15 @@ public class StripeImpl implements AgileBilling
     public JSONObject updatePlan(JSONObject stripeCustomer, Plan plan) throws Exception
     {
 
-	// Get Cutomer to update its plan
+	// Gets Customer Object to update its plan
 	Customer customer = StripeUtil.getCustomerFromJson(stripeCustomer);
 
-	// Set changes plan preferences
+	// Sets plan changes in a map
 	Map<String, Object> updateParams = new HashMap<String, Object>();
 	updateParams.put("plan", plan.plan_id);
 	updateParams.put("quantity", plan.quantity);
 
-	// Update customer with changed plan
+	// Updates customer with changed plan
 	customer = customer.update(updateParams);
 
 	// Returns Customer object as JSONObject
@@ -89,7 +114,9 @@ public class StripeImpl implements AgileBilling
     }
 
     /**
-     * Update customer credit card details of Stripe customer
+     * Updates customer credit card details in Stripe. If an exception raised
+     * while updating a customer then it is propagated back the show failure
+     * message to user
      * 
      * @param stripeCustomer
      *            , {@link Customer} , cardDetails {@link CreditCard}
@@ -102,25 +129,34 @@ public class StripeImpl implements AgileBilling
 	    throws Exception
     {
 
-	// Get Customer to update credit card retrieves from stripe
+	/*
+	 * Gets Customer retrieves from stripe based on customer id, to update
+	 * credit card
+	 */
 	Customer customer = StripeUtil.getCustomerFromJson(stripeCustomer);
 
 	Map<String, Object> updateParams = new HashMap<String, Object>();
 
-	// Gets Map of card params to be sent to stripe in update params
+	/*
+	 * Gets Map of card parameters to be sent to stripe, to update customer
+	 * card details in stripe
+	 */
 	Map<String, Object> cardParams = StripeUtil.getCardParms(cardDetails);
 
-	// Set changed credit card details
+	/*
+	 * Adds changed credit card details to map, which is sent to Stripe as
+	 * to update card details
+	 */
 	updateParams.put("card", cardParams);
 
-	// Update customer with changed card details
+	// Updates customer with changed card details
 	customer = customer.update(updateParams);
 
 	return StripeUtil.getJSONFromCustomer(customer);
     }
 
     /**
-     * Get invoices of customer given as param
+     * Gets List of invoices of particular customer(passed as parameter)
      * 
      * @param stripeCustomer
      *            {@link Customer} as JSONObject {@link JSONObject}
@@ -133,18 +169,21 @@ public class StripeImpl implements AgileBilling
     {
 	Map<String, Object> invoiceParams = new HashMap<String, Object>();
 
-	// Set invoice params (required to get invoices from stripe)
+	// Sets invoice parameters (Stripe customer id is required to get
+	// invoices of a customer form stripe)
 	invoiceParams.put("customer", StripeUtil.getCustomerFromJson(stripeCustomer).getId());
 
-	// Fetch all invoices for given stripe id which return list<invoices>
-
-	// return json_array;
+	/*
+	 * Fetches all invoices for given stripe customer id and returns
+	 * invoices
+	 */
 	return Invoice.all(invoiceParams).getData();
-
     }
 
     /**
-     * Delete customer from Stripe and cancel subscription
+     * Deletes customer from Stripe, which raises an webhook to
+     * {@link StripeWebhookServlet}, on processing webhook it deletes
+     * {@link Subscription} object
      * 
      * @param stripeCustomer
      *            {@link Customer} as {@link JSONObject}
@@ -155,13 +194,15 @@ public class StripeImpl implements AgileBilling
     {
 	Customer customer = StripeUtil.getCustomerFromJson(stripeCustomer);
 
-	// Delete customer from stripe which raises webhook gets handled in
-	// servlet
+	/*
+	 * Deletes customer from stripe, this operation in stripe raises a
+	 * webhook gets handled and deletes subscription object of the domain
+	 */
 	customer.delete();
     }
 
     /**
-     * Cancel customer subscription in Stripe
+     * Cancels customer subscription in Stripe
      * 
      * @param stripeCustomer
      *            {@link Customer} as {@link JSONObject}

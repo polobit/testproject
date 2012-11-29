@@ -13,6 +13,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.subscription.stripe.StripeImpl;
+import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.util.ClickDeskEncrytion;
@@ -26,14 +28,34 @@ import com.stripe.model.Customer;
 import com.stripe.model.Invoice;
 
 /**
- * The <code>Subscription</code> is to store subscription information, stores
- * Customer details, encrypted creditcard details, billing status, plan,
- * subscription created and updated time
+ * <code>Subscription</code> class represents subscription details of a domain.
+ * <p>
+ * This class holds information about domain's current plan represented by
+ * {@link Plan}, Billing status represent by {@link BillingStatus}, RSA
+ * encrypted( using {@link ClickDeskEncrytion}) domain user's credit card
+ * information, subscription created/updated time and gateway used for payment.
+ * </p>
+ * Billing operations are done through this class, it calls {@link AgileBilling}
+ * implementation class depending on the selected gateway. Whenever changes are
+ * made either in card details or plan(change in subscription), It calls methods
+ * to update card/plan(on change) details in gateway, then updated customer
+ * object from gateway is saved as JSON string in subscription entity.
+ * <p>
+ * This class is used when a subscription is being created or updated. Calls are
+ * made through SubcriptionApi for updating(card/plan), creating subscription.
+ * It is also used in {@link StripeWebhookServlet} whenever web hook is raised
+ * then billing status of subscription entity is set accordingly, based on the
+ * event type of the web hook and event occurrence count of failed billing
+ * attempts.
+ * </p>
  * 
  * @since November 2012
  * 
  * @author Yaswanth
  * 
+ * @see AgileBilling
+ * @see StripeImpl
+ * @see StripeWebhookServlet
  */
 @XmlRootElement
 public class Subscription
@@ -41,7 +63,7 @@ public class Subscription
     @Id
     public Long id;
 
-    /** The plan object is used to store plan and quantity */
+    /** The plan object represents plan and quantity */
     @Embedded
     @NotSaved(IfDefault.class)
     public Plan plan = null;
@@ -53,25 +75,17 @@ public class Subscription
     @NotSaved
     public CreditCard card_details = null;
 
-    /**
-     * The encrypted_card_details are encrypted form of card_details, Encrypted
-     * before saving {@link Subscription} Entity
-     */
-    @NotSaved(IfDefault.class)
-    private String encrypted_card_details = null;
-
     /** This {@link Enum} Type represents subscription status of domain */
-    public static enum Type
+    public static enum BillingStatus
     {
 	BILLING_FAILED_0, BILLING_FAILED_1, BILLING_FAILED_2, BILLING_FAILED_3, BILLING_SUCCESS, SUBSCRIPTION_DELETED
     };
 
     /**
-     * The status {@link Enum} type variable is used to set status of
-     * Subscription status
+     * The status {@link Enum} type variable holds status of Subscription status
      */
     @NotSaved(IfDefault.class)
-    public Type status;
+    public BillingStatus status;
 
     /** The created_time variable represents when subscription object is created */
     @NotSaved(IfDefault.class)
@@ -82,14 +96,6 @@ public class Subscription
     @NotSaved(IfDefault.class)
     @Indexed
     public Long updated_time = 0L;
-
-    /**
-     * The billing_data {@link JSONObject} is never saved directly but saved in
-     * the form of string converted in prepersit temporary variable used to keep
-     * {@link Customer} as {@link JSONObject}
-     */
-    @NotSaved
-    private JSONObject billing_data;
 
     /**
      * The billing_data_json_string represents {@link String} form of
@@ -106,11 +112,25 @@ public class Subscription
     };
 
     /**
-     * This variable gateway of type {@link Gateway} stores the gateway in which
-     * user made payment
+     * Gateway which is used to make a payment
      */
     @NotSaved(IfDefault.class)
     public Gateway gateway;
+
+    /**
+     * The encrypted_card_details are encrypted form of card_details, Encrypted
+     * before saving {@link Subscription} Entity
+     */
+    @NotSaved(IfDefault.class)
+    private String encrypted_card_details = null;
+
+    /**
+     * The billing_data {@link JSONObject} is never saved directly but saved in
+     * the form of string converted in prepersit temporary variable used to keep
+     * {@link Customer} as {@link JSONObject}
+     */
+    @NotSaved
+    private JSONObject billing_data;
 
     private static ObjectifyGenericDao<Subscription> dao = new ObjectifyGenericDao<Subscription>(
 	    Subscription.class);
@@ -131,7 +151,7 @@ public class Subscription
     }
 
     /**
-     * This method return {@link Subscription} object of current domain
+     * Returns {@link Subscription} object of current domain
      * 
      * @return {@link Subscription}
      * */
@@ -165,19 +185,19 @@ public class Subscription
      */
     public Subscription createNewSubscription() throws Exception
     {
-	// Create customer add subscription
+	// Creates customer and adds subscription
 	billing_data = getAgileBilling().createCustomer(card_details, plan);
 
-	// Save new subscription information
+	// Saves new subscription information
 	save();
 
 	return this;
     }
 
     /**
-     * Updates the {@link Subscription} of existing user if user is already in
+     * Updates the {@link Subscription} of existing user, if user is already in
      * same plan(plan_id and quantity both are considered) the method performs
-     * not action and returns to avoid unnecessary payments
+     * no action, to avoid unnecessary payments
      * 
      * @param plan
      *            {@link Plan}
@@ -195,23 +215,23 @@ public class Subscription
 		&& plan.quantity.equals(subscription.plan.quantity))
 	    return subscription;
 
-	// Update the plan in related gateway
+	// Updates the plan in related gateway
 	subscription.billing_data = subscription.getAgileBilling().updatePlan(
 		subscription.billing_data, plan);
 
-	// Update plan in current domain subscription object
+	// Updates plan of current domain subscription object
 	subscription.plan = plan;
 
-	// Save updated subcription object
+	// Saves updated subcription object
 	subscription.save();
 
 	return subscription;
     }
 
     /**
-     * Update credit card details of customer in its respective gateway and
-     * saves the new customer object and new card detials(enrypted before
-     * saving)
+     * Updates credit card details of customer in its respective gateway and
+     * saves the new customer object(returned from Stripe), new card detials
+     * (encrypted before saving).
      * 
      * @param cardDetails
      *            {@link CreditCard}
@@ -224,22 +244,22 @@ public class Subscription
 	// Gets subscription of current domain
 	Subscription subscription = getSubscription();
 
-	// Update credit card details in related gateway
+	// Updates credit card details in related gateway
 	subscription.billing_data = subscription.getAgileBilling().updateCreditCard(
 		subscription.billing_data, cardDetails);
 
-	// Assign store card details which will be encrypted before saving
+	// Assigns details which will be encrypted before saving
 	// subscription entity
 	subscription.card_details = cardDetails;
 
-	// Save updated details
+	// Saves updated details
 	subscription.save();
 
 	return subscription;
     }
 
     /**
-     * Fetch {@link List} of {@link Invoice} from respective gateway
+     * Fetchs {@link List} of {@link Invoice} from respective gateway
      * 
      * @return {@link List} of {@link Invoice}
      * @throws Exception
@@ -257,8 +277,7 @@ public class Subscription
     }
 
     /**
-     * Cancel Subscription cancels the subscription in its respective gateway
-     * and deletes subscription object
+     * Cancels the subscription in its respective gateway
      * 
      * @throws Exception
      */
@@ -278,13 +297,13 @@ public class Subscription
     }
 
     /**
-     * Delete subscription also deletes customer from its related gateway
+     * Deletes subscription and deletes customer from its related gateway
      * 
      * @throws Exception
      */
     public void delete() throws Exception
     {
-	// Delete the customer before deleting agile subscription object
+	// Deletes the customer before deleting agile subscription object
 	try
 	{
 	    deleteCustomer();
@@ -296,7 +315,7 @@ public class Subscription
 	finally
 	{
 	    // If customer object is not found in stripe still subscription
-	    // needs to be delted
+	    // needs to be deleted
 	    dao.delete(this);
 	}
     }
@@ -321,7 +340,7 @@ public class Subscription
     }
 
     /**
-     * Return billing data along with subscription
+     * Returns billing data along with subscription
      * 
      * @return {@link String}
      * @throws Exception
@@ -331,6 +350,20 @@ public class Subscription
     public String getBillingData() throws Exception
     {
 	return billing_data.toString();
+    }
+
+    @PostLoad
+    void PostLoad()
+    {
+	try
+	{
+	    if (billing_data_json_string != null)
+		billing_data = new JSONObject(billing_data_json_string);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 
     @PrePersist
@@ -348,20 +381,6 @@ public class Subscription
 	    // Encrypt creditcard details before saving
 	    this.encrypted_card_details = ClickDeskEncrytion.RSAEncrypt(new Gson().toJson(
 		    this.encrypted_card_details).getBytes());
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-    }
-
-    @PostLoad
-    void PostLoad()
-    {
-	try
-	{
-	    if (billing_data_json_string != null)
-		billing_data = new JSONObject(billing_data_json_string);
 	}
 	catch (Exception e)
 	{
