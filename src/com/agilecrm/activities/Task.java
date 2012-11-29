@@ -12,24 +12,51 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
-import com.agilecrm.util.DateUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
+/**
+ * The <code>Task</code> class stores tasks with their own owner and related
+ * contacts. Tasks are like to-dos. Result oriented. You can assign a category
+ * such as call, email, meeting etc.
+ * <p>
+ * Each task can be related to a single contact or multiple contacts. Also tasks
+ * have current agile user as owner.
+ * </p>
+ * <p>
+ * Tasks can be filtered based on their status of completion. The status of
+ * completion is nothing but completed tasks and pending tasks. While getting
+ * saved as new one each task is saved as pending one, but it can be made as
+ * completed by setting the is_complete variable to true.
+ * </p>
+ * <p>
+ * The <code>Event</code> class provides methods to create, delete and get the
+ * tasks.
+ * </p>
+ * 
+ * @author Rammohan
+ * 
+ */
 @XmlRootElement
 public class Task
 {
 
+    /**
+     * Type of the task
+     */
     // Category - Call etc.
     public enum Type
     {
 	CALL, EMAIL, FOLLOW_UP, MEETING, MILESTONE, SEND, TWEET
     };
 
-    // Priority Type - Default
+    /**
+     * Priority type of the task, indicates the urgency.
+     * 
+     */
     public enum PriorityType
     {
 	HIGH, NORMAL, LOW
@@ -39,46 +66,70 @@ public class Task
     @Id
     public Long id;
 
+    /**
+     * List of contact keys related to a task
+     */
     private List<Key<Contact>> related_contacts = new ArrayList<Key<Contact>>();
 
-    // Due
+    /**
+     * Due date of the task
+     */
     public Long due = 0L;
 
     public Long created_time = 0L;
 
-    // Category - Call etc.
     public Type type;
 
-    // If the task has been completed
+    /**
+     * If the task has been completed
+     */
     public boolean is_complete = false;
 
-    // List of contact id's
+    /**
+     * List of contact ids related to a task
+     */
     @NotSaved(IfDefault.class)
     @Embedded
     public List<String> contacts = null;
 
-    // Owner
+    /**
+     * Owner key of the task
+     */
     private Key<AgileUser> owner = null;
 
     // Dao
     public static ObjectifyGenericDao<Task> dao = new ObjectifyGenericDao<Task>(
 	    Task.class);
 
-    // Priority Type - Added - Ram - 08/02/12
     public PriorityType priority_type;
 
-    // Subject - Added - Ram - 08/02/12
+    /**
+     * Says what the task is.
+     */
     @NotSaved(IfDefault.class)
     public String subject = null;
 
     @NotSaved
     public String entity_type = "task";
 
+    /**
+     * Default constructor
+     */
     Task()
     {
 
     }
 
+    /**
+     * Creates a task with it's type, due date and owner id
+     * 
+     * @param type
+     *            Type of the task (call, email, meeting etc..)
+     * @param due
+     *            Due date of the task
+     * @param agileUserId
+     *            Agile user id to create owner
+     */
     public Task(Type type, Long due, Long agileUserId)
     {
 	// Get Current Agile User
@@ -89,6 +140,10 @@ public class Task
 	    this.owner = new Key<AgileUser>(AgileUser.class, agileUserId);
     }
 
+    /**
+     * Assigns created time for the new one, creates task related contact keys
+     * list with their ids and owner key with current agile user id.
+     */
     @PrePersist
     private void PrePersist()
     {
@@ -118,157 +173,38 @@ public class Task
 	}
     }
 
-    // Get Event
-    public static Task getTask(Long id)
-    {
-	try
-	{
-	    return dao.get(id);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-
-    // Get contact related tasks
-    public static List<Task> getContactTasks(Long contactId) throws Exception
-    {
-	Objectify ofy = ObjectifyService.begin();
-	Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
-
-	return ofy.query(Task.class).filter("related_contacts = ", contactKey)
-		.list();
-    }
-
-    // Get Tasks
-    public static List<Task> getOverdueTasks()
-    {
-	try
-	{
-	    // Get Today's date
-	    DateUtil startDateUtil = new DateUtil();
-	    Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
-
-	    System.out.println("check for " + startTime);
-	    // Get tasks before today's time and which are not completed
-	    return dao.ofy().query(Task.class).filter("due <=", startTime)
-		    .filter("is_complete", false).list();
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-
-    // Get All Tasks
-    public static List<Task> getAllTasks()
-    {
-	try
-	{
-	    return dao.ofy().query(Task.class).list();
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-
-    // Get All Tasks
-    public static List<Task> getAllPendingTasks()
-    {
-	try
-	{
-	    return dao.ofy().query(Task.class).filter("is_complete", false)
-		    .list();
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-
-    // Get Event
-    public static List<Task> getPendingTasks(int numDays)
-    {
-	try
-	{
-	    // Get Today's date
-	    DateUtil startDateUtil = new DateUtil();
-	    Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
-
-	    // Get Date after days days
-	    DateUtil endDateUtil = new DateUtil();
-	    Long endTime = endDateUtil.addDays(numDays + 1).toMidnight()
-		    .getTime().getTime() / 1000;
-
-	    System.out.println("check for " + startTime + " " + endTime);
-
-	    // Get end start and endtime
-	    return dao.ofy().query(Task.class).filter("due >=", startTime)
-		    .filter("due <=", endTime).filter("is_complete", false)
-		    .list();
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-
-    public static List<Task> getPendingTasksToRemind(int numDays,
-	    Key<AgileUser> owner)
-    {
-	try
-	{
-	    // Get Today's date
-	    DateUtil startDateUtil = new DateUtil();
-	    Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
-
-	    // Get Date after days days
-	    DateUtil endDateUtil = new DateUtil();
-	    Long endTime = endDateUtil.addDays(numDays + 1).toMidnight()
-		    .getTime().getTime() / 1000;
-
-	    System.out.println("check for " + startTime + " " + endTime);
-
-	    // Get end start and endtime
-	    return dao.ofy().query(Task.class).filter("owner =", owner)
-		    .filter("due >=", startTime).filter("due <=", endTime)
-		    .filter("is_complete", false).list();
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-
-    // Delete Contact
+    /**
+     * Deletes the task from database
+     */
     public void delete()
     {
 	dao.delete(this);
     }
 
-    // Save Contact
+    /**
+     * Saves the new task and updates the old one
+     */
     public void save()
     {
 
 	dao.put(this);
     }
 
-    // Save Contact
+    /**
+     * Turns the pending task as completed task
+     */
     public void completeTask()
     {
 	is_complete = true;
 	save();
     }
 
-    // Contacts related with task
+    /**
+     * While saving a task it contains list of contact keys, but while
+     * retrieving includes completes contact object.
+     * 
+     * @return List of contact objects
+     */
     @XmlElement
     public List<Contact> getContacts()
     {

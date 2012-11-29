@@ -510,3 +510,13 @@ left:265px;
 width:16px;
 height:16px;
 }
+
+/* Data todo block for tasks view */
+.data-block.todo-block table tr p {
+  margin: 0;
+  line-height: normal;
+}
+.data-block.todo-block table tr p + span {
+  font-size: 11px;
+  color: #a4a5aa;
+}

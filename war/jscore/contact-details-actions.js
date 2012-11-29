@@ -1,6 +1,6 @@
 $(function(){ 
 	// Display activity(task) modal related to contact
-    $('#contact-add-task').live('click', function(e){
+    $('.contact-add-task').live('click', function(e){
     	e.preventDefault();
     	highlightTask();
     	var	el = $("#taskForm");
@@ -9,7 +9,7 @@ $(function(){
     });
     
     // Display note modal related to contact
-    $('#contact-add-note').live('click', function(e){
+    $('.contact-add-note').live('click', function(e){
     	e.preventDefault();
     	var	el = $("#noteForm");
     	fillRelation(el);
