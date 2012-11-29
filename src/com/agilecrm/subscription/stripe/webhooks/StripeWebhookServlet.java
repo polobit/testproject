@@ -102,7 +102,7 @@ public class StripeWebhookServlet extends HttpServlet
 	    // If payment is done set subscription flag to success
 	    if (eventJSON.getString("type").equals(Globals.STRIPE_INVOICE_PAYMENT_SUCCEEDED))
 	    {
-		setSubscriptionFlag(Subscription.Type.BILLING_SUCCESS);
+		setSubscriptionFlag(Subscription.BillingStatus.BILLING_SUCCESS);
 	    }
 
 	    // If payment failed set subscription flag is set to failed and
@@ -153,7 +153,7 @@ public class StripeWebhookServlet extends HttpServlet
 			SendMail.SUBSCRIPTION_DELETED_SUBJECT, event);
 
 		// Set flag to SUBSCRIPTION_DELETED
-		setSubscriptionFlag(Subscription.Type.SUBSCRIPTION_DELETED);
+		setSubscriptionFlag(Subscription.BillingStatus.SUBSCRIPTION_DELETED);
 	    }
 	}
 
@@ -228,8 +228,8 @@ public class StripeWebhookServlet extends HttpServlet
 	if (attemptCount == 0 || attemptCount == 1)
 	{
 	    // Set subscription flag billing failed
-	    Subscription.Type flag = (attemptCount == 0) ? Subscription.Type.BILLING_FAILED_0
-		    : Subscription.Type.BILLING_FAILED_1;
+	    Subscription.BillingStatus flag = (attemptCount == 0) ? Subscription.BillingStatus.BILLING_FAILED_0
+		    : Subscription.BillingStatus.BILLING_FAILED_1;
 
 	    setSubscriptionFlag(flag);
 
@@ -255,7 +255,7 @@ public class StripeWebhookServlet extends HttpServlet
 	// all the domain users in domain
 	if (attemptCount == 2)
 	{
-	    setSubscriptionFlag(Subscription.Type.BILLING_FAILED_2);
+	    setSubscriptionFlag(Subscription.BillingStatus.BILLING_FAILED_2);
 
 	    // Get all domain users in the namespace
 	    List<DomainUser> users = DomainUser.getUsers(namespace);
@@ -285,7 +285,7 @@ public class StripeWebhookServlet extends HttpServlet
      * @param status
      *            {@link Subscription.Type}
      */
-    public void setSubscriptionFlag(Subscription.Type status)
+    public void setSubscriptionFlag(Subscription.BillingStatus status)
     {
 	// Set status and save subscription
 	Subscription subscription = Subscription.getSubscription();
