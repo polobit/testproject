@@ -199,7 +199,7 @@ public class QueryDocument
 	try
 	{
 	    // Get index of document based on type of query
-	    index = (Index) Class.forName("com.agilecrm.search." + type + "Document")
+	    index = (Index) Class.forName("com.agilecrm.search." + type + "DocumentUtil")
 		    .getDeclaredField("index").get(null);
 	}
 	catch (Exception e)
@@ -225,7 +225,7 @@ public class QueryDocument
 
 	try
 	{
-	    return (Collection) Class.forName("com.agilecrm.search." + type + "Document")
+	    return (Collection) Class.forName("com.agilecrm.search." + type + "DocumentUtil")
 		    .getMethod("getRelatedEntities", List.class).invoke(null, entity_ids);
 	}
 	catch (Exception e)
