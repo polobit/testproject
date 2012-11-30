@@ -28,11 +28,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.activities.Task;
-import com.agilecrm.activities.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.search.QueryDocument;
+import com.agilecrm.util.TaskUtil;
 import com.agilecrm.util.Util;
 
 @Path("/api/contacts")

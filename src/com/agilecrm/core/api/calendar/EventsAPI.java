@@ -15,13 +15,32 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import com.agilecrm.activities.Event;
-import com.agilecrm.activities.EventUtil;
+import com.agilecrm.util.EventUtil;
 
+/**
+ * <code>EventAPI</code> includes REST calls to interact with {@link Event}
+ * class to initiate Event CRUD operations
+ * <p>
+ * It is called from client side to create, update, fetch and delete the
+ * events.It also interacts with {@link EventUtil} class to fetch the data of
+ * Event class from database.
+ * </p>
+ * 
+ * @author Rammohan
+ * 
+ */
 @Path("/api/events")
 public class EventsAPI
 {
 
     // Events
+    /**
+     * Gets List of events matched to a search range
+     * 
+     * @param req
+     *            HttpServletRequest parameter
+     * @return List of events matched to a search range
+     */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Event> getEvents(@Context HttpServletRequest req)
@@ -50,6 +69,13 @@ public class EventsAPI
     }
 
     // Get Event
+    /**
+     * Gets an event based on id
+     * 
+     * @param id
+     *            unique id of event
+     * @return {@link Event}
+     */
     @Path("{id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -60,6 +86,12 @@ public class EventsAPI
     }
 
     // Delete Event
+    /**
+     * Deletes an event based on id
+     * 
+     * @param id
+     *            unique id of event
+     */
     @Path("{id}")
     @DELETE
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -78,6 +110,13 @@ public class EventsAPI
     }
 
     // New Event
+    /**
+     * Saves a new event in database
+     * 
+     * @param event
+     *            {@link Event} from form data
+     * @return {@link Event}
+     */
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -88,6 +127,13 @@ public class EventsAPI
     }
 
     // Update Event
+    /**
+     * Updates an existing event
+     * 
+     * @param event
+     *            {@link Event}
+     * @return {@link Event}
+     */
     @PUT
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })

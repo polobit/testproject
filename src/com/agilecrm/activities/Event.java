@@ -86,6 +86,7 @@ public class Event
     /**
      * Owner key of the event
      */
+    @NotSaved(IfDefault.class)
     private Key<AgileUser> owner = null;
 
     /**
@@ -153,13 +154,8 @@ public class Event
 	dao.put(this);
     }
 
-    public String toString()
-    {
-	return ("Start " + start + "  End: " + end + " Range: " + search_range);
-    }
-
     /**
-     * Create a range object for start and end date so that we can search
+     * Creates a range object for start and end date so that we can search
      * between the two
      */
     @PrePersist
@@ -172,6 +168,11 @@ public class Event
 	search_range = new ArrayList<Long>();
 	search_range.add(start);
 	search_range.add(end);
+    }
+
+    public String toString()
+    {
+	return ("Start " + start + "  End: " + end + " Range: " + search_range);
     }
 
 }

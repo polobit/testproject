@@ -1,31 +1,28 @@
-// UI Handlers for activities - event & task
-$(function(){ 
-		
-    
-    	// Show activity modal
+/**
+ * event.js
+ *
+ * event.js is a script file to deal with the actions like creation, updation and deletion of 
+ * events from client side.
+ * ------------------------------------------------
+ *  author:  Rammohan
+ */
+
+$(function(){
+
+		// Show activity modal
+		// Highlight the event features 	
 		$('#show-activity').live('click', function (e) {
 			e.preventDefault();
 			highlightEvent();
 			$("#activityModal").modal('show');
 		});
-	
-		// Save task & event - Rammohan 03-08-2012
-	    $('#task_event_validate').die().live('click', function (e) {
-	    	        e.preventDefault();
-	    	       
-	    	        // Save functionality for task by checking task or not
-	    	        if ($("#hiddentask").val() == "task") { 
-	    	        	
-	    	        	saveTask('taskForm', 'activityModal');
-	    	        }
-	    	        else
-	    	        { 
-	    	        	// Save functionality for event
-	    	        	saveEvent('activityForm', 'activityModal');
-	    	        }
-	    }); //End of Task and Event Validation function
 	   
 	    // Update event
+		// When click on update of event-update-modal, it calls saveEvent function with 
+	    // parameters
+	    //          -formId (to serialize the form)
+	    //          -modalId (to hide and reset the modal)
+	    //          -boolean true (to indicate that the called function is updating the existing task)
 	    $('#update_event_validate').die().live('click', function (e) {
 	    		e.preventDefault();
 	    		
@@ -57,54 +54,8 @@ $(function(){
 	    			}
 	    		});
 	    });
-	    
-	    // Edit task
-	    $('#overdue > tr').live('click', function(e){
-			e.preventDefault();
-			updateTask(this);
-	    });	
-	    
-	    $('#today > tr').live('click', function(e){
-			e.preventDefault();
-			updateTask(this);
-	    });
-	    
-	    $('#tomorrow > tr').live('click', function(e){
-			e.preventDefault();
-			updateTask(this);
-	    });
-	    
-	    $('#next-week > tr').live('click', function(e){
-			e.preventDefault();
-			updateTask(this);
-	    });
-	    
-	    // Update task
-	    $('#update_task_validate').click(function (e) {
-	    		e.preventDefault();
 	    		
-	    		saveTask('updateTaskForm', 'updateTaskModal', true);
-	    });
-	    
-	 // Hide event of update task modal
-	    $('#updateTaskModal').on('hidden', function () {
-	    	  
-	    	  // Remove appended contacts from related-to
-	    	  $("#updateTaskForm").find("li").remove();
-	    });
-	    
-	 // show event of update task modal
-	    $('#updateTaskModal').on('shown', function () {
-	    	
-	    	// Activate related-to field of update task form 
-			var	el = $("#updateTaskForm");
-	    	agile_type_ahead("update_task_related_to", el, contacts_typeahead);
-	    });
-	    
-	    		// Date Picker
-			    $('#task-date-1').datepicker({
-			        format: 'mm-dd-yyyy'
-			    });
+	    		// Date picker
 			    $('#event-date-1').datepicker({
 			        format: 'mm-dd-yyyy'
 			    });
@@ -135,40 +86,15 @@ $(function(){
 			    	
 			    });
 			    
-			    // Switch Task and Event: changing color and font-weight
-			    $("#task").click(function (e) {
-			    	e.preventDefault();
-			    	highlightTask();
-			     	
-			        var	el = $("#taskForm");
-			    	agile_type_ahead("task_related_to", el, contacts_typeahead);
-			    });
-			    $("#event").click( function (e) {
+			   // Switch Task and Event: changing color and font-weight
+			   $("#event").click( function (e) {
 			    	e.preventDefault();
 			    	highlightEvent();
 			   });
 			    
-			    // Hide event of activity modal
-			    $('#activityModal').on('hidden', function () {
-			    	  
-			    	  // Remove appended contacts from related-to
-			    	  $("#taskForm").find("li").remove();
-			    	  
-			    	 // Remove validation error messages
-			    	  removeValidationErrors('activityModal');
-			    });
 });
 
-// Highlight task
-function highlightTask(){
-    $("#hiddentask").val("task");
-    $("#task").css("color", "black");
-    $("#event").css("color", "#DD4814");
-    $("#relatedEvent").css("display", "none");
-    $("#relatedTask").css("display", "block");
-}
-
-// Highlight event
+//Highlight event
 function highlightEvent(){
 	$("#hiddentask").val("event");
     $("#event").css("color", "black");
@@ -201,76 +127,6 @@ function isValidRange(startDate, endDate, startTime, endTime){
 		return true;
 }
 
-// Save Task
-function saveTask(formId, modalId, isUpdate){
-	if (!isValidForm('#' + formId))
-    	return false;
-	
-	// Show loading symbol until model get saved
-    $('#' + modalId).find('span.save-status').html(LOADING_HTML);
-    
-   	var json = serializeForm(formId);
-   	if(!isUpdate)
-   		json.due = new Date(json.due).getTime()/1000.0;
-	
-	var newTask = new Backbone.Model();
-	newTask.url = 'core/api/tasks';
-	newTask.save(json,{
-		success: function(data){
-			$('#' + formId).each (function(){
-	          	  this.reset();
-	          	});
-			
-			$('#' + modalId).find('span.save-status img').remove();
-	        $('#' + modalId).modal('hide');
-		    
-   	        var task = data.toJSON();
-   	        if(Current_Route == 'calendar'){
-   	        	if(isUpdate)
-   	        		App_Calendar.tasksListView.collection.remove(json);
-   	        	
-    	        // Update task list view 
-	        	App_Calendar.tasksListView.collection.add(data);
-	        	App_Calendar.tasksListView.render(true);
-	        }
-   	        // Update data to temeline 
-   	        else if(App_Contacts.contactDetailView){
-				$.each(task.contacts, function(index, contact){
-					if(contact.id == App_Contacts.contactDetailView.model.get('id')){
-						
-						// Activate timeline in contact detail tab and tab content
-						activateTimelineTab();
-						
-						$('#timeline').isotope( 'insert', $(getTemplate("timeline", data.toJSON())) );
-						
-						// Add task to tasks collection in contact detail tabs
-						/*if(TASKSVIEW){
-							TASKSVIEW.collection.add(data);
-							TASKSVIEW.render(true);
-						}*/
-						return false;
-					}	
-
-				});
-				if(Current_Route != "contact/" + App_Contacts.contactDetailView.model.get('id')){
-					App_Calendar.navigate("calendar", {
-    	        		trigger: true
-    	        	});
-				}
-   	        }else{
-	        	App_Calendar.navigate("calendar", {
-	        		trigger: true
-	        	});
-	        }
-		} 
-	});
-}
-
-function updateTask(ele){
-	deserializeForm($(ele).data().toJSON(), $("#updateTaskForm"));
-	
-	$("#updateTaskModal").modal('show');
-}
 // Save event
 function saveEvent(formId, modalName, isUpdate){
 	// Save functionality for event
@@ -331,30 +187,30 @@ function saveEvent(formId, modalName, isUpdate){
        });
 }
 
-// Get Hours and Mins for the current time. It will be padded for 15 mins
+//Get Hours and Mins for the current time. It will be padded for 15 mins
 function getHHMM(end_time) {
 	
 	
 	var hours = new Date().getHours();
 	var minutes = new Date().getMinutes();
 	
-    if (minutes % 15 != 0)
-     minutes = minutes - (minutes % 15);
-    
-    // Make end time 30 minutes more than start time
-    if(end_time){
-    	if(minutes == "30"){
-    		hours = hours + 1;
-    		minutes = 0;
-    	}else if(minutes == "45"){
-    		hours = hours + 1;
-    		minutes = 15;
-    	}else
-    		minutes = minutes + 30;
-    }	
-    
-    if (hours   < 10) {hours   = "0"+hours;}
-    if (minutes < 10) {minutes = "0"+minutes;}
-    
-    return hours + ':' + minutes;
+ if (minutes % 15 != 0)
+  minutes = minutes - (minutes % 15);
+ 
+ // Make end time 30 minutes more than start time
+ if(end_time){
+ 	if(minutes == "30"){
+ 		hours = hours + 1;
+ 		minutes = 0;
+ 	}else if(minutes == "45"){
+ 		hours = hours + 1;
+ 		minutes = 15;
+ 	}else
+ 		minutes = minutes + 30;
+ }	
+ 
+ if (hours   < 10) {hours   = "0"+hours;}
+ if (minutes < 10) {minutes = "0"+minutes;}
+ 
+ return hours + ':' + minutes;
 }

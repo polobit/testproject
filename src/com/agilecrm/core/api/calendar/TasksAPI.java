@@ -17,13 +17,30 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.activities.Task;
-import com.agilecrm.activities.TaskUtil;
+import com.agilecrm.util.TaskUtil;
 
+/**
+ * <code>TaskAPI</code> includes REST calls to interact with {@link Task} class
+ * to initiate Task CRUD operations
+ * <p>
+ * It is called from client side to create, update, fetch and delete the
+ * tasks.It also interacts with {@link TaskUtil} class to fetch the data of Task
+ * class from database.
+ * </p>
+ * 
+ * @author Rammohan
+ * 
+ */
 @Path("/api/tasks")
 public class TasksAPI
 {
 
     // Tasks
+    /**
+     * Gets all pending tasks
+     * 
+     * @return List of pending tasks
+     */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Task> getOverdueTasks()
@@ -40,6 +57,11 @@ public class TasksAPI
     }
 
     // All Tasks
+    /**
+     * Gets all tasks including pending and completed
+     * 
+     * @return List of all tasks
+     */
     @Path("/all")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -57,6 +79,13 @@ public class TasksAPI
     }
 
     // Tasks
+    /**
+     * Gets the tasks which have been pending for particular no.of days
+     * 
+     * @param numdays
+     *            Days of pending
+     * @return List of pending tasks have been pending for particular no.of days
+     */
     @Path("pending/{num-days}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -75,6 +104,13 @@ public class TasksAPI
     }
 
     // Get Task
+    /**
+     * Gets a task based on id
+     * 
+     * @param id
+     *            unique id of task
+     * @return {@link Task}
+     */
     @Path("{id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -85,6 +121,12 @@ public class TasksAPI
     }
 
     // Delete Task
+    /**
+     * Deletes a task based on id
+     * 
+     * @param id
+     *            unique id of task
+     */
     @Path("{id}")
     @DELETE
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -103,6 +145,13 @@ public class TasksAPI
     }
 
     // New Task
+    /**
+     * Saves new task
+     * 
+     * @param task
+     *            {@link Task}
+     * @return {@link Task}
+     */
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -113,6 +162,13 @@ public class TasksAPI
     }
 
     // Update Task
+    /**
+     * Updates the existing task
+     * 
+     * @param task
+     *            {@link Task}
+     * @return {@link Task}
+     */
     @PUT
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -123,6 +179,13 @@ public class TasksAPI
     }
 
     // Bulk operations - delete
+    /**
+     * Deletes tasks bulk
+     * 
+     * @param model_ids
+     *            task ids, read as form parameter from request url
+     * @throws JSONException
+     */
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)

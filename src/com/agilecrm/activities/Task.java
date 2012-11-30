@@ -104,11 +104,15 @@ public class Task
     public PriorityType priority_type;
 
     /**
-     * Says what the task is.
+     * Says what the task is. If it is null shouldn't save in database.
      */
     @NotSaved(IfDefault.class)
     public String subject = null;
 
+    /**
+     * Separates task from bulk of other models at client side. And no queries
+     * run on this, so no need to save in the database.
+     */
     @NotSaved
     public String entity_type = "task";
 
@@ -138,39 +142,6 @@ public class Task
 
 	if (agileUserId != 0)
 	    this.owner = new Key<AgileUser>(AgileUser.class, agileUserId);
-    }
-
-    /**
-     * Assigns created time for the new one, creates task related contact keys
-     * list with their ids and owner key with current agile user id.
-     */
-    @PrePersist
-    private void PrePersist()
-    {
-
-	// Store Created Time
-	if (created_time == 0L)
-	    created_time = System.currentTimeMillis() / 1000;
-
-	if (this.contacts != null)
-	{
-	    // Create list of Contact keys
-	    for (String contact_id : this.contacts)
-	    {
-		this.related_contacts.add(new Key<Contact>(Contact.class, Long
-			.parseLong(contact_id)));
-	    }
-
-	    this.contacts = null;
-	}
-
-	// Create owner key
-	if (owner == null)
-	{
-	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
-	    if (agileUser != null)
-		this.owner = new Key<AgileUser>(AgileUser.class, agileUser.id);
-	}
     }
 
     /**
@@ -213,6 +184,39 @@ public class Task
 	List<Contact> contacts_list = new ArrayList<Contact>();
 	contacts_list.addAll(ofy.get(this.related_contacts).values());
 	return contacts_list;
+    }
+
+    /**
+     * Assigns created time for the new one, creates task related contact keys
+     * list with their ids and owner key with current agile user id.
+     */
+    @PrePersist
+    private void PrePersist()
+    {
+
+	// Store Created Time
+	if (created_time == 0L)
+	    created_time = System.currentTimeMillis() / 1000;
+
+	if (this.contacts != null)
+	{
+	    // Create list of Contact keys
+	    for (String contact_id : this.contacts)
+	    {
+		this.related_contacts.add(new Key<Contact>(Contact.class, Long
+			.parseLong(contact_id)));
+	    }
+
+	    this.contacts = null;
+	}
+
+	// Create owner key
+	if (owner == null)
+	{
+	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
+	    if (agileUser != null)
+		this.owner = new Key<AgileUser>(AgileUser.class, agileUser.id);
+	}
     }
 
 }

@@ -1,9 +1,22 @@
-package com.agilecrm.activities;
+package com.agilecrm.util;
 
 import java.util.List;
 
+import com.agilecrm.activities.Event;
 import com.agilecrm.db.ObjectifyGenericDao;
 
+/**
+ * <code>EventUtil</code> is utility class used to process data of {@link Event}
+ * class, It processes only when fetching the data from <code>Event<code> class
+ * <p>
+ * This utility class includes methods need to return different types of events.
+ * It's methods return all events, event tracked by an id and
+ * events by their search range.
+ * </p>
+ * 
+ * @author Rammohan
+ * 
+ */
 public class EventUtil
 {
     // Dao
@@ -11,7 +24,8 @@ public class EventUtil
 	    Event.class);
 
     /**
-     * The Event locator based on id
+     * Returns Event based on Id. If no event is present with that id, returns
+     * null.
      * 
      * @param id
      *            Id of an Event
@@ -65,8 +79,6 @@ public class EventUtil
 	    return dao.ofy().query(Event.class)
 		    .filter("search_range >=", start)
 		    .filter("search_range <=", end).list();
-	    // return dao.ofy().query(Event.class).filter("search_range >=",
-	    // start).list();
 	}
 	catch (Exception e)
 	{
