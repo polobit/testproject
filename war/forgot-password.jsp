@@ -1,7 +1,10 @@
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.core.DomainUser"%>
 <%
-
+/*
+It checks first if user exists then a mail is sent to that id along with newly generated password 
+and success message is shown. Else error is shown in the same page.
+*/
 String error = "", success = "";
 //If Email is present
 String email = request.getParameter("email");
@@ -159,7 +162,8 @@ jQuery.validator.setDefaults({
 		
 		<script type="text/javascript">
 		$(document).ready(function() {			
-						
+		  
+		  //form is self submitted
           $("#forgot_password").validate({
 				 submitHandler: function(form) {
 					   form.submit();
@@ -167,6 +171,8 @@ jQuery.validator.setDefaults({
 					});
 			
 		});
+		
+		//validates the form fields
 		function isValid(){
 		    $("#forgot_password").validate();
 		    return $("#forgot_password").valid();

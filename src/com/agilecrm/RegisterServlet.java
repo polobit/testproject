@@ -17,6 +17,26 @@ import com.agilecrm.util.Util;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
 
+/**
+ * <code>RegisterServlet</code> class registers the user gives access to the
+ * account in agile crm.
+ * 
+ * Register page have Open ID’s and Sign in options for registering users.
+ * <p>
+ * When user wants to register using open ID from register page it navigates to
+ * the Google account page after providing the credentials it will navigate to
+ * the Dashboard (Same applicable for the Yahoo).
+ * </p>
+ * 
+ * If user wants to register using the Email ID, it will check for the valid
+ * credentials if provided navigates to dashbord. if not shows error in register
+ * page.
+ * 
+ * @author mantra
+ * 
+ * @since October 2012
+ */
+
 @SuppressWarnings("serial")
 public class RegisterServlet extends HttpServlet
 {
@@ -27,6 +47,20 @@ public class RegisterServlet extends HttpServlet
 	doGet(request, response);
     }
 
+    /**
+     * If the user registering under a domain which is already existing, or the
+     * domain is empty then it is redirected to choose domain page.
+     * <p>
+     * It checks whether user wants to register using existing google/yahoo
+     * accounts(Oauth registration) or by giving his own credentials(Agile
+     * registration).
+     * </p>
+     * 
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
 	    throws IOException, ServletException
     {
@@ -70,6 +104,22 @@ public class RegisterServlet extends HttpServlet
 	request.getRequestDispatcher("register.jsp").forward(request, response);
     }
 
+    /**
+     * If the user is registering using Oauth, it first checks if user
+     * information already exists then if exists domain user is created and it
+     * is redirected to home page, if not - it checks for the url, if it is
+     * present it deletes the previous session and to OpenId Servlet.
+     * <p>
+     * Then if user allows it gets the user information from that account then
+     * sets the session and domain user is created and is redirected to home
+     * page, else if user do not allow to share that accounts information it is
+     * again redirected to choose domain page.
+     * </p>
+     * 
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     public void registerOAuth(HttpServletRequest request,
 	    HttpServletResponse response) throws Exception
     {
@@ -102,6 +152,15 @@ public class RegisterServlet extends HttpServlet
 	return;
     }
 
+    /**
+     * If the user registers with Agile form, it will check for username, email,
+     * password and if present, all these data is stored in UserInfo class
+     * object and domain user is created in the new domain.
+     * 
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     void registerAgile(HttpServletRequest request, HttpServletResponse response)
 	    throws Exception
     {
@@ -129,6 +188,23 @@ public class RegisterServlet extends HttpServlet
 	response.sendRedirect("https://" + domainUser.domain + ".agilecrm.com/");
     }
 
+    /**
+     * For creating Domain user, it will check whether the user is present
+     * already with that email, Domain user is not created and if present throws
+     * exception.Otherwise, it will capture all information of user such as IP
+     * address, Country, city, etc.. is saved.
+     * <p>
+     * In this case, Domain user created is owner of that domain and he should
+     * be admin and cannot be disabled.
+     * </p>
+     * 
+     * @param request
+     * @param response
+     * @param userInfo
+     * @param password
+     * @return DomainUser
+     * @throws Exception
+     */
     DomainUser createUser(HttpServletRequest request,
 	    HttpServletResponse response, UserInfo userInfo, String password)
 	    throws Exception

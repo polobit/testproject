@@ -16,15 +16,45 @@ import com.agilecrm.session.UserInfo;
 import com.agilecrm.util.Util;
 import com.google.appengine.api.utils.SystemProperty;
 
+/**
+ * <code>LoginServlet</code> class checks or validates the user who is
+ * registered or added under a particular domain and gives access to agile crm
+ * account.
+ * 
+ * Login page have Open ID’s and Sign in options for registered users
+ * <p>
+ * When user wants to login using open ID from login page it navigates to the
+ * Google account page after providing the credentials it will navigate to the
+ * Dash board (Same applicable for the Yahoo).
+ * </p>
+ * If user login using the Email ID, it will check for the correct credentials
+ * if provided navigates to dashbord. if not shows error in login page.
+ * 
+ * @author mantra
+ * 
+ * @since October 2012
+ */
 @SuppressWarnings("serial")
 public class LoginServlet extends HttpServlet
 {
+
     public void doPost(HttpServletRequest request, HttpServletResponse response)
 	    throws IOException, ServletException
     {
 	doGet(request, response);
     }
 
+    /**
+     * It checks type i.e whether the user comes from Oauth(openId) form or from
+     * Agile(form based) login using login-credentials.
+     * 
+     * For the first time type is null, so we include login.jsp
+     * 
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
 	    throws IOException, ServletException
     {
@@ -74,6 +104,15 @@ public class LoginServlet extends HttpServlet
 	request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 
+    /**
+     * If the type is Oauth then it will check for the URL, then redirected to
+     * OpenId Servlet there it sets the session then validate and send to home
+     * page or throws an exception and includes login.jsp
+     * 
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     void loginOAuth(HttpServletRequest request, HttpServletResponse response)
 	    throws Exception
     {
@@ -93,6 +132,24 @@ public class LoginServlet extends HttpServlet
 	return;
     }
 
+    /**
+     * <p>
+     * If the type is Agile form based, it will check for user name, password or
+     * whether the user exists with this user name previously. If present
+     * matches with the Data store credentials...,i.e. user password is stored
+     * in hash format in data store, so while matching we will convert the
+     * password given by user in login into hash format and then compare them.
+     * If any error occurs throws exception and with error login.jsp is
+     * included.
+     * </p>
+     * By marking ‘Keep me signed in’ keeps the users signed for 5 days without
+     * asking for user name and password unless they log out.If everything fine
+     * redirects to home page by setting session.
+     * 
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     void loginAgile(HttpServletRequest request, HttpServletResponse response)
 	    throws Exception
     {

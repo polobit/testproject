@@ -1,7 +1,10 @@
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.core.DomainUser"%>
 <%
-
+/*
+It checks if any user exists in that domain,
+if user exists,it is redirected to login page in the same domain otherwise it is redirected to register page.
+*/
 String error = "", success = "";
 //If Email is present
 String domain = request.getParameter("subdomain");
@@ -154,11 +157,14 @@ padding-left:10px!important;
 				$(".domain-error").hide();		
 				var subdomain = $("#subdomain").val();
 				
+				// validates the domain value
 				if(subdomain == null || subdomain == "" || subdomain.length < 4 || subdomain.length > 12)
 				{
+					//shows error message
 					$(".domain-error").show();
 					return false;
 				}
+				//Form is self submitted
 				$('#choose_domain').submit();
 				e.preventDefault();
 			});
