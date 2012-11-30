@@ -1,6 +1,10 @@
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.core.DomainUser"%>
 <%
+/*
+It checks first if user exists then if user exists,
+he is redirected to his own domain else error is shown in the same page.
+*/
 
 String error = "", success = "";
 //If Email is present
@@ -161,17 +165,15 @@ jQuery.validator.setDefaults({
 		<script type="text/javascript">
 		$(document).ready(function() {			
 			
-			/* $('.forgot_domain_btn').click(function(e)
-			{
-        	    $('#forgot_domain').submit();
-				e.preventDefault();
-			});*/
+		  //form is self submitted
           $("#forgot_domain").validate({
 				 submitHandler: function(form) {
 					   form.submit();
 					 }
 					});
 		});
+		
+		//validates the form fields
 		function isValid(){
 		    $("#forgot_domain").validate();
 		    return $("#forgot_domain").valid();

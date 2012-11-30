@@ -1,6 +1,10 @@
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.account.AccountPrefs"%>
 <%
+/*
+we use setAttribute() to store the username and to autofill if he want to resubmit
+the form after correcting the error occurred. 
+*/
 
 //Get User Name
 String email = request.getParameter("email");
@@ -26,6 +30,7 @@ if(error != null)
 else
   error = "";
 
+//Users can show their logo on login page. 
 AccountPrefs accountPrefs = AccountPrefs.getAccountPrefs();
 String logo_url = accountPrefs.logo;
 
@@ -222,14 +227,16 @@ margin-bottom:0px;
 			$('.openid_large_btn').click(function(e)
 			{
 				console.log("ready to oauth form");
-				// Get Data
+				
+				// Get Data Google/Yahoo and submits to LoginServlet
 				var data = $(this).attr('data');
 				$('#oauth-name').val(data);
 				$('#oauth').submit();
 
 				e.preventDefault();
 			});
-
+			
+			// Submits the Agile form to LoginServlet
 			$("#agile").validate({
 				 submitHandler: function(form) {
 					   form.submit();
@@ -238,6 +245,7 @@ margin-bottom:0px;
 
 		});
 		
+		//validates the form fields
 		function isValid()
 		{
 			$("#agile").validate();

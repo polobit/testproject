@@ -141,8 +141,8 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 					<input type='hidden' name='auth' value='auth'></input>
 					<input type='hidden' name='type' value='oauth'></input>
 					<input type='hidden' name='server' id='oauth-name' value=''></input>
-					<a title="log in with Google" data='google' href='#' style="background: #FFF url(img/signin/openid-logos.png); background-position: -1px -1px" class="google openid_large_btn"></a>
-					<a title="log in with Yahoo" data='yahoo' href="#"	style="background: #FFF url(img/signin/openid-logos.png); background-position: -1px -63px" class="yahoo openid_large_btn"></a>
+					<a title="log in with Google" data='google' href='#' style="background: #FFF url(img/signin/openid-logos-register.png); background-position: -1px -1px" class="google openid_large_btn"></a>
+					<a title="log in with Yahoo" data='yahoo' href="#"	style="background: #FFF url(img/signin/openid-logos-register.png); background-position: -1px -63px" class="yahoo openid_large_btn"></a>
 				  </div>
 				</div>
 				
@@ -184,7 +184,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
          
 			$('.openid_large_btn').click(function(e)
 			{
-				// Get Data
+				// Get Data Google/Yahoo and submits to to LoginServlet
 				var data = $(this).attr('data');
 				$('#oauth-name').val(data);
 				
@@ -193,7 +193,8 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 				e.preventDefault();
 				
 			});
-
+             
+			// Submits the Agile form to to RegisterServlet
 			$("#agile").validate({
 				 submitHandler: function(form) {
 					   form.submit();
@@ -201,6 +202,8 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 					});
 			
 		});
+		
+		//validates the form fields
 		function isValid(){
 		    $("#agile").validate();
 		    return $("#agile").valid();
