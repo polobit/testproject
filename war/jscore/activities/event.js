@@ -1,28 +1,38 @@
 /**
- * event.js
  *
  * event.js is a script file to deal with the actions like creation, updation and deletion of 
  * events from client side.
+ * 
+ * @module Activities
  * ------------------------------------------------
  *  author:  Rammohan
  */
 
 $(function(){
 
-		// Show activity modal
-		// Highlight the event features 	
+	   /** 
+	    * Show activity modal
+	    * Highlight the event features (Shows event form and hides task form, changing color and font-weight)
+	    *  	
+	    */
 		$('#show-activity').live('click', function (e) {
 			e.preventDefault();
 			highlightEvent();
 			$("#activityModal").modal('show');
 		});
+		
+		// Highlights event
+		$(".add-event").live('click', function(e){
+			e.preventDefault();
+			$('#activityModal').modal('show');
+			highlightEvent();
+		});
 	   
 	    // Update event
-		// When click on update of event-update-modal, it calls saveEvent function with 
-	    // parameters
-	    //          -formId (to serialize the form)
-	    //          -modalId (to hide and reset the modal)
-	    //          -boolean true (to indicate that the called function is updating the existing task)
+	   /**
+	    * When click on update button of event-update-modal, the event will get updated by calling saveEvent function  
+	    * 
+	    */
 	    $('#update_event_validate').die().live('click', function (e) {
 	    		e.preventDefault();
 	    		
@@ -30,6 +40,9 @@ $(function(){
 	    });
 	    
 	    // Delete event
+	   /**
+	    * Deletes an event from calendar by calling ajax DELETE request with an appropriate url  
+	    */
 	    $('#event_delete').die().live('click', function (e) {
 	    		e.preventDefault();
 	    		
@@ -74,7 +87,10 @@ $(function(){
 			    
 			    $('.end-timepicker').timepicker({defaultTime: 'current', showMeridian: false, template: 'modal'});
 			    
-			    // Set the time picker when the modal is shown
+			   /**
+			    * Sets the start time with current time and end time half an hour more than start time, 
+			    * when they have no values by the time the modal is shown. 
+			    */
 			    $('#activityModal').on('shown', function () {
 			    	
 			    	// Fill current time only when there is no time in the fields
@@ -85,8 +101,10 @@ $(function(){
 			    		$('.end-timepicker').val(getHHMM(true));
 			    	
 			    });
-			    
-			   // Switch Task and Event: changing color and font-weight
+			   
+			  /**
+			   * Highlight the event features (Shows event form and hides task form, changing color and font-weight)
+			   */  
 			   $("#event").click( function (e) {
 			    	e.preventDefault();
 			    	highlightEvent();
@@ -104,6 +122,15 @@ function highlightEvent(){
 }
 
 // Validate event(start and end durations) 
+/**
+ * 
+ * Validates the start time and time of an event (start time should be greater than end time)
+ * @method isValidRange
+ * @param {Number} startDate start date of an event
+ * @param {Number} endDate end date of an event
+ * @param {Number} startTime start time of an event
+ * @param {Number} endTime end time of an event
+ */
 function isValidRange(startDate, endDate, startTime, endTime){
 	 if(endDate-startDate >= 86400000){
 		 return true;
@@ -128,6 +155,17 @@ function isValidRange(startDate, endDate, startTime, endTime){
 }
 
 // Save event
+
+/**
+ * Creates or updates an event and renders the saved object 
+ * by verifying the event is updated or saved as new one.
+ * @method saveEvent
+ * @param {String} formId the unique id for the form to identify it
+ * @param {String} modalId the unique id for the modal to identify it 
+ * @param {Boolean} isUpdate the boolean value to identify weather saving 
+ * 					the new one or updating the existing one
+ * 
+ */ 
 function saveEvent(formId, modalName, isUpdate){
 	// Save functionality for event
 	if (!isValidForm('#' + formId))
@@ -187,7 +225,12 @@ function saveEvent(formId, modalName, isUpdate){
        });
 }
 
-//Get Hours and Mins for the current time. It will be padded for 15 mins
+/**
+ * Get Hours and Minutes for the current time. It will be padded for 15 minutes 
+ * @method getHHMM
+ * @param {Boolean} end_time to make end time 30 minutes more than start time
+ * 
+ */
 function getHHMM(end_time) {
 	
 	
