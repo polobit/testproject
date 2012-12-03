@@ -1,6 +1,5 @@
-package com.agilecrm.search;
+package com.agilecrm.search.query;
 
-import java.net.URLDecoder;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,13 +10,18 @@ import java.util.List;
 
 import org.apache.commons.lang.time.DateUtils;
 
+import com.agilecrm.contact.Contact;
 import com.agilecrm.reports.Reports;
-import com.agilecrm.search.SearchRule.RuleType;
+import com.agilecrm.search.QueryInterface;
+import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.search.ui.serialize.SearchRule.RuleType;
 import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.util.DateUtil;
 import com.google.appengine.api.search.Index;
 import com.google.appengine.api.search.QueryOptions;
 import com.google.appengine.api.search.ScoredDocument;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
 
 /**
  * The <code>QueryDocument</code> builds and process queries based on
@@ -40,9 +44,8 @@ import com.google.appengine.api.search.ScoredDocument;
  * 
  * @author Yaswanth
  * @since November 2012
- * 
  */
-public class QueryDocument
+public class QueryDocument implements QueryInterface
 {
     /**
      * Queries document based on {@link SearchRule} given and type of the
@@ -56,7 +59,7 @@ public class QueryDocument
      *         {@link Reports.ReportType}
      */
     @SuppressWarnings("rawtypes")
-    public static Collection queryDocuments(List<SearchRule> rules)
+    public Collection advancedSearch(List<SearchRule> rules)
     {
 
 	String query = "";
@@ -74,7 +77,7 @@ public class QueryDocument
 	     * condition(condition or query AND or NOT), RHS(field_value)
 	     */
 	    String LHS = rule.LHS;
-	    String condition = rule.condition;
+	    String condition = rule.CONDITION;
 	    String RHS = rule.RHS;
 
 	    /*
@@ -166,74 +169,30 @@ public class QueryDocument
 	    }
 	}
 
-	System.out.println(ruleType);
-
 	// return query results
 	return processQuery(query, ruleType);
     }
 
     /**
-     * processes query and return collection of contacts
+     * Queries for contacts based on keywords(Simple search). Trims spaces in
+     * the keyword and calls processQuery to execute the condition
      * 
-     * @param query
+     * @param keyword
      *            {@link String}
-     * @param type
-     *            {@link Reports.ReportType}
-     * @return
+     * @return {@link Collection}
      */
-    public static Collection<Object> processQuery(String query, RuleType type)
+    public Collection simpleSearch(String keyword)
     {
+	// Normalizes the string
+	SearchUtil.normalizeString(keyword);
 
-	/*
-	 * Set query options only to get id of document (enough to get get
-	 * respective contacts)
-	 */
-	QueryOptions options = QueryOptions.newBuilder().setFieldsToReturn("id").build();
+	// Builds the query, search on field search_tokens(since contact
+	// properties are split in to fragments, and saved in document with
+	// filed
+	// name search_tokens)
+	String query = "search_tokens : " + keyword;
 
-	// Build query on query options
-	com.google.appengine.api.search.Query query_string = com.google.appengine.api.search.Query
-		.newBuilder().setOptions(options).build(query);
-
-	// Get results on query
-	Index index = null;
-	try
-	{
-	    // Get index of document based on type of query
-	    index = (Index) Class.forName("com.agilecrm.search." + type + "DocumentUtil")
-		    .getDeclaredField("index").get(null);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-
-	// If index is null return without querying
-	if (index == null)
-	    return null;
-
-	// Get sorted documents
-	Collection<ScoredDocument> contact_documents = index.search(query_string).getResults();
-
-	List<Long> entity_ids = new ArrayList<Long>();
-
-	// Iterate through contact_documents and add document ids(contact ids)
-	// to list
-	for (ScoredDocument doc : contact_documents)
-	{
-	    entity_ids.add(Long.parseLong(doc.getId()));
-	}
-
-	try
-	{
-	    return (Collection) Class.forName("com.agilecrm.search." + type + "DocumentUtil")
-		    .getMethod("getRelatedEntities", List.class).invoke(null, entity_ids);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-
+	return QueryDocument.processQuery(query, RuleType.Contact);
     }
 
     // Build query based on condition AND, NOT..
@@ -278,21 +237,60 @@ public class QueryDocument
     }
 
     /**
-     * Queries for contacts based on keywords(Simple search). Trims spaces in
-     * the keyword and calls processQuery to execute the condition
+     * processes query and return collection of contacts
      * 
-     * @param keyword
+     * @param query
      *            {@link String}
-     * @return {@link Collection}
+     * @param type
+     *            {@link Reports.ReportType}
+     * @return
      */
-    public static Collection<Object> searchContacts(String keyword)
+    private static Collection processQuery(String query, RuleType type)
     {
-	// Decode the search keyword and remove spaces
-	keyword = URLDecoder.decode(keyword).replaceAll(" ", "");
 
-	String query = "search_tokens : " + keyword;
+	/*
+	 * Set query options only to get id of document (enough to get get
+	 * respective contacts)
+	 */
+	QueryOptions options = QueryOptions.newBuilder().setFieldsToReturn("id").build();
 
-	return QueryDocument.processQuery(query, RuleType.Contact);
+	// Build query on query options
+	com.google.appengine.api.search.Query query_string = com.google.appengine.api.search.Query
+		.newBuilder().setOptions(options).build(query);
+
+	// Get results on query
+	Index index = null;
+	try
+	{
+	    // Get index of document based on type of query
+	    index = (Index) Class.forName("com.agilecrm.search.document." + type + "Document")
+		    .getDeclaredField("index").get(null);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
+	// If index is null return without querying
+	if (index == null)
+	    return null;
+
+	// Gets sorted documents
+	Collection<ScoredDocument> contact_documents = index.search(query_string).getResults();
+
+	List<Long> entity_ids = new ArrayList<Long>();
+
+	// Iterate through contact_documents and add document ids(contact ids)
+	// to list
+	for (ScoredDocument doc : contact_documents)
+	{
+	    entity_ids.add(Long.parseLong(doc.getId()));
+	}
+
+	Objectify ofy = ObjectifyService.begin();
+
+	// Returns contact related to doc_ids
+	return ofy.get(Contact.class, entity_ids).values();
     }
 
 }

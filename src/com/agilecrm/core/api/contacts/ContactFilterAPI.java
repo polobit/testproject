@@ -89,8 +89,7 @@ public class ContactFilterAPI
 		    return ContactFilter.getContacts(SystemFilter.MY_LEAD);
 		}
 	    }
-	    ContactFilter filter = ContactFilter.getContactFilter(Long
-		    .parseLong(id));
+	    ContactFilter filter = ContactFilter.getContactFilter(Long.parseLong(id));
 
 	    Collection contacts = filter.queryContacts();
 
@@ -106,8 +105,7 @@ public class ContactFilterAPI
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteContacts(@FormParam("model_ids") String model_ids)
-	    throws JSONException
+    public void deleteContacts(@FormParam("model_ids") String model_ids) throws JSONException
     {
 
 	JSONArray contactFiltersJSONArray = new JSONArray(model_ids);

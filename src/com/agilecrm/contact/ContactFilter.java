@@ -11,8 +11,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.core.DomainUser;
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.search.QueryDocument;
-import com.agilecrm.search.SearchRule;
+import com.agilecrm.search.AppengineSearch;
+import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.util.DateUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
@@ -90,9 +90,10 @@ public class ContactFilter
     }
 
     // Perform queries to fetch contacts
-    public Collection<Object> queryContacts()
+    @SuppressWarnings("rawtypes")
+    public Collection queryContacts()
     {
-	return QueryDocument.queryDocuments(rules);
+	return AppengineSearch.getAdvacnedSearchResults(rules);
     }
 
     // Get Contacts based on system filters

@@ -13,7 +13,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Tag;
-import com.agilecrm.search.QueryDocument;
+import com.agilecrm.search.AppengineSearch;
 
 @Path("/api/typeahead")
 public class TypeAheadAPI
@@ -55,7 +55,8 @@ public class TypeAheadAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public String typeaheadContacts(@QueryParam("q") String keyword)
     {
-	Collection contacts = QueryDocument.searchContacts(keyword);
+	Collection contacts = new AppengineSearch<Contact>(Contact.class)
+		.getSimpleSearchResults(keyword);
 	String[] availableTags = new String[contacts.size()];
 
 	int count = 0;

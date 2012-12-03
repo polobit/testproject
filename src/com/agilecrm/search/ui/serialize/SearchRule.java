@@ -1,4 +1,4 @@
-package com.agilecrm.search;
+package com.agilecrm.search.ui.serialize;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -10,7 +10,7 @@ public class SearchRule
 
     public String RHS_NEW = null;
 
-    public String condition = null;
+    public String CONDITION = null;
 
     public static enum RuleType
     {

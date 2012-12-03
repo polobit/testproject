@@ -12,14 +12,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.core.DomainUser;
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.search.QueryDocument;
-import com.agilecrm.search.SearchRule;
+import com.agilecrm.search.AppengineSearch;
+import com.agilecrm.search.ui.serialize.SearchRule;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
+@SuppressWarnings("serial")
 @XmlRootElement
 public class Reports implements Serializable
 {
@@ -88,9 +89,10 @@ public class Reports implements Serializable
      * Generate contacts based on the rule element based on type of
      * report(contacts,deals..)
      */
+    @SuppressWarnings("rawtypes")
     public Collection generateReports()
     {
-	return QueryDocument.queryDocuments(rules);
+	return AppengineSearch.getAdvacnedSearchResults(rules);
     }
 
     /* Get Contact Filter by id */

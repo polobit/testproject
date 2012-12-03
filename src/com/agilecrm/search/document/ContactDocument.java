@@ -1,4 +1,4 @@
-package com.agilecrm.search;
+package com.agilecrm.search.document;
 
 import java.util.Calendar;
 import java.util.Collection;
@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.commons.lang.time.DateUtils;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.util.SearchUtil;
 import com.google.appengine.api.search.AddException;
 import com.google.appengine.api.search.Consistency;
@@ -53,8 +54,9 @@ import com.googlecode.objectify.ObjectifyService;
  * 
  * @since October 2012
  */
-public class ContactDocumentUtil
+public class ContactDocument implements BuilderInterface
 {
+
     /**
      * Initializes/get search service for the app
      */
@@ -79,8 +81,10 @@ public class ContactDocumentUtil
      * @param contact
      *            {@link Contact}
      */
-    public static void buildDocument(Contact contact)
+    public void add(Object entity)
     {
+	Contact contact = (Contact) entity;
+
 	// Gets builder object required to build a document
 	Document.Builder doc = Document.newBuilder();
 
@@ -103,14 +107,13 @@ public class ContactDocumentUtil
 	// Describes updated time document if updated time is not 0.
 	if (contact.updated_time > 0L)
 	{
-	    Date updatedDate = DateUtils.truncate(new Date(contact.updated_time * 1000),
-		    Calendar.DATE);
-
-	    doc.addField(Field.newBuilder().setName("updated_time").setDate(updatedDate));
 	}
 
 	// Adds Other fields in contacts to document
 	doc.addField(Field.newBuilder().setName("lead_score").setNumber(contact.lead_score));
+
+	// Adds Other fields in contacts to document
+	doc.addField(Field.newBuilder().setName("star_value").setNumber(contact.star_value));
 
 	/*
 	 * Get tokens from contact properties and adds it in document
@@ -123,6 +126,12 @@ public class ContactDocumentUtil
 	addToIndex(doc.setId(contact.id.toString()).build());
     }
 
+    @Override
+    public void edit(Object entity)
+    {
+	add(entity);
+    }
+
     /**
      * Gets contact collection related to given document ids
      * 
@@ -133,7 +142,8 @@ public class ContactDocumentUtil
      *            {@link List}
      * @return {@link Collection}
      */
-    public static Collection getRelatedEntities(List doc_ids)
+    @SuppressWarnings("rawtypes")
+    public Collection getResults(List doc_ids)
     {
 	Objectify ofy = ObjectifyService.begin();
 
@@ -145,13 +155,13 @@ public class ContactDocumentUtil
      * Deletes an entity from document(called when contact is deleted then
      * respective entity in document should be deleted)
      * 
-     * @param contact
-     *            {@link Contact}
+     * @param id
+     *            {@link String}
      * 
      */
-    public static void deleteDocument(Contact contact)
+    public void delete(String id)
     {
-	index.remove(contact.id.toString());
+	index.remove(id);
     }
 
     /**
