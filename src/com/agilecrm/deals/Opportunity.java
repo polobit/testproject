@@ -293,30 +293,29 @@ public class Opportunity
     // Delete Opportunity
     public void delete()
     {
-	if (contacts != null)
-	{
-	    for (String contact_id : this.contacts)
-	    {
-		TriggerUtil.executeTrigger(Long.parseLong(contact_id),
-			Trigger.Type.DEAL_IS_DELETED);
-	    }
-	}
 	dao.delete(this);
     }
 
     // Save Opportunity
     public void save()
     {
-	if (contacts != null && id == null)
+	if (id == null)
 	{
-	    for (String contact_id : this.contacts)
+	    if (contacts != null)
 	    {
-		this.related_contacts.add(new Key<Contact>(Contact.class, Long
-			.parseLong(contact_id)));
-		TriggerUtil.executeTrigger(Long.parseLong(contact_id),
-			Trigger.Type.DEAL_IS_ADDED);
-	    }
+		for (String contact_id : this.contacts)
 
+		{
+		    this.related_contacts.add(new Key<Contact>(Contact.class,
+			    Long.parseLong(contact_id)));
+
+		    TriggerUtil.executeTriggerforOthers(
+			    Long.parseLong(contact_id),
+			    Trigger.Type.DEAL_IS_ADDED);
+
+		}
+
+	    }
 	    NotificationPrefs.executeNotification(
 		    NotificationPrefs.Type.DEAL_CREATED, this);
 	}
@@ -410,7 +409,8 @@ public class Opportunity
 	    // Get owner pic through agileuser prefs
 	    agileuser = AgileUser.getCurrentAgileUserFromDomainUser(ownerKey
 		    .getId());
-	    userprefs = UserPrefs.getUserPrefs(agileuser);
+	    if (agileuser != null)
+		userprefs = UserPrefs.getUserPrefs(agileuser);
 	    return userprefs.pic;
 	}
 	catch (Exception e)

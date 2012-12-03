@@ -129,10 +129,14 @@ public class DealsAPI
 		List<Contact> dealContacts = opportunity.getContacts();
 
 		// Execute trigger for corresponding contacts
-		for (Contact contact : dealContacts)
-		    TriggerUtil.executeTrigger(contact.id,
-			    Trigger.Type.DEAL_IS_DELETED);
+		if (dealContacts != null)
+		{
+		    for (Contact contact : dealContacts)
+			TriggerUtil.executeTriggerforOthers(contact.id,
+				Trigger.Type.DEAL_IS_DELETED);
+		}
 	    }
+
 	    catch (Exception e)
 	    {
 		e.printStackTrace();
@@ -143,5 +147,4 @@ public class DealsAPI
 	Opportunity.dao.deleteBulkByIds(opportunitiesJSONArray);
 
     }
-
 }

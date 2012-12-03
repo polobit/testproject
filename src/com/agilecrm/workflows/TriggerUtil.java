@@ -7,8 +7,10 @@ import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.workflows.Trigger.Type;
+import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -26,16 +28,16 @@ import com.googlecode.objectify.ObjectifyService;
 public class TriggerUtil
 {
     /**
-     * Initialize DataAccessObject
+     * Initializes DataAccessObject
      */
     private static ObjectifyGenericDao<Trigger> dao = new ObjectifyGenericDao<Trigger>(
 	    Trigger.class);
 
     /**
-     * Remove multiple triggers
+     * Removes multiple triggers
      * 
      * @param triggersJSONArray
-     *            The model-ids of triggers that are selected for delete.
+     *            Model-ids of triggers that are selected for delete.
      */
     public static void deleteTriggersBulk(JSONArray triggersJSONArray)
     {
@@ -59,11 +61,11 @@ public class TriggerUtil
     }
 
     /**
-     * The trigger locator based on id
+     * Locates trigger based on id
      * 
      * @param id
-     *            The trigger id
-     * @return The trigger with respect to that id
+     *            Trigger id
+     * @return Trigger with respect to that id
      */
     public static Trigger getTrigger(Long id)
     {
@@ -79,7 +81,7 @@ public class TriggerUtil
     }
 
     /**
-     * Return all triggers.
+     * Returns all triggers.
      * 
      * @return All triggers that are saved
      */
@@ -91,12 +93,13 @@ public class TriggerUtil
     }
 
     /**
-     * Return list of triggers based on condition
+     * Returns list of triggers based on condition
      * 
      * @param condition
-     *            The trigger condition.
-     * @return The triggers based on condition.
+     *            Trigger condition.
+     * @return Triggers based on condition.
      */
+
     public static List<Trigger> getTriggersByCondition(Type condition)
     {
 	Objectify ofy = ObjectifyService.begin();
@@ -104,42 +107,81 @@ public class TriggerUtil
     }
 
     /**
-     * The trigger executes when tags specified in trigger are added for a
-     * contact
+     * Locates trigger based on condition and tags
+     * 
+     * @param condition
+     *            Trigger condition
+     * @param customTags
+     *            Trigger tags
+     * @return Triggers based on condition and tags
+     */
+    public static List<Trigger> getTriggersByConditionandTags(Type condition,
+	    Set customTags)
+    {
+	Objectify ofy = ObjectifyService.begin();
+
+	return ofy.query(Trigger.class).filter("type", condition)
+		.filter("custom_tags IN", customTags).list();
+    }
+
+    /**
+     * Locates trigger based on condition and score
+     * 
+     * @param condition
+     *            Trigger condition
+     * @param customScore
+     *            Trigger score
+     * @return Triggers based on condition and score
+     */
+    public static List<Trigger> getTriggersByConditionandScore(Type condition,
+	    Integer customScore)
+    {
+	Objectify ofy = ObjectifyService.begin();
+	return ofy.query(Trigger.class).filter("type", condition)
+		.filter("custom_score", customScore).list();
+    }
+
+    /**
+     * Executes trigger when tags specified in trigger are added for a contact
      * 
      * @param contactId
-     *            The id of a contact for which tags are added
+     *            Contact Id for which tags are added
      * @param contactTags
-     *            The tags of a contact
+     *            Contact tags
      * @param tagCondition
-     *            The type of trigger for tags either Tag is added or Tag is
+     *            Trigger condition for tags either Tag is added or Tag is
      *            deleted
      */
+
     public static void executeTriggerforTags(Long contactId,
-	    Set<String> contactTags, Type tagCondition)
+	    Set<String> changedTags, Type tagCondition)
     {
 
 	List<Trigger> triggersList = null;
 	try
 	{
 
-	    triggersList = TriggerUtil.getTriggersByCondition(tagCondition);
+	    triggersList = getTriggersByConditionandTags(tagCondition,
+		    changedTags);
 	    if (triggersList != null)
 	    {
-		for (Trigger triggers : triggersList)
-
+		for (Trigger trigger : triggersList)
 		{
 		    // Get custom tags given for trigger
-		    if (triggers.custom_tags != null)
+		    if (trigger.custom_tags != null)
 		    {
 			System.out.println("The given tags for a trigger:"
-				+ triggers.custom_tags);
+				+ trigger.custom_tags + "Tag condition"
+				+ tagCondition);
 
 			// Execute trigger when tags are same as custom tags
 			// added to a contact
-			if (contactTags.containsAll(triggers.custom_tags))
-			    TriggerUtil.executeTrigger(contactId, tagCondition);
-
+			if (trigger.custom_tags.equals(changedTags))
+			    executeTrigger(contactId,
+				    Long.parseLong(trigger.campaign_id), null,
+				    changedTags);
+			else
+			    continue;
 		    }
 		}
 		// Avoid further looping
@@ -153,37 +195,36 @@ public class TriggerUtil
     }
 
     /**
-     * Trigger will execute if score of contact reaches trigger custom score
+     * Executes trigger if score of contact meets trigger custom score
      * 
      * @param contactId
-     *            The id of a contact.
-     * @param leadScore
-     *            The score of a contact.
-     * @param addScore
-     *            The custom score in trigger.
+     *            Contact Id
+     * @param oldScore
+     *            Contact score before changes made
+     * @param newScore
+     *            Contact score after changes made
      */
-    public static void executeTriggerforScore(Long contactId,
-	    Integer leadScore, Type addScore)
+    public static void executeTriggerforScore(Long id, Integer oldScore,
+	    Integer newScore)
     {
-	// Execute trigger when contact score is within the range of trigger
-	// score E.g.trigger executes for 50 to 59 when custom_score is 50.
+
 	List<Trigger> triggersList = null;
 
 	try
 	{
-	    triggersList = TriggerUtil.getTriggersByCondition(addScore);
+	    triggersList = getTriggersByCondition(Trigger.Type.ADD_SCORE);
 	    System.out.println("Triggers with condition ADD_SCORE:"
 		    + triggersList);
 	    if (triggersList != null)
 	    {
-		for (Trigger triggers : triggersList)
+		for (Trigger trigger : triggersList)
 
 		{
-		    if (leadScore >= triggers.custom_score
-			    && leadScore <= (triggers.custom_score + 9))
+		    if ((oldScore < trigger.custom_score)
+			    && (newScore >= trigger.custom_score))
 		    {
-			TriggerUtil.executeTrigger(contactId,
-				Trigger.Type.ADD_SCORE);
+			executeTrigger(id, Long.parseLong(trigger.campaign_id),
+				trigger.custom_score, null);
 		    }
 
 		}
@@ -199,24 +240,113 @@ public class TriggerUtil
     }
 
     /**
-     * Serialize the triggers execution using DeferredTask and Queue.Builds
+     * Executes trigger for Contacts and Deals
+     * 
+     * @param contactId
+     *            Contact id related to contacts or deals
+     * @param condition
+     *            Trigger condition
+     */
+    public static void executeTriggerforOthers(Long contactId, Type condition)
+    {
+	List<Trigger> triggersList = null;
+
+	try
+	{
+	    triggersList = getTriggersByCondition(condition);
+	    System.out.println(" Triggers with condition " + condition
+		    + " are: " + triggersList);
+	    if (triggersList != null)
+	    {
+		for (Trigger trigger : triggersList)
+
+		{
+		    executeTrigger(contactId,
+			    Long.parseLong(trigger.campaign_id), null, null);
+		}
+		// Avoid further looping
+		triggersList = null;
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
+    }
+
+    /**
+     * Executes triggers using DeferredTask and Queue.Builds
      * {@link TriggersDeferredTask} for triggers
      * 
      * @param contactId
-     *            The id of a contact
-     * @param type
-     *            The trigger condition
+     *            Contact Id
+     * @param campaignId
+     *            Campaign Id of respective trigger
+     * @param customScore
+     *            Custom score of contact
+     * @param customTags
+     *            Custom tags of contact
      */
-    public static void executeTrigger(Long contactId, Type type)
+    public static void executeTrigger(Long contactId, Long campaignId,
+	    Integer customScore, Set customTags)
 
     {
 	System.out.println("Executing trigger with contactID:" + contactId
-		+ "Condition type" + type);
+		+ "Campaign id" + campaignId);
 
 	TriggersDeferredTask triggersDeferredTask = new TriggersDeferredTask(
-		contactId, type);
+		contactId, campaignId, customScore, customTags);
 	Queue queue = QueueFactory.getDefaultQueue();
 	queue.add(TaskOptions.Builder.withPayload(triggersDeferredTask));
+    }
+}
+
+/**
+ * Implements DeferredTask interface for triggers.Execute campaign with respect
+ * to trigger condition and contact.
+ * 
+ */
+@SuppressWarnings("serial")
+class TriggersDeferredTask implements DeferredTask
+{
+
+    Long contactId;
+
+    Long campaignId;
+
+    Integer customScore;
+
+    Set customTags;
+
+    /**
+     * Constructs new {@link TriggersDeferredTask} with contact id and trigger
+     * condition.
+     * 
+     * @param contactId
+     *            Contact id
+     * @param condition
+     *            Trigger condition
+     */
+    public TriggersDeferredTask(Long contactId, Long campaignId,
+	    Integer customScore, Set customTags)
+    {
+
+	this.contactId = contactId;
+	this.campaignId = campaignId;
+	this.customScore = customScore;
+	this.customTags = customTags;
+    }
+
+    public void run()
+    {
+
+	Contact contact = Contact.getContact(contactId);
+
+	// Check if contact is not null and campaign id is not null
+	if (contact != null && campaignId != null)
+	    WorkflowManager.subscribe(contact, campaignId);
+
     }
 
 }
