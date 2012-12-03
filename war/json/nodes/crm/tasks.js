@@ -2,68 +2,26 @@
     "name": "Tasks",
     "thumbnail": "json/nodes/images/email/tags.png",
     "icon": "json/nodes/icons/email/tags.png",
-    "info": "Tasks are like to-dos. Result oriented. You can assign a category such as call,email etc",
-    "help": "Tasks are like to-dos. Result oriented. You can assign a category such as call,email etc",
+    "info": "Get the tasks based upon Due Days.",
+    "help": "Get the tasks based upon Due Days.",
     "author": "Naresh",
     "company": "mantra",
     "language": "en",
-    "branches": "yes",
+    "branches": "no,yes",
     "workflow_tasklet_class_name":"com.campaignio.tasklets.agile.Tasks",
     "category": "Utilities",
     "ui": [{
-			"label": "Task",
-			"required": "required",
-            "category": "Info",
-            "name": "task_name",
-            "id": "task_name",
-            "title": "Enter the task name",
-			"fieldType": "input",
-			"type": "text" 
-			
-		},{
-			"label": "Category",
-			"category": "Info",
-			"name": "category",
-            "id":"category",
-			"title": "Select the category type",
-			"options": {"Call":"CALL",
-		        "Email":"EMAIL",
-		        "Follow-up":"FOLLOW_UP",
-		        "Meeting":"MEETING",
-		        "Milestone":"MILESTONE",
-		        "Send":"SEND",
-		        "Tweet":"TWEET"
-		       
-	          },
-	         "fieldType": "select",
-	          "type": "select" 
-			
-		},{
-			"label": "Priority",
-			"category": "Info",
-			"name": "priority",
-            "id":"priority",
-			"title": "Select the priority type",
-			"options": {"High":"HIGH",
-		        "Normal":"NORMAL",
-		        "Low":"LOW"
-		        	
-	          },
-	         "fieldType": "select",
-	          "type": "select" 
-			
-		},{
-			"label": "Due Date",
+			"label": "Due Days",
 			"required":"required",
 			"category": "Info",
-			"name": "due_date",
-            "id":"due_date",
-			"title": "Enter the Due Date.",
+			"name": "due_days",
+            "id":"due_days",
+			"title": "Enter the number of Due Days",
 			"fieldType": "input",
-			"type":"date"
+			"type":"number"
 			
 		},{
-            "label": "Tasks are like to-dos. Result oriented. You can assign a category such as call,email etc",
+            "label": "Get the tasks based upon Due Days.",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 

@@ -1,7 +1,6 @@
 package com.agilecrm.workflows;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Id;
@@ -11,10 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.workflows.Trigger.Type;
-import com.google.appengine.api.taskqueue.DeferredTask;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -128,22 +124,6 @@ public class Trigger
     }
 
     /**
-     * Save trigger in database
-     */
-    public void save()
-    {
-	dao.put(this);
-    }
-
-    /**
-     * Removes trigger from database
-     */
-    public void delete()
-    {
-	dao.delete(this);
-    }
-
-    /**
      * Campaign name is returned as an xml element which is retrieved using
      * campaign-id
      * 
@@ -180,6 +160,22 @@ public class Trigger
     }
 
     /**
+     * Save trigger in database
+     */
+    public void save()
+    {
+	dao.put(this);
+    }
+
+    /**
+     * Removes trigger from database
+     */
+    public void delete()
+    {
+	dao.delete(this);
+    }
+
+    /**
      * Add custom trigger tags before save.Save trigger_tags array into Set.
      */
     @PrePersist
@@ -203,58 +199,6 @@ public class Trigger
     {
 	return "Name: " + name + " Condition: " + type + "Campaign:"
 		+ campaign_id;
-    }
-
-}
-
-/**
- * Implements DeferredTask interface for triggers.Execute campaign with respect
- * to trigger condition and contact.
- * 
- */
-@SuppressWarnings("serial")
-class TriggersDeferredTask implements DeferredTask
-{
-
-    Long contactId;
-
-    Type type;
-
-    /**
-     * Constructs new {@link TriggersDeferredTask} with contact id and trigger
-     * condition.
-     * 
-     * @param contactId
-     *            The contact id
-     * @param condition
-     *            The trigger condition
-     */
-    public TriggersDeferredTask(Long contactId, Type condition)
-    {
-
-	this.contactId = contactId;
-	type = condition;
-    }
-
-    public void run()
-    {
-	List<Trigger> triggers = TriggerUtil.getTriggersByCondition(type);
-	Contact contact = Contact.getContact(contactId);
-
-	if (!triggers.isEmpty())
-	{
-	    for (Trigger trigger : triggers)
-	    {
-		// Check if contact is not null and campaign id is not equals to
-		// null and ""
-		if (contact != null
-			&& !(StringUtils.isEmpty(trigger.campaign_id)))
-
-		    WorkflowManager.subscribe(contact,
-			    Long.parseLong(trigger.campaign_id));
-
-	    }
-	}
     }
 
 }
