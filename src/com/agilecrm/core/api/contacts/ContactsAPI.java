@@ -2,7 +2,6 @@ package com.agilecrm.core.api.contacts;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -31,7 +30,6 @@ import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.deals.Opportunity;
-import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.util.TaskUtil;
 import com.agilecrm.util.Util;
 
@@ -223,15 +221,6 @@ public class ContactsAPI
 	{
 	    e.printStackTrace();
 	}
-    }
-
-    // This method is called if XML is request
-    @Path("/search/{keyword}")
-    @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Collection searchContacts(@PathParam("keyword") String keyword)
-    {
-	return new AppengineSearch<Contact>(Contact.class).getSimpleSearchResults(keyword);
     }
 
     // This method is called if XML is request

@@ -28,7 +28,7 @@ function agile_type_ahead(id, el, callback, isSearch) {
 			CONTACTS = {};
 			
 			// Get data on query
-			$.getJSON("core/api/contacts/search/" + query,
+			$.getJSON("core/api/search/" + query,
 				function(data) {
 
 				// Store query results to use them in updater and render functions

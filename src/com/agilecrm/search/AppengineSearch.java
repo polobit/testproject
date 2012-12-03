@@ -63,7 +63,7 @@ public class AppengineSearch<T>
     }
 
     @SuppressWarnings("rawtypes")
-    public Collection getSimpleSearchResults(String keyword)
+    public static Collection getSimpleSearchResults(String keyword)
     {
 	return new QueryDocument().simpleSearch(keyword);
     }
