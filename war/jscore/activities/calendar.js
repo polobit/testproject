@@ -1,35 +1,33 @@
+/**
+ * Describes the given object is an array or not
+ * @param {Object} a to verify array or not 
+ * @returns {Boolean} true if given is array else false
+ */
 function isArray(a)
 {
     return Object.prototype.toString.apply(a) === '[object Array]';
 }
 
-$(function(){
-
-	$(".add-task").live('click', function(e){
-		e.preventDefault();
-		$('#activityModal').modal('show');
-		highlightTask();
-	    var	el = $("#taskForm");
-		agile_type_ahead("task_related_to", el, contacts_typeahead);
-	});
-	
-	$(".add-event").live('click', function(e){
-		e.preventDefault();
-		$('#activityModal').modal('show');
-		highlightEvent();
-	});
-	
-});
-
+/**
+ * Shows the calendar
+ */
 function showCalendar() {
     $('#calendar').fullCalendar({
-
+    	
+       /**
+        * Renders the events displaying currently on fullCalendar
+        * @method events
+        * @param {Object} start fullCalendar current section start day date object
+        * @param {Object} end fullCalendar current section end day date object
+        * @param {function} callback displays the events on fullCalendar
+        * 
+        */
         events: function (start, end, callback) {
             $.getJSON('/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000, function (doc) {
-                 	
+                
             	if(doc)
             	{
-            		            		
+            		  
             	    callback(doc);
             		
             	}
@@ -40,12 +38,6 @@ function showCalendar() {
             center: 'title',
             right: 'month,agendaWeek,agendaDay'
         },
-        eventClick: function (event) {
-            // opens events in a popup window
-            window.open(event.url, 'gcalevent', 'width=700,height=600');
-            return false;
-        },
-
         loading: function (bool) {
             if (bool) {
                 $('#loading').show();
@@ -57,17 +49,14 @@ function showCalendar() {
 		selectHelper: true,
 		editable: true,
 		theme: false,
-		eventClick: function (event) {
-            
-			// Opens events in a popup window
-        	console.log(event);
-        	
-        	$("#newactivityModal").modal('show');
-        	
-        	// Deserialize into the modal
-        	// To do
-        	
-         },
+	   /**
+	    * Shows event pop-up modal with pre-filled date and time values, 
+	    * when we select a day or multiple days of the fullCalendar 
+	    * @method select
+	    * @param {Object} start start-date of the event
+	    * @param {Object} end end-date of the event
+	    * @param {Boolean} allDay   
+	    */	
         select: function(start, end, allDay) {
         	// Show a new event
             $('#activityModal').modal('show');
@@ -89,9 +78,19 @@ function showCalendar() {
             }
             
 		},
+	   /**
+	    * Updates the event by changing start and end date, when it is 
+	    * dragged to another location on fullCalendar.
+	    * @method eventDrop
+	    * @param {Object} event1 event with new start and end date
+	    * @param {Number} dayDelta holds the number of days the event was moved forward
+	    * @param {Number} minuteDelta holds the number of minutes the event was moved forward
+	    * @param {Boolean} allDay weather the event has been dropped on a day in month view or not
+	    * @param {Function} revertFunc sets the event back to it's original position
+	    */	
 		eventDrop: function(event1, dayDelta, minuteDelta, allDay, revertFunc) {      
 	    
-			console.log(event1);
+			
 			// Confirm from the user about the change
 			if (!confirm("Are you sure about this change?")) {
 	            revertFunc();
@@ -111,6 +110,11 @@ function showCalendar() {
 	        
 	        eventModel.save(event);	        
    	    },
+   	   /**
+   	    * Updates or deletes an event by clicking on it
+   	    * @method eventClick
+   	    * @param {Object} event to update or delete
+   	    */ 
    	    eventClick: function (event) {
    	    	
    	    	// Deserialize

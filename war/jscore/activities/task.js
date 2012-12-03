@@ -2,16 +2,19 @@
  * task.js is a script file to deal with all the actions (CRUD) of 
  * tasks from client side.
  * 
- * @module tasks
+ * @module Activities
  * ------------------------------------------------
  *  author:  Rammohan
  */
 
 $(function(){ 
 	
-	  // Activates all features of task (highlighting the task, relatedTo field typeahead)
-	  // when we click on task link in activities modal. 
-	  $("#task").click(function (e) {
+	   /** 
+	    * Activates all features of task (highlighting the task, relatedTo field typeahead, 
+	    * changing color and font-weight) when we click on task link in activities modal.
+	    * 
+	    */  
+	    $("#task").click(function (e) {
 	    	e.preventDefault();
 	    	highlightTask();
 	     	
@@ -19,9 +22,19 @@ $(function(){
 	    	agile_type_ahead("task_related_to", el, contacts_typeahead);
 	    });
 	  
+        // Highlights task
+	    $(".add-task").live('click', function(e){
+			e.preventDefault();
+			$('#activityModal').modal('show');
+			highlightTask();
+		    var	el = $("#taskForm");
+			agile_type_ahead("task_related_to", el, contacts_typeahead);
+		});
+	  
 	    
 	    // Edit task
-	  /**Tasks are categorized into four types (overdue, today, tomorrow and next-week) 
+	   /** 
+	    * Tasks are categorized into four types (overdue, today, tomorrow and next-week) 
 	    * while displaying them in client side.Each category has it's own table, so to edit
 	    * tasks call updateTask function for each category.
 	    * 
@@ -48,7 +61,7 @@ $(function(){
 	    
 	    // Update task
 	    /**
-	     *  When click on update of task-update-modal, it calls saveTask function with
+	     *  When click on update button of task-update-modal, the task will get updated by calling saveTask function  
 	     * 
 	     */ 
 
@@ -85,7 +98,10 @@ $(function(){
 	    	format: 'mm-dd-yyyy'
 		});
 	    
-	    // Clicking checkbox
+	   /**
+	    *  Makes the pending task as completed by calling  completeTask function
+	    * 
+	    */
 		$('.tasks-select').live('click', function(e){
 			e.stopPropagation();
 	        if($(this).is(':checked')){
@@ -97,6 +113,9 @@ $(function(){
 	    });
 		
 		// All tasks
+	   /**
+	    * All completed and pending tasks will be shown in separate section
+	    */
 		$('#tasks-list').live('click', function(e){
 			this.tasksListView = new Base_Collection_View({
 	            url: '/core/api/tasks/all',
@@ -225,7 +244,7 @@ function getDue(due) {
 /**
  * Based on due arranges the tasks UI
  * @method appendTasks
- * @param {Object} base_model task object
+ * @param {Object} base_model task model
  * 
  */
 function appendTasks(base_model) {

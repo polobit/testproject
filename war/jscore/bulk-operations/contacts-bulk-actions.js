@@ -1,10 +1,22 @@
+/**
+ * Performs operations like changing owner, adding tags and etc.. on contacts bulk
+ * 
+ * @module Bulk operations
+ * -------------------------------------------
+ * author: Rammohan 
+ */
 $(function(){ 
 	
 	// Bulk owner
+   /**
+    * Shows all the users as drop down list to select one of them as the owner 
+    * for the contacts bulk
+    */	
 	$("#bulk-owner").live('click', function(e){
 		e.preventDefault();
 		var id_array = getContactsBulkIds();
 		
+		// Bind a custom event to trigger on loading the form
 		$('body').die('fill_owners').live('fill_owners', function(event){
 			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 	        fillSelect('ownerBulkSelect','/core/api/users', 'domainUsers', 'no-callback ', optionsTemplate); 
@@ -15,6 +27,10 @@ $(function(){
             trigger: true
         });
 		
+	   /**
+	    * Changes the owner by sending the new owner name as path parameter 
+	    * and contact ids as form data of post request
+	    */	
 		$('#changeOwnerToBulk').die().live('click',function(e){
 			e.preventDefault();
 			
@@ -48,6 +64,10 @@ $(function(){
 	});
 	
 	// Bulk campaigns
+   /**
+	* Shows all the workflows as drop down list to select one of them  
+	* to subscribe the contacts bulk
+	*/
 	$("#bulk-campaigns").live('click', function(e){
 		e.preventDefault();
 		var id_array = getContactsBulkIds();
@@ -62,6 +82,9 @@ $(function(){
             trigger: true
         });
 		
+	   /**
+	    * Subscribes the contacts bulk to a campaign by sending the wofkflow id and contacts bulk ids 
+	    */	
 		$('#addBulkTocampaign').die().live('click',function(e){
 			e.preventDefault();
 			
@@ -103,6 +126,10 @@ $(function(){
 	});
 	
 	// Bulk tags
+   /**
+    * Shows the existing tags with help of typeahead to add tags to the contacts bulk. 
+    * Also we can add new tags.
+    */	
 	$("#bulk-tags").live('click', function(e){
 		e.preventDefault();
 		var id_array = getContactsBulkIds();
@@ -114,6 +141,11 @@ $(function(){
         });
 		
 		setupTagsTypeAhead();
+		
+	   /**
+	    * Add the tags to the contacts bulk by sending the contact ids and tags 
+	    * through post request to the appropriate url
+	    */	
 		$('#addTagsToContactsBulk').die().live('click',function(e){
 			e.preventDefault();
 			var tags = getTags('tagsBulkForm');
@@ -127,7 +159,8 @@ $(function(){
 			    var json = {};
 			    json.contact_ids = JSON.stringify(id_array);
 			    $.post(url, json, function(data){
-				
+			    	
+			    	// Add the added tags to the collection of tags
 			    	$.each(tags[0].value, function(index, tag){
 	       				tagsCollection.add( {"tag" : tag} );
 	       			});
@@ -148,7 +181,11 @@ $(function(){
         
 	});
 	
-	// Bulk email
+	// Bulk email 
+   /**
+    * Sends email to the bulk of contacts by filling up the send email details
+    * like email from address, subject and body by selecting a template. 
+    */	
 	$("#bulk-email").live('click', function(e){
 		e.preventDefault();
 		
@@ -180,6 +217,11 @@ $(function(){
 	});	
 });
 
+/**
+ * Gets an array of contact ids to perform bulk operations
+ * @method getContactsBulkIds
+ * @returns {Array} id_array of contact ids
+ */
 function getContactsBulkIds(){
 	var id_array = [];
 
