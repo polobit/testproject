@@ -100,6 +100,14 @@ public class DealsAPI
     }
 
     // Bulk operations - delete
+    /**
+     * Deletes the bulk of deals and executes trigger to the related contacts of
+     * each deal
+     * 
+     * @param model_ids
+     *            array of deal ids as String
+     * @throws JSONException
+     */
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)

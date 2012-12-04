@@ -400,6 +400,13 @@ public class Contact extends Cursor
     }
 
     // Get contacts bulk
+    /**
+     * Gets list of contacts based on array of ids
+     * 
+     * @param contactsJSONArray
+     *            JSONArray object of contact ids
+     * @return List of contacts
+     */
     public static List<Contact> getContactsBulk(JSONArray contactsJSONArray)
     {
 	Objectify ofy = ObjectifyService.begin();
@@ -425,6 +432,15 @@ public class Contact extends Cursor
     }
 
     // Change owner to contacts bulk
+    /**
+     * Creates owner key with the new owner id and changes owner key of the each
+     * contact in the bulk and saves the contact
+     * 
+     * @param contactsJSONArray
+     *            JSONArray object containing contact ids
+     * @param new_owner
+     *            new owner (DomainUser) id
+     */
     public static void changeOwnerToContactsBulk(JSONArray contactsJSONArray,
 	    String new_owner)
     {
@@ -436,17 +452,27 @@ public class Contact extends Cursor
 	    return;
 	}
 
-	Key agileUser = new Key(DomainUser.class, Long.parseLong(new_owner));
+	Key<DomainUser> newOwnerKey = new Key<DomainUser>(DomainUser.class,
+		Long.parseLong(new_owner));
 
 	for (Contact contact : contacts_list)
 	{
-	    contact.owner_key = agileUser;
+	    contact.owner_key = newOwnerKey;
 
 	    contact.save();
 	}
     }
 
     // Add tags to contacts bulk
+    /**
+     * Adds each tag in tags_array to each contact in contacts bulk and saves
+     * each contact
+     * 
+     * @param contactsJSONArray
+     *            JSONArray object containing contact ids
+     * @param tags_array
+     *            array of tags
+     */
     public static void addTagsToContactsBulk(JSONArray contactsJSONArray,
 	    String[] tags_array)
     {

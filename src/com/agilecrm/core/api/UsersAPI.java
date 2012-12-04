@@ -133,6 +133,13 @@ public class UsersAPI
     }
 
     // Bulk operation - delete
+    /**
+     * Deletes each user individually by iterating the json array of user ids
+     * 
+     * @param model_ids
+     *            array of user ids as String
+     * @throws JSONException
+     */
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
