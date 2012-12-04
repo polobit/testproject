@@ -13,6 +13,7 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -35,6 +36,7 @@ import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Unindexed;
 import com.googlecode.objectify.condition.IfDefault;
 
+@SuppressWarnings("serial")
 @XmlRootElement
 @Unindexed
 public class Contact extends Cursor
@@ -243,26 +245,26 @@ public class Contact extends Cursor
     public void save()
     {
 
-	// Check if contact is new
+	// Stores current contact id in to a temporary variable, to check
+	// whether contact is newly created or being edited.
+	Long id = this.id;
+
+	// Execute trigger for contacts
+	TriggerUtil.executeTriggerToContact(this);
+
+	dao.put(this);
+
+	// Enables to build "Document" search on current entity
+	AppengineSearch<Contact> search = new AppengineSearch<Contact>(
+		Contact.class);
+
+	// If contact is new then add it to document else edit document
 	if (id == null)
 	{
-	    dao.put(this);
-
-	    // When contact is new
-	    TriggerUtil.executeTriggertoContact(this, true);
-
-	    new AppengineSearch<Contact>(Contact.class).add(this);
+	    search.add(this);
+	    return;
 	}
-	else
-	{
-	    new AppengineSearch<Contact>(Contact.class).edit(this);
-
-	    // When contact already exists
-	    TriggerUtil.executeTriggertoContact(this, false);
-
-	    dao.put(this);
-	}
-
+	search.edit(this);
     }
 
     public static Contact getContact(Long id)
@@ -471,6 +473,7 @@ public class Contact extends Cursor
 	}
     }
 
+    @JsonIgnore
     @XmlElement(name = "domainUser")
     public DomainUser getDomainUser()
     {

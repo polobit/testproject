@@ -297,22 +297,19 @@ public class Opportunity
     // Save Opportunity
     public void save()
     {
-	if (id == null)
+
+	if (contacts != null)
 	{
-	    if (contacts != null)
+	    for (String contact_id : this.contacts)
+
 	    {
-		for (String contact_id : this.contacts)
-
-		{
-		    this.related_contacts.add(new Key<Contact>(Contact.class,
-			    Long.parseLong(contact_id)));
-		}
+		this.related_contacts.add(new Key<Contact>(Contact.class, Long
+			.parseLong(contact_id)));
 	    }
-
-	    if (this != null)
-		TriggerUtil.executeTriggertoDeals(this, null);
-
 	}
+
+	if (id == null)
+	    TriggerUtil.executeTriggerToDeals(this, null);
 
 	this.contacts = null;
 
