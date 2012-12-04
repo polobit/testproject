@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.util.DBUtil;
+import com.agilecrm.util.TaskUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.TaskletManager;
 
@@ -47,7 +48,7 @@ public class Tasks extends TaskletAdapter
 	{
 	    try
 	    {
-		List<Task> dueTasks = Task.getPendingTasks(Integer
+		List<Task> dueTasks = TaskUtil.getPendingTasks(Integer
 			.parseInt(dueDays));
 
 		log(campaignJSON, subscriberJSON, "Due Tasks : " + dueTasks

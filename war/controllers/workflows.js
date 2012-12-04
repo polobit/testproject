@@ -75,7 +75,7 @@ var WorkflowsRouter = Backbone.Router.extend({
         triggers:function () {
         	this.triggersCollectionView = new Base_Collection_View({
 
-                url: '/core/api/workflows/triggers',
+                url: '/core/api/triggers',
                 restKey: "triggers",
                 templateKey: "triggers",
                 individual_tag_name: 'tr',
@@ -87,7 +87,7 @@ var WorkflowsRouter = Backbone.Router.extend({
         },
         triggerAdd:function(){
         	this.triggerModelview = new Base_Model_View({
-        		url: 'core/api/workflows/triggers',
+        		url: 'core/api/triggers',
                 template: "trigger-add",
                 isNew: true,
                 window: 'triggers',
@@ -128,7 +128,7 @@ var WorkflowsRouter = Backbone.Router.extend({
             var currentTrigger = this.triggersCollectionView.collection.get(id);
             
             var view = new Base_Model_View({
-                url: 'core/api/workflows/triggers',
+                url: 'core/api/triggers',
                 model: currentTrigger,
                 template: "trigger-add",
                 window: 'triggers',
