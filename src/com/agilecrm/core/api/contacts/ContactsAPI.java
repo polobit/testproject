@@ -77,14 +77,16 @@ public class ContactsAPI
     {
 
 	// Check if the email exists with the current email address
-	Contact currentContact = Contact
-		.searchContactByEmail(contact.getContactFieldValue("EMAIL"));
+	Contact currentContact = Contact.searchContactByEmail(contact
+		.getContactFieldValue("EMAIL"));
 
 	// Throw non-200 if it exists
 	if (currentContact != null)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("Sorry, duplicate contact found with the same email address.").build());
+	    throw new WebApplicationException(
+		    Response.status(Response.Status.BAD_REQUEST)
+			    .entity("Sorry, duplicate contact found with the same email address.")
+			    .build());
 	}
 
 	contact.save();
@@ -168,7 +170,8 @@ public class ContactsAPI
     @Path("/{contact-id}/deals")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Opportunity> getCurrentContactOpportunity(@PathParam("contact-id") Long id)
+    public List<Opportunity> getCurrentContactOpportunity(
+	    @PathParam("contact-id") Long id)
     {
 	return Opportunity.getCurrentContactDeals(id);
     }
@@ -211,7 +214,8 @@ public class ContactsAPI
     @Path("/{contact-id}/notes/{id}")
     @DELETE
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void deleteNote(@PathParam("contact-id") Long contactId, @PathParam("id") Long noteId)
+    public void deleteNote(@PathParam("contact-id") Long contactId,
+	    @PathParam("id") Long noteId)
     {
 	try
 	{
@@ -237,8 +241,8 @@ public class ContactsAPI
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({ MediaType.APPLICATION_JSON })
-    public List<Contact> searchContactsByEmailList(@FormParam("email_ids") String email_ids)
-	    throws JSONException
+    public List<Contact> searchContactsByEmailList(
+	    @FormParam("email_ids") String email_ids) throws JSONException
     {
 	JSONArray contactsJSONArray = new JSONArray(email_ids);
 	List<Contact> contacts_list = new ArrayList<Contact>();
@@ -246,8 +250,8 @@ public class ContactsAPI
 	{
 	    try
 	    {
-		Contact contactDetails = Contact.searchContactByEmail(contactsJSONArray
-			.getString(i));
+		Contact contactDetails = Contact
+			.searchContactByEmail(contactsJSONArray.getString(i));
 		contacts_list.add(contactDetails);
 	    }
 	    catch (JSONException e)
@@ -259,17 +263,26 @@ public class ContactsAPI
     }
 
     // Bulk operations - delete
+    /**
+     * Deletes contacts bulk based on ids
+     * 
+     * @param model_ids
+     *            array of contact ids as String
+     * @throws JSONException
+     */
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteContacts(@FormParam("model_ids") String model_ids) throws JSONException
+    public void deleteContacts(@FormParam("model_ids") String model_ids)
+	    throws JSONException
     {
 
 	JSONArray contactsJSONArray = new JSONArray(model_ids);
 
 	for (int i = 0; i < contactsJSONArray.length(); i++)
 	{
-	    Contact contact = Contact.getContact(Long.parseLong(contactsJSONArray.getString(i)));
+	    Contact contact = Contact.getContact(Long
+		    .parseLong(contactsJSONArray.getString(i)));
 
 	    if (contact != null)
 		contact.delete();
@@ -278,10 +291,21 @@ public class ContactsAPI
     }
 
     // Bulk operations - change owner
+    /**
+     * Change the owner of contacts bulk
+     * 
+     * @param contact_ids
+     *            array of contact ids as String
+     * @param new_owner
+     *            id of new owner (DomainUser id)
+     * 
+     * @throws JSONException
+     */
     @Path("bulk/owner/{new_owner}")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void changeOwnerToContacts(@FormParam("contact_ids") String contact_ids,
+    public void changeOwnerToContacts(
+	    @FormParam("contact_ids") String contact_ids,
 	    @PathParam("new_owner") String new_owner) throws JSONException
     {
 	JSONArray contactsJSONArray = new JSONArray(contact_ids);
@@ -289,6 +313,15 @@ public class ContactsAPI
     }
 
     // Bulk operations - add tags
+    /**
+     * Add tags to contacts bulk
+     * 
+     * @param contact_ids
+     *            array of contact ids as String
+     * @param tagsString
+     *            array of tags as string
+     * @throws JSONException
+     */
     @Path("bulk/{tags}")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -302,10 +335,18 @@ public class ContactsAPI
     }
 
     // Bulk operations - delete tasks bulk related to a contact
+    /**
+     * Deletes bulk of tasks related to a contact
+     * 
+     * @param model_ids
+     *            array of task ids as String
+     * @throws JSONException
+     */
     @Path("/tasks/bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteTasks(@FormParam("model_ids") String model_ids) throws JSONException
+    public void deleteTasks(@FormParam("model_ids") String model_ids)
+	    throws JSONException
     {
 
 	JSONArray tasksJSONArray = new JSONArray(model_ids);
@@ -313,11 +354,18 @@ public class ContactsAPI
     }
 
     // Bulk operations - delete notes bulk related to a contact
+    /**
+     * Deletes bulk of notes related to a contact
+     * 
+     * @param model_ids
+     *            array of note ids as String
+     * @throws JSONException
+     */
     @Path("/notes/bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteNotes(@PathParam("contact-id") Long contactId,
-	    @FormParam("model_ids") String model_ids) throws JSONException
+    public void deleteNotes(@FormParam("model_ids") String model_ids)
+	    throws JSONException
     {
 
 	JSONArray notesJSONArray = new JSONArray(model_ids);
@@ -325,11 +373,18 @@ public class ContactsAPI
     }
 
     // Bulk operations - delete notes bulk related to a contact
+    /**
+     * Deletes bulk of deals related to a contact
+     * 
+     * @param model_ids
+     *            array of deal ids as String
+     * @throws JSONException
+     */
     @Path("/deals/bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteDeals(@PathParam("contact-id") Long contactId,
-	    @FormParam("model_ids") String model_ids) throws JSONException
+    public void deleteDeals(@FormParam("model_ids") String model_ids)
+	    throws JSONException
     {
 	JSONArray dealsJSONArray = new JSONArray(model_ids);
 	Note.dao.deleteBulkByIds(dealsJSONArray);

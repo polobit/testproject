@@ -83,6 +83,13 @@ public class CampaignsAPI
     }
 
     // Bulk operations - delete
+    /**
+     * Deletes logs bulk related to a campaign
+     * 
+     * @param model_ids
+     *            array of log ids as String
+     * @throws JSONException
+     */
     @Path("logs/bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -94,6 +101,16 @@ public class CampaignsAPI
     }
 
     // Bulk operations - add to campaign
+
+    /**
+     * Enrolls contacts bulk to a campaign
+     * 
+     * @param contact_ids
+     *            array of contact ids as String
+     * @param workflowId
+     *            campaign id that the contacts to be enrolled
+     * @throws JSONException
+     */
     @Path("enroll/bulk/{workflow-id}")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)

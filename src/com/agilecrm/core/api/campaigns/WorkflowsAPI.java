@@ -68,6 +68,13 @@ public class WorkflowsAPI
     }
 
     // Bulk operations - delete
+    /**
+     * Deletes bulk of campaigns using their keys list
+     * 
+     * @param model_ids
+     *            array of workflow ids as String
+     * @throws JSONException
+     */
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)

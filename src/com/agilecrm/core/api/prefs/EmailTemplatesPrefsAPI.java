@@ -66,6 +66,13 @@ public class EmailTemplatesPrefsAPI
     }
 
     // Bulk operations - delete
+    /**
+     * Deletes the bulk of email templates based on their ids
+     * 
+     * @param model_ids
+     *            array of emailTemplate ids as String
+     * @throws JSONException
+     */
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
