@@ -8,6 +8,7 @@ if user exists,it is redirected to login page in the same domain otherwise it is
 String error = "", success = "";
 //If Email is present
 String domain = request.getParameter("subdomain");
+
 if(!StringUtils.isEmpty(domain))
 {
     System.out.println(DomainUser.count());
@@ -20,10 +21,7 @@ if(!StringUtils.isEmpty(domain))
 	else
 	{
 	    error = "Domain already exists.";
-	    response.sendRedirect("https://" + domain + ".agilecrm.com/login");
-	    return;
 	}
-	
 }
 
 %>
@@ -107,7 +105,7 @@ padding-left:10px!important;
 
 	<div class="account-container">
 		<div class="content clearfix">
-				 <h1>Enter your domain</h1>
+				 <h1>Register (Step 1 of 2)</h1>
 				 <form name='choose_domain' id="choose_domain" method='post' style="padding:10px 0 15px;border-top: 1px dotted #CCC;">
 						<div class="alert alert-error domain-error" style="display:none;">
 							<a class="close" data-dismiss="alert" href="#">×</a>Please enter a valid domain 
@@ -158,18 +156,52 @@ padding-left:10px!important;
 				var subdomain = $("#subdomain").val();
 				
 				// validates the domain value
-				if(subdomain == null || subdomain == "" || subdomain.length < 4 || subdomain.length > 12)
+				if(subdomain == null || subdomain == "" || subdomain.length < 4 || subdomain.length > 12 
+			        || !isAlphaNumeric(subdomain) || !isNotValid(subdomain))
 				{
+					console.log("error");
 					//shows error message
 					$(".domain-error").show();
 					return false;
 				}
+				console.log("submited");
 				//Form is self submitted
 				$('#choose_domain').submit();
 				e.preventDefault();
 			});
 
 		});
+		function isNotValid(subdomain) {
+			subdomain = subdomain.toString();
+			var sub_domain = {};
+			sub_domain.my = "";
+			sub_domain.googleapps = "";
+			sub_domain.sales = "";
+			sub_domain.support = "";
+			sub_domain.login = "";
+			sub_domain.register = "";
+			for(var key in sub_domain){
+				
+				if(key == subdomain.toLowerCase()){
+					alert("Common domain cannot be created");
+					error = "Common domain cannot be created";
+					return false;
+				} 
+			}
+			return true;
+        }
+
+		function isAlphaNumeric(subdomain) {
+			subdomain = subdomain.toString();
+		  
+		  var regularExpression  = new RegExp(/^[a-zA-Z0-9]{4,12}$/);
+		  if(!regularExpression.test(subdomain)) {
+		        alert("Domain should not contain special character");
+		        error = "Domain should not contain special characters";
+		        return false;
+		    }
+		  return true;
+		}
 	</script>
 
 </body>
