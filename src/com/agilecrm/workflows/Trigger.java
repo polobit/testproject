@@ -124,7 +124,7 @@ public class Trigger
     }
 
     /**
-     * Campaign name is returned as an xml element which is retrieved using
+     * Returns campaign name as an xml element which is retrieved using
      * campaign-id
      * 
      * @return The campaign name as an xml element based on campaign id if
@@ -149,7 +149,7 @@ public class Trigger
     }
 
     /**
-     * Return trigger custom tags.
+     * Returns trigger's custom tags.
      * 
      * @return The custom tags of a trigger as Xml element
      */
@@ -160,7 +160,7 @@ public class Trigger
     }
 
     /**
-     * Save trigger in database
+     * Saves trigger in database
      */
     public void save()
     {
@@ -176,7 +176,7 @@ public class Trigger
     }
 
     /**
-     * Add custom trigger tags before save.Save trigger_tags array into Set.
+     * Adds custom trigger tags before save.Save trigger_tags array into Set.
      */
     @PrePersist
     private void PrePersist()

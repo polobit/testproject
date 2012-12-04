@@ -17,10 +17,7 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.agilecrm.contact.Contact;
 import com.agilecrm.deals.Opportunity;
-import com.agilecrm.user.NotificationPrefs;
-import com.agilecrm.workflows.Trigger;
 import com.agilecrm.workflows.TriggerUtil;
 
 @Path("/api/opportunity")
@@ -113,37 +110,7 @@ public class DealsAPI
 
 	JSONArray opportunitiesJSONArray = new JSONArray(model_ids);
 
-	for (int i = 0; i < opportunitiesJSONArray.length(); i++)
-	{
-	    id = opportunitiesJSONArray.get(i).toString();
-	    try
-	    {
-		// Get Opportunity based on id
-		Opportunity opportunity = Opportunity.getOpportunity(Long
-			.parseLong(id));
-
-		NotificationPrefs.executeNotification(
-			NotificationPrefs.Type.DEAL_CLOSED, opportunity);
-
-		// Get contacts related to deals
-		List<Contact> dealContacts = opportunity.getContacts();
-
-		// Execute trigger for corresponding contacts
-		if (dealContacts != null)
-		{
-		    for (Contact contact : dealContacts)
-			TriggerUtil.executeTriggerforOthers(contact.id,
-				Trigger.Type.DEAL_IS_DELETED);
-		}
-	    }
-
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-	    }
-
-	}
-
+	TriggerUtil.executeTriggertoDeals(null, opportunitiesJSONArray);
 	Opportunity.dao.deleteBulkByIds(opportunitiesJSONArray);
 
     }

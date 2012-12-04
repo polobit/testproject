@@ -23,7 +23,6 @@ import com.agilecrm.deferred.TagsDeferredTask;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.NotificationPrefs;
-import com.agilecrm.workflows.Trigger;
 import com.agilecrm.workflows.TriggerUtil;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -82,7 +81,8 @@ public class Contact extends Cursor
     public Integer lead_score = 0;
 
     // Dao
-    public static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
+    public static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(
+	    Contact.class);
 
     // Search Tokens
     @Indexed
@@ -121,7 +121,8 @@ public class Contact extends Cursor
 
     }
 
-    public Contact(Type type, String creator, Set<String> tags, List<ContactField> properties)
+    public Contact(Type type, String creator, Set<String> tags,
+	    List<ContactField> properties)
     {
 	this.type = type;
 	this.creator = creator;
@@ -135,9 +136,9 @@ public class Contact extends Cursor
     @Override
     public String toString()
     {
-	return "id: " + id + " created_time: " + created_time + " updated_time" + updated_time
-		+ " type: " + type + " creator:" + creator + " tags: " + tags + " properties: "
-		+ properties;
+	return "id: " + id + " created_time: " + created_time + " updated_time"
+		+ updated_time + " type: " + type + " creator:" + creator
+		+ " tags: " + tags + " properties: " + properties;
     }
 
     /* @XmlElement(name="properties2") */
@@ -173,7 +174,8 @@ public class Contact extends Cursor
 	if (owner_key == null)
 	{
 	    // Set lead owner(current domain user)
-	    owner_key = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
+	    owner_key = new Key<DomainUser>(DomainUser.class, SessionManager
+		    .get().getDomainId());
 
 	}
 
@@ -190,10 +192,6 @@ public class Contact extends Cursor
 	{
 	    updated_time = System.currentTimeMillis() / 1000;
 
-	    // Get Old Contact
-	    Contact oldContact = Contact.getContact(id);
-	    checkScoreChanges(this, oldContact);
-	    checkTagChanges(tags, oldContact.tags);
 	}
 
 	/*
@@ -226,11 +224,13 @@ public class Contact extends Cursor
 	Contact contact = this;
 
 	// Execute notification when contact is deleted
-	NotificationPrefs.executeNotification(NotificationPrefs.Type.CONTACT_DELETED, this);
+	NotificationPrefs.executeNotification(
+		NotificationPrefs.Type.CONTACT_DELETED, this);
 
 	dao.delete(this);
 
-	new AppengineSearch<Contact>(Contact.class).delete(contact.id.toString());
+	new AppengineSearch<Contact>(Contact.class).delete(contact.id
+		.toString());
 
 	// Delete Notes
 	Note.deleteAllNotes(id);
@@ -247,16 +247,21 @@ public class Contact extends Cursor
 	if (id == null)
 	{
 	    dao.put(this);
-	    TriggerUtil.executeTriggerforOthers(id, Trigger.Type.CONTACT_IS_ADDED);
-	    if (tags != null)
-		TriggerUtil.executeTriggerforTags(id, tags, Trigger.Type.TAG_IS_ADDED);
+
+	    // When contact is new
+	    TriggerUtil.executeTriggertoContact(this, true);
 
 	    new AppengineSearch<Contact>(Contact.class).add(this);
 	}
 	else
+	{
 	    new AppengineSearch<Contact>(Contact.class).edit(this);
 
-	dao.put(this);
+	    // When contact already exists
+	    TriggerUtil.executeTriggertoContact(this, false);
+
+	    dao.put(this);
+	}
 
     }
 
@@ -403,8 +408,8 @@ public class Contact extends Cursor
 	{
 	    try
 	    {
-		contactKeys.add(new Key<Contact>(Contact.class, Long.parseLong(contactsJSONArray
-			.getString(i))));
+		contactKeys.add(new Key<Contact>(Contact.class, Long
+			.parseLong(contactsJSONArray.getString(i))));
 	    }
 	    catch (JSONException e)
 	    {
@@ -418,9 +423,11 @@ public class Contact extends Cursor
     }
 
     // Change owner to contacts bulk
-    public static void changeOwnerToContactsBulk(JSONArray contactsJSONArray, String new_owner)
+    public static void changeOwnerToContactsBulk(JSONArray contactsJSONArray,
+	    String new_owner)
     {
-	List<Contact> contacts_list = Contact.getContactsBulk(contactsJSONArray);
+	List<Contact> contacts_list = Contact
+		.getContactsBulk(contactsJSONArray);
 	if (contacts_list.size() == 0)
 	{
 	    System.out.println("Null contact");
@@ -438,10 +445,12 @@ public class Contact extends Cursor
     }
 
     // Add tags to contacts bulk
-    public static void addTagsToContactsBulk(JSONArray contactsJSONArray, String[] tags_array)
+    public static void addTagsToContactsBulk(JSONArray contactsJSONArray,
+	    String[] tags_array)
     {
 
-	List<Contact> contacts_list = Contact.getContactsBulk(contactsJSONArray);
+	List<Contact> contacts_list = Contact
+		.getContactsBulk(contactsJSONArray);
 
 	if (contacts_list.size() == 0)
 	{
@@ -460,61 +469,6 @@ public class Contact extends Cursor
 
 	    contact.save();
 	}
-    }
-
-    /**
-     * Checks for any score changes in the Contact and runs DeferredTask for
-     * Score if any changes like adding score or decreasing score
-     * 
-     * @param updatedContact
-     *            The Contact that is updated in the data store
-     * @param oldContact
-     *            The same Contact in the data store before update.
-     */
-    public static void checkScoreChanges(Contact updatedContact, Contact oldContact)
-    {
-	System.out.println("Score of updated contact" + updatedContact.lead_score + "Score of old"
-		+ oldContact.lead_score);
-	if (updatedContact.lead_score == oldContact.lead_score)
-	{
-	    return;
-	}
-	else
-	{
-	    ScoreDeferredTask scoredeferredtask = new ScoreDeferredTask(updatedContact.id,
-		    oldContact.lead_score, updatedContact.lead_score);
-	    Queue queue = QueueFactory.getDefaultQueue();
-	    queue.add(TaskOptions.Builder.withPayload(scoredeferredtask));
-	}
-    }
-
-    /**
-     * Checks for any tag changes in the Contact
-     * 
-     * @param updatedTags
-     *            The resultant tags after addition or deletion of tags occurs
-     * @param oldTags
-     *            The tags before addition or deletion of tags occurs
-     */
-    public void checkTagChanges(Set<String> updatedTags, Set<String> oldTags)
-    {
-
-	// When tag is added,updated tags size is greater than old tags
-	if (updatedTags.size() > oldTags.size())
-	{
-
-	    // Gets tag which is added
-	    updatedTags.removeAll(oldTags);
-	    TriggerUtil.executeTriggerforTags(id, updatedTags, Trigger.Type.TAG_IS_ADDED);
-	}
-	if (updatedTags.size() < oldTags.size())
-	{
-
-	    // Gets tag which is deleted
-	    oldTags.removeAll(updatedTags);
-	    TriggerUtil.executeTriggerforTags(id, oldTags, Trigger.Type.TAG_IS_DELETED);
-	}
-
     }
 
     @XmlElement(name = "domainUser")
