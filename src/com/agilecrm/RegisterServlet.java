@@ -124,9 +124,6 @@ public class RegisterServlet extends HttpServlet
 	    HttpServletResponse response) throws Exception
     {
 
-	// Get server type
-	String server = request.getParameter("server");
-
 	// Get User Info
 	UserInfo userInfo = (UserInfo) request.getSession().getAttribute(
 		SessionManager.AUTH_SESSION_COOKIE_NAME);
@@ -137,6 +134,9 @@ public class RegisterServlet extends HttpServlet
 		    + ".agilecrm.com/");
 	    return;
 	}
+
+	// Get server type
+	String server = request.getParameter("server");
 
 	// Get OAuth URL
 	String url = Util.getOauthURL(server);

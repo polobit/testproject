@@ -184,19 +184,38 @@ public class LoginServlet extends HttpServlet
 	request.getSession().setAttribute(
 		SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
 
+	// To set session active for 30 days if "keep me signin"
 	if (request.getParameter("signin") != null
 		&& request.getParameter("signin").equalsIgnoreCase("on"))
 	{
-	    request.getSession().setMaxInactiveInterval(5 * 24 * 60 * 60);
+	    request.getSession().setMaxInactiveInterval(30 * 24 * 60 * 60);
+	}
+	else
+	{
+	    request.getSession().setMaxInactiveInterval(2 * 60 * 60);
+	}
+
+	String returnURL = (String) request.getSession().getAttribute(
+		"return_url");
+	if (returnURL != null)
+	{
+	    System.out.println(returnURL);
+	    response.sendRedirect("https://" + domainUser.domain
+		    + ".agilecrm.com" + returnURL);
+	    return;
 	}
 
 	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 	{
 	    response.sendRedirect("https://" + domainUser.domain
 		    + ".agilecrm.com/");
+	    return;
 	}
 	else
+	{
 	    response.sendRedirect("/");
+	    return;
+	}
 
     }
 }

@@ -31,6 +31,17 @@
 	    response.sendRedirect("/login");
 	    return;
 	}
+
+	DomainUser domainUser = DomainUser.getDomainCurrentUser();
+	System.out.println("Domain user " + domainUser);
+	
+	//Setting domain cookie
+	if (domainUser.domain != null)
+	{
+	 Cookie cookie = new Cookie("agile_domain", domainUser.domain);
+	 cookie.setMaxAge(10 * 24 * 60 * 60);
+	 response.addCookie(cookie);
+	}
 	
 	ObjectMapper mapper = new ObjectMapper();
 	
@@ -86,90 +97,79 @@ String CSS_PATH = "/";
 
 	<div class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
-			<div class = "container<%=width%>">
+			<div class="container<%=width%>">
 				<a class="btn btn-navbar" data-toggle="collapse"
-					data-target=".nav-collapse"> 
-					<span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            </a>
-					 <a
-					class="brand" href="#dashboard">Agile CRM</a>
+					data-target=".nav-collapse"> <span class="icon-bar"></span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span>
+				</a> <a class="brand" href="#dashboard">Agile CRM</a>
 				<div class="nav-collapse">
 					<ul class="nav agile-menu">
 						<li id="homemenu" class="active">
-						<li id="contactsmenu"><a href="#contacts"><i class="icon-user icon-white"></i> Contacts</a>
-						<li id="calendarmenu"><a href="#calendar"><i class="icon-calendar icon-white"></i> Calendar</a>
-						<li id="dealsmenu"><a href="#deals"><i class="icon-money icon-white"></i> Deals</a>
-						<li id="workflowsmenu"><a href="#workflows"><i class="icon-sitemap icon-white"></i> Campaigns</a>
-						<li id="reportsmenu"><a href="#reports"><i class="icon-share icon-white"></i> Reports</a>
+						<li id="contactsmenu"><a href="#contacts"><i
+								class="icon-user icon-white"></i> Contacts</a>
+						<li id="calendarmenu"><a href="#calendar"><i
+								class="icon-calendar icon-white"></i> Calendar</a>
+						<li id="dealsmenu"><a href="#deals"><i
+								class="icon-money icon-white"></i> Deals</a>
+						<li id="workflowsmenu"><a href="#workflows"><i
+								class="icon-sitemap icon-white"></i> Campaigns</a>
+						<li id="reportsmenu"><a href="#reports"><i
+								class="icon-share icon-white"></i> Reports</a>
 					</ul>
-					
+
 					<%
-						String logoutURL = "/login";
-						UserInfo user = SessionManager.get();
+					    String logoutURL = "/login";
+					    UserInfo user = SessionManager.get();
 					%>
-              			<form id="searchForm" class=" navbar-search" style="display:inline;">
-							<input id="searchText" type="text" data-provide="typeahead" class="typeahead typeahead_contacts search-query" placeholder="Search"></input>
-							<input id="search-results" type="image" src="img/SearchIcon.png" class="searchbox"/>
-						</form>
-						
+					<form id="searchForm" class=" navbar-search"
+						style="display: inline;">
+						<input id="searchText" type="text" data-provide="typeahead"
+							class="typeahead typeahead_contacts search-query"
+							placeholder="Search"></input> <input id="search-results"
+							type="image" src="img/SearchIcon.png" class="searchbox" />
+					</form>
+
 					<ul class="nav pull-right">
-					
-					<li class="dropdown" id="menu1"><a class="dropdown-toggle"
+
+						<li class="dropdown" id="menu1"><a class="dropdown-toggle"
 							data-toggle="dropdown" href="#menu1">Add New <i class='caret'></i></a>
 							<ul class="dropdown-menu">
 								<li><a href="#personModal" data-toggle="modal" id="person">Contact</a>
 								</li>
 								<li><a href="#companyModal" data-toggle="modal"
-									id="company">Company</a>
-								</li>
-							
-								<li><a href="#"
-									id="show-activity">Activity</a>
-								</li>
-								
-								<li><a href="#deals-add" 
-									id="activity">Deal</a>
-								</li>
-								<li><a href="#" id="show-note">Note</a>
-        						</li>
-							</ul>
-							
-							<!-- 
+									id="company">Company</a></li>
+
+								<li><a href="#" id="show-activity">Activity</a></li>
+
+								<li><a href="#deals-add" id="activity">Deal</a></li>
+								<li><a href="#" id="show-note">Note</a></li>
+							</ul> <!-- 
 							<img style='display:hidden' id='ajax'
 								src='img/ajax-loader.gif' />
-								-->
-						</li>
-					
+								--></li>
+
 						<li id="fat-menu" class="dropdown"><a href=""
 							class="dropdown-toggle" data-toggle="dropdown"><i
 								class="agilecrm-profile-dropdown"></i> </a>
 							<ul class="dropdown-menu">
-								<li>
-									<a href='#settings'><%=user.getEmail()%></a>
-											</li>
+								<li><a href='#settings'><%=user.getEmail()%></a></li>
 								<li class="divider"></li>
-								<li>
-								<a href="#settings"><i class="icon-cog"></i> Preferences</a>
-								</li>
-								
-									<%
-									DomainUser domainUser = DomainUser.getDomainCurrentUser();
-									System.out.println("Domain user " + domainUser);
-									
-									if(domainUser != null && domainUser.is_admin)
+								<li><a href="#settings"><i class="icon-cog"></i>
+										Preferences</a></li>
+
+								<%
+								    if (domainUser != null && domainUser.is_admin)
 										out.println("<li><a href='#admin'><i class='icon-fire'></i> Admin Settings</a></li>");
-									%>
-								</li>
-																					
-        							<li><a href="#contact-us"><i class="icon-pencil"></i> Contact Us</a></li>
-								<li>
-								<a href="<%=logoutURL%>"><i class="icon-off"></i> Logout</a>
-								</li>
-								
-							</ul>
-						</li>
+								%>
+							</li>
+
+						<li><a href="#contact-us"><i class="icon-pencil"></i>
+								Contact Us</a></li>
+						<li><a href="<%=logoutURL%>"><i class="icon-off"></i>
+								Logout</a></li>
+
+					</ul>
+					</li>
 					</ul>
 				</div>
 				<!--/.nav-collapse -->
@@ -179,9 +179,9 @@ String CSS_PATH = "/";
 
 	<div class="container<%=width%>">
 		<div id="content" class="">
-		
-		<img class="loading" style="padding-right:5px" src= "img/21-0.gif"></img>
-		
+
+			<img class="loading" style="padding-right: 5px" src="img/21-0.gif"></img>
+
 		</div>
 	</div>
 
@@ -191,17 +191,17 @@ String CSS_PATH = "/";
 	<div class='notifications top-right'></div>
 	<div class='notifications bottom-left'></div>
 	<div class='notifications bottom-right'></div>
-	
-	
-	
+
+
+
 	<!-- Templates -->
 	<%@ include file="tpl/min/tpl.js" %>	
 	
 	<!-- Determine Console.logging - we log in local boxes -->
-	<% 
-	boolean debug = true;
-	if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
-	    debug = false;
+	<%
+	    boolean debug = true;
+	    if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
+			debug = false;
 	%>
 	
 	

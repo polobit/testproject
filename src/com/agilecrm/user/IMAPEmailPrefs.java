@@ -143,8 +143,11 @@ public class IMAPEmailPrefs
     @PostLoad
     private void PostLoad() throws DecoderException
     {
-	// Decrypt password
-	password = Util.decrypt(encrypted_password);
+	if (encrypted_password != null)
+	{
+	    // Decrypt password
+	    password = Util.decrypt(encrypted_password);
+	}
     }
 
     public static IMAPEmailPrefs getIMAPEmailPrefs(Long id, Key<AgileUser> user)

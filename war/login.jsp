@@ -2,11 +2,10 @@
 <%@page import="com.agilecrm.account.AccountPrefs"%>
 <%
 /*
-we use setAttribute() to store the username and to autofill if he want to resubmit
-the form after correcting the error occurred. 
+we use setAttribute() to store the username and to autofill if he want to resubmit the form after correcting the error occurred. 
 */
 
-//Get User Name
+// Gets User Name
 String email = request.getParameter("email");
 
 if (email != null)
@@ -17,7 +16,7 @@ request.setAttribute("agile_email", email);
 
 }
 	
-//Check if it is being access directly and not through servlet
+// Checks if it is being access directly and not through servlet
 if(request.getAttribute("javax.servlet.forward.request_uri") == null)
 {
   response.sendRedirect("/login");
@@ -30,7 +29,7 @@ if(error != null)
 else
   error = "";
 
-//Users can show their logo on login page. 
+// Users can show their logo on login page. 
 AccountPrefs accountPrefs = AccountPrefs.getAccountPrefs();
 String logo_url = accountPrefs.logo;
 
@@ -58,7 +57,7 @@ String logo_url = accountPrefs.logo;
 <style>
 @media ( min-width : 900px) {
 	body {
-		padding-top: 30px;
+		padding-top: 20px;
 	}
 	.navbar-search {
 		padding-left: 10%
@@ -176,14 +175,13 @@ margin-bottom:0px;
 							
 						<h3><small>Login using existing accounts</small></h3>
 					  <div  style="padding-top:10px;">
-						<input type='hidden' name='auth' value='auth'></input>
 						<input type='hidden' name='type' value='oauth'></input>
 						<input type='hidden' name='server' id='oauth-name' value=''></input>
 						<a title="log in with Google" data='google' href='#' style="background: #FFF url(img/signin/openid-logos.png); background-position: -1px -1px" class="google openid_large_btn"></a>
 						<a title="log in with Yahoo" data='yahoo' href="#"	style="background: #FFF url(img/signin/openid-logos.png); background-position: -1px -63px" class="yahoo openid_large_btn"></a>
 					  </div>
 					</div>
-					<br />
+					<br/>
 				</form>
 				<div class="clearfix"></div>
 
@@ -192,7 +190,6 @@ margin-bottom:0px;
 					<h3><small>Sign in using your registered account</small></h3>
 					
 					<div id="openid_btns" style="float: left; padding: 5px 0 15px;">
-                        <input type='hidden' name='auth' value='auth'></input>
 						<input type='hidden' name='type' value='agile'></input>
 						<input class="input-xlarge required email field" name='email' type="text" maxlength="50" minlength="6" placeholder="UserName (Email)" autocapitalize="off"
 						<%if(request.getAttribute("agile_email")  != null) {%> value="<%=request.getAttribute("agile_email") %>" <%}%>>
@@ -207,7 +204,7 @@ margin-bottom:0px;
 
 						</div>
 					</div>
-					<br />
+					<br/>
 				</form>
 
 				<div class="clearfix"></div>
@@ -215,7 +212,7 @@ margin-bottom:0px;
 			</div>
 		</div>
 		<div style="text-align: center; line-height: 19px;">
-			Don't have an account? <a href="/register">Sign Up</a><br>
+			Don't have an account? <a href="/register">Sign Up</a><br/>
 			Forgot <a href="/forgot-password">Password </a><a href="/forgot-domain">Domain</a>
 		</div>
 	</div>
@@ -228,7 +225,7 @@ margin-bottom:0px;
 			{
 				console.log("ready to oauth form");
 				
-				// Get Data Google/Yahoo and submits to LoginServlet
+				// Gets Data Google/Yahoo and submits to LoginServlet
 				var data = $(this).attr('data');
 				$('#oauth-name').val(data);
 				$('#oauth').submit();
@@ -245,7 +242,7 @@ margin-bottom:0px;
 
 		});
 		
-		//validates the form fields
+		// Validates the form fields
 		function isValid()
 		{
 			$("#agile").validate();
