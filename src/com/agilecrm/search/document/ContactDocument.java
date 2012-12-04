@@ -89,7 +89,7 @@ public class ContactDocument implements BuilderInterface
 	Document.Builder doc = Document.newBuilder();
 
 	// Processes contact property fields and tags(in normalized form)
-	Map<String, String> fields = SearchUtil.getDocumentFields(contact);
+	Map<String, String> fields = SearchUtil.getFieldsMap(contact);
 
 	/*
 	 * Sets fields to document from the map of contact fields values

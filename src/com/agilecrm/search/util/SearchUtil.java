@@ -29,7 +29,7 @@ public class SearchUtil
      *            {@link Contact}
      * @return {@link Map}
      */
-    public static Map<String, String> getDocumentFields(Contact contact)
+    public static Map<String, String> getFieldsMap(Contact contact)
     {
 	// Map to store all the fields
 	Map<String, String> fields = new HashMap<String, String>();

@@ -2,6 +2,17 @@
 var QUERY_RESULTS;
 var TYPEHEAD_TAGS = {};
 var RESULT_DROPDOWN_ELEMENT;
+
+/**
+ * This defines simple search keywords entered in input fields are sent to back end as query through bootstrap typeahead. 
+ * Methods render, matcher, updater are overridden for custom functionality 
+ * @method agile_type_ahead
+ * @param id Html element id of input field
+ * @param el Html element of the view
+ * @param callback To customer contacts to show in dropdown
+ * @param isSearch Callback to override functionalities of updater function
+ * @author Yaswanth
+ */
 function agile_type_ahead(id, el, callback, isSearch) {
 	
 	// Turn off browser default auto complete
@@ -12,20 +23,24 @@ function agile_type_ahead(id, el, callback, isSearch) {
 	$('#' + id, el).typeahead({
 		source : function(query, process) {
 			
-			// Store typeahead object in temp variable
+			// Reset the results before query
+			CONTACTS = {};
+			
+			// Store type ahead object in temporary variable
 			var that = this;
 			
-			// Call render because menu needs to be initialized even before first result is fetched
+			// Set css and html data to be displayed
+			that.$menu.css("width",300);
+			
+			// Call render because menu needs to be initialized even before first result is fetched to show loading 
 			this.render();
 			
-			// Loading image is not avialable in menu then append it to menu
+			// Loading image is not available in menu then append it to menu
 			if(!$(this.$menu.find('li').last()).hasClass('loading-results'))			
 				this.$menu.append('<li class="divider"></li><li class="loading-results"><p align="center">'+LOADING_ON_CURSOR+'</p></li>');
 			
+			// Show drop down which loading image 
 			this.shown = true;
-			
-			// Reset the results before query
-			CONTACTS = {};
 			
 			// Get data on query
 			$.getJSON("core/api/search/" + query,
@@ -37,14 +52,12 @@ function agile_type_ahead(id, el, callback, isSearch) {
 				// Set results in global variable used to show results in different page
 				QUERY_RESULTS = data;
 				
-				// If no result found based on query show info in type-ahead drop-down
+				// If no result found based on query, show info in type-ahead drop-down
 				if(data.length == 0)
 				{	
 					// Call render to activate menu
 					that.render();
-					
-					// Set css and html data to be displayed
-					that.$menu.css("width",300);
+
 					that.$menu.html('<p align="center"><b>No Results Found</b><p>').show();
 					
 					// Return further processing data not required 
@@ -86,7 +99,6 @@ function agile_type_ahead(id, el, callback, isSearch) {
 			// If query results are not available activate the menu to show info and return
 			if(!CONTACTS.length)
 			{
-				this.$menu.css("width",300);
 				this.show();
 				return;
 			}
@@ -102,7 +114,7 @@ function agile_type_ahead(id, el, callback, isSearch) {
 							i = $(that.options.item).attr('data-value', fullname);
 							
 							// returns template can be contact or company compares in template
-							i.find('a').append(getTemplate('typeahead-contacts',item));
+							i.find('a').html(getTemplate('typeahead-contacts',item));
 							
 							/* highlighter*/
 							//i.find('a').append('<div><div style="display:inline;padding-right:10px;height:auto;"><img src="'+ pic +'"style="width:50px;height:50px;"></img></div><div style="height:auto;display:inline-block;vertical-align:-20px;">' + that.highlighter(fullname) + '<br/>'+ that.highlighter(email) +'<br/>'+ that.highlighter(company) +'</div></div>');
@@ -115,8 +127,6 @@ function agile_type_ahead(id, el, callback, isSearch) {
 				// Set first li element as active
 				//items.first().addClass('active');
 				items.css("overflow", "hidden");
-				// Set the width of typeahead dropdown
-				this.$menu.css("width",300);
 				
 				// Calls show to show the dropdown
 				this.$menu.html(items).show();
@@ -180,12 +190,13 @@ $('#remove_tag').die().live('click', function(event){
 
 
 
-/*
- * Customization of Type-Ahead data  
+											/* Customization of Type-Ahead data  */
+
+/**
+ * Returns list of contacts names for type ahead
+ * @method contacts_typeahead
+ * @param data process contact results from type-ahead
  */
-
-
-// Returns list of contacts names for type ahead
 function contacts_typeahead(data){
 	if(data != null)
 	{
