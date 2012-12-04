@@ -110,7 +110,9 @@ public class DealsAPI
 
 	JSONArray opportunitiesJSONArray = new JSONArray(model_ids);
 
-	TriggerUtil.executeTriggertoDeals(null, opportunitiesJSONArray);
+	// Executes trigger when deal is deleted
+	TriggerUtil.executeTriggerToDeals(null, opportunitiesJSONArray);
+
 	Opportunity.dao.deleteBulkByIds(opportunitiesJSONArray);
 
     }

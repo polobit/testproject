@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -11,7 +12,8 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.workflows.Trigger.Type;
-import com.google.appengine.api.taskqueue.DeferredTask;
+import com.agilecrm.workflows.deferred.ScoreDeferredTask;
+import com.agilecrm.workflows.deferred.TriggersDeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -126,49 +128,29 @@ public class TriggerUtil
     }
 
     /**
-     * Locates trigger based on condition and score
-     * 
-     * @param condition
-     *            Trigger condition
-     * @param customScore
-     *            Trigger score
-     * @return Triggers based on condition and score
-     */
-
-    public static List<Trigger> getTriggersByConditionandScore(Type condition,
-	    Integer customScore)
-    {
-	Objectify ofy = ObjectifyService.begin();
-	return ofy.query(Trigger.class).filter("type", condition)
-		.filter("custom_score", customScore).list();
-    }
-
-    /**
      * Executes trigger when score or tag changes occurs or new contact is added
      * 
      * @param contact
      *            Contact on which changes occur
-     * @param newContact
-     *            Boolean value true for new contact otherwise false
+     * 
      */
-    public static void executeTriggertoContact(Contact contact,
-	    Boolean newContact)
+    public static void executeTriggerToContact(Contact contact)
     {
-	if (newContact)
+	// Check if contact is new
+	if (contact.id == null)
 	{
-	    executeTriggerforOthers(contact.id, Trigger.Type.CONTACT_IS_ADDED);
+	    executeTriggerforOthers(contact, Trigger.Type.CONTACT_IS_ADDED);
 
 	    if (!contact.tags.isEmpty())
-		executeTriggerforTags(contact.id, contact.tags,
+		executeTriggerforTags(contact, contact.tags,
 			Trigger.Type.TAG_IS_ADDED);
+	    return;
 
 	}
-	else
-	{
-	    Contact oldContact = Contact.getContact(contact.id);
-	    checkScoreChange(oldContact, contact);
-	    checkTagsChange(oldContact, contact);
-	}
+
+	Contact oldContact = Contact.getContact(contact.id);
+	checkScoreChange(oldContact, contact);
+	checkTagsChange(oldContact, contact);
 
     }
 
@@ -184,7 +166,7 @@ public class TriggerUtil
      *            deleted
      */
 
-    public static void executeTriggerforTags(Long contactId,
+    public static void executeTriggerforTags(Contact contact,
 	    Set<String> changedTags, Type tagCondition)
     {
 
@@ -199,25 +181,19 @@ public class TriggerUtil
 	    {
 		for (Trigger trigger : triggersList)
 		{
-		    // Get custom tags given for trigger
+
 		    if (trigger.custom_tags != null)
 		    {
-			System.out.println("The given tags for a trigger:"
-				+ trigger.custom_tags + "Tag condition"
-				+ tagCondition);
 
 			// Execute trigger when tags are same as custom tags
 			// added to a contact
 			if (changedTags.containsAll(trigger.custom_tags))
-			    executeTriggerTask(contactId,
+			    executeTriggerTask(contact,
 				    Long.parseLong(trigger.campaign_id));
 
-			else
-			    continue;
 		    }
 		}
-		// Avoid further looping
-		triggersList = null;
+
 	    }
 	}
 	catch (Exception e)
@@ -227,7 +203,7 @@ public class TriggerUtil
     }
 
     /**
-     * Executes trigger if score of contact meets trigger custom score
+     * Executes trigger if score of contact hits trigger custom score
      * 
      * @param contactId
      *            Contact Id
@@ -236,8 +212,8 @@ public class TriggerUtil
      * @param newScore
      *            Contact score after changes made
      */
-    public static void executeTriggerforScore(Long id, Integer oldScore,
-	    Integer newScore)
+    public static void executeTriggerforScore(Contact contact,
+	    Integer oldScore, Integer newScore)
     {
 
 	List<Trigger> triggersList = null;
@@ -245,8 +221,6 @@ public class TriggerUtil
 	try
 	{
 	    triggersList = getTriggersByCondition(Trigger.Type.ADD_SCORE);
-	    System.out.println("Triggers with condition ADD_SCORE:"
-		    + triggersList);
 
 	    if (triggersList != null)
 	    {
@@ -256,19 +230,71 @@ public class TriggerUtil
 		    if ((oldScore < trigger.custom_score)
 			    && (newScore >= trigger.custom_score))
 		    {
-			executeTriggerTask(id,
+			executeTriggerTask(contact,
 				Long.parseLong(trigger.campaign_id));
 		    }
 
 		}
-		// Avoid further looping
-		triggersList = null;
+
 	    }
 	}
 
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	}
+    }
+
+    /**
+     * Executes trigger for Deals when deal is created or deal is deleted.
+     * 
+     * @param opportunity
+     *            Opportunity object when deal is created
+     * @param OpportunityIds
+     *            Opportunity Ids of deals that are selected for deletion
+     */
+    public static void executeTriggerToDeals(Opportunity opportunity,
+	    JSONArray OpportunityIds)
+    {
+	// Executes trigger when deal is created
+	if (opportunity != null && opportunity.id == null)
+	{
+	    for (Contact contact : opportunity.getContacts())
+
+	    {
+		TriggerUtil.executeTriggerforOthers(contact,
+			Trigger.Type.DEAL_IS_ADDED);
+	    }
+	    return;
+	}
+
+	// Executes trigger when deal is deleted
+	else if (OpportunityIds != null)
+	{
+	    try
+	    {
+		for (int i = 0; i < OpportunityIds.length(); i++)
+		{
+		    String id = OpportunityIds.get(i).toString();
+
+		    // Gets Opportunity based on id
+		    Opportunity opportunityObject = Opportunity
+			    .getOpportunity(Long.parseLong(id));
+
+		    // Executes trigger for corresponding contacts
+		    for (Contact contact : opportunityObject.getContacts())
+		    {
+			TriggerUtil.executeTriggerforOthers(contact,
+				Trigger.Type.DEAL_IS_DELETED);
+		    }
+
+		}
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+
 	}
     }
 
@@ -281,7 +307,7 @@ public class TriggerUtil
      *            Trigger condition
      */
 
-    public static void executeTriggerforOthers(Long contactId, Type condition)
+    public static void executeTriggerforOthers(Contact contact, Type condition)
     {
 	List<Trigger> triggersList = null;
 
@@ -297,11 +323,10 @@ public class TriggerUtil
 		for (Trigger trigger : triggersList)
 
 		{
-		    executeTriggerTask(contactId,
+		    executeTriggerTask(contact,
 			    Long.parseLong(trigger.campaign_id));
 		}
-		// Avoid further looping
-		triggersList = null;
+
 	    }
 	}
 	catch (Exception e)
@@ -309,101 +334,6 @@ public class TriggerUtil
 	    e.printStackTrace();
 	}
 
-    }
-
-    /**
-     * Executes triggers using DeferredTask and Queue.Builds
-     * {@link TriggersDeferredTask} for triggers
-     * 
-     * @param contactId
-     *            Contact Id
-     * 
-     * @param campaignId
-     *            Campaign Id of respective trigger
-     * 
-     * @param customScore
-     *            Custom score of contact
-     * 
-     * @param customTags
-     *            Custom tags of contact
-     */
-
-    public static void executeTriggerTask(Long contactId, Long campaignId)
-    {
-	System.out.println("Executing trigger with contactID:" + contactId
-		+ "Campaign id" + campaignId);
-
-	TriggersDeferredTask triggersDeferredTask = new TriggersDeferredTask(
-		contactId, campaignId);
-	Queue queue = QueueFactory.getDefaultQueue();
-	queue.add(TaskOptions.Builder.withPayload(triggersDeferredTask));
-    }
-
-    /**
-     * Executes trigger for Deals when deal is created or deal is deleted.
-     * 
-     * @param opportunity
-     *            Opportunity object when deal is created
-     * @param OpportunityIds
-     *            Opportunity Ids of deals that are selected for deletion
-     */
-    public static void executeTriggertoDeals(Opportunity opportunity,
-	    JSONArray OpportunityIds)
-    {
-
-	String id = null;
-
-	// Executes trigger when deal is created
-	if (opportunity != null && OpportunityIds == null)
-	{
-	    if (opportunity.contacts != null)
-	    {
-		for (String contactId : opportunity.contacts)
-
-		{
-		    TriggerUtil.executeTriggerforOthers(
-			    Long.parseLong(contactId),
-			    Trigger.Type.DEAL_IS_ADDED);
-		}
-		opportunity.contacts = null;
-	    }
-	}
-
-	// Executes trigger when deal is deleted
-	if (opportunity == null && OpportunityIds != null)
-	{
-	    try
-	    {
-		for (int i = 0; i < OpportunityIds.length(); i++)
-		{
-		    id = OpportunityIds.get(i).toString();
-
-		    // Get Opportunity based on id
-		    Opportunity opportunityObject = Opportunity
-			    .getOpportunity(Long.parseLong(id));
-
-		    // Get contacts related to deals
-		    List<Contact> dealContacts = opportunityObject
-			    .getContacts();
-
-		    // Execute trigger for corresponding contacts
-		    if (dealContacts != null)
-		    {
-			for (Contact contact : dealContacts)
-			    TriggerUtil.executeTriggerforOthers(contact.id,
-				    Trigger.Type.DEAL_IS_DELETED);
-
-			dealContacts = null;
-		    }
-
-		}
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-	    }
-
-	}
     }
 
     /**
@@ -425,14 +355,14 @@ public class TriggerUtil
 	{
 	    return;
 	}
-	else
-	{
-	    ScoreDeferredTask scoredeferredtask = new ScoreDeferredTask(
-		    updatedContact.id, oldContact.lead_score,
-		    updatedContact.lead_score);
-	    Queue queue = QueueFactory.getDefaultQueue();
-	    queue.add(TaskOptions.Builder.withPayload(scoredeferredtask));
-	}
+
+	String contactJSON = getJSONStringfromEntity(updatedContact);
+
+	ScoreDeferredTask scoredeferredtask = new ScoreDeferredTask(
+		contactJSON, oldContact.lead_score, updatedContact.lead_score);
+	Queue queue = QueueFactory.getDefaultQueue();
+	queue.add(TaskOptions.Builder.withPayload(scoredeferredtask));
+
     }
 
     /**
@@ -456,62 +386,95 @@ public class TriggerUtil
 
 	    // Gets tag which is added
 	    updatedTags.removeAll(oldTags);
-	    executeTriggerforTags(updatedContact.id, updatedTags,
+
+	    // Executes trigger with added tags
+	    executeTriggerforTags(updatedContact, updatedTags,
 		    Trigger.Type.TAG_IS_ADDED);
 
 	}
-	if (updatedTags.size() < oldTags.size())
+	else if (updatedTags.size() < oldTags.size())
 	{
 
 	    // Gets tag which is deleted
 	    oldTags.removeAll(updatedTags);
-	    executeTriggerforTags(updatedContact.id, oldTags,
+
+	    // Executes trigger with deleted tags
+	    executeTriggerforTags(updatedContact, oldTags,
 		    Trigger.Type.TAG_IS_DELETED);
 
 	}
 
     }
 
-}
-
-/**
- * Implements DeferredTask interface for triggers.Execute campaign with respect
- * to trigger condition and contact.
- * 
- */
-@SuppressWarnings("serial")
-class TriggersDeferredTask implements DeferredTask
-{
-
-    Long contactId;
-
-    Long campaignId;
-
     /**
-     * Constructs new {@link TriggersDeferredTask} with contact id and trigger
-     * condition.
+     * Executes triggers using DeferredTask and Queue.Builds
+     * {@link TriggersDeferredTask} for triggers
      * 
      * @param contactId
-     *            Contact id
+     *            Contact Id
+     * 
      * @param campaignId
-     *            CampaignId of a campaign which runs with a trigger.
+     *            Campaign Id of respective trigger
      */
-    public TriggersDeferredTask(Long contactId, Long campaignId)
-    {
 
-	this.contactId = contactId;
-	this.campaignId = campaignId;
+    public static void executeTriggerTask(Contact contact, Long campaignId)
+    {
+	System.out.println("Executing trigger with contactID:" + contact
+		+ "Campaign id" + campaignId);
+
+	String contactJSON = getJSONStringfromEntity(contact);
+
+	TriggersDeferredTask triggersDeferredTask = new TriggersDeferredTask(
+		contactJSON, campaignId);
+	Queue queue = QueueFactory.getDefaultQueue();
+	queue.add(TaskOptions.Builder.withPayload(triggersDeferredTask));
     }
 
-    public void run()
+    /**
+     * Converts Object class to JSONString.
+     * 
+     * @param object
+     *            Object which needs to converted to JSONString
+     * @return JSONString form of object
+     */
+    public static String getJSONStringfromEntity(Object object)
     {
+	ObjectMapper mapper = new ObjectMapper();
+	String objectJSONString = null;
+	try
+	{
+	    objectJSONString = mapper.writeValueAsString(object);
+	}
+	catch (Exception e)
+	{
 
-	Contact contact = Contact.getContact(contactId);
-
-	// Check if contact is not null and campaign id is not null
-	if (contact != null && campaignId != null)
-	    WorkflowManager.subscribe(contact, campaignId);
-
+	    e.printStackTrace();
+	}
+	return objectJSONString;
     }
 
+    /**
+     * Gets Object from objectJSON string.
+     * 
+     * @param objectJSON
+     *            JSONString from which Object is retrieved.
+     * @param clazz
+     *            Generic object class instance.
+     * @return Object from JSONString
+     */
+    public static Object getEntityfromJSONString(String objectJSON,
+	    Class<?> clazz)
+    {
+	ObjectMapper mapper = new ObjectMapper();
+	Object object = null;
+	try
+	{
+	    object = mapper.readValue(objectJSON, clazz);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return object;
+    }
 }
