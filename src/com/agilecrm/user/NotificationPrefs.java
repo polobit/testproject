@@ -176,7 +176,7 @@ public class NotificationPrefs
     public static void executeNotification(Type type, Object object)
 
     {
-	String json_data = null;
+	String jsonData = null;
 
 	System.out.println("Executing notification type" + type
 		+ " and notification" + object);
@@ -185,8 +185,8 @@ public class NotificationPrefs
 	try
 	{
 	    ObjectMapper mapper = new ObjectMapper();
-	    json_data = mapper.writeValueAsString(object);
-	    System.out.println(json_data);
+	    jsonData = mapper.writeValueAsString(object);
+	    System.out.println(jsonData);
 	}
 	catch (Exception e)
 	{
@@ -195,7 +195,7 @@ public class NotificationPrefs
 	}
 
 	NotificationsDeferredTask notificationsDeferredTask = new NotificationsDeferredTask(
-		type, json_data);
+		type, jsonData);
 	Queue queue = QueueFactory.getDefaultQueue();
 	queue.add(TaskOptions.Builder.withPayload(notificationsDeferredTask));
     }
@@ -206,15 +206,14 @@ class NotificationsDeferredTask implements DeferredTask
 {
 
     Type type;
-    String json_data = null;
-    Long agile_id;
+    String jsonData = null;
     String url = null;
     JSONObject json = null;
 
-    NotificationsDeferredTask(Type type, String json_data)
+    NotificationsDeferredTask(Type type, String jsonData)
     {
 	this.type = type;
-	this.json_data = json_data;
+	this.jsonData = jsonData;
     }
 
     public void run()
@@ -226,7 +225,7 @@ class NotificationsDeferredTask implements DeferredTask
 
 	// Inorder to get type along with notification
 	json = new JSONObject();
-	json.put("object", json_data);
+	json.put("object", jsonData);
 	json.put("type", type.toString());
 
 	System.out.println("The json after converting" + json);
