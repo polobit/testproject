@@ -5,9 +5,9 @@ import java.util.List;
 import org.json.JSONObject;
 
 import com.agilecrm.activities.Task;
+import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.util.DBUtil;
-import com.agilecrm.util.TaskUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.TaskletManager;
 

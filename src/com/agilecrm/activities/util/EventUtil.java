@@ -1,4 +1,4 @@
-package com.agilecrm.util;
+package com.agilecrm.activities.util;
 
 import java.util.List;
 

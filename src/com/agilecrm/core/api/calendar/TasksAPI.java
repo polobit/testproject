@@ -17,7 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.activities.Task;
-import com.agilecrm.util.TaskUtil;
+import com.agilecrm.activities.util.TaskUtil;
 
 /**
  * <code>TaskAPI</code> includes REST calls to interact with {@link Task} class

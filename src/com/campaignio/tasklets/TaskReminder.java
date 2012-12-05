@@ -9,10 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.agilecrm.activities.Task;
+import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.core.DomainUser;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.UserPrefs;
-import com.agilecrm.util.TaskUtil;
 import com.agilecrm.util.Util;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
