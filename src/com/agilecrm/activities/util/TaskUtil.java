@@ -1,6 +1,8 @@
 package com.agilecrm.activities.util;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
@@ -8,8 +10,6 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.util.DateUtil;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
 
 /**
  * <code>TaskUtil</code> is utility class used to process data of {@link Task}
@@ -60,16 +60,13 @@ public class TaskUtil
      */
     public static List<Task> getContactTasks(Long contactId) throws Exception
     {
-	Objectify ofy = ObjectifyService.begin();
 	Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
-
-	return ofy.query(Task.class).filter("related_contacts = ", contactKey)
-		.list();
+	return dao.listByProperty("related_contacts = ", contactKey);
     }
 
     /**
      * Gets list of tasks whose due date is less than current date (mid night
-     * time).
+     * time) and which are not completed.
      * 
      * @return List of overdue tasks
      */
@@ -82,9 +79,14 @@ public class TaskUtil
 	    Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
 
 	    System.out.println("check for " + startTime);
+
+	    Map<String, Object> conditionsMap = new HashMap<String, Object>();
+	    conditionsMap.put("due <=", startTime);
+	    conditionsMap.put("is_complete", false);
+
 	    // Get tasks before today's time and which are not completed
-	    return dao.ofy().query(Task.class).filter("due <=", startTime)
-		    .filter("is_complete", false).list();
+	    return dao.listByProperty(conditionsMap);
+
 	}
 	catch (Exception e)
 	{
@@ -103,7 +105,7 @@ public class TaskUtil
     {
 	try
 	{
-	    return dao.ofy().query(Task.class).list();
+	    return dao.fetchAll();
 	}
 	catch (Exception e)
 	{
@@ -121,8 +123,7 @@ public class TaskUtil
     {
 	try
 	{
-	    return dao.ofy().query(Task.class).filter("is_complete", false)
-		    .list();
+	    return dao.listByProperty("is_complete", false);
 	}
 	catch (Exception e)
 	{

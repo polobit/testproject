@@ -7,8 +7,8 @@
  */
 $(function(){ 
 	
-	// Bulk owner
    /**
+    * Bulk operations - Change owner 
     * Shows all the users as drop down list to select one of them as the owner 
     * for the contacts bulk
     */	
@@ -63,8 +63,8 @@ $(function(){
 		});
 	});
 	
-	// Bulk campaigns
    /**
+    * Bulk operations - Add to campaign
 	* Shows all the workflows as drop down list to select one of them  
 	* to subscribe the contacts bulk
 	*/
@@ -125,8 +125,8 @@ $(function(){
         
 	});
 	
-	// Bulk tags
    /**
+    * Bulk operations - Add tags
     * Shows the existing tags with help of typeahead to add tags to the contacts bulk. 
     * Also we can add new tags.
     */	
@@ -181,8 +181,8 @@ $(function(){
         
 	});
 	
-	// Bulk email 
    /**
+    * Bulk operations - Send email
     * Sends email to the bulk of contacts by filling up the send email details
     * like email from address, subject and body by selecting a template. 
     */	

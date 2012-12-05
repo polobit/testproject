@@ -8,8 +8,9 @@
  *  
  */
 $(function(){	
-	// Custom event to add checkboxes to specified tables
+	
    /**
+    * Custom event to add check-boxes to specified tables
     * Prepends check-boxes to the tables which are having the class showCheckboxes, 
     * by triggering the event agile_collection_loaded while loading the collection.
     */ 	
@@ -35,8 +36,8 @@ $(function(){
 		sortTables(table);
 	});
 
-	// Click head - click all checkboxes of table body
    /**
+    * Click head - click all check-boxes of table body
     * Changes the checking status of table body check-boxes according to 
     * the status of table head check-box
     */	
@@ -50,16 +51,15 @@ $(function(){
 			$('#bulk-actions').css('display', 'none');
 	});
 	
-	// Stop default functionality(edit) of it's parent (tr)
    /**
-    * Stops the propagation of default functionality of parent to the check-box 
+    * Stops the propagation of default functionality (editing the entity) of parent to the check-box (tr)
     * and shows the bulk-actions drop down of contacts only when 
     * there is at least one check-box is checked.
     */	
 	$('.tbody_check').live('click', function(event){
 		event.stopPropagation();
 		
-		// Show bulk operations (of contact) only when any of the check box is checked
+		// Show bulk actions drop down menu (of contact) only when any of the check box is checked
 		if($(this).attr('checked') == 'checked')
 			$('body').find('#bulk-actions').css('display', 'block');
 		else{

@@ -30,13 +30,13 @@ import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.triggers.Trigger;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.IMAPEmailPrefs;
 import com.agilecrm.user.NotificationPrefs;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.widgets.Widget;
-import com.agilecrm.workflows.Trigger;
 import com.agilecrm.workflows.Workflow;
 import com.campaignio.TwitterQueue;
 import com.campaignio.URLShortener;
@@ -226,6 +226,12 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	Query<T> q = ofy().query(clazz);
 	return asList(q.fetch());
+    }
+
+    public List<T> fetchAllByKeys(List<Key<T>> keysList)
+    {
+
+	return asList(ofy().get(keysList).values());
     }
 
     public int count()

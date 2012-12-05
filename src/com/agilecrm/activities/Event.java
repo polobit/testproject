@@ -15,7 +15,7 @@ import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
 /**
- * The <code>Event</code> class represents the events for FullCalendar based on
+ * <code>Event</code> class represents the events for FullCalendar based on
  * specified time duration. Events are time based such as meetings. They show up
  * in calendar.
  * <p>
@@ -60,7 +60,8 @@ public class Event
     public boolean is_event_starred = false;
 
     /**
-     * Having no end date means that it is all day event
+     * Having no end date means that it is all day event. Attribute name should
+     * be as "allDay" only, then only fullCalendar recognizes.
      */
     @NotSaved(IfDefault.class)
     public boolean allDay = false;
@@ -77,6 +78,9 @@ public class Event
     @NotSaved(IfDefault.class)
     public String color = "blue";
 
+    /**
+     * Created time of the event
+     */
     public Long created_time = 0L;
 
     // Related Contact
