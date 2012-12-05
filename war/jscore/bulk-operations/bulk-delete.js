@@ -8,7 +8,6 @@
  */
 
 $(function(){	
-	// Delete button click event
    /**
     * Validates the checked status of table body check-boxes
     * Customizes the delete operation
@@ -23,7 +22,8 @@ $(function(){
 		var table = $('body').find('table.showCheckboxes');
 
 		$(table).find('tr .tbody_check').each(function(index, element){
-			// If element is checked add store it's id in an array 
+			
+			// If element is checked store it's id in an array 
 			if($(element).is(':checked')){
 				index_array.push(index);
 				id_array.push($(element).closest('tr').data().get('id'));
@@ -47,7 +47,6 @@ $(function(){
 	});
 });
 
-// Customize bulk delete
 /**
  * Customizes the bulk delete operation of certain tables for example,
  * in case of users checks each user weather he/she is an admin or not before deleting the users
@@ -71,8 +70,8 @@ function customizeBulkDelete(id_array, data_array){
 	return true;
 }
 
-// Bulk operations - delete function
 /**
+ * Bulk operations - delete function
  * Deletes the entities by sending their ids as form data of ajax POST request 
  * and then fades out the rows from the table
  * @method bulkDeleteOperation
@@ -96,12 +95,6 @@ function bulkDeleteOperation(url, id_array, index_array, table, data_array){
 			// To remove table rows on delete 
 			for(var i = 0; i < index_array.length; i++) 
 				$(tbody).find('tr:eq(' + index_array[i] + ')').fadeOut(300, function() { $(this).remove(); });
-			
-			// Remove data from timeline
-			/*$.each(data_array, function(index, data){
-				console.log(data);
-				$('#timeline').isotope( 'remove', $(getTemplate("timeline", data)) );
-			});*/
 			
 			// Tags re-fetching
 			if(App_Contacts.contactsListView){

@@ -13,8 +13,6 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -44,14 +42,22 @@ import com.googlecode.objectify.condition.IfDefault;
 public class Task
 {
 
+    // Key
+    @Id
+    public Long id;
+
     /**
      * Type of the task
      */
-    // Category - Call etc.
     public enum Type
     {
 	CALL, EMAIL, FOLLOW_UP, MEETING, MILESTONE, SEND, TWEET
     };
+
+    /**
+     * Specifies type of the task
+     */
+    public Type type;
 
     /**
      * Priority type of the task, indicates the urgency.
@@ -62,9 +68,10 @@ public class Task
 	HIGH, NORMAL, LOW
     };
 
-    // Key
-    @Id
-    public Long id;
+    /**
+     * Specifies priority type of the task
+     */
+    public PriorityType priority_type;
 
     /**
      * List of contact keys related to a task
@@ -76,9 +83,10 @@ public class Task
      */
     public Long due = 0L;
 
+    /**
+     * Created time of task
+     */
     public Long created_time = 0L;
-
-    public Type type;
 
     /**
      * If the task has been completed
@@ -97,12 +105,6 @@ public class Task
      */
     private Key<AgileUser> owner = null;
 
-    // Dao
-    public static ObjectifyGenericDao<Task> dao = new ObjectifyGenericDao<Task>(
-	    Task.class);
-
-    public PriorityType priority_type;
-
     /**
      * Says what the task is. If it is null shouldn't save in database.
      */
@@ -115,6 +117,10 @@ public class Task
      */
     @NotSaved
     public String entity_type = "task";
+
+    // Dao
+    public static ObjectifyGenericDao<Task> dao = new ObjectifyGenericDao<Task>(
+	    Task.class);
 
     /**
      * Default constructor
@@ -180,10 +186,7 @@ public class Task
     public List<Contact> getContacts()
     {
 
-	Objectify ofy = ObjectifyService.begin();
-	List<Contact> contacts_list = new ArrayList<Contact>();
-	contacts_list.addAll(ofy.get(this.related_contacts).values());
-	return contacts_list;
+	return Contact.dao.fetchAllByKeys(this.related_contacts);
     }
 
     /**
