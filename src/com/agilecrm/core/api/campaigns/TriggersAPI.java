@@ -16,8 +16,8 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.agilecrm.workflows.Trigger;
-import com.agilecrm.workflows.TriggerUtil;
+import com.agilecrm.triggers.Trigger;
+import com.agilecrm.triggers.TriggerUtil;
 
 @Path("/api/triggers")
 public class TriggersAPI

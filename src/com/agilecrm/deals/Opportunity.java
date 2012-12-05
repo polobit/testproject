@@ -18,9 +18,9 @@ import net.sf.json.JSONObject;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.core.DomainUser;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.triggers.DealTriggerUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.UserPrefs;
-import com.agilecrm.workflows.TriggerUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -309,7 +309,7 @@ public class Opportunity
 	}
 
 	if (id == null)
-	    TriggerUtil.executeTriggerToDeals(this, null);
+	    DealTriggerUtil.executeTriggerForNewDeal(this);
 
 	this.contacts = null;
 

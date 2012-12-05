@@ -1,7 +1,7 @@
-package com.agilecrm.workflows.deferred;
+package com.agilecrm.triggers.deferred;
 
 import com.agilecrm.contact.Contact;
-import com.agilecrm.workflows.TriggerUtil;
+import com.agilecrm.triggers.TriggerUtil;
 import com.agilecrm.workflows.WorkflowManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
@@ -37,7 +37,7 @@ public class TriggersDeferredTask implements DeferredTask
     public void run()
     {
 
-	Contact contact = (Contact) TriggerUtil.getEntityfromJSONString(
+	Contact contact = (Contact) TriggerUtil.getEntityFromJSONString(
 		contactJSON, Contact.class);
 
 	// Check if contact is not null and campaign id is not null

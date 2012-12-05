@@ -23,8 +23,8 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deferred.TagsDeferredTask;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
+import com.agilecrm.triggers.ContactTriggerUtil;
 import com.agilecrm.user.NotificationPrefs;
-import com.agilecrm.workflows.TriggerUtil;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -250,7 +250,7 @@ public class Contact extends Cursor
 	Long id = this.id;
 
 	// Execute trigger for contacts
-	TriggerUtil.executeTriggerToContact(this);
+	ContactTriggerUtil.executeTriggerToContact(this);
 
 	dao.put(this);
 

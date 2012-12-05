@@ -1,7 +1,9 @@
-package com.agilecrm.contact;
+package com.agilecrm.triggers.deferred;
 
-import com.agilecrm.workflows.Trigger;
-import com.agilecrm.workflows.TriggerUtil;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.triggers.ScoreTriggerUtil;
+import com.agilecrm.triggers.Trigger;
+import com.agilecrm.triggers.TriggerUtil;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
 /**
@@ -14,7 +16,7 @@ import com.google.appengine.api.taskqueue.DeferredTask;
 @SuppressWarnings("serial")
 public class ScoreDeferredTask implements DeferredTask
 {
-    Long id = null;
+    String contactJSON = null;
     Integer oldScore = 0;
     Integer newScore = 0;
 
@@ -28,19 +30,21 @@ public class ScoreDeferredTask implements DeferredTask
      * @param newScore
      *            Requires score value of contact after changes made.
      */
-    ScoreDeferredTask(Long id, int oldScore, int newScore)
+    public ScoreDeferredTask(String contactJSON, int oldScore, int newScore)
     {
-	this.id = id;
+	this.contactJSON = contactJSON;
 	this.oldScore = oldScore;
 	this.newScore = newScore;
     }
 
     public void run()
     {
+	Contact contact = (Contact) TriggerUtil.getEntityFromJSONString(
+		contactJSON, Contact.class);
 
 	// Executes trigger when id is not null
-	if (id != null)
-	    TriggerUtil.executeTriggerforScore(id, oldScore, newScore);
+	if (contact != null)
+	    ScoreTriggerUtil
+		    .executeTriggerForScore(contact, oldScore, newScore);
     }
-
 }
