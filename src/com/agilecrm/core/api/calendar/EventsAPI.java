@@ -15,7 +15,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import com.agilecrm.activities.Event;
-import com.agilecrm.util.EventUtil;
+import com.agilecrm.activities.util.EventUtil;
 
 /**
  * <code>EventAPI</code> includes REST calls to interact with {@link Event}

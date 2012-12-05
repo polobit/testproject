@@ -1,4 +1,4 @@
-package com.agilecrm.util;
+package com.agilecrm.activities.util;
 
 import java.util.List;
 
@@ -6,6 +6,7 @@ import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.util.DateUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
