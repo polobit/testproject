@@ -1,14 +1,11 @@
-package com.agilecrm.triggers;
+package com.agilecrm.workflows.triggers;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Id;
-import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.workflows.Workflow;
@@ -72,7 +69,7 @@ public class Trigger
      * retrieved using campaign id.
      */
     @NotSaved(IfDefault.class)
-    public String campaign_id = null;
+    public Long campaign_id = null;
 
     /**
      * Custom score while saving trigger with Add score type.
@@ -86,12 +83,6 @@ public class Trigger
      */
     @NotSaved(IfDefault.class)
     public Set<String> custom_tags = new HashSet<String>();
-
-    /**
-     * String array object for trigger tags
-     */
-    @NotSaved
-    public String trigger_tags[] = null;
 
     /**
      * Initialize DataAccessObject
@@ -117,7 +108,7 @@ public class Trigger
      * @param campaign_id
      *            The campaign id from campaign.Required
      */
-    public Trigger(String name, Type type, String campaign_id)
+    public Trigger(String name, Type type, Long campaign_id)
     {
 	this.name = name;
 	this.type = type;
@@ -137,27 +128,15 @@ public class Trigger
     public String getCampaign() throws Exception
     {
 
-	if (!StringUtils.isEmpty(campaign_id))
-	{
-	    Workflow workflow = Workflow.getWorkflow(Long
-		    .parseLong(campaign_id));
+	if (campaign_id == null)
+	    return " ";
 
-	    if (workflow != null)
-		return workflow.name;
-	}
+	Workflow workflow = Workflow.getWorkflow(campaign_id);
+
+	if (workflow != null)
+	    return workflow.name;
 
 	return "?";
-    }
-
-    /**
-     * Returns trigger's custom tags.
-     * 
-     * @return The custom tags of a trigger as Xml element
-     */
-    @XmlElement
-    public Set<String> getTags()
-    {
-	return custom_tags;
     }
 
     /**
@@ -174,21 +153,6 @@ public class Trigger
     public void delete()
     {
 	dao.delete(this);
-    }
-
-    /**
-     * Adds custom trigger tags before save.Save trigger_tags array into Set.
-     */
-    @PrePersist
-    private void PrePersist()
-    {
-	// Save trigger tags into set when not null
-	if (trigger_tags != null)
-	{
-	    for (String trigger_tag : trigger_tags)
-		custom_tags.add(trigger_tag);
-	}
-
     }
 
     /*
