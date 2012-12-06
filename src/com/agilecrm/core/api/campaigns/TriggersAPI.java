@@ -16,13 +16,30 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.agilecrm.triggers.Trigger;
-import com.agilecrm.triggers.TriggerUtil;
+import com.agilecrm.workflows.triggers.Trigger;
+import com.agilecrm.workflows.triggers.TriggerUtil;
 
+/**
+ * <code>TriggersAPI</code> includes REST calls to interact with {@link Trigger}
+ * class to initiate Trigger CRUD operations
+ * <p>
+ * It is called from client side to create, fetch, update and delete triggers.It
+ * also interact with {@link Trigger} class to fetch the data of Trigger class
+ * from database.
+ * </p>
+ * 
+ * @author Naresh
+ * 
+ */
 @Path("/api/triggers")
 public class TriggersAPI
 {
 
+    /**
+     * Gets all triggers
+     * 
+     * @return List of all triggers
+     */
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public List<Trigger> getTriggers()
@@ -30,6 +47,13 @@ public class TriggersAPI
 	return TriggerUtil.getAllTriggers();
     }
 
+    /**
+     * Saves new trigger
+     * 
+     * @param trigger
+     *            Trigger object that is newly created
+     * @return Created trigger
+     */
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -39,6 +63,13 @@ public class TriggersAPI
 	return trigger;
     }
 
+    /**
+     * Updates trigger
+     * 
+     * @param trigger
+     *            Trigger object that is updated
+     * @return Updated trigger
+     */
     @PUT
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -48,6 +79,12 @@ public class TriggersAPI
 	return trigger;
     }
 
+    /**
+     * Deletes single trigger
+     * 
+     * @param id
+     *            Trigger id that should be deleted
+     */
     @Path("{trigger_id}")
     @DELETE
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -61,6 +98,15 @@ public class TriggersAPI
     }
 
     // Bulk operations - Triggers delete
+    /**
+     * Deletes multiple triggers
+     * 
+     * @param model_ids
+     *            Trigger ids that are selected to delete
+     * @throws JSONException
+     *             throws Exception when triggerIds are failed to convert to
+     *             json
+     */
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)

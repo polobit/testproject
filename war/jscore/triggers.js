@@ -3,7 +3,7 @@ $(function(){
 	// When the row of a trigger clicked,it should navigate to edit trigger
 	$('#triggers-model-list > tr').live('click', function(e){
 		e.preventDefault();
-		console.log(this);
+		
 		var id = $(this).find('.data').attr('data');
 		// Navigate to trigger form
 		if(id)
@@ -30,5 +30,7 @@ $(function(){
         	}
 	});
 	
+
+	   	
 	
 });

@@ -23,8 +23,8 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deferred.TagsDeferredTask;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
-import com.agilecrm.triggers.ContactTriggerUtil;
 import com.agilecrm.user.NotificationPrefs;
+import com.agilecrm.workflows.triggers.ContactTriggerUtil;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -249,10 +249,15 @@ public class Contact extends Cursor
 	// whether contact is newly created or being edited.
 	Long id = this.id;
 
-	// Execute trigger for contacts
-	ContactTriggerUtil.executeTriggerToContact(this);
+	Contact oldContact = null;
+
+	if (id != null)
+	    oldContact = Contact.getContact(id);
 
 	dao.put(this);
+
+	// Execute trigger for contacts
+	ContactTriggerUtil.executeTriggerToContact(oldContact, this);
 
 	// Enables to build "Document" search on current entity
 	AppengineSearch<Contact> search = new AppengineSearch<Contact>(
