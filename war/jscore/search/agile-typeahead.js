@@ -11,6 +11,9 @@ var RESULT_DROPDOWN_ELEMENT;
  * @param el Html element of the view
  * @param callback To customer contacts to show in dropdown
  * @param isSearch Callback to override functionalities of updater function
+ * 
+ * @module Search
+ * 
  * @author Yaswanth
  */
 function agile_type_ahead(id, el, callback, isSearch) {

@@ -1,8 +1,16 @@
+/**
+ * invoice.js is a script file to navigates to invoice details template if clicked on invoice list element
+ * client side.
+ * 
+ * @module Billing
+ * 
+ * author: Yaswanth
+ */
 $(function(){
 	$("#invoice-model-list > tr").live('click',function(e){
 		e.preventDefault();
-		
-		e.preventDefault();
+
+		// Reads the id of the invoice 
 		var invoice_id = $(this).find('.data').attr('data');
 		
 		if(invoice_id)

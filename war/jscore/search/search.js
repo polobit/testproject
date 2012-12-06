@@ -1,23 +1,16 @@
-$(function(){
-	
-	// agile_type_ahead method call in enable typeahead in search field in top nav-bar, 
-	//custom callback to redefine events on dropdown, which takes to contact details page 
-	agile_type_ahead("searchText", undefined, contacts_typeahead, function(data){
-		App_Contacts.navigate("contact/" + data, {
-            trigger: true
-        });
-	});   
-	
-	// Click on search image in search field top nav-bar, shows simple search results 
-	//in separate page
-	$("#search-results").live('click', function(e){
-		e.preventDefault();
-		showSearchResults();
-	});
-});
+/**
+ * Search.js is a used to show typeahead results in different page 
+ * and also initialized typeahead on search field in navbar
+ * client side.
+ * 
+ * @module Search
+ * 
+ * author: Yaswanth
+ */
 
 /**
- * showSearchResults method is used to show the simple search/ typeahead results in a separate page
+ * showSearchResults method is used to show the 
+ * simple search/ typeahead results in a separate page
  * @method showSearchResults
  */
 function showSearchResults()
@@ -39,3 +32,25 @@ function showSearchResults()
         trigger: true
     });
 }
+
+/**
+ * Initializes typeahead functionality on search field in top navbar, and defines event action on the filed
+ */
+$(function(){
+	
+	// agile_type_ahead method call in enable typeahead in search field in top nav-bar, 
+	//custom callback to redefine events on dropdown, which takes to contact details page 
+	agile_type_ahead("searchText", undefined, contacts_typeahead, function(data){
+		App_Contacts.navigate("contact/" + data, {
+            trigger: true
+        });
+	});   
+	
+	// Click on search image in search field top nav-bar, shows simple search results 
+	//in separate page
+	$("#search-results").live('click', function(e){
+		e.preventDefault();
+		showSearchResults();
+	});
+});
+

@@ -1,3 +1,13 @@
+/**
+ * contact-filter.js defines functionalities to show filter in dropdown, events on selecting filter, 
+ * call to set cookie when filter is selected. Shows name of the selected filter on dropdown button
+ * client side.
+ * 
+ * @module Search
+ * 
+ * author: Yaswanth
+ */
+
 var filter_name;
 $(function(){
 	
@@ -93,9 +103,17 @@ $(function(){
     
 });
 
-// Set up filters list drop-down in contacts list
-function setupContactFilterList(cel, filter_id)
+
+/**
+ * Sets up contact filters list in contacts list page, 
+ * also whether cookie is save with filter name to load filter results instead of all contacts
+ * 
+ * @method setupContactFilterList
+ * @param cel Html form element to append filters list, 
+ */
+function setupContactFilterList(cel)
 {
+	var filter_id;
 	var contactFiltersListView = new Base_Collection_View({
         url: '/core/api/filters',
         restKey: "ContactFilter",

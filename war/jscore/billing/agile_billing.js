@@ -1,3 +1,19 @@
+/**
+ * agile_billing.js is a script file to manage form fields i.e., credit card expiry date and 
+ * deserialize credit card details
+ * client side.
+ * 
+ * @module Billing
+ * 
+ * author: Yaswanth
+ */
+
+
+/**
+ * Show months and years in billing section for credit card expiry date
+ * 
+ * @param el html element
+ */
 function cardExpiry(el){
 	 var yearMonthsArray = {};
 	   yearMonthsArray[1] = "01 (Jan)";yearMonthsArray[2] = "02 (Feb)";yearMonthsArray[3] = "03 (Mar)";
@@ -36,6 +52,13 @@ function cardExpiry(el){
  }
 }
 
+/**
+ * Deserializes the credit card details in billing session, fills address fields
+ * 
+ * @param data subscription object
+ * @param form form html element
+ * 
+ */
 function deserializeCardDetails(data, form)
 {
 	console.log(data.activeCard);
