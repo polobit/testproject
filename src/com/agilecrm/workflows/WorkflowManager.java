@@ -81,7 +81,7 @@ public class WorkflowManager
     }
 
     // Subscribe list of contacts into a campaign
-    public static void subscribe(List<Contact> contacts, Long workflowId)
+    public static void subscribeDeferred(List<Contact> contacts, Long workflowId)
     {
 
 	// Convert Contacts into JSON Array

@@ -18,9 +18,9 @@ import net.sf.json.JSONObject;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.core.DomainUser;
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.triggers.DealTriggerUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.UserPrefs;
+import com.agilecrm.workflows.triggers.DealTriggerUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -402,11 +402,13 @@ public class Opportunity
 		    .getId());
 	    if (agileuser != null)
 		userprefs = UserPrefs.getUserPrefs(agileuser);
-	    return userprefs.pic;
+	    if (userprefs != null)
+		return userprefs.pic;
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+
 	}
 
 	return null;
