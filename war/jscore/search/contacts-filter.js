@@ -130,19 +130,23 @@ $(function()
 						
 						/*
 						 * If contactsListView is defined (default view) then
-						 * load filter results in default view if
-						 * (App_Contacts.contactsListView &&
-						 * App_Contacts.contactsListView.collection) { // Set
-						 * url to default view to load filter results
-						 * App_Contacts.contactsListView.collection.url =
-						 * "core/api/contacts/companies";
-						 * App_Contacts.contactsListView.collection.fetch(); }
-						 * }); }); /** Sets up contact filters list in contacts
-						 * list page, also whether cookie is save with filter
-						 * name to load filter results instead of all contacts
-						 * @method setupContactFilterList @param cel Html form
-						 * element to append filters list,
+						 * load filter results in default view 
 						 */
+						if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection) 
+						{ 
+							// Set url to default view to load filter results
+							App_Contacts.contactsListView.collection.url = "core/api/contacts/companies";
+							App_Contacts.contactsListView.collection.fetch(); 
+						}
+			 }); 
+});
+						 
+/** Sets up contact filters list in contacts
+ * list page, also whether cookie is save with filter
+ * name to load filter results instead of all contacts
+ * @method setupContactFilterList @param cel Html form
+ * element to append filters list,
+ */
 function setupContactFilterList(cel)
 {
 	var filter_id;
