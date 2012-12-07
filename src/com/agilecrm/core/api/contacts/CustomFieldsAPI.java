@@ -83,8 +83,8 @@ public class CustomFieldsAPI
     }
 
     /**
-     * Saves new custom field by validating it's label name. Exception will be
-     * thrown if duplicate exists
+     * Saves new custom field by validating its label name. Exception will be
+     * thrown if a duplicate field with same label exists
      * 
      * @param customField
      * @return
@@ -108,7 +108,7 @@ public class CustomFieldsAPI
     }
 
     /**
-     * Updates the existing task by validating it's label name
+     * Updates the existing field by validating its label name
      * 
      * @param customField
      *            custom field which is going to be updated
@@ -133,8 +133,7 @@ public class CustomFieldsAPI
     }
 
     /**
-     * Deletes bulk amount of custom fields at a time using array of
-     * corresponding ids
+     * Deletes all selected custom fields using array of corresponding ids
      * 
      * @param model_ids
      *            array of custom field ids as String

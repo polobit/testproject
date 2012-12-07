@@ -1,7 +1,7 @@
 /**
  * Describes the given object is an array or not
  * @param {Object} a to verify array or not 
- * @returns {Boolean} true if given is array else false
+ * @returns {Boolean} true if given param is array else false
  */
 function isArray(a)
 {
@@ -60,7 +60,7 @@ function showCalendar() {
         select: function(start, end, allDay) {
         	// Show a new event
             $('#activityModal').modal('show');
-            highlightEvent();
+            highlight_vent();
             // Set Date for Event
             var dateFormat = 'mm-dd-yy';
             $('#task-date-1').val(start.format(dateFormat));

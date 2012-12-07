@@ -17,22 +17,22 @@ import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
 /**
- * The <code>Task</code> class stores tasks with their own owner and related
- * contacts. Tasks are like to-dos. Result oriented. You can assign a category
- * such as call, email, meeting etc.
+ * <code>Task</code> class stores tasks with its owner and related contacts.
+ * Tasks are like To-Dos. These are result oriented. You can assign a category
+ * such as call, email, meeting etc. to these tasks.
  * <p>
  * Each task can be related to a single contact or multiple contacts. Also tasks
  * have current agile user as owner.
  * </p>
  * <p>
- * Tasks can be filtered based on their status of completion. The status of
- * completion is nothing but completed tasks and pending tasks. While getting
- * saved as new one each task is saved as pending one, but it can be made as
- * completed by setting the is_complete variable to true.
+ * Tasks can be filtered based on their status of completion. Available statuses
+ * are 'pending', 'completed' and 'overdue' tasks. By default, the tasks are
+ * marked as 'pending' tasks while creating. User can change the status to
+ * 'completed' if desired by setting the is_complete variable to true.
  * </p>
  * <p>
- * The <code>Event</code> class provides methods to create, delete and get the
- * tasks.
+ * <code>Task</code> class provides methods to create, update, delete and get
+ * the tasks.
  * </p>
  * 
  * @author Rammohan
@@ -47,7 +47,7 @@ public class Task
     public Long id;
 
     /**
-     * Type of the task
+     * Type of the task (category)
      */
     public enum Type
     {
@@ -60,7 +60,8 @@ public class Task
     public Type type;
 
     /**
-     * Priority type of the task, indicates the urgency.
+     * Priority type of the task, indicates the Urgency. Available priorities
+     * are high, normal and low.
      * 
      */
     public enum PriorityType
@@ -69,7 +70,7 @@ public class Task
     };
 
     /**
-     * Specifies priority type of the task
+     * Sets the priority as specified.
      */
     public PriorityType priority_type;
 
@@ -89,7 +90,7 @@ public class Task
     public Long created_time = 0L;
 
     /**
-     * If the task has been completed
+     * If the task has been completed, is_complete sets to true.
      */
     public boolean is_complete = false;
 
@@ -112,8 +113,8 @@ public class Task
     public String subject = null;
 
     /**
-     * Separates task from bulk of other models at client side. And no queries
-     * run on this, so no need to save in the database.
+     * Separates task from bulk of other models at client side (For timeline
+     * purpose). And no queries run on this, so no need to save in the database.
      */
     @NotSaved
     public String entity_type = "task";
@@ -159,7 +160,7 @@ public class Task
     }
 
     /**
-     * Saves the new task and updates the old one
+     * Saves the new task or even updates the existing one.
      */
     public void save()
     {

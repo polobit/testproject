@@ -31,15 +31,15 @@ $(function(){
 	    	$('#personModal').find(".alert").hide();
 	    	
 	    	// Remove validation error messages
-	    	removeValidationErrors('personModal');
+	    	remove_validation_errors('personModal');
 	    });
 	    
 	    $('#companyModal').on('hidden', function () {
-	    	removeValidationErrors('companyModal');
+	    	remove_validation_errors('companyModal');
 	    });
 });
 
-function removeValidationErrors(modalId){
+function remove_validation_errors(modalId){
 	$('#' + modalId).find("div.control-group").removeClass("error");
 	$('#' + modalId).find("div.control-group").removeClass("success");
 	$('#' + modalId).find("span.help-inline").remove();

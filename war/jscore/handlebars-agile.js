@@ -426,8 +426,8 @@ $(function()
 	// Add Custom Fields to Forms
 	Handlebars.registerHelper('show_custom_fields', function(custom_fields, properties){
 
-		var el = showCustomFieldsHelper(custom_fields, properties);
-		return new Handlebars.SafeString(fillCustomFieldValues($(el), properties));
+		var el = show_custom_fields_helper(custom_fields, properties);
+		return new Handlebars.SafeString(fill_custom_field_values($(el), properties));
 		
 	});
 

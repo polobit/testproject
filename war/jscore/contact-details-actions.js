@@ -2,7 +2,7 @@ $(function(){
 	// Display activity(task) modal related to contact
     $('.contact-add-task').live('click', function(e){
     	e.preventDefault();
-    	highlightTask();
+    	highlight_task();
     	var	el = $("#taskForm");
     	fillRelation(el);
     	$('#activityModal').modal('show');

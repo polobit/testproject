@@ -9,7 +9,7 @@
 
 $(function(){	
    /**
-    * Validates the checked status of table body check-boxes
+    * Validates the checkbox status of each row in table body
     * Customizes the delete operation
     * Deletes the entities
     */	
@@ -36,10 +36,10 @@ $(function(){
 			if(!confirm("Are you sure you want to delete?"))
 	    		return;
 			// Customize the bulk delete operations
-			if(!customizeBulkDelete(id_array, data_array))
+			if(!customize_bulk_delete(id_array, data_array))
 				return;
 			
-			bulkDeleteOperation($(table).attr('url'), id_array, index_array, table, data_array);
+			bulk_delete_operation($(table).attr('url'), id_array, index_array, table, data_array);
 		}	
 		else
             $('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">×</a>You have not selected any records to delete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
@@ -48,14 +48,16 @@ $(function(){
 });
 
 /**
- * Customizes the bulk delete operation of certain tables for example,
- * in case of users checks each user weather he/she is an admin or not before deleting the users
- * @method customizeBulkDelete
+ * Customizes the bulk delete operation of certain tables. For example,
+ * in case of users table, this code verifies if each user is an admin or not before deleting them. 
+ * Doesn't delete admins.
+ * 
+ * @method customize_bulk_delete
  * @param {Array} id_array holds the array of ids
  * @param {Array} data_array holds the array of entities
  * @returns {Boolean} 
  */
-function customizeBulkDelete(id_array, data_array){
+function customize_bulk_delete(id_array, data_array){
 	if(Current_Route == 'users'){
 		$.each(data_array, function(index, model){
 			if(model.is_admin){
@@ -74,14 +76,14 @@ function customizeBulkDelete(id_array, data_array){
  * Bulk operations - delete function
  * Deletes the entities by sending their ids as form data of ajax POST request 
  * and then fades out the rows from the table
- * @method bulkDeleteOperation
+ * @method bulk_delete_operation
  * @param {Steing} url to which the request has to be sent
  * @param {Array} id_array holds array of ids of the entities to be deleted
  * @param {Array} index_array holds array of row indexes to be faded out
  * @param {Object} table content as html object
  * @param {Array} data_array holds array of entities 
  */
-function bulkDeleteOperation(url, id_array, index_array, table, data_array){
+function bulk_delete_operation(url, id_array, index_array, table, data_array){
 	var json = {};
 	json.model_ids = JSON.stringify(id_array);
 	var tbody = $(table).find('tbody');

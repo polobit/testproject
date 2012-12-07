@@ -9,8 +9,8 @@ import com.agilecrm.db.ObjectifyGenericDao;
  * <code>EventUtil</code> is utility class used to process data of {@link Event}
  * class, It processes only when fetching the data from <code>Event<code> class
  * <p>
- * This utility class includes methods need to return different types of events.
- * It's methods return all events, event tracked by an id and
+ * This utility class includes methods needed to return the events based on search range. 
+ * Event utility methods return all events, event tracked by an id and
  * events by their search range.
  * </p>
  * 

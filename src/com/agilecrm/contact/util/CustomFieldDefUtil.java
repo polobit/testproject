@@ -6,13 +6,13 @@ import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.db.ObjectifyGenericDao;
 
 /**
- * <code>CustomFieldDefUtil</code> is utility class used to process data of
- * {@link CustomFieldDef} class, It processes only when fetching the data from
+ * <code>CustomFieldDefUtil</code> is a utility class used to process data of
+ * {@link CustomFieldDef} class. Its processed only when fetching the data from
  * <code>Event<code> class
  * <p>
  * This utility class includes methods need to return different types of custom fields.
- * It's methods return all custom fields, custom field tracked by an id and
- * custom field by it's label name.
+ * Its methods return all custom fields, custom field tracked by an id and
+ * custom field by its label name.
  * </p>
  * 
  * @author Yaswanth
@@ -37,7 +37,7 @@ public class CustomFieldDefUtil
     }
 
     /**
-     * Fetches a custom field based on it's id
+     * Fetches a custom field based on the id
      * 
      * @param id
      *            unique id of the custom field
@@ -57,7 +57,7 @@ public class CustomFieldDefUtil
     }
 
     /**
-     * Fetches custom field based on it's label name
+     * Fetches custom field based on the label name
      * 
      * @param field_label
      * @return

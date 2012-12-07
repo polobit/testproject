@@ -60,6 +60,6 @@ $(function(){
     	  $("#noteForm").find("li").remove();
     	  
     	// Remove validation error messages
-    	  removeValidationErrors('noteModal');
+    	  remove_validation_errors('noteModal');
     });
 });

@@ -69,7 +69,7 @@ public class WorkflowsAPI
 
     // Bulk operations - delete
     /**
-     * Deletes bulk of campaigns using their keys list
+     * Deletes selected campaigns using their keys list
      * 
      * @param model_ids
      *            array of workflow ids as String

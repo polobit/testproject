@@ -9,7 +9,7 @@
  */
 $(function() {
 	/**
-	 * Loads the respected modal (Text or Date or List or Check-box modal) based
+	 * Loads the respective modal (Text or Date or List or Check-box modal) based
 	 * on the id attribute of the clicked link to save the custom fields.
 	 */
 	$(".fieldmodal").die().live('click', function(event) {
@@ -38,7 +38,7 @@ $(function() {
  * Adds custom fields to the the desired entity and then calls the callback to
  * update the custom fields to that entity.
  * 
- * @method addCustomFieldsToForm
+ * @method add_custom_fields_to_form
  * @param context
  *            entity to fill up with the custom fields
  * @param callback
@@ -46,7 +46,7 @@ $(function() {
  *            function
  * 
  */
-function addCustomFieldsToForm(context, callback) {
+function add_custom_fields_to_form(context, callback) {
 
 	var custom_fields = Backbone.Model.extend({
 		url : "core/api/custom-fields"
@@ -77,18 +77,19 @@ function addCustomFieldsToForm(context, callback) {
 }
 
 /**
- * Generates, suitable html string of each custom field entity depending upon their's type 
- * and concats all. For example, if the type of the field is list then a select drop down 
- * will be generated same as for all the other types.
+ * Called from handlebars
+ * Generates suitable html string for each custom field entity depending upon it's type 
+ * and does concatenation. For example, if the type of the field is list then a 'select drop down' 
+ * is generated. Similarly, html strings are generated based on other filed types.
  * If the custom field has the attribute is_required as true, then it's associated html
  * string also contains the "required" class. 
  * 
- * @method showCustomFieldsHelper
+ * @method show_custom_fields_helper
  * @param custom_fields
  * @param properties
  * @returns {String}
  */
-function showCustomFieldsHelper(custom_fields, properties){
+function show_custom_fields_helper(custom_fields, properties){
 	var el = "";
 	
 	// Text as default
@@ -116,7 +117,7 @@ function showCustomFieldsHelper(custom_fields, properties){
 				if(field.is_required)
 					el = el.concat('<div class="control-group">	<label class="control-label">'
 									+ucfirst(field.field_label)
-									+'<span class="field_req">*</span></label><div class="controls"><select class="'
+									+' <span class="field_req">*</span></label><div class="controls"><select class="'
 									+field.field_type.toLowerCase()
 									+' custom_field required" id='
 									+field.id
@@ -158,7 +159,7 @@ function showCustomFieldsHelper(custom_fields, properties){
 		if(field.is_required)
 			el = el.concat('<div class="control-group">	<label class="control-label">'
 							+ucfirst(field.field_label)
-							+'<span class="field_req">*</span></label><div class="controls"><input type="text" class="'
+							+' <span class="field_req">*</span></label><div class="controls"><input type="text" class="'
 							+field.field_type.toLowerCase()
 							+'_input custom_field required" id='
 							+field.id+' name="'+field.field_label
@@ -178,17 +179,17 @@ function showCustomFieldsHelper(custom_fields, properties){
 }
 
 /**
- * Deserializes custom fields (fills the matched custom field values of the entity 
+ * De-serializes custom fields (fills the matched custom field values of the entity 
  * (for list and check-box fields) to the generated html string above) and return 
  * string to handlebars register helper to return as handlebars safestring.
  * 
- * @method fillCustomFieldValues
+ * @method fill_custom_field_values
  * @param {String} form 
  * 				html string of custom field values
  * @param {Object} content json object including custom fields
  * @returns {String} prefilled html string with matched custom field values
  */
-function fillCustomFieldValues(form, content)
+function fill_custom_field_values(form, content)
 {
 	$.each(content, function(index , property){
 		if(property.type == "CUSTOM")

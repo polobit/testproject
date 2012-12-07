@@ -82,9 +82,8 @@ public class CampaignsAPI
 	Log.removeCampaignLogs(id);
     }
 
-    // Bulk operations - delete
     /**
-     * Deletes logs bulk related to a campaign
+     * Deletes selected logs bulk related to a campaign
      * 
      * @param model_ids
      *            array of log ids as String
@@ -100,10 +99,8 @@ public class CampaignsAPI
 	Log.dao.deleteBulkByIds(logsJSONArray);
     }
 
-    // Bulk operations - add to campaign
-
     /**
-     * Enrolls contacts bulk to a campaign
+     * Enrolls selected contacts to a campaign
      * 
      * @param contact_ids
      *            array of contact ids as String

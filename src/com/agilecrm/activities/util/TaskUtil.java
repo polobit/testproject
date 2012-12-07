@@ -15,9 +15,9 @@ import com.googlecode.objectify.Key;
  * <code>TaskUtil</code> is utility class used to process data of {@link Task}
  * class, It processes only when fetching the data from <code>Task<code> class
  * <p>
- * This utility class includes methods need to return different types of tasks.
- * It's methods return all tasks, pending tasks, task tracked by an id and
- * contact related tasks etc..
+ * This utility class includes methods needed to return all tasks (based on status)
+ * and related  to any particular contact.
+ * 
  * </p>
  * 
  * @author Rammohan
@@ -30,7 +30,7 @@ public class TaskUtil
 	    Task.class);
 
     /**
-     * Returns Task based on Id. If no task is present with that id, returns
+     * Returns a Task based on Id. If no task is present with that id, returns
      * null.
      * 
      * @param id
@@ -55,7 +55,7 @@ public class TaskUtil
      * 
      * @param contactId
      *            contact id to get the tasks related to a contact
-     * @return List of contact related tasks
+     * @return List of tasks related to a contact
      * @throws Exception
      */
     public static List<Task> getContactTasks(Long contactId) throws Exception
@@ -96,8 +96,7 @@ public class TaskUtil
     }
 
     /**
-     * Gets all the tasks irrespective of their state of completion, i.e both
-     * completed and pending tasks.
+     * Gets all the tasks irrespective of their state of completion
      * 
      * @return List of all tasks
      */
@@ -115,7 +114,7 @@ public class TaskUtil
     }
 
     /**
-     * Gets all the tasks which are not completed
+     * Gets all the tasks which are not completed (includes overdue tasks).
      * 
      * @return List of pending tasks
      */
@@ -134,8 +133,8 @@ public class TaskUtil
 
     /**
      * Gets the list of tasks which have been pending for particular number of
-     * days to till date (mid night time). (For example tasks have been pending
-     * for 2 days or 3 days etc..)
+     * days to till date (mid night time), but due date is not approached. (For
+     * example tasks have been pending for 2 days or 3 days etc..)
      * 
      * @param numDays
      *            Number of days that the tasks have been pending
@@ -172,7 +171,7 @@ public class TaskUtil
     /**
      * Gets the list of tasks which have been pending for particular number of
      * days to till date (mid night time) and having the same owner, to remind
-     * him/her about the pending tasks.
+     * the owner (user) about the pending tasks.
      * 
      * @param numDays
      *            Number of days that the tasks have been pending

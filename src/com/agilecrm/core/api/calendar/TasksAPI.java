@@ -23,9 +23,9 @@ import com.agilecrm.activities.util.TaskUtil;
  * <code>TaskAPI</code> includes REST calls to interact with {@link Task} class
  * to initiate Task CRUD operations
  * <p>
- * It is called from client side to create, update, fetch and delete the
- * tasks.It also interacts with {@link TaskUtil} class to fetch the data of Task
- * class from database.
+ * It is called from client side to create, update, fetch and delete the tasks.
+ * It also interacts with {@link TaskUtil} class to fetch the data of Task class
+ * from database.
  * </p>
  * 
  * @author Rammohan
@@ -58,7 +58,7 @@ public class TasksAPI
 
     // All Tasks
     /**
-     * Gets all tasks including pending and completed
+     * Gets all tasks of ANY priority, category, related to and status.
      * 
      * @return List of all tasks
      */

@@ -3,14 +3,14 @@
  * activity-modal.js is a script file to deal with common UI Handlers for
  * activities - event & task from client side.
  * 
- * @module Activities ------------------------------------------------ 
+ * @module Activities  
  * 
  * author: Rammohan
  */
 $(function() {
 
 	/**
-	 * Saves the content of activity modal by verifying weather it is a task or
+	 * Saves the content of activity modal by verifying whether it is a task or
 	 * event
 	 */
 	$('#task_event_validate').die().live('click', function(e) {
@@ -19,11 +19,11 @@ $(function() {
 		// Save functionality for task by checking task or not
 		if ($("#hiddentask").val() == "task") {
 
-			saveTask('taskForm', 'activityModal');
+			save_task('taskForm', 'activityModal');
 		} else {
 
 			// Save functionality for event
-			saveEvent('activityForm', 'activityModal');
+			save_event('activityForm', 'activityModal');
 		}
 	}); // End of Task and Event Validation function
 
@@ -38,6 +38,6 @@ $(function() {
 		$("#taskForm").find("li").remove();
 
 		// Remove validation error messages
-		removeValidationErrors('activityModal');
+		remove_validation_errors('activityModal');
 	});
 });

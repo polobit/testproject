@@ -3,7 +3,7 @@
  * event.js is a script file to deal with the actions like creation, update and
  * deletion of events from client side.
  * 
- * @module Activities ------------------------------------------------
+ * @module Activities 
  * 
  * author: Rammohan
  */
@@ -11,34 +11,34 @@
 $(function() {
 
 	/**
-	 * Shows activity modal, and highlights the event features (Shows event form
+	 * Shows activity modal, and highlights the event form features (Shows event form
 	 * and hides task form, changes color and font-weight)
 	 * 
 	 */
 	$('#show-activity').live('click', function(e) {
 		e.preventDefault();
-		highlightEvent();
+		highlight_vent();
 		$("#activityModal").modal('show');
 	});
 
 	/**
-	 * Highlights the event features in activity modal
+	 * Shows the event form fields in activity modal
 	 */
 	$(".add-event").live('click', function(e) {
 		e.preventDefault();
 		$('#activityModal').modal('show');
-		highlightEvent();
+		highlight_vent();
 	});
 
 	/**
-	 * When click on update button of event-update-modal, the event will get
-	 * updated by calling saveEvent function
+	 * When clicked on update button of event-update-modal, the event will get
+	 * updated by calling save_event function
 	 * 
 	 */
 	$('#update_event_validate').die().live('click', function(e) {
 		e.preventDefault();
 
-		saveEvent('updateActivityForm', 'updateActivityModal', true);
+		save_event('updateActivityForm', 'updateActivityModal', true);
 	});
 
 	/**
@@ -96,7 +96,7 @@ $(function() {
 	});
 
 	/**
-	 * Activates time picker to the fields with class start-timepicker
+	 * Activates time picker for start time to the fields with class start-timepicker
 	 */
 	$('.start-timepicker').timepicker({
 		defaultTime : 'current',
@@ -105,7 +105,7 @@ $(function() {
 	});
 
 	/**
-	 * Activates time picker to the fields with class end-timepicker
+	 * Activates time picker for end time to the fields with class end-timepicker
 	 */
 	$('.end-timepicker').timepicker({
 		defaultTime : 'current',
@@ -123,20 +123,20 @@ $(function() {
 		 * Fills current time only when there is no time in the fields
 		 */
 		if ($('.start-timepicker').val() == '')
-			$('.start-timepicker').val(getHHMM());
+			$('.start-timepicker').val(get_hh_mm());
 
 		if ($('.end-timepicker').val() == '')
-			$('.end-timepicker').val(getHHMM(true));
+			$('.end-timepicker').val(get_hh_mm(true));
 
 	});
 
 	/**
-	 * Highlight the event features (Shows event form and hides task form,
+	 * Highlights the event features (Shows event form and hides task form,
 	 * changing color and font-weight)
 	 */
 	$("#event").click(function(e) {
 		e.preventDefault();
-		highlightEvent();
+		highlight_vent();
 	});
 
 });
@@ -145,7 +145,7 @@ $(function() {
  * Highlights the event portion of activity modal (Shows event form and hides
  * task form, changes color and font-weight)
  */
-function highlightEvent() {
+function highlight_vent() {
 	$("#hiddentask").val("event");
 	$("#event").css("color", "black");
 	$("#task").css("color", "#DD4814");
@@ -155,10 +155,10 @@ function highlightEvent() {
 
 /**
  * 
- * Validates the start time and time of an event (start time should be greater
+ * Validates the start time and end time of an event (start time should be less
  * than end time)
  * 
- * @method isValidRange
+ * @method is_valid_range
  * @param {Number}
  *            startDate start date of an event
  * @param {Number}
@@ -168,7 +168,7 @@ function highlightEvent() {
  * @param {Number}
  *            endTime end time of an event
  */
-function isValidRange(startDate, endDate, startTime, endTime) {
+function is_valid_range(startDate, endDate, startTime, endTime) {
 	if (endDate - startDate >= 86400000) {
 		return true;
 	} else if (startDate > endDate) {
@@ -199,10 +199,10 @@ function isValidRange(startDate, endDate, startTime, endTime) {
 // Save event
 
 /**
- * Creates or updates an event and renders the saved object by verifying the
+ * Creates or updates an event and renders the saved object by verifying if the
  * event is updated or saved as new one.
  * 
- * @method saveEvent
+ * @method save_event
  * @param {String}
  *            formId the unique id for the form to identify it
  * @param {String}
@@ -212,7 +212,7 @@ function isValidRange(startDate, endDate, startTime, endTime) {
  *            or updating the existing one
  * 
  */
-function saveEvent(formId, modalName, isUpdate) {
+function save_event(formId, modalName, isUpdate) {
 	// Save functionality for event
 	if (!isValidForm('#' + formId))
 		return false;
@@ -220,7 +220,7 @@ function saveEvent(formId, modalName, isUpdate) {
 	var json = serializeForm(formId);
 
 	// For validation
-	if (!isValidRange(new Date(json.start).getTime(), new Date(json.end)
+	if (!is_valid_range(new Date(json.start).getTime(), new Date(json.end)
 			.getTime(), (json.start_time).split(":"), (json.end_time)
 			.split(":")))
 		return;
@@ -276,12 +276,12 @@ function saveEvent(formId, modalName, isUpdate) {
 /**
  * Get Hours and Minutes for the current time. It will be padded for 15 minutes
  * 
- * @method getHHMM
+ * @method get_hh_mm
  * @param {Boolean}
  *            end_time to make end time 30 minutes more than start time
  * 
  */
-function getHHMM(end_time) {
+function get_hh_mm(end_time) {
 
 	var hours = new Date().getHours();
 	var minutes = new Date().getMinutes();
