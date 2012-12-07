@@ -230,6 +230,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
     public List<T> fetchAllByKeys(List<Key<T>> keysList)
     {
+
 	return asList(ofy().get(keysList).values());
     }
 
