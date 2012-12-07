@@ -12,6 +12,7 @@ import org.codehaus.jackson.type.TypeReference;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.CustomFieldDef;
+import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.util.Util;
 
 /**
@@ -45,7 +46,8 @@ public class SearchUtil
 	    if (contactField.type.equals(ContactField.FieldType.CUSTOM))
 	    {
 		// Get the custom field based on field name
-		customField = CustomFieldDef.getFieldByName(contactField.name);
+		customField = CustomFieldDefUtil
+			.getFieldByName(contactField.name);
 
 		/*
 		 * Checks whether customField is not available or custom field
@@ -62,7 +64,8 @@ public class SearchUtil
 	    /*
 	     * Replaces special characters with "_" in field name
 	     */
-	    String field_name = contactField.name.replaceAll("[^a-zA-Z0-9_]", "_");
+	    String field_name = contactField.name.replaceAll("[^a-zA-Z0-9_]",
+		    "_");
 
 	    /*
 	     * If key already exist appends contact field value to respective
@@ -71,7 +74,8 @@ public class SearchUtil
 	     */
 	    if (fields.containsKey(field_name))
 	    {
-		String value = normalizeString(fields.get(field_name)) + " " + normalized_value;
+		String value = normalizeString(fields.get(field_name)) + " "
+			+ normalized_value;
 
 		normalized_value = value;
 	    }
@@ -172,10 +176,12 @@ public class SearchUtil
 		{
 		    // Converts address JSON string(sent so from client) to a
 		    // map
-		    HashMap<String, String> addressMap = new ObjectMapper().readValue(
-			    contactField.value, new TypeReference<HashMap<String, String>>()
-			    {
-			    });
+		    HashMap<String, String> addressMap = new ObjectMapper()
+			    .readValue(
+				    contactField.value,
+				    new TypeReference<HashMap<String, String>>()
+				    {
+				    });
 
 		    // save the address values
 		    tokens.addAll(addressMap.values());
