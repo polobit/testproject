@@ -11,7 +11,7 @@
  * @param el
  *            html element
  */
-function cardExpiry(el)
+function card_expiry(el)
 {
 	var yearMonthsArray = {};
 	yearMonthsArray[1] = "01 (Jan)";
@@ -56,7 +56,7 @@ function cardExpiry(el)
  * @param form
  *            form html element
  */
-function deserializeCardDetails(data, form)
+function deserialize_card_details(data, form)
 {
 	/**
 	 * Iterates through activeCard details in data, finds corresponding values

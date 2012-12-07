@@ -17,7 +17,7 @@ var ACCOUNT_STATS;
  *            element to show stats
  * @author Yaswanth
  */
-function setUpAccountStats(el)
+function set_up_account_stats(el)
 {
 
 	/**
