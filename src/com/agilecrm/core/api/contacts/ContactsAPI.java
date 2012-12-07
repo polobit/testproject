@@ -262,9 +262,8 @@ public class ContactsAPI
 	return contacts_list;
     }
 
-    // Bulk operations - delete
     /**
-     * Deletes contacts bulk based on ids
+     * Deletes selected contacts based on ids
      * 
      * @param model_ids
      *            array of contact ids as String
@@ -290,9 +289,8 @@ public class ContactsAPI
 
     }
 
-    // Bulk operations - change owner
     /**
-     * Change the owner of contacts bulk
+     * Change the owner of selected contacts
      * 
      * @param contact_ids
      *            array of contact ids as String
@@ -312,9 +310,8 @@ public class ContactsAPI
 	Contact.changeOwnerToContactsBulk(contactsJSONArray, new_owner);
     }
 
-    // Bulk operations - add tags
     /**
-     * Add tags to contacts bulk
+     * Add tags to selected contacts
      * 
      * @param contact_ids
      *            array of contact ids as String
@@ -336,7 +333,7 @@ public class ContactsAPI
 
     // Bulk operations - delete tasks bulk related to a contact
     /**
-     * Deletes bulk of tasks related to a contact
+     * Deletes all selected tasks for a particular contact
      * 
      * @param model_ids
      *            array of task ids as String
@@ -355,7 +352,7 @@ public class ContactsAPI
 
     // Bulk operations - delete notes bulk related to a contact
     /**
-     * Deletes bulk of notes related to a contact
+     * Deletes all selected notes of a particular contact.
      * 
      * @param model_ids
      *            array of note ids as String
@@ -374,7 +371,7 @@ public class ContactsAPI
 
     // Bulk operations - delete notes bulk related to a contact
     /**
-     * Deletes bulk of deals related to a contact
+     * Deletes all selected deals of a particular contact
      * 
      * @param model_ids
      *            array of deal ids as String

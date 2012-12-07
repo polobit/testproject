@@ -139,7 +139,7 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, continueContact, 
         	            
         	if (continueContact) {
                 
-                addCustomFieldsToForm(data.toJSON(), function(contact){
+                add_custom_fields_to_form(data.toJSON(), function(contact){
                 	
                 deserializeContact(contact, template);
                 	

@@ -18,12 +18,12 @@ import com.agilecrm.activities.Event;
 import com.agilecrm.activities.util.EventUtil;
 
 /**
- * <code>EventAPI</code> includes REST calls to interact with {@link Event}
+ * <code>EventsAPI</code> includes REST calls to interact with {@link Event}
  * class to initiate Event CRUD operations
  * <p>
- * It is called from client side to create, update, fetch and delete the
- * events.It also interacts with {@link EventUtil} class to fetch the data of
- * Event class from database.
+ * It is called from client side to create, update, fetch and delete the events.
+ * It also interacts with {@link EventUtil} class to fetch the data of Event
+ * class from database.
  * </p>
  * 
  * @author Rammohan

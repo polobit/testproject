@@ -15,22 +15,22 @@ import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
 /**
- * <code>Event</code> class represents the events for FullCalendar based on
+ * <code>Event</code> class represents the events for FullCalendar based on the
  * specified time duration. Events are time based such as meetings. They show up
  * in calendar.
  * <p>
  * The Event entity includes start and end time, which is also stored as search
- * range of an event. Based on the search range we can search all the events of
- * a particular period.For some events the duration could be the complete day,
- * such events are also known as all day events.
+ * range of an event. Based on the search range (start and end dates) we can
+ * search all the events of that particular period. For some events the duration
+ * could be one full day, such events are also known as 'All day events'.
  * </p>
  * <p>
  * This class implements {@link AgileUser} to create key and to store the key as
  * the event's owner.
  * </p>
  * <p>
- * The <code>Event</code> class provides methods to create, delete and get the
- * events.
+ * The <code>Event</code> class provides methods to create, update, delete and
+ * get the events.
  * </p>
  * 
  * @author Rammohan
@@ -60,8 +60,8 @@ public class Event
     public boolean is_event_starred = false;
 
     /**
-     * Having no end date means that it is all day event. Attribute name should
-     * be as "allDay" only, then only fullCalendar recognizes.
+     * Having no end date means that it is an all day event. Do not change the
+     * attribute name. It has to be "allDay", only then fullCalendar recognizes.
      */
     @NotSaved(IfDefault.class)
     public boolean allDay = false;
@@ -73,7 +73,8 @@ public class Event
     public String title = null;
 
     /**
-     * Color of the event for FullCalendar based on priority type
+     * Color of the event for FullCalendar based on priority type. For high
+     * priority it's shown in red color, low -> green, normal -> blue.
      */
     @NotSaved(IfDefault.class)
     public String color = "blue";
@@ -151,7 +152,7 @@ public class Event
     /**
      * Saves the event entity in database
      * 
-     * Saves the new one as well as to update the existing one
+     * Saves the new one or even updates the existing one
      */
     public void save()
     {

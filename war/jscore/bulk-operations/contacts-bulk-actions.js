@@ -2,7 +2,7 @@
  * Performs operations like changing owner, adding tags and etc.. on contacts bulk
  * 
  * @module Bulk operations
- * -------------------------------------------
+ * 
  * author: Rammohan 
  */
 $(function(){ 
@@ -10,11 +10,11 @@ $(function(){
    /**
     * Bulk operations - Change owner 
     * Shows all the users as drop down list to select one of them as the owner 
-    * for the contacts bulk
+    * for the selected contacts.
     */	
 	$("#bulk-owner").live('click', function(e){
 		e.preventDefault();
-		var id_array = getContactsBulkIds();
+		var id_array = get_contacts_bulk_ids();
 		
 		// Bind a custom event to trigger on loading the form
 		$('body').die('fill_owners').live('fill_owners', function(event){
@@ -64,13 +64,13 @@ $(function(){
 	});
 	
    /**
-    * Bulk operations - Add to campaign
+    * Bulk operations - Adds to campaign
 	* Shows all the workflows as drop down list to select one of them  
-	* to subscribe the contacts bulk
+	* to subscribe the selected contacts
 	*/
 	$("#bulk-campaigns").live('click', function(e){
 		e.preventDefault();
-		var id_array = getContactsBulkIds();
+		var id_array = get_contacts_bulk_ids();
 		
 		$('body').die('fill_campaigns').live('fill_campaigns', function(event){
 			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
@@ -83,7 +83,7 @@ $(function(){
         });
 		
 	   /**
-	    * Subscribes the contacts bulk to a campaign by sending the wofkflow id and contacts bulk ids 
+	    * Subscribes the selected contacts to a campaign by sending the workflow id and selected contacts' ids. 
 	    */	
 		$('#addBulkTocampaign').die().live('click',function(e){
 			e.preventDefault();
@@ -126,13 +126,13 @@ $(function(){
 	});
 	
    /**
-    * Bulk operations - Add tags
-    * Shows the existing tags with help of typeahead to add tags to the contacts bulk. 
+    * Bulk operations - Adds tags'
+    * Shows the existing tags with help of typeahead to add tags to the selected contacts. 
     * Also we can add new tags.
     */	
 	$("#bulk-tags").live('click', function(e){
 		e.preventDefault();
-		var id_array = getContactsBulkIds();
+		var id_array = get_contacts_bulk_ids();
 		
 		// var tags = getTags('tagsBulkForm');
 
@@ -143,7 +143,7 @@ $(function(){
 		setupTagsTypeAhead();
 		
 	   /**
-	    * Add the tags to the contacts bulk by sending the contact ids and tags 
+	    * Add the tags to the selected contacts by sending the contact ids and tags 
 	    * through post request to the appropriate url
 	    */	
 		$('#addTagsToContactsBulk').die().live('click',function(e){
@@ -219,10 +219,10 @@ $(function(){
 
 /**
  * Gets an array of contact ids to perform bulk operations
- * @method getContactsBulkIds
+ * @method get_contacts_bulk_ids
  * @returns {Array} id_array of contact ids
  */
-function getContactsBulkIds(){
+function get_contacts_bulk_ids(){
 	var id_array = [];
 
 	var table = $('body').find('table.showCheckboxes');
@@ -235,4 +235,29 @@ function getContactsBulkIds(){
 		}
 	});
 	return id_array;
+}
+
+/**
+ * Shows bulk actions drop down menu (of contacts table) only when any of the check box is 
+ * enabled.
+ * 
+ * @method toggle_contacts_bulk_actions_dropdown
+ * @param {Object} clicked_ele clicked check-box element 
+ */
+function toggle_contacts_bulk_actions_dropdown(clicked_ele){
+	if($(clicked_ele).attr('checked') == 'checked')
+		$('body').find('#bulk-actions').css('display', 'block');
+	else{
+		var check_count = 0
+		$.each($('.tbody_check'), function(index, element){
+			if($(element).is(':checked')){
+				check_count++;
+				return false;
+			}
+			//return;
+		});
+		if(check_count == 0){
+			$('#bulk-actions').css('display', 'none');
+		}
+	}
 }

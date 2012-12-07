@@ -2,7 +2,7 @@
  * task.js is a script file to deal with all the actions (CRUD) of tasks from
  * client side.
  * 
- * @module Activities ------------------------------------------------
+ * @module Activities 
  * 
  * author: Rammohan
  */
@@ -10,26 +10,26 @@
 $(function() {
 
 	/**
-	 * Activates all features of task (highlighting the task, relatedTo field
+	 * Activates all features of a task form (highlighting the task form, relatedTo field
 	 * typeahead, changing color and font-weight) when we click on task link in
 	 * activities modal.
 	 * 
 	 */
 	$("#task").click(function(e) {
 		e.preventDefault();
-		highlightTask();
+		highlight_task();
 
 		var el = $("#taskForm");
 		agile_type_ahead("task_related_to", el, contacts_typeahead);
 	});
 
 	/**
-	 * Shows activity modal with all the task features
+	 * Shows activity modal with all the task create fields.
 	 */
 	$(".add-task").live('click', function(e) {
 		e.preventDefault();
 		$('#activityModal').modal('show');
-		highlightTask();
+		highlight_task();
 		var el = $("#taskForm");
 		agile_type_ahead("task_related_to", el, contacts_typeahead);
 	});
@@ -37,40 +37,40 @@ $(function() {
 	/**
 	 * Tasks are categorized into four types (overdue, today, tomorrow and
 	 * next-week) while displaying them in client side.Each category has it's
-	 * own table, so to edit tasks call updateTask function for each category.
+	 * own table, so to edit tasks call update_task function for each category.
 	 * 
 	 */
 	$('#overdue > tr').live('click', function(e) {
 		e.preventDefault();
-		updateTask(this);
+		update_task(this);
 	});
 	$('#today > tr').live('click', function(e) {
 		e.preventDefault();
-		updateTask(this);
+		update_task(this);
 	});
 	$('#tomorrow > tr').live('click', function(e) {
 		e.preventDefault();
-		updateTask(this);
+		update_task(this);
 	});
 	$('#next-week > tr').live('click', function(e) {
 		e.preventDefault();
-		updateTask(this);
+		update_task(this);
 	});
 
 	/**
-	 * When click on update button of task-update-modal, the task will get
-	 * updated by calling saveTask function
+	 * When clicked on update button of task-update-modal, the task will get
+	 * updated by calling save_task function
 	 * 
 	 */
 
 	$('#update_task_validate').click(function(e) {
 		e.preventDefault();
 
-		saveTask('updateTaskForm', 'updateTaskModal', true);
+		save_task('updateTaskForm', 'updateTaskModal', true);
 	});
 
 	/**
-	 * Hide event of update task modal Remove the relatedTo field elements if
+	 * Hide event of update task modal. Removes the relatedTo field elements if
 	 * any, when the modal is hidden in order to not to show them again when the
 	 * modal is shown next
 	 * 
@@ -81,7 +81,7 @@ $(function() {
 	});
 
 	/**
-	 * show event of update task modal Activates typeahead for task-update-modal
+	 * Show event of update task modal Activates typeahead for task-update-modal
 	 */
 	$('#updateTaskModal').on('shown', function() {
 
@@ -97,7 +97,7 @@ $(function() {
 	});
 
 	/**
-	 * Makes the pending task as completed by calling completeTask function
+	 * Makes the pending task as completed by calling complete_task function
 	 * 
 	 */
 	$('.tasks-select').live('click', function(e) {
@@ -105,8 +105,8 @@ $(function() {
 		if ($(this).is(':checked')) {
 			// Complete
 			var taskId = $(this).attr('data');
-			// completeTask(taskId, $(this));
-			completeTask(taskId, $(this).closest('tr'))
+			// complete_task(taskId, $(this));
+			complete_task(taskId, $(this).closest('tr'))
 		}
 	});
 
@@ -131,7 +131,7 @@ $(function() {
  * Highlights the task portion of activity modal (Shows task form and hides
  * event form, changes color and font-weight)
  */
-function highlightTask() {
+function highlight_task() {
 	$("#hiddentask").val("task");
 	$("#task").css("color", "black");
 	$("#event").css("color", "#DD4814");
@@ -144,7 +144,7 @@ function highlightTask() {
  * collection by verifying the current window location.
  * 
  * @protected
- * @method saveTask
+ * @method save_task
  * @param {String}
  *            formId the unique id for the form to identify it
  * @param {String}
@@ -154,7 +154,7 @@ function highlightTask() {
  *            or updating the existing one
  * 
  */
-function saveTask(formId, modalId, isUpdate) {
+function save_task(formId, modalId, isUpdate) {
 	if (!isValidForm('#' + formId))
 		return false;
 
@@ -225,21 +225,21 @@ function saveTask(formId, modalId, isUpdate) {
  *            ele assembled html object
  * 
  */
-function updateTask(ele) {
+function update_task(ele) {
 	deserializeForm($(ele).data().toJSON(), $("#updateTaskForm"));
 
 	$("#updateTaskModal").modal('show');
 }
 
 /**
- * Get due of the task to categorize as overdue, today etc..
+ * Get due date of the task to categorize as overdue, today etc..
  * 
- * @method getDue
+ * @method get_due
  * @param {Number}
  *            due of the task
  * 
  */
-function getDue(due) {
+function get_due(due) {
 	// Get Todays Date
 	var date = new Date();
 	date.setHours(0, 0, 0, 0);
@@ -250,14 +250,14 @@ function getDue(due) {
 }
 
 /**
- * Based on due arranges the tasks UI
+ * Based on due date arranges the tasks UI
  * 
- * @method appendTasks
+ * @method append_tasks
  * @param {Object}
  *            base_model task model
  * 
  */
-function appendTasks(base_model) {
+function append_tasks(base_model) {
 
 	var itemView = new Base_List_View({
 		model : base_model,
@@ -266,8 +266,8 @@ function appendTasks(base_model) {
 		tagName : 'tr',
 	});
 
-	// add to the right box - overdue, xxx
-	var due = getDue(base_model.get('due'));
+	// add to the right box - overdue, today, tomorrow etc.
+	var due = get_due(base_model.get('due'));
 	// console.log(due);
 	if (due < 0) {
 		$('#overdue', this.el).append(itemView.render().el);
@@ -312,14 +312,14 @@ function appendTasks(base_model) {
  * 
  * Turns the pending task as completed
  * 
- * @method completeTask
+ * @method complete_task
  * @param {Number}
  *            taskId to get the task from the collection
  * @param {Object}
  *            ui html Object to remove on success of the deletion
  * 
  */
-function completeTask(taskId, ui) {
+function complete_task(taskId, ui) {
 	console.log("Deleting Task " + taskId);
 	var collection = App_Calendar.tasksListView.collection;
 	var model = collection.get(taskId);

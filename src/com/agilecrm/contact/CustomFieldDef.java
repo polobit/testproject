@@ -11,13 +11,13 @@ import com.googlecode.objectify.annotation.Indexed;
  * Custom fields are the fields used to store custom information, i.e user desired information.
  * <p>
  * Custom fields could be added to the user desired scope also, and the scope could be a 
- * person or company or deal. User can also make these fields as required and searchable. 
- * Searchable means, if a searchable custom field is added to an entity then with that field 
- * value also we can search that particular entity. 
+ * person or company or deal. User can also make these fields as required. 
+ * While adding a custom field, the user can enable the 'searchable' checkbox to enable search on these fields. 
+ * 
  * </p>
  * <p>
- * <code>CustomFieldDef</code> class accepts the fields with different field
- * labels only. </p>
+ * <code>CustomFieldDef</code> class accepts the fields with unique field labels
+ * only. </p>
  * 
  * @author Yaswanth
  * 
@@ -34,7 +34,7 @@ public class CustomFieldDef
      */
     public enum Type
     {
-	TEXT, DATE, LIST, CHECK_BOX
+	TEXT, DATE, LIST, CHECKBOX
     };
 
     /**
@@ -43,7 +43,7 @@ public class CustomFieldDef
     public Type field_type;
 
     /**
-     * Field label of the custom field, and it should not be duplicate
+     * Field label of the custom field, and it should not be a duplicate entry.
      */
     @Indexed
     public String field_label;
@@ -59,7 +59,7 @@ public class CustomFieldDef
     public String field_data;
 
     /**
-     * Decides the custom field is required or not
+     * Decides if the custom field is required or not
      */
     public boolean is_required = false;
 
@@ -89,7 +89,7 @@ public class CustomFieldDef
     }
 
     /**
-     * Creates a custom field with it's field type, label and description etc..
+     * Creates a custom field with its field type, label and description etc.
      * values
      * 
      * @param fieldType
@@ -114,7 +114,7 @@ public class CustomFieldDef
     }
 
     /**
-     * Saves the custom field by validating it's field_label value. Throws an
+     * Saves the custom field by validating its field_label value. Throws an
      * exception if any duplicate is found. Id of the custom field is also
      * compared to avoid the problems while updating it.
      * 
@@ -122,6 +122,16 @@ public class CustomFieldDef
      */
     public void save() throws Exception
     {
+
+	/*
+	 * // It can not check the label duplicates of case sensitive.
+	 * CustomFieldDef custom_field = dao.ofy().query(CustomFieldDef.class)
+	 * .filter("field_label", field_label).get();
+	 * 
+	 * if (custom_field != null && custom_field.id != id) throw new
+	 * Exception();
+	 */
+
 	// Fetch all custom fields to check label duplicates
 	for (CustomFieldDef customField : dao.fetchAll())
 	{
