@@ -24,7 +24,7 @@ import com.agilecrm.deferred.TagsDeferredTask;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.NotificationPrefs;
-import com.agilecrm.workflows.triggers.ContactTriggerUtil;
+import com.agilecrm.workflows.triggers.util.ContactTriggerUtil;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;

@@ -17,7 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.workflows.triggers.Trigger;
-import com.agilecrm.workflows.triggers.TriggerUtil;
+import com.agilecrm.workflows.triggers.util.TriggerUtil;
 
 /**
  * <code>TriggersAPI</code> includes REST calls to interact with {@link Trigger}

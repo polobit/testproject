@@ -17,7 +17,7 @@ import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.deals.Opportunity;
-import com.agilecrm.workflows.WorkflowManager;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.sun.jersey.api.json.JSONWithPadding;
 
 @Path("js/api")
@@ -327,7 +327,7 @@ public class JSAPI
 	    return true;
 	}
 
-	WorkflowManager.subscribe(contact, workflowId);
+	WorkflowUtil.subscribe(contact, workflowId);
 
 	return true;
     }
