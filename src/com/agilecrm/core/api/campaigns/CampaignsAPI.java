@@ -16,7 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.contact.Contact;
-import com.agilecrm.workflows.WorkflowManager;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log;
 
 @Path("/api/campaigns")
@@ -37,7 +37,7 @@ public class CampaignsAPI
 	    // return "true";
 	}
 
-	WorkflowManager.subscribe(contact, workflowId);
+	WorkflowUtil.subscribe(contact, workflowId);
 
 	// return "true";
     }
@@ -130,7 +130,7 @@ public class CampaignsAPI
 
 	for (Contact contact : contacts_list)
 	{
-	    WorkflowManager.subscribe(contact, workflowId);
+	    WorkflowUtil.subscribe(contact, workflowId);
 	}
 
 	// return "true";

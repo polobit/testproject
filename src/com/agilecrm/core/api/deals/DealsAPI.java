@@ -18,7 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.deals.Opportunity;
-import com.agilecrm.workflows.triggers.DealTriggerUtil;
+import com.agilecrm.workflows.triggers.util.DealTriggerUtil;
 
 @Path("/api/opportunity")
 public class DealsAPI

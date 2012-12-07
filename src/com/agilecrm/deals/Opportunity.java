@@ -20,7 +20,7 @@ import com.agilecrm.core.DomainUser;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.UserPrefs;
-import com.agilecrm.workflows.triggers.DealTriggerUtil;
+import com.agilecrm.workflows.triggers.util.DealTriggerUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
