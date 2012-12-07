@@ -4,7 +4,7 @@
  * (http://backbonejs.org/#View), It is view backed by a models, Base_Model_View
  * binds events(click on ".save" and ".delete" html elements) which represents
  * view with logical actions i.e., actions can defined to perform on an event.
- * This binds a backbone model to views render function on change event of
+ * This binds a view backbone model to view's render function on change event of
  * model, model data is show in the view (used handlebars js to fill model data
  * to template), whenever there is a change in model data, view is updated with
  * new data, since change on model is binded to render function of the view.
@@ -442,6 +442,7 @@ var Base_Model_View = Backbone.View
 					 * is provided as option when creating an model.
 					 */
 					var callback = this.options.postRenderCallback;
+
 					/*
 					 * If callback is available for the view, callback functions
 					 * is called by sending el(current view html element) as
