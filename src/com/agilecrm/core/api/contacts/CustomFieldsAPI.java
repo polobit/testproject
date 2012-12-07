@@ -19,12 +19,29 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.contact.CustomFieldDef;
+import com.agilecrm.contact.util.CustomFieldDefUtil;
 
+/**
+ * <code>CustomFieldsAPI</code> includes REST calls to interact with
+ * {@link CustomFieldDef} class to initiate Task CRUD operations
+ * <p>
+ * It is called from client side to create, update, fetch and delete the custom
+ * fieds.It also interacts with {@link CustomFieldUtil} class to fetch the data
+ * of <code>CustomFieldDef</code> class from database.
+ * </p>
+ * 
+ * @author Yaswanth
+ * 
+ */
 @Path("/api/custom-fields")
 public class CustomFieldsAPI
 {
 
-    // Custom Fields
+    /**
+     * Gets all custom fields
+     * 
+     * @return List of custom fields
+     */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<CustomFieldDef> getCustomFields()
@@ -32,7 +49,7 @@ public class CustomFieldsAPI
 
 	try
 	{
-	    return CustomFieldDef.getCustomFields();
+	    return CustomFieldDefUtil.getAllCustomFields();
 	}
 	catch (Exception e)
 	{
@@ -41,7 +58,12 @@ public class CustomFieldsAPI
 	}
     }
 
-    // Delete Custom Field
+    /**
+     * Deletes the custom field based on 'id' from the database
+     * 
+     * @param id
+     *            unique id of the custom field
+     */
     @Path("/{id}")
     @DELETE
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -49,7 +71,8 @@ public class CustomFieldsAPI
     {
 	try
 	{
-	    CustomFieldDef customFieldDef = CustomFieldDef.get(id);
+	    CustomFieldDef customFieldDef = CustomFieldDefUtil
+		    .getCustomField(id);
 	    if (customFieldDef != null)
 		customFieldDef.delete();
 	}
@@ -59,7 +82,13 @@ public class CustomFieldsAPI
 	}
     }
 
-    // New Custom Field
+    /**
+     * Saves new custom field by validating it's label name. Exception will be
+     * thrown if duplicate exists
+     * 
+     * @param customField
+     * @return
+     */
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -78,7 +107,13 @@ public class CustomFieldsAPI
 	return customField;
     }
 
-    // Update Custom Field
+    /**
+     * Updates the existing task by validating it's label name
+     * 
+     * @param customField
+     *            custom field which is going to be updated
+     * @return updated custom field data
+     */
     @PUT
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -97,7 +132,14 @@ public class CustomFieldsAPI
 	return customField;
     }
 
-    // Bulk operations - delete
+    /**
+     * Deletes bulk amount of custom fields at a time using array of
+     * corresponding ids
+     * 
+     * @param model_ids
+     *            array of custom field ids as String
+     * @throws JSONException
+     */
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
