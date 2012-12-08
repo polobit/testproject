@@ -5,7 +5,6 @@ import java.util.Iterator;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.map.MappingJsonFactory;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.thirdparty.SendGridEmail;
@@ -16,7 +15,7 @@ public class SendMail
     public static final String NEW_USER_INVITED_SUBJECT = "New User Invitation";
 
     public static final String FORGOT_PASSWORD = "forgot_password";
-    public static final String FORGOT_PASSWORD_SUBJECT = "Your new Password";
+    public static final String FORGOT_PASSWORD_SUBJECT = "Your new Agile CRM password";
 
     public static final String SUBSCRIPTION_PAYMENT_FAILED = "payment_failed";
     public static final String SUBSCRIPTION_PAYMENT_FAILED_SUBJECT = "Your payment failed";
@@ -27,6 +26,42 @@ public class SendMail
     public static final String REPORTS = "reports";
     public static final String REPORTS_SUBJECT = "AgileCrm Reports";
 
+    public static final String WELCOME = "welcome";
+    public static final String WELCOME_SUBJECT = "Welcome to AgileCRM";
+
+    public static final String VERIFICATION_EMAIL = "verification_email";
+    public static final String VERIFICATION_EMAIL_SUBJECT = "Verify your Agile CRM Account";
+
+    public static final String ACCOUNT_CANCELLED_BY_USER = "account_cancelled_by_user";
+    public static final String ACCOUNT_CANCELLED_BY_USER_SUBJECT = "Agile CRM Account Cancelled";
+
+    public static final String AGENT_ADDED = "agent_added";
+    public static final String AGENT_ADDED_SUBJECT = "You have been added to Agile CRM";
+
+    public static final String PAYMENT_RECEIVED = "payment_received";
+    public static final String PAYMENT_RECEIVED_SUBJECT = "Payment Received. Thank you.";
+
+    public static final String PLAN_CHANGED = "plan_changed";
+    public static final String PLAN_CHANGED_SUBJECT = "Your Agile CRM plan has changed";
+
+    public static final String FAILED_BILLINGS_FIRST_TIME = "failed_billings_first_time";
+    public static final String FAILED_BILLINGS_FIRST_TIME_SUBJECT = "[Notice #1] Your Payment to Agile CRM has Declined";
+
+    public static final String FAILED_BILLINGS_SECOND_TIME = "failed_billings_second_time";
+    public static final String FAILED_BILLINGS_SECOND_TIME_SUBJECT = "[Notice #2] Your Payment to Agile CRM has Declined Again.";
+
+    public static final String FAILED_BILLINGS_THIRD_TIME = "failed_billings_third_time";
+    public static final String FAILED_BILLINGS_THIRD_TIME_SUBJECT = "[Final Notice] Your Payment to AgileCRM has Declined Yet Again";
+
+    public static final String FAILED_BILLINGS_FINAL_TIME = "failed_billings_final_time";
+    public static final String FAILED_BILLINGS_FINAL_TIME_SUBJECT = "[Cancelled] Your Payment to Agile CRM has Declined Yet Again";
+
+    public static final String REFUND = "refund";
+    public static final String REFUND_SUBJECT = "[Refund] Your Refund has been Processed";
+
+    public static final String CHARGEBACK_NOTICE = "chargeback_notice";
+    public static final String CHARGEBACK_NOTICE_SUBJECT = "[Payment dispute] Agile CRM chargeback resolution steps";
+
     public static final String AGILE_FROM_NAME = "Agile CRM";
     public static final String AGILE_FROM_EMAIL = "noreply@agilecrm.com";
 
@@ -36,6 +71,7 @@ public class SendMail
     public static final String TEMPLATE_BODY_EXT = "_body.html";
 
     private static final JsonFactory JSON_FACTORY = new MappingJsonFactory();
+    private static Object String;
 
     public static void sendMail(String to, String subject, String template,
 	    Object object, String from, String fromName)
@@ -74,8 +110,12 @@ public class SendMail
 	    if (object instanceof Object[])
 	    {
 		JSONObject content = new JSONObject();
-
-		content.put("content", new JSONArray(json));
+		for (Object eachObject : (Object[]) object)
+		{
+		    String className = eachObject.getClass().getSimpleName();
+		    content.put(className,
+			    new ObjectMapper().writeValueAsString(eachObject));
+		}
 
 		jsonObjectArray = new JSONObject[] { email, content };
 
@@ -88,7 +128,7 @@ public class SendMail
 	    }
 
 	    JSONObject mergedJSON = mergeJSONs(jsonObjectArray);
-
+	    System.out.println("mergedJson in sendemail" + mergedJSON);
 	    // Read template - HTML
 	    String emailHTML = handleBarsTemplatize(template
 		    + TEMPLATE_HTML_EXT, mergedJSON);
@@ -120,6 +160,7 @@ public class SendMail
     public static void sendMail(String to, String subject, String template,
 	    Object object)
     {
+
 	sendMail(to, subject, template, object, AGILE_FROM_EMAIL,
 		AGILE_FROM_NAME);
 

@@ -1,5 +1,6 @@
 package com.agilecrm.core.api.campaigns;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -19,11 +20,31 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log;
 
+/**
+ * <code>CampaignsAPI</code> includes REST calls to interact with {@link Log}
+ * class and {@link WorkflowUtil} class.Usually calls include when single
+ * contact or list of contacts subscribe to campaign,CampaignsAPI uses
+ * {@link WorkflowUtil} class to run workflow with respect to contact.
+ * <p>
+ * <code>CampaignsAPI</code> includes calls to get and delete logs with
+ * respective to campaigns.{@link Log} class is used to get and delete logs
+ * </p>
+ * 
+ * @author Manohar
+ * 
+ */
 @Path("/api/campaigns")
 public class CampaignsAPI
 {
 
-    // Campaign
+    /**
+     * Subscribes single contact with the campaign.
+     * 
+     * @param contactId
+     *            Id of a contact that is subscribed
+     * @param workflowId
+     *            Id of a workflow
+     */
     @Path("enroll/{contact-id}/{workflow-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -37,12 +58,24 @@ public class CampaignsAPI
 	    // return "true";
 	}
 
-	WorkflowUtil.subscribe(contact, workflowId);
+	// Contact is converted to list so that WorkflowUtil uses
+	// TaskletManager's executeCampaign method
+	// having deferredTask
+	List<Contact> contactList = new ArrayList<Contact>();
+	contactList.add(contact);
+
+	WorkflowUtil.subscribeDeferred(contactList, workflowId);
 
 	// return "true";
     }
 
-    // Campaign
+    /**
+     * Returns list of logs with respect to contact
+     * 
+     * @param contactId
+     *            Id of a contact that subscribes to campaign
+     * @return list of logs
+     */
     @Path("logs/contact/{contact-id}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -53,7 +86,15 @@ public class CampaignsAPI
 	return Log.getSubscriberLog(contactId);
     }
 
-    // Campaign
+    /**
+     * Gets log object with respect to both campaign and contact
+     * 
+     * @param contactId
+     *            Id of a contact that subscribes to campaign
+     * @param campaignId
+     *            Id of a campaign
+     * @return logs with respect to both campaign and contact
+     */
     @Path("logs/contact/{contact-id}/{campaign-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -65,7 +106,13 @@ public class CampaignsAPI
 	return Log.getCampaignSubscriberLog(campaignId, contactId);
     }
 
-    // Campaign
+    /**
+     * Gets logs with respect to campaign
+     * 
+     * @param campaignId
+     *            Id of a campaign
+     * @return logs with respect to campaign
+     */
     @Path("logs/{campaign-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -75,6 +122,12 @@ public class CampaignsAPI
 	return Log.getCampaignLog(campaignId);
     }
 
+    /**
+     * Removes logs with respect to campaign id
+     * 
+     * @param id
+     *            Id of a campaign
+     */
     @Path("logs/{campaign-id}")
     @DELETE
     public void deleteCampaignLogs(@PathParam("campaign-id") String id)
@@ -128,10 +181,7 @@ public class CampaignsAPI
 	    // return "true";
 	}
 
-	for (Contact contact : contacts_list)
-	{
-	    WorkflowUtil.subscribe(contact, workflowId);
-	}
+	WorkflowUtil.subscribeDeferred(contacts_list, workflowId);
 
 	// return "true";
     }
