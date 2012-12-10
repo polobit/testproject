@@ -1,10 +1,5 @@
 package com.campaignio.logger;
 
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
@@ -14,63 +9,157 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.util.DBUtil;
-import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
 
+/**
+ * 
+ * <code>Log</code> class is the base class for logging details of various
+ * actions in agilecrm.For example,email sending details such as delivery
+ * reports can be known using logs.Log class can be used in any tasklets that
+ * require logging.
+ * 
+ * 
+ * @author Manohar
+ * 
+ */
 @XmlRootElement
 @JsonAutoDetect
 public class Log
 {
-    // Key
+
+    /**
+     * Uniquely generated Id for each log created
+     */
     @Id
     public Long id;
 
-    // Campaign Data/ID
+    // Campaign Data
+
+    /**
+     * Id of a campaign
+     */
     public String campaign_id;
 
     // Subscriber
+
+    /**
+     * Contact id that subscribes to campaign
+     */
     public String subscriber_id;
 
-    // Subscriber
+    /**
+     * JSONArray logs
+     */
     @NotSaved
-    private JSONArray logs = new JSONArray();
+    public JSONArray logs = new JSONArray();
 
-    // We make it private so that Jersey does not send this to the client
+    /**
+     * We make it private so that Jersey does not send this to the client
+     */
     private String logs_json_array_string = null;
 
-    // Object Key in logs - time, message
+    /**
+     * Object Key in logs - time
+     */
     public final static String LOG_TIME = "t";
+
+    /**
+     * Object Key in logs - message
+     */
     public final static String LOG_MESSAGE = "m";
 
-    // Dao
-    public static ObjectifyGenericDao<Log> dao = new ObjectifyGenericDao<Log>(
-	    Log.class);
-
+    /**
+     * Sets entity type as log
+     */
     @NotSaved
     public String entity_type = "log";
 
+    /**
+     * ObjectifyGenericDao for Log class
+     */
+    public static ObjectifyGenericDao<Log> dao = new ObjectifyGenericDao<Log>(
+	    Log.class);
+
+    /**
+     * Default Log
+     */
     Log()
     {
 
     }
 
-    Log(String campaignId, String subscriberId)
+    /**
+     * Constructs new {@link Log} with campaign id and subscriber id
+     * 
+     * @param campaignId
+     *            Id of a campaign
+     * @param subscriberId
+     *            Id of a contact that subscribes to campaign
+     */
+    public Log(String campaignId, String subscriberId)
     {
 	this.subscriber_id = subscriberId;
 	this.campaign_id = campaignId;
     }
 
+
+    /**
+     * Returns logs as an xmlelement
+     * 
+     * @return log object
+     * @throws Exception
+     */
+    @XmlElement
+    @Produces("application/json")
+    public String getLogs() throws Exception
+    {
+	// System.out.println(logs);
+	return logs.toString();
+    }
+
+    /**
+     * Returns name of contact that subscribes to campaign as an xml element
+     * 
+     * @return Contact name
+     * @throws Exception
+     */
+    @XmlElement
+    public String getContactName() throws Exception
+    {
+	if (subscriber_id != null)
+	{
+	    Contact contact = Contact.getContact(Long.parseLong(subscriber_id));
+	    if (contact != null)
+		return contact.getContactFieldValue(Contact.FIRST_NAME) + " "
+			+ contact.getContactFieldValue(Contact.LAST_NAME);
+	}
+
+	return "?";
+    }
+
+    /**
+     * Saves Log in database
+     */
+    public void save()
+    {
+	dao.put(this);
+    }
+
+    /**
+     * Sets json array string before log object gets saved
+     */
     @PrePersist
     void PrePersist()
     {
 	logs_json_array_string = logs.toString();
     }
 
+    /**
+     * Sets JSONArray logs to json array string after logs has been retrieved
+     */
     @PostLoad
     void PostLoad()
     {
@@ -87,134 +176,5 @@ public class Log
 	// System.out.println("Logs " + logs);
     }
 
-    // Log
-    public static void addLogFromID(String campaignId, String subscriberId,
-	    String message)
-    {
-	// System.out.println("Adding log " + campaignId + " " + subscriberId +
-	// " " + message);
-
-	// Get existing Log
-	Log log = getCampaignSubscriberLog(campaignId, subscriberId);
-	if (log == null)
-	{
-	    System.out.println("Creating fresh log");
-	    log = new Log(campaignId, subscriberId);
-	}
-
-	try
-	{
-	    JSONObject messageJSON = new JSONObject().put(LOG_TIME,
-		    Calendar.getInstance().getTimeInMillis() / 1000).put(
-		    LOG_MESSAGE, message);
-	    log.logs.put(messageJSON);
-	    log.save();
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-    }
-
-    // Enqueue Task
-    public static void addLog(JSONObject campaignJSON,
-	    JSONObject subscriberJSON, String message) throws Exception
-    {
-	// Campaign and SubscriberId
-	String campaignId = DBUtil.getId(campaignJSON);
-	String subscriberId = DBUtil.getId(subscriberJSON);
-
-	addLogFromID(campaignId, subscriberId, message);
-    }
-
-    // Get Log
-    public static Log getCampaignSubscriberLog(String campaignId,
-	    String subscriberId)
-    {
-
-	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("subscriber_id", subscriberId);
-	searchMap.put("campaign_id", campaignId);
-
-	return dao.getByProperty(searchMap);
-    }
-
-    // Get Log
-    public static List<Log> getSubscriberLog(String subscriberId)
-    {
-	return dao.listByProperty("subscriber_id", subscriberId);
-    }
-
-    // Get Log
-    public static List<Log> getCampaignLog(String campaignId)
-    {
-	return dao.listByProperty("campaign_id", campaignId);
-    }
-
-    // Enqueue Task
-    public static void removeLogs(String subscriberID)
-    {
-	List<Key<Log>> logs = dao.listKeysByProperty("subscriber_id",
-		subscriberID);
-	if (logs == null || logs.isEmpty())
-	    return;
-
-	// Read from database
-	try
-	{
-	    dao.deleteKeys(logs);
-	}
-	catch (Exception e)
-	{
-
-	}
-
-    }
-
-    // Enqueue Task
-    public static void removeCampaignLogs(String campaignID)
-    {
-	List<Key<Log>> logs = dao.listKeysByProperty("campaign_id", campaignID);
-	if (logs == null || logs.isEmpty())
-	    return;
-
-	// Read from database
-	try
-	{
-	    dao.deleteKeys(logs);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-
-    }
-
-    public void save()
-    {
-	dao.put(this);
-    }
-
-    @XmlElement
-    @Produces("application/json")
-    public String getLogs() throws Exception
-    {
-	// System.out.println(logs);
-	return logs.toString();
-    }
-
-    @XmlElement
-    public String getContactName() throws Exception
-    {
-	if (subscriber_id != null)
-	{
-	    Contact contact = Contact.getContact(Long.parseLong(subscriber_id));
-	    if (contact != null)
-		return contact.getContactFieldValue(Contact.FIRST_NAME) + " "
-			+ contact.getContactFieldValue(Contact.LAST_NAME);
-	}
-
-	return "?";
-    }
 
 }

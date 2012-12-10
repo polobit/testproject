@@ -3,7 +3,7 @@ package com.campaignio.tasklets.sms;
 import org.json.JSONObject;
 
 import com.campaignio.tasklets.TaskletAdapter;
-import com.campaignio.tasklets.TaskletManager;
+import com.campaignio.tasklets.util.TaskletUtil;
 
 public class SendMessage extends TaskletAdapter
 {
@@ -60,7 +60,7 @@ public class SendMessage extends TaskletAdapter
 	}
 
 	// Execute Next One in Loop
-	TaskletManager.executeTasklet(campaignJSON, subscriberJSON, data,
+	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		nodeJSON, null);
     }
 

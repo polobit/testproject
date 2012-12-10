@@ -3,9 +3,9 @@ package com.campaignio.tasklets.sms;
 import org.json.JSONObject;
 
 import com.agilecrm.util.Util;
-import com.campaignio.cron.Cron;
+import com.campaignio.cron.util.CronUtil;
 import com.campaignio.tasklets.TaskletAdapter;
-import com.campaignio.tasklets.TaskletManager;
+import com.campaignio.tasklets.util.TaskletUtil;
 
 public class GetMessage extends TaskletAdapter
 {
@@ -40,7 +40,7 @@ public class GetMessage extends TaskletAdapter
 		DURATION_TYPE);
 
 	// Add ourselves to Cron Queue
-	long timeout = Cron.getTimer(duration, durationType);
+	long timeout = CronUtil.getTimer(duration, durationType);
 
 	// Add to cron
 	if (from != null && to != null)
@@ -90,7 +90,7 @@ public class GetMessage extends TaskletAdapter
 	data.put(variableName, message);
 
 	// Execute Next One in Loop
-	TaskletManager.executeTasklet(campaignJSON, subscriberJSON, data,
+	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		nodeJSON, BRANCH_SUCCESS);
     }
 
@@ -106,7 +106,7 @@ public class GetMessage extends TaskletAdapter
 	log(campaignJSON, subscriberJSON, "SMS Timeout");
 
 	// Execute Next One in Loop
-	TaskletManager.executeTasklet(campaignJSON, subscriberJSON, data,
+	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		nodeJSON, BRANCH_TIMEOUT);
     }
 

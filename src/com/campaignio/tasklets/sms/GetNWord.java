@@ -3,7 +3,7 @@ package com.campaignio.tasklets.sms;
 import org.json.JSONObject;
 
 import com.campaignio.tasklets.TaskletAdapter;
-import com.campaignio.tasklets.TaskletManager;
+import com.campaignio.tasklets.util.TaskletUtil;
 
 public class GetNWord extends TaskletAdapter
 {
@@ -33,7 +33,7 @@ public class GetNWord extends TaskletAdapter
 	data.put(variableName, "variable split value here");
 
 	// Execute Next One in Loop
-	TaskletManager.executeTasklet(campaignJSON, subscriberJSON, data,
+	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		nodeJSON, null);
     }
 
@@ -50,7 +50,7 @@ public class GetNWord extends TaskletAdapter
 	System.out.println("Woke up from wait. Executing next one.");
 
 	// Execute Next One in Loop
-	TaskletManager.executeTasklet(campaignJSON, subscriberJSON, data,
+	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		nodeJSON, BRANCH_SUCCESS);
     }
 
@@ -63,7 +63,7 @@ public class GetNWord extends TaskletAdapter
 	System.out.println("Woke up from wait. Executing next one.");
 
 	// Execute Next One in Loop
-	TaskletManager.executeTasklet(campaignJSON, subscriberJSON, data,
+	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		nodeJSON, BRANCH_TIMEOUT);
     }
 

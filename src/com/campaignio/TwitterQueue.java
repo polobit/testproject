@@ -16,7 +16,7 @@ import twitter4j.auth.AccessToken;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.util.DBUtil;
-import com.campaignio.logger.Log;
+import com.campaignio.logger.util.LogUtil;
 
 class TwitterJob
 {
@@ -57,7 +57,7 @@ class TwitterJob
 	    // twitter.getScreenName());
 
 	    Status status = twitter.updateStatus(token_secret);
-	    Log.addLogFromID(
+	    LogUtil.addLogFromID(
 		    campaign_id,
 		    subscriber_id,
 		    "Twitter - Successfully updated the status to ["
@@ -68,7 +68,7 @@ class TwitterJob
 	}
 	catch (Exception e)
 	{
-	    Log.addLogFromID(campaign_id, campaign_id,
+	    LogUtil.addLogFromID(campaign_id, campaign_id,
 		    "Tweeting failed " + e.getMessage());
 	    return false;
 	}

@@ -1,4 +1,4 @@
-package com.campaignio.tasklets;
+package com.campaignio.tasklets.util;
 
 import java.util.Iterator;
 
@@ -6,32 +6,79 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.util.DBUtil;
-import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.taskqueue.DeferredTask;
+import com.campaignio.tasklets.Tasklet;
+import com.campaignio.tasklets.deferred.TaskletWorkflowDeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 
-public class TaskletManager
+/**
+ * <code>TaskletUtil</code> class is the base class for campaigns.It can execute
+ * campaigns for single subscriber or even for a list of subscribers.It takes
+ * responsibility to execute all the nodes that are connected in a workflow.Each
+ * node is taken as one tasklet.TaskletUtil executes all the tasklets in a
+ * workflow in Top-Down approach starting from Start node.It gets next node id
+ * from current node if connected in the workflow.
+ * <p>
+ * TaskletUtil uses DeferredTask when there are list of subscribers.It executes
+ * workflow in deferredtask for each subscriber in a list.
+ * </p>
+ * 
+ * @author Manohar
+ * 
+ */
+
+public class TaskletUtil
 {
-    // Start, Hangup Nodes
+
+    /**
+     * Start Node Id.It is fixed and unique.
+     */
     public static final String START_NODE_ID = "PBXNODE1";
+
+    /**
+     * Hang-up node Id is used to identify end of workflow that there is no
+     * further node to execute in a workflow
+     */
     public static final String HANGUP_NODE_ID = "hangup";
 
-    // Default Branch Value
+    /**
+     * Default Branch value is Yes
+     */
     static final String DEFAULT_NEXT_NODE_BRANCH_DATA = "yes";
 
     // Campaign Data - workflow and campaign
+    /**
+     * Workflow id
+     */
     public static final String CAMPAIGN_WORKFLOW_ID = "workflow_id";
+    /**
+     * Workflow data
+     */
     public static final String CAMPAIGN_WORKFLOW_JSON = "workflow_json";
     public static final String CAMPAIGN_LIST_ID = "list_id";
     public static final String CAMPAIGN_LIST_JSON = "list_json";
 
     // Workflow - Tasklet Class Name
+    /**
+     * Nodes that are included in a workflow
+     */
     public static final String WORKFLOW_NODE_DEFINITION = "NodeDefinition";
+    /**
+     * Class name of a tasklet
+     */
     public static final String WORKFLOW_TASKLET_CLASS_NAME = "workflow_tasklet_class_name";
 
-    // Execute workflow - collection of tasklets
+    /**
+     * Executes workflow for single contact starting with Start node.
+     * 
+     * @param campaignJSON
+     *            Campaign json with workflow having nodes connected to each
+     *            other
+     * @param subscriberJSON
+     *            Contact that subscribes to campaign.
+     * @throws Exception
+     */
     public static void executeWorkflow(JSONObject campaignJSON,
 	    JSONObject subscriberJSON) throws Exception
     {
@@ -39,7 +86,22 @@ public class TaskletManager
 	executeTasklet(campaignJSON, subscriberJSON, null, null, null);
     }
 
-    // Execute Tasklet
+    /**
+     * Executes Tasklet
+     * 
+     * @param campaignJSON
+     *            nodes that are connected in a workflow
+     * @param subscriberJSON
+     *            contact details
+     * @param data
+     *            data within the workflow
+     * @param currentNodeJSON
+     *            current node in a workflow
+     * @param branch
+     *            branch of a node For e.g. Clicked node consists Yes and No
+     *            branches
+     * @throws Exception
+     */
     public static void executeTasklet(JSONObject campaignJSON,
 	    JSONObject subscriberJSON, JSONObject data,
 	    JSONObject currentNodeJSON, String branch) throws Exception
@@ -62,7 +124,7 @@ public class TaskletManager
 	    if (branch == null)
 		branch = DEFAULT_NEXT_NODE_BRANCH_DATA;
 
-	    // Get Next Node Id
+	    // Get Next Node Id in workflow
 	    nextNode = getNextNodeId(campaignJSON, currentNodeJSON, branch);
 
 	    // Check if it is hangup node - we are done.
@@ -73,7 +135,7 @@ public class TaskletManager
 	    }
 	}
 
-	// Get Node JSOn
+	// Get Node JSON
 	JSONObject nodeJSON = getNodeJSON(campaignJSON, nextNode);
 
 	// Get Tasklet
@@ -87,7 +149,14 @@ public class TaskletManager
 	    tasklet.run(campaignJSON, subscriberJSON, data, nodeJSON);
     }
 
-    // Execute Campaign
+    /**
+     * Executes campaign when there is a list of subscribers
+     * 
+     * @param campaignJSON
+     *            nodes that are connected in a workflow
+     * @param subscriberJSONArray
+     *            list of subscribers
+     */
     public static void executeCampaign(JSONObject campaignJSON,
 	    JSONArray subscriberJSONArray)
     {
@@ -154,29 +223,45 @@ public class TaskletManager
 	// executeWorkflow
     }
 
-    // Get Current Tasklet
+    /**
+     * Gets tasklet object
+     * 
+     * @param nodeJSON
+     *            current node in a workflow
+     * @return Tasklet object
+     * @throws Exception
+     */
     public static Tasklet getTasklet(JSONObject nodeJSON) throws Exception
     {
-	// Get Name
+	// Get Name from nodeJSON
 	String className = getNodeDefinitionValue(nodeJSON,
 		WORKFLOW_TASKLET_CLASS_NAME);
 	if (className == null)
 	    throw new Exception("Cannot find tasklet class name " + nodeJSON);
 
-	// Class.for.name
+	// get the Class object for the classname.
 	Class taskletClass = Class.forName(className);
 
 	return (Tasklet) taskletClass.newInstance();
     }
 
-    // Read Node Definition Values
+    /**
+     * Returns associated value with the key in current node
+     * 
+     * @param nodeJSON
+     *            current node in a workflow.
+     * @param key
+     *            key to get associated value in Nodedefinition json
+     * @return the value associated with the key
+     * @throws Exception
+     */
     public static String getNodeDefinitionValue(JSONObject nodeJSON, String key)
 	    throws Exception
     {
 
 	// Get Name
 	if (!nodeJSON.has(WORKFLOW_NODE_DEFINITION))
-	    throw new Exception("Node Definitoin Missing" + nodeJSON);
+	    throw new Exception("Node Definition Missing" + nodeJSON);
 
 	JSONObject nodeDefinitionJSON = nodeJSON
 		.getJSONObject(WORKFLOW_NODE_DEFINITION);
@@ -187,7 +272,18 @@ public class TaskletManager
 	return nodeDefinitionJSON.getString(key);
     }
 
-    // Get Next Node ID
+    /**
+     * Gets next node id using branch key.
+     * 
+     * @param campaignJSON
+     *            The nodes that are connected in a workflow
+     * @param currentNodeJSON
+     *            The current node in a workflow
+     * @param branch
+     *            The branch of a current node
+     * @return next node id of current node in a workflow
+     * @throws Exception
+     */
     public static String getNextNodeId(JSONObject campaignJSON,
 	    JSONObject currentNodeJSON, String branch) throws Exception
     {
@@ -214,7 +310,16 @@ public class TaskletManager
 
     }
 
-    // Get Node JSON
+    /**
+     * Gets current node in a workflow
+     * 
+     * @param campaignJSON
+     *            Nodes that are connected in a workflow
+     * @param nodeId
+     *            Id of a particular node
+     * @return json object with that nodeId in a workflow
+     * @throws Exception
+     */
     public static JSONObject getNodeJSON(JSONObject campaignJSON, String nodeId)
 	    throws Exception
     {
@@ -230,7 +335,7 @@ public class TaskletManager
 	// Get the total Arrays (Nodes) present in that object
 	JSONArray nodes = workflowJSON.getJSONArray("nodes");
 
-	// Read the Phone System
+	// Read the workflow
 	for (int i = 0; i < nodes.length(); i++)
 	{
 
@@ -250,40 +355,3 @@ public class TaskletManager
     }
 }
 
-@SuppressWarnings("serial")
-class TaskletWorkflowDeferredTask implements DeferredTask
-{
-
-    String campaignJSONString, subscriberJSONString;
-
-    public TaskletWorkflowDeferredTask(String campaignJSONString,
-	    String subscriberJSONString)
-    {
-
-	this.campaignJSONString = campaignJSONString;
-	this.subscriberJSONString = subscriberJSONString;
-    }
-
-    @Override
-    public void run()
-    {
-	try
-	{
-	    System.out.println("Executing tasklet in namespace "
-		    + NamespaceManager.get());
-
-	    // Get Campaign JSON & SubscriberJSON from String
-	    JSONObject campaignJSON = new JSONObject(campaignJSONString);
-	    JSONObject subscriberJSON = new JSONObject(subscriberJSONString);
-
-	    // Check in memcache if it is already executing
-	    TaskletManager.executeWorkflow(campaignJSON, subscriberJSON);
-
-	}
-	catch (Exception e)
-	{
-	    System.err.println("Exception occured in Cron " + e.getMessage());
-	    e.printStackTrace();
-	}
-    }
-}

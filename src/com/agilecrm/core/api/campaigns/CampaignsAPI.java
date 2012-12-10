@@ -19,6 +19,7 @@ import org.json.JSONException;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log;
+import com.campaignio.logger.util.LogUtil;
 
 /**
  * <code>CampaignsAPI</code> includes REST calls to interact with {@link Log}
@@ -83,7 +84,7 @@ public class CampaignsAPI
 	    @PathParam("contact-id") String contactId)
     {
 
-	return Log.getSubscriberLog(contactId);
+	return LogUtil.getSubscriberLog(contactId);
     }
 
     /**
@@ -103,7 +104,7 @@ public class CampaignsAPI
 	    @PathParam("campaign-id") String campaignId)
     {
 
-	return Log.getCampaignSubscriberLog(campaignId, contactId);
+	return LogUtil.getCampaignSubscriberLog(campaignId, contactId);
     }
 
     /**
@@ -119,7 +120,7 @@ public class CampaignsAPI
     public List<Log> getCampaignLogs(@PathParam("campaign-id") String campaignId)
     {
 
-	return Log.getCampaignLog(campaignId);
+	return LogUtil.getCampaignLog(campaignId);
     }
 
     /**
@@ -132,7 +133,7 @@ public class CampaignsAPI
     @DELETE
     public void deleteCampaignLogs(@PathParam("campaign-id") String id)
     {
-	Log.removeCampaignLogs(id);
+	LogUtil.removeCampaignLogs(id);
     }
 
     /**

@@ -6,7 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.campaignio.tasklets.TaskletAdapter;
-import com.campaignio.tasklets.TaskletManager;
+import com.campaignio.tasklets.util.TaskletUtil;
 
 public class Menu extends TaskletAdapter
 {
@@ -49,7 +49,7 @@ public class Menu extends TaskletAdapter
 
 		    // Get Next Branch
 		    // Execute Next One in Loop
-		    TaskletManager.executeTasklet(campaignJSON, subscriberJSON,
+		    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON,
 			    data, nodeJSON, variableName);
 		    return;
 		}
@@ -57,7 +57,7 @@ public class Menu extends TaskletAdapter
 	}
 
 	// Go to No Match
-	TaskletManager.executeTasklet(campaignJSON, subscriberJSON, data,
+	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		nodeJSON, GRID_NO_MATCH_KEY);
 
 	// Answer did not match any of the menus..
