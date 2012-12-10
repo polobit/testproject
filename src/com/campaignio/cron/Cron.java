@@ -1,11 +1,8 @@
 package com.campaignio.cron;
 
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
@@ -14,27 +11,33 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.util.DBUtil;
-import com.campaignio.tasklets.Tasklet;
-import com.campaignio.tasklets.TaskletManager;
+import com.campaignio.cron.util.CronUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.taskqueue.DeferredTask;
-import com.google.appengine.api.taskqueue.Queue;
-import com.google.appengine.api.taskqueue.QueueFactory;
-import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 
+/**
+ * <code>Cron</code> is the base class for scheduling in agilecrm.Cron is used
+ * to send emails on prescribed date and time.Cron is responsible to wake up
+ * tasks at right time.
+ * 
+ * 
+ * @author Manohar
+ * 
+ */
 @SuppressWarnings("serial")
 public class Cron extends HttpServlet
 {
-    // Key
+
+    /**
+     * Unique id for each cron
+     */
     @Id
     public Long id;
 
@@ -42,31 +45,50 @@ public class Cron extends HttpServlet
     public static final String CRON_DB = "crons";
     public static final String CRON_DB_USER_ID = "user_id";
 
-    // Time out (in seconds) - when should the tasklet wake up
+    /**
+     * Time out (in seconds) - when should the tasklet wake up
+     */
     @Indexed
     public Long timeout = 0L;
 
-    // Time out in human readable format
+    /**
+     * Time out in human readable format
+     */
+    @SuppressWarnings("unused")
     private String timeout_string = null;
 
-    // Campaign Data/ID
+    /**
+     * Campaign Data
+     */
     @NotSaved
     public JSONObject campaign_json;
 
     // Workflow Data
+    /**
+     * Workflow data
+     */
     @NotSaved
     public JSONObject data;
 
     // Current Node
+    /**
+     * Current Node
+     */
     @NotSaved
     public JSONObject node_json;
 
     // Subscriber JSON/ID
+    /**
+     * Subscriber JSON
+     */
     @NotSaved
     public JSONObject subscriber_json;
 
     // JSON Strings
-    private String campaign_json_string, data_string, node_json_string,
+    /**
+     * JSON Strings
+     */
+    public String campaign_json_string, data_string, node_json_string,
 	    subscriber_json_string;
 
     // Custom Values
@@ -97,12 +119,37 @@ public class Cron extends HttpServlet
     private static ObjectifyGenericDao<Cron> dao = new ObjectifyGenericDao<Cron>(
 	    Cron.class);
 
+    /**
+     * Default Cron
+     */
     public Cron()
     {
 
     }
 
-    Cron(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data,
+    /**
+     * Constructs a new {@link Cron}
+     * 
+     * @param campaignJSON
+     *            Campaign Data
+     * 
+     * @param subscriberJSON
+     *            Contact data that subscribes to Campaign
+     * @param data
+     *            Workflow data
+     * @param nodeJSON
+     *            Current Node
+     * @param timeOut
+     *            Timeout time
+     * @param custom1
+     *            Custom value1
+     * @param custom2
+     *            Custom value2
+     * @param custom3
+     *            Custom value3
+     */
+    public Cron(JSONObject campaignJSON, JSONObject subscriberJSON,
+	    JSONObject data,
 	    JSONObject nodeJSON, long timeOut, String custom1, String custom2,
 	    String custom3)
     {
@@ -120,6 +167,90 @@ public class Cron extends HttpServlet
 	this.subscriber_id = DBUtil.getId(subscriberJSON);
     }
 
+    // Get Request
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest
+     * , javax.servlet.http.HttpServletResponse)
+     */
+    public void doGet(HttpServletRequest req, HttpServletResponse resp)
+	    throws IOException
+    {
+
+	// For registering all entities - AgileUser is a just a random class we
+	// are using
+	ObjectifyGenericDao<AgileUser> dao = new ObjectifyGenericDao<AgileUser>(
+		AgileUser.class);
+	System.out.println(dao.getClass());
+
+	try
+	{
+	    // Dequeue Tasks
+	    System.out.println("Cron init - ");
+	    CronUtil.wakeupOldTasks();
+	    System.out.println("Cron done - ");
+	    return;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    resp.getWriter().println("Error " + e);
+	    System.out.println("Error " + e);
+	}
+
+    }
+
+    /**
+     * Sets the namespace to old namespace and save cron
+     */
+    public void save()
+    {
+
+	// Set the namespace
+	namespace = NamespaceManager.get();
+
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+	try
+	{
+	    dao.put(this);
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
+
+
+    /**
+     * Deletes Cron
+     */
+    public void delete()
+    {
+	dao.delete(this);
+    }
+
+    /**
+     * Deletes cron by namespace
+     * 
+     * @param namespace
+     *            Namespace
+     */
+    public void deleteByNameSpace(String namespace)
+    {
+	NamespaceManager.set(namespace);
+
+	List<Key<Cron>> cronKeys = dao.ofy().query(Cron.class)
+		.filter("namespace", namespace).listKeys();
+
+	dao.deleteKeys(cronKeys);
+    }
+
+    /**
+     * Sets json string variables before cron gets saved
+     */
     @PrePersist
     void PrePersist()
     {
@@ -131,6 +262,9 @@ public class Cron extends HttpServlet
 
     }
 
+    /**
+     * Sets json string to json string after crons have been retrieved
+     */
     @PostLoad
     void PostLoad()
     {
@@ -157,365 +291,6 @@ public class Cron extends HttpServlet
 	// System.out.println("Logs " + logs);
     }
 
-    // Delete Contact
-    public void delete()
-    {
-	dao.delete(this);
-    }
-
-    public void deleteByNameSpace(String namespace)
-    {
-	NamespaceManager.set(namespace);
-
-	List<Key<Cron>> cronKeys = dao.ofy().query(Cron.class)
-		.filter("namespace", namespace).listKeys();
-
-	dao.deleteKeys(cronKeys);
-    }
-
-    public void save()
-    {
-
-	// Set the namespace
-	namespace = NamespaceManager.get();
-
-	String oldNamespace = NamespaceManager.get();
-	NamespaceManager.set("");
-	try
-	{
-	    dao.put(this);
-	}
-	finally
-	{
-	    NamespaceManager.set(oldNamespace);
-	}
-    }
-
-    // Enqueue Task
-    public static void enqueueTask(JSONObject campaignJSON,
-	    JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON,
-	    long timeOut, String custom1, String custom2, String custom3)
-	    throws Exception
-    {
-	Cron cron = new Cron(campaignJSON, subscriberJSON, data, nodeJSON,
-		timeOut, custom1, custom2, custom3);
-	cron.save();
-    }
-
-    public static List<Cron> getCrons(String campaignId, String subscriberId)
-    {
-	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("subscriber_id", subscriberId);
-	searchMap.put("campaign_id", campaignId);
-
-	return dao.listByProperty(searchMap);
-    }
-
-    // Get cron by namespace
-    public static void deleteCronsByNamespace(String namespace)
-    {
-	// If namespace is empty return
-	if (StringUtils.isEmpty(namespace))
-	    return;
-
-	String oldNamespace = NamespaceManager.get();
-	NamespaceManager.set("");
-	try
-	{
-	    // Get cron key list related to given namespace
-	    List<Key<Cron>> cron_keys = dao.ofy().query(Cron.class)
-		    .filter("namespace", namespace).listKeys();
-
-	    // Delete crons
-	    dao.ofy().delete(cron_keys);
-	}
-	finally
-	{
-	    NamespaceManager.set(oldNamespace);
-	}
-    }
-
-    // Enqueue Task
-    public static void removeTask(String campaignId, String subscriberId)
-    {
-
-	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("subscriber_id", subscriberId);
-	searchMap.put("campaign_id", campaignId);
-	searchMap.put("namespace", NamespaceManager.get());
-
-	List<Key<Cron>> keys = dao.listKeysByProperty(searchMap);
-	dao.deleteKeys(keys);
-    }
-
-    // Stop Campaign
-    public static void stopCampaign(String campaignId)
-    {
-
-	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("campaign_id", campaignId);
-	searchMap.put("namespace", NamespaceManager.get());
-
-	List<Key<Cron>> keys = dao.listKeysByProperty(searchMap);
-
-	dao.deleteKeys(keys);
-    }
-
-    // Delete Contact
-    public static void deleteContact(String subscriberId)
-    {
-
-	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("subscriber_id", subscriberId);
-	searchMap.put("namespace", NamespaceManager.get());
-
-	List<Key<Cron>> keys = dao.listKeysByProperty(searchMap);
-	dao.deleteKeys(keys);
-    }
-
-    // Dequeue Tasks
-    public static void executeTasklets(List<Cron> cronJobs,
-	    String wakeupOrInterrupt, JSONObject customData)
-    {
-	System.out.println("Jobs dequeued - " + wakeupOrInterrupt + " ["
-		+ cronJobs.size() + "]" + cronJobs);
-
-	// Iterate through all tasks
-	for (Cron cron : cronJobs)
-	{
-	    if (customData == null)
-		customData = new JSONObject();
-
-	    CronDeferredTask cronDeferredTask = new CronDeferredTask(
-		    cron.namespace, cron.campaign_json_string,
-		    cron.data_string, cron.subscriber_json_string,
-		    cron.node_json_string, wakeupOrInterrupt,
-		    customData.toString());
-	    Queue queue = QueueFactory.getDefaultQueue();
-	    queue.add(TaskOptions.Builder.withPayload(cronDeferredTask));
-	}
-    }
-
-    // Get Timer
-    public static long getTimerAt(String durationString, String durationType)
-	    throws Exception
-    {
-
-	int duration = Integer.parseInt(durationString);
-
-	Calendar calendar = Calendar.getInstance();
-
-	// Days
-	if (durationType.equalsIgnoreCase(DURATION_TYPE_DAYS))
-	    calendar.add(Calendar.DAY_OF_MONTH, duration);
-
-	// Hours
-	if (durationType.equalsIgnoreCase(DURATION_TYPE_HOURS))
-	    calendar.add(Calendar.HOUR_OF_DAY, duration);
-
-	// Mins
-	if (durationType.equalsIgnoreCase(DURATION_TYPE_MINS))
-	    calendar.add(Calendar.MINUTE, duration);
-
-	System.out.print("Current Time: "
-		+ Calendar.getInstance().getTimeInMillis());
-	System.out.println(" Will wake up Time: " + calendar.getTimeInMillis());
-
-	return calendar.getTimeInMillis();
-    }
-
-    // Get Timer
-    public static long getTimer(String durationString, String durationType)
-	    throws Exception
-    {
-
-	int duration = Integer.parseInt(durationString);
-	Calendar calendar = Calendar.getInstance();
-
-	// Days
-	if (durationType.equalsIgnoreCase(DURATION_TYPE_DAYS))
-	    calendar.add(Calendar.DAY_OF_MONTH, duration);
-
-	// Hours
-	if (durationType.equalsIgnoreCase(DURATION_TYPE_HOURS))
-	    calendar.add(Calendar.HOUR_OF_DAY, duration);
-
-	// Mins
-	if (durationType.equalsIgnoreCase(DURATION_TYPE_MINS))
-	    calendar.add(Calendar.MINUTE, duration);
-
-	System.out.print("Current Time: "
-		+ Calendar.getInstance().getTimeInMillis());
-	System.out.println(" Will wake up Time: " + calendar.getTimeInMillis());
-
-	return calendar.getTimeInMillis();
-    }
-
-    // Get Old Sessions & Deletes them all
-    public static List<Cron> getExpiredCronJobs()
-    {
-
-	String oldNamespace = NamespaceManager.get();
-	NamespaceManager.set("");
-
-	// Get all sessions with last_messg_rcvd_time
-	Long milliSeconds = Calendar.getInstance().getTimeInMillis();
-	System.out.println(milliSeconds + " " + NamespaceManager.get());
-
-	List<Cron> cronJobs = dao.listByProperty("timeout <=", milliSeconds);
-
-	System.out.println(cronJobs);
-
-	cronJobs = dao.ofy().query(Cron.class)
-		.filter("timeout <=", milliSeconds).list();
-
-	System.out.println(cronJobs);
-
-	// Delete them all
-	dao.deleteAll(cronJobs);
-
-	NamespaceManager.set(oldNamespace);
-
-	return cronJobs;
-    }
-
-    // Interrupt a task
-    public static void interrupt(String custom1, String custom2,
-	    String custom3, JSONObject interruptData)
-    {
-
-	if (custom1 == null && custom2 == null && custom3 == null)
-	    return;
-
-	Map<String, Object> searchMap = new HashMap<String, Object>();
-
-	if (custom1 != null)
-	    searchMap.put("custom1", custom1);
-
-	if (custom2 != null)
-	    searchMap.put("custom2", custom2);
-
-	if (custom3 != null)
-	    searchMap.put("custom3", custom3);
-
-	List<Cron> cronJobs = dao.listByProperty(searchMap);
-
-	// Execute in another tasklet
-	executeTasklets(cronJobs, CRON_TYPE_INTERRUPT, interruptData);
-
-	dao.deleteAll(cronJobs);
-
-    }
-
-    // Wakeup
-    public static void wakeupOldTasks()
-    {
-	// Check for timeouts task and delete them after fetching
-	List<Cron> cronJobs = getExpiredCronJobs();
-
-	if (cronJobs.size() > 0)
-	{
-	    System.out.println("Waking up " + cronJobs.size() + " jobs");
-	    executeTasklets(cronJobs, CRON_TYPE_TIME_OUT, null);
-	}
-	else
-	{
-	    System.out.println("No jobs to wake up");
-	}
-    }
-
-    // Get Request
-    public void doGet(HttpServletRequest req, HttpServletResponse resp)
-	    throws IOException
-    {
-
-	// For registering all entities - AgileUser is a just a random class we
-	// are using
-	ObjectifyGenericDao<AgileUser> dao = new ObjectifyGenericDao<AgileUser>(
-		AgileUser.class);
-	System.out.println(dao.getClass());
-
-	try
-	{
-	    // Dequeue Tasks
-	    System.out.println("Cron init - ");
-	    wakeupOldTasks();
-	    System.out.println("Cron done - ");
-	    return;
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    resp.getWriter().println("Error " + e);
-	    System.out.println("Error " + e);
-	}
-
-    }
 
 }
 
-@SuppressWarnings("serial")
-class CronDeferredTask implements DeferredTask
-{
-
-    String wakeupOrInterrupt;
-    String customDataString;
-    String campaignJSONString, dataString, subscriberJSONString,
-	    nodeJSONString;
-    String namespace;
-
-    public CronDeferredTask(String namespace, String campaignJSONString,
-	    String dataString, String subscriberJSONString,
-	    String nodeJSONString, String wakeupOrInterrupt,
-	    String customDataString)
-    {
-
-	this.campaignJSONString = campaignJSONString;
-	this.dataString = dataString;
-	this.subscriberJSONString = subscriberJSONString;
-	this.nodeJSONString = nodeJSONString;
-	this.wakeupOrInterrupt = wakeupOrInterrupt;
-	this.customDataString = customDataString;
-	this.namespace = namespace;
-    }
-
-    @Override
-    public void run()
-    {
-	String oldNameSpace = NamespaceManager.get();
-
-	NamespaceManager.set(namespace);
-
-	try
-	{
-	    // Add in mem_cache
-	    JSONObject campaignJSON = new JSONObject(campaignJSONString);
-	    JSONObject data = new JSONObject(dataString);
-	    JSONObject subscriberJSON = new JSONObject(subscriberJSONString);
-	    JSONObject nodeJSON = new JSONObject(nodeJSONString);
-	    JSONObject customData = new JSONObject(customDataString);
-
-	    // Get Tasklet
-	    Tasklet tasklet = TaskletManager.getTasklet(nodeJSON);
-	    if (tasklet != null)
-	    {
-		System.out.println("Executing tasklet from CRON ");
-
-		if (wakeupOrInterrupt.equalsIgnoreCase(Cron.CRON_TYPE_TIME_OUT))
-		    tasklet.timeOutComplete(campaignJSON, subscriberJSON, data,
-			    nodeJSON);
-		else
-		    tasklet.interrupted(campaignJSON, subscriberJSON, data,
-			    nodeJSON, customData);
-	    }
-
-	}
-	catch (Exception e)
-	{
-	    System.err.println("Exception occured in Cron " + e.getMessage());
-	    e.printStackTrace();
-	}
-
-	NamespaceManager.set(oldNameSpace);
-    }
-}

@@ -7,7 +7,7 @@ import java.util.List;
 import org.json.JSONObject;
 
 import com.agilecrm.core.DomainUser;
-import com.campaignio.cron.Cron;
+import com.campaignio.cron.util.CronUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -166,7 +166,7 @@ public class DBUtil
 		for (String kind : kinds)
 		    deleteKind(kind);
 
-		Cron.deleteCronsByNamespace(namespace);
+		CronUtil.deleteCronsByNamespace(namespace);
 
 		DomainUser.deleteDomainUsers(namespace);
 

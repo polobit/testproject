@@ -8,12 +8,12 @@ import org.json.JSONObject;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.workflows.Workflow;
-import com.campaignio.tasklets.TaskletManager;
+import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
  * <code>WorkflowUtil</code> provides various static methods to convert contact
  * and workflow objects into json objects.WorkflowUtil class uses
- * {@link TaskletManager} to run campaign with contact.
+ * {@link TaskletUtil} to run campaign with contact.
  * <p>
  * <code>WorkflowUtil</code> is used whenever single contact or bulk contacts
  * are subscribed to campaign.It subscribes contacts to campaigns and runs
@@ -102,7 +102,7 @@ public class WorkflowUtil
 	    JSONObject campaignJSON = new JSONObject();
 	    JSONObject workflowJSON = new JSONObject(workflow.rules);
 
-	    campaignJSON.put(TaskletManager.CAMPAIGN_WORKFLOW_JSON,
+	    campaignJSON.put(TaskletUtil.CAMPAIGN_WORKFLOW_JSON,
 		    workflowJSON);
 	    campaignJSON.put("id", workflow.id);
 
@@ -117,7 +117,7 @@ public class WorkflowUtil
 
     /**
      * Subscribe list of contacts into a campaign and runs workflow in
-     * {@link TaskletManager} executeCampaign method which runs using
+     * {@link TaskletUtil} executeCampaign method which runs using
      * DeferredTask to execute workflow
      * 
      * @param contacts
@@ -136,12 +136,12 @@ public class WorkflowUtil
 	if (campaignJSON == null)
 	    return;
 
-	TaskletManager.executeCampaign(campaignJSON, subscriberJSONArray);
+	TaskletUtil.executeCampaign(campaignJSON, subscriberJSONArray);
     }
 
     /**
      * Subscribe a single contact into a campaign and runs
-     * {@link TaskletManager} executeWorkflow method that doesn't uses
+     * {@link TaskletUtil} executeWorkflow method that doesn't uses
      * DeferredTask to execute workflow
      * 
      * @param contact
@@ -161,7 +161,7 @@ public class WorkflowUtil
 	    if (campaignJSON == null)
 		return;
 
-	    TaskletManager.executeWorkflow(campaignJSON, subscriberJSONObject);
+	    TaskletUtil.executeWorkflow(campaignJSON, subscriberJSONObject);
 	}
 	catch (Exception e)
 	{
