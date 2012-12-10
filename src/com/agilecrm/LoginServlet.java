@@ -195,16 +195,6 @@ public class LoginServlet extends HttpServlet
 	    request.getSession().setMaxInactiveInterval(2 * 60 * 60);
 	}
 
-	String returnURL = (String) request.getSession().getAttribute(
-		"return_url");
-	if (returnURL != null)
-	{
-	    System.out.println(returnURL);
-	    response.sendRedirect("https://" + domainUser.domain
-		    + ".agilecrm.com" + returnURL);
-	    return;
-	}
-
 	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 	{
 	    response.sendRedirect("https://" + domainUser.domain

@@ -9,7 +9,6 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -40,26 +39,6 @@ public class NamespaceFilter implements Filter
 	    return true;
 	}
 
-	// Setting an attribute to return url path
-
-	// Get resourceURI
-	String resourceURI = ((HttpServletRequest) request).getRequestURI();
-
-	// Avoid URLS
-	String[] avoidURLS = new String[] { "/login", "/register",
-		"choose-domain", "forgot-domain", "/js/api" };
-
-	// Check URLS and place in session, if URI is other than these
-	if (resourceURI != null
-		&& !Arrays.asList(avoidURLS).contains(resourceURI))
-	{
-	    System.out.println("resourceURI = " + resourceURI);
-
-	    ((HttpServletRequest) request).getSession().setAttribute(
-		    "return_url", resourceURI);
-
-	}
-
 	// If it is choose domain, just return
 	if (((HttpServletRequest) request).getRequestURI().contains(
 		"choose-domain"))
@@ -84,31 +63,6 @@ public class NamespaceFilter implements Filter
 	// If not agilecrm.com or helptor.com etc. - show chooseDomain
 	if (!Arrays.asList(Globals.URLS).contains(url.toLowerCase()))
 	{
-
-	    // Saving domain cookie
-	    String cookieName = "agile_domain";
-	    Cookie cookies[] = ((HttpServletRequest) request).getCookies();
-	    Cookie domainCookie = null;
-	    if (cookies != null)
-	    {
-		for (int i = 0; i < cookies.length; i++)
-		{
-		    if (cookies[i].getName().equals(cookieName))
-		    {
-			domainCookie = cookies[i];
-			System.out.println("cookiee reteived"
-				+ domainCookie.getValue());
-			break;
-		    }
-		}
-		if (domainCookie != null)
-		{
-		    ((HttpServletResponse) response).sendRedirect("https://"
-			    + domainCookie.getValue() + ".agilecrm.com");
-		    return false;
-		}
-	    }
-
 	    redirectToChooseDomain(request, response);
 	    return false;
 	}

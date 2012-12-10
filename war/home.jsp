@@ -35,14 +35,6 @@
 	DomainUser domainUser = DomainUser.getDomainCurrentUser();
 	System.out.println("Domain user " + domainUser);
 	
-	//Setting domain cookie
-	if (domainUser.domain != null)
-	{
-	 Cookie cookie = new Cookie("agile_domain", domainUser.domain);
-	 cookie.setMaxAge(10 * 24 * 60 * 60);
-	 response.addCookie(cookie);
-	}
-	
 	ObjectMapper mapper = new ObjectMapper();
 	
 	// Get current user prefs
@@ -161,7 +153,7 @@ String CSS_PATH = "/";
 								    if (domainUser != null && domainUser.is_admin)
 										out.println("<li><a href='#admin'><i class='icon-fire'></i> Admin Settings</a></li>");
 								%>
-							</li>
+							
 
 						<li><a href="#contact-us"><i class="icon-pencil"></i>
 								Contact Us</a></li>
