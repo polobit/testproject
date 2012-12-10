@@ -181,7 +181,7 @@ var ContactsRouter = Backbone.Router.extend({
                 
                 starify(el);
                 
-                showMap(el, contact.toJSON());
+                show_map(el, contact.toJSON());
                 
                 fillOwners(el, contact.toJSON());
                }
