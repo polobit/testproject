@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.util.Util;
 import com.campaignio.tasklets.TaskletAdapter;
-import com.campaignio.tasklets.TaskletManager;
+import com.campaignio.tasklets.util.TaskletUtil;
 
 public class URLVisited extends TaskletAdapter
 {
@@ -42,7 +42,7 @@ public class URLVisited extends TaskletAdapter
 	String output = Util.accessURL(url);
 
 	// Execute Next One in Loop
-	TaskletManager.executeTasklet(campaignJSON, subscriberJSON, data,
+	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		nodeJSON, null);
     }
 

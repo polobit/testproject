@@ -2,9 +2,9 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
-import com.campaignio.cron.Cron;
+import com.campaignio.cron.util.CronUtil;
 import com.campaignio.tasklets.TaskletAdapter;
-import com.campaignio.tasklets.TaskletManager;
+import com.campaignio.tasklets.util.TaskletUtil;
 
 public class Clicked extends TaskletAdapter
 {
@@ -31,17 +31,17 @@ public class Clicked extends TaskletAdapter
 		DURATION_TYPE);
 
 	// Add ourselves to Cron Queue
-	long timeout = Cron.getTimer(duration, durationType);
+	long timeout = CronUtil.getTimer(duration, durationType);
 
 	// Get Tracker Id
 	if (data.has(SendEmail.TRACKING_ID))
 	{
-	    Cron.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON,
+	    CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON,
 		    timeout, data.getString(SendEmail.TRACKING_ID), null, null);
 	}
 	else
 	{
-	    Cron.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON,
+	    CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON,
 		    timeout, null, null, null);
 	}
     }
@@ -56,7 +56,7 @@ public class Clicked extends TaskletAdapter
 		+ customData);
 
 	// Execute Next One in Loop (Yes)
-	TaskletManager.executeTasklet(campaignJSON, subscriberJSON, data,
+	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		nodeJSON, BRANCH_YES);
     }
 
@@ -91,7 +91,7 @@ public class Clicked extends TaskletAdapter
 	// Execute Next One in Loop
 	log(campaignJSON, subscriberJSON, "No Clicks");
 
-	TaskletManager.executeTasklet(campaignJSON, subscriberJSON, data,
+	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		nodeJSON, BRANCH_NO);
     }
 }

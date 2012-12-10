@@ -2,9 +2,9 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
-import com.campaignio.logger.Log;
+import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
-import com.campaignio.tasklets.TaskletManager;
+import com.campaignio.tasklets.util.TaskletUtil;
 import com.thirdparty.Rapleaf;
 
 public class Sex extends TaskletAdapter
@@ -31,12 +31,12 @@ public class Sex extends TaskletAdapter
 	    JSONObject rapleafJSON = Rapleaf.getRapportiveValue(email);
 	    if (rapleafJSON != null)
 	    {
-		Log.addLog(campaignJSON, subscriberJSON, "Rapleaf "
+		LogUtil.addLog(campaignJSON, subscriberJSON, "Rapleaf "
 			+ rapleafJSON);
 		data.put(Rapleaf.RAPLEAF, rapleafJSON);
 	    }
 	    else
-		Log.addLog(campaignJSON, subscriberJSON,
+		LogUtil.addLog(campaignJSON, subscriberJSON,
 			"Could not retrieve data from Rapleaf");
 	}
 
@@ -65,7 +65,7 @@ public class Sex extends TaskletAdapter
 	}
 
 	// Execute Next Branch
-	TaskletManager.executeTasklet(campaignJSON, subscriberJSON, data,
+	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		nodeJSON, branch);
 
     }

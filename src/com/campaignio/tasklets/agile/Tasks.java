@@ -9,7 +9,7 @@ import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.util.DBUtil;
 import com.campaignio.tasklets.TaskletAdapter;
-import com.campaignio.tasklets.TaskletManager;
+import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
  * Tasks are to-do items.Result oriented.One can assign category like call,email
@@ -56,11 +56,11 @@ public class Tasks extends TaskletAdapter
 
 		if (dueTasks != null)
 		    // Execute Next One in Loop
-		    TaskletManager.executeTasklet(campaignJSON, subscriberJSON,
+		    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON,
 			    data, nodeJSON, BRANCH_YES);
 		if (dueTasks == null)
 		    // Execute Next One in Loop
-		    TaskletManager.executeTasklet(campaignJSON, subscriberJSON,
+		    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON,
 			    data, nodeJSON, BRANCH_NO);
 	    }
 	    catch (Exception e)

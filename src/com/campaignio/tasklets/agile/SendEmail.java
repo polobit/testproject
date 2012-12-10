@@ -10,7 +10,7 @@ import com.agilecrm.util.DBUtil;
 import com.agilecrm.util.Util;
 import com.campaignio.URLShortener;
 import com.campaignio.tasklets.TaskletAdapter;
-import com.campaignio.tasklets.TaskletManager;
+import com.campaignio.tasklets.util.TaskletUtil;
 import com.thirdparty.SendGridEmail;
 
 public class SendEmail extends TaskletAdapter
@@ -322,7 +322,7 @@ public class SendEmail extends TaskletAdapter
 	}
 
 	// Execute Next One in Loop
-	TaskletManager.executeTasklet(campaignJSON, subscriberJSON, data,
+	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		nodeJSON, null);
     }
 

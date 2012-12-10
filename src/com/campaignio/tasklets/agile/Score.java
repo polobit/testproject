@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.util.DBUtil;
 import com.campaignio.tasklets.TaskletAdapter;
-import com.campaignio.tasklets.TaskletManager;
+import com.campaignio.tasklets.util.TaskletUtil;
 
 public class Score extends TaskletAdapter
 {
@@ -42,7 +42,7 @@ public class Score extends TaskletAdapter
 	}
 
 	// Execute Next One in Loop
-	TaskletManager.executeTasklet(campaignJSON, subscriberJSON, data,
+	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		nodeJSON, null);
     }
 

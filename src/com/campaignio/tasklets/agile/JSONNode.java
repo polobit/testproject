@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.util.Util;
 import com.campaignio.tasklets.TaskletAdapter;
-import com.campaignio.tasklets.TaskletManager;
+import com.campaignio.tasklets.util.TaskletUtil;
 
 public class JSONNode extends TaskletAdapter
 {
@@ -103,7 +103,7 @@ public class JSONNode extends TaskletAdapter
 	    System.out.println(returnJSON + " " + data);
 
 	    // Execute Next One in Loop
-	    TaskletManager.executeTasklet(campaignJSON, subscriberJSON, data,
+	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		    nodeJSON, BRANCH_SUCCESS);
 
 	}
@@ -116,7 +116,7 @@ public class JSONNode extends TaskletAdapter
 		    "Error Occurred " + e.getMessage());
 
 	    // Execute Next One in Loop
-	    TaskletManager.executeTasklet(campaignJSON, subscriberJSON, data,
+	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		    nodeJSON, BRANCH_FAILURE);
 	}
     }

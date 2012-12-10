@@ -3,7 +3,7 @@ package com.campaignio.tasklets.agile;
 import org.json.JSONObject;
 
 import com.campaignio.tasklets.TaskletAdapter;
-import com.campaignio.tasklets.TaskletManager;
+import com.campaignio.tasklets.util.TaskletUtil;
 
 public class Condition extends TaskletAdapter
 {
@@ -120,7 +120,7 @@ public class Condition extends TaskletAdapter
 	}
 
 	// Go to next tasks
-	TaskletManager.executeTasklet(campaignJSON, subscriberJSON, data,
+	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		nodeJSON, branch);
 
     }

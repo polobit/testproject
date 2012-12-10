@@ -2,9 +2,9 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
-import com.campaignio.cron.Cron;
+import com.campaignio.cron.util.CronUtil;
 import com.campaignio.tasklets.TaskletAdapter;
-import com.campaignio.tasklets.TaskletManager;
+import com.campaignio.tasklets.util.TaskletUtil;
 
 public class Wait extends TaskletAdapter
 {
@@ -25,8 +25,9 @@ public class Wait extends TaskletAdapter
 	System.out.println("Waiting for " + duration + " " + durationType);
 
 	// Add ourselves to Cron Queue
-	long timeout = Cron.getTimer(duration, durationType);
-	Cron.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout,
+	long timeout = CronUtil.getTimer(duration, durationType);
+	CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON,
+		timeout,
 		null, null, null);
     }
 
@@ -39,7 +40,7 @@ public class Wait extends TaskletAdapter
 	System.out.println("Wake up from wait. Executing next one.");
 
 	// Execute Next One in Loop
-	TaskletManager.executeTasklet(campaignJSON, subscriberJSON, data,
+	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		nodeJSON, null);
     }
 }
