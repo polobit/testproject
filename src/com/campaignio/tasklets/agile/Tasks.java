@@ -12,8 +12,8 @@ import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
- * Tasks are to-do items.Result oriented.One can assign category like call,email
- * etc to tasks.
+ * <code>Tasks</code> represents Tasks node in the workflow.Tasks class get the
+ * tasks with respect to due days.
  * 
  * @author Naresh
  * 
@@ -22,13 +22,28 @@ public class Tasks extends TaskletAdapter
 {
     // Fields of Tasks node
 
+    /**
+     * Due Days
+     */
     public static String DUE_DAYS = "due_days";
 
     // Branches - Yes/No
+    /**
+     * Branch Yes
+     */
     public static String BRANCH_YES = "Yes";
+    /**
+     * Branch No
+     */
     public static String BRANCH_NO = "No";
 
     // Run
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.campaignio.tasklets.TaskletAdapter#run(org.json.JSONObject,
+     * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
+     */
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
 	    JSONObject data, JSONObject nodeJSON) throws Exception
     {

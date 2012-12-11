@@ -13,56 +13,159 @@ import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.thirdparty.SendGridEmail;
 
+/**
+ * <code>SendEmail</code> represents SendEmail node in a workflow.Sends email on
+ * any day and any time with text/html or both.Track urls with purl
+ * keyword.Recipient email id can be taken automatically from subscriber
+ * data.The email body can be either html or text.It converts long urls to
+ * shortened urls.
+ * 
+ * @author Manohar
+ * 
+ */
 public class SendEmail extends TaskletAdapter
 {
     // Fields
+    /**
+     * Sender name in email
+     */
     public static String FROM_NAME = "from_name";
+    /**
+     * Sender email id
+     */
     public static String FROM_EMAIL = "from_email";
+    /**
+     * Subject of an email
+     */
     public static String SUBJECT = "subject";
 
+    /**
+     * Reply to email id
+     */
     public static String REPLY_TO = "replyto_email";
+    /**
+     * Recipient email id
+     */
     public static String TO = "to_email";
+    /**
+     * HTML content of email
+     */
     public static String HTML_EMAIL = "html_email";
+    /**
+     * Text content of email
+     */
     public static String TEXT_EMAIL = "text_email";
 
     // On, At, TimeZone
+    /**
+     * On type
+     */
     public static String ON = "on";
+    /**
+     * Any day
+     */
     public static String ON_ANY_DAY = "any_day";
 
     // Days
+    /**
+     * Monday to Friday
+     */
     public static String ON_MON_FRI = "Mon-Fri";
+    /**
+     * Monday to Saturday
+     */
     public static String ON_MON_SAT = "Mon-Sat";
+    /**
+     * Saturday to Sunday
+     */
     public static String ON_SAT_SUN = "Sat-Sun";
+    /**
+     * Only on Monday
+     */
     public static String ON_MONDAY = "Mon";
+    /**
+     * Only on Tuesday
+     */
     public static String ON_TUESDAY = "Tue";
+    /**
+     * Only on Wednesday
+     */
     public static String ON_WED = "Wed";
+    /**
+     * Only on Thursday
+     */
     public static String ON_THU = "Thu";
+    /**
+     * Only on Friday
+     */
     public static String ON_FRI = "Fri";
+    /**
+     * Only on Saturday
+     */
     public static String ON_SAT = "Sat";
+    /**
+     * Only on Sunday
+     */
     public static String ON_SUN = "Sun";
 
+    /**
+     * At says about time
+     */
     public static String AT = "at";
+    /**
+     * Any time
+     */
     public static String AT_ANY_TIME = "any_time";
 
+    /**
+     * Timezones
+     */
     public static String TIME_ZONE = "time_zone";
 
     // Track Clicks
+    /**
+     * Track clicks Type
+     */
     public static String TRACK_CLICKS = "track_clicks";
+    /**
+     * Yes to track clicks for links in the email
+     */
     public static String TRACK_CLICKS_YES = "yes";
+    /**
+     * No to not track clicks for the links in the email
+     */
     public static String TRACK_CLICKS_NO = "no";
 
     // Keyword
+    /**
+     * Keyword that is added to url when Track Clicks yes is selected
+     */
     public static String PURL_KEYWORD = "purl_keyword";
 
     // URLS
+    /**
+     * URL shortened
+     */
     public static String URLS_SHORTENED = "urls_shortened";
+    /**
+     * Tracking id
+     */
     public static String TRACKING_ID = "tracking_id";
 
     // Unsubscribe Links
     // public static String UNSUBSCRIBE_LINK =
     // "http://usertracker.contactuswidget.appspot.com/cd_unsubscribe.jsp?id=";
+    /**
+     * Unsubscribe link that is shortened
+     */
     public static String UNSUBSCRIBE_LINK = "http://unscr.be/";
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.campaignio.tasklets.TaskletAdapter#run(org.json.JSONObject,
+     * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
+     */
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
 	    JSONObject data, JSONObject nodeJSON) throws Exception
     {
@@ -134,6 +237,13 @@ public class SendEmail extends TaskletAdapter
     }
 
     // TimeOut - Cron Job Wakes it up
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.campaignio.tasklets.TaskletAdapter#timeOutComplete(org.json.JSONObject
+     * , org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
+     */
     public void timeOutComplete(JSONObject campaignJSON,
 	    JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
 	    throws Exception
@@ -142,6 +252,16 @@ public class SendEmail extends TaskletAdapter
 	sendEmail(campaignJSON, subscriberJSON, data, nodeJSON);
     }
 
+    /**
+     * Checks given Day with the available options.Return true if matches
+     * otherwise false
+     * 
+     * @param calendar
+     *            Calendar object
+     * @param on
+     *            Given day value
+     * @return true if matches otherwise false
+     */
     public boolean checkDay(Calendar calendar, String on)
     {
 
@@ -214,6 +334,19 @@ public class SendEmail extends TaskletAdapter
 	return false;
     }
 
+    /**
+     * Sends email to recipient,here the subscriber is the recipient
+     * 
+     * @param campaignJSON
+     *            Campaign Data
+     * @param subscriberJSON
+     *            Subscriber Data
+     * @param data
+     *            Data within the workflow
+     * @param nodeJSON
+     *            Current Node data
+     * @throws Exception
+     */
     public void sendEmail(JSONObject campaignJSON, JSONObject subscriberJSON,
 	    JSONObject data, JSONObject nodeJSON) throws Exception
     {
@@ -301,6 +434,7 @@ public class SendEmail extends TaskletAdapter
 	    }
 	}
 
+	// Creates log for sending email
 	log(campaignJSON, subscriberJSON, "Sending email From:" + fromEmail
 		+ " To:" + to + " Subject:" + subject + " Text:" + text
 		+ "HTML:" + html);
@@ -326,6 +460,22 @@ public class SendEmail extends TaskletAdapter
 		nodeJSON, null);
     }
 
+    /**
+     * Converts links to short urls.
+     * 
+     * @param input
+     *            text or html body
+     * @param delimiter
+     *            various delimiters such as \r,\n etc
+     * @param data
+     *            Data within the workflow
+     * @param keyword
+     *            Purl keyword given
+     * @param subscriberId
+     *            Contact Id that subscribes to campaign
+     * @return shortened url with purl keyword if given
+     * @throws Exception
+     */
     public String convertLinks(String input, String delimiter, JSONObject data,
 	    String keyword, String subscriberId) throws Exception
     {
