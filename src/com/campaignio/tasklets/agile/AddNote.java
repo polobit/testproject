@@ -55,10 +55,8 @@ public class AddNote extends TaskletAdapter
 
 	System.out.println(" Contact Details: " + contact);
 
-	if (contact == null)
+	if (contact != null)
 	{
-	    return;
-	}
 
 	Note note = new Note(subject, description);
 	List<String> contacts = new ArrayList<String>();
@@ -67,6 +65,7 @@ public class AddNote extends TaskletAdapter
 	    note.contacts = contacts;
 	    note.save();
 
+	}
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,

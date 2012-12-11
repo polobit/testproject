@@ -348,6 +348,16 @@ $(function()
 		}
 	});
 	
+	//Trigger type to remove underscore and convert type to lowercase excluding first letter
+	Handlebars.registerHelper('if_trigger_type',function(){
+		
+		var str = this.type.replace(/_/g, ' ');
+		var temp = str.toLowerCase();
+		
+		return temp.charAt(0).toUpperCase() + temp.slice(1);
+	
+	});
+	
 	// Display properties in contact details
 	Handlebars.registerHelper('if_property', function(fname, lname, company, title, options) {
 			if(this.name != fname && this.name != lname && this.name != company && this.name != title)
