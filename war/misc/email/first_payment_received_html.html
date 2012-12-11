@@ -50,15 +50,15 @@
 						     	<tr>
 							    <td style="padding-right:20px;padding-left:20px;line-height:20px;font-size:14px;font-family:Arial,Helvetica,sans-serif">
 							    <br>
-							    Dear  {{name}},
+							    Dear  {{data.previousAttributes.user_name}},
 							    <br>
 							    <br>
 							 Thanks for using Agile CRM!
 
                                <br>
-                               <br>
-                
-                We have received a payment of {{amount}}.<br>
+                {{#data.object.lines.subscriptions}}
+                We have received a payment of {{plan.amount}}.<br>
+                {{/data.object.lines.subscriptions}}
                 <br>
                 xxxx<br>
                 xxxx<br>
