@@ -1,7 +1,7 @@
 $(function(){
 	   
 		$("#personModal").on('shown', function(){
-			setupTagsTypeAhead();
+			setup_tags_typeahead();
 		});
 	
 		// Person Form

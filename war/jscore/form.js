@@ -22,7 +22,7 @@ function serializeForm(form_id) {
     	    }).get());
     
     // Serialize tags
-    arr = arr.concat(getTags(form_id));
+    arr = arr.concat(get_tags(form_id));
     
     
     // Multiple select 

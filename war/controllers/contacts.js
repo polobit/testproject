@@ -99,7 +99,7 @@ var ContactsRouter = Backbone.Router.extend({
               postRenderCallback: function(el) {
             	  
             	  // To set chats and view when contacts are fetch by infiniscroll
-            	  setupTags(cel);
+            	  setup_tags(cel);
                   pieTags(cel);
             	  setupViews(cel);
             	  
@@ -181,7 +181,7 @@ var ContactsRouter = Backbone.Router.extend({
                 
                 starify(el);
                 
-                show_map(el, contact.toJSON());
+                show_map(el);
                 
                 fillOwners(el, contact.toJSON());
                }
@@ -557,7 +557,7 @@ var ContactsRouter = Backbone.Router.extend({
             postRenderCallback: function(el) {
           
             	// To set chats and view when contacts are fetch by infiniscroll
-            	setupTags(el);
+            	setup_tags(el);
             	
                 pieTags(el);
                 setupViews(el, view_data.name);
