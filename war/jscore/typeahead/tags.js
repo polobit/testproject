@@ -24,6 +24,7 @@ function setup_tags_typeahead() {
 	// Fetches tags collection, if no tags are exist (in TAGS) 
     if(!TAGS)
     	{
+    		
     		var TagsCollection = Backbone.Collection.extend({
     			url: '/core/api/tags',
     			sortKey: 'tag'

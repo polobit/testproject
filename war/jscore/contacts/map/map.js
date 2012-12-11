@@ -43,6 +43,7 @@ function show_map(el) {
  * function to display map) as script element to html document body
  */
 function load_gmap_script() {
+	
 	var script = document.createElement("script");
 	script.type = "text/javascript";
 	script.src = "https://maps.googleapis.com/maps/api/js?&sensor=false&callback=display_google_map";
