@@ -10,24 +10,61 @@ import com.agilecrm.util.Util;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 
+/**
+ * <code>JSONNode</code> represents JSONIO node in the workflow.‘JSON IO’ node
+ * is used to integrate workflow with web infrastructure using JSON. It consists
+ * of two branches-success and failure. When url is accessed successfully
+ * without any errors, then that node proceeds to success, otherwise failure.
+ * 
+ * @author Manohar
+ * 
+ */
 public class JSONNode extends TaskletAdapter
 {
     // Fields
+    /**
+     * Rest url
+     */
     public static String URL = "rest_url";
 
-    // Method Type - Post/Get
+
+    /**
+     * Method Type
+     */
     public static String METHOD_TYPE = "method_type";
+    /**
+     * Get method
+     */
     public static String METHOD_TYPE_GET = "get";
+    /**
+     * Post method
+     */
     public static String METHOD_TYPE_POST = "post";
 
     // Parameters
+    /**
+     * Parameters given in grid as key-value pairs
+     */
     public static String PARAMETERS = "rest_key_grid";
 
     // Branches - Success/failure
+    /**
+     * Branch success
+     */
     public static String BRANCH_SUCCESS = "success";
+    /**
+     * Branch failure
+     */
     public static String BRANCH_FAILURE = "failure";
 
     // Run
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.campaignio.tasklets.TaskletAdapter#run(org.json.JSONObject,
+     * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
+     */
+    @SuppressWarnings({ "deprecation", "rawtypes" })
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
 	    JSONObject data, JSONObject nodeJSON) throws Exception
     {
@@ -46,7 +83,7 @@ public class JSONNode extends TaskletAdapter
 
 	try
 	{
-	    // Iterate
+	    // Iterate through json array having key-value pairs
 	    for (int i = 0; i < paramsJSONArray.length(); i++)
 	    {
 		JSONObject paramJSON = paramsJSONArray.getJSONObject(i);
@@ -76,6 +113,7 @@ public class JSONNode extends TaskletAdapter
 		else
 		    url = url + "?" + httpParams;
 
+		// Creates log for JSONNode for method Get type
 		log(campaignJSON, subscriberJSON, "Accessing Get " + url);
 
 		output = Util.accessURL(url);
@@ -83,11 +121,13 @@ public class JSONNode extends TaskletAdapter
 	    }
 	    else
 	    {
+		// Creates log for JSONNode for method Post type
 		log(campaignJSON, subscriberJSON, "Accessing Post " + url + " "
 			+ httpParams);
 		output = Util.accessURLUsingPost(url, httpParams);
 	    }
 
+	    // Creates log for JSONNode for output
 	    log(campaignJSON, subscriberJSON, "Output " + output);
 
 	    JSONObject returnJSON = new JSONObject(output);
@@ -112,6 +152,7 @@ public class JSONNode extends TaskletAdapter
 	    e.printStackTrace();
 	    data.put("error", e.getMessage());
 
+	    // Creates log for JSONNode for error
 	    log(campaignJSON, subscriberJSON,
 		    "Error Occurred " + e.getMessage());
 

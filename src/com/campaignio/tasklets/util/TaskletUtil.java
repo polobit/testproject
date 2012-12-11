@@ -231,6 +231,7 @@ public class TaskletUtil
      * @return Tasklet object
      * @throws Exception
      */
+    @SuppressWarnings("rawtypes")
     public static Tasklet getTasklet(JSONObject nodeJSON) throws Exception
     {
 	// Get Name from nodeJSON
@@ -284,6 +285,7 @@ public class TaskletUtil
      * @return next node id of current node in a workflow
      * @throws Exception
      */
+    @SuppressWarnings("rawtypes")
     public static String getNextNodeId(JSONObject campaignJSON,
 	    JSONObject currentNodeJSON, String branch) throws Exception
     {

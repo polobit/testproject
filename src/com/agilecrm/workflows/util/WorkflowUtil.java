@@ -8,7 +8,11 @@ import org.json.JSONObject;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.workflows.Workflow;
+import com.campaignio.tasklets.deferred.TaskletWorkflowDeferredTask;
 import com.campaignio.tasklets.util.TaskletUtil;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 
 /**
  * <code>WorkflowUtil</code> provides various static methods to convert contact
@@ -140,9 +144,8 @@ public class WorkflowUtil
     }
 
     /**
-     * Subscribe a single contact into a campaign and runs
-     * {@link TaskletUtil} executeWorkflow method that doesn't uses
-     * DeferredTask to execute workflow
+     * Subscribe a single contact into a campaign and runs deferred task to
+     * execute workflow
      * 
      * @param contact
      *            Contact object subscribed to workflow
@@ -161,7 +164,14 @@ public class WorkflowUtil
 	    if (campaignJSON == null)
 		return;
 
-	    TaskletUtil.executeWorkflow(campaignJSON, subscriberJSONObject);
+	    // TaskletUtil.executeWorkflow(campaignJSON, subscriberJSONObject);
+
+	    TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(
+		    campaignJSON.toString(), subscriberJSONObject.toString());
+	    Queue queue = QueueFactory.getDefaultQueue();
+	    queue.add(TaskOptions.Builder
+		    .withPayload(taskletWorkflowDeferredTask));
+
 	}
 	catch (Exception e)
 	{

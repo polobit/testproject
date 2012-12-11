@@ -199,11 +199,46 @@ public class TaskletAdapter implements Tasklet
      * @throws Exception
      */
     public String replaceTokens(String value, JSONObject subscriberJSON,
-	    JSONObject data) throws Exception
+	    JSONObject data)
     {
 
 	System.out.println("The subscriberJson is " + subscriberJSON
 		+ "and the json data is" + data);
+
+	JSONObject mergedJson = null;
+	try
+	{
+	    mergedJson = mergeJSONObjects(subscriberJSON, data);
+	}
+	catch (Exception e)
+	{
+
+	    e.printStackTrace();
+	}
+
+	if (mergedJson == null)
+	    return " ";
+
+	// Compile the template using Mustache
+	return MustacheUtil.compile(value, mergedJson);
+
+    }
+
+    /**
+     * Merges two json objects into one json object
+     * 
+     * @param subscriberJSON
+     *            Contact data that subscribes to campaign
+     * @param data
+     *            Data within the workflow
+     * @return merged json object
+     * @throws Exception
+     */
+    @SuppressWarnings("rawtypes")
+    public JSONObject mergeJSONObjects(JSONObject subscriberJSON,
+	    JSONObject data)
+	    throws Exception
+    {
 	// Temporary json object to merge subscriber and data json objects.
 	JSONObject mergedJson = new JSONObject();
 
@@ -221,22 +256,21 @@ public class TaskletAdapter implements Tasklet
 		    mergedJson.put(key, obj.get(key));
 		}
 	    }
+	    return mergedJson;
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	    return null;
 	}
-
-	// Compile the template using Mustache
-	return MustacheUtil.compile(value, mergedJson);
-
     }
 
 
     // Replaces Tokens - Tokenize the values and find $, find in data and then
     // replace
     /**
-     * Replaces the template with the data object
+     * Replaces Tokens - Tokenize the values and find $, find in data and then
+     * replace
      * 
      * @param value
      *            given value
@@ -248,28 +282,40 @@ public class TaskletAdapter implements Tasklet
     public String replaceTokensOld(String value, JSONObject data)
 	    throws Exception
     {
-	/*
-	 * boolean replaced = false;
-	 * 
-	 * // Tokens String[] tokens = value.split(" "); for (int i = 0; i <
-	 * tokens.length; i++) { if (tokens[i].startsWith("$")) {
-	 * System.out.println("Converting param " + tokens[i] + " from " +
-	 * data); if (data.has(tokens[i])) { tokens[i] =
-	 * data.getString(tokens[i]); replaced = true; } } }
-	 * 
-	 * String replacedString = ""; for (int i = 0; i < tokens.length; i++) {
-	 * replacedString += (tokens[i] + " "); }
-	 * 
-	 * if (replaced) System.out.println("Replaced " + value.replaceAll("\n",
-	 * " ").replaceAll("\r", " ") + " with " +
-	 * replacedString.replaceAll("\n", " ") .replaceAll("\r", " "));
-	 * 
-	 * return replacedString.trim();
-	 */
-
-	// Return replaced content using Mustache
-	return MustacheUtil.compile(value, data);
-
+	
+	  boolean replaced = false;
+	  
+	// Tokens
+	String[] tokens = value.split(" ");
+	for (int i = 0; i < tokens.length; i++)
+	{
+	    if (tokens[i].startsWith("$"))
+	    {
+		System.out.println("Converting param " + tokens[i] + " from "
+			+ data);
+		if (data.has(tokens[i]))
+		{
+		    tokens[i] = data.getString(tokens[i]);
+		    replaced = true;
+		}
+	    }
+	}
+	  
+	String replacedString = "";
+	for (int i = 0; i < tokens.length; i++)
+	{
+	    replacedString += (tokens[i] + " ");
+	}
+	  
+	if (replaced)
+	    System.out.println("Replaced "
+		    + value.replaceAll("\n", " ").replaceAll("\r", " ")
+		    + " with "
+		    + replacedString.replaceAll("\n", " ")
+			    .replaceAll("\r", " "));
+	  
+	  return replacedString.trim();
+	 
     }
 
     /**
