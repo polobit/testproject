@@ -7,15 +7,40 @@ import com.agilecrm.util.DBUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 
+/**
+ * <code>Tags</code> represents tags node in a workflow.Tags class is used to
+ * add or delete tags from the contact that subscribes to campaign.
+ * 
+ * @author Manohar
+ * 
+ */
 public class Tags extends TaskletAdapter
 {
     // Fields
+    /**
+     * Type - Add/Delete
+     */
     public static String TYPE = "type";
+    /**
+     * Type Add for adding tags
+     */
     public static String ADD = "add";
+    /**
+     * Type Delete for deleting tags
+     */
     public static String DELETE = "delete";
+    /**
+     * Tags that are added
+     */
     public static String TAG_NAMES = "tag_names";
 
     // Run
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.campaignio.tasklets.TaskletAdapter#run(org.json.JSONObject,
+     * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
+     */
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
 	    JSONObject data, JSONObject nodeJSON) throws Exception
     {
@@ -47,11 +72,14 @@ public class Tags extends TaskletAdapter
 	    if (type.equals(ADD))
 	    {
 		contact.addTags(tagsArray);
+		log(campaignJSON, subscriberJSON, "Added tags are " + tagsArray);
 	    }
 	    // Delete Tags based on contact
 	    else
 	    {
 		contact.removeTags(tagsArray);
+		log(campaignJSON, subscriberJSON, "Deleted tags are"
+			+ tagsArray);
 	    }
 	}
 
