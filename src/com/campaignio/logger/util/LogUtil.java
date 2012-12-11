@@ -11,6 +11,14 @@ import com.agilecrm.util.DBUtil;
 import com.campaignio.logger.Log;
 import com.googlecode.objectify.Key;
 
+/**
+ * <code>LogUtil</code> class adds logs with respect to campaigns and
+ * subscribers.It gets logs based upon subscribers as well as campaigns.It
+ * removes logs with respect to subscribers and campaigns.
+ * 
+ * @author Manohar
+ * 
+ */
 public class LogUtil
 {
 
