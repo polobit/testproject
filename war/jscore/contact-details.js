@@ -49,13 +49,13 @@ $(function(){
 	$('#add-tags').live('click', function(e){
 		e.preventDefault();
 		$("#addTagsForm").css("display", "block");
-		setupTagsTypeAhead();
+		setup_tags_typeahead();
 	});
 	
 	// Add tags to a contact 
 	$('#contact-add-tags').live('click', function(e){
 		e.preventDefault();
-		var tags = getTags('addTagsForm');
+		var tags = get_tags('addTagsForm');
 
 		$("#addTagsForm").css("display", "none");
 		

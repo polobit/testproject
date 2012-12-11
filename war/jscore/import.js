@@ -79,7 +79,7 @@ $(function(){
 	            model.last_name = "uploaded";
 
 	            // Add Tags
-	            var tags = getTags('import-contact-tags');
+	            var tags = get_tags('import-contact-tags');
 	            if (tags != undefined) model.tags = tags[0].value;
 
 	            models.push(model);
@@ -137,7 +137,7 @@ function fileUploadInit() {
             console.log(data);
             $('#content').html(getTemplate("import-contacts-2", data));
            
-            setupTagsTypeAhead(); // ??
+            setup_tags_typeahead(); // ??
         }
     });
 
