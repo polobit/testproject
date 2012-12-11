@@ -8,9 +8,9 @@ import org.json.JSONObject;
 
 import com.agilecrm.util.DBUtil;
 import com.agilecrm.util.Util;
-import com.campaignio.URLShortener;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
+import com.campaignio.util.URLShortenerUtil;
 import com.thirdparty.SendGridEmail;
 
 /**
@@ -492,7 +492,7 @@ public class SendEmail extends TaskletAdapter
 		    && !tokens[i].startsWith("http://unscr.be"))
 	    {
 		// Shorten URL
-		String url = URLShortener.getShortURL(tokens[i], keyword,
+		String url = URLShortenerUtil.getShortURL(tokens[i], keyword,
 			subscriberId, data.getString(TRACKING_ID));
 		if (url == null)
 		    continue;

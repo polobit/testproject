@@ -198,6 +198,7 @@ public class TaskletAdapter implements Tasklet
      * @return replaced content
      * @throws Exception
      */
+    @SuppressWarnings("rawtypes")
     public String replaceTokens(String value, JSONObject subscriberJSON,
 	    JSONObject data) throws Exception
     {
