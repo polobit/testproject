@@ -1,136 +1,3 @@
-// We store one template compiled - if repetitive templates are called, we save time on compilations
-var Handlebars_Compiled_Templates = {};
-
-/**
- * Loads the template (script element with its id attribute as templateName
- * appended with "-template". For example if the templateName is "tasks", then
- * the script element id should be as "tasks-template") from html document body.
- * 
- * Compiles the loaded template using handlebars and replaces the context
- * related property names (which are under mustache like {{name}}) in the
- * template, with their associated values, on calling the context with the
- * compiled template.
- * 
- * @method getTemplate
- * @param {String}
- *            templateName name of the tempate to be loaded
- * @param {Object}
- *            context json object to call with the compiled template
- * @param {String}
- *            download verifies whether the template is found or not
- * @returns compiled html with the context
- */
-function getTemplate(templateName, context, download) {
-
-	// Check if it is (compiled template) present in templates
-	if (Handlebars_Compiled_Templates[source])
-		return Handlebars_Compiled_Templates[source](context);
-	else
-		Handlebars_Compiled_Templates = {};
-
-	// Check if source is available in body
-	var source = $('#' + templateName + "-template").html();
-	if (source) {
-		var template = Handlebars.compile(source);
-
-		// Store it in template
-		Handlebars_Compiled_Templates[source] = template;
-
-		return template(context);
-	}
-
-	// Check if the download is explicitly set to no
-	if (download == 'no') {
-		console.log("Not found " + templateName);
-		return;
-	}
-
-	// Download
-	var templateHTML = '';
-
-	// If starts with settings
-	/**
-	 * If the template is not found in document body, then download the template
-	 * synchronously (stops other browser actions) by verifying the starting
-	 * name of the given templateName, if it is down-loaded append it to the
-	 * document body. And call the function (getTemplate) again by setting the
-	 * download parameter to "no"
-	 */
-	if (templateName.indexOf("settings") == 0) {
-		templateHTML = downloadSynchronously("tpl/min/settings.js");
-	}
-	if (templateName.indexOf("admin-settings") == 0) {
-		templateHTML = downloadSynchronously("tpl/min/admin-settings.js");
-	}
-	if (templateName.indexOf("continue") == 0) {
-		templateHTML = downloadSynchronously("tpl/min/continue.js");
-	}
-
-	if (templateHTML) {
-		// console.log("Adding " + templateHTML);
-		$('body').append($(templateHTML));
-	}
-
-	return getTemplate(templateName, context, 'no');
-}
-
-/**
- * Downloads the template synchronously (stops other browsing actions) from the
- * given url and returns it
- * 
- * @param {String}
- *            url location to download the template
- * @returns down-loaded template content
- */
-function downloadSynchronously(url) {
-
-	var urlContent;
-	jQuery.ajax({
-		url : url,
-		dataType : 'html',
-		success : function(result) {
-			urlContent = result;
-		},
-		async : false
-	});
-
-	return urlContent;
-}
-
-/**
- * Iterates the given "items", to find a match with the given "name", if found
- * returns the value of its value attribute
- * 
- * @param {Object}
- *            items array of json objects
- * @param {String}
- *            name to get the value (of value atribute)
- * @returns value of the matched object
- */
-function getPropertyValue(items, name) {
-	if (items == undefined)
-		return;
-
-	for ( var i = 0, l = items.length; i < l; i++) {
-		if (items[i].name == name)
-			return items[i].value;
-	}
-}
-
-/**
- * Turns the first letter of the given string to upper-case and the remaining to
- * lower-case (EMaiL to Email).
- * 
- * @param {String}
- *            value to convert as ucfirst
- * @returns converted string
- */
-function ucfirst(value) {
-	return (value && typeof value === 'string') ? (value.charAt(0)
-			.toUpperCase() + value.slice(1).toLowerCase()) : '';
-
-}
-
 $(function() {
 
 	/**
@@ -258,13 +125,14 @@ $(function() {
 	 * tags-view
 	 * 
 	 * @method tagslist
-	 * @param {Object} tags array containing all tags
+	 * @param {Object}
+	 *            tags array containing all tags
 	 */
 	Handlebars.registerHelper('tagslist', function(tags) {
 
 		var json = {};
 
-		// Store tags in a json, starting letters as keys 
+		// Store tags in a json, starting letter as key
 		for ( var i = 0, l = tags.length; i < l; i++) {
 
 			var tag = tags[i].tag;
@@ -272,7 +140,7 @@ $(function() {
 			var start = tag.charAt(0);
 
 			var array = new Array();
-			
+
 			// see if it is already present
 			if (json[start] != undefined) {
 				array = json[start];
@@ -283,10 +151,7 @@ $(function() {
 
 		}
 
-		console.log(json);
-
-		// Sort it based on characters and then draw it
-		// var html = "<ul style='list-style:none'>";
+		// Sorts it based on characters and then draws it
 		var html = "";
 		for ( var key in json) {
 
@@ -309,8 +174,11 @@ $(function() {
 		return html;
 	});
 
-	// Get date string from epoch time
+	/**
+	 * Helper function to return date string from epoch time
+	 */
 	Handlebars.registerHelper('epochToHumanDate', function(format, date) {
+
 		// date form milliseconds
 		var d = new Date(parseInt(date) * 1000).format(format);
 		return d
@@ -319,7 +187,9 @@ $(function() {
 		// 1000));
 	});
 
-	// Get task date (MM dd) from epoch time
+	/**
+	 * Helper function to return task date (MM dd, ex: Jan 10 ) from epoch time
+	 */
 	Handlebars.registerHelper('epochToTaskDate', function(date) {
 		var intMonth = new Date(parseInt(date) * 1000).getMonth();
 		var intDay = new Date(parseInt(date) * 1000).getDate();
@@ -330,7 +200,9 @@ $(function() {
 		return (monthArray[intMonth] + " " + intDay);
 	});
 
-	// Get task color from it's priority
+	/**
+	 * Helper function to return task color based on it's priority
+	 */
 	Handlebars.registerHelper('task_label_color', function(priority) {
 		if (priority == 'HIGH')
 			return 'important';
@@ -342,7 +214,17 @@ $(function() {
 			return 'success';
 	});
 
-	// Get Date from epoch time
+	/**
+	 * Helper function to return date (Jan 10, 2012) from epoch time (users
+	 * table)
+	 * 
+	 * @param {Object}
+	 *            info_json json object containing information about
+	 *            createdtime, last logged in time etc..
+	 * @param {String}
+	 *            date_type specifies the type of date to return (created or
+	 *            logged in)
+	 */
 	Handlebars.registerHelper('epochToDate', function(info_json, date_type) {
 
 		var obj = JSON.parse(info_json);
@@ -357,13 +239,23 @@ $(function() {
 		return (monthArray[intMonth] + " " + intDay + ", " + intYear);
 	});
 
-	// Currency symbol
+	/**
+	 * Returns currency symbol based on the currency value (deals)
+	 */
 	Handlebars.registerHelper('currencySymbol', function(value) {
 		var symbol = value.substring(4, value.length);
 		return symbol;
 	});
 
-	// Calculate pipeline (value * probability)
+	/**
+	 * Calculates the "pipeline" for deals based on their value and probability
+	 * (value * probability)
+	 * 
+	 * @param {Number}
+	 *            value of the deal
+	 * @param {Number}
+	 *            probability of the deal
+	 */
 	Handlebars.registerHelper('calculatePipeline',
 			function(value, probability) {
 
@@ -371,7 +263,9 @@ $(function() {
 				return pipeline;
 			});
 
-	// Get required log from logs
+	/**
+	 * Returns required log (time or message) from logs (campaign logs)
+	 */
 	Handlebars.registerHelper('getRequiredLog',
 			function(log_array_string, name) {
 				var logArray = JSON.parse(log_array_string);
@@ -382,7 +276,9 @@ $(function() {
 				return logArray[0][name];
 			});
 
-	// Table headings for custom contacts list view
+	/**
+	 * Returns table headings for custom contacts list view
+	 */
 	Handlebars.registerHelper('contactTableHeadings', function(item) {
 
 		var el = "";
@@ -397,7 +293,12 @@ $(function() {
 		return new Handlebars.SafeString(el);
 	});
 
-	// Timeline details
+	/**
+	 * Helper funcction, which executes different templates (entity related)
+	 * based on entity type. Here "this" reffers the current entity object.
+	 * (used in timeline)
+	 * 
+	 */
 	Handlebars.registerHelper('if_entity', function(item, options) {
 		if (this.entity_type == item) {
 			return options.fn(this);
@@ -412,17 +313,23 @@ $(function() {
 		}
 	});
 
-	//Trigger type to remove underscore and convert type to lowercase excluding first letter
-	Handlebars.registerHelper('if_trigger_type',function(){
-		
+	/**
+	 * Returns trigger type, by removing underscore and converting into
+	 * lowercase, excluding first letter.
+	 */
+	Handlebars.registerHelper('if_trigger_type', function() {
+
 		var str = this.type.replace(/_/g, ' ');
 		var temp = str.toLowerCase();
-		
+
 		return temp.charAt(0).toUpperCase() + temp.slice(1);
-	
+
 	});
-	
-	// Display properties in contact details
+
+	/**
+	 * Displays all the properties of a contact in its detail view, excluding
+	 * the function parameters (fname, lname, company etc..)
+	 */
 	Handlebars.registerHelper('if_property', function(fname, lname, company,
 			title, options) {
 		if (this.name != fname && this.name != lname && this.name != company
@@ -430,7 +337,9 @@ $(function() {
 			return options.fn(this);
 	});
 
-	// Check the existence of property name and print value
+	/**
+	 * Checks the existence of property name and prints value
+	 */
 	Handlebars.registerHelper('if_propertyName', function(pname, options) {
 		for ( var i = 0; i < this.properties.length; i++) {
 			if (this.properties[i].name == pname)
@@ -446,7 +355,9 @@ $(function() {
 			return "(" + this.length + " Total)";
 	});
 
-	// Converts string into JSON
+	/**
+	 * Converts string to JSON
+	 */
 	Handlebars.registerHelper('stringToJSON', function(object, key, options) {
 
 		if (key) {
@@ -457,19 +368,33 @@ $(function() {
 		return options.fn(JSON.parse(object));
 	});
 
-	// Convert string to lower case
+	/**
+	 * Convert string to lower case
+	 */
 	Handlebars.registerHelper('toLowerCase', function(value) {
 		return value.toLowerCase();
 	});
 
-	// Execute template based on contact type
+	/**
+	 * Executes template, based on contact type (person or company)
+	 */
 	Handlebars.registerHelper('if_contact_type', function(ctype, options) {
 		if (this.type == ctype) {
 			return options.fn(this);
 		}
 	});
 
-	// Lead Score if greater than zero return
+	/**
+	 * Returns modified message for timeline logs
+	 */
+	Handlebars.registerHelper('tl_log_string', function(string) {
+
+		return string.replace("Sending email From:", "Email sent From:");
+	});
+
+	/**
+	 * Returns "Lead Score" of a contact, when it is greater than zero only
+	 */
 	Handlebars.registerHelper('lead_score', function(value) {
 		if (this.lead_score > 0)
 			return this.lead_score;
@@ -477,9 +402,11 @@ $(function() {
 			return "";
 	});
 
-	// Return task completion status
+	/**
+	 * Returns task completion status (Since boolean false is not getting
+	 * printed, converted it into string and returned.)
+	 */
 	Handlebars.registerHelper('task_status', function(status) {
-		console.log(status);
 		if (status)
 			return true;
 
@@ -488,14 +415,20 @@ $(function() {
 
 	});
 
-	Handlebars.registerHelper('compare', function(value, target, options) {
+	/**
+	 * Compares the arguments (value and target) and executes the template based
+	 * on the result (used in contacts typeahead)
+	 */
+	Handlebars.registerHelper('if_equals', function(value, target, options) {
 		if (value == target)
 			return options.fn(this);
 		else
 			return options.inverse(this);
 	})
 
-	// Add Custom Fields to Forms
+	/**
+	 * Adds Custom Fields to forms, where this helper function is called
+	 */
 	Handlebars.registerHelper('show_custom_fields', function(custom_fields,
 			properties) {
 
@@ -503,11 +436,5 @@ $(function() {
 		return new Handlebars.SafeString(fill_custom_field_values($(el),
 				properties));
 
-	});
-
-	// Return modified message for timeline logs
-	Handlebars.registerHelper('tl_log_string', function(string) {
-
-		return string.replace("Sending email From:", "Email sent From:");
 	});
 });

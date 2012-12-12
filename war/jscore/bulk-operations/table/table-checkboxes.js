@@ -12,7 +12,7 @@ $(function(){
    /**
     * Custom event to add check-boxes to specified tables
     * Prepends check-boxes to the tables which are having the class showCheckboxes, 
-    * by triggering the event agile_collection_loaded from base-collection.js render event, while loading the collection.
+    * by triggering the event agile_collection_loaded from base-collection render event, while loading the collection.
     */ 	
 	$('body').live('agile_collection_loaded', function(event) {
 		var table = $(this).find('table.showCheckboxes');
@@ -31,8 +31,13 @@ $(function(){
 
 		$(table).find('tbody tr').prepend('<td><input class="tbody_check" type="checkbox"/></td>');
 		
+	    // Adds class to tbody to edit the table by validating the route attribute 
+		if($(table).find('tbody').attr('route'))
+			$(table).find('tbody').addClass('agile-edit-row');
+		
 		$(table).after('<div class="row"><div class="span6  select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked"> Delete</a>');
 		
+		// Sorts the tables based on their column values
 		sort_tables(table);
 	});
 

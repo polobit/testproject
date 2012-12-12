@@ -19,7 +19,7 @@
     				</tr>
   				</thead>
   
-  				<tbody id='contact-custom-view-model-list'>
+  				<tbody id='contact-custom-view-model-list' route='contact-custom-view-edit/'>
   				</tbody>
 			</table>
 		</div>
@@ -35,7 +35,7 @@
 	</div>
 </script>
 <script id="contact-custom-view-model-template" type="text/html">
-<td view='{{id}}' class='view'></td>  	
+<td data='{{id}}' class='data'></td>  	
 <td> {{name}} </td>
 <td>
   {{#each fields_set}}
