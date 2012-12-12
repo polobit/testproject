@@ -1,22 +1,40 @@
 package com.agilecrm.widgets;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.json.JSONObject;
 
+import com.agilecrm.ScribeServlet;
+import com.agilecrm.core.api.contacts.WidgetsAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.condition.IfDefault;
 
+/**
+ * <code>Widget</code> class represents informations about the widgets
+ * (Linkedin, Twitter, Rapleaf). It include basic information about the widgets
+ * i.e., name, logo, description, url (To load the widget script), prefs (Tokens
+ * to connect to widgets). This class includes the position of the widget, since
+ * widgets are sortable at client side and position of the widget is saved in
+ * the <code>widget</code> in position variable as Integer.
+ * 
+ * <p>
+ * <code>Widget</code>class provides Linkedin, Twitter and Rapleaf as default
+ * widgets, User can store custom widget information. Widgets are stored are
+ * related to AgileUser. It includes methods to get widgets related to current
+ * {@link AgileUser}, widget by Id, Save, delete, setting prefs.
+ * </p>
+ * <p>
+ * <code>Widget</code> class is called from {@link WidgetsAPI}, to provide rest
+ * calls to get(default/saved), add, delete to modify widget data. It also
+ * called from {@link ScribeServlet} to save prefs(Access tokens\secret keys for
+ * widgets)
+ * </p>
+ */
 @XmlRootElement
 public class Widget
 {
@@ -24,13 +42,21 @@ public class Widget
     @Id
     public Long id;
 
-    // Name
+    /**
+     * Represents the name of the widget
+     */
     public String name = null;
 
-    // Description
+    /**
+     * Description, represents description about the widget which is shown at
+     * the client side as widget description
+     */
     public String description = null;
 
     // URL
+    /**
+     * Url specifies the path of the widget script
+     */
     public String url = null;
 
     // Logo
@@ -42,18 +68,28 @@ public class Widget
     // Mini Logo
     public String mini_logo_url = null;
 
-    // Prefs
+    /**
+     * Prefs are access token and secret key to connect to linkedin/twitter.
+     * Prefs represent JSON string contains access tokens, saved from
+     * {@link ScribeServlet}
+     */
     @NotSaved(IfDefault.class)
     public String prefs = null;
 
-    // Position (start from 0)
+    /**
+     * Since widgets are sortable at the client position of the widget is stored
+     * in position variable
+     */
     public int position = 0;
 
     // Dao
     private static ObjectifyGenericDao<Widget> dao = new ObjectifyGenericDao<Widget>(
 	    Widget.class);
 
-    // Private Agile User
+    /**
+     * Represents user related to the widget, for each {@link AgileUser} widgets
+     * are saved with the prefs provided by user
+     */
     @Parent
     private Key<AgileUser> user;
 
@@ -79,105 +115,29 @@ public class Widget
 		AgileUser.getCurrentAgileUser().id);
     }
 
-    private static List<Widget> getDefaultWidgets()
-    {
-
-	List<Widget> widgets = new ArrayList<Widget>();
-	widgets.add(new Widget(
-		"Linkedin",
-		" LinkedIn helps build professional relationships with contacts and helps keep tabs about their business interests.",
-		"/widgets/linkedin.js", "/img/plugins/linkedin.png",
-		"/widgets/linkedin-logo-small.png", null));
-	widgets.add(new Widget(
-		"Twitter",
-		" Twitter offers a great way of engaging with contacts in real time based on what they tweet.",
-		"/widgets/twitter.js", "/img/plugins/twitter.jpg",
-		"/widgets/twitter-logo-small.png", null));
-	widgets.add(new Widget(
-		"Rapleaf",
-		" Rapleaf makes it incredibly easy for you to personalize content for your customers.",
-		"/widgets/rapleaf.js", "/img/plugins/rapleaf.jpeg",
-		"/widgets/rapleaf-logo-small.jpeg", null));
-
-	return widgets;
-
-    }
-
-    public static List<Widget> getAvailableWidgets()
-    {
-	List<Widget> availableWidgets = getDefaultWidgets();
-
-	// Populate Widgets if they have already been added
-	for (Widget widget : availableWidgets)
-	{
-	    // Check if it is already added
-	    Widget currentWidget = getWidget(widget.name);
-
-	    if (currentWidget == null)
-		widget.is_added = false;
-	}
-
-	return availableWidgets;
-    }
-
-    public static List<Widget> getWidgetsForCurrentUser()
-    {
-
-	Objectify ofy = ObjectifyService.begin();
-
-	Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class,
-		AgileUser.getCurrentAgileUser().id);
-
-	return ofy.query(Widget.class).ancestor(userKey).list();
-    }
-
-    public static Widget getWidget(Long id)
-    {
-	try
-	{
-	    Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class,
-		    AgileUser.getCurrentAgileUser().id);
-	    Key<Widget> widgetKey = new Key<Widget>(userKey, Widget.class, id);
-
-	    return dao.get(widgetKey);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-
-    public static Widget getWidget(String name)
-    {
-	try
-	{
-	    Objectify ofy = ObjectifyService.begin();
-
-	    Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class,
-		    AgileUser.getCurrentAgileUser().id);
-
-	    return ofy.query(Widget.class).ancestor(userKey)
-		    .filter("name", name).get();
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-
+    /**
+     * Sets the position of the widget
+     * 
+     * @param position
+     *            {@link Integer}
+     */
     public void setPosition(int position)
     {
 	this.position = position;
     }
 
-    // Delete Contact
+    /**
+     * Deletes the widget
+     */
     public void delete()
     {
 	dao.delete(this);
     }
 
+    /**
+     * Saves the widget, While saving widget current is user key is set, to
+     * differentiate widgets based on {@link AgileUser}
+     */
     public void save()
     {
 	this.user = new Key<AgileUser>(AgileUser.class,
@@ -185,18 +145,30 @@ public class Widget
 	dao.put(this);
     }
 
-    // Add Property
+    /**
+     * Sets prefs to the widget, set from {@link ScribeServlet}
+     * 
+     * @param propertyName
+     *            {@link String}
+     * @param value
+     *            {@link String}
+     */
     public void addProperty(String propertyName, String value)
     {
 
 	try
 	{
+	    // Creates a new JSONOjbect to represent prefs
 	    JSONObject propertyJSON = new JSONObject();
+
+	    // If Prefs are null for the current widget then creates json object
+	    // with prefs
 	    if (prefs != null)
 		propertyJSON = new JSONObject(prefs);
 
 	    propertyJSON.put(propertyName, value);
 
+	    // Sets prefs as string to save
 	    prefs = propertyJSON.toString();
 	}
 	catch (Exception e)
@@ -206,17 +178,27 @@ public class Widget
 
     }
 
-    // Get Property
+    /**
+     * Gets prefs from the from the current widget.
+     * 
+     * @param propertyName
+     *            {@link String}
+     * @return returns prefs as string {@link String}
+     */
     public String getProperty(String propertyName)
     {
 
+	// If prefs are null then return null
 	if (prefs == null)
 	    return null;
 
 	try
 	{
+	    // Creates a JSONObject from the prefs(prefs is JSONObject saved as
+	    // string while saving a widget)
 	    JSONObject propertyJSON = new JSONObject(prefs);
 
+	    // Returns token of secret from the prefs JSON
 	    if (propertyJSON.has(propertyName))
 		return propertyJSON.getString(propertyName);
 	}
