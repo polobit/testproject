@@ -140,16 +140,6 @@ public class Subscription
 
     }
 
-    @Override
-    public String toString()
-    {
-	return "Subscription: {id: " + id + ", plan: " + plan + ", card_details: " + card_details
-		+ ", enripted_card_details: " + encrypted_card_details + ", status: " + status
-		+ ", created_time: " + created_time + ", updated_time: " + updated_time
-		+ ", billing_data: " + billing_data + ", billing_data_json_string: "
-		+ billing_data_json_string + ", gateway: " + gateway + "}";
-    }
-
     /**
      * Returns {@link Subscription} object of current domain
      * 
@@ -238,15 +228,16 @@ public class Subscription
      * @return {@link Subscription}
      * @throws Exception
      */
-    public static Subscription updateCreditCard(CreditCard cardDetails) throws Exception
+    public static Subscription updateCreditCard(CreditCard cardDetails)
+	    throws Exception
     {
 
 	// Gets subscription of current domain
 	Subscription subscription = getSubscription();
 
 	// Updates credit card details in related gateway
-	subscription.billing_data = subscription.getAgileBilling().updateCreditCard(
-		subscription.billing_data, cardDetails);
+	subscription.billing_data = subscription.getAgileBilling()
+		.updateCreditCard(subscription.billing_data, cardDetails);
 
 	// Assigns details which will be encrypted before saving
 	// subscription entity
@@ -273,7 +264,8 @@ public class Subscription
 	if (subscription == null)
 	    return null;
 
-	return subscription.getAgileBilling().getInvoices(subscription.billing_data);
+	return subscription.getAgileBilling().getInvoices(
+		subscription.billing_data);
     }
 
     /**
@@ -321,25 +313,6 @@ public class Subscription
     }
 
     /**
-     * Returns AgileBilling interface implemented object based on gateway
-     * 
-     * @return {@link AgileBilling}
-     * @throws Exception
-     */
-    private AgileBilling getAgileBilling() throws Exception
-    {
-	/*
-	 * Respective gateway implementation is expected to be in sub package of
-	 * subscription, name of package should be name of gateway and
-	 * Implementations class should be named "gateway"+Impl
-	 */
-	return (AgileBilling) Class.forName(
-		"com.agilecrm.subscription." + this.gateway.toString().toLowerCase() + "."
-			+ this.gateway + "Impl").newInstance();
-
-    }
-
-    /**
      * Returns billing data along with subscription
      * 
      * @return {@link String}
@@ -366,6 +339,26 @@ public class Subscription
 	}
     }
 
+    /**
+     * Returns AgileBilling interface implemented object based on gateway
+     * 
+     * @return {@link AgileBilling}
+     * @throws Exception
+     */
+    private AgileBilling getAgileBilling() throws Exception
+    {
+	/*
+	 * Respective gateway implementation is expected to be in sub package of
+	 * subscription, name of package should be name of gateway and
+	 * Implementations class should be named "gateway"+Impl
+	 */
+	return (AgileBilling) Class.forName(
+		"com.agilecrm.subscription."
+			+ this.gateway.toString().toLowerCase() + "."
+			+ this.gateway + "Impl").newInstance();
+
+    }
+
     @PrePersist
     private void PrePersist()
     {
@@ -379,8 +372,9 @@ public class Subscription
 	try
 	{
 	    // Encrypt creditcard details before saving
-	    this.encrypted_card_details = ClickDeskEncrytion.RSAEncrypt(new Gson().toJson(
-		    this.encrypted_card_details).getBytes());
+	    this.encrypted_card_details = ClickDeskEncrytion
+		    .RSAEncrypt(new Gson().toJson(this.encrypted_card_details)
+			    .getBytes());
 	}
 	catch (Exception e)
 	{
@@ -388,4 +382,15 @@ public class Subscription
 	}
     }
 
+    @Override
+    public String toString()
+    {
+	return "Subscription: {id: " + id + ", plan: " + plan
+		+ ", card_details: " + card_details
+		+ ", enripted_card_details: " + encrypted_card_details
+		+ ", status: " + status + ", created_time: " + created_time
+		+ ", updated_time: " + updated_time + ", billing_data: "
+		+ billing_data + ", billing_data_json_string: "
+		+ billing_data_json_string + ", gateway: " + gateway + "}";
+    }
 }
