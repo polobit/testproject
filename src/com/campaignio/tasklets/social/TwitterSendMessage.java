@@ -2,9 +2,9 @@ package com.campaignio.tasklets.social;
 
 import org.json.JSONObject;
 
-import com.campaignio.TwitterQueue;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
+import com.campaignio.twitter.TwitterQueue;
 
 public class TwitterSendMessage extends TaskletAdapter
 {
