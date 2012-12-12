@@ -126,7 +126,7 @@ public class StripeWebhookServlet extends HttpServlet
 		customizeEventAttributes(event, user);
 
 		SendMail.sendMail(user.email,
-			SendMail.FIRST_PAYMENT_RECUIVED_SUBJECT,
+			SendMail.FIRST_PAYMENT_RECEIVED_SUBJECT,
 			SendMail.FIRST_PAYMENT_RECEIVED, event);
 	    }
 
