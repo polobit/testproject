@@ -235,7 +235,7 @@ public class TaskletAdapter implements Tasklet
      * @throws Exception
      */
     @SuppressWarnings("rawtypes")
-    public JSONObject mergeJSONObjects(JSONObject subscriberJSON,
+    private static JSONObject mergeJSONObjects(JSONObject subscriberJSON,
 	    JSONObject data)
 	    throws Exception
     {

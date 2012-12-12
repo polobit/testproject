@@ -52,7 +52,7 @@ function serializeAndSaveContinueContact(e, form_id, modal_id, continueContact, 
 
     if (isValidField('job_title')) properties.push(propertyJSON('title', 'job_title'));
     
-    var tags = getTags(form_id);
+    var tags = get_tags(form_id);
 	if (tags != undefined && tags.length != 0) obj.tags = tags[0].value;
 	
     }else{
@@ -202,7 +202,7 @@ function deserializeContact(contact, template) {
     });
     
     // To set typeahead for tags
-    setupTagsTypeAhead();
+    setup_tags_typeahead();
     
     // Iterates through properties and ui clones
     $.each(contact.properties, function (index, element) {

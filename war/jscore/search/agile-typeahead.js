@@ -34,12 +34,14 @@ function agile_type_ahead(id, el, callback, isSearch)
         source: function (query, process)
         {
 
+        	console.log("query.....");
             /* Resets the results before query */
             CONTACTS = {};
 
             /* Stores type ahead object in temporary variable */
             var that = this;
 
+            console.log(that.$menu);
             /* Sets css and html data to be displayed */
             that.$menu.css("width", 300);
 
@@ -128,6 +130,7 @@ function agile_type_ahead(id, el, callback, isSearch)
         },
         matcher: function (item)
         {
+        	console.log("matcher....,,");
             if (~item.toLowerCase().indexOf(
             this.query.toLowerCase()) != 0) return~item.toLowerCase().indexOf(
             this.query.toLowerCase());
@@ -135,7 +138,7 @@ function agile_type_ahead(id, el, callback, isSearch)
         },
         render: function ()
         {
-            var that = this;
+        	var that = this;
 
             // If query results are not available activate the
             // menu to show info and return
@@ -181,6 +184,7 @@ function agile_type_ahead(id, el, callback, isSearch)
                  * that.highlighter(email) +'<br/>'+
                  * that.highlighter(company) +'</div></div>');
                  */
+                console.log(i);
                 return i[0];
             });
 
@@ -197,6 +201,9 @@ function agile_type_ahead(id, el, callback, isSearch)
         },
         updater: function (items)
         {
+        	console.log(items);
+        	console.log(TYPEHEAD_TAGS);
+        	console.log(TYPEHEAD_TAGS[items]);
             var tag_not_exist = true;
 
             // Stores items in temp variable so to show first

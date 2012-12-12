@@ -17,9 +17,21 @@ import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 
+/**
+ * <code>CronUtil</code> is the base class to save and delete crons.It is used
+ * to get crons with respect to campaign and subscribers data.CronUtil is used
+ * to calculate timeout period if duration period and type is given.CronUtil
+ * execute tasklets based upon interrupt or timeout condition.
+ * 
+ * @author Manohar
+ * 
+ */
 public class CronUtil
 {
 
+    /**
+     * Dao of Cron class
+     */
     private static ObjectifyGenericDao<Cron> dao = new ObjectifyGenericDao<Cron>(
 	    Cron.class);
 
@@ -165,6 +177,17 @@ public class CronUtil
 
 
     // Get Timer
+    /**
+     * Gets time after adding current time with specified duration and duration
+     * type.
+     * 
+     * @param durationString
+     *            Duration period
+     * @param durationType
+     *            Duration type such as days,hours and minutes
+     * @return time-out period
+     * @throws Exception
+     */
     public static long getTimerAt(String durationString, String durationType)
 	    throws Exception
     {
@@ -265,11 +288,16 @@ public class CronUtil
 
     // Interrupt a task
     /**
+     * Interrupt a task
      * 
      * @param custom1
+     *            custom value 1
      * @param custom2
+     *            custom value 2
      * @param custom3
+     *            custom value 3
      * @param interruptData
+     *            Interrupt data
      */
     public static void interrupt(String custom1, String custom2,
 	    String custom3, JSONObject interruptData)

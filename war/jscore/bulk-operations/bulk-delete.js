@@ -100,7 +100,7 @@ function bulk_delete_operation(url, id_array, index_array, table, data_array){
 			
 			// Tags re-fetching
 			if(App_Contacts.contactsListView){
-				setupTags(App_Contacts.contactsListView.el);
+				setup_tags(App_Contacts.contactsListView.el);
 			}	
 		}
 	});

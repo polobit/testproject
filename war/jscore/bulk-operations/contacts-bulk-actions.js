@@ -134,13 +134,13 @@ $(function(){
 		e.preventDefault();
 		var id_array = get_contacts_bulk_ids();
 		
-		// var tags = getTags('tagsBulkForm');
+		// var tags = get_tags('tagsBulkForm');
 
 		Backbone.history.navigate("bulk-tags", {
             trigger: true
         });
 		
-		setupTagsTypeAhead();
+		setup_tags_typeahead();
 		
 	   /**
 	    * Add the tags to the selected contacts by sending the contact ids and tags 
@@ -148,7 +148,7 @@ $(function(){
 	    */	
 		$('#addTagsToContactsBulk').die().live('click',function(e){
 			e.preventDefault();
-			var tags = getTags('tagsBulkForm');
+			var tags = get_tags('tagsBulkForm');
 
 			if (tags[0].value.length > 0){
 				
