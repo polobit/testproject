@@ -30,7 +30,7 @@
   					<th>Owner</th>
     			</tr>
   			</thead>  
-  			<tbody id='opportunities-model-list'>
+  			<tbody id='opportunities-model-list' route='deals/'>
   			</tbody>
 		</table>
 	  </div>
@@ -67,7 +67,7 @@ Deals are opportunities you can continuously track throughout its life cycle. Yo
 </script>
 
 <script id="opportunities-model-template" type="text/html">
-<td leads='{{id}}' class='leads'>
+<td data='{{id}}' class='data'>
 	<div style='display:inline;padding-right:10px;height:auto;'>
 	{{#each contacts}}
 		<img src="{{gravatarurl properties 50}}" width='40px' height='40px'>

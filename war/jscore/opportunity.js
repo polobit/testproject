@@ -3,7 +3,7 @@ $(function () {
 	// On mouseover shows the popover
 	$('#opportunities-model-list > tr').live('mouseenter', function () {
         
-        var data = $(this).find('.leads').attr('leads');
+        var data = $(this).find('.data').attr('data');
 
         var currentDeal = App_Deals.opportunityCollectionView.collection.get(data);
        
@@ -31,19 +31,6 @@ $(function () {
 	// On mouseout hides the popover
     $('#opportunities-model-list > tr').live('mouseleave', function(){
     	 $(this).popover('hide');
-    });
-    
-    // On click on row in Opportunities triggers the details of particular opportunity to edit
-    $('#opportunities-model-list > tr').live('click', function (e) {
-        e.preventDefault();
-        $(this).popover('hide');
-        var data = $(this).find('.leads').attr('leads');
-
-        if (data) {
-            Backbone.history.navigate("deals/" + data, {
-                trigger: true
-            });
-        }
     });
     
     $('#close-deal').live('click', function(e){

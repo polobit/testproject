@@ -41,27 +41,6 @@ $(function()
 		$(this).closest("tr").remove();
 	});
 
-	/**
-	 * When clicked on a filter in filter list then view is navigated to edit
-	 * selected filter
-	 */
-	$('#contact-filter-model-list > tr').live('click', function(e)
-	{
-		e.preventDefault();
-
-		// Get filter id
-		var data = $(this).find('.filter-edit').attr('filter');
-
-		// If id is defined navigate to filter edit page
-		if (data)
-		{
-			Backbone.history.navigate("contact-filter-edit/" + data, {
-				trigger : true
-			});
-		}
-
-	});
-
 	// Fetch filter result without changing route on click
 	$('.filter')
 			.live(
