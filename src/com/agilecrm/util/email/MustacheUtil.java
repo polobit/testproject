@@ -1,4 +1,4 @@
-package com.agilecrm.util;
+package com.agilecrm.util.email;
 
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -13,6 +13,7 @@ import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.MappingJsonFactory;
 import org.json.JSONObject;
 
+import com.agilecrm.util.Util;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
@@ -22,6 +23,7 @@ public class MustacheUtil
 
     private static final JsonFactory JSON_FACTORY = new MappingJsonFactory();
 
+    @SuppressWarnings({ "unchecked", "serial", "rawtypes" })
     public static Object toObject(final JsonNode node)
     {
 	if (node.isArray())
@@ -63,6 +65,46 @@ public class MustacheUtil
 	{
 	    return node.asText();
 	}
+    }
+
+    @SuppressWarnings("unused")
+    public static String templatize(String path, JSONObject json)
+	    throws Exception
+    {
+
+	// Read from path
+	String emailTemplate = Util
+		.readResource(SendMail.TEMPLATES_PATH + path);
+	String value = null;
+	if (emailTemplate == null)
+	    return null;
+
+	// Compile
+	return MustacheUtil.compile(emailTemplate, json);
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static JSONObject mergeJSONs(JSONObject[] objs)
+    {
+	JSONObject merged = new JSONObject();
+	try
+	{
+	    for (JSONObject obj : objs)
+	    {
+		Iterator it = obj.keys();
+		while (it.hasNext())
+		{
+		    String key = (String) it.next();
+		    merged.put(key, obj.get(key));
+		}
+	    }
+	}
+	catch (Exception e)
+	{
+
+	}
+
+	return merged;
     }
 
     public static String compile(String template, JSONObject json)

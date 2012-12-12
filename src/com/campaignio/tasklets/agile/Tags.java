@@ -72,13 +72,14 @@ public class Tags extends TaskletAdapter
 	    if (type.equals(ADD))
 	    {
 		contact.addTags(tagsArray);
-		log(campaignJSON, subscriberJSON, "Added tags are " + tagsArray);
+		log(campaignJSON, subscriberJSON, "Added tags are: "
+			+ tagsArray);
 	    }
 	    // Delete Tags based on contact
 	    else
 	    {
 		contact.removeTags(tagsArray);
-		log(campaignJSON, subscriberJSON, "Deleted tags are"
+		log(campaignJSON, subscriberJSON, "Deleted tags are: "
 			+ tagsArray);
 	    }
 	}

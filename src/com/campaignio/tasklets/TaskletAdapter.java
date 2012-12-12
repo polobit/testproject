@@ -5,8 +5,8 @@ import java.util.Iterator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.agilecrm.util.MustacheUtil;
 import com.agilecrm.util.Util;
+import com.agilecrm.util.email.MustacheUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
 

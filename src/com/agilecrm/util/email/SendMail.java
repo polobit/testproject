@@ -1,6 +1,4 @@
-package com.agilecrm.util;
-
-import java.util.Iterator;
+package com.agilecrm.util.email;
 
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.map.MappingJsonFactory;
@@ -9,6 +7,19 @@ import org.json.JSONObject;
 
 import com.thirdparty.SendGridEmail;
 
+/**
+ * <code>SendMail</code> is the base class to send email using different
+ * templates from AgileCRM.For each template, name of template and template
+ * subject is provided.Mustache.java is used to fill template with json values.
+ * <p>
+ * SendMail uses ObjectMapper to convert object to JSONObject.All html templates
+ * has _html extension whereas for body templates _body extension.SendGridEmail
+ * is used to send email.
+ * </p>
+ * 
+ * @author Manohar
+ * 
+ */
 public class SendMail
 {
     public static final String NEW_USER_INVITED = "new_user_invited";
@@ -73,9 +84,30 @@ public class SendMail
     public static final String TEMPLATE_HTML_EXT = "_html.html";
     public static final String TEMPLATE_BODY_EXT = "_body.html";
 
+    @SuppressWarnings("unused")
     private static final JsonFactory JSON_FACTORY = new MappingJsonFactory();
+
+    @SuppressWarnings("unused")
     private static Object String;
 
+    /**
+     * Sends email by replacing template with Object values.Uses SendGridEmail
+     * to send email.
+     * 
+     * @param to
+     *            Recipient email id
+     * @param subject
+     *            Email Subject-template subject
+     * @param template
+     *            Name of template
+     * @param object
+     *            Respective object with the template
+     * @param from
+     *            From email
+     * @param fromName
+     *            From name
+     */
+    @SuppressWarnings("unused")
     public static void sendMail(String to, String subject, String template,
 	    Object object, String from, String fromName)
     {
@@ -85,13 +117,13 @@ public class SendMail
 	    System.out.println("Sending email " + template + " " + object);
 
 	    // Serialize, Use ObjectMapper
-	    String json = null;
+	    String objectJson = null;
 	    String emailString = null;
 	    try
 	    {
 		ObjectMapper mapper = new ObjectMapper();
-		json = mapper.writeValueAsString(object);
-		System.out.println(json);
+		objectJson = mapper.writeValueAsString(object);
+		System.out.println(objectJson);
 	    }
 	    catch (Exception e)
 	    {
@@ -109,7 +141,7 @@ public class SendMail
 	    JSONObject[] jsonObjectArray;
 
 	    // If object to mail template is array then data of array can be
-	    // accessed with "content" key in template
+	    // accessed with "class name" key in template
 	    if (object instanceof Object[])
 	    {
 		JSONObject content = new JSONObject();
@@ -127,17 +159,19 @@ public class SendMail
 	    else
 	    {
 		jsonObjectArray = new JSONObject[] { email,
-			new JSONObject(json) };
+			new JSONObject(objectJson) };
 	    }
 
-	    JSONObject mergedJSON = mergeJSONs(jsonObjectArray);
+	    JSONObject mergedJSON = MustacheUtil.mergeJSONs(jsonObjectArray);
+
 	    System.out.println("mergedJson in sendemail" + mergedJSON);
+
 	    // Read template - HTML
-	    String emailHTML = handleBarsTemplatize(template
+	    String emailHTML = MustacheUtil.templatize(template
 		    + TEMPLATE_HTML_EXT, mergedJSON);
 
 	    // Read template - Body
-	    String emailBody = handleBarsTemplatize(template
+	    String emailBody = MustacheUtil.templatize(template
 		    + TEMPLATE_BODY_EXT, mergedJSON);
 
 	    // If both are null, nothing to be sent
@@ -160,6 +194,19 @@ public class SendMail
 
     }
 
+    /**
+     * Appends parameters - From email-id and From name to sendMail method.
+     * 
+     * @param to
+     *            Recipient email id
+     * 
+     * @param subject
+     *            Email Subject-template subject
+     * @param template
+     *            Name of template
+     * @param object
+     *            Respective object with the template
+     */
     public static void sendMail(String to, String subject, String template,
 	    Object object)
     {
@@ -169,40 +216,4 @@ public class SendMail
 
     }
 
-    private static String handleBarsTemplatize(String path, JSONObject json)
-	    throws Exception
-    {
-
-	// Read from path
-	String emailTemplate = Util.readResource(TEMPLATES_PATH + path);
-	String value = null;
-	if (emailTemplate == null)
-	    return null;
-
-	// Compile
-	return MustacheUtil.compile(emailTemplate, json);
-    }
-
-    private static JSONObject mergeJSONs(JSONObject[] objs)
-    {
-	JSONObject merged = new JSONObject();
-	try
-	{
-	    for (JSONObject obj : objs)
-	    {
-		Iterator it = obj.keys();
-		while (it.hasNext())
-		{
-		    String key = (String) it.next();
-		    merged.put(key, obj.get(key));
-		}
-	    }
-	}
-	catch (Exception e)
-	{
-
-	}
-
-	return merged;
-    }
 }

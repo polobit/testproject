@@ -19,7 +19,7 @@ import org.json.JSONObject;
 import com.agilecrm.Globals;
 import com.agilecrm.core.DomainUser;
 import com.agilecrm.subscription.Subscription;
-import com.agilecrm.util.SendMail;
+import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.gson.Gson;
 import com.stripe.exception.StripeException;
