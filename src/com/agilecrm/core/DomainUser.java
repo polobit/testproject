@@ -21,6 +21,7 @@ import com.agilecrm.user.IMAPEmailPrefs;
 import com.agilecrm.user.NotificationPrefs;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.util.NotificationPrefsUtil;
 import com.agilecrm.util.Util;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
@@ -534,7 +535,7 @@ public class DomainUser
 		imapPrefs.delete();
 
 	    // Delete Notification Prefs
-	    NotificationPrefs notificationPrefs = NotificationPrefs
+	    NotificationPrefs notificationPrefs = NotificationPrefsUtil
 		    .getNotificationPrefs(agileUser);
 
 	    if (notificationPrefs != null)

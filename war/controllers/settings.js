@@ -141,6 +141,10 @@ var SettingsRouter = Backbone.Router.extend({
                 $("#content").html(view.el);  
     	  
     },
+    /**
+     * Sends request to NotificationsAPI to get notification preferences and
+     *  render with obtained notification preferences
+     * **/
     notificationPrefs: function(){
     	
     	var view = new Base_Model_View({

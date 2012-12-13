@@ -7,19 +7,38 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.agilecrm.user.NotificationPrefs;
+import com.agilecrm.user.util.NotificationPrefsUtil;
 
+/**
+ * <code>NotificationsAPI</code> is used to perform GET and PUT operations on
+ * {@link NotificationPrefs}.It replaces notification preferences with updated
+ * whenever notification preferences are updated at client side.
+ * <p>
+ * {@link NotificationPrefsUtil} is used to fetch and update current
+ * notification preferences.It fetches notification preferences with respect to
+ * agile user.
+ * </p>
+ * 
+ * @author Manohar
+ * 
+ */
 @Path("/api/notifications")
 public class NotificationsAPI
 {
 
     // Notifications
+    /**
+     * Gets notification preferences with respect to current user
+     * 
+     * @return notification preferences of current user
+     */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public NotificationPrefs getNotifications()
     {
 	try
 	{
-	    return NotificationPrefs.getCurrentUserNotificationPrefs();
+	    return NotificationPrefsUtil.getCurrentUserNotificationPrefs();
 	}
 	catch (Exception e)
 	{
@@ -28,6 +47,14 @@ public class NotificationsAPI
 	}
     }
 
+    /**
+     * Updates notification preferences of current user.
+     * 
+     * @param notify
+     *            Existing notification preferences
+     * @return Updated notification preferences, otherwise return null if
+     *         exception occurs.
+     */
     @PUT
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public NotificationPrefs saveNotifications(NotificationPrefs notify)
@@ -35,7 +62,7 @@ public class NotificationsAPI
 	try
 	{
 	    // Get UserId of person who is logged in
-	    NotificationPrefs notifications = NotificationPrefs
+	    NotificationPrefs notifications = NotificationPrefsUtil
 		    .getCurrentUserNotificationPrefs();
 
 	    notifications.contact_browsing = notify.contact_browsing;

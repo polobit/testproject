@@ -24,6 +24,7 @@ import com.agilecrm.deferred.TagsDeferredTask;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.NotificationPrefs;
+import com.agilecrm.user.util.NotificationPrefsUtil;
 import com.agilecrm.workflows.triggers.util.ContactTriggerUtil;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -226,7 +227,7 @@ public class Contact extends Cursor
 	Contact contact = this;
 
 	// Execute notification when contact is deleted
-	NotificationPrefs.executeNotification(
+	NotificationPrefsUtil.executeNotification(
 		NotificationPrefs.Type.CONTACT_DELETED, this);
 
 	dao.delete(this);

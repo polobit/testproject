@@ -1,7 +1,16 @@
+/**
+ * notify.js is a script file to show notifications.socket.io.js is used to emit data received from server.
+ * Notification preferences are fetched for current user.Some jquery plugins are used to show pop-up messages.
+ * 
+ * @module Notifications
+ **/
 var notification_prefs;
 var socket;
 
 // Download and Register
+/**
+ * Fetches notification preferences for current user 
+ **/
 function downloadAndRegisterForNotifications()
 {
 	// Download Notification Prefs
@@ -10,16 +19,21 @@ function downloadAndRegisterForNotifications()
 		});
 	
 	var model = new notification_model();
-	model.fetch({ success: function(data) { 
+	model.fetch({ success: function(data) {
 		
 		// Register For Notifications
 		notification_prefs = data.toJSON();	
 		console.log(notification_prefs);
+		
+		// Register for notifications
 		registerForNotifications(notification_prefs)
 	}});	
 }
 
 // Register for notifications
+/**
+ * Register for notifications with obtained notification preferences
+ **/
 function registerForNotifications(prefs)
 {
 	// Check if at least one key is not present. In backend, we do not store if the value is default
@@ -29,11 +43,14 @@ function registerForNotifications(prefs)
 		
 	}
 	
+	// Register for sockets
 	registerForSockets();
 }
 
 
 // Gets API Key and Sets up Socket 
+/** Gets API Key and sets up socket using socket.io
+ **/
 function registerForSockets()
 {
 
@@ -52,6 +69,8 @@ function registerForSockets()
 		model.fetch({ success: function(data) { 
 			
 			var api_key = data.get('api_key');
+			
+			// Set up sockets with the obtained api key
 			_setupSockets(api_key);
 			
 		}});
@@ -60,12 +79,18 @@ function registerForSockets()
 }
 
 // Setup sockets
+/**
+ * Set up sockets with the obtained api key by using socket.io.js
+ * 
+ * @param api_key API Key.Socket is connected using the api key. 
+ **/
 function _setupSockets(api_key)
 {	
 	console.log("Connecting " + api_key);
 	
 	var agile = api_key;
 	socket = io.connect('https://stats.agilecrm.com:90');
+	
 	socket.on('connect', function () {
 		    console.log('socket connected');
 		    socket.emit('subscribe', { agile_id: agile });
@@ -82,16 +107,20 @@ function _setupSockets(api_key)
 	
 	  
 	socket.on('notification', function (data) {
+	
 		console.log('notification');
 	    console.log(data);
 	   
 	    var parse_data = JSON.parse(data);
 	    console.log(parse_data);
+	    
+	    // Obtained parse_data is in stringifyJSON
 	    var object = JSON.parse(parse_data.object);
 	    
-	    // Storing type into object json
+	    /** Storing type into object json inorder to show type in notification**/
 	    object.type = parse_data.type;
 	    console.log(object);
+	    
 	    var html = getTemplate('notify-html',object);
 	    notify('success1', html, 'bottom-right', true);	
 	    
@@ -108,6 +137,11 @@ function _setupSockets(api_key)
 	    });	
 }
 
+/**
+ * Fetches contact from given email.
+ * 
+ * @param email - email-id of a contact
+ **/
 function fetchContactAndNotify(email)
 {
 	
@@ -137,12 +171,21 @@ function fetchContactAndNotify(email)
 	
 }
 
-function _cancelSockets()
+/**
+ * Disconnects socket established 
+ **/function _cancelSockets()
 {
 	socket.disconnect();
 }
 
-function notify(type, message, position, closable)
+/**
+ * Creates bootstrap pop-up notification.
+ * @param type - success type of notification 
+ * @param message - html template for notification 
+ * @param position - position of pop-up in a web-page 
+ * @param closable - pop-up is closable
+ **/
+ function notify(type, message, position, closable)
 {	
 	head.js('lib/bootstrap-notifications-min.js', function(){
 		 $('.' + position).notify({
@@ -155,7 +198,10 @@ function notify(type, message, position, closable)
 	});
 }
 
-$(function(){
+/**
+ * Set timeout for registering notifications
+ **/
+ $(function(){
 	setTimeout(downloadAndRegisterForNotifications, 2000);
 	
 	//fetchContactAndNotify('manohar@invox.com');
@@ -163,7 +209,13 @@ $(function(){
 });
 
 
-function showNoty(type, message, position)
+/**
+ * Runs jquery noty plugin for notification pop-ups
+ * @param type - notification type
+ * @param message - html content for notification
+ * @param position - position of pop-up within the webpage 
+ **/
+ function showNoty(type, message, position)
 {
 	// Download the lib
 	head.js(LIB_PATH + 'lib/noty/jquery.noty.js', 'lib/noty/layouts/top.js', LIB_PATH + 'lib/noty/themes/default.js',
