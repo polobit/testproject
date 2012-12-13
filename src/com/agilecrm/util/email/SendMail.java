@@ -79,7 +79,7 @@ public class SendMail
     public static final String AGILE_FROM_NAME = "Agile CRM";
     public static final String AGILE_FROM_EMAIL = "noreply@agilecrm.com";
 
-    public static final String TEMPLATES_PATH = "misc/email/";
+    public static final String TEMPLATES_PATH = "war/misc/email/";
 
     public static final String TEMPLATE_HTML_EXT = "_html.html";
     public static final String TEMPLATE_BODY_EXT = "_body.html";
@@ -149,7 +149,8 @@ public class SendMail
 		{
 		    String className = eachObject.getClass().getSimpleName();
 		    content.put(className,
-			    new ObjectMapper().writeValueAsString(eachObject));
+			    new JSONObject(new ObjectMapper()
+				    .writeValueAsString(eachObject)));
 		}
 
 		jsonObjectArray = new JSONObject[] { email, content };

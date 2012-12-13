@@ -68,7 +68,7 @@ public class MustacheUtil
     }
 
     @SuppressWarnings("unused")
-    public static String templatize(String path, JSONObject json)
+    public static String templatize(String path, JSONObject emailJson)
 	    throws Exception
     {
 
@@ -80,7 +80,7 @@ public class MustacheUtil
 	    return null;
 
 	// Compile
-	return MustacheUtil.compile(emailTemplate, json);
+	return MustacheUtil.compile(emailTemplate, emailJson);
     }
 
     @SuppressWarnings("rawtypes")
@@ -101,7 +101,7 @@ public class MustacheUtil
 	}
 	catch (Exception e)
 	{
-
+	    System.out.println("Exception in mergeJSON");
 	}
 
 	return merged;

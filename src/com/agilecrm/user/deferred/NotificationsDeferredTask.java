@@ -38,12 +38,25 @@ public class NotificationsDeferredTask implements DeferredTask
      */
     JSONObject objectJson = null;
 
+    /**
+     * Constructs a new {@link NotificationsDeferredTask}
+     * 
+     * @param type
+     *            Notification type
+     * @param objectData
+     *            Object like Contact,Deals etc
+     */
     public NotificationsDeferredTask(Type type, String objectData)
     {
 	this.type = type;
 	this.objectData = objectData;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Runnable#run()
+     */
     @SuppressWarnings({ "deprecation", "unchecked" })
     public void run()
 
