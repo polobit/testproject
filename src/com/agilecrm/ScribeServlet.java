@@ -24,6 +24,7 @@ import org.scribe.oauth.OAuthService;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.util.WidgetUtil;
 
 @SuppressWarnings("serial")
 public class ScribeServlet extends HttpServlet
@@ -126,7 +127,7 @@ public class ScribeServlet extends HttpServlet
 		System.out.println(widgetId);
 
 		// Get Widget
-		Widget widget = Widget.getWidget(Long.parseLong(widgetId));
+		Widget widget = WidgetUtil.getWidget(Long.parseLong(widgetId));
 		if (widget == null)
 		{
 		    System.out.println("Widget not found with " + widgetId);
