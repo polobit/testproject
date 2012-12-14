@@ -10,6 +10,12 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 
+/**
+ * <code>WidgetUtil</code> class provides static function to perform operations
+ * on widgets, such as fetching widgets for current user, returning default
+ * widgets, Fetches widget based on id/name
+ * 
+ */
 public class WidgetUtil
 {
     // Dao
@@ -30,6 +36,7 @@ public class WidgetUtil
 	Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class,
 		AgileUser.getCurrentAgileUser().id);
 
+	System.out.println(ofy.query(Widget.class).ancestor(userKey).list());
 	// Fetches list of widgets related to AgileUser key
 	return ofy.query(Widget.class).ancestor(userKey).list();
     }

@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.json.JSONObject;
 
 import com.agilecrm.ScribeServlet;
-import com.agilecrm.core.api.contacts.WidgetsAPI;
+import com.agilecrm.core.api.widgets.WidgetsAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.googlecode.objectify.Key;

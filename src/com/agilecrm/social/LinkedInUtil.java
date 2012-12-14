@@ -9,7 +9,7 @@ import java.util.Map;
 
 import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
-import com.agilecrm.core.api.contacts.WidgetsAPI;
+import com.agilecrm.core.api.widgets.WidgetsAPI;
 import com.agilecrm.widgets.Widget;
 import com.google.code.linkedinapi.client.LinkedInApiClient;
 import com.google.code.linkedinapi.client.LinkedInApiClientFactory;

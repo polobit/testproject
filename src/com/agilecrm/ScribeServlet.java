@@ -26,6 +26,22 @@ import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 
+/**
+ * <code>ScribeServlet</code> is used to create and configure a client to
+ * connect to Linked, Twitter, Gmail, Facebook etc, scribe.jar provides methods
+ * to configure a connection, as follows
+ * 
+ * <pre>
+ * OAuthService service = new ServiceBuilder().provider(LinkedInApi.class)
+ * 	.apiKey(YOUR_API_KEY).apiSecret(YOUR_API_SECRET).build();
+ * </pre>
+ * <p>
+ * providing the api keys and secret key given by the provider, scribe connects
+ * to Linkedin, Twitter. Token can be accessed from the the request parameters
+ * "oauth.service" and oauth.request_token
+ * </p>
+ * 
+ */
 @SuppressWarnings("serial")
 public class ScribeServlet extends HttpServlet
 {
@@ -34,33 +50,59 @@ public class ScribeServlet extends HttpServlet
     public static String SERVICE_TYPE_GMAIL = "gmail";
 
     // Get Service
+    /**
+     * Builds service using serviceBuilder based on type of service specified,
+     * which can be accessed to get Token
+     * 
+     * @param req
+     *            {@link HttpServletRequest}
+     * @param resp
+     *            {@link HttpServletResponse}
+     * @param serviceType
+     *            {@link String} Service type
+     *            (linkedin/Twitter/Google/Facebook..)
+     * @return {@link OAuthRequest}
+     */
     public static OAuthService getService(HttpServletRequest req,
 	    HttpServletResponse resp, String serviceType)
     {
+	// Gets callback url
 	String callback = req.getRequestURL().toString();
 
-	System.out.println(callback);
 	OAuthService service = null;
+
+	// If service is null or service type is LinkedIn service is built
 	if (serviceType == null
 		|| serviceType.equalsIgnoreCase(SERVICE_TYPE_LINKED_IN))
 	{
+	    // Creates a Service, by specifying API key, Secret key
 	    service = new ServiceBuilder().provider(LinkedInApi.class)
 		    .callback(callback).apiKey(Globals.LINKED_IN_API_KEY)
 		    .apiSecret(Globals.LINKED_IN_SECRET_KEY).build();
+
+	    // Gets session and sets attribute "oauth.service" to LinkedIn type
+	    // as specified by Scribe
 	    req.getSession().setAttribute("oauth.service",
 		    SERVICE_TYPE_LINKED_IN);
 	}
+
+	// If service is null or service type is Twitter service is built
 	else if (serviceType.equalsIgnoreCase(SERVICE_TYPE_TWITTER))
 
 	{
+	    // Creates a Service, by specifying API key, Secret key
 	    service = new ServiceBuilder().provider(TwitterApi.class)
 		    .callback(callback).apiKey(Globals.TWITTER_API_KEY)
 		    .apiSecret(Globals.TWITTER_SECRET_KEY).build();
+
+	    // Gets session and sets attribute "oauth.service" to Twitter type
+	    // as specified by Scribe
 	    req.getSession()
 		    .setAttribute("oauth.service", SERVICE_TYPE_TWITTER);
 	}
 	else
 	{
+	    // Creates a Service, by specifying API key, Secret key
 	    service = new ServiceBuilder()
 		    .provider(GoogleApi.class)
 		    .callback(callback)
@@ -69,6 +111,8 @@ public class ScribeServlet extends HttpServlet
 		    .scope("https://mail.google.com/ https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile")
 		    .build();
 
+	    // Gets session and sets attribute "oauth.service" to Gmail type
+	    // as specified by Scribe
 	    req.getSession().setAttribute("oauth.service", SERVICE_TYPE_GMAIL);
 
 	}
@@ -76,28 +120,43 @@ public class ScribeServlet extends HttpServlet
 	return service;
     }
 
-    // Save Token after it returns back
+    /**
+     * Saves token in widget. Tokens are fetched are set as request attributes,
+     * request attributes are read and tokens are saved in the widget, according
+     * to plugin_id in request attribute.
+     * 
+     * @param req
+     *            {@link HttpServletRequest}
+     * @param resp
+     *            {@link HttpServletResponse}
+     * @throws IOException
+     */
     public static void saveToken(HttpServletRequest req,
 	    HttpServletResponse resp) throws IOException
     {
 
+	// Token and verifier are read from request parameters
 	String oAuthToken = req.getParameter("oauth_token");
 	String oAuthVerifier = req.getParameter("oauth_verifier");
 
-	// Retrieve Token and Service Name from session
+	// Retrieves Token and Service Name from session
 	String serviceName = (String) req.getSession().getAttribute(
 		"oauth.service");
 	Token requestToken = (Token) req.getSession().getAttribute(
 		"oauth.request_token");
 
-	// Get Service
+	// Gets Service
 	OAuthService service = getService(req, resp, serviceName);
 
+	// Builds a verifier
 	Verifier verifier = new Verifier(oAuthVerifier);
 
+	// if request token in not null, new token is created using oAuthToken,
+	// which gets the token from the provider
 	if (requestToken != null)
 	{
 	    Token token = new Token(oAuthToken, requestToken.getSecret());
+
 	    Token accessToken = service.getAccessToken(token, verifier);
 
 	    System.out.println("Token " + accessToken.getToken());
@@ -111,9 +170,13 @@ public class ScribeServlet extends HttpServlet
 		return;
 	    }
 
+	    // Gets service name from session
 	    String serviceNameInSession = (String) req.getSession()
 		    .getAttribute("oauth.service");
 
+	    // If service name is Twitter of LinkedIn, widget is fetched by
+	    // plugin_id in session and widget is updated with new token key and
+	    // secret key
 	    if (serviceNameInSession.equalsIgnoreCase(SERVICE_TYPE_TWITTER)
 		    || serviceNameInSession
 			    .equalsIgnoreCase(SERVICE_TYPE_LINKED_IN))
@@ -121,26 +184,33 @@ public class ScribeServlet extends HttpServlet
 
 		System.out.println("Saving Twitter Prefs");
 
+		// Gets widget Id from the session
 		String widgetId = (String) req.getSession().getAttribute(
 			"plugin_id");
 
 		System.out.println(widgetId);
 
-		// Get Widget
+		// Gets widget based on the plugin_id from session
 		Widget widget = WidgetUtil.getWidget(Long.parseLong(widgetId));
+
+		// If widget is null returns, since no widget exists with id.
 		if (widget == null)
 		{
 		    System.out.println("Widget not found with " + widgetId);
 		    return;
 		}
 
-		// Save token, tokenSecret
+		// If widget exists with id given, access token and secret are
+		// added to prefs in widget
 		widget.addProperty("token", accessToken.getToken());
 		widget.addProperty("secret", accessToken.getSecret());
 
+		// Saves widget
 		widget.save();
 
 	    }
+
+	    // If Service type is Gmail
 	    else if (serviceNameInSession.equalsIgnoreCase(SERVICE_TYPE_GMAIL))
 	    {
 
@@ -189,6 +259,17 @@ public class ScribeServlet extends HttpServlet
     }
 
     // Set up OAuth
+    /**
+     * Reads service from the request, based on which it connects to respective
+     * Service providers. Calls getService method calls which connects with
+     * service providers and get Oauth tokens,
+     * 
+     * @param req
+     *            {@link HttpServletRequest}
+     * @param resp
+     *            {@link HttpServletResponse}
+     * @throws IOException
+     */
     public void setupOAuth(HttpServletRequest req, HttpServletResponse resp)
 	    throws IOException
     {
@@ -216,6 +297,13 @@ public class ScribeServlet extends HttpServlet
 	resp.sendRedirect(url);
     }
 
+    /**
+     * Process the get request to servlet request, request can be sent either
+     * from application client or from service provider (After connecting to
+     * provider and returned). If request parameters have "oauth_token" and
+     * "oauth_verifier" then request is from provider with token keys which are
+     * saved in widget.
+     */
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
 	    throws IOException
     {
@@ -226,12 +314,18 @@ public class ScribeServlet extends HttpServlet
 	String oAuthToken = req.getParameter("oauth_token");
 	String oAuthVerifier = req.getParameter("oauth_verifier");
 
+	/*
+	 * If aAuthToken and oAuthVerifier is not null i.e., request is from
+	 * service provider, tokens are saved
+	 */
 	if (oAuthToken != null && oAuthVerifier != null)
 	{
 	    saveToken(req, resp);
 	    return;
 	}
 
+	// If request is from application the setup, request is sent based in
+	// service type
 	setupOAuth(req, resp);
 	return;
 

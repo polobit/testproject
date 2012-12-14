@@ -14,7 +14,7 @@ import twitter4j.auth.AccessToken;
 import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
-import com.agilecrm.core.api.contacts.WidgetsAPI;
+import com.agilecrm.core.api.widgets.WidgetsAPI;
 import com.agilecrm.widgets.Widget;
 
 /**

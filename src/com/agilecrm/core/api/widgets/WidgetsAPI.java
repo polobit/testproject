@@ -1,4 +1,4 @@
-package com.agilecrm.core.api.contacts;
+package com.agilecrm.core.api.widgets;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ import com.thirdparty.Rapleaf;
  * <p>
  * It is called from client side for Adding a widget, Searching LinkedIn/
  * Twitter profiles, Rapleaf information. Also used to show available widgets,
- * saves the position of the saved widgets in contacts deatails page
+ * saves the position of the saved widgets in contacts details page
  * </p>
  * 
  */

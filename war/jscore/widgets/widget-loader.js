@@ -1,4 +1,3 @@
-// Load Widgets
 /**
  * Loads widgets on a contact, creates a collection view
  */
@@ -28,6 +27,7 @@ function loadWidgets(el, contact)
     {
         success: function ()
         {
+        	console.log(view.collection.toJSON())
 
             // Iterates through all the models (widgets) in the
             // collection, and scripts are loaded from the url in the
@@ -39,6 +39,8 @@ function loadWidgets(el, contact)
                 var url = model.get("url");
                 $.get(url, "script");
 
+                console.log(model.toJSON());
+                
                 // Sets the data element in the div
                 // We can retrieve this in get plugin prefs
                 $('#' + model.get('name'), el).data('model', model);
