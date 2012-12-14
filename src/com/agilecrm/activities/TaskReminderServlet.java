@@ -1,20 +1,21 @@
 package com.agilecrm.activities;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.agilecrm.activities.util.TaskUtil;
+import com.agilecrm.activities.deferred.TaskReminderDeferredTask;
 import com.agilecrm.core.DomainUser;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.util.Util;
 import com.google.appengine.api.NamespaceManager;
-import com.googlecode.objectify.Key;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 
 /**
  * <code>TaskReminder</code> class sends daily reminder (email) about the
@@ -40,36 +41,17 @@ public class TaskReminderServlet extends HttpServlet
     {
 	res.setContentType("text/plain;charset=UTF-8");
 
-	Set<String> domainsSet = Util.getAllNamespaces();
+	Set<String> domains = Util.getAllNamespaces();
 
-	for (String domain : domainsSet)
+	for (String domain : domains)
 	{
 
 	    NamespaceManager.set(domain);
 
-	    List<DomainUser> domainList = DomainUser.getUsers(domain);
-	    for (DomainUser domainUser : domainList)
-	    {
-		AgileUser agileUser = AgileUser
-			.getCurrentAgileUserFromDomainUser(domainUser.id);
-
-		if (agileUser != null)
-		{
-		    UserPrefs userPrefs = UserPrefs.getUserPrefs(agileUser);
-
-		    if (userPrefs.task_reminder)
-		    {
-			List<Task> taskList = TaskUtil.getPendingTasksToRemind(
-				1, new Key<AgileUser>(AgileUser.class,
-					agileUser.id));
-
-			if (taskList != null)
-			    Util.sendMail("test@example.com", "Ram",
-				    domainUser.email, "Task Reminder",
-				    "test@example.com", "html", null);
-		    }
-		}
-	    }
+	    TaskReminderDeferredTask taskReminderDeferredTask = new TaskReminderDeferredTask(
+		    domain);
+	    Queue queue = QueueFactory.getDefaultQueue();
+	    queue.add(TaskOptions.Builder.withPayload(taskReminderDeferredTask));
 	}
     }
 }

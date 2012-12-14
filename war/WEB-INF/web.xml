@@ -127,6 +127,16 @@
  </servlet-mapping>
 
 <servlet>
+ 	<servlet-name>Task Reminder</servlet-name>
+ 	<servlet-class>com.agilecrm.activities</servlet-class>
+ </servlet>
+ 
+ <servlet-mapping>
+ 	<servlet-name>Task Reminder</servlet-name>
+ 	<url-pattern>/taskreminder</url-pattern>
+ </servlet-mapping>
+
+<servlet>
   <servlet-name>ForgotDomain</servlet-name> 
   <jsp-file>/forgot-domain.jsp</jsp-file> 
   </servlet>

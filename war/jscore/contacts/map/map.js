@@ -15,26 +15,25 @@ function show_map(el) {
 	var contact = App_Contacts.contactDetailView.model.toJSON();
 	var address = getPropertyValue(contact.properties, "address");
 
-	if (address) {
-		address = JSON.parse(address);
+	// Return, if no address is found 
+	if (!address) 
+		return;
+	address = JSON.parse(address);
 
-		// If all the address fields are empty, just return.
-		if (!address.address && !address.city && !address.state
-				&& !address.country)
-			return;
-		else {
+	// If all the address fields are empty, just return.
+	if (!address.address && !address.city && !address.state
+			&& !address.country)
+		return;
 
-			// If google map is already loaded display the map else load the
-			// "google maps api"
-			try {
-				if (google.maps) {
-					display_google_map();
-				}
-			} catch (err) {
-
-				load_gmap_script();
-			}
+	// If google map is already loaded display the map else load the
+	// "google maps api"
+	try {
+		if (google.maps) {
+			display_google_map();
 		}
+	} catch (err) {
+
+		load_gmap_script();
 	}
 }
 
@@ -65,6 +64,7 @@ function display_google_map() {
 	// Gets the location (latitude and longitude) from the address
 	var geocoder = new google.maps.Geocoder();
 
+	// Latitude and longitude were not saved to the contact (chances to update the address)
 	geocoder.geocode({
 		'address' : '"' + address.address + ', ' + address.city + ', '
 				+ address.state + ', ' + address.country + '"'
