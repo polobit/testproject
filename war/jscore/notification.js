@@ -1,5 +1,5 @@
 /**
- * notify.js is a script file to show notifications.socket.io.js is used to emit data received from server.
+ * notification.js is a script file to show notifications.socket.io.js is used to emit data received from server.
  * Notification preferences are fetched for current user.Some jquery plugins are used to show pop-up messages.
  * 
  * @module Notifications
@@ -42,6 +42,7 @@ function registerForNotifications(prefs)
 		// Register for sockets
 		
 	}
+	
 	
 	// Register for sockets
 	registerForSockets();
@@ -121,8 +122,13 @@ function _setupSockets(api_key)
 	    object.type = parse_data.type;
 	    console.log(object);
 	    
+	    
 	    var html = getTemplate('notify-html',object);
-	    notify('success1', html, 'bottom-right', true);	
+	    if(notification_prefs.contact_deleted)
+	    	{
+	    	console.log("Notifies", notification_prefs.contact_deleted);
+	    	notify('success1', html, 'bottom-right', true);	
+	    	}
 	    
 	    /*console.log(parse_data);
 	    for(var i=0;i<parse_data.contacts.length;i++)

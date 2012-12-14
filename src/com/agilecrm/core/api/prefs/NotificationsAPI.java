@@ -76,6 +76,10 @@ public class NotificationsAPI
 	    notifications.contact_assigned_starred_clicked_link = notify.contact_assigned_starred_clicked_link;
 	    notifications.deal_created = notify.deal_created;
 	    notifications.deal_closed = notify.deal_closed;
+	    notifications.contact_created = notify.contact_created;
+	    notifications.contact_deleted = notify.contact_deleted;
+	    notifications.tag_created = notify.tag_created;
+	    notifications.tag_deleted = notify.tag_deleted;
 
 	    notifications.save();
 
