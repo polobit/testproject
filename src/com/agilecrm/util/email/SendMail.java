@@ -1,7 +1,5 @@
 package com.agilecrm.util.email;
 
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.map.MappingJsonFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
 
@@ -22,6 +20,11 @@ import com.thirdparty.SendGridEmail;
  */
 public class SendMail
 {
+
+    /**
+     * Template name followed by Email Subject of that template.E.g. For file
+     * new_user_invited_html.html, template name is new_user_invited
+     */
     public static final String NEW_USER_INVITED = "new_user_invited";
     public static final String NEW_USER_INVITED_SUBJECT = "New User Invitation";
 
@@ -76,16 +79,29 @@ public class SendMail
     public static final String CHARGEBACK_NOTICE = "chargeback_notice";
     public static final String CHARGEBACK_NOTICE_SUBJECT = "[Payment dispute] Agile CRM chargeback resolution steps";
 
+    /**
+     * From Name of email
+     */
     public static final String AGILE_FROM_NAME = "Agile CRM";
+    /**
+     * From Email-id of email
+     */
     public static final String AGILE_FROM_EMAIL = "noreply@agilecrm.com";
 
-    public static final String TEMPLATES_PATH = "war/misc/email/";
+    /**
+     * Templates path where template files exist
+     */
+    public static final String TEMPLATES_PATH = "misc/email/";
 
+    /**
+     * Html body template extension
+     */
     public static final String TEMPLATE_HTML_EXT = "_html.html";
+    /**
+     * Text(or Body) template extension
+     */
     public static final String TEMPLATE_BODY_EXT = "_body.html";
 
-    @SuppressWarnings("unused")
-    private static final JsonFactory JSON_FACTORY = new MappingJsonFactory();
 
     @SuppressWarnings("unused")
     private static Object String;
@@ -163,6 +179,8 @@ public class SendMail
 			new JSONObject(objectJson) };
 	    }
 
+	    // Merge JSONObjects as a single JSONObject in order to get all
+	    // values in a single object
 	    JSONObject mergedJSON = MustacheUtil.mergeJSONs(jsonObjectArray);
 
 	    System.out.println("mergedJson in sendemail" + mergedJSON);
