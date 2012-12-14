@@ -23,8 +23,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deferred.TagsDeferredTask;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
-import com.agilecrm.user.NotificationPrefs;
-import com.agilecrm.user.util.NotificationPrefsUtil;
+import com.agilecrm.user.util.ContactNotificationPrefsUtil;
 import com.agilecrm.workflows.triggers.util.ContactTriggerUtil;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -227,8 +226,8 @@ public class Contact extends Cursor
 	Contact contact = this;
 
 	// Execute notification when contact is deleted
-	NotificationPrefsUtil.executeNotification(
-		NotificationPrefs.Type.CONTACT_DELETED, this);
+	ContactNotificationPrefsUtil
+		.executeNotificationForDeleteContact(contact);
 
 	dao.delete(this);
 
@@ -259,6 +258,10 @@ public class Contact extends Cursor
 
 	// Execute trigger for contacts
 	ContactTriggerUtil.executeTriggerToContact(oldContact, this);
+
+	// Execute notification for contacts
+	ContactNotificationPrefsUtil.executeNotificationToContact(oldContact,
+		this);
 
 	// Enables to build "Document" search on current entity
 	AppengineSearch<Contact> search = new AppengineSearch<Contact>(

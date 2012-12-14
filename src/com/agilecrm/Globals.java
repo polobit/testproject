@@ -13,6 +13,9 @@ public class Globals
     public static String LOGIN = "/login";
     public static String CHOOSE_DOMAIN = "https://my.agilecrm.com/choose-domain";
 
+    // Push data into stats
+    public static String PUSH_STATS = "https://stats.agilecrm.com:90/push";
+
     // We store Namespace for GoogleApps in session
     public static final String GOOGLE_APP_SESSION_ID = "gapps_namespace";
 

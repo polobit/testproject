@@ -4,6 +4,7 @@ import java.net.URLEncoder;
 
 import org.json.simple.JSONObject;
 
+import com.agilecrm.Globals;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.user.NotificationPrefs.Type;
 import com.agilecrm.util.Util;
@@ -72,7 +73,7 @@ public class NotificationsDeferredTask implements DeferredTask
 
 	System.out.println("The json after converting" + objectJson);
 
-	url = "https://stats.agilecrm.com:90/push?custom="
+	url = Globals.PUSH_STATS + "?custom="
 		+ URLEncoder.encode(objectJson.toString()) + "&agile_id="
 		+ URLEncoder.encode(apiKey) + "&type="
 		+ URLEncoder.encode(type.toString());

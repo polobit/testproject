@@ -20,6 +20,7 @@ import com.agilecrm.core.DomainUser;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.util.DealNotificationPrefsUtil;
 import com.agilecrm.workflows.triggers.util.DealTriggerUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
@@ -306,10 +307,14 @@ public class Opportunity
 		this.related_contacts.add(new Key<Contact>(Contact.class, Long
 			.parseLong(contact_id)));
 	    }
+
+	    if (this.id == null)
+	    DealTriggerUtil.executeTriggerForNewDeal(this);
 	}
 
-	if (id == null)
-	    DealTriggerUtil.executeTriggerForNewDeal(this);
+	// Executes notification for new deal
+	if (this.id == null)
+	    DealNotificationPrefsUtil.executeNotificationForNewDeal(this);
 
 	this.contacts = null;
 

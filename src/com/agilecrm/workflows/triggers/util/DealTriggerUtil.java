@@ -50,7 +50,7 @@ public class DealTriggerUtil
      * @param OpportunityIds
      *            Opportunity Ids of deals that are selected for deletion
      */
-    public static void executeTriggerforDeleteDeal(JSONArray OpportunityIds)
+    public static void executeTriggerForDeleteDeal(JSONArray OpportunityIds)
     {
 	// Executes trigger when deal is deleted
 	if (OpportunityIds != null)

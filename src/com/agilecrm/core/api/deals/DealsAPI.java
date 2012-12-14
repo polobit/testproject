@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.user.util.DealNotificationPrefsUtil;
 import com.agilecrm.workflows.triggers.util.DealTriggerUtil;
 
 @Path("/api/opportunity")
@@ -119,7 +120,11 @@ public class DealsAPI
 	JSONArray opportunitiesJSONArray = new JSONArray(model_ids);
 
 	// Executes trigger when deal is deleted
-	DealTriggerUtil.executeTriggerforDeleteDeal(opportunitiesJSONArray);
+	DealTriggerUtil.executeTriggerForDeleteDeal(opportunitiesJSONArray);
+
+	// Executes notification when deal is deleted
+	DealNotificationPrefsUtil
+		.executeNotificationForDeleteDeal(opportunitiesJSONArray);
 
 	Opportunity.dao.deleteBulkByIds(opportunitiesJSONArray);
 
