@@ -127,13 +127,13 @@
  </servlet-mapping>
 
 <servlet>
- 	<servlet-name>Task Reminder</servlet-name>
- 	<servlet-class>com.agilecrm.activities</servlet-class>
+ 	<servlet-name>Task Remainder</servlet-name>
+ 	<servlet-class>com.agilecrm.activities.TaskRemainderServlet</servlet-class>
  </servlet>
  
  <servlet-mapping>
- 	<servlet-name>Task Reminder</servlet-name>
- 	<url-pattern>/taskreminder</url-pattern>
+ 	<servlet-name>Task Remainder</servlet-name>
+ 	<url-pattern>/taskremainder</url-pattern>
  </servlet-mapping>
 
 <servlet>

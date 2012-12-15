@@ -20,7 +20,7 @@ import com.googlecode.objectify.Key;
  * 
  */
 @SuppressWarnings("serial")
-public class TaskReminderDeferredTask implements DeferredTask
+public class TaskRemainderDeferredTask implements DeferredTask
 {
 
     /**
@@ -34,7 +34,7 @@ public class TaskReminderDeferredTask implements DeferredTask
      * @param domain
      *            name as string
      */
-    public TaskReminderDeferredTask(String domain)
+    public TaskRemainderDeferredTask(String domain)
     {
 	this.domain = domain;
     }

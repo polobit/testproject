@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.agilecrm.activities.deferred.TaskReminderDeferredTask;
+import com.agilecrm.activities.deferred.TaskRemainderDeferredTask;
 import com.agilecrm.core.DomainUser;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.UserPrefs;
@@ -34,7 +34,7 @@ import com.google.appengine.api.taskqueue.TaskOptions;
  * 
  */
 @SuppressWarnings("serial")
-public class TaskReminderServlet extends HttpServlet
+public class TaskRemainderServlet extends HttpServlet
 {
     public void service(HttpServletRequest req, HttpServletResponse res)
 	    throws IOException
@@ -48,7 +48,7 @@ public class TaskReminderServlet extends HttpServlet
 
 	    NamespaceManager.set(domain);
 
-	    TaskReminderDeferredTask taskReminderDeferredTask = new TaskReminderDeferredTask(
+	    TaskRemainderDeferredTask taskReminderDeferredTask = new TaskRemainderDeferredTask(
 		    domain);
 	    Queue queue = QueueFactory.getDefaultQueue();
 	    queue.add(TaskOptions.Builder.withPayload(taskReminderDeferredTask));
