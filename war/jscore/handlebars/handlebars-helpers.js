@@ -314,10 +314,10 @@ $(function() {
 	});
 
 	/**
-	 * Returns type value, by removing underscore and converting into
+	 * Returns trigger type, by removing underscore and converting into
 	 * lowercase, excluding first letter.
 	 */
-	Handlebars.registerHelper('if_type', function() {
+	Handlebars.registerHelper('if_trigger_type', function() {
 
 		var str = this.type.replace(/_/g, ' ');
 		var temp = str.toLowerCase();
@@ -325,6 +325,21 @@ $(function() {
 		return temp.charAt(0).toUpperCase() + temp.slice(1);
 
 	});
+	
+	/**
+	 * Returns notification type,by replacing 'is' with underscore and 
+	 * converting into lowercase,excluding first letter. 
+	 */
+	Handlebars.registerHelper('if_notification_type', function() {
+
+		var str = this.type.replace(/_/g, ' is ');
+		var temp = str.toLowerCase();
+
+		return temp.charAt(0).toUpperCase() + temp.slice(1);
+
+	});
+	
+	
 
 	/**
 	 * Displays all the properties of a contact in its detail view, excluding
