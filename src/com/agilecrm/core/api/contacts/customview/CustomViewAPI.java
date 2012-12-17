@@ -62,7 +62,6 @@ public class CustomViewAPI {
 
 	}
 
-	// Contact view Save Author: Yaswanth 08-10-2012
 	/**
 	 * PUT request, updates the {@link CustomView} object
 	 * 
@@ -99,7 +98,6 @@ public class CustomViewAPI {
 
 	}
 
-	// Bulk delete Contact Views by id Author: Yaswanth 11-08-2012
 	/**
 	 * Deletes bulk {@link CustomView} objects
 	 * 
