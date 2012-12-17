@@ -7,7 +7,18 @@
 var notification_prefs;
 var socket;
 
-// Download and Register
+/**
+ * Sets timeout for registering notifications.Waits for 2secs after page loads and 
+ * calls downloadAndRegisterForNotifications function
+ **/
+ $(function(){
+	setTimeout(downloadAndRegisterForNotifications, 2000);
+	
+	//fetchContactAndNotify('manohar@invox.com');
+	
+});
+ 
+ // Download and Register
 /**
  * Fetches notification preferences for current user 
  **/
@@ -21,7 +32,7 @@ function downloadAndRegisterForNotifications()
 	var model = new notification_model();
 	model.fetch({ success: function(data) {
 		
-		// Register For Notifications
+		// Notification Preferences with respect to current agile user 
 		notification_prefs = data.toJSON();	
 		console.log(notification_prefs);
 		
@@ -118,18 +129,25 @@ function _setupSockets(api_key)
 	    // Obtained parse_data is in stringifyJSON
 	    var object = JSON.parse(parse_data.object);
 	    
-	    /** Storing type into object json inorder to show type in notification**/
+	    /** Storing notification type into object json inorder to show type in notification object**/
 	    object.type = parse_data.type;
 	    console.log(object);
 	    
 	    
 	    var html = getTemplate('notify-html',object);
-	    if(notification_prefs.contact_deleted)
-	    	{
-	    	console.log("Notifies", notification_prefs.contact_deleted);
-	    	notify('success1', html, 'bottom-right', true);	
-	    	}
+	   
 	    
+	   $.each(notification_prefs, function(key, value)
+			 {
+		     
+		        if(key == object.type.toLowerCase())
+		        	{
+		        	if(notification_prefs[key])
+		        	notify('success1', html, 'bottom-right', true);
+		        	}
+		        	
+		   });
+	   
 	    /*console.log(parse_data);
 	    for(var i=0;i<parse_data.contacts.length;i++)
 	    {
@@ -203,16 +221,6 @@ function fetchContactAndNotify(email)
 			}).show();
 	});
 }
-
-/**
- * Set timeout for registering notifications
- **/
- $(function(){
-	setTimeout(downloadAndRegisterForNotifications, 2000);
-	
-	//fetchContactAndNotify('manohar@invox.com');
-	
-});
 
 
 /**
