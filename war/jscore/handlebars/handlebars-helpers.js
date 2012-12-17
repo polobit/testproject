@@ -294,7 +294,7 @@ $(function() {
 	});
 
 	/**
-	 * Helper funcction, which executes different templates (entity related)
+	 * Helper function, which executes different templates (entity related)
 	 * based on entity type. Here "this" reffers the current entity object.
 	 * (used in timeline)
 	 * 
@@ -314,10 +314,10 @@ $(function() {
 	});
 
 	/**
-	 * Returns trigger type, by removing underscore and converting into
+	 * Returns type value, by removing underscore and converting into
 	 * lowercase, excluding first letter.
 	 */
-	Handlebars.registerHelper('if_trigger_type', function() {
+	Handlebars.registerHelper('if_type', function() {
 
 		var str = this.type.replace(/_/g, ' ');
 		var temp = str.toLowerCase();

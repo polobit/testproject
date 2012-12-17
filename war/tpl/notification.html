@@ -12,18 +12,12 @@
 					<b>{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</b><br/>
 					{{getPropertyValue properties "title"}} {{getPropertyValue properties "company"}}		
 				  </span>
-                <br>
-                
+                <br/>
                  {{/each}}
-                   
-                <img  class='thumbnail' src="{{gravatarurl properties 50}}" width="50" height="50" style='display:inline'/>			
-				  <span style='padding-left:5px'>
-					<b>{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</b><br/>
-					{{getPropertyValue properties "title"}} {{getPropertyValue properties "company"}}		
-				  </span>
-				
+               
+                  <br/>
                     <span> 
-                    <b>{{type}}</b> 
+                    <b>{{#if_type}}{{type}}{{/if_type}}</b> 
                    </span>
              </div>  
 			</div>
