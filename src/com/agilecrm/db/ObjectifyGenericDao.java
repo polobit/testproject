@@ -21,10 +21,10 @@ import com.agilecrm.activities.Task;
 import com.agilecrm.company.Company;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactFilter;
-import com.agilecrm.contact.ContactView;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
+import com.agilecrm.contact.customview.CustomView;
 import com.agilecrm.core.DomainUser;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
@@ -60,7 +60,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
     {
 	ObjectifyService.register(Contact.class);
 	ObjectifyService.register(CustomFieldDef.class);
-	ObjectifyService.register(ContactView.class);
+	ObjectifyService.register(CustomView.class);
 	ObjectifyService.register(ContactFilter.class);
 
 	ObjectifyService.register(Company.class);

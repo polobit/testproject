@@ -138,14 +138,15 @@ public class ContactsAPI
 	contact.save();
 	return contact;
     }
-	/**
-	 * Accepts list of contacts, and save the list of contacts iterating through
-	 * each contact
-	 * 
-	 * @param contacts
-	 *            {@link List} of {@link Contact}
-	 * @return {@link List} of contacts
-	 */
+
+    /**
+     * Accepts list of contacts, and save the list of contacts iterating through
+     * each contact
+     * 
+     * @param contacts
+     *            {@link List} of {@link Contact}
+     * @return {@link List} of contacts
+     */
 
     @Path("multi/upload")
     @POST
@@ -158,18 +159,16 @@ public class ContactsAPI
 
 	return contacts;
     }
-	// File Upload
-	/**
-	 * Handle request sent using file uploader, reads the details from the
-	 * uploaded file are returns the data which is processed and stored in to
-	 * map, so fields can be shown at the client side using the map
-	 * 
-	 * @param request
-	 *            {@link HttpServletRequest}
-	 * @return {@link String}
-	 */
 
-    // File Upload
+    /**
+     * Handle request sent using file uploader, reads the details from the
+     * uploaded file are returns the data which is processed and stored in to
+     * map, so fields can be shown at the client side using the map
+     * 
+     * @param request
+     *            {@link HttpServletRequest}
+     * @return {@link String}
+     */
     @Path("upload")
     // @Consumes(MediaType.MULTIPART_FORM_DATA)
     @POST
@@ -177,20 +176,20 @@ public class ContactsAPI
     {
 	try
 	{
-			// Reads data from the request object
+	    // Reads data from the request object
 	    InputStream file = request.getInputStream();
-			// Converts the inputsream in to a string
+	    // Converts the inputsream in to a string
 
 	    String csv = IOUtils.toString(file);
 	    System.out.println(csv);
 
 	    JSONObject success = new JSONObject();
 	    success.put("success", true);
-			// Stores results in to a map
+	    // Stores results in to a map
 
 	    Hashtable result = Util.convertCSVToJSONArray2(csv, "Email");
 	    JSONArray csvArray = (JSONArray) result.get("result");
-			// returns CSV file as a json object with key "data"
+	    // returns CSV file as a json object with key "data"
 
 	    success.put("data", csvArray);
 
