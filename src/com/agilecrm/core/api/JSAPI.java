@@ -16,6 +16,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.sun.jersey.api.json.JSONWithPadding;
@@ -41,7 +42,7 @@ public class JSAPI
 
 	try
 	{
-	    Contact contact = Contact.searchContactByEmail(email);
+	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    System.out.println("Contact " + contact);
 	    if (contact == null)
 		contact = new Contact();
@@ -74,7 +75,7 @@ public class JSAPI
 
 	    // Get Contact count by email
 	    String email = contact.getContactFieldValue(Contact.EMAIL);
-	    int count = Contact.searchContactCountByEmail(email);
+	    int count = ContactUtil.searchContactCountByEmail(email);
 	    if (count != 0)
 	    {
 		System.out.println("Duplicate found for " + email);
@@ -112,7 +113,7 @@ public class JSAPI
 	    System.out.println(task);
 
 	    // Get Contact
-	    Contact contact = Contact.searchContactByEmail(email);
+	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
 		return null;
 	    task.contacts = new ArrayList<String>();
@@ -148,7 +149,7 @@ public class JSAPI
 	    System.out.println(note);
 
 	    // Get Contact
-	    Contact contact = Contact.searchContactByEmail(email);
+	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
 		return null;
 	    note.contacts = new ArrayList<String>();
@@ -184,7 +185,7 @@ public class JSAPI
 	    System.out.println(opportunity);
 
 	    // Get Contact
-	    Contact contact = Contact.searchContactByEmail(email);
+	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
 		return null;
 	    opportunity.contacts = new ArrayList<String>();
@@ -223,7 +224,7 @@ public class JSAPI
 
 	    String[] tagsArray = tags.split(",");
 
-	    Contact contact = Contact.searchContactByEmail(email);
+	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
 		return null;
 
@@ -260,7 +261,7 @@ public class JSAPI
 
 	    String[] tagsArray = tags.split(",");
 
-	    Contact contact = Contact.searchContactByEmail(email);
+	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
 		return null;
 
@@ -286,7 +287,7 @@ public class JSAPI
 	    @QueryParam("score") Integer score)
     {
 
-	Contact contact = Contact.searchContactByEmail(email);
+	Contact contact = ContactUtil.searchContactByEmail(email);
 	if (contact == null)
 	    return true;
 
@@ -304,7 +305,7 @@ public class JSAPI
     {
 
 	// Get Contact
-	Contact contact = Contact.searchContactByEmail(email);
+	Contact contact = ContactUtil.searchContactByEmail(email);
 	if (contact == null)
 	    return true;
 
@@ -320,7 +321,7 @@ public class JSAPI
     public Boolean subscribeContact(@PathParam("contact-id") Long contactId,
 	    @PathParam("workflow-id") Long workflowId)
     {
-	Contact contact = Contact.getContact(contactId);
+	Contact contact = ContactUtil.getContact(contactId);
 	if (contact == null)
 	{
 	    System.out.println("Null contact");

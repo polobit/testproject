@@ -17,6 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log;
 import com.campaignio.logger.util.LogUtil;
@@ -52,7 +53,7 @@ public class CampaignsAPI
     public void subscribeContact(@PathParam("contact-id") Long contactId,
 	    @PathParam("workflow-id") Long workflowId)
     {
-	Contact contact = Contact.getContact(contactId);
+	Contact contact = ContactUtil.getContact(contactId);
 	if (contact == null)
 	{
 	    System.out.println("Null contact");
@@ -174,7 +175,7 @@ public class CampaignsAPI
 	JSONArray contactsJSONArray = new JSONArray(contact_ids);
 
 	// Get contacts list
-	List<Contact> contacts_list = Contact
+	List<Contact> contacts_list = ContactUtil
 		.getContactsBulk(contactsJSONArray);
 	if (contacts_list.size() == 0)
 	{

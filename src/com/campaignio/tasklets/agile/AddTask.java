@@ -9,6 +9,7 @@ import com.agilecrm.activities.Task;
 import com.agilecrm.activities.Task.PriorityType;
 import com.agilecrm.activities.Task.Type;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.util.DBUtil;
 import com.agilecrm.util.Util;
@@ -100,8 +101,7 @@ public class AddTask extends TaskletAdapter
     {
 
 	// Get Task Values
-	String subject = getStringValue(nodeJSON, subscriberJSON, data,
-		SUBJECT);
+	String subject = getStringValue(nodeJSON, subscriberJSON, data, SUBJECT);
 	String category = getStringValue(nodeJSON, subscriberJSON, data,
 		CATEGORY);
 	String priority = getStringValue(nodeJSON, subscriberJSON, data,
@@ -132,14 +132,13 @@ public class AddTask extends TaskletAdapter
 
 	// Get Contact Id and Contact
 	String contactId = DBUtil.getId(subscriberJSON);
-	Contact contact = Contact.getContact(Long.parseLong(contactId));
+	Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
 
 	Task task = null;
 	AgileUser agileuser = null;
 
 	if (contact != null)
 	{
-
 
 	    try
 	    {
@@ -173,13 +172,14 @@ public class AddTask extends TaskletAdapter
 	}
 
 	// Creates log for AddTask
-	log(campaignJSON, subscriberJSON, "Task name : " + task.subject
- + "Task type : "
+	log(campaignJSON,
+		subscriberJSON,
+		"Task name : " + task.subject + "Task type : "
 			+ task.entity_type + " Due Date : "
 			+ Util.getCalendarString(dueDateInEpoch));
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		nodeJSON, null);
-	    }
-	}
+    }
+}

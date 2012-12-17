@@ -3,6 +3,7 @@ package com.campaignio.tasklets.agile;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.util.DBUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
@@ -55,7 +56,7 @@ public class Tags extends TaskletAdapter
 
 	// Get Contact Id and Contact
 	String contactId = DBUtil.getId(subscriberJSON);
-	Contact contact = Contact.getContact(Long.parseLong(contactId));
+	Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
 
 	if (contact != null)
 	{
