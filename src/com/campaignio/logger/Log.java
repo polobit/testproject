@@ -11,6 +11,7 @@ import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.json.JSONArray;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.googlecode.objectify.annotation.NotSaved;
 
@@ -105,7 +106,6 @@ public class Log
 	this.campaign_id = campaignId;
     }
 
-
     /**
      * Returns logs as an xmlelement
      * 
@@ -131,7 +131,8 @@ public class Log
     {
 	if (subscriber_id != null)
 	{
-	    Contact contact = Contact.getContact(Long.parseLong(subscriber_id));
+	    Contact contact = ContactUtil.getContact(Long
+		    .parseLong(subscriber_id));
 	    if (contact != null)
 		return contact.getContactFieldValue(Contact.FIRST_NAME) + " "
 			+ contact.getContactFieldValue(Contact.LAST_NAME);
@@ -175,6 +176,5 @@ public class Log
 
 	// System.out.println("Logs " + logs);
     }
-
 
 }

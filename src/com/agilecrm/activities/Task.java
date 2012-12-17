@@ -179,7 +179,7 @@ public class Task
 
     /**
      * While saving a task it contains list of contact keys, but while
-     * retrieving includes completes contact object.
+     * retrieving includes complete contact object.
      * 
      * @return List of contact objects
      */

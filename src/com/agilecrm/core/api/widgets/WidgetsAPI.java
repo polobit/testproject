@@ -13,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.social.LinkedInUtil;
 import com.agilecrm.social.SocialSearchResult;
 import com.agilecrm.social.TwitterUtil;
@@ -210,7 +211,7 @@ public class WidgetsAPI
 
 	    // Gets contact based on contact id, to search based on first and
 	    // last name of the contact
-	    Contact contact = Contact.getContact(contactId);
+	    Contact contact = ContactUtil.getContact(contactId);
 
 	    // Gets Widget based on id
 	    Widget widget = WidgetUtil.getWidget(pluginId);

@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.googlecode.objectify.Key;
 
@@ -45,7 +46,7 @@ public class Tag
 	for (String tagName : tags)
 	{
 	    // Check if there is any contact with this tag
-	    int count = Contact.getContactsCountForTag(tagName);
+	    int count = ContactUtil.getContactsCountForTag(tagName);
 	    if (count == 0)
 	    {
 		// Delete this tag

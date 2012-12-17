@@ -1,7 +1,6 @@
 package com.agilecrm.contact;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -13,10 +12,9 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.json.JSONArray;
-import org.json.JSONException;
 
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.core.DomainUser;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -29,14 +27,33 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Unindexed;
 import com.googlecode.objectify.condition.IfDefault;
 
-@SuppressWarnings("serial")
+/**
+ * <code>Contact</code> class stores the details of a contact (person or
+ * company). The properties (name, email, phone, address, custom fields and
+ * etc..) of a contact are stored in this class as {@link ContactField} objects,
+ * which is embedded to this class.
+ * <p>
+ * Each contact is added to search document, to make the contact available to
+ * search on any value of its properties.
+ * <p>
+ * <p>
+ * Prevents the duplicates, by verifying the email of a contact to be saved.
+ * While the contact is getting saved, current domain user key is also stored
+ * along with it, as its owner key
+ * </p>
+ * <p>
+ * This class has an annotation @Unindexed to make sure, only the variables with @Indexed
+ * annotation get saved into the database.
+ * </p>
+ * 
+ * @author
+ * 
+ */
 @XmlRootElement
 @Unindexed
 public class Contact extends Cursor
@@ -45,71 +62,92 @@ public class Contact extends Cursor
     @Id
     public Long id;
 
-    // Constants
+    /**
+     * Type of the contact (person or company)
+     * 
+     */
     public static enum Type
     {
 	PERSON, COMPANY
     };
 
-    // Contact Type - Person/Company
+    /**
+     * Specifies type of the contact. @Indexed indicates, this field will get
+     * saved into the database
+     */
     @Indexed
     public Type type = Type.PERSON;
 
-    // Created/Updated Time
+    /**
+     * Created time of the contact
+     */
     @Indexed
     public Long created_time = 0L;
 
+    /**
+     * Updated time of the contact
+     */
     @NotSaved(IfDefault.class)
     public Long updated_time = 0L;
 
-    // Owner
-    @NotSaved
-    public String lead_owner = null;
-
-    // Domain User key(owner)
+    /**
+     * Stores current domain user key as owner, if it is null should not save in
+     * database
+     */
     @NotSaved(IfDefault.class)
     @Indexed
     private Key<DomainUser> owner_key = null;
 
-    // Creator
+    /**
+     * Stores creator name, when the contact is created using its augmented
+     * constructor
+     */
     public String creator = "";
 
-    // Stars
+    /**
+     * Stores the star value of a contact
+     */
     @NotSaved(IfDefault.class)
     public Short star_value = 0;
 
-    // Lead score
+    /**
+     * Lead score of the contact
+     */
     @Indexed
     public Integer lead_score = 0;
 
-    // Dao
-    public static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(
-	    Contact.class);
-
-    // Search Tokens
-    @Indexed
-    private Set<String> search_tokens = null;
-
-    // Tags
+    /**
+     * Set of tags
+     */
     @Indexed
     public Set<String> tags = new HashSet<String>();
 
-    // Properties
-    // @XmlElementWrapper(name = "properties")
+    /**
+     * Stores properties, by embedding the class <code>ContactField</code>. Also
+     * includes in the response.
+     */
     @XmlElement(name = "properties")
     @NotSaved(IfDefault.class)
     @Embedded
     @Indexed
     public List<ContactField> properties = new ArrayList<ContactField>();
 
+    /**
+     * Widget properties (twitter, linkedIn etc..) of a contact
+     */
     @NotSaved(IfDefault.class)
     public String widget_properties = null;
 
-    // To make property field available for mail templates for reports(not
-    // saved)
+    /**
+     * Makes property field available for mail templates for reports(not saved)
+     */
     @NotSaved
     public Map<String, Object> contact_properties = null;
 
+    /**
+     * Stores the property names in final variables, for reading flexibility of
+     * the property values
+     */
     public static final String FIRST_NAME = "first_name";
     public static final String LAST_NAME = "last_name";
     public static final String EMAIL = "email";
@@ -118,11 +156,30 @@ public class Contact extends Cursor
     public static final String NAME = "name";
     public static final String URL = "url";
 
+    // Dao
+    public static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(
+	    Contact.class);
+
+    /**
+     * Default constructor
+     */
     public Contact()
     {
 
     }
 
+    /**
+     * Creates a contact with its type, creator name, tags and properties
+     * 
+     * @param type
+     *            type of the contact (person/company)
+     * @param creator
+     *            creator name of the contact
+     * @param tags
+     *            tags of a contact
+     * @param properties
+     *            properties (name, email, address and etc..) of a contact
+     */
     public Contact(Type type, String creator, Set<String> tags,
 	    List<ContactField> properties)
     {
@@ -135,19 +192,21 @@ public class Contact extends Cursor
 	System.out.println(this.properties);
     }
 
-    @Override
-    public String toString()
-    {
-	return "id: " + id + " created_time: " + created_time + " updated_time"
-		+ updated_time + " type: " + type + " creator:" + creator
-		+ " tags: " + tags + " properties: " + properties;
-    }
-
-    /* @XmlElement(name="properties2") */
+    /**
+     * Gets list of properties of a contact
+     * 
+     * @return properties as list
+     */
     public List<ContactField> getProperties()
     {
 	return properties;
     }
+
+    /**
+     * Includes tags in the response of a contact, with attribute name tags
+     * 
+     * @return Set of tags
+     */
 
     @XmlElement(name = "tags")
     public Set<String> getTags()
@@ -155,69 +214,149 @@ public class Contact extends Cursor
 	return tags;
     }
 
-    public static int getContactsCountForTag(String tag)
-    {
-	Objectify ofy = ObjectifyService.begin();
-	return ofy.query(Contact.class).filter("tags", tag).count();
-    }
-
-    public static List<Contact> getContactsForTag(String tag)
+    /**
+     * Saves (new) or updates (existing) a contact and executes trigger,
+     * notification and also adds to search document
+     */
+    public void save()
     {
 
-	Objectify ofy = ObjectifyService.begin();
-	return ofy.query(Contact.class).filter("tags", tag).list();
+	// Stores current contact id in to a temporary variable, to check
+	// whether contact is newly created or being edited.
+	Long id = this.id;
+
+	Contact oldContact = null;
+
+	if (id != null)
+	    oldContact = ContactUtil.getContact(id);
+
+	dao.put(this);
+
+	// Execute trigger for contacts
+	ContactTriggerUtil.executeTriggerToContact(oldContact, this);
+
+	// Execute notification for contacts
+	ContactNotificationPrefsUtil.executeNotificationToContact(oldContact,
+		this);
+
+	// Enables to build "Document" search on current entity
+	AppengineSearch<Contact> search = new AppengineSearch<Contact>(
+		Contact.class);
+
+	// If contact is new then add it to document else edit document
+	if (id == null)
+	{
+	    search.add(this);
+	    return;
+	}
+	search.edit(this);
     }
 
-    @PrePersist
-    private void PrePersist()
+    /**
+     * Gets a property (ContactField object) from list of properties based on
+     * given name
+     * 
+     * @param name
+     *            name of the property object (first_name, last_name, email and
+     *            etc..)
+     * @return {@link ContactField} object with the given name
+     */
+    public ContactField getContactField(String name)
+    {
+	for (ContactField property : properties)
+	{
+	    if (name.equalsIgnoreCase(property.name))
+		return property;
+	}
+	return null;
+    }
+
+    /**
+     * Gets value of a ContactField object, matched with the given name
+     * 
+     * @param name
+     *            name of the object to get its value
+     * @return value of the matched entity
+     */
+    public String getContactFieldValue(String name)
     {
 
-	// Set owner only if owner_key is null
-	if (owner_key == null)
+	ContactField contactField = getContactField(name);
+	if (contactField != null)
+	    return contactField.value;
+
+	return null;
+    }
+
+    /**
+     * Adds tag(s) to a contact
+     * 
+     * @param tags
+     */
+    public void addTags(String[] tags)
+    {
+	for (String tag : tags)
 	{
-	    // Set lead owner(current domain user)
-	    owner_key = new Key<DomainUser>(DomainUser.class, SessionManager
-		    .get().getDomainId());
-
+	    this.tags.add(tag);
 	}
-
-	// Store Created and Last Updated Time Check for id even if created
-	// time
-	// is 0(To check whether it is update request)
-	if (created_time == 0L && id == null)
-	{
-	    System.out.println("New Entity");
-	    created_time = System.currentTimeMillis() / 1000;
-
-	}
-	else
-	{
-	    updated_time = System.currentTimeMillis() / 1000;
-
-	}
-
-	/*
-	 * 
-	 * // Create Search Keyword Values Set<String> tokens = new
-	 * HashSet<String>(); for (ContactField contactField : properties) { if
-	 * (contactField.value != null)
-	 * tokens.add(contactField.value.replace(" ", "")); }
-	 * 
-	 * if (tokens.size() != 0) search_tokens = Util.getSearchTokens(tokens);
-	 * 
-	 * System.out.println(search_tokens);
-	 */
-	// Update Tags - Create a deferred task
-	TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(tags);
-
-	Queue queue = QueueFactory.getDefaultQueue();
-	queue.add(TaskOptions.Builder.withPayload(tagsDeferredTask));
-
-	// Get Lead Owner
+	this.save();
 
     }
 
-    // Delete Contact
+    /**
+     * Removes tag(s) from a contact, and also from tags database, if no more
+     * contacts with that tag
+     * 
+     * @param tags
+     */
+    public void removeTags(String[] tags)
+    {
+	Set<String> tagslist = new HashSet<String>();
+	for (String tag : tags)
+	{
+	    this.tags.remove(tag);
+	    tagslist.add(tag);
+	}
+
+	this.save();
+
+	// Delete tags from Tag class
+	Tag.deleteTags(tagslist);
+
+    }
+
+    /**
+     * Adds score to a contact
+     * 
+     * @param score
+     *            value of the score to be added
+     */
+    public void addScore(Integer score)
+    {
+
+	this.lead_score = this.lead_score + score;
+	this.save();
+
+    }
+
+    /**
+     * Subtracts score from a contact
+     * 
+     * @param score
+     *            value of the score to be subtracted
+     */
+    public void subtractScore(Integer score)
+    {
+
+	this.lead_score = this.lead_score - score;
+	this.save();
+
+    }
+
+    /**
+     * Deletes a contact from database and search document by executing a
+     * notification and deleting its related notes and tags.
+     */
     public void delete()
     {
 
@@ -242,208 +381,10 @@ public class Contact extends Cursor
 
     }
 
-    public void save()
-    {
-
-	// Stores current contact id in to a temporary variable, to check
-	// whether contact is newly created or being edited.
-	Long id = this.id;
-
-	Contact oldContact = null;
-
-	if (id != null)
-	    oldContact = Contact.getContact(id);
-
-	dao.put(this);
-
-	// Execute trigger for contacts
-	ContactTriggerUtil.executeTriggerToContact(oldContact, this);
-
-	// Execute notification for contacts
-	ContactNotificationPrefsUtil.executeNotificationToContact(oldContact,
-		this);
-
-	// Enables to build "Document" search on current entity
-	AppengineSearch<Contact> search = new AppengineSearch<Contact>(
-		Contact.class);
-
-	// If contact is new then add it to document else edit document
-	if (id == null)
-	{
-	    search.add(this);
-	    return;
-	}
-	search.edit(this);
-    }
-
-    public static Contact getContact(Long id)
-    {
-	try
-	{
-	    return dao.get(id);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-
-    public static List<Contact> getAllContacts()
-    {
-	return dao.fetchAll();
-    }
-
-    public static List<Contact> getAll(int max, String cursor)
-    {
-	return dao.fetchAll(max, cursor);
-    }
-
-    public static List<Contact> getAllCompanies(int max, String cursor)
-    {
-	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("type", Type.COMPANY);
-	return dao.fetchAll(max, cursor, searchMap);
-    }
-
-    public static List<Contact> getAllContacts(int max, String cursor)
-    {
-	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("type", Type.PERSON);
-	return dao.fetchAll(max, cursor, searchMap);
-    }
-
-    public ContactField getContactField(String name)
-    {
-	for (ContactField property : properties)
-	{
-	    if (name.equalsIgnoreCase(property.name))
-		return property;
-	}
-	return null;
-    }
-
-    public String getContactFieldValue(String name)
-    {
-
-	ContactField contactField = getContactField(name);
-	if (contactField != null)
-	    return contactField.value;
-
-	return null;
-    }
-
-    /*
-     * public static List<Contact> searchContacts(String keyword) { Objectify
-     * ofy = ObjectifyService.begin(); return
-     * ofy.query(Contact.class).filter("search_tokens", keyword).list(); }
-     */
-
-    // Get Contact by Email
-    public static Contact searchContactByEmail(String email)
-    {
-
-	if (email == null)
-	    return null;
-
-	// Look in the property Class
-	Objectify ofy = ObjectifyService.begin();
-	return ofy.query(Contact.class).filter("properties.name = ", EMAIL)
-		.filter("properties.value = ", email).get();
-    }
-
-    // Get Count of Contacts by Email - should be used in most of the cases
-    // unless the real entity is required
-    public static int searchContactCountByEmail(String email)
-    {
-	// Look in the property Class
-	Objectify ofy = ObjectifyService.begin();
-	return ofy.query(Contact.class).filter("properties.name = ", EMAIL)
-		.filter("properties.value = ", email).count();
-    }
-
-    // Add tags
-    public void addTags(String[] tags)
-    {
-	for (String tag : tags)
-	{
-	    this.tags.add(tag);
-	}
-	this.save();
-
-    }
-
-    // Remove tags
-    public void removeTags(String[] tags)
-    {
-	Set<String> tagslist = new HashSet<String>();
-	for (String tag : tags)
-	{
-	    this.tags.remove(tag);
-	    tagslist.add(tag);
-	}
-
-	this.save();
-
-	// Delete tags from Tag class
-	Tag.deleteTags(tagslist);
-
-    }
-
-    // Add score
-    public void addScore(Integer score)
-    {
-
-	this.lead_score = this.lead_score + score;
-	this.save();
-
-    }
-
-    // Subtract score
-    public void subtractScore(Integer score)
-    {
-
-	this.lead_score = this.lead_score - score;
-	this.save();
-
-    }
-
-    // Get contacts bulk
-    /**
-     * Gets list of contacts based on array of ids
-     * 
-     * @param contactsJSONArray
-     *            JSONArray object of contact ids
-     * @return List of contacts
-     */
-    public static List<Contact> getContactsBulk(JSONArray contactsJSONArray)
-    {
-	Objectify ofy = ObjectifyService.begin();
-
-	List<Key<Contact>> contactKeys = new ArrayList<Key<Contact>>();
-
-	for (int i = 0; i < contactsJSONArray.length(); i++)
-	{
-	    try
-	    {
-		contactKeys.add(new Key<Contact>(Contact.class, Long
-			.parseLong(contactsJSONArray.getString(i))));
-	    }
-	    catch (JSONException e)
-	    {
-		e.printStackTrace();
-	    }
-	}
-
-	List<Contact> contacts_list = new ArrayList<Contact>();
-	contacts_list.addAll(ofy.get(contactKeys).values());
-	return contacts_list;
-    }
-
-    // Change owner to contacts bulk
     /**
      * Creates owner key with the new owner id and changes owner key of the each
-     * contact in the bulk and saves the contact
+     * contact in the bulk and saves the contact. This method is not moved to
+     * util, because can not read owner_key from out side of this class
      * 
      * @param contactsJSONArray
      *            JSONArray object containing contact ids
@@ -453,7 +394,7 @@ public class Contact extends Cursor
     public static void changeOwnerToContactsBulk(JSONArray contactsJSONArray,
 	    String new_owner)
     {
-	List<Contact> contacts_list = Contact
+	List<Contact> contacts_list = ContactUtil
 		.getContactsBulk(contactsJSONArray);
 	if (contacts_list.size() == 0)
 	{
@@ -472,43 +413,12 @@ public class Contact extends Cursor
 	}
     }
 
-    // Add tags to contacts bulk
     /**
-     * Adds each tag in tags_array to each contact in contacts bulk and saves
-     * each contact
+     * While saving a contact it contains domain user key as owner, but while
+     * retrieving includes complete DomainUser object.
      * 
-     * @param contactsJSONArray
-     *            JSONArray object containing contact ids
-     * @param tags_array
-     *            array of tags
+     * @return {@link DomainUser} object
      */
-    public static void addTagsToContactsBulk(JSONArray contactsJSONArray,
-	    String[] tags_array)
-    {
-
-	List<Contact> contacts_list = Contact
-		.getContactsBulk(contactsJSONArray);
-
-	if (contacts_list.size() == 0)
-	{
-	    System.out.println("Null contact");
-	    return;
-	}
-
-	for (Contact contact : contacts_list)
-	{
-
-	    for (String tag : tags_array)
-	    {
-		contact.tags.add(tag);
-
-	    }
-
-	    contact.save();
-	}
-    }
-
-    @JsonIgnore
     @XmlElement(name = "domainUser")
     public DomainUser getDomainUser()
     {
@@ -529,5 +439,52 @@ public class Contact extends Cursor
 	}
 	return null;
 
+    }
+
+    /**
+     * Assigns values to owner_key, created time or updated time and runs
+     * deferred task for tags of a contact, before it is getting saved.
+     */
+    @PrePersist
+    private void PrePersist()
+    {
+
+	// Set owner, when only the owner_key is null
+	if (owner_key == null)
+	{
+	    // Set lead owner(current domain user)
+	    owner_key = new Key<DomainUser>(DomainUser.class, SessionManager
+		    .get().getDomainId());
+
+	}
+
+	// Store Created and Last Updated Time Check for id even if created
+	// time is 0(To check whether it is update request)
+	if (created_time == 0L && id == null)
+	{
+	    System.out.println("New Entity");
+	    created_time = System.currentTimeMillis() / 1000;
+
+	}
+	else
+	{
+	    updated_time = System.currentTimeMillis() / 1000;
+
+	}
+
+	// Update Tags - Create a deferred task
+	TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(tags);
+
+	Queue queue = QueueFactory.getDefaultQueue();
+	queue.add(TaskOptions.Builder.withPayload(tagsDeferredTask));
+
+    }
+
+    @Override
+    public String toString()
+    {
+	return "id: " + id + " created_time: " + created_time + " updated_time"
+		+ updated_time + " type: " + type + " creator:" + creator
+		+ " tags: " + tags + " properties: " + properties;
     }
 }

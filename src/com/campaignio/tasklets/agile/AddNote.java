@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.util.DBUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
@@ -47,7 +48,7 @@ public class AddNote extends TaskletAdapter
 
 	// Get Contact Id
 	String contactId = DBUtil.getId(subscriberJSON);
-	Contact contact = Contact.getContact(Long.parseLong(contactId));
+	Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
 
 	// Creates log for note
 	log(campaignJSON, subscriberJSON, "About : " + subject
@@ -58,8 +59,8 @@ public class AddNote extends TaskletAdapter
 	if (contact != null)
 	{
 
-	Note note = new Note(subject, description);
-	List<String> contacts = new ArrayList<String>();
+	    Note note = new Note(subject, description);
+	    List<String> contacts = new ArrayList<String>();
 
 	    contacts.add(contactId);
 	    note.contacts = contacts;

@@ -30,14 +30,40 @@ import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.util.Util;
 
+/**
+ * <code>ContactsAPI</code> includes REST calls to interact with {@link Contact}
+ * class to initiate Contact CRUD operations
+ * <p>
+ * It is called from client side to create, update, fetch and delete the
+ * contacts also to upload contacts from a file. It also interacts with
+ * {@link ContactUtil} class to fetch the data of Contact class from database.
+ * </p>
+ * 
+ * @author
+ * 
+ */
 @Path("/api/contacts")
 public class ContactsAPI
 {
 
-    // This method is called if TEXT_PLAIN is request
+    /**
+     * Fetches all the contacts (of type person). Activates infiniScroll, if
+     * no.of contacts are more than count and cursor is not null. This method is
+     * called if TEXT_PLAIN is request
+     * 
+     * If count is null fetches all the contacts at once
+     * 
+     * @param cursor
+     *            activates infiniScroll
+     * @param count
+     *            no.of contacts to be fetched at once (if more contacts are
+     *            there)
+     * @return list of contacts
+     */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Contact> getContacts(@QueryParam("cursor") String cursor,
@@ -47,13 +73,26 @@ public class ContactsAPI
 	{
 
 	    System.out.println("Fetching page by page");
-	    return Contact.getAllContacts(Integer.parseInt(count), cursor);
+	    return ContactUtil.getAllContacts(Integer.parseInt(count), cursor);
 	}
 
-	return Contact.getAllContacts();
+	return ContactUtil.getAllContacts();
     }
 
-    // This method is called if TEXT_PLAIN is request
+    /**
+     * Fetches all the contacts (of type company). Activates infiniScroll, if
+     * no.of contacts are more than count and cursor is not null. This method is
+     * called if TEXT_PLAIN is request
+     * 
+     * If count is null fetches all the contacts at once
+     * 
+     * @param cursor
+     *            activates infiniScroll
+     * @param count
+     *            no.of contacts to be fetched at once (if more contacts are
+     *            there)
+     * @return list of contacts
+     */
     @Path("/companies")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -64,12 +103,19 @@ public class ContactsAPI
 	{
 
 	    System.out.println("Fetching companies page by page");
-	    return Contact.getAllCompanies(Integer.parseInt(count), cursor);
+	    return ContactUtil.getAllCompanies(Integer.parseInt(count), cursor);
 	}
 
-	return Contact.getAllContacts();
+	return ContactUtil.getAllContacts();
     }
 
+    /**
+     * Saves new contact into database, by verifying the existence of duplicates
+     * with its email. If any duplicate is found throws web exception.
+     * 
+     * @param contact
+     * @return
+     */
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -77,7 +123,7 @@ public class ContactsAPI
     {
 
 	// Check if the email exists with the current email address
-	Contact currentContact = Contact.searchContactByEmail(contact
+	Contact currentContact = ContactUtil.searchContactByEmail(contact
 		.getContactFieldValue("EMAIL"));
 
 	// Throw non-200 if it exists
@@ -138,6 +184,13 @@ public class ContactsAPI
 	return null;
     }
 
+    /**
+     * Updates the existing contact
+     * 
+     * @param contact
+     *            {@link Contact} object to update
+     * @return updated contact
+     */
     @PUT
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -147,26 +200,44 @@ public class ContactsAPI
 	return contact;
     }
 
+    /**
+     * Deletes a contact from database based on its id
+     * 
+     * @param id
+     *            id of a contact to delete
+     */
     @Path("/{contact-id}")
     @DELETE
     public void deleteContact(@PathParam("contact-id") Long id)
     {
-	Contact contact = Contact.getContact(id);
+	Contact contact = ContactUtil.getContact(id);
 	if (contact != null)
 	    contact.delete();
     }
 
-    // This method is called if XML is request
+    /**
+     * Gets a contact based on its id. This method is called if XML is request
+     * 
+     * @param id
+     *            unique id of contact
+     * @return contact associated with the id
+     */
     @Path("/{contact-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Contact getContact(@PathParam("contact-id") Long id)
     {
-	Contact contact = Contact.getContact(id);
+	Contact contact = ContactUtil.getContact(id);
 	return contact;
     }
 
-    // Opportunities of contact in contact details
+    /**
+     * Opportunities (deals) of a contact, which is in contact detail view
+     * 
+     * @param id
+     *            id of contact
+     * @return list of deals related to a contact
+     */
     @Path("/{contact-id}/deals")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -176,7 +247,13 @@ public class ContactsAPI
 	return Opportunity.getCurrentContactDeals(id);
     }
 
-    // Notes of contact in contact details
+    /**
+     * Tasks of a contact, which is in contact detail view
+     * 
+     * @param id
+     *            contact id to get its related entities (tasks)
+     * @return list of tasks related to a contact
+     */
     @Path("/{contact-id}/tasks")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -193,7 +270,13 @@ public class ContactsAPI
 	}
     }
 
-    // Notes
+    /**
+     * Notes of a contact, which is in contact detail view
+     * 
+     * @param id
+     *            contact id to get its related entities (notes)
+     * @return list of notes related to a contact
+     */
     @Path("/{contact-id}/notes")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -210,7 +293,14 @@ public class ContactsAPI
 	}
     }
 
-    // Delete Notes
+    /**
+     * Deletes a note related to a contact
+     * 
+     * @param contactId
+     *            contact id, the note related to
+     * @param noteId
+     *            note id
+     */
     @Path("/{contact-id}/notes/{id}")
     @DELETE
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -227,16 +317,30 @@ public class ContactsAPI
 	}
     }
 
-    // This method is called if XML is request
+    /**
+     * Gets a contact based on its email
+     * 
+     * @param email
+     *            email of a contact to fetch it
+     * @return contact related to email
+     */
     @Path("/search/email/{email}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Contact searchContactByEmail(@PathParam("email") String email)
     {
-	return Contact.searchContactByEmail(email);
+	return ContactUtil.searchContactByEmail(email);
     }
 
-    // Searching contacts by emaillist
+    /**
+     * Searches contacts for each email, by iterating a list of emails. The
+     * request method is taken as POST to read form data
+     * 
+     * @param email_ids
+     *            to get their associated contacts
+     * @return list of contacts
+     * @throws JSONException
+     */
     @Path("/search/email")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -244,14 +348,14 @@ public class ContactsAPI
     public List<Contact> searchContactsByEmailList(
 	    @FormParam("email_ids") String email_ids) throws JSONException
     {
-	JSONArray contactsJSONArray = new JSONArray(email_ids);
+	JSONArray emailsJSONArray = new JSONArray(email_ids);
 	List<Contact> contacts_list = new ArrayList<Contact>();
-	for (int i = 0; i < contactsJSONArray.length(); i++)
+	for (int i = 0; i < emailsJSONArray.length(); i++)
 	{
 	    try
 	    {
-		Contact contactDetails = Contact
-			.searchContactByEmail(contactsJSONArray.getString(i));
+		Contact contactDetails = ContactUtil
+			.searchContactByEmail(emailsJSONArray.getString(i));
 		contacts_list.add(contactDetails);
 	    }
 	    catch (JSONException e)
@@ -280,7 +384,7 @@ public class ContactsAPI
 
 	for (int i = 0; i < contactsJSONArray.length(); i++)
 	{
-	    Contact contact = Contact.getContact(Long
+	    Contact contact = ContactUtil.getContact(Long
 		    .parseLong(contactsJSONArray.getString(i)));
 
 	    if (contact != null)
@@ -328,10 +432,9 @@ public class ContactsAPI
 
 	JSONArray contactsJSONArray = new JSONArray(contact_ids);
 	String tags_array[] = tagsString.split(",");
-	Contact.addTagsToContactsBulk(contactsJSONArray, tags_array);
+	ContactUtil.addTagsToContactsBulk(contactsJSONArray, tags_array);
     }
 
-    // Bulk operations - delete tasks bulk related to a contact
     /**
      * Deletes all selected tasks for a particular contact
      * 
@@ -350,7 +453,6 @@ public class ContactsAPI
 	Task.dao.deleteBulkByIds(tasksJSONArray);
     }
 
-    // Bulk operations - delete notes bulk related to a contact
     /**
      * Deletes all selected notes of a particular contact.
      * 
@@ -369,7 +471,6 @@ public class ContactsAPI
 	Note.dao.deleteBulkByIds(notesJSONArray);
     }
 
-    // Bulk operations - delete notes bulk related to a contact
     /**
      * Deletes all selected deals of a particular contact
      * 

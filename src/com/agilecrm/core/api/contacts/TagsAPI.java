@@ -17,6 +17,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Tag;
+import com.agilecrm.contact.util.ContactUtil;
 
 @Path("/api/tags")
 public class TagsAPI
@@ -48,7 +49,7 @@ public class TagsAPI
     {
 	try
 	{
-	    return Contact.getContactsForTag(tag);
+	    return ContactUtil.getContactsForTag(tag);
 	}
 	catch (Exception e)
 	{
@@ -95,7 +96,7 @@ public class TagsAPI
 	{
 	    for (Tag tag : tags)
 	    {
-		result.put(tag.tag, Contact.getContactsCountForTag(tag.tag));
+		result.put(tag.tag, ContactUtil.getContactsCountForTag(tag.tag));
 	    }
 	    return result.toString();
 	}
