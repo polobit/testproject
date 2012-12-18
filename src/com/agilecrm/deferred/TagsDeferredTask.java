@@ -2,7 +2,7 @@ package com.agilecrm.deferred;
 
 import java.util.Set;
 
-import com.agilecrm.contact.Tag;
+import com.agilecrm.contact.util.TagUtil;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
 public class TagsDeferredTask implements DeferredTask
@@ -18,6 +18,6 @@ public class TagsDeferredTask implements DeferredTask
     @Override
     public void run()
     {
-	Tag.updateTags(tags);
+	TagUtil.updateTags(tags);
     }
 }

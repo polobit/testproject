@@ -3,19 +3,27 @@ package com.agilecrm.contact;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.jdo.annotations.Embedded;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
+/**
+ * <code>Note</code> class stores notes with their related contacts. A contact
+ * can be described by adding some notes related to that contact.
+ * <p>
+ * Each note can be related to a single contact or multiple contacts.
+ * <code>Task</code> class provides methods to create, update delete and get the
+ * tasks.
+ * </p>
+ * 
+ * @author
+ * 
+ */
 @XmlRootElement
 public class Note
 {
@@ -23,21 +31,38 @@ public class Note
     @Id
     public Long id;
 
-    private List<Key<Contact>> related_contacts = new ArrayList<Key<Contact>>();
-
-    // Date
+    /**
+     * Created time of the note
+     */
     public Long created_time = 0L;
 
+    /**
+     * Subject of the note, if null is the value don't save in the database
+     */
     @NotSaved(IfDefault.class)
     public String subject = null;
 
+    /**
+     * Description of the note
+     */
     public String description;
 
-    // List of contact id's
+    /**
+     * List of contact ids, a note related to
+     * 
+     */
     @NotSaved(IfDefault.class)
-    @Embedded
     public List<String> contacts = null;
 
+    /**
+     * List of contact keys, a note related to
+     */
+    private List<Key<Contact>> related_contacts = new ArrayList<Key<Contact>>();
+
+    /**
+     * Separates note from bulk of other models at client side (For timeline
+     * purpose). And no queries run on this, so no need to save in the database.
+     */
     @NotSaved
     public String entity_type = "note";
 
@@ -45,11 +70,23 @@ public class Note
     public static ObjectifyGenericDao<Note> dao = new ObjectifyGenericDao<Note>(
 	    Note.class);
 
+    /**
+     * Default constructor
+     */
     public Note()
     {
 
     }
 
+    /**
+     * Creates a note object with subject and description
+     * 
+     * @param subject
+     *            subject of the note
+     * @param description
+     *            description of the note
+     * 
+     */
     public Note(String subject, String description)
     {
 	this.description = description;
@@ -57,6 +94,18 @@ public class Note
 	    this.subject = subject;
     }
 
+    /**
+     * Saves a note in the database
+     */
+    public void save()
+    {
+	dao.put(this);
+    }
+
+    /**
+     * Creates contact keys by iterating note related contact ids and assigns
+     * created time, if it is 0L.
+     */
     @PrePersist
     private void PrePersist()
     {
@@ -72,61 +121,11 @@ public class Note
 	    created_time = System.currentTimeMillis() / 1000;
     }
 
-    public static List<Note> getNotes(Long contactId) throws Exception
-    {
-	Objectify ofy = ObjectifyService.begin();
-	Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
-
-	return ofy.query(Note.class).filter("related_contacts = ", contactKey)
-		.list();
-    }
-
-    // Return note from contact id and Note Id
-    public static Note getNote(Long contactId, Long noteId)
-    {
-	Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
-
-	try
-	{
-	    return dao.get(new Key<Note>(contactKey, Note.class, noteId));
-	}
-	catch (EntityNotFoundException e)
-	{
-	    e.printStackTrace();
-
-	}
-
-	return null;
-    }
-
-    public static void deleteAllNotes(Long contactId)
-    {
-	Objectify ofy = ObjectifyService.begin();
-	Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
-
-	Iterable<Key<Note>> keys = ofy.query(Note.class).ancestor(contactKey)
-		.fetchKeys();
-	ofy.delete(keys);
-    }
-
-    public static void deleteNote(Long noteId, Long contactId)
-    {
-	Objectify ofy = ObjectifyService.begin();
-	Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
-	Key<Note> noteKey = new Key<Note>(contactKey, Note.class, noteId);
-	ofy.delete(noteKey);
-    }
-
     @Override
     public String toString()
     {
 	return "id: " + id + " created_time: " + created_time + " subj"
 		+ subject + " description: " + description;
-    }
-
-    public void save()
-    {
-	dao.put(this);
     }
 
 }
