@@ -1,5 +1,6 @@
 package com.agilecrm.contact;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -56,7 +57,7 @@ import com.googlecode.objectify.condition.IfDefault;
  */
 @XmlRootElement
 @Unindexed
-public class Contact extends Cursor
+public class Contact extends Cursor implements Serializable
 {
     // Key
     @Id
@@ -413,6 +414,11 @@ public class Contact extends Cursor
 	}
     }
 
+    public void setDomainUser(Key<DomainUser> owner_key)
+    {
+	this.owner_key = owner_key;
+    }
+
     /**
      * While saving a contact it contains domain user key as owner, but while
      * retrieving includes complete DomainUser object.
@@ -462,7 +468,7 @@ public class Contact extends Cursor
 	// time is 0(To check whether it is update request)
 	if (created_time == 0L && id == null)
 	{
-	    System.out.println("New Entity");
+
 	    created_time = System.currentTimeMillis() / 1000;
 
 	}

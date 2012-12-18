@@ -10,7 +10,15 @@ import org.json.JSONException;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
+import com.agilecrm.contact.deferred.ContactsDeferredTask;
+import com.agilecrm.core.DomainUser;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.util.CacheUtil;
+import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 
 public class ContactUtil
@@ -220,5 +228,103 @@ public class ContactUtil
 
 	    contact.save();
 	}
+    }
+
+    /**
+     * Saves list of contacts creating a deferred task. Splits List of contacts
+     * into sub lists of length 500, so deferred tasks run smoothly. DomainUser
+     * is fetched to save owner key in the each contact.
+     * 
+     * @param contacts
+     *            {@link List} of {@link Contact}
+     * @return {@link String} cacheKey(memcache key for list object)
+     */
+    public static String SaveBulkContacts(List<Contact> contacts)
+    {
+
+	// Gets the number of sublists can be made out of contacts list with
+	// size 500
+	int size = (contacts.size() / 500);
+
+	// Gets the remaining number of contact, other than multiple of 500
+	// i.e., 10345 it is split in to 500 * 20 sublists and other sublist
+	// with remaining 345 contacts
+	int remainingSize = size % 500;
+
+	// Gets the namespace, to save the contacts from the deferred task
+	String namespace = NamespaceManager.get();
+
+	String cacheKey = null;
+
+	// Generates key for current domain user, which is required to set in
+	// owner_key field in contact while saving.
+	Key<DomainUser> userKey = new Key<DomainUser>(DomainUser.class,
+		SessionManager.get().getDomainId());
+
+	// If contact list is not exactly in multiple of 500 then get the list
+	// of contacts and adds to creates a deferred task
+	if (remainingSize != 0)
+	{
+	    List<Contact> contactList = new ArrayList<Contact>(
+		    contacts.subList(size * 500, (size * 500) + remainingSize));
+
+	    cacheKey = createContactDeferredTask(contactList, namespace,
+		    userKey);
+	}
+
+	// Iterates for each 500 contacts and creates a deferred task on each
+	// subset
+	for (int i = 0; i < size; i++)
+	{
+	    // Creates a sublist of 500 contacts (0-500, 500-1000 etc..)
+	    List<Contact> contactList = new ArrayList<Contact>(
+		    contacts.subList(i * 500, (i + 1) * 500));
+
+	    // Calls to create a deferred task on contactsList
+	    cacheKey = createContactDeferredTask(contactList, namespace,
+		    userKey);
+	}
+
+	// Returns the cacheKey, which is set to last deferred task
+	return cacheKey;
+    }
+
+    /**
+     * Saves the contacts lists in to memcache using {@link CacheUtil} class,
+     * list is saved with key as hashcode of the list object.
+     * 
+     * @param contacts
+     *            {@link List} of contacts, to be saved in memcache
+     * @param namespace
+     *            namespace to save the contacts
+     * @param userKey
+     *            domain user key to set owner key for contacts
+     * 
+     * @return {@link String} returns key of the list object in memcache
+     * 
+     */
+    private static String createContactDeferredTask(List<Contact> contacts,
+	    String namespace, Key<DomainUser> userkey)
+    {
+	// Gets the hascode of the list, which is used as key to store contacts
+	// list in memcache
+	String cacheKey = "" + contacts.hashCode();
+
+	// Save contacts list in to memcache
+	CacheUtil.put(cacheKey, contacts);
+
+	// Creats a deferred task to save contacts, sends namespace to save
+	// contacts in it, sends domain user key to set owner od the contacts
+	ContactsDeferredTask saveDefered = new ContactsDeferredTask(
+		cacheKey, NamespaceManager.get(), userkey);
+
+	// Gets the default queue to add contact saving task
+	Queue queue = QueueFactory.getDefaultQueue();
+
+	// Add to task to query, with payload list of contacts
+	queue.add(TaskOptions.Builder.withPayload(saveDefered));
+
+	// Returns the key
+	return cacheKey;
     }
 }

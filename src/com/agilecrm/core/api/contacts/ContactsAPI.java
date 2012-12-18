@@ -32,6 +32,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.util.CacheUtil;
 import com.agilecrm.util.Util;
 
 /**
@@ -145,19 +146,42 @@ public class ContactsAPI
      * 
      * @param contacts
      *            {@link List} of {@link Contact}
-     * @return {@link List} of contacts
+     * @return {@link String}, key of the subcontact list set in memcache also
+     *         sent to deferred task i.e., if key is not present in the memcache
+     *         upload of contacts is present (key is removed after task is
+     *         completed)
      */
-
     @Path("multi/upload")
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<Contact> createMultipleContact(List<Contact> contacts)
+    public String createMultipleContact(List<Contact> contacts)
     {
-	for (Contact contact : contacts)
-	    contact.save();
+	// Calls save bulk contacts method on contactUtil will will create
+	// deferred tasks to save the contacts. returns the key of list in
+	// memcache
+	return ContactUtil.SaveBulkContacts(contacts);
+    }
 
-	return contacts;
+    /**
+     * Returns whether the key of contacts list still exists in the memcache
+     * i.e., task is not completed. This method will be called repeatedly with
+     * specified time interval from client to check whether the uploaded
+     * contacts are saved. If contacts are save then key is removed from the
+     * memcache then this method will return true if key is moved from the
+     * memcache.
+     * 
+     * @param key
+     *            {@link String}, key of the contact list saved in memcache
+     * @return {@link Boolean} returns true if key is removed from memcache and
+     *         vice-versa
+     */
+    @Path("/upload/status/{key}")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public boolean contactsUploadStatus(@PathParam("key") String key)
+    {
+	return !CacheUtil.isPresent(key);
     }
 
     /**
