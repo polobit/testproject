@@ -91,15 +91,11 @@ public class NotificationPrefsUtil
     {
 	String jsonData = null;
 
-	System.out.println("Executing notification type" + type
-		+ " and notification" + object);
-
 	// Converting object to json
 	try
 	{
 	    ObjectMapper mapper = new ObjectMapper();
 	    jsonData = mapper.writeValueAsString(object);
-	    System.out.println(jsonData);
 	}
 	catch (Exception e)
 	{

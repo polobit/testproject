@@ -71,17 +71,16 @@ public class NotificationsDeferredTask implements DeferredTask
 	objectJson.put("object", objectData);
 	objectJson.put("type", type.toString());
 
-	System.out.println("The json after converting" + objectJson);
+
 
 	url = Globals.PUSH_STATS + "?custom="
 		+ URLEncoder.encode(objectJson.toString()) + "&agile_id="
 		+ URLEncoder.encode(apiKey) + "&type="
 		+ URLEncoder.encode(type.toString());
 
-	System.out.println("encoded url " + url);
-
 	String output = Util.accessURL(url);
 	System.out.println(output);
+
     }
 }
 

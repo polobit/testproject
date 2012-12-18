@@ -124,26 +124,32 @@ function _setupSockets(api_key)
 	    console.log(data);
 	   
 	    var parse_data = JSON.parse(data);
-	    console.log(parse_data);
+	    
 	    
 	    // Obtained parse_data is in stringifyJSON
 	    var object = JSON.parse(parse_data.object);
 	    
 	    /** Storing notification type into object json inorder to show type in notification object**/
 	    object.type = parse_data.type;
-	    console.log(object);
+	   // console.log(object);
 	    
 	    
 	    var html = getTemplate('notify-html',object);
 	   
 	    
-	   $.each(notification_prefs, function(key, value)
+	   /** Checks notification preferences and compare with notification type.
+	    * If it is set true then show notification.
+	    * For e.g. If Deal created is true then notification when 'deal is created' is shown.
+	    **/
+	    $.each(notification_prefs, function(key, value)
 			 {
 		     
 		        if(key == object.type.toLowerCase())
 		        	{
+		        	
 		        	if(notification_prefs[key])
 		        	notify('success1', html, 'bottom-right', true);
+		        	
 		        	}
 		        	
 		   });
