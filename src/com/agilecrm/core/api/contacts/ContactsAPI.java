@@ -31,6 +31,7 @@ import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.util.Util;
 
@@ -303,7 +304,7 @@ public class ContactsAPI
     {
 	try
 	{
-	    return Note.getNotes(id);
+	    return NoteUtil.getNotes(id);
 	}
 	catch (Exception e)
 	{
@@ -328,7 +329,7 @@ public class ContactsAPI
     {
 	try
 	{
-	    Note.deleteNote(noteId, contactId);
+	    NoteUtil.deleteNote(noteId, contactId);
 	}
 	catch (Exception e)
 	{

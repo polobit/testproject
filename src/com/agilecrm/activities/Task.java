@@ -3,7 +3,6 @@ package com.agilecrm.activities;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.jdo.annotations.Embedded;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
@@ -98,7 +97,6 @@ public class Task
      * List of contact ids related to a task
      */
     @NotSaved(IfDefault.class)
-    @Embedded
     public List<String> contacts = null;
 
     /**

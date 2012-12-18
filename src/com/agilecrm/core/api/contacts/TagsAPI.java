@@ -18,20 +18,38 @@ import org.json.JSONObject;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.contact.util.TagUtil;
 
+/**
+ * <code>TagsAPI</code> includes REST calls to interact with {@link Tag} class
+ * to initiate Tag CRUD operations and {@link Contact} class to get contacts
+ * with particular tags.
+ * <p>
+ * It is called from client side to create, fetch and delete the notes. It also
+ * interacts with {@link TagUtil} class to save, fetch and delete the data of
+ * Tag class from database and also with {@link ContactUtil} class to get tag
+ * related contacts.
+ * </p>
+ * 
+ * @author
+ * 
+ */
 @Path("/api/tags")
 public class TagsAPI
 {
 
-    // Tags
-    // Notes
+    /**
+     * Fetches all the tags from database and returns as list.
+     * 
+     * @return list of tags
+     */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Tag> getTags()
     {
 	try
 	{
-	    return Tag.getTags();
+	    return TagUtil.getTags();
 	}
 	catch (Exception e)
 	{
@@ -40,8 +58,14 @@ public class TagsAPI
 	}
     }
 
-    // Tags
-    // Notes
+    /**
+     * Gets all the contacts which are associated with the given tag and returns
+     * as list
+     * 
+     * @param tag
+     *            name of the tag
+     * @return list of tags
+     */
     @Path("{tag}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -58,13 +82,19 @@ public class TagsAPI
 	}
     }
 
-    // Remote tags
+    /**
+     * Fetches all the tags and iterates the list to put each tag in a json
+     * object (key, value pairs). Here tag name is taken as both key and value,
+     * for the purpose of contact filters.
+     * 
+     * @return tags JSONObject as string
+     */
     @Path("filter-tags")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public String getTagsTOFilterContacts()
     {
-	List<Tag> tags = Tag.getTags();
+	List<Tag> tags = TagUtil.getTags();
 	JSONObject result = new JSONObject();
 
 	// Iterate
@@ -82,13 +112,19 @@ public class TagsAPI
 	}
     }
 
-    // Stats
+    /**
+     * Returns the statistics of tags and contacts (i.e no.of contacts
+     * associated with each tag) as json object (tag name as key and no.of
+     * contacts with that tag as value)
+     * 
+     * @return JSONObject as string
+     */
     @Path("stats")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public String getTagsStats()
     {
-	List<Tag> tags = Tag.getTags();
+	List<Tag> tags = TagUtil.getTags();
 	JSONObject result = new JSONObject();
 
 	// Iterate
@@ -106,6 +142,12 @@ public class TagsAPI
 	}
     }
 
+    /**
+     * Creates new tags in tags database
+     * 
+     * @param tags
+     *            tags string read as path parameter
+     */
     @Path("{tags}")
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -121,9 +163,15 @@ public class TagsAPI
 	    tagsSet.add(tagsArray[index]);
 	}
 	// Update Tags - Create a deferred task
-	Tag.updateTags(tagsSet);
+	TagUtil.updateTags(tagsSet);
     }
 
+    /**
+     * Deletes a tag from database, based on its id (tag name)
+     * 
+     * @param tag
+     *            name (id) of the tag to be deleted
+     */
     @Path("{tag}")
     @DELETE
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -131,7 +179,7 @@ public class TagsAPI
     {
 	Set<String> tags = new HashSet<String>();
 	tags.add(tag);
-	Tag.deleteTags(tags);
+	TagUtil.deleteTags(tags);
     }
 
 }

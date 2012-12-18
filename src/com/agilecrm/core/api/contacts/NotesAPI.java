@@ -7,16 +7,35 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.util.NoteUtil;
 
+/**
+ * <code>NotesAPI</code> includes REST calls to interact with {@link Note} class
+ * to initiate Note Create, Read and Delete operations.
+ * <p>
+ * It is called from client side to create, update, fetch and delete the notes.
+ * It also interacts with {@link NoteUtil} class to fetch the data of Note class
+ * from database.
+ * </p>
+ * 
+ * @author
+ * 
+ */
 @Path("/api/notes")
 public class NotesAPI
 {
 
-    // Note related to contact
+    /**
+     * Creates a note entity and saves it in database.
+     * 
+     * @param note
+     *            Note entity to save
+     * @return saved note object
+     */
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Note saceNote(Note note)
+    public Note saveNote(Note note)
     {
 	note.save();
 	return note;

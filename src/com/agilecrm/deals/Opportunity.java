@@ -7,7 +7,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.jdo.annotations.Embedded;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
@@ -71,7 +70,6 @@ public class Opportunity
     private Key<AgileUser> agileUser = null;
 
     @NotSaved(IfDefault.class)
-    @Embedded
     public List<String> contacts = null;
 
     @NotSaved
@@ -309,7 +307,7 @@ public class Opportunity
 	    }
 
 	    if (this.id == null)
-	    DealTriggerUtil.executeTriggerForNewDeal(this);
+		DealTriggerUtil.executeTriggerForNewDeal(this);
 	}
 
 	// Executes notification for new deal

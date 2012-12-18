@@ -183,7 +183,7 @@ var ContactsRouter = Backbone.Router.extend({
                 
                 show_map(el);
                 
-                fillOwners(el, contact.toJSON());
+                fill_owners(el, contact.toJSON());
                }
         });
         
