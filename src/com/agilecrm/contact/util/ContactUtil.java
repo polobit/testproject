@@ -239,7 +239,7 @@ public class ContactUtil
      *            {@link List} of {@link Contact}
      * @return {@link String} cacheKey(memcache key for list object)
      */
-    public static String SaveBulkContacts(List<Contact> contacts)
+    public static List<String> SaveBulkContacts(List<Contact> contacts)
     {
 
 	// Gets the number of sublists can be made out of contacts list with
@@ -249,7 +249,9 @@ public class ContactUtil
 	// Gets the remaining number of contact, other than multiple of 500
 	// i.e., 10345 it is split in to 500 * 20 sublists and other sublist
 	// with remaining 345 contacts
-	int remainingSize = size % 500;
+	int remainingSize = contacts.size() % 500;
+
+	List<String> cacheKeys = new ArrayList();
 
 	// Gets the namespace, to save the contacts from the deferred task
 	String namespace = NamespaceManager.get();
@@ -263,13 +265,15 @@ public class ContactUtil
 
 	// If contact list is not exactly in multiple of 500 then get the list
 	// of contacts and adds to creates a deferred task
-	if (remainingSize != 0)
+	if (remainingSize > 0)
 	{
 	    List<Contact> contactList = new ArrayList<Contact>(
 		    contacts.subList(size * 500, (size * 500) + remainingSize));
 
 	    cacheKey = createContactDeferredTask(contactList, namespace,
 		    userKey);
+
+	    cacheKeys.add(cacheKey);
 	}
 
 	// Iterates for each 500 contacts and creates a deferred task on each
@@ -283,10 +287,12 @@ public class ContactUtil
 	    // Calls to create a deferred task on contactsList
 	    cacheKey = createContactDeferredTask(contactList, namespace,
 		    userKey);
+
+	    cacheKeys.add(cacheKey);
 	}
 
 	// Returns the cacheKey, which is set to last deferred task
-	return cacheKey;
+	return cacheKeys;
     }
 
     /**
@@ -315,8 +321,8 @@ public class ContactUtil
 
 	// Creats a deferred task to save contacts, sends namespace to save
 	// contacts in it, sends domain user key to set owner od the contacts
-	ContactsDeferredTask saveDefered = new ContactsDeferredTask(
-		cacheKey, NamespaceManager.get(), userkey);
+	ContactsDeferredTask saveDefered = new ContactsDeferredTask(cacheKey,
+		NamespaceManager.get(), userkey);
 
 	// Gets the default queue to add contact saving task
 	Queue queue = QueueFactory.getDefaultQueue();

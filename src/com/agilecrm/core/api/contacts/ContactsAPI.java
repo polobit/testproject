@@ -155,7 +155,7 @@ public class ContactsAPI
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public String createMultipleContact(List<Contact> contacts)
+    public List<String> createMultipleContact(List<Contact> contacts)
     {
 	// Calls save bulk contacts method on contactUtil will will create
 	// deferred tasks to save the contacts. returns the key of list in
@@ -176,12 +176,31 @@ public class ContactsAPI
      * @return {@link Boolean} returns true if key is removed from memcache and
      *         vice-versa
      */
-    @Path("/upload/status/{key}")
-    @GET
+    @Path("/upload/status")
+    @POST
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public boolean contactsUploadStatus(@PathParam("key") String key)
+    public boolean contactsUploadStatus(
+	    @FormParam("memcache_keys") String memcache_keys)
     {
-	return !CacheUtil.isPresent(key);
+
+	try
+	{
+	    JSONArray keys = new JSONArray(memcache_keys);
+
+	    for (int i = 0; i < keys.length(); i++)
+	    {
+		String key = keys.get(i).toString();
+		if (CacheUtil.isPresent(key))
+		    return false;
+
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return false;
+	}
+	return true;
     }
 
     /**

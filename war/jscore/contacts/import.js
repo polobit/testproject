@@ -30,12 +30,11 @@ function fileUploadInit() {
  * 
  * @param key
  */
-function verifyUploadStatus(key) {
-
+function verifyUploadStatus(keys) {
 	$.ajax({
-		type : 'GET',
-		url : '/core/api/contacts/upload/status/' + key,
-		contentType : "application/json; charset=utf-8",
+		type : 'POST',
+		url : '/core/api/contacts/upload/status',
+		data : keys,
 		success : function(data) {
 			
 			// If response data is true then navigate to contact, 
@@ -52,7 +51,7 @@ function verifyUploadStatus(key) {
 			// If data is not true, uploaded contacts are not saved yet,
 			// so calls to send request after 15 seconds
 			setTimeout(function() {
-				verifyUploadStatus(key);
+				verifyUploadStatus(keys);
 			}, 15000);
 		}
 	});
@@ -199,9 +198,11 @@ $(function() {
 							contentType : "application/json; charset=utf-8",
 							success : function(data) {
 
+								var json = {};
+								json.memcache_keys = JSON.stringify(data);
 								// Calls vefiryUploadStatus with data returned
 								// from the url i.e., key of the memcache
-								verifyUploadStatus(data);
+								verifyUploadStatus(json);
 
 								// console.log(data);
 								// App_Contacts.contactsListView.collection.add(data.contact);
