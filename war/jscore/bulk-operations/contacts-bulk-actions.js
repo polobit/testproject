@@ -205,7 +205,7 @@ $(function(){
 		$('body').live('fill_emails', function(event){
 
 			// Populate from address and templates
-			populateSendEmailDetails();
+			populate_send_email_details();
 			
 			$("#emailForm").find( 'input[name="to"]' ).val(email_array);
 		

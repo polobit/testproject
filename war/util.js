@@ -10,7 +10,7 @@ function isValidField(id) {
     return !isNotValid(value);
 }
 
-function propertyJSON(name, id, type) {
+function property_JSON(name, id, type) {
     var json = {};
 
     if (type == undefined) json.type = "SYSTEM";

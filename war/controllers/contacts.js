@@ -165,7 +165,7 @@ var ContactsRouter = Backbone.Router.extend({
         
         // If contact is of type company just edit it.
         if(contact.get('type') == 'COMPANY'){
-        	deserializeContact(contact.toJSON(), 'continue-company');
+        	deserialize_contact(contact.toJSON(), 'continue-company');
         	return;
         }
 
@@ -245,7 +245,7 @@ var ContactsRouter = Backbone.Router.extend({
 
    	 	// Contact Edit - take him to continue-contact form
     	add_custom_fields_to_form(contact, function(contact){
-    		deserializeContact(contact, 'continue-contact');
+    		deserialize_contact(contact, 'continue-contact');
     	});
     },
     
@@ -273,7 +273,7 @@ var ContactsRouter = Backbone.Router.extend({
         contactDuplicate.save(json,{
         	success: function(data)
         	{
-				deserializeContact(data.toJSON(), 'continue-contact');
+				deserialize_contact(data.toJSON(), 'continue-contact');
         	}
         });
     },
@@ -283,7 +283,7 @@ var ContactsRouter = Backbone.Router.extend({
 
     continueCompany: function () {
        // $('#content').html(getTemplate('continue-company', {}));
-    	var model = serializeAndSaveContinueContact(undefined, 'companyForm', 'companyModal', true, false);
+    	var model = serialize_and_save_continue_contact(undefined, 'companyForm', 'companyModal', true, false);
     },
     importContacts: function () {
         $('#content').html(getTemplate("import-contacts", {}));
@@ -394,7 +394,7 @@ var ContactsRouter = Backbone.Router.extend({
             postRenderCallback: function(el) {
 
             	// Populate from address and templates
-            	populateSendEmailDetails(el);
+            	populate_send_email_details(el);
             }
         });
     	$("#content").html(sendEmailView.render().el);

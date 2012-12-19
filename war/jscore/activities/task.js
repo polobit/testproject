@@ -193,7 +193,7 @@ function save_task(formId, modalId, isUpdate) {
 
 						// Activate timeline in contact detail tab and tab
 						// content
-						activateTimelineTab();
+						activate_timeline_tab();
 
 						$('#timeline').isotope('insert',
 								$(getTemplate("timeline", data.toJSON())));
