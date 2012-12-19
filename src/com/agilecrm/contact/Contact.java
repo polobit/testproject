@@ -16,6 +16,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.json.JSONArray;
 
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.contact.util.NoteUtil;
+import com.agilecrm.contact.util.TagUtil;
 import com.agilecrm.core.DomainUser;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -322,7 +324,7 @@ public class Contact extends Cursor implements Serializable
 	this.save();
 
 	// Delete tags from Tag class
-	Tag.deleteTags(tagslist);
+	TagUtil.deleteTags(tagslist);
 
     }
 
@@ -375,10 +377,10 @@ public class Contact extends Cursor implements Serializable
 		.toString());
 
 	// Delete Notes
-	Note.deleteAllNotes(id);
+	NoteUtil.deleteAllNotes(id);
 
 	// Delete Tags
-	Tag.deleteTags(tags);
+	TagUtil.deleteTags(tags);
 
     }
 
