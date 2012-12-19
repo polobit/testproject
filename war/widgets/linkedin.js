@@ -13,7 +13,7 @@ $(function () {
     // Gets plugin id from plugin object, fetched using script API
     var plugin_id = agile_crm_get_plugin(LINKEDIN_PLUGIN_NAME).id;
 
-    // Gets Plugin Prefs, required to show setup button of matching profiles
+    // Gets Plugin Prefs, required to check whether to show setup button or matching profiles
     var plugin_prefs = agile_crm_get_plugin_prefs(LINKEDIN_PLUGIN_NAME);
 
     // If not found - considering first time usage of widget, setupLinkedinOAuth
