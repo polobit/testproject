@@ -1,0 +1,23 @@
+<script id="browsing-notification-html-template" type="text/html">
+
+<div>
+	<div class="popover" style='display:inline;position:relative;color:#333'>
+            <h3 class="popover-title">Notification</h3>
+            
+          <div class="popover-content">
+			<div>
+                <img  class='thumbnail' src="{{gravatarurl properties 50}}" width="50" height="50" style='display:inline'/>			
+				 <div style='height:auto;display:inline-block;vertical-align:-23px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;padding:5px'>
+					<b>{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</b><br/>
+					{{getPropertyValue properties "title"}} <br/> {{getPropertyValue properties "company"}}		
+				  </div>
+                <br/>
+                    <span> 
+                    <b>Browsing.....</b> 
+                   </span>
+             </div>  
+			</div>
+   </div>
+</div>
+
+</script>

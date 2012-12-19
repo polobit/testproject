@@ -112,6 +112,7 @@ function _setupSockets(api_key)
 		console.log('browsing');
 	    console.log(data);
 	    
+	    
 	    // Get his email address
 	    //var email = 'manohar@invox.com';
 	    fetchContactAndNotify(data.email);
@@ -131,7 +132,7 @@ function _setupSockets(api_key)
 	    
 	    /** Storing notification type into object json inorder to show type in notification object**/
 	    object.type = parse_data.type;
-	   // console.log(object);
+	    console.log(object);
 	    
 	    
 	    var html = getTemplate('notify-html',object);
@@ -185,18 +186,33 @@ function fetchContactAndNotify(email)
 	var model = new contact_model();
 	model.fetch({ success: function(data) 
 		{
-			console.log(data);
-			console.log(data.toJSON());
+			//console.log(data);
+			//console.log(data.toJSON());
 			
 			var id = data.id;
 			if(!id)
 				return;
 			
-		var html = getTemplate('notify-html', data.toJSON());
+	    
+		var html = getTemplate('browsing-notification-html', data.toJSON());
 		
-		  // Show picture, name, title, company
-		//JSON.stringify(data.toJSON())
-	    notify('success1', html, 'bottom-right', true);	
+		// Notification for any contact
+		if(notification_prefs.contact_any_browsing)
+			{
+			notification_prefs.contact_assigned_browsing = false;
+			notification_prefs.contact_assigned_starred_browsing = false;
+			
+			// Show picture, name, title, company
+			// JSON.stringify(data.toJSON())
+		    notify('success1', html, 'bottom-right', true);	
+		     }
+		
+		// Notification for starred contact
+		   if(notification_prefs.contact_assigned_starred_browsing && (data.toJSON().star_value) != 0)
+			{
+			 notify('success1', html, 'bottom-right', true);	
+			}
+		  
 	}});
 	
 }

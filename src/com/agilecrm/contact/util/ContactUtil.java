@@ -146,7 +146,7 @@ public class ContactUtil
 	if (email == null)
 	    return null;
 
-	return dao.getByProperty("properties.name = ", Contact.EMAIL);
+	return dao.getByProperty("properties.value = ", email);
 
     }
 
