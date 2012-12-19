@@ -31,7 +31,7 @@ $(function(){
     					if(contact_id == App_Contacts.contactDetailView.model.get('id')){
     						
     						// Activate timeline in contact detail tab and tab content
-    						activateTimelineTab();
+    						activate_timeline_tab();
     						
     						$('#timeline').isotope( 'insert', $(getTemplate("timeline", data.toJSON())) );
     						return false;

@@ -9,7 +9,7 @@ $(function(){
 	    	if (!isValidForm('#personForm')) {
 	    		return false;
 	    	}
-	    	serializeAndSaveContinueContact(e, 'personForm', 'personModal', false, true);	        
+	    	serialize_and_save_continue_contact(e, 'personForm', 'personModal', false, true);	        
 	    });
 	    
 	    $('#import-link').live('click', function (e) {
@@ -21,7 +21,7 @@ $(function(){
 	    	if (!isValidForm('#companyForm')) {
 	    		return false;
 	    	}
-	    	serializeAndSaveContinueContact(e, 'companyForm', 'companyModal', false, false);	        
+	    	serialize_and_save_continue_contact(e, 'companyForm', 'companyModal', false, false);	        
 	    });
 	    
 	 // Hide email alert error when the modal is hidden in new-person-modal

@@ -53,8 +53,12 @@ function fill_owners(el, data){
 }
 
 /**
- * This script file performs some actions (delete contact, add and remove tags, 
- * change owner and change score etc...) on contact when it is in its detail view
+ * This script file (contact-details.js) performs some actions (delete contact, add 
+ * and remove tags, change owner and change score etc...) on a contact when it is in 
+ * its detail view.
+ * 
+ * @module Contact management
+ * @author Rammohan
  */
 $(function(){
 	
