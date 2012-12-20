@@ -63,7 +63,7 @@
 	  <tr>
 	   <td style="padding-right:20px;padding-left:20px;line-height:20px;font-size:14px;font-family:Lucida Grande,verdana">
 		  <br/>
-		 Dear  {{name}},
+		 Dear  {{Customer.activeCard.name}},
          <br/>
          <br/>
          <b>Confirmation of refund</b><br/>
@@ -71,9 +71,9 @@
         <br/>
          <br/>
          <b>Refund Details </b><br/>
-         Amount refunded:<br/>
-       Refund issued on: <br/>
-       Credit card on file (last four digits):
+        Amount refunded: {{Event.data.object.amountRefunded}}<br/>
+       Refund issued on: {{Customer.email}} <br/>
+       Credit card on file (last four digits):{{Customer.activeCard.last4}}
 <br/>
 <br/>
 <b>Have questions or need help?</b><br/>
