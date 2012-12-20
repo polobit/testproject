@@ -32,10 +32,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     
     // Validate Form
     if(!isValidForm($form))
-    {
-    	
     	return;
-    }
     
     // Show loading symbol until model get saved
     $('#' + modal_id).find('span.save-status').html(LOADING_HTML);

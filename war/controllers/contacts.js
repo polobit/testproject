@@ -1,4 +1,9 @@
-
+/**
+ * Creates backbone router for contacts management and filter
+ * (custom view) operations.
+ * 
+ * @module Contact management & filters
+ */
 var ContactsRouter = Backbone.Router.extend({
 
     routes: {
@@ -54,6 +59,17 @@ var ContactsRouter = Backbone.Router.extend({
     dashboard: function () {
 
     },
+    
+    /**
+     * Fetches all the contacts (persons) and shows as list, if tag_id and 
+     * filter_id are not defined, if any one of them is defined then fetches 
+     * the contacts related to that particular id (tag_id or filter_id) and
+     * shows as list. 
+     * Adds tags, charts for tags and filter views to the contacts list from
+     * postRenderCallback of its Base_Collection_View.
+     * Initiates infiniScroll to fetch contacts (25 in count) step by step on 
+     * scrolling down instead of fetching all at once. 
+     */
     contacts: function (tag_id, filter_id) {
     	var max_contacts_count = 20;
     	
@@ -71,8 +87,8 @@ var ContactsRouter = Backbone.Router.extend({
     	{
     		url = "core/api/filters/query/" + filter_id;
     	}
-    	 console.log(url);
-        // If view is set to custom view load the custom view
+    	 
+        // If view is set to custom view, load the custom view
       	if(readCookie("contact_view"))
 		{      		
       		// If there is a filter saved in cookie then show filter results in custom view saved
@@ -88,8 +104,11 @@ var ContactsRouter = Backbone.Router.extend({
 			return;
 		}
       	
-    	console.log("Fetching from " + url);
-    	
+    	//console.log("Fetching from " + url);
+
+      	/*
+      	 * cursor and page_size options are taken to activate infiniScroll
+      	 */
         this.contactsListView = new Base_Collection_View({
               url: url,
               templateKey: "contacts",
@@ -107,7 +126,7 @@ var ContactsRouter = Backbone.Router.extend({
             	  	 then show the filter name on dropdown button
             	  */
             	  setupContactFilterList(cel);            	  
-            	  }             
+              }             
           });
 
           // Contacts are fetched when the app loads in the initialize
@@ -121,14 +140,27 @@ var ContactsRouter = Backbone.Router.extend({
           $("#contactsmenu").addClass("active");    
          
     },
+    
+    /**
+     * Fetches contacts based on filter_id
+     */
     showFilterContacts: function(filter_id)
     {
     	if(App_Contacts)
     		App_Contacts.contacts(undefined, filter_id);
     },
+    
+    /**
+     * Shows a contact in its detail view by taking the contact from its list view,
+     * if list view is defined and contains the contact, otherwise downloads the 
+     * contact from server side based on its id.
+     * Loads timeline, widgets, map and stars (to rate) from postRenderCallback
+     * of its Base_Model_View.  
+     * 
+     */
     contactDetails: function (id, contact) {
 
-    	// If hte user refreshes the contacts list view page directly - we should load from the model
+    	// If hte user refreshes the contacts detail view page directly - we should load from the model
         if(!contact)
     	if (!this.contactsListView || this.contactsListView.collection.length == 0 || this.contactsListView.collection.get(id) == null) {
         	
@@ -177,7 +209,7 @@ var ContactsRouter = Backbone.Router.extend({
             	
             	loadWidgets(el, contact.toJSON());
             	
-                loadTimelineDetails(el, id);
+                load_timeline_details(el, id);
                 
                 starify(el);
                 
