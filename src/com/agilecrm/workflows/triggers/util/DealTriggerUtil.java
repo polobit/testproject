@@ -7,6 +7,7 @@ import org.json.JSONArray;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.Trigger.Type;
 import com.agilecrm.workflows.util.WorkflowUtil;
@@ -63,7 +64,7 @@ public class DealTriggerUtil
 		    String id = OpportunityIds.get(i).toString();
 
 		    // Gets Opportunity based on id
-		    Opportunity opportunityObject = Opportunity
+		    Opportunity opportunityObject = OpportunityUtil
 			    .getOpportunity(Long.parseLong(id));
 
 		    // Executes trigger for corresponding contacts

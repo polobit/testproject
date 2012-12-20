@@ -3,6 +3,7 @@ package com.agilecrm.user.util;
 import org.json.JSONArray;
 
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.user.NotificationPrefs;
 
 /**
@@ -48,7 +49,7 @@ public class DealNotificationPrefsUtil
 		    String id = OpportunityIds.get(i).toString();
 
 		    // Gets Opportunity based on id
-		    Opportunity opportunityObject = Opportunity
+		    Opportunity opportunityObject = OpportunityUtil
 			    .getOpportunity(Long.parseLong(id));
 
 		    // Executes notification when deal is deleted

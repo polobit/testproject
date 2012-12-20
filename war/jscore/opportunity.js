@@ -47,7 +47,7 @@ function populateUsers(id, el , value, key) {
 
 	// Users set id of agile user to save agileuser key in opportunities
 	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-	
+	console.log(id);
 	// Fill owners list
 	fillSelect(id,'/core/api/users', 'domainUser', function fillOwner() {
 		
@@ -61,7 +61,7 @@ function populateUsers(id, el , value, key) {
 	}, optionsTemplate); 
 }
 
-// To edit and update the opportunity
+/*// To edit and update the opportunity-detail
 $("#editOpportunity").live("click", function (e) {
 
     e.preventDefault();
@@ -74,7 +74,7 @@ $("#editOpportunity").live("click", function (e) {
         postRenderCallback: function(el){
         		populateUsers("owner", el);
         		populateMilestones(el);
-             	// Call setupTypeAhead to get tags
+             	// Call setupTypeAhead to get contacts
             	agile_type_ahead("relates_to", el, contacts_typeahead);   
             	
             	
@@ -89,7 +89,7 @@ $("#editOpportunity").live("click", function (e) {
     	var view = view.render();
     	$("#content").html(view.el);   
 });
-
+*/
 function populateMilestones(el, dealsDetails, value){
 	
 	 // Fill milestones in select options and ul 

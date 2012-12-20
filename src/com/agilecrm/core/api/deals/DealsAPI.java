@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.user.util.DealNotificationPrefsUtil;
 import com.agilecrm.workflows.triggers.util.DealTriggerUtil;
 
@@ -30,7 +31,7 @@ public class DealsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Opportunity> getOpportunities()
     {
-	return Opportunity.getOpportunities();
+	return OpportunityUtil.getOpportunities();
     }
 
     @POST
@@ -55,7 +56,7 @@ public class DealsAPI
     @DELETE
     public void deleteOpportunity(@PathParam("opportunity-id") Long id)
     {
-	Opportunity opportunity = Opportunity.getOpportunity(id);
+	Opportunity opportunity = OpportunityUtil.getOpportunity(id);
 	if (opportunity != null)
 	    opportunity.delete();
     }
@@ -66,7 +67,7 @@ public class DealsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Opportunity getOpportunity(@PathParam("opportunity-id") Long id)
     {
-	Opportunity opportunity = Opportunity.getOpportunity(id);
+	Opportunity opportunity = OpportunityUtil.getOpportunity(id);
 	return opportunity;
     }
 
@@ -77,7 +78,7 @@ public class DealsAPI
     public String getDealsStatsForMilestones(@QueryParam("min") Long min,
 	    @QueryParam("max") Long max)
     {
-	return Opportunity.getMilestones(min, max).toString();
+	return OpportunityUtil.getMilestones(min, max).toString();
     }
 
     // / Deals Stats - Conversions
@@ -87,7 +88,7 @@ public class DealsAPI
     public String getConversions(@QueryParam("min") Long min,
 	    @QueryParam("max") Long max)
     {
-	return Opportunity.getConversionDetails(min, max).toString();
+	return OpportunityUtil.getConversionDetails(min, max).toString();
     }
 
     // / Deals Stats - Conversions
@@ -97,7 +98,7 @@ public class DealsAPI
     public String getDealsDetails(@QueryParam("min") Long min,
 	    @QueryParam("max") Long max)
     {
-	return Opportunity.getDealsDetails(min, max).toString();
+	return OpportunityUtil.getDealsDetails(min, max).toString();
     }
 
     // Bulk operations - delete
@@ -109,6 +110,7 @@ public class DealsAPI
      *            array of deal ids as String
      * @throws JSONException
      */
+    @SuppressWarnings("unused")
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)

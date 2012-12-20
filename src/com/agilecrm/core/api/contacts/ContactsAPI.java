@@ -33,6 +33,7 @@ import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.util.Util;
 
@@ -307,7 +308,7 @@ public class ContactsAPI
     public List<Opportunity> getCurrentContactOpportunity(
 	    @PathParam("contact-id") Long id)
     {
-	return Opportunity.getCurrentContactDeals(id);
+	return OpportunityUtil.getCurrentContactDeals(id);
     }
 
     /**
