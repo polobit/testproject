@@ -9,8 +9,8 @@ function playSendSound(){
 }
 function playSound(){
 
-    var smp3url = '../resources/sound.mp3';
-    var swavurl = '../resources/sound.wav';
+    var smp3url = '../res/sound.mp3';
+    var swavurl = '../res/sound.wav';
     var snd;
     try
     {   
