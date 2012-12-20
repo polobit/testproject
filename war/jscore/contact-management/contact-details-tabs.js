@@ -20,7 +20,6 @@ $(function(){
 		e.preventDefault();
 		$('div.tab-content').find('div.active').removeClass('active');
 		
-	//	loadTimelineDetails(App_Contacts.contactDetailView.el, App_Contacts.contactDetailView.model.id);
 		$('#time-line').addClass('active');
 	});
 
