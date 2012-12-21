@@ -33,7 +33,6 @@ var ContactsRouter = Backbone.Router.extend({
         "contact-filter/:id" : "showFilterContacts",
         
         /* New Contact/Company - Full mode */
-        "continue-contact": "continueContact",
         "continue-company": "continueCompany",
         
         /* Contact bulk actions */
@@ -151,7 +150,7 @@ var ContactsRouter = Backbone.Router.extend({
     },
     
     /**
-     * Shows a contact in its detail view by taking the contact from its list view,
+     * Shows a contact in its detail view by taking the contact from contacts list view,
      * if list view is defined and contains the contact, otherwise downloads the 
      * contact from server side based on its id.
      * Loads timeline, widgets, map and stars (to rate) from postRenderCallback
@@ -225,8 +224,14 @@ var ContactsRouter = Backbone.Router.extend({
         $('#content').html(el);
        
     },
+    
+    /**
+     * Takes the contact to continue contact form to edit it. If attempts to edit
+     * a contact without defining contact detail view, navigates to contacts page.
+     * Gets the contact to edit, from its list view or its custom view, if not found
+     * in both downloads from server side (Contact database).   
+     */
     editContact: function (contact) {
-    	console.log("edit contact");
     	
     	// Takes back to contacts if contacts detailview is not defined
     	if (!this.contactDetailView || !this.contactDetailView.model.id) {
@@ -281,9 +286,14 @@ var ContactsRouter = Backbone.Router.extend({
     	});
     },
     
+    /**
+     * Creates a duplicate contact to the existing one. Deletes the email (as well as 
+     * it has to be unique) and id (to create new one) of the existing contact and
+     * saves it. Also takes the duplicate contact to continue contact form to edit it. 
+     */
     duplicateContact: function () {
     	
-      	 // Takes back to contacts if contacts list view is not defined
+      	 // Takes back to contacts if contacts detail view is not defined
      	 if (!this.contactDetailView || !this.contactDetailView.model.id || !this.contactsListView || this.contactsListView.collection.length == 0) {
               this.navigate("contacts", {
                   trigger: true
@@ -309,14 +319,19 @@ var ContactsRouter = Backbone.Router.extend({
         	}
         });
     },
-    continueContact: function () {
-        $('#content').html(getTemplate('continue-contact', {}));
-    },
 
+    /**
+     * Navigates the contact (of type company) to continue company form
+     */
     continueCompany: function () {
-       // $('#content').html(getTemplate('continue-company', {}));
+    	
     	var model = serialize_and_save_continue_contact(undefined, 'companyForm', 'companyModal', true, false);
     },
+    
+    /**
+     * Imports contacts from a csv file and then uploads all the contacts
+     * to database
+     */
     importContacts: function () {
         $('#content').html(getTemplate("import-contacts", {}));
         head.js('lib/fileuploader-min.js', function(){
@@ -324,11 +339,20 @@ var ContactsRouter = Backbone.Router.extend({
         });
     },
    
+    /**
+     * Adds social widgets (twitter, linkedIn and RapLeaf) to a contact
+     */
     addWidget: function () {
 
         pickWidget();
 
     },
+    
+    /**
+     * Adds an opportunity to a contact, which is in contact detail view.
+     * Populates users and milestones from postRenderCallback of its
+     * Base_Model_View.   
+     */
     addOpportunityToContact: function() {
     	var id = this.contactDetailView.model.id;
     	this.opportunityView = new Base_Model_View({
@@ -343,7 +367,7 @@ var ContactsRouter = Backbone.Router.extend({
             	var contact_name = getPropertyValue(json.properties, "first_name")+ " " + getPropertyValue(json.properties, "last_name");
             	$('.tags',el).append('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ json.id +'">'+contact_name+'</li>');
 
-            	// Enable the datepicker
+            	// Enables the date-picker
                 $('#close_date', el).datepicker({
                     format: 'mm-dd-yyyy'
                 });
@@ -354,6 +378,12 @@ var ContactsRouter = Backbone.Router.extend({
      	
         $('#content').html(view.el);
     },
+    
+    /**
+     * Subscribes a contact to a campaign. Loads the related template and
+     * triggers the custom event "fill_campaigns_contact" to show the 
+     * campaigns drop down list.
+     */
     addContactToCampaign: function(){
     	$("#content").html(getTemplate("contact-detail-campaign", {}));
 		
@@ -365,7 +395,7 @@ var ContactsRouter = Backbone.Router.extend({
     		url: 'core/api/contact-view',
     		isNew: true,
     		window: "contact-views",
-    		 template: "contact-view",
+    		template: "contact-view",
     		postRenderCallback: function(el) {
     			
     			head.js(LIB_PATH + 'lib/jquery.multi-select.js',LIB_PATH + 'lib/jquery-ui.min.js', function(){
@@ -416,6 +446,12 @@ var ContactsRouter = Backbone.Router.extend({
     	
     	$("#content").html(contactView.render().el);
     },
+    
+    /**
+     * Shows a send email form with some prefilled values (email - from, to 
+     * and templates etc..). To prefill the fields the function 
+     * populate_send_email_details is called from the postRenderCallback.
+     */
     sendEmail: function(){
     	
     	// Show the email form with the email prefilled from the curtrent contact
@@ -514,6 +550,11 @@ var ContactsRouter = Backbone.Router.extend({
     	    	$("#content").html(ContactFilter.el); 
     	
     },
+    
+    /**
+     * Loads the owners template to subscribe the selected contacts to a campaign 
+     * and triggers the custom event 'fill_owners' to fill the owners select drop down. This event is 
+     */
     ownerBulk: function(){
 
     	$("#content").html(getTemplate("bulk-actions-owner", {}));
