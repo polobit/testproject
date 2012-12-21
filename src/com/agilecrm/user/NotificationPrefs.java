@@ -1,10 +1,13 @@
 package com.agilecrm.user;
 
 import javax.persistence.Id;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.condition.IfDefault;
@@ -220,6 +223,35 @@ public class NotificationPrefs
 
 	this.user = new Key<AgileUser>(AgileUser.class, userId);
 
+    }
+
+    /**
+     * Gets user preferences with respect to agile user.
+     * 
+     * @return userprefs as an xml element
+     * 
+     * @throws Exception
+     *             NullPointerException
+     */
+    @XmlElement(name = "Prefs")
+    public UserPrefs getPrefs() throws Exception
+    {
+	if (user != null)
+	{
+	    Objectify ofy = ObjectifyService.begin();
+	    try
+	    {
+		// Gets User prefs in return to access owner name , pic
+		// etc..details of a deal
+
+		return ofy.query(UserPrefs.class).ancestor(user).get();
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+	return null;
     }
 
 

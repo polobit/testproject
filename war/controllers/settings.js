@@ -150,6 +150,7 @@ var SettingsRouter = Backbone.Router.extend({
     	var view = new Base_Model_View({
     		url: 'core/api/notifications',
     		template: 'settings-notification-prefs',
+    		reload: true
     	});
     	
     	$('#content').html(view.render().el);
