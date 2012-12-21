@@ -14,7 +14,7 @@ $(function(){
 	 * Saves the content of workflow if the form is valid
 	 * 
 	 **/
-	$('#saveWorkflow').live('click', function (e) {
+	$('#save-workflow').live('click', function (e) {
            e.preventDefault();
     	// Check if the form is valid
     	if (!isValidForm('#workflowform')) {
