@@ -1,7 +1,5 @@
 package com.agilecrm.deals.util;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -9,15 +7,36 @@ import java.util.List;
 import net.sf.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
-import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 
+/**
+ * <code>OpportunityUtil</code> is the utility class to fetch opportunities with
+ * respect to id, closed-date time period and also with respect to related
+ * contacts.The map values for a chart are provided by getting expected values
+ * and pipeline values.All expected values and pipeline values of deals having
+ * closed date of same month are merged.
+ * <p>
+ * The opportunities are retrieved with respect to milestones.The percentage of
+ * opportunities that are successfully done compared to total opportunities can
+ * be known.
+ * </p>
+ * 
+ * @author Yaswanth
+ * 
+ */
 public class OpportunityUtil
 {
 
+    /**
+     * Gets opportunity based on id
+     * 
+     * @param id
+     *            Opportunity Id
+     * @return Opportunity with respect to id
+     */
     public static Opportunity getOpportunity(Long id)
     {
 	try
@@ -31,12 +50,44 @@ public class OpportunityUtil
 	}
     }
 
+    /**
+     * Gets list of all opportunities.
+     * 
+     * @return list of all opportunities
+     */
     public static List<Opportunity> getOpportunities()
     {
 	return Opportunity.dao.fetchAll();
     }
 
+    // Get Opportunities based on time
+    /**
+     * Gets list of opportunities with respect to closed date and given time
+     * period
+     * 
+     * @param minTime
+     *            - Given time less than closed date
+     * @param maxTime
+     *            - Given time greater than closed date
+     * @return list of opportunities with closed date in between min and max
+     *         times
+     */
+    public static List<Opportunity> getOpportunities(long minTime, long maxTime)
+    {
+	return Opportunity.dao.ofy().query(Opportunity.class)
+		.filter("close_date >= ", minTime)
+		.filter("close_date <= ", maxTime).list();
+    }
+
+
     // Get deals of contact in contact details: Yaswanth - 08/24/12
+    /**
+     * Gets deals with respect to contact
+     * 
+     * @param id
+     *            Contact Id
+     * @return list of opportunities with respect to contact
+     */
     public static List<Opportunity> getCurrentContactDeals(Long id)
     {
 	Objectify ofy = ObjectifyService.begin();
@@ -48,17 +99,22 @@ public class OpportunityUtil
 
     }
 
-    // Get Opportunities based on time
-    public static List<Opportunity> getOpportunities(long minTime, long maxTime)
-    {
-	return Opportunity.dao.ofy().query(Opportunity.class)
-		.filter("close_date >= ", minTime)
-		.filter("close_date <= ", maxTime).list();
-    }
 
     // Get map of total and pipelines
     // Author: Yaswanth - 07/30/2012
-    @SuppressWarnings("unused")
+    /**
+     * Gets JSONObject of expected-values and pipeline values of deals with
+     * respect to month.Gets list of opportunities with respect to given time
+     * period.Adds expected-values and pipeline values by iterating through each
+     * deal having closed date on same month.These are used for graph building.
+     * 
+     * 
+     * @param minTime
+     *            - Given time less than closed date
+     * @param maxTime
+     *            - Given time greater than closed date
+     * @return JsonObject having total and pipeline values with respect to month
+     */
     public static JSONObject getDealsDetails(long minTime, long maxTime)
     {
 
@@ -81,7 +137,7 @@ public class OpportunityUtil
 			* opportunity.probability / 100;
 
 		// mm-yy
-		DateFormat formatter = new SimpleDateFormat("MM-yy");
+		// DateFormat formatter = new SimpleDateFormat("MM-yy");
 
 		// Get mm/yy
 		// String mmYY = formatter.format(new
@@ -133,12 +189,23 @@ public class OpportunityUtil
 	    }
 	}
 
-	// System.out.println(dealsObject);
+	System.out.println(dealsObject);
 
 	return dealsObject;
     }
 
     // Get Total Number of Milestones in a given period
+    /**
+     * Gets total number of milestones in a given period
+     * 
+     * @param minTime
+     *            - Given time less than closed date
+     * @param maxTime
+     *            - Given time greater than closed date
+     * @param milestone
+     *            - Given milestone
+     * @return Count of total number of milestones
+     */
     public static int getTotalNumberOfMilestones(long minTime, long maxTime,
 	    String milestone)
     {
@@ -151,6 +218,17 @@ public class OpportunityUtil
 
     // To get Milestones of deals
     // Author:yaswanth 07/30/2012
+    /**
+     * Gets milestone JSONObject with respect to given time period.Filters the
+     * opportunities with respect to milestones.For e.g. Milestone 'Lost'
+     * consists of 4 opportunities, having closed date within the given range.
+     * 
+     * @param minTime
+     *            - Given time less than closed date
+     * @param maxTime
+     *            - Given time greater than closed date
+     * @return Milestone JSONObjects with respect to given time period
+     */
     public static JSONObject getMilestones(long minTime, long maxTime)
     {
 
@@ -158,7 +236,7 @@ public class OpportunityUtil
 	JSONObject milestonesObject = new JSONObject();
 
 	// Array of milestones
-	Opportunity.MILESTONES = Milestone.getMilestonesArray();
+	Opportunity.MILESTONES = MilestoneUtil.getMilestonesArray();
 
 	// Iterate through all possible milestones
 	for (String milestone : Opportunity.MILESTONES)
@@ -175,25 +253,36 @@ public class OpportunityUtil
 
     // To get the conversions rate in particular period - Total Closed/Total
     // Author:yaswanth 07/30/2012
+    /**
+     * Returns JSONObject consisting of percentage of deals won compared to
+     * total number of opportunities
+     * 
+     * @param minTime
+     *            - Given time less than closed date
+     * @param maxTime
+     *            - Given time greater than closed date
+     * @return JSONObject having percentage of deals with milestone won compared
+     *         to total deals in a given period
+     */
     public static JSONObject getConversionDetails(long minTime, long maxTime)
     {
 
-	// Get Total
+	// Gets total count of opportunities within the given period
 	int numOpportunities = Opportunity.dao.ofy().query(Opportunity.class)
 		.filter("close_date >= ", minTime)
 		.filter("close_date <= ", maxTime).count();
 
-	JSONObject converstionObject = new JSONObject();
+	JSONObject conversionObject = new JSONObject();
 
-	// Get Closed Total
+	// Gets total number of opportunities with milestone won
 	int closedNumOpportunities = getTotalNumberOfMilestones(minTime,
 		maxTime, "won");
 
-	converstionObject.put("conversion", (closedNumOpportunities * 100)
+	conversionObject.put("conversion", (closedNumOpportunities * 100)
 		/ numOpportunities);
 
-	System.out.println(converstionObject);
-	return converstionObject;
+	System.out.println(conversionObject);
+	return conversionObject;
     }
 
 }
