@@ -22,11 +22,29 @@ import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.user.util.DealNotificationPrefsUtil;
 import com.agilecrm.workflows.triggers.util.DealTriggerUtil;
 
+/**
+ * <code>DealsAPI</code> includes REST calls to interact with
+ * {@link Opportunity} class to initiate Opportunity/Deal CRUD operations.
+ * <p>
+ * It is called from client side to create, update, fetch and delete the
+ * opportunities. It also interacts with {@link OpportunityUtil} class to fetch
+ * the data of Opportunity class from database.
+ * </p>
+ * 
+ * 
+ * @author Yaswanth
+ * 
+ */
 @Path("/api/opportunity")
 public class DealsAPI
 {
 
     // This method is called if TEXT_PLAIN is request
+    /**
+     * Returns list of opportunities
+     * 
+     * @return list of opportunities
+     */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Opportunity> getOpportunities()
@@ -34,34 +52,14 @@ public class DealsAPI
 	return OpportunityUtil.getOpportunities();
     }
 
-    @POST
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Opportunity createOpportunity(Opportunity opportunity)
-    {
-	opportunity.save();
-	return opportunity;
-    }
-
-    @PUT
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Opportunity updateOpportunity(Opportunity opportunity)
-    {
-	opportunity.save();
-	return opportunity;
-    }
-
-    @Path("{opportunity-id}")
-    @DELETE
-    public void deleteOpportunity(@PathParam("opportunity-id") Long id)
-    {
-	Opportunity opportunity = OpportunityUtil.getOpportunity(id);
-	if (opportunity != null)
-	    opportunity.delete();
-    }
-
     // This method is called if XML is request
+    /**
+     * Return opportunity with respect to Id
+     * 
+     * @param id
+     *            - Opportunity Id to be fetched
+     * @return Opportunity object
+     */
     @Path("{opportunity-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -71,7 +69,64 @@ public class DealsAPI
 	return opportunity;
     }
 
-    // / Deals Stats - Milestons
+    /**
+     * Saves new Opportunity
+     * 
+     * @param opportunity
+     *            - Opportunity object that is newly created
+     * @return created opportunity
+     */
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Opportunity createOpportunity(Opportunity opportunity)
+    {
+	opportunity.save();
+	return opportunity;
+    }
+
+    /**
+     * Updates opportunity
+     * 
+     * @param opportunity
+     *            - Opportunity object that is updated
+     * @return - updated opportunity
+     */
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Opportunity updateOpportunity(Opportunity opportunity)
+    {
+	opportunity.save();
+	return opportunity;
+    }
+
+    /**
+     * Deletes single opportunity
+     * 
+     * @param id
+     *            - Opportunity id that should be deleted
+     */
+    @Path("{opportunity-id}")
+    @DELETE
+    public void deleteOpportunity(@PathParam("opportunity-id") Long id)
+    {
+	Opportunity opportunity = OpportunityUtil.getOpportunity(id);
+	if (opportunity != null)
+	    opportunity.delete();
+    }
+
+
+    // Deals Stats - Milestones
+    /**
+     * Returns milestones with respect to given minimum time and maximum time.
+     * 
+     * @param min
+     *            - given time less than closed date of deal
+     * @param max
+     *            - given time more than closed date of deal
+     * @return milestones
+     */
     @Path("stats/milestones")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -81,7 +136,17 @@ public class DealsAPI
 	return OpportunityUtil.getMilestones(min, max).toString();
     }
 
-    // / Deals Stats - Conversions
+    // Deals Stats - Conversions
+    /**
+     * Returns percentage of opportunities won compared to total opportunities
+     * exist with respect to closed date
+     * 
+     * @param min
+     *            - Given time less than closed date
+     * @param max
+     *            - Given time more than closed date
+     * @return percentage of opportunities won in given time period
+     */
     @Path("stats/conversions")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -91,7 +156,18 @@ public class DealsAPI
 	return OpportunityUtil.getConversionDetails(min, max).toString();
     }
 
-    // / Deals Stats - Conversions
+    // Deals Stats - Details
+    /**
+     * Gets sum of expected values and pipeline values of the deals having
+     * closed date within the month of given time period.
+     * 
+     * @param min
+     *            - Given time less than closed date
+     * @param max
+     *            - Given time more than closed date
+     * @return string having sum of expected values and pipeline values of the
+     *         deals of same month
+     */
     @Path("stats/details")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })

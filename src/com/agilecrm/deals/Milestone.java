@@ -4,63 +4,69 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
 
+/**
+ * <code>Milestone</code> is the base class for milestones set for any
+ * deal.Milestones indicates at what stage the Deal present.'Lost','Open','Won'
+ * and 'Stage1' are taken as default milestones.
+ * <p>
+ * Milestones can be given by Domain user through admin-settings in
+ * client-side.The given milestones are displayed under select for every
+ * deal.Milestones describes the Deal's stage and can be changed for a deal
+ * whenever required.
+ * </p>
+ * 
+ * @author Yaswanth
+ * 
+ */
 @XmlRootElement
 public class Milestone
 {
 
     // Key
+    /**
+     * Milestone Id
+     */
     @Id
     public Long id;
 
+    /**
+     * Milestones
+     */
     public String milestones;
 
+    /**
+     * Milestone Dao
+     */
     private static ObjectifyGenericDao<Milestone> dao = new ObjectifyGenericDao<Milestone>(
 	    Milestone.class);
 
+    /**
+     * Default Milestone
+     */
     Milestone()
     {
 
     }
 
-    Milestone(String milestones)
+    /**
+     * Constructs a new {@link Milestone}
+     * 
+     * @param milestones
+     *            - Milestones of a deal
+     */
+    public Milestone(String milestones)
     {
 	this.milestones = milestones;
     }
 
+    /**
+     * Saves milestone in datastore
+     */
     public void save()
     {
 	dao.put(this);
     }
 
-    public static Milestone getMilestones()
-    {
-	Objectify ofy = ObjectifyService.begin();
-	Milestone milestone = ofy.query(Milestone.class).get();
-	if (milestone == null)
-	    return getDefaultMilestone();
 
-	return milestone;
-    }
-
-    public static Milestone getDefaultMilestone()
-    {
-	Milestone milestone = new Milestone("Lost, Open, Won, Stage 1");
-	milestone.save();
-	return milestone;
-    }
-
-    public static String[] getMilestonesArray()
-    {
-	Objectify ofy = ObjectifyService.begin();
-	Milestone milestone = ofy.query(Milestone.class).get();
-
-	// Send default milestones if not available
-	if (milestone == null)
-	    return getDefaultMilestone().milestones.split(",");
-
-	return milestone.milestones.split(",");
-    }
 }

@@ -241,8 +241,6 @@ public class NotificationPrefs
 	    Objectify ofy = ObjectifyService.begin();
 	    try
 	    {
-		// Gets User prefs in return to access owner name , pic
-		// etc..details of a deal
 
 		return ofy.query(UserPrefs.class).ancestor(user).get();
 	    }
