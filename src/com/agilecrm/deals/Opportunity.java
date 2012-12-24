@@ -62,10 +62,10 @@ public class Opportunity
      * Contact ids of related contacts for a deal
      */
     @NotSaved
-    public List<String> contact_ids = null;
+    public List<String> contacts = null;
 
     /**
-     * Related contact objects fetched using contact_ids
+     * Related contact objects fetched using contact ids
      */
     private List<Key<Contact>> related_contacts = new ArrayList<Key<Contact>>();
 
@@ -112,7 +112,7 @@ public class Opportunity
     private Key<DomainUser> ownerKey = null;
 
     /**
-     * Key object of agileUser
+     * Key object of agileUser inorder to get userprefs of current user
      */
     @NotSaved(IfDefault.class)
     private Key<AgileUser> agileUser = null;
@@ -303,9 +303,9 @@ public class Opportunity
     public void save()
     {
 
-	if (contact_ids != null)
+	if (contacts != null)
 	{
-	    for (String contact_id : this.contact_ids)
+	    for (String contact_id : this.contacts)
 
 	    {
 		this.related_contacts.add(new Key<Contact>(Contact.class, Long
@@ -366,7 +366,7 @@ public class Opportunity
      */
     public String toString()
     {
-	return "id: " + id + " relatesto: " + contact_ids + " close date"
+	return "id: " + id + " relatesto: " + contacts + " close date"
 		+ close_date + " name: " + name + " description:" + description
 		+ " expectedValue: " + expected_value + " milestone: "
 		+ milestone + " probability: " + probability + " Track: "

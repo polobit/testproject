@@ -188,8 +188,8 @@ public class JSAPI
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
 		return null;
-	    opportunity.contact_ids = new ArrayList<String>();
-	    opportunity.contact_ids.add(contact.id + "");
+	    opportunity.contacts = new ArrayList<String>();
+	    opportunity.contacts.add(contact.id + "");
 	    opportunity.save();
 	    System.out.println("opportunitysaved");
 	    return new JSONWithPadding(new GenericEntity<Opportunity>(

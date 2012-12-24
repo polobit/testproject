@@ -74,6 +74,8 @@ var DealsRouter = Backbone.Router.extend({
     /**
      * Updates Deal.Initializes contacts typeahead,milestones select and
      * owner select.
+     * 
+     * @param id - Opportunity Id
      **/
     dealsDetails: function (id) {
         

@@ -70,8 +70,7 @@ $(function () {
  * @param key - key name in the value.It is passed during declaration
  **/
 function populateUsers(id, el , value, key) {
-	console.log('id',id);
-	
+		
 	// Users set id of agile user to save agileuser key in opportunities
 	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 	
