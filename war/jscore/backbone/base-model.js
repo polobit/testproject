@@ -93,42 +93,6 @@ var Base_Model_View = Backbone.View
 				{
 					this.model.url = this.options.url;
 				}
-
-				/*
-				 * If "isNew" in options is true, model is not downloaded. which
-				 * represents no model data needs to be shown in the view, but
-				 * can be used to save data as url is set for model with no data
-				 */
-				if (!this.options.isNew)
-				{
-					/*
-					 * Stores view object in temp variable, to be used in
-					 * success back for fetch to call render
-					 */
-					var that = this;
-
-					/*
-					 * Fetches model from the url property set, on success
-					 * forces render to execute to show the data fetched in
-					 * view.
-					 */
-					this.model.fetch({
-						success : function(data)
-						{
-							/*
-							 * Used true argument to render (forcing render to
-							 * execute and show view.), which represent data is
-							 * downloaded from server, If render called out
-							 * "true" argument then loading image is show
-							 * instead of showing data (because Showing view
-							 * without downloading data causes flash effect on
-							 * page, since on change in model i.e., data fetched
-							 * render is called again)
-							 */
-							that.render(true);
-						}
-					});
-				}
 			},
 
 			/**

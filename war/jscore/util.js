@@ -1,6 +1,17 @@
+/**
+ * Loading spinner shown while loading
+ */
 var LOADING_HTML = '<img class="loading" style="padding-right:5px" src= "img/21-0.gif"></img>';
+
+/**
+ * Loading images shown which contacts are being fetched on page scroll
+ */
 var LOADING_ON_CURSOR = '<img class="loading" style="padding-right:5px" src= "img/ajax-loader-cursor.gif"></img>';
-var DEFAULT_GRAVATAR_url = "https://d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png";  
+
+/**
+ * Default image shown for contacts if image is not available
+ */
+var DEFAULT_GRAVATAR_url = "https://d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png";
 
 // Read a page's GET URL variables and return them as an associative array.
 function getUrlVars() {
@@ -16,52 +27,98 @@ function getUrlVars() {
 	return vars;
 }
 
+/**
+ * Creates a select fields with the options fetched from the url specified,
+ * fetches the collection from the url and creates a select element and appends
+ * to the selectId sent, it takes the template to fill the values and also takes
+ * a callback to deserialize the select field if form is being edited
+ * 
+ * @param selectId
+ *            to append the options
+ * @param url
+ *            To fetch collection
+ * @param parseKey
+ *            parses the collectio
+ * @param callback
+ *            to process select field after being created
+ * @param template
+ *            Template to create options
+ */
 function fillSelect(selectId, url, parseKey, callback, template) {
 	// Fetch Collection from URL
 	var collection_def = Backbone.Collection.extend({
 		url : url,
-/*		parse : function(response) {
-
-			if (response && response[parseKey])
-				return response[parseKey];
-
-			return response;
-		}*/
+	/*
+	 * parse : function(response) {
+	 * 
+	 * if (response && response[parseKey]) return response[parseKey];
+	 * 
+	 * return response; }
+	 */
 	});
 
 	// Prepend Loading
 	$loading = $(LOADING_HTML);
 	$("#" + selectId).after(LOADING_HTML);
 
+	// Creates a collection and fetches the data from the url set in collection
 	var collection = new collection_def();
-	collection.fetch({
-		success : function() {
 
-			// Remove loading
-			$('.loading').remove();
+	// On successful fetch of collection loading symbol is removed and options
+	// template is populated and appended in the selectId sent to the function
+	collection
+			.fetch({
+				success : function() {
 
-			// Delete prev options if any
-			$("#" + selectId).empty().append('<option class="default-select" value="">Select...</option>');
+					// Remove loading
+					$('.loading').remove();
 
-			$.each(collection.toJSON(), function(index, model) {
-				// Convert template into HTML
-				var modelTemplate = Handlebars.compile(template);
-				var optionsHTML = modelTemplate(model);
-				$("#" + selectId).append(optionsHTML);
+					// Delete prev options if any
+					$("#" + selectId)
+							.empty()
+							.append(
+									'<option class="default-select" value="">Select...</option>');
 
-				if (callback && typeof (callback) === "function") {
-					// execute the callback, passing parameters as necessary
-					callback();
+					// Iterates though each model in the collection and
+					// populates the template using handlebars
+					$.each(collection.toJSON(), function(index, model) {
+						// Convert template into HTML
+						var modelTemplate = Handlebars.compile(template);
+						var optionsHTML = modelTemplate(model);
+						$("#" + selectId).append(optionsHTML);
+
+						// If callback is present, it is called to deserialize
+						// the select field
+						if (callback && typeof (callback) === "function") {
+							// execute the callback, passing parameters as
+							// necessary
+							callback();
+						}
+					});
 				}
-			});
-		}
 
-	});
+			});
 }
 
 // Fill selects with tokenized data
-function fillTokenizedSelect(selectId, array, callback ) {
+/**
+ * fillTokenizedSelect if similar to fillSelect, but data is not fetched it is
+ * sent to the function which creates options based on the array of values sent.
+ * It also includes callback function to deseriazlie
+ * 
+ * @param selectId
+ *            to To append options
+ * @param array
+ *            list of values to be used to create options
+ * @param callback
+ *            function to be called after select if created
+ */
+function fillTokenizedSelect(selectId, array, callback) {
 	$("#" + selectId).empty().append('<option value="">Select...</option>');
+
+	// Iterates though each element in array and creates a options to select
+	// field and
+	// appends to the id sent
 	$.each(array, function(index, element) {
 		$("#" + selectId)
 				.append(
@@ -69,29 +126,40 @@ function fillTokenizedSelect(selectId, array, callback ) {
 								+ '</option>');
 	});
 
+	// If callback exists it is called after select field is created
 	if (callback && typeof (callback) === "function") {
 		// execute the callback, passing parameters as necessary
 		callback();
 	}
 }
 
+/**
+ * Fills milestore in to dorpdown
+ * 
+ * @param ulId
+ * @param array
+ */
 function fillMilestones(ulId, array) {
 	$("#" + ulId).empty();
 	$.each(array, function(index, element) {
-		$("#" + ulId)
-				.append(
-						'<a href="#"><li value=' + '"' + element + '">' + element
-								+ '</li></a>');
+		$("#" + ulId).append(
+				'<a href="#"><li value=' + '"' + element + '">' + element
+						+ '</li></a>');
 	});
 }
 function btnDropDown(contact_id, workflow_id) {
 
 }
 
-// Delete contact properties
+/**
+ * Removes the specified property from the contact
+ */
 function delete_contact_property(contact, propertyName) {
+
+	// Iterates through the properties of the contact, finds the property with
+	// the name specified and removes the property from the contact
 	for ( var index = 0; index < contact.properties.length; index++) {
-		if (contact.properties[index].name == propertyName){
+		if (contact.properties[index].name == propertyName) {
 			contact.properties.splice(index, 1);
 			--index;
 		}
@@ -100,9 +168,15 @@ function delete_contact_property(contact, propertyName) {
 }
 
 // Delete contact tag
+/**
+ * Removes a tag from the contact, tag name is to be specified to remove the tag
+ */
 function delete_contact_tag(contact, tagName) {
+
+	// Iterates though tags in the contact and removes the tag which matches the
+	// tag name parameter of the function
 	for ( var index = 0; index < contact.tags.length; index++) {
-		if (contact.tags[index] == tagName){
+		if (contact.tags[index] == tagName) {
 			contact.tags.splice(index, 1);
 			break;
 		}
@@ -110,7 +184,9 @@ function delete_contact_tag(contact, tagName) {
 	return contact;
 }
 
-// Add contact tags
+/**
+ * Adds a new tag to contact
+ */
 function add_contact_tags(contact, newTags) {
 	for ( var index = 0; index < newTags.length; index++) {
 		contact.tags.push(newTags[index])
