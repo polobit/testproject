@@ -9,9 +9,10 @@
 function starify(el){
     head.js('lib/jquery.raty.min.js', function(){
     	
-    	var contact_model =  App_Contacts.contactDetailView.model;
+    	var contact_model =  App_Contacts.contactDetailView.model.toJSON();
+    	
     	// Set URL - is this required?
-    	contact_model.url = 'core/api/contacts';
+    	// contact_model.url = 'core/api/contacts';
     	
     	$('#star', el).raty({
     		
@@ -21,18 +22,29 @@ function starify(el){
     		 */
         	click: function(score, evt) {
         	   
-        		// alert('ID: ' + $(this).attr('id') + '\nscore: ' + score + '\nevent: ' + evt);
+        		/*// (commented- reloading as silent:true is not effecting) 
+        		  // alert('ID: ' + $(this).attr('id') + '\nscore: ' + score + '\nevent: ' + evt);
         		contact_model.set('star_value', score, {silent: true});
         	
         		// Save model
-           		contact_model.save();
+           		contact_model.save();*/
+           		
+           		contact_model.star_value = score;
+        		
+        		var new_model = new Backbone.Model();
+        		new_model.url = 'core/api/contacts';
+        		new_model.save(contact_model,{
+        			success: function(model){
+
+        			}
+        		});
 
         	},
         	
         	/**
         	 * Highlights the stars based on star_value of the contact
         	 */
-        	score: contact_model.get('star_value')
+        	score: contact_model.star_value
             
         });
     });

@@ -13,6 +13,7 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.json.JSONArray;
 
 import com.agilecrm.contact.util.ContactUtil;
@@ -416,6 +417,13 @@ public class Contact extends Cursor implements Serializable
 	}
     }
 
+    /**
+     * Sets owner_key to the contact. Annotated with @JsonIgnore to prevent auto
+     * execution of this method (conflict with "PUT" request)
+     * 
+     * @param owner_key
+     */
+    @JsonIgnore
     public void setDomainUser(Key<DomainUser> owner_key)
     {
 	this.owner_key = owner_key;
