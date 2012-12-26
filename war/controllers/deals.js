@@ -86,8 +86,7 @@ var DealsRouter = Backbone.Router.extend({
             });
             return;
         }
-        
-    	this.opportunityCollectionView.collection.fetch();
+
         this.opportunityCollectionView.currentDeal = this.opportunityCollectionView.collection.get(id);
 
         var view = new Base_Model_View({

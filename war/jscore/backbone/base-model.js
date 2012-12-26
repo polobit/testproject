@@ -52,8 +52,7 @@ var Base_Model_View = Backbone.View
 			 * set to current view object. Also binds functions and model data
 			 * to views.
 			 */
-			initialize : function()
-			{
+			initialize : function() {
 				/*
 				 * Binds functions to current view object, every function that
 				 * uses current view "this" should be bind to view
@@ -72,11 +71,10 @@ var Base_Model_View = Backbone.View
 				 * If backbone model is passed as option the model is set to
 				 * view
 				 */
+				else if (this.options.model)
+					this.model = this.options.model;
 				else
-					if (this.options.model)
-						this.model = this.options.model;
-					else
-						this.model = new Backbone.Model({});
+					this.model = new Backbone.Model({});
 
 				/*
 				 * Binds render function to change event on the view object
@@ -89,9 +87,45 @@ var Base_Model_View = Backbone.View
 				 * Sets URL to backbone model, if url is passed when creating a
 				 * view. URL specified is used to fetch, save the model
 				 */
-				if (this.options.url)
-				{
+				if (this.options.url) {
 					this.model.url = this.options.url;
+				}
+
+				/*
+				 * If "isNew" in options is true, model is not downloaded. which
+				 * represents no model data needs to be shown in the view, but
+				 * can be used to save data in url set for model. If isNew is
+				 * not true and model is empty data needs to be fetched
+				 */
+				if ((!this.options.isNew)
+						&& $.isEmptyObject(this.model.toJSON())) {
+					console.log("to fetch");
+					/*
+					 * Stores view object in temp variable, to be used in
+					 * success back for fetch to call render
+					 */
+					var that = this;
+
+					/*
+					 * Fetches model from the url property set, on success
+					 * forces render to execute to show the data fetched in
+					 * view.
+					 */
+					this.model.fetch({
+						success : function(data) {
+							/*
+							 * Used true argument to render (forcing render to
+							 * execute and show view.), which represent data is
+							 * downloaded from server, If render called out
+							 * "true" argument then loading image is show
+							 * instead of showing data (because Showing view
+							 * without downloading data causes flash effect on
+							 * page, since on change in model i.e., data fetched
+							 * render is called again)
+							 */
+							that.render(true);
+						}
+					});
 				}
 			},
 
@@ -100,14 +134,12 @@ var Base_Model_View = Backbone.View
 			 * ".delete" in current view object, which sends delete request to
 			 * server(to URL set to model in initialize function)
 			 */
-			deleteItem : function(e)
-			{
+			deleteItem : function(e) {
 				/*
 				 * Sends delete request, and reloads view on success
 				 */
 				this.model.destroy({
-					success : function(model, response)
-					{
+					success : function(model, response) {
 						location.reload(true);
 					}
 				});
@@ -119,8 +151,7 @@ var Base_Model_View = Backbone.View
 			 * save the model data in the view representing a form i.e., saveS
 			 * the data in form, to the URL set in model.
 			 */
-			save : function(e)
-			{
+			save : function(e) {
 				e.preventDefault();
 
 				/*
@@ -151,8 +182,7 @@ var Base_Model_View = Backbone.View
 				 * 		}
 				 * </pre>
 				 */
-				if ($(this.el).find('form').length > 1)
-				{
+				if ($(this.el).find('form').length > 1) {
 					// Initialize variable json as a map
 					json = {};
 
@@ -164,16 +194,14 @@ var Base_Model_View = Backbone.View
 					 * as name of the form
 					 */
 					$.each($(this.el).find('form'),
-							function(index, formelement)
-							{
+							function(index, formelement) {
 
 								/*
 								 * If any form in multiple forms are not valid
 								 * then returns, setting a flag form data is
 								 * invalid
 								 */
-								if (!isValidForm($(formelement)))
-								{
+								if (!isValidForm($(formelement))) {
 									isValid = false;
 									return;
 								}
@@ -190,8 +218,7 @@ var Base_Model_View = Backbone.View
 								 * serialized data in to JSON object with form
 								 * name as key
 								 */
-								if (name)
-								{
+								if (name) {
 									json[name] = serializeForm(form_id);
 								}
 								/*
@@ -199,13 +226,11 @@ var Base_Model_View = Backbone.View
 								 * serialized values to json, with filed names
 								 * as key for the value
 								 */
-								else
-								{
-									$.each(serializeForm(form_id),
-											function(key, value)
-											{
-												json[key] = value;
-											});
+								else {
+									$.each(serializeForm(form_id), function(
+											key, value) {
+										json[key] = value;
+									});
 								}
 							});
 				}
@@ -214,8 +239,7 @@ var Base_Model_View = Backbone.View
 				 * Check isValid flag for validity(which is set in processing
 				 * multiple forms), or checks validity of single form
 				 */
-				if (isValid == false || !isValidForm($form))
-				{
+				if (isValid == false || !isValidForm($form)) {
 					return;
 				}
 
@@ -266,61 +290,51 @@ var Base_Model_View = Backbone.View
 									 * specified in the options set when
 									 * creating an view
 									 */
-									success : function(model, response)
-									{
+									success : function(model, response) {
 										// Reload the current page
 										if (reload)
 											location.reload(true);
-										else
-											if (window)
-											{
-												/*
-												 * If window option is 'back'
-												 * navigate to previews page
-												 */
-												if (window == 'back')
-												{
-													window.history.back();
-												}
-												// Else navigate to page set in
-												// window attribute
-												else
-												{
-													Backbone.history.navigate(
-															window, {
-																trigger : true
-															});
-												}
-
-												// Reset each element
-												$form.each(function()
-												{
-													this.reset();
-												});
-
-												// Hide modal if enabled
-												if (modal)
-												{
-													$(modal).modal('hide');
-												}
+										else if (window) {
+											/*
+											 * If window option is 'back'
+											 * navigate to previews page
+											 */
+											if (window == 'back') {
+												window.history.back();
 											}
-											else
-											{
-												// Hide loading on error
-												$save_info.hide();
-
-												/*
-												 * Appends success message to
-												 * form actions block in form,
-												 * if window option is not set
-												 * for view
-												 */
-												$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>Saved Successfully</i></p></small></div>');
-												$(".form-actions", this.el)
-														.append($save_info);
-												$save_info.show().delay(3000)
-														.hide(1);
+											// Else navigate to page set in
+											// window attribute
+											else {
+												Backbone.history.navigate(
+														window, {
+															trigger : true
+														});
 											}
+
+											// Reset each element
+											$form.each(function() {
+												this.reset();
+											});
+
+											// Hide modal if enabled
+											if (modal) {
+												$(modal).modal('hide');
+											}
+										} else {
+											// Hide loading on error
+											$save_info.hide();
+
+											/*
+											 * Appends success message to form
+											 * actions block in form, if window
+											 * option is not set for view
+											 */
+											$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>Saved Successfully</i></p></small></div>');
+											$(".form-actions", this.el).append(
+													$save_info);
+											$save_info.show().delay(3000).hide(
+													1);
+										}
 									},
 
 									/*
@@ -328,8 +342,7 @@ var Base_Model_View = Backbone.View
 									 * message in response object is shown in
 									 * the form
 									 */
-									error : function(model, response)
-									{
+									error : function(model, response) {
 										// Hide loading on error
 										$save_info.hide();
 
@@ -365,8 +378,7 @@ var Base_Model_View = Backbone.View
 			 *            Boolean, force render to show the view called with
 			 *            'true' when model is download
 			 */
-			render : function(isFetched)
-			{
+			render : function(isFetched) {
 
 				/**
 				 * Renders and returns the html element of view with model data,
@@ -389,8 +401,7 @@ var Base_Model_View = Backbone.View
 				 * <p>
 				 */
 				if (!this.model.isNew() || this.options.isNew
-						|| !$.isEmptyObject(this.model.toJSON()) || isFetched)
-				{
+						|| !$.isEmptyObject(this.model.toJSON()) || isFetched) {
 
 					/*
 					 * Uses handlebars js to fill the model data in the template
@@ -412,31 +423,27 @@ var Base_Model_View = Backbone.View
 					 * is called by sending el(current view html element) as
 					 * parameters
 					 */
-					if (callback && typeof (callback) === "function")
-					{
+					if (callback && typeof (callback) === "function") {
 						// execute the callback, passing parameters as necessary
 						callback($(this.el));
 					}
 
 					// If isNew is not true, then serialize the form data
-					if (this.options.isNew != true)
-					{
+					if (this.options.isNew != true) {
 						// If el have more than 1 form de serialize all forms
 						if ($(this.el).find('form').length > 1)
 							deserializeMultipleForms(this.model.toJSON(), $(
 									this.el).find('form'));
 
 						// If el have one form
-						else
-							if ($(this.el).find('form').length == 1)
-								deserializeForm(this.model.toJSON(), $(this.el)
-										.find('form'));
+						else if ($(this.el).find('form').length == 1)
+							deserializeForm(this.model.toJSON(), $(this.el)
+									.find('form'));
 					}
 				}
 				// Shows loading in the view, if conditions to renders are
 				// satisfied
-				else
-				{
+				else {
 					$(this.el).html(LOADING_HTML);
 				}
 
