@@ -10,10 +10,10 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.codehaus.jettison.json.JSONObject;
 
-import com.agilecrm.core.DomainUser;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.gson.Gson;
 import com.stripe.exception.StripeException;
@@ -50,8 +50,9 @@ public class StripeUtil
      * @throws JsonMappingException
      * @throws IOException
      */
-    public static Map<String, Object> getCustomerParams(CreditCard customerCard, Plan plan)
-	    throws JsonParseException, JsonMappingException, IOException
+    public static Map<String, Object> getCustomerParams(
+	    CreditCard customerCard, Plan plan) throws JsonParseException,
+	    JsonMappingException, IOException
     {
 	Map<String, Object> customerParams = new HashMap<String, Object>();
 
@@ -64,7 +65,8 @@ public class StripeUtil
 
 	// Sets Description and Email for subscription
 	customerParams.put("description", NamespaceManager.get());
-	customerParams.put("email", DomainUser.getDomainCurrentUser().email);
+	customerParams
+		.put("email", DomainUserUtil.getDomainCurrentUser().email);
 
 	return customerParams;
     }
@@ -88,8 +90,8 @@ public class StripeUtil
 	String creditCardJSON = new Gson().toJson(cardDetails);
 
 	// Creates HashMap from CreditCard JSON string
-	HashMap<String, Object> cardParams = new ObjectMapper().readValue(creditCardJSON,
-		new TypeReference<HashMap<String, Object>>()
+	HashMap<String, Object> cardParams = new ObjectMapper().readValue(
+		creditCardJSON, new TypeReference<HashMap<String, Object>>()
 		{
 		});
 
@@ -107,10 +109,12 @@ public class StripeUtil
      * @return {@link Customer}
      * @throws StripeException
      */
-    public static Customer getCustomerFromJson(JSONObject customerJSON) throws StripeException
+    public static Customer getCustomerFromJson(JSONObject customerJSON)
+	    throws StripeException
     {
 	// Converts Customer JSON to customer object
-	Customer customer = new Gson().fromJson(customerJSON.toString(), Customer.class);
+	Customer customer = new Gson().fromJson(customerJSON.toString(),
+		Customer.class);
 
 	// Retrieves the customer from stripe based on id
 	return Customer.retrieve(customer.getId());
@@ -124,7 +128,8 @@ public class StripeUtil
      * @return {@link JSONObject}
      * @throws Exception
      */
-    public static JSONObject getJSONFromCustomer(Customer customer) throws Exception
+    public static JSONObject getJSONFromCustomer(Customer customer)
+	    throws Exception
     {
 	// Gets customer JSON string from customer object
 	String customerJSONString = new Gson().toJson(customer);

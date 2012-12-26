@@ -11,11 +11,12 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.agilecrm.core.DomainUser;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
 
 /**
@@ -91,7 +92,7 @@ public class AgileAuthFilter implements Filter
 		AgileUser.class);
 
 	// Check if userinfo is valid for this namespace
-	DomainUser domainUser = DomainUser.getDomainCurrentUser();
+	DomainUser domainUser = DomainUserUtil.getDomainCurrentUser();
 
 	System.out.println("Current domain user " + domainUser);
 

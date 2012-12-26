@@ -1,5 +1,5 @@
 <%@page import="org.apache.commons.lang.StringUtils"%>
-<%@page import="com.agilecrm.core.DomainUser"%>
+<%@page import="com.agilecrm.user.DomainUser"%>
 <%
 /*
 It checks if any user exists in that domain,

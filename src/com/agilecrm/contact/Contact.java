@@ -16,16 +16,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.json.JSONArray;
 
+import com.agilecrm.contact.deferred.TagsDeferredTask;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.contact.util.TagUtil;
-import com.agilecrm.core.DomainUser;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.deferred.TagsDeferredTask;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.notification.util.ContactNotificationPrefsUtil;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.triggers.util.ContactTriggerUtil;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -445,7 +445,7 @@ public class Contact extends Cursor implements Serializable
 	    try
 	    {
 		// return dao.ofy().get(owner_key);
-		return DomainUser.getDomainUser(owner_key.getId());
+		return DomainUserUtil.getDomainUser(owner_key.getId());
 	    }
 	    catch (Exception e)
 	    {

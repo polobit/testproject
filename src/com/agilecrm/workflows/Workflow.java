@@ -7,10 +7,11 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.agilecrm.core.DomainUser;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Unindexed;
@@ -165,7 +166,7 @@ public class Workflow extends Cursor
 	DomainUser domainUser = null;
 	try
 	{
-	    domainUser = DomainUser.getDomainUser(creator_key.getId());
+	    domainUser = DomainUserUtil.getDomainUser(creator_key.getId());
 	}
 	catch (Exception e)
 	{

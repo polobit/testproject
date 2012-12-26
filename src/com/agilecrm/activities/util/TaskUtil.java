@@ -74,7 +74,7 @@ public class TaskUtil
     {
 	try
 	{
-	    // Get Today's date
+	    // Gets Today's date
 	    DateUtil startDateUtil = new DateUtil();
 	    Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
 

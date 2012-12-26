@@ -32,7 +32,6 @@ public class CustomFieldDefUtil
      */
     public static List<CustomFieldDef> getAllCustomFields() throws Exception
     {
-
 	return dao.fetchAll();
     }
 
@@ -64,7 +63,6 @@ public class CustomFieldDefUtil
      */
     public static CustomFieldDef getFieldByName(String field_label)
     {
-
 	return dao.getByProperty("field_label", field_label);
     }
 }

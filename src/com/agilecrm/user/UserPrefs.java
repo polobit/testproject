@@ -5,7 +5,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
-import com.agilecrm.core.DomainUser;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;

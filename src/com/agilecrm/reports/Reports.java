@@ -10,10 +10,11 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.agilecrm.core.DomainUser;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Indexed;
@@ -69,7 +70,8 @@ public class Reports implements Serializable
     @Indexed
     private Key<DomainUser> owner_key = null;
 
-    public static ObjectifyGenericDao<Reports> dao = new ObjectifyGenericDao<Reports>(Reports.class);
+    public static ObjectifyGenericDao<Reports> dao = new ObjectifyGenericDao<Reports>(
+	    Reports.class);
 
     public Reports()
     {
@@ -137,7 +139,8 @@ public class Reports implements Serializable
 	NamespaceManager.set("");
 	try
 	{
-	    return dao.ofy().query(Reports.class).filter("domain", oldNamespace).list();
+	    return dao.ofy().query(Reports.class)
+		    .filter("domain", oldNamespace).list();
 	}
 	finally
 	{
@@ -178,7 +181,8 @@ public class Reports implements Serializable
 
 	try
 	{
-	    return dao.ofy().query(Reports.class).filter("is_reports_enabled", true)
+	    return dao.ofy().query(Reports.class)
+		    .filter("is_reports_enabled", true)
 		    .filter("duration", duration).list();
 	}
 	finally
@@ -197,7 +201,7 @@ public class Reports implements Serializable
 	    // and return null
 	    try
 	    {
-		return DomainUser.getDomainUser(owner_key.getId());
+		return DomainUserUtil.getDomainUser(owner_key.getId());
 	    }
 	    catch (Exception e)
 	    {

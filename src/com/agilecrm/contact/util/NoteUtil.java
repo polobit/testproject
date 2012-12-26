@@ -94,5 +94,4 @@ public class NoteUtil
 	Key<Note> noteKey = new Key<Note>(contactKey, Note.class, noteId);
 	dao.deleteKey(noteKey);
     }
-
 }

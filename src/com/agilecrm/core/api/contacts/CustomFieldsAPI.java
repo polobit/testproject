@@ -46,7 +46,6 @@ public class CustomFieldsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<CustomFieldDef> getCustomFields()
     {
-
 	try
 	{
 	    return CustomFieldDefUtil.getAllCustomFields();

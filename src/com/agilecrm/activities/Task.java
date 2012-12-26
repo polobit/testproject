@@ -141,7 +141,6 @@ public class Task
      */
     public Task(Type type, Long due, Long agileUserId)
     {
-	// Get Current Agile User
 	this.type = type;
 	this.due = due;
 
@@ -162,7 +161,6 @@ public class Task
      */
     public void save()
     {
-
 	dao.put(this);
     }
 
@@ -184,7 +182,6 @@ public class Task
     @XmlElement
     public List<Contact> getContacts()
     {
-
 	return Contact.dao.fetchAllByKeys(this.related_contacts);
     }
 
@@ -220,5 +217,4 @@ public class Task
 		this.owner = new Key<AgileUser>(AgileUser.class, agileUser.id);
 	}
     }
-
 }

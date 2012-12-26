@@ -8,6 +8,7 @@ import com.agilecrm.core.DomainUser;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.UserPrefsUtil;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.Util;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.googlecode.objectify.Key;
@@ -47,7 +48,7 @@ public class TaskRemainderDeferredTask implements DeferredTask
      */
     public void run()
     {
-	List<DomainUser> domainUsers = DomainUser.getUsers(domain);
+	List<DomainUser> domainUsers = DomainUserUtil.getUsers(domain);
 	for (DomainUser domainUser : domainUsers)
 	{
 	    AgileUser agileUser = AgileUser

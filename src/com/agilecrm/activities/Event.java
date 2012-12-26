@@ -84,7 +84,9 @@ public class Event
      */
     public Long created_time = 0L;
 
-    // Related Contact
+    /**
+     * Related Contact
+     */
     @NotSaved(IfDefault.class)
     public Key<Contact> contact = null;
 
@@ -179,5 +181,4 @@ public class Event
     {
 	return ("Start " + start + "  End: " + end + " Range: " + search_range);
     }
-
 }

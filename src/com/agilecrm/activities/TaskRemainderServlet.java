@@ -3,13 +3,14 @@ package com.agilecrm.activities;
 import java.io.IOException;
 import java.util.Set;
 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import com.agilecrm.activities.deferred.TaskRemainderDeferredTask;
-import com.agilecrm.core.DomainUser;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.util.Util;
 import com.google.appengine.api.NamespaceManager;
@@ -33,13 +34,13 @@ import com.google.appengine.api.taskqueue.TaskOptions;
  * @author Rammohan
  * 
  */
-@SuppressWarnings("serial")
-public class TaskRemainderServlet extends HttpServlet
+@Path("/tasks/remainder")
+public class TaskRemainderServlet
 {
-    public void service(HttpServletRequest req, HttpServletResponse res)
-	    throws IOException
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void dailyTaskRemainder() throws IOException
     {
-	res.setContentType("text/plain;charset=UTF-8");
 
 	Set<String> domains = Util.getAllNamespaces();
 

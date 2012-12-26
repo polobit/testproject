@@ -33,7 +33,6 @@ import com.agilecrm.activities.util.EventUtil;
 public class EventsAPI
 {
 
-    // Events
     /**
      * Gets List of events matched to a search range
      * 
@@ -68,7 +67,6 @@ public class EventsAPI
 	}
     }
 
-    // Get Event
     /**
      * Gets an event based on id
      * 
@@ -85,7 +83,6 @@ public class EventsAPI
 	return event;
     }
 
-    // Delete Event
     /**
      * Deletes an event based on id
      * 
@@ -109,7 +106,6 @@ public class EventsAPI
 	}
     }
 
-    // New Event
     /**
      * Saves a new event in database
      * 
@@ -126,7 +122,6 @@ public class EventsAPI
 	return event;
     }
 
-    // Update Event
     /**
      * Updates an existing event
      * 
@@ -142,5 +137,4 @@ public class EventsAPI
 	event.save();
 	return event;
     }
-
 }

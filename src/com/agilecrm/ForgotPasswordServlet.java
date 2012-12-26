@@ -7,7 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.agilecrm.core.DomainUser;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 
 @SuppressWarnings("serial")
 public class ForgotPasswordServlet extends HttpServlet
@@ -25,7 +26,7 @@ public class ForgotPasswordServlet extends HttpServlet
 	String email = request.getParameter("email");
 	String password = "";
 	System.out.println(email);
-	DomainUser domainuser = DomainUser.generatePassword(email);
+	DomainUser domainuser = DomainUserUtil.generatePassword(email);
 	if (domainuser != null)
 	{
 	    password = domainuser.password;

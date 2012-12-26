@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import com.agilecrm.core.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -168,7 +168,7 @@ public class DBUtil
 
 		CronUtil.deleteCronsByNamespace(namespace);
 
-		DomainUser.deleteDomainUsers(namespace);
+		DomainUserUtil.deleteDomainUsers(namespace);
 
 	    }
 	    catch (Exception e)

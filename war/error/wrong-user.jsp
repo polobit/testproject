@@ -1,7 +1,7 @@
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.User"%>
-<%@ page import="com.agilecrm.core.DomainUser"%>
+<%@ page import="com.agilecrm.user.DomainUser"%>
 <%@ page language="java" import="java.util.*" pageEncoding="ISO-8859-1"%>
 
 <% DomainUser domainUser = DomainUser.getDomainUserFromEmail(UserServiceFactory.getUserService().getCurrentUser().getEmail()); %>
