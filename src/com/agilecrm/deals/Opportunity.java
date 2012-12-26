@@ -14,6 +14,7 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.notification.util.DealNotificationPrefsUtil;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.workflows.triggers.util.DealTriggerUtil;
 import com.googlecode.objectify.Key;
@@ -210,7 +211,7 @@ public class Opportunity
 	    try
 	    {
 		// Gets Domain User Object
-		return DomainUser.getDomainUser(ownerKey.getId());
+		return DomainUserUtil.getDomainUser(ownerKey.getId());
 	    }
 	    catch (Exception e)
 	    {

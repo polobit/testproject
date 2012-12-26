@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.user.util.DomainUserUtil"%>
 <%@page import="com.agilecrm.session.UserInfo"%>
 <%@page import="com.agilecrm.session.SessionManager"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
@@ -33,7 +34,7 @@
 	    return;
 	}
 
-	DomainUser domainUser = DomainUser.getDomainCurrentUser();
+	DomainUser domainUser = DomainUserUtil.getDomainCurrentUser();
 	System.out.println("Domain user " + domainUser);
 	
 	ObjectMapper mapper = new ObjectMapper();

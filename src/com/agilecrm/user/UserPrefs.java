@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Parent;
@@ -151,7 +152,7 @@ public class UserPrefs
      */
     public String getCurrentDomainUserName()
     {
-	DomainUser currentDomainUser = DomainUser.getDomainCurrentUser();
+	DomainUser currentDomainUser = DomainUserUtil.getDomainCurrentUser();
 	if (currentDomainUser != null && currentDomainUser.name != null)
 	    return currentDomainUser.name;
 
@@ -164,7 +165,7 @@ public class UserPrefs
     public void save()
     {
 	// Wrapping UserPrefs name to DomainUser name
-	DomainUser currentDomainUser = DomainUser.getDomainCurrentUser();
+	DomainUser currentDomainUser = DomainUserUtil.getDomainCurrentUser();
 
 	try
 	{

@@ -11,9 +11,10 @@ import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.IMAPEmailPrefs;
-import com.agilecrm.user.NotificationPrefs;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.notification.NotificationPrefs;
+import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
@@ -296,7 +297,7 @@ public class DomainUserUtil
 	if (agileUser != null)
 	{
 	    // Delete UserPrefs
-	    UserPrefs userPrefs = UserPrefs.getUserPrefs(agileUser);
+	    UserPrefs userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
 	    if (userPrefs != null)
 		userPrefs.delete();
 
