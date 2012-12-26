@@ -6,8 +6,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.agilecrm.user.NotificationPrefs;
-import com.agilecrm.user.util.NotificationPrefsUtil;
+import com.agilecrm.user.notification.NotificationPrefs;
+import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 
 /**
  * <code>NotificationsAPI</code> is used to perform GET and PUT operations on

@@ -1,7 +1,7 @@
-package com.agilecrm.user.util;
+package com.agilecrm.user.notification.util;
 
 import com.agilecrm.contact.Contact;
-import com.agilecrm.user.NotificationPrefs;
+import com.agilecrm.user.notification.NotificationPrefs;
 
 /**
  * <code>ContactNotificationPrefsUtil</code> is the base class for contact

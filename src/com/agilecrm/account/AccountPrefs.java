@@ -23,7 +23,7 @@ public class AccountPrefs
     public String logo = null;
 
     @NotSaved(IfDefault.class)
-    public String company_name = null;
+    public String company_name = "";
 
     // Dao
     private static ObjectifyGenericDao<AccountPrefs> dao = new ObjectifyGenericDao<AccountPrefs>(

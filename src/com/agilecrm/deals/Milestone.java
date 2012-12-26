@@ -23,7 +23,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 public class Milestone
 {
 
-    // Key
+
     /**
      * Milestone Id
      */

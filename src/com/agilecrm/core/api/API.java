@@ -26,6 +26,7 @@ import com.agilecrm.user.IMAPEmailPrefs;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.SocialPrefs.Type;
 import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DBUtil;
 import com.agilecrm.util.Util;
 import com.google.appengine.api.NamespaceManager;
@@ -245,7 +246,7 @@ public class API {
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<UserPrefs> getAllUserPrefs() {
-		return UserPrefs.getAllUserPrefs();
+	return UserPrefsUtil.getAllUserPrefs();
 	}
 
 	// Get Stats

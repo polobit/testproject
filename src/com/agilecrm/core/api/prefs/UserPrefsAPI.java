@@ -7,6 +7,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.util.UserPrefsUtil;
 
 @Path("/api/user-prefs")
 public class UserPrefsAPI
@@ -20,7 +21,7 @@ public class UserPrefsAPI
 	try
 	{
 
-	    return UserPrefs.getCurrentUserPrefs();
+	    return UserPrefsUtil.getCurrentUserPrefs();
 	}
 	catch (Exception e)
 	{
@@ -37,7 +38,7 @@ public class UserPrefsAPI
 	try
 	{
 	    // Get UserId of person who is logged in
-	    UserPrefs userPrefs = UserPrefs.getCurrentUserPrefs();
+	    UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
 	    userPrefs.name = prefs.name;
 	    userPrefs.pic = prefs.pic;
 	    userPrefs.signature = prefs.signature;

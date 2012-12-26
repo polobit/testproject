@@ -7,6 +7,7 @@ import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.core.DomainUser;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.Util;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.googlecode.objectify.Key;
@@ -55,7 +56,7 @@ public class TaskRemainderDeferredTask implements DeferredTask
 	    if (agileUser == null)
 		continue;
 
-	    UserPrefs userPrefs = UserPrefs.getUserPrefs(agileUser);
+	    UserPrefs userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
 
 	    if (!userPrefs.task_reminder)
 		continue;

@@ -1,10 +1,10 @@
-package com.agilecrm.user.util;
+package com.agilecrm.user.notification.util;
 
 import org.json.JSONArray;
 
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
-import com.agilecrm.user.NotificationPrefs;
+import com.agilecrm.user.notification.NotificationPrefs;
 
 /**
  * <code>DealNotificationPrefsUtil</code> is the base class to execute

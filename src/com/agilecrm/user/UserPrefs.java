@@ -1,7 +1,5 @@
 package com.agilecrm.user;
 
-import java.util.List;
-
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -9,10 +7,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import com.agilecrm.core.DomainUser;
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.condition.IfDefault;
@@ -60,7 +55,7 @@ public class UserPrefs
     private static ObjectifyGenericDao<UserPrefs> dao = new ObjectifyGenericDao<UserPrefs>(
 	    UserPrefs.class);
 
-    UserPrefs(Long userId, String name, String image, String template,
+    public UserPrefs(Long userId, String name, String image, String template,
 	    String width, String signature, boolean task_reminder)
     {
 	this.name = name;
@@ -79,36 +74,15 @@ public class UserPrefs
 
     }
 
-    public static UserPrefs getCurrentUserPrefs()
+    public String getCurrentDomainUserName()
     {
-	// Agile User
-	AgileUser agileUser = AgileUser.getCurrentAgileUser();
+	DomainUser currentDomainUser = DomainUser.getDomainCurrentUser();
+	if (currentDomainUser != null && currentDomainUser.name != null)
+	    return currentDomainUser.name;
 
-	// Get Prefs
-	return getUserPrefs(agileUser);
+	return "?";
     }
 
-    public static UserPrefs getUserPrefs(AgileUser agileUser)
-    {
-	Objectify ofy = ObjectifyService.begin();
-	Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class,
-		agileUser.id);
-
-	UserPrefs userPrefs = ofy.query(UserPrefs.class).ancestor(userKey)
-		.get();
-	if (userPrefs == null)
-	    return getDefaultPrefs(agileUser);
-
-	return userPrefs;
-    }
-
-    private static UserPrefs getDefaultPrefs(AgileUser agileUser)
-    {
-	UserPrefs userPrefs = new UserPrefs(agileUser.id, null, null,
-		"default", "", "- Powered by AgileCRM", true);
-	userPrefs.save();
-	return userPrefs;
-    }
 
     public void save()
     {
@@ -140,31 +114,4 @@ public class UserPrefs
 	dao.delete(this);
     }
 
-    public static UserPrefs getUserPrefs(Long id)
-    {
-	try
-	{
-	    return dao.get(id);
-	}
-	catch (EntityNotFoundException e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-
-    public static List<UserPrefs> getAllUserPrefs()
-    {
-	return dao.fetchAll();
-    }
-
-    public String getCurrentDomainUserName()
-    {
-	DomainUser currentDomainUser = DomainUser.getDomainCurrentUser();
-	if (currentDomainUser != null && currentDomainUser.name != null)
-	    return currentDomainUser.name;
-
-	return "?";
-    }
 }

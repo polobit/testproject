@@ -6,7 +6,7 @@ import org.json.simple.JSONObject;
 
 import com.agilecrm.Globals;
 import com.agilecrm.account.APIKey;
-import com.agilecrm.user.NotificationPrefs.Type;
+import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.util.Util;
 import com.google.appengine.api.taskqueue.DeferredTask;
 

@@ -19,7 +19,7 @@ import org.json.JSONException;
 
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
-import com.agilecrm.user.util.DealNotificationPrefsUtil;
+import com.agilecrm.user.notification.util.DealNotificationPrefsUtil;
 import com.agilecrm.workflows.triggers.util.DealTriggerUtil;
 
 /**
@@ -39,9 +39,9 @@ import com.agilecrm.workflows.triggers.util.DealTriggerUtil;
 public class DealsAPI
 {
 
-    // This method is called if TEXT_PLAIN is request
     /**
-     * Returns list of opportunities
+     * Returns list of opportunities. This method is called if TEXT_PLAIN is
+     * request
      * 
      * @return list of opportunities
      */
@@ -52,9 +52,10 @@ public class DealsAPI
 	return OpportunityUtil.getOpportunities();
     }
 
-    // This method is called if XML is request
+
     /**
-     * Return opportunity with respect to Id
+     * Return opportunity with respect to Id. This method is called if XML is
+     * request
      * 
      * @param id
      *            - Opportunity Id to be fetched
@@ -117,9 +118,9 @@ public class DealsAPI
     }
 
 
-    // Deals Stats - Milestones
     /**
      * Returns milestones with respect to given minimum time and maximum time.
+     * Deals Stats - Milestones
      * 
      * @param min
      *            - given time less than closed date of deal
@@ -136,10 +137,10 @@ public class DealsAPI
 	return OpportunityUtil.getMilestones(min, max).toString();
     }
 
-    // Deals Stats - Conversions
+
     /**
      * Returns percentage of opportunities won compared to total opportunities
-     * exist with respect to closed date
+     * exist with respect to closed date. Deals Stats - Conversions
      * 
      * @param min
      *            - Given time less than closed date
@@ -156,10 +157,10 @@ public class DealsAPI
 	return OpportunityUtil.getConversionDetails(min, max).toString();
     }
 
-    // Deals Stats - Details
+
     /**
      * Gets sum of expected values and pipeline values of the deals having
-     * closed date within the month of given time period.
+     * closed date within the month of given time period. Deals Stats - Details
      * 
      * @param min
      *            - Given time less than closed date
@@ -177,10 +178,10 @@ public class DealsAPI
 	return OpportunityUtil.getDealsDetails(min, max).toString();
     }
 
-    // Bulk operations - delete
+
     /**
      * Deletes the bulk of deals and executes trigger to the related contacts of
-     * each deal
+     * each deal. Bulk operations - delete
      * 
      * @param model_ids
      *            array of deal ids as String

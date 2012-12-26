@@ -31,25 +31,13 @@ public class MilestoneUtil
 	Objectify ofy = ObjectifyService.begin();
 	Milestone milestone = ofy.query(Milestone.class).get();
 	if (milestone == null)
-	    return getDefaultMilestone();
+	    return getDefaultMilestones();
 
 	return milestone;
     }
 
     /**
-     * Returns default milestone
-     * 
-     * @return milestone object
-     */
-    public static Milestone getDefaultMilestone()
-    {
-	Milestone milestone = new Milestone("Lost, Open, Won, Stage 1");
-	milestone.save();
-	return milestone;
-    }
-
-    /**
-     * Returns array of milestones
+     * Returns array of milestones, otherwise returns default milestones
      * 
      * @return string array of milestones
      */
@@ -60,9 +48,21 @@ public class MilestoneUtil
 
 	// Send default milestones if not available
 	if (milestone == null)
-	    return getDefaultMilestone().milestones.split(",");
+	    return getDefaultMilestones().milestones.split(",");
 
 	return milestone.milestones.split(",");
+    }
+
+    /**
+     * Returns default milestone
+     * 
+     * @return milestone object
+     */
+    public static Milestone getDefaultMilestones()
+    {
+	Milestone milestone = new Milestone("Lost, Open, Won, Stage 1");
+	milestone.save();
+	return milestone;
     }
 
 }

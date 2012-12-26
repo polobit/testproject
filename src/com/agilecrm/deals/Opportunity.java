@@ -13,7 +13,8 @@ import com.agilecrm.core.DomainUser;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.UserPrefs;
-import com.agilecrm.user.util.DealNotificationPrefsUtil;
+import com.agilecrm.user.notification.util.DealNotificationPrefsUtil;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.workflows.triggers.util.DealTriggerUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
@@ -45,7 +46,7 @@ import com.googlecode.objectify.condition.IfDefault;
 public class Opportunity
 {
 
-    // Key
+
     /**
      * Opportunity Id
      */
@@ -98,7 +99,7 @@ public class Opportunity
     @NotSaved(IfDefault.class)
     public Long close_date = 0L;
 
-    // Owner
+
     /**
      * DomainUser Id who created Deal
      */
@@ -186,7 +187,7 @@ public class Opportunity
 	this.owner_id = ownerId;
     }
 
-    // Contacts related with deals Author : Yaswanth 08-24-2012
+
     /**
      * Gets contacts related with deals
      * 
@@ -202,7 +203,7 @@ public class Opportunity
 	return contacts_list;
     }
 
-    // Get Users
+
     /**
      * Gets domain user with respect to owner id if exists, otherwise null.
      * 
@@ -228,7 +229,7 @@ public class Opportunity
 	return null;
     }
 
-    // Get Users
+
     /**
      * Gets UserPrefs object with respect to agile user.Inorder to display owner
      * name of a deal in Deals table,UserPrefs are taken into account.
@@ -282,7 +283,7 @@ public class Opportunity
 	    agileuser = AgileUser.getCurrentAgileUserFromDomainUser(ownerKey
 		    .getId());
 	    if (agileuser != null)
-		userprefs = UserPrefs.getUserPrefs(agileuser);
+		userprefs = UserPrefsUtil.getUserPrefs(agileuser);
 	    if (userprefs != null)
 		return userprefs.pic;
 	}
@@ -296,7 +297,7 @@ public class Opportunity
     }
 
 
-    // Save Opportunity
+
     /**
      * Saves opportuntiy in dao.
      */
@@ -328,7 +329,7 @@ public class Opportunity
 
     }
 
-    // Delete Opportunity
+
     /**
      * Deletes opportunity from dao
      */

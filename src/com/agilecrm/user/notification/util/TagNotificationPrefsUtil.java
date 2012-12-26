@@ -1,10 +1,10 @@
-package com.agilecrm.user.util;
+package com.agilecrm.user.notification.util;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import com.agilecrm.contact.Contact;
-import com.agilecrm.user.NotificationPrefs;
+import com.agilecrm.user.notification.NotificationPrefs;
 
 /**
  * <code>TagNotificationPrefsUtil</code> is the base class for executing

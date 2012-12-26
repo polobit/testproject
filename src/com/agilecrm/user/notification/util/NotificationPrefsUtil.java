@@ -1,11 +1,11 @@
-package com.agilecrm.user.util;
+package com.agilecrm.user.notification.util;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.agilecrm.user.AgileUser;
-import com.agilecrm.user.NotificationPrefs;
-import com.agilecrm.user.NotificationPrefs.Type;
 import com.agilecrm.user.deferred.NotificationsDeferredTask;
+import com.agilecrm.user.notification.NotificationPrefs;
+import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;

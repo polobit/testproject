@@ -60,7 +60,7 @@ public class OpportunityUtil
 	return Opportunity.dao.fetchAll();
     }
 
-    // Get Opportunities based on time
+
     /**
      * Gets list of opportunities with respect to closed date and given time
      * period
@@ -79,8 +79,6 @@ public class OpportunityUtil
 		.filter("close_date <= ", maxTime).list();
     }
 
-
-    // Get deals of contact in contact details: Yaswanth - 08/24/12
     /**
      * Gets deals with respect to contact
      * 
@@ -99,9 +97,6 @@ public class OpportunityUtil
 
     }
 
-
-    // Get map of total and pipelines
-    // Author: Yaswanth - 07/30/2012
     /**
      * Gets JSONObject of expected-values and pipeline values of deals with
      * respect to month.Gets list of opportunities with respect to given time
@@ -194,7 +189,6 @@ public class OpportunityUtil
 	return dealsObject;
     }
 
-    // Get Total Number of Milestones in a given period
     /**
      * Gets total number of milestones in a given period
      * 
@@ -216,8 +210,6 @@ public class OpportunityUtil
 
     }
 
-    // To get Milestones of deals
-    // Author:yaswanth 07/30/2012
     /**
      * Gets milestone JSONObject with respect to given time period.Filters the
      * opportunities with respect to milestones.For e.g. Milestone 'Lost'
@@ -251,11 +243,11 @@ public class OpportunityUtil
 	return milestonesObject;
     }
 
-    // To get the conversions rate in particular period - Total Closed/Total
-    // Author:yaswanth 07/30/2012
+
     /**
      * Returns JSONObject consisting of percentage of deals won compared to
-     * total number of opportunities
+     * total number of opportunities.Gets the conversions rate in particular
+     * period - Total Closed/Total
      * 
      * @param minTime
      *            - Given time less than closed date

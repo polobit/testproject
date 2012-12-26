@@ -25,7 +25,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deferred.TagsDeferredTask;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
-import com.agilecrm.user.util.ContactNotificationPrefsUtil;
+import com.agilecrm.user.notification.util.ContactNotificationPrefsUtil;
 import com.agilecrm.workflows.triggers.util.ContactTriggerUtil;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
