@@ -31,7 +31,8 @@ import org.json.JSONObject;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-import com.agilecrm.core.DomainUser;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -219,7 +220,7 @@ public class Util
     // Get all Name spaces
     public static Set<String> getAllNamespaces()
     {
-	List<DomainUser> domainList = DomainUser.getAllDomainUsers();
+	List<DomainUser> domainList = DomainUserUtil.getAllDomainUsers();
 
 	// Map<String, Long> domainMap = new HashMap<String, Long>();
 

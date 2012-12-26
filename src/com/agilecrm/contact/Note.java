@@ -127,5 +127,4 @@ public class Note
 	return "id: " + id + " created_time: " + created_time + " subj"
 		+ subject + " description: " + description;
     }
-
 }

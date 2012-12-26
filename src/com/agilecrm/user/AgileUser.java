@@ -5,9 +5,9 @@ import java.util.List;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.agilecrm.core.DomainUser;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 
@@ -68,7 +68,7 @@ public class AgileUser
     // Get Domain user based on the id
     public DomainUser getDomainUser()
     {
-	return DomainUser.getDomainUser(domain_user_id);
+	return DomainUserUtil.getDomainUser(domain_user_id);
     }
 
     // Delete Agile User

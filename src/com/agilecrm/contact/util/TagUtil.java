@@ -44,7 +44,6 @@ public class TagUtil
 		Tag.addTag(tagName);
 	    }
 	}
-
     }
 
     /**
@@ -69,7 +68,6 @@ public class TagUtil
 		dao.deleteKey(tagKey);
 	    }
 	}
-
     }
 
     /**
@@ -101,7 +99,6 @@ public class TagUtil
      */
     public static List<Tag> getTags()
     {
-
 	try
 	{
 	    return dao.fetchAll();

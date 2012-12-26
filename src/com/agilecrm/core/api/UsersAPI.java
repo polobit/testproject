@@ -17,7 +17,8 @@ import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.agilecrm.core.DomainUser;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
 
 @Path("/api/users")
@@ -34,7 +35,7 @@ public class UsersAPI
 	    String domain = NamespaceManager.get();
 
 	    // Get the users and update the password to the masked one
-	    List<DomainUser> users = DomainUser.getUsers(domain);
+	    List<DomainUser> users = DomainUserUtil.getUsers(domain);
 
 	    return users;
 	}
@@ -102,8 +103,8 @@ public class UsersAPI
 	try
 	{
 	    Long id = domainUser.id;
-	    DomainUser domainuser = DomainUser.getDomainUser(id);
-	    int count = DomainUser.count();
+	    DomainUser domainuser = DomainUserUtil.getDomainUser(id);
+	    int count = DomainUserUtil.count();
 
 	    // Check if only one account exists
 	    if (count == 1)
@@ -127,7 +128,7 @@ public class UsersAPI
 		    .build());
 	}
 
-	DomainUser.deleteRelatedEntities(domainUser.id);
+	DomainUserUtil.deleteRelatedEntities(domainUser.id);
 
 	domainUser.delete();
     }
@@ -152,7 +153,7 @@ public class UsersAPI
 	for (int i = 0; i < usersJSONArray.length(); i++)
 	{
 
-	    DomainUser domainuser = DomainUser.getDomainUser(Long
+	    DomainUser domainuser = DomainUserUtil.getDomainUser(Long
 		    .parseLong(usersJSONArray.getString(i)));
 
 	    deleteDomainUser(domainuser);

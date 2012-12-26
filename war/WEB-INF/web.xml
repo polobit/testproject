@@ -127,16 +127,6 @@
  </servlet-mapping>
 
 <servlet>
- 	<servlet-name>Task Remainder</servlet-name>
- 	<servlet-class>com.agilecrm.activities.TaskRemainderServlet</servlet-class>
- </servlet>
- 
- <servlet-mapping>
- 	<servlet-name>Task Remainder</servlet-name>
- 	<url-pattern>/taskremainder</url-pattern>
- </servlet-mapping>
-
-<servlet>
   <servlet-name>ForgotDomain</servlet-name> 
   <jsp-file>/forgot-domain.jsp</jsp-file> 
   </servlet>

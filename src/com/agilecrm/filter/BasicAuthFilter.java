@@ -15,7 +15,8 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.account.APIKey;
-import com.agilecrm.core.DomainUser;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.google.gdata.util.common.base.Charsets;
 
 /**
@@ -67,7 +68,7 @@ public class BasicAuthFilter implements Filter
 		    String password = credentials[1];
 
 		    // Get AgileUser
-		    DomainUser domainUser = DomainUser
+		    DomainUser domainUser = DomainUserUtil
 			    .getDomainUserFromEmail(user);
 
 		    // Check if ApiKey

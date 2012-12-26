@@ -17,8 +17,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
-import com.agilecrm.core.DomainUser;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.gson.Gson;
@@ -115,7 +116,7 @@ public class StripeWebhookServlet extends HttpServlet
 		setSubscriptionFlag(Subscription.BillingStatus.BILLING_SUCCESS);
 
 		// Get domain owner
-		DomainUser user = DomainUser.getDomainOwner("");
+		DomainUser user = DomainUserUtil.getDomainOwner("");
 
 		// Checks whether owner of the domain is not null, if not null
 		// payment received mail to the domain user
@@ -160,7 +161,7 @@ public class StripeWebhookServlet extends HttpServlet
 		    Globals.STRIPE_CUSTOMER_DELETED))
 	    {
 		// Get domain owner
-		DomainUser user = DomainUser.getDomainOwner(newNamespace);
+		DomainUser user = DomainUserUtil.getDomainOwner(newNamespace);
 
 		System.out.println("email should be sent to domain user : "
 			+ user);
@@ -186,7 +187,7 @@ public class StripeWebhookServlet extends HttpServlet
 	    {
 
 		// Get domain owner
-		DomainUser user = DomainUser.getDomainOwner(newNamespace);
+		DomainUser user = DomainUserUtil.getDomainOwner(newNamespace);
 
 		// If user is null return
 		if (user == null)
@@ -212,7 +213,7 @@ public class StripeWebhookServlet extends HttpServlet
 	    else if (eventJSON.getString("type").equals(
 		    Globals.STRIPE_CHARGE_REFUNDED))
 	    {
-		DomainUser user = DomainUser.getDomainOwner(newNamespace);
+		DomainUser user = DomainUserUtil.getDomainOwner(newNamespace);
 
 		if (user == null)
 		    return;
@@ -230,7 +231,7 @@ public class StripeWebhookServlet extends HttpServlet
 	    else if (eventJSON.getString("type").equals(
 		    Globals.STRIPE_CUSTOMER_SUBSCRIPTION_UPDATED))
 	    {
-		DomainUser user = DomainUser.getDomainOwner(newNamespace);
+		DomainUser user = DomainUserUtil.getDomainOwner(newNamespace);
 
 		if (user == null)
 		    return;
@@ -323,7 +324,7 @@ public class StripeWebhookServlet extends HttpServlet
 	    setSubscriptionFlag(flag);
 
 	    // Get owner of the domain
-	    DomainUser user = DomainUser.getDomainOwner(namespace);
+	    DomainUser user = DomainUserUtil.getDomainOwner(namespace);
 
 	    // If user is not found send email to AgileCrm help about the stripe
 	    // event
@@ -349,7 +350,7 @@ public class StripeWebhookServlet extends HttpServlet
 	    setSubscriptionFlag(Subscription.BillingStatus.BILLING_FAILED_2);
 
 	    // Get all domain users in the namespace
-	    List<DomainUser> users = DomainUser.getUsers(namespace);
+	    List<DomainUser> users = DomainUserUtil.getUsers(namespace);
 
 	    // Send email to AgileCrm help
 	    if (users.size() == 0)

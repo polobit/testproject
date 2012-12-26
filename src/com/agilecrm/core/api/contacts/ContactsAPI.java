@@ -184,7 +184,6 @@ public class ContactsAPI
     public boolean contactsUploadStatus(
 	    @FormParam("memcache_keys") String memcache_keys)
     {
-
 	try
 	{
 	    JSONArray keys = new JSONArray(memcache_keys);
@@ -443,7 +442,6 @@ public class ContactsAPI
     public void deleteContacts(@FormParam("model_ids") String model_ids)
 	    throws JSONException
     {
-
 	JSONArray contactsJSONArray = new JSONArray(model_ids);
 
 	for (int i = 0; i < contactsJSONArray.length(); i++)
@@ -454,7 +452,6 @@ public class ContactsAPI
 	    if (contact != null)
 		contact.delete();
 	}
-
     }
 
     /**
@@ -493,7 +490,6 @@ public class ContactsAPI
     public void addTagsTOContacts(@FormParam("contact_ids") String contact_ids,
 	    @PathParam("tags") String tagsString) throws JSONException
     {
-
 	JSONArray contactsJSONArray = new JSONArray(contact_ids);
 	String tags_array[] = tagsString.split(",");
 	ContactUtil.addTagsToContactsBulk(contactsJSONArray, tags_array);
@@ -512,7 +508,6 @@ public class ContactsAPI
     public void deleteTasks(@FormParam("model_ids") String model_ids)
 	    throws JSONException
     {
-
 	JSONArray tasksJSONArray = new JSONArray(model_ids);
 	Task.dao.deleteBulkByIds(tasksJSONArray);
     }
@@ -530,7 +525,6 @@ public class ContactsAPI
     public void deleteNotes(@FormParam("model_ids") String model_ids)
 	    throws JSONException
     {
-
 	JSONArray notesJSONArray = new JSONArray(model_ids);
 	Note.dao.deleteBulkByIds(notesJSONArray);
     }

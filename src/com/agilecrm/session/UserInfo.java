@@ -16,7 +16,8 @@ package com.agilecrm.session;
 
 import java.io.Serializable;
 
-import com.agilecrm.core.DomainUser;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 
 /**
  * Simple representation of an authenticated user.
@@ -46,7 +47,7 @@ public class UserInfo implements Serializable
 	    this.email.toLowerCase();
 
 	// Get Domain User for this email and store the id
-	DomainUser domainUser = DomainUser.getDomainUserFromEmail(email);
+	DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
 	if (domainUser != null)
 	    setDomainId(domainUser.id);
     }

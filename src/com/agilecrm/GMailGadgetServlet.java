@@ -12,10 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
-import com.agilecrm.core.DomainUser;
 import com.agilecrm.session.OpenIdServlet;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.Util;
 import com.google.appengine.api.NamespaceManager;
 
@@ -33,7 +34,8 @@ public class GMailGadgetServlet extends HttpServlet
 	System.out.println("Owner Id " + ownerId);
 
 	// Get Domain User with this Social Id
-	DomainUser domainUser = DomainUser.getDomainUserFromGadgetId(ownerId);
+	DomainUser domainUser = DomainUserUtil
+		.getDomainUserFromGadgetId(ownerId);
 	if (domainUser == null)
 	    return false;
 
@@ -85,7 +87,7 @@ public class GMailGadgetServlet extends HttpServlet
 	resp.getWriter().println("Owner Id " + ownerId);
 
 	// Setup Authentication Key
-	DomainUser domainUser = DomainUser.getDomainUserFromEmail(user
+	DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(user
 		.getEmail());
 	if (domainUser == null)
 	{

@@ -123,16 +123,7 @@ public class CustomFieldDef
     public void save() throws Exception
     {
 
-	/*
-	 * // It can not check the label duplicates of case sensitive.
-	 * CustomFieldDef custom_field = dao.ofy().query(CustomFieldDef.class)
-	 * .filter("field_label", field_label).get();
-	 * 
-	 * if (custom_field != null && custom_field.id != id) throw new
-	 * Exception();
-	 */
-
-	// Fetch all custom fields to check label duplicates
+	// Fetches all custom fields to check label duplicates
 	for (CustomFieldDef customField : dao.fetchAll())
 	{
 	    if (customField.field_label.equalsIgnoreCase(this.field_label)
@@ -160,5 +151,4 @@ public class CustomFieldDef
 		+ "is_required :" + is_required + "searchable" + searchable
 		+ "}";
     }
-
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.core.DomainUser;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.CacheUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
@@ -69,7 +69,7 @@ public class ContactsDeferredTask implements DeferredTask
 	for (Contact contact : contacts)
 	{
 	    // Sets the domain user key in contact
-	    contact.setDomainUser(owner_key);
+	    // contact.setDomainUser(owner_key);
 
 	    // Saves the contact
 	    contact.save();

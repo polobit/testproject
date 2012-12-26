@@ -9,10 +9,11 @@ import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.agilecrm.core.DomainUser;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
@@ -57,7 +58,8 @@ public class ContactFilter
 
     }
 
-    public ContactFilter(String name, boolean is_reports_enabled, List<SearchRule> rules)
+    public ContactFilter(String name, boolean is_reports_enabled,
+	    List<SearchRule> rules)
     {
 	this.name = name;
 	this.is_reports_enabled = is_reports_enabled;
@@ -113,14 +115,14 @@ public class ContactFilter
 	    long from_time = from_Date.getTime().getTime() / 1000;
 
 	    // Get last 20 recently created
-	    return contact_query.filter("created_time < ", current_time).order("-created_time")
-		    .limit(20).list();
+	    return contact_query.filter("created_time < ", current_time)
+		    .order("-created_time").limit(20).list();
 	}
 
 	if (type == SystemFilter.MY_LEAD)
 	{
 	    Key<DomainUser> userKey = new Key<DomainUser>(DomainUser.class,
-		    DomainUser.getDomainCurrentUser().id);
+		    DomainUserUtil.getDomainCurrentUser().id);
 
 	    return ofy.query(Contact.class).filter("owner_key", userKey).list();
 	}

@@ -35,7 +35,6 @@ import com.agilecrm.activities.util.TaskUtil;
 public class TasksAPI
 {
 
-    // Tasks
     /**
      * Gets all pending tasks
      * 
@@ -56,7 +55,6 @@ public class TasksAPI
 	}
     }
 
-    // All Tasks
     /**
      * Gets all tasks of ANY priority, category, related to and status.
      * 
@@ -78,7 +76,6 @@ public class TasksAPI
 	}
     }
 
-    // Tasks
     /**
      * Gets the tasks which have been pending for particular no.of days
      * 
@@ -103,7 +100,6 @@ public class TasksAPI
 	}
     }
 
-    // Get Task
     /**
      * Gets a task based on id
      * 
@@ -120,7 +116,6 @@ public class TasksAPI
 	return task;
     }
 
-    // Delete Task
     /**
      * Deletes a task based on id
      * 
@@ -144,7 +139,6 @@ public class TasksAPI
 	}
     }
 
-    // New Task
     /**
      * Saves new task
      * 
@@ -161,7 +155,6 @@ public class TasksAPI
 	return task;
     }
 
-    // Update Task
     /**
      * Updates the existing task
      * 
@@ -178,7 +171,6 @@ public class TasksAPI
 	return task;
     }
 
-    // Bulk operations - delete
     /**
      * Deletes tasks bulk
      * 

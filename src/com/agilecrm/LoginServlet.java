@@ -10,9 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.agilecrm.core.DomainUser;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.Util;
 import com.google.appengine.api.utils.SystemProperty;
 
@@ -64,7 +65,7 @@ public class LoginServlet extends HttpServlet
 		SessionManager.AUTH_SESSION_COOKIE_NAME);
 
 	// Check if this subdomain even exists
-	if (DomainUser.count() == 0)
+	if (DomainUserUtil.count() == 0)
 	{
 	    response.sendRedirect(Globals.CHOOSE_DOMAIN);
 	    return;
@@ -167,7 +168,7 @@ public class LoginServlet extends HttpServlet
 
 	// Get Domain User with this name, password - we do not check for domain
 	// as validity is verified in AuthFilter
-	DomainUser domainUser = DomainUser.getDomainUserFromEmail(email);
+	DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
 	if (domainUser == null)
 	    throw new Exception("We have not been able to locate any user");
 

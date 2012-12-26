@@ -8,9 +8,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.agilecrm.core.DomainUser;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.users.User;
 
@@ -43,7 +44,7 @@ public class HomeServlet extends HttpServlet
 	try
 	{
 	    // Logged in time
-	    DomainUser domainUser = DomainUser.getDomainCurrentUser();
+	    DomainUser domainUser = DomainUserUtil.getDomainCurrentUser();
 	    domainUser.setInfo(DomainUser.LOGGED_IN_TIME,
 		    new Long(System.currentTimeMillis() / 1000));
 
@@ -63,7 +64,7 @@ public class HomeServlet extends HttpServlet
 	// Register - check if there are any users for this domain - you cannot
 	// register
 	String domain = NamespaceManager.get();
-	List<DomainUser> listOfUsers = DomainUser.getUsers(domain);
+	List<DomainUser> listOfUsers = DomainUserUtil.getUsers(domain);
 	if (!listOfUsers.isEmpty())
 	{
 	    req.getRequestDispatcher("/error/auth-failed.jsp").include(req,

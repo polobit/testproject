@@ -162,6 +162,7 @@ public class TagsAPI
 	{
 	    tagsSet.add(tagsArray[index]);
 	}
+
 	// Update Tags - Create a deferred task
 	TagUtil.updateTags(tagsSet);
     }

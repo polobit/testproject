@@ -11,9 +11,9 @@ import org.json.JSONException;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.deferred.ContactsDeferredTask;
-import com.agilecrm.core.DomainUser;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.CacheUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
@@ -37,7 +37,6 @@ public class ContactUtil
      */
     public static int getContactsCountForTag(String tag)
     {
-
 	return dao.ofy().query(Contact.class).filter("tags", tag).count();
     }
 
@@ -50,7 +49,6 @@ public class ContactUtil
      */
     public static List<Contact> getContactsForTag(String tag)
     {
-
 	return dao.listByProperty("tags", tag);
     }
 
@@ -142,12 +140,10 @@ public class ContactUtil
      */
     public static Contact searchContactByEmail(String email)
     {
-
 	if (email == null)
 	    return null;
 
 	return dao.getByProperty("properties.value = ", email);
-
     }
 
     /**
@@ -174,7 +170,6 @@ public class ContactUtil
      */
     public static List<Contact> getContactsBulk(JSONArray contactsJSONArray)
     {
-
 	List<Key<Contact>> contactKeys = new ArrayList<Key<Contact>>();
 
 	for (int i = 0; i < contactsJSONArray.length(); i++)
@@ -207,7 +202,6 @@ public class ContactUtil
     public static void addTagsToContactsBulk(JSONArray contactsJSONArray,
 	    String[] tags_array)
     {
-
 	List<Contact> contacts_list = ContactUtil
 		.getContactsBulk(contactsJSONArray);
 

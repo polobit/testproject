@@ -62,7 +62,6 @@ public class EventUtil
 	}
     }
 
-    // Get Event from start to end for FullCalendar
     /**
      * Fetches all the events, which are in the given search range
      * 

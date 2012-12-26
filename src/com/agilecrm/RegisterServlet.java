@@ -10,9 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.agilecrm.core.DomainUser;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.Util;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
@@ -67,7 +68,7 @@ public class RegisterServlet extends HttpServlet
 	// Check if this domain is valid and not given out to anyone else
 	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 	    if (StringUtils.isEmpty(NamespaceManager.get())
-		    || DomainUser.count() != 0)
+		    || DomainUserUtil.count() != 0)
 	    {
 		response.sendRedirect(Globals.CHOOSE_DOMAIN);
 		return;
@@ -218,7 +219,7 @@ public class RegisterServlet extends HttpServlet
 
 	// Get Domain User with this name, password - we do not check for domain
 	// as validity is verified in AuthFilter
-	DomainUser domainUser = DomainUser.getDomainUserFromEmail(userInfo
+	DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(userInfo
 		.getEmail());
 	if (domainUser != null)
 	{
