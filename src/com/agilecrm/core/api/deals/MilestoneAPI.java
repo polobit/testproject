@@ -12,10 +12,10 @@ import com.agilecrm.deals.util.MilestoneUtil;
 
 /**
  * <code>MilestoneAPI</code> includes REST calls to interact with
- * {@link Milestone} class.It is called to get milestone and update existing
+ * {@link Milestone} class. It is called to get milestone and update existing
  * milestone.
  * <p>
- * Milestones are given separately under admin-settings in client-side.The
+ * Milestones are given separately under admin-settings in client-side. The
  * domain user can assign required milestones.
  * </p>
  * 
@@ -25,13 +25,12 @@ import com.agilecrm.deals.util.MilestoneUtil;
 @Path("/api/milestone")
 public class MilestoneAPI
 {
-
     /**
-     * Updates milestone
+     * Updates milestone.
      * 
      * @param milestone
-     *            - Milestone object to be updated
-     * @return null
+     *            - Milestone object to be updated.
+     * @return null once milestone saved.
      */
     @PUT
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -43,9 +42,9 @@ public class MilestoneAPI
     }
 
     /**
-     * Returns milestone saved in datastore
+     * Returns milestone saved in datastores.
      * 
-     * @return milestone object
+     * @return milestone objects.
      */
     @GET
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })

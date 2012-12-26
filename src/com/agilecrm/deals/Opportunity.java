@@ -23,19 +23,19 @@ import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
 /**
- * <code>Opportunity</code> is the base class for Deals/Opportunities.Each
+ * <code>Opportunity</code> is the base class for Deals/Opportunities. Each
  * opportunity object consists of it's own id, Deal Name, related contacts,
  * expected value, probability, milestone, closed date and owner (who creates)
  * of a deal.
  * <p>
- * Opportunity can be related with contacts.The given expected-value and
- * probability are the measures of a deal.Milestones describes at what stage
- * does the deal present.Milestones are optional and can be given by domain user
- * under admin-settings in client-side.
+ * Opportunity can be related with contacts. The given expected-value and
+ * probability are the measures of a deal. Milestones describes at what stage
+ * does the deal present. Milestones are optional and can be given by domain
+ * user under admin-settings in client-side.
  * </p>
  * <p>
  * Opportunity is provided with close-date which is estimated time to complete a
- * deal.Opportunity can be assigned to any one of the list of owners(Domain
+ * deal. Opportunity can be assigned to any one of the list of owners(Domain
  * Users).
  * </p>
  * 
@@ -45,96 +45,92 @@ import com.googlecode.objectify.condition.IfDefault;
 @XmlRootElement
 public class Opportunity
 {
-
-
     /**
-     * Opportunity Id
+     * Opportunity Id.
      */
     @Id
     public Long id;
 
     /**
-     * Name of a Deal
+     * Name of a Deal.
      */
     @NotSaved(IfDefault.class)
     public String name = null;
 
     /**
-     * Contact ids of related contacts for a deal
+     * Contact ids of related contacts for a deal.
      */
     @NotSaved
     public List<String> contacts = null;
 
     /**
-     * Related contact objects fetched using contact ids
+     * Related contact objects fetched using contact ids.
      */
     private List<Key<Contact>> related_contacts = new ArrayList<Key<Contact>>();
 
     /**
-     * Description of a deal
+     * Description of a deal.
      */
     @NotSaved(IfDefault.class)
     public String description = null;
 
     /**
-     * Estimated value of a deal
+     * Estimated value of a deal.
      */
     @NotSaved(IfDefault.class)
     public Long expected_value = null;
 
     /**
-     * Milestone string
+     * Milestone string.
      */
     @NotSaved(IfDefault.class)
     public String milestone = null;
 
     /**
-     * Probability in order to get pipeline value
+     * Probability in order to get pipeline value.
      */
     public int probability = 0;
 
     /**
-     * Closed date for a deal
+     * Closed date for a deal.
      */
     @NotSaved(IfDefault.class)
     public Long close_date = 0L;
 
-
     /**
-     * DomainUser Id who created Deal
+     * DomainUser Id who created Deal.
      */
     @NotSaved
     public String owner_id = null;
 
     /**
-     * Key object of DomainUser
+     * Key object of DomainUser.
      */
     @NotSaved(IfDefault.class)
     private Key<DomainUser> ownerKey = null;
 
     /**
-     * Key object of agileUser inorder to get userprefs of current user
+     * Key object of agileUser in order to get userprefs of current user.
      */
     @NotSaved(IfDefault.class)
     private Key<AgileUser> agileUser = null;
 
     /**
-     * Created time of a deal
+     * Created time of a deal.
      */
     public Long created_time = 0L;
 
     /**
-     * Track a deal
+     * Track a deal.
      */
     @NotSaved(IfDefault.class)
     public String track = null;
 
     /**
-     * Entity type
+     * Entity type.
      */
     @NotSaved
     public String entity_type = "deal";
-
 
     /**
      * Array of milestones converted from milestone string separated by comma.
@@ -142,14 +138,13 @@ public class Opportunity
     public static String MILESTONES[] = {};
 
     /**
-     * ObjectifyDao of Opportunity
+     * ObjectifyDao of Opportunity.
      */
     public static ObjectifyGenericDao<Opportunity> dao = new ObjectifyGenericDao<Opportunity>(
 	    Opportunity.class);
 
-
     /**
-     * Default Constructor
+     * Default Constructor.
      */
     Opportunity()
     {
@@ -157,27 +152,26 @@ public class Opportunity
     }
 
     /**
-     * Constructs a new {@link Opportunity}
+     * Constructs a new {@link Opportunity}.
      * 
      * @param name
-     *            - Name of a Deal
+     *            - Name of a Deal.
      * @param description
-     *            - Description of a Deal
+     *            - Description of a Deal.
      * @param expectedValue
-     *            - Estimated value of a Deal
+     *            - Estimated value of a Deal.
      * @param milestone
-     *            - Milestone of a deal
+     *            - Milestone of a deal.
      * @param probability
-     *            - Probability of a deal
+     *            - Probability of a deal.
      * @param track
-     *            - Track
+     *            - Track.
      * @param ownerId
-     *            - Owner id
+     *            - Owner id.
      */
     public Opportunity(String name, String description, Long expectedValue,
 	    String milestone, int probability, String track, String ownerId)
     {
-
 	this.name = name;
 	this.description = description;
 	this.expected_value = expectedValue;
@@ -187,29 +181,26 @@ public class Opportunity
 	this.owner_id = ownerId;
     }
 
-
     /**
-     * Gets contacts related with deals
+     * Gets contacts related with deals.
      * 
-     * @return list of contact objects as xml element related with a deal
+     * @return list of contact objects as xml element related with a deal.
      */
     @XmlElement
     public List<Contact> getContacts()
     {
-
 	Objectify ofy = ObjectifyService.begin();
 	List<Contact> contacts_list = new ArrayList<Contact>();
 	contacts_list.addAll(ofy.get(this.related_contacts).values());
 	return contacts_list;
     }
 
-
     /**
      * Gets domain user with respect to owner id if exists, otherwise null.
      * 
      * @return Domain user object.
      * @throws Exception
-     *             when Domain User not exists with respect to id
+     *             when Domain User not exists with respect to id.
      */
     @XmlElement(name = "owner")
     public DomainUser getOwner() throws Exception
@@ -229,14 +220,13 @@ public class Opportunity
 	return null;
     }
 
-
     /**
-     * Gets UserPrefs object with respect to agile user.Inorder to display owner
-     * name of a deal in Deals table,UserPrefs are taken into account.
+     * Gets UserPrefs object with respect to agile user. In order to display
+     * owner name of a deal in Deals table, UserPrefs are taken into account.
      * 
-     * @return UserPrefs object with respect to agile user
+     * @return UserPrefs object with respect to agile user.
      * @throws Exception
-     *             if unable to fetch UserPrefs
+     *             if unable to fetch UserPrefs.
      */
     @XmlElement(name = "Prefs")
     public UserPrefs getPrefs() throws Exception
@@ -248,7 +238,6 @@ public class Opportunity
 	    {
 		// Gets User prefs in return to access owner name , pic
 		// etc..details of a deal
-
 		return ofy.query(UserPrefs.class).ancestor(agileUser).get();
 	    }
 	    catch (Exception e)
@@ -259,25 +248,22 @@ public class Opportunity
 	return null;
     }
 
-
     /**
-     * Gets picture of owner who created deal.Owner picture is retrieved from
+     * Gets picture of owner who created deal. Owner picture is retrieved from
      * user prefs of domain user who created deal and is used to display owner
      * picture in deals list.
      * 
-     * @return picture of owner
+     * @return picture of owner.
      * @throws Exception
-     *             when agileuser doesn't exist with respect to owner key
+     *             when agileuser doesn't exist with respect to owner key.
      */
     @XmlElement
     public String getPic() throws Exception
     {
-
 	AgileUser agileuser = null;
 	UserPrefs userprefs = null;
 
 	try
-
 	{
 	    // Get owner pic through agileuser prefs
 	    agileuser = AgileUser.getCurrentAgileUserFromDomainUser(ownerKey
@@ -296,18 +282,14 @@ public class Opportunity
 	return " ";
     }
 
-
-
     /**
      * Saves opportuntiy in dao.
      */
     public void save()
     {
-
 	if (contacts != null)
 	{
 	    for (String contact_id : this.contacts)
-
 	    {
 		this.related_contacts.add(new Key<Contact>(Contact.class, Long
 			.parseLong(contact_id)));
@@ -323,15 +305,12 @@ public class Opportunity
 	if (this.id == null)
 	    DealNotificationPrefsUtil.executeNotificationForNewDeal(this);
 
-
 	// Save opportunity in dao
 	dao.put(this);
-
     }
 
-
     /**
-     * Deletes opportunity from dao
+     * Deletes opportunity from dao.
      */
     public void delete()
     {
@@ -339,8 +318,8 @@ public class Opportunity
     }
 
     /**
-     * Sets created time, owner key and agile user.PrePersist is called each
-     * time before object gets saved
+     * Sets created time, owner key and agile user. PrePersist is called each
+     * time before object gets saved.
      */
     @PrePersist
     private void PrePersist()
@@ -357,7 +336,6 @@ public class Opportunity
 	// Saves agile user key
 	agileUser = new Key<AgileUser>(AgileUser.class,
 		AgileUser.getCurrentAgileUser().id);
-
     }
 
     /*

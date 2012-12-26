@@ -132,7 +132,7 @@ public class UsersAPI
 	domainUser.delete();
     }
 
-    // Bulk operation - delete
+
     /**
      * Deletes each user individually by iterating the json array of user ids
      * 

@@ -15,10 +15,9 @@ import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.condition.IfDefault;
 
 /**
- * <code>NotificationPrefs</code> is the base class for notifications.User can
+ * <code>NotificationPrefs</code> is the base class for notifications. User can
  * set required notifications by selecting notification preferences at client
- * side.NotificationPrefs set true to those notifications selected.
- * 
+ * side. NotificationPrefs set true to those notifications selected.
  * 
  * @author Manohar
  * 
@@ -26,7 +25,6 @@ import com.googlecode.objectify.condition.IfDefault;
 @XmlRootElement
 public class NotificationPrefs
 {
-
     /**
      * Id of a notification.Each notification has its own and unique id.
      */
@@ -34,107 +32,108 @@ public class NotificationPrefs
     public Long id;
 
     /**
-     * AgileUser Key
+     * AgileUser Key.
      */
     @Parent
     private Key<AgileUser> user;
 
-    // The client checks if the key is not present.. So all default should be
-    // true
+    /**
+     * The client checks whether the key is present, if not all default values
+     * should be true.
+     */
 
     /**
-     * Contact browsing notification - default true
+     * Contact browsing notification - default true.
      */
     @NotSaved(IfDefault.class)
     public boolean contact_browsing = true;
 
     /**
-     * Contact assigned browsing notification - default true
+     * Contact assigned browsing notification - default true.
      */
     @NotSaved(IfDefault.class)
     public boolean contact_assigned_browsing = true;
 
     /**
-     * Contact assigned and starred browsing notification - default true
+     * Contact assigned and starred browsing notification - default true.
      */
     @NotSaved(IfDefault.class)
     public boolean contact_assigned_starred_browsing = true;
 
     /**
-     * Contact opened email notification - default true
+     * Contact opened email notification - default true.
      */
     @NotSaved(IfDefault.class)
     public boolean contact_opened_email = true;
 
     /**
-     * Contact assigned opened email notification - default true
+     * Contact assigned opened email notification - default true.
      */
     @NotSaved(IfDefault.class)
     public boolean contact_assigned_opened_email = true;
 
     /**
-     * Contact assigned and starred opened email notification - default true
+     * Contact assigned and starred opened email notification - default true.
      */
     @NotSaved(IfDefault.class)
     public boolean contact_assigned_starred_opened_email = true;
 
     /**
-     * Contact clicked link notification - default true
+     * Contact clicked link notification - default true.
      */
     @NotSaved(IfDefault.class)
     public boolean contact_clicked_link = true;
 
     /**
-     * Contact assigned clicked link notification - default true
+     * Contact assigned clicked link notification - default true.
      */
     @NotSaved(IfDefault.class)
     public boolean contact_assigned_clicked_link = true;
 
     /**
-     * Contact assigned and starred clicked link notification - default true
+     * Contact assigned and starred clicked link notification - default true.
      */
     @NotSaved(IfDefault.class)
     public boolean contact_assigned_starred_clicked_link = true;
 
     /**
-     * Deal created notification - default true
+     * Deal created notification - default true.
      */
     @NotSaved(IfDefault.class)
     public boolean deal_created = true;
 
     /**
-     * Deal closed notification - default true
+     * Deal closed notification - default true.
      */
     @NotSaved(IfDefault.class)
     public boolean deal_closed = true;
 
     /**
-     * Tag created notification - default true
+     * Tag created notification - default true.
      */
     @NotSaved(IfDefault.class)
     public boolean tag_created = true;
 
     /**
-     * Tag deleted notification - default true
+     * Tag deleted notification - default true.
      */
     @NotSaved(IfDefault.class)
     public boolean tag_deleted = true;
 
     /**
-     * Contact created notification - default true
+     * Contact created notification - default true.
      */
     @NotSaved(IfDefault.class)
     public boolean contact_created = true;
 
     /**
-     * Contact deleted notification - default true
+     * Contact deleted notification - default true.
      */
     @NotSaved(IfDefault.class)
     public boolean contact_deleted = true;
 
-    // Notifications
     /**
-     * Notification types
+     * Notification types.
      * 
      */
     public enum Type
@@ -142,7 +141,7 @@ public class NotificationPrefs
 	BROWSING, OPENED_EMAIL, CLICKED_LINK, DEAL_CREATED, DEAL_CLOSED, TAG_CREATED, TAG_DELETED, CONTACT_CREATED, CONTACT_DELETED
     };
 
-    // Notification type
+    /** Notification type. */
     public Type type;
 
     /**
@@ -152,7 +151,7 @@ public class NotificationPrefs
 	    NotificationPrefs.class);
 
     /**
-     * Default NotificationPrefs
+     * Default NotificationPrefs.
      */
     NotificationPrefs()
     {
@@ -160,40 +159,40 @@ public class NotificationPrefs
     }
 
     /**
-     * Constructs a new {@link NotificationPrefs}
+     * Constructs a new {@link NotificationPrefs}.
      * 
      * @param userId
-     *            AgileUser Id
+     *            AgileUser Id.
      * @param contact_browsing
-     *            Contact Browsing status
+     *            Contact Browsing status.
      * @param contact_assigned_browsing
-     *            Contact assigned Browsing status
+     *            Contact assigned Browsing status.
      * @param contact_assigned_starred_browsing
-     *            Contact assigned and starred Browsing status
+     *            Contact assigned and starred Browsing status.
      * @param contact_opened_email
-     *            Contact opened Email status
+     *            Contact opened Email status.
      * @param contact_assigned_opened_email
-     *            Contact assigned opened email status
+     *            Contact assigned opened email status.
      * @param contact_assigned_starred_opened_email
-     *            Contact assigned and starred opened email status
+     *            Contact assigned and starred opened email status.
      * @param contact_clicked_link
-     *            Contact clicked link status
+     *            Contact clicked link status.
      * @param contact_assigned_clicked_link
-     *            Contact assigned clicked link status
+     *            Contact assigned clicked link status.
      * @param contact_assigned_starred_clicked_link
-     *            Contact assigned and starred clicked link status
+     *            Contact assigned and starred clicked link status.
      * @param deal_created
-     *            Deal created status
+     *            Deal created status.
      * @param deal_closed
-     *            Deal deleted status
+     *            Deal deleted status.
      * @param contact_created
-     *            Contact created status
+     *            Contact created status.
      * @param contact_deleted
-     *            Contact deleted status
+     *            Contact deleted status.
      * @param tag_created
-     *            Tag created status
+     *            Tag created status.
      * @param tag_deleted
-     *            Tag deleted status
+     *            Tag deleted status.
      */
     public NotificationPrefs(Long userId, boolean contact_browsing,
 	    boolean contact_assigned_browsing,
@@ -224,16 +223,15 @@ public class NotificationPrefs
 	this.tag_deleted = tag_deleted;
 
 	this.user = new Key<AgileUser>(AgileUser.class, userId);
-
     }
 
     /**
      * Gets user preferences with respect to agile user.
      * 
-     * @return userprefs as an xml element
+     * @return userprefs as an xml element.
      * 
      * @throws Exception
-     *             NullPointerException
+     *             NullPointerException.
      */
     @XmlElement(name = "Prefs")
     public UserPrefs getPrefs() throws Exception
@@ -243,7 +241,6 @@ public class NotificationPrefs
 	    Objectify ofy = ObjectifyService.begin();
 	    try
 	    {
-
 		return ofy.query(UserPrefs.class).ancestor(user).get();
 	    }
 	    catch (Exception e)
@@ -254,9 +251,8 @@ public class NotificationPrefs
 	return null;
     }
 
-
     /**
-     * Saves NotificationPrefs
+     * Saves NotificationPrefs.
      */
     public void save()
     {
@@ -264,11 +260,10 @@ public class NotificationPrefs
     }
 
     /**
-     * Removes NotificationPrefs
+     * Removes NotificationPrefs.
      */
     public void delete()
     {
 	dao.delete(this);
     }
-
 }

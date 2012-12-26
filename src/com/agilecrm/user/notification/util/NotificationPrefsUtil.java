@@ -15,20 +15,19 @@ import com.googlecode.objectify.ObjectifyService;
 
 /**
  * <code>NotificationPrefsUtil</code> is the utility class for
- * {@link NotificationPrefs}.It consists of various methods to get current
- * notification preferences with respect to agile user.Gets default notification
- * preferences if there are no notification preferences.
+ * {@link NotificationPrefs}. It consists of various methods to get current
+ * notification preferences with respect to agile user. Gets default
+ * notification preferences if there are no notification preferences.
  * 
  * @author Manohar
  * 
  */
 public class NotificationPrefsUtil
 {
-
     /**
-     * Gets notifications with respect to current agileuser
+     * Gets notifications with respect to current agileuser.
      * 
-     * @return notification objects with respect to current agileuser
+     * @return notification objects with respect to current agileuser.
      */
     public static NotificationPrefs getCurrentUserNotificationPrefs()
     {
@@ -40,11 +39,11 @@ public class NotificationPrefsUtil
     }
 
     /**
-     * Gets notifications with respect to agileuser
+     * Gets notifications with respect to agileuser.
      * 
      * @param agileUser
-     *            AgileUser Object
-     * @return notification objects with respect to agileuser
+     *            AgileUser Object.
+     * @return notification objects with respect to agileuser.
      */
     public static NotificationPrefs getNotificationPrefs(AgileUser agileUser)
     {
@@ -65,8 +64,8 @@ public class NotificationPrefsUtil
      * Gets default notification preferences.
      * 
      * @param agileUser
-     *            Agile User object
-     * @return Default notification preferences
+     *            Agile User object.
+     * @return Default notification preferences.
      */
     private static NotificationPrefs getDefaultNotifications(AgileUser agileUser)
     {
@@ -77,17 +76,15 @@ public class NotificationPrefsUtil
 	return notifications;
     }
 
-    // Execute Notification
     /**
-     * Executes notification in DeferredTask with notification type and object
+     * Executes notification in DeferredTask with notification type and object.
      * 
      * @param type
-     *            Notification Type
+     *            Notification Type.
      * @param object
-     *            Objects like Contact,Deal etc
+     *            Objects like Contact,Deal etc.
      **/
     public static void executeNotification(Type type, Object object)
-
     {
 	String jsonData = null;
 
@@ -108,5 +105,4 @@ public class NotificationPrefsUtil
 	Queue queue = QueueFactory.getDefaultQueue();
 	queue.add(TaskOptions.Builder.withPayload(notificationsDeferredTask));
     }
-
 }

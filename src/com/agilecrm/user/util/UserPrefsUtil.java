@@ -2,6 +2,7 @@ package com.agilecrm.user.util;
 
 import java.util.List;
 
+import com.agilecrm.core.api.prefs.UserPrefsAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.UserPrefs;
@@ -10,12 +11,26 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 
+/**
+ * <code>UserPrefsUtil</code> is the utility class for UserPrefs.It handles some
+ * of the REST calls of {@link UserPrefsAPI}. It fetches UserPrefs with respect
+ * to id and current agile user. It sets default UserPrefs with respect to agile
+ * id.
+ * 
+ */
 public class UserPrefsUtil
 {
-
+    /**
+     * UserPrefs Dao
+     */
     private static ObjectifyGenericDao<UserPrefs> dao = new ObjectifyGenericDao<UserPrefs>(
 	    UserPrefs.class);
 
+    /**
+     * Returns UserPrefs with respect to current agile-user.
+     * 
+     * @return UserPrefs of current user.
+     */
     public static UserPrefs getCurrentUserPrefs()
     {
 	// Agile User
@@ -25,6 +40,14 @@ public class UserPrefsUtil
 	return getUserPrefs(agileUser);
     }
 
+    /**
+     * Returns UserPrefs with respect to given AgileUser if exists, otherwise
+     * returns default UserPrefs.
+     * 
+     * @param agileUser
+     *            - AgileUser object.
+     * @return UserPrefs of given agile-user.
+     */
     public static UserPrefs getUserPrefs(AgileUser agileUser)
     {
 	Objectify ofy = ObjectifyService.begin();
@@ -39,6 +62,13 @@ public class UserPrefsUtil
 	return userPrefs;
     }
 
+    /**
+     * Returns default UserPrefs.
+     * 
+     * @param agileUser
+     *            - AgileUser Object
+     * @return default UserPrefs
+     */
     private static UserPrefs getDefaultPrefs(AgileUser agileUser)
     {
 	UserPrefs userPrefs = new UserPrefs(agileUser.id, null, null,
@@ -47,6 +77,13 @@ public class UserPrefsUtil
 	return userPrefs;
     }
 
+    /**
+     * Returns UserPrefs with respect to Id if exists, otherwise returns null
+     * 
+     * @param id
+     *            - UserPrefs Id.
+     * @return UserPrefs with respect to given id.
+     */
     public static UserPrefs getUserPrefs(Long id)
     {
 	try
@@ -61,6 +98,11 @@ public class UserPrefsUtil
 	}
     }
 
+    /**
+     * Returns list of all UserPrefs.
+     * 
+     * @return all UserPrefs that are saved.
+     */
     public static List<UserPrefs> getAllUserPrefs()
     {
 	return dao.fetchAll();

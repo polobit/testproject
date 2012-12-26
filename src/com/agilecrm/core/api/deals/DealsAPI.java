@@ -31,19 +31,17 @@ import com.agilecrm.workflows.triggers.util.DealTriggerUtil;
  * the data of Opportunity class from database.
  * </p>
  * 
- * 
  * @author Yaswanth
  * 
  */
 @Path("/api/opportunity")
 public class DealsAPI
 {
-
     /**
      * Returns list of opportunities. This method is called if TEXT_PLAIN is
-     * request
+     * request.
      * 
-     * @return list of opportunities
+     * @return list of opportunities.
      */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -52,14 +50,13 @@ public class DealsAPI
 	return OpportunityUtil.getOpportunities();
     }
 
-
     /**
      * Return opportunity with respect to Id. This method is called if XML is
-     * request
+     * request.
      * 
      * @param id
-     *            - Opportunity Id to be fetched
-     * @return Opportunity object
+     *            - Opportunity Id to be fetched.
+     * @return Opportunity object.
      */
     @Path("{opportunity-id}")
     @GET
@@ -71,11 +68,11 @@ public class DealsAPI
     }
 
     /**
-     * Saves new Opportunity
+     * Saves new Opportunity.
      * 
      * @param opportunity
-     *            - Opportunity object that is newly created
-     * @return created opportunity
+     *            - Opportunity object that is newly created.
+     * @return created opportunity.
      */
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -87,11 +84,11 @@ public class DealsAPI
     }
 
     /**
-     * Updates opportunity
+     * Updates opportunity.
      * 
      * @param opportunity
-     *            - Opportunity object that is updated
-     * @return - updated opportunity
+     *            - Opportunity object that is updated.
+     * @return - updated opportunity.
      */
     @PUT
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -103,10 +100,10 @@ public class DealsAPI
     }
 
     /**
-     * Deletes single opportunity
+     * Deletes single opportunity.
      * 
      * @param id
-     *            - Opportunity id that should be deleted
+     *            - Opportunity id that should be deleted.
      */
     @Path("{opportunity-id}")
     @DELETE
@@ -117,16 +114,15 @@ public class DealsAPI
 	    opportunity.delete();
     }
 
-
     /**
      * Returns milestones with respect to given minimum time and maximum time.
-     * Deals Stats - Milestones
+     * Deals Stats - Milestones.
      * 
      * @param min
-     *            - given time less than closed date of deal
+     *            - given time less than closed date of deal.
      * @param max
-     *            - given time more than closed date of deal
-     * @return milestones
+     *            - given time more than closed date of deal.
+     * @return milestones.
      */
     @Path("stats/milestones")
     @GET
@@ -137,16 +133,15 @@ public class DealsAPI
 	return OpportunityUtil.getMilestones(min, max).toString();
     }
 
-
     /**
      * Returns percentage of opportunities won compared to total opportunities
-     * exist with respect to closed date. Deals Stats - Conversions
+     * exist with respect to closed date. Deals Stats - Conversions.
      * 
      * @param min
-     *            - Given time less than closed date
+     *            - Given time less than closed date.
      * @param max
-     *            - Given time more than closed date
-     * @return percentage of opportunities won in given time period
+     *            - Given time more than closed date.
+     * @return percentage of opportunities won in given time period.
      */
     @Path("stats/conversions")
     @GET
@@ -157,17 +152,16 @@ public class DealsAPI
 	return OpportunityUtil.getConversionDetails(min, max).toString();
     }
 
-
     /**
      * Gets sum of expected values and pipeline values of the deals having
-     * closed date within the month of given time period. Deals Stats - Details
+     * closed date within the month of given time period. Deals Stats - Details.
      * 
      * @param min
-     *            - Given time less than closed date
+     *            - Given time less than closed date.
      * @param max
-     *            - Given time more than closed date
+     *            - Given time more than closed date.
      * @return string having sum of expected values and pipeline values of the
-     *         deals of same month
+     *         deals of same month.
      */
     @Path("stats/details")
     @GET
@@ -178,13 +172,12 @@ public class DealsAPI
 	return OpportunityUtil.getDealsDetails(min, max).toString();
     }
 
-
     /**
      * Deletes the bulk of deals and executes trigger to the related contacts of
-     * each deal. Bulk operations - delete
+     * each deal. Bulk operations - delete.
      * 
      * @param model_ids
-     *            array of deal ids as String
+     *            array of deal ids as String.
      * @throws JSONException
      */
     @SuppressWarnings("unused")
@@ -206,6 +199,5 @@ public class DealsAPI
 		.executeNotificationForDeleteDeal(opportunitiesJSONArray);
 
 	Opportunity.dao.deleteBulkByIds(opportunitiesJSONArray);
-
     }
 }

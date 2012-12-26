@@ -5,7 +5,7 @@ import com.agilecrm.user.notification.NotificationPrefs;
 
 /**
  * <code>ContactNotificationPrefsUtil</code> is the base class for contact
- * notifications.Executes notifications for adding and deleting contact.Checks
+ * notifications. Executes notifications for adding and deleting contact. Checks
  * if tags are added while adding new contact and execute notification for tags,
  * if added.
  * 
@@ -14,15 +14,14 @@ import com.agilecrm.user.notification.NotificationPrefs;
  */
 public class ContactNotificationPrefsUtil
 {
-
     /**
-     * Executes notification when new contact is created.Checks if any tag is
+     * Executes notification when new contact is created. Checks if any tag is
      * added or deleted from old contact.
      * 
      * @param oldContact
-     *            Contact object before changes
+     *            Contact object before changes.
      * @param newContact
-     *            Contact object after changes
+     *            Contact object after changes.
      */
     public static void executeNotificationToContact(Contact oldContact,
 	    Contact newContact)
@@ -35,15 +34,14 @@ public class ContactNotificationPrefsUtil
 	}
 
 	TagNotificationPrefsUtil.checkTagsChange(oldContact, newContact);
-
     }
 
     /**
-     * Executes notification when contact is added.If tags are also added along
-     * with new contact, executes notification for tags
+     * Executes notification when contact is added. If tags are also added along
+     * with new contact, executes notification for tags.
      * 
      * @param contact
-     *            Contact object that is added
+     *            Contact object that is added.
      */
     public static void executeNotificationForNewContact(Contact contact)
     {
@@ -56,10 +54,10 @@ public class ContactNotificationPrefsUtil
     }
 
     /**
-     * Executes notification when contact is deleted
+     * Executes notification when contact is deleted.
      * 
      * @param contact
-     *            Contact object that is deleted
+     *            Contact object that is deleted.
      */
     public static void executeNotificationForDeleteContact(Contact contact)
     {
