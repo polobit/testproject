@@ -12,7 +12,7 @@ import com.google.appengine.api.taskqueue.DeferredTask;
 
 /**
  * <code>NotificationsDeferredTask</code> implements google appengine's
- * DeferredTask interface.Fetches api key from {@link APIKey} and sends post
+ * DeferredTask interface. Fetches api key from {@link APIKey} and sends post
  * request with object,type and api-key.
  * 
  * @author Naresh
@@ -21,31 +21,33 @@ import com.google.appengine.api.taskqueue.DeferredTask;
 @SuppressWarnings("serial")
 public class NotificationsDeferredTask implements DeferredTask
 {
-
     /**
-     * Notification type
+     * Notification type.
      */
     Type type;
+
     /**
-     * Object data
+     * Object data.
      */
     String objectData = null;
+
     /**
-     * To access url from Util class
+     * To access url from Util class.
      */
     String url = null;
+
     /**
-     * JSONObject to put object and type
+     * JSONObject to put object and type.
      */
     JSONObject objectJson = null;
 
     /**
-     * Constructs a new {@link NotificationsDeferredTask}
+     * Constructs a new {@link NotificationsDeferredTask}.
      * 
      * @param type
-     *            Notification type
+     *            Notification type.
      * @param objectData
-     *            Object like Contact,Deals etc
+     *            Object like Contact,Deals etc.
      */
     public NotificationsDeferredTask(Type type, String objectData)
     {
@@ -60,7 +62,6 @@ public class NotificationsDeferredTask implements DeferredTask
      */
     @SuppressWarnings({ "deprecation", "unchecked" })
     public void run()
-
     {
 	// Get API Key
 	APIKey api = APIKey.getAPIKey();
@@ -71,8 +72,6 @@ public class NotificationsDeferredTask implements DeferredTask
 	objectJson.put("object", objectData);
 	objectJson.put("type", type.toString());
 
-
-
 	url = Globals.PUSH_STATS + "?custom="
 		+ URLEncoder.encode(objectJson.toString()) + "&agile_id="
 		+ URLEncoder.encode(apiKey) + "&type="
@@ -80,7 +79,6 @@ public class NotificationsDeferredTask implements DeferredTask
 
 	String output = Util.accessURL(url);
 	System.out.println(output);
-
     }
 }
 

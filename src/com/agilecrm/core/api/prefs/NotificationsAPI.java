@@ -11,11 +11,11 @@ import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 
 /**
  * <code>NotificationsAPI</code> is used to perform GET and PUT operations on
- * {@link NotificationPrefs}.It replaces notification preferences with updated
+ * {@link NotificationPrefs}. It replaces notification preferences with updated
  * whenever notification preferences are updated at client side.
  * <p>
  * {@link NotificationPrefsUtil} is used to fetch and update current
- * notification preferences.It fetches notification preferences with respect to
+ * notification preferences. It fetches notification preferences with respect to
  * agile user.
  * </p>
  * 
@@ -25,12 +25,10 @@ import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 @Path("/api/notifications")
 public class NotificationsAPI
 {
-
-    // Notifications
     /**
-     * Gets notification preferences with respect to current user
+     * Gets notification preferences with respect to current user.
      * 
-     * @return notification preferences of current user
+     * @return notification preferences of current user.
      */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -51,7 +49,7 @@ public class NotificationsAPI
      * Updates notification preferences of current user.
      * 
      * @param notify
-     *            Existing notification preferences
+     *            Existing notification preferences.
      * @return Updated notification preferences, otherwise return null if
      *         exception occurs.
      */
@@ -61,7 +59,7 @@ public class NotificationsAPI
     {
 	try
 	{
-	    // Get UserId of person who is logged in
+	    // Get Notifications of user who logged in
 	    NotificationPrefs notifications = NotificationPrefsUtil
 		    .getCurrentUserNotificationPrefs();
 
@@ -82,7 +80,6 @@ public class NotificationsAPI
 	    notifications.tag_deleted = notify.tag_deleted;
 
 	    notifications.save();
-
 	    return notifications;
 	}
 	catch (Exception e)

@@ -8,22 +8,21 @@ import com.agilecrm.user.notification.NotificationPrefs;
 
 /**
  * <code>TagNotificationPrefsUtil</code> is the base class for executing
- * notifications of tags.Checks tag changes for a contact. Executes notification
- * when tag is added and tag is deleted.
+ * notifications of tags. Checks tag changes for a contact. Executes
+ * notification when tag is added and tag is deleted.
  * 
  * @author Naresh
  * 
  */
 public class TagNotificationPrefsUtil
 {
-
     /**
-     * Checks tag changes and execute notification accordingly
+     * Checks tag changes and execute notification accordingly.
      * 
      * @param oldContact
-     *            Contact object before changes
+     *            Contact object before changes.
      * @param updatedContact
-     *            Contact object after changes
+     *            Contact object after changes.
      */
     public static void checkTagsChange(Contact oldContact,
 	    Contact updatedContact)
@@ -46,32 +45,29 @@ public class TagNotificationPrefsUtil
 	// Executes notification for deleted tags
 	if (!deletedTags.isEmpty())
 	    executeNotificationWhenTagsDeleted(updatedContact);
-
     }
 
     /**
-     * Executes notification when tag is added
+     * Executes notification when tag is added.
      * 
      * @param contact
-     *            Contact object to which tag is added
+     *            Contact object to which tag is added.
      */
     public static void executeNotificationWhenTagsAdded(Contact contact)
     {
 	NotificationPrefsUtil.executeNotification(
 		NotificationPrefs.Type.TAG_CREATED, contact);
-
     }
 
     /**
-     * Executes notification when tag is deleted
+     * Executes notification when tag is deleted.
      * 
      * @param contact
-     *            Contact object to which tag is deleted
+     *            Contact object to which tag is deleted.
      */
     public static void executeNotificationWhenTagsDeleted(Contact contact)
     {
 	NotificationPrefsUtil.executeNotification(
 		NotificationPrefs.Type.TAG_DELETED, contact);
     }
-
 }

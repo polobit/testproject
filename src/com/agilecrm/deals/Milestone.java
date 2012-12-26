@@ -6,14 +6,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.agilecrm.db.ObjectifyGenericDao;
 
 /**
- * <code>Milestone</code> is the base class for milestones set for any
- * deal.Milestones indicates at what stage the Deal present.'Lost','Open','Won'
+ * <code>Milestone</code> is the base class for milestones set for any deal.
+ * Milestones indicates at what stage the Deal present. 'Lost', 'Open', 'Won'
  * and 'Stage1' are taken as default milestones.
  * <p>
- * Milestones can be given by Domain user through admin-settings in
- * client-side.The given milestones are displayed under select for every
- * deal.Milestones describes the Deal's stage and can be changed for a deal
- * whenever required.
+ * Milestones can be given by Domain user through admin-settings in client-side.
+ * The given milestones are displayed under select for every deal. Milestones
+ * describes the Deal's stage and can be changed for a deal whenever required.
  * </p>
  * 
  * @author Yaswanth
@@ -22,8 +21,6 @@ import com.agilecrm.db.ObjectifyGenericDao;
 @XmlRootElement
 public class Milestone
 {
-
-
     /**
      * Milestone Id
      */
@@ -67,6 +64,4 @@ public class Milestone
     {
 	dao.put(this);
     }
-
-
 }
