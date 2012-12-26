@@ -7,6 +7,7 @@
 <%@page import="com.agilecrm.user.AgileUser"%>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page import="com.agilecrm.user.UserPrefs"%>
+<%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <%@page import="com.agilecrm.account.AccountPrefs"%>
 <%@page import="com.google.appengine.api.users.UserServiceFactory"%>
 <%@page import="com.google.appengine.api.users.User"%>
@@ -38,7 +39,7 @@
 	ObjectMapper mapper = new ObjectMapper();
 	
 	// Get current user prefs
-	UserPrefs currentUserPrefs = UserPrefs.getCurrentUserPrefs();
+	UserPrefs currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
 	
 	// Download the template the user likes
 	String template = currentUserPrefs.template;
