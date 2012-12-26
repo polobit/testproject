@@ -19,16 +19,29 @@ import java.io.Serializable;
 import com.agilecrm.core.DomainUser;
 
 /**
- * Simple representation of an authenticated user.
+ * Simple representation of an authenticated user. Represents the claimedId
+ * (agilecrm.com), email of the logged in user, name of the user and domain user
+ * id. It Include methods to access claimId, email, name, domainId.
  */
 public class UserInfo implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
     private String claimedId;
+
+    /**
+     * Email address of the user logged in
+     */
     private String email;
+
+    /**
+     * Name of the user logged in
+     */
     private String name;
 
+    /**
+     * Domain user id logged in
+     */
     private Long domainId = 0L;
 
     public UserInfo()
@@ -51,16 +64,31 @@ public class UserInfo implements Serializable
 	    setDomainId(domainUser.id);
     }
 
+    /**
+     * Returns claimedId
+     * 
+     * @return {@link String} claimedId
+     */
     public String getClaimedId()
     {
 	return claimedId;
     }
 
+    /**
+     * Returns email of user
+     * 
+     * @return {@link String} email
+     */
     public String getEmail()
     {
 	return email;
     }
 
+    /**
+     * Returns name of the user
+     * 
+     * @return {@link String} name
+     */
     public String getName()
     {
 	return name;
@@ -71,11 +99,21 @@ public class UserInfo implements Serializable
 	return name + " (" + email + ") DomainId " + domainId;
     }
 
+    /**
+     * Sets domain id
+     * 
+     * @param domainId
+     */
     public void setDomainId(Long domainId)
     {
 	this.domainId = domainId;
     }
 
+    /**
+     * Returns the domain id of the user logged ins
+     * 
+     * @return {@link Long} domain user id
+     */
     public Long getDomainId()
     {
 	return domainId;

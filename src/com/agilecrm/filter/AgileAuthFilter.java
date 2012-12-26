@@ -19,9 +19,14 @@ import com.agilecrm.user.AgileUser;
 import com.google.appengine.api.NamespaceManager;
 
 /**
- * A very simple Servlet Filter for HTTP Basic Auth. Only supports exactly one
- * user with a password. Please note, HTTP Basic Auth is not encrypted and hence
- * unsafe!
+ * <code>AgileAuthFilter</code> is a Servlet Filter on HTTP request with urls:
+ * /home, /, /core/*, /scribe, /upload.jsp. It Checks if session is available,
+ * so it allows access further, if session is not available then redirects to
+ * login.
+ * 
+ * It also allow access to urls with "js/api", as JSAPIFilter authenticates the
+ * request based on APIKey instead of checking for sessions and userInfo
+ * 
  * 
  * @author Timo B. Huebel (me@tbh.name) (initial creation)
  */
@@ -34,6 +39,11 @@ public class AgileAuthFilter implements Filter
 	// Nothing to do.
     }
 
+    /**
+     * Validates the session and the domain user with respect to namespace set
+     * in Namespace Filter. If session cookie is not available then it redirects
+     * to login page, where new session cookie is set.
+     */
     @Override
     public void doFilter(final ServletRequest request,
 	    final ServletResponse response, final FilterChain chain)
@@ -47,7 +57,8 @@ public class AgileAuthFilter implements Filter
 	HttpServletRequest httpRequest = (HttpServletRequest) request;
 	HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-	// If it is JS API, we will pass it through
+	// If it is JS API, we will pass it through JSAPIFilter is used to
+	// filter the request i.e., to check the API key allocated to the domain
 	if (httpRequest.getRequestURI().contains("js/api"))
 	{
 	    System.out.println("JS API - ignoring filter");
@@ -55,7 +66,7 @@ public class AgileAuthFilter implements Filter
 	    return;
 	}
 
-	// If no sessions are there, redirect
+	// If no sessions are there, redirect to login page
 	if (httpRequest.getSession(false) == null)
 	{
 	    httpResponse.sendRedirect("/login");
@@ -71,7 +82,7 @@ public class AgileAuthFilter implements Filter
 	    return;
 	}
 
-	// Add this in session mnager
+	// Add this in session manager
 	SessionManager.set((HttpServletRequest) request);
 
 	// For registering all entities - AgileUser is a just a random class we

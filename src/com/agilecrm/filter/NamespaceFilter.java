@@ -18,18 +18,39 @@ import com.agilecrm.session.UserInfo;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
 
-/*
- *  Filter set the namespace. If the url is incorrect - it will forward to choose domain page
+/**
+ * <code>NamespaceFilter</code> filters every request to application, to set/
+ * Check the namespace/subdomain. If url is incorrect it will forward to choose
+ * domain page.
+ * <p>
+ * If the url path starts with "/backend/" then filter forwards request without
+ * verification of namespace, because it is required to run specific
+ * functionalities with out session or namespace being set i.e., to run crons,
+ * webhooks from stripe etc
+ * </p>
+ * 
  */
 public class NamespaceFilter implements Filter
 {
+    /**
+     * Sets the namespace to the subdomain in the request url, when namespace is
+     * not aready set or request is to create a new domain, forgot domain.
+     * 
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     */
     private boolean setNamespace(ServletRequest request,
 	    ServletResponse response) throws IOException
     {
-	// Reset the thread local
+	// Reset the thread local, which is again set after user loggedin or
+	// when registered () i.e., AgileAuthFilter redirects to login page if
+	// userInfo is null
 	SessionManager.set((UserInfo) null);
 
-	// Return if already set
+	// If namespace is already set, then returns true to allow access
+	// further
 	if (NamespaceManager.get() != null)
 	    return true;
 
@@ -88,6 +109,13 @@ public class NamespaceFilter implements Filter
 	return true;
     }
 
+    /**
+     * Creates a full url with query parameters in the request appended to the
+     * url
+     * 
+     * @param req
+     * @return
+     */
     private static String getFullUrl(HttpServletRequest req)
     {
 	String reqUrl = req.getRequestURL().toString();
@@ -99,7 +127,13 @@ public class NamespaceFilter implements Filter
 	return reqUrl;
     }
 
-    // Set up Google Apps
+    /**
+     * Sets up google apps
+     * 
+     * @param request
+     * @param response
+     * @return
+     */
     private boolean setupGoogleAppsNameSpace(ServletRequest request,
 	    ServletResponse response)
     {
@@ -141,6 +175,12 @@ public class NamespaceFilter implements Filter
 	return false;
     }
 
+    /**
+     * Redirects to choose domain.
+     * 
+     * @param request
+     * @param response
+     */
     public void redirectToChooseDomain(ServletRequest request,
 	    ServletResponse response)
     {
@@ -162,11 +202,22 @@ public class NamespaceFilter implements Filter
 	}
     }
 
+    /**
+     * Sets namespace or redirects to choose domain based on the url and
+     * sessions. If url path starts with "/backend", reqeust is forwarded
+     * without setting a namespace or redirecting to choose domain page
+     * 
+     * @param request
+     * @param response
+     * @param chain
+     */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
 	    FilterChain chain) throws IOException, ServletException
     {
-	// If Cron, just there is no filters to do
+	// If URL path stats with "/backend", then request is forwarded with out
+	// namespace verification i.e., no filter on url which starts with
+	// "/backend" (crons, StripeWebhooks)
 	String path = ((HttpServletRequest) request).getRequestURI();
 	if (path.startsWith("/backend"))
 	{
@@ -174,7 +225,10 @@ public class NamespaceFilter implements Filter
 	    return;
 	}
 
-	// Set namespace
+	// Returns true if name space is set or namespace is already set for the
+	// application. If request is not to access the
+	// application but to create new domain (choosing domain) then it
+	// returns true, allowing further access
 	boolean handled = setNamespace(request, response);
 
 	// Chain into the next request if not redirected

@@ -19,11 +19,15 @@ import com.agilecrm.core.DomainUser;
 import com.google.gdata.util.common.base.Charsets;
 
 /**
- * A very simple Servlet Filter for HTTP Basic Auth. Only supports exactly one
- * user with a password. Please note, HTTP Basic Auth is not encrypted and hence
- * unsafe!
+ * <code>BasicAuthFilter</code> is a simple Servlet Filter for HTTP Basic Auth.
+ * Filters the requests, with url path starts with "/dev", to allow access based
+ * on APIKey allocated to domain and domain user email id. Verifies the domain
+ * user and the APIkey related to domain to allow access.
+ * <p>
+ * It expects domain user email and APIKey seperated by : and encrypted and set
+ * in request headers (with key "Authorization")
+ * <p>
  * 
- * @author Timo B. Huebel (me@tbh.name) (initial creation)
  */
 public class BasicAuthFilter implements Filter
 {
@@ -40,6 +44,10 @@ public class BasicAuthFilter implements Filter
 	// Nothing to do.
     }
 
+    /**
+     * Filter the request, retrives the domain user email, its respective APIKey
+     * and verifies them to allow access
+     */
     @Override
     public void doFilter(final ServletRequest request,
 	    final ServletResponse response, final FilterChain chain)
@@ -50,7 +58,12 @@ public class BasicAuthFilter implements Filter
 	final HttpServletRequest httpRequest = (HttpServletRequest) request;
 	final HttpServletResponse httpResponse = (HttpServletResponse) response;
 
+	// Gets the "Authorization" from header, which is set with domain user
+	// and APIKey
 	final String auth = httpRequest.getHeader("Authorization");
+
+	// If Authorization in header is not null, then retrieves domain user
+	// and password from the header
 	if (auth != null)
 	{
 	    final int index = auth.indexOf(' ');
@@ -70,12 +83,14 @@ public class BasicAuthFilter implements Filter
 		    DomainUser domainUser = DomainUser
 			    .getDomainUserFromEmail(user);
 
-		    // Check if ApiKey
+		    // Gets APIKey, to authenticate the user
 		    String apiKey = APIKey.getAPIKey().api_key;
 
 		    System.out.println(user + " " + password + " " + domainUser
 			    + " " + apiKey);
 
+		    // If domain user exists and the APIKey matches, request is
+		    // given access
 		    if (domainUser != null && password.equals(apiKey))
 		    {
 			chain.doFilter(httpRequest, httpResponse);
