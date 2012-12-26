@@ -1,4 +1,4 @@
-package com.agilecrm.user.deferred;
+package com.agilecrm.user.notification.deferred;
 
 import java.net.URLEncoder;
 
