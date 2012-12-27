@@ -28,6 +28,7 @@ import com.agilecrm.user.SocialPrefs.Type;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.IMAPEmailPrefsUtil;
+import com.agilecrm.user.util.SocialPrefsUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DBUtil;
 import com.agilecrm.util.Util;
@@ -186,7 +187,7 @@ public class API
 	{
 	    // Get Gmail Social Prefs
 	    Type socialPrefsTypeEnum = SocialPrefs.Type.GMAIL;
-	    SocialPrefs gmailPrefs = SocialPrefs.getPrefs(
+	    SocialPrefs gmailPrefs = SocialPrefsUtil.getPrefs(
 		    AgileUser.getCurrentAgileUser(), socialPrefsTypeEnum);
 
 	    if (gmailPrefs != null)

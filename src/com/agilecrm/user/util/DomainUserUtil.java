@@ -302,7 +302,8 @@ public class DomainUserUtil
 		userPrefs.delete();
 
 	    // Delete Social Prefs
-	    List<SocialPrefs> socialPrefsList = SocialPrefs.getPrefs(agileUser);
+	    List<SocialPrefs> socialPrefsList = SocialPrefsUtil
+		    .getPrefs(agileUser);
 	    for (SocialPrefs socialPrefs : socialPrefsList)
 	    {
 		socialPrefs.delete();

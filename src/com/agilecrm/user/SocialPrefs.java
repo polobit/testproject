@@ -1,53 +1,122 @@
 package com.agilecrm.user;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.agilecrm.ScribeServlet;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.condition.IfDefault;
 
+/**
+ * <code>SocialPrefs</code> is the base class that handles social preferences
+ * like gmail. When user login into any social group from AgileCRM, token,
+ * secret and properties will be generated if access is given successfully.
+ * SocialPrefs makes use of {@link ScribeServlet} to get token, secret and other
+ * properties.
+ * <p>
+ * SocialPrefs makes user to connect with Contacts from AgileCRM itself through
+ * LinkedIn, Gmail, Facebook and Twitter.User can view email sent by a contact
+ * in contact detail.
+ * </p>
+ * 
+ * @author Manohar
+ * 
+ */
 @XmlRootElement
 public class SocialPrefs
 {
-
-    // Key
+    /**
+     * SocialPrefs Id.
+     */
     @Id
     public Long id;
 
-    // Type - LinkedIn, Twitter, Facebook, Dummy etc.
+    /**
+     * SocialPrefs types
+     * 
+     */
     public enum Type
     {
 	LINKEDIN, TWITTER, FACEBOOK, GMAIL, DUMMY
     };
 
+    /**
+     * SocialPrefs type.
+     */
     public Type type;
 
+    /**
+     * AgileUser Key.
+     */
     @Parent
     private Key<AgileUser> agileUser;
 
-    // Token & Secret
-    public String token, secret;
+    /**
+     * Social group token.
+     */
+    public String token;
 
-    // Name, UserId etc.
+    /**
+     * Social group secret.
+     */
+    public String secret;
+
+    /**
+     * Social Id. E.g.Id from gmail.
+     */
     @NotSaved(IfDefault.class)
-    public String socialId = null, picture = null, name = null, email = null;
+    public String socialId = null;
 
-    // Dao
+    /**
+     * Picture of user in social group.
+     */
+    @NotSaved(IfDefault.class)
+    public String picture = null;
+
+    /**
+     * User name in social group.
+     */
+    @NotSaved(IfDefault.class)
+    public String name = null;
+
+    /**
+     * User email in social group
+     */
+    @NotSaved(IfDefault.class)
+    public String email = null;
+
+    /**
+     * SocialPrefs Dao.
+     */
     private static ObjectifyGenericDao<SocialPrefs> dao = new ObjectifyGenericDao<SocialPrefs>(
 	    SocialPrefs.class);
 
+    /**
+     * Default SocialPrefs.
+     */
     SocialPrefs()
     {
     }
 
+    /**
+     * Constructs a new {@link SocialPrefs}.
+     * 
+     * @param agileUser
+     *            - AgileUser object.
+     * @param type
+     *            - SocialPrefs type.
+     * @param token
+     *            - Social group token.
+     * @param secret
+     *            - Social group secret.
+     * @param properties
+     *            - Social group properties.
+     */
     public SocialPrefs(AgileUser agileUser, Type type, String token,
 	    String secret, Map<String, String> properties)
     {
@@ -62,58 +131,33 @@ public class SocialPrefs
 
 	if (properties.containsKey("email"))
 	    this.email = properties.get("email");
-
 	System.out.println(properties);
-
     }
 
-    // Get Prefs
-    public static SocialPrefs getPrefs(AgileUser user, Type type)
-    {
-	Objectify ofy = ObjectifyService.begin();
-	Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class,
-		user.id);
-
-	return ofy.query(SocialPrefs.class).ancestor(agileUserKey)
-		.filter("type", type).get();
-    }
-
-    // Get Prefs
-    public static List<SocialPrefs> getPrefs(AgileUser user)
-    {
-	Objectify ofy = ObjectifyService.begin();
-	Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class,
-		user.id);
-
-	return ofy.query(SocialPrefs.class).ancestor(agileUserKey).list();
-    }
-
-    public static SocialPrefs getSocialPrefs(Long id)
-    {
-	try
-	{
-	    return dao.get(id);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-
-    @Override
-    public String toString()
-    {
-	return "Social - " + type + " Token: " + token + " " + secret;
-    }
-
+    /**
+     * Saves SocialPrefs.
+     */
     public void save()
     {
 	dao.put(this);
     }
 
+    /**
+     * Deletes SocialPrefs.
+     */
     public void delete()
     {
 	dao.delete(this);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString()
+    {
+	return "Social - " + type + " Token: " + token + " " + secret;
     }
 }

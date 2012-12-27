@@ -10,12 +10,26 @@ import javax.ws.rs.core.MediaType;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.SocialPrefs.Type;
+import com.agilecrm.user.util.SocialPrefsUtil;
 
+/**
+ * <code>SocialPrefsAPI</code> includes REST calls to interact with
+ * {@link SocialPrefs} class. It is called to get SocialPrefs with respect to
+ * type and deletes existing SocialPrefs associated with type.
+ * 
+ * @author Manohar
+ * 
+ */
 @Path("/api/social-prefs")
 public class SocialPrefsAPI
 {
-
-    // Social Prefs
+    /**
+     * Returns SocialPrefs associated with current AgileUser and given type.
+     * 
+     * @param type
+     *            - SocialPrefs type.
+     * @return SocialPrefs.
+     */
     @Path("{type}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -27,7 +41,7 @@ public class SocialPrefsAPI
 	    if (socialPrefsTypeEnum == null)
 		return null;
 
-	    return SocialPrefs.getPrefs(AgileUser.getCurrentAgileUser(),
+	    return SocialPrefsUtil.getPrefs(AgileUser.getCurrentAgileUser(),
 		    socialPrefsTypeEnum);
 	}
 	catch (Exception e)
@@ -36,7 +50,12 @@ public class SocialPrefsAPI
 	}
     }
 
-    // Social Prefs
+    /**
+     * Deletes SocialPrefs associated with current AgileUser and given type.
+     * 
+     * @param type
+     *            - SocialPrefs type.
+     */
     @Path("{type}")
     @DELETE
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -48,7 +67,7 @@ public class SocialPrefsAPI
 	    if (socialPrefsTypeEnum == null)
 		return;
 
-	    SocialPrefs prefs = SocialPrefs.getPrefs(
+	    SocialPrefs prefs = SocialPrefsUtil.getPrefs(
 		    AgileUser.getCurrentAgileUser(), socialPrefsTypeEnum);
 	    prefs.delete();
 	}
@@ -57,5 +76,4 @@ public class SocialPrefsAPI
 	    e.printStackTrace();
 	}
     }
-
 }
