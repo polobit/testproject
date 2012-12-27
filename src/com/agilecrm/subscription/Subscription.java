@@ -17,7 +17,7 @@ import com.agilecrm.subscription.stripe.StripeImpl;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
-import com.agilecrm.util.ClickDeskEncrytion;
+import com.agilecrm.util.ClickDeskEncryption;
 import com.google.gson.Gson;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -32,7 +32,7 @@ import com.stripe.model.Invoice;
  * <p>
  * This class holds information about domain's current plan represented by
  * {@link Plan}, Billing status represent by {@link BillingStatus}, RSA
- * encrypted( using {@link ClickDeskEncrytion}) domain user's credit card
+ * encrypted( using {@link ClickDeskEncryption}) domain user's credit card
  * information, subscription created/updated time and gateway used for payment.
  * </p>
  * Billing operations are done through this class, it calls {@link AgileBilling}
@@ -372,7 +372,7 @@ public class Subscription
 	try
 	{
 	    // Encrypt creditcard details before saving
-	    this.encrypted_card_details = ClickDeskEncrytion
+	    this.encrypted_card_details = ClickDeskEncryption
 		    .RSAEncrypt(new Gson().toJson(this.encrypted_card_details)
 			    .getBytes());
 	}
