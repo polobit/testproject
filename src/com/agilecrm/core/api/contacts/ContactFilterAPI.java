@@ -16,13 +16,30 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactFilter;
-import com.agilecrm.contact.ContactFilter.SystemFilter;
+import com.agilecrm.contact.ContactFilter.DefaultFilter;
+import com.agilecrm.search.ui.serialize.SearchRule;
 
+/**
+ * <code>ContactFilterAPI</code> class includes REST calls to access
+ * {@link ContactFilter}s
+ * <p>
+ * It is accessed from client, to create a new filter, shows filters in list, to
+ * show filtered/queried results
+ * </p>
+ * 
+ * @author Yaswanth
+ */
 @Path("/api/filters")
 public class ContactFilterAPI
 {
 
+    /**
+     * Fetches all the {@link List} of {@link ContactFilter}s
+     * 
+     * @return {@link List} of {@link ContactFilter}s
+     */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<ContactFilter> getContactFilters()
@@ -30,7 +47,13 @@ public class ContactFilterAPI
 	return ContactFilter.getAllContactFilters();
     }
 
-    // Save Filter contacts
+    /**
+     * Saves a {@link ContactFilter} entity
+     * 
+     * @param contact_filter
+     *            {@link ContactFilter}
+     * @return {@link ContactFilter}
+     */
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -40,7 +63,13 @@ public class ContactFilterAPI
 	return contact_filter;
     }
 
-    // Update filters
+    /**
+     * Updates the existing {@link ContactFilter} object
+     * 
+     * @param contact_filter
+     *            {@link ContactFilter}
+     * @return {@link ContactFilter}
+     */
     @PUT
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -50,6 +79,13 @@ public class ContactFilterAPI
 	return contact_filter;
     }
 
+    /**
+     * Fetches {@link ContactFilter} object based on its Id
+     * 
+     * @param id
+     *            of {@link ContactFilter} entity
+     * @return {@link ContactFilter}
+     */
     @Path("{filter_id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -66,6 +102,16 @@ public class ContactFilterAPI
 	}
     }
 
+    /**
+     * Returns {@link Contact}s list based on the {@link SearchRule} in the
+     * {@link ContactFilter} which is fetched by its id. It checks the type of
+     * request, whether filter is on custom built criteria or default filters,
+     * based on which results are returned returned
+     * 
+     * @param id
+     *            {@link ContactFilter} id
+     * @return {@link Collection} list of contact
+     */
     @Path("/query/{filter_id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -73,27 +119,37 @@ public class ContactFilterAPI
     {
 	try
 	{
-	    System.out.println("before spliting : " + id);
-	    // Remove system in system-XXX
-	    //
 
+	    // Checks if Filter id contacts "system", which indicates the
+	    // request is to load results based on the default filters provided
 	    if (id.contains("system"))
 	    {
+		// Seperates "system-" from id and checks the type of the filter
+		// (RECETN of LEAD), accordingly contacts are fetched and
+		// returned
 		id = id.split("-")[1];
+
 		if (id.equalsIgnoreCase("RECENT"))
 		{
-		    return ContactFilter.getContacts(SystemFilter.RECENT);
+		    return ContactFilter.getContacts(DefaultFilter.RECENT);
 		}
 		else if (id.equalsIgnoreCase("LEAD"))
 		{
-		    return ContactFilter.getContacts(SystemFilter.MY_LEAD);
+		    return ContactFilter.getContacts(DefaultFilter.MY_LEAD);
 		}
+
+		// If requested id contains "system" in it, but it doesn't match
+		// with RECENT/LEAD then return null
+		return null;
 	    }
-	    ContactFilter filter = ContactFilter.getContactFilter(Long.parseLong(id));
 
-	    Collection contacts = filter.queryContacts();
+	    // If Request is not on default filters, then fetch Filter based on
+	    // id
+	    ContactFilter filter = ContactFilter.getContactFilter(Long
+		    .parseLong(id));
 
-	    return contacts;
+	    // Queries based on list of search rules in the filter object
+	    return filter.queryContacts();
 	}
 	catch (Exception e)
 	{
@@ -101,15 +157,23 @@ public class ContactFilterAPI
 	}
     }
 
-    // Bulk operations - delete
+    /**
+     * Deletes List of filters, based on the ids sent
+     * 
+     * @param model_ids
+     *            Stringified representation of list of ids
+     * @throws JSONException
+     */
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteContacts(@FormParam("model_ids") String model_ids) throws JSONException
+    public void deleteContacts(@FormParam("model_ids") String model_ids)
+	    throws JSONException
     {
 
 	JSONArray contactFiltersJSONArray = new JSONArray(model_ids);
 
+	// Deletes all contact filters with ids specified in the list
 	ContactFilter.dao.deleteBulkByIds(contactFiltersJSONArray);
     }
 }
