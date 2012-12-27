@@ -21,11 +21,27 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
 
+/**
+ * <code>UsersAPI</code> includes REST calls to interact with {@link DomainUser}
+ * class to initiate User CRUD operations
+ * <p>
+ * It is called from client side to create, update, fetch and delete the users.
+ * It also interacts with {@link DomainUserUtil} class to fetch the data of
+ * DomainUser class from database.
+ * </p>
+ * 
+ * @author
+ * 
+ */
 @Path("/api/users")
 public class UsersAPI
 {
 
-    // Users
+    /**
+     * Gets list of users of a domain
+     * 
+     * @return list of domain users
+     */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<DomainUser> getUsers()
@@ -34,7 +50,7 @@ public class UsersAPI
 	{
 	    String domain = NamespaceManager.get();
 
-	    // Get the users and update the password to the masked one
+	    // Gets the users and update the password to the masked one
 	    List<DomainUser> users = DomainUserUtil.getUsers(domain);
 
 	    return users;
@@ -46,7 +62,14 @@ public class UsersAPI
 	}
     }
 
-    // Users
+    /**
+     * Saves new users into database, if any exception is raised throws
+     * webApplication exception.
+     * 
+     * @param domainUser
+     *            user to be saved into database
+     * @return saved user
+     */
     @POST
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public DomainUser createDomainUser(DomainUser domainUser)
@@ -64,10 +87,15 @@ public class UsersAPI
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
 	}
-
     }
 
-    // Users
+    /**
+     * Updates the existing user
+     * 
+     * @param domainUser
+     *            user to be updated
+     * @return updated user
+     */
     @PUT
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public DomainUser updateDomainUser(DomainUser domainUser)
@@ -94,26 +122,30 @@ public class UsersAPI
 	}
     }
 
-    // Users
+    /**
+     * Deletes a user from database, by validating users count and ownership of
+     * the user to be deleted. If the user is fit to delete, deletes its related
+     * entities also.
+     * 
+     * @param domainUser
+     *            user to be deleted
+     */
     @DELETE
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public void deleteDomainUser(DomainUser domainUser)
     {
-
 	try
 	{
-	    Long id = domainUser.id;
-	    DomainUser domainuser = DomainUserUtil.getDomainUser(id);
 	    int count = DomainUserUtil.count();
 
-	    // Check if only one account exists
+	    // Throws exception, if only one account exists
 	    if (count == 1)
 		throw new WebApplicationException(
 			Response.status(Response.Status.BAD_REQUEST)
 				.entity("Cannot Delete Users if only one account exists")
 				.build());
 
-	    // Check for account owner
+	    // Throws exception, if user is owner
 	    if (domainUser.is_account_owner)
 		throw new WebApplicationException(Response
 			.status(Response.Status.BAD_REQUEST)
@@ -133,7 +165,6 @@ public class UsersAPI
 	domainUser.delete();
     }
 
-
     /**
      * Deletes each user individually by iterating the json array of user ids
      * 
@@ -147,19 +178,14 @@ public class UsersAPI
     public void deleteContacts(@FormParam("model_ids") String model_ids)
 	    throws JSONException
     {
-
 	JSONArray usersJSONArray = new JSONArray(model_ids);
 
 	for (int i = 0; i < usersJSONArray.length(); i++)
 	{
-
 	    DomainUser domainuser = DomainUserUtil.getDomainUser(Long
 		    .parseLong(usersJSONArray.getString(i)));
 
 	    deleteDomainUser(domainuser);
-
 	}
-
     }
-
 }
