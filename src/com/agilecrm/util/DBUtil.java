@@ -20,13 +20,31 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 
+/**
+ * <code>DBUtil</code> class contains the utility methods to delete a name-space
+ * and all its related entities from the data store.
+ * <p>
+ * This class imports {@link DomainUserUtil} class to delete the name-space and
+ * runs a deferred task (avoids timeout exception) to delete all the entities of
+ * the name-space.
+ * </p>
+ * 
+ * @author sree
+ * 
+ */
 public class DBUtil
 {
 
     // JSON - Google App Engine DB Key
     public final static String DATASTORE_KEY_IN_JSON = "id";
 
-    // Get ID from JSONObject - gets id and thn $oid
+    /**
+     * Gets ID from JSONObject - gets id and then $oid
+     * 
+     * @param json
+     *            JSONObject reference
+     * @return value of the id attribute of given json object
+     */
     public static String getId(JSONObject json)
     {
 
@@ -40,6 +58,16 @@ public class DBUtil
 	}
     }
 
+    /**
+     * Gets all the names (Contacts, Deals and etc..) of the entities of
+     * particular name-space and stores in a list to return. Avoids the adding
+     * of entity names (starts and ends with double underscore
+     * ex:"__Stat_Total__"), which denotes statistics of the data-store.
+     * 
+     * @param namespace
+     *            name of a particular name-space
+     * @return list of entity names
+     */
     static List<String> getKinds(String namespace)
     {
 
@@ -52,8 +80,7 @@ public class DBUtil
 
 	    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 
-	    // this works in dev and prod, but doesn't provide an entity
-	    // count
+	    // This works in dev and prod, but doesn't provide an entity count
 	    Query q = new Query(Query.KIND_METADATA_KIND);
 	    for (Entity e : ds.prepare(q).asIterable())
 	    {
@@ -77,17 +104,26 @@ public class DBUtil
 	    NamespaceManager.set(old);
 	}
 
-	// don't show/include/delete these, it messes up mapreduce
+	// Don't show/include/delete these, it messes up mapreduce
 	results.remove("MapReduceState");
 	results.remove("ShardState");
 
 	return results;
     }
 
+    /**
+     * Deletes a name space and all its related entities from data-store by
+     * creating a deferred task for the name-space.
+     * 
+     * @param namespace
+     */
     public static void deleteNamespace(String namespace)
     {
-	// If namespace is null or is empty return with out deleting
-	// entities
+
+	/*
+	 * If name-space is null or empty return with out deleting entities, if
+	 * it happens deletes all the entities of all name-spaces
+	 */
 	if (namespace == null || namespace.isEmpty())
 	    return;
 
@@ -97,12 +133,17 @@ public class DBUtil
 	queue.add(TaskOptions.Builder.withPayload(namespaceDeleteDeferredTask));
     }
 
+    /**
+     * Deletes the entities of a particular kind by creating a list of keys of
+     * entities of the kind and deleting the list at once
+     * 
+     * @param kind
+     */
     static void deleteKind(String kind)
     {
-
 	try
 	{
-	    // Get All Entity Keys in the Kind
+	    // Stores all entity Keys of the Kind
 	    List<Key> keys = new LinkedList<Key>();
 
 	    // Get a handle on the datastore itself
@@ -116,8 +157,6 @@ public class DBUtil
 		keys.add(entity.getKey());
 	    }
 
-	    System.out.println("Bulk delete ...  " + kind);
-
 	    try
 	    {
 		datastore.delete(keys);
@@ -127,7 +166,6 @@ public class DBUtil
 		e.printStackTrace();
 	    }
 
-	    System.out.println("Deleted sKind " + kind);
 	}
 	catch (Exception e)
 	{
@@ -136,6 +174,14 @@ public class DBUtil
 	}
     }
 
+    /**
+     * <code>NamespaceDeleteDeferredTask</code> class crates a deferred task,
+     * which deletes all the entities of a particular name-space. Also deletes
+     * domain users and crons of the name-space.
+     * 
+     * @author sree
+     * 
+     */
     @SuppressWarnings("serial")
     static class NamespaceDeleteDeferredTask implements DeferredTask
     {
@@ -159,15 +205,17 @@ public class DBUtil
 	    try
 	    {
 
-		// Get all entities
+		// Gets all entities of the given name-space
 		List<String> kinds = getKinds(namespace);
 
-		// Delete each kind
+		// Deletes each kind
 		for (String kind : kinds)
 		    deleteKind(kind);
 
+		// Deletes crons
 		CronUtil.deleteCronsByNamespace(namespace);
 
+		// Deletes domain users
 		DomainUserUtil.deleteDomainUsers(namespace);
 
 	    }

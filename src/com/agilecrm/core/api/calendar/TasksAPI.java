@@ -1,5 +1,6 @@
 package com.agilecrm.core.api.calendar;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -17,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.activities.Task;
+import com.agilecrm.activities.TaskRemainder;
 import com.agilecrm.activities.util.TaskUtil;
 
 /**
@@ -88,7 +90,6 @@ public class TasksAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Task> getPendingTasks(@PathParam("num-days") String numdays)
     {
-
 	try
 	{
 	    return TaskUtil.getPendingTasks(Integer.parseInt(numdays));
@@ -184,9 +185,23 @@ public class TasksAPI
     public void deleteContacts(@FormParam("model_ids") String model_ids)
 	    throws JSONException
     {
-
 	JSONArray tasksJSONArray = new JSONArray(model_ids);
 
 	Task.dao.deleteBulkByIds(tasksJSONArray);
+    }
+
+    @Path("remainder")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void taskRemaider()
+    {
+	try
+	{
+	    TaskRemainder.dailyTaskRemainder();
+	}
+	catch (IOException e)
+	{
+	    e.printStackTrace();
+	}
     }
 }
