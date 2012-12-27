@@ -3,11 +3,6 @@ package com.agilecrm.activities;
 import java.io.IOException;
 import java.util.Set;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
 import com.agilecrm.activities.deferred.TaskRemainderDeferredTask;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
@@ -34,12 +29,9 @@ import com.google.appengine.api.taskqueue.TaskOptions;
  * @author Rammohan
  * 
  */
-@Path("/tasks/remainder")
-public class TaskRemainderServlet
+public class TaskRemainder
 {
-    @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void dailyTaskRemainder() throws IOException
+    public static void dailyTaskRemainder() throws IOException
     {
 
 	Set<String> domains = Util.getAllNamespaces();

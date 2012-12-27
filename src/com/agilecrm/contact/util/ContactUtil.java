@@ -21,6 +21,19 @@ import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 
+/**
+ * <code>ContactUtil</code> is a utility class to process the data of contact
+ * class, it processes when fetching the data and saving bulk amount of contacts
+ * to contact database.
+ * <p>
+ * This utility class includes methods needs to return contacts based on id,
+ * tags, email and etc..Also includes methods which perform bulk operations on
+ * contacts.
+ * </p>
+ * 
+ * @author
+ * 
+ */
 public class ContactUtil
 {
     // Dao

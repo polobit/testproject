@@ -306,26 +306,10 @@ table {
 
 /* Clip Board Application CSS -- Ending */
 
-/* Mouse over on Tables */
-/* cursor change in contact */
-#contacts-model-list>tr:hover {
+/* Mouse over on Tables (with class agile-edit-row) -- cursor change*/
+.agile-edit-row>tr:hover {
 	cursor: pointer;
-}
-
-/* cursor change in deals */
-#opportunities-model-list>tr:hover {
-	cursor: pointer;
-}
-
-/*cursor change in users*/
-#admin-settings-users-model-list>tr:hover {
-	cursor: pointer;
-}
-
-/*cursor change in triggers*/
-#triggers-model-list>tr:hover {
-	cursor: pointer;
-}
+} 
 
 /* Cursor change in calendar tasks */
 #overdue>tr:hover {
