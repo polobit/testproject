@@ -47,7 +47,6 @@ public class DBUtil
      */
     public static String getId(JSONObject json)
     {
-
 	try
 	{
 	    return json.getString(DATASTORE_KEY_IN_JSON);
@@ -70,12 +69,10 @@ public class DBUtil
      */
     static List<String> getKinds(String namespace)
     {
-
 	String old = NamespaceManager.get();
 	List<String> results = new ArrayList<String>();
 	try
 	{
-
 	    NamespaceManager.set(namespace);
 
 	    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
@@ -84,16 +81,18 @@ public class DBUtil
 	    Query q = new Query(Query.KIND_METADATA_KIND);
 	    for (Entity e : ds.prepare(q).asIterable())
 	    {
-
 		String name = e.getKey().getName();
 		if (!name.startsWith("__Stat_"))
 		{
 
-		    // find out how many entities this kind has
-		    // int count = ds.prepare(new
-		    // Query(name)).countEntities(FetchOptions.Builder.withDefaults());
-
-		    // results.add(new Kind(name));
+		    /*
+		     * find out how many entities this kind has int count =
+		     * ds.prepare(new
+		     * Query(name)).countEntities(FetchOptions.Builder
+		     * .withDefaults());
+		     * 
+		     * results.add(new Kind(name));
+		     */
 
 		    results.add(name);
 		}
@@ -179,13 +178,12 @@ public class DBUtil
      * which deletes all the entities of a particular name-space. Also deletes
      * domain users and crons of the name-space.
      * 
-     * @author sree
+     * @author
      * 
      */
     @SuppressWarnings("serial")
     static class NamespaceDeleteDeferredTask implements DeferredTask
     {
-
 	String namespace;
 
 	public NamespaceDeleteDeferredTask(String namespace)
