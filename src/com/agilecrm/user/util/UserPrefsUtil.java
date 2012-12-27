@@ -12,16 +12,16 @@ import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 
 /**
- * <code>UserPrefsUtil</code> is the utility class for UserPrefs.It handles some
- * of the REST calls of {@link UserPrefsAPI}. It fetches UserPrefs with respect
- * to id and current agile user. It sets default UserPrefs with respect to agile
- * id.
+ * <code>UserPrefsUtil</code> is the utility class for UserPrefs. It handles
+ * some of the REST calls of {@link UserPrefsAPI}. It fetches UserPrefs with
+ * respect to id and current agile user. It sets default UserPrefs with respect
+ * to agile id.
  * 
  */
 public class UserPrefsUtil
 {
     /**
-     * UserPrefs Dao
+     * UserPrefs Dao.
      */
     private static ObjectifyGenericDao<UserPrefs> dao = new ObjectifyGenericDao<UserPrefs>(
 	    UserPrefs.class);
@@ -66,8 +66,8 @@ public class UserPrefsUtil
      * Returns default UserPrefs.
      * 
      * @param agileUser
-     *            - AgileUser Object
-     * @return default UserPrefs
+     *            - AgileUser Object.
+     * @return default UserPrefs.
      */
     private static UserPrefs getDefaultPrefs(AgileUser agileUser)
     {
@@ -78,7 +78,7 @@ public class UserPrefsUtil
     }
 
     /**
-     * Returns UserPrefs with respect to Id if exists, otherwise returns null
+     * Returns UserPrefs with respect to Id if exists, otherwise returns null.
      * 
      * @param id
      *            - UserPrefs Id.
@@ -92,7 +92,6 @@ public class UserPrefsUtil
 	}
 	catch (EntityNotFoundException e)
 	{
-
 	    e.printStackTrace();
 	    return null;
 	}
@@ -107,5 +106,4 @@ public class UserPrefsUtil
     {
 	return dao.fetchAll();
     }
-
 }

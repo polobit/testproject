@@ -160,7 +160,7 @@ public class UserPrefs
     }
 
     /**
-     * Saves UserPrefs.Wraps DomainUser Name with UserPrefs name.
+     * Saves UserPrefs. Wraps DomainUser Name with UserPrefs name.
      */
     public void save()
     {

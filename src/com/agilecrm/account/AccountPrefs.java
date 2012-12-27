@@ -7,59 +7,70 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.ui.serialize.Plan;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
+/**
+ * <code>AccountPrefs</code> is the base class for Account Preferences of Admin
+ * Settings. User can upload Company logo and specify Company name. The
+ * subscription plan is shown for a user. Company name and logo can be changed
+ * anytime. Saves AccountPrefs in data store.
+ * 
+ * @author Manohar
+ * 
+ */
 @XmlRootElement
 public class AccountPrefs
 {
-    // Key
+
+    /**
+     * AccountPrefs Id.
+     */
     @Id
     public Long id;
 
+    /**
+     * Company logo.
+     */
     @NotSaved(IfDefault.class)
     public String logo = null;
 
+    /**
+     * Company name.
+     */
     @NotSaved(IfDefault.class)
     public String company_name = "";
 
-    // Dao
+    /**
+     * AccountPrefs Dao.
+     */
     private static ObjectifyGenericDao<AccountPrefs> dao = new ObjectifyGenericDao<AccountPrefs>(
 	    AccountPrefs.class);
 
-    AccountPrefs(String companyName)
-    {
-	this.company_name = companyName;
-    }
-
+    /**
+     * Default AccountPrefs.
+     */
     AccountPrefs()
     {
 
     }
 
-    public static AccountPrefs getAccountPrefs()
+    /**
+     * Constructs a new {@link AccountPrefs}.
+     * 
+     * @param companyName
+     *            - Company Name.
+     */
+    public AccountPrefs(String companyName)
     {
-	Objectify ofy = ObjectifyService.begin();
-	AccountPrefs prefs = ofy.query(AccountPrefs.class).get();
-	if (prefs == null)
-	{
-	    return getDefaultPrefs();
-	}
-
-	return prefs;
+	this.company_name = companyName;
     }
 
-    private static AccountPrefs getDefaultPrefs()
-    {
-	AccountPrefs prefs = new AccountPrefs("My company");
-
-	dao.put(prefs);
-	return prefs;
-    }
-
-    // Contacts related with deals Author : Yaswanth 08-24-2012
+    /**
+     * Returns subscription plan if exists, otherwise null.
+     * 
+     * @return Subscription plan.
+     */
     @XmlElement(name = "subscription_plan")
     public Plan getPlan()
     {
@@ -69,9 +80,11 @@ public class AccountPrefs
 	return null;
     }
 
+    /**
+     * Saves AccountPrefs.
+     */
     public void save()
     {
 	dao.put(this);
     }
-
 }

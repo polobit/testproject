@@ -22,7 +22,7 @@ public class UserPrefsAPI
     /**
      * Gets UserPrefs of current agile user.
      * 
-     * @return UserPrefs of current agile user
+     * @return UserPrefs of current agile user.
      */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
