@@ -309,7 +309,8 @@ public class DomainUserUtil
 	    }
 
 	    // Delete IMAP PRefs
-	    IMAPEmailPrefs imapPrefs = IMAPEmailPrefs.getIMAPPrefs(agileUser);
+	    IMAPEmailPrefs imapPrefs = IMAPEmailPrefsUtil
+		    .getIMAPPrefs(agileUser);
 	    if (imapPrefs != null)
 		imapPrefs.delete();
 

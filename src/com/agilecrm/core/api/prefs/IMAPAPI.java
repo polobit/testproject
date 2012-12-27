@@ -11,28 +11,48 @@ import javax.ws.rs.core.MediaType;
 
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.IMAPEmailPrefs;
+import com.agilecrm.user.util.IMAPEmailPrefsUtil;
 import com.googlecode.objectify.Key;
 
+/**
+ * <code>IMAPAPI</code> includes REST calls to interact with
+ * {@link IMAPEmailPrefs} class. It handles CRUD operations for
+ * {@link IMAPEmailPrefs}.
+ * 
+ * @author Manohar
+ * 
+ */
 @Path("/api/imap")
 public class IMAPAPI
 {
-
-    // IMAP CRUD
-    // This method is called if TEXT_PLAIN is request
+    /**
+     * Gets IMAPEmailPrefs of current agile user. This method is called if
+     * TEXT_PLAIN is request.
+     * 
+     * @return IMAPEmailPrefs.
+     */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public IMAPEmailPrefs getIMAPPrefs()
     {
-	IMAPEmailPrefs prefs = IMAPEmailPrefs.getIMAPPrefs(AgileUser
+	IMAPEmailPrefs prefs = IMAPEmailPrefsUtil.getIMAPPrefs(AgileUser
 		.getCurrentAgileUser());
+
 	if (prefs != null)
 	{
-	    prefs.password = prefs.MASKED_PASSWORD;
+	    prefs.password = IMAPEmailPrefs.MASKED_PASSWORD;
 	}
 	System.out.println(prefs);
 	return prefs;
     }
 
+    /**
+     * Saves IMAPEmailPrefs.
+     * 
+     * @param prefs
+     *            IMAPEmailPrefs object to be saved.
+     * @return IMAPEmailPrefs.
+     */
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -44,6 +64,13 @@ public class IMAPAPI
 	return prefs;
     }
 
+    /**
+     * Updates IMAPEmailPrefs.
+     * 
+     * @param prefs
+     *            IMAPEmailPrefs object to be saved.
+     * @return IMAPEmailPrefs.
+     */
     @PUT
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -56,13 +83,15 @@ public class IMAPAPI
 	return prefs;
     }
 
+    /**
+     * Deletes IMAPEmailPrefs with respect to agile user.
+     */
     @DELETE
     public void deleteIMAPEmailPrefs()
     {
-	IMAPEmailPrefs prefs = IMAPEmailPrefs.getIMAPPrefs(AgileUser
+	IMAPEmailPrefs prefs = IMAPEmailPrefsUtil.getIMAPPrefs(AgileUser
 		.getCurrentAgileUser());
 	if (prefs != null)
 	    prefs.delete();
     }
-
 }

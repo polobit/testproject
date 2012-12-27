@@ -27,6 +27,7 @@ import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.SocialPrefs.Type;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.IMAPEmailPrefsUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DBUtil;
 import com.agilecrm.util.Util;
@@ -153,7 +154,7 @@ public class API
 	String url = null;
 
 	// Get Imap Prefs
-	IMAPEmailPrefs imapPrefs = IMAPEmailPrefs.getIMAPPrefs(AgileUser
+	IMAPEmailPrefs imapPrefs = IMAPEmailPrefsUtil.getIMAPPrefs(AgileUser
 		.getCurrentAgileUser());
 	if (imapPrefs != null)
 	{
