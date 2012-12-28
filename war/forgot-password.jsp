@@ -1,3 +1,7 @@
+<%@page import="com.agilecrm.util.email.SendMail"%>
+<%@page import="com.agilecrm.util.email.AppengineMail"%>
+<%@page import="com.agilecrm.util.Util"%>
+<%@page import="com.agilecrm.user.util.DomainUserUtil"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.user.DomainUser"%>
 <%
@@ -6,14 +10,28 @@ It checks first if user exists then a mail is sent to that id along with newly g
 and success message is shown. Else error is shown in the same page.
 */
 String error = "", success = "";
+System.out.println(success);
 //If Email is present
 String email = request.getParameter("email");
-if(!StringUtils.isEmpty(email))
+String password = request.getParameter("password");
+DomainUser domainUser = null;
+
+if (!StringUtils.isEmpty(password)) {
+	domainUser = DomainUserUtil.getDomainUserFromEmail(email);
+
+	domainUser.password = Util.decrypt(password);
+
+	AppengineMail.sendMail(email, SendMail.FORGOT_PASSWORD_SUBJECT,
+			SendMail.FORGOT_PASSWORD, domainUser);
+	
+	success = "We have sent you an email";
+}
+else if(!StringUtils.isEmpty(email) && StringUtils.isEmpty(password))
 {
     
     email = email.toLowerCase();
     
-	DomainUser domainUser = DomainUser.generatePassword(email);
+    domainUser = DomainUserUtil.generatePassword(email);
 	if(domainUser == null)
 	{
 	    error = "We are not able to find any user";
@@ -145,6 +163,13 @@ jQuery.validator.setDefaults({
                     <input class="input-xlarge field required email" name='email' maxlength="50" minlength="6" type="text" placeholder="Email" autocapitalize="off">
 					<div style="margin-top:15px;">
 					  <input type='submit' style="float:right;height:39px;" value="Submit" class='btn btn-large btn-primary forgot_password_btn'>
+					  	<%
+				    if (domainUser != null) {
+				%>
+				<a href="#" id="resend-password">Resend password</a>
+				<%
+				    }
+				%>
 				  </div>
 				</div>
 				</form>
@@ -152,7 +177,19 @@ jQuery.validator.setDefaults({
 				<div class="clearfix"></div>
 				
 				</div>
-					
+								<form name='resend_password_form' id="resend_password_form"
+				class="hide" method='post'">
+
+				<%
+				    if (domainUser != null) {
+				%>
+				<input name="email" value="<%=domainUser.email%>" /> 
+				<input name="password" value="<%=Util.encrypt(domainUser.password)%>" />
+				<%
+				    }
+				%>
+
+			</form>
 			</div>
 			<div style="text-align: center;line-height: 19px;">
 	                 Already have an account? <a href="/login">Login</a><br/>
@@ -169,6 +206,12 @@ jQuery.validator.setDefaults({
 					   form.submit();
 					 }
 					});
+		  
+  		$("#resend-password").live('click', function(e) {
+			e.preventDefault();
+			alert("hai");
+			$("#resend_password_form").submit();
+		});
 			
 		});
 		

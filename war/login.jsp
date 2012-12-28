@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.account.util.AccountPrefsUtil"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.account.AccountPrefs"%>
 <%
@@ -30,7 +31,7 @@ else
   error = "";
 
 // Users can show their logo on login page. 
-AccountPrefs accountPrefs = AccountPrefs.getAccountPrefs();
+AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
 String logo_url = accountPrefs.logo;
 
 %>
