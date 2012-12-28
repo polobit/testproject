@@ -1,75 +1,80 @@
 <script id="admin-settings-api-key-model-template" type="text/html">
-
 <!-- -->
-
-<div class="row">
-	<div class="span7">
-You can use javascript API to track page views on your site, add/delete contacts from your website or blog directly.<div class="clerfix"/><br/>
-<pre class="prettyprint linenums " ">
-&lt;script type="text/javascript" &gt;
-var _agile = _agile || [];
-_agile.push(['_setAccount', '{{api_key}}']);
-/*
-*   INSERT YOUR FUNCTIONALITY CODE
-*   eg: trackPageView..
-*   _agile.push(['_setEmail', 'manohar@invox.com']);
-*   _agile.push(['_trackPageview']);
-*/
-var aj = document.createElement('script'); aj.type = 'text/javascript'; 
-aj.async = true; aj.src = '/stats/min/agile-min.js';
+<div class="row" />
+<div class="span7">
+	You can use javascript API to track page views on your site, add/delete contacts from your website or blog directly.
+	<div class="clerfix">
+		<br />
+		<pre class="prettyprint linenums " ">
+            &lt;script type="text/javascript" &gt;
+            var _agile = _agile || [];
+            _agile.push(['_setAccount', '{{api_key}}']);
+            /*
+             *   INSERT YOUR FUNCTIONALITY CODE
+             *   eg: trackPageView..
+             *   _agile.push(['_setEmail', 'manohar@invox.com']);
+             *   _agile.push(['_trackPageview']);
+             */
+             var aj = document.createElement('script');
+             aj.type = 'text/javascript'; 
+             aj.async = true;
+             aj.src = '/stats/min/agile-min.js';
  
-var s = document.getElementsByTagName('script')[0];
+             var s = document.getElementsByTagName('script')[0];
  
-s.parentNode.insertBefore(aj, s);
-&lt;/script&gt;
-</pre>
+             s.parentNode.insertBefore(aj, s);
+             &lt;/script&gt;
+        </pre>
 	</div>
 </div>
-
-Set Email (Optional)<div class="clerfix"/><br/>
+Set Email (Optional)
+<div class="clerfix" />
+<br />
 <div class="row">
 	<div class="span7">
-<pre class="prettyprint linenums " ">
-_agile.push(['_setEmail', 'manohar@invox.com']);
-</pre>
+		<pre class="prettyprint linenums " ">
+            _agile.push(['_setEmail', 'manohar@invox.com']);
+        </pre>
 	</div>
 </div>
-
-Track Page View<div class="clerfix"/><br/>
+Track Page View
+<div class="clerfix" />
+<br />
 <div class="row">
 	<div class="span7">
-<pre class="prettyprint linenums " ">
-_agile.push(['_trackPageview']);
-</pre>
+		<pre class="prettyprint linenums " ">
+            _agile.push(['_trackPageview']);
+        </pre>
 	</div>
 </div>
-
-
-Create Contact<div class="clerfix"/><br/>
+Create Contact
+<div class="clerfix" />
+<br />
 <div class="row">
 	<div class="span7">
-<pre class="prettyprint linenums " ">
-_agile.push(["_createContact", {"email": "yaswanth3@invox.com", "first_name":"yaswanth2", "last_name":"chapalamadugu"}, {"tags":"tag1 tag2"}]);
-</pre>
+		<pre class="prettyprint linenums " ">
+            _agile.push(["_createContact", {"email": "yaswanth3@invox.com", "first_name":"yaswanth2", "last_name":"chapalamadugu"}, {"tags":"tag1 tag2"}]);
+        </pre>
 	</div>
 </div>
-
-Add Tag<div class="clerfix"/><br/>
+Add Tag
+<div class="clerfix" />
+<br />
 <div class="row">
 	<div class="span7">
-<pre class="prettyprint linenums " ">
-_agile.push(["_addTag", {"email": "yaswanth3@invox.com", "tags":"tag4 tag5"}]);
-</pre>
+		<pre class="prettyprint linenums " ">
+            _agile.push(["_addTag", {"email": "yaswanth3@invox.com", "tags":"tag4 tag5"}]);
+        </pre>
 	</div>
 </div>
-
-Remove Tag<div class="clerfix"/><br/>
+Remove Tag
+<div class="clerfix" />
+<br />
 <div class="row">
 	<div class="span7">
-<pre class="prettyprint linenums " ">
- _agile.push(["_removeTag", {"email": "yaswanth3@invox.com", "tags":"manohar tag3 tag4 tag5"}]);
-</pre>
+		<pre class="prettyprint linenums " ">
+            _agile.push(["_removeTag", {"email": "yaswanth3@invox.com", "tags":"manohar tag3 tag4 tag5"}]);
+        </pre>
 	</div>
 </div>
-
 </script>
