@@ -22,7 +22,6 @@ import com.googlecode.objectify.condition.IfDefault;
 @XmlRootElement
 public class AccountPrefs
 {
-
     /**
      * AccountPrefs Id.
      */

@@ -24,12 +24,12 @@ import com.campaignio.logger.util.LogUtil;
 
 /**
  * <code>CampaignsAPI</code> includes REST calls to interact with {@link Log}
- * class and {@link WorkflowUtil} class.Usually calls include when single
- * contact or list of contacts subscribe to campaign,CampaignsAPI uses
+ * class and {@link WorkflowUtil} class. Usually calls include when single
+ * contact or list of contacts subscribe to campaign, CampaignsAPI uses
  * {@link WorkflowUtil} class to run workflow with respect to contact.
  * <p>
  * <code>CampaignsAPI</code> includes calls to get and delete logs with
- * respective to campaigns.{@link Log} class is used to get and delete logs
+ * respective to campaigns. {@link Log} class is used to get and delete logs.
  * </p>
  * 
  * @author Manohar
@@ -38,14 +38,13 @@ import com.campaignio.logger.util.LogUtil;
 @Path("/api/campaigns")
 public class CampaignsAPI
 {
-
     /**
      * Subscribes single contact with the campaign.
      * 
      * @param contactId
-     *            Id of a contact that is subscribed
+     *            Id of a contact that is subscribed.
      * @param workflowId
-     *            Id of a workflow
+     *            Id of a workflow.
      */
     @Path("enroll/{contact-id}/{workflow-id}")
     @GET
@@ -60,23 +59,23 @@ public class CampaignsAPI
 	    // return "true";
 	}
 
-	// Contact is converted to list so that WorkflowUtil uses
-	// TaskletManager's executeCampaign method
-	// having deferredTask
+	/*
+	 * Contact is converted to list so that WorkflowUtil uses
+	 * TaskletManager's executeCampaign method having deferredTask
+	 */
 	List<Contact> contactList = new ArrayList<Contact>();
 	contactList.add(contact);
 
 	WorkflowUtil.subscribeDeferred(contactList, workflowId);
-
 	// return "true";
     }
 
     /**
-     * Returns list of logs with respect to contact
+     * Returns list of logs with respect to contact.
      * 
      * @param contactId
-     *            Id of a contact that subscribes to campaign
-     * @return list of logs
+     *            Id of a contact that subscribes to campaign.
+     * @return list of logs.
      */
     @Path("logs/contact/{contact-id}")
     @GET
@@ -84,18 +83,17 @@ public class CampaignsAPI
     public List<Log> getCampaignContactLogs(
 	    @PathParam("contact-id") String contactId)
     {
-
 	return LogUtil.getSubscriberLog(contactId);
     }
 
     /**
-     * Gets log object with respect to both campaign and contact
+     * Gets log object with respect to both campaign and contact.
      * 
      * @param contactId
-     *            Id of a contact that subscribes to campaign
+     *            Id of a contact that subscribes to campaign.
      * @param campaignId
-     *            Id of a campaign
-     * @return logs with respect to both campaign and contact
+     *            Id of a campaign.
+     * @return logs with respect to both campaign and contact.
      */
     @Path("logs/contact/{contact-id}/{campaign-id}")
     @GET
@@ -104,31 +102,29 @@ public class CampaignsAPI
 	    @PathParam("contact-id") String contactId,
 	    @PathParam("campaign-id") String campaignId)
     {
-
 	return LogUtil.getCampaignSubscriberLog(campaignId, contactId);
     }
 
     /**
-     * Gets logs with respect to campaign
+     * Gets logs with respect to campaign.
      * 
      * @param campaignId
-     *            Id of a campaign
-     * @return logs with respect to campaign
+     *            Id of a campaign.
+     * @return logs with respect to campaign.
      */
     @Path("logs/{campaign-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Log> getCampaignLogs(@PathParam("campaign-id") String campaignId)
     {
-
 	return LogUtil.getCampaignLog(campaignId);
     }
 
     /**
-     * Removes logs with respect to campaign id
+     * Removes logs with respect to campaign id.
      * 
      * @param id
-     *            Id of a campaign
+     *            Id of a campaign.
      */
     @Path("logs/{campaign-id}")
     @DELETE
@@ -138,10 +134,10 @@ public class CampaignsAPI
     }
 
     /**
-     * Deletes selected logs bulk related to a campaign
+     * Deletes selected logs bulk related to a campaign.
      * 
      * @param model_ids
-     *            array of log ids as String
+     *            array of log ids as String.
      * @throws JSONException
      */
     @Path("logs/bulk")
@@ -155,12 +151,12 @@ public class CampaignsAPI
     }
 
     /**
-     * Enrolls selected contacts to a campaign
+     * Enrolls selected contacts to a campaign.
      * 
      * @param contact_ids
-     *            array of contact ids as String
+     *            array of contact ids as String.
      * @param workflowId
-     *            campaign id that the contacts to be enrolled
+     *            campaign id that the contacts to be enrolled.
      * @throws JSONException
      */
     @Path("enroll/bulk/{workflow-id}")
@@ -171,7 +167,6 @@ public class CampaignsAPI
 	    @FormParam("contact_ids") String contact_ids,
 	    @PathParam("workflow-id") Long workflowId) throws JSONException
     {
-
 	JSONArray contactsJSONArray = new JSONArray(contact_ids);
 
 	// Get contacts list
@@ -184,7 +179,6 @@ public class CampaignsAPI
 	}
 
 	WorkflowUtil.subscribeDeferred(contacts_list, workflowId);
-
 	// return "true";
     }
 }

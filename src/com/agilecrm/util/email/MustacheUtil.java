@@ -19,11 +19,10 @@ import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 
 /**
- * <code>MustacheUtil</code> is the base to compile Mustache
- * templates.MustacheUtil merges array of JSONObjects into single
- * JSONObject.Uses mustache compiler to compile mustache templates.JSONObject is
- * converted to JSONNode using JSONFactory inorder to convert JSONObject into
- * Map Object.
+ * <code>MustacheUtil</code> is the base to compile Mustache templates.
+ * MustacheUtil merges array of JSONObjects into single JSONObject. Uses
+ * mustache compiler to compile mustache templates. JSONObject is converted to
+ * JSONNode using JSONFactory inorder to convert JSONObject into Map Object.
  * 
  * @author Manohar
  * 
@@ -38,13 +37,12 @@ public class MustacheUtil
      */
     private static final JsonFactory JSON_FACTORY = new MappingJsonFactory();
 
-
     /**
-     * Merges array of JSONObjects into a single JSONObject
+     * Merges array of JSONObjects into a single JSONObject.
      * 
      * @param objs
-     *            Array of JSONObjects (not JSONArray)
-     * @return single merge JSONOobject
+     *            Array of JSONObjects (not JSONArray).
+     * @return single merge JSONOobject.
      */
     @SuppressWarnings("rawtypes")
     public static JSONObject mergeJSONs(JSONObject[] objs)
@@ -71,21 +69,21 @@ public class MustacheUtil
     }
 
     /**
-     * Gets template file using Util class and compiles template with JSONObject
+     * Gets template file using Util class and compiles template with
+     * JSONObject.
      * 
      * @param path
-     *            path of the template file
+     *            path of the template file.
      * @param emailJson
-     *            Merged JSONObject
-     * @return replaced template file
+     *            Merged JSONObject.
+     * @return replaced template file.
      * @throws Exception
-     *             FileNotFoundException - if file cannot read from given path
+     *             FileNotFoundException - if file cannot read from given path.
      */
     @SuppressWarnings("unused")
     public static String templatize(String path, JSONObject emailJson)
 	    throws Exception
     {
-
 	// Read from path
 	String emailTemplate = Util
 		.readResource(SendMail.TEMPLATES_PATH + path);
@@ -101,10 +99,10 @@ public class MustacheUtil
      * Replaces mustache values with respective json values.
      * 
      * @param template
-     *            template file having mustache keywords
+     *            template file having mustache keywords.
      * @param json
-     *            JSONObject that replaces mustaches
-     * @return replaced template
+     *            JSONObject that replaces mustaches.
+     * @return replaced template.
      **/
     public static String compile(String template, JSONObject json)
     {
@@ -133,12 +131,12 @@ public class MustacheUtil
     }
 
     /**
-     * Converts JSONNode into Map object.If JSONNode is array, it iterates
-     * through the array and adds each object to map
+     * Converts JSONNode into Map object. If JSONNode is array, it iterates
+     * through the array and adds each object to map.
      * 
      * @param node
-     *            JSONNode that is converted to map
-     * @return Map object of JsonNode
+     *            JSONNode that is converted to map.
+     * @return Map object of JsonNode.
      */
     @SuppressWarnings({ "unchecked", "serial", "rawtypes" })
     public static Object toObject(final JsonNode node)
@@ -184,7 +182,7 @@ public class MustacheUtil
 	}
     }
 
-    // Example
+    /** Example */
     public static void main(String[] args) throws Exception
     {
 	JSONObject json = new JSONObject();

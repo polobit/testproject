@@ -30,6 +30,7 @@ public class AccountPrefsUtil
     {
 	Objectify ofy = ObjectifyService.begin();
 	AccountPrefs prefs = ofy.query(AccountPrefs.class).get();
+
 	if (prefs == null)
 	{
 	    return getDefaultPrefs();

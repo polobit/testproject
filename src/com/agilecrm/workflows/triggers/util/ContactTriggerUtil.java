@@ -8,14 +8,13 @@ import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.util.WorkflowUtil;
 
 /**
- * <code>ContactTriggerUtil</code> runs trigger when new contact is added.If
- * tags added along with new contact are same as triggers,then trigger tag is
+ * <code>ContactTriggerUtil</code> runs trigger when new contact is added. If
+ * tags added along with new contact are same as triggers, then trigger tag is
  * executed.
  * <p>
  * ContactTriggerUtil is useful when email should be sent for each new contact
  * created.
  * </p>
- * 
  * 
  * @author Naresh
  * 
@@ -45,7 +44,6 @@ public class ContactTriggerUtil
 
 	ScoreTriggerUtil.checkScoreChange(oldContact, newContact);
 	TagsTriggerUtil.checkTagsChange(oldContact, newContact);
-
     }
 
     /**
@@ -59,9 +57,11 @@ public class ContactTriggerUtil
     {
 	List<Trigger> triggersList = null;
 
-	// Converts contact object to list,to send contact as list parameter to
-	// WorkflowUtil so that executeCampaign is called in TaskletManager
-	// having deferredTask
+	/*
+	 * Converts contact object to list,to send contact as list parameter to
+	 * WorkflowUtil so that executeCampaign is called in TaskletManager
+	 * having deferredTask.
+	 */
 	List<Contact> contactList = new ArrayList<Contact>();
 	contactList.add(contact);
 
@@ -76,14 +76,12 @@ public class ContactTriggerUtil
 
 	try
 	{
-
 	    for (Trigger trigger : triggersList)
 
 	    {
 		WorkflowUtil
 			.subscribeDeferred(contactList, trigger.campaign_id);
 	    }
-
 	}
 	catch (Exception e)
 	{
@@ -93,6 +91,5 @@ public class ContactTriggerUtil
 	// Executes Trigger for tags added along with new Contact
 	if (!contact.tags.isEmpty())
 	    TagsTriggerUtil.executeTriggerForTags(contact, contact.tags);
-
     }
 }

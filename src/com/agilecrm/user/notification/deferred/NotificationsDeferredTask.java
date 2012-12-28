@@ -13,7 +13,7 @@ import com.google.appengine.api.taskqueue.DeferredTask;
 /**
  * <code>NotificationsDeferredTask</code> implements google appengine's
  * DeferredTask interface. Fetches api key from {@link APIKey} and sends post
- * request with object,type and api-key.
+ * request with object, type and api-key.
  * 
  * @author Naresh
  * 
@@ -47,7 +47,7 @@ public class NotificationsDeferredTask implements DeferredTask
      * @param type
      *            Notification type.
      * @param objectData
-     *            Object like Contact,Deals etc.
+     *            Object like Contact, Deals etc.
      */
     public NotificationsDeferredTask(Type type, String objectData)
     {
@@ -81,4 +81,3 @@ public class NotificationsDeferredTask implements DeferredTask
 	System.out.println(output);
     }
 }
-

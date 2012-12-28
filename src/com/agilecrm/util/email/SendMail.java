@@ -7,12 +7,12 @@ import com.thirdparty.SendGridEmail;
 
 /**
  * <code>SendMail</code> is the base class to send email using different
- * templates from AgileCRM.For each template, name of template and template
- * subject is provided.Mustache.java is used to fill template with json values.
+ * templates from AgileCRM. For each template, name of template and template
+ * subject is provided. Mustache.java is used to fill template with json values.
  * <p>
- * SendMail uses ObjectMapper to convert object to JSONObject.All html templates
- * has _html extension whereas for body templates _body extension.SendGridEmail
- * is used to send email.
+ * SendMail uses ObjectMapper to convert object to JSONObject. All html
+ * templates has _html extension whereas for body templates _body extension.
+ * SendGridEmail is used to send email.
  * </p>
  * 
  * @author Manohar
@@ -22,8 +22,8 @@ public class SendMail
 {
 
     /**
-     * Template name followed by Email Subject of that template.E.g. For file
-     * new_user_invited_html.html, template name is new_user_invited
+     * Template name followed by Email Subject of that template. E.g. For file
+     * new_user_invited_html.html, template name is new_user_invited.
      */
     public static final String NEW_USER_INVITED = "new_user_invited";
     public static final String NEW_USER_INVITED_SUBJECT = "New User Invitation";
@@ -80,54 +80,54 @@ public class SendMail
     public static final String CHARGEBACK_NOTICE_SUBJECT = "[Payment dispute] Agile CRM chargeback resolution steps";
 
     /**
-     * From Name of email
+     * From Name of email.
      */
     public static final String AGILE_FROM_NAME = "Agile CRM";
+
     /**
-     * From Email-id of email
+     * From Email-id of email.
      */
     public static final String AGILE_FROM_EMAIL = "noreply@agilecrm.com";
 
     /**
-     * Templates path where template files exist
+     * Templates path where template files exist.
      */
     public static final String TEMPLATES_PATH = "misc/email/";
 
     /**
-     * Html body template extension
+     * Html body template extension.
      */
     public static final String TEMPLATE_HTML_EXT = "_html.html";
+
     /**
-     * Text(or Body) template extension
+     * Text(or Body) template extension.
      */
     public static final String TEMPLATE_BODY_EXT = "_body.html";
-
 
     @SuppressWarnings("unused")
     private static Object String;
 
     /**
-     * Sends email by replacing template with Object values.Uses SendGridEmail
+     * Sends email by replacing template with Object values. Uses SendGridEmail
      * to send email.
      * 
      * @param to
-     *            Recipient email id
+     *            Recipient email id.
      * @param subject
-     *            Email Subject-template subject
+     *            Email Subject-template subject.
      * @param template
-     *            Name of template
+     *            Name of template.
      * @param object
-     *            Respective object with the template
+     *            Respective object with the template.
      * @param from
-     *            From email
+     *            From email.
      * @param fromName
-     *            From name
+     *            From name.
      */
     @SuppressWarnings("unused")
     public static void sendMail(String to, String subject, String template,
 	    Object object, String from, String fromName)
     {
-
 	try
 	{
 	    System.out.println("Sending email " + template + " " + object);
@@ -135,6 +135,7 @@ public class SendMail
 	    // Serialize, Use ObjectMapper
 	    String objectJson = null;
 	    String emailString = null;
+
 	    try
 	    {
 		ObjectMapper mapper = new ObjectMapper();
@@ -170,7 +171,6 @@ public class SendMail
 		}
 
 		jsonObjectArray = new JSONObject[] { email, content };
-
 	    }
 
 	    else
@@ -210,29 +210,25 @@ public class SendMail
 	{
 	    e.printStackTrace();
 	}
-
     }
 
     /**
      * Appends parameters - From email-id and From name to sendMail method.
      * 
      * @param to
-     *            Recipient email id
+     *            Recipient email id.
      * 
      * @param subject
-     *            Email Subject-template subject
+     *            Email Subject-template subject.
      * @param template
-     *            Name of template
+     *            Name of template.
      * @param object
-     *            Respective object with the template
+     *            Respective object with the template.
      */
     public static void sendMail(String to, String subject, String template,
 	    Object object)
     {
-
 	sendMail(to, subject, template, object, AGILE_FROM_EMAIL,
 		AGILE_FROM_NAME);
-
     }
-
 }

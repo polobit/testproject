@@ -19,12 +19,13 @@ import com.googlecode.objectify.condition.IfDefault;
 
 /**
  * <code>Workflow</code> is the base class for all the workflows created at
- * client-side.Each workflow object consists of workflow-id(generated), workflow
- * name, created time, updated time, rules and name of creator.The rules in
- * workflow is a String object that takes entire workflow diagram in json.
+ * client-side. Each workflow object consists of workflow-id(generated),
+ * workflow name, created time, updated time, rules and name of creator. The
+ * rules in workflow is a String object that takes entire workflow diagram in
+ * json.
  * <p>
  * Workflow inherits {@link Cursor} to include Cursor class variables within
- * this class.Workflow class uses {@link DomainUser} to create key and to store
+ * this class. Workflow class uses {@link DomainUser} to create key and to store
  * the key as the workflow's owner.
  * </p>
  * <p>
@@ -39,50 +40,49 @@ import com.googlecode.objectify.condition.IfDefault;
 @Unindexed
 public class Workflow extends Cursor
 {
-
     /**
-     * Id of a workflow.Each workflow has its own and unique id.Id is system
+     * Id of a workflow. Each workflow has its own and unique id.Id is system
      * generated
      */
     @Id
     public Long id;
 
     /**
-     * Workflow Name
+     * Workflow Name.
      */
     public String name;
 
     /**
-     * Workflow created time(in epoch)
+     * Workflow created time (in epoch).
      */
     public Long created_time = 0L;
 
     /**
-     * Workflow updated time(in epoch)
+     * Workflow updated time (in epoch).
      */
     @NotSaved(IfDefault.class)
     public Long updated_time = 0L;
 
     /**
-     * Complete workflow diagram as json string
+     * Complete workflow diagram as json string.
      */
     @NotSaved(IfDefault.class)
     public String rules = null;
 
     /**
-     * Creator of workflow(to be specific which domain user created)
+     * Creator of workflow (to be specific which domain user created).
      */
     @NotSaved(IfDefault.class)
     private Key<DomainUser> creator_key = null;
 
     /**
-     * Initialize DataAccessObject
+     * Initialize DataAccessObject.
      */
     public static ObjectifyGenericDao<Workflow> dao = new ObjectifyGenericDao<Workflow>(
 	    Workflow.class);
 
     /**
-     * Default Workflow
+     * Default Workflow.
      */
     Workflow()
     {
@@ -93,9 +93,9 @@ public class Workflow extends Cursor
      * Constructs new {@link Workflow} with name and rules.
      * 
      * @param name
-     *            Name of workflow
+     *            Name of workflow.
      * @param rules
-     *            Workflow rules
+     *            Workflow rules.
      */
     public Workflow(String name, String rules)
     {
@@ -104,11 +104,11 @@ public class Workflow extends Cursor
     }
 
     /**
-     * Locates workflow based on id
+     * Locates workflow based on id.
      * 
      * @param id
-     *            Workflow id
-     * @return workflow object with that id if exists ,otherwise null
+     *            Workflow id.
+     * @return workflow object with that id if exists, otherwise null.
      */
     public static Workflow getWorkflow(Long id)
     {
@@ -124,9 +124,9 @@ public class Workflow extends Cursor
     }
 
     /**
-     * Returns all workflows as a collection list
+     * Returns all workflows as a collection list.
      * 
-     * @return list of all workflows
+     * @return list of all workflows.
      */
     public static List<Workflow> getAllWorkflows()
     {
@@ -134,14 +134,15 @@ public class Workflow extends Cursor
     }
 
     /**
-     * Returns list of workflows based on page size
+     * Returns list of workflows based on page size.
      * 
      * @param max
      *            Maximum number of workflows list based on page size query
-     *            param
+     *            param.
      * @param cursor
-     *            Cursor string that points the list that exceeds page_size
-     * @return Returns list of workflows with respective to page size and cursor
+     *            Cursor string that points the list that exceeds page_size.
+     * @return Returns list of workflows with respective to page size and
+     *         cursor.
      */
     public static List<Workflow> getAllWorkflows(int max, String cursor)
     {
@@ -149,11 +150,11 @@ public class Workflow extends Cursor
     }
 
     /**
-     * Returns domain user name as an xml element who creates workflow
+     * Returns domain user name as an xml element who creates workflow.
      * 
      * @return Respective name of domain user who creates workflow.
      * @throws Exception
-     *             when domain user doesn't exist with that id
+     *             when domain user doesn't exist with that id.
      */
     @XmlElement(name = "creator")
     public String getCreatorName() throws Exception
@@ -164,6 +165,7 @@ public class Workflow extends Cursor
 	}
 
 	DomainUser domainUser = null;
+
 	try
 	{
 	    domainUser = DomainUserUtil.getDomainUser(creator_key.getId());
@@ -172,6 +174,7 @@ public class Workflow extends Cursor
 	{
 	    e.printStackTrace();
 	}
+
 	if (domainUser != null)
 	    return domainUser.name;
 
@@ -179,7 +182,7 @@ public class Workflow extends Cursor
     }
 
     /**
-     * Saves the workflow object
+     * Saves the workflow object.
      */
     public void save()
     {
@@ -187,7 +190,7 @@ public class Workflow extends Cursor
     }
 
     /**
-     * Removes the workflow object
+     * Removes the workflow object.
      */
     public void delete()
     {
@@ -195,8 +198,8 @@ public class Workflow extends Cursor
     }
 
     /**
-     * Sets created time and updated time.PrePersist is called each time before
-     * object gets saved.Sets creator key when it is null.
+     * Sets created time and updated time. PrePersist is called each time before
+     * object gets saved. Sets creator key when it is null.
      */
     @PrePersist
     private void PrePersist()
@@ -207,7 +210,6 @@ public class Workflow extends Cursor
 	    // Set creator(current domain user)
 	    creator_key = new Key<DomainUser>(DomainUser.class, SessionManager
 		    .get().getDomainId());
-
 	}
 
 	// Store Created and Last Updated Time
@@ -215,6 +217,7 @@ public class Workflow extends Cursor
 	{
 	    created_time = System.currentTimeMillis() / 1000;
 	}
+
 	else
 	    updated_time = System.currentTimeMillis() / 1000;
     }

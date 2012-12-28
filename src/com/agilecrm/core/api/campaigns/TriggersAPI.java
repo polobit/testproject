@@ -21,11 +21,11 @@ import com.agilecrm.workflows.triggers.util.TriggerUtil;
 
 /**
  * <code>TriggersAPI</code> includes REST calls to interact with {@link Trigger}
- * class to initiate Trigger CRUD operations
+ * class to initiate Trigger CRUD operations.
  * <p>
- * It is called from client side to create, fetch, update and delete triggers.It
- * also interact with {@link Trigger} class to fetch the data of Trigger class
- * from database.
+ * It is called from client side to create, fetch, update and delete triggers.
+ * It also interact with {@link Trigger} class to fetch the data of Trigger
+ * class from database.
  * </p>
  * 
  * @author Naresh
@@ -34,11 +34,10 @@ import com.agilecrm.workflows.triggers.util.TriggerUtil;
 @Path("/api/triggers")
 public class TriggersAPI
 {
-
     /**
-     * Gets all triggers
+     * Gets all triggers.
      * 
-     * @return List of all triggers
+     * @return List of all triggers.
      */
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -48,11 +47,11 @@ public class TriggersAPI
     }
 
     /**
-     * Saves new trigger
+     * Saves new trigger.
      * 
      * @param trigger
-     *            Trigger object that is newly created
-     * @return Created trigger
+     *            Trigger object that is newly created.
+     * @return Created trigger.
      */
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -64,11 +63,11 @@ public class TriggersAPI
     }
 
     /**
-     * Updates trigger
+     * Updates trigger.
      * 
      * @param trigger
-     *            Trigger object that is updated
-     * @return Updated trigger
+     *            Trigger object that is updated.
+     * @return Updated trigger.
      */
     @PUT
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -80,10 +79,10 @@ public class TriggersAPI
     }
 
     /**
-     * Deletes single trigger
+     * Deletes single trigger.
      * 
      * @param id
-     *            Trigger id that should be deleted
+     *            Trigger id that should be deleted.
      */
     @Path("{trigger_id}")
     @DELETE
@@ -92,12 +91,11 @@ public class TriggersAPI
     public void deleteTrigger(@PathParam("trigger_id") Long id)
     {
 	Trigger trigger = TriggerUtil.getTrigger(id);
+
 	if (trigger != null)
 	    trigger.delete();
-
     }
 
-    // Bulk operations - Triggers delete
     /**
      * Deletes multiple triggers
      * 
@@ -114,8 +112,6 @@ public class TriggersAPI
 	    throws JSONException
     {
 	JSONArray triggersJSONArray = new JSONArray(model_ids);
-
 	TriggerUtil.deleteTriggersBulk(triggersJSONArray);
     }
-
 }
