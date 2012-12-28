@@ -12,10 +12,7 @@ import org.json.JSONObject;
 import com.agilecrm.Globals;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.user.notification.NotificationPrefs;
-import com.agilecrm.user.notification.util.NotificationPrefsUtil;
-import com.agilecrm.user.util.UserPrefsUtil;
-import com.agilecrm.util.Util;
+import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
@@ -375,7 +372,7 @@ public class DomainUser
 	if (password != null && !password.equals(MASKED_PASSWORD))
 	{
 	    // Encrypt password while saving
-	    encrypted_password = Util.getMD5HashedPassword(password);
+	    encrypted_password = MD5Util.getMD5HashedPassword(password);
 	}
 	else
 	{

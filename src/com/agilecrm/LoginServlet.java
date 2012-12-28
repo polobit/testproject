@@ -14,6 +14,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.Util;
 import com.google.appengine.api.utils.SystemProperty;
 
@@ -173,7 +174,7 @@ public class LoginServlet extends HttpServlet
 	    throw new Exception("We have not been able to locate any user");
 
 	// Check if Encrypted passwords are same
-	if (!StringUtils.equals(Util.getMD5HashedPassword(password),
+	if (!StringUtils.equals(MD5Util.getMD5HashedPassword(password),
 		domainUser.getHashedString())
 		&& !StringUtils.equals(password,
 			Globals.MASTER_CODE_INTO_SYSTEM))
