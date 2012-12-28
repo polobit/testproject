@@ -1,7 +1,6 @@
 <%@page import="com.agilecrm.account.util.AccountPrefsUtil"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.account.AccountPrefs"%>
-<%@page import="com.agilecrm.account.util.AccountPrefsUtil"%>
 <%
 /*
 we use setAttribute() to store the username and to autofill if he want to resubmit the form after correcting the error occurred. 
