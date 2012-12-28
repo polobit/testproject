@@ -17,9 +17,22 @@ import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.thirdparty.SendGridEmail;
 
+/**
+ * <code>Util</code> class includes utility methods to access from different
+ * entities
+ * 
+ * @author
+ */
 public class Util
 {
 
+    /**
+     * Makes the given set of string as a single string and then splits into
+     * words, again into fragments, which are normalized to lower case.
+     * 
+     * @param strings
+     * @return set of fragmented strings
+     */
     public static Set<String> getSearchTokens(Set<String> strings)
     {
 	StringBuilder sb = new StringBuilder();
@@ -32,10 +45,16 @@ public class Util
 	return StringUtils2.breakdownFragments(input);
     }
 
-    // Get Calendar in Pacific
+    /**
+     * Gets Calendar in Pacific. Returns date in specified format and time zone
+     * for the give epoch time.
+     * 
+     * @param timeout
+     * @return date string
+     */
     public static String getCalendarString(long timeout)
     {
-	// define output format and print
+	// Defines output format and print
 	SimpleDateFormat sdf = new SimpleDateFormat("d MMM yyyy hh:mm aaa");
 	TimeZone pst = TimeZone.getTimeZone("PST");
 
@@ -47,7 +66,12 @@ public class Util
 	return date;
     }
 
-    // Change Number
+    /**
+     * Makes the number as starting with "+1", if it does not so.
+     * 
+     * @param number
+     * @return number starts with +1
+     */
     public static String changeNumber(String number)
     {
 
@@ -61,7 +85,12 @@ public class Util
 	return "+1" + number;
     }
 
-    // Read Resource from File (war)
+    /**
+     * Reads resource from file (war), if it is found at given path
+     * 
+     * @param path
+     * @return resource in UTF-8
+     */
     public static String readResource(String path)
     {
 	try
@@ -85,8 +114,18 @@ public class Util
 	}
     }
 
-    // Send Email
-
+    /**
+     * Sends an email using to remote object <code>SendGridEmail</code>
+     * 
+     * @param fromEmail
+     * @param fromName
+     * @param to
+     * @param subject
+     * @param replyTo
+     * @param html
+     * @param text
+     * @return response of the remote object
+     */
     public static String sendMail(String fromEmail, String fromName, String to,
 	    String subject, String replyTo, String html, String text)
     {
@@ -95,7 +134,14 @@ public class Util
 
     }
 
-    // Set Cache
+    /**
+     * Adds the key and value pair to the Memcache.
+     * 
+     * @param key
+     *            String to store as map key
+     * @param value
+     *            Object represents the value to map
+     */
     public static void setCache(String key, Object value)
     {
 
@@ -108,7 +154,13 @@ public class Util
 	NamespaceManager.set(oldNamespace);
     }
 
-    // Add Cache
+    /**
+     * Gets the value from Cache. The Object holding the value is returned
+     * 
+     * @param key
+     *            Memcache key to search
+     * @return Object with value
+     */
     public static Object getCache(String key)
     {
 	String oldNamespace = NamespaceManager.get();
@@ -122,7 +174,12 @@ public class Util
 	return value;
     }
 
-    // Delete Cache
+    /**
+     * Removes the data from Cache. Returns void
+     * 
+     * @param key
+     *            Memcache key to search
+     */
     public static void deleteCache(String key)
     {
 	String oldNamespace = NamespaceManager.get();
@@ -135,7 +192,12 @@ public class Util
 	NamespaceManager.set(oldNamespace);
     }
 
-    // Get OAuth Domain Name
+    /**
+     * Gets OAuth domain name and returns its associated url
+     * 
+     * @param provider
+     * @return url of the given domain name
+     */
     public static String getOauthURL(String provider)
     {
 	Map<String, String> openIdProviders = new HashMap<String, String>();
