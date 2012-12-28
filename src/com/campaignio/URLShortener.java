@@ -4,59 +4,53 @@ import javax.persistence.Id;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 
-
 /**
- * <code>URLShortener</code> considers Id,long url,contact id and tracking id as
- * member variables.It uses shortener url for shortening long urls.
+ * <code>URLShortener</code> considers Id, long url, contact id and tracking id
+ * as instance variables. It uses shortener url for shortening long urls.
  * 
  * @author Manohar
  * 
  */
 public class URLShortener
 {
-
-    // Key
     /**
-     * Unique Id
+     * Unique Id.
      */
     @Id
     public Long id;
 
-
     /**
-     * Long url
+     * Long url.
      */
     public String long_url;
 
-
     /**
-     * Contact Id
+     * Contact Id.
      */
     public String subscriber_id;
 
-
     /**
-     * Tracker ID
+     * Tracker ID.
      */
     public String tracker_id;
 
-    // Prefix
-    // public static final String SHORTENER_URL =
-    // "http://campaigntaskrunners.appspot.com/click/";
+    /*
+     * Prefix public static final String SHORTENER_URL =
+     * "http://campaigntaskrunners.appspot.com/click/";
+     */
     /**
-     * Shortener Url
+     * Shortener Url.
      */
     public static final String SHORTENER_URL = "http://cspt.cc/";
 
-
     /**
-     * Dao for URLShortener class
+     * Dao for URLShortener class.
      */
     private static ObjectifyGenericDao<URLShortener> dao = new ObjectifyGenericDao<URLShortener>(
 	    URLShortener.class);
 
     /**
-     * Default URLShortener
+     * Default URLShortener.
      */
     public URLShortener()
     {
@@ -64,14 +58,14 @@ public class URLShortener
     }
 
     /**
-     * Constructs a new {@link URLShortener}
+     * Constructs a new {@link URLShortener}.
      * 
      * @param longURL
-     *            Long url
+     *            Long url.
      * @param subscriberId
-     *            Contact Id that subscribes to campaign
+     *            Contact Id that subscribes to campaign.
      * @param trackerId
-     *            Tracking id to track urls
+     *            Tracking id to track urls.
      */
     public URLShortener(String longURL, String subscriberId, String trackerId)
     {
@@ -81,11 +75,10 @@ public class URLShortener
     }
 
     /**
-     * Saves URLShortener Object
+     * Saves URLShortener Object.
      */
     public void save()
     {
 	dao.put(this);
     }
-
 }

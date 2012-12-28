@@ -8,20 +8,18 @@ import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
- * <code>Clicked</code> represents Clicked node in a workflow.It takes duration
- * period and duration type such as Days, Hours and Minutes.It fires when any
- * click event occurs in sent mail.The duration is to make next node wait for
- * required duration in a workflow.The branches Yes and No separates workflow
- * for click events.Clicked uses {@link Cron} to manages the timeout or
+ * <code>Clicked</code> represents Clicked node in a workflow. It takes duration
+ * period and duration type such as Days, Hours and Minutes. It fires when any
+ * click event occurs in sent mail. The duration is to make next node wait for
+ * required duration in a workflow. The branches Yes and No separates workflow
+ * for click events. Clicked uses {@link Cron} to manages the timeout or
  * interrupt events.
- * 
  * 
  * @author Manohar
  * 
  */
 public class Clicked extends TaskletAdapter
 {
-
     /**
      * Duration period
      */
@@ -32,27 +30,32 @@ public class Clicked extends TaskletAdapter
      */
     public static String DURATION_TYPE = "duration_type";
 
-    // Branches - Yes/No
     /**
      * If clicked then Yes
      */
     public static String BRANCH_YES = "Yes";
+
     /**
      * If not clicked then No
      */
     public static String BRANCH_NO = "No";
 
-    // Interrupt Data - Visitor Data
     /**
      * Long URL
      */
     public static String LINK_CLICKED_LONG = "link_clicked_long";
+
     /**
      * Short URL
      */
     public static String LINK_CLICKED_SHORT = "link_clicked_short";
 
-    // Run
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.campaignio.tasklets.TaskletAdapter#run(org.json.JSONObject,
+     * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
+     */
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
 	    JSONObject data, JSONObject nodeJSON) throws Exception
     {
@@ -78,8 +81,6 @@ public class Clicked extends TaskletAdapter
 	}
     }
 
-
-    // Executes when link clicked
     /*
      * (non-Javadoc)
      * 
@@ -101,9 +102,6 @@ public class Clicked extends TaskletAdapter
 		nodeJSON, BRANCH_YES);
     }
 
-    // TimeOut - Cron Job Wakes it up
-    // Executes when there are no clicks
-
     /*
      * (non-Javadoc)
      * 
@@ -115,7 +113,6 @@ public class Clicked extends TaskletAdapter
 	    JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
 	    throws Exception
     {
-
 	/*
 	 * 
 	 * NOT USED ANYMORE. INTERRUPTED IS PROVIDED IMMEDIATELy

@@ -7,8 +7,8 @@ import com.campaignio.URLShortener;
 
 /**
  * <code>URLShortenerUtil</code> is the class to convert urls from long urls to
- * short urls or vice-versa.It appends purl keyword and random number to the
- * shorten url.It uses 62 base to convert decimal numbers inorder to get random
+ * short urls or vice-versa. It appends purl keyword and random number to the
+ * shorten url. It uses 62 base to convert decimal numbers inorder to get random
  * number.
  * 
  * @author Manohar
@@ -16,7 +16,6 @@ import com.campaignio.URLShortener;
  */
 public class URLShortenerUtil
 {
-
     /**
      * Base 62 having 62 digits
      */
@@ -63,7 +62,6 @@ public class URLShortenerUtil
 	}
     }
 
-
     /**
      * Gets shortened Url appending with purl keyword, random number
      * 
@@ -82,7 +80,6 @@ public class URLShortenerUtil
     public static String getShortURL(String url, String keyword,
 	    String subscriberId, String trackingId) throws Exception
     {
-
 	URLShortener urlShortener = new URLShortener(url, subscriberId,
 		trackingId);
 	urlShortener.save();
@@ -106,7 +103,7 @@ public class URLShortenerUtil
     }
 
     /**
-     * Returns converted number to required base from decimal.This method is
+     * Returns converted number to required base from decimal. This method is
      * used to get random number
      * 
      * @param base
@@ -155,7 +152,4 @@ public class URLShortenerUtil
 	}
 	return returnValue;
     }
-
-
-
 }

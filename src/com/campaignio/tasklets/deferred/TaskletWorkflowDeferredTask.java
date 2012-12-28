@@ -8,34 +8,37 @@ import com.google.appengine.api.taskqueue.DeferredTask;
 
 /**
  * <code>TaskletWorkflowDeferredTask</code> is the base class to execute
- * tasklets in DeferredTask.When there are list of subscribers,DeferredTask runs
- * workflow subscribing each contact in the list.
+ * tasklets in DeferredTask. When there are list of subscribers, DeferredTask
+ * runs workflow subscribing each contact in the list.
  * 
- * 
+ * @author Manohar
  * 
  */
 @SuppressWarnings("serial")
 public class TaskletWorkflowDeferredTask implements DeferredTask
 {
-
     String campaignJSONString, subscriberJSONString;
 
     /**
      * Constructs a new {@link TaskletWorkflowDeferredTask}.
      * 
      * @param campaignJSONString
-     *            nodes that are connected in a workflow
+     *            nodes that are connected in a workflow.
      * @param subscriberJSONString
-     *            contact details
+     *            contact details.
      */
     public TaskletWorkflowDeferredTask(String campaignJSONString,
 	    String subscriberJSONString)
     {
-
 	this.campaignJSONString = campaignJSONString;
 	this.subscriberJSONString = subscriberJSONString;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Runnable#run()
+     */
     @Override
     public void run()
     {
@@ -50,7 +53,6 @@ public class TaskletWorkflowDeferredTask implements DeferredTask
 
 	    // Check in memcache if it is already executing
 	    TaskletUtil.executeWorkflow(campaignJSON, subscriberJSON);
-
 	}
 	catch (Exception e)
 	{

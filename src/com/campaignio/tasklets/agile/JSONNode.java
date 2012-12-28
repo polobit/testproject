@@ -11,7 +11,7 @@ import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
- * <code>JSONNode</code> represents JSONIO node in the workflow.‘JSON IO’ node
+ * <code>JSONNode</code> represents JSONIO node in the workflow. ‘JSON IO’ node
  * is used to integrate workflow with web infrastructure using JSON. It consists
  * of two branches-success and failure. When url is accessed successfully
  * without any errors, then that node proceeds to success, otherwise failure.
@@ -21,7 +21,6 @@ import com.campaignio.tasklets.util.TaskletUtil;
  */
 public class JSONNode extends TaskletAdapter
 {
-    // Fields
     /**
      * Rest url
      */
@@ -31,32 +30,32 @@ public class JSONNode extends TaskletAdapter
      * Method Type
      */
     public static String METHOD_TYPE = "method_type";
+
     /**
      * Get method
      */
     public static String METHOD_TYPE_GET = "get";
+
     /**
      * Post method
      */
     public static String METHOD_TYPE_POST = "post";
 
-    // Parameters
     /**
      * Parameters given in grid as key-value pairs
      */
     public static String PARAMETERS = "rest_key_grid";
 
-    // Branches - Success/failure
     /**
      * Branch success
      */
     public static String BRANCH_SUCCESS = "success";
+
     /**
      * Branch failure
      */
     public static String BRANCH_FAILURE = "failure";
 
-    // Run
     /*
      * (non-Javadoc)
      * 

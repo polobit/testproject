@@ -8,26 +8,25 @@ import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
- * <code>Wait</code> class represents wait node in workflow.Wait is to set
- * duration period in the workflow.It consists of duration period and duration
- * type.Wait class uses {@link Cron} to set for that duration period.
+ * <code>Wait</code> class represents wait node in workflow. Wait is to set
+ * duration period in the workflow. It consists of duration period and duration
+ * type. Wait class uses {@link Cron} to set for that duration period.
  * 
  * @author Manohar
  * 
  */
 public class Wait extends TaskletAdapter
 {
-    // Fields
     /**
      * Duration period
      */
     public static String DURATION = "duration";
+
     /**
      * Duration type such as Days,Hours and Minutes
      */
     public static String DURATION_TYPE = "duration_type";
 
-    // Enqueue into cron
     /*
      * (non-Javadoc)
      * 
@@ -52,7 +51,6 @@ public class Wait extends TaskletAdapter
 		null, null, null);
     }
 
-    // TimeOut - Cron Job Wakes it up
     /*
      * (non-Javadoc)
      * 
@@ -64,7 +62,6 @@ public class Wait extends TaskletAdapter
 	    JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
 	    throws Exception
     {
-
 	System.out.println("Wake up from wait. Executing next one.");
 
 	// Execute Next One in Loop

@@ -18,16 +18,14 @@ import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
  * <code>AddTask</code> represents AddTask node to add task related to
- * subscriber.Tasks are like to-dos. Result oriented. User can assign a category
- * such as call,email etc.
+ * subscriber. Tasks are like to-dos. Result oriented. User can assign a
+ * category such as call, email etc.
  * 
  * @author Manohar
  * 
  */
-
 public class AddTask extends TaskletAdapter
 {
-    // Fields
     /**
      * Subject of Note
      */
@@ -37,30 +35,37 @@ public class AddTask extends TaskletAdapter
      * Category Type
      */
     public static String CATEGORY = "category";
+
     /**
      * Call
      */
     public static String CALL = "CALL";
+
     /**
      * Email
      */
     public static String EMAIL = "EMAIL";
+
     /**
      * Follow
      */
     public static String FOLLOW_UP = "FOLLOW_UP";
+
     /**
      * Meeting
      */
     public static String MEETING = "MEETING";
+
     /**
      * Milestone
      */
     public static String MILESTONE = "MILESTONE";
+
     /**
      * Send
      */
     public static String SEND = "SEND";
+
     /**
      * Tweet
      */
@@ -70,14 +75,17 @@ public class AddTask extends TaskletAdapter
      * Task priority type
      */
     public static String PRIORITY = "priority";
+
     /**
      * High priority
      */
     public static String HIGH = "HIGH";
+
     /**
      * Normal priority
      */
     public static String NORMAL = "NORMAL";
+
     /**
      * Low priority
      */
@@ -88,8 +96,6 @@ public class AddTask extends TaskletAdapter
      */
     public static String DUE_DAYS = "due_days";
 
-    // Add task to Task object related to subscriber
-
     /*
      * (non-Javadoc)
      * 
@@ -99,7 +105,6 @@ public class AddTask extends TaskletAdapter
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
 	    JSONObject data, JSONObject nodeJSON) throws Exception
     {
-
 	// Get Task Values
 	String subject = getStringValue(nodeJSON, subscriberJSON, data, SUBJECT);
 	String category = getStringValue(nodeJSON, subscriberJSON, data,
@@ -108,13 +113,6 @@ public class AddTask extends TaskletAdapter
 		PRIORITY);
 	String dueDays = getStringValue(nodeJSON, subscriberJSON, data,
 		DUE_DAYS);
-
-	/*
-	 * // Converting Date String to epoch SimpleDateFormat simpledateformat
-	 * = new SimpleDateFormat("yyyy-MM-dd"); Date date =
-	 * simpledateformat.parse(dueDays); Long dueDateInEpoch =
-	 * (date.getTime()) / 1000;
-	 */
 
 	Calendar calendar = Calendar.getInstance();
 
@@ -139,7 +137,6 @@ public class AddTask extends TaskletAdapter
 
 	if (contact != null)
 	{
-
 	    try
 	    {
 		// Get Current AgileUser
@@ -168,7 +165,6 @@ public class AddTask extends TaskletAdapter
 		e.printStackTrace();
 		System.out.println("Exception occured while creating Task");
 	    }
-
 	}
 
 	// Creates log for AddTask

@@ -18,9 +18,9 @@ import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 
 /**
- * <code>CronUtil</code> is the base class to save and delete crons.It is used
- * to get crons with respect to campaign and subscribers data.CronUtil is used
- * to calculate timeout period if duration period and type is given.CronUtil
+ * <code>CronUtil</code> is the base class to save and delete crons. It is used
+ * to get crons with respect to campaign and subscribers data. CronUtil is used
+ * to calculate timeout period if duration period and type is given. CronUtil
  * execute tasklets based upon interrupt or timeout condition.
  * 
  * @author Manohar
@@ -28,33 +28,31 @@ import com.googlecode.objectify.Key;
  */
 public class CronUtil
 {
-
     /**
-     * Dao of Cron class
+     * Dao of Cron class.
      */
     private static ObjectifyGenericDao<Cron> dao = new ObjectifyGenericDao<Cron>(
 	    Cron.class);
 
-    // Enqueue Task
     /**
-     * Creates a new Cron object and enqueue task in cron
+     * Creates a new Cron object and enqueue task in cron.
      * 
      * @param campaignJSON
-     *            Campaign Data
+     *            Campaign Data.
      * @param subscriberJSON
-     *            Contact Data that subscribes to Campaign
+     *            Contact Data that subscribes to Campaign.
      * @param data
-     *            Workflow Data
+     *            Workflow Data.
      * @param nodeJSON
-     *            Current Node
+     *            Current Node.
      * @param timeOut
-     *            Timeout period
+     *            Timeout period.
      * @param custom1
-     *            Custom value
+     *            Custom value.
      * @param custom2
-     *            Custom value
+     *            Custom value.
      * @param custom3
-     *            Custom value
+     *            Custom value.
      * @throws Exception
      */
     public static void enqueueTask(JSONObject campaignJSON,
@@ -68,13 +66,13 @@ public class CronUtil
     }
 
     /**
-     * Gets list of Crons that are saved
+     * Gets list of Crons that are saved.
      * 
      * @param campaignId
-     *            Campaign ID
+     *            Campaign ID.
      * @param subscriberId
-     *            Contact ID
-     * @return list of Crons
+     *            Contact ID.
+     * @return list of Crons.
      */
     public static List<Cron> getCrons(String campaignId, String subscriberId)
     {
@@ -85,12 +83,11 @@ public class CronUtil
 	return dao.listByProperty(searchMap);
     }
 
-    // Get cron by namespace
     /**
-     * Removes crons by namespace and sets namespace to old
+     * Removes crons by namespace and sets namespace to old.
      * 
      * @param namespace
-     *            Namespace
+     *            Namespace.
      */
     public static void deleteCronsByNamespace(String namespace)
     {
@@ -100,6 +97,7 @@ public class CronUtil
 
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set("");
+
 	try
 	{
 	    // Get cron key list related to given namespace
@@ -115,18 +113,16 @@ public class CronUtil
 	}
     }
 
-    // Enqueue Task
     /**
-     * Removes task with respect to campaign and contact
+     * Removes task with respect to campaign and contact.
      * 
      * @param campaignId
-     *            Campaign ID
+     *            Campaign ID.
      * @param subscriberId
-     *            Contact ID
+     *            Contact ID.
      */
     public static void removeTask(String campaignId, String subscriberId)
     {
-
 	Map<String, Object> searchMap = new HashMap<String, Object>();
 	searchMap.put("subscriber_id", subscriberId);
 	searchMap.put("campaign_id", campaignId);
@@ -136,13 +132,11 @@ public class CronUtil
 	dao.deleteKeys(keys);
     }
 
-    // Stop Campaign
-
     /**
-     * Stops Campaign within the namespace
+     * Stops Campaign within the namespace.
      * 
      * @param campaignId
-     *            Campaign ID
+     *            Campaign ID.
      */
     public static void stopCampaign(String campaignId)
     {
@@ -156,12 +150,11 @@ public class CronUtil
 	dao.deleteKeys(keys);
     }
 
-    // Delete Contact
     /**
-     * Deletes contact from namespace
+     * Deletes contact from namespace.
      * 
      * @param subscriberId
-     *            Contact ID
+     *            Contact ID.
      */
     public static void deleteContact(String subscriberId)
     {
@@ -174,24 +167,20 @@ public class CronUtil
 	dao.deleteKeys(keys);
     }
 
-
-
-    // Get Timer
     /**
      * Gets time after adding current time with specified duration and duration
      * type.
      * 
      * @param durationString
-     *            Duration period
+     *            Duration period.
      * @param durationType
-     *            Duration type such as days,hours and minutes
-     * @return time-out period
+     *            Duration type such as days, hours and minutes.
+     * @return time-out period.
      * @throws Exception
      */
     public static long getTimerAt(String durationString, String durationType)
 	    throws Exception
     {
-
 	int duration = Integer.parseInt(durationString);
 
 	Calendar calendar = Calendar.getInstance();
@@ -215,23 +204,21 @@ public class CronUtil
 	return calendar.getTimeInMillis();
     }
 
-    // Get Timer
     /**
      * Gets time after adding current time with specified duration and duration
      * type.
      * 
      * @param durationString
-     *            Duration period
+     *            Duration period.
      * @param durationType
-     *            Duration type such as Days, Hours, Minutes
+     *            Duration type such as Days, Hours, Minutes.
      * @return resultant time after adding current time with the given
-     *         parameters
+     *         parameters.
      * @throws Exception
      */
     public static long getTimer(String durationString, String durationType)
 	    throws Exception
     {
-
 	int duration = Integer.parseInt(durationString);
 	Calendar calendar = Calendar.getInstance();
 
@@ -255,13 +242,12 @@ public class CronUtil
     }
 
     /**
-     * Gets Old Sessions and deletes them all
+     * Gets Old Sessions and deletes them all.
      * 
-     * @return list of Crons that are deleted
+     * @return list of Crons that are deleted.
      */
     public static List<Cron> getExpiredCronJobs()
     {
-
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set("");
 
@@ -286,23 +272,21 @@ public class CronUtil
 	return cronJobs;
     }
 
-    // Interrupt a task
     /**
-     * Interrupt a task
+     * Interrupt a task.
      * 
      * @param custom1
-     *            custom value 1
+     *            custom value 1.
      * @param custom2
-     *            custom value 2
+     *            custom value 2.
      * @param custom3
-     *            custom value 3
+     *            custom value 3.
      * @param interruptData
-     *            Interrupt data
+     *            Interrupt data.
      */
     public static void interrupt(String custom1, String custom2,
 	    String custom3, JSONObject interruptData)
     {
-
 	if (custom1 == null && custom2 == null && custom3 == null)
 	    return;
 
@@ -323,20 +307,17 @@ public class CronUtil
 	executeTasklets(cronJobs, Cron.CRON_TYPE_INTERRUPT, interruptData);
 
 	dao.deleteAll(cronJobs);
-
     }
 
-
-    // Dequeue Tasks
     /**
-     * Executes tasklets based upon wakeup or timeout using deferred task
+     * Executes tasklets based upon wakeup or timeout using deferred task.
      * 
      * @param cronJobs
-     *            List of Cron jobs in the namespace
+     *            List of Cron jobs in the namespace.
      * @param wakeupOrInterrupt
-     *            timeout or interrupt
+     *            timeout or interrupt.
      * @param customData
-     *            custom data
+     *            custom data.
      */
     public static void executeTasklets(List<Cron> cronJobs,
 	    String wakeupOrInterrupt, JSONObject customData)
@@ -360,7 +341,6 @@ public class CronUtil
 	}
     }
 
-    // Wakeup
     /**
      * Wakes up tasks that complete the timeout period.
      */

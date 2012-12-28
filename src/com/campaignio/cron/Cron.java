@@ -23,10 +23,9 @@ import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 
 /**
- * <code>Cron</code> is the base class for scheduling in agilecrm.Cron is used
- * to send emails on prescribed date and time.Cron is responsible to wake up
+ * <code>Cron</code> is the base class for scheduling in agilecrm. Cron is used
+ * to send emails on prescribed date and time. Cron is responsible to wake up
  * tasks at right time.
- * 
  * 
  * @author Manohar
  * 
@@ -34,93 +33,102 @@ import com.googlecode.objectify.annotation.NotSaved;
 @SuppressWarnings("serial")
 public class Cron extends HttpServlet
 {
-
     /**
-     * Unique id for each cron
+     * Unique id for each cron.
      */
     @Id
     public Long id;
 
-    // DB Names and fields
+    /**
+     * DB Names and fields.
+     */
     public static final String CRON_DB = "crons";
     public static final String CRON_DB_USER_ID = "user_id";
 
     /**
-     * Time out (in seconds) - when should the tasklet wake up
+     * Time out (in seconds) - when should the tasklet wake up.
      */
     @Indexed
     public Long timeout = 0L;
 
     /**
-     * Time out in human readable format
+     * Time out in human readable format.
      */
     @SuppressWarnings("unused")
     private String timeout_string = null;
 
     /**
-     * Campaign Data
+     * Campaign Data.
      */
     @NotSaved
     public JSONObject campaign_json;
 
-    // Workflow Data
     /**
-     * Workflow data
+     * Workflow data.
      */
     @NotSaved
     public JSONObject data;
 
-    // Current Node
     /**
-     * Current Node
+     * Current Node.
      */
     @NotSaved
     public JSONObject node_json;
 
-    // Subscriber JSON/ID
     /**
-     * Subscriber JSON
+     * Subscriber JSON.
      */
     @NotSaved
     public JSONObject subscriber_json;
 
-    // JSON Strings
     /**
-     * JSON Strings
+     * JSON Strings.
      */
     public String campaign_json_string, data_string, node_json_string,
 	    subscriber_json_string;
 
-    // Custom Values
+    /**
+     * Custom Values.
+     */
     public String custom1;
     public String custom2;
     public String custom3;
 
-    // Store Subscriber ID and Campaign ID to dequeue
+    /**
+     * Store Subscriber ID and Campaign ID to dequeue.
+     */
     public String campaign_id;
     public String subscriber_id;
 
-    // Store NameSpace
+    /**
+     * Store NameSpace.
+     */
     @Indexed
     public String namespace;
 
-    // Duration Type
+    /**
+     * Duration Type.
+     */
     public static final String DURATION_TYPE_MINS = "mins";
     public static final String DURATION_TYPE_SECONDS = "secs";
     public static final String DURATION_TYPE_HOURS = "hours";
     public static final String DURATION_TYPE_DAYS = "days";
     public static final String DURATION_TYPE_WEEK = "week";
 
-    // Wake up or Interrupt
+    /**
+     * Wake up or Interrupt.
+     */
     public static final String CRON_TYPE_INTERRUPT = "interrupt";
     public static final String CRON_TYPE_TIME_OUT = "timeout";
 
-    // Dao
+    /**
+     * Cron Dao.
+     */
     private static ObjectifyGenericDao<Cron> dao = new ObjectifyGenericDao<Cron>(
 	    Cron.class);
 
     /**
-     * Default Cron
+     * Default Cron.
      */
     public Cron()
     {
@@ -128,25 +136,24 @@ public class Cron extends HttpServlet
     }
 
     /**
-     * Constructs a new {@link Cron}
+     * Constructs a new {@link Cron}.
      * 
      * @param campaignJSON
-     *            Campaign Data
-     * 
+     *            Campaign Data.
      * @param subscriberJSON
-     *            Contact data that subscribes to Campaign
+     *            Contact data that subscribes to Campaign.
      * @param data
-     *            Workflow data
+     *            Workflow data.
      * @param nodeJSON
-     *            Current Node
+     *            Current Node.
      * @param timeOut
-     *            Timeout time
+     *            Timeout time.
      * @param custom1
-     *            Custom value1
+     *            Custom value1.
      * @param custom2
-     *            Custom value2
+     *            Custom value2.
      * @param custom3
-     *            Custom value3
+     *            Custom value3.
      */
     public Cron(JSONObject campaignJSON, JSONObject subscriberJSON,
 	    JSONObject data,
@@ -167,7 +174,6 @@ public class Cron extends HttpServlet
 	this.subscriber_id = DBUtil.getId(subscriberJSON);
     }
 
-    // Get Request
     /*
      * (non-Javadoc)
      * 
@@ -178,7 +184,6 @@ public class Cron extends HttpServlet
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
 	    throws IOException
     {
-
 	// For registering all entities - AgileUser is a just a random class we
 	// are using
 	ObjectifyGenericDao<AgileUser> dao = new ObjectifyGenericDao<AgileUser>(
@@ -199,20 +204,18 @@ public class Cron extends HttpServlet
 	    resp.getWriter().println("Error " + e);
 	    System.out.println("Error " + e);
 	}
-
     }
 
     /**
-     * Sets the namespace to old namespace and save cron
+     * Sets the namespace to old namespace and save cron.
      */
     public void save()
     {
-
 	// Set the namespace
 	namespace = NamespaceManager.get();
-
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set("");
+
 	try
 	{
 	    dao.put(this);
@@ -223,9 +226,8 @@ public class Cron extends HttpServlet
 	}
     }
 
-
     /**
-     * Deletes Cron
+     * Deletes Cron.
      */
     public void delete()
     {
@@ -233,10 +235,10 @@ public class Cron extends HttpServlet
     }
 
     /**
-     * Deletes cron by namespace
+     * Deletes cron by namespace.
      * 
      * @param namespace
-     *            Namespace
+     *            Namespace.
      */
     public void deleteByNameSpace(String namespace)
     {
@@ -249,7 +251,7 @@ public class Cron extends HttpServlet
     }
 
     /**
-     * Sets json string variables before cron gets saved
+     * Sets json string variables before cron gets saved.
      */
     @PrePersist
     void PrePersist()
@@ -259,11 +261,10 @@ public class Cron extends HttpServlet
 	node_json_string = node_json.toString();
 	subscriber_json_string = subscriber_json.toString();
 	timeout_string = new Date(timeout * 1000).toString();
-
     }
 
     /**
-     * Sets json string to json string after crons have been retrieved
+     * Sets json string to json string after crons have been retrieved.
      */
     @PostLoad
     void PostLoad()
@@ -281,7 +282,6 @@ public class Cron extends HttpServlet
 
 	    if (subscriber_json_string != null)
 		subscriber_json = new JSONObject(subscriber_json_string);
-
 	}
 	catch (Exception e)
 	{
@@ -290,7 +290,5 @@ public class Cron extends HttpServlet
 
 	// System.out.println("Logs " + logs);
     }
-
-
 }
 

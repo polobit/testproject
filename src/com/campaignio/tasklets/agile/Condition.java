@@ -6,17 +6,16 @@ import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
- * <code>Condition</code> represents Condition node in a workflow.It checks for
- * a condition in a workflow.It checks for values and strings.For values it
- * compare numbers and for strings,their length is compared.If matches the
- * condition, node following Branch Yes executes, otherwise the other node
+ * <code>Condition</code> represents Condition node in a workflow. It checks for
+ * a condition in a workflow. It checks for values and strings. For values it
+ * compare numbers and for strings, their length is compared. If matches the
+ * condition, node following Branch Yes executes, otherwise the other node.
  * 
  * @author Manohar
  * 
  */
 public class Condition extends TaskletAdapter
 {
-    // Fields
     /**
      * If type - value or string length
      */
@@ -32,7 +31,6 @@ public class Condition extends TaskletAdapter
      */
     public static String IF_TYPE_STRLEN = "strlen";
 
-    // Comparator
     /**
      * Comparator
      */
@@ -47,6 +45,7 @@ public class Condition extends TaskletAdapter
      * Compares for greater than
      */
     public static String COMPARATOR_GREATER_THAN = "greater_than";
+
     /**
      * Compares for less than or equals to
      */
@@ -56,31 +55,33 @@ public class Condition extends TaskletAdapter
      * Compares for greater than or equals to
      */
     public static String COMPARATOR_GREATER_THAN_OR_EQUAL_TO = "greater_than_or_equals";
+
     /**
      * Compares for not equals to
      * 
      */
     public static String COMPARATOR_NOT_EQUAL_TO = "not_equal_to";
+
     /**
      * Compares for equal to
      */
     public static String COMPARATOR_EQUAL_TO = "equal_to";
 
-
     /**
      * Variable 1
      */
     public static String VARIABLE_1 = "variable_1";
+
     /**
      * Variable 2
      */
     public static String VARIABLE_2 = "variable_2";
 
-    // Branches - Yes/No
     /**
      * Branch Yes
      */
     public static String BRANCH_YES = "Yes";
+
     /**
      * Branch No
      */
@@ -92,11 +93,9 @@ public class Condition extends TaskletAdapter
      * @see com.campaignio.tasklets.TaskletAdapter#run(org.json.JSONObject,
      * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
      */
-    // Runs tasklet for condition
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
 	    JSONObject data, JSONObject nodeJSON) throws Exception
     {
-
 	// Get Variables
 	String variable1 = getStringValue(nodeJSON, subscriberJSON, data,
 		VARIABLE_1);
@@ -185,7 +184,5 @@ public class Condition extends TaskletAdapter
 	// Go to next tasks
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		nodeJSON, branch);
-
     }
-
 }
