@@ -13,26 +13,25 @@ import com.agilecrm.workflows.triggers.Trigger.Type;
 import com.agilecrm.workflows.util.WorkflowUtil;
 
 /**
- * <code>TagsTriggerUtil</code> runs trigger for tag added or tag
- * deleted.Whenever tag added to contact is same as trigger tags then trigger
- * runs for tag added condition.Moreover,if deleted tag of a contact is same as
- * trigger tag,then trigger runs for tag deletion condition. TagsTriggerUtil
- * runs respective campaign for the contact when trigger fires.
+ * <code>TagsTriggerUtil</code> runs trigger for tag added or tag deleted.
+ * Whenever tag added to contact is same as trigger tags then trigger runs for
+ * tag added condition. Moreover, if deleted tag of a contact is same as trigger
+ * tag, then trigger runs for tag deletion condition. TagsTriggerUtil runs
+ * respective campaign for the contact when trigger fires.
  * 
  * @author Naresh
  * 
  */
 public class TagsTriggerUtil
 {
-
     /**
-     * Checks for tag changes like adding tag or deleting tag.Executes trigger
+     * Checks for tag changes like adding tag or deleting tag. Executes trigger
      * for tag adding or tag deleting respectively.
      * 
      * @param oldContact
-     *            Contact object before updating
+     *            Contact object before updating.
      * @param updatedContact
-     *            Contact object after updating
+     *            Contact object after updating.
      */
     public static void checkTagsChange(Contact oldContact,
 	    Contact updatedContact)
@@ -45,9 +44,11 @@ public class TagsTriggerUtil
 	addedTags.removeAll(oldTags);
 
 	if (!addedTags.isEmpty())
+	{
 	    // Executes trigger with added tags
 	    executeTriggerForTags(updatedContact, addedTags,
 		    Trigger.Type.TAG_IS_ADDED);
+	}
 
 	// Tags that are deleted
 	Set<String> deletedTags = new HashSet<String>(oldTags);
@@ -57,7 +58,6 @@ public class TagsTriggerUtil
 	if (!deletedTags.isEmpty())
 	    executeTriggerForTags(updatedContact, deletedTags,
 		    Trigger.Type.TAG_IS_DELETED);
-
     }
 
     /**
@@ -65,23 +65,24 @@ public class TagsTriggerUtil
      * a contact.
      * 
      * @param contact
-     *            Contact for which tags are added
+     *            Contact for which tags are added.
      * @param changedTags
-     *            Contact tags that are added or deleted
+     *            Contact tags that are added or deleted.
      * @param tagCondition
      *            Trigger condition for tags either Tag is added or Tag is
-     *            deleted
+     *            deleted.
      */
 
     public static void executeTriggerForTags(Contact contact,
 	    Set<String> changedTags, Type tagCondition)
     {
-
 	List<Trigger> triggersList = null;
 
-	// Converts contact object to list,to send contact as list parameter to
-	// WorkflowUtil so that executeCampaign is called in TaskletManager
-	// having deferredTask
+	/*
+	 * Converts contact object to list,to send contact as list parameter to
+	 * WorkflowUtil so that executeCampaign is called in TaskletManager
+	 * having deferredTask.
+	 */
 	List<Contact> contactList = new ArrayList<Contact>();
 	contactList.add(contact);
 
@@ -89,11 +90,13 @@ public class TagsTriggerUtil
 
 	// Temporary map is taken to avoid duplicate triggers
 	Map<Long, Trigger> triggerMap = new HashMap<Long, Trigger>();
+
 	for (String tag : changedTags)
 	{
-
-	    // adds tag to temporary set to avoid exception,as query doen't
-	    // allow String object for Collection comparison
+	    /*
+	     * Adds tag to temporary set to avoid exception,as query doen't
+	     * allow String object for Collection comparison
+	     */
 	    tagSet.add(tag);
 
 	    // Gets triggers list based on condition and trigger tags
@@ -106,7 +109,7 @@ public class TagsTriggerUtil
 	    for (Trigger trigger : triggersList)
 		triggerMap.put(trigger.id, trigger);
 
-	    // removes tag from temporary set
+	    // Removes tag from temporary set
 	    tagSet.remove(tag);
 
 	    if (triggersList.isEmpty())
@@ -115,13 +118,11 @@ public class TagsTriggerUtil
 
 	try
 	{
-
 	    for (Trigger trigger : triggerMap.values())
 	    {
 		WorkflowUtil
 			.subscribeDeferred(contactList, trigger.campaign_id);
 	    }
-
 	}
 	catch (Exception e)
 	{
@@ -130,17 +131,16 @@ public class TagsTriggerUtil
     }
 
     /**
-     * Executes trigger when tags are added for a contact
+     * Executes trigger when tags are added for a contact.
      * 
      * @param contact
-     *            Contact object for which tags are added
+     *            Contact object for which tags are added.
      * @param changedTags
-     *            Tags that are added or deleted
+     *            Tags that are added or deleted.
      */
     public static void executeTriggerForTags(Contact contact,
 	    Set<String> changedTags)
     {
 	executeTriggerForTags(contact, changedTags, Trigger.Type.TAG_IS_ADDED);
     }
-
 }

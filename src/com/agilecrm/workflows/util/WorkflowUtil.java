@@ -16,13 +16,13 @@ import com.google.appengine.api.taskqueue.TaskOptions;
 
 /**
  * <code>WorkflowUtil</code> provides various static methods to convert contact
- * and workflow objects into json objects.WorkflowUtil class uses
+ * and workflow objects into json objects. WorkflowUtil class uses
  * {@link TaskletUtil} to run campaign with contact.
  * <p>
  * <code>WorkflowUtil</code> is used whenever single contact or bulk contacts
- * are subscribed to campaign.It subscribes contacts to campaigns and runs
- * campaign with the contact details.WorkflowUtil class is used for triggers
- * too.Whenever trigger fires,trigger calls WorkflowUtil class to run the
+ * are subscribed to campaign. It subscribes contacts to campaigns and runs
+ * campaign with the contact details. WorkflowUtil class is used for triggers
+ * too. Whenever trigger fires, trigger calls WorkflowUtil class to run the
  * campaign.
  * </p>
  * 
@@ -31,29 +31,27 @@ import com.google.appengine.api.taskqueue.TaskOptions;
  */
 public class WorkflowUtil
 {
-
     /**
      * Converts contact object into json object.
      * 
      * @param contact
-     *            Contact object that subscribes to workflow
-     * @return JsonObject of contact
+     *            Contact object that subscribes to workflow.
+     * @return JsonObject of contact.
      */
     static JSONObject getSubscriberJSON(Contact contact)
     {
-
 	try
 	{
 	    JSONObject subscriberJSON = new JSONObject();
 
 	    List<ContactField> properties = contact.getProperties();
 	    System.out.println("List properties" + properties);
+
 	    for (ContactField field : properties)
 	    {
 		System.out.println(field);
 		if (field.name != null && field.value != null)
 		    subscriberJSON.put(field.name, field.value);
-
 	    }
 
 	    // Add Id and data
@@ -62,17 +60,16 @@ public class WorkflowUtil
 	}
 	catch (Exception e)
 	{
-
 	    return null;
 	}
     }
 
     /**
-     * Converts list of contacts into JSONArray
+     * Converts list of contacts into JSONArray.
      * 
      * @param contacts
-     *            List of Contact objects subscribed to campaign
-     * @return JSONArray of list of contacts
+     *            List of Contact objects subscribed to campaign.
+     * @return JSONArray of list of contacts.
      */
     static JSONArray convertContactIntoJSON(List<Contact> contacts)
     {
@@ -87,11 +84,11 @@ public class WorkflowUtil
     }
 
     /**
-     * Converts workflow object into json object
+     * Converts workflow object into json object.
      * 
      * @param workflowId
-     *            Id of a workflow
-     * @return JSONObject of campaign
+     *            Id of a workflow.
+     * @return JSONObject of campaign.
      */
     static JSONObject getWorkflowJSON(Long workflowId)
     {
@@ -121,17 +118,16 @@ public class WorkflowUtil
 
     /**
      * Subscribe list of contacts into a campaign and runs workflow in
-     * {@link TaskletUtil} executeCampaign method which runs using
-     * DeferredTask to execute workflow
+     * {@link TaskletUtil} executeCampaign method which runs using DeferredTask
+     * to execute workflow.
      * 
      * @param contacts
-     *            List of contact objects subscribe to campaign
+     *            List of contact objects subscribe to campaign.
      * @param workflowId
-     *            Id of a workflow
+     *            Id of a workflow.
      */
     public static void subscribeDeferred(List<Contact> contacts, Long workflowId)
     {
-
 	// Convert Contacts into JSON Array
 	JSONArray subscriberJSONArray = convertContactIntoJSON(contacts);
 
@@ -145,12 +141,12 @@ public class WorkflowUtil
 
     /**
      * Subscribe a single contact into a campaign and runs deferred task to
-     * execute workflow
+     * execute workflow.
      * 
      * @param contact
-     *            Contact object subscribed to workflow
+     *            Contact object subscribed to workflow.
      * @param workflowId
-     *            Id of a workflow
+     *            Id of a workflow.
      */
     public static void subscribe(Contact contact, Long workflowId)
     {
@@ -171,7 +167,6 @@ public class WorkflowUtil
 	    Queue queue = QueueFactory.getDefaultQueue();
 	    queue.add(TaskOptions.Builder
 		    .withPayload(taskletWorkflowDeferredTask));
-
 	}
 	catch (Exception e)
 	{
@@ -180,7 +175,7 @@ public class WorkflowUtil
     }
 
     /**
-     * Unsubscribe a contact into a campaign
+     * Unsubscribe a contact into a campaign.
      */
     public static void unsubscribe()
     {

@@ -15,16 +15,16 @@ import com.googlecode.objectify.condition.IfDefault;
 /**
  * Trigger is a base class for all triggers which allow application to run
  * campaign automatically. The Trigger Object encapsulates the trigger details
- * which includes name of a trigger,type and campaign.
+ * which includes name of a trigger, type and campaign.
  * <p>
  * Trigger uses these conditions
  * <ul>
- * <li>When same tag defined in trigger is added to contact</li>
- * <li>When same tag defined in trigger is deleted from contact</li>
- * <li>When new contact is added</li>
- * <li>When new deal is created</li>
- * <li>When deal is deleted</li>
- * <li>When score of contact reaches the trigger score</li>
+ * <li>When same tag defined in trigger is added to contact.</li>
+ * <li>When same tag defined in trigger is deleted from contact.</li>
+ * <li>When new contact is added.</li>
+ * <li>When new deal is created.</li>
+ * <li>When deal is deleted.</li>
+ * <li>When score of contact reaches the trigger score.</li>
  * </ul>
  * <p>
  * Some important points to consider are campaigns should not be empty while
@@ -37,9 +37,8 @@ import com.googlecode.objectify.condition.IfDefault;
 @XmlRootElement
 public class Trigger
 {
-
     /**
-     * Id of a trigger.Each trigger has its own and unique id.
+     * Id of a trigger. Each trigger has its own and unique id.
      */
     @Id
     public Long id;
@@ -51,7 +50,7 @@ public class Trigger
     public String name = null;
 
     /**
-     * Types of Triggers
+     * Types of Triggers.
      * 
      */
     public enum Type
@@ -65,7 +64,7 @@ public class Trigger
     public Type type;
 
     /**
-     * Campaign id of a campaign with respect to trigger.Campaign name can be
+     * Campaign id of a campaign with respect to trigger. Campaign name can be
      * retrieved using campaign id.
      */
     @NotSaved(IfDefault.class)
@@ -85,13 +84,13 @@ public class Trigger
     public Set<String> custom_tags = new HashSet<String>();
 
     /**
-     * Initialize DataAccessObject
+     * Initialize DataAccessObject.
      */
     private static ObjectifyGenericDao<Trigger> dao = new ObjectifyGenericDao<Trigger>(
 	    Trigger.class);
 
     /**
-     * Default Trigger
+     * Default Trigger.
      */
     Trigger()
     {
@@ -102,11 +101,11 @@ public class Trigger
      * Constructs new {@link Trigger} with name,type and campaign id.
      * 
      * @param name
-     *            The trigger name.Required
+     *            The trigger name.Required.
      * @param type
-     *            The trigger condition.Required
+     *            The trigger condition.Required.
      * @param campaign_id
-     *            The campaign id from campaign.Required
+     *            The campaign id from campaign.Required.
      */
     public Trigger(String name, Type type, Long campaign_id)
     {
@@ -117,17 +116,16 @@ public class Trigger
 
     /**
      * Returns campaign name as an xml element which is retrieved using
-     * campaign-id
+     * campaign-id.
      * 
      * @return The campaign name as an xml element based on campaign id if
-     *         exists otherwise return ?
+     *         exists otherwise return '?'.
      * @throws Exception
      *             When campaign doesn't exist for given campaign id.
      */
     @XmlElement(name = "campaign")
     public String getCampaign() throws Exception
     {
-
 	if (campaign_id == null)
 	    return " ";
 
@@ -140,7 +138,7 @@ public class Trigger
     }
 
     /**
-     * Saves trigger in database
+     * Saves trigger in database.
      */
     public void save()
     {
@@ -148,7 +146,7 @@ public class Trigger
     }
 
     /**
-     * Removes trigger from database
+     * Removes trigger from database.
      */
     public void delete()
     {
@@ -165,5 +163,4 @@ public class Trigger
 	return "Name: " + name + " Condition: " + type + "Campaign:"
 		+ campaign_id;
     }
-
 }
