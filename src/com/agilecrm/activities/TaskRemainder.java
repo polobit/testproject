@@ -7,6 +7,7 @@ import com.agilecrm.activities.deferred.TaskRemainderDeferredTask;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
+import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.util.Util;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
@@ -34,7 +35,7 @@ public class TaskRemainder
     public static void dailyTaskRemainder() throws IOException
     {
 
-	Set<String> domains = Util.getAllNamespaces();
+	Set<String> domains = NamespaceUtil.getAllNamespaces();
 
 	for (String domain : domains)
 	{

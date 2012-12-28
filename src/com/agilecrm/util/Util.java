@@ -15,9 +15,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
@@ -31,13 +29,7 @@ import org.json.JSONObject;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.thirdparty.SendGridEmail;
@@ -215,84 +207,6 @@ public class Util
 	    return "+" + number;
 
 	return "+1" + number;
-    }
-
-    // Get all Name spaces
-    public static Set<String> getAllNamespaces()
-    {
-	List<DomainUser> domainList = DomainUserUtil.getAllDomainUsers();
-
-	// Map<String, Long> domainMap = new HashMap<String, Long>();
-
-	Set<String> domains = new HashSet<String>();
-
-	for (DomainUser domainUser : domainList)
-	{
-	    domains.add(domainUser.domain);
-	}
-
-	return domains;
-    }
-
-    // Get Name space count
-    public static JSONObject getNamespaceCount()
-    {
-
-	DatastoreService datastore = DatastoreServiceFactory
-		.getDatastoreService();
-
-	Entity globalStat = datastore.prepare(new Query("__Stat_Total__"))
-		.asSingleEntity();
-	Long totalBytes = (Long) globalStat.getProperty("bytes");
-	Long totalEntities = (Long) globalStat.getProperty("count");
-
-	JSONObject statsJSON = new JSONObject();
-
-	try
-	{
-	    statsJSON.put("bytes", totalBytes);
-	    statsJSON.put("entities", totalEntities);
-	}
-	catch (Exception e)
-	{
-
-	}
-
-	System.out.println("Total Bytes: " + totalBytes);
-	System.out.println("Total Entities: " + totalEntities);
-
-	return statsJSON;
-    }
-
-    // Get Name space stats
-    public static JSONObject getNamespaceStats()
-    {
-
-	DatastoreService datastore = DatastoreServiceFactory
-		.getDatastoreService();
-
-	Entity globalStat = datastore.prepare(new Query("__Stat_Ns_Total__"))
-		.asSingleEntity();
-
-	Long totalBytes = (Long) globalStat.getProperty("bytes");
-	Long totalEntities = (Long) globalStat.getProperty("count");
-
-	JSONObject statsJSON = new JSONObject();
-
-	try
-	{
-	    statsJSON.put("bytes", totalBytes);
-	    statsJSON.put("entities", totalEntities);
-	}
-	catch (Exception e)
-	{
-
-	}
-
-	System.out.println("Total Bytes: " + totalBytes);
-	System.out.println("Total Entities: " + totalEntities);
-
-	return statsJSON;
     }
 
     private static final String KEY = "some-secret-key-of-your-choice";

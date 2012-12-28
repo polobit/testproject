@@ -31,6 +31,7 @@ import com.agilecrm.user.util.IMAPEmailPrefsUtil;
 import com.agilecrm.user.util.SocialPrefsUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DBUtil;
+import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.util.Util;
 import com.google.appengine.api.NamespaceManager;
 
@@ -281,7 +282,7 @@ public class API
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public JSONObject getStats()
     {
-	return Util.getNamespaceCount();
+	return NamespaceUtil.getNamespaceCount();
     }
 
     // Get Stats
@@ -290,7 +291,7 @@ public class API
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public String getNamespaceStats()
     {
-	return Util.getNamespaceStats().toString();
+	return NamespaceUtil.getNamespaceStats().toString();
     }
 
     /**
