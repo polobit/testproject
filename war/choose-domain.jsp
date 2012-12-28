@@ -1,5 +1,5 @@
 <%@page import="org.apache.commons.lang.StringUtils"%>
-<%@page import="com.agilecrm.user.DomainUser"%>
+<%@page import="com.agilecrm.user.util.DomainUserUtil"%>
 <%
 /*
 It checks if any user exists in that domain,
@@ -11,8 +11,8 @@ String domain = request.getParameter("subdomain");
 
 if(!StringUtils.isEmpty(domain))
 {
-    System.out.println(DomainUser.count());
-	if(DomainUser.count() == 0)
+    System.out.println(DomainUserUtil.count());
+	if(DomainUserUtil.count() == 0)
 	{
 	    success = "Creating " + domain;
 		response.sendRedirect("https://" + domain + ".agilecrm.com/register");

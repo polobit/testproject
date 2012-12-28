@@ -1,5 +1,6 @@
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.user.DomainUser"%>
+<%@page import="com.agilecrm.user.util.DomainUserUtil"%>
 <%
 /*
 It checks first if user exists then if user exists,
@@ -14,7 +15,7 @@ if(!StringUtils.isEmpty(email))
     
     email = email.toLowerCase();
     
-	DomainUser domainUser = DomainUser.getDomainUserFromEmail(email);
+	DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
 	if(domainUser == null)
 	{
 	    error = "We are not able to find any user";
