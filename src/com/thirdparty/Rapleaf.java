@@ -3,7 +3,7 @@ package com.thirdparty;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.agilecrm.util.Util;
+import com.agilecrm.util.HTTPUtil;
 
 /**
  * <code>Rapleaf</code> connects to Rapleaf (which provides information about a
@@ -71,7 +71,7 @@ public class Rapleaf
 
 	    // Access the url with email address and api key in it returns
 	    // response a JSON String
-	    String rapleafResponse = Util.accessURL(url);
+	    String rapleafResponse = HTTPUtil.accessURL(url);
 
 	    // Converts JSON string into JSONObject
 	    JSONObject rapleafJSONObject = new JSONObject(rapleafResponse);

@@ -1,15 +1,10 @@
 package com.agilecrm.util;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.math.BigInteger;
-import java.net.URL;
-import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -47,65 +42,6 @@ public class Util
 
 	// Set<String> tokens = tokenize(input);
 	return StringUtils2.breakdownFragments(input);
-    }
-
-    // URL
-    public static String accessURL(String url)
-    {
-	try
-	{
-	    URL yahoo = new URL(url);
-	    URLConnection conn = yahoo.openConnection();
-	    conn.setConnectTimeout(60000);
-	    conn.setReadTimeout(60000);
-
-	    BufferedReader reader = new BufferedReader(new InputStreamReader(
-		    conn.getInputStream()));
-
-	    String output = "";
-	    String inputLine;
-	    while ((inputLine = reader.readLine()) != null)
-	    {
-		output += inputLine;
-	    }
-	    reader.close();
-	    return output;
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.err.println(e.getMessage());
-	}
-	return null;
-    }
-
-    // URL
-    public static String accessURLUsingPost(String postURL, String data)
-	    throws Exception
-    {
-	// Send data
-	URL url = new URL(postURL);
-	URLConnection conn = url.openConnection();
-	conn.setDoOutput(true);
-	OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-	wr.write(data);
-	wr.flush();
-
-	// Get the response
-	BufferedReader reader = new BufferedReader(new InputStreamReader(
-		conn.getInputStream()));
-	String output = "";
-	String inputLine;
-	while ((inputLine = reader.readLine()) != null)
-	{
-	    output += inputLine;
-	}
-
-	wr.close();
-	reader.close();
-
-	return output;
-
     }
 
     // HashMap() of Error and Array

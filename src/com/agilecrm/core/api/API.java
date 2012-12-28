@@ -31,6 +31,7 @@ import com.agilecrm.user.util.IMAPEmailPrefsUtil;
 import com.agilecrm.user.util.SocialPrefsUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DBUtil;
+import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.util.Util;
 import com.google.appengine.api.NamespaceManager;
@@ -141,7 +142,7 @@ public class API
 	String url = "https://stats.agilecrm.com:90/get?email=" + searchEmail
 		+ "&agile_id=" + apiKey;
 
-	return Util.accessURL(url);
+	return HTTPUtil.accessURL(url);
     }
 
     // Contact view Save Author: Yaswanth 08-10-2012
@@ -235,7 +236,7 @@ public class API
 
 	String jsonResult = "";
 	if (url != null)
-	    jsonResult = Util.accessURL(url);
+	    jsonResult = HTTPUtil.accessURL(url);
 
 	if (url == null || jsonResult == null)
 	{
