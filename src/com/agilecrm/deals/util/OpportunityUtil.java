@@ -7,6 +7,7 @@ import java.util.List;
 import net.sf.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
@@ -30,6 +31,12 @@ import com.googlecode.objectify.ObjectifyService;
 public class OpportunityUtil
 {
     /**
+     * ObjectifyDao of Opportunity.
+     */
+    private static ObjectifyGenericDao<Opportunity> dao = new ObjectifyGenericDao<Opportunity>(
+	    Opportunity.class);
+
+    /**
      * Gets opportunity based on id.
      * 
      * @param id
@@ -40,7 +47,7 @@ public class OpportunityUtil
     {
 	try
 	{
-	    return Opportunity.dao.get(id);
+	    return dao.get(id);
 	}
 	catch (Exception e)
 	{
@@ -56,7 +63,7 @@ public class OpportunityUtil
      */
     public static List<Opportunity> getOpportunities()
     {
-	return Opportunity.dao.fetchAll();
+	return dao.fetchAll();
     }
 
 
@@ -73,7 +80,7 @@ public class OpportunityUtil
      */
     public static List<Opportunity> getOpportunities(long minTime, long maxTime)
     {
-	return Opportunity.dao.ofy().query(Opportunity.class)
+	return dao.ofy().query(Opportunity.class)
 		.filter("close_date >= ", minTime)
 		.filter("close_date <= ", maxTime).list();
     }
@@ -197,7 +204,7 @@ public class OpportunityUtil
     public static int getTotalNumberOfMilestones(long minTime, long maxTime,
 	    String milestone)
     {
-	return Opportunity.dao.ofy().query(Opportunity.class)
+	return dao.ofy().query(Opportunity.class)
 		.filter("close_date >= ", minTime)
 		.filter("close_date <= ", maxTime)
 		.filter("milestone", milestone).count();
@@ -250,7 +257,7 @@ public class OpportunityUtil
     public static JSONObject getConversionDetails(long minTime, long maxTime)
     {
 	// Gets total count of opportunities within the given period
-	int numOpportunities = Opportunity.dao.ofy().query(Opportunity.class)
+	int numOpportunities = dao.ofy().query(Opportunity.class)
 		.filter("close_date >= ", minTime)
 		.filter("close_date <= ", maxTime).count();
 
