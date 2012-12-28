@@ -10,7 +10,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.util.IMAPEmailPrefsUtil;
-import com.agilecrm.util.Util;
+import com.agilecrm.util.EncryptDecryptUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Parent;
@@ -57,7 +57,7 @@ public class IMAPEmailPrefs
      */
     @NotSaved(IfDefault.class)
     public String user_name = null;
-    
+
     /**
      * Masked Password.
      */
@@ -193,7 +193,7 @@ public class IMAPEmailPrefs
 	if (!password.equalsIgnoreCase(MASKED_PASSWORD))
 	{
 	    // Encrypt password while saving
-	    encrypted_password = Util.encrypt(password);
+	    encrypted_password = EncryptDecryptUtil.encrypt(password);
 	}
 	else
 	{
@@ -201,8 +201,7 @@ public class IMAPEmailPrefs
 	    {
 		// Get Old password
 		IMAPEmailPrefs oldIMAPEmailPrefs = IMAPEmailPrefsUtil
-			.getIMAPEmailPrefs(this.id,
-			agileUser);
+			.getIMAPEmailPrefs(this.id, agileUser);
 		this.encrypted_password = oldIMAPEmailPrefs.encrypted_password;
 	    }
 	}
@@ -221,7 +220,7 @@ public class IMAPEmailPrefs
 	if (encrypted_password != null)
 	{
 	    // Decrypt password
-	    password = Util.decrypt(encrypted_password);
+	    password = EncryptDecryptUtil.decrypt(encrypted_password);
 	}
     }
 

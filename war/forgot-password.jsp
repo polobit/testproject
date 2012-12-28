@@ -1,6 +1,6 @@
 <%@page import="com.agilecrm.util.email.SendMail"%>
 <%@page import="com.agilecrm.util.email.AppengineMail"%>
-<%@page import="com.agilecrm.util.Util"%>
+<%@page import="com.agilecrm.util.EncryptDecryptUtil"%>
 <%@page import="com.agilecrm.user.util.DomainUserUtil"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.user.DomainUser"%>
@@ -19,7 +19,7 @@ DomainUser domainUser = null;
 if (!StringUtils.isEmpty(password)) {
 	domainUser = DomainUserUtil.getDomainUserFromEmail(email);
 
-	domainUser.password = Util.decrypt(password);
+	domainUser.password = EncryptDecryptUtil.decrypt(password);
 
 	AppengineMail.sendMail(email, SendMail.FORGOT_PASSWORD_SUBJECT,
 			SendMail.FORGOT_PASSWORD, domainUser);
@@ -184,7 +184,7 @@ jQuery.validator.setDefaults({
 				    if (domainUser != null) {
 				%>
 				<input name="email" value="<%=domainUser.email%>" /> 
-				<input name="password" value="<%=Util.encrypt(domainUser.password)%>" />
+				<input name="password" value="<%=EncryptDecryptUtil.encrypt(domainUser.password)%>" />
 				<%
 				    }
 				%>

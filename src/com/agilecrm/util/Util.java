@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 
 import com.google.appengine.api.NamespaceManager;
@@ -61,44 +59,6 @@ public class Util
 	    return "+" + number;
 
 	return "+1" + number;
-    }
-
-    private static final String KEY = "some-secret-key-of-your-choice";
-
-    public static String encrypt(final String text)
-    {
-	byte[] encrypted = Base64.encodeBase64(xor(text.getBytes()));
-	return new String(encrypted);
-    }
-
-    public static String decrypt(final String hash) throws DecoderException
-    {
-	try
-	{
-	    return new String(xor(Base64.decodeBase64(hash.getBytes())),
-		    "UTF-8");
-	}
-	catch (java.io.UnsupportedEncodingException ex)
-	{
-	    throw new IllegalStateException(ex);
-	}
-    }
-
-    private static byte[] xor(final byte[] input)
-    {
-	final byte[] output = new byte[input.length];
-	final byte[] secret = KEY.getBytes();
-	int spos = 0;
-	for (int pos = 0; pos < input.length; pos += 1)
-	{
-	    output[pos] = (byte) (input[pos] ^ secret[spos]);
-	    spos += 1;
-	    if (spos >= secret.length)
-	    {
-		spos = 0;
-	    }
-	}
-	return output;
     }
 
     // Read Resource from File (war)
