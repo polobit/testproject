@@ -3,26 +3,16 @@ package com.agilecrm.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.StringReader;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
-import java.util.Vector;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import au.com.bytecode.opencsv.CSVReader;
 
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.memcache.MemcacheService;
@@ -42,78 +32,6 @@ public class Util
 
 	// Set<String> tokens = tokenize(input);
 	return StringUtils2.breakdownFragments(input);
-    }
-
-    // HashMap() of Error and Array
-    public static Hashtable convertCSVToJSONArray2(String csv,
-	    String duplicateFieldName) throws Exception
-    {
-
-	CSVReader reader = new CSVReader(new StringReader(csv.trim()));
-
-	// Get Header Liner
-	String[] headers = reader.readNext();
-	if (headers == null)
-	{
-	    System.out.println("Empty List");
-	    new Exception("Empty List");
-	}
-
-	// CSV Json Array
-	JSONArray csvJSONArray = new JSONArray();
-
-	// HashTable of keys to check duplicates - we will store all keys into
-	// this hashtable and if there are any - we will exclude them
-	Vector<String> keys = new Vector();
-	Vector<String> duplicates = new Vector();
-
-	String[] csvValues;
-	while ((csvValues = reader.readNext()) != null)
-	{
-	    JSONObject csvJSONObject = new JSONObject();
-
-	    boolean isDuplicate = false;
-	    for (int j = 0; j < csvValues.length; j++)
-	    {
-		// Check if the header is same as duplicate name
-		if (duplicateFieldName != null
-			&& headers[j].equalsIgnoreCase(duplicateFieldName))
-		{
-		    System.out.println("If already present " + headers[j] + " "
-			    + csvValues[j]);
-
-		    // Check if is already present in already imported items
-		    if (keys.contains(csvValues[j]))
-		    {
-			duplicates.add(csvValues[j]);
-			isDuplicate = true;
-			break;
-		    }
-
-		    keys.add(csvValues[j]);
-		}
-
-		csvJSONObject.put(headers[j], csvValues[j]);
-	    }
-
-	    if (!isDuplicate)
-		csvJSONArray.put(csvJSONObject);
-	}
-
-	Hashtable resultHashtable = new Hashtable();
-	resultHashtable.put("result", csvJSONArray);
-
-	// Put warning
-	if (duplicateFieldName != null && duplicates.size() > 0)
-	{
-	    resultHashtable.put("warning",
-		    "Duplicate Values (" + duplicates.size()
-			    + ") were not imported " + duplicates);
-	}
-
-	System.out.println("Converted csv " + csv + " to " + resultHashtable);
-	return resultHashtable;
-
     }
 
     // Get Calendar in Pacific
@@ -268,33 +186,5 @@ public class Util
 	openIdProviders.put("myopenid.com", "stats.agilecrm.com");
 
 	return openIdProviders.get(provider.toLowerCase());
-    }
-
-    // Hash function MD5 for password
-    public static String getMD5HashedPassword(String password)
-    {
-	String hashedPassword = null;
-
-	if (password == null)
-	    return null;
-	try
-	{
-
-	    // Create MessageDigest object for MD5
-	    MessageDigest digest = MessageDigest.getInstance("MD5");
-
-	    // Update input string in message digest
-	    digest.update(password.getBytes(), 0, password.length());
-
-	    // Converts message digest value in base 16
-	    hashedPassword = new BigInteger(1, digest.digest()).toString(16);
-
-	}
-	catch (NoSuchAlgorithmException e)
-	{
-
-	    e.printStackTrace();
-	}
-	return hashedPassword;
     }
 }

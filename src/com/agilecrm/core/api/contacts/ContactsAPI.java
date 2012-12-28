@@ -34,8 +34,8 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.util.CSVUtil;
 import com.agilecrm.util.CacheUtil;
-import com.agilecrm.util.Util;
 
 /**
  * <code>ContactsAPI</code> includes REST calls to interact with {@link Contact}
@@ -231,7 +231,7 @@ public class ContactsAPI
 	    success.put("success", true);
 	    // Stores results in to a map
 
-	    Hashtable result = Util.convertCSVToJSONArray2(csv, "Email");
+	    Hashtable result = CSVUtil.convertCSVToJSONArray2(csv, "Email");
 	    JSONArray csvArray = (JSONArray) result.get("result");
 	    // returns CSV file as a json object with key "data"
 
