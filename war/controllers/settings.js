@@ -16,6 +16,7 @@ var SettingsRouter = Backbone.Router.extend({
         "contact-us":"contactUsEmail"
     },
     
+    /** Gets Preferences*/
     settings: function () {
         var html = getTemplate("settings", {});
         $('#content').html(html);
@@ -25,7 +26,8 @@ var SettingsRouter = Backbone.Router.extend({
         $("#settingsmenu").addClass("active");
     },
        
-    userPrefs: function () {
+    /** Gets Personal Preferences form and sets HTML Editor.*/
+     userPrefs: function () {
         var view = new Base_Model_View({
             url: '/core/api/user-prefs',
             template: "settings-user-prefs",
@@ -40,6 +42,7 @@ var SettingsRouter = Backbone.Router.extend({
         
        
     },
+    /** Gets LinkedIn and Twitter preferences to get access*/
     socialPrefs: function () {
         var data = {
             "service": "linkedin"
@@ -65,7 +68,8 @@ var SettingsRouter = Backbone.Router.extend({
 
     },
     
-    email: function () {
+    /** Gets Gmail and IMAP preferences to get access for user mails*/
+     email: function () {
         // Get Social Prefs (Same as Linkedin/Twitter) for Gmail
         var data = {
             "service": "gmail",
@@ -92,6 +96,7 @@ var SettingsRouter = Backbone.Router.extend({
         $('#content').append(itemView2.render().el);
 
     },
+    /** Gets list of email templates */
     emailTemplates: function () {
         this.emailTemplatesListView = new Base_Collection_View({
             url: '/core/api/email/templates',
@@ -104,6 +109,7 @@ var SettingsRouter = Backbone.Router.extend({
         $('#content').html(this.emailTemplatesListView.el);
      
     },
+    /** Saves new email-template. Sets HTMLEditor for the form.*/
     emailTemplateAdd: function () {
     	var view = new Base_Model_View({
             url: '/core/api/email/templates',
@@ -116,6 +122,11 @@ var SettingsRouter = Backbone.Router.extend({
          });
         $('#content').html(view.render().el);       
     },
+    /** Updates existing email-template. After email-template updated, the page 
+     *  should navigate to email-templates list
+     *  
+     *  @param id EmailTemplates Id 
+     *  */
     emailTemplateEdit: function(id){
  
     	if (!this.emailTemplatesListView || this.emailTemplatesListView.collection.length == 0) {
