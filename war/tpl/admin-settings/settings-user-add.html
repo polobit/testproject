@@ -1,67 +1,67 @@
 <script id="admin-settings-user-add-template" type="text/html">
-	<div class="row">
-		<div class="span9">
-		<div class="well">
-	
-			<form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
-			{{#if id}}
-				<input type="text" name="id" class="hide" value={{id}} >
-			{{/if}}
-				<fieldset>
-					<legend>New User Details</legend>
-					<br/>
-                	<div class="control-group">
-						<label class="control-label" for="cname">Name <span class="field_req">*</span></label> 
-                		<div class="controls">
-							<input type="text" id="cname" name="name" class="required" placeholder="Name" autocapitalize="off"/>
-						</div>
-					</div> 
-				
-					<div class="control-group">
-						<label class="control-label for="eaddress">Email Address <span class="field_req">*</span></label> 
-                		<div class="controls">
-							<input type="text" id="eaddress" class="email required" name='email' placeholder="Email address" autocapitalize="off"/> 
-						</div>
-					</div>
-
-                    <div class="control-group">
-						<label class="control-label for="password">Password </label> 
-                		<div class="controls">
-							<input type="password" id="password" value="{{password}}" name='password' placeholder="Password" autocapitalize="off"/> 
-						</div>
-					</div>
-                    <div class="control-group">
-                    	<label class="control-label" for="user_add_note">Note</label>
-						<div class="controls">
-							<textarea rows="3" placeholder="Note" name="user_add_note" id="user_add_note" style="max-width:500px"></textarea> 
-						</div>
-					</div>
-				
-					<div class="control-group">
-						<div class="controls">
-							<label class="checkbox">
-								<input type="checkbox" id="Admin" name='is_admin' value='true'/> 
-                        		Allow this user to configure the account and invite or remove users
-							</label>
-						</div>
-					</div>
-
-					<div class="control-group">
-						<div class="controls">
-							<label class="checkbox">
-								<input type="checkbox" id="Disabled" name='is_disabled' value='true'/> 
-                        		Disable this user
-							</label>
-						</div>
-					</div>
-
-					<div class="form-actions">
-            			<button type="submit" class="save btn btn-primary">Save Changes</button>
-            			<a type="reset" href='#admin' class="btn">Cancel</a>
-          			</div>
-				</fieldset>
-			</form>
-		</div>
-	</div>
-</div>
+    <div class="row">
+    	<div class="span9">
+    	<div class="well">
+    
+    		<form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
+    		{{#if id}}
+    			<input type="text" name="id" class="hide" value={{id}} >
+    		{{/if}}
+    			<fieldset>
+    				<legend>New User Details</legend>
+    				<br/>
+                   	<div class="control-group">
+    					<label class="control-label" for="cname">Name <span class="field_req">*</span></label> 
+                   		<div class="controls">
+    						<input type="text" id="cname" name="name" class="required" placeholder="Name" autocapitalize="off"/>
+    					</div>
+    				</div> 
+    			
+    				<div class="control-group">
+    					<label class="control-label for="eaddress">Email Address <span class="field_req">*</span></label> 
+                   		<div class="controls">
+    						<input type="text" id="eaddress" class="email required" name='email' placeholder="Email address" autocapitalize="off"/> 
+    					</div>
+    				</div>
+    
+                       <div class="control-group">
+    					<label class="control-label for="password">Password </label> 
+                   		<div class="controls">
+    						<input type="password" id="password" value="{{password}}" name='password' placeholder="Password" autocapitalize="off"/> 
+    					</div>
+    				</div>
+                       <div class="control-group">
+                       	<label class="control-label" for="user_add_note">Note</label>
+    					<div class="controls">
+    						<textarea rows="3" placeholder="Note" name="user_add_note" id="user_add_note" style="max-width:500px"></textarea> 
+    					</div>
+    				</div>
+    			
+    				<div class="control-group">
+    					<div class="controls">
+    						<label class="checkbox">
+    							<input type="checkbox" id="Admin" name='is_admin' value='true'/> 
+                           		Allow this user to configure the account and invite or remove users
+    						</label>
+    					</div>
+    				</div>
+    
+    				<div class="control-group">
+    					<div class="controls">
+    						<label class="checkbox">
+    							<input type="checkbox" id="Disabled" name='is_disabled' value='true'/> 
+                           		Disable this user
+    						</label>
+    					</div>
+    				</div>
+    
+    				<div class="form-actions">
+               			<button type="submit" class="save btn btn-primary">Save Changes</button>
+               			<a type="reset" href='#admin' class="btn">Cancel</a>
+             			</div>
+    			</fieldset>
+    		</form>
+    	</div>
+    </div>
+    </div>
 </script>
