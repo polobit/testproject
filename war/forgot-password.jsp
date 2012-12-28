@@ -1,5 +1,6 @@
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.user.DomainUser"%>
+<%@page import="com.agilecrm.user.util.DomainUserUtil"%>
 <%
 /*
 It checks first if user exists then a mail is sent to that id along with newly generated password 
@@ -13,7 +14,7 @@ if(!StringUtils.isEmpty(email))
     
     email = email.toLowerCase();
     
-	DomainUser domainUser = DomainUser.generatePassword(email);
+	DomainUser domainUser = DomainUserUtil.generatePassword(email);
 	if(domainUser == null)
 	{
 	    error = "We are not able to find any user";
