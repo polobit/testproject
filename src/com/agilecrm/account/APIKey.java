@@ -4,11 +4,15 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.user.DomainUser;
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.NotSaved;
+import com.googlecode.objectify.condition.IfDefault;
 
 @XmlRootElement
 public class APIKey
@@ -20,6 +24,9 @@ public class APIKey
 
     // Api Key
     public String api_key;
+
+    @NotSaved(IfDefault.class)
+    private Key<DomainUser> owner = null;
 
     // Dao
     private static ObjectifyGenericDao<APIKey> dao = new ObjectifyGenericDao<APIKey>(
@@ -38,8 +45,8 @@ public class APIKey
     // Get API Key
     public static APIKey getAPIKey()
     {
-	Objectify ofy = ObjectifyService.begin();
-	APIKey apiKey = ofy.query(APIKey.class).get();
+	APIKey apiKey = getAPIKeyRelatedToUser(SessionManager.get()
+		.getDomainId());
 	if (apiKey == null)
 	{
 	    // Generate API key and save
@@ -49,10 +56,9 @@ public class APIKey
 	return apiKey;
     }
 
-    // Generaet API Key
+    // Generate API Key
     private static APIKey generateAPIKey()
     {
-
 	SecureRandom random = new SecureRandom();
 	String randomNumber = new BigInteger(130, random).toString(32);
 
@@ -60,6 +66,55 @@ public class APIKey
 
 	dao.put(apiKey);
 	return apiKey;
+    }
+
+    /**
+     * Fetches the APIKey related to domain user. This method takes domainUsers
+     * id to get APIKey related to domain user. It is used when verifying the
+     * domain user and respective APIKey
+     * 
+     * @param domainUserId
+     * @return
+     */
+    public static APIKey getAPIKeyRelatedToUser(Long domainUserId)
+    {
+	// Creates a domain user key from the id parameter
+	Key<DomainUser> currentUserKey = new Key<DomainUser>(DomainUser.class,
+		domainUserId);
+
+	// Queries to get APIKey entity related to domain user key
+	return dao.ofy().query(APIKey.class).filter("owner", currentUserKey)
+		.get();
+
+    }
+
+    /**
+     * Checks whether api is related to this domain, used while verifying JsAPI
+     * request in JsAPiFilter
+     * 
+     * @param key
+     *            APIKey to be verified
+     * @return {@link Boolean} Returns true if APIKey exists in current domain
+     *         and vice-versa
+     */
+    public static Boolean isPresent(String key)
+    {
+	// Queries APIKey entities with the apikey parameter
+	APIKey apiKey = dao.ofy().query(APIKey.class).filter("api_key", key)
+		.get();
+
+	// Returns true if key exists
+	if (apiKey != null)
+	    return true;
+
+	return false;
+    }
+
+    @PrePersist
+    void prePersist()
+    {
+	owner = new Key<DomainUser>(DomainUser.class, SessionManager.get()
+		.getDomainId());
     }
 
 }

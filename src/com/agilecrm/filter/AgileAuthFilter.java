@@ -108,7 +108,7 @@ public class AgileAuthFilter implements Filter
 
 	// Check if the domain of the user is same as namespace. Otherwise,
 	// Redirect
-	if (domainUser != null && domainUser.domain != null
+	if (domainUser != null && domainUser.domain != null && domain != null
 		&& !domain.equalsIgnoreCase(domainUser.domain))
 	{
 	    // Probably forward to the domain again he registered

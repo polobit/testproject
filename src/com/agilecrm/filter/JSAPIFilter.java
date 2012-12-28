@@ -57,7 +57,7 @@ public class JSAPIFilter implements Filter
 	{
 	    // Check if ApiKey
 	    String apiKey = APIKey.getAPIKey().api_key;
-	    if (agileId.equals(apiKey))
+	    if (APIKey.isPresent(apiKey))
 	    {
 		chain.doFilter(httpRequest, httpResponse);
 		return;

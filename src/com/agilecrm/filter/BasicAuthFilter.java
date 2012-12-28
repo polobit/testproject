@@ -85,7 +85,8 @@ public class BasicAuthFilter implements Filter
 			    .getDomainUserFromEmail(user);
 
 		    // Gets APIKey, to authenticate the user
-		    String apiKey = APIKey.getAPIKey().api_key;
+		    String apiKey = APIKey
+			    .getAPIKeyRelatedToUser(domainUser.id).api_key;
 
 		    System.out.println(user + " " + password + " " + domainUser
 			    + " " + apiKey);
