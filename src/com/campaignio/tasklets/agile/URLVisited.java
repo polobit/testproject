@@ -2,7 +2,7 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
-import com.agilecrm.util.Util;
+import com.agilecrm.util.HTTPUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 
@@ -39,7 +39,7 @@ public class URLVisited extends TaskletAdapter
 	String password = getStringValue(nodeJSON, subscriberJSON, data,
 		PASSWORD);
 
-	String output = Util.accessURL(url);
+	String output = HTTPUtil.accessURL(url);
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,

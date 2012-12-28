@@ -3,7 +3,7 @@ package com.campaignio.tasklets.agile;
 import org.json.JSONObject;
 
 import com.agilecrm.util.DBUtil;
-import com.agilecrm.util.Util;
+import com.agilecrm.util.HTTPUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 
 public class Transfer extends TaskletAdapter
@@ -32,7 +32,7 @@ public class Transfer extends TaskletAdapter
 		.replace("$listId", listId);
 
 	// Access URL
-	String retVal = Util.accessURL(url);
+	String retVal = HTTPUtil.accessURL(url);
 
 	System.out.println(retVal);
 

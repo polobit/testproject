@@ -6,7 +6,7 @@ import java.util.Iterator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.agilecrm.util.Util;
+import com.agilecrm.util.HTTPUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 
@@ -26,7 +26,6 @@ public class JSONNode extends TaskletAdapter
      * Rest url
      */
     public static String URL = "rest_url";
-
 
     /**
      * Method Type
@@ -116,7 +115,7 @@ public class JSONNode extends TaskletAdapter
 		// Creates log for JSONNode for method Get type
 		log(campaignJSON, subscriberJSON, "Accessing Get " + url);
 
-		output = Util.accessURL(url);
+		output = HTTPUtil.accessURL(url);
 
 	    }
 	    else
@@ -124,7 +123,7 @@ public class JSONNode extends TaskletAdapter
 		// Creates log for JSONNode for method Post type
 		log(campaignJSON, subscriberJSON, "Accessing Post " + url + " "
 			+ httpParams);
-		output = Util.accessURLUsingPost(url, httpParams);
+		output = HTTPUtil.accessURLUsingPost(url, httpParams);
 	    }
 
 	    // Creates log for JSONNode for output

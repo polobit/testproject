@@ -7,7 +7,7 @@ import org.json.simple.JSONObject;
 import com.agilecrm.Globals;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
-import com.agilecrm.util.Util;
+import com.agilecrm.util.HTTPUtil;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
 /**
@@ -77,8 +77,7 @@ public class NotificationsDeferredTask implements DeferredTask
 		+ URLEncoder.encode(apiKey) + "&type="
 		+ URLEncoder.encode(type.toString());
 
-	String output = Util.accessURL(url);
+	String output = HTTPUtil.accessURL(url);
 	System.out.println(output);
     }
 }
-

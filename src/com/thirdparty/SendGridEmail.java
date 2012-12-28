@@ -5,7 +5,7 @@ import java.net.URLEncoder;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
-import com.agilecrm.util.Util;
+import com.agilecrm.util.HTTPUtil;
 
 public class SendGridEmail
 {
@@ -37,8 +37,8 @@ public class SendGridEmail
 
     // Default query string
     public static String defaultQueryString = SENDGRID_API_PARAM_API_USER + "="
-	    + Globals.SENDGRID_API_USER_NAME + "&" + SENDGRID_API_PARAM_API_KEY + "="
-	    + Globals.SENDGRID_API_KEY + "&";
+	    + Globals.SENDGRID_API_USER_NAME + "&" + SENDGRID_API_PARAM_API_KEY
+	    + "=" + Globals.SENDGRID_API_KEY + "&";
 
     public static String sendMail(String fromEmail, String fromName, String to,
 	    String subject, String replyTo, String html, String text,
@@ -75,8 +75,8 @@ public class SendGridEmail
 	    System.out.println("QueryString  \n" + queryString + "\n\n");
 
 	    // Send email
-	    String response = Util.accessURLUsingPost(SENDGRID_API_POST_URL,
-		    queryString);
+	    String response = HTTPUtil.accessURLUsingPost(
+		    SENDGRID_API_POST_URL, queryString);
 
 	    System.out.println("Response " + response);
 
