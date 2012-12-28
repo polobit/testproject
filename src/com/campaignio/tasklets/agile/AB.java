@@ -9,24 +9,22 @@ import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
- * <code>AB</code> represents A/B node in a workflow.It can be used to test the
- * customers behaviour.Separate subscribers randomly based on frequency.It uses
- * random object and compare the value with the frequency.Based on comparison it
- * separates next tasklet execution using branches.Under exception it proceeds
- * with bracnch A.
+ * <code>AB</code> represents A/B node in a workflow. It can be used to test the
+ * customers behaviour. Separate subscribers randomly based on frequency. It
+ * uses random object and compare the value with the frequency. Based on
+ * comparison it separates next tasklet execution using branches. Under
+ * exception it proceeds with branch A.
  * 
  * @author Manohar
  * 
  */
 public class AB extends TaskletAdapter
 {
-    // Fields of A/B node
     /**
      * Frequency value
      */
     public static String FREQUENCY = "frequency";
 
-    // Branches - Yes/No
     /**
      * Represents Branch A of A/B node
      */
@@ -37,7 +35,12 @@ public class AB extends TaskletAdapter
      */
     public static String BRANCH_B = "B";
 
-    // Run method to execute tasklets
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.campaignio.tasklets.TaskletAdapter#run(org.json.JSONObject,
+     * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
+     */
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
 	    JSONObject data, JSONObject nodeJSON) throws Exception
     {
@@ -51,7 +54,6 @@ public class AB extends TaskletAdapter
 	    Random random = new Random(Calendar.getInstance().getTimeInMillis());
 	    double r = random.nextDouble();
 
-
 	    // Creates log for A/B node
 	    log(campaignJSON, subscriberJSON, "Random Number " + random
 		    + " Requested:" + frequency);
@@ -62,14 +64,12 @@ public class AB extends TaskletAdapter
 		// Execute Next One in Loop
 		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON,
 			data, nodeJSON, BRANCH_A);
-
 	    }
 	    else
 	    {
 		// Execute Next One in Loop
 		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON,
 			data, nodeJSON, BRANCH_B);
-
 	    }
 	}
 	catch (Exception e)
@@ -80,6 +80,5 @@ public class AB extends TaskletAdapter
 	}
 
 	return;
-
     }
 }

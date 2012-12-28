@@ -9,35 +9,35 @@ import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
- * <code>Score</code>represents Score node in the workflow.Add or subtract score
- * to the subscriber.Customers can be sorted based on score.Score class checks
- * for given type whether to add or subtract score and act accordingly
- * 
+ * <code>Score</code>represents Score node in the workflow. Add or subtract
+ * score to the subscriber. Customers can be sorted based on score. Score class
+ * checks for given type whether to add or subtract score and act accordingly.
  * 
  * @author Naresh
  * 
  */
 public class Score extends TaskletAdapter
 {
-    // Fields
     /**
      * Type - Add/Subtract
      */
     public static String TYPE = "type";
+
     /**
      * Add score
      */
     public static String ADD = "add";
+
     /**
      * Subtract score
      */
     public static String SUBTRACT = "subtract";
+
     /**
      * Score value
      */
     public static String VALUE = "Value";
 
-    // Run
     /*
      * (non-Javadoc)
      * 
@@ -77,7 +77,6 @@ public class Score extends TaskletAdapter
 		// Creates log when score is subtracted
 		log(campaignJSON, subscriberJSON, "Score subtracted by : "
 			+ value);
-
 	    }
 	}
 
@@ -85,5 +84,4 @@ public class Score extends TaskletAdapter
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		nodeJSON, null);
     }
-
 }

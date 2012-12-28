@@ -12,12 +12,12 @@ import com.campaignio.logger.util.LogUtil;
 
 /**
  * <code>TaskletAdapter</code> is an adapter class which implements Tasklet
- * interface.So, the tasklet class can define it's own implementation on any
- * number of methods but not worry to define all the Tasklet interface
- * methods.Every tasklet in the workflow inherits TaskletAdapter.
+ * interface. So, the tasklet class can define it's own implementation on any
+ * number of methods but not worry to define all the Tasklet interface methods.
+ * Every tasklet in the workflow inherits TaskletAdapter.
  * <p>
- * Moreover,taskletadapter class provides Cron functionality for scheduled
- * tasks.TaskletAdapter class is used to get field values that are entered in a
+ * Moreover, taskletadapter class provides Cron functionality for scheduled
+ * tasks. TaskletAdapter class is used to get field values that are entered in a
  * node. It replaces the template by subscriber data.
  * </p>
  * 
@@ -26,13 +26,18 @@ import com.campaignio.logger.util.LogUtil;
 
 public class TaskletAdapter implements Tasklet
 {
-
     /**
      * Json values is a json array that stores the field values entered in
      * client side.
      */
     public static final String JSON_VALUES = "JsonValues";
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.campaignio.tasklets.Tasklet#run(org.json.JSONObject,
+     * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
+     */
     @Override
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
 	    JSONObject data, JSONObject nodeJSON) throws Exception
@@ -40,6 +45,13 @@ public class TaskletAdapter implements Tasklet
 	System.out.println("Dummy run");
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.campaignio.tasklets.Tasklet#interrupted(org.json.JSONObject,
+     * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject,
+     * org.json.JSONObject)
+     */
     @Override
     public void interrupted(JSONObject campaignJSON, JSONObject subscriberJSON,
 	    JSONObject data, JSONObject nodeJSON, JSONObject interruptCustomData)
@@ -48,6 +60,12 @@ public class TaskletAdapter implements Tasklet
 	System.out.println("Dummy Interrupted");
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.campaignio.tasklets.Tasklet#timeOutComplete(org.json.JSONObject,
+     * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
+     */
     @Override
     public void timeOutComplete(JSONObject campaignJSON,
 	    JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
@@ -66,20 +84,20 @@ public class TaskletAdapter implements Tasklet
      * @param subscriberJSON
      *            contact with which campaign subscribes.
      * @param data
-     *            data that is used within the workflow
+     *            data that is used within the workflow.
      * @param nodeJSON
      *            node at that instance in a workflow.
      * @param timeout
-     *            timeout period for a task,how much time the task should stay
+     *            timeout period for a task, how much time the task should stay
      *            in cron.
      * @param custom1
-     *            custom value
+     *            custom value.
      * @param custom2
-     *            custom value
+     *            custom value.
      * @param custom3
-     *            custom value
+     *            custom value.
      * @throws Exception
-     *             if any exception occurs in Cron
+     *             if any exception occurs in Cron.
      */
     public void addToCron(JSONObject campaignJSON, JSONObject subscriberJSON,
 	    JSONObject data, JSONObject nodeJSON, long timeout, String custom1,
@@ -96,12 +114,12 @@ public class TaskletAdapter implements Tasklet
     }
 
     /**
-     * Removes task from Cron using CampaignId and subscriberId
+     * Removes task from Cron using CampaignId and SubscriberId.
      * 
      * @param campaignID
-     *            Id of a campaign at that instance
+     *            Id of a campaign at that instance.
      * @param subscriberID
-     *            Id of a contact at that instance
+     *            Id of a contact at that instance.
      * @throws Exception
      *             if any exception occurs in Cron.
      */
@@ -114,7 +132,7 @@ public class TaskletAdapter implements Tasklet
 
     /**
      * Gets value as a String and return replaced content if any mustache
-     * template exists within the value
+     * template exists within the value.
      * 
      * @param nodeJSON
      *            node at that instance in a workflow.
@@ -124,8 +142,8 @@ public class TaskletAdapter implements Tasklet
      *            data that is used within the workflow.
      * @param keyName
      *            field value in the node.
-     * @return replaced string(where-ever mustaches occurs, there the template
-     *         is replaced with subscriber and data json)
+     * @return replaced string (where-ever mustaches occurs, there the template
+     *         is replaced with subscriber and data json).
      * @throws Exception
      */
     public String getStringValue(JSONObject nodeJSON,
@@ -140,7 +158,7 @@ public class TaskletAdapter implements Tasklet
     }
 
     /**
-     * Gets value entered by the user at client side
+     * Gets value entered by the user at client side.
      * 
      * @param nodeJSON
      *            Current node at that instance in a workflow.
@@ -150,7 +168,7 @@ public class TaskletAdapter implements Tasklet
      *            Data that is used within the workflow.
      * @param keyName
      *            Field value in the node.
-     * @return Value given at client side from UI JSON Values
+     * @return Value given at client side from UI JSON Values.
      * @throws Exception
      */
     public Object getValue(JSONObject nodeJSON, JSONObject subscriberJSON,
@@ -190,18 +208,17 @@ public class TaskletAdapter implements Tasklet
      * data are merged to replace template.
      * 
      * @param value
-     *            value entered at client side
+     *            value entered at client side.
      * @param subscriberJSON
      *            contact with which campaign subscribes.
      * @param data
      *            data that is used within the workflow.
-     * @return replaced content
+     * @return replaced content.
      * @throws Exception
      */
     public String replaceTokens(String value, JSONObject subscriberJSON,
 	    JSONObject data)
     {
-
 	System.out.println("The subscriberJson is " + subscriberJSON
 		+ "and the json data is" + data);
 
@@ -212,7 +229,6 @@ public class TaskletAdapter implements Tasklet
 	}
 	catch (Exception e)
 	{
-
 	    e.printStackTrace();
 	}
 
@@ -221,17 +237,16 @@ public class TaskletAdapter implements Tasklet
 
 	// Compile the template using Mustache
 	return MustacheUtil.compile(value, mergedJson);
-
     }
 
     /**
-     * Merges two json objects into one json object
+     * Merges two json objects into one json object.
      * 
      * @param subscriberJSON
-     *            Contact data that subscribes to campaign
+     *            Contact data that subscribes to campaign.
      * @param data
-     *            Data within the workflow
-     * @return merged json object
+     *            Data within the workflow.
+     * @return merged json object.
      * @throws Exception
      */
     @SuppressWarnings("rawtypes")
@@ -265,24 +280,20 @@ public class TaskletAdapter implements Tasklet
 	}
     }
 
-
-    // Replaces Tokens - Tokenize the values and find $, find in data and then
-    // replace
     /**
      * Replaces Tokens - Tokenize the values and find $, find in data and then
-     * replace
+     * replace.
      * 
      * @param value
-     *            given value
+     *            given value.
      * @param data
-     *            data within the workflow
-     * @return replaced data
+     *            data within the workflow.
+     * @return replaced data.
      * @throws Exception
      */
     public String replaceTokensOld(String value, JSONObject data)
 	    throws Exception
     {
-	
 	  boolean replaced = false;
 	  
 	// Tokens
@@ -315,26 +326,24 @@ public class TaskletAdapter implements Tasklet
 			    .replaceAll("\r", " "));
 	  
 	  return replacedString.trim();
-	 
     }
 
     /**
-     * Creates log for the nodes using {@link Log}.Logs are useful to know the
-     * information after execution.For e.g.for send-email node,logs are useful
+     * Creates log for the nodes using {@link Log}. Logs are useful to know the
+     * information after execution. For e.g.for send-email node, logs are useful
      * whether emails are sent successfully or not.
      * 
      * @param campaignJSON
-     *            Nodes that are connected in a workflow
+     *            Nodes that are connected in a workflow.
      * @param subscriberJSON
-     *            Contact details
+     *            Contact details.
      * @param message
-     *            Message set in the node class
+     *            Message set in the node class.
      * @throws Exception
      */
     public void log(JSONObject campaignJSON, JSONObject subscriberJSON,
 	    String message) throws Exception
     {
-
 	System.out.println("Log: "
 		+ message.replaceAll("\n", " ").replaceAll("\r", " ") + " "
 		+ subscriberJSON + " " + campaignJSON);

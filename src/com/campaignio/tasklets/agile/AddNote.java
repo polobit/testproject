@@ -13,8 +13,8 @@ import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
- * <code>Add note</code> represents Add note node in workflow.It is used to add
- * note to the contact that subscribes to campaign.When the campaign runs with
+ * <code>Add note</code> represents Add note node in workflow. It is used to add
+ * note to the contact that subscribes to campaign. When the campaign runs with
  * the contact, then the note is added to that contact.
  * 
  * @author Naresh
@@ -22,22 +22,25 @@ import com.campaignio.tasklets.util.TaskletUtil;
  */
 public class AddNote extends TaskletAdapter
 {
-
-    // Fields of AddNote node
     /**
      * Subject of a note
      */
     public static String SUBJECT = "subject";
+
     /**
      * Description of a note
      */
     public static String DESCRIPTION = "description";
 
-    // Run
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.campaignio.tasklets.TaskletAdapter#run(org.json.JSONObject,
+     * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
+     */
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
 	    JSONObject data, JSONObject nodeJSON) throws Exception
     {
-
 	// Get Subject and Note
 	String subject = getStringValue(nodeJSON, subscriberJSON, data, SUBJECT);
 	String description = getStringValue(nodeJSON, subscriberJSON, data,
@@ -58,7 +61,6 @@ public class AddNote extends TaskletAdapter
 
 	if (contact != null)
 	{
-
 	    Note note = new Note(subject, description);
 	    List<String> contacts = new ArrayList<String>();
 
@@ -72,5 +74,4 @@ public class AddNote extends TaskletAdapter
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		nodeJSON, null);
     }
-
 }

@@ -13,24 +13,22 @@ import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 
 /**
- * <code>TaskletUtil</code> class is the base class for campaigns.It can execute
- * campaigns for single subscriber or even for a list of subscribers.It takes
- * responsibility to execute all the nodes that are connected in a workflow.Each
- * node is taken as one tasklet.TaskletUtil executes all the tasklets in a
- * workflow in Top-Down approach starting from Start node.It gets next node id
- * from current node if connected in the workflow.
+ * <code>TaskletUtil</code> class is the base class for campaigns. It can
+ * execute campaigns for single subscriber or even for a list of subscribers. It
+ * takes responsibility to execute all the nodes that are connected in a
+ * workflow. Each node is taken as one tasklet. TaskletUtil executes all the
+ * tasklets in a workflow in Top-Down approach starting from Start node. It gets
+ * next node id from current node if connected in the workflow.
  * <p>
- * TaskletUtil uses DeferredTask when there are list of subscribers.It executes
+ * TaskletUtil uses DeferredTask when there are list of subscribers. It executes
  * workflow in deferredtask for each subscriber in a list.
  * </p>
  * 
  * @author Manohar
  * 
  */
-
 public class TaskletUtil
 {
-
     /**
      * Start Node Id.It is fixed and unique.
      */
@@ -38,34 +36,34 @@ public class TaskletUtil
 
     /**
      * Hang-up node Id is used to identify end of workflow that there is no
-     * further node to execute in a workflow
+     * further node to execute in a workflow.
      */
     public static final String HANGUP_NODE_ID = "hangup";
 
     /**
-     * Default Branch value is Yes
+     * Default Branch value is Yes.
      */
     static final String DEFAULT_NEXT_NODE_BRANCH_DATA = "yes";
 
-    // Campaign Data - workflow and campaign
     /**
-     * Workflow id
+     * Workflow id.
      */
     public static final String CAMPAIGN_WORKFLOW_ID = "workflow_id";
+
     /**
-     * Workflow data
+     * Workflow data.
      */
     public static final String CAMPAIGN_WORKFLOW_JSON = "workflow_json";
     public static final String CAMPAIGN_LIST_ID = "list_id";
     public static final String CAMPAIGN_LIST_JSON = "list_json";
 
-    // Workflow - Tasklet Class Name
     /**
-     * Nodes that are included in a workflow
+     * Nodes that are included in a workflow.
      */
     public static final String WORKFLOW_NODE_DEFINITION = "NodeDefinition";
+
     /**
-     * Class name of a tasklet
+     * Class name of a tasklet.
      */
     public static final String WORKFLOW_TASKLET_CLASS_NAME = "workflow_tasklet_class_name";
 
@@ -74,7 +72,7 @@ public class TaskletUtil
      * 
      * @param campaignJSON
      *            Campaign json with workflow having nodes connected to each
-     *            other
+     *            other.
      * @param subscriberJSON
      *            Contact that subscribes to campaign.
      * @throws Exception
@@ -87,26 +85,25 @@ public class TaskletUtil
     }
 
     /**
-     * Executes Tasklet
+     * Executes Tasklet.
      * 
      * @param campaignJSON
-     *            nodes that are connected in a workflow
+     *            nodes that are connected in a workflow.
      * @param subscriberJSON
-     *            contact details
+     *            contact details.
      * @param data
-     *            data within the workflow
+     *            data within the workflow.
      * @param currentNodeJSON
-     *            current node in a workflow
+     *            current node in a workflow.
      * @param branch
-     *            branch of a node For e.g. Clicked node consists Yes and No
-     *            branches
+     *            branch of a node. For e.g. Clicked node consists Yes and No
+     *            branches.
      * @throws Exception
      */
     public static void executeTasklet(JSONObject campaignJSON,
 	    JSONObject subscriberJSON, JSONObject data,
 	    JSONObject currentNodeJSON, String branch) throws Exception
     {
-
 	if (data == null)
 	    data = new JSONObject();
 
@@ -150,27 +147,24 @@ public class TaskletUtil
     }
 
     /**
-     * Executes campaign when there is a list of subscribers
+     * Executes campaign when there is a list of subscribers.
      * 
      * @param campaignJSON
-     *            nodes that are connected in a workflow
+     *            nodes that are connected in a workflow.
      * @param subscriberJSONArray
-     *            list of subscribers
+     *            list of subscribers.
      */
     public static void executeCampaign(JSONObject campaignJSON,
 	    JSONArray subscriberJSONArray)
     {
-
 	// Iterate through JSONArray
 	for (int i = 0; i < subscriberJSONArray.length(); i++)
 	{
-
 	    JSONObject subscriberJSON;
 	    try
 	    {
 		// Get Subscriber
 		subscriberJSON = subscriberJSONArray.getJSONObject(i);
-
 	    }
 	    catch (Exception e)
 	    {
@@ -207,7 +201,6 @@ public class TaskletUtil
 		Queue queue = QueueFactory.getDefaultQueue();
 		queue.add(TaskOptions.Builder
 			.withPayload(taskletWorkflowDeferredTask));
-
 	    }
 	    catch (Exception e)
 	    {
@@ -224,11 +217,11 @@ public class TaskletUtil
     }
 
     /**
-     * Gets tasklet object
+     * Gets tasklet object.
      * 
      * @param nodeJSON
-     *            current node in a workflow
-     * @return Tasklet object
+     *            current node in a workflow.
+     * @return Tasklet object.
      * @throws Exception
      */
     @SuppressWarnings("rawtypes")
@@ -247,19 +240,18 @@ public class TaskletUtil
     }
 
     /**
-     * Returns associated value with the key in current node
+     * Returns associated value with the key in current node.
      * 
      * @param nodeJSON
      *            current node in a workflow.
      * @param key
-     *            key to get associated value in Nodedefinition json
-     * @return the value associated with the key
+     *            key to get associated value in Nodedefinition json.
+     * @return the value associated with the key.
      * @throws Exception
      */
     public static String getNodeDefinitionValue(JSONObject nodeJSON, String key)
 	    throws Exception
     {
-
 	// Get Name
 	if (!nodeJSON.has(WORKFLOW_NODE_DEFINITION))
 	    throw new Exception("Node Definition Missing" + nodeJSON);
@@ -277,19 +269,18 @@ public class TaskletUtil
      * Gets next node id using branch key.
      * 
      * @param campaignJSON
-     *            The nodes that are connected in a workflow
+     *            The nodes that are connected in a workflow.
      * @param currentNodeJSON
-     *            The current node in a workflow
+     *            The current node in a workflow.
      * @param branch
-     *            The branch of a current node
-     * @return next node id of current node in a workflow
+     *            The branch of a current node.
+     * @return next node id of current node in a workflow.
      * @throws Exception
      */
     @SuppressWarnings("rawtypes")
     public static String getNextNodeId(JSONObject campaignJSON,
 	    JSONObject currentNodeJSON, String branch) throws Exception
     {
-
 	// Get the States
 	JSONArray states = currentNodeJSON.getJSONArray("States");
 
@@ -309,17 +300,16 @@ public class TaskletUtil
 	}
 
 	return null;
-
     }
 
     /**
-     * Gets current node in a workflow
+     * Gets current node in a workflow.
      * 
      * @param campaignJSON
-     *            Nodes that are connected in a workflow
+     *            Nodes that are connected in a workflow.
      * @param nodeId
-     *            Id of a particular node
-     * @return json object with that nodeId in a workflow
+     *            Id of a particular node.
+     * @return json object with that nodeId in a workflow.
      * @throws Exception
      */
     public static JSONObject getNodeJSON(JSONObject campaignJSON, String nodeId)
@@ -353,7 +343,6 @@ public class TaskletUtil
 	}
 
 	return null;
-
     }
 }
 

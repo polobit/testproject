@@ -6,18 +6,16 @@ import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
- * <code>Start</code> represents Start node in a workflow.It is the starting
- * node in any workflow.Start class inherits the properties of
- * {@link TaskletAdapter} class.It makes use of {@link TaskletUtil} to execute
- * next one in a loop
+ * <code>Start</code> represents Start node in a workflow. It is the starting
+ * node in any workflow. Start class inherits the properties of
+ * {@link TaskletAdapter} class. It makes use of {@link TaskletUtil} to execute
+ * next one in a loop.
  * 
  * @author Manohar
- * 
  * 
  */
 public class Start extends TaskletAdapter
 {
-
     /*
      * (non-Javadoc)
      * 
@@ -27,10 +25,8 @@ public class Start extends TaskletAdapter
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
 	    JSONObject data, JSONObject nodeJSON) throws Exception
     {
-
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		nodeJSON, "start");
     }
-
 }

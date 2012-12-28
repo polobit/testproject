@@ -10,9 +10,9 @@ import com.google.appengine.api.taskqueue.DeferredTask;
 
 /**
  * <code>CronDeferredTask</code> is the class that supports Cron with
- * DeferredTask.It runs tasklets that completes timeout period or gets
- * interrupted.It sets the namespace to old namespace.Usually SendEmail,Clicked
- * and Wait tasklets makes use of Cron in the campaign.
+ * DeferredTask. It runs tasklets that completes timeout period or gets
+ * interrupted. It sets the namespace to old namespace. Usually SendEmail,
+ * Clicked and Wait tasklets makes use of Cron in the campaign.
  * 
  * @author Manohar
  * 
@@ -20,50 +20,50 @@ import com.google.appengine.api.taskqueue.DeferredTask;
 @SuppressWarnings("serial")
 public class CronDeferredTask implements DeferredTask
 {
-
     /**
-     * Timeout or interrupt
+     * Timeout or interrupt.
      */
     String wakeupOrInterrupt;
+
     /**
-     * Custom Data
+     * Custom Data.
      */
     String customDataString;
+
     /**
-     * Json strings required for campaign
+     * Json strings required for campaign.
      */
     String campaignJSONString, dataString, subscriberJSONString,
 	    nodeJSONString;
 
     /**
-     * For namespace
+     * For namespace.
      */
     String namespace;
 
     /**
-     * Constructs {@link CronDeferredTask}
+     * Constructs a new {@link CronDeferredTask}.
      * 
      * @param namespace
-     *            Namespace
+     *            Namespace.
      * @param campaignJSONString
-     *            Campaign JSON Data
+     *            Campaign JSON Data.
      * @param dataString
-     *            Workflow data
+     *            Workflow data.
      * @param subscriberJSONString
-     *            Contact JSON data
+     *            Contact JSON data.
      * @param nodeJSONString
-     *            Current Node
+     *            Current Node.
      * @param wakeupOrInterrupt
-     *            Timeout or interrupt
+     *            Timeout or interrupt.
      * @param customDataString
-     *            CustomData
+     *            CustomData.
      */
     public CronDeferredTask(String namespace, String campaignJSONString,
 	    String dataString, String subscriberJSONString,
 	    String nodeJSONString, String wakeupOrInterrupt,
 	    String customDataString)
     {
-
 	this.campaignJSONString = campaignJSONString;
 	this.dataString = dataString;
 	this.subscriberJSONString = subscriberJSONString;
@@ -73,6 +73,11 @@ public class CronDeferredTask implements DeferredTask
 	this.namespace = namespace;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Runnable#run()
+     */
     @Override
     public void run()
     {
@@ -102,7 +107,6 @@ public class CronDeferredTask implements DeferredTask
 		    tasklet.interrupted(campaignJSON, subscriberJSON, data,
 			    nodeJSON, customData);
 	    }
-
 	}
 	catch (Exception e)
 	{

@@ -9,7 +9,7 @@ import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
- * <code>Tags</code> represents tags node in a workflow.Tags class is used to
+ * <code>Tags</code> represents tags node in a workflow. Tags class is used to
  * add or delete tags from the contact that subscribes to campaign.
  * 
  * @author Manohar
@@ -17,25 +17,26 @@ import com.campaignio.tasklets.util.TaskletUtil;
  */
 public class Tags extends TaskletAdapter
 {
-    // Fields
     /**
      * Type - Add/Delete
      */
     public static String TYPE = "type";
+
     /**
      * Type Add for adding tags
      */
     public static String ADD = "add";
+
     /**
      * Type Delete for deleting tags
      */
     public static String DELETE = "delete";
+
     /**
      * Tags that are added
      */
     public static String TAG_NAMES = "tag_names";
 
-    // Run
     /*
      * (non-Javadoc)
      * 
@@ -45,7 +46,6 @@ public class Tags extends TaskletAdapter
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
 	    JSONObject data, JSONObject nodeJSON) throws Exception
     {
-
 	// Get Tags and Type
 	String type = getStringValue(nodeJSON, subscriberJSON, data, TYPE);
 	String tagNames = getStringValue(nodeJSON, subscriberJSON, data,
