@@ -38,7 +38,7 @@ function getUrlVars() {
  * @param url
  *            To fetch collection
  * @param parseKey
- *            parses the collectio
+ *            parses the collection
  * @param callback
  *            to process select field after being created
  * @param template
@@ -192,4 +192,21 @@ function add_contact_tags(contact, newTags) {
 		contact.tags.push(newTags[index])
 	}
 	return contact;
+}
+
+/**
+ * Creates a property json object
+ * @param name
+ * @param id
+ * @param type
+ */
+function property_JSON(name, id, type) {
+    var json = {};
+
+    if (type == undefined) json.type = "SYSTEM";
+    else json.type = type;
+
+    json.name = name;
+    json.value = $('#' + id).val();
+    return json;
 }

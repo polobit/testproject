@@ -56,3 +56,15 @@ function isValidForm(form) {
 	// Return valid of invalid, to stop from saving the data
 	return $(form).valid();
 }
+
+function isNotValid(value) {
+    if (value == undefined) return true;
+    if (value.length == 0) return true;
+    return false;
+}
+
+
+function isValidField(id) {
+    var value = $('#' + id).val();
+    return !isNotValid(value);
+}
