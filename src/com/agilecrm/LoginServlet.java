@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.filter.AgileAuthFilter;
+import com.agilecrm.filter.util.RedirectUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -199,13 +201,19 @@ public class LoginServlet extends HttpServlet
 
 	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 	{
+
+	    RedirectUtil.redirectURIFromSession(request, response,
+		    AgileAuthFilter.LOGIN_RETURN_PATH_SESSION_PARAM_NAME);
+
 	    response.sendRedirect("https://" + domainUser.domain
 		    + ".agilecrm.com/");
 	    return;
 	}
 	else
 	{
-	    response.sendRedirect("/");
+	    RedirectUtil.redirectURIFromSession(request, response,
+		    AgileAuthFilter.LOGIN_RETURN_PATH_SESSION_PARAM_NAME);
+
 	    return;
 	}
 

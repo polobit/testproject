@@ -33,6 +33,7 @@ import com.google.appengine.api.NamespaceManager;
  */
 public class AgileAuthFilter implements Filter
 {
+    public static final String LOGIN_RETURN_PATH_SESSION_PARAM_NAME = "redirect_uri_on_login";
 
     @Override
     public void destroy()
@@ -70,6 +71,7 @@ public class AgileAuthFilter implements Filter
 	// If no sessions are there, redirect to login page
 	if (httpRequest.getSession(false) == null)
 	{
+	    setRedirectURI(httpRequest);
 	    httpResponse.sendRedirect("/login");
 	    return;
 	}
@@ -79,6 +81,7 @@ public class AgileAuthFilter implements Filter
 		SessionManager.AUTH_SESSION_COOKIE_NAME);
 	if (userInfo == null)
 	{
+	    setRedirectURI(httpRequest);
 	    httpResponse.sendRedirect("/login");
 	    return;
 	}
@@ -140,5 +143,11 @@ public class AgileAuthFilter implements Filter
     public void init(FilterConfig arg0) throws ServletException
     {
 	// Nothing to do
+    }
+
+    public void setRedirectURI(HttpServletRequest request)
+    {
+	request.getSession().setAttribute(LOGIN_RETURN_PATH_SESSION_PARAM_NAME,
+		"#contacts");
     }
 }

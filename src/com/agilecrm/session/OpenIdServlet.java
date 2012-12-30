@@ -30,6 +30,7 @@ import org.openid4java.discovery.DiscoveryInformation;
 import org.openid4java.message.AuthRequest;
 import org.openid4java.message.ParameterList;
 
+import com.agilecrm.filter.util.RedirectUtil;
 import com.agilecrm.session.openid.ConsumerFactory;
 import com.google.step2.AuthRequestHelper;
 import com.google.step2.AuthResponseHelper;
@@ -136,17 +137,9 @@ public class OpenIdServlet extends HttpServlet
 	    // If valid-session and Redirect URL present in session, redirect
 	    if (req.getSession(false) != null)
 	    {
-		String redirect = (String) req.getSession().getAttribute(
+		RedirectUtil.redirectURIFromSession(req, resp,
 			RETURN_PATH_SESSION_PARAM_NAME);
-		if (redirect != null)
-		{
-		    // Remove from Session
-		    req.getSession().removeAttribute(
-			    RETURN_PATH_SESSION_PARAM_NAME);
-
-		    resp.sendRedirect(redirect);
-		    return;
-		}
+		return;
 	    }
 
 	    resp.sendRedirect(homePath);
