@@ -1,8 +1,12 @@
+/**
+ * Initiates all the routers and assigns to global variable to access the routes
+ * from any where in the code.
+ */
+
 // All Routers are global
 var App_Contacts, App_Workflows, App_Deals, App_Admin_Settings, App_Calendar, App_Settings, App_Reports;
 
-$(function () 
-{
+$(function() {
 	App_Contacts = new ContactsRouter();
 	App_Workflows = new WorkflowsRouter();
 	App_Deals = new DealsRouter();
@@ -11,18 +15,28 @@ $(function ()
 	App_Calendar = new CalendarRouter();
 	App_Subscription = new SubscribeRouter();
 	App_Reports = new ReportsRouter();
-    
-	// For infinite page scrolling
+
+	// Binds an event to activate infinite page scrolling
 	Backbone.history.bind("all", currentRoute)
-    
-    Backbone.history.start();
+
+	/*
+	 * Start Backbone history a necessary step to begin monitoring hashchange
+	 * events, and dispatching routes
+	 */
+	Backbone.history.start();
 });
 
-
+// Global variable to store current route
 var Current_Route;
-function currentRoute(route)
-{
-	Current_Route =  window.location.hash.split("#")[1];
+
+/**
+ * Reads current route, from the url of the browser, splits at "#" ( current
+ * route is after "#" ), and activates infinite scrolling
+ * 
+ * @param route
+ */
+function currentRoute(route) {
+	Current_Route = window.location.hash.split("#")[1];
 	console.log("in app/js : " + Current_Route);
 	activateInfiniScroll();
 }

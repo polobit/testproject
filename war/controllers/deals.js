@@ -1,5 +1,6 @@
 /**
- * Creates backbone router for Deals/Opportunities CRU operations
+ * Creates backbone router for Deals/Opportunities create, read and update 
+ * operations
  **/
 var DealsRouter = Backbone.Router.extend({
 
@@ -10,8 +11,9 @@ var DealsRouter = Backbone.Router.extend({
         "deals-add": "dealsAdd",
         "deals/:id": "dealsDetails"
     },
+    
     /**
-     * Fetches all the opportunities and shows them as a list.Also fetches Milestones pie-chart 
+     * Fetches all the opportunities and shows them as a list. Also fetches Milestones pie-chart 
      * and Details graph if deals exist.
      *  
      */
@@ -27,8 +29,10 @@ var DealsRouter = Backbone.Router.extend({
     	this.opportunityCollectionView.collection.fetch(
         		{
         			success:function(){ 
+        				
         				// Shows Milestones Pie
         				pieMilestones();
+        				
         				// Shows deals chart
         				pieDetails();
         				}
@@ -38,15 +42,14 @@ var DealsRouter = Backbone.Router.extend({
 
         $(".active").removeClass("active");
         $("#dealsmenu").addClass("active");        
-        	
     },
+    
     /**
-     * Saves new Deal.Initializes contacts typeahead, milestone select, date-picker 
-     * and owner select list.
+     * Saves new Deal. Initializes contacts typeahead, milestone select, date-picker 
+     * and owner select list from postRenderCallback of its Base_Model_View.
      * 
      **/
     dealsAdd: function () {
-        
     	this.opportunityModelview = new Base_Model_View({
             url: 'core/api/opportunity',
             template: "opportunity-add",
@@ -71,15 +74,16 @@ var DealsRouter = Backbone.Router.extend({
     	var view = this.opportunityModelview.render();
         $('#content').html(view.el);
     },
+    
     /**
-     * Updates Deal.Initializes contacts typeahead,milestones select and
-     * owner select.
+     * Updates a deal. Initializes contacts typeahead, milestones select and
+     * owner select from postRenderCallback of its Base_Model_View.
      * 
      * @param id - Opportunity Id
      **/
     dealsDetails: function (id) {
         
-    	// Send to deals if the user refreshes it directly
+    	// Navigates to deals if the user refreshes it directly
     	if (!this.opportunityCollectionView || this.opportunityCollectionView.collection.length == 0) {
             this.navigate("deals", {
                 trigger: true
@@ -87,6 +91,7 @@ var DealsRouter = Backbone.Router.extend({
             return;
         }
 
+    	// Gets a deal from deals collection based on id
         this.opportunityCollectionView.currentDeal = this.opportunityCollectionView.collection.get(id);
 
         var view = new Base_Model_View({
@@ -98,8 +103,10 @@ var DealsRouter = Backbone.Router.extend({
 
             	// Call setupTypeAhead to get contacts
             	agile_type_ahead("relates_to", el, contacts_typeahead);
+            	
             	// Fills milestone select element
             	populateMilestones(el,undefined, App_Deals.opportunityCollectionView.currentDeal.toJSON());
+            	
             	// Fills owner select element
             	populateUsers("owners-list", el, App_Deals.opportunityCollectionView.currentDeal.toJSON(), 'owner');
             	
