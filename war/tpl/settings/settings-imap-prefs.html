@@ -1,62 +1,55 @@
 <script id="settings-imap-prefs-template" type="text/html">
-<div class='span3 well'>
-    <form id='imap-prefs-form'>
+<div class="span3 well">
+    <form id="imap-prefs-form">
         <fieldset>
-    {{#if id}}
+            {{#if id}}
             <input name="id" type="hidden" value="{{id}}" /> 
-    {{/if}}
+            {{/if}}
             <legend>IMAP</legend>
-
             <div class="control-group">
                 <label class="control-label">Email <span class="field_req">*</span></label>
                 <div class="controls">
-                    <input name="email" type="text" class="email required" placeholder="Email" value="{{email}}" autocapitalize="off"/>
+                    <input name="email" type="text" class="email required" placeholder="Email" value="{{email}}" autocapitalize="off" />
                 </div>
             </div>
-        
             <div class="control-group">
                 <label class="control-label">Server (Host) <span class="field_req">*</span></label>
                 <div class="controls">
-                    <input name="server_name" type="text" class="required" placeholder="Server name" value="{{server_name}}" autocapitalize="off"/>
+                    <input name="server_name" type="text" class="required" placeholder="Server name" value="{{server_name}}" autocapitalize="off" />
                 </div>
             </div>
-
             <div class="control-group">
                 <label class="control-label">User Name <span class="field_req">*</span></label>
                 <div class="controls">
-                    <input name="user_name" type="text" class="required" placeholder="User name" value="{{user_name}}" autocapitalize="off"/>
+                    <input name="user_name" type="text" class="required" placeholder="User name" value="{{user_name}}" autocapitalize="off" />
                 </div>
             </div>
-            
             <div class="control-group">
                 <label class="control-label">Password <span class="field_req">*</span></label>
                 <div class="controls">
-                    <input name="password" type="password" class="required" placeholder="Password" value="PASSWORD" autocapitalize="off"/>
+                    <input name="password" type="password" class="required" placeholder="Password" value="PASSWORD" autocapitalize="off" />
                 </div>
             </div>
-        
             <div class="control-group">
                 <div class="controls">
                     <label class="checkbox">
-                        <input name="is_secure" type="checkbox" value="{{is_secure}}"/>
-                        Use SSL (Secure communication)
+                    <input name="is_secure" type="checkbox" value="{{is_secure}}" />
+                    Use SSL (Secure communication)
                     </label>
                 </div>
             </div>
-        
             <div class="form-actions"> 
                 <button type="submit" class="save btn btn-primary">Save </button>
                 {{#if id}}
-                    <button class='delete btn'>Delete </button>
+                <button class="delete btn">Delete </button>
                 {{/if}}
             </div>
         </fieldset>
-    </form> 
-
+    </form>
 </div>
-<div class='clearfix'></div>
-<div class='row'>
-    <div class='container'>
+<div class="clearfix"></div>
+<div class="row">
+    <div class="container">
         Please provide either your Google or IMAP preferences. When both are provided, your gmail preferences are used.
     </div>
 </div>
