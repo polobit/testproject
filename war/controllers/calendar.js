@@ -40,6 +40,5 @@ var CalendarRouter = Backbone.Router.extend({
 		this.tasksListView.collection.fetch();
 
 		$('#tasks').html(this.tasksListView.el);
-
 	}
 });
