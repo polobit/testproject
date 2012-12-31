@@ -1,86 +1,83 @@
 <script id="invoice-detail-template" type="html/text">
-<div  class="span8" style="border:2px solid #D4D4D4">
-<div class="row" style="margin: 5% 0% 7% 4%;">
-<div class="row">
-	<div class="span4">
-    			<address>
-    			    <strong>Invox Corp.</strong><br>
-			        440 N Wolfe Road,<br>
-			        Sunnyvale, CA, 94085<br>
-		    	</address>
-	</div>
-	<div class="span3 well">
-		<table class="invoice-head" style="background-color:transparent;">
-			<tbody>
-				<tr>
-					<td class="pull-right"><strong>Customer #</strong></td>
-					<td>{{customer}}</td>
-				</tr>
-				<tr>
-					<td class="pull-right"><strong>Invoice #</strong></td>
-					<td>{{id}}</td>
-				</tr>
-				<tr>
-					<td class="pull-right"><strong>Date</strong></td>
-					<td>{{epochToHumanDate "mm-dd-yy" date}}</td>
-				</tr>
-				<tr>
-					<td class="pull-right"><strong>Period</strong></td>
-			{{#each lines.subscriptions}}
-					<td>{{epochToHumanDate "mm-dd-yy" period.start}} to {{epochToHumanDate "mm-dd-yy" period.end}}</td>
-			{{/each}}
-				</tr>
-			</tbody>
-		</table>
-	</div>
-</div>
-
-
-
-<div class="row">
-	<div class="span7">
-		<h1>Invoice<small> AgileCrm</small></h1>
-	</div>
-</div>
-<div class="row">
-	<div class="span7 well invoice-body">
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-					<th>Description</th>
-					<th>Date</th>
-					<th>Amount</th>
-				</tr>
-			</thead>
-			<tbody>
-	{{#each lines.subscriptions}}
-				<tr>
-					<td>{{plan.name}}({{plan.amount}}/{{plan.interval}})</td>
-					<td>{{epochToHumanDate "mm-dd-yyyy" period.start}} - {{epochToHumanDate "mm-dd-yyyy" period.end}}</td>
-					<td>{{amount}}</td>
-				</tr>
-	{{/each}}
-			</tbody>
-		</table>
-	</div>
-</div>
-<div class="row">
-	<div class="span5 well offset1 invoice-thank">
-		<h5 style="text-align: center;">Thank You!</h5>
-	</div>
-</div>
-		<div class="span9" style="margin-left:-5%;">
-	<div class="span2">
-		<strong>Phone:</strong> <a href="callto:855-342-4453">855-342-4453</a>
-	</div>
-	<div class="span3" style="margin-left:5%;margin-right:-3%">
-		<strong>Email:</strong> <a href="mailto:help@agilecrm.com">help@agilecrm.com</a>
-	</div>
-	<div class="span3">
-		<strong>Website:</strong> <a href="https://www.agilecrm.com" TARGET="_blank">https://www.agilecrm.com</a>
-	</div>
-</div>
-</div>
+<div class="span8" style="border:2px solid #D4D4D4">
+    <div class="row" style="margin: 5% 0% 7% 4%;">
+        <div class="row">
+            <div class="span4">
+                <address>
+                    <strong>Invox Corp.</strong><br />
+                    440 N Wolfe Road,<br />
+                    Sunnyvale, CA, 94085<br />
+                </address>
+            </div>
+            <div class="span3 well">
+                <table class="invoice-head" style="background-color:transparent;">
+                    <tbody>
+                        <tr>
+                            <td class="pull-right"><strong>Customer #</strong></td>
+                            <td>{{customer}}</td>
+                        </tr>
+                        <tr>
+                            <td class="pull-right"><strong>Invoice #</strong></td>
+                            <td>{{id}}</td>
+                        </tr>
+                        <tr>
+                            <td class="pull-right"><strong>Date</strong></td>
+                            <td>{{epochToHumanDate "mm-dd-yy" date}}</td>
+                        </tr>
+                        <tr>
+                            <td class="pull-right"><strong>Period</strong></td>
+                            {{#each lines.subscriptions}}
+                            <td>{{epochToHumanDate "mm-dd-yy" period.start}} to {{epochToHumanDate "mm-dd-yy" period.end}}</td>
+                            {{/each}}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="span7">
+                <h1>Invoice<small> AgileCrm</small></h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="span7 well invoice-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each lines.subscriptions}}
+                        <tr>
+                            <td>{{plan.name}}({{plan.amount}}/{{plan.interval}})</td>
+                            <td>{{epochToHumanDate "mm-dd-yyyy" period.start}} - {{epochToHumanDate "mm-dd-yyyy" period.end}}</td>
+                            <td>{{amount}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="span5 well offset1 invoice-thank">
+                <h5 style="text-align: center;">Thank You!</h5>
+            </div>
+        </div>
+        <div class="span9" style="margin-left:-5%;">
+            <div class="span2">
+                <strong>Phone:</strong> <a href="callto:855-342-4453">855-342-4453</a>
+            </div>
+            <div class="span3" style="margin-left:5%;margin-right:-3%">
+                <strong>Email:</strong> <a href="mailto:help@agilecrm.com">help@agilecrm.com</a>
+            </div>
+            <div class="span3">
+                <strong>Website:</strong> <a href="https://www.agilecrm.com" TARGET="_blank">https://www.agilecrm.com</a>
+            </div>
+        </div>
+    </div>
 </div>
 </div>
 </script>

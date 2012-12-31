@@ -1,43 +1,33 @@
 <script id="campaigns-collection-template" type="text/html">
- 	</br>
-	<div class="page-header">
-   <h2>List of Workflows</h2>
-   </div>
-	<table class="table table-striped" >
-		<thead>
-    		<tr>
-      			<th>Message</th>
-				<th>Time</th>
-    		</tr>
-  		</thead>
-  
- 	 	<tbody id="campaigns-model-list">
-  		</tbody>
-  
-	</table>
-
-	<div class="right">
-		<div class="span3  enroll-succes">
-						
-		</div>
-	</div><br/>
-
-	<div class="right add-campaign">
-		<select class="campaignSelect" id='campaignSelect'  name="campaignSelect">
-  			<option class="emailSelectOptions" value="">Select..</option>
-		</select>
-		<a href="#" class="btn" id="add-selected-campaign" style="margin-left: 10px; margin-bottom:9px">Add</a>	
-		<span class="save-status"></span>
-	</div>
-
+<br>
+<div class="page-header">
+    <h2>List of Workflows</h2>
+</div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Message</th>
+            <th>Time</th>
+        </tr>
+    </thead>
+    <tbody id="campaigns-model-list"></tbody>
+</table>
+<div class="right">
+    <div class="span3 enroll-succes"></div>
+</div>
+<br>
+<div class="right add-campaign">
+    <select class="campaignSelect" id='campaignSelect' name="campaignSelect">
+        <option class="emailSelectOptions" value="">
+            Select..
+        </option>
+    </select>
+    <a class="btn" href="#" id="add-selected-campaign" name="add-selected-campaign" style="margin-left: 10px; margin-bottom:9px">Add</a>
+</div>
 </script>
 
 <script id="campaigns-model-template" type="text/html">
-
-
-  <td>{{getRequiredLog logs "m"}}</td>
-  <td>{{getRequiredLog logs "t"}}</td>
-	
-<br/>
-	
+    <td>{{getRequiredLog logs "m"}}</td>
+    <td>{{getRequiredLog logs "t"}}</td>
+    <br/>
 </script>

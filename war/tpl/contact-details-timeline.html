@@ -1,75 +1,65 @@
- <script id="timeline-template" type="text/x-handlebars-template">
-    <div class="item post">
-      <div class="inner">
+<script id="timeline-template" type="text/x-handlebars-template">
+<div class="item post">
+    <div class="inner">
+        {{#if_entity "note"}}
+            <div class="timestamp">{{created_time}}</div>
+            <div class="title"><h3><span><a><i class="icon-list-alt"></i></a></span> Note</h3></div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body">
+                <div class="text">{{subject}}</div>
+                <div class="text">{{description}}</div>
+            </div>
+        {{/if_entity}}
 
-		{{#if_entity "note"}}
+        {{#if_entity "task"}}
+            <div class="timestamp">{{created_time}}</div>
+            <div class="title"><h3><span><a><i class="icon-tasks"></i></a></span> Task</h3></div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body">
+                <div class="caption" style="margin-top:-8px">({{type}})</div>         
+                <div class="text">{{subject}}</div>
+            </div>
+        {{/if_entity}}
 
-        <div class="timestamp">{{created_time}}</div>
-        <div class="title"><h3><span><a><i class="icon-list-alt"></i></a></span> Note</h3></div>
-        <div class="date">{{epochToTaskDate created_time}}</div>
-        <div class="body">
-            <div class="text">{{subject}}</div>
-            <div class="text">{{description}}</div>
-        </div>
-		
-		{{/if_entity}}
+        {{#if_entity "deal"}}
+            <div class="timestamp">{{created_time}}</div>
+            <div class="title"><h3><span><a><i class="icon-money"></i></a></span> Deal</h3></div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body">
+                <div class="text">{{name}}</div>
+                <div class="text">{{description}}</div>
+            </div>
+        {{/if_entity}}
 
-		{{#if_entity "task"}}
+        {{#if_entity "m"}}
+            <div class="timestamp">{{t}}</div>
+            <div class="title"><h3><span><a><i class="icon-inbox"></i></a></span> Campaign Logs</h3></div>
+            <div class="date">{{epochToTaskDate t}}</div>
+            <div class="body">
+                <div class="text" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden">{{tl_log_string m}}
+                    <div class="right"><a href="#" id="tl-log-popover"><i class="icon-plus"></i></a></div>
+                </div>        
+            </div>
+        {{/if_entity}}
 
-        <div class="timestamp">{{created_time}}</div>
-        <div class="title"><h3><span><a><i class="icon-tasks"></i></a></span> Task</h3></div>
-        <div class="date">{{epochToTaskDate created_time}}</div>
-        <div class="body">
-			<div class="caption" style="margin-top:-8px">({{type}})</div>         
-            <div class="text">{{subject}}</div>
-        </div>
-		
-		{{/if_entity}}
-
-		{{#if_entity "deal"}}
-
-        <div class="timestamp">{{created_time}}</div>
-        <div class="title"><h3><span><a><i class="icon-money"></i></a></span> Deal</h3></div>
-        <div class="date">{{epochToTaskDate created_time}}</div>
-        <div class="body">
-            <div class="text">{{name}}</div>
-            <div class="text">{{description}}</div>
-        </div>
-		
-		{{/if_entity}}
-
-		{{#if_entity "m"}}
-
-        <div class="timestamp">{{t}}</div>
-        <div class="title"><h3><span><a><i class="icon-inbox"></i></a></span> Campaign Logs</h3></div>
-        <div class="date">{{epochToTaskDate t}}</div>
-        <div class="body">
-            <div class="text" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden">{{tl_log_string m}}
-				<div class="right"><a href="#" id="tl-log-popover"><i class="icon-plus"></i></a></div>
-			</div>        
-        </div>
-		
-		{{/if_entity}}
-
-		{{#if_entity "date"}}
-
-        <div class="timestamp">{{date_secs}}</div>
-        <div class="title"><h3><span><a><i class="icon-envelope"></i></a></span> Mail</h3></div>
-        <div class="date">{{epochToTaskDate date_secs}}</div>
-        <div class="body">
-			<div class="caption"><b>From:</b></br> {{from}}</div>
-			<div class="caption" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover"><b>To:</b></br> {{to}}
+        {{#if_entity "date"}}
+            <div class="timestamp">{{date_secs}}</div>
+            <div class="title"><h3><span><a><i class="icon-envelope"></i></a></span> Mail</h3></div>
+            <div class="date">{{epochToTaskDate date_secs}}</div>
+            <div class="body">
+                <div class="caption"><b>From:</b></br> {{from}}</div>
+                <div class="caption" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover"><b>To:</b></br> {{to}}
+                </div>
+            
+            {{#if message}}
+                <div class="text" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>Message:</b></br> {{message}}
+                    <div class="right"><a href="#" id="tl-mail-popover"><i class="icon-plus"></i></a></div>
+                </div> 
+            {{/if}}       
+            
 			</div>
-			
-			{{#if message}}
-            <div class="text" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>Message:</b></br> {{message}}
-				<div class="right"><a href="#" id="tl-mail-popover"><i class="icon-plus"></i></a></div>
-			</div> 
-			{{/if}}       
-        </div>
-		
-		{{/if_entity}}
-
-      </div>
-    </div>
-  </script>
+        
+        {{/if_entity}}
+  </div>
+</div>
+</script>

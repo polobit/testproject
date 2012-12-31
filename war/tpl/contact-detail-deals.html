@@ -1,46 +1,42 @@
 <script id="deals-collection-template" type="text/html">
-		</br>
-		<h1>List of Deals</h1>
-
-		<table class="table table-striped showCheckboxes" url="core/api/contacts/deals/bulk">
-			<thead>
-    			<tr>
-  					<th>Opportunity</th>
-					<th>Value</th>
-  					<th>Milestone</th>
-  					<th>Close Date</th>
-  					<th>Owner</th>
-    			</tr>
-  			</thead>  
-  			<tbody id='deals-model-list'>
-  			</tbody>
-		</table>
-
+    <br>
+<h1>List of Deals</h1>
+<table class="table table-striped showCheckboxes">
+    <thead>
+        <tr>
+            <th>Opportunity</th>
+            <th>Value</th>
+            <th>Milestone</th>
+            <th>Close Date</th>
+            <th>Owner</th>
+        </tr>
+    </thead>
+    <tbody id='deals-model-list'></tbody>
+</table>
 </script>
 
-<script id="deals-model-template" type="text/html">
-<td leads='{{id}}' class='leads'>
-<b>Name:</b>{{name}}<br/>
-<b>Related to:</b>
-{{#each contacts}}
-{{#if id}}
-	<div style='height:auto;display:inline-block;vertical-align:text-top;'>
- 	  <a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
-	</div>
-{{/if}}
-{{/each}}<br/>
-<b>Description:</b>{{description}}
-</td>  	
-
-	<td>{{#if owner.currency}}({{currencySymbol owner.currency}}){{else}}($){{/if}}{{expected_value}}</td>
-	<td>{{milestone}}({{probability}}%) </td>
-	<td>{{epochToHumanDate "mm-dd-yy" close_date}}</td>
-	<td>
+<script id="deals-model-template" type="text/html"> 
+	<td leads='{{id}}' class='leads'>
+    <b>Name:</b>{{name}}<br/>
+    <b>Related to:</b>
+    {{#each contacts}}
+        {{#if id}}
+            <div style='height:auto;display:inline-block;vertical-align:text-top;'>
+                <a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+            </div>
+        {{/if}}
+    {{/each}}<br/>
+    <b>Description:</b>{{description}}
+    </td>   
+    <td>{{#if owner.currency}}({{currencySymbol owner.currency}}){{else}}($){{/if}}{{expected_value}}</td>
+    <td>{{milestone}}({{probability}}%) </td>
+    <td>{{epochToHumanDate "mm-dd-yy" close_date}}</td>
+    <td>
        <div style='display:inline;padding-right:10px;height:auto;'>
-		<img src="{{pic}}" width='40px' height='40px'>
-	    </div> 
+            <img src="{{pic}}" width='40px' height='40px'>
+        </div> 
         <div style='height:auto;display:inline-block;vertical-align:text-top;'>
-		<b> {{owner.name}}</b>
-	    </div>
+            <b> {{owner.name}}</b>
+        </div>
     </td>
 </script>

@@ -1,60 +1,55 @@
 <script id = "contacts-custom-view-image-template" type="text/html">
-	<td class='data' data='{{id}}'>
-		<div style='display:inline;padding-right:10px;height:auto;'>
-			<img src="{{gravatarurl properties 40}}" width='40px' height='40px'>
-		</div>
-		<div style='height:auto;display:inline-block;vertical-align:text-top;'>
-			<b>
-				{{getPropertyValue properties "first_name"}}
-				{{getPropertyValue properties "last_name"}}
-			</b>
-			<br/>
-			{{getPropertyValue properties "email"}}
-		</div>
+	<td class="data" data="{{id}}">
+    	<div style="display:inline;padding-right:10px;height:auto;">
+        	<img src="{{gravatarurl properties 40}}" width="40px" height="40px" />
+    	</div>
+    	<div style="height:auto;display:inline-block;vertical-align:text-top;">
+        	<b>
+        	{{getPropertyValue properties "first_name"}}
+        	{{getPropertyValue properties "last_name"}}
+        	</b>
+        	<br />
+        	{{getPropertyValue properties "email"}}
+    	</div>
 	</td>
 </script>
 
 <script id = "contacts-custom-view-first_name-template" type="text/html">
-	<td class='data' data='{{id}}'>
-		<b>
-		{{getPropertyValue properties "first_name"}}
-		</b>
+	<td class="data" data="{{id}}">
+    	<b>
+    	{{getPropertyValue properties "first_name"}}
+    	</b>
 	</td>
 </script>
-
 
 <script id = "contacts-custom-view-last_name-template" type="text/html">
-	<td class='data' data='{{id}}'>
-		<b>
-			{{getPropertyValue properties "last_name"}}
-		</b>
+	<td class="data" data="{{id}}">
+    	<b>
+    	{{getPropertyValue properties "last_name"}}
+    	</b>
 	</td>
 </script>
-
 
 <script id = "contacts-custom-view-email-template" type="text/html">
-	<td class='data' data='{{id}}'>
-		{{getPropertyValue properties "email"}}
+	<td class="data" data="{{id}}">
+    	{{getPropertyValue properties "email"}}
 	</td>
 </script>
-
 
 <script id = "contacts-custom-view-company-template" type="text/html">
-	<td class='data' data='{{id}}'>
-		{{getPropertyValue properties "title"}}<br/>
-		{{getPropertyValue properties "company"}}
+	<td class="data" data="{{id}}">
+    	{{getPropertyValue properties "email"}}
 	</td>
 </script>
 
-
 <script id = "contacts-custom-view-tags-template" type="text/html">
-  	<td class='data' data='{{id}}'> 
-		{{#each tags}}
-			<b>
-				<span class="label">{{this}}</span>
-			</b>
-		{{/each}}
-  </td>
+	<td class="data" data="{{id}}"> 
+    	{{#each tags}}
+    	<b>
+    	<span class="label">{{this}}</span>
+    	</b>
+    	{{/each}}
+	</td>
 </script>
 
 <script id = "contacts-custom-view-created_time-template" type="text/html">

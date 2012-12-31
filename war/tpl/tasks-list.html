@@ -1,49 +1,44 @@
  <script id="tasks-list-collection-template" type="text/html">
- 	</br>
+ </br>
 <div class="row">
-	<div class="span12">
- 
-		<div class="page-header">
-    		<h1>List of Tasks</h1>
-		</div>
-
-	</div>
+    <div class="span12">
+        <div class="page-header">
+            <h1>List of Tasks</h1>
+        </div>
+    </div>
 </div>
 <div class="data-block span9">
-	  <div class="data-container">
-	<table class="table table-striped showCheckboxes" url="core/api/tasks/bulk">
-		<thead>
-    		<tr>
-      			<th>Due date</th>
-				<th>Subject</th>
-				<th>Type</th>
-				<th>Priority type</th>
-				<th>Is complete</th>
-    		</tr>
-  		</thead>
-  
- 	 	<tbody id="tasks-list-model-list">
-  		</tbody>
-  
-	</table>
-	</div>
+    <div class="data-container">
+        <table class="table table-striped showCheckboxes" url="core/api/tasks/bulk">
+            <thead>
+                <tr>
+                    <th>Due date</th>
+                    <th>Subject</th>
+                    <th>Type</th>
+                    <th>Priority type</th>
+                    <th>Is complete</th>
+                </tr>
+            </thead>
+            <tbody id="tasks-list-model-list">
+            </tbody>
+        </table>
+    </div>
 </div>
 </script>
 
 <script id="tasks-list-model-template" type="text/html">
-
-    {{#if is_complete}}
-  	<td style="text-decoration:line-through">{{epochToTaskDate due}}</td>
-  	<td style="text-decoration:line-through">{{subject}}</td>
+{{#if is_complete}}
+	<td style="text-decoration:line-through">{{epochToTaskDate due}}</td>
+	<td style="text-decoration:line-through">{{subject}}</td>
 	<td style="text-decoration:line-through">{{priority_type}}</td>
 	<td style="text-decoration:line-through">{{type}}</td>
-	<td style="text-decoration:line-through">{{task_status is_complete}}</td><br/>
-	
-    {{else}}
+	<td style="text-decoration:line-through">{{task_status is_complete}}</td>
+<br />
+{{else}}
 	<td>{{epochToTaskDate due}}</td>
-  	<td>{{subject}}</td>
+	<td>{{subject}}</td>
 	<td>{{priority_type}}</td>
 	<td>{{type}}</td>
-    <td>{{task_status is_complete}}</td>
-	{{/if}}
+	<td>{{task_status is_complete}}</td>
+{{/if}}
 </script>

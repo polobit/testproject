@@ -1,138 +1,126 @@
 <script id="import-contacts-template" type="text/html">
-<div class="row-fluid" >
+<div class="row-fluid">
     <div class="span12">
-          <div class="page-header">
+        <div class="page-header">
             <h1>Import Contacts <small>Upload file</small>	</h1>
-          </div>
-	      <div id='file-upload-div'></div>
-   </div>
+        </div>
+        <div id="file-upload-div"></div>
+    </div>
 </div>
 </script>
 
 <script id="import-contacts-2-template" type="text/html">
 <form id="import-contact-tags">
-<div class="control-group">
-   	<label class="control-label">Tags (Optional)</label>
-		<div class="pull-left" style="margin-top:3px">
-			<ul name="tags" class= "tagsinput tags"></ul>
-		</div>
-	<div class="controls">
-	<input id ='tags-import' class="tags-typeahead" name="tags" type="text"/>
-	</div>
-</div>
+    <div class="control-group">
+        <label class="control-label">Tags (Optional)</label>
+        <div class="pull-left" style="margin-top:3px">
+            <ul name="tags" class="tagsinput tags"></ul>
+        </div>
+        <div class="controls">
+            <input id="tags-import" class="tags-typeahead" name="tags" type="text" />
+        </div>
+    </div>
 </form>
-	<br/>		
-	
-	<div class="row">
-		<div class="span5">
-			<div class="alert alert-error fname-not-found-error" style="display:none">
-				<a class="close" data-dismiss="alert" href="#">×</a> 
-				First Name is mandatory. Please select first name.  
-			</div>
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="span5">
-			<div class="alert alert-error lname-not-found-error" style="display:none">
-				<a class="close" data-dismiss="alert" href="#">×</a> 
-				Last Name is mandatory. Please select last name.  
-			</div>
-		</div>
-	</div>
-
-    
-	<div class="row">
-		<div class="span5">
-			<div class="alert alert-error fname-duplicate-error" style="display:none">
-				<a class="close" data-dismiss="alert" href="#">×</a>
-				You have assigned First Name to more than one element. 
-				Please ensure that first name is assigned to only one element. 
-			</div> 
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="span5">
-			<div class="alert alert-error lname-duplicate-error" style="display:none">
-				<a class="close" data-dismiss="alert" href="#">×</a>
-				You have assigned Last Name to more than one element. 
-				Please ensure that last name is assigned to only one element. 
-			</div> 
-		</div>
-	</div>
-	
-
-	<table class='table table-bordered table-striped'>
-
-	 	<thead>
-			<tr>
-	 			{{#eachkeys data.[0]}}
-	 			<th>
-	 				<select class='import-select'>
-						<option value="first_name">First Name</option>
-						<option value="last_name">Last Name</option>
-						<option value="company">Company</option>
-						<option value="tag">Tag</option>
-						<option value="jobtitle">Title</option>
-  						<optgroup label="Email">
-							<option value="email">-</option>
-							<option value="home-email">Home</option>
-    						<option value="work-email">Work</option>
-  						</optgroup>
-  						<optgroup label="Phone">
-							<option value="home-phone">Home</option>
-    						<option value="work-phone">Work</option>	
-							<option value="mobile-phone">Mobile</option>
-							<option value="main-phone">Main</option>
-							<option value="home-fax">Home fax</option>
-							<option value="work-fax">Work fax</option>
-							<option value="other">Other</option>
-  						</optgroup>
-    						<optgroup label="Website">
-    						<option value="URL-WEBSITE">Website</option>
-							<option value="SKYPE-WEBSITE">Skype</option>
-							<option value="TWITTER-WEBSITE">Twitter</option>
-							<option value="LINKED_IN-WEBSITE">LinkedIn</option>
-							<option value="FACEBOOK-WEBSITE">Facebook</option>
-							<option value="XING-WEBSITE">Xing</option>
-							<option value="FEED-WEBSITE">Blog</option>
-							<option value="GOOGLE_PLUS-WEBSITE">Google+</option>
-							<option value="FLICKR-WEBSITE">Flickr</option>
-							<option value="GITHUB-WEBSITE">GitHub</option>
-							<option value="YOUTUBE-WEBSITE">YouTube</option>
-  						</optgroup>
-  						<optgroup label="Websites">
-							<option value="home-websites">Home</option>
-    						<option value="work-websites">Work</option>	
-  						</optgroup>
-  						<optgroup label="Address">
-    						<option value="home-address">Home</option>
-							<option value="postal-address">Postal</option>
-							<option value="office-address">Office</option>
-  							<option value="city">City</option>
-							<option value="state">State</option>
-							<option value="zip">Zip</option>
-							<option value="country">Country</option>
-                        </optgroup>
-					</select>
-				 </th>
-	 			{{/eachkeys}}
-	 		</tr>
-	 	</thead>
-
-	 	<tbody id='import-tbody'>
-    
-     	{{#each data}}
-    		<tr>
-    			{{#eachkeys this}}
-    				<td>{{this.value}}</td>
-    			{{/eachkeys}}
-		    </tr>
-	    {{/each}}
-
-	</table>
-
-	<a class='btn btn-primary' id='import-contacts'>Import</a>
-    <a class="btn" id="import-cancel" style='margin-left:2px'>Cancel</a>
+<br />		
+<div class="row">
+    <div class="span5">
+        <div class="alert alert-error fname-not-found-error" style="display:none">
+            <a class="close" data-dismiss="alert" href="#">×</a> 
+            First Name is mandatory. Please select first name.  
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="span5">
+        <div class="alert alert-error lname-not-found-error" style="display:none">
+            <a class="close" data-dismiss="alert" href="#">×</a> 
+            Last Name is mandatory. Please select last name.  
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="span5">
+        <div class="alert alert-error fname-duplicate-error" style="display:none">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+            You have assigned First Name to more than one element. 
+            Please ensure that first name is assigned to only one element. 
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="span5">
+        <div class="alert alert-error lname-duplicate-error" style="display:none">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+            You have assigned Last Name to more than one element. 
+            Please ensure that last name is assigned to only one element. 
+        </div>
+    </div>
+</div>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            {{#eachkeys data.[0]}}
+            <th>
+                <select class="import-select">
+                    <option value="first_name">First Name</option>
+                    <option value="last_name">Last Name</option>
+                    <option value="company">Company</option>
+                    <option value="tag">Tag</option>
+                    <option value="jobtitle">Title</option>
+                    <optgroup label="Email">
+                        <option value="email">-</option>
+                        <option value="home-email">Home</option>
+                        <option value="work-email">Work</option>
+                    </optgroup>
+                    <optgroup label="Phone">
+                        <option value="home-phone">Home</option>
+                        <option value="work-phone">Work</option>
+                        <option value="mobile-phone">Mobile</option>
+                        <option value="main-phone">Main</option>
+                        <option value="home-fax">Home fax</option>
+                        <option value="work-fax">Work fax</option>
+                        <option value="other">Other</option>
+                    </optgroup>
+                    <optgroup label="Website">
+                        <option value="URL-WEBSITE">Website</option>
+                        <option value="SKYPE-WEBSITE">Skype</option>
+                        <option value="TWITTER-WEBSITE">Twitter</option>
+                        <option value="LINKED_IN-WEBSITE">LinkedIn</option>
+                        <option value="FACEBOOK-WEBSITE">Facebook</option>
+                        <option value="XING-WEBSITE">Xing</option>
+                        <option value="FEED-WEBSITE">Blog</option>
+                        <option value="GOOGLE_PLUS-WEBSITE">Google+</option>
+                        <option value="FLICKR-WEBSITE">Flickr</option>
+                        <option value="GITHUB-WEBSITE">GitHub</option>
+                        <option value="YOUTUBE-WEBSITE">YouTube</option>
+                    </optgroup>
+                    <optgroup label="Websites">
+                        <option value="home-websites">Home</option>
+                        <option value="work-websites">Work</option>
+                    </optgroup>
+                    <optgroup label="Address">
+                        <option value="home-address">Home</option>
+                        <option value="postal-address">Postal</option>
+                        <option value="office-address">Office</option>
+                        <option value="city">City</option>
+                        <option value="state">State</option>
+                        <option value="zip">Zip</option>
+                        <option value="country">Country</option>
+                    </optgroup>
+                </select>
+            </th>
+            {{/eachkeys}}
+        </tr>
+    </thead>
+    <tbody id="import-tbody">
+        {{#each data}}
+        <tr>
+            {{#eachkeys this}}
+            <td>{{this.value}}</td>
+            {{/eachkeys}}
+        </tr>
+        {{/each}}
+</table>
+<a class="btn btn-primary" id="import-contacts">Import</a>
+<a class="btn" id="import-cancel" style="margin-left:2px">Cancel</a>
 </script>

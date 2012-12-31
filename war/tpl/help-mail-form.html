@@ -1,43 +1,43 @@
 <script id="help-mail-form-template" type="text/html">
-	<div class="span9">
-		<div class="well">
-			<form id='helpmailForm' name="helpmailForm" class="form-horizontal">
-				<fieldset>
-					<legend>Mail For Help</legend>
-					<div class="control-group">
-                    	<label class="control-label">From <span class="field_req">*</span></label>
-						<div class="controls">
-							<input type="text" class="span4 required email" placeholder="Your Email Id" id="from" name="from" />
-						</div>
-					</div>
-
-					<div class="control-group">
-                    	<label class="control-label">To</label>
-						<div class="controls ">
-                            <select name="to"><option value="naresh@faxdesk.com">Admin</option><option value="sukanya@invox.com">Support</option><option value="praveen@invox.com">Sales</option></select>
-						</div>
-					</div>
-					
-					<div class="control-group">
-                    	<label class="control-label">Subject <span class="field_req">*</span></label>
-						<div class="controls">
-							<input type="text" class="span4 required" name="subject" id="subject" placeholder="About" />
-						</div>
-					</div>
-					
-					<div class="control-group">
-                    	<label class="control-label">Message <span class="field_req">*</span></label>
-						<div class="controls">
-							<textarea class="span4 required" rows="8" name="body" id="body" placeholder="Description"></textarea>
-						</div>
-					</div>					
-				
-					<div class="form-actions">  
-                        <a href="#" id="helpMail" class="btn btn-primary">Send</a>        
-						<a href="#contacts" class="btn">Close</a>&nbsp;&nbsp;<span id="msg"></span> 
-					</div>
-				</fieldset>
-			</form>
-		</div>
-	</div>
+<div class="span9">
+    <div class="well">
+        <form id="helpmailForm" name="helpmailForm" class="form-horizontal">
+            <fieldset>
+                <legend>Mail For Help</legend>
+                <div class="control-group">
+                    <label class="control-label">From <span class="field_req">*</span></label>
+                    <div class="controls">
+                        <input type="text" class="span4 required email" placeholder="Your Email Id" id="from" name="from" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">To</label>
+                    <div class="controls ">
+                        <select name="to">
+                            <option value="naresh@faxdesk.com">Admin</option>
+                            <option value="sukanya@invox.com">Support</option>
+                            <option value="praveen@invox.com">Sales</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Subject <span class="field_req">*</span></label>
+                    <div class="controls">
+                        <input type="text" class="span4 required" name="subject" id="subject" placeholder="About" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Message <span class="field_req">*</span></label>
+                    <div class="controls">
+                        <textarea class="span4 required" rows="8" name="body" id="body" placeholder="Description"></textarea>
+                    </div>
+                </div>
+                <div class="form-actions">  
+                    <a href="#" id="helpMail" class="btn btn-primary">Send</a>        
+                    <a href="#contacts" class="btn">Close</a>&nbsp;&nbsp;<span id="msg"></span> 
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
 </script>

@@ -1,77 +1,71 @@
 <!-- New (Person) Modal views -->
-	<div class="modal hide fade" id="personModal">
-		<div class="modal-header">
-			<button class="close" data-dismiss="modal">x</button>
-			<h3><i class='icon-plus-sign'/></i> Add Contact</h3>
-		</div>
-		<div class="modal-body agile-modal-body">
-			<form id='personForm' name="personForm" method="post">
-			  <fieldset>
-				<div class="control-group">
-                 	<label class="control-label"><b>Name:</b> <span class="field_req">*</span></label>
-					<div class="control-group">
-					 <span class="controls">
-					   <input name="first_name" type="text" class="required" id="fname" placeholder="First name" />
-					 </span>
-					</div>
-				   <div class="control-group">
-				    <span class="controls">
-					   <input name="last_name" class="required" type="text"	id="lname" placeholder="Last name" />
-					</span>
-				   </div>
-			   </div>
-				<div class="control-group">
-                   	<label class="control-label"><b>Email:</b> </label>
-					<div class="controls">
-						 <span><input name="email" class="email" type="text" id="email" placeholder="Email" /></span>
-						 <span id="pic"  style="padding-left:20px;display:none;"></span>
-					</div>
-				</div>
-				
-				<div class="control-group">
-                   	<label class="control-label"><b>Company:</b></label>
-					<div class="controls">
-						<input name="company" type="text" id="contact_company" placeholder="Company" />
-					</div>
-				</div>
-				<div class="control-group">
-                   	<label class="control-label"><b>Job Description:</b></label>
-					<div class="controls">
-						<input name="title" type="text" id="job_title" placeholder="Job title" />
-					</div>
-				</div>
-				
-				<div class="row">
-					<div class="span5  duplicate-email">
-					
-					</div>
-				</div>
-				
-				<div class="control-group">
-                   	<label class="control-label"><b>Tags:</b> </label>
-                   	<div class="pull-left">
-						<ul name="tags" class= "tagsinput tags"></ul>
-					</div>
-					<div class="controls">
-						 <input name="tags" type="text" id="tags-new-person" class="tags-typeahead"/>
-					</div>
-				</div>	
-				<div class="control-group">                    	
-					<div class="controls">
-						<span style="display:inline;"><i class='icon-arrow-right'></i></span>
-						<a href="#import" data-dismiss="modal" id="import-link"> Click here to import multiple contacts from a file</a>
-					</div>	
-				</div>						
-			</fieldset>
-		  </form>
-		</div>
-		<div class="modal-footer">
-			<a href="#continue-contact" class="btn" id='continue-contact'>Continue
-				Editing</a> <a href="#" class="save btn btn-primary" id="person_validate">Save
-				Changes</a>
-				<span class="save-status"></span>
-		</div>
-
-	</div>
-	<!-- End of Modal views -->
-	
+<div class="modal hide fade" id="personModal">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3><i class="icon-plus-sign"></i> Add Contact</h3>
+    </div>
+    <div class="modal-body agile-modal-body">
+        <form id="personForm" name="personForm" method="post">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label"><b>Name:</b> <span class="field_req">*</span></label>
+                    <div class="control-group">
+                        <span class="controls">
+                        <input name="first_name" type="text" class="required" id="fname" placeholder="First name" />
+                        </span>
+                    </div>
+                    <div class="control-group">
+                        <span class="controls">
+                        <input name="last_name" class="required" type="text" id="lname" placeholder="Last name" />
+                        </span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label"><b>Email:</b> </label>
+                    <div class="controls">
+                        <span><input name="email" class="email" type="text" id="email" placeholder="Email" /></span>
+                        <span id="pic" style="padding-left:20px;display:none;"></span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label"><b>Company:</b></label>
+                    <div class="controls">
+                        <input name="company" type="text" id="contact_company" placeholder="Company" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label"><b>Job Description:</b></label>
+                    <div class="controls">
+                        <input name="title" type="text" id="job_title" placeholder="Job title" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="span5  duplicate-email">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label"><b>Tags:</b> </label>
+                    <div class="pull-left">
+                        <ul name="tags" class="tagsinput tags"></ul>
+                    </div>
+                    <div class="controls">
+                        <input name="tags" type="text" id="tags-new-person" class="tags-typeahead" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <span style="display:inline;"><i class="icon-arrow-right"></i></span>
+                        <a href="#import" data-dismiss="modal" id="import-link"> Click here to import multiple contacts from a file</a>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#continue-contact" class="btn" id="continue-contact">Continue
+        Editing</a> <a href="#" class="save btn btn-primary" id="person_validate">Save
+        Changes</a>
+        <span class="save-status"></span>
+    </div>
+</div>
+<!-- End of Modal views -->

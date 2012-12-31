@@ -1,100 +1,90 @@
 <script id="trigger-add-template" type="text/html">
-
-<div class='row'>
-	<div class='span12'>
-	
-    <div class="page-header">
-		{{#if id}}
-          <h1>Edit Trigger</h1>
-          {{else}}
-          <h1>New Trigger</h1>
-        {{/if}}
-    </div>
-    <div class="span8">
-		<div class="well">
-			<form id='addTriggerForm' name="addTriggerForm" class="form-horizontal">
-				<fieldset>
-					
-                    {{#if id}}
-                    <legend>Edit Trigger</legend>
-					<input name="id" type="hidden" value="{{id}}"/>
-                    {{else}}
-                     <legend>Add Trigger</legend>
-                    {{/if}} 		
-					<div class="control-group">
-                    	<label class="control-label">Name <span class="field_req">*</span></label>
-						<div class="controls">
-				    <input type="text" id="name" class="required" name="name" />
-						</div>
-					</div>
-                    
-                    
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            {{#if id}}
+            <h1>Edit Trigger</h1>
+            {{else}}
+            <h1>New Trigger</h1>
+            {{/if}}
+        </div>
+        <div class="span8">
+            <div class="well">
+                <form id="addTriggerForm" name="addTriggerForm" class="form-horizontal">
+                    <fieldset>
+                        {{#if id}}
+                        <legend>Edit Trigger</legend>
+                        <input name="id" type="hidden" value="{{id}}" />
+                        {{else}}
+                        <legend>Add Trigger</legend>
+                        {{/if}} 		
                         <div class="control-group">
-                    	 <div id="LHS" name="LHS">
-                       <label class="control-label">Condition  <span class="field_req">*</span></label>
-                         <div class="controls">
-                              <select id="trigger-type" name="type" class="required">
-                              <option></option>
-                              <option value="TAG_IS_ADDED">Tag is added</option>
-                              <option value="TAG_IS_DELETED">Tag is deleted</option>
-                              <option value="CONTACT_IS_ADDED">Contact is added</option>
-                              <option value="DEAL_IS_ADDED">Deal is added</option>
-                              <option value="DEAL_IS_DELETED">Deal is deleted</option>
-                              <option value="ADD_SCORE" id="add-score">Add score</option>
-                               </select>
-                             </div>
-                           </div>
-                       </div>
-                   
-                       
-                       <div class="control-group">
-                        <div id="RHS" name="RHS">
-                    	<label class="control-label TAG_IS_ADDED TAG_IS_DELETED ADD_SCORE ">Value  <span class="field_req">*</span></label>
+                            <label class="control-label">Name <span class="field_req">*</span></label>
                             <div class="controls">
-                               <div class="pull-left">
-									<ul class= "tagsinput tags" id="tags-ul" name="custom_tags">
-								{{#each custom_tags}}
-									<li class="tag" style="display: inline-block;" data="{{this}}">{{this}}<a class="close" id="remove_tag">&times</a></li>
-								{{/each}}
-							    </ul>
-						        </div>
-                             <input type="text" id="addTags" name="custom_tags" class="tags-typeahead span2 TAG_IS_ADDED TAG_IS_DELETED" style="margin-bottom: -1px" placeholder="Enter tags"/>
-                         
-                                   {{#if custom_score}}
-										<input type="text" value="{{this}}" id="add-score-value" name="custom_score" class="ADD_SCORE required">
-									{{else}}
-										<input type="text" value="50" id="add-score-value" name="custom_score" class="ADD_SCORE required">
-                                 {{/if}}
-                            
-							</div>
-						</div>
-				    </div>
-					<div class="control-group">
-                    	<label class="control-label">Campaign  <span class="field_req">*</span></label>
-						<div class="controls">
-							    <select id="campaign-select" name="campaign_id" class="required">
-                                <option value="">Select...</option>
-                               </select>
-						</div>
-					</div>
-					
-					<div class="form-actions">          
-				      <a href="#triggers" id="trigger-save" class="save btn btn-primary">Save</a>
-                      <a href="#triggers"  id="cancel" class="btn">Cancel</a> 
-					</div>
-				</fieldset>
-			</form>
-		</div>
-</div>
-
-<div class="span3">
-   <div class="well">
-     <h3>
-    Triggers
-   </h3><br/>   
-   <p> Give your trigger a name and choose a condition to be satisfied. Immediately link your trigger to the appropriate campaign, for an action to follow.</p>
-   </div>
-</div>
-</div>
+                                <input type="text" id="name" class="required" name="name" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div id="LHS" name="LHS">
+                                <label class="control-label">Condition  <span class="field_req">*</span></label>
+                                <div class="controls">
+                                    <select id="trigger-type" name="type" class="required">
+                                        <option></option>
+                                        <option value="TAG_IS_ADDED">Tag is added</option>
+                                        <option value="TAG_IS_DELETED">Tag is deleted</option>
+                                        <option value="CONTACT_IS_ADDED">Contact is added</option>
+                                        <option value="DEAL_IS_ADDED">Deal is added</option>
+                                        <option value="DEAL_IS_DELETED">Deal is deleted</option>
+                                        <option value="ADD_SCORE" id="add-score">Add score</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div id="RHS" name="RHS">
+                                <label class="control-label TAG_IS_ADDED TAG_IS_DELETED ADD_SCORE ">Value  <span class="field_req">*</span></label>
+                                <div class="controls">
+                                    <div class="pull-left">
+                                        <ul class="tagsinput tags" id="tags-ul" name="custom_tags">
+                                            {{#each custom_tags}}
+                                            <li class="tag" style="display: inline-block;" data="{{this}}">{{this}}<a class="close" id="remove_tag">&times</a></li>
+                                            {{/each}}
+                                        </ul>
+                                    </div>
+                                    <input type="text" id="addTags" name="custom_tags" class="tags-typeahead span2 TAG_IS_ADDED TAG_IS_DELETED" style="margin-bottom: -1px" placeholder="Enter tags" />
+                                    {{#if custom_score}}
+                                    <input type="text" value="{{this}}" id="add-score-value" name="custom_score" class="ADD_SCORE required" />
+                                    {{else}}
+                                    <input type="text" value="50" id="add-score-value" name="custom_score" class="ADD_SCORE required" />
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Campaign  <span class="field_req">*</span></label>
+                            <div class="controls">
+                                <select id="campaign-select" name="campaign_id" class="required">
+                                    <option value="">Select...</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-actions">          
+                            <a href="#triggers" id="trigger-save" class="save btn btn-primary">Save</a>
+                            <a href="#triggers" id="cancel" class="btn">Cancel</a> 
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+        <div class="span3">
+            <div class="well">
+                <h3>
+                    Triggers
+                </h3>
+                <br />   
+                <p> Give your trigger a name and choose a condition to be satisfied. Immediately link your trigger to the appropriate campaign, for an action to follow.</p>
+            </div>
+        </div>
+    </div>
 </div>
 </script>

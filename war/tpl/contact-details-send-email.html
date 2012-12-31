@@ -1,61 +1,59 @@
 <script id="send-email-template" type="text/html">
-	<div class="span8">
-		<div class="well">
-			<form id='emailForm' name="emailForm" class="form-horizontal" method="post">
-				<fieldset>
-					<legend>Send Email</legend>
-					<div class="control-group">
-                    	<label class="control-label">From</label>
-						<div class="controls">
-							<input type="text" class="span4" id="email_from" name="email_from" />
-						</div>
+<div class="span8">
+	<div class="well">
+		<form id='emailForm' name="emailForm" class="form-horizontal" method="post">
+			<fieldset>
+				<legend>Send Email</legend>
+				<div class="control-group">
+                	<label class="control-label">From</label>
+					<div class="controls">
+						<input type="text" class="span4" id="email_from" name="email_from" />
 					</div>
+				</div>
 
-					<div class="control-group">
-                    	<label class="control-label">To</label>
-						<div class="controls">
-							<input type="text" class="span4" name="email_to" id="email_to" value="{{getPropertyValue properties "email"}}" />
-						</div>
+                <div class="control-group">
+                	<label class="control-label">To</label>
+					<div class="controls">
+						<input type="text" class="span4" name="email_to" id="email_to" value="{{getPropertyValue properties "email"}}" />
 					</div>
+				</div>
 					
-					<div class="control-group">
-                    	<label class="control-label">Add Cc</label>
-						<div class="controls">
-							<input type="text" class="span4" name="email_cc" id="email_cc" />
-						</div>
+				<div class="control-group">
+                	<label class="control-label">Add Cc</label>
+					<div class="controls">
+						<input type="text" class="span4" name="email_cc" id="email_cc" />
 					</div>
+				</div>
 					
-			
-  					<div class="control-group">
-						<label class="control-label">Fill From Templates </label>
-						<div class="controls">
-							<select class="emailSelect" id='emailtemplate-model-list'  name="email_template">
-  								<option class="emailSelectOptions" value="">Select..</option>
-							</select>
-						</div>
+  				<div class="control-group">
+					<label class="control-label">Fill From Templates </label>
+					<div class="controls">
+						<select class="emailSelect" id='emailtemplate-model-list'  name="email_template">
+  							<option class="emailSelectOptions" value="">Select..</option>
+						</select>
 					</div>
+				</div>
 					
-					
-					<div class="control-group">
-                    	<label class="control-label">Subject</label>
-						<div class="controls">
-							<input type="text" class="span4" name="email_subject" id="email_subject" placeholder="" />
-						</div>
+				<div class="control-group">
+                	<label class="control-label">Subject</label>
+					<div class="controls">
+						<input type="text" class="span4" name="email_subject" id="email_subject" placeholder="" />
 					</div>
+				</div>
 					
-					<div class="control-group">
-                    	<label class="control-label">Body</label>
-						<div class="controls">
-							<textarea class="span4" rows="8" name="email_description" id="email_description" placeholder="Description"></textarea>
-						</div>
-					</div>					
+				<div class="control-group">
+                	<label class="control-label">Body</label>
+					<div class="controls">
+						<textarea class="span4" rows="8" name="email_description" id="email_description" placeholder="Description"></textarea>
+					</div>
+				</div>					
 				
-					<div class="form-actions">          
-						<a href="#contacts" class="btn ">Close</a> 
-          				<a href="#" type="submit" id="sendEmail" class="btn btn-primary">Send</a>
-					</div>
-				</fieldset>
-			</form>
-		</div>
+				<div class="form-actions">          
+					<a href="#contacts" class="btn ">Close</a> 
+          			<a href="#" type="submit" id="sendEmail" class="btn btn-primary">Send</a>
+				</div>
+			</fieldset>
+		</form>
 	</div>
+</div>
 </script>

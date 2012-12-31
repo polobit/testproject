@@ -1,25 +1,24 @@
 <script id="typeahead-contacts-template" type="text/html">
 <div>
-	<div style="display:inline;padding-right:10px;height:auto;">
-			{{#if_equals type "COMPANY"}}
-					<img src="img/company.png" style="width:50px;height:50px;"></img>
-				{{else}}
-					<img src="{{gravatarurl properties 50}}" style="width:50px;height:50px;"></img>
-			{{/if_equals}}
-		</div>
-
-		{{#if_equals type "COMPANY"}}
-			<div style="height:auto;display:inline-block;vertical-align:-20px;margin-left:2px;text-overflow: ellipsis; white-space: nowrap; width: 15em; overflow: hidden; vertical-align: top;">
-				<b>{{getPropertyValue properties "name"}}</b><br/>
-					{{getPropertyValue properties "email"}}</br>
-				{{getPropertyValue properties "url"}}</br>
-			</div>
-			{{else}}
-			<div style="height:auto;display:inline-block;vertical-align:-20px;margin-left:2px;text-overflow: ellipsis; white-space: nowrap; width: 15em; overflow: hidden; vertical-align: top;">
-				<b>{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</b><br/>
-					{{getPropertyValue properties "email"}}</br>
-					{{getPropertyValue properties "company"}}
-			</div>
-		{{/if_equals}}
+    <div style="display:inline;padding-right:10px;height:auto;">
+        {{#if_equals type "COMPANY"}}
+        <img src="img/company.png" style="width:50px;height:50px;" /></img>
+        {{else}}
+        <img src="{{gravatarurl properties 50}}" style="width:50px;height:50px;" /></img>
+        {{/if_equals}}
+    </div>
+    {{#if_equals type "COMPANY"}}
+    <div style="height:auto;display:inline-block;vertical-align:-20px;margin-left:2px;text-overflow: ellipsis; white-space: nowrap; width: 15em; overflow: hidden; vertical-align: top;">
+        <b>{{getPropertyValue properties "name"}}</b><br />
+        {{getPropertyValue properties "email"}}</br>
+        {{getPropertyValue properties "url"}}</br>
+    </div>
+    {{else}}
+    <div style="height:auto;display:inline-block;vertical-align:-20px;margin-left:2px;text-overflow: ellipsis; white-space: nowrap; width: 15em; overflow: hidden; vertical-align: top;">
+        <b>{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</b><br />
+        {{getPropertyValue properties "email"}}</br>
+        {{getPropertyValue properties "company"}}
+    </div>
+    {{/if_equals}}
 </div>
 </script>
