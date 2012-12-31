@@ -1,103 +1,100 @@
 <script id="admin-settings-customfields-collection-template" type="text/html">
 <div class="row">
-        <div class="span12">
-            <div class="page-header">
-                <h1>Custom Fields</h1>
-                <ul class="nav right">
-                    <li class="dropdown" id="menu2">
-                        <a href="#custom-fields-add" class="dropdown-toggle btn right" data-toggle="dropdown" id="addUser" style='top:-29px;position:relative'>
-                           <span><i class='icon-plus-sign'/></span> Add Custom Field</a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="#textModal" class = "fieldmodal" id="text">Text Field</a>
-                            </li>
-                            <li>
-                                <a href="#dateModal" class = "fieldmodal" id ="date">Date Field</a>
-                            </li>
-                            <li>
-                                <a href="#listModal" class = "fieldmodal" id="list">List Field</a>
-                            </li>
-                            <li>
-                                <a href="#checkboxModal"  class="fieldmodal" id="checkbox">Check Box Field</a>
-                            </li>
-                            <li class="hide">
-                                <a href="#linkModal"  class="fieldmodal" id="link">Generated Link</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+    <div class="span12">
+        <div class="page-header">
+            <h1>Custom Fields</h1>
+            <ul class="nav right">
+                <li class="dropdown" id="menu2">
+                    <a href="#custom-fields-add" class="dropdown-toggle btn right" data-toggle="dropdown" id="addUser" style="top:-29px;position:relative">
+                    <span><i class="icon-plus-sign" /></span> Add Custom Field</a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#textModal" class="fieldmodal" id="text">Text Field</a>
+                        </li>
+                        <li>
+                            <a href="#dateModal" class="fieldmodal" id="date">Date Field</a>
+                        </li>
+                        <li>
+                            <a href="#listModal" class="fieldmodal" id="list">List Field</a>
+                        </li>
+                        <li>
+                            <a href="#checkboxModal" class="fieldmodal" id="checkbox">Check Box Field</a>
+                        </li>
+                        <li class="hide">
+                            <a href="#linkModal" class="fieldmodal" id="link">Generated Link</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </div>
-
+</div>
 <div class="row">
-    <div class="span9"> 
-    {{#unless this.length}}
-    <div class="slate">
-       <div class="slate-content">
-         <div class="box-left">
-           <img alt="Clipboard" src="/img/clipboard.png">
-         </div>
-
-         <div class="box-right">
-           <h3>Your project doesn't have any tasks yet.</h3>
-           <div class="text">
-             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis. Nullam quis risus eget urna mollis ornare vel eu leo.
-           </div>
-           <a href="#">Learn more about project tasks</a>
-           <br>
-           <span class="btn blue btn-slate-action"><i class="icon-plus-sign"></i> Add the first task!</span>
-         </div>
-       </div>
-     </div>
-    {{/unless}}
-
-    {{#if this.length}}
-    <div class="data-block">
-      <div class="data-container">
-            <table class="table table-bordered showCheckboxes" url="core/api/custom-fields/bulk">
-                <thead>
-                    <tr>
-                        <th>Field Label</th>
-                        <th>Field Description</th>
-                        <th>Field Type</th>
-                    </tr>
-                </thead>
-                <tbody id='admin-settings-customfields-model-list'>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    {{/if}}
-    </div>
-
-        <div class='span3'>
-            <div class="well">
-                <h3>
-                    Export to CSV
-                </h3><br/>
-                <p>
-                    You can use workflow to automate most of your follow-ups. It's marketing and sales automation tool.
-                </p>
-                <p>
-                    Eg: you can send an email to all users who have signed up on your site. And then based on their behavior in the control panel, you can send them targetted messages periodically.
-                </p>
-                <br/>
-                <h3>
-                    What is marketing automation?
-                </h3><br/>
-                <p>
-                    You can use workflow to automate most of your follow-ups. It's marketing and sales automation tool.
-                </p>
-                <p>
-                    Eg: you can send an email to all users who have signed up on your site. And then based on their behavior in the control panel, you can send them targetted messages periodically.
-                </p>
-            </div>      
+    <div class="span9">
+        {{#unless this.length}}
+        <div class="slate">
+            <div class="slate-content">
+                <div class="box-left">
+                    <img alt="Clipboard" src="/img/clipboard.png" />
+                </div>
+                <div class="box-right">
+                    <h3>Your project doesn't have any tasks yet.</h3>
+                    <div class="text">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis. Nullam quis risus eget urna mollis ornare vel eu leo.
+                    </div>
+                    <a href="#">Learn more about project tasks</a>
+                    <br />
+                    <span class="btn blue btn-slate-action"><i class="icon-plus-sign"></i> Add the first task!</span>
+                </div>
             </div>
         </div>
-        
-        <div id= "custom-field-modal">
+        {{/unless}}
+        {{#if this.length}}
+        <div class="data-block">
+            <div class="data-container">
+                <table class="table table-bordered showCheckboxes" url="core/api/custom-fields/bulk">
+                    <thead>
+                        <tr>
+                            <th>Field Label</th>
+                            <th>Field Description</th>
+                            <th>Field Type</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-settings-customfields-model-list">
+                    </tbody>
+                </table>
+            </div>
         </div>
+        {{/if}}
+    </div>
+    <div class="span3">
+        <div class="well">
+            <h3>
+                Export to CSV
+            </h3>
+            <br />
+            <p>
+                You can use workflow to automate most of your follow-ups. It's marketing and sales automation tool.
+            </p>
+            <p>
+                Eg: you can send an email to all users who have signed up on your site. And then based on their behavior in the control panel, you can send them targetted messages periodically.
+            </p>
+            <br />
+            <h3>
+                What is marketing automation?
+            </h3>
+            <br />
+            <p>
+                You can use workflow to automate most of your follow-ups. It's marketing and sales automation tool.
+            </p>
+            <p>
+                Eg: you can send an email to all users who have signed up on your site. And then based on their behavior in the control panel, you can send them targetted messages periodically.
+            </p>
+        </div>
+    </div>
+</div>
+<div id="custom-field-modal">
+</div>
 </script>
 <script id="admin-settings-customfields-model-template" type="text/html">
     <td>{{field_label}} </td>
