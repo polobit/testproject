@@ -1,10 +1,11 @@
+<%@page import="com.agilecrm.user.util.DomainUserUtil"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.User"%>
 <%@ page import="com.agilecrm.user.DomainUser"%>
 <%@ page language="java" import="java.util.*" pageEncoding="ISO-8859-1"%>
 
-<% DomainUser domainUser = DomainUser.getDomainUserFromEmail(UserServiceFactory.getUserService().getCurrentUser().getEmail()); %>
+<% DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(UserServiceFactory.getUserService().getCurrentUser().getEmail()); %>
 <% String href = UserServiceFactory.getUserService().createLogoutURL("register.jsp"); %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
