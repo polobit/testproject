@@ -209,7 +209,6 @@ jQuery.validator.setDefaults({
 		  
   		$("#resend-password").live('click', function(e) {
 			e.preventDefault();
-			alert("hai");
 			$("#resend_password_form").submit();
 		});
 			
