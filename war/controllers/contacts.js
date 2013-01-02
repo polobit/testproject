@@ -604,6 +604,19 @@ var ContactsRouter = Backbone.Router.extend({
 			view.fetch({
 				success: function(data)
 				{
+					// If custom view object is empty i.e., custom view is deleted. 
+					// custom view cookie is eraised and default view is shown
+					if($.isEmptyObject(data.toJSON()))
+						{
+							// Erase custom_view cookie, since 
+							// view object with given id is not available
+							eraseCookie("contact_view");
+							
+							// Loads default contact view
+							App_Contacts.contacts();
+							return;
+						}
+						
 					App_Contacts.contactViewModel = data.toJSON();
 					
 					App_Contacts.customView(undefined, App_Contacts.contactViewModel, url);
