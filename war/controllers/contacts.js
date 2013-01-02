@@ -334,9 +334,9 @@ var ContactsRouter = Backbone.Router.extend({
      */
     importContacts: function () {
         $('#content').html(getTemplate("import-contacts", {}));
-        head.js('lib/fileuploader-min.js', function(){
-        	fileUploadInit();
-        });
+//        head.js('lib/fileuploader-min.js', function(){
+//        	fileUploadInit();
+//        });
     },
    
     /**

@@ -6,41 +6,70 @@
  * sends request to "core/api/contacts/upload" which processes the request and
  * returns data as a map, is shown in a template using handlebars.
  */
-function fileUploadInit() {
-	var uploader = new qq.FileUploader({
-		element : document.getElementById('file-upload-div'),
-		action : '/core/api/contacts/upload',
-		debug : true,
-		onComplete : function(id, fileName, data) {
+/*
+ * function fileUploadInit() { var uploader = new qq.FileUploader({ element :
+ * document.getElementById('file-upload-div'), action :
+ * '/core/api/upload/process', debug : true, onComplete : function(id, fileName,
+ * data) { url = data["url"]; // import-contacts template is populated with the
+ * processed data $('#content').html(getTemplate("import-contacts-2", data)); //
+ * Sets up typeahead for tags setup_tags_typeahead(); } }); }
+ */
 
-			// import-contacts template is populated with the processed data
-			$('#content').html(getTemplate("import-contacts-2", data));
-
-			// Sets up typeahead for tags
-			setup_tags_typeahead();
-		}
-	});
-
-}
+var blob_key;
 
 /**
- * Request 'core/api/contact/upload/status/' url repeatedly with specified
- * interval time until the data returned is true i.e., uploaded contacts are
- * saved the navigates to contacts route
+ * Calls method to process data uploaded, which returns first 10 contacts in
+ * tabular form to set table headings. It requests url
+ * "/core/api/upload/csv/process" with blobkey/memcache key as post data
  * 
  * @param key
  */
-function verifyUploadStatus(keys) {
+function processBlobData(key) {
+
+	// If key is not defined, no data is to process since no blob key so returns
+	if (!key)	
+		return;
+
+	// Sets blob key to global value, so it can be used while saveing uploaded
+	// contacts
+	blob_key = key;
+
+	// Post the blobkey, which internally process the csv file and return data
+	// as a json object
 	$.ajax({
 		type : 'POST',
-		url : '/core/api/contacts/upload/status',
-		data : keys,
+		url : '/core/api/upload/csv/process',
+		data : key,
 		success : function(data) {
-			
-			// If response data is true then navigate to contact, 
+
+			// Processed contacts in csv are shown in the template
+			$('#content').html(getTemplate("import-contacts-2", data));
+		}
+	});
+}
+
+/**
+ * Verifies whether blob data is saved.
+ * <p>
+ * Requests 'core/api/contact/upload/status/', repeatedly with specified
+ * interval time until the data returned is true i.e., uploaded contacts are
+ * saved, then navigates to contacts route
+ * </p>
+ * 
+ * @param key
+ *            Blob/memcache key
+ */
+function verifyUploadStatus(key) {
+	$.ajax({
+		type : 'POST',
+		url : '/core/api/upload/save/status',
+		data : key,
+		success : function(data) {
+
+			// If response data is true, then navigate to contact,
 			// since all contacts in the file are saved
 			if (data) {
-				
+
 				// Navigates back to contacts
 				Backbone.history.navigate('contacts', {
 					trigger : true
@@ -51,7 +80,7 @@ function verifyUploadStatus(keys) {
 			// If data is not true, uploaded contacts are not saved yet,
 			// so calls to send request after 15 seconds
 			setTimeout(function() {
-				verifyUploadStatus(keys);
+				verifyUploadStatus(key);
 			}, 15000);
 		}
 	});
@@ -60,11 +89,26 @@ function verifyUploadStatus(keys) {
 /**
  * Defines actions on events on imports contacts element, which does validation
  * on the import template, whether contact have first_name last_name which are
- * mandatory fields. If first naRme and last name are not specified or specified
+ * mandatory fields. If first name and last name are not specified or specified
  * same label for different fields then error message is shown and will not send
- * request to save.
+ * a request to save contacts.
  */
 $(function() {
+
+	// When upload button is selected upload jsp is initialized and show in the
+	// jsp to import files
+	$(".upload-contacts-csv").live(
+			'click',
+			function(e) {
+				e.preventDefault();
+				var newwindow = window.open("upload-contacts.jsp?import=true",
+						'name', 'height=310,width=500');
+				if (window.focus) {
+					newwindow.focus();
+				}
+				return false;
+
+			})
 
 	/*
 	 * On clicking on import contacts it checks whether all mandatory field are
@@ -77,6 +121,8 @@ $(function() {
 					'click',
 					function(e) {
 
+						if (!blob_key)
+							return;
 						var models = [];
 
 						// Hide the alerts
@@ -125,89 +171,75 @@ $(function() {
 						$waiting = $('<div style="display:inline-block;padding-left:5px"><small><p class="text-success"><i><span id="status-message">Please wait</span></i></p></small></div>');
 						$waiting.insertAfter($('#import-contacts'));
 
+						var properties = [];
+
 						/*
 						 * Iterates through all tbody tr's and reads the table
 						 * heading from the table, push the table name as
 						 * property name and value as property value as
 						 * ContactField properties.
 						 */
-						$('#import-tbody tr').each(function() {
-								var properties = [];
-								$(this).find("td").each(function(i) {
-									
-									// Empty property map (Represents
-									// ContactField in contact.java)
-									var property = {};
-									
-									// Read the name of the property from
-									// table heading
-									var name = $(this).parents('table').find('th').eq(i).find('select')
-																		.val();
-									// Reads the sub type of the fields
-									if (name.indexOf("-") != -1) 
-									{
-										var splits = name.split("-");
-										name = splits[1];
-										var type = splits[0];
-										property["sub_type"] = type;
-									}
-									
-									var value = $(this).html();
-									
-									// Set the value and name fields
-									property["value"] = value;
-									property["name"] = name;
+						$('#import-header tr th').each(function() {
 
-									// Push in to properties array (represents ContactField array)
-									properties.push(property);
-								});
+							console.log(this);
+							// Empty property map (Represents
+							// ContactField in contact.java)
+							var property = {};
 
-								var model = {};
-								model.properties = properties;
-								model.type = "PERSON";
-								model.first_name = "uploaded";
-								model.last_name = "uploaded";
+							// Read the name of the property from
+							// table heading
+							var name = $(this).find('select').val();
 
-								// Add Tags
-								var tags = get_tags('import-contact-tags');
-								if (tags != undefined)
-									model.tags = tags[0].value;
-									
-								// Pushes model (represents contact)
-								// in to an array of models
-								models.push(model);
+							// Reads the sub type of the fields
+							if (name.indexOf("-") != -1) {
+								var splits = name.split("-");
+								name = splits[1];
+								var type = splits[0];
+								property["subtype"] = type;
+							}
+
+							// Set the value and name fields
+							property["value"] = name;
+							property["name"] = name;
+
+							// Push in to properties array (represents
+							// ContactField array)
+							properties.push(property);
+
 						});
 
-						console.log(models);
+						var model = {};
+						model.properties = properties;
+						model.type = "PERSON";
+
+						// Add Tags
+						var tags = get_tags('import-contact-tags');
+						if (tags != undefined)
+							model.tags = tags[0].value;
 
 						// Shows Updating
 						$waiting.find('#status-message').html(
 								'Uploading to server');
 
-						var contact = models;
-						// contact.contact = models;
+						// Represents prototype of contact, which specifies the
+						// order of properties
+						var contact = model;
 
-						// List of contacts built out of csv, post request is
-						// sent to
-						// 'core/api/contacts/multi/upload' with list of
-						// contacts
+						// Sends request to save the contacts uploaded from csv,
+						// present in the blobstore. Contact is sent to save
+						// each row in csv file in to a contact
 						$.ajax({
 							type : 'POST',
-							url : '/core/api/contacts/multi/upload',
+							url : "/core/api/upload/contacts/save/?key="
+									+ blob_key,
 							data : JSON.stringify(contact),
 							contentType : "application/json; charset=utf-8",
 							success : function(data) {
 
-								var json = {};
-								json.memcache_keys = JSON.stringify(data);
 								// Calls vefiryUploadStatus with data returned
 								// from the url i.e., key of the memcache
-								verifyUploadStatus(json);
-
-								// console.log(data);
-								// App_Contacts.contactsListView.collection.add(data.contact);
+								verifyUploadStatus(data);
 							},
-							dataType : 'json'
 						});
 
 					});
@@ -219,8 +251,5 @@ $(function() {
 
 		// Sends empty JSON to remove contact uploaded
 		$('#content').html(getTemplate("import-contacts", {}));
-		head.js('lib/fileuploader-min.js', function() {
-			fileUploadInit();
-		});
 	});
 });

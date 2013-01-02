@@ -4,7 +4,7 @@
         <div class="page-header">
             <h1>Import Contacts <small>Upload file</small>	</h1>
         </div>
-        <div id="file-upload-div"></div>
+		<button type="button" class="btn btn-primary upload-contacts-csv" >Upload file</button>
     </div>
 </div>
 </script>
@@ -57,7 +57,7 @@
     </div>
 </div>
 <table class="table table-bordered table-striped">
-    <thead>
+    <thead id="import-header">
         <tr>
             {{#eachkeys data.[0]}}
             <th>

@@ -153,6 +153,25 @@
 <servlet-name>ChooseDomain</servlet-name> 
 <url-pattern>/choose-domain</url-pattern> 
 </servlet-mapping>
+
+<servlet>
+	<servlet-name>Upload file</servlet-name>
+	<servlet-class>com.agilecrm.contact.upload.blob.UploadServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>Upload file</servlet-name>
+	<url-pattern>/upload/file</url-pattern>
+</servlet-mapping>
+
+ <servlet>
+ <servlet-name>BulkContactProcess</servlet-name> 
+<servlet-class>com.agilecrm.contact.upload.blob.BulkContactProcess</servlet-class> 
+</servlet>
+
+<servlet-mapping>
+<servlet-name>BulkContactProcess</servlet-name> 
+<url-pattern>backend/contactsbulk/</url-pattern> 
+</servlet-mapping>
   
   <filter>
        <filter-name>NamespaceFilter</filter-name>
@@ -176,6 +195,7 @@
             <url-pattern>/core/*</url-pattern>
             <url-pattern>/scribe</url-pattern>
             <url-pattern>/upload.jsp</url-pattern>
+             <url-pattern>/upload-contacts.jsp</url-pattern>
    </filter-mapping>
    
     <filter>

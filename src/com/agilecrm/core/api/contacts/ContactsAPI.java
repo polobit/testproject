@@ -143,29 +143,6 @@ public class ContactsAPI
     }
 
     /**
-     * Accepts list of contacts, and save the list of contacts iterating through
-     * each contact
-     * 
-     * @param contacts
-     *            {@link List} of {@link Contact}
-     * @return {@link String}, key of the subcontact list set in memcache also
-     *         sent to deferred task i.e., if key is not present in the memcache
-     *         upload of contacts is present (key is removed after task is
-     *         completed)
-     */
-    @Path("multi/upload")
-    @POST
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<String> createMultipleContact(List<Contact> contacts)
-    {
-	// Calls save bulk contacts method on contactUtil will will create
-	// deferred tasks to save the contacts. returns the key of list in
-	// memcache
-	return ContactUtil.SaveBulkContacts(contacts);
-    }
-
-    /**
      * Returns whether the key of contacts list still exists in the memcache
      * i.e., task is not completed. This method will be called repeatedly with
      * specified time interval from client to check whether the uploaded
