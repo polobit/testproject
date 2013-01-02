@@ -111,11 +111,21 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     		var addressJSON = {};
     		var subtype;
     		$.each($(element).children(":not(br)"), function (index, subelement){
+    			
+    			console.log("is continue");
+    			if($(subelement).val() == undefined || $(subelement).val().length == 0)
+    				return;
+    			console.log("continueing address");
+    			
     			if($(subelement).attr('name') == 'address-type')
     				subtype = $(subelement).val();
     			else
     				addressJSON[$(subelement).attr('name')] = $(subelement).val();
     		});
+    		
+    		console.log(addressJSON);
+    		if($.isEmptyObject(addressJSON))
+    			return;
     		
     		properties.push({
         		"name": $(element).attr('data'),
@@ -127,6 +137,10 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     		var inputElement = $(element).find('input');
     		var selectElement = $(element).find('select');
 
+    		// If element has no value, don't push into properties 
+    		if(inputElement.val() == undefined || inputElement.val().length == 0)
+    			return;
+    		
     		// Checks whether fields for hidden fields (Used for clone do not save them)
     		if (!$(element).find('input').parents('div.controls').hasClass('hide'))
     			properties.push({

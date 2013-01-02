@@ -71,6 +71,9 @@ function display_google_map() {
 	}, function(results, status) {
 		if (status == google.maps.GeocoderStatus.OK) {
 
+			// Displays map portion
+			$("#map").css('display', 'block');
+			
 			var myOptions = {
 				zoom : 8,
 				center : results[0].geometry.location,

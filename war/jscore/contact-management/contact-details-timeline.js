@@ -178,7 +178,7 @@ function load_timeline_details(el, contactId)
 						remove_loading_img(el);
 						
 						// If timeline is not defined yet, calls setup_timeline for the first time
-						if(timelineView.collection.length == 0){
+						if(timelineView.collection.length == 0 && arrayView.collection.length > 0){
 							timelineView.collection.add(arrayView.collection.models);
 							
 							/*
@@ -258,6 +258,8 @@ function validate_insertion(models, timelineViewMore){
  * 			function to insert models into timelin on its initialization
  */
 function setup_timeline(models, el, callback) {
+	
+	$("#timeline-slate").css('display', 'none');
 	
 	// Load plugins for timeline	
 	head.js(LIB_PATH + "lib/jquery.isotope.min.js", LIB_PATH + "lib/jquery.event.resize.js", function(){
