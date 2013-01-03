@@ -287,14 +287,24 @@ $(function(){
 					// Activates timeline in contact detail tab and tab content
 					activate_timeline_tab();
 					
-					// Inserts logs into time-line
-					$.each(logsCollection.toJSON(), function(index, model) {
+					// If timeline is not defined yet, calls setup_timeline for the first time
+					if(timelineView.collection.length == 0){
 						
-						$.each(JSON.parse(model.logs), function(index, log_model) {
-							$('#timeline').isotope( 'insert', $(getTemplate("timeline", log_model)) );
+						$.each(logsCollection.toJSON(), function(index, model) {
+							timelineView.collection.add(JSON.parse(model.logs));
+						});	
+						
+						setup_timeline(timelineView.collection.toJSON(), App_Contacts.contactDetailView.el, undefined);
+					} else{
+					
+						// Inserts logs into time-line
+						$.each(logsCollection.toJSON(), function(index, model) {
+						
+							$.each(JSON.parse(model.logs), function(index, log_model) {
+								$('#timeline').isotope( 'insert', $(getTemplate("timeline", log_model)) );
+							});
 						});
-					});
-				
+					}
 				}
 			});
 	   });

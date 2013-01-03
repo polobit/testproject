@@ -5,11 +5,13 @@
             <fieldset>
                 <legend>Continue Editing</legend>
                 <div class="control-group">
-                    <label class="control-label">Name</label>
+                    <label class="control-label">Name <span class="field_req">*</span></label>
                     <div class="controls">
-                        <input name="fname" type="text" id="fname" placeholder="First name"
+                        <input name="fname" type="text" class="required" id="fname" placeholder="First name"
                         value="{{getPropertyValue properties "first_name"}}" />
-                        <input name="lname" type="text" id="lname" placeholder="Last name"
+					</div>
+					<div class="controls" style="margin-top: 7px">	
+                        <input name="lname" type="text" class="required" id="lname" placeholder="Last name"
                         value="{{getPropertyValue properties "last_name"}}"/> 
                     </div>
                 </div>
@@ -47,7 +49,7 @@
                     <label class="control-label">Add Email <span><a href="#" class="multiple-add"><i class="icon-plus"></i></a></span></label>
                     <div class="controls hide">
                         <div class="email multiple-template" data="email">
-                            <input type="text" id="email" name="email" placeholder="Email" />
+                            <input type="text" id="email" class="email" name="email" placeholder="Email" />
                             <select class="email-select" style="width:100px">
                                 <option></option>
                                 <option value="work">Work</option>
@@ -58,7 +60,7 @@
                     </div>
                     <div class="controls second">
                         <div class="email multiple-template" data="email">
-                            <input type="text" id="email" name="email" placeholder="Email" />
+                            <input type="text" id="email" class="email" name="email" placeholder="Email" />
                             <select class="email-select" style="width:100px">
                                 <option></option>
                                 <option value="work">Work</option>

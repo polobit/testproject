@@ -2,7 +2,7 @@
  * task.js is a script file to deal with all the actions (CRUD) of tasks from
  * client side.
  * 
- * @module Activities 
+ * @module Activities
  * 
  * author: Rammohan
  */
@@ -10,9 +10,9 @@
 $(function() {
 
 	/**
-	 * Activates all features of a task form (highlighting the task form, relatedTo field
-	 * typeahead, changing color and font-weight) when we click on task link in
-	 * activities modal.
+	 * Activates all features of a task form (highlighting the task form,
+	 * relatedTo field typeahead, changing color and font-weight) when we click
+	 * on task link in activities modal.
 	 * 
 	 */
 	$("#task").click(function(e) {
@@ -181,33 +181,47 @@ function save_task(formId, modalId, isUpdate) {
 				if (isUpdate)
 					App_Calendar.tasksListView.collection.remove(json);
 
-				// Update task list view
+				// Updates task list view
 				App_Calendar.tasksListView.collection.add(data);
 				App_Calendar.tasksListView.render(true);
 			}
-			// Update data to temeline
-			else if (App_Contacts.contactDetailView) {
+			// Updates data to temeline
+			else if (App_Contacts.contactDetailView
+					&& Current_Route == "contact/"
+							+ App_Contacts.contactDetailView.model.get('id')) {
+				
+				/*
+				 * Verifies whether the added task is related to the contact
+				 * in contact detail view or not
+				 */ 
 				$.each(task.contacts, function(index, contact) {
 					if (contact.id == App_Contacts.contactDetailView.model
 							.get('id')) {
 
-						// Activate timeline in contact detail tab and tab
-						// content
+						/*
+						 * Activates timeline in contact detail tab and tab
+						 * content
+						 */
 						activate_timeline_tab();
 
-						$('#timeline').isotope('insert',
-								$(getTemplate("timeline", data.toJSON())));
+						/*
+						 * If timeline is not defined yet, initiates with the 
+						 * data else inserts
+						 */
+						if (timelineView.collection.length == 0) {
+							timelineView.collection.add(data);
+							
+							setup_timeline(timelineView.collection.toJSON(),
+									App_Contacts.contactDetailView.el,
+									undefined);
+						} else
+							$('#timeline').isotope('insert',
+									$(getTemplate("timeline", data.toJSON())));
 
 						return false;
 					}
 
 				});
-				if (Current_Route != "contact/"
-						+ App_Contacts.contactDetailView.model.get('id')) {
-					App_Calendar.navigate("calendar", {
-						trigger : true
-					});
-				}
 			} else {
 				App_Calendar.navigate("calendar", {
 					trigger : true

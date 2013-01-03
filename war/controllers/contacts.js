@@ -315,7 +315,11 @@ var ContactsRouter = Backbone.Router.extend({
         contactDuplicate.save(json,{
         	success: function(data)
         	{
-				deserialize_contact(data.toJSON(), 'continue-contact');
+        		add_custom_fields_to_form(data.toJSON(), function(contact){
+                	
+                    	deserialize_contact(contact, 'continue-contact');
+                    	
+                	});
         	}
         });
     },
@@ -361,7 +365,7 @@ var ContactsRouter = Backbone.Router.extend({
             isNew: true,
             window: 'contact/' + id,
             postRenderCallback: function(el){
-            	populateUsers("owner", el);
+            	populateUsers("owners-list", el);
             	populateMilestones(el);
             	var json = App_Contacts.contactDetailView.model.toJSON();
             	var contact_name = getPropertyValue(json.properties, "first_name")+ " " + getPropertyValue(json.properties, "last_name");

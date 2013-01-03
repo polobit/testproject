@@ -22,9 +22,9 @@
                     {{value}}
                 {{/if_propertyName}}
             </div>      
-            <div class="right" style='position:relative;padding-right:20px'>
-                <div class="btn-group right" style='position:relative;padding-right:20px'>
-                    <div id='star' style='padding-bottom:10px'></div>
+            <div class="right" style='position:relative'>
+                <div class="btn-group right" style='position:relative'>
+                    <div id='star' style='padding-bottom:13px;width:auto !important'></div>
                         <a class="btn" href="#"><i class="icon-wrench"></i></a>
                         <a class="btn dropdown-toggle" data-toggle="dropdown">
                         Actions
@@ -45,8 +45,8 @@
                         </ul>
                     </div>      
                 </div>
-                <div class="well right unselectable" id="score" unselectable="on" style="height:50px;margin-right:70px;padding-top:0px;padding-bottom:17px;padding-right:10px;margin-top:-7px;padding-left:15px" onselectstart="return false">
-                    <span style="font-size:25px; display:inline-block"> 
+                <div class="well right unselectable" id="score" unselectable="on" style="height:40px;margin-right:70px;padding-top:0px;padding-right:10px;padding-left:15px" onselectstart="return false">
+                    <span style="font-size:23px; display:inline-block"> 
                         Score 
                         <span style="vertical-align:text-top;margin-left:-5px">
                         <img border="0" src="/img/help.png" style="height:6px;vertical-align:middle" rel="popover" data-placement="bottom"  data-title="Lead Score" data-content="Score your leads to get high quality leads to appear on top. Manually assign scores or automate the process based on user behavior using Workflow automation." id="element" data-trigger="hover">
@@ -55,9 +55,9 @@
                     <br/>
          
                     {{#if lead_score}}
-                        <span id="lead-score" style="font-size:28px; padding-left:12px">{{lead_score}}</span>&nbsp;
+                        <span id="lead-score" style="font-size:27px; padding-left:12px">{{lead_score}}</span>&nbsp;
                     {{else}}
-                        <span id="lead-score" style="font-size:28px; padding-left:12px">0</span>&nbsp;
+                        <span id="lead-score" style="font-size:27px; padding-left:12px">0</span>&nbsp;
                     {{/if}}
           
                     <div style="display:inline-block; vertical-align:middle">
@@ -132,7 +132,7 @@
                     <img alt="Clipboard" src="/img/clipboard.png" />
                 </div>
                 <div class="box-right">
-                    <h3>Yet, this contact has no entities (Notes, Tasks, deals and etc..) related to it, to show up in the Timeline.</h3>
+                    <h3>Yet, this contact has no entities (Notes, Tasks, Deals and etc..) related to it, to show up in the Timeline.</h3>
                     <div class="text">
                         You can add entities related to it by selecting suitable option from the above "actions" drop down button.
                     </div>
@@ -146,6 +146,7 @@
     </div>
 <!-- Contact Details -->
     <div class="span3">
+	  <div class="page-header">
         <div class="data-block">
             <div class='data-container'>
                 <header>
@@ -201,6 +202,7 @@
     <div style='float:right;'>
         <a href='#add-widget'>Manage widgets</a>
     </div>
-    </div>
+   </div>
+  </div>
 </div>
 </script>

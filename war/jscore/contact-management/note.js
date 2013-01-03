@@ -40,17 +40,28 @@ $(function(){
        	         * Updates data (saved note) to time-line, when contact detail view is defined and 
        	         * the note is related to the contact which is in detail view.
        	         */    
-    			if(App_Contacts.contactDetailView){
+    			if(App_Contacts.contactDetailView && Current_Route == "contact/"
+					+ App_Contacts.contactDetailView.model.get('id')){
     				$.each(note.contacts, function(index, contact_id){
     					if(contact_id == App_Contacts.contactDetailView.model.get('id')){
     						
-    						console.log(App_Contacts.contactDetailView.model.get('id'));
-    						
     						// Activates "Timeline" tab and its tab content in contact detail view 
     						activate_timeline_tab();
+
+    						/*
+    						 * If timeline is not defined yet, initiates with the 
+    						 * data else inserts
+    						 */
+    						if (timelineView.collection.length == 0) {
+    							timelineView.collection.add(data);
+    							
+    							setup_timeline(timelineView.collection.toJSON(),
+    									App_Contacts.contactDetailView.el,
+    									undefined);
+    						} else
+    							$('#timeline').isotope('insert',
+    									$(getTemplate("timeline", data.toJSON())));
     						
-    						// Inserts data into time-line
-    						$('#timeline').isotope( 'insert', $(getTemplate("timeline", data.toJSON())) );
     						return false;
     					}	
 

@@ -1,6 +1,8 @@
 <script id="deals-collection-template" type="text/html">
     <br>
-<h1>List of Deals</h1>
+<div class="page-header">
+    <h2>List of Deals</h2>
+</div>
 <table class="table table-striped showCheckboxes" url="core/api/contacts/deals/bulk">
     <thead>
         <tr>
@@ -13,6 +15,7 @@
     </thead>
     <tbody id='deals-model-list'></tbody>
 </table>
+   <a href="#add-opportunity" class="btn right"><span><i class='icon-plus-sign'/></span> Add Deal</a> 
 </script>
 
 <script id="deals-model-template" type="text/html"> 

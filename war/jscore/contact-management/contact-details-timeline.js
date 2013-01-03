@@ -10,13 +10,19 @@
  * @param contactId
  * 				id of a contact in contact detail view
  */
+
+/*
+ * Taken as global to verify whether timeline is defined or not while adding
+ * entities (notes, tasks and etc..) related to a contact.
+ */  
+var timelineView;
 function load_timeline_details(el, contactId)
 {
 		/**
 		 * An empty collection (length zero) is created to add first fetched 
 		 * details and then initializes isotope with this data 
 		 */ 
-		var timelineView =  new Base_Collection_View({
+		timelineView =  new Base_Collection_View({
 			templateKey: 'timeline',
 			individual_tag_name: 'li',
 		});
@@ -68,9 +74,6 @@ function load_timeline_details(el, contactId)
 					 * (fetched while initializing the isotope) if available.
 					 */
 					setup_timeline(timelineView.collection.toJSON(), el, function(el){
-							
-						console.log("new call back........");
-						console.log(timelineViewMore.collection.toJSON());
 						$.each(timelineViewMore.collection.toJSON(), function(index,data){
 							$('#timeline', el).isotope( 'insert', $(getTemplate("timeline", data)) );
 						});
@@ -177,8 +180,11 @@ function load_timeline_details(el, contactId)
 					if(++loading_count == fetchContactDetails.length){
 						remove_loading_img(el);
 						
+						if(arrayView.collection.length == 0)
+							return;
+						
 						// If timeline is not defined yet, calls setup_timeline for the first time
-						if(timelineView.collection.length == 0 && arrayView.collection.length > 0){
+						if(timelineView.collection.length == 0){
 							timelineView.collection.add(arrayView.collection.models);
 							
 							/*
@@ -259,6 +265,7 @@ function validate_insertion(models, timelineViewMore){
  */
 function setup_timeline(models, el, callback) {
 	
+	// Removes pad content of no data presents
 	$("#timeline-slate").css('display', 'none');
 	
 	// Load plugins for timeline	
@@ -275,6 +282,7 @@ function setup_timeline(models, el, callback) {
 		 * templates using handlebars
 		 */
 		$.each(models, function(index, model) {
+			
 			// combine data & templqate
 			$('#timeline', el).append(getTemplate("timeline", model));
 		}); //each
@@ -363,7 +371,7 @@ function customize_isotope()
 
 	/*
 	 * Defines the dimentions of layout, and alters the position of data.
-	 * It executes every tiem, when a amodal is added or deleted from timeline.
+	 * It executes every tiem, when a modal is added or deleted from timeline.
 	 */ 
 	$.Isotope.prototype._spineAlignLayout = function( $elems ) {
 		var	instance = this,
