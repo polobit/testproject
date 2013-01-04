@@ -30,8 +30,12 @@ import org.openid4java.discovery.DiscoveryInformation;
 import org.openid4java.message.AuthRequest;
 import org.openid4java.message.ParameterList;
 
+import com.agilecrm.Globals;
 import com.agilecrm.filter.util.RedirectUtil;
 import com.agilecrm.session.openid.ConsumerFactory;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.step2.AuthRequestHelper;
 import com.google.step2.AuthResponseHelper;
 import com.google.step2.ConsumerHelper;
@@ -131,10 +135,68 @@ public class OpenIdServlet extends HttpServlet
 	try
 	{
 	    UserInfo user = completeAuthentication(req);
+
+	    String subDomain = NamespaceManager.get();
+
+	    /*
+	     * If subdomain does not exit in the db, then request is considered
+	     * as new registration, so new domain user is created according to
+	     * user info returned by openID provider.
+	     */
+	    if (DomainUserUtil.count() == 0)
+	    {
+		/*
+		 * Sets the user info in session.
+		 */
+		req.getSession().setAttribute(
+			SessionManager.AUTH_SESSION_COOKIE_NAME, user);
+
+		// Type attribute is set in the request, so registerOAuth is
+		// called in registerServlet
+		req.setAttribute("type", "oauth");
+
+		// Send to Login Page
+		req.getRequestDispatcher("/register").forward(req, resp);
+		return;
+	    }
+
+	    DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(user
+		    .getEmail());
+
+	    /**
+	     * If domain user with the email does not exist then request is sent
+	     * to choose domain, considering request is for new registration.
+	     * <p>
+	     * Condition satisfies only if user is new
+	     * </p>
+	     */
+	    if (domainUser == null)
+	    {
+		resp.sendRedirect(Globals.CHOOSE_DOMAIN);
+		return;
+	    }
+
+	    /*
+	     * Sets the user info in session.
+	     */
 	    req.getSession().setAttribute(
 		    SessionManager.AUTH_SESSION_COOKIE_NAME, user);
 
-	    // If valid-session and Redirect URL present in session, redirect
+	    /*
+	     * If domain user is not null i.e., domain user exists with the
+	     * email return by openids and domain in user is not equal to
+	     * subdomain in the url, so redirect the page to respective domain
+	     * <p> To avoid logging in to wrong domains. Checked for openid
+	     * login </p>
+	     */
+	    if (!domainUser.domain.equals(subDomain))
+	    {
+		resp.sendRedirect("https://" + subDomain + ".agilecrm.com/");
+		return;
+	    }
+
+	    // If valid-session and Redirect URL present in session,
+	    // redirect
 	    if (req.getSession(false) != null)
 	    {
 		RedirectUtil.redirectURIFromSession(req, resp,
