@@ -176,6 +176,12 @@ var Base_Collection_View = Backbone.View
 				 */
 				this.collection.bind('error', function(collection, response)
 				{
+					if(response.status == 203)
+						{
+							console.log(window.location.hash);
+							$("#content").html('<div style="padding:10px;font-size:14px"><b>'+response.statusText+'<b></div>');
+							return;
+						}
 					that.render(true, response.responseText);
 				});
 

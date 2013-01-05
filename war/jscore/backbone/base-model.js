@@ -82,6 +82,14 @@ var Base_Model_View = Backbone.View
 				 * is called to update the view.
 				 */
 				this.model.bind("change", this.render, this);
+				
+				this.model.bind('error', function(model, response){
+					if(response.status == 203)
+					{
+						$("#content").html(response.statusText);
+						return;
+					}
+				});
 
 				/*
 				 * Sets URL to backbone model, if url is passed when creating a
@@ -135,6 +143,7 @@ var Base_Model_View = Backbone.View
 			 * server(to URL set to model in initialize function)
 			 */
 			deleteItem : function(e) {
+				
 				/*
 				 * Sends delete request, and reloads view on success
 				 */
