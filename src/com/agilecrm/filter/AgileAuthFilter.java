@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.filter.util.RedirectUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.AgileUser;
@@ -33,8 +34,6 @@ import com.google.appengine.api.NamespaceManager;
  */
 public class AgileAuthFilter implements Filter
 {
-    public static final String LOGIN_RETURN_PATH_SESSION_PARAM_NAME = "redirect_uri_on_login";
-
     @Override
     public void destroy()
     {
@@ -71,8 +70,7 @@ public class AgileAuthFilter implements Filter
 	// If no sessions are there, redirect to login page
 	if (httpRequest.getSession(false) == null)
 	{
-	    setRedirectURI(httpRequest);
-	    httpResponse.sendRedirect("/login");
+	    redirectToLogin(httpRequest, httpResponse);
 	    return;
 	}
 
@@ -81,8 +79,8 @@ public class AgileAuthFilter implements Filter
 		SessionManager.AUTH_SESSION_COOKIE_NAME);
 	if (userInfo == null)
 	{
-	    setRedirectURI(httpRequest);
-	    httpResponse.sendRedirect("/login");
+
+	    redirectToLogin(httpRequest, httpResponse);
 	    return;
 	}
 
@@ -105,8 +103,7 @@ public class AgileAuthFilter implements Filter
 	// Send to register
 	if (domainUser == null)
 	{
-	    // User Not Found
-
+	    httpResponse.sendRedirect("error/auth-failed.jsp");
 	}
 
 	// Check if the domain of the user is same as namespace. Otherwise,
@@ -145,9 +142,43 @@ public class AgileAuthFilter implements Filter
 	// Nothing to do
     }
 
-    public void setRedirectURI(HttpServletRequest request)
+    /**
+     * Sets current url in session to redirect after login, if url does not
+     * contain "/core" uri. if url does contains "core" in request uri then
+     * error is sent in response error is sent as response
+     * 
+     * @param request
+     * @param response
+     * @throws IOException
+     */
+    private void redirectToLogin(HttpServletRequest request,
+	    HttpServletResponse response) throws IOException
     {
-	request.getSession().setAttribute(LOGIN_RETURN_PATH_SESSION_PARAM_NAME,
-		"#contacts");
+
+	// Gets the reqeust uri
+	String uri = request.getRequestURI();
+
+	// If uri doesn't contain "core" in it, then uri is set in session for
+	// redirection
+	if (!uri.contains("/core"))
+	{
+	    // Set
+	    request.getSession().setAttribute(
+		    RedirectUtil.LOGIN_RETURN_PATH_SESSION_PARAM_NAME, uri);
+
+	    response.sendRedirect("/login");
+	    return;
+	}
+
+	// Gets login url with out uri in it
+	String loginURL = request.getRequestURL().toString()
+		.replace(request.getRequestURI(), "");
+
+	// Sends error response, so it user can be notified about session expiry
+	response.sendError(
+		HttpServletResponse.SC_NON_AUTHORITATIVE_INFORMATION,
+		"You are not logged in. <b><a href=" + loginURL
+			+ "/login>Click here</a><b>");
+	return;
     }
 }

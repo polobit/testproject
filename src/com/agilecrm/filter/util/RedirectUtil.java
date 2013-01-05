@@ -7,18 +7,20 @@ import javax.servlet.http.HttpServletResponse;
 
 public class RedirectUtil
 {
-    public static void redirectURIFromSession(HttpServletRequest request,
-	    HttpServletResponse response, String session_attribute)
+
+    public static final String LOGIN_RETURN_PATH_SESSION_PARAM_NAME = "redirect_uri_on_login";
+
+    public static void redirecTotURIOnLogin(HttpServletRequest request,
+	    HttpServletResponse response)
     {
 	String redirect = (String) request.getSession().getAttribute(
-		session_attribute);
+		LOGIN_RETURN_PATH_SESSION_PARAM_NAME);
 
-	if (redirect == null)
-	{
-	    redirect = "/";
-	}
+	if (redirect != null)
+	    request.getSession().removeAttribute(
+		    LOGIN_RETURN_PATH_SESSION_PARAM_NAME);
 	else
-	    request.getSession().removeAttribute(session_attribute);
+	    redirect = "/";
 
 	try
 	{
@@ -30,4 +32,5 @@ public class RedirectUtil
 	    e.printStackTrace();
 	}
     }
+
 }
