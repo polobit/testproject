@@ -125,6 +125,15 @@
  	<servlet-name>Stripe Webhook</servlet-name>
  	<url-pattern>/backend/stripewebhook/*</url-pattern>
  </servlet-mapping>
+ 
+ <servlet>
+ 	<servlet-name>BlobstoreManager</servlet-name>
+ 	<servlet-class>com.agilecrm.contact.upload.blob.cron.BlobstoreCron</servlet-class>
+ </servlet>
+ <servlet-mapping>
+ 	<servlet-name>BlobstoreManager</servlet-name>
+ 	<url-pattern>/backend/cron/blob</url-pattern>
+ </servlet-mapping>
 
 <servlet>
   <servlet-name>ForgotDomain</servlet-name> 
@@ -156,7 +165,7 @@
 
 <servlet>
 	<servlet-name>Upload file</servlet-name>
-	<servlet-class>com.agilecrm.contact.upload.blob.UploadServlet</servlet-class>
+	<servlet-class>com.agilecrm.contact.upload.blob.BlobUploadCallbackServlet</servlet-class>
 </servlet>
 <servlet-mapping>
 	<servlet-name>Upload file</servlet-name>

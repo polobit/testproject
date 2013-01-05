@@ -13,13 +13,16 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 
 /**
  * Callback servlet called after file is uploaded in to blobstore. After file is
- * uploaded in the blobstore this servlet is called with the blobs uploaded, it
- * reads the blob and returns blob-key of currently uploaded file
+ * uploaded in the blobstore, this servlet is called with the blobs uploaded in
+ * request.
+ * <p>
+ * Reads the blob and returns blob-key of currently uploaded file
+ * </p>
  * 
  * @author Yaswanth
  * 
  */
-public class UploadServlet extends HttpServlet
+public class BlobUploadCallbackServlet extends HttpServlet
 {
     // Initializes blobstore services
     private BlobstoreService blobstoreService = BlobstoreServiceFactory
@@ -32,7 +35,7 @@ public class UploadServlet extends HttpServlet
 	Map<String, BlobKey> blobs = blobstoreService.getUploadedBlobs(req);
 
 	// Gets the key of currently uploaded file (name of the file is "file")
-	BlobKey blobKey = blobs.get("file");
+	BlobKey blobKey = blobs.get("contacts_csv_file");
 
 	// If blobkey is null return
 	if (blobKey == null)
