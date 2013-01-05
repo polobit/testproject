@@ -96,7 +96,7 @@ label.error {
 		<br />
 		<form action="<%=blobstoreService.createUploadUrl("/upload/file")%>"
 			method="post" enctype="multipart/form-data">
-			<p></p><input type="file" name="file"/> </p><br /> 
+			<p></p><input type="file" name="contacts_csv_file"/> </p><br /> 
 			
 			<input name="submit"
 				id="submit" value="Upload" class='submit btn btn-primary'
