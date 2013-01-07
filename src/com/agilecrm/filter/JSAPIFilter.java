@@ -20,7 +20,7 @@ import com.agilecrm.account.APIKey;
  * access
  * <p>
  * Request to url path "/js/api/" should include query parameter "id" with
- * APIKey as is value
+ * APIKey as value
  * </p>
  * 
  */
@@ -56,8 +56,7 @@ public class JSAPIFilter implements Filter
 	if (agileId != null)
 	{
 	    // Check if ApiKey
-	    String apiKey = APIKey.getAPIKey().api_key;
-	    if (APIKey.isPresent(apiKey))
+	    if (APIKey.isPresent(agileId))
 	    {
 		chain.doFilter(httpRequest, httpResponse);
 		return;
