@@ -110,6 +110,11 @@ public class APIKey
 	return false;
     }
 
+    public static Key<DomainUser> getDomainUserIdRelatedToAPIKey(String apiKey)
+    {
+	return dao.ofy().query(APIKey.class).filter("api_key", apiKey).get().owner;
+    }
+
     @PrePersist
     void prePersist()
     {

@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
+import com.agilecrm.account.APIKey;
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
@@ -21,6 +22,18 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.sun.jersey.api.json.JSONWithPadding;
 
+/**
+ * <code>JSAPI</code> provides facility to perform actions, such as creating a
+ * contact, deal, tag, note and also to fetch them by required query conditions.
+ * 
+ * <p>
+ * It provides API that can be used to access the account by providing APIKey as
+ * a parameter in get request. API key is provided to each user of the domain
+ * registered, using this key user can use the JSAPI that can be simply used
+ * from javascript providing APIKey and other query parameters
+ * </p>
+ * 
+ */
 @Path("js/api")
 public class JSAPI
 {
@@ -32,6 +45,22 @@ public class JSAPI
 	return "Invalid Path";
     }
 
+    /**
+     * Accessing
+     * <domain>.agilecrm.com/js/api/contact/email?id=xxxxx&email=encoded
+     * (email)&callback=< function-name> will return contact with email, which
+     * is given as query parameter
+     * 
+     * <p>
+     * Returns Contact JSON object. If contact is not present with given email
+     * address then it returns empty JSON
+     * <P>
+     * 
+     * @param email
+     *            of the contact
+     * @param jsoncallback
+     * @return contact {@link JSONWithPadding}
+     */
     @Path("contact/email")
     @GET
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -42,6 +71,8 @@ public class JSAPI
 
 	try
 	{
+	    // Search contact based on email, returns empty contact if contact
+	    // is not available with given email
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    System.out.println("Contact " + contact);
 	    if (contact == null)
@@ -59,11 +90,30 @@ public class JSAPI
 	}
     }
 
+    /**
+     * Adds contact in the domain
+     * 
+     * <pre>
+     * var contact_json = {tags:[tag1, tag2, tag3], lead_score:100, 
+     * 	properties:[{name:fist_name, type:person/company, value: harry},
+     * {name: first_name, type:person/company, value:harry}]
+     * }
+     * 
+     * (domain-name).agilecrm.com/js/api/contacts?contact=contact_json&callback=< function-name>
+     * </pre>
+     * 
+     * @param json
+     *            contact as json string
+     * @param jsoncallback
+     * @return {@link JSONWithPadding}, returns saved contact or null if contact
+     *         exists with sent email
+     */
     @Path("contacts")
     @GET
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces("application/x-javascript")
     public JSONWithPadding createContact(@QueryParam("contact") String json,
+	    @QueryParam("id") String apiKey,
 	    @QueryParam("callback") String jsoncallback)
     {
 	try
@@ -81,6 +131,10 @@ public class JSAPI
 		System.out.println("Duplicate found for " + email);
 		return null;
 	    }
+
+	    // Sets owner key to contact before saving
+	    contact.setOwner(APIKey.getDomainUserIdRelatedToAPIKey(apiKey));
+
 	    // If zero, save it
 	    contact.save();
 
@@ -96,8 +150,23 @@ public class JSAPI
 	}
     }
 
-    // Add task
-    @Path("js/task")
+    /**
+     * Adds task. Takes email, task json and callback as query parameters, task
+     * is created and related to contact based on the email. If contact doesn't
+     * exist with current email, null is returned with out creating a task
+     * 
+     * <pre>
+     *  var task_json = {"type": CALL/EMAIL/FOLLOW_UP/MEETING/MILESTONE/SEND/TWEET, "PriorityType":HIGH/NORMAL/LOW, "subject": "call jim"}
+     * 
+     * (domain-name).agilecrm.com/core/js/api/task?email="encoded(email)"&id=api_key&task=task_json
+     * </pre>
+     * 
+     * @param email
+     * @param json
+     * @param jsoncallback
+     * @return
+     */
+    @Path("/task")
     @GET
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces("application/x-javascript")
@@ -132,8 +201,18 @@ public class JSAPI
 	}
     }
 
-    // Add note
-    @Path("js/note")
+    /**
+     * Adds note to the contact, which is searched based on the email id
+     * 
+     * @param email
+     *            email of the contact to relate note to particular contact
+     * @param json
+     *            note object as JSON string format
+     * @param jsoncallback
+     * @return {@link JSONWithPadding} Returns note object which is saved and
+     *         calls the specified callback
+     */
+    @Path("/note")
     @GET
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces("application/x-javascript")
@@ -169,11 +248,29 @@ public class JSAPI
     }
 
     // Add deal
-    @Path("js/opportunity")
+    /**
+     * Adds deal and relate contact to the deal
+     * 
+     * <pre>
+     *  var opportunity_json = {"name": "Deal sales", "description": "brief description on deal", "expected_value": "100", 
+     *  	"milestone":"won", "close_date": data as epoch time}
+     *  
+     *  (domain-name).agilecrm.com/core/js/api/opportunity?email=encoded(email)&id=apikey&opportunity=opportunity_json&callback="callback"
+     * </pre>
+     * 
+     * @param email
+     *            email of contact to be added in deal
+     * @param json
+     *            opportunity object as json object
+     * @param jsoncallback
+     * @return
+     */
+    @Path("/opportunity")
     @GET
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces("application/x-javascript")
     public JSONWithPadding createOpportunity(@QueryParam("email") String email,
+	    @QueryParam("id") String apiKey,
 	    @QueryParam("opportunity") String json,
 	    @QueryParam("callback") String jsoncallback)
     {
@@ -190,6 +287,12 @@ public class JSAPI
 		return null;
 	    opportunity.contacts = new ArrayList<String>();
 	    opportunity.contacts.add(contact.id + "");
+
+	    // Set, owner id to opportunity (owner of the apikey is set as owner
+	    // to opportunity)
+	    opportunity.owner_id = String.valueOf(APIKey
+		    .getDomainUserIdRelatedToAPIKey(apiKey).getId());
+
 	    opportunity.save();
 	    System.out.println("opportunitysaved");
 	    return new JSONWithPadding(new GenericEntity<Opportunity>(
@@ -205,6 +308,23 @@ public class JSAPI
 	}
     }
 
+    /**
+     * Adds tags to particular contact (based on email of contact). If contact
+     * doesn't exit with given email id, null is returned
+     * 
+     * <pre>
+     * var tags= "tag1, tag2, tag3" (or) var tags="tag1 tag2 tag3";
+     * 
+     *   (domain-name).agilecrm.com/core/js/api/contacts/add-tags?email=encoded(email)&id=apikey&tags=tags&callback="callback";
+     * </pre>
+     * 
+     * @param email
+     *            email of the contact to add tags
+     * @param tags
+     *            tags to be added
+     * @param jsoncallback
+     * @return {@link JSONWithPadding} contact with added tags
+     */
     @Path("contacts/add-tags")
     @GET
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -242,6 +362,22 @@ public class JSAPI
 	}
     }
 
+    /**
+     * Removes tags from a contact based on the email address
+     * 
+     * <pre>
+     * var tags = "tag1, tag2, tag3"
+     * 
+     * (domain-name).agilecrm.com/core/js/api/contacts/remove-tags?email=encoded(email)&id=apikey&tags=tags&callback="callback"
+     * </pre>
+     * 
+     * @param email
+     *            email of the contact, whose tags are to be removed
+     * @param tags
+     *            tags to be removed
+     * @param jsoncallback
+     * @return {@link JSONWithPadding} returns contact after removing tags
+     */
     @Path("contacts/remove-tags")
     @GET
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -279,24 +415,50 @@ public class JSAPI
 	}
     }
 
-    // Add score
+    /**
+     * Add score to the contact. Searches contact based on the email sent and
+     * adds score to the existing score of the contact
+     * 
+     * <pre>
+     * (domain-name).agilecrm.com/core/js/api/contacts/add-score?email=encoded(email)&score="100"
+     * </pre>
+     * 
+     * @param email
+     *            email of the contact
+     * @param score
+     *            score to be added to the contact
+     * @return
+     */
     @Path("contacts/add-score")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public boolean addScore(@QueryParam("email") String email,
 	    @QueryParam("score") Integer score)
     {
-
 	Contact contact = ContactUtil.searchContactByEmail(email);
 	if (contact == null)
 	    return true;
 
 	contact.addScore(score);
 	return true;
-
     }
 
     // Subtract score
+    /**
+     * Subtract score from the existing score of the contact
+     * 
+     * <pre>
+     * (domain-name).agilecrm.com/core/js/api/contacts/subtract-score?email=encode(email)&score="10";
+     * 
+     * It subtracts score 10 from the existing score of the contact
+     * </pre>
+     * 
+     * @param email
+     *            email address of the contact
+     * @param score
+     *            score to be subtracted
+     * @return
+     */
     @Path("contacts/subtract-score")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -314,8 +476,20 @@ public class JSAPI
 
     }
 
-    // Campaign
-    @Path("js/campaign/enroll/{contact-id}/{workflow-id}")
+    /**
+     * Enrolls a contact to particular workflow. Takes contact id and workflow
+     * id as parameters in addition apikey parameter. contact-id and worflow-id
+     * is given
+     * 
+     * <pre>
+     * (domain-name).agilecrm.com/core/js/api/campaign/enroll/{contact-id}/{workflow-id};
+     * </pre>
+     * 
+     * @param contactId
+     * @param workflowId
+     * @return
+     */
+    @Path("/campaign/enroll/{contact-id}/{workflow-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Boolean subscribeContact(@PathParam("contact-id") Long contactId,
