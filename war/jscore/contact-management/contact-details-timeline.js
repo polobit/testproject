@@ -139,6 +139,8 @@ function load_timeline_details(el, contactId)
 					$('#time-line', el).find('.loading-img-email').remove();
 				}
 			});
+			
+			// Gets address of the contact from its browsing history
 		}else{
 			
 			// Removes loading image of mails, if there is no email to contact  

@@ -38,7 +38,7 @@ $(function() {
 	$('#update_event_validate').die().live('click', function(e) {
 		e.preventDefault();
 
-		save_event('updateActivityForm', 'updateActivityModal', true);
+		save_event('updateActivityForm', 'updateActivityModal', true, this);
 	});
 
 	/**
@@ -212,10 +212,22 @@ function is_valid_range(startDate, endDate, startTime, endTime) {
  *            or updating the existing one
  * 
  */
-function save_event(formId, modalName, isUpdate) {
+function save_event(formId, modalName, isUpdate, saveBtn) {
+	
+	// Returns, if the save button has disabled attribute 
+	if($(saveBtn).attr('disabled'))
+		return;
+	
+	// Disables save button to prevent multiple click event issues
+	$(saveBtn).attr('disabled', 'disabled');
+	
 	// Save functionality for event
-	if (!isValidForm('#' + formId))
+	if (!isValidForm('#' + formId)){
+		
+		// Removes disabled attribute of save button
+		$(saveBtn).removeAttr('disabled');
 		return false;
+	}	
 
 	var json = serializeForm(formId);
 
@@ -250,7 +262,10 @@ function save_event(formId, modalName, isUpdate) {
 	eventModel.url = 'core/api/events';
 	eventModel.save(json, {
 		success : function(data) {
-
+			
+			// Removes disabled attribute of save button
+			$(saveBtn).removeAttr('disabled');
+			
 			$('#' + formId).each(function() {
 				this.reset();
 			});

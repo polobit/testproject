@@ -66,7 +66,7 @@ $(function() {
 	$('#update_task_validate').click(function(e) {
 		e.preventDefault();
 
-		save_task('updateTaskForm', 'updateTaskModal', true);
+		save_task('updateTaskForm', 'updateTaskModal', true, this);
 	});
 
 	/**
@@ -154,9 +154,21 @@ function highlight_task() {
  *            or updating the existing one
  * 
  */
-function save_task(formId, modalId, isUpdate) {
-	if (!isValidForm('#' + formId))
+function save_task(formId, modalId, isUpdate, saveBtn) {
+	
+	// Returns, if the save button has disabled attribute 
+	if($(saveBtn).attr('disabled'))
+		return;
+	
+	// Disables save button to prevent multiple click event issues
+	$(saveBtn).attr('disabled', 'disabled');
+	
+	if (!isValidForm('#' + formId)){
+		
+		// Removes disabled attribute of save button
+		$(saveBtn).removeAttr('disabled');
 		return false;
+	}	
 
 	// Show loading symbol until model get saved
 	$('#' + modalId).find('span.save-status').html(LOADING_HTML);
@@ -169,6 +181,10 @@ function save_task(formId, modalId, isUpdate) {
 	newTask.url = 'core/api/tasks';
 	newTask.save(json, {
 		success : function(data) {
+			
+			// Removes disabled attribute of save button
+			$(saveBtn).removeAttr('disabled');
+			
 			$('#' + formId).each(function() {
 				this.reset();
 			});

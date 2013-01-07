@@ -20,10 +20,7 @@ $(function(){
 		 * Saves the contact using the function "serialize_and_save_continue_contact"
 		 */
 	    $('#person_validate').live('click', function (e) {
-	    	if (!isValidForm('#personForm')) {
-	    		return false;
-	    	}
-	    	serialize_and_save_continue_contact(e, 'personForm', 'personModal', false, true);	        
+	    	serialize_and_save_continue_contact(e, 'personForm', 'personModal', false, true, this);	        
 	    });
 	    
 	    /**
@@ -38,10 +35,7 @@ $(function(){
 		 * Saves the contact using the function "serialize_and_save_continue_contact"
 		 */
 	    $('#company_validate').live('click', function (e) {
-	    	if (!isValidForm('#companyForm')) {
-	    		return false;
-	    	}
-	    	serialize_and_save_continue_contact(e, 'companyForm', 'companyModal', false, false);	        
+	    	serialize_and_save_continue_contact(e, 'companyForm', 'companyModal', false, false, this);	        
 	    });
 	    
 	    /**
