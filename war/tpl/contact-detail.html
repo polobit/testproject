@@ -132,7 +132,7 @@
                     <img alt="Clipboard" src="/img/clipboard.png" />
                 </div>
                 <div class="box-right">
-                    <h3>Yet, this contact has no entities (Notes, Tasks, Deals and etc..) related to it, to show up in the Timeline.</h3>
+                    <h3>Yet, this contact has no entities (Notes, Tasks, Deals and etc..) related to it, to show up in the Timeline and other related tabs.</h3>
                     <div class="text">
                         You can add entities related to it by selecting suitable option from the above "actions" drop down button.
                     </div>
@@ -156,10 +156,18 @@
                     <div>
                         <div class="change-owner-succes">
                         </div>
-                        <span>Lead owner: 
-                            <select id='contact-detail-owner' class="input-block-level">
+                        <span>Lead owner : <span id="contact-owner" data={{domainUser.id}} style="display: inline-block">{{domainUser.name}}</span>
+						  <div class="btn-group" style="position: relative;margin-top: 5px">	
+ 							<a class="btn dropdown-toggle" data-toggle="dropdown">
+                        		Change owner
+                            	<span class="caret"></span>
+                        	</a>
+							<ul id='contact-detail-owner' class="dropdown-menu">
+                       		</ul>
+						  </div>	
+                            <!--<select id='contact-detail-owner' class="input-block-level">
                                 <option class="contact-detail-owner" value="">Select..</option>
-                            </select>
+                            </select>-->
                         </span>
                     </div>
                     <div>
@@ -182,10 +190,12 @@
             <br/>       
 
             {{#each properties}}
-                {{#if_property "first_name" "last_name" "company" "title"}}
-                    <span style='display:inline'><icon class="{{icons name}}"></icon> <small>{{name}}</small></span> 
+                {{#if_property "first_name" "last_name" "company" "title" "image"}}
+                    <span style='display:inline'><icon class="{{icons name}}"></icon> <small>{{ucfirst name}}</small></span> 
                     {{#if subtype}}
-                        ({{subtype}})
+                        ({{subtype}}) :
+					{{else}}
+						:
                     {{/if}}
                     {{value}} 
                     <br/> 

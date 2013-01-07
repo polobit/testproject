@@ -208,18 +208,6 @@ public class Contact extends Cursor implements Serializable
     }
 
     /**
-     * Includes tags in the response of a contact, with attribute name tags
-     * 
-     * @return Set of tags
-     */
-
-    @XmlElement(name = "tags")
-    public Set<String> getTags()
-    {
-	return tags;
-    }
-
-    /**
      * Saves (new) or updates (existing) a contact and executes trigger,
      * notification and also adds to search document
      */
@@ -425,7 +413,7 @@ public class Contact extends Cursor implements Serializable
      * @param owner_key
      */
     @JsonIgnore
-    public void setDomainUser(Key<DomainUser> owner_key)
+    public void setOwner(Key<DomainUser> owner_key)
     {
 	this.owner_key = owner_key;
     }
@@ -439,6 +427,8 @@ public class Contact extends Cursor implements Serializable
     @XmlElement(name = "domainUser")
     public DomainUser getDomainUser()
     {
+	System.out.println("Xml elem of domain????????");
+	System.out.println(owner_key);
 	if (owner_key != null)
 	{
 	    // If user is deleted no user is found with key so set user to null
@@ -446,6 +436,9 @@ public class Contact extends Cursor implements Serializable
 	    try
 	    {
 		// return dao.ofy().get(owner_key);
+		System.out.println(owner_key.getId());
+		System.out.println(DomainUserUtil.getDomainUser(owner_key
+			.getId()));
 		return DomainUserUtil.getDomainUser(owner_key.getId());
 	    }
 	    catch (Exception e)

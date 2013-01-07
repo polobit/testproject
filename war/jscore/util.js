@@ -44,7 +44,7 @@ function getUrlVars() {
  * @param template
  *            Template to create options
  */
-function fillSelect(selectId, url, parseKey, callback, template) {
+function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown) {
 	// Fetch Collection from URL
 	var collection_def = Backbone.Collection.extend({
 		url : url,
@@ -73,7 +73,11 @@ function fillSelect(selectId, url, parseKey, callback, template) {
 					// Remove loading
 					$('.loading').remove();
 
-					// Delete prev options if any
+					// Delete prev options if any by verifying whether ul drop down or 
+					// select drop down
+					if(isUlDropdown)
+						$("#" + selectId).empty();
+					else
 					$("#" + selectId)
 							.empty()
 							.append(
