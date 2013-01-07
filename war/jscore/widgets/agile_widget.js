@@ -197,6 +197,8 @@ function agile_crm_save_widget_property_to_contact(propertyName, value) {
 	// Stringifies widget_properties json in to string and set to contact model.
 	contact_model.set("widget_properties", JSON.stringify(widget_properties));
 
+	contact_model.url = "core/api/contacts"
+	
 	// Saves updated model
 	contact_model.save()
 
@@ -258,6 +260,8 @@ function agile_crm_delete_widget_property_from_contact(propertyName) {
 	// sets Updated widget_properties in to contact model
 	contact_model.set("widget_properties", JSON.stringify(widget_properties));
 
+	contact_model.url = "core/api/contacts"
+	
 	// Save updated contact model
 	contact_model.save()
 }
