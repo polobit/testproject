@@ -343,7 +343,7 @@ public class ContactUtil
 	{
 	    contact.id = null;
 	    contact.created_time = 0l;
-	    contact.setDomainUser(ownerKey);
+	    contact.setOwner(ownerKey);
 
 	    for (int j = 0; j < csvValues.length; j++)
 	    {

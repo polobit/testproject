@@ -52,16 +52,12 @@ function starify(el){
 }
 
 /**
- * Shows all the domain users names as select drop down options (current owner as selected) 
+ * Shows all the domain users names as ul drop down list 
  * to change the owner of a contact 
  */
 function fill_owners(el, data){
-	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-    fillSelect('contact-detail-owner','/core/api/users', 'domainUsers', function presentOwner() {
-    		$('#contact-detail-owner',el).find('option.default-select').remove();
-    		if(data.domainUser)
-    			$('#contact-detail-owner',el).find('option[value='+data.domainUser.id+']').attr("selected", "selected");
-	}, optionsTemplate); 
+	var optionsTemplate = "<li><a class='contact-owner-list' data='{{id}}'>{{name}}</a></li>";
+    fillSelect('contact-detail-owner','/core/api/users', 'domainUsers', undefined, optionsTemplate, true); 
 }
 
 /**
@@ -195,26 +191,35 @@ $(function(){
 	});
 	
 	/**
-	 * Changes, owner of the contact, when select option of owners drop down
-	 * is changed.   
+	 * Changes, owner of the contact, when an option of change owner drop down
+	 * is selected.   
 	 */
-	$('#contact-detail-owner').live('change', function(){
+	$('.contact-owner-list').live('click', function(){
 		var id_array = [];
 		id_array.push(App_Contacts.contactDetailView.model.get('id'));
 		
 		// Reads the owner id from the selected option
-		var new_owner_id = $('#contact-detail-owner option:selected').val();
+		var new_owner_id = $(this).attr('data');
+		var new_owner_name = $(this).text();
+		var current_owner_id = $('#contact-owner').attr('data');
+		
+		// Returns, if same owner is selected again 
+		if(new_owner_id == current_owner_id)
+			return;
 		
 		var url = '/core/api/contacts/bulk/owner/' + new_owner_id;
 		var json = {};
 		json.contact_ids = JSON.stringify(id_array);
 		$.post(url, json, function(data){
 			
+			// Replaces old owner details with changed one
+			$('#contact-owner').text(new_owner_name);
+			$('#contact-owner').attr('data', new_owner_id);
+			
 			// Shows acknowledgement of owner change
 			$(".change-owner-succes").html('<div class="alert alert-success"><a class="close" data-dismiss="alert" href="#">×</a>Owner has been changed successfully.</div>');
 		});
    	});
-	
 });
 
 

@@ -131,3 +131,17 @@ function ucfirst(value) {
 
 }
 
+/**
+ * Counts total number of attributes in a json object 
+ * @param obj
+ * @returns {Number}
+ */
+function countJsonProperties(obj) {
+	  var prop;
+	  var propCount = 0;
+
+	  for (prop in obj) {
+	    propCount++;
+	  }
+	  return propCount;
+	}
