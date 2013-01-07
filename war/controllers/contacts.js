@@ -329,7 +329,7 @@ var ContactsRouter = Backbone.Router.extend({
      */
     continueCompany: function () {
     	
-    	var model = serialize_and_save_continue_contact(undefined, 'companyForm', 'companyModal', true, false);
+    	var model = serialize_and_save_continue_contact(undefined, 'companyForm', 'companyModal', true, false, '#continue-company');
     },
     
     /**

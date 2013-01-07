@@ -14,8 +14,20 @@ $(function(){
      */  
     $('#note_validate').live('click', function(e){
     	e.preventDefault();
-    	if (!isValidForm('#noteForm'))
-        	return;
+    	
+    	// Returns, if the save button has disabled attribute 
+    	if($(this).attr('disabled'))
+    		return;
+    	
+    	// Disables save button to prevent multiple click event issues
+    	$(this).attr('disabled', 'disabled');
+    	
+    	if (!isValidForm('#noteForm')){
+        	
+    		// Removes disabled attribute of save button
+    		$(this).removeAttr('disabled');
+    		return;
+    	}
     	
     	// Shows loading symbol until model get saved
         $('#noteModal').find('span.save-status').html(LOADING_HTML);
@@ -26,6 +38,10 @@ $(function(){
       	noteModel.url = 'core/api/notes';
       	noteModel.save(json,{
     		success: function(data){
+    			
+    			// Removes disabled attribute of save button
+    			$(saveBtn).removeAttr('disabled');
+    			
     			$('#noteForm').each (function(){
     	          	  this.reset();
     	        });

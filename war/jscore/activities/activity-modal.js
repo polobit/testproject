@@ -16,14 +16,15 @@ $(function() {
 	$('#task_event_validate').die().live('click', function(e) {
 		e.preventDefault();
 
+		console.log(this);
 		// Save functionality for task by checking task or not
 		if ($("#hiddentask").val() == "task") {
 
-			save_task('taskForm', 'activityModal');
+			save_task('taskForm', 'activityModal', false, this);
 		} else {
 
 			// Save functionality for event
-			save_event('activityForm', 'activityModal');
+			save_event('activityForm', 'activityModal', false, this);
 		}
 	}); // End of Task and Event Validation function
 

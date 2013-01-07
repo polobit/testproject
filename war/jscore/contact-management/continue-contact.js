@@ -22,7 +22,7 @@
  * 			verifies whether person or company
  * @returns object get saved
  */
-function serialize_and_save_continue_contact(e, form_id, modal_id, continueContact, is_person) {
+function serialize_and_save_continue_contact(e, form_id, modal_id, continueContact, is_person, saveBtn) {
 	
 	// Prevents the default event, if any 
 	if(e)
@@ -30,9 +30,20 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 	
     var $form = $('#' + form_id);
     
+	// Returns, if the save button has disabled attribute 
+	if($(saveBtn).attr('disabled'))
+		return;
+	
+	// Disables save button to prevent multiple click event issues
+	$(saveBtn).attr('disabled', 'disabled');
+	
     // Validate Form
-    if(!isValidForm($form))
+    if(!isValidForm($form)){
+    	
+    	// Removes disabled attribute of save button
+		$(saveBtn).removeAttr('disabled');
     	return;
+    }
     
     // Show loading symbol until model get saved
     $('#' + modal_id).find('span.save-status').html(LOADING_HTML);
@@ -174,6 +185,9 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     contactModel.save(obj, {
         success: function (data) {
         	
+        	// Removes disabled attribute of save button
+			$(saveBtn).removeAttr('disabled');
+			
         	// Adds the tags to tags collection 
         	if (tags != undefined && tags.length != 0)
         		{
@@ -234,6 +248,9 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         },
         error: function (model, response) {
         	
+        	// Removes disabled attribute of save button
+    		$(saveBtn).removeAttr('disabled');
+    		
         	// Remove loading image
         	$('#' + modal_id).find('span.save-status img').remove();
         	$('#' + form_id).find('span.save-status img').remove();
@@ -373,12 +390,12 @@ $(function () {
 
     // Continue editing of new-person-modal 
     $('#continue-contact').click(function (e) {
-        var model = serialize_and_save_continue_contact(e, 'personForm','personModal', true, true);
+        var model = serialize_and_save_continue_contact(e, 'personForm','personModal', true, true, this);
     });
 
     // Update button click event in continue-contact form
     $("#update").die().live('click', function (e) {
-        serialize_and_save_continue_contact(e, 'continueform', 'personModal', false, true);
+        serialize_and_save_continue_contact(e, 'continueform', 'personModal', false, true, this);
     });
     
     // Close button click event in continue-contact form
@@ -403,7 +420,7 @@ $(function () {
     
  // Update button click event in continue-company
     $("#company-update").die().live('click', function (e) {
-        serialize_and_save_continue_contact(e, 'continueCompanyForm', 'companyModal', false, false);
+        serialize_and_save_continue_contact(e, 'continueCompanyForm', 'companyModal', false, false, this);
     });
 
 });

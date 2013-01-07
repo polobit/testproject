@@ -171,7 +171,14 @@ var Base_Model_View = Backbone.View
 
 				// Represents form element
 				var $form = $('#' + formId);
-
+				
+				// Returns, if the save button has disabled attribute 
+				if($form.find('.save').attr('disabled'))
+					return;
+				
+				// Disables save button to prevent multiple click event issues
+				$form.find('.save').attr('disabled', 'disabled');
+				
 				// Represents validations result of the form, and json
 				// represents serialized data in the form
 				var isValid, json;
@@ -249,6 +256,10 @@ var Base_Model_View = Backbone.View
 				 * multiple forms), or checks validity of single form
 				 */
 				if (isValid == false || !isValidForm($form)) {
+					
+					// Removes disabled attribute of save button
+					$form.find('.save').removeAttr('disabled', 'disabled');
+					
 					return;
 				}
 
@@ -300,6 +311,10 @@ var Base_Model_View = Backbone.View
 									 * creating an view
 									 */
 									success : function(model, response) {
+										
+										// Removes disabled attribute of save button
+										$form.find('.save').removeAttr('disabled');
+										
 										// Reload the current page
 										if (reload)
 											location.reload(true);
@@ -352,6 +367,10 @@ var Base_Model_View = Backbone.View
 									 * the form
 									 */
 									error : function(model, response) {
+										
+										// Removes disabled attribute of save button
+										$form.find('.save').removeAttr('disabled');
+										
 										// Hide loading on error
 										$save_info.hide();
 
