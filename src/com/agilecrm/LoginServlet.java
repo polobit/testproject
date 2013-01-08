@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.agilecrm.filter.util.RedirectUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -40,6 +39,8 @@ import com.google.appengine.api.utils.SystemProperty;
 @SuppressWarnings("serial")
 public class LoginServlet extends HttpServlet
 {
+
+    public static String RETURN_PATH_SESSION_PARAM_NAME = "redirect_after_openid";
 
     public void doPost(HttpServletRequest request, HttpServletResponse response)
 	    throws IOException, ServletException
@@ -192,23 +193,25 @@ public class LoginServlet extends HttpServlet
 		&& request.getParameter("signin").equalsIgnoreCase("on"))
 	{
 	    request.getSession().setMaxInactiveInterval(30 * 24 * 60 * 60);
+
 	}
 	else
 	{
 	    request.getSession().setMaxInactiveInterval(2 * 60 * 60);
 	}
 
-	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
-	{
+	String redirect = (String) request.getSession().getAttribute(
+		RETURN_PATH_SESSION_PARAM_NAME);
 
-	    RedirectUtil.redirecTotURIOnLogin(request, response);
-	    return;
-	}
-	else
+	if (redirect != null)
 	{
-	    RedirectUtil.redirecTotURIOnLogin(request, response);
+	    request.getSession()
+		    .removeAttribute(RETURN_PATH_SESSION_PARAM_NAME);
+	    response.sendRedirect(redirect);
 	    return;
 	}
+
+	response.sendRedirect("/");
 
     }
 }

@@ -11,8 +11,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.agilecrm.LoginServlet;
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.filter.util.RedirectUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.AgileUser;
@@ -160,25 +160,20 @@ public class AgileAuthFilter implements Filter
 
 	// If uri doesn't contain "core" in it, then uri is set in session for
 	// redirection
-	if (!uri.contains("/core"))
+	if (uri.contains("/core"))
 	{
-	    // Set
-	    request.getSession().setAttribute(
-		    RedirectUtil.LOGIN_RETURN_PATH_SESSION_PARAM_NAME, uri);
+	    // Sends error response, so it user can be notified about session
+	    // expiry
+	    response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
+		    "You are not logged in.");
 
-	    response.sendRedirect("/login");
 	    return;
 	}
 
-	// Gets login url with out uri in it
-	String loginURL = request.getRequestURL().toString()
-		.replace(request.getRequestURI(), "");
+	// Set
+	request.getSession().setAttribute(
+		LoginServlet.RETURN_PATH_SESSION_PARAM_NAME, uri);
 
-	// Sends error response, so it user can be notified about session expiry
-	response.sendError(
-		HttpServletResponse.SC_NON_AUTHORITATIVE_INFORMATION,
-		"You are not logged in. <b><a href=" + loginURL
-			+ "/login>Click here</a><b>");
-	return;
+	response.sendRedirect("/login");
     }
 }
