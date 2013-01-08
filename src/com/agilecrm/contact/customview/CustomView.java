@@ -21,79 +21,89 @@ import com.googlecode.objectify.condition.IfDefault;
  */
 @XmlRootElement
 @Unindexed
-public class CustomView {
+public class CustomView
+{
 
-	// Key
-	@Id
-	public Long id;
+    // Key
+    @Id
+    public Long id;
 
-	/** Name of the contact custom view */
-	@NotSaved(IfDefault.class)
-	public String name = null;
+    /** Name of the contact custom view */
+    @NotSaved(IfDefault.class)
+    public String name = null;
 
-	/** List of fields, LinkedHashSet to preserve the order of the fields */
-	@NotSaved(IfDefault.class)
-	public LinkedHashSet<String> fields_set = new LinkedHashSet<String>();
+    /** List of fields, LinkedHashSet to preserve the order of the fields */
+    @NotSaved(IfDefault.class)
+    public LinkedHashSet<String> fields_set = new LinkedHashSet<String>();
 
-	// Dao
-	public static ObjectifyGenericDao<CustomView> dao = new ObjectifyGenericDao<CustomView>(
-			CustomView.class);
+    // Dao
+    public static ObjectifyGenericDao<CustomView> dao = new ObjectifyGenericDao<CustomView>(
+	    CustomView.class);
 
-	public CustomView() {
+    public CustomView()
+    {
 
+    }
+
+    public CustomView(String view_name, LinkedHashSet<String> fields_set)
+    {
+
+	this.name = view_name;
+	this.fields_set = fields_set;
+
+    }
+
+    // Get list of contact views
+    /**
+     * Gets all the views
+     * 
+     * @return {@link List} of {@link CustomView}
+     */
+    public static List<CustomView> getContactViewList()
+    {
+
+	// Fetches all the Views
+	return dao.fetchAll();
+    }
+
+    // Get contact view by id
+    /**
+     * Fetches view based on the id, whenever a view is selected it is fetched
+     * based on id and returned
+     * 
+     * @param id
+     *            {@link Long} Id of the entity
+     * @return {@link CustomView}
+     */
+    public static CustomView getContactView(Long id)
+    {
+
+	// Fetch view by id, entity is not found returns null
+	try
+	{
+	    return dao.get(id);
 	}
-
-	public CustomView(String view_name, LinkedHashSet<String> fields_set) {
-
-		this.name = view_name;
-		this.fields_set = fields_set;
-
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
 	}
+    }
 
-	// Get list of contact views
-	/**
-	 * Gets all the views
-	 * 
-	 * @return {@link List} of {@link CustomView}
-	 */
-	public static List<CustomView> getContactViewList() {
+    /**
+     * Saves current instance of {@link CustomView}
+     */
+    public void save()
+    {
+	dao.put(this);
+    }
 
-		// Fetches all the Views
-		return dao.fetchAll();
-	}
-
-	// Get contact view by id
-	/**
-	 * Fetches view based on the id, whenever a view is selected it is fetched
-	 * based on id and returned
-	 * 
-	 * @param id
-	 *            {@link Long} Id of the entity
-	 * @return {@link CustomView}
-	 */
-	public static CustomView getContactView(Long id) {
-
-		// Fetch view by id, entity is not found returns null
-		try {
-			return dao.get(id);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	/**
-	 * Saves current instance of {@link CustomView}
-	 */
-	public void save() {
-		dao.put(this);
-	}
-
-	/**
-	 * To String implementation of {@link CustomView}
-	 */
-	public String toString() {
-		return "id: " + id + " fields_set: " + fields_set + " view_name" + name;
-	}
+    /**
+     * To String implementation of {@link CustomView}
+     */
+    public String toString()
+    {
+	return "id: " + id + " fields_set: " + fields_set + " view_name" + name;
+    }
 
 }

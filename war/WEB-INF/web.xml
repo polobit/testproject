@@ -126,14 +126,6 @@
  	<url-pattern>/backend/stripewebhook/*</url-pattern>
  </servlet-mapping>
  
- <servlet>
- 	<servlet-name>BlobstoreManager</servlet-name>
- 	<servlet-class>com.agilecrm.contact.upload.blob.cron.BlobstoreCron</servlet-class>
- </servlet>
- <servlet-mapping>
- 	<servlet-name>BlobstoreManager</servlet-name>
- 	<url-pattern>/backend/cron/blob</url-pattern>
- </servlet-mapping>
 
 <servlet>
   <servlet-name>ForgotDomain</servlet-name> 
@@ -163,25 +155,6 @@
 <url-pattern>/choose-domain</url-pattern> 
 </servlet-mapping>
 
-<servlet>
-	<servlet-name>Upload file</servlet-name>
-	<servlet-class>com.agilecrm.contact.upload.blob.BlobUploadCallbackServlet</servlet-class>
-</servlet>
-<servlet-mapping>
-	<servlet-name>Upload file</servlet-name>
-	<url-pattern>/upload/file</url-pattern>
-</servlet-mapping>
-
- <servlet>
- <servlet-name>BulkContactProcess</servlet-name> 
-<servlet-class>com.agilecrm.contact.upload.blob.BulkContactProcess</servlet-class> 
-</servlet>
-
-<servlet-mapping>
-<servlet-name>BulkContactProcess</servlet-name> 
-<url-pattern>backend/contactsbulk/</url-pattern> 
-</servlet-mapping>
-  
   <filter>
        <filter-name>NamespaceFilter</filter-name>
        <filter-class>com.agilecrm.filter.NamespaceFilter</filter-class>

@@ -16,7 +16,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.util.Util;
+import com.agilecrm.util.CacheUtil;
 import com.google.appengine.api.NamespaceManager;
 
 @SuppressWarnings("serial")
@@ -71,7 +71,7 @@ public class GMailGadgetServlet extends HttpServlet
 	resp.getWriter().println("One time session " + oneTimeSessionKey);
 
 	// Get Cache Id
-	String ownerId = (String) Util.getCache(oneTimeSessionKey);
+	String ownerId = (String) CacheUtil.getCache(oneTimeSessionKey);
 	if (ownerId == null)
 	{
 	    resp.getWriter()
@@ -81,7 +81,7 @@ public class GMailGadgetServlet extends HttpServlet
 	}
 
 	// Remove from Cache
-	Util.deleteCache(oneTimeSessionKey);
+	CacheUtil.deleteCache(oneTimeSessionKey);
 
 	resp.getWriter().println("Owner Id " + ownerId);
 
@@ -114,7 +114,7 @@ public class GMailGadgetServlet extends HttpServlet
 	String oneTimeSessionKey = req.getParameter(SESSION_KEY_NAME);
 
 	// Check in cache and add to session id
-	if (Util.getCache(oneTimeSessionKey) == null)
+	if (CacheUtil.getCache(oneTimeSessionKey) == null)
 	{
 	    resp.getWriter()
 		    .println(
@@ -147,7 +147,7 @@ public class GMailGadgetServlet extends HttpServlet
 	// get this value
 	// Basicaly - the popup does the openid authentcation and then maps
 	// this opensocialid using this one-time-session
-	Util.setCache(oneTimeSessionKey, ownerId);
+	CacheUtil.setCache(oneTimeSessionKey, ownerId);
 
 	JSONObject result = new JSONObject();
 	result.put("user_exists", false);

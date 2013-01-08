@@ -35,7 +35,6 @@ import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.util.CSVUtil;
-import com.agilecrm.util.CacheUtil;
 
 /**
  * <code>ContactsAPI</code> includes REST calls to interact with {@link Contact}
@@ -143,44 +142,26 @@ public class ContactsAPI
     }
 
     /**
-     * Returns whether the key of contacts list still exists in the memcache
-     * i.e., task is not completed. This method will be called repeatedly with
-     * specified time interval from client to check whether the uploaded
-     * contacts are saved. If contacts are save then key is removed from the
-     * memcache then this method will return true if key is moved from the
-     * memcache.
+     * Accepts list of contacts, and save the list of contacts iterating through
+     * each contact
      * 
-     * @param key
-     *            {@link String}, key of the contact list saved in memcache
-     * @return {@link Boolean} returns true if key is removed from memcache and
-     *         vice-versa
+     * @param contacts
+     *            {@link List} of {@link Contact}
+     * @return {@link List} of contacts
      */
-    @Path("/upload/status")
+    @Path("multi/upload")
     @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public boolean contactsUploadStatus(
-	    @FormParam("memcache_keys") String memcache_keys)
+    public List<Contact> createMultipleContact(List<Contact> contacts)
     {
-	try
-	{
-	    JSONArray keys = new JSONArray(memcache_keys);
+	for (Contact contact : contacts)
+	    contact.save();
 
-	    for (int i = 0; i < keys.length(); i++)
-	    {
-		String key = keys.get(i).toString();
-		if (CacheUtil.isPresent(key))
-		    return false;
-
-	    }
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return false;
-	}
-	return true;
+	return contacts;
     }
 
+    // File Upload
     /**
      * Handle request sent using file uploader, reads the details from the
      * uploaded file are returns the data which is processed and stored in to
@@ -197,21 +178,21 @@ public class ContactsAPI
     {
 	try
 	{
+
 	    // Reads data from the request object
 	    InputStream file = request.getInputStream();
-	    // Converts the inputsream in to a string
 
+	    // Converts the inputsream in to a string
 	    String csv = IOUtils.toString(file);
-	    System.out.println(csv);
 
 	    JSONObject success = new JSONObject();
 	    success.put("success", true);
-	    // Stores results in to a map
 
+	    // Stores results in to a map
 	    Hashtable result = CSVUtil.convertCSVToJSONArray2(csv, "Email");
 	    JSONArray csvArray = (JSONArray) result.get("result");
-	    // returns CSV file as a json object with key "data"
 
+	    // returns CSV file as a json object with key "data"
 	    success.put("data", csvArray);
 
 	    return success.toString();

@@ -26,7 +26,7 @@ public class DealNotificationPrefsUtil
     {
 	if (opportunity != null)
 	    NotificationPrefsUtil.executeNotification(
-		NotificationPrefs.Type.DEAL_CREATED, opportunity);
+		    NotificationPrefs.Type.DEAL_CREATED, opportunity);
     }
 
     /**

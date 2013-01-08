@@ -165,7 +165,8 @@ public class SendMail
 		for (Object eachObject : (Object[]) object)
 		{
 		    String className = eachObject.getClass().getSimpleName();
-		    content.put(className,
+		    content.put(
+			    className,
 			    new JSONObject(new ObjectMapper()
 				    .writeValueAsString(eachObject)));
 		}
