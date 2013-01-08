@@ -239,7 +239,7 @@ public class ContactUtil
     }
 
     /**
-     * Converts CSV data in to JSON array, this method converts firt 10 line of
+     * Converts CSV data in to JSON array, this method converts first 10 line of
      * csv data as sample information, which is sent back to client to show
      * uploaded sample details
      * 

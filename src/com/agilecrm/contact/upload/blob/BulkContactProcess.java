@@ -8,11 +8,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.util.CacheUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreInputStream;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
@@ -44,15 +46,29 @@ public class BulkContactProcess extends HttpServlet
 	    // Gets the blob key and domain user id from the request parameters
 	    String key = request.getParameter("key");
 	    String ownerId = request.getParameter("ownerId");
+	    String namespace = request.getParameter("namespace");
+
+	    System.out.println("namespace = " + namespace);
 
 	    // Creates a blobkey object from blobkey string
 	    BlobKey blobKey = new BlobKey(key);
+
+	    if (StringUtils.isEmpty(namespace) || namespace.equals("null"))
+	    {
+		BlobstoreServiceFactory.getBlobstoreService().delete(blobKey);
+
+		CacheUtil.remove(key);
+
+		return;
+	    }
 
 	    // Reads the stream from blobstore
 	    InputStream blobStream = new BlobstoreInputStream(blobKey);
 
 	    // Converts stream data into valid string data
 	    String csv = IOUtils.toString(blobStream);
+
+	    NamespaceManager.set(namespace);
 
 	    // Calls utility method to save contacts in csv with owner id,
 	    // according to contact prototype sent

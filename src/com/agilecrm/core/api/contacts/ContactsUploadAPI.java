@@ -17,6 +17,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.util.HTTPUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.backends.BackendServiceFactory;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreInputStream;
@@ -26,7 +27,7 @@ import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 
 @Path("/api/upload")
-public class UploadContactsAPI
+public class ContactsUploadAPI
 {
 
     /**
@@ -42,14 +43,11 @@ public class UploadContactsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public String processBlobToCSV(String blobKey)
     {
-	// Creates a Blobkey from blobkey string
-	BlobKey key = new BlobKey(blobKey);
-
 	BlobstoreInputStream stream;
 	try
 	{
 	    // Read stream data from blobstore
-	    stream = new BlobstoreInputStream(key);
+	    stream = new BlobstoreInputStream(new BlobKey(blobKey));
 
 	    // Converts byte data in to string
 	    String csv = IOUtils.toString(stream);
@@ -58,7 +56,8 @@ public class UploadContactsAPI
 	    success.put("success", true);
 
 	    // Stores results in to a map
-	    Hashtable result = ContactUtil.convertCSVToJSONArrayPartially(csv, null);
+	    Hashtable result = ContactUtil.convertCSVToJSONArrayPartially(csv,
+		    "Email");
 
 	    JSONArray csvArray = (JSONArray) result.get("result");
 
@@ -99,7 +98,7 @@ public class UploadContactsAPI
 
 	// Add to task to queue, which access backends url with given data
 	queue.add(TaskOptions.Builder.withPayload(new TaskRunner(contact,
-		postURL, blobKey, ownerId)));
+		postURL, blobKey, ownerId, NamespaceManager.get())));
 
 	// Blobkey is returned
 	return blobKey;
@@ -144,14 +143,16 @@ class TaskRunner implements DeferredTask
     String blobKey;
     String postURL;
     Long ownerId;
+    String namespace;
 
     public TaskRunner(String contact, String postURL, String blobKey,
-	    Long ownerId)
+	    Long ownerId, String namespace)
     {
 	this.contact = contact;
 	this.postURL = postURL;
 	this.blobKey = blobKey;
 	this.ownerId = ownerId;
+	this.namespace = namespace;
     }
 
     public void run()
@@ -159,12 +160,13 @@ class TaskRunner implements DeferredTask
 
 	// Access backends url, with blobkey, ownerid
 	String URL = "http://" + postURL + "/backend/contactsbulk/?key="
-		+ blobKey + "&ownerId=" + ownerId;
+		+ blobKey + "&ownerId=" + ownerId + "&namespace=" + namespace;
 
 	System.out.println("backend url data : " + URL);
 
 	try
 	{
+
 	    // Post contact to backends url
 	    HTTPUtil.accessURLUsingPost(URL, contact);
 	}
@@ -174,5 +176,4 @@ class TaskRunner implements DeferredTask
 	    e.printStackTrace();
 	}
     }
-
 }
