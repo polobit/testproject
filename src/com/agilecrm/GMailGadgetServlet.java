@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
-import com.agilecrm.session.OpenIdServlet;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -125,7 +124,7 @@ public class GMailGadgetServlet extends HttpServlet
 
 	// Return back to this URL
 	req.getSession().setAttribute(
-		OpenIdServlet.RETURN_PATH_SESSION_PARAM_NAME,
+		LoginServlet.RETURN_PATH_SESSION_PARAM_NAME,
 		"/gmail?" + SESSION_KEY_NAME + "=" + oneTimeSessionKey
 			+ "&openid=done&hd=" + req.getParameter("hd"));
 
