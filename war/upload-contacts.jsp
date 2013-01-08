@@ -55,6 +55,15 @@
 		return;
 	}
 
+	function isValid(){
+	    $("#upload-contacts-form").validate({
+	        rules: {
+	        	contacts_csv_file:{required:true,accept:"csv"}
+	               }
+	   		});
+	    return $("#upload-contacts-form").valid();
+	    } 
+	
 	$(function() {
 		
 		// Get import query parameter from url
@@ -68,7 +77,6 @@
 			return;
 		}
 	});
-
 
 
 </script>
@@ -95,7 +103,7 @@ label.error {
 
 		<br />
 		<form action="<%=blobstoreService.createUploadUrl("/upload/file")%>"
-			method="post" enctype="multipart/form-data">
+			method="post" id="upload-contacts-form" enctype="multipart/form-data" onsubmit="return isValid()">
 			<p></p><input type="file" name="contacts_csv_file"/> </p><br /> 
 			
 			<input name="submit"

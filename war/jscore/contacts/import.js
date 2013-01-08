@@ -30,7 +30,7 @@ function processBlobData(key) {
 	if (!key)	
 		return;
 
-	// Sets blob key to global value, so it can be used while saveing uploaded
+	// Sets blob key to global value, so it can be used while saving uploaded
 	// contacts
 	blob_key = key;
 
@@ -41,7 +41,7 @@ function processBlobData(key) {
 		url : '/core/api/upload/csv/process',
 		data : key,
 		success : function(data) {
-
+			
 			// Processed contacts in csv are shown in the template
 			$('#content').html(getTemplate("import-contacts-2", data));
 		}

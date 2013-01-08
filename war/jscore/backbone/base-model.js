@@ -84,9 +84,11 @@ var Base_Model_View = Backbone.View
 				this.model.bind("change", this.render, this);
 				
 				this.model.bind('error', function(model, response){
-					if(response.status == 203)
+
+					if(response.status == 401)
 					{
-						$("#content").html(response.statusText);
+						var hash = window.location.hash;
+						window.location.href = window.location.origin+"/login"+hash;
 						return;
 					}
 				});

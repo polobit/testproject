@@ -128,12 +128,34 @@ public class RegisterServlet extends HttpServlet
 	// Get User Info
 	UserInfo userInfo = (UserInfo) request.getSession().getAttribute(
 		SessionManager.AUTH_SESSION_COOKIE_NAME);
+
+	// If userInfo and domain count is zero the it is considered as new
+	// registration, else considered as open ID registration
 	if (userInfo != null)
 	{
-	    DomainUser domainUser = createUser(request, response, userInfo, "");
-	    response.sendRedirect("https://" + domainUser.domain
-		    + ".agilecrm.com/");
+	    if (DomainUserUtil.count() == 0)
+	    {
+		DomainUser domainUser = createUser(request, response, userInfo,
+			"");
+		response.sendRedirect("https://" + domainUser.domain
+			+ ".agilecrm.com/");
+		return;
+	    }
+
+	    String redirect = (String) request.getSession().getAttribute(
+		    LoginServlet.RETURN_PATH_SESSION_PARAM_NAME);
+
+	    if (redirect != null)
+	    {
+		request.getSession().removeAttribute(
+			LoginServlet.RETURN_PATH_SESSION_PARAM_NAME);
+		response.sendRedirect(redirect);
+		return;
+	    }
+
+	    response.sendRedirect("/");
 	    return;
+
 	}
 
 	// Get server type

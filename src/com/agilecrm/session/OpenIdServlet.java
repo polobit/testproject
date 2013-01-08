@@ -31,7 +31,6 @@ import org.openid4java.message.AuthRequest;
 import org.openid4java.message.ParameterList;
 
 import com.agilecrm.session.openid.ConsumerFactory;
-import com.agilecrm.user.util.DomainUserUtil;
 import com.google.step2.AuthRequestHelper;
 import com.google.step2.AuthResponseHelper;
 import com.google.step2.ConsumerHelper;
@@ -50,8 +49,6 @@ public class OpenIdServlet extends HttpServlet
     protected String realm;
     protected String returnToPath;
     protected String homePath;
-
-    public static String RETURN_PATH_SESSION_PARAM_NAME = "redirect_after_openid";
 
     /**
      * Init the servlet. For demo purposes, we're just using an in-memory
@@ -138,33 +135,10 @@ public class OpenIdServlet extends HttpServlet
 	    /**
 	     * To check whether request is for registration or for login
 	     */
-	    if (DomainUserUtil.count() == 0)
-	    {
-		req.setAttribute("type", "oauth");
 
-		resp.sendRedirect("/register");
+	    req.setAttribute("type", "oauth");
 
-		return;
-	    }
-
-	    // If valid-session and Redirect URL present in session,
-	    // redirect
-	    if (req.getSession(false) != null)
-	    {
-		String redirect = (String) req.getSession().getAttribute(
-			RETURN_PATH_SESSION_PARAM_NAME);
-		if (redirect != null)
-		{
-		    // Remove from Session
-		    req.getSession().removeAttribute(
-			    RETURN_PATH_SESSION_PARAM_NAME);
-
-		    resp.sendRedirect(redirect);
-		    return;
-		}
-	    }
-
-	    resp.sendRedirect(homePath);
+	    resp.sendRedirect("/register?type=oauth");
 	}
 	catch (OpenIDException e)
 	{
