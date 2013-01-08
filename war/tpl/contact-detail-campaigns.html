@@ -1,21 +1,38 @@
 <script id="campaigns-collection-template" type="text/html">
 <br>
+<div class='data-block'>
+<div class='data-container'>
 <div class="page-header">
-    <h2>List of Workflows</h2>
+    <h2>List of Campaign Logs</h2>
 </div>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Message</th>
-            <th>Time</th>
-        </tr>
-    </thead>
-    <tbody id="campaigns-model-list"></tbody>
-</table>
-<div class="right">
-    <div class="span3 enroll-succes"></div>
-</div>
-<br>
+		{{#unless this.length}}
+        <div class="slate">
+            <div class="slate-content">
+                <div class="box-left">
+                    <img alt="Clipboard" src="/img/clipboard.png" />
+                </div>
+                <div class="box-right">
+                    <h3>Yet, this contacts has no campaign logs related to it.</h3>
+                    <div class="text">
+                        You can subscribe this contact to a campaign to get logs, by selecting and adding campaign from the below drop down list or from "actions" dropdown.
+                    </div>
+                    <a href="#">Click here to learn more</a>
+                    <br />
+                </div>
+            </div>
+        </div>
+        {{/unless}}
+        {{#if this.length}}
+				<table class="table table-striped">
+    				<thead>
+        				<tr>
+            				<th>Message</th>
+            				<th>Time</th>
+        				</tr>
+    				</thead>
+    				<tbody id="campaigns-model-list"></tbody>
+				</table>
+		{{/if}}
 <div class="right add-campaign">
     <select class="campaignSelect" id='campaignSelect' name="campaignSelect">
         <option class="emailSelectOptions" value="">
@@ -23,6 +40,8 @@
         </option>
     </select>
     <a class="btn" href="#" id="add-selected-campaign" name="add-selected-campaign" style="margin-left: 10px; margin-bottom:9px">Add</a>
+</div>
+</div>
 </div>
 </script>
 

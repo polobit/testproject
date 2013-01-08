@@ -1,21 +1,49 @@
 <script id="deals-collection-template" type="text/html">
     <br>
+<div class='data-block'>
+<div class='data-container'>
 <div class="page-header">
     <h2>List of Deals</h2>
+   <a href="#add-opportunity" class="btn right" style="top:-30px;position:relative"><span><i class='icon-plus-sign'/></span> Add Deal</a> 
 </div>
-<table class="table table-striped showCheckboxes" url="core/api/contacts/deals/bulk">
-    <thead>
-        <tr>
-            <th>Opportunity</th>
-            <th>Value</th>
-            <th>Milestone</th>
-            <th>Close Date</th>
-            <th>Owner</th>
-        </tr>
-    </thead>
-    <tbody id='deals-model-list'></tbody>
-</table>
-   <a href="#add-opportunity" class="btn right"><span><i class='icon-plus-sign'/></span> Add Deal</a> 
+        {{#unless this.length}}
+        <div class="slate">
+            <div class="slate-content">
+                <div class="box-left">
+                    <img alt="Clipboard" src="/img/clipboard.png" />
+                </div>
+                <div class="box-right">
+                    <h3>Yet, this contacts has no deals related to it.</h3>
+                    <div class="text">
+                        You can add deal related to this contact by clicking on "Add Deal" button or from "actions" dropdown.
+                    </div>
+                    <a href="#">Click here to learn more</a>
+                    <br />
+                    <a href="#add-opportunity" class="btn blue btn-slate-action"><i class="icon-plus-sign"></i>  Add Deal !</a>
+                </div>
+            </div>
+        </div>
+        {{/unless}}
+        {{#if this.length}}
+		<div class='data-block'>
+			<div class='data-container' style="border:none;padding:0px 0px 0px 0px; !important">
+				<table class="table table-striped showCheckboxes" url="core/api/opportunity/bulk">
+    				<thead>
+        				<tr>
+            				<th>Opportunity</th>
+            				<th>Value</th>
+            				<th>Milestone</th>
+            				<th>Close Date</th>
+            				<th>Owner</th>
+        				</tr>
+    				</thead>
+    				<tbody id='deals-model-list'></tbody>
+				</table>
+			</div>
+		</div>
+		{{/if}}
+</div>
+</div>
 </script>
 
 <script id="deals-model-template" type="text/html"> 

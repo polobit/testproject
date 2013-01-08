@@ -82,7 +82,7 @@ function display_google_map() {
 
 			var map = new google.maps.Map(document.getElementById("map"),
 					myOptions);
-
+			
 			var marker = new google.maps.Marker({
 				map : map,
 				position : results[0].geometry.location

@@ -1,19 +1,47 @@
 <script id="notes-collection-template" type="text/html">
 <br>
+<div class='data-block'>
+<div class='data-container'>
 <div class="page-header">
     <h2>List of Notes</h2>
+   <a href="#noteModal" data-toggle="modal" class="btn right contact-add-note" style="top:-30px;position:relative"><span><i class='icon-plus-sign'/></span> Add Note</a> 
 </div>
-<table class="table table-striped showCheckboxes" url="core/api/contacts/notes/bulk">
-    <thead>
-        <tr>
-            <th>Subject</th>
-            <th>Description</th>
-            <th>Date</th>
-        </tr>
-    </thead>
-    <tbody id='notes-model-list'></tbody>
-</table>
-   <a href="#noteModal" data-toggle="modal" class="btn right contact-add-note"><span><i class='icon-plus-sign'/></span> Add Note</a> 
+        {{#unless this.length}}
+        <div class="slate">
+            <div class="slate-content">
+                <div class="box-left">
+                    <img alt="Clipboard" src="/img/clipboard.png" />
+                </div>
+                <div class="box-right">
+                    <h3>Yet, this contacts has no notes related to it.</h3>
+                    <div class="text">
+                        You can add note related to this contact by clicking on "Add Note" button or from "actions" dropdown.
+                    </div>
+                    <a href="#">Click here to learn more</a>
+                    <br />
+                    <a href="#noteModal" data-toggle="modal" class="btn blue btn-slate-action contact-add-note"><i class="icon-plus-sign"></i>  Add Note !</a>
+                </div>
+            </div>
+        </div>
+        {{/unless}}
+        {{#if this.length}}
+		<div class='data-block'>
+			<div class='data-container' style="border:none;padding:0px 0px 0px 0px; !important">
+				<table class="table table-striped showCheckboxes" url="core/api/contacts/notes/bulk">
+    				<thead>
+        				<tr>
+            				<th>Subject</th>
+  	          				<th>Description</th>
+            				<th>Date</th>
+        				</tr>
+    				</thead>
+    				<tbody id='notes-model-list'></tbody>
+				</table>
+			</div>
+		</div>
+		{{/if}}
+</div>
+</div>
 </script>
 
 <script id="notes-model-template" type="text/html">

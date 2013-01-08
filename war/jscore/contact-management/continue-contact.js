@@ -123,10 +123,8 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     		var subtype;
     		$.each($(element).children(":not(br)"), function (index, subelement){
     			
-    			console.log("is continue");
     			if($(subelement).val() == undefined || $(subelement).val().length == 0)
     				return;
-    			console.log("continueing address");
     			
     			if($(subelement).attr('name') == 'address-type')
     				subtype = $(subelement).val();
@@ -134,7 +132,6 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     				addressJSON[$(subelement).attr('name')] = $(subelement).val();
     		});
     		
-    		console.log(addressJSON);
     		if($.isEmptyObject(addressJSON))
     			return;
     		

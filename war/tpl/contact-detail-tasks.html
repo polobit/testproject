@@ -1,20 +1,48 @@
 <script id="contact-tasks-collection-template" type="text/html">
 <br>
+<div class='data-block'>
+<div class='data-container'>
 <div class="page-header">
     <h2>List of Tasks</h2>
+	<a href="#" class="btn right contact-add-task" style="top:-30px;position:relative"><span><i class='icon-plus-sign'/></span> Add Task</a>
 </div>
-<table class="table table-striped showCheckboxes" url="core/api/contacts/tasks/bulk">
-    <thead>
-        <tr>
-            <th>Subject</th>
-            <th>Type</th>
-            <th>Priority Type</th>
-            <th>Date</th>
-        </tr>
-    </thead>
-    <tbody id='contact-tasks-model-list'></tbody>
-</table>
-<a href="#" class="btn right contact-add-task"><span><i class='icon-plus-sign'/></span> Add Task</a> 
+		{{#unless this.length}}
+        <div class="slate">
+            <div class="slate-content">
+                <div class="box-left">
+                    <img alt="Clipboard" src="/img/clipboard.png" />
+                </div>
+                <div class="box-right">
+                    <h3>Yet, this contacts has no tasks related to it.</h3>
+                    <div class="text">
+                        You can add task related to this contact by clicking on "Add Task" button or from "actions" dropdown.
+                    </div>
+                    <a href="#">Click here to learn more</a>
+                    <br />
+                    <a href="#" class="btn blue btn-slate-action contact-add-task"><i class="icon-plus-sign"></i>  Add Task !</a>
+                </div>
+            </div>
+        </div>
+        {{/unless}}
+        {{#if this.length}}
+		<div class='data-block'>
+			<div class='data-container' style="border:none;padding:0px 0px 0px 0px; !important">
+				<table class="table table-striped showCheckboxes" url="core/api/contacts/tasks/bulk">
+    				<thead>
+        				<tr>
+            				<th>Subject</th>
+            				<th>Type</th>
+            				<th>Priority Type</th>
+            				<th>Date</th>
+        				</tr>
+    				</thead>
+    				<tbody id='contact-tasks-model-list'></tbody>
+				</table>
+			</div>
+		</div>
+		{{/if}}
+</div>
+</div> 
 </script>
 
 <script id="contact-tasks-model-template" type="text/html">

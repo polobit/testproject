@@ -33,14 +33,15 @@ $(function(){
         $('#noteModal').find('span.save-status').html(LOADING_HTML);
     	
        	var json = serializeForm("noteForm");
- 
+    	var that = this;
+
       	var noteModel = new Backbone.Model();
       	noteModel.url = 'core/api/notes';
       	noteModel.save(json,{
     		success: function(data){
     			
     			// Removes disabled attribute of save button
-    			$(saveBtn).removeAttr('disabled');
+    			$(that).removeAttr('disabled');
     			
     			$('#noteForm').each (function(){
     	          	  this.reset();

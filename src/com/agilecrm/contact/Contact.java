@@ -427,8 +427,6 @@ public class Contact extends Cursor implements Serializable
     @XmlElement(name = "domainUser")
     public DomainUser getDomainUser()
     {
-	System.out.println("Xml elem of domain????????");
-	System.out.println(owner_key);
 	if (owner_key != null)
 	{
 	    // If user is deleted no user is found with key so set user to null
@@ -436,9 +434,6 @@ public class Contact extends Cursor implements Serializable
 	    try
 	    {
 		// return dao.ofy().get(owner_key);
-		System.out.println(owner_key.getId());
-		System.out.println(DomainUserUtil.getDomainUser(owner_key
-			.getId()));
 		return DomainUserUtil.getDomainUser(owner_key.getId());
 	    }
 	    catch (Exception e)
@@ -448,7 +443,6 @@ public class Contact extends Cursor implements Serializable
 	    }
 	}
 	return null;
-
     }
 
     /**
@@ -465,21 +459,17 @@ public class Contact extends Cursor implements Serializable
 	    // Set lead owner(current domain user)
 	    owner_key = new Key<DomainUser>(DomainUser.class, SessionManager
 		    .get().getDomainId());
-
 	}
 
 	// Store Created and Last Updated Time Check for id even if created
 	// time is 0(To check whether it is update request)
 	if (created_time == 0L && id == null)
 	{
-
 	    created_time = System.currentTimeMillis() / 1000;
-
 	}
 	else
 	{
 	    updated_time = System.currentTimeMillis() / 1000;
-
 	}
 
 	// Update Tags - Create a deferred task

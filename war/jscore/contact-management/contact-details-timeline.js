@@ -16,8 +16,11 @@
  * entities (notes, tasks and etc..) related to a contact.
  */  
 var timelineView;
-function load_timeline_details(el, contactId)
+function load_timeline_details(el, contactId, callback1)
 {
+	// Sets to true, if the associated entity is fetched 
+	var is_logs_fetched = false, is_mails_fetched = false, is_array_urls_fetched = false;
+	
 		/**
 		 * An empty collection (length zero) is created to add first fetched 
 		 * details and then initializes isotope with this data 
@@ -48,7 +51,7 @@ function load_timeline_details(el, contactId)
 	        }
 	        return item.get('id');
 		}
-				
+		
 		// Fetches logs related to the contact
 		var LogsCollection = Backbone.Collection.extend({
 			url: '/core/api/campaigns/logs/contact/' + contactId,
@@ -56,6 +59,8 @@ function load_timeline_details(el, contactId)
 		var logsCollection = new LogsCollection();
 		logsCollection .fetch({
 			success: function(){
+				is_logs_fetched = true;
+				show_timeline_padcontent(is_logs_fetched, is_mails_fetched, is_array_urls_fetched);
 				
 				// Remove logs related loading image
 				$('#time-line', el).find('.loading-img-log').remove();
@@ -110,6 +115,9 @@ function load_timeline_details(el, contactId)
 			var emailsCollection = new EmailsCollection();
 			emailsCollection .fetch({
 				success: function(){
+					is_mails_fetched = true;
+					show_timeline_padcontent(is_logs_fetched, is_mails_fetched, is_array_urls_fetched);
+					
 					$('#time-line', el).find('.loading-img-email').remove();
 					
 					if(emailsCollection.toJSON()[0]['emails'].length > 0){
@@ -134,6 +142,8 @@ function load_timeline_details(el, contactId)
 					}
 				},
 				error: function(){
+					is_mails_fetched = true;
+					show_timeline_padcontent(is_logs_fetched, is_mails_fetched, is_array_urls_fetched);
 					
 					// Remove loading image of mails
 					$('#time-line', el).find('.loading-img-email').remove();
@@ -141,7 +151,11 @@ function load_timeline_details(el, contactId)
 			});
 			
 			// Gets address of the contact from its browsing history
+			var address = getPropertyValue(json.properties, "address");
+			if(!address)
+				get_address_from_browsing_history(email, json);
 		}else{
+			is_mails_fetched = true;
 			
 			// Removes loading image of mails, if there is no email to contact  
 			$('#time-line', el).find('.loading-img-email').remove();
@@ -182,6 +196,9 @@ function load_timeline_details(el, contactId)
 					if(++loading_count == fetchContactDetails.length){
 						remove_loading_img(el);
 						
+						is_array_urls_fetched = true;
+						show_timeline_padcontent(is_logs_fetched, is_mails_fetched, is_array_urls_fetched);
+						
 						if(arrayView.collection.length == 0)
 							return;
 						
@@ -213,7 +230,6 @@ function load_timeline_details(el, contactId)
 				}
 			});
 		});	
-	
 }	
 
 /**
@@ -253,6 +269,22 @@ function validate_insertion(models, timelineViewMore){
 }
 
 /**
+ * Shows "no entities present" pad content for timeline by verifying
+ * whether all the entities are fetched or not.
+ *  
+ * @param is_logs_fetched
+ * @param is_mails_fetched
+ * @param is_array_urls_fetched
+ */
+function show_timeline_padcontent(is_logs_fetched, is_mails_fetched, is_array_urls_fetched){
+	if(!is_logs_fetched || !is_mails_fetched || !is_array_urls_fetched)
+		return;
+	
+	if (timelineView.collection.length == 0)
+		$("#timeline-slate").css('display', 'block');
+}
+
+/**
  * Loads minified jquery.isotope plug-in and jquery.event.resize plug-in to 
  * to initialize the isotope and appends the given models to the timeline, by 
  * loading their corresponding templates using handlebars
@@ -268,7 +300,7 @@ function validate_insertion(models, timelineViewMore){
 function setup_timeline(models, el, callback) {
 	
 	// Removes pad content of no data presents
-	$("#timeline-slate").css('display', 'none');
+	 $("#timeline-slate").css('display', 'none');
 	
 	// Load plugins for timeline	
 	head.js(LIB_PATH + "lib/jquery.isotope.min.js", LIB_PATH + "lib/jquery.event.resize.js", function(){
@@ -448,6 +480,54 @@ function customize_isotope()
  */
 function remove_loading_img(el){
 	$('#time-line', el).find('.loading-img').remove();
+}
+
+/**
+ * When contact has no address, based on its email, traces address from its
+ * browsing history and stores as address property of the contact.
+ * 
+ * To get address of a contact with its email, you should run the java script
+ * api provided at api & analytics (admin settings) by pushing the email of the
+ * contact
+ * 
+ * @param {String}
+ *            email of the contact
+ * @param {Object}
+ *            contact present in contact detail view
+ * @param {Boolean}
+ *            empty_address refers the address presence (empty address or no
+ *            address field) of a contact
+ */
+function get_address_from_browsing_history(email, contact) {
+
+	// Get browsing address of contact with it's email, when it is defined
+		var url = 'core/api/stats?e=' + encodeURIComponent(email);
+
+		$.get(url, function(data) {
+
+			console.log(data);
+			// Go further only when the contact got browsing address
+			if (data && data.length > 0) {
+				var addressJSON = {};
+				addressJSON.city = data[0].c.city;
+				addressJSON.country = data[0].c.country;
+
+				// If contact has no address property push the new one
+					contact.properties.push({
+						"name" : "address",
+						"value" : JSON.stringify(addressJSON)
+					});
+
+				// Update contact with the browsing address
+				var contactModel = new Backbone.Model();
+				contactModel.url = 'core/api/contacts';
+				contactModel.save(contact, {
+					success : function(obj) {
+
+					}
+				});
+			}
+		});
 }
 
 /**
