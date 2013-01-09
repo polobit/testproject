@@ -8,6 +8,7 @@
     "company": "Invox",
     "language": "en",
     "branches": "No,Yes",
+    "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.URLVisited",
     "category": "URL",
     "ui": [
 		{
@@ -19,47 +20,6 @@
 		    "fieldType": "input",
 		    "type": "url" 
 		},
-		{
-		    "label": "Identifier",
-		    "required": "required",
-		    "category": "Settings",
-		    "name": "identifier",
-		    "title": "Enter a valid Identifier.",
-		    "fieldType": "input",
-		    "type": "text",
-		    "value": "{{email}}"
-		},
-		{   
-			"label": "Type",
-		   "required": "required",
-		    "category": "Settings",
-		    "name": "account",
-		    "id": "account",
-		    "title": "Select the type of Account.",
-		    "options": {"Piwik":"piwik",
-				        "GetClicky":"getclicky",
-				        "Minutes":"mins"
-			          },
-			"fieldType": "select",
-			"type": "select" 
-		 },
-        {
-            "label": "Username",
-            "required": "required",
-            "category": "Settings",
-            "name": "username",
-            "title": "Enter a valid username.",
-            "fieldType": "input",
-            "type": "text" 
-        },{
-            "label": "Password",
-            "required": "required",
-            "category": "Settings",
-            "name": "password",
-            "title": "Enter a valid password.",
-            "fieldType": "input",
-            "type": "password" 
-        },
         {
             "label": "Specify your visited url.",
             "category": "Help",

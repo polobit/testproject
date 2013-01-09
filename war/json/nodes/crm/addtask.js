@@ -1,5 +1,5 @@
 {
-    "name": "AddTask",
+    "name": "Add Task",
     "thumbnail": "json/nodes/images/email/tags.png",
     "icon": "json/nodes/icons/email/tags.png",
     "info": "Tasks are like to-dos. Result oriented. You can assign a category such as call,email etc",
@@ -60,7 +60,8 @@
             "id":"due_days",
 			"title": "Enter the number of Due Days.",
 			"fieldType": "input",
-			"type":"text"
+			"type":"number",
+			"min":"0"
 
 		},{
             "label": "Tasks are like to-dos. Result oriented. You can assign a category such as call,email etc",
