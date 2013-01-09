@@ -373,7 +373,7 @@ var ContactsRouter = Backbone.Router.extend({
 
             	// Enables the date-picker
                 $('#close_date', el).datepicker({
-                    format: 'mm-dd-yyyy'
+                    format: 'mm/dd/yyyy'
                 });
             }
         });

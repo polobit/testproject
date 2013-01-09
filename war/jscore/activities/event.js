@@ -83,16 +83,16 @@ $(function() {
 	 * and activity-update modal
 	 */
 	$('#event-date-1').datepicker({
-		format : 'mm-dd-yyyy'
+		format : 'mm/dd/yyyy'
 	});
 	$('#event-date-2').datepicker({
-		format : 'mm-dd-yyyy'
+		format : 'mm/dd/yyyy'
 	});
 	$('#update-event-date-1').datepicker({
-		format : 'mm-dd-yyyy'
+		format : 'mm/dd/yyyy'
 	});
 	$('#update-event-date-2').datepicker({
-		format : 'mm-dd-yyyy'
+		format : 'mm/dd/yyyy'
 	});
 
 	/**

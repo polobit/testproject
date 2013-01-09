@@ -53,7 +53,7 @@
                         {{#each lines.subscriptions}}
                         <tr>
                             <td>{{plan.name}}({{plan.amount}}/{{plan.interval}})</td>
-                            <td>{{epochToHumanDate "mm-dd-yyyy" period.start}} - {{epochToHumanDate "mm-dd-yyyy" period.end}}</td>
+                            <td>{{epochToHumanDate "mm/dd/yyyy" period.start}} - {{epochToHumanDate "mm/dd/yyyy" period.end}}</td>
                             <td>{{amount}}</td>
                         </tr>
                         {{/each}}

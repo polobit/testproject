@@ -64,11 +64,11 @@ function deserializeForm(data, form)
                 if (fel.hasClass('date'))
                 {
                     fel.val(new Date(el * 1000)
-                        .format('mm-dd-yyyy'));
+                        .format('mm/dd/yyyy'));
 
                     fel.datepicker(
                     {
-                        format: 'mm-dd-yyyy',
+                        format: 'mm/dd/yyyy',
                     });
                 }
 
@@ -250,10 +250,10 @@ function deserializeForm(data, form)
                             if ($(input_element).hasClass('date'))
                             {
                                 $(input_element).val(new Date(value)
-                                    .format('mm-dd-yyyy'));
+                                    .format('mm/dd/yyyy'));
                                 $(input_element).datepicker(
                                 {
-                                    format: 'mm-dd-yyyy',
+                                    format: 'mm/dd/yyyy',
                                 });
                                 return;
                             }

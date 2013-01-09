@@ -28,8 +28,8 @@
     	{{#each lines.subscriptions}}
     	{{this.plan.name}}
 	</td>
-	<td>{{epochToHumanDate "mm-dd-yyyy" period.start}}</td>
-	<td>{{epochToHumanDate "mm-dd-yyyy" period.end}}</td>
+	<td>{{epochToHumanDate "mm/dd/yyyy" period.start}}</td>
+	<td>{{epochToHumanDate "mm/dd/yyyy" period.end}}</td>
 	<td>{{this.plan.amount}}</td>
 	{{/each}}	
 </script>

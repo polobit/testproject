@@ -280,7 +280,7 @@ function deserialize_contact(contact, template) {
     $('.date_input').attr("placeholder","MM/DD/YYYY");
     
     $('.date_input').datepicker({
-        format: 'mm-dd-yyyy'
+        format: 'mm/dd/yyyy'
     });
     
     // To set typeahead for tags

@@ -145,7 +145,7 @@ var SettingsRouter = Backbone.Router.extend({
 			postRenderCallback : function(el) {
 				
 				// Setup HTML Editor
-				setupHTMLEditor($('#email-template-html'));
+				setupHTMLEditor($('#email-template-html', el));
 			}
 		});
 		$('#content').html(view.render().el);
@@ -163,10 +163,10 @@ var SettingsRouter = Backbone.Router.extend({
 		// Navigates to list of email templates, if it is not defined
 		if (!this.emailTemplatesListView
 				|| this.emailTemplatesListView.collection.length == 0) {
-			console.log("true");
-			this.navigate("email-templates", {
+			    this.navigate("email-templates", {
 				trigger : true
 			});
+			return;
 		}
 		
 		// Gets the template form its collection
@@ -179,7 +179,7 @@ var SettingsRouter = Backbone.Router.extend({
 			window : 'email-templates',
 			postRenderCallback : function(el) {
 				// Setup HTML Editor
-				setupHTMLEditor($('#email-template-html'));
+				setupHTMLEditor($('#email-template-html', el));
 			}
 		});
 
