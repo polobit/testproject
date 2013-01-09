@@ -25,6 +25,9 @@ $(function(){
 			
 			// If element is checked store it's id in an array 
 			if($(element).is(':checked')){
+				
+				// Disables mouseenter once checked for delete
+				$(element).closest('tr').on("mouseenter", false);
 				index_array.push(index);
 				id_array.push($(element).closest('tr').data().get('id'));
 				data_array.push($(element).closest('tr').data().toJSON());

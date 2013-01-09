@@ -590,7 +590,7 @@ margin-bottom:10px;
 
 .nodeedit{
 	
-	background: url(../../images/mouseoverImage.gif) ;
+	background: url(../../images/draw2d/mouseoverImage.gif) ;
 	background-position: -7px -7px;
 	width: 14px;
 	height: 14px;
@@ -600,7 +600,7 @@ margin-bottom:10px;
 	}
 .nodedelete{
 	
-	background: url(../../images/mouseoverImage.gif) ;
+	background: url(../../images/draw2d/mouseoverImage.gif) ;
 	background-position: -7px -35px;
 	width: 14px;
 	height: 14px;

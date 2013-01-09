@@ -165,7 +165,7 @@ $("#editOpportunity").live("click", function (e) {
             	
             	// Enable the datepicker
                 $('#close_date', el).datepicker({
-                   format: 'mm-dd-yyyy'
+                   format: 'mm/dd/yyyy'
                 });
             	
             },
