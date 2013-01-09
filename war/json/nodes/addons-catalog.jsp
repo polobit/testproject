@@ -2,7 +2,7 @@
 <%@page import="org.apache.commons.io.IOUtils"%>
 <%@page import="java.io.InputStream"%>
 <%@page import="java.io.File"%>
-<%@page import="org.json.JSONObject"%>
+<%@page import="org.json.JSONObject"%> 
 <%@page import="org.json.JSONArray"%>
 <%
     // Get Catalog
@@ -13,12 +13,12 @@
 		    "json/nodes/common/score.js", "json/nodes/common/tags.js",
 		    "json/nodes/common/transfer.js",
 		    "json/nodes/social/tweet.js" };
-    String[] MOBILE_CATALOG = { "json/nodes/sms/sendmessage.js",
-		    "json/nodes/sms/getmessage.js", "json/nodes/sms/menusms.js" };
+    /* String[] MOBILE_CATALOG = { "json/nodes/sms/sendmessage.js",
+		    "json/nodes/sms/getmessage.js", "json/nodes/sms/menusms.js" };  */
     String[] DEVELOPERS_CATALOG = { "json/nodes/developers/jsonio.js",
 		    "json/nodes/developers/condition.js" };
     String[] CRM_CATALOG = { "json/nodes/crm/addnote.js",
-		    "json/nodes/crm/updatestatus.js" };
+		    "json/nodes/crm/addtask.js" };
 
     // Download Each Catalog
     JSONArray jsonArray = new JSONArray();
@@ -34,8 +34,8 @@
 
     if (type.equalsIgnoreCase("email"))
 		target = EMAIL_CATALOG;
-    else if (type.equalsIgnoreCase("mobile"))
-		target = MOBILE_CATALOG;
+   /*  else if (type.equalsIgnoreCase("mobile"))
+		target = MOBILE_CATALOG; */
     else if (type.equalsIgnoreCase("utilities"))
 		target = UTILITIES_CATALOG;
     else if (type.equalsIgnoreCase("developers"))
