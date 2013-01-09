@@ -65,7 +65,33 @@ function setup_tags_typeahead() {
     	 * a tag from the list of matched items provided by the source method   
     	 */
     	updater: function(tag) {
-      
+    		
+    		// Saves the selected tag to the contact
+    		if((this.$element).closest(".control-group").hasClass('save-tag')){
+    			var json = App_Contacts.contactDetailView.model.toJSON();
+    			json.tags.push(tag);
+    			
+    			// Save the contact with added tags
+    	    	var contact = new Backbone.Model();
+    	        contact.url = 'core/api/contacts';
+    	        contact.save(json,{
+    	       		success: function(data){
+    	       			
+    	       		// Get all existing tags of the contact to compare with the added tags
+    	       			var old_tags = [];
+    	       			$.each($('#added-tags-ul').children(), function(index, element){
+           					
+    	       				old_tags.push($(element).attr('data'));
+           				});
+    	       			
+    	       			// Append to the list, when no match is found 
+    	       			if ($.inArray(tag, old_tags) == -1) 
+    	       				$('#added-tags-ul').append('<li style="display:inline-block;" class="tag" data="' + tag + '"><span><a class="anchor" href="#tags/'+ tag + '">'+ tag + '</a><a class="close remove-tags" id="' + tag + '">&times</a></span></li>');
+    	       		}
+    	        });
+    	        return;
+    		}
+    		
         	(this.$element).closest(".control-group").find('ul.tags').append('<li class="tag"  style="display: inline-block;" data="'+ tag+'">'+tag+'<a class="close" id="remove_tag">&times</a></li>');
         }
     });
@@ -75,6 +101,9 @@ function setup_tags_typeahead() {
      * element, then it could be added as new tag)
      */
     $(".tags-typeahead").bind("keydown", function(e){
+    	if($(this).hasClass('ignore-comma-keydown'))
+    		return;
+    	
     	var tag = $(this).val();
     	
     	// To make a tag when "," keydown and check input is not empty
@@ -140,4 +169,27 @@ function get_tags(form_id) {
     }).get();
     
     return tags_json;
+}
+
+/**
+ * Reads the values of a input field and splits based on comma
+ * @param id
+ * @returns
+ */
+function get_new_tags(id){
+    // Add Tags
+    if (isValidField(id)) {
+        var tags = $('#' + id).val();
+        
+        // Replace multiple space with single space
+        tags =  tags.replace(/ +(?= )/g,'');
+
+        // Replace ,space with space
+        tags = tags.replace(", ", " ");
+
+        // Replace , with spaces
+        tags = tags.replace(",", " ");
+
+        return tags.split(" ");
+    }
 }
