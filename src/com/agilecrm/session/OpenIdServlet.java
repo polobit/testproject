@@ -132,12 +132,6 @@ public class OpenIdServlet extends HttpServlet
 	    req.getSession().setAttribute(
 		    SessionManager.AUTH_SESSION_COOKIE_NAME, user);
 
-	    /**
-	     * To check whether request is for registration or for login
-	     */
-
-	    req.setAttribute("type", "oauth");
-
 	    resp.sendRedirect("/register?type=oauth");
 	}
 	catch (OpenIDException e)
