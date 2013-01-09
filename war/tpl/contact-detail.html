@@ -68,7 +68,10 @@
                 </div>
             </div>
             <div class='clearfix'></div>    
-            <div style="height:48px">   
+            <div style="height:68px"> 
+ 				<div style="vertical-align:top">
+                    <a href="#" id="add-tags" rel="tooltip" data-original-title="addtag" data-placement="top"><i class="icon-plus-sign"></i> <span>Add tags</span></a>  
+                </div>  
                 <ul id="added-tags-ul" class="tagsinput" style="display:inline-block;vertical-align:top;">
                 {{#if tags}}
                     {{#each tags}}
@@ -78,22 +81,20 @@
                 </ul>
                 <div style="display:inline-block">
                     <form id="addTagsForm" style="display:none">
-                        <div class="control-group">
+                        <div class="control-group save-tag">
                             <div class="pull-left">
                                 <ul id="ul-add-tags" name="tags" class= "tagsinput tags"></ul>
                             </div>
                             <div class="controls" style="display:inline-block">
-                                <input name="" type="text" id="addTags" class="tags-typeahead span2" style="margin-bottom: -1px" placeholder="Enter tags"/>
+                                <input name="" type="text" id="addTags" class="tags-typeahead span2 ignore-comma-keydown" style="margin-bottom: -1px" placeholder="Enter tags"/>
                                 <span><a href="#" class="btn" id="contact-add-tags" style="margin-left: 10px;margin-right: 5px">Add</a></span>
                             </div>
                         </div>                          
                     </form>
                 </div>
-                <div style="display:inline-block;vertical-align:top;margin-top:6px">
-                    <a href="#" id="add-tags" rel="tooltip" data-original-title="addtag" data-placement="top"><i class="icon-plus-sign"></i></a> <span>Add tags</span>  
-                </div>       
+                      
             </div>
-            <div class="subnav" >
+            <div class="subnav">
                 <ul class="nav nav-pills" id="contactDetailsTab">
                     <li class="active"><a data-toggle="tab" href="#timeline">Timeline</a></li>
                     <li class=""><a data-toggle="tab" href="#notes">Notes</a></li>
@@ -103,7 +104,7 @@
                 <!--<li class="active"><a data-toggle="tab" href="#activities">Activity <sup><span class="badge badge-success">3</span></sup> </a></li>-->
                     <li class=""><a data-toggle="tab" href="#mail">Mail</a></li>
                 </ul>
-                <div class="tab-content">
+                <div class="tab-content well">
                     <div class="tab-pane active" id="time-line">
                         <div class="timeline-loading-img">
                             <img class="loading-img-log" style="position:fixed;margin-top:-30px" src="img/21-0.gif">
@@ -111,21 +112,21 @@
                             <img class="loading-img" style="position:fixed;margin-top:-30px" src="img/21-0.gif">
                         </div>
 												
-		<div class="slate" id="timeline-slate" style="margin-top:30px;display:none">
-            <div class="slate-content">
-                <div class="box-left">
-                    <img alt="Clipboard" src="/img/clipboard.png" />
-                </div>
-                <div class="box-right">
-                    <h3>Yet, this contact has no entities (Notes, Tasks, Deals and etc..) related to it, to show up in the Timeline and other related tabs.</h3>
-                    <div class="text">
-                        You can add entities related to it by selecting suitable option from the above "actions" drop down button.
-                    </div>
-                    <a href="#">Click here to learn more</a>
-                    <br />
-                </div>
-            </div>
-        </div>
+						<div class="slate" id="timeline-slate" style="margin-top:30px;display:none">
+            				<div class="slate-content">
+                				<div class="box-left">
+                    				<img alt="Clipboard" src="/img/clipboard.png" />
+                				</div>
+                				<div class="box-right">
+                    				<h3>Yet, this contact has no entities (Notes, Tasks, Deals and etc..) related to it, to show up in the Timeline.</h3>
+                    				<div class="text">
+                       	 				You can add entities related to it by selecting suitable option from the above "actions" drop down button.
+                    				</div>
+                    				<a href="#">Click here to learn more</a>
+                    				<br />
+                				</div>
+            				</div>
+        				</div>
 
                         <div  style="margin:auto;width:700px">
                         <div id="timeline">
@@ -149,15 +150,18 @@
 	  <div class="page-header">
         <div class="data-block">
             <div class='data-container'>
-                <header>
+                <header style="margin-bottom: 14px !important">
                     <h2><i class="icon-user "></i> Contact details</h2>
                 </header>
                 <div style='padding:10px;'>
                     <div>
                         <div class="change-owner-succes">
                         </div>
-                        <span>Lead owner : <span id="contact-owner" data={{domainUser.id}} style="display: inline-block">{{domainUser.name}}</span>
-						  <div class="btn-group" style="position: relative;margin-top: 5px">	
+                        <span><b>Lead owner</b> : <span id="contact-owner" data={{domainUser.id}} style="display: inline-block">{{domainUser.name}}</span> 
+						<span>
+                       		<a href="3"> <i class="icon-edit" style="vertical-align:top" rel="popover" data-placement="top"  data-title="Lead Owner" data-content="Click here to change owner." id="change-owner-element" data-trigger="hover"></i></a>
+ 						</span>
+						  <div class="btn-group" id="change-owner-ul" style="position: relative;margin-top: 5px;display:none">	
  							<a class="btn dropdown-toggle" data-toggle="dropdown">
                         		Change owner
                             	<span class="caret"></span>
@@ -190,8 +194,8 @@
             <br/>       
 
             {{#each properties}}
-                {{#if_property "first_name" "last_name" "company" "title" "image"}}
-                    <span style='display:inline'><icon class="{{icons name}}"></icon> <small>{{ucfirst name}}</small></span> 
+                {{#if_property "first_name" "last_name" "company" "title" "email" "image"}}
+                    <span style='display:inline'><icon class="{{icons name}}"></icon> <small><b>{{ucfirst name}}</b></small></span> 
                     {{#if subtype}}
                         ({{subtype}}) :
 					{{else}}

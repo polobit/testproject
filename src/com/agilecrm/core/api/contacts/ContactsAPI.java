@@ -501,6 +501,6 @@ public class ContactsAPI
 	    throws JSONException
     {
 	JSONArray dealsJSONArray = new JSONArray(model_ids);
-	Note.dao.deleteBulkByIds(dealsJSONArray);
+	Opportunity.dao.deleteBulkByIds(dealsJSONArray);
     }
 }

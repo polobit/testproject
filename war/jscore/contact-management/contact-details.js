@@ -135,16 +135,17 @@ $(function(){
 	 */ 
 	$('#contact-add-tags').live('click', function(e){
 		e.preventDefault();
-		var tags = get_tags('addTagsForm');
-
+		
+	    // Add Tags
+		var new_tags = get_new_tags('addTags');
 		$("#addTagsForm").css("display", "none");
 		
-	    if (tags[0].value.length > 0){
-	    	var json = App_Contacts.contactDetailView.model.toJSON();
+		if(new_tags){
+			var json = App_Contacts.contactDetailView.model.toJSON();
 	    	
 	    	// Push the new tags 
-	    	for(var i = 0; i < tags[0].value.length; i++)
-	    		json.tags.push(tags[0].value[i]);
+	    	for(var i = 0; i < new_tags.length; i++)
+	    		json.tags.push(new_tags[i]);
 	    	
 	    	// Reset form
 	    	$('#addTagsForm').each (function(){
@@ -156,38 +157,25 @@ $(function(){
 	        contact.url = 'core/api/contacts';
 	        contact.save(json,{
 	       		success: function(data){
-	       			
 	       			// Get all existing tags of the contact to compare with the added tags
 	       			var old_tags = [];
 	       			$.each($('#added-tags-ul').children(), function(index, element){
-       					
 	       				old_tags.push($(element).attr('data'));
        				});
 	       			
 	       			// Append to the list, when no match is found 
-	       			for(var i = 0; i < tags[0].value.length; i++){
-	       				
-	       				if ($.inArray(tags[0].value[i], old_tags) == -1) 
-	       					$('#added-tags-ul').append('<li style="display:inline-block;" class="tag" data="' + tags[0].value[i] + '"><span><a class="anchor" href="#tags/'+ tags[0].value[i] + '">'+ tags[0].value[i] + '</a><a class="close remove-tags" id="{{this}}">&times</a></span></li>');
+	       			for(var i = 0; i < new_tags.length; i++){
+	       				if ($.inArray(new_tags[i], old_tags) == -1) 
+	       					$('#added-tags-ul').append('<li style="display:inline-block;" class="tag" data="' + new_tags[i] + '"><span><a class="anchor" href="#tags/'+ new_tags[i] + '">'+ new_tags[i] + '</a><a class="close remove-tags" id="' + new_tags[i] + '">&times</a></span></li>');
 	       			}
 	       			
-	       			// Remove all the elements in ul
-	       			$('#ul-add-tags').empty();
-	       			
-	       			// Save new tags in Tag class
-	       			//$.post('core/api/tags/' + tags[0].value, function(){
-	       			//	console.log(tags[0].value);
-	       			//});
-	       			
 	       			// Adds the added tags (if new) to tags collection
-	       			$.each(tags[0].value,function(index, tag){
+	       			$.each(new_tags,function(index, tag){
 	       				tagsCollection.add( {"tag" : tag} );
 	       			});
-	       			
 	       		}
 	        });
-	    }
-	    
+		}
 	});
 	
 	/**
@@ -195,6 +183,8 @@ $(function(){
 	 * is selected.   
 	 */
 	$('.contact-owner-list').live('click', function(){
+		
+		$('#change-owner-ul').css('display', 'none');
 		var id_array = [];
 		id_array.push(App_Contacts.contactDetailView.model.get('id'));
 		
@@ -217,7 +207,7 @@ $(function(){
 			$('#contact-owner').attr('data', new_owner_id);
 			
 			// Shows acknowledgement of owner change
-			$(".change-owner-succes").html('<div class="alert alert-success"><a class="close" data-dismiss="alert" href="#">×</a>Owner has been changed successfully.</div>');
+			// $(".change-owner-succes").html('<div class="alert alert-success"><a class="close" data-dismiss="alert" href="#">×</a>Owner has been changed successfully.</div>');
 		});
    	});
 });
@@ -312,11 +302,28 @@ $(function(){
         	template:'<div class="popover"><div class="arrow"></div><div class="popover-inner"><div class="popover-content"><p></p></div></div></div>'
         });
         $(this).popover('show');
-        });
+    });
     $('#element-title').live('mouseenter',function(e){
     	e.preventDefault();
         $(this).popover('show');});
-	    
+	   
+    $('#change-owner-element').live('mouseenter',function(e){
+    	e.preventDefault();
+    	$('#change-owner-ul').css('display', 'none');
+        $(this).popover({
+        	template:'<div class="popover"><div class="arrow"></div><div class="popover-inner"><div class="popover-content"><p></p></div></div></div>'
+        });
+        $(this).popover('show');
+    });
+    
+    $('#change-owner-element').live('click',function(e){
+    	e.preventDefault();
+    	$('#change-owner-element').popover('hide');
+    	if($('#change-owner-ul').css('display') == 'block')
+    		$('#change-owner-ul').css('display', 'none');
+    	else
+    		$('#change-owner-ul').css('display', 'block');
+    });
 });
 
 

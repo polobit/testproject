@@ -35,7 +35,7 @@ $(function(){
 		if($(table).find('tbody').attr('route'))
 			$(table).find('tbody').addClass('agile-edit-row');
 		
-		$(table).after('<div class="row"><div class="span6  select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked"> Delete</a>');
+		$(table).after('<div class="row"><div class="span6  select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked" style="margin-bottom: 15px"> Delete</a>');
 		
 		// Sorts the tables based on their column values
 		sort_tables(table);

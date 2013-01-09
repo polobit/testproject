@@ -346,14 +346,14 @@ $(function() {
 	 * the function parameters (fname, lname, company etc..)
 	 */
 	Handlebars.registerHelper('if_property', function(fname, lname, company,
-			title, image, options) {
+			title, email, image, options) {
 		
 		/*
 		 * Converts address as comma seprated values and returns as
 		 * handlebars safe string.
 		 */ 
 		if(this.name == "address"){
-			var el = "<span><small>address</small>";
+			var el = "<span><small><b>address</b></small>";
 			
 			var address = JSON.parse(this.value);
 			if(address.subtype)
@@ -375,7 +375,7 @@ $(function() {
 			return new Handlebars.SafeString(el);
 		}	
 		if (this.name != fname && this.name != lname && this.name != company
-				&& this.name != title && this.name != image)
+				&& this.name != title && this.name != email && this.name != image)
 			return options.fn(this);
 	});
 
