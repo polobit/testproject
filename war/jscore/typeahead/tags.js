@@ -101,6 +101,8 @@ function setup_tags_typeahead() {
      * element, then it could be added as new tag)
      */
     $(".tags-typeahead").bind("keydown", function(e){
+    	
+    	// Adds no tags when the key down is "," in contact detail view tags 
     	if($(this).hasClass('ignore-comma-keydown'))
     		return;
     	

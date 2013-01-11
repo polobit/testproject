@@ -303,7 +303,9 @@ table {
 .slate .btn-slate-action {
 	margin-top: 10px;
 }
-
+a.no-line:hover{
+	text-decoration:none;
+}
 /* Clip Board Application CSS -- Ending */
 
 /* Mouse over on Tables (with class agile-edit-row) -- cursor change*/

@@ -101,7 +101,34 @@
 	background: transparent url(../img/tab-right.png) no-repeat left;
 	left: -54px;
 }
-
+#timeline .year-marker {
+	float: left;
+	width: 80px;
+	margin: 11px 0 15px 0;
+}
+#timeline .year-marker.top{
+	margin-top: 0;
+}
+#timeline .year-marker .inner{
+	width: 76px;
+	height: 26px;
+	padding: 2px;
+	background-color: #FFF;
+}
+#timeline .year-marker .inner2{
+	background-color: #434a50;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+}
+#timeline .year{
+	text-align: center;
+	color: #fff;
+	font-size: 14px;
+	font-weight: bold;
+	height: 26px;
+	line-height: 26px;
+}
 #buttons{
 	text-align: center;
 	margin: 30px 0 15px 0;

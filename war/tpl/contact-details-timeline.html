@@ -1,39 +1,50 @@
+  <script id="year-marker-template" type="text/x-handlebars-template">
+    <div class="item year-marker">
+      <div class="inner">
+        <div class="inner2">
+          <div class="timestamp">{{timestamp}}</div>
+          <div class="year">{{year}}</div>
+        </div>
+      </div>
+    </div>
+  </script>
+
 <script id="timeline-template" type="text/x-handlebars-template">
 <div class="item post">
     <div class="inner">
         {{#if_entity "note"}}
             <div class="timestamp">{{created_time}}</div>
-            <div class="title"><h3><span><a><i class="icon-list-alt"></i></a></span> Note</h3></div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-list-alt"></i></a></span> Note</h3></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
-                <div class="text">{{subject}}</div>
-                <div class="text">{{description}}</div>
+                <div class="text" style="color: #333333">{{subject}}</div>
+                <div class="text" style="color: #999999">{{description}}</div>
             </div>
         {{/if_entity}}
 
         {{#if_entity "task"}}
             <div class="timestamp">{{created_time}}</div>
-            <div class="title"><h3><span><a><i class="icon-tasks"></i></a></span> Task</h3></div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-tasks"></i></a></span> Task</h3></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                 <div class="caption" style="margin-top:-8px">({{type}})</div>         
-                <div class="text">{{subject}}</div>
+                <div class="text" style="color: #333333">{{subject}}</div>
             </div>
         {{/if_entity}}
 
         {{#if_entity "deal"}}
             <div class="timestamp">{{created_time}}</div>
-            <div class="title"><h3><span><a><i class="icon-money"></i></a></span> Deal</h3></div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-money"></i></a></span> Deal</h3></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
-                <div class="text">{{name}}</div>
-                <div class="text">{{description}}</div>
+                <div class="text" style="color: #333333">{{name}}</div>
+                <div class="text" style="color: #999999">{{description}}</div>
             </div>
         {{/if_entity}}
 
         {{#if_entity "m"}}
             <div class="timestamp">{{t}}</div>
-            <div class="title"><h3><span><a><i class="icon-inbox"></i></a></span> Campaign Logs</h3></div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-inbox"></i></a></span> Campaign Logs</h3></div>
             <div class="date">{{epochToTaskDate t}}</div>
             <div class="body">
                 <div class="text" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden">{{tl_log_string m}}
@@ -44,7 +55,7 @@
 
         {{#if_entity "date"}}
             <div class="timestamp">{{date_secs}}</div>
-            <div class="title"><h3><span><a><i class="icon-envelope"></i></a></span> Mail</h3></div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-envelope"></i></a></span> Mail</h3></div>
             <div class="date">{{epochToTaskDate date_secs}}</div>
             <div class="body">
                 <div class="caption"><b>From:</b></br> {{from}}</div>
