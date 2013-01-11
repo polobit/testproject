@@ -195,7 +195,7 @@
 
             {{#each properties}}
                 {{#if_property "first_name" "last_name" "company" "title" "email" "image"}}
-                    <span style='display:inline'><icon class="{{icons name}}"></icon> <small><b>{{ucfirst name}}</b></small></span> 
+                    <span style='display:inline'><icon class="{{name}}"></icon> <small><b>{{ucfirst name}}</b></small></span> 
                     {{#if subtype}}
                         ({{subtype}}) :
 					{{else}}

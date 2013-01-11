@@ -353,7 +353,7 @@ $(function() {
 		 * handlebars safe string.
 		 */ 
 		if(this.name == "address"){
-			var el = "<span><small><b>address</b></small>";
+			var el = "<span><small><b>Address</b></small>";
 			
 			var address = JSON.parse(this.value);
 			if(address.subtype)
