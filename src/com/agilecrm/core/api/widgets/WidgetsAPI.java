@@ -10,7 +10,9 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
@@ -19,7 +21,6 @@ import com.agilecrm.social.SocialSearchResult;
 import com.agilecrm.social.TwitterUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
-import com.google.appengine.api.datastore.Email;
 import com.thirdparty.Rapleaf;
 
 /**
@@ -64,7 +65,7 @@ public class WidgetsAPI
     }
 
     /**
-     * Saves an widget, can also save custom widget by specifying script url lo
+     * Saves a widget, can also save custom widget by specifying script url to
      * load and prefs to connect.
      * 
      * @param widget
@@ -124,7 +125,6 @@ public class WidgetsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public void savePositions(List<Widget> widgets)
     {
-
 	// UI sends only ID and Position
 	for (Widget widget : widgets)
 	{
@@ -145,42 +145,38 @@ public class WidgetsAPI
      *            {@link String}
      * @param socialId
      *            {@link String}
-     * @param id
+     * @param widgetId
      *            {@link Long}
      * @return {@link SocialSearchResult}
      */
-    @Path("contact/{type}/{plugin-id}/{id}")
+    @Path("profile/{widget-id}/{social-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public SocialSearchResult getSocialProfile(@PathParam("type") String type,
-	    @PathParam("plugin-id") String socialId, @PathParam("id") Long id)
+    public SocialSearchResult getSocialProfile(
+	    @PathParam("social-id") String socialId,
+	    @PathParam("widget-id") Long widgetId)
     {
-
 	// Gets widget based on id
-	Widget widget = WidgetUtil.getWidget(id);
+	Widget widget = WidgetUtil.getWidget(widgetId);
+
 	if (widget == null)
-	{
 	    return null;
-	}
 
-	// If name of the widget is Linkedin then gets profile from the
-	// LinkedinUtil
-	if (widget.name.equalsIgnoreCase("LINKEDIN"))
+	try
 	{
-	    SocialSearchResult results = LinkedInUtil.getLinkedinProfileById(
-		    widget, socialId);
-	    return results;
+	    // Gets profiles from LinkedInUtil based on socialId
+	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
+		return LinkedInUtil.getLinkedinProfileById(widget, socialId);
 
+	    // Gets profiles from TwitterUtil based on socialId
+	    else if (widget.name.equalsIgnoreCase("TWITTER"))
+		return TwitterUtil.getTwitterProfileById(widget, socialId);
 	}
-
-	// If name of the widget is Twitter then gets profile from the
-	// TwitterUtil
-	else if (widget.name.equalsIgnoreCase("TWITTER"))
+	catch (Exception e)
 	{
-	    SocialSearchResult results = TwitterUtil.getTwitterProfileById(
-		    widget, socialId);
-	    return results;
-
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
 	return null;
     }
@@ -195,64 +191,153 @@ public class WidgetsAPI
      *            {@link String} type of widget linkedin/tiwtter
      * @param contactId
      *            {@link Long} cutomer id
-     * @param pluginId
+     * @param widgetId
      *            {@link Long} plugin-id/widget id
      * @return
      */
-    @Path("{type}/{id}/{plugin-id}")
+    @Path("/match/{widget-id}/{contact-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<SocialSearchResult> getSocialResults(
-	    @PathParam("type") String type, @PathParam("id") Long contactId,
-	    @PathParam("plugin-id") Long pluginId)
+	    @PathParam("contact-id") Long contactId,
+	    @PathParam("widget-id") Long widgetId)
     {
 	try
 	{
-
-	    // Gets contact based on contact id, to search based on first and
-	    // last name of the contact
+	    // Get contact and widget based on their id
 	    Contact contact = ContactUtil.getContact(contactId);
+	    Widget widget = WidgetUtil.getWidget(widgetId);
 
-	    // Gets Widget based on id
-	    Widget widget = WidgetUtil.getWidget(pluginId);
-
-	    // Returns null if widget doesnt exist with given plugin id
+	    // Returns null if widget doesn't exist with given widget id
 	    if (widget == null)
 		return null;
 
-	    // Gets name of the widget and checks the type of the widget
-	    // (LinkedIn/twitter). Based on the name of the widget twitter or
-	    // linkedin profiles are searched based on first and last name of
-	    // the contact
+	    // Profiles are searched based on first and last name of contact
+	    // Gets profiles from LinkedInUtil based on contact
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-	    {
-		// Returns LinkedIn profile results
 		return LinkedInUtil.searchLinkedInProfiles(widget, contact);
-	    }
-	    else if (widget.name.equalsIgnoreCase("TWITTER"))
-	    {
-		// Returns Twitter profile results
-		return TwitterUtil.searchTwitterProfiles(widget, contact);
-	    }
-	    return null;
 
+	    // Gets profiles from TwitterUtil based on contact
+	    else if (widget.name.equalsIgnoreCase("TWITTER"))
+		return TwitterUtil.searchTwitterProfiles(widget, contact);
 	}
 	catch (Exception e)
 	{
-
-	    e.printStackTrace();
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
 	return null;
     }
 
+    @Path("/message/{widget-id}/{social-id}/{subject}/{message}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String sendMessage(@PathParam("widget-id") Long widgetId,
+	    @PathParam("social-id") String socialId,
+	    @PathParam("subject") String subject,
+	    @PathParam("message") String message)
+    {
+	try
+	{
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+	    if (widget == null)
+		return null;
+
+	    // Profiles are searched based on first and last name of contact
+	    // Calls LinkedUtil method to send message to person by socialId
+	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
+		return LinkedInUtil.sendLinkedInMessageById(widget, socialId,
+			subject, message);
+
+	    // Calls TwitterUtil method to send message to person by socialId
+	    else if (widget.name.equalsIgnoreCase("TWITTER"))
+		return TwitterUtil.sendTwitterMessageById(widget, socialId,
+			message);
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+	return null;
+    }
+
+    @Path("/add/{widget-id}/{social-id}/{subject}/{message}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String sendAddRequest(@PathParam("widget-id") Long widgetId,
+	    @PathParam("social-id") String socialId,
+	    @PathParam("subject") String subject,
+	    @PathParam("message") String message)
+    {
+	try
+	{
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+	    if (widget == null)
+		return null;
+
+	    // Profiles are searched based on first and last name of contact
+	    // Calls LinkedUtil method to send message to person by socialId
+	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
+		return LinkedInUtil.sendLinkedInAddRequest(widget, socialId,
+			subject, message);
+
+	    // Calls TwitterUtil method to send message to person by socialId
+	    else if (widget.name.equalsIgnoreCase("TWITTER"))
+		return TwitterUtil.follow(widget, Long.parseLong(socialId));
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+	return null;
+    }
+
+    @Path("/tweet/{widget-id}/{tweetId}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String reTweet(@PathParam("widget-id") Long widgetId,
+	    @PathParam("tweet-id") String tweetId)
+    {
+	try
+	{
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+	    if (widget == null)
+		return null;
+	    System.out.println(widget.name);
+	    // Calls TwitterUtil method to send message to person by socialId
+	    if (widget.name.equalsIgnoreCase("TWITTER"))
+	    {
+		System.out.println("Retweeted successfully");
+		System.out.println(TwitterUtil.reTweetByTweetId(widget,
+			Long.parseLong(tweetId)).toString());
+		return "Retweeted successfully";
+	    }
+	    System.out.println("out");
+	}
+	catch (Exception e)
+	{
+	    System.out.println("BAD_REQUEST");
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+	System.out.println("Unsuccessfull");
+	return "Unsuccessfull";
+    }
+
     /**
-     * Connects to Raplead and fetches information based on the email
+     * Connects to Rapleaf and fetches information based on the email
      * 
      * @param apikey
-     *            {@link String} API key given by user (from rapleaf)
+     *            {@link String} API key given by user from rapleaf account
      * @param email
-     *            {@link Email} {@link String} email of the contact
-     * @return
+     *            {@link String} email of the contact
+     * @return {@link String}
      */
     @Path("rapleaf/{apikey}/{email}")
     @GET
@@ -260,7 +345,7 @@ public class WidgetsAPI
     public String getRapleafDetails(@PathParam("apikey") String apikey,
 	    @PathParam("email") String email)
     {
-	// Return rapartive results
+	// Return rapportive results
 	return Rapleaf.getRapportiveValue(email, apikey).toString();
     }
 }

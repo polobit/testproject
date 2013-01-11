@@ -1,11 +1,15 @@
 package com.agilecrm.social;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
+import twitter4j.DirectMessage;
+import twitter4j.Query;
+import twitter4j.QueryResult;
 import twitter4j.ResponseList;
+import twitter4j.Tweet;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import twitter4j.User;
@@ -13,7 +17,6 @@ import twitter4j.auth.AccessToken;
 
 import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.ContactField;
 import com.agilecrm.core.api.widgets.WidgetsAPI;
 import com.agilecrm.widgets.Widget;
 
@@ -31,13 +34,37 @@ import com.agilecrm.widgets.Widget;
 public class TwitterUtil
 {
     /**
+     * Creates a twitter instance and sets the consumer tokens (developer
+     * keys)and access tokens (retrieved from widget) on it.
+     * 
+     * @param widget
+     *            {@link Widget} to get access tokens
+     * @return {@link Twitter} after setting authorization required to connect
+     *         with the Twitter server.
+     */
+    private static Twitter getTwitter(Widget widget)
+    {
+	// Creates a twitter factory to connect with twitter
+	Twitter twitter = new TwitterFactory().getInstance();
+
+	// Sets authentication, sets developers api key and secret key
+	twitter.setOAuthConsumer(Globals.TWITTER_API_KEY,
+		Globals.TWITTER_SECRET_KEY);
+
+	// Sets AccessToken, sets twitter api key and secret key
+	twitter.setOAuthAccessToken(new AccessToken(
+		widget.getProperty("token"), widget.getProperty("secret")));
+
+	return twitter;
+    }
+
+    /**
      * Searches Twitter profiles based on first name and last name specified,
      * result fetched are represented by class {@link SocialSearchResult}
-     * include details id, name, image_url, url etc..
+     * including details id, name, image_url, url etc..
      * 
      * <p>
-     * Token and secret required to connect are retrieved from the widget (saved
-     * as prefs JSONString)
+     * Token and secret required to connect are retrieved from the widget
      * </p>
      * 
      * @param widget
@@ -45,35 +72,26 @@ public class TwitterUtil
      * @param contact
      *            {@link Contact}
      * @return {@link List} of {@link SocialSearchResult}
+     * @throws Exception
+     *             If twitter throws an exception
      */
     public static List<SocialSearchResult> searchTwitterProfiles(Widget widget,
 	    Contact contact) throws Exception
     {
-	/* Gets first name and last name of the contact to search profiles */
+	// Gets first name and last name of the contact to search profiles
 	String firstName = contact.getContactFieldValue(Contact.FIRST_NAME);
 	String lastName = contact.getContactFieldValue(Contact.LAST_NAME);
-	if (firstName == null || lastName == null)
+
+	// returns null if firstname or lastname of contact is null
+	if (StringUtils.isBlank(firstName) && StringUtils.isBlank(lastName))
 	    return null;
 
-	// Creates a twitter factory, can be used to to create a connect using
-	// appropriate authentication keys
-	Twitter twitter = new TwitterFactory().getInstance();
-
-	// Sets authentication, sets api key and secret key
-	twitter.setOAuthConsumer(Globals.TWITTER_API_KEY,
-		Globals.TWITTER_SECRET_KEY);
-
-	// Creates an accesstoken to connect to Twitter. Token and secret key
-	// are specific to an user, stored in widget
-	AccessToken accessToken = new AccessToken(widget.getProperty("token"),
-		widget.getProperty("secret"));
-
-	// Authenticates based on accessToken created
-	twitter.setOAuthAccessToken(accessToken);
+	// Creates a twitter object to connect with twitter
+	Twitter twitter = getTwitter(widget);
 
 	// Searches tiwtter profiles based on first name and last name
 	ResponseList<User> users = twitter.searchUsers(firstName + " "
-		+ lastName + " ", 0);
+		+ lastName, 1);
 
 	List<SocialSearchResult> searchResults = new ArrayList<SocialSearchResult>();
 
@@ -81,7 +99,6 @@ public class TwitterUtil
 	// SocialSearchResult and adds to list
 	for (User user : users)
 	{
-
 	    SocialSearchResult result = new SocialSearchResult();
 
 	    result.id = user.getId() + "";
@@ -91,7 +108,8 @@ public class TwitterUtil
 	    result.summary = user.getDescription();
 	    result.num_connections = user.getFollowersCount() + "";
 	    result.friends = user.getFriendsCount() + "";
-	    result.tweets = user.getStatusesCount() + "";
+	    result.currentUpdate = user.getStatusesCount() + "";
+	    result.url = user.getURL() + "";
 
 	    // Adds each result in to list
 	    searchResults.add(result);
@@ -102,121 +120,150 @@ public class TwitterUtil
     }
 
     /**
-     * Creates a client to connect to Twitter using developers API key and
-     * secret key. Fetches profile for the current user who connects to Twitter
-     * based on token and token secret provided when user creates a connect
-     * 
-     * @param token
-     *            {@link String}
-     * @param tokenSecret
-     *            {@link String}
-     * @return {@link Map}
-     */
-    public static Map<String, String> getTwitterUserProperties(String token,
-	    String tokenSecret)
-    {
-
-	// Get Users
-	Twitter twitter = new TwitterFactory().getInstance();
-
-	twitter.setOAuthConsumer(Globals.TWITTER_API_KEY,
-		Globals.TWITTER_SECRET_KEY);
-	AccessToken accessToken = new AccessToken(token, tokenSecret);
-	twitter.setOAuthAccessToken(accessToken);
-
-	// Properties
-	Map<String, String> properties = new HashMap<String, String>();
-
-	try
-	{
-
-	    String id = twitter.getScreenName();
-	    // Get User Details - picture, name etc
-	    User user = twitter.showUser(id);
-	    String name = user.getName();
-	    String path = user.getProfileImageUrlHttps().toString();
-
-	    properties.put("id", id);
-	    properties.put("name", name);
-	    properties.put("pic", path);
-
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-
-	return properties;
-    }
-
-    /**
      * Fetches Twitter profiles based on the profile id, token and secret are
      * retrieved from the widget object and Twitter sent. Result is wrapped in
      * to {@link SocialSearchResult} class
      * 
      * @param widget
      *            {@link Widget}, for accessing token and secret key
-     * @param id
+     * @param twitterId
      *            {@link String}
      * @return {@link SocialSearchResult}
+     * @throws Exception
      */
     public static SocialSearchResult getTwitterProfileById(Widget widget,
-	    String id)
+	    String twitterId) throws Exception
     {
+	// Creates a twitter object to connect with twitter
+	Twitter twitter = getTwitter(widget);
 
-	// Creates a twitter factory, can be used to to create a connect using
-	// appropriate authentication keys
-	Twitter twitter = new TwitterFactory().getInstance();
+	long profile_id = Long.parseLong(twitterId);
 
-	twitter.setOAuthConsumer(Globals.TWITTER_API_KEY,
-		Globals.TWITTER_SECRET_KEY);
-	AccessToken accessToken = new AccessToken(widget.getProperty("token"),
-		widget.getProperty("secret"));
+	// Fetch Twitter user profile based on profile Id
+	User user = twitter.showUser(profile_id);
 
-	// Creates Client factory using developer keys, which allows to connect
-	// to Twitter using token and key
-	twitter.setOAuthAccessToken(accessToken);
+	SocialSearchResult result = new SocialSearchResult();
 
-	try
+	// Gets user details from twitter and maps to SocialSearchResult
+	// class
+	result.id = user.getId() + "";
+	result.name = user.getName();
+	result.picture = user.getProfileImageUrlHttps().toString();
+	result.location = user.getLocation();
+	result.summary = user.getDescription();
+	result.num_connections = user.getFollowersCount() + "";
+	result.friends = user.getFriendsCount() + "";
+	result.currentUpdate = user.getStatusesCount() + "";
+	result.url = user.getURL() + "";
+
+	result.updateStream = new ArrayList<SocialUpdateStream>();
+	System.out.println("get tweetes"
+		+ getTweetsByName(twitter, user.getScreenName()));
+	for (Tweet tweet : getTweetsByName(twitter, user.getScreenName()))
 	{
-	    long profile_id = Long.parseLong(id);
-
-	    // Fetch Twitter user profile based on profile Id
-	    User user = twitter.showUser(profile_id);
-
-	    SocialSearchResult result = new SocialSearchResult();
-
-	    // Gets user details from twitter and maps to SocialSearchResult
-	    // class
-	    result.id = user.getId() + "";
-	    result.name = user.getName();
-	    result.picture = user.getProfileImageUrlHttps().toString();
-	    result.location = user.getLocation();
-	    result.summary = user.getDescription();
-	    result.num_connections = user.getFollowersCount() + "";
-	    result.friends = user.getFriendsCount() + "";
-	    result.tweets = user.getStatusesCount() + "";
-
-	    return result;
+	    SocialUpdateStream stream = new SocialUpdateStream();
+	    stream.id = tweet.getId();
+	    stream.message = tweet.getText();
+	    stream.created_time = tweet.getCreatedAt().getTime();
+	    result.updateStream.add(stream);
 	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-
-	return null;
+	System.out.println(result.updateStream);
+	return result;
     }
 
-    public static void main(String[] args) throws Exception
+    /**
+     * Checks whether the person with the parameter twitterId is following the
+     * agile user or not.If he is following, then he sends direct message to his
+     * twitter account.
+     * 
+     * @param widget
+     *            {@link Widget}, for accessing token and secret key
+     * @param twitterId
+     *            {@link String}, to access recipient twitter account
+     * @param message
+     *            {@link String}, message to be sent
+     * @return {@link String}, success message
+     * @throws Exception
+     *             If the person with twitterId is not following agile user in
+     *             twitter
+     */
+    public static String sendTwitterMessageById(Widget widget,
+	    String twitterId, String message) throws Exception
     {
+	long profile_id = Long.parseLong(twitterId);
+	Twitter twitter = getTwitter(widget);
+	long id = twitter.getId();
 
-	List<ContactField> properties = new ArrayList<ContactField>();
-	properties.add(new ContactField("company", "work", "Giga Om"));
+	if (!twitter.showFriendship(id, profile_id).isSourceFollowedByTarget())
+	    return "You can send a message only to persons who is following you";
 
-	// Contact contact = new Contact(Contact.Type.PERSON, "", "Om", "Malik",
-	// new ArrayList<String>(), properties);
-	// getLinkedInProfile(contact);
-	// getTwitterProfile(contact);
+	DirectMessage dirMess = twitter.sendDirectMessage(profile_id, message);
+	if (dirMess.getId() == 0)
+	    return "Unsuccessfull try again";
+	return "Message sent Successfully";
     }
 
+    /**
+     * Connects to the twitter based on widget prefs and retweets the tweet
+     * based on the given tweet id
+     * 
+     * @param widget
+     *            {@link Widget}, for accessing token and secret key
+     * @param tweetId
+     *            id of the {@link Tweet}
+     * @return {@link String} with success message
+     * @throws Exception
+     */
+    public static String reTweetByTweetId(Widget widget, Long tweetId)
+	    throws Exception
+    {
+	Twitter twitter = getTwitter(widget);
+	twitter.retweetStatus(tweetId);
+	// Status reTweet = twitter.retweetStatus(tweetId);
+	// SocialUpdateStream updateStream = new SocialUpdateStream();
+	// updateStream.created_time = reTweet.getCreatedAt().getTime();
+	// updateStream.id = reTweet.getId();
+	// updateStream.message = reTweet.getText();
+	// System.out.println("-----------------" + updateStream);
+	return "Retweeted successfully";
+    }
+
+    /**
+     * Connects to the twitter based on widget prefs and creates friendship
+     * (follow) between agile user and the person with twitter id in twitter
+     * 
+     * @param widget
+     *            {@link Widget}, for accessing token and secret key
+     * @param twitterId
+     *            {@link String}, to access recipient twitter account
+     * @return {@link String} with success message
+     * @throws Exception
+     */
+    public static String follow(Widget widget, Long twitterId) throws Exception
+    {
+	Twitter twitter = getTwitter(widget);
+	User user = twitter.createFriendship(twitterId);
+	return (user != null) ? "Followed successfully" : "Unsuccessfull";
+    }
+
+    /**
+     * Searches in Twitter for the specified screen name and gets the tweets of
+     * that person
+     * 
+     * @param twitter
+     *            {@link Twitter},after setting authentication
+     * @param screenName
+     *            {@link String}, twitter screen name
+     * @return {@link List} of {@link Tweet}
+     * @throws Exception
+     *             If {@link Twitter} throws an exception
+     */
+    public static List<Tweet> getTweetsByName(Twitter twitter, String screenName)
+	    throws Exception
+    {
+	Query query = new Query("from:" + screenName);
+	QueryResult result = twitter.search(query);
+
+	return result.getTweets();
+    }
 }

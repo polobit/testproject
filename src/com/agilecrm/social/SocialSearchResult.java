@@ -1,5 +1,8 @@
 package com.agilecrm.social;
 
+import java.util.List;
+
+import javax.persistence.Embedded;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -17,11 +20,13 @@ public class SocialSearchResult
     public String friends = "";
     public String tweets = "";
     public String distance = "";
+    @Embedded
+    public List<SocialUpdateStream> updateStream = null;
 
     public String toString()
     {
 	return id + " " + name + " " + picture + " " + url + " " + summary
 		+ " " + headline + " " + num_connections + " " + location + " "
-		+ friends + " " + tweets + " " + distance;
+		+ friends + " " + tweets + " " + distance + " ";
     }
 }
