@@ -209,3 +209,9 @@ function retweetTheTweet(plugin_id, share_id, message) {
         console.log(data);
     });
 }
+
+function tweet(plugin_id, twitter_id, message){
+	 $.get("/core/api/widgets/tweet/" + plugin_id + "/" + twitter_id + "/" + message, function (data) {
+	  console.log(data);
+	 });
+	}

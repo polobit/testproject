@@ -9,6 +9,7 @@ import twitter4j.DirectMessage;
 import twitter4j.Query;
 import twitter4j.QueryResult;
 import twitter4j.ResponseList;
+import twitter4j.Status;
 import twitter4j.Tweet;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
@@ -18,6 +19,7 @@ import twitter4j.auth.AccessToken;
 import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.core.api.widgets.WidgetsAPI;
+import com.agilecrm.util.Util;
 import com.agilecrm.widgets.Widget;
 
 /**
@@ -244,6 +246,18 @@ public class TwitterUtil
 	Twitter twitter = getTwitter(widget);
 	User user = twitter.createFriendship(twitterId);
 	return (user != null) ? "Followed successfully" : "Unsuccessfull";
+    }
+
+    public static String tweetInTwitter(Widget widget, Long twitterId,
+	    String text) throws Exception
+    {
+	Twitter twitter = getTwitter(widget);
+	User user = twitter.showUser(twitterId);
+	text = "@" + user.getScreenName() + " " + text;
+
+	Status status = twitter.updateStatus(text);
+	System.out.println(Util.toJSONString(status));
+	return "Successfull";
     }
 
     /**

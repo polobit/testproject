@@ -398,6 +398,36 @@ public class WidgetsAPI
 	    // Calls LinkedUtil method to send message to person by socialId
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
 		return LinkedInUtil.getNetworkUpdates(widget, socialId);
+
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+	return null;
+    }
+
+    @Path("/tweet/{widget-id}/{social-id}/{message}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String tweetInTwitter(@PathParam("widget-id") Long widgetId,
+	    @PathParam("social-id") String socialId,
+	    @PathParam("message") String message)
+    {
+	try
+	{
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+	    if (widget == null)
+		return null;
+
+	    // Profiles are searched based on first and last name of contact
+	    // Calls LinkedUtil method to send message to person by socialId
+	    if (widget.name.equalsIgnoreCase("TWITTER"))
+		return TwitterUtil.tweetInTwitter(widget,
+			Long.parseLong(socialId), message);
+
 	}
 	catch (Exception e)
 	{
