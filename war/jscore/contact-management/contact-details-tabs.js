@@ -301,7 +301,9 @@ $(function(){
 						$.each(logsCollection.toJSON(), function(index, model) {
 						
 							$.each(JSON.parse(model.logs), function(index, log_model) {
-								$('#timeline').isotope( 'insert', $(getTemplate("timeline", log_model)) );
+								var newItem = $(getTemplate("timeline", log_model));
+								newItem.find('.inner').append('<a href="#" class="open-close"></a>');
+								$('#timeline').isotope( 'insert', newItem);
 							});
 						});
 					}

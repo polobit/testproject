@@ -75,16 +75,15 @@ $(function(){
     							setup_timeline(timelineView.collection.toJSON(),
     									App_Contacts.contactDetailView.el,
     									undefined);
-    						} else
-    							$('#timeline').isotope('insert',
-    									$(getTemplate("timeline", data.toJSON())));
-    						
+    						} else{
+    							var newItem = $(getTemplate("timeline", data.toJSON()));
+    							newItem.find('.inner').append('<a href="#" class="open-close"></a>');
+    							$('#timeline').isotope('insert', newItem);
+    						}
     						return false;
     					}	
-
     				});
     			}
-    	      
 			}    
       	});
     });

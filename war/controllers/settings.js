@@ -103,7 +103,8 @@ var SettingsRouter = Backbone.Router.extend({
 			template : "settings-social-prefs",
 			data : data
 		});
-
+		itemView.model.fetch();
+		
 		// Adds Gmail Prefs
 		$('#content').html(itemView.render().el);
 
