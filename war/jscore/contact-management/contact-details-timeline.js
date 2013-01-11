@@ -69,32 +69,35 @@ function load_timeline_details(el, contactId, callback1)
 					
 				// If timeline is not defined yet, calls setup_timeline for the first time
 				if(timelineView.collection.length == 0){
-					
 					$.each(logsCollection.toJSON(), function(index, model) {
 						timelineView.collection.add(JSON.parse(model.logs));
 					});	
-										
+								
 					/*
 					 * Calls setup_timeline with a callback function to insert other models 
 					 * (fetched while initializing the isotope) if available.
 					 */
 					setup_timeline(timelineView.collection.toJSON(), el, function(el){
 						$.each(timelineViewMore.collection.toJSON(), function(index,data){
-							$('#timeline', el).isotope( 'insert', $(getTemplate("timeline", data)) );
+							var newItem = $(getTemplate("timeline", data));
+							newItem.find('.inner').append('<a href="#" class="open-close"></a>');
+							$('#timeline', el).isotope( 'insert', newItem);
 						});
 					});
 				}else{
-						
+					var logs_array = [];	
 					/*
-					 * Already setup_timeline is called with the first fetched data.
-					 * 
+					 * Already setup_timeline is called with the first fetched data. Adds all the
+					 * logs of each campaign to an array and then inserts the array values 
+					 * (avoids calling insertion and month marker multiple times).
 					 * Inserts the data into timeline or adds to other collection (timelineViewMore) 
 					 * by validating the status of isotope initialization.
 					 */   
 					$.each(logsCollection.toJSON(), function(index, model) {
-														
-						validate_insertion(JSON.parse(model.logs), timelineViewMore);
+						logs_array = logs_array.concat(JSON.parse(model.logs));								
+						//validate_insertion(JSON.parse(model.logs), timelineViewMore);
 					});
+					validate_insertion(logs_array, timelineViewMore);
 				}
 			
 			}
@@ -131,12 +134,13 @@ function load_timeline_details(el, contactId, callback1)
 							setup_timeline(timelineView.collection.toJSON(), el);
 						}else{
 							$.each(emailsCollection.toJSON()[0]['emails'], function(index, data){
-								
+								var newItem = $(getTemplate("timeline", data));
+								newItem.find('.inner').append('<a href="#" class="open-close"></a>');
 								/*
 								 * Inserts mails to timeline with out validating the isotope status,
 								 * as it takes more time to fetch.
 								 */  
-								$('#timeline', el).isotope( 'insert', $(getTemplate("timeline", data)) );
+								$('#timeline', el).isotope( 'insert', newItem);
 							});
 						}
 					}
@@ -213,7 +217,9 @@ function load_timeline_details(el, contactId, callback1)
 							setup_timeline(timelineView.collection.toJSON(), el, function(el){
 								
 								$.each(timelineViewMore.collection.toJSON(), function(index,data){
-									$('#timeline', el).isotope( 'insert', $(getTemplate("timeline", data)) );
+									var newItem = $(getTemplate("timeline", data));
+									newItem.find('.inner').append('<a href="#" class="open-close"></a>');
+									$('#timeline', el).isotope( 'insert', newItem);
 								});
 							})
 						}else{
@@ -255,15 +261,24 @@ function validate_insertion(models, timelineViewMore){
 		head.js(LIB_PATH + "lib/jquery.isotope.min.js", LIB_PATH + "lib/jquery.event.resize.js", function(){
 		
 			if($('#timeline').isotope()){
-				$.each(models, function(index,data){
-				
-					$('#timeline').isotope( 'insert', $(getTemplate("timeline", data)) );
+				var month_years = [];
+				$.each(models, function(index, model){
+					var month_year = entity_created_month_year(model);
+									
+					if (month_years.indexOf(month_year) < 0 && MONTH_YEARS.indexOf(month_year))
+						month_years[month_years.length] = month_year;
+					var newItem = $(getTemplate("timeline", model));
+					newItem.find('.inner').append('<a href="#" class="open-close"></a>');
+					$('#timeline').isotope( 'insert', newItem);
 				});
+				
+				// add a year marker for each year that has a post
+				create_month_marker(month_years, true);
 			}
 		});
 		
 	}catch(err){
-		
+		console.log(err);
 		timelineViewMore.collection.add(models);
 	}
 }
@@ -284,6 +299,53 @@ function show_timeline_padcontent(is_logs_fetched, is_mails_fetched, is_array_ur
 		$("#timeline-slate").css('display', 'block');
 }
 
+// Stores month names with their maximum days to get time stamp (milliseconds)
+var monthArray = ['January 31', 'February 28', 'March 31', 'April 30', 'May 31', 'June 30',
+                  'July 31', 'August 31', 'September 30', 'October 31', 'November 30', 'December 31'];
+
+// Stores "monthIndex-year" of timeline initiating entities
+var MONTH_YEARS = [];
+
+/**
+ * Get the timestamp (milliseconds) given month of the year.
+ */
+function getTimestamp(month_index, year){
+	if((year % 4) == 0)
+		monthArray[1] = 'February 29';
+	return Date.parse(monthArray[month_index] + ', ' + year); 
+}
+
+/**
+ * Returns month index and full year of the given entity as "-" separated.
+ * @param model
+ * @returns {String}
+ */
+function entity_created_month_year(model){
+	if(model.created_time)
+		return month_year = new Date(model.created_time * 1000).getMonth() + '-' + new Date(model.created_time * 1000).getFullYear();
+	else if(model.t)
+		return month_year = new Date(model.t * 1000).getMonth() + '-' + new Date(model.t * 1000).getFullYear();
+	else if(model.date_secs)
+		return month_year = new Date(model.date_secs * 1000).getMonth() + '-' + new Date(model.date_secs).getFullYear();
+}
+
+/**
+ * Inserts or appends month marker to the timeline
+ * @param month_years
+ * @param is_insert
+ */
+function create_month_marker(month_years, is_insert){
+	// add a year marker for each year that has a post
+	$.each(month_years, function(i, val){
+		var monthYear = val.split('-');
+		var timestamp = getTimestamp(monthYear[0], monthYear[1]) / 1000;
+		var context = {year: monthArray[monthYear[0]].split(' ')[0], timestamp: timestamp};
+		if(is_insert)
+			$('#timeline').isotope( 'insert', $(getTemplate("year-marker", context)));
+		else
+			$('#timeline').append(getTemplate("year-marker", context));
+	});
+}
 /**
  * Loads minified jquery.isotope plug-in and jquery.event.resize plug-in to 
  * to initialize the isotope and appends the given models to the timeline, by 
@@ -310,17 +372,26 @@ function setup_timeline(models, el, callback) {
 		 * arrangement of data position added to timeline etc..
 		 */ 
 		customize_isotope();
-	
+		
 		/*
 		 * Appends each model to timeline, by loading their corresponding
 		 * templates using handlebars
 		 */
 		$.each(models, function(index, model) {
 			
+			// save the years so we can create year markers
+			var month_year = entity_created_month_year(model);
+					
+			if (MONTH_YEARS.indexOf(month_year) < 0)
+				MONTH_YEARS[MONTH_YEARS.length] = month_year;
+			
 			// combine data & templqate
 			$('#timeline', el).append(getTemplate("timeline", model));
 		}); //each
 
+		// add a year marker for each year that has a post
+		create_month_marker(MONTH_YEARS, false);
+		
 		// Initializes isotope with options (sorts the data based on created time)
 		$('#timeline',el).imagesLoaded(function(){
 			$('#timeline').isotope({
@@ -347,7 +418,7 @@ function setup_timeline(models, el, callback) {
 		});
 
 		// Resizes the item height
-		$('#timeline .item a.open-close').click(function(e){
+		$('#timeline .item a.open-close').live("click", function(e){
 			$(this).siblings('.body').slideToggle(function(){
 				$('#timeline').isotope('reLayout');
 			});
@@ -505,7 +576,6 @@ function get_address_from_browsing_history(email, contact) {
 
 		$.get(url, function(data) {
 
-			console.log(data);
 			// Go further only when the contact got browsing address
 			if (data && data.length > 0) {
 				var addressJSON = {};
