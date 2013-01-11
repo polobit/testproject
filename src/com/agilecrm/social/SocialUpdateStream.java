@@ -8,6 +8,7 @@ public class SocialUpdateStream
     public Long id;
     public long created_time;
     public String message = "";
+    public String type = "";
 
     public String toString()
     {

@@ -204,8 +204,8 @@ function sendMessage(plugin_id, twitter_id, message) {
     });
 }
 
-function retweetTheTweet(plugin - id, share - id, message) {
-    $.get("/core/api/widgets/reshare/" + plugin_id + "/" + share - id + "/" + message, function (data) {
+function retweetTheTweet(plugin_id, share_id, message) {
+    $.get("/core/api/widgets/reshare/" + plugin_id + "/" + share_id + "/" + message, function (data) {
         console.log(data);
     });
 }

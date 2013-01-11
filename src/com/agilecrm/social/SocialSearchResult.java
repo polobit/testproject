@@ -18,7 +18,7 @@ public class SocialSearchResult
     public String num_connections = "";
     public String location = "";
     public String friends = "";
-    public String tweets = "";
+    public String currentUpdate = "";
     public String distance = "";
     @Embedded
     public List<SocialUpdateStream> updateStream = null;
@@ -27,6 +27,6 @@ public class SocialSearchResult
     {
 	return id + " " + name + " " + picture + " " + url + " " + summary
 		+ " " + headline + " " + num_connections + " " + location + " "
-		+ friends + " " + tweets + " " + distance + " ";
+		+ friends + " " + currentUpdate + " " + distance + " ";
     }
 }

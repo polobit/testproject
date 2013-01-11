@@ -18,6 +18,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.social.LinkedInUtil;
 import com.agilecrm.social.SocialSearchResult;
+import com.agilecrm.social.SocialUpdateStream;
 import com.agilecrm.social.TwitterUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
@@ -82,7 +83,7 @@ public class WidgetsAPI
     }
 
     /**
-     * Updates an widget
+     * Updates a widget
      * 
      * @param widget
      *            {@link Widget}
@@ -137,24 +138,22 @@ public class WidgetsAPI
 
     // Get widget
     /**
-     * Returns user LinkedIn/Twitter profile, Connects to LinkedinUtil or
-     * TwitterUtil based on plugin type and fetches results based on widget id
-     * to get prefs and profile id
+     * Connects to {@link LinkedInUtil} or {@link TwitterUtil} based on the name
+     * given in widget and fetches profile of the contact in LinkedIn or Twitter
+     * based on the parameter social id
      * 
-     * @param type
-     *            {@link String}
-     * @param socialId
-     *            {@link String}
      * @param widgetId
-     *            {@link Long}
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param socialId
+     *            {@link String} LinkedIn id or Twitter id of the contact
      * @return {@link SocialSearchResult}
      */
     @Path("profile/{widget-id}/{social-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public SocialSearchResult getSocialProfile(
-	    @PathParam("social-id") String socialId,
-	    @PathParam("widget-id") Long widgetId)
+	    @PathParam("widget-id") Long widgetId,
+	    @PathParam("social-id") String socialId)
     {
 	// Gets widget based on id
 	Widget widget = WidgetUtil.getWidget(widgetId);
@@ -183,17 +182,15 @@ public class WidgetsAPI
 
     // Get matching profiles for linkedin and Twitter
     /**
-     * Gets matching profiles for linkedin and twitter, based on the type
-     * parameter differentiates the type of request is for linkedin or twitter
-     * profiles
+     * Connects to {@link LinkedInUtil} or {@link TwitterUtil} based on the name
+     * given in widget and fetches matching profiles for the contact in LinkedIn
+     * and Twitter, based on the parameter social id
      * 
-     * @param type
-     *            {@link String} type of widget linkedin/tiwtter
      * @param contactId
-     *            {@link Long} cutomer id
+     *            {@link Long} customer id, to get name of contact
      * @param widgetId
-     *            {@link Long} plugin-id/widget id
-     * @return
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @return {@link List} of {@link SocialSearchResult}
      */
     @Path("/match/{widget-id}/{contact-id}")
     @GET
@@ -230,6 +227,69 @@ public class WidgetsAPI
 	return null;
     }
 
+    /**
+     * Connects to {@link LinkedInUtil} or {@link TwitterUtil} user based on the
+     * name given in widget and sends an add request to contact in LinkedIn and
+     * Twitter based on the parameter social id
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param socialId
+     *            {@link String} LinkedIn id or Twitter id of the contact
+     * @param subject
+     *            {@link String} subject to be sent with request
+     * @param message
+     *            {@link String} message to be sent
+     * @return {@link String}
+     */
+    @Path("/add/{widget-id}/{social-id}/{subject}/{message}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String sendAddRequest(@PathParam("widget-id") Long widgetId,
+	    @PathParam("social-id") String socialId,
+	    @PathParam("subject") String subject,
+	    @PathParam("message") String message)
+    {
+	try
+	{
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+	    if (widget == null)
+		return null;
+
+	    // Profiles are searched based on first and last name of contact
+	    // Calls LinkedUtil method to send message to person by socialId
+	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
+		return LinkedInUtil.sendLinkedInAddRequest(widget, socialId,
+			subject, message);
+
+	    // Calls TwitterUtil method to send message to person by socialId
+	    else if (widget.name.equalsIgnoreCase("TWITTER"))
+		return TwitterUtil.follow(widget, Long.parseLong(socialId));
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+	return null;
+    }
+
+    /**
+     * Connects to {@link LinkedInUtil} or {@link TwitterUtil} based on the name
+     * given in widget and sends a message to the contact in LinkedIn and
+     * Twitter based on the parameter social id
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param socialId
+     *            {@link String} LinkedIn id or Twitter id of the contact
+     * @param subject
+     *            {@link String} subject to be sent with message
+     * @param message
+     *            {@link String} message to be sent
+     * @return {@link String}
+     */
     @Path("/message/{widget-id}/{social-id}/{subject}/{message}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -264,13 +324,69 @@ public class WidgetsAPI
 	return null;
     }
 
-    @Path("/add/{widget-id}/{social-id}/{subject}/{message}")
+    /**
+     * Connects to {@link LinkedInUtil} or {@link TwitterUtil} based on the name
+     * given in widget and reshares or retweets a post in LinkedIn and Twitter
+     * based on the parameter social id
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param shareId
+     *            {@link String} Id of the tweet or post in Twitter or LinkedIn
+     * @param comment
+     *            {@link String} Comment to be set while sharing
+     * @return {@link String}
+     */
+    @Path("/reshare/{widget-id}/{share-id}/{comment}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String sendAddRequest(@PathParam("widget-id") Long widgetId,
-	    @PathParam("social-id") String socialId,
-	    @PathParam("subject") String subject,
-	    @PathParam("message") String message)
+    public String shareSocialNetworkupdates(
+	    @PathParam("widget-id") Long widgetId,
+	    @PathParam("share-id") String shareId,
+	    @PathParam("comment") String comment)
+    {
+	try
+	{
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+	    if (widget == null)
+		return null;
+
+	    // Calls TwitterUtil method to send message to person by socialId
+	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
+		return LinkedInUtil.reshareLinkedInPost(widget, shareId,
+			comment);
+
+	    else if (widget.name.equalsIgnoreCase("TWITTER"))
+		return TwitterUtil.reTweetByTweetId(widget,
+			Long.parseLong(shareId));
+
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+	return "Unsuccessfull";
+    }
+
+    /**
+     * Connects to {@link LinkedInUtil} or {@link TwitterUtil} based on the name
+     * given in widget and fetches the posts or tweets in LinkedIn and Twitter
+     * based on the parameter social id
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param socialId
+     *            {@link String} LinkedIn id or Twitter id of the contact
+     * @return {@link List} of {@link SocialUpdateStream}
+     */
+    @Path("/updates/{widget-id}/{social-id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<SocialUpdateStream> getSocialNetworkUpdates(
+	    @PathParam("widget-id") Long widgetId,
+	    @PathParam("social-id") String socialId)
     {
 	try
 	{
@@ -281,12 +397,7 @@ public class WidgetsAPI
 	    // Profiles are searched based on first and last name of contact
 	    // Calls LinkedUtil method to send message to person by socialId
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInUtil.sendLinkedInAddRequest(widget, socialId,
-			subject, message);
-
-	    // Calls TwitterUtil method to send message to person by socialId
-	    else if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterUtil.follow(widget, Long.parseLong(socialId));
+		return LinkedInUtil.getNetworkUpdates(widget, socialId);
 	}
 	catch (Exception e)
 	{
@@ -295,39 +406,6 @@ public class WidgetsAPI
 		    .build());
 	}
 	return null;
-    }
-
-    @Path("/tweet/{widget-id}/{tweetId}")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String reTweet(@PathParam("widget-id") Long widgetId,
-	    @PathParam("tweet-id") String tweetId)
-    {
-	try
-	{
-	    Widget widget = WidgetUtil.getWidget(widgetId);
-	    if (widget == null)
-		return null;
-	    System.out.println(widget.name);
-	    // Calls TwitterUtil method to send message to person by socialId
-	    if (widget.name.equalsIgnoreCase("TWITTER"))
-	    {
-		System.out.println("Retweeted successfully");
-		System.out.println(TwitterUtil.reTweetByTweetId(widget,
-			Long.parseLong(tweetId)).toString());
-		return "Retweeted successfully";
-	    }
-	    System.out.println("out");
-	}
-	catch (Exception e)
-	{
-	    System.out.println("BAD_REQUEST");
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-	}
-	System.out.println("Unsuccessfull");
-	return "Unsuccessfull";
     }
 
     /**

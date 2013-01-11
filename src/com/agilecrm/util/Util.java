@@ -11,7 +11,11 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.commons.io.IOUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 
+import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.thirdparty.SendGridEmail;
 
 /**
@@ -132,6 +136,64 @@ public class Util
     }
 
     /**
+     * Adds the key and value pair to the Memcache.
+     * 
+     * @param key
+     *            String to store as map key
+     * @param value
+     *            Object represents the value to map
+     */
+    public static void setCache(String key, Object value)
+    {
+
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+	syncCache.put(key, value);
+
+	NamespaceManager.set(oldNamespace);
+    }
+
+    /**
+     * Gets the value from Cache. The Object holding the value is returned
+     * 
+     * @param key
+     *            Memcache key to search
+     * @return Object with value
+     */
+    public static Object getCache(String key)
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+	Object value = syncCache.get(key);
+
+	NamespaceManager.set(oldNamespace);
+
+	return value;
+    }
+
+    /**
+     * Removes the data from Cache. Returns void
+     * 
+     * @param key
+     *            Memcache key to search
+     */
+    public static void deleteCache(String key)
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+	if (syncCache.contains(key))
+	    syncCache.delete(key);
+
+	NamespaceManager.set(oldNamespace);
+    }
+
+    /**
      * Gets OAuth domain name and returns its associated url
      * 
      * @param provider
@@ -147,5 +209,21 @@ public class Util
 	openIdProviders.put("myopenid.com", "stats.agilecrm.com");
 
 	return openIdProviders.get(provider.toLowerCase());
+    }
+
+    public static String toJSONString(Object obj)
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        String json;
+        try
+        {
+            json = mapper.writeValueAsString(obj);
+            return json;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            return "";
+        }
     }
 }
