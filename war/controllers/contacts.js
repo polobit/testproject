@@ -112,8 +112,8 @@ var ContactsRouter = Backbone.Router.extend({
               url: url,
               templateKey: "contacts",
               individual_tag_name: 'tr',
-              cursor: true,
-              page_size: 25,
+//              cursor: true,
+//              page_size: 25,
               postRenderCallback: function(el) {
             	  
             	  // To set chats and view when contacts are fetch by infiniscroll
@@ -131,7 +131,9 @@ var ContactsRouter = Backbone.Router.extend({
           // Contacts are fetched when the app loads in the initialize
           var cel = this.contactsListView.el;
           var collection = this.contactsListView.collection;
-          this.contactsListView.collection.fetch();
+          this.contactsListView.collection.fetch({success: function(data){
+        	  console.log(JSON.stringify(data.toJSON()));
+          }});
 
           $('#content').html(this.contactsListView.render().el);
           
@@ -493,20 +495,7 @@ var ContactsRouter = Backbone.Router.extend({
        					
     	            	head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
     	           		    	{	
-    	           					var LHS, condition, RHS, RHS_NEW;
-    	           					
-    	           					LHS = $("#LHS", el);
-    	           					condition = $("#condition", el)
-    	           					RHS = $("#RHS", el)
-    	           					
-    	           					// Extra field required for (Between values condition)
-    	           					RHS_NEW = $("#RHS-NEW", el)
-    	           					
-    	           					// Chaining dependencies of input fields with jquery.chained.js
-    	           					condition.chained(LHS);
-    	           					RHS_NEW.chained(condition);
-    	           					RHS.chained(LHS);
-    	            			        	            			    
+    	            				chainFilters(el);	            			    
     	           		    	})
     	               }
     	        });
@@ -531,21 +520,7 @@ var ContactsRouter = Backbone.Router.extend({
 	            postRenderCallback: function(el) {  
 	            	head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 	           		    	{	
-	            				var LHS, condition, RHS, RHS_NEW;
-       					
-	            				LHS = $("#LHS", el);
-	            				condition = $("#condition", el)
-	            				RHS = $("#RHS", el)
-       					
-	            				// Extra field required for (Between values condition)
-	            				RHS_NEW = $("#RHS-NEW", el)
-       					
-	            				// Chaining dependencies of input fields with jquery.chained.js
-	            				condition.chained(LHS);
-	            				RHS_NEW.chained(condition);
-	            				RHS.chained(LHS);
-        			        	            
-	            			        	            			    
+	            				chainFilters(el);      	            			    
 	           		    	})
 	               }
     	    	});

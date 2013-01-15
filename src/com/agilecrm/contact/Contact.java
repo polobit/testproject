@@ -1,6 +1,5 @@
 package com.agilecrm.contact;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,6 +14,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.contact.deferred.TagsDeferredTask;
 import com.agilecrm.contact.util.ContactUtil;
@@ -61,7 +62,7 @@ import com.googlecode.objectify.condition.IfDefault;
  */
 @XmlRootElement
 @Unindexed
-public class Contact extends Cursor implements Serializable
+public class Contact extends Cursor
 {
     // Key
     @Id
@@ -104,12 +105,6 @@ public class Contact extends Cursor implements Serializable
     private Key<DomainUser> owner_key = null;
 
     /**
-     * Stores creator name, when the contact is created using its augmented
-     * constructor
-     */
-    public String creator = "";
-
-    /**
      * Stores the star value of a contact
      */
     @NotSaved(IfDefault.class)
@@ -149,6 +144,9 @@ public class Contact extends Cursor implements Serializable
     @NotSaved
     public Map<String, Object> contact_properties = null;
 
+    @NotSaved(IfDefault.class)
+    public String tags_with_time_json = null;
+
     /**
      * Stores the property names in final variables, for reading flexibility of
      * the property values
@@ -185,16 +183,13 @@ public class Contact extends Cursor implements Serializable
      * @param properties
      *            properties (name, email, address and etc..) of a contact
      */
-    public Contact(Type type, String creator, Set<String> tags,
-	    List<ContactField> properties)
+    public Contact(Type type, Set<String> tags, List<ContactField> properties)
     {
 	this.type = type;
-	this.creator = creator;
 
 	this.tags = tags;
 	this.properties = properties;
 
-	System.out.println(this.properties);
     }
 
     /**
@@ -391,7 +386,6 @@ public class Contact extends Cursor implements Serializable
 		.getContactsBulk(contactsJSONArray);
 	if (contacts_list.size() == 0)
 	{
-	    System.out.println("Null contact");
 	    return;
 	}
 
@@ -475,16 +469,57 @@ public class Contact extends Cursor implements Serializable
 	// Update Tags - Create a deferred task
 	TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(tags);
 
+	tags_with_time_json = mapTagsWithTime(tags, System.currentTimeMillis());
+
 	Queue queue = QueueFactory.getDefaultQueue();
 	queue.add(TaskOptions.Builder.withPayload(tagsDeferredTask));
 
+    }
+
+    private String mapTagsWithTime(Set<String> tags, long currentTime)
+    {
+	JSONObject tags_json = new JSONObject();
+	try
+	{
+	    if (tags_with_time_json != null)
+		tags_json = new JSONObject(tags_with_time_json);
+
+	    for (String tag : tags)
+	    {
+		if (tags_json.has(tag))
+		    continue;
+
+		tags_json.put(tag, currentTime);
+	    }
+
+	    return removeDeletedTagsFromMap(tags_json).toString();
+	}
+	catch (JSONException e)
+	{
+	    return null;
+	}
+    }
+
+    private JSONObject removeDeletedTagsFromMap(JSONObject tagJson)
+    {
+	if (tags.isEmpty())
+	    return new JSONObject();
+
+	for (String tag : tags)
+	{
+	    if (!tagJson.has(tag))
+		tagJson.remove(tag);
+	}
+
+	return tagJson;
     }
 
     @Override
     public String toString()
     {
 	return "id: " + id + " created_time: " + created_time + " updated_time"
-		+ updated_time + " type: " + type + " creator:" + creator
-		+ " tags: " + tags + " properties: " + properties;
+		+ updated_time + " type: " + type + " tags: " + tags
+		+ " properties: " + properties;
     }
+
 }

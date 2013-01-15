@@ -1,11 +1,16 @@
 package com.agilecrm.search.util;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
@@ -215,4 +220,18 @@ public class SearchUtil
 	return normalizeSet(tokens);
     }
 
+    public static String getDateWithoutTimeComponent(Long millSeconds)
+    {
+	/*
+	 * Truncate date Document search date is without time component
+	 */
+	Date truncatedDate = DateUtils.truncate(new Date(millSeconds),
+		Calendar.DATE);
+
+	// Format date(formated as stored in document)
+	Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+	// Formated to build query
+	return formatter.format(truncatedDate);
+    }
 }

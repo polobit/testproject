@@ -229,9 +229,7 @@ function deserializeForm(data, form)
                              * Chains dependencies of input fields with
                              * jquery.chained.js based on the rule element
                              */
-                            $('#condition',rule_element).chained($('#LHS', rule_element));
-                            $("#RHS", rule_element).chained($('#LHS', rule_element));
-                            $('#RHS-NEW', rule_element).chained($('#condition', rule_element));
+    						chainFilters(rule_element);
 
                             $(parent_element).append(rule_element);
                         });
@@ -249,7 +247,7 @@ function deserializeForm(data, form)
                         	// Fills date in to fields and initialize datepicker on the field
                             if ($(input_element).hasClass('date'))
                             {
-                                $(input_element).val(new Date(value)
+                                $(input_element).val(new Date(parseInt(value))
                                     .format('mm/dd/yyyy'));
                                 $(input_element).datepicker(
                                 {

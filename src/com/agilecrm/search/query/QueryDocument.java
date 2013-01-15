@@ -1,14 +1,9 @@
 package com.agilecrm.search.query;
 
-import java.text.Format;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-
-import org.apache.commons.lang.time.DateUtils;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.reports.Reports;
@@ -76,24 +71,28 @@ public class QueryDocument implements QueryInterface
 	     * Get condition parameters LHS(field_name in document) ,
 	     * condition(condition or query AND or NOT), RHS(field_value)
 	     */
-	    String LHS = rule.LHS;
-	    String condition = rule.CONDITION;
-	    String RHS = rule.RHS;
+	    String lhs = rule.LHS;
+	    SearchRule.RuleCondition condition = rule.CONDITION;
+	    String rhs = rule.RHS;
+	    String rhs_new = rule.RHS_NEW;
+	    SearchRule.RuleCondition nestedCondition = rule.nested_condition;
+	    String nestedLhs = rule.nested_lhs;
+	    String nestedRhs = rule.nested_rhs;
 
 	    /*
 	     * Build equals and not equals queries conditions except time based
 	     * conditions
 	     */
-	    if (!LHS.contains("time"))
+	    if (!lhs.contains("time"))
 	    {
 		/*
 		 * Create new query with LHS and RHS conditions to be processed
 		 * further for necessary queries
 		 */
-		String newQuery = LHS + ":" + SearchUtil.normalizeString(RHS);
+		String newQuery = lhs + ":" + SearchUtil.normalizeString(rhs);
 
 		// For equals condition
-		if (condition.equalsIgnoreCase("EQUALS"))
+		if (condition.equals(SearchRule.RuleCondition.EQUALS))
 		{
 		    /*
 		     * Build query by passing condition old query and new query
@@ -109,65 +108,20 @@ public class QueryDocument implements QueryInterface
 	    }
 
 	    // Queries on created or updated times
-	    else if (LHS.contains("time"))
+	    if (lhs.contains("time") && !lhs.contains("tags"))
 	    {
-		/*
-		 * Truncate date Document search date is without time component
-		 */
-		Date truncatedDate = DateUtils.truncate(new Date(Long.parseLong(RHS)),
-			Calendar.DATE);
+		query = createTimeQuery(query, lhs, condition, rhs, rhs_new);
 
-		// Format date(formated as stored in document)
-		Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+	    }
 
-		// Formated to build query
-		String date = formatter.format(truncatedDate);
-
-		System.out.println("date string is  : " + date);
-
-		// Created on date condition
-		if (condition.equalsIgnoreCase("EQUALS"))
-		{
-		    query = buildQuery("AND", query, LHS + "=" + date);
-		}
-
-		// Created after given date
-		else if (condition.equalsIgnoreCase("AFTER"))
-		{
-		    query = buildQuery("AND", query, LHS + " >" + date);
-		}
-
-		// Created before particular date
-		else if (condition.equalsIgnoreCase("BEFORE"))
-		{
-		    query = buildQuery("AND", query, LHS + " < " + date);
-		}
-
-		// Created in last number of days
-		else if (condition.equalsIgnoreCase("LAST"))
-		{
-		    long from_date = new DateUtil().removeDays(Integer.parseInt(RHS)).getTime()
-			    .getTime() / 1000;
-
-		    query = buildQuery("AND", query, LHS + " > " + date);
-
-		    query = query + LHS + " < " + date;
-		}
-
-		// Created Between given dates
-		else if (condition.equalsIgnoreCase("BETWEEN"))
-		{
-		    String RHS_NEW = rule.RHS_NEW;
-		    if (RHS_NEW != null)
-		    {
-			String to_date = formatter.format(new Date(Long.parseLong(RHS_NEW)));
-
-			query = buildQuery("AND", query, LHS + " >=" + date);
-			query = buildQuery("AND", query, LHS + " <= " + to_date);
-		    }
-		}
+	    if (lhs.contains("time") && lhs.contains("tags"))
+	    {
+		query = createTimeQuery(query, rhs + "_time", nestedCondition,
+			nestedLhs, nestedRhs);
 	    }
 	}
+
+	System.out.println("query built is  : " + query);
 
 	// return query results
 	return processQuery(query, ruleType);
@@ -207,7 +161,8 @@ public class QueryDocument implements QueryInterface
      *            {@link String}
      * @return Returns query string built based on conditions {@link String}
      */
-    private static String buildQuery(String condition, String query, String newQuery)
+    private static String buildQuery(String condition, String query,
+	    String newQuery)
     {
 
 	// If query string is empty return simple not query
@@ -236,6 +191,78 @@ public class QueryDocument implements QueryInterface
 	return newQuery;
     }
 
+    private static String createTimeQuery(String query, String lhs,
+	    SearchRule.RuleCondition condition, String rhs, String rhs_new)
+    {
+	// Formated to build query
+	String date = SearchUtil.getDateWithoutTimeComponent(Long
+		.parseLong(rhs));
+
+	// Created on date condition
+	if (condition.equals(SearchRule.RuleCondition.EQUALS))
+	{
+	    query = buildQuery("AND", query, lhs + "=" + date);
+	}
+
+	// Created after given date
+	else if (condition.equals(SearchRule.RuleCondition.AFTER))
+	{
+	    query = buildQuery("AND", query, lhs + " >" + date);
+	}
+
+	// Created before particular date
+	else if (condition.equals(SearchRule.RuleCondition.BEFORE))
+	{
+	    query = buildQuery("AND", query, lhs + " < " + date);
+	}
+
+	// Created Between given dates
+	else if (condition.equals(SearchRule.RuleCondition.BETWEEN))
+	{
+	    if (rhs_new != null)
+	    {
+		String to_date = SearchUtil.getDateWithoutTimeComponent(Long
+			.parseLong(rhs_new));
+
+		query = buildQuery("AND", query, lhs + " >=" + date);
+		query = buildQuery("AND", query, lhs + " <= " + to_date);
+	    }
+	}
+
+	// Created in last number of days
+	else if (condition.equals(SearchRule.RuleCondition.LAST))
+	{
+	    long fromDateInSecs = new DateUtil()
+		    .removeDays(Integer.parseInt(rhs)).getTime().getTime();
+
+	    String fromDate = SearchUtil
+		    .getDateWithoutTimeComponent(fromDateInSecs);
+
+	    System.out.println("from date = " + fromDate + " lhs = " + lhs);
+
+	    query = buildQuery("AND", query, lhs + " >= " + fromDate);
+	}
+	else if (condition.equals(SearchRule.RuleCondition.NEXT))
+	{
+	    long limitTime = new DateUtil().addDays(Integer.parseInt(rhs))
+		    .getTime().getTime();
+	    String formatedLimitDate = SearchUtil
+		    .getDateWithoutTimeComponent(limitTime);
+
+	    long currentTime = new Date().getTime();
+
+	    String formatedCurrentDate = SearchUtil
+		    .getDateWithoutTimeComponent(currentTime);
+
+	    query = buildQuery("AND", query, lhs + " >=" + formatedCurrentDate);
+	    query = buildQuery("AND", query, lhs + " <= " + formatedLimitDate);
+
+	}
+
+	return query;
+
+    }
+
     /**
      * processes query and return collection of contacts
      * 
@@ -252,7 +279,8 @@ public class QueryDocument implements QueryInterface
 	 * Set query options only to get id of document (enough to get get
 	 * respective contacts)
 	 */
-	QueryOptions options = QueryOptions.newBuilder().setFieldsToReturn("id").build();
+	QueryOptions options = QueryOptions.newBuilder()
+		.setFieldsToReturn("id").build();
 
 	// Build query on query options
 	com.google.appengine.api.search.Query query_string = com.google.appengine.api.search.Query
@@ -263,7 +291,9 @@ public class QueryDocument implements QueryInterface
 	try
 	{
 	    // Get index of document based on type of query
-	    index = (Index) Class.forName("com.agilecrm.search.document." + type + "Document")
+	    index = (Index) Class
+		    .forName(
+			    "com.agilecrm.search.document." + type + "Document")
 		    .getDeclaredField("index").get(null);
 	}
 	catch (Exception e)
@@ -276,7 +306,8 @@ public class QueryDocument implements QueryInterface
 	    return null;
 
 	// Gets sorted documents
-	Collection<ScoredDocument> contact_documents = index.search(query_string).getResults();
+	Collection<ScoredDocument> contact_documents = index.search(
+		query_string).getResults();
 
 	List<Long> entity_ids = new ArrayList<Long>();
 

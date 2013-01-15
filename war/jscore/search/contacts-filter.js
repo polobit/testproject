@@ -17,18 +17,10 @@ $(function()
 
 				// To solve chaining issue when cloned
 				var htmlContent = $(getTemplate("filter-contacts", {})).find(
-						'tr').clone()
-
-				var LHS = $('#LHS', htmlContent);
-				var condition = $('#condition', htmlContent);
-				var RHS_NEW = $('#RHS-NEW', htmlContent);
-				var RHS = $("#RHS", htmlContent);
-
-				// Chaining dependencies of input fields with jquery.chained.js
-				condition.chained(LHS);
-				RHS_NEW.chained(condition);
-				RHS.chained(LHS);
-
+						'tr').clone();
+						
+						chainFilters(htmlContent);
+				
 				// var htmlContent = $(this).closest("tr").clone();
 				$(htmlContent).find("i.filter-contacts-multiple-remove").css(
 						"display", "inline-block");
@@ -170,4 +162,27 @@ function setupContactFilterList(cel)
 
 	// Shows in contacts list
 	$('#filter-list', cel).html(contactFiltersListView.render().el);
+}
+
+function chainFilters(el)
+{	
+	var LHS, condition, RHS, RHS_NEW, NESTED_CONDITION, NESTED_RHS, NESTED_LHS;
+		
+		LHS = $("#LHS", el);
+		condition = $("#condition", el)
+		RHS = $("#RHS", el)
+		
+		// Extra field required for (Between values condition)
+		RHS_NEW = $("#RHS-NEW", el)
+		
+		NESTED_CONDITION = $("#nested_condition", el);
+		NESTED_RHS = $("#nested_rhs", el);
+		NESTED_LHS = $("#nested_lhs", el);
+		// Chaining dependencies of input fields with jquery.chained.js
+		condition.chained(LHS);
+		RHS.chained(LHS);
+		RHS_NEW.chained(condition);
+		NESTED_CONDITION.chained(LHS);
+		NESTED_LHS.chained(NESTED_CONDITION);
+		NESTED_RHS.chained(NESTED_CONDITION);	            
 }

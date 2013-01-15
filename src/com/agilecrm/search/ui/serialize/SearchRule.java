@@ -31,10 +31,21 @@ public class SearchRule
      */
     public String RHS_NEW = null;
 
+    public enum RuleCondition
+    {
+	EQUALS, AFTER, BEFORE, BETWEEN, LAST, NEXT
+    }
+
     /**
      * Condition to be applied on the lhs and rhs fields
      */
-    public String CONDITION = null;
+    public RuleCondition CONDITION = null;
+
+    public RuleCondition nested_condition = null;
+
+    public String nested_lhs = null;
+
+    public String nested_rhs = null;
 
     /**
      * Enum to specify Types of search rule, can be contact, opportunity

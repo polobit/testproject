@@ -1,12 +1,16 @@
 package com.agilecrm.search.document;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.time.DateUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.search.BuilderInterface;
@@ -60,13 +64,14 @@ public class ContactDocument implements BuilderInterface
     /**
      * Initializes/get search service for the app
      */
-    private static SearchService searchService = SearchServiceFactory.getSearchService();
+    private static SearchService searchService = SearchServiceFactory
+	    .getSearchService();
 
     /**
      * Index for the contact Document, Required to search on contacts document
      */
-    public static Index index = searchService.getIndex(IndexSpec.newBuilder().setName("contacts")
-	    .setConsistency(Consistency.PER_DOCUMENT));
+    public static Index index = searchService.getIndex(IndexSpec.newBuilder()
+	    .setName("contacts").setConsistency(Consistency.PER_DOCUMENT));
 
     /**
      * Describes all the contact field values in the document based on the
@@ -96,13 +101,15 @@ public class ContactDocument implements BuilderInterface
 	 */
 	for (Map.Entry<String, String> e : fields.entrySet())
 	{
-	    doc.addField(Field.newBuilder().setName(e.getKey()).setText(e.getValue()));
+	    doc.addField(Field.newBuilder().setName(e.getKey())
+		    .setText(e.getValue()));
 	}
 
 	// Sets created date to document with out time component(Search API
 	// support date without time component)
 	Date truncatedDate = DateUtils.truncate(new Date(), Calendar.DATE);
-	doc.addField(Field.newBuilder().setName("created_time").setDate(truncatedDate));
+	doc.addField(Field.newBuilder().setName("created_time")
+		.setDate(truncatedDate));
 
 	// Describes updated time document if updated time is not 0.
 	if (contact.updated_time > 0L)
@@ -110,10 +117,14 @@ public class ContactDocument implements BuilderInterface
 	}
 
 	// Adds Other fields in contacts to document
-	doc.addField(Field.newBuilder().setName("lead_score").setNumber(contact.lead_score));
+	doc.addField(Field.newBuilder().setName("lead_score")
+		.setNumber(contact.lead_score));
 
 	// Adds Other fields in contacts to document
-	doc.addField(Field.newBuilder().setName("star_value").setNumber(contact.star_value));
+	doc.addField(Field.newBuilder().setName("star_value")
+		.setNumber(contact.star_value));
+
+	addTagFields(contact.tags_with_time_json, doc);
 
 	/*
 	 * Get tokens from contact properties and adds it in document
@@ -180,10 +191,53 @@ public class ContactDocument implements BuilderInterface
 	}
 	catch (AddException e)
 	{
-	    if (StatusCode.TRANSIENT_ERROR.equals(e.getOperationResult().getCode()))
+	    if (StatusCode.TRANSIENT_ERROR.equals(e.getOperationResult()
+		    .getCode()))
 	    {
 		// retry adding document
 	    }
 	}
     }
+
+    private static void addTagFields(String tags_json_string,
+	    Document.Builder doc)
+    {
+	if (tags_json_string == null)
+	    return;
+
+	try
+	{
+	    HashMap<String, Long> tagsMappedWithTime = new ObjectMapper()
+		    .readValue(tags_json_string,
+			    new TypeReference<HashMap<String, Long>>()
+			    {
+			    });
+
+	    for (String tag : tagsMappedWithTime.keySet())
+	    {
+
+		String normalizedTag = SearchUtil.normalizeString(tag);
+
+		Long TagCreationTimeInMills = tagsMappedWithTime.get(tag);
+
+		/*
+		 * Truncate date Document search date is without time component
+		 */
+		Date TagCreatedDate = DateUtils.truncate(new Date(
+			TagCreationTimeInMills), Calendar.DATE);
+
+		// Adds Other fields in contacts to document
+		doc.addField(Field.newBuilder()
+			.setName(normalizedTag + "_time")
+			.setDate(TagCreatedDate));
+	    }
+
+	}
+	catch (IOException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+    }
+
 }
