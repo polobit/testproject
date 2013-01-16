@@ -154,6 +154,9 @@ public class LinkedInUtil
 	    result.summary = person.getHeadline();
 	    result.distance = person.getDistance() + "";
 
+	    if (person.getDistance() == 1)
+		result.is_connected = true;
+
 	    // Changes http to https to avoid client side warnings by browser,
 	    // Changes certificate from m3 to m3-s to fix ssl broken image link
 	    if (result.picture != null)
@@ -213,7 +216,11 @@ public class LinkedInUtil
 	result.summary = person.getHeadline();
 	result.location = person.getLocation().getName();
 	result.distance = person.getDistance() + "";
-	result.currentUpdate = person.getCurrentStatus();
+	result.current_update = person.getCurrentStatus();
+	result.num_connections = String.valueOf(person.getNumConnections());
+
+	if (person.getDistance() == 1l)
+	    result.is_connected = true;
 
 	// Change http to https to avoid client side warnings by browser
 	// Change certificate from m3 to m3-s to fix ssl broken image link
@@ -314,18 +321,29 @@ public class LinkedInUtil
 		.createNetworkUpdatesApiClient(widget.getProperty("token"),
 			widget.getProperty("secret"));
 
-	Network network = client.getUserUpdates("R4cGHT6L_l", EnumSet.of(
+	Network network = client.getUserUpdates(linkedInId, EnumSet.of(
 		NetworkUpdateType.PROFILE_UPDATE,
 		NetworkUpdateType.CONNECTION_UPDATE,
 		NetworkUpdateType.SHARED_ITEM));
 
 	List<SocialUpdateStream> list = new ArrayList<SocialUpdateStream>();
+
 	for (Update update : network.getUpdates().getUpdateList())
 	{
 	    SocialUpdateStream stream = new SocialUpdateStream();
 	    stream.type = update.getUpdateType().name();
-	    stream.id = Long.parseLong(update.getUpdateContent().getPerson()
-		    .getCurrentShare().getId());
+	    if (update.getUpdateContent().getPerson().getCurrentShare() == null)
+		return list;
+
+	    stream.id = update.getUpdateContent().getPerson().getCurrentShare()
+		    .getId();
+	    stream.created_time = update.getUpdateContent().getPerson()
+		    .getCurrentShare().getTimestamp() / 1000;
+
+	    System.out.println(stream.id);
+	    System.out.println(update.getUpdateContent().getPerson()
+		    .getCurrentShare().getComment());
+
 	    JSONObject json = new JSONObject().put(
 		    "comment",
 		    update.getUpdateContent().getPerson().getCurrentShare()
@@ -333,7 +351,7 @@ public class LinkedInUtil
 		    "current-share",
 		    Util.toJSONString(update.getUpdateContent().getPerson()
 			    .getCurrentShare()));
-	    stream.message = Util.toJSONString(json);
+	    stream.message = json.toString();
 	    list.add(stream);
 	}
 	return list;
@@ -363,4 +381,5 @@ public class LinkedInUtil
 	client.reShare(shareId, text, VisibilityType.ANYONE);
 	return "Shared Successfully";
     }
+
 }

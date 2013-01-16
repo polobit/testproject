@@ -91,7 +91,7 @@ public class TwitterUtil
 	// Creates a twitter object to connect with twitter
 	Twitter twitter = getTwitter(widget);
 
-	// Searches tiwtter profiles based on first name and last name
+	// Searches twitter profiles based on first name and last name
 	ResponseList<User> users = twitter.searchUsers(firstName + " "
 		+ lastName, 1);
 
@@ -110,7 +110,7 @@ public class TwitterUtil
 	    result.summary = user.getDescription();
 	    result.num_connections = user.getFollowersCount() + "";
 	    result.friends = user.getFriendsCount() + "";
-	    result.currentUpdate = user.getStatusesCount() + "";
+	    result.current_update = user.getStatusesCount() + "";
 	    result.url = user.getURL() + "";
 
 	    // Adds each result in to list
@@ -155,21 +155,15 @@ public class TwitterUtil
 	result.summary = user.getDescription();
 	result.num_connections = user.getFollowersCount() + "";
 	result.friends = user.getFriendsCount() + "";
-	result.currentUpdate = user.getStatusesCount() + "";
+	result.current_update = user.getStatusesCount() + "";
 	result.url = user.getURL() + "";
+	result.is_connected = twitter.showFriendship(twitter.getId(),
+		user.getId()).isSourceFollowingTarget();
+	result.is_followed_by_target = twitter.showFriendship(twitter.getId(),
+		user.getId()).isSourceFollowedByTarget();
 
-	result.updateStream = new ArrayList<SocialUpdateStream>();
-	System.out.println("get tweetes"
-		+ getTweetsByName(twitter, user.getScreenName()));
-	for (Tweet tweet : getTweetsByName(twitter, user.getScreenName()))
-	{
-	    SocialUpdateStream stream = new SocialUpdateStream();
-	    stream.id = tweet.getId();
-	    stream.message = tweet.getText();
-	    stream.created_time = tweet.getCreatedAt().getTime();
-	    result.updateStream.add(stream);
-	}
-	System.out.println(result.updateStream);
+	result.updateStream = getNetworkUpdates(widget,
+		Long.parseLong(twitterId));
 	return result;
     }
 
@@ -248,6 +242,19 @@ public class TwitterUtil
 	return (user != null) ? "Followed successfully" : "Unsuccessfull";
     }
 
+    /**
+     * Connects to the twitter based on widget prefs and post a tweet in twitter
+     * account of the contact based on twitter id
+     * 
+     * @param widget
+     *            {@link Widget}, for accessing token and secret key
+     * @param twitterId
+     *            {@link String}, to access recipient twitter account
+     * @param text
+     *            {@link String}, message to tweet
+     * @return
+     * @throws Exception
+     */
     public static String tweetInTwitter(Widget widget, Long twitterId,
 	    String text) throws Exception
     {
@@ -258,6 +265,38 @@ public class TwitterUtil
 	Status status = twitter.updateStatus(text);
 	System.out.println(Util.toJSONString(status));
 	return "Successfull";
+    }
+
+    /**
+     * Searches in Twitter for the specified twitterId and gets the tweets of
+     * that person
+     * 
+     * @param widget
+     *            {@link Widget}, for accessing token and secret key
+     * @param twitterId
+     *            {@link String}, to access recipient twitter account
+     * @return {@link List} of {@link SocialUpdateStream}
+     * @throws Exception
+     *             If {@link Twitter} throws an exception
+     */
+    public static List<SocialUpdateStream> getNetworkUpdates(Widget widget,
+	    Long twitterId) throws Exception
+    {
+	Twitter twitter = getTwitter(widget);
+	User user = twitter.showUser(twitterId);
+	Query query = new Query("from:" + user.getScreenName());
+	QueryResult result = twitter.search(query);
+
+	List<SocialUpdateStream> updateStream = new ArrayList<SocialUpdateStream>();
+	for (Tweet tweet : result.getTweets())
+	{
+	    SocialUpdateStream stream = new SocialUpdateStream();
+	    stream.id = String.valueOf(tweet.getId());
+	    stream.message = tweet.getText();
+	    stream.created_time = tweet.getCreatedAt().getTime();
+	    updateStream.add(stream);
+	}
+	return updateStream;
     }
 
     /**
@@ -280,4 +319,5 @@ public class TwitterUtil
 
 	return result.getTweets();
     }
+
 }

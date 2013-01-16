@@ -25,8 +25,29 @@ $(function () {
         showTwitterMatchingProfiles(plugin_id);
         return;
     }
+    
     // Show contact's twitter profile
     showTwitterProfile(twitter_id, plugin_id);
+    
+    // Deletes Twitter profile, when click on elemtn with id "twitter_plugin_delete", 
+    // represents cross mark shown in panel
+    $('#twitter_plugin_delete').die().live('click', function (e) {
+        e.preventDefault();
+        agile_crm_delete_widget_property_from_contact(TWITTER_PLUGIN_NAME);
+    });
+    
+    $('#twitter_message').die().live('click', function (e) {
+    	e.preventDefault();
+    	sendMessage(plugin_id, twitter_id);
+    });
+    
+    $('#twitter_connect').die().live('click', function(e)
+    {
+    	e.preventDefault();
+    	sendAddRequest(plugin_id, twitter_id);
+    });
+    
+    
 });
 /**
  * Shows setup if user adds Twitter widget for the first time, to set up
@@ -152,12 +173,6 @@ function showTwitterProfile(twitter_id, plugin_id) {
         // Gets Twitter-profile template and populate the fields using handlebars
         $('#Twitter').html(getTemplate("twitter-profile", data));
     });
-    // Deletes Twitter profile, when click on elemtn with id "twitter_plugin_delete", 
-    // represents cross mark shown in panel
-    $('#twitter_plugin_delete').die().live('click', function (e) {
-        e.preventDefault();
-        agile_crm_delete_widget_property_from_contact(TWITTER_PLUGIN_NAME);
-    });
 }
 /**
  * Sends request to url "core/api/widget/Twitter/" with contact id and plugin id
@@ -193,15 +208,51 @@ function getTwitterMatchingProlfiles(plugin_id, callback) {
 }
 
 function sendFollowRequest(plugin_id, twitter_id) {
-    $.get("/core/api/widgets/add/" + plugin_id + "/" + twitter_id + "/dummy/dummy", function (data) {
-        console.log(data);
-    });
+	var json = {};
+	json["headline"] = "Connect";
+	 var message_form_modal = getTemplate("twitter-message", json);
+		console.log("show modal");
+		$('#content').append(message_form_modal);
+		$('#messageModal').modal("show");
+		
+
+		$('#send_request').click( function(e) {
+			e.preventDefault();
+			
+		    if(!isValidForm($("#messageForm"))){
+		    }
+		    
+		    $.post( "/core/api/widgets/connect/" + plugin_id + "/" + linkedin_id , $('#messageForm').serialize(), function(data) {
+		    	$('#messageModal').modal("hide");
+		       });
+		});
 }
 
 function sendMessage(plugin_id, twitter_id, message) {
-    $.get("/core/api/widgets/message/" + plugin_id + "/" + twitter_id + "/dummy/" + message, function (data) {
-        console.log(data);
-    });
+	
+	var json = {};
+	json["headline"] = "Send Message";
+	var message_form_modal = getTemplate("twitter-message", json);
+	console.log("show modal");
+	
+	$("#messageModal").remove();
+	
+	$('#content').append(message_form_modal);
+	$('#messageModal').modal("show");
+	
+
+	
+	$('#send_request').click( function(e) {
+		e.preventDefault();
+	    
+		if(!isValidForm($("#messageForm"))){
+	    	return;
+	    }
+		
+		$.post( "/core/api/widgets/message/" + plugin_id + "/" + twitter_id ,$('#messageForm').serialize(), function (data) {
+			$('#messageModal').modal("hide");
+		});
+	});
 }
 
 function retweetTheTweet(plugin_id, share_id, message) {
@@ -209,9 +260,3 @@ function retweetTheTweet(plugin_id, share_id, message) {
         console.log(data);
     });
 }
-
-function tweet(plugin_id, twitter_id, message){
-	 $.get("/core/api/widgets/tweet/" + plugin_id + "/" + twitter_id + "/" + message, function (data) {
-	  console.log(data);
-	 });
-	}

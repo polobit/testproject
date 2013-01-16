@@ -18,8 +18,10 @@ public class SocialSearchResult
     public String num_connections = "";
     public String location = "";
     public String friends = "";
-    public String currentUpdate = "";
+    public String current_update = "";
     public String distance = "";
+    public boolean is_connected;
+    public boolean is_followed_by_target;
     @Embedded
     public List<SocialUpdateStream> updateStream = null;
 
@@ -27,6 +29,6 @@ public class SocialSearchResult
     {
 	return id + " " + name + " " + picture + " " + url + " " + summary
 		+ " " + headline + " " + num_connections + " " + location + " "
-		+ friends + " " + currentUpdate + " " + distance + " ";
+		+ friends + " " + current_update + " " + distance + " ";
     }
 }

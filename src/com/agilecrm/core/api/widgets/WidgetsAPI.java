@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -242,13 +243,13 @@ public class WidgetsAPI
      *            {@link String} message to be sent
      * @return {@link String}
      */
-    @Path("/add/{widget-id}/{social-id}/{subject}/{message}")
-    @GET
+    @Path("/connect/{widget-id}/{social-id}")
+    @POST
     @Produces(MediaType.TEXT_PLAIN)
     public String sendAddRequest(@PathParam("widget-id") Long widgetId,
 	    @PathParam("social-id") String socialId,
-	    @PathParam("subject") String subject,
-	    @PathParam("message") String message)
+	    @FormParam("subject") String subject,
+	    @FormParam("message") String message)
     {
 	try
 	{
@@ -290,13 +291,13 @@ public class WidgetsAPI
      *            {@link String} message to be sent
      * @return {@link String}
      */
-    @Path("/message/{widget-id}/{social-id}/{subject}/{message}")
-    @GET
+    @Path("/message/{widget-id}/{social-id}")
+    @POST
     @Produces(MediaType.TEXT_PLAIN)
     public String sendMessage(@PathParam("widget-id") Long widgetId,
 	    @PathParam("social-id") String socialId,
-	    @PathParam("subject") String subject,
-	    @PathParam("message") String message)
+	    @FormParam("subject") String subject,
+	    @FormParam("message") String message)
     {
 	try
 	{
@@ -402,6 +403,10 @@ public class WidgetsAPI
 	}
 	catch (Exception e)
 	{
+
+	    System.out.println("exception in widgets api");
+	    System.out.println(e.getMessage());
+	    e.printStackTrace();
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
