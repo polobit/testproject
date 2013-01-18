@@ -1,6 +1,7 @@
 package com.campaignio;
 
 import javax.persistence.Id;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 
@@ -11,6 +12,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
  * @author Manohar
  * 
  */
+@XmlRootElement
 public class URLShortener
 {
     /**
@@ -33,6 +35,11 @@ public class URLShortener
      * Tracker ID.
      */
     public String tracker_id;
+
+    /**
+     * Campaign Id
+     */
+    public String campaign_id;
 
     /*
      * Prefix public static final String SHORTENER_URL =
@@ -67,11 +74,13 @@ public class URLShortener
      * @param trackerId
      *            Tracking id to track urls.
      */
-    public URLShortener(String longURL, String subscriberId, String trackerId)
+    public URLShortener(String longURL, String subscriberId, String trackerId,
+	    String campaignId)
     {
 	this.long_url = longURL;
 	this.subscriber_id = subscriberId;
 	this.tracker_id = trackerId;
+	this.campaign_id = campaignId;
     }
 
     /**

@@ -1,11 +1,14 @@
 package com.campaignio.tasklets.agile;
 
 import java.net.URLEncoder;
+import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DBUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.campaignio.tasklets.TaskletAdapter;
@@ -48,12 +51,25 @@ public class URLVisited extends TaskletAdapter
 
 	String subscriberId = DBUtil.getId(subscriberJSON);
 
+	List<DomainUser> users = DomainUserUtil.getAllDomainUsers();
+	Long domainId = null;
+	for (DomainUser user : users)
+	{
+	    if (user.is_account_owner == true)
+		domainId = user.id;
+	}
+
 	// Get API Key
-	APIKey api = APIKey.getAPIKey();
+	APIKey api = APIKey.getAPIKeyRelatedToUser(domainId);
 	String apiKey = api.api_key;
 
-	String customUrl = url + "&agile_id=" + URLEncoder.encode(apiKey)
-		+ "&subscriber_id=" + URLEncoder.encode(subscriberId);
+	String customUrl = "";
+	if (url.contains("?"))
+	    customUrl = url + "&agile_id=" + URLEncoder.encode(apiKey)
+		    + "&subscriber_id=" + URLEncoder.encode(subscriberId);
+	else
+	    customUrl = url + "?agile_id=" + URLEncoder.encode(apiKey)
+		    + "&subscriber_id=" + URLEncoder.encode(subscriberId);
 
 	// Access given URL
 	String output = HTTPUtil.accessURL(customUrl);

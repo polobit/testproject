@@ -180,15 +180,12 @@ public class DealsAPI
      *            array of deal ids as String.
      * @throws JSONException
      */
-    @SuppressWarnings("unused")
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void deleteOpportunities(@FormParam("model_ids") String model_ids)
 	    throws JSONException
     {
-	String id = null;
-
 	JSONArray opportunitiesJSONArray = new JSONArray(model_ids);
 
 	// Executes trigger when deal is deleted
