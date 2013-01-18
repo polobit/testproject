@@ -2,6 +2,8 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
+import com.agilecrm.util.DBUtil;
+import com.campaignio.CampaignStats;
 import com.campaignio.cron.Cron;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.tasklets.TaskletAdapter;
@@ -96,6 +98,9 @@ public class Clicked extends TaskletAdapter
 	// Creates log for clicked node when interrupted
 	log(campaignJSON, subscriberJSON, "Interrupted - we got clicked - "
 		+ customData);
+
+	// Increment email clicks
+	CampaignStats.incrementEmailsClicked(DBUtil.getId(campaignJSON));
 
 	// Execute Next One in Loop (Yes)
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,

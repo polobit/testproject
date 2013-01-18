@@ -2,6 +2,7 @@ package com.campaignio.tasklets.agile;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import org.json.JSONObject;
 
@@ -11,6 +12,8 @@ import com.agilecrm.activities.Task.Type;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DBUtil;
 import com.agilecrm.util.Util;
 import com.campaignio.tasklets.TaskletAdapter;
@@ -139,8 +142,17 @@ public class AddTask extends TaskletAdapter
 	{
 	    try
 	    {
-		// Get Current AgileUser
-		agileuser = AgileUser.getCurrentAgileUser();
+		List<DomainUser> users = DomainUserUtil.getAllDomainUsers();
+		Long domainId = null;
+		for (DomainUser user : users)
+		{
+		    if (user.is_account_owner == true)
+			domainId = user.id;
+		}
+
+		// Get AgileUser with respect to DomainUser Id
+		agileuser = AgileUser
+			.getCurrentAgileUserFromDomainUser(domainId);
 
 		if (agileuser == null)
 		    return;

@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.util.DBUtil;
 import com.agilecrm.util.Util;
+import com.campaignio.CampaignStats;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.campaignio.util.URLShortenerUtil;
@@ -399,39 +400,53 @@ public class SendEmail extends TaskletAdapter
 
 		// Get Keyword
 		text = convertLinks(text, " ", data, keyword,
-			DBUtil.getId(subscriberJSON));
+			DBUtil.getId(subscriberJSON),
+			DBUtil.getId(campaignJSON));
 		html = convertLinks(html, " ", data, keyword,
-			DBUtil.getId(subscriberJSON));
+			DBUtil.getId(subscriberJSON),
+			DBUtil.getId(campaignJSON));
 
 		text = convertLinks(text, "\n", data, keyword,
-			DBUtil.getId(subscriberJSON));
+			DBUtil.getId(subscriberJSON),
+			DBUtil.getId(campaignJSON));
 		html = convertLinks(html, "\n", data, keyword,
-			DBUtil.getId(subscriberJSON));
+			DBUtil.getId(subscriberJSON),
+			DBUtil.getId(campaignJSON));
 
 		text = convertLinks(text, "\r", data, keyword,
-			DBUtil.getId(subscriberJSON));
+			DBUtil.getId(subscriberJSON),
+			DBUtil.getId(campaignJSON));
 		html = convertLinks(html, "\r", data, keyword,
-			DBUtil.getId(subscriberJSON));
+			DBUtil.getId(subscriberJSON),
+			DBUtil.getId(campaignJSON));
 
 		text = convertLinks(text, "<", data, keyword,
-			DBUtil.getId(subscriberJSON));
+			DBUtil.getId(subscriberJSON),
+			DBUtil.getId(campaignJSON));
 		html = convertLinks(html, "<", data, keyword,
-			DBUtil.getId(subscriberJSON));
+			DBUtil.getId(subscriberJSON),
+			DBUtil.getId(campaignJSON));
 
 		text = convertLinks(text, "\"", data, keyword,
-			DBUtil.getId(subscriberJSON));
+			DBUtil.getId(subscriberJSON),
+			DBUtil.getId(campaignJSON));
 		html = convertLinks(html, "\"", data, keyword,
-			DBUtil.getId(subscriberJSON));
+			DBUtil.getId(subscriberJSON),
+			DBUtil.getId(campaignJSON));
 
 		text = convertLinks(text, "'", data, keyword,
-			DBUtil.getId(subscriberJSON));
+			DBUtil.getId(subscriberJSON),
+			DBUtil.getId(campaignJSON));
 		html = convertLinks(html, "'", data, keyword,
-			DBUtil.getId(subscriberJSON));
+			DBUtil.getId(subscriberJSON),
+			DBUtil.getId(campaignJSON));
 
 		text = convertLinks(text, "\"", data, keyword,
-			DBUtil.getId(subscriberJSON));
+			DBUtil.getId(subscriberJSON),
+			DBUtil.getId(campaignJSON));
 		html = convertLinks(html, "\"", data, keyword,
-			DBUtil.getId(subscriberJSON));
+			DBUtil.getId(subscriberJSON),
+			DBUtil.getId(campaignJSON));
 
 	    }
 	    catch (Exception e)
@@ -452,6 +467,8 @@ public class SendEmail extends TaskletAdapter
 	    // replyTo, html, text, subscriberJSON, campaignJSON);
 	    SendGridEmail.sendMail(fromEmail, fromName, to, subject, replyTo,
 		    html, text, subscriberJSON, campaignJSON);
+
+	    CampaignStats.incrementEmailsSent(DBUtil.getId(campaignJSON));
 	}
 	else
 	{
@@ -459,6 +476,8 @@ public class SendEmail extends TaskletAdapter
 	    // replyTo, null, text, subscriberJSON, campaignJSON);
 	    SendGridEmail.sendMail(fromEmail, fromName, to, subject, replyTo,
 		    null, text, subscriberJSON, campaignJSON);
+
+	    CampaignStats.incrementEmailsSent(DBUtil.getId(campaignJSON));
 	}
 
 	// Execute Next One in Loop
@@ -483,7 +502,8 @@ public class SendEmail extends TaskletAdapter
      * @throws Exception
      */
     public String convertLinks(String input, String delimiter, JSONObject data,
-	    String keyword, String subscriberId) throws Exception
+	    String keyword, String subscriberId, String campaignId)
+	    throws Exception
     {
 	boolean converted = false;
 
@@ -499,7 +519,8 @@ public class SendEmail extends TaskletAdapter
 	    {
 		// Shorten URL
 		String url = URLShortenerUtil.getShortURL(tokens[i], keyword,
-			subscriberId, data.getString(TRACKING_ID));
+			subscriberId, data.getString(TRACKING_ID), campaignId);
+
 		if (url == null)
 		    continue;
 

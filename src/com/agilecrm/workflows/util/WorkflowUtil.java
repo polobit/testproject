@@ -38,7 +38,7 @@ public class WorkflowUtil
      *            Contact object that subscribes to workflow.
      * @return JsonObject of contact.
      */
-    static JSONObject getSubscriberJSON(Contact contact)
+    public static JSONObject getSubscriberJSON(Contact contact)
     {
 	try
 	{
@@ -103,8 +103,7 @@ public class WorkflowUtil
 	    JSONObject campaignJSON = new JSONObject();
 	    JSONObject workflowJSON = new JSONObject(workflow.rules);
 
-	    campaignJSON.put(TaskletUtil.CAMPAIGN_WORKFLOW_JSON,
-		    workflowJSON);
+	    campaignJSON.put(TaskletUtil.CAMPAIGN_WORKFLOW_JSON, workflowJSON);
 	    campaignJSON.put("id", workflow.id);
 
 	    return campaignJSON;

@@ -229,4 +229,21 @@
   <servlet-name>SystemServiceServlet</servlet-name>
   <url-pattern>/_ah/spi/*</url-pattern>
  </servlet-mapping>
+ 
+ <servlet>
+ <servlet-name>RedirectServlet</servlet-name>
+ <servlet-class>com.agilecrm.RedirectServlet</servlet-class>
+ </servlet>
+ <servlet-mapping>
+ <servlet-name>RedirectServlet</servlet-name>
+ <url-pattern>/click/*</url-pattern>
+ </servlet-mapping>
+ 
+ <servlet><servlet-name>TaskQueueServlet</servlet-name>
+ <servlet-class>com.agilecrm.TaskQueueServlet</servlet-class>
+ </servlet>
+ <servlet-mapping>
+ <servlet-name>TaskQueueServlet</servlet-name>
+ <url-pattern>/worker</url-pattern>
+ </servlet-mapping>
 </web-app>

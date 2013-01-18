@@ -14,12 +14,11 @@ var socket;
  */
 $(function() {
 	setTimeout(downloadAndRegisterForNotifications, 2000);
-
+	
 	// fetchContactAndNotify('manohar@invox.com');
 
 });
 
-// Download and Register
 /**
  * Fetches notification preferences for current user
  */
@@ -43,7 +42,6 @@ function downloadAndRegisterForNotifications() {
 	});
 }
 
-// Register for notifications
 /**
  * Registers notifications with obtained notification preferences
  */
@@ -60,7 +58,6 @@ function registerForNotifications(prefs) {
 	registerForSockets();
 }
 
-// Gets API Key and Sets up Socket
 /**
  * Gets API Key and sets up socket using socket.io
  */
@@ -92,7 +89,6 @@ function registerForSockets() {
 			});
 }
 
-// Setup sockets
 /**
  * Sets sockets with the obtained api key by using socket.io.js
  * 
@@ -123,8 +119,8 @@ function _setupSockets(api_key) {
 
 	socket.on('notification', function(data) {
 
-		// console.log('notification');
-		// console.log(data);
+		console.log('notification');
+		console.log(data);
 
 		var parse_data = JSON.parse(data);
 
@@ -150,7 +146,8 @@ function _setupSockets(api_key) {
 			if (key == object.type.toLowerCase()) {
 
 				if (notification_prefs[key])
-					notify('success1', html, 'bottom-right', true);
+					//notify('information', html, 'bottom-right',true);
+				    showNoty('warning', html, 'bottomRight');
 
 			}
 
@@ -231,7 +228,8 @@ function notificationForBrowsing(contact) {
 
 		// Show picture, name, title, company
 		// JSON.stringify(data.toJSON())
-		notify('success1', html, 'bottom-right', true);
+		//notify('success1', html, 'bottom-right', true);
+		showNoty('warning', html, 'bottomRight');
 	}
 
 	// Notification for assigned and starred contacts
@@ -241,7 +239,8 @@ function notificationForBrowsing(contact) {
 		
 		// Show notifications for contacts of same user
 		if (current_user == contact_created_by)
-			notify('success1', html, 'bottom-right', true);
+			//notify('success1', html, 'bottom-right', true);
+			showNoty('warning', html, 'bottomRight');
 	}
 
 }
@@ -294,7 +293,7 @@ function notify(type, message, position, closable) {
  */
 function showNoty(type, message, position) {
 	// Download the lib
-	head.js(LIB_PATH + 'lib/noty/jquery.noty.js', 'lib/noty/layouts/top.js',
+	head.js(LIB_PATH + 'lib/noty/jquery.noty.js', 'lib/noty/layouts/bottomRight.js',
 			LIB_PATH + 'lib/noty/themes/default.js', function() {
 				noty({
 					text : message,

@@ -78,10 +78,11 @@ public class URLShortenerUtil
      */
     @SuppressWarnings("deprecation")
     public static String getShortURL(String url, String keyword,
-	    String subscriberId, String trackingId) throws Exception
+	    String subscriberId, String trackingId, String campaignId)
+	    throws Exception
     {
 	URLShortener urlShortener = new URLShortener(url, subscriberId,
-		trackingId);
+		trackingId, campaignId);
 	urlShortener.save();
 
 	// Get Key
@@ -151,5 +152,12 @@ public class URLShortenerUtil
 	    --iterator;
 	}
 	return returnValue;
+    }
+
+    public static void main(String[] ares)
+    {
+	String shortURL = "http://cspt.cc/naresh/33m";
+	URLShortener url = URLShortenerUtil.getLongURL(shortURL);
+	System.out.println(url.long_url);
     }
 }

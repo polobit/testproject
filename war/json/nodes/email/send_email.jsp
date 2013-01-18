@@ -110,25 +110,24 @@
 		            "name": "time_zone",
 		            "title": "Select the time zone for your email delivery.",
 		            "options": {
-		            							<%@page import="java.util.Arrays"%>
-<%@page import="java.util.TimeZone"%>
-<%
+		            	<%@page import="java.util.Arrays"%>
+                        <%@page import="java.util.TimeZone"%>
+                        <%
 						String[] allTimeZones = TimeZone.getAvailableIDs();    
 						Arrays.sort(allTimeZones);  
-						  
-
-						for (int i = 0; i < allTimeZones.length; i++) {  
+						
+					    for (int i = 0; i < allTimeZones.length; i++)
+					    {  
 							String option = allTimeZones[i];
 							
 							if(i == allTimeZones.length -1 )
 							out.println("\"" + option +  "\":\"" + option + "\"");
 							else
-								out.println("\"" + option +  "\":\"" + option + "\",");
+							out.println("\"" + option +  "\":\"" + option + "\",");
 								
 						}  
 						%>
 		            	
-		                
 		            },
 		            "fieldType": "select",
 		            "type": "select" 
@@ -168,8 +167,8 @@
 	                "title": "Select the time for your email delivery.",
 	                "options": {
 	                	"Any Time": "any_time",
-	                    "9:00 AM": "9:00",
-	                    "9:30 AM": "9:30",
+	                    "9:00 AM": "09:00",
+	                    "9:30 AM": "09:30",
 	                    "10:00 AM": "10:00",
 	                    "10:30 AM": "10:30",
 	                    "11:00 AM": "11:00",
