@@ -95,14 +95,14 @@ public class AgileAuthFilter implements Filter
 	// Check if userinfo is valid for this namespace
 	DomainUser domainUser = DomainUserUtil.getDomainCurrentUser();
 
-	System.out.println("Current domain user " + domainUser);
-
 	// Get Namespace
 	String domain = NamespaceManager.get();
 
 	// Send to register
 	if (domainUser == null)
 	{
+	    // Remove user info from session, redirect to auth-failed.jsp.
+	    SessionManager.set((UserInfo) null);
 	    httpResponse.sendRedirect("error/auth-failed.jsp");
 	}
 
