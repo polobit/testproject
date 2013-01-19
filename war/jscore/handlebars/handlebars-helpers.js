@@ -468,6 +468,15 @@ $(function() {
 			return options.inverse(this);
 	})
 
+	
+		Handlebars.registerHelper('is_link', function(value, options) {
+		if (s.indexOf("http") != -1)
+			return options.fn(this);
+		else
+			return options.inverse(this);
+	})
+	
+	
 	/**
 	 * Adds Custom Fields to forms, where this helper function is called
 	 */

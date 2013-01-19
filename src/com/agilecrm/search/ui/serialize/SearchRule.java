@@ -1,5 +1,7 @@
 package com.agilecrm.search.ui.serialize;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -12,7 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * 
  */
 @XmlRootElement
-public class SearchRule
+public class SearchRule implements Serializable
 {
     /**
      * Represents the field name

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
@@ -58,6 +59,7 @@ public class Reports implements Serializable
     public Duration duration;
 
     @NotSaved(IfDefault.class)
+    @Embedded
     public List<SearchRule> rules = new ArrayList<SearchRule>();
 
     @NotSaved(IfDefault.class)

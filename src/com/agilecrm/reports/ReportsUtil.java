@@ -3,6 +3,7 @@ package com.agilecrm.reports;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,8 @@ import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.CustomFieldDef;
+import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
@@ -24,8 +27,11 @@ public class ReportsUtil
 
 	for (Reports report : reportsList)
 	{
+	    System.out.println("reports list in reports util : " + reportsList);
 	    // Get the owner of the report to send email
 	    DomainUser user = report.getDomainUser();
+
+	    System.out.println("user : " + user);
 
 	    // If user is not available query not required
 	    if (user == null)
@@ -67,24 +73,37 @@ public class ReportsUtil
 	// Set new namespace and run the queries
 	NamespaceManager.set(newNamespace);
 
+	// Iterate through each filter and add results collection
+	// To store reports in collection
 	System.out.println("new namespace to run query: "
 		+ NamespaceManager.get());
 
 	// Iterate through each filter and add results collection
 	// To store reports in collection
 	Collection reportList = report.generateReports();
+	List<CustomFieldDef> fieldsCustomFieldDefs = new ArrayList<CustomFieldDef>();
+	try
+	{
+	    fieldsCustomFieldDefs = CustomFieldDefUtil.getAllCustomFields();
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 
 	Map<String, Object> domain_details = new HashMap<String, Object>();
 
 	// Add additional detials to show in email template
 	domain_details.put("report_results", reportList);
 	domain_details.put("domain", report.domain);
-	domain_details.put("report_name", report.name);
+	domain_details.put("report", report);
 	domain_details.put("user_name", user.name);
+	domain_details.put("custom_fields", fieldsCustomFieldDefs);
 
 	// If report_type if of contacts customize object to show properties
 	if (report.report_type.equals(Reports.ReportType.Contact))
-	    customizeContactParameters(reportList);
+	    customizeContactParameters(reportList, fieldsCustomFieldDefs);
 
 	System.out.println("search results : " + reportList);
 
@@ -136,7 +155,8 @@ public class ReportsUtil
      * Customize the contact parameter to enable email templates to use
      * properties(ContactField)
      */
-    public static Collection customizeContactParameters(Collection contactList)
+    public static Collection customizeContactParameters(Collection contactList,
+	    List<CustomFieldDef> customFields)
     {
 	for (Object contactObject : contactList)
 	{
@@ -147,10 +167,24 @@ public class ReportsUtil
 
 	    for (ContactField contactField : contact.properties)
 	    {
-		if (contactField.name != null)
+
+		if (!contactField.type.equals(ContactField.FieldType.CUSTOM))
 		    contact.contact_properties.put(contactField.name,
 			    contactField.value);
 	    }
+
+	    List<ContactField> customFieldValuesList = new LinkedList<ContactField>();
+	    for (CustomFieldDef field : customFields)
+	    {
+		ContactField contactField = contact
+			.getContactFieldByName(field.field_label);
+
+		customFieldValuesList.add(contactField);
+	    }
+	    contact.contact_properties.put("custom", customFieldValuesList);
+	    contact.contact_properties.put("image",
+		    contact.getContactFieldValue("image"));
+	    System.out.println(contact.contact_properties);
 	}
 
 	return contactList;

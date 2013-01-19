@@ -46,22 +46,7 @@ var ReportsRouter = Backbone.Router.extend({
 
 				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js',
 						function() {
-
-							var LHS, condition, RHS, RHS_NEW;
-
-							LHS = $("#LHS", el);
-							condition = $("#condition", el)
-							RHS = $("#RHS", el)
-
-							// Extra field required for (Between values
-							// condition)
-							RHS_NEW = $("#RHS-NEW", el)
-
-							// Chaining dependencies of input fields with
-							// jquery.chained.js
-							condition.chained(LHS);
-							RHS_NEW.chained(condition);
-							RHS.chained(LHS);
+							chainFilters(el);
 						})
 			}
 		});
@@ -100,21 +85,7 @@ var ReportsRouter = Backbone.Router.extend({
 
 				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js',
 						function() {
-							var LHS, condition, RHS, RHS_NEW;
-
-							LHS = $("#LHS", el);
-							condition = $("#condition", el)
-							RHS = $("#RHS", el)
-
-							// Extra field required for (Between values
-							// condition)
-							RHS_NEW = $("#RHS-NEW", el)
-
-							// Chaining dependencies of input fields with
-							// jquery.chained.js
-							condition.chained(LHS);
-							RHS_NEW.chained(condition);
-							RHS.chained(LHS);
+							chainFilters(el);
 						})
 			}
 		});

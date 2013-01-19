@@ -2,7 +2,6 @@
 	<div>
 		<div
 			style="background-color: #8A6086; font-family: Arial, sans-serif; padding: 5px">
-
 			<div
 				style="min-height: 36px; font-size: 14px; font-weight: bold; padding-bottom: 4px">
 				<table style="display: inline; width: 100%">
@@ -14,47 +13,101 @@
 					</tbody>
 				</table>
 			</div>
-
 			<div
-				style="font-size: 13px; background-color: #fff; padding: 10px 7px 7px 7px">
-				<br> <br> Dear {{user_name}}, <br> 
-				<br>Your reports based on "{{report_name}}" generated<br> <br><br>
-				<table style="width: 100%;" border="1">
-					<thead>
+				style="font-size: 14px; background-color: #fff; padding: 10px 7px 7px 7px">
+				<p>*****This is an automated email. Please do not reply*****</p>
+				<table width="100%" cellpadding="0" cellspacing="0" bgcolor="#F3F3F3" style="border-top:3px solid #cccccc;border-bottom:3px solid #cccccc;padding:10">
+					<tbody>
 						<tr>
-							<th>Name</th>
-							<th>Work</th>
-							<th>Email</th>
-							<th>Lead Score</th>
-							<th>Tags</th>
+							<td valign="top" align="center">
+												<h2 style="font-size: 16px">Report Name: <strong>{{report.name}} ({{report.duration}} Report)</strong></h2>
+												<p style="font-size: 12px">
+													Account Holder Name: <strong>{{user_name}}</strong>
+												</p>
+												<p style="font-size: 12px">
+													Report Type: <strong>{{report.report_type}}</strong><br />
+													<br />
+												</p>
+								</table>
+							</td>
 						</tr>
+					</tbody>
+				</table>
+
+				<table width="100%" cellpadding="5" cellspacing="0" style:"margin-top:-40px">
 					<thead>
+						<tr bgcolor="#CCCCCC">
+							<th align="left" style="font-size: 12px"><strong>Name</strong></th>
+								<th align="left" style="font-size: 12px"><strong>Tags</strong></th>
+							<th align="left" style="font-size: 12px"><strong>Job
+									Title</strong></th>
+							<th align="left" style="font-size: 12px"><strong>Company</strong></th>
+							<th align="left" style="font-size: 12px"><strong>Lead</strong></th>
+							
+								{{#custom_fields}}
+									<th align="left" align="center"
+										style="font-size: 12px"><strong>{{field_label}}</strong></th>
+								{{/custom_fields}}
+							
+						</tr>
+					</thead>
 					<tbody>
 						{{#report_results}}
 						<tr>
-							{{#contact_properties}}
-							<td>{{first_name}}&nbsp;{{last_name}}</td>
-							<td>{{title}}<br>{{mantra}}
-							</td>
-							<td>{{email}}</td> {{/contact_properties}}
-							<td>{{lead_score}}</td>
-							<td>{{tags}}</td>
+						{{#contact_properties}}
+							<td align="left" valign="top"
+								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
+								{{#image}}
+								<span style="display: inline; padding-right: 10px; height: auto;">
+									<img class="thumbnail" src="{{image}}" width="40px"
+										height="40px" style="display: inline">
+								</span>
+								{{/image}}
+								{{^image}}
+								<span style="display: inline; padding-right: 10px; height: auto;">
+									<img class="thumbnail" src="https://secure.gravatar.com/avatar/8ee08c67fe0de091e6116e0ad1cd778b.jpg?s=40&d=https%3A//d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png" width="40px"
+										height="40px" style="display: inline">
+								</span>
+								{{/image}}
+								<span
+									style="height: auto; display: inline-block; vertical-align: top; text-overflow: ellipsis; white-space: nowrap; width: 12em; overflow: hidden;">
+									<b> {{first_name}}&nbsp;{{last_name}}  </b> <br> {{email}}
+								</span></td> 
+								<td align="left" valign="top"
+								style="border-bottom: 1px solid #f3f3f3; font-size: 12px"><strong>{{tags}}</strong></td>
+							<td valign="top"
+								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">{{contact_properties.title}}</td>
+							<td  valign="top"
+								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">{{contact_properties.company}}</td>
+								<td  valign="top"
+								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">{{lead_score}}</td>
+							{{#custom}}
+							<td align="left" valign="top"
+								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">{{value}}</td>
+							{{/custom}}
+							
+						{{/contact_properties}}
 						</tr>
+						
 						{{/report_results}}
 					</tbody>
 				</table>
-				<br> <br> <br> <br> <br> <span
-					style="color: #898989">AgileCRM: Built with love for small
-					businesses</span>
+
+				<br />
+				<p style="font-weight: bold;">Have questions or need help?</p>
+				<p>Our customer service and support team is here to help you any
+					way we can. Please email us at support@agilecrm.com</p>
+				<p>Thanks for being a valued customer.</p>
+				<br /> Best Wishes, <br /> AgileCRM Support. <br />
+				http://www.agilecrm.com 
 				<div style="text-align: right">
-					<a href="https://www.agilecrm.com" target="_blank"> <img
+					<a href="{{domain}}.agilecrm.com" target="_blank"> <img
 						style="border: 0; margin-top: 10px"
-						src="https://ssl.gstatic.com/docs/documents/share/images/services/google_logo-1.png"
-						alt="Logo for Google Drive">
+						src="https://agilecrm.s3.amazonaws.com/email/agilecrm-logo.jpg"
+						alt="Logo for AgileCRM" />
 					</a>
 				</div>
 			</div>
 		</div>
 	</div>
 </body>
-

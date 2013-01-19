@@ -259,6 +259,16 @@ public class Contact extends Cursor
 	return null;
     }
 
+    public ContactField getContactFieldByName(String fieldName)
+    {
+	for (ContactField field : properties)
+	{
+	    if (field.name.equals(fieldName))
+		return field;
+	}
+	return null;
+    }
+
     /**
      * Gets value of a ContactField object, matched with the given name
      * 
