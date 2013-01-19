@@ -47,18 +47,18 @@ $(function () {
     	sendAddRequest(plugin_id, linkedin_id);
     });
     
-    $('.linkedin_stream').die().live('click', function (e) {
+    $('.linkedin_share').die().live('click', function(e)
+    {
     	e.preventDefault();
-    	var that = this;
-    	$.getJSON("/core/api/widgets/updates/" + plugin_id + "/" + linkedin_id, function(data){
-    		 console.log(data);
-    		 var streamHtml = getTemplate("linkedin-update-stream", data);
-    		 $(that).before(streamHtml);
-    		 
-    	}).error(function(data) { alert(data); 
-    		$(that).before(data.responseText);
-    	}); 
+    	var share_id = $(this).attr("id");
+    	reSharePost(plugin_id, share_id,"optional");
     });
+    
+//    $('#linkedin_social_stream').on('hidden', function () {
+//    	console.log("hidden");
+//    	  // do something…
+//    	})  
+    
 });
 /**
  * Shows setup if user adds linkedIn widget for the first time, to set up
@@ -182,6 +182,7 @@ function showLinkedinMatchingProfiles(plugin_id) {
  * @param plugin_id	  : plugin_id to get prefs to connect to Linkedin
  */
 function showLinkedinProfile(linkedin_id, plugin_id) {
+	var profile_name;
     // Shows loading, until profile is fetched
     $('#Linkedin').html(
     LINKEDIN_PLUGIN_HEADER + '<img src=\"img/1-0.gif\"></img>');
@@ -189,6 +190,8 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
     $.getJSON("/core/api/widgets/profile/" + plugin_id + "/" + linkedin_id,
 
     function (data) {
+    	
+    	profile_name = data.name;
         // If picture is not availabe to user then show default picture
         if (data.picture == null) {
             data.picture = 'https://contactuswidget.appspot.com/images/pic.png';
@@ -197,7 +200,42 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
         $('#Linkedin').html(getTemplate("linkedin-profile", data));
     });
     
+    $('.linkedin_stream').die().live('click', function (e) {
+    	e.preventDefault();
+    
+    	$("#linkedin_social_stream").html(LOADING_HTML);
+    	$.getJSON("/core/api/widgets/updates/" + plugin_id + "/" + linkedin_id, function(data){
+    		
+    		 data["profile_name"] = profile_name;
+    		
+    		 $("#linkedin_social_stream").html(getTemplate("linkedin-update-stream", data));
+    		 $("#linkedin_stream").remove();
+    		 $('#linkedin_less').show();
+    		 $('#linkedin_refresh_stream').show();
+    	}).error(function(data) { 
+    		alert(data.responseText); 
+    	}); 
+    });
+    
+   $('#linkedin_less').die().live('click', function (e) {
+    	e.preventDefault();
+    	var data = $(this).text();
+    	if(data == "Less.."){
+    		$(this).text("More..");
+    		$('#linkedin_refresh_stream').hide();
+    	}
+    	else
+    	{
+    		$(this).text("Less..");
+    		$('#linkedin_refresh_stream').show();
+    	}
+    });
+   
+    
 }
+
+
+
 /**
  * Sends request to url "core/api/widget/linkedin/" with contact id and plugin id
  * as path parameters, which fetches matching profiles using widget prefs based on 

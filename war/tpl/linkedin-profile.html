@@ -1,79 +1,123 @@
 <script id="linkedin-profile-template" type="text/html">
-<div style="display:inline;  line-height:12px;">
-    <div class="row-fluid" style="margin-top:-10px;padding:0px;">
-        <a class="icon-remove pull-right" id="linkedin_plugin_delete" style="cursor:pointer; color: #FF00FF"></a>
-        <div class="span3" style=" margin-right:3%">
-            <img src="{{picture}}" style=" display:inline; float:left; margin-right:2px; margin-top:5px; padding:0px 5px;cursor:pointer; color: #FF00FF" />
-        </div>
-        <div class="span8">
-            <h4 >
-                <a href="{{url}}" target="_blank" >{{name}}</a> 
-				<span class="badge badge-info">{{distance}}</span>
-            </h4>
-            <span style="font-size:10px; margin-bottom:2px;">{{summary}}, {{location}}, {{num_connections}}Connections <br /></span><br /><br />
-
-        	{{#if is_connected}}
-				<a class="btn btn-mini btn-primary" id="linkedin_message" style="font-size:13px; margin-bottom:10px;margin-top:-10px">Send Message</a>
-			{{else}}
-				<a class="btn btn-mini btn-primary" id="linkedin_connect" name="{{name}}" style="font-size:13px; margin-bottom:10px;margin-top:-10px">Connect</a>	
-			{{/if}}
-		
+	<div style="display:inline;  line-height:12px; margin-bottom: 1px;">
+	    <div class="row-fluid well" style="padding:0px;border-bottom: 1px solid #dedede;margin-bottom: 10px;background-color: white;">
+	        <div class="span3" style=" margin-right:3%">
+	            <img src="{{picture}}" style=" display:inline; float:left; margin-right:2px; margin-top:5px; padding:0px 5px;cursor:pointer; color: #FF00FF" />
+	        </div>
+	        <div class="span8" style="padding-bottom: 7px;">
+	            <div style="padding-bottom:5px;">
+	                <h4 ><a href="{{url}}" target="_blank" >{{name}}</a></h4> 
+					<span class="badge badge-info" style="background-color: #CDE1FF;color:#3f5fa3">{{distance}}</span>
+					<span class="icon-arrow-right" style="color:green"></span>YOU
+					<a class="icon-trash pull-right" id="linkedin_plugin_delete" style="cursor:pointer;color:#772953"></a>
+	            </div>
+				<div style="padding-bottom:7px;">
+	            	<span style="font-size:10px;">{{summary}}, {{location}}, {{num_connections}}Connections </span>
+				</div>
+				<div style="padding-bottom:7px;">
+	        	{{#if is_connected}}
+					<a class="btn btn-mini btn-primary" id="linkedin_message" style="font-size:13px;">Send Message</a>
+				{{else}}
+					<a class="btn btn-mini btn-primary" id="linkedin_connect" name="{{name}}" style="font-size:13px;">Connect</a>	
+				{{/if}}
+				</div>		
+			</div>
+	    </div>
+		{{#if current_update}}
+			<div class="row-fluid well" style="padding:0px;margin-bottom:0px;background-color:#ffffff;">				
+				<div style="background-color:#f5f5f5;text-align: center;">
+					<h5 style="color: #999999;">CURRENT ACTIVITY</h5>
+				</div>					
+				<div style="padding:7px 0px 7px 0px;">
+	           		<span>{{current_update}}<br /></span>
+				</div>						
+	    	</div>
+		{{/if}}
+		<div id="linkedin_social_stream" class="collapse in">				
 		</div>
-    </div>
-	<div class="row-fluid" style="margin-top:-10px;padding:0px;">
-            
-            <span style="font-size:10px; margin-bottom:2px;">{{current_update}}<br /></span><br /><br />
- 			
-    </div>
-
-	<a href="#more" class="linkedin_stream">More..</a>
-</div>
+		<div style="padding:0px;margin-top:15px">
+			<a href="#more" class="linkedin_stream" id="linkedin_stream">More..</a>
+			<a href="#more" data-toggle="collapse" data-target="#linkedin_social_stream" id="linkedin_less" style="display:none">Less..</a>
+			<a href="#refresh" id="linkedin_refresh_stream" class="linkedin_stream icon-refresh pull-right" rel="tooltip" title="Refresh to get current updates" style="display:none"></a>
+		</div>
+	</div>
 </script>
 
-<script id="linkedin-update-stream-template" type= "text/html">
-{{#each this}}
-	<tr>
-	{{#if_equals type "SHARED_ITEM"}}
-		<td>{{type}}</td>
-	{{/if_equals}}
-	{{#if_equals type "CONNECTION_ADDED_CONNECTIONS"}}
-		<td>{{type}}</td>
-	{{/if_equals}}
-	<td>{{epochToHumanDate "mm-dd-yyyy" created_time}}<td>
-	</tr>
-{{/each}}
+<script id="linkedin-update-stream-template" type="text/html">
+{{#if this.length}}
+<div class="row-fluid well" style="padding:0px;margin-bottom:0px; background-color:#ffffff;">
+	<table class="table-striped" style="border:#f5f5f5">
+		<tbody>
+			{{#each this}}
+				<tr style="border-bottom: 1px solid #dedede;">				
+					<td style="padding:7px 0px 7px 0px;">
+						{{#stringToJSON this "message"}} {{/stringToJSON}}
+						{{#if_equals type "SHARED_ITEM"}}
+							{{#stringToJSON this.message "current-share"}} {{/stringToJSON}}
+							{{#if message.current-share.content}}
+								{{#if message.current-share.content.title}}
+									{{#if message.current-share.comment}}									
+										{{message.current-share.comment}}<br /><a target="_blank" href="{{message.current-share.content.shortenedUrl}}">{{message.current-share.content.title}}</a>									
+									{{else}}									
+										<a target="_blank" href="{{message.current-share.content.shortenedUrl}}">{{message.current-share.content.title}}</a>
+									{{/if}}
+								{{else}}
+									{{message.current-share.author.firstName}} shared a <a target="_blank" href="{{message.current-share.content.shortenedUrl}}">link</a>
+								{{/if}}
+							{{else}}
+								{{message.current-share.comment}}
+							{{/if}}
+							<div style="font-size:12px;padding-top:7px;">
+								{{epochToHumanDate "mm-dd-yyyy" created_time}}
+								<a href="#share" class="linkedin_share" id="{{id}}" style="margin-left:14px">Share</a>
+							</div>
+						{{/if_equals}}
+						{{#if_equals type "CONNECTION_ADDED_CONNECTIONS"}}
+							Connected to <a href="{{message.publicProfileUrl}}" target="_blank">{{message.firstName}}&nbsp{{message.lastName}}</a>
+							<div style="font-size:12px;;padding-top:7px;">
+								{{epochToHumanDate "mm-dd-yyyy" created_time}}
+							</div>
+						{{/if_equals}}			
+					</td>				
+				</tr>
+			{{/each}}
+		</tbody>
+	</table>
+</div>
+	
+{{/if}}
 </script>
 
 <script id="linkedin-message-template" type="text/html">
-<!-- New (Note) Modal views -->
-<div class="modal hide fade message-modal" id="messageModal" style="width:400px; left:55%" >
-    <div class="modal-header">
-        <button class="close" data-dismiss="modal">x</button>
-        <h3><i class="icon-plus-sign"></i> {{headline}}</h3>
-    </div>
-    <div class="modal-body agile-modal-body">
-        <form id="messageForm" name="messageForm" method="post">
-            <fieldset>
-                <input name="linkedin_id" type="hidden" value="" />
-                <div class="control-group">
-                    <label class="control-label"><b>Subject: </b><span class="field_req">*</span></label>
-                    <div class="controls">
-                        <input type="text" placeholder="About" name="subject" id="subject" class="required span4" />
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label"><b>Message: </b><span class="field_req">*</span></label>
-                    <div class="controls">
-                        <textarea rows="4" class="required span4" placeholder="Detailed Message" name="message" id="message" style="max-width:500px;"></textarea> 
-                    </div>
-                </div>
-            </fieldset>
-        </form>
-    </div>
-    <div class="modal-footer">
-        <a href="#" class="btn btn-primary" id="send_request">Send</a>
-        <span class="save-status"></span>
-    </div>
-</div>
+	<!-- New (Note) Modal views -->
+	<div class="modal hide fade message-modal" id="messageModal" style="width:400px; left:55%">
+	    <div class="modal-header">
+	        <button class="close" data-dismiss="modal">x</button>
+	        <h3><i class="icon-plus-sign"></i> {{headline}}</h3>
+	    </div>
+	    <div class="modal-body agile-modal-body">
+	        <form id="messageForm" name="messageForm" method="post">
+	            <fieldset>
+	                <input name="linkedin_id" type="hidden" value="" />
+	                <div class="control-group">
+	                    <label class="control-label"><b>Subject: </b><span class="field_req">*</span></label>
+	                    <div class="controls">
+	                        <input type="text" placeholder="About" name="subject" id="subject" class="required span4" />
+	                    </div>
+	                </div>
+	                <div class="control-group">
+	                    <label class="control-label"><b>Message: </b><span class="field_req">*</span></label>
+	                    <div class="controls">
+	                        <textarea rows="4" class="required span4" placeholder="Detailed Message" name="message" id="message" style="max-width:500px;"></textarea> 
+	                    </div>
+	                </div>
+	            </fieldset>
+	        </form>
+	    </div>
+	    <div class="modal-footer">
+	        <a href="#" class="btn btn-primary" id="send_request">Send</a>
+	        <span class="save-status"></span>
+	    </div>
+	</div>
 </script>
 <!-- End of Modal views -->
