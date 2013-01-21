@@ -265,14 +265,16 @@ function validate_insertion(models, timelineViewMore){
 				$.each(models, function(index, model){
 					var month_year = entity_created_month_year(model);
 									
-					if (month_years.indexOf(month_year) < 0 && MONTH_YEARS.indexOf(month_year))
+					if (month_years.indexOf(month_year) < 0 && MONTH_YEARS.indexOf(month_year) < 0){
 						month_years[month_years.length] = month_year;
+						MONTH_YEARS[MONTH_YEARS.length] = month_year;
+					}	
 					var newItem = $(getTemplate("timeline", model));
 					newItem.find('.inner').append('<a href="#" class="open-close"></a>');
 					$('#timeline').isotope( 'insert', newItem);
 				});
 				
-				// add a year marker for each year that has a post
+				// add a month marker for each month that has a post
 				create_month_marker(month_years, true);
 			}
 		});
@@ -304,7 +306,7 @@ var monthArray = ['January 31', 'February 28', 'March 31', 'April 30', 'May 31',
                   'July 31', 'August 31', 'September 30', 'October 31', 'November 30', 'December 31'];
 
 // Stores "monthIndex-year" of timeline initiating entities
-var MONTH_YEARS = [];
+var MONTH_YEARS;
 
 /**
  * Get the timestamp (milliseconds) given month of the year.
@@ -346,6 +348,7 @@ function create_month_marker(month_years, is_insert){
 			$('#timeline').append(getTemplate("year-marker", context));
 	});
 }
+
 /**
  * Loads minified jquery.isotope plug-in and jquery.event.resize plug-in to 
  * to initialize the isotope and appends the given models to the timeline, by 
@@ -363,6 +366,8 @@ function setup_timeline(models, el, callback) {
 	
 	// Removes pad content of no data presents
 	 $("#timeline-slate").css('display', 'none');
+	 
+	 MONTH_YEARS = [];
 	
 	// Load plugins for timeline	
 	head.js(LIB_PATH + "lib/jquery.isotope.min.js", LIB_PATH + "lib/jquery.event.resize.js", function(){
@@ -379,17 +384,17 @@ function setup_timeline(models, el, callback) {
 		 */
 		$.each(models, function(index, model) {
 			
-			// save the years so we can create year markers
+			// saves the month and years so we can create month markers
 			var month_year = entity_created_month_year(model);
 					
 			if (MONTH_YEARS.indexOf(month_year) < 0)
 				MONTH_YEARS[MONTH_YEARS.length] = month_year;
 			
-			// combine data & templqate
+			// combine data & template
 			$('#timeline', el).append(getTemplate("timeline", model));
 		}); //each
 
-		// add a year marker for each year that has a post
+		// add a month marker for each month that has a post
 		create_month_marker(MONTH_YEARS, false);
 		
 		// Initializes isotope with options (sorts the data based on created time)

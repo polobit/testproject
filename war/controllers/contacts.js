@@ -112,8 +112,8 @@ var ContactsRouter = Backbone.Router.extend({
               url: url,
               templateKey: "contacts",
               individual_tag_name: 'tr',
-//              cursor: true,
-//              page_size: 25,
+              cursor: true,
+              page_size: 25,
               postRenderCallback: function(el) {
             	  
             	  // To set chats and view when contacts are fetch by infiniscroll
