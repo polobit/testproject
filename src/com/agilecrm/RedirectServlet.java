@@ -20,6 +20,15 @@ import com.campaignio.util.URLShortenerUtil;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 
+/**
+ * <code>RedirectServlet</code> is the servlet that redirects short url to
+ * original url. Appends contact json values as parameters to original url. Sets
+ * a queue inorder to wakeup the cron tasks that matches with the tracking Id.
+ * 
+ * @author Naresh
+ * 
+ */
+@SuppressWarnings("serial")
 public class RedirectServlet extends HttpServlet
 {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -28,15 +37,16 @@ public class RedirectServlet extends HttpServlet
 	doGet(request, response);
     }
 
+    @SuppressWarnings({ "unchecked", "deprecation" })
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
 	    throws IOException
     {
 	resp.setContentType("text/plain");
 	String url = req.getRequestURL().toString();
-	System.out.println("" + url);
+	// System.out.println(url);
 
-	// Gets URLShortener object based on key i.e., id
-	URLShortener urlShortener = URLShortenerUtil.getLongURL(url);
+	// Gets URLShortener object based on key i.e., URLShortener id
+	URLShortener urlShortener = URLShortenerUtil.getURLShortener(url);
 
 	if (urlShortener == null)
 	{
@@ -44,7 +54,7 @@ public class RedirectServlet extends HttpServlet
 	    return;
 	}
 
-	System.out.println(urlShortener);
+	// System.out.println(urlShortener);
 	String longURL = urlShortener.long_url;
 
 	String params = "?fwd=cd";
@@ -56,56 +66,56 @@ public class RedirectServlet extends HttpServlet
 	Contact contact = ContactUtil.getContact(Long.parseLong(subscriberId));
 
 	if (contact == null)
-	    return;
+	    resp.sendRedirect(longURL);
 
-	try
+	else
 	{
-	    JSONObject contactJSON = WorkflowUtil.getSubscriberJSON(contact);
-	    System.out.println("Contact json" + contactJSON);
-	    // Iterate through JSON and construct all params
-	    Iterator<String> itr = contactJSON.keys();
-	    while (itr.hasNext())
+	    try
 	    {
-		// Get Property Name & Value
-		String propertyName = itr.next();
-		String value = contactJSON.getString(propertyName);
+		JSONObject contactJSON = WorkflowUtil
+			.getSubscriberJSON(contact);
 
-		params += ("&" + propertyName.trim() + "=" + URLEncoder
-			.encode(value.trim()));
+		// Iterate through JSON and construct all params
+		Iterator<String> itr = contactJSON.keys();
+
+		while (itr.hasNext())
+		{
+		    // Get Property Name & Value
+		    String propertyName = itr.next();
+		    String value = contactJSON.getString(propertyName);
+
+		    params += ("&" + propertyName.trim() + "=" + URLEncoder
+			    .encode(value.trim()));
+		}
 	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+
+	    // If URL has spaces or erroneous chars - we chop them
+	    if (longURL.contains(" "))
+	    {
+		System.out.println("Trimming " + longURL);
+		longURL = longURL.substring(0, longURL.indexOf(" "));
+	    }
+
+	    if (longURL.contains("\r"))
+	    {
+		System.out.println("Trimming " + longURL);
+		longURL = longURL.substring(0, longURL.indexOf("\r"));
+	    }
+	    if (longURL.contains("\n"))
+	    {
+		System.out.println("Trimming " + longURL);
+		longURL = longURL.substring(0, longURL.indexOf("\n"));
+	    }
+
+	    System.out.println("Forwarding it to " + longURL + " " + params);
+
+	    resp.sendRedirect(longURL + params);
 	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
 
-	// If URL has spaces or erroneous chars - we chop them
-	if (longURL.contains(" "))
-	{
-	    System.out.println("Trimming " + longURL);
-	    longURL = longURL.substring(0, longURL.indexOf(" "));
-	}
-
-	if (longURL.contains("\r"))
-	{
-	    System.out.println("Trimming " + longURL);
-	    longURL = longURL.substring(0, longURL.indexOf("\r"));
-	}
-	if (longURL.contains("\n"))
-	{
-	    System.out.println("Trimming " + longURL);
-	    longURL = longURL.substring(0, longURL.indexOf("\n"));
-	}
-
-	System.out.println("Forwarding it to " + longURL + " " + params);
-
-	resp.sendRedirect(longURL + params);
-
-	// Get Tracker Id and Interrupt
-	if (urlShortener.tracker_id.isEmpty())
-	    return;
-
-	String trackerId = urlShortener.tracker_id;
 	try
 	{
 	    /*
@@ -119,7 +129,7 @@ public class RedirectServlet extends HttpServlet
 	    Queue queue = QueueFactory.getDefaultQueue();
 	    queue.add(withUrl("/worker")
 		    .param(TaskQueueServlet.TASK_QUEUE_COMMAND_INTERRUPT_TASKLET_CUSTOM1,
-			    trackerId)
+			    urlShortener.tracker_id)
 		    .param(TaskQueueServlet.TASK_QUEUE_COMMAND_INTERRUPT_TASKLET_CUSTOM2,
 			    subscriberId));
 	}

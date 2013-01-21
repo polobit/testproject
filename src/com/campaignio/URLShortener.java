@@ -90,4 +90,11 @@ public class URLShortener
     {
 	dao.put(this);
     }
+
+    public String toString()
+    {
+	return "Long URL: " + long_url + " Subscriber ID: " + subscriber_id
+		+ " Tracker ID: " + tracker_id + " Campaign ID: " + campaign_id;
+    }
+
 }
