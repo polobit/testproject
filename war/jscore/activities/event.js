@@ -108,7 +108,7 @@ $(function() {
 	 * Activates time picker for end time to the fields with class end-timepicker
 	 */
 	$('.end-timepicker').timepicker({
-		defaultTime : 'current',
+		defaultTime : get_hh_mm(true),
 		showMeridian : false,
 		template : 'modal'
 	});

@@ -495,3 +495,8 @@ span.valid {
 html {
 	overflow-y: scroll;
 }
+
+/* Not to overide z-index of datepicker due to timepicker modal */
+.datepicker {
+	z-index: 2050!important;
+}
