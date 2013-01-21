@@ -8,6 +8,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.campaignio.cron.util.CronUtil;
 
+/**
+ * <code>TaskQueueServlet</code> is the servlet to wakeup the cron jobs for
+ * links clicked. Tracking Id is given as one of the custom values. The cron
+ * that matches the tracking Id is get to wake up and interrupted method of
+ * Clicked node is called inside Cron class.
+ * 
+ * @author Naresh
+ * 
+ */
 @SuppressWarnings("serial")
 public class TaskQueueServlet extends HttpServlet
 {
@@ -33,8 +42,8 @@ public class TaskQueueServlet extends HttpServlet
 	{
 	    String trackerId = req
 		    .getParameter(TASK_QUEUE_COMMAND_INTERRUPT_TASKLET_CUSTOM1);
-	    String subscriberId = req
-		    .getParameter(TASK_QUEUE_COMMAND_INTERRUPT_TASKLET_CUSTOM2);
+	    // String subscriberId = req
+	    // .getParameter(TASK_QUEUE_COMMAND_INTERRUPT_TASKLET_CUSTOM2);
 	    CronUtil.interrupt(trackerId, null, null, null);
 	}
 	catch (Exception e)

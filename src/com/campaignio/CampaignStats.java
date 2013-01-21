@@ -8,29 +8,69 @@ import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
+/**
+ * <code>CampaignStats</code> is the base class for campaign statistics. It
+ * records number of emails sent, clicked and opened based on campaign.
+ * 
+ * @author Naresh
+ * 
+ */
 @XmlRootElement
 public class CampaignStats
 {
+    /**
+     * CampaignStats Id
+     */
     @Id
     public Long id;
 
+    /**
+     * Campaign Id
+     */
     @NotSaved(IfDefault.class)
     public Long campaignId = null;
 
+    /**
+     * Emails sent count
+     */
     public int emailsSent = 0;
 
+    /**
+     * Emails clicked count
+     */
     public int emailsClicked = 0;
 
+    /**
+     * Emails opened count
+     */
     public int emailsOpened = 0;
 
+    /**
+     * Campaign Stats Dao
+     */
     private static ObjectifyGenericDao<CampaignStats> dao = new ObjectifyGenericDao<CampaignStats>(
 	    CampaignStats.class);
 
+    /**
+     * Default CampaignStats
+     */
     CampaignStats()
     {
 
     }
 
+    /**
+     * Constructs a new {@link CampaignStats}.
+     * 
+     * @param campaignId
+     *            - Campaign Id.
+     * @param emailsSent
+     *            - Emails Sent count.
+     * @param emailsClicked
+     *            - Emails Clicked count.
+     * @param emailsOpened
+     *            - Emails Opened count.
+     */
     public CampaignStats(Long campaignId, int emailsSent, int emailsClicked,
 	    int emailsOpened)
     {
@@ -40,49 +80,28 @@ public class CampaignStats
 	this.emailsOpened = emailsOpened;
     }
 
+    /**
+     * Saves CampaignStats within empty namespace.
+     */
     public void save()
     {
-	String namespace = NamespaceManager.get();
-	NamespaceManager.set(namespace);
-	dao.put(this);
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+	try
+	{
+	    dao.put(this);
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
     }
 
+    /**
+     * Deletes CampaignStats
+     */
     public void delete()
     {
 	dao.delete(this);
-    }
-
-    public static CampaignStats getCampaignStatsByCampaignId(Long campaignId)
-    {
-	CampaignStats campaignStats = dao.getByProperty("campaignId",
-		campaignId);
-
-	if (campaignStats == null)
-	    return getDefaultCampaignStats(campaignId);
-
-	return campaignStats;
-    }
-
-    private static CampaignStats getDefaultCampaignStats(Long campaignId)
-    {
-	CampaignStats campaignStats = new CampaignStats(campaignId, 0, 0, 0);
-	campaignStats.save();
-	return campaignStats;
-    }
-
-    public static void incrementEmailsClicked(String campaignId)
-    {
-	CampaignStats campaignStats = getCampaignStatsByCampaignId(Long
-		.parseLong(campaignId));
-	campaignStats.emailsClicked++;
-	campaignStats.save();
-    }
-
-    public static void incrementEmailsSent(String campaignId)
-    {
-	CampaignStats campaignStats = getCampaignStatsByCampaignId(Long
-		.parseLong(campaignId));
-	campaignStats.emailsSent++;
-	campaignStats.save();
     }
 }

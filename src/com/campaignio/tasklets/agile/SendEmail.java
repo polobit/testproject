@@ -8,9 +8,9 @@ import org.json.JSONObject;
 
 import com.agilecrm.util.DBUtil;
 import com.agilecrm.util.Util;
-import com.campaignio.CampaignStats;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
+import com.campaignio.util.CampaignStatsUtil;
 import com.campaignio.util.URLShortenerUtil;
 import com.thirdparty.SendGridEmail;
 
@@ -468,7 +468,7 @@ public class SendEmail extends TaskletAdapter
 	    SendGridEmail.sendMail(fromEmail, fromName, to, subject, replyTo,
 		    html, text, subscriberJSON, campaignJSON);
 
-	    CampaignStats.incrementEmailsSent(DBUtil.getId(campaignJSON));
+	    CampaignStatsUtil.incrementEmailsSent(DBUtil.getId(campaignJSON));
 	}
 	else
 	{
@@ -477,7 +477,7 @@ public class SendEmail extends TaskletAdapter
 	    SendGridEmail.sendMail(fromEmail, fromName, to, subject, replyTo,
 		    null, text, subscriberJSON, campaignJSON);
 
-	    CampaignStats.incrementEmailsSent(DBUtil.getId(campaignJSON));
+	    CampaignStatsUtil.incrementEmailsSent(DBUtil.getId(campaignJSON));
 	}
 
 	// Execute Next One in Loop
