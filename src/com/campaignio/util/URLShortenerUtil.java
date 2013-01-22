@@ -28,13 +28,13 @@ public class URLShortenerUtil
 	    URLShortener.class);
 
     /**
-     * Gets long urls from shortened urls
+     * Gets URLShortener object from shortened urls
      * 
      * @param shortURL
      *            Short url that needs to be converted
-     * @return long url
+     * @return URLShortener
      */
-    public static URLShortener getLongURL(String shortURL)
+    public static URLShortener getURLShortener(String shortURL)
     {
 	try
 	{
@@ -53,7 +53,11 @@ public class URLShortenerUtil
 	    String shortKey = tokens[tokens.length - 1];
 	    long keyNumber = fromOtherBaseToDecimal(62, shortKey);
 
-	    return dao.get(keyNumber);
+	    // Increment Emails clicked count based on campaign
+	    URLShortener urlShortener = dao.get(keyNumber);
+	    CampaignStatsUtil.incrementEmailsClicked(urlShortener.campaign_id);
+
+	    return urlShortener;
 	}
 	catch (Exception e)
 	{
@@ -157,7 +161,7 @@ public class URLShortenerUtil
     public static void main(String[] ares)
     {
 	String shortURL = "http://cspt.cc/naresh/33m";
-	URLShortener url = URLShortenerUtil.getLongURL(shortURL);
+	URLShortener url = URLShortenerUtil.getURLShortener(shortURL);
 	System.out.println(url.long_url);
     }
 }
