@@ -1,6 +1,5 @@
 package com.agilecrm.reports;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,12 +26,12 @@ public class ReportServlet extends HttpServlet
 	// Get duration parameter to fetch filter for that duration
 	String duration = req.getParameter("duration");
 
-	List<Reports> reportsList = new ArrayList<Reports>();
-
 	if (duration == null)
 	    return;
 
 	System.out.println("duration : " + duration);
+
+	List<Reports> reportsList = null;
 
 	// Run query to get all the filter with particular duration in name
 	// space = ""
@@ -47,6 +46,9 @@ public class ReportServlet extends HttpServlet
 	else if (duration.equalsIgnoreCase("MONTHLY"))
 	    reportsList = Reports
 		    .getAllReportsByDuration(Reports.Duration.MONTHLY);
+
+	if (reportsList == null || reportsList.isEmpty())
+	    return;
 
 	// Store contactFilters list with domain name as key(domain name,
 	// reports in that domain in particular duration)

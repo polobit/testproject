@@ -169,18 +169,19 @@ function chainFilters(el)
 	var LHS, condition, RHS, RHS_NEW, NESTED_CONDITION, NESTED_RHS, NESTED_LHS;
 		
 		LHS = $("#LHS", el);
-		condition = $("#condition", el)
-		RHS = $("#RHS", el)
+		condition = $("#condition", el);
+		RHS = $("#RHS", el);
 		
 		// Extra field required for (Between values condition)
-		RHS_NEW = $("#RHS-NEW", el)
+		RHS_NEW = $("#RHS-NEW", el);
 		
 		NESTED_CONDITION = $("#nested_condition", el);
 		NESTED_RHS = $("#nested_rhs", el);
 		NESTED_LHS = $("#nested_lhs", el);
 		// Chaining dependencies of input fields with jquery.chained.js
+		RHS.chained(condition);
 		condition.chained(LHS);
-		RHS.chained(LHS);
+		
 		RHS_NEW.chained(condition);
 		NESTED_CONDITION.chained(LHS);
 		NESTED_LHS.chained(NESTED_CONDITION);

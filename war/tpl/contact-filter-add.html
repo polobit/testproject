@@ -56,8 +56,8 @@
 													<option value="EQUALS"
 														class="first_name tags_time phone tags company title org_tag jobtitle email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
 													<option value="NOTEQUALS"
-														class="first_name tags_time company tags org_tag title email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
-													<option value="EQUALS" class="updated_time created_time">on</option>
+														class="first_name company tags org_tag title email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
+													<option value="ON" class="updated_time created_time">on</option>
 													<option value="AFTER" class="created_time updated_time">is
 														after</option>
 													<option value="BEFORE" class="created_time updated_time">is
@@ -76,13 +76,13 @@
 										<td>
 											<div id="RHS" name="RHS">
 												<input type="text" name="temp"
-													class="EQUALS NOTEQUALS LAST first_name company title phone"
+													class="EQUALS NOTEQUALS LAST NEXT ANYOF"
 													style="width: 167px" /> <input type="text" name="tag"
 													class=" tags tags_time"
 													style="margin: 0 0 0 0px; width: 167px" /> <input
 													type="text" name="temp" class="email" style="width: 167px" />
 												<input id="updated_date" type="text" name="updated_date"
-													class="updated_time created_time input required date span2"
+													class="ON AFTER BEFORE BETWEEN input required date span2"
 													style="width: 167px" placeholder="MM/DD/YY" />
 											</div>
 										</td>
@@ -109,7 +109,7 @@
 										<td>
 											<div id="nested_lhs" name="nested_lhs">
 												<input type="text" name="temp" class="LAST NEXT"
-													style="width: 167px" placeholder="Number of days" /> <input
+													style="width: 120px" placeholder="Number of days" /> <input
 													id="date_between" type="text" style="width: 120px"
 													name="temp"
 													class="BETWEEN EQUALS AFTER BEFORE input date span2"

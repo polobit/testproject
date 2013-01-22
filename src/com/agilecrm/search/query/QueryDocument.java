@@ -92,7 +92,7 @@ public class QueryDocument implements QueryInterface
 		String newQuery = lhs + ":" + SearchUtil.normalizeString(rhs);
 
 		// For equals condition
-		if (condition.equals(SearchRule.RuleCondition.EQUALS))
+		if (condition.equals(SearchRule.RuleCondition.ON))
 		{
 		    /*
 		     * Build query by passing condition old query and new query
@@ -232,8 +232,13 @@ public class QueryDocument implements QueryInterface
 	// Created in last number of days
 	else if (condition.equals(SearchRule.RuleCondition.LAST))
 	{
+	    System.out.println(new DateUtil().getTime().toGMTString());
+
 	    long fromDateInSecs = new DateUtil()
-		    .removeDays(Integer.parseInt(rhs)).getTime().getTime();
+		    .removeDays(Integer.parseInt(rhs) - 1).getTime().getTime();
+
+	    System.out.println(new DateUtil(new Date(fromDateInSecs)).getTime()
+		    .toGMTString());
 
 	    String fromDate = SearchUtil
 		    .getDateWithoutTimeComponent(fromDateInSecs);
@@ -244,7 +249,7 @@ public class QueryDocument implements QueryInterface
 	}
 	else if (condition.equals(SearchRule.RuleCondition.NEXT))
 	{
-	    long limitTime = new DateUtil().addDays(Integer.parseInt(rhs))
+	    long limitTime = new DateUtil().addDays(Integer.parseInt(rhs) - 1)
 		    .getTime().getTime();
 	    String formatedLimitDate = SearchUtil
 		    .getDateWithoutTimeComponent(limitTime);
@@ -274,7 +279,6 @@ public class QueryDocument implements QueryInterface
      */
     private static Collection processQuery(String query, RuleType type)
     {
-
 	/*
 	 * Set query options only to get id of document (enough to get get
 	 * respective contacts)

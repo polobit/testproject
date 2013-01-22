@@ -17,10 +17,24 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 
+/**
+ * <code>ReportsUtil</code> is utility class, it provides functionalities to
+ * organize reports according to the namespace, customize contact parameters, to
+ * access property fields in contact. After processing and customizing data as
+ * required by template, report results are sent to respecitive domain users
+ * specified.
+ * 
+ * @author Yaswanth
+ */
 public class ReportsUtil
 {
-    /*
-     * Send the Report results and mail to domain users in respective domain
+
+    /**
+     * Processes the reports and sends results to respective domain users. It
+     * iterates through search report in reports list, fetches the results based
+     * on the criteria specified in the report object.
+     * 
+     * @param reportsList
      */
     public static void sendReportsToUsers(List<Reports> reportsList)
     {
@@ -28,12 +42,14 @@ public class ReportsUtil
 	for (Reports report : reportsList)
 	{
 	    System.out.println("reports list in reports util : " + reportsList);
-	    // Get the owner of the report to send email
+
+	    // Get the owner of the report, to send email
 	    DomainUser user = report.getDomainUser();
 
 	    System.out.println("user : " + user);
 
-	    // If user is not available query not required
+	    // If user is not available, querying on search rule is not
+	    // required.
 	    if (user == null)
 		return;
 
@@ -43,17 +59,20 @@ public class ReportsUtil
 
 	    System.out.println("Results : " + results);
 
-	    if (results == null)
-		return;
-
-	    // Check whether results are not empty
-	    if (!((Collection) results.get("report_results")).isEmpty())
-		SendMail.sendMail(user.email, SendMail.REPORTS_SUBJECT,
-			SendMail.REPORTS, results);
+	    // Mail should be send even of reports are empty.
+	    SendMail.sendMail(user.email, SendMail.REPORTS_SUBJECT,
+		    SendMail.REPORTS, results);
 	}
     }
 
-    /* Process each filter and return contact results based on filters */
+    /**
+     * Process each report and return contact results based on filters, which
+     * are customized i.e., user name, report, domain, custom_fields are added
+     * 
+     * @param report
+     * @param user
+     * @return
+     */
     public static Map<String, Object> processReports(Reports report,
 	    DomainUser user)
     {
@@ -119,15 +138,14 @@ public class ReportsUtil
      * respective contact filters list)
      */
     public static Map<String, List<Reports>> organizeFiltersByDomain(
-	    List<Reports> reports_list)
+	    List<Reports> reportsList)
     {
-	System.out.println(reports_list);
 
 	Map<String, List<Reports>> reportsMap = new HashMap<String, List<Reports>>();
 
 	// Iterate through reports and add reports to list its
 	// put in a map with its respective domain name as key
-	for (Reports report : reports_list)
+	for (Reports report : reportsList)
 	{
 	    // Make sure domain is not null or empty
 	    if (StringUtils.isEmpty(report.domain))
