@@ -16,8 +16,9 @@ public class SocialSearchResult
     public String summary = "";
     public String headline = "";
     public String num_connections = "";
+    public String tweet_count = "";
     public String location = "";
-    public String friends = "";
+    public String friends_count = "";
     public String current_update = "";
     public String distance = "";
     public boolean is_connected;
@@ -29,6 +30,6 @@ public class SocialSearchResult
     {
 	return id + " " + name + " " + picture + " " + url + " " + summary
 		+ " " + headline + " " + num_connections + " " + location + " "
-		+ friends + " " + current_update + " " + distance + " ";
+		+ friends_count + " " + current_update + " " + distance + " ";
     }
 }

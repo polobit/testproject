@@ -488,4 +488,29 @@ $(function() {
 				properties));
 
 	});
+	
+	 Handlebars.registerHelper('is_link', function(value, options) {
+		  if (value.indexOf("http") != -1)
+		   return options.fn(this);
+		  else
+		   return options.inverse(this);
+		 });
+	 
+	 Handlebars.registerHelper('show_link_in_statement', function(value){
+		 
+		 console.log("up");
+		 if (value.indexOf("http") == -1)
+			 return value;
+		 
+		 console.log("down");
+		 
+		 var link = value.substring(value.indexOf("http"));
+		 
+		 if(link.indexOf(" ") != -1 )
+			 link = link.substring(link.indexOf("http"), link.indexOf(" "));
+		 
+		 value = value.replace(link, '<a target="_blank" href=' + link + '>Click here to read more</a>');
+		 
+		 return new Handlebars.SafeString(value);
+	 })
 });

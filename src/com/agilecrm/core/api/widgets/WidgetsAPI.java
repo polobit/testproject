@@ -174,6 +174,7 @@ public class WidgetsAPI
 	}
 	catch (Exception e)
 	{
+	    e.printStackTrace();
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
@@ -269,6 +270,7 @@ public class WidgetsAPI
 	}
 	catch (Exception e)
 	{
+
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
@@ -400,12 +402,13 @@ public class WidgetsAPI
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
 		return LinkedInUtil.getNetworkUpdates(widget, socialId);
 
+	    else if (widget.name.equalsIgnoreCase("TWITTER"))
+		return TwitterUtil.getNetworkUpdates(widget,
+			Long.parseLong(socialId));
+
 	}
 	catch (Exception e)
 	{
-
-	    System.out.println("exception in widgets api");
-	    System.out.println(e.getMessage());
 	    e.printStackTrace();
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())

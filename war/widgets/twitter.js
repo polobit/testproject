@@ -7,6 +7,8 @@ $(function () {
     // Plugin name as a global variable
     TWITTER_PLUGIN_NAME = "Twitter";
     TWITTER_PLUGIN_HEADER = '<div></div>';
+    
+    Twitter_current_profile_user_name = "";
     // Gets plugin id from plugin object, fetched using script API
     var plugin_id = agile_crm_get_plugin(TWITTER_PLUGIN_NAME).id;
     // Get Plugin Prefs
@@ -38,15 +40,21 @@ $(function () {
     
     $('#twitter_message').die().live('click', function (e) {
     	e.preventDefault();
-    	sendMessage(plugin_id, twitter_id);
+    	sendTwitterMessage(plugin_id, twitter_id);
     });
     
-    $('#twitter_connect').die().live('click', function(e)
+    $('#twitter_follow').die().live('click', function(e)
     {
     	e.preventDefault();
-    	sendAddRequest(plugin_id, twitter_id);
+    	sendFollowRequest(plugin_id, twitter_id);
     });
     
+    $('.twitter_retweet').die().live('click', function(e)
+    {
+    	e.preventDefault();
+    	var share_id = $(this).attr("id");
+    	retweetTheTweet(plugin_id, share_id, "optional");
+    });
     
 });
 /**
@@ -170,8 +178,41 @@ function showTwitterProfile(twitter_id, plugin_id) {
     // Fetches matching profiles
     $.getJSON("/core/api/widgets/profile/" + plugin_id + "/" + twitter_id, function (data) {
         console.log(data);
+        
+        Twitter_current_profile_user_name = data.name;
         // Gets Twitter-profile template and populate the fields using handlebars
         $('#Twitter').html(getTemplate("twitter-profile", data));
+    });
+    
+    $('.twitter_stream').die().live('click', function (e) {
+    	e.preventDefault();
+    alert("twitter");
+    	$("#twitter_social_stream").html(LOADING_HTML);
+    	$.getJSON("/core/api/widgets/updates/" + plugin_id + "/" + twitter_id, function(data){
+    		    		console.log(data);
+    		 $("#twitter_social_stream").html(getTemplate("twitter-update-stream", data));
+    		 $("#twitter_stream").remove();
+    		 $('#twitter_less').show();
+    		 $('#twitter_refresh_stream').show();
+    	}).error(function(data) { 
+    		alert(data.responseText); 
+    	}); 
+    });
+    
+    $('#twitter_less').die().live('click', function (e) {
+    	e.preventDefault();
+    	var data = $(this).text();
+    	
+    	if($(this).attr("less") == "true"){
+    		$(this).attr("less","false");
+    		$(this).text("See Less..");
+    		$('#twitter_refresh_stream').show();
+    		return;
+    	}
+    	
+    	$(this).attr("less","true");
+    	$(this).text("See More..");
+    	$('#twitter_refresh_stream').hide();
     });
 }
 /**
@@ -209,49 +250,57 @@ function getTwitterMatchingProlfiles(plugin_id, callback) {
 
 function sendFollowRequest(plugin_id, twitter_id) {
 	var json = {};
-	json["headline"] = "Connect";
+	json["headline"] = "Follow";
+	json["info"] = "Makes you follow "+ Twitter_current_profile_user_name.toLocaleUpperCase() +" on Twitter from your Twitter account associated with Agile CRM";
+		
+	$('#twitter_messageModal').remove();
 	 var message_form_modal = getTemplate("twitter-message", json);
 		console.log("show modal");
 		$('#content').append(message_form_modal);
-		$('#messageModal').modal("show");
+		$('#twitter_messageModal').modal("show");
 		
 
 		$('#send_request').click( function(e) {
 			e.preventDefault();
 			
-		    if(!isValidForm($("#messageForm"))){
+		    if(!isValidForm($("#twitter_messageForm"))){
 		    }
 		    
-		    $.post( "/core/api/widgets/connect/" + plugin_id + "/" + linkedin_id , $('#messageForm').serialize(), function(data) {
-		    	$('#messageModal').modal("hide");
-		       });
+		    $.post( "/core/api/widgets/connect/" + plugin_id + "/" + twitter_id , $('#twitter_messageForm').serialize(), function(data) {
+		    	$('#twitter_messageModal').modal("hide");
+		       }).error(function(data) { 
+		    	   $('#twitter_messageModal').remove();
+		    		alert(data.responseText); 
+		    	}) 
 		});
 }
 
-function sendMessage(plugin_id, twitter_id, message) {
+function sendTwitterMessage(plugin_id, twitter_id, message) {
 	
 	var json = {};
 	json["headline"] = "Send Message";
+	json["info"] = "Sends a message to " + Twitter_current_profile_user_name.toUpperCase() +
+			" on Twitter from your Twitter account associated with Agile CRM";
+	
+	$('#twitter_messageModal').remove();
 	var message_form_modal = getTemplate("twitter-message", json);
-	console.log("show modal");
-	
-	$("#messageModal").remove();
-	
-	$('#content').append(message_form_modal);
-	$('#messageModal').modal("show");
-	
 
-	
+	$('#content').append(message_form_modal);
+	$('#twitter_messageModal').modal("show");
+
 	$('#send_request').click( function(e) {
 		e.preventDefault();
 	    
-		if(!isValidForm($("#messageForm"))){
+		if(!isValidForm($("#twitter_messageForm"))){
 	    	return;
 	    }
 		
-		$.post( "/core/api/widgets/message/" + plugin_id + "/" + twitter_id ,$('#messageForm').serialize(), function (data) {
-			$('#messageModal').modal("hide");
-		});
+		$.post( "/core/api/widgets/message/" + plugin_id + "/" + twitter_id ,$('#twitter_messageForm').serialize(), function (data) {
+			$('#twitter_messageModal').modal("hide");
+		}).error(function(data) { 
+			$('#twitter_messageModal').remove();
+    		alert(data.responseText); 
+    	}); 
 	});
 }
 

@@ -192,7 +192,7 @@ public class LinkedInUtil
      * @return {@link SocialSearchResult}
      */
     public static SocialSearchResult getLinkedinProfileById(Widget widget,
-	    String linkedInId) throws Exception
+	    String linkedInId)
     {
 	final LinkedInApiClient client = factory.createLinkedInApiClient(
 		widget.getProperty("token"), widget.getProperty("secret"));
@@ -317,6 +317,8 @@ public class LinkedInUtil
     public static List<SocialUpdateStream> getNetworkUpdates(Widget widget,
 	    String linkedInId) throws Exception
     {
+	LinkedInApiClient client1 = factory.createLinkedInApiClient(
+		widget.getProperty("token"), widget.getProperty("secret"));
 	final NetworkUpdatesApiClient client = factory
 		.createNetworkUpdatesApiClient(widget.getProperty("token"),
 			widget.getProperty("secret"));
@@ -327,32 +329,52 @@ public class LinkedInUtil
 		NetworkUpdateType.SHARED_ITEM));
 
 	List<SocialUpdateStream> list = new ArrayList<SocialUpdateStream>();
-
 	for (Update update : network.getUpdates().getUpdateList())
 	{
 	    SocialUpdateStream stream = new SocialUpdateStream();
-	    stream.type = update.getUpdateType().name();
-	    if (update.getUpdateContent().getPerson().getCurrentShare() == null)
-		return list;
+	    JSONObject json = null;
 
-	    stream.id = update.getUpdateContent().getPerson().getCurrentShare()
-		    .getId();
-	    stream.created_time = update.getUpdateContent().getPerson()
-		    .getCurrentShare().getTimestamp() / 1000;
+	    if (update.getUpdateContent().getPerson().getCurrentShare() != null)
+	    {
+		stream.id = update.getUpdateContent().getPerson()
+			.getCurrentShare().getId();
+		stream.type = update.getUpdateType().name();
+		stream.created_time = update.getTimestamp() / 1000;
+		json = new JSONObject().put(
+			"comment",
+			update.getUpdateContent().getPerson().getCurrentShare()
+				.getComment()).put(
+			"current-share",
+			Util.toJSONString(update.getUpdateContent().getPerson()
+				.getCurrentShare()));
+		stream.message = json.toString();
+		list.add(stream);
+	    }
+	    else if (update.getUpdateContent().getPerson().getConnections() != null)
+	    {
+		for (Person person : update.getUpdateContent().getPerson()
+			.getConnections().getPersonList())
+		{
+		    stream.id = person.getId();
+		    stream.type = update.getUpdateType().name();
+		    stream.created_time = update.getTimestamp() / 1000;
 
-	    System.out.println(stream.id);
-	    System.out.println(update.getUpdateContent().getPerson()
-		    .getCurrentShare().getComment());
-
-	    JSONObject json = new JSONObject().put(
-		    "comment",
-		    update.getUpdateContent().getPerson().getCurrentShare()
-			    .getComment()).put(
-		    "current-share",
-		    Util.toJSONString(update.getUpdateContent().getPerson()
-			    .getCurrentShare()));
-	    stream.message = json.toString();
-	    list.add(stream);
+		    try
+		    {
+			Person p = client1.getProfileById(stream.id, EnumSet
+				.of(ProfileField.PUBLIC_PROFILE_URL,
+					ProfileField.LAST_NAME,
+					ProfileField.FIRST_NAME));
+			json = new JSONObject(p);
+		    }
+		    catch (Exception e)
+		    {
+			continue;
+		    }
+		    stream.message = json.toString();
+		    list.add(stream);
+		}
+	    }
 	}
 	return list;
     }
@@ -378,6 +400,7 @@ public class LinkedInUtil
 		.createNetworkUpdatesApiClient(widget.getProperty("token"),
 			widget.getProperty("secret"));
 
+	text = "";
 	client.reShare(shareId, text, VisibilityType.ANYONE);
 	return "Shared Successfully";
     }

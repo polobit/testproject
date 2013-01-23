@@ -1,6 +1,6 @@
 <script id="linkedin-profile-template" type="text/html">
 	<div style="display:inline;  line-height:12px; margin-bottom: 1px;">
-	    <div class="row-fluid well" style="padding:0px;border-bottom: 1px solid #dedede;margin-bottom: 10px;background-color: white;">
+	    <div class="row-fluid well" style="padding:0px;margin-bottom: 10px;background-color: white;">
 	        <div class="span3" style=" margin-right:3%">
 	            <img src="{{picture}}" style=" display:inline; float:left; margin-right:2px; margin-top:5px; padding:0px 5px;cursor:pointer; color: #FF00FF" />
 	        </div>
@@ -9,10 +9,10 @@
 	                <h4 ><a href="{{url}}" target="_blank" >{{name}}</a></h4> 
 					<span class="badge badge-info" style="background-color: #CDE1FF;color:#3f5fa3">{{distance}}</span>
 					<span class="icon-arrow-right" style="color:green"></span>YOU
-					<a class="icon-trash pull-right" id="linkedin_plugin_delete" style="cursor:pointer;color:#772953"></a>
+					<a class="icon-trash pull-right" id="linkedin_plugin_delete" rel="tooltip" title="Delete this person" style="cursor:pointer;color:#772953"></a>
 	            </div>
-				<div style="padding-bottom:7px;">
-	            	<span style="font-size:10px;">{{summary}}, {{location}}, {{num_connections}}Connections </span>
+				<div style="padding-bottom:7px;font-size:10px;">
+	            	{{summary}}, {{location}}, {{num_connections}} Connections
 				</div>
 				<div style="padding-bottom:7px;">
 	        	{{#if is_connected}}
@@ -27,29 +27,38 @@
 			<div class="row-fluid well" style="padding:0px;margin-bottom:0px;background-color:#ffffff;">				
 				<div style="background-color:#f5f5f5;text-align: center;">
 					<h5 style="color: #999999;">CURRENT ACTIVITY</h5>
-				</div>					
-				<div style="padding:7px 0px 7px 0px;">
-	           		<span>{{current_update}}<br /></span>
-				</div>						
+				</div>	
+				<div style="padding:7px 0px 10px 0px;">	
+					{{#is_link current_update}}
+	           			{{name}} shared a <a href="{{current_update}}" target="_blank" >link</a>
+					{{else}}
+						<span>{{current_update}}</span>
+					{{/is_link}}
+				</div>
 	    	</div>
 		{{/if}}
 		<div id="linkedin_social_stream" class="collapse in">				
 		</div>
 		<div style="padding:0px;margin-top:15px">
-			<a href="#more" class="linkedin_stream" id="linkedin_stream">More..</a>
-			<a href="#more" data-toggle="collapse" data-target="#linkedin_social_stream" id="linkedin_less" style="display:none">Less..</a>
+			<a href="#more" class="linkedin_stream" id="linkedin_stream" rel="tooltip" title="Click to see updates">See More..</a>
+			<a href="#more" data-toggle="collapse" data-target="#linkedin_social_stream" id="linkedin_less" style="display:none">See Less..</a>
 			<a href="#refresh" id="linkedin_refresh_stream" class="linkedin_stream icon-refresh pull-right" rel="tooltip" title="Refresh to get current updates" style="display:none"></a>
-		</div>
+		</div>	
 	</div>
 </script>
 
 <script id="linkedin-update-stream-template" type="text/html">
 {{#if this.length}}
-<div class="row-fluid well" style="padding:0px;margin-bottom:0px; background-color:#ffffff;">
-	<table class="table-striped" style="border:#f5f5f5">
+<div class="well" style="padding:0px;margin-bottom:0px; background-color:#ffffff;">
+	{{#unless current_update}}
+		<div style="text-align: center;">
+			<h5 style="color: #999999;">CURRENT UPDATES</h5>
+		</div>
+	{{/unless}}
+	<table class="table-striped"  style="border: 1px solid #f5f5f5; margin-top:-1px;">
 		<tbody>
 			{{#each this}}
-				<tr style="border-bottom: 1px solid #dedede;">				
+				<tr style="border-bottom: 1px solid #f5f5f5;">				
 					<td style="padding:7px 0px 7px 0px;">
 						{{#stringToJSON this "message"}} {{/stringToJSON}}
 						{{#if_equals type "SHARED_ITEM"}}
@@ -90,25 +99,43 @@
 
 <script id="linkedin-message-template" type="text/html">
 	<!-- New (Note) Modal views -->
-	<div class="modal hide fade message-modal" id="messageModal" style="width:400px; left:55%">
+	<div class="modal hide fade message-modal" id="linkedin_messageModal" style="width:400px; left:55%">
 	    <div class="modal-header">
 	        <button class="close" data-dismiss="modal">x</button>
-	        <h3><i class="icon-plus-sign"></i> {{headline}}</h3>
+			{{#if_equals headline "Send Message"}}
+	        	<h3><i class="icon-envelope"></i> {{headline}}</h3>
+			{{else}}
+				<h3><i class="icon-plus-sign"></i> {{headline}}</h3>
+			{{/if_equals}}
 	    </div>
 	    <div class="modal-body agile-modal-body">
-	        <form id="messageForm" name="messageForm" method="post">
+	        <form id="linkedin_messageForm" name="linkedin_messageForm" method="post">
 	            <fieldset>
+					<div style="margin-bottom:10px;">{{info}}</div>
 	                <input name="linkedin_id" type="hidden" value="" />
-	                <div class="control-group">
-	                    <label class="control-label"><b>Subject: </b><span class="field_req">*</span></label>
+	                <div class="control-group">	                    
 	                    <div class="controls">
-	                        <input type="text" placeholder="About" name="subject" id="subject" class="required span4" />
+							{{#if_equals headline "Send Message"}}
+								<label class="control-label"><b>Subject: </b><span class="field_req">*</span></label>	                        
+								<input type="text" placeholder="About" name="subject" id="subject" class="required span4" />
+							{{else}}
+								<select name="subject" class="required span4" >
+									<option value="Indicated you as friend">Friend</option>
+									<option value="Indicated you as colleague">Colleague</option>
+									<option value="Indicated you as classmate">Classmate</option>
+									<option value="Indicated you as other">Other</option>
+								</select>
+							{{/if_equals}}
 	                    </div>
 	                </div>
 	                <div class="control-group">
 	                    <label class="control-label"><b>Message: </b><span class="field_req">*</span></label>
 	                    <div class="controls">
-	                        <textarea rows="4" class="required span4" placeholder="Detailed Message" name="message" id="message" style="max-width:500px;"></textarea> 
+							{{#if_equals headline "Connect"}}
+	                        	<textarea rows="4" class="required span4" placeholder="Detailed Message" name="message" id="message" style="max-width:500px;">{{description}}</textarea> 
+							{{else}}
+	                        	<textarea rows="4" class="required span4" placeholder="Detailed Message" name="message" id="message" style="max-width:500px;"></textarea>
+							{{/if_equals}} 
 	                    </div>
 	                </div>
 	            </fieldset>

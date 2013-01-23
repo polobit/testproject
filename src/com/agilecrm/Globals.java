@@ -36,8 +36,8 @@ public class Globals
     public static final String LINKED_IN_SECRET_KEY = "BPN9L6QQvWwum7kn";
 
     // TWITTER
-    public static final String TWITTER_API_KEY = "fhaEpuOQOJYMfDnxHFf7PQ";
-    public static final String TWITTER_SECRET_KEY = "AUoq9TJHwKRIdngQa39RBskYBzn6aZNkERqj5z753k";
+    public static final String TWITTER_API_KEY = "BuHxUT4CouZKfLiX9bqDDw";
+    public static final String TWITTER_SECRET_KEY = "LJn5yqFu2hdzVgOpNJE7emKEOm4n6GZzdySFPq7A";
 
     // Payment gateways
     public static final String STRIPE = "Stripe";

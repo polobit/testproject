@@ -8,6 +8,8 @@ $(function () {
     // Plugin name as a global variable
     LINKEDIN_PLUGIN_NAME = "Linkedin";
     LINKEDIN_PLUGIN_HEADER = '<div></div>';
+    
+    Linkedin_current_profile_user_name = "";
     // Gets plugin id from plugin object, fetched using script API
     var plugin_id = agile_crm_get_plugin(LINKEDIN_PLUGIN_NAME).id;
     // Gets Plugin Prefs, required to check whether to show setup button or matching profiles
@@ -38,13 +40,13 @@ $(function () {
     
     $('#linkedin_message').die().live('click', function (e) {
     	e.preventDefault();
-    	sendMessage(plugin_id, linkedin_id);
+    	sendLinkedInMessage(plugin_id, linkedin_id);
     });
     
     $('#linkedin_connect').die().live('click', function(e)
     {
     	e.preventDefault();
-    	sendAddRequest(plugin_id, linkedin_id);
+    	sendLinkedInAddRequest(plugin_id, linkedin_id);
     });
     
     $('.linkedin_share').die().live('click', function(e)
@@ -54,11 +56,7 @@ $(function () {
     	reSharePost(plugin_id, share_id,"optional");
     });
     
-//    $('#linkedin_social_stream').on('hidden', function () {
-//    	console.log("hidden");
-//    	  // do something…
-//    	})  
-    
+
 });
 /**
  * Shows setup if user adds linkedIn widget for the first time, to set up
@@ -182,7 +180,7 @@ function showLinkedinMatchingProfiles(plugin_id) {
  * @param plugin_id	  : plugin_id to get prefs to connect to Linkedin
  */
 function showLinkedinProfile(linkedin_id, plugin_id) {
-	var profile_name;
+	
     // Shows loading, until profile is fetched
     $('#Linkedin').html(
     LINKEDIN_PLUGIN_HEADER + '<img src=\"img/1-0.gif\"></img>');
@@ -191,7 +189,8 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
 
     function (data) {
     	
-    	profile_name = data.name;
+    	Linkedin_current_profile_user_name = data.name;
+    	
         // If picture is not availabe to user then show default picture
         if (data.picture == null) {
             data.picture = 'https://contactuswidget.appspot.com/images/pic.png';
@@ -205,14 +204,15 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
     
     	$("#linkedin_social_stream").html(LOADING_HTML);
     	$.getJSON("/core/api/widgets/updates/" + plugin_id + "/" + linkedin_id, function(data){
-    		
-    		 data["profile_name"] = profile_name;
-    		
+    		    		
     		 $("#linkedin_social_stream").html(getTemplate("linkedin-update-stream", data));
     		 $("#linkedin_stream").remove();
     		 $('#linkedin_less').show();
     		 $('#linkedin_refresh_stream').show();
     	}).error(function(data) { 
+    		
+    		$("#linkedin_social_stream").remove();
+   		
     		alert(data.responseText); 
     	}); 
     });
@@ -220,16 +220,19 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
    $('#linkedin_less').die().live('click', function (e) {
     	e.preventDefault();
     	var data = $(this).text();
-    	if(data == "Less.."){
-    		$(this).text("More..");
-    		$('#linkedin_refresh_stream').hide();
-    	}
-    	else
-    	{
-    		$(this).text("Less..");
+    	
+    	if($(this).attr("less") == "true"){
+    		$(this).attr("less","false");
+    		$(this).text("See Less..");
     		$('#linkedin_refresh_stream').show();
+    		return;
     	}
+    	
+    	$(this).attr("less","true");
+    	$(this).text("See More..");
+    	$('#linkedin_refresh_stream').hide();
     });
+   
    
     
 }
@@ -271,51 +274,61 @@ function getLinkedinMatchingProlfiles(plugin_id, callback) {
     }
 }
 
-function sendAddRequest(plugin_id, linkedin_id) {
+function sendLinkedInAddRequest(plugin_id, linkedin_id) {
+	
 	var json = {};
 	json["headline"] = "Connect";
+	json["info"] = "Sends a connect request to "+ Linkedin_current_profile_user_name +" on Linkedin from your Linkedin account associated with Agile CRM";
+	json["description"] = "I'd like to add you to my professional network on LinkedIn.";
+	
+	$('#linkedin_messageModal').remove();
     var message_form_modal = getTemplate("linkedin-message", json);
-	console.log("show modal");
+	
 	$('#content').append(message_form_modal);
-	$('#messageModal').modal("show");
+	$('#linkedin_messageModal').modal("show");
 	
 
 	$('#send_request').click( function(e) {
 		e.preventDefault();
 		
-	    if(!isValidForm($("#messageForm"))){
+	    if(!isValidForm($("#linkedin_messageForm"))){
 	    }
 	    
-	    $.post( "/core/api/widgets/connect/" + plugin_id + "/" + linkedin_id , $('#messageForm').serialize(), function(data) {
-	    	$('#messageModal').modal("hide");
-	       });
+	    $.post( "/core/api/widgets/connect/" + plugin_id + "/" + linkedin_id , $('#linkedin_messageForm').serialize(), function(data) {
+	    	$('#linkedin_messageModal').modal("hide");
+	       }).error(function(data) { 
+	    	$('#linkedin_messageModal').remove();
+       		alert(data.responseText); 
+       	}); 
 	});
 }
 
-function sendMessage(plugin_id, linkedin_id) {
-	
+function sendLinkedInMessage(plugin_id, linkedin_id) {
+	console.log("linked");
 	var json = {};
 	json["headline"] = "Send Message";
-	  var message_form_modal = getTemplate("linkedin-message", json);
-		console.log("show modal");
-		
-		$("#messageModal").remove();
-		
-		$('#content').append(message_form_modal);
-		$('#messageModal').modal("show");
-		
+	json["info"] = "Sends a message to " + Linkedin_current_profile_user_name +
+			" on Linkedin from your Linkedin account associated with Agile CRM";
+	
+	$('#linkedin_messageModal').remove();
+	var message_form_modal = getTemplate("linkedin-message", json);
 
+		$('#content').append(message_form_modal);
+		$('#linkedin_messageModal').modal("show");
 		
 		$('#send_request').click( function(e) {
 			e.preventDefault();
 		    
-			if(!isValidForm($("#messageForm"))){
+			if(!isValidForm($("#linkedin_messageForm"))){
 		    	return;
 		    }
 		    
-			$.post( "/core/api/widgets/message/" + plugin_id + "/" + linkedin_id , $('#messageForm').serialize(), function(data) {
-				$('#messageModal').modal("hide");
-       		});
+			$.post( "/core/api/widgets/message/" + plugin_id + "/" + linkedin_id , $('#linkedin_messageForm').serialize(), function(data) {
+				$('#linkedin_messageModal').modal("hide");
+       		}).error(function(data) { 
+       			$('#linkedin_messageModal').remove();
+        		alert(data.responseText); 
+        	}); 
 		});
 
 }
@@ -326,8 +339,3 @@ function reSharePost(plugin_id, share_id, message) {
     });
 }
 
-function getNetworkUpdates(plugin_id, linkedin_id) {
-    $.get("/core/api/widgets/updates/" + plugin_id + "/" + linkedin_id, function (data) {
-        console.log(data);
-    });
-}

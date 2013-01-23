@@ -109,9 +109,9 @@ public class TwitterUtil
 	    result.location = user.getLocation();
 	    result.summary = user.getDescription();
 	    result.num_connections = user.getFollowersCount() + "";
-	    result.friends = user.getFriendsCount() + "";
-	    result.current_update = user.getStatusesCount() + "";
-	    result.url = user.getURL() + "";
+	    result.tweet_count = user.getStatusesCount() + "";
+	    result.friends_count = user.getFriendsCount() + "";
+	    result.url = "https://twitter.com/" + user.getScreenName();
 
 	    // Adds each result in to list
 	    searchResults.add(result);
@@ -154,16 +154,17 @@ public class TwitterUtil
 	result.location = user.getLocation();
 	result.summary = user.getDescription();
 	result.num_connections = user.getFollowersCount() + "";
-	result.friends = user.getFriendsCount() + "";
-	result.current_update = user.getStatusesCount() + "";
-	result.url = user.getURL() + "";
+
+	result.tweet_count = user.getStatusesCount() + "";
+	result.friends_count = user.getFriendsCount() + "";
+	result.current_update = (user.getStatus() != null) ? user.getStatus()
+		.getText() : null;
+	result.url = "https://twitter.com/" + user.getScreenName();
 	result.is_connected = twitter.showFriendship(twitter.getId(),
 		user.getId()).isSourceFollowingTarget();
 	result.is_followed_by_target = twitter.showFriendship(twitter.getId(),
 		user.getId()).isSourceFollowedByTarget();
 
-	result.updateStream = getNetworkUpdates(widget,
-		Long.parseLong(twitterId));
 	return result;
     }
 
@@ -239,7 +240,7 @@ public class TwitterUtil
     {
 	Twitter twitter = getTwitter(widget);
 	User user = twitter.createFriendship(twitterId);
-	return (user != null) ? "Followed successfully" : "Unsuccessfull";
+	return (user != null) ? "Followed request sent" : "Unsuccessfull";
     }
 
     /**
@@ -293,7 +294,8 @@ public class TwitterUtil
 	    SocialUpdateStream stream = new SocialUpdateStream();
 	    stream.id = String.valueOf(tweet.getId());
 	    stream.message = tweet.getText();
-	    stream.created_time = tweet.getCreatedAt().getTime();
+
+	    stream.created_time = tweet.getCreatedAt().getTime() / 1000;
 	    updateStream.add(stream);
 	}
 	return updateStream;
