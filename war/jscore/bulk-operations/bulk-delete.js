@@ -104,7 +104,20 @@ function bulk_delete_operation(url, id_array, index_array, table, data_array){
 			// Tags re-fetching
 			if(App_Contacts.contactsListView){
 				setup_tags(App_Contacts.contactsListView.el);
-			}	
+			}
+			
+			// Removes the entities from timeline, if they are deleted from contact detail view
+			if(App_Contacts.contactDetailView && Current_Route == "contact/"
+				+ App_Contacts.contactDetailView.model.get('id')){
+				
+				// Activates "Timeline" tab and its tab content in contact detail view 
+				activate_timeline_tab();
+				
+				$.each(data_array, function(index, data){
+					var $removeItem = $( '#' + data.id );
+					$('#timeline').isotope('remove', $removeItem);
+				});
+			}
 		}
 	});
 }
