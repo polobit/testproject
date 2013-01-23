@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.util.WorkflowUtil;
 
 /**
  * <code>WorkflowsAPI</code> includes REST calls to interact with
@@ -53,9 +54,10 @@ public class WorkflowsAPI
     {
 	if (count != null)
 	{
-	    return Workflow.getAllWorkflows(Integer.parseInt(count), cursor);
+	    return WorkflowUtil
+		    .getAllWorkflows(Integer.parseInt(count), cursor);
 	}
-	return Workflow.getAllWorkflows();
+	return WorkflowUtil.getAllWorkflows();
     }
 
     /**
@@ -101,7 +103,7 @@ public class WorkflowsAPI
     @DELETE
     public void deleteWorkflow(@PathParam("id") Long id)
     {
-	Workflow workflow = Workflow.getWorkflow(id);
+	Workflow workflow = WorkflowUtil.getWorkflow(id);
 
 	if (workflow != null)
 	    workflow.delete();

@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -129,7 +130,7 @@ public class Trigger
 	if (campaign_id == null)
 	    return " ";
 
-	Workflow workflow = Workflow.getWorkflow(campaign_id);
+	Workflow workflow = WorkflowUtil.getWorkflow(campaign_id);
 
 	if (workflow != null)
 	    return workflow.name;
