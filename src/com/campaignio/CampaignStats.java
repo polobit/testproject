@@ -33,17 +33,17 @@ public class CampaignStats
     /**
      * Emails sent count
      */
-    public int emailsSent = 0;
+    public int emailsSent;
 
     /**
      * Emails clicked count
      */
-    public int emailsClicked = 0;
+    public int emailsClicked;
 
     /**
      * Emails opened count
      */
-    public int emailsOpened = 0;
+    public int emailsOpened;
 
     /**
      * Campaign Stats Dao

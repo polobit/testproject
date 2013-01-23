@@ -1,6 +1,10 @@
 package com.campaignio.util;
 
+import java.util.List;
+
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.CampaignStats;
 
 /**
@@ -20,6 +24,16 @@ public class CampaignStatsUtil
 	    CampaignStats.class);
 
     /**
+     * Returns list of all CampaignStats
+     * 
+     * @return CampaignStats List
+     */
+    public static List<CampaignStats> getAllCampaignStats()
+    {
+	return dao.fetchAll();
+    }
+
+    /**
      * Returns CampaignStats based on campaign-id. If campaign-id is null, then
      * it returns default CampaignStats.
      * 
@@ -29,6 +43,12 @@ public class CampaignStatsUtil
      */
     public static CampaignStats getCampaignStatsByCampaignId(Long campaignId)
     {
+	// Verify whether campaign exists
+	Workflow workflow = WorkflowUtil.getWorkflow(campaignId);
+
+	if (workflow == null)
+	    return null;
+
 	CampaignStats campaignStats = dao.getByProperty("campaignId",
 		campaignId);
 
@@ -62,6 +82,10 @@ public class CampaignStatsUtil
     {
 	CampaignStats campaignStats = getCampaignStatsByCampaignId(Long
 		.parseLong(campaignId));
+
+	if (campaignStats == null)
+	    return;
+
 	campaignStats.emailsClicked++;
 	campaignStats.save();
     }
@@ -76,6 +100,10 @@ public class CampaignStatsUtil
     {
 	CampaignStats campaignStats = getCampaignStatsByCampaignId(Long
 		.parseLong(campaignId));
+
+	if (campaignStats == null)
+	    return;
+
 	campaignStats.emailsSent++;
 	campaignStats.save();
     }
