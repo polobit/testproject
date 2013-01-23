@@ -351,7 +351,7 @@ function create_month_marker(month_years, is_insert){
 
 /**
  * Loads minified jquery.isotope plug-in and jquery.event.resize plug-in to 
- * to initialize the isotope and appends the given models to the timeline, by 
+ * initialize the isotope and appends the given models to the timeline, by 
  * loading their corresponding templates using handlebars
  * 
  * @method setup_timeline 

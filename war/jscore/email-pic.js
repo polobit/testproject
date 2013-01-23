@@ -3,6 +3,10 @@ $(function(){
 		$('#email').live('focusout', function (e) {
 			e.preventDefault();
 			var val = $("#email").val();
+			if(val.length == 0){
+				$('#pic').css("display", "none");
+				return;
+			}
 			var pic = getPicByEmail(val, 45);
 			if(pic != undefined && pic != null)
 			{
@@ -18,8 +22,6 @@ $(function(){
 function getPicByEmail(email, width)
 {
 	if (email) {
-		console.log(email);
-
 		return 'https://secure.gravatar.com/avatar/' + MD5(email)
 				+ '.jpg?s=' + width+'&d=404';
 	}	
