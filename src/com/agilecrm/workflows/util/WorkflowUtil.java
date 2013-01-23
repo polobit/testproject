@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.workflows.Workflow;
 import com.campaignio.tasklets.deferred.TaskletWorkflowDeferredTask;
 import com.campaignio.tasklets.util.TaskletUtil;
@@ -31,6 +32,58 @@ import com.google.appengine.api.taskqueue.TaskOptions;
  */
 public class WorkflowUtil
 {
+    /**
+     * Initialize DataAccessObject.
+     */
+    private static ObjectifyGenericDao<Workflow> dao = new ObjectifyGenericDao<Workflow>(
+	    Workflow.class);
+
+    /**
+     * Locates workflow based on id.
+     * 
+     * @param id
+     *            Workflow id.
+     * @return workflow object with that id if exists, otherwise null.
+     */
+    public static Workflow getWorkflow(Long id)
+    {
+	try
+	{
+	    return dao.get(id);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Returns all workflows as a collection list.
+     * 
+     * @return list of all workflows.
+     */
+    public static List<Workflow> getAllWorkflows()
+    {
+	return dao.fetchAll();
+    }
+
+    /**
+     * Returns list of workflows based on page size.
+     * 
+     * @param max
+     *            Maximum number of workflows list based on page size query
+     *            param.
+     * @param cursor
+     *            Cursor string that points the list that exceeds page_size.
+     * @return Returns list of workflows with respective to page size and
+     *         cursor.
+     */
+    public static List<Workflow> getAllWorkflows(int max, String cursor)
+    {
+	return dao.fetchAll(max, cursor);
+    }
+
     /**
      * Converts contact object into json object.
      * 
@@ -95,7 +148,7 @@ public class WorkflowUtil
 	try
 	{
 	    // Get Workflow JSON
-	    Workflow workflow = Workflow.getWorkflow(workflowId);
+	    Workflow workflow = getWorkflow(workflowId);
 	    if (workflow == null)
 		return null;
 
