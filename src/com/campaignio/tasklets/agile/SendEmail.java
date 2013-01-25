@@ -12,6 +12,7 @@ import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.campaignio.util.CampaignStatsUtil;
 import com.campaignio.util.URLShortenerUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.SendGridEmail;
 
 /**
@@ -173,6 +174,8 @@ public class SendEmail extends TaskletAdapter
      * Unsubscribe link that is shortened
      */
     public static String UNSUBSCRIBE_LINK = "http://unscr.be/";
+
+    public static String TRACKING_IMAGE = "<div><img src=\"http://nrshmkl.appspot.com/open/namespace/campaign_id/subscriber_id\" nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
 
     /*
      * (non-Javadoc)
@@ -463,6 +466,8 @@ public class SendEmail extends TaskletAdapter
 	// Send Message
 	if (html != null && html.length() > 10)
 	{
+	    html = appendTrackingImage(html, campaignJSON, subscriberJSON);
+
 	    // Util.sendEmailUsingMailgun(fromEmail, fromName, to, subject,
 	    // replyTo, html, text, subscriberJSON, campaignJSON);
 	    SendGridEmail.sendMail(fromEmail, fromName, to, subject, replyTo,
@@ -550,5 +555,34 @@ public class SendEmail extends TaskletAdapter
 	    System.out.println("Replaced " + input + " with " + replacedString);
 
 	return replacedString.trim();
+    }
+
+    /**
+     * Appends tracking image for html body
+     * 
+     * @param html
+     *            - html body.
+     * @param campaignJSON
+     *            - CampaignJSON.
+     * @param subsciberJSON
+     *            - SubscriberJSON.
+     * @return html string with appended image.
+     **/
+    public String appendTrackingImage(String html, JSONObject campaignJSON,
+	    JSONObject subsciberJSON)
+    {
+	String namespace = NamespaceManager.get();
+	String campaign_id = DBUtil.getId(campaignJSON);
+	String subscriber_id = DBUtil.getId(subsciberJSON);
+
+	String trackingImage = "<div><img src=\"http://localhost:8888/open?namespace="
+		+ namespace
+		+ "&campaign_id="
+		+ campaign_id
+		+ "&subscriber_id="
+		+ subscriber_id
+		+ "\" nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
+
+	return html + trackingImage;
     }
 }

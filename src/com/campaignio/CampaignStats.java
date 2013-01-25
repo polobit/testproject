@@ -46,6 +46,11 @@ public class CampaignStats
     public int emailsOpened;
 
     /**
+     * Namespace
+     */
+    public String namespace;
+
+    /**
      * Campaign Stats Dao
      */
     private static ObjectifyGenericDao<CampaignStats> dao = new ObjectifyGenericDao<CampaignStats>(
@@ -85,6 +90,8 @@ public class CampaignStats
      */
     public void save()
     {
+	namespace = NamespaceManager.get();
+
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set("");
 	try

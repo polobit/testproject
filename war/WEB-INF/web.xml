@@ -246,4 +246,13 @@
  <servlet-name>TaskQueueServlet</servlet-name>
  <url-pattern>/worker</url-pattern>
  </servlet-mapping>
+ 
+ <servlet><servlet-name>EmailOpenServlet</servlet-name>
+ <servlet-class>com.agilecrm.EmailOpenServlet</servlet-class>
+ </servlet>
+ <servlet-mapping>
+ <servlet-name>EmailOpenServlet</servlet-name>
+ <url-pattern>/open/*</url-pattern>
+ </servlet-mapping>
+ 
 </web-app>
