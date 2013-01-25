@@ -3,9 +3,10 @@
 <link rel="stylesheet" type="text/css" href="https://googleapps.agilecrm.com/css/bootstrap-red.min.css" />
   <style>
 		.error{color:red;}
+		.field_req {color: red;}
 		body{font-size:12px;}
 		h1{font-size:20px;line-height:25px;}
-		input{height:28px;}
+		input{height:28px !important;}
     </style>
 </head>
 <body>
@@ -16,7 +17,7 @@
    </div>
    
  <script src='https://googleapps.agilecrm.com/lib/headjs-min.js'></script>
- <script src='http://localhost:8888/misc/gmail/gadget.js'></script>
+ <script src='http://localhost/misc/gmail/gadget.js'></script>
    
    <script type="text/javascript">
 		init_agile_gadget();   
@@ -25,7 +26,7 @@
 	<script id="gadget-template" type="text/html">
 {{#if id}}
 <div class="span9 well gadget_contact_details_tab" >
-  <div class="row gadget_contact" style='margin-bottom: 5px;'> 
+  <div class="row gadget_contact" style='margin-bottom: 5px'> 
     <div class="span1">
 	   <div style='display:inline;padding-right:10px;height:auto;'>
     		<img  class='thumbnail' src="{{gravatarurl properties 50}}" width="50" height="50" style='display:inline'/>
@@ -34,7 +35,7 @@
     <div class="span3" style='height:auto;display:inline-block;vertical-align:-23px;'>
 		<b>
 			<h1>{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</h1>
-		</b></br>
+		</b>
 		{{#if_propertyName "email"}}
 			{{value}}</br>
 		{{/if_propertyName}}
@@ -51,9 +52,9 @@
      	
     <div class="span2">
 		<ul style='list-style:none;color:blue;'>
-      		<li><a class="gadget-add-note" href="#">Add Note</a></li>
-      		<li><a class="gadget-add-task" href="#">Add Task</a></li>
-      		<li><a class="gadget-add-deal" href="#">Add Deal</a></li>
+      		<li><a class="gadget-add-note" href="#"><i class="icon-plus-sign"></i> Add Note</a></li>
+      		<li><a class="gadget-add-task" href="#"><i class="icon-plus-sign"></i> Add Task</a></li>
+      		<li><a class="gadget-add-deal" href="#"><i class="icon-plus-sign"></i> Add Deal</a></li>
     	</ul>
     </div>
    </div>
@@ -62,8 +63,8 @@
 
         <div class="gadget-note" style="display:none;">
 			<form class='gadget_note_form' name="gadget_note_form" method="post">
-				<fieldset>
-                    <legend><b>Add Note</b></legend>
+				<fieldset style="margin-top:10px">
+                    <legend><i class="icon-plus-sign"></i> Add Note</legend>
                     <input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
 					<div class="control-group">
                     	<label class="control-label"><b>Subject: </b><span class="field_req">*</span></label>
@@ -72,13 +73,13 @@
 						</div>
 					</div>
 					<div class="control-group">
-                    	<label class="control-label"><b>Description:</b><span class="field_req">*</span></label>
+                    	<label class="control-label"><b>Description:</b> <span class="field_req">*</span></label>
 						<div class="controls">
 							<textarea rows="3" placeholder="Detailed Note" name="description" id="description" class="required"></textarea> 
 						</div>
 					</div>
                     
-                   <div>
+                   <div class="form-actions" style="padding-left:0px">
                      <a type="submit" class="btn btn-primary gadget-note-validate">Add Note</a>
 		             <a class="cancel btn">Cancel</a>
                      <span class="status" style="display:none;"><i>Successfully Saved</i></span> 
@@ -89,8 +90,8 @@
 
   	   <div class="gadget-task" style="display:none;">
            	<form class='gadget_task_form' name="gadget_task_form" method="post">
-					<fieldset>
-                       <legend><b>Add Task</b></legend>
+					<fieldset style="margin-top:10px">
+                       <legend><i class="icon-plus-sign"></i> Add Task</legend>
                        <input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
 						<div class="row">
 							<div id="addTask" class="span3 control-group">
@@ -135,7 +136,7 @@
 								</div>
 							</div>
 						</div> 
-                        <div>
+                        <div class="form-actions" style="padding-left:0px">
                           <a type="submit" class="btn btn-primary gadget-task-validate">Add Task</a>
 				          <a class="cancel btn">Cancel</a>
                           <span class="status" style="display:none;"><i>Successfully Saved</i></span>
@@ -146,8 +147,8 @@
 
   	   	<div class="gadget-deal" style="display:none;">
 			  <form class="gadget_deal_form" name="gadget_deal_form" method="post">
-		  		<fieldset>
-                    <legend><b>Add Deal</b></legend>
+		  		<fieldset style="margin-top:10px">
+                    <legend><i class="icon-plus-sign"></i> Add Deal</legend>
                     <input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
 					<div class="control-group">			
 						<label class="control-label"><b>Name: </b> <span class="field_req">*</span></label>
@@ -166,7 +167,7 @@
 						<label class="control-label"><b>Milestone: </b> <span class="field_req">*</span></label>
 						<div class="controls">
 							<select id="milestone" name="milestone" class="input-small required" 
-									Style="width:100px">
+									Style="width:90px">
 								<option value="">Select</option>
                                 <option value="Open">Open</option>
 								<option value="Won">Won</option>
@@ -186,11 +187,11 @@
 					  <div class=" span2 control-group">
 						<label class="control-label"><b>Close Date: </b> <span class="field_req">*</span></label>
 						<div class="controls">
-							<input id="close_date" type="text" name="close_date" class="input required" placeholder="MM/DD/YY"/>				
+							<input id="close_date" type="text" name="close_date" class="input-small required" placeholder="MM/DD/YY"/>				
 						</div>
 					</div>
                     </div>
-                    <div>
+                    <div class="form-actions" style="padding-left:0px">
                         <a type="submit" class="btn btn-primary gadget-deal-validate">Add Deal</a> 
 			            <a class="cancel btn" >Cancel</a>
                         <span class="status" style="display:none;"><i>Successfully Saved</i></span>
@@ -211,7 +212,7 @@
         <div class="gadget-contact" style="display:none;">
 			<form class='gadget_contact_form' name="gadget_contact_form" method="post">
 			  <fieldset>
-                <legend><b>Add Contact To Agile CRM</b></legend>
+                <legend><i class="icon-plus-sign"></i> Add Contact To Agile CRM</legend>
 				<div class="control-group" style="margin-top:0px;">
                  		 <label class="control-label"><b>Name:</b> <span class="field_req">*</span></label>
 				  <div class="row">
@@ -252,7 +253,7 @@
 					</div>
 				  </div>
                 </div>
-                <div>
+                <div class="form-actions" style="padding-left:0px">
                   <a type="submit" class="btn btn-primary gadget-contact-validate">Add Contact</a>
                   <a class="cancel btn">Cancel</a>
                   <span class="status" style="display:none;"><i>Successfully Saved</i></span>
