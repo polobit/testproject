@@ -204,11 +204,11 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
     
     	$("#linkedin_social_stream").html(LOADING_HTML);
     	$.getJSON("/core/api/widgets/updates/" + plugin_id + "/" + linkedin_id, function(data){
-    		    		if(data.length == 0)
-    		    			{
-    		    				$("#linkedin_social_stream").html("No stream available");
-    		    				return;
-    		    			}
+    		if(data.length == 0)
+			{    		    
+				$("#linkedin_social_stream").html('<div style="padding:10px 0px 10px 0px;word-wrap: break-word;border: 1px solid #f5f5f5;";>No updates available</div>');
+				return;
+			}
     		 $("#linkedin_social_stream").html(getTemplate("linkedin-update-stream", data));
     		 $("#linkedin_stream").remove();
     		 $('#linkedin_less').show();

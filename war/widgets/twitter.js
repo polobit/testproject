@@ -186,10 +186,15 @@ function showTwitterProfile(twitter_id, plugin_id) {
     
     $('.twitter_stream').die().live('click', function (e) {
     	e.preventDefault();
-    alert("twitter");
     	$("#twitter_social_stream").html(LOADING_HTML);
     	$.getJSON("/core/api/widgets/updates/" + plugin_id + "/" + twitter_id, function(data){
     		    		console.log(data);
+    		    		console.log(data.length);
+    		    		if(data.length == 0)
+		    			{    		    
+		    				$("#twitter_social_stream").html('<div style="padding:10px 0px 10px 0px;word-wrap: break-word;border: 1px solid #f5f5f5;";>No updates available</div>');
+		    				return;
+		    			}
     		 $("#twitter_social_stream").html(getTemplate("twitter-update-stream", data));
     		 $("#twitter_stream").remove();
     		 $('#twitter_less').show();
