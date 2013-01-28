@@ -1,16 +1,10 @@
 <script id="reports-add-template" type="text/html">
 <div class="span12">
 	<div class="well">
-		<form id="filterContactForm" class="form-horizontal">
+		<form id="reportsForm" class="form-horizontal">
 			<div name="rules" class="formsection chainedSelect">
 				<legend class="formheading">
-					<span> Filter Contacts <span
-						style="vertical-align: text-top; margin-left: -3px"> <img
-							border="0" src="/img/help.png"
-							style="height: 6px; vertical-align: text-top" rel="popover"
-							data-placement="bottom"
-							data-content="Use filters to sort contacts with a specific criteria to find patterns. You can save your preferred filters and also have daily, weekly or monthly reports sent to you based on the filter."
-							id="element" data-trigger="hover">
+					<span> Reports </span>
 					</span>
 					</span>
 				</legend>
@@ -36,11 +30,9 @@
 										<td>
 											<div id="LHS" name="LHS">
 												<select name="temp" id="LHS">
-													<option value="tags" selected="selected">Tagged
-														With</option>
+													<option value="tags" selected="selected">Tag</option>
 													<option value="first_name">First Name</option>
-													<option value="tags_time">Tagged With (Creation
-														Time Related)</option>
+													<option value="tags_time">Tag And Creating Time</option>
 													<option value="title">Job Title</option>
 													<option value="email">Email Address</option>
 													<option value="phone">Phone Number</option>
