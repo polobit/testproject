@@ -204,7 +204,11 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
     
     	$("#linkedin_social_stream").html(LOADING_HTML);
     	$.getJSON("/core/api/widgets/updates/" + plugin_id + "/" + linkedin_id, function(data){
-    		    		
+    		    		if(data.length == 0)
+    		    			{
+    		    				$("#linkedin_social_stream").html("No stream available");
+    		    				return;
+    		    			}
     		 $("#linkedin_social_stream").html(getTemplate("linkedin-update-stream", data));
     		 $("#linkedin_stream").remove();
     		 $('#linkedin_less').show();

@@ -154,9 +154,13 @@ public class WidgetUtil
 		" Rapleaf makes it incredibly easy for you to personalize content for your customers.",
 		"/widgets/rapleaf.js", "/img/plugins/rapleaf.jpeg",
 		"/widgets/rapleaf-logo-small.jpeg", null));
+	widgets.add(new Widget(
+		"Twilio",
+		" Stay connected to your users with Twilio phone numbers in 40 countries all over the globe.",
+		"/widgets/twilio.js", "/img/plugins/twilio.jpg",
+		"/img/plugins/twilio.jpg", null));
 
 	return widgets;
 
     }
-
 }
