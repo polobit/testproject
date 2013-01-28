@@ -136,8 +136,13 @@ $(function(){
 
 	        });
 
-	        console.log(models);
-	        
+//	        if(models.length > 1000)
+//	        	{
+//	        		$waiting.find('#status-message').html('Sorry, Cannot upload more than 1000 contacts');
+//	        		return;
+//	        	}
+//	        
+//	        
 	        
 	        // Shows Updating
 	        $waiting.find('#status-message').html('Uploading to server');
@@ -164,6 +169,10 @@ $(function(){
 
 	                //console.log(data);
 	            	//App_Contacts.contactsListView.collection.add(data.contact);
+	            },
+	            error: function(response)
+	            {
+	            	console.log(response.responseText);
 	            },
 	            dataType: 'json'
 	        });

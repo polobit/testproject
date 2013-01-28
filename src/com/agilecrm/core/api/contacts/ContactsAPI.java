@@ -155,6 +155,14 @@ public class ContactsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public List<Contact> createMultipleContact(List<Contact> contacts)
     {
+	if (contacts.size() > 1000)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Sorry, Cannot upload more than 1000 contacts.")
+		    .build());
+	}
+
 	for (Contact contact : contacts)
 	    contact.save();
 
