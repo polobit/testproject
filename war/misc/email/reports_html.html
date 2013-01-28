@@ -4,11 +4,13 @@
 			style="background-color: #8A6086; font-family: Arial, sans-serif; padding: 5px">
 			<div
 				style="min-height: 36px; font-size: 14px; font-weight: bold; padding-bottom: 4px">
-				<table style="display: inline; width: 100%">
+				<table style="width: 100%">
 					<tbody>
 						<tr>
 							<td valign="middle" height="32px"
-								style="padding: 0; color: white">{{email_subject}}</td>
+								style="padding: 0; color: white">{{report.name}}</td>
+							<td valign="right"  height="32px"
+								style="padding: 0; color: white; text-align:right">{{report.duration}} Report</td>
 						</tr>
 					</tbody>
 				</table>
@@ -16,32 +18,14 @@
 			<div
 				style="font-size: 14px; background-color: #fff; padding: 10px 7px 7px 7px">
 				<p>*****This is an automated email. Please do not reply*****</p>
-				<table width="100%" cellpadding="0" cellspacing="0" bgcolor="#F3F3F3" style="border-top:3px solid #cccccc;border-bottom:3px solid #cccccc;padding:10">
-					<tbody>
-						<tr>
-							<td valign="top" align="center">
-												<h2 style="font-size: 16px">Report Name: <strong>{{report.name}} ({{report.duration}} Report)</strong></h2>
-												<p style="font-size: 12px">
-													Account Holder Name: <strong>{{user_name}}</strong>
-												</p>
-												<p style="font-size: 12px">
-													Report Type: <strong>{{report.report_type}}</strong><br />
-													<br />
-												</p>
-								</table>
-							</td>
-						</tr>
-					</tbody>
-				</table>
+
 
 				<table width="100%" cellpadding="5" cellspacing="0" style:"margin-top:-40px">
 					<thead>
 						<tr bgcolor="#CCCCCC">
 							<th align="left" style="font-size: 12px"><strong>Name</strong></th>
 								<th align="left" style="font-size: 12px"><strong>Tags</strong></th>
-							<th align="left" style="font-size: 12px"><strong>Job
-									Title</strong></th>
-							<th align="left" style="font-size: 12px"><strong>Company</strong></th>
+							<th align="left" style="font-size: 12px"><strong>Work</strong></th>
 							<th align="left" style="font-size: 12px"><strong>Lead</strong></th>
 							
 								{{#custom_fields}}
@@ -76,9 +60,7 @@
 								<td align="left" valign="top"
 								style="border-bottom: 1px solid #f3f3f3; font-size: 12px"><strong>{{tags}}</strong></td>
 							<td valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">{{contact_properties.title}}</td>
-							<td  valign="top"
-								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">{{contact_properties.company}}</td>
+								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">{{contact_properties.title}} <br> <b>{{contact_properties.company}}</b></td>
 								<td  valign="top"
 								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">{{lead_score}}</td>
 							{{#custom}}
