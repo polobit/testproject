@@ -575,7 +575,7 @@ public class SendEmail extends TaskletAdapter
 	String campaign_id = DBUtil.getId(campaignJSON);
 	String subscriber_id = DBUtil.getId(subsciberJSON);
 
-	String trackingImage = "<div><img src=\"http://localhost:8888/open?namespace="
+	String trackingImage = "<div><img src=\"http://click.agilecrm.com/open?namespace="
 		+ namespace
 		+ "&campaign_id="
 		+ campaign_id

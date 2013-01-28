@@ -43,6 +43,6 @@ public class EmailOpenServlet extends HttpServlet
 
 	LogUtil.addLogFromID(campaignId, subscriberId, "Email Opened");
 
-	res.sendRedirect("/img/1-0.gif");
+	res.sendRedirect("/img/worker.gif");
     }
 }
