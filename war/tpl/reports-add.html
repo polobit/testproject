@@ -133,15 +133,36 @@
 						</div>
 					</div>
 			</div>
-
-			{{#if id}} <input type="text" name="id" class="hide" value={{id}}>
-			{{/if}}
-			<div class="form-actions">
-				<a href="#" type="submit" class="save btn btn-primary"
-					id="filtersAdd">Save</a> <a href="#contact-filters" class="btn ">Close</a>
-			</div>
-			</fieldset>
-		</form>
-	</div>
+			  <div class="control-group" style="margin-left:-20px">					
+            	<label class="control-label">Sent Report To<span class="field_req">*</span></label>
+            	<div class="controls">
+            		<select id="owners" class="required" name="domain_user_id">
+            		</select>		
+            	</div>
+            </div>
+            <div class="control-group" style="padding-top: 2%;margin-left:-20px">					
+            	<div class="controls">
+            		<label class="checkbox"> 
+            		<input type="checkbox" name="is_reports_enabled" />
+            		<span style="vertical-align: bottom; display: inline;">Send Me This Report</span>
+            		</label> 
+            		<select name="duration">
+            			<option value="DAILY">Daily</option>
+            			<option value="WEEKLY">Weekly</option>
+            			<option value="MONTHLY">Monthly</option>
+            		</select>		
+            	</div>
+            </div>
+            <input type="text" name="report_type" class="hide" value="Contact" /></input>
+            {{#if id}}
+            <input type="text" name="id" class="hide" value="{{id}}" />
+            {{/if}}
+            <div class="form-actions">
+            <a href="#" type="submit" class="save btn btn-primary" id="filtersAdd">Save</a>
+            <a href="#contact-filters" class="btn ">Close</a>
+            </div>
+            </fieldset>
+        </form>
+    </div>
 </div>
 </script>
