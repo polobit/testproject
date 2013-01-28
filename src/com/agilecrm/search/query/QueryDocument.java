@@ -92,7 +92,7 @@ public class QueryDocument implements QueryInterface
 		String newQuery = lhs + ":" + SearchUtil.normalizeString(rhs);
 
 		// For equals condition
-		if (condition.equals(SearchRule.RuleCondition.ON))
+		if (condition.equals(SearchRule.RuleCondition.EQUALS))
 		{
 		    /*
 		     * Build query by passing condition old query and new query
