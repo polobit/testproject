@@ -2,7 +2,6 @@ package com.campaignio.tasklets.agile;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import org.json.JSONObject;
 
@@ -18,6 +17,7 @@ import com.agilecrm.util.DBUtil;
 import com.agilecrm.util.Util;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>AddTask</code> represents AddTask node to add task related to
@@ -125,7 +125,7 @@ public class AddTask extends TaskletAdapter
 	calendar.add(Calendar.DAY_OF_MONTH, Integer.parseInt(dueDays));
 	Long dueDateInEpoch = calendar.getTimeInMillis() / 1000;
 
-	System.out.println(Util.getCalendarString(dueDateInEpoch));
+	// System.out.println(Util.getCalendarString(dueDateInEpoch));
 
 	System.out.println("Given Task Name: " + subject + ",category: "
 		+ category + ",priority: " + priority + "and Due Date : "
@@ -136,27 +136,19 @@ public class AddTask extends TaskletAdapter
 	Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
 
 	Task task = null;
-	AgileUser agileuser = null;
+	DomainUser domainOwner = null;
 
 	if (contact != null)
 	{
 	    try
 	    {
-		List<DomainUser> users = DomainUserUtil.getAllDomainUsers();
-		Long domainId = null;
-		for (DomainUser user : users)
-		{
-		    if (user.is_account_owner == true)
-			domainId = user.id;
-		}
+		String domain = NamespaceManager.get();
 
 		// Get AgileUser with respect to DomainUser Id
-		agileuser = AgileUser
-			.getCurrentAgileUserFromDomainUser(domainId);
+		domainOwner = DomainUserUtil.getDomainOwner(domain);
 
-		if (agileuser == null)
-		    return;
-
+		AgileUser agileuser = AgileUser
+			.getCurrentAgileUserFromDomainUser(domainOwner.id);
 		task = new Task(Type.valueOf(category), dueDateInEpoch,
 			agileuser.id);
 
