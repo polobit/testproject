@@ -33,7 +33,7 @@ $(function () {
     
     // Deletes linkedin profile, when click on elemtn with id "linkedin_plugin_delete", 
     // represents cross mark shown in panel
-    $('#linkedin_plugin_delete').die().live('click', function (event) {
+    $('#Linkedin_plugin_delete').die().live('click', function (event) {
         event.preventDefault();
         agile_crm_delete_widget_property_from_contact(LINKEDIN_PLUGIN_NAME);
     });
@@ -189,6 +189,7 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
 
     function (data) {
     	
+    	$('#Linkedin_plugin_delete').show();
     	Linkedin_current_profile_user_name = data.name;
     	
         // If picture is not availabe to user then show default picture
