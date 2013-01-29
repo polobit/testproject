@@ -33,7 +33,7 @@ $(function () {
     
     // Deletes linkedin profile, when click on elemtn with id "linkedin_plugin_delete", 
     // represents cross mark shown in panel
-    $('#linkedin_plugin_delete').die().live('click', function (event) {
+    $('#Linkedin_plugin_delete').die().live('click', function (event) {
         event.preventDefault();
         agile_crm_delete_widget_property_from_contact(LINKEDIN_PLUGIN_NAME);
     });
@@ -189,6 +189,7 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
 
     function (data) {
     	
+    	$('#Linkedin_plugin_delete').show();
     	Linkedin_current_profile_user_name = data.name;
     	
         // If picture is not availabe to user then show default picture
@@ -204,7 +205,11 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
     
     	$("#linkedin_social_stream").html(LOADING_HTML);
     	$.getJSON("/core/api/widgets/updates/" + plugin_id + "/" + linkedin_id, function(data){
-    		    		
+    		if(data.length == 0)
+			{    		    
+				$("#linkedin_social_stream").html('<div style="padding:10px 0px 10px 0px;word-wrap: break-word;border: 1px solid #f5f5f5;";>No updates available</div>');
+				return;
+			}
     		 $("#linkedin_social_stream").html(getTemplate("linkedin-update-stream", data));
     		 $("#linkedin_stream").remove();
     		 $('#linkedin_less').show();

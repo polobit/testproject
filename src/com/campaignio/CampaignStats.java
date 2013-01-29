@@ -1,10 +1,12 @@
 package com.campaignio;
 
 import javax.persistence.Id;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.google.appengine.api.NamespaceManager;
+import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -28,27 +30,22 @@ public class CampaignStats
      * Campaign Id
      */
     @NotSaved(IfDefault.class)
-    public Long campaignId = null;
+    public Long campaign_id = null;
 
     /**
      * Emails sent count
      */
-    public int emailsSent;
+    public int emails_sent;
 
     /**
      * Emails clicked count
      */
-    public int emailsClicked;
+    public int emails_clicked;
 
     /**
      * Emails opened count
      */
-    public int emailsOpened;
-
-    /**
-     * Namespace
-     */
-    public String namespace;
+    public int emails_opened;
 
     /**
      * Campaign Stats Dao
@@ -79,29 +76,40 @@ public class CampaignStats
     public CampaignStats(Long campaignId, int emailsSent, int emailsClicked,
 	    int emailsOpened)
     {
-	this.campaignId = campaignId;
-	this.emailsSent = emailsSent;
-	this.emailsClicked = emailsClicked;
-	this.emailsOpened = emailsOpened;
+	campaign_id = campaignId;
+	emails_sent = emailsSent;
+	emails_clicked = emailsClicked;
+	emails_opened = emailsOpened;
     }
 
     /**
-     * Saves CampaignStats within empty namespace.
+     * Returns campaign name as an xml element which is retrieved using
+     * campaign-id.
+     * 
+     * @return The campaign name as an xml element based on campaign id if
+     *         exists otherwise return '?'.
+     * @throws Exception
+     *             When campaign doesn't exist for given campaign id.
+     */
+    @XmlElement
+    public String getCampaign()
+    {
+	if (campaign_id == null)
+	    return " ";
+	Workflow workflow = WorkflowUtil.getWorkflow(campaign_id);
+
+	if (workflow != null)
+	    return workflow.name;
+
+	return "?";
+    }
+
+    /**
+     * Saves CampaignStats.
      */
     public void save()
     {
-	namespace = NamespaceManager.get();
-
-	String oldNamespace = NamespaceManager.get();
-	NamespaceManager.set("");
-	try
-	{
-	    dao.put(this);
-	}
-	finally
-	{
-	    NamespaceManager.set(oldNamespace);
-	}
+	dao.put(this);
     }
 
     /**
@@ -110,5 +118,12 @@ public class CampaignStats
     public void delete()
     {
 	dao.delete(this);
+    }
+
+    public String toString()
+    {
+	return "CampaignStats: Campaign id " + campaign_id + " Emails sent "
+		+ emails_sent + " Emails Opened " + emails_opened
+		+ " Emails clicked " + emails_clicked;
     }
 }

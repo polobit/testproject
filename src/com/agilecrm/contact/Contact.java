@@ -486,22 +486,33 @@ public class Contact extends Cursor
 
     }
 
+    /*
+     * Creates tags map with created time as value and <tagname> as key, which
+     * is to be stored in document to enable search on tags w.r.t created time
+     */
     private String mapTagsWithTime(Set<String> tags, long currentTime)
     {
 	JSONObject tags_json = new JSONObject();
 	try
 	{
+	    // If tags JSON is not null the create a JSON object with existing
+	    // map stored in contact entity
 	    if (tags_with_time_json != null)
 		tags_json = new JSONObject(tags_with_time_json);
 
+	    // Iterates through tags in the contact
 	    for (String tag : tags)
 	    {
+		// If contact json already contacts tag it is an old tag,
+		// changes are not to be made
 		if (tags_json.has(tag))
 		    continue;
 
 		tags_json.put(tag, currentTime);
 	    }
 
+	    // Returns map after removing tags which are not present in tags,
+	    // considering they are deleted in current update
 	    return removeDeletedTagsFromMap(tags_json).toString();
 	}
 	catch (JSONException e)

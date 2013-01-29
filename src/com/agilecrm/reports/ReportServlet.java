@@ -12,6 +12,12 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 
+/**
+ * <code>ReportServlet</code> process reports, based on duration or report
+ * (Daily, Weekly, Monthly). It is accessed from cron.
+ * 
+ * @author Yaswanth
+ */
 @SuppressWarnings("serial")
 public class ReportServlet extends HttpServlet
 {
@@ -20,12 +26,19 @@ public class ReportServlet extends HttpServlet
 	doGet(req, res);
     }
 
+    /*
+     * Based on the duration parameter in the url respective reports are
+     * fetched, on fetching the reports entities they are organized in a map
+     * with its domain as a key, deferred task is created with map of reports
+     * which fetches the reports results and mail them to their respective users
+     */
     public void doGet(HttpServletRequest req, HttpServletResponse res)
     {
 
 	// Get duration parameter to fetch filter for that duration
 	String duration = req.getParameter("duration");
 
+	// If duration is null return, since query is done based on the duration
 	if (duration == null)
 	    return;
 
@@ -47,6 +60,8 @@ public class ReportServlet extends HttpServlet
 	    reportsList = Reports
 		    .getAllReportsByDuration(Reports.Duration.MONTHLY);
 
+	// If reports are empty or null then return, since there are no reports
+	// to process.
 	if (reportsList == null || reportsList.isEmpty())
 	    return;
 

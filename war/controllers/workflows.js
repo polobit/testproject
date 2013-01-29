@@ -16,6 +16,9 @@ var WorkflowsRouter = Backbone.Router.extend({
 
 		/* Logs */
 		"workflows/logs/:id" : "logsToCampaign",
+		
+		/* Campaign Stats */
+		"campaign-stats" : "campaignStats",
 
 		/* Triggers */
 		"triggers" : "triggers",
@@ -105,6 +108,16 @@ var WorkflowsRouter = Backbone.Router.extend({
 
 		logsListView.collection.fetch();
 		$('#content').html(logsListView.el);
+	},
+	
+	campaignStats : function(){
+		this.campaignStatsCollectionView = new Base_Collection_View({
+			url : 'core/api/campaign-stats',
+			templateKey : "campaign-stats",
+			individual_tag_name : 'tr'
+		});
+		this.campaignStatsCollectionView.collection.fetch();
+		$('#content').html(this.campaignStatsCollectionView.el);
 	},
 
 	/** Gets list of triggers */

@@ -55,8 +55,6 @@ public class URLShortenerUtil
 
 	    // Increment Emails clicked count based on campaign
 	    URLShortener urlShortener = dao.get(keyNumber);
-	    CampaignStatsUtil.incrementEmailsClicked(urlShortener.campaign_id);
-
 	    return urlShortener;
 	}
 	catch (Exception e)

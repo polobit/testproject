@@ -199,6 +199,13 @@ public class ContactDocument implements BuilderInterface
 	}
     }
 
+    /**
+     * Add tag fields to document as <tagName>_time and it is saved as a date
+     * field.
+     * 
+     * @param tags_json_string
+     * @param doc
+     */
     private static void addTagFields(String tags_json_string,
 	    Document.Builder doc)
     {
@@ -207,12 +214,15 @@ public class ContactDocument implements BuilderInterface
 
 	try
 	{
+	    // Converts tags JSON in to a Map
 	    HashMap<String, Long> tagsMappedWithTime = new ObjectMapper()
 		    .readValue(tags_json_string,
 			    new TypeReference<HashMap<String, Long>>()
 			    {
 			    });
 
+	    // Iterates through each tag and creates field for each tag i.e.,
+	    // <tagName>_time.
 	    for (String tag : tagsMappedWithTime.keySet())
 	    {
 

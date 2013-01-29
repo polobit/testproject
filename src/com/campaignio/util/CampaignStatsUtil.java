@@ -49,7 +49,7 @@ public class CampaignStatsUtil
 	if (workflow == null)
 	    return null;
 
-	CampaignStats campaignStats = dao.getByProperty("campaignId",
+	CampaignStats campaignStats = dao.getByProperty("campaign_id",
 		campaignId);
 
 	if (campaignStats == null)
@@ -68,7 +68,6 @@ public class CampaignStatsUtil
     private static CampaignStats getDefaultCampaignStats(Long campaignId)
     {
 	CampaignStats campaignStats = new CampaignStats(campaignId, 0, 0, 0);
-	campaignStats.save();
 	return campaignStats;
     }
 
@@ -86,7 +85,7 @@ public class CampaignStatsUtil
 	if (campaignStats == null)
 	    return;
 
-	campaignStats.emailsClicked++;
+	campaignStats.emails_clicked++;
 	campaignStats.save();
     }
 
@@ -104,7 +103,25 @@ public class CampaignStatsUtil
 	if (campaignStats == null)
 	    return;
 
-	campaignStats.emailsSent++;
+	campaignStats.emails_sent++;
+	campaignStats.save();
+    }
+
+    /**
+     * Increment Emails opened based on campaign Id.
+     * 
+     * @param campaignId
+     *            - CampaignId.
+     */
+    public static void incrementEmailsOpened(String campaignId)
+    {
+	CampaignStats campaignStats = CampaignStatsUtil
+		.getCampaignStatsByCampaignId(Long.parseLong(campaignId));
+
+	if (campaignStats == null)
+	    return;
+
+	campaignStats.emails_opened++;
 	campaignStats.save();
     }
 }

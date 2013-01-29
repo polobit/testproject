@@ -20,6 +20,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.social.LinkedInUtil;
 import com.agilecrm.social.SocialSearchResult;
 import com.agilecrm.social.SocialUpdateStream;
+import com.agilecrm.social.TwilioUtil;
 import com.agilecrm.social.TwitterUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
@@ -463,5 +464,17 @@ public class WidgetsAPI
     {
 	// Return rapportive results
 	return Rapleaf.getRapportiveValue(email, apikey).toString();
+    }
+
+    @Path("twilio")
+    @POST
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getTwilioToken(@FormParam("token") String accountSID,
+	    @FormParam("secret") String authToken)
+    {
+	if (accountSID == null || authToken == null)
+	    return null;
+
+	return TwilioUtil.generateTwilioToken(accountSID, authToken);
     }
 }

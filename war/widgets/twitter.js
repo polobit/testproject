@@ -33,7 +33,7 @@ $(function () {
     
     // Deletes Twitter profile, when click on elemtn with id "twitter_plugin_delete", 
     // represents cross mark shown in panel
-    $('#twitter_plugin_delete').die().live('click', function (e) {
+    $('#Twitter_plugin_delete').die().live('click', function (e) {
         e.preventDefault();
         agile_crm_delete_widget_property_from_contact(TWITTER_PLUGIN_NAME);
     });
@@ -178,7 +178,7 @@ function showTwitterProfile(twitter_id, plugin_id) {
     // Fetches matching profiles
     $.getJSON("/core/api/widgets/profile/" + plugin_id + "/" + twitter_id, function (data) {
         console.log(data);
-        
+        $('#Twitter_plugin_delete').show();
         Twitter_current_profile_user_name = data.name;
         // Gets Twitter-profile template and populate the fields using handlebars
         $('#Twitter').html(getTemplate("twitter-profile", data));
@@ -186,10 +186,15 @@ function showTwitterProfile(twitter_id, plugin_id) {
     
     $('.twitter_stream').die().live('click', function (e) {
     	e.preventDefault();
-    alert("twitter");
     	$("#twitter_social_stream").html(LOADING_HTML);
     	$.getJSON("/core/api/widgets/updates/" + plugin_id + "/" + twitter_id, function(data){
     		    		console.log(data);
+    		    		console.log(data.length);
+    		    		if(data.length == 0)
+		    			{    		    
+		    				$("#twitter_social_stream").html('<div style="padding:10px 0px 10px 0px;word-wrap: break-word;border: 1px solid #f5f5f5;";>No updates available</div>');
+		    				return;
+		    			}
     		 $("#twitter_social_stream").html(getTemplate("twitter-update-stream", data));
     		 $("#twitter_stream").remove();
     		 $('#twitter_less').show();
