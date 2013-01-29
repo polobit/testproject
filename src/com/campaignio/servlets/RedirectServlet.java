@@ -1,4 +1,4 @@
-package com.agilecrm;
+package com.campaignio.servlets;
 
 import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl;
 
@@ -16,6 +16,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.URLShortener;
+import com.campaignio.util.CampaignStatsUtil;
 import com.campaignio.util.URLShortenerUtil;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -53,6 +54,9 @@ public class RedirectServlet extends HttpServlet
 	    resp.getWriter().println("Invalid URL");
 	    return;
 	}
+
+	// Increment emails clicked
+	CampaignStatsUtil.incrementEmailsClicked(urlShortener.campaign_id);
 
 	// System.out.println(urlShortener);
 	String longURL = urlShortener.long_url;

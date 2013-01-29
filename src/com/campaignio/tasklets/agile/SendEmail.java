@@ -175,8 +175,6 @@ public class SendEmail extends TaskletAdapter
      */
     public static String UNSUBSCRIBE_LINK = "http://unscr.be/";
 
-    public static String TRACKING_IMAGE = "<div><img src=\"http://nrshmkl.appspot.com/open/namespace/campaign_id/subscriber_id\" nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
-
     /*
      * (non-Javadoc)
      * 
@@ -199,7 +197,6 @@ public class SendEmail extends TaskletAdapter
 	}
 
 	// Schedule the time and date
-
 	// Set Timezone
 	String timeZoneString = getStringValue(nodeJSON, subscriberJSON, data,
 		TIME_ZONE);
@@ -472,8 +469,6 @@ public class SendEmail extends TaskletAdapter
 	    // replyTo, html, text, subscriberJSON, campaignJSON);
 	    SendGridEmail.sendMail(fromEmail, fromName, to, subject, replyTo,
 		    html, text, subscriberJSON, campaignJSON);
-
-	    CampaignStatsUtil.incrementEmailsSent(DBUtil.getId(campaignJSON));
 	}
 	else
 	{
@@ -481,9 +476,9 @@ public class SendEmail extends TaskletAdapter
 	    // replyTo, null, text, subscriberJSON, campaignJSON);
 	    SendGridEmail.sendMail(fromEmail, fromName, to, subject, replyTo,
 		    null, text, subscriberJSON, campaignJSON);
-
-	    CampaignStatsUtil.incrementEmailsSent(DBUtil.getId(campaignJSON));
 	}
+
+	CampaignStatsUtil.incrementEmailsSent(DBUtil.getId(campaignJSON));
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
@@ -575,11 +570,11 @@ public class SendEmail extends TaskletAdapter
 	String campaign_id = DBUtil.getId(campaignJSON);
 	String subscriber_id = DBUtil.getId(subsciberJSON);
 
-	String trackingImage = "<div><img src=\"http://click.agilecrm.com/open?namespace="
+	String trackingImage = "<div><img src=\"https://click.agilecrm.com/open?n="
 		+ namespace
-		+ "&campaign_id="
+		+ "&c="
 		+ campaign_id
-		+ "&subscriber_id="
+		+ "&s="
 		+ subscriber_id
 		+ "\" nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
 

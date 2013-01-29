@@ -1,0 +1,55 @@
+<script id="campaign-stats-model-template" type="text/html">
+<td><a href="#workflow/{{campaign_id}}">{{campaign}}</a></td>
+<td>{{emails_sent}}</td>
+<td>{{emails_opened}}</td>
+<td>{{emails_clicked}}</td>
+</script>
+
+<script id="campaign-stats-collection-template" type="text/html">
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h1>Campaign Stats</h1>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="span9">
+        {{#unless this.length}}
+        <div class="slate">
+            <div class="slate-content">
+                <div class="box-left">
+                    <img alt="Clipboard" src="/img/clipboard.png" />
+                </div>
+                <div class="box-right">
+                    <h3>You don't have any CampaignStats yet.</h3>
+                    <div class="text">
+                        It means you haven't send any email through campaign yet.
+                    </div>
+                    <a href="#">Click here to learn more</a>
+                    <br />
+                    <a href="#campaign-stats" class="btn blue btn-slate-action"><i class="icon-plus-sign"></i>  Campaign Stats !</a>
+                </div>
+            </div>
+        </div>
+        {{/unless}}
+        {{#if this.length}}
+        <div class="data-block">
+            <div class="data-container">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Campaign</th>
+                            <th>Emails Sent</th>
+                            <th>Emails Opened</th>
+                            <th>Email Links Clicked</th>
+                        </tr>
+                    </thead>
+                    <tbody id="campaign-stats-model-list"></tbody>
+                </table>
+            </div>
+        </div>
+        {{/if}}
+    </div>
+</div>
+</script>

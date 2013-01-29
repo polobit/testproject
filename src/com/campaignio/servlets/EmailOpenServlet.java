@@ -1,4 +1,4 @@
-package com.agilecrm;
+package com.campaignio.servlets;
 
 import java.io.IOException;
 
@@ -6,9 +6,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.campaignio.CampaignStats;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.util.CampaignStatsUtil;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>EmailOpenServlet</code> is the servlet that track emails opened. It
@@ -27,19 +27,23 @@ public class EmailOpenServlet extends HttpServlet
 	doGet(req, res);
     }
 
-    @SuppressWarnings("unused")
     public void doGet(HttpServletRequest request, HttpServletResponse res)
 	    throws IOException
     {
-	// URL url = new URL(request.getRequestURL().toString());
-	String subscriberId = request.getParameter("subscriber_id");
-	String namespace = request.getParameter("namespace");
-	String campaignId = request.getParameter("campaign_id");
+	String subscriberId = request.getParameter("s");
+	String namespace = request.getParameter("n");
+	String campaignId = request.getParameter("c");
 
-	CampaignStats stats = CampaignStatsUtil
-		.getCampaignStatsByCampaignId(Long.parseLong(campaignId));
-	stats.emailsOpened++;
-	stats.save();
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set(namespace);
+	try
+	{
+	    CampaignStatsUtil.incrementEmailsOpened(campaignId);
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
 
 	LogUtil.addLogFromID(campaignId, subscriberId, "Email Opened");
 
