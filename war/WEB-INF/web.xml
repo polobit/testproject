@@ -232,7 +232,7 @@
  
  <servlet>
  <servlet-name>RedirectServlet</servlet-name>
- <servlet-class>com.agilecrm.RedirectServlet</servlet-class>
+ <servlet-class>com.campaignio.servlets.RedirectServlet</servlet-class>
  </servlet>
  <servlet-mapping>
  <servlet-name>RedirectServlet</servlet-name>
@@ -240,7 +240,7 @@
  </servlet-mapping>
  
  <servlet><servlet-name>TaskQueueServlet</servlet-name>
- <servlet-class>com.agilecrm.TaskQueueServlet</servlet-class>
+ <servlet-class>com.campaignio.servlets.TaskQueueServlet</servlet-class>
  </servlet>
  <servlet-mapping>
  <servlet-name>TaskQueueServlet</servlet-name>
@@ -248,7 +248,7 @@
  </servlet-mapping>
  
  <servlet><servlet-name>EmailOpenServlet</servlet-name>
- <servlet-class>com.agilecrm.EmailOpenServlet</servlet-class>
+ <servlet-class>com.campaignio.servlets.EmailOpenServlet</servlet-class>
  </servlet>
  <servlet-mapping>
  <servlet-name>EmailOpenServlet</servlet-name>
