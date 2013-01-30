@@ -184,6 +184,8 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
     // Shows loading, until profile is fetched
     $('#Linkedin').html(
     LINKEDIN_PLUGIN_HEADER + '<img src=\"img/1-0.gif\"></img>');
+    
+    var update;
     // Fetches matching profiles
     $.getJSON("/core/api/widgets/profile/" + plugin_id + "/" + linkedin_id,
 
@@ -192,12 +194,15 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
     	$('#Linkedin_plugin_delete').show();
     	Linkedin_current_profile_user_name = data.name;
     	
+    	update = data.current_update;
         // If picture is not availabe to user then show default picture
         if (data.picture == null) {
             data.picture = 'https://contactuswidget.appspot.com/images/pic.png';
         }
         // Gets Linkedin-profile template and populate the fields using handlebars
         $('#Linkedin').html(getTemplate("linkedin-profile", data));
+        
+        
     });
     
     $('.linkedin_stream').die().live('click', function (e) {
@@ -210,7 +215,11 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
 				$("#linkedin_social_stream").html('<div style="padding:10px 0px 10px 0px;word-wrap: break-word;border: 1px solid #f5f5f5;";>No updates available</div>');
 				return;
 			}
+    		data["current_update"] = update;
     		 $("#linkedin_social_stream").html(getTemplate("linkedin-update-stream", data));
+    		 console.log( $('#current_activity').html());
+    		 $('#current_activity',$('#Linkedin')).hide();
+    		 
     		 $("#linkedin_stream").remove();
     		 $('#linkedin_less').show();
     		 $('#linkedin_refresh_stream').show();
@@ -229,11 +238,13 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
     	if($(this).attr("less") == "true"){
     		$(this).attr("less","false");
     		$(this).text("See Less..");
+    		$('#current_activity',$('#Linkedin')).hide();
     		$('#linkedin_refresh_stream').show();
     		return;
     	}
     	
     	$(this).attr("less","true");
+    	$('#current_activity',$('#Linkedin')).show();
     	$(this).text("See More..");
     	$('#linkedin_refresh_stream').hide();
     });

@@ -1,33 +1,38 @@
 <script id="linkedin-profile-template" type="text/html">
 	<div style="display:inline;  line-height:12px;word-wrap: break-word;">
 	    <div class="row-fluid well" style="padding:0px;margin-bottom: 10px;background-color: white;">
-	        <div class="span3" style=" margin-right:3%">
-	            <img src="{{picture}}" style=" display:inline; float:left; margin-right:2px; margin-top:5px; padding:0px 5px;cursor:pointer; color: #FF00FF" />
-	        </div>
-	        <div class="span8" style="padding-bottom: 7px;">
-	            <div style="padding-bottom:5px;">
-	                <h4 ><a href="{{url}}" target="_blank" >{{name}}</a></h4> 
-					<span class="badge badge-info" style="background-color: #CDE1FF;color:#3f5fa3">{{distance}}</span>
-					<span class="icon-arrow-right" style="color:green"></span>YOU					
-	            </div>
-				<div style="padding-bottom:7px;font-size:10px;">
-	            	{{summary}}, {{location}}, {{num_connections}} Connections
+			<div class="row-fluid">
+	        	<div class="span3" style=" margin-right:3%">
+	            	<img src="{{picture}}" style=" display:inline; float:left; margin-right:2px; margin-top:5px; padding:0px 5px;cursor:pointer; color: #FF00FF" />
+	        	</div>
+	        	<div class="span8" style='padding-top: 5px;'>	            	
+					<span class="badge badge-info pull-right" style="background-color: #CDE1FF;color:#3f5fa3">{{distance}}</span> 
+	                <h4 style="color:#069;"><a href="{{url}}" target="_blank" >{{name}}</a></h4>						
+					<p style="font-size: 11px;">{{location}}</p>            	
 				</div>
-				<div style="padding-bottom:7px;">
+			</div>
+			{{#if summary}}
+				<div class='row-fluid' style='padding: 0px 2px 10px 2px;font-size: 13px;'>
+				 	{{summary}} 
+				</div>
+			{{/if}}
+			<div style="padding: 0px 2px 5px 2px;font-size: 13px;">
+	            {{num_connections}} Connections
+			</div>
+			<div style="padding: 0px 3px 4px 3px;text-align: right;" >
 	        	{{#if is_connected}}
 					<a class="btn btn-mini btn-primary" id="linkedin_message" style="font-size:13px;">Send Message</a>
 				{{else}}
 					<a class="btn btn-mini btn-primary" id="linkedin_connect" name="{{name}}" style="font-size:13px;">Connect</a>	
 				{{/if}}
-				</div>		
-			</div>
+			</div>		
 	    </div>
 		{{#if current_update}}
-			<div class="row-fluid well" style="padding:0px;margin-bottom:0px;background-color:#ffffff;">				
+			<div class="row-fluid well" style="padding:0px;margin-bottom: -3px;background-color:#ffffff;">				
 				<div style="background-color:#f5f5f5;text-align: center;">
 					<h5 style="color: #999999;">CURRENT ACTIVITY</h5>
 				</div>	
-				<div style="padding:7px 0px 10px 0px;">	
+				<div id="current_activity" style="padding:7px 0px 10px 0px;">	
 					{{#is_link current_update}}
 	           			{{name}} shared a <a href="{{current_update}}" target="_blank" >link</a>
 					{{else}}
@@ -38,7 +43,7 @@
 		{{/if}}
 		<div id="linkedin_social_stream" class="collapse in">				
 		</div>
-		<div style="padding:0px;margin-top:15px">
+		<div style="padding:0px;margin: 10px 0px 5px 0px;">
 			<a href="#more" class="linkedin_stream" id="linkedin_stream" rel="tooltip" title="Click to see updates">See More..</a>
 			<a href="#more" data-toggle="collapse" data-target="#linkedin_social_stream" id="linkedin_less" style="display:none">See Less..</a>
 			<a href="#refresh" id="linkedin_refresh_stream" class="linkedin_stream icon-refresh pull-right" rel="tooltip" title="Refresh to get current updates" style="display:none"></a>
@@ -48,10 +53,11 @@
 
 <script id="linkedin-update-stream-template" type="text/html">
 {{#if this.length}}	
-	<table class="row-fluid table-striped"  style="border: 1px solid #f5f5f5; margin-top:-1px;">
+	<table class="row-fluid table-striped"  style="border: 1px solid #f5f5f5;">
 		<tbody>
+			<tr/>
 			{{#each this}}
-				<tr style="border-bottom: 1px solid #f5f5f5;">				
+				<tr style="border-bottom: 1px solid #f5f5f5;" update_time="{{created_time}}">				
 					<td style="padding:7px 0px 7px 0px;">
 						{{#stringToJSON this "message"}} {{/stringToJSON}}
 						{{#if_equals type "SHARED_ITEM"}}

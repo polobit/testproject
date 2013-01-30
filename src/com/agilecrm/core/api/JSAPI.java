@@ -19,7 +19,10 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.googlecode.objectify.Key;
 import com.sun.jersey.api.json.JSONWithPadding;
 
 /**
@@ -172,7 +175,8 @@ public class JSAPI
     @Produces("application/x-javascript")
     public JSONWithPadding createTask(@QueryParam("email") String email,
 	    @QueryParam("task") String json,
-	    @QueryParam("callback") String jsoncallback)
+	    @QueryParam("callback") String jsoncallback,
+	    @QueryParam("id") String key)
     {
 	try
 	{
@@ -183,10 +187,16 @@ public class JSAPI
 
 	    // Get Contact
 	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    
+	    task.setOwner(new Key<AgileUser>(AgileUser.class, APIKey.getAgileUserRelatedToAPIKey(key).id));
+	    
 	    if (contact == null)
 		return null;
+	   
 	    task.contacts = new ArrayList<String>();
 	    task.contacts.add(contact.id + "");
+	    
+
 	    task.save();
 
 	    return new JSONWithPadding(new GenericEntity<Task>(task)
@@ -231,7 +241,9 @@ public class JSAPI
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
 		return null;
-	    note.contacts = new ArrayList<String>();
+	    if(note.contacts == null)
+	    	note.contacts = new ArrayList<String>();
+	    
 	    note.contacts.add(contact.id + "");
 	    note.save();
 

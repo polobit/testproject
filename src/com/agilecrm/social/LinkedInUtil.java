@@ -1,6 +1,8 @@
 package com.agilecrm.social;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -190,9 +192,10 @@ public class LinkedInUtil
      * @param id
      *            {@link String}
      * @return {@link SocialSearchResult}
+     * @throws Exception
      */
     public static SocialSearchResult getLinkedinProfileById(Widget widget,
-	    String linkedInId)
+	    String linkedInId) throws Exception
     {
 	final LinkedInApiClient client = factory.createLinkedInApiClient(
 		widget.getProperty("token"), widget.getProperty("secret"));
@@ -317,8 +320,6 @@ public class LinkedInUtil
     public static List<SocialUpdateStream> getNetworkUpdates(Widget widget,
 	    String linkedInId) throws Exception
     {
-	LinkedInApiClient client1 = factory.createLinkedInApiClient(
-		widget.getProperty("token"), widget.getProperty("secret"));
 	final NetworkUpdatesApiClient client = factory
 		.createNetworkUpdatesApiClient(widget.getProperty("token"),
 			widget.getProperty("secret"));
@@ -328,7 +329,138 @@ public class LinkedInUtil
 		NetworkUpdateType.CONNECTION_UPDATE,
 		NetworkUpdateType.SHARED_ITEM));
 
+	LinkedInApiClient client1 = factory.createLinkedInApiClient(
+		widget.getProperty("token"), widget.getProperty("secret"));
+
+	return getListFromNetwork(network, client1);
+
+    }
+
+    /**
+     * Fetches the updates of the person based on his LInkedIn id and specific
+     * number of updates which are limited to start and end point
+     * 
+     * @param widget
+     *            {@link Widget} to retrieve token and secret of LinkedIn
+     *            account of agile user
+     * @param linkedInId
+     *            Id of the person whose updates are required
+     * @param startIndex
+     * @param endIndex
+     * @return {@link List} of {@link SocialUpdateStream}
+     * @throws Exception
+     *             If the personId does not exists or person provides restricted
+     *             access to his profile
+     */
+    public static List<SocialUpdateStream> getNetworkUpdates(Widget widget,
+	    String linkedInId, int startIndex, int endIndex) throws Exception
+    {
+	final NetworkUpdatesApiClient client = factory
+		.createNetworkUpdatesApiClient(widget.getProperty("token"),
+			widget.getProperty("secret"));
+
+	Network network = client.getUserUpdates(linkedInId, EnumSet.of(
+		NetworkUpdateType.PROFILE_UPDATE,
+		NetworkUpdateType.CONNECTION_UPDATE,
+		NetworkUpdateType.SHARED_ITEM), startIndex, endIndex);
+
+	LinkedInApiClient client1 = factory.createLinkedInApiClient(
+		widget.getProperty("token"), widget.getProperty("secret"));
+
+	return getListFromNetwork(network, client1);
+
+    }
+
+    /**
+     * Fetches the updates of the person based on his LInkedIn id and specific
+     * number of updates which are limited to start and end point and from
+     * specific start date to end date
+     * 
+     * @param widget
+     *            {@link Widget} to retrieve token and secret of LinkedIn
+     *            account of agile user
+     * @param linkedInId
+     *            Id of the person whose updates are required
+     * @param startIndex
+     * @param endIndex
+     * @param startDate
+     * @param endDate
+     * @return {@link List} of {@link SocialUpdateStream}
+     * @throws Exception
+     *             If the personId does not exists or person provides restricted
+     *             access to his profile
+     */
+    public static List<SocialUpdateStream> getNetworkUpdates(Widget widget,
+	    String linkedInId, int startIndex, int endIndex, String startDate,
+	    String endDate) throws Exception
+    {
+	final NetworkUpdatesApiClient client = factory
+		.createNetworkUpdatesApiClient(widget.getProperty("token"),
+			widget.getProperty("secret"));
+
+	Calendar cal = Calendar.getInstance();
+
+	cal.setTimeInMillis(Long.parseLong(startDate) * 1000);
+	Date startDat = cal.getTime();
+
+	cal.setTimeInMillis(Long.parseLong(endDate) * 1000);
+	Date endDat = cal.getTime();
+
+	Network network = client.getUserUpdates(linkedInId, EnumSet.of(
+		NetworkUpdateType.PROFILE_UPDATE,
+		NetworkUpdateType.CONNECTION_UPDATE,
+		NetworkUpdateType.SHARED_ITEM), startIndex, endIndex, startDat,
+		endDat);
+
+	LinkedInApiClient client1 = factory.createLinkedInApiClient(
+		widget.getProperty("token"), widget.getProperty("secret"));
+
+	return getListFromNetwork(network, client1);
+
+    }
+
+    /**
+     * Connects to linkedIn basedon widget prefs and reshares a post in LinkedIn
+     * based on the given share id of the post.
+     * 
+     * @param widget
+     *            {@link Widget} to retrieve token and secret of LinkedIn
+     *            account of agile user
+     * @param shareId
+     *            Id of the post in LinkedIn
+     * @param text
+     *            Comment message while resharing the post
+     * @return {@link String} with success message
+     * @throws Exception
+     */
+    public static String reshareLinkedInPost(Widget widget, String shareId,
+	    String text) throws Exception
+    {
+	final NetworkUpdatesApiClient client = factory
+		.createNetworkUpdatesApiClient(widget.getProperty("token"),
+			widget.getProperty("secret"));
+
+	text = "";
+	client.reShare(shareId, text, VisibilityType.ANYONE);
+	return "Shared Successfully";
+    }
+
+    /**
+     * Used to form a {@link List} of {@link SocialUpdateStream} from
+     * {@link Network} object
+     * 
+     * @param network
+     *            {@link Network}
+     * @param client1
+     *            {@link LinkedInApiClient}
+     * @return {@link List} of {@link SocialUpdateStream}
+     * @throws Exception
+     */
+    private static List<SocialUpdateStream> getListFromNetwork(Network network,
+	    LinkedInApiClient client1) throws Exception
+    {
 	List<SocialUpdateStream> list = new ArrayList<SocialUpdateStream>();
+
 	for (Update update : network.getUpdates().getUpdateList())
 	{
 	    SocialUpdateStream stream = new SocialUpdateStream();
@@ -375,34 +507,9 @@ public class LinkedInUtil
 		    list.add(stream);
 		}
 	    }
+
 	}
+
 	return list;
     }
-
-    /**
-     * Connects to linkedIn basedon widget prefs and reshares a post in LinkedIn
-     * based on the given share id of the post.
-     * 
-     * @param widget
-     *            {@link Widget} to retrieve token and secret of LinkedIn
-     *            account of agile user
-     * @param shareId
-     *            Id of the post in LinkedIn
-     * @param text
-     *            Comment message while resharing the post
-     * @return {@link String} with success message
-     * @throws Exception
-     */
-    public static String reshareLinkedInPost(Widget widget, String shareId,
-	    String text) throws Exception
-    {
-	final NetworkUpdatesApiClient client = factory
-		.createNetworkUpdatesApiClient(widget.getProperty("token"),
-			widget.getProperty("secret"));
-
-	text = "";
-	client.reShare(shareId, text, VisibilityType.ANYONE);
-	return "Shared Successfully";
-    }
-
 }

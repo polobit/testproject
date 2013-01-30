@@ -226,6 +226,26 @@ public class TwitterUtil
     }
 
     /**
+     * Connects to the twitter based on widget prefs and destroys friendship
+     * (unfollow) between agile user and the person with twitter id in twitter
+     * 
+     * @param widget
+     *            {@link Widget}, for accessing token and secret key
+     * @param twitterId
+     *            {@link String}, to access recipient twitter account
+     * @return {@link String} with success message
+     * @throws Exception
+     */
+    public static String unfollow(Widget widget, Long twitterId)
+	    throws Exception
+    {
+	Twitter twitter = getTwitter(widget);
+	User user = twitter.destroyFriendship(twitterId);
+
+	return (user != null) ? "Unfollowed" : "Unsuccessfull";
+    }
+
+    /**
      * Connects to the twitter based on widget prefs and creates friendship
      * (follow) between agile user and the person with twitter id in twitter
      * 
@@ -240,7 +260,9 @@ public class TwitterUtil
     {
 	Twitter twitter = getTwitter(widget);
 	User user = twitter.createFriendship(twitterId);
-	return (user != null) ? "Followed request sent" : "Unsuccessfull";
+	boolean connected = twitter.showFriendship(twitter.getId(),
+		user.getId()).isSourceFollowingTarget();
+	return (connected) ? "true" : "false";
     }
 
     /**
@@ -286,6 +308,41 @@ public class TwitterUtil
 	Twitter twitter = getTwitter(widget);
 	User user = twitter.showUser(twitterId);
 	Query query = new Query("from:" + user.getScreenName());
+	QueryResult result = twitter.search(query);
+
+	List<SocialUpdateStream> updateStream = new ArrayList<SocialUpdateStream>();
+	for (Tweet tweet : result.getTweets())
+	{
+	    SocialUpdateStream stream = new SocialUpdateStream();
+	    stream.id = String.valueOf(tweet.getId());
+	    stream.message = tweet.getText();
+
+	    stream.created_time = tweet.getCreatedAt().getTime() / 1000;
+	    updateStream.add(stream);
+	}
+	return updateStream;
+    }
+
+    /**
+     * Searches in Twitter for the specified twitterId and gets the tweets of
+     * that person
+     * 
+     * @param widget
+     *            {@link Widget}, for accessing token and secret key
+     * @param twitterId
+     *            {@link String}, to access recipient twitter account
+     * @return {@link List} of {@link SocialUpdateStream}
+     * @throws Exception
+     *             If {@link Twitter} throws an exception
+     */
+    public static List<SocialUpdateStream> getNetworkUpdates(Widget widget,
+	    Long twitterId, String date, int count) throws Exception
+    {
+	Twitter twitter = getTwitter(widget);
+	User user = twitter.showUser(twitterId);
+	Query query = new Query("from:" + user.getScreenName());
+	query.setUntil(date);
+
 	QueryResult result = twitter.search(query);
 
 	List<SocialUpdateStream> updateStream = new ArrayList<SocialUpdateStream>();

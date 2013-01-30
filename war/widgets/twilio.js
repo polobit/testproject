@@ -77,7 +77,7 @@ function setUpTwilio(data){
 	 $('#Twilio').html('<p><img src=\"img/1-0.gif\"></img></p>');
 	 
 	head.js("https://static.twilio.com/libs/twiliojs/1.1/twilio.min.js", function(){
-		  $(document).ready(function () {
+		  //$(document).ready(function () {
 			  
 			  
 	$("#Twilio").html('<button class="btn" id="twilio_call">Call</button>');
@@ -157,7 +157,7 @@ function setUpTwilio(data){
     });
     
 		});
-	});
+	//});
 
 	
 	

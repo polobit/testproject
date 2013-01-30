@@ -49,6 +49,13 @@ $(function () {
     	sendFollowRequest(plugin_id, twitter_id);
     });
     
+    $('#twitter_unfollow').die().live('click', function(e){
+   
+    	e.preventDefault();
+    	sendUnfollowRequest(plugin_id, twitter_id);
+    	
+    });
+    
     $('.twitter_retweet').die().live('click', function(e)
     {
     	e.preventDefault();
@@ -175,6 +182,8 @@ function showTwitterMatchingProfiles(plugin_id) {
 function showTwitterProfile(twitter_id, plugin_id) {
     // Shows loading, until profile is fetched
     $('#Twitter').html('<p><img src=\"img/1-0.gif\"></img></p>');
+    
+    var update;
     // Fetches matching profiles
     $.getJSON("/core/api/widgets/profile/" + plugin_id + "/" + twitter_id, function (data) {
         console.log(data);
@@ -182,20 +191,32 @@ function showTwitterProfile(twitter_id, plugin_id) {
         Twitter_current_profile_user_name = data.name;
         // Gets Twitter-profile template and populate the fields using handlebars
         $('#Twitter').html(getTemplate("twitter-profile", data));
+        
+        update = data.current_update;
+        
+        if(data.is_connected)
+		 {
+			 $('#twitter_unfollow').show();
+			 $('#twitter_message').show();
+		 }
+		 else{
+			 $('#twitter_follow').show();
+		 }
     });
     
     $('.twitter_stream').die().live('click', function (e) {
     	e.preventDefault();
     	$("#twitter_social_stream").html(LOADING_HTML);
-    	$.getJSON("/core/api/widgets/updates/" + plugin_id + "/" + twitter_id, function(data){
-    		    		console.log(data);
+    	$.getJSON("/core/api/widgets/updates/" + plugin_id + "/" + twitter_id, function(data){    					
     		    		console.log(data.length);
     		    		if(data.length == 0)
 		    			{    		    
 		    				$("#twitter_social_stream").html('<div style="padding:10px 0px 10px 0px;word-wrap: break-word;border: 1px solid #f5f5f5;";>No updates available</div>');
 		    				return;
 		    			}
-    		 $("#twitter_social_stream").html(getTemplate("twitter-update-stream", data));
+    		    		data["current_update"] = update;
+    		 $('#current_activity',$('#Twitter')).hide();
+    		 $("#twitter_social_stream").html(getTemplate("twitter-update-stream", data));    		
     		 $("#twitter_stream").remove();
     		 $('#twitter_less').show();
     		 $('#twitter_refresh_stream').show();
@@ -210,6 +231,7 @@ function showTwitterProfile(twitter_id, plugin_id) {
     	
     	if($(this).attr("less") == "true"){
     		$(this).attr("less","false");
+    		$('#current_activity',$('#Twitter')).hide();
     		$(this).text("See Less..");
     		$('#twitter_refresh_stream').show();
     		return;
@@ -217,6 +239,7 @@ function showTwitterProfile(twitter_id, plugin_id) {
     	
     	$(this).attr("less","true");
     	$(this).text("See More..");
+    	$('#current_activity',$('#Twitter')).show();
     	$('#twitter_refresh_stream').hide();
     });
 }
@@ -272,12 +295,37 @@ function sendFollowRequest(plugin_id, twitter_id) {
 		    }
 		    
 		    $.post( "/core/api/widgets/connect/" + plugin_id + "/" + twitter_id , $('#twitter_messageForm').serialize(), function(data) {
+		    	if(data == "true"){
+		    		//$('#twitter_follow').text("unfollow");
+					//$('#twitter_follow').attr("id", "twitter_unfollow");
+		    		$('#twitter_follow').hide();
+					$('#twitter_unfollow').show();
+					$('#twitter_message').show();
+					
+		    	}
+				
 		    	$('#twitter_messageModal').modal("hide");
+		    	
 		       }).error(function(data) { 
 		    	   $('#twitter_messageModal').remove();
 		    		alert(data.responseText); 
 		    	}) 
 		});
+}
+
+
+function sendUnfollowRequest(plugin_id, twitter_id){	
+		    
+		    $.get( "/core/api/widgets/disconnect/" + plugin_id + "/" + twitter_id , function(data) {
+		    	
+		    	$("#twitter_follow").show();
+		    	$('#twitter_unfollow').hide();
+		    	$('#twitter_message').hide();
+		       }).error(function(data) { 
+		    	   
+		    		alert(data.responseText); 
+		    	}) ;
+		
 }
 
 function sendTwitterMessage(plugin_id, twitter_id, message) {
@@ -301,6 +349,8 @@ function sendTwitterMessage(plugin_id, twitter_id, message) {
 	    }
 		
 		$.post( "/core/api/widgets/message/" + plugin_id + "/" + twitter_id ,$('#twitter_messageForm').serialize(), function (data) {
+		
+			
 			$('#twitter_messageModal').modal("hide");
 		}).error(function(data) { 
 			$('#twitter_messageModal').remove();

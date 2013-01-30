@@ -279,6 +279,33 @@ public class WidgetsAPI
 	return null;
     }
 
+    @Path("/disconnect/{widget-id}/{social-id}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String disconnect(@PathParam("widget-id") Long widgetId,
+	    @PathParam("social-id") String socialId)
+
+    {
+	try
+	{
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+	    if (widget == null)
+		return null;
+
+	    // Calls TwitterUtil method to send message to person by socialId
+	    if (widget.name.equalsIgnoreCase("TWITTER"))
+		return TwitterUtil.unfollow(widget, Long.parseLong(socialId));
+	}
+	catch (Exception e)
+	{
+
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+	return null;
+    }
+
     /**
      * Connects to {@link LinkedInUtil} or {@link TwitterUtil} based on the name
      * given in widget and sends a message to the contact in LinkedIn and
@@ -406,6 +433,55 @@ public class WidgetsAPI
 	    else if (widget.name.equalsIgnoreCase("TWITTER"))
 		return TwitterUtil.getNetworkUpdates(widget,
 			Long.parseLong(socialId));
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+	return null;
+    }
+
+    /**
+     * Connects to {@link LinkedInUtil} or {@link TwitterUtil} based on the name
+     * given in widget and fetches the posts or tweets in LinkedIn and Twitter
+     * based on the parameter social id
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param socialId
+     *            {@link String} LinkedIn id or Twitter id of the contact
+     * @return {@link List} of {@link SocialUpdateStream}
+     */
+    @Path("/updates/more/{widget-id}/{social-id}/{endIndex}/{startDate}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<SocialUpdateStream> getSocialNetworkUpdates(
+	    @PathParam("widget-id") Long widgetId,
+	    @PathParam("social-id") String socialId, String startIndex,
+	    @PathParam("endIndex") String endIndex,
+	    @PathParam("startDate") String startDate, String endDate)
+    {
+	try
+	{
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+	    if (widget == null)
+		return null;
+
+	    // Profiles are searched based on first and last name of contact
+	    // Calls LinkedUtil method to send message to person by socialId
+	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
+		return LinkedInUtil.getNetworkUpdates(widget, socialId,
+			Integer.parseInt(startIndex),
+			Integer.parseInt(endIndex), startDate, endDate);
+
+	    else if (widget.name.equalsIgnoreCase("TWITTER"))
+		return TwitterUtil.getNetworkUpdates(widget,
+			Long.parseLong(socialId), startDate,
+			Integer.parseInt(endIndex));
 
 	}
 	catch (Exception e)
