@@ -154,6 +154,9 @@ function agile_type_ahead(id, el, callback, isSearch){
             
             items.css("overflow", "hidden");
 
+            //this.$menu.css("max-height", "400px");
+            //this.$menu.css("overflow", "auto");
+            
             // Keeps the list of items in menu (ul) and shows the drop down
             this.$menu.html(items).show();
             this.shown = true;
@@ -213,6 +216,24 @@ function agile_type_ahead(id, el, callback, isSearch){
             // add tag
             if (tag_not_exist) $('.tags', el).append(
                 '<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_TAGS[items] + '">' + items_temp + '<a class="close" id="remove_tag">&times</a></li>');
+        },
+        
+        // Hides the results list
+        hide: function () {
+        	this.$menu.hide();
+            this.shown = false;
+            return this;
+        },
+        
+        // Handles cursor exiting the textbox
+        blur: function (e) {
+            var that = this;
+            e.stopPropagation();
+            e.preventDefault();
+            setTimeout(function () {
+                if (!that.$menu.is(':focus'))
+                  that.hide();
+            }, 150)
         },
         minLength: 2,
     })

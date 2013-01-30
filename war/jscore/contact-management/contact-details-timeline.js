@@ -314,7 +314,7 @@ var MONTH_YEARS;
 function getTimestamp(month_index, year){
 	if((year % 4) == 0)
 		monthArray[1] = 'February 29';
-	return Date.parse(monthArray[month_index] + ', ' + year); 
+	return Date.parse(monthArray[month_index] + ', ' + year) + 86400000 - 1; 
 }
 
 /**
@@ -342,10 +342,12 @@ function create_month_marker(month_years, is_insert){
 		var monthYear = val.split('-');
 		var timestamp = getTimestamp(monthYear[0], monthYear[1]) / 1000;
 		var context = {year: monthArray[monthYear[0]].split(' ')[0], timestamp: timestamp};
-		if(is_insert)
+		if(is_insert){
 			$('#timeline').isotope( 'insert', $(getTemplate("year-marker", context)));
-		else
+		}	
+		else{
 			$('#timeline').append(getTemplate("year-marker", context));
+		}	
 	});
 }
 

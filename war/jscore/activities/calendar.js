@@ -62,7 +62,7 @@ function showCalendar() {
             $('#activityModal').modal('show');
             highlight_vent();
             // Set Date for Event
-            var dateFormat = 'mm-dd-yy';
+            var dateFormat = 'mm/dd/yy';
             $('#task-date-1').val(start.format(dateFormat));
             $("#event-date-1").val(start.format(dateFormat));
             $("#event-date-2").val(end.format(dateFormat));
@@ -125,7 +125,7 @@ function showCalendar() {
             $('#update-event-time-2').val((event.end.getHours() < 10 ? "0" : "") + event.end.getHours() + ":" + (event.end.getMinutes() < 10 ? "0" : "") + event.end.getMinutes());
            
          // Set date for update Event
-            var dateFormat = 'mm-dd-yy';
+            var dateFormat = 'mm/dd/yy';
             $("#update-event-date-1").val((event.start).format(dateFormat));
             $("#update-event-date-2").val((event.end).format(dateFormat));
             

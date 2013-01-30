@@ -111,7 +111,9 @@ function setup_tags_typeahead() {
     	// To make a tag when "," keydown and check input is not empty
     	if(e.which == 188 && tag != "")
     	{
-    		$(this).attr("value","");
+    		// Prevents comma (",") as an argument to the input field
+    		$(this).blur();
+    		$(this).val("");
     		$(this).closest(".control-group").find('ul.tags').append('<li class="tag"  style="display: inline-block;" data="'+ tag+'">'+tag+'<a class="close" id="remove_tag">&times</a></li>');
     	}
     });
