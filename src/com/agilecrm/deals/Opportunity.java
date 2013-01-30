@@ -8,6 +8,8 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
@@ -62,7 +64,8 @@ public class Opportunity
      * Contact ids of related contacts for a deal.
      */
     @NotSaved
-    public List<String> contacts = null;
+    @JsonIgnore
+    private List<String> contacts = null;
 
     /**
      * Related contact objects fetched using contact ids.
@@ -195,6 +198,14 @@ public class Opportunity
 	contacts_list.addAll(ofy.get(this.related_contacts).values());
 	return contacts_list;
     }
+    
+    public void addContactIds(String id)
+    {
+    	if(contacts == null)
+    		contacts = new ArrayList<String>();
+    	
+    	contacts.add(id);
+    }
 
     /**
      * Gets domain user with respect to owner id if exists, otherwise null.
@@ -281,6 +292,18 @@ public class Opportunity
 	}
 
 	return " ";
+    }
+    
+    public void setContactIds(String id)
+    {
+    	if(contacts != null)
+    	{
+    		contacts.add(id);
+    		return;
+    	}
+    	contacts = new ArrayList<String>();
+    	contacts.add(id);
+    	
     }
 
     /**

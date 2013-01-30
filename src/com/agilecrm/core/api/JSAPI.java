@@ -297,8 +297,8 @@ public class JSAPI
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
 		return null;
-	    opportunity.contacts = new ArrayList<String>();
-	    opportunity.contacts.add(contact.id + "");
+	    
+	    opportunity.addContactIds(contact.id+"");
 
 	    // Set, owner id to opportunity (owner of the apikey is set as owner
 	    // to opportunity)
