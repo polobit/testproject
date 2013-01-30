@@ -8,6 +8,8 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
@@ -171,6 +173,12 @@ public class Task
     {
 	is_complete = true;
 	save();
+    }
+    
+    @JsonIgnore
+    public void setOwner(Key<AgileUser> user)
+    {
+    	owner = user;
     }
 
     /**

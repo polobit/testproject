@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -112,7 +113,13 @@ public class APIKey
 
     public static Key<DomainUser> getDomainUserIdRelatedToAPIKey(String apiKey)
     {
-	return dao.ofy().query(APIKey.class).filter("api_key", apiKey).get().owner;
+    	return dao.ofy().query(APIKey.class).filter("api_key", apiKey).get().owner;
+    }
+    
+    public static AgileUser getAgileUserRelatedToAPIKey(String apiKey)
+    {
+    	Key<DomainUser> domainUserKey =  dao.ofy().query(APIKey.class).filter("api_key", apiKey).get().owner;
+    	return AgileUser.getCurrentAgileUserFromDomainUser(domainUserKey.getId());
     }
 
     @PrePersist
