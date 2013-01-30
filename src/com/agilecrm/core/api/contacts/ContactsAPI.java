@@ -123,11 +123,10 @@ public class ContactsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Contact createContact(Contact contact)
     {
-
 	// Check if the email exists with the current email address
 	Contact currentContact = ContactUtil.searchContactByEmail(contact
 		.getContactFieldValue("EMAIL"));
-
+	
 	// Throw non-200 if it exists
 	if (currentContact != null)
 	{
@@ -450,15 +449,28 @@ public class ContactsAPI
      *            array of tags as string
      * @throws JSONException
      */
-    @Path("bulk/{tags}")
+    @Path("bulk/tags")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void addTagsTOContacts(@FormParam("contact_ids") String contact_ids,
-	    @PathParam("tags") String tagsString) throws JSONException
+	    @FormParam("tags") String tagsString) throws JSONException
     {
+	System.out.println(tagsString);
+
+	JSONArray tagsJSONArray = new JSONArray(tagsString);
+
+	String[] tagsArray = new String[tagsJSONArray.length()];
+
+	System.out.println(tagsJSONArray);
+
+	for (int i = 0; i < tagsJSONArray.length(); i++)
+	{
+	    tagsArray[i] = tagsJSONArray.get(i).toString();
+	}
+
 	JSONArray contactsJSONArray = new JSONArray(contact_ids);
-	String tags_array[] = tagsString.split(",");
-	ContactUtil.addTagsToContactsBulk(contactsJSONArray, tags_array);
+
+	ContactUtil.addTagsToContactsBulk(contactsJSONArray, tagsArray);
     }
 
     /**

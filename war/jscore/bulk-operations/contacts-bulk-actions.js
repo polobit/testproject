@@ -148,15 +148,16 @@ $(function(){
 	    */	
 		$('#addTagsToContactsBulk').die().live('click',function(e){
 			e.preventDefault();
+			
 			var tags = get_tags('tagsBulkForm');
-
 			if (tags[0].value.length > 0){
 				
 				// Show loading symbol until model get saved
 			    $('#tagsBulkForm').find('span.save-status').html(LOADING_HTML);
 			    
-			    var url = '/core/api/contacts/bulk/' + tags[0].value;
+			    var url = '/core/api/contacts/bulk/tags';
 			    var json = {};
+			    json.tags = JSON.stringify(tags[0].value);
 			    json.contact_ids = JSON.stringify(id_array);
 			    $.post(url, json, function(data){
 			    	
