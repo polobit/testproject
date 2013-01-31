@@ -21,16 +21,11 @@ public class TwilioServlet extends HttpServlet
     {
 
 	String accountSid = request.getParameter("AccountSid");
-	System.out.println(accountSid);
 
 	String state = request.getParameter("state");
 
-	System.out.println("state : " + state);
-
 	String oldNamespace = NamespaceManager.get();
 	String namespace = state.split("://")[1].split("\\.")[0];
-
-	System.out.println(namespace);
 
 	NamespaceManager.set(namespace);
 
@@ -40,7 +35,6 @@ public class TwilioServlet extends HttpServlet
 
 	if (userInfo != null)
 	{
-	    System.out.println("domain id : " + userInfo.getClaimedId());
 	    try
 	    {
 		SessionManager.set((HttpServletRequest) request);
@@ -54,17 +48,14 @@ public class TwilioServlet extends HttpServlet
 	}
 
 	Widget widget = WidgetUtil.getWidget("Twilio");
-	System.out.println(widget);
 
 	if (widget == null)
 	{
-	    System.out.println("widget is null");
 	    response.sendRedirect(state);
 	    return;
 	}
 
 	widget.addProperty("token", accountSid);
-	System.out.println(widget);
 	widget.save();
 
 	NamespaceManager.set(oldNamespace);

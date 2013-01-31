@@ -456,14 +456,16 @@ public class WidgetsAPI
      *            {@link String} LinkedIn id or Twitter id of the contact
      * @return {@link List} of {@link SocialUpdateStream}
      */
-    @Path("/updates/more/{widget-id}/{social-id}/{endIndex}/{startDate}")
+    @Path("/updates/more/{widget-id}/{social-id}/{startIndex}/{endIndex}/{startDate}/{endDate}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<SocialUpdateStream> getSocialNetworkUpdates(
 	    @PathParam("widget-id") Long widgetId,
-	    @PathParam("social-id") String socialId, String startIndex,
+	    @PathParam("social-id") String socialId,
+	    @PathParam("startIndex") String startIndex,
 	    @PathParam("endIndex") String endIndex,
-	    @PathParam("startDate") String startDate, String endDate)
+	    @PathParam("startDate") String startDate,
+	    @PathParam("endDate") String endDate)
     {
 	try
 	{
@@ -471,6 +473,8 @@ public class WidgetsAPI
 	    if (widget == null)
 		return null;
 
+	    if (endDate != null)
+		endDate = String.valueOf(Integer.parseInt(endDate) - 5);
 	    // Profiles are searched based on first and last name of contact
 	    // Calls LinkedUtil method to send message to person by socialId
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))

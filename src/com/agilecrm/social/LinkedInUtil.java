@@ -223,7 +223,12 @@ public class LinkedInUtil
 	result.num_connections = String.valueOf(person.getNumConnections());
 
 	if (person.getDistance() == 1l)
+	{
 	    result.is_connected = true;
+	    if (!(getNetworkUpdates(widget, linkedInId, 0, 5) instanceof Exception))
+		result.updateStream = getNetworkUpdates(widget, linkedInId, 0,
+			5);
+	}
 
 	// Change http to https to avoid client side warnings by browser
 	// Change certificate from m3 to m3-s to fix ssl broken image link

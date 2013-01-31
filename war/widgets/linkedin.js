@@ -193,40 +193,64 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
     	
     	$('#Linkedin_plugin_delete').show();
     	Linkedin_current_profile_user_name = data.name;
+    	Linkedin_Connected = data.is_connected;
     	
-    	update = data.current_update;
         // If picture is not availabe to user then show default picture
         if (data.picture == null) {
             data.picture = 'https://contactuswidget.appspot.com/images/pic.png';
         }
-        // Gets Linkedin-profile template and populate the fields using handlebars
-        $('#Linkedin').html(getTemplate("linkedin-profile", data));
         
+        // Gets Linkedin-profile template and populate the fields using handlebars
+        $('#Linkedin').html(getTemplate("linkedin-profile", data));  
+               
+       if(data.updateStream && data.updateStream.length != 0)
+       {
+    	    data["linkedin_user_name"] = Linkedin_current_profile_user_name;
+        	$('#linkedin_update_heading',$('#Linkedin')).show();
+        	$('#linkedin_table').append(getTemplate("linkedin-update-stream", data.updateStream));
+        	return;
+        }
+        
+       	if(data.current_update)
+       	{        
+       		$('#linkedin_update_heading',$('#Linkedin')).show();
+       		$('#current_activity',$('#Linkedin')).show();
+       	}        
         
     });
     
     $('.linkedin_stream').die().live('click', function (e) {
     	e.preventDefault();
     
-    	$("#linkedin_social_stream").html(LOADING_HTML);
-    	$.getJSON("/core/api/widgets/updates/" + plugin_id + "/" + linkedin_id, function(data){
+    	//$("#linkedin_social_stream").html(LOADING_HTML);
+    	var end_time = $('#linkedin_table').find('tr:last').attr('update_time');
+    	
+    	if(!end_time){
+    		if(Linkedin_Connected){
+    			alert("No updates available");
+    			return;
+    		}
+    		alert("Member does not share his/her updates. Get connected");
+    		return;
+    	}    		
+    	
+    	$.getJSON("/core/api/widgets/updates/more/" + plugin_id + "/" + linkedin_id + "/0/5/1262304000/" + end_time, function(data){
     		if(data.length == 0)
-			{    		    
-				$("#linkedin_social_stream").html('<div style="padding:10px 0px 10px 0px;word-wrap: break-word;border: 1px solid #f5f5f5;";>No updates available</div>');
+			{    		
+    			 $("#linkedin_stream").remove();
+        		 $('#linkedin_less').show();
+        		 $('#linkedin_refresh_stream').show();
 				return;
 			}
-    		data["current_update"] = update;
-    		 $("#linkedin_social_stream").html(getTemplate("linkedin-update-stream", data));
-    		 console.log( $('#current_activity').html());
-    		 $('#current_activity',$('#Linkedin')).hide();
+    		
+    		 data["linkedin_user_name"] = Linkedin_current_profile_user_name;
+    		 $("#linkedin_table").append(getTemplate("linkedin-update-stream", data));
     		 
-    		 $("#linkedin_stream").remove();
-    		 $('#linkedin_less').show();
+    		 $('#current_activity',$('#Linkedin')).hide();
     		 $('#linkedin_refresh_stream').show();
     	}).error(function(data) { 
     		
-    		$("#linkedin_social_stream").remove();
-   		
+    		$("#linkedin_table").remove();   		
     		alert(data.responseText); 
     	}); 
     });
@@ -250,7 +274,24 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
     });
    
    
-    
+    $('#linkedin_refresh_stream').die().live('click', function (e) {
+    	e.preventDefault();
+    	$('#linkedin_table').html(LOADING_HTML);
+    	$.getJSON("/core/api/widgets/updates/" + plugin_id + "/" + linkedin_id, function(data){
+    		
+    		if(data.length == 0)
+			{    		
+				return;
+			}
+    		
+    		$('#linkedin_refresh_stream').show();
+    		$("#linkedin_table").html(getTemplate("linkedin-update-stream", data));
+    		
+    	}).error(function(data) {  		
+    		
+    		alert(data.responseText); 
+    	}); 
+    });
 }
 
 

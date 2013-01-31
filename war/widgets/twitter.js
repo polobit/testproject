@@ -183,7 +183,9 @@ function showTwitterProfile(twitter_id, plugin_id) {
     // Shows loading, until profile is fetched
     $('#Twitter').html('<p><img src=\"img/1-0.gif\"></img></p>');
     
-    var update;
+    Twitter_Connected = data.is_connected;
+    
+    var update = data.current_update;
     // Fetches matching profiles
     $.getJSON("/core/api/widgets/profile/" + plugin_id + "/" + twitter_id, function (data) {
         console.log(data);
@@ -192,9 +194,7 @@ function showTwitterProfile(twitter_id, plugin_id) {
         // Gets Twitter-profile template and populate the fields using handlebars
         $('#Twitter').html(getTemplate("twitter-profile", data));
         
-        update = data.current_update;
-        
-        if(data.is_connected)
+         if(data.is_connected)
 		 {
 			 $('#twitter_unfollow').show();
 			 $('#twitter_message').show();
@@ -202,6 +202,12 @@ function showTwitterProfile(twitter_id, plugin_id) {
 		 else{
 			 $('#twitter_follow').show();
 		 }
+        
+    	if(data.current_update)
+       	{        
+       		$('#twitter_update_heading',$('#Twitter')).show();
+       		$('#twitter_current_activity',$('#Twitter')).show();
+       	}    
     });
     
     $('.twitter_stream').die().live('click', function (e) {
@@ -211,11 +217,19 @@ function showTwitterProfile(twitter_id, plugin_id) {
     		    		console.log(data.length);
     		    		if(data.length == 0)
 		    			{    		    
-		    				$("#twitter_social_stream").html('<div style="padding:10px 0px 10px 0px;word-wrap: break-word;border: 1px solid #f5f5f5;";>No updates available</div>');
-		    				return;
+    		    			if(Twitter_Connected){
+    		        			alert("No updates available");
+    		        			return;
+    		        		}
+    		        		alert("Member does not share his/her updates");
+    		        		return;
 		    			}
-    		    		data["current_update"] = update;
-    		 $('#current_activity',$('#Twitter')).hide();
+    		    		
+    		 if(!update){
+    			 $('#twitter_update_heading',$('#Twitter')).show(); 
+    		 }
+    		 
+    		 $('#twitter_current_activity',$('#Twitter')).hide();
     		 $("#twitter_social_stream").html(getTemplate("twitter-update-stream", data));    		
     		 $("#twitter_stream").remove();
     		 $('#twitter_less').show();
@@ -231,7 +245,7 @@ function showTwitterProfile(twitter_id, plugin_id) {
     	
     	if($(this).attr("less") == "true"){
     		$(this).attr("less","false");
-    		$('#current_activity',$('#Twitter')).hide();
+    		$('#twitter_current_activity',$('#Twitter')).hide();
     		$(this).text("See Less..");
     		$('#twitter_refresh_stream').show();
     		return;
@@ -239,7 +253,7 @@ function showTwitterProfile(twitter_id, plugin_id) {
     	
     	$(this).attr("less","true");
     	$(this).text("See More..");
-    	$('#current_activity',$('#Twitter')).show();
+    	$('#twitter_current_activity',$('#Twitter')).show();
     	$('#twitter_refresh_stream').hide();
     });
 }

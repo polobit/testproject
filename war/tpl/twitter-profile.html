@@ -1,7 +1,7 @@
 <script id="twitter-profile-template" type="text/html">         
 	<div style="display:inline;  line-height:12px;word-wrap: break-word;">
 	    <div class="row-fluid well" style="padding:0px;margin-bottom: 10px;background-color: white;">
-			<div class="row-fluid" style='padding-bottom:5px;'>
+			<div class="row-fluid" >
 	        	<div class="span3" style=" margin-right:3%">
 	            	<img src="{{picture}}" style=" display:inline; float:left; margin-right:2px; margin-top:5px; padding:0px 5px;cursor:pointer; color: #FF00FF" />
 	        	</div>
@@ -13,7 +13,7 @@
 				</div>
 			</div>
 			{{#if summary}}
-				<div class='row-fluid' style='padding: 0px 2px 10px 2px;font-size: 13px;'>
+				<div class='row-fluid' style='padding: 5px 2px 10px 2px;font-size: 13px;'>
 				 	{{summary}} 
 				</div>
 			{{/if}}				 
@@ -33,11 +33,11 @@
 			</div>			
 	    </div>
 		{{#if current_update}}
-			<div class="row-fluid well" style="padding:0px;margin-bottom: -3px;background-color:#ffffff;">				
+			<div class="row-fluid well" id="twitter_update_heading" style="padding:0px;margin-bottom: -3px;background-color:#ffffff;display:none;">				
 				<div style="background-color:#f5f5f5;text-align: center;">
 					<h5 style="color: #999999;">CURRENT ACTIVITY</h5>
 				</div>	
-				<div id="current_activity" style="padding:7px 0px 10px 0px;">	
+				<div id="twitter_current_activity" style="padding:7px 0px 10px 0px;display:none;">	
 					{{show_link_in_statement current_update}}
 				</div>
 	    	</div>
@@ -93,11 +93,6 @@
 <script id="twitter-update-stream-template" type="text/html">
 {{#if this.length}}
 	<div class="row-fluid well" style="padding:0px; background-color:#ffffff;border:1px solid #f5f5f5";word-wrap: break-word;>
-		{{#unless current_update}}
-			<div  style="text-align: center;background-color:#f5f5f5;">
-				<h5 style="color: #999999;">CURRENT UPDATES</h5>
-			</div>
-		{{/unless}}
 		{{#each this}}				
 			<div style="padding-top:7px;line-height: 120%;margin: 0px 1px 0px 1px;border-bottom: 1px solid #dedede;">						
 				{{show_link_in_statement message}}
