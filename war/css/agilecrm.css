@@ -51,7 +51,7 @@
 }
 
 @media ( min-width : 900px) {
-	body {
+	div#agilecrm-container {
 		padding-top: 60px; //
 		background-color: whitesmoke;
 	}
@@ -386,28 +386,50 @@ table .headerSortDown::after,table .headerSortDown:hover::after {
 	opacity: 0.6;
 }
 
-/* Footer to remain in botom of the page */
-html,body {
-	height: 93%;
-}
+/* Footer */
+  html,
+      body {
+        height: 100%;
+        /* The html and body elements cannot have any padding or margin. */
+      }
 
-#wrap {
-	min-height: 100%;
-}
+      /* Wrapper for page content to push down footer */
+      #wrap {
+        min-height: 100%;
+        height: auto !important;
+        height: 100%;
+        /* Negative indent footer by it's height */
+        margin: 0 auto -60px;
+      }
 
-#main {
-	overflow: visible;
-	padding-bottom: 40px;
-} /* must be same height as the footer */
-footer {
-	position: relative;
-	margin-top: -40px; /* negative value of footer height */
-	height: 40px;
-	clear: both;
-	border: none;
-	padding: 0px;
-}
+      /* Set the fixed height of the footer here */
+      #push,
+      #footer {
+        height: 60px;
+      }
+      
+      /* Lastly, apply responsive CSS fixes as necessary */
+      @media (max-width: 767px) {
+        #footer {
+          margin-left: -20px;
+          margin-right: -20px;
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+      }
 
+ footer #scroll-top
+{
+ position: fixed;
+    right: 10px;
+    bottom: 0px;
+    margin: 0px;
+    z-index: 99;
+    display: none;
+}
+  
+ 
+ 
 /*Disable selection using css */
 .unselectable {
 	-moz-user-select: -moz-none;
@@ -491,17 +513,17 @@ span.valid {
 	color: #a4a5aa;
 }
 
-/* To overcome page shifts due loading pages of different lengths, adds scroll bar default for all pages */
+/* /* To overcome page shifts due loading pages of different lengths, adds scroll bar default for all pages 
 html {
 	overflow-y: scroll;
 }
-
+ */
 /* Not to overide z-index of datepicker due to timepicker modal */
 .datepicker {
 	z-index: 2050!important;
 }
 
- #twilio-connect-button {
+#twilio-connect-button {
 	  background: url(https://www.twilio.com/packages/connect-apps/images/connect-button.png);
 	  width: 130px; height: 34px; display: block; margin: 0 auto;
 	 }

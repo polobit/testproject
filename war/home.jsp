@@ -88,7 +88,7 @@ String CSS_PATH = "/";
 </head>
 
 <body>
-
+<div id="wrap">
 	<div class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
 			<div class="container<%=width%>">
@@ -171,13 +171,12 @@ String CSS_PATH = "/";
 		</div>
 	</div>
 
-	<div class="container<%=width%>">
-		<div id="content" class="">
-
+	<div class="container<%=width%>" id="agilecrm-container">
+		<div id="content">
 			<img class="loading" style="padding-right: 5px" src="img/21-0.gif"></img>
-
 		</div>
 	</div>
+	<div id="push"></div>
 
 	<!-- <footer class="container"><a href="#top" id="top" class="btn btn-mini btn-flat btn-primary pull-right">Top &uarr;</a></footer>	-->
 	<!--  Notifications -->
@@ -198,7 +197,10 @@ String CSS_PATH = "/";
 			debug = false;
 	%>
 	
-	
+	</div>
+		<footer class="footer" id="footer" style="padding:0px !important">
+	        <a href="#" id="scroll-top" class="btn btn-mini btn-flat btn-primary pull-right">Top &uarr;</a>
+    	</footer>
 <script src='lib/headjs-min.js'></script>
 	
 	<script>
