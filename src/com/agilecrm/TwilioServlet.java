@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.datanucleus.util.StringUtils;
+
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -23,20 +25,20 @@ public class TwilioServlet extends HttpServlet
 	String state = request.getParameter("state");
 	System.out.println(state);
 	String oldNamespace = NamespaceManager.get();
+	String namespace = state.split("://")[1].split("\\.")[0];
 
-	String[] params = state.split(",");
-	String url = params[0];
-	String id = params[1];
+	if (StringUtils.isEmpty(namespace))
+	    return;
 
-	NamespaceManager.set(state);
+	NamespaceManager.set(namespace);
 	Widget widget = WidgetUtil.getWidget("Twilio");
 	widget.addProperty("token", accountSid);
-	System.out.println(widget.toString());
+	System.out.println(widget);
 	widget.save();
 	NamespaceManager.set(oldNamespace);
 
-	response.sendRedirect("https://" + url + "/#contacts/" + id);
+	response.sendRedirect(state);
 
-	// response.sendRedirect("http://example.com/myapp");
     }
+
 }

@@ -45,8 +45,12 @@ $(function() {
  */
 function setupTwilioOAuth(plugin_id) {
 	
-	 $('#Twilio').html('<a href="https://www.twilio.com/authorize/CN0830ebdfa28e0a919fd477f8276e2ca3?state='+location.host+','+agile_crm_get_contact().id+'"id="twilio-connect-button"></a>');
+	// $('#Twilio').html('<a href="https://www.twilio.com/authorize/CN0830ebdfa28e0a919fd477f8276e2ca3?state='+location.host+','+agile_crm_get_contact().id+'"id="twilio-connect-button"></a>');
 
+	 $('#Twilio').html('<a href="https://www.twilio.com/authorize/CNf63bca035414be121d517a116066a5f8?state=' + encodeURIComponent(window.location.href) + '"id="twilio-connect-button"></a>');
+
+	
+				
 }
 
 function setUpTwilio(data){
