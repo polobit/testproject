@@ -6,13 +6,11 @@ import com.twilio.sdk.client.TwilioCapability.DomainException;
 public class TwilioUtil
 {
 
-    public static String generateTwilioToken(String accountSid, String authToken)
+    public static String generateTwilioToken(String accountSid)
     {
+	String authToken = "b6420aa8715bad58ad2cff61036b4640";
 	TwilioCapability capability = new TwilioCapability(accountSid,
 		authToken);
-
-	capability.allowClientOutgoing("APdda81c58897889bee9497fef24056bb8");
-	capability.allowClientIncoming("APdda81c58897889bee9497fef24056bb8");
 
 	String token = null;
 	try

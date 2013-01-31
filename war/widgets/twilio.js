@@ -12,13 +12,20 @@ $(function() {
 	// fetch details
 	var plugin_prefs = plugin.prefs;
 
+	if(!agile_crm_get_contact_property("phone"))
+		{
+			$("#Twilio").html("No contact number associated with this contact");
+			return;
+		}
+	
 	// If not found - considering first time usage of widget, setupTwilioOAuth
 	// called
 	if (plugin_prefs == undefined) {
 		setupTwilioOAuth(plugin_id);
 		return;
 	}
-	$.post("/core/api/widgets/twilio", JSON.parse(plugin_prefs), function(data){
+	var prefs = JSON.parse(plugin_prefs);
+	$.get("/core/api/widgets/twilio/"+prefs.token,  function(data){
 		console.log("generated token : " + data);
 		setUpTwilio(data);
 	})
@@ -38,35 +45,8 @@ $(function() {
  */
 function setupTwilioOAuth(plugin_id) {
 	
-	// Shows an input filed to save the the prefs (api key provided by Twilio)
-	$('#Twilio')
-			.html(
-					Twilio_PLUGIN_HEADER
-							+ '<div><p>Stay connected to your users with Twilio phone numbers in 40 countries all over the globe. To access </p> <p><label><b>Enter Your API key</b></label>'
-							+ '<input type="text" id="Twilio_api_key" class="input-medium required" placeholder="API Key" value=""></input></p><p><label><b>Enter Your SID key</b></label>'
-							+ '<input type="text" id="Twilio_sid_key" class="input-medium required" placeholder="SID Key" value=""></input></p>'
-							+ '<button id="save_api_key" class="btn"><a href="#">Save</a></button><br/>'
-							+ '</div>');
+	 $('#Twilio').html('<a href="https://www.twilio.com/authorize/CN0830ebdfa28e0a919fd477f8276e2ca3?state='+location.host+','+agile_crm_get_contact().id+'"id="twilio-connect-button"></a>');
 
-	// Saves the api key
-	$('#save_api_key').die().live('click', function(e) {
-		e.preventDefault();
-		var api_key = $("#Twilio_api_key").val();
-		var sid_key = $("#Twilio_sid_key").val();
-		
-		console.log(api_key);
-		// If input field is empty return
-		if(api_key == "" || sid_key == "")
-			return;
-		
-		var prefs = {};
-		prefs["token"] = sid_key;
-		prefs["secret"] = api_key;
-		
-		// api_key = "f3e71aadbbc564750d2057612a775ec6";
-		agile_crm_save_widget_prefs(Twilio_PLUGIN_NAME, JSON.stringify(prefs));
-		
-	});
 }
 
 function setUpTwilio(data){
@@ -74,7 +54,13 @@ function setUpTwilio(data){
 	if(!data)
 		return;
 	
+	
+
+
+	
 	 $('#Twilio').html('<p><img src=\"img/1-0.gif\"></img></p>');
+	
+console.log(location.href+'/#'+location.hash);
 	 
 	head.js("https://static.twilio.com/libs/twiliojs/1.1/twilio.min.js", function(){
 		  //$(document).ready(function () {

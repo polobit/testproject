@@ -542,15 +542,14 @@ public class WidgetsAPI
 	return Rapleaf.getRapportiveValue(email, apikey).toString();
     }
 
-    @Path("twilio")
-    @POST
+    @Path("twilio/{accountSID}")
+    @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String getTwilioToken(@FormParam("token") String accountSID,
-	    @FormParam("secret") String authToken)
+    public String getTwilioToken(@PathParam("accountSID") String accountSID)
     {
-	if (accountSID == null || authToken == null)
+	if (accountSID == null)
 	    return null;
 
-	return TwilioUtil.generateTwilioToken(accountSID, authToken);
+	return TwilioUtil.generateTwilioToken(accountSID);
     }
 }

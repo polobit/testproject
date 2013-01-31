@@ -126,6 +126,15 @@
  	<url-pattern>/backend/stripewebhook/*</url-pattern>
  </servlet-mapping>
  
+ <servlet>
+	<servlet-name>TwilioServlet</servlet-name> 
+	<servlet-class>com.agilecrm.TwilioServlet</servlet-class> 
+</servlet>
+<servlet-mapping>
+	<servlet-name>TwilioServlet</servlet-name> 
+	<url-pattern>/backend/TwilioServlet</url-pattern> 
+</servlet-mapping>
+ 
 
 <servlet>
   <servlet-name>ForgotDomain</servlet-name> 
