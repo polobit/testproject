@@ -69,9 +69,14 @@ var ContactsRouter = Backbone.Router.extend({
      * Initiates infiniScroll to fetch contacts (25 in count) step by step on 
      * scrolling down instead of fetching all at once. 
      */
-    contacts: function (tag_id, filter_id) {
+    contacts: function (tag_id, filter_id, grid_view) {
     	var max_contacts_count = 20;
-    	
+    	var template_key = "contacts";
+    	var individual_tag_name = "tr";
+    	if(grid_view || readCookie("agile_contact_view")){
+    		template_key = "contacts-grid";
+        	individual_tag_name = "div";
+    	}
     	// Default url for contacts route
     	var url = '/core/api/contacts';
     	
@@ -110,8 +115,8 @@ var ContactsRouter = Backbone.Router.extend({
       	 */
         this.contactsListView = new Base_Collection_View({
               url: url,
-              templateKey: "contacts",
-              individual_tag_name: 'tr',
+              templateKey: template_key,
+              individual_tag_name: individual_tag_name,
               cursor: true,
               page_size: 25,
               postRenderCallback: function(el) {
