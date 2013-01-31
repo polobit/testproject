@@ -260,7 +260,7 @@ var Base_Model_View = Backbone.View
 				if (isValid == false || !isValidForm($form)) {
 					
 					// Removes disabled attribute of save button
-					$form.find('.save').removeAttr('disabled', 'disabled');
+					$form.find('.save').removeAttr('disabled');
 					
 					return;
 				}

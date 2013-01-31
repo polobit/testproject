@@ -146,9 +146,23 @@ $(function() {
 
 		// Erases the cookie
 		eraseCookie("contact_view");
+		eraseCookie("agile_contact_view");
 
 		// Loads the contacts
 		App_Contacts.contacts();
+
+	});
+	
+	// If grid view is selected, contacts are loaded with grid view and
+	// creates the grid view cookie 
+	$('.GridView').die().live('click', function(e) {
+		e.preventDefault();
+
+		// Creates the cookie
+		createCookie("agile_contact_view", "grid_view");
+
+		// Loads the contacts
+		App_Contacts.contacts(undefined, undefined, true);
 
 	});
 });
