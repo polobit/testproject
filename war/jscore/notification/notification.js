@@ -132,7 +132,7 @@ function _setupSockets(api_key) {
 		 * notification object*
 		 */
 		object.type = parse_data.type;
-		// console.log(object);
+        //console.log("object " , object);
 
 		var html = getTemplate('notify-html', object);
 
@@ -147,8 +147,7 @@ function _setupSockets(api_key) {
 
 				if (notification_prefs[key])
 					//notify('information', html, 'bottom-right',true);
-				    showNoty('warning', html, 'bottomRight');
-
+				    showNoty('information', html, 'bottomRight');
 			}
 
 		});
@@ -229,7 +228,7 @@ function notificationForBrowsing(contact) {
 		// Show picture, name, title, company
 		// JSON.stringify(data.toJSON())
 		//notify('success1', html, 'bottom-right', true);
-		showNoty('warning', html, 'bottomRight');
+		showNoty('information', html, 'bottomRight');
 	}
 
 	// Notification for assigned and starred contacts
@@ -240,7 +239,7 @@ function notificationForBrowsing(contact) {
 		// Show notifications for contacts of same user
 		if (current_user == contact_created_by)
 			//notify('success1', html, 'bottom-right', true);
-			showNoty('warning', html, 'bottomRight');
+			showNoty('information', html, 'bottomRight');
 	}
 
 }

@@ -302,12 +302,14 @@ public class Opportunity
 		DealTriggerUtil.executeTriggerForNewDeal(this);
 	}
 
-	// Executes notification for new deal
-	if (this.id == null)
-	    DealNotificationPrefsUtil.executeNotificationForNewDeal(this);
+	Long id = this.id;
 
 	// Save opportunity in dao
 	dao.put(this);
+
+	// Executes notification for new deal, inorder to get id
+	if (id == null)
+	    DealNotificationPrefsUtil.executeNotificationForNewDeal(this);
     }
 
     /**

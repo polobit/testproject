@@ -4,6 +4,8 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.google.appengine.api.NamespaceManager;
+import com.googlecode.objectify.annotation.Indexed;
 
 /**
  * <code>URLShortener</code> considers Id, long url, contact id and tracking id
@@ -43,12 +45,19 @@ public class URLShortener
 
     /*
      * Prefix public static final String SHORTENER_URL =
-     * "http://campaigntaskrunners.appspot.com/click/";
+     * "http://campaigntaskrunners.appspot.com/click/"; public static final
+     * String SHORTENER_URL = "http://cspt.cc/";
      */
     /**
      * Shortener Url.
      */
-    public static final String SHORTENER_URL = "http://cspt.cc/";
+    public static final String SHORTENER_URL = "http://agle.cc/";
+
+    /**
+     * Show namespace
+     */
+    @Indexed
+    public String namespace;
 
     /**
      * Dao for URLShortener class.
@@ -84,11 +93,22 @@ public class URLShortener
     }
 
     /**
-     * Saves URLShortener Object.
+     * Saves URLShortener Object in empty namespace.
      */
     public void save()
     {
-	dao.put(this);
+	// Sets empty namespace
+	namespace = NamespaceManager.get();
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+	try
+	{
+	    dao.put(this);
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
     }
 
     public String toString()

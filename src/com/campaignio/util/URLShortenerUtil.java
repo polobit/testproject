@@ -155,11 +155,4 @@ public class URLShortenerUtil
 	}
 	return returnValue;
     }
-
-    public static void main(String[] ares)
-    {
-	String shortURL = "http://cspt.cc/naresh/33m";
-	URLShortener url = URLShortenerUtil.getURLShortener(shortURL);
-	System.out.println(url.long_url);
-    }
 }
