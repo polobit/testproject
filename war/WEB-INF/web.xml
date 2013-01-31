@@ -245,7 +245,7 @@
  </servlet>
  <servlet-mapping>
  <servlet-name>RedirectServlet</servlet-name>
- <url-pattern>/click/*</url-pattern>
+ <url-pattern>/backend/click/*</url-pattern>
  </servlet-mapping>
  
  <servlet><servlet-name>TaskQueueServlet</servlet-name>
@@ -253,7 +253,7 @@
  </servlet>
  <servlet-mapping>
  <servlet-name>TaskQueueServlet</servlet-name>
- <url-pattern>/worker</url-pattern>
+ <url-pattern>/backend/worker</url-pattern>
  </servlet-mapping>
  
  <servlet><servlet-name>EmailOpenServlet</servlet-name>
@@ -261,7 +261,7 @@
  </servlet>
  <servlet-mapping>
  <servlet-name>EmailOpenServlet</servlet-name>
- <url-pattern>/open/*</url-pattern>
+ <url-pattern>/backend/open/*</url-pattern>
  </servlet-mapping>
  
 </web-app>
