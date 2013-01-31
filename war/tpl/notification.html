@@ -1,5 +1,5 @@
 <script id="notify-html-template" type="text/html">
-<div style="display:inline;position:relative;color:#333">
+<!--<div style="display:inline;position:relative;color:#333">
     <h3>Notification</h3>
     <br/>
     <div>
@@ -26,5 +26,16 @@
                 <b>{{#if_notification_type}} {{type}} {{/if_notification_type}}</b> 
                 </span>
     </div>
+</div>-->
+
+<div>  
+   {{#if entity_type}}
+       <span><a href="#deals/{{id}}">{{name}}</a></span>
+   {{else}}
+       <span style="height:auto;display:inline-block;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:7em;padding:10;vertical-align:text-top">
+           <a href="#contact/{{id}}" title=" {{getPropertyValue properties "first_name"}} {{ getPropertyValue properties "last_name"}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>   
+       </span>
+   {{/if}} 
+    <span>{{#if_notification_type}} {{type}} {{/if_notification_type}}</span>
 </div>
 </script>

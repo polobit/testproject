@@ -327,16 +327,24 @@ $(function() {
 	});
 	
 	/**
-	 * Returns notification type,by replacing 'is' with underscore and 
-	 * converting into lowercase,excluding first letter. 
+	 * Returns notification type,by replacing 'has been' with underscore and 
+	 * converting into lowercase. 
 	 */
 	Handlebars.registerHelper('if_notification_type', function() {
-
-		var str = this.type.replace(/_/g, ' is ');
-		var temp = str.toLowerCase();
-
-		return temp.charAt(0).toUpperCase() + temp.slice(1);
-
+		
+		// Makes 'TAG_CREATED' to 'created tag'
+		if(this.type == 'TAG_CREATED' || this.type == 'TAG_DELETED')
+			{
+			  var arr = this.type.split('_');
+			  var temp = arr[1] + " " + arr[0];
+			  return temp.toLowerCase();
+			}
+		
+		// Replaces '_' with 'has been' 
+		var str = this.type.replace(/_/g, ' has been ');
+		return str.toLowerCase();
+		
+	//return temp.charAt(0).toUpperCase() + temp.slice(1);
 	});
 	
 	

@@ -1,5 +1,5 @@
 <script id="browsing-notification-html-template" type="text/html">
-<div style='display:inline;position:relative;color:#333'>
+<!--<div style='display:inline;position:relative;color:#333'>
     <h3>Notification</h3>
     <div>
         <img class="thumbnail" src="{{gravatarurl properties 50}}" width="50" height="50" style="display:inline; vertical-align:top" />			
@@ -13,5 +13,12 @@
             <b>Browsing ...</b> 
         </span>
     </div>  
+</div> -->
+
+<div>  
+    <span style="height:auto;display:inline-block;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:7em;padding:10;vertical-align:text-top;">
+        <b title=" {{getPropertyValue properties "first_name"}} {{ getPropertyValue properties "last_name"}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</b>   
+    </span> 
+    <span> is browsing...</span>
 </div>
 </script>
