@@ -42,17 +42,25 @@ public class NotificationsDeferredTask implements DeferredTask
     JSONObject objectJson = null;
 
     /**
+     * To get apiKey
+     */
+    String apiKey = null;
+
+    /**
      * Constructs a new {@link NotificationsDeferredTask}.
      * 
      * @param type
      *            Notification type.
      * @param objectData
      *            Object like Contact, Deals etc.
+     * @param apiKey
+     *            ApiKey.
      */
-    public NotificationsDeferredTask(Type type, String objectData)
+    public NotificationsDeferredTask(Type type, String objectData, String apiKey)
     {
 	this.type = type;
 	this.objectData = objectData;
+	this.apiKey = apiKey;
     }
 
     /*
@@ -60,24 +68,28 @@ public class NotificationsDeferredTask implements DeferredTask
      * 
      * @see java.lang.Runnable#run()
      */
-    @SuppressWarnings({ "deprecation", "unchecked" })
+    @SuppressWarnings({ "deprecation", "unchecked", "unused" })
     public void run()
     {
-	// Get API Key
-	APIKey api = APIKey.getAPIKey();
-	String apiKey = api.api_key;
+	try
+	{
+	    // Inorder to get type along with notification
+	    objectJson = new JSONObject();
+	    objectJson.put("object", objectData);
+	    objectJson.put("type", type.toString());
 
-	// Inorder to get type along with notification
-	objectJson = new JSONObject();
-	objectJson.put("object", objectData);
-	objectJson.put("type", type.toString());
+	    url = Globals.PUSH_STATS + "?custom="
+		    + URLEncoder.encode(objectJson.toString()) + "&agile_id="
+		    + URLEncoder.encode(apiKey) + "&type="
+		    + URLEncoder.encode(type.toString());
+	    System.out.println(url);
+	    String output = HTTPUtil.accessURL(url);
+	    // System.out.println(output);
 
-	url = Globals.PUSH_STATS + "?custom="
-		+ URLEncoder.encode(objectJson.toString()) + "&agile_id="
-		+ URLEncoder.encode(apiKey) + "&type="
-		+ URLEncoder.encode(type.toString());
-
-	String output = HTTPUtil.accessURL(url);
-	System.out.println(output);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 }
