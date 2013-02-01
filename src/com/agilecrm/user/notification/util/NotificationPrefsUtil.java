@@ -2,6 +2,7 @@ package com.agilecrm.user.notification.util;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
+import com.agilecrm.account.APIKey;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.notification.NotificationPrefs;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
@@ -87,12 +88,14 @@ public class NotificationPrefsUtil
     public static void executeNotification(Type type, Object object)
     {
 	String jsonData = null;
+	APIKey api;
 
 	// Converting object to json
 	try
 	{
 	    ObjectMapper mapper = new ObjectMapper();
 	    jsonData = mapper.writeValueAsString(object);
+	    api = APIKey.getAPIKey();
 	}
 	catch (Exception e)
 	{
@@ -101,7 +104,7 @@ public class NotificationPrefsUtil
 	}
 
 	NotificationsDeferredTask notificationsDeferredTask = new NotificationsDeferredTask(
-		type, jsonData);
+		type, jsonData, api.api_key);
 	Queue queue = QueueFactory.getDefaultQueue();
 	queue.add(TaskOptions.Builder.withPayload(notificationsDeferredTask));
     }
