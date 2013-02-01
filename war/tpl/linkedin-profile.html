@@ -32,7 +32,7 @@
 				<h5 style="color: #999999;">CURRENT ACTIVITY</h5>
 			</div>	
 			{{#if current_update}}
-			<div id="current_activity" style="padding:7px 0px 10px 0px;display:none;">	
+			<div id="linkedin_current_activity" style="padding:7px 0px 10px 0px;display:none;">	
 				{{#is_link current_update}}
 	        		{{name}} shared a <a href="{{current_update}}" target="_blank" >link</a>
 				{{else}}
@@ -91,6 +91,7 @@
 					</td>				
 				</tr>
 			{{/each}}
+			<tr/>
 {{/if}}
 </script>
 

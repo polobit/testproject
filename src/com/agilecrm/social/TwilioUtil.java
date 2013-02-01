@@ -14,6 +14,8 @@ public class TwilioUtil
 	TwilioCapability capability = new TwilioCapability(accountSid,
 		authToken);
 
+	capability.allowClientOutgoing("CNf63bca035414be121d517a116066a5f8");
+
 	String token = null;
 	try
 	{

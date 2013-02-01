@@ -46,6 +46,9 @@ $(function () {
     $('#twitter_follow').die().live('click', function(e)
     {
     	e.preventDefault();
+    	if ($(this).attr("disabled"))
+    		return;
+    	
     	sendFollowRequest(plugin_id, twitter_id);
     });
     
@@ -183,14 +186,18 @@ function showTwitterProfile(twitter_id, plugin_id) {
     // Shows loading, until profile is fetched
     $('#Twitter').html('<p><img src=\"img/1-0.gif\"></img></p>');
     
-    Twitter_Connected = data.is_connected;
+    var twitter_connected;    
+    var update;
     
-    var update = data.current_update;
     // Fetches matching profiles
     $.getJSON("/core/api/widgets/profile/" + plugin_id + "/" + twitter_id, function (data) {
-        console.log(data);
+        
         $('#Twitter_plugin_delete').show();
+        
         Twitter_current_profile_user_name = data.name;
+        twitter_connected = data.is_connected;
+        update = data.current_update;
+        
         // Gets Twitter-profile template and populate the fields using handlebars
         $('#Twitter').html(getTemplate("twitter-profile", data));
         
@@ -199,8 +206,12 @@ function showTwitterProfile(twitter_id, plugin_id) {
 			 $('#twitter_unfollow').show();
 			 $('#twitter_message').show();
 		 }
-		 else{
-			 $('#twitter_follow').show();
+		 else
+		 {
+			if(!data.is_follow_request_sent)
+				 $('#twitter_follow').show();
+			else 
+				$('#twitter_follow').text("Follow Request Sent").attr("disabled", "disabled").show();				 
 		 }
         
     	if(data.current_update)
@@ -216,12 +227,13 @@ function showTwitterProfile(twitter_id, plugin_id) {
     	$.getJSON("/core/api/widgets/updates/" + plugin_id + "/" + twitter_id, function(data){    					
     		    		console.log(data.length);
     		    		if(data.length == 0)
-		    			{    		    
-    		    			if(Twitter_Connected){
+		    			{   
+    		    			$("#twitter_social_stream").remove();
+    		    			if(twitter_connected){
     		        			alert("No updates available");
     		        			return;
     		        		}
-    		        		alert("Member does not share his/her updates");
+    		        		alert("Member does not share his/her updates.Follow him on twitter");
     		        		return;
 		    			}
     		    		
@@ -309,9 +321,9 @@ function sendFollowRequest(plugin_id, twitter_id) {
 		    }
 		    
 		    $.post( "/core/api/widgets/connect/" + plugin_id + "/" + twitter_id , $('#twitter_messageForm').serialize(), function(data) {
+		    	
 		    	if(data == "true"){
-		    		//$('#twitter_follow').text("unfollow");
-					//$('#twitter_follow').attr("id", "twitter_unfollow");
+		    		
 		    		$('#twitter_follow').hide();
 					$('#twitter_unfollow').show();
 					$('#twitter_message').show();
@@ -322,7 +334,7 @@ function sendFollowRequest(plugin_id, twitter_id) {
 		    	
 		       }).error(function(data) { 
 		    	   $('#twitter_messageModal').remove();
-		    		alert(data.responseText); 
+		    		alert(data.status); 
 		    	}) 
 		});
 }

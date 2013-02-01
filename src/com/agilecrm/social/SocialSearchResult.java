@@ -22,6 +22,7 @@ public class SocialSearchResult
     public String current_update = "";
     public String distance = "";
     public boolean is_connected;
+    public boolean is_follow_request_sent;
     public boolean is_followed_by_target;
     @Embedded
     public List<SocialUpdateStream> updateStream = null;

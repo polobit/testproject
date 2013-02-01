@@ -49,7 +49,7 @@ function set_up_account_stats(el)
  */
 $(function()
 {
-	$("#cancel-account").click(
+	$("#cancel-account").die().live('click',
 			function(e)
 			{
 				e.preventDefault();

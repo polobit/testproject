@@ -160,6 +160,7 @@ public class TwitterUtil
 	result.current_update = (user.getStatus() != null) ? user.getStatus()
 		.getText() : null;
 	result.url = "https://twitter.com/" + user.getScreenName();
+	result.is_follow_request_sent = user.isFollowRequestSent();
 	result.is_connected = twitter.showFriendship(twitter.getId(),
 		user.getId()).isSourceFollowingTarget();
 	result.is_followed_by_target = twitter.showFriendship(twitter.getId(),

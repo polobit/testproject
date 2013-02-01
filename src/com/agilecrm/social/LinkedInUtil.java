@@ -222,7 +222,7 @@ public class LinkedInUtil
 	result.current_update = person.getCurrentStatus();
 	result.num_connections = String.valueOf(person.getNumConnections());
 
-	if (person.getDistance() == 1l)
+	if (!(person.getDistance() > 1l))
 	{
 	    result.is_connected = true;
 	    if (!(getNetworkUpdates(widget, linkedInId, 0, 5) instanceof Exception))
