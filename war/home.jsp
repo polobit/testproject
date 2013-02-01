@@ -155,7 +155,10 @@ String CSS_PATH = "/";
 								    if (domainUser != null && domainUser.is_admin)
 										out.println("<li><a href='#admin'><i class='icon-fire'></i> Admin Settings</a></li>");
 								%>
-							
+							   <%
+							        if(domainUser.domain == "admin")
+							           out.println("<li><a href='#all-domain-users'><i class='icon-group'></i> All Domain Users</a></li>");
+							   %>
 
 						<li><a href="#contact-us"><i class="icon-pencil"></i>
 								Contact Us</a></li>

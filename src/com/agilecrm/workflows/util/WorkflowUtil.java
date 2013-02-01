@@ -3,14 +3,17 @@ package com.agilecrm.workflows.util;
 import java.util.List;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.workflows.Workflow;
+import com.campaignio.CampaignStats;
 import com.campaignio.tasklets.deferred.TaskletWorkflowDeferredTask;
 import com.campaignio.tasklets.util.TaskletUtil;
+import com.campaignio.util.CampaignStatsUtil;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -224,6 +227,32 @@ public class WorkflowUtil
 	{
 	    e.printStackTrace();
 	}
+    }
+
+    public static void deleteRelatedEntities(JSONArray campaignIds)
+    {
+	CampaignStats stats = null;
+	String campaignId = "";
+
+	for (int i = 0; i < campaignIds.length(); i++)
+	{
+	    try
+	    {
+		campaignId = campaignIds.getString(i);
+		// System.out.println("CampaignId " + campaignId);
+	    }
+	    catch (JSONException e)
+	    {
+		e.printStackTrace();
+	    }
+	    stats = CampaignStatsUtil.getCampaignStatsByCampaignId(Long
+		    .parseLong(campaignId));
+	}
+
+	if (stats == null)
+	    return;
+
+	stats.delete();
     }
 
     /**

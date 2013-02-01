@@ -110,7 +110,8 @@ public class WorkflowsAPI
     }
 
     /**
-     * Deletes selected workflows using their keys list.
+     * Deletes selected workflows using their keys list.Deletes related
+     * campaignStats
      * 
      * @param model_ids
      *            array of workflow ids as String.
@@ -123,6 +124,10 @@ public class WorkflowsAPI
 	    throws JSONException
     {
 	JSONArray workflowsJSONArray = new JSONArray(model_ids);
+
+	// Deletes CampaignStats
+	WorkflowUtil.deleteRelatedEntities(workflowsJSONArray);
 	Workflow.dao.deleteBulkByIds(workflowsJSONArray);
+
     }
 }

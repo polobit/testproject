@@ -25,7 +25,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		"analytics-code" : "analyticsCode",
 
 		/* Milestones */
-		"milestones" : "milestones"
+		"milestones" : "milestones",
+		
+		/* All Domain Users */
+		"all-domain-users" : "allDomainUsers"
 	},
 
 	/**
@@ -183,4 +186,18 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 		$('#content').html(view.render().el);
 	},
+	
+	/**
+	 * Creates a Model to show All Domain Users.
+	 **/
+	allDomainUsers : function(){
+		allDomainUsersCollectionView = new Base_Collection_View({
+			url : 'core/api/users/admin/domain-users',
+			templateKey : "all-domain-users",
+			individual_tag_name : 'tr'
+		});
+		
+	allDomainUsersCollectionView.collection.fetch();
+    $('#content').html(allDomainUsersCollectionView.el);
+	}
 });

@@ -14,6 +14,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -187,5 +188,29 @@ public class UsersAPI
 
 	    deleteDomainUser(domainuser);
 	}
+    }
+
+    /**
+     * Gets list of all domain users irrespective of domain for the users of
+     * domain "admin".
+     * 
+     * @return DomainUsers list
+     */
+    @Path("/admin/domain-users")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<DomainUser> getAllDomainUsers()
+    {
+	String domain = NamespaceManager.get();
+
+	if (StringUtils.isEmpty(domain) || !domain.equals("admin"))
+	{
+	    throw new WebApplicationException(
+		    Response.status(Response.Status.BAD_REQUEST)
+			    .entity("Sorry you don't have privileges to access this page.")
+			    .build());
+	}
+
+	return DomainUserUtil.getAllDomainUsers();
     }
 }

@@ -1,0 +1,55 @@
+<script id="all-domain-users-model-template" type="text/html">
+<td>{{name}}</td>
+<td>{{email}}</td>
+<td>{{domain}}</td>
+<td>{{is_account_owner}}</td>
+</script>
+
+<script id="all-domain-users-collection-template" type="text/html">
+<div class="row">
+<div class="span12">
+    <div class="page-header">
+        <h1>List of All Domain Users</h1>
+    </div>
+</div>
+</div>
+<div class="row">
+<div class="span9">
+    {{#unless this.length}}
+    <div class="slate">
+        <div class="slate-content">
+            <div class="box-left">
+                <img alt="Clipboard" src="/img/clipboard.png" />
+            </div>
+            <div class="box-right">
+                <h3>You don't have Domain Users.</h3>
+                <div class="text">
+                    No user is registered yet.
+                </div>
+                <a href="#">Click here to learn more</a>
+                <br />
+                <a href="#" class="btn blue btn-slate-action"><i class="icon-plus-sign"></i> Domain Users !</a>
+            </div>
+        </div>
+    </div>
+    {{/unless}}
+    {{#if this.length}}
+    <div class="data-block">
+        <div class="data-container">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Domain</th>
+                        <th>Account Owner</th>
+                    </tr>
+                </thead>
+                <tbody id="all-domain-users-model-list"></tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</div>
+</div>
+</script>

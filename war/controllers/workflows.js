@@ -110,6 +110,7 @@ var WorkflowsRouter = Backbone.Router.extend({
 		$('#content').html(logsListView.el);
 	},
 	
+	/** Gets list of campaign-stats **/
 	campaignStats : function(){
 		this.campaignStatsCollectionView = new Base_Collection_View({
 			url : 'core/api/campaign-stats',
