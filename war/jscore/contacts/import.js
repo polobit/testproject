@@ -11,6 +11,7 @@ function fileUploadInit() {
 		element : document.getElementById('file-upload-div'),
 		action : '/core/api/contacts/upload',
 		debug : true,
+		allowedExtensions: ["csv"],
 		onComplete : function(id, fileName, data) {
 
 			// import-contacts template is populated with the processed data
