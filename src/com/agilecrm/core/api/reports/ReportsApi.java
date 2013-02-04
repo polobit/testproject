@@ -18,6 +18,7 @@ import org.json.JSONException;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.reports.Reports;
+import com.google.appengine.api.NamespaceManager;
 
 @Path("/api/reports")
 public class ReportsApi
@@ -95,6 +96,11 @@ public class ReportsApi
 
 	JSONArray reportsJSONArray = new JSONArray(model_ids);
 
+	String oldName = NamespaceManager.get();
+	NamespaceManager.set("");
+
 	Reports.dao.deleteBulkByIds(reportsJSONArray);
+
+	NamespaceManager.set(oldName);
     }
 }
