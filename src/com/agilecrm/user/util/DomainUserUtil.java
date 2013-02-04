@@ -220,6 +220,22 @@ public class DomainUserUtil
     }
 
     /**
+     * Returns list of domain users based on page size.
+     * 
+     * @param max
+     *            Maximum number of domain users list based on page size query
+     *            param.
+     * @param cursor
+     *            Cursor string that points the list that exceeds page_size.
+     * @return Returns list of domain users with respective to page size and
+     *         cursor.
+     */
+    public static List<DomainUser> getAllDomainUsers(int max, String cursor)
+    {
+	return dao.fetchAll(max, cursor);
+    }
+
+    /**
      * Gets account owners of the given domain
      * 
      * @param domain

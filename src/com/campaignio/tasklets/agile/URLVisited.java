@@ -1,7 +1,6 @@
 package com.campaignio.tasklets.agile;
 
 import java.net.URLEncoder;
-import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,6 +12,7 @@ import com.agilecrm.util.DBUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>URLVisited</code> represents URLVisited node in the workflow. It access
@@ -45,34 +45,30 @@ public class URLVisited extends TaskletAdapter
     {
 	// Get URL value
 	String url = getStringValue(nodeJSON, subscriberJSON, data, URL);
-
-	if (url == null)
-	    return;
-
 	String subscriberId = DBUtil.getId(subscriberJSON);
 
-	List<DomainUser> users = DomainUserUtil.getAllDomainUsers();
-	Long domainId = null;
-	for (DomainUser user : users)
+	String domain = NamespaceManager.get();
+
+	// Get DomainUser who is account owner with respect to domain
+	DomainUser domainOwner = DomainUserUtil.getDomainOwner(domain);
+
+	if (domainOwner == null)
 	{
-	    if (user.is_account_owner == true)
-		domainId = user.id;
+	    // Execute Next One in Loop
+	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
+		    nodeJSON, null);
+	    return;
 	}
 
-	// Get API Key
-	APIKey api = APIKey.getAPIKeyRelatedToUser(domainId);
+	// Get API Key of domain owner
+	APIKey api = APIKey.getAPIKeyRelatedToUser(domainOwner.id);
 	String apiKey = api.api_key;
 
-	String customUrl = "";
-	if (url.contains("?"))
-	    customUrl = url + "&agile_id=" + URLEncoder.encode(apiKey)
-		    + "&subscriber_id=" + URLEncoder.encode(subscriberId);
-	else
-	    customUrl = url + "?agile_id=" + URLEncoder.encode(apiKey)
-		    + "&subscriber_id=" + URLEncoder.encode(subscriberId);
+	url += "&agile_id=" + URLEncoder.encode(apiKey) + "&subscriber_id="
+		+ URLEncoder.encode(subscriberId);
 
 	// Access given URL
-	String output = HTTPUtil.accessURL(customUrl);
+	String output = HTTPUtil.accessURL(url);
 
 	// Checks whether output string can be converted to JSONObject
 	boolean validJSON = isValidJSON(output);

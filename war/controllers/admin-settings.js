@@ -194,7 +194,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		allDomainUsersCollectionView = new Base_Collection_View({
 			url : 'core/api/users/admin/domain-users',
 			templateKey : "all-domain-users",
-			individual_tag_name : 'tr'
+			individual_tag_name : 'tr',
+			cursor : true,
+			page_size : 25
 		});
 		
 	allDomainUsersCollectionView.collection.fetch();
