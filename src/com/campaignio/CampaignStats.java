@@ -35,17 +35,20 @@ public class CampaignStats
     /**
      * Emails sent count
      */
-    public int emails_sent;
+    @NotSaved(IfDefault.class)
+    public int emails_sent = 0;
 
     /**
      * Emails clicked count
      */
-    public int emails_clicked;
+    @NotSaved(IfDefault.class)
+    public int emails_clicked = 0;
 
     /**
      * Emails opened count
      */
-    public int emails_opened;
+    @NotSaved(IfDefault.class)
+    public int emails_opened = 0;
 
     /**
      * Campaign Stats Dao

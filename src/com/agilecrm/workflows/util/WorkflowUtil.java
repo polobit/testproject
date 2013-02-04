@@ -229,6 +229,12 @@ public class WorkflowUtil
 	}
     }
 
+    /**
+     * Deletes Campaign Stats related to campaign that is selected for delete.
+     * 
+     * @param campaignIds
+     *            - Campaign Id of deleted campaign.
+     */
     public static void deleteRelatedEntities(JSONArray campaignIds)
     {
 	CampaignStats stats = null;
@@ -249,7 +255,8 @@ public class WorkflowUtil
 		    .parseLong(campaignId));
 	}
 
-	if (stats == null)
+	if (stats.emails_clicked == 0 && stats.emails_opened == 0
+		&& stats.emails_sent == 0)
 	    return;
 
 	stats.delete();
