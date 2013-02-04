@@ -491,6 +491,14 @@ var ContactsRouter = Backbone.Router.extend({
     },
     contactFilterAdd: function()
     {
+    	if (!this.contactFiltersList || this.contactFiltersList.collection.length == 0)
+    	{
+    		this.navigate("contact-filters", {
+                trigger: true
+            });
+    		return;
+    	}
+    	
     	var contacts_filter = new Base_Model_View({
     				url:'core/api/filters',
     	            template: "filter-contacts",
@@ -514,6 +522,7 @@ var ContactsRouter = Backbone.Router.extend({
     		this.navigate("contact-filters", {
                 trigger: true
             });
+    		return;
     	}
     	
     	var contact_filter = this.contactFiltersList.collection.get(id);
