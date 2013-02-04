@@ -10,6 +10,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -199,7 +200,9 @@ public class UsersAPI
     @Path("/admin/domain-users")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<DomainUser> getAllDomainUsers()
+    public List<DomainUser> getAllDomainUsers(
+	    @QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count)
     {
 	String domain = NamespaceManager.get();
 
@@ -209,6 +212,13 @@ public class UsersAPI
 		    Response.status(Response.Status.BAD_REQUEST)
 			    .entity("Sorry you don't have privileges to access this page.")
 			    .build());
+	}
+
+	if (count != null)
+	{
+	    System.out.println("Fetching page by page");
+	    return DomainUserUtil.getAllDomainUsers(Integer.parseInt(count),
+		    cursor);
 	}
 
 	return DomainUserUtil.getAllDomainUsers();
