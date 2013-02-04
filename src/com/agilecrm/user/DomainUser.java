@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
+import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
@@ -39,7 +40,7 @@ import com.googlecode.objectify.condition.IfDefault;
  * 
  */
 @XmlRootElement
-public class DomainUser
+public class DomainUser extends Cursor
 {
 
     // Key

@@ -119,13 +119,9 @@ public class AddTask extends TaskletAdapter
 
 	Calendar calendar = Calendar.getInstance();
 
-	// System.out.println(calendar.getTimeInMillis() / 1000);
-
 	// Add duration period to get relative date
 	calendar.add(Calendar.DAY_OF_MONTH, Integer.parseInt(dueDays));
 	Long dueDateInEpoch = calendar.getTimeInMillis() / 1000;
-
-	// System.out.println(Util.getCalendarString(dueDateInEpoch));
 
 	System.out.println("Given Task Name: " + subject + ",category: "
 		+ category + ",priority: " + priority + "and Due Date : "
@@ -144,8 +140,17 @@ public class AddTask extends TaskletAdapter
 	    {
 		String domain = NamespaceManager.get();
 
-		// Get AgileUser with respect to DomainUser Id
+		// Get DomainUser who is account owner with respect to
+		// domain
 		domainOwner = DomainUserUtil.getDomainOwner(domain);
+
+		if (domainOwner == null)
+		{
+		    // Execute Next One in Loop
+		    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON,
+			    data, nodeJSON, null);
+		    return;
+		}
 
 		AgileUser agileuser = AgileUser
 			.getCurrentAgileUserFromDomainUser(domainOwner.id);
