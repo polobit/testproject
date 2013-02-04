@@ -26,6 +26,9 @@ var ReportsRouter = Backbone.Router.extend({
 
 		this.reports.collection.fetch();
 		$("#content").html(this.reports.render().el);
+        
+		$(".active").removeClass("active");
+        $("#reportsmenu").addClass("active");  
 	},
 
 	/**

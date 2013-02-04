@@ -49,6 +49,30 @@ function agile_crm_get_contact_property(propertyName) {
 
 }
 
+
+function agile_crm_get_contact_properties_list(propertyName) {
+
+	// Reads current contact model form the contactDetailView
+	var contact_model = App_Contacts.contactDetailView.model;
+
+	// Gets properties list field from contact
+	var properties = contact_model.get('properties');
+	var property = [];
+
+	// Iterates though each property and finds the value related to the property
+	// name
+	$.each(properties, function(key, value) {
+		if (value.name == propertyName) {
+			property.push(value);
+		}
+	});
+
+	// If property is defined then return property value list
+		return property;
+
+}
+
+
 /**
  * Updates a contact based on the property name and its value specified. If
  * property name already exists with the given then replaces the value, if
@@ -106,10 +130,20 @@ function agile_crm_add_note(sub, description) {
 	// Get Current Contact Model
 	var contact_model = this.contactDetailView.model;
 
+	console.log(contact_model);
+	
 	// Get ID
-
+	var note =new Backbone.Model();
+	 var contactModel = new Backbone.Model();
+	    contactModel.url = 'core/api/notes';
+	    
+	    note.set("subject", sub);
+	    note.set("description", description);
+	    
+	    note.set("contacts", [contact_model.id].toString())
+	    
+	    note.save();
 	// Create Model and Save
-
 }
 
 /**
