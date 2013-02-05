@@ -332,16 +332,24 @@ $(function() {
 	 */
 	Handlebars.registerHelper('if_notification_type', function() {
 		
+		// Makes 'CONTACT CREATED' To 'COMPANY CREATED'
+		if(this.type == "COMPANY")
+		{
+			var arr = this.notification.split('_');
+			 var temp = arr[0].replace('CONTACT','COMPANY') + " " + arr[1];
+			 return temp.toLowerCase();
+		}
+		
 		// Makes 'TAG_CREATED' to 'created tag'
-		if(this.type == 'TAG_CREATED' || this.type == 'TAG_DELETED')
+        if(this.notification == 'TAG_CREATED' || this.notification == 'TAG_DELETED')
 			{
-			  var arr = this.type.split('_');
+			  var arr = this.notification.split('_');
 			  var temp = arr[1] + " " + arr[0];
 			  return temp.toLowerCase();
 			}
 		
 		// Replaces '_' with 'has been' 
-		var str = this.type.replace(/_/g, ' has been ');
+		var str = this.notification.replace(/_/g, ' has been ');
 		return str.toLowerCase();
 		
 	//return temp.charAt(0).toUpperCase() + temp.slice(1);
