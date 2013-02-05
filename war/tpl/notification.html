@@ -23,19 +23,27 @@
         {{/if}}
                 <br />
                 <span> 
-                <b>{{#if_notification_type}} {{type}} {{/if_notification_type}}</b> 
+                <b>{{#if_notification_type}} {{notification}} {{/if_notification_type}}</b> 
                 </span>
     </div>
 </div>-->
 
 <div>  
    {{#if entity_type}}
-       <span><a href="#deals/{{id}}">{{name}}</a></span>
+       <span><a href="#deals/{{id}}" style="color:black;">{{name}}</a></span>
    {{else}}
-       <span style="height:auto;display:inline-block;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:7em;padding:10;vertical-align:text-top">
-           <a href="#contact/{{id}}" title=" {{getPropertyValue properties "first_name"}} {{ getPropertyValue properties "last_name"}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>   
-       </span>
+       {{#if_contact_type "PERSON"}}
+           <span style="vertical-align:text-top">
+               <a href="#contact/{{id}}" style="color:black;" title=" {{getPropertyValue properties "first_name"}} {{ getPropertyValue properties "last_name"}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>   
+       	   </span>
+        {{/if_contact_type}}
+
+        {{#if_contact_type "COMPANY"}}
+           <span style="vertical-align:text-top">
+               <b style="color:black;">{{getPropertyValue properties "name"}}</b>
+           </span>  
+        {{/if_contact_type}}
    {{/if}} 
-    <span>{{#if_notification_type}} {{type}} {{/if_notification_type}}</span>
+    <span style="margin-left:5pt">{{#if_notification_type}} {{notification}} {{/if_notification_type}}</span>
 </div>
 </script>

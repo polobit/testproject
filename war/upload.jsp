@@ -77,8 +77,16 @@ function isValid(){
    		});
     return $("#form").valid();
     } 
-
-
+    
+ $(function()
+		{
+	$("input:file").change(function (){
+    $('#submit').removeAttr("hidden");
+    $('#submit').prop("type", "submit");
+		var fileName = $(this).val();
+    $(".filename").html(fileName);
+  });
+		}); 
 </script>
 <style>
 	label.error {
@@ -119,7 +127,7 @@ function isValid(){
 
 <p><input name="file" id='fileextension' type="file" /></p>
 <br/>
-<input name="submit" id="submit" value="Upload" class='submit btn btn-primary' type="submit" /> 
+<input name="submit" id="submit" value="Upload" class='submit btn btn-primary' type="hidden"/> 
 </form> 
 </div>
 

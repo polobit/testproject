@@ -95,7 +95,7 @@ var SettingsRouter = Backbone.Router.extend({
 		
 		// Gets Social Prefs (Same as Linkedin/Twitter) for Gmail
 		var data = {
-			"service" : "gmail",
+			"service" : "Gmail",
 			"return_url" : encodeURIComponent(window.location.href)
 		};
 		var itemView = new Base_Model_View({

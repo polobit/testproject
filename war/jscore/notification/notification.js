@@ -131,7 +131,7 @@ function _setupSockets(api_key) {
 		 * Storing notification type into object json inorder to show type in
 		 * notification object*
 		 */
-		object.type = parse_data.type;
+		object.notification = parse_data.type;
         //console.log("object " , object);
 
 		var html = getTemplate('notify-html', object);
@@ -143,7 +143,7 @@ function _setupSockets(api_key) {
 		 */
 		$.each(notification_prefs, function(key, value) {
 
-			if (key == object.type.toLowerCase()) {
+			if (key == object.notification.toLowerCase()) {
 
 				if (notification_prefs[key])
 					//notify('information', html, 'bottom-right',true);
@@ -183,7 +183,7 @@ function fetchContactAndNotify(email) {
 	model.fetch({
 		success : function(data) {
 			// console.log(data);
-			// console.log(data.toJSON());
+            // console.log(data.toJSON());
 
 			var id = data.id;
 			if (!id)
