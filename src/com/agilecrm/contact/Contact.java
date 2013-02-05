@@ -143,21 +143,20 @@ public class Contact extends Cursor
      */
     @NotSaved
     public Map<String, Object> contact_properties = null;
-    
+
     /**
      * Saves tags mapped with created time.
      */
     @NotSaved(IfDefault.class)
     public String tags_with_time_json = null;
-    
+
     /**
-	 * Used for when request is sent using developer js api, to avoid json
-	 * mapping exception
-	 */
-	@SuppressWarnings("unused")
-	@NotSaved
-	@JsonIgnore
-	private DomainUser domainUser = null;
+     * Used for when request is sent using developer js api, to avoid json
+     * mapping exception
+     */
+    @SuppressWarnings("unused")
+    @NotSaved
+    private DomainUser domainUser = null;
 
     /**
      * Stores the property names in final variables, for reading flexibility of
@@ -466,7 +465,7 @@ public class Contact extends Cursor
      * deferred task for tags of a contact, before it is getting saved.
      */
     @SuppressWarnings("unused")
-	@PrePersist
+    @PrePersist
     private void PrePersist()
     {
 
