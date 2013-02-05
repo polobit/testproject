@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.GoogleApi;
@@ -23,6 +24,7 @@ import org.scribe.oauth.OAuthService;
 
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.SocialPrefs;
+import com.agilecrm.util.Base64Encoder;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 
@@ -48,6 +50,7 @@ public class ScribeServlet extends HttpServlet
     public static String SERVICE_TYPE_LINKED_IN = "linkedin";
     public static String SERVICE_TYPE_TWITTER = "twitter";
     public static String SERVICE_TYPE_GMAIL = "gmail";
+    public static String SERVICE_TYPE_STRIPE = "stripe";
 
     // Get Service
     /**
@@ -69,6 +72,7 @@ public class ScribeServlet extends HttpServlet
 	// Gets callback url
 	String callback = req.getRequestURL().toString();
 
+	System.out.println("getSErvice:" + callback);
 	OAuthService service = null;
 
 	// If service is null or service type is LinkedIn service is built
@@ -100,6 +104,21 @@ public class ScribeServlet extends HttpServlet
 	    req.getSession()
 		    .setAttribute("oauth.service", SERVICE_TYPE_TWITTER);
 	}
+
+	else if (serviceType.equalsIgnoreCase(SERVICE_TYPE_STRIPE))
+
+	{
+	    // Creates a Service, by specifying API key, Secret key
+	    service = new ServiceBuilder().provider(StripeApi.class)
+		    .callback(callback).apiKey(Globals.STRIPE_CLIENT_ID)
+		    .apiSecret(Globals.SENDGRID_API_KEY).scope("read_write")
+		    .build();
+
+	    // Gets session and sets attribute "oauth.service" to Twitter type
+	    // as specified by Scribe
+	    req.getSession().setAttribute("oauth.service", SERVICE_TYPE_STRIPE);
+	}
+
 	else
 	{
 	    // Creates a Service, by specifying API key, Secret key
@@ -135,118 +154,187 @@ public class ScribeServlet extends HttpServlet
 	    HttpServletResponse resp) throws IOException
     {
 
-	// Token and verifier are read from request parameters
-	String oAuthToken = req.getParameter("oauth_token");
-	String oAuthVerifier = req.getParameter("oauth_verifier");
-
 	// Retrieves Token and Service Name from session
 	String serviceName = (String) req.getSession().getAttribute(
 		"oauth.service");
-	Token requestToken = (Token) req.getSession().getAttribute(
-		"oauth.request_token");
 
-	// Gets Service
-	OAuthService service = getService(req, resp, serviceName);
+	String code = null;
+	Token requestToken = null;
+	Token accessToken = null;
+	AgileUser agileUser = null;
+	OAuthService service = null;
 
-	// Builds a verifier
-	Verifier verifier = new Verifier(oAuthVerifier);
-
-	// if request token in not null, new token is created using oAuthToken,
-	// which gets the token from the provider
-	if (requestToken != null)
+	if (serviceName.equalsIgnoreCase("Stripe"))
 	{
+	    code = req.getParameter("code");
+	}
+	else
+	{
+	    requestToken = (Token) req.getSession().getAttribute(
+		    "oauth.request_token");
+
+	    // Token and verifier are read from request parameters
+	    String oAuthToken = req.getParameter("oauth_token");
+	    String oAuthVerifier = req.getParameter("oauth_verifier");
+	    // Gets Service
+	    service = getService(req, resp, serviceName);
+
+	    // Builds a verifier
+	    Verifier verifier = new Verifier(oAuthVerifier);
+
+	    // if request token in not null, new token is created using
+	    // oAuthToken,
+	    // which gets the token from the provider
+
 	    Token token = new Token(oAuthToken, requestToken.getSecret());
 
-	    Token accessToken = service.getAccessToken(token, verifier);
+	    accessToken = service.getAccessToken(token, verifier);
 
 	    System.out.println("Token " + accessToken.getToken());
 	    System.out.println("Secret " + accessToken.getSecret());
 
 	    // Get Agile User
-	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
+	    agileUser = AgileUser.getCurrentAgileUser();
 	    if (agileUser == null)
 	    {
 		System.out.println("Cannot find Agile User");
 		return;
 	    }
+	}
 
-	    // Gets service name from session
-	    String serviceNameInSession = (String) req.getSession()
-		    .getAttribute("oauth.service");
+	// Gets service name from session
+	String serviceNameInSession = (String) req.getSession().getAttribute(
+		"oauth.service");
 
-	    // If service name is Twitter of LinkedIn, widget is fetched by
-	    // plugin_id in session and widget is updated with new token key and
-	    // secret key
-	    if (serviceNameInSession.equalsIgnoreCase(SERVICE_TYPE_TWITTER)
-		    || serviceNameInSession
-			    .equalsIgnoreCase(SERVICE_TYPE_LINKED_IN))
+	// If service name is Twitter of LinkedIn, widget is fetched by
+	// plugin_id in session and widget is updated with new token key and
+	// secret key
+	if (serviceNameInSession.equalsIgnoreCase(SERVICE_TYPE_TWITTER)
+		|| serviceNameInSession
+			.equalsIgnoreCase(SERVICE_TYPE_LINKED_IN))
+	{
+
+	    System.out.println("Saving Twitter Prefs");
+
+	    // Gets widget Id from the session
+	    String widgetId = (String) req.getSession().getAttribute(
+		    "plugin_id");
+
+	    System.out.println(widgetId);
+
+	    // Gets widget based on the plugin_id from session
+	    Widget widget = WidgetUtil.getWidget(Long.parseLong(widgetId));
+
+	    // If widget is null returns, since no widget exists with id.
+	    if (widget == null)
 	    {
-
-		System.out.println("Saving Twitter Prefs");
-
-		// Gets widget Id from the session
-		String widgetId = (String) req.getSession().getAttribute(
-			"plugin_id");
-
-		System.out.println(widgetId);
-
-		// Gets widget based on the plugin_id from session
-		Widget widget = WidgetUtil.getWidget(Long.parseLong(widgetId));
-
-		// If widget is null returns, since no widget exists with id.
-		if (widget == null)
-		{
-		    System.out.println("Widget not found with " + widgetId);
-		    return;
-		}
-
-		// If widget exists with id given, access token and secret are
-		// added to prefs in widget
-		widget.addProperty("token", accessToken.getToken());
-		widget.addProperty("secret", accessToken.getSecret());
-
-		// Saves widget
-		widget.save();
-
+		System.out.println("Widget not found with " + widgetId);
+		return;
 	    }
 
-	    // If Service type is Gmail
-	    else if (serviceNameInSession.equalsIgnoreCase(SERVICE_TYPE_GMAIL))
+	    // If widget exists with id given, access token and secret are
+	    // added to prefs in widget
+	    widget.addProperty("token", accessToken.getToken());
+	    widget.addProperty("secret", accessToken.getSecret());
+
+	    // Saves widget
+	    widget.save();
+
+	}
+
+	// If Service type is Gmail
+	else if (serviceNameInSession.equalsIgnoreCase(SERVICE_TYPE_GMAIL))
+	{
+
+	    System.out.println("Saving Gmail Prefs");
+
+	    OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET,
+		    "https://www.googleapis.com/oauth2/v1/userinfo?alt=json");
+	    service.signRequest(accessToken, oAuthRequest);
+	    Response response = oAuthRequest.send();
+
+	    System.out.println(response.getBody());
+
+	    Map<String, String> properties = new HashMap<String, String>();
+
+	    try
 	    {
+		JSONObject responseJSON = new JSONObject(response.getBody());
 
-		System.out.println("Saving Gmail Prefs");
+		Iterator<String> nameItr = responseJSON.keys();
+		while (nameItr.hasNext())
+		{
+		    String name = nameItr.next();
+		    properties.put(name, responseJSON.getString(name));
+		}
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
 
-		OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET,
-			"https://www.googleapis.com/oauth2/v1/userinfo?alt=json");
-		service.signRequest(accessToken, oAuthRequest);
+	    SocialPrefs gmailPrefs = new SocialPrefs(agileUser,
+		    SocialPrefs.Type.GMAIL, accessToken.getToken(),
+		    accessToken.getSecret(), properties);
+	    gmailPrefs.save();
+	}
+
+	else if (serviceNameInSession.equalsIgnoreCase(SERVICE_TYPE_STRIPE))
+	{
+	    System.out.println("In save token");
+	    Base64Encoder enc = new Base64Encoder();
+	    OAuthRequest oAuthRequest = new OAuthRequest(
+		    Verb.POST,
+		    String.format(
+			    "https://connect.stripe.com/oauth/token?code=%s&grant_type=%s",
+			    code, "authorization_code"));
+	    oAuthRequest.addHeader("Authorization", "Bearer "
+		    + Globals.STRIPE_API_KEY);
+	    Map<String, String> properties = new HashMap<String, String>();
+	    try
+	    {
 		Response response = oAuthRequest.send();
+		System.out.println("Stripe response " + response);
+		JSONObject responseJSON = new JSONObject(response.getBody());
 
-		System.out.println(response.getBody());
-
-		Map<String, String> properties = new HashMap<String, String>();
-
-		try
+		Iterator<String> nameItr = responseJSON.keys();
+		System.out.println("map:" + properties.toString());
+		while (nameItr.hasNext())
 		{
-		    JSONObject responseJSON = new JSONObject(response.getBody());
-
-		    Iterator<String> nameItr = responseJSON.keys();
-		    while (nameItr.hasNext())
-		    {
-			String name = nameItr.next();
-			properties.put(name, responseJSON.getString(name));
-		    }
-		}
-		catch (Exception e)
-		{
-		    e.printStackTrace();
+		    String name = nameItr.next();
+		    properties.put(name, responseJSON.getString(name));
+		    System.out.println(name + ":"
+			    + responseJSON.getString(name));
 		}
 
-		SocialPrefs gmailPrefs = new SocialPrefs(agileUser,
-			SocialPrefs.Type.GMAIL, accessToken.getToken(),
-			accessToken.getSecret(), properties);
-		gmailPrefs.save();
+	    }
+	    catch (JSONException e)
+	    {
+		System.out.println(e.getMessage());
 	    }
 
+	    // Gets widget Id from the session
+	    String widgetId = (String) req.getSession().getAttribute(
+		    "plugin_id");
+
+	    System.out.println(widgetId);
+
+	    // Gets widget based on the plugin_id from session
+	    Widget widget = WidgetUtil.getWidget(Long.parseLong(widgetId));
+
+	    // If widget is null returns, since no widget exists with id.
+	    if (widget == null)
+	    {
+		System.out.println("Widget not found with " + widgetId);
+		return;
+	    }
+
+	    // If widget exists with id given, access token and secret are
+	    // added to prefs in widget
+	    widget.addProperty("token", properties.get("access_token"));
+
+	    // Saves widget
+	    widget.save();
 	}
 
 	String returnURL = (String) req.getSession().getAttribute("return_url");
@@ -278,10 +366,22 @@ public class ScribeServlet extends HttpServlet
 	String serviceName = req.getParameter("service");
 	OAuthService service = getService(req, resp, serviceName);
 
-	Token requestToken = service.getRequestToken();
+	String url;
+	Token token = null;
+	if (serviceName.equalsIgnoreCase("Stripe"))
+	{
+	    url = service.getAuthorizationUrl(null);
+	    System.out.println("Stripe redirect url" + url);
+	}
+	else
+	{
+	    token = service.getRequestToken();
+	    url = service.getAuthorizationUrl(token);
+	    System.out.println("redirect url" + url);
+	}
 
 	// Save Token and Service as we need them after it returns back
-	req.getSession().setAttribute("oauth.request_token", requestToken);
+	req.getSession().setAttribute("oauth.request_token", token);
 
 	// Save Return URL and Plugin-Id
 	String returnURL = req.getParameter("return_url");
@@ -293,7 +393,6 @@ public class ScribeServlet extends HttpServlet
 	    req.getSession().setAttribute("plugin_id", pluginId);
 
 	// Redirect URL
-	String url = service.getAuthorizationUrl(requestToken);
 	resp.sendRedirect(url);
     }
 
@@ -314,11 +413,14 @@ public class ScribeServlet extends HttpServlet
 	String oAuthToken = req.getParameter("oauth_token");
 	String oAuthVerifier = req.getParameter("oauth_verifier");
 
+	String token = req.getParameter("access_token");
+	String code = req.getParameter("code");
+
 	/*
 	 * If aAuthToken and oAuthVerifier is not null i.e., request is from
 	 * service provider, tokens are saved
 	 */
-	if (oAuthToken != null && oAuthVerifier != null)
+	if (code != null || (oAuthToken != null && oAuthVerifier != null))
 	{
 	    saveToken(req, resp);
 	    return;

@@ -159,6 +159,11 @@ public class WidgetUtil
 		" Stay connected to your users with Twilio phone numbers in 40 countries all over the globe.",
 		"/widgets/twilio.js", "/img/plugins/twilio.jpg",
 		"/img/plugins/twilio.jpg", null));
+	widgets.add(new Widget(
+		"Stripe",
+		" Stay connected to your users with Twilio phone numbers in 40 countries all over the globe.",
+		"/widgets/stripe.js", "/img/plugins/stripe-logo.jpg",
+		"/widgets/stripe.jpg", null));
 
 	return widgets;
 
