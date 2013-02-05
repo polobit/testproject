@@ -232,7 +232,17 @@ public class DomainUserUtil
      */
     public static List<DomainUser> getAllDomainUsers(int max, String cursor)
     {
-	return dao.fetchAll(max, cursor);
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	try
+	{
+	    return dao.fetchAll(max, cursor);
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
     }
 
     /**
