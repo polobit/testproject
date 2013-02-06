@@ -157,13 +157,13 @@ public class WidgetUtil
 	widgets.add(new Widget(
 		"Twilio",
 		" Stay connected to your users with Twilio phone numbers in 40 countries all over the globe.",
-		"/widgets/twilio.js", "/img/plugins/twilio.jpg",
-		"/img/plugins/twilio.jpg", null));
+		"/widgets/twilio.js", "/img/plugins/twilio.png",
+		"/widgets/twilio-logo-small.jpg", null));
 	widgets.add(new Widget(
 		"Stripe",
-		" Stripe enables individuals and businesses to accept payments over the internet.",
+		"Stripe enables individuals and businesses to accept payments over the internet.",
 		"/widgets/stripe.js", "/img/plugins/stripe-logo.jpg",
-		"/widgets/stripe.jpg", null));
+		"/widgets/stripe-logo-small.jpeg", null));
 
 	return widgets;
 

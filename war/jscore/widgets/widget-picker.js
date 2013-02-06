@@ -62,12 +62,20 @@ $(function() {
 				widgetModel.url = '/core/api/widgets';
 				widgetModel.save(models[0].toJSON(), {
 					success : function() {
-
+						if(!App_Contacts || !App_Contacts.contactDetailView || !App_Contacts.contactDetailView.model)
+						{	
+							Backbone.history.navigate("contacts", {
+								trigger : true
+							});
+							
+							return;
+						}	
 						// Navigates back to the contact id form
 						Backbone.history.navigate("contact/"
 								+ App_Contacts.contactDetailView.model.id, {
 							trigger : true
 						});
+						
 					}
 				});
 

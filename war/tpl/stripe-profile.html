@@ -1,0 +1,10 @@
+<script id="stripe-profile-template" type="text/html">
+	<div style="display:inline;  line-height:12px;word-wrap: break-word;">
+	    <div class="row-fluid well" style="padding:0px;margin-bottom: 10px;background-color: white;">
+			<div>{{activeCard.name}}</div>
+			<div>{{activeCard.addressState}}</div>
+			<div>subscription start {{epochToHumanDate "mm-dd-yyyy" subscription.currentPeriodStart}}</div>
+			<div>subscription end {{epochToHumanDate "mm-dd-yyyy" subscription.currentPeriodEnd}}</div>
+	    </div>	
+	</div>
+</script>

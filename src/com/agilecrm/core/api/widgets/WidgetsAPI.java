@@ -20,6 +20,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.social.LinkedInUtil;
 import com.agilecrm.social.SocialSearchResult;
 import com.agilecrm.social.SocialUpdateStream;
+import com.agilecrm.social.StripePluginUtil;
 import com.agilecrm.social.TwilioUtil;
 import com.agilecrm.social.TwitterUtil;
 import com.agilecrm.widgets.Widget;
@@ -556,4 +557,31 @@ public class WidgetsAPI
 
 	return TwilioUtil.generateTwilioToken(accountSID);
     }
+
+    @Path("stripe/{widget-id}/{customerId}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getStripeCustomerDetails(
+	    @PathParam("widget-id") Long widgetId,
+	    @PathParam("customerId") String customerId)
+    {
+
+	try
+	{
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+	    if (widget == null)
+		return null;
+
+	    return StripePluginUtil.getCustomerDetails(widget, customerId)
+		    .toString();
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+
+    }
+
 }
