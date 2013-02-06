@@ -161,7 +161,7 @@ public class WidgetUtil
 		"/img/plugins/twilio.jpg", null));
 	widgets.add(new Widget(
 		"Stripe",
-		" Stay connected to your users with Twilio phone numbers in 40 countries all over the globe.",
+		" Stripe enables individuals and businesses to accept payments over the internet.",
 		"/widgets/stripe.js", "/img/plugins/stripe-logo.jpg",
 		"/widgets/stripe.jpg", null));
 

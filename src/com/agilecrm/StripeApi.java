@@ -2,7 +2,8 @@ package com.agilecrm;
 
 import org.scribe.builder.api.DefaultApi20;
 import org.scribe.model.OAuthConfig;
-import org.scribe.utils.OAuthEncoder;
+
+import com.google.appengine.api.NamespaceManager;
 
 public class StripeApi extends DefaultApi20
 {
@@ -10,7 +11,7 @@ public class StripeApi extends DefaultApi20
     // /oauth/authorize
     // /oauth/token
 
-    private static final String AUTHORIZE_URL = "https://connect.stripe.com/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code";
+    private static final String AUTHORIZE_URL = "https://connect.stripe.com/oauth/authorize?client_id=%s&state=%s&response_type=code";
 
     @Override
     public String getAccessTokenEndpoint()
@@ -30,7 +31,7 @@ public class StripeApi extends DefaultApi20
     {
 	// TODO Auto-generated method stub
 	return String.format(AUTHORIZE_URL, config.getApiKey(),
-		OAuthEncoder.encode(config.getCallback()));
+		NamespaceManager.get());
     }
 
 }

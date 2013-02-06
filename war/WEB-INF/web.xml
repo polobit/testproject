@@ -135,6 +135,14 @@
 	<url-pattern>/backend/TwilioServlet</url-pattern> 
 </servlet-mapping>
  
+ <servlet>
+ <servlet-name>StripeServlet</servlet-name> 
+ <servlet-class>com.agilecrm.StripeServlet</servlet-class> 
+</servlet>
+<servlet-mapping>
+ <servlet-name>StripeServlet</servlet-name> 
+ <url-pattern>/backend/StripeServlet</url-pattern> 
+</servlet-mapping>
 
 <servlet>
   <servlet-name>ForgotDomain</servlet-name> 

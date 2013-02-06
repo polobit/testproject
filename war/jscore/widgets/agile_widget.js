@@ -128,14 +128,12 @@ function agile_crm_add_note(sub, description) {
 	// Add Note to Notes Collection
 
 	// Get Current Contact Model
-	var contact_model = this.contactDetailView.model;
-
-	console.log(contact_model);
+	var contact_model = App_Contacts.contactDetailView.model;
 	
-	// Get ID
-	var note =new Backbone.Model();
+		// Get ID
+		var note =new Backbone.Model();
 	 var contactModel = new Backbone.Model();
-	    contactModel.url = 'core/api/notes';
+	    note.url = 'core/api/notes';
 	    
 	    note.set("subject", sub);
 	    note.set("description", description);

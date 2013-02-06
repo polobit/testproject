@@ -27,7 +27,6 @@ function setupStripeOAuth(plugin_id) {
 	
 	 var url = '/scribe?service=stripe&return_url=' + encodeURIComponent(window.location.href) + '&plugin_id=' + encodeURIComponent(plugin_id);
 
-	 $('#Stripe').html('<p>Stay connected to your Stripe all over the globe. </p><a href="' + url + '" style="margin-bottom: 10px;"><img src="https://stripe.com/img/documentation/connect-button-blue.png" width="190" height="33"></a>');	
-		
+	 $('#Stripe').html('<p>Stripe enables individuals and businesses to accept payments over the internet </p><a href="' + url + '" style="margin-bottom: 10px;"><img src="/img/plugins/stripe-connect-button.png" width="190" height="33"></a>');	
 	
 }
