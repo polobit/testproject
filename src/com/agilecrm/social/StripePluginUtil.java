@@ -1,10 +1,17 @@
 package com.agilecrm.social;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.widgets.Widget;
+import com.google.gson.Gson;
 import com.stripe.model.Customer;
+import com.stripe.model.Invoice;
 
 public class StripePluginUtil
 {
@@ -12,9 +19,24 @@ public class StripePluginUtil
     public static JSONObject getCustomerDetails(Widget widget, String customerId)
 	    throws Exception
     {
+
+	JSONObject customer_info = new JSONObject();
+
 	String apiKey = widget.getProperty("access_token");
 	Customer customer = Customer.retrieve(customerId, apiKey);
-	return StripeUtil.getJSONFromCustomer(customer);
+
+	Map<String, Object> invoiceParams = new HashMap<String, Object>();
+	invoiceParams.put("customer", customerId);
+	List<Invoice> invoiceList = Invoice.all(invoiceParams, apiKey)
+		.getData();
+	System.out.println(Invoice.all(invoiceParams, apiKey));
+	System.out.println(invoiceList);
+	JSONArray list = new JSONArray(new Gson().toJson(invoiceList));
+	System.out.println(list);
+	customer_info.put("customer", StripeUtil.getJSONFromCustomer(customer));
+	customer_info.put("invoice", list);
+	System.out.println(customer_info);
+	return customer_info;
 
     }
 

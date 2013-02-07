@@ -1,10 +1,37 @@
 <script id="stripe-profile-template" type="text/html">
 	<div style="display:inline;  line-height:12px;word-wrap: break-word;">
-	    <div class="row-fluid well" style="padding:0px;margin-bottom: 10px;background-color: white;">
-			<div>{{activeCard.name}}</div>
-			<div>{{activeCard.addressState}}</div>
-			<div>subscription start {{epochToHumanDate "mm-dd-yyyy" subscription.currentPeriodStart}}</div>
-			<div>subscription end {{epochToHumanDate "mm-dd-yyyy" subscription.currentPeriodEnd}}</div>
+	    <div class="row-fluid" style="padding:0px;margin-bottom: 10px;">
+			<div>
+				<h4 style="text-transform: capitalize;"><b>{{customer.activeCard.name}}</b></h4>
+				<p style="font-size: 11px;">{{customer.activeCard.addressState}}, {{customer.activeCard.addressCountry}}</p>
+			</div>
+			<div><b>Subscription Details</b>
+				<p><div>Start {{epochToHumanDate "mm-dd-yyyy" customer.subscription.start}}</div>
+				<div>End {{epochToHumanDate "mm-dd-yyyy" customer.subscription.currentPeriodEnd}}</div>
+				<div>Status {{customer.subscription.status}}</div>
+				<div>Plan {{customer.subscription.plan.id}}</div>
+				<div>Interval {{customer.subscription.plan.interval}}</div>
+				<div>Amount {{customer.subscription.plan.amount}}</div></p>
+			</div>
+			
+				<table class="row-fluid table table-striped">
+				<tbody>
+				<div><b>Payment Details</b>
+				{{#each invoice}}<tr style="border-bottom:1px solid #f5f5f5"><p>
+					<div>subtotal {{subtotal}}</div>
+					<div>total {{total}}</div>
+					<div>amountDue {{amountDue}}</div>
+					<div>Date {{epochToHumanDate "mm/dd/yyyy" date}}</div>
+					<div>Start {{epochToHumanDate "mm/dd/yyyy" periodStart}}</div>
+					<div>periodEnd {{epochToHumanDate "mm/dd/yyyy" periodEnd}}</div>					
+					<div>Livemode {{livemode}}</div>					
+					<div>Balance {{endingBalance}}</div></p></tr>
+				{{/each}}
+				</div>					
+				</tbody>
+			</table>
+				
+			
 	    </div>	
 	</div>
 </script>
