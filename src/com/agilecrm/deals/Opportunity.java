@@ -8,8 +8,6 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
@@ -64,7 +62,6 @@ public class Opportunity
      * Contact ids of related contacts for a deal.
      */
     @NotSaved
-    @JsonIgnore
     private List<String> contacts = null;
 
     /**
@@ -198,13 +195,13 @@ public class Opportunity
 	contacts_list.addAll(ofy.get(this.related_contacts).values());
 	return contacts_list;
     }
-    
+
     public void addContactIds(String id)
     {
-    	if(contacts == null)
-    		contacts = new ArrayList<String>();
-    	
-    	contacts.add(id);
+	if (contacts == null)
+	    contacts = new ArrayList<String>();
+
+	contacts.add(id);
     }
 
     /**
@@ -293,17 +290,16 @@ public class Opportunity
 
 	return " ";
     }
-    
+
     public void setContactIds(String id)
     {
-    	if(contacts != null)
-    	{
-    		contacts.add(id);
-    		return;
-    	}
-    	contacts = new ArrayList<String>();
-    	contacts.add(id);
-    	
+	if (contacts != null)
+	{
+	    contacts.add(id);
+	    return;
+	}
+	contacts = new ArrayList<String>();
+	contacts.add(id);
     }
 
     /**
@@ -327,7 +323,6 @@ public class Opportunity
 
 	Long id = this.id;
 
-	// Save opportunity in dao
 	dao.put(this);
 
 	// Executes notification for new deal, inorder to get id
