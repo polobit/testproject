@@ -86,6 +86,7 @@ $(function()
 		
 		// erase filter cookie
 		eraseCookie('contact_filter');
+		eraseCookie('company_filter');
 		
 		// Loads contacts
 		App_Contacts.contacts();
@@ -99,17 +100,40 @@ $(function()
 					{
 						e.preventDefault();
 						
+						
+						if(readCookie('contact_view'))
+						{
+							App_Contacts.contact_custom_view.collection.url = "core/api/contacts/companies"
+							App_Contacts.contact_custom_view.collection.fetch();
+							
+							$('.filter-dropdown', App_Contacts.contact_custom_view.el).append(filter_name);
+
+						}
 						/*
 						 * If contactsListView is defined (default view) then
 						 * load filter results in default view 
 						 */
 						if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection) 
 						{ 
+							eraseCookie('contact_filter');
+							createCookie('company_filter', "Companies");
 							// Set url to default view to load filter results
 							App_Contacts.contactsListView.collection.url = "core/api/contacts/companies";
-							App_Contacts.contactsListView.collection.fetch(); 
+							App_Contacts.contactsListView.collection.fetch();
+							console.log(App_Contacts.contactsListView.el);
+							$('.filter-dropdown', App_Contacts.contactsListView.el).append(filter_name);
 						}
 			 }); 
+	
+	$('.lhs_chanined_parent').die().live('change' , function(e){
+		e.preventDefault();
+		
+		if(($(this).val()).indexOf('tags') != -1)
+			{
+				var element = $(this).closest('tr').find('div#RHS');
+				addTagsDefaultTypeahead(element);
+			}
+	});
 });
 						 
 /** Sets up contact filters list in contacts
@@ -128,7 +152,9 @@ function setupContactFilterList(cel)
 		individual_tag_name : 'li',
 		postRenderCallback : function(el)
 		{
-
+			if(filter_id = readCookie('company_filter'))
+				el.find('.filter-dropdown').append(filter_id);
+				
 			// Set saved filter name on dropdown button
 			if (filter_id = readCookie('contact_filter'))
 			{
@@ -185,5 +211,55 @@ function chainFilters(el)
 		RHS_NEW.chained(condition);
 		NESTED_CONDITION.chained(LHS);
 		NESTED_LHS.chained(NESTED_CONDITION);
-		NESTED_RHS.chained(NESTED_CONDITION);	            
+		NESTED_RHS.chained(NESTED_CONDITION);	  
+
+		if(($(':selected', LHS).val()).indexOf('tags') != -1)
+			{
+				console.log("adding tags");;
+				addTagsDefaultTypeahead(RHS)
+			}
+}
+
+function addTagsDefaultTypeahead(element)
+{
+	var tags_array = [];
+
+	if(!TAGS)
+		{
+		var TagsCollection = Backbone.Collection.extend({
+			url: '/core/api/tags',
+			sortKey: 'tag'
+		});
+		
+		
+		alert("fetching");
+		tagsCollection = new TagsCollection();
+		
+		tagsCollection.fetch({success:function(data){
+			TAGS = tagsCollection.models;
+			alert("fetched");
+			addTagsArrayasTypeaheadSource(tagsCollection.toJSON(), element);
+			
+		}});
+			return;
+		}
+	
+	console.log(tagsCollection.toJSON());
+	addTagsArrayasTypeaheadSource(tagsCollection.toJSON(), element);
+}
+
+function addTagsArrayasTypeaheadSource(tagsJSON, element)
+{
+	var tags_array = [];
+	
+	$.each(tagsJSON, function(index, element){
+		tags_array .push(element.tag.toString());
+	});
+
+	console.log(tags_array);
+	console.log(("input", element));
+	$("input", element).attr("test","test");
+	//$("input", element).attr("data-provide","typeahead");
+	$("input", element).typeahead({"source": tags_array});
+	console.log(("input", element).html())
 }

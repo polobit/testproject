@@ -86,6 +86,9 @@ var ContactsRouter = Backbone.Router.extend({
     		url = '/core/api/tags/' + tag_id;
     	}
     	
+    	if(readCookie('company_filter'))
+    		url = "core/api/contacts/companies";
+    	
     	// If contact-filter cookie is defined set url to fetch respective filter results
     	if(filter_id || (filter_id = readCookie('contact_filter')))
     	{
@@ -103,6 +106,11 @@ var ContactsRouter = Backbone.Router.extend({
       			return;
       		}
       		
+      		if(readCookie('company_filter'))
+      			{
+      				this.customView(readCookie("contact_view"), undefined, "core/api/contacts/companies")
+      				return;
+      			}
       		// Else call customView function fetches results from default url : "core/api/contacts"
 			this.customView(readCookie("contact_view"), undefined);
 			return;
@@ -588,7 +596,6 @@ var ContactsRouter = Backbone.Router.extend({
     
     // Id = custom-view-id, view_data = custom view data if already availabel, url = filter url if there is any filter
     customView : function(id, view_data, url) {
-    	
     	// If id is defined get the respective custom view object 
     	if (id && !view_data) 
 		{
