@@ -86,9 +86,17 @@ public class OpenIdServlet extends HttpServlet
     {
 
 	String domain = req.getParameter("hd");
+	String openidStatus = req.getParameter("openid.mode");
+
+	if (openidStatus != null && openidStatus.equals("cancel"))
+	{
+	    resp.sendRedirect("/register?openid.mode=cancel");
+	    return;
+	}
 	if (domain != null)
 	{
-	    // User attempting to login with provided domain, build and OpenID
+	    // User attempting to login with provided domain, build and
+	    // OpenID
 	    // request and redirect
 	    try
 	    {

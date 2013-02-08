@@ -77,6 +77,24 @@ public class RegisterServlet extends HttpServlet
 	try
 	{
 	    String type = request.getParameter("type");
+	    String status = request.getParameter("openid.mode");
+
+	    // If users cancels openid login/register, they are redirected to
+	    // login or register based on domain count. If domain already
+	    // exists, user is trying to login so they are redirected to login
+	    // page
+	    if (status != null && status.equals("cancel"))
+	    {
+		// If current domain does not exist, then redirected to register
+		// page
+		if (DomainUserUtil.count() == 0)
+		{
+		    response.sendRedirect("/register");
+		    return;
+		}
+		response.sendRedirect("/login");
+	    }
+
 	    if (type != null)
 	    {
 		if (type.equalsIgnoreCase("oauth"))
@@ -93,11 +111,11 @@ public class RegisterServlet extends HttpServlet
 	}
 	catch (Exception e)
 	{
+
 	    // Send to Login Page
 	    request.getRequestDispatcher(
 		    "register.jsp?error=" + URLEncoder.encode(e.getMessage()))
 		    .forward(request, response);
-
 	    return;
 	}
 
