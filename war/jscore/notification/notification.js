@@ -129,7 +129,8 @@ function _setupSockets(api_key) {
 
 		/**
 		 * Storing notification type into object json inorder to show type in
-		 * notification object*
+		 * notification object
+		 *
 		 */
 		object.notification = parse_data.type;
         //console.log("object " , object);
@@ -297,7 +298,8 @@ function showNoty(type, message, position) {
 				noty({
 					text : message,
 					layout : position,
-					type : type
+					type : type,
+					timeout: 5000
 				});
 			});
 }

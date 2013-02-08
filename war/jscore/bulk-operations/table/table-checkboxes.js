@@ -15,6 +15,14 @@ $(function(){
     * by triggering the event agile_collection_loaded from base-collection render event, while loading the collection.
     */ 	
 	$('body').live('agile_collection_loaded', function(event) {
+		
+		if($('table').hasClass('onlySorting'))
+		{	
+			var sortingtable = $(this).find('table.onlySorting');
+		    sort_tables(sortingtable);
+		    return;
+		}
+		
 		var table = $(this).find('table.showCheckboxes');
 		$(table).removeClass('table-bordered');
 		$(table).closest('div.data-block').removeClass('data-block');
