@@ -280,6 +280,17 @@ public class WidgetsAPI
 	return null;
     }
 
+    /**
+     * Connects to {@link LinkedInUtil} or {@link TwitterUtil} user based on the
+     * name given in widget and disconnects or unfollows a contact in LinkedIn
+     * and Twitter based on the parameter social id
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param socialId
+     *            {@link String} LinkedIn id or Twitter id of the contact
+     * @return {@link String}
+     */
     @Path("/disconnect/{widget-id}/{social-id}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -499,12 +510,24 @@ public class WidgetsAPI
 	return null;
     }
 
-    @Path("/tweet/{widget-id}/{social-id}/{message}")
-    @GET
+    /**
+     * Connects to {@link TwitterUtil} and sends the post or tweet in Twitter
+     * based on the parameter social id
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param socialId
+     *            {@link String} LinkedIn id or Twitter id of the contact
+     * @param message
+     *            {@link String} message to send tweet
+     * @return {@link String}
+     */
+    @Path("/tweet/{widget-id}/{social-id}")
+    @POST
     @Produces(MediaType.TEXT_PLAIN)
     public String tweetInTwitter(@PathParam("widget-id") Long widgetId,
 	    @PathParam("social-id") String socialId,
-	    @PathParam("message") String message)
+	    @FormParam("message") String message)
     {
 	try
 	{
@@ -547,6 +570,13 @@ public class WidgetsAPI
 	return Rapleaf.getRapportiveValue(email, apikey).toString();
     }
 
+    /**
+     * Connects to Twilio and fetches information based on the accountSID
+     * 
+     * @param accountSID
+     *            {@link String}
+     * @return {@link String}
+     */
     @Path("twilio/{accountSID}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -558,6 +588,15 @@ public class WidgetsAPI
 	return TwilioUtil.generateTwilioToken(accountSID);
     }
 
+    /**
+     * Connects to Stripe and fetches the data based on customer id.
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param customerId
+     *            {@link String} id of the stripe customer
+     * @return {@link String}
+     */
     @Path("stripe/{widget-id}/{customerId}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)

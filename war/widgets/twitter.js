@@ -63,9 +63,14 @@ $(function () {
     {
     	e.preventDefault();
     	var share_id = $(this).attr("id");
-    	retweetTheTweet(plugin_id, share_id, "optional");
+    	
+    	retweetTheTweet(plugin_id, share_id, "optional",this);
     });
     
+    $('#twitter_tweet').die().live('click', function(e){
+    	e.preventDefault();
+    	tweetInTwitter(plugin_id, twitter_id);
+    });
 });
 /**
  * Shows setup if user adds Twitter widget for the first time, to set up
@@ -204,7 +209,10 @@ function showTwitterProfile(twitter_id, plugin_id) {
          if(data.is_connected)
 		 {
 			 $('#twitter_unfollow').show();
-			 $('#twitter_message').show();
+			 $('#twitter_tweet').show();
+			 if(data.is_followed_by_target){
+				 $('#twitter_message').show();
+			 }
 		 }
 		 else
 		 {
@@ -224,7 +232,7 @@ function showTwitterProfile(twitter_id, plugin_id) {
     $('.twitter_stream').die().live('click', function (e) {
     	e.preventDefault();
     	$("#twitter_social_stream").html(LOADING_HTML);
-    	$.getJSON("/core/api/widgets/updates/" + plugin_id + "/" + twitter_id, function(data){    					
+    	$.getJSON("/core/api/widgets/updates/" + plugin_id + "/" + twitter_id, function (data)  {    					
     		    		console.log(data.length);
     		    		if(data.length == 0)
 		    			{   
@@ -322,12 +330,10 @@ function sendFollowRequest(plugin_id, twitter_id) {
 		    
 		    $.post( "/core/api/widgets/connect/" + plugin_id + "/" + twitter_id , $('#twitter_messageForm').serialize(), function(data) {
 		    	
-		    	if(data == "true"){
-		    		
+		    	if(data == "true"){		    		
 		    		$('#twitter_follow').hide();
 					$('#twitter_unfollow').show();
-					$('#twitter_message').show();
-					
+					$('#twitter_tweet').show();
 		    	}
 				
 		    	$('#twitter_messageModal').modal("hide");
@@ -342,11 +348,11 @@ function sendFollowRequest(plugin_id, twitter_id) {
 
 function sendUnfollowRequest(plugin_id, twitter_id){	
 		    
-		    $.get( "/core/api/widgets/disconnect/" + plugin_id + "/" + twitter_id , function(data) {
-		    	
+		    $.get( "/core/api/widgets/disconnect/" + plugin_id + "/" + twitter_id , function (data) {
+		    	 $('#twitter_message').hide();
+		    	 $('#twitter_tweet').hide();
 		    	$("#twitter_follow").show();
 		    	$('#twitter_unfollow').hide();
-		    	$('#twitter_message').hide();
 		       }).error(function(data) { 
 		    	   
 		    		alert(data.responseText); 
@@ -374,8 +380,7 @@ function sendTwitterMessage(plugin_id, twitter_id, message) {
 	    	return;
 	    }
 		
-		$.post( "/core/api/widgets/message/" + plugin_id + "/" + twitter_id ,$('#twitter_messageForm').serialize(), function (data) {
-		
+		$.post( "/core/api/widgets/message/" + plugin_id + "/" + twitter_id ,$('#twitter_messageForm').serialize(), function (data) {	
 			
 			$('#twitter_messageModal').modal("hide");
 		}).error(function(data) { 
@@ -385,8 +390,38 @@ function sendTwitterMessage(plugin_id, twitter_id, message) {
 	});
 }
 
-function retweetTheTweet(plugin_id, share_id, message) {
+function tweetInTwitter(plugin_id, twitter_id){
+	
+	var json = {};
+	json["headline"] = "Tweet";
+	json["info"] = "Tweet to " + Twitter_current_profile_user_name.toUpperCase() +
+			" on Twitter from your Twitter account associated with Agile CRM";
+	
+	$('#twitter_messageModal').remove();
+	var message_form_modal = getTemplate("twitter-message", json);
+
+	$('#content').append(message_form_modal);
+	$('#twitter_messageModal').modal("show");
+	
+	$('#send_request').click( function(e) {
+		e.preventDefault();
+	    
+		if(!isValidForm($("#twitter_messageForm"))){
+	    	return;
+	    }
+		
+		$.post("/core/api/widgets/tweet/" + plugin_id + "/" + twitter_id, $('#twitter_messageForm').serialize(), function (data) {
+			$('#twitter_messageModal').modal("hide");
+		}).error(function(data) { 
+			$('#twitter_messageModal').remove();
+			alert(data.responseText); 
+		}); 
+	});
+}
+
+function retweetTheTweet(plugin_id, share_id, message, element) {
     $.get("/core/api/widgets/reshare/" + plugin_id + "/" + share_id + "/" + message, function (data) {
-        console.log(data);
+    	$(element).css('color', 'green');
+    	$(element).text('Retweeted');
     });
 }
