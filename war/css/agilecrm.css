@@ -56,10 +56,6 @@
 		background-color: whitesmoke;
 	}
 
-	/*searchForm */
-	.navbar-search {
-		padding-left: 5%
-	}
 }
 /*dropdown*/
 .agilecrm-profile-dropdown:hover {
@@ -486,22 +482,6 @@ span.valid {
 	line-height: 1.4;
 }
 
-.search-query {
-	border: 0px; /*important*/
-	background-color: transparent; /*important*/
-	position: absolute; /*important*/
-}
-
-.searchbox {
-	border: 0px; /*important*/
-	background-color: transparent; /*important*/
-	position: absolute; /*important*/
-	top: 5px;
-	left: 265px;
-	width: 16px;
-	height: 16px;
-}
-
 /* Data todo block for tasks view */
 .data-block.todo-block table tr p {
 	margin: 0;
@@ -513,11 +493,24 @@ span.valid {
 	color: #a4a5aa;
 }
 
-/* /* To overcome page shifts due loading pages of different lengths, adds scroll bar default for all pages 
+/* To overcome page shifts due loading pages of different lengths, adds scroll bar default for all pages */
 html {
 	overflow-y: scroll;
 }
- */
+
+.search-icon
+{
+	position:absolute;
+	top:2px;
+	right:0px;
+	display:block;
+	width:26px;
+	height:26px;
+	cursor:pointer;
+	z-index:2;
+	
+}
+
 /* Not to overide z-index of datepicker due to timepicker modal */
 .datepicker {
 	z-index: 2050!important;
