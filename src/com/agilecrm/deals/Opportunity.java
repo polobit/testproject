@@ -349,14 +349,22 @@ public class Opportunity
 	if (created_time == 0L)
 	    created_time = System.currentTimeMillis() / 1000;
 
+	if(owner_id == null)
+		return;
+		
 	// Saves domain user key
 	ownerKey = new Key<DomainUser>(DomainUser.class,
 		Long.parseLong(owner_id));
 	System.out.println("OwnerKey" + ownerKey);
 
+	AgileUser user = AgileUser.getCurrentAgileUser();
+	
+	if(user == null)
+		return;
+	
 	// Saves agile user key
 	agileUser = new Key<AgileUser>(AgileUser.class,
-		AgileUser.getCurrentAgileUser().id);
+		user.id);
     }
 
     /*

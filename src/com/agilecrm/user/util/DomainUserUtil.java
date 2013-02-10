@@ -152,6 +152,9 @@ public class DomainUserUtil
     {
 	// Get Current Logged In user
 	UserInfo userInfo = SessionManager.get();
+	if(userInfo == null)
+		return null;
+	
 	return getDomainUserFromEmail(userInfo.getEmail());
     }
 
