@@ -3,7 +3,7 @@
     "thumbnail": "json/nodes/images/common/jsonio.png",
     "icon": "json/nodes/icons/common/jsonio.png",
     "info": "Integrate your workflow with your web infrastructure using JSON.",
-    "help": "ContactSpot can query your URL to retrieve or update information.",
+    "help": "AgileCRM can query your URL to retrieve or update information.",
     "author": "Manohar",
     "company": "Invox",
     "language": "en",
@@ -65,7 +65,7 @@
 					 ]
 		},
         {
-            "label": "ContactSpot can query given URL by posting desired parameters. The returned JSON values can be used in rest of the workflow. Eg: $retVal1",
+            "label": "AgileCRM can query given URL by posting desired parameters. The returned JSON values can be used in rest of the workflow. Eg: $retVal1",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 

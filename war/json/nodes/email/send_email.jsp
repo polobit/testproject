@@ -85,7 +85,7 @@
 		            "required": "No",
 		            "category": "Settings",
 		            "name": "track_clicks",
-		            "title": "ContactSpot will track your Clicks.",
+		            "title": "AgileCRM will track your Clicks.",
 		            "options": {
 		                "*No": "no",
 		                "Yes": "yes"
@@ -98,7 +98,7 @@
 					"category": "Settings",
 					"name": "purl_keyword",
 		            "id":"purl_keyword",
-					"title": "While tracking clicks, ContactSpot can show a keyword in the URL. Valid only when you are tracking clicks.",
+					"title": "While tracking clicks, AgileCRM can show a keyword in the URL. Valid only when you are tracking clicks.",
 					"fieldType": "input",
 		            "type": "text" 
 		        },

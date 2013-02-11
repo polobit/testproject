@@ -3,7 +3,7 @@
     "thumbnail": "json/nodes/images/common/sex.png",
     "icon": "json/nodes/icons/common/sex.png",
     "info": "Retrieve the gender of the subscriber based on email address.",
-    "help": "ContactSpot uses Rapleaf to retrieve the gender of the subscriber based on the email address.",
+    "help": "AgileCRM uses Rapleaf to retrieve the gender of the subscriber based on the email address.",
     "author": "John",
     "company": "Invox",
     "language": "en",
@@ -23,7 +23,7 @@
             "value": "{{email}}"
         },
         {
-            "label": "ContactSpot uses Rapleaf to retrieve the gender of the subscriber based on the email address.",
+            "label": "AgileCRM uses Rapleaf to retrieve the gender of the subscriber based on the email address.",
             "category": "Help",
             "componet": "label",
             "type": "label" 
