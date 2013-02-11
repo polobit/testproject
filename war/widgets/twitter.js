@@ -222,26 +222,50 @@ function showTwitterProfile(twitter_id, plugin_id) {
 				$('#twitter_follow').text("Follow Request Sent").attr("disabled", "disabled").show();				 
 		 }
         
-    	if(data.current_update)
-       	{        
+         console.log(data.updateStream);
+         if(data.updateStream && data.updateStream.length != 0)
+         {    	    
+        	 $('#twitter_update_heading',$('#Twitter')).show();
+          	$('#twitter_social_stream').append(getTemplate("twitter-update-stream", data.updateStream));
+          	return;
+         }
+         
+    	 if(data.current_update)
+       	 {        
        		$('#twitter_update_heading',$('#Twitter')).show();
        		$('#twitter_current_activity',$('#Twitter')).show();
-       	}    
-    });
+       	 }    
+    	
+     }).error(function(data) {    	 
+    	alert(data.responseText); 
+    }); 
     
     $('.twitter_stream').die().live('click', function (e) {
     	e.preventDefault();
-    	$("#twitter_social_stream").html(LOADING_HTML);
-    	$.getJSON("/core/api/widgets/updates/" + plugin_id + "/" + twitter_id, function (data)  {    					
-    		    		console.log(data.length);
+    	
+    	
+    	var tweet_id = $('div#twitter_social_stream').find('div#twitter_status:last').attr('status_id');
+    	console.log ($('div#twitter_social_stream').last().find('div#twitter_status').html());
+    	
+    	console.log(tweet_id);
+    	
+    	if(!tweet_id){
+    		if(twitter_connected){    			
+    			alert("No updates available");
+    			return;
+    		}
+    		alert("Member does not share his/her updates. Follow him and try");
+    		return;
+    	}    
+    	
+    	$.getJSON("/core/api/widgets/updates/more/" + plugin_id + "/" + twitter_id + "/" + tweet_id + "/5" , function (data)  {    					
+    		    		console.log(data);
     		    		if(data.length == 0)
 		    			{   
-    		    			$("#twitter_social_stream").remove();
-    		    			if(twitter_connected){
-    		        			alert("No updates available");
-    		        			return;
-    		        		}
-    		        		alert("Member does not share his/her updates.Follow him on twitter");
+    		    			alert("No more updates available");
+    		    			 $("#twitter_stream").remove();
+    		    			 $('#twitter_less').show();
+    		        		 $('#twitter_refresh_stream').show();
     		        		return;
 		    			}
     		    		
@@ -249,12 +273,13 @@ function showTwitterProfile(twitter_id, plugin_id) {
     			 $('#twitter_update_heading',$('#Twitter')).show(); 
     		 }
     		 
+    		 
+    		 $("#twitter_social_stream").append(getTemplate("twitter-update-stream", data)); 
     		 $('#twitter_current_activity',$('#Twitter')).hide();
-    		 $("#twitter_social_stream").html(getTemplate("twitter-update-stream", data));    		
-    		 $("#twitter_stream").remove();
-    		 $('#twitter_less').show();
     		 $('#twitter_refresh_stream').show();
+    		 
     	}).error(function(data) { 
+    		 $("#twitter_stream").remove();
     		alert(data.responseText); 
     	}); 
     });
@@ -275,6 +300,25 @@ function showTwitterProfile(twitter_id, plugin_id) {
     	$(this).text("See More..");
     	$('#twitter_current_activity',$('#Twitter')).show();
     	$('#twitter_refresh_stream').hide();
+    });
+    
+    $('#twitter_refresh_stream').die().live('click', function (e) {
+    	e.preventDefault();
+    	$('#twitter_social_stream').html(LOADING_HTML);
+    	$.getJSON("/core/api/widgets/updates/" + plugin_id + "/" + twitter_id, function(data){
+    		
+    		if(data.length == 0)
+			{    		
+				return;
+			}
+    		
+    		$('#twitter_refresh_stream').show();
+    		$("#twitter_social_stream").html(getTemplate("twitter-update-stream", data));
+    		
+    	}).error(function(data) {  		
+    		console.log('entered error');
+    		alert(data.responseText); 
+    	}); 
     });
 }
 /**

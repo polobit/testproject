@@ -27,14 +27,14 @@
 				{{/if}}
 			</div>		
 	    </div>		
-		<div class="row-fluid well" id="linkedin_update_heading" style="padding:0px;margin-bottom: -3px;background-color:#ffffff;display:none;">				
+		<div class="row-fluid well" id="linkedin_update_heading" style="padding:0px;margin-bottom: -3px;display:none;">				
 			<div  style="background-color:#f5f5f5;text-align: center;">
 				<h5 style="color: #999999;">CURRENT ACTIVITY</h5>
 			</div>	
 			{{#if current_update}}
-			<div id="linkedin_current_activity" style="padding:7px 0px 10px 0px;display:none;">	
+			<div id="linkedin_current_activity" style="padding:7px 0px 10px 0px;display:none;background-color:#ffffff;">	
 				{{#is_link current_update}}
-	        		{{name}} shared a <a href="{{current_update}}" target="_blank" >link</a>
+	        		{{name}} shared a link <a href="{{current_update}}" target="_blank" >{{show_link_in_statement current_update}}</a>
 				{{else}}
 					<span>{{current_update}}</span>
 				{{/is_link}}
@@ -57,7 +57,7 @@
 
 <script id="linkedin-update-stream-template" type="text/html">
 {{#if this.length}}	
-			<tr/>
+		<tr/>
 			{{#each this}}
 				<tr style="border-bottom: 1px solid #f5f5f5;" update_time="{{created_time}}">				
 					<td style="padding:7px 0px 7px 0px;">
@@ -91,7 +91,7 @@
 					</td>				
 				</tr>
 			{{/each}}
-			<tr/>
+		<tr/>
 {{/if}}
 </script>
 

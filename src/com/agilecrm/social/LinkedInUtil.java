@@ -236,7 +236,6 @@ public class LinkedInUtil
 	    result.picture = result.picture.replace("http:", "https:").replace(
 		    "m3", "m3-s");
 
-	System.out.println("Linkedin profiles :" + result);
 	return result;
 
     }

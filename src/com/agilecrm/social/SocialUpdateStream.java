@@ -9,7 +9,7 @@ public class SocialUpdateStream
     public long created_time;
     public String message = "";
     public String type = "";
-
+    public boolean is_retweeted = false;
     public String toString()
     {
 	return id + " " + created_time + " " + message;

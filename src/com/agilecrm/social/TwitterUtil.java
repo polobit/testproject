@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import twitter4j.DirectMessage;
 import twitter4j.Query;
 import twitter4j.QueryResult;
 import twitter4j.ResponseList;
 import twitter4j.Status;
-import twitter4j.Tweet;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import twitter4j.User;
@@ -105,7 +105,7 @@ public class TwitterUtil
 
 	    result.id = user.getId() + "";
 	    result.name = user.getName();
-	    result.picture = user.getProfileImageUrlHttps().toString();
+	    result.picture = user.getBiggerProfileImageURLHttps().toString();
 	    result.location = user.getLocation();
 	    result.summary = user.getDescription();
 	    result.num_connections = user.getFollowersCount() + "";
@@ -139,10 +139,8 @@ public class TwitterUtil
 	// Creates a twitter object to connect with twitter
 	Twitter twitter = getTwitter(widget);
 
-	long profile_id = Long.parseLong(twitterId);
-
-	// Fetch Twitter user profile based on profile Id
-	User user = twitter.showUser(profile_id);
+	// Fetch Twitter user profile based on twitter Id
+	User user = twitter.showUser(Long.parseLong(twitterId));
 
 	SocialSearchResult result = new SocialSearchResult();
 
@@ -150,7 +148,7 @@ public class TwitterUtil
 	// class
 	result.id = user.getId() + "";
 	result.name = user.getName();
-	result.picture = user.getProfileImageUrlHttps().toString();
+	result.picture = user.getBiggerProfileImageURLHttps().toString();
 	result.location = user.getLocation();
 	result.summary = user.getDescription();
 	result.num_connections = user.getFollowersCount() + "";
@@ -165,6 +163,9 @@ public class TwitterUtil
 		user.getId()).isSourceFollowingTarget();
 	result.is_followed_by_target = twitter.showFriendship(twitter.getId(),
 		user.getId()).isSourceFollowedByTarget();
+	if (result.is_connected && user.getStatus() != null)
+	    result.updateStream = getNetworkUpdates(widget,
+		    Long.parseLong(twitterId), user.getStatus().getId(), 5);
 
 	return result;
     }
@@ -216,14 +217,14 @@ public class TwitterUtil
 	    throws Exception
     {
 	Twitter twitter = getTwitter(widget);
-	twitter.retweetStatus(tweetId);
+	Status reTweet = twitter.retweetStatus(tweetId);
 	// Status reTweet = twitter.retweetStatus(tweetId);
 	// SocialUpdateStream updateStream = new SocialUpdateStream();
 	// updateStream.created_time = reTweet.getCreatedAt().getTime();
 	// updateStream.id = reTweet.getId();
 	// updateStream.message = reTweet.getText();
 	// System.out.println("-----------------" + updateStream);
-	return "Retweeted successfully";
+	return (reTweet != null) ? "Retweeted successfully" : "Unsuccessfull";
     }
 
     /**
@@ -312,12 +313,15 @@ public class TwitterUtil
 	QueryResult result = twitter.search(query);
 
 	List<SocialUpdateStream> updateStream = new ArrayList<SocialUpdateStream>();
-	for (Tweet tweet : result.getTweets())
+
+	for (Status tweet : result.getTweets())
 	{
 	    SocialUpdateStream stream = new SocialUpdateStream();
 	    stream.id = String.valueOf(tweet.getId());
 	    stream.message = tweet.getText();
-
+	    System.out.println("tweet "
+		    + new ObjectMapper().writeValueAsString(tweet));
+	    stream.is_retweeted = tweet.isRetweetedByMe();
 	    stream.created_time = tweet.getCreatedAt().getTime() / 1000;
 	    updateStream.add(stream);
 	}
@@ -332,22 +336,26 @@ public class TwitterUtil
      *            {@link Widget}, for accessing token and secret key
      * @param twitterId
      *            {@link String}, to access recipient twitter account
+     * @param statusId
+     *            tweet id of the tweet after which updates are retrieved
+     * @param count
+     *            number of tweets to be retrieved
      * @return {@link List} of {@link SocialUpdateStream}
      * @throws Exception
      *             If {@link Twitter} throws an exception
      */
     public static List<SocialUpdateStream> getNetworkUpdates(Widget widget,
-	    Long twitterId, String date, int count) throws Exception
+	    Long twitterId, long statusId, int count) throws Exception
     {
 	Twitter twitter = getTwitter(widget);
 	User user = twitter.showUser(twitterId);
 	Query query = new Query("from:" + user.getScreenName());
-	query.setUntil(date);
-
+	query.maxId(statusId);
+	query.setCount(count);
 	QueryResult result = twitter.search(query);
 
 	List<SocialUpdateStream> updateStream = new ArrayList<SocialUpdateStream>();
-	for (Tweet tweet : result.getTweets())
+	for (Status tweet : result.getTweets())
 	{
 	    SocialUpdateStream stream = new SocialUpdateStream();
 	    stream.id = String.valueOf(tweet.getId());
@@ -371,8 +379,8 @@ public class TwitterUtil
      * @throws Exception
      *             If {@link Twitter} throws an exception
      */
-    public static List<Tweet> getTweetsByName(Twitter twitter, String screenName)
-	    throws Exception
+    public static List<Status> getTweetsByName(Twitter twitter,
+	    String screenName) throws Exception
     {
 	Query query = new Query("from:" + screenName);
 	QueryResult result = twitter.search(query);

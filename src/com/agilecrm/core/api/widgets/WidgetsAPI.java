@@ -458,14 +458,22 @@ public class WidgetsAPI
     }
 
     /**
-     * Connects to {@link LinkedInUtil} or {@link TwitterUtil} based on the name
-     * given in widget and fetches the posts or tweets in LinkedIn and Twitter
-     * based on the parameter social id
+     * Connects to {@link LinkedInUtil} based on the name given in widget and
+     * fetches specified number of posts LinkedIn based on the parameter social
+     * id
      * 
      * @param widgetId
      *            {@link Long} plugin-id/widget id, to get {@link Widget} object
      * @param socialId
      *            {@link String} LinkedIn id or Twitter id of the contact
+     * @param startIndex
+     *            {@link String} start index of list of updates to be retrieved
+     * @param endIndex
+     *            {@link String} end index of list of updates
+     * @param startDate
+     *            {@link String} since which updates are retrieved
+     * @param endDate
+     *            {@link String} until which updates are retrieved
      * @return {@link List} of {@link SocialUpdateStream}
      */
     @Path("/updates/more/{widget-id}/{social-id}/{startIndex}/{endIndex}/{startDate}/{endDate}")
@@ -485,18 +493,62 @@ public class WidgetsAPI
 	    if (widget == null)
 		return null;
 
-	    if (endDate != null)
-		endDate = String.valueOf(Integer.parseInt(endDate) - 5);
 	    // Profiles are searched based on first and last name of contact
 	    // Calls LinkedUtil method to send message to person by socialId
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
+	    {
+		if (endDate != null)
+		    endDate = String.valueOf(Integer.parseInt(endDate) - 5);
 		return LinkedInUtil.getNetworkUpdates(widget, socialId,
 			Integer.parseInt(startIndex),
 			Integer.parseInt(endIndex), startDate, endDate);
+	    }
 
-	    else if (widget.name.equalsIgnoreCase("TWITTER"))
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+	return null;
+    }
+
+    /**
+     * Connects to {@link TwitterUtil} based on the name given in widget and
+     * fetches specified number of tweets in Twitter based on the parameter
+     * social id
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param socialId
+     *            {@link String} LinkedIn id or Twitter id of the contact
+     * @param tweetId
+     *            {@link String} Id of the tweet after which the tweets are
+     *            given
+     * @param endIndex
+     *            {@link String} count of tweets to be retrieved
+     * @return {@link List} of {@link SocialUpdateStream}
+     */
+    @Path("/updates/more/{widget-id}/{social-id}/{tweet_id}/{endIndex}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<SocialUpdateStream> getSocialNetworkUpdates(
+	    @PathParam("widget-id") Long widgetId,
+	    @PathParam("social-id") String socialId,
+	    @PathParam("tweet_id") String tweetId,
+	    @PathParam("endIndex") String endIndex)
+    {
+	try
+	{
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+	    if (widget == null)
+		return null;
+
+	    if (widget.name.equalsIgnoreCase("TWITTER"))
 		return TwitterUtil.getNetworkUpdates(widget,
-			Long.parseLong(socialId), startDate,
+			Long.parseLong(socialId), Long.parseLong(tweetId) - 5,
 			Integer.parseInt(endIndex));
 
 	}

@@ -34,13 +34,15 @@
 			</div>			
 	    </div>
 		{{#if current_update}}
-			<div class="row-fluid well" id="twitter_update_heading" style="padding:0px;margin-bottom: -3px;background-color:#ffffff;display:none;">				
+			<div class="row-fluid well" id="twitter_update_heading" style="padding:0px;margin-bottom: -3px;display:none;">				
 				<div style="background-color:#f5f5f5;text-align: center;">
 					<h5 style="color: #999999;">CURRENT ACTIVITY</h5>
-				</div>	
-				<div id="twitter_current_activity" style="padding:7px 0px 10px 0px;display:none;">	
+				</div>
+				{{#if current_update}}	
+				<div id="twitter_current_activity" style="padding:7px 0px 10px 0px;display:none;background-color:#ffffff;">	
 					{{show_link_in_statement current_update}}
 				</div>
+				{{/if}}
 	    	</div>
 		{{/if}}
 		<div id="twitter_social_stream" class="collapse in">				
@@ -48,7 +50,7 @@
 		<div style="margin: 10px 0px 5px 0px;">			
 			<a href="#more" class="twitter_stream" id="twitter_stream" rel="tooltip" title="Click to see more tweets">See More..</a>
 			<a href="#more" data-toggle="collapse" data-target="#twitter_social_stream" id="twitter_less" style="display:none">See Less..</a>
-			<a href="#refresh" id="twitter_refresh_stream" class="twitter_stream icon-refresh pull-right" rel="tooltip" title="Refresh to get current updates" style="display:none"></a>
+			<a href="#refresh" id="twitter_refresh_stream" class="icon-refresh pull-right" rel="tooltip" title="Refresh to get current updates" style="display:none"></a>
 		</div>	
 	</div>
 </script> 
@@ -97,13 +99,17 @@
 
 <script id="twitter-update-stream-template" type="text/html">
 {{#if this.length}}
-	<div class="row-fluid" style="word-wrap: break-word;>
+	<div class="row-fluid" style="word-wrap: break-word;padding-top:5px;">
 		{{#each this}}				
-			<div style="padding-top:7px;line-height: 120%;margin: 0px 1px 0px 1px;border-bottom: 1px solid #dedede;">						
+			<div style="padding-top:7px;line-height: 120%;margin: 0px 1px 0px 1px;border-bottom: 1px solid #dedede;" id="twitter_status" status_id="{{id}}" >						
 				{{show_link_in_statement message}}
-				<div style="font-size:12px;padding:7px 0px 5px 0px;">
+				<div style="font-size:12px;padding:7px 0px 5px 0px;" >
 					{{epochToHumanDate "mm-dd-yyyy" created_time}}
-					<a href="#retweet" class="twitter_retweet icon-retweet" id="{{id}}" style="margin-left:14px; display: inline;">Retweet</a>
+					{{#if is_retweeted}}
+						<a href="#retweeted" class="icon-retweet" id="{{id}}" style="margin-left:14px; display: inline;color:green">Retweeted</a>
+					{{else}}
+						<a href="#retweet" class="twitter_retweet icon-retweet" id="{{id}}" style="margin-left:14px; display: inline;">Retweet</a>
+					{{/if}}
 				</div>
 			</div>															
 		{{/each}}

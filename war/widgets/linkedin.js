@@ -38,22 +38,25 @@ $(function () {
         agile_crm_delete_widget_property_from_contact(LINKEDIN_PLUGIN_NAME);
     });
     
+    //Sends a message to linkedin when clicked on send message button
     $('#linkedin_message').die().live('click', function (e) {
     	e.preventDefault();
     	sendLinkedInMessage(plugin_id, linkedin_id);
     });
     
+    //Sends an add request to llinkedin when clicked on connect button
     $('#linkedin_connect').die().live('click', function(e)
     {
     	e.preventDefault();
     	sendLinkedInAddRequest(plugin_id, linkedin_id);
     });
     
+    //Reshare a post in linkedin
     $('.linkedin_share').die().live('click', function(e)
     {
     	e.preventDefault();
     	var share_id = $(this).attr("id");
-    	reSharePost(plugin_id, share_id,"optional");
+    	reSharePost(plugin_id, share_id,"optional",this);
     });
     
 
@@ -239,7 +242,8 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
     	
     	$.getJSON("/core/api/widgets/updates/more/" + plugin_id + "/" + linkedin_id + "/0/5/1262304000/" + end_time, function(data){
     		if(data.length == 0)
-			{    		
+			{    	
+    			 alert("No more updates available");
     			 $("#linkedin_stream").remove();
         		 $('#linkedin_less').show();
         		 $('#linkedin_refresh_stream').show();
@@ -393,9 +397,10 @@ function sendLinkedInMessage(plugin_id, linkedin_id) {
 
 }
 
-function reSharePost(plugin_id, share_id, message) {
+function reSharePost(plugin_id, share_id, message, element) {
     $.get("/core/api/widgets/reshare/" + plugin_id + "/" + share_id + "/" + message, function (data) {
-        console.log(data);
+    	$(element).css('color', 'green');
+    	$(element).text('Shared');
     });
 }
 
