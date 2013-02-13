@@ -189,6 +189,7 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
     LINKEDIN_PLUGIN_HEADER + '<img src=\"img/1-0.gif\"></img>');
     
     var linkedin_connected;
+    var update_stream_length;
     
     // Fetches matching profiles
     $.getJSON("/core/api/widgets/profile/" + plugin_id + "/" + linkedin_id,
@@ -212,6 +213,7 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
        {    	    
         	$('#linkedin_update_heading').show();
         	$('#linkedin_table').append(getTemplate("linkedin-update-stream", data.updateStream));
+        	update_stream_length = data.updateStream.length;
         	return;
         }
         
@@ -233,7 +235,7 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
     	if(!end_time){
     		if(linkedin_connected){
     			
-    			alert("No updates available");
+    			alert("This person does not share his/her updates");
     			return;
     		}
     		alert("Member does not share his/her updates. Get connected");
@@ -243,10 +245,13 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
     	$.getJSON("/core/api/widgets/updates/more/" + plugin_id + "/" + linkedin_id + "/0/5/1262304000/" + end_time, function(data){
     		if(data.length == 0)
 			{    	
-    			 alert("No more updates available");
-    			 $("#linkedin_stream").remove();
-        		 $('#linkedin_less').show();
+    			 alert("No more updates available");    			 
         		 $('#linkedin_refresh_stream').show();
+        		 
+        		 if(update_stream_length > 3){
+        			 $("#linkedin_stream").hide();
+        			 $('#linkedin_less').show();
+        		 }
 				return;
 			}
     		
@@ -291,6 +296,8 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
 				return;
 			}
     		
+    		$("#linkedin_stream").show();
+    		$('#linkedin_less').hide();
     		$('#linkedin_refresh_stream').show();
     		$("#linkedin_table").html(getTemplate("linkedin-update-stream", data));
     		

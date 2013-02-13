@@ -99,7 +99,7 @@
 
 <script id="twitter-update-stream-template" type="text/html">
 {{#if this.length}}
-	<div class="row-fluid" style="word-wrap: break-word;padding-top:5px;">
+	<div class="row-fluid twitter_update" style="word-wrap: break-word;padding-top:5px;">
 		{{#each this}}				
 			<div style="padding-top:7px;line-height: 120%;margin: 0px 1px 0px 1px;border-bottom: 1px solid #dedede;" id="twitter_status" status_id="{{id}}" >						
 				{{show_link_in_statement message}}
@@ -114,6 +114,8 @@
 			</div>															
 		{{/each}}
 	</div>	
+{{else}}
+		<div class="row-fluid" style="padding: 7px 2px 7px 2px;line-height: 120%;color: #999999;">This person does not share his updates</div>
 {{/if}}
 </script>
 

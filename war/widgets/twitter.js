@@ -6,9 +6,11 @@
 $(function () {
     // Plugin name as a global variable
     TWITTER_PLUGIN_NAME = "Twitter";
-    TWITTER_PLUGIN_HEADER = '<div></div>';
+    TWITTER_PLUGIN_HEADER = '<div></div>';    
     
     Twitter_current_profile_user_name = "";
+    Twitter_current_update_id = "";
+    
     // Gets plugin id from plugin object, fetched using script API
     var plugin_id = agile_crm_get_plugin(TWITTER_PLUGIN_NAME).id;
     // Get Plugin Prefs
@@ -201,7 +203,7 @@ function showTwitterProfile(twitter_id, plugin_id) {
         
         Twitter_current_profile_user_name = data.name;
         twitter_connected = data.is_connected;
-        update = data.current_update;
+        Twitter_current_update_id = data.current_update_id;
         
         // Gets Twitter-profile template and populate the fields using handlebars
         $('#Twitter').html(getTemplate("twitter-profile", data));
@@ -230,7 +232,7 @@ function showTwitterProfile(twitter_id, plugin_id) {
           	return;
          }
          
-    	 if(data.current_update)
+    	 if(Twitter_current_update_id)
        	 {        
        		$('#twitter_update_heading',$('#Twitter')).show();
        		$('#twitter_current_activity',$('#Twitter')).show();
@@ -243,15 +245,12 @@ function showTwitterProfile(twitter_id, plugin_id) {
     $('.twitter_stream').die().live('click', function (e) {
     	e.preventDefault();
     	
-    	
-    	var tweet_id = $('div#twitter_social_stream').find('div#twitter_status:last').attr('status_id');
-    	console.log ($('div#twitter_social_stream').last().find('div#twitter_status').html());
-    	
+    	var tweet_id = $('div#twitter_social_stream').find('div#twitter_status:last').attr('status_id');    	
     	console.log(tweet_id);
     	
     	if(!tweet_id){
     		if(twitter_connected){    			
-    			alert("No updates available");
+    			alert("This member doesn't share his/her updates");
     			return;
     		}
     		alert("Member does not share his/her updates. Follow him and try");
@@ -263,13 +262,13 @@ function showTwitterProfile(twitter_id, plugin_id) {
     		    		if(data.length == 0)
 		    			{   
     		    			alert("No more updates available");
-    		    			 $("#twitter_stream").remove();
-    		    			 $('#twitter_less').show();
-    		        		 $('#twitter_refresh_stream').show();
+    		    			$("#twitter_stream").hide();
+    		    			$('#twitter_less').show();
+    		        		$('#twitter_refresh_stream').show();
     		        		return;
 		    			}
     		    		
-    		 if(!update){
+    		 if(!Twitter_current_update_id){
     			 $('#twitter_update_heading',$('#Twitter')).show(); 
     		 }
     		 
@@ -290,7 +289,10 @@ function showTwitterProfile(twitter_id, plugin_id) {
     	
     	if($(this).attr("less") == "true"){
     		$(this).attr("less","false");
-    		$('#twitter_current_activity',$('#Twitter')).hide();
+    		
+    		if($('div#twitter_social_stream').find('div.twitter_update').length != 0)
+    			$('#twitter_current_activity',$('#Twitter')).hide();
+    		
     		$(this).text("See Less..");
     		$('#twitter_refresh_stream').show();
     		return;
@@ -305,18 +307,19 @@ function showTwitterProfile(twitter_id, plugin_id) {
     $('#twitter_refresh_stream').die().live('click', function (e) {
     	e.preventDefault();
     	$('#twitter_social_stream').html(LOADING_HTML);
-    	$.getJSON("/core/api/widgets/updates/" + plugin_id + "/" + twitter_id, function(data){
+    	$.getJSON("/core/api/widgets/updates/" + plugin_id + "/" + twitter_id, function(data){ 		
     		
-    		if(data.length == 0)
-			{    		
-				return;
+    		if(data.length != 0)
+			{    
+    			$("#twitter_stream").show();
+        		$('#twitter_less').hide();
 			}
     		
-    		$('#twitter_refresh_stream').show();
+    		$('#twitter_refresh_stream').show(); 	
     		$("#twitter_social_stream").html(getTemplate("twitter-update-stream", data));
     		
     	}).error(function(data) {  		
-    		console.log('entered error');
+    		$('#twitter_social_stream').remove();
     		alert(data.responseText); 
     	}); 
     });
@@ -355,52 +358,60 @@ function getTwitterMatchingProlfiles(plugin_id, callback) {
 }
 
 function sendFollowRequest(plugin_id, twitter_id) {
-	var json = {};
-	json["headline"] = "Follow";
-	json["info"] = "Makes you follow "+ Twitter_current_profile_user_name.toLocaleUpperCase() +" on Twitter from your Twitter account associated with Agile CRM";
-		
-	$('#twitter_messageModal').remove();
-	 var message_form_modal = getTemplate("twitter-message", json);
-		console.log("show modal");
-		$('#content').append(message_form_modal);
-		$('#twitter_messageModal').modal("show");
-		
-
-		$('#send_request').click( function(e) {
-			e.preventDefault();
-			
-		    if(!isValidForm($("#twitter_messageForm"))){
-		    }
-		    
-		    $.post( "/core/api/widgets/connect/" + plugin_id + "/" + twitter_id , $('#twitter_messageForm').serialize(), function(data) {
+			    
+	 $.post( "/core/api/widgets/connect/" + plugin_id + "/" + twitter_id ,  function(data) {
 		    	
-		    	if(data == "true"){		    		
-		    		$('#twitter_follow').hide();
-					$('#twitter_unfollow').show();
-					$('#twitter_tweet').show();
-		    	}
-				
-		    	$('#twitter_messageModal').modal("hide");
+	    	if(data == "true"){		    		
+	     		$('#twitter_follow').hide();
+				$('#twitter_unfollow').show();
+				$('#twitter_tweet').show();
+	    	}
+	    	
+	    	if(!Twitter_current_update_id)
+				return;					
+	    	
+	    	$.getJSON("/core/api/widgets/updates/more/" + plugin_id + "/" + twitter_id + "/" + Twitter_current_update_id + "/5" , function (data)  {    					
+		    		
+	    		 if(data.length == 0)
+	   			 {   	
+	    			 $("#twitter_social_stream").html(getTemplate("twitter-update-stream", data)); 
+	    			 $("#twitter_stream").remove();
+        			 $('#twitter_less').show();
+            		 $('#twitter_refresh_stream').show();
+	        		 return;
+	   			 }
+	    		
+				 if(!Twitter_current_update_id){
+					 $('#twitter_update_heading',$('#Twitter')).show(); 
+				 }			 
+						 
+				 $("#twitter_social_stream").append(getTemplate("twitter-update-stream", data)); 
+				 $('#twitter_current_activity',$('#Twitter')).hide();				
+				 $('#twitter_refresh_stream').show();
+	 
+			 }).error(function(data) { 
+				 $("#twitter_stream").remove();
+	 			 alert(data.responseText); 
+			 }); 
 		    	
-		       }).error(function(data) { 
-		    	   $('#twitter_messageModal').remove();
-		    		alert(data.status); 
-		    	}) 
-		});
+       }).error(function(data) { 
+    	   alert(data.responseText); 
+       }); 		
 }
 
 
 function sendUnfollowRequest(plugin_id, twitter_id){	
 		    
 		    $.get( "/core/api/widgets/disconnect/" + plugin_id + "/" + twitter_id , function (data) {
-		    	 $('#twitter_message').hide();
-		    	 $('#twitter_tweet').hide();
+		    	 
+		    	$('#twitter_message').hide();
+		    	$('#twitter_tweet').hide();
 		    	$("#twitter_follow").show();
 		    	$('#twitter_unfollow').hide();
-		       }).error(function(data) { 
-		    	   
+		    	
+		    }).error(function(data) {		    	   
 		    		alert(data.responseText); 
-		    	}) ;
+		    });
 		
 }
 

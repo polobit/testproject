@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import twitter4j.DirectMessage;
 import twitter4j.Query;
@@ -148,24 +147,28 @@ public class TwitterUtil
 	// class
 	result.id = user.getId() + "";
 	result.name = user.getName();
-	result.picture = user.getBiggerProfileImageURLHttps().toString();
+	result.picture = user.getMiniProfileImageURLHttps().toString();
 	result.location = user.getLocation();
 	result.summary = user.getDescription();
 	result.num_connections = user.getFollowersCount() + "";
-
 	result.tweet_count = user.getStatusesCount() + "";
 	result.friends_count = user.getFriendsCount() + "";
-	result.current_update = (user.getStatus() != null) ? user.getStatus()
-		.getText() : null;
+
 	result.url = "https://twitter.com/" + user.getScreenName();
 	result.is_follow_request_sent = user.isFollowRequestSent();
 	result.is_connected = twitter.showFriendship(twitter.getId(),
 		user.getId()).isSourceFollowingTarget();
 	result.is_followed_by_target = twitter.showFriendship(twitter.getId(),
 		user.getId()).isSourceFollowedByTarget();
-	if (result.is_connected && user.getStatus() != null)
+
+	if (user.getStatus() != null)
+	{
+	    result.current_update = user.getStatus().getText();
+	    result.current_update_id = user.getStatus().getId();
+
 	    result.updateStream = getNetworkUpdates(widget,
-		    Long.parseLong(twitterId), user.getStatus().getId(), 5);
+		    Long.parseLong(twitterId), result.current_update_id, 5);
+	}
 
 	return result;
     }
@@ -218,12 +221,6 @@ public class TwitterUtil
     {
 	Twitter twitter = getTwitter(widget);
 	Status reTweet = twitter.retweetStatus(tweetId);
-	// Status reTweet = twitter.retweetStatus(tweetId);
-	// SocialUpdateStream updateStream = new SocialUpdateStream();
-	// updateStream.created_time = reTweet.getCreatedAt().getTime();
-	// updateStream.id = reTweet.getId();
-	// updateStream.message = reTweet.getText();
-	// System.out.println("-----------------" + updateStream);
 	return (reTweet != null) ? "Retweeted successfully" : "Unsuccessfull";
     }
 
@@ -319,8 +316,6 @@ public class TwitterUtil
 	    SocialUpdateStream stream = new SocialUpdateStream();
 	    stream.id = String.valueOf(tweet.getId());
 	    stream.message = tweet.getText();
-	    System.out.println("tweet "
-		    + new ObjectMapper().writeValueAsString(tweet));
 	    stream.is_retweeted = tweet.isRetweetedByMe();
 	    stream.created_time = tweet.getCreatedAt().getTime() / 1000;
 	    updateStream.add(stream);
@@ -360,7 +355,7 @@ public class TwitterUtil
 	    SocialUpdateStream stream = new SocialUpdateStream();
 	    stream.id = String.valueOf(tweet.getId());
 	    stream.message = tweet.getText();
-
+	    stream.is_retweeted = tweet.isRetweetedByMe();
 	    stream.created_time = tweet.getCreatedAt().getTime() / 1000;
 	    updateStream.add(stream);
 	}

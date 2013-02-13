@@ -24,6 +24,8 @@ public class SocialSearchResult
     public boolean is_connected;
     public boolean is_follow_request_sent;
     public boolean is_followed_by_target;
+    public long current_update_id;
+    
     @Embedded
     public List<SocialUpdateStream> updateStream = null;
 
