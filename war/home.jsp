@@ -63,6 +63,9 @@ String CSS_PATH = "/";
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/agilecrm.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/timeline.css" />
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/jslider.css" />
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/planandupgrade.css" />
+
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>

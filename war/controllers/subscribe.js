@@ -15,6 +15,7 @@ var SubscribeRouter = Backbone.Router
 				/* Updating subscription details */
 				"updatecard" : "updateCreditCard",
 				"updateplan" : "updatePlan",
+				"purchase-plan": "purchasePlan",
 
 				/* Invoices */
 				"invoice" : "invoice",
@@ -37,9 +38,9 @@ var SubscribeRouter = Backbone.Router
 				 */
 				var subscribe_plan = new Base_Model_View({
 					url : "core/api/subscription",
-					template : "subscribe",
+					template : "subscribe-new",
 					window : 'subscribe',
-					postRenderCallback : function(el)
+		/*			postRenderCallback : function(el)
 					{
 						// Setup account statistics
 						set_up_account_stats(el);
@@ -52,9 +53,33 @@ var SubscribeRouter = Backbone.Router
 						{
 							print_country($("#country", el));
 						});
-					}
+					},*/
+			       postRenderCallback : function(el) {
+			           var data = subscribe_plan.model.toJSON();
+			        
+			           // Setup account statistics
+						set_up_account_stats(el);
+			           
+			           if(!$.isEmptyObject(data))
+			        	   {
+			        	   	USER_BILLING_PREFS = data;   
+			        	   	USER_CREDIRCARD_DETAILS = subscribe_plan.model.toJSON().billingData;
+			        	   	console.log(USER_CREDIRCARD_DETAILS);
+			        	   	element =  setPriceTemplete(data.plan.plan_type, el);
+			        	   }	
+			        	   	
+			           else   
+			        	   element =  setPriceTemplete("free", el);
+			           
+			           	head.js('/lib/jquery.slider.min.js', function() {
+			        	   if($.isEmptyObject(data))
+			        		   	setPlan("free");
+			        	   else
+			        		   setPlan(data);
+			            load_slider(el);
+			           });
+			          }
 				});
-
 				$('#content').html(subscribe_plan.render().el);
 			},
 
@@ -73,7 +98,7 @@ var SubscribeRouter = Backbone.Router
 						{
 							url : "core/api/subscription",
 							template : "subscription-card-detail",
-							window : 'subscribe',
+							window : 'purchase-plan',
 							postRenderCallback : function(el)
 							{
 
@@ -173,5 +198,40 @@ var SubscribeRouter = Backbone.Router
 				});
 
 				$('#content').html(invoice_details.render().el);
-			}
+			},
+			
+			purchasePlan: function() {
+			    if(!plan_json.plan)
+			    { 
+			    	this.navigate("subscribe", {
+						trigger : true
+					});
+			    	
+					return;
+			    }
+			    
+			    var plan = plan_json
+			    
+			    var upgrade_plan = new Base_Model_View(
+			      {
+			       url : "core/api/subscription",
+			       template : "purchase-plan",
+			       window : 'subscribe',
+			       isNew : true,
+			       data : plan,
+			       postRenderCallback: function(el)
+			       {
+			    	   card_expiry(el);
+			    		head.js(LIB_PATH + 'lib/countries.js', function()
+								{
+									print_country($("#country", el));
+								});
+			       }
+			      });
+			   
+			     // Prepend Loading
+			    $('#content').html(upgrade_plan.render().el);
+			    $(".active").removeClass("active");
+			    // $("#fat-menu").addClass("active");
+			   }
 		});

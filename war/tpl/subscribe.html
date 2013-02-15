@@ -1,188 +1,186 @@
-<script id="subscribe-template" type="text/html">
-<div class="span6">
-    <div class="well">
-        {{#unless id}}
-        <form id="planform" class="form-horizontal " name="plan">
-            <fieldset>
-                <div class="control-group">
-                    <legend>Subscribe</legend>
-                    <label class="control-label">Plan<span class="field_req">*</span></label>
-                    <div class="controls">
-                        <select class="required" name="plan_id">
-                            <option value="plan10">Lite</option>
-                            <option value="plan20">Pro</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label">Quantity<span class="field_req">*</span></label>
-                    <div class="controls">
-                        <select class="required" name="quantity">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
-                    </div>
-                </div>
-            </fieldset>
-        </form>
-        <form id="CCform" class="form-horizontal" name="card_details">
-            <fieldset>
-                <div class="control-group">
-                    <label class="control-label">Card Number <span class="field_req">*</span></label>
-                    <div class="controls">
-                        <input type="text" name="number" class="input required  digits" placeholder="Enter Your Card Number" />
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label">Name<span class="field_req">*</span></label>
-                    <div class="controls">
-                        <input type="text" name="name" class="input required " placeholder="Cardholder's name" />
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label">Expiry Month<span class="field_req">*</span></label>
-                    <div class="controls">
-                        <select name="exp_month" id="exp_month" class="input span2  exp_month" placeholder="Expiry Month" style="width:94px" onChange="$(&quot;#exp_year&quot;).valid();"></select>	
-                        <span style="margin-left:10px;margin-right:10px">/ </span>	
-                        <select name="exp_year" id="exp_year" class="input required  digits span2 exp_year atleastThreeMonths" placeholder="Expiry Year" style="width:94px"></select>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label">Address</label>
-                    <div class="controls">
-                        <input type="text" name="address_line1" class="required" id="address1" placeholder="address" />
-                    </div>
-                </div>
-                <div class="control-group">
-                    <div class="controls">
-                        <input type="text" name="address_line2" id="address2" placeholder="address" />
-                    </div>
-                </div>
-                <div class="control-group">
-                    <div class="controls">
-                        <input type="text" name="address_zip" class="required" id="address_zip" placeholder="zip" /><br /> <br />
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label">Country<span class="field_req">*</span></label>
-                    <div class="controls">
-                        <select class="country required" id="country" name="address_country" onchange="print_state('state',this.selectedIndex);"></select>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label">State<span class="field_req">*</span></label>
-                    <div class="controls">
-                        <select class="required" name="address_state" id="state" class="required" name="address_country">
-                        </select>
-                    </div>
-                </div>
-                <!-- <div class="control-group">	
-                    <label class="control-label">Gateway<span class="field_req">*</span></label>
-                    <div class="controls">
-                    			<select class="required" name="gateway">
-                    		<option value="">select</option>
-                    		<option value="Stripe">Stripe</option>
-                    		<option value="Paypal">Paypal</option>
-                    	</select>
-                    </div>
-                    </div> -->
-            </fieldset>
-        </form>
-        {{/unless}}
-        <form id="gateway" class="form-horizontal hide">
-            <input type="text" name="gateway" class="hidden" value="Stripe" />
-        </form>
-        {{#unless id}}
-        <div class="form-actions" align="center">
-            <a href="#" type="submit" id="subscribe" class="save btn btn-primary">Subscribe</a>
-            <a href="#admin" class="btn">Close</a>
-        </div>
-        {{/unless}} 
-        {{#if id}}
-        <legend>
-            Current Plan<a href="#updateplan" style="font-size: 15px" class="pull-right">Update Plan</a>
-        </legend>
-        <table class="table table-bordered">
-            <colgroup>
-                <col class="span3" />
-                <col class="span7" />
-            </colgroup>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Details</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>plan</td>
-                    <td>{{plan.plan_id}}</td>
-                </tr>
-                <tr>
-                    <td>Quantity</td>
-                    <td>{{plan.quantity}}</td>
-                </tr>
-            </tbody>
-        </table>
-        <legend style="margin-top: 20px">
-            Card Details<a href="#updatecard" style="font-size: 15px" class="pull-right">Update Card</a>
-        </legend>
-        {{#stringToJSON this "billingData"}} {{/stringToJSON}}
-        <table class="table table-bordered">
-            <colgroup>
-                <col class="span3" />
-                <col class="span7" />
-            </colgroup>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Details</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Name</td>
-                    <td>{{billingData.activeCard.name}}</td>
-                </tr>
-                <tr>
-                    <td>Number</td>
-                    <td>Ending with {{billingData.activeCard.last4}}</td>
-                </tr>
-                <tr>
-                    <td>Type</td>
-                    <td>{{billingData.activeCard.type}}</td>
-                </tr>
-                <tr>
-                    <td>Expiry</td>
-                    <td>{{billingData.activeCard.expMonth}}&nbsp
-                        {{billingData.activeCard.expYear}}
-                    </td>
-                </tr>
-                <tr>
-                    <td>Address</td>
-                    <td>{{billingData.activeCard.addressLine1}} <br />
-                        {{#if billingData.activeCard.addressLine2}}
-                        {{billingData.activeCard.addressLine2}} <br />
-                        {{/if}}
-                        {{billingData.activeCard.addressState}} <br />
-                        {{billingData.activeCard.addressCountry}}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div>
-            <a href="#invoice" style="margin-left:32%;font-size:15px">Click here for Invoices</a><br /><br />
-        </div>
-        <a href="#admin" align="center" class="btn">Close</a>
-        {{/if}}
-    </div>
+<script id="subscribe-new-template" type="text/html">
+<div class="row">
+	<div class="span12">
+		<div class="page-header">
+			<h1>Plan and Upgrade</h1>
+		</div>
+	</div>
 </div>
-<div class="span5 well">
-    <div id="account-stats">
-        "Stats comes here"
-    </div>
+<div class="row">
+	<div class="span9">
+		<h3>
+			<b>Choose Plan And Billing Cycle</b>
+		</h3>
+		<div class="pagination ac plan-strip"
+			style="margin-top: 15px; margin-bottom: 15px;">
+			<ul
+				style="float: none !important; text-align: center; display: inline-block;"
+				class="tagsli">
+				<li><a href="#" class="monthly"><strong>&nbsp;&nbsp;&nbsp;&nbsp;Monthly&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></a></li>
+
+				<li><a href="#" class="yearly"><strong>Yearly (15%
+							off)</strong></a></li>
+				<li><a href="#" class="twoyears"><strong>2 Years
+							(33% off)</strong></a></li>
+			</ul>
+		</div>
+	</div>
 </div>
+<div class="row">
+	<div class="span9">
+
+		<div class="">
+
+			<div class="span3 plan-collection-bot clearfix"
+				style="margin-left: 0px;">
+				<div class="plan-collection-in liteplan">
+					<span class="plan-off-ribbon"></span>
+					<h3 class="plan-collection-top">
+						<span class="plan-collection-icon"></span><br> <span
+							title="Lite Plan" id="plan_name">Lite</span>
+					</h3>
+					<div class="plan-collection-content" id="litepricebox">
+						<div id="lite_plan_price_content">
+							<span style="color: #FA782D; font-size: 30px;">$<span
+								id="lite_plan_price">12.74</span></span> <br> <span
+								style="color: #999">per month/agent</span>
+						</div>
+					</div>
+					<div class="plan-collection-content" id="lite_plan_statement">
+						For new companies just getting started with live chat and tickets
+					</div>
+					<div class="plan-collection-buy">
+						<div class="cat-addtocart-out">
+							<div class="cat-addtocart" id="lite_buy_btn">
+								<input type="radio" name="pro_vs_lite" value="lite"
+									class="djc_addtocart_link" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="span3 plan-collection-bot clearfix">
+				<div class="plan-collection-in proplan">
+					<span class="plan-off-ribbon"></span>
+					<h3 class="plan-collection-top">
+						<span class="plan-collection-icon pro_selected"></span><br> <span
+							title="Pro Plan" id="plan_name">Pro</span>
+					</h3>
+					<div class="plan-collection-content" id="propricebox">
+						<div id="pro_plan_price_content">
+							<span style="color: #FA782D; font-size: 30px;">$<span
+								id="pro_plan_price">21.24</span></span> <br> <span
+								style="color: #999">per month/agent</span>
+						</div>
+					</div>
+					<div class="plan-collection-content" id="pro_plan_statement">
+						Full feature packed - for fast growing and established companies</div>
+
+					<div class="plan-collection-buy">
+						<div class="cat-addtocart-out">
+							<div class="cat-addtocart" id="pro_buy_btn">
+								<input type="radio" name="pro_vs_lite" value="pro"
+									class="djc_addtocart_link" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="span3 plan-collection-bot clearfix">
+				<div class="plan-collection-in customplan">
+					<span class="plan-off-ribbon"></span>
+					<h3 class="plan-collection-top">
+						<span class="plan-collection-icon"></span><br> <span
+							title="Enterprise" id="plan_name">Enterprise</span>
+					</h3>
+					<div class="plan-collection-content">
+						<div id="Enterprise_plan_price_content">
+							<span style="color: #FA782D; font-size: 30px;">$<span
+								id="enterprise_plan_price">42.49</span></span> <br> <span
+								style="color: #999">per month/agent</span>
+						</div>
+					</div>
+					<div class="plan-collection-content">Helps for larger teams
+						or enterprises with custom requirements</div>
+					<div class="plan-collection-buy">
+						<div class="cat-addtocart-out">
+							<div class="cat-addtocart" id="custom_buy_btn">
+								<input type="radio" name="pro_vs_lite"
+									value="enterprise" class="djc_addtocart_link" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+
+			<div class="span9" id="choose_users"
+				style="border: 1px solid whiteSmoke; padding-top: 10px; border-radius: 5px; margin-top: 15px;">
+				<div class="row">
+					<div class="span4"  style="margin-left: 40px;">
+						<label><h3>
+								<b id="choose_users_popover" rel="popover" data-placement="right"
+								data-content="Choose number of users using this slider."
+								data-original-title="Add More Users">Choose Number Of Users </b>
+							</h3></label>
+						<div class="span3"
+							style="margin-left: 0px; margin-top: 20px; margin-left: 6px;">
+							<input id="users_select_slider" type="slider" name="price"
+								value="1" />
+						</div>
+					</div>
+					<div class="span4" style="margin-top: 45px;">
+						<span style="font-size: 15px;"><b>Monthly Cost : </b></span> <span
+							style="color: #FA782D; font-size: 30px;">$<span
+							id="users_total_cost">22.49</span></span>( for <span
+							style="color: #FA782D;" id="users_quantity">1</span> Users )
+					</div>
+				</div>
+				<div class="row"
+					style="text-align: center; margin-top: 25px; margin-bottom: 15px;">
+					<a href="#purchase-plan" id="purchase-plan"
+						class="btn btn-large btn-primary" style="padding: 15px 30px;"><b>Proceed
+							to Payment</b></a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="span3">
+		<div class="well">
+			<p>
+				<strong><u>Your Current Plan</u>:</strong>
+			</p>
+			<p>
+                 Plan: {{titleFromEnums this.plan.plan_type}}     
+            </p>
+            {{#if plan.quantity}}
+            <p>
+                 Quantity: {{this.plan.quantity}}     
+            </p>
+            {{/if}}
+			<p>
+				<a href="#choose_users" id="add_more_users">Add more users</a>
+			</p>
+			
+		</div>
+		
+
+
+		<div id="account-stats" class="well">
+			
+		</div>
+	
+		<hr style="margin: 18px 0px">
+
+	</div>
+</div>
+
+<div class="row">
+	<img src="img/clickdesk-featured-strip.png" width="100%">
+</div>
+<div id="cancel_account_modal" class="modal hide fade" tabindex="-1"
+					role="dialog" aria-labelledby="mymodalLabel" aria-hidden="true"
+					style="width: 650px; left: 45%;"></div>
 </script>

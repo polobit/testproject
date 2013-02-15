@@ -5,7 +5,8 @@
  * @module Billing author: Yaswanth
  */
 
-// Global variable to store statistics, to show details in confirmation of account delete
+// Global variable to store statistics, to show details in confirmation of
+// account delete
 var ACCOUNT_STATS;
 
 /**
@@ -27,20 +28,15 @@ function set_up_account_stats(el)
 	var account_stats = new Base_Model_View({
 		url : "core/api/namespace-stats",
 		template : "account-stats",
+		postRenderCallback: function(el) {
+			
+			ACCOUNT_STATS = account_stats.model.toJSON();
+		}
 	});
 
 	// Shows account statistics in subscription page
-	$('#account-stats', el).html(account_stats.render().el);
+	$('#account-stats', el).html(account_stats.render(true).el);
 
-	/**
-	 * Fetches stats model and stores in global variables
-	 */
-	account_stats.model.fetch({
-		success : function(data)
-		{
-			ACCOUNT_STATS = data.toJSON();
-		}
-	})
 }
 
 /**
@@ -65,8 +61,8 @@ $(function()
 				$("#warning-deletion").modal('show');
 
 				/**
-				 * If user clicks on confirm delete the modal is hidden 
-				 * and delete request is sent to "core/api/delete/account"
+				 * If user clicks on confirm delete the modal is hidden and
+				 * delete request is sent to "core/api/delete/account"
 				 */
 				$("#confirm-delete-account").click(
 						function(e)

@@ -179,6 +179,9 @@ $(function() {
 	 */
 	Handlebars.registerHelper('epochToHumanDate', function(format, date) {
 
+		if(!date)
+			return;
+		
 		// date form milliseconds
 		var d = new Date(parseInt(date) * 1000).format(format);
 		return d
@@ -317,12 +320,12 @@ $(function() {
 	 * Returns trigger type, by removing underscore and converting into
 	 * lowercase, excluding first letter.
 	 */
-	Handlebars.registerHelper('if_trigger_type', function() {
-
-		var str = this.type.replace(/_/g, ' ');
-		var temp = str.toLowerCase();
-
-		return temp.charAt(0).toUpperCase() + temp.slice(1);
+	Handlebars.registerHelper('titleFromEnums', function(value) {
+		if(!value)
+			return;
+		
+		var str = value.replace(/_/g, ' ');
+		return ucfirst(str.toLowerCase());
 
 	});
 	
@@ -518,4 +521,18 @@ $(function() {
 		   }
 
 		  })
+		  
+		  /**
+			 * Returns table headings for custom contacts list view
+			 */
+			Handlebars.registerHelper('displayPlan', function(value) {
+
+				return ucfirst(value).replaceAll("_", " ");
+
+				});
+	 
+	 
+		  
+		  
+		  
 });

@@ -522,3 +522,21 @@ html {
   }
 
 #twilio-connect-button:hover { background-position: 0 34px; }
+
+
+/*for information block */
+
+.info-block
+{
+ /*background: url(../img/tip-icon.jpg) no-repeat top left;
+ background: url("../img/tip-icon.jpg") no-repeat scroll 12px 12px #ECF9FF;*/
+ border: 1px solid #DDDAA6;
+ background: lightYellow;
+ padding: 10px 15px 10px 20px;
+ margin: 10px 0;
+ border-radius:5px;
+ color: #736B4D;
+}
+.info-block strong{text-decoration:underline;padding-left:5px;}
+.info-block p{margin:10px 0px 5px;}
+.info-block i{font-size:18px;vertical-align:middle;}
