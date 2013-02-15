@@ -147,7 +147,7 @@ public class TwitterUtil
 	// class
 	result.id = user.getId() + "";
 	result.name = user.getName();
-	result.picture = user.getMiniProfileImageURLHttps().toString();
+	result.picture = user.getBiggerProfileImageURLHttps().toString();
 	result.location = user.getLocation();
 	result.summary = user.getDescription();
 	result.num_connections = user.getFollowersCount() + "";
