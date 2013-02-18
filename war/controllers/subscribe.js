@@ -110,6 +110,10 @@ var SubscribeRouter = Backbone.Router
 										.find('form.card_details'), card_data = card_details.model
 										.toJSON().billingData;
 
+								USER_CREDIRCARD_DETAILS = card_data;
+				        	   	plan_json.customer = JSON.parse(USER_CREDIRCARD_DETAILS);
+								
+								
 								// Load countries and respective states
 								head.js(LIB_PATH + 'lib/countries.js',
 										function()
