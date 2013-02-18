@@ -366,7 +366,13 @@ function sendLinkedInAddRequest(plugin_id, linkedin_id) {
 	    }
 	    
 	    $.post( "/core/api/widgets/connect/" + plugin_id + "/" + linkedin_id , $('#linkedin_messageForm').serialize(), function(data) {
-	    	$('#linkedin_messageModal').modal("hide");
+	    	
+	    	$('#linkedin_messageModal').find('span.save-status').html("sent");
+			
+			setTimeout(function(){ 
+				$('#linkedin_messageModal').modal("hide");
+			}, 2000);
+			
 	       }).error(function(data) { 
 	    	$('#linkedin_messageModal').remove();
        		alert(data.responseText); 
@@ -375,7 +381,7 @@ function sendLinkedInAddRequest(plugin_id, linkedin_id) {
 }
 
 function sendLinkedInMessage(plugin_id, linkedin_id) {
-	console.log("linked");
+	
 	var json = {};
 	json["headline"] = "Send Message";
 	json["info"] = "Sends a message to " + Linkedin_current_profile_user_name +
@@ -395,7 +401,13 @@ function sendLinkedInMessage(plugin_id, linkedin_id) {
 		    }
 		    
 			$.post( "/core/api/widgets/message/" + plugin_id + "/" + linkedin_id , $('#linkedin_messageForm').serialize(), function(data) {
-				$('#linkedin_messageModal').modal("hide");
+
+				$('#linkedin_messageModal').find('span.save-status').html("sent");
+				
+				setTimeout(function(){ 
+					$('#linkedin_messageModal').modal("hide");
+				}, 2000);
+				
        		}).error(function(data) { 
        			$('#linkedin_messageModal').remove();
         		alert(data.responseText); 

@@ -385,7 +385,7 @@ function sendFollowRequest(plugin_id, twitter_id) {
 					 $('#twitter_update_heading',$('#Twitter')).show(); 
 				 }			 
 						 
-				 $("#twitter_social_stream").append(getTemplate("twitter-update-stream", data)); 
+				 $("#twitter_social_stream").html(getTemplate("twitter-update-stream", data)); 
 				 $('#twitter_current_activity',$('#Twitter')).hide();				
 				 $('#twitter_refresh_stream').show();
 	 
@@ -437,7 +437,12 @@ function sendTwitterMessage(plugin_id, twitter_id, message) {
 		
 		$.post( "/core/api/widgets/message/" + plugin_id + "/" + twitter_id ,$('#twitter_messageForm').serialize(), function (data) {	
 			
-			$('#twitter_messageModal').modal("hide");
+			$('#twitter_messageModal').find('span.save-status').html("sent");
+			
+			setTimeout(function(){ 
+				$('#twitter_messageModal').modal("hide");
+			}, 2000);
+			
 		}).error(function(data) { 
 			$('#twitter_messageModal').remove();
     		alert(data.responseText); 
@@ -466,7 +471,13 @@ function tweetInTwitter(plugin_id, twitter_id){
 	    }
 		
 		$.post("/core/api/widgets/tweet/" + plugin_id + "/" + twitter_id, $('#twitter_messageForm').serialize(), function (data) {
-			$('#twitter_messageModal').modal("hide");
+			
+			$('#twitter_messageModal').find('span.save-status').html("sent");
+			
+			setTimeout(function(){ 
+				$('#twitter_messageModal').modal("hide");
+			}, 2000);
+			
 		}).error(function(data) { 
 			$('#twitter_messageModal').remove();
 			alert(data.responseText); 

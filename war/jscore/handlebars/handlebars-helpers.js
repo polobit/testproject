@@ -481,6 +481,10 @@ $(function() {
 	 * on the result (used in contacts typeahead)
 	 */
 	Handlebars.registerHelper('if_equals', function(value, target, options) {
+		
+		if(!target)
+			return options.inverse(this);
+			
 		if (value == target)
 			return options.fn(this);
 		else
