@@ -17,10 +17,16 @@ var USER_CREDIRCARD_DETAILS = {};
 var USER_BILLING_PREFS;
 
 var USER_DETAILS = {
-		getCurrentName : function(userJSON){
+		getCurrentPlanName : function(userJSON){
 			if(!userJSON)
 				return "free";
 			return userJSON.plan.PlanType;
+		},
+		getCurrentPlanId: function(userJSON)
+		{
+			if(!userJSON)
+				return "free";
+			return userJSON.plan.plan_id;
 		},
 		getPlanType : function(userJSON){
 			if(!userJSON)
@@ -47,11 +53,10 @@ var USER_DETAILS = {
 			
 		},
 		getQuantity : function(userJSON){
-			console.log(userJSON);
+			
 			if(!userJSON)
 				return 2;
-			console.log(userJSON);
-			console.log(userJSON.plan);
+			
 			return userJSON.plan.quantity;
 		}
 }
@@ -122,15 +127,11 @@ function setPlan(user_plan)
 			plan_type = plan_type.toLowerCase();
 			interval = interval.toLowerCase();
 		}
-		
-		console.log(plan_type);
-		console.log(interval);
+	
 		
 		$("ul.tagsli a." + interval).trigger("click");
 		$("input[value='" + plan_type + "']").trigger("click");
 		
-		console.log($("ul.tagsli a." + interval));
-		console.log($("input[value='" + plan_type + "']"));
 		
 	}catch(err){
 		console.log(err);
@@ -210,9 +211,13 @@ $(function()
 					variable[percent] = discount_amount.toFixed(2);
 				}
 		
-	          // Check the plan
-	          var selected_plan_name = plan + "-" + quantity + "Operator-" + cycle;
-	          if(selected_plan_name.toLowerCase() == user_existing_plan_name.toLowerCase()){
+			  user_existing_plan_name = USER_DETAILS.getCurrentPlanId(USER_BILLING_PREFS);
+			 
+			  // Check the plan
+	          var selected_plan_name = "plan-" + amount +"-"+ months;
+	          
+	          if(selected_plan_name.toLowerCase()+"-" + quantity == user_existing_plan_name+"-"+USER_DETAILS.getQuantity(USER_BILLING_PREFS))
+	          {
 	        	  alert("Please change your plan to proceed");
 	        	  return false;
 	          }
@@ -226,7 +231,6 @@ $(function()
 	        plan_json.plan = plan;
 	        plan_json.plan_type = plan.toUpperCase()+"_"+ cycle.toUpperCase();
 	        plan_json.cycle = cycle;
-	        plan_json.user_plan = plan + "-" + quantity + "Operator-" + cycle;
 	        
 	        if(cycle != "Two Years")
 	        	{
@@ -248,9 +252,11 @@ $(function()
 	        plan_json.plan_id = plan_id;
 	        plan_json.discount = discount;
 		    plan_json.quantity = quantity;
-		    plan_json.current_plan = USER_DETAILS.getCurrentName(USER_BILLING_PREFS);
+		    plan_json.current_plan = USER_DETAILS.getCurrentPlanName(USER_BILLING_PREFS);
 		    
-		    if(USER_CREDIRCARD_DETAILS){
+		    if(!$.isEmptyObject(USER_CREDIRCARD_DETAILS)){
+		    	
+		    	console.log(USER_CREDIRCARD_DETAILS);
 		    	plan_json.customer = JSON.parse(USER_CREDIRCARD_DETAILS);
 		    }
 		    
