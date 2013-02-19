@@ -11,6 +11,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
@@ -113,13 +114,25 @@ public class APIKey
 
     public static Key<DomainUser> getDomainUserIdRelatedToAPIKey(String apiKey)
     {
-    	return dao.ofy().query(APIKey.class).filter("api_key", apiKey).get().owner;
+	return dao.ofy().query(APIKey.class).filter("api_key", apiKey).get().owner;
     }
-    
+
     public static AgileUser getAgileUserRelatedToAPIKey(String apiKey)
     {
-    	Key<DomainUser> domainUserKey =  dao.ofy().query(APIKey.class).filter("api_key", apiKey).get().owner;
-    	return AgileUser.getCurrentAgileUserFromDomainUser(domainUserKey.getId());
+	Key<DomainUser> domainUserKey = dao.ofy().query(APIKey.class)
+		.filter("api_key", apiKey).get().owner;
+	return AgileUser.getCurrentAgileUserFromDomainUser(domainUserKey
+		.getId());
+    }
+
+    public static APIKey getAPIKeyRelatedToDomain(String domain)
+    {
+	DomainUser domainUser = DomainUserUtil.getDomainOwner(domain);
+
+	if (domainUser == null)
+	    return null;
+
+	return getAPIKeyRelatedToUser(domainUser.id);
     }
 
     @PrePersist
@@ -128,5 +141,4 @@ public class APIKey
 	owner = new Key<DomainUser>(DomainUser.class, SessionManager.get()
 		.getDomainId());
     }
-
 }

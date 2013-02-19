@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.agilecrm.activities.Event;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.user.AgileUser;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>EventUtil</code> is utility class used to process data of {@link Event}
@@ -84,5 +86,26 @@ public class EventUtil
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+
+    /**
+     * Gets Events with respect to AgileUser.
+     * 
+     * @param agileUser
+     *            @link AgileUser
+     * @return events list with respect to agileuser.
+     */
+    public static List<Event> getEventsByAgileUser(AgileUser agileUser)
+    {
+
+	if (agileUser == null)
+	    return null;
+
+	Key<AgileUser> owner = new Key<AgileUser>(AgileUser.class, agileUser.id);
+
+	List<Event> events = dao.ofy().query(Event.class)
+		.filter("owner = ", owner).list();
+
+	return events;
     }
 }

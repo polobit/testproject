@@ -217,13 +217,11 @@
  	<filter-name>JSAPIFilter</filter-name>
  	<url-pattern>/core/js/*</url-pattern>
  </filter-mapping>
-   
-   
+    
    <welcome-file-list>
    <welcome-file>home</welcome-file>
    </welcome-file-list>
-   
-      
+       
     <security-constraint>
         <web-resource-collection>
             <url-pattern>/*</url-pattern>
@@ -232,7 +230,6 @@
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
 	</security-constraint>
-
 
  <servlet>
   <servlet-name>SystemServiceServlet</servlet-name>
@@ -264,12 +261,22 @@
  <url-pattern>/backend/worker</url-pattern>
  </servlet-mapping>
  
- <servlet><servlet-name>EmailOpenServlet</servlet-name>
+ <servlet>
+ <servlet-name>EmailOpenServlet</servlet-name>
  <servlet-class>com.campaignio.servlets.EmailOpenServlet</servlet-class>
  </servlet>
  <servlet-mapping>
  <servlet-name>EmailOpenServlet</servlet-name>
  <url-pattern>/backend/open/*</url-pattern>
+ </servlet-mapping>
+ 
+ <servlet>
+ <servlet-name>ICalendarServlet</servlet-name>
+ <servlet-class>com.agilecrm.ICalendarServlet</servlet-class>
+ </servlet>
+ <servlet-mapping>
+ <servlet-name>ICalendarServlet</servlet-name>
+ <url-pattern>/backend/ical/*</url-pattern>
  </servlet-mapping>
  
 </web-app>
