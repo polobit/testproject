@@ -159,6 +159,7 @@ public class Event
     public void save()
     {
 	dao.put(this);
+	System.out.println("Event object " + this);
     }
 
     /**
@@ -175,6 +176,14 @@ public class Event
 	search_range = new ArrayList<Long>();
 	search_range.add(start);
 	search_range.add(end);
+
+	// Create owner key
+	if (owner == null)
+	{
+	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
+	    if (agileUser != null)
+		this.owner = new Key<AgileUser>(AgileUser.class, agileUser.id);
+	}
     }
 
     public String toString()
