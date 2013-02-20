@@ -51,8 +51,8 @@ public class Tags extends TaskletAdapter
 	String tagNames = getStringValue(nodeJSON, subscriberJSON, data,
 		TAG_NAMES);
 
-	System.out
-		.println("Given Tag Type " + type + "and TagName " + tagNames);
+	System.out.println("Given Tag Type " + type + " and TagName "
+		+ tagNames);
 
 	// Get Contact Id and Contact
 	String contactId = DBUtil.getId(subscriberJSON);
