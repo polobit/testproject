@@ -7,7 +7,8 @@ var CalendarRouter = Backbone.Router.extend({
 
 	routes : {
 		/* Shows fullCalendar page */
-		"calendar" : "calendar"
+		"calendar" : "calendar",
+		"tasks" : "tasks"
 	},
 	/**
 	 * Activates the calendar menu and loads minified fullcalendar and jquery-ui
@@ -40,5 +41,18 @@ var CalendarRouter = Backbone.Router.extend({
 		this.tasksListView.collection.fetch();
 
 		$('#tasks').html(this.tasksListView.el);
+	},
+
+	/* Show tasks list when All Tasks clicked under calendar page. */
+	tasks : function() {
+		this.tasksListView = new Base_Collection_View({
+			url : '/core/api/tasks/all',
+			restKey : "task",
+			templateKey : "tasks-list",
+			individual_tag_name : 'tr'
+		});
+		this.tasksListView.collection.fetch();
+
+		$('#content').html(this.tasksListView.el);
 	}
 });

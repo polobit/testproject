@@ -113,6 +113,7 @@ $(function() {
 	/**
 	 * All completed and pending tasks will be shown in separate section
 	 */
+	/*
 	$('#tasks-list').live('click', function(e) {
 		this.tasksListView = new Base_Collection_View({
 			url : '/core/api/tasks/all',
@@ -124,7 +125,7 @@ $(function() {
 
 		$('#content').html(this.tasksListView.el);
 
-	});
+	});*/
 });
 
 /**
