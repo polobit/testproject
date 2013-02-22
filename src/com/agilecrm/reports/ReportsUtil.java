@@ -97,6 +97,12 @@ public class ReportsUtil
 
 	    // Mail should be sent even of reports are empty, verification for
 	    // empty results are not performed.
+	    if (StringUtils.isEmpty(report.domain))
+		return;
+
+	    if (results == null)
+		results = new HashMap<String, Object>();
+
 	    SendMail.sendMail(user.email, SendMail.REPORTS_SUBJECT,
 		    SendMail.REPORTS, new Object[] { results, fieldsList });
 
@@ -150,7 +156,7 @@ public class ReportsUtil
 	if (report.report_type.equals(Reports.ReportType.Contact))
 
 	    domain_details.put("report_results",
-		    customizeContactParameters1(reportList, report.fields_set));
+		    customizeContactParameters(reportList, report.fields_set));
 
 	// Set the old namespace back
 	NamespaceManager.set(oldNamespace);
@@ -192,8 +198,8 @@ public class ReportsUtil
 	return reportsMap;
     }
 
-    public static Collection customizeContactParameters1(
-	    Collection contactList, LinkedHashSet<String> fields_set)
+    public static Collection customizeContactParameters(Collection contactList,
+	    LinkedHashSet<String> fields_set)
     {
 
 	List<Map<String, List<Map<String, Object>>>> newProperties = new ArrayList<Map<String, List<Map<String, Object>>>>();
