@@ -347,7 +347,7 @@ $(function() {
         if(this.notification == 'TAG_CREATED' || this.notification == 'TAG_DELETED')
 			{
 			  var arr = this.notification.split('_');
-			  var temp = arr[1] + " " + arr[0];
+			  var temp = arr[0] + " " + arr[1];
 			  return temp.toLowerCase();
 			}
 		

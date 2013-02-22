@@ -99,6 +99,7 @@ public class CampaignStats
     {
 	if (campaign_id == null)
 	    return " ";
+
 	Workflow workflow = WorkflowUtil.getWorkflow(campaign_id);
 
 	if (workflow != null)

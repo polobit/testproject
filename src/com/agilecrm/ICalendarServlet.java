@@ -2,8 +2,8 @@ package com.agilecrm;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import javax.servlet.http.HttpServlet;
@@ -22,10 +22,13 @@ import net.fortuna.ical4j.model.property.Version;
 import net.fortuna.ical4j.util.SimpleHostInfo;
 import net.fortuna.ical4j.util.UidGenerator;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.account.APIKey;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.user.AgileUser;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>ICalendarServlet</code> is the servlet for handling iCalendar data. It
@@ -47,24 +50,47 @@ public class ICalendarServlet extends HttpServlet
     {
 	res.setContentType("text/plain");
 
-	URI uri = null;
-	String apiKey = null;
+	URL url = null;
 
 	try
 	{
-	    uri = new URI(req.getRequestURI());
-	    apiKey = getAPIKeyFromURI(uri);
+	    url = new URL(req.getRequestURL().toString());
 	}
-	catch (URISyntaxException e)
+	catch (MalformedURLException e1)
 	{
-	    e.printStackTrace();
+	    e1.printStackTrace();
 	}
+
+	String apiKey = getAPIKeyFromICalURL(url);
+	String namespace = getNamespaceFromURL(url);
+
+	if (StringUtils.isEmpty(namespace) && StringUtils.isEmpty(apiKey))
+	    return;
 
 	System.out.println("APIKey in ICalendarServlet " + apiKey);
+	System.out.println("Namespace in ICalendarServlet " + namespace);
 
-	// Gets AgileUser with respect to APIKey.
-	AgileUser agileUser = APIKey.getAgileUserRelatedToAPIKey(apiKey);
-	List<Event> events = EventUtil.getEventsByAgileUser(agileUser);
+	AgileUser agileUser = null;
+	List<Event> events = null;
+
+	String oldNamespace = NamespaceManager.get();
+
+	try
+	{
+	    NamespaceManager.set(namespace);
+
+	    // Gets AgileUser with respect to APIKey.
+	    agileUser = APIKey.getAgileUserRelatedToAPIKey(apiKey);
+
+	    if (agileUser == null)
+		return;
+
+	    events = EventUtil.getEventsByAgileUser(agileUser);
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
 
 	if (events == null)
 	    return;
@@ -117,20 +143,36 @@ public class ICalendarServlet extends HttpServlet
      *            - Requested URI
      * @return api key.
      */
-    static String getAPIKeyFromURI(URI uri)
+    static String getAPIKeyFromICalURL(URL url)
     {
-	String uriPath = uri.getPath();
+	String urlString = url.toString();
 
 	// Checks whether uripath ends with /
-	while (uriPath.endsWith("/"))
+	while (urlString.endsWith("/"))
 	{
-	    uriPath = uriPath.substring(0, uriPath.length() - 1);
+	    urlString = urlString.substring(0, urlString.length() - 1);
 	}
 
-	String tokens[] = uriPath.split("/");
+	String tokens[] = urlString.split("/");
+
 	String apiKey = tokens[tokens.length - 1];
 
 	return apiKey;
+    }
+
+    /**
+     * Gets domain user's domain from url.
+     * 
+     * @param url
+     *            - Requested Url.
+     * @return domain name.
+     */
+    static String getNamespaceFromURL(URL url)
+    {
+	String host = url.getHost().toString();
+
+	// Eg., return 'admin' from 'admin.agilecrm.com'
+	return host.split("\\.")[0];
     }
 
     /**
