@@ -190,95 +190,7 @@ function deserializeForm(data, form)
             else if (fel.hasClass('chainedSelect'))
             {
 
-                // Iterates through JSON array of rules, to fill
-                // a chained select
-                $.each(el,
-                function (index, data)
-                {
-
-                    // Finds the rule html element
-                    var rule_element = ($(form)
-                        .find('.chained'))[0];
-
-                    /*
-                     * If more than one rule clones the fields and relate with
-                     * jquery.chained.js
-                     */
-                    if (index > 0)
-                    {
-                        var parent_element = $(rule_element).parent();
-
-                        /*
-                         * Gets the Template for input and select
-                         * fields
-                         */
-                        rule_element = $(getTemplate("filter-contacts", {})).find('tr')
-                            .clone();
-
-                        // Add remove icon for rule
-                        $(rule_element).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
-
-                        // Loads jquery chained plugin for chaining
-                        // the input fields
-                        head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js',
-
-                        function ()
-                        {
-
-                            /*
-                             * Chains dependencies of input fields with
-                             * jquery.chained.js based on the rule element
-                             */
-    						chainFilters(rule_element);
-
-                            $(parent_element).append(rule_element);
-                        });
-                    }
-
-                    $.each(data, function (i, value)
-                    {
-                        var input_element = ($(rule_element).find('*[name="' + i + '"]').children())[0];
-
-                        // If input field set is value for input field, checks it chained select elements
-                        // date fields should be filled with date
-                        if (input_element.tagName.toLowerCase() == "input")
-                        {
-
-                        	// Fills date in to fields and initialize datepicker on the field
-                            if ($(input_element).hasClass('date'))
-                            {
-                                $(input_element).val(new Date(parseInt(value))
-                                    .format('mm/dd/yyyy'));
-                                $(input_element).datepicker(
-                                {
-                                    format: 'mm/dd/yyyy',
-                                });
-                                return;
-                            }
-                            $(
-                            input_element)
-                                .val(
-                            value);
-                            return;
-                        }
-
-                        // Gets related select field
-                        var option_element = $(input_element).children()
-
-                        // Iterates through options in select field
-                        $.each(option_element, function (index, element)
-                        {
-                            // Selects the option
-                            if ($(element).attr('value') == value)
-                            {
-                                $(element).attr("selected",
-                                    "selected");
-                                $(input_element).trigger("change");
-                                return;
-                            }
-                        });
-                    });
-                })
+            	//deserializeChainedSelect(form, el);
             }
         }
 
@@ -314,4 +226,101 @@ function deserializeMultipleForms(data, form)
         // can be directly available in the JSON object
         else deserializeForm(data, $(form_element));
     });
+}
+
+
+
+
+function deserializeChainedSelect(form, el, element)
+{
+
+    // Iterates through JSON array of rules, to fill
+    // a chained select
+    $.each(el,
+    function (index, data)
+    {
+
+        // Finds the rule html element
+        var rule_element = ($(form)
+            .find('.chained'))[0];
+
+        /*
+         * If more than one rule clones the fields and relate with
+         * jquery.chained.js
+         */
+        if (index > 0)
+        {
+            var parent_element = $(rule_element).parent();
+
+            /*
+             * Gets the Template for input and select
+             * fields
+             */
+            rule_element = $(getTemplate("filter-contacts", {})).find('tr')
+                .clone();
+
+            // Add remove icon for rule
+            $(rule_element).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
+
+            // Loads jquery chained plugin for chaining
+            // the input fields
+            head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js',
+
+            function ()
+            {
+
+                /*
+                 * Chains dependencies of input fields with
+                 * jquery.chained.js based on the rule element
+                 */
+				chainFilters(rule_element);
+
+                $(parent_element).append(rule_element);
+            });
+        }
+
+        $.each(data, function (i, value)
+        {
+            var input_element = ($(rule_element).find('*[name="'+ i +'"]').children())[0];
+         
+            // If input field set is value for input field, checks it chained select elements
+            // date fields should be filled with date
+            if (input_element.tagName.toLowerCase() == "input")
+            {
+
+            	// Fills date in to fields and initialize datepicker on the field
+                if ($(input_element).hasClass('date'))
+                {
+                    $(input_element).val(new Date(parseInt(value))
+                        .format('mm/dd/yyyy'));
+                    $(input_element).datepicker(
+                    {
+                        format: 'mm/dd/yyyy',
+                    });
+                    return;
+                }
+                $(
+                input_element)
+                    .val(
+                value);
+                return;
+            }
+
+            // Gets related select field
+            var option_element = $(input_element).children()
+
+            // Iterates through options in select field
+            $.each(option_element, function (index, element)
+            {
+                // Selects the option
+                if ($(element).attr('value') == value)
+                {
+                    $(element).attr("selected",
+                        "selected");
+                    $(input_element).trigger("change");
+                    return;
+                }
+            });
+        });
+    })
 }

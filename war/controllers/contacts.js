@@ -8,6 +8,7 @@ var ContactsRouter = Backbone.Router.extend({
 
     routes: {
         "": "dashboard",
+        "dashboard": "dashboard",
 
         /* Contacts */
         "contacts": "contacts",
@@ -51,13 +52,7 @@ var ContactsRouter = Backbone.Router.extend({
     },
     initialize: function () {
 
-    	 
-    	    
-    },
-
-    dashboard: function () {
-
-    },
+        },
     
     /**
      * Fetches all the contacts (persons) and shows as list, if tag_id and 
@@ -420,6 +415,7 @@ var ContactsRouter = Backbone.Router.extend({
     			head.js(LIB_PATH + 'lib/jquery.multi-select.js',LIB_PATH + 'lib/jquery-ui.min.js', function(){
     			
     				$('#multipleSelect', el).multiSelect();
+    				
     				$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").sortable();
     			});
     		}
@@ -444,6 +440,7 @@ var ContactsRouter = Backbone.Router.extend({
     		this.navigate("contact-views", {
                 trigger: true
             });
+    		return;
     	}
     	var contact_view_model = App_Contacts.contactViewListView.collection.get(id);
     	
@@ -456,14 +453,30 @@ var ContactsRouter = Backbone.Router.extend({
             window: 'contact-views',
             postRenderCallback: function(el) {
        			head.js(LIB_PATH + 'lib/jquery.multi-select.js', LIB_PATH + 'lib/jquery-ui.min.js', function(){
+       					
+       				
+       				
+       					$('#multipleSelect', el).val(contact_view_model.toJSON()['fields_set']); 
+       				
+       	
+       					$("#content").html(el);
+       					
        					$('#multipleSelect', el).multiSelect();
-       					$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id","fields_set").sortable();
+       					$('#multipleSelect', el).multiSelect('select', contact_view_model.toJSON()['fields_set']); 
+       					
+       				    $('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id","fields_set").sortable();
+       					       					
+       					$.each(contact_view_model.toJSON()['fields_set'], function(index, field){
+       						
+       					});
+       					
        				});
        			}
 
     	});
     	
     	$("#content").html(contactView.render().el);
+    	
     },
     
     /**
@@ -499,13 +512,7 @@ var ContactsRouter = Backbone.Router.extend({
     },
     contactFilterAdd: function()
     {
-    	if (!this.contactFiltersList || this.contactFiltersList.collection.length == 0)
-    	{
-    		this.navigate("contact-filters", {
-                trigger: true
-            });
-    		return;
-    	}
+ 
     	
     	var contacts_filter = new Base_Model_View({
     				url:'core/api/filters',
@@ -542,7 +549,8 @@ var ContactsRouter = Backbone.Router.extend({
 	            postRenderCallback: function(el) {  
 	            	head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 	           		    	{	
-	            				chainFilters(el);      	            			    
+	            				chainFilters(el); 
+	            				deserializeChainedSelect($(el).find('form'), contact_filter.toJSON().rules);
 	           		    	})
 	               }
     	    	});

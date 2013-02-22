@@ -21,6 +21,16 @@ public class SearchRule implements Serializable
      */
     public String LHS = null;
 
+    public enum RuleCondition
+    {
+	EQUALS, ON, AFTER, BEFORE, BETWEEN, LAST, NEXT, NOTEQUALS
+    }
+
+    /**
+     * Condition to be applied on the lhs and rhs fields
+     */
+    public RuleCondition CONDITION = null;
+
     /**
      * Represents the field value, used to compare with condition specified on
      * lhs
@@ -32,16 +42,6 @@ public class SearchRule implements Serializable
      * "between" condition
      */
     public String RHS_NEW = null;
-
-    public enum RuleCondition
-    {
-	EQUALS, ON, AFTER, BEFORE, BETWEEN, LAST, NEXT
-    }
-
-    /**
-     * Condition to be applied on the lhs and rhs fields
-     */
-    public RuleCondition CONDITION = null;
 
     public RuleCondition nested_condition = null;
 
