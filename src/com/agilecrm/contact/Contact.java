@@ -3,7 +3,6 @@ package com.agilecrm.contact;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Embedded;
@@ -137,12 +136,6 @@ public class Contact extends Cursor
      */
     @NotSaved(IfDefault.class)
     public String widget_properties = null;
-
-    /**
-     * Makes property field available for mail templates for reports(not saved)
-     */
-    @NotSaved
-    public Map<String, Object> contact_properties = null;
 
     /**
      * Saves tags mapped with created time.

@@ -1,18 +1,23 @@
 package com.agilecrm.reports;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
-import com.agilecrm.contact.CustomFieldDef;
-import com.agilecrm.contact.util.CustomFieldDefUtil;
+import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
@@ -35,13 +40,14 @@ public class ReportsUtil
      * on the criteria specified in the report object.
      * 
      * @param reportsList
+     * @throws JSONException
      */
     public static void sendReportsToUsers(List<Reports> reportsList)
+	    throws JSONException
     {
 
 	for (Reports report : reportsList)
 	{
-	    System.out.println("reports list in reports util : " + reportsList);
 
 	    // Get the owner of the report, to send email
 	    DomainUser user = report.getDomainUser();
@@ -49,19 +55,51 @@ public class ReportsUtil
 	    System.out.println("user : " + user);
 
 	    // If user is not available, querying on search rule is not
-	    // required.
+	    // required, so return without further processing.
 	    if (user == null)
 		return;
 
-	    // Call process filters to get reports for one domain and add domain
-	    // details
+	    // Call process filters to get reports for one domain, and add
+	    // domain details
 	    Map<String, Object> results = processReports(report, user);
 
-	    System.out.println("Results : " + results);
+	    // Report heading. It holds the field values chosen in the report
+	    LinkedHashSet<String> reportHeadings = new LinkedHashSet<String>();
 
-	    // Mail should be send even of reports are empty.
+	    // Iterates through each filter and customizes (Replace underscore
+	    // with space, and capitalize the first letter in the heading ) the
+	    // field heading.
+	    for (String field : report.fields_set)
+	    {
+		// Splits fields at properties.
+		String fields[] = field.split("properties_");
+		if (fields.length > 1)
+		{
+		    // Replaces underscore with space
+		    field = fields[1].replace("_", " ");
+		}
+
+		// Split fields at "custom_", and replaces underscore with
+		// space.
+		String customFields[] = field.split("custom_");
+		if (customFields.length > 1)
+		{
+		    field = customFields[1].replace("_", " ");
+		}
+
+		String heading = field.substring(0, 1).toUpperCase()
+			+ field.substring(1);
+		reportHeadings.add(heading);
+	    }
+
+	    Map<String, LinkedHashSet<String>> fieldsList = new LinkedHashMap<String, LinkedHashSet<String>>();
+	    fieldsList.put("fields", reportHeadings);
+
+	    // Mail should be sent even of reports are empty, verification for
+	    // empty results are not performed.
 	    SendMail.sendMail(user.email, SendMail.REPORTS_SUBJECT,
-		    SendMail.REPORTS, results);
+		    SendMail.REPORTS, new Object[] { results, fieldsList });
+
 	}
     }
 
@@ -100,31 +138,19 @@ public class ReportsUtil
 	// Iterate through each filter and add results collection
 	// To store reports in collection
 	Collection reportList = report.generateReports();
-	List<CustomFieldDef> fieldsCustomFieldDefs = new ArrayList<CustomFieldDef>();
-	try
-	{
-	    fieldsCustomFieldDefs = CustomFieldDefUtil.getAllCustomFields();
-	}
-	catch (Exception e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
 
 	Map<String, Object> domain_details = new HashMap<String, Object>();
 
 	// Add additional detials to show in email template
-	domain_details.put("report_results", reportList);
 	domain_details.put("domain", report.domain);
 	domain_details.put("report", report);
 	domain_details.put("user_name", user.name);
-	domain_details.put("custom_fields", fieldsCustomFieldDefs);
 
 	// If report_type if of contacts customize object to show properties
 	if (report.report_type.equals(Reports.ReportType.Contact))
-	    customizeContactParameters(reportList, fieldsCustomFieldDefs);
 
-	System.out.println("search results : " + reportList);
+	    domain_details.put("report_results",
+		    customizeContactParameters1(reportList, report.fields_set));
 
 	// Set the old namespace back
 	NamespaceManager.set(oldNamespace);
@@ -137,7 +163,7 @@ public class ReportsUtil
      * Organize all the filters based on domain names returns map(domain,
      * respective contact filters list)
      */
-    public static Map<String, List<Reports>> organizeFiltersByDomain(
+    public static Map<String, List<Reports>> organizeReportsByDomain(
 	    List<Reports> reportsList)
     {
 
@@ -147,9 +173,6 @@ public class ReportsUtil
 	// put in a map with its respective domain name as key
 	for (Reports report : reportsList)
 	{
-	    // Make sure domain is not null or empty
-	    if (StringUtils.isEmpty(report.domain))
-		continue;
 
 	    // If domain name is already a key then add contact filter to
 	    // existing list
@@ -169,42 +192,119 @@ public class ReportsUtil
 	return reportsMap;
     }
 
-    /*
-     * Customize the contact parameter to enable email templates to use
-     * properties(ContactField)
-     */
-    public static Collection customizeContactParameters(Collection contactList,
-	    List<CustomFieldDef> customFields)
+    public static Collection customizeContactParameters1(
+	    Collection contactList, LinkedHashSet<String> fields_set)
     {
+
+	List<Map<String, List<Map<String, Object>>>> newProperties = new ArrayList<Map<String, List<Map<String, Object>>>>();
+
 	for (Object contactObject : contactList)
 	{
+	    List<Map<String, Object>> customProperties = new ArrayList<Map<String, Object>>();
+	    List<Map<String, Object>> contactProperties = new ArrayList<Map<String, Object>>();
 	    Contact contact = (Contact) contactObject;
 
-	    // Not saved field in contacts add all properties as name value pair
-	    contact.contact_properties = new HashMap<String, Object>();
+	    Map<String, List<Map<String, Object>>> details = new HashMap<String, List<Map<String, Object>>>();
 
-	    for (ContactField contactField : contact.properties)
+	    System.out.println(fields_set);
+	    for (String field : fields_set)
 	    {
 
-		if (!contactField.type.equals(ContactField.FieldType.CUSTOM))
-		    contact.contact_properties.put(contactField.name,
-			    contactField.value);
+		System.out.println("field : " + field);
+		if (field.contains("properties_"))
+		{
+		    Map<String, Object> fieldsMap = new LinkedHashMap<String, Object>();
+		    String field_name = field.split("properties_")[1];
+		    ContactField contactField = contact
+			    .getContactField(field_name);
+
+		    if (contactField == null)
+			contactField = new ContactField();
+
+		    fieldsMap.put(field_name, contactField);
+
+		    contactProperties.add(fieldsMap);
+		    System.out.println("contact property : " + fieldsMap);
+		}
+		else if (field.contains("custom"))
+		{
+
+		    String field_name = field.split("custom_")[1];
+		    ContactField contactField = contact
+			    .getContactField(field_name);
+
+		    String customFieldJSON = null;
+		    try
+		    {
+			if (contactField == null)
+			    contactField = new ContactField();
+
+			customFieldJSON = new ObjectMapper()
+				.writeValueAsString(contactField);
+
+			Map<String, Object> customField = new ObjectMapper()
+				.readValue(
+					customFieldJSON,
+					new TypeReference<HashMap<String, Object>>()
+					{
+					});
+
+			customProperties.add(customField);
+		    }
+
+		    catch (IOException e)
+		    {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		    }
+		}
+		else
+		{
+
+		    ObjectMapper mapper = new ObjectMapper();
+		    JSONObject contactJSON = new JSONObject();
+		    String fieldValue = null;
+
+		    try
+		    {
+			contactJSON = new JSONObject(
+				mapper.writeValueAsString(contact));
+			fieldValue = contactJSON.get(field).toString();
+
+			if (field.contains("time"))
+			    fieldValue = SearchUtil
+				    .getDateWithoutTimeComponent(Long
+					    .parseLong(fieldValue) * 1000);
+		    }
+		    catch (Exception e)
+		    {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		    }
+
+		    LinkedHashMap<String, Object> fieldsMap = new LinkedHashMap<String, Object>();
+
+		    System.out.println("field = " + field + "fieldValue = "
+			    + fieldValue);
+
+		    if (fieldValue == null)
+			fieldsMap.put(field, new ContactField());
+		    else
+			fieldsMap.put(field, fieldValue);
+
+		    System.out.println("non property : " + fieldsMap);
+		    contactProperties.add(fieldsMap);
+		}
+
 	    }
 
-	    List<ContactField> customFieldValuesList = new LinkedList<ContactField>();
-	    for (CustomFieldDef field : customFields)
-	    {
-		ContactField contactField = contact
-			.getContactFieldByName(field.field_label);
+	    details.put("details", contactProperties);
+	    details.put("custom_fields", customProperties);
 
-		customFieldValuesList.add(contactField);
-	    }
-	    contact.contact_properties.put("custom", customFieldValuesList);
-	    contact.contact_properties.put("image",
-		    contact.getContactFieldValue("image"));
-	    System.out.println(contact.contact_properties);
+	    newProperties.add(details);
 	}
 
-	return contactList;
+	System.out.println(newProperties);
+	return newProperties;
     }
 }

@@ -3,6 +3,8 @@ package com.agilecrm.deferred;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONException;
+
 import com.agilecrm.reports.Reports;
 import com.agilecrm.reports.ReportsUtil;
 import com.google.appengine.api.taskqueue.DeferredTask;
@@ -24,7 +26,15 @@ public class ReportsDeferredTask implements DeferredTask
 	{
 	    // Call send reports on map of filters to process filters and send
 	    // reports to respective domain users
-	    ReportsUtil.sendReportsToUsers(reportsMap.get(domain));
+	    try
+	    {
+		ReportsUtil.sendReportsToUsers(reportsMap.get(domain));
+	    }
+	    catch (JSONException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
 	}
     }
 }

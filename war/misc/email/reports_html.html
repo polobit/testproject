@@ -9,8 +9,9 @@
 						<tr>
 							<td valign="middle" height="32px"
 								style="padding: 0; color: white">{{report.name}}</td>
-							<td valign="right"  height="32px"
-								style="padding: 0; color: white; text-align:right">{{report.duration}} Report</td>
+							<td valign="right" height="32px"
+								style="padding: 0; color: white; text-align: right">{{report.duration}}
+								Report</td>
 						</tr>
 					</tbody>
 				</table>
@@ -20,11 +21,14 @@
 				<p>*****This is an automated email. Please do not reply*****</p>
 
 
-				<table width="100%" cellpadding="5" cellspacing="0" style:"margin-top:-40px">
+				<table width="100%" cellpadding="5" cellspacing="0"style:"margin-top:-40px">
 					<thead>
 						<tr bgcolor="#CCCCCC">
-							<th align="left" style="font-size: 12px"><strong>Name</strong></th>
-								<th align="left" style="font-size: 12px"><strong>Tags</strong></th>
+							{{#LinkedHashMap.fields}}
+							<th align="left" style="font-size: 12px"><strong>{{.}}</strong></th>
+							{{/LinkedHashMap.fields}}
+
+							<!-- 				<th align="left" style="font-size: 12px"><strong>Tags</strong></th>
 							<th align="left" style="font-size: 12px"><strong>Work</strong></th>
 							<th align="left" style="font-size: 12px"><strong>Lead</strong></th>
 							
@@ -32,14 +36,94 @@
 									<th align="left" align="center"
 										style="font-size: 12px"><strong>{{field_label}}</strong></th>
 								{{/custom_fields}}
-							
+							 -->
 						</tr>
 					</thead>
 					<tbody>
-						{{#report_results}}
+						{{#HashMap.report_results}}
 						<tr>
-						{{#contact_properties}}
+							{{#details}} {{#first_name}} {{^details.image}}
 							<td align="left" valign="top"
+								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
+								{{first_name.value}}</td> {{/details.image}} {{#details.image}}
+
+							<td align="left" valign="top"
+								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
+								<span
+								style="display: inline; padding-right: 10px; height: auto;">
+									<img class="thumbnail" src="{{image}}" width="40px"
+									height="40px" style="display: inline">
+							</span> <span
+								style="height: auto; display: inline-block; vertical-align: top; text-overflow: ellipsis; white-space: nowrap; width: 12em; overflow: hidden;">
+									<b> {{first_name.value}}&nbsp;{{last_name.value}} </b> <br>
+									{{email.value}}
+							</span>
+							</td> {{/details.image}} {{/first_name}} {{#last_name}}
+							<td align="left" valign="top"
+								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
+								{{last_name.value}}</td> {{/last_name}} {{#created_time}}
+							<td align="left" valign="top"
+								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
+								{{created_time}}</td> {{/created_time}} {{#image}} {{#image.value}}
+							<td align="left" valign="top"
+								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
+								<img class="thumbnail" src="{{image.value}}" width="40px"
+								height="40px" style="display: inline">
+							</td> {{/image.value}} {{^image.value}}
+							<td align="left" valign="top"
+								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
+								<img class="thumbnail"
+								src="https://secure.gravatar.com/avatar/8ee08c67fe0de091e6116e0ad1cd778b.jpg?s=40&d=https%3A//d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png"
+								width="40px" height="40px" style="display: inline">
+							</td> {{/image.value}} {{/image}} {{#email}}
+							<td align="left" valign="top"
+								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
+								{{email.value}}</td> {{/email}} {{#title}}
+							<td valign="top"
+								style="border-bottom: 1px solid #f3f3f3; font-size: 12px"><b>{{title.value}}</b></td>
+							{{/title}} {{#tags}}
+							<td valign="top"
+								style="border-bottom: 1px solid #f3f3f3; font-size: 12px"><b>{{tags}}</b></td>
+							{{/tags}} {{#updated_time}}
+							<td valign="top"
+								style="border-bottom: 1px solid #f3f3f3; font-size: 12px"><b>{{updated_time.value}}</b></td>
+							{{/updated_time}} {{#company}}
+							<td valign="top"
+								style="border-bottom: 1px solid #f3f3f3; font-size: 12px"><b>{{company.value}}</b></td>
+							{{/company}}
+
+
+							<!-- 							
+						{{^image}}
+						<td align="left" valign="top"
+								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
+							{{value}}
+							</td>
+						{{/image}}
+						{{#image}}
+							{{#first_name}}
+								{{#last_name}}
+									
+									
+									<td align="left" valign="top"
+								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
+								<span style="display: inline; padding-right: 10px; height: auto;">
+									<img class="thumbnail" src="{{image}}" width="40px"
+										height="40px" style="display: inline">
+								</span>
+								<span
+									style="height: auto; display: inline-block; vertical-align: top; text-overflow: ellipsis; white-space: nowrap; width: 12em; overflow: hidden;">
+									<b> {{first_name.value}}&nbsp;{{last_name.value}}  </b> <br> {{email.value}}
+								</span></td> 
+									
+									
+									
+								{{/last_name}}
+							{{/first_name}}
+							
+						{{/image}} -->
+
+							<!-- 	<td align="left" valign="top"
 								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
 								{{#image}}
 								<span style="display: inline; padding-right: 10px; height: auto;">
@@ -66,12 +150,15 @@
 							{{#custom}}
 							<td align="left" valign="top"
 								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">{{value}}</td>
-							{{/custom}}
-							
-						{{/contact_properties}}
+							{{/custom}} -->
+
+							{{/details}} {{#custom_fields}}
+							<td align="left" valign="top"
+								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">{{value}}</td>
+							{{/custom_fields}}
 						</tr>
-						
-						{{/report_results}}
+
+						{{/HashMap.report_results}}
 					</tbody>
 				</table>
 
@@ -81,7 +168,7 @@
 					way we can. Please email us at support@agilecrm.com</p>
 				<p>Thanks for being a valued customer.</p>
 				<br /> Best Wishes, <br /> AgileCRM Support. <br />
-				http://www.agilecrm.com 
+				http://www.agilecrm.com
 				<div style="text-align: right">
 					<a href="{{domain}}.agilecrm.com" target="_blank"> <img
 						style="border: 0; margin-top: 10px"

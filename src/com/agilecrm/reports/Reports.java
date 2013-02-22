@@ -3,6 +3,7 @@ package com.agilecrm.reports;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import javax.persistence.Embedded;
@@ -61,6 +62,10 @@ public class Reports implements Serializable
     @NotSaved(IfDefault.class)
     @Embedded
     public List<SearchRule> rules = new ArrayList<SearchRule>();
+
+    /** List of fields, LinkedHashSet to preserve the order of the fields */
+    @NotSaved(IfDefault.class)
+    public LinkedHashSet<String> fields_set = new LinkedHashSet<String>();
 
     @NotSaved(IfDefault.class)
     public String domain = null;
@@ -179,10 +184,11 @@ public class Reports implements Serializable
     public static List<Reports> getAllReportsByDuration(Duration duration)
     {
 	String oldNamespace = NamespaceManager.get();
-	NamespaceManager.set("");
+	// NamespaceManager.set("");
 
 	try
 	{
+	    System.out.println("fetching the reports");
 	    return dao.ofy().query(Reports.class)
 		    .filter("is_reports_enabled", true)
 		    .filter("duration", duration).list();

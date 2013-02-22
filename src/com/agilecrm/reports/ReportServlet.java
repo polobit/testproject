@@ -68,7 +68,7 @@ public class ReportServlet extends HttpServlet
 	// Store contactFilters list with domain name as key(domain name,
 	// reports in that domain in particular duration)
 	Map<String, List<Reports>> reportsMap = ReportsUtil
-		.organizeFiltersByDomain(reportsList);
+		.organizeReportsByDomain(reportsList);
 
 	System.out.println("Reports map : " + reportsMap);
 
