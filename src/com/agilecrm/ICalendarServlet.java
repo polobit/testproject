@@ -77,7 +77,7 @@ public class ICalendarServlet extends HttpServlet
 
 	try
 	{
-	    NamespaceManager.set(namespace);
+	    // NamespaceManager.set(namespace);
 
 	    // Gets AgileUser with respect to APIKey.
 	    agileUser = APIKey.getAgileUserRelatedToAPIKey(apiKey);
@@ -106,9 +106,13 @@ public class ICalendarServlet extends HttpServlet
 	    if (event.start == null || event.end == null)
 		continue;
 
-	    // Converts event start and end time into iCal DateTime Objects
+	    // Converts event start and end time into iCal DateTime Objects and
+	    // sets into UTC
 	    DateTime startTime = new DateTime(event.start * 1000);
+	    startTime.setUtc(true);
 	    DateTime endTime = new DateTime(event.end * 1000);
+	    endTime.setUtc(true);
+
 	    DateTime createdTime = new DateTime(event.created_time * 1000);
 
 	    // Generate UID
