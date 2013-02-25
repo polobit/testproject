@@ -68,7 +68,7 @@ public class RegisterServlet extends HttpServlet
 	// Check if this domain is valid and not given out to anyone else
 	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 	    if (StringUtils.isEmpty(NamespaceManager.get())
-		    || DomainUserUtil.count() != 0)
+		    || DomainUserUtil.count() == 0)
 	    {
 		response.sendRedirect(Globals.CHOOSE_DOMAIN);
 		return;
