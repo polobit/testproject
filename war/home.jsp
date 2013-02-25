@@ -122,7 +122,7 @@ String CSS_PATH = "/";
 						style="display: inline;">
 						<input id="searchText" type="text" data-provide="typeahead"
 							class="typeahead typeahead_contacts search-query"
-							placeholder="Search"></input><span id="search-results" class="search-icon" /><img type="image" src="img/SearchIcon.png" ></img> </span>
+							placeholder="Search"></input><span id="search-results" class="search-icon"><img type="image" src="img/SearchIcon.png" ></img> </span>
 					</form>
 
 					<ul class="nav pull-right">
