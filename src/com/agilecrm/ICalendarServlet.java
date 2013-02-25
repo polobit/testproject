@@ -77,7 +77,7 @@ public class ICalendarServlet extends HttpServlet
 
 	try
 	{
-	    // NamespaceManager.set(namespace);
+	    NamespaceManager.set(namespace);
 
 	    // Gets AgileUser with respect to APIKey.
 	    agileUser = APIKey.getAgileUserRelatedToAPIKey(apiKey);
