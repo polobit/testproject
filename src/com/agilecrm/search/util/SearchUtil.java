@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
@@ -114,6 +115,9 @@ public class SearchUtil
 	// return ParserUtils.normalizePhrase("\"" + URLEncoder.encode(value)
 	// + "\"");
 	// return "\"" + (value) + "\"";
+
+	if (StringUtils.isEmpty(value))
+	    return "";
 
 	return (value).replace(" ", "");
     }

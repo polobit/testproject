@@ -85,6 +85,7 @@ public class QueryDocument implements QueryInterface
 	     */
 	    if (!lhs.contains("time"))
 	    {
+		System.out.println("LHS : " + lhs + "Rhs : " + rhs);
 		/*
 		 * Create new query with LHS and RHS conditions to be processed
 		 * further for necessary queries
