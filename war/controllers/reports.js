@@ -100,7 +100,7 @@ var ReportsRouter = Backbone.Router.extend({
 				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js',
 						function() {
 							chainFilters(el);
-							deserializeChainedSelect($(el).find('form'), report.toJSON().fields_set);
+							deserializeChainedSelect($(el).find('form'), report.toJSON().rules);
 						})
 					
 						
