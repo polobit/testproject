@@ -197,12 +197,10 @@ margin-bottom:0px;
 						
 					    <input class="input-xlarge required field " maxlength="10" minlength="4" name='password' type="password" placeholder="Password" autocapitalize="off">
 						<div style="margin-top: 15px;">
-							<label class="checkbox" style="display: inline-block;">
+							<input type='submit' style="float: right;height:39px" value="Sign In" class='btn btn-large btn-primary agile_btn'>
+							<label class="checkbox" style="">
 							    <input type="checkbox" checked="checked" name="signin">Keep me signed in 
 							</label> 
-
-							<input type='submit' style="float: right;height:39px" value="Sign In" class='btn btn-large btn-primary agile_btn'>
-
 						</div>
 					</div>
 					<br/>
