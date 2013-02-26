@@ -3,10 +3,12 @@ package com.agilecrm.user.notification.util;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.notification.NotificationPrefs;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.deferred.NotificationsDeferredTask;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -85,17 +87,27 @@ public class NotificationPrefsUtil
      * @param object
      *            Objects like Contact,Deal etc.
      **/
-    public static void executeNotification(Type type, Object object)
+    public static void executeNotification(Type type, Object object, APIKey api)
     {
 	String jsonData = null;
-	APIKey api;
 
 	// Converting object to json
 	try
 	{
 	    ObjectMapper mapper = new ObjectMapper();
 	    jsonData = mapper.writeValueAsString(object);
-	    api = APIKey.getAPIKey();
+
+	    // When tags are added through campaign i.e., deferred task, set
+	    // api-key w.r.t domain owner but not with session.
+	    if (SessionManager.get() == null)
+	    {
+		api = APIKey.getAPIKeyRelatedToDomain(NamespaceManager.get());
+	    }
+	    else
+	    {
+		api = APIKey.getAPIKey();
+	    }
+
 	}
 	catch (Exception e)
 	{
@@ -107,5 +119,18 @@ public class NotificationPrefsUtil
 		type, jsonData, api.api_key);
 	Queue queue = QueueFactory.getDefaultQueue();
 	queue.add(TaskOptions.Builder.withPayload(notificationsDeferredTask));
+    }
+
+    /**
+     * Calls executeNotification method in order to set api-key.
+     * 
+     * @param type
+     *            - Notification Type.
+     * @param object
+     *            - Object like Contact, Deals etc.
+     */
+    public static void executeNotification(Type type, Object object)
+    {
+	executeNotification(type, object, null);
     }
 }
