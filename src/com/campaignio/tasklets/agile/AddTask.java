@@ -2,6 +2,7 @@ package com.campaignio.tasklets.agile;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import org.json.JSONObject;
 
@@ -14,7 +15,6 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DBUtil;
-import com.agilecrm.util.Util;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -177,11 +177,9 @@ public class AddTask extends TaskletAdapter
 	}
 
 	// Creates log for AddTask
-	log(campaignJSON,
-		subscriberJSON,
-		"Task name : " + task.subject + "Task type : "
-			+ task.entity_type + " Due Date : "
-			+ Util.getCalendarString(dueDateInEpoch));
+	log(campaignJSON, subscriberJSON, "Task name : " + task.subject
+		+ "Task type : " + task.entity_type + " Due Date : "
+		+ new Date(dueDateInEpoch * 1000));
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
