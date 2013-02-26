@@ -109,7 +109,7 @@ function agile_crm_update_contact(propertyName, value) {
 		});
 
 	contact_model.set("properties", properties);
-
+	contact_model.url = "core/api/contacts";
 	// Save model
 	contact_model.save();
 }
@@ -138,7 +138,7 @@ function agile_crm_add_note(sub, description) {
 	    note.set("subject", sub);
 	    note.set("description", description);
 	    
-	    note.set("contacts", [contact_model.id].toString())
+	    note.set("contacts", [contact_model.id].toString());
 	    
 	    note.save();
 	// Create Model and Save
@@ -230,10 +230,10 @@ function agile_crm_save_widget_property_to_contact(propertyName, value) {
 	// Stringifies widget_properties json in to string and set to contact model.
 	contact_model.set("widget_properties", JSON.stringify(widget_properties));
 
-	contact_model.url = "core/api/contacts"
+	contact_model.url = "core/api/contacts";
 	
 	// Saves updated model
-	contact_model.save()
+	contact_model.save();
 
 }
 
@@ -293,8 +293,8 @@ function agile_crm_delete_widget_property_from_contact(propertyName) {
 	// sets Updated widget_properties in to contact model
 	contact_model.set("widget_properties", JSON.stringify(widget_properties));
 
-	contact_model.url = "core/api/contacts"
+	contact_model.url = "core/api/contacts";
 	
 	// Save updated contact model
-	contact_model.save()
+	contact_model.save();
 }
