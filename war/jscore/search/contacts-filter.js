@@ -232,12 +232,10 @@ function addTagsDefaultTypeahead(element)
 		});
 		
 		
-		alert("fetching");
 		tagsCollection = new TagsCollection();
 		
 		tagsCollection.fetch({success:function(data){
 			TAGS = tagsCollection.models;
-			alert("fetched");
 			addTagsArrayasTypeaheadSource(tagsCollection.toJSON(), element);
 			
 		}});

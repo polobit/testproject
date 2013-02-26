@@ -107,7 +107,6 @@ var ReportsRouter = Backbone.Router.extend({
 				fillSelect("custom-fields-optgroup", "core/api/custom-fields", undefined, function(data){console.log(data)}, '<option value="custom_{{field_label}}">{{field_label}}</option>', true);
 				
        			head.js(LIB_PATH + 'lib/jquery.multi-select.js', LIB_PATH + 'lib/jquery-ui.min.js', function(){
-       				alert("loading chained select");
        				
        					$('#multipleSelect', el).multiSelect({ selectableOptgroup: true });
        				
