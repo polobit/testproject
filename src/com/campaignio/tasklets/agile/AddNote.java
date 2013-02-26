@@ -55,7 +55,7 @@ public class AddNote extends TaskletAdapter
 
 	// Creates log for note
 	log(campaignJSON, subscriberJSON, "About : " + subject
-		+ "Description : " + description);
+		+ " Description : " + description);
 
 	System.out.println(" Contact Details: " + contact);
 
