@@ -456,9 +456,9 @@ public class SendEmail extends TaskletAdapter
 	}
 
 	// Creates log for sending email
-	log(campaignJSON, subscriberJSON, "Sending email From:" + fromEmail
-		+ " To:" + to + " Subject:" + subject + " Text:" + text
-		+ "HTML:" + html);
+	log(campaignJSON, subscriberJSON, "Sending email From: " + fromEmail
+		+ " To: " + to + " Subject: " + subject + " Text: " + text
+		+ " HTML: " + html);
 
 	// Send Message
 	if (html != null && html.length() > 10)
@@ -570,12 +570,9 @@ public class SendEmail extends TaskletAdapter
 	String campaign_id = DBUtil.getId(campaignJSON);
 	String subscriber_id = DBUtil.getId(subsciberJSON);
 
-	String trackingImage = "<div><img src=\"https://click.agilecrm.com/backend/open?n="
-		+ namespace
-		+ "&c="
-		+ campaign_id
-		+ "&s="
-		+ subscriber_id
+	String trackingImage = "<div><img src=\"https://" + namespace
+		+ ".agilecrm.com/backend/open?n=" + namespace + "&c="
+		+ campaign_id + "&s=" + subscriber_id
 		+ "\" nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
 
 	return html + trackingImage;

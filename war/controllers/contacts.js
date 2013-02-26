@@ -674,34 +674,31 @@ var ContactsRouter = Backbone.Router.extend({
     searchResults: function(query)
     {
     	var searchResultsView = new Base_Collection_View({
-            url: "core/api/contacts/search/" + query,
+            url: "core/api/search/" + query,
             templateKey: "search",
             individual_tag_name: 'tr',
-            cursor: true,
+            postRenderCallback: function(el)
+            {
+            	// Shows the query string as heading of search results
+            	$("#search-query-heading", el).html('Search results for "' + query + '"');
+            }
       	});
 
      // If QUERY_RESULTS is defined which are set by agile_typeahead istead of fetching again
       if(QUERY_RESULTS)
       {
     	  //Create collection with results
-    	  searchResultsView.collection =  new Backbone.Collection(QUERY_RESULTS);
-    	  
-    	  // Set query parameter to show on results page
-    	  searchResultsView.collection.add({"query" : query});
+    	  searchResultsView.collection =  new Backbone.Collection(QUERY_RESULTS);    	  
 
     	  $('#content').html(searchResultsView.render(true).el);
-      	return;
+          $('body').trigger('agile_collection_loaded');
+    	  return;
       }
       
-      // If in case results in different page is clicked before typeahead fetch results then fetch here
-      searchResultsView.collection.fetch({
-    	  success:function(data)
-    	  {
-    		  // Set query parameter to show on results page if page is refeshed or QUERY_RESULTS is not defined
-    		  searchResultsView.collection.add({"query" : query});
+      // If in case results in different page is clicked before typeahead fetch results, then results are fetched here
+      searchResultsView.collection.fetch();
+      
+      $('#content').html(searchResultsView.render().el);
 
-    		    $('#content').html(searchResultsView.render(true).el);
-    	  }
-      });
     }
 });

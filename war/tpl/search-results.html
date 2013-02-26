@@ -26,11 +26,9 @@
 <div class="row">
     <div class="span12">
         <div class="page-header">
-            {{#each this}}
-            {{#if query}}
-            <h1>Search results for "{{query}}"</h1>
-            {{/if}}
-            {{/each}}
+            
+            <h1 id="search-query-heading">Search results for "{{query}}"</h1>
+            
             <div class="btn-group right" id="view-list" style="top:-29px;position:relative">
             </div>
             <div class="btn-group right" id="filter-list" style="top:-29px;position:relative;margin-right:5px">
@@ -55,7 +53,7 @@
                         <li><a href="#" id="bulk-tags">Add tags</a></li>
                     </ul>
                 </div>
-                <table id="contacts" class="table table-striped showCheckboxes" url="core/api/contacts/bulk" style="overflow: scroll">
+                <table id="contacts_search" class="table table-striped showCheckboxes" url="core/api/contacts/bulk" style="overflow: scroll">
                     <thead>
                         <tr>
                             <th>Name</th>
