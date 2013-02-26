@@ -65,10 +65,13 @@ public class RegisterServlet extends HttpServlet
     public void doGet(HttpServletRequest request, HttpServletResponse response)
 	    throws IOException, ServletException
     {
+	String type = request.getParameter("type");
+
 	// Check if this domain is valid and not given out to anyone else
 	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 	    if (StringUtils.isEmpty(NamespaceManager.get())
-		    || DomainUserUtil.count() == 0)
+		    || (DomainUserUtil.count() != 0 && StringUtils
+			    .isEmpty(type)))
 	    {
 		response.sendRedirect(Globals.CHOOSE_DOMAIN);
 		return;
@@ -76,7 +79,6 @@ public class RegisterServlet extends HttpServlet
 
 	try
 	{
-	    String type = request.getParameter("type");
 	    String status = request.getParameter("openid.mode");
 
 	    // If users cancels openid login/register, they are redirected to
