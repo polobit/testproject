@@ -118,13 +118,13 @@ String CSS_PATH = "/";
 					    String logoutURL = "/login";
 					    UserInfo user = SessionManager.get();
 					%>
-					<form id="searchForm" class=" navbar-search"
+			<form id="searchForm" class=" navbar-search"
 						style="display: inline;">
 						<input id="searchText" type="text" data-provide="typeahead"
 							class="typeahead typeahead_contacts search-query"
-							placeholder="Search"></input><span id="search-results" class="search-icon" /><img type="image" src="img/SearchIcon.png" ></img> </span>
+							placeholder="Search"></input> <input id="search-results"
+							type="image" src="img/SearchIcon.png" class="searchbox" />
 					</form>
-
 					<ul class="nav pull-right">
 
 						<li class="dropdown" id="menu1"><a class="dropdown-toggle"
@@ -203,9 +203,10 @@ String CSS_PATH = "/";
 	%>
 	
 	</div>
-		<footer class="footer" id="footer" style="padding:0px !important">
+		<div class="footer" id="footer" style="padding:0px !important">
+			<hr></hr>
 	        <a href="#" id="scroll-top" class="btn btn-mini btn-flat btn-primary pull-right">Top &uarr;</a>
-    	</footer>
+    	</div>
 <script src='lib/headjs-min.js'></script>
 	
 	<script>
