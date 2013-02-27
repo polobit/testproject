@@ -108,6 +108,28 @@ function deserializeForm(data, form)
             }
 
             /*
+             * Deserialize multiselect, select box to select
+             * multiple values, used for contact custom views.
+             * This is for the fields which uses
+             * jquery.multi-select.js, it provides multiSelect()
+             * function to fill the select
+             */
+            else if (fel.hasClass('multiSelect') && tag == 'ul')
+            {
+
+                /*
+                 * Iterates through options of the select and
+                 * call multiSelect function to select the
+                 * option
+                 */
+                $.each(el, function (index, option)
+                {
+                    $('#multipleSelect', form).multiSelect(
+                        'select', option);
+                });
+            }
+            
+            /*
              * Deserialize tags, tags are represented by list
              * elements prepended the respective input field. If
              * field has class tagsinput and tag is ul and

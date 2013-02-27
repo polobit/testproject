@@ -13,7 +13,7 @@
  */
 var CONTENT_JSON = {
 	"contacts" : {
-		"title" : "You dont have any contacts yet",
+		"title" : "You dont have any contacts",
 		"description" : "You can add your contact details.......etc...etc",
 		"learn_more" : "click here to learn more",
 		"button_text" : "Add Contacts",
@@ -22,7 +22,7 @@ var CONTENT_JSON = {
 		"image" : "/img/clipboard.png"
 	},
 	"workflows" : {
-		"title" : "You dont have any workflows yet",
+		"title" : "You dont have any workflows",
 		"description" : "You can add your workflows details.......etc...etc",
 		"learn_more" : "click here to learn more",
 		"button_text" : "Add Workflows",
@@ -30,7 +30,7 @@ var CONTENT_JSON = {
 		"image" : "/img/clipboard.png"
 	},
 	"deals" : {
-		"title" : "You dont have any deals yet",
+		"title" : "You dont have any deals",
 		"description" : "You can add your deal details.......etc...etc",
 		"learn_more" : "click here to learn more",
 		"button_text" : "Add deal",
@@ -38,7 +38,7 @@ var CONTENT_JSON = {
 		"image" : "/img/clipboard.png"
 	},
 	"reports" : {
-		"title" : "You dont have any reports yet",
+		"title" : "You dont have any reports",
 		"description" : "You can add your report details.......etc...etc",
 		"learn_more" : "click here to learn more",
 		"button_text" : "Add Report",
@@ -46,7 +46,7 @@ var CONTENT_JSON = {
 		"image" : "/img/clipboard.png"
 	},
 	"contact-filters" : {
-		"title" : "You dont have any filter yet",
+		"title" : "You dont have any filter",
 		"description" : "You can add your filters details.......etc...etc",
 		"learn_more" : "click here to learn more",
 		"button_text" : "Add filter",
@@ -54,7 +54,7 @@ var CONTENT_JSON = {
 		"image" : "/img/clipboard.png"
 	},
 	"contact-views": {
-		"title" : "You dont have any custom views yet",
+		"title" : "You dont have any custom views",
 		"description" : "You can add your custom view details.......etc...etc",
 		"learn_more" : "click here to learn more",
 		"button_text" : "Add view",
