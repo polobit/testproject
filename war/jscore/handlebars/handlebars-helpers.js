@@ -246,7 +246,7 @@ $(function() {
 	 * Returns currency symbol based on the currency value (deals)
 	 */
 	Handlebars.registerHelper('currencySymbol', function(value) {
-		var symbol = value.substring(4, value.length);
+		var symbol = ((value.length < 4)? $ : value.substring(4, value.length));
 		return symbol;
 	});
 

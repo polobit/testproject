@@ -47,7 +47,7 @@
             <div class="row">
                 <div class="span2 well" style="display:inline;padding: 10px;margin-left:20px;width:115px; ">
                     <span style="font-size:14px; font-weight:bold ">value</span><br />
-                    <span style="font-size:13px">{{#if owner.currency}}({{currencySymbol owner.currency}}){{else}}($){{/if}} {{expected_value}}</span>
+                    <span style="font-size:13px">{{#if owner.currency}}{{currencySymbol owner.currency}}{{else}}<span>$</span>{{/if}} {{expected_value}}</span>
                 </div>
                 <div class="span2 well" style="display:inline;padding: 10px;margin-left:20px;width:115px; ">
                     <span style="font-size:14px; font-weight:bold ">probability</span>
@@ -61,7 +61,7 @@
                 </div>
                 <div class="span2 well" style="display:inline;padding: 10px; margin-left:20px;width:115px; ">
                     <span style="font-size:14px; font-weight:bold ">pipeline</span><br />
-                    <span style="font-size:13px">{{#if owner.currency}}({{currencySymbol owner.currency}}){{else}}($){{/if}} {{calculatePipeline expected_value probability pipeline}}</span>
+                    <span style="font-size:13px">{{#if owner.currency}}{{currencySymbol owner.currency}}{{else}}<span>$</span>{{/if}} {{calculatePipeline expected_value probability pipeline}}</span>
                 </div>
             </div>
         </div>
