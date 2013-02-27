@@ -56,20 +56,20 @@ public class AB extends TaskletAdapter
 
 	    // Creates log for A/B node
 	    log(campaignJSON, subscriberJSON, "Random Number " + random
-		    + " Requested:" + frequency);
+		    + " Requested: " + frequency);
 
 	    // Go with A or B
 	    if (r > Double.parseDouble(frequency))
 	    {
 		// Execute Next One in Loop
-		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON,
-			data, nodeJSON, BRANCH_A);
+		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
+			nodeJSON, BRANCH_A);
 	    }
 	    else
 	    {
 		// Execute Next One in Loop
-		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON,
-			data, nodeJSON, BRANCH_B);
+		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
+			nodeJSON, BRANCH_B);
 	    }
 	}
 	catch (Exception e)

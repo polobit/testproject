@@ -124,7 +124,7 @@ public class AddTask extends TaskletAdapter
 	Long dueDateInEpoch = calendar.getTimeInMillis() / 1000;
 
 	System.out.println("Given Task Name: " + subject + ",category: "
-		+ category + ",priority: " + priority + "and Due Date : "
+		+ category + ",priority: " + priority + " and Due Date : "
 		+ dueDateInEpoch);
 
 	// Get Contact Id and Contact
@@ -178,7 +178,7 @@ public class AddTask extends TaskletAdapter
 
 	// Creates log for AddTask
 	log(campaignJSON, subscriberJSON, "Task name : " + task.subject
-		+ "Task type : " + task.entity_type + " Due Date : "
+		+ " Task type : " + task.entity_type + " Due Date : "
 		+ new Date(dueDateInEpoch * 1000));
 
 	// Execute Next One in Loop
