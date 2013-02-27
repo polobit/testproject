@@ -1,6 +1,7 @@
 <script id="contacts-grid-model-template" type="text/html">
 <div class="span3" style="padding-bottom:10px;margin-left:20px !important">
-    <div style="border: 1px solid #DDD;border-radius:4px;padding: 10px;background-color:#f5f5dc">
+  {{#if_contact_type "PERSON"}}
+    <div style="border: 1px solid #DDD;border-radius:4px;padding: 10px;background-color:#f5f5dc"><input class="tbody_check right" type="checkbox"/>
 	  <div style="display:inline;padding-right:10px;height:auto;">
         <img class="thumbnail" src="{{gravatarurl properties 50}}" width="50px" height="50px" style="display:inline" />
       </div>
@@ -17,8 +18,24 @@
         {{/each}}
 	  </div>
     </div>
+  {{/if_contact_type}}
+
+  {{#if_contact_type "COMPANY"}}
+    <div style="border: 1px solid #DDD;border-radius:4px;padding: 10px;background-color:#f5f5dc"><input class="tbody_check right" type="checkbox"/>
+	  <div style="display:inline;padding-right:10px;height:auto;">
+        <img class="thumbnail" src="img/company.png" width="40px" height="40px" style="display:inline" />
+      </div>
+	  <div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:12em;overflow:hidden;">
+        <a href="#contact/{{id}}">
+        		<b>{{getPropertyValue properties "name"}}</b></a></br>
+        		{{getPropertyValue properties "url"}}
+	  </div>
+    </div>
+  {{/if_contact_type}}
+
 </div>
 </script>
+
 <script id="contacts-grid-collection-template" type="text/html">
 <div class="row">
     <div class="span12">
@@ -47,7 +64,7 @@
             </div>
         </div>
     </div>
-    <div class="span9" '>
+    <div class="span9">
         <div id="slate">
         </div>
         {{#if this.length}}
@@ -72,7 +89,7 @@
                         </li>
                     </ul>
                 </div>
-                <div id="contacts-grid-model-list" class="contacts-model-list" route="contact/" style="overflow:auto;">
+                <div id="contacts-grid-model-list" class="contacts-model-list" route="contact/"  url="core/api/contacts/bulk" style="overflow:auto;">
                 </div>
             </div>
         </div>

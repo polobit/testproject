@@ -2,6 +2,7 @@ package com.agilecrm.contact;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -119,7 +120,7 @@ public class Contact extends Cursor
      * Set of tags
      */
     @Indexed
-    public Set<String> tags = new HashSet<String>();
+    public LinkedHashSet<String> tags = new LinkedHashSet<String>();
 
     /**
      * Stores properties, by embedding the class <code>ContactField</code>. Also
@@ -187,7 +188,8 @@ public class Contact extends Cursor
      * @param properties
      *            properties (name, email, address and etc..) of a contact
      */
-    public Contact(Type type, Set<String> tags, List<ContactField> properties)
+    public Contact(Type type, LinkedHashSet<String> tags,
+	    List<ContactField> properties)
     {
 	this.type = type;
 
