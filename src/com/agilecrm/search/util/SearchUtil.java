@@ -238,4 +238,22 @@ public class SearchUtil
 	// Formated to build query
 	return formatter.format(truncatedDate);
     }
+
+    public static String getDateWithoutTimeComponent(Long millSeconds,
+	    String format)
+    {
+	if (StringUtils.isEmpty(format))
+	    return null;
+	/*
+	 * Truncate date Document search date is without time component
+	 */
+	Date truncatedDate = DateUtils.truncate(new Date(millSeconds),
+		Calendar.DATE);
+
+	// Format date(formated as stored in document)
+	Format formatter = new SimpleDateFormat(format);
+
+	// Formated to build query
+	return formatter.format(truncatedDate);
+    }
 }

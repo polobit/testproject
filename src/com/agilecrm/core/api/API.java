@@ -1,6 +1,8 @@
 package com.agilecrm.core.api;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -17,9 +19,15 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.activities.Task;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.IMAPEmailPrefs;
@@ -35,6 +43,9 @@ import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.util.Util;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.QueryResultIterator;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
 
 @Path("/api")
 public class API
@@ -313,4 +324,114 @@ public class API
 		    .build());
 	}
     }
+
+    @Path("/timeline/contact")
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @GET
+    public String timlineContacts() throws JSONException
+    {
+	List<Contact> contacts = ContactUtil.getAllContacts(10, null);
+	JSONArray array = new JSONArray();
+
+	JSONObject mainJSON = new JSONObject();
+	JSONObject object1 = new JSONObject();
+
+	JSONObject object3 = new JSONObject();
+
+	// object1.put("headline", "Account ");
+	object1.put("type", "default");
+	object1.put("text", "contact");
+	object1.put("title", "contact");
+	object1.put("startDate", "1990, 07, 03");
+	for (Contact contact : contacts)
+	{
+
+	    JSONObject object2 = new JSONObject();
+
+	    String startDate = SearchUtil.getDateWithoutTimeComponent(
+		    contact.created_time * 1000, "yyyy,mm,dd");
+
+	    object2.put("startDate", startDate);
+
+	    // object2.put("endDate",
+	    // dateformat.format(new Date(contact.created_time * 1000)));
+
+	    // object2.put("endDate", "2012,1,27");
+	    object2.put("headline", contact.getContactFieldValue("first_name")
+		    + " " + contact.getContactFieldValue("last_name"));
+	    object2.put("description", contact.getContactFieldValue("email"));
+	    object3.put("media", contact.getContactFieldValue("image"));
+	    object3.put("credit", "");
+	    object3.put("caption", "");
+
+	    object2.put("asset", object3);
+
+	    array.put(object2);
+	}
+
+	object1.put("date", array);
+
+	mainJSON.put("timeline", object1);
+
+	return mainJSON.toString();
+    }
+
+    @Path("/timeline/tasks")
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @GET
+    public String timlineTasks() throws JSONException
+    {
+	Objectify ofy = ObjectifyService.begin();
+	QueryResultIterator<Task> taskIterator = ofy.query(Task.class)
+		.filter("created_time < ", new Date().getTime()).limit(10)
+		.fetch().iterator();
+
+	List<Task> tasksList = new ArrayList<Task>();
+	while (taskIterator.hasNext())
+	{
+	    tasksList.add(taskIterator.next());
+	}
+
+	List<Contact> contacts = ContactUtil.getAllContacts(10, null);
+	JSONArray array = new JSONArray();
+
+	JSONObject mainJSON = new JSONObject();
+	JSONObject object1 = new JSONObject();
+
+	JSONObject object3 = new JSONObject();
+
+	// object1.put("headline", "Account ");
+	object1.put("type", "default");
+	object1.put("text", "Task");
+	object1.put("title", "Task");
+	object1.put("startDate", "1990, 07, 03");
+	for (Task task : tasksList)
+	{
+	    JSONObject object2 = new JSONObject();
+
+	    String startDate = SearchUtil.getDateWithoutTimeComponent(
+		    task.created_time * 1000, "yyyy,mm,dd");
+
+	    object2.put("startDate", startDate);
+
+	    // object2.put("endDate",
+	    // dateformat.format(new Date(contact.created_time * 1000)));
+
+	    // object2.put("endDate", "2012,1,27");
+	    object2.put("headline", task.subject);
+	    object2.put("description", "Type : " + task.type + ", priority : "
+		    + task.priority_type);
+
+	    object2.put("asset", object3);
+
+	    array.put(object2);
+	}
+
+	object1.put("date", array);
+
+	mainJSON.put("timeline", object1);
+
+	return mainJSON.toString();
+    }
+
 }

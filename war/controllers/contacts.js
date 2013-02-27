@@ -52,8 +52,22 @@ var ContactsRouter = Backbone.Router.extend({
     },
     initialize: function () {
 
-        },
-    
+    	$(".active").removeClass("active");
+        
+      	 $("#content").html(getTemplate('dashboard-timline', {}));
+      	 setupDashboardTimeline();
+      	    
+      },
+
+      dashboard: function () {
+    	  
+   	  $(".active").removeClass("active");
+                  
+
+      	var el = getTemplate('dashboard', {});
+      	$("#content").html(el)
+      	setupDashboard(el);
+      },
     /**
      * Fetches all the contacts (persons) and shows as list, if tag_id and 
      * filter_id are not defined, if any one of them is defined then fetches 
