@@ -36,7 +36,32 @@ var CONTENT_JSON = {
 		"button_text" : "Add deal",
 		"route" : "#deals-add",
 		"image" : "/img/clipboard.png"
+	},
+	"reports" : {
+		"title" : "You dont have any reports yet",
+		"description" : "You can add your report details.......etc...etc",
+		"learn_more" : "click here to learn more",
+		"button_text" : "Add Report",
+		"route" : "#report-add",
+		"image" : "/img/clipboard.png"
+	},
+	"contact-filters" : {
+		"title" : "You dont have any filter yet",
+		"description" : "You can add your filters details.......etc...etc",
+		"learn_more" : "click here to learn more",
+		"button_text" : "Add filter",
+		"route" : "#contact-filter-add",
+		"image" : "/img/clipboard.png"
+	},
+	"contact-views": {
+		"title" : "You dont have any custom views yet",
+		"description" : "You can add your custom view details.......etc...etc",
+		"learn_more" : "click here to learn more",
+		"button_text" : "Add view",
+		"route" : "#contact-view-add",
+		"image" : "/img/clipboard.png"
 	}
+	
 };
 
 /**
