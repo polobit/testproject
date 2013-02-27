@@ -9,6 +9,9 @@
 </div>
 <div class="row">
     <div class="span9">
+		 <div id="slate">
+         </div>
+        {{#if this.length}}
         <table class="table table-bordered showCheckboxes" url="core/api/reports/bulk">
             <thead>
                 <tr>
@@ -19,14 +22,16 @@
             <tbody id="report-model-list" route="report-edit/">
             </tbody>
         </table>
+		{{/if}}
     </div>
     <div class="span3">
         <div class="well" id="addview">
             <h3>
-                What are Filters?
+                What are Reports?
             </h3>
             <br />
-            <p>Filters are used to sort contacts with a specific criteria to find patterns. You can save your preferred filters and also have daily, weekly or monthly reports sent to you based on the filter</p>
+            <p>Customize your reports based on a variety of tags and filters and receive them periodically to constantly be in touch with your sales cycle and pipeline. Use the information to improve lead nurturing and customer retention strategies.
+</p>
         </div>
     </div>
 </div>

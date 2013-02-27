@@ -9,6 +9,9 @@
 </div>
 <div class="row">
     <div class="span9">
+		<div id="slate">
+         </div>
+        {{#if this.length}}
         <table class="table table-bordered showCheckboxes" url="core/api/contact-view/delete/bulk">
             <thead>
                 <tr>
@@ -20,6 +23,7 @@
             <tbody id="contact-custom-view-model-list" route="contact-custom-view-edit/">
             </tbody>
         </table>
+		{{/if}}
     </div>
     <div class="span3">
         <div class="well" id="addview">
