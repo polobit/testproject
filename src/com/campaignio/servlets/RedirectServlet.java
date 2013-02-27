@@ -18,6 +18,7 @@ import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.URLShortener;
 import com.campaignio.util.CampaignStatsUtil;
 import com.campaignio.util.URLShortenerUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 
@@ -55,8 +56,28 @@ public class RedirectServlet extends HttpServlet
 	    return;
 	}
 
-	// Increment emails clicked
-	CampaignStatsUtil.incrementEmailsClicked(urlShortener.campaign_id);
+	String domain = urlShortener.namespace;
+	String subscriberId = urlShortener.subscriber_id;
+
+	Contact contact = null;
+
+	String oldNamespace = NamespaceManager.get();
+
+	try
+	{
+	    NamespaceManager.set(domain);
+
+	    System.out.println("Namespace set before CampaignStats: "
+		    + NamespaceManager.get());
+
+	    // Increment emails clicked
+	    CampaignStatsUtil.incrementEmailsClicked(urlShortener.campaign_id);
+	    contact = ContactUtil.getContact(Long.parseLong(subscriberId));
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
 
 	// System.out.println(urlShortener);
 	String longURL = urlShortener.long_url;
@@ -66,8 +87,9 @@ public class RedirectServlet extends HttpServlet
 	if (urlShortener.long_url.contains("?"))
 	    params = "&fwd=cd";
 
-	String subscriberId = urlShortener.subscriber_id;
-	Contact contact = ContactUtil.getContact(Long.parseLong(subscriberId));
+	// String subscriberId = urlShortener.subscriber_id;
+	// Contact contact =
+	// ContactUtil.getContact(Long.parseLong(subscriberId));
 
 	if (contact == null)
 	    resp.sendRedirect(longURL);
@@ -76,6 +98,8 @@ public class RedirectServlet extends HttpServlet
 	{
 	    try
 	    {
+		NamespaceManager.set(domain);
+
 		JSONObject contactJSON = WorkflowUtil
 			.getSubscriberJSON(contact);
 
@@ -95,6 +119,10 @@ public class RedirectServlet extends HttpServlet
 	    catch (Exception e)
 	    {
 		e.printStackTrace();
+	    }
+	    finally
+	    {
+		NamespaceManager.set(oldNamespace);
 	    }
 
 	    // If URL has spaces or erroneous chars - we chop them
@@ -133,9 +161,7 @@ public class RedirectServlet extends HttpServlet
 	    Queue queue = QueueFactory.getDefaultQueue();
 	    queue.add(withUrl("/worker")
 		    .param(TaskQueueServlet.TASK_QUEUE_COMMAND_INTERRUPT_TASKLET_CUSTOM1,
-			    urlShortener.tracker_id)
-		    .param(TaskQueueServlet.TASK_QUEUE_COMMAND_INTERRUPT_TASKLET_CUSTOM2,
-			    subscriberId));
+			    urlShortener.tracker_id));
 	}
 	catch (Exception e)
 	{
