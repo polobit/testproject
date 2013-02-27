@@ -17,6 +17,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Duration</th>
+					<th>Fields</th>
                 </tr>
             </thead>
             <tbody id="report-model-list" route="report-edit/">
@@ -40,7 +41,12 @@
 <script id="report-model-template" type="text/html">
 	<td data="{{id}}" class="data" style="cursor:pointer"> {{name}} </td>
 	<td>
-    	{{duration}}
+    	{{ucfirst duration}}
 	</td>
+	<td>
+  {{#each fields_set}}
+	 {{ucfirst this}}</br> 
+  {{/each}}
+</td>
 <br />
 </script>

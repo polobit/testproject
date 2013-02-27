@@ -149,7 +149,7 @@
 			</div>
 
 			<div class="control-group" style="margin-left: -20px">
-				<label class="control-label">Sent Report To<span
+				<label class="control-label">Send Report To<span
 					class="field_req">*</span></label>
 				<div class="controls">
 					<select id="owners" class="required" name="domain_user_id">
@@ -158,18 +158,26 @@
 			</div>
 			<div class="control-group"
 				style="padding-top: 2%; margin-left: -20px">
+				<label class="control-label">Send Me This Report</label>
 				<div class="controls">
 					<label class="checkbox"> <input type="checkbox"
-						name="is_reports_enabled" /> <span
-						style="vertical-align: bottom; display: inline;">Send Me
-							This Report</span>
-					</label> <select name="duration">
-						<option value="DAILY">Daily</option>
+						name="is_reports_enabled" /> 
+					</label> 
+				</div>
+			</div>
+			<div class="control-group" style="margin-left: -20px">
+				<label class="control-label">Duration<span
+					class="field_req">*</span></label>
+				<div class="controls">
+					<select class="required" name="duration">
+					<option value="DAILY">Daily</option>
 						<option value="WEEKLY">Weekly</option>
 						<option value="MONTHLY">Monthly</option>
 					</select>
 				</div>
-			</div>
+			</div>			
+
+
 			<input type="text" name="report_type" class="hide" value="Contact" /></input>
 			{{#if id}} <input type="text" name="id" class="hide" value="{{id}}" />
 			{{/if}}
