@@ -47,10 +47,6 @@ public class Score extends TaskletAdapter
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
 	    JSONObject data, JSONObject nodeJSON) throws Exception
     {
-	System.out.println("CampaignJson: " + campaignJSON
-		+ " subscriberJSON: " + subscriberJSON + " data: " + data
-		+ " nodeJSON: " + nodeJSON);
-
 	// Get Score and Type
 	String type = getStringValue(nodeJSON, subscriberJSON, data, TYPE);
 	String value = getStringValue(nodeJSON, subscriberJSON, data, VALUE);
