@@ -56,6 +56,10 @@
 		background-color: whitesmoke;
 	}
 
+	/*searchForm */
+	.navbar-search {
+		padding-left: 5%
+	}
 }
 /*dropdown*/
 .agilecrm-profile-dropdown:hover {
@@ -498,19 +502,22 @@ html {
 	overflow-y: scroll;
 }
 
-.search-icon
-{
-	position:absolute;
-	top:2px;
-	right:0px;
-	display:block;
-	width:26px;
-	height:26px;
-	cursor:pointer;
-	z-index:2;
-	
+
+.search-query {
+	border: 0px; /*important*/
+	background-color: transparent; /*important*/
+	position: absolute; /*important*/
 }
 
+.searchbox {
+	border: 0px; /*important*/
+	background-color: transparent; /*important*/
+	position: absolute; /*important*/
+	top: 5px;
+	left: 265px;
+	width: 16px;
+	height: 16px;
+}
 /* Not to overide z-index of datepicker due to timepicker modal */
 .datepicker {
 	z-index: 2050!important;
