@@ -44,14 +44,12 @@ public class URLShortener
     public String campaign_id;
 
     /*
-     * Prefix public static final String SHORTENER_URL =
-     * "http://campaigntaskrunners.appspot.com/click/"; public static final
-     * String SHORTENER_URL = "http://cspt.cc/";
+     * Prefix for SHORTENER_URL "https://click.agilecrm.com/backend/click"
      */
     /**
      * Shortener Url.
      */
-    public static final String SHORTENER_URL = "http://agle.cc/backend/click/";
+    public static final String SHORTENER_URL = "http://agle.cc/";
 
     /**
      * Show namespace
