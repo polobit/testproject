@@ -5,7 +5,8 @@
 It checks if any user exists in that domain,
 if user exists,it is redirected to login page in the same domain otherwise it is redirected to register page.
 */
-String error = "", success = "";
+String error = "";
+String success = "";
 //If Email is present
 String domain = request.getParameter("subdomain");
 
@@ -90,7 +91,7 @@ padding-left:10px!important;
  				<div class="nav-collapse">
 				<ul class="nav pull-right">
 					<li class="">						
-					<a href="home" class="">
+					<a href="http://www.agilecrm.com" class="">
 						<i class="icon-chevron-left"></i>
 						Back to home-page
 					</a>
@@ -107,9 +108,7 @@ padding-left:10px!important;
 		<div class="content clearfix">
 				 <h1>Register (Step 1 of 2)</h1>
 				 <form name='choose_domain' id="choose_domain" method='post' style="padding:10px 0 15px;border-top: 1px dotted #CCC;">
-						<div class="alert alert-error domain-error" style="display:none;">
-							<a class="close" data-dismiss="alert" href="#">×</a>Please enter a valid domain 
-						</div>
+						<div id="domain-error"></div>
 						<% if(!StringUtils.isEmpty(error)){%>
 					 <div class="alert alert-error login-error">
 						<a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
@@ -148,22 +147,24 @@ padding-left:10px!important;
 	<script type="text/javascript" src="/lib/bootstrap.min.js"></script>
 	<script>
 		//Init
+		var error = "";
 		$(function() {
-
+			$("#subdomain").focus();
 			$(".btn").click(function(e) {
 				
-				$(".domain-error").hide();		
 				var subdomain = $("#subdomain").val();
-				
 				// validates the domain value
 				if(subdomain == null || subdomain == "" || subdomain.length < 4 || subdomain.length > 12 
 			        || !isAlphaNumeric(subdomain) || !isNotValid(subdomain))
 				{
-					console.log("error");
 					//shows error message
-					$(".domain-error").show();
+					if(!error)error = "Domain should be 4 to 12 characters."
+					$("#domain-error").html('<div class="alert alert-error domain-error">'
+							+ '<a class="close" data-dismiss="alert" href="#">×</a>'+ error +'</div>');
+					error = "";
 					return false;
 				}
+				$(".domain-error").hide();
 				console.log("submited");
 				//Form is self submitted
 				$('#choose_domain').submit();
@@ -173,18 +174,10 @@ padding-left:10px!important;
 		});
 		function isNotValid(subdomain) {
 			subdomain = subdomain.toString();
-			var sub_domain = {};
-			sub_domain.my = "";
-			sub_domain.googleapps = "";
-			sub_domain.sales = "";
-			sub_domain.support = "";
-			sub_domain.login = "";
-			sub_domain.register = "";
+			var sub_domain = ["my", "googleapps", "sales", "support", "login", "register"];
 			for(var key in sub_domain){
-				
-				if(key == subdomain.toLowerCase()){
-					alert("Common domain cannot be created");
-					error = "Common domain cannot be created";
+				if(sub_domain[key] == subdomain.toLowerCase()){
+					error = "Common domain cannot be created.";
 					return false;
 				} 
 			}
@@ -194,11 +187,10 @@ padding-left:10px!important;
 		function isAlphaNumeric(subdomain) {
 			subdomain = subdomain.toString();
 		  
-		  var regularExpression  = new RegExp(/^[a-zA-Z0-9]{4,12}$/);
+		  var regularExpression  = new RegExp(/^[A-Za-z][a-zA-Z0-9]{3,12}$/);
 		  if(!regularExpression.test(subdomain)) {
-		        alert("Domain should not contain special character");
-		        error = "Domain should not contain special characters";
-		        return false;
+		        error = "Domain should start with alphabet and special characters not allowed.";
+				return false;
 		    }
 		  return true;
 		}
