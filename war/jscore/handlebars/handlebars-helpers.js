@@ -365,7 +365,7 @@ $(function() {
 	 * the function parameters (fname, lname, company etc..)
 	 */
 	Handlebars.registerHelper('if_property', function(fname, lname, company,
-			title, email, image, options) {
+			title,  image, options) {
 		
 		/*
 		 * Converts address as comma seprated values and returns as
@@ -394,7 +394,7 @@ $(function() {
 			return new Handlebars.SafeString(el);
 		}	
 		if (this.name != fname && this.name != lname && this.name != company
-				&& this.name != title && this.name != email && this.name != image)
+				&& this.name != title && this.name != image)
 			return options.fn(this);
 	});
 
