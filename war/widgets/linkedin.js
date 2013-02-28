@@ -363,6 +363,7 @@ function sendLinkedInAddRequest(plugin_id, linkedin_id) {
 		e.preventDefault();
 		
 	    if(!isValidForm($("#linkedin_messageForm"))){
+	    	return;
 	    }
 	    
 	    $.post( "/core/api/widgets/connect/" + plugin_id + "/" + linkedin_id , $('#linkedin_messageForm').serialize(), function(data) {

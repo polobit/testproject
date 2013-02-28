@@ -164,6 +164,11 @@ public class WidgetUtil
 		"Stripe enables individuals and businesses to accept payments over the internet.",
 		"/widgets/stripe.js", "/img/plugins/stripe-logo.jpg",
 		"/widgets/stripe-logo-small.jpeg", null));
+	widgets.add(new Widget(
+		"Zendesk",
+		"Zendesk streamlines communication within a ticket that has workflow towards resolution of customer issue.",
+		"/widgets/zendesk.js", "/img/plugins/zendesk_logo.png",
+		"/widgets/zendesk-logo-small.png", null));
 
 	return widgets;
 

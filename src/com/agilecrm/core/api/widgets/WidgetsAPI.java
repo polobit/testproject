@@ -23,6 +23,7 @@ import com.agilecrm.social.SocialUpdateStream;
 import com.agilecrm.social.StripePluginUtil;
 import com.agilecrm.social.TwilioUtil;
 import com.agilecrm.social.TwitterUtil;
+import com.agilecrm.social.ZendeskUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.thirdparty.Rapleaf;
@@ -675,4 +676,83 @@ public class WidgetsAPI
 
     }
 
+    @Path("zendesk/get/{widget-id}/{email}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getTicketsFromZendesk(@PathParam("widget-id") Long widgetId,
+	    @PathParam("email") String email)
+    {
+
+	try
+	{
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+	    if (widget == null)
+		return null;
+
+	    return ZendeskUtil.getContactTickets(widget, email);
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+
+    }
+
+    @Path("zendesk/add/{widget-id}")
+    @POST
+    @Produces(MediaType.TEXT_PLAIN)
+    public String addTicketToZendesk(@PathParam("widget-id") Long widgetId,
+	    @FormParam("email") String email,
+	    @FormParam("message") String description)
+    {
+
+	try
+	{
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+	    if (widget == null)
+		return null;
+
+	    return ZendeskUtil.addTicket(widget, email, description);
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+
+    }
+
+    @Path("zendesk/update/{widget-id}")
+    @POST
+    @Produces(MediaType.TEXT_PLAIN)
+    public String updateTicketinZendesk(@PathParam("widget-id") Long widgetId,
+	    @FormParam("ticketNumber") String ticketNumber,
+	    @FormParam("message") String description)
+    {
+
+	try
+	{
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+	    if (widget == null)
+		return null;
+
+	    return ZendeskUtil.updateTicket(widget, ticketNumber, description);
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+
+    }
+
+    public static void main(String[] args)
+    {
+	WidgetsAPI wid = new WidgetsAPI();
+	wid.getTicketsFromZendesk(3584l, "tejutest@gmail.com");
+    }
 }

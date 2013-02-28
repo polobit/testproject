@@ -1,0 +1,66 @@
+<script id="zendesk-profile-template" type="text/html">
+	<div style="display:inline;  line-height:12px;word-wrap: break-word;">
+		<div id="show_tickets">
+			{{safe_string info}}
+		</div>
+		<div>
+			<input  id="add_ticket" type="button" value="Add Ticket"></input>
+			<input  id="update_ticket" type="button" value="Update Ticket"></input>
+		</div>
+	</div>
+</script>
+
+<script id="zendesk-login-template" type="text/html">
+	<div style="display:inline;  line-height:12px;word-wrap: break-word;">
+		<form id="zendesk_login_form" name="zendesk_login_form" method="post">
+	    	<fieldset>
+				<p>A ticketing system built for speed automatic actions, meaningful organization, and streamlined systems for managing support content.</p>
+				<input type="text" id="zendesk_username" class="input-medium required" placeholder="User Name" value="" name="username"></input>
+				<input type="password" id="zendesk_password" class="input-medium required" placeholder="Password" value="" name="password"></input>
+				<input type="text" id="zendesk_url" class="input-medium required" placeholder="url" value="" name="url"></input>
+				<button id="save_prefs" class="btn"><a href="#">Save</a></button>
+			 </fieldset>
+	    </form>
+	</div>
+</script>
+
+<script id="zendesk-message-template" type="text/html">
+	<!-- New (Note) Modal views -->
+	<div class="modal hide fade message-modal" id="zendesk_messageModal" style="width:400px; left:55%">
+	    <div class="modal-header">
+	        <button class="close" data-dismiss="modal">x</button>
+			{{#if_equals headline "Add Ticket"}}
+	        	<h3><i class="icon-envelope"></i> {{headline}}</h3>
+			{{else}}
+				<h3><i class=" icon-pencil"></i> {{headline}}</h3>
+			{{/if_equals}}
+	    </div>
+	    <div class="modal-body agile-modal-body">
+	        <form id="zendesk_messageForm" name="zendesk_messageForm" method="post">
+	            <fieldset>
+					<div style="margin-bottom:10px;">{{info}}</div>
+	                <input name="email" type="hidden" value="{{email}}" />
+	                <div class="control-group">	                    
+	                    <div class="controls">
+							{{#if_equals headline "Update Ticket"}}
+								<label class="control-label"><b>Ticket Id: </b><span class="field_req">*</span></label>	                        
+								<input type="text" placeholder="Ticket Id" name="ticketNumber" id="ticketNumber" class="required span4" />
+							{{/if_equals}}							
+	                    </div>
+	                </div>
+	                <div class="control-group">
+	                    <label class="control-label"><b>Message: </b><span class="field_req">*</span></label>
+	                    <div class="controls">
+							<textarea rows="4" class="required span4" placeholder="Detailed Message" name="message" id="message" style="max-width:500px;"></textarea>
+	                    </div>
+	                </div>
+	            </fieldset>
+	        </form>
+	    </div>
+	    <div class="modal-footer">
+	        <a href="#" class="btn btn-primary" id="send_request">Send</a>
+	        <span class="save-status"></span>
+	    </div>
+	</div>
+</script>
+<!-- End of Modal views -->
