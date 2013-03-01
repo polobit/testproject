@@ -1,14 +1,19 @@
 <script id="widgets-add-model-template" type="text/html">
-<div class="well widget-add span3">
-    <img class="thumbnail" src="{{logo_url}}" style="width:210px; height:70px;" /> </a><br />
+<div class="well widget-add span3" style="width:220px; height:280px;">
+    <img class="thumbnail" src="{{logo_url}}" style="width:210px; height:70px;" /> 
+	<br />
     <h1> {{name}}</h1>
     <br />
-    {{description}} <br /><br />
-    {{#if is_added}}
-    <a class="btn btn-danger" id="delete-widget" widget-name="{{name}}">Delete</a>
-    {{else}}
-    <a class="btn btn-primary add-widget" widget-name="{{name}}">Add</a>
-    {{/if}}
+    <div style="width: 220px;height: 90px;margin-bottom: 10px;">
+		{{description}}
+	</div>
+    <div>
+		{{#if is_added}}
+    		<a class="btn btn-danger delete" id="delete-widget" widget-name="{{name}}">Delete</a>
+    	{{else}}
+    		<a class="btn btn-primary add-widget" widget-name="{{name}}">Add</a>
+    	{{/if}}
+	</div>
 </div>
 </script>
 

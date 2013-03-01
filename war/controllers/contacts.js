@@ -52,11 +52,11 @@ var ContactsRouter = Backbone.Router.extend({
     },
     initialize: function () {
 
-    	$(".active").removeClass("active");
+    /*	$(".active").removeClass("active");
         
       	 $("#content").html(getTemplate('dashboard-timline', {}));
       	 setupDashboardTimeline();
-      	    
+      	    */
       },
 
       dashboard: function () {
@@ -691,6 +691,8 @@ var ContactsRouter = Backbone.Router.extend({
             url: "core/api/search/" + query,
             templateKey: "search",
             individual_tag_name: 'tr',
+           /* cursor: true,
+            page_size: 25,*/
             postRenderCallback: function(el)
             {
             	// Shows the query string as heading of search results

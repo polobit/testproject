@@ -543,7 +543,7 @@ $(function() {
 	 			console.log(App_Contacts.contactDetailView.model.toJSON());
 	 			return getPropertyValue(contact_properties, value);
 	 		}	
-	 	})
+	 	});
 	 
 	 
 		  
