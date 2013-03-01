@@ -106,9 +106,7 @@ $(function() {
 	 * which is selected and calls customView function is called to to custom
 	 * view of contacts
 	 */
-	$('.ContactView').die().live(
-			'click',
-			function(e) {
+	$('.ContactView').die().live('click', function(e) {
 
 				e.preventDefault();
 
@@ -163,7 +161,9 @@ $(function() {
 	// creates the grid view cookie 
 	$('.GridView').die().live('click', function(e) {
 		e.preventDefault();
-
+		
+		// Erases the cookie
+		eraseCookie("contact_view");
 		// Creates the cookie
 		createCookie("agile_contact_view", "grid_view");
 
