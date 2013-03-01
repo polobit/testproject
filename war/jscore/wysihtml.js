@@ -27,6 +27,7 @@ $(function() {
 
 					// wysihtml5.editor.setValue(fieldcontent + " " + val,
 					// true);
+				    editor.focus();
 					wysihtml5.editor.composer.commands.exec("insertHTML", '{{'
 							+ fieldContent + '}}');
 				}
