@@ -248,6 +248,15 @@ var WorkflowsRouter = Backbone.Router.extend({
 						$('#trigger-type', el).find(
 								'option[value=' + type + ']').attr("selected",
 								"selected").trigger('change');
+						
+						$('#trigger-type',el).trigger('change');
+						
+						// Calls TagsTypeAhead on focus event.
+						if(type == 'TAG_IS_ADDED' || type == 'TAG_IS_DELETED')
+							$('.trigger-tags',el).live("focus", function(e){
+								e.preventDefault();
+								setup_tags_typeahead();
+							});
 
 						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 
