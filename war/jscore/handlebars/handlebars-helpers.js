@@ -544,6 +544,12 @@ $(function() {
 	 			return getPropertyValue(contact_properties, value);
 	 		}	
 	 	});
+	 	
+	 	
+	 	Handlebars.registerHelper('safe_string',function(data){
+	 		  
+	 	   return new Handlebars.SafeString(data);
+	 	  });
 	 
 	 
 		  
