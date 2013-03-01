@@ -1,7 +1,5 @@
 package com.agilecrm.contact;
 
-import java.io.Serializable;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -18,7 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @SuppressWarnings("serial")
 @XmlRootElement
-public class ContactField implements Serializable
+public class ContactField
 {
 
     /*

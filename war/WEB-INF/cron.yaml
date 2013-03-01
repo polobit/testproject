@@ -13,8 +13,4 @@ cron:
   
 - description: Weekly reports
   url: /backend/cron/reports/?duration=WEEKLY
-  schedule: every friday 23:50
-  
-- description: Blob store manager
-  url: /backend/cron/blob
-  schedule: every 30 mins  
+  schedule: every friday 23:50 

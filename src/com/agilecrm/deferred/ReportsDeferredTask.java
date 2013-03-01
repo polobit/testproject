@@ -9,6 +9,7 @@ import com.agilecrm.reports.Reports;
 import com.agilecrm.reports.ReportsUtil;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
+@SuppressWarnings("serial")
 public class ReportsDeferredTask implements DeferredTask
 {
 
@@ -28,6 +29,7 @@ public class ReportsDeferredTask implements DeferredTask
 	    // reports to respective domain users
 	    try
 	    {
+
 		ReportsUtil.sendReportsToUsers(reportsMap.get(domain));
 	    }
 	    catch (JSONException e)
