@@ -120,7 +120,7 @@ padding-left:10px!important;
 						<a class="close" data-dismiss="alert" href="#">×</a><%=success%> 
 					</div>
 					 <%}%>
-					 <h3><small> Choose your domain at AgileCRM</small></h3>
+					 <h3><small> Choose your domain at Agile CRM</small></h3>
 					 <div style="padding-top:10px;">
           				<input id='subdomain' type="text" placeholder="Enter domain"
 						   	   name="subdomain" class="input-medium field required" autocapitalize="off"><b> .agilecrm.com</b>
@@ -174,7 +174,7 @@ padding-left:10px!important;
 		});
 		function isNotValid(subdomain) {
 			subdomain = subdomain.toString();
-			var sub_domain = ["my", "googleapps", "sales", "support", "login", "register"];
+			var sub_domain = ["my", "agile", "googleapps", "sales", "support", "login", "register"];
 			for(var key in sub_domain){
 				if(sub_domain[key] == subdomain.toLowerCase()){
 					error = "Common domain cannot be created.";

@@ -155,7 +155,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 					<input type='hidden' name='type' value='agile'></input>
 					
 					<input class="input-xlarge field required" name='name' type="text" maxlength="50" minlength="3" placeholder="Name" autocapitalize="off">
-                    <input class="input-xlarge field required email" name='email' type="text" maxlength="50" minlength="6" placeholder="Email (UserName)" autocapitalize="off">
+                    <input class="input-xlarge field required email" name='email' type="text" maxlength="50" minlength="6" placeholder="Email Address (User ID)" autocapitalize="off">
                     <input class="input-xlarge field required" maxlength="10" minlength="4" name='password' type="password" placeholder="Password" autocapitalize="off">
 					<div style="margin-top:15px;">
 					  <label class="checkbox" style="display:inline-block;">I agree with the Terms<input type="checkbox" checked="checked" name="agree" class="required"></label>
