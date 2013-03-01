@@ -24,7 +24,7 @@ public class NotificationsDeferredTask implements DeferredTask
     /**
      * Serial ID
      */
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2713282877446898897L;
 
     /**
      * Notification type.

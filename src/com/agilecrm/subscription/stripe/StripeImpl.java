@@ -70,11 +70,13 @@ public class StripeImpl implements AgileBilling
      * 
      * 
      */
-    public JSONObject createCustomer(CreditCard cardDetails, Plan plan) throws Exception
+    public JSONObject createCustomer(CreditCard cardDetails, Plan plan)
+	    throws Exception
     {
 
 	// Creates customer and add subscription to it
-	Customer customer = Customer.create(StripeUtil.getCustomerParams(cardDetails, plan));
+	Customer customer = Customer.create(StripeUtil.getCustomerParams(
+		cardDetails, plan));
 
 	// Return Customer JSON
 	return StripeUtil.getJSONFromCustomer(customer);
@@ -95,7 +97,8 @@ public class StripeImpl implements AgileBilling
      * @throws Exception
      *             if
      */
-    public JSONObject updatePlan(JSONObject stripeCustomer, Plan plan) throws Exception
+    public JSONObject updatePlan(JSONObject stripeCustomer, Plan plan)
+	    throws Exception
     {
 
 	// Gets Customer Object to update its plan
@@ -107,7 +110,7 @@ public class StripeImpl implements AgileBilling
 	updateParams.put("quantity", plan.quantity);
 
 	// Updates customer with changed plan
-	customer = customer.update(updateParams);
+	customer.updateSubscription(updateParams);
 
 	// Returns Customer object as JSONObject
 	return StripeUtil.getJSONFromCustomer(customer);
@@ -125,8 +128,8 @@ public class StripeImpl implements AgileBilling
      * 
      * @throws Exception
      * */
-    public JSONObject updateCreditCard(JSONObject stripeCustomer, CreditCard cardDetails)
-	    throws Exception
+    public JSONObject updateCreditCard(JSONObject stripeCustomer,
+	    CreditCard cardDetails) throws Exception
     {
 
 	/*
@@ -165,13 +168,15 @@ public class StripeImpl implements AgileBilling
      * 
      * @throws StripeException
      * */
-    public List<Invoice> getInvoices(JSONObject stripeCustomer) throws StripeException
+    public List<Invoice> getInvoices(JSONObject stripeCustomer)
+	    throws StripeException
     {
 	Map<String, Object> invoiceParams = new HashMap<String, Object>();
 
 	// Sets invoice parameters (Stripe customer id is required to get
 	// invoices of a customer form stripe)
-	invoiceParams.put("customer", StripeUtil.getCustomerFromJson(stripeCustomer).getId());
+	invoiceParams.put("customer",
+		StripeUtil.getCustomerFromJson(stripeCustomer).getId());
 
 	/*
 	 * Fetches all invoices for given stripe customer id and returns

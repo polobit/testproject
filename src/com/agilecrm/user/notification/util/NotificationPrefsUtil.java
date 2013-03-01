@@ -121,7 +121,7 @@ public class NotificationPrefsUtil
 
 	NotificationsDeferredTask notificationsDeferredTask = new NotificationsDeferredTask(
 		type, jsonData, api.api_key);
-	Queue queue = QueueFactory.getDefaultQueue();
+	Queue queue = QueueFactory.getQueue("notification-queue");
 	queue.add(TaskOptions.Builder.withPayload(notificationsDeferredTask));
     }
 

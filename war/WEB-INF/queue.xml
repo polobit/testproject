@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<queue-entries>
+  <queue>
+    <name>notification-queue</name>
+    <rate>100/s</rate>
+    <max-concurrent-requests>100</max-concurrent-requests>
+  </queue>
+</queue-entries>
