@@ -18,9 +18,14 @@ import com.google.appengine.api.taskqueue.DeferredTask;
  * @author Naresh
  * 
  */
-@SuppressWarnings("serial")
+
 public class NotificationsDeferredTask implements DeferredTask
 {
+    /**
+     * Serial ID
+     */
+    private static final long serialVersionUID = 1L;
+
     /**
      * Notification type.
      */

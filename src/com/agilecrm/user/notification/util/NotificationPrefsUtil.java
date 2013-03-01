@@ -115,6 +115,10 @@ public class NotificationPrefsUtil
 	    return;
 	}
 
+	// If APIKey is null return
+	if (api == null)
+	    return;
+
 	NotificationsDeferredTask notificationsDeferredTask = new NotificationsDeferredTask(
 		type, jsonData, api.api_key);
 	Queue queue = QueueFactory.getDefaultQueue();
