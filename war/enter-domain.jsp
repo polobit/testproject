@@ -13,15 +13,15 @@ String domain = request.getParameter("subdomain");
 if(!StringUtils.isEmpty(domain))
 {
     System.out.println(DomainUserUtil.count());
-	if(DomainUserUtil.count() == 0)
+	if(DomainUserUtil.count() != 0)
 	{
-	    success = "Creating " + domain;
-		response.sendRedirect("https://" + domain + ".agilecrm.com/register");
+	    success = "Entering " + domain;
+		response.sendRedirect("https://" + domain + ".agilecrm.com/login");
 		return;
 	}
 	else
 	{
-	    error = "Domain already exists.";
+	    error = "Domain does not exists.";
 	}
 }
 
@@ -33,7 +33,7 @@ if(!StringUtils.isEmpty(domain))
 <head>
 <meta charset="utf-8">
  <meta name="globalsign-domain-verification" content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx"/>
-<title>Choose Your Domain</title>
+<title>Enter Your Domain</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
@@ -106,7 +106,7 @@ padding-left:10px!important;
 
 	<div class="account-container">
 		<div class="content clearfix">
-				 <h1>Register (Step 1 of 2)</h1>
+				 <h1>Enter Your Domain</h1>
 				 <form name='choose_domain' id="choose_domain" method='post' style="padding:10px 0 15px;border-top: 1px dotted #CCC;">
 						<div id="domain-error"></div>
 						<% if(!StringUtils.isEmpty(error)){%>
@@ -120,9 +120,9 @@ padding-left:10px!important;
 						<a class="close" data-dismiss="alert" href="#">×</a><%=success%> 
 					</div>
 					 <%}%>
-					 <h3><small>Choose your domain at Agile CRM</small></h3>
+					 <h3><small>Enter your domain at Agile CRM</small></h3>
 					 <div style="padding-top:10px;">
-          				<input id='subdomain' type="text" placeholder="Choose your domain"
+          				<input id='subdomain' type="text" placeholder="Enter Your domain"
 						   	   name="subdomain" class="input-medium field required" autocapitalize="off"><b> .agilecrm.com</b>
 				   </div>
 				</form>
@@ -133,8 +133,8 @@ padding-left:10px!important;
 		</div>
 	</div>
 	<div style="text-align: center; line-height: 19px;">
-	   Already Signed Up? <a href="/enter-domain">Login</a><br/>
-	   Forgot <a href="/forgot-domain">Domain</a>
+	   Not yet created domain? <a href="/choose-domain">Click here</a><br/>
+	   Forgot <a href="/forgot-password">Password </a><a href="/forgot-domain">Domain</a>
 	</div>
 </div>
 

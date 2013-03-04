@@ -65,6 +65,11 @@ public class NamespaceFilter implements Filter
 		"choose-domain"))
 	    return true;
 
+	// If it is enter domain, just return
+	if (((HttpServletRequest) request).getRequestURI().contains(
+		"enter-domain"))
+	    return true;
+
 	// If it is forgot domain, just return
 	if (((HttpServletRequest) request).getRequestURI().contains(
 		"forgot-domain"))
