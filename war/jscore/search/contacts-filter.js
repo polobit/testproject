@@ -72,6 +72,8 @@ $(function()
 							// Set url to default view to load filter results
 							App_Contacts.contactsListView.collection.url = "core/api/filters/query/"
 									+ filter_id;
+							App_Contacts.contactsListView.collection.sort_collection = false;
+							
 							App_Contacts.contactsListView.collection.fetch();
 						}
 					});

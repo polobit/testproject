@@ -88,7 +88,7 @@ var ContactsRouter = Backbone.Router.extend({
     	}
     	// Default url for contacts route
     	var url = '/core/api/contacts';
-    	
+    	var collection_is_reverse = true;
     	// Tags, Search & default browse comes to the same function
     	if(tag_id)
     	{
@@ -101,6 +101,7 @@ var ContactsRouter = Backbone.Router.extend({
     	// If contact-filter cookie is defined set url to fetch respective filter results
     	if(filter_id || (filter_id = readCookie('contact_filter')))
     	{
+    		collection_is_reverse = false;
     		url = "core/api/filters/query/" + filter_id;
     	}
     	 
@@ -116,10 +117,11 @@ var ContactsRouter = Backbone.Router.extend({
       		}
       		
       		if(readCookie('company_filter'))
-      			{
-      				this.customView(readCookie("contact_view"), undefined, "core/api/contacts/companies")
-      				return;
-      			}
+      		{
+      			this.customView(readCookie("contact_view"), undefined, "core/api/contacts/companies")
+      			return;
+      		}
+      		
       		// Else call customView function fetches results from default url : "core/api/contacts"
 			this.customView(readCookie("contact_view"), undefined);
 			return;
@@ -127,6 +129,8 @@ var ContactsRouter = Backbone.Router.extend({
       	
     	//console.log("Fetching from " + url);
 
+      	console.log("while creating new base collection view : " + collection_is_reverse);
+      	
       	/*
       	 * cursor and page_size options are taken to activate infiniScroll
       	 */
@@ -136,6 +140,7 @@ var ContactsRouter = Backbone.Router.extend({
               individual_tag_name: individual_tag_name,
               cursor: true,
               page_size: 25,
+              sort_collection : collection_is_reverse,
               postRenderCallback: function(el) {
             	  
             	  // To set chats and view when contacts are fetch by infiniscroll
@@ -691,8 +696,10 @@ var ContactsRouter = Backbone.Router.extend({
             url: "core/api/search/" + query,
             templateKey: "search",
             individual_tag_name: 'tr',
-           /* cursor: true,
-            page_size: 25,*/
+            cursor: true,
+            data : QUERY_RESULTS,
+            sort_collection : false,
+            page_size: 15,
             postRenderCallback: function(el)
             {
             	// Shows the query string as heading of search results
@@ -701,15 +708,18 @@ var ContactsRouter = Backbone.Router.extend({
       	});
 
      // If QUERY_RESULTS is defined which are set by agile_typeahead istead of fetching again
-      if(QUERY_RESULTS)
+ /*     if(QUERY_RESULTS)
       {
     	  //Create collection with results
-    	  searchResultsView.collection =  new Backbone.Collection(QUERY_RESULTS);    	  
+    	  searchResultsView.collection =  new BaseCollection(QUERY_RESULTS, {
+				restKey : searchResultsView.options.restKey,
+				sortKey : searchResultsView.options.sortKey
+			});   	  
 
     	  $('#content').html(searchResultsView.render(true).el);
           $('body').trigger('agile_collection_loaded');
     	  return;
-      }
+      }*/
       
       // If in case results in different page is clicked before typeahead fetch results, then results are fetched here
       searchResultsView.collection.fetch();

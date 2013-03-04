@@ -31,7 +31,8 @@ public class AppengineSearch<T>
 	try
 	{
 	    builder = (BuilderInterface) Class.forName(
-		    "com.agilecrm.search.document." + type + "Document").newInstance();
+		    "com.agilecrm.search.document." + type + "Document")
+		    .newInstance();
 
 	    query = new QueryDocument();
 	}
@@ -63,9 +64,17 @@ public class AppengineSearch<T>
     }
 
     @SuppressWarnings("rawtypes")
-    public static Collection getSimpleSearchResults(String keyword)
+    public static Collection getAdvacnedSearchResults(List<SearchRule> rules,
+	    int count, String cursor)
     {
-	return new QueryDocument().simpleSearch(keyword);
+	return new QueryDocument().advancedSearch(rules, count, cursor);
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static Collection getSimpleSearchResults(String keyword,
+	    Integer count, String cursor)
+    {
+	return new QueryDocument().simpleSearch(keyword, count, cursor);
     }
 
 }

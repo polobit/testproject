@@ -14,6 +14,12 @@ var BaseCollection = Backbone.Collection.extend({
 		this.restKey = options.restKey;
 		if (options.sortKey)
 			this.sortKey = options.sortKey;
+		if (options.reverse)
+			this.reverse = options.reverse;
+		
+		// Set false if sorting is not required. Used when order returned 
+		// from server is to be preserved.
+		this.sort_collection = options.sort_collection;
 	},
 	/*
 	 * Sorts the order of the collection based on the sortKey. When models are
@@ -23,10 +29,18 @@ var BaseCollection = Backbone.Collection.extend({
 	comparator : function(item)
 	{
 		if (this.sortKey)
-		{
+		{	
 			// console.log("Sorting on " + this.sortKey);
 			return item.get(this.sortKey);
 		}
+
+		// If sort_collection is set false then order of collection is not changed
+		if(this.sort_collection == false)
+		{
+			console.log("sort not required");
+			return 0;
+		}
+		
 		return item.get('id');
 	},
 	/*
@@ -139,12 +153,26 @@ var Base_Collection_View = Backbone.View
 			{
 				// Binds functions to view
 				_.bindAll(this, 'render', 'appendItem');
-
-				// Initializes the collection with restKey and sortkey
-				this.collection = new BaseCollection([], {
-					restKey : this.options.restKey,
-					sortKey : this.options.sortKey
-				});
+			
+				
+				if(this.options.data)
+					{
+						// Initializes the collection with restKey and sortkey
+						this.collection = new BaseCollection(this.options.data, {
+							restKey : this.options.restKey,
+							sortKey : this.options.sortKey,
+							sort_collection : this.options.sort_collection
+						});
+					}
+				else
+				{
+					// Initializes the collection with restKey and sortkey
+					this.collection = new BaseCollection([], {
+						restKey : this.options.restKey,
+						sortKey : this.options.sortKey,
+						sort_collection : this.options.sort_collection
+					});
+				}
 
 				/*
 				 * Sets url to the collection to perform CRUD operations on the
@@ -214,6 +242,7 @@ var Base_Collection_View = Backbone.View
 					 * scrolling
 					 */
 					var that = this;
+					
 
 					/**
 					 * Initiazlizes the infiniscroll on the collection created

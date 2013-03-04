@@ -47,11 +47,9 @@
     	{{getPropertyValue properties "company"}}
 	</td>
 	<td> 
-       <div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:15em;overflow:hidden;">
-	    {{#each tags}}
-    	  <b><span class="label">{{this}}</span></b>
-        {{/each}}
-       </div>
+	{{#each tags}}
+    	<b><span class="label">{{this}}</span></b>
+    {{/each}}
 	</td>
 	<td>{{lead_score}}</td>
 </script>
@@ -61,8 +59,32 @@
     <div class="span12">
         <div class="page-header">
             <h1>Contacts <small> {{count}}</small></h1>
+<div class="span9 offset3"  style="margin-left:300px">
+ <div class="btn-group pull-left" id="bulk-actions" style="position:relative; display:none; top:-29px">
+					<div class="btn-group">
+  						<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"> Bulk Actions
+    							<span class="caret"></span>
+ 	 					</a>
+  						    </button>
+                    <ul class="dropdown-menu" id="view-actions">
+                        <li>
+                            <a href="#" id="bulk-owner">Change owner</a>
+                        </li>
+                        <li>
+                            <a href="#" id="bulk-campaigns">Add to campaign</a>	
+                        </li>
+                        <li class="hide">
+                            <a href="#" id="bulk-email">Send email</a>
+                        </li>
+                        <li>
+                            <a href="#" id="bulk-tags">Add tags</a>
+                        </li>
+                    </ul>
+					</div>
+</div>
             <div class="btn-group right" id="view-list" style="top:-29px;position:relative"></div>
             <div class="btn-group right" id="filter-list" style="top:-29px;position:relative;margin-right:5px"></div>
+</div>
         </div>
     </div>
 </div>
@@ -90,24 +112,7 @@
         {{#if this.length}}
         <div class="data">
             <div class="data-container">
-                <div class="btn-group right" id="bulk-actions" style="position:relative; display:none">
-                    <button class="btn">Bulk Actions</button>
-                    <button class="btn dropdown-toggle" data-toggle="dropdown" id="view-actions"><span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" id="view-actions">
-                        <li>
-                            <a href="#" id="bulk-owner">Change owner</a>
-                        </li>
-                        <li>
-                            <a href="#" id="bulk-campaigns">Add to campaign</a>	
-                        </li>
-                        <li class="hide">
-                            <a href="#" id="bulk-email">Send email</a>
-                        </li>
-                        <li>
-                            <a href="#" id="bulk-tags">Add tags</a>
-                        </li>
-                    </ul>
+                  
                 </div>
                 <table id="contacts" class="table table-striped showCheckboxes" url="core/api/contacts/bulk" style="overflow:scroll">
                     <thead>
