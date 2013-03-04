@@ -82,10 +82,13 @@ public class TypeAheadAPI
     @Path("contacts")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public String typeaheadContacts(@QueryParam("q") String keyword)
+    public String typeaheadContacts(@QueryParam("q") String keyword,
+	    @QueryParam("page_size") String size,
+	    @QueryParam("cursor") String cursor)
     {
 	Collection contacts = new AppengineSearch<Contact>(Contact.class)
-		.getSimpleSearchResults(keyword);
+		.getSimpleSearchResults(keyword, Integer.parseInt(size), cursor);
+
 	String[] availableTags = new String[contacts.size()];
 
 	int count = 0;

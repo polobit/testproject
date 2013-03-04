@@ -47,11 +47,9 @@
     	{{getPropertyValue properties "company"}}
 	</td>
 	<td> 
-       <div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:15em;overflow:hidden;">
-	    {{#each tags}}
-    	  <b><span class="label">{{this}}</span></b>
-        {{/each}}
-       </div>
+	{{#each tags}}
+    	<b><span class="label">{{this}}</span></b>
+    {{/each}}
 	</td>
 	<td>{{lead_score}}</td>
 </script>
@@ -90,10 +88,12 @@
         {{#if this.length}}
         <div class="data">
             <div class="data-container">
-                <div class="btn-group right" id="bulk-actions" style="position:relative; display:none">
-                    <button class="btn">Bulk Actions</button>
-                    <button class="btn dropdown-toggle" data-toggle="dropdown" id="view-actions"><span class="caret"></span>
-                    </button>
+                   <div class="btn-group right" id="bulk-actions" style="position:relative; display:none">
+					<div class="btn-group">
+  						<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"> Bulk Actions
+    							<span class="caret"></span>
+ 	 					</a>
+  						    </button>
                     <ul class="dropdown-menu" id="view-actions">
                         <li>
                             <a href="#" id="bulk-owner">Change owner</a>
@@ -108,6 +108,7 @@
                             <a href="#" id="bulk-tags">Add tags</a>
                         </li>
                     </ul>
+					</div>
                 </div>
                 <table id="contacts" class="table table-striped showCheckboxes" url="core/api/contacts/bulk" style="overflow:scroll">
                     <thead>

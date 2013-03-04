@@ -26,7 +26,8 @@ public interface QueryInterface
      *            {@link String} searches based in th keyword
      * @return {@link Collection} of entities returned after querying
      */
-    public Collection<?> simpleSearch(String keyword);
+    public Collection<?> simpleSearch(String keyword, Integer count,
+	    String cursor);
 
     /**
      * It declares advancedSearch based on the list of search Rules, should
@@ -37,4 +38,7 @@ public interface QueryInterface
      * @return {@link Collection} of entities
      */
     public Collection<?> advancedSearch(List<SearchRule> rule);
+
+    public Collection<?> advancedSearch(List<SearchRule> rule, Integer count,
+	    String cursor);
 }

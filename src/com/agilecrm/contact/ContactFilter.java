@@ -135,9 +135,10 @@ public class ContactFilter
      * @return {@link Collection}
      */
     @SuppressWarnings("rawtypes")
-    public Collection queryContacts()
+    public Collection queryContacts(int count, String cursor)
     {
-	return AppengineSearch.getAdvacnedSearchResults(rules);
+
+	return AppengineSearch.getAdvacnedSearchResults(rules, count, cursor);
     }
 
     // Get Contacts based on system filters

@@ -59,7 +59,7 @@ function agile_type_ahead(id, el, callback, isSearch){
         	this.shown = true;
 
         	// Get data on query
-        	$.getJSON("core/api/search/" + query, function (data){
+        	$.getJSON("core/api/search/" + query+"?page_size=10", function (data){
 
         	    /*
         		 * Stores query results to use them in updater and render
