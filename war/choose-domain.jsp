@@ -87,7 +87,7 @@ padding-left:10px!important;
 <div class='navbar navbar-fixed-top'> 
    	<div class='navbar-inner'> 
    		<div class='container'> 
-   			<a class='brand' href='#dashboard'>Agile CRM</a>
+   			<a class='brand' href='http://www.agilecrm.com'>Agile CRM</a>
  				<div class="nav-collapse">
 				<ul class="nav pull-right">
 					<li class="">						

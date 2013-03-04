@@ -6,7 +6,7 @@
             <input name="id" type="hidden" value="{{id}}" /> 		
             <legend>Personal Preferences</legend>
             <div class="row">
-                <div class="span4">
+                <div class="span5" style="margin-right:80px;">
                     <div class="control-group">
                         <label class="control-label">Name <span class="field_req">*</span></label>
                         <div class="controls">
@@ -35,20 +35,19 @@
                         </div>
                     </div>
                 </div>
-                <div class="span3">
+                <div class="">
                     <div class="control-group">
                         <div id="upload-container" messg="User image has been uploaded">
                             <div class="controls">
-                                <div class="imgholder">
+                                <div class="span1 imgholder">
                                     {{#if pic}}
                                     <img src="{{pic}}" style="height:75px!important;width:75px!important;" />
                                     {{else}}
                                     <img src="https://contactuswidget.appspot.com/images/pic.png" style="height:75px!important;width:75px!important;" />
                                     {{/if}}													
                                 </div>
-                                <p style="margin-top:-10px"><br /></p>
                                 <p><input type="hidden" id="upload_url" name="pic" />  
-                                    <input class="upload_s3 submit btn" type="submit" id="user_prefs_image" value="Upload" />
+                                    <input style="margin: 10px 20px 0px;" class="upload_s3 submit btn" type="submit" id="user_prefs_image" value="Upload"/>
                                 </p>
                             </div>
                         </div>
