@@ -166,7 +166,7 @@ public class WidgetUtil
 		"/widgets/stripe-logo-small.jpeg", null));
 	widgets.add(new Widget(
 		"Zendesk",
-		"Zendesk streamlines communication within a ticket that has workflow towards resolution of customer issue.",
+		"Zendesk streamlines communication within a ticket that has organized workflow towards resolution of the customer issue.",
 		"/widgets/zendesk.js", "/img/plugins/zendesk_logo.png",
 		"/widgets/zendesk-logo-small.png", null));
 

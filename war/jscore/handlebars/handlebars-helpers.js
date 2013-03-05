@@ -545,14 +545,18 @@ $(function() {
 	 		}	
 	 	});
 	 	
-	 	
-	 	Handlebars.registerHelper('safe_string',function(data){
+	 
+	 	 Handlebars.registerHelper('safe_string',function(data){
 	 		  
-	 	   return new Handlebars.SafeString(data);
-	 	  });
-	 
-	 
-		  
+	 		   data = data.replace(/\n/g,"<br/>");
+	 		   console.log(data);
+	 		   return new Handlebars.SafeString(data);
+	 		  });
+	 		   
+	 		  Handlebars.registerHelper('string_to_date',function(format,date){
+	 		  
+	 		   return new Date(date).format(format);
+	 		  });
 		  
 		  
 });
