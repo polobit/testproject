@@ -693,6 +693,7 @@ public class WidgetsAPI
 	}
 	catch (Exception e)
 	{
+	    System.out.println(e.getMessage());
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
@@ -704,6 +705,8 @@ public class WidgetsAPI
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     public String addTicketToZendesk(@PathParam("widget-id") Long widgetId,
+	    @FormParam("name") String name,
+	    @FormParam("subject") String subject,
 	    @FormParam("email") String email,
 	    @FormParam("message") String description)
     {
@@ -714,7 +717,8 @@ public class WidgetsAPI
 	    if (widget == null)
 		return null;
 
-	    return ZendeskUtil.addTicket(widget, email, description);
+	    return ZendeskUtil.addTicket(widget, name, email, subject,
+		    description);
 	}
 	catch (Exception e)
 	{

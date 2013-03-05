@@ -42,10 +42,9 @@
 			{{/if}}
 	    </div>		
 		<div id="linkedin_social_stream" class="collapse in">	
-			<table class="row-fluid table-striped"   style="border: 1px solid #f5f5f5;">
-				<tbody id="linkedin_table" >						
-				</tbody>
-			</table>	
+	<div id="linkedin_table" >
+		
+	</div>
 		</div>
 		<div style="padding:0px;margin: 10px 0px 5px 0px;">
 			<a href="#more" class="linkedin_stream" id="linkedin_stream" rel="tooltip" title="Click to see updates">See More..</a>
@@ -57,8 +56,11 @@
 
 <script id="linkedin-update-stream-template" type="text/html">
 {{#if this.length}}	
-		<tr/>
-			{{#each this}}
+		
+	<table class="row-fluid table-striped"   style="border: 1px solid #f5f5f5;">
+				<tbody >
+	<tr/>				
+{{#each this}}
 				<tr style="border-bottom: 1px solid #f5f5f5;" update_time="{{created_time}}">				
 					<td style="padding:7px 0px 7px 0px;">
 						{{#stringToJSON this "message"}} {{/stringToJSON}}
@@ -91,7 +93,10 @@
 					</td>				
 				</tr>
 			{{/each}}
-		<tr/>
+	
+						
+				</tbody>
+			</table>	
 {{/if}}
 </script>
 

@@ -6,9 +6,6 @@ import javax.ws.rs.core.UriBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.widgets.Widget;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -74,7 +71,7 @@ public class ZendeskUtil
 	if (pluginPrefsJSON == null || contactPrefsJSON == null)
 	    throw new Exception("zendesk preferences null");
 
-	JSONObject json = new JSONObject().put("pluginPrefsJSON",
+	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON",
 		pluginPrefsJSON).put("visitorJSON", contactPrefsJSON);
 
 	/**
@@ -86,13 +83,11 @@ public class ZendeskUtil
 
 	// Get ClickDesk res
 	resource = getResource();
-	response = resource.path("/core/zendesk/prechat")
+	response = resource.path("/core/agile/zendesk/get")
 		.type(MediaType.APPLICATION_JSON)
-		.put(ClientResponse.class, json.toString());
+		.put(ClientResponse.class, prefsJSON.toString());
 
-	String result = response.getEntity(String.class);
-	result = result.replaceAll("\\r\\n|\\r|\\n", "<br/>");
-	return result;
+	return response.getEntity(String.class);
 
     }
 
@@ -114,26 +109,23 @@ public class ZendeskUtil
      *             if the response is an exception
      */
 
-    public static String addTicket(Widget widget, String email,
-	    String description) throws Exception
+    public static String addTicket(Widget widget, String name, String email,
+	    String subject, String description) throws Exception
     {
-
-	Contact contact = ContactUtil.searchContactByEmail(email);
-	String name = contact.getContactFieldValue("first_name");
 
 	JSONObject pluginPrefsJSON = buildPluginPrefsJSON(widget);
 	JSONObject contactPrefsJSON = new JSONObject().put("visitor_email",
 		email).put("visitor_name", name);
+	JSONObject messageJSON = new JSONObject().put("subject", subject).put(
+		"message", description);
 
 	if (pluginPrefsJSON == null || contactPrefsJSON == null)
 	    throw new Exception("zendesk preferences null");
 
-	String agileUserName = UserPrefsUtil.getCurrentUserPrefs().name;
-	String message = "/ticket " + description + " %" + agileUserName + "%";
-	System.out.println(message);
 	JSONObject json = new JSONObject()
 		.put("pluginPrefsJSON", pluginPrefsJSON)
-		.put("visitorJSON", contactPrefsJSON).put("message", message);
+		.put("visitorJSON", contactPrefsJSON)
+		.put("messageJSON", messageJSON);
 
 	/**
 	 * Holds a {@link WebResource} object with the credentials of the
@@ -143,7 +135,7 @@ public class ZendeskUtil
 	ClientResponse response = null;
 
 	resource = getResource();
-	response = resource.path("/core/zendesk/chat")
+	response = resource.path("/core/agile/zendesk/add")
 		.type(MediaType.APPLICATION_JSON)
 		.put(ClientResponse.class, json.toString());
 
@@ -174,17 +166,14 @@ public class ZendeskUtil
     {
 
 	JSONObject pluginPrefsJSON = buildPluginPrefsJSON(widget);
-	JSONObject contactPrefsJSON = new JSONObject().put("visitor_email",
-		"tejutest@gmail.com");
+	JSONObject messageJSON = new JSONObject().put("ticketId", ticketNumber)
+		.put("message", description);
 
-	if (pluginPrefsJSON == null || contactPrefsJSON == null)
+	if (pluginPrefsJSON == null || messageJSON == null)
 	    throw new Exception("zendesk preferences null");
 
-	String message = "/update " + ticketNumber + " " + description;
-	System.out.println(message);
-	JSONObject json = new JSONObject()
-		.put("pluginPrefsJSON", pluginPrefsJSON)
-		.put("visitorJSON", contactPrefsJSON).put("message", message);
+	JSONObject json = new JSONObject().put("pluginPrefsJSON",
+		pluginPrefsJSON).put("messageJSON", messageJSON);
 
 	/**
 	 * Holds a {@link WebResource} object with the credentials of the
@@ -194,7 +183,7 @@ public class ZendeskUtil
 	ClientResponse response = null;
 
 	resource = getResource();
-	response = resource.path("/core/zendesk/chat")
+	response = resource.path("/core/agile/zendesk/update")
 		.type(MediaType.APPLICATION_JSON)
 		.put(ClientResponse.class, json.toString());
 	return response.getEntity(String.class);

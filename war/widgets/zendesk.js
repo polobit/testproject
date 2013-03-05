@@ -16,6 +16,8 @@ $(function() {
 	// Gets Plugin Prefs, required to check whether to show setup button or to
 	// fetch details
 	var plugin_prefs = agile_crm_get_plugin_prefs(ZENDESK_PLUGIN_NAME);
+	
+	var tickets_data = {};
 
 	// If not found - considering first time usage of widget, setupRapleafOAuth
 	// called
@@ -24,16 +26,19 @@ $(function() {
 		return;
 	}
 	console.log("in zendesk " + agile_crm_get_contact_property('email'));
+	
+	if(!agile_crm_get_contact_property('email')){
+		$('#Zendesk').html('<div style="margin: -10px 2px 10px 2px;">No email is associated with this contact</div>');
+		return;
+	}
+	
 	showTicketsFromZendesk(plugin_id,agile_crm_get_contact_property('email'));
 
 	$('#add_ticket').die().live('click', function(e) {
 		addTicketToZendesk(plugin_id,agile_crm_get_contact_property('email'));
 	});
 	
-	$('#update_ticket').die().live('click', function(e) {
-		updateTicketInZendesk(plugin_id);
-	});
-
+	
 });
 
 
@@ -62,7 +67,7 @@ function setupZendeskOAuth(plugin_id) {
 	    }	
 		
 		agile_crm_save_widget_prefs(ZENDESK_PLUGIN_NAME, JSON.stringify(zendesk_prefs));		
-		showTicketsFromZendesk(plugin_id,agile_crm_get_contact_property('email'));
+		//showTicketsFromZendesk(plugin_id,agile_crm_get_contact_property('email'));
 		
 	});
 }
@@ -71,35 +76,46 @@ function showTicketsFromZendesk(plugin_id,email){
 	
 	console.log('in show');
 			$.get("/core/api/widgets/zendesk/get/" + plugin_id + "/" + email, function (data) {
-				/*var result = data.substring(data.indexOf("id")).split("<br/><br/>");
-	
-				var array = [];
-				$.each(result, function(index, value){
-					result[index] ="{" + result[index].split("<br/>").join(",") + "}";
-					
+								
+				try
+				{					
+					$('#Zendesk').html(getTemplate('zendesk-profile', JSON.parse(data)));
+									
+				}catch(err)
+				{					
+					if(data == "There are no tickets for this user")
+						{
+							$('#Zendesk').html('<div style="margin: -10px 2px 10px 2px;"><p>'+ data + '</p>'+
+							'<a class="btn btn-mini btn-primary" id="add_ticket" style="font-size:13px;">'+
+							'Add Ticket</a></div>');
+							return;
+						}
+				}
+				
+				tickets_data = JSON.parse(data);
+			
+				$('#ticket_update').die().live('click', function(e) {
+					e.preventDefault();
+					updateTicketInZendesk(plugin_id,this);
+				});
+
+				$('#ticket_show').die().live('click', function(e) {
+					e.preventDefault();
+					showTicketById(tickets_data, this);
 				});
 				
-				console.log(result);
-				console.log(JSON.parse(result.toString()));*/
-			
-				var json = {};
-				json['info'] = data;
-				console.log(json);
-				
-				$('#Zendesk').html(getTemplate('zendesk-profile',json));				
-						
 			}).error(function(data){
-	       		alert("error");
+				$('#Zendesk').html('<div style="margin: -10px 2px 10px 2px;"><p>'+ data + '</p></div>');
 	       	}); 
 			
 }
 
 function addTicketToZendesk(plugin_id,email){
-	//zendesk/add/{widget-id}
 	
 	var json = {};
 	json["headline"] = "Add Ticket";
-	json["info"] = "Adds ticket in your Zendesk account associated with Agile CRM";
+	json["info"] = "Adds ticket to your Zendesk account associated with Agile CRM";
+	json["name"] = agile_crm_get_contact_property('first_name')+" "+ agile_crm_get_contact_property('last_name');
 	json["email"] =  agile_crm_get_contact_property('email');
 	
 	$('#zendesk_messageModal').remove();
@@ -133,12 +149,12 @@ function addTicketToZendesk(plugin_id,email){
 	
 }
 
-function updateTicketInZendesk(plugin_id){
+function updateTicketInZendesk(plugin_id,element){
 	
 	var json = {};
 	json["headline"] = "Update Ticket";
-	json["info"] = "Updates ticket in your Zendesk account associated with Agile CRM";
-	
+	json["info"] = "Updates Ticket No "+ $(element).attr('update_id') + " in your Zendesk account associated with Agile CRM";
+	json["id"] = $(element).attr('update_id');
 	
 	$('#zendesk_messageModal').remove();
 	var message_form_modal = getTemplate("zendesk-message", json);
@@ -168,4 +184,31 @@ function updateTicketInZendesk(plugin_id){
         		alert(data.responseText); 
         	}); 
 		});
+}
+
+function showTicketById(tickets_data, element){
+	
+	var json = {};
+	$('#zendesk_showModal').remove();
+	var find_id = $(element).attr('ticket_id');					
+	json = getTicketById(find_id, tickets_data);
+	json["headline"] = "Ticket " + find_id;		
+	json["desc_len"] = json['description'].length > 200;
+	console.log(json["desc_len"]);
+	
+	$('#content').append(getTemplate("zendesk-ticket-show", json));
+	$('#zendesk_showModal').modal("show");
+}
+
+function getTicketById(ticket_id, data){
+	
+	for(var i = 0; i < data.length; i++){
+		if(ticket_id == data[i].id)
+		{
+			console.log(data[i]);
+			return data[i];
+			
+		}
+	}
+	
 }
