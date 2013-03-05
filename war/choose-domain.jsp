@@ -134,7 +134,7 @@ padding-left:10px!important;
 	</div>
 	<div style="text-align: center; line-height: 19px;">
 	   Already Signed Up? <a href="/enter-domain">Login</a><br/>
-	   Forgot <a href="/forgot-domain">Domain</a>
+	   Forgot <a href="/forgot-domain">Domain?</a>
 	</div>
 </div>
 

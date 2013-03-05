@@ -170,7 +170,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 					
 			</div>
 			<div style="text-align: center;line-height: 19px;">
-	                 Already have an account? <a href="/login">Login</a><br/>
+	                 Already have an account? <a href="/enter-domain">Login</a><br/>
 	                 Forgot <a href="/forgot-password">Password</a>
                </div>
 		</div>
