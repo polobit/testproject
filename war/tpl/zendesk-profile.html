@@ -1,9 +1,9 @@
 <script id="zendesk-profile-template" type="text/html">
 	<div style="display:inline;  line-height: 16px;word-wrap: break-word;">
-		<div id="show_tickets" style="margin-bottom: 10px;">
+		<div id="show_tickets">
 			{{#if this.length}}	
 				{{#each this}}	
-					<table class="ticket_table row-fluid table table-bordered"  id="{{id}}" style="line-height:13px;table-layout: fixed;width:100%;">
+					<table class="ticket_table row-fluid table table-bordered"  id="{{id}}" style="line-height:13px;table-layout: fixed;width:100%;margin-bottom: 10px;">
 					
 						<tr>
 							<th style="padding: 5px;">Subject</th>
@@ -45,7 +45,7 @@
 				<p>A ticketing system built for speed automatic actions, meaningful organization, and streamlined systems for managing support content.</p>
 				<input type="text" id="zendesk_username" class="input-medium required" placeholder="User Name" value="" name="username"></input>
 				<input type="password" id="zendesk_password" class="input-medium required" placeholder="Password" value="" name="password"></input>
-				<input type="text" id="zendesk_url" class="input-medium required" placeholder="url" value="" name="url"></input>
+				<input type="text" id="zendesk_url" class="input-medium required" placeholder="url" value="" name="url"></input><br/>
 				<button id="save_prefs" class="btn"><a href="#">Save</a></button>
 			 </fieldset>
 	    </form>
