@@ -114,7 +114,7 @@ var ReportsRouter = Backbone.Router.extend({
        					$('#multipleSelect').multiSelect({ selectableOptgroup: true });
        					
        					
-       					$.each(contact_view_model.toJSON()['fields_set'], function(index, field){
+       					$.each(report.toJSON()['fields_set'], function(index, field){
        						$('#multipleSelect').multiSelect('select', field); 
        					});
        					

@@ -12,17 +12,10 @@ String domain = request.getParameter("subdomain");
 
 if(!StringUtils.isEmpty(domain))
 {
-    System.out.println(DomainUserUtil.count());
-	if(DomainUserUtil.count() != 0)
-	{
-	    success = "Entering " + domain;
+    
+	  //  success = "Entering " + domain;
 		response.sendRedirect("https://" + domain + ".agilecrm.com/login");
 		return;
-	}
-	else
-	{
-	    error = "Domain does not exists.";
-	}
 }
 
 %>
