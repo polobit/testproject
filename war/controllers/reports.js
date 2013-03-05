@@ -108,14 +108,22 @@ var ReportsRouter = Backbone.Router.extend({
 				
        			head.js(LIB_PATH + 'lib/jquery.multi-select.js', LIB_PATH + 'lib/jquery-ui.min.js', function(){
        				
-       					$('#multipleSelect', el).multiSelect({ selectableOptgroup: true });
+       					
        				
+       					$("#content").html(el);
+       					$('#multipleSelect').multiSelect({ selectableOptgroup: true });
+       					
+       					
+       					$.each(contact_view_model.toJSON()['fields_set'], function(index, field){
+       						$('#multipleSelect').multiSelect('select', field); 
+       					});
+       					
        					$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id","fields_set").sortable();
      	
        			});
 			}
 		});
 
-		$("#content").html(report_model.render().el);
+		report_model.render();
 	},
 })

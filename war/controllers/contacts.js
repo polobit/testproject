@@ -473,20 +473,15 @@ var ContactsRouter = Backbone.Router.extend({
             postRenderCallback: function(el) {
        			head.js(LIB_PATH + 'lib/jquery.multi-select.js', LIB_PATH + 'lib/jquery-ui.min.js', function(){
        					
-       				
-       				
-       					$('#multipleSelect', el).val(contact_view_model.toJSON()['fields_set']); 
-       				
-       	
+       		
        					$("#content").html(el);
        					
-       					$('#multipleSelect', el).multiSelect();
-       					$('#multipleSelect', el).multiSelect('select', contact_view_model.toJSON()['fields_set']); 
+       					$('#multipleSelect').multiSelect();
        					
        				    $('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id","fields_set").sortable();
        					       					
        					$.each(contact_view_model.toJSON()['fields_set'], function(index, field){
-       						
+       						$('#multipleSelect').multiSelect('select', field); 
        					});
        					
        				});
@@ -494,7 +489,7 @@ var ContactsRouter = Backbone.Router.extend({
 
     	});
     	
-    	$("#content").html(contactView.render().el);
+    	contactView.render();
     	
     },
     
