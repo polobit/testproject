@@ -28,7 +28,7 @@ $(function() {
 	console.log("in zendesk " + agile_crm_get_contact_property('email'));
 	
 	if(!agile_crm_get_contact_property('email')){
-		$('#Zendesk').html('<div style="margin: -10px 2px 10px 2px;">No email is associated with this contact</div>');
+		$('#Zendesk').html('<div style="margin: 0px 2px 10px 2px;word-wrap: break-word;">No email is associated with this contact</div>');
 		return;
 	}
 	
@@ -50,7 +50,7 @@ $(function() {
  * @param plugin_id
  */
 function setupZendeskOAuth(plugin_id) {
-	
+	$('#Zendesk').html(LOADING_HTML);
 	// Shows an input filed to save the the prefs (api key provided by rapleaf)
 	$('#Zendesk').html(getTemplate('zendesk-login'));
 
@@ -69,11 +69,13 @@ function setupZendeskOAuth(plugin_id) {
 		agile_crm_save_widget_prefs(ZENDESK_PLUGIN_NAME, JSON.stringify(zendesk_prefs));		
 		//showTicketsFromZendesk(plugin_id,agile_crm_get_contact_property('email'));
 		
-	});
+	}).error(function(data){
+		$('#Zendesk').html('<div style="margin: 0px 2px 10px 2px;word-wrap: break-word;"><p>'+ data.responseText + '</p></div>');
+   	}); 
 }
 
 function showTicketsFromZendesk(plugin_id,email){
-	
+	$('#Zendesk').html(LOADING_HTML);
 	console.log('in show');
 			$.get("/core/api/widgets/zendesk/get/" + plugin_id + "/" + email, function (data) {
 								
@@ -85,11 +87,13 @@ function showTicketsFromZendesk(plugin_id,email){
 				{					
 					if(data == "There are no tickets for this user")
 						{
-							$('#Zendesk').html('<div style="margin: -10px 2px 10px 2px;"><p>'+ data + '</p>'+
-							'<a class="btn btn-mini btn-primary" id="add_ticket" style="font-size:13px;">'+
-							'Add Ticket</a></div>');
+							$('#Zendesk').html('<div style="margin: 0px 2px 10px 2px;word-wrap: break-word;"><p>'+ data +
+									'</p><a class="btn btn-mini btn-primary" id="add_ticket" style="font-size:13px;">'+
+									'Add Ticket</a></div>');
 							return;
 						}
+					
+					$('#Zendesk').html('<div style="margin: 0px 2px 10px 2px;word-wrap: break-word;"><p>'+ data + '</p></div>');
 				}
 				
 				tickets_data = JSON.parse(data);
@@ -105,7 +109,7 @@ function showTicketsFromZendesk(plugin_id,email){
 				});
 				
 			}).error(function(data){
-				$('#Zendesk').html('<div style="margin: -10px 2px 10px 2px;"><p>'+ data + '</p></div>');
+				$('#Zendesk').html('<div style="margin: 0px 2px 10px 2px;word-wrap: break-word;"><p>'+ data + '</p></div>');
 	       	}); 
 			
 }
@@ -143,7 +147,8 @@ function addTicketToZendesk(plugin_id,email){
 				}, 2000);
 			}).error(function(data) { 
        			$('#zendesk_messageModal').remove();
-        		alert(data.responseText); 
+				$('#Zendesk').html('<div style="margin: 0px 2px 10px 2px;word-wrap: break-word;"><p>'+ data.responseText + '</p></div>');
+        		
         	}); 
 		});
 	
@@ -181,7 +186,7 @@ function updateTicketInZendesk(plugin_id,element){
 				}, 2000);
 			}).error(function(data) { 
        			$('#zendesk_messageModal').remove();
-        		alert(data.responseText); 
+				$('#Zendesk').html('<div style="margin: 0px 2px 10px 2px;word-wrap: break-word;"><p>'+ data.responseText + '</p></div>');
         	}); 
 		});
 }

@@ -32,11 +32,13 @@ $(function() {
 	
 });
 
-function setupStripeOAuth(plugin_id) {	
+function setupStripeOAuth(plugin_id) {
 	
-	 var url = '/scribe?service=stripe&return_url=' + encodeURIComponent(window.location.href) + '&plugin_id=' + encodeURIComponent(plugin_id);
-
-	 $('#Stripe').html('<p>Once linked with Stripe, Agile will show the payment history from this contact here. </p><a href="' + url + '" style="margin-bottom: 10px;"><img src="/img/plugins/stripe-connect-button.png" width="190" height="33"></a>');	
+	$('#Stripe').html(LOADING_HTML);
+	var url = '/scribe?service=stripe&return_url=' + encodeURIComponent(window.location.href) 
+				+ '&plugin_id=' + encodeURIComponent(plugin_id);	 
+	$('#Stripe').html('<p>Stripe enables individuals and businesses to accept payments over the internet </p><a href="' 
+			+ url + '"><img src="/img/plugins/stripe-connect-button.png" width="190" height="33"  style="margin-bottom: 10px;"></a>');	
 		
 	
 }
@@ -44,10 +46,13 @@ function setupStripeOAuth(plugin_id) {
 function showStripeProfile(plugin_id,customer_id){
 	
 	
-	
+	$('#Stripe').html(LOADING_HTML);
 	$.get("/core/api/widgets/stripe/" + plugin_id + "/" +  customer_id, function(data){
 		
-		console.log("Stripe user data : "+ data);
+		
 		$('#Stripe').html(getTemplate("stripe-profile", JSON.parse(data)));
-	});
+		
+	}).error(function(data) { 			
+		$('#Stripe').html('<div style="margin: 0px 2px 10px 2px;word-wrap: break-word;"><p>'+ data.responseText + '</p></div>');
+    }); 
 }

@@ -2,39 +2,68 @@
 	<div style="display:inline;  line-height:13px;word-wrap: break-word;">
 	    <div style="margin-bottom: 10px;">
 			<div style="margin-bottom: 10px;border-bottom:1px solid #f5f5f5">
-				<h4 style="text-transform: capitalize;"><b>{{customer.activeCard.name}}</b></h4>
-				<p style="font-size: 13px;">{{customer.activeCard.addressState}}, {{customer.activeCard.addressCountry}}</p>
+				{{#if customer.activeCard.name}}
+					<h4 style="text-transform: capitalize;"><b>{{customer.activeCard.name}}</b></h4>
+				{{/if}}
+				{{#if customer.activeCard.addressState}}
+					<p style="font-size: 13px;">{{customer.activeCard.addressState}}
+						{{#if customer.activeCard.addressCountry}} 
+							, {{customer.activeCard.addressCountry}}</p>
+						{{/if}}
+				{{/if}}
 				<div style="margin-bottom: 10px;">
 					<b>Id:</b> {{customer.id}}
 				</div>
 			</div>			
-			<div style="margin-bottom: 10px;">
+			<div style="margin-bottom: 10px;border-bottom:1px solid #f5f5f5">
 				<div style="margin-bottom: 7px;">
 					<b>Subscription Details</b>
 				</div>			
-				<table class="row-fluid" style="text-align:center;margin-bottom: 10px;+">
+				<table class="row-fluid" style="margin-bottom: 10px;line-height: 16px;table-layout:fixed;">
 					<tr>
-						<th>Start Date </th>
-						<th>End Date </th>
-					<tr>
-						<td>{{epochToHumanDate "mm-dd-yyyy" customer.subscription.start}}</td>
-						<td>{{epochToHumanDate "mm-dd-yyyy" customer.subscription.currentPeriodEnd}}</td>
+						<th style="vertical-align: top;">Start Date </th>
+						<td style="vertical-align: top;">
+							<span class="pull-left">:</span>
+							<div style="margin-left: 10px;">
+								{{epochToHumanDate "mm-dd-yyyy" customer.subscription.start}}
+							</div>
+						</td>
 					</tr>
-				</table>
-			</div>
-			<div style="margin-bottom: 10px;border-bottom:1px solid #f5f5f5">
-				<div style="margin-bottom: 5px;">
-					<b>Current Plan</b>
-				</div>
-				<table class="row-fluid" style="text-align:center;margin-bottom: 10px;">
 					<tr>
-						<th>Plan </th>
-						<th>Interval </th>
-						<th>Amount </th>
+						<th style="vertical-align: top;">End Date </th>						
+						<td style="vertical-align: top;">
+							<span class="pull-left">:</span>
+							<div style="margin-left: 10px;">
+								{{epochToHumanDate "mm-dd-yyyy" customer.subscription.currentPeriodEnd}}
+							</div>
+						</td>
+					</tr>
 					<tr>
-						<td>{{customer.subscription.plan.id}}</td>
-						<td>{{customer.subscription.plan.interval}}</td>
-						<td>{{customer.subscription.plan.amount}}</td>
+						<th style="vertical-align: top;">Current Plan </th>						
+						<td style="vertical-align: top;">
+							<span class="pull-left">:</span>
+							<div style="margin-left: 10px;">
+								{{customer.subscription.plan.id}}
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th style="vertical-align: top;">Interval </th>						
+						<td style="vertical-align: top;">
+							<span class="pull-left">:</span>
+							<div style="margin-left: 10px;">
+								{{customer.subscription.plan.interval}}
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th style="vertical-align: top;">Amount </th>						
+						<td style="vertical-align: top;">
+							<span class="pull-left">:</span>
+							<div style="margin-left: 10px;">
+								{{customer.subscription.plan.amount}}
+							</div>
+						</td>
 					</tr>
 				</table>
 			</div>
@@ -44,7 +73,7 @@
 				<b>Payment Details</b>
 			</div>	
 			{{#each invoice}}	
-				<table class="row-fluid table table-bordered" style="line-height:13px;margin-bottom:5px;" >
+				<table class="row-fluid table table-bordered" style="line-height:13px;margin-bottom:10px;">
 					
 						<tr><th style="padding: 5px;">Plan</th>
 							<td style="padding: 5px;">Default</td>
