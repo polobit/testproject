@@ -85,6 +85,9 @@ public class SendMail
     public static final String CHARGEBACK_NOTICE = "chargeback_notice";
     public static final String CHARGEBACK_NOTICE_SUBJECT = "[Payment dispute] Agile CRM chargeback resolution steps";
 
+    public static final String DUE_TASK_REMINDER = "due_task_reminder";
+    public static final String DUE_TASK_REMINDER_SUBJECT = "Your Due Tasks.";
+
     /**
      * From Name of email.
      */

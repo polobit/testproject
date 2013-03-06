@@ -115,6 +115,15 @@
  	<servlet-name>Reports</servlet-name>
  	<url-pattern>/backend/cron/reports/*</url-pattern>
  </servlet-mapping>
+ 
+ <servlet>
+ <servlet-name>TaskReminder</servlet-name>
+ <servlet-class>com.agilecrm.TaskReminderServlet</servlet-class>
+ </servlet>
+ <servlet-mapping>
+ <servlet-name>TaskReminder</servlet-name>
+ <url-pattern> /backend/cron/tasks</url-pattern>
+ </servlet-mapping>
 
 <servlet>
  	<servlet-name>Stripe Webhook</servlet-name>
@@ -287,5 +296,5 @@
  <servlet-name>ICalendarServlet</servlet-name>
  <url-pattern>/backend/ical/*</url-pattern>
  </servlet-mapping>
- 
+  
 </web-app>

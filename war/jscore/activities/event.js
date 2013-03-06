@@ -112,7 +112,26 @@ $(function() {
 		showMeridian : false,
 		template : 'modal'
 	});
-
+	
+	/**
+	 * Activates time picker for start time to the fields with class update-start-timepicker
+	 */
+	$('.update-start-timepicker').timepicker({
+		defaultTime : 'current',
+		showMeridian : false,
+		template : 'modal'
+	});
+	
+	
+	/**
+	 * Activates time picker for end time to the fields with class update-end-timepicker
+	 */
+	$('.update-end-timepicker').timepicker({
+		defaultTime : get_hh_mm(true),
+		showMeridian : false,
+		template : 'modal'
+	});
+	
 	/**
 	 * Sets the start time with current time and end time half an hour more than
 	 * start time, when they have no values by the time the modal is shown.

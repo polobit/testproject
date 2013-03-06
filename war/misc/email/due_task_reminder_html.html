@@ -1,0 +1,59 @@
+<body>
+	<div>
+		<div
+			style="background-color: #8A6086; font-family: Arial, sans-serif; padding: 5px">
+			<div
+				style="min-height: 36px; font-size: 14px; font-weight: bold; padding-bottom: 4px">
+				<table style="width: 100%">
+					<tbody>
+						<tr>
+							<td valign="middle" height="32px"
+								style="padding: 0; color: white">Due Tasks for Today</td>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div
+				style="font-size: 14px; background-color: #fff; padding: 10px 7px 7px 7px">
+				<p>*****This is an automated email. Please do not reply*****</p>
+				<table width="100%" cellpadding="5" cellspacing="0"style:"margin-top:-40px">
+					<thead>
+						<tr bgcolor="#CCCCCC">
+							<th align="left" style="font-size: 12px"><strong>Subject</strong></th>
+							<th align="left" style="font-size: 12px"><strong>Type</strong></th>
+							<th align="left" style="font-size: 12px"><strong>Priority</strong></th>
+		      				<th align="left" style="font-size: 12px"><strong>Due</strong></th>
+						</tr>
+					</thead>
+					<tbody>
+						{{#tasks}}
+						<tr>
+						   <td align="left" style="font-size: 12px">{{subject}}</td>
+						   <td align="left" style="font-size: 12px">{{type}}</td>
+						   <td align="left" style="font-size: 12px">{{priority_type}}</td>
+						   <td align="left" style="font-size: 12px">{{due_date}}</td>
+						</tr>
+						{{/tasks}}
+				
+					</tbody>
+				</table>
+
+				<br />
+				<p style="font-weight: bold;">Have questions or need help?</p>
+				<p>Our customer service and support team is here to help you any
+					way we can. Please email us at support@agilecrm.com</p>
+				<p>Thanks for being a valued customer.</p>
+				<br /> Best Wishes, <br /> AgileCRM Support. <br />
+				http://www.agilecrm.com
+				<div style="text-align: right">
+					<a href="{{domain}}.agilecrm.com" target="_blank"> <img
+						style="border: 0; margin-top: 10px"
+						src="https://agilecrm.s3.amazonaws.com/email/agilecrm-logo.jpg"
+						alt="Logo for AgileCRM" />
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
