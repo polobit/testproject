@@ -28,6 +28,12 @@ public class SendMail
     public static final String NEW_USER_INVITED = "new_user_invited";
     public static final String NEW_USER_INVITED_SUBJECT = "New User Invitation";
 
+    public static final String USER_ENABLED_NOTIFICATION = "user_enabled";
+    public static final String USER_ENABLED_SUBJECT = "User Enabled Notification";
+
+    public static final String USER_DISABLED_NOTIFICATION = "user_disabled";
+    public static final String USER_DISABLED_SUBJECT = "User Disabled Notification";
+
     public static final String FORGOT_PASSWORD = "forgot_password";
     public static final String FORGOT_PASSWORD_SUBJECT = "Your new Agile CRM password";
 

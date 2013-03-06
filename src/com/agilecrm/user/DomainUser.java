@@ -226,6 +226,27 @@ public class DomainUser extends Cursor
 			    "Super user should be Admin and cannot be disabled.");
 		}
 	    }
+
+	    // To send enabled/disabled user email notification
+	    if (domainUser.is_disabled != this.is_disabled)
+	    {
+		try
+		{
+		    if (domainUser.is_disabled == true)
+			SendMail.sendMail(this.email,
+				SendMail.USER_ENABLED_SUBJECT,
+				SendMail.USER_ENABLED_NOTIFICATION, this);
+		    else
+			SendMail.sendMail(this.email,
+				SendMail.USER_DISABLED_SUBJECT,
+				SendMail.USER_DISABLED_NOTIFICATION, this);
+
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+	    }
 	}
 
 	// User cannot be admin and disabled
