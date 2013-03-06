@@ -212,7 +212,7 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
        if(data.updateStream && data.updateStream.length != 0)
        {    	    
         	$('#linkedin_update_heading').show();
-        	$('#linkedin_table').append(getTemplate("linkedin-update-stream", data.updateStream));
+        	$('#linkedin_social_stream').append(getTemplate("linkedin-update-stream", data.updateStream));
         	update_stream_length = data.updateStream.length;
         	return;
         }
@@ -229,7 +229,8 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
     	e.preventDefault();
     
     	//$("#linkedin_social_stream").html(LOADING_HTML);
-    	var end_time = $('#linkedin_table tr').eq(-2).attr('update_time');
+    
+    	var end_time = $('div#linkedin_social_stream').find('div#linkedin_status:last').attr('update_time');
     	
     	console.log(end_time);
     	if(!end_time){
@@ -255,14 +256,14 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
 				return;
 			}
     		
-    		 $("#linkedin_table").append(getTemplate("linkedin-update-stream", data));
+    		 $("#linkedin_social_stream").append(getTemplate("linkedin-update-stream", data));
     		 console.log(data);
     		 
     		 $('#linkedin_current_activity',$('#Linkedin')).hide();
     		 $('#linkedin_refresh_stream').show();
     	}).error(function(data) { 
     		
-    		$("#linkedin_table").remove();   		
+    		$("#linkedin_stream").remove();   		
     		alert(data.responseText); 
     	}); 
     });
@@ -288,7 +289,7 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
    
     $('#linkedin_refresh_stream').die().live('click', function (e) {
     	e.preventDefault();
-    	$('#linkedin_table').html(LOADING_HTML);
+    	$('#linkedin_social_stream').html(LOADING_HTML);
     	$.getJSON("/core/api/widgets/updates/" + plugin_id + "/" + linkedin_id, function(data){
     		
     		if(data.length == 0)
@@ -299,10 +300,10 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
     		$("#linkedin_stream").show();
     		$('#linkedin_less').hide();
     		$('#linkedin_refresh_stream').show();
-    		$("#linkedin_table").html(getTemplate("linkedin-update-stream", data));
+    		$("#linkedin_social_stream").html(getTemplate("linkedin-update-stream", data));
     		
     	}).error(function(data) {  		
-    		
+    		$("#linkedin_social_stream").remove();
     		alert(data.responseText); 
     	}); 
     });

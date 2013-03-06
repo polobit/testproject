@@ -235,7 +235,7 @@ function showTwitterProfile(twitter_id, plugin_id) {
     	 if(Twitter_current_update_id)
        	 {        
        		$('#twitter_update_heading',$('#Twitter')).show();
-       		$('#twitter_current_activity',$('#Twitter')).show();
+       		$('#twitter_current_activity',$('#Twitter')).show();           
        	 }    
     	
      }).error(function(data) {    	 

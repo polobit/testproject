@@ -3,7 +3,6 @@
  */
 function loadWidgets(el, contact)
 {
-
     // Create Data JSON
     var data = {
         contact: contact

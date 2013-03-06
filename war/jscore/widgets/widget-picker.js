@@ -44,6 +44,11 @@ $(function() {
 			'click',
 			function(e) {
 
+				if ($(this).attr("disabled"))
+			        return;
+			    
+			    $(this).attr("disabled", "disabled");
+			    
 				// Reads the name of the widget to be added
 				var widget_name = $(this).attr('widget-name');
 				if (Catalog_Widgets_View == null) {

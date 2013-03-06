@@ -78,7 +78,7 @@ function setUpTwilio(data, numbers){
 	 
 	head.js("https://static.twilio.com/libs/twiliojs/1.1/twilio.min.js", function(){
 		  			  
-		$("#Twilio").html(getTemplate("twilio-profile", numbers));	
+			
 		
 		
 		Twilio.Device.setup(data);
@@ -98,6 +98,7 @@ function setUpTwilio(data, numbers){
 	
 	    Twilio.Device.ready(function() {
 	      console.log("ready");
+	      $("#Twilio").html(getTemplate("twilio-profile", numbers));
 	      $("#twilio_call").show();
 	    });
 	
@@ -179,7 +180,7 @@ function setUpTwilio(data, numbers){
 	
 	
 	
-	    $("#twilio_hangup").click(function(e) {
+	    $("#twilio_hangup").die().live('click', function(e) {
 	    	e.preventDefault();
 	    	console.log("disconnected");
 	        Twilio.Device.disconnectAll();
