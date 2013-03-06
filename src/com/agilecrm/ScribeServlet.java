@@ -316,6 +316,17 @@ public class ScribeServlet extends HttpServlet
 
 	String url;
 	Token token = null;
+
+	// On oauth cancel
+	if (serviceName == null)
+	{
+	    String return_url = (String) req.getSession().getAttribute(
+		    "return_url");
+
+	    // Redirect URL
+	    resp.sendRedirect(return_url);
+	    return;
+	}
 	if (serviceName.equalsIgnoreCase("Stripe"))
 	{
 	    url = service.getAuthorizationUrl(null);
