@@ -215,6 +215,10 @@ $(function(){
 
 $(function(){
 	
+	$(".tooltip_info").die().live("hover", function() {
+		 $(this).tooltip('show');
+		});
+	
 	/**
 	 * Adds score to a contact (both in UI and back end)
 	 * When '+' symbol is clicked in contact detail view score section, the score

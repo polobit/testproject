@@ -8,13 +8,15 @@ if user exists,it is redirected to login page in the same domain otherwise it is
 
 //If Email is present
 String domain = request.getParameter("subdomain");
-
-if(!StringUtils.isEmpty(domain))
-{
-	response.sendRedirect("https://" + domain + ".agilecrm.com/login");
-	return;
+if(request.getAttribute("to")  != null) {
+    String redirect = (String)request.getAttribute("to");
+    System.out.println(domain + " to " + redirect);
+	if(!StringUtils.isEmpty(domain))
+	{
+		response.sendRedirect("https://" + domain + ".agilecrm.com/" + redirect);
+		return;
+	}
 }
-
 %>
 
 <!DOCTYPE html>
@@ -111,9 +113,9 @@ padding-left:10px!important;
 		
 		</div>
 	</div>
-	<div style="text-align: center; line-height: 19px;">
+	 <div style="text-align: center; line-height: 19px;">
 	   Not yet created domain? <a href="/choose-domain">Click here</a><br/>
-	   Forgot <a href="/forgot-password">Password? </a><a href="/forgot-domain">Domain?</a>
+	   <!-- Forgot <a href="/forgot-password">Password? </a><a href="/forgot-domain">Domain?</a> -->
 	</div>
 </div>
 
