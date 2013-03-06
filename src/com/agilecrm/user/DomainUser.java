@@ -261,9 +261,8 @@ public class DomainUser extends Cursor
 	{
 	    try
 	    {
-		SendMail.sendMail(this.email,
-			SendMail.NEW_USER_INVITED_SUBJECT,
-			SendMail.NEW_USER_INVITED, this);
+		SendMail.sendMail(this.email, SendMail.WELCOME_SUBJECT,
+			SendMail.WELCOME, this);
 
 	    }
 	    catch (Exception e)

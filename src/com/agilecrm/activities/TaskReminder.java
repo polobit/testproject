@@ -3,7 +3,7 @@ package com.agilecrm.activities;
 import java.io.IOException;
 import java.util.Set;
 
-import com.agilecrm.activities.deferred.TaskRemainderDeferredTask;
+import com.agilecrm.activities.deferred.TaskReminderDeferredTask;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
@@ -30,19 +30,17 @@ import com.google.appengine.api.taskqueue.TaskOptions;
  * @author Rammohan
  * 
  */
-public class TaskRemainder
+public class TaskReminder
 {
-    public static void dailyTaskRemainder() throws IOException
+    public static void dailyTaskReminder() throws IOException
     {
-
 	Set<String> domains = NamespaceUtil.getAllNamespaces();
 
 	for (String domain : domains)
 	{
-
 	    NamespaceManager.set(domain);
 
-	    TaskRemainderDeferredTask taskReminderDeferredTask = new TaskRemainderDeferredTask(
+	    TaskReminderDeferredTask taskReminderDeferredTask = new TaskReminderDeferredTask(
 		    domain);
 	    Queue queue = QueueFactory.getDefaultQueue();
 	    queue.add(TaskOptions.Builder.withPayload(taskReminderDeferredTask));

@@ -18,7 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.activities.Task;
-import com.agilecrm.activities.TaskRemainder;
+import com.agilecrm.activities.TaskReminder;
 import com.agilecrm.activities.util.TaskUtil;
 
 /**
@@ -197,7 +197,7 @@ public class TasksAPI
     {
 	try
 	{
-	    TaskRemainder.dailyTaskRemainder();
+	    TaskReminder.dailyTaskReminder();
 	}
 	catch (IOException e)
 	{

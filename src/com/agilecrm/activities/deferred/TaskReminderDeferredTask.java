@@ -1,15 +1,17 @@
 package com.agilecrm.activities.deferred;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.TaskUtil;
+import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
-import com.agilecrm.util.Util;
+import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.googlecode.objectify.Key;
 
@@ -22,7 +24,7 @@ import com.googlecode.objectify.Key;
  * 
  */
 @SuppressWarnings("serial")
-public class TaskRemainderDeferredTask implements DeferredTask
+public class TaskReminderDeferredTask implements DeferredTask
 {
 
     /**
@@ -36,7 +38,7 @@ public class TaskRemainderDeferredTask implements DeferredTask
      * @param domain
      *            name as string
      */
-    public TaskRemainderDeferredTask(String domain)
+    public TaskReminderDeferredTask(String domain)
     {
 	this.domain = domain;
     }
@@ -50,6 +52,10 @@ public class TaskRemainderDeferredTask implements DeferredTask
     {
 	List<com.agilecrm.user.DomainUser> domainUsers = DomainUserUtil
 		.getUsers(domain);
+
+	if (domainUsers == null)
+	    return;
+
 	for (DomainUser domainUser : domainUsers)
 	{
 	    AgileUser agileUser = AgileUser
@@ -69,8 +75,21 @@ public class TaskRemainderDeferredTask implements DeferredTask
 	    if (taskList == null)
 		continue;
 
-	    Util.sendMail("test@example.com", "Ram", domainUser.email,
-		    "Task Reminder", "test@example.com", "html", null);
+	    String date = null;
+
+	    // Changes time in milliseconds to Date format.
+	    for (Task task : taskList)
+	    {
+		date = SearchUtil.getDateWithoutTimeComponent(task.due * 1000);
+	    }
+
+	    HashMap map = new HashMap();
+	    map.put("tasks", taskList);
+	    map.put("due_date", date);
+
+	    SendMail.sendMail(domainUser.email,
+		    SendMail.DUE_TASK_REMINDER_SUBJECT,
+		    SendMail.DUE_TASK_REMINDER, map);
 	}
     }
 }
