@@ -10,6 +10,10 @@ $(function () {
     LINKEDIN_PLUGIN_HEADER = '<div></div>';
     
     Linkedin_current_profile_user_name = "";
+    
+    Linkedin_loading_image = '<center><img id="status_load" src='+
+		'\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;"></img></center>';
+    
     // Gets plugin id from plugin object, fetched using script API
     var plugin_id = agile_crm_get_plugin(LINKEDIN_PLUGIN_NAME).id;
     // Gets Plugin Prefs, required to check whether to show setup button or matching profiles
@@ -228,7 +232,11 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
     $('.linkedin_stream').die().live('click', function (e) {
     	e.preventDefault();
     
-    	//$("#linkedin_social_stream").html(LOADING_HTML);
+    	$("#linkedin_social_stream").append(Linkedin_loading_image);
+    	
+    	var that = this;
+    	$(this).removeClass('twitter_stream');
+    	
     
     	var end_time = $('div#linkedin_social_stream').find('div#linkedin_status:last').attr('update_time');
     	
@@ -243,26 +251,34 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
     		return;
     	}    		
     	
-    	$.getJSON("/core/api/widgets/updates/more/" + plugin_id + "/" + linkedin_id + "/0/5/1262304000/" + end_time, function(data){
-    		if(data.length == 0)
-			{    	
-    			 alert("No more updates available");    			 
-        		 $('#linkedin_refresh_stream').show();
-        		 
-        		 if(update_stream_length > 3){
-        			 $("#linkedin_stream").hide();
-        			 $('#linkedin_less').show();
-        		 }
-				return;
-			}
+    	$.getJSON("/core/api/widgets/updates/more/" + plugin_id + "/" + linkedin_id + "/0/5/1262304000/" + end_time, 
+    			function(data){
+    				
+    				$('#status_load').remove();
+    				$(that).addClass('linkedin_stream');
     		
-    		 $("#linkedin_social_stream").append(getTemplate("linkedin-update-stream", data));
-    		 console.log(data);
-    		 
-    		 $('#linkedin_current_activity',$('#Linkedin')).hide();
-    		 $('#linkedin_refresh_stream').show();
+		    		if(data.length == 0)
+					{    	
+		    			 alert("No more updates available");    			 
+		        		 $('#linkedin_refresh_stream').show();
+		        		 
+		        		 if(update_stream_length > 3){
+		        			 $("#linkedin_stream").hide();
+		        			 $('#linkedin_less').show();
+		        		 }
+						return;
+					}
+		    		
+		    		 $("#linkedin_social_stream").append(getTemplate("linkedin-update-stream", data));
+		    		 console.log(data);
+		    		 
+		    		 $('#linkedin_current_activity',$('#Linkedin')).hide();
+		    		 $('#linkedin_refresh_stream').show();
+		    		 
     	}).error(function(data) { 
     		
+    		$('#status_load').remove();
+			$(that).addClass('linkedin_stream');
     		$("#linkedin_stream").remove();   		
     		alert(data.responseText); 
     	}); 
@@ -288,8 +304,10 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
    
    
     $('#linkedin_refresh_stream').die().live('click', function (e) {
-    	e.preventDefault();
-    	$('#linkedin_social_stream').html(LOADING_HTML);
+    	e.preventDefault();    	
+    	
+    	$("#linkedin_social_stream").html(Linkedin_loading_image);
+    	
     	$.getJSON("/core/api/widgets/updates/" + plugin_id + "/" + linkedin_id, function(data){
     		
     		if(data.length == 0)
@@ -302,7 +320,9 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
     		$('#linkedin_refresh_stream').show();
     		$("#linkedin_social_stream").html(getTemplate("linkedin-update-stream", data));
     		
-    	}).error(function(data) {  		
+    	}).error(function(data) {  	
+    		
+    		$('#status_load').remove();
     		$("#linkedin_social_stream").remove();
     		alert(data.responseText); 
     	}); 

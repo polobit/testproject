@@ -15,6 +15,10 @@ $(function () {
     var plugin_id = agile_crm_get_plugin(TWITTER_PLUGIN_NAME).id;
     // Get Plugin Prefs
     var plugin_prefs = agile_crm_get_plugin_prefs(TWITTER_PLUGIN_NAME);
+    
+    Loading_image = '<center><img id="tweet_load" src='+
+	'\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;"></img></center>';
+    
     // If not found - considering first time usage of widget, setupLinkedinOAuth
     // called
     if (plugin_prefs == undefined) {
@@ -243,8 +247,15 @@ function showTwitterProfile(twitter_id, plugin_id) {
     }); 
     
     $('.twitter_stream').die().live('click', function (e) {
+    	
     	e.preventDefault();
     	
+    	var that = this;
+    	$(this).removeClass('twitter_stream');
+    	
+    	$("#twitter_social_stream").append(Loading_image);
+    	
+    	    	
     	var tweet_id = $('div#twitter_social_stream').find('div#twitter_status:last').attr('status_id');    	
     	console.log(tweet_id);
     	
@@ -257,8 +268,14 @@ function showTwitterProfile(twitter_id, plugin_id) {
     		return;
     	}    
     	
-    	$.getJSON("/core/api/widgets/updates/more/" + plugin_id + "/" + twitter_id + "/" + tweet_id + "/5" , function (data)  {    					
+    	$.getJSON("/core/api/widgets/updates/more/" + plugin_id + "/" + twitter_id + "/" + tweet_id + "/5" ,
+    			
+    			function (data)  {    					
     		    		console.log(data);
+    		    		
+    		    		$('#tweet_load').remove();
+    		    		$(that).addClass('twitter_stream');
+    		    		
     		    		if(data.length == 0)
 		    			{   
     		    			alert("No more updates available");
@@ -268,18 +285,21 @@ function showTwitterProfile(twitter_id, plugin_id) {
     		        		return;
 		    			}
     		    		
-    		 if(!Twitter_current_update_id){
-    			 $('#twitter_update_heading',$('#Twitter')).show(); 
-    		 }
-    		 
-    		 
-    		 $("#twitter_social_stream").append(getTemplate("twitter-update-stream", data)); 
-    		 $('#twitter_current_activity',$('#Twitter')).hide();
-    		 $('#twitter_refresh_stream').show();
+			    		 if(!Twitter_current_update_id){
+			    			 $('#twitter_update_heading',$('#Twitter')).show(); 
+			    		 }
+			    		 
+			    		 
+			    		 $("#twitter_social_stream").append(getTemplate("twitter-update-stream", data)); 
+			    		 $('#twitter_current_activity',$('#Twitter')).hide();
+			    		 $('#twitter_refresh_stream').show();
     		 
     	}).error(function(data) { 
+    		
+    		 $('#tweet_load').remove();
+    		 $(that).addClass('twitter_stream');
     		 $("#twitter_stream").remove();
-    		alert(data.responseText); 
+    		 alert(data.responseText); 
     	}); 
     });
     
@@ -306,7 +326,9 @@ function showTwitterProfile(twitter_id, plugin_id) {
     
     $('#twitter_refresh_stream').die().live('click', function (e) {
     	e.preventDefault();
-    	$('#twitter_social_stream').html(LOADING_HTML);
+    	
+    	$("#twitter_social_stream").html(Loading_image);
+    	
     	$.getJSON("/core/api/widgets/updates/" + plugin_id + "/" + twitter_id, function(data){ 		
     		
     		if(data.length != 0)
@@ -319,7 +341,7 @@ function showTwitterProfile(twitter_id, plugin_id) {
     		$("#twitter_social_stream").html(getTemplate("twitter-update-stream", data));
     		
     	}).error(function(data) {  		
-    		$('#twitter_social_stream').remove();
+    		$('#tweet_load').remove();
     		alert(data.responseText); 
     	}); 
     });
