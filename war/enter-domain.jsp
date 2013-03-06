@@ -5,19 +5,18 @@
 It checks if any user exists in that domain,
 if user exists,it is redirected to login page in the same domain otherwise it is redirected to register page.
 */
-String error = "";
-String success = "";
+
 //If Email is present
 String domain = request.getParameter("subdomain");
-
-if(!StringUtils.isEmpty(domain))
-{
-    
-	  //  success = "Entering " + domain;
-		response.sendRedirect("https://" + domain + ".agilecrm.com/login");
+if(request.getAttribute("to")  != null) {
+    String redirect = (String)request.getAttribute("to");
+    System.out.println(domain + " to " + redirect);
+	if(!StringUtils.isEmpty(domain))
+	{
+		response.sendRedirect("https://" + domain + ".agilecrm.com/" + redirect);
 		return;
+	}
 }
-
 %>
 
 <!DOCTYPE html>
@@ -102,17 +101,6 @@ padding-left:10px!important;
 				 <h1>Enter Your Domain</h1>
 				 <form name='choose_domain' id="choose_domain" method='post' style="padding:10px 0 15px;border-top: 1px dotted #CCC;">
 						<div id="domain-error"></div>
-						<% if(!StringUtils.isEmpty(error)){%>
-					 <div class="alert alert-error login-error">
-						<a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
-					</div>
-					<%}%>
-					
-					 <% if(!StringUtils.isEmpty(success)){%>
-					<div class="alert alert-success login-success">
-						<a class="close" data-dismiss="alert" href="#">×</a><%=success%> 
-					</div>
-					 <%}%>
 					 <h3><small>Enter your domain at Agile CRM</small></h3>
 					 <div style="padding-top:10px;">
           				<input id='subdomain' type="text" placeholder="Enter Your domain"
@@ -125,9 +113,9 @@ padding-left:10px!important;
 		
 		</div>
 	</div>
-	<div style="text-align: center; line-height: 19px;">
+	 <div style="text-align: center; line-height: 19px;">
 	   Not yet created domain? <a href="/choose-domain">Click here</a><br/>
-	   Forgot <a href="/forgot-password">Password </a><a href="/forgot-domain">Domain</a>
+	   <!-- Forgot <a href="/forgot-password">Password? </a><a href="/forgot-domain">Domain?</a> -->
 	</div>
 </div>
 
@@ -167,7 +155,7 @@ padding-left:10px!important;
 		});
 		function isNotValid(subdomain) {
 			subdomain = subdomain.toString();
-			var sub_domain = ["my", "agile", "googleapps", "sales", "support", "login", "register"];
+			var sub_domain = ["my", "agile", "googleapps", "sales", "support", "login", "register", "google", "yahoo"];
 			for(var key in sub_domain){
 				if(sub_domain[key] == subdomain.toLowerCase()){
 					error = "Common domain cannot be created.";

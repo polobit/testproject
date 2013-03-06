@@ -170,9 +170,9 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 					
 			</div>
 			<div style="text-align: center;line-height: 19px;">
-	                 Already have an account? <a href="/login">Login</a><br/>
-	                 Forgot <a href="/forgot-password">Password</a>
-               </div>
+	                 Already have an account? <a class="to" to="login" href="/enter-domain">Login</a><br/>
+	                 Forgot <a class="to" to="password" href="/forgot-password">Password</a>
+            </div>
 		</div>
 		
 		<script type="text/javascript">
@@ -188,6 +188,21 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 				$('#oauth').submit();
 				
 				e.preventDefault();
+				
+			});
+			
+			$(".to").click(function(e) {
+				e.preventDefault();
+				var data = $(this).closest("a").attr('to');
+				    <% String redirect;%>
+				if(data == "login")
+					<% redirect = "login";%>
+				else
+					<% redirect = "forgot-password";%>
+				<%
+				request.setAttribute("to", redirect);
+				response.sendRedirect("/enter-domain");
+				%>
 				
 			});
              

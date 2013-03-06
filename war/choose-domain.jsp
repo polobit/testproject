@@ -133,8 +133,8 @@ padding-left:10px!important;
 		</div>
 	</div>
 	<div style="text-align: center; line-height: 19px;">
-	   Already Signed Up? <a href="/enter-domain">Login</a><br/>
-	   Forgot <a href="/forgot-domain">Domain</a>
+	   Already Signed Up? <a class="to" to="login" href="/enter-domain">Login</a><br/>
+	   Forgot  <a class="to" to="password" href="/forgot-password">Password? </a><a href="/forgot-domain">Domain?</a>
 	</div>
 </div>
 
@@ -170,11 +170,25 @@ padding-left:10px!important;
 				$('#choose_domain').submit();
 				e.preventDefault();
 			});
+			$(".to").click(function(e) {
+				e.preventDefault();
+				var data = $(this).closest("a").attr('to');
+				    <% String redirect;%>
+				if(data == "login")
+					<% redirect = "login";%>
+				else
+					<% redirect = "forgot-password";%>
+				<%
+				request.setAttribute("to", redirect);
+				response.sendRedirect("/enter-domain");
+				%>
+				
+			});
 
 		});
 		function isNotValid(subdomain) {
 			subdomain = subdomain.toString();
-			var sub_domain = ["my", "agile", "googleapps", "sales", "support", "login", "register"];
+			var sub_domain = ["my", "agile", "googleapps", "sales", "support", "login", "register", "google", "yahoo"];
 			for(var key in sub_domain){
 				if(sub_domain[key] == subdomain.toLowerCase()){
 					error = "Common domain cannot be created.";
