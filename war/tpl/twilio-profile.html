@@ -3,7 +3,9 @@
 		<div class="row-fluid" style="padding-bottom: 10px;">
 			<select name="number" id="contact_number" class="required span12" >
 				{{#each this}}
-					<option value="{{value}}">{{value}} ({{subtype}})</option>
+					<option value="{{value}}">{{value}} 
+      						{{#if subtype}}({{subtype}}){{/if}}
+     				</option>
 				{{/each}}
 			</select>			
 			<a href="#call" class="btn btn-mini btn-primary" id="twilio_call" style="font-size:13px;display:none;">

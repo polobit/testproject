@@ -1,7 +1,7 @@
 <script id="contacts-grid-model-template" type="text/html">
 <div class="span3" style="padding-bottom:10px;margin-left:20px !important">
   {{#if_contact_type "PERSON"}}
-    <div style="border: 1px solid #DDD;border-radius:4px;padding: 10px;background-color:#f5f5dc"><input class="tbody_check right" type="checkbox"/>
+    <div style="border: 1px solid #DDD;border-radius:4px;padding: 10px;background-color:#f5f5dc"id={{id}}><input class="tbody_check right" type="checkbox"/>
 	  <div style="display:inline;padding-right:10px;height:auto;">
         <img class="thumbnail" src="{{gravatarurl properties 50}}" width="50px" height="50px" style="display:inline" />
       </div>
@@ -21,7 +21,7 @@
   {{/if_contact_type}}
 
   {{#if_contact_type "COMPANY"}}
-    <div style="border: 1px solid #DDD;border-radius:4px;padding: 10px;background-color:#f5f5dc"><input class="tbody_check right" type="checkbox"/>
+    <div style="border: 1px solid #DDD;border-radius:4px;padding: 10px;background-color:#f5f5dc" id={{id}}><input class="tbody_check right" type="checkbox"/>
 	  <div style="display:inline;padding-right:10px;height:auto;">
         <img class="thumbnail" src="img/company.png" width="40px" height="40px" style="display:inline" />
       </div>
@@ -39,13 +39,39 @@
 <script id="contacts-grid-collection-template" type="text/html">
 <div class="row">
     <div class="span12">
-        <div class="page-header">
-            <h1>Contacts <small> {{count}}</small></h1>
+<div class="page-header">
+			<h1>
+				Contacts <small> {{count}}</small>
+			</h1>
+
+			<div class="btn-group pull-left" id="bulk-actions"
+				style="position: relative; display: none; top: -29px; margin-left: -20px;">
+				<div class="btn-group offset3">
+  						<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"> Bulk Actions
+    							<span class="caret"></span>
+ 	 					</a>
+  						    </button>
+                    <ul class="dropdown-menu" id="view-actions">
+                        <li>
+                            <a href="#" id="bulk-owner">Change owner</a>
+                        </li>
+                        <li>
+                            <a href="#" id="bulk-campaigns">Add to campaign</a>	
+                        </li>
+                        <li class="hide">
+                            <a href="#" id="bulk-email">Send email</a>
+                        </li>
+                        <li>
+                            <a href="#" id="bulk-tags">Add tags</a>
+                        </li>
+                    </ul>
+					</div>
+				</div>
             <div class="btn-group right" id="view-list" style="top:-29px;position:relative"></div>
             <div class="btn-group right" id="filter-list" style="top:-29px;position:relative;margin-right:5px"></div>
+		</div>
         </div>
     </div>
-</div>
 <div class="row">
     <div class="span3">
         <div class="data-block">
@@ -70,26 +96,7 @@
         {{#if this.length}}
         <div class="data">
             <div class="data-container">
-                <div class="btn-group right" id="bulk-actions" style="position:relative; display:none">
-                    <button class="btn">Bulk Actions</button>
-                    <button class="btn dropdown-toggle" data-toggle="dropdown" id="view-actions"><span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" id="view-actions">
-                        <li>
-                            <a href="#" id="bulk-owner">Change owner</a>
-                        </li>
-                        <li>
-                            <a href="#" id="bulk-campaigns">Add to campaign</a>	
-                        </li>
-                        <li class="hide">
-                            <a href="#" id="bulk-email">Send email</a>
-                        </li>
-                        <li>
-                            <a href="#" id="bulk-tags">Add tags</a>
-                        </li>
-                    </ul>
-                </div>
-                <div id="contacts-grid-model-list" class="contacts-model-list" route="contact/"  url="core/api/contacts/bulk" style="overflow:auto;">
+                <div id="contacts-grid-model-list" class="contacts-model-list .showCheckboxes" route="contact/"  url="core/api/contacts/bulk" style="overflow:auto;">
                 </div>
             </div>
         </div>
