@@ -7,16 +7,21 @@ if user exists,it is redirected to login page in the same domain otherwise it is
 */
 
 //If Email is present
+
+String redirect = (String)session.getAttribute("redirect");
+session.removeAttribute("redirect");
+
 String domain = request.getParameter("subdomain");
-if(request.getAttribute("to")  != null) {
-    String redirect = (String)request.getAttribute("to");
-    System.out.println(domain + " to " + redirect);
+String redirectTo = request.getParameter("redirect");
+if(redirectTo  != null)
+{
 	if(!StringUtils.isEmpty(domain))
 	{
-		response.sendRedirect("https://" + domain + ".agilecrm.com/" + redirect);
+		response.sendRedirect("https://" + domain + ".agilecrm.com/" + redirectTo);
 		return;
 	}
 }
+
 %>
 
 <!DOCTYPE html>
@@ -105,6 +110,7 @@ padding-left:10px!important;
 					 <div style="padding-top:10px;">
           				<input id='subdomain' type="text" placeholder="Enter Your domain"
 						   	   name="subdomain" class="input-medium field required" autocapitalize="off"><b> .agilecrm.com</b>
+						<input type="hidden" name="redirect" value="<%=redirect%>"/> 	   
 				   </div>
 				</form>
 				<div style="margin-left:30%"><input class="btn btn-large btn-primary" type="submit" value="Submit"></div>
@@ -115,8 +121,8 @@ padding-left:10px!important;
 	</div>
 	 <div style="text-align: center; line-height: 19px;">
 	   Not yet created domain? <a href="/choose-domain">Click here</a><br/>
-	   <!-- Forgot <a href="/forgot-password">Password? </a><a href="/forgot-domain">Domain?</a> -->
-	</div>
+	   Forgot <a href="/forgot-domain">Domain?</a>
+	 </div>
 </div>
 
 

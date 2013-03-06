@@ -12,6 +12,15 @@ if(error != null)
     System.out.println(error);
 else
     error = "";
+
+String pageDirect = request.getParameter("to");
+if(!StringUtils.isEmpty(pageDirect))
+{
+    session.setAttribute("redirect", pageDirect);
+    response.sendRedirect("/enter-domain");
+	return;
+}
+
 %>
 
 <!DOCTYPE html>
@@ -170,8 +179,8 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 					
 			</div>
 			<div style="text-align: center;line-height: 19px;">
-	                 Already have an account? <a class="to" to="login" href="/enter-domain">Login</a><br/>
-	                 Forgot <a class="to" to="password" href="/forgot-password">Password</a>
+	                 Already have an account? <a href="/register?to=login">Login</a><br/>
+	                 Forgot <a href="/register?to=forgot-password">Password?</a>
             </div>
 		</div>
 		
@@ -191,7 +200,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 				
 			});
 			
-			$(".to").click(function(e) {
+<%-- 			$(".to").click(function(e) {
 				e.preventDefault();
 				var data = $(this).closest("a").attr('to');
 				    <% String redirect;%>
@@ -204,14 +213,14 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 				response.sendRedirect("/enter-domain");
 				%>
 				
-			});
+			}); --%>
              
 			// Submits the Agile form to to RegisterServlet
 			$("#agile").validate({
 				 submitHandler: function(form) {
 					   form.submit();
 					 }
-					});
+			});
 			
 		});
 		
