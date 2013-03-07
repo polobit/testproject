@@ -333,10 +333,9 @@ function get_property_JSON(contactJSON)
 function populate_send_email_details(el){
 	 // Add From address to the form (FROM - current user email)
 	 var CurrentuserModel = Backbone.Model.extend({
-	     url: '/core/api/current-user',
-	     restKey: "domainUser"
+	     url: '/core/api/imap',
+	     //restKey: "domainUser"
 	});
-	 
 	var currentuserModel = new CurrentuserModel();
 	currentuserModel.fetch({success: function(data){
 			var model = data.toJSON();
