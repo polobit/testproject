@@ -14,6 +14,7 @@ import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.util.DateUtil;
 import com.google.appengine.api.search.Cursor;
 import com.google.appengine.api.search.Index;
+import com.google.appengine.api.search.Query;
 import com.google.appengine.api.search.QueryOptions;
 import com.google.appengine.api.search.ScoredDocument;
 import com.googlecode.objectify.Objectify;
@@ -235,16 +236,12 @@ public class QueryDocument implements QueryInterface
 	 * Set query options only to get id of document (enough to get get
 	 * respective contacts)
 	 */
-	QueryOptions options = QueryOptions
-		.newBuilder()
-		.setFieldsToReturn("id")
-		.setCursor(
-			Cursor.newBuilder().setPerResult(true).build("true:2"))
-		.build();
+	QueryOptions options = QueryOptions.newBuilder()
+		.setFieldsToReturn("id").build();
 
 	// Build query on query options
-	com.google.appengine.api.search.Query query_string = com.google.appengine.api.search.Query
-		.newBuilder().setOptions(options).build(query);
+	Query query_string = Query.newBuilder().setOptions(options)
+		.build(query);
 
 	// Get results on query
 	Index index = null;
@@ -265,13 +262,12 @@ public class QueryDocument implements QueryInterface
 	if (index == null)
 	    return null;
 
-	System.out.println(index.search(query_string).getCursor());
-
 	// Gets sorted documents
 	Collection<ScoredDocument> contact_documents = index.search(
 		query_string).getResults();
 
-	System.out.println("contact results : " + contact_documents);
+	System.out.println("contact results without cursor : "
+		+ contact_documents);
 
 	List<Long> entity_ids = new ArrayList<Long>();
 
@@ -279,7 +275,6 @@ public class QueryDocument implements QueryInterface
 	// to list
 	for (ScoredDocument doc : contact_documents)
 	{
-	    System.out.println(doc.getCursor().toWebSafeString());
 	    entity_ids.add(Long.parseLong(doc.getId()));
 	}
 
@@ -351,7 +346,7 @@ public class QueryDocument implements QueryInterface
 	// to list
 	for (ScoredDocument doc : contact_documents)
 	{
-	    System.out.println(doc.getCursor().toWebSafeString());
+
 	    entity_ids.add(Long.parseLong(doc.getId()));
 	    cursor = doc.getCursor().toWebSafeString();
 	}
@@ -362,6 +357,7 @@ public class QueryDocument implements QueryInterface
 	Collection<Contact> contactResults = ofy.get(Contact.class, entity_ids)
 		.values();
 	int max = contactResults.size();
+
 	int countOfContacts = 0;
 	for (Contact contact : contactResults)
 	{
@@ -372,7 +368,6 @@ public class QueryDocument implements QueryInterface
 	    }
 	}
 
-	System.out.println(contactResults);
 	return contactResults;
 
     }

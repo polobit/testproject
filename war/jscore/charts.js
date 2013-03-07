@@ -185,9 +185,14 @@ function pieMilestones() {
 					pie : {
 						allowPointSelect : true,
 						cursor : 'pointer',
-						dataLabels : {
-							enabled : false
-						},
+						  dataLabels: {
+		                        enabled: true,
+		                        color: '#000000',
+		                        connectorColor: '#000000',
+		                        formatter: function() {
+		                        	 return this.percentage.toFixed(2) +' %';
+		                        }
+		                    },
 						showInLegend : true
 					}
 				},
@@ -259,9 +264,14 @@ function pieTags() {
 					pie : {
 						allowPointSelect : true,
 						cursor : 'pointer',
-						dataLabels : {
-							enabled : false
-						},
+					      dataLabels: {
+		                        enabled: true,
+		                        color: '#000000',
+		                        connectorColor: '#000000',
+		                        formatter: function() {
+		                        return this.percentage.toFixed(2) +' %';
+		                        }
+		                    },
 						showInLegend : true
 					}
 				},

@@ -190,11 +190,13 @@ public class LoginServlet extends HttpServlet
 		.println("subdomain to login is : " + subdomain.toLowerCase());
 
 	if (!subdomain.equalsIgnoreCase(domainUser.domain))
-	    throw new Exception(
-		    "User with same email address already exists in our system for "
-			    + domainUser.domain + " domain. <a href=https://"
-			    + domainUser.domain
-			    + ".agilecrm.com> Click here</a> to continue");
+	    if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
+		throw new Exception(
+			"User with same email address is registered in "
+				+ domainUser.domain
+				+ " domain. <a href=https://"
+				+ domainUser.domain
+				+ ".agilecrm.com> Click here</a> to continue");
 
 	// Set Cookie and forward to /home
 	UserInfo userInfo = new UserInfo("agilecrm.com", email, domainUser.name);
