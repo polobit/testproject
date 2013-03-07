@@ -232,10 +232,7 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
     $('.linkedin_stream').die().live('click', function (e) {
     	e.preventDefault();
     
-    	$("#linkedin_social_stream").append(Linkedin_loading_image);
     	
-    	var that = this;
-    	$(this).removeClass('twitter_stream');
     	
     
     	var end_time = $('div#linkedin_social_stream').find('div#linkedin_status:last').attr('update_time');
@@ -250,6 +247,11 @@ function showLinkedinProfile(linkedin_id, plugin_id) {
     		alert("Member does not share his/her updates. Get connected");
     		return;
     	}    		
+    	
+    	$("#linkedin_social_stream").append(Linkedin_loading_image);
+    	
+    	var that = this;
+    	$(this).removeClass('twitter_stream');
     	
     	$.getJSON("/core/api/widgets/updates/more/" + plugin_id + "/" + linkedin_id + "/0/5/1262304000/" + end_time, 
     			function(data){
