@@ -12,6 +12,7 @@ import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.email.SendMail;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.googlecode.objectify.Key;
 
@@ -50,46 +51,65 @@ public class TaskReminderDeferredTask implements DeferredTask
      */
     public void run()
     {
-	List<com.agilecrm.user.DomainUser> domainUsers = DomainUserUtil
-		.getUsers(domain);
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set(domain);
 
-	if (domainUsers == null)
-	    return;
-
-	for (DomainUser domainUser : domainUsers)
+	try
 	{
-	    AgileUser agileUser = AgileUser
-		    .getCurrentAgileUserFromDomainUser(domainUser.id);
+	    List<com.agilecrm.user.DomainUser> domainUsers = DomainUserUtil
+		    .getUsers(domain);
 
-	    if (agileUser == null)
-		continue;
+	    System.out
+		    .println("List of Domain Users in DeferredTask of TaskReminder "
+			    + domainUsers);
 
-	    UserPrefs userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
+	    System.out.println("Namespace in deferred task "
+		    + NamespaceManager.get());
 
-	    if (!userPrefs.task_reminder)
-		continue;
+	    if (domainUsers == null)
+		return;
 
-	    List<Task> taskList = TaskUtil.getPendingTasksToRemind(1,
-		    new Key<AgileUser>(AgileUser.class, agileUser.id));
-
-	    if (taskList == null)
-		continue;
-
-	    String date = null;
-
-	    // Changes time in milliseconds to Date format.
-	    for (Task task : taskList)
+	    for (DomainUser domainUser : domainUsers)
 	    {
-		date = SearchUtil.getDateWithoutTimeComponent(task.due * 1000);
+		AgileUser agileUser = AgileUser
+			.getCurrentAgileUserFromDomainUser(domainUser.id);
+
+		if (agileUser == null)
+		    continue;
+
+		UserPrefs userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
+
+		if (!userPrefs.task_reminder)
+		    continue;
+
+		List<Task> taskList = TaskUtil.getPendingTasksToRemind(1,
+			new Key<AgileUser>(AgileUser.class, agileUser.id));
+
+		if (taskList == null)
+		    continue;
+
+		String date = null;
+
+		// Changes time in milliseconds to Date format.
+		for (Task task : taskList)
+		{
+		    date = SearchUtil
+			    .getDateWithoutTimeComponent(task.due * 1000);
+		    break;
+		}
+
+		HashMap map = new HashMap();
+		map.put("tasks", taskList);
+		map.put("due_date", date);
+
+		SendMail.sendMail(domainUser.email,
+			SendMail.DUE_TASK_REMINDER_SUBJECT,
+			SendMail.DUE_TASK_REMINDER, map);
 	    }
-
-	    HashMap map = new HashMap();
-	    map.put("tasks", taskList);
-	    map.put("due_date", date);
-
-	    SendMail.sendMail(domainUser.email,
-		    SendMail.DUE_TASK_REMINDER_SUBJECT,
-		    SendMail.DUE_TASK_REMINDER, map);
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
 	}
     }
 }
