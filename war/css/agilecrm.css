@@ -58,7 +58,7 @@
 
 	/*searchForm */
 	.navbar-search {
-		padding-left: 5%
+		/*padding-left: 5%*/
 	}
 }
 /*dropdown*/
@@ -514,7 +514,7 @@ html {
 	background-color: transparent; /*important*/
 	position: absolute; /*important*/
 	top: 5px;
-	left: 265px;
+	left: 210px;
 	width: 16px;
 	height: 16px;
 }

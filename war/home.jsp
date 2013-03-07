@@ -119,7 +119,7 @@ String CSS_PATH = "/";
 					    UserInfo user = SessionManager.get();
 					%>
 			<form id="searchForm" class=" navbar-search"
-						style="display: inline;">
+						style="display: inline;margin:5px;">
 						<input id="searchText" type="text" data-provide="typeahead"
 							class="typeahead typeahead_contacts search-query"
 							placeholder="Search"></input> <input id="search-results"
