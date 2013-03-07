@@ -159,7 +159,7 @@ public class RedirectServlet extends HttpServlet
 
 	    // Add them to Queue
 	    Queue queue = QueueFactory.getDefaultQueue();
-	    queue.add(withUrl("/worker")
+	    queue.add(withUrl("/backend/worker")
 		    .param(TaskQueueServlet.TASK_QUEUE_COMMAND_INTERRUPT_TASKLET_CUSTOM1,
 			    urlShortener.tracker_id));
 	}
