@@ -270,6 +270,9 @@ $(function(){
 		// Converts text to float
 		var sub_score = parseFloat($('#lead-score').text());
 		
+		if(sub_score <= 0)
+			return;
+		
 		sub_score = sub_score - 1;
 		
 		// Changes score in UI

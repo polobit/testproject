@@ -9,14 +9,6 @@ String error = "";
 String success = "";
 //If Email is present
 
-String pageDirect = request.getParameter("to");
-if(!StringUtils.isEmpty(pageDirect))
-{
-    session.setAttribute("redirect", pageDirect);
-    response.sendRedirect("/enter-domain");
-	return;
-}
-
 String domain = request.getParameter("subdomain");
 if(!StringUtils.isEmpty(domain))
 {
@@ -141,8 +133,8 @@ padding-left:10px!important;
 		</div>
 	</div>
 	<div style="text-align: center; line-height: 19px;">
-	   Already Signed Up? <a href="/choose-domain?to=login">Login</a><br/>
-	   Forgot <a href="/choose-domain?to=forgot-password">Password?</a> <a href="/forgot-domain">Domain?</a>
+	   Already Signed Up? <a href="/enter-domain?to=login">Login</a><br/>
+	   Forgot <a href="/enter-domain?to=forgot-password">Password?</a> <a href="/forgot-domain">Domain?</a>
 	</div>
 </div>
 
