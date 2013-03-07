@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
@@ -228,6 +229,8 @@ public class ContactDocument implements BuilderInterface
 
 		String normalizedTag = SearchUtil.normalizeString(tag);
 
+		System.out.println(StringUtils.isBlank(normalizedTag));
+
 		Long TagCreationTimeInMills = tagsMappedWithTime.get(tag);
 
 		/*
@@ -235,6 +238,9 @@ public class ContactDocument implements BuilderInterface
 		 */
 		Date TagCreatedDate = DateUtils.truncate(new Date(
 			TagCreationTimeInMills), Calendar.DATE);
+
+		if (!normalizedTag.matches("^[A-Za-z][A-Za-z0-9_]"))
+		    continue;
 
 		// Adds Other fields in contacts to document
 		doc.addField(Field.newBuilder()
