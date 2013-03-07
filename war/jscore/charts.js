@@ -181,21 +181,27 @@ function pieMilestones() {
 					pointFormat : '{series.name}: <b>{point.percentage}%</b>',
 					percentageDecimals : 1
 				},
-				plotOptions : {
-					pie : {
-						allowPointSelect : true,
-						cursor : 'pointer',
-						  dataLabels: {
-		                        enabled: true,
-		                        color: '#000000',
-		                        connectorColor: '#000000',
-		                        formatter: function() {
-		                        	 return this.percentage.toFixed(2) +' %';
-		                        }
-		                    },
-						showInLegend : true
-					}
-				},
+				 plotOptions : {
+				     pie : {
+				      allowPointSelect : true,
+				      cursor : 'pointer',
+				      borderWidth: 0,
+				      dataLabels : {
+				       enabled : true,
+				       color : '#000000',
+				       connectorColor : '#000000',
+				       connectorWidth: 0,
+				       formatter : function() {
+				        if(this.percentage <= 2)
+				         return "";
+				        return '<b>' + this.point.name + '</b>: '
+				          + (this.percentage).toFixed(2) + ' %';
+				       },
+				             distance: 5
+				      },
+				      showInLegend : true
+				     }
+				 },
 				series : [ {
 					type : 'pie',
 					name : 'Milestone',
@@ -260,21 +266,27 @@ function pieTags() {
 					pointFormat : '{series.name}: <b>{point.percentage}%</b>',
 					percentageDecimals : 1
 				},
-				plotOptions : {
-					pie : {
-						allowPointSelect : true,
-						cursor : 'pointer',
-					      dataLabels: {
-		                        enabled: true,
-		                        color: '#000000',
-		                        connectorColor: '#000000',
-		                        formatter: function() {
-		                        return this.percentage.toFixed(2) +' %';
-		                        }
-		                    },
-						showInLegend : true
-					}
-				},
+				 plotOptions : {
+				     pie : {
+				      allowPointSelect : true,
+				      cursor : 'pointer',
+				      borderWidth: 0,
+				      dataLabels : {
+				       enabled : true,
+				       color : '#000000',
+				       connectorColor : '#000000',
+				       connectorWidth: 0,
+				       formatter : function() {
+				        if(this.percentage <= 2)
+				         return "";
+				        return '<b>' + this.point.name + '</b>: '
+				          + (this.percentage).toFixed(2) + ' %';
+				       },
+				             distance: 5
+				      },
+				      showInLegend : true
+				     }
+				 },
 				series : [ {
 					type : 'pie',
 					name : 'Tag',

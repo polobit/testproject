@@ -250,10 +250,7 @@ function showTwitterProfile(twitter_id, plugin_id) {
     	
     	e.preventDefault();
     	
-    	var that = this;
-    	$(this).removeClass('twitter_stream');
     	
-    	$("#twitter_social_stream").append(Loading_image);
     	
     	    	
     	var tweet_id = $('div#twitter_social_stream').find('div#twitter_status:last').attr('status_id');    	
@@ -267,6 +264,11 @@ function showTwitterProfile(twitter_id, plugin_id) {
     		alert("Member does not share his/her updates. Follow him and try");
     		return;
     	}    
+    	
+    	var that = this;
+    	$(this).removeClass('twitter_stream');
+    	
+    	$("#twitter_social_stream").append(Loading_image);
     	
     	$.getJSON("/core/api/widgets/updates/more/" + plugin_id + "/" + twitter_id + "/" + tweet_id + "/5" ,
     			
