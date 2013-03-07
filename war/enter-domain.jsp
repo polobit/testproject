@@ -8,11 +8,8 @@ if user exists,it is redirected to login page in the same domain otherwise it is
 
 //If Email is present
 
-String redirect = (String)session.getAttribute("redirect");
-session.removeAttribute("redirect");
-
 String domain = request.getParameter("subdomain");
-String redirectTo = request.getParameter("redirect");
+String redirectTo = request.getParameter("to");
 if(redirectTo  != null)
 {
 	if(!StringUtils.isEmpty(domain))
@@ -110,8 +107,7 @@ padding-left:10px!important;
 					 <div style="padding-top:10px;">
           				<input id='subdomain' type="text" placeholder="Enter Your domain"
 						   	   name="subdomain" class="input-medium field required" autocapitalize="off"><b> .agilecrm.com</b>
-						<input type="hidden" name="redirect" value="<%=redirect%>"/> 	   
-				   </div>
+				     </div>
 				</form>
 				<div style="margin-left:30%"><input class="btn btn-large btn-primary" type="submit" value="Submit"></div>
 				

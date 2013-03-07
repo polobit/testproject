@@ -13,14 +13,6 @@ if(error != null)
 else
     error = "";
 
-String pageDirect = request.getParameter("to");
-if(!StringUtils.isEmpty(pageDirect))
-{
-    session.setAttribute("redirect", pageDirect);
-    response.sendRedirect("/enter-domain");
-	return;
-}
-
 %>
 
 <!DOCTYPE html>
@@ -179,8 +171,8 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 					
 			</div>
 			<div style="text-align: center;line-height: 19px;">
-	                 Already have an account? <a href="/register?to=login">Login</a><br/>
-	                 Forgot <a href="/register?to=forgot-password">Password?</a>
+	                 Already have an account? <a href="/enter-domain?to=login">Login</a><br/>
+	                 Forgot <a href="/enter-domain?to=forgot-password">Password?</a>
             </div>
 		</div>
 		
