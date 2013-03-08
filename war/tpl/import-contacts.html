@@ -22,39 +22,7 @@
     </div>
 </form>
 <br />		
-<div class="row">
-    <div class="span5">
-        <div class="alert alert-error fname-not-found-error" style="display:none">
-            <a class="close" data-dismiss="alert" href="#">×</a> 
-            First Name is mandatory. Please select first name.  
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="span5">
-        <div class="alert alert-error lname-not-found-error" style="display:none">
-            <a class="close" data-dismiss="alert" href="#">×</a> 
-            Last Name is mandatory. Please select last name.  
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="span5">
-        <div class="alert alert-error fname-duplicate-error" style="display:none">
-            <a class="close" data-dismiss="alert" href="#">×</a>
-            You have assigned First Name to more than one element. 
-            Please ensure that first name is assigned to only one element. 
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="span5">
-        <div class="alert alert-error lname-duplicate-error" style="display:none">
-            <a class="close" data-dismiss="alert" href="#">×</a>
-            You have assigned Last Name to more than one element. 
-            Please ensure that last name is assigned to only one element. 
-        </div>
-    </div>
+<div id="import-validation-error">
 </div>
 <table class="table table-bordered table-striped" style="border-collapse: collapse;">
     <thead>
@@ -77,9 +45,9 @@
                         <option value="properties_work-phone">Work</option>
                         <option value="properties_mobile-phone">Mobile</option>
                         <option value="properties_main-phone">Main</option>
-                        <option value="properties_home-fax">Home fax</option>
-                        <option value="properties_work-fax">Work fax</option>
-                        <option value="properties_other">Other</option>
+                        <option value="properties_home fax-phone">Home fax</option>
+                        <option value="properties_work fax-phone">Work fax</option>
+                        <option value="properties_other-phone">Other</option>
                     </optgroup>
                     <optgroup label="Website">
                         <option value="properties_URL-website">Website</option>
@@ -96,8 +64,8 @@
                     </optgroup>
                     <optgroup label="Address">
                         <option value="home-address">Home</option>
-                        <option value="postal-address">Postal</option>
-                        <option value="office-address">Office</option>
+                        <option value="address">Postal</option>
+                        <option value="address">Office</option>
                         <option value="city">City</option>
                         <option value="state">State</option>
                         <option value="zip">Zip</option>
@@ -119,4 +87,15 @@
 </table>
 <a class="btn btn-primary" id="import-contacts">Import</a>
 <a class="btn" id="import-cancel" style="margin-left:2px">Cancel</a>
+</script>
+
+<script id="import-contacts-validation-message-template" type="text/html">
+<div class="row">
+    <div class="span5">
+        <div class="alert alert-error import_contact_error">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+          {{error_message}}
+        </div>
+    </div>
+</div>
 </script>

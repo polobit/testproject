@@ -39,15 +39,39 @@ $(function(){
 	 * checks are passed, the request the backend to save the contacts
 	 */
 	 $('#import-contacts').die().live('click', function (e) {
+		 e.preventDefault();
 		 
+		 var upload_valudation_errors= {
+				 "first_name_missing" : {
+					 "error_message" : "First Name is mandatory. Please select first name."   
+				 }, 
+				 "last_name_missing" : {
+					 "error_message" : "Last Name is mandatory. Please select lname."   
+				 },
+				 "first_name_duplicate" : {
+					 "error_message" : " You have assigned First Name to more than one element. Please ensure that first name is assigned to only one element. "
+				 },
+				 "last_name_duplicate" : {
+					 "error_message" :   "You have assigned Last Name to more than one element. Please ensure that last name is assigned to only one element." 
+				 },
+				 "company_duplicate" : {
+					 "error_message" :  "You have assigned Company to more than one element. Please ensure that last name is assigned to only one element."
+				 },
+				 "job_title_duplicate" : {
+					 "error_message" :  "You have assigned job description to more than one element. Please ensure that last name is assigned to only one element."
+				 }
+		 }
+		 
+		 
+		 alert('validating');
 		 	var models = [];
 		 
-		 	// Hide the alerts
-		 	$(".fname-not-found-error").hide();
-		 	$(".lname-not-found-error").hide();
-		 	$(".fname-duplicate-error").hide();
-		 	$(".lname-duplicate-error").hide();
-		 
+		 // Hide the alerts
+	 	$(".import_contact_error").hide();
+		 	
+		 	
+
+		 	
 		 	// Headings validation Rammohan: 10-09-12
 		 	/*
 		 	 * Reads all the table heading set after importing contacts list from 
@@ -62,21 +86,37 @@ $(function(){
 		 	var lastNameCount = $(".import-select").filter(function() {
 				 return $(this).val() == "properties_last_name";
 			 });
+		 	
+		 	var company = $(".import-select").filter(function() {
+				 return $(this).val() == "properties_company";
+			 });
+		 	
+		 	var job_title = $(".import-select").filter(function() {
+				 return $(this).val() == "properties_title";
+			 });
  
 		 	if(firstNameCount.length == 0){ 
-		 		$(".fname-not-found-error").show();
+		 		$("#import-validation-error").html(getTemplate("import-contacts-validation-message", upload_valudation_errors.first_name_missing));
 		 		return false;
 		 	}
 		 	else if(lastNameCount.length == 0){
-		 		$(".lname-not-found-error").show();
+		 		$("#import-validation-error").html(getTemplate("import-contacts-validation-message", upload_valudation_errors.last_name_missing));
 		 		return false;
 		 	}
 		 	else if(firstNameCount.length > 1){
-		 		$(".fname-duplicate-error").show();
+		 		$("#import-validation-error").html(getTemplate("import-contacts-validation-message", upload_valudation_errors.first_name_duplicate));
 		 		return false;
 		 	}
 		 	else if(lastNameCount.length > 1){
-		 		$(".lname-duplicate-error").show();
+		 		$("#import-validation-error").html(getTemplate("import-contacts-validation-message", upload_valudation_errors.last_name_duplicate));
+		 		return false;
+		 	}
+		 	else if(company.length > 1){
+		 		$("#import-validation-error").html(getTemplate("import-contacts-validation-message", upload_valudation_errors.company_duplicate));
+		 		return false;
+		 	}
+		 	else if(job_title.length > 1){
+		 		$("#import-validation-error").html(getTemplate("import-contacts-validation-message", upload_valudation_errors.job_title_duplicate));	
 		 		return false;
 		 	}
 		 	
@@ -86,7 +126,7 @@ $(function(){
 		 	$waiting =  $('<div style="display:inline-block;padding-left:5px"><small><p class="text-success"><i><span id="status-message">Please wait</span></i></p></small></div>');
     		$waiting.insertAfter($('#import-contacts'));
     		
-    		 var model = {};
+    		
     		
     		/*
     		 * Iterates through all tbody tr's and reads the table heading from the 
@@ -94,15 +134,23 @@ $(function(){
     		 * value as ContactField properties.
     		 */
 	        $('#import-tbody tr').each(function () {
+	        	var model = {};
 	            var properties = [];
 	            
 	            $(this).find("td").each(function (i) {
 
 	            	// Empty property map (Represents ContactField in contact.java)
 	                var property = {};
+	                var property_address = {};
 	                
 	                // Read the name of the property from table heading
 	                var name = $(this).parents('table').find('th').eq(i).find('select').val();
+	                
+	                
+	                if(name.indexOf("properties_address_") != -1)
+	                {
+	                	name = name.split("properties_address_")[1];
+	                }
 	                
 	                if(name.indexOf("properties_") != -1)
 	                {
@@ -115,6 +163,18 @@ $(function(){
 	                		var type = splits[0];
 	                		property["subtype"] = type;
 	                	}
+	                	
+
+		                var value = $(this).html();
+		                //console.log("Column value is " + value);
+
+		                // Set the value and name fields
+		                property["value"] = value;
+		                property["name"] = name;
+
+		                // Push in to properties array (represents ContactField array)
+		                properties.push(property);
+
 	                }
 	                
 	                else
@@ -125,8 +185,18 @@ $(function(){
 	                		
 	                			var tags = [];
 	                			tags.push($(this).html());
-	                			console.log(tags);
-	                			model.tags = tags;
+	                			
+	                			if(isArray(model.tags))
+	                			{
+	                				$.each(tags, function(index, value){
+	        	            			model.tags.push(value);
+	        	            		});
+	                			}		
+	                			else
+	                			{
+	                				model.tags = tags;
+	                			}
+	                			
 	                	}
 	                	else
 	                	{
@@ -134,19 +204,8 @@ $(function(){
 	                	}
 	                }
 
-	                var value = $(this).html();
-	                //console.log("Column value is " + value);
-
-	                // Set the value and name fields
-	                property["value"] = value;
-	                property["name"] = name;
-
-	                // Push in to properties array (represents ContactField array)
-	                properties.push(property);
-
 	            });
 
-	           
 	            model.properties = properties;
 	            model.type = "PERSON";
 	            model.first_name = "uploaded";
