@@ -22,6 +22,9 @@ public class SendGridEmail
     // Post param to
     public static final String SENDGRID_API_PARAM_TO = "to";
 
+    // Post param replyto
+    public static final String SENDGRID_API_PARAM_REPLY_TO = "replyto";
+
     // Post param from
     public static final String SENDGRID_API_PARAM_FROM = "from";
     public static final String SENDGRID_API_PARAM_FROM_NAME = "fromname";
@@ -50,8 +53,10 @@ public class SendGridEmail
 	    String queryString = "";
 
 	    queryString = defaultQueryString + SENDGRID_API_PARAM_TO + "="
-		    + URLEncoder.encode(to) + "&" + SENDGRID_API_PARAM_SUBJECT
-		    + "=" + URLEncoder.encode(subject) + "&"
+		    + URLEncoder.encode(to) + "&" + SENDGRID_API_PARAM_REPLY_TO
+		    + "=" + URLEncoder.encode(replyTo) + "&"
+		    + SENDGRID_API_PARAM_SUBJECT + "="
+		    + URLEncoder.encode(subject) + "&"
 		    + SENDGRID_API_PARAM_FROM + "="
 		    + URLEncoder.encode(fromEmail) + "&"
 		    + SENDGRID_API_PARAM_FROM_NAME + "="
