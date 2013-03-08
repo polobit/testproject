@@ -197,7 +197,7 @@ function pieMilestones() {
 				        return '<b>' + this.point.name + '</b>: '
 				          + (this.percentage).toFixed(2) + ' %';
 				       },
-				             distance: 5
+				       distance: 5
 				      },
 				      showInLegend : true
 				     }
@@ -266,6 +266,9 @@ function pieTags() {
 					pointFormat : '{series.name}: <b>{point.percentage}%</b>',
 					percentageDecimals : 1
 				},
+			    legend: {
+			        itemWidth: 75,
+			    },
 				 plotOptions : {
 				     pie : {
 				      allowPointSelect : true,
@@ -282,7 +285,7 @@ function pieTags() {
 				        return '<b>' + this.point.name + '</b>: '
 				          + (this.percentage).toFixed(2) + ' %';
 				       },
-				             distance: 5
+				       distance: 5
 				      },
 				      showInLegend : true
 				     }

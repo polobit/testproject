@@ -21,6 +21,15 @@ var CONTENT_JSON = {
 		"modal_id" : "personModal",
 		"image" : "/img/clipboard.png"
 	},
+	"companies" : {
+		"title" : "You dont have any companies",
+		"description" : "You can add your company details.......etc...etc",
+		"learn_more" : "click here to learn more",
+		"button_text" : "Add Companies",
+		"route" : "#",
+		"modal_id" : "companyModal",
+		"image" : "/img/clipboard.png"
+	},
 	"workflows" : {
 		"title" : "You dont have any workflows",
 		"description" : "You can add your workflows details.......etc...etc",
@@ -76,6 +85,10 @@ function fillSlate(id, el) {
 		$("#" + id, el).html(
 				getTemplate("empty-collection-model",
 						CONTENT_JSON[Current_Route]));
+	if(readCookie('company_filter'))
+		$("#" + id, el).html(
+				getTemplate("empty-collection-model",
+						CONTENT_JSON["companies"]));
 
 }
 
