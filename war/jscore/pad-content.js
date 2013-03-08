@@ -81,14 +81,16 @@ function fillSlate(id, el) {
 
 	// If content for current route is available in the CONTENT_JSON, slate
 	// template is made with the content related to current route
-	if (CONTENT_JSON[Current_Route])
-		$("#" + id, el).html(
+	if (CONTENT_JSON[Current_Route]){
+		if((Current_Route == "contacts") && readCookie('company_filter'))
+			$("#" + id, el).html(
+					getTemplate("empty-collection-model",
+							CONTENT_JSON["companies"]));
+		else
+			$("#" + id, el).html(
 				getTemplate("empty-collection-model",
 						CONTENT_JSON[Current_Route]));
-	if(readCookie('company_filter'))
-		$("#" + id, el).html(
-				getTemplate("empty-collection-model",
-						CONTENT_JSON["companies"]));
+	}
 
 }
 
