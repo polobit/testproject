@@ -3,6 +3,8 @@ package com.agilecrm.contact.util;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.contact.Tag;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.googlecode.objectify.Key;
@@ -32,10 +34,13 @@ public class TagUtil
      */
     public static void updateTags(Set<String> tags)
     {
-
 	// Add to tags Library
 	for (String tagName : tags)
 	{
+	    // Checks for empty or null or whitespace(\s*) tag.
+	    if (StringUtils.isBlank(tagName))
+		continue;
+
 	    // Check if already present
 	    Tag tag = getTag(tagName);
 	    if (tag == null)
