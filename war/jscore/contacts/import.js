@@ -62,12 +62,10 @@ $(function(){
 				 }
 		 }
 		 
-		 
-		 alert('validating');
 		 	var models = [];
 		 
-		 // Hide the alerts
-	 	$(".import_contact_error").hide();
+		 	// Hide the alerts
+	 		$(".import_contact_error").hide();
 		 	
 		 	
 
@@ -181,8 +179,6 @@ $(function(){
 	                {
 	                	if(name.indexOf("tags") != -1)
 	                	{
-	                		alert("in else");
-	                		
 	                			var tags = [];
 	                			tags.push($(this).html());
 	                			
