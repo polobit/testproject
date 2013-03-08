@@ -37,7 +37,7 @@ $(function() {
 	 */
 	$('#update_event_validate').die().live('click', function(e) {
 		e.preventDefault();
-
+        console.log("Hi Update Event");
 		save_event('updateActivityForm', 'updateActivityModal', true, this);
 	});
 
@@ -187,25 +187,25 @@ function highlight_vent() {
  * @param {Number}
  *            endTime end time of an event
  */
-function is_valid_range(startDate, endDate, startTime, endTime) {
+function is_valid_range(startDate, endDate, startTime, endTime, modalName) {
 	if (endDate - startDate >= 86400000) {
 		return true;
 	} else if (startDate > endDate) {
-		$("#activityModal")
+		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
-						'<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#"></a>Start date should not be greater than end date. Please change.</div>');
+						'<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times</a>Start date should not be greater than end date. Please change.</div>');
 
 		return false;
 	} else if (startTime[0] > endTime[0]) {
-		$("#activityModal")
+		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
 						'<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater than end time. Please change.</div>');
 
 		return false;
 	} else if (startTime[0] == endTime[0] && startTime[1] >= endTime[1]) {
-		$("#activityModal")
+		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
 						'<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater or equal to end time. Please change.</div>');
@@ -253,8 +253,13 @@ function save_event(formId, modalName, isUpdate, saveBtn) {
 	// For validation
 	if (!is_valid_range(new Date(json.start).getTime(), new Date(json.end)
 			.getTime(), (json.start_time).split(":"), (json.end_time)
-			.split(":")))
+			.split(":"),modalName))
+		{
+		
+		// Removes disabled attribute of save button
+		$(saveBtn).removeAttr('disabled');
 		return;
+		}
 
 	// Show loading symbol until model get saved
 	$('#' + modalName).find('span.save-status').html(LOADING_HTML);
