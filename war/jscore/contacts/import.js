@@ -56,11 +56,11 @@ $(function(){
 		 	 * validations failed the error alerts a explaining the cause are shown
 		 	 */
 		 	var firstNameCount = $(".import-select").filter(function() {
-				 return $(this).val() == "first_name";
+				 return $(this).val() == "properties_first_name";
 			 });
 	
 		 	var lastNameCount = $(".import-select").filter(function() {
-				 return $(this).val() == "last_name";
+				 return $(this).val() == "properties_last_name";
 			 });
  
 		 	if(firstNameCount.length == 0){ 
@@ -86,6 +86,8 @@ $(function(){
 		 	$waiting =  $('<div style="display:inline-block;padding-left:5px"><small><p class="text-success"><i><span id="status-message">Please wait</span></i></p></small></div>');
     		$waiting.insertAfter($('#import-contacts'));
     		
+    		 var model = {};
+    		
     		/*
     		 * Iterates through all tbody tr's and reads the table heading from the 
     		 * table, push the table name as property name and value as property 
@@ -102,12 +104,34 @@ $(function(){
 	                // Read the name of the property from table heading
 	                var name = $(this).parents('table').find('th').eq(i).find('select').val();
 	                
-	                // Reads the sub type of the fields
-	                if (name.indexOf("-") != -1) {
-	                    var splits = name.split("-");
-	                    name = splits[1];
-	                    var type = splits[0];
-	                    property["sub_type"] = type;
+	                if(name.indexOf("properties_") != -1)
+	                {
+	                	name = name.split("properties_")[1];
+	                	console.log(name);
+	                	// Reads the sub type of the fields
+	                	if (name.indexOf("-") != -1) {
+	                		var splits = name.split("-");
+	                		name = splits[1];
+	                		var type = splits[0];
+	                		property["subtype"] = type;
+	                	}
+	                }
+	                
+	                else
+	                {
+	                	if(name.indexOf("tags") != -1)
+	                	{
+	                		alert("in else");
+	                		
+	                			var tags = [];
+	                			tags.push($(this).html());
+	                			console.log(tags);
+	                			model.tags = tags;
+	                	}
+	                	else
+	                	{
+	                		model[name] = $(this).html();
+	                	}
 	                }
 
 	                var value = $(this).html();
@@ -122,15 +146,22 @@ $(function(){
 
 	            });
 
-	            var model = {};
+	           
 	            model.properties = properties;
 	            model.type = "PERSON";
 	            model.first_name = "uploaded";
 	            model.last_name = "uploaded";
 
+	            console.log(model);
+	            
 	            // Add Tags
 	            var tags = get_tags('import-contact-tags');
-	            if (tags != undefined) model.tags = tags[0].value;
+	            if (tags != undefined) 
+	            	{
+	            		$.each(tags[0].value, function(index, value){
+	            			model.tags.push(value);
+	            		});
+	            	}
 
 	            // Pushes model (represents contact) in to an array of models 
 	            models.push(model);
@@ -150,6 +181,8 @@ $(function(){
 
 	        var contact = models;
 	        //contact.contact = models;
+	        
+	        console.log(contact);
 
 	        // List of contacts built out of csv, post request is sent to 
 	        // 'core/api/contacts/multi/upload' with list of contacts
