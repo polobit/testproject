@@ -42,7 +42,7 @@
 
 <script id="tasks-model-template" type="text/html">
 	<td style="border-top:1px dotted #DDD"> <input type="checkbox" data='{{id}}' class='tasks-select'> </td>
-	<td style="border-top:1px dotted #DDD"><p><span class="label">{{ucfirst type}}</span> <span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span> {{ subject}}</p>
+	<td style="border-top:1px dotted #DDD"><p style="text-overflow:ellipsis;overflow:hidden;white-space:nowrap;width:13em;"><span class="label">{{ucfirst type}}</span> <span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span> <br/> {{ subject}}</p>
         <span>due {{epochToTaskDate due}}</span>
 	</td>
 </script>
