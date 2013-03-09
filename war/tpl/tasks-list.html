@@ -29,14 +29,14 @@
 <script id="tasks-list-model-template" type="text/html">
 {{#if is_complete}}
 	<td style="text-decoration:line-through">{{epochToTaskDate due}}</td>
-	<td style="text-decoration:line-through">{{subject}}</td>
+	<td><div style="text-decoration:line-through;text-overflow:ellipsis;text-align:justify;white-space:nowrap;width:200px;overflow:hidden;">{{subject}}</div></td>
 	<td style="text-decoration:line-through">{{priority_type}}</td>
 	<td style="text-decoration:line-through">{{type}}</td>
 	<td style="text-decoration:line-through">{{task_status is_complete}}</td>
 <br />
 {{else}}
 	<td>{{epochToTaskDate due}}</td>
-	<td>{{subject}}</td>
+	<td><div style="overflow:hidden;text-overflow:ellipsis;text-align:justify;white-space:nowrap;width:200px;">{{subject}}</div></td>
 	<td>{{priority_type}}</td>
 	<td>{{type}}</td>
 	<td>{{task_status is_complete}}</td>
