@@ -163,7 +163,9 @@ $(function() {
 
 			for ( var i = 0, l = array.length; i < l; i++) {
 				var hrefTag = "#tags/" + array[i];
-				html += ("<a href=" + hrefTag + " >" + array[i] + "</a> ");
+				console.log(hrefTag);
+				
+				html += ('<a href=\"' + hrefTag + '\" >' + array[i] + '</a> ');
 			}
 			html += "</div></div>";
 
