@@ -14,6 +14,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -104,6 +105,8 @@ public class Task
     /**
      * Owner key of the task
      */
+    @NotSaved(IfDefault.class)
+    @Indexed
     private Key<AgileUser> owner = null;
 
     /**
@@ -174,11 +177,11 @@ public class Task
 	is_complete = true;
 	save();
     }
-    
+
     @JsonIgnore
     public void setOwner(Key<AgileUser> user)
     {
-    	owner = user;
+	owner = user;
     }
 
     /**
