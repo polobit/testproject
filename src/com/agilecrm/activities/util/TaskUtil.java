@@ -197,8 +197,8 @@ public class TaskUtil
 	    System.out.println("check for " + startTime + " " + endTime);
 
 	    // Gets list of tasks filtered on given conditions
-	    return dao.ofy().query(Task.class).filter("owner =", owner)
-		    .filter("due >=", startTime).filter("due <=", endTime)
+	    return dao.ofy().query(Task.class).filter("owner", owner)
+		    .filter("due >", startTime).filter("due <=", endTime)
 		    .filter("is_complete", false).list();
 	}
 	catch (Exception e)
