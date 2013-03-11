@@ -22,6 +22,7 @@ import com.google.code.linkedinapi.client.LinkedInApiClientFactory;
 import com.google.code.linkedinapi.client.NetworkUpdatesApiClient;
 import com.google.code.linkedinapi.client.enumeration.NetworkUpdateType;
 import com.google.code.linkedinapi.client.enumeration.ProfileField;
+import com.google.code.linkedinapi.client.enumeration.ProfileType;
 import com.google.code.linkedinapi.client.enumeration.SearchParameter;
 import com.google.code.linkedinapi.schema.Network;
 import com.google.code.linkedinapi.schema.People;
@@ -76,8 +77,6 @@ public class LinkedInUtil
 		.getProfileForCurrentUser(EnumSet.of(ProfileField.PICTURE_URL,
 			ProfileField.FIRST_NAME, ProfileField.LAST_NAME,
 			ProfileField.ID, ProfileField.DISTANCE));
-
-	System.out.println("profile: " + profile);
 
 	// Sets the user profiles details in to a map
 	Map<String, String> properties = new HashMap<String, String>();
@@ -167,13 +166,13 @@ public class LinkedInUtil
 
 	    // Sets number of connects if provided
 	    result.num_connections = (person.getNumConnections() != null) ? person
-		    .getNumConnections().toString() : "?";
+		    .getNumConnections().toString() : "";
 
 	    result.location = (person.getLocation() != null) ? person
-		    .getLocation().getName() : "?";
+		    .getLocation().getName() : "";
 
 	    result.distance = (person.getDistance() != null) ? person
-		    .getDistance().toString() : "?";
+		    .getDistance().toString() : "";
 
 	    // Add result wrapper object to the list
 	    searchResults.add(result);
@@ -449,6 +448,21 @@ public class LinkedInUtil
 	return "Shared Successfully";
     }
 
+    public static String getIdByUrl(Widget widget, String webUrl)
+    {
+
+	final LinkedInApiClient client = factory.createLinkedInApiClient(
+		widget.getProperty("token"), widget.getProperty("secret"));
+
+	// Creates a client specifying the fields to be returned
+	Person person = client.getProfileByUrl(webUrl, ProfileType.PUBLIC,
+		EnumSet.of(ProfileField.ID));
+
+	System.out.println(person.getId());
+	return person.getId();
+
+    }
+
     /**
      * Used to form a {@link List} of {@link SocialUpdateStream} from
      * {@link Network} object
@@ -516,4 +530,21 @@ public class LinkedInUtil
 
 	return list;
     }
+
+    /*
+     * public static void main(String[] args) {
+     * 
+     * final LinkedInApiClient client = factory.createLinkedInApiClient(
+     * "742877e1-5f85-4b49-a10c-08009f98005f",
+     * "846cae2c-d653-45bf-98b4-39c24655ba2d");
+     * 
+     * // Creates a client specifying the fields to be returned Person person =
+     * client.getProfileByUrl(
+     * "http://www.linkedin.com/pub/yaswanth-praveen/54/8a9/698",
+     * ProfileType.PUBLIC, EnumSet.of(ProfileField.ID));
+     * 
+     * System.out.println(person.getId());
+     * 
+     * }
+     */
 }

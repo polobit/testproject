@@ -754,6 +754,39 @@ public class WidgetsAPI
 
     }
 
+    @Path("getidbyurl/{widget-id}")
+    @POST
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public String getSocialIdByUrl(@PathParam("widget-id") Long widgetId,
+	    @FormParam("web_url") String webUrl)
+    {
+	try
+	{
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+	    if (widget == null)
+		return null;
+
+	    System.out.println("in widgets api");
+	    System.out.println(webUrl);
+	    // Profiles are searched based on first and last name of contact
+	    // Calls LinkedUtil method to send message to person by socialId
+	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
+		return LinkedInUtil.getIdByUrl(widget, webUrl);
+
+	    // Calls TwitterUtil method to send message to person by socialId
+	    else if (widget.name.equalsIgnoreCase("TWITTER"))
+		return TwitterUtil.getTwitterIdByUrl(widget, webUrl);
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+	return null;
+    }
+
     public static void main(String[] args)
     {
 	WidgetsAPI wid = new WidgetsAPI();

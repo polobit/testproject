@@ -383,4 +383,21 @@ public class TwitterUtil
 	return result.getTweets();
     }
 
+    public static String getTwitterIdByUrl(Widget widget, String webUrl)
+	    throws Exception
+    {
+
+	// Creates a twitter object to connect with twitter
+	Twitter twitter = getTwitter(widget);
+
+	if (!webUrl.startsWith("https://twitter.com/"))
+	    return null;
+
+	System.out.println(webUrl.substring(webUrl.lastIndexOf("/") + 1));
+	// Fetch Twitter user profile based on twitter Id
+	User user = twitter
+		.showUser(webUrl.substring(webUrl.lastIndexOf("/") + 1));
+
+	return String.valueOf(user.getId());
+    }
 }
