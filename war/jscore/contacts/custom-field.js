@@ -101,7 +101,7 @@ function show_custom_fields_helper(custom_fields, properties){
 		// If field type is list create a select dropdown
 		if(field.field_type.toLowerCase() == "list")
 		{
-			var list_values = [],list_options = "";
+			var list_values = [],list_options = '<option value="">Select</option>';
 			
 			// Split values at ";" to separate values of field_data (list options)
 			if(field.field_data)
