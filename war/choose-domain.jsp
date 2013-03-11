@@ -174,7 +174,7 @@ padding-left:10px!important;
 		});
 		function isNotValid(subdomain) {
 			subdomain = subdomain.toString();
-			var sub_domain = ["my", "agile", "googleapps", "sales", "support", "login", "register", "google", "yahoo"];
+			var sub_domain = ["my", "agile", "googleapps", "sales", "support", "login", "register", "google", "yahoo", "twitter", "facebook", "aol", "hotmail"];
 			for(var key in sub_domain){
 				if(sub_domain[key] == subdomain.toLowerCase()){
 					error = "Common domain cannot be created.";
