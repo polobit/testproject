@@ -97,23 +97,23 @@ $(function(){
 		 		$("#import-validation-error").html(getTemplate("import-contacts-validation-message", upload_valudation_errors.first_name_missing));
 		 		return false;
 		 	}
-		 	else if(lastNameCount.length == 0){
+		 	else if(lastNameCount.length == 0) {
 		 		$("#import-validation-error").html(getTemplate("import-contacts-validation-message", upload_valudation_errors.last_name_missing));
 		 		return false;
 		 	}
-		 	else if(firstNameCount.length > 1){
+		 	else if(firstNameCount.length > 1) {
 		 		$("#import-validation-error").html(getTemplate("import-contacts-validation-message", upload_valudation_errors.first_name_duplicate));
 		 		return false;
 		 	}
-		 	else if(lastNameCount.length > 1){
+		 	else if(lastNameCount.length > 1) {
 		 		$("#import-validation-error").html(getTemplate("import-contacts-validation-message", upload_valudation_errors.last_name_duplicate));
 		 		return false;
 		 	}
-		 	else if(company.length > 1){
+		 	else if(company.length > 1) {
 		 		$("#import-validation-error").html(getTemplate("import-contacts-validation-message", upload_valudation_errors.company_duplicate));
 		 		return false;
 		 	}
-		 	else if(job_title.length > 1){
+		 	else if(job_title.length > 1) {
 		 		$("#import-validation-error").html(getTemplate("import-contacts-validation-message", upload_valudation_errors.job_title_duplicate));	
 		 		return false;
 		 	}
@@ -223,13 +223,13 @@ $(function(){
 
 	        });
 
-//	        if(models.length > 1000)
-//	        	{
-//	        		$waiting.find('#status-message').html('Sorry, Cannot upload more than 1000 contacts');
-//	        		return;
-//	        	}
-//	        
-//	        
+	        if(models.length > 1000)
+	        	{
+	        		$waiting.find('#status-message').html('Sorry, Cannot upload more than 1000 contacts');
+	        		return;
+	        	}
+        
+        
 	        
 	        // Shows Updating
 	        $waiting.find('#status-message').html('Uploading to server');
