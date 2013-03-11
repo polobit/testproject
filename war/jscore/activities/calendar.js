@@ -42,8 +42,10 @@ function showCalendar() {
         loading: function (bool) {
             if (bool) {
                 $('#loading').show();
+                
             } else {
                 $('#loading').hide();
+                $('#subscribe-ical').css('display','block');
             }
         },
         selectable: true,
