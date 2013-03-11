@@ -54,5 +54,8 @@ var CalendarRouter = Backbone.Router.extend({
 		this.tasksListView.collection.fetch();
 
 		$('#content').html(this.tasksListView.el);
+		
+		$(".active").removeClass("active");
+		$("#calendarmenu").addClass("active");
 	}
 });

@@ -119,6 +119,9 @@ var WorkflowsRouter = Backbone.Router.extend({
 		});
 		this.campaignStatsCollectionView.collection.fetch();
 		$('#content').html(this.campaignStatsCollectionView.el);
+		
+		$(".active").removeClass("active");
+		$("#workflowsmenu").addClass("active");
 	},
 
 	/** Gets list of triggers */
@@ -133,6 +136,9 @@ var WorkflowsRouter = Backbone.Router.extend({
 
 		this.triggersCollectionView.collection.fetch();
 		$('#content').html(this.triggersCollectionView.el);
+		
+		$(".active").removeClass("active");
+		$("#workflowsmenu").addClass("active");
 	},
 
 	/**

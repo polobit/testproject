@@ -93,6 +93,10 @@ function deserializeForm(data, form)
                     {
                         if (el == true) fel.attr("checked", "checked");
                     }
+                    else
+                	{
+                		fel.removeAttr("checked");
+                	}
                 }
 
                 /*
