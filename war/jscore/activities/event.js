@@ -37,7 +37,6 @@ $(function() {
 	 */
 	$('#update_event_validate').die().live('click', function(e) {
 		e.preventDefault();
-        console.log("Hi Update Event");
 		save_event('updateActivityForm', 'updateActivityModal', true, this);
 	});
 
