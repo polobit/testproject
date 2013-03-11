@@ -207,7 +207,9 @@ var Base_Collection_View = Backbone.View
 					if(response.status == 401)
 						{
 							var hash = window.location.hash;
-							window.location.href = window.location.origin+"/login"+hash;
+							
+							// Firefox do not support window.location.origin, so protocol is explicitly added to host
+							window.location.href = window.location.protocol + "//" + window.location.host+"/login"+hash;
 							return;
 						}
 					that.render(true, response.responseText);
