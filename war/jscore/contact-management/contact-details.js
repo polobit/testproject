@@ -140,8 +140,13 @@ $(function(){
 		var new_tags = get_new_tags('addTags');
 		$("#addTagsForm").css("display", "none");
 		
+		if(!new_tags || (/^\s*$/).test(new_tags))
+		{
+			console.log(new_tags);
+			return;
+		}
+		
 		if(new_tags){
-			alert(new_tags);
 			var json = App_Contacts.contactDetailView.model.toJSON();
 	    	
 	    	// Push the new tags 

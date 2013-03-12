@@ -222,10 +222,13 @@ public class ContactDocument implements BuilderInterface
 			    {
 			    });
 
+	    System.out.println(tagsMappedWithTime);
 	    // Iterates through each tag and creates field for each tag i.e.,
 	    // <tagName>_time.
 	    for (String tag : tagsMappedWithTime.keySet())
 	    {
+
+		System.out.println(tag);
 
 		String normalizedTag = SearchUtil.normalizeString(tag);
 
@@ -239,7 +242,7 @@ public class ContactDocument implements BuilderInterface
 		Date TagCreatedDate = DateUtils.truncate(new Date(
 			TagCreationTimeInMills), Calendar.DATE);
 
-		if (!normalizedTag.matches("^[A-Za-z][A-Za-z0-9_]"))
+		if (!normalizedTag.matches("^[A-Za-z][A-Za-z0-9_]*$"))
 		    continue;
 
 		// Adds Other fields in contacts to document
@@ -255,5 +258,4 @@ public class ContactDocument implements BuilderInterface
 	    e.printStackTrace();
 	}
     }
-
 }

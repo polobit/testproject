@@ -27,7 +27,6 @@ $(function ()
     // Gets Plugin Preferences to check whether to show setup or matching profiles
     var plugin_prefs = agile_crm_get_plugin_prefs(LINKEDIN_PLUGIN_NAME);
 
-    console.log(plugin_prefs);
     // If not found, considering first time usage of widget, setupLinkedinOAuth called
     if (plugin_prefs == undefined)
     {
@@ -275,9 +274,9 @@ function showLinkedinProfile(linkedin_id, plugin_id)
     //Stores connected status of agile user with contact LinkedIn profile
     var linkedin_connected;
 
-    // Stores the length of update stream of the contact's LinkedIn profile
-    var update_stream_length;
-
+    // Stores the initial update stream of the contact's LinkedIn profile
+    var stream_data;
+    
     // Calls WidgetsAPI class to get LinkedIn profile of contact
     $.getJSON("/core/api/widgets/profile/" + plugin_id + "/" + linkedin_id,
 
@@ -300,18 +299,21 @@ function showLinkedinProfile(linkedin_id, plugin_id)
 
         // Gets LinkedIn profile template and populate the fields with details
         $('#Linkedin').html(getTemplate("linkedin-profile", data));
-
+        
         // If updates are available, show recent updates in LinkedIn profile
         if (data.updateStream && data.updateStream.length != 0)
         {
-        	// Current update heading and current updates are shown
+        	// Current update heading, refresh button is shown
             $('#linkedin_update_heading').show();
-            $('#linkedin_social_stream')
-            	.append(getTemplate("linkedin-update-stream", data.updateStream));
-
-            // Sets the length of update stream to the local variable
-            update_stream_length = data.updateStream.length;
+            $('#linkedin_refresh_stream').show();
             
+            // Sets the update stream into a local variable for this method
+            stream_data = data.updateStream;
+            
+            // Template is populated with update details and shown
+            $('#linkedin_social_stream')
+            	.append(getTemplate("linkedin-update-stream", data.updateStream));        
+           
             return;
         }
 
@@ -377,7 +379,7 @@ function showLinkedinProfile(linkedin_id, plugin_id)
 
             // See more link activated to get more updates
             $(that).addClass('linkedin_stream');
-
+            
             // If no more updates available, less and refresh buttons are shown
             if (data.length == 0)
             {
@@ -385,7 +387,7 @@ function showLinkedinProfile(linkedin_id, plugin_id)
                 $('#linkedin_refresh_stream').show();
 
                 // If user have overall updates more than 3, less button is shown
-                if (update_stream_length > 3)
+                if (stream_data.length > 3)
                 {
                     $("#linkedin_stream").hide();
                     $('#linkedin_less').show();
@@ -442,7 +444,7 @@ function showLinkedinProfile(linkedin_id, plugin_id)
     $('#linkedin_refresh_stream').die().live('click', function (e)
     {
         e.preventDefault();
-
+    
         // Loading button is displayed until updates are shown
         $("#linkedin_social_stream").html(LINKEDIN_UPDATE_LOAD_IMAGE);
 
@@ -471,8 +473,12 @@ function showLinkedinProfile(linkedin_id, plugin_id)
         }).error(function (data)
         {
             // Remove loading button on error
-            $('#status_load').remove();
-
+            $('#status_load').remove();            
+           
+            // Populates the template with the initial update stream on error
+            $("#linkedin_social_stream")
+            		.html(getTemplate("linkedin-update-stream", stream_data));
+            
             // Error message is displayed to user 
             alert(data.responseText);
         });

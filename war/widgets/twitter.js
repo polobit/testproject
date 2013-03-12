@@ -11,11 +11,11 @@ $(function ()
 
     // Twitter profile loading image declared as global
     TWITTER_PROFILE_LOAD_IMAGE = '<center><img id="twitter_profile_load" ' +
-        'src=\"img/1-0.gif\" style="margin-top: 10px;"></img></center>';
+        'src=\"img/1-0.gif\" style="margin-bottom: 10px;"></img></center>';
 
     // Twitter update loading image declared as global
     TWITTER_UPDATE_LOAD_IMAGE = '<center><img id="tweet_load" src=' +
-        '\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;"></img></center>';
+        '\"img/ajax-loader-cursor.gif\" style="margin-top: 14px;"></img></center>';
 
     // Current contact user name in Twitter profile
     Twitter_current_profile_user_name = "";
@@ -28,7 +28,7 @@ $(function ()
     var plugin_prefs = agile_crm_get_plugin_prefs(TWITTER_PLUGIN_NAME);
 
 
-    // If not found, considering first time usage of widget, setupLinkedinOAuth called
+    // If not found, considering first time usage of widget, setupTwitterOAuth called
     if (plugin_prefs == undefined)
     {
         setupTwitterOAuth(plugin_id);
@@ -293,8 +293,8 @@ function showTwitterProfile(twitter_id, plugin_id)
     //Stores connected status of agile user with contact Twitter profile
     var twitter_connected;
 
-    // Stores the length of update stream of the contact's Twitter profile
-    var update_stream_length;
+    // Stores the initial update stream of the contact's Twitter profile
+    var stream_data;
 
     // Calls WidgetsAPI class to get Twitter profile of contact
     $.getJSON("/core/api/widgets/profile/" + plugin_id + "/" + twitter_id,
@@ -349,15 +349,16 @@ function showTwitterProfile(twitter_id, plugin_id)
         // If updates are available, show recent updates in Twitter profile
         if (data.updateStream && data.updateStream.length != 0)
         {
-            // Current update heading is shown
+            // Current update heading and refresh button is shown
             $('#twitter_update_heading').show();
-
+            $('#twitter_refresh_stream').show();
+            
+            // Sets the update stream into a local variable for this method
+            stream_data = data.updateStream;
+            
             // Template is populated with update details and shown
             $('#twitter_social_stream')
-                .append(getTemplate("twitter-update-stream", data.updateStream));
-
-            // Sets the length of update stream to the local variable
-            update_stream_length = data.updateStream.length;
+                .append(getTemplate("twitter-update-stream", data.updateStream));          
 
             return;
         }
@@ -434,9 +435,9 @@ function showTwitterProfile(twitter_id, plugin_id)
             {
                 alert("No more updates available");
                 $('#twitter_refresh_stream').show();
-
+             
                 // If user have overall updates more than 3, less button is shown
-                if (update_stream_length > 3)
+                if (stream_data.length > 3)
                 {
                     $("#twitter_stream").hide();
                     $('#twitter_less').show();
@@ -538,7 +539,11 @@ function showTwitterProfile(twitter_id, plugin_id)
         {
             // Remove loading button on error
             $('#status_load').remove();
-
+            
+            // Populates the template with the initial update stream on error
+            $("#twitter_social_stream")
+            		.html(getTemplate("twitter-update-stream", stream_data));
+            
             // Error message is displayed to user 
             alert(data.responseText);
         });
@@ -703,7 +708,7 @@ function sendUnfollowRequest(plugin_id, twitter_id)
  *  
  *  @param plugin_id
  * 			plugin id to fetch widget preferences
- * @param linkedin_id
+ * @param twitter_id
  * 			Twitter Id to send request
  */
 function sendTwitterMessage(plugin_id, twitter_id, message)
@@ -774,7 +779,7 @@ function sendTwitterMessage(plugin_id, twitter_id, message)
  *  
  * @param plugin_id
  * 			plugin id to fetch widget preferences
- * @param linkedin_id
+ * @param twitter_id
  * 			Twitter Id to send tweet request
  */
 function tweetInTwitter(plugin_id, twitter_id)

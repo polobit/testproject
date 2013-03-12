@@ -48,6 +48,8 @@ $(function() {
  */
 function add_custom_fields_to_form(context, callback) {
 
+	
+	$("#content").html(LOADING_HTML);
 	var custom_fields = Backbone.Model.extend({
 		url : "core/api/custom-fields"
 	});

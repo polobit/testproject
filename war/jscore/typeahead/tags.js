@@ -68,7 +68,11 @@ function setup_tags_typeahead() {
     	 */
     	updater: function(tag) {
     		
-    		alert(tag);
+    		if(!tag || (/^\s*$/).test(tag))
+    			{
+    				return;
+    			}
+ 
     		
     		// Saves the selected tag to the contact
     		if((this.$element).closest(".control-group").hasClass('save-tag')){

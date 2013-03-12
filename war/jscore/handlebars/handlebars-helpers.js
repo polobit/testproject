@@ -406,6 +406,31 @@ $(function() {
 	    return new Handlebars.SafeString(el);
 	});
 	
+
+	/**
+	 * Converts string to JSON
+	 */
+	Handlebars.registerHelper('stringToJSON', function(object, key, options) {
+		   if (key) 
+		   {
+			   try {
+				  object[key] = JSON.parse(object[key]);   
+			   }    
+			   finally {
+				  return options.fn(object[key]);
+			   }    
+		   }
+
+		  try
+		  {
+			  return options.fn(JSON.parse(object));
+		  }
+		  catch(err)
+		  {
+			  return options.fn(object);
+		  }
+	});
+	
 	/**
 	 * Converts address as comma seprated values and returns as
 	 * handlebars safe string.
