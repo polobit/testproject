@@ -85,8 +85,10 @@ public class TaskReminderDeferredTask implements DeferredTask
 		List<Task> taskList = TaskUtil.getPendingTasksToRemind(1,
 			new Key<AgileUser>(AgileUser.class, agileUser.id));
 
-		if (taskList == null)
+		if (taskList.isEmpty())
+		{
 		    continue;
+		}
 
 		String date = null;
 
@@ -106,6 +108,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 			SendMail.DUE_TASK_REMINDER_SUBJECT,
 			SendMail.DUE_TASK_REMINDER, map);
 	    }
+
 	}
 	finally
 	{
