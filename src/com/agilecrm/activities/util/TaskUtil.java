@@ -11,8 +11,6 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.util.DateUtil;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
 
 /**
  * <code>TaskUtil</code> is utility class used to process data of {@link Task}
@@ -186,49 +184,41 @@ public class TaskUtil
     public static List<Task> getPendingTasksToRemind(int numDays,
 	    Key<AgileUser> owner)
     {
-	try
+
+	// Gets Today's date
+	DateUtil startDateUtil = new DateUtil();
+	Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
+
+	// Gets Date after numDays days
+	DateUtil endDateUtil = new DateUtil();
+	Long endTime = endDateUtil.addDays(numDays).toMidnight().getTime()
+		.getTime() / 1000;
+
+	System.out.println("check for " + startTime + " " + endTime);
+
+	// Gets list of tasks filtered on given conditions
+	// return dao.ofy().query(Task.class).filter("owner =", owner)
+	// .filter("due >=", startTime).filter("due <=", endTime)
+	// .filter("is_complete", false).list();
+
+	List<Task> tasks = dao.ofy().query(Task.class).filter("owner =", owner)
+		.filter("is_complete", false).list();
+
+	System.out.println("Owner tasks: " + tasks);
+
+	if (tasks.isEmpty())
+	    return tasks;
+
+	List<Task> dueTasksList = new ArrayList<Task>();
+
+	for (Task task : tasks)
 	{
-	    Objectify ofy = ObjectifyService.begin();
+	    if (!(task.due > startTime && task.due <= endTime))
+		continue;
 
-	    // Gets Today's date
-	    DateUtil startDateUtil = new DateUtil();
-	    Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
-
-	    // Gets Date after numDays days
-	    DateUtil endDateUtil = new DateUtil();
-	    Long endTime = endDateUtil.addDays(numDays).toMidnight().getTime()
-		    .getTime() / 1000;
-
-	    System.out.println("check for " + startTime + " " + endTime);
-
-	    // Gets list of tasks filtered on given conditions
-	    // return dao.ofy().query(Task.class).filter("owner =", owner)
-	    // .filter("due >=", startTime).filter("due <=", endTime)
-	    // .filter("is_complete", false).list();
-
-	    List<Task> tasks = ofy.query(Task.class).filter("owner =", owner)
-		    .filter("is_complete", false).list();
-
-	    System.out.println("Owner tasks: " + tasks);
-
-	    if (tasks == null)
-		return null;
-
-	    List<Task> dueTasksList = new ArrayList<Task>();
-
-	    for (Task task : tasks)
-	    {
-		if (!(task.due > startTime && task.due <= endTime))
-		    continue;
-
-		dueTasksList.add(task);
-	    }
-	    return dueTasksList;
+	    dueTasksList.add(task);
 	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
+
+	return dueTasksList;
     }
 }
