@@ -15,67 +15,79 @@
 </script>
 
 <script id = "contacts-custom-view-first_name-template" type="text/html">
-	<td class="data" data="{{id}}" style="text-overflow:ellipsis;white-space:nowrap;width:10em;overflow:hidden;">
-    	<b>
-    	{{getPropertyValue properties "first_name"}}
-    	</b>
+	<td class="data" data="{{id}}">
+    	<div style="text-overflow:ellipsis;width:10em;white-space:nowrap;overflow:hidden;">
+    	<b>{{getPropertyValue properties "first_name"}}</b>
+    	</div>
 	</td>
 </script>
 
 <script id = "contacts-custom-view-last_name-template" type="text/html">
 	<td class="data" data="{{id}}">
-    	<b>
-    	{{getPropertyValue properties "last_name"}}
-    	</b>
+    	<div style="text-overflow:ellipsis;width:10em;white-space:nowrap;overflow:hidden;">
+        <b>{{getPropertyValue properties "last_name"}}</b>
+        </div>
 	</td>
 </script>
 
 <script id = "contacts-custom-view-email-template" type="text/html">
 	<td class="data" data="{{id}}">
+        <div style="text-overflow:ellipsis;width:10em;white-space:nowrap;overflow:hidden;">
     	{{getPropertyValue properties "email"}}
+        </div>
 	</td>
 </script>
 
 <script id = "contacts-custom-view-company-template" type="text/html">
 	<td class="data" data="{{id}}">
+      <div style="text-overflow:ellipsis;width:10em;white-space:nowrap;overflow:hidden;">
     	{{getPropertyValue properties "company"}}
+      </div>
 	</td>
 </script>
 
 <script id = "contacts-custom-view-tags-template" type="text/html">
 	<td class="data" data="{{id}}"> 
+    <div style="text-overflow:clip;width:10em;white-space:nowrap;overflow:hidden;">
     	{{#each tags}}
     	<b>
     	<span class="label">{{this}}</span>
     	</b>
     	{{/each}}
+    </div>
 	</td>
 </script>
 
 <script id = "contacts-custom-view-created_time-template" type="text/html">
 	<td class='data' data='{{id}}'>
+    <div style="text-overflow:ellipsis;width:7em;overflow:hidden;">
 		{{epochToHumanDate "mm-dd-yy" created_time}}
+    </div>
 	</td>
 </script>
 
 <script id = "contacts-custom-view-updated_time-template" type="text/html">
 	<td class='data' data='{{id}}'>
+    <div style="text-overflow:ellipsis;width:7em;overflow:hidden;">
 		{{#if updated_time}}
 			{{epochToHumanDate "mm-dd-yy" updated_time}}
 		{{/if}}
+    </div>
 	</td>
 </script>
 
 <script id = "contacts-custom-view-title-template" type="text/html">
 	<td class='data' data='{{id}}'>
+    <div style="text-overflow:ellipsis;width:7em;overflow:hidden;">
 		{{getPropertyValue properties "title"}}
+    </div>
 	</td>
 </script>
 
 <script id = "contacts-custom-view-lead_owner-template" type="text/html">
 	<td class='data' data='{{id}}'>
-		<b>
-		{{domainUser.name}}
-		</b>
+       <div style="text-overflow:ellipsis;width:7em;overflow:hidden;">
+		  <b>{{domainUser.name}}</b>
+       </div>
 	</td>
 </script>

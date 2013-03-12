@@ -367,37 +367,73 @@ $(function() {
 	 * the function parameters (fname, lname, company etc..)
 	 */
 	Handlebars.registerHelper('if_property', function(fname, lname, company,
-			title,  image, options) {
+			title, image, email, phone, website, address, options) {
 		
-		/*
-		 * Converts address as comma seprated values and returns as
-		 * handlebars safe string.
-		 */ 
-		if(this.name == "address"){
-			var el = "<span><small><b>Address</b></small>";
-			
-			var address = JSON.parse(this.value);
-			if(address.subtype)
-				el = el.concat("(" + address.subtype +") :</br>");
-			else
-				el = el.concat(" :</br>");
-			
-			// Gets properties (keys) count of given json object
-			var count = countJsonProperties(address);
-			
-			$.each(address, function(key, val){
-				if(--count == 0){
-					el = el.concat(val + ".</span></br>");
-					return;
-				}
-				
-				el = el.concat(val + ", ");
-			});
-			return new Handlebars.SafeString(el);
-		}	
 		if (this.name != fname && this.name != lname && this.name != company
-				&& this.name != title && this.name != image)
+				&& this.name != title && this.name != image && this.name != email
+				&& this.name != phone && this.name != website && this.name != address)
 			return options.fn(this);
+	});
+	
+	/**
+	 * Counts the existence of property name which occurred multiple times.
+	 */
+	Handlebars.registerHelper('multiple_Property_Count', function(name, properties) {
+		var count = 0;
+		for ( var i = 0, l = properties.length; i < l; i++){
+		    if(properties[i].name == name)
+			  count++; 
+		}
+		return count;
+	});
+	
+	/**
+	 * Displays multiple times occurred properties of a contact in its detail view in single entity
+	 */
+	Handlebars.registerHelper('multiple_Property_Element', function(name, properties) {
+		var el = "<span><small><b>" + ucfirst(name) +"</b></small> :<br/>";
+		var count = false;
+		for ( var i = 0, l = properties.length; i < l; i++){
+		    if (properties[i].name == name){
+		    	count = true;
+		    	if(properties[i].subtype)
+					el = el.concat("(" + properties[i].subtype +") : " + properties[i].value +"</br>");
+				else
+					el = el.concat(" : " + properties[i].value +"</br>");
+		    }
+		}
+		if(count)
+	    return new Handlebars.SafeString(el);
+	});
+	
+	/**
+	 * Converts address as comma seprated values and returns as
+	 * handlebars safe string.
+	 */ 
+	Handlebars.registerHelper('address_Element', function(properties) {
+		
+		for ( var i = 0, l = properties.length; i < l; i++){
+			
+			if(properties[i].name == "address"){
+				var el = "<span><small><b>Address</b></small> :</br>";
+				var address = JSON.parse(properties[i].value);
+	
+				if(properties[i].subtype)
+					el = el.concat("(" + properties[i].subtype +") : ");
+				
+				// Gets properties (keys) count of given json object
+				var count = countJsonProperties(address);
+				
+				$.each(address, function(key, val){
+					if(--count == 0){
+						el = el.concat(val + ".</span></br>");
+						return;
+					}
+					el = el.concat(val + ", ");
+				});
+				return new Handlebars.SafeString(el);
+			}
+		}
 	});
 
 	/**

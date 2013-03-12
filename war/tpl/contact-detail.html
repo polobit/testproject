@@ -195,7 +195,7 @@
             <br/>       
 
             {{#each properties}}
-                {{#if_property "first_name" "last_name" "company" "title" "image"}}
+                {{#if_property "first_name" "last_name" "company" "title" "image" "email" "phone" "website" "address"}}
                     <span style='display:inline'><icon class="{{name}}"></icon> <small><b>{{ucfirst name}}</b></small></span> 
                     {{#if subtype}}
                         ({{subtype}}) :
@@ -206,6 +206,10 @@
                     <br/> 
                 {{/if_property}}        
             {{/each}}
+            {{#multiple_Property_Element "email" properties}}{{/multiple_Property_Element}}
+            {{#multiple_Property_Element "phone" properties}}{{/multiple_Property_Element}}
+            {{#multiple_Property_Element "website" properties}}{{/multiple_Property_Element}}
+            {{#address_Element properties}}{{/address_Element}}
             <br/>
                 <div id="map" style="width:auto; height:200px; display:none">
                 </div>
