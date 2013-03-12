@@ -141,11 +141,12 @@ $(function(){
 		$("#addTagsForm").css("display", "none");
 		
 		if(new_tags){
+			alert(new_tags);
 			var json = App_Contacts.contactDetailView.model.toJSON();
 	    	
 	    	// Push the new tags 
-	    	for(var i = 0; i < new_tags.length; i++)
-	    		json.tags.push(new_tags[i]);
+	    	//for(var i = 0; i < new_tags.length; i++)
+	    		json.tags.push(new_tags.toString());
 	    	
 	    	// Reset form
 	    	$('#addTagsForm').each (function(){
@@ -164,10 +165,9 @@ $(function(){
        				});
 	       			
 	       			// Append to the list, when no match is found 
-	       			for(var i = 0; i < new_tags.length; i++){
-	       				if ($.inArray(new_tags[i], old_tags) == -1) 
-	       					$('#added-tags-ul').append('<li style="display:inline-block;" class="tag" data="' + new_tags[i] + '"><span><a class="anchor" href="#tags/'+ new_tags[i] + '">'+ new_tags[i] + '</a><a class="close remove-tags" id="' + new_tags[i] + '">&times</a></span></li>');
-	       			}
+	       			if ($.inArray(new_tags, old_tags) == -1) 
+	       				$('#added-tags-ul').append('<li style="display:inline-block;" class="tag" data="' + new_tags + '"><span><a class="anchor" href="#tags/'+ new_tags + '">'+ new_tags + '</a><a class="close remove-tags" id="' + new_tags + '">&times</a></span></li>');
+	       			
 	       			
 	       			// Adds the added tags (if new) to tags collection
 	       			$.each(new_tags,function(index, tag){

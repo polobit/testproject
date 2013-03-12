@@ -68,10 +68,14 @@ function setup_tags_typeahead() {
     	 */
     	updater: function(tag) {
     		
+    		alert(tag);
+    		
     		// Saves the selected tag to the contact
     		if((this.$element).closest(".control-group").hasClass('save-tag')){
     			var json = App_Contacts.contactDetailView.model.toJSON();
     			json.tags.push(tag);
+    			
+    			
     			
     			// Save the contact with added tags
     	    	var contact = new Backbone.Model();
@@ -191,12 +195,14 @@ function get_new_tags(id){
         // Replace multiple space with single space
         tags =  tags.replace(/ +(?= )/g,'');
 
+        
         // Replace ,space with space
         tags = tags.replace(", ", " ");
 
         // Replace , with spaces
         tags = tags.replace(",", " ");
 
-        return tags.split(" ");
+        return tags;
+//        return tags.split(" ");
     }
 }
