@@ -399,36 +399,12 @@ $(function() {
 		    	if(properties[i].subtype)
 					el = el.concat("(" + properties[i].subtype +") : " + properties[i].value +"</br>");
 				else
-					el = el.concat(" : " + properties[i].value +"</br>");
+					el = el.concat(properties[i].value +"</br>");
 		    }
 		}
+		el = el.concat("</span>");
 		if(count)
 	    return new Handlebars.SafeString(el);
-	});
-	
-
-	/**
-	 * Converts string to JSON
-	 */
-	Handlebars.registerHelper('stringToJSON', function(object, key, options) {
-		   if (key) 
-		   {
-			   try {
-				  object[key] = JSON.parse(object[key]);   
-			   }    
-			   finally {
-				  return options.fn(object[key]);
-			   }    
-		   }
-
-		  try
-		  {
-			  return options.fn(JSON.parse(object));
-		  }
-		  catch(err)
-		  {
-			  return options.fn(object);
-		  }
 	});
 	
 	/**
@@ -459,6 +435,30 @@ $(function() {
 				return new Handlebars.SafeString(el);
 			}
 		}
+	});
+
+	/**
+	 * Converts string to JSON
+	 */
+	Handlebars.registerHelper('stringToJSON', function(object, key, options) {
+		   if (key) 
+		   {
+			   try {
+				  object[key] = JSON.parse(object[key]);   
+			   }    
+			   finally {
+				  return options.fn(object[key]);
+			   }    
+		   }
+
+		  try
+		  {
+			  return options.fn(JSON.parse(object));
+		  }
+		  catch(err)
+		  {
+			  return options.fn(object);
+		  }
 	});
 
 	/**
