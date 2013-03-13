@@ -165,7 +165,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     		var selectElement = $(element).find('select');
 
     		// If element has no value, don't push into properties 
-    		if(inputElement.val() == undefined || inputElement.val().length == 0)
+    		if(inputElement.val() == undefined || inputElement.val().trim().length == 0)
     			return;
     		
     		// Checks whether fields for hidden fields (Used for clone do not save them)
