@@ -213,7 +213,7 @@ public class TaskUtil
 
 	for (Task task : tasks)
 	{
-	    if (!(task.due > startTime && task.due <= endTime))
+	    if (task == null || !(task.due > startTime && task.due <= endTime))
 		continue;
 
 	    dueTasksList.add(task);
