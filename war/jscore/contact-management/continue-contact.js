@@ -184,24 +184,25 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
      * There are chances user adds a property(may be stripe id..) using developers API, in order not to loose them 
      * following verification is done
      */
-    $.each(obj.properties, function(contact_property_index, contact_property){
-        
-    	$.each(properties, function(new_property_index, new_property){	
+    if(obj.properties)
+    	$.each(obj.properties, function(contact_property_index, contact_property) {
     		
-    		// If property name exists in new property, no changes are made considering property is updated.
-    		if(new_property.name == contact_property.name){
+    		$.each(properties, function(new_property_index, new_property) {	
     			
-    			return false;
-    		}
+    			// If property name exists in new property, no changes are made considering property is updated.
+    			if(new_property.name == contact_property.name) {
+    				
+    				return false;
+    			}
     		
-    		// If property name is missing in new properties then preserving them.
-    		else if(new_property_index == properties.index)
-    		{
-    			properties.push(new_property);
-    		}
+    			// If property name is missing in new properties then preserving them.
+    			else if(new_property_index == properties.index)
+    			{
+    				properties.push(new_property);
+    			}
     		
+    		});
     	});
-    });
     
     
     // Stores json object with "properties" as value
@@ -256,20 +257,14 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
                 });
                 
             } 
-        	else if(is_person){
+        	else if(is_person) {
         
-        		// If user refreshes in contact details page, then contact detail view model is changed.
-            	if(App_Contacts.contactDetailView && App_Contacts.contactDetailView.model != null)
-        		{
-        			App_Contacts.contactDetailView.model = data
-        		}
-
-            	
+                
             	/*
             	 * If contactsListView is defined, it is getting the contact from there not the updated one.
             	 * Delete the old one and add the updated one to the listView. 
             	 */
-            	else if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection.get(data.id) != null) {
+            	if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection.get(data.id) != null) {
 
             		App_Contacts.contactsListView.collection.remove(obj);
             	
@@ -283,6 +278,15 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
         			App_Contacts.contact_custom_view.collection.add(data);
         		}
+            	
+ 
+            	// If user refreshes in contact details page, then contact detail view model is changed.
+            	if(App_Contacts.contactDetailView && App_Contacts.contactDetailView.model != null)
+            	{
+            		console.log(data.toJSON());
+            		App_Contacts.contactDetailView.model = data
+            	}
+
         	
             	
             	App_Contacts.navigate("contact/" + data.id, {
