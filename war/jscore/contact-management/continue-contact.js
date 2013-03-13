@@ -67,18 +67,19 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     // Contact should be fetched based on id from any of the following views. It is required so other properties saved are not lost.
     if(id)
     	{
+
+			// If user refreshes in contact details page, then none of the list views are defined so, contact will be fetched from detailed view
+			if(App_Contacts.contactDetailView && App_Contacts.contactDetailView.model != null)
+				obj = App_Contacts.contactDetailView.model.toJSON();
+		
     		// If contact list view is defined, then contact is fetched from list.
-    		if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection.get(id) != null)
+			else if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection.get(id) != null)
     			obj = App_Contacts.contactsListView.collection.get(id).toJSON();
     			
     		// If contact list is under a selected custom view, then contact is fetched from the custom view list.
     		else if(App_Contacts.contact_custom_view && App_Contacts.contact_custom_view.collection.get(id) != null)
     			obj = App_Contacts.contact_custom_view.collection.get(id).toJSON();
-    		
-    		// If user refreshes in contact details page, then none of the list views are defined so, contact will be fetched from detailed view
-    		else if(App_Contacts.contactDetailView && App_Contacts.contactDetailView.model != null)
-    			obj = App_Contacts.contactDetailView.model.toJSON();
-    		
+
     	}
     
     

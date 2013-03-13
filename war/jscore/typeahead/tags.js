@@ -76,10 +76,14 @@ function setup_tags_typeahead() {
     		
     		// Saves the selected tag to the contact
     		if((this.$element).closest(".control-group").hasClass('save-tag')){
+    			
     			var json = App_Contacts.contactDetailView.model.toJSON();
+    			
+    			// Checks if tag already exists in contact
+    			if($.inArray(tag, json.tags) >= 0)
+    				return;
+    			
     			json.tags.push(tag);
-    			
-    			
     			
     			// Save the contact with added tags
     	    	var contact = new Backbone.Model();
@@ -102,7 +106,17 @@ function setup_tags_typeahead() {
     	        return;
     		}
     		
-        	(this.$element).closest(".control-group").find('ul.tags').append('<li class="tag"  style="display: inline-block;" data="'+ tag+'">'+tag+'<a class="close" id="remove_tag">&times</a></li>');
+    		// To store existing tags in form.
+    		var tags_temp = [];
+    		
+    	    // If tag already exists returns
+            $.each((this.$element).closest(".control-group").find('ul.tags').children('li'), function (index, tag){
+            	tags_temp.push($(tag).attr('data'));
+            });
+
+            // If tag is not added already, then add new tag.
+    		if($.inArray(tag, tags_temp) == -1)
+    			(this.$element).closest(".control-group").find('ul.tags').append('<li class="tag"  style="display: inline-block;" data="'+ tag+'">'+tag+'<a class="close" id="remove_tag">&times</a></li>');
         }
     });
     
