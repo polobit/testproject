@@ -270,11 +270,17 @@ var ContactsRouter = Backbone.Router.extend({
             return;
         }
     	
+    	
+    	
     	// If contact detail view is defined the get current contact model id
     	var id = this.contactDetailView.model.id;
-
+    	
+    	if(this.contactDetailView && this.contactDetailView.model.id)
+    	{
+    		contact = this.contactDetailView.model.toJSON();
+    	}
     	// If contact list is defined the get contact to edit from the list
-    	if (this.contactsListView && this.contactsListView.collection && this.contactsListView.collection.get(id))
+    	else if (this.contactsListView && this.contactsListView.collection && this.contactsListView.collection.get(id))
     	{
    		 	contact = this.contactsListView.collection.get(id).toJSON();
    		}
