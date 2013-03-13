@@ -192,7 +192,6 @@ var ContactsRouter = Backbone.Router.extend({
         if(!contact)
     	if (!this.contactsListView || this.contactsListView.collection.length == 0 || this.contactsListView.collection.get(id) == null) {
         	
-    		
     		console.log("Downloading contact");
     		
         	// Download 
@@ -277,6 +276,7 @@ var ContactsRouter = Backbone.Router.extend({
     	
     	if(this.contactDetailView && this.contactDetailView.model.id)
     	{
+    		console.log(this.contactDetailView.model.toJSON());
     		contact = this.contactDetailView.model.toJSON();
     	}
     	// If contact list is defined the get contact to edit from the list
@@ -439,9 +439,12 @@ var ContactsRouter = Backbone.Router.extend({
     			
     			head.js(LIB_PATH + 'lib/jquery.multi-select.js',LIB_PATH + 'lib/jquery-ui.min.js', function(){
     			
-    				$('#multipleSelect', el).multiSelect();
+	
+    				$("#content").html(el);
     				
-    				$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").sortable();
+    				$('#multipleSelect').multiSelect();
+    				
+    				$('.ms-selection').children('ul').addClass('multiSelect').attr("name", "fields_set").sortable();
     			});
     		}
     		 

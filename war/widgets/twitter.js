@@ -11,7 +11,8 @@ $(function ()
 
     // Twitter profile loading image declared as global
     TWITTER_PROFILE_LOAD_IMAGE = '<center><img id="twitter_profile_load" ' +
-        'src=\"img/1-0.gif\" style="margin-bottom: 10px;"></img></center>';
+        'src=\"img/1-0.gif\" style="margin-bottom: 10px;margin-right: 16px;" >' + 
+        '</img></center>';
 
     // Twitter update loading image declared as global
     TWITTER_UPDATE_LOAD_IMAGE = '<center><img id="tweet_load" src=' +
@@ -27,7 +28,6 @@ $(function ()
     // Gets Plugin Preferences to check whether to show setup or matching profiles
     var plugin_prefs = agile_crm_get_plugin_prefs(TWITTER_PLUGIN_NAME);
 
-
     // If not found, considering first time usage of widget, setupTwitterOAuth called
     if (plugin_prefs == undefined)
     {
@@ -37,7 +37,6 @@ $(function ()
 
     // Gets Contact Preferences for this widget, based on plugin name 
     var twitter_id = agile_crm_get_widget_property_from_contact(TWITTER_PLUGIN_NAME);
-
 
     if (twitter_id)
     {
@@ -56,7 +55,6 @@ $(function ()
             getTwitterIdByUrl(plugin_id, web_url, function (data)
             {
                 twitter_id = data;
-                console.log('data' + data);
                 showTwitterProfile(twitter_id, plugin_id);
             });
         }
@@ -72,19 +70,21 @@ $(function ()
     {
         e.preventDefault();
 
-        //Get website URL for Twitter from contact to check whether it exists
-        var web_url = agile_crm_get_contact_property_by_subtype('website', 'TWITTER');
-        console.log(web_url);
-
-        //If exists remove the URL from the contact to delete profile
-        if (web_url)
+        var twit_id = agile_crm_get_widget_property_from_contact(TWITTER_PLUGIN_NAME);
+        
+        if(twit_id)
         {
-            agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url);
-            return;
+        	//If URL not exists remove Twitter Id saved for contact
+            agile_crm_delete_widget_property_from_contact(TWITTER_PLUGIN_NAME);
         }
-
-        //If URL not exists remove Twitter Id saved for contact
-        agile_crm_delete_widget_property_from_contact(TWITTER_PLUGIN_NAME);
+        else
+        {
+            //If exists remove the URL from the contact to delete profile
+            if (web_url)
+            {
+                agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url);             
+            }
+        }        
     });
 
     //Sends a message to Twitter when clicked on send message button
@@ -154,9 +154,10 @@ function setupTwitterOAuth(plugin_id)
         '&plugin_id=' + encodeURIComponent(plugin_id);
 
     //Shows a link button in the UI which connects to the above URL
-    $('#Twitter').html(TWITTER_PLUGIN_HEADER + "<p>Follow your friends, experts, " +
-        "favorite celebrities, and breaking news on TWITTER.<p><button class='btn'>" +
-        "<a href=" + url + ">Link Your Twitter</button>");
+    $('#Twitter').html("<div style='padding: 0px 5px 7px 5px;line-height: 160%;' >" + 
+    		"Follow your friends, experts, favorite celebrities, and breaking news " + 
+    		"on TWITTER.<button class='btn' style='margin-top: 7px;' ><a href=" + 
+    		url + ">Link Your Twitter</button></div>");
 }
 
 /**
@@ -182,7 +183,8 @@ function showTwitterMatchingProfiles(plugin_id)
         // If no matches found display message
         if (data.length == 0)
         {
-            $('#Twitter').html(TWITTER_PLUGIN_HEADER + "No Matches Found");
+            $('#Twitter').html("<div style='padding: 0px 5px 7px 5px;line-height:160%;'>" + 
+            		"No Matches Found</div>");
             return;
         }
 
@@ -389,7 +391,6 @@ function showTwitterProfile(twitter_id, plugin_id)
         // Tweet Id of the last update is retrieved to get old updates before that Id
         var tweet_id = $('div#twitter_social_stream')
             .find('div#twitter_status:last').attr('status_id');
-        console.log(tweet_id);
 
         // It is undefined in case if person does not share his updates
         if (!tweet_id)
@@ -422,21 +423,20 @@ function showTwitterProfile(twitter_id, plugin_id)
 
         function (data)
         {
-            console.log(data);
-
             // Removes loading button after fetching updates
             $('#tweet_load').remove();
 
             // See more link activated to get more updates
             $(that).addClass('twitter_stream');
-
+            $('#twitter_refresh_stream').show();
+            
             // If no more updates available, less and refresh buttons are shown
             if (data.length == 0)
             {
                 alert("No more updates available");
-                $('#twitter_refresh_stream').show();
              
-                // If user have overall updates more than 3, less button is shown
+                // On click of more if no updates available and if user have initial 
+                // updates more than 3 and  then less button is shown
                 if (stream_data.length > 3)
                 {
                     $("#twitter_stream").hide();
@@ -457,9 +457,9 @@ function showTwitterProfile(twitter_id, plugin_id)
             $("#twitter_social_stream")
                 .append(getTemplate("twitter-update-stream", data));
 
-            // Current activity is hidden and refresh button is shown
+            // Current activity is hidden
             $('#twitter_current_activity').hide();
-            $('#twitter_refresh_stream').show();
+           
 
         }).error(function (data)
         {
@@ -519,21 +519,23 @@ function showTwitterProfile(twitter_id, plugin_id)
         function (data)
         {
             // Remove loading button on success
-            $('#tweet_load').remove();
-
-            // If no updates are available for person return
+            $('#tweet_load').remove();            
+            
+            // Populates the template with the data 
+            $("#twitter_social_stream").html(getTemplate("twitter-update-stream", data));            
+            
+            // Checks if stream available, 
             if (data.length == 0)
             {
+                // See Less is shown and see more is hidden
+                $("#twitter_stream").hide();
+                $('#twitter_less').show();
                 return;
             }
 
             // See more,refresh  buttons are shown and less is hidden
             $("#twitter_stream").show();
-            $('#twitter_less').hide();
-            $('#twitter_refresh_stream').show();
-
-            // Populates the template with the data 
-            $("#twitter_social_stream").html(getTemplate("twitter-update-stream", data));
+            $('#twitter_less').hide();                   
 
         }).error(function (data)
         {
@@ -546,6 +548,7 @@ function showTwitterProfile(twitter_id, plugin_id)
             
             // Error message is displayed to user 
             alert(data.responseText);
+            
         });
     });
 }
@@ -649,19 +652,14 @@ function sendFollowRequest(plugin_id, twitter_id)
             if (data.length == 0)
             {
                 // See Less is shown and see more is hidden
-                $("#twitter_stream").remove();
+                $("#twitter_stream").hide();
                 $('#twitter_less').show();
                 return;
             }
 
-            // Current activity is hidden if data is defined
-            $('#twitter_current_activity').hide();
-
         }).error(function (data)
-        {
-            // See more is removed on error
-            $("#twitter_stream").remove();
-
+        {           
+        	$('#twitter_refresh_stream').show();
             // Error message is shown if error occurs
             alert(data.responseText);
         });

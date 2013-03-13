@@ -12,11 +12,12 @@ $(function ()
 
     // LinkedIn profile load image declared as global
     LINKEDIN_PROFILE_LOAD_IMAGE = '<center><img id="linkedin_profile_load" ' + 
-			'src=\"img/1-0.gif\" style="margin-top: 10px;"></img></center>';    
+			'src=\"img/1-0.gif\" style="margin-bottom: 10px;margin-right: 16px;" >' + 
+	        '</img></center>';   
     
     // LinkedIn update loading image declared as global
     LINKEDIN_UPDATE_LOAD_IMAGE = '<center><img id="status_load" src=' +
-        '\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;"></img></center>';
+        '\"img/ajax-loader-cursor.gif\" style="margin-top: 14px;"></img></center>';
     
     // Current contact user name in LinkedIn profile
     Linkedin_current_profile_user_name = "";   
@@ -37,6 +38,9 @@ $(function ()
     // Gets Contact Preferences for this widget, based on plugin name 
     var linkedin_id = agile_crm_get_widget_property_from_contact(LINKEDIN_PLUGIN_NAME);
 
+    //Get website URL for LinkedIn from contact to get profile based on it
+    var web_url = agile_crm_get_contact_property_by_subtype('website', 'LINKED_IN');
+    
     // If property with LinkedIn (LinkedIn ID) exist
     if (linkedin_id)
     {
@@ -45,9 +49,6 @@ $(function ()
     }
     else
     {
-        //Get website URL for LinkedIn from contact to get profile based on it
-        var web_url = agile_crm_get_contact_property_by_subtype('website', 'LINKED_IN');
-
         //If LinkedIn URL exists for contact,
         if (web_url)
         {
@@ -69,21 +70,24 @@ $(function ()
     $('#Linkedin_plugin_delete').die().live('click', function (event)
     {
         event.preventDefault();
-        console.log("in delete");
-
-        //Get website URL for LinkedIn from contact to check whether it exists
-        var web_url = agile_crm_get_contact_property_by_subtype('website', 'LINKED_IN');
-        console.log(web_url);
-
-        //If exists remove the URL from the contact to delete profile
-        if (web_url)
+        
+        // Gets Contact Preferences for this widget, based on plugin name 
+        var linked_id = agile_crm_get_widget_property_from_contact(LINKEDIN_PLUGIN_NAME);
+        
+        if(linked_id)
         {
-            agile_crm_delete_contact_property_by_subtype('website', 'LINKED_IN', web_url);
-            return;
+        	 //If URL not exists remove LinkedIn Id saved for contact
+            agile_crm_delete_widget_property_from_contact(LINKEDIN_PLUGIN_NAME);
         }
-
-        //If URL not exists remove LinkedIn Id saved for contact
-        agile_crm_delete_widget_property_from_contact(LINKEDIN_PLUGIN_NAME);
+        else
+        {
+	        //If exists remove the URL from the contact to delete profile
+	        if (web_url)
+	        {
+	            agile_crm_delete_contact_property_by_subtype('website', 'LINKED_IN', web_url);	            
+	        }
+        }
+       
     });
 
     //Sends a message to LinkedIn when clicked on send message button
@@ -131,9 +135,10 @@ function setupLinkedinOAuth(plugin_id)
         '&plugin_id=' + encodeURIComponent(plugin_id);
 
     //Shows a link button in the UI which connects to the above URL
-    $('#Linkedin').html(LINKEDIN_PLUGIN_HEADER + "<p>Build and engage with your " +
-        "professional network. Access knowledge, insights and opportunities.</p>" +
-        "<button class='btn'><a href='" + url + "'>Link Your LinkedIn</button>");
+    $('#Linkedin').html("<div style='padding: 0px 5px 7px 5px;line-height: 160%;' >" + 
+    		"Build and engage with your professional network. Access knowledge, " + 
+    		"insights and opportunities.<button class='btn' style='margin-top: 7px;'>" +
+    		"<a href='" + url + "'>Link Your LinkedIn</button></div>");
 }
 
 /**
@@ -159,7 +164,8 @@ function showLinkedinMatchingProfiles(plugin_id)
         // If no matches found display message
         if (data.length == 0)
         {
-            $('#Linkedin').html(el.concat("No Matches Found"));
+            $('#Linkedin').html("<div style='padding: 0px 5px 7px 5px;line-height:160%;'>" + 
+    				"No Matches Found</div>");
             return;
         }
 

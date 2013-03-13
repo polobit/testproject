@@ -148,6 +148,9 @@ public class LinkedInUtil
 	{
 	    SocialSearchResult result = new SocialSearchResult();
 
+	    if (person.getId().equalsIgnoreCase("private"))
+		continue;
+
 	    result.id = person.getId();
 	    result.name = person.getFirstName() + " " + person.getLastName();
 	    result.picture = person.getPictureUrl();
@@ -155,7 +158,7 @@ public class LinkedInUtil
 	    result.summary = person.getHeadline();
 	    result.distance = person.getDistance() + "";
 
-	    if (person.getDistance() == 1)
+	    if (person.getDistance() != null && person.getDistance() == 1)
 		result.is_connected = true;
 
 	    // Changes http to https to avoid client side warnings by browser,
@@ -224,9 +227,15 @@ public class LinkedInUtil
 	if (!(person.getDistance() > 1l))
 	{
 	    result.is_connected = true;
-	    if (!(getNetworkUpdates(widget, linkedInId, 0, 5) instanceof Exception))
+	    try
+	    {
 		result.updateStream = getNetworkUpdates(widget, linkedInId, 0,
 			5);
+	    }
+	    catch (Exception e)
+	    {
+		result.updateStream = new ArrayList<SocialUpdateStream>();
+	    }
 	}
 
 	// Change http to https to avoid client side warnings by browser
@@ -362,7 +371,9 @@ public class LinkedInUtil
 		.createNetworkUpdatesApiClient(widget.getProperty("token"),
 			widget.getProperty("secret"));
 
-	Network network = client.getUserUpdates(linkedInId, EnumSet.of(
+	Network network = null;
+
+	network = client.getUserUpdates(linkedInId, EnumSet.of(
 		NetworkUpdateType.PROFILE_UPDATE,
 		NetworkUpdateType.CONNECTION_UPDATE,
 		NetworkUpdateType.SHARED_ITEM), startIndex, endIndex);
@@ -445,6 +456,7 @@ public class LinkedInUtil
 
 	text = "";
 	client.reShare(shareId, text, VisibilityType.ANYONE);
+
 	return "Shared Successfully";
     }
 
@@ -531,20 +543,4 @@ public class LinkedInUtil
 	return list;
     }
 
-    /*
-     * public static void main(String[] args) {
-     * 
-     * final LinkedInApiClient client = factory.createLinkedInApiClient(
-     * "742877e1-5f85-4b49-a10c-08009f98005f",
-     * "846cae2c-d653-45bf-98b4-39c24655ba2d");
-     * 
-     * // Creates a client specifying the fields to be returned Person person =
-     * client.getProfileByUrl(
-     * "http://www.linkedin.com/pub/yaswanth-praveen/54/8a9/698",
-     * ProfileType.PUBLIC, EnumSet.of(ProfileField.ID));
-     * 
-     * System.out.println(person.getId());
-     * 
-     * }
-     */
 }
