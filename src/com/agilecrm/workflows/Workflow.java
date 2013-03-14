@@ -102,6 +102,19 @@ public class Workflow extends Cursor
     }
 
     /**
+     * Returns domain user id from DomainUser Key
+     * 
+     * @return domain user id
+     */
+    public Long getDomainUserId()
+    {
+	if (this.creator_key == null)
+	    return null;
+
+	return this.creator_key.getId();
+    }
+
+    /**
      * Returns domain user name as an xml element who creates workflow.
      * 
      * @return Respective name of domain user who creates workflow.
