@@ -232,8 +232,9 @@ $(function(){
 	 */  
 	$('#add').live('click', function(e){
 	    e.preventDefault();
-	    // Convert text to float
-	    var add_score = parseFloat($('#lead-score').text());
+	    
+	    // Convert string type to int
+	    var add_score = parseInt($('#lead-score').text());
 	    
 	    add_score = add_score + 1;
 	    
@@ -272,8 +273,8 @@ $(function(){
 	$('#minus').live('click', function(e){
 		e.preventDefault();
 		
-		// Converts text to float
-		var sub_score = parseFloat($('#lead-score').text());
+		// Converts string type to Int
+		var sub_score = parseInt($('#lead-score').text());
 		
 		if(sub_score <= 0)
 			return;
