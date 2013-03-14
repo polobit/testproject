@@ -12,12 +12,9 @@ import com.agilecrm.activities.Task.Type;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.AgileUser;
-import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DBUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
-import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>AddTask</code> represents AddTask node to add task related to
@@ -132,19 +129,15 @@ public class AddTask extends TaskletAdapter
 	Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
 
 	Task task = null;
-	DomainUser domainOwner = null;
 
 	if (contact != null)
 	{
 	    try
 	    {
-		String domain = NamespaceManager.get();
+		// Get DomainUser id who created workflow
+		Long domainId = campaignJSON.getLong("domainUserId");
 
-		// Get DomainUser who is account owner with respect to
-		// domain
-		domainOwner = DomainUserUtil.getDomainOwner(domain);
-
-		if (domainOwner == null)
+		if (domainId == null)
 		{
 		    // Execute Next One in Loop
 		    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON,
@@ -153,7 +146,8 @@ public class AddTask extends TaskletAdapter
 		}
 
 		AgileUser agileuser = AgileUser
-			.getCurrentAgileUserFromDomainUser(domainOwner.id);
+			.getCurrentAgileUserFromDomainUser(domainId);
+
 		task = new Task(Type.valueOf(category), dueDateInEpoch,
 			agileuser.id);
 

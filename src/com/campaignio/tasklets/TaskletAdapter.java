@@ -109,8 +109,7 @@ public class TaskletAdapter implements Tasklet
 
 	// Enqueue Task
 	CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON,
-		timeout,
-		custom1, custom2, custom3);
+		timeout, custom1, custom2, custom3);
     }
 
     /**
@@ -219,9 +218,6 @@ public class TaskletAdapter implements Tasklet
     public String replaceTokens(String value, JSONObject subscriberJSON,
 	    JSONObject data)
     {
-	System.out.println("The subscriberJson is " + subscriberJSON
-		+ "and the json data is" + data);
-
 	JSONObject mergedJson = null;
 	try
 	{
@@ -251,8 +247,7 @@ public class TaskletAdapter implements Tasklet
      */
     @SuppressWarnings("rawtypes")
     private static JSONObject mergeJSONObjects(JSONObject subscriberJSON,
-	    JSONObject data)
-	    throws Exception
+	    JSONObject data) throws Exception
     {
 	// Temporary json object to merge subscriber and data json objects.
 	JSONObject mergedJson = new JSONObject();
@@ -294,8 +289,8 @@ public class TaskletAdapter implements Tasklet
     public String replaceTokensOld(String value, JSONObject data)
 	    throws Exception
     {
-	  boolean replaced = false;
-	  
+	boolean replaced = false;
+
 	// Tokens
 	String[] tokens = value.split(" ");
 	for (int i = 0; i < tokens.length; i++)
@@ -311,21 +306,21 @@ public class TaskletAdapter implements Tasklet
 		}
 	    }
 	}
-	  
+
 	String replacedString = "";
 	for (int i = 0; i < tokens.length; i++)
 	{
 	    replacedString += (tokens[i] + " ");
 	}
-	  
+
 	if (replaced)
 	    System.out.println("Replaced "
 		    + value.replaceAll("\n", " ").replaceAll("\r", " ")
 		    + " with "
 		    + replacedString.replaceAll("\n", " ")
 			    .replaceAll("\r", " "));
-	  
-	  return replacedString.trim();
+
+	return replacedString.trim();
     }
 
     /**
