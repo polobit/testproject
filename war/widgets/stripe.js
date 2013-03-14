@@ -25,8 +25,10 @@ $(function() {
 	console.log("customer id "+ customer_id);
 	
 	if(!customer_id)
-		$('#Stripe').html('No customer id related to this contact');
-	
+		{
+			$('#Stripe').html('No customer id related to this contact');
+			return;
+		}
 	showStripeProfile(plugin_id, customer_id);
 	
 	
