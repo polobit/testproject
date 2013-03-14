@@ -543,15 +543,16 @@ var ContactsRouter = Backbone.Router.extend({
     	            isNew:"true",
     	            window: "contact-filters",
     	            postRenderCallback: function(el) {
-       					
+    	            	$("#content").html(LOADING_HTML); 
     	            	head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
     	           		    	{	
-    	            				chainFilters(el);	            			    
+    	            				chainFilters(el);
+    	            				$('#content').html(el);
     	           		    	})
     	               }
     	        });
     	
-        $('#content').html(contacts_filter.render().el);
+        contacts_filter.render();
     },
     contactFilterEdit : function(id)
     {
@@ -570,16 +571,19 @@ var ContactsRouter = Backbone.Router.extend({
     	        template: "filter-contacts",
     	        window: 'contact-filters',
 	            postRenderCallback: function(el) {  
+	            	
+	            	$("#content").html(LOADING_HTML); 
 	            	head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 	           		    	{	
 	            				chainFilters(el); 
 	            				deserializeChainedSelect($(el).find('form'), contact_filter.toJSON().rules);
+	            				$("#content").html(ContactFilter.el); 
 	           		    	})
 	               }
     	    	});
     	    
     	    	var ContactFilter = ContactFilter.render();
-    	    	$("#content").html(ContactFilter.el); 
+    	    	
     	
     },
     

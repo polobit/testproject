@@ -47,9 +47,14 @@ var ReportsRouter = Backbone.Router.extend({
 				// Populates users drop down
 				populateUsers("owners", el);
 
+				// Hide table until chaining is done, to avoid showing all fields and hiding.
+				$(".reports-condition-table", el).hide();
+				
 				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js',
 						function() {
+				
 							chainFilters(el);
+							$(".reports-condition-table", el).show();
 						})						
 				
 						
@@ -97,9 +102,13 @@ var ReportsRouter = Backbone.Router.extend({
 			postRenderCallback : function(el) {
 				populateUsers("owners", el, report.toJSON(), 'domainUser');
 
+				$(".reports-condition-table", el).hide();
 				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js',
 						function() {
 							chainFilters(el);
+							
+							$(".reports-condition-table", el).show();
+							
 							deserializeChainedSelect($(el).find('form'), report.toJSON().rules);
 						})
 					
@@ -107,9 +116,7 @@ var ReportsRouter = Backbone.Router.extend({
 				fillSelect("custom-fields-optgroup", "core/api/custom-fields", undefined, function(data){console.log(data)}, '<option value="custom_{{field_label}}">{{field_label}}</option>', true);
 				
        			head.js(LIB_PATH + 'lib/jquery.multi-select.js', LIB_PATH + 'lib/jquery-ui.min.js', function(){
-       				
-       					
-       				
+       				       				
        					$("#content").html(el);
        					$('#multipleSelect').multiSelect({ selectableOptgroup: true });
        					
@@ -118,12 +125,14 @@ var ReportsRouter = Backbone.Router.extend({
        						$('#multipleSelect').multiSelect('select', field); 
        					});
        					
-       					$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id","fields_set").sortable();
+       					$('.ms-selection').children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id","fields_set").sortable();
      	
        			});
 			}
 		});
 
 		report_model.render();
+		
+		
 	},
 })
