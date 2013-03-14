@@ -161,6 +161,7 @@ public class WorkflowUtil
 
 	    campaignJSON.put(TaskletUtil.CAMPAIGN_WORKFLOW_JSON, workflowJSON);
 	    campaignJSON.put("id", workflow.id);
+	    campaignJSON.put("domainUserId", workflow.getDomainUserId());
 
 	    return campaignJSON;
 	}
