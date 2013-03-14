@@ -44,7 +44,7 @@
 		<div id="linkedin_social_stream" class="collapse in">		
 		</div>
 		<div style="padding: 10px 5px 10px 5px;">
-			<a href="#more" class="linkedin_stream" id="linkedin_stream" rel="tooltip" title="Click to see updates">See More..</a>
+			<a href="#more" class="linkedin_stream" id="linkedin_stream" rel="tooltip" title="Click to see more updates">See More..</a>
 			<a href="#less" data-toggle="collapse" data-target="#linkedin_social_stream" id="linkedin_less" style="display:none">See Less..</a>
 			<a href="#refresh" id="linkedin_refresh_stream" class="icon-refresh pull-right" rel="tooltip" title="Refresh to get current updates" style="display:none"></a>
 		</div>	
@@ -69,13 +69,16 @@
 								{{else}}
 									{{message.current-share.author.firstName}} shared a <a target="_blank" href="{{message.current-share.content.shortenedUrl}}">link</a>
 								{{/if}}
+								<div style="font-size:12px;padding:5px 0px 5px 0px;">
+									{{epochToHumanDate "mm-dd-yyyy" created_time}}
+									<a href="#share" class="linkedin_share" id="{{id}}" style="margin-left:14px">Share</a>
+								</div>
 							{{else}}
 								{{message.current-share.comment}}
-							{{/if}}
-							<div style="font-size:12px;padding:5px 0px 5px 0px;">
-								{{epochToHumanDate "mm-dd-yyyy" created_time}}
-								<a href="#share" class="linkedin_share" id="{{id}}" style="margin-left:14px">Share</a>
-							</div>
+								<div style="font-size:12px;padding:5px 0px 5px 0px;">
+									{{epochToHumanDate "mm-dd-yyyy" created_time}}
+								</div>
+							{{/if}}							
 						{{/if_equals}}
 						{{#if_equals type "CONNECTION_ADDED_CONNECTIONS"}}
 							Connected to <a href="{{message.publicProfileUrl}}" target="_blank">{{message.firstName}}&nbsp{{message.lastName}}</a>
@@ -86,6 +89,8 @@
 					</div>
 			{{/each}}
 		</div>
+{{else}}
+  <div class="row-fluid" style="padding: 7px 5px 0px 5px;line-height: 140%;color: #999999;">This person does not share his/her updates</div>
 {{/if}}
 </script>
 
