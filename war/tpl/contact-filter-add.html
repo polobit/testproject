@@ -2,9 +2,13 @@
 <div class="span12">
 	<div class="well">
 		<form id="filterContactForm" class="form-horizontal">
-			<div name="rules" class="formsection chainedSelect">
-				<legend class="formheading">
-					<span> Filter Contacts <span
+			<div name="rules" class="formsection chainedSelect">	
+					 {{#if id}} 
+                        <legend class="formheading"> Edit Contact Filter</legend>
+                        {{else}}
+                        <legend class="formheading"><i class="icon-plus-sign"></i> Add Contact Filter</legend>
+                        {{/if}}
+				<span> Filter Contacts <span
 						style="vertical-align: text-top; margin-left: -3px"> <img
 							border="0" src="/img/help.png"
 							style="height: 6px; vertical-align: text-top" rel="popover"

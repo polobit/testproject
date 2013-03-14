@@ -1,4 +1,4 @@
-package com.agilecrm;
+package com.agilecrm.plugin.oauth;
 
 import java.io.IOException;
 

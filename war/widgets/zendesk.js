@@ -67,8 +67,7 @@ function setupZendeskOAuth(plugin_id) {
 	    }	
 		
 		agile_crm_save_widget_prefs(ZENDESK_PLUGIN_NAME, JSON.stringify(zendesk_prefs));		
-		agile_crm_save_widget_property_to_contact("test", "test");
-		//showTicketsFromZendesk(plugin_id,agile_crm_get_contact_property('email'));
+		showTicketsFromZendesk(plugin_id,agile_crm_get_contact_property('email'));
 		
 	}).error(function(data){
 		$('#Zendesk').html('<div style="margin: 0px 2px 10px 2px;word-wrap: break-word;"><p>'+ data.responseText + '</p></div>');

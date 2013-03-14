@@ -711,6 +711,9 @@ var ContactsRouter = Backbone.Router.extend({
             postRenderCallback: function(el)
             {
             	// Shows the query string as heading of search results
+            	if(searchResultsView.collection.length ==0)
+            		$("#search-query-heading", el).html('No matches found for "' + query + '"');
+            	else
             	$("#search-query-heading", el).html('Search results for "' + query + '"');
             }
       	});
