@@ -14,7 +14,6 @@ $(function()
 			'click',
 			function(e)
 			{
-
 				// To solve chaining issue when cloned
 				var htmlContent = $(getTemplate("filter-contacts", {})).find(
 						'tr').clone();
@@ -217,10 +216,22 @@ function chainFilters(el)
 
 		if(($(':selected', LHS).val()).indexOf('tags') != -1)
 			{
-				console.log("adding tags");;
 				addTagsDefaultTypeahead(RHS)
 			}
+		
+		$('.lhs', el).die().live('change', function(e){
+			e.preventDefault();
+			var value = $('.lhs', el).val();
+
+			if(value.indexOf('tags') != -1)
+				{
+					addTagsDefaultTypeahead($(this).closest('td').siblings('td.rhs-block'));
+				}
+			
+		})
 }
+
+
 
 function addTagsDefaultTypeahead(element)
 {
@@ -243,8 +254,7 @@ function addTagsDefaultTypeahead(element)
 		}});
 			return;
 		}
-	
-	console.log(tagsCollection.toJSON());
+
 	addTagsArrayasTypeaheadSource(tagsCollection.toJSON(), element);
 }
 
@@ -256,10 +266,7 @@ function addTagsArrayasTypeaheadSource(tagsJSON, element)
 		tags_array .push(element.tag.toString());
 	});
 
-	console.log(tags_array);
-	console.log(("input", element));
 	$("input", element).attr("test","test");
 	//$("input", element).attr("data-provide","typeahead");
 	$("input", element).typeahead({"source": tags_array});
-	console.log(("input", element).html())
 }

@@ -18,16 +18,16 @@
 						<div class="controls">
 							<table style="background-color: transparent">
 								<tbody>
-									<tr class="chained"padding-left:100%">
+									<tr class="chained" padding-left:100%">
 										<td>
 											<div name="ruleType">
 												<input type="text" class="hide" name="temp" class="required"
 													value="Contact" />
 											</div>
 										</td>
-										<td>
+										<td class="lhs-block">
 											<div id="LHS" name="LHS">
-												<select name="temp" id="LHS">
+												<select name="temp" class="lhs" id="LHS">
 													<option value="tags" selected="selected">Tag</option>
 													<option value="first_name">First Name</option>
 													<option value="tags_created">Tag And Creating Time</option>
@@ -40,7 +40,7 @@
 												</select>
 											</div>
 										</td>
-										<td>
+										<td class="codition-block">
 											<div id="condition" name="CONDITION">
 												<select name="temp" style="width: 120px;">
 													<option value="EQUALS"
@@ -63,8 +63,8 @@
 												</select>
 											</div>
 										</td>
-										<td>
-											<div id="RHS" name="RHS">
+										<td class="rhs-block">
+											<div id="RHS" class="rhs" name="RHS">
 												<input type="text" name="temp"
 													class="EQUALS NOTEQUALS LAST NEXT ANYOF span2"/>
                                                 <input type="text" name="tag"
