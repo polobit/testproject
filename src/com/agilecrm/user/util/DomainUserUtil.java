@@ -53,13 +53,20 @@ public class DomainUserUtil
      * @param email
      *            email address of the user
      * @return {@link DomainUser} object
+     * @throws Exception
      */
-    public static DomainUser generatePassword(String email)
+    public static DomainUser generatePassword(String email) throws Exception
     {
 	DomainUser domainUser = getDomainUserFromEmail(email);
 
 	if (email != null && domainUser != null)
 	{
+	    // If account is registered with open id new password is not
+	    // generated.
+	    if (domainUser.password.equals(DomainUser.MASKED_PASSWORD))
+	    {
+		throw new Exception();
+	    }
 	    String oldNamespace = NamespaceManager.get();
 	    NamespaceManager.set("");
 
@@ -152,9 +159,9 @@ public class DomainUserUtil
     {
 	// Get Current Logged In user
 	UserInfo userInfo = SessionManager.get();
-	if(userInfo == null)
-		return null;
-	
+	if (userInfo == null)
+	    return null;
+
 	return getDomainUserFromEmail(userInfo.getEmail());
     }
 
