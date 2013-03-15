@@ -19,14 +19,14 @@ $(function(){
 		var index_array = [];
 		var data_array = [];
 		var checked = false;
-		var table = $('body').find('table.showCheckboxes');
+		var table = $('body').find('.showCheckboxes');
 
 		$(table).find('tr .tbody_check').each(function(index, element){
 			
 			// If element is checked store it's id in an array 
 			if($(element).is(':checked')){
 				
-				// Disables mouseenter once checked for delete
+				// Disables mouseenter once checked for delete(To avoid popover in deals when model is checked)
 				$(element).closest('tr').on("mouseenter", false);
 				index_array.push(index);
 				id_array.push($(element).closest('tr').data().get('id'));
@@ -48,6 +48,50 @@ $(function(){
             $('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">×</a>You have not selected any records to delete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
 			
 	});
+	
+	
+	
+	/**
+	    * Validates the checkbox status of each row in table body
+	    * Customizes the delete operation
+	    * Deletes the entities
+	    */	
+		$('#delete-checked-grid').live('click', function(event){
+			event.preventDefault();
+			var id_array = [];
+			var index_array = [];
+			var data_array = [];
+			var checked = false;
+			var table = $('body').find('.showCheckboxes');
+
+			$(table).find('.tbody_check').each(function(index, element){
+				console.log("delete");
+				// If element is checked store it's id in an array 
+				if($(element).is(':checked')){
+					
+					console.log($(element).parent('div').attr('id'));
+					index_array.push(index);
+					console.log(index_array);
+					id_array.push($(element).parent('div').attr('id'));
+					//data_array.push($(element).parent('div').data().toJSON());
+					checked = true;
+				}
+			});
+			if(checked){
+				
+				if(!confirm("Are you sure you want to delete?"))
+		    		return;
+				// Customize the bulk delete operations
+				if(!customize_bulk_delete(id_array, data_array))
+					return;
+				
+				bulk_delete_operation($(table).attr('url'), id_array, index_array, table, true, data_array);
+			}	
+			else
+	            $('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">×</a>You have not selected any records to delete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
+				
+		});
+	
 });
 
 /**
@@ -86,21 +130,32 @@ function customize_bulk_delete(id_array, data_array){
  * @param {Object} table content as html object
  * @param {Array} data_array holds array of entities 
  */
-function bulk_delete_operation(url, id_array, index_array, table, data_array){
+function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, data_array){
 	var json = {};
 	json.model_ids = JSON.stringify(id_array);
-	var tbody = $(table).find('tbody');
+	
 	
 	$.ajax({
 		url: url,
 		type: 'POST',
 		data: json,
 		success: function(){
-			
-			// To remove table rows on delete 
-			for(var i = 0; i < index_array.length; i++) 
-				$(tbody).find('tr:eq(' + index_array[i] + ')').fadeOut(300, function() { $(this).remove(); });
-			
+	
+			if(!is_grid_view)
+			{
+				var tbody = $(table).find('tbody');
+				
+				// To remove table rows on delete 
+				for(var i = 0; i < index_array.length; i++) 
+					$(tbody).find('tr:eq(' + index_array[i] + ')').fadeOut(300, function() { $(this).remove(); });
+			}
+			else
+			{
+				// To remove table rows on delete 
+				for(var i = 0; i < id_array.length; i++) 
+					$("."+id_array[i]).fadeOut(300, function() { $(this).remove(); });
+				
+			}
 			// Tags re-fetching
 			if(App_Contacts.contactsListView){
 				setup_tags(App_Contacts.contactsListView.el);

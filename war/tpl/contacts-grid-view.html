@@ -1,5 +1,5 @@
 <script id="contacts-grid-model-template" type="text/html">
-<div class="span3" style="padding-bottom:10px;margin-left:20px !important">
+<div class="span3 {{id}}" style="padding-bottom:10px;margin-left:20px !important">
   {{#if_contact_type "PERSON"}}
     <div style="border: 1px solid #DDD;border-radius:4px;padding: 10px;background-color:#f5f5dc"id={{id}}><input class="tbody_check right" type="checkbox"/>
 	  <div style="display:inline;padding-right:10px;height:auto;">
@@ -96,7 +96,7 @@
         {{#if this.length}}
         <div class="data">
             <div class="data-container">
-                <div id="contacts-grid-model-list" class="contacts-model-list .showCheckboxes" route="contact/"  url="core/api/contacts/bulk" style="overflow:auto;">
+                <div id="contacts-grid-model-list" class="contacts-model-list grid-view showCheckboxes" route="contact/"  url="core/api/contacts/bulk" style="overflow:auto;">
                 </div>
             </div>
         </div>
