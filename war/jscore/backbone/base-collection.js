@@ -272,7 +272,7 @@ var Base_Collection_View = Backbone.View
 								 */
 								onFetch : function()
 								{
-									$("table").after(
+									$("table", that.el).after(
 											'<div style="margin-left:50%">'
 													+ LOADING_ON_CURSOR
 													+ '</div>');
