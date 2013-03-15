@@ -30,10 +30,10 @@
 										</td>
 										<td class="lhs-block">
 											<div id="LHS" name="LHS">
-												<select name="temp" class="lhs" id="LHS">
+												<select name="temp" class="lhs" id="LHS" style="width: 125px;">
 													<option value="tags" selected="selected">Tag</option>
 													<option value="first_name">First Name</option>
-													<option value="tags_created">Tag And Creating Time</option>
+													<option value="tags_created">Tag And CreatedDate</option>
 													<option value="title">Job Title</option>
 													<option value="email">Email Address</option>
 													<option value="phone">Phone Number</option>
@@ -68,21 +68,21 @@
 										</td>
 										<td class="rhs-block">
 											<div id="RHS" class="rhs" name="RHS">
-												<input type="text" name="temp"
-													class="EQUALS NOTEQUALS LAST NEXT ANYOF span2"/>
+												<input type="text" name="temp" style="width: 100px"
+													class="EQUALS NOTEQUALS LAST NEXT ANYOF"/>
                                                 <input type="text" name="tag"
-													class=" tags tags_created span2"
-													style="margin: 0 0 0 0px;" /> 
-                                                <input type="text" name="temp" class="email span2"/>
-												<input id="updated_date" type="text" name="updated_date"
-													class="ON AFTER BEFORE BETWEEN input required date span2"
+													class=" tags tags_created"
+													style="margin: 0 0 0 0px;width: 100px" /> 
+                                                <input type="text" name="temp" class="email" style="width: 100px"/>
+												<input id="updated_date" type="text" name="updated_date" style="width: 100px"
+													class="ON AFTER BEFORE BETWEEN input required date"
 													placeholder="MM/DD/YY" />
 											</div>
 										</td>
 										<td>
 											<div id="RHS-NEW" name="RHS_NEW">
-												<input id="date_between" type="text" name="temp"
-													class="BETWEEN input date span2" placeholder="MM/DD/YY" />
+												<input id="date_between" type="text" name="temp" style="width: 100px"
+													class="BETWEEN input date" placeholder="MM/DD/YY" />
 											</div>
 										</td>
 										<td>
@@ -104,17 +104,17 @@
 										<td>
 											<div id="nested_lhs" name="nested_lhs">
 												<input type="text" name="temp" class="LAST NEXT"
-													style="width: 120px" placeholder="Number of days" /> <input
-													id="date_between" type="text" style="width: 120px"
+													style="width: 100px" placeholder="Number of days" /> <input
+													id="date_between" type="text" style="width: 100px"
 													name="temp"
-													class="BETWEEN EQUALS AFTER BEFORE input date span2"
+													class="BETWEEN EQUALS AFTER BEFORE input date"
 													placeholder="MM/DD/YY" />
 											</div>
 										</td>
 										<td>
 											<div id="nested_rhs" name="nested_rhs">
 												<input id="date_between" type="text" name="temp"
-													style="width: 120px" class="BETWEEN input date span2"
+													style="width: 100px" class="BETWEEN input date"
 													placeholder="MM/DD/YY" />
 											</div>
 										</td>
