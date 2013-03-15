@@ -189,6 +189,7 @@ function agile_crm_save_widget_prefs(pluginName, prefs, callback) {
 	// Set changed prefs to widget backbone model
 	widget.set("prefs", prefs);
 
+	
 	widget.url = "core/api/widgets"
 	// Set the changed model data to respective plugin div as data
 	$('#' + pluginName).data('model', widget);

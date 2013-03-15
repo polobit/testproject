@@ -42,7 +42,7 @@ $(function(){
 			if(!customize_bulk_delete(id_array, data_array))
 				return;
 			
-			bulk_delete_operation($(table).attr('url'), id_array, index_array, table, data_array);
+			bulk_delete_operation($(table).attr('url'), id_array, index_array, table, undefined, data_array);
 		}	
 		else
             $('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">×</a>You have not selected any records to delete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
@@ -65,7 +65,7 @@ $(function(){
 			var table = $('body').find('.showCheckboxes');
 
 			$(table).find('.tbody_check').each(function(index, element){
-				console.log("delete");
+				
 				// If element is checked store it's id in an array 
 				if($(element).is(':checked')){
 					
@@ -139,8 +139,8 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 		url: url,
 		type: 'POST',
 		data: json,
-		success: function(){
-	
+		success: function() {
+			
 			if(!is_grid_view)
 			{
 				var tbody = $(table).find('tbody');
