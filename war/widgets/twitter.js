@@ -155,9 +155,9 @@ function setupTwitterOAuth(plugin_id)
 
     //Shows a link button in the UI which connects to the above URL
     $('#Twitter').html("<div style='padding: 0px 5px 7px 5px;line-height: 160%;' >" + 
-    	      "Follow your friends, experts, favorite celebrities, and breaking news " + 
-    	      "on TWITTER.<p style='margin: 10px 0px 5px 0px;'><button class='btn' >" + 
-    	      "<a href=" + url + ">Link Your Twitter</a></button></p></div>");
+    		"Follow your friends, experts, favorite celebrities, and breaking news " + 
+    		"on TWITTER.<p style='margin: 10px 0px 5px 0px;'><button class='btn' >" + 
+    		"<a href=" + url + ">Link Your Twitter</a></button></p></div>");
 }
 
 /**
@@ -379,7 +379,8 @@ function showTwitterProfile(twitter_id, plugin_id)
         $('#twitter_profile_load').remove();
 
         // Shows error message if error occurs
-        alert(data.responseText);
+    	$('#Twitter').html("<div style='padding: 0px 5px 7px 5px;line-height:160%;'" + 
+				"word-wrap: break-word;' >" + data.responseText + "</div>"); 
     });
 
     // On click of see more link, more updates are retrieved
@@ -922,6 +923,12 @@ function getTwitterIdByUrl(plugin_id, web_url, callback)
 
     }).error(function (data)
     {
+    	if(data.responseText == "TimeOut")
+    	{
+    		alert("Time Out while fetching LinkedIn profile. Reload and try again");
+    		return;
+    	}
+    	
         // Shows error message to the user returned by Twitter
         alert("URL provided for Twitter is not valid " + data.responseText);
 

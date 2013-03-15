@@ -34,7 +34,7 @@
 			{{#if current_update}}
 			<div id="linkedin_current_activity" style="padding: 7px 5px 10px 5px;border-bottom: 1px solid #dedede;display:none;line-height: 140%;">	
 				{{#is_link current_update}}
-	        		{{name}} shared a link <a href="{{current_update}}" target="_blank" >{{show_link_in_statement current_update}}</a>
+	        		{{name}} shared a link {{show_link_in_statement current_update}}
 				{{else}}
 					<span>{{current_update}}</span>
 				{{/is_link}}
@@ -62,7 +62,7 @@
 							{{#if message.current-share.content}}
 								{{#if message.current-share.content.title}}
 									{{#if message.current-share.comment}}									
-										{{message.current-share.comment}}<br /><a target="_blank" href="{{message.current-share.content.shortenedUrl}}">{{message.current-share.content.title}}</a>									
+										{{show_link_in_statement message.current-share.comment}}<br /><a target="_blank" href="{{message.current-share.content.shortenedUrl}}">{{message.current-share.content.title}}</a>									
 									{{else}}									
 										<a target="_blank" href="{{message.current-share.content.shortenedUrl}}">{{message.current-share.content.title}}</a>
 									{{/if}}
@@ -74,7 +74,7 @@
 									<a href="#share" class="linkedin_share" id="{{id}}" style="margin-left:14px">Share</a>
 								</div>
 							{{else}}
-								{{message.current-share.comment}}
+								{{show_link_in_statement message.current-share.comment}}
 								<div style="font-size:12px;padding:5px 0px 5px 0px;">
 									{{epochToHumanDate "mm-dd-yyyy" created_time}}
 								</div>
@@ -90,7 +90,7 @@
 			{{/each}}
 		</div>
 {{else}}
-  <div class="row-fluid" style="padding: 7px 5px 0px 5px;line-height: 140%;color: #999999;">This person does not share his/her updates</div>
+		<div class="row-fluid" style="padding: 7px 5px 0px 5px;line-height: 130%;color: #999999;">This person does not share his/her updates</div>
 {{/if}}
 </script>
 

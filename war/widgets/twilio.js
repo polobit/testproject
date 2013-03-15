@@ -31,7 +31,7 @@ $(function() {
 	var prefs = JSON.parse(plugin_prefs);
 	$.get("/core/api/widgets/twilio/"+prefs.token,  function(data){
 		console.log("generated token : " + data);
-		setUpTwilio(data);
+		setUpTwilio(data, numbers);
 	})
 
 	//setUpTwilio("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJBQzdkNTVhMDFhNjQwNDBiMTk2ODBjMTA2ZDk5NmRjOWNlIiwiZXhwIjoiMTM1OTcxODU0NiIsInNjb3BlIjoic2NvcGU6Y2xpZW50OmluY29taW5nP2NsaWVudE5hbWU9dGVqdSBzY29wZTpjbGllbnQ6b3V0Z29pbmc_YXBwU2lkPUNOZjYzYmNhMDM1NDE0YmUxMjFkNTE3YTExNjA2NmE1ZjgmY2xpZW50TmFtZT10ZWp1In0.Vr1iLBOWvXS0TjUqlYyrDDnovfuVCcbcdDHNUI1Qig4", numbers);

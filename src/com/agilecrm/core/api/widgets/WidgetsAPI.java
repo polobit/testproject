@@ -1,5 +1,6 @@
 package com.agilecrm.core.api.widgets;
 
+import java.net.SocketTimeoutException;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -175,6 +176,7 @@ public class WidgetsAPI
 	    else if (widget.name.equalsIgnoreCase("TWITTER"))
 		return TwitterUtil.getTwitterProfileById(widget, socialId);
 	}
+
 	catch (Exception e)
 	{
 	    e.printStackTrace();
@@ -777,6 +779,10 @@ public class WidgetsAPI
 	    // Calls TwitterUtil method to send message to person by socialId
 	    else if (widget.name.equalsIgnoreCase("TWITTER"))
 		return TwitterUtil.getTwitterIdByUrl(widget, webUrl);
+	}
+	catch (SocketTimeoutException e)
+	{
+	    return "TimeOut";
 	}
 	catch (Exception e)
 	{

@@ -8,8 +8,8 @@ $(function ()
 {
 	// LinkedIn plugin name as global variable
     LINKEDIN_PLUGIN_NAME = "Linkedin";
-    LINKEDIN_PLUGIN_HEADER = '<div></div>';
 
+    LINKEDIN_PLUGIN_HEADER = '<div></div>';
     // LinkedIn profile load image declared as global
     LINKEDIN_PROFILE_LOAD_IMAGE = '<center><img id="linkedin_profile_load" ' + 
 			'src=\"img/1-0.gif\" style="margin-bottom: 10px;margin-right: 16px;" >' + 
@@ -136,10 +136,10 @@ function setupLinkedinOAuth(plugin_id)
 
     //Shows a link button in the UI which connects to the above URL
     $('#Linkedin').html("<div style='padding: 0px 5px 7px 5px;line-height: 160%;' >" + 
-    	      "Build and engage with your professional network. Access knowledge, " + 
-    	      "insights and opportunities.<p style='margin: 10px 0px 5px 0px;' >" + 
-    	      "<button class='btn' ><a href='" + url + "'>Link Your LinkedIn</a>" + 
-    	      "</p></button></div>");
+    		"Build and engage with your professional network. Access knowledge, " + 
+    		"insights and opportunities.<p style='margin: 10px 0px 5px 0px;' >" + 
+    		"<button class='btn' ><a href='" + url + "'>Link Your LinkedIn</a>" + 
+    		"</p></button></div>");
 }
 
 /**
@@ -337,8 +337,18 @@ function showLinkedinProfile(linkedin_id, plugin_id)
     	// Remove loading image on error 
     	$('#linkedin_profile_load').remove();
     	
+    	// Check if member does not share information for third party applications
+    	if(data.responseText == "Invalid member id {private}")
+    	{
+    		$('#Linkedin').html("<div style='padding: 0px 5px 7px 5px;line-height:160%;'" + 
+    				"word-wrap: break-word;' >Member doesn't share his information for " + 
+    				"third party applications</div>");
+    		return;
+    	}
+    	
     	// Shows error message if error occurs
-        alert(data.responseText);
+    	$('#Linkedin').html("<div style='padding: 0px 5px 7px 5px;line-height:160%;'" + 
+				"word-wrap: break-word;' >" + data.responseText + "</div>");        
     });
 
     // On click of see more link, more updates are retrieved
@@ -463,28 +473,33 @@ function showLinkedinProfile(linkedin_id, plugin_id)
             // Remove loading button on success
             $('#status_load').remove();
 
+            // Populates the template with the data 
+            $("#linkedin_social_stream").html(getTemplate("linkedin-update-stream", data));
+            
             // If no updates are available for person return
             if (data.length == 0)
             {
+            	// See Less is shown and see more is hidden
+                $("#linkedin_stream").hide();
+                $('#linkedin_less').show();
                 return;
             }
 
             // See more,refresh  buttons are shown and less is hidden
             $("#linkedin_stream").show();
             $('#linkedin_less').hide();
-            $('#linkedin_refresh_stream').show();
-
-            // Populates the template with the data 
-            $("#linkedin_social_stream").html(getTemplate("linkedin-update-stream", data));
-
+           
         }).error(function (data)
         {
             // Remove loading button on error
             $('#status_load').remove();            
            
-            // Populates the template with the initial update stream on error
-            $("#linkedin_social_stream")
+            if(stream_data)
+            {
+            	// Populates the template with the initial update stream on error
+            	$("#linkedin_social_stream")
             		.html(getTemplate("linkedin-update-stream", stream_data));
+            }
             
             // Error message is displayed to user 
             alert(data.responseText);
@@ -561,13 +576,13 @@ function getLinkedinMatchingProlfiles(plugin_id, callback)
  */
 function sendLinkedInAddRequest(plugin_id, linkedin_id)
 {
-    // Store info in a json, to send it to the modal window when making a connect request
+    // Stores info in a JSON, to send it to the modal window when making a connect request
     var json = {};
 
     // Set headline of modal window as Connect
     json["headline"] = "Connect";
 
-    // Information to be shown in the modal to the user while making request 
+    // Information to be shown in the modal to the user 
     json["info"] = "Sends a connect request to " + Linkedin_current_profile_user_name +
         " on Linkedin from your Linkedin account associated with Agile CRM";
 
@@ -597,8 +612,8 @@ function sendLinkedInAddRequest(plugin_id, linkedin_id)
             return;
         }
 
-        // Sends post request to url "core/api/widgets/connect/" and Calls WidgetsAPI with 
-        // plugin id and LinkedIn id as path parameters and form as post data
+        // Sends post request to url "core/api/widgets/connect/" to call WidgetsAPI 
+        // with plugin id and LinkedIn id as path parameters and form as post data
         $.post("/core/api/widgets/connect/" + plugin_id + "/" + linkedin_id, 
         		$('#linkedin_messageForm').serialize(),
 
@@ -775,6 +790,12 @@ function getLinkedinIdByUrl(plugin_id, web_url, callback)
 
     }).error(function (data)
     {
+    	if(data.responseText == "TimeOut")
+    	{
+    		alert("Time Out while fetching LinkedIn profile. Reload and try again");
+    		return;
+    	}
+    	
         // Shows error message to the user returned by LinkedIn
         alert("URL provided for linkedin is not valid " + data.responseText);
 
