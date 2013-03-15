@@ -567,18 +567,19 @@ $(function() {
 	});
 	
 	 Handlebars.registerHelper('is_link', function(value, options) {
-		  if (value.indexOf("http") != -1)
-		   return options.fn(this);
-		  else
-		   return options.inverse(this);
-		 });
-	 
-	 Handlebars.registerHelper('show_link_in_statement', function(value){
 		   
-		   if (value.indexOf("http") == -1)
-		    return value;
 		   var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+		      
+		   if (value.search(exp) != -1)
+		    return options.fn(this);
+		   else
+		    return options.inverse(this);
+		  });
+		  
+		  Handlebars.registerHelper('show_link_in_statement', function(value){ 
 		   
+		   var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+
 		   try {
 		    value = value.replace(exp,"<a href='$1' target='_blank' class='cd_hyperlink'>$1</a>");
 		    return new Handlebars.SafeString(value);
@@ -587,7 +588,7 @@ $(function() {
 		    return text;
 		   }
 
-		  })
+		  });
 		  
 		  /**
 			 * Returns table headings for custom contacts list view

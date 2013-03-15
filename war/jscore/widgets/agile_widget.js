@@ -181,7 +181,7 @@ function agile_crm_get_plugin_prefs(pluginName) {
  * @param prefs :
  *            prefs to be saved
  */
-function agile_crm_save_widget_prefs(pluginName, prefs) {
+function agile_crm_save_widget_prefs(pluginName, prefs, callback) {
 
 	// Get the model from the the element
 	var widget = $('#' + pluginName).data('model');
@@ -194,7 +194,14 @@ function agile_crm_save_widget_prefs(pluginName, prefs) {
 	$('#' + pluginName).data('model', widget);
 
 	// Save the updated model attributes
-	widget.save(widget);
+    widget.save(widget, {success:function(data){
+       console.log(data.toJSON())
+       if (callback && typeof (callback) === "function")
+          {
+              // Execute the callback, passing parameters as necessary
+              callback(data.toJSON());
+          }
+    }});
 
 }
 
