@@ -437,19 +437,20 @@ var ContactsRouter = Backbone.Router.extend({
     		template: "contact-view",
     		postRenderCallback: function(el) {
     			
+    			$("#content").html(LOADING_HTML);
     			head.js(LIB_PATH + 'lib/jquery.multi-select.js',LIB_PATH + 'lib/jquery-ui.min.js', function(){
     			
-	
+    				$('#multipleSelect', el).multiSelect();
+    				
     				$("#content").html(el);
     				
-    				$('#multipleSelect').multiSelect();
     				
     				$('.ms-selection').children('ul').addClass('multiSelect').attr("name", "fields_set").sortable();
     			});
     		}
     		 
     	});
-    	$('#content').html(view.render().el);
+    	view.render();
     },
     contactViews: function() {
     	   this.contactViewListView = new Base_Collection_View({
@@ -480,6 +481,8 @@ var ContactsRouter = Backbone.Router.extend({
     		restKey: "contactView",
             window: 'contact-views',
             postRenderCallback: function(el) {
+
+            	$("#content").html(LOADING_HTML);
        			head.js(LIB_PATH + 'lib/jquery.multi-select.js', LIB_PATH + 'lib/jquery-ui.min.js', function(){
        					
        		
@@ -487,7 +490,7 @@ var ContactsRouter = Backbone.Router.extend({
        					
        					$('#multipleSelect').multiSelect();
        					
-       				    $('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id","fields_set").sortable();
+       				    $('.ms-selection').children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id","fields_set").sortable();
        					       					
        					$.each(contact_view_model.toJSON()['fields_set'], function(index, field){
        						$('#multipleSelect').multiSelect('select', field); 
