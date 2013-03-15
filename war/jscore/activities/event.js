@@ -3,7 +3,7 @@
  * event.js is a script file to deal with the actions like creation, update and
  * deletion of events from client side.
  * 
- * @module Activities 
+ * @module Activities
  * 
  * author: Rammohan
  */
@@ -11,8 +11,8 @@
 $(function() {
 
 	/**
-	 * Shows activity modal, and highlights the event form features (Shows event form
-	 * and hides task form, changes color and font-weight)
+	 * Shows activity modal, and highlights the event form features (Shows event
+	 * form and hides task form, changes color and font-weight)
 	 * 
 	 */
 	$('#show-activity').live('click', function(e) {
@@ -95,7 +95,8 @@ $(function() {
 	});
 
 	/**
-	 * Activates time picker for start time to the fields with class start-timepicker
+	 * Activates time picker for start time to the fields with class
+	 * start-timepicker
 	 */
 	$('.start-timepicker').timepicker({
 		defaultTime : 'current',
@@ -104,33 +105,35 @@ $(function() {
 	});
 
 	/**
-	 * Activates time picker for end time to the fields with class end-timepicker
+	 * Activates time picker for end time to the fields with class
+	 * end-timepicker
 	 */
 	$('.end-timepicker').timepicker({
 		defaultTime : get_hh_mm(true),
 		showMeridian : false,
 		template : 'modal'
 	});
-	
+
 	/**
-	 * Activates time picker for start time to the fields with class update-start-timepicker
+	 * Activates time picker for start time to the fields with class
+	 * update-start-timepicker
 	 */
 	$('.update-start-timepicker').timepicker({
 		defaultTime : 'current',
 		showMeridian : false,
 		template : 'modal'
 	});
-	
-	
+
 	/**
-	 * Activates time picker for end time to the fields with class update-end-timepicker
+	 * Activates time picker for end time to the fields with class
+	 * update-end-timepicker
 	 */
 	$('.update-end-timepicker').timepicker({
 		defaultTime : get_hh_mm(true),
 		showMeridian : false,
 		template : 'modal'
 	});
-	
+
 	/**
 	 * Sets the start time with current time and end time half an hour more than
 	 * start time, when they have no values by the time the modal is shown.
@@ -146,6 +149,15 @@ $(function() {
 		if ($('.end-timepicker').val() == '')
 			$('.end-timepicker').val(get_hh_mm(true));
 
+	});
+
+	/**
+	 * To avoid showing previous errors of the modal.
+	 */
+	$('#updateActivityModal').on('shown', function() {
+		if (isValidForm('#updateActivityForm')) {
+			$('#' + this.id).find('.alert').css('display', 'none');
+		}
 	});
 
 	/**
@@ -185,6 +197,8 @@ function highlight_vent() {
  *            startTime start time of an event
  * @param {Number}
  *            endTime end time of an event
+ * @param {String}
+ *            modalId the unique id for the modal to identify it
  */
 function is_valid_range(startDate, endDate, startTime, endTime, modalName) {
 	if (endDate - startDate >= 86400000) {
@@ -231,34 +245,33 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName) {
  * 
  */
 function save_event(formId, modalName, isUpdate, saveBtn) {
-	
-	// Returns, if the save button has disabled attribute 
-	if($(saveBtn).attr('disabled'))
+
+	// Returns, if the save button has disabled attribute
+	if ($(saveBtn).attr('disabled'))
 		return;
-	
+
 	// Disables save button to prevent multiple click event issues
 	$(saveBtn).attr('disabled', 'disabled');
-	
+
 	// Save functionality for event
-	if (!isValidForm('#' + formId)){
-		
+	if (!isValidForm('#' + formId)) {
+
 		// Removes disabled attribute of save button
 		$(saveBtn).removeAttr('disabled');
 		return false;
-	}	
+	}
 
 	var json = serializeForm(formId);
 
 	// For validation
 	if (!is_valid_range(new Date(json.start).getTime(), new Date(json.end)
 			.getTime(), (json.start_time).split(":"), (json.end_time)
-			.split(":"),modalName))
-		{
-		
+			.split(":"), modalName)) {
+
 		// Removes disabled attribute of save button
 		$(saveBtn).removeAttr('disabled');
 		return;
-		}
+	}
 
 	// Show loading symbol until model get saved
 	$('#' + modalName).find('span.save-status').html(LOADING_HTML);
@@ -285,10 +298,10 @@ function save_event(formId, modalName, isUpdate, saveBtn) {
 	eventModel.url = 'core/api/events';
 	eventModel.save(json, {
 		success : function(data) {
-			
+
 			// Removes disabled attribute of save button
 			$(saveBtn).removeAttr('disabled');
-			
+
 			$('#' + formId).each(function() {
 				this.reset();
 			});
