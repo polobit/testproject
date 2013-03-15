@@ -31,15 +31,23 @@ else if(!StringUtils.isEmpty(email) && StringUtils.isEmpty(password))
     
     email = email.toLowerCase();
     
-    domainUser = DomainUserUtil.generatePassword(email);
-	if(domainUser == null)
-	{
-	    error = "We are not able to find any user";
-	}
-	else
-	{
-	   success = "We have sent you an email";
-	}
+    try
+    {
+	    domainUser = DomainUserUtil.generatePassword(email);
+	    if(domainUser == null)
+		{
+		    error = "We are not able to find any user";
+		}
+		else
+		{
+		   success = "We have sent you an email";
+		}
+    }
+    catch (Exception e)
+    {	
+		error = "You have signed-up using your Google/Yahoo account. Please sign-in through the same account";
+    }
+    
 	
 	System.out.println(error + " " + success);
 }

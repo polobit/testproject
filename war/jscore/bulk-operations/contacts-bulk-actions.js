@@ -225,9 +225,21 @@ $(function(){
  */
 function get_contacts_bulk_ids(){
 	var id_array = [];
+	
+	var table = $('body').find('.showCheckboxes');
 
-	var table = $('body').find('table.showCheckboxes');
-
+		if($(".grid-view").length != 0)
+		{
+			$(table).find('.tbody_check').each(function(index, element){
+				// If element is checked add store it's id in an array 
+				if($(element).is(':checked')){
+					id_array.push($(element).parent('div').attr('id'));
+				}	
+			});
+			
+			return id_array;
+		}
+				
 	$(table).find('tr .tbody_check').each(function(index, element){
 		
 		// If element is checked add store it's id in an array 
