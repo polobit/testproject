@@ -77,7 +77,7 @@ function agile_type_ahead(id, el, callback, isSearch){
         		 * If no result found based on query, shows info in
         		 * type-ahead drop-down and return
         		 */
-        		if (data.length == 0){
+        		if (data.length == 0) {
         			
         			that.$menu.html('<p align="center"><b>No Results Found</b><p>');
         			return;
@@ -138,10 +138,10 @@ function agile_type_ahead(id, el, callback, isSearch){
                 		 * and last name of person
                 		 */
                 		if (item.type == "COMPANY") 
-                			var fullname = getPropertyValue(item.properties, "name");
+                			var fullname = getPropertyValue(item.properties, "name") + item.id;
                 		else 
                 			var fullname = getPropertyValue(item.properties, 
-                						   		"first_name") + " " + getPropertyValue(item.properties, "last_name");
+                						   		"first_name") + " " + getPropertyValue(item.properties, "last_name") + "-" +  item.id;
 
                 		// Sets data-value to name
                 		i = $(that.options.item).attr('data-value', fullname);
@@ -170,14 +170,15 @@ function agile_type_ahead(id, el, callback, isSearch){
          * when search symbol is clicked. 
          */
         updater: function (items){
-        	
+        
             // To verify whether the entity (task, deal etc..) related to same contact twice 
         	var tag_not_exist = true;
 
-            /* Stores items in temp variable so that, to show first
+            /* Stores items in temp variable so that, shows first
              * name and last name separated by space
              */
-            var items_temp = items;
+        	if (items)
+        		var items_temp = items.substr(0, items.lastIndexOf('-'));
 
             // Trims spaces in names to retrieve contact id from JSON (TYPEHEAD_TAGS)
             if (items) items = items.split(" ").join("")
@@ -214,8 +215,11 @@ function agile_type_ahead(id, el, callback, isSearch){
             });
 
             // add tag
-            if (tag_not_exist) $('.tags', el).append(
-                '<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_TAGS[items] + '">' + items_temp + '<a class="close" id="remove_tag">&times</a></li>');
+            if (tag_not_exist)
+            	{
+            	
+            		$('.tags', el).append('<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_TAGS[items] + '">' + items_temp + '<a class="close" id="remove_tag">&times</a></li>');
+            	}
         },
         
         // Hides the results list
@@ -284,7 +288,7 @@ function contacts_typeahead(data)
         }
 
         // Appends first and last name to push in to a list
-        contact_name = getPropertyValue(contact.properties, "first_name") + getPropertyValue(contact.properties, "last_name");
+        contact_name = getPropertyValue(contact.properties, "first_name") + getPropertyValue(contact.properties, "last_name") +"-"+ contact.id;
             
         // Spaces are removed from the name, name should be used as a key in map "TYPEHEAD_TAGS"
         contact_names_list.push(contact_name.split(" ").join(""));
