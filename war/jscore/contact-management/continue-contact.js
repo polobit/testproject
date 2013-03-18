@@ -279,15 +279,12 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         			App_Contacts.contact_custom_view.collection.add(data);
         		}
             	
- 
-            	// If user refreshes in contact details page, then contact detail view model is changed.
-            	if(App_Contacts.contactDetailView && App_Contacts.contactDetailView.model != null)
-            	{
-            		console.log(data.toJSON());
-            		App_Contacts.contactDetailView.model = data
-            	}
-
-        	
+        		else if(App_Contacts.contactDetailView)
+        		{
+        			App_Contacts.contactDetailView.model = data
+        		}
+            	
+            	
             	
             	App_Contacts.navigate("contact/" + data.id, {
                 	trigger: true
@@ -308,8 +305,8 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
                 this.reset();
             });
             
-            // Removes tags list 
-            $('.tagsinput').empty();
+            // Removes tags list(remove them from new person modal)
+            $('.tagsinput', $("#"+modal_id)).empty();
         },
         error: function (model, response) {
         	

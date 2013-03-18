@@ -74,7 +74,7 @@
                     <a href="#" id="add-tags" rel="tooltip" data-original-title="addtag" data-placement="top"><i class="icon-plus-sign"></i> <span>Add tags</span></a>  
                 </div>  
                 <ul id="added-tags-ul" class="tagsinput" style="display:inline-block;vertical-align:top;margin-bottom:10px">
-                {{#if tags}}
+                {{#if tags.length}}
                     {{#each tags}}
                         <li style="display:inline-block;" class="tag" data="{{this}}"><span><a class="anchor" href="#tags/{{this}}">{{this}}</a><a class="close remove-tags" id="{{this}}">&times</a></span></li>
                     {{/each}}
