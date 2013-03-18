@@ -156,9 +156,6 @@ $(function() {
 	 */
 	$('#updateActivityModal').on('show', function() {
 		
-		if (!(isValidForm('#updateActivityForm')))
-		return;
-		
 		// Removes alert message of error related date and time.
 		$('#' + this.id).find('.alert').css('display', 'none');
 		

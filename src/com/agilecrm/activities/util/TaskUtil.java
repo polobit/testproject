@@ -184,7 +184,6 @@ public class TaskUtil
     public static List<Task> getPendingTasksToRemind(int numDays,
 	    Key<AgileUser> owner)
     {
-
 	// Gets Today's date
 	DateUtil startDateUtil = new DateUtil();
 	Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
@@ -197,14 +196,15 @@ public class TaskUtil
 	System.out.println("check for " + startTime + " " + endTime);
 
 	// Gets list of tasks filtered on given conditions
-	// return dao.ofy().query(Task.class).filter("owner =", owner)
-	// .filter("due >=", startTime).filter("due <=", endTime)
-	// .filter("is_complete", false).list();
-
-	List<Task> tasks = dao.ofy().query(Task.class).filter("owner =", owner)
+	List<Task> tasks = dao.ofy().query(Task.class)
+		.filter("due >", startTime).filter("due <=", endTime)
 		.filter("is_complete", false).list();
 
-	System.out.println("Owner tasks: " + tasks);
+	// List<Task> tasks = dao.ofy().query(Task.class).filter("owner =",
+	// owner)
+	// .filter("is_complete", false).list();
+
+	System.out.println("Due tasks: " + tasks);
 
 	if (tasks.isEmpty())
 	    return tasks;
@@ -213,10 +213,18 @@ public class TaskUtil
 
 	for (Task task : tasks)
 	{
-	    if (task == null || !(task.due > startTime && task.due <= endTime))
+	    if (task == null)
 		continue;
 
-	    dueTasksList.add(task);
+	    // Compare task owner with current owner.
+	    boolean value = task.compareTaskOwner(owner);
+
+	    // if (task == null || !(task.due > startTime && task.due <=
+	    // endTime))
+	    // continue;
+
+	    if (value)
+		dueTasksList.add(task);
 	}
 
 	return dueTasksList;

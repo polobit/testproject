@@ -169,8 +169,22 @@ $(function(){
 	 */
 	$('.emailSelect').die().live('change',function(e){
 		e.preventDefault();
+		
+		// To remove previous errors
+		$('#emailForm').find('.error').removeClass('error');
+		$('#emailForm').find('.help-inline').css('display','none');
+		
 		var model_id = $('.emailSelect option:selected').attr('value');
-			
+	
+		 // When default option selected make subject and body empty
+		if(!model_id)
+			{
+			// Fill subject and body of send email form
+			$("#emailForm").find( 'input[name="subject"]' ).val("");
+			$("#emailForm").find( 'textarea[name="body"]' ).val("");
+			return;
+			}
+		
 		var emailTemplatesModel = Backbone.Model.extend({
 		     url: '/core/api/email/templates/' + model_id,
 		     restKey: "emailTemplates"

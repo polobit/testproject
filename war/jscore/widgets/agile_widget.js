@@ -138,7 +138,7 @@ function agile_crm_add_note(sub, description) {
 	    note.set("subject", sub);
 	    note.set("description", description);
 	    
-	    note.set("contacts", [contact_model.id].toString());
+	    note.set("contacts", [contact_model.id.toString()]);
 	    
 	    note.save();
 	// Create Model and Save

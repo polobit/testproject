@@ -13,7 +13,7 @@
 			</div>
 			{{#if summary}}
 				<div class='row-fluid'>
-				 	<div style="padding: 5px 5px 10px 5px;font-size: 13px;line-height: 14px;">{{summary}}</div> 
+				 	<div style="padding: 5px 5px 10px 5px;font-size: 13px;line-height: 14px;">{{show_link_in_statement summary}}</div> 
 				</div>
 			{{/if}}
 			<div style="padding: 5px 5px 10px 5px;font-size: 13px;">
@@ -34,7 +34,7 @@
 			{{#if current_update}}
 			<div id="linkedin_current_activity" style="padding: 7px 5px 10px 5px;border-bottom: 1px solid #dedede;display:none;line-height: 140%;">	
 				{{#is_link current_update}}
-	        		{{name}} shared a link {{show_link_in_statement current_update}}
+	        		<a href="{{url}}" target="_blank" >{{name}}</a> shared a link {{show_link_in_statement current_update}}
 				{{else}}
 					<span>{{current_update}}</span>
 				{{/is_link}}
