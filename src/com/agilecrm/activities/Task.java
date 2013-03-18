@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
@@ -194,6 +195,35 @@ public class Task
     public List<Contact> getContacts()
     {
 	return Contact.dao.fetchAllByKeys(this.related_contacts);
+    }
+
+    /**
+     * Returns list of contacts related to task.
+     * 
+     * @param id
+     *            - Task Id.
+     * @return list of Contacts
+     */
+    public List<Contact> getContacts(Long id)
+    {
+	Task task = TaskUtil.getTask(id);
+	return task.getContacts();
+    }
+
+    /**
+     * Compares task owner with given owner. TaskUtil uses this method to
+     * compare task owners.
+     * 
+     * @param owner
+     *            - Current owner.
+     * @return boolean value - true if equal otherwise false.
+     */
+    public boolean compareTaskOwner(Key<AgileUser> owner)
+    {
+	if (owner.equals(this.owner))
+	    return true;
+
+	return false;
     }
 
     /**
