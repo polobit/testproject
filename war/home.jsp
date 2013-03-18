@@ -59,6 +59,10 @@
 String CSS_PATH = "/";
 // String CSS_PATH = "//d13pkp0ru5xuwf.cloudfront.net/";
 %>
+<%
+					    String logoutURL = "/login";
+					    UserInfo user = SessionManager.get();
+					%>
 	
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/agilecrm.css" />
@@ -112,19 +116,21 @@ String CSS_PATH = "/";
 								class="icon-sitemap icon-white"></i> Campaigns</a>
 						<li id="reportsmenu"><a href="#reports"><i
 								class="icon-share icon-white"></i> Reports</a>
+						<li>
+							<form id="searchForm" class=" navbar-search"
+									style="display: inline;margin:5px;">
+									<input id="searchText" type="text" data-provide="typeahead"
+										class="typeahead typeahead_contacts search-query"
+										placeholder="Search"></input> <input id="search-results"
+										type="image" src="img/SearchIcon.png" class="searchbox" />
+							</form>
+						</li>
 					</ul>
+					
+										
 
-					<%
-					    String logoutURL = "/login";
-					    UserInfo user = SessionManager.get();
-					%>
-			<form id="searchForm" class=" navbar-search"
-						style="display: inline;margin:5px;">
-						<input id="searchText" type="text" data-provide="typeahead"
-							class="typeahead typeahead_contacts search-query"
-							placeholder="Search"></input> <input id="search-results"
-							type="image" src="img/SearchIcon.png" class="searchbox" />
-					</form>
+					
+					
 					<ul class="nav pull-right">
 
 						<li class="dropdown" id="menu1"><a class="dropdown-toggle"
