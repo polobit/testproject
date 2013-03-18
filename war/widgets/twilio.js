@@ -7,11 +7,7 @@ $(function() {
 	var numbers = agile_crm_get_contact_properties_list("phone");
 	console.log(numbers);
 	
-	if(numbers.length == 0)
-		{
-			$("#Twilio").html("<p>No contact number associated with this contact</p>");
-			return;
-		}
+
 	
 	var plugin = agile_crm_get_plugin(Twilio_PLUGIN_NAME);
 	// Gets plugin id from plugin object, fetched using script API
@@ -27,6 +23,13 @@ $(function() {
 		setupTwilioOAuth(plugin_id);
 		return;
 	}
+	
+	if(numbers.length == 0)
+	 {
+	  $("#Twilio").html("<div style='padding: 0px 5px 7px 5px;line-height:160%;'>" +
+	    "No contact number is associated with this contact</div>");
+	        return;
+	 }
 	
 	var prefs = JSON.parse(plugin_prefs);
 	$.get("/core/api/widgets/twilio/"+prefs.token,  function(data){

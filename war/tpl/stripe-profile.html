@@ -14,12 +14,12 @@
 				<div style="margin-bottom: 10px;">
 					<b>Id:</b> {{customer.id}}
 				</div>
-			</div>
-			{{#if customer.subscription}}			
+			</div>			
 			<div style="margin-bottom: 10px;border-bottom:1px solid #f5f5f5">
 				<div style="margin-bottom: 7px;">
 					<b>Subscription Details</b>
-				</div>			
+				</div>	
+				{{#if customer.subscription}}		
 				<table class="row-fluid" style="margin-bottom: 10px;line-height: 16px;table-layout:fixed;">
 					<tr>
 						<th style="vertical-align: top;">Start Date </th>
@@ -67,14 +67,18 @@
 						</td>
 					</tr>
 				</table>
-			</div>
-			{{/if}}
-		</div>
-		{{#if invoice.length}}	
+				{{else}}
+					<div class='well' style='padding: 5px 5px 5px 5px;line-height:160%;background-color: #ffffff;color: #aaa;margin-bottom: 10px;'>
+			            No active subscription
+					</div>
+				{{/if}}
+			</div>			
+		</div>	
 		<div style="padding: 0px 5px 0px 5px;">
 			<div style="margin-bottom: 10px;">
 				<b>Payment Details</b>
 			</div>	
+			{{#if invoice.length}}
 			{{#each invoice}}	
 				<table class="row-fluid table table-bordered" style="line-height:13px;margin-bottom:10px;">					
 						<tr><th style="padding: 5px;">Plan</th>
@@ -94,7 +98,11 @@
 						</tr>								
 				</table>
 			{{/each}}
-		{{/if}}
+			{{else}}
+				<div class='well' style='padding: 5px 5px 5px 5px;line-height:160%;background-color: #ffffff;color: #aaa;margin-bottom: 10px;'>
+			            No payments
+				</div>
+			{{/if}}
 		</div>		    	
 	</div>
 </script>
