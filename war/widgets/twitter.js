@@ -925,7 +925,7 @@ function getTwitterIdByUrl(plugin_id, web_url, callback)
     {
     	if(data.responseText == "TimeOut")
     	{
-    		alert("Time Out while fetching LinkedIn profile. Reload and try again");
+    		alert("Time Out while fetching Twitter profile. Reload and try again");
     		return;
     	}
     	
