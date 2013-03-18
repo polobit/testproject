@@ -154,10 +154,17 @@ $(function() {
 	/**
 	 * To avoid showing previous errors of the modal.
 	 */
-	$('#updateActivityModal').on('shown', function() {
-		if (isValidForm('#updateActivityForm')) {
-			$('#' + this.id).find('.alert').css('display', 'none');
-		}
+	$('#updateActivityModal').on('show', function() {
+		
+		if (!(isValidForm('#updateActivityForm')))
+		return;
+		
+		// Removes alert message of error related date and time.
+		$('#' + this.id).find('.alert').css('display', 'none');
+		
+		// Removes error class of input fields
+		$('#' + this.id).find('.error').removeClass('error');
+
 	});
 
 	/**
