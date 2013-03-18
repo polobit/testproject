@@ -158,9 +158,7 @@ var ContactsRouter = Backbone.Router.extend({
           // Contacts are fetched when the app loads in the initialize
           var cel = this.contactsListView.el;
           var collection = this.contactsListView.collection;
-          this.contactsListView.collection.fetch({success: function(data){
-        	  console.log(JSON.stringify(data.toJSON()));
-          }});
+          this.contactsListView.collection.fetch();
 
           $('#content').html(this.contactsListView.render().el);
           
@@ -188,6 +186,13 @@ var ContactsRouter = Backbone.Router.extend({
      */
     contactDetails: function (id, contact) {
 
+    	if(!contact && this.contactDetailView && this.contactDetailView.model != null)
+    	{
+    		console.log(this.contactDetailView.model.toJSON())
+    		App_Contacts.contactDetails(id, this.contactDetailView.model);
+    		return;
+    	}
+    		
     	// If hte user refreshes the contacts detail view page directly - we should load from the model
         if(!contact)
     	if (!this.contactsListView || this.contactsListView.collection.length == 0 || this.contactsListView.collection.get(id) == null) {
@@ -223,13 +228,14 @@ var ContactsRouter = Backbone.Router.extend({
         	}
         
         // If contact is of type company just edit it.
-        if(contact.get('type') == 'COMPANY'){
+        if(contact.get('type') == 'COMPANY') {
         	deserialize_contact(contact.toJSON(), 'continue-company');
         	return;
         }
 
+      
         this.contactDetailView = new Base_Model_View({
-            model: contact,
+            model : contact,
             isNew: true,
             template: "contact-detail",
             postRenderCallback: function(el) {
@@ -276,9 +282,9 @@ var ContactsRouter = Backbone.Router.extend({
     	
     	if(this.contactDetailView && this.contactDetailView.model.id)
     	{
-    		console.log(this.contactDetailView.model.toJSON());
     		contact = this.contactDetailView.model.toJSON();
     	}
+    	
     	// If contact list is defined the get contact to edit from the list
     	else if (this.contactsListView && this.contactsListView.collection && this.contactsListView.collection.get(id))
     	{
@@ -290,7 +296,6 @@ var ContactsRouter = Backbone.Router.extend({
     	else if(this.contact_custom_view && this.contact_custom_view.collection && this.contact_custom_view.collection.get(id))
     	{
     		contact = this.contact_custom_view.collection.get(id).toJSON();
-    		console.log(contact);
     	}
     
     	// If contact list view and custom view list is not defined then download contact

@@ -152,7 +152,7 @@
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label">Address</label>
+						<label class="control-label">Address<span class="field_req">*</span></label>
 						<div class="controls">
 							<input type="text" name="address_line1" class="required"
 								id="address1" placeholder="address" />
@@ -165,10 +165,10 @@
 						</div>
 					</div>
 					<div class="control-group">
-						<div class="controls">
-							<input type="text" name="address_zip" class="required"
-								id="address_zip" placeholder="zip" /><br /> <br />
-						</div>
+						<label class="control-label">ZIP Code<span class="field_req">*</span></label>
+							<div class="controls">
+								<input type="text" name="address_zip" class="required" id="address_zip" placeholder="zip" /><br /> <br />						
+							</div>
 					</div>
 					<div class="control-group">
 						<label class="control-label">Country<span
@@ -234,7 +234,7 @@
 				</form>
 			</div>
 			{{/if_equals}}
-			<div class="form-actions" align="center">
+			<div class="form-actions" style="padding-left: 160px;">
 				<a href="#" type="submit" id="subscribe"
 					class="save btn btn-primary">Upgrade Plan</a> <a href="#subscribe"
 					class="btn ">Close</a>
