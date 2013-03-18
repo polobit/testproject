@@ -23,7 +23,7 @@
                             <th>Value</th>
                             <th>Milestone</th>
                             <th>Pipeline</th>
-                            <th>CloseDate</th>
+                            <th>Close Date</th>
                             <th>Owner</th>
                         </tr>
                     </thead>
@@ -74,15 +74,15 @@
         <br/><b>{{name}}</b>
     </div>
 </td>
-<td>{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}} {{expected_value}}</td>
-<td>{{milestone}}<br />({{probability}}%) </td>
-<td>
+<td><div style="height:auto;text-overflow:ellipsis;width:6em;overflow:hidden;">{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}} {{expected_value}}</div></td>
+<td><div style="height:auto;text-overflow:ellipsis;width:5em;overflow:hidden;">{{milestone}}<br />({{probability}}%) </div></td>
+<td><div style="height:auto;text-overflow:ellipsis;width:6em;overflow:hidden;">
     {{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}}
-     {{calculatePipeline expected_value probability pipeline}} 
+     {{calculatePipeline expected_value probability pipeline}} </div>
 </td>
-<td>{{epochToHumanDate "mm-dd-yy" close_date}}</td>
+<td><div style="height:auto;text-overflow:ellipsis;width:5em;overflow:hidden;">{{epochToHumanDate "mm-dd-yy" close_date}}</div></td>
 <td>
-    <div style="display:inline;padding-right:10px;height:auto;">
+    <div style="display:inline;padding-right:10px;height:auto;text-overflow:ellipsis;width:4em;overflow:hidden;">
         <img src="{{pic}}" width="40px" height="40px" /><br/> <b> {{owner.name}}</b>
     </div>
 </td>
