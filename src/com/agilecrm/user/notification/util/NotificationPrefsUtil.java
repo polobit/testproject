@@ -8,7 +8,6 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.notification.NotificationPrefs;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.deferred.NotificationsDeferredTask;
-import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -87,7 +86,7 @@ public class NotificationPrefsUtil
      * @param object
      *            Objects like Contact,Deal etc.
      **/
-    public static void executeNotification(Type type, Object object, APIKey api)
+    public static void executeNotification(Type type, Object object, String api)
     {
 	String jsonData = null;
 
@@ -97,15 +96,15 @@ public class NotificationPrefsUtil
 	    ObjectMapper mapper = new ObjectMapper();
 	    jsonData = mapper.writeValueAsString(object);
 
-	    // When tags are added through campaign i.e., deferred task, set
-	    // api-key w.r.t domain owner but not with session.
-	    if (SessionManager.get() == null)
+	    if (api == null)
 	    {
-		api = APIKey.getAPIKeyRelatedToDomain(NamespaceManager.get());
-	    }
-	    else
-	    {
-		api = APIKey.getAPIKey();
+		// When tags are added through campaign i.e., deferred
+		// task,session doesn't exist to get apikey.
+		if (SessionManager.get() == null)
+		    return;
+
+		APIKey apiKey = APIKey.getAPIKey();
+		api = apiKey.api_key;
 	    }
 
 	}
@@ -115,12 +114,8 @@ public class NotificationPrefsUtil
 	    return;
 	}
 
-	// If APIKey is null return
-	if (api == null)
-	    return;
-
 	NotificationsDeferredTask notificationsDeferredTask = new NotificationsDeferredTask(
-		type, jsonData, api.api_key);
+		type, jsonData, api);
 	Queue queue = QueueFactory.getQueue("notification-queue");
 	queue.add(TaskOptions.Builder.withPayload(notificationsDeferredTask));
     }

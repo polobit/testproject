@@ -1,5 +1,5 @@
 /**
- * notification.js is a script file to show notifications.socket.io.js is used
+ * notification.js is a script file to show notifications.'socket.io.js' is used
  * to emit data received from server. Notification preferences are fetched for
  * current user.Some jquery plugins are used to show pop-up messages.
  * 
@@ -14,7 +14,7 @@ var socket;
  */
 $(function() {
 	setTimeout(downloadAndRegisterForNotifications, 2000);
-	
+
 	// fetchContactAndNotify('manohar@invox.com');
 
 });
@@ -124,19 +124,31 @@ function _setupSockets(api_key) {
 
 		var parse_data = JSON.parse(data);
 
-		// Obtained parse_data is in stringifyJSON
+		// Obtained parse_data is in stringifyJSON, so parsing again.
 		var object = JSON.parse(parse_data.object);
 
 		/**
 		 * Storing notification type into object json inorder to show type in
-		 * notification object
-		 *
+		 * notification object. 'type' key is changed to 'notification', to
+		 * avoid 'type' in contact.
+		 * 
 		 */
 		object.notification = parse_data.type;
-        //console.log("object " , object);
+		console.log("object ", object);
+
+		// Inorder to avoid navigating to the contact or deal deleted
+		// when clicking on notification.
+		if (object.notification == 'CONTACT_DELETED'
+				|| object.notification == 'DEAL_CLOSED')
+			object.id = "";
 
 		var html = getTemplate('notify-html', object);
 
+		if (object.notification == 'CLICKED_LINK'
+				|| object.notification == 'OPENED_EMAIL') {
+			// Shows notification for email opened and clicked
+			notificationForClickedAndOpened(object, html);
+		}
 		/**
 		 * Checks notification preferences and compare with notification type.
 		 * If it is set true then show notification. For e.g. If Deal created is
@@ -147,8 +159,9 @@ function _setupSockets(api_key) {
 			if (key == object.notification.toLowerCase()) {
 
 				if (notification_prefs[key])
-					//notify('information', html, 'bottom-right',true);
-				    showNoty('information', html, 'bottomRight');
+					// notify('information', html,
+					// 'bottom-right',true);
+					showNoty('information', html, 'bottomRight');
 			}
 
 		});
@@ -162,6 +175,71 @@ function _setupSockets(api_key) {
 		 */
 
 	});
+}
+
+/**
+ * Sets email clicked and email opened notifications for any contact,assigned
+ * contact and assigned & starred contact.
+ * 
+ * @param contact -
+ *            Contact object that is obtained.
+ * @param html -
+ *            notification template.
+ */
+function notificationForClickedAndOpened(contact, html) {
+	// Current user who logged_in
+	var current_user = notification_prefs.prefs.currentDomainUserName;
+
+	// User who created contact
+	var contact_created_by = contact.domainUser.name;
+
+	// console.log(contact.domainUser.name);
+
+	// Checks for starred contact
+	if (contact.star_value == 0) {
+		notification_prefs.contact_assigned_starred_clicked_link = false;
+		notification_prefs.contact_assigned_starred_opened_email = false;
+	}
+
+	// Clicked Link
+	if (notification_prefs.contact_clicked_link) {
+		// console.log(contact.type);
+
+		// If any contact, set others false
+		notification_prefs.contact_assigned_clicked_link = false;
+		notification_prefs.contact_assigned_starred_clicked_link = false;
+
+		if (contact.notification == "CLICKED_LINK")
+			showNoty('information', html, 'bottomRight');
+	}
+
+	// Notification for assigned and starred contacts
+	if (notification_prefs.contact_assigned_clicked_link
+			|| notification_prefs.contact_assigned_starred_clicked_link) {
+		// Show notifications for contacts of same user
+		if (current_user == contact_created_by
+				&& contact.notification == "CLICKED_LINK")
+			showNoty('information', html, 'bottomRight');
+	}
+
+	// Opened Email
+	if (notification_prefs.contact_opened_email) {
+		// If any contact, set others false
+		notification_prefs.contact_assigned_opened_email = false;
+		notification_prefs.contact_assigned_starred_opened_email = false;
+
+		if (contact.notification == "OPENED_EMAIL")
+			showNoty('information', html, 'bottomRight');
+	}
+
+	// Notification for assigned and starred contacts
+	if (notification_prefs.contact_assigned_opened_email
+			|| notification_prefs.contact_assigned_starred_opened_email) {
+		// Show notifications for contacts of same user
+		if (current_user == contact_created_by
+				&& contact.notification == "OPENED_EMAIL")
+			showNoty('information', html, 'bottomRight');
+	}
 }
 
 /**
@@ -184,7 +262,7 @@ function fetchContactAndNotify(email) {
 	model.fetch({
 		success : function(data) {
 			// console.log(data);
-            // console.log(data.toJSON());
+			// console.log(data.toJSON());
 
 			var id = data.id;
 			if (!id)
@@ -211,6 +289,8 @@ function notificationForBrowsing(contact) {
 	// User who created contact
 	var contact_created_by = contact.domainUser.name;
 
+	// Another template is taken for browsing as the fields required are
+	// different.
 	var html = getTemplate('browsing-notification-html', contact);
 
 	// console.log(contact.domainUser.name);
@@ -228,18 +308,17 @@ function notificationForBrowsing(contact) {
 
 		// Show picture, name, title, company
 		// JSON.stringify(data.toJSON())
-		//notify('success1', html, 'bottom-right', true);
+		// notify('success1', html, 'bottom-right', true);
 		showNoty('information', html, 'bottomRight');
 	}
 
 	// Notification for assigned and starred contacts
 	if (notification_prefs.contact_assigned_browsing
-			|| notification_prefs.contact_assigned_starred_browsing)
-	{
-		
+			|| notification_prefs.contact_assigned_starred_browsing) {
+
 		// Show notifications for contacts of same user
 		if (current_user == contact_created_by)
-			//notify('success1', html, 'bottom-right', true);
+			// notify('success1', html, 'bottom-right', true);
 			showNoty('information', html, 'bottomRight');
 	}
 
@@ -293,13 +372,14 @@ function notify(type, message, position, closable) {
  */
 function showNoty(type, message, position) {
 	// Download the lib
-	head.js(LIB_PATH + 'lib/noty/jquery.noty.js', 'lib/noty/layouts/bottomRight.js',
-			LIB_PATH + 'lib/noty/themes/default.js', function() {
+	head.js(LIB_PATH + 'lib/noty/jquery.noty.js',
+			'lib/noty/layouts/bottomRight.js', LIB_PATH
+					+ 'lib/noty/themes/default.js', function() {
 				noty({
 					text : message,
 					layout : position,
 					type : type,
-					timeout: 5000
+					timeout : 5000
 				});
 			});
 }
