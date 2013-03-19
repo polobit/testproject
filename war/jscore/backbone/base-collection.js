@@ -37,7 +37,6 @@ var BaseCollection = Backbone.Collection.extend({
 		// If sort_collection is set false then order of collection is not changed
 		if(this.sort_collection == false)
 		{
-			console.log("sort not required");
 			return 0;
 		}
 		

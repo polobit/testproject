@@ -9,13 +9,13 @@
                 <div class="control-group">
                     <label class="control-label">Organization</label>
                     <div class="controls">                     
-                        <input name="name" type="text" id="name" value="{{getPropertyValue properties "name"}}"/>
+                        <input name="name" type="text" class="required" id="name" value="{{getPropertyValue properties "name"}}"/>
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label">Url</label>
                     <div class="controls">
-                        <input name="url" type="text" id="url" value="{{getPropertyValue properties "url"}}"/>
+                        <input name="url" class="required" type="text" id="url" value="{{getPropertyValue properties "url"}}"/>
                     </div>
                 </div>
                 <div class="control-group">
@@ -23,7 +23,7 @@
                     <div class="controls hide">
                         <div class="email multiple-template" data="email">
                             <input type="text" id="email" class="required" name="email" placeholder="Email" />
-                            <select class="email-select" style="width:100px">
+                            <select class="email-select" name="email-select" style="width:100px">
                                 <option></option>
                                 <option value="work">Work</option>
                                 <option value="home">Home</option>
@@ -34,7 +34,7 @@
                     <div class="controls second">
                         <div class="email multiple-template" data="email">
                             <input type="text" id="email" class="required" name="email" placeholder="Email" />
-                            <select class="email-select" style="width:100px">
+                            <select class="email-select" name="email-select" style="width:100px">
                                 <option></option>
                                 <option value="work">Work</option>
                                 <option value="home">Home</option>
@@ -48,7 +48,7 @@
                     <div class="controls hide">
                         <div class="phone multiple-template" data="phone">
                             <input type="text" id="phone" name="phone" class="required" placeholder="Phone number" />
-                            <select class="phone-select" style="width:100px">
+                            <select class="phone-select" name="phone-select" style="width:100px">
                                 <option></option>
                                 <option value="work">Work</option>
                                 <option value="home">Home</option>
@@ -64,7 +64,7 @@
                     <div class="controls second">
                         <div class="phone multiple-template" data="phone">
                             <input type="text" id="phone" name="phone" class="required" placeholder="Phone number" />
-                            <select class="phone-select" style="width:100px">
+                            <select class="phone-select" name="phone-select" style="width:100px">
                                 <option></option>
                                 <option value="work">Work test</option>
                                 <option value="home">Home</option>
@@ -84,7 +84,7 @@
                     <div class="controls hide">
                         <div class="website multiple-template style=" display:none" data="website">
                             <input type="text" id="website" class="required" name="website" style="width:105px" placeholder="Website" /> 
-                            <select class="website-select" style="width:100px">
+                            <select class="website-select" name="website-select" style="width:100px">
                                 <option></option>
                                 <option value="URL">Website</option>
                                 <option value="SKYPE">Skype</option>
@@ -104,7 +104,7 @@
                     <div class="controls second">
                         <div class="website multiple-template style=" display:none" data="website">
                             <input type="text" id="website" style="width:105px" class="required" name="website" placeholder="Website" /> 
-                            <select class="website-select" style="width:100px">
+                            <select class="website-select" name="website-select" style="width:100px">
                                 <option></option>
                                 <option value="URL">Website</option>
                                 <option value="SKYPE">Skype</option>
