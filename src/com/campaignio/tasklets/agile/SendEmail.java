@@ -4,8 +4,10 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.account.APIKey;
 import com.agilecrm.util.DBUtil;
 import com.agilecrm.util.Util;
 import com.campaignio.tasklets.TaskletAdapter;
@@ -569,10 +571,21 @@ public class SendEmail extends TaskletAdapter
 	String namespace = NamespaceManager.get();
 	String campaign_id = DBUtil.getId(campaignJSON);
 	String subscriber_id = DBUtil.getId(subsciberJSON);
+	String domainId = null;
+	try
+	{
+	    domainId = campaignJSON.getString("domainUserId");
+	}
+	catch (JSONException e)
+	{
+	    e.printStackTrace();
+	}
+
+	APIKey apiKey = APIKey.getAPIKeyRelatedToUser(Long.parseLong(domainId));
 
 	String trackingImage = "<div><img src=\"https://" + namespace
 		+ ".agilecrm.com/backend/open?n=" + namespace + "&c="
-		+ campaign_id + "&s=" + subscriber_id
+		+ campaign_id + "&s=" + subscriber_id + "&a=" + apiKey.api_key
 		+ "\" nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
 
 	return html + trackingImage;
