@@ -381,7 +381,12 @@ function showContextMenu(action, el, pos)
     {
 
     case 'edit':
-        node.onEditImageClick();
+    	if (node.name.toLowerCase() == "start")
+        {
+            alert("Start option cannot be edited.");
+            return;
+        }
+    	node.onEditImageClick();
         break;
 
     case 'delete':
