@@ -24,10 +24,6 @@
  */
 function serialize_and_save_continue_contact(e, form_id, modal_id, continueContact, is_person, saveBtn) {
 	
-	// Prevents the default event, if any 
-	if(e)
-		e.preventDefault();
-	
     var $form = $('#' + form_id);
     
 	// Returns, if the save button has disabled attribute 
@@ -39,7 +35,9 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 	
     // Validate Form
     if(!isValidForm($form)){
-    	
+    	// Prevents the default event, if any 
+    	if(e)
+    		e.preventDefault();
     	// Removes disabled attribute of save button
 		$(saveBtn).removeAttr('disabled');
     	return;
@@ -292,9 +290,9 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
             	               
             }else{
             		// Navigates to contacts as there is no detail view for companies
-                  	App_Contacts.navigate("contacts", {
+                  	/*App_Contacts.navigate("contacts", {
                 	trigger: true
-            	});            	
+            	}); */   location.reload(true);        	
             }
         	
         	// Hides the modal
@@ -452,11 +450,13 @@ $(function () {
 
     // Continue editing of new-person-modal 
     $('#continue-contact').click(function (e) {
+    		e.preventDefault();
         var model = serialize_and_save_continue_contact(e, 'personForm','personModal', true, true, this);
     });
 
     // Update button click event in continue-contact form
     $("#update").die().live('click', function (e) {
+    		e.preventDefault();
         serialize_and_save_continue_contact(e, 'continueform', 'personModal', false, true, this);
     });
     
@@ -474,14 +474,15 @@ $(function () {
 
     // Continue editing in the new-company-modal (to change the route it 
     // is called through controller, commented here)
-    /*$('#continue-company').click(function (e) {
-     
+    $('#continue-company').click(function (e) {
+    	e.preventDefault();
         var model = serialize_and_save_continue_contact(e, 'companyForm', 'companyModal', true, false);
          
-    });*/
+    });
     
  // Update button click event in continue-company
     $("#company-update").die().live('click', function (e) {
+    	e.preventDefault();
         serialize_and_save_continue_contact(e, 'continueCompanyForm', 'companyModal', false, false, this);
     });
 
