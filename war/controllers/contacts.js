@@ -188,9 +188,11 @@ var ContactsRouter = Backbone.Router.extend({
 
     	if(!contact && this.contactDetailView && this.contactDetailView.model != null)
     	{
-    		console.log(this.contactDetailView.model.toJSON())
-    		App_Contacts.contactDetails(id, this.contactDetailView.model);
-    		return;
+    		if(id == this.contactDetailView.model.toJSON()['id'])
+    		{	
+    			App_Contacts.contactDetails(id, this.contactDetailView.model);
+    			return;
+    		}
     	}
     		
     	// If hte user refreshes the contacts detail view page directly - we should load from the model
