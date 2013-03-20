@@ -205,7 +205,8 @@ public class DomainUser extends Cursor
 	    {
 		throw new Exception(
 			"User already exists with this email address "
-				+ domainUser);
+				+ domainUser.email + "in" + domainUser.domain
+				+ "domain.");
 	    }
 
 	    // If domain user exists,setting to name if null
