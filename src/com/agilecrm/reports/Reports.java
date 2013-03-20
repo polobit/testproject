@@ -17,7 +17,7 @@ import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -67,9 +67,6 @@ public class Reports implements Serializable
     @NotSaved(IfDefault.class)
     public LinkedHashSet<String> fields_set = new LinkedHashSet<String>();
 
-    @NotSaved(IfDefault.class)
-    public String domain = null;
-
     @NotSaved
     public Long domain_user_id = null;
 
@@ -107,52 +104,23 @@ public class Reports implements Serializable
     /* Get Contact Filter by id */
     public static Reports getReport(Long id)
     {
-	String oldNamespace = NamespaceManager.get();
-	NamespaceManager.set("");
 	try
 	{
 	    return dao.get(id);
 	}
-	catch (Exception e)
+	catch (EntityNotFoundException e)
 	{
+	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	    return null;
 	}
-	finally
-	{
-	    NamespaceManager.set(oldNamespace);
-	}
-    }
 
-    /* Fetch list of Report entities of all namespaces */
-    public static List<Reports> getAllReports()
-    {
-	String oldNamespace = NamespaceManager.get();
-	NamespaceManager.set("");
-	try
-	{
-	    return dao.fetchAll();
-	}
-	finally
-	{
-	    NamespaceManager.set(oldNamespace);
-	}
     }
 
     /* Get the list of Report entities related to current namespace */
-    public static List<Reports> getCurrentNamespaceReports()
+    public static List<Reports> fetchAllReports()
     {
-	String oldNamespace = NamespaceManager.get();
-	NamespaceManager.set("");
-	try
-	{
-	    return dao.ofy().query(Reports.class)
-		    .filter("domain", oldNamespace).list();
-	}
-	finally
-	{
-	    NamespaceManager.set(oldNamespace);
-	}
+	return dao.fetchAll();
     }
 
     @PrePersist
@@ -164,39 +132,21 @@ public class Reports implements Serializable
     /* Saved in empty namespace */
     public void save()
     {
-	domain = NamespaceManager.get();
-	NamespaceManager.set("");
-
-	try
-	{
-	    dao.put(this);
-	}
-	finally
-	{
-	    NamespaceManager.set(domain);
-	}
+	dao.put(this);
     }
 
     /*
-     * Fetch all the Report entities in App with particular report duration
+     * Fetch all the Report entities in App with particular report duration,
      * which are reports email enabled
      */
-    public static List<Reports> getAllReportsByDuration(Duration duration)
+    public static List<Reports> getAllReportsByDuration(String duration)
     {
-	String oldNamespace = NamespaceManager.get();
-	// NamespaceManager.set("");
 
-	try
-	{
-	    System.out.println("fetching the reports");
-	    return dao.ofy().query(Reports.class)
-		    .filter("is_reports_enabled", true)
-		    .filter("duration", duration).list();
-	}
-	finally
-	{
-	    NamespaceManager.set(oldNamespace);
-	}
+	System.out.println("fetching the reports");
+	return dao.ofy().query(Reports.class)
+		.filter("is_reports_enabled", true)
+		.filter("duration", duration).list();
+
     }
 
     /**/

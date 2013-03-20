@@ -143,6 +143,28 @@
 	<servlet-name>TwilioServlet</servlet-name> 
 	<url-pattern>/backend/TwilioServlet</url-pattern> 
 </servlet-mapping>
+
+	<servlet>
+		<servlet-name>TwilioCallServlet</servlet-name>
+		<servlet-class>com.agilecrm.TwilioCallServlet</servlet-class>
+		<init-param>
+			<param-name>services</param-name>
+			<param-value/>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TwilioCallServlet</servlet-name>
+		<url-pattern>/TwilioCallServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>TwilioVoiceServlet</servlet-name>
+		<servlet-class>com.agilecrm.TwilioVoiceServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TwilioVoiceServlet</servlet-name>
+		<url-pattern>/backend/voice</url-pattern>
+	</servlet-mapping>
  
 <servlet>
   <servlet-name>StripeServlet</servlet-name> 

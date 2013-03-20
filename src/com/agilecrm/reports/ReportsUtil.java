@@ -9,7 +9,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONException;
@@ -20,7 +19,6 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.email.SendMail;
-import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>ReportsUtil</code> is utility class, it provides functionalities to
@@ -95,11 +93,6 @@ public class ReportsUtil
 	    Map<String, LinkedHashSet<String>> fieldsList = new LinkedHashMap<String, LinkedHashSet<String>>();
 	    fieldsList.put("fields", reportHeadings);
 
-	    // Mail should be sent even of reports are empty, verification for
-	    // empty results are not performed.
-	    if (StringUtils.isEmpty(report.domain))
-		return;
-
 	    if (results == null)
 		results = new HashMap<String, Object>();
 
@@ -121,34 +114,12 @@ public class ReportsUtil
 	    DomainUser user)
     {
 
-	// Get current namespace and store it
-	String oldNamespace = NamespaceManager.get();
-
-	System.out.println("old namespace : " + oldNamespace);
-
-	// Get the domain(namespace) in which queries need to be run
-	String newNamespace = report.domain;
-
-	// If newNamespace is empty return empty list
-	if (StringUtils.isEmpty(newNamespace))
-	    return null;
-
-	// Set new namespace and run the queries
-	NamespaceManager.set(newNamespace);
-
-	// Iterate through each filter and add results collection
-	// To store reports in collection
-	System.out.println("new namespace to run query: "
-		+ NamespaceManager.get());
-
 	// Iterate through each filter and add results collection
 	// To store reports in collection
 	Collection reportList = report.generateReports();
 
 	Map<String, Object> domain_details = new HashMap<String, Object>();
 
-	// Add additional detials to show in email template
-	domain_details.put("domain", report.domain);
 	domain_details.put("report", report);
 	domain_details.put("user_name", user.name);
 
@@ -158,44 +129,8 @@ public class ReportsUtil
 	    domain_details.put("report_results",
 		    customizeContactParameters(reportList, report.fields_set));
 
-	// Set the old namespace back
-	NamespaceManager.set(oldNamespace);
-
 	// Return results
 	return domain_details;
-    }
-
-    /*
-     * Organize all the filters based on domain names returns map(domain,
-     * respective contact filters list)
-     */
-    public static Map<String, List<Reports>> organizeReportsByDomain(
-	    List<Reports> reportsList)
-    {
-
-	Map<String, List<Reports>> reportsMap = new HashMap<String, List<Reports>>();
-
-	// Iterate through reports and add reports to list its
-	// put in a map with its respective domain name as key
-	for (Reports report : reportsList)
-	{
-
-	    // If domain name is already a key then add contact filter to
-	    // existing list
-	    if (reportsMap.containsKey(report.domain))
-	    {
-		reportsMap.get(report.domain).add(report);
-		continue;
-	    }
-
-	    // If reports respective to particular domain is not available
-	    // create a new list and add to map
-	    List<Reports> reportList = new ArrayList<Reports>();
-	    reportList.add(report);
-	    reportsMap.put(report.domain, reportList);
-	}
-
-	return reportsMap;
     }
 
     public static Collection customizeContactParameters(Collection contactList,

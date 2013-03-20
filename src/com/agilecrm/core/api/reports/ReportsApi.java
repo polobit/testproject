@@ -27,7 +27,7 @@ public class ReportsApi
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Reports> getListOfReports()
     {
-	return Reports.getCurrentNamespaceReports();
+	return Reports.fetchAllReports();
     }
 
     // Save Filter contacts
