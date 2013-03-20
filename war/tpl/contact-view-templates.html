@@ -1,6 +1,6 @@
 <script id = "contacts-custom-view-image-template" type="text/html">
 	<td class="data" data="{{id}}">
-    	<div style="display:inline;padding-right:10px;height:auto;">
+    	<div style="width:4em;overflow:hidden;">
         	<img src="{{gravatarurl properties 40}}" width="40px" height="40px" />
     	</div>
     	<!--<div style="height:auto;display:inline-block;vertical-align:text-top;">
@@ -60,7 +60,7 @@
 
 <script id = "contacts-custom-view-created_time-template" type="text/html">
 	<td class='data' data='{{id}}'>
-    <div style="text-overflow:ellipsis;width:7em;overflow:hidden;">
+    <div style="text-overflow:ellipsis;width:8em;overflow:hidden;">
 		{{epochToHumanDate "mm-dd-yy" created_time}}
     </div>
 	</td>
@@ -68,7 +68,7 @@
 
 <script id = "contacts-custom-view-updated_time-template" type="text/html">
 	<td class='data' data='{{id}}'>
-    <div style="text-overflow:ellipsis;width:7em;overflow:hidden;">
+    <div style="text-overflow:ellipsis;width:8em;overflow:hidden;">
 		{{#if updated_time}}
 			{{epochToHumanDate "mm-dd-yy" updated_time}}
 		{{/if}}

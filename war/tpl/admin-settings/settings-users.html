@@ -52,15 +52,15 @@
     </div>
 </script>
 <script id="admin-settings-users-model-template" type="text/html">
-    <td class='data' data='{{id}}'>{{name}}</td>
+    <td class='data' data='{{id}}'><div style='text-overflow:ellipsis;width:9em;overflow:hidden;'>{{name}}</div></td>
     <td>
-        <div style='height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:12em;overflow:hidden;'>
+        <div style='height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:10em;overflow:hidden;'>
         {{email}}
         </div>
     </td>
-    <td>{{epochToDate info_json_string "created_time"}}</td>
-    <td>{{epochToDate info_json_string "logged_in_time"}}</td>
-    <td>{{is_admin}}</td>
-    <td>{{is_disabled}}</td>
-    <br/>
+    <td><div style='text-overflow:ellipsis;width:7em;overflow:hidden;'>{{epochToDate info_json_string "created_time"}}</div></td>
+    <td><div style='text-overflow:ellipsis;width:8em;overflow:hidden;'>{{epochToDate info_json_string "logged_in_time"}}</div></td>
+    <td><div style='text-overflow:ellipsis;width:5em;overflow:hidden;'>{{is_admin}}</div></td>
+    <td><div style='text-overflow:ellipsis;width:6em;overflow:hidden;'>{{is_disabled}}</div></td>
+    
 </script>
