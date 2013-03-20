@@ -34,7 +34,7 @@ var ContactsRouter = Backbone.Router.extend({
         "contact-filter/:id" : "showFilterContacts",
         
         /* New Contact/Company - Full mode */
-        "continue-company": "continueCompany",
+        //"continue-company": "continueCompany",
         
         /* Contact bulk actions */
         "bulk-campaigns": "campaignsBulk",
@@ -369,10 +369,10 @@ var ContactsRouter = Backbone.Router.extend({
     /**
      * Navigates the contact (of type company) to continue company form
      */
-    continueCompany: function () {
-    	
+    /*continueCompany: function () {
+    	// commented here to avoid the creation of multiple entities 
     	var model = serialize_and_save_continue_contact(undefined, 'companyForm', 'companyModal', true, false, '#continue-company');
-    },
+    },*/
     
     /**
      * Imports contacts from a csv file and then uploads all the contacts
