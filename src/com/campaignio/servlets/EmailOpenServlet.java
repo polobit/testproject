@@ -53,13 +53,13 @@ public class EmailOpenServlet extends HttpServlet
 	    // APIKey apiKey = APIKey.getAPIKeyRelatedToDomain(namespace);
 	    NotificationPrefsUtil.executeNotification(Type.OPENED_EMAIL,
 		    contact, apiKey);
+
+	    LogUtil.addLogFromID(campaignId, subscriberId, "Email Opened");
 	}
 	finally
 	{
 	    NamespaceManager.set(oldNamespace);
 	}
-
-	LogUtil.addLogFromID(campaignId, subscriberId, "Email Opened");
 
 	res.sendRedirect("/img/worker.gif");
     }
