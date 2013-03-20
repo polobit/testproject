@@ -16,20 +16,31 @@ $(function ()
     // Gets plugin id from plugin object, fetched using script API
     var plugin_id = agile_crm_get_plugin(ZENDESK_PLUGIN_NAME).id;
 
+
     // Gets plugin preferences, required to check whether to show setup button or 
     // to fetch details
     var plugin_prefs = agile_crm_get_plugin_prefs(ZENDESK_PLUGIN_NAME);
 
+    // Stores email of the contact as global variable
+    Email = agile_crm_get_contact_property('email');
+    
     // If not found - considering first time usage of widget, setupZendeskOAuth
     // called
     if (plugin_prefs == undefined)
     {
+    	// Checks if contact has email, if undefined shows message in Zendesk panel
+        if (!Email)
+           {
+               $('#Zendesk').html('<div style="padding: 0px 5px 10px 5px;' +
+                   'line-height:160%;">No email is associated with this contact</div>');
+               return;
+           }
+        
         setupZendeskOAuth(plugin_id);
         return;
     }
 
-    // Stores email of the contact as global variable
-    Email = agile_crm_get_contact_property('email');
+  
 
     // Checks if contact has email, if undefined shows message in Zendesk panel
     if (!Email)
@@ -92,13 +103,7 @@ function setupZendeskOAuth(plugin_id)
             showTicketsFromZendesk(plugin_id, Email);
         });
 
-    }).error(function (data)
-    {
-
-        // Shows error message in the panel
-        $('#Zendesk').html('<div style="padding: 0px 5px 10px 5px;' +
-            'word-wrap: break-word;">' + data.responseText + '</div>');
-    });
+    })
 }
 
 /**

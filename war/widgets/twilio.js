@@ -93,8 +93,17 @@ function setUpTwilio(data, numbers){
 			console.log($('#contact_number').val());
 			var phone = $('#contact_number').val();
 			
-			 Twilio.Device.connect({
-				 phone_number:phone
+		    /*  $.get("/TwilioCallServlet?From=14105551234&To=" + phone + "&Body=hi", function(data){
+		             console.log('in');
+		             console.log(data);
+		            }).error(function(data){
+		             console.log('error' + data);
+		            });*/
+			
+				Twilio.Device.connect({
+				 From: "+919491544841",
+				 To: phone,
+			     url: "http://agile-crm-cloud.appspot.com/backend/voice?PhoneNumber="+phone
 		        });
 		})
 		

@@ -4,5 +4,8 @@
     <name>notification-queue</name>
     <rate>100/s</rate>
     <max-concurrent-requests>100</max-concurrent-requests>
+    <retry-parameters>
+			<task-retry-limit>5</task-retry-limit>
+		</retry-parameters>
   </queue>
 </queue-entries>

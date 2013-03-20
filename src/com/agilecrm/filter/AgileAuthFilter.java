@@ -101,6 +101,9 @@ public class AgileAuthFilter implements Filter
 	// Send to register
 	if (domainUser == null)
 	{
+	    ((HttpServletRequest) request).getSession().removeAttribute(
+		    SessionManager.AUTH_SESSION_COOKIE_NAME);
+
 	    // Remove user info from session, redirect to auth-failed.jsp.
 	    SessionManager.set((UserInfo) null);
 	    httpResponse.sendRedirect("error/auth-failed.jsp");

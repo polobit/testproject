@@ -153,6 +153,8 @@ public class UserPrefs
     public String getCurrentDomainUserName()
     {
 	DomainUser currentDomainUser = DomainUserUtil.getDomainCurrentUser();
+	System.out.println(currentDomainUser.email);
+	System.out.println(currentDomainUser.name);
 	if (currentDomainUser != null && currentDomainUser.name != null)
 	    return currentDomainUser.name;
 

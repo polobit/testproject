@@ -203,7 +203,7 @@ public class Util
     {
 	Map<String, String> openIdProviders = new HashMap<String, String>();
 	openIdProviders.put("google", "www.google.com/accounts/o8/id");
-	openIdProviders.put("yahoo", "yahoo.com");
+	openIdProviders.put("yahoo", "me.yahoo.com");
 	openIdProviders.put("myspace", "myspace.com");
 	openIdProviders.put("aol", "aol.com");
 	openIdProviders.put("myopenid.com", "stats.agilecrm.com");
@@ -213,17 +213,17 @@ public class Util
 
     public static String toJSONString(Object obj)
     {
-        ObjectMapper mapper = new ObjectMapper();
-        String json;
-        try
-        {
-            json = mapper.writeValueAsString(obj);
-            return json;
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-            return "";
-        }
+	ObjectMapper mapper = new ObjectMapper();
+	String json;
+	try
+	{
+	    json = mapper.writeValueAsString(obj);
+	    return json;
+	}
+	catch (Exception e)
+	{
+	    System.out.println(e.getMessage());
+	    return "";
+	}
     }
 }
