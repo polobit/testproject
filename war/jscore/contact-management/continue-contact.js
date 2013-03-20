@@ -258,11 +258,17 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
             } 
         	else if(is_person) {
         
+        		
+        		if(App_Contacts.contactDetailView)
+        		{
+        			App_Contacts.contactDetailView.model = data
+        		}
+        		
             	/*
             	 * If contactsListView is defined, it is getting the contact from there not the updated one.
             	 * Delete the old one and add the updated one to the listView. 
             	 */
-            	if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection.get(data.id) != null) {
+        		else if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection.get(data.id) != null) {
 
             		App_Contacts.contactsListView.collection.remove(obj);
             	
@@ -275,11 +281,6 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         			App_Contacts.contact_custom_view.collection.remove(obj);
 
         			App_Contacts.contact_custom_view.collection.add(data);
-        		}
-            	
-        		else if(App_Contacts.contactDetailView)
-        		{
-        			App_Contacts.contactDetailView.model = data
         		}
             	
             	App_Contacts.navigate("contact/" + data.id, {
