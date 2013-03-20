@@ -75,14 +75,14 @@
     </div>
 </td>
 <td><div style="height:auto;text-overflow:ellipsis;width:6em;overflow:hidden;">{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}} {{expected_value}}</div></td>
-<td><div style="height:auto;text-overflow:ellipsis;width:5em;overflow:hidden;">{{milestone}}<br />({{probability}}%) </div></td>
+<td><div style="height:auto;text-overflow:ellipsis;width:6em;overflow:hidden;">{{milestone}}<br />({{probability}}%) </div></td>
 <td><div style="height:auto;text-overflow:ellipsis;width:6em;overflow:hidden;">
     {{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}}
      {{calculatePipeline expected_value probability pipeline}} </div>
 </td>
-<td><div style="height:auto;text-overflow:ellipsis;width:5em;overflow:hidden;">{{epochToHumanDate "mm-dd-yy" close_date}}</div></td>
+<td><div style="height:auto;text-overflow:ellipsis;width:6em;overflow:hidden;">{{epochToHumanDate "mm-dd-yy" close_date}}</div></td>
 <td>
-    <div style="display:inline;padding-right:10px;height:auto;text-overflow:ellipsis;width:4em;overflow:hidden;">
+    <div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:4em;overflow:hidden;">
         <img src="{{pic}}" width="40px" height="40px" /><br/> <b> {{owner.name}}</b>
     </div>
 </td>
