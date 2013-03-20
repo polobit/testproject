@@ -73,7 +73,11 @@ function isValid(){
     $("#form").validate({
         rules: {
         		file:{required:true,accept:"png|jpg|jpeg|gif"}
-               }
+               },
+        submitHandler:function(form)
+                      {   
+        	              form.submit();
+        	          }
    		});
     return $("#form").valid();
     } 
@@ -81,10 +85,11 @@ function isValid(){
  $(function()
 		{
 	$("input:file").change(function (){
-    $('#submit').removeAttr("hidden");
-    $('#submit').prop("type", "submit");
-		var fileName = $(this).val();
+	var fileName = $(this).val();
     $(".filename").html(fileName);
+    
+    // to remove error message while change
+    isValid();
   });
 		}); 
 </script>
@@ -127,7 +132,7 @@ function isValid(){
 
 <p><input name="file" id='fileextension' type="file" /></p>
 <br/>
-<input name="submit" id="submit" value="Upload" class='submit btn btn-primary' type="hidden"/> 
+<input name="upload" value="Upload" class='submit btn btn-primary' type="submit"/> 
 </form> 
 </div>
 
