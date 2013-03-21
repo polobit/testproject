@@ -28,7 +28,7 @@ public class TwilioVoiceServlet extends HttpServlet
 	Dial dial = new Dial();
 	try
 	{
-	    dial.setCallerid(callerId);
+	    dial.setCallerId(callerId);
 	    dial.append(new Number(phoneNumber));
 
 	    twiml.append(dial);
