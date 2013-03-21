@@ -381,6 +381,14 @@ public class QueryDocument implements QueryInterface
 
 	for (SearchRule rule : rules)
 	{
+	    // Checks Rules is built properly, as validations are not preset at
+	    // client side. Improper query raises exceptions.
+	    if (rule.LHS == null || rule.RHS == null || rule.CONDITION == null)
+		continue;
+
+	    if (rule.nested_condition != null && rule.nested_lhs == null)
+		continue;
+
 	    // Set type of rule(search on what?)
 	    ruleType = rule.ruleType;
 

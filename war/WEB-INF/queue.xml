@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <queue-entries>
   <queue>
+    <name>default</name>
+    <rate>100/s</rate>
+        <retry-parameters>
+			<task-retry-limit>5</task-retry-limit>
+		</retry-parameters>
+  </queue>
+  <queue>
     <name>notification-queue</name>
+    <rate>100/s</rate>
+    <max-concurrent-requests>100</max-concurrent-requests>
+    <retry-parameters>
+			<task-retry-limit>5</task-retry-limit>
+		</retry-parameters>
+  </queue>
+  <queue>
+    <name>reports-queue</name>
     <rate>100/s</rate>
     <max-concurrent-requests>100</max-concurrent-requests>
     <retry-parameters>

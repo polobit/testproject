@@ -52,7 +52,7 @@ public class ReportServlet extends HttpServlet
 	    ReportsDeferredTask reportsDeferredTask = new ReportsDeferredTask(
 		    domain, duration);
 
-	    Queue queue = QueueFactory.getDefaultQueue();
+	    Queue queue = QueueFactory.getQueue("reports-queue");
 
 	    // Add to queue
 	    queue.add(TaskOptions.Builder.withPayload(reportsDeferredTask));
