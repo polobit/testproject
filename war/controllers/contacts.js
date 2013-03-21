@@ -195,7 +195,7 @@ var ContactsRouter = Backbone.Router.extend({
     		}
     	}
     		
-    	// If hte user refreshes the contacts detail view page directly - we should load from the model
+    	// If user refreshes the contacts detail view page directly - we should load from the model
         if(!contact)
     	if (!this.contactsListView || this.contactsListView.collection.length == 0 || this.contactsListView.collection.get(id) == null) {
         	

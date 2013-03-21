@@ -126,7 +126,7 @@ public class ContactsAPI
 	// Check if the email exists with the current email address
 	Contact currentContact = ContactUtil.searchContactByEmail(contact
 		.getContactFieldValue("EMAIL"));
-	
+
 	// Throw non-200 if it exists
 	if (currentContact != null)
 	{
@@ -163,7 +163,15 @@ public class ContactsAPI
 	}
 
 	for (Contact contact : contacts)
+	{
+	    // Check if the email exists with the current email address
+	    Contact currentContact = ContactUtil.searchContactByEmail(contact
+		    .getContactFieldValue("EMAIL"));
+	    if (currentContact != null)
+		continue;
+
 	    contact.save();
+	}
 
 	return contacts;
     }
@@ -196,7 +204,7 @@ public class ContactsAPI
 	    success.put("success", true);
 
 	    // Stores results in to a map
-	    Hashtable result = CSVUtil.convertCSVToJSONArray2(csv, "Email");
+	    Hashtable result = CSVUtil.convertCSVToJSONArray2(csv, "email");
 	    JSONArray csvArray = (JSONArray) result.get("result");
 
 	    // returns CSV file as a json object with key "data"
