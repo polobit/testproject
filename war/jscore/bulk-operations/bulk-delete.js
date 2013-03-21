@@ -38,9 +38,13 @@ $(function(){
 			
 			if(!confirm("Are you sure you want to delete?"))
 	    		return;
+			
 			// Customize the bulk delete operations
 			if(!customize_bulk_delete(id_array, data_array))
 				return;
+			
+			
+			$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
 			
 			bulk_delete_operation($(table).attr('url'), id_array, index_array, table, undefined, data_array);
 		}	
@@ -134,12 +138,12 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 	var json = {};
 	json.model_ids = JSON.stringify(id_array);
 	
-	
 	$.ajax({
 		url: url,
 		type: 'POST',
 		data: json,
 		success: function() {
+			$(".bulk-delete-loading").remove();
 			
 			if(!is_grid_view)
 			{
