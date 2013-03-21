@@ -43,6 +43,11 @@ public class URLShortener
      */
     public String campaign_id;
 
+    /**
+     * API Key
+     */
+    public String api_key;
+
     /*
      * Prefix for SHORTENER_URL "https://click.agilecrm.com/backend/click"
      */
@@ -82,12 +87,13 @@ public class URLShortener
      *            Tracking id to track urls.
      */
     public URLShortener(String longURL, String subscriberId, String trackerId,
-	    String campaignId)
+	    String campaignId, String apiKey)
     {
 	this.long_url = longURL;
 	this.subscriber_id = subscriberId;
 	this.tracker_id = trackerId;
 	this.campaign_id = campaignId;
+	this.api_key = apiKey;
     }
 
     /**
@@ -112,7 +118,8 @@ public class URLShortener
     public String toString()
     {
 	return "Long URL: " + long_url + " Subscriber ID: " + subscriber_id
-		+ " Tracker ID: " + tracker_id + " Campaign ID: " + campaign_id;
+		+ " Tracker ID: " + tracker_id + " Campaign ID: " + campaign_id
+		+ " API Key: " + api_key;
     }
 
 }
