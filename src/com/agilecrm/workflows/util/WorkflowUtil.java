@@ -254,13 +254,13 @@ public class WorkflowUtil
 	    }
 	    stats = CampaignStatsUtil.getCampaignStatsByCampaignId(Long
 		    .parseLong(campaignId));
+
+	    if (stats.emails_clicked == 0 && stats.emails_opened == 0
+		    && stats.emails_sent == 0)
+		continue;
+
+	    stats.delete();
 	}
-
-	if (stats.emails_clicked == 0 && stats.emails_opened == 0
-		&& stats.emails_sent == 0)
-	    return;
-
-	stats.delete();
     }
 
     /**
