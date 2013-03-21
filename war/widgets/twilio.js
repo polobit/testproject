@@ -100,6 +100,12 @@ function setUpTwilio(data, numbers){
 		             console.log('error' + data);
 		            });*/
 			
+			
+			 $.get("/backend/voice?PhoneNumber=" + phone , function(data){
+	             console.log('in');
+	             console.log(data);
+	            });
+			
 				Twilio.Device.connect({
 				 From: "+919491544841",
 				 To: phone,
