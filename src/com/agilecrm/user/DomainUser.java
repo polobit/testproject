@@ -283,8 +283,13 @@ public class DomainUser extends Cursor
 	{
 	    try
 	    {
+		DomainUser user = (DomainUser) this.clone();
+
+		if (user.password.equals(MASKED_PASSWORD))
+		    user.password = null;
+
 		SendMail.sendMail(this.email, SendMail.WELCOME_SUBJECT,
-			SendMail.WELCOME, this);
+			SendMail.WELCOME, user);
 
 	    }
 	    catch (Exception e)
