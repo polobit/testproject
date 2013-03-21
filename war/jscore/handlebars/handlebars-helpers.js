@@ -352,8 +352,8 @@ $(function() {
 			  return temp.toLowerCase();
 			}
 		
-		// Replaces '_' with 'has been' 
-		var str = this.notification.replace(/_/g, ' has been ');
+		// Replaces '_' with ' ' 
+		var str = this.notification.replace(/_/g, ' ');
 		return str.toLowerCase();
 		
 	//return temp.charAt(0).toUpperCase() + temp.slice(1);
