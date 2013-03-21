@@ -7,6 +7,9 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
@@ -133,6 +136,26 @@ public class APIKey
 	    return null;
 
 	return getAPIKeyRelatedToUser(domainUser.id);
+    }
+
+    public static String getAPIKeyFromCampaignJSON(JSONObject campaignJSON)
+    {
+	String domainId = null;
+	try
+	{
+	    domainId = campaignJSON.getString("domainUserId");
+	}
+	catch (JSONException e)
+	{
+	    e.printStackTrace();
+	}
+
+	APIKey apiKey = APIKey.getAPIKeyRelatedToUser(Long.parseLong(domainId));
+
+	if (apiKey == null)
+	    return null;
+
+	return apiKey.api_key;
     }
 
     @PrePersist

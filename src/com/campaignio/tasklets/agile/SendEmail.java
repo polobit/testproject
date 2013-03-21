@@ -4,7 +4,6 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
@@ -167,6 +166,11 @@ public class SendEmail extends TaskletAdapter
      * Tracking id
      */
     public static String TRACKING_ID = "tracking_id";
+
+    /**
+     * API Key of campaign owner
+     */
+    public static String API_KEY = "api_key";
 
     /*
      * Unsubscribe Links public static String UNSUBSCRIBE_LINK =
@@ -400,6 +404,11 @@ public class SendEmail extends TaskletAdapter
 		// clicks
 		data.put(TRACKING_ID, Calendar.getInstance().getTimeInMillis());
 
+		// Gets APIKey from campaignJSON using domain Id key of campaign
+		// owner.
+		data.put(API_KEY,
+			APIKey.getAPIKeyFromCampaignJSON(campaignJSON));
+
 		// Get Keyword
 		text = convertLinks(text, " ", data, keyword,
 			DBUtil.getId(subscriberJSON),
@@ -521,7 +530,8 @@ public class SendEmail extends TaskletAdapter
 	    {
 		// Shorten URL
 		String url = URLShortenerUtil.getShortURL(tokens[i], keyword,
-			subscriberId, data.getString(TRACKING_ID), campaignId);
+			subscriberId, data.getString(TRACKING_ID), campaignId,
+			data.getString(API_KEY));
 
 		if (url == null)
 		    continue;
@@ -571,21 +581,11 @@ public class SendEmail extends TaskletAdapter
 	String namespace = NamespaceManager.get();
 	String campaign_id = DBUtil.getId(campaignJSON);
 	String subscriber_id = DBUtil.getId(subsciberJSON);
-	String domainId = null;
-	try
-	{
-	    domainId = campaignJSON.getString("domainUserId");
-	}
-	catch (JSONException e)
-	{
-	    e.printStackTrace();
-	}
-
-	APIKey apiKey = APIKey.getAPIKeyRelatedToUser(Long.parseLong(domainId));
+	String api_key = APIKey.getAPIKeyFromCampaignJSON(campaignJSON);
 
 	String trackingImage = "<div><img src=\"https://" + namespace
 		+ ".agilecrm.com/backend/open?n=" + namespace + "&c="
-		+ campaign_id + "&s=" + subscriber_id + "&a=" + apiKey.api_key
+		+ campaign_id + "&s=" + subscriber_id + "&a=" + api_key
 		+ "\" nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
 
 	return html + trackingImage;
