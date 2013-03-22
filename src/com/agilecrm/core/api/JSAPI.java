@@ -136,7 +136,7 @@ public class JSAPI
 	    }
 
 	    // Sets owner key to contact before saving
-	    contact.setOwner(APIKey.getDomainUserIdRelatedToAPIKey(apiKey));
+	    contact.setOwner(APIKey.getDomainUserKeyRelatedToAPIKey(apiKey));
 
 	    // If zero, save it
 	    contact.save();
@@ -303,7 +303,7 @@ public class JSAPI
 	    // Set, owner id to opportunity (owner of the apikey is set as owner
 	    // to opportunity)
 	    opportunity.owner_id = String.valueOf(APIKey
-		    .getDomainUserIdRelatedToAPIKey(apiKey).getId());
+		    .getDomainUserKeyRelatedToAPIKey(apiKey).getId());
 
 	    opportunity.save();
 	    System.out.println("opportunitysaved");
