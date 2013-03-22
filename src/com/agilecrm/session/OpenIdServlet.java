@@ -225,7 +225,9 @@ public class OpenIdServlet extends HttpServlet
     {
 	helper.requestAxAttribute(Step2.AxSchema.EMAIL, true)
 		.requestAxAttribute(Step2.AxSchema.FIRST_NAME, true)
-		.requestAxAttribute(Step2.AxSchema.LAST_NAME, true);
+		.requestAxAttribute(Step2.AxSchema.LAST_NAME, true)
+		.requestAxAttribute("fullname",
+			"http://axschema.org/namePerson", false);
     }
 
     /**
@@ -311,12 +313,22 @@ public class OpenIdServlet extends HttpServlet
      */
     UserInfo onSuccess(AuthResponseHelper helper, HttpServletRequest request)
     {
-	return new UserInfo(
-		helper.getClaimedId().toString(),
-		helper.getAxFetchAttributeValue(Step2.AxSchema.EMAIL),
-		helper.getAxFetchAttributeValue(Step2.AxSchema.FIRST_NAME)
-			+ " "
-			+ helper.getAxFetchAttributeValue(Step2.AxSchema.LAST_NAME));
+	String firstName = helper
+		.getAxFetchAttributeValue(Step2.AxSchema.FIRST_NAME);
+	String lastName = helper
+		.getAxFetchAttributeValue(Step2.AxSchema.LAST_NAME);
+
+	String fullName = firstName + " " + lastName;
+
+	// Checks if firstName is null in that case considering openid is from
+	// yahoo, fullname is fetched
+	if (firstName == null)
+	    fullName = helper.getAxFetchAttributeValue("fullname");
+
+	System.out.println(fullName);
+
+	return new UserInfo(helper.getClaimedId().toString(),
+		helper.getAxFetchAttributeValue(Step2.AxSchema.EMAIL), fullName);
     }
 
     /**
