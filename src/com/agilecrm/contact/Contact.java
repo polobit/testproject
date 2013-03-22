@@ -533,10 +533,21 @@ public class Contact extends Cursor
 	if (tags.isEmpty())
 	    return new JSONObject();
 
-	for (String tag : tags)
+	for (int i = 0; i < tagJson.names().length(); i++)
 	{
-	    if (!tagJson.has(tag))
-		tagJson.remove(tag);
+	    try
+	    {
+		if (tags.contains(tagJson.names().get(i)))
+		    continue;
+
+		tagJson.remove(tagJson.names().get(i).toString());
+	    }
+	    catch (JSONException e)
+	    {
+		// TODO Auto-generated catch block
+		continue;
+	    }
+
 	}
 
 	return tagJson;
