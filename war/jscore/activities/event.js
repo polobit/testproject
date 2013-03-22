@@ -163,6 +163,19 @@ $(function() {
 		$('#' + this.id).find('.error').removeClass('error');
 
 	});
+	
+	/**
+	 * To avoid showing previous errors of the modal.
+	 */
+	$('#activityModal').on('show', function() {
+		
+		// Removes alert message of error related date and time.
+		$('#' + this.id).find('.alert').css('display', 'none');
+		
+		// Removes error class of input fields
+		$('#' + this.id).find('.error').removeClass('error');
+
+	});
 
 	/**
 	 * Highlights the event features (Shows event form and hides task form,
