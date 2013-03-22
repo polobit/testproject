@@ -292,15 +292,7 @@
  <servlet-name>RedirectServlet</servlet-name>
  <url-pattern>/backend/click/*</url-pattern>
  </servlet-mapping>
- 
- <servlet><servlet-name>TaskQueueServlet</servlet-name>
- <servlet-class>com.campaignio.servlets.TaskQueueServlet</servlet-class>
- </servlet>
- <servlet-mapping>
- <servlet-name>TaskQueueServlet</servlet-name>
- <url-pattern>/backend/worker</url-pattern>
- </servlet-mapping>
- 
+  
  <servlet>
  <servlet-name>EmailOpenServlet</servlet-name>
  <servlet-class>com.campaignio.servlets.EmailOpenServlet</servlet-class>

@@ -37,7 +37,7 @@
 		            "id":"to_email",
 		            "value":"{{email}}",
 		            "required": "required",
-					"title": "Enter your subscriber E-mail ID. If you are using a list, you can use $subscriber.Email",
+					"title": "Enter your subscriber E-mail ID. If you are using a list, you can use {{email}}",
 					"fieldType": "input",
 		            "type": "email"
 				},
@@ -55,7 +55,6 @@
 					"category": "Info",
 					"name": "replyto_email",
 		            "id":"replyto_email",
-		            "required": "required",
 					"title": "Enter email you need your subscribers to reply.",
 					"fieldType": "input",
 		            "type": "email"	

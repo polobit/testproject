@@ -6,17 +6,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.user.notification.NotificationPrefs.Type;
-import com.agilecrm.user.notification.util.NotificationPrefsUtil;
+import org.apache.commons.lang.StringUtils;
+
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.util.CampaignStatsUtil;
 import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>EmailOpenServlet</code> is the servlet that track emails opened. The
- * 1X1 gif image is used for tracking emails opened. The image src sends
+ * 1X1 png image is used for tracking emails opened. The image src sends
  * request, with subscriber-id, namespace and campaign-id as query parameters.
  * The email opened count is incremented with respect to campaign id. Finally it
  * redirects to image.
@@ -39,21 +37,19 @@ public class EmailOpenServlet extends HttpServlet
 	String subscriberId = request.getParameter("s");
 	String namespace = request.getParameter("n");
 	String campaignId = request.getParameter("c");
-	String apiKey = request.getParameter("a");
+
+	if (StringUtils.isEmpty(campaignId)
+		|| StringUtils.isEmpty(subscriberId)
+		|| StringUtils.isEmpty(namespace))
+	    return;
 
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set(namespace);
+
 	try
 	{
+	    // Increment Emails opened count and add log.
 	    CampaignStatsUtil.incrementEmailsOpened(campaignId);
-
-	    Contact contact = ContactUtil.getContact(Long
-		    .parseLong(subscriberId));
-
-	    // APIKey apiKey = APIKey.getAPIKeyRelatedToDomain(namespace);
-	    NotificationPrefsUtil.executeNotification(Type.OPENED_EMAIL,
-		    contact, apiKey);
-
 	    LogUtil.addLogFromID(campaignId, subscriberId, "Email Opened");
 	}
 	finally
@@ -61,6 +57,7 @@ public class EmailOpenServlet extends HttpServlet
 	    NamespaceManager.set(oldNamespace);
 	}
 
-	res.sendRedirect("/img/worker.gif");
+	// Redirect to image.
+	res.sendRedirect("/img/1X1.png");
     }
 }

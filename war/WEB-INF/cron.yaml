@@ -17,4 +17,4 @@ cron:
   
 - description: Due Tasks Reminder
   url: /backend/cron/tasks
-  schedule: every day 23:55
+  schedule: every day 23:00
