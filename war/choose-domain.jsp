@@ -13,7 +13,7 @@ String domain = request.getParameter("subdomain");
 if(!StringUtils.isEmpty(domain))
 {
     System.out.println(DomainUserUtil.count());
-	if(DomainUserUtil.count() == 0)
+	if(DomainUserUtil.count(domain) == 0)
 	{
 	    success = "Creating " + domain;
 		response.sendRedirect("https://" + domain + ".agilecrm.com/register");

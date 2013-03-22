@@ -322,6 +322,21 @@ public class DomainUserUtil
 	}
     }
 
+    public static int count(String domain)
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+	try
+	{
+	    return dao.ofy().query(DomainUser.class).filter("domain", domain)
+		    .count();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
+
     /**
      * Deletes All the entities(AgileUser, Userprefs, Imap prefs, notification
      * prefs) before deleting domain users
