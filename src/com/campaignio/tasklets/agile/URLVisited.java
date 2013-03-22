@@ -2,17 +2,15 @@ package com.campaignio.tasklets.agile;
 
 import java.net.URLEncoder;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
-import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DBUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
-import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>URLVisited</code> represents URLVisited node in the workflow. It access
@@ -47,22 +45,16 @@ public class URLVisited extends TaskletAdapter
 	String url = getStringValue(nodeJSON, subscriberJSON, data, URL);
 	String subscriberId = DBUtil.getId(subscriberJSON);
 
-	String domain = NamespaceManager.get();
+	// Get API Key from campaignJSON domainUser Id.
+	String apiKey = APIKey.getAPIKeyFromCampaignJSON(campaignJSON);
 
-	// Get DomainUser who is account owner with respect to domain
-	DomainUser domainOwner = DomainUserUtil.getDomainOwner(domain);
-
-	if (domainOwner == null)
+	if (StringUtils.isEmpty(apiKey))
 	{
 	    // Execute Next One in Loop
 	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		    nodeJSON, null);
 	    return;
 	}
-
-	// Get API Key of domain owner
-	APIKey api = APIKey.getAPIKeyRelatedToUser(domainOwner.id);
-	String apiKey = api.api_key;
 
 	url += "&agile_id=" + URLEncoder.encode(apiKey) + "&subscriber_id="
 		+ URLEncoder.encode(subscriberId);

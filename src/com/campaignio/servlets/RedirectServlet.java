@@ -1,7 +1,5 @@
 package com.campaignio.servlets;
 
-import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl;
-
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.Iterator;
@@ -14,20 +12,21 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.user.notification.NotificationPrefs.Type;
-import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.URLShortener;
+import com.campaignio.servlets.deferred.EmailClickDeferredTask;
 import com.campaignio.util.CampaignStatsUtil;
 import com.campaignio.util.URLShortenerUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 
 /**
  * <code>RedirectServlet</code> is the servlet that redirects short url to
  * original url. Appends contact json values as parameters to original url. Sets
- * a queue inorder to wakeup the cron tasks that matches with the tracking Id.
+ * a deferred task inorder to wakeup the cron tasks that matches with the
+ * tracking Id.
  * 
  * @author Naresh
  * 
@@ -46,6 +45,7 @@ public class RedirectServlet extends HttpServlet
 	    throws IOException
     {
 	resp.setContentType("text/plain");
+
 	String url = req.getRequestURL().toString();
 	// System.out.println(url);
 
@@ -60,7 +60,6 @@ public class RedirectServlet extends HttpServlet
 
 	String domain = urlShortener.namespace;
 	String subscriberId = urlShortener.subscriber_id;
-	String apiKey = urlShortener.api_key;
 
 	Contact contact = null;
 
@@ -77,8 +76,6 @@ public class RedirectServlet extends HttpServlet
 	    CampaignStatsUtil.incrementEmailsClicked(urlShortener.campaign_id);
 	    contact = ContactUtil.getContact(Long.parseLong(subscriberId));
 
-	    NotificationPrefsUtil.executeNotification(Type.CLICKED_LINK,
-		    contact, apiKey);
 	}
 	finally
 	{
@@ -88,86 +85,74 @@ public class RedirectServlet extends HttpServlet
 	// System.out.println(urlShortener);
 	String longURL = urlShortener.long_url;
 
+	// If URL has spaces or erroneous chars - we chop them
+	if (longURL.contains(" "))
+	{
+	    System.out.println("Trimming " + longURL);
+	    longURL = longURL.substring(0, longURL.indexOf(" "));
+	}
+
+	if (longURL.contains("\r"))
+	{
+	    System.out.println("Trimming " + longURL);
+	    longURL = longURL.substring(0, longURL.indexOf("\r"));
+	}
+	if (longURL.contains("\n"))
+	{
+	    System.out.println("Trimming " + longURL);
+	    longURL = longURL.substring(0, longURL.indexOf("\n"));
+	}
+
 	String params = "?fwd=cd";
 
 	if (urlShortener.long_url.contains("?"))
 	    params = "&fwd=cd";
 
-	// String subscriberId = urlShortener.subscriber_id;
-	// Contact contact =
-	// ContactUtil.getContact(Long.parseLong(subscriberId));
-
 	if (contact == null)
-	    resp.sendRedirect(longURL);
-
-	else
 	{
-	    try
-	    {
-		NamespaceManager.set(domain);
-
-		JSONObject contactJSON = WorkflowUtil
-			.getSubscriberJSON(contact);
-
-		// Iterate through JSON and construct all params
-		Iterator<String> itr = contactJSON.keys();
-
-		while (itr.hasNext())
-		{
-		    // Get Property Name & Value
-		    String propertyName = itr.next();
-		    String value = contactJSON.getString(propertyName);
-
-		    params += ("&" + propertyName.trim() + "=" + URLEncoder
-			    .encode(value.trim()));
-		}
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-	    }
-	    finally
-	    {
-		NamespaceManager.set(oldNamespace);
-	    }
-
-	    // If URL has spaces or erroneous chars - we chop them
-	    if (longURL.contains(" "))
-	    {
-		System.out.println("Trimming " + longURL);
-		longURL = longURL.substring(0, longURL.indexOf(" "));
-	    }
-
-	    if (longURL.contains("\r"))
-	    {
-		System.out.println("Trimming " + longURL);
-		longURL = longURL.substring(0, longURL.indexOf("\r"));
-	    }
-	    if (longURL.contains("\n"))
-	    {
-		System.out.println("Trimming " + longURL);
-		longURL = longURL.substring(0, longURL.indexOf("\n"));
-	    }
-
-	    System.out.println("Forwarding it to " + longURL + " " + params);
-
-	    resp.sendRedirect(longURL + params);
+	    resp.sendRedirect(longURL);
+	    return;
 	}
 
 	try
 	{
-	    /*
-	     * // Store this information in servlet JSONObject
-	     * visitorInfoJSONObject = new JSONObject();
-	     * visitorInfoJSONObject.put(Clicked.LINK_CLICKED_SHORT, url);
-	     * visitorInfoJSONObject.put(Clicked.LINK_CLICKED_LONG, longURL);
-	     */
+	    NamespaceManager.set(domain);
 
-	    // Add them to Queue
+	    JSONObject contactJSON = WorkflowUtil.getSubscriberJSON(contact);
+
+	    // Iterate through JSON and construct all params
+	    Iterator<String> itr = contactJSON.keys();
+
+	    while (itr.hasNext())
+	    {
+		// Get Property Name & Value
+		String propertyName = itr.next();
+		String value = contactJSON.getString(propertyName);
+
+		params += ("&" + propertyName.trim() + "=" + URLEncoder
+			.encode(value.trim()));
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+
+	System.out.println("Forwarding it to " + longURL + " " + params);
+
+	resp.sendRedirect(longURL + params);
+
+	try
+	{
+	    // Interrupt clicked in DeferredTask
+	    EmailClickDeferredTask emailClickDeferredTask = new EmailClickDeferredTask(
+		    urlShortener.tracker_id);
 	    Queue queue = QueueFactory.getDefaultQueue();
-	    queue.add(withUrl("/backend/worker")
-		    .param(TaskQueueServlet.TASK_QUEUE_COMMAND_INTERRUPT_TASKLET_CUSTOM1,
-			    urlShortener.tracker_id));
+	    queue.add(TaskOptions.Builder.withPayload(emailClickDeferredTask));
 	}
 	catch (Exception e)
 	{

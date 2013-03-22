@@ -110,6 +110,7 @@ public class ICalendarServlet extends HttpServlet
 	    // sets into UTC
 	    DateTime startTime = new DateTime(event.start * 1000);
 	    startTime.setUtc(true);
+
 	    DateTime endTime = new DateTime(event.end * 1000);
 	    endTime.setUtc(true);
 

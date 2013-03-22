@@ -2,6 +2,7 @@ package com.thirdparty;
 
 import java.net.URLEncoder;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
@@ -53,14 +54,16 @@ public class SendGridEmail
 	    String queryString = "";
 
 	    queryString = defaultQueryString + SENDGRID_API_PARAM_TO + "="
-		    + URLEncoder.encode(to) + "&" + SENDGRID_API_PARAM_REPLY_TO
-		    + "=" + URLEncoder.encode(replyTo) + "&"
-		    + SENDGRID_API_PARAM_SUBJECT + "="
-		    + URLEncoder.encode(subject) + "&"
+		    + URLEncoder.encode(to) + "&" + SENDGRID_API_PARAM_SUBJECT
+		    + "=" + URLEncoder.encode(subject) + "&"
 		    + SENDGRID_API_PARAM_FROM + "="
 		    + URLEncoder.encode(fromEmail) + "&"
 		    + SENDGRID_API_PARAM_FROM_NAME + "="
 		    + URLEncoder.encode(fromName);
+
+	    if (!StringUtils.isEmpty(replyTo))
+		queryString += "&" + SENDGRID_API_PARAM_REPLY_TO + "="
+			+ URLEncoder.encode(replyTo);
 
 	    // Check type of email
 

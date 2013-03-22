@@ -19,35 +19,62 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
+/**
+ * <code>APIKey</code> is the class that generates unique random key for each
+ * domain user. Assigns domain user key to api key in prepersist.
+ * 
+ */
 @XmlRootElement
 public class APIKey
 {
 
-    // Key
+    /**
+     * Id of APIKey
+     */
     @Id
     public Long id;
 
-    // Api Key
+    /**
+     * Api key that is generated
+     */
     public String api_key;
 
+    /**
+     * Domain User Key
+     */
     @NotSaved(IfDefault.class)
     private Key<DomainUser> owner = null;
 
-    // Dao
+    /**
+     * Dao
+     */
     private static ObjectifyGenericDao<APIKey> dao = new ObjectifyGenericDao<APIKey>(
 	    APIKey.class);
 
+    /**
+     * Default APIKey.
+     */
     APIKey()
     {
 
     }
 
+    /**
+     * Constructs a new {@link APIKey} with apikey generated.
+     * 
+     * @param randomNumber
+     *            - Random Number generated.
+     */
     APIKey(String randomNumber)
     {
 	this.api_key = randomNumber;
     }
 
-    // Get API Key
+    /**
+     * Returns api key with respect to domain id of that session.
+     * 
+     * @return api key.
+     */
     public static APIKey getAPIKey()
     {
 	APIKey apiKey = getAPIKeyRelatedToUser(SessionManager.get()
@@ -61,7 +88,11 @@ public class APIKey
 	return apiKey;
     }
 
-    // Generate API Key
+    /**
+     * Returns generated apikey. Generates apikey and save in datastore.
+     * 
+     * @return random apikey.
+     */
     private static APIKey generateAPIKey()
     {
 	SecureRandom random = new SecureRandom();
@@ -115,11 +146,26 @@ public class APIKey
 	return false;
     }
 
+    /**
+     * Returns Domain User key with respect to api key.
+     * 
+     * @param apiKey
+     *            - api key of domain user
+     * @return Domain user key
+     */
     public static Key<DomainUser> getDomainUserIdRelatedToAPIKey(String apiKey)
     {
 	return dao.ofy().query(APIKey.class).filter("api_key", apiKey).get().owner;
     }
 
+    /**
+     * Returns Agile User key with respect to apikey. Gets domain user from api
+     * key and then gets agile user from domain user id.
+     * 
+     * @param apiKey
+     *            - api key.
+     * @return AgileUser
+     */
     public static AgileUser getAgileUserRelatedToAPIKey(String apiKey)
     {
 	Key<DomainUser> domainUserKey = dao.ofy().query(APIKey.class)
@@ -128,6 +174,14 @@ public class APIKey
 		.getId());
     }
 
+    /**
+     * Returns Api key of Domain Owner. Domain Owner is the domain user having
+     * is_account_owner 'true'.
+     * 
+     * @param domain
+     *            - required domain.
+     * @return api key of domain owner
+     */
     public static APIKey getAPIKeyRelatedToDomain(String domain)
     {
 	DomainUser domainUser = DomainUserUtil.getDomainOwner(domain);
@@ -138,6 +192,14 @@ public class APIKey
 	return getAPIKeyRelatedToUser(domainUser.id);
     }
 
+    /**
+     * Returns api key of domain user who created campaign. Used to get apikey
+     * in tasklets of campaign.
+     * 
+     * @param campaignJSON
+     *            - Campaign JSONObject
+     * @return api key
+     */
     public static String getAPIKeyFromCampaignJSON(JSONObject campaignJSON)
     {
 	String domainId = null;
@@ -158,6 +220,10 @@ public class APIKey
 	return apiKey.api_key;
     }
 
+    /**
+     * Assigns owner key to api-key before saving into data store. Gets domain
+     * id from session and then creates domain user key.
+     */
     @PrePersist
     void prePersist()
     {

@@ -200,10 +200,6 @@ public class TaskUtil
 		.filter("due >", startTime).filter("due <=", endTime)
 		.filter("is_complete", false).list();
 
-	// List<Task> tasks = dao.ofy().query(Task.class).filter("owner =",
-	// owner)
-	// .filter("is_complete", false).list();
-
 	System.out.println("Due tasks: " + tasks);
 
 	if (tasks.isEmpty())
@@ -218,10 +214,6 @@ public class TaskUtil
 
 	    // Compare task owner with current owner.
 	    boolean value = task.compareTaskOwner(owner);
-
-	    // if (task == null || !(task.due > startTime && task.due <=
-	    // endTime))
-	    // continue;
 
 	    if (value)
 		dueTasksList.add(task);

@@ -80,11 +80,11 @@ public class URLShortenerUtil
      */
     @SuppressWarnings("deprecation")
     public static String getShortURL(String url, String keyword,
-	    String subscriberId, String trackingId, String campaignId,
-	    String apiKey) throws Exception
+	    String subscriberId, String trackingId, String campaignId)
+	    throws Exception
     {
 	URLShortener urlShortener = new URLShortener(url, subscriberId,
-		trackingId, campaignId, apiKey);
+		trackingId, campaignId);
 	urlShortener.save();
 
 	// Get Key
