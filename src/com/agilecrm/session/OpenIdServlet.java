@@ -90,7 +90,7 @@ public class OpenIdServlet extends HttpServlet
 
 	if (openidStatus != null && openidStatus.equals("cancel"))
 	{
-	    resp.sendRedirect("/register?openid.mode=cancel");
+	    resp.sendRedirect("/login");
 	    return;
 	}
 	if (domain != null)
