@@ -26,6 +26,8 @@ public class Tag
     @Id
     public String tag;
 
+    public Long createdTime = 0L;
+
     // Dao
     private static ObjectifyGenericDao<Tag> dao = new ObjectifyGenericDao<Tag>(
 	    Tag.class);
@@ -33,7 +35,7 @@ public class Tag
     /**
      * Default constructor
      */
-    Tag()
+    public Tag()
     {
 
     }
@@ -46,6 +48,12 @@ public class Tag
     Tag(String tag)
     {
 	this.tag = tag;
+    }
+
+    Tag(String tag, Long createdTime)
+    {
+	this.tag = tag;
+	this.createdTime = createdTime;
     }
 
     /**

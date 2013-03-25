@@ -73,7 +73,6 @@ public class ContactsAPI
     {
 	if (count != null)
 	{
-
 	    System.out.println("Fetching page by page");
 	    return ContactUtil.getAllContacts(Integer.parseInt(count), cursor);
 	}
@@ -130,6 +129,7 @@ public class ContactsAPI
 	// Throw non-200 if it exists
 	if (currentContact != null)
 	{
+
 	    throw new WebApplicationException(
 		    Response.status(Response.Status.BAD_REQUEST)
 			    .entity("Sorry, duplicate contact found with the same email address.")
@@ -249,6 +249,8 @@ public class ContactsAPI
 	Contact contact = ContactUtil.getContact(id);
 	if (contact != null)
 	    contact.delete();
+
+	Response.ok();
     }
 
     /**
