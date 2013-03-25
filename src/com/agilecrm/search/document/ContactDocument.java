@@ -1,30 +1,24 @@
 package com.agilecrm.search.document;
 
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Tag;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.util.SearchUtil;
-import com.google.appengine.api.search.AddException;
-import com.google.appengine.api.search.Consistency;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Field;
 import com.google.appengine.api.search.Index;
 import com.google.appengine.api.search.IndexSpec;
 import com.google.appengine.api.search.SearchService;
 import com.google.appengine.api.search.SearchServiceFactory;
-import com.google.appengine.api.search.StatusCode;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 
@@ -72,7 +66,7 @@ public class ContactDocument implements BuilderInterface
      * Index for the contact Document, Required to search on contacts document
      */
     public static Index index = searchService.getIndex(IndexSpec.newBuilder()
-	    .setName("contacts").setConsistency(Consistency.PER_DOCUMENT));
+	    .setName("contacts"));
 
     /**
      * Describes all the contact field values in the document based on the
@@ -111,7 +105,6 @@ public class ContactDocument implements BuilderInterface
 	Date truncatedDate = DateUtils.truncate(new Date(), Calendar.DATE);
 	doc.addField(Field.newBuilder().setName("created_time")
 		.setDate(truncatedDate));
-
 	// Describes updated time document if updated time is not 0.
 	if (contact.updated_time > 0L)
 	{
@@ -125,7 +118,7 @@ public class ContactDocument implements BuilderInterface
 	doc.addField(Field.newBuilder().setName("star_value")
 		.setNumber(contact.star_value));
 
-	addTagFields(contact.tags_with_time_json, doc);
+	addTagFields(contact.getTagsList(), doc);
 
 	/*
 	 * Get tokens from contact properties and adds it in document
@@ -173,7 +166,7 @@ public class ContactDocument implements BuilderInterface
      */
     public void delete(String id)
     {
-	index.remove(id);
+	index.delete(id);
     }
 
     /**
@@ -184,20 +177,9 @@ public class ContactDocument implements BuilderInterface
      */
     private static void addToIndex(Document doc)
     {
-	try
-	{
-	    // Adds document to index
-	    index.add(doc);
+	// Adds document to index
+	index.put(doc);
 
-	}
-	catch (AddException e)
-	{
-	    if (StatusCode.TRANSIENT_ERROR.equals(e.getOperationResult()
-		    .getCode()))
-	    {
-		// retry adding document
-	    }
-	}
     }
 
     /**
@@ -207,55 +189,41 @@ public class ContactDocument implements BuilderInterface
      * @param tags_json_string
      * @param doc
      */
-    private static void addTagFields(String tags_json_string,
+    private static void addTagFields(LinkedHashSet<Tag> tags,
 	    Document.Builder doc)
     {
-	if (tags_json_string == null)
+	if (tags == null || tags.isEmpty())
 	    return;
 
-	try
+	// Iterates through each tag and creates field for each tag i.e.,
+	// <tagName>_time.
+	for (Tag tag : tags)
 	{
-	    // Converts tags JSON in to a Map
-	    HashMap<String, Long> tagsMappedWithTime = new ObjectMapper()
-		    .readValue(tags_json_string,
-			    new TypeReference<HashMap<String, Long>>()
-			    {
-			    });
 
-	    System.out.println(tagsMappedWithTime);
-	    // Iterates through each tag and creates field for each tag i.e.,
-	    // <tagName>_time.
-	    for (String tag : tagsMappedWithTime.keySet())
-	    {
+	    System.out.println(tag);
 
-		System.out.println(tag);
+	    // Tag value
+	    String normalizedTag = SearchUtil.normalizeString(tag.tag);
 
-		String normalizedTag = SearchUtil.normalizeString(tag);
+	    // Created time
+	    Long TagCreationTimeInMills = tag.createdTime;
 
-		System.out.println(StringUtils.isBlank(normalizedTag));
+	    /*
+	     * Truncate date Document search date is without time component
+	     */
+	    Date TagCreatedDate = DateUtils.truncate(new Date(
+		    TagCreationTimeInMills), Calendar.DATE);
 
-		Long TagCreationTimeInMills = tagsMappedWithTime.get(tag);
+	    // If tag doesn't satisfies the regular expression of field name in
+	    // document search, field is not added to avoid exceptions while
+	    // searching.
+	    if (!normalizedTag.matches("^[A-Za-z][A-Za-z0-9_]*$"))
+		continue;
 
-		/*
-		 * Truncate date Document search date is without time component
-		 */
-		Date TagCreatedDate = DateUtils.truncate(new Date(
-			TagCreationTimeInMills), Calendar.DATE);
-
-		if (!normalizedTag.matches("^[A-Za-z][A-Za-z0-9_]*$"))
-		    continue;
-
-		// Adds Other fields in contacts to document
-		doc.addField(Field.newBuilder()
-			.setName(normalizedTag + "_time")
-			.setDate(TagCreatedDate));
-	    }
-
+	    // Adds Other fields in contacts to document
+	    doc.addField(Field.newBuilder().setName(normalizedTag + "_time")
+		    .setDate(TagCreatedDate));
 	}
-	catch (IOException e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
+
     }
 }
