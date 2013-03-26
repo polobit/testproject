@@ -1,6 +1,7 @@
 package com.campaignio.servlets.deferred;
 
 import com.campaignio.cron.util.CronUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
 /**
@@ -33,6 +34,11 @@ public class EmailClickDeferredTask implements DeferredTask
 
     public void run()
     {
+	String oldNamespace = NamespaceManager.get();
+
+	// Set empty namespace for cron
+	NamespaceManager.set("");
+
 	try
 	{
 	    // Interrupt the cron tasks with trackerId
@@ -41,6 +47,10 @@ public class EmailClickDeferredTask implements DeferredTask
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
 	}
     }
 }
