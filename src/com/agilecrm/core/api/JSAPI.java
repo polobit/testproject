@@ -21,8 +21,6 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.workflows.util.WorkflowUtil;
-import com.google.appengine.labs.repackaged.org.json.JSONArray;
-import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.googlecode.objectify.Key;
 import com.sun.jersey.api.json.JSONWithPadding;
 
@@ -154,45 +152,22 @@ public class JSAPI
 	}
     }
 
-    /**
-     * Deletes contacts based on the list of contact ids.
-     * 
-     * @param contact_ids
-     * @param apiKey
-     * @param jsoncallback
-     * @return
-     */
-    @Path("contacts/delete")
+    @Path("contact/delete")
     @GET
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces("application/x-javascript")
-    public JSONWithPadding deleteContact(
-	    @QueryParam("contact_ids") String contact_ids,
+    public JSONWithPadding deleteContact(@QueryParam("email") String email,
 	    @QueryParam("id") String apiKey,
 	    @QueryParam("callback") String jsoncallback)
     {
-	try
-	{
-	    JSONArray contactsJSONArray = new JSONArray(contact_ids);
+	Contact contact = ContactUtil.searchContactByEmail(email);
 
-	    for (int i = 0; i < contactsJSONArray.length(); i++)
-	    {
-		Contact contact = ContactUtil.getContact(Long
-			.parseLong(contactsJSONArray.getString(i)));
-
-		if (contact != null)
-		{
-		    contact.delete();
-		}
-	    }
-	}
-	catch (JSONException e)
+	if (contact != null)
 	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	    return null;
+	    contact.delete();
+	    return new JSONWithPadding(true, jsoncallback);
 	}
-	return new JSONWithPadding(true, jsoncallback);
+	return new JSONWithPadding(false, jsoncallback);
     }
 
     /**
