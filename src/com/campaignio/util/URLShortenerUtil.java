@@ -2,7 +2,7 @@ package com.campaignio.util;
 
 import java.net.URLEncoder;
 
-import org.datanucleus.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.campaignio.URLShortener;

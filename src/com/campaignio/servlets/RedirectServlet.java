@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
@@ -51,25 +53,31 @@ public class RedirectServlet extends HttpServlet
 	String url = req.getRequestURL().toString();
 	// System.out.println(url);
 
-	// Gets URLShortener object based on key i.e., URLShortener id
-	URLShortener urlShortener = URLShortenerUtil.getURLShortener(url);
-
-	if (urlShortener == null)
-	{
-	    resp.getWriter().println("Invalid URL");
-	    return;
-	}
-
 	String domain = URLShortenerUtil.getDomainFromShortURL(url);
-	String subscriberId = urlShortener.subscriber_id;
 
-	Contact contact = null;
+	if (StringUtils.isEmpty(domain))
+	    return;
+
+	System.out.println("Domain from short url: " + domain);
 
 	String oldNamespace = NamespaceManager.get();
 
 	try
 	{
 	    NamespaceManager.set(domain);
+
+	    // Gets URLShortener object based on key i.e., URLShortener id
+	    URLShortener urlShortener = URLShortenerUtil.getURLShortener(url);
+
+	    if (urlShortener == null)
+	    {
+		resp.getWriter().println("Invalid URL");
+		return;
+	    }
+
+	    String subscriberId = urlShortener.subscriber_id;
+
+	    Contact contact = null;
 
 	    System.out.println("Namespace set before CampaignStats: "
 		    + NamespaceManager.get());
@@ -80,47 +88,38 @@ public class RedirectServlet extends HttpServlet
 
 	    NotificationPrefsUtil.executeNotification(Type.CLICKED_LINK,
 		    contact);
-	}
-	finally
-	{
-	    NamespaceManager.set(oldNamespace);
-	}
 
-	// System.out.println(urlShortener);
-	String longURL = urlShortener.long_url;
+	    // System.out.println(urlShortener);
+	    String longURL = urlShortener.long_url;
 
-	// If URL has spaces or erroneous chars - we chop them
-	if (longURL.contains(" "))
-	{
-	    System.out.println("Trimming " + longURL);
-	    longURL = longURL.substring(0, longURL.indexOf(" "));
-	}
+	    // If URL has spaces or erroneous chars - we chop them
+	    if (longURL.contains(" "))
+	    {
+		System.out.println("Trimming " + longURL);
+		longURL = longURL.substring(0, longURL.indexOf(" "));
+	    }
 
-	if (longURL.contains("\r"))
-	{
-	    System.out.println("Trimming " + longURL);
-	    longURL = longURL.substring(0, longURL.indexOf("\r"));
-	}
-	if (longURL.contains("\n"))
-	{
-	    System.out.println("Trimming " + longURL);
-	    longURL = longURL.substring(0, longURL.indexOf("\n"));
-	}
+	    if (longURL.contains("\r"))
+	    {
+		System.out.println("Trimming " + longURL);
+		longURL = longURL.substring(0, longURL.indexOf("\r"));
+	    }
+	    if (longURL.contains("\n"))
+	    {
+		System.out.println("Trimming " + longURL);
+		longURL = longURL.substring(0, longURL.indexOf("\n"));
+	    }
 
-	String params = "?fwd=cd";
+	    String params = "?fwd=cd";
 
-	if (urlShortener.long_url.contains("?"))
-	    params = "&fwd=cd";
+	    if (urlShortener.long_url.contains("?"))
+		params = "&fwd=cd";
 
-	if (contact == null)
-	{
-	    resp.sendRedirect(longURL);
-	    return;
-	}
-
-	try
-	{
-	    NamespaceManager.set(domain);
+	    if (contact == null)
+	    {
+		resp.sendRedirect(longURL);
+		return;
+	    }
 
 	    JSONObject contactJSON = WorkflowUtil.getSubscriberJSON(contact);
 
@@ -131,36 +130,44 @@ public class RedirectServlet extends HttpServlet
 	    {
 		// Get Property Name & Value
 		String propertyName = itr.next();
-		String value = contactJSON.getString(propertyName);
+		String value = "";
+		try
+		{
+		    value = contactJSON.getString(propertyName);
+		}
+		catch (JSONException e)
+		{
+
+		    e.printStackTrace();
+		}
 
 		params += ("&" + propertyName.trim() + "=" + URLEncoder
 			.encode(value.trim()));
 	    }
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
+
+	    System.out.println("Forwarding it to " + longURL + " " + params);
+
+	    resp.sendRedirect(longURL + params);
+
+	    try
+	    {
+		// Interrupt clicked in DeferredTask
+		EmailClickDeferredTask emailClickDeferredTask = new EmailClickDeferredTask(
+			urlShortener.tracker_id);
+		Queue queue = QueueFactory.getDefaultQueue();
+		queue.add(TaskOptions.Builder
+			.withPayload(emailClickDeferredTask));
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+
 	}
 	finally
 	{
 	    NamespaceManager.set(oldNamespace);
 	}
 
-	System.out.println("Forwarding it to " + longURL + " " + params);
-
-	resp.sendRedirect(longURL + params);
-
-	try
-	{
-	    // Interrupt clicked in DeferredTask
-	    EmailClickDeferredTask emailClickDeferredTask = new EmailClickDeferredTask(
-		    urlShortener.tracker_id);
-	    Queue queue = QueueFactory.getDefaultQueue();
-	    queue.add(TaskOptions.Builder.withPayload(emailClickDeferredTask));
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
     }
 }
