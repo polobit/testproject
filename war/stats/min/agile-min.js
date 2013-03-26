@@ -224,6 +224,18 @@ function agile_createContact(data, tags)
 	 	});
 }
 
+function agile_deleteContact(email)
+{
+
+	 var agile_url = agile_id.getURL() + "/contact/delete?callback=?&id=" + agile_id.get() + "&email="+encodeURIComponent(email);
+	 
+	 agile_getJSONP(agile_url, function(data){
+	 	  if (callback && typeof(callback) === "function") {
+		 	callback(data);
+			}
+	 	});
+}
+
 
 
 function agile_getContact(email, callback)
@@ -363,6 +375,39 @@ function agile_removeTag(data)
     
 }
 
+function agile_addScore(socre)
+{
+	if(!score)
+		return;
+	
+	// Post
+	 var agile_url = agile_id.getURL() + "/contacts/add-score?callback=?&id=" + agile_id.get() + "&score=" +score+"&email="+encodeURIComponent(email);
+	 
+	 agile_getJSONP(agile_url, function(data){
+	 	  if (callback && typeof(callback) === "function") {
+		 	callback(data);
+			}
+	 	});
+    
+}
+
+function agile_subtractScore(socre)
+{
+	if(!score)
+		return;
+	
+	// Post
+	 var agile_url = agile_id.getURL() + "/contacts/subtract-score?callback=?&id=" + agile_id.get() + "&score=" +score+"&email="+encodeURIComponent(email);
+	 
+	 agile_getJSONP(agile_url, function(data){
+	 	  if (callback && typeof(callback) === "function") {
+		 	callback(data);
+			}
+	 	});
+}
+
+
+
 
 String.prototype.format = function() {
 	  var args = arguments;
@@ -442,7 +487,7 @@ var agile_id =
 		},
 		getURL: function()
 		{
-			if(this.namespace == "localhost")
+			if(!this.namespace || this.namespace == "localhost")
 				return "http://localhost:8888/core/js/api";
 			else
 				return "https://" + this.namespace + ".agilecrm.com/core/js/api";
