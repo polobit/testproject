@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
+import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -229,8 +230,14 @@ public class Contact extends Cursor
 
 	    // Sets tags into tags, so they can be compared in
 	    // notifications/triggers with new tags
-	    oldContact.tags = oldContact.getTags();
+	    oldContact.tags = oldContact.getContactTags();
 	}
+
+	// Compare with old contact and add new tags
+	if (oldContact != null)
+	    tagsWithTime = mapTagsWithTime(oldContact.tagsWithTime, tags);
+	else
+	    tagsWithTime = mapTagsWithTime(tagsWithTime, tags);
 
 	dao.put(this);
 
@@ -447,12 +454,13 @@ public class Contact extends Cursor
      * 
      * @return
      */
-    @XmlElement(name = "tags")
-    public LinkedHashSet<String> getTags()
+    @JsonIgnore
+    public LinkedHashSet<String> getContactTags()
     {
 	if (!tags.isEmpty())
 	    return tags;
 
+	System.out.println(tagsWithTime);
 	LinkedHashSet<String> tags = new LinkedHashSet<String>();
 
 	for (Tag tag : tagsWithTime)
@@ -521,17 +529,22 @@ public class Contact extends Cursor
 	// Update Tags - Create a deferred task
 	TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(tags);
 
-	tagsWithTime = mapTagsWithTime(tags);
-
 	Queue queue = QueueFactory.getDefaultQueue();
 	queue.add(TaskOptions.Builder.withPayload(tagsDeferredTask));
 
     }
 
+    @PostLoad
+    private void postLoad()
+    {
+	tags = getContactTags();
+    }
+
     /*
      * Creates a list of @Tag objects with tags value and created time in it.
      */
-    private LinkedHashSet<Tag> mapTagsWithTime(Set<String> tags)
+    private LinkedHashSet<Tag> mapTagsWithTime(
+	    LinkedHashSet<Tag> oldTagsWithTime, Set<String> tags)
     {
 	// If tags are empty(considering tags are deleted) then empty list is
 	// saved.
@@ -545,14 +558,14 @@ public class Contact extends Cursor
 	{
 	    boolean tagExists = false;
 
-	    for (Tag tag : tagsWithTime)
+	    for (Tag tag : oldTagsWithTime)
 	    {
 		// If tags list do not contain a tag which is previously saved
 		// in
 		// the tagsWithTime, then tag is removed from the list
 		if (!tags.contains(tag.tag))
 		{
-		    tagsWithTime.remove(tag);
+		    oldTagsWithTime.remove(tag);
 		    continue;
 		}
 
@@ -566,10 +579,11 @@ public class Contact extends Cursor
 	    // If new tag is added, then current tag is added to list with
 	    // current time as tag created time
 	    if (!tagExists)
-		tagsWithTime.add(new Tag(tagValue, System.currentTimeMillis()));
+		oldTagsWithTime.add(new Tag(tagValue, System
+			.currentTimeMillis()));
 
 	}
-	return tagsWithTime;
+	return oldTagsWithTime;
     }
 
     @Override

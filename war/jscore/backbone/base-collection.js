@@ -351,6 +351,10 @@ var Base_Collection_View = Backbone.View
 			{
 				this.appendItem(base_model);
 				
+				if($('table', this.el).hasClass('onlySorting'))
+					return;
+				
+				
 				$('#' + this.options.templateKey + '-model-list').find(
 				'tr:last').prepend('<td><input class="tbody_check" type="checkbox"/></td>');
 			},
