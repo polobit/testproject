@@ -141,13 +141,13 @@ function deserializeForm(data, form)
              * is considered as the tags field, it de-serializes
              * the contact tags
              */
-            else if (fel.hasClass('tagsinput') && tag == "ul" && fel.attr('name') == 'contacts')
+            else if (fel.hasClass('tagsinput') && tag == "ul" && fel.hasClass('contacts'))
             {
-
+            	
                 // Iterates through contacts to create a tag
                 // element for each contact
                 $.each(
-                el,
+                		data.contacts,
 
                 function (index, contact)
                 {

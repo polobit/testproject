@@ -10,6 +10,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
@@ -62,7 +64,7 @@ public class Opportunity
      * Contact ids of related contacts for a deal.
      */
     @NotSaved
-    private List<String> contacts = null;
+    private List<String> contact_ids = new ArrayList<String>();
 
     /**
      * Related contact objects fetched using contact ids.
@@ -198,10 +200,19 @@ public class Opportunity
 
     public void addContactIds(String id)
     {
-	if (contacts == null)
-	    contacts = new ArrayList<String>();
+	if (contact_ids == null)
+	    contact_ids = new ArrayList<String>();
 
-	contacts.add(id);
+	contact_ids.add(id);
+    }
+
+    @XmlElement(name = "contact_ids")
+    public List<String> getcontact_ids()
+    {
+	for (Key<Contact> contactKey : related_contacts)
+	    contact_ids.add(String.valueOf(contactKey.getId()));
+
+	return contact_ids;
     }
 
     /**
@@ -293,13 +304,13 @@ public class Opportunity
 
     public void setContactIds(String id)
     {
-	if (contacts != null)
+	if (contact_ids != null)
 	{
-	    contacts.add(id);
+	    contact_ids.add(id);
 	    return;
 	}
-	contacts = new ArrayList<String>();
-	contacts.add(id);
+	contact_ids = new ArrayList<String>();
+	contact_ids.add(id);
     }
 
     /**
@@ -307,9 +318,9 @@ public class Opportunity
      */
     public void save()
     {
-	if (contacts != null)
+	if (contact_ids != null)
 	{
-	    for (String contact_id : this.contacts)
+	    for (String contact_id : this.contact_ids)
 	    {
 		this.related_contacts.add(new Key<Contact>(Contact.class, Long
 			.parseLong(contact_id)));
@@ -349,22 +360,28 @@ public class Opportunity
 	if (created_time == 0L)
 	    created_time = System.currentTimeMillis() / 1000;
 
-	if(owner_id == null)
+	// If owner_id is null
+	if (owner_id == null)
+	{
+	    UserInfo userInfo = SessionManager.get();
+	    if (userInfo == null)
 		return;
-		
+
+	    owner_id = SessionManager.get().getDomainId().toString();
+	}
+
 	// Saves domain user key
 	ownerKey = new Key<DomainUser>(DomainUser.class,
 		Long.parseLong(owner_id));
 	System.out.println("OwnerKey" + ownerKey);
 
 	AgileUser user = AgileUser.getCurrentAgileUser();
-	
-	if(user == null)
-		return;
-	
+
+	if (user == null)
+	    return;
+
 	// Saves agile user key
-	agileUser = new Key<AgileUser>(AgileUser.class,
-		user.id);
+	agileUser = new Key<AgileUser>(AgileUser.class, user.id);
     }
 
     /*
@@ -374,7 +391,7 @@ public class Opportunity
      */
     public String toString()
     {
-	return "id: " + id + " relatesto: " + contacts + " close date"
+	return "id: " + id + " relatesto: " + contact_ids + " close date"
 		+ close_date + " name: " + name + " description:" + description
 		+ " expectedValue: " + expected_value + " milestone: "
 		+ milestone + " probability: " + probability + " Track: "
