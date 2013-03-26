@@ -207,8 +207,10 @@ public class Opportunity
     }
 
     @XmlElement(name = "contact_ids")
-    public List<String> getcontact_ids()
+    public List<String> getContact_ids()
     {
+	contact_ids = new ArrayList<String>();
+
 	for (Key<Contact> contactKey : related_contacts)
 	    contact_ids.add(String.valueOf(contactKey.getId()));
 
@@ -300,17 +302,6 @@ public class Opportunity
 	}
 
 	return " ";
-    }
-
-    public void setContactIds(String id)
-    {
-	if (contact_ids != null)
-	{
-	    contact_ids.add(id);
-	    return;
-	}
-	contact_ids = new ArrayList<String>();
-	contact_ids.add(id);
     }
 
     /**
