@@ -2,8 +2,11 @@ package com.campaignio.util;
 
 import java.net.URLEncoder;
 
+import org.datanucleus.util.StringUtils;
+
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.campaignio.URLShortener;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>URLShortenerUtil</code> is the class to convert urls from long urls to
@@ -51,7 +54,12 @@ public class URLShortenerUtil
 	    String[] tokens = shortURL.split("/");
 
 	    String shortKey = tokens[tokens.length - 1];
-	    long keyNumber = fromOtherBaseToDecimal(62, shortKey);
+
+	    // Split shortKey and get url key.
+	    String[] keys = shortKey.split("-");
+	    String urlKey = keys[keys.length - 1];
+
+	    long keyNumber = fromOtherBaseToDecimal(62, urlKey);
 
 	    // Increment Emails clicked count based on campaign
 	    URLShortener urlShortener = dao.get(keyNumber);
@@ -93,6 +101,20 @@ public class URLShortenerUtil
 	// Let's convert into base62
 	String urlKey = fromDecimalToOtherBase(62, keyNumber);
 
+	// Gets current namespace to append url
+	String domain = NamespaceManager.get();
+	System.out.println("Namespace in URLShortenerUtil: " + domain);
+
+	String domainKey = "";
+
+	if (StringUtils.isEmpty(domain))
+	{
+	    return null;
+	}
+
+	// Converts domain using Rot13.
+	domainKey = convertStringUsingRot13(domain);
+
 	// When keyword is null initialize with space
 	if (keyword == null || keyword.trim().length() == 0)
 	    keyword = "";
@@ -102,7 +124,50 @@ public class URLShortenerUtil
 	    keyword = URLEncoder.encode(keyword) + "/";
 	}
 
-	return URLShortener.SHORTENER_URL + keyword + urlKey;
+	return URLShortener.SHORTENER_URL + keyword + domainKey + "-" + urlKey;
+    }
+
+    /**
+     * Gets domain from shortened urls
+     * 
+     * @param shortURL
+     *            Short url
+     * @return domain if exists , otherwise empty
+     */
+    public static String getDomainFromShortURL(String shortURL)
+    {
+	try
+	{
+	    if (shortURL == null)
+		return null;
+
+	    // Remove all /
+	    while (shortURL.endsWith("/"))
+	    {
+		shortURL = shortURL.substring(0, shortURL.length() - 1);
+	    }
+
+	    // Split tokens
+	    String[] tokens = shortURL.split("/");
+	    String shortKey = tokens[tokens.length - 1];
+
+	    String[] keys = shortKey.split("-");
+	    String domain = "";
+
+	    System.out.println("Keys obtained after spliting url: " + keys[0]
+		    + " " + keys[1]);
+
+	    if (StringUtils.isEmpty(keys[0]))
+		return domain;
+
+	    domain = convertStringUsingRot13(keys[0]);
+	    return domain;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
     }
 
     /**
@@ -154,5 +219,35 @@ public class URLShortenerUtil
 	    --iterator;
 	}
 	return returnValue;
+    }
+
+    /**
+     * Converts string using Rot13 algorithm.Same method can be used to encrypt
+     * and decrypt the string. E.g., A <-> N, B <-> O etc.
+     * 
+     * @param value
+     *            - Required string to be converted.
+     * @return - converted string.
+     */
+    private static String convertStringUsingRot13(String value)
+    {
+	// To append characters.
+	StringBuffer temp = new StringBuffer();
+
+	for (int i = 0; i < value.length(); i++)
+	{
+	    char c = value.charAt(i);
+	    if (c >= 'a' && c <= 'm')
+		c += 13;
+	    else if (c >= 'A' && c <= 'M')
+		c += 13;
+	    else if (c >= 'n' && c <= 'z')
+		c -= 13;
+	    else if (c >= 'N' && c <= 'Z')
+		c -= 13;
+
+	    temp.append(c);
+	}
+	return temp.toString();
     }
 }

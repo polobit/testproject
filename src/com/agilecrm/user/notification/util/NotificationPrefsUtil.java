@@ -1,13 +1,14 @@
 package com.agilecrm.user.notification.util;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONObject;
 
-import com.agilecrm.account.APIKey;
-import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.notification.NotificationPrefs;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.deferred.NotificationsDeferredTask;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -86,27 +87,33 @@ public class NotificationPrefsUtil
      * @param object
      *            Objects like Contact,Deal etc.
      **/
-    public static void executeNotification(Type type, Object object, String api)
+    public static void executeNotification(Type type, Object object)
     {
-	String jsonData = null;
+	String objectJson = null;
+	JSONObject json = null;
+	String domain = null;
 
-	// Converting object to json
+	if (object == null)
+	    return;
 	try
 	{
+	    // Converting object to json
 	    ObjectMapper mapper = new ObjectMapper();
-	    jsonData = mapper.writeValueAsString(object);
+	    objectJson = mapper.writeValueAsString(object);
 
-	    if (api == null)
+	    // Including type into json object as notification key
+	    json = new JSONObject(objectJson);
+	    json.put("notification", type.toString());
+
+	    // Before adding to message
+	    // deleting contacts list of deals to reduce message size.
+	    if (type == Type.DEAL_CREATED || type == Type.DEAL_CLOSED)
 	    {
-		// When tags are added through campaign i.e., deferred
-		// task,session doesn't exist to get apikey.
-		if (SessionManager.get() == null)
-		    return;
-
-		APIKey apiKey = APIKey.getAPIKey();
-		api = apiKey.api_key;
+		if (json.getString("contacts") != null)
+		    json.remove("contacts");
 	    }
 
+	    System.out.println(json);
 	}
 	catch (Exception e)
 	{
@@ -114,22 +121,18 @@ public class NotificationPrefsUtil
 	    return;
 	}
 
+	// Our channel for pubnub is current namespace.
+	domain = NamespaceManager.get();
+
+	System.out.println("Namespace in NotificationPrefsUtil: " + domain);
+
+	// If domain is empty return
+	if (StringUtils.isEmpty(domain))
+	    return;
+
 	NotificationsDeferredTask notificationsDeferredTask = new NotificationsDeferredTask(
-		type, jsonData, api);
+		domain, json.toString());
 	Queue queue = QueueFactory.getQueue("notification-queue");
 	queue.add(TaskOptions.Builder.withPayload(notificationsDeferredTask));
-    }
-
-    /**
-     * Calls executeNotification method in order to set api-key.
-     * 
-     * @param type
-     *            - Notification Type.
-     * @param object
-     *            - Object like Contact, Deals etc.
-     */
-    public static void executeNotification(Type type, Object object)
-    {
-	executeNotification(type, object, null);
     }
 }
