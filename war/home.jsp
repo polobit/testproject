@@ -65,6 +65,8 @@ String CSS_PATH = "/";
 					%>
 	
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
+
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/agilecrm.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/timeline.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/jslider.css" />
@@ -210,8 +212,11 @@ String CSS_PATH = "/";
 	
 	</div>
 		<div class="footer" id="footer" style="padding:0px !important">
-			<hr></hr>
+			<div style="border-top:1px solid #f5f5f5;border-bottom:1px solid #f5f5f5"></div>
+			<div class="container">
+			<p style="margin:20px 0px 20px 0px"><b>Like AgileCRM?</b> Refer your friends</p>
 	        <a href="#" id="scroll-top" class="btn btn-mini btn-flat btn-primary pull-right">Top &uarr;</a>
+    		</div>
     	</div>
 <script src='lib/headjs-min.js'></script>
 	
