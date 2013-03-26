@@ -8,6 +8,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.user.notification.NotificationPrefs.Type;
+import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.util.CampaignStatsUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -51,6 +55,12 @@ public class EmailOpenServlet extends HttpServlet
 	    // Increment Emails opened count and add log.
 	    CampaignStatsUtil.incrementEmailsOpened(campaignId);
 	    LogUtil.addLogFromID(campaignId, subscriberId, "Email Opened");
+
+	    Contact contact = ContactUtil.getContact(Long
+		    .parseLong(subscriberId));
+	    NotificationPrefsUtil.executeNotification(Type.OPENED_EMAIL,
+		    contact);
+
 	}
 	finally
 	{

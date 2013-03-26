@@ -4,8 +4,6 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.google.appengine.api.NamespaceManager;
-import com.googlecode.objectify.annotation.Indexed;
 
 /**
  * <code>URLShortener</code> considers Id, long url, contact id and tracking id
@@ -52,12 +50,6 @@ public class URLShortener
     public static final String SHORTENER_URL = "http://agle.cc/";
 
     /**
-     * Show namespace
-     */
-    @Indexed
-    public String namespace;
-
-    /**
      * Dao for URLShortener class.
      */
     private static ObjectifyGenericDao<URLShortener> dao = new ObjectifyGenericDao<URLShortener>(
@@ -95,18 +87,7 @@ public class URLShortener
      */
     public void save()
     {
-	// Sets empty namespace
-	namespace = NamespaceManager.get();
-	String oldNamespace = NamespaceManager.get();
-	NamespaceManager.set("");
-	try
-	{
-	    dao.put(this);
-	}
-	finally
-	{
-	    NamespaceManager.set(oldNamespace);
-	}
+	dao.put(this);
     }
 
     public String toString()
