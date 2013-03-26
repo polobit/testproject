@@ -183,6 +183,7 @@ function pieMilestones() {
 				},
 				 plotOptions : {
 				     pie : {
+			    	 cumulative : -0.25,
 				      allowPointSelect : true,
 				      cursor : 'pointer',
 				      borderWidth: 0,
@@ -194,10 +195,9 @@ function pieMilestones() {
 				       formatter : function() {
 				        if(this.percentage <= 2)
 				         return "";
-				        return '<b>' + this.point.name + '</b>: '
-				          + (this.percentage).toFixed(2) + ' %';
+				        return (this.percentage).toFixed(2) + ' %';
 				       },
-				       distance: 5
+				       distance: 2
 				      },
 				      showInLegend : true
 				     }
@@ -271,6 +271,7 @@ function pieTags() {
 			    },
 				 plotOptions : {
 				     pie : {
+				    cumulative : -0.25,
 				      allowPointSelect : true,
 				      cursor : 'pointer',
 				      borderWidth: 0,
@@ -282,10 +283,9 @@ function pieTags() {
 				       formatter : function() {
 				        if(this.percentage <= 2)
 				         return "";
-				        return '<b>' + this.point.name + '</b>: '
-				          + (this.percentage).toFixed(2) + ' %';
+				        return (this.percentage).toFixed(2) + ' %';
 				       },
-				       distance: 5
+				       distance: 2
 				      },
 				      showInLegend : true
 				     }
