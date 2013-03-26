@@ -1,12 +1,11 @@
 /**
- * notification.js is a script file to show notifications.'socket.io.js' is used
- * to emit data received from server. Notification preferences are fetched for
- * current user.Some jquery plugins are used to show pop-up messages.
+ * notification.js is a script file to show notifications.pubnub is used to emit
+ * data received from server. Notification preferences are fetched for current
+ * user.Noty jquery plugin are used to show pop-up messages.
  * 
  * @module Notifications
  */
 var notification_prefs;
-var socket;
 
 /**
  * Sets timeout for registering notifications.Waits for 2secs after page loads
@@ -14,8 +13,7 @@ var socket;
  */
 $(function() {
 	setTimeout(downloadAndRegisterForNotifications, 2000);
-
-	// fetchContactAndNotify('manohar@invox.com');
+//	fetchContactAndNotify('manohar@invox.com');
 
 });
 
@@ -50,131 +48,101 @@ function registerForNotifications(prefs) {
 	// the value is default
 	if (!prefs.contact_any_browsing || !prefs.contact_assigned_browsing
 			|| !prefs.contact_assigned_starred_browsing) {
-		// Register for sockets
 
 	}
 
-	// Register for sockets
-	registerForSockets();
+	// Gets domain 
+	getDomainFromCurrentUser();
 }
 
 /**
- * Gets API Key and sets up socket using socket.io
+ * Gets domain from current user using backbone model.
+ **/
+function getDomainFromCurrentUser() {
+	var domain_user = Backbone.Model.extend({
+		url : 'core/api/current-user'
+	});
+	var user = new domain_user();
+	user.fetch({
+		success : function(data) {
+			var domain = data.get('domain');
+			// console.log(domain);
+			subscribeToPubNub(domain);
+		}
+	});
+}
+
+/**
+ * Subscribes to Pubnub
  */
-function registerForSockets() {
+function subscribeToPubNub(domain) {
 
 	// Put http or https
 	// var protocol = document.location.protocol;
-	var protocol = 'https';
-	head.js(protocol + '://stats.agilecrm.com:90/socket.io/socket.io.js',
-			function() {
 
-				// Get API Key
-				var api_key_model = Backbone.Model.extend({
-					url : 'core/api/api-key'
-				});
-
-				var model = new api_key_model();
-				model.fetch({
-					success : function(data) {
-
-						var api_key = data.get('api_key');
-
-						// Set up sockets with the obtained api key
-						_setupSockets(api_key);
-
-					}
-				});
-
-			});
+	var protocol = 'http';
+	head.js(protocol + '://cdn.pubnub.com/pubnub-3.4.min.js', function() {
+		// CREATE A PUBNUB OBJECT
+		var pubnub = PUBNUB.init({
+			'publish_key' : 'pub-c-e4c8fdc2-40b1-443d-8bb0-2a9c8facd274',
+			'subscribe_key' : 'sub-c-118f8482-92c3-11e2-9b69-12313f022c90'
+		});
+		pubnub.ready();
+		pubnub.subscribe({   
+			channel : domain,
+			callback : function(message) {
+				_setupNotification(message);
+			}
+		});
+	});
 }
 
 /**
- * Sets sockets with the obtained api key by using socket.io.js
+ * Sets notification message
  * 
- * @param api_key
- *            API Key.Socket is connected using the api key.
+ * @param object
+ *            object data such as contact
  */
-function _setupSockets(api_key) {
-	console.log("Connecting " + api_key);
+function _setupNotification(object) {
 
-	var agile = api_key;
-	socket = io.connect('https://stats.agilecrm.com:90');
+	// Inorder to avoid navigating to the contact or deal deleted
+	// when clicking on notification.
+	if (object.notification == 'CONTACT_DELETED'
+			|| object.notification == 'DEAL_CLOSED')
+		object.id = "";
 
-	socket.on('connect', function() {
-		console.log('socket connected');
-		socket.emit('subscribe', {
-			agile_id : agile
-		});
-	});
+	var html = getTemplate('notify-html', object);
 
-	socket.on('browsing', function(data) {
-		console.log('browsing');
-		console.log(data);
+	if (object.notification == 'CLICKED_LINK'
+			|| object.notification == 'OPENED_EMAIL') {
+		// Shows notification for email opened and clicked
+		notificationForClickedAndOpened(object, html);
+	}
+	/**
+	 * Checks notification preferences and compare with notification type. If it
+	 * is set true then show notification. For e.g. If Deal created is true then
+	 * notification when 'deal is created' is shown.
+	 */
+	$.each(notification_prefs, function(key, value) {
 
-		// Get his email address
-		// var email = 'manohar@invox.com';
-		fetchContactAndNotify(data.email);
-	});
+		if (key == object.notification.toLowerCase()) {
 
-	socket.on('notification', function(data) {
-
-		console.log('notification');
-		console.log(data);
-
-		var parse_data = JSON.parse(data);
-
-		// Obtained parse_data is in stringifyJSON, so parsing again.
-		var object = JSON.parse(parse_data.object);
-
-		/**
-		 * Storing notification type into object json inorder to show type in
-		 * notification object. 'type' key is changed to 'notification', to
-		 * avoid 'type' in contact.
-		 * 
-		 */
-		object.notification = parse_data.type;
-		console.log("object ", object);
-
-		// Inorder to avoid navigating to the contact or deal deleted
-		// when clicking on notification.
-		if (object.notification == 'CONTACT_DELETED'
-				|| object.notification == 'DEAL_CLOSED')
-			object.id = "";
-
-		var html = getTemplate('notify-html', object);
-
-		if (object.notification == 'CLICKED_LINK'
-				|| object.notification == 'OPENED_EMAIL') {
-			// Shows notification for email opened and clicked
-			notificationForClickedAndOpened(object, html);
+			if (notification_prefs[key])
+				// notify('information', html,
+				// 'bottom-right',true);
+				showNoty('information', html, 'bottomRight');
 		}
-		/**
-		 * Checks notification preferences and compare with notification type.
-		 * If it is set true then show notification. For e.g. If Deal created is
-		 * true then notification when 'deal is created' is shown.
-		 */
-		$.each(notification_prefs, function(key, value) {
-
-			if (key == object.notification.toLowerCase()) {
-
-				if (notification_prefs[key])
-					// notify('information', html,
-					// 'bottom-right',true);
-					showNoty('information', html, 'bottomRight');
-			}
-
-		});
-
-		/*
-		 * console.log(parse_data); for(var i=0;i<parse_data.contacts.length;i++) { //
-		 * var email = getPropertyValue(parse_data.contacts[i].properties,
-		 * "email"); console.log(parse_data.contacts[i]); var html =
-		 * getTemplate('notify-html',parse_data.contacts[i]); notify('success1',
-		 * html, 'bottom-right', true); } //fetchContactAndNotify(email);
-		 */
 
 	});
+
+	/*
+	 * console.log(parse_data); for(var i=0;i<parse_data.contacts.length;i++) { //
+	 * var email = getPropertyValue(parse_data.contacts[i].properties, "email");
+	 * console.log(parse_data.contacts[i]); var html =
+	 * getTemplate('notify-html',parse_data.contacts[i]); notify('success1',
+	 * html, 'bottom-right', true); } //fetchContactAndNotify(email);
+	 */
+
 }
 
 /**
@@ -322,13 +290,6 @@ function notificationForBrowsing(contact) {
 			showNoty('information', html, 'bottomRight');
 	}
 
-}
-
-/**
- * Disconnects socket established
- */
-function _cancelSockets() {
-	socket.disconnect();
 }
 
 /**

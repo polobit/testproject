@@ -12,6 +12,8 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.user.notification.NotificationPrefs.Type;
+import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.URLShortener;
 import com.campaignio.servlets.deferred.EmailClickDeferredTask;
@@ -58,7 +60,7 @@ public class RedirectServlet extends HttpServlet
 	    return;
 	}
 
-	String domain = urlShortener.namespace;
+	String domain = URLShortenerUtil.getDomainFromShortURL(url);
 	String subscriberId = urlShortener.subscriber_id;
 
 	Contact contact = null;
@@ -76,6 +78,8 @@ public class RedirectServlet extends HttpServlet
 	    CampaignStatsUtil.incrementEmailsClicked(urlShortener.campaign_id);
 	    contact = ContactUtil.getContact(Long.parseLong(subscriberId));
 
+	    NotificationPrefsUtil.executeNotification(Type.CLICKED_LINK,
+		    contact);
 	}
 	finally
 	{
