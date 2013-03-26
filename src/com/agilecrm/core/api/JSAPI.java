@@ -20,8 +20,9 @@ import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.user.AgileUser;
-import com.agilecrm.user.DomainUser;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.google.appengine.labs.repackaged.org.json.JSONArray;
+import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.googlecode.objectify.Key;
 import com.sun.jersey.api.json.JSONWithPadding;
 
@@ -154,6 +155,47 @@ public class JSAPI
     }
 
     /**
+     * Deletes contacts based on the list of contact ids.
+     * 
+     * @param contact_ids
+     * @param apiKey
+     * @param jsoncallback
+     * @return
+     */
+    @Path("contacts/delete")
+    @GET
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces("application/x-javascript")
+    public JSONWithPadding deleteContact(
+	    @QueryParam("contact_ids") String contact_ids,
+	    @QueryParam("id") String apiKey,
+	    @QueryParam("callback") String jsoncallback)
+    {
+	try
+	{
+	    JSONArray contactsJSONArray = new JSONArray(contact_ids);
+
+	    for (int i = 0; i < contactsJSONArray.length(); i++)
+	    {
+		Contact contact = ContactUtil.getContact(Long
+			.parseLong(contactsJSONArray.getString(i)));
+
+		if (contact != null)
+		{
+		    contact.delete();
+		}
+	    }
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	    return null;
+	}
+	return new JSONWithPadding(true, jsoncallback);
+    }
+
+    /**
      * Adds task. Takes email, task json and callback as query parameters, task
      * is created and related to contact based on the email. If contact doesn't
      * exist with current email, null is returned with out creating a task
@@ -187,15 +229,15 @@ public class JSAPI
 
 	    // Get Contact
 	    Contact contact = ContactUtil.searchContactByEmail(email);
-	    
-	    task.setOwner(new Key<AgileUser>(AgileUser.class, APIKey.getAgileUserRelatedToAPIKey(key).id));
-	    
+
+	    task.setOwner(new Key<AgileUser>(AgileUser.class, APIKey
+		    .getAgileUserRelatedToAPIKey(key).id));
+
 	    if (contact == null)
 		return null;
-	   
+
 	    task.contacts = new ArrayList<String>();
 	    task.contacts.add(contact.id + "");
-	    
 
 	    task.save();
 
@@ -241,9 +283,9 @@ public class JSAPI
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
 		return null;
-	    if(note.contacts == null)
-	    	note.contacts = new ArrayList<String>();
-	    
+	    if (note.contacts == null)
+		note.contacts = new ArrayList<String>();
+
 	    note.contacts.add(contact.id + "");
 	    note.save();
 
@@ -297,8 +339,8 @@ public class JSAPI
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
 		return null;
-	    
-	    opportunity.addContactIds(contact.id+"");
+
+	    opportunity.addContactIds(contact.id + "");
 
 	    // Set, owner id to opportunity (owner of the apikey is set as owner
 	    // to opportunity)
@@ -443,16 +485,18 @@ public class JSAPI
      */
     @Path("contacts/add-score")
     @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public boolean addScore(@QueryParam("email") String email,
-	    @QueryParam("score") Integer score)
+    @Produces("application/x-javascript")
+    public JSONWithPadding addScore(@QueryParam("email") String email,
+	    @QueryParam("score") Integer score,
+	    @QueryParam("callback") String jsoncallback)
     {
 	Contact contact = ContactUtil.searchContactByEmail(email);
 	if (contact == null)
-	    return true;
+	    return new JSONWithPadding(false, jsoncallback);
 
 	contact.addScore(score);
-	return true;
+	return new JSONWithPadding(true, jsoncallback);
+
     }
 
     // Subtract score
@@ -473,18 +517,19 @@ public class JSAPI
      */
     @Path("contacts/subtract-score")
     @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public boolean subtractScore(@QueryParam("email") String email,
-	    @QueryParam("score") Integer score)
+    @Produces("application/x-javascript")
+    public JSONWithPadding subtractScore(@QueryParam("email") String email,
+	    @QueryParam("score") Integer score,
+	    @QueryParam("callback") String jsoncallback)
     {
 
 	// Get Contact
 	Contact contact = ContactUtil.searchContactByEmail(email);
 	if (contact == null)
-	    return true;
+	    return new JSONWithPadding(false, jsoncallback);
 
 	contact.subtractScore(score);
-	return true;
+	return new JSONWithPadding(true, jsoncallback);
 
     }
 

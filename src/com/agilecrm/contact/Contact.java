@@ -14,8 +14,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.agilecrm.contact.deferred.TagsDeferredTask;
 import com.agilecrm.contact.util.ContactUtil;
@@ -117,10 +115,20 @@ public class Contact extends Cursor
     public Integer lead_score = 0;
 
     /**
-     * Set of tags
+     * Set of tags. Not saved in it, it is used to map tags from client
+     * requests, which are further processed in pre persist to save in
+     * tagsWithTime variable
      */
-    @Indexed
+    @NotSaved
     public LinkedHashSet<String> tags = new LinkedHashSet<String>();
+
+    /**
+     * Stores tags with created time.
+     */
+    @NotSaved(IfDefault.class)
+    @Embedded
+    @Indexed
+    private LinkedHashSet<Tag> tagsWithTime = new LinkedHashSet<Tag>();
 
     /**
      * Stores properties, by embedding the class <code>ContactField</code>. Also
@@ -137,12 +145,6 @@ public class Contact extends Cursor
      */
     @NotSaved(IfDefault.class)
     public String widget_properties = null;
-
-    /**
-     * Saves tags mapped with created time.
-     */
-    @NotSaved(IfDefault.class)
-    public String tags_with_time_json = null;
 
     /**
      * Used for when request is sent using developer js api, to avoid json
@@ -222,7 +224,13 @@ public class Contact extends Cursor
 	Contact oldContact = null;
 
 	if (id != null)
+	{
 	    oldContact = ContactUtil.getContact(id);
+
+	    // Sets tags into tags, so they can be compared in
+	    // notifications/triggers with new tags
+	    oldContact.tags = oldContact.getTags();
+	}
 
 	dao.put(this);
 
@@ -290,6 +298,12 @@ public class Contact extends Cursor
 	    return contactField.value;
 
 	return null;
+    }
+
+    @JsonIgnore
+    public LinkedHashSet<Tag> getTagsList()
+    {
+	return tagsWithTime;
     }
 
     /**
@@ -429,6 +443,27 @@ public class Contact extends Cursor
     }
 
     /**
+     * Returns tags
+     * 
+     * @return
+     */
+    @XmlElement(name = "tags")
+    public LinkedHashSet<String> getTags()
+    {
+	if (!tags.isEmpty())
+	    return tags;
+
+	LinkedHashSet<String> tags = new LinkedHashSet<String>();
+
+	for (Tag tag : tagsWithTime)
+	{
+	    tags.add(tag.tag);
+	}
+
+	return tags;
+    }
+
+    /**
      * While saving a contact it contains domain user key as owner, but while
      * retrieving includes complete DomainUser object.
      * 
@@ -486,7 +521,7 @@ public class Contact extends Cursor
 	// Update Tags - Create a deferred task
 	TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(tags);
 
-	tags_with_time_json = mapTagsWithTime(tags, System.currentTimeMillis());
+	tagsWithTime = mapTagsWithTime(tags);
 
 	Queue queue = QueueFactory.getDefaultQueue();
 	queue.add(TaskOptions.Builder.withPayload(tagsDeferredTask));
@@ -494,63 +529,47 @@ public class Contact extends Cursor
     }
 
     /*
-     * Creates tags map with created time as value and <tagname> as key, which
-     * is to be stored in document to enable search on tags w.r.t created time
+     * Creates a list of @Tag objects with tags value and created time in it.
      */
-    private String mapTagsWithTime(Set<String> tags, long currentTime)
+    private LinkedHashSet<Tag> mapTagsWithTime(Set<String> tags)
     {
-	JSONObject tags_json = new JSONObject();
-	try
-	{
-	    // If tags JSON is not null the create a JSON object with existing
-	    // map stored in contact entity
-	    if (tags_with_time_json != null)
-		tags_json = new JSONObject(tags_with_time_json);
-
-	    // Iterates through tags in the contact
-	    for (String tag : tags)
-	    {
-		// If contact json already contacts tag it is an old tag,
-		// changes are not to be made
-		if (tags_json.has(tag))
-		    continue;
-
-		tags_json.put(tag, currentTime);
-	    }
-
-	    // Returns map after removing tags which are not present in tags,
-	    // considering they are deleted in current update
-	    return removeDeletedTagsFromMap(tags_json).toString();
-	}
-	catch (JSONException e)
-	{
-	    return null;
-	}
-    }
-
-    private JSONObject removeDeletedTagsFromMap(JSONObject tagJson)
-    {
+	// If tags are empty(considering tags are deleted) then empty list is
+	// saved.
 	if (tags.isEmpty())
-	    return new JSONObject();
+	    return new LinkedHashSet<Tag>();
 
-	for (int i = 0; i < tagJson.names().length(); i++)
+	// Iterates through each tag in tags list and add new tags with current
+	// time, also removes tags from list which are deleted in the current
+	// request
+	for (String tagValue : tags)
 	{
-	    try
-	    {
-		if (tags.contains(tagJson.names().get(i)))
-		    continue;
+	    boolean tagExists = false;
 
-		tagJson.remove(tagJson.names().get(i).toString());
-	    }
-	    catch (JSONException e)
+	    for (Tag tag : tagsWithTime)
 	    {
-		// TODO Auto-generated catch block
-		continue;
+		// If tags list do not contain a tag which is previously saved
+		// in
+		// the tagsWithTime, then tag is removed from the list
+		if (!tags.contains(tag.tag))
+		{
+		    tagsWithTime.remove(tag);
+		    continue;
+		}
+
+		// Check if any new tag is added.
+		if (tag.tag.equalsIgnoreCase(tagValue))
+		{
+		    tagExists = true;
+		}
 	    }
+
+	    // If new tag is added, then current tag is added to list with
+	    // current time as tag created time
+	    if (!tagExists)
+		tagsWithTime.add(new Tag(tagValue, System.currentTimeMillis()));
 
 	}
-
-	return tagJson;
+	return tagsWithTime;
     }
 
     @Override

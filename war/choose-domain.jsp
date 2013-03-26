@@ -21,7 +21,7 @@ if(!StringUtils.isEmpty(domain))
 	}
 	else
 	{
-	    error = "Domain already exists.";
+	    error = "Domain "+ domain +" already exists.";
 	}
 }
 

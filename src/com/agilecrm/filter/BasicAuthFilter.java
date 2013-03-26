@@ -15,6 +15,8 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.gdata.util.common.base.Charsets;
@@ -95,6 +97,26 @@ public class BasicAuthFilter implements Filter
 		    // given access
 		    if (domainUser != null && password.equals(apiKey))
 		    {
+			// Set Cookie and forward to /home
+
+			UserInfo userInfo = (UserInfo) httpRequest
+				.getSession()
+				.getAttribute(
+					SessionManager.AUTH_SESSION_COOKIE_NAME);
+
+			if (userInfo == null)
+			{
+			    userInfo = new UserInfo("agilecrm.com",
+				    domainUser.email, domainUser.name);
+
+			    httpRequest.getSession().setAttribute(
+				    SessionManager.AUTH_SESSION_COOKIE_NAME,
+				    userInfo);
+
+			}
+
+			SessionManager.set(httpRequest);
+
 			chain.doFilter(httpRequest, httpResponse);
 			return;
 		    }

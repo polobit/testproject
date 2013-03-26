@@ -151,7 +151,7 @@ var Base_Collection_View = Backbone.View
 			initialize : function()
 			{
 				// Binds functions to view
-				_.bindAll(this, 'render', 'appendItem');
+				_.bindAll(this, 'render', 'appendItem', 'appendItemOnAddEvent');
 			
 				
 				if(this.options.data)
@@ -185,6 +185,7 @@ var Base_Collection_View = Backbone.View
 				 * model to the server
 				 */
 				this.collection.bind('sync', this.appendItem);
+				this.collection.bind('add', this.appendItemOnAddEvent);
 
 				var that = this;
 
@@ -258,7 +259,8 @@ var Base_Collection_View = Backbone.View
 									 * called, so addition models fetched in
 									 * collection are show in the view
 									 */
-									that.render(true)
+									$(".scroll-loading", that.el).remove();
+									
 								},
 								untilAttr : 'cursor',
 								param : 'cursor',
@@ -272,7 +274,7 @@ var Base_Collection_View = Backbone.View
 								onFetch : function()
 								{
 									$("table", that.el).after(
-											'<div style="margin-left:50%">'
+											'<div class="scroll-loading" style="margin-left:50%">'
 													+ LOADING_ON_CURSOR
 													+ '</div>');
 								}
@@ -343,6 +345,14 @@ var Base_Collection_View = Backbone.View
 				// Add model as data to it's corresponding row
 				$('#' + this.options.templateKey + '-model-list').find(
 						'tr:last').data(base_model);
+			},
+			
+			appendItemOnAddEvent : function(base_model)
+			{
+				this.appendItem(base_model);
+				
+				$('#' + this.options.templateKey + '-model-list').find(
+				'tr:last').prepend('<td><input class="tbody_check" type="checkbox"/></td>');
 			},
 			/**
 			 * Renders the collection to a template specified in options, uses

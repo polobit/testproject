@@ -51,7 +51,8 @@ public class ContactUtil
      */
     public static int getContactsCountForTag(String tag)
     {
-	return dao.ofy().query(Contact.class).filter("tags", tag).count();
+	return dao.ofy().query(Contact.class)
+		.filter("tagsWithTime.tag = ", tag).count();
     }
 
     /**
@@ -63,7 +64,7 @@ public class ContactUtil
      */
     public static List<Contact> getContactsForTag(String tag)
     {
-	return dao.listByProperty("tags", tag);
+	return dao.listByProperty("tagsWithTime.tag", tag);
     }
 
     /**
@@ -165,7 +166,7 @@ public class ContactUtil
      * unless the real entity is required
      * 
      * @param email
-     *            email value to get contact count with this emil
+     *            email value to get contact count with this email
      * @return number of contacts with the given email
      */
     public static int searchContactCountByEmail(String email)
