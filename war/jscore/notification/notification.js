@@ -79,9 +79,8 @@ function subscribeToPubNub(domain) {
 
 	// Put http or https
 	// var protocol = document.location.protocol;
-
-	var protocol = 'http';
-	head.js(protocol + '://cdn.pubnub.com/pubnub-3.4.min.js', function() {
+	var protocol = 'https';
+	head.js(protocol + '://pubnub.a.ssl.fastly.net/pubnub-3.4.min.js', function() {
 		// CREATE A PUBNUB OBJECT
 		var pubnub = PUBNUB.init({
 			'publish_key' : 'pub-c-e4c8fdc2-40b1-443d-8bb0-2a9c8facd274',
