@@ -296,6 +296,27 @@ $(function() {
 
 		return new Handlebars.SafeString(el);
 	});
+	
+
+	/**
+	 * Returns table headings for reports custom contacts list view
+	 */
+	Handlebars.registerHelper('reportsContactTableHeadings', function(item) {
+
+		var el = "";
+		$.each(REPORT[item], function(index, element) {
+
+			if(element.indexOf("properties_") != -1)
+				element = element.split("properties_")[1];
+			
+			element = element.replace("_", " ")
+
+			el = el.concat('<th>' + ucfirst(element) + '</th>');
+
+		});
+
+		return new Handlebars.SafeString(el);
+	});
 
 	/**
 	 * Helper function, which executes different templates (entity related)

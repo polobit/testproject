@@ -11,6 +11,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.json.JSONArray;
@@ -18,7 +19,11 @@ import org.json.JSONException;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.reports.Reports;
+import com.agilecrm.reports.deferred.ReportsDeferredTaskInstantEmail;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 
 @Path("/api/reports")
 public class ReportsApi
@@ -70,19 +75,45 @@ public class ReportsApi
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Collection<Contact> getReportResults(
-	    @PathParam("filter_id") String id)
+	    @PathParam("report_id") String id,
+	    @QueryParam("page_size") String count,
+	    @QueryParam("cursor") String cursor)
     {
 	try
 	{
 	    Reports report = Reports.getReport(Long.parseLong(id));
 
-	    Collection<Contact> contacts = report.generateReports();
+	    Collection<Contact> contacts = report.generateReports(
+		    Integer.parseInt(count), cursor);
 
 	    return contacts;
 	}
 	catch (Exception e)
 	{
 	    return null;
+	}
+    }
+
+    @Path("/send/{report_id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void sendReportResults(@PathParam("report_id") String id)
+    {
+	try
+	{
+	    Reports report = Reports.getReport(Long.parseLong(id));
+
+	    ReportsDeferredTaskInstantEmail reportsDeferredTask = new ReportsDeferredTaskInstantEmail(
+		    Long.parseLong(id));
+
+	    Queue queue = QueueFactory.getDefaultQueue();
+
+	    // Add to queue
+	    queue.add(TaskOptions.Builder.withPayload(reportsDeferredTask));
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
 	}
     }
 
@@ -103,4 +134,5 @@ public class ReportsApi
 
 	NamespaceManager.set(oldName);
     }
+
 }

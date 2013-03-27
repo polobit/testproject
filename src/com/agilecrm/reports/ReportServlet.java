@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.agilecrm.deferred.ReportsDeferredTask;
+import com.agilecrm.reports.deferred.ReportsDeferredTask;
 import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;

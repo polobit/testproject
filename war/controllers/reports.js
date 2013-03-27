@@ -11,6 +11,7 @@ var ReportsRouter = Backbone.Router.extend({
 		"reports" : "reports",
 		"report-add" : "reportAdd",
 		"report-edit/:id" : "reportEdit",
+		"report-results/:id": "reportInstantResults"
 	},
 
 	/**
@@ -100,8 +101,9 @@ var ReportsRouter = Backbone.Router.extend({
 			template : "reports-add",
 			window : 'reports',
 			postRenderCallback : function(el) {
-				populateUsers("owners", el, report.toJSON(), 'domainUser');
 
+				populateUsers("owners", el, report.toJSON(), 'domainUser');
+				
 				$(".reports-condition-table", el).hide();
 				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js',
 						function() {
@@ -116,23 +118,63 @@ var ReportsRouter = Backbone.Router.extend({
 				fillSelect("custom-fields-optgroup", "core/api/custom-fields", undefined, function(data){console.log(data)}, '<option value="custom_{{field_label}}">{{field_label}}</option>', true);
 				
        			head.js(LIB_PATH + 'lib/jquery.multi-select.js', LIB_PATH + 'lib/jquery-ui.min.js', function(){
-       				       				
-       					$("#content").html(el);
-       					$('#multipleSelect').multiSelect({ selectableOptgroup: true });
+       				       	
+       				
+       						
+       					$('#multipleSelect', el).multiSelect({ selectableOptgroup: true });
        					
        					
        					$.each(report.toJSON()['fields_set'], function(index, field){
-       						$('#multipleSelect').multiSelect('select', field); 
+       						$('#multipleSelect', el).multiSelect('select', field); 
        					});
        					
-       					$('.ms-selection').children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id","fields_set").sortable();
+       					$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id","fields_set").sortable();
      	
        			});
+       			
+       			
 			}
 		});
 
+//		report_model.render();
+		
 		report_model.render();
-		
-		
+		$("#content").html(report_model.el);
+	
 	},
+	
+	reportInstantResults : function(id) {
+		
+		if(!REPORT)
+		console.log("reports not defined");
+		
+		if(!REPORT)
+		{
+			$("#content").html(LOADING_HTML);
+			var reportModel = new Backbone.Model();
+			reportModel.url = "core/api/reports/" + id;
+			reportModel.fetch({success: function(data){
+					REPORT = data.toJSON();
+					App_Reports.reportInstantResults(id);
+				}
+			});
+		return;
+		}
+	
+		var report_results_view = new Base_Collection_View({
+				url : "core/api/reports/query/" + id,
+				modelData: REPORT ,
+				templateKey: "report-search",
+				individual_tag_name: 'tr',
+				cursor: true,		        
+		        sort_collection : false,
+		        page_size: 15, 
+		});// Collection
+	
+		report_results_view.appendItem = reportsContactTableView;
+
+		report_results_view.collection.fetch();
+		
+		$("#content").html(report_results_view.render().el);
+	}
 })

@@ -101,6 +101,12 @@ public class Reports implements Serializable
 	return AppengineSearch.getAdvacnedSearchResults(rules);
     }
 
+    @SuppressWarnings("rawtypes")
+    public Collection generateReports(int count, String cursor)
+    {
+	return AppengineSearch.getAdvacnedSearchResults(rules, count, cursor);
+    }
+
     /* Get Contact Filter by id */
     public static Reports getReport(Long id)
     {

@@ -16,6 +16,11 @@ $(function(){
     */ 	
 	$('body').live('agile_collection_loaded', function(event) {
 		
+		
+		  // Adds class to tbody to edit the table by validating the route attribute 
+		if($('table').find('tbody').attr('route'))
+			$('table').find('tbody').addClass('agile-edit-row');
+		
 		if($('table').hasClass('onlySorting'))
 		{	
 			var sortingtable = $(this).find('table.onlySorting');
@@ -47,9 +52,7 @@ $(function(){
 
 		$(table).find('tbody tr').prepend('<td><input class="tbody_check" type="checkbox"/></td>');
 		
-	    // Adds class to tbody to edit the table by validating the route attribute 
-		if($(table).find('tbody').attr('route'))
-			$(table).find('tbody').addClass('agile-edit-row');
+	  
 		
 		$(table).after('<div class="row"><div class="span6  select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked" style="margin-bottom: 15px"> Delete</a>');
 		

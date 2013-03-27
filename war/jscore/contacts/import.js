@@ -214,6 +214,9 @@ $(function(){
 	            if (tags != undefined) 
 	            	{
 	            		$.each(tags[0].value, function(index, value){
+	            			if(!model.tags)
+	            				model.tags = [];
+	            			
 	            			model.tags.push(value);
 	            		});
 	            	}

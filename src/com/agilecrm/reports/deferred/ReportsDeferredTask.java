@@ -1,4 +1,4 @@
-package com.agilecrm.deferred;
+package com.agilecrm.reports.deferred;
 
 import java.util.List;
 import java.util.Map;
