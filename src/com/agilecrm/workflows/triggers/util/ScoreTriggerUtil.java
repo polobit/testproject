@@ -32,8 +32,8 @@ public class ScoreTriggerUtil
     public static void checkScoreChange(Contact oldContact,
 	    Contact updatedContact)
     {
-	System.out.println("Score of updated contact"
-		+ updatedContact.lead_score + "Score of old"
+	System.out.println("Score of updated contact: "
+		+ updatedContact.lead_score + "Score of old: "
 		+ oldContact.lead_score);
 
 	if (updatedContact.lead_score == oldContact.lead_score)

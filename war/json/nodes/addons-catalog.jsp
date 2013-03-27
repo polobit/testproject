@@ -7,8 +7,7 @@
 <%
     // Get Catalog
     String[] EMAIL_CATALOG = { "json/nodes/email/send_email.jsp",
-		    "json/nodes/email/ab.js", "json/nodes/email/clicked.js",
-		    "json/nodes/email/sex.js" };
+		    "json/nodes/email/ab.js", "json/nodes/email/clicked.js" };
     String[] UTILITIES_CATALOG = { "json/nodes/common/wait.js",
 		    "json/nodes/common/score.js", "json/nodes/common/tags.js",
 		    "json/nodes/common/transfer.js",
@@ -18,7 +17,7 @@
     String[] DEVELOPERS_CATALOG = { "json/nodes/developers/jsonio.js",
 		    "json/nodes/developers/condition.js" };
     String[] CRM_CATALOG = { "json/nodes/crm/addnote.js",
-		    "json/nodes/crm/addtask.js" };
+		    "json/nodes/crm/addtask.js","json/nodes/common/tag_exists.js" };
 
     // Download Each Catalog
     JSONArray jsonArray = new JSONArray();
