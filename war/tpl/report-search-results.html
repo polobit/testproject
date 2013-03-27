@@ -1,0 +1,72 @@
+<script id="report-search-model-template" type="text/html">
+	<td class="data" data="{{id}}">
+    	<div style="display: inline; padding-right: 10px; height: auto;">
+        	{{#if_contact_type "PERSON"}} <img class="thumbnail" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display: inline" /> {{/if_contact_type}}
+        	{{#if_contact_type "COMPANY"}} <img class="thumbnail" src="img/company.png" width="40px" height="40px" style="display: inline" /> {{/if_contact_type}}
+    	</div>
+    	<div style="height: auto; display: inline-block; vertical-align: top; text-overflow: ellipsis; white-space: nowrap; width: 12em; overflow: hidden;">
+        	{{#if_contact_type "PERSON"}} <b> {{getPropertyValue properties
+        	"first_name"}} {{getPropertyValue properties "last_name"}} </b> <br />
+        	{{getPropertyValue properties "email"}} {{/if_contact_type}}
+        	{{#if_contact_type "COMPANY"}} <b>{{getPropertyValue properties
+        	"name"}}</b></br> {{getPropertyValue properties "url"}} {{/if_contact_type}}
+    	</div>
+    	<div style="float: right"></div>
+	</td>
+	<td>{{getPropertyValue properties "title"}}<br />
+    	{{getPropertyValue properties "company"}}
+	</td>
+	<td>{{#each tags}} <b><span class="label">{{this}}</span></b>
+    	{{/each}}
+	</td>
+	<td>{{lead_score}}</td>
+</script>
+
+<script id="report-search-collection-template" type="text/html">
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            
+            <h1>Report Results</h1>
+            
+            <div class="btn-group right" id="view-list" style="top:-29px;position:relative">
+            </div>
+            <div class="btn-group right" id="filter-list" style="top:-29px;position:relative;margin-right:5px">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="span9">
+        {{#if this.length}}
+        <div class="data">
+            <div class="data-container">
+                <div class="btn-group right" id="bulk-actions" style="position: relative; display: none">
+                    <button class="btn">Bulk Actions</button>
+                    <button class="btn dropdown-toggle" data-toggle="dropdown" id="view-actions">
+                    <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" id="view-actions">
+                        <li><a href="#" id="bulk-owner">Change owner</a></li>
+                        <li><a href="#" id="bulk-campaigns">Add to campaign</a></li>
+                        <li class="hide"><a href="#" id="bulk-email">Send email</a></li>
+                        <li><a href="#" id="bulk-tags">Add tags</a></li>
+                    </ul>
+                </div>
+                <table id="contacts_search" class="table table-striped onlySorting" url="core/api/contacts/bulk" style="overflow: scroll">
+                    <thead>
+                        <tr style="text-transform: capitalize;">
+                            {{reportsContactTableHeadings "fields_set"}}
+                        </tr>
+                    </thead>
+                    <tbody id="report-search-model-list" class="model-list-cursor" route="contact/" style="overflow: scroll;">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {{/if}}
+    </div>
+    <div class="span3">
+    </div>
+</div>
+</script>
