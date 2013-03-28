@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
+  <application>agile-crm-cloud</application>
+  <version>1</version>
+        <threadsafe>true</threadsafe>
+	  <sessions-enabled>true</sessions-enabled>
+	<system-properties>
+    <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
+  <property name="com.google.gdata.DisableCookieHandler" value="true"/>
+</system-properties>
+<!-- Configure static files -->
+ <static-files>
+ 
+	  <!-- Images -->
+	  <include path="/**.png" expiration="7d" />
+	  <include path="/**.gif" expiration="7d" />
+	  <include path="/**.jpg" expiration="7d" />
+	  <!-- End of images -->
+	
+	  <!-- CSS -->
+	  <include path="/**.css" expiration="7d" />
+	  <!-- CSS -->
+	
+	  <!-- JS -->
+	  <include path="/**.js" />
+	  <!-- End of JS -->
+	
+	  <!-- Error handlers -->
+	  <include path="error/**.html" />
+	  
+	  <!-- End of Error handlers -->
+	  
+	 </static-files>
+	 <!-- End of static files configuration -->
+</appengine-web-app>
