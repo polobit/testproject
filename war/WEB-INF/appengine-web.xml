@@ -8,6 +8,16 @@
     <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
   <property name="com.google.gdata.DisableCookieHandler" value="true"/>
 </system-properties>
+
+ <!-- Error pages configuration -->
+ <static-error-handlers>
+  <handler file="error/default_error.html" />
+  <handler file="error/overquota.html" error-code="over_quota" />
+  <handler file="error/dos.html" error-code="dos_api_denial" />
+  <handler file="error/timeout.html" error-code="timeout" />
+ </static-error-handlers>
+ <!-- End of error pages configuration -->
+
 <!-- Configure static files -->
  <static-files>
  
