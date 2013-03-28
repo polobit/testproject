@@ -23,7 +23,6 @@ $(function(){
 		var that = this;
 	
 		saveReportForm(function(data){
-			alert(data);
 			REPORT = data.toJSON()
 			
 			$.get('core/api/reports/send/' + REPORT.id, function(data){
