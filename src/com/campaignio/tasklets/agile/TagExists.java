@@ -10,8 +10,19 @@ import com.agilecrm.util.DBUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 
+/**
+ * <code>TagExists</code> represents Tag exists node in workflow. It compares
+ * given tags with contact tags. If all given tags are present in contact tags,
+ * then branch Yes is processed, otherwise branch No.
+ * 
+ * @author Naresh
+ * 
+ */
 public class TagExists extends TaskletAdapter
 {
+    /**
+     * Entered tag value
+     */
     public static String TAG_VALUE = "tag_value";
 
     /**
@@ -50,17 +61,20 @@ public class TagExists extends TaskletAdapter
 
 	String[] tagsArray = tags.split(",");
 
+	// Set to add given tags array
 	LinkedHashSet<String> tagsSet = new LinkedHashSet<String>();
 
 	// Add tags to set
 	for (String tag : tagsArray)
 	    tagsSet.add(tag);
 
+	// Contact tags.
 	LinkedHashSet<String> contactTags = contact.tags;
 
-	System.out.println("Contact tags " + contactTags + " and given tags: "
+	System.out.println("Contact tags: " + contactTags + " and given tags: "
 		+ tagsSet);
 
+	// Check contact tags consists of all given tags.
 	if (contactTags.containsAll(tagsSet))
 	{
 	    log(campaignJSON, subscriberJSON, "Given tags exist: " + tagsSet);
