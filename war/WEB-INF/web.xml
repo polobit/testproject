@@ -310,5 +310,14 @@
  <servlet-name>ICalendarServlet</servlet-name>
  <url-pattern>/backend/ical/*</url-pattern>
  </servlet-mapping>
+ 
+ <servlet>
+ <servlet-name>StatsServlet</servlet-name>
+ <servlet-class>com.agilecrm.StatsServlet</servlet-class>
+ </servlet>
+ <servlet-mapping>
+ <servlet-name>StatsServlet</servlet-name>
+ <url-pattern>/stats</url-pattern>
+ </servlet-mapping>
   
 </web-app>
