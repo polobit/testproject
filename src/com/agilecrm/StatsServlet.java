@@ -42,7 +42,7 @@ public class StatsServlet extends HttpServlet
 
 	String ip = null;
 	String newOne = null;
-	String ref = null;
+	String ref = "ref";
 	String userAgent = null;
 	String country = null;
 	String region = null;

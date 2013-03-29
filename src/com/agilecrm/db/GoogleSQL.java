@@ -126,15 +126,15 @@ public class GoogleSQL
     {
 	String insertToPageViews = "INSERT INTO page_views (domain,guid,email,sid,url,ip,new_one,ref,user_agent,country,region,city,city_lat_long,time) VALUES(\'"
 		+ domain
-		+ "\',"
+		+ "\',\'"
 		+ guid
-		+ ","
+		+ "\',\'"
 		+ email
-		+ ","
+		+ "\',\'"
 		+ sid
-		+ ","
+		+ "\',\'"
 		+ url
-		+ ",\'"
+		+ "\',\'"
 		+ ip
 		+ "\',"
 		+ newOne
@@ -146,9 +146,7 @@ public class GoogleSQL
 		+ country
 		+ "\',\'"
 		+ region
-		+ "\',\'"
-		+ city
-		+ "\',\'" + cityLatLong + "\'," + time + ")";
+		+ "\',\'" + city + "\',\'" + cityLatLong + "\'," + time + ")";
 
 	System.out.println("Insert to PageViews: " + insertToPageViews);
 
@@ -164,8 +162,8 @@ public class GoogleSQL
 
     public static void getFromPageViews(String email)
     {
-	String guids = "(SELECT guid FROM page_views where email=" + email
-		+ ") g";
+	String guids = "(SELECT guid FROM page_views where email=\'" + email
+		+ "\') g";
 
 	System.out.println("guids query is: " + guids);
 
