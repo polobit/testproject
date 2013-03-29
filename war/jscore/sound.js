@@ -20,7 +20,7 @@ function playSound(){
          
     }catch(err)
    {
-    	clickdeskLog("playSound Error :"+err);
+    console.log("playSound Error :"+err);
     	
         try{
 		        if(cd_ie_browser_version !== undefined && cd_ie_browser_version != null && cd_ie_browser_version <= 9){
@@ -50,7 +50,7 @@ function playSound(){
 		        }catch(e){}
       	  
         }catch(err){
-      	  clickdeskLog("playSound in flash :"+err);
+      	  console.log("playSound in flash :"+err);
         }    
    }
 }

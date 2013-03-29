@@ -94,7 +94,8 @@ public class GoogleSQL
     }
 
     /**
-     * Inserts values into page_views table
+     * Inserts values into page_views table. Guid is unique, so update when
+     * duplicate guid is given.
      * 
      * @param domain
      *            - current namespace.
@@ -146,7 +147,13 @@ public class GoogleSQL
 		+ country
 		+ "\',\'"
 		+ region
-		+ "\',\'" + city + "\',\'" + cityLatLong + "\'," + time + ")";
+		+ "\',\'"
+		+ city
+		+ "\',\'"
+		+ cityLatLong
+		+ "\',"
+		+ time
+		+ ") ON DUPLICATE KEY UPDATE email = \'" + email + "\'";
 
 	System.out.println("Insert Query to PageViews: " + insertToPageViews);
 
@@ -166,7 +173,7 @@ public class GoogleSQL
      * @param email
      *            - email-id
      */
-    public static void getFromPageViews(String email)
+    public static String getFromPageViews(String email)
     {
 	// Gets Guids (clients) based on Email from database
 	String guids = "(SELECT guid FROM page_views where email=\'" + email
@@ -176,19 +183,22 @@ public class GoogleSQL
 
 	// Gets all Sessions based on above obtained guids
 	String pageViews = "SELECT * FROM page_views p," + guids
-		+ " WHERE p.guid=g.guid";
+		+ " WHERE p.guid=g.guid AND p.email <> 'null'";
 
 	System.out.println("Select query: " + pageViews);
 
+	JSONArray arr = null;
 	try
 	{
-	    JSONArray arr = getJSONQuery(pageViews);
+	    arr = getJSONQuery(pageViews);
 	    System.out.println("Sessions based on guids and email: " + arr);
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	    return null;
 	}
+	return arr.toString();
     }
 
     /**

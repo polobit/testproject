@@ -27,6 +27,7 @@ import com.agilecrm.account.APIKey;
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.db.GoogleSQL;
 import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
@@ -144,16 +145,11 @@ public class API
     @Produces({ MediaType.APPLICATION_JSON })
     public String getStats(@QueryParam("e") String searchEmail)
     {
+	String stats = GoogleSQL.getFromPageViews(searchEmail);
+	System.out.println("Stats of given email: " + searchEmail + " are: "
+		+ stats);
 
-	// Get API Key
-	APIKey api = APIKey.getAPIKey();
-	String apiKey = api.api_key;
-
-	// Hit Stats Server
-	String url = "https://stats.agilecrm.com:90/get?email=" + searchEmail
-		+ "&agile_id=" + apiKey;
-
-	return HTTPUtil.accessURL(url);
+	return stats;
     }
 
     // Contact view Save Author: Yaswanth 08-10-2012
