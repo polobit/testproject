@@ -460,7 +460,7 @@ function agile_trackPageview()
  	if(agile_guid.get_email())
  		params += "&email=" + encodeURIComponent(agile_guid.get_email());
  	
- 	var agile_url = "http://stats.agilecrm.com/stats?callback=?&" + params;
+ 	var agile_url = "https://"+agile_id.getNamespace()+".agilecrm.com/stats?callback=?&" + params;
  	
  	agile_getJSONP(agile_url,function(data){
  	    var success = data.flag === 'successful';
@@ -491,6 +491,10 @@ var agile_id =
 				return "http://localhost:8888/core/js/api";
 			else
 				return "https://" + this.namespace + ".agilecrm.com/core/js/api";
+		},
+		getNamespace:function()
+		{
+			return this.namespace;
 		}
 	};
 
