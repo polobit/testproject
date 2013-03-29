@@ -63,9 +63,7 @@ String CSS_PATH = "/";
 					    String logoutURL = "/login";
 					    UserInfo user = SessionManager.get();
 					%>
-	
-<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
-
+					
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/agilecrm.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/timeline.css" />
