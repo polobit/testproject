@@ -13,8 +13,9 @@ import com.agilecrm.db.GoogleSQL;
 import com.google.appengine.api.NamespaceManager;
 
 /**
- * <code>StatsServlet</code> handles page-views analytics. It will store the
- * query parameters into google cloud sql.
+ * <code>StatsServlet</code> handles page-view requests from javascript.It
+ * handles page-views analysis. It will store the obtained values from query
+ * string into google cloud sql. Fetches remote ip address to save in database.
  * 
  * @author Naresh
  * 
@@ -42,7 +43,7 @@ public class StatsServlet extends HttpServlet
 
 	String ip = null;
 	String newOne = null;
-	String ref = "ref";
+	String ref = null;
 	String userAgent = null;
 	String country = null;
 	String region = null;
@@ -54,6 +55,11 @@ public class StatsServlet extends HttpServlet
 	{
 	    newOne = req.getParameter("new");
 	    ref = req.getParameter("ref");
+
+	    // If ref is empty
+	    if (StringUtils.isEmpty(ref))
+		ref = "ref";
+
 	    ip = getClientIP(req);
 
 	    // Get Visitor Info

@@ -14,7 +14,7 @@ import com.google.appengine.api.rdbms.AppEngineDriver;
 
 /**
  * <code>GoogleSQL</code> handles connection and runs queries of google cloud
- * sql. It establishes connection and runs the given query.
+ * sql. It establishes connection and runs the given queries.
  * 
  */
 public class GoogleSQL
@@ -27,7 +27,6 @@ public class GoogleSQL
      */
     public static Connection GetConnection()
     {
-
 	Connection conn = null;
 
 	try
@@ -57,7 +56,7 @@ public class GoogleSQL
     public static void executeNonQuery(String sql) throws Exception
     {
 	Connection conn = null;
-	int success = 2;
+	int success;
 
 	try
 	{
@@ -68,7 +67,8 @@ public class GoogleSQL
 
 	    // creates the statement object
 	    Statement stmt = conn.createStatement();
-	    // Execute the query
+
+	    // Execute the query. Returns the row count.
 	    success = stmt.executeUpdate(sql);
 
 	    if (success == 1)
@@ -76,7 +76,7 @@ public class GoogleSQL
 	}
 	catch (SQLException ex)
 	{
-	    System.err.print(ex);
+	    System.out.println("Error in executing given query: " + ex);
 	    ex.printStackTrace();
 	}
 	finally
@@ -148,7 +148,7 @@ public class GoogleSQL
 		+ region
 		+ "\',\'" + city + "\',\'" + cityLatLong + "\'," + time + ")";
 
-	System.out.println("Insert to PageViews: " + insertToPageViews);
+	System.out.println("Insert Query to PageViews: " + insertToPageViews);
 
 	try
 	{
@@ -160,26 +160,33 @@ public class GoogleSQL
 	}
     }
 
+    /**
+     * Gets all sessions from table having guids equal with given email
+     * 
+     * @param email
+     *            - email-id
+     */
     public static void getFromPageViews(String email)
     {
+	// Gets Guids (clients) based on Email from database
 	String guids = "(SELECT guid FROM page_views where email=\'" + email
 		+ "\') g";
 
 	System.out.println("guids query is: " + guids);
 
+	// Gets all Sessions based on above obtained guids
 	String pageViews = "SELECT * FROM page_views p," + guids
 		+ " WHERE p.guid=g.guid";
 
-	System.out.println("Select query " + pageViews);
+	System.out.println("Select query: " + pageViews);
 
 	try
 	{
 	    JSONArray arr = getJSONQuery(pageViews);
-	    System.out.println("json array: " + arr);
+	    System.out.println("Sessions based on guids and email: " + arr);
 	}
 	catch (Exception e)
 	{
-
 	    e.printStackTrace();
 	}
     }
@@ -193,7 +200,6 @@ public class GoogleSQL
      */
     public static ResultSet executeQuery(String query)
     {
-
 	ResultSet rs = null;
 
 	try
@@ -208,13 +214,13 @@ public class GoogleSQL
 
 	    // get the ResultSet object
 	    rs = stmt.executeQuery(query);
-
 	}
 	catch (Exception ex)
 	{
-	    System.out.println("Error executing the query ");
+	    System.out.println("Error in executing given query: " + ex);
 	    ex.printStackTrace();
 	}
+
 	return rs;
     }
 
@@ -228,11 +234,11 @@ public class GoogleSQL
      */
     public static JSONArray getJSONQuery(String query) throws Exception
     {
-
 	System.out.println("Query " + query);
 
 	// get the ResultSet object
 	ResultSet rs = executeQuery(query);
+
 	if (rs == null)
 	    return null;
 
@@ -252,11 +258,9 @@ public class GoogleSQL
 
 	try
 	{
-
 	    // iterate the ResultSet object
 	    while (rs.next())
 	    {
-
 		// create JSONObject for each record
 		JSONObject eachAgentJSON = new JSONObject();
 
@@ -264,33 +268,25 @@ public class GoogleSQL
 		// eachAgent record in agentJSONArray
 		for (int i = 1; i < numColumns + 1; i++)
 		{
-
 		    // Get the column names
 		    columnName = resultMetadata.getColumnName(i);
 
 		    // put column name and value in json array
 		    eachAgentJSON
 			    .put(columnName, "" + rs.getString(columnName));
-
 		}
 
 		// place result data in agentDetailsArray
 		agentDetailsArray.put(eachAgentJSON);
-
 	    }
-
 	}
 	catch (Exception e)
 	{
-
 	    e.printStackTrace();
-	    // return emptyArray
 	    return agentDetailsArray;
-
 	}
 	finally
 	{
-
 	    // close the Connection and ResultSet objects
 	    closeResultSet(rs);
 	}
@@ -299,8 +295,9 @@ public class GoogleSQL
     }
 
     /**
-     * Takes the resultSet as input returns the boolean (returns true if
-     * connection closed successfully otherwise returns false)
+     * Closes the connection,resultSet and statement objects.Takes the resultSet
+     * as input returns the boolean (returns true if connection closed
+     * successfully otherwise returns false)
      * 
      * @param rs
      *            - ResultSet
@@ -308,24 +305,27 @@ public class GoogleSQL
      */
     public static boolean closeResultSet(ResultSet rs)
     {
-
 	try
 	{
-
 	    if (rs == null)
 		return false;
+
 	    // get the Statement object from the ResultSet
 	    Statement stmt = rs.getStatement();
+
 	    // get the Connection object from the Statement
 	    Connection conn = stmt.getConnection();
 
 	    // close the ResultSet
 	    rs.close();
+
 	    // close the Statement
 	    stmt.close();
+
 	    // close the Connection
 	    conn.close();
-	    System.out.println("closed the connection from database");
+
+	    System.out.println("Closed the connection from database");
 
 	}
 	catch (Exception ex)
