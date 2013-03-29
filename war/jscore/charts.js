@@ -170,17 +170,31 @@ function pieMilestones() {
 					renderTo : 'pie-deals-chart',
 					plotBackgroundColor : null,
 					plotBorderWidth : null,
-					plotShadow : false
+					plotShadow : false,
+					marginTop : 80
 				},
 				title : {
 					text : '',
 					align : 'left',
 					x : 20
 				},
-				tooltip : {
-					pointFormat : '{series.name}: <b>{point.percentage}%</b>',
-					percentageDecimals : 1
-				},
+				tooltip: {
+				  	backgroundColor: 'white',
+				   	borderWidth: 0,
+				   	borderRadius: 0,
+				   	headerFormat: '',
+				   	useHTML:true,
+				   	enabled: true,
+				   	formatter: function(){
+				   		var s = '<div class="info-block" style="width:150px;text-align:center;"><span style="position:relative;"><span>'+this.point.name+'</span><br/> <b>'+(this.point.percentage).toFixed(2)+'%</b></span></div>';
+				   		return s;
+				   	},
+					
+			    	positioner: function () {
+			    		return { x: 18, y: 1 };
+			    	},
+			    	shadow: false
+				 },
 				 plotOptions : {
 				     pie : {
 			    	 cumulative : -0.25,
@@ -192,15 +206,23 @@ function pieMilestones() {
 				       color : '#000000',
 				       connectorColor : '#000000',
 				       connectorWidth: 0,
+				      rotation:15,
 				       formatter : function() {
+				    	   return "";
 				        if(this.percentage <= 2)
 				         return "";
 				        return (this.percentage).toFixed(2) + ' %';
 				       },
-				       distance: 2
+				       distance: 2,
 				      },
-				      showInLegend : true
-				     }
+				      showInLegend : false,
+				      showInLegend: false,
+	                    innerSize: '30%',
+	                    size: '75%',
+	                    shadow: true,
+	                    borderWidth: 2
+				     },
+				     
 				 },
 				series : [ {
 					type : 'pie',
@@ -257,15 +279,31 @@ function pieTags() {
 					renderTo : 'pie-tags-chart',
 					plotBackgroundColor : null,
 					plotBorderWidth : null,
-					plotShadow : false
+					plotShadow : false,
+					marginTop: 80
 				},
 				title : {
 					text : ''
 				},
-				tooltip : {
-					pointFormat : '{series.name}: <b>{point.percentage}%</b>',
-					percentageDecimals : 1
-				},
+				
+				   tooltip: {
+				    	backgroundColor: 'white',
+				    	borderWidth: 0,
+				    	borderRadius: 0,
+				    	headerFormat: '',
+				    	useHTML:true,
+				    	enabled: true,
+				    	formatter: function(){
+				    		var s = '<div class="info-block" style="width:150px;text-align:center;"><span style="position:relative;"><span><div style="text-overflow:ellipsis">'+this.point.name+':<div></span><br/> <b>'+(this.point.percentage).toFixed(2)+'%</b></span></div>';
+				    		return s;
+				    		
+				    	},
+				    		
+				    	positioner: function () {
+				    		return { x: 18, y: 1 };
+				    	},
+				    	shadow: false
+				    },
 			    legend: {
 			        itemWidth: 75,
 			    },
@@ -278,22 +316,30 @@ function pieTags() {
 				      dataLabels : {
 				       enabled : true,
 				       color : '#000000',
+				       rotation : 15,
 				       connectorColor : '#000000',
 				       connectorWidth: 0,
-				       formatter : function() {
+				      formatter : function() {
+				    	  return "";
 				        if(this.percentage <= 2)
 				         return "";
-				        return (this.percentage).toFixed(2) + ' %';
+				        return  (this.percentage).toFixed(2) + ' %';
 				       },
 				       distance: 2
 				      },
-				      showInLegend : true
-				     }
+				        showInLegend: false,
+	                    innerSize: '30%',
+	                    size: '75%',
+	                    shadow: true,
+	                    borderWidth: 2
+				     },
+				     
 				 },
 				series : [ {
 					type : 'pie',
 					name : 'Tag',
-					data : pieData
+					data : pieData,
+					startAngle : 90
 				} ],
 				exporting : {
 					enabled : false
