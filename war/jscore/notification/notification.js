@@ -13,7 +13,7 @@ var notification_prefs;
  */
 $(function() {
 	setTimeout(downloadAndRegisterForNotifications, 2000);
-//	fetchContactAndNotify('manohar@invox.com');
+	// fetchContactAndNotify('manohar@invox.com');
 
 });
 
@@ -51,13 +51,13 @@ function registerForNotifications(prefs) {
 
 	}
 
-	// Gets domain 
+	// Gets domain
 	getDomainFromCurrentUser();
 }
 
 /**
  * Gets domain from current user using backbone model.
- **/
+ */
 function getDomainFromCurrentUser() {
 	var domain_user = Backbone.Model.extend({
 		url : 'core/api/current-user'
@@ -80,22 +80,26 @@ function subscribeToPubNub(domain) {
 	// Put http or https
 	// var protocol = document.location.protocol;
 	var protocol = 'https';
-	head.js(protocol + '://pubnub.a.ssl.fastly.net/pubnub-3.4.min.js', function() {
-		// CREATE A PUBNUB OBJECT
-		var pubnub = PUBNUB.init({
-			'publish_key' : 'pub-c-e4c8fdc2-40b1-443d-8bb0-2a9c8facd274',
-			'subscribe_key' : 'sub-c-118f8482-92c3-11e2-9b69-12313f022c90',
-			ssl:true,
-			origin:'pubsub.pubnub.com'
-		});
-		pubnub.ready();
-		pubnub.subscribe({   
-			channel : domain,
-			callback : function(message) {
-				_setupNotification(message);
-			}
-		});
-	});
+	head
+			.js(
+					protocol + '://pubnub.a.ssl.fastly.net/pubnub-3.4.min.js',
+					function() {
+						// CREATE A PUBNUB OBJECT
+						var pubnub = PUBNUB
+								.init({
+									'publish_key' : 'pub-c-e4c8fdc2-40b1-443d-8bb0-2a9c8facd274',
+									'subscribe_key' : 'sub-c-118f8482-92c3-11e2-9b69-12313f022c90',
+									ssl : true,
+									origin : 'pubsub.pubnub.com'
+								});
+						pubnub.ready();
+						pubnub.subscribe({
+							channel : domain,
+							callback : function(message) {
+								_setupNotification(message);
+							}
+						});
+					});
 }
 
 /**
@@ -335,13 +339,14 @@ function notify(type, message, position, closable) {
 function showNoty(type, message, position) {
 	// Download the lib
 	head.js(LIB_PATH + 'lib/noty/jquery.noty.js',
-			'lib/noty/layouts/bottomRight.js', LIB_PATH
-					+ 'lib/noty/themes/default.js', function() {
+			'lib/noty/layouts/bottomRight.js', 'lib/noty/themes/default.js',
+			'jscore/sound.js', function() {
 				noty({
 					text : message,
 					layout : position,
 					type : type,
-					timeout : 5000
+					timeout : 30000
 				});
+				playRecvSound();
 			});
 }
