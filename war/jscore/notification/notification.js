@@ -339,8 +339,8 @@ function notify(type, message, position, closable) {
 function showNoty(type, message, position) {
 	// Download the lib
 	head.js(LIB_PATH + 'lib/noty/jquery.noty.js',
-			'lib/noty/layouts/bottomRight.js', 'lib/noty/themes/default.js',
-			'jscore/sound.js', function() {
+			LIB_PATH + 'lib/noty/layouts/bottomRight.js', LIB_PATH + 'lib/noty/themes/default.js',
+			LIB_PATH + 'jscore/sound.js', function() {
 				noty({
 					text : message,
 					layout : position,
