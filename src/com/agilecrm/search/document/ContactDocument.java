@@ -13,6 +13,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.util.SearchUtil;
+import com.google.appengine.api.search.Consistency;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Field;
 import com.google.appengine.api.search.Index;
@@ -66,7 +67,7 @@ public class ContactDocument implements BuilderInterface
      * Index for the contact Document, Required to search on contacts document
      */
     public static Index index = searchService.getIndex(IndexSpec.newBuilder()
-	    .setName("contacts"));
+	    .setName("contacts").setConsistency(Consistency.PER_DOCUMENT));
 
     /**
      * Describes all the contact field values in the document based on the
