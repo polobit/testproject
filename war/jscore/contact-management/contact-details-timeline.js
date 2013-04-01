@@ -580,14 +580,14 @@ function get_address_from_browsing_history(email, contact) {
 
 	// Get browsing address of contact with it's email, when it is defined
 		var url = 'core/api/stats?e=' + encodeURIComponent(email);
-
-		$.get(url, function(data) {
-
+		
+		$.getJSON(url, function(data) {
+			
 			// Go further only when the contact got browsing address
 			if (data && data.length > 0) {
 				var addressJSON = {};
-				addressJSON.city = data[0].c.city;
-				addressJSON.country = data[0].c.country;
+				addressJSON.city = data[0].city;
+				addressJSON.country = data[0].country;
 
 				// If contact has no address property push the new one
 					contact.properties.push({

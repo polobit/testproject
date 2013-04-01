@@ -79,12 +79,6 @@ public class StatsServlet extends HttpServlet
 	// Insert into table
 	GoogleSQL.addToPageViews(domain, guid, email, sid, url, ip, newOne,
 		ref, userAgent, country, region, city, cityLatLong, reqTime);
-
-	// If email
-	if (!StringUtils.isEmpty(req.getParameter("email")))
-	{
-	    GoogleSQL.getFromPageViews(email);
-	}
     }
 
     /**

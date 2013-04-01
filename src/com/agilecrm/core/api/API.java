@@ -140,7 +140,7 @@ public class API
 
     @Path("stats")
     @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON })
     public String getStats(@QueryParam("e") String searchEmail)
     {
 	String stats = GoogleSQL.getFromPageViews(searchEmail);
