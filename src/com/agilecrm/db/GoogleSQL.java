@@ -187,10 +187,14 @@ public class GoogleSQL
 
 	System.out.println("Select query: " + pageViews);
 
-	JSONArray arr = null;
+	JSONArray arr = new JSONArray();
 	try
 	{
 	    arr = getJSONQuery(pageViews);
+
+	    if (arr == null)
+		return "";
+
 	    System.out.println("Sessions based on guids and email: " + arr);
 	}
 	catch (Exception e)

@@ -138,11 +138,9 @@ public class API
 	return APIKey.getAPIKey();
     }
 
-    // Contact view Save Author: Yaswanth 08-10-2012
     @Path("stats")
     @GET
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public String getStats(@QueryParam("e") String searchEmail)
     {
 	String stats = GoogleSQL.getFromPageViews(searchEmail);
