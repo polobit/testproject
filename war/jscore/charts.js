@@ -173,28 +173,29 @@ function pieMilestones() {
 					plotShadow : false,
 					marginTop : 80
 				},
+
 				title : {
 					text : '',
 					align : 'left',
 					x : 20
 				},
 				tooltip: {
-				  	backgroundColor: 'white',
-				   	borderWidth: 0,
-				   	borderRadius: 0,
-				   	headerFormat: '',
-				   	useHTML:true,
-				   	enabled: true,
-				   	formatter: function(){
-				   		var s = '<div class="info-block" style="width:150px;text-align:center;"><span style="position:relative;"><span>'+this.point.name+'</span><br/> <b>'+(this.point.percentage).toFixed(2)+'%</b></span></div>';
-				   		return s;
-				   	},
-					
-			    	positioner: function () {
-			    		return { x: 18, y: 1 };
-			    	},
-			    	shadow: false
-				 },
+					backgroundColor: null,
+				    borderWidth: 0,
+				    borderRadius: 0,
+				    headerFormat: '',
+				    useHTML:true,
+				    enabled: true,
+				    shadow: false,
+				    formatter: function() {
+				    	var s = '<div class="highcharts-tool-tip"><div class="tooltip-title">'+this.point.name+'</div><div style="text-align:center;margin-top:7px;margin-left:-3px"><b>'+(this.point.percentage).toFixed(2)+'%<b></div></div>';
+				    	return s;
+					},
+				    message: "Hover over chart slices<br>for more information.",
+				    positioner: function () {
+				    		return { x: 15, y: 23 };        
+				    	},
+				    },
 				 plotOptions : {
 				     pie : {
 			    	 cumulative : -0.25,
@@ -222,7 +223,16 @@ function pieMilestones() {
 	                    shadow: true,
 	                    borderWidth: 2
 				     },
-				     
+				     series : {
+					    	events: {
+				               mouseOver: function() {
+				            	   $('.tooltip-default-message').hide();
+				                 },
+				               mouseOut: function(e) {
+				            	   $('.tooltip-default-message').show();
+				                 }
+				              }
+					     } 
 				 },
 				series : [ {
 					type : 'pie',
@@ -233,7 +243,12 @@ function pieMilestones() {
 				exporting : {
 					enabled : false
 				}
-			});
+			}, function(chart) { // on complete
+			     
+		        chart.renderer.image('img/donut-tooltip-frame (1).png', 14, 5, 200, 80).add(); 
+		        chart.renderer.text (this.options.tooltip.message, 50, 40).attr("class", 'tooltip-default-message').add(); 
+		        
+		    });
 		});
 	});
 }
@@ -243,7 +258,9 @@ function pieMilestones() {
  */
 function pieTags() {
 	var chart;
-	setupCharts(function() {
+	
+	 
+	setupCharts(function() {		 
 
 		// Fetches data from to get tags informations
 		// i.e., {"tags1" :" number of contacts with 'tags1', "tags2" : "number
@@ -277,46 +294,43 @@ function pieTags() {
 			chart = new Highcharts.Chart({
 				chart : {
 					renderTo : 'pie-tags-chart',
+					type : 'pie',
 					plotBackgroundColor : null,
 					plotBorderWidth : null,
 					plotShadow : false,
-					marginTop: 80
+					marginTop: 50
 				},
 				title : {
 					text : ''
 				},
-				
-				   tooltip: {
-				    	backgroundColor: 'white',
-				    	borderWidth: 0,
-				    	borderRadius: 0,
-				    	headerFormat: '',
-				    	useHTML:true,
-				    	enabled: true,
-				    	formatter: function(){
-				    		var s = '<div class="info-block" style="width:150px;text-align:center;"><span style="position:relative;"><span><div style="text-overflow:ellipsis">'+this.point.name+':<div></span><br/> <b>'+(this.point.percentage).toFixed(2)+'%</b></span></div>';
-				    		return s;
-				    		
+				tooltip: {
+					backgroundColor: null,
+				    borderWidth: 0,
+				    borderRadius: 0,
+				    headerFormat: '',
+				    useHTML:true,
+				    enabled: true,
+				    shadow: false,
+				    formatter: function() {
+				    	var s = '<div class="highcharts-tool-tip"><div class="tooltip-title">'+this.point.name+'</div><div style="text-align:center;margin-top:7px;margin-left:-3px"><b>'+(this.point.percentage).toFixed(2)+'%<b></div></div>';
+				    	return s;
+					},
+				    message: "Hover over chart slices<br>for more information.",
+				    positioner: function () {
+				    		return { x: 15, y: 23 };        
 				    	},
-				    		
-				    	positioner: function () {
-				    		return { x: 18, y: 1 };
-				    	},
-				    	shadow: false
 				    },
 			    legend: {
 			        itemWidth: 75,
 			    },
 				 plotOptions : {
 				     pie : {
-				    cumulative : -0.25,
 				      allowPointSelect : true,
 				      cursor : 'pointer',
 				      borderWidth: 0,
 				      dataLabels : {
 				       enabled : true,
 				       color : '#000000',
-				       rotation : 15,
 				       connectorColor : '#000000',
 				       connectorWidth: 0,
 				      formatter : function() {
@@ -333,7 +347,16 @@ function pieTags() {
 	                    shadow: true,
 	                    borderWidth: 2
 				     },
-				     
+				     series : {
+				    	events: {
+			               mouseOver: function() {
+			            	   $('.tooltip-default-message').hide();
+			                 },
+			               mouseOut: function(e) {
+			            	   $('.tooltip-default-message').show();
+			                 }
+			              }
+				     }
 				 },
 				series : [ {
 					type : 'pie',
@@ -344,7 +367,12 @@ function pieTags() {
 				exporting : {
 					enabled : false
 				}
-			});
+			}, function(chart) { // on complete
+			     
+		        chart.renderer.image('img/donut-tooltip-frame (1).png', 14, 5, 200, 80).add(); 
+		        chart.renderer.text (this.options.tooltip.message, 50, 40).attr("class", 'tooltip-default-message').add(); 
+		        
+		    });
 		});
 	});
 }

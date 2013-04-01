@@ -547,3 +547,36 @@ html {
 .info-block strong{text-decoration:underline;padding-left:5px;}
 .info-block p{margin:10px 0px 5px;}
 .info-block i{font-size:18px;vertical-align:middle;}
+
+.highcharts-container { overflow: visible !important; }
+
+.highcharts-tooltip {
+	visibility:visible;
+	text-align:center;
+	text-shadow:0 1px 0 #fff;
+	color:#5e5e5e;
+}
+
+.tooltip-title {
+	width:180px;
+	font-size:14px;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	overflow:hidden;
+	display:block;	
+	text-align:center;
+}
+
+.highcharts-tool-tip {
+	text-align:center;
+	width:200px;
+	position: absolute; 
+	white-space: nowrap; 
+	font-family: Georgia, serif; 
+	font-size: 12px; 	
+}
+
+.tooltip-default-message {
+	font-family : Georgia, serif;
+	display:block;
+}
