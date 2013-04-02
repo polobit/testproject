@@ -245,7 +245,7 @@ function pieMilestones() {
 				}
 			}, function(chart) { // on complete
 			     
-		        chart.renderer.image('img/donut-tooltip-frame (1).png', 14, 5, 200, 80).add(); 
+		        chart.renderer.image('img/donut-tooltip-frame.png', 14, 5, 200, 80).add(); 
 		        chart.renderer.text (this.options.tooltip.message, 50, 40).attr("class", 'tooltip-default-message').add(); 
 		        
 		    });
@@ -369,7 +369,7 @@ function pieTags() {
 				}
 			}, function(chart) { // on complete
 			     
-		        chart.renderer.image('img/donut-tooltip-frame (1).png', 14, 5, 200, 80).add(); 
+		        chart.renderer.image('img/donut-tooltip-frame.png', 14, 5, 200, 80).add(); 
 		        chart.renderer.text (this.options.tooltip.message, 50, 40).attr("class", 'tooltip-default-message').add(); 
 		        
 		    });
