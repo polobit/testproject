@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.agilecrm.db.GoogleSQL;
+import com.agilecrm.db.util.StatsUtil;
 import com.google.appengine.api.NamespaceManager;
 
 /**
@@ -77,7 +77,7 @@ public class StatsServlet extends HttpServlet
 	long reqTime = date.getTime() / 1000;
 
 	// Insert into table
-	GoogleSQL.addToPageViews(domain, guid, email, sid, url, ip, newOne,
+	StatsUtil.addToPageViews(domain, guid, email, sid, url, ip, newOne,
 		ref, userAgent, country, region, city, cityLatLong, reqTime);
     }
 

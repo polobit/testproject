@@ -2,9 +2,13 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
-import com.agilecrm.db.GoogleSQL;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.db.util.StatsUtil;
+import com.agilecrm.util.DBUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>URLVisited</code> represents URLVisited node in the workflow. It access
@@ -37,9 +41,14 @@ public class URLVisited extends TaskletAdapter
     {
 	// Get URL value
 	String url = getStringValue(nodeJSON, subscriberJSON, data, URL);
+	String domain = NamespaceManager.get();
+
+	String contactId = DBUtil.getId(subscriberJSON);
+	Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
+	String email = contact.getContactFieldValue(Contact.EMAIL);
 
 	// Gets URL count from table.
-	int count = GoogleSQL.getCountForGivenURL(url);
+	int count = StatsUtil.getCountForGivenURL(url, domain, email);
 
 	if (count == 0)
 	{
