@@ -10,7 +10,7 @@ function setupSubscriptionDetails(el)
 		console.log(data);
 		if(data)
 			{
-				head.js('lib/prettify-min.js', function() {
+				head.js(LIB_PATH + 'lib/prettify-min.js', function() {
 					var view = new Base_Model_View({
 					url : '/core/api/api-key',
 					template : "dashboard-api-key-model",

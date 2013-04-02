@@ -3,7 +3,7 @@ function setupDashboardTimeline(url)
 {
 	if(!url)
 		url = "core/api/timeline/contact";
-head.js('lib/storyjs-embed.js', function(){
+head.js(LIB_PATH + 'lib/storyjs-embed.js', function(){
 createStoryJS({
        	type:       'default',
         width:      '1170',

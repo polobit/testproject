@@ -7,7 +7,7 @@
  * 			html object of contact detail view
  */
 function starify(el){
-    head.js('lib/jquery.raty.min.js', function(){
+    head.js(LIB_PATH + 'lib/jquery.raty.min.js', function(){
     	
     	var contact_model =  App_Contacts.contactDetailView.model.toJSON();
     	

@@ -310,7 +310,7 @@ function notificationForBrowsing(contact) {
  *            pop-up is closable
  */
 function notify(type, message, position, closable) {
-	head.js('lib/bootstrap-notifications-min.js', function() {
+	head.js(LIB_PATH + 'lib/bootstrap-notifications-min.js', function() {
 		$('.' + position).notify({
 			type : type,
 			message : {

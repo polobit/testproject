@@ -71,7 +71,7 @@ var SubscribeRouter = Backbone.Router
 			           else   
 			        	   element =  setPriceTemplete("free", el);
 			           
-			           	head.js('/lib/jquery.slider.min.js', function() {
+			           	head.js(LIB_PATH + '/lib/jquery.slider.min.js', function() {
 			        	   if($.isEmptyObject(data))
 			        		   	setPlan("free");
 			        	   else

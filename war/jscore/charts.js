@@ -11,7 +11,7 @@ function setupCharts(callback) {
 
 	// Loads Highchars.js and highcharts-exportin.js, call back sent to this
 	// function is called after loading plugin scripts
-	head.js('/lib/flot/highcharts.js', '/lib/flot/highcharts-exporting.js',
+	head.js(LIB_PATH + '/lib/flot/highcharts.js', LIB_PATH + '/lib/flot/highcharts-exporting.js',
 
 	function() {
 

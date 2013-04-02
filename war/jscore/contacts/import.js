@@ -277,7 +277,7 @@ $(function(){
 		 
 		 // Sends empty JSON to remove contact uploaded
 		 $('#content').html(getTemplate("import-contacts", {}));
-	        head.js('lib/fileuploader-min.js', function(){
+	        head.js(LIB_PATH + 'lib/fileuploader-min.js', function(){
 	        	fileUploadInit();
 	        });
 	 });

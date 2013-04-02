@@ -38,7 +38,7 @@ $(function() {
  * Sets HTML Editor for UserPrefs, EmailTemplates etc.
  **/
 function setupHTMLEditor(selector) {
-	head.js('lib/wysihtml5-0.3.0-min.js', 'lib/bootstrap-wysihtml5-min.js',
+	head.js(LIB_PATH + 'lib/wysihtml5-0.3.0-min.js', LIB_PATH + 'lib/bootstrap-wysihtml5-min.js',
 			function() {
 				console.log('setting up text');
 				console.log(selector.html());

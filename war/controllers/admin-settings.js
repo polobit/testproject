@@ -145,7 +145,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	 * minified prettify.js to prettify analytics code.
 	 */
 	analyticsCode : function() {
-		head.js('lib/prettify-min.js', function() {
+		head.js(LIB_PATH + 'lib/prettify-min.js', function() {
 			var view = new Base_Model_View({
 				url : '/core/api/api-key',
 				template : "admin-settings-api-key-model",
@@ -161,7 +161,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	 * Shows API-KEY. Loads minified prettify.js to prettify the view
 	 */
 	api : function() {
-		head.js('lib/prettify-min.js', function() {
+		head.js(LIB_PATH + 'lib/prettify-min.js', function() {
 			var view = new Base_Model_View({
 				url : '/core/api/api-key',
 				template : "admin-settings-api-model",
