@@ -156,8 +156,12 @@ function load_timeline_details(el, contactId, callback1)
 			
 			// Gets address of the contact from its browsing history
 			var address = getPropertyValue(json.properties, "address");
-			if(!address)
-				get_address_from_browsing_history(email, json);
+           
+			//if(!address)
+				//get_address_from_browsing_history(email, json,el);
+			
+			// Gets address from stats and save to contact
+			get_stats(email,json,el);
 		}else{
 			is_mails_fetched = true;
 			
@@ -294,7 +298,7 @@ function validate_insertion(models, timelineViewMore){
  * @param is_array_urls_fetched
  */
 function show_timeline_padcontent(is_logs_fetched, is_mails_fetched, is_array_urls_fetched){
-	if(!is_logs_fetched || !is_mails_fetched || !is_array_urls_fetched)
+	if(!is_logs_fetched || !is_mails_fetched || !is_array_urls_fetched )
 		return;
 	
 	if (timelineView.collection.length == 0)
@@ -572,40 +576,89 @@ function remove_loading_img(el){
  *            email of the contact
  * @param {Object}
  *            contact present in contact detail view
- * @param {Boolean}
- *            empty_address refers the address presence (empty address or no
- *            address field) of a contact
- */
-function get_address_from_browsing_history(email, contact) {
-
-	// Get browsing address of contact with it's email, when it is defined
-		var url = 'core/api/stats?e=' + encodeURIComponent(email);
-		
-		$.getJSON(url, function(data) {
+ * @param {Object}
+ *            backbone element.
+ */function get_stats(email,contact,el)
+{
+	var StatsCollection = Backbone.Collection.extend({
+		                        url:'core/api/stats?e='+ encodeURIComponent(email)
+		                                             });
+	var statsCollection = new StatsCollection();
+	statsCollection.fetch({
+		success:function(data){
 			
-			// Go further only when the contact got browsing address
-			if (data && data.length > 0) {
+			is_mails_fetched = true;
+			is_logs_fetched = false;
+			is_array_urls_fetched = false;
+			
+			show_timeline_padcontent(is_logs_fetched, is_mails_fetched, is_array_urls_fetched);
+			
+			$('#time-line', el).find('.loading-img-email').remove();
+			
+			// Checks whether data is empty or not.
+			if (data.toJSON() && data.toJSON().length > 0) {
+				
+				// To add to address field.
 				var addressJSON = {};
-				addressJSON.city = data[0].city;
-				addressJSON.country = data[0].country;
-
+				addressJSON.city = data.toJSON()[0].city;
+				addressJSON.country = data.toJSON()[0].country;
+				
+				// To add for timeline we need created time inorder to show month-wise
+				var statsJSON = {};
+				statsJSON.city = addressJSON.city;
+				statsJSON.country = addressJSON.country;
+				statsJSON.created_time = data.toJSON()[0].time;
+				statsJSON.entity_type = "s";
+				
+				
 				// If contact has no address property push the new one
-					contact.properties.push({
-						"name" : "address",
-						"value" : JSON.stringify(addressJSON)
-					});
+				contact.properties.push({
+					"name" : "address",
+					"value" : JSON.stringify(addressJSON)
+				                       });
 
-				// Update contact with the browsing address
-				var contactModel = new Backbone.Model();
-				contactModel.url = 'core/api/contacts';
-				contactModel.save(contact, {
-					success : function(obj) {
+			// Update contact with the browsing address
+			var contactModel = new Backbone.Model();
+			contactModel.url = 'core/api/contacts';
+			contactModel.save(contact, {
+				success : function(obj) {
 
-					}
-				});
+				                        }
+			                           });
+				
+				
+				// If timeline is not defined yet, calls setup_timeline for the first time
+				if(timelineView.collection.length == 0)
+				{					
+					timelineView.collection.add(statsJSON);
+					
+					// No callback function is taken as the email takes more time to fetch
+					setup_timeline(timelineView.collection.toJSON(), el);
+					
+				}
+				else
+				{					
+						var newItem = $(getTemplate("timeline", statsJSON));
+						newItem.find('.inner').append('<a href="#" class="open-close"></a>');
+						
+						/*
+						 * Inserts mails to timeline with out validating the isotope status,
+						 * as it takes more time to fetch.
+						 */  
+						$('#timeline', el).isotope( 'insert', newItem);		
+				}
+				
 			}
-		});
-}
+		},
+		error: function(){
+			is_mails_fetched = true;
+			show_timeline_padcontent(is_logs_fetched, is_mails_fetched, is_array_urls_fetched);
+			
+			// Remove loading image of mails
+			$('#time-line', el).find('.loading-img-email').remove();
+		}
+	});
+	}
 
 /**
  * Handles the events (click and mouseenter) of mail and log entities of 
