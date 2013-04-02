@@ -27,7 +27,7 @@ import com.agilecrm.account.APIKey;
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.db.GoogleSQL;
+import com.agilecrm.db.util.StatsUtil;
 import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
@@ -143,7 +143,9 @@ public class API
     @Produces({ MediaType.APPLICATION_JSON })
     public String getStats(@QueryParam("e") String searchEmail)
     {
-	String stats = GoogleSQL.getFromPageViews(searchEmail);
+	String domain = NamespaceManager.get();
+	String stats = StatsUtil.getFromPageViews(searchEmail, domain);
+
 	System.out.println("Stats of given email: " + searchEmail + " are: "
 		+ stats);
 
