@@ -71,6 +71,16 @@
 			</div>
         
         {{/if_entity}}
+
+     {{#if_entity "s"}}
+            <div class="timestamp">{{created_time}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-list-alt"></i></a></span> Stats</h3></div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body">
+                <div class="text" style="color: #333333">{{city}}</div>
+                <div class="text" style="color: #999999">{{country}}</div>
+            </div>
+     {{/if_entity}}
   </div>
 </div>
 </script>
