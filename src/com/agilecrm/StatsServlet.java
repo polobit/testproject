@@ -58,7 +58,7 @@ public class StatsServlet extends HttpServlet
 
 	    // If ref is empty
 	    if (StringUtils.isEmpty(ref))
-		ref = "ref";
+		ref = null;
 
 	    ip = getClientIP(req);
 

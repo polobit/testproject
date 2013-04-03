@@ -41,35 +41,36 @@ public class StatsUtil
 	    String userAgent, String country, String region, String city,
 	    String cityLatLong, long created_time)
     {
-	String insertToPageViews = "INSERT INTO page_views (domain,guid,email,sid,url,ip,new_one,ref,user_agent,country,region,city,city_lat_long,created_time) VALUES(\'"
-		+ domain
-		+ "\',\'"
-		+ guid
-		+ "\',\'"
-		+ email
-		+ "\',\'"
-		+ sid
-		+ "\',\'"
-		+ url
-		+ "\',\'"
-		+ ip
-		+ "\',"
+	String insertToPageViews = "INSERT INTO page_views (domain,guid,email,sid,url,ip,new_one,ref,user_agent,country,region,city,city_lat_long,created_time) VALUES("
+		+ encodeSQLColumnValue(domain)
+		+ ","
+		+ encodeSQLColumnValue(guid)
+		+ ","
+		+ encodeSQLColumnValue(email)
+		+ ","
+		+ encodeSQLColumnValue(sid)
+		+ ","
+		+ encodeSQLColumnValue(url)
+		+ ","
+		+ encodeSQLColumnValue(ip)
+		+ ","
 		+ newOne
 		+ ","
-		+ ref
-		+ ",\'"
-		+ userAgent
-		+ "\',\'"
-		+ country
-		+ "\',\'"
-		+ region
-		+ "\',\'"
-		+ city
-		+ "\',\'"
-		+ cityLatLong
-		+ "\',"
+		+ encodeSQLColumnValue(ref)
+		+ ","
+		+ encodeSQLColumnValue(userAgent)
+		+ ","
+		+ encodeSQLColumnValue(country)
+		+ ","
+		+ encodeSQLColumnValue(region)
+		+ ","
+		+ encodeSQLColumnValue(city)
+		+ ","
+		+ encodeSQLColumnValue(cityLatLong)
+		+ ","
 		+ created_time
-		+ ") ON DUPLICATE KEY UPDATE email = \'" + email + "\'";
+		+ ") ON DUPLICATE KEY UPDATE email = "
+		+ encodeSQLColumnValue(email) + "";
 
 	System.out.println("Insert Query to PageViews: " + insertToPageViews);
 
@@ -91,10 +92,10 @@ public class StatsUtil
      */
     public static String getFromPageViews(String email, String domain)
     {
-	domain = "_test_";
 	// Gets Guids (clients) based on Email from database
-	String guids = "(SELECT guid FROM page_views WHERE email =\'" + email
-		+ "\' AND domain = \'" + domain + "\')";
+	String guids = "(SELECT guid FROM page_views WHERE email ="
+		+ encodeSQLColumnValue(email) + " AND domain = "
+		+ encodeSQLColumnValue(domain) + ")";
 
 	System.out.println("guids query is: " + guids);
 
@@ -131,9 +132,10 @@ public class StatsUtil
     public static int getCountForGivenURL(String url, String domain,
 	    String email)
     {
-	String urlCountQuery = "SELECT COUNT(*) FROM page_views WHERE url = \'"
-		+ url + "\' AND domain = \'" + domain + "\' AND email = \'"
-		+ email + "\'";
+	String urlCountQuery = "SELECT COUNT(*) FROM page_views WHERE url = "
+		+ encodeSQLColumnValue(url) + " AND domain = "
+		+ encodeSQLColumnValue(domain) + " AND email = "
+		+ encodeSQLColumnValue(email) + "";
 
 	System.out.println("URL count query is: " + urlCountQuery);
 
@@ -157,4 +159,19 @@ public class StatsUtil
 	return count;
     }
 
+    /**
+     * Returns string value appended by quotations if not null. It is used to
+     * avoid 'null' values(having quotations) being inserted instead of null.
+     * 
+     * @param value
+     *            - given string.
+     * @return encoded string if not null, otherwise null.
+     */
+    public static String encodeSQLColumnValue(String value)
+    {
+	if (value == null)
+	    return null;
+
+	return "\'" + value + "\'";
+    }
 }
