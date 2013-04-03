@@ -144,7 +144,7 @@ public class API
     public String getStats(@QueryParam("e") String searchEmail)
     {
 	String domain = NamespaceManager.get();
-	String stats = StatsUtil.getFromPageViews(searchEmail, domain);
+	String stats = StatsUtil.getPageViews(searchEmail, domain);
 
 	System.out.println("Stats of given email: " + searchEmail + " are: "
 		+ stats);

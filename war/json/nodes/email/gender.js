@@ -1,5 +1,5 @@
 {
-    "name": "Sex",
+    "name": "Gender",
     "thumbnail": "json/nodes/images/common/sex.png",
     "icon": "json/nodes/icons/common/sex.png",
     "info": "Retrieve the gender of the subscriber based on email address.",
@@ -8,7 +8,7 @@
     "company": "Invox",
     "language": "en",
     "branches": "Male,Female,Unknown",
-    "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.Sex",
+    "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.Gender",
     "category": "Email",
     "ui": [
         

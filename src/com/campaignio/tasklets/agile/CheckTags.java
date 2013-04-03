@@ -18,7 +18,7 @@ import com.campaignio.tasklets.util.TaskletUtil;
  * @author Naresh
  * 
  */
-public class TagExists extends TaskletAdapter
+public class CheckTags extends TaskletAdapter
 {
     /**
      * Entered tag value
