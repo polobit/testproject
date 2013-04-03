@@ -1,9 +1,9 @@
 package com.agilecrm.search.document;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -190,8 +190,7 @@ public class ContactDocument implements BuilderInterface
      * @param tags_json_string
      * @param doc
      */
-    private static void addTagFields(LinkedHashSet<Tag> tags,
-	    Document.Builder doc)
+    private static void addTagFields(ArrayList<Tag> tags, Document.Builder doc)
     {
 	if (tags == null || tags.isEmpty())
 	    return;

@@ -1,18 +1,25 @@
 package com.agilecrm.social;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
 
 import twitter4j.DirectMessage;
+import twitter4j.HashtagEntity;
+import twitter4j.IDs;
 import twitter4j.Query;
 import twitter4j.QueryResult;
 import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
+import twitter4j.URLEntity;
 import twitter4j.User;
+import twitter4j.UserMentionEntity;
 import twitter4j.auth.AccessToken;
 
 import com.agilecrm.Globals;
@@ -126,7 +133,7 @@ public class TwitterUtil
      * to {@link SocialSearchResult} class
      * 
      * @param widget
-     *            {@link Widget}, for accessing token and secret key
+     *            {@link Widget} for accessing token and secret key
      * @param twitterId
      *            {@link String}
      * @return {@link SocialSearchResult}
@@ -179,12 +186,12 @@ public class TwitterUtil
      * twitter account.
      * 
      * @param widget
-     *            {@link Widget}, for accessing token and secret key
+     *            {@link Widget} for accessing token and secret key
      * @param twitterId
-     *            {@link String}, to access recipient twitter account
+     *            {@link String} to access recipient twitter account
      * @param message
-     *            {@link String}, message to be sent
-     * @return {@link String}, success message
+     *            {@link String} message to be sent
+     * @return {@link String} success message
      * @throws Exception
      *             If the person with twitterId is not following agile user in
      *             twitter
@@ -210,7 +217,7 @@ public class TwitterUtil
      * based on the given tweet id
      * 
      * @param widget
-     *            {@link Widget}, for accessing token and secret key
+     *            {@link Widget} for accessing token and secret key
      * @param tweetId
      *            id of the {@link Tweet}
      * @return {@link String} with success message
@@ -229,9 +236,9 @@ public class TwitterUtil
      * (unfollow) between agile user and the person with twitter id in twitter
      * 
      * @param widget
-     *            {@link Widget}, for accessing token and secret key
+     *            {@link Widget} for accessing token and secret key
      * @param twitterId
-     *            {@link String}, to access recipient twitter account
+     *            {@link String} to access recipient twitter account
      * @return {@link String} with success message
      * @throws Exception
      */
@@ -249,9 +256,9 @@ public class TwitterUtil
      * (follow) between agile user and the person with twitter id in twitter
      * 
      * @param widget
-     *            {@link Widget}, for accessing token and secret key
+     *            {@link Widget} for accessing token and secret key
      * @param twitterId
-     *            {@link String}, to access recipient twitter account
+     *            {@link String} to access recipient twitter account
      * @return {@link String} with success message
      * @throws Exception
      */
@@ -269,11 +276,11 @@ public class TwitterUtil
      * account of the contact based on twitter id
      * 
      * @param widget
-     *            {@link Widget}, for accessing token and secret key
+     *            {@link Widget} for accessing token and secret key
      * @param twitterId
-     *            {@link String}, to access recipient twitter account
+     *            {@link String} to access recipient twitter account
      * @param text
-     *            {@link String}, message to tweet
+     *            {@link String} message to tweet
      * @return
      * @throws Exception
      */
@@ -294,9 +301,9 @@ public class TwitterUtil
      * that person
      * 
      * @param widget
-     *            {@link Widget}, for accessing token and secret key
+     *            {@link Widget} for accessing token and secret key
      * @param twitterId
-     *            {@link String}, to access recipient twitter account
+     *            {@link String} to access recipient twitter account
      * @return {@link List} of {@link SocialUpdateStream}
      * @throws Exception
      *             If {@link Twitter} throws an exception
@@ -309,18 +316,8 @@ public class TwitterUtil
 	Query query = new Query("from:" + user.getScreenName());
 	QueryResult result = twitter.search(query);
 
-	List<SocialUpdateStream> updateStream = new ArrayList<SocialUpdateStream>();
+	return getListOfSocialUpdateStream(user, twitter, result);
 
-	for (Status tweet : result.getTweets())
-	{
-	    SocialUpdateStream stream = new SocialUpdateStream();
-	    stream.id = String.valueOf(tweet.getId());
-	    stream.message = tweet.getText();
-	    stream.is_retweeted = tweet.isRetweetedByMe();
-	    stream.created_time = tweet.getCreatedAt().getTime() / 1000;
-	    updateStream.add(stream);
-	}
-	return updateStream;
     }
 
     /**
@@ -328,9 +325,9 @@ public class TwitterUtil
      * that person
      * 
      * @param widget
-     *            {@link Widget}, for accessing token and secret key
+     *            {@link Widget} for accessing token and secret key
      * @param twitterId
-     *            {@link String}, to access recipient twitter account
+     *            {@link String} to access recipient twitter account
      * @param statusId
      *            tweet id of the tweet after which updates are retrieved
      * @param count
@@ -349,17 +346,8 @@ public class TwitterUtil
 	query.setCount(count);
 	QueryResult result = twitter.search(query);
 
-	List<SocialUpdateStream> updateStream = new ArrayList<SocialUpdateStream>();
-	for (Status tweet : result.getTweets())
-	{
-	    SocialUpdateStream stream = new SocialUpdateStream();
-	    stream.id = String.valueOf(tweet.getId());
-	    stream.message = tweet.getText();
-	    stream.is_retweeted = tweet.isRetweetedByMe();
-	    stream.created_time = tweet.getCreatedAt().getTime() / 1000;
-	    updateStream.add(stream);
-	}
-	return updateStream;
+	return getListOfSocialUpdateStream(user, twitter, result);
+
     }
 
     /**
@@ -367,9 +355,9 @@ public class TwitterUtil
      * that person
      * 
      * @param twitter
-     *            {@link Twitter},after setting authentication
+     *            {@link Twitter}after setting authentication
      * @param screenName
-     *            {@link String}, twitter screen name
+     *            {@link String} twitter screen name
      * @return {@link List} of {@link Tweet}
      * @throws Exception
      *             If {@link Twitter} throws an exception
@@ -383,6 +371,18 @@ public class TwitterUtil
 	return result.getTweets();
     }
 
+    /**
+     * Retrieves the twitter profile of the contact based on URL provided for
+     * twitter.
+     * 
+     * @param widget
+     *            {@link Widget} for accessing token and secret key
+     * @param webUrl
+     *            {@link String} twitter URL of the contact
+     * @return {@link String} twitter id of the profile
+     * @throws Exception
+     *             If {@link Twitter} throws an exception
+     */
     public static String getTwitterIdByUrl(Widget widget, String webUrl)
 	    throws Exception
     {
@@ -399,5 +399,224 @@ public class TwitterUtil
 		.showUser(webUrl.substring(webUrl.lastIndexOf("/") + 1));
 
 	return String.valueOf(user.getId());
+    }
+
+    /**
+     * Retrieves the list of follower IDs of the contact based on the contact's
+     * twitter id and wraps the result into a {@link List}
+     * 
+     * @param widget
+     *            {@link Widget} for accessing token and secret key
+     * @param twitterId
+     *            {@link String} twitter id of the contact
+     * @return {@link List} of {@link Long} IDs
+     * @throws Exception
+     *             If {@link Twitter} throws an exception
+     */
+    public static List<Long> getFollowersIDs(Widget widget, String twitterId)
+	    throws Exception
+    {
+	// Creates a twitter object to connect with twitter
+	Twitter twitter = getTwitter(widget);
+	IDs ids;
+	List<Long> listOfIds = new ArrayList<Long>();
+	long cursor = -1;
+
+	System.out.println("Listing ids.");
+
+	// If more than 5000 followers are required then unComment this do while
+	// do {
+
+	ids = twitter.getFollowersIDs(Long.parseLong(twitterId), cursor);
+	listOfIds.addAll(Arrays.asList(ArrayUtils.toObject(ids.getIDs())));
+	System.out.println(listOfIds);
+
+	// } while ((cursor = ids.getNextCursor()) != 0);
+
+	return listOfIds;
+    }
+
+    /**
+     * Retrieves the list of twitter IDs who are followed by the contact in
+     * twitter and wraps the result into a {@link List}
+     * 
+     * @param widget
+     *            {@link Widget} for accessing token and secret key
+     * @param twitterId
+     *            {@link String} twitter id of the contact
+     * @return {@link List} of {@link Long} IDs
+     * @throws Exception
+     *             If {@link Twitter} throws an exception
+     */
+    public static List<Long> getFollowingIDs(Widget widget, String twitterId)
+	    throws Exception
+    {
+	// Creates a twitter object to connect with twitter
+	Twitter twitter = getTwitter(widget);
+	IDs ids;
+	List<Long> listOfIds = new ArrayList<Long>();
+	long cursor = -1;
+
+	System.out.println("Listing ids.");
+
+	// If more than 5000 following are required then unComment this do while
+	// do {
+
+	ids = twitter.getFriendsIDs(Long.parseLong(twitterId), cursor);
+	listOfIds.addAll(Arrays.asList(ArrayUtils.toObject(ids.getIDs())));
+	System.out.println(listOfIds);
+
+	// } while ((cursor = ids.getNextCursor()) != 0);
+
+	return listOfIds;
+
+    }
+
+    /**
+     * Retrieves profile for each Twitter Id given in {@link List} of IDs and
+     * wraps result into a {@link List} of {@link SocialSearchResult}
+     * 
+     * @param widget
+     *            {@link Widget} for accessing token and secret key
+     * @param ids
+     *            {@link List} of {@link Long} twitter IDs
+     * @return {@link List} of {@link SocialSearchResult}
+     * @throws Exception
+     *             If {@link Twitter} throws an exception
+     */
+    public static List<SocialSearchResult> getListOfProfiles(Widget widget,
+	    JSONArray ids) throws Exception
+    {
+	Twitter twitter = getTwitter(widget);
+	List<SocialSearchResult> profilesList = new ArrayList<SocialSearchResult>();
+
+	for (int i = 0; i < ids.length(); i++)
+	{
+	    SocialSearchResult result = new SocialSearchResult();
+
+	    User user = twitter.showUser(Long.parseLong(ids.getString(i)));
+	    result.id = user.getId() + "";
+	    result.name = user.getName();
+	    result.picture = user.getBiggerProfileImageURLHttps().toString();
+	    result.location = user.getLocation();
+	    result.summary = user.getDescription();
+	    result.num_connections = user.getFollowersCount() + "";
+	    result.tweet_count = user.getStatusesCount() + "";
+	    result.friends_count = user.getFriendsCount() + "";
+	    result.url = "https://twitter.com/" + user.getScreenName();
+
+	    System.out.println(result.url);
+	    System.out.println(result);
+
+	    // Adds each result in to list
+	    profilesList.add(result);
+	}
+	return profilesList;
+    }
+
+    /**
+     * Forms a {@link List} of {@link SocialUpdateStream} with the tweets of the
+     * contact
+     * 
+     * @param user
+     *            {@link User} contact whose tweets are to be filled in list
+     * @param twitter
+     *            {@link Twitter} after setting authentication
+     * @param result
+     *            {@link QueryResult} to retrieve tweets of the person
+     * @return {@link List} of {@link SocialUpdateStream}
+     * @throws Exception
+     *             If {@link Twitter} throws an exception
+     */
+    private static List<SocialUpdateStream> getListOfSocialUpdateStream(
+	    User user, Twitter twitter, QueryResult result) throws Exception
+    {
+	List<SocialUpdateStream> updateStream = new ArrayList<SocialUpdateStream>();
+
+	for (Status tweet : result.getTweets())
+	{
+	    SocialUpdateStream stream = new SocialUpdateStream();
+
+	    stream.id = String.valueOf(tweet.getId());
+	    stream.message = tweet.getText();
+	    stream.is_retweet = tweet.isRetweet();
+
+	    // If tweet is a retweet, get the picture URL and profile URL of
+	    // person who actually tweeted it, else get picture URL and profile
+	    // URL of contact
+	    if (tweet.isRetweet())
+	    {
+		User tweetor = twitter
+			.showUser(tweet.getUserMentionEntities()[0]
+				.getScreenName());
+		stream.tweeted_person_pic_url = tweetor
+			.getMiniProfileImageURLHttps();
+		stream.tweeted_person_profile_url = "https://twitter.com/"
+			+ tweetor.getScreenName();
+
+	    }
+	    else
+	    {
+		stream.tweeted_person_pic_url = user
+			.getBiggerProfileImageURLHttps();
+		stream.tweeted_person_profile_url = "https://twitter.com/"
+			+ user.getScreenName();
+
+	    }
+
+	    // For every tweetor who retweeted the tweet, linking his name with
+	    // a URL which redirects to his/her twitter profile
+	    for (UserMentionEntity entity : tweet.getUserMentionEntities())
+	    {
+		stream.message = stream.message.replace(
+			"@" + entity.getScreenName(),
+			"<a href='https://twitter.com/"
+				+ entity.getScreenName()
+				+ "' target='_blank' class='cd_hyperlink'>@"
+				+ entity.getScreenName() + "</a>");
+	    }
+
+	    // For every hash tag, linking it with a URL which redirects to
+	    // twitter profile of it
+	    for (HashtagEntity entity : tweet.getHashtagEntities())
+	    {
+
+		String url = "https://twitter.com/search?q=%23"
+			+ entity.getText() + "&src=hash";
+		stream.message = stream.message.replace("#" + entity.getText(),
+			"<a href='" + url
+				+ "' target='_blank' class='cd_hyperlink'>#"
+				+ entity.getText() + "</a>");
+	    }
+
+	    // If tweet contains links, replacing the link with its display
+	    // content returned from twitter and linking it with the actual URL
+	    for (URLEntity entity : tweet.getURLEntities())
+	    {
+
+		stream.message = stream.message.replace(entity.getURL(),
+			"<a href='" + entity.getURL()
+				+ "' target='_blank' class='cd_hyperlink'>"
+				+ entity.getDisplayURL() + "</a>");
+	    }
+
+	    // If still tweet contains URL, showing it as hyper link and linking
+	    // it with its own URL
+	    String[] words = stream.message.split(" ");
+	    String exp = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+
+	    for (String word : words)
+	    {
+		if (word.matches(exp))
+		    stream.message = stream.message.replace(word, "<a href='"
+			    + word + "' target='_blank' class='cd_hyperlink'>"
+			    + word + "</a>");
+	    }
+	    System.out.println(stream.message);
+	    stream.is_retweeted = tweet.isRetweetedByMe();
+	    stream.created_time = tweet.getCreatedAt().getTime() / 1000;
+	    updateStream.add(stream);
+	}
+	return updateStream;
     }
 }

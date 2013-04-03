@@ -81,7 +81,9 @@
 							{{/if}}							
 						{{/if_equals}}
 						{{#if_equals type "CONNECTION_ADDED_CONNECTIONS"}}
-							Connected to <a href="{{message.publicProfileUrl}}" target="_blank">{{message.firstName}}&nbsp{{message.lastName}}</a>
+							Connected to 
+							<a href="{{message.publicProfileUrl}}" target="_blank">{{message.firstName}}&nbsp{{message.lastName}}</a>
+							{{#if message.headline}}, {{message.headline}}{{/if}}
 							<div style="font-size:12px;padding:5px 0px 5px 0px;">
 								{{epochToHumanDate "mm-dd-yyyy" created_time}}
 							</div>

@@ -24,6 +24,7 @@ import com.google.code.linkedinapi.client.enumeration.NetworkUpdateType;
 import com.google.code.linkedinapi.client.enumeration.ProfileField;
 import com.google.code.linkedinapi.client.enumeration.ProfileType;
 import com.google.code.linkedinapi.client.enumeration.SearchParameter;
+import com.google.code.linkedinapi.schema.Connections;
 import com.google.code.linkedinapi.schema.Network;
 import com.google.code.linkedinapi.schema.People;
 import com.google.code.linkedinapi.schema.Person;
@@ -339,7 +340,8 @@ public class LinkedInUtil
 	Network network = client.getUserUpdates(linkedInId, EnumSet.of(
 		NetworkUpdateType.PROFILE_UPDATE,
 		NetworkUpdateType.CONNECTION_UPDATE,
-		NetworkUpdateType.SHARED_ITEM));
+		NetworkUpdateType.SHARED_ITEM,
+		NetworkUpdateType.EXTENDED_PROFILE_UPDATE));
 
 	LinkedInApiClient client1 = factory.createLinkedInApiClient(
 		widget.getProperty("token"), widget.getProperty("secret"));
@@ -376,7 +378,9 @@ public class LinkedInUtil
 	network = client.getUserUpdates(linkedInId, EnumSet.of(
 		NetworkUpdateType.PROFILE_UPDATE,
 		NetworkUpdateType.CONNECTION_UPDATE,
-		NetworkUpdateType.SHARED_ITEM), startIndex, endIndex);
+		NetworkUpdateType.SHARED_ITEM,
+		NetworkUpdateType.EXTENDED_PROFILE_UPDATE), startIndex,
+		endIndex);
 
 	LinkedInApiClient client1 = factory.createLinkedInApiClient(
 		widget.getProperty("token"), widget.getProperty("secret"));
@@ -423,8 +427,9 @@ public class LinkedInUtil
 	Network network = client.getUserUpdates(linkedInId, EnumSet.of(
 		NetworkUpdateType.PROFILE_UPDATE,
 		NetworkUpdateType.CONNECTION_UPDATE,
-		NetworkUpdateType.SHARED_ITEM), startIndex, endIndex, startDat,
-		endDat);
+		NetworkUpdateType.SHARED_ITEM,
+		NetworkUpdateType.EXTENDED_PROFILE_UPDATE), startIndex,
+		endIndex, startDat, endDat);
 
 	LinkedInApiClient client1 = factory.createLinkedInApiClient(
 		widget.getProperty("token"), widget.getProperty("secret"));
@@ -514,19 +519,35 @@ public class LinkedInUtil
 	    }
 	    else if (update.getUpdateContent().getPerson().getConnections() != null)
 	    {
+
 		for (Person person : update.getUpdateContent().getPerson()
 			.getConnections().getPersonList())
 		{
+
 		    stream.id = person.getId();
 		    stream.type = update.getUpdateType().name();
 		    stream.created_time = update.getTimestamp() / 1000;
 
 		    try
 		    {
-			Person p = client1.getProfileById(stream.id, EnumSet
-				.of(ProfileField.PUBLIC_PROFILE_URL,
+			Person p = client1
+				.getProfileById(stream.id, EnumSet.of(
+					ProfileField.PUBLIC_PROFILE_URL,
 					ProfileField.LAST_NAME,
-					ProfileField.FIRST_NAME));
+					ProfileField.FIRST_NAME,
+					ProfileField.PICTURE_URL,
+					ProfileField.HEADLINE,
+					ProfileField.LOCATION_NAME,
+					ProfileField.NUM_CONNECTIONS,
+					ProfileField.ID, ProfileField.DISTANCE));
+
+			// Changes http to https to avoid client side warnings
+			// by browser, Changes certificate from m3 to m3-s to
+			// fix ssl broken image link
+			p.setPictureUrl(p.getPictureUrl()
+				.replace("http:", "https:")
+				.replace("m3", "m3-s"));
+
 			json = new JSONObject(p);
 		    }
 		    catch (Exception e)
@@ -543,4 +564,86 @@ public class LinkedInUtil
 	return list;
     }
 
+    /**
+     * Retrieves connections profiles of the contacts LinkedIn profile
+     * 
+     * This method will not work as of now as LinkedIn does not give other
+     * person connections
+     * 
+     * @param widget
+     *            {@link Widget} to retrieve token and secret of LinkedIn
+     *            account of agile user
+     * @param linkedInId
+     *            Id of the person whose updates are required
+     * @return {@link List} of {@link SocialUpdateStream}
+     * @throws Exception
+     *             If the personId does not exists or person provides restricted
+     *             access to his profile
+     */
+    public static List<SocialSearchResult> getConnections(Widget widget,
+	    String linkedInId) throws Exception
+    {
+	final LinkedInApiClient client = factory.createLinkedInApiClient(
+		widget.getProperty("token"), widget.getProperty("secret"));
+
+	Connections connections = client.getConnectionsById(linkedInId, EnumSet
+		.of(ProfileField.PUBLIC_PROFILE_URL, ProfileField.LAST_NAME,
+			ProfileField.FIRST_NAME, ProfileField.PICTURE_URL,
+			ProfileField.HEADLINE, ProfileField.LOCATION_NAME,
+			ProfileField.NUM_CONNECTIONS, ProfileField.ID,
+			ProfileField.DISTANCE));
+
+	List<SocialSearchResult> persons = new ArrayList<SocialSearchResult>();
+
+	for (Person person : connections.getPersonList())
+	{
+	    SocialSearchResult result = new SocialSearchResult();
+
+	    if (person.getId().equalsIgnoreCase("private"))
+		continue;
+
+	    result.id = person.getId();
+	    result.name = person.getFirstName() + " " + person.getLastName();
+	    result.picture = person.getPictureUrl();
+	    result.url = person.getPublicProfileUrl();
+	    result.summary = person.getHeadline();
+	    result.distance = person.getDistance() + "";
+
+	    if (person.getDistance() != null && person.getDistance() == 1)
+		result.is_connected = true;
+
+	    // Changes http to https to avoid client side warnings by browser,
+	    // Changes certificate from m3 to m3-s to fix ssl broken image link
+	    if (result.picture != null)
+		result.picture = result.picture.replace("http:", "https:")
+			.replace("m3", "m3-s");
+
+	    // Sets number of connects if provided
+	    result.num_connections = (person.getNumConnections() != null) ? person
+		    .getNumConnections().toString() : "";
+
+	    result.location = (person.getLocation() != null) ? person
+		    .getLocation().getName() : "";
+
+	    result.distance = (person.getDistance() != null) ? person
+		    .getDistance().toString() : "";
+
+	    // Add result wrapper object to the list
+	    persons.add(result);
+	}
+
+	return persons;
+    }
+
+    public static void main(String[] args)
+    {
+	final LinkedInApiClient client = factory.createLinkedInApiClient(
+		"f71d216b-16b7-41d5-a593-92c928b6fa13",
+		"9c9a2635-3efd-474c-8459-61251a5006e1");
+
+	Connections cons = client.getConnectionsById("ucRi4lo_XM",
+		EnumSet.of(ProfileField.ID));
+
+	System.out.println(cons.getPersonList());
+    }
 }

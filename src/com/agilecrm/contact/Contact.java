@@ -2,6 +2,7 @@ package com.agilecrm.contact;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -129,7 +130,7 @@ public class Contact extends Cursor
     @NotSaved(IfDefault.class)
     @Embedded
     @Indexed
-    private LinkedHashSet<Tag> tagsWithTime = new LinkedHashSet<Tag>();
+    private ArrayList<Tag> tagsWithTime = new ArrayList<Tag>();
 
     /**
      * Stores properties, by embedding the class <code>ContactField</code>. Also
@@ -308,7 +309,7 @@ public class Contact extends Cursor
     }
 
     @JsonIgnore
-    public LinkedHashSet<Tag> getTagsList()
+    public ArrayList<Tag> getTagsList()
     {
 	return tagsWithTime;
     }
@@ -543,13 +544,13 @@ public class Contact extends Cursor
     /*
      * Creates a list of @Tag objects with tags value and created time in it.
      */
-    private LinkedHashSet<Tag> mapTagsWithTime(
-	    LinkedHashSet<Tag> oldTagsWithTime, Set<String> tags)
+    private ArrayList<Tag> mapTagsWithTime(ArrayList<Tag> oldTagsWithTime,
+	    Set<String> tags)
     {
 	// If tags are empty(considering tags are deleted) then empty list is
 	// saved.
 	if (tags.isEmpty())
-	    return new LinkedHashSet<Tag>();
+	    return new ArrayList<Tag>();
 
 	// Iterates through each tag in tags list and add new tags with current
 	// time, also removes tags from list which are deleted in the current
@@ -558,14 +559,17 @@ public class Contact extends Cursor
 	{
 	    boolean tagExists = false;
 
-	    for (Tag tag : oldTagsWithTime)
+	    Iterator<Tag> tagsIterator = oldTagsWithTime.iterator();
+
+	    while (tagsIterator.hasNext())
 	    {
+		Tag tag = tagsIterator.next();
 		// If tags list do not contain a tag which is previously saved
 		// in
 		// the tagsWithTime, then tag is removed from the list
 		if (!tags.contains(tag.tag))
 		{
-		    oldTagsWithTime.remove(tag);
+		    tagsIterator.remove();
 		    continue;
 		}
 

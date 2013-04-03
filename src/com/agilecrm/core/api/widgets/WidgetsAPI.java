@@ -16,6 +16,10 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.json.JSONArray;
+
+import twitter4j.Twitter;
+
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.social.LinkedInUtil;
@@ -141,6 +145,53 @@ public class WidgetsAPI
 	}
     }
 
+    // Get matching profiles for linkedin and Twitter
+    /**
+     * Connects to {@link LinkedInUtil} or {@link TwitterUtil} based on the name
+     * given in widget and fetches matching profiles for the contact in LinkedIn
+     * and Twitter, based on the parameter social id
+     * 
+     * @param contactId
+     *            {@link Long} customer id, to get name of contact
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @return {@link List} of {@link SocialSearchResult}
+     */
+    @Path("/match/{widget-id}/{contact-id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<SocialSearchResult> getSocialResults(
+	    @PathParam("contact-id") Long contactId,
+	    @PathParam("widget-id") Long widgetId)
+    {
+	try
+	{
+	    // Get contact and widget based on their id
+	    Contact contact = ContactUtil.getContact(contactId);
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+
+	    // Returns null if widget doesn't exist with given widget id
+	    if (widget == null)
+		return null;
+
+	    // Profiles are searched based on first and last name of contact
+	    // Gets profiles from LinkedInUtil based on contact
+	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
+		return LinkedInUtil.searchLinkedInProfiles(widget, contact);
+
+	    // Gets profiles from TwitterUtil based on contact
+	    else if (widget.name.equalsIgnoreCase("TWITTER"))
+		return TwitterUtil.searchTwitterProfiles(widget, contact);
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+	return null;
+    }
+
     // Get widget
     /**
      * Connects to {@link LinkedInUtil} or {@link TwitterUtil} based on the name
@@ -187,43 +238,166 @@ public class WidgetsAPI
 	return null;
     }
 
-    // Get matching profiles for linkedin and Twitter
     /**
-     * Connects to {@link LinkedInUtil} or {@link TwitterUtil} based on the name
-     * given in widget and fetches matching profiles for the contact in LinkedIn
-     * and Twitter, based on the parameter social id
+     * Retrieves the id of the LinkedIn or Twitter based on widget preferences
+     * provided and URL saved for contact.
      * 
-     * @param contactId
-     *            {@link Long} customer id, to get name of contact
      * @param widgetId
      *            {@link Long} plugin-id/widget id, to get {@link Widget} object
-     * @return {@link List} of {@link SocialSearchResult}
+     * @param webUrl
+     *            {@link String} URL saved for the contact
+     * @return {@link String} Id of LinkedIn or Twitter
      */
-    @Path("/match/{widget-id}/{contact-id}")
-    @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<SocialSearchResult> getSocialResults(
-	    @PathParam("contact-id") Long contactId,
-	    @PathParam("widget-id") Long widgetId)
+    @Path("getidbyurl/{widget-id}")
+    @POST
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public String getSocialIdByUrl(@PathParam("widget-id") Long widgetId,
+	    @FormParam("web_url") String webUrl)
     {
 	try
 	{
-	    // Get contact and widget based on their id
-	    Contact contact = ContactUtil.getContact(contactId);
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 
-	    // Returns null if widget doesn't exist with given widget id
 	    if (widget == null)
 		return null;
 
+	    System.out.println("in widgets api");
+	    System.out.println(webUrl);
 	    // Profiles are searched based on first and last name of contact
-	    // Gets profiles from LinkedInUtil based on contact
+	    // Calls LinkedUtil method to send message to person by socialId
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInUtil.searchLinkedInProfiles(widget, contact);
+		return LinkedInUtil.getIdByUrl(widget, webUrl);
 
-	    // Gets profiles from TwitterUtil based on contact
+	    // Calls TwitterUtil method to send message to person by socialId
 	    else if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterUtil.searchTwitterProfiles(widget, contact);
+		return TwitterUtil.getTwitterIdByUrl(widget, webUrl);
+	}
+	catch (SocketTimeoutException e)
+	{
+	    return "TimeOut";
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+	return null;
+    }
+
+    /**
+     * Retrieves followers of a contact Twitter profile based on {@link Widget}
+     * id and {@link Twitter} id
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param socialId
+     *            {@link String} {@link Twitter} id of the contact
+     * @return {@link List} of {@link Long} {@link Twitter} IDs of followers
+     */
+    @Path("/followers/{widget-id}/{social-id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON })
+    public List<Long> getFollowersListInTwitter(
+	    @PathParam("widget-id") Long widgetId,
+	    @PathParam("social-id") String socialId)
+    {
+	try
+	{
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+
+	    if (widget == null)
+		return null;
+
+	    System.out.println("in widgets api");
+
+	    if (widget.name.equalsIgnoreCase("TWITTER"))
+		return TwitterUtil.getFollowersIDs(widget, socialId);
+
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+	return null;
+    }
+
+    /**
+     * Retrieves {@link Twitter} IDs of Twitter profiles whom contact follows
+     * based on {@link Widget} id and {@link Twitter} id
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param socialId
+     *            {@link String} {@link Twitter} id of the contact
+     * @return {@link List} of {@link Long} {@link Twitter} IDs of following
+     *         {@link Twitter} profiles of contact
+     */
+    @Path("/following/{widget-id}/{social-id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON })
+    public List<Long> getFollowingListInTwitter(
+	    @PathParam("widget-id") Long widgetId,
+	    @PathParam("social-id") String socialId)
+    {
+	try
+	{
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+
+	    if (widget == null)
+		return null;
+
+	    System.out.println("in widgets api");
+
+	    if (widget.name.equalsIgnoreCase("TWITTER"))
+		return TwitterUtil.getFollowingIDs(widget, socialId);
+
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+	return null;
+    }
+
+    /**
+     * Retrieves {@link Twitter} profiles for {@link List} of {@link Twitter}
+     * IDs provided based on {@link Widget} id
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param twitterIds
+     *            String {@link JSONArray} of {@link Twitter} IDs
+     * @return {@link List} of {@link SocialSearchResult}
+     */
+    @Path("/profile/list/{widget-id}")
+    @POST
+    @Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<SocialSearchResult> getProfileListInTwitter(
+	    @PathParam("widget-id") Long widgetId,
+	    @FormParam("twitter_ids") String twitterIds)
+    {
+	try
+	{
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+
+	    if (widget == null)
+		return null;
+
+	    System.out.println("in widgets api");
+
+	    JSONArray twitterIdsJsonArray = new JSONArray(twitterIds);
+
+	    if (widget.name.equalsIgnoreCase("TWITTER"))
+		return TwitterUtil.getListOfProfiles(widget,
+			twitterIdsJsonArray);
+
 	}
 	catch (Exception e)
 	{
@@ -678,6 +852,16 @@ public class WidgetsAPI
 
     }
 
+    /**
+     * Retrieves Tickets from Zendesk based on the email and {@link Widget} Id
+     * provided
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param email
+     *            {@link String} email of the {@link Contact}
+     * @return {@link String} form of Tickets {@link JSONArray}
+     */
     @Path("zendesk/get/{widget-id}/{email}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -703,6 +887,24 @@ public class WidgetsAPI
 
     }
 
+    /**
+     * Adds a Ticket to Zendesk based on the given parameters and {@link Widget}
+     * id
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param name
+     *            {@link String} name of the {@link Contact} to be added to
+     *            Ticket
+     * @param subject
+     *            {@link String} subject of the Ticket to be added
+     * @param email
+     *            {@link String} email of the {@link Contact} to be added to
+     *            Ticket
+     * @param description
+     *            {@link String} description of the Ticket to be added
+     * @return {@link String} form of Ticket added
+     */
     @Path("zendesk/add/{widget-id}")
     @POST
     @Produces(MediaType.TEXT_PLAIN)
@@ -731,6 +933,19 @@ public class WidgetsAPI
 
     }
 
+    /**
+     * Updates an existing Ticket in Zendesk based on the {@link Widget} id and
+     * ticket number provided with the given description as comment
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param ticketNumber
+     *            {@link String} Id of the Ticket to be updated
+     * @param description
+     *            {@link String} description of the Ticket to be added as
+     *            comment
+     * @return {@link String} form of Ticket updated
+     */
     @Path("zendesk/update/{widget-id}")
     @POST
     @Produces(MediaType.TEXT_PLAIN)
@@ -756,46 +971,4 @@ public class WidgetsAPI
 
     }
 
-    @Path("getidbyurl/{widget-id}")
-    @POST
-    @Produces(MediaType.TEXT_PLAIN)
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public String getSocialIdByUrl(@PathParam("widget-id") Long widgetId,
-	    @FormParam("web_url") String webUrl)
-    {
-	try
-	{
-	    Widget widget = WidgetUtil.getWidget(widgetId);
-	    if (widget == null)
-		return null;
-
-	    System.out.println("in widgets api");
-	    System.out.println(webUrl);
-	    // Profiles are searched based on first and last name of contact
-	    // Calls LinkedUtil method to send message to person by socialId
-	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInUtil.getIdByUrl(widget, webUrl);
-
-	    // Calls TwitterUtil method to send message to person by socialId
-	    else if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterUtil.getTwitterIdByUrl(widget, webUrl);
-	}
-	catch (SocketTimeoutException e)
-	{
-	    return "TimeOut";
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-	}
-	return null;
-    }
-
-    public static void main(String[] args)
-    {
-	WidgetsAPI wid = new WidgetsAPI();
-	wid.getTicketsFromZendesk(3584l, "tejutest@gmail.com");
-    }
 }

@@ -21,6 +21,8 @@ $(function ()
     // Current contact user name in Twitter profile
     Twitter_current_profile_user_name = "";
     Twitter_current_update_id = "";
+    //Twitter_follower_ids = [];
+    //Twitter_following_ids = [];
 
     // Gets plugin id from plugin object, fetched using script API
     var plugin_id = agile_crm_get_plugin(TWITTER_PLUGIN_NAME).id;
@@ -130,7 +132,55 @@ $(function ()
     {
         e.preventDefault();
         tweetInTwitter(plugin_id, twitter_id);
+
     });
+    
+    // On click of followers in twitter panel
+    $('#twitter_followers').die().live('click', function (e)
+    {
+    	 e.preventDefault();
+    	
+    	 // Retrieves the Twitter IDs of all the followers 
+    	 getFollowerIdsInTwitter(plugin_id, twitter_id, function(data)
+    	 {
+    		 // Store array of IDs in a global variable    		 
+	    	 Twitter_follower_ids = data; 
+	    	 
+	    	 // Get 20 from array and 20 from array
+	    	 var temp = Twitter_follower_ids.splice(0, 20);	    	 
+	    	 console.log(temp);
+	    	 
+	    	 // Get the Twitter profile for 20 Twitter IDs
+	    	 getListOfProfilesByIDsinTwitter(plugin_id, temp, function(data) {
+	    		 
+	    		 console.log(data);
+	    	 });
+    	 });    		        
+    });
+    
+    // On click of following in twitter panel
+    $('#twitter_following').die().live('click', function (e)
+    {
+    	e.preventDefault();
+    	
+   	    // Retrieves the Twitter IDs of all the following persons 
+    	getFollowingIdsInTwitter(plugin_id, twitter_id, function(data)
+    	{
+    		// Store array of IDs in a global variable 
+    		Twitter_following_ids = data;    		
+
+	    	// Get 20 from array and 20 from array
+    		var temp = Twitter_following_ids.splice(0, 20);	    	 
+	    	console.log(temp);
+	    	 
+	    	// Get the Twitter profile for 20 Twitter IDs
+	    	getListOfProfilesByIDsinTwitter(plugin_id, temp, function(data) {
+	    		console.log(data);
+	    	});
+
+    	});   	 
+    });
+    
 });
 
 /**
@@ -923,6 +973,7 @@ function getTwitterIdByUrl(plugin_id, web_url, callback)
 
     }).error(function (data)
     {
+    	// If time out exception occurs, ask user to refresh and return
     	if(data.responseText == "TimeOut")
     	{
     		alert("Time Out while fetching Twitter profile. Reload and try again");
@@ -938,4 +989,114 @@ function getTwitterIdByUrl(plugin_id, web_url, callback)
         // Delete the Twitter URL associated with contact as it is incorrect
         agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url);
     });
+}
+
+/**
+ * Retrieves Twitter Ids of the followers of Twitter profile of contact based on 
+ * twitter id of the contact
+ * 
+ *@param plugin_id
+ * 			plugin id to fetch widget preferences
+ * @param twitter_id
+ * 			Twitter Id to send tweet request
+ * @param callback
+ * 			Callback to be executed to get the profiles
+ */
+function getFollowerIdsInTwitter(plugin_id, twitter_id, callback)
+{
+	
+    // Sends get request to URL "/core/api/widgets/followers/" by sending plugin id 
+    // and twitter id as path parameter
+	$.getJSON("/core/api/widgets/followers/" + plugin_id + "/" + twitter_id,  
+	function (data)
+	{		 
+		// If data is undefined, return
+		if(!data)
+			return;
+		
+		// If defined, execute the callback function
+		if (callback && typeof (callback) === "function")
+	    {
+			callback(data);
+	    }
+		
+	}).error(function (data)
+	{
+		// Show the error message
+		alert( data.responseText);
+	});
+}
+
+/**
+ * Retrieves Twitter Ids of persons whom contact twitter profile follows based on 
+ * twitter id of the contact
+ * 
+ *@param plugin_id
+ * 			plugin id to fetch widget preferences
+ * @param twitter_id
+ * 			Twitter Id to send tweet request
+ * @param callback
+ * 			Callback to be executed to get the profiles
+ */
+function getFollowingIdsInTwitter(plugin_id, twitter_id, callback)
+{
+	// Sends get request to URL "/core/api/widgets/followers/" by sending plugin id 
+    // and twitter id as path parameter
+	$.getJSON("/core/api/widgets/following/" + plugin_id + "/" + twitter_id,  
+	function (data)
+	{		 
+		// If data is undefined, return
+		if(!data)
+			return;
+		
+		// If defined, execute the callback function
+		if (callback && typeof (callback) === "function")
+	    {
+			callback(data);
+	    }
+		
+	}).error(function (data)
+	{
+		// Show the error message
+		alert( data.responseText);
+	});
+}
+
+/**
+ * Retrieves the Twitter profiles of followers or following based on the 
+ * twitter IDs provided
+ * 
+ * @param plugin_id
+ * 			plugin id to fetch widget preferences
+ * @param twitter_ids
+ * 			Array of IDs for which profiles are required
+ * @param callback
+ * 			Callback to be executed to get the profiles
+ */
+function getListOfProfilesByIDsinTwitter(plugin_id, twitter_ids, callback)
+{	
+	// Store the Twitter IDs provided as json tos send it as post data
+	var json = {};
+	json["twitter_ids"] = JSON.stringify(twitter_ids);
+	
+	// Sends post request to URL "/core/api/widgets/profile/list/" by sending 
+	// plugin id as path parameter and array of twitter ids as post data
+	$.post("/core/api/widgets/profile/list/" + plugin_id, json, function(data) 
+	{
+		// If data is undefined, return
+		if(!data)
+			return;
+		
+		// If defined, execute the callback function
+		if (callback && typeof (callback) === "function")
+	    {
+			callback(data);
+	    }
+		
+	// Accept the return type as json
+	}, "json").error(function (data)
+	{
+		// Show the error message
+		alert( data.responseText);
+	});
 }
