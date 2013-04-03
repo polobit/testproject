@@ -90,7 +90,7 @@ public class StatsUtil
      * @param email
      *            - email-id
      */
-    public static String getFromPageViews(String email, String domain)
+    public static String getPageViews(String email, String domain)
     {
 	// Gets Guids (clients) based on Email from database
 	String guids = "(SELECT guid FROM page_views WHERE email ="
@@ -172,6 +172,16 @@ public class StatsUtil
 	if (value == null)
 	    return null;
 
-	return "\'" + value + "\'";
+	// Removes single quotation on start and end.
+	String replaceSingleQuote = value.replaceAll("(^')|('$)", "");
+	String replaceDoubleQuote = replaceSingleQuote.replaceAll(
+		"(^\")|(\"$)", "");
+
+	// Replace ' with \' within the value. To avoid error while insertion
+	// into table
+	if (replaceDoubleQuote.contains("'"))
+	    replaceDoubleQuote = replaceDoubleQuote.replace("'", "\\'");
+
+	return "\'" + replaceDoubleQuote + "\'";
     }
 }

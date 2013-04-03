@@ -1,5 +1,5 @@
 {
-	"name": "Tag Exists",
+	"name": "Check Tags",
 	"thumbnail": "json/nodes/images/email/tags.png",
     "icon": "json/nodes/icons/email/tags.png",
     "info": "Verify whether given tag exists or not for your customer.",
@@ -8,7 +8,7 @@
     "company": "mantra",
     "language": "en",
     "branches": "no,yes",
-    "workflow_tasklet_class_name":"com.campaignio.tasklets.agile.TagExists",
+    "workflow_tasklet_class_name":"com.campaignio.tasklets.agile.CheckTags",
     "category": "Utilities",
     "ui": [{
 			"label": "Tag",

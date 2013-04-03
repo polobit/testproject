@@ -8,17 +8,17 @@ import com.campaignio.tasklets.util.TaskletUtil;
 import com.thirdparty.Rapleaf;
 
 /**
- * <code>Sex</code> represents Sex node in the workflow. ‘Sex’ option is used to
- * retrieve the gender of contact based on the email-id of that contact. Sex
- * class uses Rapleaf to get gender from email-ids. It consists of three
- * branches such as Male,Female and Unknown. If unable to retrieve the gender
- * from the email-id that contact is taken as Unknown. This node helps to target
- * the contacts based on their gender.
+ * <code>Gender</code> represents Gender node in the workflow. ‘Gender’ option
+ * is used to retrieve the gender of contact based on the email-id of that
+ * contact. Gender class uses Rapleaf to get gender from email-ids. It consists
+ * of three branches such as Male,Female and Unknown. If unable to retrieve the
+ * gender from the email-id that contact is taken as Unknown. This node helps to
+ * target the contacts based on their gender.
  * 
  * @author Manohar
  * 
  */
-public class Sex extends TaskletAdapter
+public class Gender extends TaskletAdapter
 {
     /**
      * Email Id of contact
@@ -67,7 +67,6 @@ public class Sex extends TaskletAdapter
 		LogUtil.addLog(campaignJSON, subscriberJSON,
 			"Could not retrieve data from Rapleaf");
 	}
-
 
 	String branch = BRANCH_UNKNOWN;
 
