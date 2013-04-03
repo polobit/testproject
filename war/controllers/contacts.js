@@ -9,6 +9,7 @@ var ContactsRouter = Backbone.Router.extend({
     routes: {
         "": "contacts",
         "dashboard": "contacts",
+        "dashboard-test": "dashboard",
 
         /* Contacts */
         "contacts": "contacts",
