@@ -32,7 +32,7 @@ import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>ICalendarServlet</code> is the servlet for handling iCalendar data. It
- * converts @link Event data into iCal format. iCal4j API is used for getting
+ * converts {@link Event} data into iCal format. iCal4j API is used for getting
  * iCal data from Event object.
  * 
  * @author Naresh
