@@ -167,6 +167,7 @@ function load_timeline_details(el, contactId, callback1)
 			
 			// Removes loading image of mails, if there is no email to contact  
 			$('#time-line', el).find('.loading-img-email').remove();
+			$('#time-line',el).find('.loading-img-stats').remove();
 		}
 		
 		/**
@@ -593,30 +594,38 @@ function remove_loading_img(el){
 			
 			show_timeline_padcontent(is_logs_fetched, is_mails_fetched, is_array_urls_fetched);
 			
-			$('#time-line', el).find('.loading-img-email').remove();
+         	$('#time-line', el).find('.loading-img-stats').remove();
 			
 			// Checks whether data is empty or not.
 			if (data.toJSON() && data.toJSON().length > 0) {
 				
-				// To add to address field.
+				// Gets address of the contact from its browsing history
+				var address = getPropertyValue(contact.properties, "address");
+				
+				if(!address)
+				{
 				var addressJSON = {};
+				
 				addressJSON.city = data.toJSON()[0].city;
+				addressJSON.state = data.toJSON()[0].region;
 				addressJSON.country = data.toJSON()[0].country;
 				
-				// To add for timeline we need created time inorder to show month-wise
-				var statsJSON = {};
-				statsJSON.city = addressJSON.city;
-				statsJSON.country = addressJSON.country;
-				statsJSON.created_time = data.toJSON()[0].time;
-				statsJSON.entity_type = "s";
-				
+				$.each(data.toJSON(), function(index,model){
+					if(addressJSON.city != model.city || addressJSON.state != model.region || addressJSON.country != model.country)
+						{
+						addressJSON.city = model.city;
+						addressJSON.state = model.region;
+						addressJSON.country = model.country;
+						}
+				});
 				
 				// If contact has no address property push the new one
 				contact.properties.push({
 					"name" : "address",
 					"value" : JSON.stringify(addressJSON)
 				                       });
-
+				}
+				
 			// Update contact with the browsing address
 			var contactModel = new Backbone.Model();
 			contactModel.url = 'core/api/contacts';
@@ -630,22 +639,33 @@ function remove_loading_img(el){
 				// If timeline is not defined yet, calls setup_timeline for the first time
 				if(timelineView.collection.length == 0)
 				{					
-					timelineView.collection.add(statsJSON);
+					$.each(data.toJSON(),function(index,model){
+						
+						//Add entity type to each model of stats to identify it
+						model.entity_type = "s";
+						
+						timelineView.collection.add(model);
+					});					
 					
 					// No callback function is taken as the email takes more time to fetch
-					setup_timeline(timelineView.collection.toJSON(), el);
-					
+					setup_timeline(timelineView.collection.toJSON(), el);							
 				}
 				else
 				{					
-						var newItem = $(getTemplate("timeline", statsJSON));
+						$.each(data.toJSON(),function(index,model){
+							
+     					//Add entity type to each model of stats to identify it
+						model.entity_type = "s";
+						
+						var newItem = $(getTemplate("timeline", model));
 						newItem.find('.inner').append('<a href="#" class="open-close"></a>');
 						
 						/*
 						 * Inserts mails to timeline with out validating the isotope status,
 						 * as it takes more time to fetch.
 						 */  
-						$('#timeline', el).isotope( 'insert', newItem);		
+						$('#timeline', el).isotope( 'insert', newItem);
+						});
 				}
 				
 			}
@@ -655,7 +675,7 @@ function remove_loading_img(el){
 			show_timeline_padcontent(is_logs_fetched, is_mails_fetched, is_array_urls_fetched);
 			
 			// Remove loading image of mails
-			$('#time-line', el).find('.loading-img-email').remove();
+			$('#time-line', el).find('.loading-img-stats').remove();
 		}
 	});
 	}
