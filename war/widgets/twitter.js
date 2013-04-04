@@ -429,7 +429,7 @@ function showTwitterProfile(twitter_id, plugin_id)
         $('#twitter_profile_load').remove();
 
         // Shows error message if error occurs
-    	$('#Twitter').html("<div style='padding: 0px 5px 7px 5px;line-height:160%;'" + 
+    	$('#Twitter').html("<div style='padding: 0px 5px 7px 5px;line-height:160%;" + 
 				"word-wrap: break-word;' >" + data.responseText + "</div>"); 
     });
 
