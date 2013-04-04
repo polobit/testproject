@@ -314,7 +314,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         	$('#' + form_id).find('span.save-status img').remove();
         	
             // Shows eroor alert of duplicate contacts
-        	$('#' + modal_id).find(".duplicate-email").html('<div class="alert alert-error" style="display:none"><a class="close" data-dismiss="alert" href="#">×</a>Please change email. A contact already exists with this email.</div>');
+        	$('#' + modal_id).find(".duplicate-email").html('<div class="alert alert-error" style="display:none"><a class="close" data-dismiss="alert" href="#">&times</a>Please change email. A contact already exists with this email.</div>');
 
             $('#' + modal_id).find(".alert").show();
         }
