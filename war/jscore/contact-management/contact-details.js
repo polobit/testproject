@@ -123,8 +123,9 @@ $(function(){
 	/**
 	 * Shows a form to add tags with typeahead option
 	 */ 
-	$('#add-tags').live('click', function(e){
+	$('#add-tags').live('click', function(e) {
 		e.preventDefault();
+		$(this).css("display", "none");
 		$("#addTagsForm").css("display", "block");
 		setup_tags_typeahead();
 	});
@@ -138,6 +139,7 @@ $(function(){
 		
 	    // Add Tags
 		var new_tags = get_new_tags('addTags');
+		$('#add-tags').css("display", "block");
 		$("#addTagsForm").css("display", "none");
 		
 		if(!new_tags || (/^\s*$/).test(new_tags))
@@ -146,7 +148,7 @@ $(function(){
 			return;
 		}
 		
-		if(new_tags){
+		if(new_tags) {
 			var json = App_Contacts.contactDetailView.model.toJSON();
 	    	
 	    	// Push the new tags 

@@ -7,7 +7,7 @@
  */
 var TAGS;
 var tagsCollection;
-
+var isTagsTypeaheadActive;
 /**
  * Creates a list (tags_list) only with tag values (i.e excludes the keys), 
  * by fetching the tags from server side, if they do not exist at client side (in TAGS). 
@@ -60,20 +60,28 @@ function setup_tags_typeahead() {
     	 * input field (having the class "tags-typeahead") from the list of elements
     	 * (tags_list) passed to the source method of typeahead
     	 */
-    	source: tags_list,
-        
+    	source: function (query, process)
+    	{
+    		isTagsTypeaheadActive = false;
+    		(this.$menu).empty();
+    		
+    		process(tags_list);
+    		
+    		if(this.$menu.find('.active').length > 0)
+    			isTagsTypeaheadActive = true;
+    	},
     	/**
     	 * Performs its operation (adds the tag as an li element to its nearest ul) on selecting 
     	 * a tag from the list of matched items provided by the source method   
     	 */
     	updater: function(tag) {
-    		
+    		console.log(tag);
     		if(!tag || (/^\s*$/).test(tag))
     			{
     				return;
     			}
- 
-    		
+    	
+    	
     		// Saves the selected tag to the contact
     		if((this.$element).closest(".control-group").hasClass('save-tag')){
     			
@@ -85,24 +93,22 @@ function setup_tags_typeahead() {
     			
     			json.tags.push(tag);
     			
-    			// Save the contact with added tags
-    	    	var contact = new Backbone.Model();
-    	        contact.url = 'core/api/contacts';
-    	        contact.save(json,{
-    	       		success: function(data){
-    	       			
-    	       		// Get all existing tags of the contact to compare with the added tags
-    	       			var old_tags = [];
-    	       			$.each($('#added-tags-ul').children(), function(index, element){
-           					
-    	       				old_tags.push($(element).attr('data'));
-           				});
-    	       			
-    	       			// Append to the list, when no match is found 
-    	       			if ($.inArray(tag, old_tags) == -1) 
-    	       				$('#added-tags-ul').append('<li style="display:inline-block;" class="tag" data="' + tag + '"><span><a class="anchor" href="#tags/'+ tag + '">'+ tag + '</a><a class="close remove-tags" id="' + tag + '">&times</a></span></li>');
-    	       		}
-    	        });
+    			saveEntity(json, 'core/api/contacts', function(data){
+    				$("#addTagsForm").css("display", "none");
+        		    $("#add-tags").css("display", "block");
+        		    
+    	     		// Get all existing tags of the contact to compare with the added tags
+	       			var old_tags = [];
+	       			$.each($('#added-tags-ul').children(), function(index, element){
+       					
+	       				old_tags.push($(element).attr('data'));
+       				});
+	       			
+	       			// Append to the list, when no match is found 
+	       			if ($.inArray(tag, old_tags) == -1) 
+	       				$('#added-tags-ul').append('<li style="display:inline-block;" class="tag" data="' + tag + '"><span><a class="anchor" href="#tags/'+ tag + '">'+ tag + '</a><a class="close remove-tags" id="' + tag + '">&times</a></span></li>');
+    				
+    			});
     	        return;
     		}
     		
@@ -120,6 +126,47 @@ function setup_tags_typeahead() {
         }
     });
     
+    
+    $("#addTags").bind("keydown",  function(e) {
+    	if(e.which == 13 && !isTagsTypeaheadActive)
+    		{
+    			e.preventDefault();
+
+    			var contact_json = App_Contacts.contactDetailView.model.toJSON();
+    	
+    			var tag = $(this).val();
+    			
+    			contact_json.tags.push(tag);
+    	
+    			$("#addTags").val("");
+    	
+    			if(!tag || (/^\s*$/).test(tag))
+    			{
+    					return;
+    			}
+    	    	
+    			// Get all existing tags of the contact to compare with the added tags
+    			var old_tags = [];
+    			$.each($('#added-tags-ul').children(), function(index, element){
+				
+    				old_tags.push($(element).attr('data'));
+    			});
+			
+    			// Append to the list, when no match is found 
+    			if ($.inArray(tag, old_tags) != -1) 
+    				return;
+   			
+    			saveEntity(contact_json, 'core/api/contacts',  function(data) {
+    		
+    			$("#addTagsForm").css("display", "none");
+    		    $("#add-tags").css("display", "block");
+
+       				$('#added-tags-ul').append('<li style="display:inline-block;" class="tag" data="' + tag + '"><span><a class="anchor" href="#tags/'+ tag + '">'+ tag + '</a><a class="close remove-tags" id="' + tag + '">&times</a></span></li>');
+    			});
+    		}
+    });
+    
+    
     /**
      * If entered tag is not in typeahead source, create a new tag (enter "," at the end of new tag 
      * element, then it could be added as new tag)
@@ -128,7 +175,7 @@ function setup_tags_typeahead() {
     	
     	// Adds no tags when the key down is "," in contact detail view tags 
     	if($(this).hasClass('ignore-comma-keydown'))
-    		return;
+    	  return;
     	
     	var tag = $(this).val();
     	
@@ -136,6 +183,7 @@ function setup_tags_typeahead() {
     	if(e.which == 188 && tag != "")
     	{
     		e.preventDefault();
+    		alert("test");
     	
     		// Prevents comma (",") as an argument to the input field
     		$(this).val("");

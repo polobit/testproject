@@ -214,3 +214,18 @@ function property_JSON(name, id, type) {
     json.value = $('#' + id).val();
     return json;
 }
+
+function saveEntity(object, url, callback)
+{
+ 	var model = new Backbone.Model();
+    model.url = url;
+    model.save(object, {
+   			success: function(data){
+   					if (callback && typeof (callback) === "function")
+   					{
+   						// execute the callback, passing parameters as necessary
+   						callback(data);
+   					}
+   				}
+   		});
+}
