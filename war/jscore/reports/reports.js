@@ -1,30 +1,15 @@
 // Stores report object, so it can be used while creating report table headings
 var REPORT;
 $(function(){
-	$("#reports-show-now").die().live('click', function(e){
-		e.preventDefault();
-		
-		// Saves report and then calls to show results based on the saved report. 
-		// It is required to save because of the possibility, user can change rules 
-		// in from and hit show results
-		saveReportForm(function(data){
-				REPORT = data.toJSON()
-		    	Backbone.history.navigate("report-results/" + REPORT.id, {
-		    			trigger: true
-		    		});
-			})
-	}); // Click event
 	
 	$("#reports-email-now").die().live('click', function(e){
-		e.preventDefault();
-		
+		//e.preventDefault();
+		e.stopPropagation();
 		$(that).parent('.form-actions').append(LOADING_HTML);
 
 		var that = this;
 	
-		saveReportForm(function(data){
-			REPORT = data.toJSON()
-			
+		
 			$.get('core/api/reports/send/' + REPORT.id, function(data){
 				
 				$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>Report will be send shortly</i></p></small></div>');
@@ -33,8 +18,16 @@ $(function(){
 				
 				$save_info.show().delay(3000).hide(1);
 			});
-		});
 	})
+	
+	$("#report-instant-results").die().live('click', function(e){
+		e.stopPropagation();
+		var id = $(this).arrt('data');
+		console.log(id);
+		Backbone.history.navigate("report-results/" + id, {
+    		trigger: true
+    	});
+	});
 })
 
 
@@ -78,38 +71,4 @@ function reportsContactTableView(base_model) {
 	$(('#' + this.options.templateKey + '-model-list'), this.el).find('tr:last').data(
 			base_model);
 
-}
-
-/**
- * Saved reports form and on success calls callback sent to the function.
- * @param callback
- */
-function saveReportForm(callback)
-{
-	
-	if (!isValidForm($("#reportsForm"))) {
-		isValid = false;
-		return;
-	}
-	
-	var reports = serializeForm("reportsForm");
-	
-	var reportModel = new Backbone.Model();
-	reportModel.url = "core/api/reports";
-	reportModel.save(reports, {success: function(data){
-		
-		// Adds input field with id, so after saving first time 
-		// it will not be create new report and selecting send email again
-		if($("#reportsForm").find('*[name="id"]').length == 0)
-			$("#reportsForm").append('<input type="text" name="id" class="hide" value="'+data.toJSON().id+'" />');
-		
-		
-		if (callback && typeof (callback) === "function")
-		{
-			// execute the callback, passing parameters as necessary
-			callback(data);
-		}
-
-	}});// Model save
-	
 }

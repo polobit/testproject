@@ -143,27 +143,33 @@ var ReportsRouter = Backbone.Router.extend({
 	
 	},
 	
-	reportInstantResults : function(id) {
+	reportInstantResults : function(id, report) {
 		
-		if(!REPORT)
-		console.log("reports not defined");
-		
-		if(!REPORT)
-		{
+		if(!report)
+		// If reports view is not defined, navigates to reports
+		if (!this.reports || !this.reports.collection
+				|| this.reports.collection.length == 0
+				|| this.reports.collection.get(id) == null) {
+			
 			$("#content").html(LOADING_HTML);
 			var reportModel = new Backbone.Model();
 			reportModel.url = "core/api/reports/" + id;
 			reportModel.fetch({success: function(data){
-					REPORT = data.toJSON();
-					App_Reports.reportInstantResults(id);
+					App_Reports.reportInstantResults(id, data.toJSON());
 				}
 			});
 		return;
+		
 		}
-	
+		else
+		{
+			report = this.reports.collection.get(id).toJSON();
+		}
+
+		REPORT = report;
 		var report_results_view = new Base_Collection_View({
 				url : "core/api/reports/query/" + id,
-				modelData: REPORT ,
+				modelData: report ,
 				templateKey: "report-search",
 				individual_tag_name: 'tr',
 				cursor: true,		        
