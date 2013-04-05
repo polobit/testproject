@@ -44,16 +44,18 @@
     	{{ucfirst duration}}
 	</td>
 	<td>
-<div style="display:inline;padding-right:10px;height:auto;">
-  {{#each fields_set}}
-	 {{ucfirst this}}</br> 
-  {{/each}}
-</div>
-<div style="display:inline;">
-	<a href="#report-results/{{id}}" data={{id}} id="report-instant-results" class="btn">Show Results</a>
-	<a  data={{id}} id="reports-email-now" class="btn">Send Report</a>
-
-</div>
-</td>
+  		{{#each fields_set}}
+	 		{{ucfirst this}}</br> 
+  		{{/each}}
+	</td>
+	<td>
+		<div>
+			<a href="#report-results/{{id}}" data={{id}} id="report-instant-results">Show Results</a> 
+		</div>
+		<div style="margin-top:5px">			
+			<a  data={{id}} id="reports-email-now" >Send Now</a>
+		</div>
+	</td>
 <br />
 </script>
+

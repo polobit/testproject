@@ -167,6 +167,7 @@ var ReportsRouter = Backbone.Router.extend({
 		}
 
 		REPORT = report;
+		
 		var report_results_view = new Base_Collection_View({
 				url : "core/api/reports/query/" + id,
 				modelData: report ,

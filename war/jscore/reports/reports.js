@@ -5,28 +5,63 @@ $(function(){
 	$("#reports-email-now").die().live('click', function(e){
 		//e.preventDefault();
 		e.stopPropagation();
-		$(that).parent('.form-actions').append(LOADING_HTML);
-
-		var that = this;
 	
+		var id = $(this).attr('data');
+	
+		var confirmationModal = $('<div id="report-send-confirmation" class="modal fade in">' +
+									'<div class="modal-header" >'+
+										'<a href="#" data-dismiss="modal" class="close">&times;</a>' +
+											'<h3>Add Image</h3></div>' +
+												'<div class="modal-body">' +
+													'<p>You are about to send report.</p>' +
+													'<p>Do you want to proceed?</p>' +
+												'</div>' +	
+										'<div class="modal-footer">' +
+											'<span class="report-message" style="margin-right:5px"></span>' +
+											'<a href="#" id="report-send-confirm" class="btn btn-primary">Yes</a>' +
+											'<a  href="#" class="btn close" data-dismiss="modal" >No</a>' +
+										'</div>' +
+									'</div>' + 
+								'</div>')
 		
-			$.get('core/api/reports/send/' + REPORT.id, function(data){
+		confirmationModal.modal('show');
+		
+		$("#report-send-confirm", confirmationModal).click(
+				function(event)
+				{
+					event.preventDefault();
+					
+					if ($(this).attr("disabled")) return;
+					
+					$(this).attr("disabled", "disabled");
+					
+					
+		
+					$.get('core/api/reports/send/' + id, function(data){
 				
-				$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>Report will be send shortly</i></p></small></div>');
+						console.log("sending email");
+							$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>Report will be sent shortly</i></p></small></div>');
 				
-				$(that).parent('.form-actions').append($save_info);
+							$('.report-message').html($save_info);
 				
-				$save_info.show().delay(3000).hide(1);
-			});
-	})
+							$save_info.show();
+
+							setTimeout(function ()
+							            {
+								   (confirmationModal).modal('hide');
+							            }, 2000);
+
+					});
+				});
+	});
 	
 	$("#report-instant-results").die().live('click', function(e){
 		e.stopPropagation();
-		var id = $(this).arrt('data');
+		var id = $(this).attr('data');
 		console.log(id);
-		Backbone.history.navigate("report-results/" + id, {
+		/*Backbone.history.navigate("report-results/" + id, {
     		trigger: true
-    	});
+    	});*/
 	});
 })
 
