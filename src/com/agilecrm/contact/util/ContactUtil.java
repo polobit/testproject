@@ -344,7 +344,7 @@ public class ContactUtil
 	{
 	    contact.id = null;
 	    contact.created_time = 0l;
-	    contact.setOwner(ownerKey);
+	    contact.setContactOwner(ownerKey);
 
 	    for (int j = 0; j < csvValues.length; j++)
 	    {

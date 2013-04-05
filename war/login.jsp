@@ -170,7 +170,7 @@ margin-bottom:0px;
 					<div id="openid_btns" style="float: left; padding: 5px 0 15px; border-top: 1px dotted #CCC; border-bottom: 1px dotted #CCC; border-right: none; border-left: none;">
 					   <% if(!StringUtils.isEmpty(error)){%>
 				        <div class="alert alert-error login-error">
-							<a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
+							<a class="close" data-dismiss="alert" href="#">&times</a><%=error%> 
 						</div>
 						<%}%>
 							

@@ -149,12 +149,12 @@ public class Contact extends Cursor
     public String widget_properties = null;
 
     /**
-     * Used for when request is sent using developer js api, to avoid json
-     * mapping exception
+     * Used when request is sent using developer js api, to avoid json mapping
+     * exception
      */
     @SuppressWarnings("unused")
     @NotSaved
-    private DomainUser domainUser = null;
+    private DomainUser Owner = null;
 
     /**
      * Stores the property names in final variables, for reading flexibility of
@@ -445,7 +445,7 @@ public class Contact extends Cursor
      * @param owner_key
      */
     @JsonIgnore
-    public void setOwner(Key<DomainUser> owner_key)
+    public void setContactOwner(Key<DomainUser> owner_key)
     {
 	this.owner_key = owner_key;
     }
@@ -478,8 +478,8 @@ public class Contact extends Cursor
      * 
      * @return {@link DomainUser} object
      */
-    @XmlElement(name = "domainUser")
-    public DomainUser getDomainUser()
+    @XmlElement(name = "owner")
+    public DomainUser getOwner()
     {
 	if (owner_key != null)
 	{
