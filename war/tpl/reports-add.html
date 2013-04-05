@@ -155,8 +155,7 @@
 				<label class="control-label">Send Report To<span
 					class="field_req">*</span></label>
 				<div class="controls">
-					<select id="owners" class="required" name="domain_user_id">
-					</select>
+					<input type="text" name="sendTo" class="required" />
 				</div>
 			</div>
 			<div class="control-group"
@@ -187,8 +186,6 @@
 			<div class="form-actions">
 				<a href="#" type="submit" class="save btn btn-primary"
 					id="filtersAdd">Save</a>
-				<a href="#reports/results/{{id}}" id="reports-show-now" class="btn ">View Report</a>
-				<a href="send-email" id="reports-email-now" report="{{id}}" class="btn ">Send Report</a>
 				 <a href="#reports" class="btn ">Close</a>
 			</div>
 			</fieldset>

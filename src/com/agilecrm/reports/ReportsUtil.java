@@ -11,13 +11,13 @@ import java.util.Map;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
+import org.datanucleus.util.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.search.util.SearchUtil;
-import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.email.SendMail;
 
 /**
@@ -47,19 +47,12 @@ public class ReportsUtil
 	for (Reports report : reportsList)
 	{
 
-	    // Get the owner of the report, to send email
-	    DomainUser user = report.getDomainUser();
-
-	    System.out.println("user : " + user);
-
-	    // If user is not available, querying on search rule is not
-	    // required, so return without further processing.
-	    if (user == null)
+	    if (StringUtils.isEmpty(report.sendTo))
 		return;
 
 	    // Call process filters to get reports for one domain, and add
 	    // domain details
-	    Map<String, Object> results = processReports(report, user);
+	    Map<String, Object> results = processReports(report);
 
 	    // Report heading. It holds the field values chosen in the report
 	    LinkedHashSet<String> reportHeadings = new LinkedHashSet<String>();
@@ -96,9 +89,8 @@ public class ReportsUtil
 	    if (results == null)
 		results = new HashMap<String, Object>();
 
-	    SendMail.sendMail(user.email, SendMail.REPORTS_SUBJECT,
+	    SendMail.sendMail(report.sendTo, SendMail.REPORTS_SUBJECT,
 		    SendMail.REPORTS, new Object[] { results, fieldsList });
-
 	}
     }
 
@@ -110,8 +102,7 @@ public class ReportsUtil
      * @param user
      * @return
      */
-    public static Map<String, Object> processReports(Reports report,
-	    DomainUser user)
+    public static Map<String, Object> processReports(Reports report)
     {
 
 	// Iterate through each filter and add results collection
@@ -121,7 +112,6 @@ public class ReportsUtil
 	Map<String, Object> domain_details = new HashMap<String, Object>();
 
 	domain_details.put("report", report);
-	domain_details.put("user_name", user.name);
 
 	// If report_type if of contacts customize object to show properties
 	if (report.report_type.equals(Reports.ReportType.Contact))

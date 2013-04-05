@@ -8,17 +8,12 @@ import java.util.List;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
-import javax.persistence.PrePersist;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.ui.serialize.SearchRule;
-import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
@@ -71,8 +66,7 @@ public class Reports implements Serializable
     public Long domain_user_id = null;
 
     @NotSaved(IfDefault.class)
-    @Indexed
-    private Key<DomainUser> owner_key = null;
+    public String sendTo = null;
 
     public static ObjectifyGenericDao<Reports> dao = new ObjectifyGenericDao<Reports>(
 	    Reports.class);
@@ -129,12 +123,6 @@ public class Reports implements Serializable
 	return dao.fetchAll();
     }
 
-    @PrePersist
-    void prePersit()
-    {
-	owner_key = new Key<DomainUser>(DomainUser.class, domain_user_id);
-    }
-
     /* Saved in empty namespace */
     public void save()
     {
@@ -152,28 +140,6 @@ public class Reports implements Serializable
 	return dao.ofy().query(Reports.class)
 		.filter("is_reports_enabled", true)
 		.filter("duration", duration).list();
-
-    }
-
-    /**/
-    @XmlElement(name = "domainUser")
-    public DomainUser getDomainUser()
-    {
-	if (owner_key != null)
-	{
-	    // If user is deleted no user is found with key so set user to null
-	    // and return null
-	    try
-	    {
-		return DomainUserUtil.getDomainUser(owner_key.getId());
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-		return null;
-	    }
-	}
-	return null;
 
     }
 }
