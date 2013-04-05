@@ -127,6 +127,7 @@ $(function(){
 		e.preventDefault();
 		$(this).css("display", "none");
 		$("#addTagsForm").css("display", "block");
+		$("#addTags").focus();
 		setup_tags_typeahead();
 	});
 	

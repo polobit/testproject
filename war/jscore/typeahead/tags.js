@@ -45,7 +45,8 @@ function setup_tags_typeahead() {
         if ($.inArray(tag, tags_list) == -1) tags_list.push(tag);
     });
 
-    $('.tags-typeahead').attr("placeholder", "Separate tags with commas");
+    if(!$('.tags-typeahead').attr('placeholder'))
+    	$('.tags-typeahead').attr("placeholder", "Separate tags with commas");
     
     // Turn off browser default auto complete
     $('.tags-typeahead').attr("autocomplete","off");
@@ -157,7 +158,7 @@ function setup_tags_typeahead() {
     				return;
    			
     			saveEntity(contact_json, 'core/api/contacts',  function(data) {
-    		
+    				tagsCollection.add( {"tag" : tag} );
     			$("#addTagsForm").css("display", "none");
     		    $("#add-tags").css("display", "block");
 
