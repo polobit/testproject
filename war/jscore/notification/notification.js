@@ -337,16 +337,45 @@ function notify(type, message, position, closable) {
  *            position of pop-up within the webpage
  */
 function showNoty(type, message, position) {
+	
 	// Download the lib
 	head.js(LIB_PATH + 'lib/noty/jquery.noty.js',
-			LIB_PATH + 'lib/noty/layouts/bottomRight.js', LIB_PATH + 'lib/noty/themes/default.js',
-			LIB_PATH + 'jscore/sound.js', function() {
-				noty({
+			LIB_PATH + 'lib/noty/layouts/bottomRight.js', 
+			LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH + 'lib/noty/themes/default.js', 
+			function() {
+		
+		    var n = noty({
 					text : message,
 					layout : position,
 					type : type,
 					timeout : 30000
 				});
-				playRecvSound();
-			});
+		    
+		    // Play sounds for only user notifications
+		    if(n.options.type == 'information')
+		    	playRecvSound();
+		    
+		 // Set the handler for click
+		     $('.noty_bar').die().live('click', function(){
+
+				// warning type is used for upgrade. So when cliked on it navigate to subscribe.
+		    	 if(n.options.type == "warning")
+					{
+						// Send to upgrade page
+						Backbone.history.navigate('subscribe', {
+							trigger : true
+						});
+					}
+					
+					// information type is used for user notification. When clicked navigate to link.
+		    	 if(n.options.type == "information")
+					{					
+						var link = $(this).find("a").attr("href");
+						Backbone.history.navigate(link,{
+							trigger:true
+							});
+					}
+				
+			     });
+	});
 }
