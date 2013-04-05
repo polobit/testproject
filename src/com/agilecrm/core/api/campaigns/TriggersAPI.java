@@ -108,7 +108,7 @@ public class TriggersAPI
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteTriggers(@FormParam("model_ids") String model_ids)
+    public void deleteTriggers(@FormParam("ids") String model_ids)
 	    throws JSONException
     {
 	JSONArray triggersJSONArray = new JSONArray(model_ids);

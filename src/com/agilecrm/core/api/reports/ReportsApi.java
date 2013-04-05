@@ -20,7 +20,6 @@ import org.json.JSONException;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.reports.deferred.ReportsDeferredTaskInstantEmail;
-import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -121,18 +120,13 @@ public class ReportsApi
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteReports(@FormParam("model_ids") String model_ids)
+    public void deleteReports(@FormParam("ids") String model_ids)
 	    throws JSONException
     {
 
 	JSONArray reportsJSONArray = new JSONArray(model_ids);
-
-	String oldName = NamespaceManager.get();
-	NamespaceManager.set("");
-
 	Reports.dao.deleteBulkByIds(reportsJSONArray);
 
-	NamespaceManager.set(oldName);
     }
 
 }

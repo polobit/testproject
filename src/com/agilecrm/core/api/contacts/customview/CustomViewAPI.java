@@ -28,91 +28,97 @@ import com.agilecrm.contact.customview.CustomView;
  * 
  */
 @Path("api/contact-view")
-public class CustomViewAPI {
+public class CustomViewAPI
+{
 
-	/**
-	 * Gets List of {@link CustomView}, Fetches all the views saved in domain
-	 * 
-	 * @return {@link List} of {@link CustomView}
-	 */
-	@GET
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public List<CustomView> getContactViews() {
+    /**
+     * Gets List of {@link CustomView}, Fetches all the views saved in domain
+     * 
+     * @return {@link List} of {@link CustomView}
+     */
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<CustomView> getContactViews()
+    {
 
-		// Calls getContactViewList() in customview to fetch all views
-		return CustomView.getContactViewList();
+	// Calls getContactViewList() in customview to fetch all views
+	return CustomView.getContactViewList();
 
-	}
+    }
 
-	/**
-	 * Saves CustomView object in current domain
-	 * 
-	 * @param contact_view
-	 *            {@link CustomView} object
-	 * @return {@link CustomView}
-	 */
-	@POST
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public CustomView createContactView(CustomView contact_view) {
+    /**
+     * Saves CustomView object in current domain
+     * 
+     * @param contact_view
+     *            {@link CustomView} object
+     * @return {@link CustomView}
+     */
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public CustomView createContactView(CustomView contact_view)
+    {
 
-		// Sends save request, to save the view
-		contact_view.save();
-		return contact_view;
+	// Sends save request, to save the view
+	contact_view.save();
+	return contact_view;
 
-	}
+    }
 
-	/**
-	 * PUT request, updates the {@link CustomView} object
-	 * 
-	 * @param contact_view
-	 *            {@link CustomView} object
-	 * @return {@link CustomView}
-	 * 
-	 */
-	@PUT
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public CustomView updateContactView(CustomView contact_view) {
-		contact_view.save();
-		return contact_view;
+    /**
+     * PUT request, updates the {@link CustomView} object
+     * 
+     * @param contact_view
+     *            {@link CustomView} object
+     * @return {@link CustomView}
+     * 
+     */
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public CustomView updateContactView(CustomView contact_view)
+    {
+	contact_view.save();
+	return contact_view;
 
-	}
+    }
 
-	// Get Contact View by id Author: Yaswanth 09-02-2012
-	/**
-	 * Returns {@link CustomView} object, fetched based on the id sent as
-	 * pathparam
-	 * 
-	 * @param id
-	 *            Id of view object
-	 * @return
-	 */
-	@Path("{id}")
-	@GET
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public CustomView getContactView(@PathParam("id") Long id) {
+    // Get Contact View by id Author: Yaswanth 09-02-2012
+    /**
+     * Returns {@link CustomView} object, fetched based on the id sent as
+     * pathparam
+     * 
+     * @param id
+     *            Id of view object
+     * @return
+     */
+    @Path("{id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public CustomView getContactView(@PathParam("id") Long id)
+    {
 
-		// Returns Customview based on the id parameter
-		return CustomView.getContactView(id);
+	// Returns Customview based on the id parameter
+	return CustomView.getContactView(id);
 
-	}
+    }
 
-	/**
-	 * Deletes bulk {@link CustomView} objects
-	 * 
-	 * @param model_ids
-	 *            Array of CustomView ids to delete
-	 * @throws JSONException
-	 */
-	@Path("delete/bulk")
-	@POST
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public void deleteBulkContactViews(@FormParam("model_ids") String model_ids)
-			throws JSONException {
+    /**
+     * Deletes bulk {@link CustomView} objects
+     * 
+     * @param model_ids
+     *            Array of CustomView ids to delete
+     * @throws JSONException
+     */
+    @Path("delete/bulk")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void deleteBulkContactViews(@FormParam("ids") String model_ids)
+	    throws JSONException
+    {
 
-		// Converts String of ids to JSONArray
-		JSONArray ContactViewsJSONArray = new JSONArray(model_ids);
-		CustomView.dao.deleteBulkByIds(ContactViewsJSONArray);
-	}
+	// Converts String of ids to JSONArray
+	JSONArray ContactViewsJSONArray = new JSONArray(model_ids);
+	CustomView.dao.deleteBulkByIds(ContactViewsJSONArray);
+    }
 }

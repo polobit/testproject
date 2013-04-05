@@ -177,7 +177,7 @@ public class UsersAPI
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteContacts(@FormParam("model_ids") String model_ids)
+    public void deleteContacts(@FormParam("ids") String model_ids)
 	    throws JSONException
     {
 	JSONArray usersJSONArray = new JSONArray(model_ids);

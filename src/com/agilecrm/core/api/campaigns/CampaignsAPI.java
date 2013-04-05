@@ -143,7 +143,7 @@ public class CampaignsAPI
     @Path("logs/bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteLogs(@FormParam("model_ids") String model_ids)
+    public void deleteLogs(@FormParam("ids") String model_ids)
 	    throws JSONException
     {
 	JSONArray logsJSONArray = new JSONArray(model_ids);

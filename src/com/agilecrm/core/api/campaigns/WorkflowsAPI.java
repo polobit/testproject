@@ -120,7 +120,7 @@ public class WorkflowsAPI
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteWorkflows(@FormParam("model_ids") String model_ids)
+    public void deleteWorkflows(@FormParam("ids") String model_ids)
 	    throws JSONException
     {
 	JSONArray workflowsJSONArray = new JSONArray(model_ids);

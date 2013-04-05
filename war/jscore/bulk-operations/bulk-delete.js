@@ -136,7 +136,7 @@ function customize_bulk_delete(id_array, data_array){
  */
 function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, data_array){
 	var json = {};
-	json.model_ids = JSON.stringify(id_array);
+	json.ids = JSON.stringify(id_array);
 	
 	$.ajax({
 		url: url,

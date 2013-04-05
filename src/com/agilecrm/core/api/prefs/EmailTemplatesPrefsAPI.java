@@ -112,7 +112,7 @@ public class EmailTemplatesPrefsAPI
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteEmailTemplates(@FormParam("model_ids") String model_ids)
+    public void deleteEmailTemplates(@FormParam("ids") String model_ids)
 	    throws JSONException
     {
 	JSONArray emailsJSONArray = new JSONArray(model_ids);

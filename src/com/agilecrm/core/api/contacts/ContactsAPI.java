@@ -414,7 +414,7 @@ public class ContactsAPI
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteContacts(@FormParam("model_ids") String model_ids)
+    public void deleteContacts(@FormParam("ids") String model_ids)
 	    throws JSONException
     {
 	JSONArray contactsJSONArray = new JSONArray(model_ids);
@@ -493,7 +493,7 @@ public class ContactsAPI
     @Path("/tasks/bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteTasks(@FormParam("model_ids") String model_ids)
+    public void deleteTasks(@FormParam("ids") String model_ids)
 	    throws JSONException
     {
 	JSONArray tasksJSONArray = new JSONArray(model_ids);
@@ -510,7 +510,7 @@ public class ContactsAPI
     @Path("/notes/bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteNotes(@FormParam("model_ids") String model_ids)
+    public void deleteNotes(@FormParam("ids") String model_ids)
 	    throws JSONException
     {
 	JSONArray notesJSONArray = new JSONArray(model_ids);
@@ -527,7 +527,7 @@ public class ContactsAPI
     @Path("/deals/bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteDeals(@FormParam("model_ids") String model_ids)
+    public void deleteDeals(@FormParam("ids") String model_ids)
 	    throws JSONException
     {
 	JSONArray dealsJSONArray = new JSONArray(model_ids);

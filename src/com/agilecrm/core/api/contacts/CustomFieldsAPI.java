@@ -141,7 +141,7 @@ public class CustomFieldsAPI
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteCustomFields(@FormParam("model_ids") String model_ids)
+    public void deleteCustomFields(@FormParam("ids") String model_ids)
 	    throws JSONException
     {
 	JSONArray CustomFieldsJSONArray = new JSONArray(model_ids);

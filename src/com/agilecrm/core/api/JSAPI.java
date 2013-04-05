@@ -135,7 +135,7 @@ public class JSAPI
 	    }
 
 	    // Sets owner key to contact before saving
-	    contact.setOwner(APIKey.getDomainUserKeyRelatedToAPIKey(apiKey));
+	    contact.setContactOwner(APIKey.getDomainUserKeyRelatedToAPIKey(apiKey));
 
 	    // If zero, save it
 	    contact.save();
