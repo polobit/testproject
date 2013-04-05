@@ -550,12 +550,6 @@ html {
 
 .highcharts-container { overflow: visible !important; }
 
-.highcharts-tooltip {
-	visibility:visible;
-	text-align:center;
-	text-shadow:0 1px 0 #fff;
-	color:#5e5e5e;
-}
 
 .tooltip-title {
 	width:180px;

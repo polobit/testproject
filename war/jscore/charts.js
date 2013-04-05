@@ -376,3 +376,116 @@ function pieTags() {
 		});
 	});
 }
+
+/**
+ * Sets bar chart for campaign-stats.
+ * @param url - url to get data for charts.
+ * @param selector - id of graph container.
+ * @param name - name that should be on top of graph
+ * @param yaxis_name - name that appears along the yaxis.
+ * **/
+function showLine(url, selector, name, yaxis_name) {
+	var chart;
+
+	// Show loading
+	$('#' + selector).html(LOADING_HTML);
+
+	// Charts will be columned
+	// http://jsfiddle.net/gh/get/jquery/1.7.2/highslide-software/highcharts.com/tree/master/samples/highcharts/demo/column-stacked/
+
+	// Loading Highcharts plugin using setupCharts
+	setupCharts(function() {
+
+		// Loads statistics details for campaign stats
+		$
+				.get(
+						url,
+						function(data) {
+							
+							console.log("chart " + data);
+
+							// Convert into labels and data as required by
+							// Highcharts
+							var categories = [];
+							var series;
+
+							// Iterates through data and adds campaign names to categories.
+							$.each(data, function(k, v) {
+								
+								if(k == "Campaign Names")
+								categories = v;
+								
+							});
+							
+							//console.log("categories"+ categories);
+
+								// Initializes series with Email Sent, Email Opened, Email Clicked.
+								if (series == undefined) {
+									var index = 0;
+									series = [];
+									$.each(data, function(k1, v1) {
+										var series_data = {};
+										
+										// Not adding campaign names to array
+										if(k1 == "Campaign Names")
+											return true;
+										
+										series_data.name = k1;
+										series_data.data = v1;
+										series[index++] = series_data;
+									});
+								
+								}
+
+							// Draw the graph
+							chart = new Highcharts.Chart(
+									{
+										chart : {
+											renderTo : selector,
+											type : 'column'
+										},
+										colors : [ '#4365AD', '#D52A3E',
+												'gray'],
+										title : {
+											text : name
+										},
+										xAxis : {
+											categories : categories
+										},
+										yAxis : {
+											min : 0,
+											title : {
+												text : yaxis_name
+											}
+										},
+										legend : {
+											align : 'right',
+											x : -100,
+											verticalAlign : 'top',
+											y : 20,
+											floating : true,
+											backgroundColor : (Highcharts.theme && Highcharts.theme.legendBackgroundColorSolid)
+													|| 'white',
+											borderColor : '#CCC',
+											borderWidth : 1,
+											shadow : false
+										},
+										tooltip : {
+							                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+							                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+							                    '<td style="padding:0"><b>{point.y} </b></td></tr>',
+							                footerFormat: '</table>',
+							                shared: true,
+							                useHTML: true
+							            },
+							            plotOptions: {
+							                column: {
+							                    pointPadding: 0.2,
+							                    borderWidth: 0
+							                }
+							            },
+									 	series : series							            
+									});
+						});
+	});
+}

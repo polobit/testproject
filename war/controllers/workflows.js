@@ -117,7 +117,14 @@ var WorkflowsRouter = Backbone.Router.extend({
 			templateKey : "campaign-stats",
 			individual_tag_name : 'tr'
 		});
-		this.campaignStatsCollectionView.collection.fetch();
+		this.campaignStatsCollectionView.collection.fetch({
+			success: function()
+			{
+				// Show bar graph for campaign stats
+				showLine('/core/api/campaign-stats/stats/',
+						'campaign-stats-chart', 'Campaign Stats', 'Email Stats');
+			}
+		});
 		$('#content').html(this.campaignStatsCollectionView.el);
 		
 		$(".active").removeClass("active");
