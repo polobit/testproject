@@ -47,7 +47,6 @@ public class MilestoneAPI
      * @return milestone objects.
      */
     @GET
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Milestone getMilestone()
     {
