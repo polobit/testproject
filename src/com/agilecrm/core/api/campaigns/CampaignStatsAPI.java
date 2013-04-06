@@ -44,7 +44,7 @@ public class CampaignStatsAPI
      *            - Campaign Id.
      * @return CampaignStats
      */
-    @Path("{id}")
+    @Path("details/{id}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public CampaignStats getCampaignStat(@PathParam("id") Long campaignId)
@@ -63,8 +63,7 @@ public class CampaignStatsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public String getCampaignStatsForGraph()
     {
-	List<CampaignStats> CampaignStats = CampaignStatsUtil
-		.getAllCampaignStats();
+	List<CampaignStats> CampaignStats = CampaignStatsUtil.getAllCampaignStats();
 
 	ArrayList<String> campaignNames = new ArrayList<String>();
 	ArrayList emailsSent = new ArrayList();
