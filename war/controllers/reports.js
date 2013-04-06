@@ -45,33 +45,22 @@ var ReportsRouter = Backbone.Router.extend({
 			isNew : true,
 			postRenderCallback : function(el) {
 
-				// Populates users drop down
-				populateUsers("owners", el);
-
-				// Hide table until chaining is done, to avoid showing all fields and hiding.
-				$(".reports-condition-table", el).hide();
-				
-				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js',
-						function() {
-				
-							chainFilters(el);
-							$(".reports-condition-table", el).show();
-						})						
-				
+				fillSelect("custom-fields-optgroup", "core/api/custom-fields", undefined, function(data){console.log(data)}, '<option value="custom_{{field_label}}">{{field_label}}</option>', true);
 						
-						fillSelect("custom-fields-optgroup", "core/api/custom-fields", undefined, function(data){console.log(data)}, '<option value="custom_{{field_label}}">{{field_label}}</option>', true);
-						
-		       			head.js(LIB_PATH + 'lib/jquery.multi-select.js', LIB_PATH + 'lib/jquery-ui.min.js', function(){
+				head.js(LIB_PATH + 'lib/jquery.multi-select.js', LIB_PATH + 'lib/jquery-ui.min.js',LIB_PATH + 'lib/agile.jquery.chained.min.js', function(){
 
-		       				$('#multipleSelect', el).multiSelect({ selectableOptgroup: true });
+					$("#content").html(el);
+					chainFilters(el);
+					
+		       		$('#multipleSelect').multiSelect({ selectableOptgroup: true });
 		       				
-		       					$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id","fields_set").sortable();
+		       		$('.ms-selection').children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id","fields_set").sortable();
 		     	
-		       			});
+		       });
 			}
 		});
 
-		$('#content').html(report_add.render().el);
+		report_add.render();
 	},
 
 	/**
@@ -101,34 +90,25 @@ var ReportsRouter = Backbone.Router.extend({
 			template : "reports-add",
 			window : 'reports',
 			postRenderCallback : function(el) {
-
-				populateUsers("owners", el, report.toJSON(), 'domainUser');
 				
-				$(".reports-condition-table", el).hide();
-				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js',
-						function() {
-							chainFilters(el);
-							
-							$(".reports-condition-table", el).show();
-							
-							deserializeChainedSelect($(el).find('form'), report.toJSON().rules);
-						})
-					
-						
 				fillSelect("custom-fields-optgroup", "core/api/custom-fields", undefined, function(data){console.log(data)}, '<option value="custom_{{field_label}}">{{field_label}}</option>', true);
 				
-       			head.js(LIB_PATH + 'lib/jquery.multi-select.js', LIB_PATH + 'lib/jquery-ui.min.js', function(){
-       				       	
-       				
-       						
-       					$('#multipleSelect', el).multiSelect({ selectableOptgroup: true });
+       			head.js(LIB_PATH + 'lib/jquery.multi-select.js', LIB_PATH + 'lib/jquery-ui.min.js',LIB_PATH + 'lib/agile.jquery.chained.min.js', function(){
+       		
+       				$("#content").html(el);
+       				chainFilters(el);
+					
+					
+					deserializeChainedSelect($(el).find('form'), report.toJSON().rules);
+       		
+       					$('#multipleSelect').multiSelect({ selectableOptgroup: true });
        					
        					
        					$.each(report.toJSON()['fields_set'], function(index, field){
-       						$('#multipleSelect', el).multiSelect('select', field); 
+       						$('#multipleSelect').multiSelect('select', field); 
        					});
        					
-       					$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id","fields_set").sortable();
+       					$('.ms-selection').children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id","fields_set").sortable();
      	
        			});
        			
@@ -139,7 +119,6 @@ var ReportsRouter = Backbone.Router.extend({
 //		report_model.render();
 		
 		report_model.render();
-		$("#content").html(report_model.el);
 	
 	},
 	
