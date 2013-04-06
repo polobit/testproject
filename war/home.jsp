@@ -223,7 +223,7 @@ String CSS_PATH = "/";
 <script src='lib/headjs-min.js'></script>
 	
 	<script>
-	 var LIB_PATH = "//d13pkp0ru5xuwf.cloudfront.net/js/";
+	 var LIB_PATH = "//da4o37ei6ybbh.cloudfront.net/js/";
 	//var LIB_PATH = "/";
 	
 	var IS_CONSOLE_ENABLED = <%=debug%>;
@@ -246,9 +246,13 @@ String CSS_PATH = "/";
 	<!-- Handle bars -->
 	head.js(LIB_PATH + 'lib/handlebars-1.0.0.beta.6-min.js');
 	
+	
+	
 	head.ready(function() {	
 		head.js('jscore/min/js-all-min.js');
 		
+		// Remove the loading image
+		$('body').css('background-image', 'none');
 		$('#content').html('ready');
 	});
 	

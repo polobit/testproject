@@ -574,3 +574,9 @@ html {
 	font-family : Georgia, serif;
 	display:block;
 }
+
+/* To show the loading image in the beginning */
+body
+{
+	background: #ffffff url("/img/initializing.png") 50% 50% no-repeat;
+}
