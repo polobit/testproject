@@ -56,7 +56,23 @@
 	    <url-pattern>/register</url-pattern>
 	</servlet-mapping>
 	
+	<!-- Rest Easy -->
+	<context-param>
+      <param-name>resteasy.scan</param-name>
+      <param-value>false</param-value>
+   </context-param>
+   <context-param>
+    <param-name>resteasy.use.deployment.sensitive.factory</param-name>
+    <param-value>false</param-value>
+</context-param>
+     <context-param>
+      <param-name>javax.ws.rs.Application</param-name>
+      <param-value>com.agilecrm.core.JerseyApplication</param-value>
+		</context-param>
+   <!-- Rest Easy -->
 	
+
+<!-- 	
 	<servlet>
    <servlet-name>Jersey REST Service</servlet-name>
   <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
@@ -66,11 +82,22 @@
 		</init-param>
      <load-on-startup>1</load-on-startup>
   </servlet>
-  
+   -->
+   
+   <servlet>
+   <servlet-name>Jersey REST Service</servlet-name>
+  <servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+  </servlet>
+   
   <servlet-mapping>
     <servlet-name>Jersey REST Service</servlet-name>
     <url-pattern>/core/*</url-pattern>
   </servlet-mapping>
+  
+  <context-param>
+    <param-name>resteasy.servlet.mapping.prefix</param-name>
+    <param-value>/core</param-value>
+</context-param>
   
   <servlet-mapping>
     <servlet-name>Jersey REST Service</servlet-name>
@@ -257,6 +284,18 @@
  	<filter-name>JSAPIFilter</filter-name>
  	<url-pattern>/core/js/*</url-pattern>
  </filter-mapping>
+ 
+ <!-- JSON Filter -->
+ <filter>
+ 	<filter-name>JSONPFilter</filter-name>
+ 	<filter-class>com.agilecrm.filter.JSONPRequestFilter</filter-class>
+ </filter>
+ 
+ <filter-mapping>
+ 	<filter-name>JSONPFilter</filter-name>
+ 	<url-pattern>/core/js/*</url-pattern>
+ </filter-mapping>
+  <!-- JSON Filter -->
     
    <welcome-file-list>
    <welcome-file>home</welcome-file>
@@ -264,26 +303,14 @@
        
     <security-constraint>
         <web-resource-collection>
-            <url-pattern>/*</url-pattern>
+        <url-pattern>/*</url-pattern>
         </web-resource-collection>
         <user-data-constraint>
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
 	</security-constraint>
 
- <servlet>
-  <servlet-name>SystemServiceServlet</servlet-name>
-  <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
-  <init-param>
-   <param-name>services</param-name>
-   <param-value/>
-  </init-param>
- </servlet>
- <servlet-mapping>
-  <servlet-name>SystemServiceServlet</servlet-name>
-  <url-pattern>/_ah/spi/*</url-pattern>
- </servlet-mapping>
- 
+
  <servlet>
  <servlet-name>RedirectServlet</servlet-name>
  <servlet-class>com.campaignio.servlets.RedirectServlet</servlet-class>
