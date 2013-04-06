@@ -2,13 +2,11 @@ package com.agilecrm.core.api;
 
 import java.util.ArrayList;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jackson.map.ObjectMapper;
@@ -22,7 +20,6 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.googlecode.objectify.Key;
-import com.sun.jersey.api.json.JSONWithPadding;
 
 /**
  * <code>JSAPI</code> provides facility to perform actions, such as creating a
@@ -65,10 +62,8 @@ public class JSAPI
      */
     @Path("contact/email")
     @GET
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces("application/x-javascript")
-    public JSONWithPadding getContact(@QueryParam("email") String email,
-	    @QueryParam("callback") String jsoncallback)
+    public Contact getContact(@QueryParam("email") String email, @QueryParam("callback") String jsoncallback)
     {
 
 	try
@@ -80,9 +75,7 @@ public class JSAPI
 	    if (contact == null)
 		contact = new Contact();
 
-	    return new JSONWithPadding(new GenericEntity<Contact>(contact)
-	    {
-	    }, jsoncallback);
+	    return contact;
 
 	}
 	catch (Exception e)
@@ -112,11 +105,8 @@ public class JSAPI
      */
     @Path("contacts")
     @GET
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces("application/x-javascript")
-    public JSONWithPadding createContact(@QueryParam("contact") String json,
-	    @QueryParam("id") String apiKey,
-	    @QueryParam("callback") String jsoncallback)
+    public Contact createContact(@QueryParam("contact") String json, @QueryParam("id") String apiKey, @QueryParam("callback") String jsoncallback)
     {
 	try
 	{
@@ -140,10 +130,7 @@ public class JSAPI
 	    // If zero, save it
 	    contact.save();
 
-	    return new JSONWithPadding(new GenericEntity<Contact>(contact)
-	    {
-	    }, jsoncallback);
-
+	    return contact;
 	}
 	catch (Exception e)
 	{
@@ -154,20 +141,18 @@ public class JSAPI
 
     @Path("contact/delete")
     @GET
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces("application/x-javascript")
-    public JSONWithPadding deleteContact(@QueryParam("email") String email,
-	    @QueryParam("id") String apiKey,
-	    @QueryParam("callback") String jsoncallback)
+    public Boolean deleteContact(@QueryParam("email") String email, @QueryParam("id") String apiKey, @QueryParam("callback") String jsoncallback)
     {
 	Contact contact = ContactUtil.searchContactByEmail(email);
 
 	if (contact != null)
 	{
 	    contact.delete();
-	    return new JSONWithPadding(true, jsoncallback);
+	    return true;
 	}
-	return new JSONWithPadding(false, jsoncallback);
+
+	return false;
     }
 
     /**
@@ -188,11 +173,8 @@ public class JSAPI
      */
     @Path("/task")
     @GET
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces("application/x-javascript")
-    public JSONWithPadding createTask(@QueryParam("email") String email,
-	    @QueryParam("task") String json,
-	    @QueryParam("callback") String jsoncallback,
+    public Task createTask(@QueryParam("email") String email, @QueryParam("task") String json, @QueryParam("callback") String jsoncallback,
 	    @QueryParam("id") String key)
     {
 	try
@@ -205,8 +187,7 @@ public class JSAPI
 	    // Get Contact
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 
-	    task.setOwner(new Key<AgileUser>(AgileUser.class, APIKey
-		    .getAgileUserRelatedToAPIKey(key).id));
+	    task.setOwner(new Key<AgileUser>(AgileUser.class, APIKey.getAgileUserRelatedToAPIKey(key).id));
 
 	    if (contact == null)
 		return null;
@@ -216,10 +197,7 @@ public class JSAPI
 
 	    task.save();
 
-	    return new JSONWithPadding(new GenericEntity<Task>(task)
-	    {
-	    }, jsoncallback);
-
+	    return task;
 	}
 	catch (Exception e)
 	{
@@ -241,11 +219,8 @@ public class JSAPI
      */
     @Path("/note")
     @GET
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces("application/x-javascript")
-    public JSONWithPadding createNote(@QueryParam("email") String email,
-	    @QueryParam("note") String json,
-	    @QueryParam("callback") String jsoncallback)
+    public Note createNote(@QueryParam("email") String email, @QueryParam("note") String json, @QueryParam("callback") String jsoncallback)
     {
 	try
 	{
@@ -264,9 +239,7 @@ public class JSAPI
 	    note.contacts.add(contact.id + "");
 	    note.save();
 
-	    return new JSONWithPadding(new GenericEntity<Note>(note)
-	    {
-	    }, jsoncallback);
+	    return note;
 
 	}
 	catch (Exception e)
@@ -296,11 +269,8 @@ public class JSAPI
      */
     @Path("/opportunity")
     @GET
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces("application/x-javascript")
-    public JSONWithPadding createOpportunity(@QueryParam("email") String email,
-	    @QueryParam("id") String apiKey,
-	    @QueryParam("opportunity") String json,
+    public Opportunity createOpportunity(@QueryParam("email") String email, @QueryParam("id") String apiKey, @QueryParam("opportunity") String json,
 	    @QueryParam("callback") String jsoncallback)
     {
 	try
@@ -319,15 +289,12 @@ public class JSAPI
 
 	    // Set, owner id to opportunity (owner of the apikey is set as owner
 	    // to opportunity)
-	    opportunity.owner_id = String.valueOf(APIKey
-		    .getDomainUserKeyRelatedToAPIKey(apiKey).getId());
+	    opportunity.owner_id = String.valueOf(APIKey.getDomainUserKeyRelatedToAPIKey(apiKey).getId());
 
 	    opportunity.save();
 	    System.out.println("opportunitysaved");
-	    return new JSONWithPadding(new GenericEntity<Opportunity>(
-		    opportunity)
-	    {
-	    }, jsoncallback);
+
+	    return opportunity;
 
 	}
 	catch (Exception e)
@@ -356,11 +323,8 @@ public class JSAPI
      */
     @Path("contacts/add-tags")
     @GET
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces("application/x-javascript")
-    public JSONWithPadding addTags(@QueryParam("email") String email,
-	    @QueryParam("tags") String tags,
-	    @QueryParam("callback") String jsoncallback)
+    public Contact addTags(@QueryParam("email") String email, @QueryParam("tags") String tags, @QueryParam("callback") String jsoncallback)
     {
 	try
 	{
@@ -379,9 +343,7 @@ public class JSAPI
 
 	    contact.addTags(tagsArray);
 
-	    return new JSONWithPadding(new GenericEntity<Contact>(contact)
-	    {
-	    }, jsoncallback);
+	    return contact;
 
 	}
 	catch (Exception e)
@@ -409,11 +371,8 @@ public class JSAPI
      */
     @Path("contacts/remove-tags")
     @GET
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces("application/x-javascript")
-    public JSONWithPadding removeTags(@QueryParam("email") String email,
-	    @QueryParam("tags") String tags,
-	    @QueryParam("callback") String jsoncallback)
+    public Contact removeTags(@QueryParam("email") String email, @QueryParam("tags") String tags, @QueryParam("callback") String jsoncallback)
     {
 	try
 	{
@@ -432,9 +391,7 @@ public class JSAPI
 
 	    contact.removeTags(tagsArray);
 
-	    return new JSONWithPadding(new GenericEntity<Contact>(contact)
-	    {
-	    }, jsoncallback);
+	    return contact;
 
 	}
 	catch (Exception e)
@@ -461,16 +418,14 @@ public class JSAPI
     @Path("contacts/add-score")
     @GET
     @Produces("application/x-javascript")
-    public JSONWithPadding addScore(@QueryParam("email") String email,
-	    @QueryParam("score") Integer score,
-	    @QueryParam("callback") String jsoncallback)
+    public Boolean addScore(@QueryParam("email") String email, @QueryParam("score") Integer score, @QueryParam("callback") String jsoncallback)
     {
 	Contact contact = ContactUtil.searchContactByEmail(email);
 	if (contact == null)
-	    return new JSONWithPadding(false, jsoncallback);
+	    return false;
 
 	contact.addScore(score);
-	return new JSONWithPadding(true, jsoncallback);
+	return true;
 
     }
 
@@ -493,18 +448,16 @@ public class JSAPI
     @Path("contacts/subtract-score")
     @GET
     @Produces("application/x-javascript")
-    public JSONWithPadding subtractScore(@QueryParam("email") String email,
-	    @QueryParam("score") Integer score,
-	    @QueryParam("callback") String jsoncallback)
+    public Boolean subtractScore(@QueryParam("email") String email, @QueryParam("score") Integer score, @QueryParam("callback") String jsoncallback)
     {
 
 	// Get Contact
 	Contact contact = ContactUtil.searchContactByEmail(email);
 	if (contact == null)
-	    return new JSONWithPadding(false, jsoncallback);
+	    return false;
 
 	contact.subtractScore(score);
-	return new JSONWithPadding(true, jsoncallback);
+	return true;
 
     }
 
@@ -524,8 +477,7 @@ public class JSAPI
     @Path("/campaign/enroll/{contact-id}/{workflow-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Boolean subscribeContact(@PathParam("contact-id") Long contactId,
-	    @PathParam("workflow-id") Long workflowId)
+    public Boolean subscribeContact(@PathParam("contact-id") Long contactId, @PathParam("workflow-id") Long workflowId)
     {
 	Contact contact = ContactUtil.getContact(contactId);
 	if (contact == null)
