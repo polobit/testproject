@@ -31,10 +31,6 @@ public class Reports implements Serializable
     @NotSaved(IfDefault.class)
     public String name = null;
 
-    @Indexed
-    @NotSaved(IfDefault.class)
-    public boolean is_reports_enabled = false;
-
     public static enum ReportType
     {
 	Contact, Opportunity
@@ -62,9 +58,6 @@ public class Reports implements Serializable
     @NotSaved(IfDefault.class)
     public LinkedHashSet<String> fields_set = new LinkedHashSet<String>();
 
-    @NotSaved
-    public Long domain_user_id = null;
-
     @NotSaved(IfDefault.class)
     public String sendTo = null;
 
@@ -76,11 +69,9 @@ public class Reports implements Serializable
 
     }
 
-    public Reports(Duration duration, String name, boolean is_reports_enabled,
-	    List<SearchRule> rules)
+    public Reports(Duration duration, String name, List<SearchRule> rules)
     {
 	this.name = name;
-	this.is_reports_enabled = is_reports_enabled;
 	this.duration = duration;
 	this.rules = rules;
     }
@@ -137,9 +128,8 @@ public class Reports implements Serializable
     {
 
 	System.out.println("fetching the reports");
-	return dao.ofy().query(Reports.class)
-		.filter("is_reports_enabled", true)
-		.filter("duration", duration).list();
+	return dao.ofy().query(Reports.class).filter("duration", duration)
+		.list();
 
     }
 }
