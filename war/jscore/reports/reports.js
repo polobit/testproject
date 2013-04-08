@@ -11,7 +11,7 @@ $(function(){
 		var confirmationModal = $('<div id="report-send-confirmation" class="modal fade in">' +
 									'<div class="modal-header" >'+
 										'<a href="#" data-dismiss="modal" class="close">&times;</a>' +
-											'<h3>Add Image</h3></div>' +
+											'<h3>Send Report</h3></div>' +
 												'<div class="modal-body">' +
 													'<p>You are about to send report.</p>' +
 													'<p>Do you want to proceed?</p>' +
