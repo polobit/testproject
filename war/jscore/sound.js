@@ -1,15 +1,15 @@
 // receive sound
-function playRecvSound() {
-  playSound();
+function playRecvSound(sound) {
+  playSound(sound);
 }
 // send sound
 function playSendSound(){
 	playSound();
 	
 }
-function playSound(){
+function playSound(sound){
 
-    var smp3url = '../res/sound.mp3';
+    var smp3url = '../res/'+sound+'.mp3';
     var swavurl = '../res/sound.wav';
     var snd;
     try
