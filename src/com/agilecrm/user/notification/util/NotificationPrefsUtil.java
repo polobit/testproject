@@ -74,7 +74,7 @@ public class NotificationPrefsUtil
     {
 	NotificationPrefs notifications = new NotificationPrefs(agileUser.id,
 		false, true, true, false, false, false, false, true, true,
-		false, true, true, true, true, true);
+		false, true, true, true, true, true, "alert_1");
 	notifications.save();
 	return notifications;
     }
