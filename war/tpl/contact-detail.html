@@ -62,9 +62,9 @@
                         <span id="lead-score" style="font-size:27px; padding-left:12px">0</span>&nbsp;
                     {{/if}}
                     <div style="display:inline-block; vertical-align:middle">
-                        <span><a><i class="icon-plus" id="add" style="height:10px"></i></a></span>
+                        <span><i class="icon-sort-up" id="add" style="height:10px;cursor:pointer"></i></span>
                         <br/>
-                        <span><a><i class="icon-minus" id="minus" style="height:30px"></i></a></span>
+                        <span><i class="icon-sort-down" id="minus" style="height:30px;cursor:pointer"></i></span>
                     </div>
                 </div>
             </div>
@@ -141,13 +141,22 @@
     </div>
 <!-- Contact Details -->
     <div class="span3">
-	  <div class="page-header">
-        <div class="data-block">
-            <div class='data-container'>
-                <header style="margin-bottom: 14px !important">
-                    <h2><i class="icon-user "></i> Contact details</h2>
-                </header>
-                <div style='padding:10px;word-wrap: break-word;'>
+		<div class="widget_container" id="{{name}}-container">
+		<div class="widget_header">
+			<div class="pull-left">
+				<i class="icon-user "></i> 
+				<strong>Contact details</strong>
+			</div>
+			<div class="pull-right">
+				<ul class="widget_header_control">
+					<li><a href="#"><i class="icon-move"></i></a></li>
+					<li><a href="#"><i class="icon-minus"></i></a></li>
+					<li><a href="#" id="{{name}}_plugin_delete" rel="tooltip" title="Delete this person"><i class="icon-remove"></i></a></li>						
+				</ul>
+			</div>
+		</div>
+          <div id="qrcode" style='border:1px solid #adadad'></div>
+		 <div style='padding:10px;word-wrap: break-word;'>
                     <div>
                         <div class="change-owner-succes">
                         </div>
@@ -199,7 +208,9 @@
                     <br/> 
                 {{/if_property}}        
             {{/each}}
-            {{#multiple_Property_Element "email" properties}}{{/multiple_Property_Element}}
+            {{#multiple_Property_Element "email" properties}}
+
+			{{/multiple_Property_Element}}
             {{#multiple_Property_Element "phone" properties}}{{/multiple_Property_Element}}
             {{#multiple_Property_Element "website" properties}}{{/multiple_Property_Element}}
             {{#address_Element properties}}{{/address_Element}}
@@ -207,8 +218,8 @@
                 <div id="map" style="width:auto; height:200px; display:none">
                 </div>
             </div>
-        </div>
-    </div>
+	</div>
+
     <div id="widgets">
     </div>
     <div style='float:right;'>
