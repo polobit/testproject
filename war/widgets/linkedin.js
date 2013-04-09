@@ -111,6 +111,12 @@ $(function ()
         var share_id = $(this).attr("id");
         reSharePost(plugin_id, share_id, "optional", this);
     });
+    
+    $('#linkedin_experience').die().live('click', function (e)
+    {
+    	e.preventDefault();
+    	getExperienceOfPerson(plugin_id, linkedin_id);
+    });
 
 });
 
@@ -289,6 +295,11 @@ function showLinkedinProfile(linkedin_id, plugin_id)
 
     function (data)
     {
+    	// If contact title is undefined, saves headline of the LinkedIn profile
+    	// to the contact title
+    	if(!agile_crm_get_contact_property("title"))
+    		agile_crm_update_contact("title", data.summary);
+    	
         //shows delete button in the LinkedIn panel
         $('#Linkedin_plugin_delete').show();
 
@@ -357,9 +368,9 @@ function showLinkedinProfile(linkedin_id, plugin_id)
         e.preventDefault();
 
         // Time of the last update is retrieved to get old updates before that time
-        var end_time = $('div#linkedin_social_stream')
-        		.find('div#linkedin_status:last').attr('update_time');
-
+        var end_time = $('ul#linkedin_social_stream')
+        		.find('li#linkedin_status:last').attr('update_time');
+        
         // It is undefined in case if person does not share his updates
         if (!end_time)
         {
@@ -806,4 +817,32 @@ function getLinkedinIdByUrl(plugin_id, web_url, callback)
         agile_crm_delete_contact_property_by_subtype('website', 'LINKED_IN', web_url);
 
     });
+}
+
+function getExperienceOfPerson(plugin_id, linkedin_id)
+{
+	 $.get("/core/api/widgets/experience/" + plugin_id + "/" + linkedin_id, function (data)
+     {
+		 console.log(data);
+		 
+		 var e1 = "";
+		 
+		 if(data.three_current_positions)
+		 {
+			 e1 = e1.concat(getTemplate("linkedin-experience", data.three_current_positions));
+		 }
+		 
+		 if(data.three_past_positions)
+		 {
+			 e1 = e1.concat(getTemplate("linkedin-experience", data.three_past_positions));
+		 }
+		 
+		 $('#linkedin_experience_panel').html(e1);
+		 
+		 console.log(e1);
+		 
+     }).error(function(data){
+    	 alert(data.responseText);
+     });
+     
 }

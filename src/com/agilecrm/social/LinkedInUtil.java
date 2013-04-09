@@ -28,6 +28,7 @@ import com.google.code.linkedinapi.schema.Connections;
 import com.google.code.linkedinapi.schema.Network;
 import com.google.code.linkedinapi.schema.People;
 import com.google.code.linkedinapi.schema.Person;
+import com.google.code.linkedinapi.schema.Position;
 import com.google.code.linkedinapi.schema.Update;
 import com.google.code.linkedinapi.schema.VisibilityType;
 
@@ -635,15 +636,73 @@ public class LinkedInUtil
 	return persons;
     }
 
+    public static SocialSearchResult getExperience(Widget widget,
+	    String linkedInId)
+    {
+	final LinkedInApiClient client = factory.createLinkedInApiClient(
+		widget.getProperty("token"), widget.getProperty("secret"));
+
+	Person person = client.getProfileById(linkedInId, EnumSet.of(
+		ProfileField.POSITIONS_COMPANY,
+		ProfileField.THREE_CURRENT_POSITIONS,
+		ProfileField.THREE_PAST_POSITIONS));
+
+	SocialSearchResult experience = new SocialSearchResult();
+	experience.id = linkedInId;
+	experience.three_current_positions = person.getThreeCurrentPositions()
+		.getPositionList();
+	experience.three_past_positions = person.getThreePastPositions()
+		.getPositionList();
+
+	return experience;
+    }
+
     public static void main(String[] args)
     {
 	final LinkedInApiClient client = factory.createLinkedInApiClient(
-		"f71d216b-16b7-41d5-a593-92c928b6fa13",
+	// "4c1b1828-e275-4e09-b7f9-1f85ee32c22e", // devikkah
+	// "4abc6b56-a41e-4864-a759-22c36c36e460");
+		"f71d216b-16b7-41d5-a593-92c928b6fa13", // revathi
 		"9c9a2635-3efd-474c-8459-61251a5006e1");
+	// "3382f692-f598-4b72-9dd3-891853fec2fc", // test
+	// "7984afcf-f0f7-4fb3-b39c-cb7379d0336e");
 
-	Connections cons = client.getConnectionsById("ucRi4lo_XM",
-		EnumSet.of(ProfileField.ID));
+	// {"token":"4c1b1828-e275-4e09-b7f9-1f85ee32c22e","secret":"4abc6b56-a41e-4864-a759-22c36c36e460"}
+	// {"token":"3382f692-f598-4b72-9dd3-891853fec2fc","secret":"7984afcf-f0f7-4fb3-b39c-cb7379d0336e"}
+	Person cons = client.getProfileById("7Q5fkA7k4Y", EnumSet.of(
+		ProfileField.POSITIONS_COMPANY,
+		ProfileField.THREE_CURRENT_POSITIONS,
+		ProfileField.THREE_PAST_POSITIONS));
+	// tUqQPRTrto
+	// mgSCSTsq2V
+	System.out.println(cons.getThreeCurrentPositions().getPositionList());
+	System.out.println(cons.getThreePastPositions().getPositionList());
 
-	System.out.println(cons.getPersonList());
+	SocialSearchResult experience = new SocialSearchResult();
+	experience.three_current_positions = cons.getThreeCurrentPositions()
+		.getPositionList();
+	for (Position pos : cons.getThreeCurrentPositions().getPositionList())
+	{
+
+	    System.out.println(pos.getTitle());
+	    System.out.println("summary" + pos.getSummary());
+	    System.out.println("company" + pos.getCompany().getName());
+	    System.out.println(pos.getStartDate().getMonth() + "-"
+		    + pos.getStartDate().getYear());
+	    System.out.println(pos.getEndDate());
+	}
+
+	for (Position pos : cons.getThreePastPositions().getPositionList())
+	{
+
+	    System.out.println(pos.getTitle());
+	    System.out.println(pos.getSummary());
+	    System.out.println(pos.getCompany().getName());
+	    System.out.println(pos.getStartDate().getMonth() + "-"
+		    + pos.getStartDate().getYear());
+	    System.out.println(pos.getEndDate().getMonth() + "-"
+		    + pos.getEndDate().getYear());
+	}
+
     }
 }

@@ -25,7 +25,10 @@ public class SocialSearchResult
     public boolean is_follow_request_sent;
     public boolean is_followed_by_target;
     public long current_update_id;
-    
+    public List three_current_positions;
+    @SuppressWarnings("rawtypes")
+    public List three_past_positions;
+
     @Embedded
     public List<SocialUpdateStream> updateStream = null;
 
