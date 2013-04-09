@@ -66,7 +66,7 @@ String CSS_PATH = "/";
 					
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/agilecrm.css" />
-[7:24:22 PM] Tejaswi G: <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/widget.css" />
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/widget.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/timeline.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/jslider.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/planandupgrade.css" />
