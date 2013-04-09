@@ -144,6 +144,9 @@ public class NotificationPrefs
     /** Notification type. */
     public Type type;
 
+    @NotSaved(IfDefault.class)
+    public String notification_sound = null;
+
     /**
      * ObjectifyGenericDao for Notifications.
      */
@@ -204,7 +207,8 @@ public class NotificationPrefs
 	    boolean contact_assigned_clicked_link,
 	    boolean contact_assigned_starred_clicked_link,
 	    boolean deal_created, boolean deal_closed, boolean contact_created,
-	    boolean contact_deleted, boolean tag_created, boolean tag_deleted)
+	    boolean contact_deleted, boolean tag_created, boolean tag_deleted,
+	    String notification_sound)
     {
 	this.contact_browsing = contact_browsing;
 	this.contact_assigned_browsing = contact_assigned_browsing;
@@ -221,6 +225,7 @@ public class NotificationPrefs
 	this.contact_deleted = contact_deleted;
 	this.tag_created = tag_created;
 	this.tag_deleted = tag_deleted;
+	this.notification_sound = notification_sound;
 
 	this.user = new Key<AgileUser>(AgileUser.class, userId);
     }

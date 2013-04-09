@@ -1,0 +1,178 @@
+.widget_container{	
+	border:1px solid #d6d6d6;
+	background:#ffffff;
+	margin:0 auto;
+	margin-top:20px;
+	margin-bottom:20px;
+}
+
+.widget_container > div{	
+	box-sizing:border-box;
+}
+
+.widget_header{
+	padding:10px;
+	background:#f5f5f5;
+	border-bottom:1px solid #d6d6d6;
+	width:100%;
+	display:inline-block;
+}
+
+.widget_header > div > strong{
+	margin-left:5px;
+}
+
+.widget_header_control{
+	list-style:none;
+}
+
+.widget_header_control li{
+	float:left;
+	margin-left:5px;
+	word-break: break-all;
+}
+
+.widget_content{
+	border-bottom:1px solid #d6d6d6;
+	padding:10px;
+}
+
+.ml_10{
+	margin-left:10px;
+}
+
+.ml_5{
+	margin-left:5px;
+}
+
+.title_txt{
+	color:#0088CC;
+	font-weight:bold;
+	margin:0;
+	font-size:16px;
+}
+
+.widget_container > .widgets > .nav-tabs {
+	background:#f5f5f5;
+	border-bottom:1px solid #d6d6d6;
+	padding:10px;
+	margin:0;
+}
+
+.widget_container > .widgets > .nav-tabs > li > a > h3{
+	margin:0;
+	line-height:30px;
+	color: #555555;
+}
+
+.widget_container > .widgets > .nav-tabs {
+	border-bottom: 1px solid #ddd;
+}
+
+.widget_container > .widgets > .nav-tabs > li {
+  margin-bottom: 0px;
+  margin-right:0px;
+  word-break: break-all;
+}
+
+.widget_container > .widgets > .nav-tabs > .last {
+	margin-right:0px;
+}
+
+.widget_container > .widgets > .nav-tabs > li > a,
+.widget_container > .nav-pills > li > a {
+	padding-right: 5px;
+	padding-left: 5px;
+	line-height: 14px;
+	word-break: break-all;
+}
+
+.widget_container > .widgets > .nav-tabs > li > a {
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-right: 5px;
+	padding-left: 5px;
+	line-height: 14px;
+	border: none;
+	-webkit-border-radius: none;
+	 -moz-border-radius: none;
+	      border-radius: none;
+	color: #b2b0b1;
+}
+
+.widget_container > .widgets > .nav-tabs > li > a:hover {
+	border: none;
+}
+
+.widget_container > .widgets > .nav-tabs > .active > a,
+.widget_container > .widgets > .nav-tabs > .active > a:hover {
+	color: #b2b0b1;
+	cursor: default;
+	background-color: #eeeff1;
+	border: none;
+}
+
+.widget_container > .widgets > .nav-tabs > .active > a > h3,
+.widget_container > .widgets > .nav-tabs > .active > a:hover > h3{
+	color: #0088CC;
+}
+
+.widget_tab_title{
+	background:#f5f5f5;
+	border-bottom:1px solid #d6d6d6;
+	padding:10px;
+}
+
+.widget_tab_footer{
+	box-sizing:border-box;
+	border-bottom:1px solid #d6d6d6;
+	padding:10px;
+	float:left;
+	width:100%;
+}
+
+.img-rounded {
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+}
+
+small{
+	color: #b2b0b1;
+}
+
+.icon-blue{
+  background-image: url("../img/glyphicons-halflings-blue.png");
+}
+
+.widget_tab_content{
+	float:left;
+	list-style:none;
+	margin:0;
+}
+
+.widget_tab_content li{
+	box-sizing: border-box;
+	padding:10px;
+	border-bottom:1px solid #d6d6d6;
+	float:left;
+	word-break: break-all;
+	width:100%;
+}
+
+.mb_0{
+	margin-bottom:0;
+}
+
+.widget_tab_link{
+	float:right;
+	list-style:none;
+	padding:0;
+}
+
+.widget_tab_link li{
+	float:left;
+	padding:0;
+	border:none;
+	width:15px;
+}

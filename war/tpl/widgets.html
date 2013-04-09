@@ -1,21 +1,31 @@
 <script id="widgets-model-template" type="text/html">
-<div class="data-block">
-    <div class="data-container" id="{{name}}-container">
-        <header style="cursor:move;margin-bottom:10px">
-            <h2>
-                <img src="{{mini_logo_url}}" style="width:22px;height:22px;" /></img> 
-                <b>{{name}}</b>
-				
-            </h2><a class="icon-trash pull-right" id="{{name}}_plugin_delete" rel="tooltip" title="Delete this person" style="cursor:pointer;color:#772953;display:none"></a>
-        </header>
-        <div>
-            <span class="widget" id="{{name}}" style="padding: 0px;"></span>
-			
-        </div>
-    </div>
-</div>
+
+	<div class="widget_container" id="{{name}}-container">
+		<div class="widget_header">
+			<div class="pull-left">
+				<img src="{{mini_logo_url}}" width="24" height="24" alt=""/>
+				<strong>{{name}}</strong>
+			</div>
+			<div class="pull-right">
+				<ul class="widget_header_control">
+					<li><a href="#"><i class="icon-move"></i></a></li>
+					<li><a href="#"><i class="icon-minus"></i></a></li>
+					<li><a href="#" id="{{name}}_plugin_delete" rel="tooltip" title="Delete this person"><i class="icon-remove"></i></a></li>						
+				</ul>
+			</div>
+		</div>
+		<div class="widgets" id="{{name}}">
+		</div>
+	</div>
 </script>
 
 <script id="widgets-collection-template" type="text/html">
 <ul class="widget-sortable" id="widgets-model-list" style="margin:0px 0px"></ul>
 </script>
+
+<!-- <li><a href="#" id="{{name}}_plugin_delete" rel="tooltip" title="Delete this person"><i class="icon-remove icon-gray"></i></a></li>
+-->
+
+		
+		
+		

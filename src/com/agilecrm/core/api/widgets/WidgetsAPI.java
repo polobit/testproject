@@ -231,9 +231,13 @@ public class WidgetsAPI
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+
+	    String error = "[invalid.profile.access].";
+	    error = (e.getMessage().contains(error)) ? e.getMessage().replace(
+		    error, "") : e.getMessage().trim();
+
 	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+		    .status(Response.Status.BAD_REQUEST).entity(error).build());
 	}
 	return null;
     }
@@ -802,9 +806,9 @@ public class WidgetsAPI
     /**
      * Connects to Twilio and fetches information based on the accountSID
      * 
-     * @param accountSID
-     *            {@link String}
-     * @return {@link String}
+     * @param accountSid
+     *            {@link String} accountSid of agent Twilio account
+     * @return {@link String} token generated from Twilio
      */
     @Path("twilio/{accountSID}")
     @GET
@@ -814,7 +818,18 @@ public class WidgetsAPI
 	if (accountSID == null)
 	    return null;
 
-	return TwilioUtil.generateTwilioToken(accountSID);
+	try
+	{
+	    return TwilioUtil.generateTwilioToken(accountSID);
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+
+	}
+
     }
 
     /**

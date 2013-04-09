@@ -27,10 +27,10 @@ $(function(){
 		showNoty("warning", get_random_message(), "bottom");
 	}, 3000);
 	
-	// Set the periodically
-	setInterval(function(){
-		showNoty("warning", get_random_message(), "bottom");
-	}, 30000);
+//	// Set the periodically
+//	setInterval(function(){
+//		showNoty("warning", get_random_message(), "bottom");
+//	}, 30000);
 	
 		}
 	});

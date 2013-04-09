@@ -74,7 +74,7 @@ public class NotificationPrefsUtil
     {
 	NotificationPrefs notifications = new NotificationPrefs(agileUser.id,
 		false, true, true, false, false, false, false, true, true,
-		false, true, true, true, true, true);
+		false, true, true, true, true, true, "alert_1");
 	notifications.save();
 	return notifications;
     }
@@ -111,9 +111,24 @@ public class NotificationPrefsUtil
 	    {
 		if (json.getString("contacts") != null)
 		    json.remove("contacts");
+
+		if (json.getString("prefs") != null)
+		    json.remove("prefs");
 	    }
 
-	    System.out.println(json);
+	    // For other notification types removing tags and widget properties
+	    // to reduce message
+	    // size.
+	    else
+	    {
+		if (json.getString("tags") != null)
+		    json.remove("tags");
+
+		if (json.getString("widget_properties") != null)
+		    json.remove("widget_properties");
+	    }
+
+	    System.out.println("Object json of notification: " + json);
 	}
 	catch (Exception e)
 	{

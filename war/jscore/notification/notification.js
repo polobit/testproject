@@ -11,7 +11,19 @@ var notification_prefs;
  * Sets timeout for registering notifications.Waits for 2secs after page loads
  * and calls downloadAndRegisterForNotifications function
  */
-$(function() {
+$(function() {	
+	
+	// Play notification sound when clicked on play icon.
+	$('#notification-sound-play').live('click',function(e){
+		e.preventDefault();
+		var sound = $('#notificationsForm #notification_sound').find(":selected").val();
+		
+		if(sound == 'no_sound')
+			return;
+		
+		playRecvSound(sound);
+	});
+	
 	setTimeout(downloadAndRegisterForNotifications, 2000);
 	// fetchContactAndNotify('manohar@invox.com');
 
@@ -353,7 +365,10 @@ function showNoty(type, message, position) {
 		    
 		    // Play sounds for only user notifications
 		    if(n.options.type == 'information')
-		    	playRecvSound();
+		    	{ 
+		    	 if(notification_prefs.notification_sound != 'no_sound')
+		    	 playRecvSound(notification_prefs.notification_sound);
+		    	}
 		    
 		 // Set the handler for click
 		     $('.noty_bar').die().live('click', function(){

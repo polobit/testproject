@@ -7,7 +7,6 @@ $(function ()
 {
     // Twitter plugin name as a global variable
     TWITTER_PLUGIN_NAME = "Twitter";
-    TWITTER_PLUGIN_HEADER = '<div></div>';
 
     // Twitter profile loading image declared as global
     TWITTER_PROFILE_LOAD_IMAGE = '<center><img id="twitter_profile_load" ' +
@@ -122,6 +121,7 @@ $(function ()
 
         // Get the id of the tweet on which retweet is clicked
         var tweet_id = $(this).attr("id");
+        console.log(tweet_id);
 
         // While retweet, the comment message is made optional
         retweetTheTweet(plugin_id, tweet_id, "optional", this);
@@ -136,47 +136,127 @@ $(function ()
     });
     
     // On click of followers in twitter panel
-    $('#twitter_followers').die().live('click', function (e)
+    $('#twitter_followers').die().live('click', function (e1)
     {
-    	 e.preventDefault();
+    	 e1.preventDefault();
     	
+    	 $('#twitter_follower_panel').html(TWITTER_UPDATE_LOAD_IMAGE);
+    	 
     	 // Retrieves the Twitter IDs of all the followers 
     	 getFollowerIdsInTwitter(plugin_id, twitter_id, function(data)
     	 {
     		 // Store array of IDs in a global variable    		 
 	    	 Twitter_follower_ids = data; 
 	    	 
-	    	 // Get 20 from array and 20 from array
+    		 // Get 20 from array and remove 20 from array
 	    	 var temp = Twitter_follower_ids.splice(0, 20);	    	 
 	    	 console.log(temp);
 	    	 
 	    	 // Get the Twitter profile for 20 Twitter IDs
-	    	 getListOfProfilesByIDsinTwitter(plugin_id, temp, function(data) {
+	    	 getListOfProfilesByIDsinTwitter(plugin_id, temp, function(result) {	    		 
+	    		 	
+	    		 // Show matching profiles in Twitter panel
+	    		 $('#twitter_follower_panel').html(result);
 	    		 
-	    		 console.log(data);
+	    		 $(".twitterImage").die().live('mouseover', function ()
+	    	     {
+	    			 // Unique Twitter Id from widget 
+	    	    	 var id = $(this).attr('id');
+	    	    	            
+	    	    	 // Aligns details to left in the pop over
+	    	    	 $('#' + id).popover(
+	    	    	 {
+	    	    		 placement: 'left'
+	    	    	 });
+
+	    	    	 // Called show to overcome pop over bug (not showing pop over on mouse 
+	    	    	 // hover for first time)
+	    	    	 $('#' + id).popover('show');
+	    	     });
 	    	 });
+	    	 
+	    	 $('#more_followers').die().live('click', function (e2)
+	    	 {
+	    		 e2.preventDefault();
+	    		 
+	        	 $('#twitter_follower_panel').append(TWITTER_UPDATE_LOAD_IMAGE);
+	    		 
+	    		 // Get 20 from array and remove 20 from array
+		    	 var temp = Twitter_follower_ids.splice(0, 20);	    	 
+		    	 console.log(temp);
+		    	 
+		    	 // Get the Twitter profile for 20 Twitter IDs
+		    	 getListOfProfilesByIDsinTwitter(plugin_id, temp, function(result) {	    		 
+		    		 	
+		    		 $('#tweet_load').remove();
+		    		 
+		    		 // Show matching profiles in Twitter panel
+		    		 $('#twitter_follower_panel').append("<div style='margin-top:-10px;'>" + result + "</div>");
+		    	 });
+	    	 });
+	    	 
     	 });    		        
     });
     
     // On click of following in twitter panel
-    $('#twitter_following').die().live('click', function (e)
+    $('#twitter_following').die().live('click', function (e1)
     {
-    	e.preventDefault();
+    	e1.preventDefault();
     	
+   	 	$('#twitter_following_panel').html(TWITTER_UPDATE_LOAD_IMAGE);
+   	 
    	    // Retrieves the Twitter IDs of all the following persons 
     	getFollowingIdsInTwitter(plugin_id, twitter_id, function(data)
     	{
     		// Store array of IDs in a global variable 
     		Twitter_following_ids = data;    		
-
-	    	// Get 20 from array and 20 from array
+    		   		 
+    		// Get 20 from array and remove 20 from array
     		var temp = Twitter_following_ids.splice(0, 20);	    	 
-	    	console.log(temp);
+ 	    	console.log(temp);
 	    	 
 	    	// Get the Twitter profile for 20 Twitter IDs
-	    	getListOfProfilesByIDsinTwitter(plugin_id, temp, function(data) {
-	    		console.log(data);
+	    	getListOfProfilesByIDsinTwitter(plugin_id, temp, function(result) {	    		 
+	    		 	   			    		 
+	    		// Show matching profiles in Twitter panel
+	    		$('#twitter_following_panel').html(result);
+	    		
+	    		 $(".twitterImage").die().live('mouseover', function ()
+	    		 {
+	    			    // Unique Twitter Id from widget 
+	    	            var id = $(this).attr('id');
+	    	            
+	    	            // Aligns details to left in the pop over
+	    	            $('#' + id).popover(
+	    	            {
+	    	                placement: 'left'
+	    	            });
+
+	    	            // Called show to overcome pop over bug (not showing pop over on mouse 
+	    	            // hover for first time)
+	    	            $('#' + id).popover('show');
+	    		 });
 	    	});
+	    	
+    		$('#more_following').die().live('click', function (e2)
+    	    {
+    			e2.preventDefault();
+	    		 
+    			$('#twitter_following_panel').append(TWITTER_UPDATE_LOAD_IMAGE);
+
+	    		// Get 20 from array and remove 20 from array
+	    		var temp = Twitter_following_ids.splice(0, 20);	    	 
+	 	    	console.log(temp);
+		    	 
+		    	// Get the Twitter profile for 20 Twitter IDs
+		    	getListOfProfilesByIDsinTwitter(plugin_id, temp, function(result) {	    		 
+		    		 	   			
+		    		 $('#tweet_load').remove();
+
+		    		// Show matching profiles in Twitter panel
+		    		$('#twitter_following_panel').append("<div style='margin-top:-10px;'>" + result + "</div>");
+		    	});
+    	    });
 
     	});   	 
     });
@@ -228,7 +308,7 @@ function showTwitterMatchingProfiles(plugin_id)
      */
     getTwitterMatchingProlfiles(plugin_id, function (data)
     {
-        var el = TWITTER_PLUGIN_HEADER;
+        var el = "<div style='padding:5px'>";
 
         // If no matches found display message
         if (data.length == 0)
@@ -247,7 +327,7 @@ function showTwitterMatchingProfiles(plugin_id)
         });
 
         // Show matching profiles in Twitter panel
-        $('#Twitter').html(el);
+        $('#Twitter').html(el + "</div>");
         
         // Displays Twitter profile details on mouse hover and saves profile on click
         $(".twitterImage").die().live('mouseover', function ()
@@ -440,8 +520,10 @@ function showTwitterProfile(twitter_id, plugin_id)
         e.preventDefault();
 
         // Tweet Id of the last update is retrieved to get old updates before that Id
-        var tweet_id = $('div#twitter_social_stream')
-            .find('div#twitter_status:last').attr('status_id');
+        var tweet_id = $('ul#twitter_social_stream')
+            .find('li#twitter_status:last').attr('status_id');
+        
+        console.log(tweet_id);
 
         // It is undefined in case if person does not share his updates
         if (!tweet_id)
@@ -917,8 +999,6 @@ function retweetTheTweet(plugin_id, share_id, message, element)
         // On success, the color of the reshare is shown green for that instance only
         $(element).css('color', 'green');
 
-        // Text is changed as Retweeted, will be changed to retweet on refresh of profile
-        $(element).text('Retweeted');
     }).error(function (data)
     {
         // Error message is shown when error occurs
@@ -1087,16 +1167,44 @@ function getListOfProfilesByIDsinTwitter(plugin_id, twitter_ids, callback)
 		if(!data)
 			return;
 		
+		ArrangeListOfProfilesInElement(data, function(result) 
+		{
+			data = result;
+		});
+		
 		// If defined, execute the callback function
 		if (callback && typeof (callback) === "function")
 	    {
 			callback(data);
 	    }
-		
+        
 	// Accept the return type as json
 	}, "json").error(function (data)
 	{
 		// Show the error message
 		alert( data.responseText);
 	});
+	
+	
+}
+
+function ArrangeListOfProfilesInElement(data, callback)
+{
+	var el = "<div style='padding:5px;'>";
+
+    // If matches found, Iterates though each profile
+    $.each(data, function (key, value)
+    {
+            // Calls to populate template with the search results
+            el = el.concat(getTemplate("twitter-search-result", value));
+    });
+    
+    el = el + "</div>";
+    
+    // If defined, execute the callback function
+	if (callback && typeof (callback) === "function")
+    {
+		callback(el);
+    }
+    
 }
