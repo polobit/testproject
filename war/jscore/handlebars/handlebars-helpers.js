@@ -410,21 +410,11 @@ $(function() {
 	/**
 	 * Displays multiple times occurred properties of a contact in its detail view in single entity
 	 */
-	Handlebars.registerHelper('multiple_Property_Element', function(name, properties) {
-		var el = "<span><small><b>" + ucfirst(name) +"</b></small> :<br/>";
-		var count = false;
-		for ( var i = 0, l = properties.length; i < l; i++){
-		    if (properties[i].name == name){
-		    	count = true;
-		    	if(properties[i].subtype)
-					el = el.concat("(" + properties[i].subtype +") : " + properties[i].value +"</br>");
-				else
-					el = el.concat(properties[i].value +"</br>");
-		    }
-		}
-		el = el.concat("</span>");
-		if(count)
-	    return new Handlebars.SafeString(el);
+	Handlebars.registerHelper('multiple_Property_Element', function(name, properties, options) {
+	
+		var matching_properties_list = agile_crm_get_contact_properties_list(name)
+		if(matching_properties_list.length > 0)
+			return options.fn(matching_properties_list);
 	});
 	
 	/**
