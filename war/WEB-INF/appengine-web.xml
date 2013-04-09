@@ -25,7 +25,13 @@
 	  <include path="/**.png" expiration="7d" />
 	  <include path="/**.gif" expiration="7d" />
 	  <include path="/**.jpg" expiration="7d" />
+	  <include path="/**.ico" expiration="7d" />
 	  <!-- End of images -->
+	  
+	  <!-- Sounds -->
+	  <include path="/**.mp3" expiration="7d" />
+	  <!-- End of Sounds -->
+	   
 	
 	  <!-- CSS -->
 	  <include path="/**.css" expiration="7d" />
