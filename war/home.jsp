@@ -225,8 +225,8 @@ String CSS_PATH = "/";
 <script src='lib/headjs-min.js'></script>
 	
 	<script>
-	// var LIB_PATH = "//da4o37ei6ybbh.cloudfront.net/js/";
-	var LIB_PATH = "/";
+	var LIB_PATH = "//da4o37ei6ybbh.cloudfront.net/js/";
+	// var LIB_PATH = "/";
 	
 	var IS_CONSOLE_ENABLED = <%=debug%>;
 	
