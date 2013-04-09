@@ -411,12 +411,10 @@ $(function() {
 	 * Displays multiple times occurred properties of a contact in its detail view in single entity
 	 */
 	Handlebars.registerHelper('multiple_Property_Element', function(name, properties, options) {
-		var el = "<span><small><b>" + ucfirst(name) +"</b></small> :<br/>";
-		console.log(name);
-		
+	
 		var matching_properties_list = agile_crm_get_contact_properties_list(name)
-		
-		return options.fn(matching_properties_list);
+		if(matching_properties_list.length > 0)
+			return options.fn(matching_properties_list);
 	});
 	
 	/**
