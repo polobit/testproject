@@ -97,10 +97,7 @@ String CSS_PATH = "/";
 
 <body>
 <div id="wrap">
-    <div class="help" id="help">
-    	   <a href="#show-help" data-toggle="modal">Need help for Getting Started ?</a>
-    </div>
-	<div class="navbar navbar-fixed-top top20">
+	<div class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
 			<div class="container<%=width%>">
 				<a class="btn btn-navbar" data-toggle="collapse"
@@ -219,7 +216,8 @@ String CSS_PATH = "/";
 			<p style="margin:20px 0px 20px 0px"><b>Like AgileCRM?</b> Refer your friends <i class="icon-twitter"></i>
 			<i class="icon-facebook"></i>
 			<i class="icon-google-plus-sign"></i>
-				<a href="#" id="scroll-top" class="btn btn-mini btn-flat btn-primary pull-right">Top &uarr;</a>
+    	    <a style="margin-left:20px;cursor:pointer;" id="help-page">Help</a>
+			<a href="#" id="scroll-top" class="btn btn-mini btn-flat btn-primary pull-right">Top &uarr;</a>
 			</p>
 	        
     		</div>
@@ -227,8 +225,8 @@ String CSS_PATH = "/";
 <script src='lib/headjs-min.js'></script>
 	
 	<script>
-	var LIB_PATH = "//da4o37ei6ybbh.cloudfront.net/js/";
-	// var LIB_PATH = "/";
+	// var LIB_PATH = "//da4o37ei6ybbh.cloudfront.net/js/";
+	var LIB_PATH = "/";
 	
 	var IS_CONSOLE_ENABLED = <%=debug%>;
 	
@@ -259,31 +257,12 @@ String CSS_PATH = "/";
 		$('body').css('background-image', 'none');
 		$('#content').html('ready');
 	});
-	
 	</script>
 	
 	<!-- Unified CSS for All Lib -->
 	<link rel='stylesheet' type='text/css' href='<%=CSS_PATH%>css/lib.css' />
 
-	<div id="show-help" class="modal hide" data-backdrop="static">
-		<div class="modal-header">
-			<h3>Getting started with Agile CRM</h3>
-		</div>
-		<div class="modal-body help-text" onclick=$('#show-help').modal('toggle');>
-		<h3>Add contacts</h3>
-		Start adding <a href="#personModal" data-toggle="modal" id="person">contacts</a> / <a href="#companyModal" data-toggle="modal" id="company">companies</a>  or you can <a href="#import">importing</a> them.
-		
-		<h3>Manage Events and Tasks</h3>
-		Add <a href="#" id="show-activity">events or tasks</a>
-		
-		<h3>Track your sales pipeline</h3>
-		Add and track <a href="#deals-add">opportunities</a> in your sales pipeline
-
-		</div>
-		<div class="modal-footer">
-			<a href="#" data-dismiss="modal" class="btn btn-primary">Close</a>
-		</div>
-	</div>
-
+<script>
+</script>
 </body>
 </html>
