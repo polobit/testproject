@@ -186,7 +186,7 @@ var ContactsRouter = Backbone.Router.extend({
      * 
      */
     contactDetails: function (id, contact) {
-
+    	
     	if(!contact && this.contactDetailView && this.contactDetailView.model != null)
     	{
     		if(id == this.contactDetailView.model.toJSON()['id'])
@@ -236,7 +236,7 @@ var ContactsRouter = Backbone.Router.extend({
         	return;
         }
 
-      
+       
         this.contactDetailView = new Base_Model_View({
             model : contact,
             isNew: true,
@@ -244,13 +244,27 @@ var ContactsRouter = Backbone.Router.extend({
             postRenderCallback: function(el) {
             	
             	loadWidgets(el, contact.toJSON());
-            	
+
                 load_timeline_details(el, id);
                 
                 starify(el);
                 
                 show_map(el);
                 
+                head.js(LIB_PATH + 'lib/jquery.classyqr.js',  function(){
+                	
+                	details = fill_QR(contact.toJSON().properties);
+
+                    $("#qrcode", el).ClassyQR({
+                    	create: true,
+                        type: 'contact',
+                        name:  details.name,
+                        address: details.address,
+                        url: details.url,
+                        number: details.number,
+                        email: details.email
+                    });
+                });
                 fill_owners(el, contact.toJSON());
                }
         });
@@ -259,6 +273,7 @@ var ContactsRouter = Backbone.Router.extend({
         var el = this.contactDetailView.render().el;
       
         $('#content').html(el);
+
        
     },
     
