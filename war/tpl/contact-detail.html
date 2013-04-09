@@ -147,13 +147,6 @@
 				<i class="icon-user "></i> 
 				<strong>Contact details</strong>
 			</div>
-			<div class="pull-right">
-				<ul class="widget_header_control">
-					<li><a href="#"><i class="icon-move"></i></a></li>
-					<li><a href="#"><i class="icon-minus"></i></a></li>
-					<li><a href="#" id="{{name}}_plugin_delete" rel="tooltip" title="Delete this person"><i class="icon-remove"></i></a></li>						
-				</ul>
-			</div>
 		</div>
           <div id="qrcode"></div>
 		 <div style='padding:10px;word-wrap: break-word;'>
@@ -196,6 +189,40 @@
                 </div>
             <br/>       
 
+
+          {{#multiple_Property_Element "phone" properties}}
+			<div class="pull-left row-fluid">
+				<i class="icon-phone pull-left"></i>
+				<div class="pull-right span9">
+				{{#each this}}	
+					<a href="tel:{{value}}">{{value}}</a> 	
+					&nbsp {{#if subtype}} ({{subtype}}) {{/if}}</br>
+				{{/each}}
+				</div>
+			</div>
+		  {{/multiple_Property_Element}}
+		  {{#multiple_Property_Element "email" properties}}
+				<div class="pull-left row-fluid">
+					<i class="icon-envelope-alt pull-left"> </i>
+					<div class="pull-right span9">
+						{{#each this}}
+							<a href="mailto:{{value}}">{{value}}</a> 	
+							&nbsp {{#if subtype}} ({{subtype}}) {{/if}}</br>
+						{{/each}}
+					</div>
+				</div>
+			{{/multiple_Property_Element}}
+            {{#multiple_Property_Element "website" properties}}
+				<div class="pull-left row-fluid">
+					<i class="icon-globe pull-left"></i> 
+						<div class="pull-right span9">
+							{{#each this}}	
+								<a href="{{value}}">{{value}}</a> &nbsp<i class="icon-{{toLowerCase subtype}}-sign"></i></br>
+							{{/each}}
+						</div>
+				</div>
+			{{/multiple_Property_Element}}
+
             {{#each properties}}
                 {{#if_property "first_name" "last_name" "company" "title" "image" "email" "phone" "website" "address"}}
                     <span style='display:inline'><icon class="{{name}}"></icon> <small><b>{{ucfirst name}}</b></small></span> 
@@ -208,11 +235,7 @@
                     <br/> 
                 {{/if_property}}        
             {{/each}}
-            {{#multiple_Property_Element "email" properties}}
-
-			{{/multiple_Property_Element}}
-            {{#multiple_Property_Element "phone" properties}}{{/multiple_Property_Element}}
-            {{#multiple_Property_Element "website" properties}}{{/multiple_Property_Element}}
+          
             {{#address_Element properties}}{{/address_Element}}
             <br/>
                 <div id="map" style="width:auto; height:200px; display:none">
