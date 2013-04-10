@@ -59,9 +59,14 @@ function starify(el){
 function fill_QR(properties){
 	var details = {};
 	details.name = getPropertyValue(properties, 'first_name') + " " +getPropertyValue(properties, 'last_name');
-	//details.email = "", details.number = "", details.url = "";
+	details.title = getPropertyValue(properties, 'title');
+	details.company = getPropertyValue(properties, 'company');
+	
+	details.email = get_list_of_properties('email');
+	details.number = get_list_of_properties('phone');
+	details.url = get_list_of_properties('website');
+	
 	for ( var i = 0; i < properties.length; i++){
-		
 		if(properties[i].name == "address"){
 			var adr = JSON.parse(properties[i].value);
 			var address = "";
@@ -72,18 +77,26 @@ function fill_QR(properties){
 			}
 			details.address = address;
 		}
-		else if(properties[i].name == "email" && details.email == undefined){
-			details.email = properties[i].value;
-		}
-		else if(properties[i].name == "phone" && details.number == undefined){
-			details.number = properties[i].value;
-		}
-		else if(properties[i].name == "website" && details.url == undefined){
-			details.url = properties[i].value;
-		}
 	}
-	
 	return details;
+}
+
+/**
+ * To get list of common properties
+ * @param name
+ * @returns {String}
+ */
+function get_list_of_properties(name){
+	var list_val = agile_crm_get_contact_properties_list(name);
+	var val = "";
+	for ( var i = 0; i < list_val.length; i++){
+		
+		if(list_val[i].subtype != undefined && list_val[i].subtype != '')
+			val += list_val[i].value + "(" + list_val[i].subtype + "),";
+		else
+			val += list_val[i].value +",";
+	}
+	return val;
 }
 
 /**
