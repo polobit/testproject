@@ -1,8 +1,8 @@
 <script id="linkedin-profile-template" type="text/html">
 
-<div class="widget_content">
-	<img src="{{picture}}" width="36" height="36" alt="" class="img-rounded pull-left"/>
-	<div class="pull-left ml_5">
+<div class="widget_content row-fluid">
+	<div class="span3"><img src="{{picture}}" width="36" height="36" alt="" class="img-rounded pull-left"/></div>
+	<div class="pull-left span9">
 		<p class="title_txt">
 			<a href="{{url}}" target="_blank" >{{name}}</a>
 			<span class="badge badge-info pull-right">{{distance}}</span> 
@@ -18,15 +18,13 @@
 	{{/if}}
 </div>
 <ul class="nav nav-tabs row-fluid" id="myTab">
-	<li class="active span6"><a data-toggle="tab" href="#updates"><h3>Activity</h3><small>   </small></a></li>
-	<li class="span6"><a data-toggle="tab" href="#connections" id="linkedin_experience"><h3>{{num_connections}}</h3><small>Connections</small></a></li>
+	<li class="active span4"><a data-toggle="tab" href="#updates"><h3>Activity</h3><small></small></a></li>
+	<li class="span4"><a data-toggle="tab" href="#experience" id="linkedin_experience"><h3>Work</h3><small></small></a></li>
+	<li class="span4"><a data-toggle="tab" href="#connections"><h3>{{num_connections}}</h3><small>Connections</small></a></li>
 </ul>
 
 <div class="tab-content" id="myTabContent">
 	<div id="updates" class="tab-pane fade active in">
-		<div class="widget_tab_title">
-			<strong>Recent Activity</strong>
-		</div>
 		{{#if current_update}}
 			<ul class="widget_tab_content" id="linkedin_current_activity" style="display:none;">
 				<li>	
@@ -47,11 +45,13 @@
 			<a href="#refresh" id="linkedin_refresh_stream" class="icon-refresh pull-right" rel="tooltip" title="Refresh to get current updates" style="display:none"></a>
 		</div>
 	</div>
-	<div id="connections" class="tab-pane fade">
-		<div class="widget_tab_title">
-			<strong>Experience</strong>
-		</div>
+	<div id="experience" class="tab-pane fade">
 		<ul class="widget_tab_content" id="linkedin_experience_panel">
+						
+		</ul>
+	</div>
+	<div id="connections" class="tab-pane fade">
+		<ul class="widget_tab_content" id="linkedin_connections_panel">
 						
 		</ul>
 	</div>
@@ -69,7 +69,7 @@
 						{{#if_equals type "SHARED_ITEM"}}
 							{{#stringToJSON this.message "current-share"}} {{/stringToJSON}}
 							{{#if message.current-share.content}}
-								<a href="{{message.current-share.content.shortenedUrl}}" target="_blank"><img src="{{message.current-share.content.thumbnailUrl}}" width="30" height="30" alt="" class="img-rounded pull-left span2" style="margin-right:10px;"/></a>
+								<div class="span2 mr_5"><a href="{{message.current-share.content.shortenedUrl}}" target="_blank"><img src="{{message.current-share.content.thumbnailUrl}}" width="30" height="30" alt="" class="img-rounded pull-left"/></a></div>
 								<div class="pull-left span9" >
 									<p class="mb_0">
 										{{#if message.current-share.content.title}}
@@ -88,7 +88,7 @@
 									</ul>
 								</div>
 							{{else}}
-								<img src="widgets/linkedin-logo-small.png" width="30" height="30" alt="" class="img-rounded pull-left span2" style="margin-right:10px;"/>
+								<div class="span2 mr_5"><img src="widgets/linkedin-logo-small.png" width="30" height="30" alt="" class="img-rounded pull-left"/></div>
 								<div class="pull-left span9" >
 									<p class="mb_0">
 										{{show_link_in_statement message.current-share.comment}}
@@ -98,7 +98,7 @@
 							{{/if}}							
 						{{/if_equals}}
 						{{#if_equals type "CONNECTION_ADDED_CONNECTIONS"}}
-							<a href="{{message.publicProfileUrl}}" target="_blank"><img src="{{message.pictureUrl}}" width="30" height="30" alt="" class="img-rounded pull-left span2" style="margin-right:10px;"/></a>
+							<div class="span2 mr_5" ><a href="{{message.publicProfileUrl}}" target="_blank"><img src="{{message.pictureUrl}}" width="30" height="30" alt="" class="img-rounded pull-left"/></a></div>
 							<div class="pull-left span9" >
 								<p class="mb_0">
 									Connected to 
@@ -121,11 +121,11 @@
 <script id="linkedin-experience-template" type="text/html">
 	{{#each this}}
 		<li>
-			<h3>{{title}}</h3>
-			<p class="mb_0">				
+			<h4>{{title}}</h4>
+			<p class="mb_0 space_pre_line">				
 				{{summary}}
 			</p>			
-			<h3>{{company.name}}</h3>			
+			<h4>{{company.name}}</h4>			
 			<small>
 				{{startDate.month}}, {{startDate.year}} -
 				{{#if endDate}}

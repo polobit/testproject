@@ -49,10 +49,11 @@ function setupRapleafOAuth(plugin_id) {
 	$('#Rapleaf')
 			.html(
 					RAPLEAF_PLUGIN_HEADER
-							+ '<div><p>Rapleaf helps you learn more about your customers, provides data (age, gender, marital status, income, etc., ) on US consumer email addresses.To access </p> <p><label><b>Enter Your API key</b></label>'
+							+ '<div><p style="padding:5px;">Rapleaf helps you learn more about your customers, provides data (age, gender, marital status, income, etc., ) on US consumer email addresses.To access </p>'
+							+ '<p style="padding:5px;"><label><b>Enter Your API key</b></label>'
 							+ '<input type="text" id="rapleaf_api_key" class="input-medium required" placeholder="API Key" value=""></input></p>'
-							+ '<button id="save_api_key" class="btn"><a href="#">Save</a></button><br/>'
-							+ '<p style="line-height: 25px;">Don\'t have an API key? <a href="https://www.rapleaf.com/developers/api_access"> SignUp </a></p></div>');
+							+ '<button id="save_api_key" class="btn" style="margin-left:5px;"><a href="#">Save</a></button><br/>'
+							+ '<p style="line-height: 25px;padding:5px;">Don\'t have an API key? <a href="https://www.rapleaf.com/developers/api_access"> SignUp </a></p></div>');
 
 	// Saves the api key
 	$('#save_api_key').die().live('click', function(e) {
