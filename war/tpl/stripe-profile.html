@@ -1,4 +1,4 @@
-<script id="stripe-profile-template" type="text/html">
+<!-- <script id="stripe-profile-template" type="text/html">
 	<div style="display:inline;  line-height:13px;word-wrap: break-word;">
 	    <div style="padding: 0px 5px 0px 5px;">
 			<div style="margin-bottom: 10px;border-bottom:1px solid #f5f5f5">
@@ -105,4 +105,90 @@
 			{{/if}}
 		</div>		    	
 	</div>
+</script>
+ -->
+
+<script id="stripe-profile-template" type="text/html">
+<div class="widget_content">
+	{{#if customer.activeCard.name}}
+		<h4 style="text-transform: capitalize;"><b>{{customer.activeCard.name}}</b></h4>
+	{{/if}}
+	{{#if customer.activeCard.addressState}}
+		<p style="font-size: 13px;">
+			{{customer.activeCard.addressState}}
+			{{#if customer.activeCard.addressCountry}} 
+				, {{customer.activeCard.addressCountry}}
+			{{/if}}
+		</p>
+	{{/if}}
+	<div style="margin-bottom: 10px;">
+		<b>Id:</b> {{customer.id}}
+	</div>
+</div>
+<div class="sub_header">
+		<h3>Subscription Details</h3>
+</div>
+{{#if customer.subscription}}
+	<ul style="margin:0px;padding:10px;border-bottom:1px solid #ddd;">
+		<li class="row-fluid">	
+			<div class="span5">Start Date
+				<div class="pull-right">:</div>
+			</div>
+							
+			<div class="span6" style="margin-left: 10px;">
+				{{epochToHumanDate "mm-dd-yyyy" customer.subscription.start}}
+			</div>
+		</li>
+		<li class="row-fluid">	
+			<div class="span5">End Date
+				<div class="pull-right">:</div>
+			</div>
+							
+			<div class="span6" style="margin-left: 10px;">
+				{{epochToHumanDate "mm-dd-yyyy" customer.subscription.currentPeriodEnd}}
+			</div>
+		</li>
+
+		<li class="row-fluid">	
+			<div class="span5">Current Plan
+				<div class="pull-right">:</div>
+			</div>
+							
+			<div class="span6" style="margin-left: 10px;">
+				{{customer.subscription.plan.id}}
+			</div>
+		</li>
+		<li class="row-fluid">	
+			<div class="span5">Interval
+				<div class="pull-right">:</div>
+			</div>
+							
+			<div class="span6" style="margin-left: 10px;">
+				{{customer.subscription.plan.interval}}
+			</div>
+		</li>
+		<li class="row-fluid">	
+			<div class="span5">Amount
+				<div class="pull-right">:</div>
+			</div>
+							
+			<div class="span6" style="margin-left: 10px;">
+				{{customer.subscription.plan.amount}}
+			</div>
+		</li>
+	</ul>
+{{/if}}
+<div class="sub_header">
+		<h3>Subscription History</h3>
+</div>
+{{#if invoice.length}}
+<ul style="margin:0px;padding:10px;border-bottom:1px solid #ddd;">
+{{#each invoice}}
+	<li class="row-fluid">
+		<div class="span3">Default <small>plan</small></div>
+		<div class="span8">{{epochToHumanDate "mm/dd/yyyy" periodStart}} to {{epochToHumanDate "mm/dd/yyyy" periodEnd}}</div>
+	</li>
+{{/each}}
+</ul>
+{{/if}}
 </script>

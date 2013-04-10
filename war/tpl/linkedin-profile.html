@@ -10,17 +10,20 @@
 		<p>{{location}}</p>
 	</div>
 	<div class="clearfix"></div>	
-	<p>{{show_link_in_statement summary}}</p>
+	<p>{{show_link_in_statement summary}}</p>	
 	{{#if is_connected}}
-		<a href="#message" class="btn" id="linkedin_message">Send Message</a>
+		<a href="#message" class="btn pull-left" id="linkedin_message">Send Message</a>
 	{{else}}
-		<a href="#connect" class="btn" id="linkedin_connect" name="{{name}}">Connect</a>
+		<a href="#connect" class="btn pull-left" id="linkedin_connect" name="{{name}}">Connect</a>
 	{{/if}}
+	<div class="pull-right" style="text-align: right;">
+		<b style="color:#0088CC;">{{num_connections}}</b>
+		<div style="font-size: 11px;margin-top: -5px;">Connections</div>
+	</div>
 </div>
 <ul class="nav nav-tabs row-fluid" id="myTab">
-	<li class="active span4"><a data-toggle="tab" href="#updates"><h3>Activity</h3><small></small></a></li>
-	<li class="span4"><a data-toggle="tab" href="#experience" id="linkedin_experience"><h3>Work</h3><small></small></a></li>
-	<li class="span4"><a data-toggle="tab" href="#connections"><h3>{{num_connections}}</h3><small>Connections</small></a></li>
+	<li class="active span6"><a data-toggle="tab" href="#updates"><h3>Activity</h3><small></small></a></li>
+	<li class="span6"><a data-toggle="tab" href="#work" id="linkedin_experience"><h3>Experience</h3><small></small></a></li>
 </ul>
 
 <div class="tab-content" id="myTabContent">
@@ -45,13 +48,8 @@
 			<a href="#refresh" id="linkedin_refresh_stream" class="icon-refresh pull-right" rel="tooltip" title="Refresh to get current updates" style="display:none"></a>
 		</div>
 	</div>
-	<div id="experience" class="tab-pane fade">
+	<div id="work" class="tab-pane fade">
 		<ul class="widget_tab_content" id="linkedin_experience_panel">
-						
-		</ul>
-	</div>
-	<div id="connections" class="tab-pane fade">
-		<ul class="widget_tab_content" id="linkedin_connections_panel">
 						
 		</ul>
 	</div>
@@ -121,13 +119,15 @@
 <script id="linkedin-experience-template" type="text/html">
 	{{#each this}}
 		<li>
-			<h4>{{title}}</h4>
+			<b>{{title}}</b><br>
+			<h4>{{company.name}}</h4>
 			<p class="mb_0 space_pre_line">				
 				{{summary}}
-			</p>			
-			<h4>{{company.name}}</h4>			
+			</p>						
 			<small>
-				{{startDate.month}}, {{startDate.year}} -
+				{{#if startDate}}
+					{{startDate.month}}, {{startDate.year}} -
+				{{/if}}
 				{{#if endDate}}
  					{{endDate.month}}, {{endDate.year}}
 				{{else}}
