@@ -2,6 +2,11 @@
 	border:1px solid #d6d6d6;
 	background:#ffffff;
 	margin:0 auto;
+	margin-bottom:20px;
+}
+
+#widgets ul {
+	list-style: none;
 }
 
 .widget_container > div{	
@@ -58,6 +63,10 @@
 
 .ml_5{
 	margin-left:5px;
+}
+
+.mr_5{
+	margin-right:5px;
 }
 
 .title_txt{
@@ -155,6 +164,10 @@ small{
 
 .mb_0{
 	margin-bottom:0;
+}
+
+.space_pre_line{
+	white-space:pre-line;
 }
 
 .widget_tab_link{

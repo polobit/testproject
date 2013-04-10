@@ -631,11 +631,8 @@ function showTwitterProfile(twitter_id, plugin_id)
             // changed as see less and shows all the updates by toggling
             $(this).attr("less", "false");
 
-            // If updates exists only hide current update
-            if ($('div#twitter_social_stream').find('div.twitter_update').length != 0)
-            {
-                $('#twitter_current_activity').hide();
-            }
+            $('#twitter_current_activity').hide();
+            
 
             // On first click of see less, less attribute is made true and text will be
             // changed as see more button 

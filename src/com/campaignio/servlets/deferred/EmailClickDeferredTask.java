@@ -1,5 +1,7 @@
 package com.campaignio.servlets.deferred;
 
+import org.json.JSONObject;
+
 import com.campaignio.cron.util.CronUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
@@ -21,15 +23,18 @@ public class EmailClickDeferredTask implements DeferredTask
      */
     String trackerId;
 
+    String longURL;
+
     /**
      * Constructs a new {@link EmailClickDeferredTask}.
      * 
      * @param trackerId
      *            - tracker Id.
      */
-    public EmailClickDeferredTask(String trackerId)
+    public EmailClickDeferredTask(String trackerId, String longURL)
     {
 	this.trackerId = trackerId;
+	this.longURL = longURL;
     }
 
     public void run()
@@ -42,7 +47,7 @@ public class EmailClickDeferredTask implements DeferredTask
 	try
 	{
 	    // Interrupt the cron tasks with trackerId
-	    CronUtil.interrupt(trackerId, null, null, null);
+	    CronUtil.interrupt(trackerId, null, null, new JSONObject(longURL));
 	}
 	catch (Exception e)
 	{

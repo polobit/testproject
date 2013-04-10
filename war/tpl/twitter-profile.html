@@ -1,7 +1,7 @@
 <script id="twitter-profile-template" type="text/html">
-<div class="widget_content">
-	<img src="{{picture}}" width="36" height="36" alt="" class="img-rounded pull-left"/>
-	<div class="pull-left ml_5">
+<div class="widget_content row-fluid">
+	<div class="span3"><img src="{{picture}}" width="36" height="36" alt="" class="img-rounded pull-left"/></div>
+	<div class="pull-left ml_5 span8">
 		<p class="title_txt"><a href="{{url}}" target="_blank" >{{name}}</a></p>
 		<p>{{location}}</p>
 	</div>
@@ -20,9 +20,6 @@
 
 <div class="tab-content" id="myTabContent">
 	<div id="tweets" class="tab-pane fade active in">
-		<div class="widget_tab_title">
-			<strong>Tweets</strong>
-		</div>
 		{{#if current_update}}
 			<ul class="widget_tab_content"  id="twitter_current_activity" style="display:none;">
 				<li>	
@@ -40,9 +37,6 @@
 		</div>
 	</div>
 	<div id="followers" class="tab-pane fade">
-		<div class="widget_tab_title">
-			<strong>Followers</strong>
-		</div>
 		<ul class="widget_tab_content" id="twitter_follower_panel">
 						
 		</ul>
@@ -51,9 +45,6 @@
 		</div>
 	</div>
 	<div id="following" class="tab-pane fade">
-		<div class="widget_tab_title">
-			<strong>Following</strong>
-		</div>
 		<ul class="widget_tab_content" id="twitter_following_panel">
 			
 		</ul>
@@ -108,7 +99,7 @@
 		{{#each this}}	
 			<li id="twitter_status" status_id="{{id}}">	
 				<div class="pull-left row-fluid">
-					<a href="{{tweeted_person_profile_url}}" target="_blank"><img src="{{tweeted_person_pic_url}}" width="30" height="30" alt="" class="img-rounded pull-left span2" style="margin-right:10px;"/></a>
+					<div class="span2 mr_5"><a href="{{tweeted_person_profile_url}}" target="_blank"><img src="{{tweeted_person_pic_url}}" width="30" height="30" alt="" class="img-rounded pull-left"/></a></div>
 					<div class="pull-left span9" >
 						<p class="mb_0">{{safe_string message}}</p>
 						<small>{{epochToHumanDate "mm-dd-yyyy" created_time}}</small>

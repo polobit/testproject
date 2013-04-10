@@ -42,7 +42,8 @@ public class SendMessage extends TaskletAdapter
 	    else
 	    {
 
-		log(campaignJSON, subscriberJSON, "Sending using Tropo");
+		log(campaignJSON, subscriberJSON, nodeJSON,
+			"Sending using Tropo");
 
 		// Util.sendMessageUsingTwilio(Util.changeNumber(to), message,
 		// Util.changeNumber(from));
@@ -50,8 +51,8 @@ public class SendMessage extends TaskletAdapter
 		// message,Util.changeNumber(from));
 	    }
 
-	    log(campaignJSON, subscriberJSON, "Send SMS -> From " + from
-		    + " To: " + to + " Messsage: " + message);
+	    log(campaignJSON, subscriberJSON, nodeJSON, "Send SMS -> From "
+		    + from + " To: " + to + " Messsage: " + message);
 
 	}
 	else

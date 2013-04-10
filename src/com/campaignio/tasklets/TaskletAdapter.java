@@ -104,7 +104,7 @@ public class TaskletAdapter implements Tasklet
 	    String custom2, String custom3) throws Exception
     {
 	// Add Log
-	log(campaignJSON, subscriberJSON,
+	log(campaignJSON, subscriberJSON, nodeJSON,
 		"Sleeping till " + Util.getCalendarString(timeout));
 
 	// Enqueue Task
@@ -337,13 +337,17 @@ public class TaskletAdapter implements Tasklet
      * @throws Exception
      */
     public void log(JSONObject campaignJSON, JSONObject subscriberJSON,
-	    String message) throws Exception
+	    JSONObject nodeJSON, String message) throws Exception
     {
 	System.out.println("Log: "
 		+ message.replaceAll("\n", " ").replaceAll("\r", " ") + " "
-		+ subscriberJSON + " " + campaignJSON);
+		+ subscriberJSON + " " + campaignJSON + " " + nodeJSON);
+
+	// Node name as log type.
+	String logType = nodeJSON.getJSONObject("NodeDefinition").getString(
+		"name");
 
 	// Add Log
-	LogUtil.addLog(campaignJSON, subscriberJSON, message);
+	LogUtil.addLog(campaignJSON, subscriberJSON, message, logType);
     }
 }

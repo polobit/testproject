@@ -55,8 +55,8 @@ public class AB extends TaskletAdapter
 	    double r = random.nextDouble();
 
 	    // Creates log for A/B node
-	    log(campaignJSON, subscriberJSON, "Random Number " + random
-		    + " Requested: " + frequency);
+	    log(campaignJSON, subscriberJSON, nodeJSON,
+		    "A/B Log - Given A/B frequency: " + frequency);
 
 	    // Go with A or B
 	    if (r > Double.parseDouble(frequency))

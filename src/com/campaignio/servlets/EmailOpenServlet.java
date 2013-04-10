@@ -12,6 +12,8 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
+import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.util.CampaignStatsUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -54,7 +56,15 @@ public class EmailOpenServlet extends HttpServlet
 	{
 	    // Increment Emails opened count and add log.
 	    CampaignStatsUtil.incrementEmailsOpened(campaignId);
-	    LogUtil.addLogFromID(campaignId, subscriberId, "Email Opened");
+	    Workflow workflow = WorkflowUtil.getWorkflow(Long
+		    .parseLong(campaignId));
+
+	    if (workflow != null)
+	    {
+		LogUtil.addLogToSQL(campaignId, subscriberId,
+			"Email of campaign - " + workflow.name + " opened.",
+			"Email Opened");
+	    }
 
 	    Contact contact = ContactUtil.getContact(Long
 		    .parseLong(subscriberId));

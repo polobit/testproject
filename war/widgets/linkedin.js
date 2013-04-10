@@ -9,7 +9,6 @@ $(function ()
 	// LinkedIn plugin name as global variable
     LINKEDIN_PLUGIN_NAME = "Linkedin";
 
-    LINKEDIN_PLUGIN_HEADER = '<div></div>';
     // LinkedIn profile load image declared as global
     LINKEDIN_PROFILE_LOAD_IMAGE = '<center><img id="linkedin_profile_load" ' + 
 			'src=\"img/1-0.gif\" style="margin-bottom: 10px;margin-right: 16px;" >' + 
@@ -166,7 +165,7 @@ function showLinkedinMatchingProfiles(plugin_id)
      */
     getLinkedinMatchingProlfiles(plugin_id, function (data)
     {
-        var el = LINKEDIN_PLUGIN_HEADER;
+    	var el = "<div style='padding:5px'>";
 
         // If no matches found display message
         if (data.length == 0)
@@ -190,6 +189,8 @@ function showLinkedinMatchingProfiles(plugin_id)
 
         });
 
+        el = el + "</div>";
+        
         // Show matching profiles in LinkedIn panel
         $('#Linkedin').html(el);
         

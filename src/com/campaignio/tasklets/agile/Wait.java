@@ -44,11 +44,13 @@ public class Wait extends TaskletAdapter
 
 	System.out.println("Waiting for " + duration + " " + durationType);
 
+	log(campaignJSON, subscriberJSON, nodeJSON, "Waiting for - " + duration
+		+ " " + durationType);
+
 	// Add ourselves to Cron Queue
 	long timeout = CronUtil.getTimer(duration, durationType);
 	CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON,
-		timeout,
-		null, null, null);
+		timeout, null, null, null);
     }
 
     /*
@@ -63,6 +65,8 @@ public class Wait extends TaskletAdapter
 	    throws Exception
     {
 	System.out.println("Wake up from wait. Executing next one.");
+
+	log(campaignJSON, subscriberJSON, nodeJSON, "Wait Duration Completed.");
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
