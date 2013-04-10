@@ -112,7 +112,8 @@ public class JSONNode extends TaskletAdapter
 		    url = url + "?" + httpParams;
 
 		// Creates log for JSONNode for method Get type
-		log(campaignJSON, subscriberJSON, "Accessing Get " + url);
+		log(campaignJSON, subscriberJSON, nodeJSON,
+			"Accessed GET URL: " + url);
 
 		output = HTTPUtil.accessURL(url);
 
@@ -120,13 +121,13 @@ public class JSONNode extends TaskletAdapter
 	    else
 	    {
 		// Creates log for JSONNode for method Post type
-		log(campaignJSON, subscriberJSON, "Accessing Post " + url + " "
-			+ httpParams);
+		log(campaignJSON, subscriberJSON, nodeJSON,
+			"Accessed Post URL: " + url + " " + httpParams);
 		output = HTTPUtil.accessURLUsingPost(url, httpParams);
 	    }
 
 	    // Creates log for JSONNode for output
-	    log(campaignJSON, subscriberJSON, "Output " + output);
+	    log(campaignJSON, subscriberJSON, nodeJSON, "Output: " + output);
 
 	    JSONObject returnJSON = new JSONObject(output);
 
@@ -151,7 +152,7 @@ public class JSONNode extends TaskletAdapter
 	    data.put("error", e.getMessage());
 
 	    // Creates log for JSONNode for error
-	    log(campaignJSON, subscriberJSON,
+	    log(campaignJSON, subscriberJSON, nodeJSON,
 		    "Error Occurred " + e.getMessage());
 
 	    // Execute Next One in Loop

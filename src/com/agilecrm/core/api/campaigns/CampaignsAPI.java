@@ -115,9 +115,9 @@ public class CampaignsAPI
     @Path("logs/{campaign-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Log> getCampaignLogs(@PathParam("campaign-id") String campaignId)
+    public String getCampaignLogs(@PathParam("campaign-id") String campaignId)
     {
-	return LogUtil.getCampaignLog(campaignId);
+	return LogUtil.getSQLLogsOfCampaign(campaignId);
     }
 
     /**

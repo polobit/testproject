@@ -35,6 +35,7 @@
                     <tr>
                         <th>Contact</th>
                         <th>Message</th>
+                        <th>Type</th>
                         <th>Time</th>
                     </tr>
                 </thead>
@@ -50,7 +51,8 @@
 <script id="campaign-logs-model-template" type="text/html">
 <input name="id" class="campaign" type="hidden" value="{{campaign_id}}" />
 <td><a href="#contact/{{subscriber_id}}">{{contactName}}</a></td>
-<td>{{getRequiredLog logs "m"}}</td>
-<td>{{getRequiredLog logs "t"}}</td>
+<td>{{message}}</td>
+<td>{{log_type}}</td>
+<td>{{epochToLogDate log_time}}</td>
 <br/>
 </script>

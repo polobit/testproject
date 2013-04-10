@@ -94,11 +94,8 @@ public class Clicked extends TaskletAdapter
 	    throws Exception
     {
 	// Creates log for clicked node when interrupted
-	log(campaignJSON, subscriberJSON, "Interrupted - we got clicked - "
-		+ customData);
-
-	// Increment email clicks
-	// CampaignStats.incrementEmailsClicked(DBUtil.getId(campaignJSON));
+	log(campaignJSON, subscriberJSON, nodeJSON, "Link clicked: "
+		+ customData.getString("long_url"));
 
 	// Execute Next One in Loop (Yes)
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
@@ -139,7 +136,7 @@ public class Clicked extends TaskletAdapter
 	 */
 
 	// Creates log for clicked when there are no clicks
-	log(campaignJSON, subscriberJSON, "No Clicks");
+	log(campaignJSON, subscriberJSON, nodeJSON, "No Clicks");
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,

@@ -5,10 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.db.util.StatsUtil;
 import com.agilecrm.util.DBUtil;
 import com.campaignio.logger.Log;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 
 /**
@@ -39,6 +45,7 @@ public class LogUtil
 
 	// Get existing Log
 	Log log = getCampaignSubscriberLog(campaignId, subscriberId);
+
 	if (log == null)
 	{
 	    System.out.println("Creating fresh log");
@@ -72,13 +79,17 @@ public class LogUtil
      * @throws Exception
      */
     public static void addLog(JSONObject campaignJSON,
-	    JSONObject subscriberJSON, String message) throws Exception
+	    JSONObject subscriberJSON, String message, String logType)
+	    throws Exception
     {
 	// Campaign and SubscriberId
 	String campaignId = DBUtil.getId(campaignJSON);
 	String subscriberId = DBUtil.getId(subscriberJSON);
 
 	addLogFromID(campaignId, subscriberId, message);
+
+	// addLog To SQL.
+	addLogToSQL(campaignId, subscriberId, message, logType);
     }
 
     /**
@@ -170,5 +181,77 @@ public class LogUtil
 	{
 	    e.printStackTrace();
 	}
+    }
+
+    /**
+     * Adds campaign-log to Google-SQL. It gets domain and logTime to add them
+     * to table.
+     * 
+     * @param campaignId
+     *            - Campaign Id.
+     * @param subscriberId
+     *            - Subscriber Id.
+     * @param message
+     *            - Message.
+     * @param logType
+     *            - Log Type.
+     */
+    public static void addLogToSQL(String campaignId, String subscriberId,
+	    String message, String logType)
+    {
+	long logTime = Calendar.getInstance().getTimeInMillis() / 1000;
+	String domain = NamespaceManager.get();
+
+	if (StringUtils.isEmpty(domain))
+	    return;
+
+	// Insert to SQL
+	StatsUtil.addToCampaignLogs(domain, campaignId, subscriberId, logTime,
+		message, logType);
+    }
+
+    /**
+     * Returns campaign logs fetched from Google SQL with respect to campaign
+     * id. Add contact name to each element of json array.
+     * 
+     * @param campaignId
+     *            - Campaign Id.
+     * @return return json-array string.
+     */
+    public static String getSQLLogsOfCampaign(String campaignId)
+    {
+	String domain = NamespaceManager.get();
+
+	// Get from SQL.
+	JSONArray campaignLogs = StatsUtil
+		.getLogsOfCampaign(campaignId, domain);
+
+	if (campaignLogs == null)
+	    return null;
+
+	// Embed contact-name for each log.
+	try
+	{
+	    for (int i = 0; i < campaignLogs.length(); i++)
+	    {
+		// Get each from json-array
+		JSONObject log = campaignLogs.getJSONObject(i);
+
+		String subscriberId = log.getString("subscriber_id");
+
+		String contactName = ContactUtil.getContactNameFromId(Long
+			.parseLong(subscriberId));
+
+		log.put("contactName", contactName);
+	    }
+	}
+	catch (JSONException e)
+	{
+	    e.printStackTrace();
+	}
+
+	System.out.println("Campaign Logs: " + campaignLogs);
+
+	return campaignLogs.toString();
     }
 }

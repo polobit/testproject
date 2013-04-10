@@ -53,10 +53,6 @@ public class AddNote extends TaskletAdapter
 	String contactId = DBUtil.getId(subscriberJSON);
 	Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
 
-	// Creates log for note
-	log(campaignJSON, subscriberJSON, "About : " + subject
-		+ " Description : " + description);
-
 	System.out.println(" Contact Details: " + contact);
 
 	if (contact != null)
@@ -69,6 +65,11 @@ public class AddNote extends TaskletAdapter
 	    note.save();
 
 	}
+
+	// Creates log for note
+	log(campaignJSON, subscriberJSON, nodeJSON,
+		"AddNote Log - Note having Subject: " + subject
+			+ " and Description : " + description + " is added.");
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
