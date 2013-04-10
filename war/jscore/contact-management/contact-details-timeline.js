@@ -685,7 +685,10 @@ function remove_loading_img(el){
  * tiemline 
  */
 $(function () {
-	
+	// Using autoellipsis
+	head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function(){
+	$("#autoellipsis").ellipsis();
+	});
 	/*
 	 * Shows the mail details in detail on a popup modal, when '+'
 	 * symbol is clicked 
