@@ -74,11 +74,11 @@
 	
 	/* For toggling help modal popup */
 	$('#help-page').die().live('click', function(e){
+		
 		var helpModal = $(getTemplate("show-help"),{});
 		helpModal.modal('show');
 	
 	    $('.hide-modal', helpModal).click(function(){
-	    		console.log("closing");
 	    		helpModal.modal('hide');
 	    });
 	});
