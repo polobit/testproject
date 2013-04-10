@@ -20,8 +20,8 @@ $(function ()
     // Current contact user name in Twitter profile
     Twitter_current_profile_user_name = "";
     Twitter_current_update_id = "";
-    //Twitter_follower_ids = [];
-    //Twitter_following_ids = [];
+    var Twitter_follower_ids;
+    var Twitter_following_ids;
 
     // Gets plugin id from plugin object, fetched using script API
     var plugin_id = agile_crm_get_plugin(TWITTER_PLUGIN_NAME).id;
@@ -140,6 +140,11 @@ $(function ()
     {
     	 e1.preventDefault();
     	
+    	 if(Twitter_follower_ids)
+    		 return;
+    	
+    	 Twitter_follower_ids = [];
+
     	 $('#twitter_follower_panel').html(TWITTER_UPDATE_LOAD_IMAGE);
     	 
     	 // Retrieves the Twitter IDs of all the followers 
@@ -203,6 +208,13 @@ $(function ()
     {
     	e1.preventDefault();
     	
+    	if(Twitter_following_ids){
+    		console.log('iam');
+    		return;
+    	}
+    	
+    	Twitter_following_ids = [];
+
    	 	$('#twitter_following_panel').html(TWITTER_UPDATE_LOAD_IMAGE);
    	 
    	    // Retrieves the Twitter IDs of all the following persons 
@@ -1104,6 +1116,8 @@ function getFollowerIdsInTwitter(plugin_id, twitter_id, callback)
 	{
 		// Show the error message
 		alert( data.responseText);
+
+		$('#tweet_load').remove();
 	});
 }
 
@@ -1139,6 +1153,8 @@ function getFollowingIdsInTwitter(plugin_id, twitter_id, callback)
 	{
 		// Show the error message
 		alert( data.responseText);
+
+		$('#tweet_load').remove();
 	});
 }
 
@@ -1183,6 +1199,8 @@ function getListOfProfilesByIDsinTwitter(plugin_id, twitter_ids, callback)
 	{
 		// Show the error message
 		alert( data.responseText);
+
+		$('#tweet_load').remove();
 	});
 	
 	

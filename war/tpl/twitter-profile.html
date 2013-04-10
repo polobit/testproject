@@ -1,61 +1,3 @@
-<!-- 
-<script id="twitter-profile-template" type="text/html">         
-	    <div class="row-fluid well" style="padding:0px;margin-bottom: 10px;background-color: white;">
-			<div class="row-fluid" >
-	        	<div class="span3" style=" margin-right:5%">
-	            	<img src="{{picture}}" style=" display:inline; float:left; margin-right:2px; margin-top:5px; border: 1px solid #dedede;border-radius: 5px;margin-left: 5px;cursor:pointer; color: #FF00FF" />
-	        	</div>
-	        	<div class="span8" >
-	            	<div style="padding-top: 5px;">						
-	               		<h4 style="color:#069;"><a href="{{url}}" target="_blank" >{{name}}</a></h4>
-						<p style="font-size: 11px;">{{location}}</p>
-					</div>
-				</div>
-			</div>
-			{{#if summary}}
-				<div class='row-fluid'>
-				 	<div style="padding: 5px 5px 10px 5px;font-size: 13px;line-height: 14px;">{{show_link_in_statement summary}}</div> 
-				</div>
-			{{/if}}				 
-			<div class='row-fluid' style='padding-bottom:5px;font-size:12px'>
-            	<div class='span4' style='text-align:center;padding-top: 5px;'>Tweets<p>{{tweet_count}}</p></div>
-            	<div class='span4' style='border-left: solid 1px #EAEAEA;text-align:center;padding-top: 5px;padding-left: 3px;'>Followers<p>{{num_connections}}</p></div>
-            	<div class='span4' style='border-left: solid 1px #EAEAEA;text-align:center;padding-top: 5px;'>Follows<p>{{friends_count}}</p></div>
-     		</div>
-			<div style="padding: 2px 5px 2px 0px;text-align: right;" >
-	        		<a class="btn btn-mini btn-primary" id="twitter_follow" name="{{name}}" style="font-size:13px;display:none;">Follow</a>
-			</div>
-			<div class="row-fluid" style="padding-bottom: 5px;" >
-				<center>					
-					<span><a class="btn btn-mini btn-primary icon-share" id="twitter_tweet" rel="tooltip" title="Compose a new Tweet" style="display:none;"></a></span>
-					<span><a class="btn btn-mini btn-primary icon-envelope" id="twitter_message" rel="tooltip" title="Send Direct Message" style="display:none;"></a></span> 					
-					<span><a class="btn btn-mini btn-danger" id="twitter_unfollow" name="{{name}}" style="font-size:13px;display:none;">Unfollow</a></span>
-				</center>			
-			</div>			
-	    </div>
-		{{#if current_update}}
-			<div class="row-fluid" id="twitter_update_heading" style="margin-bottom: -3px;display:none;">				
-				<div class="well" style="padding: 0px;margin-bottom: 0px;background-color:#f5f5f5;text-align: center;">
-					<h5 style="color: #999999;">CURRENT ACTIVITY</h5>
-				</div>
-				{{#if current_update}}	
-				<div id="twitter_current_activity" style="padding: 7px 5px 10px 5px;border-bottom: 1px solid #dedede;display:none;line-height: 140%;">	
-					{{show_link_in_statement current_update}}
-				</div>
-				{{/if}}
-	    	</div>
-		{{/if}}
-		<div id="twitter_social_stream" class="collapse in">				
-		</div>
-		<div style="padding: 10px 5px 10px 5px;">			
-			<a href="#more" class="twitter_stream" id="twitter_stream" rel="tooltip" title="Click to see more tweets">See More..</a>
-			<a href="#less" data-toggle="collapse" data-target="#twitter_social_stream" id="twitter_less" style="display:none">See Less..</a>
-			<a href="#refresh" id="twitter_refresh_stream" class="icon-refresh pull-right" rel="tooltip" title="Refresh to get current updates" style="display:none"></a>
-		</div>	
-</script> 
- -->
- 
- 
 <script id="twitter-profile-template" type="text/html">
 <div class="widget_content">
 	<img src="{{picture}}" width="36" height="36" alt="" class="img-rounded pull-left"/>
@@ -63,19 +5,17 @@
 		<p class="title_txt"><a href="{{url}}" target="_blank" >{{name}}</a></p>
 		<p>{{location}}</p>
 	</div>
-	<div class="clearfix"></div>
-	{{#if summary}}
-		<p>{{show_link_in_statement summary}}</p>
-	{{/if}}
+	<div class="clearfix"></div>	
+	<p>{{show_link_in_statement summary}}</p>
 	<a href="#" class="btn" id="twitter_follow" name="{{name}}" style="display:none;">Follow</a>
-	<a href="#" class="btn" id="twitter_unfollow" name="{{name}}" style="display:none;">UnFollow</a>
+	<a href="#" class="btn" id="twitter_unfollow" name="{{name}}" style="display:none;">Unfollow</a>
 	<a href="#" class="btn ml_5" id="twitter_tweet" rel="tooltip" title="Compose a new Tweet" style="display:none;">Tweet</a>
 	<a href="#" class="btn ml_5 icon-envelope" id="twitter_message" rel="tooltip" title="Send Direct Message" style="display:none;"></a>					
 </div>
-<ul class="nav nav-tabs" id="myTab">
-	<li class="active"><a data-toggle="tab" href="#tweets"><h3>{{tweet_count}}</h3><small>Tweets</small></a></li>
-	<li class=""><a data-toggle="tab" href="#followers" id="twitter_followers"><h3>{{num_connections}}</h3><small>Followers</small></a></li>
-	<li class="last"><a data-toggle="tab" href="#following" id="twitter_following"><h3>{{friends_count}}</h3><small>Following</small></a></li>
+<ul class="nav nav-tabs row-fluid" id="myTab">
+	<li class="active span4"><a data-toggle="tab" href="#tweets"><h3>{{tweet_count}}</h3><small>Tweets</small></a></li>
+	<li class="span4"><a data-toggle="tab" href="#followers" id="twitter_followers"><h3>{{num_connections}}</h3><small>Followers</small></a></li>
+	<li class="span4"><a data-toggle="tab" href="#following" id="twitter_following"><h3>{{friends_count}}</h3><small>Following</small></a></li>
 </ul>
 
 <div class="tab-content" id="myTabContent">
@@ -168,49 +108,23 @@
 		{{#each this}}	
 			<li id="twitter_status" status_id="{{id}}">	
 				<div class="pull-left row-fluid">
-					<a href="{{tweeted_person_profile_url}}" ><img src="{{tweeted_person_pic_url}}" width="30" height="30" alt="" class="img-rounded pull-left span2" style="margin-right:10px;"/></a>
+					<a href="{{tweeted_person_profile_url}}" target="_blank"><img src="{{tweeted_person_pic_url}}" width="30" height="30" alt="" class="img-rounded pull-left span2" style="margin-right:10px;"/></a>
 					<div class="pull-left span9" >
 						<p class="mb_0">{{safe_string message}}</p>
 						<small>{{epochToHumanDate "mm-dd-yyyy" created_time}}</small>
 						<ul class="widget_tab_link">
 							{{#if is_retweeted}}
-								<li><a href="#retweeted" rel="tooltip" title="Retweeted"><i class="icon-retweet icon-blue"  id="{{id}}" ></i></a></li>
+								<li><a href="#retweeted" rel="tooltip" title="Retweeted"><i class="icon-retweet"  id="{{id}}" ></i></a></li>
 							{{else}}
-								<li><a href="#retweet" rel="tooltip" title="Retweet the tweet"><i class="twitter_retweet icon-retweet icon-blue" id="{{id}}"></i></a></li>
+								<li><a href="#retweet" rel="tooltip" title="Retweet the tweet"><i class="twitter_retweet icon-retweet" id="{{id}}"></i></a></li>
 							{{/if}}
 						</ul>
 					</div>
 				</div>					
 			</li>													
 		{{/each}}
-	</div>	
 {{else}}
 		<div class="row-fluid" style="padding: 7px 5px 0px 5px;line-height: 140%;color: #999999;">This person does not share his/her updates</div>
 {{/if}}
 </script>
 
-
-
-<!--
-<script id="twitter-update-stream-template" type="text/html">
-{{#if this.length}}
-	<div class="row-fluid twitter_update" style="word-wrap: break-word;padding-top:5px;">
-		{{#each this}}				
-			<div style="line-height: 140%;padding: 7px 5px 0px 5px;border-bottom: 1px solid #dedede;" id="twitter_status" status_id="{{id}}" >						
-				{{safe_string message}}
-				<div style="font-size:12px;padding:7px 0px 5px 0px;" >
-					{{epochToHumanDate "mm-dd-yyyy" created_time}}
-					{{#if is_retweeted}}
-						<a href="#retweeted" class="icon-retweet" id="{{id}}" style="margin-left:14px; display: inline;color:green">Retweeted</a>
-					{{else}}
-						<a href="#retweet" class="twitter_retweet icon-retweet" id="{{id}}" style="margin-left:14px; display: inline;">Retweet</a>
-					{{/if}}
-				</div>
-			</div>															
-		{{/each}}
-	</div>	
-{{else}}
-		<div class="row-fluid" style="padding: 7px 5px 0px 5px;line-height: 140%;color: #999999;">This person does not share his/her updates</div>
-{{/if}}
-</script>
- -->

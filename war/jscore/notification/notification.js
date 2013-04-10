@@ -176,9 +176,9 @@ function notificationForClickedAndOpened(contact, html) {
 	var current_user = notification_prefs.prefs.currentDomainUserName;
 
 	// User who created contact
-	var contact_created_by = contact.domainUser.name;
+	var contact_created_by = contact.owner.name;
 
-	// console.log(contact.domainUser.name);
+	// console.log(contact.owner.name);
 
 	// Checks for starred contact
 	if (contact.star_value == 0) {
@@ -201,6 +201,7 @@ function notificationForClickedAndOpened(contact, html) {
 	// Notification for assigned and starred contacts
 	if (notification_prefs.contact_assigned_clicked_link
 			|| notification_prefs.contact_assigned_starred_clicked_link) {
+		
 		// Show notifications for contacts of same user
 		if (current_user == contact_created_by
 				&& contact.notification == "CLICKED_LINK")
@@ -209,6 +210,7 @@ function notificationForClickedAndOpened(contact, html) {
 
 	// Opened Email
 	if (notification_prefs.contact_opened_email) {
+		
 		// If any contact, set others false
 		notification_prefs.contact_assigned_opened_email = false;
 		notification_prefs.contact_assigned_starred_opened_email = false;
@@ -220,6 +222,7 @@ function notificationForClickedAndOpened(contact, html) {
 	// Notification for assigned and starred contacts
 	if (notification_prefs.contact_assigned_opened_email
 			|| notification_prefs.contact_assigned_starred_opened_email) {
+		
 		// Show notifications for contacts of same user
 		if (current_user == contact_created_by
 				&& contact.notification == "OPENED_EMAIL")
@@ -272,7 +275,7 @@ function notificationForBrowsing(contact) {
 	var current_user = notification_prefs.prefs.currentDomainUserName;
 
 	// User who created contact
-	var contact_created_by = contact.domainUser.name;
+	var contact_created_by = contact.owner.name;
 
 	// Another template is taken for browsing as the fields required are
 	// different.
