@@ -177,6 +177,10 @@
 			</div>
 		</li>
 	</ul>
+{{else}}
+	<div class='well' style='padding: 5px 5px 5px 5px;line-height:160%;background-color: #ffffff;color: #999;margin-bottom: 10px;'>
+	    No active subscription
+	</div>
 {{/if}}
 <div class="sub_header">
 		<h3>Subscription History</h3>
@@ -190,5 +194,9 @@
 	</li>
 {{/each}}
 </ul>
+{{else}}
+	<div class='well' style='padding: 5px 5px 5px 5px;line-height:160%;background-color: #ffffff;color: #999;margin-bottom: 10px;'>
+	    No payments
+	</div>
 {{/if}}
 </script>
