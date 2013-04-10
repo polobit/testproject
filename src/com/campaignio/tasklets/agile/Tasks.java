@@ -62,8 +62,8 @@ public class Tasks extends TaskletAdapter
 		List<Task> dueTasks = TaskUtil.getPendingTasks(Integer
 			.parseInt(dueDays));
 
-		log(campaignJSON, subscriberJSON, "Due Tasks : " + dueTasks
-			+ " with Due Days : " + dueDays);
+		log(campaignJSON, subscriberJSON, nodeJSON, "Due Tasks : "
+			+ dueTasks + " with Due Days : " + dueDays);
 
 		if (dueTasks != null)
 		    // Execute Next One in Loop

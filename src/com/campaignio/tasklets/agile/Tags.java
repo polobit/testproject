@@ -61,6 +61,10 @@ public class Tags extends TaskletAdapter
 	if (contact != null)
 	{
 	    String tags = "";
+
+	    // Remove leading and trailing whitespace
+	    tagNames.trim();
+
 	    // Replace multiple space with single space
 	    tags = tagNames.trim().replaceAll(" +", " ");
 
@@ -73,14 +77,15 @@ public class Tags extends TaskletAdapter
 	    if (type.equals(ADD))
 	    {
 		contact.addTags(tagsArray);
-		log(campaignJSON, subscriberJSON, "Added tags are: " + tagNames);
+		log(campaignJSON, subscriberJSON, nodeJSON, "Added tags are: "
+			+ tagNames);
 	    }
 	    // Delete Tags based on contact
 	    else
 	    {
 		contact.removeTags(tagsArray);
-		log(campaignJSON, subscriberJSON, "Deleted tags are: "
-			+ tagNames);
+		log(campaignJSON, subscriberJSON, nodeJSON,
+			"Deleted tags are: " + tagNames);
 	    }
 	}
 
