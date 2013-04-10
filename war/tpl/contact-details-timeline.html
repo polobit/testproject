@@ -55,7 +55,7 @@
 
         {{#if_entity "date"}}
             <div class="timestamp">{{date_secs}}</div>
-            <div class="title"><h3><span><a class="no-line"><i class="icon-envelope"></i></a></span>{{subject}}</h3></div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-envelope"></i></a></span> {{subject}}</h3></div>
             <div class="date">{{epochToTaskDate date_secs}}</div>
             <div class="body">
                 <div class="caption" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>From:</b> {{from}}</div>
@@ -63,7 +63,7 @@
                 </div>
             
             {{#if message}}
-                <div id="autoellipsis" class="text" style="text-overflow:ellipsis;height:50px;overflow:hidden"><b>Message:</b> {{message}}
+                <div id="autoellipsis" class="text" style="text-overflow:ellipsis;height:50px;overflow:hidden"> {{message}}
                     <div class="right"><a href="#" id="tl-mail-popover"><i class="icon-plus"></i></a></div>
                 </div> 
             {{/if}}       

@@ -252,7 +252,7 @@ var ContactsRouter = Backbone.Router.extend({
                 show_map(el);
                 
                 // To get QR code
-                head.js(LIB_PATH + 'lib/jquery.classyqr.js',  function(){
+                head.js(LIB_PATH + 'lib/jquery.classyqr.min.js',  function(){
                 	
                 	details = fill_QR(contact.toJSON().properties);
                 	
