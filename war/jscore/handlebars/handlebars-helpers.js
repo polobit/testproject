@@ -380,7 +380,20 @@ $(function() {
 	//return temp.charAt(0).toUpperCase() + temp.slice(1);
 	});
 	
+	/**
+	 * Converts Epoch Time to Human readable date of default format.Used for campaign-logs.
+	 **/
+	Handlebars.registerHelper('epochToLogDate', function(logTime){
+		return new Date(logTime * 1000);
+	});
 	
+	/**
+	 * Replace '+' symbols with space.Used in notification.
+	 **/
+	Handlebars.registerHelper('replace_plus_symbol', function(name){
+		
+		return name.replace(/\+/g, ' ');
+	});	
 
 	/**
 	 * Displays all the properties of a contact in its detail view, excluding

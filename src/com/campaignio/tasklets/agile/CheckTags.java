@@ -77,14 +77,15 @@ public class CheckTags extends TaskletAdapter
 	// Check contact tags consists of all given tags.
 	if (contactTags.containsAll(tagsSet))
 	{
-	    log(campaignJSON, subscriberJSON, "Given tags exist: " + tagsSet);
+	    log(campaignJSON, subscriberJSON, nodeJSON,
+		    "CheckTags Log - Given tags exist: " + tagsSet);
 	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		    nodeJSON, BRANCH_YES);
 	    return;
 	}
 
-	log(campaignJSON, subscriberJSON, "Given tags doesn't exist: "
-		+ tagsSet);
+	log(campaignJSON, subscriberJSON, nodeJSON,
+		"CheckTags Log - Given tags doesn't exist: " + tagsSet);
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		nodeJSON, BRANCH_NO);
     }

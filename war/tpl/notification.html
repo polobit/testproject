@@ -30,7 +30,7 @@
 
 <div>  
    {{#if entity_type}}
-       <span><a href="#deals/{{id}}" style="color:black;">{{name}}</a></span>
+       <span><a href="#deals/{{id}}" style="color:black;">{{replace_plus_symbol name}}</a></span>
    {{else}}
        {{#if_contact_type "PERSON"}}
            <span style="vertical-align:text-top">

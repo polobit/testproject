@@ -61,8 +61,8 @@ public class GetMessage extends TaskletAdapter
 	String message = customData.getString("message");
 
 	// Log
-	log(campaignJSON, subscriberJSON, "Interrupted - we got new SMS - "
-		+ message);
+	log(campaignJSON, subscriberJSON, nodeJSON,
+		"Interrupted - we got new SMS - " + message);
 
 	// Get From, Message
 	String from = getStringValue(nodeJSON, subscriberJSON, data, WORD_FROM);
@@ -103,7 +103,7 @@ public class GetMessage extends TaskletAdapter
 	System.out.println("Woke up from wait. Executing Timeout Branch.");
 
 	// Log
-	log(campaignJSON, subscriberJSON, "SMS Timeout");
+	log(campaignJSON, subscriberJSON, nodeJSON, "SMS Timeout");
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,

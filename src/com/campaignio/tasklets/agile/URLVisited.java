@@ -35,7 +35,6 @@ public class URLVisited extends TaskletAdapter
      */
     public static String BRANCH_NO = "no";
 
-    @SuppressWarnings("deprecation")
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
 	    JSONObject data, JSONObject nodeJSON) throws Exception
     {
@@ -52,13 +51,15 @@ public class URLVisited extends TaskletAdapter
 
 	if (count == 0)
 	{
-	    log(campaignJSON, subscriberJSON, "URL Not Visited : " + url);
+	    System.out.println("Node JSON in url visited is: " + nodeJSON);
+	    log(campaignJSON, subscriberJSON, nodeJSON, "URL Not Visited : "
+		    + url);
 	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		    nodeJSON, BRANCH_NO);
 	    return;
 	}
 
-	log(campaignJSON, subscriberJSON, "URL Visited : " + url);
+	log(campaignJSON, subscriberJSON, nodeJSON, "URL Visited : " + url);
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		nodeJSON, BRANCH_YES);
     }

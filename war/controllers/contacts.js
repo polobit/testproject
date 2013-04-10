@@ -251,10 +251,11 @@ var ContactsRouter = Backbone.Router.extend({
                 
                 show_map(el);
                 
+                // To get QR code
                 head.js(LIB_PATH + 'lib/jquery.classyqr.js',  function(){
                 	
                 	details = fill_QR(contact.toJSON().properties);
-
+                	
                     $("#qrcode", el).ClassyQR({
                     	create: true,
                         type: 'contact',
@@ -262,7 +263,9 @@ var ContactsRouter = Backbone.Router.extend({
                         address: details.address,
                         url: details.url,
                         number: details.number,
-                        email: details.email
+                        email: details.email,
+                        title: details.title,
+                        company: details.company
                     });
                 });
                 fill_owners(el, contact.toJSON());

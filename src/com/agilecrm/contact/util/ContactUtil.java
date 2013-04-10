@@ -353,4 +353,24 @@ public class ContactUtil
 	    contact.save();
 	}
     }
+
+    /**
+     * Returns contact firstname and lastname from contact-id.
+     * 
+     * @param contactId
+     *            - Contact Id.
+     * @return Contact Name.
+     */
+    public static String getContactNameFromId(Long contactId)
+    {
+	Contact contact = getContact(contactId);
+
+	if (contact == null)
+	    return "?";
+
+	String contactName = contact.getContactFieldValue(Contact.FIRST_NAME)
+		+ " " + contact.getContactFieldValue(Contact.LAST_NAME);
+
+	return contactName;
+    }
 }
