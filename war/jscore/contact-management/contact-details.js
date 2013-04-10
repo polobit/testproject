@@ -62,9 +62,9 @@ function fill_QR(properties){
 	details.title = getPropertyValue(properties, 'title');
 	details.company = getPropertyValue(properties, 'company');
 	
-	details.email = get_list_of_properties('email');
-	details.number = get_list_of_properties('phone');
-	details.url = get_list_of_properties('website');
+	details.email = trim_last_comma(get_list_of_properties('email'));
+	details.number = trim_last_comma(get_list_of_properties('phone'));
+	details.url = trim_last_comma(get_list_of_properties('website'));
 	
 	for ( var i = 0; i < properties.length; i++){
 		if(properties[i].name == "address"){
@@ -72,15 +72,30 @@ function fill_QR(properties){
 			var address = "";
 			for(var key in adr){
 				if(adr[key] && adr[key] != undefined){
-					address += adr[key] + ", ";
+					address += adr[key] + ",";
 					}
 			}
-			details.address = address;
+			details.address = trim_last_comma(address);
 		}
 	}
 	return details;
 }
 
+/**
+ * To remove the last comma of the object.
+ * @param str
+ * @returns str
+ */
+function trim_last_comma(str){
+	if(str != undefined)
+		{
+			var len =str.length;
+			var last =str.lastIndexOf(",");
+			if((len-1) == last)
+			str = str.slice(0,(len-1));
+		}
+	return str;
+}
 /**
  * To get list of common properties
  * @param name

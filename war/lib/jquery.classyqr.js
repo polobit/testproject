@@ -14,7 +14,7 @@
 			var c = {
 				baseUrl : 'https://chart.googleapis.com/chart?cht=qr&chs=',
 				// baseUrl: 'http://chart.apis.google.com/chart?cht=qr&chs=',
-				size : 230,
+				size : 300,
 				create : false,
 				number : null,
 				email : null,

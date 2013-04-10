@@ -55,15 +55,15 @@
 
         {{#if_entity "date"}}
             <div class="timestamp">{{date_secs}}</div>
-            <div class="title"><h3><span><a class="no-line"><i class="icon-envelope"></i></a></span> Mail</h3></div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-envelope"></i></a></span> Subject</h3></div>
             <div class="date">{{epochToTaskDate date_secs}}</div>
             <div class="body">
-                <div class="caption"><b>From:</b></br> {{from}}</div>
-                <div class="caption" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover"><b>To:</b></br> {{to}}
+                <div class="caption" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>From:</b>{{from}}</div>
+                <div class="caption" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover"><b>To:</b>{{to}}
                 </div>
             
             {{#if message}}
-                <div class="text" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>Message:</b></br> {{message}}
+                <div class="text" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>Message:</b> {{message}}
                     <div class="right"><a href="#" id="tl-mail-popover"><i class="icon-plus"></i></a></div>
                 </div> 
             {{/if}}       

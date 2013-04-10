@@ -697,7 +697,7 @@ $(function () {
 		htmlstring = htmlstring.replace("icon-plus", "");
 
 		// Add pre tag to the string to consider white spaces
-		$("#mail-in-detail").html("<pre>" + htmlstring + "</pre>");
+		$("#mail-in-detail").html("<pre style='background:none;border:none;'>" + htmlstring + "</pre>");
 		
 		$("#timelineMailModal").modal("show");
         
@@ -713,7 +713,7 @@ $(function () {
 		string = string.replace("From:", "</br>From:</br>").replace("To:", "</br>To:</br>").replace("Subject:", "</br>Subject:</br>").replace("Text:", "</br>Text:</br>").replace("HTML:", "");
 		
 		// Add pre tag to the string to consider white spaces
-		$("#log-in-detail").html("<pre>" + string + "</pre>");
+		$("#log-in-detail").html("<pre style='background:none;border:none;'>" + string + "</pre>");
 		
 		$("#timelineLogModal").modal("show");
     });
