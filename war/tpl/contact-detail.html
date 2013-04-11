@@ -189,33 +189,39 @@
                 </div>
             <br/>       
 
-
-          {{#multiple_Property_Element "phone" properties}}
+{{#multiple_Property_Element "phone" properties}}
 			<div class="pull-left row-fluid">
-				<i class="icon-phone pull-left"></i>
-				<div class="pull-right span9">
+				<div class="span1">
+					<i class="icon-phone pull-left"></i>
+				</div>
+				<div class="pull-right span10">
 				{{#each this}}	
 					<a href="tel:{{value}}">{{value}}</a> 	
-					&nbsp {{#if subtype}} ({{subtype}}) {{/if}}</br>
+					  {{#if subtype}} ({{subtype}}) {{/if}}</br>
 				{{/each}}
 				</div>
 			</div>
 		  {{/multiple_Property_Element}}
 		  {{#multiple_Property_Element "email" properties}}
 				<div class="pull-left row-fluid">
-					<i class="icon-envelope-alt pull-left"> </i>
-					<div class="pull-right span9">
+					<div class="span1">
+						<i class="icon-envelope-alt pull-left"> </i>
+					</div>
+					<div class="pull-right span10">
 						{{#each this}}
 							<a href="mailto:{{value}}">{{value}}</a> 	
-							&nbsp {{#if subtype}} ({{subtype}}) {{/if}}</br>
+							  {{#if subtype}} ({{subtype}}) {{/if}}</br>
 						{{/each}}
 					</div>
 				</div>
 			{{/multiple_Property_Element}}
             {{#multiple_Property_Element "website" properties}}
+
 				<div class="pull-left row-fluid">
-					<i class="icon-globe pull-left"></i> 
-						<div class="pull-right span9">
+					<div class="span1">					
+						<i class="icon-globe pull-left"></i>
+					</div> 
+						<div class="pull-right span10">
 							{{#each this}}	
 								<a href="{{value}}">{{value}}</a> &nbsp<i class="icon-{{toLowerCase subtype}}-sign"></i></br>
 							{{/each}}

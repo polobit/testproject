@@ -22,7 +22,23 @@ $(function(){
 		
 		$('#time-line').addClass('active');
 	});
-
+	
+	$('.email-subject').die().live('click', function(e) {
+		e.preventDefault();
+		var href = $(this).attr("href");
+		var id = $(this).attr('id');
+		$(".collapse-" + id).hide();
+		$(href).collapse('toggle');
+		
+		$(href).on("hidden", function(){
+			$(".collapse-" + id).show();
+		})
+		
+	});	
+	
+	
+	
+	
 	/**
 	 * Fetches all the notes related to the contact and shows the notes collection 
 	 * as a table in its tab-content, when "Notes" tab is clicked.
@@ -34,10 +50,15 @@ $(function(){
             url: '/core/api/contacts/' + id + "/notes",
             restKey: "note",
             templateKey: "notes",
-            individual_tag_name: 'tr'
+            individual_tag_name: 'li',
+            postRenderCallback: function(el){
+            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+            		 $("time.note-created-time", el).timeago();
+            	})
+            }
         });
         notesView.collection.fetch();
-        $('#notes', this.el).html(notesView.el);
+        $('#notes', App_Contacts.contactDetailView.model.el).html(notesView.el);
 	});
 	
 	/**
@@ -119,10 +140,17 @@ $(function(){
 			url: 'core/api/email?e=' + encodeURIComponent(email) + '&c=10&o=0',
             templateKey: "email-social",
             restKey: "emails",
-            individual_tag_name: 'tr'
+            individual_tag_name: 'li',
+            postRenderCallback: function(el) {
+            		head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+            			$("time", el).each(function(index, element){
+              				$(element).timeago();
+            			})
+            	});
+            }
         });
         mailsView.collection.fetch();
-        $('#mail', this.el).html(mailsView.el);
+        $('#mail').html(mailsView.el);
 	});
 	
 	/**
@@ -314,7 +342,7 @@ $(function(){
 			});
 	   });
 	});
-
+	
 });
 
 /**

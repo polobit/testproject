@@ -5,10 +5,15 @@ import java.util.List;
 
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.UserPrefs;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -53,6 +58,9 @@ public class Note
      */
     @NotSaved(IfDefault.class)
     public List<String> contacts = null;
+
+    @NotSaved(IfDefault.class)
+    private Key<AgileUser> owner = null;
 
     /**
      * List of contact keys, a note related to
@@ -116,9 +124,29 @@ public class Note
 		    .parseLong(contact_id)));
 	}
 
+	owner = new Key<AgileUser>(AgileUser.class,
+		AgileUser.getCurrentAgileUser().id);
 	// Store Created Time
 	if (created_time == 0L)
 	    created_time = System.currentTimeMillis() / 1000;
+    }
+
+    @XmlElement(name = "Prefs")
+    public UserPrefs getPrefs() throws Exception
+    {
+	if (owner != null)
+	{
+	    Objectify ofy = ObjectifyService.begin();
+	    try
+	    {
+		return ofy.query(UserPrefs.class).ancestor(owner).get();
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+	return null;
     }
 
     @Override
