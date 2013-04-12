@@ -9,10 +9,10 @@
     "language": "en",
     "branches": "yes", 
     "category": "Mobile",
-    "workflow_tasklet_class_name": "com.campaignio.tasklets.social.TwitterSendMessage",
+    "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.TwitterSendMessage",
     "ui": [
 		{
-		    "label": "Please allow ContactSpot to <a href=\"javascript:openTwitter()\">access your account</a>",
+		    "label": "Please allow AgileCRM to <a href=\"javascript:openTwitter()\">access your account</a>",
 		    "category": "Settings",
 		    "fieldType": "label",
 		    "type": "label" 
@@ -77,7 +77,7 @@
          }
 		,
 		 {
-            "label": "Tweet or send mentions automatically to your prospect. Please note that ContactSpot will not tweet more than 500 tweets a day.<br>",
+            "label": "Tweet or send mentions automatically to your prospect. Please note that AgileCRM will not tweet more than 500 tweets a day.<br>",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 
