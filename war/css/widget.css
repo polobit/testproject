@@ -15,7 +15,7 @@
 
 .widget_header{
 	padding:10px;
-	background:#f0f0f0;
+	background:rgba(240, 240, 240, 3);
 	border-bottom:1px solid #d6d6d6;
 	width:100%;
 	display:inline-block;
@@ -85,12 +85,13 @@
 }
 
 .widget_container > .widgets > .nav-tabs {
-	background:#f5f5f5;
+	background: rgba(240, 240, 240, .4);
 	border-bottom:1px solid #ddd;
-	padding:10px;
+	
 	margin:0;
 	box-sizing:border-box;
 }
+
 
 .widget_container > .widgets > .nav-tabs > li > a > h3{
 	margin:0;
@@ -105,7 +106,7 @@
 
 .widget_container > .widgets > .nav-tabs > li > a,
 .widget_container > .widgets > .nav-pills > li > a {
-	padding:0px;
+	padding:10px;
 	line-height: 14px;
 	word-break: break-all;
 	border:none;
