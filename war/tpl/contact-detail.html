@@ -67,9 +67,8 @@
                     	</div>
                     </div>
                 </div>
-            </div>
             <div class='clearfix'></div>    
-			<div style="margin-bottom:10px">
+			<div>
                 <ul id="added-tags-ul" class="tagsinput" style="display:inline;vertical-align:top;margin-bottom:10px">
                	 	{{#if tags.length}}
                     	{{#each tags}}
@@ -87,6 +86,8 @@
 					<a href="#" id="add-tags" rel="tooltip" data-original-title="addtag" data-placement="top"><i class="icon-plus-sign"></i> <span>Add tags</span></a>
 				</div> 
             </div>
+            </div>
+            <div class='clearfix'></div>
             <div class="">
                 <ul class="nav nav-tabs" id="contactDetailsTab">
                     <li class="active"><a data-toggle="tab" href="#timeline">Timeline</a></li>
@@ -149,20 +150,20 @@
 			</div>
 		</div>
          <div id="qrcode"></div>
-		 <div style='padding:0% 8%;word-wrap: break-word;'>
+		 <div style='padding:0% 8% 10px;word-wrap: break-word;'>
                     <div>
                         <div class="change-owner-succes">
                         </div>
-                        <span><b>Lead owner</b> : <span id="contact-owner" data={{owner.id}} style="display: inline-block">{{owner.name}}</span> 
+                        <span><b>Owner</b> : <span id="contact-owner" data={{owner.id}} style="display: inline-block">{{owner.name}}</span> 
 						<span>
-                       		<a href="3"> <i class="icon-edit" style="vertical-align:top" rel="popover" data-placement="top"  data-title="Lead Owner" data-content="Click here to change owner." id="change-owner-element" data-trigger="hover"></i></a>
+                       		<a href="#"> <i class="icon-edit" style="vertical-align:top" rel="popover" data-placement="top"  data-title="Lead Owner" data-content="Click here to change owner." id="change-owner-element" data-trigger="hover"></i></a>
  						</span>
-						  <div class="btn-group" id="change-owner-ul" style="position: relative;margin-top: 5px;display:none">	
+						  <div class="btn-group" id="change-owner-ul" style="vertical-align:middle;display:none">	
  							<a class="btn dropdown-toggle" data-toggle="dropdown">
                         		Change owner
                             	<span class="caret"></span>
                         	</a>
-							<ul id='contact-detail-owner' class="dropdown-menu">
+							<ul id='contact-detail-owner' class="dropdown-menu pull-right">
                        		</ul>
 						  </div>	
                             <!--<select id='contact-detail-owner' class="input-block-level">
@@ -249,11 +250,8 @@
             </div>
 	</div>
 
-    <div id="widgets">
-    </div>
-    <div style='float:right;'>
-        <a href='#add-widget'>Manage widgets</a>
-    </div>
+    <div id="widgets"></div>
+
    </div>
   </div>
 </div>

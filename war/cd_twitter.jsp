@@ -1,27 +1,26 @@
-<%@page import="twitter4j.auth.RequestToken"%>
-<%@page import="twitter4j.TwitterFactory"%>
-<%@page import="twitter4j.Twitter"%>
+
+<%@page import="org.scribe.model.Token"%>
+<%@page import="com.agilecrm.Globals"%>
+<%@page import="org.scribe.builder.api.TwitterApi"%>
+<%@page import="org.scribe.builder.ServiceBuilder"%>
+<%@page import="org.scribe.oauth.OAuthService"%>
 <%
 
-// Constants
-final String CONSUMER_KEY = "Q8jLaFvEhdE3kRTgUpMw";
-final String CONSUMER_SECRET = "vfsi8O6nXsKh4jhTpJlS003OULo4KcuBnek5eWpgfCQ"; 
+// Get Service
+StringBuffer callbackURL = request.getRequestURL();
+int index = callbackURL.lastIndexOf("/");
+callbackURL.replace(index, callbackURL.length(), "").append("/cd_twitter_callback.jsp");
 
-Twitter twitter = new TwitterFactory().getInstance();
-twitter.setOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
+OAuthService service = new ServiceBuilder().provider(TwitterApi.class).callback(callbackURL.toString()).apiKey(Globals.TWITTER_API_KEY)
+	.apiSecret(Globals.TWITTER_SECRET_KEY).build();
 
-RequestToken requestToken = twitter.getOAuthRequestToken();
+// Save Token and Service as we need them after it returns back
+Token token = service.getRequestToken();
+session.setAttribute("requestToken", token);
 
-String token = requestToken.getToken();
-String tokenSecret = requestToken.getTokenSecret();
+// Redirect to Authorization URL
+String url = service.getAuthorizationUrl(token);
+System.out.println(url + " " + token.getToken() + " " + token.getSecret());
  
-session.setAttribute("token", token);
-session.setAttribute("tokenSecret", tokenSecret);
- 
-String authUrl = requestToken.getAuthorizationURL();
-
-System.out.println(authUrl + " " + token + " " + tokenSecret);
- 
-response.sendRedirect(authUrl);
-
+response.sendRedirect(url);
 %>

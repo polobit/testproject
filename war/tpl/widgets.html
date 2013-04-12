@@ -17,10 +17,18 @@
 		<div class="widgets" id="{{name}}">
 		</div>
 	</div>
+
 </script>
 
 <script id="widgets-collection-template" type="text/html">
-<ul class="widget-sortable" id="widgets-model-list" style="margin:0px 0px"></ul>
+{{#unless this.length}}
+    <a class="btn btn-primary pull-right" href='#add-widget'><i class="icon-plus-sign"></i> Manage widgets</a>
+{{else}}
+    <ul class="widget-sortable" id="widgets-model-list" style="margin:0px 0px"></ul>
+    <div style='float:right;'>
+        <a href='#add-widget'>Manage widgets</a>
+    </div>
+{{/unless}}
 </script>
 
 <!-- <li><a href="#" id="{{name}}_plugin_delete" rel="tooltip" title="Delete this person"><i class="icon-remove icon-gray"></i></a></li>

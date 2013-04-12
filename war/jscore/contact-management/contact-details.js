@@ -254,7 +254,7 @@ $(function(){
 	 * is selected.   
 	 */
 	$('.contact-owner-list').live('click', function(){
-		
+	
 		$('#change-owner-ul').css('display', 'none');
 		var id_array = [];
 		id_array.push(App_Contacts.contactDetailView.model.get('id'));
@@ -267,7 +267,7 @@ $(function(){
 		// Returns, if same owner is selected again 
 		if(new_owner_id == current_owner_id)
 			return;
-		
+
 		var url = '/core/api/contacts/bulk/owner/' + new_owner_id;
 		var json = {};
 		json.contact_ids = JSON.stringify(id_array);
@@ -276,6 +276,10 @@ $(function(){
 			// Replaces old owner details with changed one
 			$('#contact-owner').text(new_owner_name);
 			$('#contact-owner').attr('data', new_owner_id);
+			
+			// Showing updated owner
+			$('#change-owner-element').css('display', 'inline-block');
+        	$('#contact-owner').css('display', 'inline-block');
 			
 			// Shows acknowledgement of owner change
 			// $(".change-owner-succes").html('<div class="alert alert-success"><a class="close" data-dismiss="alert" href="#">×</a>Owner has been changed successfully.</div>');
@@ -398,10 +402,20 @@ $(function(){
     $('#change-owner-element').live('click',function(e){
     	e.preventDefault();
     	$('#change-owner-element').popover('hide');
-    	if($('#change-owner-ul').css('display') == 'block')
+    	
+    	// Hiding the owner name
+    	$('#change-owner-element').css('display', 'none');
+    	$('#contact-owner').css('display', 'none');
+    	
+    	if($('#change-owner-ul').css('display') == 'inline-block'){
     		$('#change-owner-ul').css('display', 'none');
+    		// Showing the owner name
+    		$('#change-owner-element').css('display', 'inline-block');
+        	$('#contact-owner').css('display', 'inline-block');
+    	}
+    	
     	else
-    		$('#change-owner-ul').css('display', 'block');
+    		$('#change-owner-ul').css('display', 'inline-block');
     });
 });
 

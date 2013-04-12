@@ -14,10 +14,9 @@
     <div class="inner">
         {{#if_entity "note"}}
             <div class="timestamp">{{created_time}}</div>
-            <div class="title"><h3><span><a class="no-line"><i class="icon-list-alt"></i></a></span> Note</h3></div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-list-alt"></i></a></span> {{subject}}</h3></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
-                <div class="text" style="color: #333333">{{subject}}</div>
                 <div class="text" style="color: #999999">{{description}}</div>
             </div>
         {{/if_entity}}
