@@ -686,7 +686,7 @@ function remove_loading_img(el){
  */
 $(function () {
 	// Using autoellipsis
-	head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function(){
+	head.js(LIB_PATH + 'lib/jquery.autoellipsis.min.js', function(){
 	$("#autoellipsis").ellipsis();
 	});
 	/*
