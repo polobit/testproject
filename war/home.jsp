@@ -210,10 +210,10 @@ String CSS_PATH = "/";
 	%>
 	
 	</div>
-		<div class="footer" id="footer" style="padding:0px !important">
+		<div class="footer" id="footer" style="padding:0px !important;margin-top:15px;">
 			<div style="border-top:1px solid #f5f5f5;border-bottom:1px solid #f5f5f5"></div>
 			<div class="container">
-			<p style="margin:20px 0px 20px 0px"><b>Like AgileCRM?</b> Refer your friends <i class="icon-twitter"></i>
+			<p style="margin:15px 0px 15px 0px"><b>Like AgileCRM?</b> Refer your friends <i class="icon-twitter"></i>
 			<i class="icon-facebook"></i>
 			<i class="icon-google-plus-sign"></i>
     	    <a style="margin-left:20px;cursor:pointer;" id="help-page">Help</a>
