@@ -71,7 +71,7 @@ function setupStripeOAuth(plugin_id)
     var url = '/scribe?service=stripe&return_url=' + encodeURIComponent(callbackURL) +
         '&plugin_id=' + encodeURIComponent(plugin_id);
 
-    $('#Stripe').html('<div style="padding: 0px 5px 7px 5px;line-height: 160%;" >' +
+    $('#Stripe').html('<div class="widget_content" style="border-bottom:none;line-height: 160%;" >' +
         'Stripe enables individuals and businesses to accept payments over the ' +
         'internet.<p style="margin: 10px 0px 5px 0px;"><a href=' + url + '>' +
         '<img src="/img/plugins/stripe-connect-button.png" style="width: 190px;' +

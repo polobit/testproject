@@ -49,7 +49,7 @@ function setupRapleafOAuth(plugin_id) {
 	$('#Rapleaf')
 			.html(
 					RAPLEAF_PLUGIN_HEADER
-							+ '<div><p style="padding:5px;">Rapleaf helps you learn more about your customers, provides data (age, gender, marital status, income, etc., ) on US consumer email addresses.To access </p>'
+							+ '<div class="widget_content" style="border-bottom:none"><p >Rapleaf helps you learn more about your customers, provides data (age, gender, marital status, income, etc., ) on US consumer email addresses.To access </p>'
 							+ '<p style="padding:5px;"><label><b>Enter Your API key</b></label>'
 							+ '<input type="text" id="rapleaf_api_key" class="input-medium required" placeholder="API Key" value=""></input></p>'
 							+ '<button id="save_api_key" class="btn" style="margin-left:5px;"><a href="#">Save</a></button><br/>'

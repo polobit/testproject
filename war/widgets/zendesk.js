@@ -45,7 +45,7 @@ $(function ()
     // Checks if contact has email, if undefined shows message in Zendesk panel
     if (!Email)
     {
-        $('#Zendesk').html('<div style="padding: 0px 5px 10px 5px;' +
+        $('#Zendesk').html('<div class="widget_content"style="border-bottom:none;padding: 0px 5px 10px 5px;' +
             'line-height:160%;">No email is associated with this contact</div>');
         return;
     }
