@@ -18,7 +18,7 @@
         </div>
         {{/unless}}
 {{#if this.length}}
-	<ul id="notes-model-list" class="ativity-block-ul"></ul>
+	<ul id="notes-model-list" class="ativity-block-ul" url="core/api/notes/bulk"></ul>
 {{/if}}
 </script>
 <script id="notes-model-template" type="text/html">
@@ -29,17 +29,22 @@
 		{{#if prefs.pic}}
 			<img class="user-img" width="40" height="40" alt="" src="{{prefs.pic}}" >
 		{{else}}
-			<img class="user-img" width="40" height="40" src="https://d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png">
+			<img class="user-img" width="40" height="40" src="{{defaultGravatarurl 40}}">
 		{{/if}}
 		<span class="owner-name">{{prefs.currentDomainUserName}}</span>
 	</span>
 
 	<h4><b>{{subject}}</b></h4></br>
 	<p>{{description}}</p>
-	<small class="edit-hover">
-	Written 
-		<time class="note-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" created_time}}</time>
-	</small>	
+	<div class="clear">
+		<span class="actions pull-right">
+                    <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="icon-trash"><i></i></span></a>
+         </span>
+		<small class="edit-hover">
+			Written 
+			<time class="note-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" created_time}}</time>
+		</small>	
+	</div>
 </div>
 </div>
 </script>

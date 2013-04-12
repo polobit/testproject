@@ -41,12 +41,12 @@
             </div>
         {{/if_entity}}
 
-        {{#if_entity "m"}}
-            <div class="timestamp">{{t}}</div>
+        {{#if_entity "logTime"}}
+            <div class="timestamp">{{logTime}}</div>
             <div class="title"><h3><span><a class="no-line"><i class="icon-inbox"></i></a></span> Campaign Logs</h3></div>
-            <div class="date">{{epochToTaskDate t}}</div>
+            <div class="date">{{epochToTaskDate logTime}}</div>
             <div class="body">
-                <div class="text" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden">{{tl_log_string m}}
+                <div class="text" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden">{{logMessage}}
                     <div class="right"><a href="#" id="tl-log-popover"><i class="icon-plus"></i></a></div>
                 </div>        
             </div>

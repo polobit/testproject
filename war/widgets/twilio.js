@@ -50,7 +50,7 @@ $(function() {
  */
 function setupTwilioOAuth(plugin_id) {	
 
-	 $('#Twilio').html('<p style="padding:5px;">Stay connected to your users with Twilio phone numbers in 40 countries all over the globe. </p><a id="twilio-connect-button" href="https://www.twilio.com/authorize/CNf63bca035414be121d517a116066a5f8?state=' + encodeURIComponent(window.location.href) + '" style="margin-bottom: 10px;"></a>');	
+	 $('#Twilio').html('<p class="widget_content" style="border-bottom:none">Stay connected to your users with Twilio phone numbers in 40 countries all over the globe. </p><a id="twilio-connect-button" href="https://www.twilio.com/authorize/CNf63bca035414be121d517a116066a5f8?state=' + encodeURIComponent(window.location.href) + '" style="margin-bottom: 10px;"></a>');	
 				
 }
 

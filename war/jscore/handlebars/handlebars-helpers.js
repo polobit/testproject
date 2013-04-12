@@ -59,8 +59,18 @@ $(function() {
 			return 'https://secure.gravatar.com/avatar/' + MD5(email)
 					+ '.jpg?s=' + width + "&d=" + escape(img);
 		}
+		
+		return 'https://secure.gravatar.com/avatar/' + MD5("")
+		+ '.jpg?s=' + width + "&d=" + escape(img);
 
-		return img;
+	});
+	
+	Handlebars.registerHelper('defaultGravatarurl', function(width) {
+		// Default image
+		var img = "https://d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png";
+		
+		return 'https://secure.gravatar.com/avatar/' + MD5("")
+		+ '.jpg?s=' + width + "&d=" + escape(img);
 	});
 
 	/**
