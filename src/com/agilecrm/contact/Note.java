@@ -8,6 +8,8 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.UserPrefs;
@@ -111,6 +113,17 @@ public class Note
     }
 
     /**
+     * Sets note owner. Used for 'AddNote' of campaigns
+     * 
+     * @param owner
+     */
+    @JsonIgnore
+    public void setOwner(Key<AgileUser> owner)
+    {
+	this.owner = owner;
+    }
+
+    /**
      * Creates contact keys by iterating note related contact ids and assigns
      * created time, if it is 0L.
      */
@@ -124,8 +137,10 @@ public class Note
 		    .parseLong(contact_id)));
 	}
 
-	owner = new Key<AgileUser>(AgileUser.class,
-		AgileUser.getCurrentAgileUser().id);
+	if (owner == null)
+	    owner = new Key<AgileUser>(AgileUser.class,
+		    AgileUser.getCurrentAgileUser().id);
+
 	// Store Created Time
 	if (created_time == 0L)
 	    created_time = System.currentTimeMillis() / 1000;

@@ -8,9 +8,11 @@ import org.json.JSONObject;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.util.DBUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>Add note</code> represents Add note node in workflow. It is used to add
@@ -57,11 +59,28 @@ public class AddNote extends TaskletAdapter
 
 	if (contact != null)
 	{
+	    // Get DomainUser id who created workflow
+	    Long domainId = campaignJSON.getLong("domainUserId");
+
+	    if (domainId == null)
+	    {
+		// Execute Next One in Loop
+		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
+			nodeJSON, null);
+		return;
+	    }
+
+	    AgileUser agileUser = AgileUser
+		    .getCurrentAgileUserFromDomainUser(domainId);
+	    Key<AgileUser> owner = new Key<AgileUser>(AgileUser.class,
+		    agileUser.id);
+
 	    Note note = new Note(subject, description);
 	    List<String> contacts = new ArrayList<String>();
 
 	    contacts.add(contactId);
 	    note.contacts = contacts;
+	    note.setOwner(owner);
 	    note.save();
 
 	}
