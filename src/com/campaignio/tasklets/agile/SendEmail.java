@@ -9,7 +9,6 @@ import org.json.JSONObject;
 
 import com.agilecrm.util.DBUtil;
 import com.agilecrm.util.Util;
-import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.campaignio.util.CampaignStatsUtil;
@@ -463,12 +462,12 @@ public class SendEmail extends TaskletAdapter
 			+ ", Recipient: " + to + ", Subject: " + subject
 			+ ", Text Body: " + text + " and  HTML Body: " + html);
 
-	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
-		DBUtil.getId(subscriberJSON),
-		"Sending Email Details - Sender: " + fromEmail
-			+ ", Recipient: " + to + ", Subject: " + subject
-			+ ", Text Body: " + text + " and  HTML Body: " + html,
-		"Email Sent");
+	// LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
+	// DBUtil.getId(subscriberJSON),
+	// "Sending Email Details - Sender: " + fromEmail
+	// + ", Recipient: " + to + ", Subject: " + subject
+	// + ", Text Body: " + text + " and  HTML Body: " + html,
+	// "Email Sent");
 
 	// Send Message
 	if (html != null && html.length() > 10)

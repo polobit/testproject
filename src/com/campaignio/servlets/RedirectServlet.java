@@ -16,10 +16,8 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
-import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.URLShortener;
-import com.campaignio.logger.util.LogUtil;
 import com.campaignio.servlets.deferred.EmailClickDeferredTask;
 import com.campaignio.util.CampaignStatsUtil;
 import com.campaignio.util.URLShortenerUtil;
@@ -91,16 +89,16 @@ public class RedirectServlet extends HttpServlet
 	    NotificationPrefsUtil.executeNotification(Type.CLICKED_LINK,
 		    contact);
 
-	    Workflow workflow = WorkflowUtil.getWorkflow(Long
-		    .parseLong(urlShortener.campaign_id));
+	    // Workflow workflow = WorkflowUtil.getWorkflow(Long
+	    // .parseLong(urlShortener.campaign_id));
 
-	    if (workflow != null)
-	    {
-		LogUtil.addLogToSQL(urlShortener.campaign_id, subscriberId,
-			"Email link: " + urlShortener.long_url
-				+ " of campaign - " + workflow.name
-				+ " clicked.", "Email Clicked");
-	    }
+	    // if (workflow != null)
+	    // {
+	    // LogUtil.addLogToSQL(urlShortener.campaign_id, subscriberId,
+	    // "Email link: " + urlShortener.long_url
+	    // + " of campaign - " + workflow.name
+	    // + " clicked.", "Email Clicked");
+	    // }
 
 	    // System.out.println(urlShortener);
 	    String longURL = urlShortener.long_url;

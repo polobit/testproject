@@ -1,20 +1,16 @@
 package com.campaignio.logger.util;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.db.util.StatsUtil;
 import com.agilecrm.util.DBUtil;
 import com.campaignio.logger.Log;
-import com.google.appengine.api.NamespaceManager;
+import com.campaignio.logger.LogItem;
 import com.googlecode.objectify.Key;
 
 /**
@@ -38,10 +34,12 @@ public class LogUtil
      *            Message given in the tasklet while declaring log.
      */
     public static void addLogFromID(String campaignId, String subscriberId,
-	    String message)
+	    String message, String logType)
     {
 	// System.out.println("Adding log " + campaignId + " " + subscriberId +
 	// " " + message);
+
+	long logTime = Calendar.getInstance().getTimeInMillis() / 1000;
 
 	// Get existing Log
 	Log log = getCampaignSubscriberLog(campaignId, subscriberId);
@@ -49,15 +47,19 @@ public class LogUtil
 	if (log == null)
 	{
 	    System.out.println("Creating fresh log");
-	    log = new Log(campaignId, subscriberId);
+
+	    List<LogItem> logItemList = new ArrayList<LogItem>();
+	    LogItem logItem = new LogItem(logType, logTime, message);
+	    logItemList.add(logItem);
+
+	    log = new Log(campaignId, subscriberId, logItemList);
+	    log.save();
+	    return;
 	}
 
 	try
 	{
-	    JSONObject messageJSON = new JSONObject().put(Log.LOG_TIME,
-		    Calendar.getInstance().getTimeInMillis() / 1000).put(
-		    Log.LOG_MESSAGE, message);
-	    log.logs.put(messageJSON);
+	    log.logs.add(new LogItem(logType, logTime, message));
 	    log.save();
 	}
 	catch (Exception e)
@@ -86,10 +88,7 @@ public class LogUtil
 	String campaignId = DBUtil.getId(campaignJSON);
 	String subscriberId = DBUtil.getId(subscriberJSON);
 
-	addLogFromID(campaignId, subscriberId, message);
-
-	// addLog To SQL.
-	addLogToSQL(campaignId, subscriberId, message, logType);
+	addLogFromID(campaignId, subscriberId, message, logType);
     }
 
     /**
@@ -181,77 +180,5 @@ public class LogUtil
 	{
 	    e.printStackTrace();
 	}
-    }
-
-    /**
-     * Adds campaign-log to Google-SQL. It gets domain and logTime to add them
-     * to table.
-     * 
-     * @param campaignId
-     *            - Campaign Id.
-     * @param subscriberId
-     *            - Subscriber Id.
-     * @param message
-     *            - Message.
-     * @param logType
-     *            - Log Type.
-     */
-    public static void addLogToSQL(String campaignId, String subscriberId,
-	    String message, String logType)
-    {
-	long logTime = Calendar.getInstance().getTimeInMillis() / 1000;
-	String domain = NamespaceManager.get();
-
-	if (StringUtils.isEmpty(domain))
-	    return;
-
-	// Insert to SQL
-	StatsUtil.addToCampaignLogs(domain, campaignId, subscriberId, logTime,
-		message, logType);
-    }
-
-    /**
-     * Returns campaign logs fetched from Google SQL with respect to campaign
-     * id. Add contact name to each element of json array.
-     * 
-     * @param campaignId
-     *            - Campaign Id.
-     * @return return json-array string.
-     */
-    public static String getSQLLogsOfCampaign(String campaignId)
-    {
-	String domain = NamespaceManager.get();
-
-	// Get from SQL.
-	JSONArray campaignLogs = StatsUtil
-		.getLogsOfCampaign(campaignId, domain);
-
-	if (campaignLogs == null)
-	    return null;
-
-	// Embed contact-name for each log.
-	try
-	{
-	    for (int i = 0; i < campaignLogs.length(); i++)
-	    {
-		// Get each from json-array
-		JSONObject log = campaignLogs.getJSONObject(i);
-
-		String subscriberId = log.getString("subscriber_id");
-
-		String contactName = ContactUtil.getContactNameFromId(Long
-			.parseLong(subscriberId));
-
-		log.put("contactName", contactName);
-	    }
-	}
-	catch (JSONException e)
-	{
-	    e.printStackTrace();
-	}
-
-	System.out.println("Campaign Logs: " + campaignLogs);
-
-	return campaignLogs.toString();
     }
 }

@@ -1,18 +1,19 @@
 package com.campaignio.logger;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Embedded;
 import javax.persistence.Id;
-import javax.persistence.PostLoad;
-import javax.persistence.PrePersist;
-import javax.ws.rs.Produces;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.json.JSONArray;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 
 /**
@@ -46,25 +47,12 @@ public class Log
     public String subscriber_id;
 
     /**
-     * JSONArray logs.
+     * Logs List.
      */
-    @NotSaved
-    public JSONArray logs = new JSONArray();
-
-    /**
-     * We make it private so that Jersey does not send this to the client.
-     */
-    private String logs_json_array_string = null;
-
-    /**
-     * Object Key in logs - time.
-     */
-    public final static String LOG_TIME = "t";
-
-    /**
-     * Object Key in logs - message.
-     */
-    public final static String LOG_MESSAGE = "m";
+    @XmlElement(name = "logs")
+    @Embedded
+    @Indexed
+    public List<LogItem> logs = new ArrayList<LogItem>();
 
     /**
      * Sets entity type as log.
@@ -81,7 +69,7 @@ public class Log
     /**
      * Default Log.
      */
-    Log()
+    public Log()
     {
 
     }
@@ -94,24 +82,11 @@ public class Log
      * @param subscriberId
      *            Id of a contact that subscribes to campaign.
      */
-    public Log(String campaignId, String subscriberId)
+    public Log(String campaignId, String subscriberId, List<LogItem> logs)
     {
 	this.subscriber_id = subscriberId;
 	this.campaign_id = campaignId;
-    }
-
-    /**
-     * Returns logs as an xml element.
-     * 
-     * @return log object.
-     * @throws Exception
-     */
-    @XmlElement
-    @Produces("application/json")
-    public String getLogs() throws Exception
-    {
-	// System.out.println(logs);
-	return logs.toString();
+	this.logs = logs;
     }
 
     /**
@@ -141,33 +116,5 @@ public class Log
     public void save()
     {
 	dao.put(this);
-    }
-
-    /**
-     * Sets json array string before log object gets saved.
-     */
-    @PrePersist
-    void PrePersist()
-    {
-	logs_json_array_string = logs.toString();
-    }
-
-    /**
-     * Sets JSONArray logs to json array string after logs has been retrieved.
-     */
-    @PostLoad
-    void PostLoad()
-    {
-	try
-	{
-	    if (logs_json_array_string != null)
-		logs = new JSONArray(logs_json_array_string);
-	}
-	catch (Exception e)
-	{
-
-	}
-
-	// System.out.println("Logs " + logs);
     }
 }
