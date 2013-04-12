@@ -82,6 +82,8 @@ public class Widget
      */
     public int position = 0;
 
+    public boolean is_minimized = false;
+
     // Dao
     private static ObjectifyGenericDao<Widget> dao = new ObjectifyGenericDao<Widget>(
 	    Widget.class);

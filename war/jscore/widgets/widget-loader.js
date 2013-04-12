@@ -36,7 +36,9 @@ function loadWidgets(el, contact)
                 // In case collection is not empty
                 var id = model.get("id");
                 var url = model.get("url");
-                $.get(url, "script");
+ 
+                if(!model.get("is_minimized"))
+                	$.get(url, "script");
 
                 console.log(model.toJSON());
                 
@@ -95,4 +97,57 @@ function loadWidgets(el, contact)
     var newEl = view.render().el;
 
     $('#widgets', el).html(newEl);
+    
+	
+	$('.widget-minimize').die().live('click', function(e){
+		e.preventDefault();
+
+		var widget_name = $(this).attr('widget');
+		
+		$("#" + widget_name).collapse('hide');
+		$(this).removeClass();
+		$(this).addClass('collapsed');
+		$(this).addClass('widget-maximize');
+		$(this).addClass('icon-plus');
+		var widget = view.collection.where({name: widget_name})[0]
+		var widgetJSON = widget.toJSON();
+		
+		widgetJSON['is_minimized'] = true;
+		
+		var model = new BaseModel();
+		model.url = "core/api/widgets";
+		model.save(widgetJSON, {silent:true});
+		
+		widget = model;
+	});
+	
+	$('.widget-maximize').die().live('click', function(e){
+		e.preventDefault();
+		var widget_name = $(this).attr('widget');
+		
+		var widget = view.collection.where({name: widget_name})[0];
+		
+		var widgetJSON = widget.toJSON();
+		widgetJSON['is_minimized'] = false;
+		
+		var model = new BaseModel();
+		model.url = "core/api/widgets";
+		model.save(widgetJSON, {silent:true});
+		
+		widget = model;
+
+		var is_collapsed = $(this).hasClass('collapsed');
+		$(this).removeClass();
+		$(this).addClass('widget-minimize');
+		$(this).addClass('icon-minus');
+		console.log(is_collapsed);
+		if(is_collapsed)
+		{
+			$("#" + widget_name).collapse('show');
+			return;
+		}
+		
+		$.get(widget.get('url'), 'script');
+
+	});
 }

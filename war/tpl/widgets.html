@@ -8,9 +8,12 @@
 			</div>
 			<div class="pull-right">
 				<ul class="widget_header_control">
-					<li><a href="#"><i class="icon-move"></i></a></li>
-					<li><a href="#"><i class="icon-minus"></i></a></li>
-					<li><a href="#" id="{{name}}_plugin_delete" rel="tooltip" title="Delete this person"><i class="icon-remove"></i></a></li>						
+					{{#if is_minimized}}
+						<li><a href="#"><i widget="{{name}}" class="widget-maximize icon-plus"></i></a></li>
+					{{else}}
+						<li><a href="#"><i widget="{{name}}" class="widget-minimize icon-minus"></i></a></li>
+					{{/if}}
+					<li><a href="#" id="{{name}}_plugin_delete" rel="tooltip" title="Delete this person"><i class="icon-remove"></i></a></li>												
 				</ul>
 			</div>
 		</div>
