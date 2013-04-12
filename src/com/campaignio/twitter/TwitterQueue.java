@@ -22,26 +22,22 @@ import com.agilecrm.util.DBUtil;
 public class TwitterQueue
 {
 
-    // Key
     /**
      * TwitterQueue Id
      */
     @Id
     public Long id;
 
-    // Queue
     /**
      * List of Twitter Jobs
      */
     public List<TwitterJob> twitter_jobs = new ArrayList<TwitterJob>();
 
-    // Twitter Account
     /**
      * Twitter Account
      */
     public String account;
 
-    // Rate Limit
     /**
      * Rate limit
      */
@@ -60,7 +56,6 @@ public class TwitterQueue
      */
     public static final String TWITTER_DB_RATE_LIMIT_HOURLY_20 = "rate_limit_20";
 
-    // Dao
     /**
      * Dao for TwitterQueue class
      */

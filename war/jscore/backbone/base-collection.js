@@ -14,8 +14,8 @@ var BaseCollection = Backbone.Collection.extend({
 		this.restKey = options.restKey;
 		if (options.sortKey)
 			this.sortKey = options.sortKey;
-		if (options.reverse)
-			this.reverse = options.reverse;
+		if (options.descending)
+			this.descending = options.descending;
 		
 		// Set false if sorting is not required. Used when order returned 
 		// from server is to be preserved.
@@ -28,12 +28,15 @@ var BaseCollection = Backbone.Collection.extend({
 	 */
 	comparator : function(item)
 	{
+		
 		if (this.sortKey)
 		{	
+			if(this.descending == true)
+				return -item.get(this.sortKey);
 			// console.log("Sorting on " + this.sortKey);
 			return item.get(this.sortKey);
 		}
-
+		
 		// If sort_collection is set false then order of collection is not changed
 		if(this.sort_collection == false)
 		{
@@ -160,6 +163,7 @@ var Base_Collection_View = Backbone.View
 						this.collection = new BaseCollection(this.options.data, {
 							restKey : this.options.restKey,
 							sortKey : this.options.sortKey,
+							descending : this.options.descending,
 							sort_collection : this.options.sort_collection
 						});
 					}
@@ -169,6 +173,7 @@ var Base_Collection_View = Backbone.View
 					this.collection = new BaseCollection([], {
 						restKey : this.options.restKey,
 						sortKey : this.options.sortKey,
+						descending : this.options.descending,
 						sort_collection : this.options.sort_collection
 					});
 				}
