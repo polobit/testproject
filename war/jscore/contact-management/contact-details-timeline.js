@@ -135,6 +135,12 @@ function load_timeline_details(el, contactId, callback1)
 						}else{
 							$.each(emailsCollection.toJSON()[0]['emails'], function(index, data){
 								var newItem = $(getTemplate("timeline", data));
+								
+								// Using autoellipsis for showing 3 lines of message
+								head.js(LIB_PATH + 'lib/jquery.autoellipsis.min.js', function(){
+									newItem.find("#autoellipsis").ellipsis();
+								});
+								
 								newItem.find('.inner').append('<a href="#" class="open-close"></a>');
 								/*
 								 * Inserts mails to timeline with out validating the isotope status,
@@ -685,10 +691,6 @@ function remove_loading_img(el){
  * tiemline 
  */
 $(function () {
-	// Using autoellipsis
-	head.js(LIB_PATH + 'lib/jquery.autoellipsis.min.js', function(){
-	$("#autoellipsis").ellipsis();
-	});
 	/*
 	 * Shows the mail details in detail on a popup modal, when '+'
 	 * symbol is clicked 
