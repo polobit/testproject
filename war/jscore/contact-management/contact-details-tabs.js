@@ -35,8 +35,14 @@ $(function(){
 		})
 		
 	});	
-	
-	
+/*	
+	$('.ativity-block-ul > li')
+	.live('mouseenter',function(){
+		console.log("hover");
+	})
+	.live('mouseleave',function(){
+		console.log("hout");
+	}); */
 	
 	
 	/**
@@ -51,7 +57,7 @@ $(function(){
             restKey: "note",
             templateKey: "notes",
             individual_tag_name: 'li',
-            postRenderCallback: function(el){
+            postRenderCallback: function(el) {
             	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
             		 $("time.note-created-time", el).timeago();
             	})
@@ -72,7 +78,7 @@ $(function(){
             url: '/core/api/contacts/' + id + "/tasks",
             restKey: "task",
             templateKey: "contact-tasks",
-            individual_tag_name: 'tr'
+            individual_tag_name: 'li'
         });
 		tasksView.collection.fetch();
         $('#tasks', this.el).html(tasksView.el);
@@ -142,20 +148,24 @@ $(function(){
             restKey: "emails",
             sortKey:"date_secs",
             descending: true,
-            individual_tag_name: 'li',
-            postRenderCallback: function(el) {
-            	console.log(mailsView.collection.toJSON());
-            		head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-            			console.log("loaded timeago");
-            			console.log(el.context);
-            			$("time", el).each(function(index, element){
-              				$(element).timeago();
-            			})
-            	});
-            }
+            individual_tag_name: 'li'
         });
-        mailsView.collection.fetch();
-        $('#mail', App_Contacts.contactDetailView.model.el).html(mailsView.el);
+		
+		$('#mail', App_Contacts.contactDetailView.model.el).html(LOADING_HTML);
+        mailsView.collection.fetch({success: function(){
+        	// Using autoellipsis for showing 3 lines of message
+			head.js(LIB_PATH + 'lib/jquery.autoellipsis.min.js', function(){
+				$('#mail', App_Contacts.contactDetailView.model.el).html(mailsView.el);
+				
+				$(".ellipsis", mailsView.el).ellipsis();
+			});
+			
+			head.js(LIB_PATH + 'lib/jquery.timeago.js', function() { 
+    			$("time.email-sent-time").timeago();
+			});
+
+        }});
+        
 	});
 	
 	/**
