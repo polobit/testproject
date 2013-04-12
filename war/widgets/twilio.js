@@ -26,7 +26,7 @@ $(function() {
 	
 	if(numbers.length == 0)
 	 {
-	  $("#Twilio").html("<div style='padding: 0px 5px 7px 5px;line-height:160%;'>" +
+	  $("#Twilio").html("<div style='padding: 10px;line-height:160%;'>" +
 	    "No contact number is associated with this contact</div>");
 	        return;
 	 }

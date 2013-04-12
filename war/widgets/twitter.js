@@ -325,7 +325,7 @@ function showTwitterMatchingProfiles(plugin_id)
         // If no matches found display message
         if (data.length == 0)
         {
-            $('#Twitter').html("<div style='padding: 0px 5px 7px 5px;line-height:160%;'>" + 
+            $('#Twitter').html("<div style='padding: 10px;line-height:160%;'>" + 
             		"No Matches Found</div>");
             return;
         }

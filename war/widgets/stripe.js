@@ -38,7 +38,7 @@ $(function ()
     // If customer id is undefined, message is shown
     if (!customer_id)
     {
-        $('#Stripe').html("<div style='padding: 0px 5px 7px 5px;line-height:160%;'>" +
+        $('#Stripe').html("<div style='padding: 10px;line-height:160%;'>" +
             "No stripe customer id is related to this contact</div>");
         return;
     }
