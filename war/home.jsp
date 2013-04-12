@@ -255,7 +255,8 @@ String CSS_PATH = "/";
 		
 		// Remove the loading image
 		$('body').css('background-image', 'none');
-		$('#content').html('ready');
+		//$('#content').html('ready');
+		$('#content').append($("img").attr("src", "/img/ajax-loader-cursor.gif"));
 	});
 	</script>
 	
