@@ -34,7 +34,7 @@
 	   
 	
 	  <!-- CSS -->
-	  <include path="/**.css" expiration="7d" />
+	  <include path="/**.css"/>
 	  <!-- CSS -->
 	
 	  <!-- JS -->
