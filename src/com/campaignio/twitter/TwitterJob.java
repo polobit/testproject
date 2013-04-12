@@ -23,11 +23,11 @@ class TwitterJob
     /**
      * Consumer Key
      */
-    static final String CONSUMER_KEY = "PtWo0H7yLiEZv46r3FDJbw";
+    static final String CONSUMER_KEY = "Q8jLaFvEhdE3kRTgUpMw";
     /**
      * Consumer secret
      */
-    static final String CONSUMER_SECRET = "kntZFSrFVGogu9DF6OszABqm6N3eQcprN2QT3bm3S8";
+    static final String CONSUMER_SECRET = "vfsi8O6nXsKh4jhTpJlS003OULo4KcuBnek5eWpgfCQ";
 
     // Online, Offline or Unknown
     /**
@@ -99,7 +99,7 @@ class TwitterJob
 		    campaign_id,
 		    subscriber_id,
 		    "Twitter - Successfully updated the status to ["
-			    + status.getText() + "].");
+			    + status.getText() + "].", "Twitter");
 
 	    return true;
 
@@ -107,10 +107,9 @@ class TwitterJob
 	catch (Exception e)
 	{
 	    LogUtil.addLogFromID(campaign_id, campaign_id, "Tweeting failed "
-		    + e.getMessage());
+		    + e.getMessage(), "Twitter");
 	    return false;
 	}
     }
 
 }
-

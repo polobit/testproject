@@ -1,4 +1,4 @@
-package com.campaignio.tasklets.social;
+package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
@@ -6,6 +6,13 @@ import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.campaignio.twitter.TwitterQueue;
 
+/**
+ * <code>TwitterSendMessage</code> is the base class for tweet node of
+ * campaigns. It sends tweets on Hourly basis. It fetches twitter-token, token
+ * secret automatically when user login into twitter account.
+ * 
+ * 
+ */
 public class TwitterSendMessage extends TaskletAdapter
 {
     // Fields
@@ -14,6 +21,7 @@ public class TwitterSendMessage extends TaskletAdapter
     public static String ACCOUNT = "twitter_account";
     public static String MESSAGE = "message";
 
+    // Rate Limit
     public static String RATE_LIMIT = "message";
     public static String RATE_LIMIT_5 = "5";
     public static String RATE_LIMIT_10 = "10";
