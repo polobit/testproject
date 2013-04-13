@@ -358,6 +358,44 @@ $(function(){
 	   });
 	});
 	
+	/**
+	 * Delete functionality for activity blocks in contact details
+	 */
+	$('.activity-delete').die().live('click', function(e){
+		e.preventDefault();
+
+		// Gets the id of the entity
+		var entity_id = $(this).attr('id');
+
+		// Gets the url to which delete request is to be sent
+		var entity_url = $(this).attr('url');
+		var id_array = [];
+		var id_json = {};
+		
+		// Create array with entity id.
+		id_array.push(entity_id);
+		
+		// Set entity id array in to json object with key ids, 
+		// where ids are read using form param
+		id_json.ids = JSON.stringify(id_array);
+		var that = this;
+
+		// Add loading. Adds loading only if there is no loaded image added already i.e., 
+		// to avoid multiple loading images on hitting delete multiple times
+		if($(this).find('.loading').length == 0)
+			$(this).prepend($(LOADING_HTML).addClass('pull-left').css('width', "20px"));
+		
+		$.ajax({
+			url: entity_url,
+			type: 'POST',
+			data: id_json,
+			success: function() {
+				// Removes activity from list
+				$(that).parents(".activity").remove();
+			}
+		});
+	});
+	
 });
 
 /**

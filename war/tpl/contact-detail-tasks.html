@@ -1,11 +1,4 @@
 <script id="contact-tasks-collection-template" type="text/html">
-<br>
-<div class='data-block'>
-<div class='data-container'>
-<div class="page-header" style="margin-top: 0px !important">
-    <h2>List of Tasks</h2>
-	<a href="#" class="btn right contact-add-task" style="top:-30px;position:relative"><span><i class='icon-plus-sign'/></span> Add Task</a>
-</div>
 		{{#unless this.length}}
         <div class="slate">
             <div class="slate-content">
@@ -25,30 +18,28 @@
         </div>
         {{/unless}}
         {{#if this.length}}
-		<div class='data-block'>
-			<div class='data-container' style="border:none;padding:0px 0px 0px 0px; !important">
-				<table class="table table-striped showCheckboxes" url="core/api/contacts/tasks/bulk">
-    				<thead>
-        				<tr>
-            				<th>Subject</th>
-            				<th>Type</th>
-            				<th>Priority Type</th>
-            				<th>Date</th>
-        				</tr>
-    				</thead>
-    				<tbody id='contact-tasks-model-list'></tbody>
-				</table>
-			</div>
-		</div>
-		{{/if}}
-</div>
-</div> 
+			<ul id="contact-tasks-model-list" class="ativity-block-ul" url="core/api/notes/bulk"></ul>
+		{{/if}} 
 </script>
 
 <script id="contact-tasks-model-template" type="text/html">
-    <td>{{subject}} </td>
-    <td>{{type}}</td>
-    <td>{{priority_type}}</td>
-    <td>{{epochToTaskDate due}}</td>
-    <br/>
+
+<div class="activity" style="display:block;">
+
+<div id="notes" class="activity-text-block">
+	<h4><b>{{subject}}</b></h4></br>
+	<p><strong>Type : </strong>{{ucfirst type}}</p>
+	<p><strong>Priority : </strong>{{ucfirst priority_type}}</p>
+	<div class="clear">
+		<span class="actions pull-right">
+            <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/tasks/bulk"><i></i></span></a>
+        </span>
+		<small class="edit-hover">
+			Written 
+			<time class="note-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" created_time}}</time>
+		</small>	
+	</div>
+</div>
+</div>
+
 </script>

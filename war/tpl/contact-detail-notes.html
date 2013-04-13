@@ -18,11 +18,11 @@
         </div>
         {{/unless}}
 {{#if this.length}}
-	<ul id="notes-model-list" class="ativity-block-ul" url="core/api/notes/bulk"></ul>
+	<ul id="notes-model-list" class="ativity-block-ul"></ul>
 {{/if}}
 </script>
 <script id="notes-model-template" type="text/html">
-<div style="display:block;">
+<div style="display:block;" class="activity">
 
 <div id="notes" class="activity-text-block">
 	<span class="activity-block-owner">
@@ -38,8 +38,8 @@
 	<p>{{description}}</p>
 	<div class="clear">
 		<span class="actions pull-right">
-                    <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="icon-trash"><i></i></span></a>
-         </span>
+             <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/contacts/notes/bulk"></span></a>
+        </span>
 		<small class="edit-hover">
 			Written 
 			<time class="note-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" created_time}}</time>
