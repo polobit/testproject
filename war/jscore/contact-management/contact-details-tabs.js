@@ -61,8 +61,8 @@ $(function(){
             descending: true,
             postRenderCallback: function(el) {
             	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-            		 $("time.note-created-time", el).timeago();
-            	})
+            		 $(".note-created-time", el).timeago();
+              	})
             }
         });
         notesView.collection.fetch();
@@ -83,6 +83,11 @@ $(function(){
             individual_tag_name: 'li',
             sortKey:"created_time",
             descending: true,
+            postRenderCallback: function(el) {
+            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+            		 $(".task-created-time", el).timeago();
+              	})
+            }
         });
 		tasksView.collection.fetch();
         $('#tasks', this.el).html(tasksView.el);
@@ -104,12 +109,12 @@ $(function(){
             descending: true,
             postRenderCallback: function(el) {
             	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-            		 $("time.note-created-time", el).timeago();
+            		 $(".deal-created-time", el).timeago();
             	})
             }
         });
         dealsView.collection.fetch();
-        $('#deals', this.el).html(dealsView.el);
+        $('#deals').html(dealsView.el);
 		
 	});
 	
@@ -159,24 +164,26 @@ $(function(){
             restKey: "emails",
             sortKey:"date_secs",
             descending: true,
-            individual_tag_name: 'li'
-        });
-		
-		$('#mail', App_Contacts.contactDetailView.model.el).html(LOADING_HTML);
-        mailsView.collection.fetch({success: function(){
+            individual_tag_name: 'li',
+            postRenderCallback: function(el) {
         	// Using autoellipsis for showing 3 lines of message
 			head.js(LIB_PATH + 'lib/jquery.autoellipsis.min.js', function(){
-				$('#mail', App_Contacts.contactDetailView.model.el).html(mailsView.el);
-				
-				$(".ellipsis", mailsView.el).ellipsis();
+				$(".ellipsis", el).ellipsis();
 			});
 			
 			head.js(LIB_PATH + 'lib/jquery.timeago.js', function() { 
-    			$("time.email-sent-time").timeago();
+    			$(".email-sent-time", el).each(function(index, element) {
+    				
+    				console.log("before :" + $(element).html())
+    				console.log("converted manually" + jQuery.timeago($(element).html()));
+    				$(element).timeago();
+    				console.log($(element).html())
+    			});
 			});
-
-        }});
-        
+            }
+        });
+        mailsView.collection.fetch();
+        $('#mail', App_Contacts.contactDetailView.model.el).html(mailsView.el);
 	});
 	
 	/**

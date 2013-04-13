@@ -14,7 +14,10 @@ import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.UserPrefs;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
@@ -226,6 +229,24 @@ public class Task
 	return false;
     }
 
+    @XmlElement(name = "Prefs")
+    public UserPrefs getPrefs() throws Exception
+    {
+	if (owner != null)
+	{
+	    Objectify ofy = ObjectifyService.begin();
+	    try
+	    {
+		return ofy.query(UserPrefs.class).ancestor(owner).get();
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+	return null;
+    }
+
     /**
      * Assigns created time for the new one, creates task related contact keys
      * list with their ids and owner key with current agile user id.
@@ -258,4 +279,5 @@ public class Task
 		this.owner = new Key<AgileUser>(AgileUser.class, agileUser.id);
 	}
     }
+
 }

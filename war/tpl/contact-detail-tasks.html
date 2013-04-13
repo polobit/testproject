@@ -26,17 +26,26 @@
 
 <div class="activity" style="display:block;">
 
-<div id="notes" class="activity-text-block">
-	<h4><b>{{subject}}</b></h4></br>
+<div id="tasks" class="activity-text-block">
+	<span class="activity-block-owner">
+		{{#if prefs.pic}}
+			<img class="user-img" width="40" height="40" alt="" src="{{prefs.pic}}" >
+		{{else}}
+			<img class="user-img" width="40" height="40" src="{{defaultGravatarurl 40}}">
+		{{/if}}
+		<span class="owner-name">{{prefs.currentDomainUserName}}</span>
+	</span>
+	<h4><b>{{subject}}</b> ({{ucfirst priority_type}})</h4></br>
 	<p><strong>Type : </strong>{{ucfirst type}}</p>
-	<p><strong>Priority : </strong>{{ucfirst priority_type}}</p>
+	<p><strong>Type : </strong>{{ucfirst type}}</p>
+
 	<div class="clear">
 		<span class="actions pull-right">
             <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/tasks/bulk"><i></i></span></a>
         </span>
 		<small class="edit-hover">
 			Written 
-			<time class="note-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" created_time}}</time>
+			<time class="task-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" created_time}}</time>
 		</small>	
 	</div>
 </div>

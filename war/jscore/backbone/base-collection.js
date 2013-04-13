@@ -429,6 +429,17 @@ var Base_Collection_View = Backbone.View
 							'row-fluid');
 				}
 
+			
+
+				/*
+				 * Iterates through each model in the collection and creates a
+				 * view for each model and adds it to model-list
+				 */
+				_(this.collection.models).each(function(item)
+				{ // in case collection is not empty
+					this.appendItem(item);
+				}, this);
+				
 				/*
 				 * Few operations on the view after rendering the view,
 				 * operations like adding some alerts, graphs etc after the view
@@ -446,15 +457,6 @@ var Base_Collection_View = Backbone.View
 					// execute the callback, passing parameters as necessary
 					callback($(this.el));
 				}
-
-				/*
-				 * Iterates through each model in the collection and creates a
-				 * view for each model and adds it to model-list
-				 */
-				_(this.collection.models).each(function(item)
-				{ // in case collection is not empty
-					this.appendItem(item);
-				}, this);
 
 				// Add checkboxes to specified tables by triggering this event
 				$('body').trigger('agile_collection_loaded');
