@@ -347,7 +347,12 @@ public class TaskletAdapter implements Tasklet
 	String logType = nodeJSON.getJSONObject("NodeDefinition").getString(
 		"name");
 
+	// Node image.
+	String iconPath = nodeJSON.getJSONObject("NodeDefinition").getString(
+		"thumbnail");
+
 	// Add Log
-	LogUtil.addLog(campaignJSON, subscriberJSON, message, logType);
+	LogUtil.addLog(campaignJSON, subscriberJSON, message, logType, iconPath);
     }
+
 }

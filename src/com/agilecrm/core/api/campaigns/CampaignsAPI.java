@@ -20,6 +20,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log;
+import com.campaignio.logger.LogItem;
 import com.campaignio.logger.util.LogUtil;
 
 /**
@@ -80,14 +81,16 @@ public class CampaignsAPI
     @Path("logs/contact/{contact-id}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<Log> getCampaignContactLogs(
+    public List<LogItem> getCampaignContactLogs(
 	    @PathParam("contact-id") String contactId)
     {
-	return LogUtil.getSubscriberLog(contactId);
+	List<Log> logs = LogUtil.getSubscriberLog(contactId);
+
+	return LogUtil.getLogItemsFromLogs(logs);
     }
 
     /**
-     * Gets log object with respect to both campaign and contact.
+     * Returns logs from log object with respect to both campaign and contact.
      * 
      * @param contactId
      *            Id of a contact that subscribes to campaign.
@@ -98,11 +101,16 @@ public class CampaignsAPI
     @Path("logs/contact/{contact-id}/{campaign-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Log getCampaignContactLogs(
+    public List<LogItem> getCampaignContactLogs(
 	    @PathParam("contact-id") String contactId,
 	    @PathParam("campaign-id") String campaignId)
     {
-	return LogUtil.getCampaignSubscriberLog(campaignId, contactId);
+	Log log = LogUtil.getCampaignSubscriberLog(campaignId, contactId);
+
+	if (log == null)
+	    return null;
+
+	return log.logs;
     }
 
     /**

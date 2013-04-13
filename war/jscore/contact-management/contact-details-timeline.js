@@ -46,8 +46,8 @@ function load_timeline_details(el, contactId, callback1)
 			if (item.get('created_time')) {
 	            return item.get('created_time');
 	        }
-	        if (item.get('logTime')) {
-	        	return item.get('logTime')/1000;
+	        if (item.get('time')) {
+	        	return item.get('time')/1000;
 	        }
 	        return item.get('id');
 		}
@@ -69,10 +69,8 @@ function load_timeline_details(el, contactId, callback1)
 					
 				// If timeline is not defined yet, calls setup_timeline for the first time
 				if(timelineView.collection.length == 0){
-					$.each(logsCollection.toJSON(), function(index, model) {
-						$.each(model.logs, function(index, log){
-							timelineView.collection.add(log);	
-						});
+					$.each(logsCollection.toJSON(), function(index, model){
+							timelineView.collection.add(model);							
 					});
 								
 					/*
@@ -95,11 +93,9 @@ function load_timeline_details(el, contactId, callback1)
 					 * Inserts the data into timeline or adds to other collection (timelineViewMore) 
 					 * by validating the status of isotope initialization.
 					 */   
-					$.each(logsCollection.toJSON(), function(index, model) {
-						$.each(model.logs, function(index, log){
-							logs_array.push(log);
-						});
-													
+					$.each(logsCollection.toJSON(), function(index, model) {						
+							
+						logs_array.push(log);																			
 						//validate_insertion(JSON.parse(model.logs), timelineViewMore);
 					});
 					validate_insertion(logs_array, timelineViewMore);
@@ -341,8 +337,8 @@ function getTimestamp(month_index, year){
 function entity_created_month_year(model){
 	if(model.created_time)
 		return month_year = new Date(model.created_time * 1000).getMonth() + '-' + new Date(model.created_time * 1000).getFullYear();
-	else if(model.logTime)
-		return month_year = new Date(model.logTime * 1000).getMonth() + '-' + new Date(model.logTime * 1000).getFullYear();
+	else if(model.time)
+		return month_year = new Date(model.time * 1000).getMonth() + '-' + new Date(model.time * 1000).getFullYear();
 	else if(model.date_secs)
 		return month_year = new Date(model.date_secs * 1000).getMonth() + '-' + new Date(model.date_secs).getFullYear();
 }

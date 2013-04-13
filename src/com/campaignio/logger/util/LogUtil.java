@@ -32,9 +32,13 @@ public class LogUtil
      *            Contact id that subscribes to campaign.
      * @param message
      *            Message given in the tasklet while declaring log.
+     * @param logType
+     *            - Type of log with respect to node.
+     * @param pic
+     *            -Relative path of node image.
      */
     public static void addLogFromID(String campaignId, String subscriberId,
-	    String message, String logType)
+	    String message, String logType, String pic)
     {
 	// System.out.println("Adding log " + campaignId + " " + subscriberId +
 	// " " + message);
@@ -49,7 +53,7 @@ public class LogUtil
 	    System.out.println("Creating fresh log");
 
 	    List<LogItem> logItemList = new ArrayList<LogItem>();
-	    LogItem logItem = new LogItem(logType, logTime, message);
+	    LogItem logItem = new LogItem(logType, logTime, message, pic);
 	    logItemList.add(logItem);
 
 	    log = new Log(campaignId, subscriberId, logItemList);
@@ -59,7 +63,7 @@ public class LogUtil
 
 	try
 	{
-	    log.logs.add(new LogItem(logType, logTime, message));
+	    log.logs.add(new LogItem(logType, logTime, message, pic));
 	    log.save();
 	}
 	catch (Exception e)
@@ -78,17 +82,21 @@ public class LogUtil
      *            JSONObject of contact that subscribes to campaign.
      * @param message
      *            Message that is set in the tasklet.
+     * @param logType
+     *            - Type of log with respect to node.
+     * @param pic
+     *            - Relative path of node image.
      * @throws Exception
      */
     public static void addLog(JSONObject campaignJSON,
-	    JSONObject subscriberJSON, String message, String logType)
-	    throws Exception
+	    JSONObject subscriberJSON, String message, String logType,
+	    String pic) throws Exception
     {
 	// Campaign and SubscriberId
 	String campaignId = DBUtil.getId(campaignJSON);
 	String subscriberId = DBUtil.getId(subscriberJSON);
 
-	addLogFromID(campaignId, subscriberId, message, logType);
+	addLogFromID(campaignId, subscriberId, message, logType, pic);
     }
 
     /**
@@ -132,6 +140,44 @@ public class LogUtil
     public static List<Log> getCampaignLog(String campaignId)
     {
 	return Log.dao.listByProperty("campaign_id", campaignId);
+    }
+
+    /**
+     * Returns logs count with respect to type.
+     * 
+     * @param type
+     *            - log type.
+     * @return count value.
+     */
+    public static int getLogsCountForType(String type)
+    {
+	return Log.dao.ofy().query(Log.class).filter("logs.type ", type)
+		.count();
+    }
+
+    /**
+     * Returns list of log-items by appending all log-items from different logs
+     * into one list.
+     * 
+     * @param logs
+     *            - Logs List.
+     * @return list of logItems.
+     */
+    public static List<LogItem> getLogItemsFromLogs(List<Log> logs)
+    {
+	List<LogItem> logItems = new ArrayList<LogItem>();
+
+	for (Log log : logs)
+	{
+	    if (log == null)
+		continue;
+
+	    // Add all logItems to a list.
+	    for (LogItem logItem : log.logs)
+		logItems.add(logItem);
+	}
+
+	return logItems;
     }
 
     /**

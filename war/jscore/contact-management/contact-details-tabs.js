@@ -206,8 +206,11 @@ $(function(){
 			url: '/core/api/campaigns/logs/contact/' + App_Contacts.contactDetailView.model.id,
             restKey: "logs",
             templateKey: "campaigns",
-            individual_tag_name: 'tr',
+            individual_tag_name: 'li',
             postRenderCallback: function(el) {
+            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+              		 $("time.log-created-time", el).timeago();
+              	});
             	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
                 fillSelect('campaignSelect','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
             }
@@ -348,7 +351,7 @@ $(function(){
 					if(timelineView.collection.length == 0){
 						
 						$.each(logsCollection.toJSON(), function(index, model) {
-							timelineView.collection.add(JSON.parse(model.logs));
+							timelineView.collection.add(model);
 						});	
 						
 						setup_timeline(timelineView.collection.toJSON(), App_Contacts.contactDetailView.el, undefined);
@@ -356,12 +359,9 @@ $(function(){
 					
 						// Inserts logs into time-line
 						$.each(logsCollection.toJSON(), function(index, model) {
-						
-							$.each(JSON.parse(model.logs), function(index, log_model) {
-								var newItem = $(getTemplate("timeline", log_model));
+								var newItem = $(getTemplate("timeline", model));
 								newItem.find('.inner').append('<a href="#" class="open-close"></a>');
 								$('#timeline').isotope( 'insert', newItem);
-							});
 						});
 					}
 				}

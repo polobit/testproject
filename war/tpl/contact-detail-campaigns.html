@@ -1,10 +1,14 @@
 <script id="campaigns-collection-template" type="text/html">
-<br>
-<div class='data-block'>
-<div class='data-container'>
-<div class="page-header" style="margin-top: 0px !important">
     <h2>List of Campaign Logs</h2>
+    <div class="right add-campaign" style="margin-top:-32px">
+    <select class="campaignSelect" id='campaignSelect' name="campaignSelect">
+        <option class="emailSelectOptions" value="">
+            Select..
+        </option>
+    </select>
+    <a class="btn" href="#" id="add-selected-campaign" name="add-selected-campaign" style="margin-left: 10px; margin-bottom:9px">Add</a>
 </div>
+
 		{{#unless this.length}}
         <div class="slate">
             <div class="slate-content">
@@ -23,30 +27,28 @@
         </div>
         {{/unless}}
         {{#if this.length}}
-				<table class="table table-striped">
-    				<thead>
-        				<tr>
-            				<th>Message</th>
-            				<th>Time</th>
-        				</tr>
-    				</thead>
-    				<tbody id="campaigns-model-list"></tbody>
-				</table>
+				<ul id="campaigns-model-list" class="ativity-block-ul"></ul>
 		{{/if}}
-<div class="right add-campaign">
-    <select class="campaignSelect" id='campaignSelect' name="campaignSelect">
-        <option class="emailSelectOptions" value="">
-            Select..
-        </option>
-    </select>
-    <a class="btn" href="#" id="add-selected-campaign" name="add-selected-campaign" style="margin-left: 10px; margin-bottom:9px">Add</a>
-</div>
-</div>
-</div>
 </script>
 
 <script id="campaigns-model-template" type="text/html">
-    <td>{{getRequiredLog logs "m"}}</td>
-    <td>{{getRequiredLog logs "t"}}</td>
-    <br/>
+<div style="display:block;">
+
+<div id="campaigns" class="activity-text-block">
+	<span class="activity-block-owner">
+		{{#if pic}}
+			<img class="user-img" width="40" height="40" alt="" src="{{pic}}" >
+		{{else}}
+			<img class="user-img" width="40" height="40" src="https://d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png">
+		{{/if}}
+	</span>
+
+	<h4><b>{{type}}</b></h4></br>
+	<p>{{message}}</p>
+	<small class="edit-hover">
+	Written 
+		<time class="log-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" time}}</time>
+	</small>	
+</div>
+</div>
 </script>

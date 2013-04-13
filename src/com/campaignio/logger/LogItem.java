@@ -2,6 +2,8 @@ package com.campaignio.logger;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.googlecode.objectify.annotation.Indexed;
+
 /**
  * <code>LogItem</code> holds log's type, time and message. Each log is created
  * with these attributes.
@@ -12,21 +14,34 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class LogItem
 {
-
     /**
      * Log Type
      */
-    public String logType;
+    public String type;
 
     /**
      * Log Time
      */
-    public long logTime;
+    public long time;
 
     /**
      * Log Message.
      */
-    public String logMessage;
+    public String message;
+
+    /**
+     * Icon pic based on logType.
+     */
+    public String pic;
+
+    @Indexed
+    public long email_opened = 0L;
+
+    @Indexed
+    public long email_clicked = 0L;
+
+    @Indexed
+    public long email_sent = 0L;
 
     /**
      * Default LogItem
@@ -39,18 +54,36 @@ public class LogItem
     /**
      * Constructs a new {@link LogItem}
      * 
-     * @param logType
+     * @param type
      *            - logType.
-     * @param logTime
+     * @param time
      *            - logTime.
-     * @param logMessage
+     * @param message
      *            - logMessage.
      */
-    public LogItem(String logType, long logTime, String logMessage)
+    public LogItem(String type, long time, String message, String pic)
     {
-	this.logType = logType;
-	this.logTime = logTime;
-	this.logMessage = logMessage;
+	this.type = type;
+	this.time = time;
+	this.message = message;
+	this.pic = pic;
+
+	addSearch(this.type);
     }
 
+    /**
+     * Assigns time to type to search on required type.
+     * 
+     * @param type
+     *            - Log type.
+     */
+    private void addSearch(String type)
+    {
+	if (type.equals("Send E-mail"))
+	    email_sent = time;
+	else if (type.equals("Email Opened"))
+	    email_opened = time;
+	else if (type.equals("Email Clicked"))
+	    email_clicked = time;
+    }
 }

@@ -99,7 +99,8 @@ class TwitterJob
 		    campaign_id,
 		    subscriber_id,
 		    "Twitter - Successfully updated the status to ["
-			    + status.getText() + "].", "Twitter");
+			    + status.getText() + "].", "Twitter",
+		    "json/nodes/images/social/twitter.png");
 
 	    return true;
 
@@ -107,7 +108,8 @@ class TwitterJob
 	catch (Exception e)
 	{
 	    LogUtil.addLogFromID(campaign_id, campaign_id, "Tweeting failed "
-		    + e.getMessage(), "Twitter");
+		    + e.getMessage(), "Twitter",
+		    "json/nodes/images/social/twitter.png");
 	    return false;
 	}
     }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -15,6 +16,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
+import com.googlecode.objectify.condition.IfDefault;
 
 /**
  * 
@@ -61,6 +63,12 @@ public class Log
     public String entity_type = "log";
 
     /**
+     * Log Updated Time.
+     */
+    @NotSaved(IfDefault.class)
+    public Long updated_time = 0L;
+
+    /**
      * ObjectifyGenericDao for Log class.
      */
     public static ObjectifyGenericDao<Log> dao = new ObjectifyGenericDao<Log>(
@@ -96,18 +104,29 @@ public class Log
      * @throws Exception
      */
     @XmlElement
-    public String getContactName() throws Exception
+    public Contact getContact() throws Exception
     {
 	if (subscriber_id != null)
 	{
 	    Contact contact = ContactUtil.getContact(Long
 		    .parseLong(subscriber_id));
+
 	    if (contact != null)
-		return contact.getContactFieldValue(Contact.FIRST_NAME) + " "
-			+ contact.getContactFieldValue(Contact.LAST_NAME);
+		return contact;
 	}
 
-	return "?";
+	return null;
+    }
+
+    /**
+     * Returns logs array size.
+     * 
+     * @return logs array size.
+     */
+    @XmlElement
+    public int getLogsCount()
+    {
+	return this.logs.size();
     }
 
     /**
@@ -116,5 +135,11 @@ public class Log
     public void save()
     {
 	dao.put(this);
+    }
+
+    @PrePersist
+    private void Prepersist()
+    {
+	updated_time = System.currentTimeMillis() / 1000;
     }
 }

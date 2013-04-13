@@ -34,12 +34,11 @@
                 <thead>
                     <tr>
                         <th>Contact</th>
-                        <th>Message</th>
-                        <th>Type</th>
-                        <th>Time</th>
+                        <th>Last Run Time</th>
+                        <th>Message Count</th>                    
                     </tr>
                 </thead>
-                <tbody id="campaign-logs-model-list">
+                <tbody id="campaign-logs-model-list" route="contact/">
                 </tbody>
             </table>
         </div>
@@ -50,9 +49,13 @@
 
 <script id="campaign-logs-model-template" type="text/html">
 <input name="id" class="campaign" type="hidden" value="{{campaign_id}}" />
-<td><a href="#contact/{{subscriber_id}}">{{contactName}}</a></td>
-<td>{{message}}</td>
-<td>{{log_type}}</td>
-<td>{{epochToLogDate log_time}}</td>
+<td class="data" data={{subscriber_id}}>
+    <div style="padding-right:10px;height:auto;text-overflow:ellipsis;white-space:nowrap;width:16em;overflow:hidden;">
+        <img src="{{gravatarurl contact.properties 50}}" width="40px" height="40px" />
+        <br/><b>{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}</b>
+    </div>
+</td>
+<td>{{epochToLogDate updated_time}}</td>
+<td>{{logsCount}}</td>
 <br/>
 </script>
