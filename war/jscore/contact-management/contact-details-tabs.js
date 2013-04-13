@@ -369,6 +369,10 @@ $(function(){
 
 		// Gets the url to which delete request is to be sent
 		var entity_url = $(this).attr('url');
+
+		if(!entity_url)
+			return;
+		
 		var id_array = [];
 		var id_json = {};
 		
@@ -391,7 +395,7 @@ $(function(){
 			data: id_json,
 			success: function() {
 				// Removes activity from list
-				$(that).parents(".activity").remove();
+				$(that).parents(".activity").fadeOut(400, function(){ $(this).remove(); });
 			}
 		});
 	});
