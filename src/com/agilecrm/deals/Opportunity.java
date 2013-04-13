@@ -301,7 +301,7 @@ public class Opportunity
 
 	}
 
-	return " ";
+	return "";
     }
 
     /**

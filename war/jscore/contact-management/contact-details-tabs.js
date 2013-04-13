@@ -57,6 +57,8 @@ $(function(){
             restKey: "note",
             templateKey: "notes",
             individual_tag_name: 'li',
+            sortKey:"created_time",
+            descending: true,
             postRenderCallback: function(el) {
             	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
             		 $("time.note-created-time", el).timeago();
@@ -78,7 +80,9 @@ $(function(){
             url: '/core/api/contacts/' + id + "/tasks",
             restKey: "task",
             templateKey: "contact-tasks",
-            individual_tag_name: 'li'
+            individual_tag_name: 'li',
+            sortKey:"created_time",
+            descending: true,
         });
 		tasksView.collection.fetch();
         $('#tasks', this.el).html(tasksView.el);
@@ -95,7 +99,14 @@ $(function(){
 			url: 'core/api/contacts/'+ id + "/deals" ,
             restKey: "opportunity",
             templateKey: "deals",
-            individual_tag_name: 'tr'
+            individual_tag_name: 'li',
+            sortKey:"created_time",
+            descending: true,
+            postRenderCallback: function(el) {
+            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+            		 $("time.note-created-time", el).timeago();
+            	})
+            }
         });
         dealsView.collection.fetch();
         $('#deals', this.el).html(dealsView.el);

@@ -426,6 +426,9 @@ var ContactsRouter = Backbone.Router.extend({
             isNew: true,
             window: 'contact/' + id,
             postRenderCallback: function(el){
+            	// Contacts type-ahead
+            	agile_type_ahead("relates_to", el, contacts_typeahead);
+            	
             	populateUsers("owners-list", el);
             	populateMilestones(el);
             	var json = App_Contacts.contactDetailView.model.toJSON();

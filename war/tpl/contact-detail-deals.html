@@ -1,12 +1,6 @@
 <script id="deals-collection-template" type="text/html">
-    <br>
-<div class='data-block'>
-<div class='data-container'>
-<div class="page-header" style="margin-top: 0px !important">
-    <h2>List of Deals</h2>
-   <a href="#add-opportunity" class="btn right" style="top:-30px;position:relative"><span><i class='icon-plus-sign'/></span> Add Deal</a> 
-</div>
-        {{#unless this.length}}
+
+  {{#unless this.length}}
         <div class="slate">
             <div class="slate-content">
                 <div class="box-left">
@@ -24,47 +18,67 @@
             </div>
         </div>
         {{/unless}}
-        {{#if this.length}}
-		<div class='data-block'>
-			<div class='data-container' style="border:none;padding:0px 0px 0px 0px; !important">
-				<table class="table table-striped showCheckboxes" url="core/api/opportunity/bulk">
-    				<thead>
-        				<tr>
-            				<th>Opportunity</th>
-            				<th>Value</th>
-            				<th>Milestone</th>
-            				<th>Close Date</th>
-            				<th>Owner</th>
-        				</tr>
-    				</thead>
-    				<tbody id='deals-model-list'></tbody>
-				</table>
-			</div>
-		</div>
-		{{/if}}
-</div>
-</div>
+
+{{#if this.length}}
+	<ul id="deals-model-list" class="ativity-block-ul"></ul>
+{{/if}}
 </script>
 
 <script id="deals-model-template" type="text/html"> 
-	<td leads='{{id}}' class='leads'>
-        <div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:18em;overflow:hidden;">
-           <b>Name: </b>{{name}}<br/>
-           <b>Related to: </b>
-           {{#each contacts}}
-             {{#if id}}
-                  <a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
-             {{/if}}
-           {{/each}}<br/>
-           <b>Description: </b>{{description}}
-        </div>
-    </td>   
-    <td><div style="height:auto;text-overflow:ellipsis;width:6em;overflow:hidden;">{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}} {{expected_value}}</div></td>
-    <td><div style="height:auto;text-overflow:ellipsis;width:6em;overflow:hidden;">{{milestone}}({{probability}}%) </div></td>
-    <td><div style="height:auto;text-overflow:ellipsis;width:6em;overflow:hidden;">{{epochToHumanDate "mm-dd-yy" close_date}}</div></td>
-    <td>
-       <div style='height:auto;text-overflow:ellipsis;white-space:nowrap;width:4em;overflow:hidden;'>
-            <img src="{{pic}}" width='40px' height='40px'><br/> <b> {{owner.name}}</b>
-        </div> 
-    </td>
+<div style="display:block;" class="activity">
+	<div id="notes" class="activity-text-block">
+		<span class="activity-block-owner">
+			{{#if pic}}
+				<img class="user-img" width="40" height="40" alt="" src="{{pic}}" >
+			{{else}}
+				<img class="user-img" width="40" height="40" src="{{defaultGravatarurl 40}}">
+			{{/if}}
+			<span class="owner-name">{{owner.name}}</span>
+		</span>
+		<h4><b>{{name}}</b></h4></br>
+		<p>{{description}}</p>
+		
+		<div class="row-fluid">
+			<div class="span6 row-fluid " style="float:right;"> 
+				<span class="span10" style="float: left;">
+					<table class="table table-bordered">
+						<tbody>
+							<tr>
+								<td><strong>Value</strong></td>
+								<td>{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}} {{expected_value}}</td>
+							</tr>
+							<tr>
+								<td><strong>Milestone</strong></td>
+								<td>{{milestone}}({{probability}}%)</td>
+							</tr>
+							<tr>
+								<td><strong>Close Date</strong></td>
+								<td>{{epochToHumanDate "mm-dd-yy" close_date}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</span>
+			</div>
+			<p class="span5">
+				<strong>
+					Related To
+				</strong></br>
+				{{#each contacts}}
+             		{{#if id}}
+                  		<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+             		{{/if}}
+           		{{/each}}<br/>
+			</p>
+		</div>
+	<div class="clear">
+		<span class="actions pull-right">
+             <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/opportunity/bulk"></span></a>
+        </span>
+		<small class="edit-hover">
+			Created 
+			<time class="note-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" created_time}}</time>
+		</small>	
+	</div>
+</div>
+</div>
 </script>
