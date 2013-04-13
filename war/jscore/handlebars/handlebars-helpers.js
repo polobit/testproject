@@ -206,6 +206,10 @@ $(function() {
 		if(!date)
 			return;
 		
+			if((date/100000000000) > 1)
+			{
+				return new Date(parseInt(date)).format(format);
+			}
 		// date form milliseconds
 		var d = new Date(parseInt(date) * 1000).format(format);
 		return d
@@ -659,14 +663,14 @@ $(function() {
 	 	 Handlebars.registerHelper('safe_string',function(data){
 	 		  
 	 		   data = data.replace(/\n/g,"<br/>");
-	 		   console.log(data);
 	 		   return new Handlebars.SafeString(data);
 	 		  });
 	 		   
-	 		  Handlebars.registerHelper('string_to_date',function(format,date){
-	 		  
+	 	 Handlebars.registerHelper('string_to_date',function(format,date){
+
 	 		   return new Date(date).format(format);
 	 		  });
+
 		  
 		  
 });
