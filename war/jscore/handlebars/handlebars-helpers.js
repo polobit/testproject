@@ -72,6 +72,19 @@ $(function() {
 		return 'https://secure.gravatar.com/avatar/' + MD5("")
 		+ '.jpg?s=' + width + "&d=" + escape(img);
 	});
+	
+	Handlebars.registerHelper('emailGravatarurl', function(width, email) {
+		// Default image
+		var img = "https://d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png";
+		
+		if (email) {
+			return 'https://secure.gravatar.com/avatar/' + MD5(email)
+					+ '.jpg?s=' + width + "&d=" + escape(img);
+		}
+		
+		return 'https://secure.gravatar.com/avatar/' + MD5("")
+		+ '.jpg?s=' + width + "&d=" + escape(img);
+	});
 
 	/**
 	 * Helper function to return icons based on given name
