@@ -121,8 +121,8 @@ var WorkflowsRouter = Backbone.Router.extend({
 			success: function()
 			{
 				// Show bar graph for campaign stats
-				showLine('/core/api/campaign-stats/stats/',
-						'campaign-stats-chart', 'Campaign Stats', 'Email Stats');
+				showBar('/core/api/campaign-stats/stats/',
+						'campaign-stats-chart', 'Campaign Stats', 'Email Stats', 'null');
 			}
 		});
 		$('#content').html(this.campaignStatsCollectionView.el);

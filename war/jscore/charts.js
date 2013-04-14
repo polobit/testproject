@@ -24,53 +24,335 @@ function setupCharts(callback) {
 	});
 }
 
+//Chat duration 0-10s, 10-30s etc.
+//Chat lines < 10, 10-20 etc
+function pie(url, selector, name) {
+
+	// Show loading
+	//$('#' + selector).html(LOADING_HTML);
+
+	var chart;
+	setupCharts(function() {
+
+		// Fetches data from to get tags informations
+		// i.e., {"tags1" :" number of contacts with 'tags1', "tags2" : "number
+		// of contacts with tags2"}
+		$.getJSON(url, function(data) {
+
+			// Convert into labels and data as required by Highcharts
+			var pieData = [];
+			var total = 0;
+
+			// Iterates through data and calculate total number
+			$.each(data, function(k, v) {
+				total += v;
+			});
+
+			// Iterates through data, gets each tag, count and calculate
+			// percentage of each tag
+			$.each(data, function(k, v) {
+				var item = [];
+
+				// Push tag name in to array
+				item.push(k);
+
+				// Push percentage of current tag in to array
+				item.push(v / total * 100);
+				pieData.push(item);
+			})
+
+			// Initializes Highcharts,
+			chart = new Highcharts.Chart({
+				chart : {
+					renderTo : selector,
+					type : 'pie',
+					plotBackgroundColor : null,
+					plotBorderWidth : null,
+					plotShadow : false,
+					marginTop: 50
+				},
+				title : {
+					text : name
+				},
+				tooltip : {
+					backgroundColor: null,
+				    borderWidth: 0,
+				    borderRadius: 0,
+				    headerFormat: '',
+				    useHTML:true,
+				    enabled: true,
+				    shadow: false,
+				    formatter: function() {
+				    	var s = '<div class="highcharts-tool-tip"><div class="tooltip-title">'+this.point.name+'</div><div style="text-align:center;margin-top:7px;margin-left:-3px"><b>'+(this.point.percentage).toFixed(2)+'%<b></div></div>';
+				    	return s;
+					},
+				    message: "Hover over chart slices<br>for more information.",
+				    positioner: function () {
+				    		return { x: 15, y: 23 };        
+				    	},
+				    },
+			    legend: {
+			        itemWidth: 75,
+			    },
+				plotOptions : {
+					 pie : {
+					      allowPointSelect : true,
+					      cursor : 'pointer',
+					      borderWidth: 0,
+					      dataLabels : {
+					       enabled : true,
+					       color : '#000000',
+					       connectorColor : '#000000',
+					       connectorWidth: 0,
+					      formatter : function() {
+					    	  return "";
+					        if(this.percentage <= 2)
+					         return "";
+					        return  (this.percentage).toFixed(2) + ' %';
+					       },
+					       distance: 2
+					      },
+					        showInLegend: false,
+		                    innerSize: '30%',
+		                    size: '75%',
+		                    shadow: true,
+		                    borderWidth: 2
+					     },
+					     series : {
+					    	events: {
+				               mouseOver: function() {
+				            	   $('.tooltip-default-message').hide();
+				                 },
+				               mouseOut: function(e) {
+				            	   $('.tooltip-default-message').show();
+				                 }
+				              }
+					     }
+					 },
+
+					 series : [ {
+							type : 'pie',
+							name : 'Tag',
+							data : pieData,
+							startAngle : 90
+						} ],
+						exporting : {
+							enabled : false
+						}
+			}
+			, function(chart) { // on complete
+			     
+		        chart.renderer.image('img/donut-tooltip-frame.png', 14, 5, 200, 80).add(); 
+		        chart.renderer.text (this.options.tooltip.message, 50, 40).attr("class", 'tooltip-default-message').add(); 
+		        
+		    }
+			);
+		});
+	});
+}
+
 /**
  * Sets up pie chart for deal statistics. Deal totals and pipeline with respects
  * time
  */
-function pieDetails() {
+function showBar(url, selector, name, yaxis_name, stacked) {
+	var chart;
+
+	// Show loading
+	$('#' + selector).html(LOADING_HTML);
+
+	// Charts will be columned
+	// http://jsfiddle.net/gh/get/jquery/1.7.2/highslide-software/highcharts.com/tree/master/samples/highcharts/demo/column-stacked/
+
+	// Loading Highcharts plugin using setupCharts
+	setupCharts(function() {
+
+		// Loads statistics details from backend - for line - daily, hourly,
+		// weekly
+		$
+				.getJSON(
+						url,
+						function(data) {
+
+							// Convert into labels and data as required by
+							// Highcharts
+							var categories = [];
+							var series;
+
+							// Iterates through data and adds the keys are
+							// categories
+							$.each(data, function(k, v) {
+								categories.push(k);
+
+								// Initializes series with names with the first
+								// data point
+								if (series == undefined) {
+									var index = 0;
+									series = [];
+									$.each(v, function(k1, v1) {
+										var series_data = {};
+										series_data.name = k1;
+										series_data.data = [];
+										series[index++] = series_data;
+									});
+								}
+
+								// console.log(series);
+
+								// Fill Data Values with series data
+								$.each(v, function(k1, v1) {
+
+									// Find series with the name k1 and to that,
+									// push v1
+									var series_data = find_series_with_name(
+											series, k1);
+									series_data.data.push(v1);
+								});
+
+							});
+
+							// Draw the graph
+							chart = new Highcharts.Chart(
+									{
+										chart : {
+											renderTo : selector,
+											type : 'column'
+										},
+										colors : [ '#4365AD', '#D52A3E',
+												'gray', '#1E995C' ],
+										title : {
+											text : name
+										},
+										xAxis : {
+											categories : categories
+										},
+										yAxis : {
+											min : 0,
+											title : {
+												text : yaxis_name
+											},
+											stackLabels : {
+												enabled : true,
+												style : {
+													fontWeight : 'bold',
+													color : (Highcharts.theme && Highcharts.theme.textColor)
+															|| 'gray'
+												}
+											}
+										},
+										legend : {
+											align : 'right',
+											x : -100,
+											verticalAlign : 'top',
+											y : 20,
+											floating : true,
+											backgroundColor : (Highcharts.theme && Highcharts.theme.legendBackgroundColorSolid)
+													|| 'white',
+											borderColor : '#CCC',
+											borderWidth : 1,
+											shadow : false
+										},
+										tooltip : {
+											formatter : function() {
+												return '<b>' + this.x
+														+ '</b><br/>'
+														+ this.series.name
+														+ ': ' + this.y
+														+ '<br/>' + 'Total: '
+														+ this.point.stackTotal;
+											}
+										},
+										plotOptions : {
+											column : {
+												stacking : null,
+												dataLabels : {
+													enabled : true,
+													color : (Highcharts.theme && Highcharts.theme.dataLabelsColor)
+															|| 'white'
+												}
+											}
+										},
+										series : series
+									});
+
+						});
+	});
+}
+
+// Small utility function to search series with a given name
+function find_series_with_name(series, name) {
+	for ( var i = 0; i < series.length; i++) {
+		if (series[i].name == name)
+			return series[i];
+	}
+}
+
+
+/**
+ * Sets up pie chart for deal statistics. Deal totals and pipeline with respects
+ * time
+ */
+function showLine(url, selector, name, yaxis_name) {
 	var chart;
 
 	// Loading Highcharts plugin using setupCharts, and sets up pie chart in the
 	// callback
 	setupCharts(function() {
 
-		// Sets max to really big i.e., epoch time set very high to get all the
-		// deal statistics till the set date
-		var max = 1543842319;
-
 		// Loads statistics details from backend i.e.,[{closed
 		// date:{total:value, pipeline: value},...]
-		$.getJSON('/core/api/opportunity/stats/details', {
-			min : 0,
-			max : max
-		}, function(data) {
+		$.getJSON(url, function(data) {
 
-			// Convert into labels and data as required by Highcharts
-			var total = {};
-			total.data = [];
-			var pipeline = {};
-			pipeline.data = [];
+			
+			// Convert into labels and data as required by
+			// Highcharts
+			var categories = [];
+			var series;
 
-			// Populates the total and pipeline objects, converting epochtime
-			// into milliseconds and its respecitve total and pipelines
+			// Iterates through data and adds the keys are
+			// categories
 			$.each(data, function(k, v) {
-				total.data.push([ k * 1000, v.total ]);
-				pipeline.data.push([ k * 1000, v.pipeline ]);
+				
+				// Initializes series with names with the first
+				// data point
+				if (series == undefined) {
+					var index = 0;
+					series = [];
+					$.each(v, function(k1, v1) {
+						var series_data = {};
+						series_data.name = k1;
+						series_data.data = [];
+						series[index++] = series_data;
+					});
+				}
+
+				// console.log(series);
+
+				// Fill Data Values with series data
+				$.each(v, function(k1, v1) {
+
+					// Find series with the name k1 and to that,
+					// push v1
+					var series_data = find_series_with_name(
+							series, k1);
+					series_data.data.push([k*1000, v1]);
+				});
+
 			});
+			
 
 			// After loading and processing all data, highcharts are initialized
 			// setting preferences and data to show
 			chart = new Highcharts.Chart({
 				chart : {
-					renderTo : 'total-pipeline-chart', // Html element id to
+					renderTo : selector, // Html element id to
 					// show chart
 					type : 'line',
 					marginRight : 130,
 					marginBottom : 25
 				},
 				title : {
-					text : 'Monthly Deals', // Title
+					text : name, // Title
 					x : -20
 				// center
 				},
@@ -82,6 +364,9 @@ function pieDetails() {
 					}
 				},
 				yAxis : {
+					title: {
+	                    text: yaxis_name
+	                },
 					plotLines : [ {
 						value : 0,
 						width : 1,
@@ -109,13 +394,7 @@ function pieDetails() {
 
 				// Sets the series of data to be shown in the graph, shows total
 				// and pipeline
-				series : [ {
-					name : 'Total',
-					data : total.data
-				}, {
-					name : 'Pipeline',
-					data : pipeline.data
-				} ],
+				series : series,
 				exporting : {
 					enabled : false
 				}
@@ -123,369 +402,31 @@ function pieDetails() {
 		});
 	});
 }
-// pie chart for milestones
-/**
- * Shows pie chart of milestones using high charts, called from deals controller
- * when deals collection is loaded.
- */
-function pieMilestones() {
-	var chart;
 
-	// Loads Highcharts then executes the functionality of showing milestone
-	// details
-	setupCharts(function() {
 
-		var max = 1543842319; // Set max to really big
-
-		// Gets milestone details, {"milestone name" : "number of deals with
-		// milestone",...}
-		$.getJSON('/core/api/opportunity/stats/milestones', {
-			min : 0,
-			max : max
-		}, function(data) {
-
-			// Convert into labels and data as required by highcharts
-			var pieData = [];
-			var total_milestones = 0;
-			$.each(data, function(k, v) {
-
-				// Gets total number of milestones, to calculate the percentage
-				// of deals for each milestone
-				total_milestones = total_milestones + v;
-			});
-
-			// Iterates though data and calculate the percentage of each
-			// milestone and sets in to an array [["milestone name1",
-			// %]["milestone name2", %]]
-			$.each(data, function(k, v) {
-				var item = [];
-				item.push(k);
-				item.push(v / total_milestones * 100);
-				pieData.push(item);
-			});
-
-			// Initializes highchart with the data, which is processed above
-			chart = new Highcharts.Chart({
-				chart : {
-					renderTo : 'pie-deals-chart',
-					plotBackgroundColor : null,
-					plotBorderWidth : null,
-					plotShadow : false,
-					marginTop : 80
-				},
-
-				title : {
-					text : '',
-					align : 'left',
-					x : 20
-				},
-				tooltip: {
-					backgroundColor: null,
-				    borderWidth: 0,
-				    borderRadius: 0,
-				    headerFormat: '',
-				    useHTML:true,
-				    enabled: true,
-				    shadow: false,
-				    formatter: function() {
-				    	var s = '<div class="highcharts-tool-tip"><div class="tooltip-title">'+this.point.name+'</div><div style="text-align:center;margin-top:7px;margin-left:-3px"><b>'+(this.point.percentage).toFixed(2)+'%<b></div></div>';
-				    	return s;
-					},
-				    message: "Hover over chart slices<br>for more information.",
-				    positioner: function () {
-				    		return { x: 15, y: 23 };        
-				    	},
-				    },
-				 plotOptions : {
-				     pie : {
-			    	 cumulative : -0.25,
-				      allowPointSelect : true,
-				      cursor : 'pointer',
-				      borderWidth: 0,
-				      dataLabels : {
-				       enabled : true,
-				       color : '#000000',
-				       connectorColor : '#000000',
-				       connectorWidth: 0,
-				      rotation:15,
-				       formatter : function() {
-				    	   return "";
-				        if(this.percentage <= 2)
-				         return "";
-				        return (this.percentage).toFixed(2) + ' %';
-				       },
-				       distance: 2,
-				      },
-				      showInLegend : false,
-				      showInLegend: false,
-	                    innerSize: '30%',
-	                    size: '75%',
-	                    shadow: true,
-	                    borderWidth: 2
-				     },
-				     series : {
-					    	events: {
-				               mouseOver: function() {
-				            	   $('.tooltip-default-message').hide();
-				                 },
-				               mouseOut: function(e) {
-				            	   $('.tooltip-default-message').show();
-				                 }
-				              }
-					     } 
-				 },
-				series : [ {
-					type : 'pie',
-					name : 'Milestone',
-					data : pieData
-				// Sets data to charts
-				} ],
-				exporting : {
-					enabled : false
-				}
-			}, function(chart) { // on complete
-			     
-		        chart.renderer.image('img/donut-tooltip-frame.png', 14, 5, 200, 80).add(); 
-		        chart.renderer.text (this.options.tooltip.message, 50, 40).attr("class", 'tooltip-default-message').add(); 
-		        
-		    });
-		});
-	});
-}
 
 /**
  * Show Pie chart for tags of contacts,
  */
-function pieTags() {
-	var chart;
-	
-	 
-	setupCharts(function() {		 
-
-		// Fetches data from to get tags informations
-		// i.e., {"tags1" :" number of contacts with 'tags1', "tags2" : "number
-		// of contacts with tags2"}
-		$.getJSON('/core/api/tags/stats', function(data) {
-
-			// Convert into labels and data as required by Highcharts
-			var pieData = [];
-			var total_tags = 0;
-
-			// Iterates through data and calculate total number of tags, used to
-			// calculate percentage of tags
-			$.each(data, function(k, v) {
-				total_tags = total_tags + v;
-			});
-
-			// Iterates through data, gets each tag, count and calculate
-			// percentage of each tag
-			$.each(data, function(k, v) {
-				var item = [];
-
-				// Push tag name in to array
-				item.push(k);
-
-				// Push percentage of current tag in to array
-				item.push(v / total_tags * 100);
-				pieData.push(item);
-			})
-			
-			// Initializes Highcharts, 
-			chart = new Highcharts.Chart({
-				chart : {
-					renderTo : 'pie-tags-chart',
-					type : 'pie',
-					plotBackgroundColor : null,
-					plotBorderWidth : null,
-					plotShadow : false,
-					marginTop: 50
-				},
-				title : {
-					text : ''
-				},
-				tooltip: {
-					backgroundColor: null,
-				    borderWidth: 0,
-				    borderRadius: 0,
-				    headerFormat: '',
-				    useHTML:true,
-				    enabled: true,
-				    shadow: false,
-				    formatter: function() {
-				    	var s = '<div class="highcharts-tool-tip"><div class="tooltip-title">'+this.point.name+'</div><div style="text-align:center;margin-top:7px;margin-left:-3px"><b>'+(this.point.percentage).toFixed(2)+'%<b></div></div>';
-				    	return s;
-					},
-				    message: "Hover over chart slices<br>for more information.",
-				    positioner: function () {
-				    		return { x: 15, y: 23 };        
-				    	},
-				    },
-			    legend: {
-			        itemWidth: 75,
-			    },
-				 plotOptions : {
-				     pie : {
-				      allowPointSelect : true,
-				      cursor : 'pointer',
-				      borderWidth: 0,
-				      dataLabels : {
-				       enabled : true,
-				       color : '#000000',
-				       connectorColor : '#000000',
-				       connectorWidth: 0,
-				      formatter : function() {
-				    	  return "";
-				        if(this.percentage <= 2)
-				         return "";
-				        return  (this.percentage).toFixed(2) + ' %';
-				       },
-				       distance: 2
-				      },
-				        showInLegend: false,
-	                    innerSize: '30%',
-	                    size: '75%',
-	                    shadow: true,
-	                    borderWidth: 2
-				     },
-				     series : {
-				    	events: {
-			               mouseOver: function() {
-			            	   $('.tooltip-default-message').hide();
-			                 },
-			               mouseOut: function(e) {
-			            	   $('.tooltip-default-message').show();
-			                 }
-			              }
-				     }
-				 },
-				series : [ {
-					type : 'pie',
-					name : 'Tag',
-					data : pieData,
-					startAngle : 90
-				} ],
-				exporting : {
-					enabled : false
-				}
-			}, function(chart) { // on complete
-			     
-		        chart.renderer.image('img/donut-tooltip-frame.png', 14, 5, 200, 80).add(); 
-		        chart.renderer.text (this.options.tooltip.message, 50, 40).attr("class", 'tooltip-default-message').add(); 
-		        
-		    });
-		});
-	});
+function pieTags()
+{
+	pie('/core/api/tags/stats', 'pie-tags-chart', '');
 }
 
 /**
- * Sets bar chart for campaign-stats.
- * @param url - url to get data for charts.
- * @param selector - id of graph container.
- * @param name - name that should be on top of graph
- * @param yaxis_name - name that appears along the yaxis.
- * **/
-function showLine(url, selector, name, yaxis_name) {
-	var chart;
+ * Shows pie chart of milestones using high charts, called from deals controller
+ * when deals collection is loaded.
+ */
+function pieMilestones()
+{
+	pie('/core/api/opportunity/stats/milestones?min=0&max=1543842319', 'pie-deals-chart', '');
+}
 
-	// Show loading
-	$('#' + selector).html(LOADING_HTML);
-
-	// Charts will be columned
-	// http://jsfiddle.net/gh/get/jquery/1.7.2/highslide-software/highcharts.com/tree/master/samples/highcharts/demo/column-stacked/
-
-	// Loading Highcharts plugin using setupCharts
-	setupCharts(function() {
-
-		// Loads statistics details for campaign stats
-		$
-				.get(
-						url,
-						function(data) {
-							
-							console.log("chart " + data);
-
-							// Convert into labels and data as required by
-							// Highcharts
-							var categories = [];
-							var series;
-
-							// Iterates through data and adds campaign names to categories.
-							$.each(data, function(k, v) {
-								
-								if(k == "Campaign Names")
-								categories = v;
-								
-							});
-							
-							//console.log("categories"+ categories);
-
-								// Initializes series with Email Sent, Email Opened, Email Clicked.
-								if (series == undefined) {
-									var index = 0;
-									series = [];
-									$.each(data, function(k1, v1) {
-										var series_data = {};
-										
-										// Not adding campaign names to array
-										if(k1 == "Campaign Names")
-											return true;
-										
-										series_data.name = k1;
-										series_data.data = v1;
-										series[index++] = series_data;
-									});
-								
-								}
-
-							// Draw the graph
-							chart = new Highcharts.Chart(
-									{
-										chart : {
-											renderTo : selector,
-											type : 'column'
-										},
-										colors : [ '#4365AD', '#D52A3E',
-												'gray'],
-										title : {
-											text : name
-										},
-										xAxis : {
-											categories : categories
-										},
-										yAxis : {
-											min : 0,
-											title : {
-												text : yaxis_name
-											}
-										},
-										legend : {
-											align : 'right',
-											x : -100,
-											verticalAlign : 'top',
-											y : 20,
-											floating : true,
-											backgroundColor : (Highcharts.theme && Highcharts.theme.legendBackgroundColorSolid)
-													|| 'white',
-											borderColor : '#CCC',
-											borderWidth : 1,
-											shadow : false
-										},
-										tooltip : {
-							                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-							                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-							                    '<td style="padding:0"><b>{point.y} </b></td></tr>',
-							                footerFormat: '</table>',
-							                shared: true,
-							                useHTML: true
-							            },
-							            plotOptions: {
-							                column: {
-							                    pointPadding: 0.2,
-							                    borderWidth: 0
-							                }
-							            },
-									 	series : series							            
-									});
-						});
-	});
+/**
+ * Sets up pie chart for deal statistics. Deal totals and pipeline with respects
+ * time
+ */
+function pieDetails()
+{
+	showLine('core/api/opportunity/stats/details?min=0&max=1543842319', 'total-pipeline-chart', 'Monthly Deals', 'Total Value');	
 }
