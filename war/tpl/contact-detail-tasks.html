@@ -39,6 +39,17 @@
 	<p><strong>Type : </strong>{{ucfirst type}}</p>
 	<p><strong>Type : </strong>{{ucfirst type}}</p>
 
+				<p>
+				<strong>
+					Related To
+				</strong></br>
+				{{#each contacts}}
+             		{{#if id}}
+                  		<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+             		{{/if}}
+           		{{/each}}<br/>
+			</p>
+
 	<div class="clear">
 		<span class="actions pull-right">
             <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/tasks/bulk"><i></i></span></a>
