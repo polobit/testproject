@@ -333,6 +333,10 @@ function showLinkedinProfile(linkedin_id, plugin_id)
             $('#linkedin_social_stream')
             	.append(getTemplate("linkedin-update-stream", data.updateStream));        
            
+            head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+        		$(".time-ago", $('#linkedin_social_stream')).timeago();
+        	})
+        	
             return;
         }
 
@@ -427,6 +431,8 @@ function showLinkedinProfile(linkedin_id, plugin_id)
             // Populate the template with update stream details and show in panel
             $("#linkedin_social_stream").append(getTemplate("linkedin-update-stream", data));
 
+            $(".time-ago", $("#linkedin_social_stream")).timeago();
+        	        	
             // Current activity is hidden and refresh button is shown
             $('#linkedin_current_activity').hide();
             $('#linkedin_refresh_stream').show();
