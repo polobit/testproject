@@ -109,7 +109,7 @@ $(function() {
 		if (item == "meeting")
 			return "icon-group";
 		if (item == "milestone")
-			return "icon-asterisk";
+			return "icon-certificate";
 		if (item == "send")
 			return "icon-share-alt";
 		if (item == "tweet")
