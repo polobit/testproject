@@ -38,6 +38,7 @@
 }
 
 .widget_header_control > li > a,
+.widget_header_control > li > i,
 .widget_header_control > li > a:hover{
 	color:#aeaeae;
 	border:none;
