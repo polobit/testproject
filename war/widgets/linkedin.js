@@ -165,7 +165,7 @@ function showLinkedinMatchingProfiles(plugin_id)
      */
     getLinkedinMatchingProlfiles(plugin_id, function (data)
     {
-    	var el = "<div style='padding:5px'>";
+    	var el = "<div style='padding:10px'>";
 
         // If no matches found display message
         if (data.length == 0)
@@ -352,14 +352,14 @@ function showLinkedinProfile(linkedin_id, plugin_id)
     	// Check if member does not share information for third party applications
     	if(data.responseText == "Invalid member id {private}")
     	{
-    		$('#Linkedin').html("<div style='padding: 0px 5px 7px 5px;line-height:160%;" + 
+    		$('#Linkedin').html("<div style='padding: 10px;line-height:160%;" + 
     				"word-wrap: break-word;' >Member doesn't share his information for " + 
     				"third party applications</div>");
     		return;
     	}
     	
     	// Shows error message if error occurs
-    	$('#Linkedin').html("<div style='padding: 0px 5px 7px 5px;line-height:160%;" + 
+    	$('#Linkedin').html("<div style='padding: 10px;line-height:160%;" + 
 				"word-wrap: break-word;' >" + data.responseText + "</div>");        
     });
 

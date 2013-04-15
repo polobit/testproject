@@ -320,7 +320,7 @@ function showTwitterMatchingProfiles(plugin_id)
      */
     getTwitterMatchingProlfiles(plugin_id, function (data)
     {
-        var el = "<div style='padding:5px'>";
+        var el = "<div style='padding:10px'>";
 
         // If no matches found display message
         if (data.length == 0)
@@ -521,7 +521,7 @@ function showTwitterProfile(twitter_id, plugin_id)
         $('#twitter_profile_load').remove();
 
         // Shows error message if error occurs
-    	$('#Twitter').html("<div style='padding: 0px 5px 7px 5px;line-height:160%;" + 
+    	$('#Twitter').html("<div style='padding: 10px;line-height:160%;" + 
 				"word-wrap: break-word;' >" + data.responseText + "</div>"); 
     });
 
@@ -631,20 +631,24 @@ function showTwitterProfile(twitter_id, plugin_id)
             // changed as see less and shows all the updates by toggling
             $(this).attr("less", "false");
 
-            $('#twitter_current_activity').hide();
-            
+            // If updates exists only hide current update
+            if ($('ul#twitter_social_stream').find('div#twitter_update').length != 0)
+            {
+                $('#twitter_current_activity').hide();
+            }
 
             // On first click of see less, less attribute is made true and text will be
             // changed as see more button 
             $(this).text("See Less..");
             $('#twitter_refresh_stream').show();
-            return;
         }
-
-        $(this).attr("less", "true");
-        $(this).text("See More..");
-        $('#twitter_current_activity').show();
-        $('#twitter_refresh_stream').hide();
+        else
+        {
+        	$(this).attr("less", "true");
+        	$(this).text("See More..");
+	        $('#twitter_current_activity').show();
+	        $('#twitter_refresh_stream').hide();
+        }
     });
 
     // On click of refresh icon in the Twitter panel, all the new updates are shown
@@ -1205,7 +1209,7 @@ function getListOfProfilesByIDsinTwitter(plugin_id, twitter_ids, callback)
 
 function ArrangeListOfProfilesInElement(data, callback)
 {
-	var el = "<div style='padding:5px;'>";
+	var el = "<div style='padding:10px;'>";
 
     // If matches found, Iterates though each profile
     $.each(data, function (key, value)

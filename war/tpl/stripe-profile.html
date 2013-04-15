@@ -126,10 +126,10 @@
 	</div>
 </div>
 <div class="sub_header">
-		<h3>Subscription Details</h3>
+	<h3>Subscription Details</h3>
 </div>
-{{#if customer.subscription}}
-	<ul style="margin:0px;padding:10px;border-bottom:1px solid #ddd;">
+<ul style="margin:0px;padding:10px;border-bottom:1px solid #ddd;">
+	{{#if customer.subscription}}
 		<li class="row-fluid">	
 			<div class="span5">Start Date
 				<div class="pull-right">:</div>
@@ -176,27 +176,28 @@
 				{{customer.subscription.plan.amount}}
 			</div>
 		</li>
-	</ul>
-{{else}}
-	<div class='well' style='padding: 5px 5px 5px 5px;line-height:160%;background-color: #ffffff;color: #999;margin-bottom: 10px;'>
-	    No active subscription
-	</div>
-{{/if}}
+	{{else}}
+		<li style='color: #999;'>
+	    	No active subscription
+		</li>
+	{{/if}}
+</ul>
+
 <div class="sub_header">
 		<h3>Subscription History</h3>
 </div>
-{{#if invoice.length}}
 <ul style="margin:0px;padding:10px;border-bottom:1px solid #ddd;">
-{{#each invoice}}
-	<li class="row-fluid">
-		<div class="span3">Default <small>plan</small></div>
-		<div class="span8">{{epochToHumanDate "mm/dd/yyyy" periodStart}} to {{epochToHumanDate "mm/dd/yyyy" periodEnd}}</div>
-	</li>
-{{/each}}
-</ul>
+{{#if invoice.length}}
+	{{#each invoice}}
+		<li class="row-fluid">
+			<div class="span3">Default <small>plan</small></div>
+			<div class="span8">{{epochToHumanDate "mm/dd/yyyy" periodStart}} to {{epochToHumanDate "mm/dd/yyyy" periodEnd}}</div>
+		</li>
+	{{/each}}
 {{else}}
-	<div class='well' style='padding: 5px 5px 5px 5px;line-height:160%;background-color: #ffffff;color: #999;margin-bottom: 10px;'>
+	<li style='color: #999;'>
 	    No payments
-	</div>
+	</li>
 {{/if}}
+</ul>
 </script>
