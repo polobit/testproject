@@ -104,7 +104,7 @@ function showStripeProfile(plugin_id, customer_id)
     }).error(function (data)
     {
         // Shows error message in the stripe panel
-        $('#Stripe').html('<div style="padding: 0px 5px 7px 5px;line-height:160%;' +
+        $('#Stripe').html('<div style="padding: 10px;line-height:160%;' +
             'word-wrap: break-word;" >' + data.responseText + '</div>');
     });
 }
