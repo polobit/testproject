@@ -126,7 +126,7 @@ public class Note
     @JsonIgnore
     public void addRelatedContacts(String contactId)
     {
-	this.contact_ids.add(contactId);
+	contact_ids.add(contactId);
     }
 
     /**
@@ -136,11 +136,13 @@ public class Note
     @PrePersist
     private void PrePersist()
     {
+	System.out.println("contacts before saving : " + contact_ids);
+
 	// Create list of contact keys
-	for (String contact_id : this.contact_ids)
+	    for (Object contact_id : this.contact_ids)
 	{
 	    this.related_contacts.add(new Key<Contact>(Contact.class, Long
-		    .parseLong(contact_id)));
+			.parseLong(contact_id.toString())));
 	}
 
 	if (owner == null)
@@ -164,6 +166,17 @@ public class Note
 	List<Contact> contacts_list = new ArrayList<Contact>();
 	contacts_list.addAll(ofy.get(this.related_contacts).values());
 	return contacts_list;
+    }
+
+    @XmlElement(name = "contact_ids")
+    public List<String> getContact_ids()
+    {
+	contact_ids = new ArrayList<String>();
+
+	for (Key<Contact> contactKey : related_contacts)
+	    contact_ids.add(String.valueOf(contactKey.getId()));
+
+	return contact_ids;
     }
 
     @XmlElement(name = "Prefs")
