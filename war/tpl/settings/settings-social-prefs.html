@@ -4,15 +4,14 @@
     	<legend>{{service}}</legend>
     	{{#if picture}}
     		<i class="media-grid">
-    		<img class="thumbnail" src="{{gravatarurl properties 75}}" width="75px" height="75px" /> </a>
+    		<img class="thumbnail" src="{{picture}}" width="75px" height="75px" /> </a>
     		</i>
-    	{{/if}}
- 
-    	{{#if email}}
+    	{{else}}
     		<i class="media-grid">
-    		<img class="thumbnail" src="{{picture}}" width="50px" height="50px" /> </a>
+    		<img class="thumbnail" src="{{emailGravatarurl 50 email}}" width="50px" height="50px" /> </a>
     		</i>
     	{{/if}}
+    	
 	    <br />
  	   	<label>{{name}}</label>
     	<br /> 

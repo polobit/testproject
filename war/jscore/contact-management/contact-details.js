@@ -122,6 +122,13 @@ function fill_owners(el, data){
 	var optionsTemplate = "<li><a class='contact-owner-list' data='{{id}}'>{{name}}</a></li>";
     fillSelect('contact-detail-owner','/core/api/users', 'domainUsers', undefined, optionsTemplate, true); 
 }
+/**
+ * To show owner on change
+ */
+function show_owner(){
+	$('#change-owner-element').css('display', 'inline-block');
+	$('#contact-owner').css('display', 'inline-block');
+}
 
 /**
  * This script file (contact-details.js) performs some actions (delete contact, add 
@@ -263,10 +270,15 @@ $(function(){
 		var new_owner_id = $(this).attr('data');
 		var new_owner_name = $(this).text();
 		var current_owner_id = $('#contact-owner').attr('data');
-		
+
+    	
 		// Returns, if same owner is selected again 
 		if(new_owner_id == current_owner_id)
-			return;
+			{
+			  // Showing updated owner
+			  show_owner();
+			  return;
+			}
 
 		var url = '/core/api/contacts/bulk/owner/' + new_owner_id;
 		var json = {};
@@ -278,12 +290,11 @@ $(function(){
 			$('#contact-owner').attr('data', new_owner_id);
 			
 			// Showing updated owner
-			$('#change-owner-element').css('display', 'inline-block');
-        	$('#contact-owner').css('display', 'inline-block');
-			
+			show_owner(); 
 			// Shows acknowledgement of owner change
 			// $(".change-owner-succes").html('<div class="alert alert-success"><a class="close" data-dismiss="alert" href="#">×</a>Owner has been changed successfully.</div>');
 		});
+
    	});
 });
 
@@ -407,12 +418,8 @@ $(function(){
     	$('#change-owner-element').css('display', 'none');
     	$('#contact-owner').css('display', 'none');
     	
-    	if($('#change-owner-ul').css('display') == 'inline-block'){
+    	if($('#change-owner-ul').css('display') == 'inline-block')
     		$('#change-owner-ul').css('display', 'none');
-    		// Showing the owner name
-    		$('#change-owner-element').css('display', 'inline-block');
-        	$('#contact-owner').css('display', 'inline-block');
-    	}
     	
     	else
     		$('#change-owner-ul').css('display', 'inline-block');

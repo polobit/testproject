@@ -38,9 +38,8 @@
 		{{/if}}
 		<span class="owner-name">{{prefs.currentDomainUserName}}</span>
 	</span>
-	<h4><b>{{subject}}</b> ({{ucfirst priority_type}})</h4></br>
-	<p><strong>Type : </strong>{{ucfirst type}}</p>
-	<p><strong>Type : </strong>{{ucfirst type}}</p>
+	<h4><b>{{subject}}</b> <span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></h4></br>
+	<p><strong>Type : </strong><i class="{{icons type}}"></i> {{ucfirst type}}</p>
 
 				<p>
 				<strong>
