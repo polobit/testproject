@@ -233,10 +233,8 @@ public class JSAPI
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
 		return null;
-	    if (note.contacts == null)
-		note.contacts = new ArrayList<String>();
 
-	    note.contacts.add(contact.id + "");
+	    note.addRelatedContacts(contact.id + "");
 	    note.save();
 
 	    return note;
