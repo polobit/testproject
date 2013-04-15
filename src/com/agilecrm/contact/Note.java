@@ -58,9 +58,9 @@ public class Note
      * List of contact ids, a note related to
      * 
      */
-    @NotSaved(IfDefault.class)
-    public List<String> contacts = null;
-
+    @NotSaved
+    private List<String> contact_ids = new ArrayList<String>();
+    
     @NotSaved(IfDefault.class)
     private Key<AgileUser> owner = null;
 
@@ -123,6 +123,12 @@ public class Note
 	this.owner = owner;
     }
 
+    @JsonIgnore
+    public void addRelatedContacts(String contactId)
+    {
+	this.contact_ids.add(contactId);
+    }
+
     /**
      * Creates contact keys by iterating note related contact ids and assigns
      * created time, if it is 0L.
@@ -131,7 +137,7 @@ public class Note
     private void PrePersist()
     {
 	// Create list of contact keys
-	for (String contact_id : this.contacts)
+	for (String contact_id : this.contact_ids)
 	{
 	    this.related_contacts.add(new Key<Contact>(Contact.class, Long
 		    .parseLong(contact_id)));
@@ -144,6 +150,20 @@ public class Note
 	// Store Created Time
 	if (created_time == 0L)
 	    created_time = System.currentTimeMillis() / 1000;
+    }
+
+    /**
+     * Gets contacts related with Notes.
+     * 
+     * @return list of contact objects as xml element related with a deal.
+     */
+    @XmlElement
+    public List<Contact> getContacts()
+    {
+	Objectify ofy = ObjectifyService.begin();
+	List<Contact> contacts_list = new ArrayList<Contact>();
+	contacts_list.addAll(ofy.get(this.related_contacts).values());
+	return contacts_list;
     }
 
     @XmlElement(name = "Prefs")
@@ -167,7 +187,7 @@ public class Note
     @Override
     public String toString()
     {
-	return "id: " + id + " created_time: " + created_time + " subj"
-		+ subject + " description: " + description;
+    	return "id: " + id + " created_time: " + created_time + " subj"
+    			+ subject + " description: " + description;
     }
 }
