@@ -49,29 +49,22 @@
                     </div>      
                 </div>
                 <div class="well right unselectable" id="score" unselectable="on" style="height:43px;margin-right:70px;padding-top:0px;padding-right:10px;padding-left:15px" onselectstart="return false">
-                    <div style="font-size:22px; display:inline-block;"> 
+                    <div style="font-size:22px; display:inline-block"> 
                         Score 
                         <span style="vertical-align:text-top;margin-left:-5px">
                         <img border="0" src="/img/help.png" style="height:6px;vertical-align:middle" rel="popover" data-placement="bottom"  data-title="Lead Score" data-content="Score your leads to get high quality leads to appear on top. Manually assign scores or automate the process based on user behavior using Workflow automation." id="element" data-trigger="hover">
                         </span>
                     </div> 
-					</br>
-					<div>
+                    <div>
                     	{{#if lead_score}}
-                        	<span id="lead-score" style="font-size:28px;padding-left:12px;display:inline-block;">{{lead_score}}</span>
+                        	<div id="lead-score" style="font-size:28px;padding-left:12px;display:inline-block;">{{lead_score}}</div>&nbsp;
                     	{{else}}
-                        	<span id="lead-score" style="font-size:28px;display:inline-block;padding-left:12px;">0</span>&nbsp;
+                        	<div id="lead-score" style="font-size:28px;display:inline-block;padding-left:12px;">0</div>&nbsp;
                     	{{/if}}
-					
-                    	<ul style="display:inline-block;list-style-type:none;margin-left:2px">
-                        	<li style="height:12px">
-							<i class="icon-sort-up" id="add" style="height:10px;cursor:pointer"></i>
-							</li>
-							<li style="height:14px">                        
-								<i class="icon-sort-down" id="minus" style="height:10px;cursor:pointer"></i>
-							</li>
-                    	</ul>
-					</div>
+                    	<div style="display:inline-block; vertical-align:middle">
+                        	<i class="icon-sort-up" id="add" style="height:10px;cursor:pointer"></i>
+                        	<br/><i class="icon-sort-down" id="minus" style="height:10px;cursor:pointer"></i>
+                    	</div>
                     </div>
                 </div>
             <div class='clearfix'></div>    
