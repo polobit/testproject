@@ -40,7 +40,7 @@ import com.googlecode.objectify.condition.IfDefault;
  * 
  */
 @XmlRootElement
-public class DomainUser extends Cursor
+public class DomainUser extends Cursor implements Cloneable
 {
 
     // Key
