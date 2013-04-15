@@ -8,7 +8,7 @@
 	<div id="notes" class="activity-text-block">
 	<span class="activity-block-owner">
 	
-			<img class="user-img" width="40" height="40" src="{{emailGravatarurl 40 from}}">
+			<img class="user-img thumbnail" width="40" height="40" src="{{emailGravatarurl 40 from}}">
 	
 	
 	</span>
@@ -32,8 +32,7 @@
        			<p style="margin-top:10px">{{#if message}}{{safe_string message}}{{/if}}</p>
     		</div>
 		<div>
-		<small class="edit-hover">
-			Emailed   
+		<small class="edit-hover"> 
 			<time class="email-sent-time" datetime="{{epochToHumanDate "" date_secs}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" date_secs}}</time>
 		</small>
 	</div>	

@@ -18,6 +18,9 @@
         </div>
         {{/unless}}
         {{#if this.length}}
+	<div class="page-header" style="margin-top: 0px !important">
+		<a href="#" class="btn right contact-add-task" style="position:relative"><span><i class='icon-plus-sign'/></span> Add Task</a>
+	</div>
 			<ul id="contact-tasks-model-list" class="ativity-block-ul" url="core/api/notes/bulk"></ul>
 		{{/if}} 
 </script>
@@ -29,9 +32,9 @@
 <div id="tasks" class="activity-text-block">
 	<span class="activity-block-owner">
 		{{#if prefs.pic}}
-			<img class="user-img" width="40" height="40" alt="" src="{{prefs.pic}}" >
+			<img class="user-img thumbnail" width="40" height="40" alt="" src="{{prefs.pic}}" >
 		{{else}}
-			<img class="user-img" width="40" height="40" src="{{defaultGravatarurl 40}}">
+			<img class="user-img thumbnail" width="40" height="40" src="{{defaultGravatarurl 40}}">
 		{{/if}}
 		<span class="owner-name">{{prefs.currentDomainUserName}}</span>
 	</span>
@@ -53,8 +56,7 @@
 		<span class="actions pull-right">
             <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/tasks/bulk"><i></i></span></a>
         </span>
-		<small class="edit-hover">
-			Written 
+		<small class="edit-hover"> 
 			<time class="task-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" created_time}}</time>
 		</small>	
 	</div>

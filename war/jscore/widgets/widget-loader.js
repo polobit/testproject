@@ -40,12 +40,10 @@ function loadWidgets(el, contact)
                 if(!model.get("is_minimized"))
                 	$.get(url, "script");
 
-                console.log(model.toJSON());
                 
                 // Sets the data element in the div
                 // We can retrieve this in get plugin prefs
                 $('#' + model.get('name'), el).data('model', model);
-
             }, this);
 
             // Loads jquery-ui to get sortable functionality on widgets
@@ -60,14 +58,13 @@ function loadWidgets(el, contact)
                         var models = [];
 
                         // Store the save
-                        $('.widget-sortable li').each(function (index)
+                        $('.widget-sortable > li').each(function (index, element)
                         {
-                        	var model_name = $(this).find('.widget').attr('id');
-
+                        	var model_name = $(element).find('.widgets').attr('id');
+                        	
                             // Get Model, model is set as data to widget element
                             var model = $('#' + model_name).data('model');
-
-                            // console.log(modelId);
+                            
                             models.push(
                             {
                                 id: model.get("id"),

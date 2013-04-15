@@ -1,8 +1,5 @@
 package com.campaignio.tasklets.agile;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
@@ -76,10 +73,8 @@ public class AddNote extends TaskletAdapter
 		    agileUser.id);
 
 	    Note note = new Note(subject, description);
-	    List<String> contacts = new ArrayList<String>();
 
-	    contacts.add(contactId);
-	    note.contacts = contacts;
+	    note.addRelatedContacts(contactId);
 	    note.setOwner(owner);
 	    note.save();
 
