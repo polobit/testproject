@@ -184,7 +184,6 @@ function setup_tags_typeahead() {
     	if(e.which == 188 && tag != "")
     	{
     		e.preventDefault();
-    		alert("test");
     	
     		// Prevents comma (",") as an argument to the input field
     		$(this).val("");
