@@ -116,8 +116,13 @@ public class AddTask extends TaskletAdapter
 
 	Calendar calendar = Calendar.getInstance();
 
-	// Add duration period to get relative date
+	// Add duration and make time set to midnight of that day.
 	calendar.add(Calendar.DAY_OF_MONTH, Integer.parseInt(dueDays));
+	calendar.set(Calendar.HOUR_OF_DAY, 0);
+	calendar.set(Calendar.MINUTE, 0);
+	calendar.set(Calendar.SECOND, 0);
+	calendar.set(Calendar.MILLISECOND, 0);
+
 	Long dueDateInEpoch = calendar.getTimeInMillis() / 1000;
 
 	System.out.println("Given Task Name: " + subject + ",category: "
