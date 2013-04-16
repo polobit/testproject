@@ -99,8 +99,7 @@ public class RedirectServlet extends HttpServlet
 		LogUtil.addLogFromID(urlShortener.campaign_id, subscriberId,
 			"Email link: " + urlShortener.long_url
 				+ " of campaign - " + workflow.name
-				+ " clicked.", "Email Clicked",
-			"json/nodes/images/email/sendemail.png");
+				+ " clicked.", "Email Clicked");
 	    }
 
 	    // System.out.println(urlShortener);

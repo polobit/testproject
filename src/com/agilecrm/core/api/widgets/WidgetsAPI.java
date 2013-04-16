@@ -784,6 +784,31 @@ public class WidgetsAPI
 	return null;
     }
 
+    @Path("/experience/{widget-id}/{social-id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public SocialSearchResult getExperienceInLinkedIn(
+	    @PathParam("widget-id") Long widgetId,
+	    @PathParam("social-id") String socialId)
+    {
+	try
+	{
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+	    if (widget == null)
+		return null;
+
+	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
+		return LinkedInUtil.getExperience(widget, socialId);
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+	return null;
+    }
+
     /**
      * Connects to Rapleaf and fetches information based on the email
      * 
@@ -984,33 +1009,6 @@ public class WidgetsAPI
 		    .build());
 	}
 
-    }
-
-    @Path("/experience/{widget-id}/{social-id}")
-    @GET
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public SocialSearchResult getExperienceInLinkedIn(
-	    @PathParam("widget-id") Long widgetId,
-	    @PathParam("social-id") String socialId)
-    {
-	try
-	{
-	    Widget widget = WidgetUtil.getWidget(widgetId);
-	    if (widget == null)
-		return null;
-
-	    // Profiles are searched based on first and last name of contact
-	    // Calls LinkedUtil method to send message to person by socialId
-	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInUtil.getExperience(widget, socialId);
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-	}
-	return null;
     }
 
 }

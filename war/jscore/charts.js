@@ -257,6 +257,7 @@ function showBar(url, selector, name, yaxis_name, stacked) {
 												return '<b>' + this.x
 														+ '</b><br/>'
 														+ this.series.name
+														+ ': ' + this.y
 														;
 											}
 										},

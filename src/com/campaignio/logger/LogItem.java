@@ -29,11 +29,6 @@ public class LogItem
      */
     public String message;
 
-    /**
-     * Icon pic based on logType.
-     */
-    public String pic;
-
     @Indexed
     public long email_opened = 0L;
 
@@ -61,12 +56,11 @@ public class LogItem
      * @param message
      *            - logMessage.
      */
-    public LogItem(String type, long time, String message, String pic)
+    public LogItem(String type, long time, String message)
     {
 	this.type = type;
 	this.time = time;
 	this.message = message;
-	this.pic = pic;
 
 	addSearch(this.type);
     }

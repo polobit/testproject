@@ -5,6 +5,7 @@ import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 
+import com.agilecrm.Globals;
 import com.campaignio.logger.util.LogUtil;
 
 /**
@@ -23,11 +24,11 @@ class TwitterJob
     /**
      * Consumer Key
      */
-    static final String CONSUMER_KEY = "Q8jLaFvEhdE3kRTgUpMw";
+    static final String CONSUMER_KEY = Globals.TWITTER_API_KEY;
     /**
      * Consumer secret
      */
-    static final String CONSUMER_SECRET = "vfsi8O6nXsKh4jhTpJlS003OULo4KcuBnek5eWpgfCQ";
+    static final String CONSUMER_SECRET = Globals.TWITTER_SECRET_KEY;
 
     // Online, Offline or Unknown
     /**
@@ -50,6 +51,11 @@ class TwitterJob
      * Campaign Id
      */
     public String campaign_id;
+
+    TwitterJob()
+    {
+
+    }
 
     /**
      * Constructs a new {@link TwitterJob}
@@ -80,7 +86,7 @@ class TwitterJob
      * 
      * @return Boolean value-true if tweet posted successfully otherwise false
      */
-    public boolean postStatus()
+    public boolean postStatus(String tweet)
     {
 	try
 	{
@@ -94,13 +100,12 @@ class TwitterJob
 	    // System.out.println("Twitter Screename " +
 	    // twitter.getScreenName());
 
-	    Status status = twitter.updateStatus(token_secret);
+	    Status status = twitter.updateStatus(tweet);
 	    LogUtil.addLogFromID(
 		    campaign_id,
 		    subscriber_id,
 		    "Twitter - Successfully updated the status to ["
-			    + status.getText() + "].", "Twitter",
-		    "json/nodes/images/social/twitter.png");
+			    + status.getText() + "].", "Tweet");
 
 	    return true;
 
@@ -108,8 +113,7 @@ class TwitterJob
 	catch (Exception e)
 	{
 	    LogUtil.addLogFromID(campaign_id, campaign_id, "Tweeting failed "
-		    + e.getMessage(), "Twitter",
-		    "json/nodes/images/social/twitter.png");
+		    + e.getMessage(), "Tweet");
 	    return false;
 	}
     }

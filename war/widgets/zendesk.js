@@ -27,15 +27,7 @@ $(function ()
     // If not found - considering first time usage of widget, setupZendeskOAuth
     // called
     if (plugin_prefs == undefined)
-    {
-    	// Checks if contact has email, if undefined shows message in Zendesk panel
-        if (!Email)
-           {
-               $('#Zendesk').html('<div style="padding: 10px;' +
-                   'line-height:160%;">No email is associated with this contact</div>');
-               return;
-           }
-        
+    {        
         setupZendeskOAuth(plugin_id);
         return;
     }
@@ -45,7 +37,7 @@ $(function ()
     // Checks if contact has email, if undefined shows message in Zendesk panel
     if (!Email)
     {
-        $('#Zendesk').html('<div class="widget_content"style="border-bottom:none;padding: 0px 5px 10px 5px;' +
+        $('#Zendesk').html('<div class="widget_content" style="border-bottom:none;padding: 10px;' +
             'line-height:160%;">No email is associated with this contact</div>');
         return;
     }
@@ -76,13 +68,15 @@ function setupZendeskOAuth(plugin_id)
     $('#Zendesk').html(ZENDESK_PROFILE_LOAD_IMAGE);
 
     // Shows input fields to save the zendesk preferences
-    $('#Zendesk').html(getTemplate('zendesk-login'));
+    $('#Zendesk').html(getTemplate('zendesk-login', {}));
 
     // On click of save button 
     $('#save_prefs').die().live('click', function (e)
     {
         e.preventDefault();
-
+        console.log($(this).length);
+        console.log($(this).parents("form#zendesk_login_form").length);
+        console.log($("#zendesk_login_form", $('#Zendesk')).length);
         // Checks whether all input fields are given
         if (!isValidForm($("#zendesk_login_form")))
         {
@@ -99,6 +93,14 @@ function setupZendeskOAuth(plugin_id)
         agile_crm_save_widget_prefs(ZENDESK_PLUGIN_NAME,
         JSON.stringify(zendesk_prefs), function (data)
         {
+        	// Checks if contact has email, if undefined shows message in Zendesk panel
+            if (!Email)
+            {
+                $('#Zendesk').html('<div class="widget_content" style="border-bottom:none;padding: 10px;' +
+                    'line-height:160%;">No email is associated with this contact</div>');
+                return;
+            }
+            
             // Show tickets method called to show tickets after saving preferences
             showTicketsFromZendesk(plugin_id, Email);
         });
@@ -121,7 +123,7 @@ function showTicketsFromZendesk(plugin_id, email)
 
     // Sends request to the URL "/core/api/widgets/zendesk/get/" with plugin id and 
     // email as path parameters and calls WidgetsAPI class
-    $.get("/core/api/widgets/zendesk/get/" + plugin_id + "/" + email,
+    $.getJSON("/core/api/widgets/zendesk/get/" + plugin_id + "/" + email,
 
     function (data)
     {
@@ -137,7 +139,7 @@ function showTicketsFromZendesk(plugin_id, email)
             // If data equals no tickets, add ticket button is shown
             if (data == "There are no tickets for this user")
             {
-                $('#Zendesk').html('<div style="padding: 0px 5px 10px 5px;' +
+                $('#Zendesk').html('<div style="padding: 10px;' +
                     'word-wrap: break-word;"><p>' + data + '</p>' +
                     '<a class="btn btn-mini btn-primary" id="add_ticket" ' +
                     'style="font-size:13px;">Add Ticket</a></div>');
@@ -145,7 +147,7 @@ function showTicketsFromZendesk(plugin_id, email)
             }
 
             // Else the error message is shown
-            $('#Zendesk').html('<div style="padding: 0px 5px 10px 5px;' +
+            $('#Zendesk').html('<div style="padding: 10px;' +
                 'word-wrap: break-word;">' + data + '</div>');
         }
 
@@ -172,10 +174,10 @@ function showTicketsFromZendesk(plugin_id, email)
             showTicketById(tickets_data, ticket_id);
         });
 
-    }).error(function (data)
+    },"json").error(function (data)
     {
         // Error message is shown if error occurs
-        $('#Zendesk').html('<div style="padding: 0px 5px 10px 5px;' +
+        $('#Zendesk').html('<div style="padding: 10px;' +
             'word-wrap: break-word;">' + data + '</div>');
     });
 

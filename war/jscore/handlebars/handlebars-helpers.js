@@ -434,6 +434,16 @@ $(function() {
 		
 		return name.replace(/\+/g, ' ');
 	});	
+	
+	/**
+	 * Removes forward slash. Makes A/B to AB. Used in contact-detail-campaigns
+	 **/
+	Handlebars.registerHelper('removeSlash', function(value){
+		 if(value == 'A/B')
+			return value.replace(/\//g,'');
+		 
+		 return value;
+	});
 
 	/**
 	 * Displays all the properties of a contact in its detail view, excluding
