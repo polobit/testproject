@@ -29,6 +29,8 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.notification.util.ContactNotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.triggers.util.ContactTriggerUtil;
+import com.campaignio.cron.util.CronUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -385,19 +387,12 @@ public class Contact extends Cursor
      */
     public void delete()
     {
-
-	// Store contact in temporary variable to delete its document after
-	// contact delete
-	Contact contact = this;
-
 	// Execute notification when contact is deleted
-	ContactNotificationPrefsUtil
-		.executeNotificationForDeleteContact(contact);
+	ContactNotificationPrefsUtil.executeNotificationForDeleteContact(this);
 
 	dao.delete(this);
 
-	new AppengineSearch<Contact>(Contact.class).delete(contact.id
-		.toString());
+	new AppengineSearch<Contact>(Contact.class).delete(id.toString());
 
 	// Delete Notes
 	NoteUtil.deleteAllNotes(id);
@@ -405,6 +400,8 @@ public class Contact extends Cursor
 	// Delete Tags
 	TagUtil.deleteTags(tags);
 
+	// Delete Crons
+	CronUtil.deleteContactFromCron(id.toString(), NamespaceManager.get());
     }
 
     /**

@@ -53,7 +53,7 @@ public class CampaignStatsUtil
 		campaignId);
 
 	if (campaignStats == null)
-	    return getDefaultCampaignStats(campaignId);
+	    return null;
 
 	return campaignStats;
     }
@@ -115,13 +115,30 @@ public class CampaignStatsUtil
      */
     public static void incrementEmailsOpened(String campaignId)
     {
-	CampaignStats campaignStats = CampaignStatsUtil
-		.getCampaignStatsByCampaignId(Long.parseLong(campaignId));
+	CampaignStats campaignStats = getCampaignStatsByCampaignId(Long
+		.parseLong(campaignId));
 
 	if (campaignStats == null)
 	    return;
 
 	campaignStats.emails_opened++;
 	campaignStats.save();
+    }
+
+    /**
+     * Delete Campaign Stats based on campaignId.
+     * 
+     * @param campaignId
+     *            - Campaign Id.
+     */
+    public static void deleteCampaignStatsByCampaignId(String campaignId)
+    {
+	CampaignStats stats = CampaignStatsUtil
+		.getCampaignStatsByCampaignId(Long.parseLong(campaignId));
+
+	if (stats == null)
+	    return;
+
+	dao.delete(stats);
     }
 }
