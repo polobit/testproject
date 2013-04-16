@@ -10,10 +10,11 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.workflows.Workflow;
-import com.campaignio.CampaignStats;
+import com.campaignio.cron.util.CronUtil;
 import com.campaignio.tasklets.deferred.TaskletWorkflowDeferredTask;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.campaignio.util.CampaignStatsUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -231,15 +232,16 @@ public class WorkflowUtil
     }
 
     /**
-     * Deletes Campaign Stats related to campaign that is selected for delete.
+     * Deletes Campaign Stats, Cron Tasks related to campaigns that are selected
+     * for delete.
      * 
      * @param campaignIds
      *            - Campaign Id of deleted campaign.
      */
     public static void deleteRelatedEntities(JSONArray campaignIds)
     {
-	CampaignStats stats = null;
 	String campaignId = "";
+	String namespace = NamespaceManager.get();
 
 	for (int i = 0; i < campaignIds.length(); i++)
 	{
@@ -252,14 +254,12 @@ public class WorkflowUtil
 	    {
 		e.printStackTrace();
 	    }
-	    stats = CampaignStatsUtil.getCampaignStatsByCampaignId(Long
-		    .parseLong(campaignId));
 
-	    if (stats.emails_clicked == 0 && stats.emails_opened == 0
-		    && stats.emails_sent == 0)
-		continue;
+	    // Deletes Related CampaignStats.
+	    CampaignStatsUtil.deleteCampaignStatsByCampaignId(campaignId);
 
-	    stats.delete();
+	    // Deletes Related Crons.
+	    CronUtil.deleteCampaignFromCron(campaignId, namespace);
 	}
     }
 
