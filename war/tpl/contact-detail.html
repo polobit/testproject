@@ -233,7 +233,8 @@
 						</div>
 				</div>
 			{{/multiple_Property_Element}}
-
+			<br/>
+			<br/>
             {{#each properties}}
                 {{#if_property "first_name" "last_name" "company" "title" "image" "email" "phone" "website" "address"}}
                     <span style='display:inline'><icon class="{{name}}"></icon> <small><b>{{ucfirst name}}</b></small></span> 
@@ -246,12 +247,10 @@
                     <br/> 
                 {{/if_property}}        
             {{/each}}
-          
-            {{#address_Element properties}}{{/address_Element}}
-            <br/>
-                <div id="map" style="width:auto; height:200px; display:none">
-                </div>
 			<br/>
+            {{#address_Element properties}}{{/address_Element}}
+                <div id="map" style="width:auto; height:200px; display:none;margin-bottom:10px;margin-top:10px">
+                </div>
             </div>
 	</div>
 
