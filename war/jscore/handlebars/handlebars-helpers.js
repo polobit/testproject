@@ -105,11 +105,11 @@ $(function() {
 		if (item == "call")
 			return "icon-phone-sign";
 		if (item == "follow_up")
-			return "icon-circle-arrow-right";
+			return "icon-forward";
 		if (item == "meeting")
 			return "icon-group";
 		if (item == "milestone")
-			return "icon-certificate";
+			return "icon-cog";
 		if (item == "send")
 			return "icon-share-alt";
 		if (item == "tweet")
