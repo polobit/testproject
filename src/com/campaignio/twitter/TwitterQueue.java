@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.Embedded;
 import javax.persistence.Id;
 
 import org.json.JSONObject;
@@ -31,6 +32,7 @@ public class TwitterQueue
     /**
      * List of Twitter Jobs
      */
+    @Embedded
     public List<TwitterJob> twitter_jobs = new ArrayList<TwitterJob>();
 
     /**
@@ -126,6 +128,7 @@ public class TwitterQueue
 	    TwitterJob twitterJob = new TwitterJob(token, tokenSecret, message,
 		    subscriberId, campaignId);
 	    twitterQueue.twitter_jobs.add(twitterJob);
+	    twitterQueue.save();
 
 	    return true;
 
@@ -199,7 +202,8 @@ public class TwitterQueue
 
 		    try
 		    {
-			twitterJobs.get(0).postStatus();
+			twitterJobs.get(0)
+				.postStatus(twitterJobs.get(0).status);
 		    }
 		    catch (Exception e)
 		    {
