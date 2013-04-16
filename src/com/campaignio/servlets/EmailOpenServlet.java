@@ -63,7 +63,7 @@ public class EmailOpenServlet extends HttpServlet
 	    {
 		LogUtil.addLogFromID(campaignId, subscriberId,
 			"Email of campaign - " + workflow.name + " is opened.",
-			"Email Opened", "json/nodes/images/email/sendemail.png");
+			"Email Opened");
 	    }
 
 	    Contact contact = ContactUtil.getContact(Long

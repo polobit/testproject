@@ -13,10 +13,10 @@ var Translator_Path_Global = "js/translator.js";
 var First_Nodes_Toolbar_Global = new Array("json/nodes/email/send_email.jsp",
 		"json/nodes/common/wait.js", "json/nodes/email/clicked.js",
 		"json/nodes/email/ab.js", "json/nodes/common/score.js",
-		"json/nodes/crm/addnote.js", "json/nodes/crm/tags.js");
+		"json/nodes/crm/addnote.js", "json/nodes/social/tweet.js");
 var Second_Nodes_Toolbar_Global = new Array("json/nodes/crm/addtask.js",
-		"json/nodes/common/url.js", "json/nodes/developers/jsonio.js","json/nodes/common/check_tags.js",
-		"json/nodes/developers/condition.js","json/nodes/social/tweet.js" );
+		"json/nodes/common/url.js", "json/nodes/crm/tags.js","json/nodes/common/check_tags.js",
+		"json/nodes/developers/condition.js", "json/nodes/developers/jsonio.js");
 
 /*
  * var First_Nodes_Toolbar_Global = new Array("json/nodes/sms/sendmessage.js",
