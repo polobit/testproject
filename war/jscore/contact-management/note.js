@@ -46,21 +46,21 @@ $(function(){
     			$('#noteForm').each (function(){
     	          	  this.reset();
     	        });
-				
+
     			// Removes loading symbol and hides the modal
     			$('#noteModal').find('span.save-status img').remove();
     	        $("#noteModal").modal('hide');
     			
        	        var note = data.toJSON();
        	        
-       	        /*
+       	             	        /*
        	         * Updates data (saved note) to time-line, when contact detail view is defined and 
        	         * the note is related to the contact which is in detail view.
        	         */    
     			if(App_Contacts.contactDetailView && Current_Route == "contact/"
 					+ App_Contacts.contactDetailView.model.get('id')){
-    				$.each(note.contacts, function(index, contact_id){
-    					if(contact_id == App_Contacts.contactDetailView.model.get('id')){
+    				$.each(note.contacts, function(index, contact) {
+    					if(contact.id == App_Contacts.contactDetailView.model.get('id')) {
     						
     						// Activates "Timeline" tab and its tab content in contact detail view 
     						activate_timeline_tab();
@@ -81,7 +81,8 @@ $(function(){
     							$('#timeline').isotope('insert', newItem);
     						}
     						return false;
-    					}	
+    					}
+    					
     				});
     			}
 			}    

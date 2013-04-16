@@ -138,12 +138,13 @@ public class CronUtil
      * @param campaignId
      *            Campaign ID.
      */
-    public static void stopCampaign(String campaignId)
+    public static void deleteCampaignFromCron(String campaignId,
+	    String namespace)
     {
 
 	Map<String, Object> searchMap = new HashMap<String, Object>();
 	searchMap.put("campaign_id", campaignId);
-	searchMap.put("namespace", NamespaceManager.get());
+	searchMap.put("namespace", namespace);
 
 	List<Key<Cron>> keys = dao.listKeysByProperty(searchMap);
 
@@ -156,12 +157,12 @@ public class CronUtil
      * @param subscriberId
      *            Contact ID.
      */
-    public static void deleteContact(String subscriberId)
+    public static void deleteContactFromCron(String subscriberId,
+	    String namespace)
     {
-
 	Map<String, Object> searchMap = new HashMap<String, Object>();
 	searchMap.put("subscriber_id", subscriberId);
-	searchMap.put("namespace", NamespaceManager.get());
+	searchMap.put("namespace", namespace);
 
 	List<Key<Cron>> keys = dao.listKeysByProperty(searchMap);
 	dao.deleteKeys(keys);

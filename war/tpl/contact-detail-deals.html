@@ -32,9 +32,9 @@
 	<div id="notes" class="activity-text-block">
 		<span class="activity-block-owner">
 			{{#if pic}}
-				<img class="user-img" width="40" height="40" alt="" src="{{pic}}" >
+				<img class="user-img thumbnail" width="40" height="40" alt="" src="{{pic}}" >
 			{{else}}
-				<img class="user-img" width="40" height="40" src="{{defaultGravatarurl 40}}">
+				<img class="user-img thumbnail" width="40" height="40" src="{{defaultGravatarurl 40}}">
 			{{/if}}
 			<span class="owner-name">{{owner.name}}</span>
 		</span>
@@ -52,7 +52,7 @@
 							</tr>
 							<tr>
 								<td><strong>Milestone</strong></td>
-								<td>{{milestone}}({{probability}}%)</td>
+								<td>{{milestone}} ({{probability}}%)</td>
 							</tr>
 							<tr>
 								<td><strong>Close Date</strong></td>
@@ -78,7 +78,6 @@
              <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/opportunity/bulk"></span></a>
         </span>
 		<small class="edit-hover">
-			Created 
 			<time class="deal-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" created_time}}</time>
 		</small>	
 	</div>

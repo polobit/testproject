@@ -7,7 +7,6 @@
     <div class="modal-body agile-modal-body">
         <form id="noteForm" name="noteForm" method="post">
             <fieldset>
-                <input name="contact_id" type="hidden" value="" />
                 <div class="control-group">
                     <label class="control-label"><b>Subject: </b><span class="field_req">*</span></label>
                     <div class="controls">
@@ -25,7 +24,7 @@
                     <div class="controls">
                         <div>
                             <div class="pull-left">
-                                <ul name="contacts" class="contacts tags tagsinput"></ul>
+                                <ul name="contact_ids" class="contacts tags tagsinput"></ul>
                             </div>
                             <input type="text" placeholder="Contact Name" id="note_related_to" class="typeahead typeahead_contacts" data-provide="typeahead" data-mode="multiple" size="40" />
                         </div>

@@ -95,12 +95,25 @@ $(function() {
 	 * @returns icon name
 	 */
 	Handlebars.registerHelper('icons', function(item) {
+		item = item.toLowerCase();
 		if (item == "email")
-			return "icon-envelope";
+			return "icon-envelope-alt";
 		if (item == "phone")
 			return "icon-headphones";
 		if (item == "url")
 			return "icon-home";
+		if (item == "call")
+			return "icon-phone-sign";
+		if (item == "follow_up")
+			return "icon-circle-arrow-right";
+		if (item == "meeting")
+			return "icon-group";
+		if (item == "milestone")
+			return "icon-certificate";
+		if (item == "send")
+			return "icon-share-alt";
+		if (item == "tweet")
+			return "icon-signout";
 
 	});
 
@@ -466,22 +479,22 @@ $(function() {
 		for ( var i = 0, l = properties.length; i < l; i++){
 			
 			if(properties[i].name == "address"){
-				var el = "<span><small><b>Address</b></small> :</br>";
+				var el = "<span><i class='icon-map-marker'></i>&nbsp;&nbsp;";
 				var address = JSON.parse(properties[i].value);
-	
-				if(properties[i].subtype)
-					el = el.concat("(" + properties[i].subtype +") : ");
 				
 				// Gets properties (keys) count of given json object
 				var count = countJsonProperties(address);
 				
 				$.each(address, function(key, val){
 					if(--count == 0){
-						el = el.concat(val + ".</span></br>");
+						el = el.concat(val + ".</span>");
 						return;
 					}
 					el = el.concat(val + ", ");
 				});
+				
+				if(properties[i].subtype)
+					el = el.concat(" (" + properties[i].subtype +")");
 				return new Handlebars.SafeString(el);
 			}
 		}

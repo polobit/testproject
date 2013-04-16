@@ -318,7 +318,7 @@ function showTwitterMatchingProfiles(plugin_id)
      *  Fetches matching profiles from Twitter based on widget preferences, and uses 
      *  call back function to get template and view matches
      */
-    getTwitterMatchingProlfiles(plugin_id, function (data)
+    getTwitterMatchingProfiles(plugin_id, function (data)
     {
         var el = "<div style='padding:10px'>";
 
@@ -500,9 +500,15 @@ function showTwitterProfile(twitter_id, plugin_id)
             // Sets the update stream into a local variable for this method
             stream_data = data.updateStream;
             
+            var element = $(getTemplate("twitter-update-stream", data.updateStream))
+
+            head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+            		$(".time-ago", element).timeago();
+            	})
+            	
             // Template is populated with update details and shown
             $('#twitter_social_stream')
-                .append(getTemplate("twitter-update-stream", data.updateStream));          
+                .append(element);          
 
             return;
         }
@@ -601,7 +607,9 @@ function showTwitterProfile(twitter_id, plugin_id)
             // Populate the template with update stream details and show in panel
             $("#twitter_social_stream")
                 .append(getTemplate("twitter-update-stream", data));
-
+            
+           $(".time-ago", $("#twitter_social_stream")).timeago();
+        	
             // Current activity is hidden
             $('#twitter_current_activity').hide();
            
@@ -707,7 +715,7 @@ function showTwitterProfile(twitter_id, plugin_id)
  * @param callback 
  * 			callback to create template and show matching profiles
  */
-function getTwitterMatchingProlfiles(plugin_id, callback)
+function getTwitterMatchingProfiles(plugin_id, callback)
 {
     // Gets contact id, to save social results of a particular id
     var contact_id = agile_crm_get_contact()['id'];
