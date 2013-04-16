@@ -52,69 +52,6 @@ function starify(el){
 }
 
 /**
- * Used to fill the contact details for generating QR code.
- * @param properties
- * @returns details{name, email, url, phone number, address}
- */
-function fill_QR(properties){
-	var details = {};
-	details.name = getPropertyValue(properties, 'first_name') + " " +getPropertyValue(properties, 'last_name');
-	details.title = getPropertyValue(properties, 'title');
-	details.company = getPropertyValue(properties, 'company');
-	
-	details.email = trim_last_comma(get_list_of_properties('email'));
-	details.number = trim_last_comma(get_list_of_properties('phone'));
-	details.url = trim_last_comma(get_list_of_properties('website'));
-	
-	for ( var i = 0; i < properties.length; i++){
-		if(properties[i].name == "address"){
-			var adr = JSON.parse(properties[i].value);
-			var address = "";
-			for(var key in adr){
-				if(adr[key] && adr[key] != undefined){
-					address += adr[key] + ",";
-					}
-			}
-			details.address = trim_last_comma(address);
-		}
-	}
-	return details;
-}
-
-/**
- * To remove the last comma of the object.
- * @param str
- * @returns str
- */
-function trim_last_comma(str){
-	if(str != undefined)
-		{
-			var len =str.length;
-			var last =str.lastIndexOf(",");
-			if((len-1) == last)
-			str = str.slice(0,(len-1));
-		}
-	return str;
-}
-/**
- * To get list of common properties
- * @param name
- * @returns {String}
- */
-function get_list_of_properties(name){
-	var list_val = agile_crm_get_contact_properties_list(name);
-	var val = "";
-	for ( var i = 0; i < list_val.length; i++){
-		
-		if(list_val[i].subtype != undefined && list_val[i].subtype != '')
-			val += list_val[i].value + "(" + list_val[i].subtype + "),";
-		else
-			val += list_val[i].value +",";
-	}
-	return val;
-}
-
-/**
  * Shows all the domain users names as ul drop down list 
  * to change the owner of a contact 
  */
@@ -122,6 +59,7 @@ function fill_owners(el, data){
 	var optionsTemplate = "<li><a class='contact-owner-list' data='{{id}}'>{{name}}</a></li>";
     fillSelect('contact-detail-owner','/core/api/users', 'domainUsers', undefined, optionsTemplate, true); 
 }
+
 /**
  * To show owner on change
  */
