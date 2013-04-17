@@ -119,12 +119,11 @@ public class TwitterQueue
 	    JSONObject subscriberJSON, JSONObject campaignJSON)
     {
 	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
 
 	// Add to Twitter Queue
 	try
 	{
-	    NamespaceManager.set("");
-
 	    // Get Existing Queue
 	    TwitterQueue twitterQueue = getTwitterQueueForAccount(account,
 		    rateLimit);
@@ -199,10 +198,10 @@ public class TwitterQueue
     public static void runTwitterQueues(String rateLimit)
     {
 	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
 	try
 	{
-	    NamespaceManager.set("");
-
 	    // Get All Queues for specified RateLimit
 	    List<TwitterQueue> twitterQueues = getTwitterQueue(rateLimit);
 
@@ -263,16 +262,19 @@ public class TwitterQueue
      */
     public void save()
     {
+	// Save namespace.
 	namespace = NamespaceManager.get();
+
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
 
 	try
 	{
-	    NamespaceManager.set("");
 	    dao.put(this);
 	}
 	finally
 	{
-	    NamespaceManager.set(namespace);
+	    NamespaceManager.set(oldNamespace);
 	}
     }
 

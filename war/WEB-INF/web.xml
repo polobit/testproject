@@ -43,7 +43,7 @@
 	</servlet>
 	<servlet-mapping>
 	     <servlet-name>TwitterCron</servlet-name>
-	     <url-pattern>/crons/twitter</url-pattern></servlet-mapping>
+	     <url-pattern>/backend/cron/twitter</url-pattern></servlet-mapping>
 	
 	
 	<servlet>
