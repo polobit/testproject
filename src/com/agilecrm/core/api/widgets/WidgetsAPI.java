@@ -1011,4 +1011,71 @@ public class WidgetsAPI
 
     }
 
+    @Path("zendesk/agent/{widget-id}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getAgentInfo(@PathParam("widget-id") Long widgetId)
+    {
+	try
+	{
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+	    if (widget == null)
+		return null;
+
+	    return ZendeskUtil.getUserInfo(widget);
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+
+    }
+
+    @Path("zendesk/ticket/status/{widget-id}/{email}/{status}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getTicketsOnstatus(@PathParam("widget-id") Long widgetId,
+	    @PathParam("email") String email, @PathParam("status") String status)
+    {
+	try
+	{
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+	    if (widget == null)
+		return null;
+
+	    return ZendeskUtil.getTicketsByStatus(widget, email, status);
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+
+    }
+
+    @Path("zendesk/profile/{widget-id}/{email}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getZendeskProfile(@PathParam("widget-id") Long widgetId,
+	    @PathParam("email") String email)
+    {
+	try
+	{
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+	    if (widget == null)
+		return null;
+
+	    return ZendeskUtil.getZendeskProfile(widget, email);
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+    }
+
 }

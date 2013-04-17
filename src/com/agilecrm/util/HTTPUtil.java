@@ -3,6 +3,7 @@ package com.agilecrm.util;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -90,4 +91,45 @@ public class HTTPUtil
 
 	return output;
     }
+
+    public static String accessHTTPURL(String postURL, String data,
+	    String methodType) throws Exception
+    {
+	URL url;
+	HttpURLConnection conn = null;
+
+	try
+	{
+	    // Send data
+	    url = new URL(postURL);
+	    conn = (HttpURLConnection) url.openConnection();
+	    conn.setDoOutput(true);
+	    // conn.setRequestProperty("Content-Type", "application/json");
+	    conn.setRequestMethod(methodType.toUpperCase());
+	    OutputStreamWriter wr = new OutputStreamWriter(
+		    conn.getOutputStream());
+	    wr.write(data);
+	    wr.flush();
+
+	    // Get the response
+	    BufferedReader reader = new BufferedReader(new InputStreamReader(
+		    conn.getInputStream()));
+	    String output = "";
+	    String inputLine;
+	    while ((inputLine = reader.readLine()) != null)
+	    {
+		output += inputLine;
+	    }
+
+	    wr.close();
+	    reader.close();
+
+	    return output;
+	}
+	catch (Exception e)
+	{
+	    throw new Exception(conn.getResponseMessage());
+	}
+    }
+
 }

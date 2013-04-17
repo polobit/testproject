@@ -684,6 +684,15 @@ $(function() {
 	 		   return new Date(date).format(format);
 	 		  });
 
-		  
+	 	Handlebars.registerHelper('isArray',function(data, options){
+	 		console.log(data);
+		 	     if(isArray(data))
+		 	      return options.fn(this);
+		 	    return options.inverse(this);
+	 	      });
+	 	
+	 	 Handlebars.registerHelper("bindData", function(data) {
+	        return 'data-attr=' + JSON.stringify(data) ;
+	    });
 		  
 });

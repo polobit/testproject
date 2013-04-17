@@ -1,10 +1,9 @@
 package com.agilecrm.social;
 
-import org.jboss.resteasy.client.ClientRequest;
-import org.jboss.resteasy.client.ClientResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.widgets.Widget;
 
 /*       
@@ -54,15 +53,10 @@ public class ZendeskUtil
 	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON",
 		pluginPrefsJSON).put("visitorJSON", contactPrefsJSON);
 
-	ClientRequest request = new ClientRequest(pluginURL
-		+ "core/agile/zendesk/get");
-	request.accept("application/json");
+	String response = HTTPUtil.accessHTTPURL(pluginURL
+		+ "core/agile/zendesk/get", prefsJSON.toString(), "PUT");
 
-	request.body("application/json", prefsJSON.toString());
-
-	ClientResponse<String> response = request.put(String.class);
-
-	return response.getEntity();
+	return response;
 
     }
 
@@ -97,20 +91,15 @@ public class ZendeskUtil
 	if (pluginPrefsJSON == null || contactPrefsJSON == null)
 	    throw new Exception("zendesk preferences null");
 
-	JSONObject prefsJSON = new JSONObject()
+	JSONObject json = new JSONObject()
 		.put("pluginPrefsJSON", pluginPrefsJSON)
 		.put("visitorJSON", contactPrefsJSON)
 		.put("messageJSON", messageJSON);
 
-	ClientRequest request = new ClientRequest(pluginURL
-		+ "core/agile/zendesk/add");
-	request.accept("application/json");
+	String response = HTTPUtil.accessHTTPURL(pluginURL
+		+ "core/agile/zendesk/add", json.toString(), "PUT");
 
-	request.body("application/json", prefsJSON.toString());
-
-	ClientResponse<String> response = request.put(String.class);
-
-	return response.getEntity();
+	return response;
 
     }
 
@@ -142,19 +131,71 @@ public class ZendeskUtil
 	if (pluginPrefsJSON == null || messageJSON == null)
 	    throw new Exception("zendesk preferences null");
 
-	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON",
+	JSONObject json = new JSONObject().put("pluginPrefsJSON",
 		pluginPrefsJSON).put("messageJSON", messageJSON);
 
-	ClientRequest request = new ClientRequest(pluginURL
-		+ "core/agile/zendesk/update");
-	request.accept("application/json");
+	String response = HTTPUtil.accessHTTPURL(pluginURL
+		+ "core/agile/zendesk/update", json.toString(), "PUT");
 
-	request.body("application/json", prefsJSON.toString());
+	return response;
 
-	ClientResponse<String> response = request.put(String.class);
+    }
 
-	return response.getEntity();
+    public static String getUserInfo(Widget widget) throws Exception
+    {
+	String email = widget.getProperty("zendesk_username");
 
+	JSONObject pluginPrefsJSON = buildPluginPrefsJSON(widget);
+	JSONObject contactPrefsJSON = new JSONObject().put("visitor_email",
+		email);
+
+	if (pluginPrefsJSON == null || contactPrefsJSON == null)
+	    throw new Exception("zendesk preferences null");
+
+	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON",
+		pluginPrefsJSON).put("visitorJSON", contactPrefsJSON);
+
+	String response = HTTPUtil.accessHTTPURL(pluginURL
+		+ "core/agile/zendesk/users", prefsJSON.toString(), "PUT");
+
+	return response;
+    }
+
+    public static String getTicketsByStatus(Widget widget, String email,
+	    String status) throws Exception
+    {
+	JSONObject pluginPrefsJSON = buildPluginPrefsJSON(widget);
+	JSONObject contactPrefsJSON = new JSONObject().put("visitor_email",
+		email);
+	JSONObject messageJSON = new JSONObject().put("ticket_status", status);
+
+	JSONObject prefsJSON = new JSONObject()
+		.put("pluginPrefsJSON", pluginPrefsJSON)
+		.put("visitorJSON", contactPrefsJSON)
+		.put("messageJSON", messageJSON);
+
+	String response = HTTPUtil.accessHTTPURL(pluginURL
+		+ "core/agile/zendesk/tickets/status", prefsJSON.toString(),
+		"PUT");
+
+	return response;
+    }
+
+    public static String getZendeskProfile(Widget widget, String email)
+	    throws Exception
+    {
+
+	String userInfo = getUserInfo(widget);
+
+	String openTickets = getTicketsByStatus(widget, email, "open");
+
+	JSONObject zendeskInfo = new JSONObject();
+	zendeskInfo
+		.put("user_info", new JSONObject(userInfo)
+			.getJSONArray("users").getJSONObject(0));
+	zendeskInfo.put("open_tickets", openTickets);
+
+	return zendeskInfo.toString();
     }
 
     /**
@@ -170,17 +211,17 @@ public class ZendeskUtil
     {
 	try
 	{
-	    JSONObject pluginPrefs = new JSONObject()
-		    .put("zendesk_username",
-			    widget.getProperty("zendesk_username"))
-		    .put("zendesk_password",
-			    widget.getProperty("zendesk_password"))
-		    .put("zendesk_url", widget.getProperty("zendesk_url"));
-
 	    // JSONObject pluginPrefs = new JSONObject()
-	    // .put("zendesk_username", "praveen@invox.com")
-	    // .put("zendesk_password", "agilecrm")
-	    // .put("zendesk_url", "https://agilecrm.zendesk.com");
+	    // .put("zendesk_username",
+	    // widget.getProperty("zendesk_username"))
+	    // .put("zendesk_password",
+	    // widget.getProperty("zendesk_password"))
+	    // .put("zendesk_url", widget.getProperty("zendesk_url"));
+
+	    JSONObject pluginPrefs = new JSONObject()
+		    .put("zendesk_username", "praveen@invox.com")
+		    .put("zendesk_password", "agilecrm")
+		    .put("zendesk_url", "https://agilecrm.zendesk.com");
 
 	    return pluginPrefs;
 	}
@@ -200,7 +241,9 @@ public class ZendeskUtil
 		    "test@agile.com"));
 	    System.out.println(ZendeskUtil.addTicket(null, "te",
 		    "test@agile.com", "test", "desc"));
-	    System.out.println(ZendeskUtil.updateTicket(null, "1", "hi test"));
+	    System.out.println(ZendeskUtil.updateTicket(null, "1", "hi choc"));
+	    System.out.println(ZendeskUtil.getTicketsByStatus(null,
+		    "test@zendesk.com", "solved"));
 	}
 	catch (Exception e)
 	{
