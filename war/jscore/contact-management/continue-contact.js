@@ -228,6 +228,10 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     contactModel.save(obj, {
         success: function (data) {
         	
+        	// Remove social search results from local storage after editing a contact
+        	localStorage.removeItem("Agile_linkedin_matches_" + data.get('id'));
+        	localStorage.removeItem("Agile_twitter_matches_" + data.get('id'));
+
         	// Removes disabled attribute of save button
 			$(saveBtn).removeAttr('disabled');
 			

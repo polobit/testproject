@@ -7,9 +7,9 @@
 	</div>
 	<div class="clearfix"></div>	
 	<p>{{show_link_in_statement summary}}</p>
-	<a href="#" class="btn" id="twitter_follow" name="{{name}}" style="display:none;"><i class="icon-circle-arrow-right"></i>Follow</a>
-	<a href="#" class="btn" id="twitter_unfollow" name="{{name}}" style="display:none;"><i class="icon-circle-arrow-left"></i>Unfollow</a>
-	<a href="#" class="btn ml_5" id="twitter_tweet" rel="tooltip" title="Compose a new Tweet" style="display:none;"><i class="icon-signout"></i>Tweet</a>
+	<a href="#" class="btn" id="twitter_follow" name="{{name}}" style="display:none;"><i class="icon-twitter"></i>&nbsp;Follow</a>
+	<a href="#" class="btn" id="twitter_unfollow" name="{{name}}" style="display:none;"><i class="icon-backward"></i>&nbsp;Unfollow</a>
+	<a href="#" class="btn ml_5" id="twitter_tweet" rel="tooltip" title="Compose a new Tweet" style="display:none;"><i class="icon-signout"></i>&nbsp;Tweet</a>
 	<a href="#" class="btn ml_5 icon-envelope" id="twitter_message" rel="tooltip" title="Send Direct Message" style="display:none;"></a>					
 </div>
 <ul class="nav nav-tabs row-fluid" id="myTab">
@@ -102,7 +102,7 @@
 				<div class="pull-left row-fluid">
 					<div class="span2 mr_5"><a href="{{tweeted_person_profile_url}}" target="_blank"><img src="{{tweeted_person_pic_url}}" width="30" height="30" alt="" class="img-rounded pull-left"/></a></div>
 					<div class="pull-left span9" >
-						<p class="mb_0">{{safe_string message}}</p>
+						<p class="mb_0" style="word-break:normal">{{safe_string message}}</p>
 						<small><time class="time-ago" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "" created_time}}</time></small>
 						<ul class="widget_tab_link">
 							{{#if is_retweeted}}

@@ -5,12 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.Embedded;
 import javax.persistence.Id;
 
 import org.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.util.DBUtil;
+import com.google.appengine.api.NamespaceManager;
+import com.googlecode.objectify.annotation.Indexed;
 
 /**
  * <code>TwitterQueue</code> is responsible to post tweets at regular intervals
@@ -31,6 +34,7 @@ public class TwitterQueue
     /**
      * List of Twitter Jobs
      */
+    @Embedded
     public List<TwitterJob> twitter_jobs = new ArrayList<TwitterJob>();
 
     /**
@@ -42,6 +46,12 @@ public class TwitterQueue
      * Rate limit
      */
     public String rate_limit;
+
+    /**
+     * Namespace
+     */
+    @Indexed
+    public String namespace;
 
     /**
      * 5 tweets per hour
@@ -108,6 +118,8 @@ public class TwitterQueue
 	    String tokenSecret, String message, String rateLimit,
 	    JSONObject subscriberJSON, JSONObject campaignJSON)
     {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
 
 	// Add to Twitter Queue
 	try
@@ -115,6 +127,7 @@ public class TwitterQueue
 	    // Get Existing Queue
 	    TwitterQueue twitterQueue = getTwitterQueueForAccount(account,
 		    rateLimit);
+
 	    if (twitterQueue == null)
 	    {
 		twitterQueue = new TwitterQueue(account, rateLimit);
@@ -126,6 +139,7 @@ public class TwitterQueue
 	    TwitterJob twitterJob = new TwitterJob(token, tokenSecret, message,
 		    subscriberId, campaignId);
 	    twitterQueue.twitter_jobs.add(twitterJob);
+	    twitterQueue.save();
 
 	    return true;
 
@@ -133,6 +147,10 @@ public class TwitterQueue
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
 	}
 
 	return false;
@@ -179,51 +197,63 @@ public class TwitterQueue
      */
     public static void runTwitterQueues(String rateLimit)
     {
-	// Get All Queues for specified RateLimit
-	List<TwitterQueue> twitterQueues = getTwitterQueue(rateLimit);
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
 
-	System.out.println("Tweeting " + twitterQueues.size());
-
-	for (TwitterQueue twitterQueue : twitterQueues)
+	try
 	{
-	    try
+	    // Get All Queues for specified RateLimit
+	    List<TwitterQueue> twitterQueues = getTwitterQueue(rateLimit);
+
+	    System.out.println("Tweeting " + twitterQueues.size());
+
+	    for (TwitterQueue twitterQueue : twitterQueues)
 	    {
-
-		List<TwitterJob> twitterJobs = twitterQueue.twitter_jobs;
-
-		System.out.println("Queue " + twitterJobs.size());
-
-		// Get First Job, Execute it
-		if (twitterJobs.size() > 0)
+		try
 		{
 
-		    try
+		    List<TwitterJob> twitterJobs = twitterQueue.twitter_jobs;
+
+		    System.out.println("Queue " + twitterJobs.size());
+
+		    // Get First Job, Execute it
+		    if (twitterJobs.size() > 0)
 		    {
-			twitterJobs.get(0).postStatus();
-		    }
-		    catch (Exception e)
-		    {
-			e.printStackTrace();
+
+			try
+			{
+			    twitterJobs.get(0).postStatus(
+				    twitterJobs.get(0).status);
+			}
+			catch (Exception e)
+			{
+			    e.printStackTrace();
+			}
+
+			twitterJobs.remove(0);
+
+			// Delete the queue for that account if no more jobs are
+			// pending
+			if (twitterJobs.size() == 0)
+			    twitterQueue.delete();
+			else
+			{
+			    twitterQueue.twitter_jobs = twitterJobs;
+			    twitterQueue.save();
+			}
 		    }
 
-		    twitterJobs.remove(0);
-
-		    // Delete the queue for that account if no more jobs are
-		    // pending
-		    if (twitterJobs.size() == 0)
-			twitterQueue.delete();
-		    else
-		    {
-			twitterQueue.twitter_jobs = twitterJobs;
-			twitterQueue.save();
-		    }
 		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+	    }
 
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-	    }
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
 	}
     }
 
@@ -232,7 +262,20 @@ public class TwitterQueue
      */
     public void save()
     {
-	dao.put(this);
+	// Save namespace.
+	namespace = NamespaceManager.get();
+
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	try
+	{
+	    dao.put(this);
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
     }
 
     /**

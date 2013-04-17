@@ -50,10 +50,12 @@
 <script id="campaign-logs-model-template" type="text/html">
 <input name="id" class="campaign" type="hidden" value="{{campaign_id}}" />
 <td class="data" data={{subscriber_id}}>
-    <div style="padding-right:10px;height:auto;text-overflow:ellipsis;white-space:nowrap;width:16em;overflow:hidden;">
-        <img src="{{gravatarurl contact.properties 50}}" width="40px" height="40px" />
-        <br/><b>{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}</b>
-    </div>
+   <div style="display:inline;padding-right:10px;height:auto;">
+        <img class="thumbnail" src="{{gravatarurl contact.properties 50}}" width="40px" height="40px" style="display:inline;"/>
+   </div>
+   <div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:12em;overflow:hidden;">
+       <b> {{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}</b>
+   </div>
 </td>
 <td>{{epochToLogDate updated_time}}</td>
 <td>{{logsCount}}</td>

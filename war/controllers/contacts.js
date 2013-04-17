@@ -252,22 +252,11 @@ var ContactsRouter = Backbone.Router.extend({
                 show_map(el);
                 
                 // To get QR code
-                head.js(LIB_PATH + 'lib/jquery.classyqr.min.js',  function(){
-                	
-                	details = fill_QR(contact.toJSON().properties);
-                	
-                    $("#qrcode", el).ClassyQR({
-                    	create: true,
-                        type: 'contact',
-                        name:  details.name,
-                        address: details.address,
-                        url: details.url,
-                        number: details.number,
-                        email: details.email,
-                        title: details.title,
-                        company: details.company
-                    });
-                });
+                $.get('/core/api/contacts/vcard/' + contact.toJSON().id, function(data){
+                	var url = 'https://chart.googleapis.com/chart?cht=qr&chs=250x250&choe=UTF-8&chl=' + encodeURIComponent(data);
+                	$("#qrcode", el).html('<img src="' + url + '" alt="QR Code"/>');
+                }); 
+                
                 fill_owners(el, contact.toJSON());
                }
         });

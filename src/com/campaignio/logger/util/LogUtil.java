@@ -38,7 +38,7 @@ public class LogUtil
      *            -Relative path of node image.
      */
     public static void addLogFromID(String campaignId, String subscriberId,
-	    String message, String logType, String pic)
+	    String message, String logType)
     {
 	// System.out.println("Adding log " + campaignId + " " + subscriberId +
 	// " " + message);
@@ -53,8 +53,8 @@ public class LogUtil
 	    System.out.println("Creating fresh log");
 
 	    List<LogItem> logItemList = new ArrayList<LogItem>();
-	    LogItem logItem = new LogItem(logType, logTime, message, pic);
-	    logItemList.add(logItem);
+
+	    logItemList.add(new LogItem(logType, logTime, message));
 
 	    log = new Log(campaignId, subscriberId, logItemList);
 	    log.save();
@@ -63,7 +63,7 @@ public class LogUtil
 
 	try
 	{
-	    log.logs.add(new LogItem(logType, logTime, message, pic));
+	    log.logs.add(new LogItem(logType, logTime, message));
 	    log.save();
 	}
 	catch (Exception e)
@@ -89,14 +89,14 @@ public class LogUtil
      * @throws Exception
      */
     public static void addLog(JSONObject campaignJSON,
-	    JSONObject subscriberJSON, String message, String logType,
-	    String pic) throws Exception
+	    JSONObject subscriberJSON, String message, String logType)
+	    throws Exception
     {
 	// Campaign and SubscriberId
 	String campaignId = DBUtil.getId(campaignJSON);
 	String subscriberId = DBUtil.getId(subscriberJSON);
 
-	addLogFromID(campaignId, subscriberId, message, logType, pic);
+	addLogFromID(campaignId, subscriberId, message, logType);
     }
 
     /**

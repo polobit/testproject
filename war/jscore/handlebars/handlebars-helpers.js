@@ -105,11 +105,11 @@ $(function() {
 		if (item == "call")
 			return "icon-phone-sign";
 		if (item == "follow_up")
-			return "icon-circle-arrow-right";
+			return "icon-forward";
 		if (item == "meeting")
 			return "icon-group";
 		if (item == "milestone")
-			return "icon-certificate";
+			return "icon-cog";
 		if (item == "send")
 			return "icon-share-alt";
 		if (item == "tweet")
@@ -434,6 +434,16 @@ $(function() {
 		
 		return name.replace(/\+/g, ' ');
 	});	
+	
+	/**
+	 * Removes forward slash. Makes A/B to AB. Used in contact-detail-campaigns
+	 **/
+	Handlebars.registerHelper('removeSlash', function(value){
+		 if(value == 'A/B')
+			return value.replace(/\//g,'');
+		 
+		 return value;
+	});
 
 	/**
 	 * Displays all the properties of a contact in its detail view, excluding

@@ -37,6 +37,14 @@
 		<url-pattern>/backend/cron</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+	    <servlet-name>TwitterCron</servlet-name>
+	    <servlet-class>com.campaignio.twitter.TwitterCron</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	     <servlet-name>TwitterCron</servlet-name>
+	     <url-pattern>/backend/cron/twitter</url-pattern></servlet-mapping>
+	
 	
 	<servlet>
 	    <servlet-name>login</servlet-name>
