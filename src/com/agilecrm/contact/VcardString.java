@@ -14,6 +14,15 @@ import ezvcard.parameters.EmailTypeParameter;
 import ezvcard.parameters.TelephoneTypeParameter;
 import ezvcard.types.AddressType;
 
+/**
+ * <code>VcardString</code> is a class which provides Vcard format string.
+ * <p>
+ * It is called from client side to generate QR Code using this string.
+ * </p>
+ * 
+ * @author mantra
+ * 
+ */
 public class VcardString
 {
     static String VCARD_STRING = "";
@@ -90,8 +99,19 @@ public class VcardString
 	}
 	vcard.setFormattedName(name);
 	VCARD_STRING = Ezvcard.write(vcard).version(VCardVersion.V2_1).go();
+
+	/*
+	 * File file = new File(name + ".vcf"); try {
+	 * Ezvcard.write(vcard).go(file); } catch (IOException e) {
+	 * e.printStackTrace(); }
+	 */
     }
 
+    /**
+     * It generates the VCard string.
+     * 
+     * @return
+     */
     public String getVcardString()
     {
 	return VCARD_STRING;
