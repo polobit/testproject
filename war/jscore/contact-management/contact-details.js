@@ -362,6 +362,36 @@ $(function(){
     	else
     		$('#change-owner-ul').css('display', 'inline-block');
     });
+    
+    // To download the Vcard
+    $('#downloadify').live('click',function(e){
+		head.js(LIB_PATH + 'lib/downloadify.min.js', LIB_PATH + 'lib/swfobject.js',  function(){
+		  Downloadify.create('downloadify',{
+		    filename: function(){
+		      return agile_crm_get_contact_property("first_name") + ".vcf";
+		    },
+		    data: function(){
+		      return $('#qr_code').attr('data');
+		    },
+		    onComplete: function(){ 
+		      alert('Your File Has Been Saved!'); 
+		    },
+		    onCancel: function(){ 
+		      alert('You have cancelled the saving of this file.');
+		    },
+		    onError: function(){ 
+		      alert('You must put something in the File Contents or there will be nothing to save!'); 
+		    },
+		    transparent: false,
+		    swf: 'media/downloadify.swf',
+		    downloadImage: 'img/download.png',
+		    width: 36,
+		    height: 30,
+		    transparent: true,
+		    append: false
+		  });
+		});
+    });
 });
 
 

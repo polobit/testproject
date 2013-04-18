@@ -251,10 +251,10 @@ var ContactsRouter = Backbone.Router.extend({
                 
                 show_map(el);
                 
-                // To get QR code
+                // To get QR code and download Vcard
                 $.get('/core/api/contacts/vcard/' + contact.toJSON().id, function(data){
-                	var url = 'https://chart.googleapis.com/chart?cht=qr&chs=250x250&choe=UTF-8&chl=' + encodeURIComponent(data);
-                	$("#qrcode", el).html('<img src="' + url + '" alt="QR Code"/>');
+                	var url = 'https://chart.googleapis.com/chart?cht=qr&chs=250x250&chld=0&choe=UTF-8&chl=' + encodeURIComponent(data);
+                	$("#qrcode", el).html('<img style="display:inline-block!important;" src="' + url + '" id="qr_code" alt="QR Code" data="' + data + '"/><div style="padding: 0% 8%;float:right;" id="downloadify"><a style="cursor:pointer;">Want to Download VCard ?</a></br></br></div>');
                 }); 
                 
                 fill_owners(el, contact.toJSON());
