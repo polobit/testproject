@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.campaignio.twitter.TwitterQueue;
+import com.campaignio.twitter.util.TwitterQueueUtil;
 
 /**
  * <code>TwitterSendMessage</code> is the base class for tweet node of
@@ -22,7 +23,7 @@ public class TwitterSendMessage extends TaskletAdapter
     public static String MESSAGE = "message";
 
     // Rate Limit
-    public static String RATE_LIMIT = "message";
+    public static String RATE_LIMIT = "rate_limit";
     public static String RATE_LIMIT_5 = "5";
     public static String RATE_LIMIT_10 = "10";
     public static String RATE_LIMIT_20 = "20";
@@ -53,8 +54,8 @@ public class TwitterSendMessage extends TaskletAdapter
 	log(campaignJSON, subscriberJSON, nodeJSON,
 		"Adding tweet for this user: " + message);
 
-	TwitterQueue.addToTwitterQueue(account, token, tokenSecret, message,
-		rateLimit, subscriberJSON, campaignJSON);
+	TwitterQueueUtil.addToTwitterQueue(account, token, tokenSecret,
+		message, rateLimit, subscriberJSON, campaignJSON);
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,

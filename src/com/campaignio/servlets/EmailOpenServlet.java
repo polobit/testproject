@@ -61,8 +61,8 @@ public class EmailOpenServlet extends HttpServlet
 
 	    if (workflow != null)
 	    {
-		LogUtil.addLogFromID(campaignId, subscriberId,
-			"Email of campaign - " + workflow.name + " is opened.",
+		LogUtil.addLogToSQL(campaignId, subscriberId,
+			"Email Opened of campaign - " + workflow.name,
 			"Email Opened");
 	    }
 

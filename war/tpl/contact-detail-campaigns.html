@@ -36,8 +36,8 @@
 
 <div id="campaigns" class="activity-text-block">
 	<span class="activity-block-owner">
-		{{#if pic}}
-			<img class="user-img" width="40" height="40" alt="" src="img/campaigns/{{removeSlash type}}.png">
+		{{#if log_type}}
+			<img class="user-img" width="40" height="40" alt="" src="img/campaigns/{{removeSlash log_type}}.png">
 		{{else}}
 			<img class="user-img" width="40" height="40" src="https://d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png">
 		{{/if}}
@@ -47,7 +47,7 @@
 	<p>{{message}}</p>
 	<small class="edit-hover">
 	Written 
-		<time class="log-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" time}}</time>
+		<time class="log-created-time" datetime="{{epochToHumanDate "" log_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" log_time}}</time>
 	</small>	
 </div>
 </div>

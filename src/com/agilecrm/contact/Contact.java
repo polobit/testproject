@@ -30,6 +30,8 @@ import com.agilecrm.user.notification.util.ContactNotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.triggers.util.ContactTriggerUtil;
 import com.campaignio.cron.util.CronUtil;
+import com.campaignio.logger.util.LogUtil;
+import com.campaignio.twitter.util.TwitterQueueUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -400,8 +402,15 @@ public class Contact extends Cursor
 	// Delete Tags
 	TagUtil.deleteTags(tags);
 
-	// Delete Crons
-	CronUtil.deleteContactFromCron(id.toString(), NamespaceManager.get());
+	// Delete Crons.
+	CronUtil.removeTask(null, id.toString());
+
+	// Deletes logs of contact.
+	LogUtil.deleteSQLLogsOfSubscriber(id.toString());
+
+	// Deletes TwitterCron
+	TwitterQueueUtil.removeTwitterJobsOfContact(id.toString(),
+		NamespaceManager.get());
     }
 
     /**
