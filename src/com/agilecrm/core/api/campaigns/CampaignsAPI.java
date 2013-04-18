@@ -80,10 +80,9 @@ public class CampaignsAPI
     @Path("logs/contact/{contact-id}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public String getCampaignContactLogs(
-	    @PathParam("contact-id") String contactId)
+    public List<Log> getContactLogs(@PathParam("contact-id") String contactId)
     {
-	return LogUtil.getSQLLogsOfContact(contactId);
+	return LogUtil.getSQLLogs(null, contactId);
     }
 
     /**
@@ -98,11 +97,11 @@ public class CampaignsAPI
     @Path("logs/contact/{contact-id}/{campaign-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public String getCampaignContactLogs(
+    public List<Log> getCampaignContactLogs(
 	    @PathParam("contact-id") String contactId,
 	    @PathParam("campaign-id") String campaignId)
     {
-	return LogUtil.getSQLLogsOfCampaignSubscriber(campaignId, contactId);
+	return LogUtil.getSQLLogs(campaignId, contactId);
     }
 
     /**
@@ -115,9 +114,9 @@ public class CampaignsAPI
     @Path("logs/{campaign-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public String getCampaignLogs(@PathParam("campaign-id") String campaignId)
+    public List<Log> getCampaignLogs(@PathParam("campaign-id") String campaignId)
     {
-	return LogUtil.getSQLLogsOfCampaign(campaignId);
+	return LogUtil.getSQLLogs(campaignId, null);
     }
 
     /**
@@ -130,7 +129,7 @@ public class CampaignsAPI
     @DELETE
     public void deleteCampaignLogs(@PathParam("campaign-id") String id)
     {
-	LogUtil.deleteSQLLogsOfCampaign(id);
+	LogUtil.deleteSQLLogs(id, null);
     }
 
     /**

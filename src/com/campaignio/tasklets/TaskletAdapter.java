@@ -5,6 +5,7 @@ import java.util.Iterator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.agilecrm.util.DBUtil;
 import com.agilecrm.util.Util;
 import com.agilecrm.util.email.MustacheUtil;
 import com.campaignio.cron.util.CronUtil;
@@ -347,8 +348,10 @@ public class TaskletAdapter implements Tasklet
 	String logType = nodeJSON.getJSONObject("NodeDefinition").getString(
 		"name");
 
-	// Add Log
-	LogUtil.addLog(campaignJSON, subscriberJSON, message, logType);
-    }
+	String campaignId = DBUtil.getId(campaignJSON);
+	String subscriberId = DBUtil.getId(subscriberJSON);
 
+	// Add Log
+	LogUtil.addLogToSQL(campaignId, subscriberId, message, logType);
+    }
 }
