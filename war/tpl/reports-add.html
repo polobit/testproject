@@ -33,7 +33,7 @@
 												<select name="temp" class="lhs" id="LHS" style="width: 125px;">
 													<option value="tags" selected="selected">Tag</option>
 													<option value="first_name">First Name</option>
-													<option value="tags_created">Tag And CreatedDate</option>
+													<option value="tags_time">Tag And Created Date</option>
 													<option value="title">Job Title</option>
 													<option value="email">Email Address</option>
 													<option value="phone">Phone Number</option>
@@ -47,7 +47,7 @@
 											<div id="condition" name="CONDITION">
 												<select name="temp" style="width: 120px;">
 													<option value="EQUALS"
-														class="first_name tags_created phone tags company title org_tag jobtitle email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
+														class="first_name tags_time phone tags company title org_tag jobtitle email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
 													<option value="NOTEQUALS"
 														class="first_name company tags org_tag title email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
 													<option value="ON" class="updated_time created_time">on</option>
@@ -71,7 +71,7 @@
 												<input type="text" name="temp" style="width: 100px"
 													class="EQUALS NOTEQUALS LAST NEXT ANYOF"/>
                                                 <input type="text" name="tag"
-													class=" tags tags_created"
+													class=" tags tags_time"
 													style="margin: 0 0 0 0px;width: 100px" /> 
                                                 <input type="text" name="temp" class="email" style="width: 100px"/>
 												<input id="updated_date" type="text" name="updated_date" style="width: 100px"
@@ -88,16 +88,16 @@
 										<td>
 											<div id="nested_condition" name="nested_condition">
 												<select name="temp" style="width: 120px;">
-													<option value="EQUALS" class="tags_created">on</option>
-													<option value="AFTER" class="tags_created">is
+													<option value="EQUALS" class="tags_time">on</option>
+													<option value="AFTER" class="tags_time">is
 														after</option>
-													<option value="BEFORE" class="tags_created">is
+													<option value="BEFORE" class="tags_time">is
 														before</option>
-													<option value="BETWEEN" class="tags_created">is
+													<option value="BETWEEN" class="tags_time">is
 														between</option>
-													<option value="NEXT" class="tags_created">is
+													<option value="NEXT" class="tags_time">is
 														within next</option>
-													<option value="LAST" class="tags_created">in last</option>
+													<option value="LAST" class="tags_time">in last</option>
 											</div>
 											</div>
 										</td>

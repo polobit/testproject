@@ -7,9 +7,8 @@ $(function() {
 	var numbers = agile_crm_get_contact_properties_list("phone");
 	console.log(numbers);
 	
-
-	
 	var plugin = agile_crm_get_plugin(Twilio_PLUGIN_NAME);
+	
 	// Gets plugin id from plugin object, fetched using script API
 	var plugin_id = plugin.id;
 
@@ -17,10 +16,9 @@ $(function() {
 	// fetch details
 	var plugin_prefs = plugin.prefs;
 	
-	// If not found - considering first time usage of widget, setupTwilioOAuth
-	// called
+	// If not found - considering first time usage, setupTwilioOAuth called
 	if (plugin_prefs == undefined) {
-		setupTwilioOAuth(plugin_id);
+		setUpTwilio(plugin_id);
 		return;
 	}
 	
@@ -31,15 +29,59 @@ $(function() {
 	        return;
 	 }
 	
-	var prefs = JSON.parse(plugin_prefs);
-	$.get("/core/api/widgets/twilio/"+prefs.token,  function(data){
-		console.log("generated token : " + data);
-		setUpTwilio(data, numbers);
-	})
-
-	//setUpTwilio("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJBQzdkNTVhMDFhNjQwNDBiMTk2ODBjMTA2ZDk5NmRjOWNlIiwiZXhwIjoiMTM1OTcxODU0NiIsInNjb3BlIjoic2NvcGU6Y2xpZW50OmluY29taW5nP2NsaWVudE5hbWU9dGVqdSBzY29wZTpjbGllbnQ6b3V0Z29pbmc_YXBwU2lkPUNOZjYzYmNhMDM1NDE0YmUxMjFkNTE3YTExNjA2NmE1ZjgmY2xpZW50TmFtZT10ZWp1In0.Vr1iLBOWvXS0TjUqlYyrDDnovfuVCcbcdDHNUI1Qig4", numbers);
-
+	getTwilioLogs(plugin_id);
+	
+	$('#save_twilio_token').die().live('click', function(e) {
+		
+		e.preventDefault();
+		
+		var prefs={};
+		prefs["account_sid"] = $("#twilio_account_sid").val();
+		prefs["token"] = $("#twilio_auth_token").val();
+			
+		agile_crm_save_widget_prefs(Twilio_PLUGIN_NAME, JSON.stringify(prefs));
+		getTwilioLogs(plugin_id);
+		
+	});
+	
 });
+
+
+
+function setUpTwilio(plugin_id)
+{
+	$("#Twilio").html('<div class="widget_content" style="border-bottom:none">'
+			+ '<p style="padding:5px;"><label><b>Enter Your Account Sid</b></label>'
+			+ '<input type="text" id="twilio_account_sid" class="input-medium required" placeholder="Account sid" value=""></input></p>'
+			+ '<p style="padding:5px;"><label><b>Enter Your Auth Token</b></label>'
+			+ '<input type="text" id="twilio_auth_token" class="input-medium required" placeholder="Auth token" value=""></input></p>'
+			+ '<button id="save_twilio_token" class="btn" style="margin-left:5px;"><a href="#">Save</a></button><br/></div>');
+
+}
+
+function getTwilioLogs(plugin_id)
+{
+	$.get("/core/api/widgets/twilio/call/logs/" + plugin_id, function (data) {
+		
+		console.log(data);
+		
+	});
+}
+
+function makeCall(plugin_id, from, to, url)
+{
+	var json = {};
+	json["from"] = from;
+	json["to"] = to;
+	json["url"] = url;
+	
+	$.post("/core/api/widgets/twilio/call/" + plugin_id, json, function (data) {
+		
+		console.log(data);
+		
+	});
+}
+
 
 /**
  * Shows setup if user adds Twilio widget for the first time, to set up
@@ -48,9 +90,13 @@ $(function() {
  * 
  * @param plugin_id
  */
-function setupTwilioOAuth(plugin_id) {	
+/*function setupTwilioOAuth(plugin_id) {	
 
-	 $('#Twilio').html('<p class="widget_content" style="border-bottom:none">Stay connected to your users with Twilio phone numbers in 40 countries all over the globe. </p><a id="twilio-connect-button" href="https://www.twilio.com/authorize/CNf63bca035414be121d517a116066a5f8?state=' + encodeURIComponent(window.location.href) + '" style="margin-bottom: 10px;"></a>');	
+	 $('#Twilio').html('<p class="widget_content" style="border-bottom:none">' 
+			 + 'Stay connected to your users with Twilio phone numbers in 40 countries ' 
+			 + 'all over the globe. </p><a id="twilio-connect-button" ' 
+			 + 'href="https://www.twilio.com/authorize/CNf63bca035414be121d517a116066a5f8?state=' 
+			 + encodeURIComponent(window.location.href) + '" style="margin-bottom: 10px;"></a>');	
 				
 }
 
@@ -80,10 +126,6 @@ function setUpTwilio(data, numbers){
 	 var status;
 	 
 	head.js("https://static.twilio.com/libs/twiliojs/1.1/twilio.min.js", function(){
-		  			  
-			
-		
-		
 		Twilio.Device.setup(data);
 		
 		
@@ -93,12 +135,12 @@ function setUpTwilio(data, numbers){
 			console.log($('#contact_number').val());
 			var phone = $('#contact_number').val();
 			
-		    /*  $.get("/TwilioCallServlet?From=14105551234&To=" + phone + "&Body=hi", function(data){
+		      $.get("/TwilioCallServlet?From=14105551234&To=" + phone + "&Body=hi", function(data){
 		             console.log('in');
 		             console.log(data);
 		            }).error(function(data){
 		             console.log('error' + data);
-		            });*/
+		            });
 			
 			
 			 $.get("/backend/voice?PhoneNumber=" + phone , function(data){
@@ -212,3 +254,4 @@ function setUpTwilio(data, numbers){
 	
 	
 }
+*/
