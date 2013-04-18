@@ -11,8 +11,10 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.workflows.Workflow;
 import com.campaignio.cron.util.CronUtil;
+import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.deferred.TaskletWorkflowDeferredTask;
 import com.campaignio.tasklets.util.TaskletUtil;
+import com.campaignio.twitter.util.TwitterQueueUtil;
 import com.campaignio.util.CampaignStatsUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
@@ -259,7 +261,13 @@ public class WorkflowUtil
 	    CampaignStatsUtil.deleteCampaignStatsByCampaignId(campaignId);
 
 	    // Deletes Related Crons.
-	    CronUtil.deleteCampaignFromCron(campaignId, namespace);
+	    CronUtil.removeTask(campaignId, null);
+
+	    // Deletes logs of workflow
+	    LogUtil.deleteSQLLogsOfCampaign(campaignId);
+
+	    // Deletes twitter-jobs of campaign
+	    TwitterQueueUtil.removeTwitterJobsOfCampaign(campaignId, namespace);
 	}
     }
 
