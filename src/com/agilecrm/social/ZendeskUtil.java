@@ -186,7 +186,8 @@ public class ZendeskUtil
     {
 
 	String userInfo = getUserInfo(widget);
-
+	System.out.println("----------userinfo-------------");
+	System.out.println(userInfo);
 	String openTickets = getTicketsByStatus(widget, email, "open");
 
 	JSONObject zendeskInfo = new JSONObject();
@@ -219,17 +220,17 @@ public class ZendeskUtil
     {
 	try
 	{
-	    // JSONObject pluginPrefs = new JSONObject()
-	    // .put("zendesk_username",
-	    // widget.getProperty("zendesk_username"))
-	    // .put("zendesk_password",
-	    // widget.getProperty("zendesk_password"))
-	    // .put("zendesk_url", widget.getProperty("zendesk_url"));
-
 	    JSONObject pluginPrefs = new JSONObject()
-		    .put("zendesk_username", "praveen@invox.com")
-		    .put("zendesk_password", "agilecrm")
-		    .put("zendesk_url", "https://agilecrm.zendesk.com");
+		    .put("zendesk_username",
+			    widget.getProperty("zendesk_username"))
+		    .put("zendesk_password",
+			    widget.getProperty("zendesk_password"))
+		    .put("zendesk_url", widget.getProperty("zendesk_url"));
+
+	    // JSONObject pluginPrefs = new JSONObject()
+	    // .put("zendesk_username", "praveen@invox.com")
+	    // .put("zendesk_password", "agilecrm")
+	    // .put("zendesk_url", "https://agilecrm.zendesk.com");
 
 	    return pluginPrefs;
 	}

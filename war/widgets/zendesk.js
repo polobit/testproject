@@ -12,6 +12,10 @@ $(function ()
     ZENDESK_PROFILE_LOAD_IMAGE = '<center><img id="zendesk_profile_load" ' +
         'src=\"img/1-0.gif\" style="margin-bottom: 10px;margin-right: 16px;" >' +
         '</img></center>';
+    
+    // zendesk update loading image declared as global
+    ZENDESK_UPDATE_LOAD_IMAGE = '<center><img id="tickets_load" src=' +
+        '\"img/ajax-loader-cursor.gif\" style="margin-top: 14px;"></img></center>';
 
     AgentInfo = null;
        
@@ -341,11 +345,16 @@ function getTicketByStatus(plugin_id, email, status, callback)
 			callback(data);
 	    }
 				
+	}).error(function (data) {
+		
+		$('#tickets_load').remove();
 	});
 }
 
 function showZendeskProfile(plugin_id, email)
 {
+	$('#Zendesk').html(ZENDESK_PROFILE_LOAD_IMAGE);
+	
 	$.getJSON("/core/api/widgets/zendesk/profile/" + plugin_id + "/" + email,
 	function (data)
 	{
@@ -376,7 +385,10 @@ function showZendeskProfile(plugin_id, email)
 	     {
 	         e.preventDefault();
 	         
-	         getTicketByStatus(plugin_id, email, "solved", function(data){
+	         $('#solved_tickets_panel').html(ZENDESK_UPDATE_LOAD_IMAGE);
+	         
+	         getTicketByStatus(plugin_id, email, "solved", function(data)
+	         {	        	 
 	        	 
 	        	 try
 	    		 {
@@ -402,6 +414,8 @@ function showZendeskProfile(plugin_id, email)
 	     {
 	    	 e.preventDefault();
 	         
+	    	 $('#closed_tickets_panel').html(ZENDESK_UPDATE_LOAD_IMAGE);
+	    	 
 	         getTicketByStatus(plugin_id, email, "closed", function(data){
 	    		 console.log('in zendesk');
 
@@ -452,6 +466,9 @@ function showZendeskProfile(plugin_id, email)
 
 		 
 	}).error(function(data) {
+		
+		$('#zendesk_profile_load').remove();
+		
         // Else the error message is shown
         $('#Zendesk').html('<div style="padding: 10px;' +
             'word-wrap: break-word;">' + data + '</div>');
