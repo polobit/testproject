@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.campaignio.twitter.util.TwitterQueueUtil;
 
 /**
  * <code>TwitterCron</code> is the servlet that is used to run TwitterQueue with
@@ -40,7 +41,7 @@ public class TwitterCron extends HttpServlet
 	}
 
 	System.out.println("Rate Limit " + rateLimit);
-	TwitterQueue.runTwitterQueues(rateLimit);
+	TwitterQueueUtil.runTwitterQueues(rateLimit);
 
     }
 

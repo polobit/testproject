@@ -56,7 +56,7 @@ public class GoogleSQL
     public static void executeNonQuery(String sql) throws Exception
     {
 	Connection conn = null;
-	int success;
+	int rowCount;
 
 	try
 	{
@@ -68,11 +68,13 @@ public class GoogleSQL
 	    // creates the statement object
 	    Statement stmt = conn.createStatement();
 
-	    // Execute the query. Returns the row count.
-	    success = stmt.executeUpdate(sql);
+	    // Execute the query. Returns the row count for INSERT, DELETE and
+	    // UPDATE or 0 for other statements
+	    rowCount = stmt.executeUpdate(sql);
 
-	    if (success == 1)
-		System.out.println("Saved successfully");
+	    System.out
+		    .println("Number of rows affected in SQL by DML statement: "
+			    + rowCount);
 	}
 	catch (SQLException ex)
 	{
