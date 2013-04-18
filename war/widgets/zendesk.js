@@ -14,10 +14,7 @@ $(function ()
         '</img></center>';
 
     AgentInfo = null;
-   /* Open_tickets = null;
-    Closed_tickets = null;
-    Solved_tickets = null;*/
-    
+       
     // Gets plugin id from plugin object, fetched using script API
     var plugin_id = agile_crm_get_plugin(ZENDESK_PLUGIN_NAME).id;
 
@@ -35,9 +32,7 @@ $(function ()
     {        
         setupZendeskOAuth(plugin_id);
         return;
-    }
-
-  
+    }  
 
     // Checks if contact has email, if undefined shows message in Zendesk panel
     if (!Email)
@@ -140,29 +135,16 @@ function showTicketsFromZendesk(plugin_id, email)
         try
         {
             // populates template with data to show tickets
-            $('#Zendesk').html(getTemplate('zendesk-profile', JSON.parse(data)));
+            $('#Zendesk').html(getTemplate('zendesk-ticket_stream', JSON.parse(data)));
 
-            // If error occurs while parsing JSON, it is an exception
         }
         catch (err)
         {
-            // If data equals no tickets, add ticket button is shown
-            if (data == "There are no tickets for this user")
-            {
-                $('#Zendesk').html('<div style="padding: 10px;' +
-                    'word-wrap: break-word;"><p>' + data + '</p>' +
-                    '<a class="btn btn-mini btn-primary" id="add_ticket" ' +
-                    'style="font-size:13px;">Add Ticket</a></div>');
-                return;
-            }
-
             // Else the error message is shown
             $('#Zendesk').html('<div style="padding: 10px;' +
                 'word-wrap: break-word;">' + data + '</div>');
         }
 
-        // Tickets data from Zendesk is parsed and stored into variable
-        var tickets_data = JSON.parse(data);
 
     }).error(function (data)
     {
@@ -346,30 +328,6 @@ function showTicketById(json, ticket_id)
     $('#zendesk_showModal').modal("show");
 }
 
-function getUserInfo(plugin_id, callback)
-{
-	$.get("/core/api/widgets/zendesk/agent/" + plugin_id, 
-	function(data) 
-	{
-		//console.log(data);
-		
-		var user = JSON.parse(data);
-				
-		if(user["users"].length == 0)
-			return;
-		
-		console.log((user["users"])[0]);
-		
-		// If defined, execute the callback function
-		if (callback && typeof (callback) === "function")
-	    {
-			callback((user["users"])[0]);
-	    }
-		
-	});
-}
-
-
 function getTicketByStatus(plugin_id, email, status, callback)
 {
 	$.get("/core/api/widgets/zendesk/ticket/status/" + plugin_id + "/" + email + "/" + status, 
@@ -392,24 +350,18 @@ function showZendeskProfile(plugin_id, email)
 	function (data)
 	{
 		 $('#Zendesk').html(getTemplate('zendesk-profile', data));
-		 console.log('in zendesk');
-		// data = JSON.parse(data);
 
-		 console.log(data['open_tickets']);
 		 var open_tickets;
 		 var solved_tickets;
 		 var closed_tickets;
 		 try
 		 {
-			 console.log(data['open_tickets']);
 			 open_tickets = JSON.parse(data.open_tickets);
 		 }
 		 catch (err)
 	     {
 			 open_tickets = data.open_tickets;
 	     }
-
-		 console.log(open_tickets);
 		 
 		 var open_tickets_template = $(getTemplate('zendesk-ticket-stream', open_tickets));	
 		 
@@ -451,7 +403,9 @@ function showZendeskProfile(plugin_id, email)
 	    	 e.preventDefault();
 	         
 	         getTicketByStatus(plugin_id, email, "closed", function(data){
-	        	 
+	    		 console.log('in zendesk');
+
+	        	 console.log(data);
 	        	 try
 	    		 {
 	        		 closed_tickets = JSON.parse(data);
@@ -461,14 +415,13 @@ function showZendeskProfile(plugin_id, email)
 	    			 closed_tickets = data;
 	    	     }
 	    		 
-	    		 var template = $(getTemplate(('zendesk-ticket-stream', closed_tickets)));
+	    		 var closed_tickets_template = $(getTemplate('zendesk-ticket-stream', closed_tickets));
 	    		 
-	    		 $('#closed_tickets_panel').html(template);	
+	    		 $('#closed_tickets_panel').html(closed_tickets_template);	
 	    		 
 	    		  head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-	          		$(".time-ago", template).timeago();
-	          	  });
-	          	
+	          		$(".time-ago", closed_tickets_template).timeago();
+	          	  });	          	
 	         });
 	    
 	     });

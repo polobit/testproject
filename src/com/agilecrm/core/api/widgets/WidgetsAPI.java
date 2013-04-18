@@ -829,35 +829,6 @@ public class WidgetsAPI
     }
 
     /**
-     * Connects to Twilio and fetches information based on the accountSID
-     * 
-     * @param accountSid
-     *            {@link String} accountSid of agent Twilio account
-     * @return {@link String} token generated from Twilio
-     */
-    @Path("twilio/{accountSID}")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getTwilioToken(@PathParam("accountSID") String accountSID)
-    {
-	if (accountSID == null)
-	    return null;
-
-	try
-	{
-	    return TwilioUtil.generateTwilioToken(accountSID);
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-
-	}
-
-    }
-
-    /**
      * Connects to Stripe and fetches the data based on customer id.
      * 
      * @param widgetId
@@ -1075,6 +1046,74 @@ public class WidgetsAPI
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
+	}
+    }
+
+    /**
+     * Connects to Twilio and fetches call logs based on the accountSID
+     * 
+     * @param widgetId
+     *            {@link String} widget id to get {@link Widget} preferences
+     * @return {@link String} form of {@link JSONArray} of call logs
+     */
+    @Path("twilio/call/logs/{widget-id}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getCallLogsOfTwilio(@PathParam("widget-id") Long widgetId)
+    {
+	Widget widget = WidgetUtil.getWidget(widgetId);
+	if (widget == null)
+	    return null;
+
+	try
+	{
+	    return TwilioUtil.getCallLogs(widget).toString();
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+
+	}
+
+    }
+
+    /**
+     * Initiates a call from agent Twilio account to the given number
+     * 
+     * @param widgetId
+     *            {@link String} widget id to get {@link Widget} preferences
+     * @param from
+     *            {@link String} caller id of the phone call
+     * @param to
+     *            {@link String} phone number to be called
+     * @param url
+     *            {@link String} URL to execute when the called party answers
+     * @return {@link String} form of {@link JSONObject} of call made
+     */
+    @Path("twilio/call/{widget-id}")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String makeCallFromTwilio(@PathParam("widget-id") Long widgetId,
+	    @FormParam("from") String from, @FormParam("to") String to,
+	    @FormParam("url") String url)
+
+    {
+	Widget widget = WidgetUtil.getWidget(widgetId);
+	if (widget == null)
+	    return null;
+	try
+	{
+	    return TwilioUtil.makeCall(widget, from, to, url).toString();
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+
 	}
     }
 

@@ -190,9 +190,17 @@ public class ZendeskUtil
 	String openTickets = getTicketsByStatus(widget, email, "open");
 
 	JSONObject zendeskInfo = new JSONObject();
-	zendeskInfo
-		.put("user_info", new JSONObject(userInfo)
-			.getJSONArray("users").getJSONObject(0));
+	try
+	{
+	    zendeskInfo.put("user_info",
+		    new JSONObject(userInfo).getJSONArray("users")
+			    .getJSONObject(0));
+	}
+	catch (JSONException e)
+	{
+	    zendeskInfo.put("user_info", userInfo);
+	}
+
 	zendeskInfo.put("open_tickets", openTickets);
 
 	return zendeskInfo.toString();
