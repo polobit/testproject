@@ -99,11 +99,18 @@ public class ContactDocument implements BuilderInterface
 
 	// Sets created date to document with out time component(Search API
 	// support date without time component)
-	Date truncatedDate = DateUtils.truncate(new Date(), Calendar.DATE);
+	Date truncatedDate = DateUtils.truncate(new Date(
+		contact.created_time * 1000),
+		Calendar.DATE);
 	doc.addField(Field.newBuilder().setName("created_time").setDate(truncatedDate));
 	// Describes updated time document if updated time is not 0.
 	if (contact.updated_time > 0L)
 	{
+	    Date updatedDate = DateUtils.truncate(
+		    new Date(contact.updated_time * 1000), Calendar.DATE);
+
+	    doc.addField(Field.newBuilder().setName("updated_time")
+		    .setDate(updatedDate));
 	}
 
 	// Adds Other fields in contacts to document
