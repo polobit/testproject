@@ -137,17 +137,18 @@ function load_timeline_details(el, contactId, callback1)
 							$.each(emailsCollection.toJSON()[0]['emails'], function(index, data){
 								var newItem = $(getTemplate("timeline", data));
 								
-								// Using autoellipsis for showing 3 lines of message
-								head.js(LIB_PATH + 'lib/jquery.autoellipsis.min.js', function(){
-									newItem.find("#autoellipsis").ellipsis();
-								});
-								
 								newItem.find('.inner').append('<a href="#" class="open-close"></a>');
 								/*
 								 * Inserts mails to timeline with out validating the isotope status,
 								 * as it takes more time to fetch.
 								 */  
 								$('#timeline', el).isotope( 'insert', newItem);
+								
+								// Using autoellipsis for showing 3 lines of message
+								head.js(LIB_PATH + 'lib/jquery.autoellipsis.min.js', function(){
+									newItem.find("#autoellipsis").ellipsis();
+									$('#timeline', el).isotope( 'insert', newItem);
+								});
 							});
 						}
 					}
@@ -698,9 +699,10 @@ $(function () {
 	 */  
 	$("#tl-mail-popover").live('click',function(e){
 		e.preventDefault();
-
-		var htmlstring = $(this).closest('div.text').html();
-		htmlstring = htmlstring.replace("icon-plus", "");
+		
+		var htmlstring = $(this).closest('div').attr("data");
+		// var htmlstring = $(this).closest('div.text').html();
+		// htmlstring = htmlstring.replace("icon-plus", "");
 
 		// Add pre tag to the string to consider white spaces
 		$("#mail-in-detail").html("<pre style='background:none;border:none;'>" + htmlstring + "</pre>");
