@@ -1,4 +1,4 @@
-<script id="zendesk-profile-template" type="text/html">
+<!-- <script id="zendesk-profile-template" type="text/html">
 	<div style="display:inline;  line-height: 16px;word-wrap: break-word;">
 		<div id="show_tickets">
 			{{#if this.length}}	
@@ -24,7 +24,7 @@
 						<tr>						
 							<td  colspan="2" style="padding: 5px;">
 								<a class="pull-left" href="#more" ticket_id="{{id}}" id="ticket_show">Show Ticket</a>
-								<a class="pull-right" href="#update" update_id="{{id}}" id="ticket_update" style:">Update Ticket</a>
+								<a class="pull-right" href="#update" update_id="{{id}}" id="ticket_update">Update Ticket</a>
 							</td>
 						</tr>		
 					</table>
@@ -36,6 +36,70 @@
 			<a class="btn btn-mini btn-primary" id="add_ticket" style="font-size:13px;">Add Ticket</a>
 		</div>
 	</div>
+</script>
+-->
+
+<script id="zendesk-profile-template" type="text/html">
+<div class="widget_content row-fluid">
+	{{#if user_info.photo.content_url}}
+		<div class="span3"><img src="{{user_info.photo.content_url}}" width="36" height="36" alt="" class="img-rounded pull-left"/></div>
+	{{else}}
+		<div class="span3"><img src="{{defaultGravatarurl 36}}" width="36" height="36" alt="" class="img-rounded pull-left"/></div>
+	{{/if}}
+	<div class="pull-left ml_5 span8">
+		{{#if user_info.name}}
+			<p class="title_txt">{{user_info.name}}</p>
+		{{else}}
+			<p class="title_txt">{{user_info.email}}</p>
+		{{/if}}
+		<p>{{user_info.locale}}</p>
+	</div>
+	<div class="clearfix"></div>
+	<a href="#" class="btn" id="add_ticket"><i class="icon-plus"></i>Add Ticket</a>						
+</div>
+<ul class="nav nav-tabs row-fluid" id="myTab">
+	<li class="active span4"><a data-toggle="tab" href="#tickets_open" id="open_tickets"><h3>open</h3></a></li>
+	<li class="span4"><a data-toggle="tab" href="#tickets_solved" id="solved_tickets"><h3>solved</h3></a></li>
+	<li class="span4"><a data-toggle="tab" href="#tickets_closed" id="closed_tickets"><h3>closed</h3></a></li>
+</ul>
+<div class="tab-content" id="myTabContent">
+	<div id="tickets_open" class="tab-pane fade active in">
+		
+		<ul class="widget_tab_content"  id="open_tickets_panel">
+					
+		</ul>
+	</div>
+	<div id="tickets_solved" class="tab-pane fade active in">
+		
+		<ul class="widget_tab_content"  id="solved_tickets_panel">
+					
+		</ul>
+	</div>
+	<div id="tickets_closed" class="tab-pane fade active in">
+		
+		<ul class="widget_tab_content"  id="closed_tickets_panel">
+					
+		</ul>
+	</div>
+</div>
+</script>
+
+<script id="zendesk-ticket-stream-template" type="text/html">
+{{#isArray this}}
+	{{#each this}}
+		<li class="" id="{{id}}">
+			{{subject}}<br>
+			<small><time class="time-ago" datetime="{{created_at}}">{{created_at}}</time></small><br>
+			<ul class="widget_tab_link" style="float:left;margin:0px">
+				<li><a href="{{url}}" target="_blank" rel="tooltip" title="Link to ticket in zendesk">Link</a></li>
+				<li><a class="l_border" href="#show" {{bindData this}} ticket_status="{{status}}" ticket_id="{{id}}" id="ticket_show" rel="tooltip" title="Show more information of ticket">Show</a></li>
+				<li><a class="l_border" href="#update" update_id="{{id}}" id="ticket_update" rel="tooltip" title="Update ticket in zendesk">Comment</a></li>										
+			</ul>
+		</li>
+	{{/each}}
+{{else}}
+	<li>{{this}}</li>
+{{/isArray}}
 </script>
 
 <script id="zendesk-login-template" type="text/html">
@@ -97,7 +161,6 @@
 
 
 <script id="zendesk-ticket-show-template" type="text/html">
-	<!-- New (Note) Modal views -->
 	<div class="modal hide fade message-modal" id="zendesk_showModal" style="width:400px; left:55%">
 	    <div class="modal-header">
 	        <button class="close" data-dismiss="modal">x</button>
@@ -145,3 +208,4 @@
 	    </div>
 	</div>
 </script>
+

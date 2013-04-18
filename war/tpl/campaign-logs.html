@@ -30,12 +30,12 @@
     {{#if this.length}}
     <div class="data-block">
         <div class="data-container">
-            <table class="table table-bordered table-striped showCheckboxes" id="logs-table" url="core/api/campaigns/logs/bulk">
+            <table class="table table-striped onlySorting" id="logs-table" url="core/api/campaigns/logs/bulk">
                 <thead>
                     <tr>
                         <th>Contact</th>
-                        <th>Last Run Time</th>
-                        <th>Message Count</th>                    
+                        <th>LogTime</th>
+                        <th>Message</th>                    
                     </tr>
                 </thead>
                 <tbody id="campaign-logs-model-list" route="contact/">
@@ -50,14 +50,9 @@
 <script id="campaign-logs-model-template" type="text/html">
 <input name="id" class="campaign" type="hidden" value="{{campaign_id}}" />
 <td class="data" data={{subscriber_id}}>
-   <div style="display:inline;padding-right:10px;height:auto;">
-        <img class="thumbnail" src="{{gravatarurl contact.properties 50}}" width="40px" height="40px" style="display:inline;"/>
-   </div>
-   <div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:12em;overflow:hidden;">
-       <b> {{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}}</b>
-   </div>
+  {{contactName}}
 </td>
-<td>{{epochToLogDate updated_time}}</td>
-<td>{{logsCount}}</td>
+<td>{{log_time}}</td>
+<td>{{message}}</td>
 <br/>
 </script>

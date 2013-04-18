@@ -17,7 +17,7 @@ import com.campaignio.logger.util.LogUtil;
  * @author Manohar
  * 
  */
-class TwitterJob
+public class TwitterJob
 {
 
     /**
@@ -77,7 +77,7 @@ class TwitterJob
      * @param campaignId
      *            Campaign Id
      */
-    TwitterJob(String token, String tokenSecret, String status,
+    public TwitterJob(String token, String tokenSecret, String status,
 	    String subscriberId, String campaignId)
     {
 	this.token = token;
@@ -96,7 +96,6 @@ class TwitterJob
     {
 	try
 	{
-
 	    Twitter twitter = new TwitterFactory().getInstance();
 	    twitter.setOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
 
@@ -107,7 +106,7 @@ class TwitterJob
 	    // twitter.getScreenName());
 
 	    Status status = twitter.updateStatus(tweet);
-	    LogUtil.addLogFromID(
+	    LogUtil.addLogToSQL(
 		    campaign_id,
 		    subscriber_id,
 		    "Twitter - Successfully updated the status to ["
@@ -118,7 +117,7 @@ class TwitterJob
 	}
 	catch (Exception e)
 	{
-	    LogUtil.addLogFromID(campaign_id, campaign_id, "Tweeting failed "
+	    LogUtil.addLogToSQL(campaign_id, campaign_id, "Tweeting failed "
 		    + e.getMessage(), "Tweet");
 	    return false;
 	}

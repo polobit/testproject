@@ -46,8 +46,8 @@ function load_timeline_details(el, contactId, callback1)
 			if (item.get('created_time')) {
 	            return item.get('created_time');
 	        }
-	        if (item.get('time')) {
-	        	return item.get('time')/1000;
+	        if (item.get('log_time')) {
+	        	return item.get('log_time')/1000;
 	        }
 	        return item.get('id');
 		}
@@ -95,7 +95,7 @@ function load_timeline_details(el, contactId, callback1)
 					 */   
 					$.each(logsCollection.toJSON(), function(index, model) {						
 							
-						logs_array.push(log);																			
+						logs_array.push(model);																			
 						//validate_insertion(JSON.parse(model.logs), timelineViewMore);
 					});
 					validate_insertion(logs_array, timelineViewMore);
@@ -337,8 +337,8 @@ function getTimestamp(month_index, year){
 function entity_created_month_year(model){
 	if(model.created_time)
 		return month_year = new Date(model.created_time * 1000).getMonth() + '-' + new Date(model.created_time * 1000).getFullYear();
-	else if(model.time)
-		return month_year = new Date(model.time * 1000).getMonth() + '-' + new Date(model.time * 1000).getFullYear();
+	else if(model.log_time)
+		return month_year = new Date(model.time * 1000).getMonth() + '-' + new Date(model.log_time * 1000).getFullYear();
 	else if(model.date_secs)
 		return month_year = new Date(model.date_secs * 1000).getMonth() + '-' + new Date(model.date_secs).getFullYear();
 }

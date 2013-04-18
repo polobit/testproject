@@ -13,6 +13,11 @@ $(function ()
         'src=\"img/1-0.gif\" style="margin-bottom: 10px;margin-right: 16px;" >' +
         '</img></center>';
 
+    AgentInfo = null;
+   /* Open_tickets = null;
+    Closed_tickets = null;
+    Solved_tickets = null;*/
+    
     // Gets plugin id from plugin object, fetched using script API
     var plugin_id = agile_crm_get_plugin(ZENDESK_PLUGIN_NAME).id;
 
@@ -43,12 +48,15 @@ $(function ()
     }
 
     // If defined, shows tickets from Zendesk if any with that email
-    showTicketsFromZendesk(plugin_id, Email);
-
+    // showTicketsFromZendesk(plugin_id, Email);
+    showZendeskProfile(plugin_id, Email)
+    
     // On click of add ticket, add ticket method is called
     $('#add_ticket').die().live('click', function (e)
     {
+    	e.preventDefault();
         addTicketToZendesk(plugin_id, Email);
+        
     });
 
 });
@@ -102,7 +110,9 @@ function setupZendeskOAuth(plugin_id)
             }
             
             // Show tickets method called to show tickets after saving preferences
-            showTicketsFromZendesk(plugin_id, Email);
+            // showTicketsFromZendesk(plugin_id, Email);
+            
+            showZendeskProfile(plugin_id, Email);
         });
 
     })
@@ -123,7 +133,7 @@ function showTicketsFromZendesk(plugin_id, email)
 
     // Sends request to the URL "/core/api/widgets/zendesk/get/" with plugin id and 
     // email as path parameters and calls WidgetsAPI class
-    $.getJSON("/core/api/widgets/zendesk/get/" + plugin_id + "/" + email,
+    $.get("/core/api/widgets/zendesk/get/" + plugin_id + "/" + email,
 
     function (data)
     {
@@ -154,27 +164,7 @@ function showTicketsFromZendesk(plugin_id, email)
         // Tickets data from Zendesk is parsed and stored into variable
         var tickets_data = JSON.parse(data);
 
-        // On click of update ticket link for ticket, update ticket method is called
-        $('#ticket_update').die().live('click', function (e)
-        {
-            e.preventDefault();
-
-            // Id of the ticket is retrieved to update ticket based on id
-            var ticket_id = $(this).attr('update_id');
-            updateTicketInZendesk(plugin_id, ticket_id);
-        });
-
-        // On click of show ticket, show ticket by ticket id method is called
-        $('#ticket_show').die().live('click', function (e)
-        {
-            e.preventDefault();
-
-            // Id of the ticket is retrieved to show ticket based on id
-            var ticket_id = $(this).attr('ticket_id');
-            showTicketById(tickets_data, ticket_id);
-        });
-
-    },"json").error(function (data)
+    }).error(function (data)
     {
         // Error message is shown if error occurs
         $('#Zendesk').html('<div style="padding: 10px;' +
@@ -182,6 +172,7 @@ function showTicketsFromZendesk(plugin_id, email)
     });
 
 }
+
 
 /**
  * Adds a ticket in Zendesk with the contact email based on plugin id
@@ -336,15 +327,8 @@ function updateTicketInZendesk(plugin_id, ticket_id)
  * @param ticket_id
  * 			Id of the ticket to be shown
  */
-function showTicketById(tickets_data, ticket_id)
+function showTicketById(json, ticket_id)
 {
-
-    // Stores information as JSON
-    var json = {};
-
-    // Get ticket by id method is called to get ticket data
-    json = getTicketById(ticket_id, tickets_data);
-
     // Sets headline of modal as Ticket TicketId
     json["headline"] = "Ticket " + ticket_id;
 
@@ -362,19 +346,162 @@ function showTicketById(tickets_data, ticket_id)
     $('#zendesk_showModal').modal("show");
 }
 
-/**
- * Retrieves the ticket based on ticket id from tickets data
- */
-function getTicketById(ticket_id, data)
+function getUserInfo(plugin_id, callback)
 {
-    for (var i = 0; i < data.length; i++)
-    {
+	$.get("/core/api/widgets/zendesk/agent/" + plugin_id, 
+	function(data) 
+	{
+		//console.log(data);
+		
+		var user = JSON.parse(data);
+				
+		if(user["users"].length == 0)
+			return;
+		
+		console.log((user["users"])[0]);
+		
+		// If defined, execute the callback function
+		if (callback && typeof (callback) === "function")
+	    {
+			callback((user["users"])[0]);
+	    }
+		
+	});
+}
 
-        // Checks for each ticket if the given ticket id matches with its id
-        if (ticket_id == data[i].id)
-        {
-            // If matches returns the ticket
-            return data[i];
-        }
-    }
+
+function getTicketByStatus(plugin_id, email, status, callback)
+{
+	$.get("/core/api/widgets/zendesk/ticket/status/" + plugin_id + "/" + email + "/" + status, 
+	function(data) 
+	{
+		console.log(data);
+		
+		// If defined, execute the callback function
+		if (callback && typeof (callback) === "function")
+	    {
+			callback(data);
+	    }
+				
+	});
+}
+
+function showZendeskProfile(plugin_id, email)
+{
+	$.getJSON("/core/api/widgets/zendesk/profile/" + plugin_id + "/" + email,
+	function (data)
+	{
+		 $('#Zendesk').html(getTemplate('zendesk-profile', data));
+		 console.log('in zendesk');
+		// data = JSON.parse(data);
+
+		 console.log(data['open_tickets']);
+		 var open_tickets;
+		 var solved_tickets;
+		 var closed_tickets;
+		 try
+		 {
+			 console.log(data['open_tickets']);
+			 open_tickets = JSON.parse(data.open_tickets);
+		 }
+		 catch (err)
+	     {
+			 open_tickets = data.open_tickets;
+	     }
+
+		 console.log(open_tickets);
+		 
+		 var open_tickets_template = $(getTemplate('zendesk-ticket-stream', open_tickets));	
+		 
+		 $('#open_tickets_panel').html(open_tickets_template);	
+		 
+		  head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+      		$(".time-ago", open_tickets_template).timeago();
+      	  });
+		  
+	     
+	     $('#solved_tickets').die().live('click', function (e)
+	     {
+	         e.preventDefault();
+	         
+	         getTicketByStatus(plugin_id, email, "solved", function(data){
+	        	 
+	        	 try
+	    		 {
+	        		 solved_tickets = JSON.parse(data);
+	    		 }
+	    		 catch (err)
+	    	     {
+	    			 solved_tickets = data;
+	    	     }	    		 
+	    		 
+	    		 var solved_tickets_template = $(getTemplate('zendesk-ticket-stream', solved_tickets));	
+	    		 
+	    		 $('#solved_tickets_panel').html(solved_tickets_template);	
+	    		 
+	    		  head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+	          		$(".time-ago", solved_tickets_template).timeago();
+	          	  });
+	    		  
+	         });
+	     });
+	     
+	     $('#closed_tickets').die().live('click', function (e)
+	     {
+	    	 e.preventDefault();
+	         
+	         getTicketByStatus(plugin_id, email, "closed", function(data){
+	        	 
+	        	 try
+	    		 {
+	        		 closed_tickets = JSON.parse(data);
+	    		 }
+	    		 catch (err)
+	    	     {
+	    			 closed_tickets = data;
+	    	     }
+	    		 
+	    		 var template = $(getTemplate(('zendesk-ticket-stream', closed_tickets)));
+	    		 
+	    		 $('#closed_tickets_panel').html(template);	
+	    		 
+	    		  head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+	          		$(".time-ago", template).timeago();
+	          	  });
+	          	
+	         });
+	    
+	     });
+	     
+	     // On click of update ticket link for ticket, update ticket method is called
+	     $('#ticket_update').die().live('click', function (e)
+	     {
+	         e.preventDefault();
+
+	         // Id of the ticket is retrieved to update ticket based on id
+	         var ticket_id = $(this).attr('update_id');
+	         updateTicketInZendesk(plugin_id, ticket_id);
+	     });
+
+         // On click of show ticket, show ticket by ticket id method is called
+	     $('#ticket_show').die().live('click', function (e)
+	     {
+	         e.preventDefault();
+
+	         console.log($(this).attr('data-attr'));
+	         var json = JSON.parse($(this).attr('data-attr'));
+	         
+	         // Id of the ticket is retrieved to show ticket based on id
+	         var ticket_id = $(this).attr('ticket_id');
+
+	         showTicketById(json, ticket_id);
+	     });
+
+		 
+	}).error(function(data) {
+        // Else the error message is shown
+        $('#Zendesk').html('<div style="padding: 10px;' +
+            'word-wrap: break-word;">' + data + '</div>');
+	});
+	
 }

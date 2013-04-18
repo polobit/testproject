@@ -59,31 +59,31 @@ $(function() {
 			return 'https://secure.gravatar.com/avatar/' + MD5(email)
 					+ '.jpg?s=' + width + "&d=" + escape(img);
 		}
-		
-		return 'https://secure.gravatar.com/avatar/' + MD5("")
-		+ '.jpg?s=' + width + "&d=" + escape(img);
+
+		return 'https://secure.gravatar.com/avatar/' + MD5("") + '.jpg?s='
+				+ width + "&d=" + escape(img);
 
 	});
-	
+
 	Handlebars.registerHelper('defaultGravatarurl', function(width) {
 		// Default image
 		var img = "https://d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png";
-		
-		return 'https://secure.gravatar.com/avatar/' + MD5("")
-		+ '.jpg?s=' + width + "&d=" + escape(img);
+
+		return 'https://secure.gravatar.com/avatar/' + MD5("") + '.jpg?s='
+				+ width + "&d=" + escape(img);
 	});
-	
+
 	Handlebars.registerHelper('emailGravatarurl', function(width, email) {
 		// Default image
 		var img = "https://d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png";
-		
+
 		if (email) {
 			return 'https://secure.gravatar.com/avatar/' + MD5(email)
 					+ '.jpg?s=' + width + "&d=" + escape(img);
 		}
-		
-		return 'https://secure.gravatar.com/avatar/' + MD5("")
-		+ '.jpg?s=' + width + "&d=" + escape(img);
+
+		return 'https://secure.gravatar.com/avatar/' + MD5("") + '.jpg?s='
+				+ width + "&d=" + escape(img);
 	});
 
 	/**
@@ -199,7 +199,7 @@ $(function() {
 
 			for ( var i = 0, l = array.length; i < l; i++) {
 				var hrefTag = "#tags/" + array[i];
-				
+
 				html += ('<a href=\"' + hrefTag + '\" >' + array[i] + '</a> ');
 			}
 			html += "</div></div>";
@@ -216,13 +216,12 @@ $(function() {
 	 */
 	Handlebars.registerHelper('epochToHumanDate', function(format, date) {
 
-		if(!date)
+		if (!date)
 			return;
-		
-			if((date/100000000000) > 1)
-			{
-				return new Date(parseInt(date)).format(format);
-			}
+
+		if ((date / 100000000000) > 1) {
+			return new Date(parseInt(date)).format(format);
+		}
 		// date form milliseconds
 		var d = new Date(parseInt(date) * 1000).format(format);
 		return d
@@ -287,7 +286,8 @@ $(function() {
 	 * Returns currency symbol based on the currency value (deals)
 	 */
 	Handlebars.registerHelper('currencySymbol', function(value) {
-		var symbol = ((value.length < 4)? "$" : value.substring(4, value.length));
+		var symbol = ((value.length < 4) ? "$" : value.substring(4,
+				value.length));
 		return symbol;
 	});
 
@@ -336,7 +336,6 @@ $(function() {
 
 		return new Handlebars.SafeString(el);
 	});
-	
 
 	/**
 	 * Returns table headings for reports custom contacts list view
@@ -346,9 +345,9 @@ $(function() {
 		var el = "";
 		$.each(REPORT[item], function(index, element) {
 
-			if(element.indexOf("properties_") != -1)
+			if (element.indexOf("properties_") != -1)
 				element = element.split("properties_")[1];
-			
+
 			element = element.replace("_", " ")
 
 			el = el.concat('<th>' + ucfirst(element) + '</th>');
@@ -383,66 +382,66 @@ $(function() {
 	 * lowercase, excluding first letter.
 	 */
 	Handlebars.registerHelper('titleFromEnums', function(value) {
-		if(!value)
+		if (!value)
 			return;
-		
+
 		var str = value.replace(/_/g, ' ');
 		return ucfirst(str.toLowerCase());
 
 	});
-	
+
 	/**
-	 * Returns notification type,by replacing 'has been' with underscore and 
-	 * converting into lowercase. 
+	 * Returns notification type,by replacing 'has been' with underscore and
+	 * converting into lowercase.
 	 */
 	Handlebars.registerHelper('if_notification_type', function() {
-		
+
 		// Makes 'CONTACT CREATED' To 'COMPANY CREATED'
-		if(this.type == "COMPANY")
-		{
+		if (this.type == "COMPANY") {
 			var arr = this.notification.split('_');
-			 var temp = arr[0].replace('CONTACT','COMPANY') + " " + arr[1];
-			 return temp.toLowerCase();
+			var temp = arr[0].replace('CONTACT', 'COMPANY') + " " + arr[1];
+			return temp.toLowerCase();
 		}
-		
+
 		// Makes 'TAG_CREATED' to 'created tag'
-        if(this.notification == 'TAG_CREATED' || this.notification == 'TAG_DELETED')
-			{
-			  var arr = this.notification.split('_');
-			  var temp = arr[1] + " " + arr[0];
-			  return temp.toLowerCase();
-			}
-		
-		// Replaces '_' with ' ' 
+		if (this.notification == 'TAG_CREATED'
+				|| this.notification == 'TAG_DELETED') {
+			var arr = this.notification.split('_');
+			var temp = arr[1] + " " + arr[0];
+			return temp.toLowerCase();
+		}
+
+		// Replaces '_' with ' '
 		var str = this.notification.replace(/_/g, ' ');
 		return str.toLowerCase();
-		
-	//return temp.charAt(0).toUpperCase() + temp.slice(1);
+
+		// return temp.charAt(0).toUpperCase() + temp.slice(1);
 	});
-	
+
 	/**
-	 * Converts Epoch Time to Human readable date of default format.Used for campaign-logs.
-	 **/
-	Handlebars.registerHelper('epochToLogDate', function(logTime){
+	 * Converts Epoch Time to Human readable date of default format.Used for
+	 * campaign-logs.
+	 */
+	Handlebars.registerHelper('epochToLogDate', function(logTime) {
 		return new Date(logTime * 1000);
 	});
-	
+
 	/**
 	 * Replace '+' symbols with space.Used in notification.
-	 **/
-	Handlebars.registerHelper('replace_plus_symbol', function(name){
-		
+	 */
+	Handlebars.registerHelper('replace_plus_symbol', function(name) {
+
 		return name.replace(/\+/g, ' ');
-	});	
-	
+	});
+
 	/**
 	 * Removes forward slash. Makes A/B to AB. Used in contact-detail-campaigns
-	 **/
-	Handlebars.registerHelper('removeSlash', function(value){
-		 if(value == 'A/B')
-			return value.replace(/\//g,'');
-		 
-		 return value;
+	 */
+	Handlebars.registerHelper('removeSlash', function(value) {
+		if (value == 'A/B')
+			return value.replace(/\//g, '');
+
+		return value;
 	});
 
 	/**
@@ -451,60 +450,66 @@ $(function() {
 	 */
 	Handlebars.registerHelper('if_property', function(fname, lname, company,
 			title, image, email, phone, website, address, options) {
-		
+
 		if (this.name != fname && this.name != lname && this.name != company
-				&& this.name != title && this.name != image && this.name != email
-				&& this.name != phone && this.name != website && this.name != address)
+				&& this.name != title && this.name != image
+				&& this.name != email && this.name != phone
+				&& this.name != website && this.name != address)
 			return options.fn(this);
 	});
-	
+
 	/**
 	 * Counts the existence of property name which occurred multiple times.
 	 */
-	Handlebars.registerHelper('multiple_Property_Count', function(name, properties) {
+	Handlebars.registerHelper('multiple_Property_Count', function(name,
+			properties) {
 		var count = 0;
-		for ( var i = 0, l = properties.length; i < l; i++){
-		    if(properties[i].name == name)
-			  count++; 
+		for ( var i = 0, l = properties.length; i < l; i++) {
+			if (properties[i].name == name)
+				count++;
 		}
 		return count;
 	});
-	
+
 	/**
-	 * Displays multiple times occurred properties of a contact in its detail view in single entity
+	 * Displays multiple times occurred properties of a contact in its detail
+	 * view in single entity
 	 */
-	Handlebars.registerHelper('multiple_Property_Element', function(name, properties, options) {
-	
-		var matching_properties_list = agile_crm_get_contact_properties_list(name)
-		if(matching_properties_list.length > 0)
-			return options.fn(matching_properties_list);
-	});
-	
+	Handlebars
+			.registerHelper(
+					'multiple_Property_Element',
+					function(name, properties, options) {
+
+						var matching_properties_list = agile_crm_get_contact_properties_list(name)
+						if (matching_properties_list.length > 0)
+							return options.fn(matching_properties_list);
+					});
+
 	/**
-	 * Converts address as comma seprated values and returns as
-	 * handlebars safe string.
-	 */ 
+	 * Converts address as comma seprated values and returns as handlebars safe
+	 * string.
+	 */
 	Handlebars.registerHelper('address_Element', function(properties) {
-		
-		for ( var i = 0, l = properties.length; i < l; i++){
-			
-			if(properties[i].name == "address"){
+
+		for ( var i = 0, l = properties.length; i < l; i++) {
+
+			if (properties[i].name == "address") {
 				var el = "<span><i class='icon-map-marker'></i>&nbsp;&nbsp;";
 				var address = JSON.parse(properties[i].value);
-				
+
 				// Gets properties (keys) count of given json object
 				var count = countJsonProperties(address);
-				
-				$.each(address, function(key, val){
-					if(--count == 0){
+
+				$.each(address, function(key, val) {
+					if (--count == 0) {
 						el = el.concat(val + ".</span>");
 						return;
 					}
 					el = el.concat(val + ", ");
 				});
-				
-				if(properties[i].subtype)
-					el = el.concat(" (" + properties[i].subtype +")");
+
+				if (properties[i].subtype)
+					el = el.concat(" (" + properties[i].subtype + ")");
 				return new Handlebars.SafeString(el);
 			}
 		}
@@ -514,24 +519,19 @@ $(function() {
 	 * Converts string to JSON
 	 */
 	Handlebars.registerHelper('stringToJSON', function(object, key, options) {
-		   if (key) 
-		   {
-			   try {
-				  object[key] = JSON.parse(object[key]);   
-			   }    
-			   finally {
-				  return options.fn(object[key]);
-			   }    
-		   }
+		if (key) {
+			try {
+				object[key] = JSON.parse(object[key]);
+			} finally {
+				return options.fn(object[key]);
+			}
+		}
 
-		  try
-		  {
-			  return options.fn(JSON.parse(object));
-		  }
-		  catch(err)
-		  {
-			  return options.fn(object);
-		  }
+		try {
+			return options.fn(JSON.parse(object));
+		} catch (err) {
+			return options.fn(object);
+		}
 	});
 
 	/**
@@ -617,16 +617,16 @@ $(function() {
 	 * on the result (used in contacts typeahead)
 	 */
 	Handlebars.registerHelper('if_equals', function(value, target, options) {
-		
-		if(!target)
+
+		if (!target)
 			return options.inverse(this);
-			
+
 		if (value == target)
 			return options.fn(this);
 		else
 			return options.inverse(this);
 	})
-	
+
 	/**
 	 * Adds Custom Fields to forms, where this helper function is called
 	 */
@@ -638,62 +638,93 @@ $(function() {
 				properties));
 
 	});
+
+	Handlebars
+			.registerHelper(
+					'is_link',
+					function(value, options) {
+
+						var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+
+						if (value.search(exp) != -1)
+							return options.fn(this);
+						else
+							return options.inverse(this);
+					});
+
+	Handlebars
+			.registerHelper(
+					'show_link_in_statement',
+					function(value) {
+
+						var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+
+						try {
+							value = value
+									.replace(exp,
+											"<a href='$1' target='_blank' class='cd_hyperlink'>$1</a>");
+							return new Handlebars.SafeString(value);
+						} catch (err) {
+							return text;
+						}
+
+					});
+
+	/**
+	 * Returns table headings for custom contacts list view
+	 */
+	Handlebars.registerHelper('displayPlan', function(value) {
+
+		return ucfirst(value).replaceAll("_", " ");
+
+	});
+
+	Handlebars.registerHelper('getCurrentContactProperty', function(value) {
+		if (App_Contacts.contactDetailView
+				&& App_Contacts.contactDetailView.model) {
+			var contact_properties = App_Contacts.contactDetailView.model
+					.get('properties')
+			console.log(App_Contacts.contactDetailView.model.toJSON());
+			return getPropertyValue(contact_properties, value);
+		}
+	});
+
+	Handlebars.registerHelper('safe_string', function(data) {
+
+		data = data.replace(/\n/g, "<br/>");
+		return new Handlebars.SafeString(data);
+	});
+
+	Handlebars.registerHelper('string_to_date', function(format, date) {
+
+		return new Date(date).format(format);
+	});
+
+	Handlebars.registerHelper('isArray', function(data, options) {
+		console.log(data);
+		if (isArray(data))
+			return options.fn(this);
+		return options.inverse(this);
+	});
+
+	Handlebars.registerHelper("bindData", function(data) {
+		return 'data-attr=' + JSON.stringify(data);
+	});
+
+	Handlebars.registerHelper("getCurrentUserPrefs", function(options) {
+		if(CURRENT_USER_PREFS);
+			return options.fn(CURRENT_USER_PREFS);
+	});
 	
-	 Handlebars.registerHelper('is_link', function(value, options) {
-		   
-		   var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-		      
-		   if (value.search(exp) != -1)
-		    return options.fn(this);
-		   else
-		    return options.inverse(this);
-		  });
-		  
-		  Handlebars.registerHelper('show_link_in_statement', function(value){ 
-		   
-		   var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+	Handlebars.registerHelper("getCurrentDomain", function(options) {
+		var url = window.location.href;
+		
+		var exp = /(\.)/;
+		
+		if(url.search(exp) >= 0)
+			return url.split(exp)[0];
 
-		   try {
-		    value = value.replace(exp,"<a href='$1' target='_blank' class='cd_hyperlink'>$1</a>");
-		    return new Handlebars.SafeString(value);
-		   } 
-		   catch (err) {
-		    return text;
-		   }
+		return " ";
+	});
 
-		  });
-		  
-		  /**
-			 * Returns table headings for custom contacts list view
-			 */
-			Handlebars.registerHelper('displayPlan', function(value) {
-
-				return ucfirst(value).replaceAll("_", " ");
-
-				});
-	 
-	 
-	 	Handlebars.registerHelper('getCurrentContactProperty', function(value){
-	 		if(App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
-	 		{	
-	 			var contact_properties = App_Contacts.contactDetailView.model.get('properties')
-	 			console.log(App_Contacts.contactDetailView.model.toJSON());
-	 			return getPropertyValue(contact_properties, value);
-	 		}	
-	 	});
-	 	
-	 
-	 	 Handlebars.registerHelper('safe_string',function(data){
-	 		  
-	 		   data = data.replace(/\n/g,"<br/>");
-	 		   return new Handlebars.SafeString(data);
-	 		  });
-	 		   
-	 	 Handlebars.registerHelper('string_to_date',function(format,date){
-
-	 		   return new Date(date).format(format);
-	 		  });
-
-		  
-		  
 });
