@@ -72,8 +72,6 @@ public class QueryDocument implements QueryInterface
 
 	String query = constructQuery(rules);
 
-	System.out.println("query constructed : " + query);
-
 	// return query results
 	return processQuery(query, RuleType.Contact, count, cursor);
     }
@@ -152,7 +150,8 @@ public class QueryDocument implements QueryInterface
 		.parseLong(rhs));
 
 	// Created on date condition
-	if (condition.equals(SearchRule.RuleCondition.EQUALS))
+	if (condition.equals(SearchRule.RuleCondition.ON)
+		|| condition.equals(SearchRule.RuleCondition.EQUALS))
 	{
 	    query = buildQuery("AND", query, lhs + "=" + date);
 	}
@@ -177,7 +176,7 @@ public class QueryDocument implements QueryInterface
 		String to_date = SearchUtil.getDateWithoutTimeComponent(Long
 			.parseLong(rhs_new));
 
-		query = buildQuery("AND", query, lhs + " >=" + date);
+		query = buildQuery("AND", query, lhs + " >= " + date);
 		query = buildQuery("AND", query, lhs + " <= " + to_date);
 	    }
 	}
@@ -185,8 +184,6 @@ public class QueryDocument implements QueryInterface
 	// Created in last number of days
 	else if (condition.equals(SearchRule.RuleCondition.LAST))
 	{
-	    System.out.println(new DateUtil().getTime().toGMTString());
-
 	    long fromDateInSecs = new DateUtil()
 		    .removeDays(Integer.parseInt(rhs) - 1).getTime().getTime();
 
@@ -266,8 +263,6 @@ public class QueryDocument implements QueryInterface
 	Collection<ScoredDocument> contact_documents = index.search(
 		query_string).getResults();
 
-	System.out.println("contact results without cursor : "
-		+ contact_documents);
 
 	List<Long> entity_ids = new ArrayList<Long>();
 
@@ -338,7 +333,6 @@ public class QueryDocument implements QueryInterface
 	Collection<ScoredDocument> contact_documents = index.search(
 		query_string).getResults();
 
-	System.out.println("contact results : " + contact_documents);
 
 	List<Long> entity_ids = new ArrayList<Long>();
 
@@ -389,7 +383,7 @@ public class QueryDocument implements QueryInterface
 	    if (rule.nested_condition != null && rule.nested_lhs == null)
 		continue;
 
-	    // Set type of rule(search on what?)
+	    // Set type of rule (search on what?)
 	    ruleType = rule.ruleType;
 
 	    /*
@@ -410,7 +404,6 @@ public class QueryDocument implements QueryInterface
 	     */
 	    if (!lhs.contains("time"))
 	    {
-		System.out.println("LHS : " + lhs + "Rhs : " + rhs);
 		/*
 		 * Create new query with LHS and RHS conditions to be processed
 		 * further for necessary queries
@@ -418,7 +411,8 @@ public class QueryDocument implements QueryInterface
 		String newQuery = lhs + ":" + SearchUtil.normalizeString(rhs);
 
 		// For equals condition
-		if (condition.equals(SearchRule.RuleCondition.EQUALS))
+		if (condition.equals(SearchRule.RuleCondition.EQUALS)
+			|| condition.equals(SearchRule.RuleCondition.ON))
 		{
 		    /*
 		     * Build query by passing condition old query and new query
@@ -437,7 +431,6 @@ public class QueryDocument implements QueryInterface
 	    if (lhs.contains("time") && !lhs.contains("tags"))
 	    {
 		query = createTimeQuery(query, lhs, condition, rhs, rhs_new);
-
 	    }
 
 	    if (lhs.contains("time") && lhs.contains("tags"))
