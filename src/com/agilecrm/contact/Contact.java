@@ -406,10 +406,10 @@ public class Contact extends Cursor
 	CronUtil.removeTask(null, id.toString());
 
 	// Deletes logs of contact.
-	LogUtil.deleteSQLLogsOfSubscriber(id.toString());
+	LogUtil.deleteSQLLogs(null, id.toString());
 
 	// Deletes TwitterCron
-	TwitterQueueUtil.removeTwitterJobsOfContact(id.toString(),
+	TwitterQueueUtil.removeTwitterJobs(null, id.toString(),
 		NamespaceManager.get());
     }
 
