@@ -20,7 +20,6 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log;
-import com.campaignio.logger.LogItem;
 import com.campaignio.logger.util.LogUtil;
 
 /**
@@ -81,12 +80,10 @@ public class CampaignsAPI
     @Path("logs/contact/{contact-id}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<LogItem> getCampaignContactLogs(
+    public String getCampaignContactLogs(
 	    @PathParam("contact-id") String contactId)
     {
-	List<Log> logs = LogUtil.getSubscriberLog(contactId);
-
-	return LogUtil.getLogItemsFromLogs(logs);
+	return LogUtil.getSQLLogsOfContact(contactId);
     }
 
     /**
@@ -101,16 +98,11 @@ public class CampaignsAPI
     @Path("logs/contact/{contact-id}/{campaign-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<LogItem> getCampaignContactLogs(
+    public String getCampaignContactLogs(
 	    @PathParam("contact-id") String contactId,
 	    @PathParam("campaign-id") String campaignId)
     {
-	Log log = LogUtil.getCampaignSubscriberLog(campaignId, contactId);
-
-	if (log == null)
-	    return null;
-
-	return log.logs;
+	return LogUtil.getSQLLogsOfCampaignSubscriber(campaignId, contactId);
     }
 
     /**
@@ -123,9 +115,9 @@ public class CampaignsAPI
     @Path("logs/{campaign-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Log> getCampaignLogs(@PathParam("campaign-id") String campaignId)
+    public String getCampaignLogs(@PathParam("campaign-id") String campaignId)
     {
-	return LogUtil.getCampaignLog(campaignId);
+	return LogUtil.getSQLLogsOfCampaign(campaignId);
     }
 
     /**
@@ -138,24 +130,7 @@ public class CampaignsAPI
     @DELETE
     public void deleteCampaignLogs(@PathParam("campaign-id") String id)
     {
-	LogUtil.removeCampaignLogs(id);
-    }
-
-    /**
-     * Deletes selected logs bulk related to a campaign.
-     * 
-     * @param model_ids
-     *            array of log ids as String.
-     * @throws JSONException
-     */
-    @Path("logs/bulk")
-    @POST
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteLogs(@FormParam("ids") String model_ids)
-	    throws JSONException
-    {
-	JSONArray logsJSONArray = new JSONArray(model_ids);
-	Log.dao.deleteBulkByIds(logsJSONArray);
+	LogUtil.deleteSQLLogsOfCampaign(id);
     }
 
     /**
