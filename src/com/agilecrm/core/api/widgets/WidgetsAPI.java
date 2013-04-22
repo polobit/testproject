@@ -1056,10 +1056,11 @@ public class WidgetsAPI
      *            {@link String} widget id to get {@link Widget} preferences
      * @return {@link String} form of {@link JSONArray} of call logs
      */
-    @Path("twilio/call/logs/{widget-id}")
+    @Path("twilio/call/logs/{widget-id}/{to}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String getCallLogsOfTwilio(@PathParam("widget-id") Long widgetId)
+    public String getCallLogsOfTwilio(@PathParam("widget-id") Long widgetId,
+	    @PathParam("to") String to)
     {
 	Widget widget = WidgetUtil.getWidget(widgetId);
 	if (widget == null)
@@ -1067,7 +1068,7 @@ public class WidgetsAPI
 
 	try
 	{
-	    return TwilioUtil.getCallLogs(widget).toString();
+	    return TwilioUtil.getCallLogs(widget, to).toString();
 	}
 	catch (Exception e)
 	{

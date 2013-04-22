@@ -26,7 +26,8 @@ public class TwilioUtil
      * @return {@link JSONArray} of calls
      * @throws Exception
      */
-    public static JSONArray getCallLogs(Widget widget) throws Exception
+    public static JSONArray getCallLogs(Widget widget, String to)
+	    throws Exception
     {
 
 	String accountSid = widget.getProperty("account_sid");
@@ -53,14 +54,18 @@ public class TwilioUtil
 		System.out.println(xml);
 		JSONArray array = xml.getJSONObject("TwilioResponse")
 			.getJSONObject("Calls").getJSONArray("Call");
+		JSONArray logs = new JSONArray();
 
 		for (int i = 0; i < array.length(); i++)
 		{
 		    System.out.print(array.getJSONObject(i).get("From") + "-");
 		    System.out.println(array.getJSONObject(i).get("To"));
-		}
 
-		return array;
+		    if (array.getJSONObject(i).getString("To").contains(to))
+			logs.put(array.getJSONObject(i));
+		}
+		System.out.println(logs);
+		return logs;
 
 	    }
 	    catch (JSONException e)

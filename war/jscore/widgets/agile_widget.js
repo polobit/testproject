@@ -204,6 +204,11 @@ function agile_crm_save_widget_prefs(pluginName, prefs, callback) {
           }
     }});
 
+    if (callback && typeof (callback) === "function")
+    {
+        // execute the callback, passing parameters as necessary
+        callback(data);
+    }
 }
 
 /**
@@ -305,4 +310,73 @@ function agile_crm_delete_widget_property_from_contact(propertyName) {
 	
 	// Save updated contact model
 	contact_model.save();
+}
+
+/**
+ *  Retrieves the contact property value based on property name and sub type of the property
+ * 
+ * @param propertyName
+ * @param subtype
+ */
+function agile_crm_get_contact_property_by_subtype(propertyName, subtype)
+{
+
+    // Reads current contact model form the contactDetailView
+    var contact_model = App_Contacts.contactDetailView.model;
+
+    // Gets properties list field from contact
+    var properties = contact_model.get('properties');
+    var property;
+
+    // Iterates though each property and finds the value related to the property
+    // name
+    $.each(properties, function (key, value)
+    {
+        if (value.name == propertyName && value.subtype == subtype)
+        {
+            property = value;
+        }
+    });
+
+    // If property is defined then return property value
+    if (property) return property.value;
+
+}
+
+/**
+ * Deletes the contact property value based on property name and sub type of the property 
+ * and value of the property
+ * 
+ * @param propertyName
+ * @param subtype
+ * @param value
+ */
+function agile_crm_delete_contact_property_by_subtype(propertyName, subtype, value)
+{
+
+    // Reads current contact model form the contactDetailView
+    var contact_model = App_Contacts.contactDetailView.model;
+
+    // Gets properties list field from contact
+    var properties = contact_model.get('properties');
+
+
+    // Iterates though each property and finds the value related to the property
+    // name
+    $.each(properties, function (index, property)
+    {
+        if (property.name == propertyName && property.subtype == subtype && property.value == value)
+        {
+            console.log(index);
+            properties.splice(index, 1);
+        }
+    });
+
+
+    contact_model.set("properties", properties);
+
+    contact_model.url = "core/api/contacts"
+
+    // Save updated contact model
+    contact_model.save()
 }

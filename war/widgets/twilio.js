@@ -4,8 +4,18 @@ $(function() {
 	Twilio_PLUGIN_NAME = "Twilio";
 	Twilio_PLUGIN_HEADER = '<div></div>'
 
-	var numbers = agile_crm_get_contact_properties_list("phone");
-	console.log(numbers);
+	// Stripe profile loading image declared as global
+	TWILIO_PROFILE_LOAD_IMAGE = '<center><img id="twilio_profile_load" ' +
+	        'src=\"img/1-0.gif\" style="margin-bottom: 10px;margin-right: 16px;" >' +
+	        '</img></center>';
+	    
+	    // zendesk update loading image declared as global
+	TWILIO_LOGS_LOAD_IMAGE = '<center><img id="logs_load" src=' +
+	        '\"img/ajax-loader-cursor.gif\" style="margin-top: 14px;"></img></center>';
+
+	    
+	Numbers = agile_crm_get_contact_properties_list("phone");
+	console.log(Numbers);
 	
 	var plugin = agile_crm_get_plugin(Twilio_PLUGIN_NAME);
 	
@@ -22,27 +32,16 @@ $(function() {
 		return;
 	}
 	
-	if(numbers.length == 0)
+	if(Numbers.length == 0)
 	 {
 	  $("#Twilio").html("<div style='padding: 10px;line-height:160%;'>" +
 	    "No contact number is associated with this contact</div>");
 	        return;
 	 }
 	
-	getTwilioLogs(plugin_id);
+	showTwilioDetails(plugin_id);
 	
-	$('#save_twilio_token').die().live('click', function(e) {
-		
-		e.preventDefault();
-		
-		var prefs={};
-		prefs["account_sid"] = $("#twilio_account_sid").val();
-		prefs["token"] = $("#twilio_auth_token").val();
-			
-		agile_crm_save_widget_prefs(Twilio_PLUGIN_NAME, JSON.stringify(prefs));
-		getTwilioLogs(plugin_id);
-		
-	});
+	
 	
 });
 
@@ -50,6 +49,8 @@ $(function() {
 
 function setUpTwilio(plugin_id)
 {
+	$('#Twilio').html(TWILIO_PROFILE_LOAD_IMAGE);
+	
 	$("#Twilio").html('<div class="widget_content" style="border-bottom:none">'
 			+ '<p style="padding:5px;"><label><b>Enter Your Account Sid</b></label>'
 			+ '<input type="text" id="twilio_account_sid" class="input-medium required" placeholder="Account sid" value=""></input></p>'
@@ -57,14 +58,83 @@ function setUpTwilio(plugin_id)
 			+ '<input type="text" id="twilio_auth_token" class="input-medium required" placeholder="Auth token" value=""></input></p>'
 			+ '<button id="save_twilio_token" class="btn" style="margin-left:5px;"><a href="#">Save</a></button><br/></div>');
 
+	$('#save_twilio_token').die().live('click', function(e) {
+		
+		e.preventDefault();
+		console.log('in');
+		
+		var prefs={};
+		prefs["account_sid"] = $("#twilio_account_sid").val();
+		prefs["token"] = $("#twilio_auth_token").val();
+			
+		agile_crm_save_widget_prefs(Twilio_PLUGIN_NAME, JSON.stringify(prefs), function(data) {
+			
+			showTwilioDetails(plugin_id);			
+		});
+		
+	});
+	
 }
 
-function getTwilioLogs(plugin_id)
+function showTwilioDetails(plugin_id)
 {
-	$.get("/core/api/widgets/twilio/call/logs/" + plugin_id, function (data) {
+	$('#Twilio').html(TWILIO_PROFILE_LOAD_IMAGE);
+	
+	if(Numbers.length == 0)
+	{
+	  $("#Twilio").html("<div style='padding: 10px;line-height:160%;'>" +
+	    "No contact number is associated with this contact</div>");
+	        return;
+	}
+	
+	$('#Twilio').html(getTemplate('twilio-profile', Numbers));
+	$('#twilio_call').show();
+	
+	var to = $('#contact_number').val();
+	
+	getTwilioLogs(plugin_id, to, function(logs)
+	{
+		console.log(logs);
+		
+		 var twilio_logs_template = $(getTemplate('twilio-logs', JSON.parse(logs)));
+		 
+		 $('#twilio-logs-panel').html(twilio_logs_template);	
+		 
+		  head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+      		$(".time-ago", twilio_logs_template).timeago();
+      	  });	   
+	});
+	
+	$('#twilio_call').die().live('click', function(e) {
+		
+		e.preventDefault();
+		
+		var from = "+919533477545";
+		var to = $('#contact_number').val();
+		var url = "https://agile-crm-cloud.appspot.com/backend/voice?PhoneNumber=" + to + "&from=" + from;
+		
+		makeCall(plugin_id, from, to, url);
+		
+	});
+}
+
+function getTwilioLogs(plugin_id, to, callback)
+{
+	$('#twilio-logs-panel').html(TWILIO_LOGS_LOAD_IMAGE);
+	
+	$.get("/core/api/widgets/twilio/call/logs/" + plugin_id + "/" + to, function (data) {
 		
 		console.log(data);
 		
+		if (callback && typeof (callback) === "function")
+		{
+			callback(data);
+		}
+		
+	}).error(function(data) {
+		
+		$('#logs_load').remove();
+		$('#twilio-logs-panel').html('<div style="padding:10px">' + data.responseText + '</div>');
 	});
 }
 

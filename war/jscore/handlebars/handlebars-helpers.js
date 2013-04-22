@@ -707,6 +707,13 @@ $(function() {
 		return options.inverse(this);
 	});
 
+	Handlebars.registerHelper('is_string', function(data, options) {
+		if(typeof data == "string")
+			return options.fn(this);
+		return options.inverse(this);
+			
+	});
+	
 	Handlebars.registerHelper("bindData", function(data) {
 		return 'data-attr=' + JSON.stringify(data);
 	});
