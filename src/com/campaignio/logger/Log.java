@@ -1,11 +1,6 @@
 package com.campaignio.logger;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.Embedded;
 import javax.persistence.Id;
-import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -13,10 +8,8 @@ import org.codehaus.jackson.annotate.JsonAutoDetect;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.db.ObjectifyGenericDao;
-import com.googlecode.objectify.annotation.Indexed;
-import com.googlecode.objectify.annotation.NotSaved;
-import com.googlecode.objectify.condition.IfDefault;
+import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.util.WorkflowUtil;
 
 /**
  * 
@@ -49,30 +42,34 @@ public class Log
     public String subscriber_id;
 
     /**
-     * Logs List.
+     * Log message
      */
-    @XmlElement(name = "logs")
-    @Embedded
-    @Indexed
-    public List<LogItem> logs = new ArrayList<LogItem>();
+    public String message;
 
     /**
-     * Sets entity type as log.
+     * Domain
      */
-    @NotSaved
-    public String entity_type = "log";
+    public String domain;
 
     /**
-     * Log Updated Time.
+     * Log Type
      */
-    @NotSaved(IfDefault.class)
-    public Long updated_time = 0L;
+    public String log_type;
 
     /**
-     * ObjectifyGenericDao for Log class.
+     * Log epoch time.
      */
-    public static ObjectifyGenericDao<Log> dao = new ObjectifyGenericDao<Log>(
-	    Log.class);
+    public String time;
+
+    /**
+     * Log Date time.
+     */
+    public String log_time;
+
+    /**
+     * Log level
+     */
+    public String level;
 
     /**
      * Default Log.
@@ -80,21 +77,6 @@ public class Log
     public Log()
     {
 
-    }
-
-    /**
-     * Constructs new {@link Log} with campaign id and subscriber id.
-     * 
-     * @param campaignId
-     *            Id of a campaign.
-     * @param subscriberId
-     *            Id of a contact that subscribes to campaign.
-     */
-    public Log(String campaignId, String subscriberId, List<LogItem> logs)
-    {
-	this.subscriber_id = subscriberId;
-	this.campaign_id = campaignId;
-	this.logs = logs;
     }
 
     /**
@@ -119,27 +101,23 @@ public class Log
     }
 
     /**
-     * Returns logs array size.
+     * Returns workflow name from campaign-id.
      * 
-     * @return logs array size.
+     * @return campaign name string.
      */
     @XmlElement
-    public int getLogsCount()
+    public String getCampaignName()
     {
-	return this.logs.size();
+	if (campaign_id != null)
+	{
+	    Workflow workflow = WorkflowUtil.getWorkflow(Long
+		    .parseLong(campaign_id));
+
+	    if (workflow != null)
+		return workflow.name;
+	}
+
+	return null;
     }
 
-    /**
-     * Saves Log in database.
-     */
-    public void save()
-    {
-	dao.put(this);
-    }
-
-    @PrePersist
-    private void Prepersist()
-    {
-	updated_time = System.currentTimeMillis() / 1000;
-    }
 }

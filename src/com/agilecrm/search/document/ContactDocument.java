@@ -103,6 +103,7 @@ public class ContactDocument implements BuilderInterface
 		contact.created_time * 1000),
 		Calendar.DATE);
 	doc.addField(Field.newBuilder().setName("created_time").setDate(truncatedDate));
+
 	// Describes updated time document if updated time is not 0.
 	if (contact.updated_time > 0L)
 	{
@@ -166,7 +167,7 @@ public class ContactDocument implements BuilderInterface
      */
     public void delete(String id)
     {
-	index.delete(id);
+	index.deleteAsync(id);
     }
 
     /**
@@ -178,7 +179,7 @@ public class ContactDocument implements BuilderInterface
     private static void addToIndex(Document doc)
     {
 	// Adds document to index
-	index.put(doc);
+	index.putAsync(doc);
 
     }
 

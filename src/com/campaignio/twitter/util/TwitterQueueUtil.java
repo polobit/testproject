@@ -214,8 +214,8 @@ public class TwitterQueueUtil
      * @param namespace
      *            namespace.
      */
-    public static void removeTwitterJobsOfCampaign(String campaignId,
-	    String namespace)
+    public static void removeTwitterJobs(String campaignId,
+	    String subscriberId, String namespace)
     {
 	List<TwitterQueue> twitterQueues = getTwitterQueueForNamespace(namespace);
 
@@ -229,7 +229,16 @@ public class TwitterQueueUtil
 
 	    while (twitterJobIterator.hasNext())
 	    {
-		if (twitterJobIterator.next().campaign_id.equals(campaignId))
+		if (!StringUtils.isEmpty(campaignId)
+			&& twitterJobIterator.next().campaign_id
+				.equals(campaignId))
+		{
+		    twitterJobIterator.remove();
+		}
+
+		else if (!StringUtils.isEmpty(subscriberId)
+			&& twitterJobIterator.next().subscriber_id
+				.equals(subscriberId))
 		{
 		    twitterJobIterator.remove();
 		}
@@ -237,38 +246,4 @@ public class TwitterQueueUtil
 	    twitterQueue.save();
 	}
     }
-
-    /**
-     * Deletes contact from TwitterQueue.
-     * 
-     * @param subscriberId
-     *            Contact ID.
-     * @param namespace
-     *            Namespace.
-     */
-    public static void removeTwitterJobsOfContact(String subscriberId,
-	    String namespace)
-    {
-	List<TwitterQueue> twitterQueues = getTwitterQueueForNamespace(namespace);
-
-	if (twitterQueues == null)
-	    return;
-
-	for (TwitterQueue twitterQueue : twitterQueues)
-	{
-	    Iterator<TwitterJob> twitterJobIterator = twitterQueue.twitter_jobs
-		    .listIterator();
-
-	    while (twitterJobIterator.hasNext())
-	    {
-		if (twitterJobIterator.next().subscriber_id
-			.equals(subscriberId))
-		{
-		    twitterJobIterator.remove();
-		}
-	    }
-	    twitterQueue.save();
-	}
-    }
-
 }

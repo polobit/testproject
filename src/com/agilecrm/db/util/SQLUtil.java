@@ -1,5 +1,6 @@
 package com.agilecrm.db.util;
 
+import org.datanucleus.util.StringUtils;
 import org.json.JSONArray;
 
 import com.agilecrm.db.GoogleSQL;
@@ -55,81 +56,7 @@ public class SQLUtil
     }
 
     /**
-     * Returns obtained logs with respect to campaign id and domain.
-     * 
-     * @param campaignId
-     *            - Campaign Id.
-     * @param domain
-     *            - Domain.
-     * @return json array.
-     */
-    public static JSONArray getLogsOfCampaign(String campaignId, String domain)
-    {
-	String campaignLogs = "SELECT * FROM campaign_logs WHERE campaign_id = "
-		+ StatsUtil.encodeSQLColumnValue(campaignId)
-		+ " AND domain = "
-		+ StatsUtil.encodeSQLColumnValue(domain);
-
-	JSONArray arr = new JSONArray();
-
-	try
-	{
-	    arr = GoogleSQL.getJSONQuery(campaignLogs);
-
-	    if (arr == null)
-		return null;
-
-	    System.out.println("Campaign logs of domain - " + domain + " are: "
-		    + arr);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-
-	return arr;
-    }
-
-    /**
-     * Returns logs of campaign with respect to subscriber id.
-     * 
-     * @param subscriberId
-     *            - Subscriber Id.
-     * @param domain
-     *            - Domain.
-     * @return json array of logs.
-     */
-    public static JSONArray getLogsOfSubscriber(String subscriberId,
-	    String domain)
-    {
-	String campaignLogs = "SELECT * FROM campaign_logs WHERE subscriber_id = "
-		+ StatsUtil.encodeSQLColumnValue(subscriberId)
-		+ " AND domain = " + StatsUtil.encodeSQLColumnValue(domain);
-
-	JSONArray arr = new JSONArray();
-
-	try
-	{
-	    arr = GoogleSQL.getJSONQuery(campaignLogs);
-
-	    if (arr == null)
-		return null;
-
-	    System.out.println("Subscriber Logs of Domain - " + domain
-		    + " are: " + arr);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-
-	return arr;
-    }
-
-    /**
-     * Returns logs with respect to both campaign-id and subscriber-id.
+     * Returns logs with respect to campaign-id or subscriber-id.
      * 
      * @param campaignId
      *            - Campaign Id.
@@ -139,34 +66,36 @@ public class SQLUtil
      *            - Domain
      * @return JSONArray of logs.
      */
-    public static JSONArray getLogsOfCampaignSubscriber(String campaignId,
-	    String subscriberId, String domain)
+    public static JSONArray getLogs(String campaignId, String subscriberId,
+	    String domain)
     {
-	String campaignContactLogs = "SELECT * FROM campaign_logs WHERE campaign_id = "
-		+ StatsUtil.encodeSQLColumnValue(campaignId)
-		+ " AND subscriber_id = "
-		+ StatsUtil.encodeSQLColumnValue(subscriberId)
-		+ " AND domain = " + StatsUtil.encodeSQLColumnValue(domain);
+	String logs = "SELECT *, UNIX_TIMESTAMP(log_time) AS time FROM campaign_logs WHERE";
 
-	JSONArray arr = new JSONArray();
+	if (!StringUtils.isEmpty(campaignId))
+	{
+	    logs += " campaign_id = "
+		    + StatsUtil.encodeSQLColumnValue(campaignId);
+
+	    // if both are not null
+	    if (!StringUtils.isEmpty(subscriberId))
+		logs += " AND subscriber_id = "
+			+ StatsUtil.encodeSQLColumnValue(subscriberId);
+	}
+	else if (!StringUtils.isEmpty(subscriberId))
+	    logs += " subscriber_id = "
+		    + StatsUtil.encodeSQLColumnValue(subscriberId);
+
+	logs += appendDomainToQuery(domain);
 
 	try
 	{
-	    arr = GoogleSQL.getJSONQuery(campaignContactLogs);
-
-	    if (arr == null)
-		return null;
-
-	    System.out.println("Campaign-Subscriber Logs of Domain - " + domain
-		    + " are: " + arr);
+	    return GoogleSQL.getJSONQuery(logs);
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
 	    return null;
 	}
-
-	return arr;
     }
 
     /**
@@ -177,12 +106,28 @@ public class SQLUtil
      * @param domain
      *            - Domain.
      */
-    public static void deleteLogsOfCampaign(String campaignId, String domain)
+    public static void deleteLogsFromSQL(String campaignId,
+	    String subscriberId, String domain)
     {
-	String deleteCampaignLogs = "DELETE FROM campaign_logs WHERE campaign_id = "
-		+ StatsUtil.encodeSQLColumnValue(campaignId)
-		+ " AND domain = "
-		+ StatsUtil.encodeSQLColumnValue(domain);
+	String deleteCampaignLogs = "DELETE FROM campaign_logs WHERE";
+
+	if (!StringUtils.isEmpty(campaignId))
+	{
+	    deleteCampaignLogs += " campaign_id = "
+		    + StatsUtil.encodeSQLColumnValue(campaignId);
+
+	    // If both are not null
+	    if (!StringUtils.isEmpty(subscriberId))
+		deleteCampaignLogs += " AND subscriber_id = "
+			+ StatsUtil.encodeSQLColumnValue(subscriberId);
+
+	}
+
+	else if (!StringUtils.isEmpty(subscriberId))
+	    deleteCampaignLogs += " subscriber_id = "
+		    + StatsUtil.encodeSQLColumnValue(subscriberId);
+
+	deleteCampaignLogs += appendDomainToQuery(domain);
 
 	try
 	{
@@ -195,26 +140,14 @@ public class SQLUtil
     }
 
     /**
-     * Deletes logs with respect to subscriber.
+     * Appends domain to SQL query.
      * 
-     * @param subscriberId
-     *            - Subscriber id.
      * @param domain
-     *            - Domain.
+     *            - domain name.
+     * @return domain query string.
      */
-    public static void deleteLogsOfSubscriber(String subscriberId, String domain)
+    public static String appendDomainToQuery(String domain)
     {
-	String deleteSubscriberLogs = "DELETE FROM campaign_logs WHERE subscriber_id = "
-		+ StatsUtil.encodeSQLColumnValue(subscriberId)
-		+ " AND domain = " + StatsUtil.encodeSQLColumnValue(domain);
-	try
-	{
-	    GoogleSQL.executeNonQuery(deleteSubscriberLogs);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
+	return " AND domain = " + StatsUtil.encodeSQLColumnValue(domain);
     }
-
 }

@@ -33,9 +33,10 @@
             <table class="table table-striped onlySorting" id="logs-table" url="core/api/campaigns/logs/bulk">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Contact</th>
-                        <th>LogTime</th>
-                        <th>Message</th>                    
+                        <th>Message</th>
+                        <th>LogTime</th>                    
                     </tr>
                 </thead>
                 <tbody id="campaign-logs-model-list" route="contact/">
@@ -49,10 +50,15 @@
 
 <script id="campaign-logs-model-template" type="text/html">
 <input name="id" class="campaign" type="hidden" value="{{campaign_id}}" />
+<td></td>
 <td class="data" data={{subscriber_id}}>
-  {{contactName}}
+    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:12em;overflow:hidden;">
+        		<b>	{{getPropertyValue contact.properties "first_name"}}
+        		{{getPropertyValue contact.properties "last_name"}} </b>
+    	</div>
+    	<div style="float:right"></div>
 </td>
-<td>{{log_time}}</td>
 <td>{{message}}</td>
+<td>{{epochToLogDate time}}</td>
 <br/>
 </script>

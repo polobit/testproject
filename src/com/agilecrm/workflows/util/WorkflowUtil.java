@@ -264,10 +264,10 @@ public class WorkflowUtil
 	    CronUtil.removeTask(campaignId, null);
 
 	    // Deletes logs of workflow
-	    LogUtil.deleteSQLLogsOfCampaign(campaignId);
+	    LogUtil.deleteSQLLogs(campaignId, null);
 
 	    // Deletes twitter-jobs of campaign
-	    TwitterQueueUtil.removeTwitterJobsOfCampaign(campaignId, namespace);
+	    TwitterQueueUtil.removeTwitterJobs(campaignId, null, namespace);
 	}
     }
 

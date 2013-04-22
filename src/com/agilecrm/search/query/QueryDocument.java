@@ -435,7 +435,8 @@ public class QueryDocument implements QueryInterface
 
 	    if (lhs.contains("time") && lhs.contains("tags"))
 	    {
-		query = createTimeQuery(query, rhs + "_time", nestedCondition,
+		query = createTimeQuery(query, SearchUtil.normalizeString(rhs)
+			+ "_time", nestedCondition,
 			nestedLhs, nestedRhs);
 	    }
 	}
