@@ -1,0 +1,143 @@
+package com.campaignio.stats.util;
+
+import java.util.Calendar;
+import java.util.LinkedHashMap;
+
+import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+public class CampaignStatsReportsUtil
+{
+
+    /**
+     * Constructs a sorted hash table for the ticket reports that are fetched
+     * based on time duration and time zone
+     * 
+     * @param recordsJSONArray
+     * @param type
+     * @param startTime
+     * @param endTime
+     * @param timeZone
+     * @return LinkedHashMap<String, Integer>
+     */
+    public static LinkedHashMap<String, LinkedHashMap> getSortedJSONByDate(
+	    JSONArray emailLogs, String type, String startTime, String endTime,
+	    String timeZone) throws Exception
+    {
+	String[] emailType = { "Send E-mail", "Email Opened", "Email Clicked" };
+
+	LinkedHashMap<String, LinkedHashMap> dateHashtable = EmailReportsUtil
+		.getDefaultDateTable(startTime, endTime, type, timeZone,
+			emailType);
+
+	LinkedHashMap<String, Integer> statusTable = EmailReportsUtil
+		.getDefaultCountTable(emailType);
+
+	// Iterate through all JSONs
+	for (int index = 0; index < emailLogs.length(); index++)
+	{
+	    // Get Session
+	    JSONObject emailLog = emailLogs.getJSONObject(index);
+
+	    long timeInMilliSecs = Long.parseLong(JSONUtil.getJSONValue(
+		    emailLog, "logTime"));
+
+	    // Get Nearest Date
+	    String nearestDate = "";
+	    if (StringUtils.equalsIgnoreCase(type, "date"))
+		nearestDate = DateUtil.getNearestDateOnlyFromEpoch(
+			timeInMilliSecs, timeZone);
+	    else if (StringUtils.equalsIgnoreCase(type, "hour"))
+		nearestDate = DateUtil.getNearestHourOnlyFromEpoch(
+			timeInMilliSecs, timeZone);
+	    else
+		nearestDate = DateUtil.getNearestDayOnlyFromEpoch(
+			timeInMilliSecs, timeZone);
+
+	    if (dateHashtable.containsKey(nearestDate))
+		// Get Table
+		statusTable = dateHashtable.get(nearestDate);
+
+	    String logType = JSONUtil.getJSONValue(emailLog, "log_type");
+
+	    statusTable.put(logType, statusTable.get(logType) + 1);
+
+	    dateHashtable.put(nearestDate, statusTable);
+	}
+	return dateHashtable;
+    }
+
+    /**
+     * Constructs a default hash table for the dates between the duration and
+     * time zone and sets date as key and getDefaultCountTable() as value
+     * 
+     * @return LinkedHashMap<String, LinkedHashMap>
+     */
+    public static LinkedHashMap<String, LinkedHashMap> getDefaultDateTable(
+	    String startTime, String endTime, String type, String timeZone,
+	    String[] logTypes)
+    {
+
+	LinkedHashMap<String, LinkedHashMap> dateHashtable = new LinkedHashMap<String, LinkedHashMap>();
+	Calendar startCalendar = Calendar.getInstance();
+	startCalendar.setTimeInMillis(Long.parseLong(startTime));
+	long startTimeMilli = startCalendar.getTimeInMillis();
+
+	Calendar endCalendar = Calendar.getInstance();
+	endCalendar.setTimeInMillis(Long.parseLong(endTime));
+	long endTimeMilli = endCalendar.getTimeInMillis();
+
+	do
+	{
+	    if (StringUtils.equalsIgnoreCase(type, "date"))
+	    {
+		// to get month and date ( example : Jan 12 )
+		dateHashtable.put(DateUtil.getNearestDateOnlyFromEpoch(
+			startTimeMilli, timeZone),
+			getDefaultCountTable(logTypes));
+		startCalendar.add(Calendar.DAY_OF_MONTH, 1);
+		startTimeMilli = startCalendar.getTimeInMillis();
+	    }
+	    else if (StringUtils.equalsIgnoreCase(type, "hour"))
+	    {
+		// to get 12hours frame ( example : 7 AM )
+		dateHashtable.put(DateUtil.getNearestHourOnlyFromEpoch(
+			startTimeMilli, timeZone),
+			getDefaultCountTable(logTypes));
+		startCalendar.add(Calendar.HOUR, 1);
+		startTimeMilli = startCalendar.getTimeInMillis();
+	    }
+	    else
+	    {
+		// to get day (example : mon , tue etc..)
+		dateHashtable.put(DateUtil.getNearestDayOnlyFromEpoch(
+			startTimeMilli, timeZone),
+			getDefaultCountTable(logTypes));
+		startCalendar.add(Calendar.DAY_OF_WEEK, 1);
+		startTimeMilli = startCalendar.getTimeInMillis();
+	    }
+	}
+	while (startTimeMilli <= endTimeMilli);
+
+	return dateHashtable;
+    }
+
+    /**
+     * Constructs a default hash table for the String of arrays and sets array
+     * value as key and '0' as value
+     * 
+     * @return LinkedHashMap<String, Integer>
+     */
+    public static LinkedHashMap<String, Integer> getDefaultCountTable(
+	    String[] variable)
+    {
+	LinkedHashMap<String, Integer> countHashtable = new LinkedHashMap<String, Integer>();
+	for (String string : variable)
+	{
+	    countHashtable.put(string, 0);
+	}
+	return countHashtable;
+    }
+
+}

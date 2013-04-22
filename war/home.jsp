@@ -70,7 +70,7 @@ String CSS_PATH = "/";
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/timeline.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/jslider.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/planandupgrade.css" />
-
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/daterangepicker.css" />
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>

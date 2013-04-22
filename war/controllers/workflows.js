@@ -19,6 +19,7 @@ var WorkflowsRouter = Backbone.Router.extend({
 		
 		/* Campaign Stats */
 		"campaign-stats" : "campaignStats",
+		"email-reports/:id" : "emailReports",
 
 		/* Triggers */
 		"triggers" : "triggers",
@@ -129,6 +130,18 @@ var WorkflowsRouter = Backbone.Router.extend({
 		
 		$(".active").removeClass("active");
 		$("#workflowsmenu").addClass("active");
+	},
+	
+	emailReports: function(id){
+		 head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH +'lib/date-range-picker.js', function() {                   
+       
+	   // Load Reports Template
+       $("#content").html(getTemplate("campaign-email-reports",{}), {});
+       initChartsUI(id);
+      });
+		 
+    $(".active").removeClass("active");
+    $("#workflowsmenu").addClass("active");
 	},
 
 	/** Gets list of triggers */
