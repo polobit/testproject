@@ -147,7 +147,7 @@ function load_timeline_details(el, contactId, callback1)
 								// Using autoellipsis for showing 3 lines of message
 								head.js(LIB_PATH + 'lib/jquery.autoellipsis.min.js', function(){
 									newItem.find("#autoellipsis").ellipsis();
-									$('#timeline', el).isotope( 'insert', newItem);
+									$('#timeline', el).isotope('reLayout');
 								});
 							});
 						}
@@ -431,20 +431,16 @@ function setup_timeline(models, el, callback) {
 				itemPositionDataEnabled: true
 			});
 		});
-
+		
+		// Using autoellipsis for showing 3 lines of message
+		head.js(LIB_PATH + 'lib/jquery.autoellipsis.min.js', function(){
+			$('#timeline', el).find("#autoellipsis").ellipsis();
+			$('#timeline', el).isotope('reLayout');
+		});
+		
 		// add open/close buttons to each post
 		$('#timeline .item.post').each(function(){
 			$(this).find('.inner').append('<a href="#" class="open-close"></a>');
-		});
-
-		// Resizes the item height
-		$('#timeline .item a.open-close').live("click", function(e){
-			$(this).siblings('.body').slideToggle(function(){
-				$('#timeline').isotope('reLayout');
-			});
-			$(this).parents('.post').toggleClass('closed');
-			$('#expand-collapse-buttons a').removeClass('active');
-			e.preventDefault();
 		});
 
 		// Resizes the line height based on entities overall height
@@ -741,6 +737,16 @@ $(function () {
 		$(this).attr("data-content", html);
         $(this).popover('show');
     });
+	
+	// Resizes the item height and open close effect for timeline elements
+	$('#timeline .item a.open-close').live("click", function(e){
+		$(this).siblings('.body').slideToggle(function(){
+			$('#timeline').isotope('reLayout');
+		});
+		$(this).parents('.post').toggleClass('closed');
+		$('#expand-collapse-buttons a').removeClass('active');
+		e.preventDefault();
+	});
 	
 });
 
