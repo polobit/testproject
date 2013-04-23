@@ -724,9 +724,9 @@ $(function() {
 	});
 	
 	Handlebars.registerHelper("getCurrentDomain", function(options) {
-		var url = window.location.href;
+		var url = window.location.host;
 		
-		var exp = /(\.)/;
+		var exp = /(\\.)/;
 		
 		if(url.search(exp) >= 0)
 			return url.split(exp)[0];
