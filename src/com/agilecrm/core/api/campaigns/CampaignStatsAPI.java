@@ -152,6 +152,9 @@ public class CampaignStatsAPI
 	    JSONArray emailLogs = SQLUtil.getAllEmailLogs(campaignId,
 		    startTime, endTime);
 
+	    if (emailLogs == null)
+		return null;
+
 	    System.out.println("Email logs: " + emailLogs.toString());
 
 	    // Get Date wise reports for chat type

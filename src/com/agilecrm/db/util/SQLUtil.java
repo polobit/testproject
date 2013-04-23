@@ -1,6 +1,6 @@
 package com.agilecrm.db.util;
 
-import org.datanucleus.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
 import com.agilecrm.db.GoogleSQL;
