@@ -724,14 +724,26 @@ $(function() {
 	});
 	
 	Handlebars.registerHelper("getCurrentDomain", function(options) {
-		var url = window.location.href;
+		var url = window.location.host;
 		
-		var exp = /(\.)/;
+		var exp = /(\\.)/;
 		
 		if(url.search(exp) >= 0)
 			return url.split(exp)[0];
 
 		return " ";
+	});
+	
+	// Gets date in given range
+	Handlebars.registerHelper('date-range', function(from_date_string, no_of_days,
+	  options) {
+	 var from_date = Date.parse(from_date_string);
+	 var to_date = Date.today().add({
+	  days : parseInt(no_of_days)
+	 });
+	 return to_date.toString('MMMM d, yyyy') + " - "
+	   + from_date.toString('MMMM d, yyyy');
+
 	});
 
 });
