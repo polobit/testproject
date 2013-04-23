@@ -86,34 +86,34 @@ function showTwilioDetails(plugin_id)
 	    "No contact number is associated with this contact</div>");
 	        return;
 	}
+
+	var numbers = {};
+	numbers['to'] = Numbers;
 	
-	$('#Twilio').html(getTemplate('twilio-profile', Numbers));
-	$('#twilio_call').show();
-	
-	var to = $('#contact_number').val();
-	
-	getTwilioLogs(plugin_id, to, function(logs)
-	{
-		console.log(logs);
+	getOutgoingNumbers(plugin_id, function(data) {
 		
-		 var twilio_logs_template = $(getTemplate('twilio-logs', JSON.parse(logs)));
-		 
-		 $('#twilio-logs-panel').html(twilio_logs_template);	
-		 
-		  head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-      		$(".time-ago", twilio_logs_template).timeago();
-      	  });	   
+		numbers['from'] = JSON.parse(data);
+		$('#Twilio').html(getTemplate('twilio-profile', numbers));
+		$('#twilio_call').show();
+	});	 
+	
+	getTwilioLogs(plugin_id, Numbers[0].value);	
+	
+	$('#contact_number').die().live('change', function(e) {
+		var to = $('#contact_number').val();
+		
+		getTwilioLogs(plugin_id, to);
 	});
 	
 	$('#twilio_call').die().live('click', function(e) {
 		
 		e.preventDefault();
 		
-		var from = "+919533477545";
+		var from = $('#from_number').val();
 		var to = $('#contact_number').val();
-		var url = "https://agile-crm-cloud.appspot.com/backend/voice?PhoneNumber=" + to + "&from=" + from;
+		var url = "https://agile-crm-cloud.appspot.com/backend/voice?PhoneNumber=" + encodeURIComponent(to);
 		
-		makeCall(plugin_id, from, to, url);
+		makeCall(plugin_id, from, from, url);
 		
 	});
 }
@@ -122,10 +122,18 @@ function getTwilioLogs(plugin_id, to, callback)
 {
 	$('#twilio-logs-panel').html(TWILIO_LOGS_LOAD_IMAGE);
 	
-	$.get("/core/api/widgets/twilio/call/logs/" + plugin_id + "/" + to, function (data) {
+	$.get("/core/api/widgets/twilio/call/logs/" + plugin_id + "/" + to, function (logs) {
 		
-		console.log(data);
+		 console.log(logs);
 		
+		 var twilio_logs_template = $(getTemplate('twilio-logs', JSON.parse(logs)));
+		 
+		 $('#twilio-logs-panel').html(twilio_logs_template);	
+		 
+		  head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+     		$(".time-ago", twilio_logs_template).timeago();
+     	  });
+		  
 		if (callback && typeof (callback) === "function")
 		{
 			callback(data);
@@ -152,7 +160,22 @@ function makeCall(plugin_id, from, to, url)
 	});
 }
 
+function getOutgoingNumbers(plugin_id, callback)
+{
+	$.get("/core/api/widgets/twilio/numbers/" + plugin_id, function(data) {
+		
+		if (callback && typeof (callback) === "function")
+		{
+			callback(data);
+		}
+		
+	}).error(function(data) {
+		
+		$('#twilio_profile_load').remove();
+		$('#Twilio').html('<div style="padding:10px">' + data.responseText + '</div>');
+	});
 
+}
 /**
  * Shows setup if user adds Twilio widget for the first time, to set up
  * connection to Twilio account. Enter and api key provided by Twilio access

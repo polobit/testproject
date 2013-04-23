@@ -1118,4 +1118,25 @@ public class WidgetsAPI
 	}
     }
 
+    @Path("twilio/numbers/{widget-id}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getOutgoingNumbersfromTwilio(
+	    @PathParam("widget-id") Long widgetId)
+    {
+	Widget widget = WidgetUtil.getWidget(widgetId);
+	if (widget == null)
+	    return null;
+	try
+	{
+	    return TwilioUtil.getOutgoingNumbers(widget).toString();
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+
+	}
+    }
 }

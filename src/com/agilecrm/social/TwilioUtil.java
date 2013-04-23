@@ -236,7 +236,7 @@ public class TwilioUtil
 	}
     }
 
-    public static void getOutgoingNumbers(Widget widget)
+    public static JSONArray getOutgoingNumbers(Widget widget) throws Exception
     {
 
 	String accountSid = widget.getProperty("account_sid");
@@ -245,42 +245,36 @@ public class TwilioUtil
 	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
 		null);
 	TwilioRestResponse response;
-	try
+
+	response = client.request(
+		"/" + APIVERSION + "/Accounts/" + client.getAccountSid()
+			+ "/OutgoingCallerIds", "GET", null);
+	// /2010-04-01/Accounts/AC0079cf757ae0a3e1915a3ce40d4c65ee/AvailablePhoneNumbers
+	if (response.isError())
 	{
-
-	    response = client.request(
-		    "/" + APIVERSION + "/Accounts/" + client.getAccountSid()
-			    + "/OutgoingCallerIds", "GET", null);
-	    // /2010-04-01/Accounts/AC0079cf757ae0a3e1915a3ce40d4c65ee/AvailablePhoneNumbers
-	    if (response.isError())
-	    {
-		System.out.println("Error sending message: "
-			+ response.getHttpStatus() + "\n"
-			+ response.getResponseText());
-	    }
-	    else
-	    {
-
-		System.out.println(response.getResponseText());
-
-		JSONObject json = XML.toJSONObject(response.getResponseText());
-		JSONArray array = json.getJSONObject("TwilioResponse")
-			.getJSONObject("OutgoingCallerIds")
-			.getJSONArray("OutgoingCallerId");
-		JSONArray arrayOfNums = new JSONArray();
-		for (int i = 0; i < array.length(); i++)
-		{
-		    System.out.println(array.getJSONObject(i).getString(
-			    "PhoneNumber"));
-		    arrayOfNums.put(i,
-			    array.getJSONObject(i).getString("PhoneNumber"));
-		}
-		// new JSONObject(response.getResponseText());
-	    }
+	    throw new Exception("Error sending message: "
+		    + response.getHttpStatus() + "\n"
+		    + response.getResponseText());
 	}
-	catch (Exception e)
+	else
 	{
-	    e.printStackTrace();
+
+	    System.out.println(response.getResponseText());
+
+	    JSONObject json = XML.toJSONObject(response.getResponseText());
+	    JSONArray array = json.getJSONObject("TwilioResponse")
+		    .getJSONObject("OutgoingCallerIds")
+		    .getJSONArray("OutgoingCallerId");
+	    JSONArray arrayOfNums = new JSONArray();
+	    for (int i = 0; i < array.length(); i++)
+	    {
+		System.out.println(array.getJSONObject(i).getString(
+			"PhoneNumber"));
+		arrayOfNums.put(i,
+			array.getJSONObject(i).getString("PhoneNumber"));
+	    }
+	    return arrayOfNums;
+
 	}
 
     }
