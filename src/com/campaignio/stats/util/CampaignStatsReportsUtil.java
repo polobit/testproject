@@ -25,7 +25,8 @@ public class CampaignStatsReportsUtil
 	    JSONArray emailLogs, String type, String startTime, String endTime,
 	    String timeZone) throws Exception
     {
-	String[] emailType = { "Send E-mail", "Email Opened", "Email Clicked" };
+	String[] emailType = { "Send E-mail", "Email Opened", "Email Clicked",
+		"total" };
 
 	LinkedHashMap<String, LinkedHashMap> dateHashtable = EmailReportsUtil
 		.getDefaultDateTable(startTime, endTime, type, timeZone,
@@ -62,6 +63,12 @@ public class CampaignStatsReportsUtil
 	    String logType = JSONUtil.getJSONValue(emailLog, "log_type");
 
 	    statusTable.put(logType, statusTable.get(logType) + 1);
+
+	    String total = JSONUtil.getJSONValue(emailLog, "total");
+
+	    // Since null value returned from sql is string
+	    if (!total.equals("null"))
+		statusTable.put("total", Integer.parseInt(total));
 
 	    dateHashtable.put(nearestDate, statusTable);
 	}
