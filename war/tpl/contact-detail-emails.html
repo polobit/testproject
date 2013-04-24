@@ -6,11 +6,9 @@
 <script id="email-social-model-template" type="text/html">
 <div style="display:block;0 1px 2px rgba(0,0,0,0.05)">
 	<div id="notes" class="activity-text-block">
-	<span class="activity-block-owner">
-	
-			<img class="user-img thumbnail" width="40" height="40" src="{{emailGravatarurl 40 from}}">
-	
-	
+	<span class="activity-block-owner">	
+			<img class="user-img thumbnail" width="40" height="40" src="{{#extractEmail from}}{{emailGravatarurl 40 this}}{{/extractEmail}}">
+
 	</span>
 
 		<div>
@@ -22,7 +20,8 @@
       		</div>
 			<div id="collapse-{{id}}" class="collapse activity-email-collapse">
 				<ul class="email-headers">
-                	<li><strong>From:</strong> {{from}}</li>
+                	<li><strong>From:</strong> {{from}}</li> 
+						
                 	<li>
 						<div class="caption" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover">
 							<strong>To:</strong> {{to}}
