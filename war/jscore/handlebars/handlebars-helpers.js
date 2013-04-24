@@ -763,12 +763,6 @@ $(function() {
 		console.log(content);
 		
 		return options.fn(content.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0]);
-		
-		
-	/*	if(url.search(exp) >= 0)
-			return url.split(exp)[0];
-*/
-		return " ";
 	});
 
 });
