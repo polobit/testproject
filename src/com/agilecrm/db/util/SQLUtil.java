@@ -141,38 +141,75 @@ public class SQLUtil
     }
 
     /**
-     * Returns all email stats with respect to campaign-id,start-time and
-     * end-time.
+     * Returns email sent,clicked, opened and total clicks data for email graphs
+     * with respect to campaign.
      * 
      * @param campaignId
-     *            - Campaign-id.
+     *            - Campaign Id.
      * @param startTime
-     *            - start time.
+     *            - Start Time.
      * @param endTime
-     *            - end time.
-     * @return json array of email logs.
+     *            - End Time.
+     * @param type
+     *            - day or hour or date.
+     * @return JSONArray
      */
-    public static JSONArray getAllEmailLogs(String campaignId,
-	    String startTime, String endTime)
+    public static JSONArray getEmailLogsForGraph(String campaignId,
+	    String startTime, String endTime, String type)
     {
 	String domain = NamespaceManager.get();
 
-	if (StringUtils.isEmpty(domain) || StringUtils.isEmpty(campaignId))
-	    return null;
-
-	String emailLogs = "SELECT DISTINCT subscriber_id, (UNIX_TIMESTAMP(log_time) * 1000) AS logTime, log_type FROM campaign_logs WHERE domain="
+	// Get logs of type Send E-mail
+	String subQuery1 = "(SELECT log_type, (UNIX_TIMESTAMP(log_time) * 1000) as logTime FROM campaign_logs WHERE domain="
 		+ StatsUtil.encodeSQLColumnValue(domain)
 		+ " AND campaign_id="
 		+ StatsUtil.encodeSQLColumnValue(campaignId)
-		+ " AND log_type IN ('Send E-mail', 'Email Opened', 'Email Clicked')"
+		+ " AND log_type IN ('Send E-mail')"
 		+ " AND (UNIX_TIMESTAMP(log_time) * 1000) BETWEEN "
 		+ StatsUtil.encodeSQLColumnValue(startTime)
 		+ " AND "
-		+ StatsUtil.encodeSQLColumnValue(endTime);
+		+ StatsUtil.encodeSQLColumnValue(endTime) + ")";
+
+	// Get unique logs of type Email Clicked and Email Opened w.r.t
+	// subscriber.
+	String subQuery2 = "(SELECT log_type, MIN(UNIX_TIMESTAMP(log_time) * 1000) as logTime FROM campaign_logs WHERE domain="
+		+ StatsUtil.encodeSQLColumnValue(domain)
+		+ " AND campaign_id="
+		+ StatsUtil.encodeSQLColumnValue(campaignId)
+		+ " AND log_type IN ('Email Clicked', 'Email Opened')"
+		+ " AND (UNIX_TIMESTAMP(log_time) * 1000) BETWEEN "
+		+ StatsUtil.encodeSQLColumnValue(startTime)
+		+ " AND "
+		+ StatsUtil.encodeSQLColumnValue(endTime)
+		+ " GROUP BY log_type,subscriber_id)";
+
+	// Get logs of type Send E-mail, Email Clicked and Email Opened
+	String uniqueClicksQuery = subQuery1 + " UNION ALL" + subQuery2;
+
+	// Get total clicks
+	String totalClicksQuery = "(SELECT log_type, (UNIX_TIMESTAMP(log_time) * 1000) as logTime, COUNT(*) as total FROM campaign_logs WHERE domain="
+		+ StatsUtil.encodeSQLColumnValue(domain)
+		+ " AND campaign_id="
+		+ StatsUtil.encodeSQLColumnValue(campaignId)
+		+ " AND log_type IN ('Email Clicked')"
+		+ " AND (UNIX_TIMESTAMP(log_time) * 1000) BETWEEN "
+		+ StatsUtil.encodeSQLColumnValue(startTime)
+		+ " AND "
+		+ StatsUtil.encodeSQLColumnValue(endTime)
+		+ " GROUP BY log_type, " + groupByType(type) + ")";
+
+	// Apply join for both unique clicks and total clicks
+	String joinQuery = "(" + uniqueClicksQuery + ") A LEFT OUTER JOIN "
+		+ totalClicksQuery + " B";
+
+	// Get logs of unique clicked and total clicks.
+	String neededQuery = "SELECT A.log_type,A.logTime, B.total FROM "
+		+ joinQuery
+		+ " ON A.log_type = B.log_type and A.logTime = B.logTime";
 
 	try
 	{
-	    return GoogleSQL.getJSONQuery(emailLogs);
+	    return GoogleSQL.getJSONQuery(neededQuery);
 	}
 	catch (Exception e)
 	{
@@ -180,6 +217,23 @@ public class SQLUtil
 	    return null;
 	}
 
+    }
+
+    /**
+     * Returns query part based on given type.
+     * 
+     * @param type
+     *            day or hour or date.
+     * @return String.
+     */
+    private static String groupByType(String type)
+    {
+	if (type.equals("day"))
+	    return "DAY(log_time)";
+	else if (type.equals("hour"))
+	    return "HOUR(log_time)";
+
+	return "DATE(log_time)";
     }
 
     /**
