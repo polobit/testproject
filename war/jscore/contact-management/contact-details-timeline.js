@@ -49,6 +49,9 @@ function load_timeline_details(el, contactId, callback1)
 	        if (item.get('time')) {
 	        	return item.get('time')/1000;
 	        }
+	        if (item.get('date_secs')) {
+	        	return item.get('date_secs')/1000;
+	        }
 	        return item.get('id');
 		}
 		
@@ -144,11 +147,11 @@ function load_timeline_details(el, contactId, callback1)
 								 */  
 								$('#timeline', el).isotope( 'insert', newItem);
 								
-								// Using autoellipsis for showing 3 lines of message
+								/*// Using autoellipsis for showing 3 lines of message
 								head.js(LIB_PATH + 'lib/jquery.autoellipsis.min.js', function(){
 									newItem.find("#autoellipsis").ellipsis();
 									$('#timeline', el).isotope('reLayout');
-								});
+								});*/
 							});
 						}
 					}
@@ -341,7 +344,7 @@ function entity_created_month_year(model){
 	else if(model.time)
 		return month_year = new Date(model.time * 1000).getMonth() + '-' + new Date(model.time * 1000).getFullYear();
 	else if(model.date_secs)
-		return month_year = new Date(model.date_secs * 1000).getMonth() + '-' + new Date(model.date_secs).getFullYear();
+		return month_year = new Date(model.date_secs).getMonth() + '-' + new Date(model.date_secs).getFullYear();
 }
 
 /**
@@ -432,12 +435,12 @@ function setup_timeline(models, el, callback) {
 			});
 		});
 		
-		// Using autoellipsis for showing 3 lines of message
+	/*	// Using autoellipsis for showing 3 lines of message
 		head.js(LIB_PATH + 'lib/jquery.autoellipsis.min.js', function(){
 			$('#timeline', el).find("#autoellipsis").ellipsis();
 			$('#timeline', el).isotope('reLayout');
 		});
-		
+		*/
 		// add open/close buttons to each post
 		$('#timeline .item.post').each(function(){
 			$(this).find('.inner').append('<a href="#" class="open-close"></a>');
