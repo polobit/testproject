@@ -64,43 +64,8 @@ function fill_owners(el, data){
  * To show owner on change
  */
 function show_owner(){
-/*  var $save_info = $('<span><img src="img/1-0.gif"><span>'); 
-	$('#contact-owner').closest('span').prepend($save_info);
-	setTimeout(function(){$save_info.remove();},2000);*/
 	$('#change-owner-element').css('display', 'inline-block');
 	$('#contact-owner').css('display', 'inline-block');
-}
-
-/**
- * To download vcard
- */
-function qr_load(){
-	head.js(LIB_PATH + 'lib/downloadify.min.js', LIB_PATH + 'lib/swfobject.js',  function(){
-		  Downloadify.create('downloadify',{
-		    filename: function(){
-		      return agile_crm_get_contact_property("first_name") + ".vcf";
-		    },
-		    data: function(){
-		      return $('#qr_code').attr('data');
-		    },
-		    onComplete: function(){ 
-		      alert('Your File Has Been Saved!'); 
-		    },
-		    onCancel: function(){ 
-		      alert('You have cancelled the saving of this file.');
-		    },
-		    onError: function(){ 
-		      alert('You must put something in the File Contents or there will be nothing to save!'); 
-		    },
-		    transparent: false,
-		    swf: 'media/downloadify.swf',
-		    downloadImage: 'img/download.png',
-		    width: 36,
-		    height: 30,
-		    transparent: true,
-		    append: false
-		  });
-		});
 }
 
 /**
@@ -275,7 +240,7 @@ $(function(){
 	
 	$(".tooltip_info").die().live("hover", function() {
 		 $(this).tooltip('show');
-		});
+	});
 	
 	/**
 	 * Adds score to a contact (both in UI and back end)
@@ -371,7 +336,8 @@ $(function(){
     });
     $('#element-title').live('mouseenter',function(e){
     	e.preventDefault();
-        $(this).popover('show');});
+        $(this).popover('show');
+    });
 	   
     $('#change-owner-element').live('mouseenter',function(e){
     	e.preventDefault();
