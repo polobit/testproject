@@ -30,7 +30,6 @@ import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
-import com.agilecrm.contact.VcardString;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
@@ -268,22 +267,6 @@ public class ContactsAPI
     {
 	Contact contact = ContactUtil.getContact(id);
 	return contact;
-    }
-
-    /**
-     * Gets the Vcard String
-     * 
-     * @param id
-     * @return
-     */
-    @Path("/vcard/{contact-id}")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getVcard(@PathParam("contact-id") Long id)
-    {
-	Contact contact = ContactUtil.getContact(id);
-	VcardString vcard = new VcardString(contact.getProperties());
-	return vcard.getVcardString();
     }
 
     /**
