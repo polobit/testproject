@@ -93,15 +93,14 @@ function showStripeProfile(plugin_id, customer_id)
 
     // Sends request to url "/core/api/widgets/stripe/" with plugin id and customer id 
     // as path parameters which calls WidgetsAPI class 
-    $.get("/core/api/widgets/stripe/" + plugin_id + "/" + customer_id,
-
-    function (data)
+	queueGetRequest("widget_queue", "/core/api/widgets/stripe/" + plugin_id + "/" + customer_id, 'json',
+    function success(data)
     {
         //populates the template with and shows in the widget panel
         $('#Stripe').html(getTemplate("stripe-profile", JSON.parse(data)));
 
         // if error occurs
-    }).error(function (data)
+    }, function error(data)
     {
         // Shows error message in the stripe panel
         $('#Stripe').html('<div style="padding: 10px;line-height:160%;' +

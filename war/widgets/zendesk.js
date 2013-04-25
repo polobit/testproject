@@ -354,9 +354,9 @@ function getTicketByStatus(plugin_id, email, status, callback)
 function showZendeskProfile(plugin_id, email)
 {
 	$('#Zendesk').html(ZENDESK_PROFILE_LOAD_IMAGE);
-	
-	$.getJSON("/core/api/widgets/zendesk/profile/" + plugin_id + "/" + email,
-	function (data)
+
+	queueGetRequest("widget_queue", "/core/api/widgets/zendesk/profile/" + plugin_id + "/" + email, 'json',		
+	function success(data)
 	{
 		 $('#Zendesk').html(getTemplate('zendesk-profile', data));
 
@@ -465,7 +465,7 @@ function showZendeskProfile(plugin_id, email)
 	     });
 
 		 
-	}).error(function(data) {
+	}, function error(data) {
 		
 		$('#zendesk_profile_load').remove();
 		

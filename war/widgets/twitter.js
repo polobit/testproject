@@ -441,8 +441,7 @@ function showTwitterProfile(twitter_id, plugin_id)
     var stream_data;
 
     // Calls WidgetsAPI class to get Twitter profile of contact
-    $.getJSON("/core/api/widgets/profile/" + plugin_id + "/" + twitter_id,
-
+	queueGetRequest("widget_queue", "/core/api/widgets/profile/" + plugin_id + "/" + twitter_id, 'json',
     function (data)
     {
         //shows delete button in the Twitter panel
@@ -521,7 +520,7 @@ function showTwitterProfile(twitter_id, plugin_id)
             $('#twitter_current_activity').show();
         }
 
-    }).error(function (data)
+    }, function (data)
     {
         // Remove loading image on error 
         $('#twitter_profile_load').remove();
@@ -722,16 +721,15 @@ function getTwitterMatchingProfiles(plugin_id, callback)
 
     // Reads from cookie (local storage HTML5), since widgets are saved using local 
     // storage when matches are fetched for the first time on the contact
-    var data = localStorage.getItem('Agile_twitter_matches_' + contact_id);
+    var data //= localStorage.getItem('Agile_twitter_matches_' + contact_id);
 
     // If cookie is not available fetch results from Twitter
     if (!data)
     {
         // Sends request to url "core/api/widgets/match/" and Calls WidgetsAPI with contact
         // id and plugin id as path parameters
-        $.getJSON("/core/api/widgets/match/" + plugin_id + "/" + agile_crm_get_contact()['id'],
-
-        function (data)
+   		queueGetRequest("widget_queue", "core/api/widgets/match/" + plugin_id + "/" +contact_id, 'json', 
+   		function success(data)
         {
             // Save social results in cookie of particular contact
             localStorage.setItem('Agile_twitter_matches_' + contact_id, JSON.stringify(data));
@@ -742,7 +740,7 @@ function getTwitterMatchingProfiles(plugin_id, callback)
                 // execute the callback, passing parameters as necessary
                 callback(data);
             }
-        }).error(function (data)
+        }, function error(data)
         {
             // Remove loading image on error 
             $('#twitter_profile_load').remove();
