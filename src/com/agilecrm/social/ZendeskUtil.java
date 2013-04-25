@@ -23,12 +23,11 @@ public class ZendeskUtil
     /**
      * Plugin Server URL
      */
-    private static final String pluginURL = "http://ec2-72-44-57-140.compute-1.amazonaws.com:8080/ClickdeskPlugins/";
+    public static final String pluginURL = "http://ec2-72-44-57-140.compute-1.amazonaws.com:8080/ClickdeskPlugins/";
 
-    // Run - Before Chat
     /**
-     * Calls preChat method of zendesk class in ClickDeskPlugins server using
-     * REST API to get the details of the contact
+     * Calls method in ClickDeskPlugins server using REST API to get the details
+     * of the contact
      * 
      * @param widget
      *            {@link Widget} to retrieve plugin prefs from zendesk account

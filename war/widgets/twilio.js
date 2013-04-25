@@ -95,9 +95,10 @@ function showTwilioDetails(plugin_id)
 		numbers['from'] = JSON.parse(data);
 		$('#Twilio').html(getTemplate('twilio-profile', numbers));
 		$('#twilio_call').show();
+		getTwilioLogs(plugin_id, Numbers[0].value);
 	});	 
 	
-	getTwilioLogs(plugin_id, Numbers[0].value);	
+	
 	
 	$('#contact_number').die().live('change', function(e) {
 		var to = $('#contact_number').val();
@@ -162,20 +163,22 @@ function makeCall(plugin_id, from, to, url)
 
 function getOutgoingNumbers(plugin_id, callback)
 {
-	$.get("/core/api/widgets/twilio/numbers/" + plugin_id, function(data) {
+	queueGetRequest("widget_queue", "/core/api/widgets/twilio/numbers/" + plugin_id, "text", 
+		function success(data) {
 		
 		if (callback && typeof (callback) === "function")
 		{
 			callback(data);
 		}
 		
-	}).error(function(data) {
+	}, function error(data) {
 		
 		$('#twilio_profile_load').remove();
 		$('#Twilio').html('<div style="padding:10px">' + data.responseText + '</div>');
 	});
 
 }
+
 /**
  * Shows setup if user adds Twilio widget for the first time, to set up
  * connection to Twilio account. Enter and api key provided by Twilio access

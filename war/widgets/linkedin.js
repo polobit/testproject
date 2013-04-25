@@ -292,8 +292,7 @@ function showLinkedinProfile(linkedin_id, plugin_id)
     var stream_data;
     
     // Calls WidgetsAPI class to get LinkedIn profile of contact
-    $.getJSON("/core/api/widgets/profile/" + plugin_id + "/" + linkedin_id,
-
+    queueGetRequest("widget_queue", "/core/api/widgets/profile/" + plugin_id + "/" + linkedin_id, 'json', 
     function (data)
     {
     	// If contact title is undefined, saves headline of the LinkedIn profile
@@ -348,7 +347,7 @@ function showLinkedinProfile(linkedin_id, plugin_id)
             $('#linkedin_current_activity', $('#Linkedin')).show();
         }
 
-    }).error(function (data)
+    }, function (data)
     {
     	// Remove loading image on error 
     	$('#linkedin_profile_load').remove();
@@ -549,10 +548,7 @@ function getLinkedinMatchingProlfiles(plugin_id, callback)
     {
         // Sends request to url "core/api/widgets/match/" and Calls WidgetsAPI with contact
         // id and plugin id as path parameters
-        $.getJSON("/core/api/widgets/match/" + plugin_id + "/" + agile_crm_get_contact()['id'],
-
-        function (data)
-        {
+        queueGetRequest("widget_queue", "/core/api/widgets/match/" + plugin_id + "/" + contact_id, 'json', function(data){
             // Store social results in cookie of particular contact
             localStorage.setItem('Agile_linkedin_matches_' + contact_id, JSON.stringify(data));
 
@@ -561,9 +557,10 @@ function getLinkedinMatchingProlfiles(plugin_id, callback)
             {
                 // Execute the callback, passing parameters as necessary
                 callback(data);
-            }
-        }).error(function (data)
-        	    {
+            }	
+        	
+        }, 
+        function (data) {
         	// Remove loading image on error 
         	$('#linkedin_profile_load').remove();
         	
@@ -783,47 +780,46 @@ function getLinkedinIdByUrl(plugin_id, web_url, callback)
 
     // Sends post request to URL "/core/api/widgets/getidbyurl/" bye sending plugin id 
     // as path parameter and json as post data
-    $.post("/core/api/widgets/getidbyurl/" + plugin_id, url_json, function (data)
-    {
-        // If LinkedIn id is undefined
-        if (!data)
-        {
-            // Shows message that URL is invalid to the user
-            alert("URL provided for linkedin is not valid ");
+    	queuePostRequest("widget_queue", "/core/api/widgets/getidbyurl/" + plugin_id, url_json, function(data){
+    		// If LinkedIn id is undefined
+    		if (!data)
+    		{
+    			// Shows message that URL is invalid to the user
+    			alert("URL provided for linkedin is not valid ");
 
-            // Shows LinkedIn matching profiles based on contact name
-            showLinkedinMatchingProfiles(plugin_id);
+    			// Shows LinkedIn matching profiles based on contact name
+    			showLinkedinMatchingProfiles(plugin_id);
+	
+	            // Delete the LinkedIn URL associated with contact as it is incorrect
+	            agile_crm_delete_contact_property_by_subtype('website', 'LINKED_IN', web_url);
+	
+	            return;
+		        }
+		
+		        // If defined, execute the callback function
+		        if (callback && typeof (callback) === "function")
+		        {
+		            callback(data);
+		        }
+		
+		    }, function (data)
+		    {
+		    	if(data.responseText == "TimeOut")
+		    	{
+		    		alert("Time Out while fetching LinkedIn profile. Reload and try again");
+		    		return;
+		    	}
+		    	
+		        // Shows error message to the user returned by LinkedIn
+		        alert("URL provided for linkedin is not valid " + data.responseText);
+		
+		        // Shows LinkedIn matching profiles based on contact name
+		        showLinkedinMatchingProfiles(plugin_id);
+		
+		        // Delete the LinkedIn URL associated with contact as it is incorrect
+		        agile_crm_delete_contact_property_by_subtype('website', 'LINKED_IN', web_url);
 
-            // Delete the LinkedIn URL associated with contact as it is incorrect
-            agile_crm_delete_contact_property_by_subtype('website', 'LINKED_IN', web_url);
-
-            return;
-        }
-
-        // If defined, execute the callback function
-        if (callback && typeof (callback) === "function")
-        {
-            callback(data);
-        }
-
-    }).error(function (data)
-    {
-    	if(data.responseText == "TimeOut")
-    	{
-    		alert("Time Out while fetching LinkedIn profile. Reload and try again");
-    		return;
-    	}
-    	
-        // Shows error message to the user returned by LinkedIn
-        alert("URL provided for linkedin is not valid " + data.responseText);
-
-        // Shows LinkedIn matching profiles based on contact name
-        showLinkedinMatchingProfiles(plugin_id);
-
-        // Delete the LinkedIn URL associated with contact as it is incorrect
-        agile_crm_delete_contact_property_by_subtype('website', 'LINKED_IN', web_url);
-
-    });
+		 });
 }
 
 function getExperienceOfPerson(plugin_id, linkedin_id)

@@ -17,11 +17,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import twitter4j.Twitter;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.social.FreshBooksUtil;
 import com.agilecrm.social.LinkedInUtil;
 import com.agilecrm.social.SocialSearchResult;
 import com.agilecrm.social.SocialUpdateStream;
@@ -784,6 +786,16 @@ public class WidgetsAPI
 	return null;
     }
 
+    /**
+     * Retrieves the experience information of a person in LinkedIn based on
+     * LinkedIn id
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param socialId
+     *            {@link String} LinkedIn id of the profile
+     * @return {@link SocialSearchResult}
+     */
     @Path("/experience/{widget-id}/{social-id}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -982,6 +994,13 @@ public class WidgetsAPI
 
     }
 
+    /**
+     * Retrieves the agent information from his Zendesk account
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @return {@link String} form of {@link JSONObject}
+     */
     @Path("zendesk/agent/{widget-id}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -1004,6 +1023,18 @@ public class WidgetsAPI
 
     }
 
+    /**
+     * Retrieves the tickets from Zendesk server based on its status for a
+     * specified contact
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param email
+     *            {@link String} email of the contact
+     * @param status
+     *            {@link String} status of the ticket
+     * @return {@link String} form of {@link JSONObject}
+     */
     @Path("zendesk/ticket/status/{widget-id}/{email}/{status}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -1027,6 +1058,16 @@ public class WidgetsAPI
 
     }
 
+    /**
+     * Retrieves the agent information based on his zendesk user name from
+     * Agent's Zendesk account and open tickets based on contact email
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param email
+     *            {@link String} email of the contact
+     * @return {@link String} form of {@link JSONObject}
+     */
     @Path("zendesk/profile/{widget-id}/{email}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -1118,6 +1159,13 @@ public class WidgetsAPI
 	}
     }
 
+    /**
+     * Retrieves registered phone numbers from agent's Twilio account
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @return {@link String} form of {@link JSONArray}
+     */
     @Path("twilio/numbers/{widget-id}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -1139,4 +1187,185 @@ public class WidgetsAPI
 
 	}
     }
+
+    /**
+     * Retrieves clients from agent's FreshBooks account based on contact email
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param email
+     *            {@link String} email of the contact
+     * @return {@link String} form of {@link JSONObject}
+     */
+    @Path("freshbooks/clients/{widget-id}/{email}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getClientsFromFreshBooks(
+	    @PathParam("widget-id") Long widgetId,
+	    @PathParam("email") String email)
+    {
+	Widget widget = WidgetUtil.getWidget(widgetId);
+	if (widget == null)
+	    return null;
+	try
+	{
+	    return FreshBooksUtil.getClients(widget, email);
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+
+	}
+
+    }
+
+    /**
+     * Retrieves invoices of a client based on his contact client id in
+     * FreshBooks from agent's FreshBooks account
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param clientId
+     *            {@link String} client id of the contact
+     * @return {@link String} form of {@link JSONObject}
+     */
+    @Path("freshbooks/invoices/{widget-id}/{client_id}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getInvoicesFromFreshBooks(
+	    @PathParam("widget-id") Long widgetId,
+	    @PathParam("client_id") String clientId)
+    {
+	Widget widget = WidgetUtil.getWidget(widgetId);
+	if (widget == null)
+	    return null;
+	try
+	{
+	    return FreshBooksUtil.getInvoicesOfClient(widget, clientId);
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+
+	}
+
+    }
+
+    /**
+     * Retrieves items to which invoices are added for a client from agnet's
+     * FreshBooks account
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @return {@link String} form of {@link JSONObject}
+     */
+    @Path("freshbooks/items/{widget-id}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getItemsFromFreshBooks(@PathParam("widget-id") Long widgetId)
+    {
+	Widget widget = WidgetUtil.getWidget(widgetId);
+	if (widget == null)
+	    return null;
+	try
+	{
+	    return FreshBooksUtil.getItems(widget);
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+
+	}
+
+    }
+
+    /**
+     * Adds a client to agent's FreshBooks account based on the given parameters
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param firstName
+     *            {@link String} first name of the contact
+     * @param lastName
+     *            {@link String} last name of the contact
+     * @param email
+     *            {@link String} email of the contact
+     * @return {@link String} form of {@link JSONObject}
+     */
+    @Path("freshbooks/add/client/{widget-id}/{first_name}/{last_name}/{email}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String addClientToFreshBooks(@PathParam("widget-id") Long widgetId,
+	    @PathParam("first_name") String firstName,
+	    @PathParam("last_name") String lastName,
+	    @PathParam("email") String email)
+    {
+	Widget widget = WidgetUtil.getWidget(widgetId);
+	if (widget == null)
+	    return null;
+	try
+	{
+	    return FreshBooksUtil.addClient(widget, firstName, lastName, email);
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+
+	}
+
+    }
+
+    /**
+     * Adds invoice to an existing contact in FreshBooks based on item name
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param firstName
+     *            {@link String} first name of the contact
+     * @param lastName
+     *            {@link String} last name of the contact
+     * @param email
+     *            {@link String} email of the contact
+     * @param itemName
+     *            {@link String} name of the item
+     * @param quantity
+     *            {@link String} quantity of items
+     * @return {@link String} form of {@link JSONObject}
+     */
+    @Path("freshbooks/add/invoice/{widget-id}/{first_name}/{last_name}/{email}/{item_name}/{quantity}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String addinvoiceToClient(@PathParam("widget-id") Long widgetId,
+	    @PathParam("first_name") String firstName,
+	    @PathParam("last_name") String lastName,
+	    @PathParam("email") String email,
+	    @PathParam("item_name") String itemName,
+	    @PathParam("quantity") String quantity)
+    {
+	Widget widget = WidgetUtil.getWidget(widgetId);
+	if (widget == null)
+	    return null;
+	try
+	{
+	    return FreshBooksUtil.addInvoice(widget, firstName, lastName,
+		    email, itemName, quantity);
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+
+	}
+
+    }
+
 }
