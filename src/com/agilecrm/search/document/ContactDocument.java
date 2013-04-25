@@ -102,7 +102,9 @@ public class ContactDocument implements BuilderInterface
 	Date truncatedDate = DateUtils.truncate(new Date(
 		contact.created_time * 1000),
 		Calendar.DATE);
-	doc.addField(Field.newBuilder().setName("created_time").setDate(truncatedDate));
+	doc.addField(Field.newBuilder().setName("created_time")
+		.setDate(truncatedDate));
+
 
 	// Describes updated time document if updated time is not 0.
 	if (contact.updated_time > 0L)
@@ -167,7 +169,7 @@ public class ContactDocument implements BuilderInterface
      */
     public void delete(String id)
     {
-	index.deleteAsync(id);
+	index.delete(id);
     }
 
     /**
@@ -179,7 +181,11 @@ public class ContactDocument implements BuilderInterface
     private static void addToIndex(Document doc)
     {
 	// Adds document to index
-	index.putAsync(doc);
+	index.put(doc);
+	System.out.println("after saving ..................");
+	System.out.println(index.getName());
+	//System.out.println(index.getConsistency());
+	System.out.println(index.getSchema());
 
     }
 

@@ -125,7 +125,6 @@ public class CampaignStatsAPI
 	String sortedReportsString = "";
 	try
 	{
-
 	    // Weekly
 	    if (StringUtils.equalsIgnoreCase(type, "day"))
 	    {
@@ -149,13 +148,13 @@ public class CampaignStatsAPI
 	    endCal.add(Calendar.SECOND, 59);
 	    endTime = endCal.getTimeInMillis() + "";
 
-	    JSONArray emailLogs = SQLUtil.getAllEmailLogs(campaignId,
-		    startTime, endTime);
+	    JSONArray emailLogs = SQLUtil.getEmailLogsForGraph(campaignId,
+		    startTime, endTime, type);
 
 	    if (emailLogs == null)
 		return null;
 
-	    System.out.println("Email logs: " + emailLogs.toString());
+	    System.out.println("Email logs: " + emailLogs);
 
 	    // Get Date wise reports for chat type
 	    LinkedHashMap sortedReports = CampaignStatsReportsUtil
@@ -165,7 +164,8 @@ public class CampaignStatsAPI
 	    sortedReportsString = JSONSerializer.toJSON(sortedReports)
 		    .toString().replace("Send E-mail", "Email Sent")
 		    .replace("Email Opened", "Email Opened")
-		    .replace("Email Clicked", "Email Clicked");
+		    .replace("Email Clicked", "Email Clicks(Unique)")
+		    .replace("total", "Total Clicks");
 
 	    System.out.println("Sorted reports: " + sortedReportsString);
 	}

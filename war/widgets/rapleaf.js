@@ -87,7 +87,7 @@ function showRapleafDetails(plugin_id) {
 	var url = "core/api/widgets/rapleaf/"
 			+ agile_crm_get_plugin_prefs(RAPLEAF_PLUGIN_NAME) + "/" + email;
 
-	$.getJSON(url, function(data) {
+		queueGetRequest("widget_queue", url, 'json', function success(data) {
 						// console.log(data);
 						// &fields=gender,age,education,marital_status
 						$('#Rapleaf').html(

@@ -148,3 +148,65 @@ function loadWidgets(el, contact)
 
 	});
 }
+
+
+
+function queueGetRequest(queueName, url, dataType, successcallback, errorCallback)
+{
+	head.js('/js/lib/ajaxm/ajaxq.js', function(){
+	$.ajaxq(queueName, {
+		 url : url,
+		 cache: false,
+		 dataType: dataType,
+		    success: function(data)
+		    {
+		    	console.log(data);
+		    	
+		    	// If defined, execute the callback function
+		        if (successcallback && typeof (successcallback) === "function")
+		        {
+		        	successcallback(data);
+		        }
+		    },
+		    error: function(data)
+            {
+		    	// If defined, execute the callback function
+		        if (errorCallback && typeof (errorCallback) === "function")
+		        {
+		        	errorCallback(data);
+		        }
+            },
+		});
+	});
+}
+
+function queuePostRequest(queueName, url, data, successcallback, errorCallback)
+{
+	alert("queue");
+	head.js('/js/lib/ajaxm/ajaxq.js', function(){
+	$.ajaxq(queueName, {
+		type:'POST',
+		 url : url,
+		 cache: false,
+		 data:data,
+		    success: function(data)
+		    {
+		    	console.log(data);
+		    	
+		    	// If defined, execute the callback function
+		        if (successcallback && typeof (successcallback) === "function")
+		        {
+		        	successcallback(data);
+		        }
+		    },
+		    error: function(data)
+            {
+		    	// If defined, execute the callback function
+		        if (errorCallback && typeof (errorCallback) === "function")
+		        {
+		        	errorCallback(data);
+		        }
+            },
+		});
+	});
+}

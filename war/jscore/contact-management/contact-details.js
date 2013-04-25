@@ -208,8 +208,7 @@ $(function(){
 		var new_owner_id = $(this).attr('data');
 		var new_owner_name = $(this).text();
 		var current_owner_id = $('#contact-owner').attr('data');
-
-    	
+		
 		// Returns, if same owner is selected again 
 		if(new_owner_id == current_owner_id)
 			{
@@ -241,7 +240,7 @@ $(function(){
 	
 	$(".tooltip_info").die().live("hover", function() {
 		 $(this).tooltip('show');
-		});
+	});
 	
 	/**
 	 * Adds score to a contact (both in UI and back end)
@@ -337,7 +336,8 @@ $(function(){
     });
     $('#element-title').live('mouseenter',function(e){
     	e.preventDefault();
-        $(this).popover('show');});
+        $(this).popover('show');
+    });
 	   
     $('#change-owner-element').live('mouseenter',function(e){
     	e.preventDefault();
@@ -362,36 +362,7 @@ $(function(){
     	else
     		$('#change-owner-ul').css('display', 'inline-block');
     });
-    
-    // To download the Vcard
-    $('#downloadify').live('click',function(e){
-		head.js(LIB_PATH + 'lib/downloadify.min.js', LIB_PATH + 'lib/swfobject.js',  function(){
-		  Downloadify.create('downloadify',{
-		    filename: function(){
-		      return agile_crm_get_contact_property("first_name") + ".vcf";
-		    },
-		    data: function(){
-		      return $('#qr_code').attr('data');
-		    },
-		    onComplete: function(){ 
-		      alert('Your File Has Been Saved!'); 
-		    },
-		    onCancel: function(){ 
-		      alert('You have cancelled the saving of this file.');
-		    },
-		    onError: function(){ 
-		      alert('You must put something in the File Contents or there will be nothing to save!'); 
-		    },
-		    transparent: false,
-		    swf: 'media/downloadify.swf',
-		    downloadImage: 'img/download.png',
-		    width: 36,
-		    height: 30,
-		    transparent: true,
-		    append: false
-		  });
-		});
-    });
+
 });
 
 

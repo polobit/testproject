@@ -7,6 +7,7 @@
  * @module Contact management
  * @author Rammohan
  */
+var notesView;
 $(function(){ 
 
 	var id;
@@ -52,7 +53,7 @@ $(function(){
 	$('#contactDetailsTab a[href="#notes"]').live('click', function (e){
 		e.preventDefault();
 	    id = App_Contacts.contactDetailView.model.id;
-		var notesView = new Base_Collection_View({
+	    notesView = new Base_Collection_View({
             url: '/core/api/contacts/' + id + "/notes",
             restKey: "note",
             templateKey: "notes",
@@ -166,12 +167,8 @@ $(function(){
             descending: true,
             individual_tag_name: 'li',
             postRenderCallback: function(el) {
-        	// Using autoellipsis for showing 3 lines of message
-			head.js(LIB_PATH + 'lib/jquery.autoellipsis.min.js', function(){
-				$(".ellipsis", el).ellipsis();
-			});
-			
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function() { 
+        	
+          	head.js(LIB_PATH + 'lib/jquery.timeago.js', function() { 
     			$(".email-sent-time", el).each(function(index, element) {
     				
     				console.log("before :" + $(element).html())

@@ -726,7 +726,7 @@ $(function() {
 	Handlebars.registerHelper("getCurrentDomain", function(options) {
 		var url = window.location.host;
 		
-		var exp = /(\\.)/;
+		var exp = /(\.)/;
 		
 		if(url.search(exp) >= 0)
 			return url.split(exp)[0];
@@ -744,6 +744,25 @@ $(function() {
 	 return to_date.toString('MMMM d, yyyy') + " - "
 	   + from_date.toString('MMMM d, yyyy');
 
+	});
+	
+	Handlebars.registerHelper("getCurrentDomain", function(options) {
+		var url = window.location.host;
+		
+		var exp = /(\.)/;
+		
+		if(url.search(exp) >= 0)
+			return url.split(exp)[0];
+
+		return " ";
+	});
+	
+
+	Handlebars.registerHelper("extractEmail", function(content, options) {
+
+		console.log(content);
+		
+		return options.fn(content.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0]);
 	});
 
 });
