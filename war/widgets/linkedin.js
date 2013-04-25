@@ -541,7 +541,7 @@ function getLinkedinMatchingProlfiles(plugin_id, callback)
 
     // Reads from cookie (local storage HTML5), since widgets are saved using local 
     // storage when matches are fetched for the first time on the contact
-    var data; // = localStorage.getItem('Agile_linkedin_matches_' + contact_id);
+    var data = localStorage.getItem('Agile_linkedin_matches_' + contact_id);
 
     // If cookie is not available, fetches results from LinkedIn
     if (!data)
