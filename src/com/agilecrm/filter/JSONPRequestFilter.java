@@ -2,10 +2,8 @@ package com.agilecrm.filter;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,12 +19,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
 
 public class JSONPRequestFilter implements Filter
 {
-    private String callbackParameter;
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
     {
@@ -36,49 +31,14 @@ public class JSONPRequestFilter implements Filter
 	}
 
 	final HttpServletRequest httpRequest = (HttpServletRequest) request;
-	final HttpServletResponse httpResponse = (HttpServletResponse) response;
 
 	if (isJSONPRequest(httpRequest))
 	{
-	    RequestWrapper requestWrapper = new RequestWrapper(httpRequest);
-	    requestWrapper.setContentType("application/json; charset=UTF-8");
-	    requestWrapper.setHeader("cache-control", "no-cache");
-	    requestWrapper.setHeader("accept", "application/json");
-	    requestWrapper.setCharacterEncoding("UTF-8");
-	    requestWrapper.setBody(httpRequest.getParameter("json"));
-	    final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	    HttpServletResponseWrapper responseWrapper = new HttpServletResponseWrapper(httpResponse)
-	    {
+	    ServletOutputStream out = response.getOutputStream();
 
-		@Override
-		public ServletOutputStream getOutputStream() throws IOException
-		{
-		    return new ServletOutputStream()
-		    {
-			@Override
-			public void write(int b) throws IOException
-			{
-			    baos.write(b);
-			}
-		    };
-		}
-
-		@Override
-		public PrintWriter getWriter() throws IOException
-		{
-		    return new PrintWriter(baos);
-		}
-
-		public String getData()
-		{
-		    return baos.toString();
-		}
-	    };
-
-	    chain.doFilter(requestWrapper, responseWrapper);
-	    response.getOutputStream().write((getCallbackParameter(httpRequest) + "(").getBytes());
-	    response.getOutputStream().write(baos.toByteArray());
-	    response.getOutputStream().write(");".getBytes());
+	    out.println(getCallbackParameter(httpRequest) + "(");
+	    chain.doFilter(request, response);
+	    out.println(");");
 
 	    response.setContentType("text/javascript");
 	}
@@ -90,7 +50,7 @@ public class JSONPRequestFilter implements Filter
 
     private String getCallbackMethod(HttpServletRequest httpRequest)
     {
-	return httpRequest.getParameter(callbackParameter);
+	return httpRequest.getParameter("callback");
     }
 
     private boolean isJSONPRequest(HttpServletRequest httpRequest)
