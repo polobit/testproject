@@ -182,7 +182,6 @@ function queueGetRequest(queueName, url, dataType, successcallback, errorCallbac
 
 function queuePostRequest(queueName, url, data, successcallback, errorCallback)
 {
-	alert("queue");
 	head.js('/js/lib/ajaxm/ajaxq.js', function(){
 	$.ajaxq(queueName, {
 		type:'POST',
