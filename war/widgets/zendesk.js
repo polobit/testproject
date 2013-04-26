@@ -48,7 +48,7 @@ $(function ()
 
     // If defined, shows tickets from Zendesk if any with that email
     // showTicketsFromZendesk(plugin_id, Email);
-    showZendeskProfile(plugin_id, Email)
+    showZendeskProfile(plugin_id, Email);
     
     // On click of add ticket, add ticket method is called
     $('#add_ticket').die().live('click', function (e)

@@ -1,8 +1,5 @@
 package com.agilecrm.social;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -239,34 +236,18 @@ public class FreshBooksUtil
 
     }
 
-    public static void test()
-    {
-	try
-	{
-	    System.out.println(getClients(null, "tejaswitest@gmail.com"));
-	    System.out.println(getInvoicesOfClient(null, "28"));
-	    System.out.println(getItems(null));
-	    System.out.println(addClient(null, "teju-agile", "test",
-		    "test@agile.com"));
-	    System.out.println(addInvoice(null, "teju-agile", "test",
-		    "test@agile.com", "mobile", "3"));
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-
-	}
-    }
-
     public static void main(String[] args)
     {
 
 	try
 	{
-	    test();
+	    // System.out.println(getClients(null, "tejaswitest@gmail.com"));
+	    // System.out.println(getInvoicesOfClient(null, "28"));
+	    // System.out.println(getItems(null));
+	    System.out.println(addClient(null, "teju-agile", "test",
+		    "test4@agile.com"));
+	    System.out.println(addInvoice(null, "teju-agile", "test",
+		    "test3@agile.com", "mobile", "3"));
 	}
 	catch (Exception e)
 	{

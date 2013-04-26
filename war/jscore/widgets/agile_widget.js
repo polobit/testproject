@@ -204,11 +204,6 @@ function agile_crm_save_widget_prefs(pluginName, prefs, callback) {
           }
     }});
 
-    if (callback && typeof (callback) === "function")
-    {
-        // execute the callback, passing parameters as necessary
-        callback(data);
-    }
 }
 
 /**

@@ -1,0 +1,150 @@
+<script id="freshbooks-login-template" type="text/html">
+	<div display:inline;  line-height:12px;word-wrap: break-word;">
+		<form class="widget_content" style="border-bottom:none;" id="freshbooks_login_form" name="freshbooks_login_form" method="post">
+	    	<fieldset>
+				<p class="ml_5" style='line-height:140%;'>Cloud Accounting Specialist for Small Business Owners</p>
+				<input type="text" id="freshbooks_apikey" class="input-medium required ml_5" placeholder="Api key" value="" name="api_key"></input>
+				<input type="text" id="freshbooks_url" class="input-medium required ml_5" placeholder="FreshBooks url" value="" name="url"></input><br/>
+				<button id="freshbooks_save_token" class="btn ml_5"><a href="#">Save</a></button>
+			 </fieldset>
+	    </form>
+	</div>
+</script>
+
+<script id="freshbooks-profile-template" type="text/html">
+{{#if_equals total "0"}}
+	<div class="widget_content">
+		No clients matching this contact.
+		<a href="#add" class="btn" id="freshbooks_add_client" style="margin-top:10px;"><i class="icon-plus"></i>Add client</a>
+	</div>
+{{else}}
+	<div class="widget_content">
+		{{#isArray client}}
+			{{#if client.0.username}}
+				<a href="{{client.0.links.statement}}" target="_blank"><h4 style="text-transform: capitalize;"><b>{{client.0.first_name}} {{client.0.last_name}}</b></h4></a>
+			{{/if}}
+			{{#if client.0.p_country}}
+				<p style="font-size: 13px;">
+					{{#if client.0.p_state}}			
+						{{client.0.p_state}}, 
+					{{/if}}
+					{{client.0.p_country}}
+				</p>
+			{{/if}}
+			<div style="margin-bottom:10px;"><b>Organization:&nbsp</b><a href="{{client.0.links.view}}" target="_blank">{{client.0.organization}}</a></div>		
+			{{#if client.0.home_phone}}<i class="icon-phone"></i><a href="tel:{{client.0.home_phone}}" > {{client.0.home_phone}} <br> </a>{{/if}}
+			{{#if client.0.mobile}}<i class="icon-mobile-phone"></i><a href="tel:{{client.0.mobile}}"> {{client.0.mobile}} </a>{{/if}}
+		{{else}}
+			{{#if client.username}}
+				<a href="{{client.links.statement}}" target="_blank"><h4 style="text-transform: capitalize;"><b>{{client.first_name}} {{client.last_name}}</b></h4></a>
+			{{/if}}
+			{{#if client.p_country}}
+				<p style="font-size: 13px;">
+					{{#if client.p_state}}			
+						{{client.p_state}}, 
+					{{/if}}
+					{{client.p_country}}
+				</p>
+			{{/if}}	
+			<div style="margin-bottom:10px;"><b>Organization:&nbsp<a href="{{client.links.view}}" target="_blank"><i class="icon-building"></i> {{client.organization}}</a></div>	
+			{{#if client.home_phone}}<i class="icon-phone"></i><a href="tel:{{client.home_phone}}" > {{client.home_phone}} <br> </a>{{/if}}
+			{{#if client.mobile}}<i class="icon-mobile-phone"></i><a href="tel:{{client.mobile}}"> {{client.mobile}} </a>{{/if}}
+		{{/isArray}}
+	</div>
+	<ul class="nav nav-tabs row-fluid" id="myTab">
+		<li class="active span6"><a data-toggle="tab" href="#invoices" id="freshboooks_invoices"><h3>Invoices</h3><small></small></a></li>
+		<li class="span6"><a data-toggle="tab" href="#items" id="freshbooks_items"><h3>Items</h3><small></small></a></li>
+	</ul>
+	<div class="tab-content" id="myTabContent">
+		<div id="invoices" class="tab-pane fade active in">
+			<ul class="widget_tab_content"  id="freshbooks_invoice_panel">
+				<li>
+					<center><img id="freshbooks_invoice_load" src="img/ajax-loader-cursor.gif" style="margin-top: 14px;margin-bottom: 10px;"></img></center>
+				</li>		
+			</ul>
+		</div>
+		<div id="items" class="tab-pane fade">
+			<ul class="widget_tab_content" id="freshbooks_items_panel">
+		
+			</ul>
+		</div>
+	</div>
+{{/if_equals}}
+</script>
+
+<script id="freshbooks-invoice-template" type="text/html">
+	{{#if_equals total "0"}}
+		<li class="sub_header_li" style='color: #999;'>
+	    	No invoices available. Select an item to generate invoice.
+		</li>		
+	{{else}}
+		<li class="sub_header row-fluid" style="padding-bottom: 0px;">
+			<div class="span6">Item name</div>
+			<div class="span6" style="text-align: right;">Amount</div>
+		</li>
+		{{#isArray invoice}}
+			{{#each invoice}}
+				<li class="row-fluid sub_header_li">
+					{{#isArray lines.line}}
+						{{#each lines.line}}
+							<div class="pull-left">{{name}}</div>
+							<div class="pull-right">{{amount}}</div><br>
+						{{/each}}
+					{{else}}
+						<div class="pull-left">{{lines.line.name}}</div>
+						<div class="pull-right">{{lines.line.amount}}</div><br>
+					{{/isArray}}
+					<small><time class="time-ago pull-left" datetime="{{updated}}">{{updated}}</time></small>
+				</li>
+			{{/each}}
+		{{else}}
+			<li class="row-fluid sub_header_li">
+					{{#isArray invoice.lines.line}}
+						{{#each invoice.lines.line}}
+							<div class="pull-left">{{name}}</div>
+							<div class="pull-right">{{amount}}</div><br>
+						{{/each}}
+					{{else}}
+						<div class="pull-left">{{invoice.lines.line.name}}</div>
+						<div class="pull-right">{{invoice.lines.line.amount}}</div><br>
+					{{/isArray}}
+					<small><time class="time-ago pull-left" datetime="{{invoice.updated}}">{{invoice.updated}}</time></small>
+			</li>
+		{{/isArray}}
+	{{/if_equals}}
+</script>
+
+<script id="freshbooks-items-template" type="text/html">
+	{{#if_equals total "0"}}
+		<li class="sub_header_li" style='color: #999;'>
+	    	No Items available. Add an item in your account to generate invoice.
+		</li>		
+	{{else}}
+		<li class="sub_header row-fluid" style="padding-bottom: 0px;">
+			<div class="span6">Item name</div>
+			<div class="span6" style="text-align: right;">Unit cost</div>
+		</li>
+		{{#isArray item}}
+			{{#each item}}
+				<li class="row-fluid">
+					<div class="pull-left" rel="tooltip" title="{{description}}">{{name}}</div>
+					<div class="pull-right">{{unit_cost}}</div><br>
+					<ul class="widget_tab_link" style="float:left;margin:0px">
+						<li><a href="#add" id="freshbooks_add_invoice" item_name={{name}} rel="tooltip" title="Generate invoice and send an email for this item">Add Invoice</a></li>
+						<li><small><time class="time-ago pull-left l_border" datetime="{{updated}}">{{updated}}</time></small></li>
+					</ul>
+				</li>
+			{{/each}}
+		{{else}}
+			<li class="row-fluid">
+				<div class="pull-left" rel="tooltip" title="{{item.description}}">{{item.name}}</div>
+				<div class="pull-right">{{item.unit_cost}}</div><br>
+				<small><time class="time-ago pull-left" datetime="{{item.updated}}">{{item.updated}}</time></small>
+				<ul class="widget_tab_link" style="float:left;margin:0px">
+					<li><a href="#add" id="freshbooks_add_invoice" item_name={{item.name}} rel="tooltip" title="Generate invoice and send an email for this item">Add Invoice</a></li>
+					<li><small><time class="time-ago pull-left l_border" datetime="{{item.updated}}">{{item.updated}}</time></small></li>
+				</ul>
+			</li>
+		{{/isArray}}
+	{{/if_equals}}
+</script>

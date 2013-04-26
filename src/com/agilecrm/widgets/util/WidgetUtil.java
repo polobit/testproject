@@ -169,6 +169,11 @@ public class WidgetUtil
 		"Zendesk streamlines communication within a ticket that has organized workflow towards resolution of the customer issue.",
 		"/widgets/zendesk.js", "/img/plugins/zendesk_logo.png",
 		"/widgets/zendesk-logo-small.png", null));
+	widgets.add(new Widget(
+		"FreshBooks",
+		"FreshBooks enables the ability to create and manage invoices, estimates, expenses, and projects all in one place.",
+		"/widgets/freshbooks.js", "/img/plugins/freshbooks-logo.jpg",
+		"/widgets/freshbooks-logo-small.jpg", null));
 
 	return widgets;
 

@@ -97,7 +97,7 @@ function showStripeProfile(plugin_id, customer_id)
     function success(data)
     {
         //populates the template with and shows in the widget panel
-        $('#Stripe').html(getTemplate("stripe-profile", JSON.parse(data)));
+        $('#Stripe').html(getTemplate("stripe-profile", data));
 
         // if error occurs
     }, function error(data)
