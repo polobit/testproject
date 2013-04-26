@@ -113,6 +113,22 @@ $(function ()
         e.preventDefault();
         sendUnfollowRequest(plugin_id, twitter_id);
     });
+    
+    // On mouse enter unfollow
+    $('#twitter_unfollow').live('mouseenter', function ()
+    {   
+    	$('#twitter_unfollow').text("Unfollow");
+    	$('#twitter_unfollow').addClass("btn-danger");
+    	$('#twitter_unfollow').removeClass("btn-primary");
+    });
+    
+    // On mouse leave following
+    $('#twitter_unfollow').live('mouseleave', function ()
+    {
+    	$('#twitter_unfollow').text("Following");
+    	$('#twitter_unfollow').addClass("btn-primary");
+    	$('#twitter_unfollow').removeClass("btn-danger");
+    });
 
     //ReTweets a tweet in Twitter on click of ReTweet link
     $('.twitter_retweet').die().live('click', function (e)

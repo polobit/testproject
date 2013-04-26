@@ -128,10 +128,6 @@ String CSS_PATH = "/";
 						</li>
 					</ul>
 					
-										
-
-					
-					
 					<ul class="nav pull-right">
 
 						<li class="dropdown" id="menu1"><a class="dropdown-toggle"
@@ -210,7 +206,7 @@ String CSS_PATH = "/";
 	%>
 	
 	</div>
-		<div class="footer" id="footer" style="padding:0px !important;margin-top:15px;">
+<!-- 		<div class="footer" id="footer" style="padding:0px !important;margin-top:15px;">
 			<div style="border-top:1px solid #f5f5f5;border-bottom:1px solid #f5f5f5"></div>
 			<div class="container">
 			<p style="margin:15px 0px 15px 0px"><b>Like AgileCRM?</b> Refer your friends <i class="icon-twitter"></i>
@@ -221,7 +217,23 @@ String CSS_PATH = "/";
 			</p>
 	        
     		</div>
-    	</div>
+    	</div> -->
+	<footer id="footer" class="footer container"
+		style="padding: 0px !important;overflow-x:hidden;overflow-y:hidden;margin-top:15px;">
+	 	<div style="width:300px;display:inline-block;">
+	 		<div style="margin-top:10px;font-weight:bold;color:#777;">Like AgileCRM?</div>
+     		<div style="margin-right:5px;display:inline-block;vertical-align:top;">Refer your friends.</div>
+     		<div style="display:inline;"><a href="https://twitter.com/agilecrm" class="twitter-share-button" data-url="https://www.agilecrm.com/" >Tweet</a></div>
+     		<div class="fb-like" data-href="https://facebook.com/agilecrm" data-send="false" data-layout="button_count" data-width="450" data-show-faces="true" data-font="arial" style="overflow:hidden;display:inline;float:right;"></div>
+     	</div>
+     	<a style="margin-left:10%;font-weight:bold;cursor:pointer;" id="help-page">Help</a>
+	 	<a href="#" id="scroll-top"
+			class="btn btn-mini btn-flat btn-primary pull-right">Top &uarr;</a>
+			
+	</footer>
+	<script src="https://platform.twitter.com/widgets.js" type="text/javascript"></script>
+	<script src="https://connect.facebook.net/en_US/all.js#xfbml=1" type="text/javascript"></script>
+
 <script src='lib/headjs-min.js'></script>
 	
 	<script>
