@@ -19,9 +19,11 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpServletResponse;
 
 public class JSONPRequestFilter implements Filter
 {
+    private String callbackParameter;
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
     {
@@ -31,6 +33,7 @@ public class JSONPRequestFilter implements Filter
 	}
 
 	final HttpServletRequest httpRequest = (HttpServletRequest) request;
+	final HttpServletResponse httpResponse = (HttpServletResponse) response;
 
 	if (isJSONPRequest(httpRequest))
 	{
