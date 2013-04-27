@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <queue-entries>
   <queue>
+    <name>campaign-queue</name>
+    <rate>5/s</rate>
+    <max-concurrent-requests>5</max-concurrent-requests>
+    <retry-parameters>
+		<task-retry-limit>1</task-retry-limit>
+	</retry-parameters>
+  </queue>
+  <queue>
     <name>notification-queue</name>
     <rate>5/s</rate>
     <max-concurrent-requests>5</max-concurrent-requests>
     <retry-parameters>
-			<task-retry-limit>1</task-retry-limit>
-		</retry-parameters>
+		<task-retry-limit>1</task-retry-limit>
+	</retry-parameters>
   </queue>
   <queue>
     <name>reports-queue</name>
     <rate>2/s</rate>
     <max-concurrent-requests>5</max-concurrent-requests>
     <retry-parameters>
-			<task-retry-limit>1</task-retry-limit>
-		</retry-parameters>
+		<task-retry-limit>1</task-retry-limit>
+	</retry-parameters>
   </queue>
 </queue-entries>

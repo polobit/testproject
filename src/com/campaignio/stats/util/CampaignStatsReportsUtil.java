@@ -4,77 +4,9 @@ import java.util.Calendar;
 import java.util.LinkedHashMap;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class CampaignStatsReportsUtil
 {
-
-    /**
-     * Constructs a sorted hash table for the ticket reports that are fetched
-     * based on time duration and time zone
-     * 
-     * @param recordsJSONArray
-     * @param type
-     * @param startTime
-     * @param endTime
-     * @param timeZone
-     * @return LinkedHashMap<String, Integer>
-     */
-    public static LinkedHashMap<String, LinkedHashMap> getSortedJSONByDate(
-	    JSONArray emailLogs, String type, String startTime, String endTime,
-	    String timeZone) throws Exception
-    {
-	String[] emailType = { "Send E-mail", "Email Opened", "Email Clicked",
-		"total" };
-
-	LinkedHashMap<String, LinkedHashMap> dateHashtable = EmailReportsUtil
-		.getDefaultDateTable(startTime, endTime, type, timeZone,
-			emailType);
-
-	LinkedHashMap<String, Integer> statusTable = EmailReportsUtil
-		.getDefaultCountTable(emailType);
-
-	// Iterate through all JSONs
-	for (int index = 0; index < emailLogs.length(); index++)
-	{
-	    // Get Session
-	    JSONObject emailLog = emailLogs.getJSONObject(index);
-
-	    long timeInMilliSecs = Long.parseLong(JSONUtil.getJSONValue(
-		    emailLog, "logTime"));
-
-	    // Get Nearest Date
-	    String nearestDate = "";
-	    if (StringUtils.equalsIgnoreCase(type, "date"))
-		nearestDate = DateUtil.getNearestDateOnlyFromEpoch(
-			timeInMilliSecs, timeZone);
-	    else if (StringUtils.equalsIgnoreCase(type, "hour"))
-		nearestDate = DateUtil.getNearestHourOnlyFromEpoch(
-			timeInMilliSecs, timeZone);
-	    else
-		nearestDate = DateUtil.getNearestDayOnlyFromEpoch(
-			timeInMilliSecs, timeZone);
-
-	    if (dateHashtable.containsKey(nearestDate))
-		// Get Table
-		statusTable = dateHashtable.get(nearestDate);
-
-	    String logType = JSONUtil.getJSONValue(emailLog, "log_type");
-
-	    statusTable.put(logType, statusTable.get(logType) + 1);
-
-	    String total = JSONUtil.getJSONValue(emailLog, "total");
-
-	    // Since null value returned from sql is string
-	    if (!total.equals("null"))
-		statusTable.put("total", Integer.parseInt(total));
-
-	    dateHashtable.put(nearestDate, statusTable);
-	}
-	return dateHashtable;
-    }
-
     /**
      * Constructs a default hash table for the dates between the duration and
      * time zone and sets date as key and getDefaultCountTable() as value

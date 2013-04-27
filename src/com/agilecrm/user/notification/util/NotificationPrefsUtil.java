@@ -2,6 +2,7 @@ package com.agilecrm.user.notification.util;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.user.AgileUser;
@@ -105,6 +106,8 @@ public class NotificationPrefsUtil
 	    json = new JSONObject(objectJson);
 	    json.put("notification", type.toString());
 
+	    System.out.println("object: " + json);
+
 	    // Before adding to message
 	    // deleting contacts list of deals to reduce message size.
 	    if (type == Type.DEAL_CREATED || type == Type.DEAL_CLOSED)
@@ -116,9 +119,7 @@ public class NotificationPrefsUtil
 		    json.remove("prefs");
 	    }
 
-	    // For other notification types removing tags and widget properties
-	    // to reduce message
-	    // size.
+	    // Remove other fields except first-name,last-name and owner.
 	    else
 	    {
 		if (json.getString("tags") != null)
@@ -126,6 +127,38 @@ public class NotificationPrefsUtil
 
 		if (json.getString("widget_properties") != null)
 		    json.remove("widget_properties");
+
+		JSONObject ownerJSON = new JSONObject();
+		if (json.getString("owner") != null)
+		{
+		    JSONObject owner = json.getJSONObject("owner");
+		    json.remove("owner");
+
+		    ownerJSON.put("id", owner.getString("id"));
+		    ownerJSON.put("domain", owner.getString("domain"));
+		    ownerJSON.put("name", owner.getString("name"));
+		    ownerJSON.put("email", owner.getString("email"));
+		}
+		json.put("owner", ownerJSON);
+
+		if (json.getString("properties") != null)
+		{
+		    JSONArray properties = json.getJSONArray("properties");
+		    json.remove("properties");
+
+		    JSONArray propertyArray = new JSONArray();
+		    for (int index = 0; index < properties.length(); index++)
+		    {
+			JSONObject property = properties.getJSONObject(index);
+
+			if (property.getString("name").equals("first_name")
+				|| property.getString("name").equals(
+					"last_name"))
+			    propertyArray.put(property);
+
+		    }
+		    json.put("properties", propertyArray);
+		}
 	    }
 
 	    System.out.println("Object json of notification: " + json);

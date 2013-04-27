@@ -131,6 +131,15 @@ function ucfirst(value) {
 
 }
 
+function titleFromEnums(value){
+	if (!value)
+		return;
+	
+	var str = value.replace(/_/g, ' ');
+	
+	return ucfirst(str.toLowerCase());
+}
+
 /**
  * Counts total number of attributes in a json object 
  * @param obj
