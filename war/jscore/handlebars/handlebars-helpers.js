@@ -384,10 +384,17 @@ $(function() {
 	Handlebars.registerHelper('titleFromEnums', function(value) {
 		if (!value)
 			return;
-
+		
 		var str = value.replace(/_/g, ' ');
 		return ucfirst(str.toLowerCase());
 
+	});
+	
+	Handlebars.registerHelper('triggerType',function(value){
+		if(value == 'ADD_SCORE')
+			return value.replace('ADD_SCORE','Score (>=)');
+		
+		return titleFromEnums(value);
 	});
 
 	/**
@@ -444,6 +451,7 @@ $(function() {
 		return value;
 	});
 
+	
 	/**
 	 * Displays all the properties of a contact in its detail view, excluding
 	 * the function parameters (fname, lname, company etc..)

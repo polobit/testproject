@@ -51,13 +51,16 @@ public class CheckTags extends TaskletAdapter
 	if (contact == null)
 	    return;
 
-	// remove leading and trailing spaces
-	tagValue.trim();
-
 	String tags = "";
 
+	// remove leading and trailing spaces
+	tags = tagValue.trim();
+
+	// Remove trailing comma
+	tags = tags.replaceAll(",$", "");
+
 	// Replace ,space with space
-	tags = tagValue.replaceAll(", ", ",");
+	tags = tags.replaceAll(", ", ",");
 
 	String[] tagsArray = tags.split(",");
 

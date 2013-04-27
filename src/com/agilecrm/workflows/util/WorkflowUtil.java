@@ -223,7 +223,7 @@ public class WorkflowUtil
 
 	    TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(
 		    campaignJSON.toString(), subscriberJSONObject.toString());
-	    Queue queue = QueueFactory.getDefaultQueue();
+	    Queue queue = QueueFactory.getQueue("campaign-queue");
 	    queue.add(TaskOptions.Builder
 		    .withPayload(taskletWorkflowDeferredTask));
 	}

@@ -63,13 +63,13 @@ public class Tags extends TaskletAdapter
 	    String tags = "";
 
 	    // Remove leading and trailing whitespace
-	    tagNames.trim();
+	    tags = tagNames.trim();
 
-	    // Replace multiple space with single space
-	    tags = tagNames.trim().replaceAll(" +", " ");
+	    // Remove trailing comma
+	    tags = tags.replaceAll(",$", "");
 
 	    // Replace ,space with space
-	    tags = tagNames.replaceAll(", ", ",");
+	    tags = tags.replaceAll(", ", ",");
 
 	    String[] tagsArray = tags.split(",");
 

@@ -350,11 +350,17 @@ public class DateUtil
 
     }
 
+    /**
+     * Returns mysql NOW() date format.
+     * 
+     * @param timestamp
+     *            - epochtime
+     * @return String
+     */
     public static String getMySQLNowDateFormat(long timestamp)
     {
 	Date date = new Date(timestamp);
 	DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	format.setTimeZone(TimeZone.getTimeZone("UTC"));
 	return format.format(date);
     }
 }

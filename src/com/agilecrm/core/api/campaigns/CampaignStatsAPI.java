@@ -19,9 +19,11 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.agilecrm.db.util.SQLUtil;
+import com.agilecrm.db.util.EmailStatsUtil;
 import com.campaignio.CampaignStats;
 import com.campaignio.stats.util.CampaignStatsReportsUtil;
+import com.campaignio.stats.util.DateUtil;
+import com.campaignio.stats.util.EmailReportsUtil;
 import com.campaignio.util.CampaignStatsUtil;
 
 /**
@@ -113,6 +115,7 @@ public class CampaignStatsAPI
      *            - client timezone.
      * @return email-stats json string
      * */
+    @SuppressWarnings("unchecked")
     @Path("/email/reports/{id}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -122,7 +125,7 @@ public class CampaignStatsAPI
 	    @QueryParam("type") String type,
 	    @QueryParam("time_zone") String timeZone)
     {
-	String sortedReportsString = "";
+	String reportsString = "";
 	try
 	{
 	    // Weekly
@@ -148,26 +151,76 @@ public class CampaignStatsAPI
 	    endCal.add(Calendar.SECOND, 59);
 	    endTime = endCal.getTimeInMillis() + "";
 
-	    JSONArray emailLogs = SQLUtil.getEmailLogsForGraph(campaignId,
-		    startTime, endTime, type);
+	    // Converts epoch time to "yyyy-MM-dd HH:mm:ss"
+	    String startDate = DateUtil.getMySQLNowDateFormat(Long
+		    .parseLong(startTime));
+
+	    String endDate = DateUtil.getMySQLNowDateFormat(Long
+		    .parseLong(endTime));
+
+	    JSONArray emailLogs = EmailStatsUtil.getEmailLogs(campaignId,
+		    startDate, endDate, timeZone, type);
 
 	    if (emailLogs == null)
 		return null;
 
 	    System.out.println("Email logs: " + emailLogs);
 
-	    // Get Date wise reports for chat type
-	    LinkedHashMap sortedReports = CampaignStatsReportsUtil
-		    .getSortedJSONByDate(emailLogs, type, startTime, endTime,
-			    timeZone);
+	    String[] emailType = { "Send E-mail", "Email Opened",
+		    "Email Clicked", "total" };
 
-	    sortedReportsString = JSONSerializer.toJSON(sortedReports)
-		    .toString().replace("Send E-mail", "Email Sent")
+	    // Populate graph's x-axis with given date-range.
+	    LinkedHashMap<String, LinkedHashMap> dateHashtable = EmailReportsUtil
+		    .getDefaultDateTable(startTime, endTime, type, timeZone,
+			    emailType);
+
+	    // Initialize values with 0
+	    LinkedHashMap<String, Integer> statusTable = CampaignStatsReportsUtil
+		    .getDefaultCountTable(emailType);
+
+	    for (int index = 0; index < emailLogs.length(); index++)
+	    {
+		JSONObject logJSON = emailLogs.getJSONObject(index);
+
+		statusTable.put(logJSON.getString("log_type"),
+			Integer.parseInt(logJSON.getString("count")));
+
+		// Since SQL 'NULL' is string.
+		if (!logJSON.getString("total").equals("null"))
+		{
+		    // Get Total clicks.
+		    statusTable.put("total",
+			    Integer.parseInt(logJSON.getString("total")));
+		}
+
+		// Insert status based on logDate.
+		if (dateHashtable.containsKey(logJSON.getString("logDate")))
+		{
+		    dateHashtable.get(logJSON.getString("logDate")).put(
+			    logJSON.getString("log_type"),
+			    Integer.parseInt(logJSON.getString("count")));
+
+		    if (!logJSON.getString("total").equals("null"))
+		    {
+			dateHashtable.get(logJSON.getString("logDate")).put(
+				"total",
+				Integer.parseInt(logJSON.getString("total")));
+		    }
+		}
+		else
+		{
+		    dateHashtable
+			    .put(logJSON.getString("logDate"), statusTable);
+		}
+	    }
+
+	    reportsString = JSONSerializer.toJSON(dateHashtable).toString()
+		    .replace("Send E-mail", "Email Sent")
 		    .replace("Email Opened", "Email Opened")
-		    .replace("Email Clicked", "Email Clicks(Unique)")
+		    .replace("Email Clicked", "Unique Clicks")
 		    .replace("total", "Total Clicks");
 
-	    System.out.println("Sorted reports: " + sortedReportsString);
+	    System.out.println("Sorted reports: " + reportsString);
 	}
 	catch (Exception e)
 	{
@@ -175,6 +228,6 @@ public class CampaignStatsAPI
 		    .status(javax.ws.rs.core.Response.Status.BAD_REQUEST)
 		    .entity(e.getMessage()).build());
 	}
-	return sortedReportsString;
+	return reportsString;
     }
 }
