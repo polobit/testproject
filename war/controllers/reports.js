@@ -44,23 +44,27 @@ var ReportsRouter = Backbone.Router.extend({
 			window : "reports",
 			isNew : true,
 			postRenderCallback : function(el) {
-
-				fillSelect("custom-fields-optgroup", "core/api/custom-fields", undefined, function(data){console.log(data)}, '<option value="custom_{{field_label}}">{{field_label}}</option>', true);
+					fillSelect("custom-fields-optgroup", "core/api/custom-fields", undefined,  function(){
 						
-				head.js(LIB_PATH + 'lib/jquery.multi-select.js', LIB_PATH + 'lib/jquery-ui.min.js',LIB_PATH + 'lib/agile.jquery.chained.min.js', function(){
+					head.js(LIB_PATH + 'lib/jquery.multi-select.js', function() {
+						
+						
+						
+						$('#multipleSelect').multiSelect({ selectableOptgroup: true });
+						
+						$('.ms-selection').children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id","fields_set").sortable();
+						
+					});		
+				}, '<option value="custom_{{field_label}}">{{field_label}}</option>', true, el);
+						
+				head.js(LIB_PATH + 'lib/jquery-ui.min.js',LIB_PATH + 'lib/agile.jquery.chained.min.js', function(){
 
-					$("#content").html(el);
 					chainFilters(el);
-					
-		       		$('#multipleSelect').multiSelect({ selectableOptgroup: true });
-		       				
-		       		$('.ms-selection').children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id","fields_set").sortable();
-		     	
 		       });
 			}
 		});
 
-		report_add.render();
+		$("#content").html(report_add.render().el);
 	},
 
 	/**
@@ -91,16 +95,10 @@ var ReportsRouter = Backbone.Router.extend({
 			window : 'reports',
 			postRenderCallback : function(el) {
 				
-				fillSelect("custom-fields-optgroup", "core/api/custom-fields", undefined, function(data){console.log(data)}, '<option value="custom_{{field_label}}">{{field_label}}</option>', true);
-				
-       			head.js(LIB_PATH + 'lib/jquery.multi-select.js', LIB_PATH + 'lib/jquery-ui.min.js',LIB_PATH + 'lib/agile.jquery.chained.min.js', function(){
-       		
-       				$("#content").html(el);
-       				chainFilters(el);
+				fillSelect("custom-fields-optgroup", "core/api/custom-fields", undefined,  function(){
 					
-					
-					deserializeChainedSelect($(el).find('form'), report.toJSON().rules);
-       		
+					head.js(LIB_PATH + 'lib/jquery.multi-select.js', function() {
+						
        					$('#multipleSelect').multiSelect({ selectableOptgroup: true });
        					
        					
@@ -109,6 +107,15 @@ var ReportsRouter = Backbone.Router.extend({
        					});
        					
        					$('.ms-selection').children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id","fields_set").sortable();
+					})
+						
+					},
+					'<option value="custom_{{field_label}}">{{field_label}}</option>', true, el);
+				
+       			head.js(LIB_PATH + 'lib/jquery-ui.min.js',LIB_PATH + 'lib/agile.jquery.chained.min.js', function(){
+       		
+       				chainFilters(el);
+					deserializeChainedSelect($(el).find('form'), report.toJSON().rules);
      	
        			});
        			
@@ -117,8 +124,8 @@ var ReportsRouter = Backbone.Router.extend({
 		});
 
 //		report_model.render();
-		
-		report_model.render();
+		$("#content").html(report_model.render().el);
+		//report_model.render();
 	
 	},
 	

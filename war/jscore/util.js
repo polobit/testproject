@@ -44,7 +44,7 @@ function getUrlVars() {
  * @param template
  *            Template to create options
  */
-function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown) {
+function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, el) {
 	// Fetch Collection from URL
 	var collection_def = Backbone.Collection.extend({
 		url : url,
@@ -76,9 +76,9 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown) {
 					// Delete prev options if any by verifying whether ul drop down or 
 					// select drop down
 					if(isUlDropdown)
-						$("#" + selectId).empty();
+						$("#" + selectId, el).empty();
 					else
-					$("#" + selectId)
+					$("#" + selectId, el)
 							.empty()
 							.append(
 									'<option class="default-select" value="">Select...</option>');
@@ -89,16 +89,16 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown) {
 						// Convert template into HTML
 						var modelTemplate = Handlebars.compile(template);
 						var optionsHTML = modelTemplate(model);
-						$("#" + selectId).append(optionsHTML);
-
-						// If callback is present, it is called to deserialize
-						// the select field
-						if (callback && typeof (callback) === "function") {
-							// execute the callback, passing parameters as
-							// necessary
-							callback();
-						}
+						$("#" + selectId, el).append(optionsHTML);
 					});
+					
+					// If callback is present, it is called to deserialize
+					// the select field
+					if (callback && typeof (callback) === "function") {
+						// execute the callback, passing parameters as
+						// necessary
+						callback();
+					}
 				}
 
 			});
