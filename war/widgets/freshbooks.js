@@ -13,6 +13,8 @@ $(function() {
 	        '\"img/ajax-loader-cursor.gif\" style="margin-top: 14px;margin-bottom: 10px;">' +
 	        '</img></center>';
 	
+	items = {};
+	
     // Gets widget id from widget object, fetched using script API
     var plugin_id = agile_crm_get_plugin(FRESHBOOKS_PLUGIN_NAME).id;
 
@@ -40,7 +42,6 @@ $(function() {
     }
 
     showFreshBooksClient(plugin_id, Email);
-    getItemsInFreshBooks(plugin_id);
     
     var first_name = agile_crm_get_contact_property("first_name");
 	var last_name = agile_crm_get_contact_property("last_name");
@@ -55,7 +56,9 @@ $(function() {
     $('#freshbooks_items').die().live('click', function (e) {
     	e.preventDefault();
     	
-    	getItemsInFreshBooks(plugin_id);
+    	console.log(items.total);
+    	if(!items.total)
+    		getItemsInFreshBooks(plugin_id);
     });
     
     $('#freshbooks_add_invoice').die().live('click', function (e) {
@@ -90,7 +93,7 @@ function setUpFreshbooksAuth(plugin_id)
 
         // Store the data given by the user as JSON 
         var freshbooks_prefs = {};
-        freshbooks_prefs["freshbooks_apikey"] = $("#freshbooks_apikey").val();
+        freshbooks_prefs["freshbooks_apiKey"] = $("#freshbooks_apikey").val();
         freshbooks_prefs["freshbooks_url"] = $("#freshbooks_url").val();
 
         // Saves the preferences into widget with FreshBooks widget name
@@ -172,7 +175,8 @@ function getItemsInFreshBooks(plugin_id)
 	$.get("/core/api/widgets/freshbooks/items/" + plugin_id + "/", 
 	function(data) 
 	{
-		console.log(data);
+		items = data;
+		console.log(items);
 		$('#freshbooks_items_panel').html(getTemplate('freshbooks-items', data));
 		
 		head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
