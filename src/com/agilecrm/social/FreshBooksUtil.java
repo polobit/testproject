@@ -18,6 +18,9 @@ import com.agilecrm.widgets.Widget;
 public class FreshBooksUtil
 {
 
+    public static final String FRESHBOOKS_API_KEY = "freshbooks_apiKey";
+    public static final String FRESHBOOKS_URL = "freshbooks_url";
+
     /**
      * Calls method in ClickDeskPlugins server using REST API to get clients
      * from FreshBooks
@@ -44,6 +47,7 @@ public class FreshBooksUtil
 	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON",
 		pluginPrefsJSON).put("visitorJSON", contactPrefsJSON);
 
+	System.out.println(prefsJSON);
 	String response = HTTPUtil.accessHTTPURL(ZendeskUtil.pluginURL
 		+ "core/agile/freshbooks/clients/get", prefsJSON.toString(),
 		"PUT");
@@ -217,14 +221,19 @@ public class FreshBooksUtil
     {
 	try
 	{
-	    // JSONObject pluginPrefs = new
-	    // JSONObject().put("freshbooks_apiKey",
-	    // widget.getProperty("freshbooks_apiKey")).put(
-	    // "freshbooks_url", widget.getProperty("freshbooks_url"));
+	    System.out.println(widget.getProperty("freshbooks_apikey"));
+	    System.out.println(widget.getProperty("freshbooks_url"));
 
-	    JSONObject pluginPrefs = new JSONObject().put("freshbooks_apiKey",
-		    "55b352b9e2c08f778c50c0de6f26f1ab").put("freshbooks_url",
-		    "https://clickdesk-billing.freshbooks.com");
+	    JSONObject pluginPrefs = new JSONObject().put(FRESHBOOKS_API_KEY,
+		    widget.getProperty(FRESHBOOKS_API_KEY)).put(FRESHBOOKS_URL,
+		    widget.getProperty(FRESHBOOKS_URL));
+
+	    // JSONObject pluginPrefs = new
+	    // JSONObject().put(FRESHBOOKS_API_KEY,
+	    // "55b352b9e2c08f778c50c0de6f26f1ab").put(FRESHBOOKS_URL,
+	    // "https://clickdesk-billing.freshbooks.com");
+
+	    System.out.println(pluginPrefs);
 
 	    return pluginPrefs;
 	}

@@ -11,7 +11,6 @@ import com.agilecrm.util.DBUtil;
 import com.agilecrm.util.Util;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
-import com.campaignio.util.CampaignStatsUtil;
 import com.campaignio.util.URLShortenerUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.SendGridEmail;
@@ -457,10 +456,9 @@ public class SendEmail extends TaskletAdapter
 	}
 
 	// Creates log for sending email
-	log(campaignJSON, subscriberJSON, nodeJSON,
-		"Sending Email Details - Sender: " + fromEmail
-			+ ", Recipient: " + to + ", Subject: " + subject
-			+ ", Text Body: " + text + " and  HTML Body: " + html);
+	log(campaignJSON, subscriberJSON, nodeJSON, "Send E-mail - Subject: "
+		+ subject + "," + "From: " + fromEmail + "," + "To: " + to
+		+ "," + "Text Body: " + text + ",HTML Body: " + html);
 
 	// LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
 	// DBUtil.getId(subscriberJSON),
@@ -486,8 +484,6 @@ public class SendEmail extends TaskletAdapter
 	    SendGridEmail.sendMail(fromEmail, fromName, to, subject, replyTo,
 		    null, text, subscriberJSON, campaignJSON);
 	}
-
-	CampaignStatsUtil.incrementEmailsSent(DBUtil.getId(campaignJSON));
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,

@@ -1,5 +1,6 @@
 package com.agilecrm.db.util;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
 import com.agilecrm.db.GoogleSQL;
@@ -15,6 +16,45 @@ import com.google.appengine.api.NamespaceManager;
 public class EmailStatsUtil
 {
     /**
+     * Returns campaign stats of email campaigns with respect to campaign-id and
+     * domain.
+     * 
+     * @return JSONArray.
+     */
+    public static JSONArray getAllEmailCampaignStats()
+    {
+	String domain = NamespaceManager.get();
+
+	if (StringUtils.isEmpty(domain))
+	    return null;
+
+	String uniqueClicks = "(SELECT campaign_id,log_type,COUNT(DISTINCT subscriber_id) AS count  FROM campaign_logs WHERE log_type IN ('Send E-mail', 'Email Clicked', 'Email Opened') AND "
+		+ SQLUtil.appendDomainToQuery(domain)
+		+ " GROUP BY log_type,campaign_id)";
+
+	String totalClicks = "(SELECT campaign_id,log_type,COUNT(subscriber_id) AS total  FROM campaign_logs WHERE log_type IN ('Email Clicked') AND "
+		+ SQLUtil.appendDomainToQuery(domain)
+		+ " GROUP BY log_type,campaign_id)";
+
+	String campaignStats = "SELECT A.campaign_id, A.log_type, A.count,B.total FROM "
+		+ uniqueClicks
+		+ " A LEFT OUTER JOIN "
+		+ totalClicks
+		+ " B ON A.campaign_id = B.campaign_id AND A.log_type = B.log_type";
+
+	try
+	{
+	    return GoogleSQL.getJSONQuery(campaignStats);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+
+    }
+
+    /**
      * Gets email logs with respect to campaign-id and given date range.
      * 
      * @param campaignId
@@ -29,10 +69,13 @@ public class EmailStatsUtil
      *            - hour, day or date.
      * @return JSONArray.
      */
-    public static JSONArray getEmailLogs(String campaignId, String startDate,
-	    String endDate, String timeZone, String type)
+    public static JSONArray getEmailCampaignStats(String campaignId,
+	    String startDate, String endDate, String timeZone, String type)
     {
 	String domain = NamespaceManager.get();
+
+	if (StringUtils.isEmpty(domain))
+	    return null;
 
 	// Returns (sign)HH:mm from total minutes.
 	String timeZoneOffset = convertMinutesToTime(timeZone);

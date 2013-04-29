@@ -15,7 +15,6 @@ import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.deferred.TaskletWorkflowDeferredTask;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.campaignio.twitter.util.TwitterQueueUtil;
-import com.campaignio.util.CampaignStatsUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -256,9 +255,6 @@ public class WorkflowUtil
 	    {
 		e.printStackTrace();
 	    }
-
-	    // Deletes Related CampaignStats.
-	    CampaignStatsUtil.deleteCampaignStatsByCampaignId(campaignId);
 
 	    // Deletes Related Crons.
 	    CronUtil.removeTask(campaignId, null);

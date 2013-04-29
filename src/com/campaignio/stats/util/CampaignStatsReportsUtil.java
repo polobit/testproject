@@ -5,6 +5,10 @@ import java.util.LinkedHashMap;
 
 import org.apache.commons.lang.StringUtils;
 
+/**
+ * <code>CampaignStatsReportsUtil</code> initializes graphs with default data.
+ * Initializes all values of bar-graph to zero.
+ */
 public class CampaignStatsReportsUtil
 {
     /**

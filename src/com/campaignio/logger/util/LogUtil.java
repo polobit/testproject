@@ -42,7 +42,8 @@ public class LogUtil
     {
 	String domain = NamespaceManager.get();
 
-	if (StringUtils.isEmpty(domain))
+	if (StringUtils.isEmpty(domain) || StringUtils.isEmpty(campaignId)
+		|| StringUtils.isEmpty(subscriberId))
 	    return;
 
 	// Insert to SQL
@@ -68,19 +69,16 @@ public class LogUtil
 
 	JSONArray logs = null;
 
-	if (!StringUtils.isEmpty(campaignId))
-	{
+	// Returns logs w.r.t both campaignId and subscriberId.
+	if (!StringUtils.isEmpty(campaignId)
+		&& !StringUtils.isEmpty(subscriberId))
+	    logs = SQLUtil.getLogs(campaignId, subscriberId, domain);
+
+	else if (!StringUtils.isEmpty(campaignId))
 	    logs = SQLUtil.getLogs(campaignId, null, domain);
 
-	    // When both are not null
-	    if (!StringUtils.isEmpty(subscriberId))
-		logs = SQLUtil.getLogs(campaignId, subscriberId, domain);
-	}
-
 	else if (!StringUtils.isEmpty(subscriberId))
-	{
 	    logs = SQLUtil.getLogs(null, subscriberId, domain);
-	}
 
 	if (logs == null)
 	    return null;
@@ -120,18 +118,18 @@ public class LogUtil
 	if (StringUtils.isEmpty(domain))
 	    return;
 
-	// Deletes campaign logs.
-	if (!StringUtils.isEmpty(campaignId))
-	{
-	    SQLUtil.deleteLogsFromSQL(campaignId, null, domain);
+	// Deletes w.r.t both campaignId and subscriberId.
+	if (!StringUtils.isEmpty(campaignId)
+		&& !StringUtils.isEmpty(subscriberId))
+	    SQLUtil.deleteLogsFromSQL(campaignId, subscriberId, domain);
 
-	    // When both are not null
-	    if (!StringUtils.isEmpty(subscriberId))
-		SQLUtil.deleteLogsFromSQL(null, subscriberId, domain);
-	}
+	// Deletes campaign logs.
+	else if (!StringUtils.isEmpty(campaignId))
+	    SQLUtil.deleteLogsFromSQL(campaignId, null, domain);
 
 	// Deletes subscriber logs.
 	else if (!StringUtils.isEmpty(subscriberId))
 	    SQLUtil.deleteLogsFromSQL(null, subscriberId, domain);
+
     }
 }

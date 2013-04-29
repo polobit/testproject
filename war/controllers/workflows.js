@@ -121,20 +121,15 @@ var WorkflowsRouter = Backbone.Router
 
 			/** Gets list of campaign-stats * */
 			campaignStats : function() {
-				this.campaignStatsCollectionView = new Base_Collection_View({
-					url : 'core/api/campaign-stats',
-					templateKey : "campaign-stats",
-					individual_tag_name : 'tr'
-				});
-				this.campaignStatsCollectionView.collection.fetch({
-					success : function() {
+				
+				// Load Reports Template
+				$("#content").html(
+						getTemplate("campaign-stats-chart", {}));
+
 						// Show bar graph for campaign stats
 						showBar('/core/api/campaign-stats/stats/',
 								'campaign-stats-chart', 'Campaign Stats',
-								'Email Stats', 'null');
-					}
-				});
-				$('#content').html(this.campaignStatsCollectionView.el);
+								'Email Stats', null);
 
 				$(".active").removeClass("active");
 				$("#workflowsmenu").addClass("active");
@@ -146,7 +141,7 @@ var WorkflowsRouter = Backbone.Router
 
 					// Load Reports Template
 					$("#content").html(
-							getTemplate("campaign-email-reports", {}), {});
+							getTemplate("campaign-email-reports", {}));
 
 					initChartsUI(id);
 				});

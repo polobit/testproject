@@ -21,7 +21,6 @@ import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.URLShortener;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.servlets.deferred.EmailClickDeferredTask;
-import com.campaignio.util.CampaignStatsUtil;
 import com.campaignio.util.URLShortenerUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
@@ -81,11 +80,9 @@ public class RedirectServlet extends HttpServlet
 
 	    Contact contact = null;
 
-	    System.out.println("Namespace set before CampaignStats: "
+	    System.out.println("Namespace in RedirectServlet: "
 		    + NamespaceManager.get());
 
-	    // Increment emails clicked
-	    CampaignStatsUtil.incrementEmailsClicked(urlShortener.campaign_id);
 	    contact = ContactUtil.getContact(Long.parseLong(subscriberId));
 
 	    NotificationPrefsUtil.executeNotification(Type.CLICKED_LINK,
