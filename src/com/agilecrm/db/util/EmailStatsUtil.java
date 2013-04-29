@@ -1,5 +1,6 @@
 package com.agilecrm.db.util;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
 import com.agilecrm.db.GoogleSQL;
@@ -23,6 +24,9 @@ public class EmailStatsUtil
     public static JSONArray getAllEmailCampaignStats()
     {
 	String domain = NamespaceManager.get();
+
+	if (StringUtils.isEmpty(domain))
+	    return null;
 
 	String uniqueClicks = "(SELECT campaign_id,log_type,COUNT(DISTINCT subscriber_id) AS count  FROM campaign_logs WHERE log_type IN ('Send E-mail', 'Email Clicked', 'Email Opened') AND "
 		+ SQLUtil.appendDomainToQuery(domain)
@@ -69,6 +73,9 @@ public class EmailStatsUtil
 	    String startDate, String endDate, String timeZone, String type)
     {
 	String domain = NamespaceManager.get();
+
+	if (StringUtils.isEmpty(domain))
+	    return null;
 
 	// Returns (sign)HH:mm from total minutes.
 	String timeZoneOffset = convertMinutesToTime(timeZone);
