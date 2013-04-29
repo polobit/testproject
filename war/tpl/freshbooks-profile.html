@@ -31,7 +31,7 @@
 					{{client.0.p_country}}
 				</p>
 			{{/if}}
-			<div style="margin-bottom:10px;"><b>Organization:&nbsp</b><a href="{{client.0.links.view}}" target="_blank">{{client.0.organization}}</a></div>		
+			<div style="margin-bottom:10px;"><b>Organization:</b>&nbsp<a href="{{client.0.links.view}}" target="_blank">{{client.0.organization}}</a></div>		
 			{{#if client.0.home_phone}}<i class="icon-phone"></i><a href="tel:{{client.0.home_phone}}" > {{client.0.home_phone}} <br> </a>{{/if}}
 			{{#if client.0.mobile}}<i class="icon-mobile-phone"></i><a href="tel:{{client.0.mobile}}"> {{client.0.mobile}} </a>{{/if}}
 		{{else}}
@@ -46,7 +46,7 @@
 					{{client.p_country}}
 				</p>
 			{{/if}}	
-			<div style="margin-bottom:10px;"><b>Organization:&nbsp<a href="{{client.links.view}}" target="_blank"><i class="icon-building"></i> {{client.organization}}</a></div>	
+			<div style="margin-bottom:10px;"><b>Organization</b>:&nbsp<a href="{{client.links.view}}" target="_blank"><i class="icon-building"></i> {{client.organization}}</a></div>	
 			{{#if client.home_phone}}<i class="icon-phone"></i><a href="tel:{{client.home_phone}}" > {{client.home_phone}} <br> </a>{{/if}}
 			{{#if client.mobile}}<i class="icon-mobile-phone"></i><a href="tel:{{client.mobile}}"> {{client.mobile}} </a>{{/if}}
 		{{/isArray}}
