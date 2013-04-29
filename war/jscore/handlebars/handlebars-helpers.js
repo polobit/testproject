@@ -577,6 +577,8 @@ $(function() {
 	 * Convert string to lower case
 	 */
 	Handlebars.registerHelper('toLowerCase', function(value) {
+		if(!value)
+			return;
 		return value.toLowerCase();
 	});
 
