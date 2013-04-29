@@ -220,19 +220,21 @@ String CSS_PATH = "/";
     	</div> -->
 	<footer id="footer" class="footer container"
 		style="padding: 0px !important;overflow-x:hidden;overflow-y:hidden;margin-top:15px;">
+
 	 	<div style="width:300px;display:inline-block;">
 	 		<div style="margin-top:10px;font-weight:bold;color:#777;">Like AgileCRM?</div>
      		<div style="margin-right:5px;display:inline-block;vertical-align:top;">Refer your friends.</div>
-     		<div style="display:inline;"><a href="https://twitter.com/agilecrm" class="twitter-share-button" data-url="https://www.agilecrm.com/" >Tweet</a></div>
-     		<div class="fb-like" data-href="https://facebook.com/agilecrm" data-send="false" data-layout="button_count" data-width="450" data-show-faces="true" data-font="arial" style="overflow:hidden;display:inline;float:right;"></div>
+     		
+     		<div id="fb-root" style="display:inline;"></div>
+		    <script src="https://connect.facebook.net/en_US/all.js#xfbml=1" type="text/javascript"></script>
+     		<div class="fb-like" data-href="https://www.agilecrm.com" data-send="false" data-layout="button_count" data-width="450" data-show-faces="true" data-font="arial" style="overflow:hidden;display:inline;float:right;"></div>
+     		
+     		<script src="https://platform.twitter.com/widgets.js" type="text/javascript"></script>
+     		<div style="display:inline;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="https://www.agilecrm.com" >Tweet</a></div>
      	</div>
      	<a style="margin-left:10%;font-weight:bold;cursor:pointer;" id="help-page">Help</a>
-	 	<a href="#" id="scroll-top"
-			class="btn btn-mini btn-flat btn-primary pull-right">Top &uarr;</a>
-			
+	 	<a href="#" id="scroll-top" class="btn btn-mini btn-flat btn-primary pull-right">Top &uarr;</a>
 	</footer>
-	<script src="https://platform.twitter.com/widgets.js" type="text/javascript"></script>
-	<script src="https://connect.facebook.net/en_US/all.js#xfbml=1" type="text/javascript"></script>
 
 <script src='lib/headjs-min.js'></script>
 	
