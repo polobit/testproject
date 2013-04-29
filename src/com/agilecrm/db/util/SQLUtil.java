@@ -85,7 +85,7 @@ public class SQLUtil
 	    logs += " subscriber_id = "
 		    + StatsUtil.encodeSQLColumnValue(subscriberId);
 
-	logs += appendDomainToQuery(domain);
+	logs += " AND " + appendDomainToQuery(domain);
 
 	try
 	{
@@ -127,11 +127,32 @@ public class SQLUtil
 	    deleteCampaignLogs += " subscriber_id = "
 		    + StatsUtil.encodeSQLColumnValue(subscriberId);
 
-	deleteCampaignLogs += appendDomainToQuery(domain);
+	deleteCampaignLogs += " AND " + appendDomainToQuery(domain);
 
 	try
 	{
 	    GoogleSQL.executeNonQuery(deleteCampaignLogs);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+    }
+
+    /**
+     * Deletes logs based on domain from SQL.
+     * 
+     * @param namespace
+     *            - namespace.
+     */
+    public static void deleteLogsBasedOnDomain(String namespace)
+    {
+	String deleteLogs = "DELETE FROM campaign_logs WHERE"
+		+ appendDomainToQuery(namespace);
+
+	try
+	{
+	    GoogleSQL.executeNonQuery(deleteLogs);
 	}
 	catch (Exception e)
 	{
@@ -148,7 +169,7 @@ public class SQLUtil
      */
     public static String appendDomainToQuery(String domain)
     {
-	return " AND domain = " + StatsUtil.encodeSQLColumnValue(domain);
+	return " domain = " + StatsUtil.encodeSQLColumnValue(domain);
     }
 
 }
