@@ -106,7 +106,7 @@
 						{{else}}
 							{{#if lines.line.name}}
 								<div class="pull-left">{{lines.line.name}}</div>
-								<div class="pull-right">{{lines.line.amount}}</div>
+								<div class="pull-right">{{lines.line.amount}}</div><br>
 								{{#if lines.line.tax1_name}}				
 									<div class="pull-left">{{lines.line.tax1_name}}</div>
 									<div class="pull-right">{{lines.line.tax1_percent}}</div><br>
@@ -131,11 +131,11 @@
 								{{#if name}}
 									<div class="pull-left">{{name}}</div>					
 									<div class="pull-right">{{amount}}</div><br>
-									{{#if tax1_name}}				
+									{{#if tax1_name}}
 										<div class="pull-left">{{tax1_name}}</div>
 										<div class="pull-right">{{tax1_percent}}</div><br>
 									{{/if}}
-									{{#if tax2_name}}				
+									{{#if tax2_name}}<br>				
 										<div class="pull-left">{{tax2_name}}</div>
 										<div class="pull-right">{{tax2_percent}}</div><br>
 									{{/if}}
@@ -149,7 +149,7 @@
 									<div class="pull-left">{{invoice.lines.line.tax1_name}}</div>
 									<div class="pull-right">{{invoice.lines.line.tax1_percent}}</div><br>
 								{{/if}}
-								{{#if invoice.lines.line.tax2_name}}				
+								{{#if invoice.lines.line.tax2_name}}
 									<div class="pull-left">{{invoice.lines.line.tax2_name}}</div>
 									<div class="pull-right">{{invoice.lines.line.tax2_percent}}</div><br>
 								{{/if}}
