@@ -2,7 +2,6 @@ package com.agilecrm.core.api.campaigns;
 
 import java.util.Calendar;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -20,7 +19,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.db.util.EmailStatsUtil;
-import com.campaignio.CampaignStats;
 import com.campaignio.stats.util.CampaignStatsReportsUtil;
 import com.campaignio.stats.util.DateUtil;
 import com.campaignio.stats.util.EmailReportsUtil;
@@ -38,33 +36,6 @@ import com.campaignio.util.CampaignStatsUtil;
 public class CampaignStatsAPI
 {
     /**
-     * Returns all campaignstats.
-     * 
-     * @return CampaignStats list.
-     */
-    @GET
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<CampaignStats> getCampaignStats()
-    {
-	return CampaignStatsUtil.getAllCampaignStats();
-    }
-
-    /**
-     * Returns CampaignStats with respect to CampaignId.
-     * 
-     * @param campaignId
-     *            - Campaign Id.
-     * @return CampaignStats
-     */
-    @Path("details/{id}")
-    @GET
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public CampaignStats getCampaignStat(@PathParam("id") Long campaignId)
-    {
-	return CampaignStatsUtil.getCampaignStatsByCampaignId(campaignId);
-    }
-
-    /**
      * Returns all available campaign-stats for generating bar graph.
      * 
      * @return campaign-stats json string.
@@ -74,30 +45,44 @@ public class CampaignStatsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public String getCampaignStatsForGraph() throws Exception
     {
-	List<CampaignStats> CampaignStats = CampaignStatsUtil
-		.getAllCampaignStats();
+	String type[] = { "Send E-mail", "Email Opened", "Email Clicked",
+		"total" };
 
-	// Send a JSONArray with campaign name and values for each
-	// Add campaign name, emails sent, emails opened and emails clicked
-	JSONObject campaignStatsJSONArray = new JSONObject();
+	LinkedHashMap<String, Integer> emailStats = CampaignStatsReportsUtil
+		.getDefaultCountTable(type);
 
-	for (CampaignStats campaignStats : CampaignStats)
+	LinkedHashMap<String, LinkedHashMap> campaignStats = new LinkedHashMap<String, LinkedHashMap>();
+
+	JSONArray campaignStatsArray = EmailStatsUtil
+		.getAllEmailCampaignStats();
+
+	if (campaignStatsArray == null)
+	    return null;
+
+	for (int index = 0; index < campaignStatsArray.length(); index++)
 	{
-	    if (campaignStats == null)
-		continue;
+	    JSONObject emailStatsJSON = campaignStatsArray.getJSONObject(index);
 
-	    // Init the stats JSON
-	    JSONObject statsJSON = new JSONObject();
-	    statsJSON.put("Emails Opened", campaignStats.emails_opened);
-	    statsJSON.put("Emails Sent", campaignStats.emails_sent);
-	    statsJSON.put("Emails Clicked", campaignStats.emails_clicked);
+	    emailStats.put(emailStatsJSON.getString("log_type"),
+		    Integer.parseInt(emailStatsJSON.getString("count")));
 
-	    // Put the campaign name and stats JSON
-	    campaignStatsJSONArray.put(campaignStats.getCampaign(), statsJSON);
+	    // since sql null returned is in string.
+	    if (!emailStatsJSON.getString("total").equals("null"))
+		emailStats.put("total",
+			Integer.parseInt(emailStatsJSON.getString("total")));
 
+	    // Categorize w.r.t campaign-names
+	    campaignStats.put(CampaignStatsUtil.getCampaignName(emailStatsJSON
+		    .getString("campaign_id")), emailStats);
 	}
 
-	return campaignStatsJSONArray.toString();
+	String campaignStatsString = JSONSerializer.toJSON(campaignStats)
+		.toString().replace("Send E-mail", "Email Sent")
+		.replace("Email Opened", "Email Opened")
+		.replace("Email Clicked", "Unique Clicks")
+		.replace("total", "Total Clicks");
+
+	return campaignStatsString;
     }
 
     /**
@@ -158,8 +143,8 @@ public class CampaignStatsAPI
 	    String endDate = DateUtil.getMySQLNowDateFormat(Long
 		    .parseLong(endTime));
 
-	    JSONArray emailLogs = EmailStatsUtil.getEmailLogs(campaignId,
-		    startDate, endDate, timeZone, type);
+	    JSONArray emailLogs = EmailStatsUtil.getEmailCampaignStats(
+		    campaignId, startDate, endDate, timeZone, type);
 
 	    if (emailLogs == null)
 		return null;

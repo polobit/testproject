@@ -123,6 +123,27 @@ public class StatsUtil
     }
 
     /**
+     * Removes stats from SQL based on namespace.
+     * 
+     * @param namespace
+     *            - namespace
+     */
+    public static void deleteStatsBasedOnNamespace(String namespace)
+    {
+	String deleteQuery = "DELETE FROM page_views WHERE"
+		+ SQLUtil.appendDomainToQuery(namespace);
+
+	try
+	{
+	    GoogleSQL.executeNonQuery(deleteQuery);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+    }
+
+    /**
      * Gets number of rows having the given url in a table 'page_views'.
      * 
      * @param url
