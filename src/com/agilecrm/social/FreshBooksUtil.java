@@ -217,14 +217,14 @@ public class FreshBooksUtil
     {
 	try
 	{
+	    JSONObject pluginPrefs = new JSONObject().put("freshbooks_apiKey",
+		    widget.getProperty("freshbooks_apiKey")).put(
+		    "freshbooks_url", widget.getProperty("freshbooks_url"));
+
 	    // JSONObject pluginPrefs = new
 	    // JSONObject().put("freshbooks_apiKey",
-	    // widget.getProperty("freshbooks_apiKey")).put(
-	    // "freshbooks_url", widget.getProperty("freshbooks_url"));
-
-	    JSONObject pluginPrefs = new JSONObject().put("freshbooks_apiKey",
-		    "55b352b9e2c08f778c50c0de6f26f1ab").put("freshbooks_url",
-		    "https://clickdesk-billing.freshbooks.com");
+	    // "55b352b9e2c08f778c50c0de6f26f1ab").put("freshbooks_url",
+	    // "https://clickdesk-billing.freshbooks.com");
 
 	    return pluginPrefs;
 	}
