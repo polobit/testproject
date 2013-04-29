@@ -657,3 +657,6 @@ body
 			background: -ms-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
 			background: linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white)
 }
+.fb-like > span {
+	height:16px!important;
+}

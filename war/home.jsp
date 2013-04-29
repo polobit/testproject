@@ -104,7 +104,10 @@ String CSS_PATH = "/";
 					data-target=".nav-collapse"> <span class="icon-bar"></span> <span
 					class="icon-bar"></span> <span class="icon-bar"></span>
 				</a> <a class="brand" href="#dashboard">Agile CRM</a>
+
 				<div class="nav-collapse">
+				<%
+					if(!"admin".equals(domainUser.domain)) {%>
 					<ul class="nav agile-menu">
 						<li id="homemenu" class="active">
 						<li id="contactsmenu"><a href="#contacts"><i
@@ -127,9 +130,10 @@ String CSS_PATH = "/";
 							</form>
 						</li>
 					</ul>
-					
+		      <%} %>			
 					<ul class="nav pull-right">
-
+				<%
+					if(!"admin".equals(domainUser.domain)) {%>
 						<li class="dropdown" id="menu1"><a class="dropdown-toggle"
 							data-toggle="dropdown" href="#menu1">Add New <i class='caret'></i></a>
 							<ul class="dropdown-menu">
@@ -146,7 +150,7 @@ String CSS_PATH = "/";
 							<img style='display:hidden' id='ajax'
 								src='img/ajax-loader.gif' />
 								--></li>
-
+<%} %>
 						<li id="fat-menu" class="dropdown"><a href=""
 							class="dropdown-toggle" data-toggle="dropdown"><i
 								class="agilecrm-profile-dropdown"></i> </a>

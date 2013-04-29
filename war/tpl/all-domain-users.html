@@ -1,9 +1,10 @@
 <script id="all-domain-users-model-template" type="text/html">
 <td></td>
+<td>{{domain}}</td>
 <td>{{name}}</td>
 <td>{{email}}</td>
-<td>{{domain}}</td>
 <td>{{is_account_owner}}</td>
+<td><a href="#" class="btn btn-danger">Cancel</a></td>
 </script>
 
 <script id="all-domain-users-collection-template" type="text/html">
@@ -41,10 +42,11 @@
                 <thead>
                     <tr>
                         <th></th>
+						<th>Domain</th>
                         <th>Name</th>
                         <th>Email</th>
-                        <th>Domain</th>
                         <th>Account Owner</th>
+						<th>Cancel Account</th>
                     </tr>
                 </thead>
                 <tbody id="all-domain-users-model-list"></tbody>
