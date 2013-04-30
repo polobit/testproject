@@ -47,10 +47,11 @@ import com.agilecrm.widgets.util.WidgetUtil;
 @SuppressWarnings("serial")
 public class ScribeServlet extends HttpServlet
 {
-    public static String SERVICE_TYPE_LINKED_IN = "linkedin";
-    public static String SERVICE_TYPE_TWITTER = "twitter";
-    public static String SERVICE_TYPE_GMAIL = "gmail";
-    public static String SERVICE_TYPE_STRIPE = "stripe";
+    public static final String SERVICE_TYPE_LINKED_IN = "linkedin";
+    public static final String SERVICE_TYPE_TWITTER = "twitter";
+    public static final String SERVICE_TYPE_GMAIL = "gmail";
+    public static final String SERVICE_TYPE_STRIPE = "stripe";
+    public static final String SERVICE_TYPE_FRESHBOOKS = "freshbooks";
 
     // Get Service
     /**
@@ -91,8 +92,22 @@ public class ScribeServlet extends HttpServlet
 	}
 
 	// If service is null or service type is Twitter service is built
-	else if (serviceType.equalsIgnoreCase(SERVICE_TYPE_TWITTER))
+	else if (serviceType.equalsIgnoreCase(SERVICE_TYPE_FRESHBOOKS))
 
+	{
+	    // Creates a Service, by specifying API key, Secret key
+	    service = new ServiceBuilder().provider(FreshBooksApi.class)
+		    .callback(callback).apiKey(Globals.FRESHBOOKS_API_KEY)
+		    .apiSecret(Globals.FRESHBOOKS_SECRET_KEY).build();
+
+	    // Gets session and sets attribute "oauth.service" to Twitter type
+	    // as specified by Scribe
+	    req.getSession().setAttribute("oauth.service",
+		    SERVICE_TYPE_FRESHBOOKS);
+	}
+
+	// If service is null or service type is Twitter service is built
+	else if (serviceType.equalsIgnoreCase(SERVICE_TYPE_TWITTER))
 	{
 	    // Creates a Service, by specifying API key, Secret key
 	    service = new ServiceBuilder().provider(TwitterApi.class)
@@ -214,7 +229,9 @@ public class ScribeServlet extends HttpServlet
 	// secret key
 	if (serviceNameInSession.equalsIgnoreCase(SERVICE_TYPE_TWITTER)
 		|| serviceNameInSession
-			.equalsIgnoreCase(SERVICE_TYPE_LINKED_IN))
+			.equalsIgnoreCase(SERVICE_TYPE_LINKED_IN)
+		|| serviceNameInSession
+			.equalsIgnoreCase(SERVICE_TYPE_FRESHBOOKS))
 	{
 	    // Gets widget Id from the session
 	    String widgetId = (String) req.getSession().getAttribute(
@@ -327,10 +344,24 @@ public class ScribeServlet extends HttpServlet
 	    resp.sendRedirect(return_url);
 	    return;
 	}
-	if (serviceName.equalsIgnoreCase("Stripe"))
+	if (serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE))
 	{
 	    url = service.getAuthorizationUrl(null);
+
 	    System.out.println("Stripe redirect url" + url);
+	}
+	else if (serviceName.equalsIgnoreCase(SERVICE_TYPE_FRESHBOOKS))
+	{
+
+	    // token = service.getRequestToken();
+	    // System.out.println(token);
+	    OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST,
+		    FreshBooksApi.REQUEST_TOKEN_URL);
+	    Response res = oAuthRequest.send();
+	    System.out.println(res.getBody());
+	    url = "";
+	    System.out.println("Stripe redirect url" + url);
+
 	}
 	else
 	{

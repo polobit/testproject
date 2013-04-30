@@ -4,7 +4,7 @@
 <td>{{name}}</td>
 <td>{{email}}</td>
 <td>{{is_account_owner}}</td>
-<td><a href="#" class="btn btn-danger">Cancel</a></td>
+<td><a href="#" data="{{domain}}" class="delete-namespace btn btn-danger">Delete</a></td>
 </script>
 
 <script id="all-domain-users-collection-template" type="text/html">
@@ -16,7 +16,7 @@
 </div>
 </div>
 <div class="row">
-<div class="span9">
+<div class="span12">
     {{#unless this.length}}
     <div class="slate">
         <div class="slate-content">
@@ -36,8 +36,8 @@
     </div>
     {{/unless}}
     {{#if this.length}}
-    <div class="data-block">
-        <div class="data-container">
+    <div class="">
+        <div class="">
             <table class="table table-striped onlySorting">
                 <thead>
                     <tr>
@@ -46,7 +46,7 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Account Owner</th>
-						<th>Cancel Account</th>
+						<th>Delete Domain</th>
                     </tr>
                 </thead>
                 <tbody id="all-domain-users-model-list"></tbody>

@@ -106,20 +106,21 @@ String CSS_PATH = "/";
 				</a> <a class="brand" href="#dashboard">Agile CRM</a>
 
 				<div class="nav-collapse">
-				<%
-					if(!"admin".equals(domainUser.domain)) {%>
+
 					<ul class="nav agile-menu">
-						<li id="homemenu" class="active">
+						<li id="homemenu" class="active"></li>
 						<li id="contactsmenu"><a href="#contacts"><i
-								class="icon-user icon-white"></i> Contacts</a>
+								class="icon-user icon-white"></i> Contacts</a></li>
+					<%if(!"admin".equals(domainUser.domain)){%>
 						<li id="calendarmenu"><a href="#calendar"><i
-								class="icon-calendar icon-white"></i> Calendar</a>
+								class="icon-calendar icon-white"></i> Calendar</a></li>
 						<li id="dealsmenu"><a href="#deals"><i
-								class="icon-money icon-white"></i> Deals</a>
+								class="icon-money icon-white"></i> Deals</a></li>
 						<li id="workflowsmenu"><a href="#workflows"><i
-								class="icon-sitemap icon-white"></i> Campaigns</a>
+								class="icon-sitemap icon-white"></i> Campaigns</a></li>
 						<li id="reportsmenu"><a href="#reports"><i
-								class="icon-share icon-white"></i> Reports</a>
+								class="icon-share icon-white"></i> Reports</a></li>
+					<%}%>			
 						<li>
 							<form id="searchForm" class=" navbar-search"
 									style="display: inline;margin:5px;">
@@ -130,10 +131,9 @@ String CSS_PATH = "/";
 							</form>
 						</li>
 					</ul>
-		      <%} %>			
+				
 					<ul class="nav pull-right">
-				<%
-					if(!"admin".equals(domainUser.domain)) {%>
+
 						<li class="dropdown" id="menu1"><a class="dropdown-toggle"
 							data-toggle="dropdown" href="#menu1">Add New <i class='caret'></i></a>
 							<ul class="dropdown-menu">
@@ -141,16 +141,17 @@ String CSS_PATH = "/";
 								</li>
 								<li><a href="#companyModal" data-toggle="modal"
 									id="company">Company</a></li>
-
+                     <%if(!"admin".equals(domainUser.domain)){%>
 								<li><a href="#" id="show-activity">Activity</a></li>
 
 								<li><a href="#deals-add" id="activity">Deal</a></li>
 								<li><a href="#" id="show-note">Note</a></li>
+				     <%}%>
 							</ul> <!-- 
 							<img style='display:hidden' id='ajax'
 								src='img/ajax-loader.gif' />
 								--></li>
-<%} %>
+
 						<li id="fat-menu" class="dropdown"><a href=""
 							class="dropdown-toggle" data-toggle="dropdown"><i
 								class="agilecrm-profile-dropdown"></i> </a>
@@ -281,7 +282,5 @@ String CSS_PATH = "/";
 	<!-- Unified CSS for All Lib -->
 	<link rel='stylesheet' type='text/css' href='<%=CSS_PATH%>css/lib.css' />
 
-<script>
-</script>
 </body>
 </html>

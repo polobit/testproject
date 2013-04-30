@@ -9,6 +9,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
@@ -21,6 +22,8 @@ import org.json.JSONException;
 
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.DBUtil;
+import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.NamespaceManager;
 
 /**
@@ -222,5 +225,61 @@ public class UsersAPI
 	}
 
 	return DomainUserUtil.getAllDomainUsers();
+    }
+
+    /**
+     * Delete domain users of particular namespace
+     */
+    @Path("/admin/delete/{namespace}")
+    @DELETE
+    public void deleteDomainUser(@PathParam("namespace") String namespace)
+    {
+	String domain = NamespaceManager.get();
+
+	if (StringUtils.isEmpty(domain) || !domain.equals("admin"))
+	{
+	    throw new WebApplicationException(
+		    Response.status(Response.Status.BAD_REQUEST)
+			    .entity("Sorry you don't have privileges to access this page.")
+			    .build());
+	}
+
+	try
+	{
+	    DBUtil.deleteNamespace(namespace);
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+    }
+
+    // Get Stats for particular name-space
+    @Path("/admin/namespace-stats/{namespace}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getNamespaceStats(@PathParam("namespace") String namespace)
+    {
+	String domain = NamespaceManager.get();
+
+	if (StringUtils.isEmpty(domain) || !domain.equals("admin"))
+	{
+	    throw new WebApplicationException(
+		    Response.status(Response.Status.BAD_REQUEST)
+			    .entity("Sorry you don't have privileges to access this page.")
+			    .build());
+	}
+
+	NamespaceManager.set(namespace);
+	try
+	{
+	    return NamespaceUtil.getNamespaceStats().toString();
+	}
+	finally
+	{
+	    NamespaceManager.set(domain);
+	}
     }
 }
