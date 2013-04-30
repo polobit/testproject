@@ -84,31 +84,40 @@ var DealsRouter = Backbone.Router.extend({
     dealsDetails: function (id) {
         
     	// Navigates to deals if the user refreshes it directly
-    	if (!this.opportunityCollectionView || this.opportunityCollectionView.collection.length == 0) {
+    	if ((!this.opportunityCollectionView || this.opportunityCollectionView.collection.length == 0) && (!dealsView || 
+    			dealsView.collection.length == 0)) {
             this.navigate("deals", {
                 trigger: true
             });
             return;
         }
 
-    	// Gets a deal from deals collection based on id
-        this.opportunityCollectionView.currentDeal = this.opportunityCollectionView.collection.get(id);
-
+    	if(this.opportunityCollectionView && this.opportunityCollectionView.collection)
+    		// Gets a deal from deals collection based on id
+    			var model = this.opportunityCollectionView.currentDeal = this.opportunityCollectionView.collection.get(id);
+    	
+    	else if(dealsView && dealsView.collection)
+    		// Gets a deal from deals collection based on id
+    		var model = dealsView.collection.get(id);
+    	
+    	console.log(model.toJSON());
+    	
+    	
         var view = new Base_Model_View({
             url: 'core/api/opportunity',
-            model: this.opportunityCollectionView.currentDeal,
+            data: model.toJSON(),
             template: "opportunity-add",
-            window: 'deals',
+            window: 'back',
             postRenderCallback: function(el){
 
             	// Call setupTypeAhead to get contacts
             	agile_type_ahead("relates_to", el, contacts_typeahead);
             	
             	// Fills milestone select element
-            	populateMilestones(el,undefined, App_Deals.opportunityCollectionView.currentDeal.toJSON());
+            	populateMilestones(el,undefined, model.toJSON());
             	
             	// Fills owner select element
-            	populateUsers("owners-list", el, App_Deals.opportunityCollectionView.currentDeal.toJSON(), 'owner');
+            	populateUsers("owners-list", el, model.toJSON(), 'owner');
             	
             },
         	});

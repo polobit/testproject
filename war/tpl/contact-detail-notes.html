@@ -36,24 +36,24 @@
 		{{/if}}
 		<span class="owner-name">{{prefs.currentDomainUserName}}</span>
 	</span>
-
-	<h4><b>{{subject}}</b></h4></br>
+	<h4><a style="text-decoration: none"><b>{{ucfirst subject}}</b></a></h4></br>
 	<p>{{description}}</p>	
-	<p>
-		<strong>Related To</strong></br>
-			{{#each contacts}}
-            	{{#if id}}
-               		<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
-            	{{/if}}
-           	{{/each}}<br/>
-	</p>
 	 	<div class="clear">
 		<span class="actions pull-right">
-             <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/contacts/notes/bulk"></span></a>
+			<a title="Edit"  data="{{id}}" data-toggle="modal" class="edit-note" style="cursor:pointer;text-decoration: none;padding-right:10px"> <i class="icon-pencil"></i> </a>
+            <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/contacts/notes/bulk"></span></a>
         </span>
-		<small class="edit-hover"> 
+		<small class="edit-hover" style="margin-right:10px"> 
 			<time class="note-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" created_time}}</time>
-		</small>	
+		</small>
+		<div style="display:inline-block; ">	
+		{{#each contacts}}
+           	{{#if id}}
+           		&nbsp<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+           	{{/if}}
+       	{{/each}}
+		</div>
+	<br/>
 	</div>
 </div>
 </div>
