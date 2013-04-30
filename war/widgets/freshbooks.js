@@ -30,6 +30,7 @@ $(function() {
     if (plugin_prefs == undefined)
     {        
         setUpFreshbooksAuth(plugin_id);
+    	//setUpFreshBooksOauth(plugin_id);
         return;
     }  
 
@@ -72,6 +73,29 @@ $(function() {
     
 });
 
+
+function setUpFreshBooksOauth(plugin_id)
+{
+	 // URL to return, after fetching token and secret key from LinkedIn
+    var callbackURL = window.location.href;
+
+    /*
+     * Creates a URL, which on click can connect to scribe using parameters sent
+     * and returns back to the profile based on return URL provided and saves widget  
+     * preferences in widget based on plugin id
+     */
+    var url = '/scribe?service=freshbooks&return_url=' + encodeURIComponent(callbackURL) +
+        '&plugin_id=' + encodeURIComponent(plugin_id);
+
+    //Shows a link button in the UI which connects to the above URL
+    $('#FreshBooks').html("<div class='widget_content' style='border-bottom:none;line-height: 160%;' >" + 
+    		"Cloud Accounting Specialist for Small Business Owners" + 
+    		"<p style='margin: 10px 0px 5px 0px;' >" + 
+    		"<button class='btn' ><a href='" + url + "'>Link Your FreshBooks</a>" + 
+    		"</p></button></div>");
+
+}
+
 function setUpFreshbooksAuth(plugin_id)
 {
 	// Shows loading image until set up is shown 
@@ -109,7 +133,6 @@ function setUpFreshbooksAuth(plugin_id)
             }            
             
             showFreshBooksClient(plugin_id, Email);
-            // getItemsInFreshBooks(plugin_id);
                      
         });
 
@@ -280,7 +303,5 @@ function addInvoiceToClientInFreshBooks(plugin_id, first_name, last_name, email,
     	});
         
     });
-    
-	
-
 }
+
