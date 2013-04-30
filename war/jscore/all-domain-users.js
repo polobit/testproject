@@ -8,7 +8,8 @@ $(function()
 				function(e)
 				{
 					e.preventDefault();
-					var namespace = $(".delete-namespace").closest('a').attr("data");
+					var namespace = $(this).closest('a').attr("data");
+					
 					if(namespace != "")
 					{
 						/**
