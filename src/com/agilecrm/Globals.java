@@ -39,6 +39,10 @@ public class Globals
     public static final String TWITTER_API_KEY = "BuHxUT4CouZKfLiX9bqDDw";
     public static final String TWITTER_SECRET_KEY = "LJn5yqFu2hdzVgOpNJE7emKEOm4n6GZzdySFPq7A";
 
+    // FRESHBOOKS
+    public static final String FRESHBOOKS_API_KEY = "55b352b9e2c08f778c50c0de6f26f1ab";
+    public static final String FRESHBOOKS_SECRET_KEY = "3gVEvFmv9eMCv6jMuBa4pyGmqey7iiHBzL";
+
     // Payment gateways
     public static final String STRIPE = "Stripe";
     public static final String PAYPAL = "Paypal";
