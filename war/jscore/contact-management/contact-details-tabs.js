@@ -9,6 +9,7 @@
  */
 var notesView;
 var dealsView; 
+var tasksView;
 $(function(){ 
 
 	var id;
@@ -78,7 +79,7 @@ $(function(){
 	$('#contactDetailsTab a[href="#tasks"]').live('click', function (e){
 		e.preventDefault();
 	    id = App_Contacts.contactDetailView.model.id;
-		var tasksView = new Base_Collection_View({
+		tasksView = new Base_Collection_View({
             url: '/core/api/contacts/' + id + "/tasks",
             restKey: "task",
             templateKey: "contact-tasks",

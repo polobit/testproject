@@ -58,6 +58,7 @@ $(function(){
      */  
     $('#note_validate').live('click', function(e){
     	e.preventDefault();
+    	
     	// Returns, if the save button has disabled attribute 
     	if($(this).attr('disabled'))
     		return;
