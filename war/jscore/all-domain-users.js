@@ -8,8 +8,15 @@ $(function()
 			
 					e.preventDefault();
 					var namespace = $(this).closest('a').attr("data");
+					
 					if(namespace != "")
 					{
+						// If modal already exists, removes to append new
+	                    if ($('#warning-deletion').size() != 0)
+	                    {
+	                    	$('#warning-deletion').remove();
+	                    }
+	                    
 						// Shows account stats warning template with stats(data used)
 						/**
 						 * Getting namespace stats for this domain
@@ -18,11 +25,11 @@ $(function()
 							url : "core/api/users/admin/namespace-stats/" + namespace,
 							template : "warning",
 						});
-						
+	                    
 						// Appends to content, warning is modal can call show if
 						// appended in content
 						$('#content').append(account_stats.render(true).el);
-
+						
 						// Shows warning modal
 						$("#warning-deletion").modal('show');
 
@@ -36,7 +43,6 @@ $(function()
 		
 								// Hides modal
 								$("#warning-deletion").modal('hide');
-		
 								// Show loading in content
 								$("#content").html(LOADING_HTML);
 								/**
@@ -47,7 +53,12 @@ $(function()
 									url : "core/api/users/admin/delete/" + namespace,
 									success : function()
 									{
+										location.reload(true);
 										console.log("Deleted namespace: "+ namespace);
+									},
+									error : function()
+									{
+										console.log("error in deleting:"+ namespace);
 									}
 								});
 					     });

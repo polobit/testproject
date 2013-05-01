@@ -109,9 +109,16 @@ String CSS_PATH = "/";
 
 					<ul class="nav agile-menu">
 						<li id="homemenu" class="active"></li>
+						<%
+					        if("admin".equals(domainUser.domain)){
+					           out.println("</ul><ul class='nav pull-right' style='float:right!important;'><li><a href='#all-domain-users'><i class='icon-group'></i> All Domain Users</a></li>");
+						       out.println("<li><a href="+ logoutURL +"><i class='icon-off'></i>Logout</a></li>");
+					        }
+					        else{
+						%>
+
 						<li id="contactsmenu"><a href="#contacts"><i
 								class="icon-user icon-white"></i> Contacts</a></li>
-					<%if(!"admin".equals(domainUser.domain)){%>
 						<li id="calendarmenu"><a href="#calendar"><i
 								class="icon-calendar icon-white"></i> Calendar</a></li>
 						<li id="dealsmenu"><a href="#deals"><i
@@ -120,7 +127,7 @@ String CSS_PATH = "/";
 								class="icon-sitemap icon-white"></i> Campaigns</a></li>
 						<li id="reportsmenu"><a href="#reports"><i
 								class="icon-share icon-white"></i> Reports</a></li>
-					<%}%>			
+								
 						<li>
 							<form id="searchForm" class=" navbar-search"
 									style="display: inline;margin:5px;">
@@ -131,9 +138,8 @@ String CSS_PATH = "/";
 							</form>
 						</li>
 					</ul>
-				
+				   
 					<ul class="nav pull-right">
-
 						<li class="dropdown" id="menu1"><a class="dropdown-toggle"
 							data-toggle="dropdown" href="#menu1">Add New <i class='caret'></i></a>
 							<ul class="dropdown-menu">
@@ -141,17 +147,15 @@ String CSS_PATH = "/";
 								</li>
 								<li><a href="#companyModal" data-toggle="modal"
 									id="company">Company</a></li>
-                     <%if(!"admin".equals(domainUser.domain)){%>
 								<li><a href="#" id="show-activity">Activity</a></li>
 
 								<li><a href="#deals-add" id="activity">Deal</a></li>
 								<li><a href="#" id="show-note">Note</a></li>
-				     <%}%>
 							</ul> <!-- 
 							<img style='display:hidden' id='ajax'
 								src='img/ajax-loader.gif' />
 								--></li>
-
+                     
 						<li id="fat-menu" class="dropdown"><a href=""
 							class="dropdown-toggle" data-toggle="dropdown"><i
 								class="agilecrm-profile-dropdown"></i> </a>
@@ -165,18 +169,16 @@ String CSS_PATH = "/";
 								    if (domainUser != null && domainUser.is_admin)
 										out.println("<li><a href='#admin'><i class='icon-fire'></i> Admin Settings</a></li>");
 								%>
-							   <%
-							        if("admin".equals(domainUser.domain))
-							           out.println("<li><a href='#all-domain-users'><i class='icon-group'></i> All Domain Users</a></li>");
-							   %>
 
 						<li><a href="#contact-us"><i class="icon-pencil"></i>
 								Contact Us</a></li>
+						
 						<li><a href="<%=logoutURL%>"><i class="icon-off"></i>
 								Logout</a></li>
 
 					</ul>
 					</li>
+					<%} %>
 					</ul>
 				</div>
 				<!--/.nav-collapse -->
@@ -211,33 +213,24 @@ String CSS_PATH = "/";
 	%>
 	
 	</div>
-<!-- 		<div class="footer" id="footer" style="padding:0px !important;margin-top:15px;">
-			<div style="border-top:1px solid #f5f5f5;border-bottom:1px solid #f5f5f5"></div>
-			<div class="container">
-			<p style="margin:15px 0px 15px 0px"><b>Like AgileCRM?</b> Refer your friends <i class="icon-twitter"></i>
-			<i class="icon-facebook"></i>
-			<i class="icon-google-plus-sign"></i>
-    	    <a style="margin-left:20px;cursor:pointer;" id="help-page">Help</a>
-			<a href="#" id="scroll-top" class="btn btn-mini btn-flat btn-primary pull-right">Top &uarr;</a>
-			</p>
-	        
-    		</div>
-    	</div> -->
+
 	<footer id="footer" class="footer container"
 		style="padding: 0px !important;overflow-x:hidden;overflow-y:hidden;margin-top:15px;">
 
-	 	<div style="width:300px;display:inline-block;">
-	 		<div style="margin-top:10px;font-weight:bold;color:#777;">Like AgileCRM?</div>
+	 	<div style="width:290px;display:inline-block;margin-top:15px;">
      		<div style="margin-right:5px;display:inline-block;vertical-align:top;">Refer your friends.</div>
      		
      		<div id="fb-root" style="display:inline;"></div>
 		    <script src="https://connect.facebook.net/en_US/all.js#xfbml=1" type="text/javascript"></script>
-     		<div class="fb-like" data-href="https://www.agilecrm.com" data-send="false" data-layout="button_count" data-width="450" data-show-faces="true" data-font="arial" style="overflow:hidden;display:inline;float:right;"></div>
+     		<div class="fb-like" data-href="https://www.agilecrm.com" data-send="false" data-layout="button_count" data-width="450" data-show-faces="true"
+     		      data-font="arial" style="overflow:hidden;display:inline;float:right;"></div>
      		
      		<script src="https://platform.twitter.com/widgets.js" type="text/javascript"></script>
      		<div style="display:inline;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="https://www.agilecrm.com" >Tweet</a></div>
      	</div>
-     	<a style="margin-left:10%;font-weight:bold;cursor:pointer;" id="help-page">Help</a>
+     	<span style="min-height:3em;margin-left:10%;display:inline-block;vertical-align: middle">
+     	    <a style="font-weight:bold;cursor:pointer;" id="help-page">Help</a>
+	 	</span>
 	 	<a href="#" id="scroll-top" class="btn btn-mini btn-flat btn-primary pull-right">Top &uarr;</a>
 	</footer>
 
