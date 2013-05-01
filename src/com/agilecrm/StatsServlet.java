@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.agilecrm.db.util.StatsUtil;
+import com.agilecrm.db.util.AnalyticsUtil;
 import com.google.appengine.api.NamespaceManager;
 
 /**
@@ -42,7 +42,7 @@ public class StatsServlet extends HttpServlet
 	String email = req.getParameter("email");
 
 	String ip = null;
-	String newOne = null;
+	String isNew = null;
 	String ref = null;
 	String userAgent = null;
 	String country = null;
@@ -53,7 +53,7 @@ public class StatsServlet extends HttpServlet
 	// If new
 	if (!StringUtils.isEmpty(req.getParameter("new")))
 	{
-	    newOne = req.getParameter("new");
+	    isNew = req.getParameter("new");
 	    ref = req.getParameter("ref");
 
 	    // If ref is empty
@@ -77,7 +77,7 @@ public class StatsServlet extends HttpServlet
 	long reqTime = date.getTime() / 1000;
 
 	// Insert into table
-	StatsUtil.addToPageViews(domain, guid, email, sid, url, ip, newOne,
+	AnalyticsUtil.addToPageViews(domain, guid, email, sid, url, ip, isNew,
 		ref, userAgent, country, region, city, cityLatLong, reqTime);
     }
 

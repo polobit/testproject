@@ -105,9 +105,10 @@ var WorkflowsRouter = Backbone.Router
 			logsToCampaign : function(id) {
 				var logsListView = new Base_Collection_View({
 					url : '/core/api/campaigns/logs/' + id,
-					restKey : "logs",
 					templateKey : "campaign-logs",
 					individual_tag_name : 'tr',
+					sortKey:'time',
+					descending:true,
 					postRenderCallback : function(el) {
 						head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
 							$("time.log-created-time", el).timeago();

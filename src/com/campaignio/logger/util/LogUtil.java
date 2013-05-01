@@ -1,17 +1,15 @@
 package com.campaignio.logger.util;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
 
 import com.agilecrm.db.util.SQLUtil;
 import com.campaignio.logger.Log;
+import com.campaignio.util.CampaignStatsUtil;
 import com.google.appengine.api.NamespaceManager;
 
 /**
@@ -47,8 +45,9 @@ public class LogUtil
 	    return;
 
 	// Insert to SQL
-	SQLUtil.addToCampaignLogs(domain, campaignId, subscriberId, message,
-		logType);
+	SQLUtil.addToCampaignLogs(domain, campaignId,
+		CampaignStatsUtil.getCampaignName(campaignId), subscriberId,
+		message, logType);
     }
 
     /**
@@ -64,45 +63,29 @@ public class LogUtil
     {
 	String domain = NamespaceManager.get();
 
-	if (StringUtils.isEmpty(domain))
+	if (StringUtils.isEmpty(domain) || (StringUtils.isEmpty(campaignId))
+		&& (StringUtils.isEmpty(subscriberId)))
 	    return null;
 
-	JSONArray logs = null;
-
-	// Returns logs w.r.t both campaignId and subscriberId.
-	if (!StringUtils.isEmpty(campaignId)
-		&& !StringUtils.isEmpty(subscriberId))
-	    logs = SQLUtil.getLogs(campaignId, subscriberId, domain);
-
-	else if (!StringUtils.isEmpty(campaignId))
-	    logs = SQLUtil.getLogs(campaignId, null, domain);
-
-	else if (!StringUtils.isEmpty(subscriberId))
-	    logs = SQLUtil.getLogs(null, subscriberId, domain);
+	// get SQL logs
+	JSONArray logs = SQLUtil.getLogs(campaignId, subscriberId, domain);
 
 	if (logs == null)
 	    return null;
 
 	try
 	{
+	    // to attach contact and campaign-name to each log.
 	    return new ObjectMapper().readValue(logs.toString(),
 		    new TypeReference<List<Log>>()
 		    {
 		    });
 	}
-	catch (JsonParseException e1)
+	catch (Exception e)
 	{
-	    e1.printStackTrace();
+	    e.printStackTrace();
+	    return null;
 	}
-	catch (JsonMappingException e1)
-	{
-	    e1.printStackTrace();
-	}
-	catch (IOException e1)
-	{
-	    e1.printStackTrace();
-	}
-	return null;
     }
 
     /**
@@ -115,21 +98,11 @@ public class LogUtil
     {
 	String domain = NamespaceManager.get();
 
-	if (StringUtils.isEmpty(domain))
+	if (StringUtils.isEmpty(domain)
+		|| (StringUtils.isEmpty(campaignId) && StringUtils
+			.isEmpty(subscriberId)))
 	    return;
 
-	// Deletes w.r.t both campaignId and subscriberId.
-	if (!StringUtils.isEmpty(campaignId)
-		&& !StringUtils.isEmpty(subscriberId))
-	    SQLUtil.deleteLogsFromSQL(campaignId, subscriberId, domain);
-
-	// Deletes campaign logs.
-	else if (!StringUtils.isEmpty(campaignId))
-	    SQLUtil.deleteLogsFromSQL(campaignId, null, domain);
-
-	// Deletes subscriber logs.
-	else if (!StringUtils.isEmpty(subscriberId))
-	    SQLUtil.deleteLogsFromSQL(null, subscriberId, domain);
-
+	SQLUtil.deleteLogsFromSQL(campaignId, subscriberId, domain);
     }
 }

@@ -376,14 +376,14 @@ function showNoty(type, message, position) {
 		 // Set the handler for click
 		     $('.noty_bar').die().live('click', function(){
 
-				// warning type is used for upgrade. So when cliked on it navigate to subscribe.
-		    	 if(n.options.type == "warning")
-					{
-						// Send to upgrade page
-						Backbone.history.navigate('subscribe', {
-							trigger : true
-						});
-					}
+//				// warning type is used for upgrade. So when cliked on it navigate to subscribe.
+//		    	 if(n.options.type == "warning")
+//					{
+//						// Send to upgrade page
+//						Backbone.history.navigate('subscribe', {
+//							trigger : true
+//						});
+//					}
 					
 					// information type is used for user notification. When clicked navigate to link.
 		    	 if(n.options.type == "information")

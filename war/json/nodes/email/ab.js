@@ -17,7 +17,7 @@
 			"name": "frequency",
             "id":"frequency",
 			"value":"0.5",
-			"title": "Enter the frequency for your A/B testing - 0.5 for 50%",
+			"title": "Enter the frequency for your A/B testing. Eg: 0.5 for 50%",
 			"fieldType": "input",
             "type": "number",
             "max": "1"

@@ -2,8 +2,8 @@
     "name": "Add Note",
     "thumbnail": "json/nodes/images/crm/addnote.png",
     "icon": "json/nodes/icons/crm/addnote.png",
-    "info": "Add a note for your existing lead in your CRM",
-    "help": "Add a note for your existing lead in your CRM",
+    "info": "Add a note to your existing customer in your CRM",
+    "help": "Add a note to your existing customer in your CRM",
     "author": "john",
     "company": "Invox",
     "language": "en",
@@ -33,7 +33,7 @@
             "fieldType": "textarea",
             "type": "textarea" 
         },{
-            "label": "Add a note for your existing lead in your CRM",
+            "label": "Add a note to your existing customer in your CRM",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 
