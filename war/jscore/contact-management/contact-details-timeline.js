@@ -646,11 +646,7 @@ function remove_loading_img(el){
 				// If timeline is not defined yet, calls setup_timeline for the first time
 				if(timelineView.collection.length == 0)
 				{					
-					$.each(data.toJSON(),function(index,model){
-						
-						//Add entity type to each model of stats to identify it
-						model.entity_type = "s";
-						
+					$.each(data.toJSON(),function(index,model){					
 						timelineView.collection.add(model);
 					});					
 					
@@ -660,10 +656,6 @@ function remove_loading_img(el){
 				else
 				{					
 						$.each(data.toJSON(),function(index,model){
-							
-     					//Add entity type to each model of stats to identify it
-						model.entity_type = "s";
-						
 						var newItem = $(getTemplate("timeline", model));
 						newItem.find('.inner').append('<a href="#" class="open-close"></a>');
 						

@@ -396,13 +396,13 @@ table .headerSortDown::after,table .headerSortDown:hover::after {
         height: auto !important;
         height: 100%;
         /* Negative indent footer by it's height */
-        margin: 0 auto -60px;
+        margin: 0 auto -45px;
       }
 
       /* Set the fixed height of the footer here */
       #push,
       #footer {
-        height: 60px;
+        height: 45px;
       }
       
       /* Lastly, apply responsive CSS fixes as necessary */
@@ -415,17 +415,15 @@ table .headerSortDown::after,table .headerSortDown:hover::after {
         }
       }
 
- footer #scroll-top
+footer #scroll-top
 {
  position: fixed;
     right: 10px;
-    bottom: 0px;
+    bottom: 10px;
     margin: 0px;
     z-index: 99;
     display: none;
 }
-  
- 
  
 /*Disable selection using css */
 .unselectable {

@@ -60,6 +60,7 @@ $(function()
         // General options
         mode : "textareas",
         theme : "advanced",
+        width : "250",
         plugins : "autolink,lists,spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template",
 
         // Theme options
@@ -127,7 +128,7 @@ function validateInput()
 <div id="hld" style='padding:10px'>
 <div class="wrapper" style='min-width:450px;'><!-- wrapper begins -->
 
-<div class="block small" style="width:100%; float:left;">
+<div class="block small" style="width:100%; float:left;background-color: #f5f5f5;padding-left: 10px;-webkit-box-shadow: inset 0 1px 1px;border: 1px solid rgba(0, 0, 0, 0.05);border-radius: 4px;box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);">
 
 
 <div class="block_head">
@@ -141,9 +142,9 @@ function validateInput()
 <!-- out.println(Util.getHTMLMessageBox("","error", "errormsg")); -->
 
 <form method="post" action="somepage">
- <textarea name="content" id='content' style="width:20%"></textarea>
+ <textarea name="content" id='content' rows="30" cols="90"></textarea>
  <br/>
- <p><input type="submit" id="save_html" class="submit long" value="Save" /> &nbsp;</p>
+ <p><input type="submit" id="save_html" class="submit long" value="Save"/> &nbsp;</p>
  </form>
  </div>
 <!-- .block_content ends -->

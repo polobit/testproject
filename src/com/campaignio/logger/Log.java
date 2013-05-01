@@ -8,8 +8,6 @@ import org.codehaus.jackson.annotate.JsonAutoDetect;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.workflows.Workflow;
-import com.agilecrm.workflows.util.WorkflowUtil;
 
 /**
  * 
@@ -37,6 +35,11 @@ public class Log
     public String campaign_id;
 
     /**
+     * Campaign Name.
+     */
+    public String campaign_name;
+
+    /**
      * Contact id that subscribes to campaign.
      */
     public String subscriber_id;
@@ -57,8 +60,9 @@ public class Log
     public String log_type;
 
     /**
-     * Log epoch time.
-     */
+     * Log epoch time(log_time converted) is sent along with other fields. Epoch
+     * time is needed for timeline and tables.
+     **/
     public String time;
 
     /**
@@ -99,25 +103,4 @@ public class Log
 
 	return null;
     }
-
-    /**
-     * Returns workflow name from campaign-id.
-     * 
-     * @return campaign name string.
-     */
-    @XmlElement
-    public String getCampaignName()
-    {
-	if (campaign_id != null)
-	{
-	    Workflow workflow = WorkflowUtil.getWorkflow(Long
-		    .parseLong(campaign_id));
-
-	    if (workflow != null)
-		return workflow.name;
-	}
-
-	return null;
-    }
-
 }

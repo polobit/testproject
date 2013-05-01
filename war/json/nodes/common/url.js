@@ -2,7 +2,7 @@
     "name": "URL Visited",
     "thumbnail": "json/nodes/images/common/url.png",
     "icon": "json/nodes/icons/common/url.png",
-    "info": "Check if the URL has been visited in a workflow",
+    "info": "Check if the URL has been visited by the customer",
     "help": "AgileCRM can check if the subscriber (Email address) has visited a web page (URL).",
     "author": "John",
     "company": "Invox",
@@ -19,6 +19,19 @@
 		    "title": "Enter a valid URL.",
 		    "fieldType": "input",
 		    "type": "url" 
+		},
+		{
+			"label": "Type",
+			"required": "required",
+			"category": "Settings",
+			"name": "type",
+			"title": "Select the given URL type.",
+			"options": {
+				"Exact": "exact",
+		        "Like": "like"    
+	          },
+	          "fieldType": "select",
+			  "type": "type"
 		},
         {
             "label": "Specify your visited url.",

@@ -328,7 +328,7 @@ var Base_Model_View = Backbone.View
 											 * navigate to previews page
 											 */
 											if (window == 'back') {
-												window.history.back();
+												history.back(-1);
 											}
 											// Else navigate to page set in
 											// window attribute

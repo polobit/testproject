@@ -1,7 +1,7 @@
 {
 	"name": "Check Tags",
-	"thumbnail": "json/nodes/images/email/tags.png",
-    "icon": "json/nodes/icons/email/tags.png",
+	"thumbnail": "json/nodes/images/email/checktags.png",
+    "icon": "json/nodes/icons/email/checktags.png",
     "info": "Verify whether given tag exists or not for your customer.",
     "help": "Verify whether given tag exists or not for your customer.",
     "author": "Naresh",

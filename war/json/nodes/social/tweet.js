@@ -58,7 +58,9 @@
             "id": "message",
             "title": "Enter your message.",
 			"fieldType": "textarea",
-			"type": "textarea" 
+			"type": "textarea",
+			"rows": "5",
+			"cols": "58"
          },
         {   
 			"label": "Rate Limit (Hourly):",
