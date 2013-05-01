@@ -29,19 +29,22 @@ public class SQLUtil
      *            - Log Type.
      */
     public static void addToCampaignLogs(String domain, String campaignId,
-	    String subscriberId, String message, String type)
+	    String campaignName, String subscriberId, String message,
+	    String type)
     {
-	String insertToLogs = "INSERT INTO campaign_logs (domain, campaign_id, subscriber_id, log_time, message, log_type) VALUES("
-		+ StatsUtil.encodeSQLColumnValue(domain)
+	String insertToLogs = "INSERT INTO campaign_logs (domain, campaign_id, campaign_name, subscriber_id, log_time, message, log_type) VALUES("
+		+ encodeSQLColumnValue(domain)
 		+ ","
-		+ StatsUtil.encodeSQLColumnValue(campaignId)
+		+ encodeSQLColumnValue(campaignId)
 		+ ","
-		+ StatsUtil.encodeSQLColumnValue(subscriberId)
+		+ encodeSQLColumnValue(campaignName)
+		+ ","
+		+ encodeSQLColumnValue(subscriberId)
 		+ ",NOW()"
 		+ ","
-		+ StatsUtil.encodeSQLColumnValue(message)
+		+ encodeSQLColumnValue(message)
 		+ ","
-		+ StatsUtil.encodeSQLColumnValue(type) + ")";
+		+ encodeSQLColumnValue(type) + ")";
 
 	System.out.println("Insert Query to CampaignLogs: " + insertToLogs);
 
@@ -69,24 +72,8 @@ public class SQLUtil
     public static JSONArray getLogs(String campaignId, String subscriberId,
 	    String domain)
     {
-	String logs = "SELECT *, UNIX_TIMESTAMP(log_time) AS time FROM campaign_logs WHERE";
-
-	if (!StringUtils.isEmpty(campaignId))
-	{
-	    logs += " campaign_id = "
-		    + StatsUtil.encodeSQLColumnValue(campaignId);
-
-	    // if both are not null
-	    if (!StringUtils.isEmpty(subscriberId))
-		logs += " AND subscriber_id = "
-			+ StatsUtil.encodeSQLColumnValue(subscriberId);
-	}
-	else if (!StringUtils.isEmpty(subscriberId))
-	    logs += " subscriber_id = "
-		    + StatsUtil.encodeSQLColumnValue(subscriberId);
-
-	logs += " AND " + appendDomainToQuery(domain);
-
+	String logs = "SELECT *, UNIX_TIMESTAMP(log_time) AS time FROM campaign_logs WHERE"
+		+ getWhereConditionOfLogs(campaignId, subscriberId, domain);
 	try
 	{
 	    return GoogleSQL.getJSONQuery(logs);
@@ -109,26 +96,8 @@ public class SQLUtil
     public static void deleteLogsFromSQL(String campaignId,
 	    String subscriberId, String domain)
     {
-	String deleteCampaignLogs = "DELETE FROM campaign_logs WHERE";
-
-	if (!StringUtils.isEmpty(campaignId))
-	{
-	    deleteCampaignLogs += " campaign_id = "
-		    + StatsUtil.encodeSQLColumnValue(campaignId);
-
-	    // If both are not null
-	    if (!StringUtils.isEmpty(subscriberId))
-		deleteCampaignLogs += " AND subscriber_id = "
-			+ StatsUtil.encodeSQLColumnValue(subscriberId);
-
-	}
-
-	else if (!StringUtils.isEmpty(subscriberId))
-	    deleteCampaignLogs += " subscriber_id = "
-		    + StatsUtil.encodeSQLColumnValue(subscriberId);
-
-	deleteCampaignLogs += " AND " + appendDomainToQuery(domain);
-
+	String deleteCampaignLogs = "DELETE FROM campaign_logs WHERE"
+		+ getWhereConditionOfLogs(campaignId, subscriberId, domain);
 	try
 	{
 	    GoogleSQL.executeNonQuery(deleteCampaignLogs);
@@ -137,6 +106,40 @@ public class SQLUtil
 	{
 	    e.printStackTrace();
 	}
+    }
+
+    /**
+     * Returns where clause for campaign logs query.
+     * 
+     * @param campaignId
+     *            - campaignId.
+     * @param subscriberId
+     *            - subscriberId.
+     * @param domain
+     *            - domain.
+     * @return String
+     */
+    private static String getWhereConditionOfLogs(String campaignId,
+	    String subscriberId, String domain)
+    {
+	String condition = null;
+
+	if (!StringUtils.isEmpty(campaignId))
+	{
+	    condition = " campaign_id = " + encodeSQLColumnValue(campaignId);
+
+	    // If both are not null
+	    if (!StringUtils.isEmpty(subscriberId))
+		condition += " AND ";
+	}
+
+	if (!StringUtils.isEmpty(subscriberId))
+	    condition = " subscriber_id = "
+		    + encodeSQLColumnValue(subscriberId);
+
+	condition += " AND " + appendDomainToQuery(domain);
+
+	return condition;
     }
 
     /**
@@ -169,7 +172,34 @@ public class SQLUtil
      */
     public static String appendDomainToQuery(String domain)
     {
-	return " domain = " + StatsUtil.encodeSQLColumnValue(domain);
+	return " domain = " + encodeSQLColumnValue(domain);
     }
 
+    /**
+     * Returns string value appended by quotations if not null. It is used to
+     * avoid 'null' values(having quotations) being inserted instead of null.
+     * 
+     * @param value
+     *            - given string.
+     * @return encoded string if not null, otherwise null.
+     */
+    public static String encodeSQLColumnValue(String value)
+    {
+	if (value == null)
+	    return null;
+
+	// Removes single quotation on start and end.
+	String replaceSingleQuote = value.replaceAll("(^')|('$)", "");
+
+	// Removes double quotes
+	String replaceDoubleQuote = replaceSingleQuote.replaceAll(
+		"(^\")|(\"$)", "");
+
+	// Replace ' with \' within the value. To avoid error while insertion
+	// into table
+	if (replaceDoubleQuote.contains("'"))
+	    replaceDoubleQuote = replaceDoubleQuote.replace("'", "\\'");
+
+	return "\'" + replaceDoubleQuote + "\'";
+    }
 }

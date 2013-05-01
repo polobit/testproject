@@ -1,41 +1,41 @@
-$(function(){
-
-	var accountprefs = Backbone.Model.extend({
-		url:'core/api/account-prefs'
-	});
-	
-	var accountPrefs = new accountprefs();
-	accountPrefs.fetch({
-		success: function(data)
-		{
-			var json = data.toJSON();
-			
-			console.log(json);
-			
-			// Allow only for free users
-			try{
-				
-				// if json consists of plan, then return
-				if(json.plan)
-					return;	
-				
-			}
-			catch(err){}	
-	
-	// Show the first one after 3 secs
-	setTimeout(function(){
-		showNoty("warning", get_random_message(), "bottom");
-	}, 3000);
-	
-//	// Set the periodically
-//	setInterval(function(){
+//$(function(){
+//
+//	var accountprefs = Backbone.Model.extend({
+//		url:'core/api/account-prefs'
+//	});
+//	
+//	var accountPrefs = new accountprefs();
+//	accountPrefs.fetch({
+//		success: function(data)
+//		{
+//			var json = data.toJSON();
+//			
+//			console.log(json);
+//			
+//			// Allow only for free users
+//			try{
+//				
+//				// if json consists of plan, then return
+//				if(json.plan)
+//					return;	
+//				
+//			}
+//			catch(err){}	
+//	
+//	// Show the first one after 3 secs
+//	setTimeout(function(){
 //		showNoty("warning", get_random_message(), "bottom");
-//	}, 30000);
-	
-		}
-	});
-	
-});
+//	}, 3000);
+//	
+////	// Set the periodically
+////	setInterval(function(){
+////		showNoty("warning", get_random_message(), "bottom");
+////	}, 30000);
+//	
+//		}
+//	});
+//	
+//});
 
 
 //function showNotyP(type, message, position)

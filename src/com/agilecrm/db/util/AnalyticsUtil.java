@@ -6,8 +6,9 @@ import java.sql.SQLException;
 import org.json.JSONArray;
 
 import com.agilecrm.db.GoogleSQL;
+import com.campaignio.tasklets.agile.URLVisited;
 
-public class StatsUtil
+public class AnalyticsUtil
 {
     /**
      * Inserts values into page_views table. Guid is unique, so update when
@@ -25,7 +26,7 @@ public class StatsUtil
      *            - url.
      * @param ip
      *            - ip address.
-     * @param newOne
+     * @param isNew
      *            - if new
      * @param ref
      *            -reference.
@@ -37,40 +38,39 @@ public class StatsUtil
      *            - requested time.
      */
     public static void addToPageViews(String domain, String guid, String email,
-	    String sid, String url, String ip, String newOne, String ref,
+	    String sid, String url, String ip, String isNew, String ref,
 	    String userAgent, String country, String region, String city,
 	    String cityLatLong, long created_time)
     {
-	String insertToPageViews = "INSERT INTO page_views (domain,guid,email,sid,url,ip,new_one,ref,user_agent,country,region,city,city_lat_long,created_time) VALUES("
-		+ encodeSQLColumnValue(domain)
+	String insertToPageViews = "INSERT INTO page_views (domain,guid,email,sid,url,ip,is_new,ref,user_agent,country,region,city,city_lat_long,stats_time) VALUES("
+		+ SQLUtil.encodeSQLColumnValue(domain)
 		+ ","
-		+ encodeSQLColumnValue(guid)
+		+ SQLUtil.encodeSQLColumnValue(guid)
 		+ ","
-		+ encodeSQLColumnValue(email)
+		+ SQLUtil.encodeSQLColumnValue(email)
 		+ ","
-		+ encodeSQLColumnValue(sid)
+		+ SQLUtil.encodeSQLColumnValue(sid)
 		+ ","
-		+ encodeSQLColumnValue(url)
+		+ SQLUtil.encodeSQLColumnValue(url)
 		+ ","
-		+ encodeSQLColumnValue(ip)
+		+ SQLUtil.encodeSQLColumnValue(ip)
 		+ ","
-		+ newOne
+		+ isNew
 		+ ","
-		+ encodeSQLColumnValue(ref)
+		+ SQLUtil.encodeSQLColumnValue(ref)
 		+ ","
-		+ encodeSQLColumnValue(userAgent)
+		+ SQLUtil.encodeSQLColumnValue(userAgent)
 		+ ","
-		+ encodeSQLColumnValue(country)
+		+ SQLUtil.encodeSQLColumnValue(country)
 		+ ","
-		+ encodeSQLColumnValue(region)
+		+ SQLUtil.encodeSQLColumnValue(region)
 		+ ","
-		+ encodeSQLColumnValue(city)
+		+ SQLUtil.encodeSQLColumnValue(city)
 		+ ","
-		+ encodeSQLColumnValue(cityLatLong)
-		+ ","
-		+ created_time
+		+ SQLUtil.encodeSQLColumnValue(cityLatLong)
+		+ ", NOW()"
 		+ ") ON DUPLICATE KEY UPDATE email = "
-		+ encodeSQLColumnValue(email) + "";
+		+ SQLUtil.encodeSQLColumnValue(email) + "";
 
 	System.out.println("Insert Query to PageViews: " + insertToPageViews);
 
@@ -92,15 +92,17 @@ public class StatsUtil
      */
     public static String getPageViews(String email, String domain)
     {
+	domain = "_test_";
 	// Gets Guids (clients) based on Email from database
 	String guids = "(SELECT guid FROM page_views WHERE email ="
-		+ encodeSQLColumnValue(email) + " AND domain = "
-		+ encodeSQLColumnValue(domain) + ")";
+		+ SQLUtil.encodeSQLColumnValue(email) + " AND domain = "
+		+ SQLUtil.encodeSQLColumnValue(domain) + ")";
 
 	System.out.println("guids query is: " + guids);
 
 	// Gets all Sessions based on above obtained guids
-	String pageViews = "SELECT * FROM page_views WHERE guid IN " + guids;
+	String pageViews = "SELECT *, UNIX_TIMESTAMP(stats_time) AS created_time FROM page_views WHERE guid IN "
+		+ guids;
 
 	System.out.println("Select query: " + pageViews);
 
@@ -144,19 +146,30 @@ public class StatsUtil
     }
 
     /**
-     * Gets number of rows having the given url in a table 'page_views'.
+     * Returns count for the given url.
      * 
      * @param url
-     *            - given url.
-     * @return integer count value.
+     *            - URL given in URL Visited node.
+     * @param domain
+     *            - domain.
+     * @param email
+     *            - Subscriber email.
+     * @param type
+     *            - Exact or Like
+     * @return int
      */
     public static int getCountForGivenURL(String url, String domain,
-	    String email)
+	    String email, String type)
     {
-	String urlCountQuery = "SELECT COUNT(*) FROM page_views WHERE url = "
-		+ encodeSQLColumnValue(url) + " AND domain = "
-		+ encodeSQLColumnValue(domain) + " AND email = "
-		+ encodeSQLColumnValue(email) + "";
+	String urlCountQuery = "SELECT COUNT(*) FROM page_views WHERE domain = "
+		+ SQLUtil.encodeSQLColumnValue(domain)
+		+ " AND email = "
+		+ SQLUtil.encodeSQLColumnValue(email) + " AND url LIKE ";
+
+	if (type.equals(URLVisited.EXACT))
+	    urlCountQuery += SQLUtil.encodeSQLColumnValue(url);
+	else
+	    urlCountQuery += " \'%" + url + "%\'";
 
 	System.out.println("URL count query is: " + urlCountQuery);
 
@@ -178,33 +191,5 @@ public class StatsUtil
 	}
 
 	return count;
-    }
-
-    /**
-     * Returns string value appended by quotations if not null. It is used to
-     * avoid 'null' values(having quotations) being inserted instead of null.
-     * 
-     * @param value
-     *            - given string.
-     * @return encoded string if not null, otherwise null.
-     */
-    public static String encodeSQLColumnValue(String value)
-    {
-	if (value == null)
-	    return null;
-
-	// Removes single quotation on start and end.
-	String replaceSingleQuote = value.replaceAll("(^')|('$)", "");
-
-	// Removes double quotes
-	String replaceDoubleQuote = replaceSingleQuote.replaceAll(
-		"(^\")|(\"$)", "");
-
-	// Replace ' with \' within the value. To avoid error while insertion
-	// into table
-	if (replaceDoubleQuote.contains("'"))
-	    replaceDoubleQuote = replaceDoubleQuote.replace("'", "\\'");
-
-	return "\'" + replaceDoubleQuote + "\'";
     }
 }

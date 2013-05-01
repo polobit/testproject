@@ -22,7 +22,6 @@ import com.agilecrm.db.util.EmailStatsUtil;
 import com.campaignio.stats.util.CampaignStatsReportsUtil;
 import com.campaignio.stats.util.DateUtil;
 import com.campaignio.stats.util.EmailReportsUtil;
-import com.campaignio.util.CampaignStatsUtil;
 
 /**
  * <code>CampaignStatsAPI</code> includes REST calls to interact with
@@ -72,8 +71,8 @@ public class CampaignStatsAPI
 			Integer.parseInt(emailStatsJSON.getString("total")));
 
 	    // Categorize w.r.t campaign-names
-	    campaignStats.put(CampaignStatsUtil.getCampaignName(emailStatsJSON
-		    .getString("campaign_id")), emailStats);
+	    campaignStats.put(emailStatsJSON.getString("campaign_name"),
+		    emailStats);
 	}
 
 	String campaignStatsString = JSONSerializer.toJSON(campaignStats)
