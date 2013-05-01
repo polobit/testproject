@@ -151,10 +151,19 @@ public class NotificationPrefsUtil
 		    {
 			JSONObject property = properties.getJSONObject(index);
 
-			if (property.getString("name").equals("first_name")
-				|| property.getString("name").equals(
-					"last_name"))
-			    propertyArray.put(property);
+			if (json.getString("type").equals("PERSON"))
+			{
+			    if (property.getString("name").equals("first_name")
+				    || property.getString("name").equals(
+					    "last_name"))
+				propertyArray.put(property);
+			}
+
+			if (json.getString("type").equals("COMPANY"))
+			{
+			    if (property.getString("name").equals("name"))
+				propertyArray.put(property);
+			}
 
 		    }
 		    json.put("properties", propertyArray);

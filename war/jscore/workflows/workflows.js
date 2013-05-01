@@ -89,6 +89,9 @@ $(function(){
     	if(!campaign_id)
     		return;
     	
+    	if(!confirm("Are you sure you want to delete all logs?"))
+    		return;
+    	
     	// Sends delete request to CampaignsAPI for deletion of logs
     	$.ajax({
     	    url: 'core/api/campaigns/logs/' + campaign_id,

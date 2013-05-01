@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.db.util.StatsUtil;
+import com.agilecrm.db.util.AnalyticsUtil;
 import com.agilecrm.util.DBUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
@@ -26,6 +26,21 @@ public class URLVisited extends TaskletAdapter
     public static String URL = "url";
 
     /**
+     * Given URL type
+     */
+    public static String TYPE = "type";
+
+    /**
+     * Exact URL type
+     */
+    public static String EXACT = "exact";
+
+    /**
+     * Like URL type
+     */
+    public static String LIKE = "like";
+
+    /**
      * Branch Yes
      */
     public static String BRANCH_YES = "yes";
@@ -38,8 +53,9 @@ public class URLVisited extends TaskletAdapter
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
 	    JSONObject data, JSONObject nodeJSON) throws Exception
     {
-	// Get URL value
+	// Get URL value and type
 	String url = getStringValue(nodeJSON, subscriberJSON, data, URL);
+	String type = getStringValue(nodeJSON, subscriberJSON, data, TYPE);
 	String domain = NamespaceManager.get();
 
 	String contactId = DBUtil.getId(subscriberJSON);
@@ -47,7 +63,7 @@ public class URLVisited extends TaskletAdapter
 	String email = contact.getContactFieldValue(Contact.EMAIL);
 
 	// Gets URL count from table.
-	int count = StatsUtil.getCountForGivenURL(url, domain, email);
+	int count = AnalyticsUtil.getCountForGivenURL(url, domain, email, type);
 
 	if (count == 0)
 	{

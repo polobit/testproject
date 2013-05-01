@@ -41,7 +41,7 @@
             </div>
         {{/if_entity}}
 
-        {{#if_entity "time"}}
+        {{#if_entity "campaign_id"}}
             <div class="timestamp">{{time}}</div>
             <div class="title"><h3><span><a class="no-line"><i class="icon-inbox"></i></a></span> Campaign Logs</h3></div>
             <div class="date">{{epochToTaskDate time}}</div>
@@ -71,7 +71,7 @@
         
         {{/if_entity}}
 
-     {{#if_entity "s"}}
+     {{#if_entity "guid"}}
             <div class="timestamp">{{created_time}}</div>
             <div class="title"><h3><span><a class="no-line"><i class="icon-list-alt"></i></a></span> Web</h3></div>
             <div class="date">{{epochToTaskDate created_time}}</div>

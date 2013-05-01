@@ -28,19 +28,19 @@ public class EmailStatsUtil
 	if (StringUtils.isEmpty(domain))
 	    return null;
 
-	String uniqueClicks = "(SELECT campaign_id,log_type,COUNT(DISTINCT subscriber_id) AS count  FROM campaign_logs WHERE log_type IN ('Send E-mail', 'Email Clicked', 'Email Opened') AND "
+	String uniqueClicks = "(SELECT campaign_name,log_type,COUNT(DISTINCT subscriber_id) AS count  FROM campaign_logs WHERE log_type IN ('Send E-mail', 'Email Clicked', 'Email Opened') AND "
 		+ SQLUtil.appendDomainToQuery(domain)
-		+ " GROUP BY log_type,campaign_id)";
+		+ " GROUP BY log_type,campaign_name)";
 
-	String totalClicks = "(SELECT campaign_id,log_type,COUNT(subscriber_id) AS total  FROM campaign_logs WHERE log_type IN ('Email Clicked') AND "
+	String totalClicks = "(SELECT campaign_name,log_type,COUNT(subscriber_id) AS total  FROM campaign_logs WHERE log_type IN ('Email Clicked') AND "
 		+ SQLUtil.appendDomainToQuery(domain)
-		+ " GROUP BY log_type,campaign_id)";
+		+ " GROUP BY log_type,campaign_name)";
 
-	String campaignStats = "SELECT A.campaign_id, A.log_type, A.count,B.total FROM "
+	String campaignStats = "SELECT A.campaign_name, A.log_type, A.count,B.total FROM "
 		+ uniqueClicks
 		+ " A LEFT OUTER JOIN "
 		+ totalClicks
-		+ " B ON A.campaign_id = B.campaign_id AND A.log_type = B.log_type";
+		+ " B ON A.campaign_name = B.campaign_name AND A.log_type = B.log_type";
 
 	try
 	{
@@ -85,13 +85,13 @@ public class EmailStatsUtil
 		+ ","
 		+ getDateFormatBasedOnType(type)
 		+ ")  AS logDate, log_type, COUNT(DISTINCT subscriber_id) AS count FROM campaign_logs WHERE domain="
-		+ StatsUtil.encodeSQLColumnValue(domain)
+		+ SQLUtil.encodeSQLColumnValue(domain)
 		+ " AND campaign_id="
-		+ StatsUtil.encodeSQLColumnValue(campaignId)
+		+ SQLUtil.encodeSQLColumnValue(campaignId)
 		+ "  AND log_type IN ('Send E-mail', 'Email Opened', 'Email Clicked') AND DATE("
 		+ addConvertTZ(timeZoneOffset) + ") BETWEEN " + "DATE("
-		+ StatsUtil.encodeSQLColumnValue(startDate) + ") AND DATE("
-		+ StatsUtil.encodeSQLColumnValue(endDate)
+		+ SQLUtil.encodeSQLColumnValue(startDate) + ") AND DATE("
+		+ SQLUtil.encodeSQLColumnValue(endDate)
 		+ ") GROUP BY log_type,logDate)";
 
 	String totalClicks = "(SELECT DATE_FORMAT("
@@ -99,12 +99,12 @@ public class EmailStatsUtil
 		+ ","
 		+ getDateFormatBasedOnType(type)
 		+ ")  AS logDate,log_type, COUNT(*) AS total  FROM campaign_logs WHERE domain="
-		+ StatsUtil.encodeSQLColumnValue(domain) + " AND campaign_id="
-		+ StatsUtil.encodeSQLColumnValue(campaignId)
+		+ SQLUtil.encodeSQLColumnValue(domain) + " AND campaign_id="
+		+ SQLUtil.encodeSQLColumnValue(campaignId)
 		+ "  AND log_type IN ('Email Clicked') AND DATE("
 		+ addConvertTZ(timeZoneOffset) + ") BETWEEN DATE("
-		+ StatsUtil.encodeSQLColumnValue(startDate) + ")  AND DATE("
-		+ StatsUtil.encodeSQLColumnValue(endDate)
+		+ SQLUtil.encodeSQLColumnValue(startDate) + ")  AND DATE("
+		+ SQLUtil.encodeSQLColumnValue(endDate)
 		+ ") GROUP BY log_type,logDate)";
 
 	String emailLogs = "SELECT  A.logDate,A.log_type, A.count, B.total FROM "
@@ -136,7 +136,7 @@ public class EmailStatsUtil
     public static String addConvertTZ(String timeZoneOffset)
     {
 	return "CONVERT_TZ(log_time,'+00:00',"
-		+ StatsUtil.encodeSQLColumnValue(timeZoneOffset) + ")";
+		+ SQLUtil.encodeSQLColumnValue(timeZoneOffset) + ")";
     }
 
     /**
@@ -181,13 +181,13 @@ public class EmailStatsUtil
     {
 	// 1 to 12 AM or PM Eg. 1 AM
 	if (type.equals("hour"))
-	    return StatsUtil.encodeSQLColumnValue("%l %p");
+	    return SQLUtil.encodeSQLColumnValue("%l %p");
 
 	// Sun to Sat Eg. Mon
 	else if (type.equals("day"))
-	    return StatsUtil.encodeSQLColumnValue("%a");
+	    return SQLUtil.encodeSQLColumnValue("%a");
 
 	// Jan to Dec 01 to 31 Eg. Jan 04
-	return StatsUtil.encodeSQLColumnValue("%b %d");
+	return SQLUtil.encodeSQLColumnValue("%b %d");
     }
 }

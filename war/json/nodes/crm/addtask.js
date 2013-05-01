@@ -2,8 +2,8 @@
     "name": "Add Task",
     "thumbnail": "json/nodes/images/email/abtesting.png",
     "icon": "json/nodes/icons/email/abtesting.png",
-    "info": "Tasks are like to-dos. Result oriented. You can assign a category such as call,email etc",
-    "help": "Tasks are like to-dos. Result oriented. You can assign a category such as call,email etc",
+    "info": "Tasks are like to-dos. Result oriented. You can assign a category such as call, email etc.",
+    "help": "Tasks are like to-dos. Result oriented. You can assign a category such as call, email etc.",
     "author": "Naresh",
     "company": "mantra",
     "language": "en",
@@ -64,7 +64,7 @@
 			"min":"0"
 
 		},{
-            "label": "Tasks are like to-dos. Result oriented. You can assign a category such as call,email etc",
+            "label": "Tasks are like to-dos. Result oriented. You can assign a category such as call, email etc.",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 
