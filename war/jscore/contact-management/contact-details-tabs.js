@@ -8,6 +8,7 @@
  * @author Rammohan
  */
 var notesView;
+var dealsView; 
 $(function(){ 
 
 	var id;
@@ -101,7 +102,7 @@ $(function(){
 	$('#contactDetailsTab a[href="#deals"]').live('click', function (e){
 		e.preventDefault();
 		id = App_Contacts.contactDetailView.model.id;
-		var dealsView = new Base_Collection_View({
+		dealsView = new Base_Collection_View({
 			url: 'core/api/contacts/'+ id + "/deals" ,
             restKey: "opportunity",
             templateKey: "deals",
