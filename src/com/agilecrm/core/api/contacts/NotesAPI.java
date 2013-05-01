@@ -2,6 +2,7 @@ package com.agilecrm.core.api.contacts;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -36,6 +37,22 @@ public class NotesAPI
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Note saveNote(Note note)
+    {
+	note.save();
+	return note;
+    }
+
+    /**
+     * Creates a note entity and saves it in database.
+     * 
+     * @param note
+     *            Note entity to save
+     * @return saved note object
+     */
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Note updateNote(Note note)
     {
 	note.save();
 	return note;

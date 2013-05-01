@@ -7,14 +7,57 @@
  * @author Rammohan  
  */
 $(function(){ 
+	
+	$(".edit-note").die().live('click', function(e) {
+		e.preventDefault();
+		console.log($(this).attr('data'));
+		var note = notesView.collection.get($(this).attr('data'));
+		
+		// Clone modal, so we dont have to create a update modal.
+		// we can clone add change ids and use it as different modal
+		var noteModal = $("#noteModal").clone();
+
+		$("#noteForm > fieldset", noteModal).prepend('<input name="id" type="hidden"/>')
+		$("#noteForm", noteModal).attr('id', "noteUpdateForm");
+		noteModal.attr('id', "noteUpdateModal");
+		$("#note_validate", noteModal).attr("id", "note_update");
+		deserializeForm(note.toJSON(), $("#noteUpdateForm", noteModal));
+		
+
+		noteModal.modal('show');
+		//noteModal.modal('show');
+	});
     
+	$("#note_update").live('click', function(e){
+		e.preventDefault();
+		
+		// Returns, if the save button has disabled attribute 
+    	if($(this).attr('disabled'))
+    		return;
+    	
+    	// Disables save button to prevent multiple click event issues
+    	$(this).attr('disabled', 'disabled');
+    	
+    	if (!isValidForm('#noteUpdateForm')) {
+        	
+    		// Removes disabled attribute of save button
+    		$(this).removeAttr('disabled');
+    		return;
+    	}
+    	
+    	// Shows loading symbol until model get saved
+        $('#noteUpdateModal').find('span.save-status').html(LOADING_HTML);
+    	
+       	var json = serializeForm("noteUpdateForm");
+    	
+    	saveNote($("#noteUpdateForm"),  $("#noteUpdateModal"), this, json);
+	});
     /**
      * Saves note model using "Bcakbone.Model" object, and adds saved
      * data to time-line if necessary.
      */  
     $('#note_validate').live('click', function(e){
     	e.preventDefault();
-    	
     	// Returns, if the save button has disabled attribute 
     	if($(this).attr('disabled'))
     		return;
@@ -22,7 +65,7 @@ $(function(){
     	// Disables save button to prevent multiple click event issues
     	$(this).attr('disabled', 'disabled');
     	
-    	if (!isValidForm('#noteForm')){
+    	if (!isValidForm('#noteForm')) {
         	
     		// Removes disabled attribute of save button
     		$(this).removeAttr('disabled');
@@ -33,25 +76,56 @@ $(function(){
         $('#noteModal').find('span.save-status').html(LOADING_HTML);
     	
        	var json = serializeForm("noteForm");
-    	var that = this;
+    	
+    	saveNote($("#noteForm"),  $("#noteModal"), this, json);
+
+    });
+    
+    /**
+     * Shows note modal and activates contacts typeahead to its related to field
+     */   
+    $('#show-note').live('click', function(e){
+    	e.preventDefault();
+     	$("#noteModal").modal('show');
+    	
+    	var	el = $("#noteForm");
+    	agile_type_ahead("note_related_to", el, contacts_typeahead);
+    });
+    
+    /**
+     * "Hide" event of note modal to remove contacts appended to related to field
+     * and validation errors
+     */ 
+    $('#noteModal').on('hidden', function () {
+    	
+    	  // Removes appended contacts from related-to field
+    	  $("#noteForm").find("li").remove();
+    	  
+    	// Removes validation error messages
+    	  remove_validation_errors('noteModal');
+    });
+    
+    function saveNote(form, modal, element, note)
+    {
 
       	var noteModel = new Backbone.Model();
       	noteModel.url = 'core/api/notes';
-      	noteModel.save(json,{
+      	noteModel.save(note,{
     		success: function(data){
     			
     			// Removes disabled attribute of save button
-    			$(that).removeAttr('disabled');
+    			$(element).removeAttr('disabled');
     			
-    			$('#noteForm').each (function(){
+    			form.each (function(){
     	          	  this.reset();
     	        });
 
     			// Removes loading symbol and hides the modal
-    			$('#noteModal').find('span.save-status img').remove();
-    	        $("#noteModal").modal('hide');
+    			modal.find('span.save-status img').remove();
+    	        modal.modal('hide');
     			
        	        var note = data.toJSON();
+       	        notesView.add(new BaseModel(note));
        	        
        	             	        /*
        	         * Updates data (saved note) to time-line, when contact detail view is defined and 
@@ -87,29 +161,5 @@ $(function(){
     			}
 			}    
       	});
-    });
-    
-    /**
-     * Shows note modal and activates contacts typeahead to its related to field
-     */   
-    $('#show-note').live('click', function(e){
-    	e.preventDefault();
-     	$("#noteModal").modal('show');
-    	
-    	var	el = $("#noteForm");
-    	agile_type_ahead("note_related_to", el, contacts_typeahead);
-    });
-    
-    /**
-     * "Hide" event of note modal to remove contacts appended to related to field
-     * and validation errors
-     */ 
-    $('#noteModal').on('hidden', function () {
-    	
-    	  // Removes appended contacts from related-to field
-    	  $("#noteForm").find("li").remove();
-    	  
-    	// Removes validation error messages
-    	  remove_validation_errors('noteModal');
-    });
+    }
 });
