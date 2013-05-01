@@ -83,7 +83,7 @@ function agile_crm_get_contact_properties_list(propertyName) {
  * @param value :
  *            value for the property
  */
-function agile_crm_update_contact(propertyName, value) {
+function agile_crm_update_contact(propertyName, value, callback) {
 
 	// Gets current contact model from the contactDetailView object
 	var contact_model = App_Contacts.contactDetailView.model;
@@ -111,7 +111,16 @@ function agile_crm_update_contact(propertyName, value) {
 	contact_model.set("properties", properties);
 	contact_model.url = "core/api/contacts";
 	// Save model
-	contact_model.save();
+	contact_model.save(
+	{
+		success: function(model, response)
+		{
+	
+				if(callback && typeof (callback) == "function")
+			    	callback();
+		}
+	});
+	
 }
 
 function agile_crm_get_contact() {

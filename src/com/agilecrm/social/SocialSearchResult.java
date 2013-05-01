@@ -11,6 +11,7 @@ public class SocialSearchResult
 
     public String id = "";
     public String name = "";
+    public String screen_name = "";
     public String picture = "";
     public String url = "";
     public String summary = "";

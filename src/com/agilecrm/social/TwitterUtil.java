@@ -111,6 +111,7 @@ public class TwitterUtil
 
 	    result.id = user.getId() + "";
 	    result.name = user.getName();
+	    result.screen_name = user.getScreenName();
 	    result.picture = user.getBiggerProfileImageURLHttps().toString();
 	    result.location = user.getLocation();
 	    result.summary = user.getDescription();
@@ -154,6 +155,7 @@ public class TwitterUtil
 	// class
 	result.id = user.getId() + "";
 	result.name = user.getName();
+	result.screen_name = user.getScreenName();
 	result.picture = user.getBiggerProfileImageURLHttps().toString();
 	result.location = user.getLocation();
 	result.summary = user.getDescription();
@@ -284,12 +286,10 @@ public class TwitterUtil
      * @return
      * @throws Exception
      */
-    public static String tweetInTwitter(Widget widget, Long twitterId,
-	    String text) throws Exception
+    public static String tweetInTwitter(Widget widget, String text)
+	    throws Exception
     {
 	Twitter twitter = getTwitter(widget);
-	User user = twitter.showUser(twitterId);
-	text = "@" + user.getScreenName() + " " + text;
 
 	Status status = twitter.updateStatus(text);
 	System.out.println(Util.toJSONString(status));

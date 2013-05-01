@@ -8,15 +8,12 @@ $(function ()
 {
 	// LinkedIn plugin name as global variable
     LINKEDIN_PLUGIN_NAME = "Linkedin";
-
-    // LinkedIn profile load image declared as global
-    LINKEDIN_PROFILE_LOAD_IMAGE = '<center><img id="linkedin_profile_load" ' + 
-			'src=\"img/1-0.gif\" style="margin-bottom: 10px;margin-right: 16px;" >' + 
-	        '</img></center>';   
     
     // LinkedIn update loading image declared as global
-    LINKEDIN_UPDATE_LOAD_IMAGE = '<center><img id="status_load" src=' +
-        '\"img/ajax-loader-cursor.gif\" style="margin-top: 14px;"></img></center>';
+    LINKEDIN_UPDATE_LOAD_IMAGE = '<center><img id="status_load" src=\"img/ajax-loader-cursor.gif\" ' + 
+    		'style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+    
+    $('#Linkedin').html(LINKEDIN_UPDATE_LOAD_IMAGE);
     
     // Current contact user name in LinkedIn profile
     Linkedin_current_profile_user_name = "";   
@@ -38,7 +35,7 @@ $(function ()
     var linkedin_id = agile_crm_get_widget_property_from_contact(LINKEDIN_PLUGIN_NAME);
 
     //Get website URL for LinkedIn from contact to get profile based on it
-    var web_url = agile_crm_get_contact_property_by_subtype('website', 'LINKED_IN');
+    var web_url = agile_crm_get_contact_property_by_subtype('website', 'LINKEDIN');
     
     // If property with LinkedIn (LinkedIn ID) exist
     if (linkedin_id)
@@ -83,7 +80,7 @@ $(function ()
 	        //If exists remove the URL from the contact to delete profile
 	        if (web_url)
 	        {
-	            agile_crm_delete_contact_property_by_subtype('website', 'LINKED_IN', web_url);	            
+	            agile_crm_delete_contact_property_by_subtype('website', 'LINKEDIN', web_url);	            
 	        }
         }
        
@@ -157,7 +154,7 @@ function setupLinkedinOAuth(plugin_id)
 function showLinkedinMatchingProfiles(plugin_id)
 {
     // Shows loading image, until matches profiles are fetched
-    $('#Linkedin').html(LINKEDIN_PROFILE_LOAD_IMAGE);
+    $('#Linkedin').html(LINKEDIN_UPDATE_LOAD_IMAGE);
 
     /*
      *  Fetches matching profiles from LinkedIn based on widget preferences, and uses 
@@ -283,7 +280,7 @@ function showLinkedinMatchingProfiles(plugin_id)
 function showLinkedinProfile(linkedin_id, plugin_id)
 {
     // Shows loading image, until profile is fetched
-    $('#Linkedin').html(LINKEDIN_PROFILE_LOAD_IMAGE);
+    $('#Linkedin').html(LINKEDIN_UPDATE_LOAD_IMAGE);
 
     //Stores connected status of agile user with contact LinkedIn profile
     var linkedin_connected;
@@ -295,14 +292,6 @@ function showLinkedinProfile(linkedin_id, plugin_id)
     queueGetRequest("widget_queue", "/core/api/widgets/profile/" + plugin_id + "/" + linkedin_id, 'json', 
     function (data)
     {
-    	// If contact title is undefined, saves headline of the LinkedIn profile
-    	// to the contact title
-    	if(!agile_crm_get_contact_property("title"))
-    		agile_crm_update_contact("title", data.summary);
-    	
-        //shows delete button in the LinkedIn panel
-        $('#Linkedin_plugin_delete').show();
-
         // Sets the LinkedIn name of the profile to the global variable
         Linkedin_current_profile_user_name = data.name;
 
@@ -315,8 +304,20 @@ function showLinkedinProfile(linkedin_id, plugin_id)
             data.picture = 'https://contactuswidget.appspot.com/images/pic.png';
         }
 
-        // Gets LinkedIn profile template and populate the fields with details
-        $('#Linkedin').html(getTemplate("linkedin-profile", data));
+    	// If contact title is undefined, saves headline of the LinkedIn profile
+    	// to the contact title
+    	if(!agile_crm_get_contact_property("title"))
+    		agile_crm_update_contact("title", data.summary, function(el) 
+    		{
+    			// Gets LinkedIn profile template and populate the fields with details
+    			$('#Linkedin').html(getTemplate("linkedin-profile", data));
+    		});
+    	else
+    	{
+    		// Gets LinkedIn profile template and populate the fields with details
+            $('#Linkedin').html(getTemplate("linkedin-profile", data));
+    	}
+        
         
         // If updates are available, show recent updates in LinkedIn profile
         if (data.updateStream && data.updateStream.length != 0)
@@ -350,7 +351,7 @@ function showLinkedinProfile(linkedin_id, plugin_id)
     }, function (data)
     {
     	// Remove loading image on error 
-    	$('#linkedin_profile_load').remove();
+    	$('#status_load').remove();
     	
     	// Check if member does not share information for third party applications
     	if(data.responseText == "Invalid member id {private}")
@@ -562,7 +563,7 @@ function getLinkedinMatchingProlfiles(plugin_id, callback)
         }, 
         function (data) {
         	// Remove loading image on error 
-        	$('#linkedin_profile_load').remove();
+        	$('#status_load').remove();
         	
         	// Shows error message if error occurs
             alert(data.responseText);
@@ -598,8 +599,8 @@ function sendLinkedInAddRequest(plugin_id, linkedin_id)
     json["headline"] = "Connect";
 
     // Information to be shown in the modal to the user 
-    json["info"] = "Sends a connect request to " + Linkedin_current_profile_user_name +
-        " on Linkedin from your Linkedin account associated with Agile CRM";
+    json["info"] = "Connect to " + Linkedin_current_profile_user_name +
+        " on Linkedin";
 
     // Default message to be sent while sending connect request to LinkedIn
     json["description"] = "I'd like to add you to my professional network on LinkedIn.";
@@ -671,8 +672,8 @@ function sendLinkedInMessage(plugin_id, linkedin_id)
     json["headline"] = "Send Message";
 
     // Information to be shown in the modal to the user while sending message 
-    json["info"] = "Sends a message to " + Linkedin_current_profile_user_name +
-        " on Linkedin from your Linkedin account associated with Agile CRM";
+    json["info"] = "Send message to " + Linkedin_current_profile_user_name +
+        " on LinkedIn";
 
     // If modal already exists remove to show a new one
     $('#linkedin_messageModal').remove();
@@ -791,7 +792,7 @@ function getLinkedinIdByUrl(plugin_id, web_url, callback)
     			showLinkedinMatchingProfiles(plugin_id);
 	
 	            // Delete the LinkedIn URL associated with contact as it is incorrect
-	            agile_crm_delete_contact_property_by_subtype('website', 'LINKED_IN', web_url);
+	            agile_crm_delete_contact_property_by_subtype('website', 'LINKEDIN', web_url);
 	
 	            return;
 		        }
@@ -817,13 +818,16 @@ function getLinkedinIdByUrl(plugin_id, web_url, callback)
 		        showLinkedinMatchingProfiles(plugin_id);
 		
 		        // Delete the LinkedIn URL associated with contact as it is incorrect
-		        agile_crm_delete_contact_property_by_subtype('website', 'LINKED_IN', web_url);
+		        agile_crm_delete_contact_property_by_subtype('website', 'LINKEDIN', web_url);
 
 		 });
 }
 
 function getExperienceOfPerson(plugin_id, linkedin_id)
 {
+	
+	 $('#linkedin_experience_panel').html(LINKEDIN_UPDATE_LOAD_IMAGE);
+	 
 	 $.get("/core/api/widgets/experience/" + plugin_id + "/" + linkedin_id, function (data)
      {
 		 console.log(data);
@@ -845,6 +849,9 @@ function getExperienceOfPerson(plugin_id, linkedin_id)
 		 console.log(e1);
 		 
      }).error(function(data){
+    	// Remove loading image on error 
+     	$('#status_load').remove();
+     	
     	 alert(data.responseText);
      });
      

@@ -21,9 +21,9 @@
 		<div style="font-size: 11px;margin-top: -5px;">Connections</div>
 	</div>
 </div>
-<ul class="nav nav-tabs row-fluid" id="myTab">
-	<li class="active span6"><a data-toggle="tab" href="#updates"><h3>Activity</h3><small></small></a></li>
-	<li class="span6"><a data-toggle="tab" href="#work" id="linkedin_experience"><h3>Experience</h3><small></small></a></li>
+<ul class="nav nav-tabs" id="myTab">
+	<li class="active" style="width:50%;"><a data-toggle="tab" href="#updates"><h3>Activity</h3><small></small></a></li>
+	<li style="width:50%;"><a data-toggle="tab" href="#work" id="linkedin_experience"><h3>Experience</h3><small></small></a></li>
 </ul>
 
 <div class="tab-content" id="myTabContent">
@@ -119,19 +119,32 @@
 <script id="linkedin-experience-template" type="text/html">
 	{{#each this}}
 		<li>
-			<b>{{title}}</b><br>
-			<h4>{{company.name}}</h4>
-			<p class="mb_0 space_pre_line" style="word-break:normal">				
-				{{summary}}
-			</p>						
+			<div class="row-fluid" >
+				<div class="pull-left span9">
+					<b>{{title}}</b><br>
+					<h4>{{company.name}}</h4>
+				</div>
+				<div class="span3">
+					{{#if company.logoUrl}}
+						<img src="{{company.logoUrl}}" width="36" height="36" alt="" class="img-rounded pull-right"/>
+					{{/if}}
+				</div>
+			</div>			
+			{{#if summary}}
+				<p class="mb_0 space_pre_line" style="word-break:normal">				
+					{{summary}}
+				</p>
+			{{/if}}			
 			<small>
 				{{#if startDate}}
-					{{startDate.month}}, {{startDate.year}} -
+					{{startDate.month}}, {{startDate.year}} - 
 				{{/if}}
 				{{#if endDate}}
  					{{endDate.month}}, {{endDate.year}}
 				{{else}}
-					present
+					{{#if isCurrent}}
+						present
+					{{/if}}
 				{{/if}}
 			</small>
 		</li>
@@ -173,9 +186,9 @@
 	                    <label class="control-label"><b>Message: </b><span class="field_req">*</span></label>
 	                    <div class="controls">
 							{{#if_equals headline "Connect"}}
-	                        	<textarea rows="4" class="required span4" placeholder="Detailed Message" name="message" id="message" style="max-width:500px;">{{description}}</textarea> 
+	                        	<textarea rows="4" class="required span4" placeholder="Detailed Message" name="message" id="message" style="max-width:500px;" maxlength="300">{{description}}</textarea> 
 							{{else}}
-	                        	<textarea rows="4" class="required span4" placeholder="Detailed Message" name="message" id="message" style="max-width:500px;"></textarea>
+	                        	<textarea rows="4" class="required span4" placeholder="Detailed Message" name="message" id="message" style="max-width:500px;" maxlength="300"></textarea>
 							{{/if_equals}} 
 	                    </div>
 	                </div>
