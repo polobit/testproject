@@ -8,18 +8,16 @@ $(function ()
     // Twitter plugin name as a global variable
     TWITTER_PLUGIN_NAME = "Twitter";
 
-    // Twitter profile loading image declared as global
-    TWITTER_PROFILE_LOAD_IMAGE = '<center><img id="twitter_profile_load" ' +
-        'src=\"img/1-0.gif\" style="margin-bottom: 10px;margin-right: 16px;" >' + 
-        '</img></center>';
-
     // Twitter update loading image declared as global
-    TWITTER_UPDATE_LOAD_IMAGE = '<center><img id="tweet_load" src=' +
-        '\"img/ajax-loader-cursor.gif\" style="margin-top: 14px;"></img></center>';
+    TWITTER_UPDATE_LOAD_IMAGE = '<center><img id="tweet_load" src=\"img/ajax-loader-cursor.gif\" ' + 
+    			'style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+    
+    $('#Twitter').html(TWITTER_UPDATE_LOAD_IMAGE);
 
     // Current contact user name in Twitter profile
     Twitter_current_profile_user_name = "";
     Twitter_current_update_id = "";
+    Twitter_current_profile_screen_name = "";
     var Twitter_follower_ids;
     var Twitter_following_ids;
 
@@ -328,7 +326,7 @@ function setupTwitterOAuth(plugin_id)
 function showTwitterMatchingProfiles(plugin_id)
 {
     // Shows loading image, until matches profiles are fetched
-    $('#Twitter').html(TWITTER_PROFILE_LOAD_IMAGE);
+    $('#Twitter').html(TWITTER_UPDATE_LOAD_IMAGE);
 
     /*
      *  Fetches matching profiles from Twitter based on widget preferences, and uses 
@@ -448,7 +446,7 @@ function showTwitterMatchingProfiles(plugin_id)
 function showTwitterProfile(twitter_id, plugin_id)
 {
     // Shows loading, until profile is fetched
-    $('#Twitter').html(TWITTER_PROFILE_LOAD_IMAGE);
+    $('#Twitter').html(TWITTER_UPDATE_LOAD_IMAGE);
 
     //Stores connected status of agile user with contact Twitter profile
     var twitter_connected;
@@ -465,7 +463,8 @@ function showTwitterProfile(twitter_id, plugin_id)
 
         // Sets the Twitter name of the profile to the global variable
         Twitter_current_profile_user_name = data.name;
-
+        Twitter_current_profile_screen_name = data.screen_name;
+        
         // Sets the Twitter connected status to the local variable
         twitter_connected = data.is_connected;
 
@@ -539,7 +538,7 @@ function showTwitterProfile(twitter_id, plugin_id)
     }, function (data)
     {
         // Remove loading image on error 
-        $('#twitter_profile_load').remove();
+        $('#tweet_load').remove();
 
         // Shows error message if error occurs
     	$('#Twitter').html("<div style='padding: 10px;line-height:160%;" + 
@@ -759,7 +758,7 @@ function getTwitterMatchingProfiles(plugin_id, callback)
         }, function error(data)
         {
             // Remove loading image on error 
-            $('#twitter_profile_load').remove();
+            $('#tweet_load').remove();
 
             // Shows error message if error occurs
             alert(data.responseText);
@@ -883,11 +882,11 @@ function sendTwitterMessage(plugin_id, twitter_id, message)
     var json = {};
 
     // Set headline of modal window as Send Message
-    json["headline"] = "Send Message";
+    json["headline"] = "Direct Message";
 
     // Information to be shown in the modal to the user while sending message 
-    json["info"] = "Sends a message to " + Twitter_current_profile_user_name.toUpperCase() +
-        " on Twitter from your Twitter account associated with Agile CRM";
+    json["info"] = "Send message to " + Twitter_current_profile_user_name.toUpperCase() +
+        " on Twitter";
 
     // If modal already exists remove to show a new one
     $('#twitter_messageModal').remove();
@@ -958,8 +957,9 @@ function tweetInTwitter(plugin_id, twitter_id)
 
     // Information to be shown in the modal to the user while sending message    
     json["info"] = "Tweet to " + Twitter_current_profile_user_name.toUpperCase() +
-        " on Twitter from your Twitter account associated with Agile CRM";
+        " on Twitter";
 
+    json["description"] = "@" + Twitter_current_profile_screen_name;
     // If modal already exists remove to show a new one
     $('#twitter_messageModal').remove();
 
@@ -985,7 +985,7 @@ function tweetInTwitter(plugin_id, twitter_id)
 
         // Sends post request to url "core/api/widgets/message/" and Calls WidgetsAPI with 
         // plugin id and Twitter id as path parameters and form as post data
-        $.post("/core/api/widgets/tweet/" + plugin_id + "/" + twitter_id,
+        $.post("/core/api/widgets/tweet/" + plugin_id ,
         $('#twitter_messageForm').serialize(),
 
         function (data)

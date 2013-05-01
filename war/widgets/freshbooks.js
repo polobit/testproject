@@ -3,11 +3,6 @@ $(function() {
 	// Widget name as a global variable
 	FRESHBOOKS_PLUGIN_NAME = "FreshBooks";
 
-	// FreshBooks profile loading image declared as global
-	FRESHBOOKS_PROFILE_LOAD_IMAGE = '<center><img id="freshbooks_profile_load" ' +
-	        'src=\"img/1-0.gif\" style="margin-bottom: 10px;margin-right: 16px;" >' +
-	        '</img></center>';
-	    
 	// FreshBooks update loading image declared as global
 	FRESHBOOKS_LOGS_LOAD_IMAGE = '<center><img id="freshbooks_invoice_load" src=' +
 	        '\"img/ajax-loader-cursor.gif\" style="margin-top: 14px;margin-bottom: 10px;">' +
@@ -65,10 +60,7 @@ $(function() {
     $('#freshbooks_add_invoice').die().live('click', function (e) {
     	e.preventDefault();
     	
-    	var item_name = $(this).attr('item_name');
-    	console.log(item_name);
-    	
-    	addInvoiceToClientInFreshBooks(plugin_id, first_name, last_name, Email, item_name);
+    	addInvoiceToClientInFreshBooks(plugin_id, first_name, last_name, Email);
     });
     
 });
@@ -99,7 +91,7 @@ function setUpFreshBooksOauth(plugin_id)
 function setUpFreshbooksAuth(plugin_id)
 {
 	// Shows loading image until set up is shown 
-    $('#FreshBooks').html(FRESHBOOKS_PROFILE_LOAD_IMAGE);
+    $('#FreshBooks').html(FRESHBOOKS_LOGS_LOAD_IMAGE);
 
     // Shows input fields to save the FreshBooks preferences
     $('#FreshBooks').html(getTemplate('freshbooks-login', {}));
@@ -142,13 +134,16 @@ function setUpFreshbooksAuth(plugin_id)
 function showFreshBooksClient(plugin_id, email)
 {
 	// Shows loading image until set up is shown 
-    $('#FreshBooks').html(FRESHBOOKS_PROFILE_LOAD_IMAGE);
+    $('#FreshBooks').html(FRESHBOOKS_LOGS_LOAD_IMAGE);
     
 	queueGetRequest("widget_queue", "/core/api/widgets/freshbooks/clients/" + 
 			plugin_id + "/" + email, 'json', 
 	function success(data)
 	{
 		console.log(data);
+		
+		if(!data)
+			return;
 		
 		$('#FreshBooks').html(getTemplate('freshbooks-profile', data));
 		
@@ -162,10 +157,15 @@ function showFreshBooksClient(plugin_id, email)
 	}, 
 	function error(data)
 	{
-		$('#freshbooks_profile_load').remove();
+		$('#freshbooks_invoice_load').remove();
 		
-		$('#FreshBooks').html('<div class="widget_content" style="border-bottom:none;padding: 10px;' + 
-				'line-height:160%;">'+ data.responseText + '</div>');
+		var prefs = undefined;
+		// Saves the preferences into widget with FreshBooks widget name
+        agile_crm_save_widget_prefs(FRESHBOOKS_PLUGIN_NAME, JSON.stringify(prefs));
+		
+        alert(data.responseText);
+		
+		setUpFreshbooksAuth(plugin_id);
 	});
 }
 
@@ -191,7 +191,7 @@ function getInvoicesOfClient(plugin_id, client_id)
 	});
 }
 
-function getItemsInFreshBooks(plugin_id)
+function getItemsInFreshBooks(plugin_id, callback)
 {
 	$('#freshbooks_items_panel').html(FRESHBOOKS_LOGS_LOAD_IMAGE);
 	
@@ -205,6 +205,12 @@ function getItemsInFreshBooks(plugin_id)
 		head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
      		$(".time-ago", $('#freshbooks_items_panel')).timeago();
      	});
+		
+		if (callback && typeof (callback) === "function")
+        {
+            // Execute the callback, passing parameters as necessary
+            callback(data);
+        }	
 		
 	}, 'json').error(function(data)
 	{		
@@ -234,7 +240,7 @@ function addClientToFreshBooks(plugin_id, first_name, last_name, email)
 	
 }
 
-function addInvoiceToClientInFreshBooks(plugin_id, first_name, last_name, email, item_name)
+function addInvoiceToClientInFreshBooks(plugin_id, first_name, last_name, email)
 {
 	
     // Store info in a json, to send it to the modal window when making send message request
@@ -244,9 +250,14 @@ function addInvoiceToClientInFreshBooks(plugin_id, first_name, last_name, email,
     json["headline"] = "Add Invoice";
 
     // Information to be shown in the modal to the user while sending message 
-    json["info"] = "Generates an invoice for the item <b>" + item_name +
-        "</b> and sends an email to " + email;
-
+    json["info"] = "Generates an invoice for the item and sends an email to " + email;
+    
+    getItemsInFreshBooks(plugin_id, function(data) 
+    {   
+    	json["items"] = data;
+    	
+    	console.log(json);
+    
     // If modal already exists remove to show a new one
     $('#freshbooks_addModal').remove();
 
@@ -254,10 +265,12 @@ function addInvoiceToClientInFreshBooks(plugin_id, first_name, last_name, email,
     var message_form_modal = getTemplate("freshbooks-modal", json);
 
     // Append the form into the content
-    $('#content').append(message_form_modal);
+  //  $('#content').append(message_form_modal);
 
     // Shows the modal after filling with details
-    $('#freshbooks_addModal').modal("show");
+    $(message_form_modal).modal("show");
+    
+    });
 
     // On click of send button in the modal, message request is sent    
     $('#send_request').click(function (e)
@@ -275,7 +288,7 @@ function addInvoiceToClientInFreshBooks(plugin_id, first_name, last_name, email,
         
         if(!quantity)
         	quantity = 1;
-        
+        var item_name = "pro";
         console.log(quantity);
 
         $.get("/core/api/widgets/freshbooks/add/invoice/" + plugin_id + "/"	+ first_name + "/" + last_name 

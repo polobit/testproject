@@ -757,11 +757,10 @@ public class WidgetsAPI
      *            {@link String} message to send tweet
      * @return {@link String}
      */
-    @Path("/tweet/{widget-id}/{social-id}")
+    @Path("/tweet/{widget-id}")
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     public String tweetInTwitter(@PathParam("widget-id") Long widgetId,
-	    @PathParam("social-id") String socialId,
 	    @FormParam("message") String message)
     {
 	try
@@ -773,8 +772,7 @@ public class WidgetsAPI
 	    // Profiles are searched based on first and last name of contact
 	    // Calls LinkedUtil method to send message to person by socialId
 	    if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterUtil.tweetInTwitter(widget,
-			Long.parseLong(socialId), message);
+		return TwitterUtil.tweetInTwitter(widget, message);
 
 	}
 	catch (Exception e)

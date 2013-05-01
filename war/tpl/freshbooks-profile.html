@@ -3,8 +3,8 @@
 		<form class="widget_content" style="border-bottom:none;" id="freshbooks_login_form" name="freshbooks_login_form" method="post">
 	    	<fieldset>
 				<p class="ml_5" style='line-height:140%;'>Cloud Accounting Specialist for Small Business Owners</p>
-				<input type="text" id="freshbooks_apikey" class="input-medium required ml_5" placeholder="Api key" value="" name="api_key"></input>
-				<input type="text" id="freshbooks_url" class="input-medium required ml_5" placeholder="FreshBooks url" value="" name="url"></input><br/>
+				<input type="text" id="freshbooks_url" class="input-medium required ml_5" placeholder="FreshBooks url" value="" name="url"></input>
+				<input type="text" id="freshbooks_apikey" class="input-medium required ml_5" placeholder="Api key" value="" name="api_key"></input><br/>
 				<button id="freshbooks_save_token" class="btn ml_5"><a href="#">Save</a></button>
 			 </fieldset>
 	    </form>
@@ -24,96 +24,105 @@
 				<a href="{{client.0.links.statement}}" target="_blank"><h4 style="text-transform: capitalize;"><b>{{client.0.first_name}} {{client.0.last_name}}</b></h4></a>
 			{{/if}}
 			<p style="font-size: 13px;">
+				{{#if client.0.p_street1}}
+					{{client.0.p_street1}}
+				{{/if}}
+				{{#if client.0.p_street2}}
+					{{client.0.p_street2}}
+				{{/if}}
+				{{#if client.0.p_state}}			
+					{{client.0.p_state}}, 
+				{{/if}}
 				{{#if client.0.p_country}}
-					{{#if client.0.p_state}}			
-						{{client.0.p_state}}, 
-					{{/if}}
 					{{client.0.p_country}}
 				{{/if}}
 			</p>
 			<div style="margin-bottom:10px;"><b>Organization:</b>&nbsp<a href="{{client.0.links.view}}" target="_blank">{{client.0.organization}}</a></div>		
-			{{#if client.0.home_phone}}<i class="icon-phone"></i><a href="tel:{{client.0.home_phone}}" > {{client.0.home_phone}} <br> </a>{{/if}}
-			{{#if client.0.mobile}}<i class="icon-mobile-phone"></i><a href="tel:{{client.0.mobile}}"> {{client.0.mobile}} </a>{{/if}}
+			{{#if client.0.home_phone}}<i class="icon-phone"></i><a href="tel:{{client.0.home_phone}}" > {{client.0.home_phone}} (home)<br> </a>{{/if}}
+			{{#if client.0.work_phone}}<i class="icon-phone"></i><a href="tel:{{client.0.work_phone}}" > {{client.0.work_phone}} (work)<br> </a>{{/if}}
+			{{#if client.0.mobile}}<i class="icon-mobile-phone"></i><a href="tel:{{client.0.mobile}}"> {{client.0.mobile}} (mobile)</a>{{/if}}
 		{{else}}
 			{{#if client.username}}
 				<a href="{{client.links.statement}}" target="_blank"><h4 style="text-transform: capitalize;"><b>{{client.first_name}} {{client.last_name}}</b></h4></a>
 			{{/if}}
 			<p style="font-size: 13px;">
+				{{#if client.p_street1}}
+					{{client.p_street1}},
+				{{/if}}
+				{{#if client.p_street2}}
+					{{client.p_street2}},
+				{{/if}}
+				{{#if client.p_state}}			
+					{{client.p_state}}, 
+				{{/if}}
 				{{#if client.p_country}}
-					{{#if client.p_state}}			
-						{{client.p_state}}, 
-					{{/if}}
 					{{client.p_country}}
 				{{/if}}
 			</p>	
 			<div style="margin-bottom:10px;"><b>Organization:</b>&nbsp<a href="{{client.links.view}}" target="_blank"><i class="icon-building"></i> {{client.organization}}</a></div>	
-			{{#if client.home_phone}}<i class="icon-phone"></i><a href="tel:{{client.home_phone}}" > {{client.home_phone}} <br> </a>{{/if}}
-			{{#if client.mobile}}<i class="icon-mobile-phone"></i><a href="tel:{{client.mobile}}"> {{client.mobile}} </a>{{/if}}
+			{{#if client.home_phone}}<i class="icon-phone"></i><a href="tel:{{client.home_phone}}" > {{client.home_phone}} (home)<br> </a>{{/if}}
+			{{#if client.work_phone}}<i class="icon-phone"></i><a href="tel:{{client.work_phone}}" > {{client.work_phone}} (work)<br> </a>{{/if}}
+			{{#if client.mobile}}<i class="icon-phone"></i><a href="tel:{{client.mobile}}"> {{client.mobile}} (mobile)</a>{{/if}}
+		{{/isArray}}
+		<div style="margin-bottom:10px;"><a href="#add" class="btn" id="freshbooks_add_invoice" item_name={{name}} rel="tooltip" title="Generate invoice and send an email for this item">Add Invoice</a></div>
+	</div>
+	<div class="sub_header">
+		{{#isArray client}}
+			<a href="{{client.0.links.statement}}" ><h3>Invoices</h3></a>
+		{{else}}
+			<a href="{{client.links.statement}}" ><h3>Invoices</h3></a>
 		{{/isArray}}
 	</div>
-	<ul class="nav nav-tabs row-fluid" id="myTab">
-		<li class="active span6"><a data-toggle="tab" href="#invoices" id="freshboooks_invoices"><h3>Invoices</h3><small></small></a></li>
-		<li class="span6"><a data-toggle="tab" href="#items" id="freshbooks_items"><h3>Items</h3><small></small></a></li>
+	<ul style="margin:0px;" id="freshbooks_invoice_panel">
+		<li>
+			<center><img id="freshbooks_invoice_load" src="img/ajax-loader-cursor.gif" style="margin-top: 14px;margin-bottom: 10px;"></img></center>
+		</li>
 	</ul>
-	<div class="tab-content" id="myTabContent">
-		<div id="invoices" class="tab-pane fade active in">
-			<ul class="widget_tab_content"  id="freshbooks_invoice_panel">
-				<li>
-					<center><img id="freshbooks_invoice_load" src="img/ajax-loader-cursor.gif" style="margin-top: 14px;margin-bottom: 10px;"></img></center>
-				</li>		
-			</ul>
-		</div>
-		<div id="items" class="tab-pane fade">
-			<ul class="widget_tab_content" id="freshbooks_items_panel">
-		
-			</ul>
-		</div>
-	</div>
 {{/if_equals}}
 </script>
 
 <script id="freshbooks-invoice-template" type="text/html">
 	{{#if_equals total "0"}}
 		<li class="sub_header_li" style='color: #999;'>
-	    	No invoices available. Select an item to generate invoice.
+	    	No invoices			
 		</li>		
 	{{else}}
 		<li class="sub_header row-fluid" style="padding-bottom: 0px;">
-			<div class="span6">Item name</div>
+			<div class="span6">Status</div>
 			<div class="span6" style="text-align: right;">Amount</div>
 		</li>
 		{{#isArray invoice}}
 			{{#each invoice}}
 				<li class="row-fluid sub_header_li">
-					<a class="pull-left" data-toggle="collapse" href="#collapse-{{invoice_id}}" >{{invoice_id}}</a>
-					<div class="pull-right">{{amount}}</div><br>
+					<a class="pull-left" data-toggle="collapse" href="#collapse-{{invoice_id}}" >{{status}}</a>
+					<div class="pull-right">$ {{amount}}</div><br>
 					<div id="collapse-{{invoice_id}}" class="collapse">
 						{{#isArray lines.line}}						
 							{{#each lines.line}}	
 								{{#if name}}
 									<div class="pull-left">{{name}}</div>					
-									<div class="pull-right">{{amount}}</div><br>
+									<div class="pull-right">$ {{amount}}</div><br>
 									{{#if tax1_name}}				
 										<div class="pull-left">{{tax1_name}}</div>
-										<div class="pull-right">{{tax1_percent}}</div><br>
+										<div class="pull-right">{{tax1_percent}}%</div><br>
 									{{/if}}
 									{{#if tax2_name}}				
 										<div class="pull-left">{{tax2_name}}</div>
-										<div class="pull-right">{{tax2_percent}}</div><br>
+										<div class="pull-right">{{tax2_percent}}%</div><br>
 									{{/if}}
 								{{/if}}	         
 							{{/each}}					
 						{{else}}
 							{{#if lines.line.name}}
 								<div class="pull-left">{{lines.line.name}}</div>
-								<div class="pull-right">{{lines.line.amount}}</div><br>
+								<div class="pull-right">$ {{lines.line.amount}}</div><br>
 								{{#if lines.line.tax1_name}}				
 									<div class="pull-left">{{lines.line.tax1_name}}</div>
-									<div class="pull-right">{{lines.line.tax1_percent}}</div><br>
+									<div class="pull-right">{{lines.line.tax1_percent}}%</div><br>
 								{{/if}}
 								{{#if lines.line.tax2_name}}				
 									<div class="pull-left">{{lines.line.tax2_name}}</div>
-									<div class="pull-right">{{lines.line.tax2_percent}}</div><br>
+									<div class="pull-right">{{lines.line.tax2_percent}}%</div><br>
 								{{/if}}
 							{{/if}}
 						{{/isArray}}
@@ -123,35 +132,35 @@
 			{{/each}}
 		{{else}}
 			<li class="row-fluid sub_header_li">
-					<a class="pull-left" data-toggle="collapse" href="#collapse-{{invoice.invoice_id}}" >{{invoice.invoice_id}}</a>
+					<a class="pull-left" data-toggle="collapse" href="#collapse-{{invoice.invoice_id}}" >{{invoice.status}}</a>
 					<div class="pull-right">{{invoice.amount}}</div><br>
 					<div id="collapse-{{invoice.invoice_id}}" class="collapse">
 						{{#isArray invoice.lines.line}}      
 							{{#each invoice.lines.line}}	
 								{{#if name}}
 									<div class="pull-left">{{name}}</div>					
-									<div class="pull-right">{{amount}}</div><br>
+									<div class="pull-right">$ {{amount}}</div><br>
 									{{#if tax1_name}}
 										<div class="pull-left">{{tax1_name}}</div>
-										<div class="pull-right">{{tax1_percent}}</div><br>
+										<div class="pull-right">{{tax1_percent}}%</div><br>
 									{{/if}}
 									{{#if tax2_name}}<br>				
 										<div class="pull-left">{{tax2_name}}</div>
-										<div class="pull-right">{{tax2_percent}}</div><br>
+										<div class="pull-right">{{tax2_percent}}%</div><br>
 									{{/if}}
 								{{/if}}
 							{{/each}}
 						{{else}}
 							{{#if invoice.lines.line.name}}
 								<div class="pull-left">{{invoice.lines.line.name}}</div>
-								<div class="pull-right">{{invoice.lines.line.amount}}</div><br>
+								<div class="pull-right">$ {{invoice.lines.line.amount}}</div><br>
 								{{#if invoice.lines.line.tax1_name}}				
 									<div class="pull-left">{{invoice.lines.line.tax1_name}}</div>
-									<div class="pull-right">{{invoice.lines.line.tax1_percent}}</div><br>
+									<div class="pull-right">{{invoice.lines.line.tax1_percent}}%</div><br>
 								{{/if}}
 								{{#if invoice.lines.line.tax2_name}}
 									<div class="pull-left">{{invoice.lines.line.tax2_name}}</div>
-									<div class="pull-right">{{invoice.lines.line.tax2_percent}}</div><br>
+									<div class="pull-right">{{invoice.lines.line.tax2_percent}}%</div><br>
 								{{/if}}
 							{{/if}}
 						{{/isArray}}
@@ -210,6 +219,19 @@
 	                <input name="freshbooks_id" type="hidden" value="" />
 	                <div class="control-group">	                    
 	                    <div class="controls">
+							<div class="row-fluid">
+								<div class="">
+									<select name="items_name" class="required span5" >
+									{{#isArray items.item}}
+										{{#each items.item}}
+											<option value="{{name}}">{{name}}</option>
+										{{/each}}
+									{{else}}
+										<option value="{{items.item.name}}">{{items.item.name}}</option>
+									{{/isArray}}
+									</select>
+								</div>
+							</div>
 							<label class="control-label"><b>Quantity: </b><span class="field_req">*</span></label>	                        
 							<input type="text" placeholder="quantity" name="quantity" id="quantity" class="required span4 digits" />							
 	                    </div>

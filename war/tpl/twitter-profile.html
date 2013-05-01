@@ -13,9 +13,9 @@
 	<a href="#" class="btn ml_5 icon-envelope" id="twitter_message" rel="tooltip" title="Send Direct Message" style="display:none;"></a>					
 </div>
 <ul class="nav nav-tabs row-fluid" id="myTab">
-	<li class="active span4"><a data-toggle="tab" href="#tweets"><h3>{{tweet_count}}</h3><small>Tweets</small></a></li>
-	<li class="span4"><a data-toggle="tab" href="#followers" id="twitter_followers"><h3>{{num_connections}}</h3><small>Followers</small></a></li>
-	<li class="span4"><a data-toggle="tab" href="#following" id="twitter_following"><h3>{{friends_count}}</h3><small>Following</small></a></li>
+	<li class="active" style="width:33.33333%"><a data-toggle="tab" href="#tweets"><h3>{{tweet_count}}</h3><small>Tweets</small></a></li>
+	<li style="width:33.33333%"><a data-toggle="tab" href="#followers" id="twitter_followers"><h3>{{num_connections}}</h3><small>Followers</small></a></li>
+	<li style="width:33.33333%"><a data-toggle="tab" href="#following" id="twitter_following"><h3>{{friends_count}}</h3><small>Following</small></a></li>
 </ul>
 
 <div class="tab-content" id="myTabContent">
@@ -60,11 +60,8 @@
 	<div class="modal hide fade message-modal" id="twitter_messageModal" style="width:400px; left:55%;word-wrap: break-word;">
 	    <div class="modal-header">
 	        <button class="close" data-dismiss="modal">x</button>
-			{{#if_equals headline "Send Message"}}
+			{{#if_equals headline "Direct Message"}}
 	        	<h3><i class="icon-envelope"></i> {{headline}}</h3>
-			{{/if_equals}}
-			{{#if_equals headline "Follow"}}
-				<h3><i class="icon-plus-sign"></i> {{headline}}</h3>
 			{{/if_equals}}
 			{{#if_equals headline "Tweet"}}
 				<h3><i class="icon-share"></i> {{headline}}</h3>
@@ -80,7 +77,11 @@
 	                <div class="control-group">
 	                    <label class="control-label"><b>Message: </b><span class="field_req">*</span></label>
 	                    <div class="controls">
-	                        <textarea rows="4" class="required span4" placeholder="Detailed Message" name="message" id="message" style="max-width:500px;"></textarea>  
+							{{#if_equals headline "Tweet"}}
+								<textarea rows="4" class="required span4" placeholder="Detailed Message" name="message" id="message" maxlength="140" style="max-width:500px;">{{description}}&nbsp</textarea>
+							{{else}}
+	                        	<textarea rows="4" class="required span4" placeholder="Detailed Message" name="message" id="message" maxlength="140" style="max-width:500px;"></textarea>
+							{{/if_equals}}  
 	                    </div>
 	                </div>
 	            </fieldset>

@@ -7,15 +7,10 @@ $(function ()
 {
     // Plugin name as a global variable
     ZENDESK_PLUGIN_NAME = "Zendesk";
-
-    // Stripe profile loading image declared as global
-    ZENDESK_PROFILE_LOAD_IMAGE = '<center><img id="zendesk_profile_load" ' +
-        'src=\"img/1-0.gif\" style="margin-bottom: 10px;margin-right: 16px;" >' +
-        '</img></center>';
     
     // zendesk update loading image declared as global
     ZENDESK_UPDATE_LOAD_IMAGE = '<center><img id="tickets_load" src=' +
-        '\"img/ajax-loader-cursor.gif\" style="margin-top: 14px;"></img></center>';
+        '\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
 
     AgentInfo = null;
        
@@ -72,7 +67,7 @@ function setupZendeskOAuth(plugin_id)
 {
 
     // Shows loading image until set up is shown 
-    $('#Zendesk').html(ZENDESK_PROFILE_LOAD_IMAGE);
+    $('#Zendesk').html(ZENDESK_UPDATE_LOAD_IMAGE);
 
     // Shows input fields to save the zendesk preferences
     $('#Zendesk').html(getTemplate('zendesk-login', {}));
@@ -128,7 +123,7 @@ function setupZendeskOAuth(plugin_id)
 function showTicketsFromZendesk(plugin_id, email)
 {
     // Shows loading until tickets are shown
-    $('#Zendesk').html(ZENDESK_PROFILE_LOAD_IMAGE);
+    $('#Zendesk').html(ZENDESK_UPDATE_LOAD_IMAGE);
 
     // Sends request to the URL "/core/api/widgets/zendesk/get/" with plugin id and 
     // email as path parameters and calls WidgetsAPI class
@@ -353,7 +348,7 @@ function getTicketByStatus(plugin_id, email, status, callback)
 
 function showZendeskProfile(plugin_id, email)
 {
-	$('#Zendesk').html(ZENDESK_PROFILE_LOAD_IMAGE);
+	$('#Zendesk').html(ZENDESK_UPDATE_LOAD_IMAGE);
 
 	queueGetRequest("widget_queue", "/core/api/widgets/zendesk/profile/" + plugin_id + "/" + email, 'json',		
 	function success(data)
@@ -467,7 +462,7 @@ function showZendeskProfile(plugin_id, email)
 		 
 	}, function error(data) {
 		
-		$('#zendesk_profile_load').remove();
+		$('#tickets_load').remove();
 		
         // Else the error message is shown
         $('#Zendesk').html('<div style="padding: 10px;' +

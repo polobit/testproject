@@ -9,9 +9,8 @@ $(function ()
     Stripe_PLUGIN_NAME = "Stripe";
 
     // Stripe profile loading image declared as global
-    STRIPE_PROFILE_LOAD_IMAGE = '<center><img id="stripe_profile_load" ' +
-        'src=\"img/1-0.gif\" style="margin-bottom: 10px;margin-right: 16px;" >' +
-        '</img></center>';
+    STRIPE_PROFILE_LOAD_IMAGE = '<center><img id="stripe_profile_load" src=\"img/ajax-loader-cursor.gif\" ' + 
+				'style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
 
     // Retrieves the plugin object saved with Stripe plugin name
     var plugin = agile_crm_get_plugin(Stripe_PLUGIN_NAME);

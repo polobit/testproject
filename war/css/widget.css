@@ -203,7 +203,7 @@ small{
 	padding:10px;
 	border-bottom:1px solid #d6d6d6;
 	float:left;
-	word-break: break-all;
+	word-break: normal;
 	width:100%;
 }
 

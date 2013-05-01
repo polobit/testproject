@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
@@ -20,10 +21,12 @@ import com.agilecrm.widgets.Widget;
 import com.google.code.linkedinapi.client.LinkedInApiClient;
 import com.google.code.linkedinapi.client.LinkedInApiClientFactory;
 import com.google.code.linkedinapi.client.NetworkUpdatesApiClient;
+import com.google.code.linkedinapi.client.enumeration.CompanyField;
 import com.google.code.linkedinapi.client.enumeration.NetworkUpdateType;
 import com.google.code.linkedinapi.client.enumeration.ProfileField;
 import com.google.code.linkedinapi.client.enumeration.ProfileType;
 import com.google.code.linkedinapi.client.enumeration.SearchParameter;
+import com.google.code.linkedinapi.schema.Company;
 import com.google.code.linkedinapi.schema.Connections;
 import com.google.code.linkedinapi.schema.Network;
 import com.google.code.linkedinapi.schema.People;
@@ -645,12 +648,55 @@ public class LinkedInUtil
 	Person person = client.getProfileById(linkedInId, EnumSet.of(
 		ProfileField.POSITIONS_COMPANY,
 		ProfileField.THREE_CURRENT_POSITIONS,
-		ProfileField.THREE_PAST_POSITIONS));
+		ProfileField.THREE_PAST_POSITIONS,
+		ProfileField.POSITIONS_COMPANY_INDUSTRY,
+		ProfileField.POSITIONS_COMPANY_TICKER));
 
 	SocialSearchResult experience = new SocialSearchResult();
 	experience.id = linkedInId;
+
+	for (Position position : person.getThreeCurrentPositions()
+		.getPositionList())
+	{
+	    if (position.getCompany().getId() != null)
+	    {
+		Company company = client.getCompanyById(position.getCompany()
+			.getId(), EnumSet.of(CompanyField.LOCATIONS_ADDRESS,
+			CompanyField.LOGO_URL, CompanyField.NAME,
+			CompanyField.NUM_FOLLOWERS, CompanyField.BLOG_RSS_URL,
+			CompanyField.DESCRIPTION, CompanyField.ID,
+			CompanyField.INDUSTRY, CompanyField.TICKER));
+
+		company.setLogoUrl(company.getLogoUrl().replace("http:", "https:")
+			.replace("m3", "m3-s"));
+		position.setCompany(company);
+	    }
+
+	}
+
 	experience.three_current_positions = person.getThreeCurrentPositions()
 		.getPositionList();
+
+	for (Position position : person.getThreePastPositions()
+		.getPositionList())
+	{
+	    if (position.getCompany().getId() != null)
+	    {
+		Company company = client.getCompanyById(position.getCompany()
+			.getId(), EnumSet.of(CompanyField.LOCATIONS_ADDRESS,
+			CompanyField.LOGO_URL, CompanyField.NAME,
+			CompanyField.NUM_FOLLOWERS, CompanyField.BLOG_RSS_URL,
+			CompanyField.DESCRIPTION, CompanyField.ID,
+			CompanyField.INDUSTRY, CompanyField.TICKER));
+
+		company.setLogoUrl(company.getLogoUrl()
+			.replace("http:", "https:").replace("m3", "m3-s"));
+		position.setCompany(company);
+
+	    }
+
+	}
+
 	experience.three_past_positions = person.getThreePastPositions()
 		.getPositionList();
 
@@ -669,40 +715,69 @@ public class LinkedInUtil
 
 	// {"token":"4c1b1828-e275-4e09-b7f9-1f85ee32c22e","secret":"4abc6b56-a41e-4864-a759-22c36c36e460"}
 	// {"token":"3382f692-f598-4b72-9dd3-891853fec2fc","secret":"7984afcf-f0f7-4fb3-b39c-cb7379d0336e"}
-	Person cons = client.getProfileById("7Q5fkA7k4Y", EnumSet.of(
+	Person cons = client.getProfileById("ZQglvOshW2", EnumSet.of(
 		ProfileField.POSITIONS_COMPANY,
 		ProfileField.THREE_CURRENT_POSITIONS,
-		ProfileField.THREE_PAST_POSITIONS));
+		ProfileField.THREE_PAST_POSITIONS,
+		ProfileField.POSITIONS_COMPANY_ID, ProfileField.LOCATION_NAME,
+		ProfileField.INDUSTRY, ProfileField.LOCATION));
+
+	Company com = client.getCompanyById("1680", EnumSet.of(
+		CompanyField.LOCATIONS_ADDRESS, CompanyField.LOGO_URL,
+		CompanyField.NAME, CompanyField.NUM_FOLLOWERS,
+		CompanyField.BLOG_RSS_URL, CompanyField.DESCRIPTION,
+		CompanyField.ID, CompanyField.INDUSTRY, CompanyField.TICKER));
+
+	com.setLogoUrl(com.getLogoUrl().replace("http:", "https:")
+		.replace("m3", "m3-s"));
 	// tUqQPRTrto
 	// mgSCSTsq2V
-	System.out.println(cons.getThreeCurrentPositions().getPositionList());
-	System.out.println(cons.getThreePastPositions().getPositionList());
 
-	SocialSearchResult experience = new SocialSearchResult();
-	experience.three_current_positions = cons.getThreeCurrentPositions()
-		.getPositionList();
-	for (Position pos : cons.getThreeCurrentPositions().getPositionList())
+	ObjectMapper mapper = new ObjectMapper();
+	String json;
+	try
 	{
-
-	    System.out.println(pos.getTitle());
-	    System.out.println("summary" + pos.getSummary());
-	    System.out.println("company" + pos.getCompany().getName());
-	    System.out.println(pos.getStartDate().getMonth() + "-"
-		    + pos.getStartDate().getYear());
-	    System.out.println(pos.getEndDate());
+	    // json = mapper.writeValueAsString(com);
+	    // System.out.println(json);
+	    // json = mapper.writeValueAsString(cons);
+	    // System.out.println(json);
+	    json = mapper.writeValueAsString(cons.getThreeCurrentPositions());
+	    System.out.println(json);
+	    cons.getThreeCurrentPositions().getPositionList().get(0)
+		    .setCompany(com);
+	    json = mapper.writeValueAsString(cons.getThreeCurrentPositions());
+	    System.out.println(json);
+	    // json = mapper.writeValueAsString(cons.getThreePastPositions());
+	    // System.out.println(json);
 	}
-
-	for (Position pos : cons.getThreePastPositions().getPositionList())
+	catch (Exception e)
 	{
-
-	    System.out.println(pos.getTitle());
-	    System.out.println(pos.getSummary());
-	    System.out.println(pos.getCompany().getName());
-	    System.out.println(pos.getStartDate().getMonth() + "-"
-		    + pos.getStartDate().getYear());
-	    System.out.println(pos.getEndDate().getMonth() + "-"
-		    + pos.getEndDate().getYear());
+	    e.getMessage();
 	}
+	// for (Position pos :
+	// cons.getThreeCurrentPositions().getPositionList())
+	// {
+	//
+	// System.out.println(pos.getTitle());
+	//
+	// System.out.println("summary" + pos.getSummary());
+	// System.out.println("company" + pos.getCompany().getName());
+	// System.out.println(pos.getStartDate().getMonth() + "-"
+	// + pos.getStartDate().getYear());
+	// System.out.println(pos.getEndDate());
+	// }
+	//
+	// for (Position pos : cons.getThreePastPositions().getPositionList())
+	// {
+	//
+	// System.out.println(pos.getTitle());
+	// System.out.println(pos.getSummary());
+	// System.out.println(pos.getCompany().getName());
+	// System.out.println(pos.getStartDate().getMonth() + "-"
+	// + pos.getStartDate().getYear());
+	// System.out.println(pos.getEndDate().getMonth() + "-"
+	// + pos.getEndDate().getYear());
+	// }
 
     }
 }
