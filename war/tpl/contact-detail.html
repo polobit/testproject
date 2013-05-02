@@ -50,26 +50,30 @@
                 </div>
                 <div class="well right unselectable" id="score" unselectable="on" style="height:43px;margin-right:70px;padding-top:0px;padding-right:10px;padding-left:15px" onselectstart="return false">
                     <div style="font-size:22px; display:inline-block"> 
-                        Score 
+                        Score
                         <span style="vertical-align:text-top;margin-left:-5px">
                         <img border="0" src="/img/help.png" style="height:6px;vertical-align:middle" rel="popover" data-placement="bottom"  data-title="Lead Score" data-content="Score your leads to get high quality leads to appear on top. Manually assign scores or automate the process based on user behavior using Workflow automation." id="element" data-trigger="hover">
                         </span>
-                    </div> 
-                    <div>
+                    </div>
+				<div> 
+				<div style="display:inline-block;vertical-align:middle">
                     	{{#if lead_score}}
-                        	<div id="lead-score" style="font-size:28px;padding-left:12px;display:inline-block;">{{lead_score}}</div>&nbsp;
+                        	<span id="lead-score" style="font-size:28px;padding-left:12px;">{{lead_score}}</span>&nbsp;
                     	{{else}}
-                        	<div id="lead-score" style="font-size:28px;display:inline-block;padding-left:12px;">0</div>&nbsp;
+                        	<span id="lead-score" style="font-size:28px;padding-left:12px;">0</span>&nbsp;
                     	{{/if}}
+				</div>	
+				<div style="display:inline-block">
                     	<ul style="display:inline-block;list-style-type:none;margin-left:2px">
-                        	<li style="height:12px">
+                        	<li style="height:9px">
 							<i class="icon-sort-up" id="add" style="height:10px;cursor:pointer"></i>
 							</li>
-							<li style="height:14px">                        
+							<li>                        
 								<i class="icon-sort-down" id="minus" style="height:10px;cursor:pointer"></i>
 							</li>
                     	</ul>
-                    </div>
+				</div>
+				</div>
                 </div>
             <div class='clearfix'></div>    
 			<div>
@@ -156,10 +160,10 @@
         <!-- <div id="qrcode"><img src="img/1-0.gif"></div> -->
          <div class="clearfix"></div>
 		 <div style='padding:4% 8% 10px;word-wrap: break-word;'>
-                    <div>
+                    <div style="padding-bottom:10px">
                         <div class="change-owner-succes">
                         </div>
-                        <span><b>Owner</b> : <span id="contact-owner" data={{owner.id}} style="display: inline-block">{{owner.name}}</span> 
+                        <span title="Owner"><b><i class="icon-group" ></i></b> : <span id="contact-owner" data={{owner.id}} style="display: inline-block">{{owner.name}}</span> 
 						<span>
                        		<a href="#"> <i class="icon-edit" style="vertical-align:middle;" rel="popover" data-placement="top"  data-title="Lead Owner" data-content="Click here to change owner." id="change-owner-element" data-trigger="hover"></i></a>
  						</span>
@@ -176,7 +180,7 @@
                             </select>-->
                         </span>
                     </div>
-                    <div>
+                    <div style="padding-bottom:10px">
                         <!--<div style='float: left;height:auto;padding-right:10px;'>
                         <img  class='thumbnail' src="{{gravatarurl properties 50}}" width="50" height="50"/>
                         </div>-->       
@@ -192,51 +196,51 @@
                             <span>{{getPropertyValue properties "company"}}</span>
                         {{/if}}
                     </div>
-                </div>
-            <br/>       
+                </div>      
 
-{{#multiple_Property_Element "phone" properties}}
-			<div class="pull-left row-fluid">
-				<div class="span1">
+			<div class="pull-left row-fluid" style="padding-bottom:5px">
+		{{#multiple_Property_Element "phone" properties}}
+			
+				<span>
 					<i class="icon-phone pull-left"></i>
-				</div>
-				<div class="pull-right span10">
+				</span>
+				<span style="padding-left:5px">
 				{{#each this}}	
 					<a href="tel:{{value}}">{{value}}</a> 	
 					  {{#if subtype}} ({{subtype}}) {{/if}}</br>
 				{{/each}}
-				</div>
-			</div>
+				</span>
 		  {{/multiple_Property_Element}}
-		  {{#multiple_Property_Element "email" properties}}
-				<div class="pull-left row-fluid">
-					<div class="span1">
+			</div>
+			  <div class="pull-left row-fluid" style="padding-bottom:5px">
+			{{#multiple_Property_Element "email" properties}}
+					<span>
 						<i class="icon-envelope-alt pull-left"> </i>
-					</div>
-					<div class="pull-right span10">
+					</span>
+					<span style="padding-left:5px">
 						{{#each this}}
 							<a href="mailto:{{value}}">{{value}}</a> 	
 							  {{#if subtype}} ({{subtype}}) {{/if}}</br>
 						{{/each}}
-					</div>
-				</div>
+					</span>
 			{{/multiple_Property_Element}}
+			</div>
+		  <div class="pull-left row-fluid" style="padding-bottom:5px">
             {{#multiple_Property_Element "website" properties}}
-
-				<div class="pull-left row-fluid">
-					<div class="span1">					
+					<span class="span1">					
 						<i class="icon-globe pull-left"></i>
-					</div> 
-						<div class="pull-right span10">
+					</span> 
+						<span style="padding-left:5px">
 							{{#each this}}	
 								<a href="{{value}}">{{value}}</a> &nbsp<i class="icon-{{toLowerCase subtype}}-sign"></i></br>
 							{{/each}}
-						</div>
-				</div>
+						</span>
 			{{/multiple_Property_Element}}
-			<br/>
-			<br/>
-            {{#each properties}}
+			</div>
+			</br>
+           <div class="pull-left row-fluid" style="padding-bottom:5px">
+			{{#each properties}}
+			
                 {{#if_property "first_name" "last_name" "company" "title" "image" "email" "phone" "website" "address"}}
                     <span style='display:inline'><icon class="{{name}}"></icon> <small><b>{{ucfirst name}}</b></small></span> 
                     {{#if subtype}}
@@ -246,8 +250,10 @@
                     {{/if}}
                     {{value}} 
                     <br/> 
-                {{/if_property}}        
+                {{/if_property}}
+			        
             {{/each}}
+			</div>
 			<br/>
             {{#address_Element properties}}{{/address_Element}}
                 <div id="map" style="width:auto; height:200px; display:none;margin-bottom:10px;margin-top:10px">

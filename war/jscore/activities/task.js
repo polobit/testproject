@@ -106,7 +106,7 @@ $(function() {
 			// Complete
 			var taskId = $(this).attr('data');
 			// complete_task(taskId, $(this));
-			complete_task(taskId, $(this).closest('tr'))
+			complete_task(taskId, App_Calendar.tasksListView.collection, $(this).closest('tr'))
 		}
 	});
 
@@ -351,28 +351,36 @@ function append_tasks(base_model) {
  *            ui html Object to remove on success of the deletion
  * 
  */
-function complete_task(taskId, ui) {
-	console.log("Deleting Task " + taskId);
-	var collection = App_Calendar.tasksListView.collection;
-	var model = collection.get(taskId);
+function complete_task(taskId, collection, ui, callback) {
+	console.log(taskJSON);
 
-	var json = model.toJSON();
+	var taskJSON = collection.get(taskId).toJSON();
+	// Replace contacts object with contact ids 
+	var contacts  = [];
+	$.each(taskJSON.contacts, function(index, contact){
+		contacts.push(contact.id);
+	});
+	
+	taskJSON.contacts = contacts;
+	taskJSON.is_complete = true;
 
-	// Make contacts null to avoid exception in prepersist (here contacts is
-	// array of contact models)
-	// Or replace objects with respective ids
-	json.contacts = null;
-	json.is_complete = true;
-
-	var new_task = new Backbone.Model();
+var new_task = new Backbone.Model();
 	new_task.url = '/core/api/tasks';
-	new_task.save(json, {
+	new_task.save(taskJSON, {
 		success : function(model, response) {
-			App_Calendar.tasksListView.collection.remove(model);
+			collection.remove(model);
 
-			ui.fadeOut(2000);
+			if(ui)
+				ui.fadeOut(2000);
+			
+			if (callback && typeof (callback) === "function")
+			{
+				// execute the callback, passing parameters as necessary
+				callback(model);
+			}
 		}
 	});
+	
 
 	// Set is complete flag to be true
 	/*

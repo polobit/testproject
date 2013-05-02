@@ -49,7 +49,11 @@
 		<div style="display:inline-block; ">	
 		{{#each contacts}}
            	{{#if id}}
-           		&nbsp<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+				{{#isDuplicateContactProperty properties "email"}}
+					{{else}}	
+						&nbsp<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+				{{/isDuplicateContactProperty}}
+           		
            	{{/if}}
        	{{/each}}
 		</div>
