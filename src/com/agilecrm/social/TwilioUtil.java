@@ -11,11 +11,70 @@ import org.json.XML;
 import com.agilecrm.widgets.Widget;
 import com.thirdparty.twilio.sdk.TwilioRestClient;
 import com.thirdparty.twilio.sdk.TwilioRestResponse;
+import com.twilio.sdk.client.TwilioCapability;
+import com.twilio.sdk.client.TwilioCapability.DomainException;
 
 public class TwilioUtil
 {
     /* Twilio REST API version */
     public static final String APIVERSION = "2010-04-01";
+
+    public static String generateTwilioToken(String accountSid, String appSID)
+	    throws Exception
+    {
+	// String authToken = "b6420aa8715bad58ad2cff61036b4640";
+	String authToken = "5e7085bb019e378fb18822f319a3ec46";
+
+	TwilioCapability capability = new TwilioCapability(accountSid,
+		authToken);
+
+	capability.allowClientOutgoing(appSID);
+
+	String token = null;
+	try
+	{
+	    token = capability.generateToken();
+	    System.out.println(token);
+	    return token;
+	}
+	catch (DomainException e)
+	{
+	    System.out.println(e.getMessage());
+	    return "";
+	}
+    }
+
+    public static String getTwilioAppSID(String accountSID) throws Exception
+    {
+	// String authToken = "b6420aa8715bad58ad2cff61036b4640";
+	// test account token
+	String authToken = "5e7085bb019e378fb18822f319a3ec46";
+
+	TwilioRestClient client = new TwilioRestClient(accountSID, authToken,
+		null);
+	TwilioRestResponse response;
+
+	Map<String, String> params = new HashMap<String, String>();
+	params.put("FriendlyName", "Phone Me");
+	params.put("VoiceUrl",
+		"https://agile-crm-cloud.appspot.com/backend/voice");
+	params.put("VoiceMethod", "GET");
+
+	response = client.request(
+		"/2010-04-01/Accounts/" + client.getAccountSid()
+			+ "/Applications.json", "POST", params);
+
+	if (response.isError())
+	    throw new Exception("Error fetching recent calls: "
+		    + response.getHttpStatus() + "\n"
+		    + response.getResponseText());
+	else
+	{
+	    System.out.println(response.getResponseText());
+	    return new JSONObject(response.getResponseText()).getString("sid");
+	}
+
+    }
 
     /**
      * Retrieves the call logs from agent Twilio account based on his Twilio
@@ -278,4 +337,5 @@ public class TwilioUtil
 	}
 
     }
+
 }

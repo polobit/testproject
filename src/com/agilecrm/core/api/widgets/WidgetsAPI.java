@@ -1187,6 +1187,67 @@ public class WidgetsAPI
     }
 
     /**
+     * Connects to Twilio and fetches token based on the accountSID and appsid
+     * 
+     * @param accountSid
+     *            {@link String} accountSid of agent Twilio account
+     * @param appSID
+     *            {@link String} appSid of agent Twilio account
+     * @return {@link String} token generated from Twilio
+     */
+    @Path("twilio/accountsid/{accountSID}/{appSID}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getTwilioToken(@PathParam("accountSID") String accountSID,
+	    @PathParam("appSID") String appSID)
+    {
+	if (accountSID == null)
+	    return null;
+
+	try
+	{
+	    return TwilioUtil.generateTwilioToken(accountSID, appSID);
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+
+	}
+
+    }
+
+    /**
+     * Connects to Twilio and fetches applicaiton sid based on the accountSID
+     * 
+     * @param accountSid
+     *            {@link String} accountSid of agent Twilio account
+     * @return {@link String} token generated from Twilio
+     */
+    @Path("twilio/appsid/{accountSID}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getTwilioAppSid(@PathParam("accountSID") String accountSID)
+    {
+	if (accountSID == null)
+	    return null;
+
+	try
+	{
+	    return TwilioUtil.getTwilioAppSID(accountSID);
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+
+	}
+
+    }
+
+    /**
      * Retrieves clients from agent's FreshBooks account based on contact email
      * 
      * @param widgetId
