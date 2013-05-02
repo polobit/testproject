@@ -7,16 +7,19 @@ $(function()
 		$(".delete-namespace").die().live('click', function(e){
 			
 					e.preventDefault();
+					
+					// If modal already exists, removes to append new
+                    if ($('#warning-deletion').size() != 0)
+                    {
+                    	console.log('template removed');
+                    	$('#warning-deletion').remove();
+                    }
+                    
 					var namespace = $(this).closest('a').attr("data");
 					
 					if(namespace != "")
 					{
-						// If modal already exists, removes to append new
-	                    if ($('#warning-deletion').size() != 0)
-	                    {
-	                    	$('#warning-deletion').remove();
-	                    }
-	                    
+	                    console.log(namespace);
 						// Shows account stats warning template with stats(data used)
 						/**
 						 * Getting namespace stats for this domain
