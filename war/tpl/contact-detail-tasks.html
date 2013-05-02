@@ -46,7 +46,8 @@
 		{{else}}
 			<div><input data="{{id}}" class="complete-task" type="checkbox"/><h4 class="task-subject" style="display:inline"><b> {{subject}}</b>&nbsp;<span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></h4></div></br>
 	{{/if}}
-	<p><strong>Type : </strong><i class="{{icons type}}"></i>&nbsp;{{ucfirst type}}</p>
+	<p><strong>Type : </strong><i class="{{icons type}}"></i>&nbsp;{{ucfirst type}}&nbsp;</p>
+<p><strong>Due : </strong>&nbsp;{{epochToHumanDate "mmm d, yyyy" due}}</p>
 
 	<div class="clear">
 		<span class="actions pull-right">
@@ -59,7 +60,12 @@
 		<div style="display:inline-block;">	
 		{{#each contacts}}
            	{{#if id}}
-           		&nbsp<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+				{{#isDuplicateContactProperty properties "email"}}
+
+					{{else}}	
+						&nbsp<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+				{{/isDuplicateContactProperty}}
+           		
            	{{/if}}
        	{{/each}}
 		</div>

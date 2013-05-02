@@ -224,6 +224,7 @@ $(function() {
 		}
 		// date form milliseconds
 		var d = new Date(parseInt(date) * 1000).format(format);
+		console.log(d);
 		return d
 
 		// return $.datepicker.formatDate(format , new Date( parseInt(date) *
@@ -773,6 +774,37 @@ $(function() {
 		console.log(content);
 		
 		return options.fn(content.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0]);
+	});
+	
+	Handlebars.registerHelper('getCurrentContactPropertyBlock', function(value, options) {
+		if (App_Contacts.contactDetailView
+				&& App_Contacts.contactDetailView.model) {
+			var contact_properties = App_Contacts.contactDetailView.model
+					.get('properties')
+			console.log(App_Contacts.contactDetailView.model.toJSON());
+			return options.fn(getPropertyValue(contact_properties, value));
+		}
+	});
+	
+	Handlebars.registerHelper('isDuplicateContactProperty', function(properties, key,  options) {
+		if (App_Contacts.contactDetailView
+				&& App_Contacts.contactDetailView.model) {
+			var contact_properties = App_Contacts.contactDetailView.model
+					.get('properties')
+					var currentContactEntity = getPropertyValue(contact_properties, key);
+					var contactEntity = getPropertyValue(properties, key);
+					
+					if(!currentContactEntity || !contactEntity)
+					{
+						currentContactEntity = getPropertyValue(contact_properties, "first_name") + " " + getPropertyValue(contact_properties, "last_name");
+						contactEntity = getPropertyValue(properties, "first_name") + " " + getPropertyValue(properties, "last_name");
+					}
+					
+					if(getPropertyValue(contact_properties, key) == getPropertyValue(properties, key))
+					 return options.fn(this);
+
+					 return options.inverse(this)
+		}
 	});
 
 });
