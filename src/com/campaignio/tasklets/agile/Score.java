@@ -65,7 +65,7 @@ public class Score extends TaskletAdapter
 		contact.addScore(Integer.parseInt(value));
 
 		// Creates log when score is added
-		log(campaignJSON, subscriberJSON, nodeJSON, "Score added by : "
+		log(campaignJSON, subscriberJSON, nodeJSON, "Score added by "
 			+ value);
 	    }
 	    else
@@ -74,7 +74,7 @@ public class Score extends TaskletAdapter
 
 		// Creates log when score is subtracted
 		log(campaignJSON, subscriberJSON, nodeJSON,
-			"Score subtracted by : " + value);
+			"Score subtracted by " + value);
 	    }
 	}
 

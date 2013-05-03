@@ -1,19 +1,69 @@
 <script id="stats-collection-template" type="text/html">
-<br>
-<h2>List of Activities</h2>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Url</th>
-            <th>Ip Address</th>
-        </tr>
-    </thead>
-    <tbody id='stats-model-list'></tbody>
-</table>
+{{#unless this.length}}
+        <div class="slate">
+            <div class="slate-content">
+                <div class="box-left">
+                    <img alt="Clipboard" src="/img/clipboard.png" />
+                </div>
+                <div class="box-right">
+                    <h3>{{getCurrentContactProperty "first_name"}} has no stats.</h3>
+                    <div class="text">
+                        May be {{getCurrentContactProperty "first_name"}} did not visit the target page yet.
+                    </div>
+                    <a href="#">Click here to learn more</a>
+                </div>
+            </div>
+        </div>
+        {{/unless}}
+
+{{#if this.length}}
+	<ul id="stats-model-list" class="ativity-block-ul"></ul>
+{{/if}}
+
 </script>
 
-<!-- Imap-Email model -->
+<!-- Web Stats model -->
 <script id="stats-model-template" type="text/html">
-    <td> {{u}} </td>
-    <td> {{i}} </td>
+<div style="display:block;" class="activity">
+	<div id="notes" class="activity-text-block">
+		<span class="activity-block-owner">
+		</span>
+		<h4><a style="text-decoration: none"><b>Page View Analytics</b></a></h4></br>
+		
+		<ul style="list-style: none;">
+			<li class="row-fluid">	
+					<div class="span2"><b>URL</b>
+						<div class="pull-right">:</div>
+					</div>
+							
+					<div class="span6" style="margin-left: 10px;">
+						{{url}}
+					</div>
+				</li>
+				<li class="row-fluid">	
+					<div class="span2"><b>IP Address</b>
+						<div class="pull-right">:</div>
+					</div>		
+					<div class="span6" style="margin-left: 10px;">
+						{{ip}}
+					</div>
+				</li>
+
+				<li class="row-fluid">	
+					<div class="span2"><b>Location</b>
+						<div class="pull-right">:</div>
+					</div>		
+					<div class="span6" style="margin-left: 10px;">
+						{{ucfirst city}}, {{region}}, {{country}}
+					</div>
+				</li>
+		</ul>
+
+	<div class="clear">
+		<small class="edit-hover" style="margin-right:10px">
+			<time class="stats-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" created_time}}</time>
+		</small>	
+	</div>
+</div>
+</div>
 </script>

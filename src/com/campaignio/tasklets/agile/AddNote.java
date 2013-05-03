@@ -81,9 +81,8 @@ public class AddNote extends TaskletAdapter
 	}
 
 	// Creates log for note
-	log(campaignJSON, subscriberJSON, nodeJSON,
-		"AddNote Log - Note having Subject: " + subject
-			+ " and Description : " + description + " is added.");
+	log(campaignJSON, subscriberJSON, nodeJSON, "Subject - " + subject
+		+ "<br>Description - " + description);
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,

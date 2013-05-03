@@ -94,7 +94,7 @@ public class Clicked extends TaskletAdapter
 	    throws Exception
     {
 	// Creates log for clicked node when interrupted
-	log(campaignJSON, subscriberJSON, nodeJSON, "Link clicked: "
+	log(campaignJSON, subscriberJSON, nodeJSON, "Link clicked - "
 		+ customData.getString("long_url"));
 
 	// Execute Next One in Loop (Yes)

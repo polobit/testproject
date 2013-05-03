@@ -33,7 +33,7 @@
             "category": "Settings",
             "value": "",
             "name": "variable_1",
-            "title": "Variable name (eg: $variable) or value (eg: 5).",
+            "title": "Variable name (eg: {{variable}}) or value (eg: 5).",
             "fieldType": "input",
             "type": "text" 
         },
@@ -52,7 +52,8 @@
                 "less than or equals": "less_than_or_equals",
                 "greater than or equals": "greater_than_or_equals",
                 "not equal to": "not_equal_to",
-                "equal to": "equal_to"
+                "equal to": "equal_to",
+                "contains": "contains"
             },
             "fieldType": "select",
             "type": "select" 
@@ -62,7 +63,7 @@
             "required": "required",
             "category": "Settings",
             "name": "variable_2",
-            "title": "Variable name (eg: $variable) or value (eg: 5).",
+            "title": "Variable name (eg: {{variable}}) or value (eg: 5).",
             "fieldType": "input",
             "type": "text" 
         },

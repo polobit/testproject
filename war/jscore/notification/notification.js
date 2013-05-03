@@ -13,6 +13,21 @@ var notification_prefs;
  */
 $(function() {	
 	
+	// Verify desktop notification settings.
+	$("#set-desktop-notification").die().live('click', function() {	
+		if(!window.webkitNotifications)
+			alert("Desktop notifications are not supported for this Browser/OS version yet.")
+			
+		if(window.webkitNotifications.checkPermission() == 0)
+			alert("Permission for desktop notifications is allowed already.");
+		
+		if(window.webkitNotifications.checkPermission() == 2)
+			alert("Permission for desktop notifications is denied. Please reset in browser settings.");
+	});
+	
+	// Request for notification permission.
+	request_notification_permission();
+	
 	// Play notification sound when clicked on play icon.
 	$('#notification-sound-play').live('click',function(e){
 		e.preventDefault();
@@ -147,7 +162,7 @@ function _setupNotification(object) {
 			if (notification_prefs[key])
 				// notify('information', html,
 				// 'bottom-right',true);
-				showNoty('information', html, 'bottomRight');
+				showNoty('information', html, 'bottomRight',object.notification);
 		}
 
 	});
@@ -195,7 +210,7 @@ function notificationForClickedAndOpened(contact, html) {
 		notification_prefs.contact_assigned_starred_clicked_link = false;
 
 		if (contact.notification == "CLICKED_LINK")
-			showNoty('information', html, 'bottomRight');
+			showNoty('information', html, 'bottomRight',"CLICKED_LINK");
 	}
 
 	// Notification for assigned and starred contacts
@@ -205,7 +220,7 @@ function notificationForClickedAndOpened(contact, html) {
 		// Show notifications for contacts of same user
 		if (current_user == contact_created_by
 				&& contact.notification == "CLICKED_LINK")
-			showNoty('information', html, 'bottomRight');
+			showNoty('information', html, 'bottomRight',"CLICKED_LINK");
 	}
 
 	// Opened Email
@@ -216,7 +231,7 @@ function notificationForClickedAndOpened(contact, html) {
 		notification_prefs.contact_assigned_starred_opened_email = false;
 
 		if (contact.notification == "OPENED_EMAIL")
-			showNoty('information', html, 'bottomRight');
+			showNoty('information', html, 'bottomRight', "OPENED_EMAIL");
 	}
 
 	// Notification for assigned and starred contacts
@@ -226,7 +241,7 @@ function notificationForClickedAndOpened(contact, html) {
 		// Show notifications for contacts of same user
 		if (current_user == contact_created_by
 				&& contact.notification == "OPENED_EMAIL")
-			showNoty('information', html, 'bottomRight');
+			showNoty('information', html, 'bottomRight', "OPENED_EMAIL");
 	}
 }
 
@@ -297,7 +312,7 @@ function notificationForBrowsing(contact) {
 		// Show picture, name, title, company
 		// JSON.stringify(data.toJSON())
 		// notify('success1', html, 'bottom-right', true);
-		showNoty('information', html, 'bottomRight');
+		showNoty('information', html, 'bottomRight', "BROWSING");
 	}
 
 	// Notification for assigned and starred contacts
@@ -307,7 +322,7 @@ function notificationForBrowsing(contact) {
 		// Show notifications for contacts of same user
 		if (current_user == contact_created_by)
 			// notify('success1', html, 'bottom-right', true);
-			showNoty('information', html, 'bottomRight');
+			showNoty('information', html, 'bottomRight', "BROWSING");
 	}
 
 }
@@ -342,16 +357,26 @@ function notify(type, message, position, closable) {
 }
 
 /**
- * Runs jquery noty plugin for notification pop-ups
+ * Runs jquery noty plugin for notification pop-ups when desktop permission is not given.
  * 
  * @param type -
- *            notification type
+ *            noty types like information, warning etc.
  * @param message -
  *            html content for notification
  * @param position -
- *            position of pop-up within the webpage
+ *            position of pop-up within the webpage.
+ * @param notification_type - 
+ *            notification type - TAG CREATED, TAG DELETED etc.
  */
-function showNoty(type, message, position) {
+function showNoty(type, message, position,notification_type) {
+
+	// Check for html5 notification permission.
+	if (window.webkitNotifications) {
+		if (window.webkitNotifications.checkPermission() == 0) { 
+			show_desktop_notification(getImageUrl(message),notification_type, getTextMessage(message),getId(message));
+			return;
+		}
+	}
 	
 	// Download the lib
 	head.js(LIB_PATH + 'lib/noty/jquery.noty.js',
@@ -396,4 +421,50 @@ function showNoty(type, message, position) {
 				
 			     });
 	});
+}
+
+/**
+ * Returns required text from notification template as html5 doesn't allow html.
+ * @param {String} message - notification template.
+ ***/
+function getTextMessage(message)
+{
+	var name;
+	var type = $(message).find('#notification-type').text();
+
+	if($(message).find('#notification-contact-id').text() != "")
+	{
+		name = $(message).find('#notification-contact-id').text();
+	    return name + " " + type;
+	}
+	
+	name = $(message).find('#notification-deal-id').text();
+	return name + " " + type;       
+}
+
+/**
+ * Returns required contact-id or deal-id from notification template. This allows to return 
+ * to respective page when clicked on notification.
+ * @param {String} message - notification template.
+ ***/
+function getId(message)
+{
+	if($(message).find('#notification-contact-id').text() != "")
+	{
+		return $(message).find('#notification-contact-id').attr('href');
+	}
+	
+	return $(message).find('#notification-deal-id').attr('href');
+}
+
+/**
+ * Returns image url from notification template to display image.
+ * @param {String} message - notification template.
+ ***/
+function getImageUrl(message)
+{
+	if($(message).find('#notification-contact-id').text() != "")
+		return $('span:first',message).attr('id');
+	
+	return '/img/deal.png';
 }

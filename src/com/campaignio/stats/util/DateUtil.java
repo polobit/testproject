@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.TimeZone;
 
+import com.agilecrm.db.util.EmailStatsUtil;
+
 public class DateUtil
 {
     public static void main(String[] args)
@@ -351,16 +353,21 @@ public class DateUtil
     }
 
     /**
-     * Returns mysql NOW() date format.
+     * Returns mysql NOW() date format after setting client's timezone.
      * 
      * @param timestamp
      *            - epochtime
+     * @param timeZoneOffset
+     *            - timezone offset received from client.
      * @return String
      */
-    public static String getMySQLNowDateFormat(long timestamp)
+    public static String getMySQLNowDateFormat(long timestamp,
+	    String timeZoneOffset)
     {
 	Date date = new Date(timestamp);
 	DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	format.setTimeZone(TimeZone.getTimeZone("GMT"
+		+ EmailStatsUtil.convertMinutesToTime(timeZoneOffset)));
 	return format.format(date);
     }
 }

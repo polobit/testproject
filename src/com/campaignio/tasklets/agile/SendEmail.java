@@ -456,16 +456,9 @@ public class SendEmail extends TaskletAdapter
 	}
 
 	// Creates log for sending email
-	log(campaignJSON, subscriberJSON, nodeJSON, "Send E-mail - Subject: "
-		+ subject + "," + "From: " + fromEmail + "," + "To: " + to
-		+ "," + "Text Body: " + text + ",HTML Body: " + html);
-
-	// LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
-	// DBUtil.getId(subscriberJSON),
-	// "Sending Email Details - Sender: " + fromEmail
-	// + ", Recipient: " + to + ", Subject: " + subject
-	// + ", Text Body: " + text + " and  HTML Body: " + html,
-	// "Email Sent");
+	log(campaignJSON, subscriberJSON, nodeJSON, "From: " + fromEmail
+		+ "<br>" + "To: " + to + "<br>" + "Subject: " + subject
+		+ "<br>" + "Text: " + text + "<br>HTML: " + html);
 
 	// Send Message
 	if (html != null && html.length() > 10)
