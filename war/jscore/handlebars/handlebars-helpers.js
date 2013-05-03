@@ -806,5 +806,13 @@ $(function() {
 					 return options.inverse(this)
 		}
 	});
+	
+	Handlebars.registerHelper('containString', function(value, target,  options) {
+		if(target.search(value) != -1)
+			return options.fn(this);
+		
+		return options.inverse(this);
+	});
+	
 
 });
