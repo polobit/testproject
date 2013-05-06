@@ -479,7 +479,7 @@ public class ContactsAPI
     @Path("bulk/tags")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void addTagsTOContacts(@FormParam("contact_ids") String contact_ids,
+    public void addTagsToContacts(@FormParam("contact_ids") String contact_ids,
 	    @FormParam("tags") String tagsString) throws JSONException
     {
 	System.out.println(tagsString);
@@ -518,7 +518,7 @@ public class ContactsAPI
     @Path("bulk/email/tags")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void addTagsTOContactsBasedOnEmail(@FormParam("email") String email,
+    public void addTagsToContactsBasedOnEmail(@FormParam("email") String email,
 	    @FormParam("tags") String tagsString) throws JSONException
     {
 
@@ -544,8 +544,7 @@ public class ContactsAPI
 	    e.printStackTrace();
 	}
 	if (tagsArray == null)
-	    return;
-
+	    return;
 	contact.addTags(tagsArray);
     }
 
