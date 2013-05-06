@@ -22,6 +22,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.IOUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -126,7 +127,6 @@ public class ContactsAPI
     }
 
     @Path("/")
-
     /**
      * Saves new contact into database, by verifying the existence of duplicates
      * with its email. If any duplicate is found throws web exception.
@@ -486,18 +486,67 @@ public class ContactsAPI
 
 	JSONArray tagsJSONArray = new JSONArray(tagsString);
 
-	String[] tagsArray = new String[tagsJSONArray.length()];
-
-	System.out.println(tagsJSONArray);
-
-	for (int i = 0; i < tagsJSONArray.length(); i++)
+	String[] tagsArray = null;
+	try
 	{
-	    tagsArray[i] = tagsJSONArray.get(i).toString();
+	    tagsArray = new ObjectMapper().readValue(tagsJSONArray.toString(),
+		    String[].class);
 	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	if (tagsArray == null)
+	    return;
 
 	JSONArray contactsJSONArray = new JSONArray(contact_ids);
 
 	ContactUtil.addTagsToContactsBulk(contactsJSONArray, tagsArray);
+    }
+
+    /**
+     * Add tags to selected contacts
+     * 
+     * @param contact_ids
+     *            array of contact ids as String
+     * @param tagsString
+     *            array of tags as string
+     * @throws JSONException
+     */
+    @Path("bulk/email/tags")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void addTagsTOContactsBasedOnEmail(@FormParam("email") String email,
+	    @FormParam("tags") String tagsString) throws JSONException
+    {
+
+
+	Contact contact = ContactUtil.searchContactByEmail("email");
+	
+	if (contact == null)
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("No contact found with provied email address")
+		    .build());
+
+	JSONArray tagsJSONArray = new JSONArray(tagsString);
+	String[] tagsArray = null;
+	try
+	{
+	    tagsArray = new ObjectMapper().readValue(tagsJSONArray.toString(),
+		    String[].class);
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	if (tagsArray == null)
+	    return;
+
+	contact.addTags(tagsArray);
     }
 
     /**
