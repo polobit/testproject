@@ -111,8 +111,8 @@ String CSS_PATH = "/";
 						<li id="homemenu" class="active"></li>
 						<%
 					        if("admin".equals(domainUser.domain)){
-					           out.println("</ul><ul class='nav pull-right' style='float:right!important;'><li><a href='#all-domain-users'><i class='icon-group'></i> All Domain Users</a></li>");
-						       out.println("<li><a href="+ logoutURL +"><i class='icon-off'></i>Logout</a></li>");
+					           out.println("<li><a href='#all-domain-users'><i class='icon-group'></i> All Domain Users</a></li></ul>");
+						       out.println("<ul class='nav pull-right' style='float:right!important;'><li><a href="+ logoutURL +"><i class='icon-off'></i>Logout</a></li>");
 					        }
 					        else{
 						%>

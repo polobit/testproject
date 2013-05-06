@@ -8,25 +8,23 @@ $(function()
 			
 					e.preventDefault();
 					
-					// If modal already exists, removes to append new
+					/*// If modal already exists, removes to append new
                     if ($('#warning-deletion').size() != 0)
                     {
-                    	console.log('template removed');
                     	$('#warning-deletion').remove();
-                    }
+                    }*/
                     
 					var namespace = $(this).closest('a').attr("data");
 					
 					if(namespace != "")
 					{
-	                    console.log(namespace);
 						// Shows account stats warning template with stats(data used)
 						/**
 						 * Getting namespace stats for this domain
 						 */
 						var account_stats = new Base_Model_View({
 							url : "core/api/users/admin/namespace-stats/" + namespace,
-							template : "warning",
+							template : "warning"
 						});
 	                    
 						// Appends to content, warning is modal can call show if
@@ -57,11 +55,6 @@ $(function()
 									success : function()
 									{
 										location.reload(true);
-										console.log("Deleted namespace: "+ namespace);
-									},
-									error : function()
-									{
-										console.log("error in deleting:"+ namespace);
 									}
 								});
 					     });
