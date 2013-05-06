@@ -51,52 +51,38 @@
 </script>
 
 <script id="dashboard-tasks-collection-template" type="text/html">
-<header>
-    <h3 style="margin-left:3px">
-        <span><i class="icon-edit"></i></span> 
-        My Tasks
-        <span style="vertical-align:text-top;margin-left:-3px">         
-        <img border="0" src="/img/help.png" style="height:6px;vertical-align:top" rel="popover" data-placement="right" data-content="Tasks are like to-dos. Result oriented. You can assign a category such as call, email etc and add them to your calendar." id="element" data-trigger="hover" />
-        </span>
-    </h3>
-</header>
-{{#unless this.length}}
-<img src="/img/funtime.jpg" /></img>
-{{/unless}}
-{{#if this.length}}
-<section>
-    <form>
-        <table class="table">
-            <b id="overdue-heading" style="display: none">Overdue</b>
-            <tbody id="overdue" style="display: none; margin:3px"></tbody>
+    <div class="data-container">
+        <table class="table table-striped" url="core/api/tasks/bulk">
+            <thead>
+                <tr>
+                    <th>Due Date</th>
+                    <th>Task Name</th>
+                    <th>Priority Type</th>
+                    <th>Category</th>
+                    <th>Is Complete</th>
+                </tr>
+            </thead>
+            <tbody id="dashboard-tasks-model-list">
+            </tbody>
         </table>
-        <table class="table">
-            <b id="today-heading" style="display: none">Today</b>	
-            <tbody id="today" style="display: none; margin:3px"></tbody>
-        </table>
-        <table class="table">
-            <b id="tomorrow-heading" style="display: none">Tomorrow</b>
-            <tbody id="tomorrow" style="display: none; margin:3px"></tbody>
-        </table>
-        <table class="table">
-            <b id="next-week-heading" style="display: none">Next Week</b>
-            <tbody id="next-week" style="display: none; margin:3px"></tbody>
-        </table>
-    </form>
-</section>
-<br />
-<div>
-    <a href="#tasks" class="tasks-table" id="tasks-list">All Tasks</a>
-    <div class="right add-task"><a href="#"><i class="icon-plus" /> Add New</a></div>
-</div>
-{{/if}}
+    </div>
 </script>
 
 <script id="dashboard-tasks-model-template" type="text/html">
-	<td style="border-top:1px dotted #DDD"> <input type="checkbox" data='{{id}}' class='tasks-select'> </td>
-	<td style="border-top:1px dotted #DDD"><p style="text-overflow:ellipsis;overflow:hidden;white-space:nowrap;width:11em;"><span class="label">{{ucfirst type}}</span> <span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span> <br/> {{ subject}}</p>
-        <span>due {{epochToTaskDate due}}</span>
-	</td>
+{{#if is_complete}}
+	<td style="text-decoration:line-through">{{epochToTaskDate due}}</td>
+	<td><div style="text-decoration:line-through;text-overflow:ellipsis;text-align:justify;white-space:nowrap;width:100px;overflow:hidden;">{{subject}}</div></td>
+	<td style="text-decoration:line-through">{{priority_type}}</td>
+	<td style="text-decoration:line-through">{{type}}</td>
+	<td style="text-decoration:line-through">{{task_status is_complete}}</td>
+<br />
+{{else}}
+	<td>{{epochToTaskDate due}}</td>
+	<td><div style="overflow:hidden;text-overflow:ellipsis;text-align:justify;white-space:nowrap;width:100px;">{{subject}}</div></td>
+	<td>{{priority_type}}</td>
+	<td>{{type}}</td>
+	<td>{{task_status is_complete}}</td>
+{{/if}}
 </script>
 
 
