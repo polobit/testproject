@@ -507,15 +507,15 @@ public class ContactsAPI
     }
 
     /**
-     * Add tags to selected contacts
+     * Add tags to a contact based on email address of the contact
      * 
-     * @param contact_ids
-     *            array of contact ids as String
+     * @param email
+     *            email of contact form parameter
      * @param tagsString
      *            array of tags as string
      * @throws JSONException
      */
-    @Path("bulk/email/tags")
+    @Path("/email/tags/add")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void addTagsToContactsBasedOnEmail(@FormParam("email") String email,
@@ -546,6 +546,49 @@ public class ContactsAPI
 	if (tagsArray == null)
 	    return;
 	contact.addTags(tagsArray);
+    }
+
+    /**
+     * delete tags from a contact based on email address of the contact
+     * 
+     * @param email
+     *            email of contact form parameter
+     * @param tagsString
+     *            array of tags as string
+     * @throws JSONException
+     */
+    @Path("/email/tags/delete")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void deleteTagsToContactsBasedOnEmail(
+	    @FormParam("email") String email,
+	    @FormParam("tags") String tagsString) throws JSONException
+    {
+
+	Contact contact = ContactUtil.searchContactByEmail("email");
+
+	if (contact == null)
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("No contact found with provied email address")
+		    .build());
+
+	JSONArray tagsJSONArray = new JSONArray(tagsString);
+	String[] tagsArray = null;
+	try
+	{
+	    tagsArray = new ObjectMapper().readValue(tagsJSONArray.toString(),
+		    String[].class);
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	if (tagsArray == null)
+	    return;
+
+	contact.removeTags(tagsArray);
     }
 
     /**
