@@ -60,7 +60,7 @@ $(function()
         // General options
         mode : "textareas",
         theme : "advanced",
-        width : "250",
+        width : "300",
         plugins : "autolink,lists,spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template",
 
         // Theme options
@@ -144,7 +144,7 @@ function validateInput()
 <form method="post" action="somepage">
  <textarea name="content" id='content' rows="30" cols="90"></textarea>
  <br/>
- <p><input type="submit" id="save_html" class="submit long" value="Save"/> &nbsp;</p>
+ <p><input type="submit" id="save_html" class="submit long" style="cursor:pointer;" value="Save"/> &nbsp;</p>
  </form>
  </div>
 <!-- .block_content ends -->
