@@ -89,12 +89,32 @@ function setUpDashboardNavtabs(el)
 	});
 	$('#dashboardTabs a[href="#tasks"]').live('click', function (e){
 		e.preventDefault();
-	
+		var tasksListView = new Base_Collection_View({
+			url : '/core/api/tasks/my/tasks',
+			restKey : "task",
+			templateKey : "dashboard-tasks",
+			individual_tag_name : 'tr'
+		});
+		tasksListView.collection.fetch();
+
+		$('#tasks').html(tasksListView.el);
 	});
-	$('#dashboardTabs a[href="#campaigns"]').live('click', function (e){
+	$('#dashboardTabs a[href="#campaigns"]').live('click', function (e) {
 		e.preventDefault();
+			var workflowsListView = new Base_Collection_View({
+				url : '/core/api/workflows',
+				restKey : "workflow",
+				templateKey : "dashboard-workflows",
+				individual_tag_name : 'tr',
+				page_size : 10
+			});
+
+			workflowsListView.collection.fetch();
+			$('#campaigns').html(workflowsListView.el);
+
 	});
-	$('#dashboardTabs a[href="#recentContacts"]').live('click', function (e){
+	
+	$('#dashboardTabs a[href="#recentContacts"]').live('click', function (e) {
 		e.preventDefault();
 		var myRecentContacts = new Base_Collection_View({
 			url: 'core/api/contacts/recent?page_size=10' ,
