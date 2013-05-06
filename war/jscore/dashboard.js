@@ -2,6 +2,7 @@ function setupDashboard(el)
 {
 	setupSubscriptionDetails(el);
 	setupDashboardTimeline();
+	setUpDashboardNavtabs(el);
 }
 
 function setupSubscriptionDetails(el)
@@ -17,8 +18,6 @@ function setupSubscriptionDetails(el)
 					postRenderCallback : function(el) {
 						prettyPrint();
 					}
-					
-					
 				});
 
 					$("#subscription-stats").html(view.el);
@@ -30,7 +29,21 @@ function setupSubscriptionDetails(el)
 	
 }
 
-$(function(){
+
+function setUpDashboardNavtabs(el)
+{
+	var myRecentContacts = new Base_Collection_View({
+		url: 'core/api/contacts/recent?page_size=10' ,
+        restKey: "contacts",
+        templateKey: "dashboard-contacts",
+        individual_tag_name: 'tr',
+        sort_collection: false,
+    });
+	myRecentContacts.collection.fetch();
+	$('#recentContacts', el).addClass('active');
+	console.log(myRecentContacts.el);
+    	$('#recentContacts', el).html(myRecentContacts.el);
+	
 	$('.dashboard-timeline-filter').live('click', function(e){
 		e.preventDefault();
 		$("#my-timeline").empty();
@@ -83,15 +96,15 @@ $(function(){
 	});
 	$('#dashboardTabs a[href="#recentContacts"]').live('click', function (e){
 		e.preventDefault();
-		var myDeals = new Base_Collection_View({
+		var myRecentContacts = new Base_Collection_View({
 			url: 'core/api/contacts/recent?page_size=10' ,
             restKey: "contacts",
             templateKey: "dashboard-contacts",
             individual_tag_name: 'tr',
             sort_collection: false,
         });
-		myDeals.collection.fetch();
-        	$('#recentContacts').html(myDeals.el);
+		myRecentContacts.collection.fetch();
+        	$('#recentContacts').html(myRecentContacts.el);
 	});
-});
+}
 
