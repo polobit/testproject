@@ -204,4 +204,12 @@ public class TasksAPI
 	    e.printStackTrace();
 	}
     }
+
+    @Path("/my/tasks")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Task> getDealsRelatedToCurrentUser()
+    {
+	return TaskUtil.getTasksRelatedToCurrentUser();
+    }
 }

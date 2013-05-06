@@ -101,6 +101,13 @@ public class Contact extends Cursor
     public Long updated_time = 0L;
 
     /**
+     * Viewed time of the contact, in milliseconds
+     */
+    @NotSaved(IfDefault.class)
+    @Indexed
+    public Long viewed_time = 0L;
+
+    /**
      * Stores current domain user key as owner, if it is null should not save in
      * database
      */
@@ -442,6 +449,8 @@ public class Contact extends Cursor
 
 	    contact.save();
 	}
+
+
     }
 
     /**

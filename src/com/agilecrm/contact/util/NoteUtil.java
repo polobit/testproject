@@ -5,6 +5,7 @@ import java.util.List;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.user.AgileUser;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 
@@ -93,5 +94,16 @@ public class NoteUtil
 	Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
 	Key<Note> noteKey = new Key<Note>(contactKey, Note.class, noteId);
 	dao.deleteKey(noteKey);
+    }
+
+    public static List<Note> getNotesRelatedToCurrentUser()
+    {
+	return dao
+		.ofy()
+		.query(Note.class)
+		.filter("owner",
+			new Key<AgileUser>(AgileUser.class, AgileUser
+				.getCurrentAgileUser().id))
+		.order("-created_time").limit(10).list();
     }
 }

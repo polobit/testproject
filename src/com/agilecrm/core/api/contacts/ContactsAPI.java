@@ -80,6 +80,21 @@ public class ContactsAPI
 	return ContactUtil.getAllContacts();
     }
 
+    @Path("/recent")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Contact> getRecentContacts(@QueryParam("page_size") String count)
+    {
+	if (count != null)
+	{
+	    System.out.println("Fetching page by page");
+
+	    return ContactUtil.getRecentContacts(count);
+	}
+
+	return ContactUtil.getRecentContacts("10");
+    }
+
     /**
      * Fetches all the contacts (of type company). Activates infiniScroll, if
      * no.of contacts are more than count and cursor is not null. This method is
@@ -109,6 +124,8 @@ public class ContactsAPI
 
 	return ContactUtil.getAllContacts();
     }
+
+    @Path("/")
 
     /**
      * Saves new contact into database, by verifying the existence of duplicates

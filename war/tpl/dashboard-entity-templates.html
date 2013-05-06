@@ -1,0 +1,164 @@
+<script id="dashboard-opportunities-collection-template" type="text/html">
+<table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Opportunity</th>
+                            <th>Value</th>
+                            <th>Milestone</th>
+                            <th>Pipeline</th>
+                            <th>Close Date</th>
+                        </tr>
+                    </thead>
+              <tbody id="dashboard-opportunities-model-list" route="deals/">
+          </tbody>
+	</table>
+</script>
+
+<script id="dashboard-opportunities-model-template" type="text/html">
+<td data="{{id}}" class="data">
+    <div style="padding-right:10px;height:auto;text-overflow:ellipsis;white-space:nowrap;width:12em;overflow:hidden;">
+        {{#each contacts}}
+        <img src="{{gravatarurl properties 50}}" width="40px" height="40px" />
+        {{/each}}
+        <br/><b>{{name}}</b>
+    </div>
+</td>
+<td><div style="height:auto;text-overflow:ellipsis;width:6em;overflow:hidden;">{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}} {{expected_value}}</div></td>
+<td><div style="height:auto;text-overflow:ellipsis;width:6em;overflow:hidden;">{{milestone}}<br />({{probability}}%) </div></td>
+<td><div style="height:auto;text-overflow:ellipsis;width:6em;overflow:hidden;">
+    {{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}}
+     {{calculatePipeline expected_value probability pipeline}} </div>
+</td>
+<td><div style="height:auto;text-overflow:ellipsis;width:6em;overflow:hidden;">{{epochToHumanDate "mm-dd-yy" close_date}}</div></td>
+</script>
+
+<script id="dashboard-notes-collection-template" type="text/html">
+<table class="table">
+    <thead>
+        <tr>
+            <th>subject</th>
+            <th>description</th>
+        </tr>
+    </thead>
+    <tbody id="dashboard-notes-model-list">
+    </tbody>
+</table>
+</script>
+<script id="dashboard-notes-model-template" type="text/html">
+	<td>{{subject}} </td>
+	<td>{{note}}</td>
+<br />
+</script>
+
+<script id="dashboard-tasks-collection-template" type="text/html">
+<header>
+    <h3 style="margin-left:3px">
+        <span><i class="icon-edit"></i></span> 
+        My Tasks
+        <span style="vertical-align:text-top;margin-left:-3px">         
+        <img border="0" src="/img/help.png" style="height:6px;vertical-align:top" rel="popover" data-placement="right" data-content="Tasks are like to-dos. Result oriented. You can assign a category such as call, email etc and add them to your calendar." id="element" data-trigger="hover" />
+        </span>
+    </h3>
+</header>
+{{#unless this.length}}
+<img src="/img/funtime.jpg" /></img>
+{{/unless}}
+{{#if this.length}}
+<section>
+    <form>
+        <table class="table">
+            <b id="overdue-heading" style="display: none">Overdue</b>
+            <tbody id="overdue" style="display: none; margin:3px"></tbody>
+        </table>
+        <table class="table">
+            <b id="today-heading" style="display: none">Today</b>	
+            <tbody id="today" style="display: none; margin:3px"></tbody>
+        </table>
+        <table class="table">
+            <b id="tomorrow-heading" style="display: none">Tomorrow</b>
+            <tbody id="tomorrow" style="display: none; margin:3px"></tbody>
+        </table>
+        <table class="table">
+            <b id="next-week-heading" style="display: none">Next Week</b>
+            <tbody id="next-week" style="display: none; margin:3px"></tbody>
+        </table>
+    </form>
+</section>
+<br />
+<div>
+    <a href="#tasks" class="tasks-table" id="tasks-list">All Tasks</a>
+    <div class="right add-task"><a href="#"><i class="icon-plus" /> Add New</a></div>
+</div>
+{{/if}}
+</script>
+
+<script id="dashboard-tasks-model-template" type="text/html">
+	<td style="border-top:1px dotted #DDD"> <input type="checkbox" data='{{id}}' class='tasks-select'> </td>
+	<td style="border-top:1px dotted #DDD"><p style="text-overflow:ellipsis;overflow:hidden;white-space:nowrap;width:11em;"><span class="label">{{ucfirst type}}</span> <span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span> <br/> {{ subject}}</p>
+        <span>due {{epochToTaskDate due}}</span>
+	</td>
+</script>
+
+
+<script id="dashboard-contacts-model-template" type="text/html">
+	<td class="data" data="{{id}}showCheckboxes">
+    	<div style="display:inline;padding-right:10px;height:auto;">
+        	{{#if_contact_type "PERSON"}}
+        		<img class="thumbnail" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline" />
+        	{{/if_contact_type}}
+        
+			{{#if_contact_type "COMPANY"}}
+        		<img class="thumbnail" src="img/company.png" width="40px" height="40px" style="display:inline" />
+        	{{/if_contact_type}}
+    	</div>
+    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:10em;overflow:hidden;">
+        	{{#if_contact_type "PERSON"}}
+        		<b>	{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </b>
+        		<br />
+        		{{getPropertyValue properties "email"}}
+        	{{/if_contact_type}}
+        
+			{{#if_contact_type "COMPANY"}}
+        		<b>{{getPropertyValue properties "name"}}</b></br>
+        		{{getPropertyValue properties "url"}}
+        	{{/if_contact_type}}
+    	</div>
+    	<div style="float:right"></div>
+	</td>
+	<td>{{getPropertyValue properties "title"}}<br />
+    	{{getPropertyValue properties "company"}}
+	</td>
+	<td> 
+<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:clip;white-space:nowrap;width:15em;overflow:hidden;">
+	{{#each tags}}
+    	<b><span class="label">{{this}}</span></b>
+    {{/each}}
+</div>
+	</td>
+	<td>{{lead_score}}</td>
+</script>
+
+<script id="dashboard-contacts-collection-template" type="text/html">
+
+		{{#if this.length}}
+		<div class="data">
+			<div class="data-container"></div>
+			<table id="contacts" class="table table-striped "
+				url="core/api/contacts/bulk" style="overflow: scroll">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Work</th>
+						<th>Tags</th>
+						<th>Lead Score</th>
+					</tr>
+				</thead>
+				<tbody id="dashboard-contacts-model-list" class="contacts-model-list"
+					route="contact/" style="overflow: scroll;">
+				</tbody>
+			</table>
+		</div>
+	</div>
+	{{/if}}
+</script>

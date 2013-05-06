@@ -221,4 +221,16 @@ public class TaskUtil
 
 	return dueTasksList;
     }
+
+    public static List<Task> getTasksRelatedToCurrentUser()
+    {
+	return dao
+		.ofy()
+		.query(Task.class)
+		.filter("owner",
+			new Key<AgileUser>(AgileUser.class, AgileUser
+				.getCurrentAgileUser().id))
+		.order("-created_time").limit(10).list();
+    }
+
 }

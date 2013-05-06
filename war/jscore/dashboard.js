@@ -37,4 +37,61 @@ $(function(){
 		console.log($(this).attr('url'));
 		setupDashboardTimeline($(this).attr('url'));
 	});
+	
+	$('#dashboardTabs a[href="#notes"]').live('click', function (e){
+		e.preventDefault();
+		var myNotes = new Base_Collection_View({
+			url: 'core/api/notes/my/notes' ,
+            restKey: "opportunity",
+            templateKey: "dashboard-notes",
+            individual_tag_name: 'tr',
+            sortKey:"created_time",
+            descending: true,
+            postRenderCallback: function(el) {
+            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+            		 $(".deal-created-time", el).timeago();
+            	})
+            }
+        });
+		myNotes.collection.fetch();
+        	$('#notes').html(myNotes.el);
+	});
+	$('#dashboardTabs a[href="#deals"]').live('click', function (e){
+		e.preventDefault();
+		var myDeals = new Base_Collection_View({
+			url: 'core/api/opportunity/my/deals' ,
+            restKey: "opportunity",
+            templateKey: "dashboard-opportunities",
+            individual_tag_name: 'tr',
+            sortKey:"created_time",
+            descending: true,
+            postRenderCallback: function(el) {
+            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+            		 $(".deal-created-time", el).timeago();
+            	})
+            }
+        });
+		myDeals.collection.fetch();
+        	$('#deals').html(myDeals.el);
+	});
+	$('#dashboardTabs a[href="#tasks"]').live('click', function (e){
+		e.preventDefault();
+	
+	});
+	$('#dashboardTabs a[href="#campaigns"]').live('click', function (e){
+		e.preventDefault();
+	});
+	$('#dashboardTabs a[href="#recentContacts"]').live('click', function (e){
+		e.preventDefault();
+		var myDeals = new Base_Collection_View({
+			url: 'core/api/contacts/recent?page_size=10' ,
+            restKey: "contacts",
+            templateKey: "dashboard-contacts",
+            individual_tag_name: 'tr',
+            sort_collection: false,
+        });
+		myDeals.collection.fetch();
+        	$('#recentContacts').html(myDeals.el);
+	});
 });
+
