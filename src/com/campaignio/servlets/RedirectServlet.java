@@ -94,8 +94,8 @@ public class RedirectServlet extends HttpServlet
 	    if (workflow != null)
 	    {
 		LogUtil.addLogToSQL(urlShortener.campaign_id, subscriberId,
-			"Email link clicked: " + urlShortener.long_url
-				+ " of campaign - " + workflow.name,
+			"Email link clicked " + urlShortener.long_url
+				+ " of campaign " + workflow.name,
 			"Email Clicked");
 	    }
 

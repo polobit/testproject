@@ -150,6 +150,10 @@ function _setupNotification(object) {
 		// Shows notification for email opened and clicked
 		notificationForClickedAndOpened(object, html);
 	}
+	
+	if(object.notification == 'BROWSING')
+		notificationForBrowsing(object);
+
 	/**
 	 * Checks notification preferences and compare with notification type. If it
 	 * is set true then show notification. For e.g. If Deal created is true then
@@ -292,11 +296,9 @@ function notificationForBrowsing(contact) {
 	// User who created contact
 	var contact_created_by = contact.owner.name;
 
-	// Another template is taken for browsing as the fields required are
-	// different.
-	var html = getTemplate('browsing-notification-html', contact);
+	var html = getTemplate('notify-html', contact);
 
-	// console.log(contact.domainUser.name);
+	// console.log(contact.owner.name);
 
 	// Checks for starred contact
 	if (contact.star_value == 0)
