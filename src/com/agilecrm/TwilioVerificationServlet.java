@@ -1,4 +1,4 @@
-package com.agilecrm.plugin.oauth;
+package com.agilecrm;
 
 import java.io.IOException;
 
@@ -12,21 +12,14 @@ import com.agilecrm.session.UserInfo;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 
-public class TwilioServlet extends HttpServlet
+public class TwilioVerificationServlet extends HttpServlet
 {
-
     public void service(HttpServletRequest request, HttpServletResponse response)
 	    throws IOException
     {
 
-	String accountSid = request.getParameter("AccountSid");
-
-	String state = request.getParameter("state");
-
-	// String oldNamespace = NamespaceManager.get();
-	// String namespace = state.split("://")[1].split("\\.")[0];
-
-	// NamespaceManager.set(namespace);
+	/* Use this as the caller ID when making calls from a browser. */
+	String verification_status = request.getParameter("VerificationStatus");
 
 	// Check if UserInfo is already there
 	UserInfo userInfo = (UserInfo) request.getSession().getAttribute(
@@ -50,15 +43,11 @@ public class TwilioServlet extends HttpServlet
 
 	if (widget == null)
 	{
-	    response.sendRedirect(state);
 	    return;
 	}
 
-	widget.addProperty("token", accountSid);
+	widget.addProperty("verificaton_status", verification_status);
 	widget.save();
-
-	// NamespaceManager.set(oldNamespace);
-	response.sendRedirect(state);
 
     }
 }

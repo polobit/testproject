@@ -31,10 +31,10 @@ $(function() {
 	        return;
 	 }
 	
-	var prefs = JSON.parse(plugin_prefs);
+	prefs = JSON.parse(plugin_prefs);
 	//console.log(prefs);
 
-	var sid;
+    var sid = "";
 	$.get("/core/api/widgets/twilio/appsid/" + prefs.token, function(data) {
 		
 		sid = data;
@@ -102,12 +102,14 @@ function setUpTwilio(data, numbers){
 			console.log($('#contact_number').val());
 			var phone = $('#contact_number').val();
 			var from = "+919491544841";
-				Twilio.Device.connect({
+				
+			getOutgoingNumbers(prefs.token);
+			Twilio.Device.connect({
 					
-				 From: from,
-				 To: phone,
-					PhoneNumber:phone,
-			     Url:"https://agile-crm-cloud.appspot.com/backend/voice?from="+ encodeURIComponent(from) +"PhoneNumber=" + encodeURIComponent(phone)
+				 //From: from,
+				//To: phone,
+				PhoneNumber:phone,
+			     Url:"https://teju-first.appspot.com/twilio/voice"
 		        });
 		})
 		
@@ -374,10 +376,10 @@ function makeCall(plugin_id, from, to, url)
 		
 	});
 }
-
-function getOutgoingNumbers(plugin_id, callback)
+*/
+function getOutgoingNumbers(account_sid, callback)
 {
-	queueGetRequest("widget_queue", "/core/api/widgets/twilio/numbers/" + plugin_id, "text", 
+	queueGetRequest("widget_queue", "/core/api/widgets/twilio/numbers/" + account_sid, "text", 
 		function success(data) {
 		
 		if (callback && typeof (callback) === "function")
@@ -385,12 +387,13 @@ function getOutgoingNumbers(plugin_id, callback)
 			callback(data);
 		}
 		
+		console.log(data);
 	}, function error(data) {
 		
-		$('#twilio_profile_load').remove();
+		//$('#twilio_profile_load').remove();
 		$('#Twilio').html('<div style="padding:10px">' + data.responseText + '</div>');
 	});
 
 }
-*/
+
 

@@ -1160,22 +1160,20 @@ public class WidgetsAPI
     /**
      * Retrieves registered phone numbers from agent's Twilio account
      * 
-     * @param widgetId
-     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param accountsid
      * @return {@link String} form of {@link JSONArray}
      */
-    @Path("twilio/numbers/{widget-id}")
+    @Path("twilio/numbers/{account_sid}/{from}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String getOutgoingNumbersfromTwilio(
-	    @PathParam("widget-id") Long widgetId)
+	    @PathParam("account_sid") String accountsid,
+	    @PathParam("from") String from)
     {
-	Widget widget = WidgetUtil.getWidget(widgetId);
-	if (widget == null)
-	    return null;
+
 	try
 	{
-	    return TwilioUtil.getOutgoingNumbers(widget).toString();
+	    return TwilioUtil.getOutgoingNumbers(accountsid, from).toString();
 	}
 	catch (Exception e)
 	{

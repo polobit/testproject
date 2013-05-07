@@ -667,8 +667,8 @@ public class LinkedInUtil
 			CompanyField.DESCRIPTION, CompanyField.ID,
 			CompanyField.INDUSTRY, CompanyField.TICKER));
 
-		company.setLogoUrl(company.getLogoUrl().replace("http:", "https:")
-			.replace("m3", "m3-s"));
+		company.setLogoUrl(company.getLogoUrl()
+			.replace("http:", "https:").replace("m3", "m3-s"));
 		position.setCompany(company);
 	    }
 
@@ -715,21 +715,26 @@ public class LinkedInUtil
 
 	// {"token":"4c1b1828-e275-4e09-b7f9-1f85ee32c22e","secret":"4abc6b56-a41e-4864-a759-22c36c36e460"}
 	// {"token":"3382f692-f598-4b72-9dd3-891853fec2fc","secret":"7984afcf-f0f7-4fb3-b39c-cb7379d0336e"}
-	Person cons = client.getProfileById("ZQglvOshW2", EnumSet.of(
-		ProfileField.POSITIONS_COMPANY,
-		ProfileField.THREE_CURRENT_POSITIONS,
-		ProfileField.THREE_PAST_POSITIONS,
-		ProfileField.POSITIONS_COMPANY_ID, ProfileField.LOCATION_NAME,
-		ProfileField.INDUSTRY, ProfileField.LOCATION));
+	Person cons = client
+		.getProfileById(
+			"ZQglvOshW2",
+			EnumSet.of(
+				ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS,
+				ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_HEADLINE,
+				ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_PUBLIC_PROFILE_URL,
+				ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_LAST_NAME,
+				ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_FIRST_NAME,
+				ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_PICTURE_URL,
+				ProfileField.RELATION_TO_VIEWER_CONNECTIONS));
 
-	Company com = client.getCompanyById("1680", EnumSet.of(
-		CompanyField.LOCATIONS_ADDRESS, CompanyField.LOGO_URL,
-		CompanyField.NAME, CompanyField.NUM_FOLLOWERS,
-		CompanyField.BLOG_RSS_URL, CompanyField.DESCRIPTION,
-		CompanyField.ID, CompanyField.INDUSTRY, CompanyField.TICKER));
-
-	com.setLogoUrl(com.getLogoUrl().replace("http:", "https:")
-		.replace("m3", "m3-s"));
+	// Company com = client.getCompanyById("1680", EnumSet.of(
+	// CompanyField.LOCATIONS_ADDRESS, CompanyField.LOGO_URL,
+	// CompanyField.NAME, CompanyField.NUM_FOLLOWERS,
+	// CompanyField.BLOG_RSS_URL, CompanyField.DESCRIPTION,
+	// CompanyField.ID, CompanyField.INDUSTRY, CompanyField.TICKER));
+	//
+	// com.setLogoUrl(com.getLogoUrl().replace("http:", "https:")
+	// .replace("m3", "m3-s"));
 	// tUqQPRTrto
 	// mgSCSTsq2V
 
@@ -741,10 +746,10 @@ public class LinkedInUtil
 	    // System.out.println(json);
 	    // json = mapper.writeValueAsString(cons);
 	    // System.out.println(json);
-	    json = mapper.writeValueAsString(cons.getThreeCurrentPositions());
+	    json = mapper.writeValueAsString(cons);
 	    System.out.println(json);
-	    cons.getThreeCurrentPositions().getPositionList().get(0)
-		    .setCompany(com);
+	    // cons.getThreeCurrentPositions().getPositionList().get(0)
+	    // .setCompany(com);
 	    json = mapper.writeValueAsString(cons.getThreeCurrentPositions());
 	    System.out.println(json);
 	    // json = mapper.writeValueAsString(cons.getThreePastPositions());
