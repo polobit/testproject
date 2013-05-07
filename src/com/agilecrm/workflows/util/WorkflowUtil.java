@@ -9,6 +9,8 @@ import org.json.JSONObject;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.workflows.Workflow;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
@@ -19,6 +21,7 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>WorkflowUtil</code> provides various static methods to convert contact
@@ -273,5 +276,18 @@ public class WorkflowUtil
     public static void unsubscribe()
     {
 
+    }
+    
+    public static List<Workflow> getWorkflowsRelatedToCurrentUser(String page_size)
+    {
+	System.out.println("owner id : " + SessionManager.get().getDomainId());
+	return dao
+		.ofy()
+		.query(Workflow.class)
+		.filter("creator_key",
+			new Key<DomainUser>(DomainUser.class, SessionManager
+				.get().getDomainId()))
+		.order("-created_time").limit(Integer.parseInt(page_size))
+		.list();
     }
 }

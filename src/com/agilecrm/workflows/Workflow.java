@@ -11,6 +11,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Unindexed;
 import com.googlecode.objectify.condition.IfDefault;
@@ -53,6 +54,7 @@ public class Workflow extends Cursor
     /**
      * Workflow created time (in epoch).
      */
+    @Indexed
     public Long created_time = 0L;
 
     /**
@@ -71,6 +73,7 @@ public class Workflow extends Cursor
      * Creator of workflow (to be specific which domain user created).
      */
     @NotSaved(IfDefault.class)
+    @Indexed
     private Key<DomainUser> creator_key = null;
 
     /**

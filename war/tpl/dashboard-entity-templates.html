@@ -1,3 +1,4 @@
+<!-- Opportunity template -->
 <script id="dashboard-opportunities-collection-template" type="text/html">
 <table class="table table-striped">
                     <thead>
@@ -9,7 +10,7 @@
                             <th>Close Date</th>
                         </tr>
                     </thead>
-              <tbody id="dashboard-opportunities-model-list" route="deals/">
+              <tbody id="dashboard-opportunities-model-list">
           </tbody>
 	</table>
 </script>
@@ -32,6 +33,7 @@
 <td><div style="height:auto;text-overflow:ellipsis;width:6em;overflow:hidden;">{{epochToHumanDate "mm-dd-yy" close_date}}</div></td>
 </script>
 
+<!-- Notes Template -->
 <script id="dashboard-notes-collection-template" type="text/html">
 <table class="table">
     <thead>
@@ -44,12 +46,14 @@
     </tbody>
 </table>
 </script>
+
 <script id="dashboard-notes-model-template" type="text/html">
 	<td>{{subject}} </td>
 	<td>{{note}}</td>
 <br />
 </script>
 
+<!-- Tasks Template -->
 <script id="dashboard-tasks-collection-template" type="text/html">
     <div class="data-container">
         <table class="table table-striped" url="core/api/tasks/bulk">
@@ -86,6 +90,7 @@
 </script>
 
 
+<!-- Contacts Template -->
 <script id="dashboard-contacts-model-template" type="text/html">
 	<td class="data" data="{{id}}">
     	<div style="display:inline;padding-right:10px;height:auto;">
@@ -143,4 +148,35 @@
 		</div>
 	</div>
 	{{/if}}
+</script>
+
+<!-- Workflows template-->
+<script id="dashboard-workflows-model-template" type="text/html">
+	<td class="hide">{{id}}</td>
+	<td><a href="#workflow/{{id}}">{{name}}</a></td>
+	<td>{{creatorName}}</td>
+	<td><a href="#workflows/logs/{{id}}">View Logs</a></td>
+    <td><a href="#email-reports/{{id}}">View Stats</a></td>
+<br />
+</script>
+
+<script id="dashboard-workflows-collection-template" type="text/html">
+        {{#unless this.length}}
+        <div id="slate">
+        </div>
+        {{/unless}}
+        {{#if this.length}}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="hide">Id</th>
+                            <th>Name</th>
+                            <th>Creator</th>
+                            <th>Logs</th>
+                            <th>Stats</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dashboard-workflows-model-list"> </tbody>
+                </table>
+        {{/if}}
 </script>

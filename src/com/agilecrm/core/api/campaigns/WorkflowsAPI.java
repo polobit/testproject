@@ -76,6 +76,18 @@ public class WorkflowsAPI
 	return workflow;
     }
 
+    @Path("/my/workflows")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Workflow> getNotesRelatedToCurrentUser(
+	    @QueryParam("page_size") String count)
+    {
+	if (count != null)
+	    return WorkflowUtil.getWorkflowsRelatedToCurrentUser(count);
+	
+	return WorkflowUtil.getWorkflowsRelatedToCurrentUser("10");
+    }
+
     /**
      * Updates workflow.
      * 
