@@ -69,11 +69,6 @@ public class ContactTriggerUtil
 	triggersList = TriggerUtil
 		.getTriggersByCondition(Trigger.Type.CONTACT_IS_ADDED);
 
-	if (triggersList.isEmpty())
-	{
-	    return;
-	}
-
 	try
 	{
 	    for (Trigger trigger : triggersList)
