@@ -1,5 +1,9 @@
 <!-- Opportunity template -->
 <script id="dashboard-opportunities-collection-template" type="text/html">
+{{#unless this.length}}
+	<b>You don't own any deals</b>
+{{/unless}}
+{{#if this.length}}
 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -13,6 +17,7 @@
               <tbody id="dashboard-opportunities-model-list">
           </tbody>
 	</table>
+{{/if}}
 </script>
 
 <script id="dashboard-opportunities-model-template" type="text/html">
@@ -35,6 +40,10 @@
 
 <!-- Notes Template -->
 <script id="dashboard-notes-collection-template" type="text/html">
+{{#unless this.length}}
+	<b>You don't own any notes</b>
+{{/unless}}
+{{#if this.length}}
 <table class="table">
     <thead>
         <tr>
@@ -45,6 +54,7 @@
     <tbody id="dashboard-notes-model-list">
     </tbody>
 </table>
+{{/if}}
 </script>
 
 <script id="dashboard-notes-model-template" type="text/html">
@@ -55,6 +65,10 @@
 
 <!-- Tasks Template -->
 <script id="dashboard-tasks-collection-template" type="text/html">
+{{#unless this.length}}
+	<b>You don't own any Tasks</b>
+{{/unless}}
+{{#if this.length}}
     <div class="data-container">
         <table class="table table-striped" url="core/api/tasks/bulk">
             <thead>
@@ -70,6 +84,7 @@
             </tbody>
         </table>
     </div>
+{{/if}}
 </script>
 
 <script id="dashboard-tasks-model-template" type="text/html">
@@ -128,7 +143,9 @@
 </script>
 
 <script id="dashboard-contacts-collection-template" type="text/html">
-
+{{#unless this.length}}
+	<b>No recently viewed contacts</b>
+{{/unless}}
 		{{#if this.length}}
 		<div class="data">
 			<div class="data-container"></div>
@@ -161,11 +178,10 @@
 </script>
 
 <script id="dashboard-workflows-collection-template" type="text/html">
-        {{#unless this.length}}
-        <div id="slate">
-        </div>
-        {{/unless}}
-        {{#if this.length}}
+{{#unless this.length}}
+	<b>You don't own any Workflows</b>
+{{/unless}}
+{{#if this.length}}
                 <table class="table table-striped">
                     <thead>
                         <tr>
