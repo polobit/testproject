@@ -68,6 +68,7 @@ var ContactsRouter = Backbone.Router.extend({
       	var el = getTemplate('dashboard', {});
       	$("#content").html(el)
       	setupDashboard(el);
+      	//loadDynamicTimeline("my-timeline", el);
       },
     /**
      * Fetches all the contacts (persons) and shows as list, if tag_id and 
@@ -242,7 +243,14 @@ var ContactsRouter = Backbone.Router.extend({
             isNew: true,
             template: "contact-detail",
             postRenderCallback: function(el) {
-            	
+
+            // Clone contact model, to avoid render and post-render fell in to 
+            // loop while changing attributes of contact
+            var contact_duplicate = contact.clone();
+          	contact_duplicate.url = "core/api/contacts";
+          	contact_duplicate.set({"viewed_time" : new Date().getTime()})
+         	contact_duplicate.save();          	  
+          	  
             	loadWidgets(el, contact.toJSON());
 
                 load_timeline_details(el, id);

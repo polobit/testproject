@@ -1,0 +1,198 @@
+<!-- Opportunity template -->
+<script id="dashboard-opportunities-collection-template" type="text/html">
+{{#unless this.length}}
+	<b>You don't own any deals</b>
+{{/unless}}
+{{#if this.length}}
+<table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Opportunity</th>
+                            <th>Value</th>
+                            <th>Milestone</th>
+                            <th>Pipeline</th>
+                            <th>Close Date</th>
+                        </tr>
+                    </thead>
+              <tbody id="dashboard-opportunities-model-list">
+          </tbody>
+	</table>
+{{/if}}
+</script>
+
+<script id="dashboard-opportunities-model-template" type="text/html">
+<td data="{{id}}" class="data">
+    <div style="padding-right:10px;height:auto;text-overflow:ellipsis;white-space:nowrap;width:12em;overflow:hidden;">
+        {{#each contacts}}
+        <img src="{{gravatarurl properties 50}}" width="40px" height="40px" />
+        {{/each}}
+        <br/><b>{{name}}</b>
+    </div>
+</td>
+<td><div style="height:auto;text-overflow:ellipsis;width:6em;overflow:hidden;">{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}} {{expected_value}}</div></td>
+<td><div style="height:auto;text-overflow:ellipsis;width:6em;overflow:hidden;">{{milestone}}<br />({{probability}}%) </div></td>
+<td><div style="height:auto;text-overflow:ellipsis;width:6em;overflow:hidden;">
+    {{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}}
+     {{calculatePipeline expected_value probability pipeline}} </div>
+</td>
+<td><div style="height:auto;text-overflow:ellipsis;width:6em;overflow:hidden;">{{epochToHumanDate "mm-dd-yy" close_date}}</div></td>
+</script>
+
+<!-- Notes Template -->
+<script id="dashboard-notes-collection-template" type="text/html">
+{{#unless this.length}}
+	<b>You don't own any notes</b>
+{{/unless}}
+{{#if this.length}}
+<table class="table">
+    <thead>
+        <tr>
+            <th>subject</th>
+            <th>description</th>
+        </tr>
+    </thead>
+    <tbody id="dashboard-notes-model-list">
+    </tbody>
+</table>
+{{/if}}
+</script>
+
+<script id="dashboard-notes-model-template" type="text/html">
+	<td>{{subject}} </td>
+	<td>{{note}}</td>
+<br />
+</script>
+
+<!-- Tasks Template -->
+<script id="dashboard-tasks-collection-template" type="text/html">
+{{#unless this.length}}
+	<b>You don't own any Tasks</b>
+{{/unless}}
+{{#if this.length}}
+    <div class="data-container">
+        <table class="table table-striped" url="core/api/tasks/bulk">
+            <thead>
+                <tr>
+                    <th>Due Date</th>
+                    <th>Task Name</th>
+                    <th>Priority Type</th>
+                    <th>Category</th>
+                    <th>Is Complete</th>
+                </tr>
+            </thead>
+            <tbody id="dashboard-tasks-model-list">
+            </tbody>
+        </table>
+    </div>
+{{/if}}
+</script>
+
+<script id="dashboard-tasks-model-template" type="text/html">
+{{#if is_complete}}
+	<td style="text-decoration:line-through">{{epochToTaskDate due}}</td>
+	<td><div style="text-decoration:line-through;text-overflow:ellipsis;text-align:justify;white-space:nowrap;width:100px;overflow:hidden;">{{subject}}</div></td>
+	<td style="text-decoration:line-through">{{priority_type}}</td>
+	<td style="text-decoration:line-through">{{type}}</td>
+	<td style="text-decoration:line-through">{{task_status is_complete}}</td>
+<br />
+{{else}}
+	<td>{{epochToTaskDate due}}</td>
+	<td><div style="overflow:hidden;text-overflow:ellipsis;text-align:justify;white-space:nowrap;width:100px;">{{subject}}</div></td>
+	<td>{{priority_type}}</td>
+	<td>{{type}}</td>
+	<td>{{task_status is_complete}}</td>
+{{/if}}
+</script>
+
+
+<!-- Contacts Template -->
+<script id="dashboard-contacts-model-template" type="text/html">
+	<td class="data" data="{{id}}">
+    	<div style="display:inline;padding-right:10px;height:auto;">
+        	{{#if_contact_type "PERSON"}}
+        		<img class="thumbnail" src="{{gravatarurl properties 35}}" width="35px" height="35px" style="display:inline" />
+        	{{/if_contact_type}}
+        
+			{{#if_contact_type "COMPANY"}}
+        		<img class="thumbnail" src="img/company.png" width="40px" height="40px" style="display:inline" />
+        	{{/if_contact_type}}
+    	</div>
+    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:10em;overflow:hidden;">
+        	{{#if_contact_type "PERSON"}}
+        		<b>	{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </b>
+        		<br />
+        		{{getPropertyValue properties "email"}}
+        	{{/if_contact_type}}
+        
+			{{#if_contact_type "COMPANY"}}
+        		<b>{{getPropertyValue properties "name"}}</b></br>
+        		{{getPropertyValue properties "url"}}
+        	{{/if_contact_type}}
+    	</div>
+    	<div style="float:right"></div>
+	</td>
+	<td> 
+<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:clip;white-space:nowrap;width:13em;overflow:hidden;">
+	{{#each tags}}
+    	<b><span class="label">{{this}}</span></b>
+    {{/each}}
+</div>
+	</td>
+	<td>{{lead_score}}</td>
+</script>
+
+<script id="dashboard-contacts-collection-template" type="text/html">
+{{#unless this.length}}
+	<b>No recently viewed contacts</b>
+{{/unless}}
+		{{#if this.length}}
+		<div class="data">
+			<div class="data-container"></div>
+			<table id="contacts" class="table table-striped "
+				url="core/api/contacts/bulk" style="overflow: scroll">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Tags</th>
+						<th>Lead Score</th>
+					</tr>
+				</thead>
+				<tbody id="dashboard-contacts-model-list" class="contacts-model-list"
+					route="contact/" style="overflow: scroll;">
+				</tbody>
+			</table>
+		</div>
+	</div>
+	{{/if}}
+</script>
+
+<!-- Workflows template-->
+<script id="dashboard-workflows-model-template" type="text/html">
+	<td class="hide">{{id}}</td>
+	<td><a href="#workflow/{{id}}">{{name}}</a></td>
+	<td>{{creatorName}}</td>
+	<td><a href="#workflows/logs/{{id}}">View Logs</a></td>
+    <td><a href="#email-reports/{{id}}">View Stats</a></td>
+<br />
+</script>
+
+<script id="dashboard-workflows-collection-template" type="text/html">
+{{#unless this.length}}
+	<b>You don't own any Workflows</b>
+{{/unless}}
+{{#if this.length}}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="hide">Id</th>
+                            <th>Name</th>
+                            <th>Creator</th>
+                            <th>Logs</th>
+                            <th>Stats</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dashboard-workflows-model-list"> </tbody>
+                </table>
+        {{/if}}
+</script>

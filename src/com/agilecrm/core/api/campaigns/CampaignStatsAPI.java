@@ -135,12 +135,12 @@ public class CampaignStatsAPI
 	    endCal.add(Calendar.SECOND, 59);
 	    endTime = endCal.getTimeInMillis() + "";
 
-	    // Converts epoch time to "yyyy-MM-dd HH:mm:ss"
-	    String startDate = DateUtil.getMySQLNowDateFormat(Long
-		    .parseLong(startTime));
+	    // Converts epoch time to "yyyy-MM-dd HH:mm:ss" and set timezone.
+	    String startDate = DateUtil.getMySQLNowDateFormat(
+		    Long.parseLong(startTime), timeZone);
 
-	    String endDate = DateUtil.getMySQLNowDateFormat(Long
-		    .parseLong(endTime));
+	    String endDate = DateUtil.getMySQLNowDateFormat(
+		    Long.parseLong(endTime), timeZone);
 
 	    JSONArray emailLogs = EmailStatsUtil.getEmailCampaignStats(
 		    campaignId, startDate, endDate, timeZone, type);

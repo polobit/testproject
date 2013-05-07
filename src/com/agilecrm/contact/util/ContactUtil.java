@@ -373,4 +373,10 @@ public class ContactUtil
 
 	return contactName;
     }
+
+    public static List<Contact> getRecentContacts(String page_size)
+    {
+	return dao.ofy().query(Contact.class).order("-viewed_time")
+		.limit(Integer.parseInt(page_size)).list();
+    }
 }

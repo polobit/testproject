@@ -411,14 +411,6 @@ $(function() {
 			return temp.toLowerCase();
 		}
 
-		// Makes 'TAG_CREATED' to 'created tag'
-		if (this.notification == 'TAG_CREATED'
-				|| this.notification == 'TAG_DELETED') {
-			var arr = this.notification.split('_');
-			var temp = arr[1] + " " + arr[0];
-			return temp.toLowerCase();
-		}
-
 		// Replaces '_' with ' '
 		var str = this.notification.replace(/_/g, ' ');
 		return str.toLowerCase();
@@ -806,5 +798,13 @@ $(function() {
 					 return options.inverse(this)
 		}
 	});
+	
+	Handlebars.registerHelper('containString', function(value, target,  options) {
+		if(target.search(value) != -1)
+			return options.fn(this);
+		
+		return options.inverse(this);
+	});
+	
 
 });

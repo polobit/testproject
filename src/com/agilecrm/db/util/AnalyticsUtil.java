@@ -8,6 +8,14 @@ import org.json.JSONArray;
 import com.agilecrm.db.GoogleSQL;
 import com.campaignio.tasklets.agile.URLVisited;
 
+/**
+ * <code>AnalyticsUtil</code> is the base class for handling SQL queries to
+ * insert and get page-views analytics data. It also handles campaigns
+ * URLVisited query.
+ * 
+ * @author Naresh
+ * 
+ */
 public class AnalyticsUtil
 {
     /**
@@ -92,7 +100,6 @@ public class AnalyticsUtil
      */
     public static String getPageViews(String email, String domain)
     {
-	domain = "_test_";
 	// Gets Guids (clients) based on Email from database
 	String guids = "(SELECT guid FROM page_views WHERE email ="
 		+ SQLUtil.encodeSQLColumnValue(email) + " AND domain = "

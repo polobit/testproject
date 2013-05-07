@@ -1,0 +1,35 @@
+<!-- Indices written at Sat, 13 Apr 2013 15:44:41 GMT+05:30 -->
+
+<datastore-indexes>
+
+    <!-- Used 8 times in query history -->
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="milestone" direction="asc"/>
+        <property name="close_date" direction="asc"/>
+    </datastore-index>
+    
+    <!-- Needed in dashboard -->
+    <datastore-index kind="Opportunity" ancestor="false" source="manual">
+        <property name="ownerKey" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
+
+  <!-- Dashboard -->
+    <datastore-index kind="Workflow" ancestor="false" source="auto">
+        <property name="creator_key" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
+
+    <!-- Dashboard -->
+    <datastore-index kind="Task" ancestor="false" source="auto">
+        <property name="owner" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
+
+    <!-- Dashboard -->
+    <datastore-index kind="Note" ancestor="false" source="auto">
+        <property name="owner" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
+    
+</datastore-indexes>

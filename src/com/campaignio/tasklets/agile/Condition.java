@@ -68,6 +68,11 @@ public class Condition extends TaskletAdapter
     public static String COMPARATOR_EQUAL_TO = "equal_to";
 
     /**
+     * Compares for substring
+     */
+    public static String COMPARATOR_CONTAINS = "contains";
+
+    /**
      * Variable 1
      */
     public static String VARIABLE_1 = "variable_1";
@@ -173,6 +178,12 @@ public class Condition extends TaskletAdapter
 	    if (comparator.equalsIgnoreCase(COMPARATOR_EQUAL_TO))
 	    {
 		if (variable1.equalsIgnoreCase(variable2))
+		    branch = "yes";
+	    }
+
+	    if (comparator.equalsIgnoreCase(COMPARATOR_CONTAINS))
+	    {
+		if (variable1.toLowerCase().contains(variable2.toLowerCase()))
 		    branch = "yes";
 	    }
 	}

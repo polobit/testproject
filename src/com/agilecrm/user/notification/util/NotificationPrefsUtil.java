@@ -108,67 +108,7 @@ public class NotificationPrefsUtil
 
 	    System.out.println("object: " + json);
 
-	    // Before adding to message
-	    // deleting contacts list of deals to reduce message size.
-	    if (type == Type.DEAL_CREATED || type == Type.DEAL_CLOSED)
-	    {
-		if (json.getString("contacts") != null)
-		    json.remove("contacts");
-
-		if (json.getString("prefs") != null)
-		    json.remove("prefs");
-	    }
-
-	    // Remove other fields except first-name,last-name and owner.
-	    else
-	    {
-		if (json.getString("tags") != null)
-		    json.remove("tags");
-
-		if (json.getString("widget_properties") != null)
-		    json.remove("widget_properties");
-
-		JSONObject ownerJSON = new JSONObject();
-		if (json.getString("owner") != null)
-		{
-		    JSONObject owner = json.getJSONObject("owner");
-		    json.remove("owner");
-
-		    ownerJSON.put("id", owner.getString("id"));
-		    ownerJSON.put("domain", owner.getString("domain"));
-		    ownerJSON.put("name", owner.getString("name"));
-		    ownerJSON.put("email", owner.getString("email"));
-		}
-		json.put("owner", ownerJSON);
-
-		if (json.getString("properties") != null)
-		{
-		    JSONArray properties = json.getJSONArray("properties");
-		    json.remove("properties");
-
-		    JSONArray propertyArray = new JSONArray();
-		    for (int index = 0; index < properties.length(); index++)
-		    {
-			JSONObject property = properties.getJSONObject(index);
-
-			if (json.getString("type").equals("PERSON"))
-			{
-			    if (property.getString("name").equals("first_name")
-				    || property.getString("name").equals(
-					    "last_name"))
-				propertyArray.put(property);
-			}
-
-			if (json.getString("type").equals("COMPANY"))
-			{
-			    if (property.getString("name").equals("name"))
-				propertyArray.put(property);
-			}
-
-		    }
-		    json.put("properties", propertyArray);
-		}
-	    }
+	    json = reduceObjectSize(json, type);
 
 	    System.out.println("Object json of notification: " + json);
 	}
@@ -191,5 +131,93 @@ public class NotificationPrefsUtil
 		domain, json.toString());
 	Queue queue = QueueFactory.getQueue("notification-queue");
 	queue.add(TaskOptions.Builder.withPayload(notificationsDeferredTask));
+    }
+
+    /**
+     * Optimising object to reduce it's size, before sending to pubnub.
+     * 
+     * @param json
+     *            - Contact or Deal Object.
+     * @param type
+     *            - Notification Type.
+     * @return JSONObject.
+     */
+    private static JSONObject reduceObjectSize(JSONObject json, Type type)
+    {
+	try
+	{
+	    // Deletes related contacts list and prefs of deals to reduce
+	    // message size.
+	    if (type == Type.DEAL_CREATED || type == Type.DEAL_CLOSED)
+	    {
+		if (json.getString("contacts") != null)
+		    json.remove("contacts");
+
+		if (json.getString("prefs") != null)
+		    json.remove("prefs");
+
+		return json;
+	    }
+
+	    // Remove other fields except first-name,last-name, email, image and
+	    // owner.
+	    if (json.getString("tags") != null)
+		json.remove("tags");
+
+	    if (json.getString("widget_properties") != null)
+		json.remove("widget_properties");
+
+	    JSONObject ownerJSON = new JSONObject();
+	    if (json.getString("owner") != null)
+	    {
+		JSONObject owner = json.getJSONObject("owner");
+		json.remove("owner");
+
+		ownerJSON.put("id", owner.getString("id"));
+		ownerJSON.put("domain", owner.getString("domain"));
+		ownerJSON.put("name", owner.getString("name"));
+		ownerJSON.put("email", owner.getString("email"));
+	    }
+	    json.put("owner", ownerJSON);
+
+	    if (json.getString("properties") != null)
+	    {
+		JSONArray properties = json.getJSONArray("properties");
+		json.remove("properties");
+
+		JSONArray propertyArray = new JSONArray();
+
+		for (int index = 0; index < properties.length(); index++)
+		{
+		    JSONObject property = properties.getJSONObject(index);
+
+		    if (json.getString("type").equals("PERSON"))
+		    {
+			if (property.getString("name").equals("first_name")
+				|| property.getString("name").equals(
+					"last_name")
+				|| property.getString("name").equals("email")
+				|| property.getString("name").equals("image"))
+			    propertyArray.put(property);
+		    }
+
+		    if (json.getString("type").equals("COMPANY"))
+		    {
+			if (property.getString("name").equals("name"))
+			    propertyArray.put(property);
+		    }
+
+		}
+		json.put("properties", propertyArray);
+	    }
+
+	}
+
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
+	return json;
     }
 }

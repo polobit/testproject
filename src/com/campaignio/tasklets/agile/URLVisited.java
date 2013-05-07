@@ -68,14 +68,15 @@ public class URLVisited extends TaskletAdapter
 	if (count == 0)
 	{
 	    System.out.println("Node JSON in url visited is: " + nodeJSON);
-	    log(campaignJSON, subscriberJSON, nodeJSON, "URL Not Visited : "
-		    + url);
+	    log(campaignJSON, subscriberJSON, nodeJSON, "URL - " + url + " "
+		    + " has not been visited.");
 	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		    nodeJSON, BRANCH_NO);
 	    return;
 	}
 
-	log(campaignJSON, subscriberJSON, nodeJSON, "URL Visited : " + url);
+	log(campaignJSON, subscriberJSON, nodeJSON, "URL - " + url + " "
+		+ " has visited.");
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
 		nodeJSON, BRANCH_YES);
     }

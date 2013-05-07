@@ -1,5 +1,6 @@
 package com.agilecrm.core.api;
 
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
@@ -157,11 +158,13 @@ public class API
 
 	String url = null;
 
+	String userName = "";
+	
 	// Get Imap Prefs
 	IMAPEmailPrefs imapPrefs = IMAPEmailPrefsUtil.getIMAPPrefs(AgileUser.getCurrentAgileUser());
 	if (imapPrefs != null)
 	{
-	    String userName = imapPrefs.user_name;
+	    userName = imapPrefs.email;
 	    String host = imapPrefs.server_name;
 	    String password = imapPrefs.password;
 	    String port = "993";
@@ -184,7 +187,7 @@ public class API
 	    if (gmailPrefs != null)
 	    {
 
-		String userName = gmailPrefs.email;
+		userName = gmailPrefs.email;
 		String host = "imap.gmail.com";
 		String port = "993";
 		String consumerKey = "anonymous";
@@ -223,7 +226,27 @@ public class API
 
 	}
 
-	return jsonResult;
+	JSONObject emails = new JSONObject();
+	try
+	{
+	    // for(String value : emails)
+	    emails = new JSONObject(jsonResult);
+	    JSONArray emailsArray = emails.getJSONArray("emails");
+	    for (int i = 0; i < emailsArray.length(); i++)
+	    {
+		emailsArray.getJSONObject(i)
+			.put("owner_email",
+			    URLDecoder.decode(userName));
+	    }
+
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	return emails.toString();
 
     }
 

@@ -8,25 +8,37 @@ $(function()
 			
 					e.preventDefault();
 					
-					// If modal already exists, removes to append new
+					/*// If modal already exists, removes to append new
                     if ($('#warning-deletion').size() != 0)
                     {
-                    	console.log('template removed');
                     	$('#warning-deletion').remove();
-                    }
+                    }*/
                     
 					var namespace = $(this).closest('a').attr("data");
 					
 					if(namespace != "")
 					{
-	                    console.log(namespace);
-						// Shows account stats warning template with stats(data used)
+						// Show loading in content
+						$("#content").html(LOADING_HTML);
 						/**
-						 * Getting namespace stats for this domain
+						 * Sends delete request to delete namespace 
 						 */
+						$.ajax({
+							type : "DELETE",
+							url : "core/api/users/admin/delete/" + namespace,
+							success : function()
+							{
+								location.reload(true);
+							}
+						});
+						/*						
+						* // Shows account stats warning template with stats(data used)
+						*//**
+						 * Getting namespace stats for this domain
+						 *//*
 						var account_stats = new Base_Model_View({
 							url : "core/api/users/admin/namespace-stats/" + namespace,
-							template : "warning",
+							template : "warning"
 						});
 	                    
 						// Appends to content, warning is modal can call show if
@@ -36,35 +48,18 @@ $(function()
 						// Shows warning modal
 						$("#warning-deletion").modal('show');
 
-						/**
+						*//**
 						 * If user clicks on confirm delete the modal is hidden and
 						 * delete request is sent to "core/api/admin/delete/namespace"
-						 */
+						 *//*
 						$("#confirm-delete-account").click(function(e){
 							
 								e.preventDefault();
 		
 								// Hides modal
 								$("#warning-deletion").modal('hide');
-								// Show loading in content
-								$("#content").html(LOADING_HTML);
-								/**
-								 * Sends delete request to delete namespace 
-								 */
-								$.ajax({
-									type : "DELETE",
-									url : "core/api/users/admin/delete/" + namespace,
-									success : function()
-									{
-										location.reload(true);
-										console.log("Deleted namespace: "+ namespace);
-									},
-									error : function()
-									{
-										console.log("error in deleting:"+ namespace);
-									}
-								});
-					     });
+
+					     });*/
 				   }
 		});
 });

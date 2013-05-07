@@ -353,7 +353,8 @@ table .header:hover::after {
 table .header::after {
 	content: "";
 	float: right;
-	margin-top: -5px;
+ 	margin-top: 5px;
+	/* margin-right:50%; */
 	border-width: 0 4px 4px;
 	border-style: solid;
 	border-color: black transparent;
@@ -424,7 +425,12 @@ footer #scroll-top
     z-index: 99;
     display: none;
 }
- 
+
+/* fb-like button in footer*/
+.fb-like > span {
+	height:16px!important;
+}
+
 /*Disable selection using css */
 .unselectable {
 	-moz-user-select: -moz-none;
@@ -492,11 +498,20 @@ span.valid {
 	color: #a4a5aa;
 }
 
+/* Border-radius in calender */
+.data-block.todo-block{
+	border-radius:0px!important;
+}
+
+/* Border-radius in contacts and deals */
+.data-block{
+	border-radius:5px;
+}
+
 /* To overcome page shifts due loading pages of different lengths, adds scroll bar default for all pages */
 html {
 	overflow-y: scroll;
 }
-
 
 .search-query {
 	border: 0px; /*important*/
@@ -654,7 +669,4 @@ body
 			background: -o-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
 			background: -ms-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
 			background: linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white)
-}
-.fb-like > span {
-	height:16px!important;
 }

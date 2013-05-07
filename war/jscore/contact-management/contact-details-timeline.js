@@ -709,7 +709,7 @@ $(function () {
 		e.preventDefault();
 		
 		var string = $(this).closest('div.text').text();
-		string = string.replace("From:", "</br>From:</br>").replace("To:", "</br>To:</br>").replace("Subject:", "</br>Subject:</br>").replace("Text:", "</br>Text:</br>").replace("HTML:", "");
+        string = string.replace("From:", "</br>From:").replace("To:", "</br>To:").replace("Subject:", "</br>Subject:").replace("Text Body:", "</br>Text Body:").replace("HTML Body:", "</br>HTML Body:");
 		
 		// Add pre tag to the string to consider white spaces
 		$("#log-in-detail").html("<pre style='background:none;border:none;'>" + string + "</pre>");

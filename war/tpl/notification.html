@@ -28,22 +28,23 @@
     </div>
 </div>-->
 
-<div>  
+<div> 
+<span type="hidden" id={{gravatarurl properties 50}}></span> 
    {{#if entity_type}}
-       <span><a href="#deals/{{id}}" style="color:black;">{{replace_plus_symbol name}}</a></span>
+       <span><a href="#deals/{{id}}" id="notification-deal-id" style="color:black;">{{replace_plus_symbol name}}</a></span>
    {{else}}
        {{#if_contact_type "PERSON"}}
            <span style="vertical-align:text-top">
-               <a href="#contact/{{id}}" style="color:black;" title=" {{getPropertyValue properties "first_name"}} {{ getPropertyValue properties "last_name"}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>   
+               <a href="#contact/{{id}}" id="notification-contact-id" style="color:black;" title=" {{getPropertyValue properties "first_name"}} {{ getPropertyValue properties "last_name"}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>   
        	   </span>
         {{/if_contact_type}}
 
         {{#if_contact_type "COMPANY"}}
            <span style="vertical-align:text-top">
-               <a href="#contact/{{id}}" style="color:black;">{{getPropertyValue properties "name"}}</a>
+               <a href="#contact/{{id}}" id="notification-contact-id" style="color:black;">{{getPropertyValue properties "name"}}</a>
            </span>  
         {{/if_contact_type}}
    {{/if}} 
-    <span style="margin-left:5pt">{{#if_notification_type}} {{notification}} {{/if_notification_type}}</span>
+    <span style="margin-left:5pt" id= "notification-type">{{#if_notification_type}} {{notification}} {{/if_notification_type}}</span>
 </div>
 </script>

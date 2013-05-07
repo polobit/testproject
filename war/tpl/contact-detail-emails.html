@@ -8,11 +8,14 @@
 	<div id="notes" class="activity-text-block">
 	<span class="activity-block-owner">	
 			<img class="user-img thumbnail" width="40" height="40" src="{{#extractEmail from}}{{emailGravatarurl 40 this}}{{/extractEmail}}">
-
 	</span>
-
 		<div>
 			<h4>
+	{{#containString owner_email from}}
+			<i class="icon-arrow-up"></i>
+		{{else}}
+			<i class="icon-arrow-down"></i>
+	{{/containString}}
 				<a class="email-subject" id={{id}} style="font-weight:bold" href="#collapse-{{id}}">{{subject}}</a>
 			</h4></br>
 			<div style="height:70px;margin-bottom:5px" class="ellipsis-multi-line collapse-{{id}}">

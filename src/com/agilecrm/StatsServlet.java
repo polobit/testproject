@@ -9,7 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.util.AnalyticsUtil;
+import com.agilecrm.user.notification.NotificationPrefs.Type;
+import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.google.appengine.api.NamespaceManager;
 
 /**
@@ -20,6 +23,7 @@ import com.google.appengine.api.NamespaceManager;
  * @author Naresh
  * 
  */
+@SuppressWarnings("serial")
 public class StatsServlet extends HttpServlet
 {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -79,6 +83,11 @@ public class StatsServlet extends HttpServlet
 	// Insert into table
 	AnalyticsUtil.addToPageViews(domain, guid, email, sid, url, ip, isNew,
 		ref, userAgent, country, region, city, cityLatLong, reqTime);
+
+	// Show notification
+	if (!StringUtils.isEmpty(email))
+	    NotificationPrefsUtil.executeNotification(Type.BROWSING,
+		    ContactUtil.searchContactByEmail(email));
     }
 
     /**

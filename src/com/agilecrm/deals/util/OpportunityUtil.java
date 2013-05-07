@@ -9,6 +9,8 @@ import net.sf.json.JSONObject;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -65,7 +67,6 @@ public class OpportunityUtil
     {
 	return dao.fetchAll();
     }
-
 
     /**
      * Gets list of opportunities with respect to closed date and given time
@@ -272,6 +273,19 @@ public class OpportunityUtil
 
 	System.out.println(conversionObject);
 	return conversionObject;
+    }
+
+    public static List<Opportunity> getDealsRelatedToCurrentUser()
+    {
+	System.out.println(SessionManager.get().getDomainId());
+	return dao
+		.ofy()
+		.query(Opportunity.class)
+		.filter("ownerKey",
+			new Key<DomainUser>(DomainUser.class, SessionManager
+				.get().getDomainId())).order("-created_time")
+		.limit(10)
+		.list();
     }
 
 }

@@ -1,6 +1,9 @@
 package com.agilecrm.core.api.contacts;
 
+import java.util.List;
+
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -56,5 +59,13 @@ public class NotesAPI
     {
 	note.save();
 	return note;
+    }
+
+    @Path("/my/notes")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Note> getNotesRelatedToCurrentUser()
+    {
+	return NoteUtil.getNotesRelatedToCurrentUser();
     }
 }

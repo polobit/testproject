@@ -176,10 +176,9 @@ public class AddTask extends TaskletAdapter
 	}
 
 	// Creates log for AddTask
-	log(campaignJSON, subscriberJSON, nodeJSON,
-		"Add Task Log - Added Task: " + task.subject + " with type: "
-			+ task.entity_type + " and due date: "
-			+ new Date(dueDateInEpoch * 1000));
+	log(campaignJSON, subscriberJSON, nodeJSON, "Added task "
+		+ task.subject + " having type " + task.entity_type
+		+ " and due date " + new Date(dueDateInEpoch * 1000));
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,

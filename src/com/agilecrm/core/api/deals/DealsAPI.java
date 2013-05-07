@@ -197,4 +197,13 @@ public class DealsAPI
 
 	Opportunity.dao.deleteBulkByIds(opportunitiesJSONArray);
     }
+    
+    @Path("/my/deals")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Opportunity> getDealsRelatedToCurrentUser()
+    {
+	return OpportunityUtil.getDealsRelatedToCurrentUser();
+    }
+    
 }

@@ -51,8 +51,7 @@ public class TwitterSendMessage extends TaskletAdapter
 	else
 	    rateLimit = TwitterQueue.TWITTER_DB_RATE_LIMIT_HOURLY_5;
 
-	log(campaignJSON, subscriberJSON, nodeJSON,
-		"Adding tweet for this user: " + message);
+	log(campaignJSON, subscriberJSON, nodeJSON, "Adding tweet - " + message);
 
 	TwitterQueueUtil.addToTwitterQueue(account, token, tokenSecret,
 		message, rateLimit, subscriberJSON, campaignJSON);

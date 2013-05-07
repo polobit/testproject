@@ -190,15 +190,36 @@ $(function(){
 	 * email. To do so the email should be run in analytics script provided by 
 	 * agileCRM.
 	 */ 
-	$('#contactDetailsTab a[href="#activities"]').live('click', function (e){
+	$('#contactDetailsTab a[href="#stats"]').live('click', function (e){
 		e.preventDefault();
-		var activitiesView = new Base_Collection_View({
-			url: 'core/api/stats?e=' + encodeURIComponent("sam@invox.com") ,
+		
+		var contact = App_Contacts.contactDetailView.model;
+		var json = contact.toJSON();
+		 
+		// Get email of the contact in contact detail
+		var email = getPropertyValue(json.properties, "email");
+		
+		// Shows an error alert, when there is no email to the contact 
+		if(!email){
+			$('#stats', App_Contacts.contactDetailView.model.el).html('<div class="alert alert-error span4" style="margin-top:30px"><a class="close" data-dismiss="alert" href="#">×</a>Sorry! this contact has no email to get the stats.</div>').show().delay(3000).hide(1);
+			return;	
+		}	
+		
+		var statsView = new Base_Collection_View({
+			url: 'core/api/stats?e=' + encodeURIComponent(email) ,
 			templateKey: "stats",
-            individual_tag_name: 'tr'
+            individual_tag_name: 'li',
+            postRenderCallback: function(el)
+            {
+            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function() { 
+        			$(".stats-created-time", el).each(function(index, element) {
+        				$(element).timeago();
+        			});
+    			});
+            }
         });
-        activitiesView.collection.fetch();
-        $('#activities', this.el).html(activitiesView.el);
+        statsView.collection.fetch();
+        $('#stats',this.el).html(statsView.el);
 	});
 	
 	/**

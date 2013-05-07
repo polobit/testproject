@@ -22,6 +22,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.IOUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -80,6 +81,21 @@ public class ContactsAPI
 	return ContactUtil.getAllContacts();
     }
 
+    @Path("/recent")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Contact> getRecentContacts(@QueryParam("page_size") String count)
+    {
+	if (count != null)
+	{
+	    System.out.println("Fetching page by page");
+
+	    return ContactUtil.getRecentContacts(count);
+	}
+
+	return ContactUtil.getRecentContacts("10");
+    }
+
     /**
      * Fetches all the contacts (of type company). Activates infiniScroll, if
      * no.of contacts are more than count and cursor is not null. This method is
@@ -110,6 +126,7 @@ public class ContactsAPI
 	return ContactUtil.getAllContacts();
     }
 
+    @Path("/")
     /**
      * Saves new contact into database, by verifying the existence of duplicates
      * with its email. If any duplicate is found throws web exception.
@@ -462,25 +479,116 @@ public class ContactsAPI
     @Path("bulk/tags")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void addTagsTOContacts(@FormParam("contact_ids") String contact_ids,
+    public void addTagsToContacts(@FormParam("contact_ids") String contact_ids,
 	    @FormParam("tags") String tagsString) throws JSONException
     {
 	System.out.println(tagsString);
 
 	JSONArray tagsJSONArray = new JSONArray(tagsString);
 
-	String[] tagsArray = new String[tagsJSONArray.length()];
-
-	System.out.println(tagsJSONArray);
-
-	for (int i = 0; i < tagsJSONArray.length(); i++)
+	String[] tagsArray = null;
+	try
 	{
-	    tagsArray[i] = tagsJSONArray.get(i).toString();
+	    tagsArray = new ObjectMapper().readValue(tagsJSONArray.toString(),
+		    String[].class);
 	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	if (tagsArray == null)
+	    return;
 
 	JSONArray contactsJSONArray = new JSONArray(contact_ids);
 
 	ContactUtil.addTagsToContactsBulk(contactsJSONArray, tagsArray);
+    }
+
+    /**
+     * Add tags to a contact based on email address of the contact
+     * 
+     * @param email
+     *            email of contact form parameter
+     * @param tagsString
+     *            array of tags as string
+     * @throws JSONException
+     */
+    @Path("/email/tags/add")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void addTagsToContactsBasedOnEmail(@FormParam("email") String email,
+	    @FormParam("tags") String tagsString) throws JSONException
+    {
+
+
+	Contact contact = ContactUtil.searchContactByEmail(email);
+	
+	if (contact == null)
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("No contact found with provied email address")
+		    .build());
+
+	JSONArray tagsJSONArray = new JSONArray(tagsString);
+	String[] tagsArray = null;
+	try
+	{
+	    tagsArray = new ObjectMapper().readValue(tagsJSONArray.toString(),
+		    String[].class);
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	if (tagsArray == null)
+	    return;
+	contact.addTags(tagsArray);
+    }
+
+    /**
+     * delete tags from a contact based on email address of the contact
+     * 
+     * @param email
+     *            email of contact form parameter
+     * @param tagsString
+     *            array of tags as string
+     * @throws JSONException
+     */
+    @Path("/email/tags/delete")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void deleteTagsToContactsBasedOnEmail(
+	    @FormParam("email") String email,
+	    @FormParam("tags") String tagsString) throws JSONException
+    {
+
+	Contact contact = ContactUtil.searchContactByEmail(email);
+
+	if (contact == null)
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("No contact found with provied email address")
+		    .build());
+
+	JSONArray tagsJSONArray = new JSONArray(tagsString);
+	String[] tagsArray = null;
+	try
+	{
+	    tagsArray = new ObjectMapper().readValue(tagsJSONArray.toString(),
+		    String[].class);
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	if (tagsArray == null)
+	    return;
+
+	contact.removeTags(tagsArray);
     }
 
     /**
