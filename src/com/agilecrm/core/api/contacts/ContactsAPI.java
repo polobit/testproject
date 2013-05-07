@@ -86,6 +86,7 @@ public class ContactsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Contact> getRecentContacts(@QueryParam("page_size") String count)
     {
+
 	if (count != null)
 	{
 	    System.out.println("Fetching page by page");
@@ -94,6 +95,7 @@ public class ContactsAPI
 	}
 
 	return ContactUtil.getRecentContacts("10");
+
     }
 
     /**
@@ -140,11 +142,11 @@ public class ContactsAPI
     public Contact createContact(Contact contact)
     {
 	// Check if the email exists with the current email address
-	Contact currentContact = ContactUtil.searchContactByEmail(contact
+	boolean isDuplicate = ContactUtil.isExists(contact
 		.getContactFieldValue("EMAIL"));
 
 	// Throw non-200 if it exists
-	if (currentContact != null)
+	if (isDuplicate)
 	{
 
 	    throw new WebApplicationException(
@@ -182,9 +184,10 @@ public class ContactsAPI
 	for (Contact contact : contacts)
 	{
 	    // Check if the email exists with the current email address
-	    Contact currentContact = ContactUtil.searchContactByEmail(contact
+	    boolean iSDuplicate = ContactUtil.isExists(contact
 		    .getContactFieldValue("EMAIL"));
-	    if (currentContact != null)
+
+	    if (iSDuplicate)
 		continue;
 
 	    contact.save();

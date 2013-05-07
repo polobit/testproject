@@ -42,8 +42,8 @@ public class TagUtil
 		continue;
 
 	    // Check if already present
-	    Tag tag = getTag(tagName);
-	    if (tag == null)
+	    int count = getTagsCount(tagName);
+	    if (count != 0)
 	    {
 		// Add tag to db
 		Tag.addTag(tagName);
@@ -112,5 +112,10 @@ public class TagUtil
 	{
 	    return null;
 	}
+    }
+
+    public static int getTagsCount(String tag)
+    {
+	return dao.getCountByProperty("tag", tag);
     }
 }

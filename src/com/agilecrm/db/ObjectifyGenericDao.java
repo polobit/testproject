@@ -276,6 +276,35 @@ public class ObjectifyGenericDao<T> extends DAOBase
     }
 
     /**
+     * Convenience method to get number of entities based on a property
+     * 
+     * @param map
+     * @return T matching object
+     */
+    public int getCountByProperty(String propName, Object propValue)
+    {
+	Query<T> q = ofy().query(clazz);
+	q.filter(propName, propValue);
+	return q.count();
+    }
+
+    /**
+     * Convenience method to get number of entities based on properties map
+     * 
+     * @param map
+     * @return T matching object
+     */
+    public int getCountByProperty(Map<String, Object> map)
+    {
+	Query<T> q = ofy().query(clazz);
+	for (String propName : map.keySet())
+	{
+	    q.filter(propName, map.get(propName));
+	}
+	return q.count();
+    }
+
+    /**
      * Convenience method to get all objects matching a single property
      * 
      * @param propName

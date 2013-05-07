@@ -161,6 +161,15 @@ public class ContactUtil
 	return dao.getByProperty("properties.value = ", email);
     }
 
+    public static boolean isExists(String email)
+    {
+	if (email == null)
+	    return false;
+
+	return dao.getCountByProperty("properties.value = ", email) != 0 ? true
+		: false;
+    }
+
     /**
      * Get Count of Contacts by Email - should be used in most of the cases
      * unless the real entity is required
