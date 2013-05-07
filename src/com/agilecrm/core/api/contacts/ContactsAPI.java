@@ -523,7 +523,7 @@ public class ContactsAPI
     {
 
 
-	Contact contact = ContactUtil.searchContactByEmail("email");
+	Contact contact = ContactUtil.searchContactByEmail(email);
 	
 	if (contact == null)
 	    throw new WebApplicationException(Response
@@ -565,7 +565,7 @@ public class ContactsAPI
 	    @FormParam("tags") String tagsString) throws JSONException
     {
 
-	Contact contact = ContactUtil.searchContactByEmail("email");
+	Contact contact = ContactUtil.searchContactByEmail(email);
 
 	if (contact == null)
 	    throw new WebApplicationException(Response
