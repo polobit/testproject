@@ -32,7 +32,12 @@ var CalendarRouter = Backbone.Router.extend({
 			url : '/core/api/tasks',
 			restKey : "task",
 			templateKey : "tasks",
-			individual_tag_name : 'tr'
+			individual_tag_name : 'tr',
+			postRenderCallback: function(el) {
+            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+            		 $(".task-due-time", el).timeago();
+              	});
+            }
 		});
 
 		// Tasks has its own appendItem function to show the status (overdue,
