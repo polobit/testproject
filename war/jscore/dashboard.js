@@ -102,10 +102,11 @@ function setUpDashboardNavtabs(el)
 	$('#dashboardTabs a[href="#campaigns"]').live('click', function (e) {
 		e.preventDefault();
 			var workflowsListView = new Base_Collection_View({
-				url : '/core/api/workflows',
+				url : '/core/api/workflows/my/workflows',
 				restKey : "workflow",
 				templateKey : "dashboard-workflows",
 				individual_tag_name : 'tr',
+				cursor: true,
 				page_size : 10
 			});
 
