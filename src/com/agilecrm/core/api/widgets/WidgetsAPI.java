@@ -1089,163 +1089,6 @@ public class WidgetsAPI
     }
 
     /**
-     * Connects to Twilio and fetches call logs based on the accountSID
-     * 
-     * @param widgetId
-     *            {@link String} widget id to get {@link Widget} preferences
-     * @return {@link String} form of {@link JSONArray} of call logs
-     */
-    @Path("twilio/call/logs/{widget-id}/{to}")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getCallLogsOfTwilio(@PathParam("widget-id") Long widgetId,
-	    @PathParam("to") String to)
-    {
-	Widget widget = WidgetUtil.getWidget(widgetId);
-	if (widget == null)
-	    return null;
-
-	try
-	{
-	    return TwilioUtil.getCallLogs(widget, to).toString();
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-
-	}
-
-    }
-
-    /**
-     * Initiates a call from agent Twilio account to the given number
-     * 
-     * @param widgetId
-     *            {@link String} widget id to get {@link Widget} preferences
-     * @param from
-     *            {@link String} caller id of the phone call
-     * @param to
-     *            {@link String} phone number to be called
-     * @param url
-     *            {@link String} URL to execute when the called party answers
-     * @return {@link String} form of {@link JSONObject} of call made
-     */
-    @Path("twilio/call/{widget-id}")
-    @POST
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces(MediaType.TEXT_PLAIN)
-    public String makeCallFromTwilio(@PathParam("widget-id") Long widgetId,
-	    @FormParam("from") String from, @FormParam("to") String to,
-	    @FormParam("url") String url)
-
-    {
-	Widget widget = WidgetUtil.getWidget(widgetId);
-	if (widget == null)
-	    return null;
-	try
-	{
-	    return TwilioUtil.makeCall(widget, from, to, url).toString();
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-
-	}
-    }
-
-    /**
-     * Retrieves registered phone numbers from agent's Twilio account
-     * 
-     * @param accountsid
-     * @return {@link String} form of {@link JSONArray}
-     */
-    @Path("twilio/numbers/{account_sid}/{from}")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getOutgoingNumbersfromTwilio(
-	    @PathParam("account_sid") String accountsid,
-	    @PathParam("from") String from)
-    {
-
-	try
-	{
-	    return TwilioUtil.getOutgoingNumbers(accountsid, from);
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-
-	}
-    }
-
-    /**
-     * Connects to Twilio and fetches token based on the accountSID and appsid
-     * 
-     * @param accountSid
-     *            {@link String} accountSid of agent Twilio account
-     * @param appSID
-     *            {@link String} appSid of agent Twilio account
-     * @return {@link String} token generated from Twilio
-     */
-    @Path("twilio/accountsid/{accountSID}/{appSID}")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getTwilioToken(@PathParam("accountSID") String accountSID,
-	    @PathParam("appSID") String appSID)
-    {
-	if (accountSID == null)
-	    return null;
-
-	try
-	{
-	    return TwilioUtil.generateTwilioToken(accountSID, appSID);
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-
-	}
-
-    }
-
-    /**
-     * Connects to Twilio and fetches applicaiton sid based on the accountSID
-     * 
-     * @param accountSid
-     *            {@link String} accountSid of agent Twilio account
-     * @return {@link String} token generated from Twilio
-     */
-    @Path("twilio/appsid/{accountSID}")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getTwilioAppSid(@PathParam("accountSID") String accountSID)
-    {
-	if (accountSID == null)
-	    return null;
-
-	try
-	{
-	    return TwilioUtil.getTwilioAppSID(accountSID);
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-
-	}
-
-    }
-
-    /**
      * Retrieves clients from agent's FreshBooks account based on contact email
      * 
      * @param widgetId
@@ -1423,6 +1266,165 @@ public class WidgetsAPI
 
 	}
 
+    }
+
+    /**
+     * Connects to Twilio and fetches call logs based on the accountSID
+     * 
+     * @param widgetId
+     *            {@link String} widget id to get {@link Widget} preferences
+     * @return {@link String} form of {@link JSONArray} of call logs
+     */
+    @Path("twilio/call/logs/{widget-id}/{to}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getCallLogsOfTwilio(@PathParam("widget-id") Long widgetId,
+	    @PathParam("to") String to)
+    {
+	Widget widget = WidgetUtil.getWidget(widgetId);
+	if (widget == null)
+	    return null;
+
+	try
+	{
+	    return TwilioUtil.getCallLogs(widget, to).toString();
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+
+	}
+
+    }
+
+    /**
+     * Initiates a call from agent Twilio account to the given number
+     * 
+     * @param widgetId
+     *            {@link String} widget id to get {@link Widget} preferences
+     * @param from
+     *            {@link String} caller id of the phone call
+     * @param to
+     *            {@link String} phone number to be called
+     * @param url
+     *            {@link String} URL to execute when the called party answers
+     * @return {@link String} form of {@link JSONObject} of call made
+     */
+    @Path("twilio/call/{widget-id}")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String makeCallFromTwilio(@PathParam("widget-id") Long widgetId,
+	    @FormParam("from") String from, @FormParam("to") String to,
+	    @FormParam("url") String url)
+
+    {
+	Widget widget = WidgetUtil.getWidget(widgetId);
+	if (widget == null)
+	    return null;
+	try
+	{
+	    return TwilioUtil.makeCall(widget, from, to, url).toString();
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+
+	}
+    }
+
+    /**
+     * Retrieves registered phone numbers from agent's Twilio account
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @return {@link String} form of {@link JSONArray}
+     */
+    @Path("twilio/numbers/{widget-id}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getOutgoingNumbersfromTwilio(
+	    @PathParam("widget-id") Long widgetId)
+    {
+	Widget widget = WidgetUtil.getWidget(widgetId);
+	if (widget == null)
+	    return null;
+	try
+	{
+	    return TwilioUtil.getOutgoingNumbers(widget).toString();
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+
+	}
+    }
+
+    /**
+     * Connects to Twilio and fetches token based on the accountSID and appsid
+     * 
+     * @param accountSid
+     *            {@link String} accountSid of agent Twilio account
+     * @param appSID
+     *            {@link String} appSid of agent Twilio account
+     * @return {@link String} token generated from Twilio
+     */
+    @Path("twilio/token/{widget-id}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getTwilioToken(@PathParam("widget-id") Long widgetId)
+    {
+	Widget widget = WidgetUtil.getWidget(widgetId);
+	if (widget == null)
+	    return null;
+
+	try
+	{
+	    return TwilioUtil.generateTwilioToken(widget);
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+
+	}
+
+    }
+
+    /**
+     * Connects to Twilio and fetches applicaiton sid based on the accountSID
+     * 
+     * @param accountSid
+     *            {@link String} accountSid of agent Twilio account
+     * @return {@link String} token generated from Twilio
+     */
+    @Path("twilio/appsid/{widget-id}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getTwilioAppSid(@PathParam("widget-id") Long widgetId)
+    {
+	Widget widget = WidgetUtil.getWidget(widgetId);
+	if (widget == null)
+	    return null;
+
+	try
+	{
+	    return TwilioUtil.getTwilioAppSID(widget);
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+
+	}
     }
 
 }

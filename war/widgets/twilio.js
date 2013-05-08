@@ -1,4 +1,4 @@
-$(function() {
+/*$(function() {
 
 	// Plugin name as a global variable
 	Twilio_PLUGIN_NAME = "Twilio";
@@ -62,13 +62,13 @@ $(function() {
 
 });
 
-/**
+*//**
  * Shows setup if user adds Twilio widget for the first time, to set up
  * connection to Twilio account. Enter and api key provided by Twilio access
  * functionalities
  * 
  * @param plugin_id
- */
+ *//*
 function setupTwilioOAuth(plugin_id) {	
 
 	 $('#Twilio').html('<p class="widget_content" style="border-bottom:none">' 
@@ -246,22 +246,17 @@ function setUpTwilio(data, numbers, prefs){
 	
 	
 }
+*/
 
-
-/*$(function() {
+$(function() {
 
 	// Plugin name as a global variable
 	Twilio_PLUGIN_NAME = "Twilio";
 	Twilio_PLUGIN_HEADER = '<div></div>'
 
-	// Stripe profile loading image declared as global
-	TWILIO_PROFILE_LOAD_IMAGE = '<center><img id="twilio_profile_load" ' +
-	        'src=\"img/1-0.gif\" style="margin-bottom: 10px;margin-right: 16px;" >' +
-	        '</img></center>';
-	    
-	    // zendesk update loading image declared as global
-	TWILIO_LOGS_LOAD_IMAGE = '<center><img id="logs_load" src=' +
-	        '\"img/ajax-loader-cursor.gif\" style="margin-top: 14px;"></img></center>';
+    // Twilio update loading image declared as global
+	TWILIO_LOGS_LOAD_IMAGE = '<center><img id="logs_load" src=\"img/ajax-loader-cursor.gif\" ' + 
+					'style="margin-top: 10px;margin-bottom: 14px;"></img></center>'
 
 	    
 	Numbers = agile_crm_get_contact_properties_list("phone");
@@ -278,7 +273,7 @@ function setUpTwilio(data, numbers, prefs){
 	
 	// If not found - considering first time usage, setupTwilioOAuth called
 	if (plugin_prefs == undefined) {
-		setUpTwilio(plugin_id);
+		setUpTwilioAuth(plugin_id);
 		return;
 	}
 	
@@ -289,17 +284,15 @@ function setUpTwilio(data, numbers, prefs){
 	        return;
 	 }
 	
-	showTwilioDetails(plugin_id);
-	
-	
+	generateTwilioToken(plugin_id);
 	
 });
 
 
 
-function setUpTwilio(plugin_id)
+function setUpTwilioAuth(plugin_id)
 {
-	$('#Twilio').html(TWILIO_PROFILE_LOAD_IMAGE);
+	$('#Twilio').html(TWILIO_LOGS_LOAD_IMAGE);
 	
 	$("#Twilio").html('<div class="widget_content" style="border-bottom:none">'
 			+ '<p style="padding:5px;"><label><b>Enter Your Account Sid</b></label>'
@@ -315,20 +308,57 @@ function setUpTwilio(plugin_id)
 		
 		var prefs={};
 		prefs["account_sid"] = $("#twilio_account_sid").val();
-		prefs["token"] = $("#twilio_auth_token").val();
-			
+		prefs["auth_token"] = $("#twilio_auth_token").val();
+		
 		agile_crm_save_widget_prefs(Twilio_PLUGIN_NAME, JSON.stringify(prefs), function(data) {
 			
-			showTwilioDetails(plugin_id);			
+			generateTwilioToken(plugin_id);
+			
 		});
+	});
+}
+
+function generateTwilioToken(plugin_id)
+{
+	var plugin_prefs = agile_crm_get_plugin_prefs(Twilio_PLUGIN_NAME);
+	var prefs = JSON.parse(plugin_prefs);
+	
+	if(prefs.account_sid)
+	{				
+		if(!prefs.app_sid)
+	    {
+	    	setUpApplication(plugin_id, prefs);
+	    }
+		else
+		{
+			$.get("/core/api/widgets/twilio/token/"+ plugin_id,  function(data) {
+				console.log("generated token : " + data);
+				//setUpTwilio(data, numbers, prefs);
+				showTwilioDetails(data, plugin_id);
+				return;
+		    });
+		}
+	}
+}
+
+function setUpApplication(plugin_id, prefs)
+{
+	$.get("/core/api/widgets/twilio/appsid/" + plugin_id , function(data) {
 		
+		prefs['app_sid'] = data;
+		console.log(prefs);
+		agile_crm_save_widget_prefs(Twilio_PLUGIN_NAME,JSON.stringify(prefs), function(data) {
+			
+			generateTwilioToken(plugin_id);
+
+		});
 	});
 	
 }
 
-function showTwilioDetails(plugin_id)
+function showTwilioDetails(token, plugin_id)
 {
-	$('#Twilio').html(TWILIO_PROFILE_LOAD_IMAGE);
+	$('#Twilio').html(TWILIO_LOGS_LOAD_IMAGE);
 	
 	if(Numbers.length == 0)
 	{
@@ -339,6 +369,8 @@ function showTwilioDetails(plugin_id)
 
 	var numbers = {};
 	numbers['to'] = Numbers;
+	
+	setUpTwilio(token, numbers);
 	
 	getOutgoingNumbers(plugin_id, function(data) {
 		
@@ -356,7 +388,7 @@ function showTwilioDetails(plugin_id)
 		getTwilioLogs(plugin_id, to);
 	});
 	
-	$('#twilio_call').die().live('click', function(e) {
+	/*$('#twilio_call').die().live('click', function(e) {
 		
 		e.preventDefault();
 		
@@ -366,7 +398,7 @@ function showTwilioDetails(plugin_id)
 		
 		makeCall(plugin_id, from, from, url);
 		
-	});
+	});*/
 }
 
 function getTwilioLogs(plugin_id, to, callback)
@@ -410,24 +442,146 @@ function makeCall(plugin_id, from, to, url)
 		
 	});
 }
-*/
-function getOutgoingNumbers(account_sid, from, callback)
+
+function getOutgoingNumbers(plugin_id, callback)
 {
-	$.getJSON("/core/api/widgets/twilio/numbers/" + account_sid + "/" + from,  
-		function(data) {
+	queueGetRequest("widget_queue", "/core/api/widgets/twilio/numbers/" + plugin_id, "text", 
+		function success(data) {
 		
 		if (callback && typeof (callback) === "function")
 		{
 			callback(data);
 		}
 		
-		console.log(data);
-	}).error(function(data) {
+	}, function error(data) {
 		
-		//$('#twilio_profile_load').remove();
+		$('#twilio_profile_load').remove();
 		$('#Twilio').html('<div style="padding:10px">' + data.responseText + '</div>');
 	});
 
 }
 
-
+function setUpTwilio(data, numbers){
+	
+	 var start_time;
+	 var end_time;
+	 var status;
+	 
+	head.js("https://static.twilio.com/libs/twiliojs/1.1/twilio.min.js", function(){
+		Twilio.Device.setup(data);
+		
+		
+		$("#twilio_call").die().live("click", function(e){
+			
+			e.preventDefault();
+			console.log($('#contact_number').val());
+			var phone = $('#contact_number').val();
+			//var from = "+15109008283";
+			var from = "+14076411220";
+				
+			Twilio.Device.connect({
+					
+				 //From: from,
+				//To: phone,
+				from:from,
+				PhoneNumber:phone,
+			     Url:"https://teju-first.appspot.com/twilio/voice"
+		        });
+		});
+		
+	
+	    Twilio.Device.ready(function() {
+	      console.log("ready");
+	      
+	      $("#twilio_call").show();
+	    });
+	
+		
+	    Twilio.Device.offline(function() {
+	        // Called on network connection lost.
+	    	console.log("went offline");
+	    });
+	
+	    Twilio.Device.incoming(function(conn) {
+	        console.log(conn.parameters.From); // who is calling
+	        console.log(conn._status);
+	        conn.status // => "pending"
+	        conn.accept();
+	        conn.status // => "connecting"
+	        
+	        if(conn._status == "open")
+	        {
+	        	start_time = new Date().getTime();
+	        	status = "incoming";
+	        	console.log(start_time + "incoming started");
+	        	$("#twilio_hangup").show();
+	        	$("#twilio_call").hide();
+	        }
+	        
+	    });
+	
+	    Twilio.Device.cancel(function(conn) {
+	        console.log(conn.parameters.From); // who canceled the call
+	        conn.status // => "closed"
+	        $("#twilio_hangup").hide();
+	        $("#twilio_call").show();
+	        
+	    });
+	
+	    Twilio.Device.connect(function (conn) {
+	    	console.log("call is connected");
+	        // Called for all new connections
+	        console.log(conn);
+	        console.log(conn._status);
+	        
+	        if(conn._status == "open")
+	        {
+	        	start_time = new Date().getTime();
+	        	status = "outgoing";
+	        	console.log(start_time + "outgoing started");
+	        	$("#twilio_hangup").show();
+	        	$("#twilio_call").hide();
+	        }
+	    });
+	
+	    Twilio.Device.disconnect(function (conn) {
+	    	console.log("call is disconnected");
+	        // Called for all disconnections
+	        console.log(conn._status);
+	        if(conn._status == "closed")
+	        {
+	        	end_time = new Date().getTime();
+	        	console.log(end_time + "ended");
+	        	//addCallNote(start_time,end_time,status);
+	        	$("#twilio_hangup").hide();
+	        	$("#twilio_call").show();
+	        }
+	        
+	    });
+	
+	    Twilio.Device.presence(function (presenceEvent) {
+	        // Called for each available client when this device becomes ready
+	        // and every time another client's availability changes.
+	        presenceEvent.from // => name of client whose availablity changed
+	        presenceEvent.available // => true or false
+	    });
+	
+	    Twilio.Device.error(function (e) {
+	    	console.log("error");
+	        console.log(e);
+	        $("#twilio_hangup").hide();
+	    });
+	
+	
+	
+	    $("#twilio_hangup").die().live('click', function(e) {
+	    	e.preventDefault();
+	    	console.log("disconnected");
+	        Twilio.Device.disconnectAll();
+	        $("#twilio_hangup").hide();
+	        $("#twilio_call").show();
+	    });
+   
+		
+	});
+}
