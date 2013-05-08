@@ -71,8 +71,14 @@ public class UserPrefsUtil
      */
     private static UserPrefs getDefaultPrefs(AgileUser agileUser)
     {
-	UserPrefs userPrefs = new UserPrefs(agileUser.id, null, null,
-		"default", "", "- Powered by AgileCRM", true);
+	UserPrefs userPrefs = new UserPrefs(
+		agileUser.id,
+		null,
+		null,
+		"default",
+		"",
+		"- Powered by <a href=\"https://www.agilecrm.com\" target=\"_blank\" rel=\"nofollow\" title=\"Link: https://www.agilecrm.com\">AgileCRM</a>",
+		true);
 	userPrefs.save();
 	return userPrefs;
     }

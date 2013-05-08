@@ -4,11 +4,13 @@
     	<div class="well">
     
     		<form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
-    		{{#if id}}
-    			<input type="text" name="id" class="hide" value={{id}} >
-    		{{/if}}
     			<fieldset>
-    				<legend>New User Details</legend>
+    				{{#if id}}
+                		<legend>Edit User Details</legend>
+    					<input type="text" name="id" class="hide" value={{id}} >
+					{{else}}
+						<legend>New User Details</legend>
+    				{{/if}}
     				<br/>
                    	<div class="control-group">
     					<label class="control-label" for="cname">Name <span class="field_req">*</span></label> 
