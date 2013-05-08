@@ -11,6 +11,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
+import com.google.appengine.api.NamespaceManager;
 
 public class TwilioServlet extends HttpServlet
 {
@@ -23,10 +24,10 @@ public class TwilioServlet extends HttpServlet
 
 	String state = request.getParameter("state");
 
-	// String oldNamespace = NamespaceManager.get();
-	// String namespace = state.split("://")[1].split("\\.")[0];
+	String oldNamespace = NamespaceManager.get();
+	String namespace = state.split("://")[1].split("\\.")[0];
 
-	// NamespaceManager.set(namespace);
+	NamespaceManager.set(namespace);
 
 	// Check if UserInfo is already there
 	UserInfo userInfo = (UserInfo) request.getSession().getAttribute(
@@ -57,7 +58,7 @@ public class TwilioServlet extends HttpServlet
 	widget.addProperty("token", accountSid);
 	widget.save();
 
-	// NamespaceManager.set(oldNamespace);
+	NamespaceManager.set(oldNamespace);
 	response.sendRedirect(state);
 
     }
