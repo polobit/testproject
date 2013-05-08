@@ -31,20 +31,32 @@ $(function() {
 	        return;
 	 }
 	
-	prefs = JSON.parse(plugin_prefs);
-	//console.log(prefs);
+	var prefs = JSON.parse(plugin_prefs);
+	console.log(prefs);
 
-    var sid = "";
-	$.get("/core/api/widgets/twilio/appsid/" + prefs.token, function(data) {
-		
-		sid = data;
-		
-		$.get("/core/api/widgets/twilio/accountsid/"+ prefs.token + "/" + sid,  function(data){
-			console.log("generated token : " + data);
-			setUpTwilio(data, numbers);
-	    });
+    if(!prefs.app_sid)
+    {
+    	console.log(prefs.token);
+    	$.get("/core/api/widgets/twilio/appsid/" + prefs.token, function(data) {
+    		
+    		prefs['app_sid'] = data;
+    		console.log(prefs);
+    		agile_crm_save_widget_prefs(Twilio_PLUGIN_NAME,JSON.stringify(prefs));
+    		
+    		$.get("/core/api/widgets/twilio/accountsid/"+ prefs.token + "/" + data,  function(data){
+    			console.log("generated token : " + data);
+    			setUpTwilio(data, numbers, prefs);
+    			return;
+    	    });
 
-	});
+    	});
+    }
+	
+    $.get("/core/api/widgets/twilio/accountsid/"+ prefs.token + "/" + prefs.app_sid,  function(data){
+		console.log("generated token : " + data);
+		setUpTwilio(data, numbers, prefs);
+		return;
+    });
 	
 	//setUpTwilio("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJBQzc5YmQwYTNkYTZiMjk5NDlmMGRhYjZmYzUyMjFkNWZiIiwiZXhwIjoiMTM2NzQ4OTM1MSIsInNjb3BlIjoic2NvcGU6Y2xpZW50Om91dGdvaW5nP2FwcFNpZD1BUDUxMWFkMmQzOGRhZTk2YzZhMjlhOWQ3NDdkYjViZTQ2In0.j0OiOWr6iELZzDKNzwulwB28wDGaQuxq_EU-5Of0w0c", numbers);
 
@@ -83,7 +95,7 @@ function addCallNote(start, end, status)
 	
 }
 
-function setUpTwilio(data, numbers){
+function setUpTwilio(data, numbers, prefs){
 	
 	
 	 $('#Twilio').html('<p><img src=\"img/1-0.gif\"></img></p>');
@@ -101,22 +113,44 @@ function setUpTwilio(data, numbers){
 			e.preventDefault();
 			console.log($('#contact_number').val());
 			var phone = $('#contact_number').val();
-			var from = "+919491544841";
+			//var from = "+15109008283";
+			var from = "+14076411220";
 				
-			getOutgoingNumbers(prefs.token);
 			Twilio.Device.connect({
 					
 				 //From: from,
 				//To: phone,
+				from:from,
 				PhoneNumber:phone,
 			     Url:"https://teju-first.appspot.com/twilio/voice"
 		        });
-		})
+		});
 		
+		$("#twilio_verify").die().live("click", function(e){
+		
+			e.preventDefault();
+			var from = $('#twilio_from').val();
+			console.log(from);
+			getOutgoingNumbers(prefs.token, from, function(data) {
+				
+				var result = JSON.parse(data);
+				
+				if(result.validation_code)
+					$('#Twilio').html('<div class="widget_content">' + 
+							'Enter this number after receiving a call to verify your number ' + 
+							result.validation_code + ' </div>');
+				
+				$('#Twilio').html('done');
+				
+				
+			});
+			
+			
+		});
 	
 	    Twilio.Device.ready(function() {
 	      console.log("ready");
-	      $("#Twilio").html(getTemplate("twilio-profile", numbers));
+	      $("#Twilio").html(getTemplate("twilio-initial", {}));
 	      $("#twilio_call").show();
 	    });
 	
@@ -377,10 +411,10 @@ function makeCall(plugin_id, from, to, url)
 	});
 }
 */
-function getOutgoingNumbers(account_sid, callback)
+function getOutgoingNumbers(account_sid, from, callback)
 {
-	queueGetRequest("widget_queue", "/core/api/widgets/twilio/numbers/" + account_sid, "text", 
-		function success(data) {
+	$.getJSON("/core/api/widgets/twilio/numbers/" + account_sid + "/" + from,  
+		function(data) {
 		
 		if (callback && typeof (callback) === "function")
 		{
@@ -388,7 +422,7 @@ function getOutgoingNumbers(account_sid, callback)
 		}
 		
 		console.log(data);
-	}, function error(data) {
+	}).error(function(data) {
 		
 		//$('#twilio_profile_load').remove();
 		$('#Twilio').html('<div style="padding:10px">' + data.responseText + '</div>');

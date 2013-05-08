@@ -1173,7 +1173,7 @@ public class WidgetsAPI
 
 	try
 	{
-	    return TwilioUtil.getOutgoingNumbers(accountsid, from).toString();
+	    return TwilioUtil.getOutgoingNumbers(accountsid, from);
 	}
 	catch (Exception e)
 	{
