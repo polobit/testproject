@@ -33,12 +33,12 @@ public class URLVisited extends TaskletAdapter
     /**
      * Exact URL type
      */
-    public static String EXACT = "exact";
+    public static String EXACT_MATCH = "exact_match";
 
     /**
      * Like URL type
      */
-    public static String LIKE = "like";
+    public static String CONTAINS = "contains";
 
     /**
      * Branch Yes

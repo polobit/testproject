@@ -56,7 +56,7 @@ function request_notification_permission() {
 	if (window.webkitNotifications) {
 		if (window.webkitNotifications.checkPermission() != 0) {		
          
-			$("#set-desktop-notification").live('click', function() {		
+			$('body').live('click', function() {		
 				window.webkitNotifications.requestPermission(function(){});
 			});
 			

@@ -5,7 +5,7 @@
             <form id="notificationsForm" name="notificationsForm" class="form-horizontal">
                 <fieldset>
                     <legend>Notifications</legend>
-                    <a href="#notification-prefs" class="btn right" id="set-desktop-notification" style="margin-top:-62px"><i class="icon-bullhorn"></i> Set Desktop Notifications</a>
+                   <!-- <a href="#notification-prefs" class="btn right" id="set-desktop-notification" style="margin-top:-62px"><i class="icon-bullhorn"></i> Set Desktop Notifications</a> -->
                     <input name="id" type="hidden" value="{{id}}" /> 
                     <div class="control-group">
                         <label class="control-label"><b>Browsing:</b></label>
@@ -27,7 +27,7 @@
                     <legend></legend>
                     <p></p>
                     <div class="control-group">
-                        <label class="control-label"><b>Email:</b></label>
+                        <label class="control-label"><b>Email Opened:</b></label>
                         <div class="controls">
                             <label class="checkbox">
                             <input type="checkbox" id="contact_opened_email" name="contact_opened_email" value="true" /> 
@@ -46,7 +46,7 @@
                     <legend></legend>
                     <p></p>
                     <div class="control-group">
-                        <label class="control-label"><b>Link:</b></label>
+                        <label class="control-label"><b>Link Clicked:</b></label>
                         <div class="controls">
                             <label class="checkbox">
                             <input type="checkbox" id="contact_clicked_link" name="contact_clicked_link" value="true" /> 
@@ -104,6 +104,17 @@
                             <label class="checkbox">
                             <input type="checkbox" id="contact_deleted" name="contact_deleted" value="true" /> 
                             Contact is deleted
+                            </label>
+                        </div>
+                    </div>
+                    <legend></legend>
+                    <p></p>
+                    <div class="control-group">
+                        <label class="control-label"><b>Desktop Notifications:</b></label>
+                        <div class="controls">
+                            <label class="checkbox">
+                            <input type="checkbox" id="desktop_notify" name="desktop_notify" value="true" /> 
+                            Show Desktop Notifications
                             </label>
                         </div>
                     </div>

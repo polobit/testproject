@@ -27,8 +27,8 @@
 			"name": "type",
 			"title": "Select the given URL type.",
 			"options": {
-				"Exact": "exact",
-		        "Like": "like"    
+				"Exact Match": "exact_match",
+		        "Contains": "contains"    
 	          },
 	          "fieldType": "select",
 			  "type": "type"

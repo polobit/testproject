@@ -10,6 +10,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.campaignio.cron.util.CronUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -147,6 +148,12 @@ public class Workflow extends Cursor
 	    return domainUser.name;
 
 	return "";
+    }
+
+    @XmlElement
+    public int getActiveUsersCount()
+    {
+	return CronUtil.activeUsersCount(id.toString());
     }
 
     /**

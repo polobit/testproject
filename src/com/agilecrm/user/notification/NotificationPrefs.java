@@ -133,6 +133,12 @@ public class NotificationPrefs
     public boolean contact_deleted = true;
 
     /**
+     * Desktop notification - default true.
+     */
+    @NotSaved(IfDefault.class)
+    public boolean desktop_notify = true;
+
+    /**
      * Notification types.
      * 
      */
@@ -208,7 +214,7 @@ public class NotificationPrefs
 	    boolean contact_assigned_starred_clicked_link,
 	    boolean deal_created, boolean deal_closed, boolean contact_created,
 	    boolean contact_deleted, boolean tag_created, boolean tag_deleted,
-	    String notification_sound)
+	    boolean desktop_notify, String notification_sound)
     {
 	this.contact_browsing = contact_browsing;
 	this.contact_assigned_browsing = contact_assigned_browsing;
@@ -225,6 +231,7 @@ public class NotificationPrefs
 	this.contact_deleted = contact_deleted;
 	this.tag_created = tag_created;
 	this.tag_deleted = tag_deleted;
+	this.desktop_notify = desktop_notify;
 	this.notification_sound = notification_sound;
 
 	this.user = new Key<AgileUser>(AgileUser.class, userId);

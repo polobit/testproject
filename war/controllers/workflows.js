@@ -40,7 +40,16 @@ var WorkflowsRouter = Backbone.Router
 					templateKey : "workflows",
 					individual_tag_name : 'tr',
 					cursor : true,
-					page_size : 10
+					page_size : 10,
+					postRenderCallback : function(el) {
+						head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
+							$("time.campaign-created-time", el).timeago();
+						});
+					},
+					appendItemCallback:function(el)
+					{
+						$("time.campaign-created-time", el).timeago();
+					}
 				});
 
 				this.workflowsListView.collection.fetch();
@@ -103,6 +112,19 @@ var WorkflowsRouter = Backbone.Router
 			 *            Workflow Id
 			 */
 			logsToCampaign : function(id) {
+				
+				if (!this.workflowsListView
+						|| this.workflowsListView.collection.length == 0) {
+					this.navigate("workflows", {
+						trigger : true
+					});
+					return;
+				}
+				
+				/* Set the designer JSON. This will be deserialized */
+				this.workflow_model = this.workflowsListView.collection.get(id);
+				var workflowName = this.workflow_model.get("name");
+				
 				var logsListView = new Base_Collection_View({
 					url : '/core/api/campaigns/logs/' + id,
 					templateKey : "campaign-logs",
@@ -113,6 +135,8 @@ var WorkflowsRouter = Backbone.Router
 						head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
 							$("time.log-created-time", el).timeago();
 						});
+						
+						$('#logs-campaign-name').text(workflowName);
 					}
 				});
 
@@ -137,12 +161,28 @@ var WorkflowsRouter = Backbone.Router
 			},
 
 			emailReports : function(id) {
+				
+				if (!this.workflowsListView
+						|| this.workflowsListView.collection.length == 0) {
+					this.navigate("workflows", {
+						trigger : true
+					});
+					return;
+				}
+				
+				/* Set the designer JSON. This will be deserialized */
+				this.workflow_model = this.workflowsListView.collection.get(id);
+				var workflowName = this.workflow_model.get("name");
+				
 				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH
 						+ 'lib/date-range-picker.js', function() {
 
 					// Load Reports Template
 					$("#content").html(
 							getTemplate("campaign-email-reports", {}));
+					
+					// Set the name
+					$('#reports-campaign-name').text(workflowName);
 
 					initChartsUI(id);
 				});

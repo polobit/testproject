@@ -197,10 +197,14 @@ var SettingsRouter = Backbone.Router.extend({
 		var view = new Base_Model_View({
 			url : 'core/api/notifications',
 			template : 'settings-notification-prefs',
-			reload : true
+			reload : true,
+			postRenderCallback:function(el)
+			{
+				checkAndDisableBrowserNotifications(el);
+			}
 		});
 
-		$('#content').html(view.render().el);
+		$('#content').html(view.render().el);		
 	},
 	contactUsEmail : function() {
 		$("#content").html(getTemplate("help-mail-form"), {});
