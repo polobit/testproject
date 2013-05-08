@@ -173,7 +173,7 @@ public class AnalyticsUtil
 		+ " AND email = "
 		+ SQLUtil.encodeSQLColumnValue(email) + " AND url LIKE ";
 
-	if (type.equals(URLVisited.EXACT))
+	if (type.equals(URLVisited.EXACT_MATCH))
 	    urlCountQuery += SQLUtil.encodeSQLColumnValue(url);
 	else
 	    urlCountQuery += " \'%" + url + "%\'";

@@ -4,6 +4,17 @@
 	<td>{{creatorName}}</td>
 	<td><a href="#workflows/logs/{{id}}">View Logs</a></td>
     <td><a href="#email-reports/{{id}}">View Stats</a></td>
+    <td>{{activeUsersCount}}</td>
+    <td>{{#if updated_time}} 
+            <small class="edit-hover"> 
+		        <time class="campaign-created-time" datetime="{{epochToHumanDate "" updated_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" updated_time}}</time>
+         	</small>
+        {{else}}
+        <small class="edit-hover"> 
+		        <time class="campaign-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" created_time}}</time>
+         	</small>
+        {{/if}}
+    </td>  
 <br />
 </script>
 
@@ -35,6 +46,8 @@
                             <th>Creator</th>
                             <th>Logs</th>
                             <th>Stats</th>
+                            <th>Active Users</th>
+                            <th>Time</th>
                         </tr>
                     </thead>
                     <tbody id="workflows-model-list"> </tbody>
