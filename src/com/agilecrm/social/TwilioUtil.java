@@ -294,23 +294,29 @@ public class TwilioUtil
 	}
     }
 
-    public static JSONArray getOutgoingNumbers(String accountSid, String from)
+    public static String getOutgoingNumbers(String accountSid, String from)
 	    throws Exception
     {
 
-	// String authToken = "5e7085bb019e378fb18822f319a3ec46";
+	String authToken = "5e7085bb019e378fb18822f319a3ec46";
 
-	String authToken = "b6420aa8715bad58ad2cff61036b4640";
+	// String authToken = "b6420aa8715bad58ad2cff61036b4640";
+
 	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
 		null);
 	TwilioRestResponse response;
 
 	Map<String, String> params = new HashMap<String, String>();
 	params.put("PhoneNumber", from);
+	params.put("VoiceUrl",
+		"https://agile-crm-cloud.appspot.com/backend/voice");
+	params.put("VoiceMethod", "GET");
+	params.put("FriendlyName", "AGILECRM");
+	params.put("AreaCode", "510");
 
 	response = client.request(
 		"/" + APIVERSION + "/Accounts/" + client.getAccountSid()
-			+ "/OutgoingCallerIds.json", "POST", params);
+			+ "/IncomingPhoneNumbers.json", "POST", params);
 
 	// /2010-04-01/Accounts/AC0079cf757ae0a3e1915a3ce40d4c65ee/AvailablePhoneNumbers
 	if (response.isError())
@@ -328,7 +334,7 @@ public class TwilioUtil
 	    // JSONArray array = json.getJSONObject("TwilioResponse")
 	    // .getJSONObject("OutgoingCallerIds")
 	    // .getJSONArray("OutgoingCallerId");
-	    JSONArray arrayOfNums = new JSONArray();
+	    // JSONArray arrayOfNums = new JSONArray();
 	    // for (int i = 0; i < array.length(); i++)
 	    // {
 	    // System.out.println(array.getJSONObject(i).getString(
@@ -336,7 +342,7 @@ public class TwilioUtil
 	    // arrayOfNums.put(i,
 	    // array.getJSONObject(i).getString("PhoneNumber"));
 	    // }
-	    return arrayOfNums;
+	    return response.getResponseText();
 
 	}
 
@@ -346,8 +352,10 @@ public class TwilioUtil
     {
 	try
 	{
-	    TwilioUtil.getOutgoingNumbers("AC0079cf757ae0a3e1915a3ce40d4c65ee",
-		    "+919032173525");
+	    TwilioUtil.getOutgoingNumbers("ACd1fe050ffa754cabc100a3acc93d8d1b",
+		    "+14076411314");
+
+	    // ACd1fe050ffa754cabc100a3acc93d8d1b
 	}
 	catch (Exception e)
 	{
@@ -355,5 +363,4 @@ public class TwilioUtil
 	    e.printStackTrace();
 	}
     }
-
 }
