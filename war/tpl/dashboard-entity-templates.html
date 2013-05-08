@@ -1,12 +1,14 @@
 <!-- Opportunity template -->
 <script id="dashboard-opportunities-collection-template" type="text/html">
+<div style="margin-left:0px">
+<h2 style="border-bottom:1px solid #f5f5f5; margin-bottom:10px">Deals</h2>
 {{#unless this.length}}
 	<b>You don't own any deals</b>
 {{/unless}}
 {{#if this.length}}
 <table class="table table-striped">
                     <thead>
-                        <tr>
+                        <tr style="background-color:#EDF3FE;">
                             <th>Opportunity</th>
                             <th>Value</th>
                             <th>Milestone</th>
@@ -18,6 +20,7 @@
           </tbody>
 	</table>
 {{/if}}
+</div>
 </script>
 
 <script id="dashboard-opportunities-model-template" type="text/html">
@@ -64,7 +67,7 @@
 </script>
 
 <!-- Tasks Template -->
-<script id="dashboard-tasks-collection-template" type="text/html">
+<script id="dashboard1-tasks-collection-template" type="text/html">
 {{#unless this.length}}
 	<b>You don't own any Tasks</b>
 {{/unless}}
@@ -87,7 +90,7 @@
 {{/if}}
 </script>
 
-<script id="dashboard-tasks-model-template" type="text/html">
+<script id="dashboard1-tasks-model-template" type="text/html">
 {{#if is_complete}}
 	<td style="text-decoration:line-through">{{epochToTaskDate due}}</td>
 	<td><div style="text-decoration:line-through;text-overflow:ellipsis;text-align:justify;white-space:nowrap;width:100px;overflow:hidden;">{{subject}}</div></td>
@@ -132,6 +135,7 @@
     	</div>
     	<div style="float:right"></div>
 	</td>
+	
 	<td> 
 <div style="height:auto;display:inline-block;vertical-align:top;text-overflow:clip;white-space:nowrap;width:13em;overflow:hidden;">
 	{{#each tags}}
@@ -139,20 +143,28 @@
     {{/each}}
 </div>
 	</td>
-	<td>{{lead_score}}</td>
+	<td>
+		{{#if lead_score}}
+				{{lead_score}}
+			{{else}}
+				0
+		{{/if}}
+	</td>
 </script>
 
 <script id="dashboard-contacts-collection-template" type="text/html">
+
+
+<div style="margin-left:0px">
+<h2 style="border-bottom:1px solid #f5f5f5; margin-bottom:10px">Recently Viewed  <small>Contacts</small></h2>
 {{#unless this.length}}
-	<b>No recently viewed contacts</b>
-{{/unless}}
-		{{#if this.length}}
+ {{else}}
 		<div class="data">
-			<div class="data-container"></div>
+			<div class="data-container">
 			<table id="contacts" class="table table-striped "
 				url="core/api/contacts/bulk" style="overflow: scroll">
 				<thead>
-					<tr>
+					<tr style="background-color:#EDF3FE;">
 						<th>Name</th>
 						<th>Tags</th>
 						<th>Lead Score</th>
@@ -162,9 +174,11 @@
 					route="contact/" style="overflow: scroll;">
 				</tbody>
 			</table>
-		</div>
+			</div>
+			</div>
 	</div>
-	{{/if}}
+{{/unless}}
+</div>
 </script>
 
 <!-- Workflows template-->
@@ -178,13 +192,15 @@
 </script>
 
 <script id="dashboard-workflows-collection-template" type="text/html">
+<div style="margin-left:0px">
+<h2 style="border-bottom:1px solid #f5f5f5; margin-bottom:10px">Workflows</h2>
 {{#unless this.length}}
 	<b>You don't own any Workflows</b>
 {{/unless}}
 {{#if this.length}}
                 <table class="table table-striped">
                     <thead>
-                        <tr>
+                       <tr style="background-color:#EDF3FE;">
                             <th class="hide">Id</th>
                             <th>Name</th>
                             <th>Creator</th>
@@ -194,5 +210,83 @@
                     </thead>
                     <tbody id="dashboard-workflows-model-list"> </tbody>
                 </table>
-        {{/if}}
+{{/if}}
+</div>
+</script>
+
+<script id="dashboard-tasks-collection-template" type="text/html">
+<div style="margin-left:0px">
+<h2 style="border-bottom:1px solid #f5f5f5; margin-bottom:10px">Tasks</h2>
+
+{{#unless this.length}}
+<img src="/img/funtime.jpg" /></img>
+{{/unless}}
+{{#if this.length}}
+<section>
+        <table class="table hide">
+            <b id="overdue-heading" style="display: none">Overdue</b>
+            <tbody id="overdue" style="display: none; margin:3px"></tbody>
+        </table>
+        <table class="table hide">
+            <b id="today-heading" style="display: none">Today</b>	
+            <tbody id="today" style="display: none; margin:3px"></tbody>
+        </table>
+        <table class="table hide">
+            <b id="tomorrow-heading" style="display: none">Tomorrow</b>
+            <tbody id="tomorrow" style="display: none; margin:3px"></tbody>
+        </table>
+        <table class="table hide">
+            <b id="next-week-heading" style="display: none">Next Week</b>
+            <tbody id="next-week" style="display: none; margin:3px"></tbody>
+        </table>
+</section>
+<div>
+    <a href="#tasks" class="tasks-table" id="tasks-list">All Tasks</a>
+    <div class="right add-task"><a href="#"><i class="icon-plus" /> Add New</a></div>
+</div>
+{{/if}}
+</div>
+</script>
+
+<script id="dashboard-tasks-model-template" type="text/html">
+
+<td style="border-top:1px dotted #DDD;width:1%"> <input type="checkbox" data='{{id}}' class='tasks-select'> </td>
+	<td style="border-top:1px dotted #DDD;width:11em"><p style="text-overflow:ellipsis;overflow:hidden;white-space:nowrap;"><span style="font-size:14px;"><b>{{ subject}}</b></span></br><span class="label" style="margin-left:10px">{{ucfirst type}}</span> <span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></p>
+        <span>
+        	<time class="task-due-time" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" due}}</time>
+	   </span>
+	</td>
+	<td></td>
+	<td>
+		{{epochToHumanDate "mmm-dd-yyyy" due}}
+	</td>
+</script>
+
+<script id="dashboard-billing-template" type="text/html">
+
+<div style="margin-top: 36px;" id="user-billing"><div style="background-color: #F8F8B9; padding: 15px;">
+<strong style="font-size: 15px;"><span style="text-decoration:underline;">
+Account Overview</span></strong>
+<p style="padding-top: 10px;">
+	<strong>Allowed Agents:</strong>  20<br> 
+   <strong>User Plan:</strong><span style="text-transform:capitalize;"> Pro-18Operator-Yearly</span><br>
+    <strong> Account Status:</strong> 
+                     
+                     
+					 
+                      -- <br>
+   <!--  -->
+</p>
+
+<p style="padding-top: 10px;">
+	<a style="text-decoration: underline;" href="#subscribe">Please upgrade your account</a> now to add more agents. It takes only 10 seconds.
+</p>
+
+<!-- <p>
+	<strong style="color: red;">Special Upgrade Offer:</strong><br /> <a
+		style="text-decoration: underline;" href="#subscribe">Upgrade
+		today</a> and <strong>save $5</strong> on your next month's billing.
+</p>-->
+</div></div>
+
 </script>

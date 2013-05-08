@@ -1,8 +1,71 @@
 function setupDashboard(el)
 {
 	setupSubscriptionDetails(el);
-	setupDashboardTimeline();
-	setUpDashboardNavtabs(el);
+	/*setupDashboardTimeline();
+	setUpDashboardNavtabs(el);*/
+	setUpDashboardEntities(el);
+}
+
+function setUpDashboardEntities(el) {
+	
+	var myRecentContacts = new Base_Collection_View({
+		url: 'core/api/contacts/recent?page_size=5' ,
+        restKey: "contacts",
+        templateKey: "dashboard-contacts",
+        individual_tag_name: 'tr',
+        sort_collection: false,
+        postRenderCallback: function(el) {
+        	console.log($(el).context);
+        }
+    });
+	myRecentContacts.collection.fetch();
+	console.log($(myRecentContacts.el).html());
+	
+    	$('#recent-contacts', el).html(myRecentContacts.el);
+
+    	var tasksListView = new Base_Collection_View({
+			url : '/core/api/tasks/my/tasks',
+			restKey : "task",
+			templateKey : "dashboard-tasks",
+			individual_tag_name : 'tr',
+			postRenderCallback: function(el) {
+				head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+           		 $(".task-due-time", el).timeago();
+             	});
+			}
+		});
+    	tasksListView.appendItem = append_tasks;
+		tasksListView.collection.fetch();
+
+		$('#my-tasks').html(tasksListView.el);
+		
+			var myDeals = new Base_Collection_View({
+				url: 'core/api/opportunity/my/deals' ,
+	            restKey: "opportunity",
+	            templateKey: "dashboard-opportunities",
+	            individual_tag_name: 'tr',
+	            sortKey:"created_time",
+	            descending: true,
+	            postRenderCallback: function(el) {
+	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+	            		 $(".deal-created-time", el).timeago();
+	            	})
+	            }
+	        });
+			myDeals.collection.fetch();
+	        	$('#my-deals').html(myDeals.el);
+	        	
+	        var workflowsListView = new Base_Collection_View({
+				url : '/core/api/workflows/my/workflows',
+				restKey : "workflow",
+				templateKey : "dashboard-workflows",
+				individual_tag_name : 'tr',
+				cursor: true,
+				page_size : 10
+			});
+
+			workflowsListView.collection.fetch();
+			$('#my-logs').html(workflowsListView.el);
 }
 
 function setupSubscriptionDetails(el)
