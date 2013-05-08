@@ -18,29 +18,22 @@ $(function()
 					
 					if(namespace != "")
 					{
-						var account_stats = new Base_Model_View({
-							url : "core/api/users/admin/namespace-stats/" + namespace,
-							postRenderCallback: function(el) {
-								ACCOUNT_STATS = account_stats.model.toJSON();
-								
-								if (!confirm("The namespace "+ namespace +" having \n Bytes : " + ACCOUNT_STATS.bytes + " \n Entities : " + ACCOUNT_STATS.entities + ".\n Are you sure you want to delete ?" ))
-									return;
-								// Show loading in content
-								$("#content").html(LOADING_HTML);
-								/**
-								 * Sends delete request to delete namespace 
-								 */
-								$.ajax({
-									type : "DELETE",
-									url : "core/api/users/admin/delete/" + namespace,
-									success : function()
-									{
-										location.reload(true);
-									}
-								});
-							}
-						});
-						
+							if (!confirm("Are you sure you want to delete ?" ))
+								return;
+							
+							// Show loading in content
+							$("#content").html(LOADING_HTML);
+							/**
+							 * Sends delete request to delete namespace 
+							 */
+							$.ajax({
+								type : "DELETE",
+								url : "core/api/users/admin/delete/" + namespace,
+								success : function()
+								{
+									location.reload(true);
+								}
+							});
 						
 						/*						
 						* // Shows account stats warning template with stats(data used)

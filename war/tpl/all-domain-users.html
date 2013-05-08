@@ -4,7 +4,7 @@
 <td>{{name}}</td>
 <td>{{email}}</td>
 <td>{{is_account_owner}}</td>
-<td><a href="#" data="{{domain}}" class="delete-namespace btn btn-danger">Delete</a></td>
+<td>{{#if is_account_owner}}<a href="#" data="{{domain}}" class="delete-namespace btn btn-danger">Delete</a>{{/if}}</td>
 </script>
 
 <script id="all-domain-users-collection-template" type="text/html">
