@@ -43,7 +43,8 @@ public class TagUtil
 
 	    // Check if already present
 	    int count = getTagsCount(tagName);
-	    if (count != 0)
+	    System.out.println("tags count :" + count);
+	    if (count == 0)
 	    {
 		// Add tag to db
 		Tag.addTag(tagName);
