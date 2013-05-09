@@ -169,11 +169,11 @@ $(function() {
 		var json = {};
 
 		// Store tags in a json, starting letter as key
-		for ( var i = 0, l = tags.length; i < l; i++) {
+		for ( var i = 0; i < tags.length; i++) {
 
 			var tag = tags[i].tag;
 			// console.log(tag);
-			var start = tag.charAt(0);
+			var start = tag.charAt(0).toUpperCase();
 
 			var array = new Array();
 
@@ -186,18 +186,24 @@ $(function() {
 			json[start] = array;
 
 		}
+		
+        // To sort tags in case-insensitive order i.e. keys in json object
+		var keys = Object.keys(json);
+		keys.sort();
 
 		// Sorts it based on characters and then draws it
 		var html = "";
-		for ( var key in json) {
 
-			var array = json[key];
+		for ( var i in keys ) {
+
+			var array = json[keys[i]];
+			
 			html += "<div class='tag-element'><div class='tag-key'>"
-					+ key.toUpperCase() + "</div> ";
+					+ keys[i] + "</div> ";
 
 			html += "<div class='tag-values'>";
 
-			for ( var i = 0, l = array.length; i < l; i++) {
+			for ( var i = 0; i < array.length; i++) {
 				var hrefTag = "#tags/" + array[i];
 
 				html += ('<a href=\"' + hrefTag + '\" >' + array[i] + '</a> ');
@@ -206,11 +212,9 @@ $(function() {
 
 		}
 
-		// html += "</ul>";
-
 		return html;
 	});
-
+	
 	/**
 	 * Helper function to return date string from epoch time
 	 */

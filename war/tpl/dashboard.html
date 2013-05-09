@@ -16,8 +16,6 @@
     </ul>
 </div>
 
-
-
 </div>
 <div id="my-timeline"></div>
 <div class="span12 row-fluid" style="padding-top:15px; margin-left:0px">
@@ -50,15 +48,14 @@
 
 
 <script id="user-billing-template" type="text/html">
-<h3 style="border-bottom:1px solid #f5f5f5">Upgrade</h3>
-<div style="background-color: #F8F8B9; margin-top:10px; margin-bottom:10px;padding: 15px;">
+<div style="background-color: #F8F8B9; margin-bottom:10px;padding: 15px;">
 	<strong style="font-size: 20px;">Oops. You are out of users.</strong>
 	<p style="padding-top: 10px;">
 		Allowed Users : 2<br /> 
 		User Plan : Free User<br /> 
 		Account Status : Active
 	</p>
-	<p style="padding-top: 10px;">
+	<p>
 		<a style="text-decoration: underline;" href="#subscribe">Please
 			upgrade your account</a> to create more users. It takes only 10 seconds.
 	</p>
@@ -73,29 +70,69 @@
 
 <script id="dashboard-api-key-model-template" type="text/html">
 <!-- -->
-<h3 style="border-bottom:1px solid #f5f5f5">Analytics</h3>
+<h3 style="border-bottom:1px solid #f5f5f5">API Key</h3>
 <div style="margin-top:10px; margin-bottom:10px;">
-<pre class="prettyprint linenums " ">
-&lt;script type="text/javascript" &gt;
-var _agile = _agile || [];
-_agile.push(['_setAccount', '{{api_key}}']);
-/*
- *   INSERT YOUR FUNCTIONALITY CODE
- *   eg: trackPageView..
- *   _agile.push(['_setEmail', 'manohar@invox.com']);
- *   _agile.push(['_trackPageview']);
- */
-var aj = document.createElement('script'); 
-    aj.type = 'text/javascript'; 
-    aj.async = true;
-    aj.src = '/stats/min/agile-min.js';
- 
-var s = document.getElementsByTagName('script')[0];
- 
-s.parentNode.insertBefore(aj, s);
-&lt;/script&gt;
+<pre class="prettyprint">
+'{{api_key}}'
 </pre>
 	</div>
 </div>
 </div>
+</script>
+
+
+<script id="dashboard1-template" type="text/html">
+<div class="row">
+	<div class="span12">
+		<div class="page-header">
+			<div id="reportrange" class="pull-right"
+				style="padding: 4px 8px; box-shadow: 0 0px 2px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1); display: none;">
+				<i class="icon-calendar icon-large"></i> <span id="range"></span>
+			</div>
+			<h1>Welcome to Agile CRM</h1>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="span9">
+			<div style="background-color:#f2f5ff;">
+				<div style="font-size:14px;height:150px">
+					<p style="padding:20px">Agile integrates marketing automation (multichannel and multistep campaigns, newsletters, 
+						click tracking, lead nurturing, real time alerts, Twitter campaigns) 
+					   with CRM, social suite, telephony and web analytics.</p>
+				</div>
+			</div>
+	<div id="recent-contacts" style="margin-top:50px"></div>
+	<div id="my-tasks" style="margin-top:50px">sdfsdf</div>
+	<div id="my-deals" style="margin-top:50px"></div>
+	<div id="my-logs" style="margin-top:50px"></div>
+	</div>
+	
+	
+<div class="span3">
+        <div id="subscription-stats"></div>
+		</br>
+		<div class="data-block">
+			<div class="well">
+				<header>
+					<h3 style="margin-left: 3px">
+					 <i class="icon-external-link"></i>	<span>From Blog
+						</span>
+					</h3>
+				</header>
+				<strong>Season's Greetings! Claim Your Gift Today</strong>
+				<p style="padding-top:5px;">The Holidays are a perfect time to reflect upon the year gone
+					by and share our gratitude with the most important people in our
+					lives. As you know, we consider everybody in our fold as family and
+					would like to take this opportunity to sincerely thank you all for
+					the support and wish you a Wonderful Holiday Season and a Happy New
+					Year!...</p><span class="pull-right"><a href="http://blog.clickdesk.com/">More...</a></span>
+
+
+			</div>
+		</div>
+	</div>	
+</div>
+</div>
+<hr/>
 </script>

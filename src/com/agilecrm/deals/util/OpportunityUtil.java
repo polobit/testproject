@@ -277,7 +277,6 @@ public class OpportunityUtil
 
     public static List<Opportunity> getDealsRelatedToCurrentUser()
     {
-	System.out.println(SessionManager.get().getDomainId());
 	return dao
 		.ofy()
 		.query(Opportunity.class)
@@ -286,6 +285,18 @@ public class OpportunityUtil
 				.get().getDomainId())).order("-created_time")
 		.limit(10)
 		.list();
+    }
+
+    public static List<Opportunity> getUpcomingDealsRelatedToCurrentUser(
+	    String pageSize)
+    {
+	return dao
+		.ofy()
+		.query(Opportunity.class)
+		.filter("ownerKey",
+			new Key<DomainUser>(DomainUser.class, SessionManager
+				.get().getDomainId())).order("close_date")
+		.limit(Integer.parseInt(pageSize)).list();
     }
 
 }

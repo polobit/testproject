@@ -327,4 +327,26 @@ public class CronUtil
 	    System.out.println("No jobs to wake up");
 	}
     }
+
+    /**
+     * Returns count of subscribers for that campaign.
+     * 
+     * @param campaignId
+     *            - campaign-id
+     * @return int
+     */
+    public static int activeUsersCount(String campaignId)
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+	try
+	{
+	    return dao.ofy().query(Cron.class)
+		    .filter("campaign_id", campaignId).count();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
 }

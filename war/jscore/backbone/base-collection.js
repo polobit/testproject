@@ -355,13 +355,18 @@ var Base_Collection_View = Backbone.View
 			appendItemOnAddEvent : function(base_model)
 			{
 				this.appendItem(base_model);
-				
+			
 				if($('table', this.el).hasClass('onlySorting'))
 					return;
 				
-				
 				$('#' + this.options.templateKey + '-model-list').find(
 				'tr:last').prepend('<td><input class="tbody_check" type="checkbox"/></td>');
+				
+                // callback for newly added models
+				var appendItemCallback = this.options.appendItemCallback;
+				
+				if(appendItemCallback && typeof (appendItemCallback) === "function")
+					appendItemCallback($(this.el));
 			},
 			/**
 			 * Renders the collection to a template specified in options, uses

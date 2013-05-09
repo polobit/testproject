@@ -11,38 +11,43 @@ var notification_prefs;
  * Sets timeout for registering notifications.Waits for 2secs after page loads
  * and calls downloadAndRegisterForNotifications function
  */
-$(function() {	
-	
-	// Verify desktop notification settings.
-	$("#set-desktop-notification").die().live('click', function() {	
-		if(!window.webkitNotifications)
-			alert("Desktop notifications are not supported for this Browser/OS version yet.")
-			
-		if(window.webkitNotifications.checkPermission() == 0)
-			alert("Permission for desktop notifications is allowed already.");
-		
-		if(window.webkitNotifications.checkPermission() == 2)
-			alert("Permission for desktop notifications is denied. Please reset in browser settings.");
-	});
-	
+$(function() {
+
 	// Request for notification permission.
 	request_notification_permission();
-	
+
 	// Play notification sound when clicked on play icon.
-	$('#notification-sound-play').live('click',function(e){
-		e.preventDefault();
-		var sound = $('#notificationsForm #notification_sound').find(":selected").val();
-		
-		if(sound == 'no_sound')
-			return;
-		
-		playRecvSound(sound);
-	});
-	
+	$('#notification-sound-play').live(
+			'click',
+			function(e) {
+				e.preventDefault();
+				var sound = $('#notificationsForm #notification_sound').find(
+						":selected").val();
+
+				if (sound == 'no_sound')
+					return;
+
+				playRecvSound(sound);
+			});
+
 	setTimeout(downloadAndRegisterForNotifications, 2000);
 	// fetchContactAndNotify('manohar@invox.com');
 
 });
+
+/**
+ * Check notifications of browser and disable checked property if browser doesn't
+ * support notifications or notification denied.
+ */
+function checkAndDisableBrowserNotifications(el) {
+	
+	if ((window.webkitNotifications && window.webkitNotifications
+			.checkPermission() == 2)
+			|| !window.webkitNotifications) {
+		$("#desktop_notify",el).attr('disabled', 'disabled');
+	}
+
+}
 
 /**
  * Fetches notification preferences for current user
@@ -150,8 +155,8 @@ function _setupNotification(object) {
 		// Shows notification for email opened and clicked
 		notificationForClickedAndOpened(object, html);
 	}
-	
-	if(object.notification == 'BROWSING')
+
+	if (object.notification == 'BROWSING')
 		notificationForBrowsing(object);
 
 	/**
@@ -166,7 +171,8 @@ function _setupNotification(object) {
 			if (notification_prefs[key])
 				// notify('information', html,
 				// 'bottom-right',true);
-				showNoty('information', html, 'bottomRight',object.notification);
+				showNoty('information', html, 'bottomRight',
+						object.notification);
 		}
 
 	});
@@ -214,22 +220,22 @@ function notificationForClickedAndOpened(contact, html) {
 		notification_prefs.contact_assigned_starred_clicked_link = false;
 
 		if (contact.notification == "CLICKED_LINK")
-			showNoty('information', html, 'bottomRight',"CLICKED_LINK");
+			showNoty('information', html, 'bottomRight', "CLICKED_LINK");
 	}
 
 	// Notification for assigned and starred contacts
 	if (notification_prefs.contact_assigned_clicked_link
 			|| notification_prefs.contact_assigned_starred_clicked_link) {
-		
+
 		// Show notifications for contacts of same user
 		if (current_user == contact_created_by
 				&& contact.notification == "CLICKED_LINK")
-			showNoty('information', html, 'bottomRight',"CLICKED_LINK");
+			showNoty('information', html, 'bottomRight', "CLICKED_LINK");
 	}
 
 	// Opened Email
 	if (notification_prefs.contact_opened_email) {
-		
+
 		// If any contact, set others false
 		notification_prefs.contact_assigned_opened_email = false;
 		notification_prefs.contact_assigned_starred_opened_email = false;
@@ -241,7 +247,7 @@ function notificationForClickedAndOpened(contact, html) {
 	// Notification for assigned and starred contacts
 	if (notification_prefs.contact_assigned_opened_email
 			|| notification_prefs.contact_assigned_starred_opened_email) {
-		
+
 		// Show notifications for contacts of same user
 		if (current_user == contact_created_by
 				&& contact.notification == "OPENED_EMAIL")
@@ -359,7 +365,8 @@ function notify(type, message, position, closable) {
 }
 
 /**
- * Runs jquery noty plugin for notification pop-ups when desktop permission is not given.
+ * Runs jquery noty plugin for notification pop-ups when desktop permission is
+ * not given.
  * 
  * @param type -
  *            noty types like information, warning etc.
@@ -367,106 +374,106 @@ function notify(type, message, position, closable) {
  *            html content for notification
  * @param position -
  *            position of pop-up within the webpage.
- * @param notification_type - 
+ * @param notification_type -
  *            notification type - TAG CREATED, TAG DELETED etc.
  */
-function showNoty(type, message, position,notification_type) {
+function showNoty(type, message, position, notification_type) {
 
 	// Check for html5 notification permission.
-	if (window.webkitNotifications) {
-		if (window.webkitNotifications.checkPermission() == 0) { 
-			show_desktop_notification(getImageUrl(message),notification_type, getTextMessage(message),getId(message));
+		if (notification_prefs.desktop_notify && window.webkitNotifications.checkPermission() == 0) {
+			show_desktop_notification(getImageUrl(message), notification_type,
+					getTextMessage(message), getId(message));
 			return;
 		}
-	}
-	
-	// Download the lib
-	head.js(LIB_PATH + 'lib/noty/jquery.noty.js',
-			LIB_PATH + 'lib/noty/layouts/bottomRight.js', 
-			LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH + 'lib/noty/themes/default.js', 
-			function() {
-		
-		    var n = noty({
-					text : message,
-					layout : position,
-					type : type,
-					timeout : 30000
-				});
-		    
-		    // Play sounds for only user notifications
-		    if(n.options.type == 'information')
-		    	{ 
-		    	 if(notification_prefs.notification_sound != 'no_sound')
-		    	 playRecvSound(notification_prefs.notification_sound);
-		    	}
-		    
-		 // Set the handler for click
-		     $('.noty_bar').die().live('click', function(){
 
-//				// warning type is used for upgrade. So when cliked on it navigate to subscribe.
-//		    	 if(n.options.type == "warning")
-//					{
-//						// Send to upgrade page
-//						Backbone.history.navigate('subscribe', {
-//							trigger : true
-//						});
-//					}
-					
-					// information type is used for user notification. When clicked navigate to link.
-		    	 if(n.options.type == "information")
-					{					
-						var link = $(this).find("a").attr("href");
-						Backbone.history.navigate(link,{
-							trigger:true
-							});
-					}
-				
-			     });
+	// Download the lib
+	head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
+			+ 'lib/noty/layouts/bottomRight.js', LIB_PATH
+			+ 'lib/noty/layouts/bottom.js', LIB_PATH
+			+ 'lib/noty/themes/default.js', function() {
+
+		var n = noty({
+			text : message,
+			layout : position,
+			type : type,
+			timeout : 30000
+		});
+
+		// Play sounds for only user notifications
+		if (n.options.type == 'information') {
+			if (notification_prefs.notification_sound != 'no_sound')
+				playRecvSound(notification_prefs.notification_sound);
+		}
+
+		// Set the handler for click
+		$('.noty_bar').die().live('click', function() {
+
+			// // warning type is used for upgrade. So when cliked on it
+			// navigate to subscribe.
+			// if(n.options.type == "warning")
+			// {
+			// // Send to upgrade page
+			// Backbone.history.navigate('subscribe', {
+			// trigger : true
+			// });
+			// }
+
+			// information type is used for user notification. When clicked
+			// navigate to link.
+			if (n.options.type == "information") {
+				var link = $(this).find("a").attr("href");
+				Backbone.history.navigate(link, {
+					trigger : true
+				});
+			}
+
+		});
 	});
 }
 
 /**
  * Returns required text from notification template as html5 doesn't allow html.
- * @param {String} message - notification template.
- ***/
-function getTextMessage(message)
-{
+ * 
+ * @param {String}
+ *            message - notification template.
+ **/
+function getTextMessage(message) {
 	var name;
 	var type = $(message).find('#notification-type').text();
 
-	if($(message).find('#notification-contact-id').text() != "")
-	{
+	if ($(message).find('#notification-contact-id').text() != "") {
 		name = $(message).find('#notification-contact-id').text();
-	    return name + " " + type;
+		return name + " " + type;
 	}
-	
+
 	name = $(message).find('#notification-deal-id').text();
-	return name + " " + type;       
+	return name + " " + type;
 }
 
 /**
- * Returns required contact-id or deal-id from notification template. This allows to return 
- * to respective page when clicked on notification.
- * @param {String} message - notification template.
- ***/
-function getId(message)
-{
-	if($(message).find('#notification-contact-id').text() != "")
-	{
+ * Returns required contact-id or deal-id from notification template. This
+ * allows to return to respective page when clicked on notification.
+ * 
+ * @param {String}
+ *            message - notification template.
+ **/
+function getId(message) {
+	if ($(message).find('#notification-contact-id').text() != "") {
 		return $(message).find('#notification-contact-id').attr('href');
 	}
-	
+
 	return $(message).find('#notification-deal-id').attr('href');
 }
 
 /**
  * Returns image url from notification template to display image.
- * @param {String} message - notification template.
- ***/
-function getImageUrl(message)
-{
-	if($(message).find('#notification-contact-id').text() != "")
-		return $('span:first',message).attr('id');
-	
+ * 
+ * @param {String}
+ *            message - notification template.
+ **/
+function getImageUrl(message) {
+	if ($(message).find('#notification-contact-id').text() != "")
+		return $('span:first', message).attr('id');
+
 	return '/img/deal.png';
 }

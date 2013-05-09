@@ -55,7 +55,7 @@
 					"category": "Info",
 					"name": "replyto_email",
 		            "id":"replyto_email",
-					"title": "Enter email you need your subscribers to reply.",
+					"title": "Enter email your subscribers need to reply.",
 					"fieldType": "input",
 		            "type": "email"	
 				},

@@ -78,6 +78,7 @@ public class NotificationsAPI
 	    notifications.contact_deleted = notify.contact_deleted;
 	    notifications.tag_created = notify.tag_created;
 	    notifications.tag_deleted = notify.tag_deleted;
+	    notifications.desktop_notify = notify.desktop_notify;
 	    notifications.notification_sound = notify.notification_sound;
 
 	    notifications.save();

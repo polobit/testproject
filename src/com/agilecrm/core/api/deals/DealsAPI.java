@@ -206,4 +206,16 @@ public class DealsAPI
 	return OpportunityUtil.getDealsRelatedToCurrentUser();
     }
     
+    @Path("/my/upcoming-deals")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Opportunity> getUpcomingDealsRelatedToCurrentUser(
+	    @QueryParam("page_size") String page_size)
+    {
+	if (page_size != null)
+	    return OpportunityUtil
+		    .getUpcomingDealsRelatedToCurrentUser(page_size);
+
+	return OpportunityUtil.getUpcomingDealsRelatedToCurrentUser("10");
+    }
 }

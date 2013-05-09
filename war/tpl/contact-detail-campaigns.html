@@ -1,13 +1,14 @@
 <script id="campaigns-collection-template" type="text/html">
-    <h2>List of Campaign Logs</h2>
-    <div class="right add-campaign" style="margin-top:-32px">
-    <select class="campaignSelect" id='campaignSelect' name="campaignSelect">
-        <option class="emailSelectOptions" value="">
-            Select..
+<div class="right add-campaign" style="margin-top:-32px">
+   <!-- <select class="campaignSelect" id='campaignSelect' name="campaignSelect">
+        <option class="campaignSelectOptions" value="">
+            Add to Campaign...
         </option>
     </select>
-    <a class="btn" href="#" id="add-selected-campaign" name="add-selected-campaign" style="margin-left: 10px; margin-bottom:9px">Add</a>
+    <a class="btn" href="#" id="add-selected-campaign" name="add-selected-campaign" style="margin-left: 10px; margin-bottom:9px">Add</a>-->
+    <a class="btn right" href="#add-campaign"><i class="icon-plus-sign"></i> Add Contact to Campaign</a>
 </div>
+<div style="margin-top:30px"><h2>Campaign Log</h2></div>
 
 		{{#unless this.length}}
         <div class="slate">
@@ -47,6 +48,7 @@
 	<p>{{{message}}}</p>
 	<small class="edit-hover">
 		<time class="log-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" time}}</time>
+        <a class="pull-right" href="#workflow/{{campaign_id}}">{{campaign_name}}</a>
 	</small>	
 </div>
 </div>
