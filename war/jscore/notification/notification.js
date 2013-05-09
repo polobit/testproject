@@ -36,15 +36,15 @@ $(function() {
 });
 
 /**
- * Check notifications of browser and disable checked property if browser doesn't
- * support notifications or notification denied.
+ * Check notifications of browser and disable checked property if browser
+ * doesn't support notifications or notification denied.
  */
 function checkAndDisableBrowserNotifications(el) {
-	
+
 	if ((window.webkitNotifications && window.webkitNotifications
 			.checkPermission() == 2)
 			|| !window.webkitNotifications) {
-		$("#desktop_notify",el).attr('disabled', 'disabled');
+		$("#desktop_notify", el).attr('disabled', 'disabled');
 	}
 
 }
@@ -99,7 +99,7 @@ function getDomainFromCurrentUser() {
 		success : function(data) {
 			var domain = data.get('domain');
 			// console.log(domain);
-			subscribeToPubNub(domain);
+			subscribeToPubNub("naresh");
 		}
 	});
 }
@@ -171,8 +171,7 @@ function _setupNotification(object) {
 			if (notification_prefs[key])
 				// notify('information', html,
 				// 'bottom-right',true);
-				showNoty('information', html, 'bottomRight',
-						object.notification);
+				showNoty('information', html, 'bottomRight');
 		}
 
 	});
@@ -220,7 +219,7 @@ function notificationForClickedAndOpened(contact, html) {
 		notification_prefs.contact_assigned_starred_clicked_link = false;
 
 		if (contact.notification == "CLICKED_LINK")
-			showNoty('information', html, 'bottomRight', "CLICKED_LINK");
+			showNoty('information', html, 'bottomRight');
 	}
 
 	// Notification for assigned and starred contacts
@@ -230,7 +229,7 @@ function notificationForClickedAndOpened(contact, html) {
 		// Show notifications for contacts of same user
 		if (current_user == contact_created_by
 				&& contact.notification == "CLICKED_LINK")
-			showNoty('information', html, 'bottomRight', "CLICKED_LINK");
+			showNoty('information', html, 'bottomRight');
 	}
 
 	// Opened Email
@@ -241,7 +240,7 @@ function notificationForClickedAndOpened(contact, html) {
 		notification_prefs.contact_assigned_starred_opened_email = false;
 
 		if (contact.notification == "OPENED_EMAIL")
-			showNoty('information', html, 'bottomRight', "OPENED_EMAIL");
+			showNoty('information', html, 'bottomRight');
 	}
 
 	// Notification for assigned and starred contacts
@@ -251,7 +250,7 @@ function notificationForClickedAndOpened(contact, html) {
 		// Show notifications for contacts of same user
 		if (current_user == contact_created_by
 				&& contact.notification == "OPENED_EMAIL")
-			showNoty('information', html, 'bottomRight', "OPENED_EMAIL");
+			showNoty('information', html, 'bottomRight');
 	}
 }
 
@@ -320,7 +319,7 @@ function notificationForBrowsing(contact) {
 		// Show picture, name, title, company
 		// JSON.stringify(data.toJSON())
 		// notify('success1', html, 'bottom-right', true);
-		showNoty('information', html, 'bottomRight', "BROWSING");
+		showNoty('information', html, 'bottomRight');
 	}
 
 	// Notification for assigned and starred contacts
@@ -330,7 +329,7 @@ function notificationForBrowsing(contact) {
 		// Show notifications for contacts of same user
 		if (current_user == contact_created_by)
 			// notify('success1', html, 'bottom-right', true);
-			showNoty('information', html, 'bottomRight', "BROWSING");
+			showNoty('information', html, 'bottomRight');
 	}
 
 }
@@ -377,14 +376,16 @@ function notify(type, message, position, closable) {
  * @param notification_type -
  *            notification type - TAG CREATED, TAG DELETED etc.
  */
-function showNoty(type, message, position, notification_type) {
+function showNoty(type, message, position) {
 
 	// Check for html5 notification permission.
-		if (notification_prefs.desktop_notify && window.webkitNotifications.checkPermission() == 0) {
-			show_desktop_notification(getImageUrl(message), notification_type,
-					getTextMessage(message), getId(message));
-			return;
-		}
+	if (notification_prefs.desktop_notify
+			&& window.webkitNotifications.checkPermission() == 0) {
+		show_desktop_notification(getImageUrl(message),
+				getNotificationType(message), getTextMessage(message),
+				getId(message));
+		return;
+	}
 
 	// Download the lib
 	head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
@@ -436,7 +437,7 @@ function showNoty(type, message, position, notification_type) {
  * 
  * @param {String}
  *            message - notification template.
- **/
+ */
 function getTextMessage(message) {
 	var name;
 	var type = $(message).find('#notification-type').text();
@@ -451,12 +452,22 @@ function getTextMessage(message) {
 }
 
 /**
+ * Returns notification type from notification template.
+ * 
+ * @param {String}
+ *            message - notification template.
+ */
+function getNotificationType(message) {
+	return $(message).find('#notification-type').text().toUpperCase();
+}
+
+/**
  * Returns required contact-id or deal-id from notification template. This
  * allows to return to respective page when clicked on notification.
  * 
  * @param {String}
  *            message - notification template.
- **/
+ */
 function getId(message) {
 	if ($(message).find('#notification-contact-id').text() != "") {
 		return $(message).find('#notification-contact-id').attr('href');
@@ -470,7 +481,7 @@ function getId(message) {
  * 
  * @param {String}
  *            message - notification template.
- **/
+ */
 function getImageUrl(message) {
 	if ($(message).find('#notification-contact-id').text() != "")
 		return $('span:first', message).attr('id');
