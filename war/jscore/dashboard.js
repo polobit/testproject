@@ -40,10 +40,11 @@ function setUpDashboardEntities(el) {
 		$('#my-tasks').html(tasksListView.el);
 		
 			var myDeals = new Base_Collection_View({
-				url: 'core/api/opportunity/my/deals' ,
+				url: 'core/api/opportunity/my/upcoming-deals' ,
 	            restKey: "opportunity",
 	            templateKey: "dashboard-opportunities",
 	            individual_tag_name: 'tr',
+	            page_size : 5,
 	            sortKey:"created_time",
 	            descending: true,
 	            postRenderCallback: function(el) {
