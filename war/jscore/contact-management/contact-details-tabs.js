@@ -234,15 +234,17 @@ $(function(){
             restKey: "logs",
             templateKey: "campaigns",
             individual_tag_name: 'li',
+            sortKey:'time',
+			descending:true,
             postRenderCallback: function(el) {
             	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
               		 $("time.log-created-time", el).timeago();
               	});
-            	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-                fillSelect('campaignSelect','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
+              // var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+             // fillSelect('campaignSelect','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
             }
         });
-		campaignsView.collection.fetch();
+		campaignsView.collection.fetch();	
         $('#campaigns', this.el).html(campaignsView.el);
 	});
 	    
@@ -340,61 +342,64 @@ $(function(){
         });
 	});	
 
-	/**
-	 * Subscribes the contact to the selected campaign on clicking "Add"
-	 * button and activates the "Timeline" tab to inserts the campaign 
-	 * related logs into time-line.  
-	 */   
-	$('#add-selected-campaign').die().live('click',function(e){
-		e.preventDefault();
-		
-		var workflow_id = $('#campaignSelect option:selected').attr('value');
-		
-		if(!workflow_id){
-			return;
-		}
-		
-		$('.add-campaign').find('span.save-status').html(LOADING_HTML);
-		
-		var contact_id = App_Contacts.contactDetailView.model.id;
-		var url = '/core/api/campaigns/enroll/' + contact_id + '/' + workflow_id;
-
-		// Gets logs related to a campaign
-		$.get(url, function(data){
-			$('.add-campaign').find('span.save-status img').remove();
-			
-			// Fetches logs and adds to timeline
-			var LogsCollection = Backbone.Collection.extend({
-				url: '/core/api/campaigns/logs/contact/' + contact_id + '/' + workflow_id,
-			});
-			var logsCollection = new LogsCollection();
-			logsCollection .fetch({
-				success: function(){
-					
-					// Activates timeline in contact detail tab and tab content
-					activate_timeline_tab();
-					
-					// If timeline is not defined yet, calls setup_timeline for the first time
-					if(timelineView.collection.length == 0){
-						
-						$.each(logsCollection.toJSON(), function(index, model) {
-							timelineView.collection.add(model);
-						});	
-						
-						setup_timeline(timelineView.collection.toJSON(), App_Contacts.contactDetailView.el, undefined);
-					} else{
-					
-						// Inserts logs into time-line
-						$.each(logsCollection.toJSON(), function(index, model) {
-								var newItem = $(getTemplate("timeline", model));
-								newItem.find('.inner').append('<a href="#" class="open-close"></a>');
-								$('#timeline').isotope( 'insert', newItem);
-						});
-					}
-				}
-			});
-	   });
-	});
+//	/**
+//	 * Subscribes the contact to the selected campaign on clicking "Add"
+//	 * button and activates the "Timeline" tab to inserts the campaign 
+//	 * related logs into time-line.  
+//	 */   
+//	$('#campaignSelect').die().live('change',function(e){
+//		e.preventDefault();
+//		
+//		var workflow_id = $('#campaignSelect option:selected').attr('value');
+//		
+//		if(!workflow_id){
+//			return;
+//		}
+//		
+//		$('.add-campaign').find('span.save-status').html(LOADING_HTML);
+//		
+//		var contact_id = App_Contacts.contactDetailView.model.id;
+//		var url = '/core/api/campaigns/enroll/' + contact_id + '/' + workflow_id;
+//
+//		if(!confirm("Are you sure to run selected campaign?"))
+//			return;
+//		
+//		// Gets logs related to a campaign
+//		$.get(url, function(data){
+//			$('.add-campaign').find('span.save-status img').remove();
+//			
+//			// Fetches logs and adds to timeline
+//			var LogsCollection = Backbone.Collection.extend({
+//				url: '/core/api/campaigns/logs/contact/' + contact_id + '/' + workflow_id,
+//			});
+//			var logsCollection = new LogsCollection();
+//			logsCollection .fetch({
+//				success: function(){
+//					
+//					// Activates timeline in contact detail tab and tab content
+//					activate_timeline_tab();
+//					
+//					// If timeline is not defined yet, calls setup_timeline for the first time
+//					if(timelineView.collection.length == 0){
+//						
+//						$.each(logsCollection.toJSON(), function(index, model) {
+//							timelineView.collection.add(model);
+//						});	
+//						
+//						setup_timeline(timelineView.collection.toJSON(), App_Contacts.contactDetailView.el, undefined);
+//					} else{
+//					
+//						// Inserts logs into time-line
+//						$.each(logsCollection.toJSON(), function(index, model) {
+//								var newItem = $(getTemplate("timeline", model));
+//								newItem.find('.inner').append('<a href="#" class="open-close"></a>');
+//								$('#timeline').isotope( 'insert', newItem);
+//						});
+//					}
+//				}
+//			});
+//	   });
+//	});
 	
 	/**
 	 * Delete functionality for activity blocks in contact details
