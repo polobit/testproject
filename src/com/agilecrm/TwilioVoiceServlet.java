@@ -17,21 +17,6 @@ public class TwilioVoiceServlet extends HttpServlet
 	    throws IOException
     {
 
-	// /* Use this as the caller ID when making calls from a browser. */
-	// String from = "+7472228995";
-	//
-	// String phoneNumber = request.getParameter("PhoneNumber");
-	// // String from = request.getParameter("from");
-	//
-	// System.out.println("phone number : " + phoneNumber);
-	//
-	// String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-	// + "<Response><Dial callerId=\"" + from + "\"><Number>"
-	// + phoneNumber + "</Number>" + "</Dial></Response>";
-	//
-	// response.setContentType("application/xml");
-	// response.getWriter().print(xml);
-
 	String phoneNumber = request.getParameter("PhoneNumber");
 
 	System.out.println("phone number : " + phoneNumber);
@@ -45,6 +30,7 @@ public class TwilioVoiceServlet extends HttpServlet
 	try
 	{
 	    dial.setCallerId(callerId);
+	    dial.set("record", "true");
 	    dial.append(new Number(phoneNumber));
 	    twiml.append(dial);
 	}
