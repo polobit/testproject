@@ -26,7 +26,7 @@ function setUpDashboardEntities(el) {
     	var tasksListView = new Base_Collection_View({
 			url : '/core/api/tasks/my/tasks',
 			restKey : "task",
-			templateKey : "dashboard-tasks",
+			templateKey : "dashboard1-tasks",
 			individual_tag_name : 'tr',
 			postRenderCallback: function(el) {
 				head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
@@ -34,7 +34,7 @@ function setUpDashboardEntities(el) {
              	});
 			}
 		});
-    	tasksListView.appendItem = append_tasks;
+    	//tasksListView.appendItem = append_tasks;
 		tasksListView.collection.fetch();
 
 		$('#my-tasks').html(tasksListView.el);
