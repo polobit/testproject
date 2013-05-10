@@ -505,7 +505,7 @@ function setUpTwilio(token, plugin_id){
 			
 			e.preventDefault();
 			var phone = $('#contact_number').val();
-			from= "+918121623734";
+			
 			Twilio.Device.connect({
 				from:from,
 				PhoneNumber:phone,
