@@ -99,7 +99,7 @@ function getDomainFromCurrentUser() {
 		success : function(data) {
 			var domain = data.get('domain');
 			// console.log(domain);
-			subscribeToPubNub("naresh");
+			subscribeToPubNub(domain);
 		}
 	});
 }
