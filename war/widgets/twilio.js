@@ -493,23 +493,26 @@ function setUpTwilio(token, plugin_id){
 		      
 		});
 		
+		$("#record_sound_play").die().live("click", function(e){
+			e.preventDefault();
+			var sound_url = "https://api.twilio.com" + $(this).attr("sound_url");
+			console.log(sound_url);
+			
+			playSound(sound_url, "true");
+		});
+		
 		$("#twilio_call").die().live("click", function(e){
 			
 			e.preventDefault();
 			var phone = $('#contact_number').val();
-			//var from = "+15109008283";
-			
+			from= "+918121623734";
 			Twilio.Device.connect({
 				from:from,
 				PhoneNumber:phone,
 			    Url:"https://teju-first.appspot.com/twilio/voice"
 		    });
 		});
-		
 	
-	    
-	
-		
 	    Twilio.Device.offline(function() {
 	        // Called on network connection lost.
 	    	console.log("went offline");

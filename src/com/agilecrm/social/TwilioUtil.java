@@ -142,6 +142,97 @@ public class TwilioUtil
 
     }
 
+    public static JSONArray getCallLogsWithRecordings(Widget widget, String to)
+	    throws Exception
+    {
+
+	String authToken = "5e7085bb019e378fb18822f319a3ec46";
+
+	String accountSid = widget.getProperty("account_sid");
+	// String authToken = widget.getProperty("auth_token");
+
+	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
+		null);
+	TwilioRestResponse response;
+
+	Map<String, String> params = new HashMap<String, String>();
+	params.put("To", to);
+	response = client.request(
+		"/" + APIVERSION + "/Accounts/" + client.getAccountSid()
+			+ "/Calls", "GET", params);
+
+	if (response.isError())
+	    throw new Exception("Error fetching recent calls: "
+		    + response.getHttpStatus() + "\n"
+		    + response.getResponseText());
+	else
+	{
+	    JSONArray logs = new JSONArray();
+	    try
+	    {
+		// System.out.println(response.getResponseText());
+		JSONObject xml = XML.toJSONObject(response.getResponseText());
+		System.out.println(xml);
+		JSONObject calls = xml.getJSONObject("TwilioResponse")
+			.getJSONObject("Calls");
+
+		if (Integer.parseInt(calls.getString("total")) == 0)
+		    return logs;
+
+		JSONArray array = calls.getJSONArray("Call");
+
+		for (int i = 0; i < array.length(); i++)
+		{
+		    JSONObject callWithRecordings = new JSONObject();
+		    String callSid = array.getJSONObject(i).getString(
+			    "ParentCallSid");
+		    JSONObject recordings = getRecordings(client, callSid);
+		    callWithRecordings.put("call", array.getJSONObject(i));
+		    callWithRecordings.put("recording", recordings);
+		    logs.put(callWithRecordings);
+
+		}
+		System.out.println(logs);
+		return logs;
+
+	    }
+	    catch (JSONException e)
+	    {
+		e.printStackTrace();
+		return logs;
+	    }
+	}
+
+    }
+
+    public static JSONObject getRecordings(TwilioRestClient client,
+	    String callSid) throws Exception
+    {
+	// Calls/{CallSid}/
+
+	TwilioRestResponse response;
+
+	response = client.request(
+		"/" + APIVERSION + "/Accounts/" + client.getAccountSid()
+			+ "/Calls/" + callSid + "/Recordings", "GET", null);
+	if (response.isError())
+	{
+	    throw new Exception("Error sending message: "
+		    + response.getHttpStatus() + "\n"
+		    + response.getResponseText());
+	}
+	else
+	{
+
+	    System.out.println(response.getResponseText());
+
+	    JSONObject json = XML.toJSONObject(response.getResponseText());
+	    return json.getJSONObject("TwilioResponse").getJSONObject(
+		    "Recordings");
+
+	}
+    }
+
     /**
      * Making an outgoing call based on account SID and the phone numbers
      * 
@@ -311,21 +402,30 @@ public class TwilioUtil
 	}
     }
 
-    public static JSONArray getOutgoingNumbers(Widget widget) throws Exception
+    public static JSONArray verifyOutgoingNumbers(Widget widget, String from)
+	    throws Exception
     {
 
 	String authToken = "5e7085bb019e378fb18822f319a3ec46";
 
-	String accountSid = widget.getProperty("account_sid");
+	String accountSid = "ACd1fe050ffa754cabc100a3acc93d8d1b";// widget.getProperty("account_sid");
 	// String authToken = widget.getProperty("auth_token");
 
 	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
 		null);
 	TwilioRestResponse response;
 
+	Map<String, String> params = new HashMap<String, String>();
+	params.put("PhoneNumber", from);
+	// params.put("VoiceUrl",
+	// "https://agile-crm-cloud.appspot.com/backend/voice");
+	// params.put("VoiceMethod", "GET");
+	// params.put("FriendlyName", "AGILECRM");
+	// params.put("AreaCode", "510");
+
 	response = client.request(
 		"/" + APIVERSION + "/Accounts/" + client.getAccountSid()
-			+ "/OutgoingCallerIds", "GET", null);
+			+ "/OutgoingCallerIds", "POST", params);
 	// /2010-04-01/Accounts/AC0079cf757ae0a3e1915a3ce40d4c65ee/AvailablePhoneNumbers
 	if (response.isError())
 	{
@@ -350,6 +450,55 @@ public class TwilioUtil
 		arrayOfNums.put(i,
 			array.getJSONObject(i).getString("PhoneNumber"));
 	    }
+	    return arrayOfNums;
+
+	}
+
+    }
+
+    public static JSONArray getOutgoingNumbers(Widget widget) throws Exception
+    {
+
+	String authToken = "5e7085bb019e378fb18822f319a3ec46";
+
+	String accountSid = "ACd1fe050ffa754cabc100a3acc93d8d1b";// widget.getProperty("account_sid");
+	// String authToken = widget.getProperty("auth_token");
+
+	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
+		null);
+	TwilioRestResponse response;
+
+	// Map<String, String> params = new HashMap<String, String>();
+	// params.put("PhoneNumber", from);
+	// params.put("VoiceUrl",
+	// "https://agile-crm-cloud.appspot.com/backend/voice");
+	// params.put("VoiceMethod", "GET");
+	// params.put("FriendlyName", "AGILECRM");
+	// params.put("AreaCode", "510");
+
+	response = client.request(
+		"/" + APIVERSION + "/Accounts/" + client.getAccountSid()
+			+ "/OutgoingCallerIds", "GET", null);
+	// /2010-04-01/Accounts/AC0079cf757ae0a3e1915a3ce40d4c65ee/AvailablePhoneNumbers
+	if (response.isError())
+	{
+	    throw new Exception("Error sending message: "
+		    + response.getHttpStatus() + "\n"
+		    + response.getResponseText());
+	}
+	else
+	{
+
+	    System.out.println(response.getResponseText());
+
+	    JSONObject json = XML.toJSONObject(response.getResponseText());
+	    JSONObject array = json.getJSONObject("TwilioResponse")
+		    .getJSONObject("OutgoingCallerIds")
+		    .getJSONObject("OutgoingCallerId");
+	    JSONArray arrayOfNums = new JSONArray();
+
+	    arrayOfNums.put(array.getString("PhoneNumber"));
+
 	    return arrayOfNums;
 
 	}
@@ -401,7 +550,10 @@ public class TwilioUtil
     {
 	try
 	{
-	    System.out.println(TwilioUtil.getIncomingNumbers(null));
+	    // System.out.println(TwilioUtil.getCallLogsWithRecordings(null,
+	    // "+913748874888"));
+
+	    TwilioUtil.getOutgoingNumbers(null);
 	}
 	catch (Exception e)
 	{

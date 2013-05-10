@@ -1287,7 +1287,7 @@ public class WidgetsAPI
 
 	try
 	{
-	    return TwilioUtil.getCallLogs(widget, to).toString();
+	    return TwilioUtil.getCallLogsWithRecordings(widget, to).toString();
 	}
 	catch (Exception e)
 	{

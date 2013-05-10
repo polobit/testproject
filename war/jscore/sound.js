@@ -20,6 +20,7 @@ function playSound(sound, is_web_url){
     var snd;
     try
     {   
+    	
     	// If browser supports html5 audio
          snd = new Audio(smp3url);
          snd.play();
