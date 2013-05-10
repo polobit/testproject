@@ -53,9 +53,9 @@
 			<a title="Edit"  data="{{id}}" class="task-edit-contact-tab" style="cursor:pointer;text-decoration: none;padding-right:10px"> <i class="icon-pencil"></i> </a>
             <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/tasks/bulk"><i></i></span></a>
         </span>
-		<!-- <small class="edit-hover" style="margin-right:10px"> 
+		 <small class="edit-hover" style="margin-right:10px"> 
 			<time class="task-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" created_time}}</time>
-		</small>	-->
+		</small>	
 		<div style="display:inline;">	
 		{{#each contacts}}
            	{{#if id}}
