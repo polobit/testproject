@@ -39,6 +39,7 @@ public class CampaignStatsAPI
      * 
      * @return campaign-stats json string.
      */
+    @SuppressWarnings("unchecked")
     @Path("/stats")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -70,9 +71,30 @@ public class CampaignStatsAPI
 		emailStats.put("total",
 			Integer.parseInt(emailStatsJSON.getString("total")));
 
-	    // Categorize w.r.t campaign-names
-	    campaignStats.put(emailStatsJSON.getString("campaign_name"),
-		    emailStats);
+	    if (campaignStats.containsKey(emailStatsJSON
+		    .getString("campaign_name")))
+	    {
+		// Categorize w.r.t campaign-names
+		campaignStats.get(emailStatsJSON.getString("campaign_name"))
+			.put(emailStatsJSON.getString("log_type"),
+				Integer.parseInt(emailStatsJSON
+					.getString("count")));
+
+		if (!emailStatsJSON.getString("total").equals("null"))
+		    campaignStats
+			    .get(emailStatsJSON.getString("campaign_name"))
+			    .put("total",
+				    Integer.parseInt(emailStatsJSON
+					    .getString("total")));
+	    }
+
+	    else
+	    {
+		campaignStats.put(emailStatsJSON.getString("campaign_name"),
+			emailStats);
+		emailStats = CampaignStatsReportsUtil
+			.getDefaultCountTable(type);
+	    }
 	}
 
 	String campaignStatsString = JSONSerializer.toJSON(campaignStats)
