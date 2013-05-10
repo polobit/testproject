@@ -1,5 +1,4 @@
 <script id="deals-collection-template" type="text/html">
-
   {{#unless this.length}}
         <div class="slate">
             <div class="slate-content">
@@ -17,7 +16,7 @@
                 </div>
             </div>
         </div>
-        {{/unless}}
+   {{/unless}}
 
 {{#if this.length}}
 <div class="page-header" style="margin-top: 0px !important">
@@ -38,9 +37,7 @@
 			{{/if}}
 			<span class="owner-name">{{owner.name}}</span>
 		</span>
-		<h4><a style="text-decoration: none"><b>{{ucfirst name}}</b></a></h4></br>
-		<p>{{description}}</p>
-		
+		<h4><a style="text-decoration: none"><b>{{ucfirst name}}</b></a><span style="margin-left:20px;">{{milestone}} ({{probability}} %)</span></h4></br>
 		<ul style="list-style: none;">
 			<li class="row-fluid">	
 					<div class="span2"><b>Value</b>
@@ -51,16 +48,7 @@
 						{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}} {{expected_value}}
 					</div>
 				</li>
-				<li class="row-fluid">	
-					<div class="span2"><b>Milestone</b>
-						<div class="pull-right">:</div>
-					</div>		
-					<div class="span6" style="margin-left: 10px;">
-						{{milestone}} ({{probability}} %)
-					</div>
-				</li>
-
-				<li class="row-fluid">	
+			<!--	<li class="row-fluid">	
 					<div class="span2"><b>Pipeline</b>
 						<div class="pull-right">:</div>
 					</div>		
@@ -68,18 +56,18 @@
 						{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}}
      						{{calculatePipeline expected_value probability pipeline}}
 					</div>
-				</li>
+				</li>  -->
 		</ul>
-
+    <p>{{description}}</p>
 	<div class="clear">
 		<span class="actions pull-right">
 			 <a title="Edit"  data="{{id}}" href="#deals/{{id}}" class="deal-edit-contact-tab" style="cursor:pointer;text-decoration: none;padding-right:10px"> <i class="icon-pencil"></i> </a>
              <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/opportunity/bulk"></span></a>
         </span>
-		<small class="edit-hover" style="margin-right:10px">
+		<!-- <small class="edit-hover" style="margin-right:10px">
 			<time class="deal-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" created_time}}</time>
-		</small>	
-		<div style="display:inline-block;">	
+		</small>	-->
+		<div style="display:inline;">	
 		{{#each contacts}}
            	{{#if id}}
            		&nbsp<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,

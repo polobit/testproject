@@ -42,22 +42,21 @@
 		<span class="owner-name">{{prefs.currentDomainUserName}}</span>
 	</span>
 	{{#if is_complete}}
-			<div><span>&#10004; </span><h4 class="task-subject" style="text-decoration:line-through;display:inline"><b>{{subject}}</b>&nbsp;<span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></h4></div></br>
+			<div style="margin-bottom: 9px;"><span>&#10004;</span><h4 class="task-subject" style="text-decoration:line-through;display:inline;"><b style="margin:0px 20px 0px 10px;">{{subject}}</b><span class="span1"></span><span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></h4></div>
 		{{else}}
-			<div><input data="{{id}}" class="complete-task" type="checkbox"/><h4 class="task-subject" style="display:inline"><b> {{subject}}</b>&nbsp;<span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></h4></div></br>
+			<div style="margin-bottom: 9px;"><input data="{{id}}" class="complete-task" type="checkbox"/><h4 class="task-subject" style="display:inline;"><b style="margin:0px 20px 0px 10px;">{{subject}}</b><span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></h4></div>
 	{{/if}}
-	<p><strong>Type : </strong><i class="{{icons type}}"></i>&nbsp;{{ucfirst type}}&nbsp;</p>
-<p><strong>Due : </strong>&nbsp;{{epochToHumanDate "mmm d, yyyy" due}}</p>
-
+  <div style="margin-left:22px;">
+	<p><i class="{{icons type}}"></i>&nbsp;{{ucfirst type}}<span style="color:#b2b0b1;margin-left:20px;">Due : {{epochToHumanDate "mmm d, yyyy" due}}</span></p>
 	<div class="clear">
 		<span class="actions pull-right">
 			<a title="Edit"  data="{{id}}" class="task-edit-contact-tab" style="cursor:pointer;text-decoration: none;padding-right:10px"> <i class="icon-pencil"></i> </a>
             <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/tasks/bulk"><i></i></span></a>
         </span>
-		<small class="edit-hover" style="margin-right:10px"> 
+		<!-- <small class="edit-hover" style="margin-right:10px"> 
 			<time class="task-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" created_time}}</time>
-		</small>	
-		<div style="display:inline-block;">	
+		</small>	-->
+		<div style="display:inline;">	
 		{{#each contacts}}
            	{{#if id}}
 				{{#isDuplicateContactProperty properties "email"}}
@@ -70,6 +69,7 @@
        	{{/each}}
 		</div>
 	</div>
+  </div>
 </div>
 </div>
 
