@@ -1367,6 +1367,35 @@ public class WidgetsAPI
     }
 
     /**
+     * Retrieves registered incoming phone numbers from agent's Twilio account
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @return {@link String} form of {@link JSONArray}
+     */
+    @Path("twilio/incoming/numbers/{widget-id}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getIncomingNumbersfromTwilio(
+	    @PathParam("widget-id") Long widgetId)
+    {
+	Widget widget = WidgetUtil.getWidget(widgetId);
+	if (widget == null)
+	    return null;
+	try
+	{
+	    return TwilioUtil.getIncomingNumbers(widget).toString();
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+
+	}
+    }
+
+    /**
      * Connects to Twilio and fetches token based on the accountSID and appsid
      * 
      * @param accountSid
@@ -1417,6 +1446,29 @@ public class WidgetsAPI
 	try
 	{
 	    return TwilioUtil.getTwilioAppSID(widget);
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+
+	}
+    }
+
+    @Path("twilio/appsid/{widget-id}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getTwilioRecordings(@PathParam("widget-id") Long widgetId)
+    {
+	Widget widget = WidgetUtil.getWidget(widgetId);
+	if (widget == null)
+	    return null;
+
+	try
+	{
+	    return TwilioUtil.getRecordingsExample(widget,
+		    "CA4a612d4fb2ba5a8ec2fa13f37b21de95");
 	}
 	catch (Exception e)
 	{

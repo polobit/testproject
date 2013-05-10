@@ -19,9 +19,8 @@ function setUpDashboardEntities(el) {
         }
     });
 	myRecentContacts.collection.fetch();
-	console.log($(myRecentContacts.el).html());
 	
-    	$('#recent-contacts', el).html(myRecentContacts.el);
+    	$('#recent-contacts', el).html(myRecentContacts.render().el);
 
     	var tasksListView = new Base_Collection_View({
 			url : '/core/api/tasks/my/tasks',

@@ -57,18 +57,21 @@ public class LogUtil
      *            - Campaign Id.
      * @param subscriberId
      *            - Subscriber Id.
+     * @param limit
+     *            - limit to get number of logs.
      * @return logs array string.
      */
-    public static List<Log> getSQLLogs(String campaignId, String subscriberId)
+    public static List<Log> getSQLLogs(String campaignId, String subscriberId,
+	    String limit)
     {
 	String domain = NamespaceManager.get();
 
-	if (StringUtils.isEmpty(domain) || (StringUtils.isEmpty(campaignId))
-		&& (StringUtils.isEmpty(subscriberId)))
+	if (StringUtils.isEmpty(domain))
 	    return null;
 
 	// get SQL logs
-	JSONArray logs = SQLUtil.getLogs(campaignId, subscriberId, domain);
+	JSONArray logs = SQLUtil.getLogs(campaignId, subscriberId, domain,
+		limit);
 
 	if (logs == null)
 	    return null;

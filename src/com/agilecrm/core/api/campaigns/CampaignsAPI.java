@@ -11,6 +11,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.json.JSONArray;
@@ -82,7 +83,7 @@ public class CampaignsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public List<Log> getContactLogs(@PathParam("contact-id") String contactId)
     {
-	return LogUtil.getSQLLogs(null, contactId);
+	return LogUtil.getSQLLogs(null, contactId, null);
     }
 
     /**
@@ -101,7 +102,7 @@ public class CampaignsAPI
 	    @PathParam("contact-id") String contactId,
 	    @PathParam("campaign-id") String campaignId)
     {
-	return LogUtil.getSQLLogs(campaignId, contactId);
+	return LogUtil.getSQLLogs(campaignId, contactId, null);
     }
 
     /**
@@ -116,7 +117,22 @@ public class CampaignsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Log> getCampaignLogs(@PathParam("campaign-id") String campaignId)
     {
-	return LogUtil.getSQLLogs(campaignId, null);
+	return LogUtil.getSQLLogs(campaignId, null, null);
+    }
+
+    /**
+     * Returns recent logs upto given limit.
+     * 
+     * @param limit
+     *            - required number of logs
+     * @return List
+     */
+    @Path("logs/recent")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Log> getRecentCampaignLogs(@QueryParam("limit") String limit)
+    {
+	return LogUtil.getSQLLogs(null, null, limit);
     }
 
     /**

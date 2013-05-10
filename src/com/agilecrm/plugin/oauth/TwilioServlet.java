@@ -55,7 +55,7 @@ public class TwilioServlet extends HttpServlet
 	    return;
 	}
 
-	widget.addProperty("token", accountSid);
+	widget.addProperty("account_sid", accountSid);
 	widget.save();
 
 	NamespaceManager.set(oldNamespace);

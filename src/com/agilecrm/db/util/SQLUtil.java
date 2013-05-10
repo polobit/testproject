@@ -70,10 +70,11 @@ public class SQLUtil
      * @return JSONArray of logs.
      */
     public static JSONArray getLogs(String campaignId, String subscriberId,
-	    String domain)
+	    String domain, String limit)
     {
 	String logs = "SELECT *, UNIX_TIMESTAMP(log_time) AS time FROM campaign_logs WHERE"
-		+ getWhereConditionOfLogs(campaignId, subscriberId, domain);
+		+ getWhereConditionOfLogs(campaignId, subscriberId, domain)
+		+ " ORDER BY log_time DESC" + appendLimitToQuery(limit);
 	try
 	{
 	    return GoogleSQL.getJSONQuery(logs);
@@ -137,9 +138,29 @@ public class SQLUtil
 	    condition = " subscriber_id = "
 		    + encodeSQLColumnValue(subscriberId);
 
+	// if both campaignId and subscriberId are null
+	if (StringUtils.isEmpty(campaignId)
+		&& StringUtils.isEmpty(subscriberId))
+	    return appendDomainToQuery(domain);
+
 	condition += " AND " + appendDomainToQuery(domain);
 
 	return condition;
+    }
+
+    /**
+     * Append limit to query to retrieve recent results.
+     * 
+     * @param limit
+     *            - required limit.
+     * @return String.
+     */
+    private static String appendLimitToQuery(String limit)
+    {
+	if (limit == null)
+	    return "";
+
+	return " LIMIT " + limit;
     }
 
     /**

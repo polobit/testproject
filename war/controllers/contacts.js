@@ -7,9 +7,9 @@
 var ContactsRouter = Backbone.Router.extend({
 
     routes: {
-        "": "contacts",
-        "dashboard": "contacts",
-        "dashboard-test": "dashboard",
+        "": "dashboard",
+        "dashboard": "dashboard",
+ //       "dashboard-test": "dashboard",
 
         /* Contacts */
         "contacts": "contacts",
@@ -65,7 +65,7 @@ var ContactsRouter = Backbone.Router.extend({
    	  $(".active").removeClass("active");
                   
 
-      	var el = getTemplate('dashboard', {});
+      	var el = $(getTemplate('dashboard1', {}));
       	$("#content").html(el)
       	setupDashboard(el);
       	//loadDynamicTimeline("my-timeline", el);
