@@ -105,15 +105,15 @@ $(function() {
 		if (item == "call")
 			return "icon-phone-sign";
 		if (item == "follow_up")
-			return "icon-forward";
+			return "icon-signout";
 		if (item == "meeting")
 			return "icon-group";
 		if (item == "milestone")
 			return "icon-cog";
 		if (item == "send")
-			return "icon-share-alt";
+			return "icon-reply";
 		if (item == "tweet")
-			return "icon-signout";
+			return "icon-share-alt";
 
 	});
 

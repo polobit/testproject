@@ -44,7 +44,7 @@ $(function(){
      * option and then fills the select drop down with all the campaigns by triggering
      * a custom event (fill_campaigns_contact).
      */ 
-    $('#contact-add-campaign').live('click', function(e){
+    $('.contact-add-campaign').live('click', function(e){
     		e.preventDefault();
     	
     		var contact_id = App_Contacts.contactDetailView.model.id;

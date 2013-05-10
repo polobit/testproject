@@ -30,14 +30,14 @@
 {{#if is_complete}}
     <td style="text-decoration:line-through">{{type}}</td>
 	<td><div style="text-decoration:line-through;text-overflow:ellipsis;text-align:justify;white-space:nowrap;width:200px;overflow:hidden;">{{subject}}</div></td>
-    <td style="text-decoration:line-through">{{epochToTaskDate due}}</td>	
+    <td style="text-decoration:line-through">{{epochToHumanDate "mmm d, yyyy" due}}</td>	
     <td style="text-decoration:line-through">{{priority_type}}</td>
 	<td style="text-decoration:line-through">{{task_status is_complete}}</td>
 <br />
 {{else}}
     <td>{{type}}</td>
 	<td><div style="overflow:hidden;text-overflow:ellipsis;text-align:justify;white-space:nowrap;width:200px;">{{subject}}</div></td>
-	<td>{{epochToTaskDate due}}</td>	
+	<td>{{epochToHumanDate "mmm d, yyyy" due}}</td>	
 	<td>{{priority_type}}</td>
 	<td>{{task_status is_complete}}</td>
 {{/if}}
