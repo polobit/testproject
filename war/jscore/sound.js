@@ -7,9 +7,15 @@ function playSendSound(){
 	playSound();
 	
 }
-function playSound(sound){
+function playSound(sound, is_web_url){
 
-    var smp3url = '../res/'+sound+'.mp3';
+	 var smp3url;
+	
+	 if(is_web_url)
+		smp3url = sound
+	else
+		smp3url = '../res/'+sound+'.mp3';
+	
     var swavurl = '../res/sound.wav';
     var snd;
     try

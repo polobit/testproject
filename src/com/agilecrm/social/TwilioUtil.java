@@ -22,10 +22,10 @@ public class TwilioUtil
     public static String generateTwilioToken(Widget widget) throws Exception
     {
 	// String authToken = "b6420aa8715bad58ad2cff61036b4640";
-	// String authToken = "5e7085bb019e378fb18822f319a3ec46";
+	String authToken = "5e7085bb019e378fb18822f319a3ec46";
 
 	String accountSid = widget.getProperty("account_sid");
-	String authToken = widget.getProperty("auth_token");
+	// String authToken = widget.getProperty("auth_token");
 	String appSid = widget.getProperty("app_sid");
 
 	TwilioCapability capability = new TwilioCapability(accountSid,
@@ -51,10 +51,10 @@ public class TwilioUtil
     {
 	// String authToken = "b6420aa8715bad58ad2cff61036b4640";
 	// test account token
-	// String authToken = "5e7085bb019e378fb18822f319a3ec46";
+	String authToken = "5e7085bb019e378fb18822f319a3ec46";
 
 	String accountSid = widget.getProperty("account_sid");
-	String authToken = widget.getProperty("auth_token");
+	// String authToken = widget.getProperty("auth_token");
 
 	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
 		null);
@@ -94,8 +94,10 @@ public class TwilioUtil
 	    throws Exception
     {
 
+	String authToken = "5e7085bb019e378fb18822f319a3ec46";
+
 	String accountSid = widget.getProperty("account_sid");
-	String authToken = widget.getProperty("auth_token");
+	// String authToken = widget.getProperty("auth_token");
 
 	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
 		null);
@@ -157,8 +159,10 @@ public class TwilioUtil
 	    String url) throws Exception
     {
 
+	String authToken = "5e7085bb019e378fb18822f319a3ec46";
+
 	String accountSid = widget.getProperty("account_sid");
-	String authToken = widget.getProperty("auth_token");
+	// String authToken = widget.getProperty("auth_token");
 
 	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
 		null);
@@ -207,8 +211,10 @@ public class TwilioUtil
     public static void getNotificationsExample(Widget widget) throws Exception
     {
 
+	String authToken = "5e7085bb019e378fb18822f319a3ec46";
+
 	String accountSid = widget.getProperty("account_sid");
-	String authToken = widget.getProperty("auth_token");
+	// String authToken = widget.getProperty("auth_token");
 
 	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
 		null);
@@ -238,12 +244,15 @@ public class TwilioUtil
      *            required
      * @throws Exception
      */
-    public static void getRecordingsExample(Widget widget, String callSid)
+    public static String getRecordingsExample(Widget widget, String callSid)
 	    throws Exception
     {
 
+	String authToken = "5e7085bb019e378fb18822f319a3ec46";
+
 	String accountSid = widget.getProperty("account_sid");
-	String authToken = widget.getProperty("auth_token");
+	// String authToken = "b6420aa8715bad58ad2cff61036b4640";//
+	// widget.getProperty("auth_token");
 
 	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
 		null);
@@ -255,15 +264,15 @@ public class TwilioUtil
 	TwilioRestResponse response;
 	response = client.request(
 		"/" + APIVERSION + "/Accounts/" + client.getAccountSid()
-			+ "/Recordings", "GET", params);
+			+ "/Recordings.json", "GET", params);
 
 	if (response.isError())
-	    System.out.println("Error fetching recordings: "
+	    throw new Exception("Error fetching recordings: "
 		    + response.getHttpStatus() + "\n"
 		    + response.getResponseText());
 	else
 	{
-	    System.out.println(response.getResponseText());
+	    return response.getResponseText();
 	}
     }
 
@@ -279,8 +288,10 @@ public class TwilioUtil
     public static void deleteRecordingsExample(Widget widget,
 	    String recordingSid) throws Exception
     {
+	String authToken = "5e7085bb019e378fb18822f319a3ec46";
+
 	String accountSid = widget.getProperty("account_sid");
-	String authToken = widget.getProperty("auth_token");
+	// String authToken = widget.getProperty("auth_token");
 
 	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
 		null);
@@ -303,8 +314,10 @@ public class TwilioUtil
     public static JSONArray getOutgoingNumbers(Widget widget) throws Exception
     {
 
+	String authToken = "5e7085bb019e378fb18822f319a3ec46";
+
 	String accountSid = widget.getProperty("account_sid");
-	String authToken = widget.getProperty("auth_token");
+	// String authToken = widget.getProperty("auth_token");
 
 	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
 		null);
@@ -341,5 +354,59 @@ public class TwilioUtil
 
 	}
 
+    }
+
+    public static JSONObject getIncomingNumbers(Widget widget) throws Exception
+    {
+
+	String authToken = "5e7085bb019e378fb18822f319a3ec46";
+
+	// String accountSid = "ACd1fe050ffa754cabc100a3acc93d8d1b";
+	// String accountSid = "AC79bd0a3da6b29949f0dab6fc5221d5fb";
+	String accountSid = widget.getProperty("account_sid");
+	// String authToken = widget.getProperty("auth_token");
+
+	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
+		null);
+	TwilioRestResponse response;
+
+	response = client.request(
+		"/" + APIVERSION + "/Accounts/" + client.getAccountSid()
+			+ "/IncomingPhoneNumbers", "GET", null);
+	// /2010-04-01/Accounts/AC0079cf757ae0a3e1915a3ce40d4c65ee/AvailablePhoneNumbers
+	if (response.isError())
+	{
+	    throw new Exception("Error sending message: "
+		    + response.getHttpStatus() + "\n"
+		    + response.getResponseText());
+	}
+	else
+	{
+
+	    System.out.println(response.getResponseText());
+
+	    JSONObject json = XML.toJSONObject(response.getResponseText());
+	    JSONObject result = json.getJSONObject("TwilioResponse")
+		    .getJSONObject("IncomingPhoneNumbers");
+
+	    if (result.get("IncomingPhoneNumber") instanceof JSONArray)
+		return result.getJSONArray("IncomingPhoneNumber")
+			.getJSONObject(0);
+	    return result.getJSONObject("IncomingPhoneNumber");
+	}
+
+    }
+
+    public static void main(String[] args)
+    {
+	try
+	{
+	    System.out.println(TwilioUtil.getIncomingNumbers(null));
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
     }
 }
