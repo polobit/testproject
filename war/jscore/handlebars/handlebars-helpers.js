@@ -632,6 +632,18 @@ $(function() {
 			return options.fn(this);
 		else
 			return options.inverse(this);
+	});
+	
+	/**
+	 * Compares the arguments (value and target) and executes the template based
+	 * on the result (used in contacts typeahead)
+	 */
+	Handlebars.registerHelper('if_greater', function(value, target, options) {
+
+		if (target > value)
+			return options.inverse(this);
+		else
+			return options.fn(this);
 	})
 
 	/**

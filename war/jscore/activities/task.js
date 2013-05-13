@@ -56,7 +56,11 @@ $(function() {
 		e.preventDefault();
 		update_task(this);
 	});
-
+	$('#tasks-list-model-list > tr').live('click', function(e) {
+		e.preventDefault();
+		update_task(this);
+	});
+	
 	/**
 	 * When clicked on update button of task-update-modal, the task will get
 	 * updated by calling save_task function
@@ -201,6 +205,17 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 				// Updates task list view
 				App_Calendar.tasksListView.collection.add(data);
 				App_Calendar.tasksListView.render(true);
+			}
+			else if (Current_Route == 'tasks'){
+				if (isUpdate)
+					App_Calendar.tasksListView.collection.remove(json);
+
+				// Updates task list view
+				App_Calendar.tasksListView.collection.add(data);
+				App_Calendar.tasksListView.render(true);
+				App_Calendar.navigate("tasks", {
+					trigger : true
+				});
 			}
 			// Updates data to temeline
 			else if (App_Contacts.contactDetailView
