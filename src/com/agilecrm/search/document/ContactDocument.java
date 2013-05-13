@@ -59,12 +59,14 @@ public class ContactDocument implements BuilderInterface
     /**
      * Initializes/get search service for the app
      */
-    private static SearchService searchService = SearchServiceFactory.getSearchService();
+    private SearchService searchService = SearchServiceFactory
+	    .getSearchService();
 
     /**
      * Index for the contact Document, Required to search on contacts document
      */
-    public static Index index = searchService.getIndex(IndexSpec.newBuilder().setName("contacts"));
+    public Index index = searchService.getIndex(IndexSpec.newBuilder().setName(
+	    "contacts"));
 
     /**
      * Describes all the contact field values in the document based on the
@@ -112,6 +114,7 @@ public class ContactDocument implements BuilderInterface
 	    Date updatedDate = DateUtils.truncate(
 		    new Date(contact.updated_time * 1000), Calendar.DATE);
 
+	    System.out.println(updatedDate);
 	    doc.addField(Field.newBuilder().setName("updated_time")
 		    .setDate(updatedDate));
 	}
@@ -178,11 +181,11 @@ public class ContactDocument implements BuilderInterface
      * @param doc
      *            {@link Document}
      */
-    private static void addToIndex(Document doc)
+    private void addToIndex(Document doc)
     {
 	// Adds document to index
 	index.put(doc);
-	System.out.println("after saving ..................");
+
 	System.out.println(index.getName());
 	//System.out.println(index.getConsistency());
 	System.out.println(index.getSchema());
