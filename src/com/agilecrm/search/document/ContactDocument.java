@@ -17,10 +17,10 @@ import com.agilecrm.search.util.SearchUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Field;
+import com.google.appengine.api.search.GetRequest;
+import com.google.appengine.api.search.GetResponse;
 import com.google.appengine.api.search.Index;
 import com.google.appengine.api.search.IndexSpec;
-import com.google.appengine.api.search.Query;
-import com.google.appengine.api.search.QueryOptions;
 import com.google.appengine.api.search.SearchService;
 import com.google.appengine.api.search.SearchServiceFactory;
 import com.googlecode.objectify.Objectify;
@@ -70,8 +70,7 @@ public class ContactDocument implements BuilderInterface
      * Index for the contact Document, Required to search on contacts document
      */
     private Index index = searchService.getIndex(IndexSpec.newBuilder()
-	    .setName(
-	    "contacts"));
+	    .setName("contacts"));
 
     /**
      * Describes all the contact field values in the document based on the
@@ -101,24 +100,23 @@ public class ContactDocument implements BuilderInterface
 	 */
 	for (Map.Entry<String, String> e : fields.entrySet())
 	{
-	    doc.addField(Field.newBuilder().setName(e.getKey()).setText(e.getValue()));
+	    doc.addField(Field.newBuilder().setName(e.getKey())
+		    .setText(e.getValue()));
 	}
 
 	// Sets created date to document with out time component(Search API
 	// support date without time component)
 	Date truncatedDate = DateUtils.truncate(new Date(
-		contact.created_time * 1000),
-		Calendar.DATE);
+		contact.created_time * 1000), Calendar.DATE);
 	System.out.println(truncatedDate);
 	doc.addField(Field.newBuilder().setName("created_time")
 		.setDate(truncatedDate));
 
-
 	// Describes updated time document if updated time is not 0.
 	if (contact.updated_time > 0L)
 	{
-	    Date updatedDate = DateUtils.truncate(
-		    new Date(contact.updated_time * 1000), Calendar.DATE);
+	    Date updatedDate = DateUtils.truncate(new Date(
+		    contact.updated_time * 1000), Calendar.DATE);
 
 	    System.out.println(updatedDate);
 	    doc.addField(Field.newBuilder().setName("updated_time")
@@ -126,10 +124,12 @@ public class ContactDocument implements BuilderInterface
 	}
 
 	// Adds Other fields in contacts to document
-	doc.addField(Field.newBuilder().setName("lead_score").setNumber(contact.lead_score));
+	doc.addField(Field.newBuilder().setName("lead_score")
+		.setNumber(contact.lead_score));
 
 	// Adds Other fields in contacts to document
-	doc.addField(Field.newBuilder().setName("star_value").setNumber(contact.star_value));
+	doc.addField(Field.newBuilder().setName("star_value")
+		.setNumber(contact.star_value));
 
 	addTagFields(contact.getTagsList(), doc);
 
@@ -137,7 +137,8 @@ public class ContactDocument implements BuilderInterface
 	 * Get tokens from contact properties and adds it in document
 	 * "search_tokens"
 	 */
-	doc.addField(Field.newBuilder().setName("search_tokens").setText(SearchUtil.getSearchTokens(contact.properties)));
+	doc.addField(Field.newBuilder().setName("search_tokens")
+		.setText(SearchUtil.getSearchTokens(contact.properties)));
 
 	// Adds document to Index
 	addToIndex(doc.setId(contact.id.toString()).build());
@@ -192,7 +193,7 @@ public class ContactDocument implements BuilderInterface
 	// Adds document to index
 	index.put(doc);
 	System.out.println(index.getName());
-	//System.out.println(index.getConsistency());
+	// System.out.println(index.getConsistency());
 	System.out.println(index.getSchema());
 
     }
@@ -225,7 +226,8 @@ public class ContactDocument implements BuilderInterface
 	    /*
 	     * Truncate date Document search date is without time component
 	     */
-	    Date TagCreatedDate = DateUtils.truncate(new Date(TagCreationTimeInMills), Calendar.DATE);
+	    Date TagCreatedDate = DateUtils.truncate(new Date(
+		    TagCreationTimeInMills), Calendar.DATE);
 
 	    // If tag doesn't satisfies the regular expression of field name in
 	    // document search, field is not added to avoid exceptions while
@@ -234,13 +236,15 @@ public class ContactDocument implements BuilderInterface
 		continue;
 
 	    // Adds Other fields in contacts to document
-	    doc.addField(Field.newBuilder().setName(normalizedTag + "_time").setDate(TagCreatedDate));
+	    doc.addField(Field.newBuilder().setName(normalizedTag + "_time")
+		    .setDate(TagCreatedDate));
 	}
 
     }
 
     public static void deleteAllData(String namespace)
     {
+
 	if (StringUtils.isEmpty(namespace))
 	    return;
 
@@ -249,19 +253,23 @@ public class ContactDocument implements BuilderInterface
 	{
 	    NamespaceManager.set(namespace);
 
-	    QueryOptions options = QueryOptions.newBuilder()
-		    .setFieldsToReturn("id").build();
+	    List<String> docIds = new ArrayList<String>();
 
-	    // Build query on query options Query query_string =
-	    Query.newBuilder().setOptions(options).build();
+	    Index index = SearchServiceFactory.getSearchService().getIndex(
+		    IndexSpec.newBuilder().setName("contacts"));
 
-	    SearchService searchService = SearchServiceFactory
-		    .getSearchService();
+	    // Return a set of document IDs.
+	    GetRequest request = GetRequest.newBuilder()
+		    .setReturningIdsOnly(true).build();
 
-	    Index index = searchService.getIndex(IndexSpec.newBuilder()
-		    .setName("contacts"));
+	    GetResponse<Document> response = index.getRange(request);
 
-	    index.search("").getResults();
+	    for (Document doc : response)
+	    {
+		docIds.add(doc.getId());
+	    }
+
+	    index.delete(docIds);
 
 	}
 	finally
@@ -274,6 +282,7 @@ public class ContactDocument implements BuilderInterface
     public Index getIndex()
     {
 	return index;
+
     }
 
 }

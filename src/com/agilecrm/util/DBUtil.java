@@ -6,8 +6,9 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import com.agilecrm.db.util.SQLUtil;
 import com.agilecrm.db.util.AnalyticsUtil;
+import com.agilecrm.db.util.SQLUtil;
+import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -221,8 +222,11 @@ public class DBUtil
 		// Deletes campaign logs from sql.
 		SQLUtil.deleteLogsBasedOnDomain(namespace);
 
+
 		// Deletes page stats from sql.
 		AnalyticsUtil.deleteStatsBasedOnNamespace(namespace);
+
+		ContactDocument.deleteAllData(namespace);
 
 	    }
 	    catch (Exception e)
