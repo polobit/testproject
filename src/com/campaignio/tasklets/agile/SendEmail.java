@@ -458,7 +458,7 @@ public class SendEmail extends TaskletAdapter
 	// Creates log for sending email
 	log(campaignJSON, subscriberJSON, nodeJSON, "From: " + fromEmail
 		+ "<br>" + "To: " + to + "<br>" + "Subject: " + subject
-		+ "<br>" + "Text: " + text + "<br>HTML: " + html);
+		+ "<br>" + "Text: " + text);
 
 	// Send Message
 	if (html != null && html.length() > 10)

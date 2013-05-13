@@ -40,7 +40,7 @@ public class EmailStatsUtil
 		+ uniqueClicks
 		+ " A LEFT OUTER JOIN "
 		+ totalClicks
-		+ " B ON A.campaign_name = B.campaign_name AND A.log_type = B.log_type";
+		+ " B ON A.campaign_name = B.campaign_name AND A.log_type = B.log_type ORDER BY A.campaign_name";
 
 	try
 	{
