@@ -1,5 +1,7 @@
 package com.agilecrm.search;
 
+import com.google.appengine.api.search.Index;
+
 /**
  * <code> BuilderInterface </code> is root interface to build search on
  * entities. It includes method declarations to add an entity to search, edit
@@ -35,5 +37,7 @@ public interface BuilderInterface
      * @param id
      */
     public void delete(String id);
+
+    public Index getIndex();
 
 }
