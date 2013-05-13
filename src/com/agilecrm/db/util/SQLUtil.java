@@ -157,7 +157,7 @@ public class SQLUtil
      */
     private static String appendLimitToQuery(String limit)
     {
-	if (limit == null)
+	if (StringUtils.isEmpty(limit))
 	    return "";
 
 	return " LIMIT " + limit;

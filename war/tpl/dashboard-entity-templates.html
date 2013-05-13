@@ -297,3 +297,68 @@ Account Overview</span></strong>
 </div></div>
 
 </script>
+
+<script id="dashboard-campaign-logs-collection-template" type="text/html">
+<div style="margin-left:0px">
+<h2 style="border-bottom:1px solid #f5f5f5; margin-bottom:10px">Recent Campaign Logs</h2>
+
+    {{#unless this.length}}
+    <div class="slate">
+        <div class="slate-content">
+            <div class="box-left">
+            <img alt="Clipboard" src="/img/clipboard.png">
+            </div>
+            <div class="box-right">
+                <h3>No log exists.</h3>
+                <div class="text">
+                Recent logs are not yet created. May be no campaign run yet.
+                </div>
+                <a href="#">Learn more about logs.</a>
+                <br>
+               <!-- <span class="btn blue btn-slate-action"><i class="icon-plus-sign"></i> Add the first task!</span> -->
+            </div>
+        </div>
+    </div>
+    {{/unless}}
+
+    {{#if this.length}}
+    <div class="data">
+        <div class="data-container">
+            <table class="table table-striped onlySorting" id="logs-table" url="core/api/campaigns/logs/bulk">
+                <thead>
+                     <tr style="background-color:#EDF3FE;">
+                        <th></th>
+                        <th>Contact</th>
+                        <th>Message</th>
+                        <th>Time</th>                    
+                    </tr>
+                </thead>
+                <tbody id="dashboard-campaign-logs-model-list" route="contact/">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</div>
+</script>
+
+<script id="dashboard-campaign-logs-model-template" type="text/html">
+<input name="id" class="campaign" type="hidden" value="{{campaign_id}}" />
+<td></td>
+<td class="data" data={{subscriber_id}} style="width:20em;">
+	<div style="display:inline;padding-right:10px;height:auto;">
+    	<img class="thumbnail" src="{{gravatarurl contact.properties 40}}" width="40px" height="40px" style="display:inline" />
+    </div>
+ 	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:12em;overflow:hidden;">
+    	<b>	{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </b>
+        <br />
+        	{{getPropertyValue contact.properties "email"}}
+    </div>
+    <div style="float:right"></div>
+</td>
+<td style="width:30em;">{{{message}}}</td>
+<td><small class="edit-hover"> 
+		<time class="log-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" time}}</time>
+	</small></td>
+<br/>
+</script>

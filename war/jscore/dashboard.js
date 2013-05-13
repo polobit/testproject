@@ -56,13 +56,18 @@ function setUpDashboardEntities(el) {
 	        	$('#my-deals').html(myDeals.el);
 	        	
 	        var workflowsListView = new Base_Collection_View({
-				url : '/core/api/workflows/my/workflows',
+				url : '/core/api/campaigns/logs/recent?page_size=5',
 				restKey : "workflow",
-				templateKey : "dashboard-workflows",
+				templateKey : "dashboard-campaign-logs",
 				individual_tag_name : 'tr',
-				cursor: true,
-				page_size : 10
+				page_size : 10,
+				postRenderCallback : function(el) {
+					head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
+						$("time.log-created-time", el).timeago();
+					});
+	        }
 			});
+	        
 
 			workflowsListView.collection.fetch();
 			$('#my-logs').html(workflowsListView.el);

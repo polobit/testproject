@@ -80,19 +80,27 @@ public class EmailStatsUtil
 	// Returns (sign)HH:mm from total minutes.
 	String timeZoneOffset = convertMinutesToTime(timeZone);
 
-	String uniqueClicks = "(SELECT DATE_FORMAT("
+	// Returns minimum of log-time for given date-range.
+	String subQuery = "(SELECT log_type, MIN("
 		+ addConvertTZ(timeZoneOffset)
-		+ ","
-		+ getDateFormatBasedOnType(type)
-		+ ")  AS logDate, log_type, COUNT(DISTINCT subscriber_id) AS count FROM campaign_logs WHERE domain="
-		+ SQLUtil.encodeSQLColumnValue(domain)
+		+ ") AS minTime FROM campaign_logs WHERE "
+		+ SQLUtil.appendDomainToQuery(domain)
 		+ " AND campaign_id="
 		+ SQLUtil.encodeSQLColumnValue(campaignId)
-		+ "  AND log_type IN ('Send E-mail', 'Email Opened', 'Email Clicked') AND DATE("
+		+ " AND log_type IN ('Send E-mail', 'Email Clicked', 'Email Opened') AND DATE("
 		+ addConvertTZ(timeZoneOffset) + ") BETWEEN " + "DATE("
 		+ SQLUtil.encodeSQLColumnValue(startDate) + ") AND DATE("
 		+ SQLUtil.encodeSQLColumnValue(endDate)
-		+ ") GROUP BY log_type,logDate)";
+		+ ") GROUP BY subscriber_id,log_type) subQuery";
+
+	String uniqueClicks = "(SELECT DATE_FORMAT(CONVERT_TZ(minTime,'+00:00',"
+		+ SQLUtil.encodeSQLColumnValue(timeZoneOffset)
+		+ ")"
+		+ ","
+		+ getDateFormatBasedOnType(type)
+		+ ")  AS logDate, log_type, COUNT(*) AS count FROM "
+		+ subQuery
+		+ " GROUP BY log_type, logDate)";
 
 	String totalClicks = "(SELECT DATE_FORMAT("
 		+ addConvertTZ(timeZoneOffset)
