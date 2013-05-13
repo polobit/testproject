@@ -820,6 +820,41 @@ public class WidgetsAPI
     }
 
     /**
+     * Retrieves the shared connections information of a person in LinkedIn
+     * based on LinkedIn id
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param socialId
+     *            {@link String} LinkedIn id of the profile
+     * @return {@link List} of {@link SocialSearchResult}
+     */
+    @Path("/shared/connections/{widget-id}/{social-id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<SocialSearchResult> getSharedConnectionsInLinkedIn(
+	    @PathParam("widget-id") Long widgetId,
+	    @PathParam("social-id") String socialId)
+    {
+	try
+	{
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+	    if (widget == null)
+		return null;
+
+	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
+		return LinkedInUtil.getSharedConnections(widget, socialId);
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+	return null;
+    }
+
+    /**
      * Connects to Rapleaf and fetches information based on the email
      * 
      * @param apikey
@@ -1356,6 +1391,35 @@ public class WidgetsAPI
 	try
 	{
 	    return TwilioUtil.getOutgoingNumbers(widget).toString();
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+
+	}
+    }
+
+    /**
+     * Verify phone number in agent's Twilio account
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @return {@link String} form of {@link JSONArray}
+     */
+    @Path("twilio/verify/numbers/{widget-id}/{from}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String verifyNumberInTwilio(@PathParam("widget-id") Long widgetId,
+	    @PathParam("from") String from)
+    {
+	Widget widget = WidgetUtil.getWidget(widgetId);
+	if (widget == null)
+	    return null;
+	try
+	{
+	    return TwilioUtil.verifyOutgoingNumbers(widget, from).toString();
 	}
 	catch (Exception e)
 	{

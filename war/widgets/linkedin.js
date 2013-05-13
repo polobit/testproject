@@ -114,6 +114,11 @@ $(function ()
     	getExperienceOfPerson(plugin_id, linkedin_id);
     });
 
+    $('#linkedin_shared_connections').die().live('click', function (e)
+    		{
+    	e.preventDefault();
+    	getLinkedInSharedConnections(plugin_id, linkedin_id);
+    });
 });
 
 /**
@@ -855,4 +860,67 @@ function getExperienceOfPerson(plugin_id, linkedin_id)
     	 alert(data.responseText);
      });
      
+}
+
+function getLinkedInSharedConnections(plugin_id, linkedin_id)
+{
+
+	 $('#linkedin_shared_panel').html(LINKEDIN_UPDATE_LOAD_IMAGE);
+	 
+	 $.get("/core/api/widgets/shared/connections/" + plugin_id + "/" + linkedin_id, 
+	 function (data)
+     {
+		 console.log(data);
+		 
+		 	var el = "<div style='padding:10px'>";
+
+	        // If no matches found display message
+	        if (data.length == 0)
+	        {
+	            $('#linkedin_shared_panel').html("<div style='padding: 10px;line-height:160%;'>" + 
+	    				"No shared connections</div>");
+	            return;
+	        }
+
+	        // If matches found, Iterates through each profile
+	        $.each(data, function (key, value)
+	        {
+	            //If contact picture is null, show default image
+	            if (value.picture == null)
+	            {
+	                value.picture = 'https://contactuswidget.appspot.com/images/pic.png';
+	            }
+
+	            // Calls to populate template with the search results
+	            el = el.concat(getTemplate("linkedin-shared", value));
+
+	        });
+
+	        el = el + "</div>";
+	        
+	        $('#linkedin_shared_panel').html(el);
+	        
+	        // Displays LinkedIn profile details on mouse hover and saves profile on click
+	        $(".linkedinSharedImage").die().live('mouseover', function ()
+	        {
+	          
+	            // Aligns details to left in the pop over
+	            $(this).popover(
+	            {
+	                placement: 'left'
+	            });
+
+	            // Called show to overcome pop over bug (not showing pop over on mouse hover 
+	            // for first time)
+	            $(this).popover('show');
+	            
+	        });
+		 
+    }).error(function(data){
+    	// Remove loading image on error 
+    	$('#status_load').remove();
+    	
+   	 	alert(data.responseText);
+    });
+    
 }

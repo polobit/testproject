@@ -402,13 +402,15 @@ public class TwilioUtil
 	}
     }
 
-    public static JSONArray verifyOutgoingNumbers(Widget widget, String from)
+    public static JSONObject verifyOutgoingNumbers(Widget widget, String from)
 	    throws Exception
     {
 
 	String authToken = "5e7085bb019e378fb18822f319a3ec46";
 
-	String accountSid = "ACd1fe050ffa754cabc100a3acc93d8d1b";// widget.getProperty("account_sid");
+	String accountSid = widget.getProperty("account_sid");
+	// "AC79bd0a3da6b29949f0dab6fc5221d5fb";
+	// "ACd1fe050ffa754cabc100a3acc93d8d1b";
 	// String authToken = widget.getProperty("auth_token");
 
 	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
@@ -417,11 +419,8 @@ public class TwilioUtil
 
 	Map<String, String> params = new HashMap<String, String>();
 	params.put("PhoneNumber", from);
-	// params.put("VoiceUrl",
-	// "https://agile-crm-cloud.appspot.com/backend/voice");
-	// params.put("VoiceMethod", "GET");
-	// params.put("FriendlyName", "AGILECRM");
-	// params.put("AreaCode", "510");
+	params.put("StatusCallback",
+		"https://agile-crm-cloud.appspot.com/backend/verification");
 
 	response = client.request(
 		"/" + APIVERSION + "/Accounts/" + client.getAccountSid()
@@ -439,29 +438,22 @@ public class TwilioUtil
 	    System.out.println(response.getResponseText());
 
 	    JSONObject json = XML.toJSONObject(response.getResponseText());
-	    JSONArray array = json.getJSONObject("TwilioResponse")
-		    .getJSONObject("OutgoingCallerIds")
-		    .getJSONArray("OutgoingCallerId");
-	    JSONArray arrayOfNums = new JSONArray();
-	    for (int i = 0; i < array.length(); i++)
-	    {
-		System.out.println(array.getJSONObject(i).getString(
-			"PhoneNumber"));
-		arrayOfNums.put(i,
-			array.getJSONObject(i).getString("PhoneNumber"));
-	    }
-	    return arrayOfNums;
+	    System.out.println(json);
+	    JSONObject responseJSON = json.getJSONObject("TwilioResponse");
+	    System.out.println(responseJSON);
+	    return responseJSON;
 
 	}
 
     }
 
-    public static JSONArray getOutgoingNumbers(Widget widget) throws Exception
+    public static JSONObject getOutgoingNumbers(Widget widget) throws Exception
     {
 
 	String authToken = "5e7085bb019e378fb18822f319a3ec46";
 
-	String accountSid = "ACd1fe050ffa754cabc100a3acc93d8d1b";// widget.getProperty("account_sid");
+	String accountSid = widget.getProperty("account_sid");
+	// "AC758e99f9fd7fea38f470f8cd7ddf465a";
 	// String authToken = widget.getProperty("auth_token");
 
 	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
@@ -492,14 +484,19 @@ public class TwilioUtil
 	    System.out.println(response.getResponseText());
 
 	    JSONObject json = XML.toJSONObject(response.getResponseText());
-	    JSONObject array = json.getJSONObject("TwilioResponse")
-		    .getJSONObject("OutgoingCallerIds")
-		    .getJSONObject("OutgoingCallerId");
-	    JSONArray arrayOfNums = new JSONArray();
 
-	    arrayOfNums.put(array.getString("PhoneNumber"));
+	    System.out.println(json);
+	    JSONObject result = json.getJSONObject("TwilioResponse")
+		    .getJSONObject("OutgoingCallerIds");
 
-	    return arrayOfNums;
+	    System.out.println(result);
+
+	    if (Integer.parseInt(result.getString("total")) == 0)
+		return new JSONObject();
+
+	    if (result.get("OutgoingCallerId") instanceof JSONObject)
+		return result.getJSONObject("OutgoingCallerId");
+	    return result.getJSONArray("OutgoingCallerId").getJSONObject(0);
 
 	}
 
@@ -554,6 +551,7 @@ public class TwilioUtil
 	    // "+913748874888"));
 
 	    TwilioUtil.getOutgoingNumbers(null);
+	    // TwilioUtil.verifyOutgoingNumbers(null, "+919533477545");
 	}
 	catch (Exception e)
 	{

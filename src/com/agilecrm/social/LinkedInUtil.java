@@ -703,23 +703,20 @@ public class LinkedInUtil
 	return experience;
     }
 
-    public static void main(String[] args)
+    public static List<SocialSearchResult> getSharedConnections(Widget widget,
+	    String linkedInId) throws Exception
     {
-	final LinkedInApiClient client = factory.createLinkedInApiClient(
-	// "4c1b1828-e275-4e09-b7f9-1f85ee32c22e", // devikkah
-	// "4abc6b56-a41e-4864-a759-22c36c36e460");
-		"f71d216b-16b7-41d5-a593-92c928b6fa13", // revathi
-		"9c9a2635-3efd-474c-8459-61251a5006e1");
-	// "3382f692-f598-4b72-9dd3-891853fec2fc", // test
-	// "7984afcf-f0f7-4fb3-b39c-cb7379d0336e");
 
-	// {"token":"4c1b1828-e275-4e09-b7f9-1f85ee32c22e","secret":"4abc6b56-a41e-4864-a759-22c36c36e460"}
-	// {"token":"3382f692-f598-4b72-9dd3-891853fec2fc","secret":"7984afcf-f0f7-4fb3-b39c-cb7379d0336e"}
-	Person cons = client
+	final LinkedInApiClient client = factory.createLinkedInApiClient(
+		widget.getProperty("token"), widget.getProperty("secret"));
+
+	Person profile = client
 		.getProfileById(
-			"ZQglvOshW2",
+			linkedInId,
 			EnumSet.of(
+				ProfileField.DISTANCE,
 				ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS,
+				ProfileField.RELATION_TO_VIEWER,
 				ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_HEADLINE,
 				ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_PUBLIC_PROFILE_URL,
 				ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_LAST_NAME,
@@ -727,62 +724,90 @@ public class LinkedInUtil
 				ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_PICTURE_URL,
 				ProfileField.RELATION_TO_VIEWER_CONNECTIONS));
 
-	// Company com = client.getCompanyById("1680", EnumSet.of(
-	// CompanyField.LOCATIONS_ADDRESS, CompanyField.LOGO_URL,
-	// CompanyField.NAME, CompanyField.NUM_FOLLOWERS,
-	// CompanyField.BLOG_RSS_URL, CompanyField.DESCRIPTION,
-	// CompanyField.ID, CompanyField.INDUSTRY, CompanyField.TICKER));
-	//
-	// com.setLogoUrl(com.getLogoUrl().replace("http:", "https:")
-	// .replace("m3", "m3-s"));
-	// tUqQPRTrto
-	// mgSCSTsq2V
+	List<SocialSearchResult> searchResults = new ArrayList<SocialSearchResult>();
+
+	if (profile.getRelationToViewer().getRelatedConnections() == null)
+	    return searchResults;
+
+	List<Person> persons = profile.getRelationToViewer()
+		.getRelatedConnections().getPersonList();
+
+	for (Person person : persons)
+	{
+	    SocialSearchResult result = new SocialSearchResult();
+
+	    result.id = person.getId();
+	    result.name = person.getFirstName() + " " + person.getLastName();
+	    result.picture = person.getPictureUrl();
+	    result.url = person.getPublicProfileUrl();
+	    result.summary = person.getHeadline();
+	    result.distance = String.valueOf(person.getDistance());
+
+	    if (person.getDistance() != null && person.getDistance() == 1)
+		result.is_connected = true;
+
+	    // Changes http to https to avoid client side warnings by browser,
+	    // Changes certificate from m3 to m3-s to fix ssl broken image link
+	    if (result.picture != null)
+		result.picture = result.picture.replace("http:", "https:")
+			.replace("m3", "m3-s");
+
+	    // Sets number of connects if provided
+	    result.num_connections = (person.getNumConnections() != null) ? person
+		    .getNumConnections().toString() : "";
+
+	    result.location = (person.getLocation() != null) ? person
+		    .getLocation().getName() : "";
+
+	    result.distance = (person.getDistance() != null) ? person
+		    .getDistance().toString() : "";
+
+	    // Add result wrapper object to the list
+	    searchResults.add(result);
+	}
+
+	return searchResults;
+    }
+
+    public static void main(String[] args)
+    {
+	final LinkedInApiClient client = factory.createLinkedInApiClient(
+		// "4c1b1828-e275-4e09-b7f9-1f85ee32c22e", // devikkah
+		// "4abc6b56-a41e-4864-a759-22c36c36e460");
+		// "f71d216b-16b7-41d5-a593-92c928b6fa13", // revathi
+		// "9c9a2635-3efd-474c-8459-61251a5006e1");
+		// "3382f692-f598-4b72-9dd3-891853fec2fc", // test
+		// "7984afcf-f0f7-4fb3-b39c-cb7379d0336e");
+		"742877e1-5f85-4b49-a10c-08009f98005f",
+		"846cae2c-d653-45bf-98b4-39c24655ba2d");
+
+	Person cons = client
+		.getProfileById(
+			"6ZlRac2KIO",
+			EnumSet.of(
+				ProfileField.DISTANCE,
+				ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS,
+				ProfileField.RELATION_TO_VIEWER,
+				ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_HEADLINE,
+				ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_PUBLIC_PROFILE_URL,
+				ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_LAST_NAME,
+				ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_FIRST_NAME,
+				ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_PICTURE_URL,
+				ProfileField.RELATION_TO_VIEWER_CONNECTIONS));
 
 	ObjectMapper mapper = new ObjectMapper();
 	String json;
 	try
 	{
-	    // json = mapper.writeValueAsString(com);
-	    // System.out.println(json);
-	    // json = mapper.writeValueAsString(cons);
-	    // System.out.println(json);
+
 	    json = mapper.writeValueAsString(cons);
 	    System.out.println(json);
-	    // cons.getThreeCurrentPositions().getPositionList().get(0)
-	    // .setCompany(com);
-	    json = mapper.writeValueAsString(cons.getThreeCurrentPositions());
-	    System.out.println(json);
-	    // json = mapper.writeValueAsString(cons.getThreePastPositions());
-	    // System.out.println(json);
+
 	}
 	catch (Exception e)
 	{
 	    e.getMessage();
 	}
-	// for (Position pos :
-	// cons.getThreeCurrentPositions().getPositionList())
-	// {
-	//
-	// System.out.println(pos.getTitle());
-	//
-	// System.out.println("summary" + pos.getSummary());
-	// System.out.println("company" + pos.getCompany().getName());
-	// System.out.println(pos.getStartDate().getMonth() + "-"
-	// + pos.getStartDate().getYear());
-	// System.out.println(pos.getEndDate());
-	// }
-	//
-	// for (Position pos : cons.getThreePastPositions().getPositionList())
-	// {
-	//
-	// System.out.println(pos.getTitle());
-	// System.out.println(pos.getSummary());
-	// System.out.println(pos.getCompany().getName());
-	// System.out.println(pos.getStartDate().getMonth() + "-"
-	// + pos.getStartDate().getYear());
-	// System.out.println(pos.getEndDate().getMonth() + "-"
-	// + pos.getEndDate().getYear());
-	// }
 
     }
 }

@@ -39,25 +39,24 @@
 	<h4><a style="text-decoration: none"><b>{{ucfirst subject}}</b></a></h4></br>
 	<p>{{description}}</p>	
 	 	<div class="clear">
-		<span class="actions pull-right">
-			<a title="Edit"  data="{{id}}" data-toggle="modal" class="edit-note" style="cursor:pointer;text-decoration: none;padding-right:10px"> <i class="icon-pencil"></i> </a>
-            <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/contacts/notes/bulk"></span></a>
-        </span>
-		<small class="edit-hover" style="margin-right:10px"> 
-			<time class="note-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" created_time}}</time>
-		</small>
-		<div style="display:inline-block; ">	
+		<div style="margin-bottom: 9px;">	
 		{{#each contacts}}
            	{{#if id}}
 				{{#isDuplicateContactProperty properties "email"}}
 					{{else}}	
-						&nbsp<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+						<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
 				{{/isDuplicateContactProperty}}
            		
            	{{/if}}
        	{{/each}}
 		</div>
-	<br/>
+		<small class="edit-hover" style="margin-right:10px"> 
+			<time class="note-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" created_time}}</time>
+		</small>
+		<span class="actions pull-right">
+			<a title="Edit"  data="{{id}}" data-toggle="modal" class="edit-note" style="cursor:pointer;text-decoration: none;padding-right:10px"> <i class="icon-pencil"></i> </a>
+            <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/contacts/notes/bulk"></span></a>
+        </span>
 	</div>
 </div>
 </div>
