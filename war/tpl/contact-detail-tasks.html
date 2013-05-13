@@ -47,27 +47,27 @@
 			<div style="margin-bottom: 9px;"><input data="{{id}}" class="complete-task" type="checkbox"/><h4 class="task-subject" style="display:inline;"><b style="margin:0px 20px 0px 10px;">{{subject}}</b><span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></h4></div>
 	{{/if}}
   <div style="margin-left:22px;">
-	<p><i class="{{icons type}}"></i>&nbsp;{{ucfirst type}}<span style="color:#b2b0b1;margin-left:20px;">Due : {{epochToHumanDate "mmm d, yyyy" due}}</span></p>
+	<p><i class="{{icons type}}"></i>&nbsp;{{ucfirst type}}<span style="margin-left:20px;">Due : {{epochToHumanDate "mmm d, yyyy" due}}</span></p>
 	<div class="clear">
-		<span class="actions pull-right">
-			<a title="Edit"  data="{{id}}" class="task-edit-contact-tab" style="cursor:pointer;text-decoration: none;padding-right:10px"> <i class="icon-pencil"></i> </a>
-            <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/tasks/bulk"><i></i></span></a>
-        </span>
-		 <small class="edit-hover" style="margin-right:10px"> 
-			<time class="task-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" created_time}}</time>
-		</small>	
-		<div style="display:inline;">	
+		<div style="margin-bottom: 9px;">	
 		{{#each contacts}}
            	{{#if id}}
 				{{#isDuplicateContactProperty properties "email"}}
 
 					{{else}}	
-						&nbsp<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+						<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
 				{{/isDuplicateContactProperty}}
            		
            	{{/if}}
        	{{/each}}
 		</div>
+		 <small class="edit-hover" style="margin-right:10px"> 
+			<time class="task-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" created_time}}</time>
+		</small>
+		<span class="actions pull-right">
+			<a title="Edit"  data="{{id}}" class="task-edit-contact-tab" style="cursor:pointer;text-decoration: none;padding-right:10px"> <i class="icon-pencil"></i> </a>
+            <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/tasks/bulk"><i></i></span></a>
+        </span>
 	</div>
   </div>
 </div>
