@@ -22,8 +22,9 @@
 	</div>
 </div>
 <ul class="nav nav-tabs" id="myTab">
-	<li class="active" style="width:50%;"><a data-toggle="tab" href="#updates"><h3>Activity</h3><small></small></a></li>
-	<li style="width:50%;"><a data-toggle="tab" href="#work" id="linkedin_experience"><h3>Experience</h3><small></small></a></li>
+	<li class="active" style="width:33.33333%"><a data-toggle="tab" href="#updates"><h3>Activity</h3><small></small></a></li>
+	<li style="width:33.33333%"><a data-toggle="tab" href="#experience" id="linkedin_experience"><h3>Work</h3><small></small></a></li>
+	<li style="width:33.33333%"><a data-toggle="tab" href="#connections" id="linkedin_shared_connections"><h3>Shared</h3><small></small></a></li>
 </ul>
 
 <div class="tab-content" id="myTabContent">
@@ -48,8 +49,13 @@
 			<a href="#refresh" id="linkedin_refresh_stream" class="icon-refresh pull-right" rel="tooltip" title="Refresh to get current updates" style="display:none"></a>
 		</div>
 	</div>
-	<div id="work" class="tab-pane fade">
+	<div id="experience" class="tab-pane fade">
 		<ul class="widget_tab_content" id="linkedin_experience_panel">
+						
+		</ul>
+	</div>
+	<div id="connections" class="tab-pane fade">
+		<ul class="widget_tab_content" id="linkedin_shared_panel">
 						
 		</ul>
 	</div>
@@ -201,4 +207,26 @@
 	    </div>
 	</div>
 </script>
+
+<script id="linkedin-shared-template" type="text/html">
+<a href="{{url}}" target="_blank"><img  rel='popover' data-original-title='LinkedIn Profile' class='linkedinSharedImage thumbnail' id="{{id}}" src ="{{picture}}"
+   style='width: 35px;height: 35px; display:inline-block; margin-right:2px; margin-bottom:2px; cursor:pointer;'
+   data-content="
+		<div class='row-fluid' style='padding-bottom:10px;'>
+            <div class='span4' style='padding:0px 10px 0px 10px;'>
+              <img style='width:55px;height:55px;' src='{{picture}}'></img>
+            </div>
+            <div class='span8'>
+               <b style='color:#069;font-size:14px;'>{{name}}</b>
+			   <p>
+					{{#if location}}{{location}}{{/if}}<br/>
+					{{#if num_connections}}{{num_connections}} Connections{{/if}}
+			   </p>
+            </div>		
+		</div>
+	  <div  class='row-fluid' style='padding-bottom:10px;word-wrap: break-word;'>
+		 <p style='font-style: italic;'>{{summary}}</p>
+	  </div>
+"></img></a>
+</script>  
 <!-- End of Modal views -->

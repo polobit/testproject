@@ -15,6 +15,7 @@
 		<div class="row-fluid">
 			<a href="#call" class="btn pull-right" id="twilio_call" style="display:none;"><i class="icon-phone"></i>Call</a>
 			<a href="#hangup" class="btn btn-danger pull-right" id="twilio_hangup" style="display:none;">Hang up</a>
+			<a href="#note" class="right contact-add-note" id="twilio_note" style="margin: 5px;">Add Note</a>
 		</div>
  	</div>
 	<div class="sub_header">
@@ -52,15 +53,22 @@
 	{{/if}}
 </script>
  
-<!-- 
+
 <script id="twilio-initial-template" type="text/html" >
 	<div class="widget_content">
-		<input type="text" placeholder="Enter number" name="twilio_from" id="twilio_from" class="required digits" style="width:auto"/><br>	
-		<a href="#call" class="btn" id="twilio_verify" style="font-size:13px;">Verify</a>						
+		<input type="text" placeholder="Enter number" name="twilio_from" id="twilio_from" class="required digits" style="width:auto" maxlength="15"/><br>	
+		<a href="#verify" class="btn" id="twilio_verify" style="font-size:13px;">Verify</a>						
 	</div>
 </script>
 
+<script id="twilio-verify-template" type="text/html" >
+	<div class="widget_content">
+		<p>Please enter this code <b>{{ValidationRequest.ValidationCode}}</b> to verify your number after you receive a call from Twilio</p>
+		<a href="#proceed" class="btn" id="twilio_proceed" style="font-size:13px;">Proceed</a>						
+	</div>
+</script>
 
+<!-- 
 <script id="twilio-profile-template" type="text/html">
 	<div class="widget_content">
 		<div class="row-fluid" style="padding-bottom: 10px;">

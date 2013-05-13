@@ -8,6 +8,7 @@ import java.util.List;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.search.QueryInterface;
+import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleType;
 import com.agilecrm.search.util.SearchUtil;
@@ -245,10 +246,7 @@ public class QueryDocument implements QueryInterface
 	try
 	{
 	    // Get index of document based on type of query
-	    index = (Index) Class
-		    .forName(
-			    "com.agilecrm.search.document." + type + "Document")
-		    .getDeclaredField("index").get(null);
+	    index = new ContactDocument().getIndex();
 	}
 	catch (Exception e)
 	{
@@ -315,10 +313,8 @@ public class QueryDocument implements QueryInterface
 	try
 	{
 	    // Get index of document based on type of query
-	    index = (Index) Class
-		    .forName(
-			    "com.agilecrm.search.document." + type + "Document")
-		    .getDeclaredField("index").get(null);
+	    // Get index of document based on type of query
+	    index = new ContactDocument().getIndex();
 	}
 	catch (Exception e)
 	{

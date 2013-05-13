@@ -7,16 +7,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.util.SearchUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Field;
 import com.google.appengine.api.search.Index;
 import com.google.appengine.api.search.IndexSpec;
+import com.google.appengine.api.search.Query;
+import com.google.appengine.api.search.QueryOptions;
 import com.google.appengine.api.search.SearchService;
 import com.google.appengine.api.search.SearchServiceFactory;
 import com.googlecode.objectify.Objectify;
@@ -65,7 +69,8 @@ public class ContactDocument implements BuilderInterface
     /**
      * Index for the contact Document, Required to search on contacts document
      */
-    public Index index = searchService.getIndex(IndexSpec.newBuilder().setName(
+    private Index index = searchService.getIndex(IndexSpec.newBuilder()
+	    .setName(
 	    "contacts"));
 
     /**
@@ -104,6 +109,7 @@ public class ContactDocument implements BuilderInterface
 	Date truncatedDate = DateUtils.truncate(new Date(
 		contact.created_time * 1000),
 		Calendar.DATE);
+	System.out.println(truncatedDate);
 	doc.addField(Field.newBuilder().setName("created_time")
 		.setDate(truncatedDate));
 
@@ -185,7 +191,6 @@ public class ContactDocument implements BuilderInterface
     {
 	// Adds document to index
 	index.put(doc);
-
 	System.out.println(index.getName());
 	//System.out.println(index.getConsistency());
 	System.out.println(index.getSchema());
@@ -233,4 +238,42 @@ public class ContactDocument implements BuilderInterface
 	}
 
     }
+
+    public static void deleteAllData(String namespace)
+    {
+	if (StringUtils.isEmpty(namespace))
+	    return;
+
+	String oldNamespace = NamespaceManager.get();
+	try
+	{
+	    NamespaceManager.set(namespace);
+
+	    QueryOptions options = QueryOptions.newBuilder()
+		    .setFieldsToReturn("id").build();
+
+	    // Build query on query options Query query_string =
+	    Query.newBuilder().setOptions(options).build();
+
+	    SearchService searchService = SearchServiceFactory
+		    .getSearchService();
+
+	    Index index = searchService.getIndex(IndexSpec.newBuilder()
+		    .setName("contacts"));
+
+	    index.search("").getResults();
+
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+
+    }
+
+    public Index getIndex()
+    {
+	return index;
+    }
+
 }
