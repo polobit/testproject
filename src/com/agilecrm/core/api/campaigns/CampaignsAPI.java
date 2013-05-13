@@ -130,8 +130,9 @@ public class CampaignsAPI
     @Path("logs/recent")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Log> getRecentCampaignLogs(@QueryParam("limit") String limit)
+    public List<Log> getRecentCampaignLogs(@QueryParam("page_size") String limit)
     {
+	// System.out.println("limit : " + limit);
 	return LogUtil.getSQLLogs(null, null, limit);
     }
 

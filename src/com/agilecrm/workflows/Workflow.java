@@ -150,6 +150,11 @@ public class Workflow extends Cursor
 	return "";
     }
 
+    /**
+     * Returns subscribers count saved in cron.
+     * 
+     * @return int
+     */
     @XmlElement
     public int getActiveUsersCount()
     {
