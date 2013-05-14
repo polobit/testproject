@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
@@ -18,25 +20,36 @@ import com.google.appengine.api.users.User;
 @SuppressWarnings("serial")
 public class HomeServlet extends HttpServlet
 {
+    public static final String IS_FIRST_TIME_USER = "isFirstTimeUser";
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
 	    throws IOException, ServletException
     {
 	// First Time User
-	boolean isFirstTimeUser = false;
+	String isFirstTimerUser = req.getParameter(IS_FIRST_TIME_USER);
+
 
 	// Get Agile User
 	AgileUser agileUser = AgileUser.getCurrentAgileUser();
+
+	// If agileuser is null and if it occurs after first time login,
+	// redirects its to homeservlet again.
+	if (agileUser == null && StringUtils.equals(isFirstTimerUser, "true"))
+	{
+	    req.getRequestDispatcher("/home?isFirstTimeUser=true").forward(req,
+		    resp);
+	    return;
+	}
+
 	if (agileUser == null)
 	{
-	    isFirstTimeUser = true;
-
 	    // Create New User - AgileUser (for this namespace)
 	    agileUser = new AgileUser(SessionManager.get().getDomainId());
 	    agileUser.save();
 
 	    System.out.println(agileUser);
 
-	    req.getRequestDispatcher("/home").forward(req, resp);
+	    req.getRequestDispatcher("/home?isFirstTimeUser=true").forward(req,
+		    resp);
 	    return;
 	}
 
