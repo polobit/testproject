@@ -27,11 +27,15 @@
 	  <include path="/**.ico" expiration="7d" />
 	  <!-- End of images -->
 	  
+	  <!--  Fonts -->
+	  <include path="/**.woff" expiration="7d" />
+	  <!-- End of Fonts -->
+	  
+	  
 	  <!-- Sounds -->
 	  <include path="/**.mp3" expiration="7d" />
 	  <!-- End of Sounds -->
-	   
-	
+	  
 	  <!-- CSS -->
 	  <include path="/**.css"/>
 	  <!-- CSS -->
