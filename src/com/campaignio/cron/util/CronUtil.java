@@ -1,5 +1,6 @@
 package com.campaignio.cron.util;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -12,10 +13,12 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.campaignio.cron.Cron;
 import com.campaignio.cron.deferred.CronDeferredTask;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.QueryResultIterator;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Query;
 
 /**
  * <code>CronUtil</code> is the base class to save and delete crons. It is used
@@ -210,11 +213,10 @@ public class CronUtil
     }
 
     /**
-     * Gets Old Sessions and deletes them all.
-     * 
-     * @return list of Crons that are deleted.
+     * Gets old cron job and run the cron job. Once fetched, delete that cron
+     * job.
      */
-    public static List<Cron> getExpiredCronJobs()
+    public static void getExpiredCronJobsAndRun()
     {
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set("");
@@ -223,21 +225,25 @@ public class CronUtil
 	Long milliSeconds = Calendar.getInstance().getTimeInMillis();
 	System.out.println(milliSeconds + " " + NamespaceManager.get());
 
-	List<Cron> cronJobs = dao.listByProperty("timeout <=", milliSeconds);
+	// Temporary list
+	List<Cron> cronList = new ArrayList<Cron>();
 
-	System.out.println(cronJobs);
+	Query<Cron> query = dao.ofy().query(Cron.class)
+		.filter("timeout <= ", milliSeconds);
 
-	cronJobs = dao.ofy().query(Cron.class)
-		.filter("timeout <=", milliSeconds).list();
+	QueryResultIterator<Cron> iterator = query.iterator();
 
-	System.out.println(cronJobs);
+	while (iterator.hasNext())
+	{
+	    Cron cron = iterator.next();
+	    dao.delete(cron);
+	    cronList.add(cron);
 
-	// Delete them all
-	dao.deleteAll(cronJobs);
+	    // Run cron job
+	    executeTasklets(cronList, Cron.CRON_TYPE_TIME_OUT, null);
+	}
 
 	NamespaceManager.set(oldNamespace);
-
-	return cronJobs;
     }
 
     /**
@@ -306,25 +312,6 @@ public class CronUtil
 		    customData.toString());
 	    Queue queue = QueueFactory.getDefaultQueue();
 	    queue.add(TaskOptions.Builder.withPayload(cronDeferredTask));
-	}
-    }
-
-    /**
-     * Wakes up tasks that complete the timeout period.
-     */
-    public static void wakeupOldTasks()
-    {
-	// Check for timeouts task and delete them after fetching
-	List<Cron> cronJobs = getExpiredCronJobs();
-
-	if (cronJobs.size() > 0)
-	{
-	    System.out.println("Waking up " + cronJobs.size() + " jobs");
-	    executeTasklets(cronJobs, Cron.CRON_TYPE_TIME_OUT, null);
-	}
-	else
-	{
-	    System.out.println("No jobs to wake up");
 	}
     }
 

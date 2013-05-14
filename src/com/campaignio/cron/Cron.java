@@ -156,9 +156,8 @@ public class Cron extends HttpServlet
      *            Custom value3.
      */
     public Cron(JSONObject campaignJSON, JSONObject subscriberJSON,
-	    JSONObject data,
-	    JSONObject nodeJSON, long timeOut, String custom1, String custom2,
-	    String custom3)
+	    JSONObject data, JSONObject nodeJSON, long timeOut, String custom1,
+	    String custom2, String custom3)
     {
 	this.campaign_json = campaignJSON;
 	this.subscriber_json = subscriberJSON;
@@ -194,7 +193,7 @@ public class Cron extends HttpServlet
 	{
 	    // Dequeue Tasks
 	    System.out.println("Cron init - ");
-	    CronUtil.wakeupOldTasks();
+	    CronUtil.getExpiredCronJobsAndRun();
 	    System.out.println("Cron done - ");
 	    return;
 	}
@@ -291,4 +290,3 @@ public class Cron extends HttpServlet
 	// System.out.println("Logs " + logs);
     }
 }
-
