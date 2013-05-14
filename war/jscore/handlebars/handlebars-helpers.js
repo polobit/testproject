@@ -153,7 +153,35 @@ $(function() {
 		return (value && typeof value === 'string') ? (value.charAt(0)
 				.toUpperCase() + value.slice(1).toLowerCase()) : '';
 	});
-
+	
+	/**
+	 * 
+	 * @method report_property
+	 * @param {String}
+	 *            change property value in view
+	 * @returns converted string
+	 */
+	Handlebars.registerHelper('report_property', function(value) {
+		if (value == "properties_first_name")
+			return "First Name";
+		else if (value == "properties_last_name")
+			return "Last Name";
+		else if (value == "properties_email")
+			return "Email";
+		else if (value == "properties_image")
+			return "Image";
+		else if (value == "properties_title")
+			return "Title";
+		else if (value == "properties_company")
+			return "Company";
+		else if (value == "created_time")
+			return "Created Date";
+		else if (value == "updated_time")
+			return "Updated Date";
+		else if (value == "tags")
+			return "Tags";
+	});
+	
 	// Tip on using Gravar with JS:
 	// http://www.deluxeblogtips.com/2010/04/get-gravatar-using-only-javascript.html
 	/**
@@ -764,18 +792,6 @@ $(function() {
 	   + from_date.toString('MMMM d, yyyy');
 
 	});
-	
-	Handlebars.registerHelper("getCurrentDomain", function(options) {
-		var url = window.location.host;
-		
-		var exp = /(\.)/;
-		
-		if(url.search(exp) >= 0)
-			return url.split(exp)[0];
-
-		return " ";
-	});
-	
 
 	Handlebars.registerHelper("extractEmail", function(content, options) {
 

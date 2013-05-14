@@ -48,7 +48,7 @@
                     </div>
                 </div>                  
                 
-                <input name="signature" type="hidden"/>
+                <input name="signature" type="hidden" value="{{#getCurrentUserPrefs}}{{signature}}{{/getCurrentUserPrefs}}"/>
 
                 <div class="form-actions">          
                     <a href="#"  id="sendEmail" class="btn btn-primary">Send</a>
