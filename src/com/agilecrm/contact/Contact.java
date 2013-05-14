@@ -544,7 +544,8 @@ public class Contact extends Cursor
 	System.out.println(tagsWithTime);
 
 	// Update Tags - Create a deferred task
-	TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(tags);
+	TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(
+		getContactTags());
 
 	Queue queue = QueueFactory.getDefaultQueue();
 	queue.add(TaskOptions.Builder.withPayload(tagsDeferredTask));
