@@ -277,6 +277,8 @@ $(function() {
 
 		var obj = JSON.parse(info_json);
 
+		if(!obj[date_type])
+			return "-"
 		var intMonth = new Date(parseInt(obj[date_type]) * 1000).getMonth();
 		var intDay = new Date(parseInt(obj[date_type]) * 1000).getDate();
 		var intYear = new Date(parseInt(obj[date_type]) * 1000).getFullYear();
