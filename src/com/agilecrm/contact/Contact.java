@@ -2,7 +2,6 @@ package com.agilecrm.contact;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -141,7 +140,7 @@ public class Contact extends Cursor
     @NotSaved(IfDefault.class)
     @Embedded
     @Indexed
-    private ArrayList<Tag> tagsWithTime = new ArrayList<Tag>();
+    public ArrayList<Tag> tagsWithTime = new ArrayList<Tag>();
 
     /**
      * Stores properties, by embedding the class <code>ContactField</code>. Also
@@ -244,12 +243,6 @@ public class Contact extends Cursor
 	    // notifications/triggers with new tags
 	    oldContact.tags = oldContact.getContactTags();
 	}
-
-	// Compare with old contact and add new tags
-	if (oldContact != null)
-	    tagsWithTime = mapTagsWithTime(oldContact.tagsWithTime, tags);
-	else
-	    tagsWithTime = mapTagsWithTime(tagsWithTime, tags);
 
 	dao.put(this);
 
@@ -541,6 +534,14 @@ public class Contact extends Cursor
 	{
 	    updated_time = System.currentTimeMillis() / 1000;
 	}
+	
+	for(Tag tag : tagsWithTime)
+	{
+	    if (tag.createdTime == 0L)
+		tag.createdTime = System.currentTimeMillis();
+	}
+
+	System.out.println(tagsWithTime);
 
 	// Update Tags - Create a deferred task
 	TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(tags);
@@ -554,55 +555,6 @@ public class Contact extends Cursor
     private void postLoad()
     {
 	tags = getContactTags();
-    }
-
-    /*
-     * Creates a list of @Tag objects with tags value and created time in it.
-     */
-    private ArrayList<Tag> mapTagsWithTime(ArrayList<Tag> oldTagsWithTime,
-	    Set<String> tags)
-    {
-	// If tags are empty(considering tags are deleted) then empty list is
-	// saved.
-	if (tags.isEmpty())
-	    return new ArrayList<Tag>();
-
-	// Iterates through each tag in tags list and add new tags with current
-	// time, also removes tags from list which are deleted in the current
-	// request
-	for (String tagValue : tags)
-	{
-	    boolean tagExists = false;
-
-	    Iterator<Tag> tagsIterator = oldTagsWithTime.iterator();
-
-	    while (tagsIterator.hasNext())
-	    {
-		Tag tag = tagsIterator.next();
-		// If tags list do not contain a tag which is previously saved
-		// in
-		// the tagsWithTime, then tag is removed from the list
-		if (!tags.contains(tag.tag))
-		{
-		    tagsIterator.remove();
-		    continue;
-		}
-
-		// Check if any new tag is added.
-		if (tag.tag.equalsIgnoreCase(tagValue))
-		{
-		    tagExists = true;
-		}
-	    }
-
-	    // If new tag is added, then current tag is added to list with
-	    // current time as tag created time
-	    if (!tagExists)
-		oldTagsWithTime.add(new Tag(tagValue, System
-			.currentTimeMillis()));
-
-	}
-	return oldTagsWithTime;
     }
 
     @Override

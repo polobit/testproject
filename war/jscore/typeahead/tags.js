@@ -91,8 +91,8 @@ function setup_tags_typeahead() {
     			// Checks if tag already exists in contact
     			if($.inArray(tag, json.tags) >= 0)
     				return;
-    			
-    			json.tags.push(tag);
+    			console.log(json.tagsWithTime);
+    			json.tagsWithTime.push({"tag" : tag});
     			
     			saveEntity(json, 'core/api/contacts', function(data){
     				$("#addTagsForm").css("display", "none");
@@ -136,16 +136,15 @@ function setup_tags_typeahead() {
     			var contact_json = App_Contacts.contactDetailView.model.toJSON();
     	
     			var tag = $(this).val();
-    			
-    			contact_json.tags.push(tag);
-    	
+
     			$("#addTags").val("");
     	
     			if(!tag || (/^\s*$/).test(tag))
     			{
-    					return;
+    				return;
     			}
-    	    	
+    			
+    			
     			// Get all existing tags of the contact to compare with the added tags
     			var old_tags = [];
     			$.each($('#added-tags-ul').children(), function(index, element){
@@ -157,6 +156,8 @@ function setup_tags_typeahead() {
     			if ($.inArray(tag, old_tags) != -1) 
     				return;
    			
+    			contact_json.tagsWithTime.push({"tag" : tag});
+    	    	
     			saveEntity(contact_json, 'core/api/contacts',  function(data) {
     				tagsCollection.add( {"tag" : tag} );
     			$("#addTagsForm").css("display", "none");

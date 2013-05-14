@@ -45,12 +45,12 @@ public class Tag
      * 
      * @param tag
      */
-    Tag(String tag)
+    public Tag(String tag)
     {
 	this.tag = tag;
     }
 
-    Tag(String tag, Long createdTime)
+    public Tag(String tag, Long createdTime)
     {
 	this.tag = tag;
 	this.createdTime = createdTime;
@@ -70,8 +70,16 @@ public class Tag
     }
 
     @Override
+    public boolean equals(Object o)
+    {
+	Tag tag = (Tag)o;
+	return this.tag.equalsIgnoreCase(tag.tag);
+    }
+
+    @Override
     public String toString()
     {
-	return "id: " + tag;
+	return "Tag [tag=" + tag + ", createdTime=" + createdTime + "]";
     }
+
 }

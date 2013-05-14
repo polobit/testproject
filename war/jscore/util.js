@@ -179,12 +179,14 @@ function delete_contact_tag(contact, tagName) {
 
 	// Iterates though tags in the contact and removes the tag which matches the
 	// tag name parameter of the function
-	for ( var index = 0; index < contact.tags.length; index++) {
-		if (contact.tags[index] == tagName) {
-			contact.tags.splice(index, 1);
-			break;
+	$.each(contact.tagsWithTime, function(index, tagObject) {
+		if(tagObject.tag == tagName)
+		{
+			contact.tagsWithTime.splice(index, 1);
+			return false;
 		}
-	}
+	});
+	
 	return contact;
 }
 
