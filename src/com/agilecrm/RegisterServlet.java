@@ -274,6 +274,8 @@ public class RegisterServlet extends HttpServlet
 		request.getHeader("X-AppEngine-CityLatLong"));
 
 	domainUser.save();
+	
+	userInfo.setDomainId(domainUser.id);
 	return domainUser;
     }
 }

@@ -20,12 +20,11 @@ import com.google.appengine.api.users.User;
 @SuppressWarnings("serial")
 public class HomeServlet extends HttpServlet
 {
-    public static final String IS_FIRST_TIME_USER = "isFirstTimeUser";
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
 	    throws IOException, ServletException
     {
 	// First Time User
-	String isFirstTimerUser = req.getParameter(IS_FIRST_TIME_USER);
+	String isFirstTimerUser = req.getParameter("w");
 
 
 	// Get Agile User
@@ -33,9 +32,9 @@ public class HomeServlet extends HttpServlet
 
 	// If agileuser is null and if it occurs after first time login,
 	// redirects its to homeservlet again.
-	if (agileUser == null && StringUtils.equals(isFirstTimerUser, "true"))
+	if (agileUser == null && StringUtils.equals(isFirstTimerUser, "1"))
 	{
-	    req.getRequestDispatcher("/home?isFirstTimeUser=true").forward(req,
+	    req.getRequestDispatcher("/home?w=1").forward(req,
 		    resp);
 	    return;
 	}
@@ -48,7 +47,7 @@ public class HomeServlet extends HttpServlet
 
 	    System.out.println(agileUser);
 
-	    req.getRequestDispatcher("/home?isFirstTimeUser=true").forward(req,
+	    req.getRequestDispatcher("/home?w=1").forward(req,
 		    resp);
 	    return;
 	}
