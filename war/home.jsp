@@ -103,7 +103,7 @@ String CSS_PATH = "/";
 				<a class="btn btn-navbar" data-toggle="collapse"
 					data-target=".nav-collapse"> <span class="icon-bar"></span> <span
 					class="icon-bar"></span> <span class="icon-bar"></span>
-				</a> <a class="brand" href="#dashboard">Agile CRM</a>
+				</a> <a class="brand" href="#dashboard"><i class='icon-cloud'></i> Agile CRM</a>
 
 				<div class="nav-collapse">
 
