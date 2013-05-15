@@ -317,8 +317,8 @@ $(function(){
 		var json = serializeForm("emailForm");
 
 		var url =  'core/api/send-email?from=' + encodeURIComponent(json.from) + '&to=' + 
-			 encodeURIComponent(json.to) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + 
-				 encodeURIComponent(json.body) + '<div>' + encodeURIComponent(json.signature) + '</div>';
+			 encodeURIComponent(json.to + "," + json.email_cc) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + 
+				 encodeURIComponent(json.body) + '<br/><div><br/><br/>' + encodeURIComponent(json.signature) + '</div>';
 		
 		// Shows message 
 	    $save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><p class="text-success" style="color:#008000; font-size:15px; display:inline-block"> <i>Sending mail...</i></p></span>');
