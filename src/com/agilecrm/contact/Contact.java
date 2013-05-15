@@ -333,6 +333,32 @@ public class Contact extends Cursor
 
     }
 
+    public void addTags(Tag[] tags)
+    {
+	for (Tag tag : tags)
+	{
+	    tagsWithTime.add(tag);
+	}
+
+	this.save();
+    }
+
+    public void removeTags(Tag[] tags)
+    {
+	Set<String> tagslist = new HashSet<String>();
+	for (Tag tag : tags)
+	{
+	    this.tagsWithTime.remove(tag);
+
+	    tagslist.add(tag.tag);
+	}
+
+	this.save();
+
+	// Delete tags from Tag class
+	TagUtil.deleteTags(tagslist);
+    }
+
     /**
      * Removes tag(s) from a contact, and also from tags database, if no more
      * contacts with that tag
