@@ -7,13 +7,13 @@
             </div>
             <p><b>Contacts</b></p>
             <div style="margin:5px;">
-                <p>Owner: {{owner.name}}</p>
-                <p>Related To:</p> 
-                <div style="width:15em;">
+                <p>Owner : {{owner.name}}</p>
+                <p>Related To :</p> 
+                <div>
 				{{#each contacts}}
-                	<div class="span3" style="display:inline-block;margin:5px;">
+                	<div class="span4" style="display:inline-block;margin:5px;margin-left:25px;">
                     	<img class="thumbnail" src="{{gravatarurl properties 50}}" width="40px" height="40px" />
-                    	<div style="display:inline-block;text-overflow:ellipsis;white-space:nowrap;width:45px;overflow:hidden;">
+                    	<div style="display:inline-block;text-overflow:ellipsis;white-space:nowrap;width:90px;overflow:hidden;">
                         	{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}},
                     	</div>
                 	</div>

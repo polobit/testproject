@@ -41,8 +41,7 @@
 	<td>
 		<div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:83px;overflow:hidden;display:inline-block;">
         	{{#each contacts}}
-             <a href="#" class="tooltip_info" data-placement="top" data-toggle="tooltip" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" style='text-decoration: none;'> 
-          	 	<img src="{{gravatarurl properties 50}}" width="40px" height="40px" /></a>
+          	 	<img src="{{gravatarurl properties 50}}" width="40px" height="40px" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
         	{{/each}}</div>
        {{#if_greater this.contacts.length "3"}}<span>...</span>{{/if_greater}}
     </td>

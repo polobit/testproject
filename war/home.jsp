@@ -146,7 +146,7 @@ String CSS_PATH = "/";
 								<li><a href="#personModal" data-toggle="modal" id="person"><i class="icon-user"></i> Contact</a>
 								</li>
 								<li><a href="#companyModal" data-toggle="modal"
-									id="company"><i class="icon-briefcase"></i> Company</a></li>
+									id="company"><i class="icon-building"></i> Company</a></li>
 								<li><a href="#" id="show-activity"><i class="icon-list-alt"></i> Activity</a></li>
 
 								<li><a href="#deals-add" id="activity"><i class="icon-money"></i> Deal</a></li>
