@@ -315,9 +315,10 @@ $(function(){
 	      }
 		
 		var json = serializeForm("emailForm");
+
 		var url =  'core/api/send-email?from=' + encodeURIComponent(json.from) + '&to=' + 
-		   										 encodeURIComponent(json.to) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + 
-		   										encodeURIComponent(json.body) + '<div>' + encodeURIComponent(json.signature) + '</div>';
+			 encodeURIComponent(json.to) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + 
+				 encodeURIComponent(json.body) + '<div>' + encodeURIComponent(json.signature) + '</div>';
 		
 		// Shows message 
 	    $save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><p class="text-success" style="color:#008000; font-size:15px; display:inline-block"> <i>Sending mail...</i></p></span>');
@@ -475,17 +476,18 @@ function get_property_JSON(contactJSON)
 function populate_send_email_details(el){
 	 // Add From address to the form (FROM - current user email)
 	 var CurrentuserModel = Backbone.Model.extend({
-	     url: '/core/api/imap',
-	     //restKey: "domainUser"
+	     //url: '/core/api/imap',
+	     url: '/core/api/current-user',
+	     restKey: "domainUser"
 	});
 	var currentuserModel = new CurrentuserModel();
 	currentuserModel.fetch({success: function(data){
 			var model = data.toJSON();
 			$("#emailForm").find( 'input[name="from"]' ).val(model.email);
 	}});
-	
+
 	// Fill hidden signature field using userprefs 
-	$("#emailForm").find( 'input[name="signature"]' ).val(CURRENT_USER_PREFS.signature);
+	//$("#emailForm").find( 'input[name="signature"]' ).val(CURRENT_USER_PREFS.signature);
 	
 	// Prefill the templates
 	var optionsTemplate = "<option value='{{id}}'> {{subject}}</option>";

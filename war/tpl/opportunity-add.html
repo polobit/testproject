@@ -1,6 +1,6 @@
 <script id="opportunity-add-template" type="text/html">
 <div class="row">
-    <div class="span8">
+    <div class="span9">
         <div class="well">
             <form id="opportunityform" class="form-horizontal">
                 <fieldset>
@@ -35,22 +35,21 @@
                     <div class="control-group">
                         <label class="control-label">Value <span class="field_req">*</span></label>
                         <div class="controls"> 
-                            <input type="text" name="expected_value" class="input-small required  number" max="1000000000000000" placeholder="Value of deal" />
+                            <input type="text" name="expected_value" class="required  number" max="1000000000000" placeholder="Value of deal" />
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label">Milestone <span class="field_req">*</span></label>
                         <div class="controls">
-                            <select id="milestone" name="milestone" class="input-small required" Style="width:100px">
+                            <select id="milestone" name="milestone" class="required">
                                 <option value="">Select..</option>
                             </select>
-                            <span class="help-inline">Some help line for Milestone</span>				
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label">Probability (%) <span class="field_req">*</span></label>
                         <div class="controls">
-                            <input type="text" id="probability" name="probability" class="input-small required number" max="100" placeholder="Probability %" />				
+                            <input type="text" id="probability" name="probability" class=" required number" max="100" placeholder="Probability %" />				
                         </div>
                     </div>
                     <div class="control-group">

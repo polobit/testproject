@@ -8,7 +8,6 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -92,7 +91,8 @@ public class API
     {
 
 	// Get Users for this domain to see if it is free
-	List<com.agilecrm.user.DomainUser> usersList = DomainUserUtil.getUsers(domain);
+	List<com.agilecrm.user.DomainUser> usersList = DomainUserUtil
+		.getUsers(domain);
 
 	if (!usersList.isEmpty())
 	{
@@ -110,14 +110,15 @@ public class API
 
     @Path("send-email")
     @POST
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public void createEmail(@QueryParam("from") String fromEmail, @QueryParam("to") String to, @QueryParam("subject") String subject,
+    public void createEmail(@QueryParam("from") String fromEmail,
+	    @QueryParam("to") String to, @QueryParam("subject") String subject,
 	    @QueryParam("body") String body)
     {
 	try
 	{
-	    Util.sendMail(fromEmail, fromEmail, to, subject, fromEmail, body, null);
+	    Util.sendMail(fromEmail, fromEmail, to, subject, fromEmail, body,
+		    null);
 	}
 	catch (Exception e)
 	{
@@ -144,7 +145,8 @@ public class API
 	String domain = NamespaceManager.get();
 	String stats = AnalyticsUtil.getPageViews(searchEmail, domain);
 
-	System.out.println("Stats of given email: " + searchEmail + " are: " + stats);
+	System.out.println("Stats of given email: " + searchEmail + " are: "
+		+ stats);
 
 	return stats;
     }
@@ -153,15 +155,17 @@ public class API
     @Path("email")
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
-    public String getEmails(@QueryParam("e") String searchEmail, @QueryParam("c") String count, @QueryParam("o") String offset)
+    public String getEmails(@QueryParam("e") String searchEmail,
+	    @QueryParam("c") String count, @QueryParam("o") String offset)
     {
 
 	String url = null;
 
 	String userName = "";
-	
+
 	// Get Imap Prefs
-	IMAPEmailPrefs imapPrefs = IMAPEmailPrefsUtil.getIMAPPrefs(AgileUser.getCurrentAgileUser());
+	IMAPEmailPrefs imapPrefs = IMAPEmailPrefsUtil.getIMAPPrefs(AgileUser
+		.getCurrentAgileUser());
 	if (imapPrefs != null)
 	{
 	    userName = imapPrefs.email;
@@ -175,14 +179,25 @@ public class API
 	    password = URLEncoder.encode(password);
 	    port = URLEncoder.encode(port);
 
-	    url = "http://stats.agilecrm.com:8080/AgileCRMEmail/imap?user_name=" + userName + "&search_email=" + searchEmail + "&host=" + host + "&port="
-		    + port + "&offset=" + offset + "&count=" + count + "&command=imap_email&password=" + password;
+	    url = "http://stats.agilecrm.com:8080/AgileCRMEmail/imap?user_name="
+		    + userName
+		    + "&search_email="
+		    + searchEmail
+		    + "&host="
+		    + host
+		    + "&port="
+		    + port
+		    + "&offset="
+		    + offset
+		    + "&count="
+		    + count + "&command=imap_email&password=" + password;
 	}
 	else
 	{
 	    // Get Gmail Social Prefs
 	    Type socialPrefsTypeEnum = SocialPrefs.Type.GMAIL;
-	    SocialPrefs gmailPrefs = SocialPrefsUtil.getPrefs(AgileUser.getCurrentAgileUser(), socialPrefsTypeEnum);
+	    SocialPrefs gmailPrefs = SocialPrefsUtil.getPrefs(
+		    AgileUser.getCurrentAgileUser(), socialPrefsTypeEnum);
 
 	    if (gmailPrefs != null)
 	    {
@@ -205,9 +220,24 @@ public class API
 		oauth_key = URLEncoder.encode(oauth_key);
 		oauth_secret = URLEncoder.encode(oauth_secret);
 
-		url = "http://stats.agilecrm.com:8080/AgileCRMEmail/imap?command=oauth_email&user_name=" + userName + "&search_email=" + searchEmail + "&host="
-			+ host + "&port=" + port + "&offset=" + offset + "&count=" + count + "&consumer_key=" + consumerKey + "&consumer_secret="
-			+ consumerSecret + "&oauth_key=" + oauth_key + "&oauth_secret=" + oauth_secret;
+		url = "http://stats.agilecrm.com:8080/AgileCRMEmail/imap?command=oauth_email&user_name="
+			+ userName
+			+ "&search_email="
+			+ searchEmail
+			+ "&host="
+			+ host
+			+ "&port="
+			+ port
+			+ "&offset="
+			+ offset
+			+ "&count="
+			+ count
+			+ "&consumer_key="
+			+ consumerKey
+			+ "&consumer_secret="
+			+ consumerSecret
+			+ "&oauth_key="
+			+ oauth_key + "&oauth_secret=" + oauth_secret;
 	    }
 	}
 
@@ -219,10 +249,14 @@ public class API
 	{
 	    // If url is null throw exception to configure email prefs
 	    if (url == null)
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-			.entity("You have not yet configured your email. Please click <a href='#email'>here</a> to get started.").build());
+		throw new WebApplicationException(
+			Response.status(Response.Status.BAD_REQUEST)
+				.entity("You have not yet configured your email. Please click <a href='#email'>here</a> to get started.")
+				.build());
 	    else
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("No Emails.").build());
+		throw new WebApplicationException(Response
+			.status(Response.Status.BAD_REQUEST)
+			.entity("No Emails.").build());
 
 	}
 
@@ -234,9 +268,8 @@ public class API
 	    JSONArray emailsArray = emails.getJSONArray("emails");
 	    for (int i = 0; i < emailsArray.length(); i++)
 	    {
-		emailsArray.getJSONObject(i)
-			.put("owner_email",
-			    URLDecoder.decode(userName));
+		emailsArray.getJSONObject(i).put("owner_email",
+			URLDecoder.decode(userName));
 	    }
 
 	}
@@ -300,7 +333,9 @@ public class API
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
     }
 
@@ -327,7 +362,8 @@ public class API
 
 	    JSONObject object2 = new JSONObject();
 
-	    String startDate = SearchUtil.getDateWithoutTimeComponent(contact.created_time * 1000, "yyyy,mm,dd");
+	    String startDate = SearchUtil.getDateWithoutTimeComponent(
+		    contact.created_time * 1000, "yyyy,mm,dd");
 
 	    object2.put("startDate", startDate);
 
@@ -335,7 +371,8 @@ public class API
 	    // dateformat.format(new Date(contact.created_time * 1000)));
 
 	    // object2.put("endDate", "2012,1,27");
-	    object2.put("headline", contact.getContactFieldValue("first_name") + " " + contact.getContactFieldValue("last_name"));
+	    object2.put("headline", contact.getContactFieldValue("first_name")
+		    + " " + contact.getContactFieldValue("last_name"));
 	    object2.put("description", contact.getContactFieldValue("email"));
 	    object3.put("media", contact.getContactFieldValue("image"));
 	    object3.put("credit", "");
@@ -359,7 +396,9 @@ public class API
     public String timlineTasks() throws JSONException
     {
 	Objectify ofy = ObjectifyService.begin();
-	QueryResultIterator<Task> taskIterator = ofy.query(Task.class).filter("created_time < ", new Date().getTime()).limit(10).fetch().iterator();
+	QueryResultIterator<Task> taskIterator = ofy.query(Task.class)
+		.filter("created_time < ", new Date().getTime()).limit(10)
+		.fetch().iterator();
 
 	List<Task> tasksList = new ArrayList<Task>();
 	while (taskIterator.hasNext())
@@ -384,7 +423,8 @@ public class API
 	{
 	    JSONObject object2 = new JSONObject();
 
-	    String startDate = SearchUtil.getDateWithoutTimeComponent(task.created_time * 1000, "yyyy,mm,dd");
+	    String startDate = SearchUtil.getDateWithoutTimeComponent(
+		    task.created_time * 1000, "yyyy,mm,dd");
 
 	    object2.put("startDate", startDate);
 
@@ -393,7 +433,8 @@ public class API
 
 	    // object2.put("endDate", "2012,1,27");
 	    object2.put("headline", task.subject);
-	    object2.put("description", "Type : " + task.type + ", priority : " + task.priority_type);
+	    object2.put("description", "Type : " + task.type + ", priority : "
+		    + task.priority_type);
 
 	    object2.put("asset", object3);
 
