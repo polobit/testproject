@@ -34,8 +34,7 @@ public class CronUtil
     /**
      * Dao of Cron class.
      */
-    private static ObjectifyGenericDao<Cron> dao = new ObjectifyGenericDao<Cron>(
-	    Cron.class);
+    private static ObjectifyGenericDao<Cron> dao = new ObjectifyGenericDao<Cron>(Cron.class);
 
     /**
      * Creates a new Cron object and enqueue task in cron.
@@ -58,13 +57,10 @@ public class CronUtil
      *            Custom value.
      * @throws Exception
      */
-    public static void enqueueTask(JSONObject campaignJSON,
-	    JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON,
-	    long timeOut, String custom1, String custom2, String custom3)
-	    throws Exception
+    public static void enqueueTask(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON, long timeOut, String custom1,
+	    String custom2, String custom3) throws Exception
     {
-	Cron cron = new Cron(campaignJSON, subscriberJSON, data, nodeJSON,
-		timeOut, custom1, custom2, custom3);
+	Cron cron = new Cron(campaignJSON, subscriberJSON, data, nodeJSON, timeOut, custom1, custom2, custom3);
 	cron.save();
     }
 
@@ -104,8 +100,7 @@ public class CronUtil
 	try
 	{
 	    // Get cron key list related to given namespace
-	    List<Key<Cron>> cron_keys = dao.ofy().query(Cron.class)
-		    .filter("namespace", namespace).listKeys();
+	    List<Key<Cron>> cron_keys = dao.ofy().query(Cron.class).filter("namespace", namespace).listKeys();
 
 	    // Delete crons
 	    dao.ofy().delete(cron_keys);
@@ -149,8 +144,7 @@ public class CronUtil
      * @return time-out period.
      * @throws Exception
      */
-    public static long getTimerAt(String durationString, String durationType)
-	    throws Exception
+    public static long getTimerAt(String durationString, String durationType) throws Exception
     {
 	int duration = Integer.parseInt(durationString);
 
@@ -168,8 +162,7 @@ public class CronUtil
 	if (durationType.equalsIgnoreCase(Cron.DURATION_TYPE_MINS))
 	    calendar.add(Calendar.MINUTE, duration);
 
-	System.out.print("Current Time: "
-		+ Calendar.getInstance().getTimeInMillis());
+	System.out.print("Current Time: " + Calendar.getInstance().getTimeInMillis());
 	System.out.println(" Will wake up Time: " + calendar.getTimeInMillis());
 
 	return calendar.getTimeInMillis();
@@ -187,8 +180,7 @@ public class CronUtil
      *         parameters.
      * @throws Exception
      */
-    public static long getTimer(String durationString, String durationType)
-	    throws Exception
+    public static long getTimer(String durationString, String durationType) throws Exception
     {
 	int duration = Integer.parseInt(durationString);
 	Calendar calendar = Calendar.getInstance();
@@ -205,8 +197,7 @@ public class CronUtil
 	if (durationType.equalsIgnoreCase(Cron.DURATION_TYPE_MINS))
 	    calendar.add(Calendar.MINUTE, duration);
 
-	System.out.print("Current Time: "
-		+ Calendar.getInstance().getTimeInMillis());
+	System.out.print("Current Time: " + Calendar.getInstance().getTimeInMillis());
 	System.out.println(" Will wake up Time: " + calendar.getTimeInMillis());
 
 	return calendar.getTimeInMillis();
@@ -225,11 +216,7 @@ public class CronUtil
 	Long milliSeconds = Calendar.getInstance().getTimeInMillis();
 	System.out.println(milliSeconds + " " + NamespaceManager.get());
 
-	// Temporary list
-	List<Cron> cronList = new ArrayList<Cron>();
-
-	Query<Cron> query = dao.ofy().query(Cron.class)
-		.filter("timeout <= ", milliSeconds);
+	Query<Cron> query = dao.ofy().query(Cron.class).filter("timeout <= ", milliSeconds);
 
 	QueryResultIterator<Cron> iterator = query.iterator();
 
@@ -237,6 +224,9 @@ public class CronUtil
 	{
 	    Cron cron = iterator.next();
 	    dao.delete(cron);
+
+	    // Temporary list
+	    List<Cron> cronList = new ArrayList<Cron>();
 	    cronList.add(cron);
 
 	    // Run cron job
@@ -258,8 +248,7 @@ public class CronUtil
      * @param interruptData
      *            Interrupt data.
      */
-    public static void interrupt(String custom1, String custom2,
-	    String custom3, JSONObject interruptData)
+    public static void interrupt(String custom1, String custom2, String custom3, JSONObject interruptData)
     {
 	if (custom1 == null && custom2 == null && custom3 == null)
 	    return;
@@ -293,11 +282,9 @@ public class CronUtil
      * @param customData
      *            custom data.
      */
-    public static void executeTasklets(List<Cron> cronJobs,
-	    String wakeupOrInterrupt, JSONObject customData)
+    public static void executeTasklets(List<Cron> cronJobs, String wakeupOrInterrupt, JSONObject customData)
     {
-	System.out.println("Jobs dequeued - " + wakeupOrInterrupt + " ["
-		+ cronJobs.size() + "]" + cronJobs);
+	System.out.println("Jobs dequeued - " + wakeupOrInterrupt + " [" + cronJobs.size() + "]" + cronJobs);
 
 	// Iterate through all tasks
 	for (Cron cron : cronJobs)
@@ -305,11 +292,8 @@ public class CronUtil
 	    if (customData == null)
 		customData = new JSONObject();
 
-	    CronDeferredTask cronDeferredTask = new CronDeferredTask(
-		    cron.namespace, cron.campaign_json_string,
-		    cron.data_string, cron.subscriber_json_string,
-		    cron.node_json_string, wakeupOrInterrupt,
-		    customData.toString());
+	    CronDeferredTask cronDeferredTask = new CronDeferredTask(cron.namespace, cron.campaign_json_string, cron.data_string, cron.subscriber_json_string,
+		    cron.node_json_string, wakeupOrInterrupt, customData.toString());
 	    Queue queue = QueueFactory.getDefaultQueue();
 	    queue.add(TaskOptions.Builder.withPayload(cronDeferredTask));
 	}
@@ -328,8 +312,7 @@ public class CronUtil
 	NamespaceManager.set("");
 	try
 	{
-	    return dao.ofy().query(Cron.class)
-		    .filter("campaign_id", campaignId).count();
+	    return dao.ofy().query(Cron.class).filter("campaign_id", campaignId).count();
 	}
 	finally
 	{
