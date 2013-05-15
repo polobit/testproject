@@ -27,7 +27,8 @@ function getTemplate(templateName, context, download) {
 			return Handlebars_Compiled_Templates[templateName](context);
 	else
 		Handlebars_Compiled_Templates = {};
-
+	
+	
 	// Check if source is available in body
 	var source = $('#' + templateName + "-template").html();
 	if (source) {
