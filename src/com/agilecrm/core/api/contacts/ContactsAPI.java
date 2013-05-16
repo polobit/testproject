@@ -22,6 +22,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,6 +32,7 @@ import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
@@ -526,6 +528,7 @@ public class ContactsAPI
     {
 
 
+	System.out.println("email to search on" + email);
 	Contact contact = ContactUtil.searchContactByEmail(email);
 	
 	if (contact == null)
@@ -534,12 +537,18 @@ public class ContactsAPI
 		    .entity("No contact found with provied email address")
 		    .build());
 
+	if(StringUtils.isEmpty(tagsString))
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("No tags to add")
+		    .build());
+	    
 	JSONArray tagsJSONArray = new JSONArray(tagsString);
-	String[] tagsArray = null;
+	Tag[] tagsArray = null;
 	try
 	{
 	    tagsArray = new ObjectMapper().readValue(tagsJSONArray.toString(),
-		    String[].class);
+		    Tag[].class);
 	}
 	catch (Exception e)
 	{
@@ -576,12 +585,17 @@ public class ContactsAPI
 		    .entity("No contact found with provied email address")
 		    .build());
 
+	if (StringUtils.isEmpty(tagsString))
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("No tags to delete").build());
+
 	JSONArray tagsJSONArray = new JSONArray(tagsString);
-	String[] tagsArray = null;
+	Tag[] tagsArray = null;
 	try
 	{
 	    tagsArray = new ObjectMapper().readValue(tagsJSONArray.toString(),
-		    String[].class);
+		    Tag[].class);
 	}
 	catch (Exception e)
 	{
@@ -643,5 +657,23 @@ public class ContactsAPI
     {
 	JSONArray dealsJSONArray = new JSONArray(model_ids);
 	Opportunity.dao.deleteBulkByIds(dealsJSONArray);
+    }
+
+    /**
+     * Deletes all selected deals of a particular contact
+     * 
+     * @param model_ids
+     *            array of deal ids as String
+     * @throws JSONException
+     */
+    @Path("/viewed-at/{id}")
+    @POST
+    public void UpdateViewedTime(@PathParam("id") String id)
+	    throws JSONException
+    {
+	Contact contact = ContactUtil.getContact(Long.parseLong(id));
+
+	contact.viewed_time = System.currentTimeMillis();
+	contact.save();
     }
 }

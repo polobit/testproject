@@ -23,19 +23,22 @@ var Handlebars_Compiled_Templates = {};
 function getTemplate(templateName, context, download) {
 
 	// Check if it is (compiled template) present in templates
-	if (Handlebars_Compiled_Templates[source])
-		return Handlebars_Compiled_Templates[source](context);
+	if (Handlebars_Compiled_Templates[templateName])
+			return Handlebars_Compiled_Templates[templateName](context);
 	else
 		Handlebars_Compiled_Templates = {};
-
+	
+	
 	// Check if source is available in body
 	var source = $('#' + templateName + "-template").html();
 	if (source) {
+		
 		var template = Handlebars.compile(source);
-
+		
 		// Store it in template
-		Handlebars_Compiled_Templates[source] = template;
+		Handlebars_Compiled_Templates[templateName] = template;
 
+		//alert("template");
 		return template(context);
 	}
 
