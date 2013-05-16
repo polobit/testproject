@@ -327,8 +327,9 @@ public class Contact extends Cursor
     {
 	for (String tag : tags)
 	{
-	    this.tags.add(tag);
+	    tagsWithTime.add(new Tag(tag));
 	}
+
 	this.save();
 
     }
@@ -370,7 +371,8 @@ public class Contact extends Cursor
 	Set<String> tagslist = new HashSet<String>();
 	for (String tag : tags)
 	{
-	    this.tags.remove(tag);
+	    tagsWithTime.remove(new Tag(tag));
+
 	    tagslist.add(tag);
 	}
 
@@ -469,7 +471,6 @@ public class Contact extends Cursor
 	    contact.save();
 	}
 
-
     }
 
     /**
@@ -492,10 +493,6 @@ public class Contact extends Cursor
     @JsonIgnore
     public LinkedHashSet<String> getContactTags()
     {
-	if (!tags.isEmpty())
-	    return tags;
-
-	System.out.println(tagsWithTime);
 	LinkedHashSet<String> tags = new LinkedHashSet<String>();
 
 	for (Tag tag : tagsWithTime)
@@ -560,8 +557,8 @@ public class Contact extends Cursor
 	{
 	    updated_time = System.currentTimeMillis() / 1000;
 	}
-	
-	for(Tag tag : tagsWithTime)
+
+	for (Tag tag : tagsWithTime)
 	{
 	    if (tag.createdTime == 0L)
 		tag.createdTime = System.currentTimeMillis();

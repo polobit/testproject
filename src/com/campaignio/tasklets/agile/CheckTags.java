@@ -72,7 +72,7 @@ public class CheckTags extends TaskletAdapter
 	    tagsSet.add(tag);
 
 	// Contact tags.
-	LinkedHashSet<String> contactTags = contact.tags;
+	LinkedHashSet<String> contactTags = contact.getContactTags();
 
 	System.out.println("Contact tags: " + contactTags + " and given tags: "
 		+ tagsSet);

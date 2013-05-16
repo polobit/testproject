@@ -27,8 +27,10 @@ public class TagNotificationPrefsUtil
     public static void checkTagsChange(Contact oldContact,
 	    Contact updatedContact)
     {
-	Set<String> oldTags = new HashSet<String>(oldContact.tags);
-	Set<String> updatedTags = new HashSet<String>(updatedContact.tags);
+
+	Set<String> oldTags = new HashSet<String>(oldContact.getContactTags());
+	Set<String> updatedTags = new HashSet<String>(
+		updatedContact.getContactTags());
 
 	// Tags that are added newly
 	Set<String> addedTags = new HashSet<String>(updatedTags);
