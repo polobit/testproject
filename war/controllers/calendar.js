@@ -54,7 +54,12 @@ var CalendarRouter = Backbone.Router.extend({
 			url : '/core/api/tasks/all',
 			restKey : "task",
 			templateKey : "tasks-list",
-			individual_tag_name : 'tr'
+			individual_tag_name : 'tr',
+			postRenderCallback: function(el) {
+            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+            		 $(".task-due-time", el).timeago();
+              	});
+            }
 		});
 		this.tasksListView.collection.fetch();
 
