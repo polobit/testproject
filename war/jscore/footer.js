@@ -83,4 +83,64 @@
 	    });
 	});
 	
+	/* For opening the footer icons in seperate popup window */
+	$('.email-share').die().live('click', function(e){
+		e.preventDefault();
+		var x = 500;
+		var title = $(this).closest("a").attr('data');
+		if(title == "Linkedin") x=700;
+		var url = $(this).closest("a").attr('href');
+		window.open(url, title, "width=" + x + ",height=500,left=200%,top=100%");
+	});
+	
+	/* For sharing agile to friends */
+	$('#share-email').die().live('click', function(e){
+		e.preventDefault();
+
+		 var CurrentuserModel = Backbone.Model.extend({
+		     //url: '/core/api/imap',
+		     url: '/core/api/current-user',
+		     restKey: "domainUser"
+		});
+		 
+		var currentuserModel = new CurrentuserModel();
+		
+		currentuserModel.fetch({success: function(data){
+			
+				var model = data.toJSON();
+				//$("#sharemailForm").find( 'input[name="from"]' ).val(model.email);
+		
+				var emailModal = $(getTemplate("share-by-email", model));
+				emailModal.modal('show');
+		
+				$('#shareMail').die().live('click',function(e){
+					e.preventDefault();
+					
+					if(!isValidForm($('#sharemailForm')))
+				      {	
+				      	return;
+				      }
+					
+					var json = serializeForm("sharemailForm");
+		
+					var url =  'core/api/send-email?from=' + encodeURIComponent(json.from) + '&to=' + 
+					 encodeURIComponent(json.to) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + 
+						 encodeURIComponent(json.body) + '<br/><div><br/><br/>' + encodeURIComponent(json.signature) + '</div>';
+					
+					// Shows message 
+				    $save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><p class="text-success" style="color:#008000; font-size:15px; display:inline-block"> <i>Sending mail...</i></p></span>');
+				    $("#msg", this.el).append($save_info);
+					$save_info.show().delay(2000).fadeOut("slow");
+					
+					// Navigates to previous page on sending email
+					$.post(url, function(){
+						emailModal.modal('hide');
+					});
+		
+				});
+		
+		 }});
+		
+	});
+	
 })(jQuery);
