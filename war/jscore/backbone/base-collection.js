@@ -83,6 +83,7 @@ var Base_List_View = Backbone.View.extend({
 		// object should be
 		// in here
 		this.model.bind("destroy", this.close, this);
+		
 		this.model.bind("change", this.render, this);
 	},
 	/*
@@ -110,6 +111,10 @@ var Base_List_View = Backbone.View.extend({
 		// console.log(this.model.toJSON());
 		$(this.el)
 				.html(getTemplate(this.options.template, this.model.toJSON()));
+		
+		// Add model as data to it's corresponding row
+		$(this.el).data(this.model);
+		
 		return this;
 	}
 });
@@ -177,12 +182,16 @@ var Base_Collection_View = Backbone.View
 						sort_collection : this.options.sort_collection
 					});
 				}
-
+				
+				this.element_list_template = $(this.element_list_template).html("");
+				
 				/*
 				 * Sets url to the collection to perform CRUD operations on the
 				 * collection
 				 */
 				this.collection.url = this.options.url;
+				
+				this.model_list_template = $('<div class="model-list"></div>');
 
 				/*
 				 * Binds appendItem function to sync event of the collection
@@ -321,7 +330,7 @@ var Base_Collection_View = Backbone.View
 			 * @param base_model
 			 *            backbone model object
 			 */
-			appendItem : function(base_model)
+			appendItem : function(base_model, element)
 			{
 
 				// If modelData is set in options of the view then custom data
@@ -341,15 +350,9 @@ var Base_Collection_View = Backbone.View
 					template : (this.options.templateKey + '-model'),
 					tagName : this.options.individual_tag_name
 				});
-
-				// Template gets populated with the data and appended to the
-				// model-list in the collection.
-				$(('#' + this.options.templateKey + '-model-list'), this.el)
-						.append(itemView.render().el);
-
-				// Add model as data to it's corresponding row
-				$('#' + this.options.templateKey + '-model-list').find(
-						'tr:last').data(base_model);
+				
+				
+				$(element).append(itemView.render().el);				
 			},
 			
 			appendItemOnAddEvent : function(base_model)
@@ -435,16 +438,17 @@ var Base_Collection_View = Backbone.View
 				}
 
 			
-
+				var model_list_element = $('#' + this.options.templateKey + '-model-list', $(this.el));
+				
 				/*
 				 * Iterates through each model in the collection and creates a
 				 * view for each model and adds it to model-list
 				 */
 				_(this.collection.models).each(function(item)
 				{ // in case collection is not empty
-					this.appendItem(item);
+					this.appendItem(item, model_list_element);
 				}, this);
-				
+
 				/*
 				 * Few operations on the view after rendering the view,
 				 * operations like adding some alerts, graphs etc after the view
