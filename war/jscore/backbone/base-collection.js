@@ -183,8 +183,6 @@ var Base_Collection_View = Backbone.View
 					});
 				}
 				
-				this.element_list_template = $(this.element_list_template).html("");
-				
 				/*
 				 * Sets url to the collection to perform CRUD operations on the
 				 * collection
@@ -330,7 +328,7 @@ var Base_Collection_View = Backbone.View
 			 * @param base_model
 			 *            backbone model object
 			 */
-			appendItem : function(base_model, element)
+			appendItem : function(base_model)
 			{
 
 				// If modelData is set in options of the view then custom data
@@ -352,7 +350,7 @@ var Base_Collection_View = Backbone.View
 				});
 				
 				
-				$(element).append(itemView.render().el);				
+				$(this.model_list_element).append(itemView.render().el);				
 			},
 			
 			appendItemOnAddEvent : function(base_model)
@@ -362,8 +360,7 @@ var Base_Collection_View = Backbone.View
 				if($('table', this.el).hasClass('onlySorting'))
 					return;
 				
-				$('#' + this.options.templateKey + '-model-list').find(
-				'tr:last').prepend('<td><input class="tbody_check" type="checkbox"/></td>');
+				$('tr:last', this.model_list_element).prepend('<td><input class="tbody_check" type="checkbox"/></td>');
 				
                 // callback for newly added models
 				var appendItemCallback = this.options.appendItemCallback;
@@ -438,7 +435,7 @@ var Base_Collection_View = Backbone.View
 				}
 
 			
-				var model_list_element = $('#' + this.options.templateKey + '-model-list', $(this.el));
+				this.model_list_element = $('#' + this.options.templateKey + '-model-list', $(this.el));
 				
 				/*
 				 * Iterates through each model in the collection and creates a
@@ -446,7 +443,7 @@ var Base_Collection_View = Backbone.View
 				 */
 				_(this.collection.models).each(function(item)
 				{ // in case collection is not empty
-					this.appendItem(item, model_list_element);
+					this.appendItem(item);
 				}, this);
 
 				/*
