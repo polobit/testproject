@@ -8,8 +8,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Indexed;
@@ -146,6 +149,40 @@ public class Workflow extends Cursor
 
 	if (domainUser != null)
 	    return domainUser.name;
+
+	return "";
+    }
+
+    /**
+     * Gets picture of owner who created workflow. Owner picture is retrieved
+     * from user prefs of domain user who created workflow and is used to
+     * display owner picture in deals list.
+     * 
+     * @return picture of owner.
+     * @throws Exception
+     *             when agileuser doesn't exist with respect to owner key.
+     */
+    @XmlElement
+    public String getPic() throws Exception
+    {
+	AgileUser agileuser = null;
+	UserPrefs userprefs = null;
+
+	try
+	{
+	    // Get owner pic through agileuser prefs
+	    agileuser = AgileUser.getCurrentAgileUserFromDomainUser(creator_key
+		    .getId());
+	    if (agileuser != null)
+		userprefs = UserPrefsUtil.getUserPrefs(agileuser);
+	    if (userprefs != null)
+		return userprefs.pic;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+
+	}
 
 	return "";
     }

@@ -35,19 +35,7 @@ $(function() {
 
 });
 
-/**
- * Check notifications of browser and disable checked property if browser
- * doesn't support notifications or notification denied.
- */
-function checkAndDisableBrowserNotifications(el) {
 
-	if ((window.webkitNotifications && window.webkitNotifications
-			.checkPermission() == 2)
-			|| !window.webkitNotifications) {
-		$("#desktop_notify", el).attr('disabled', 'disabled');
-	}
-
-}
 
 /**
  * Fetches notification preferences for current user
@@ -98,9 +86,8 @@ function getDomainFromCurrentUser() {
 	user.fetch({
 		success : function(data) {
 			var domain = data.get('domain');
-			// console.log(domain);
-			subscribeToPubNub(domain);
-		}
+				subscribeToPubNub(domain);
+				}
 	});
 }
 
@@ -108,7 +95,6 @@ function getDomainFromCurrentUser() {
  * Subscribes to Pubnub
  */
 function subscribeToPubNub(domain) {
-
 	// Put http or https
 	// var protocol = document.location.protocol;
 	var protocol = 'https';
@@ -141,7 +127,6 @@ function subscribeToPubNub(domain) {
  *            object data such as contact
  */
 function _setupNotification(object) {
-
 	// Inorder to avoid navigating to the contact or deal deleted
 	// when clicking on notification.
 	if (object.notification == 'CONTACT_DELETED'
@@ -159,11 +144,21 @@ function _setupNotification(object) {
 	if (object.notification == 'BROWSING')
 		notificationForBrowsing(object);
 
+	// Verify whether current_user key exists. It doesn't exists when tag added through
+	// campaign, or notification for email-clicked etc. since session doesn't exist.
+	if('current_user' in object)
+	{	
+		var current_user = JSON.parse(object.current_user);
+	
+	    if(notification_prefs.prefs.currentDomainUserName == current_user.domainUser.name)
+		    return;
+	}
+	
 	/**
 	 * Checks notification preferences and compare with notification type. If it
 	 * is set true then show notification. For e.g. If Deal created is true then
 	 * notification when 'deal is created' is shown.
-	 */
+	 */	
 	$.each(notification_prefs, function(key, value) {
 
 		if (key == object.notification.toLowerCase()) {
@@ -174,7 +169,8 @@ function _setupNotification(object) {
 				showNoty('information', html, 'bottomRight');
 		}
 
-	});
+	    });
+	
 
 	/*
 	 * console.log(parse_data); for(var i=0;i<parse_data.contacts.length;i++) { //
@@ -335,6 +331,47 @@ function notificationForBrowsing(contact) {
 }
 
 /**
+ * Checks browser notifications
+ ***/
+function checkBrowserNotifications(el)
+{
+	// Checked - Enable all notifications; Unchecked - Disable all notifications
+	$('#control_notifications',el).die().live('click',function(e){
+		 if(!$(this).is(':checked'))
+		 {  $(el).find('input[type=checkbox]').not('#control_notifications').attr('disabled','disabled');
+		 }
+		 else
+			 $(el).find('input[type=checkbox]').not('#control_notifications').removeAttr('disabled');
+	});
+
+	    // Verify desktop notification settings. 
+	    
+	    // Check if browser support
+	    if(!window.webkitNotifications)
+	    {  
+	    	$('#set-desktop-notification').die().live('click',function(e){
+	        e.preventDefault();
+	    	alert("Desktop notifications are not supported for this Browser/OS version yet.");
+	    	});
+	    }
+	      
+	    // Allowed
+	    if(window.webkitNotifications && window.webkitNotifications.checkPermission() == 0)
+	    { 
+	     $('#set-desktop-notification').css('display','none');
+	     $('#desktop-notification-content').html("<i>Desktop Notifications are allowed. Disable it in browser settings.</i>")
+	    }
+	    
+	    // Denied
+	    if(window.webkitNotifications && window.webkitNotifications.checkPermission() == 2)
+	    {
+	    	$('#set-desktop-notification').css('display','none');
+	    	$('#desktop-notification-content').html("<i>Desktop Notifications are disabled. Enable it in browser settings.</i>")
+	    }
+	  
+}
+
+/**
  * Creates bootstrap pop-up notification.
  * 
  * @param type -
@@ -377,10 +414,14 @@ function notify(type, message, position, closable) {
  *            notification type - TAG CREATED, TAG DELETED etc.
  */
 function showNoty(type, message, position) {
+	
+	// Don't show notifications when disabled by user
+	if(!notification_prefs.control_notifications)
+		return;
 
 	// Check for html5 notification permission.
-	if (notification_prefs.desktop_notify
-			&& window.webkitNotifications.checkPermission() == 0) {
+	if (window.webkitNotifications && 
+			 window.webkitNotifications.checkPermission() == 0) {
 		show_desktop_notification(getImageUrl(message),
 				getNotificationType(message), getTextMessage(message),
 				getId(message));

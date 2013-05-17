@@ -200,7 +200,7 @@ var SettingsRouter = Backbone.Router.extend({
 			reload : true,
 			postRenderCallback:function(el)
 			{
-				checkAndDisableBrowserNotifications(el);
+				checkBrowserNotifications(el);
 			}
 		});
 

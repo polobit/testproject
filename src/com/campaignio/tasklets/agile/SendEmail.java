@@ -510,10 +510,17 @@ public class SendEmail extends TaskletAdapter
 	for (int i = 0; i < tokens.length; i++)
 	{
 
+	    // Avoid image urls
 	    if (tokens[i].startsWith("http")
 		    && !tokens[i].startsWith("http://goo.gl")
 		    && !tokens[i].startsWith("http://usertracker")
-		    && !tokens[i].startsWith("http://unscr.be"))
+		    && !tokens[i].startsWith("http://unscr.be")
+		    && !tokens[i].endsWith(".png")
+		    && !tokens[i].endsWith(".jpg")
+		    && !tokens[i].endsWith(".jpeg")
+		    && !tokens[i].endsWith(".gif")
+		    && !tokens[i].endsWith(".bmp")
+		    && !tokens[i].endsWith(".dtd"))
 	    {
 		// Shorten URL
 		String url = URLShortenerUtil.getShortURL(tokens[i], keyword,

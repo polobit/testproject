@@ -5,8 +5,21 @@
             <form id="notificationsForm" name="notificationsForm" class="form-horizontal">
                 <fieldset>
                     <legend>Notifications</legend>
-                   <!-- <a href="#notification-prefs" class="btn right" id="set-desktop-notification" style="margin-top:-62px"><i class="icon-bullhorn"></i> Set Desktop Notifications</a> -->
+                    <span id="desktop-notification-content" class="right" style="margin-top:-52px"></span>
+                    <a href="#notification-prefs" class="btn right" id="set-desktop-notification" style="margin-top:-62px;"><i class="icon-bullhorn"></i> Set Desktop Notifications</a>
                     <input name="id" type="hidden" value="{{id}}" /> 
+                    <div class="control-group">
+                        <label class="control-label"><b>Notifications:</b></label>
+                        <div class="controls">
+                            <label class="checkbox">
+                            <input type="checkbox" id="control_notifications" name="control_notifications" value="true" /> 
+                            Show Notifications
+                            </label>
+                        </div>
+                    </div>
+                  {{#if control_notifications}}
+                    <legend></legend>
+                    <p></p>
                     <div class="control-group">
                         <label class="control-label"><b>Browsing:</b></label>
                         <div class="controls">
@@ -107,17 +120,110 @@
                             </label>
                         </div>
                     </div>
-                    <legend></legend>
+                   {{else}}
+                      <legend></legend>
                     <p></p>
                     <div class="control-group">
-                        <label class="control-label"><b>Desktop Notifications:</b></label>
+                        <label class="control-label"><b>Browsing:</b></label>
                         <div class="controls">
                             <label class="checkbox">
-                            <input type="checkbox" id="desktop_notify" name="desktop_notify" value="true" /> 
-                            Show Desktop Notifications
+                            <input type="checkbox" id="contact_browsing" name="contact_browsing" value="true" disabled="disabled"/> 
+                            Contact is browsing
+                            </label>
+                            <label class="checkbox">
+                            <input type="checkbox" id="contact_assigned_browsing" name="contact_assigned_browsing" value="true" disabled="disabled"/> 
+                            Contact <em>assigned to me&nbsp;</em> is browsing
+                            </label>
+                            <label class="checkbox">
+                            <input type="checkbox" id="contact_assigned_starred_browsing" name="contact_assigned_starred_browsing" value="true" disabled="disabled"/> 
+                            Contact <em>assigned to me & starred&nbsp;</em> is browsing
                             </label>
                         </div>
                     </div>
+                    <legend></legend>
+                    <p></p>
+                    <div class="control-group">
+                        <label class="control-label"><b>Email Opened:</b></label>
+                        <div class="controls">
+                            <label class="checkbox">
+                            <input type="checkbox" id="contact_opened_email" name="contact_opened_email" value="true" disabled="disabled"/> 
+                            Contact has opened email
+                            </label>
+                            <label class="checkbox">
+                            <input type="checkbox" id="contact_assigned_opened_email" name="contact_assigned_opened_email" value="true" disabled="disabled"/> 
+                            Contact <em>assigned to me&nbsp;</em> has opened email
+                            </label>
+                            <label class="checkbox">
+                            <input type="checkbox" id="contact_assigned_starred_opened_email" name="contact_assigned_starred_opened_email" value="true" disabled="disabled"/> 
+                            Contact <em>assigned to me & starred&nbsp;</em> has opened email
+                            </label>
+                        </div>
+                    </div>
+                    <legend></legend>
+                    <p></p>
+                    <div class="control-group">
+                        <label class="control-label"><b>Link Clicked:</b></label>
+                        <div class="controls">
+                            <label class="checkbox">
+                            <input type="checkbox" id="contact_clicked_link" name="contact_clicked_link" value="true" disabled="disabled"/> 
+                            Contact has clicked a link
+                            </label>
+                            <label class="checkbox">
+                            <input type="checkbox" id="contact_assigned_clicked_link" name="contact_assigned_clicked_link" value="true" disabled="disabled"/> 
+                            Contact <em>assigned to me&nbsp;</em> has clicked a link
+                            </label>
+                            <label class="checkbox">
+                            <input type="checkbox" id="contact_assigned_starred_clicked_link" name="contact_assigned_starred_clicked_link" value="true" disabled="disabled"/> 
+                            Contact <em>assigned to me & starred&nbsp;</em> has clicked a link
+                            </label>
+                        </div>
+                    </div>
+                    <legend></legend>
+                    <p></p>
+                    <div class="control-group">
+                        <label class="control-label"><b>Deal:</b></label>
+                        <div class="controls">
+                            <label class="checkbox">
+                            <input type="checkbox" id="deal_created" name="deal_created" value="true" disabled="disabled"/> 
+                            Deal is created
+                            </label>
+                            <label class="checkbox">
+                            <input type="checkbox" id="deal_closed" name="deal_closed" value="true" disabled="disabled"/> 
+                            Deal is closed
+                            </label>
+                        </div>
+                    </div>
+                    <legend></legend>
+                    <p></p>
+                    <div class="control-group">
+                        <label class="control-label"><b>Tag:</b></label>
+                        <div class="controls">
+                            <label class="checkbox">
+                            <input type="checkbox" id="tag_created" name="tag_created" value="true" disabled="disabled"/> 
+                            Tag is created
+                            </label>
+                            <label class="checkbox">
+                            <input type="checkbox" id="tag_deleted" name="tag_deleted" value="true" disabled="disabled"/> 
+                            Tag is deleted
+                            </label>
+                        </div>
+                    </div>
+                    <legend></legend>
+                    <p></p>
+                    <div class="control-group">
+                        <label class="control-label"><b>Contact:</b></label>
+                        <div class="controls">
+                            <label class="checkbox">
+                            <input type="checkbox" id="contact_created" name="contact_created" value="true" disabled="disabled"/> 
+                            Contact is created
+                            </label>
+                            <label class="checkbox">
+                            <input type="checkbox" id="contact_deleted" name="contact_deleted" value="true" disabled="disabled"/> 
+                            Contact is deleted
+                            </label>
+                        </div>
+                    </div>
+                    {{/if}}
                     <legend></legend>
                     <p></p>
                     <div class="control-group">

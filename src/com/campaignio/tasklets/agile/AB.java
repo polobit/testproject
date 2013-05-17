@@ -59,7 +59,7 @@ public class AB extends TaskletAdapter
 		    + frequency);
 
 	    // Go with A or B
-	    if (r > Double.parseDouble(frequency))
+	    if (r < Double.parseDouble(frequency))
 	    {
 		// Execute Next One in Loop
 		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,

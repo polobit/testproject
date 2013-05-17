@@ -2,47 +2,39 @@
  * Create the Notification if permissions allowed in the browser.
  * 
  * @method show_desktop_notification
+ * 
  * @param {String}
- *            sessionId
+ *            imageURL - image url to show image in popup.
  * @param {String}
- *            imageURl
+ *            title - Notification type.
  * @param {String}
- *            title
- * @param {String}
- *            message
+ *            message - Notification message.
  */
-function show_desktop_notification(imageURL,title, message,link) {
-	
-	if (window.webkitNotifications) {
-		if (window.webkitNotifications.checkPermission() == 0) { 
-			
-			// 0 is
-			// PERMISSION_ALLOWED
-			// function defined
-			
-			var notification = window.webkitNotifications.createNotification(
-					imageURL, title.replace(/_/g, " "), message);
-			
-			notification.onclick = function(x) {
-				window.focus();
-				// Open respective block
-				Backbone.history.navigate(link,{
-					trigger:true
-					});
+function show_desktop_notification(imageURL, title, message, link) {
 
-				// open_user_panel(sessionId);
-				this.cancel();
-			};
-			setTimeout(function() {
-				notification.cancel();
-			}, '30000');
-			// Show when tab is inactive
-			if (!window.closed)
-				notification.show();
+	if (window.webkitNotifications
+			&& window.webkitNotifications.checkPermission() == 0) {
+		var notification = window.webkitNotifications.createNotification(
+				imageURL, title.replace(/_/g, " "), message);
 
-		}
+		notification.onclick = function(x) {
+			window.focus();
+			// Open respective block
+			Backbone.history.navigate(link, {
+				trigger : true
+			});
+
+			// open_user_panel(sessionId);
+			this.cancel();
+		};
+		setTimeout(function() {
+			notification.cancel();
+		}, '30000');
+		// Show when tab is inactive
+		if (!window.closed)
+			notification.show();
+
 	}
-
 }
 
 /**
@@ -51,17 +43,14 @@ function show_desktop_notification(imageURL,title, message,link) {
  * 
  * @method request_notification_permission
  */
-// 0 is PERMISSION_ALLOWED
 function request_notification_permission() {
-	if (window.webkitNotifications) {
-		if (window.webkitNotifications.checkPermission() != 0) {		
-         
-			$('body').live('click', function() {		
-				window.webkitNotifications.requestPermission(function(){});
+	if (window.webkitNotifications
+			&& window.webkitNotifications.checkPermission() != 0) {
+
+		$('#set-desktop-notification').live('click', function() {
+			window.webkitNotifications.requestPermission(function() {
 			});
-			
-		}
+		});
 
 	}
 }
-

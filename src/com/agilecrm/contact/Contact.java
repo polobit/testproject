@@ -327,7 +327,9 @@ public class Contact extends Cursor
     {
 	for (String tag : tags)
 	{
-	    tagsWithTime.add(new Tag(tag));
+	    Tag tagObject = new Tag(tag);
+	    if (!tagsWithTime.contains(tagObject))
+		tagsWithTime.add(tagObject);
 	}
 
 	this.save();

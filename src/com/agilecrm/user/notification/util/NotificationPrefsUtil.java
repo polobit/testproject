@@ -5,6 +5,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.notification.NotificationPrefs;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
@@ -74,8 +75,8 @@ public class NotificationPrefsUtil
     private static NotificationPrefs getDefaultNotifications(AgileUser agileUser)
     {
 	NotificationPrefs notifications = new NotificationPrefs(agileUser.id,
-		false, true, true, false, false, false, false, true, true,
-		false, true, true, true, true, true, true, "alert_1");
+		true, false, true, true, false, false, false, false, true,
+		true, false, true, true, true, true, true, "alert_1");
 	notifications.save();
 	return notifications;
     }
@@ -105,6 +106,12 @@ public class NotificationPrefsUtil
 	    // Including type into json object as notification key
 	    json = new JSONObject(objectJson);
 	    json.put("notification", type.toString());
+
+	    if (SessionManager.get() != null)
+	    {
+		AgileUser agileUser = AgileUser.getCurrentAgileUser();
+		json.put("current_user", mapper.writeValueAsString(agileUser));
+	    }
 
 	    System.out.println("object: " + json);
 
