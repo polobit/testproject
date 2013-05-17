@@ -126,6 +126,8 @@
 				      }
 					
 					var json = serializeForm("sharemailForm");
+					
+					json.body = json.body.replace("Hey,","Hey,<br/>");
 		
 					var url =  'core/api/send-email?from=' + encodeURIComponent(json.from) + '&to=' + 
 					 encodeURIComponent(json.to) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + 

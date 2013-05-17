@@ -60,6 +60,8 @@ public class SendGridEmail
 	    String email = st.nextToken();
 	    toEmailSet.add(email);
 	}
+	// Send email
+	String response = "";
 
 	for (String email : toEmailSet)
 	{
@@ -98,13 +100,10 @@ public class SendGridEmail
 
 		System.out.println("QueryString  \n" + queryString + "\n\n");
 
-		// Send email
-		String response = HTTPUtil.accessURLUsingPost(
-			SENDGRID_API_POST_URL, queryString);
+		response = HTTPUtil.accessURLUsingPost(SENDGRID_API_POST_URL,
+			queryString);
 
 		System.out.println("Response " + response);
-
-		return response;
 
 	    }
 	    catch (Exception e)
@@ -114,8 +113,6 @@ public class SendGridEmail
 	    }
 	}
 
-	return null;
-
+	return response;
     }
-
 }
