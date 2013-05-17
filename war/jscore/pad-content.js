@@ -13,59 +13,59 @@
  */
 var CONTENT_JSON = {
 	"contacts" : {
-		"title" : "You dont have any contacts",
-		"description" : "You can add your contact details.......etc...etc",
-		"learn_more" : "click here to learn more",
+		"title" : "You do not have any contacts currently.",
+		"description" : "Contacts are your customers or prospects that you interact with using Agile.",
+		//"learn_more" : "click here to learn more",
 		"button_text" : "Add Contacts",
 		"route" : "#",
 		"modal_id" : "personModal",
 		"image" : "/img/clipboard.png"
 	},
 	"companies" : {
-		"title" : "You dont have any companies",
-		"description" : "You can add your company details.......etc...etc",
-		"learn_more" : "click here to learn more",
+		"title" : "You do not have any companies currently.",
+		"description" : "compaines are prospects that you interact with using Agile.",
+		//"learn_more" : "click here to learn more",
 		"button_text" : "Add Companies",
 		"route" : "#",
 		"modal_id" : "companyModal",
 		"image" : "/img/clipboard.png"
 	},
 	"workflows" : {
-		"title" : "You dont have any workflows",
-		"description" : "You can add your workflows details.......etc...etc",
-		"learn_more" : "click here to learn more",
+		"title" : "You do not have any Campaigns currently",
+		"description" : "Campaign or workflow is an intelligent sales and marketing automation process for sending your contacts relevant information at the right time.",
+		//"learn_more" : "click here to learn more",
 		"button_text" : "Add Workflows",
 		"route" : "#workflow-add",
 		"image" : "/img/clipboard.png"
 	},
 	"deals" : {
-		"title" : "You dont have any deals",
-		"description" : "You can add your deal details.......etc...etc",
-		"learn_more" : "click here to learn more",
+		"title" : "You do not have any deals currently.",
+		"description" : "Deals are sales opportunities you track continuously throughout its lifecycle.",
+		//"learn_more" : "click here to learn more",
 		"button_text" : "Add deal",
 		"route" : "#deals-add",
 		"image" : "/img/clipboard.png"
 	},
 	"reports" : {
-		"title" : "You dont have any reports",
-		"description" : "You can add your report details.......etc...etc",
-		"learn_more" : "click here to learn more",
+		"title" : "You do not have any reports currently.",
+		"description" : "Reports are based on a variety of tags and filters and receive them periodically to constantly be in touch with your sales cycle and pipeline.",
+		//"learn_more" : "click here to learn more",
 		"button_text" : "Add Report",
 		"route" : "#report-add",
 		"image" : "/img/clipboard.png"
 	},
 	"contact-filters" : {
-		"title" : "You dont have any filter",
-		"description" : "You can add your filters details.......etc...etc",
-		"learn_more" : "click here to learn more",
+		"title" : "You do not have any filter currently.",
+		"description" : "Filters are used to sort contacts with a specific criteria to find patterns.",
+		//"learn_more" : "click here to learn more",
 		"button_text" : "Add filter",
 		"route" : "#contact-filter-add",
 		"image" : "/img/clipboard.png"
 	},
 	"contact-views": {
-		"title" : "You dont have any custom views",
-		"description" : "You can add your custom view details.......etc...etc",
-		"learn_more" : "click here to learn more",
+		"title" : "You do not have any custom views currently.",
+		"description" : "View is collection of different fields and the order in which you would like them to appear.",
+		//"learn_more" : "click here to learn more",
 		"button_text" : "Add view",
 		"route" : "#contact-view-add",
 		"image" : "/img/clipboard.png"

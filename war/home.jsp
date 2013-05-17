@@ -217,7 +217,7 @@ String CSS_PATH = "/";
 		style="padding: 0px !important;overflow-x:hidden;overflow-y:hidden;margin-top:15px;">
 
 	 	<div style="width:290px;display:inline-block;margin-top:15px;">
-	 	    <b>Like AgileCRM ?</b> Share it 
+	 	    Like AgileCRM?<b> Share it -</b>
 	 		<script src="https://platform.twitter.com/widgets.js" type="text/javascript"></script>
      		<span style="margin:0 10px;"><a data="Twitter" class="email-share" href="https://twitter.com/share?url=https%3A%2F%2Fwww.agilecrm.com&text=Sell%20like%20a%20pro%20with%20%23AgileCRM%20-%20" target="_blank"><i class="icon-twitter"></i></a></span>
 	 		<span><a data="Facebook" class="email-share" href="https://www.shareaholic.com/api/share/?v=1&apitype=1&apikey=8943b7fd64cd8b1770ff5affa9a9437b&service=5&title=Sell%20like%20a%20pro%20with%20%23AgileCRM%20-%20&link=https%3A%2F%2Fwww.agilecrm.com&notes=Sell%20like%20a%20pro%20with%20%23AgileCRM%20" target="_blank"><i class="icon-facebook"></i></a></span>

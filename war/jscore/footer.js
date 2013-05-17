@@ -96,8 +96,12 @@
 	/* For sharing agile to friends */
 	$('#share-email').die().live('click', function(e){
 		e.preventDefault();
-
-		 var CurrentuserModel = Backbone.Model.extend({
+		
+        if ($('#share-by-email').size() != 0)
+        {
+        	$('#share-by-email').remove();
+        }
+		var CurrentuserModel = Backbone.Model.extend({
 		     //url: '/core/api/imap',
 		     url: '/core/api/current-user',
 		     restKey: "domainUser"
@@ -125,7 +129,7 @@
 		
 					var url =  'core/api/send-email?from=' + encodeURIComponent(json.from) + '&to=' + 
 					 encodeURIComponent(json.to) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + 
-						 encodeURIComponent(json.body) + '<br/><div><br/><br/>' + encodeURIComponent(json.signature) + '</div>';
+						 encodeURIComponent(json.body);
 					
 					// Shows message 
 				    $save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><p class="text-success" style="color:#008000; font-size:15px; display:inline-block"> <i>Sending mail...</i></p></span>');

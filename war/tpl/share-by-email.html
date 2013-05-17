@@ -12,8 +12,8 @@
 					<label class="control-label">To<span
 						class="field_req">*</span></label>
 					<div class="controls ">
-						<input type="text" class="required email input-xlarge" name="to"
-							id="to" placeholder="Enter Your Friend's Email Address"/>
+						<input type="text" class="required input-xlarge" name="to"
+							id="to" placeholder="Enter Your Friend's Email Address" value=""/>
 					</div>
 				</div>
 				<div class="control-group">
@@ -21,17 +21,17 @@
 						class="field_req">*</span></label>
 					<div class="controls">
 						<input type="text" class="required input-xlarge" name="subject"
-							id="subject" placeholder="About" value="Check it out - its awesone."/>
+							id="subject" placeholder="About" value="Check AgileCRM. Its awesome."/>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label">Message <span
 						class="field_req">*</span></label>
 					<div class="controls">
-						<textarea class="required input-xlarge" rows="8" name="body" id="body" placeholder="Description">Hey, I am using this CRM called Agile that made my life easier. I think it will help you too.</textarea>
+						<textarea class="required input-xlarge" rows="8" name="body" id="body" placeholder="Description">Hey,
+I am using this CRM called Agile that made my life easier. I think it will help you too.</textarea>
 					</div>
 				</div>
-				<input name="signature" type="hidden" value="{{#getCurrentUserPrefs}}{{signature}}{{/getCurrentUserPrefs}}"/>
 			</fieldset>
 		</form>
         </div>
