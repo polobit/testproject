@@ -78,9 +78,9 @@
             <div class='clearfix'></div>    
 			<div>
                 <ul id="added-tags-ul" class="tagsinput" style="display:inline;vertical-align:top;margin-bottom:10px">
-               	 	{{#if tags.length}}
-                    	{{#each tags}}
-                        	<li style="display:inline-block;" class="tag" data="{{this}}"><span><a class="anchor" href="#tags/{{this}}">{{this}}</a><a class="close remove-tags" id="{{this}}">&times</a></span></li>
+               	 	{{#if tagsWithTime.length}}
+                    	{{#each tagsWithTime}}
+                        	<li style="display:inline-block;" class="tag" data="{{this.tag}}"><span><a class="anchor" href="#tags/{{this.tag}}">{{this.tag}}</a><a class="close remove-tags" id="{{this.tag}}">&times</a></span></li>
                     	{{/each}}
                 	{{/if}} 	
 				</ul>
