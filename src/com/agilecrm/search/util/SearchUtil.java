@@ -94,7 +94,7 @@ public class SearchUtil
 	 * Removes spaces in each tag, and concat all tags with space between
 	 * them(ex: ["agile dev", "clickdesk dev"] to "agiledev clickdeskdev")
 	 */
-	String tags = normalizeSet(contact.tags);
+	String tags = normalizeSet(contact.getContactTags());
 
 	// put String tags
 	if (tags != null)
