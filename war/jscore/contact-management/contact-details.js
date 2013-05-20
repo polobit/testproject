@@ -162,7 +162,7 @@ $(function(){
 	    	
 	    	// Push the new tags 
 	    	//for(var i = 0; i < new_tags.length; i++)
-	    		json.tags.push(new_tags.toString());
+	    		json.tagsWithTime.push({"tag" : new_tags.toString()});
 	    	
 	    	// Reset form
 	    	$('#addTagsForm').each (function(){
