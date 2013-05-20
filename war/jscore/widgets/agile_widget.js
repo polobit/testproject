@@ -369,18 +369,47 @@ function agile_crm_delete_contact_property_by_subtype(propertyName, subtype, val
     // name
     $.each(properties, function (index, property)
     {
+    	
         if (property.name == propertyName && property.subtype == subtype && property.value == value)
         {
-            console.log(index);
             properties.splice(index, 1);
+            contact_model.set("properties", properties);
+
+            contact_model.url = "core/api/contacts";
+
+            // Save updated contact model
+            contact_model.save();
+            
+            return false;
         }
     });
 
 
+   
+}
+
+function agile_crm_save_contact_properties_subtype(propertyName, subtype, value)
+{
+    // Reads current contact model form the contactDetailView
+    var contact_model = App_Contacts.contactDetailView.model;
+
+    // Gets properties list field from contact
+    var properties = contact_model.get('properties');
+   
+    var property = {};
+    property["name"] = propertyName;
+    property["value"] = value;
+    property["subtype"] = subtype;
+    
+    properties.push(property);
+    
     contact_model.set("properties", properties);
 
+    console.log(properties);
+    
     contact_model.url = "core/api/contacts"
 
     // Save updated contact model
     contact_model.save()
+
 }

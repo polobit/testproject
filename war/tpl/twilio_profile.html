@@ -34,9 +34,9 @@
 			<li class="row-fluid sub_header_li">
 				<div class="span2 mr_5">
 					{{#if_equals recording.total "0"}}
-						<img src="img/plugins/icon-tel.png" width="30" height="30" alt="" class="img-rounded pull-left" style="background-color:#000000;"/>
+						<button class="btn btn-mini btn-inverse" style="width:30px;height:30px;"><i class="icon-phone"></i></button>
 					{{else}}
-						<img src="img/plugins/icon_play_voice.png" id="record_sound_play" sound_url="{{recording.Recording.Uri}}" width="30" height="30" alt="" class="img-rounded pull-left" style="background-color:#000000;"/>
+						<button class="btn btn-mini btn-inverse" id="record_sound_play" sound_url="{{recording.Recording.Uri}}" style="width:30px;height:30px;"><i class="icon-play"></i></button>
 					{{/if_equals}}						
 				</div>
 				<div class="span9">
@@ -68,6 +68,21 @@
 	</div>
 </script>
 
+<script id="twilio-record-template" type="text/html">
+<div id="twilio-record-modal" class="modal fade in" >
+	<div class="modal-header" >
+    	<a href="#" data-dismiss="modal" class="close">&times;</a>'
+		<h3>Record</h3></div>
+        <div class="modal-body" >
+		<p>You are about to record the call</p>
+        <p>Do you want to proceed?</p>
+	</div>
+	<div class="modal-footer" >
+		<a href="#" class="btn btn-primary enable-record" record="yes">Yes</a>
+		<a href="#" class="btn close enable-record" data-dismiss="modal" record="no">No</a>
+	</div>
+</div>
+</script>
 <!-- 
 <script id="twilio-profile-template" type="text/html">
 	<div class="widget_content">

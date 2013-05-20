@@ -31,58 +31,35 @@ $(function ()
         return;
     }
 
-    // Gets Contact Preferences for this widget, based on plugin name 
-    var linkedin_id = agile_crm_get_widget_property_from_contact(LINKEDIN_PLUGIN_NAME);
+    // Global linkedin id
+    var linkedin_id = "";
 
     //Get website URL for LinkedIn from contact to get profile based on it
     var web_url = agile_crm_get_contact_property_by_subtype('website', 'LINKEDIN');
     
-    // If property with LinkedIn (LinkedIn ID) exist
-    if (linkedin_id)
+    if (web_url)
     {
-        // Shows contact's linkedIn profile
-        showLinkedinProfile(linkedin_id, plugin_id);
+    	 // Get LinkedIn id from URL and show profile
+        getLinkedinIdByUrl(plugin_id, web_url, function (data)
+        {
+            linkedin_id = data;
+            
+            showLinkedinProfile(linkedin_id, plugin_id);
+        });
     }
     else
     {
-        //If LinkedIn URL exists for contact,
-        if (web_url)
-        {
-            // Get LinkedIn id from URL and show profile
-            getLinkedinIdByUrl(plugin_id, web_url, function (data)
-            {
-                linkedin_id = data;
-                showLinkedinProfile(linkedin_id, plugin_id);
-            });
-        }
-        else
-        {
-            // Shows all the matches in linkedin for the contact 
-            showLinkedinMatchingProfiles(plugin_id);
-        }
+        // Shows all the matches in linkedin for the contact 
+        showLinkedinMatchingProfiles(plugin_id);
     }
+   
 
     // Deletes LinkedIn  profile on click of delete button in template
     $('#Linkedin_plugin_delete').die().live('click', function (event)
     {
         event.preventDefault();
         
-        // Gets Contact Preferences for this widget, based on plugin name 
-        var linked_id = agile_crm_get_widget_property_from_contact(LINKEDIN_PLUGIN_NAME);
-        
-        if(linked_id)
-        {
-        	 //If URL not exists remove LinkedIn Id saved for contact
-            agile_crm_delete_widget_property_from_contact(LINKEDIN_PLUGIN_NAME);
-        }
-        else
-        {
-	        //If exists remove the URL from the contact to delete profile
-	        if (web_url)
-	        {
-	            agile_crm_delete_contact_property_by_subtype('website', 'LINKEDIN', web_url);	            
-	        }
-        }
+       agile_crm_delete_contact_property_by_subtype('website', 'LINKEDIN', web_url);	            
        
     });
 
@@ -223,6 +200,14 @@ function showLinkedinMatchingProfiles(plugin_id)
                 //Hide pop over after clicking on any picture
                 $('#' + id).popover('hide');
                 
+                var url = $(this).attr('url');
+
+                // save url to contact
+                agile_crm_save_contact_properties_subtype("website", "LINKEDIN", url);
+                
+                // Save LinkedInId of selected profile to contact with name LinkedIn
+                // agile_crm_save_widget_property_to_contact(LINKEDIN_PLUGIN_NAME, id);
+
                 // If id (LinkedIn id) is defined, shows modal and prompts user to save 
                 // picture to contact
                 if (id)
@@ -251,8 +236,6 @@ function showLinkedinMatchingProfiles(plugin_id)
                     // adding image to contact
                     $('#linkedin-image-save-modal').modal('show');
 
-                    // Save LinkedInId of selected profile to contact with name LinkedIn
-                    agile_crm_save_widget_property_to_contact(LINKEDIN_PLUGIN_NAME, id);
 
                     // Shows Selected profile in the LinkedIn block
                     showLinkedinProfile(id, plugin_id)
