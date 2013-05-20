@@ -238,11 +238,7 @@ public class ContactUtil
 	for (Contact contact : contacts_list)
 	{
 
-	    for (String tag : tags_array)
-	    {
-		contact.tags.add(tag);
-
-	    }
+	    contact.addTags(tags_array);
 
 	    contact.save();
 	}
