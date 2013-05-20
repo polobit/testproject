@@ -64,7 +64,7 @@
 			{{#if client.work_phone}}<i class="icon-phone"></i><a href="tel:{{client.work_phone}}" > {{client.work_phone}} (work)<br> </a>{{/if}}
 			{{#if client.mobile}}<i class="icon-phone"></i><a href="tel:{{client.mobile}}"> {{client.mobile}} (mobile)</a>{{/if}}
 		{{/isArray}}
-		<div style="margin-bottom:10px;"><a href="#add" class="btn" id="freshbooks_add_invoice" item_name={{name}} rel="tooltip" title="Generate invoice and send an email for this item">Add Invoice</a></div>
+		<div style="margin-bottom:10px;"><a href="#add" class="btn" id="freshbooks_add_invoice" item_name={{name}} rel="tooltip" title="Generate invoice and send an email for this item" style="display:none">Add Invoice</a></div>
 	</div>
 	<div class="sub_header">
 		{{#isArray client}}
