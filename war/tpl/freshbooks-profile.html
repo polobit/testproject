@@ -64,13 +64,13 @@
 			{{#if client.work_phone}}<i class="icon-phone"></i><a href="tel:{{client.work_phone}}" > {{client.work_phone}} (work)<br> </a>{{/if}}
 			{{#if client.mobile}}<i class="icon-phone"></i><a href="tel:{{client.mobile}}"> {{client.mobile}} (mobile)</a>{{/if}}
 		{{/isArray}}
-		<div style="margin-bottom:10px;display:none;"><a href="#add" class="btn" id="freshbooks_add_invoice" item_name={{name}} rel="tooltip" title="Generate invoice and send an email for this item">Add Invoice</a></div>
+		<div style="margin-bottom:10px;"><a href="#add" class="btn" id="freshbooks_add_invoice" item_name={{name}} rel="tooltip" title="Generate invoice and send an email for this item">Add Invoice</a></div>
 	</div>
 	<div class="sub_header">
 		{{#isArray client}}
-			<a href="{{client.0.links.statement}}" ><h3>Invoices</h3></a>
+			<a href="{{client.0.links.statement}}" target="_blank"><h3>Invoices</h3></a>
 		{{else}}
-			<a href="{{client.links.statement}}" ><h3>Invoices</h3></a>
+			<a href="{{client.links.statement}}" target="_blank"><h3>Invoices</h3></a>
 		{{/isArray}}
 	</div>
 	<ul style="margin:0px;" id="freshbooks_invoice_panel">
@@ -207,7 +207,7 @@
 </script>
 
 <script id="freshbooks-modal-template" type="text/html">
-	<div class="modal hide fade message-modal" id="freshbooks_addModal" style="width:400px; left:55%">
+	<div class="modal hide fade message-modal" id="freshbooks_addModal">
 	    <div class="modal-header">
 	        <button class="close" data-dismiss="modal">x</button>
 			<h3><i class="icon-plus-sign"></i> {{headline}}</h3>
@@ -219,29 +219,102 @@
 	                <input name="freshbooks_id" type="hidden" value="" />
 	                <div class="control-group">	                    
 	                    <div class="controls">
-							<div class="row-fluid">
-								<div class="">
-									<select name="items_name" class="required span5" >
-									{{#isArray items.item}}
-										{{#each items.item}}
-											<option value="{{name}}">{{name}}</option>
-										{{/each}}
-									{{else}}
-										<option value="{{items.item.name}}">{{items.item.name}}</option>
-									{{/isArray}}
-									</select>
-								</div>
-							</div>
-							<label class="control-label"><b>Quantity: </b><span class="field_req">*</span></label>	                        
-							<input type="text" placeholder="quantity" name="quantity" id="quantity" class="required span4 digits" />							
-	                    </div>
-	                </div>
-	            </fieldset>
-	        </form>
-	    </div>
-	    <div class="modal-footer">
-	        <a href="#" class="btn btn-primary" id="send_request">Send</a>
-	        <span class="save-status"></span>
-	    </div>
-	</div>
+							<table id="invoice-table" class="table table-bordered" table-layout:fixed;width:auto;>
+								<thead style="background: rgba(240, 240, 240, .2);">
+									<tr>
+									<th >Item</th>
+									<th >Description</th>
+									<th >Unit Cost</th>
+									<th >Quantity</th>
+									<th >Tax1</th>
+									<th >Tax2</th>
+									<th >Line Total</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td id="item_names">
+											<select name="items_name" id="item-select" style="width:auto;">
+												<option value=""></option>
+												{{#isArray items.item}}
+													{{#each items.item}}
+														<option value="{{name}}">{{name}}</option>
+													{{/each}}
+												{{else}}
+													<option value="{{items.item.name}}">{{items.item.name}}</option>
+												{{/isArray}}
+											</select>
+										</td>
+										<td id="item_description" >
+												<input  name="description" style="width:auto;"/>
+												{{#isArray items.item}}
+													{{#each items.item}}
+														<input type="text" name="description" id="item_desc" class="{{name}}" style="width:auto;" value="{{description}}"/>
+													{{/each}}
+												{{else}}
+													<input type="text" name="description" id="item_desc" class="{{items.item.name}}" style="width:auto;" value="{{items.item.description}}"/>
+												{{/isArray}}
+										</td>
+										<td id="item_cost" >
+												<input type="text" style="width:auto;"/>
+												{{#isArray items.item}}
+													{{#each items.item}}
+														<input type="text" value="{{unit_cost}}" name="unit_cost" id="unit-cost" max="100" min="1" class="{{name}} number" style="width:auto;"/>
+													{{/each}}
+												{{else}}
+													<input type="text" value="{{items.item.unit_cost}}" name="unit_cost" max="100" min="1" id="unit-cost" class="{{items.item.name}} number"  style="width:auto;" />
+												{{/isArray}}
+										</td>
+										<td id="item_quantity" >
+											<input type="text" style="width:auto;"/>
+												{{#isArray items.item}}
+													{{#each items.item}}
+														<input type="number" value="1" name="quantity" id="quantity" max="100" min="1"  class="{{name}} digits" style="width:auto;"/>
+													{{/each}}
+												{{else}}
+													<input type="number" value="1" name="quantity" id="quantity" max="30" min="1" class="{{items.item.name}} digits" style="width:auto;"/>
+												{{/isArray}}
+										</td>
+										<td id="item_tax1" >
+											<select name="tax_name" id="item-tax1" style="width:auto;" >
+												<option value=""></option>
+												{{#isArray taxes.tax}}
+													{{#each taxes.tax}}
+														<option value="{{name}}_tax1" rate="{{rate}}">{{name}}</option>
+													{{/each}}
+												{{else}}
+													<option value="{{taxes.tax.name}}_tax1" rate="{{taxes.tax.rate}}">{{taxes.tax.name}}</option>
+												{{/isArray}}
+											</select>
+										</td>
+										<td id="item_tax2" >
+											<select name="tax_name" id="item-tax2" style="width:auto;" >
+												<option value=""></option>	
+												{{#isArray taxes.tax}}
+													{{#each taxes.tax}}
+														<option value="{{name}}_tax2" rate="{{rate}}">{{name}}</option>
+													{{/each}}
+												{{else}}
+													<option value="{{taxes.tax.name}}_tax2" rate="{{taxes.tax.rate}}">{{taxes.tax.name}}</option>
+												{{/isArray}}
+											</select>
+										</td>
+										<td id="item_total">
+											<input type="text" placeholder="total" name="line_total" id="line-total" class="" style="width:auto;"/>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<i class="add_lines icon-plus"></i>
+						</div>
+                	</div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer">
+       <a href="#" class="btn btn-primary" id="send_request">Send</a>
+       <span class="save-status"></span>
+    </div>
+</div>
 </script>
