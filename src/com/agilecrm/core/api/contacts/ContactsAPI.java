@@ -33,6 +33,7 @@ import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
+import com.agilecrm.contact.VcardString;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
@@ -502,7 +503,7 @@ public class ContactsAPI
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
-
+
 	if (tagsArray == null)
 	    return;
 
@@ -527,22 +528,20 @@ public class ContactsAPI
 	    @FormParam("tags") String tagsString) throws JSONException
     {
 
-
 	System.out.println("email to search on" + email);
 	Contact contact = ContactUtil.searchContactByEmail(email);
-	
+
 	if (contact == null)
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST)
 		    .entity("No contact found with provied email address")
 		    .build());
 
-	if(StringUtils.isEmpty(tagsString))
+	if (StringUtils.isEmpty(tagsString))
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST)
-		    .entity("No tags to add")
-		    .build());
-	    
+		    .entity("No tags to add").build());
+
 	JSONArray tagsJSONArray = new JSONArray(tagsString);
 	Tag[] tagsArray = null;
 	try
@@ -675,5 +674,21 @@ public class ContactsAPI
 
 	contact.viewed_time = System.currentTimeMillis();
 	contact.save();
+    }
+
+    /**
+     * Gets the Vcard String
+     * 
+     * @param id
+     * @return
+     */
+    @Path("/vcard/{contact-id}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getVcard(@PathParam("contact-id") Long id)
+    {
+	Contact contact = ContactUtil.getContact(id);
+	VcardString vcard = new VcardString(contact.getProperties());
+	return vcard.getVcardString();
     }
 }
