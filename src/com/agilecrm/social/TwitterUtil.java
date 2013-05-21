@@ -494,20 +494,28 @@ public class TwitterUtil
 	{
 	    SocialSearchResult result = new SocialSearchResult();
 
-	    User user = twitter.showUser(Long.parseLong(ids.getString(i)));
-	    result.id = user.getId() + "";
-	    result.name = user.getName();
-	    result.picture = user.getBiggerProfileImageURLHttps().toString();
-	    result.location = user.getLocation();
-	    result.summary = user.getDescription();
-	    result.num_connections = user.getFollowersCount() + "";
-	    result.tweet_count = user.getStatusesCount() + "";
-	    result.friends_count = user.getFriendsCount() + "";
-	    result.url = "https://twitter.com/" + user.getScreenName();
+	    try
+	    {
+		User user = twitter.showUser(Long.parseLong(ids.getString(i)));
+		result.id = user.getId() + "";
+		result.name = user.getName();
+		result.picture = user.getBiggerProfileImageURLHttps()
+			.toString();
+		result.location = user.getLocation();
+		result.summary = user.getDescription();
+		result.url = "https://twitter.com/" + user.getScreenName();
+		result.num_connections = user.getFollowersCount() + "";
+		result.tweet_count = user.getStatusesCount() + "";
+		result.friends_count = user.getFriendsCount() + "";
+
+	    }
+	    catch (Exception e)
+	    {
+		continue;
+	    }
 
 	    System.out.println(result.url);
 	    System.out.println(result);
-
 	    // Adds each result in to list
 	    profilesList.add(result);
 	}

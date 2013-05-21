@@ -20,6 +20,7 @@ public class TwilioVoiceServlet extends HttpServlet
 	String phoneNumber = request.getParameter("PhoneNumber");
 
 	System.out.println("phone number : " + phoneNumber);
+	String record = request.getParameter("record");
 
 	/* Use this as the caller ID when making calls from a browser. */
 	String callerId = request.getParameter("from");
@@ -30,7 +31,7 @@ public class TwilioVoiceServlet extends HttpServlet
 	try
 	{
 	    dial.setCallerId(callerId);
-	    dial.set("record", "true");
+	    dial.set("record", record);
 	    dial.append(new Number(phoneNumber));
 	    twiml.append(dial);
 	}

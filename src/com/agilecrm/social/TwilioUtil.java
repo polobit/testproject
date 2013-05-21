@@ -173,6 +173,7 @@ public class TwilioUtil
 		// System.out.println(response.getResponseText());
 		JSONObject xml = XML.toJSONObject(response.getResponseText());
 		System.out.println(xml);
+		System.out.println("in calls");
 		JSONObject calls = xml.getJSONObject("TwilioResponse")
 			.getJSONObject("Calls");
 
@@ -184,15 +185,22 @@ public class TwilioUtil
 		for (int i = 0; i < array.length(); i++)
 		{
 		    JSONObject callWithRecordings = new JSONObject();
+		    System.out.println("in loop " + i);
+
 		    String callSid = array.getJSONObject(i).getString(
 			    "ParentCallSid");
+
+		    if (callSid.equals("{}"))
+			continue;
+
 		    JSONObject recordings = getRecordings(client, callSid);
 		    callWithRecordings.put("call", array.getJSONObject(i));
 		    callWithRecordings.put("recording", recordings);
+		    System.out.println(callWithRecordings);
 		    logs.put(callWithRecordings);
 
 		}
-		System.out.println(logs);
+		// System.out.println(logs);
 		return logs;
 
 	    }
@@ -210,11 +218,21 @@ public class TwilioUtil
     {
 	// Calls/{CallSid}/
 
-	TwilioRestResponse response;
+	TwilioRestResponse response = null;
 
-	response = client.request(
-		"/" + APIVERSION + "/Accounts/" + client.getAccountSid()
-			+ "/Calls/" + callSid + "/Recordings", "GET", null);
+	try
+	{
+	    System.out.println("in recordings");
+	    response = client.request(
+		    "/" + APIVERSION + "/Accounts/" + client.getAccountSid()
+			    + "/Calls/" + callSid + "/Recordings", "GET", null);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    throw new Exception(e.getMessage());
+	}
+
 	if (response.isError())
 	{
 	    throw new Exception("Error sending message: "
@@ -547,11 +565,10 @@ public class TwilioUtil
     {
 	try
 	{
-	    // System.out.println(TwilioUtil.getCallLogsWithRecordings(null,
-	    // "+913748874888"));
+	    System.out.println("hi");
+	    System.out.println(TwilioUtil.getCallLogsWithRecordings(null,
+		    "+919533477545"));
 
-	    TwilioUtil.getOutgoingNumbers(null);
-	    // TwilioUtil.verifyOutgoingNumbers(null, "+919533477545");
 	}
 	catch (Exception e)
 	{

@@ -279,6 +279,8 @@ function setUpTwilio(token, plugin_id, from){
 			to = $('#contact_number').val();
 			var record = "false";
 			
+			$("#twilio-record-modal").remove();
+			
 			var record_modal = $(getTemplate('twilio-record',{}));
 			
 				
@@ -367,6 +369,7 @@ function setUpTwilio(token, plugin_id, from){
 	        	end_time = new Date().getTime();
 	        	console.log(end_time + "ended");
 	        	//addCallNote(start_time,end_time,status);
+	        	getTwilioLogs(plugin_id, to);
 	        	$('#twilio_note').show();
 	        	$("#twilio_hangup").hide();
 	        	$("#twilio_call").show();
