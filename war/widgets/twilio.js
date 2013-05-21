@@ -245,6 +245,10 @@ function getIncomingNumbers(plugin_id, callback)
 
 }
 
+function recordCallInTwilio(plugin_id)
+{
+	
+}
 function setUpTwilio(token, plugin_id, from){
 	
 	 var start_time;
@@ -273,12 +277,38 @@ function setUpTwilio(token, plugin_id, from){
 			
 			e.preventDefault();
 			to = $('#contact_number').val();
+			var record = "false";
 			
-			Twilio.Device.connect({
-				from:from,
-				PhoneNumber:to,
-			    Url:"https://teju-first.appspot.com/twilio/voice"
-		    });
+			var record_modal = $(getTemplate('twilio-record',{}));
+			
+				
+			 // Append the form into the content
+			 $('#content').append(record_modal);
+			    
+		     // Shows the modal after filling with details
+			 $("#twilio-record-modal").modal("show");
+			 
+			 $('.enable-record').die().live('click', function(e) {
+				 
+				e.preventDefault();
+				 var confirm = $(this).attr('record');
+				 
+				 if(confirm == "yes")
+					 record = "true";
+				 
+				 $("#twilio-record-modal").modal("hide");				
+				 
+				 console.log(record);
+				 Twilio.Device.connect({
+						from:from,
+						PhoneNumber:to,
+						record:record,
+					    Url:"https://teju-first.appspot.com/twilio/voice?record=" + record
+				    });
+			 });
+			   
+			 
+			
 		});
 	
 	    Twilio.Device.offline(function() {
@@ -372,4 +402,9 @@ function setUpTwilio(token, plugin_id, from){
    
 		
 	});
+}
+
+function twilio_connect() {
+	
+
 }

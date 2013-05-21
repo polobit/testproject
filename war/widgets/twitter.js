@@ -34,56 +34,37 @@ $(function ()
         return;
     }
 
-    // Gets Contact Preferences for this widget, based on plugin name 
-    var twitter_id = agile_crm_get_widget_property_from_contact(TWITTER_PLUGIN_NAME);
+    // Global twitter id
+    var twitter_id = "";
 
-    if (twitter_id)
+    //Get website URL for Twitter from contact to get profile based on it
+    var web_url = agile_crm_get_contact_property_by_subtype('website', 'TWITTER');
+    console.log(web_url);
+  
+    	
+    //If Twitter URL exists for contact,
+    if (web_url)
     {
-        // Shows contact's Twitter profile
-        showTwitterProfile(twitter_id, plugin_id);
+        // Get Twitter id from URL and show profile
+        getTwitterIdByUrl(plugin_id, web_url, function (data)
+        {
+            twitter_id = data;
+            showTwitterProfile(twitter_id, plugin_id);
+        });
     }
     else
     {
-        //Get website URL for Twitter from contact to get profile based on it
-        var web_url = agile_crm_get_contact_property_by_subtype('website', 'TWITTER');
-
-        //If Twitter URL exists for contact,
-        if (web_url)
-        {
-            // Get Twitter id from URL and show profile
-            getTwitterIdByUrl(plugin_id, web_url, function (data)
-            {
-                twitter_id = data;
-                showTwitterProfile(twitter_id, plugin_id);
-            });
-        }
-        else
-        {
-            // Shows all the matches in Twitter for the contact 
-            showTwitterMatchingProfiles(plugin_id);
-        }
+        // Shows all the matches in Twitter for the contact 
+        showTwitterMatchingProfiles(plugin_id);
     }
-
+    
     // Deletes Twitter  profile on click of delete button in template
     $('#Twitter_plugin_delete').die().live('click', function (e)
     {
         e.preventDefault();
 
-        var twit_id = agile_crm_get_widget_property_from_contact(TWITTER_PLUGIN_NAME);
-        
-        if(twit_id)
-        {
-        	//If URL not exists remove Twitter Id saved for contact
-            agile_crm_delete_widget_property_from_contact(TWITTER_PLUGIN_NAME);
-        }
-        else
-        {
-            //If exists remove the URL from the contact to delete profile
-            if (web_url)
-            {
-                agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url);             
-            }
-        }        
+        agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url);
+         
     });
 
     //Sends a message to Twitter when clicked on send message button
@@ -383,7 +364,12 @@ function showTwitterMatchingProfiles(plugin_id)
 
                 //Hide pop over after clicking on any picture
                 $('#' + id).popover('hide');
+                
+                var url = $(this).attr('url');
 
+                // save url to contact
+                agile_crm_save_contact_properties_subtype("website", "TWITTER", url);
+                
                 // If id (Twitter id) is defined, shows modal and prompts user to save 
                 // picture to contact
                 if (id)
@@ -414,7 +400,7 @@ function showTwitterMatchingProfiles(plugin_id)
                     $('#twitter-image-save-modal').modal('show');
 
                     // Saves Twitter Id of selected profile to contact with name Twitter
-                    agile_crm_save_widget_property_to_contact(TWITTER_PLUGIN_NAME, id);
+                    // agile_crm_save_widget_property_to_contact(TWITTER_PLUGIN_NAME, id);
 
                     // Shows Selected profile in the Twitter block
                     showTwitterProfile(id, plugin_id);
@@ -1056,9 +1042,27 @@ function retweetTheTweet(plugin_id, share_id, message, element)
  */
 function getTwitterIdByUrl(plugin_id, web_url, callback)
 {
+	var proper_web_url;
+	
+	console.log(web_url);
+
+	if(web_url.indexOf("https://twitter.com/") == -1)
+    {
+    	if(web_url.indexOf('@') == 0)
+    		proper_web_url = "https://twitter.com/" + web_url.substring(1);
+    	else
+    		proper_web_url = "https://twitter.com/" + web_url;
+    	
+    	console.log(proper_web_url);
+    }
+	else
+	{
+		proper_web_url = web_url;
+	}
+	
     // Store url in a json to post it
     var url_json = {};
-    url_json['web_url'] = web_url;
+    url_json['web_url'] = proper_web_url;
     console.log('in method');
 
     // Sends post request to URL "/core/api/widgets/getidbyurl/" bye sending plugin id 
@@ -1098,11 +1102,14 @@ function getTwitterIdByUrl(plugin_id, web_url, callback)
         // Shows error message to the user returned by Twitter
         alert("URL provided for Twitter is not valid " + data.responseText);
 
+        console.log(web_url);
+        // Delete the Twitter URL associated with contact as it is incorrect
+        agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url.toString());
+        
         // Shows Twitter matching profiles based on contact name
         showTwitterMatchingProfiles(plugin_id);
 
-        // Delete the Twitter URL associated with contact as it is incorrect
-        agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url);
+       
     });
 }
 
@@ -1203,8 +1210,11 @@ function getListOfProfilesByIDsinTwitter(plugin_id, twitter_ids, callback)
 	$.post("/core/api/widgets/profile/list/" + plugin_id, json, function(data) 
 	{
 		// If data is undefined, return
-		if(!data)
+		if(!data || data.length == 0)
+		{
+			$('#tweet_load').remove(); 
 			return;
+		}
 		
 		ArrangeListOfProfilesInElement(data, function(result) 
 		{

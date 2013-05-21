@@ -119,6 +119,35 @@ public class FreshBooksUtil
     }
 
     /**
+     * Calls method in ClickDeskPlugins server using REST API to get Taxes from
+     * FreshBooks
+     * 
+     * @param widget
+     *            {@link Widget} to retrieve plugin prefs from FreshBooks
+     *            account of agile user
+     * @return {@link String} with the client response
+     * @throws Exception
+     *             if the response is an exception
+     */
+    public static String getTaxes(Widget widget) throws Exception
+    {
+	JSONObject pluginPrefsJSON = buildPluginPrefsJSON(widget);
+
+	if (pluginPrefsJSON == null)
+	    throw new Exception("Freshbooks preferences null");
+
+	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON",
+		pluginPrefsJSON);
+
+	String response = HTTPUtil.accessHTTPURL(ZendeskUtil.pluginURL
+		+ "core/agile/freshbooks/taxes/get", prefsJSON.toString(),
+		"PUT");
+
+	return response;
+
+    }
+
+    /**
      * Calls method in ClickDeskPlugins server using REST API to add client to
      * FreshBooks
      * 
@@ -171,7 +200,7 @@ public class FreshBooksUtil
      *            {@link String} last name of the contact
      * @param email
      *            {@link String} email of the contact
-     * @param itemName
+     * @param invoiceLines
      *            {@link String} name of the item
      * @param quantity
      *            {@link String} quantity of items
@@ -180,7 +209,7 @@ public class FreshBooksUtil
      *             if the response is an exception
      */
     public static String addInvoice(Widget widget, String firstName,
-	    String lastName, String email, String itemName, String quantity)
+	    String lastName, String email, String invoiceLines)
 	    throws Exception
     {
 	JSONObject pluginPrefsJSON = buildPluginPrefsJSON(widget);
@@ -188,8 +217,8 @@ public class FreshBooksUtil
 	JSONObject contactPrefsJSON = new JSONObject()
 		.put("visitor_email", email).put("first_name", firstName)
 		.put("last_name", lastName);
-	JSONObject messageJSON = new JSONObject().put("item_name", itemName)
-		.put("quantity", quantity);
+	JSONObject messageJSON = new JSONObject().put("lines_json",
+		invoiceLines);
 
 	if (pluginPrefsJSON == null || contactPrefsJSON == null
 		|| messageJSON == null)
@@ -256,7 +285,7 @@ public class FreshBooksUtil
 	    System.out.println(addClient(null, "teju-agile", "test",
 		    "test4@agile.com"));
 	    System.out.println(addInvoice(null, "teju-agile", "test",
-		    "test3@agile.com", "mobile", "3"));
+		    "test3@agile.com", ""));
 	}
 	catch (Exception e)
 	{

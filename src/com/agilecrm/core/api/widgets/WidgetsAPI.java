@@ -1221,6 +1221,36 @@ public class WidgetsAPI
     }
 
     /**
+     * Retrieves taxes to which invoices are charged for a client from agnet's
+     * FreshBooks account
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @return {@link String} form of {@link JSONObject}
+     */
+    @Path("freshbooks/taxes/{widget-id}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getTaxesFromFreshBooks(@PathParam("widget-id") Long widgetId)
+    {
+	Widget widget = WidgetUtil.getWidget(widgetId);
+	if (widget == null)
+	    return null;
+	try
+	{
+	    return FreshBooksUtil.getTaxes(widget);
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+
+	}
+
+    }
+
+    /**
      * Adds a client to agent's FreshBooks account based on the given parameters
      * 
      * @param widgetId
@@ -1275,15 +1305,15 @@ public class WidgetsAPI
      *            {@link String} quantity of items
      * @return {@link String} form of {@link JSONObject}
      */
-    @Path("freshbooks/add/invoice/{widget-id}/{first_name}/{last_name}/{email}/{item_name}/{quantity}")
-    @GET
+    @Path("freshbooks/add/invoice/{widget-id}")
+    @POST
     @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public String addinvoiceToClient(@PathParam("widget-id") Long widgetId,
-	    @PathParam("first_name") String firstName,
-	    @PathParam("last_name") String lastName,
-	    @PathParam("email") String email,
-	    @PathParam("item_name") String itemName,
-	    @PathParam("quantity") String quantity)
+	    @FormParam("first_name") String firstName,
+	    @FormParam("last_name") String lastName,
+	    @FormParam("email") String email,
+	    @FormParam("lines_info") String linesInfo)
     {
 	Widget widget = WidgetUtil.getWidget(widgetId);
 	if (widget == null)
@@ -1291,7 +1321,7 @@ public class WidgetsAPI
 	try
 	{
 	    return FreshBooksUtil.addInvoice(widget, firstName, lastName,
-		    email, itemName, quantity);
+		    email, linesInfo);
 	}
 	catch (Exception e)
 	{

@@ -265,7 +265,7 @@ function addInvoiceToClientInFreshBooks(plugin_id, first_name, last_name, email)
     var message_form_modal = getTemplate("freshbooks-modal", json);
 
     // Append the form into the content
-  //  $('#content').append(message_form_modal);
+    $('#content').append(message_form_modal);
 
     // Shows the modal after filling with details
     $(message_form_modal).modal("show");
