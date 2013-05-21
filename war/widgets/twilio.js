@@ -279,6 +279,8 @@ function setUpTwilio(token, plugin_id, from){
 			to = $('#contact_number').val();
 			var record = "false";
 			
+			$("#twilio-record-modal").remove();
+			
 			var record_modal = $(getTemplate('twilio-record',{}));
 			
 				
