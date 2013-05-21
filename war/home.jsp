@@ -157,8 +157,18 @@ String CSS_PATH = "/";
 								--></li>
                      
 						<li id="fat-menu" class="dropdown"><a href=""
-							class="dropdown-toggle" data-toggle="dropdown"><i
-								class="agilecrm-profile-dropdown"></i> </a>
+							class="dropdown-toggle" data-toggle="dropdown" style="padding:6px 4px 6px 4px;">
+								
+								<%
+								if(!StringUtils.isEmpty(currentUserPrefs.pic))
+								    out.println("<img src='"+currentUserPrefs.pic+"' style='width:30px;height:28px'></img>");
+								else
+								    out.println("<img src='img/gravatar.png' style='width:30px;height:28px'></img>");
+								%>		
+									
+								<i class='caret' style='vertical-align:text-top;margin-left:4px'></i>	
+							 </a>
+							 
 							<ul class="dropdown-menu">
 								<li><a href='#settings'><%=user.getEmail()%></a></li>
 								<li class="divider"></li>
@@ -188,7 +198,7 @@ String CSS_PATH = "/";
 
 	<div class="container<%=width%>" id="agilecrm-container">
 		<div id="content">
-			<img class="loading" style="padding-right: 5px" src="img/21-0.gif"></img>
+			<img class="init-loading" style="padding-right: 5px" src="img/21-0.gif"></img>
 		</div>
 	</div>
 	<div id="push"></div>
@@ -270,7 +280,7 @@ String CSS_PATH = "/";
 		// Remove the loading image
 		$('body').css('background-image', 'none');
 		//$('#content').html('ready');
-		$('#content').append($("img").attr("src", "/img/ajax-loader-cursor.gif"));
+		$("img.init-loading", $('#content')).attr("src", "/img/ajax-loader-cursor.gif");
 	});
 	</script>
 	
