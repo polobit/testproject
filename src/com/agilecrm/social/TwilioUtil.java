@@ -148,7 +148,7 @@ public class TwilioUtil
 
 	String authToken = "5e7085bb019e378fb18822f319a3ec46";
 
-	String accountSid = "ACd1fe050ffa754cabc100a3acc93d8d1b";// widget.getProperty("account_sid");
+	String accountSid = widget.getProperty("account_sid");
 	// String authToken = widget.getProperty("auth_token");
 
 	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
