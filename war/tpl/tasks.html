@@ -43,8 +43,8 @@
 <script id="tasks-model-template" type="text/html">
 	<td style="border-top:1px dotted #DDD"> <input type="checkbox" data='{{id}}' class='tasks-select'> </td>
 	<td style="border-top:1px dotted #DDD">
-		<div style="text-overflow:ellipsis;overflow:hidden;white-space:nowrap;width:11em;">
-  			<p><b>{{ucfirst subject}}</b></p>
+		<div>
+  			<p style="text-overflow:ellipsis;overflow:hidden;white-space:nowrap;width:11em;"><b>{{ucfirst subject}}</b></p>
   			<p style="margin:5px 0px;"> 
 				<span style="margin-right:20px;" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
 				<i class="{{icons type}}"></i>&nbsp;<span>{{report_property type}}</span>
