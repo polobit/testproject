@@ -22,6 +22,7 @@ $(function(){
     	fill_relation(el);
     	$('#activityModal').modal('show');
     	agile_type_ahead("task_related_to", el, contacts_typeahead);
+    	populateUsers("owners-list", el);
     });
     
     /**

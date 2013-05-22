@@ -3,10 +3,15 @@ $(function(){
 		e.preventDefault();
 		var id = $(this).attr('data');
 		console.log(id);
-		
-		deserializeForm(tasksView.collection.get(id).toJSON(), $("#updateTaskForm"));
-
-		$("#updateTaskModal").modal('show');
+		var value = tasksView.collection.get(id).toJSON();
+		deserializeForm(value, $("#updateTaskForm"));
+    	console.log("contact details tab owner list");
+		// Fills owner select element
+		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data){
+			$("#updateTaskForm").find("#owners-list").html(data);
+			$("#owners-list", $("#updateTaskForm")).find('option[value='+value['taskOwner'].id+']').attr("selected", "selected");
+			$("#updateTaskModal").modal('show');
+		});
 	})
 	
 	$(".complete-task").die().live('click', function(e){
@@ -21,4 +26,4 @@ $(function(){
 			});
 		}
 	});
-})
+});

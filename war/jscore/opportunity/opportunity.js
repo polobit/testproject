@@ -69,7 +69,7 @@ $(function () {
  * @param value - Deal object
  * @param key - key name in the value.It is passed during declaration
  **/
-function populateUsers(id, el , value, key) {
+function populateUsers(id, el , value, key, callback) {
 		
 	// Users set id of agile user to save agileuser key in opportunities
 	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
@@ -91,8 +91,17 @@ function populateUsers(id, el , value, key) {
 			if(value[key])
 				// While deserialize set agile user id from user prefs, to save agile user key in opportunity 
 				$('#' + id, el).find('option[value='+value[key].id+']').attr("selected", "selected");
-		}			
+		}	
+		// If callback is present, it is called to deserialize
+		// the select field
+		if (callback && typeof (callback) === "function") {
+			// execute the callback, passing parameters as
+			// necessary
+			callback($('#' + id).html());
+		}
 	}, optionsTemplate); 
+	
+	
 }
 
 

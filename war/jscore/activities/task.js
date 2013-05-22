@@ -21,6 +21,7 @@ $(function() {
 
 		var el = $("#taskForm");
 		agile_type_ahead("task_related_to", el, contacts_typeahead);
+		populateUsers("owners-list", el);
 	});
 
 	/**
@@ -32,6 +33,8 @@ $(function() {
 		highlight_task();
 		var el = $("#taskForm");
 		agile_type_ahead("task_related_to", el, contacts_typeahead);
+		populateUsers("owners-list", el);
+
 	});
 
 	/**
@@ -83,7 +86,7 @@ $(function() {
 
 		$("#updateTaskForm").find("li").remove();
 	});
-
+	
 	/**
 	 * Show event of update task modal Activates typeahead for task-update-modal
 	 */
@@ -99,6 +102,26 @@ $(function() {
 	$('#task-date-1').datepicker({
 		format : 'mm/dd/yyyy'
 	});
+	
+	/**
+	 * Shows a pop-up modal with pre-filled values to update a task
+	 * 
+	 * @method updateTask
+	 * @param {Object}
+	 *            ele assembled html object
+	 * 
+	 */
+	function update_task(ele) {
+		var value = $(ele).data().toJSON();
+		deserializeForm(value, $("#updateTaskForm"));
+		
+		// Fills owner select element
+		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data){
+			$("#updateTaskForm").find("#owners-list").html(data);
+			$("#owners-list", $("#updateTaskForm")).find('option[value='+value['taskOwner'].id+']').attr("selected", "selected");
+			$("#updateTaskModal").modal('show');
+		});
+	}
 
 	/**
 	 * Makes the pending task as completed by calling complete_task function
@@ -264,19 +287,6 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 	});
 }
 
-/**
- * Shows a pop-up modal with pre-filled values to update a task
- * 
- * @method updateTask
- * @param {Object}
- *            ele assembled html object
- * 
- */
-function update_task(ele) {
-	deserializeForm($(ele).data().toJSON(), $("#updateTaskForm"));
-
-	$("#updateTaskModal").modal('show');
-}
 
 /**
  * Get due date of the task to categorize as overdue, today etc..
@@ -371,7 +381,7 @@ console.log(this.options);
  * 
  */
 function complete_task(taskId, collection, ui, callback) {
-	console.log(taskJSON);
+	
 
 	var taskJSON = collection.get(taskId).toJSON();
 	// Replace contacts object with contact ids 
@@ -382,7 +392,8 @@ function complete_task(taskId, collection, ui, callback) {
 	
 	taskJSON.contacts = contacts;
 	taskJSON.is_complete = true;
-
+	taskJSON.owner_id = taskJSON.taskOwner.id;
+	
 var new_task = new Backbone.Model();
 	new_task.url = '/core/api/tasks';
 	new_task.save(taskJSON, {

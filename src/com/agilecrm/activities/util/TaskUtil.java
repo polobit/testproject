@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.agilecrm.activities.Task;
+import com.agilecrm.activities.Task.Type;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
@@ -233,4 +234,22 @@ public class TaskUtil
 		.order("-created_time").limit(10).list();
     }
 
+    /**
+     * Gets all the tasks based on type.
+     * 
+     * @return List of pending tasks
+     */
+    public static List<Task> getCategoryTask(Type type)
+    {
+	try
+	{
+	    return dao.ofy().query(Task.class).filter("type =", type)
+		    .order("-created_time").limit(10).list();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
 }

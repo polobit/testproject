@@ -14,11 +14,12 @@ import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
-import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -107,11 +108,22 @@ public class Task
     public List<String> contacts = null;
 
     /**
-     * Owner key of the task
+     * DomainUser Id who created Deal.
+     */
+    @NotSaved
+    public String owner_id = null;
+
+    /**
+     * Key object of DomainUser.
      */
     @NotSaved(IfDefault.class)
-    @Indexed
-    private Key<AgileUser> owner = null;
+    private Key<DomainUser> ownerKey = null;
+
+    /**
+     * Key object of agileUser in order to get userprefs of current user.
+     */
+    @NotSaved(IfDefault.class)
+    private Key<AgileUser> agileUser = null;
 
     /**
      * Says what the task is. If it is null shouldn't save in database.
@@ -154,7 +166,7 @@ public class Task
 	this.due = due;
 
 	if (agileUserId != 0)
-	    this.owner = new Key<AgileUser>(AgileUser.class, agileUserId);
+	    this.agileUser = new Key<AgileUser>(AgileUser.class, agileUserId);
     }
 
     /**
@@ -185,7 +197,7 @@ public class Task
     @JsonIgnore
     public void setOwner(Key<AgileUser> user)
     {
-	owner = user;
+	agileUser = user;
     }
 
     /**
@@ -223,7 +235,7 @@ public class Task
      */
     public boolean compareTaskOwner(Key<AgileUser> owner)
     {
-	if (owner.equals(this.owner))
+	if (owner.equals(this.agileUser))
 	    return true;
 
 	return false;
@@ -232,12 +244,37 @@ public class Task
     @XmlElement(name = "Prefs")
     public UserPrefs getPrefs() throws Exception
     {
-	if (owner != null)
+	if (agileUser != null)
 	{
 	    Objectify ofy = ObjectifyService.begin();
 	    try
 	    {
-		return ofy.query(UserPrefs.class).ancestor(owner).get();
+		return ofy.query(UserPrefs.class).ancestor(agileUser).get();
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+	return null;
+    }
+
+    /**
+     * Gets domain user with respect to owner id if exists, otherwise null.
+     * 
+     * @return Domain user object.
+     * @throws Exception
+     *             when Domain User not exists with respect to id.
+     */
+    @XmlElement(name = "taskOwner")
+    public DomainUser getTaskOwner() throws Exception
+    {
+	if (ownerKey != null)
+	{
+	    try
+	    {
+		// Gets Domain User Object
+		return DomainUserUtil.getDomainUser(ownerKey.getId());
 	    }
 	    catch (Exception e)
 	    {
@@ -254,7 +291,6 @@ public class Task
     @PrePersist
     private void PrePersist()
     {
-
 	// Store Created Time
 	if (created_time == 0L)
 	    created_time = System.currentTimeMillis() / 1000;
@@ -270,14 +306,24 @@ public class Task
 
 	    this.contacts = null;
 	}
+	System.out.println("Owner_id : " + this.owner_id);
+
+	// Saves domain user key
+	if (owner_id != null)
+	    ownerKey = new Key<DomainUser>(DomainUser.class,
+		    Long.parseLong(owner_id));
+
+	System.out.println("OwnerKey : " + this.ownerKey);
 
 	// Create owner key
-	if (owner == null)
+	if (agileUser == null)
 	{
 	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
 	    if (agileUser != null)
-		this.owner = new Key<AgileUser>(AgileUser.class, agileUser.id);
+		this.agileUser = new Key<AgileUser>(AgileUser.class,
+			agileUser.id);
 	}
+	System.out.println("agileUser: " + this.agileUser);
     }
 
 }
