@@ -12,6 +12,8 @@ $(function ()
     TWITTER_UPDATE_LOAD_IMAGE = '<center><img id="tweet_load" src=\"img/ajax-loader-cursor.gif\" ' + 
     			'style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
     
+    Errorjson = {};
+    
     $('#Twitter').html(TWITTER_UPDATE_LOAD_IMAGE);
 
     // Current contact user name in Twitter profile
@@ -320,8 +322,11 @@ function showTwitterMatchingProfiles(plugin_id)
         // If no matches found display message
         if (data.length == 0)
         {
-            $('#Twitter').html("<div style='padding: 10px;line-height:160%;'>" + 
-            		"No Matches Found</div>");
+        	Errorjson['message'] = "No Matches Found";
+        	$('#Twitter').html(getTemplate('twitter-error', Errorjson));
+        	
+            /*$('#Twitter').html("<div style='padding: 10px;line-height:160%;'>" + 
+            		"No Matches Found</div>");*/
             return;
         }
 
@@ -526,9 +531,12 @@ function showTwitterProfile(twitter_id, plugin_id)
         // Remove loading image on error 
         $('#tweet_load').remove();
 
+        Errorjson['message'] = data.responseText;
+        $('#Twitter').html(getTemplate('twitter-error', Errorjson));
+        
         // Shows error message if error occurs
-    	$('#Twitter').html("<div style='padding: 10px;line-height:160%;" + 
-				"word-wrap: break-word;' >" + data.responseText + "</div>"); 
+    	/*$('#Twitter').html("<div style='padding: 10px;line-height:160%;" + 
+				"word-wrap: break-word;' >" + data.responseText + "</div>");*/ 
     });
 
     // On click of see more link, more updates are retrieved
@@ -747,7 +755,11 @@ function getTwitterMatchingProfiles(plugin_id, callback)
             $('#tweet_load').remove();
 
             // Shows error message if error occurs
-            alert(data.responseText);
+            // alert(data.responseText);
+            
+            Errorjson['message'] = data.responseText;
+            
+            $('#Twitter').html(getTemplate('twitter-error', Errorjson));
         });
     }
     else

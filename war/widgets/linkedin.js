@@ -15,6 +15,8 @@ $(function ()
     
     $('#Linkedin').html(LINKEDIN_UPDATE_LOAD_IMAGE);
     
+    Errorjson = {};
+    
     // Current contact user name in LinkedIn profile
     Linkedin_current_profile_user_name = "";   
 
@@ -142,15 +144,19 @@ function showLinkedinMatchingProfiles(plugin_id)
      *  Fetches matching profiles from LinkedIn based on widget preferences, and uses 
      *  call back function to get template and view matches
      */
-    getLinkedinMatchingProlfiles(plugin_id, function (data)
+    getLinkedinMatchingProfiles(plugin_id, function (data)
     {
     	var el = "<div style='padding:10px'>";
 
         // If no matches found display message
         if (data.length == 0)
         {
-            $('#Linkedin').html("<div style='padding: 10px;line-height:160%;'>" + 
-    				"No Matches Found</div>");
+        	Errorjson['message'] = "No Matches Found";
+        	
+        	$('#Linkedin').html(getTemplate("linkedin-error", Errorjson));
+        	
+            /*$('#Linkedin').html("<div style='padding: 10px;line-height:160%;'>" + 
+    				"No Matches Found</div>");*/
             return;
         }
 
@@ -344,15 +350,23 @@ function showLinkedinProfile(linkedin_id, plugin_id)
     	// Check if member does not share information for third party applications
     	if(data.responseText == "Invalid member id {private}")
     	{
-    		$('#Linkedin').html("<div style='padding: 10px;line-height:160%;" + 
+    		Errorjson['message'] = "Member doesn't share his information for third party applications";
+    		
+    		$('#Linkedin').html(getTempalte("linkedin-error", Errorjson));
+    		
+    		/*$('#Linkedin').html("<div style='padding: 10px;line-height:160%;" + 
     				"word-wrap: break-word;' >Member doesn't share his information for " + 
-    				"third party applications</div>");
+    				"third party applications</div>");*/
     		return;
     	}
     	
     	// Shows error message if error occurs
-    	$('#Linkedin').html("<div style='padding: 10px;line-height:160%;" + 
-				"word-wrap: break-word;' >" + data.responseText + "</div>");        
+    	Errorjson['message'] = data.responseText;
+    	
+    	$('#Linkedin').html(getTempalte("linkedin-error", Errorjson));
+    	
+    	/*$('#Linkedin').html("<div style='padding: 10px;line-height:160%;" + 
+				"word-wrap: break-word;' >" + data.responseText + "</div>");  */      
     });
 
     // On click of see more link, more updates are retrieved
@@ -523,7 +537,7 @@ function showLinkedinProfile(linkedin_id, plugin_id)
  * @param callback 
  * 			callback to create template and show matching profiles
  */
-function getLinkedinMatchingProlfiles(plugin_id, callback)
+function getLinkedinMatchingProfiles(plugin_id, callback)
 {
     // Gets contact id, to save social results of a particular id
     var contact_id = agile_crm_get_contact()['id'];
@@ -554,7 +568,12 @@ function getLinkedinMatchingProlfiles(plugin_id, callback)
         	$('#status_load').remove();
         	
         	// Shows error message if error occurs
-            alert(data.responseText);
+            // alert(data.responseText);
+            
+            // Shows error message if error occurs
+        	Errorjson['message'] = data.responseText;
+        	
+        	$('#Linkedin').html(getTempalte("linkedin-error", Errorjson));
         });
 
     }
@@ -840,7 +859,10 @@ function getExperienceOfPerson(plugin_id, linkedin_id)
     	// Remove loading image on error 
      	$('#status_load').remove();
      	
-    	 alert(data.responseText);
+     	Errorjson['message'] = data.responseText;
+     	$('#linkedin_experience_panel').html(getTemplate('linkedin-error', Errorjson))
+     	
+    	// alert(data.responseText);
      });
      
 }
@@ -903,7 +925,9 @@ function getLinkedInSharedConnections(plugin_id, linkedin_id)
     	// Remove loading image on error 
     	$('#status_load').remove();
     	
-   	 	alert(data.responseText);
+    	Errorjson['message'] = data.responseText;
+    	$('#linkedin_shared_panel').html(getTemplate('linkedin-error', Errorjson))
+   	 	// alert(data.responseText);
     });
     
 }

@@ -472,8 +472,15 @@ var Base_Model_View = Backbone.View
 							deserializeForm(this.model.toJSON(), $(this.el)
 									.find('form'));
 					}
+					
+					// Add row-fluid if user prefs are set to fluid
+					if (IS_FLUID)
+					{
+						$(this.el).find('div.row').removeClass('row').addClass(
+								'row-fluid');
+					}
 				}
-				// Shows loading in the view, if conditions to renders are
+				// Shows loading in the view, if render conditions are
 				// satisfied
 				else {
 					$(this.el).html(LOADING_HTML);
