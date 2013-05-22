@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.activities.Task;
+import com.agilecrm.activities.Task.Type;
 import com.agilecrm.activities.TaskReminder;
 import com.agilecrm.activities.util.TaskUtil;
 
@@ -114,6 +115,7 @@ public class TasksAPI
     public Task getTask(@PathParam("id") Long id)
     {
 	Task task = TaskUtil.getTask(id);
+	System.out.println("task id " + task);
 	return task;
     }
 
@@ -211,5 +213,19 @@ public class TasksAPI
     public List<Task> getDealsRelatedToCurrentUser()
     {
 	return TaskUtil.getTasksRelatedToCurrentUser();
+    }
+
+    /**
+     * Gets all task based on type
+     * 
+     * @param type
+     * @return {@link Task}
+     */
+    @Path("{type}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Task> getCategoryBasedTask(@PathParam("type") Type type)
+    {
+	return TaskUtil.getCategoryTask(type);
     }
 }
