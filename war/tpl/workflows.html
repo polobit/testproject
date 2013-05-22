@@ -12,14 +12,17 @@
     </td>
 	<td><a href="#workflows/logs/{{id}}">View Logs</a></td>
     <td><a href="#email-reports/{{id}}">View Stats</a></td>
-    <td> 
+    <td>
         <div>
-            <small class="edit-hover"> 
-		       <span>Created:&nbsp;</span>
-               <time class="campaign-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" created_time}}</time>
-         	</small>
+		    {{#stringToJSON this "subscribersCount"}}{{/stringToJSON}} 	
+            <small><span>Active:&nbsp;</span>{{#if subscribersCount.active}}{{subscribersCount.active}}{{else}} - {{/if}}</small>
         </div>
         <br/>
+        <div>
+            <small><span>Done:&nbsp;&nbsp;</span>{{#if subscribersCount.done}}{{subscribersCount.done}}{{else}} - {{/if}}</small>
+        </div>
+    </td>
+    <td> 
         {{#if updated_time}}
         <div>
             <small class="edit-hover"> 
@@ -29,7 +32,10 @@
         </div>
         {{else}}
         <div>
-            <small><span>Modified&nbsp;:&nbsp;</span> - </small>
+            <small class="edit-hover"> 
+		       <span>Created:&nbsp;</span>
+               <time class="campaign-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" created_time}}</time>
+         	</small>
         </div>
         {{/if}}
     </td>  
@@ -64,6 +70,7 @@
                             <th>Creator</th>
                             <th>Logs</th>
                             <th>Stats</th>
+                            <th>Subscribers</th>
                             <th>Time</th>
                         </tr>
                     </thead>

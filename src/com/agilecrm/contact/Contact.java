@@ -27,6 +27,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.notification.util.ContactNotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.triggers.util.ContactTriggerUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
@@ -151,6 +152,11 @@ public class Contact extends Cursor
     @Embedded
     @Indexed
     public List<ContactField> properties = new ArrayList<ContactField>();
+
+    @NotSaved(IfDefault.class)
+    @Embedded
+    @Indexed
+    public List<CampaignStatus> campaignStatus = new ArrayList<CampaignStatus>();
 
     /**
      * Widget properties (twitter, linkedIn etc..) of a contact
@@ -409,7 +415,9 @@ public class Contact extends Cursor
     {
 
 	this.lead_score = this.lead_score - score;
-	this.save();
+
+	if (this.lead_score >= 0)
+	    this.save();
 
     }
 

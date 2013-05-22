@@ -12,10 +12,10 @@ var Translator_Path_Global = "js/translator.js";
 // Default Nodes to be populated
 var First_Nodes_Toolbar_Global = new Array("json/nodes/email/send_email.jsp",
 		"json/nodes/common/wait.js", "json/nodes/email/clicked.js",
-		"json/nodes/email/ab.js", "json/nodes/common/score.js", "json/nodes/common/url.js"
+		"json/nodes/crm/tags.js", "json/nodes/common/score.js", "json/nodes/common/url.js"
 		, "json/nodes/social/tweet.js");
 var Second_Nodes_Toolbar_Global = new Array("json/nodes/crm/addtask.js",
-		"json/nodes/crm/addnote.js", "json/nodes/crm/tags.js","json/nodes/common/check_tags.js",
+		"json/nodes/crm/addnote.js", "json/nodes/email/ab.js","json/nodes/common/check_tags.js",
 		"json/nodes/developers/condition.js", "json/nodes/developers/jsonio.js");
 
 /*

@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.util.DBUtil;
+import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.campaignio.tasklets.Tasklet;
 import com.campaignio.tasklets.deferred.TaskletWorkflowDeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
@@ -128,6 +129,14 @@ public class TaskletUtil
 	    if (nextNode == null || nextNode.equalsIgnoreCase(HANGUP_NODE_ID))
 	    {
 		System.out.println("Job Complete");
+
+		// Records end-time of campaign and change status to
+		// campaignId-DONE.
+		CampaignStatusUtil.setStatusOfCampaign(
+			DBUtil.getId(subscriberJSON),
+			DBUtil.getId(campaignJSON), DBUtil.getId(campaignJSON)
+				+ "-DONE");
+
 		return;
 	    }
 	}

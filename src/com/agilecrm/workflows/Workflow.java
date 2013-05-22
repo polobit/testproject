@@ -5,6 +5,10 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
@@ -13,7 +17,6 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
-import com.campaignio.cron.util.CronUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -188,14 +191,31 @@ public class Workflow extends Cursor
     }
 
     /**
-     * Returns subscribers count saved in cron.
+     * Return subscribers count(active and done) of a workflow.
      * 
-     * @return int
+     * @return String
      */
     @XmlElement
-    public int getActiveUsersCount()
+    public String getSubscribersCount()
     {
-	return CronUtil.activeUsersCount(id.toString());
+	JSONObject subscribersCount = new JSONObject();
+
+	int active = ContactUtil.getSubscribersCount(id.toString(),
+		id.toString() + "-ACTIVE");
+
+	int done = ContactUtil.getSubscribersCount(id.toString(), id.toString()
+		+ "-DONE");
+
+	try
+	{
+	    subscribersCount.put("active", active);
+	    subscribersCount.put("done", done);
+	}
+	catch (JSONException e)
+	{
+	    e.printStackTrace();
+	}
+	return subscribersCount.toString();
     }
 
     /**

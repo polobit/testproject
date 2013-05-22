@@ -384,4 +384,20 @@ public class ContactUtil
 	return dao.ofy().query(Contact.class).order("-viewed_time")
 		.limit(Integer.parseInt(page_size)).list();
     }
+
+    /**
+     * Returns total contacts count that are subscribed to a campaign having
+     * given status.
+     * 
+     * @param campaignId
+     *            - CampaignId.
+     * @param status
+     *            - Active or Done.
+     * @return int
+     */
+    public static int getSubscribersCount(String campaignId, String status)
+    {
+	return dao.ofy().query(Contact.class)
+		.filter("campaignStatus.status", status).count();
+    }
 }

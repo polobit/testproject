@@ -114,6 +114,7 @@ function subscribeToPubNub(domain) {
 						pubnub.subscribe({
 							channel : domain,
 							callback : function(message) {
+								//console.log(unescape(message.replace('/\+/g', " ")));
 								_setupNotification(message);
 							}
 						});
@@ -338,10 +339,13 @@ function checkBrowserNotifications(el)
 	// Checked - Enable all notifications; Unchecked - Disable all notifications
 	$('#control_notifications',el).die().live('click',function(e){
 		 if(!$(this).is(':checked'))
-		 {  $(el).find('input[type=checkbox]').not('#control_notifications').attr('disabled','disabled');
+		 {  
+			 $(el).find('input[type=checkbox]').not('#control_notifications').attr('disabled','disabled');
 		 }
 		 else
+		 { 
 			 $(el).find('input[type=checkbox]').not('#control_notifications').removeAttr('disabled');
+		 }
 	});
 
 	    // Verify desktop notification settings. 
@@ -349,25 +353,28 @@ function checkBrowserNotifications(el)
 	    // Check if browser support
 	    if(!window.webkitNotifications)
 	    {  
-	    	$('#set-desktop-notification').die().live('click',function(e){
-	        e.preventDefault();
-	    	alert("Desktop notifications are not supported for this Browser/OS version yet.");
-	    	});
+	    	$('#set-desktop-notification').css('display','none');
 	    }
 	      
 	    // Allowed
 	    if(window.webkitNotifications && window.webkitNotifications.checkPermission() == 0)
 	    { 
 	     $('#set-desktop-notification').css('display','none');
-	     $('#desktop-notification-content').html("<i>Desktop Notifications are allowed. Disable it in browser settings.</i>")
 	    }
 	    
 	    // Denied
 	    if(window.webkitNotifications && window.webkitNotifications.checkPermission() == 2)
 	    {
 	    	$('#set-desktop-notification').css('display','none');
-	    	$('#desktop-notification-content').html("<i>Desktop Notifications are disabled. Enable it in browser settings.</i>")
+	    	$('#desktop-notification-content').html
+	    	   ("<i>Desktop Notifications are disabled in browser settings. <a href=\"#\" id=\"enable-notification\" style=\"text-decoration:underline;\">Enable it.</a></i>")
 	    }
+	    
+	    $('#enable-notification',el).die().live('click',function(e){
+	    	e.preventDefault();
+	    	$('#notification-help-modal').modal("show");
+	    });
+	    
 	  
 }
 
