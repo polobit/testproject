@@ -172,7 +172,7 @@ function addTicketToZendesk(plugin_id, email)
     json["headline"] = "Add Ticket";
 
     // Information to be shown in the modal to the user
-    json["info"] = "Adds ticket to your Zendesk account associated with Agile CRM";
+    json["info"] = "Add ticket in Zendesk";
 
     // Name of the contact to be added to ticket
     json["name"] = agile_crm_get_contact_property('first_name') + " " +

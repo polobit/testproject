@@ -281,7 +281,12 @@ function setUpTwilio(token, plugin_id, from){
 			
 			$("#twilio-record-modal").remove();
 			
-			var record_modal = $(getTemplate('twilio-record',{}));
+			var to_display ={};
+			to_display['to'] = to;
+			to_display['name'] = agile_crm_get_contact_property('first_name') + " " +
+	        agile_crm_get_contact_property('last_name');
+			
+			var record_modal = $(getTemplate('twilio-record', to_display));
 			
 				
 			 // Append the form into the content
@@ -290,15 +295,18 @@ function setUpTwilio(token, plugin_id, from){
 		     // Shows the modal after filling with details
 			 $("#twilio-record-modal").modal("show");
 			 
-			 $('.enable-record').die().live('click', function(e) {
+			 $('.enable-call').die().live('click', function(e) {
 				 
-				e.preventDefault();
-				 var confirm = $(this).attr('record');
+				e.preventDefault();				
+				$("#twilio-record-modal").modal("hide");
+				
+				 var confirm = $(this).attr('make_call');
 				 
-				 if(confirm == "yes")
-					 record = "true";
-				 
-				 $("#twilio-record-modal").modal("hide");				
+				 if(confirm == "no")
+					 return;
+					 
+				 if($('#enable-record').is(':checked'))
+					 record = "true";				 				
 				 
 				 console.log(record);
 				 Twilio.Device.connect({
@@ -309,8 +317,6 @@ function setUpTwilio(token, plugin_id, from){
 				    });
 			 });
 			   
-			 
-			
 		});
 	
 	    Twilio.Device.offline(function() {
@@ -407,7 +413,3 @@ function setUpTwilio(token, plugin_id, from){
 	});
 }
 
-function twilio_connect() {
-	
-
-}

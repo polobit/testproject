@@ -26,7 +26,7 @@
 			</div>
 							
 			<div class="span6" style="margin-left: 10px;">
-				{{epochToHumanDate "mm-dd-yyyy" customer.subscription.start}}
+				{{epochToHumanDate "dd-mmm-yyyy" customer.subscription.start}}
 			</div>
 		</li>
 		<li class="row-fluid">	
@@ -35,7 +35,7 @@
 			</div>
 							
 			<div class="span6" style="margin-left: 10px;">
-				{{epochToHumanDate "mm-dd-yyyy" customer.subscription.currentPeriodEnd}}
+				{{epochToHumanDate "dd-mmm-yyyy" customer.subscription.currentPeriodEnd}}
 			</div>
 		</li>
 
@@ -63,7 +63,7 @@
 			</div>
 							
 			<div class="span6" style="margin-left: 10px;">
-				{{customer.subscription.plan.amount}}
+				{{numeric_operation customer.subscription.plan.amount 100 "/"}} {{toUpperCase customer.subscription.plan.currency}}
 			</div>
 		</li>
 	{{else}}
@@ -81,7 +81,7 @@
 	{{#each invoice}}
 		<li class="sub_header_li row-fluid">
 			<div class="span3">{{lines.data.0.plan.name}} <small>plan</small></div>
-			<div class="span8">{{epochToHumanDate "mm/dd/yyyy" periodStart}} to {{epochToHumanDate "mm/dd/yyyy" periodEnd}}</div>
+			<div class="span9">{{epochToHumanDate "dd-mmm-yyyy" periodStart}} to {{epochToHumanDate "dd-mmm-yyyy" periodEnd}}</div>
 		</li>
 	{{/each}}
 {{else}}
