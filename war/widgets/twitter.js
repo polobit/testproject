@@ -193,7 +193,7 @@ $(function ()
 		    		 $('#tweet_load').remove();
 		    		 
 		    		 // Show matching profiles in Twitter panel
-		    		 $('#twitter_follower_panel').append("<div style='margin-top:-10px;'>" + result + "</div>");
+		    		 $('#twitter_follower_panel').append("<div style='margin-top:-20px;'>" + result + "</div>");
 		    	 });
 	    	 });
 	    	 
@@ -263,7 +263,7 @@ $(function ()
 		    		 $('#tweet_load').remove();
 
 		    		// Show matching profiles in Twitter panel
-		    		$('#twitter_following_panel').append("<div style='margin-top:-10px;'>" + result + "</div>");
+		    		$('#twitter_following_panel').append("<div style='margin-top:-20px;'>" + result + "</div>");
 		    	});
     	    });
 
@@ -317,7 +317,7 @@ function showTwitterMatchingProfiles(plugin_id)
      */
     getTwitterMatchingProfiles(plugin_id, function (data)
     {
-        var el = "<div style='padding:10px'>";
+        var el = "<div style='padding:10px'><p>Please choose the right Twitter profile for this contact</p>";
 
         // If no matches found display message
         if (data.length == 0)
