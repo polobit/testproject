@@ -118,7 +118,10 @@ $(function() {
 		// Fills owner select element
 		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data){
 			$("#updateTaskForm").find("#owners-list").html(data);
-			$("#owners-list", $("#updateTaskForm")).find('option[value='+value['taskOwner'].id+']').attr("selected", "selected");
+			if(value.taskOwner)
+			{
+				$("#owners-list", $("#updateTaskForm")).find('option[value='+value['taskOwner'].id+']').attr("selected", "selected");
+			}
 			$("#updateTaskModal").modal('show');
 		});
 	}
