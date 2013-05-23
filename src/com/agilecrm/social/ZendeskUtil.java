@@ -187,7 +187,7 @@ public class ZendeskUtil
 	String userInfo = getUserInfo(widget);
 	System.out.println("----------userinfo-------------");
 	System.out.println(userInfo);
-	String openTickets = getTicketsByStatus(widget, email, "open");
+	String allTickets = getContactTickets(widget, email);
 
 	JSONObject zendeskInfo = new JSONObject();
 	try
@@ -201,7 +201,7 @@ public class ZendeskUtil
 	    zendeskInfo.put("user_info", userInfo);
 	}
 
-	zendeskInfo.put("open_tickets", openTickets);
+	zendeskInfo.put("all_tickets", allTickets);
 
 	return zendeskInfo.toString();
     }
@@ -227,9 +227,9 @@ public class ZendeskUtil
 		    .put("zendesk_url", widget.getProperty("zendesk_url"));
 
 	    // JSONObject pluginPrefs = new JSONObject()
-	    // .put("zendesk_username", "praveen@invox.com")
-	    // .put("zendesk_password", "agilecrm")
-	    // .put("zendesk_url", "https://agilecrm.zendesk.com");
+	    // .put("zendesk_username", "gadamtest5@gmail.com")
+	    // .put("zendesk_password", "mantra123")
+	    // .put("zendesk_url", "https://devikatest.zendesk.com");
 
 	    return pluginPrefs;
 	}
@@ -245,13 +245,13 @@ public class ZendeskUtil
     {
 	try
 	{
-	    System.out.println(ZendeskUtil.getContactTickets(null,
-		    "test@agile.com"));
-	    System.out.println(ZendeskUtil.addTicket(null, "te",
-		    "test@agile.com", "test", "desc"));
-	    System.out.println(ZendeskUtil.updateTicket(null, "1", "hi choc"));
-	    System.out.println(ZendeskUtil.getTicketsByStatus(null,
-		    "test@zendesk.com", "solved"));
+	    System.out.println(ZendeskUtil.getUserInfo(null));
+	    // System.out.println(ZendeskUtil.addTicket(null, "te",
+	    // "test@agile.com", "test", "desc"));
+	    // System.out.println(ZendeskUtil.updateTicket(null, "1",
+	    // "hi choc"));
+	    // System.out.println(ZendeskUtil.getTicketsByStatus(null,
+	    // "test@zendesk.com", "solved"));
 	}
 	catch (Exception e)
 	{

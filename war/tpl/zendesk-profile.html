@@ -16,48 +16,39 @@
 	<div class="clearfix"></div>
 	<a href="#" class="btn" id="add_ticket"><i class="icon-plus"></i>Add Ticket</a>						
 </div>
-<ul class="nav nav-tabs row-fluid" id="myTab">
-	<li class="active" style="width:33.33333%"><a data-toggle="tab" href="#tickets_open" id="open_tickets"><h3>open</h3></a></li>
-	<li style="width:33.33333%"><a data-toggle="tab" href="#tickets_solved" id="solved_tickets"><h3>solved</h3></a></li>
-	<li style="width:33.33333%"><a data-toggle="tab" href="#tickets_closed" id="closed_tickets"><h3>closed</h3></a></li>
-</ul>
-<div class="tab-content" id="myTabContent">
-	<div id="tickets_open" class="tab-pane fade active in">
-		
-		<ul class="widget_tab_content"  id="open_tickets_panel">
-					
-		</ul>
-	</div>
-	<div id="tickets_solved" class="tab-pane fade active in">
-		
-		<ul class="widget_tab_content"  id="solved_tickets_panel">
-					
-		</ul>
-	</div>
-	<div id="tickets_closed" class="tab-pane fade active in">
-		
-		<ul class="widget_tab_content"  id="closed_tickets_panel">
-					
-		</ul>
-	</div>
+<div class="sub_header">
+	<h3>Tickets</h3>
+	<div><center><img id="freshbooks_invoice_load" src="img/ajax-spinner.gif" style="display:none;"></img></center></div>
 </div>
+
+<ul style="margin:0px;" id="all_tickets_panel">
+	
+</ul>
+<div class="widget_tab_footer" style="float:none">
+	<a href="#more" id="more_tickets" rel="tooltip" title="Click to see more tickets">Show More</a>
+</div>
+
 </script>
 
 <script id="zendesk-ticket-stream-template" type="text/html">
 {{#isArray this}}
 	{{#each this}}
-		<li class="" id="{{id}}">
-			{{subject}}<br>
-			<small><time class="time-ago" datetime="{{created_at}}">{{created_at}}</time></small><br>
-			<ul class="widget_tab_link" style="float:left;margin:0px">
-				<li><a href="{{url}}" target="_blank" rel="tooltip" title="Link to ticket in zendesk">Link</a></li>
-				<li><a class="l_border" href="#show" {{bindData this}} ticket_status="{{status}}" ticket_id="{{id}}" id="ticket_show" rel="tooltip" title="Show more information of ticket">Show</a></li>
-				<li><a class="l_border" href="#update" update_id="{{id}}" id="ticket_update" rel="tooltip" title="Update ticket in zendesk">Comment</a></li>										
-			</ul>
+		<li class="sub_header_li" id="{{id}}">
+			<div class="overflow-elipsis" title="{{subject}}">{{subject}}</div>
+			<div>
+				<div class="label right">{{status}}</div>
+				<small><time class="time-ago" datetime="{{created_at}}">{{created_at}}</time></small>
+			</div>
+			<div class="sub_header_tab_link" style="float:left;margin:0px">
+				<div><a href="{{url}}" target="_blank" rel="tooltip" title="Link to ticket in zendesk">Link</a></div>
+				<div><a class="l_border" href="#show" ticket_status="{{status}}" ticket_id="{{id}}" id="ticket_show" rel="tooltip" title="Show more information of ticket" data-attr="{{bindData this}}">Show</a></div>
+				<div><a class="l_border" href="#update" update_id="{{id}}" id="ticket_update" rel="tooltip" title="Update ticket in zendesk">Comment</a></div>										
+			</div>
+			<div class="clearfix"></div>
 		</li>
 	{{/each}}
 {{else}}
-	<li>{{this}}</li>
+	<li class="sub_header_li" >{{this}}</li>
 {{/isArray}}
 </script>
 

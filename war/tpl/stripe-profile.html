@@ -76,11 +76,11 @@
 <div class="sub_header">
 		<h3>Subscription History</h3>
 </div>
-<ul style="margin:0px;padding:10px;border-bottom:1px solid #ddd;">
+<ul style="margin:0px;">
 {{#if invoice.length}}
 	{{#each invoice}}
-		<li class="row-fluid">
-			<div class="span3">Default <small>plan</small></div>
+		<li class="sub_header_li row-fluid">
+			<div class="span3">{{lines.data.0.plan.name}} <small>plan</small></div>
 			<div class="span8">{{epochToHumanDate "mm/dd/yyyy" periodStart}} to {{epochToHumanDate "mm/dd/yyyy" periodEnd}}</div>
 		</li>
 	{{/each}}

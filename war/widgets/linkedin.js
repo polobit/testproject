@@ -146,7 +146,7 @@ function showLinkedinMatchingProfiles(plugin_id)
      */
     getLinkedinMatchingProfiles(plugin_id, function (data)
     {
-    	var el = "<div style='padding:10px'>";
+    	var el = "<div style='padding:10px'><p>Please choose the right LinkedIn profile for this contact</p>";
 
         // If no matches found display message
         if (data.length == 0)

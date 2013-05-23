@@ -778,7 +778,10 @@ $(function() {
 	});
 	
 	Handlebars.registerHelper("bindData", function(data) {
-		return 'data-attr=' + JSON.stringify(data);
+		
+		//console.log("in handle");
+		//console.log(JSON.stringify(data));
+		return  JSON.stringify(data);
 	});
 
 	Handlebars.registerHelper("getCurrentUserPrefs", function(options) {
