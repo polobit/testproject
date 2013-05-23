@@ -5,13 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.activities.Task;
-import com.agilecrm.activities.Task.Type;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.DateUtil;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Query;
 
 /**
  * <code>TaskUtil</code> is utility class used to process data of {@link Task}
@@ -235,16 +238,26 @@ public class TaskUtil
     }
 
     /**
-     * Gets all the tasks based on type.
+     * Gets all the tasks based on owner and type.
      * 
-     * @return List of pending tasks
+     * @return List of tasks
      */
-    public static List<Task> getCategoryTask(Type type)
+    public static List<Task> getTasksRelatedToOwnerOfType(String type,
+	    String owner)
     {
 	try
 	{
-	    return dao.ofy().query(Task.class).filter("type =", type)
-		    .order("-created_time").limit(10).list();
+
+	    Query<Task> query = dao.ofy().query(Task.class);
+	    if (StringUtils.isNotBlank(type))
+		query = query.filter("type", type);
+
+	    if (StringUtils.isNotBlank(owner))
+		query = query.filter("owner", new Key<DomainUser>(
+			DomainUser.class, Long.parseLong(owner)));
+
+	    return query.list();
+
 	}
 	catch (Exception e)
 	{
