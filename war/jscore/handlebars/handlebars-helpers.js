@@ -624,6 +624,15 @@ $(function() {
 	});
 
 	/**
+	 * Convert string to lower case
+	 */
+	Handlebars.registerHelper('toUpperCase', function(value) {
+		if(!value)
+			return;
+		return value.toUpperCase();
+	});
+	
+	/**
 	 * Executes template, based on contact type (person or company)
 	 */
 	Handlebars.registerHelper('if_contact_type', function(ctype, options) {
@@ -857,5 +866,25 @@ $(function() {
 		return options.inverse(this);
 	});
 	
-
+	Handlebars.registerHelper('numeric_operation', function(operand1, operand2, operator) {
+		
+		var operators = "/*-+";
+		
+		console.log(operator);
+		
+		if (operators.indexOf(operator) == -1)
+			return "";
+		
+		if(operator == "+")
+			return operand1 + operand2;
+		
+		if(operator == "-")
+			return operand1 - operand2;
+		
+		if(operator == "*")
+			return operand1 * operand2;
+		
+		if(operator == "/")
+			return operand1 / operand2;
+	});
 });
