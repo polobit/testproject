@@ -605,10 +605,13 @@ $(function() {
 	 * Converts string to JSON
 	 */
 	Handlebars.registerHelper('stringToJSON', function(object, key, options) {
-
 		if (key) {
+			try {
 			object[key] = JSON.parse(object[key]);
 			return options.fn(object[key]);
+			} catch(err) {
+				return options.fn(object[key]);
+			}
 		}
 
 		return options.fn(JSON.parse(object));
