@@ -1,4 +1,7 @@
 <script id="linkedin-search-result-template" type="text/html">
+<div style="padding:10px" id="linkedin-search">
+<p>Please choose the right LinkedIn profile for this contact</p>
+{{#each this}}
 <img  rel='popover' data-original-title='LinkedIn Profile' class='linkedinImage thumbnail' id="{{id}}" src ="{{picture}}" url="{{url}}"
    style='width: 35px;height: 35px; display:inline-block; margin-right:2px; margin-bottom:2px; cursor:pointer;'
    data-content="
@@ -16,4 +19,6 @@
 		 <p style='font-style: italic;'>{{summary}}</p>
 	  </div>
 "></img>
+{{/each}}
+</div>
 </script>  

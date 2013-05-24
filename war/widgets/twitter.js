@@ -9,8 +9,8 @@ $(function ()
     TWITTER_PLUGIN_NAME = "Twitter";
 
     // Twitter update loading image declared as global
-    TWITTER_UPDATE_LOAD_IMAGE = '<center><img id="tweet_load" src=\"img/ajax-loader-cursor.gif\" ' + 
-    			'style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+    TWITTER_UPDATE_LOAD_IMAGE = '<div id="tweet_load"><center><img  src=\"img/ajax-loader-cursor.gif\" ' + 
+    			'style="margin-top: 10px;margin-bottom: 14px;"></img></center></div>';
     
     Errorjson = {};
     
@@ -158,7 +158,7 @@ $(function ()
 	    	 getListOfProfilesByIDsinTwitter(plugin_id, temp, function(result) {	    		 
 	    		 	
 	    		 // Show matching profiles in Twitter panel
-	    		 $('#twitter_follower_panel').html(result);
+	    		 $('#twitter_follower_panel').html(getTemplate("twitter-search-result", result));
 	    		 
 	    		 $(".twitterImage").die().live('mouseover', function ()
 	    	     {
@@ -181,8 +181,9 @@ $(function ()
 	    	 {
 	    		 e2.preventDefault();
 	    		 
-	        	 $('#twitter_follower_panel').append(TWITTER_UPDATE_LOAD_IMAGE);
-	    		 
+	        	 //$('#twitter_follower_panel').append(TWITTER_UPDATE_LOAD_IMAGE);
+	        	 $('#spinner-followers').show();
+	        	 
 	    		 // Get 20 from array and remove 20 from array
 		    	 var temp = Twitter_follower_ids.splice(0, 20);	    	 
 		    	 console.log(temp);
@@ -190,10 +191,11 @@ $(function ()
 		    	 // Get the Twitter profile for 20 Twitter IDs
 		    	 getListOfProfilesByIDsinTwitter(plugin_id, temp, function(result) {	    		 
 		    		 	
-		    		 $('#tweet_load').remove();
+		    		 //$('#tweet_load').remove();
+		    		 $('#spinner-followers').hide();
 		    		 
 		    		 // Show matching profiles in Twitter panel
-		    		 $('#twitter_follower_panel').append("<div style='margin-top:-20px;'>" + result + "</div>");
+		    		 $('#twitter_follower_panel').append(getTemplate('twitter-search-result', result));
 		    	 });
 	    	 });
 	    	 
@@ -228,7 +230,7 @@ $(function ()
 	    	getListOfProfilesByIDsinTwitter(plugin_id, temp, function(result) {	    		 
 	    		 	   			    		 
 	    		// Show matching profiles in Twitter panel
-	    		$('#twitter_following_panel').html(result);
+	    		$('#twitter_following_panel').html(getTemplate("twitter-search-result", result));
 	    		
 	    		 $(".twitterImage").die().live('mouseover', function ()
 	    		 {
@@ -251,8 +253,9 @@ $(function ()
     	    {
     			e2.preventDefault();
 	    		 
-    			$('#twitter_following_panel').append(TWITTER_UPDATE_LOAD_IMAGE);
-
+    			//$('#twitter_following_panel').append(TWITTER_UPDATE_LOAD_IMAGE);
+    			$('#spinner-following').show();
+    			
 	    		// Get 20 from array and remove 20 from array
 	    		var temp = Twitter_following_ids.splice(0, 20);	    	 
 	 	    	console.log(temp);
@@ -260,10 +263,11 @@ $(function ()
 		    	// Get the Twitter profile for 20 Twitter IDs
 		    	getListOfProfilesByIDsinTwitter(plugin_id, temp, function(result) {	    		 
 		    		 	   			
-		    		 $('#tweet_load').remove();
-
+		    		 //$('#tweet_load').remove();
+		    		 $('#spinner-following').hide();
+		    		
 		    		// Show matching profiles in Twitter panel
-		    		$('#twitter_following_panel').append("<div style='margin-top:-20px;'>" + result + "</div>");
+		    		$('#twitter_follower_panel').append(getTemplate('twitter-search-result', result));
 		    	});
     	    });
 
@@ -330,16 +334,12 @@ function showTwitterMatchingProfiles(plugin_id)
             return;
         }
 
-        console.log(data);
-        // If matches found, Iterates though each profile
-        $.each(data, function (key, value)
-        {
-                // Calls to populate template with the search results
-                el = el.concat(getTemplate("twitter-search-result", value));
-        });
+       
+        el = el.concat(getTemplate("twitter-search-result", data));
+        el = el + "</div>";
 
         // Show matching profiles in Twitter panel
-        $('#Twitter').html(el + "</div>");
+        $('#Twitter').html(el);
         
         // Displays Twitter profile details on mouse hover and saves profile on click
         $(".twitterImage").die().live('mouseover', function ()
@@ -531,9 +531,6 @@ function showTwitterProfile(twitter_id, plugin_id)
         Errorjson['message'] = data.responseText;
         $('#Twitter').html(getTemplate('twitter-error', Errorjson));
         
-        // Shows error message if error occurs
-    	/*$('#Twitter').html("<div style='padding: 10px;line-height:160%;" + 
-				"word-wrap: break-word;' >" + data.responseText + "</div>");*/ 
     });
 
     // On click of see more link, more updates are retrieved
@@ -564,7 +561,8 @@ function showTwitterProfile(twitter_id, plugin_id)
         }
 
         // Loading image is shown until the updates are retrieved 
-        $("#twitter_social_stream").append(TWITTER_UPDATE_LOAD_IMAGE);
+        //$("#twitter_social_stream").append(TWITTER_UPDATE_LOAD_IMAGE);
+        $('#spinner-tweets').show();
 
         var that = this;
 
@@ -580,7 +578,8 @@ function showTwitterProfile(twitter_id, plugin_id)
         function (data)
         {
             // Removes loading button after fetching updates
-            $('#tweet_load').remove();
+            // $('#tweet_load').remove();
+            $('#spinner-tweets').hide();
 
             // See more link activated to get more updates
             $(that).addClass('twitter_stream');
@@ -601,14 +600,6 @@ function showTwitterProfile(twitter_id, plugin_id)
                 return;
             }
 
-            // On click of follow and then see more, if current update is undefined when
-            // first time updates are retrieved after following heading is not defined, 
-            // we need to show it before showing updates
-            if (!Twitter_current_update_id)
-            {
-                $('#twitter_update_heading').show();
-            }
-
             // Populate the template with update stream details and show in panel
             $("#twitter_social_stream")
                 .append(getTemplate("twitter-update-stream", data));
@@ -622,7 +613,7 @@ function showTwitterProfile(twitter_id, plugin_id)
         }).error(function (data)
         {
             // Removes loading button if error occurs
-            $('#tweet_load').remove();
+        	$('#spinner-tweets').hide();
 
             // Activates see more button 
             $(that).addClass('twitter_stream');
@@ -1222,13 +1213,9 @@ function getListOfProfilesByIDsinTwitter(plugin_id, twitter_ids, callback)
 		if(!data || data.length == 0)
 		{
 			$('#tweet_load').remove(); 
+			
 			return;
 		}
-		
-		ArrangeListOfProfilesInElement(data, function(result) 
-		{
-			data = result;
-		});
 		
 		// If defined, execute the callback function
 		if (callback && typeof (callback) === "function")
@@ -1248,7 +1235,7 @@ function getListOfProfilesByIDsinTwitter(plugin_id, twitter_ids, callback)
 	
 }
 
-function ArrangeListOfProfilesInElement(data, callback)
+/*function ArrangeListOfProfilesInElement(data, callback)
 {
 	var el = "<div style='padding:10px;'>";
 
@@ -1267,4 +1254,4 @@ function ArrangeListOfProfilesInElement(data, callback)
 		callback(el);
     }
     
-}
+}*/

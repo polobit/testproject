@@ -199,43 +199,45 @@
                 </div>      
 
 			<div class="pull-left row-fluid" style="padding-bottom:5px">
-		{{#multiple_Property_Element "phone" properties}}
-			
-				<span>
-					<i class="icon-phone pull-left"></i>
-				</span>
-				<span style="padding-left:5px">
-				{{#each this}}	
-					<a href="tel:{{value}}">{{value}}</a> 	
-					  {{#if subtype}} ({{subtype}}) {{/if}}</br>
-				{{/each}}
-				</span>
-		  {{/multiple_Property_Element}}
-			</div>
-			  <div class="pull-left row-fluid" style="padding-bottom:5px">
-			{{#multiple_Property_Element "email" properties}}
-					<span>
-						<i class="icon-envelope-alt pull-left"> </i>
-					</span>
-					<span style="padding-left:5px">
-						{{#each this}}
-							<a href="mailto:{{value}}">{{value}}</a> 	
-							  {{#if subtype}} ({{subtype}}) {{/if}}</br>
+				{{#multiple_Property_Element "phone" properties}}
+					<div style="display:inline-block;vertical-align: top;">
+						<i class="icon-phone pull-left"></i>
+					</div>
+					<div style="padding-left:5px;display:inline-block;">
+						{{#each this}}	
+							<div><a href="tel:{{value}}">{{value}}</a>{{#if subtype}} ({{subtype}}) {{/if}}</div>
 						{{/each}}
-					</span>
-			{{/multiple_Property_Element}}
+					</div>
+		  		{{/multiple_Property_Element}}
 			</div>
+
+			<div class="pull-left row-fluid" style="padding-bottom:5px">
+				{{#multiple_Property_Element "email" properties}}
+					<div style="display:inline-block;vertical-align: top;">
+						<i class="icon-envelope-alt pull-left"> </i>
+					</div>
+					<div style="padding-left:5px;display:inline-block;">
+						{{#each this}}
+							<div><a href="mailto:{{value}}">{{value}}</a> 	
+							  {{#if subtype}} ({{subtype}}) {{/if}}</div>
+						{{/each}}
+					</div>
+				{{/multiple_Property_Element}}
+			</div>
+
 		  <div class="pull-left row-fluid" style="padding-bottom:5px">
-            {{#multiple_Property_Element "website" properties}}
-					<span class="span1">					
+            	{{#multiple_Property_Element "website" properties}}
+					<div style="display:inline-block;vertical-align: top;">					
 						<i class="icon-globe pull-left"></i>
-					</span> 
-						<span style="padding-left:5px">
-							{{#each this}}	
-								<a href="{{value}}">{{value}}</a> &nbsp<i class="icon-{{toLowerCase subtype}}-sign"></i></br>
-							{{/each}}
-						</span>
-			{{/multiple_Property_Element}}
+					</div> 
+					<div style="display:inline-block;">
+						{{#each this}}	
+							<div style="padding-left:5px;overflow: hidden;width: 11em;word-wrap: normal;text-overflow: ellipsis;white-space: nowrap;">
+                                <!--<i class="icon-{{toLowerCase subtype}}-sign"></i> &nbsp;--><a href="{{value}}">{{value}}</a>
+							</div>
+						{{/each}}
+					</div>
+				{{/multiple_Property_Element}}
 			</div>
 			</br>
            <div class="pull-left row-fluid" style="padding-bottom:5px">
