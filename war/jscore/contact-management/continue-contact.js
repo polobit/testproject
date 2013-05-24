@@ -112,9 +112,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     	var tags = get_tags(form_id);
     	if (tags != undefined && tags.length != 0) 
     	{
-    		console.log(obj.tagsWithTime);
-    		if(!obj.tagsWithTime)
-    			obj['tagsWithTime'] = [];
+    		obj['tagsWithTime'] = [];
     		
     		$.each(tags[0].value, function(index, value){
     			obj.tagsWithTime.push({"tag": value});
