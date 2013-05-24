@@ -151,12 +151,13 @@ public class WorkflowUtil
      *            Id of a workflow.
      * @return JSONObject of campaign.
      */
-    static JSONObject getWorkflowJSON(Long workflowId)
+    public static JSONObject getWorkflowJSON(Long workflowId)
     {
 	try
 	{
 	    // Get Workflow JSON
 	    Workflow workflow = getWorkflow(workflowId);
+
 	    if (workflow == null)
 		return null;
 
@@ -216,15 +217,10 @@ public class WorkflowUtil
 	    // Convert Contacts into JSON Array
 	    JSONObject subscriberJSONObject = getSubscriberJSON(contact);
 
-	    // Get Campaign JSON
-	    JSONObject campaignJSON = getWorkflowJSON(workflowId);
-	    if (campaignJSON == null)
-		return;
-
 	    // TaskletUtil.executeWorkflow(campaignJSON, subscriberJSONObject);
 
 	    TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(
-		    campaignJSON.toString(), subscriberJSONObject.toString());
+		    workflowId.toString(), subscriberJSONObject.toString());
 	    Queue queue = QueueFactory.getQueue("campaign-queue");
 	    queue.add(TaskOptions.Builder
 		    .withPayload(taskletWorkflowDeferredTask));
@@ -277,8 +273,9 @@ public class WorkflowUtil
     {
 
     }
-    
-    public static List<Workflow> getWorkflowsRelatedToCurrentUser(String page_size)
+
+    public static List<Workflow> getWorkflowsRelatedToCurrentUser(
+	    String page_size)
     {
 	System.out.println("owner id : " + SessionManager.get().getDomainId());
 	return dao
@@ -286,8 +283,7 @@ public class WorkflowUtil
 		.query(Workflow.class)
 		.filter("creator_key",
 			new Key<DomainUser>(DomainUser.class, SessionManager
-				.get().getDomainId()))
-		.order("-created_time").limit(Integer.parseInt(page_size))
-		.list();
+				.get().getDomainId())).order("-created_time")
+		.limit(Integer.parseInt(page_size)).list();
     }
 }

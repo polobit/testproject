@@ -206,7 +206,7 @@ public class TaskletUtil
 		// executeWorkflow(campaignJSON, subscriberJSON);
 
 		TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(
-			campaignJSON.toString(), subscriberJSON.toString());
+			DBUtil.getId(campaignJSON), subscriberJSON.toString());
 		Queue queue = QueueFactory.getQueue("campaign-queue");
 		queue.add(TaskOptions.Builder
 			.withPayload(taskletWorkflowDeferredTask));
