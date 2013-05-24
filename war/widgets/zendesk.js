@@ -172,7 +172,7 @@ function addTicketToZendesk(plugin_id, email)
     json["headline"] = "Add Ticket";
 
     // Information to be shown in the modal to the user
-    json["info"] = "Adds ticket to your Zendesk account associated with Agile CRM";
+    json["info"] = "Add ticket in Zendesk";
 
     // Name of the contact to be added to ticket
     json["name"] = agile_crm_get_contact_property('first_name') + " " +
@@ -327,113 +327,36 @@ function showTicketById(json, ticket_id)
     $('#zendesk_showModal').modal("show");
 }
 
-function getTicketByStatus(plugin_id, email, status, callback)
-{
-	$.get("/core/api/widgets/zendesk/ticket/status/" + plugin_id + "/" + email + "/" + status, 
-	function(data) 
-	{
-		console.log(data);
-		
-		// If defined, execute the callback function
-		if (callback && typeof (callback) === "function")
-	    {
-			callback(data);
-	    }
-				
-	}).error(function (data) {
-		
-		$('#tickets_load').remove();
-	});
-}
-
 function showZendeskProfile(plugin_id, email)
 {
 	$('#Zendesk').html(ZENDESK_UPDATE_LOAD_IMAGE);
 
+	var all_tickets;
+	
 	queueGetRequest("widget_queue", "/core/api/widgets/zendesk/profile/" + plugin_id + "/" + email, 'json',		
 	function success(data)
 	{
 		 $('#Zendesk').html(getTemplate('zendesk-profile', data));
 
-		 var open_tickets;
-		 var solved_tickets;
-		 var closed_tickets;
+		 var first_five;
 		 try
 		 {
-			 open_tickets = JSON.parse(data.open_tickets);
+			 all_tickets = JSON.parse(data.all_tickets);
+			 first_five = all_tickets.splice(0,5);
 		 }
 		 catch (err)
 	     {
-			 open_tickets = data.open_tickets;
+			 first_five = data.all_tickets;
 	     }
 		 
-		 var open_tickets_template = $(getTemplate('zendesk-ticket-stream', open_tickets));	
+		 var all_tickets_template = $(getTemplate('zendesk-ticket-stream', first_five));	
 		 
-		 $('#open_tickets_panel').html(open_tickets_template);	
+		 $('#all_tickets_panel').html(all_tickets_template);	
 		 
 		  head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-      		$(".time-ago", open_tickets_template).timeago();
+      		$(".time-ago", all_tickets_template).timeago();
       	  });
 		  
-	     
-	     $('#solved_tickets').die().live('click', function (e)
-	     {
-	         e.preventDefault();
-	         
-	         $('#solved_tickets_panel').html(ZENDESK_UPDATE_LOAD_IMAGE);
-	         
-	         getTicketByStatus(plugin_id, email, "solved", function(data)
-	         {	        	 
-	        	 
-	        	 try
-	    		 {
-	        		 solved_tickets = JSON.parse(data);
-	    		 }
-	    		 catch (err)
-	    	     {
-	    			 solved_tickets = data;
-	    	     }	    		 
-	    		 
-	    		 var solved_tickets_template = $(getTemplate('zendesk-ticket-stream', solved_tickets));	
-	    		 
-	    		 $('#solved_tickets_panel').html(solved_tickets_template);	
-	    		 
-	    		  head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-	          		$(".time-ago", solved_tickets_template).timeago();
-	          	  });
-	    		  
-	         });
-	     });
-	     
-	     $('#closed_tickets').die().live('click', function (e)
-	     {
-	    	 e.preventDefault();
-	         
-	    	 $('#closed_tickets_panel').html(ZENDESK_UPDATE_LOAD_IMAGE);
-	    	 
-	         getTicketByStatus(plugin_id, email, "closed", function(data){
-	    		 console.log('in zendesk');
-
-	        	 console.log(data);
-	        	 try
-	    		 {
-	        		 closed_tickets = JSON.parse(data);
-	    		 }
-	    		 catch (err)
-	    	     {
-	    			 closed_tickets = data;
-	    	     }
-	    		 
-	    		 var closed_tickets_template = $(getTemplate('zendesk-ticket-stream', closed_tickets));
-	    		 
-	    		 $('#closed_tickets_panel').html(closed_tickets_template);	
-	    		 
-	    		  head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-	          		$(".time-ago", closed_tickets_template).timeago();
-	          	  });	          	
-	         });
-	    
-	     });
 	     
 	     // On click of update ticket link for ticket, update ticket method is called
 	     $('#ticket_update').die().live('click', function (e)
@@ -453,12 +376,41 @@ function showZendeskProfile(plugin_id, email)
 	         console.log($(this).attr('data-attr'));
 	         var json = JSON.parse($(this).attr('data-attr'));
 	         
+	         console.log(json);
 	         // Id of the ticket is retrieved to show ticket based on id
 	         var ticket_id = $(this).attr('ticket_id');
 
+	         
 	         showTicketById(json, ticket_id);
 	     });
 
+	     $('#more_tickets').die().live('click', function (e)
+	     {
+	    	 e.preventDefault();
+	    	 
+	    	 if(!all_tickets)
+	    	 {
+	    		 alert('No tickets');
+	    		 return;
+	    	 }
+	    	 var more_tickets = all_tickets.splice(0, 5);	
+	    	 console.log(more_tickets);
+	    	 
+	    	 if(more_tickets.length == 0)
+	    	 {
+	    		 alert('No more tickets');
+	    		 return;
+	    	 }
+	    	 
+	    	 var more_tickets_template = $(getTemplate('zendesk-ticket-stream', more_tickets));	
+			 
+			 $('#all_tickets_panel').append(more_tickets_template);	
+			 
+			  head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+	      		$(".time-ago", more_tickets_template).timeago();
+	      	  });
+	    	 
+	     });
 		 
 	}, function error(data) {
 		

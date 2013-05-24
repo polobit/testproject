@@ -1,11 +1,7 @@
- <script id="tasks-list-collection-template" type="text/html">
-<div class="row">
-    <div class="span12">
-        <div class="page-header">
-            <h1>List of Tasks</h1>
-        </div>
-    </div>
-</div>
+<script id="tasks-list-collection-template" type="text/html">
+{{#unless this.length}}
+<h3>You have no tasks based on this condition.</h3>
+{{else}}
 <div class="data-block span11">
     <div class="data-container">
         <table class="table table-striped showCheckboxes" url="core/api/tasks/bulk">
@@ -15,6 +11,7 @@
                     <th>Category</th>
 					<th>Due Date</th>
                     <th>Priority Type</th>
+					<th>Owner</th>
                     <th>Related To</th>
                 </tr>
             </thead>
@@ -23,6 +20,7 @@
         </table>
     </div>
 </div>
+{{/unless}}
 </script>
 
 <script id="tasks-list-model-template" type="text/html">
@@ -36,6 +34,11 @@
 	<td><time class="task-due-time" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" due}}</time></td>	
 {{/if}}
     <td><span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></td>
+	<td>  
+     	<div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:5em;overflow:hidden;">
+        	<img src="{{ownerPic}}" width="40px" height="40px" /><br/> <b> {{taskOwner.name}}</b>
+     	</div>
+	</td>
 	<td>
 		<div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:83px;overflow:hidden;display:inline-block;">
         	{{#each contacts}}
@@ -43,4 +46,38 @@
         	{{/each}}</div>
        {{#if_greater this.contacts.length "3"}}<span>...</span>{{/if_greater}}
     </td>
+</script>
+<script id="tasks-list-header-template" type="text/html">
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h1>List of Tasks</h1>
+            <div class="btn-group pull-right" style="cursor:pointer;margin-right:15px;top: -28px;">
+                <div class="btn selected_name">All Types</div>
+                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" id="type-tasks">
+					 <li><a href="">All</a></li>
+                     <li><a href="CALL">Call</a></li>
+                     <li><a href="EMAIL">Email</a></li>
+                     <li><a href="FOLLOW_UP">Follow-up</a></li>
+                     <li><a href="MEETING">Meeting</a></li>
+                     <li><a href="MILESTONE">Milestone</a></li>
+                     <li><a href="SEND">Send</a></li>
+                     <li><a href="TWEET">Tweet</a></li>
+                </ul>
+            </div>
+            <div class="btn-group pull-right" style="cursor:pointer;margin-right:15px;top: -28px;">
+                <div class="btn selected_name">All Tasks</div>
+                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" id="owner-tasks">
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="task-list-based-condition"></div>
 </script>

@@ -118,7 +118,10 @@ $(function() {
 		// Fills owner select element
 		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data){
 			$("#updateTaskForm").find("#owners-list").html(data);
-			$("#owners-list", $("#updateTaskForm")).find('option[value='+value['taskOwner'].id+']').attr("selected", "selected");
+			if(value.taskOwner)
+			{
+				$("#owners-list", $("#updateTaskForm")).find('option[value='+value['taskOwner'].id+']').attr("selected", "selected");
+			}
 			$("#updateTaskModal").modal('show');
 		});
 	}
@@ -424,4 +427,78 @@ var new_task = new Backbone.Model();
 	 * ui.fadeOut(2000); }} );
 	 */
 
+}
+
+function initOwnerslist(){
+	
+	// Click events to agents dropdown and department
+	$("ul#owner-tasks li a, ul#type-tasks li a").die().live("click",
+			function(e) {
+				e.preventDefault();
+				
+				// Show selected name
+				var name = $(this).html(), id = $(this).attr("href");
+				
+                $(this).closest("ul").data("selected_item", id);
+				$(this).closest(".btn-group").find(".selected_name").text(name);
+              
+				updateData(getParams());
+	});
+	updateData(getParams());
+}
+
+
+var allTasksListView;
+
+/**
+ * updateData() method updates chat sessions on page for different query's from user
+ * 
+ * @param params
+ *           query string contains date, agentId & widgetId
+ */
+function updateData(params){
+
+	//Shows loading image untill data gets ready for displaying
+	$('#task-list-based-condition').html(LOADING_HTML);
+	
+	//Creates backbone collection view 
+	allTasksListView = new Base_Collection_View({
+		url : '/core/api/tasks/based' + params,
+		restKey : "task",
+		templateKey : "tasks-list",
+		individual_tag_name : 'tr',
+		postRenderCallback: function(el) {
+	    	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+	    		 $(".task-due-time", el).timeago();
+	      	});
+	    }
+
+	});  
+    
+	//Fetches data from server
+	allTasksListView.collection.fetch();
+	
+	//Renders data to chat transcript page.
+	$('#task-list-based-condition').html(allTasksListView.render().el);
+	
+}
+
+/**
+ * getParams() method returns a string(used as query param string) contains user selected type and owners
+ * 
+ * @returns {String} query string
+ */
+function getParams() {
+
+	var params = "?";
+
+	// Get task type and append it to params
+	var type = $('#type-tasks').data("selected_item");
+	if (type)
+		params += ("&type=" + type);
+	// Get owner name and append it to params
+	var owner = $('#owner-tasks').data("selected_item");
+	if (owner)
+		params += ("&owner=" + owner);
+	return params;
 }

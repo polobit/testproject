@@ -157,13 +157,13 @@ String CSS_PATH = "/";
 								--></li>
                      
 						<li id="fat-menu" class="dropdown"><a href=""
-							class="dropdown-toggle" data-toggle="dropdown" style="padding:6px 4px 6px 4px;">
+							class="dropdown-toggle" data-toggle="dropdown" style="padding:4px 4px 4px 11px">
 								
 								<%
 								if(!StringUtils.isEmpty(currentUserPrefs.pic))
-								    out.println("<img src='"+currentUserPrefs.pic+"' style='width:30px;height:28px'></img>");
+								    out.println("<img src='"+currentUserPrefs.pic+"' style='width:33px;height:33px;border-radius:2px'></img>");
 								else
-								    out.println("<img src='img/gravatar.png' style='width:30px;height:28px'></img>");
+								    out.println("<img src='img/gravatar.png' style='width:33px;height:33px;border-radius:2px'></img>");
 								%>		
 									
 								<i class='caret' style='vertical-align:text-top;margin-left:4px'></i>	

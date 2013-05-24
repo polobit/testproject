@@ -193,7 +193,7 @@ $(function ()
 		    		 $('#tweet_load').remove();
 		    		 
 		    		 // Show matching profiles in Twitter panel
-		    		 $('#twitter_follower_panel').append("<div style='margin-top:-10px;'>" + result + "</div>");
+		    		 $('#twitter_follower_panel').append("<div style='margin-top:-20px;'>" + result + "</div>");
 		    	 });
 	    	 });
 	    	 
@@ -263,7 +263,7 @@ $(function ()
 		    		 $('#tweet_load').remove();
 
 		    		// Show matching profiles in Twitter panel
-		    		$('#twitter_following_panel').append("<div style='margin-top:-10px;'>" + result + "</div>");
+		    		$('#twitter_following_panel').append("<div style='margin-top:-20px;'>" + result + "</div>");
 		    	});
     	    });
 
@@ -317,7 +317,7 @@ function showTwitterMatchingProfiles(plugin_id)
      */
     getTwitterMatchingProfiles(plugin_id, function (data)
     {
-        var el = "<div style='padding:10px'>";
+        var el = "<div style='padding:10px'><p>Please choose the right Twitter profile for this contact</p>";
 
         // If no matches found display message
         if (data.length == 0)
@@ -372,25 +372,14 @@ function showTwitterMatchingProfiles(plugin_id)
                 
                 var url = $(this).attr('url');
 
-                // save url to contact
-                agile_crm_save_contact_properties_subtype("website", "TWITTER", url);
-                
                 // If id (Twitter id) is defined, shows modal and prompts user to save 
                 // picture to contact
                 if (id)
                 {
+                	$('#twitter-image-save-modal').remove();
+                	
                     // Creates a modal element which is to be appended to content to show
-                    var modal = $('<div id="twitter-image-save-modal" class="modal fade in" >' +
-                        '<div class="modal-header" >' +
-                        '<a href="#" data-dismiss="modal" class="close">&times;</a>' +
-                        '<h3>Add Image</h3></div>' +
-                        '<div class="modal-body">' +
-                        '<p>You are about to add Image to contact</p>' +
-                        '<p>Do you want to proceed?</p>' + '</div>' +
-                        '<div class="modal-footer">' +
-                        '<a href="#" id="save_twitter_image" class="btn btn-primary">Yes' +
-                        '</a><a  href="#" class="btn close" data-dismiss="modal" >No</a>' +
-                        '</div></div>');
+                    var modal = $(getTemplate('twitter-profile-add', {}));
 
                     // Checks if modal is already added to content
                     if ($('#twitter-image-save-modal').size() == 0)
@@ -399,29 +388,37 @@ function showTwitterMatchingProfiles(plugin_id)
                         $('#content').append(modal);
                     }
 
-
                     // If added call show on modal and ask for confirmation about 
                     // adding image to contact
                     $('#twitter-image-save-modal').modal('show');
 
-                    // Saves Twitter Id of selected profile to contact with name Twitter
-                    // agile_crm_save_widget_property_to_contact(TWITTER_PLUGIN_NAME, id);
-
-                    // Shows Selected profile in the Twitter block
-                    showTwitterProfile(id, plugin_id);
                 }
+                
+                // On click of yes on modal, image is saved as contact image
+                $('.save-twitter-profile').die().live('click', function (e)
+                {
+                	e.preventDefault();
+                	
+                	// Hides modal after confirmation
+                    $('#twitter-image-save-modal').modal('hide');
+                    
+                	if($(this).attr('resp') == "no")
+                	{
+                		showTwitterMatchingProfiles(plugin_id);
+                		return;
+                	}
+                		
+                	// save url to contact
+	                agile_crm_save_contact_properties_subtype("website", "TWITTER", url);
+	                
+	                // Shows Selected profile in the LinkedIn block
+                    showTwitterProfile(id, plugin_id);
+                    
+	                if($('#save_twitter_image').is(':checked'))
+	                	 agile_crm_update_contact("image", twitter_image);
+	                
+                });
             });
-
-            // On click of yes on modal, image is saved as contact image
-            $('#save_twitter_image').die().live('click', function (e)
-            {
-                e.preventDefault();
-                agile_crm_update_contact("image", twitter_image);
-
-                // Hides modal after confirmation
-                $('#twitter-image-save-modal').modal('hide');
-            });
-
         });
     });    
 }

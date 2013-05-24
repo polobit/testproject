@@ -146,7 +146,7 @@ function showLinkedinMatchingProfiles(plugin_id)
      */
     getLinkedinMatchingProfiles(plugin_id, function (data)
     {
-    	var el = "<div style='padding:10px'>";
+    	var el = "<div style='padding:10px'><p>Please choose the right LinkedIn profile for this contact</p>";
 
         // If no matches found display message
         if (data.length == 0)
@@ -208,28 +208,14 @@ function showLinkedinMatchingProfiles(plugin_id)
                 
                 var url = $(this).attr('url');
 
-                // save url to contact
-                agile_crm_save_contact_properties_subtype("website", "LINKEDIN", url);
-                
-                // Save LinkedInId of selected profile to contact with name LinkedIn
-                // agile_crm_save_widget_property_to_contact(LINKEDIN_PLUGIN_NAME, id);
-
                 // If id (LinkedIn id) is defined, shows modal and prompts user to save 
                 // picture to contact
                 if (id)
                 {
+                	$('#linkedin-image-save-modal').remove();
+                	
                     // Creates a modal element which is to be appended to content to show
-                    var modal = $('<div id="linkedin-image-save-modal" class="modal fade in" >' +
-                        '<div class="modal-header" >' +
-                        '<a href="#" data-dismiss="modal" class="close">&times;</a>' +
-                        '<h3>Add Image</h3></div>' +
-                        '<div class="modal-body" >' +
-                        '<p>You are about to add Image to contact</p>' +
-                        '<p>Do you want to proceed?</p></div>' +
-                        '<div class="modal-footer" >' +
-                        '<a href="#" id="save_linkedin_image" class="btn btn-primary">Yes' +
-                        '</a><a href="#" class="btn close" data-dismiss="modal" >No</a>' +
-                        '</div></div>');
+                    var modal = $(getTemplate('linkedin-profile-add', {}));
 
                     // Checks if modal is already added to content
                     if ($('#linkedin-image-save-modal').size() == 0)
@@ -242,22 +228,36 @@ function showLinkedinMatchingProfiles(plugin_id)
                     // adding image to contact
                     $('#linkedin-image-save-modal').modal('show');
 
-
-                    // Shows Selected profile in the LinkedIn block
-                    showLinkedinProfile(id, plugin_id)
                 }
+                
+                // On click of yes on modal, image is saved as contact image
+                $('.save-linkedin-profile').die().live('click', function (e)
+                {
+                	e.preventDefault();
+                	
+                	// Hides modal after confirmation
+                    $('#linkedin-image-save-modal').modal('hide');
+                    
+                	if($(this).attr('resp') == "no")
+                	{
+                		showLinkedinMatchingProfiles(plugin_id);
+                		return;
+                	}
+                		
+                	// save url to contact
+	                agile_crm_save_contact_properties_subtype("website", "LINKEDIN", url);
+	                
+	                // Shows Selected profile in the LinkedIn block
+                    showLinkedinProfile(id, plugin_id);
+                    
+	                if($('#save_linkedin_image').is(':checked'))
+	                	 agile_crm_update_contact("image", linkedin_image);
+	                
+                });
+            
             });
 
-            // On click of yes on modal, image is saved as contact image
-            $('#save_linkedin_image').die().live('click', function (e)
-            {
-                e.preventDefault();
-                agile_crm_update_contact("image", linkedin_image);
-
-                // Hides modal after confirmation
-                $('#linkedin-image-save-modal').modal('hide');
-
-            });
+          
         });
 
     });

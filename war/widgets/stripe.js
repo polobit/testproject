@@ -95,6 +95,8 @@ function showStripeProfile(plugin_id, customer_id)
 	queueGetRequest("widget_queue", "/core/api/widgets/stripe/" + plugin_id + "/" + customer_id, 'json',
     function success(data)
     {
+		console.log(data);
+		
         //populates the template with and shows in the widget panel
         $('#Stripe').html(getTemplate("stripe-profile", data));
 

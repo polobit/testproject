@@ -50,20 +50,17 @@ var CalendarRouter = Backbone.Router.extend({
 
 	/* Show tasks list when All Tasks clicked under calendar page. */
 	tasks : function() {
-		this.tasksListView = new Base_Collection_View({
-			url : '/core/api/tasks/all',
-			restKey : "task",
-			templateKey : "tasks-list",
-			individual_tag_name : 'tr',
-			postRenderCallback: function(el) {
-            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-            		 $(".task-due-time", el).timeago();
-              	});
-            }
-		});
-		this.tasksListView.collection.fetch();
-
-		$('#content').html(this.tasksListView.el);
+		
+		$('#content').html(getTemplate("tasks-list-header", {}));
+		
+		// Owners
+		fillSelect("owner-tasks", '/core/api/users', 'domainUser',function fillOwner() 
+		{
+			$('#content').find("#owner-tasks").prepend("<li><a href=''>All</a></li>");
+		}, "<li><a href='{{id}}'>{{name}}</a></li>");
+		
+		// To Updated task list based on user selection of type and owner 
+		initOwnerslist();
 		
 		$(".active").removeClass("active");
 		$("#calendarmenu").addClass("active");

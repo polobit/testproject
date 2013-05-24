@@ -17,9 +17,8 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -117,13 +116,7 @@ public class Task
      * Key object of DomainUser.
      */
     @NotSaved(IfDefault.class)
-    private Key<DomainUser> ownerKey = null;
-
-    /**
-     * Key object of agileUser in order to get userprefs of current user.
-     */
-    @NotSaved(IfDefault.class)
-    private Key<AgileUser> agileUser = null;
+    private Key<DomainUser> owner = null;
 
     /**
      * Says what the task is. If it is null shouldn't save in database.
@@ -165,8 +158,8 @@ public class Task
 	this.type = type;
 	this.due = due;
 
-	if (agileUserId != 0)
-	    this.agileUser = new Key<AgileUser>(AgileUser.class, agileUserId);
+	// if (agileUserId != 0)
+	// this.agileUser = new Key<AgileUser>(AgileUser.class, agileUserId);
     }
 
     /**
@@ -195,9 +188,9 @@ public class Task
     }
 
     @JsonIgnore
-    public void setOwner(Key<AgileUser> user)
+    public void setOwner(Key<DomainUser> user)
     {
-	agileUser = user;
+	owner = user;
     }
 
     /**
@@ -235,28 +228,47 @@ public class Task
      */
     public boolean compareTaskOwner(Key<AgileUser> owner)
     {
-	if (owner.equals(this.agileUser))
+	System.out.println("comaparing owners agile user and domain user");
+	System.out.println("agile user key :" + owner);
+	System.out.println("domain user key :" + this.owner);
+	if (owner.equals(this.owner))
 	    return true;
 
 	return false;
     }
 
-    @XmlElement(name = "Prefs")
-    public UserPrefs getPrefs() throws Exception
+    /**
+     * Gets picture of owner who created deal. Owner picture is retrieved from
+     * user prefs of domain user who created deal and is used to display owner
+     * picture in deals list.
+     * 
+     * @return picture of owner.
+     * @throws Exception
+     *             when agileuser doesn't exist with respect to owner key.
+     */
+    @XmlElement(name = "ownerPic")
+    public String getOwnerPic() throws Exception
     {
-	if (agileUser != null)
+	AgileUser agileuser = null;
+	UserPrefs userprefs = null;
+
+	try
 	{
-	    Objectify ofy = ObjectifyService.begin();
-	    try
-	    {
-		return ofy.query(UserPrefs.class).ancestor(agileUser).get();
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-	    }
+	    // Get owner pic through agileuser prefs
+	    agileuser = AgileUser.getCurrentAgileUserFromDomainUser(owner
+		    .getId());
+	    if (agileuser != null)
+		userprefs = UserPrefsUtil.getUserPrefs(agileuser);
+	    if (userprefs != null)
+		return userprefs.pic;
 	}
-	return null;
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+
+	}
+
+	return "";
     }
 
     /**
@@ -269,12 +281,12 @@ public class Task
     @XmlElement(name = "taskOwner")
     public DomainUser getTaskOwner() throws Exception
     {
-	if (ownerKey != null)
+	if (owner != null)
 	{
 	    try
 	    {
 		// Gets Domain User Object
-		return DomainUserUtil.getDomainUser(ownerKey.getId());
+		return DomainUserUtil.getDomainUser(owner.getId());
 	    }
 	    catch (Exception e)
 	    {
@@ -310,20 +322,10 @@ public class Task
 
 	// Saves domain user key
 	if (owner_id != null)
-	    ownerKey = new Key<DomainUser>(DomainUser.class,
+	    owner = new Key<DomainUser>(DomainUser.class,
 		    Long.parseLong(owner_id));
 
-	System.out.println("OwnerKey : " + this.ownerKey);
-
-	// Create owner key
-	if (agileUser == null)
-	{
-	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
-	    if (agileUser != null)
-		this.agileUser = new Key<AgileUser>(AgileUser.class,
-			agileUser.id);
-	}
-	System.out.println("agileUser: " + this.agileUser);
+	System.out.println("Owner : " + this.owner);
     }
 
 }

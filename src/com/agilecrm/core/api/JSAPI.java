@@ -17,9 +17,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.Opportunity;
-import com.agilecrm.user.AgileUser;
 import com.agilecrm.workflows.util.WorkflowUtil;
-import com.googlecode.objectify.Key;
 
 /**
  * <code>JSAPI</code> provides facility to perform actions, such as creating a
@@ -63,7 +61,8 @@ public class JSAPI
     @Path("contact/email")
     @GET
     @Produces("application/x-javascript")
-    public Contact getContact(@QueryParam("email") String email, @QueryParam("callback") String jsoncallback)
+    public Contact getContact(@QueryParam("email") String email,
+	    @QueryParam("callback") String jsoncallback)
     {
 
 	try
@@ -106,7 +105,9 @@ public class JSAPI
     @Path("contacts")
     @GET
     @Produces("application/x-javascript")
-    public Contact createContact(@QueryParam("contact") String json, @QueryParam("id") String apiKey, @QueryParam("callback") String jsoncallback)
+    public Contact createContact(@QueryParam("contact") String json,
+	    @QueryParam("id") String apiKey,
+	    @QueryParam("callback") String jsoncallback)
     {
 	try
 	{
@@ -125,7 +126,8 @@ public class JSAPI
 	    }
 
 	    // Sets owner key to contact before saving
-	    contact.setContactOwner(APIKey.getDomainUserKeyRelatedToAPIKey(apiKey));
+	    contact.setContactOwner(APIKey
+		    .getDomainUserKeyRelatedToAPIKey(apiKey));
 
 	    // If zero, save it
 	    contact.save();
@@ -142,7 +144,9 @@ public class JSAPI
     @Path("contact/delete")
     @GET
     @Produces("application/x-javascript")
-    public Boolean deleteContact(@QueryParam("email") String email, @QueryParam("id") String apiKey, @QueryParam("callback") String jsoncallback)
+    public Boolean deleteContact(@QueryParam("email") String email,
+	    @QueryParam("id") String apiKey,
+	    @QueryParam("callback") String jsoncallback)
     {
 	Contact contact = ContactUtil.searchContactByEmail(email);
 
@@ -174,7 +178,9 @@ public class JSAPI
     @Path("/task")
     @GET
     @Produces("application/x-javascript")
-    public Task createTask(@QueryParam("email") String email, @QueryParam("task") String json, @QueryParam("callback") String jsoncallback,
+    public Task createTask(@QueryParam("email") String email,
+	    @QueryParam("task") String json,
+	    @QueryParam("callback") String jsoncallback,
 	    @QueryParam("id") String key)
     {
 	try
@@ -187,8 +193,9 @@ public class JSAPI
 	    // Get Contact
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 
-	    task.setOwner(new Key<AgileUser>(AgileUser.class, APIKey.getAgileUserRelatedToAPIKey(key).id));
-
+	    // task.setOwner(new Key<AgileUser>(AgileUser.class,
+	    // APIKey.getAgileUserRelatedToAPIKey(key).id));
+	    task.setOwner(APIKey.getDomainUserKeyRelatedToAPIKey(key));
 	    if (contact == null)
 		return null;
 
@@ -220,7 +227,9 @@ public class JSAPI
     @Path("/note")
     @GET
     @Produces("application/x-javascript")
-    public Note createNote(@QueryParam("email") String email, @QueryParam("note") String json, @QueryParam("callback") String jsoncallback)
+    public Note createNote(@QueryParam("email") String email,
+	    @QueryParam("note") String json,
+	    @QueryParam("callback") String jsoncallback)
     {
 	try
 	{
@@ -268,7 +277,9 @@ public class JSAPI
     @Path("/opportunity")
     @GET
     @Produces("application/x-javascript")
-    public Opportunity createOpportunity(@QueryParam("email") String email, @QueryParam("id") String apiKey, @QueryParam("opportunity") String json,
+    public Opportunity createOpportunity(@QueryParam("email") String email,
+	    @QueryParam("id") String apiKey,
+	    @QueryParam("opportunity") String json,
 	    @QueryParam("callback") String jsoncallback)
     {
 	try
@@ -287,7 +298,8 @@ public class JSAPI
 
 	    // Set, owner id to opportunity (owner of the apikey is set as owner
 	    // to opportunity)
-	    opportunity.owner_id = String.valueOf(APIKey.getDomainUserKeyRelatedToAPIKey(apiKey).getId());
+	    opportunity.owner_id = String.valueOf(APIKey
+		    .getDomainUserKeyRelatedToAPIKey(apiKey).getId());
 
 	    opportunity.save();
 	    System.out.println("opportunitysaved");
@@ -322,7 +334,9 @@ public class JSAPI
     @Path("contacts/add-tags")
     @GET
     @Produces("application/x-javascript")
-    public Contact addTags(@QueryParam("email") String email, @QueryParam("tags") String tags, @QueryParam("callback") String jsoncallback)
+    public Contact addTags(@QueryParam("email") String email,
+	    @QueryParam("tags") String tags,
+	    @QueryParam("callback") String jsoncallback)
     {
 	try
 	{
@@ -370,7 +384,9 @@ public class JSAPI
     @Path("contacts/remove-tags")
     @GET
     @Produces("application/x-javascript")
-    public Contact removeTags(@QueryParam("email") String email, @QueryParam("tags") String tags, @QueryParam("callback") String jsoncallback)
+    public Contact removeTags(@QueryParam("email") String email,
+	    @QueryParam("tags") String tags,
+	    @QueryParam("callback") String jsoncallback)
     {
 	try
 	{
@@ -416,7 +432,9 @@ public class JSAPI
     @Path("contacts/add-score")
     @GET
     @Produces("application/x-javascript")
-    public Boolean addScore(@QueryParam("email") String email, @QueryParam("score") Integer score, @QueryParam("callback") String jsoncallback)
+    public Boolean addScore(@QueryParam("email") String email,
+	    @QueryParam("score") Integer score,
+	    @QueryParam("callback") String jsoncallback)
     {
 	Contact contact = ContactUtil.searchContactByEmail(email);
 	if (contact == null)
@@ -446,7 +464,9 @@ public class JSAPI
     @Path("contacts/subtract-score")
     @GET
     @Produces("application/x-javascript")
-    public Boolean subtractScore(@QueryParam("email") String email, @QueryParam("score") Integer score, @QueryParam("callback") String jsoncallback)
+    public Boolean subtractScore(@QueryParam("email") String email,
+	    @QueryParam("score") Integer score,
+	    @QueryParam("callback") String jsoncallback)
     {
 
 	// Get Contact
@@ -475,7 +495,8 @@ public class JSAPI
     @Path("/campaign/enroll/{contact-id}/{workflow-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Boolean subscribeContact(@PathParam("contact-id") Long contactId, @PathParam("workflow-id") Long workflowId)
+    public Boolean subscribeContact(@PathParam("contact-id") Long contactId,
+	    @PathParam("workflow-id") Long workflowId)
     {
 	Contact contact = ContactUtil.getContact(contactId);
 	if (contact == null)

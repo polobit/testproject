@@ -12,13 +12,13 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.activities.Task;
-import com.agilecrm.activities.Task.Type;
 import com.agilecrm.activities.TaskReminder;
 import com.agilecrm.activities.util.TaskUtil;
 
@@ -216,16 +216,18 @@ public class TasksAPI
     }
 
     /**
-     * Gets all task based on type
+     * Gets all task based on owner and type
      * 
      * @param type
      * @return {@link Task}
      */
-    @Path("{type}")
+    @Path("/based")
     @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Task> getCategoryBasedTask(@PathParam("type") Type type)
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<Task> getTasksBasedOnOwnerOfType(
+	    @QueryParam("type") String type, @QueryParam("owner") String owner)
+	    throws Exception
     {
-	return TaskUtil.getCategoryTask(type);
+	return TaskUtil.getTasksRelatedToOwnerOfType(type, owner);
     }
 }

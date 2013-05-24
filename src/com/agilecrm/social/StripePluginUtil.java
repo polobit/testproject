@@ -40,4 +40,17 @@ public class StripePluginUtil
 
     }
 
+    public static void main(String[] args)
+    {
+	try
+	{
+	    System.out.println(getCustomerDetails(null, "cus_1HB4FFdQLR4g7X"));
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+    }
+
 }
