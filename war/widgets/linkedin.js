@@ -10,8 +10,8 @@ $(function ()
     LINKEDIN_PLUGIN_NAME = "Linkedin";
     
     // LinkedIn update loading image declared as global
-    LINKEDIN_UPDATE_LOAD_IMAGE = '<center><img id="status_load" src=\"img/ajax-loader-cursor.gif\" ' + 
-    		'style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+    LINKEDIN_UPDATE_LOAD_IMAGE = '<div id="status_load"><center><img  src=\"img/ajax-loader-cursor.gif\" ' + 
+    		'style="margin-top: 10px;margin-bottom: 14px;"></img></center></div>';
     
     $('#Linkedin').html(LINKEDIN_UPDATE_LOAD_IMAGE);
     
@@ -146,8 +146,6 @@ function showLinkedinMatchingProfiles(plugin_id)
      */
     getLinkedinMatchingProfiles(plugin_id, function (data)
     {
-    	var el = "<div style='padding:10px'><p>Please choose the right LinkedIn profile for this contact</p>";
-
         // If no matches found display message
         if (data.length == 0)
         {
@@ -155,29 +153,11 @@ function showLinkedinMatchingProfiles(plugin_id)
         	
         	$('#Linkedin').html(getTemplate("linkedin-error", Errorjson));
         	
-            /*$('#Linkedin').html("<div style='padding: 10px;line-height:160%;'>" + 
-    				"No Matches Found</div>");*/
             return;
         }
 
-        // If matches found, Iterates through each profile
-        $.each(data, function (key, value)
-        {
-            //If contact picture is null, show default image
-            if (value.picture == null)
-            {
-                value.picture = 'https://contactuswidget.appspot.com/images/pic.png';
-            }
-
-            // Calls to populate template with the search results
-            el = el.concat(getTemplate("linkedin-search-result", value));
-
-        });
-
-        el = el + "</div>";
-        
         // Show matching profiles in LinkedIn panel
-        $('#Linkedin').html(el);
+        $('#Linkedin').html(getTemplate("linkedin-search-result", data));
         
         // Displays LinkedIn profile details on mouse hover and saves profile on click
         $(".linkedinImage").die().live('mouseover', function ()
@@ -257,7 +237,6 @@ function showLinkedinMatchingProfiles(plugin_id)
             
             });
 
-          
         });
 
     });
