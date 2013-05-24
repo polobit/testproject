@@ -63,7 +63,7 @@ $(function() {
 		e.preventDefault();
 		update_task(this);
 	});
-	
+
 	/**
 	 * When clicked on update button of task-update-modal, the task will get
 	 * updated by calling save_task function
@@ -86,7 +86,7 @@ $(function() {
 
 		$("#updateTaskForm").find("li").remove();
 	});
-	
+
 	/**
 	 * Show event of update task modal Activates typeahead for task-update-modal
 	 */
@@ -102,7 +102,7 @@ $(function() {
 	$('#task-date-1').datepicker({
 		format : 'mm/dd/yyyy'
 	});
-	
+
 	/**
 	 * Shows a pop-up modal with pre-filled values to update a task
 	 * 
@@ -114,48 +114,51 @@ $(function() {
 	function update_task(ele) {
 		var value = $(ele).data().toJSON();
 		deserializeForm(value, $("#updateTaskForm"));
-		
+
 		// Fills owner select element
-		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data){
-			$("#updateTaskForm").find("#owners-list").html(data);
-			if(value.taskOwner)
-			{
-				$("#owners-list", $("#updateTaskForm")).find('option[value='+value['taskOwner'].id+']').attr("selected", "selected");
-			}
-			$("#updateTaskModal").modal('show');
-		});
+		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner',
+				function(data) {
+					$("#updateTaskForm").find("#owners-list").html(data);
+					if (value.taskOwner) {
+						$("#owners-list", $("#updateTaskForm")).find(
+								'option[value=' + value['taskOwner'].id + ']')
+								.attr("selected", "selected");
+					}
+					$("#updateTaskModal").modal('show');
+				});
 	}
 
 	/**
 	 * Makes the pending task as completed by calling complete_task function
 	 * 
 	 */
-	$('.tasks-select').live('click', function(e) {
-		e.stopPropagation();
-		if ($(this).is(':checked')) {
-			// Complete
-			var taskId = $(this).attr('data');
-			// complete_task(taskId, $(this));
-			complete_task(taskId, App_Calendar.tasksListView.collection, $(this).closest('tr'))
-		}
-	});
+	$('.tasks-select').live(
+			'click',
+			function(e) {
+				e.stopPropagation();
+				if ($(this).is(':checked')) {
+					// Complete
+					var taskId = $(this).attr('data');
+					// complete_task(taskId, $(this));
+					complete_task(taskId,
+							App_Calendar.tasksListView.collection, $(this)
+									.closest('tr'))
+				}
+			});
 
 	/**
 	 * All completed and pending tasks will be shown in separate section
 	 */
 	/*
-	$('#tasks-list').live('click', function(e) {
-		this.tasksListView = new Base_Collection_View({
-			url : '/core/api/tasks/all',
-			restKey : "task",
-			templateKey : "tasks-list",
-			individual_tag_name : 'tr'
-		});
-		this.tasksListView.collection.fetch();
-
-		$('#content').html(this.tasksListView.el);
-
-	});*/
+	 * $('#tasks-list').live('click', function(e) { this.tasksListView = new
+	 * Base_Collection_View({ url : '/core/api/tasks/all', restKey : "task",
+	 * templateKey : "tasks-list", individual_tag_name : 'tr' });
+	 * this.tasksListView.collection.fetch();
+	 * 
+	 * $('#content').html(this.tasksListView.el);
+	 * 
+	 * });
+	 */
 });
 
 /**
@@ -186,20 +189,20 @@ function highlight_task() {
  * 
  */
 function save_task(formId, modalId, isUpdate, saveBtn) {
-	
-	// Returns, if the save button has disabled attribute 
-	if($(saveBtn).attr('disabled'))
+
+	// Returns, if the save button has disabled attribute
+	if ($(saveBtn).attr('disabled'))
 		return;
-	
+
 	// Disables save button to prevent multiple click event issues
 	$(saveBtn).attr('disabled', 'disabled');
-	
-	if (!isValidForm('#' + formId)){
-		
+
+	if (!isValidForm('#' + formId)) {
+
 		// Removes disabled attribute of save button
 		$(saveBtn).removeAttr('disabled');
 		return false;
-	}	
+	}
 
 	// Show loading symbol until model get saved
 	$('#' + modalId).find('span.save-status').html(LOADING_HTML);
@@ -212,10 +215,10 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 	newTask.url = 'core/api/tasks';
 	newTask.save(json, {
 		success : function(data) {
-			
+
 			// Removes disabled attribute of save button
 			$(saveBtn).removeAttr('disabled');
-			
+
 			$('#' + formId).each(function() {
 				this.reset();
 			});
@@ -229,29 +232,23 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 					App_Calendar.tasksListView.collection.remove(json);
 
 				// Updates task list view
-				App_Calendar.tasksListView.collection.add(data);
-				App_Calendar.tasksListView.render(true);
-			}
-			else if (Current_Route == 'tasks'){
-				if (isUpdate)
-					App_Calendar.tasksListView.collection.remove(json);
+				if (!data.toJSON().is_complete)
+					App_Calendar.tasksListView.collection.add(data);
 
-				// Updates task list view
-				App_Calendar.tasksListView.collection.add(data);
 				App_Calendar.tasksListView.render(true);
-				App_Calendar.navigate("tasks", {
-					trigger : true
-				});
+
+			} else if (Current_Route == 'tasks') {
+				location.reload(true);
 			}
 			// Updates data to temeline
 			else if (App_Contacts.contactDetailView
 					&& Current_Route == "contact/"
 							+ App_Contacts.contactDetailView.model.get('id')) {
-				
+
 				/*
-				 * Verifies whether the added task is related to the contact
-				 * in contact detail view or not
-				 */ 
+				 * Verifies whether the added task is related to the contact in
+				 * contact detail view or not
+				 */
 				$.each(task.contacts, function(index, contact) {
 					if (contact.id == App_Contacts.contactDetailView.model
 							.get('id')) {
@@ -263,20 +260,22 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 						activate_timeline_tab();
 
 						/*
-						 * If timeline is not defined yet, initiates with the 
+						 * If timeline is not defined yet, initiates with the
 						 * data else inserts
 						 */
 						if (timelineView.collection.length == 0) {
 							timelineView.collection.add(data);
-							
+
 							setup_timeline(timelineView.collection.toJSON(),
 									App_Contacts.contactDetailView.el,
 									undefined);
-						} else{
-							var newItem = $(getTemplate("timeline", data.toJSON()));
-							newItem.find('.inner').append('<a href="#" class="open-close"></a>');
+						} else {
+							var newItem = $(getTemplate("timeline", data
+									.toJSON()));
+							newItem.find('.inner').append(
+									'<a href="#" class="open-close"></a>');
 							$('#timeline').isotope('insert', newItem);
-						}	
+						}
 
 						return false;
 					}
@@ -289,7 +288,6 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 		}
 	});
 }
-
 
 /**
  * Get due date of the task to categorize as overdue, today etc..
@@ -318,7 +316,7 @@ function get_due(due) {
  * 
  */
 function append_tasks(base_model) {
-console.log(this.options);
+	console.log(this.options);
 	var itemView = new Base_List_View({
 		model : base_model,
 		"view" : "inline",
@@ -384,36 +382,33 @@ console.log(this.options);
  * 
  */
 function complete_task(taskId, collection, ui, callback) {
-	
 
 	var taskJSON = collection.get(taskId).toJSON();
-	// Replace contacts object with contact ids 
-	var contacts  = [];
-	$.each(taskJSON.contacts, function(index, contact){
+	// Replace contacts object with contact ids
+	var contacts = [];
+	$.each(taskJSON.contacts, function(index, contact) {
 		contacts.push(contact.id);
 	});
-	
+
 	taskJSON.contacts = contacts;
 	taskJSON.is_complete = true;
 	taskJSON.owner_id = taskJSON.taskOwner.id;
-	
-var new_task = new Backbone.Model();
+
+	var new_task = new Backbone.Model();
 	new_task.url = '/core/api/tasks';
 	new_task.save(taskJSON, {
 		success : function(model, response) {
 			collection.remove(model);
 
-			if(ui)
+			if (ui)
 				ui.fadeOut(2000);
-			
-			if (callback && typeof (callback) === "function")
-			{
+
+			if (callback && typeof (callback) === "function") {
 				// execute the callback, passing parameters as necessary
 				callback(model);
 			}
 		}
 	});
-	
 
 	// Set is complete flag to be true
 	/*
@@ -427,78 +422,4 @@ var new_task = new Backbone.Model();
 	 * ui.fadeOut(2000); }} );
 	 */
 
-}
-
-function initOwnerslist(){
-	
-	// Click events to agents dropdown and department
-	$("ul#owner-tasks li a, ul#type-tasks li a").die().live("click",
-			function(e) {
-				e.preventDefault();
-				
-				// Show selected name
-				var name = $(this).html(), id = $(this).attr("href");
-				
-                $(this).closest("ul").data("selected_item", id);
-				$(this).closest(".btn-group").find(".selected_name").text(name);
-              
-				updateData(getParams());
-	});
-	updateData(getParams());
-}
-
-
-var allTasksListView;
-
-/**
- * updateData() method updates chat sessions on page for different query's from user
- * 
- * @param params
- *           query string contains date, agentId & widgetId
- */
-function updateData(params){
-
-	//Shows loading image untill data gets ready for displaying
-	$('#task-list-based-condition').html(LOADING_HTML);
-	
-	//Creates backbone collection view 
-	allTasksListView = new Base_Collection_View({
-		url : '/core/api/tasks/based' + params,
-		restKey : "task",
-		templateKey : "tasks-list",
-		individual_tag_name : 'tr',
-		postRenderCallback: function(el) {
-	    	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-	    		 $(".task-due-time", el).timeago();
-	      	});
-	    }
-
-	});  
-    
-	//Fetches data from server
-	allTasksListView.collection.fetch();
-	
-	//Renders data to chat transcript page.
-	$('#task-list-based-condition').html(allTasksListView.render().el);
-	
-}
-
-/**
- * getParams() method returns a string(used as query param string) contains user selected type and owners
- * 
- * @returns {String} query string
- */
-function getParams() {
-
-	var params = "?";
-
-	// Get task type and append it to params
-	var type = $('#type-tasks').data("selected_item");
-	if (type)
-		params += ("&type=" + type);
-	// Get owner name and append it to params
-	var owner = $('#owner-tasks').data("selected_item");
-	if (owner)
-		params += ("&owner=" + owner);
-	return params;
 }
