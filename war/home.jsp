@@ -163,7 +163,7 @@ String CSS_PATH = "/";
 								if(!StringUtils.isEmpty(currentUserPrefs.pic))
 								    out.println("<img src='"+currentUserPrefs.pic+"' style='width:33px;height:33px;border-radius:2px'></img>");
 								else
-								    out.println("<img src='img/gravatar.png' style='width:30px;height:28px;border-radius:2px'></img>");
+								    out.println("<img src='img/gravatar.png' style='width:33px;height:33px;border-radius:2px'></img>");
 								%>		
 									
 								<i class='caret' style='vertical-align:text-top;margin-left:4px'></i>	
