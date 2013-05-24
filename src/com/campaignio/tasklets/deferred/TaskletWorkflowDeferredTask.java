@@ -2,6 +2,7 @@ package com.campaignio.tasklets.deferred;
 
 import org.json.JSONObject;
 
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
@@ -17,20 +18,20 @@ import com.google.appengine.api.taskqueue.DeferredTask;
 @SuppressWarnings("serial")
 public class TaskletWorkflowDeferredTask implements DeferredTask
 {
-    String campaignJSONString, subscriberJSONString;
+    String campaignId, subscriberJSONString;
 
     /**
      * Constructs a new {@link TaskletWorkflowDeferredTask}.
      * 
-     * @param campaignJSONString
-     *            nodes that are connected in a workflow.
+     * @param campaignId
+     *            CampaignId - to avoid 'Task too large' Exception
      * @param subscriberJSONString
      *            contact details.
      */
-    public TaskletWorkflowDeferredTask(String campaignJSONString,
+    public TaskletWorkflowDeferredTask(String campaignId,
 	    String subscriberJSONString)
     {
-	this.campaignJSONString = campaignJSONString;
+	this.campaignId = campaignId;
 	this.subscriberJSONString = subscriberJSONString;
     }
 
@@ -47,9 +48,16 @@ public class TaskletWorkflowDeferredTask implements DeferredTask
 	    System.out.println("Executing tasklet in namespace "
 		    + NamespaceManager.get());
 
-	    // Get Campaign JSON & SubscriberJSON from String
-	    JSONObject campaignJSON = new JSONObject(campaignJSONString);
 	    JSONObject subscriberJSON = new JSONObject(subscriberJSONString);
+
+	    // Fetching campaignJSON within the task, to avoid 'Task too large
+	    // Exception.'
+	    JSONObject campaignJSON = WorkflowUtil.getWorkflowJSON(Long
+		    .parseLong(campaignId));
+
+	    // In case workflow is deleted.
+	    if (campaignJSON == null)
+		return;
 
 	    // Check in memcache if it is already executing
 	    TaskletUtil.executeWorkflow(campaignJSON, subscriberJSON);

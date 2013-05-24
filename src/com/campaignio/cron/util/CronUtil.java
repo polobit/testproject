@@ -306,10 +306,9 @@ public class CronUtil
 		customData = new JSONObject();
 
 	    CronDeferredTask cronDeferredTask = new CronDeferredTask(
-		    cron.namespace, cron.campaign_json_string,
-		    cron.data_string, cron.subscriber_json_string,
-		    cron.node_json_string, wakeupOrInterrupt,
-		    customData.toString());
+		    cron.namespace, cron.campaign_id, cron.data_string,
+		    cron.subscriber_json_string, cron.node_json_string,
+		    wakeupOrInterrupt, customData.toString());
 	    Queue queue = QueueFactory.getQueue("campaign-queue");
 	    queue.add(TaskOptions.Builder.withPayload(cronDeferredTask));
 	}

@@ -2,6 +2,7 @@ package com.campaignio.cron.deferred;
 
 import org.json.JSONObject;
 
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.cron.Cron;
 import com.campaignio.tasklets.Tasklet;
 import com.campaignio.tasklets.util.TaskletUtil;
@@ -31,10 +32,14 @@ public class CronDeferredTask implements DeferredTask
     String customDataString;
 
     /**
+     * Campaign Id.
+     */
+    String campaignId;
+
+    /**
      * Json strings required for campaign.
      */
-    String campaignJSONString, dataString, subscriberJSONString,
-	    nodeJSONString;
+    String dataString, subscriberJSONString, nodeJSONString;
 
     /**
      * For namespace.
@@ -46,8 +51,8 @@ public class CronDeferredTask implements DeferredTask
      * 
      * @param namespace
      *            Namespace.
-     * @param campaignJSONString
-     *            Campaign JSON Data.
+     * @param campaignId
+     *            CampaignId.
      * @param dataString
      *            Workflow data.
      * @param subscriberJSONString
@@ -59,12 +64,12 @@ public class CronDeferredTask implements DeferredTask
      * @param customDataString
      *            CustomData.
      */
-    public CronDeferredTask(String namespace, String campaignJSONString,
+    public CronDeferredTask(String namespace, String campaignId,
 	    String dataString, String subscriberJSONString,
 	    String nodeJSONString, String wakeupOrInterrupt,
 	    String customDataString)
     {
-	this.campaignJSONString = campaignJSONString;
+	this.campaignId = campaignId;
 	this.dataString = dataString;
 	this.subscriberJSONString = subscriberJSONString;
 	this.nodeJSONString = nodeJSONString;
@@ -87,8 +92,13 @@ public class CronDeferredTask implements DeferredTask
 
 	try
 	{
-	    // Add in mem_cache
-	    JSONObject campaignJSON = new JSONObject(campaignJSONString);
+	    // Gets workflow json from campaignId.
+	    JSONObject campaignJSON = WorkflowUtil.getWorkflowJSON(Long
+		    .parseLong(campaignId));
+
+	    if (campaignJSON == null)
+		return;
+
 	    JSONObject data = new JSONObject(dataString);
 	    JSONObject subscriberJSON = new JSONObject(subscriberJSONString);
 	    JSONObject nodeJSON = new JSONObject(nodeJSONString);
