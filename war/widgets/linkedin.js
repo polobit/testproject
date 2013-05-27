@@ -149,10 +149,7 @@ function showLinkedinMatchingProfiles(plugin_id)
         // If no matches found display message
         if (data.length == 0)
         {
-        	Errorjson['message'] = "No Matches Found";
-        	
-        	$('#Linkedin').html(getTemplate("linkedin-error", Errorjson));
-        	
+        	linkedinMainError("No Matches Found");
             return;
         }
 
@@ -227,9 +224,6 @@ function showLinkedinMatchingProfiles(plugin_id)
                 	// save url to contact
 	                agile_crm_save_contact_properties_subtype("website", "LINKEDIN", url);
 	                
-	                // Shows Selected profile in the LinkedIn block
-                    showLinkedinProfile(id, plugin_id);
-                    
 	                if($('#save_linkedin_image').is(':checked'))
 	                	 agile_crm_update_contact("image", linkedin_image);
 	                
@@ -329,23 +323,13 @@ function showLinkedinProfile(linkedin_id, plugin_id)
     	// Check if member does not share information for third party applications
     	if(data.responseText == "Invalid member id {private}")
     	{
-    		Errorjson['message'] = "Member doesn't share his information for third party applications";
-    		
-    		$('#Linkedin').html(getTempalte("linkedin-error", Errorjson));
-    		
-    		/*$('#Linkedin').html("<div style='padding: 10px;line-height:160%;" + 
-    				"word-wrap: break-word;' >Member doesn't share his information for " + 
-    				"third party applications</div>");*/
+    		linkedinMainError("Member doesn't share his information for third party applications");
     		return;
     	}
     	
     	// Shows error message if error occurs
-    	Errorjson['message'] = data.responseText;
+    	linkedinMainError(data.responseText);
     	
-    	$('#Linkedin').html(getTempalte("linkedin-error", Errorjson));
-    	
-    	/*$('#Linkedin').html("<div style='padding: 10px;line-height:160%;" + 
-				"word-wrap: break-word;' >" + data.responseText + "</div>");  */      
     });
 
     // On click of see more link, more updates are retrieved
@@ -363,18 +347,19 @@ function showLinkedinProfile(linkedin_id, plugin_id)
             // Checks if person is already connected in LinkedIn to agile user
             if (linkedin_connected)
             {
-                alert("This person does not share his/her updates");
+                statusError("This person does not share his/her updates");
                 return;
             }
 
             // If not connected, advice user to connect to see updates
-            alert("Member does not share his/her updates. Get connected");
+            statusError("Member does not share his/her updates. Get connected");
             return;
         }
 
         // Loading image is shown until the updates are retrieved 
-        $("#linkedin_social_stream").append(LINKEDIN_UPDATE_LOAD_IMAGE);
-
+       // $("#linkedin_social_stream").append(LINKEDIN_UPDATE_LOAD_IMAGE);
+        $('#spinner-status').show();
+        
         var that = this;
 
         // See more link is disabled until the updates are retrieved since there may 
@@ -389,7 +374,8 @@ function showLinkedinProfile(linkedin_id, plugin_id)
         function (data)
         {
             // Removes loading button after fetching updates
-            $('#status_load').remove();
+            // $('#status_load').remove();
+            $('#spinner-status').hide();
 
             // See more link activated to get more updates
             $(that).addClass('linkedin_stream');
@@ -397,7 +383,7 @@ function showLinkedinProfile(linkedin_id, plugin_id)
             // If no more updates available, less and refresh buttons are shown
             if (data.length == 0)
             {
-                alert("No more updates available");
+                statusError("No more updates available");
                 $('#linkedin_refresh_stream').show();
 
                 // If user have overall updates more than 3, less button is shown
@@ -421,13 +407,15 @@ function showLinkedinProfile(linkedin_id, plugin_id)
         }).error(function (data)
         {
             // Removes loading button if error occurs
-            $('#status_load').remove();
+            //$('#status_load').remove();
+            
+            $('#spinner-status').hide();
 
             // Activates see more button 
             $(that).addClass('linkedin_stream');
 
             // Error message is shown to the user
-            alert(data.responseText);
+            statusError(data.responseText);
         });
     });
 
@@ -501,7 +489,7 @@ function showLinkedinProfile(linkedin_id, plugin_id)
             }
             
             // Error message is displayed to user 
-            alert(data.responseText);
+            statusError(data.responseText);
         });
     });
 }
@@ -547,12 +535,7 @@ function getLinkedinMatchingProfiles(plugin_id, callback)
         	$('#status_load').remove();
         	
         	// Shows error message if error occurs
-            // alert(data.responseText);
-            
-            // Shows error message if error occurs
-        	Errorjson['message'] = data.responseText;
-        	
-        	$('#Linkedin').html(getTempalte("linkedin-error", Errorjson));
+            linkedinMainError(data.responseText);            
         });
 
     }
@@ -634,7 +617,7 @@ function sendLinkedInAddRequest(plugin_id, linkedin_id)
         {
             // If error occurs while posting modal is removed and error message is shown
             $('#linkedin_messageModal').remove();
-            alert(data.responseText);
+            linkedinError(data.responseText);
 
         });
     });
@@ -706,7 +689,7 @@ function sendLinkedInMessage(plugin_id, linkedin_id)
             $('#linkedin_messageModal').remove();
             
             // Error message is shown if error occurs
-            alert(data.responseText);            
+            linkedinError(data.responseText);            
         });
     });
 
@@ -742,7 +725,7 @@ function reSharePost(plugin_id, share_id, message, element)
     }).error(function (data)
     {
         // Error message is shown when error occurs
-        alert(data.responseText);
+    	linkedinError(data.responseText);
 
     });
 }
@@ -793,15 +776,12 @@ function getLinkedinIdByUrl(plugin_id, web_url, callback)
 		    {
 		    	if(data.responseText == "TimeOut")
 		    	{
-		    		alert("Time Out while fetching LinkedIn profile. Reload and try again");
+		    		linkedinMainError("Time Out while fetching LinkedIn profile. Reload and try again");
 		    		return;
 		    	}
 		    	
 		        // Shows error message to the user returned by LinkedIn
 		        alert("URL provided for linkedin is not valid " + data.responseText);
-		
-		        // Shows LinkedIn matching profiles based on contact name
-		        showLinkedinMatchingProfiles(plugin_id);
 		
 		        // Delete the LinkedIn URL associated with contact as it is incorrect
 		        agile_crm_delete_contact_property_by_subtype('website', 'LINKEDIN', web_url);
@@ -839,7 +819,7 @@ function getExperienceOfPerson(plugin_id, linkedin_id)
      	$('#status_load').remove();
      	
      	Errorjson['message'] = data.responseText;
-     	$('#linkedin_experience_panel').html(getTemplate('linkedin-error', Errorjson))
+     	$('#linkedin_experience_panel').html(getTemplate('linkedin-error-panel', Errorjson))
      	
     	// alert(data.responseText);
      });
@@ -905,8 +885,39 @@ function getLinkedInSharedConnections(plugin_id, linkedin_id)
     	$('#status_load').remove();
     	
     	Errorjson['message'] = data.responseText;
-    	$('#linkedin_shared_panel').html(getTemplate('linkedin-error', Errorjson))
+    	$('#linkedin_shared_panel').html(getTemplate('linkedin-error-panel', Errorjson))
    	 	// alert(data.responseText);
     });
     
+}
+
+function linkedinError(error)
+{
+	Errorjson['message'] = error;
+    
+	$('#linkedin-error-panel').html(getTemplate('linkedin-error-panel', Errorjson));
+	$('#linkedin-error-panel').show();
+	
+	// Hides the modal after 2 seconds after the sent is shown
+    $('#linkedin-error-panel').fadeOut(10000);
+    
+}
+
+function statusError(error)
+{
+	Errorjson['message'] = error;
+    
+    // Error message is shown to the user
+	$('#status-error-panel').html(getTemplate('linkedin-error-panel', Errorjson));
+	$('#status-error-panel').show();
+	
+	// Hides the modal after 2 seconds after the sent is shown
+    $('#status-error-panel').fadeOut(10000);
+}
+
+function linkedinMainError(error)
+{
+	Errorjson['message'] = error;
+    
+	$('#Linkedin').html(getTemplate('linkedin-error-panel', Errorjson));
 }

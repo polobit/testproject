@@ -150,6 +150,15 @@ $(function ()
     		 // Store array of IDs in a global variable    		 
 	    	 Twitter_follower_ids = data; 
 	    	 
+	    	 console.log(data); 
+	    	 
+	    	 if(data.length == 0)
+	    	 {
+	    		 $('#twitter_follower_panel').html(Twitter_current_profile_user_name +
+	    				 " doesn't have any followers yet");
+	    		 return;
+	    	 }
+	    	 
     		 // Get 20 from array and remove 20 from array
 	    	 var temp = Twitter_follower_ids.splice(0, 20);	    	 
 	    	 console.log(temp);
@@ -175,7 +184,14 @@ $(function ()
 	    	    	 // hover for first time)
 	    	    	 $('#' + id).popover('show');
 	    	     });
-	    	 });
+	    	 },
+		     function(error)
+		     {
+	    		 $('#tweet_load').remove();
+		    	 $('#follower-error-panel').html(error.responseText);
+		    	 $('#follower-error-panel').show();
+		    	 $('#follower-error-panel').fadeOut(10000);
+		     });
 	    	 
 	    	 $('#more_followers').die().live('click', function (e2)
 	    	 {
@@ -196,7 +212,14 @@ $(function ()
 		    		 
 		    		 // Show matching profiles in Twitter panel
 		    		 $('#twitter_follower_panel').append(getTemplate('twitter-search-result', result));
-		    	 });
+		    	 },
+		    	 function(error)
+			     {
+		    		 $('#spinner-followers').hide();
+			    	 $('#follower-error-panel').html(error.responseText);
+			    	 $('#follower-error-panel').show();
+			    	 $('#follower-error-panel').fadeOut(10000);
+			     });
 	    	 });
 	    	 
     	 });    		        
@@ -222,6 +245,14 @@ $(function ()
     		// Store array of IDs in a global variable 
     		Twitter_following_ids = data;    		
     		   		 
+    		console.log(data.length); 
+    		if(data.length == 0)
+	    	 {
+	    		 $('#twitter_following_panel').html(Twitter_current_profile_user_name + 
+	    				 " isn't following anyone yet");
+	    		 return;
+	    	 }
+    		
     		// Get 20 from array and remove 20 from array
     		var temp = Twitter_following_ids.splice(0, 20);	    	 
  	    	console.log(temp);
@@ -247,6 +278,13 @@ $(function ()
 	    	            // hover for first time)
 	    	            $('#' + id).popover('show');
 	    		 });
+	    	},
+	    	function(error)
+	    	{
+	    		$('#tweet_load').remove();
+	    		$('#following-error-panel').html(error.responseText);
+	    		$('#following-error-panel').show();
+	    		$('#following-error-panel').fadeOut(10000);
 	    	});
 	    	
     		$('#more_following').die().live('click', function (e2)
@@ -267,13 +305,19 @@ $(function ()
 		    		 $('#spinner-following').hide();
 		    		
 		    		// Show matching profiles in Twitter panel
-		    		$('#twitter_follower_panel').append(getTemplate('twitter-search-result', result));
+		    		$('#twitter_following_panel').append(getTemplate('twitter-search-result', result));
+		    	},
+		    	function(error)
+		    	{
+		    		$('#spinner-following').hide();
+		    		$('#following-error-panel').html(error.responseText);
+		    		$('#following-error-panel').show();
+		    		$('#following-error-panel').fadeOut(10000);
 		    	});
+		    	
     	    });
-
     	});   	 
     });
-    
 });
 
 /**
@@ -326,11 +370,7 @@ function showTwitterMatchingProfiles(plugin_id)
         // If no matches found display message
         if (data.length == 0)
         {
-        	Errorjson['message'] = "No Matches Found";
-        	$('#Twitter').html(getTemplate('twitter-error', Errorjson));
-        	
-            /*$('#Twitter').html("<div style='padding: 10px;line-height:160%;'>" + 
-            		"No Matches Found</div>");*/
+        	twitterMainError("No Matches Found");
             return;
         }
 
@@ -411,9 +451,6 @@ function showTwitterMatchingProfiles(plugin_id)
                 	// save url to contact
 	                agile_crm_save_contact_properties_subtype("website", "TWITTER", url);
 	                
-	                // Shows Selected profile in the LinkedIn block
-                    showTwitterProfile(id, plugin_id);
-                    
 	                if($('#save_twitter_image').is(':checked'))
 	                	 agile_crm_update_contact("image", twitter_image);
 	                
@@ -496,7 +533,6 @@ function showTwitterProfile(twitter_id, plugin_id)
         if (data.updateStream && data.updateStream.length != 0)
         {
             // Current update heading and refresh button is shown
-            $('#twitter_update_heading').show();
             $('#twitter_refresh_stream').show();
             
             // Sets the update stream into a local variable for this method
@@ -519,17 +555,19 @@ function showTwitterProfile(twitter_id, plugin_id)
         if (Twitter_current_update_id)
         {
             // Current update heading and current update is shown
-            $('#twitter_update_heading').show();
             $('#twitter_current_activity').show();
+            return;
         }
-
+        
+        $('#twitter_social_stream').html("<div style='padding:10px;'>" + 
+        		Twitter_current_profile_user_name + " hasn't tweeted yet");
+        
     }, function (data)
     {
         // Remove loading image on error 
         $('#tweet_load').remove();
 
-        Errorjson['message'] = data.responseText;
-        $('#Twitter').html(getTemplate('twitter-error', Errorjson));
+        twitterMainError(data.responseText);
         
     });
 
@@ -551,12 +589,13 @@ function showTwitterProfile(twitter_id, plugin_id)
             // Checks if person is already following in Twitter to agile user
             if (twitter_connected)
             {
-                alert("This member doesn't share his/her updates");
+            	tweetError("This member doesn't share his/her updates");
                 return;
             }
 
             // If not following, advice user to follow him/her to see updates
-            alert("Member does not share his/her updates. Follow him/her and try");
+            // Error message is shown to the user
+            tweetError("Member does not share his/her updates. Follow him/her and try");
             return;
         }
 
@@ -588,7 +627,7 @@ function showTwitterProfile(twitter_id, plugin_id)
             // If no more updates available, less and refresh buttons are shown
             if (data.length == 0)
             {
-                alert("No more updates available");
+                tweetError("No more updates available");
              
                 // On click of more if no updates available and if user have initial 
                 // updates more than 3 and  then less button is shown
@@ -619,7 +658,7 @@ function showTwitterProfile(twitter_id, plugin_id)
             $(that).addClass('twitter_stream');
 
             // Error message is shown to the user
-            alert(data.responseText);
+            tweetError(data.responseText);
         });
     });
 
@@ -672,7 +711,9 @@ function showTwitterProfile(twitter_id, plugin_id)
             $('#tweet_load').remove();            
             
             // Populates the template with the data 
-            $("#twitter_social_stream").html(getTemplate("twitter-update-stream", data));            
+            $("#twitter_social_stream").html(getTemplate("twitter-update-stream", data));   
+            
+            $(".time-ago", $("#twitter_social_stream")).timeago();
             
             // Checks if stream available, 
             if (data.length == 0)
@@ -690,14 +731,14 @@ function showTwitterProfile(twitter_id, plugin_id)
         }).error(function (data)
         {
             // Remove loading button on error
-            $('#status_load').remove();
+            $('#tweet_load').remove();
             
             // Populates the template with the initial update stream on error
             $("#twitter_social_stream")
             		.html(getTemplate("twitter-update-stream", stream_data));
             
-            // Error message is displayed to user 
-            alert(data.responseText);
+            // Error message is shown to the user
+            tweetError(data.responseText);
             
         });
     });
@@ -743,11 +784,7 @@ function getTwitterMatchingProfiles(plugin_id, callback)
             $('#tweet_load').remove();
 
             // Shows error message if error occurs
-            // alert(data.responseText);
-            
-            Errorjson['message'] = data.responseText;
-            
-            $('#Twitter').html(getTemplate('twitter-error', Errorjson));
+            twitterMainError(data.responseText);
         });
     }
     else
@@ -813,14 +850,16 @@ function sendFollowRequest(plugin_id, twitter_id)
         }).error(function (data)
         {           
         	$('#twitter_refresh_stream').show();
+        	
             // Error message is shown if error occurs
-            alert(data.responseText);
+            twitterError(data.responseText);
+            
         });
 
     }).error(function (data)
     {
         // Error message is shown if error occurs
-        alert(data.responseText);
+    	twitterError(data.responseText);
     });
 }
 
@@ -848,7 +887,7 @@ function sendUnfollowRequest(plugin_id, twitter_id)
     }).error(function (data)
     {
         // Error message is shown if error occurs
-        alert(data.responseText);
+    	twitterError(data.responseText);
     });
 
 }
@@ -919,7 +958,7 @@ function sendTwitterMessage(plugin_id, twitter_id, message)
             $('#twitter_messageModal').remove();
 
             // Error message is shown if error occurs
-            alert(data.responseText);
+            twitterError(data.responseText);
         });
     });
 }
@@ -991,7 +1030,7 @@ function tweetInTwitter(plugin_id, twitter_id)
             $('#twitter_messageModal').remove();
 
             // Error message is shown if error occurs
-            alert(data.responseText);
+            twitterError(data.responseText);
         });
     });
 }
@@ -1023,7 +1062,7 @@ function retweetTheTweet(plugin_id, share_id, message, element)
     }).error(function (data)
     {
         // Error message is shown when error occurs
-        alert(data.responseText);
+    	tweetError(data.responseText);
 
     });
 }
@@ -1095,21 +1134,23 @@ function getTwitterIdByUrl(plugin_id, web_url, callback)
     	// If time out exception occurs, ask user to refresh and return
     	if(data.responseText == "TimeOut")
     	{
-    		alert("Time Out while fetching Twitter profile. Reload and try again");
+    		twitterMainError("Time Out while fetching Twitter profile. Reload and try again");
     		return;
     	}
     	
-        // Shows error message to the user returned by Twitter
-        alert("URL provided for Twitter is not valid " + data.responseText);
+    	if(data.responseText == "URL provided for Twitter is invalid. No such user exists.")
+    	{
+    		alert(data.responseText);
+    		
+    		console.log(web_url);
+            // Delete the Twitter URL associated with contact as it is incorrect
+            agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url.toString());
+            
+            return;
+    	}
+    	
+    	twitterMainError(data.responseText);
 
-        console.log(web_url);
-        // Delete the Twitter URL associated with contact as it is incorrect
-        agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url.toString());
-        
-        // Shows Twitter matching profiles based on contact name
-        showTwitterMatchingProfiles(plugin_id);
-
-       
     });
 }
 
@@ -1145,7 +1186,9 @@ function getFollowerIdsInTwitter(plugin_id, twitter_id, callback)
 	}).error(function (data)
 	{
 		// Show the error message
-		alert( data.responseText);
+		$('#follower-error-panel').html(data.responseText);
+   	    $('#follower-error-panel').show();
+   	    $('#follower-error-panel').fadeOut(10000);
 
 		$('#tweet_load').remove();
 	});
@@ -1182,7 +1225,9 @@ function getFollowingIdsInTwitter(plugin_id, twitter_id, callback)
 	}).error(function (data)
 	{
 		// Show the error message
-		alert( data.responseText);
+		$('#following-error-panel').html(data.responseText);
+   	    $('#following-error-panel').show();
+   	    $('#following-error-panel').fadeOut(10000);
 
 		$('#tweet_load').remove();
 	});
@@ -1199,7 +1244,7 @@ function getFollowingIdsInTwitter(plugin_id, twitter_id, callback)
  * @param callback
  * 			Callback to be executed to get the profiles
  */
-function getListOfProfilesByIDsinTwitter(plugin_id, twitter_ids, callback)
+function getListOfProfilesByIDsinTwitter(plugin_id, twitter_ids, callback, errorcallback)
 {	
 	// Store the Twitter IDs provided as json tos send it as post data
 	var json = {};
@@ -1210,7 +1255,7 @@ function getListOfProfilesByIDsinTwitter(plugin_id, twitter_ids, callback)
 	$.post("/core/api/widgets/profile/list/" + plugin_id, json, function(data) 
 	{
 		// If data is undefined, return
-		if(!data || data.length == 0)
+		if(!data)
 		{
 			$('#tweet_load').remove(); 
 			
@@ -1226,32 +1271,44 @@ function getListOfProfilesByIDsinTwitter(plugin_id, twitter_ids, callback)
 	// Accept the return type as json
 	}, "json").error(function (data)
 	{
-		// Show the error message
-		alert( data.responseText);
-
-		$('#tweet_load').remove();
+		
+		// If defined, execute the callback function
+		if (errorcallback && typeof (errorcallback) === "function")
+	    {
+			errorcallback(data);
+	    }
+		
 	});
-	
 	
 }
 
-/*function ArrangeListOfProfilesInElement(data, callback)
+function twitterError(error)
 {
-	var el = "<div style='padding:10px;'>";
+	Errorjson['message'] = error;
+    
+	$('#twitter-error-panel').html(getTemplate('twitter-error-panel', Errorjson));
+	$('#twitter-error-panel').show();
+	
+	// Hides the modal after 2 seconds after the sent is shown
+    $('#twitter-error-panel').fadeOut(10000);
+    
+}
 
-    // If matches found, Iterates though each profile
-    $.each(data, function (key, value)
-    {
-            // Calls to populate template with the search results
-            el = el.concat(getTemplate("twitter-search-result", value));
-    });
+function tweetError(error)
+{
+	Errorjson['message'] = error;
     
-    el = el + "</div>";
+    // Error message is shown to the user
+	$('#tweet-error-panel').html(getTemplate('twitter-error-panel', Errorjson));
+	$('#tweet-error-panel').show();
+	
+	// Hides the modal after 2 seconds after the sent is shown
+    $('#tweet-error-panel').fadeOut(10000);
+}
+
+function twitterMainError(error)
+{
+	Errorjson['message'] = error;
     
-    // If defined, execute the callback function
-	if (callback && typeof (callback) === "function")
-    {
-		callback(el);
-    }
-    
-}*/
+	$('#Twitter').html(getTemplate('twitter-error-panel', Errorjson));
+}

@@ -1,5 +1,4 @@
 <script id="linkedin-profile-template" type="text/html">
-
 <div class="widget_content row-fluid">
 	<div class="span3"><img src="{{picture}}" width="36" height="36" alt="" class="img-rounded pull-left"/></div>
 	<div class="pull-left span9">
@@ -21,14 +20,13 @@
 		<div style="font-size: 11px;margin-top: -5px;">Connections</div>
 	</div>
 </div>
-<div class="widget_content row-fluid" id="linkedin-error-panel">
+<div class="" id="linkedin-error-panel" style="display:none;">
 </div>
 <ul class="nav nav-tabs" id="myTab">
 	<li class="active" style="width:33.33333%"><a data-toggle="tab" href="#updates"><h3>Activity</h3><small></small></a></li>
 	<li style="width:33.33333%"><a data-toggle="tab" href="#experience" id="linkedin_experience"><h3>Work</h3><small></small></a></li>
 	<li style="width:33.33333%"><a data-toggle="tab" href="#connections" id="linkedin_shared_connections"><h3>Shared</h3><small></small></a></li>
 </ul>
-
 <div class="tab-content" id="myTabContent">
 	<div id="updates" class="tab-pane fade active in">
 		{{#if current_update}}
@@ -45,9 +43,12 @@
 		<ul class="widget_tab_content collapse in"  id="linkedin_social_stream">
 					
 		</ul>
-		<div class="widget_tab_footer">
+		<div class="clearfix" id="status-error-panel" style="display:none;">
+		</div>
+		<div class="widget_tab_footer" align="center">
 			<a href="#more" class="linkedin_stream" id="linkedin_stream" rel="tooltip" title="Click to see more updates">Show More</a>
 			<a href="#less" data-toggle="collapse" data-target="#linkedin_social_stream" id="linkedin_less" style="display:none">Show Less..</a>
+			<img src="img/ajax-spinner.gif" id="spinner-status" style="display:none;"></img>
 			<a href="#refresh" id="linkedin_refresh_stream" class="icon-refresh pull-right" rel="tooltip" title="Refresh to get current updates" style="display:none"></a>
 		</div>
 	</div>
@@ -210,10 +211,16 @@
 	</div>
 </script>
 
-<script id="linkedin-error-template" type="text/html">
-<div style='padding: 10px;line-height:160%;word-wrap: break-word;' >
-{{message}}
-</div>
+<script id="linkedin-error-panel-template" type="text/html">
+{{#check_length message "140"}}
+	<div style="height: 140px;overflow-y: scroll;line-height:160%;word-wrap: break-word;padding:10px">
+		{{message}}
+	</div>
+{{else}}
+	<div style="line-height:160%;word-wrap: break-word;padding:10px">
+		{{message}}
+	</div>
+{{/check_length}}	
 </script>
 
 <script id="linkedin-shared-template" type="text/html">

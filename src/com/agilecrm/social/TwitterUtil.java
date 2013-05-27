@@ -16,6 +16,7 @@ import twitter4j.QueryResult;
 import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.Twitter;
+import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.URLEntity;
 import twitter4j.User;
@@ -394,11 +395,22 @@ public class TwitterUtil
 	    return null;
 
 	System.out.println(webUrl.substring(webUrl.lastIndexOf("/") + 1));
-	// Fetch Twitter user profile based on twitter Id
-	User user = twitter
-		.showUser(webUrl.substring(webUrl.lastIndexOf("/") + 1));
+	try
+	{
+	    // Fetch Twitter user profile based on twitter Id
+	    User user = twitter.showUser(webUrl.substring(webUrl
+		    .lastIndexOf("/") + 1));
+	    return String.valueOf(user.getId());
+	}
+	catch (Exception e)
+	{
+	    if (e.getMessage().startsWith("404"))
+		throw new Exception(
+			"URL provided for Twitter is invalid. No such user exists.");
 
-	return String.valueOf(user.getId());
+	    throw new Exception(e.getMessage());
+	}
+
     }
 
     /**
@@ -509,7 +521,7 @@ public class TwitterUtil
 		result.friends_count = user.getFriendsCount() + "";
 
 	    }
-	    catch (Exception e)
+	    catch (TwitterException e)
 	    {
 		continue;
 	    }
