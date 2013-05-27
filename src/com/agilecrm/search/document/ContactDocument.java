@@ -108,9 +108,17 @@ public class ContactDocument implements BuilderInterface
 	// support date without time component)
 	Date truncatedDate = DateUtils.truncate(new Date(
 		contact.created_time * 1000), Calendar.DATE);
+
+	/*
+	 * Date date = DateUtil.deserializeDate(String.valueOf(truncatedDate
+	 * .getTime()));
+	 */
 	System.out.println(truncatedDate);
 	doc.addField(Field.newBuilder().setName("created_time")
 		.setDate(truncatedDate));
+
+	doc.addField(Field.newBuilder().setName("created_time_epoch")
+		.setNumber(contact.created_time.doubleValue()));
 
 	// Describes updated time document if updated time is not 0.
 	if (contact.updated_time > 0L)
@@ -121,6 +129,9 @@ public class ContactDocument implements BuilderInterface
 	    System.out.println(updatedDate);
 	    doc.addField(Field.newBuilder().setName("updated_time")
 		    .setDate(updatedDate));
+
+	    doc.addField(Field.newBuilder().setName("updated_time_epoch")
+		    .setNumber(contact.updated_time));
 	}
 
 	// Adds Other fields in contacts to document
@@ -226,6 +237,7 @@ public class ContactDocument implements BuilderInterface
 	    /*
 	     * Truncate date Document search date is without time component
 	     */
+
 	    Date TagCreatedDate = DateUtils.truncate(new Date(
 		    TagCreationTimeInMills), Calendar.DATE);
 
@@ -234,10 +246,15 @@ public class ContactDocument implements BuilderInterface
 	    // searching.
 	    if (!normalizedTag.matches("^[A-Za-z][A-Za-z0-9_]*$"))
 		continue;
-
+	    
+	    System.out.println(normalizedTag);
 	    // Adds Other fields in contacts to document
 	    doc.addField(Field.newBuilder().setName(normalizedTag + "_time")
 		    .setDate(TagCreatedDate));
+
+	    doc.addField(Field.newBuilder()
+		    .setName(normalizedTag + "_time_epoch")
+		    .setNumber(TagCreationTimeInMills.doubleValue() / 1000));
 	}
 
     }

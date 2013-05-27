@@ -14,6 +14,7 @@ import com.agilecrm.search.ui.serialize.SearchRule.RuleType;
 import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.util.DateUtil;
 import com.google.appengine.api.search.Cursor;
+import com.google.appengine.api.search.Field;
 import com.google.appengine.api.search.Index;
 import com.google.appengine.api.search.Query;
 import com.google.appengine.api.search.QueryOptions;
@@ -143,7 +144,7 @@ public class QueryDocument implements QueryInterface
 	return newQuery;
     }
 
-    private static String createTimeQuery(String query, String lhs,
+    public static String createTimeQuery1(String query, String lhs,
 	    SearchRule.RuleCondition condition, String rhs, String rhs_new)
     {
 	// Formated to build query
@@ -219,6 +220,159 @@ public class QueryDocument implements QueryInterface
 
     }
 
+    private static String createTimeQuery(String query, String lhs,
+	    SearchRule.RuleCondition condition, String rhs, String rhs_new)
+    {
+
+	Date startDate = new DateUtil(new Date(Long.parseLong(rhs)))
+		.toMidnight().getTime();
+
+	String startDateEpoch = String.valueOf(startDate.getTime() / 1000);
+
+	Date endDate = new DateUtil(startDate).addDays(1).toMidnight()
+		.getTime();
+
+	String endDateEpoch = String.valueOf(endDate.getTime() / 1000);
+
+	// Formated to build query
+	String date = SearchUtil.getDateWithoutTimeComponent(Long
+		.parseLong(rhs));
+
+	// Created on date condition
+	if (condition.equals(SearchRule.RuleCondition.ON)
+		|| condition.equals(SearchRule.RuleCondition.EQUALS))
+	{
+	    /*
+	     * Date endDate = new Date(
+	     * com.google.appengine.api.search.DateUtil.getEpochPlusDays(days,
+	     * milliseconds)P 1, 0));
+	     */
+
+	    String epochQuery = "";
+
+	    // First create query based on epoch time, take it in to temp string
+	    // as it should be combined with a OR query on date fields to
+	    // support old data
+	    epochQuery = lhs + "_epoch" + ">=" + startDateEpoch;
+
+	    epochQuery = buildQuery("AND", epochQuery, lhs + "_epoch" + "<="
+		    + endDateEpoch);
+
+	    String dateQuery = lhs + ":" + date;
+
+	    String timeQuery = "((" + epochQuery + ") OR (" + dateQuery + "))";
+
+	    query = buildQuery("AND", query, timeQuery);
+
+	}
+
+	// Created after given date
+	else if (condition.equals(SearchRule.RuleCondition.AFTER))
+	{
+	    String epochQuery = lhs + "_epoch >= " + endDateEpoch;
+
+	    String dateQuery = lhs + " > " + date;
+
+	    String timeQuery = "((" + epochQuery + ") OR (" + dateQuery + "))";
+
+	    query = buildQuery("AND", query, timeQuery);
+	}
+
+	// Created before particular date
+	else if (condition.equals(SearchRule.RuleCondition.BEFORE))
+	{
+	    String epochQuery = lhs + "_epoch < " + endDateEpoch;
+
+	    String dateQuery = lhs + " < " + date;
+
+	    String timeQuery = "((" + epochQuery + ") OR (" + dateQuery + "))";
+
+	    query = buildQuery("AND", query, timeQuery);
+	}
+
+	// Created Between given dates
+	else if (condition.equals(SearchRule.RuleCondition.BETWEEN))
+	{
+	    if (rhs_new != null)
+	    {
+
+		Date toDate = new DateUtil(new Date(Long.parseLong(rhs_new)))
+			.addDays(1).toMidnight().getTime();
+
+
+		String toDateEpoch = String.valueOf(toDate.getTime() / 1000);
+
+		String epochQuery = lhs + "_epoch >= " + startDateEpoch;
+		
+		epochQuery = buildQuery("AND", epochQuery, lhs + "_epoch <= "
+			+ toDateEpoch);
+
+		String to_date = SearchUtil.getDateWithoutTimeComponent(Long
+			.parseLong(rhs_new));
+
+		String dateQuery = lhs + " >= " + date;
+			
+		dateQuery = buildQuery("AND", dateQuery, lhs + " <= " + to_date);
+
+		String timeQuery = "((" + epochQuery + ") OR (" + dateQuery
+			+ "))";
+
+		query = buildQuery("AND", query, timeQuery);
+	    }
+	}
+
+	// Created in last number of days
+	else if (condition.equals(SearchRule.RuleCondition.LAST))
+	{
+	    long fromDateInSecs = new DateUtil()
+		    .removeDays(Integer.parseInt(rhs)).toMidnight().getTime()
+		    .getTime() / 1000;
+
+	    long currentEpochTime = new DateUtil().getTime().getTime() / 1000;
+
+	    String epochQuery = lhs + "_epoch >= "
+		    + String.valueOf(fromDateInSecs);
+
+	    epochQuery = buildQuery("AND", epochQuery,
+		    lhs + "_epoch <= " + String.valueOf(currentEpochTime));
+	    
+	    String fromDate = SearchUtil
+		    .getDateWithoutTimeComponent(fromDateInSecs * 1000);
+
+	    String toDate = SearchUtil
+		    .getDateWithoutTimeComponent(currentEpochTime * 1000);
+
+	    String dateQuery = lhs + " >= " + fromDate;
+	    
+	    dateQuery = buildQuery("AND", dateQuery, lhs + " <= " + toDate);
+
+	    String timeQuery = "((" + epochQuery + ") OR (" + dateQuery + "))";
+
+	    query = buildQuery("AND", query, timeQuery);
+
+	}
+	else if (condition.equals(SearchRule.RuleCondition.NEXT))
+	{
+	    long limitTime = new DateUtil().addDays(Integer.parseInt(rhs) - 1)
+		    .getTime().getTime();
+
+	    String formatedLimitDate = SearchUtil
+		    .getDateWithoutTimeComponent(limitTime);
+
+	    long currentTime = new Date().getTime();
+
+	    String formatedCurrentDate = SearchUtil
+		    .getDateWithoutTimeComponent(currentTime);
+
+	    query = buildQuery("AND", query, lhs + " >=" + formatedCurrentDate);
+	    query = buildQuery("AND", query, lhs + " <= " + formatedLimitDate);
+
+	}
+
+	return query;
+
+    }
+
     /**
      * processes query and return collection of contacts
      * 
@@ -261,7 +415,6 @@ public class QueryDocument implements QueryInterface
 	Collection<ScoredDocument> contact_documents = index.search(
 		query_string).getResults();
 
-
 	List<Long> entity_ids = new ArrayList<Long>();
 
 	// Iterate through contact_documents and add document ids(contact ids)
@@ -288,15 +441,13 @@ public class QueryDocument implements QueryInterface
 	 */
 	if (cursor == null)
 
-	    options = QueryOptions.newBuilder().setFieldsToReturn("id")
-		    .setLimit(page)
+	    options = QueryOptions.newBuilder().setLimit(page)
 		    .setCursor(Cursor.newBuilder().setPerResult(true).build())
 		    .build();
 	else
 	{
 	    options = QueryOptions
 		    .newBuilder()
-		    .setFieldsToReturn("id")
 		    .setLimit(page)
 		    .setCursor(
 			    Cursor.newBuilder().setPerResult(true)
@@ -329,7 +480,6 @@ public class QueryDocument implements QueryInterface
 	Collection<ScoredDocument> contact_documents = index.search(
 		query_string).getResults();
 
-
 	List<Long> entity_ids = new ArrayList<Long>();
 
 	// Iterate through contact_documents and add document ids(contact ids)
@@ -337,6 +487,14 @@ public class QueryDocument implements QueryInterface
 	for (ScoredDocument doc : contact_documents)
 	{
 
+	    System.out.println(doc.getFieldNames());
+	    for (Field field : doc.getFields())
+	    {
+		System.out.println("field name : " + field.getName() + ", type"
+			+ field.getType());
+		if (field.getType() == Field.FieldType.DATE)
+		    System.out.println(field.getDate());
+	    }
 	    entity_ids.add(Long.parseLong(doc.getId()));
 	    cursor = doc.getCursor().toWebSafeString();
 	}
@@ -358,8 +516,21 @@ public class QueryDocument implements QueryInterface
 	    }
 	}
 
-	return contactResults;
+	System.out.println(query);
 
+	System.out.println(query_string);
+
+	System.out.println(com.google.appengine.api.search.DateUtil
+		.deserializeDate(String.valueOf(System.currentTimeMillis())));
+
+	/*
+	 * System.out.println("contact query : " + index.search(
+	 * "agilecrm_time: " + com.google.appengine.api.search.DateUtil //
+	 * .deserializeDate(date))
+	 */
+	// .getNumberFound());
+
+	return contactResults;
     }
 
     public static String constructQuery(List<SearchRule> rules)
@@ -432,8 +603,7 @@ public class QueryDocument implements QueryInterface
 	    if (lhs.contains("time") && lhs.contains("tags"))
 	    {
 		query = createTimeQuery(query, SearchUtil.normalizeString(rhs)
-			+ "_time", nestedCondition,
-			nestedLhs, nestedRhs);
+			+ "_time", nestedCondition, nestedLhs, nestedRhs);
 	    }
 	}
 	return query;
