@@ -56,7 +56,7 @@ var CalendarRouter = Backbone.Router.extend({
 		// Owners
 		fillSelect("owner-tasks", '/core/api/users', 'domainUser',function fillOwner() 
 		{
-			$('#content').find("#owner-tasks").prepend("<li><a href=''>All</a></li>");
+			$('#content').find("#owner-tasks").prepend("<li><a href=''>All Tasks</a></li>");
 		}, "<li><a href='{{id}}'>{{name}}</a></li>");
 		
 		// To Updated task list based on user selection of type and owner 

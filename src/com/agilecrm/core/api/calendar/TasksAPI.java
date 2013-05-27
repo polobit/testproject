@@ -216,6 +216,21 @@ public class TasksAPI
     }
 
     /**
+     * Completes tasks bulk
+     * 
+     * @param model_ids
+     *            task ids, read as form parameter from request url
+     * @throws JSONException
+     */
+    @Path("bulk/complete")
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public void completeBulkTask(List<Task> tasks) throws JSONException
+    {
+	TaskUtil.completeBulkTasks(tasks);
+    }
+
+    /**
      * Gets all task based on owner and type
      * 
      * @param type

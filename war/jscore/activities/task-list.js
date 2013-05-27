@@ -3,9 +3,7 @@ function initOwnerslist() {
 
 	// Click events to agents dropdown and department
 	$("ul#owner-tasks li a, ul#type-tasks li a").die()
-			.live(
-					"click",
-					function(e) {
+			.live("click", function(e) {
 						e.preventDefault();
 
 						// Show selected name
@@ -51,7 +49,7 @@ function updateData(params) {
 	// Fetches data from server
 	allTasksListView.collection.fetch();
 
-	// Renders data to chat transcript page.
+	// Renders data to tasks list page.
 	$('#task-list-based-condition').html(allTasksListView.render().el);
 
 }
@@ -78,7 +76,7 @@ function getParams() {
 }
 
 /**
- * Deletes the selected row related entities from the database based on the url 
+ * Completes the selected row related entities from the database based on the url 
  * attribute of the table and fades out the rows from the table
  * 
  * @module Bulk operation for completed task
@@ -94,7 +92,6 @@ $(function(){
     */	
 	$('#bulk-complete').live('click', function(event){
 		event.preventDefault();
-		var id_array = [];
 		var index_array = [];
 		var data_array = [];
 		var checked = false;
@@ -108,18 +105,13 @@ $(function(){
 				// Disables mouseenter once checked for delete(To avoid popover in deals when model is checked)
 				$(element).closest('tr').on("mouseenter", false);
 				index_array.push(index);
-				id_array.push($(element).closest('tr').data().get('id'));
 				data_array.push($(element).closest('tr').data().toJSON());
 				checked = true;
 			}
 		});
 		if(checked){
-			
-			// Customize the bulk complete task operations
-			if(!customize_bulk_complete(id_array, data_array))
-				return;
-			
-			bulk_complete_operation($(table).attr('url'), id_array, index_array, table, true, data_array);
+			$(this).after('<img class="bulk-complete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
+			bulk_complete_operation('/core/api/tasks/bulk/complete', index_array, table, data_array);
 		}	
 		else
             $('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">×</a>You have not selected any records to complete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
@@ -127,4 +119,45 @@ $(function(){
 	});
 	
 });
+
+/**
+ * Bulk operations - delete function
+ * Deletes the entities by sending their ids as form data of ajax POST request 
+ * and then fades out the rows from the table
+ * @method bulk_delete_operation
+ * @param {Steing} url to which the request has to be sent
+ * @param {Array} id_array holds array of ids of the entities to be deleted
+ * @param {Array} index_array holds array of row indexes to be faded out
+ * @param {Object} table content as html object
+ * @param {Array} data_array holds array of entities 
+ */
+function bulk_complete_operation(url, index_array, table, data_array){
+	
+	var tasks = [];
+	$.each(data_array, function(index, task){
+		var contacts = task.contacts;
+		task.contacts = [];
+		$.each(contacts, function(i, contact){
+			task.contacts.push(contact.id);
+			tasks.push(task);
+		});
+		task.is_complete = true;
+		task.owner_id = task.taskOwner.id;
+	});
+	$.ajax({
+		url: url,
+		type: 'POST',
+		data: JSON.stringify(tasks),
+		contentType : 'application/json',
+		success: function() {
+			$(".bulk-complete-loading").remove();
+			
+			var tbody = $(table).find('tbody');
+			
+			// To remove table rows on delete 
+			for(var i = 0; i < index_array.length; i++) 
+				$(tbody).find('tr:eq(' + index_array[i] + ')').find("div:lt(3)").css("text-decoration","line-through");
+		}
+	});
+}
 		

@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.DateUtil;
@@ -232,9 +233,9 @@ public class TaskUtil
 		.ofy()
 		.query(Task.class)
 		.filter("owner",
-			new Key<AgileUser>(AgileUser.class, AgileUser
-				.getCurrentAgileUser().id))
-		.order("-created_time").limit(10).list();
+			new Key<DomainUser>(DomainUser.class, SessionManager
+				.get().getDomainId())).order("-created_time")
+		.limit(10).list();
     }
 
     /**
@@ -247,7 +248,6 @@ public class TaskUtil
     {
 	try
 	{
-
 	    Query<Task> query = dao.ofy().query(Task.class);
 	    if (StringUtils.isNotBlank(type))
 		query = query.filter("type", type);
@@ -264,5 +264,22 @@ public class TaskUtil
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+
+    /**
+     * Completes tasks by Ids
+     * 
+     * @param ids
+     */
+    public static void completeBulkTasks(List<Task> tasks)
+    {
+	// Add keys
+	for (Task task : tasks)
+	{
+	    task.is_complete = true;
+	}
+
+	// Updates all
+	Task.dao.putAll(tasks);
     }
 }
