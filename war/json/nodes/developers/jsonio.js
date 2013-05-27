@@ -2,8 +2,8 @@
     "name": "JSON IO",
     "thumbnail": "json/nodes/images/common/jsonio.png",
     "icon": "json/nodes/icons/common/jsonio.png",
-    "info": "Integrate your workflow with your web infrastructure using JSON.",
-    "help": "AgileCRM can query your URL to retrieve or update information.",
+    "info": "Integrate your workflow with your web infrastructure using JSON. Push or retrieve data to/from your other applications.",
+    "help": "Integrate your workflow with your web infrastructure using JSON. Push or retrieve data to/from your other applications.",
     "author": "Manohar",
     "company": "Invox",
     "language": "en",
@@ -65,7 +65,7 @@
 					 ]
 		},
         {
-            "label": "AgileCRM can query given URL by posting desired parameters. The returned JSON values can be used in rest of the workflow. Eg: $retVal1",
+            "label": "Integrate your workflow with your web infrastructure using JSON IO. You can retrive or post information with a JSON Http call to a given URL and defined URL parameters. <br/><br/>The returned JSON value is stored in variables ($retVal1 etc) and this can be used in the rest of the workflow.",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 

@@ -6,9 +6,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.util.DBUtil;
-import com.agilecrm.util.Util;
 import com.agilecrm.util.email.MustacheUtil;
 import com.campaignio.cron.util.CronUtil;
+import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 
 /**
@@ -105,8 +105,9 @@ public class TaskletAdapter implements Tasklet
 	    String custom2, String custom3) throws Exception
     {
 	// Add Log
-	log(campaignJSON, subscriberJSON, nodeJSON,
-		"Sleeping till " + Util.getCalendarString(timeout));
+	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
+		DBUtil.getId(subscriberJSON), "Sleeping till " + timeout,
+		LogType.EMAIL_SLEEP.toString());
 
 	// Enqueue Task
 	CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON,

@@ -54,10 +54,6 @@ public class AB extends TaskletAdapter
 	    Random random = new Random(Calendar.getInstance().getTimeInMillis());
 	    double r = random.nextDouble();
 
-	    // Creates log for A/B node
-	    log(campaignJSON, subscriberJSON, nodeJSON, "A/B frequency is "
-		    + frequency);
-
 	    // Go with A or B
 	    if (r < Double.parseDouble(frequency))
 	    {

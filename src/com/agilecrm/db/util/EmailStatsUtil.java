@@ -28,11 +28,11 @@ public class EmailStatsUtil
 	if (StringUtils.isEmpty(domain))
 	    return null;
 
-	String uniqueClicks = "(SELECT campaign_name,log_type,COUNT(DISTINCT subscriber_id) AS count  FROM campaign_logs WHERE log_type IN ('Send E-mail', 'Email Clicked', 'Email Opened') AND "
+	String uniqueClicks = "(SELECT campaign_name,log_type,COUNT(DISTINCT subscriber_id) AS count  FROM campaign_logs WHERE log_type IN ('EMAIL_SENT', 'EMAIL_CLICKED', 'EMAIL_OPENED') AND "
 		+ SQLUtil.appendDomainToQuery(domain)
 		+ " GROUP BY log_type,campaign_name)";
 
-	String totalClicks = "(SELECT campaign_name,log_type,COUNT(subscriber_id) AS total  FROM campaign_logs WHERE log_type IN ('Email Clicked') AND "
+	String totalClicks = "(SELECT campaign_name,log_type,COUNT(subscriber_id) AS total  FROM campaign_logs WHERE log_type IN ('EMAIL_CLICKED') AND "
 		+ SQLUtil.appendDomainToQuery(domain)
 		+ " GROUP BY log_type,campaign_name)";
 
@@ -87,19 +87,15 @@ public class EmailStatsUtil
 		+ SQLUtil.appendDomainToQuery(domain)
 		+ " AND campaign_id="
 		+ SQLUtil.encodeSQLColumnValue(campaignId)
-		+ " AND log_type IN ('Send E-mail', 'Email Clicked', 'Email Opened') AND DATE("
+		+ " AND log_type IN ('EMAIL_SENT', 'EMAIL_CLICKED', 'EMAIL_OPENED') AND DATE("
 		+ addConvertTZ(timeZoneOffset) + ") BETWEEN " + "DATE("
 		+ SQLUtil.encodeSQLColumnValue(startDate) + ") AND DATE("
 		+ SQLUtil.encodeSQLColumnValue(endDate)
 		+ ") GROUP BY subscriber_id,log_type) subQuery";
 
-	String uniqueClicks = "(SELECT DATE_FORMAT(CONVERT_TZ(minTime,'+00:00',"
-		+ SQLUtil.encodeSQLColumnValue(timeZoneOffset)
-		+ ")"
-		+ ","
+	String uniqueClicks = "(SELECT DATE_FORMAT(minTime,"
 		+ getDateFormatBasedOnType(type)
-		+ ")  AS logDate, log_type, COUNT(*) AS count FROM "
-		+ subQuery
+		+ ")  AS logDate, log_type, COUNT(*) AS count FROM " + subQuery
 		+ " GROUP BY log_type, logDate)";
 
 	String totalClicks = "(SELECT DATE_FORMAT("
@@ -109,7 +105,7 @@ public class EmailStatsUtil
 		+ ")  AS logDate,log_type, COUNT(*) AS total  FROM campaign_logs WHERE domain="
 		+ SQLUtil.encodeSQLColumnValue(domain) + " AND campaign_id="
 		+ SQLUtil.encodeSQLColumnValue(campaignId)
-		+ "  AND log_type IN ('Email Clicked') AND DATE("
+		+ "  AND log_type IN ('EMAIL_CLICKED') AND DATE("
 		+ addConvertTZ(timeZoneOffset) + ") BETWEEN DATE("
 		+ SQLUtil.encodeSQLColumnValue(startDate) + ")  AND DATE("
 		+ SQLUtil.encodeSQLColumnValue(endDate)

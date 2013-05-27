@@ -2,8 +2,8 @@
     "name": "Wait",
     "thumbnail": "json/nodes/images/common/wait.png",
     "icon": "json/nodes/icons/common/wait.png",
-    "info": "Wait for a specified duration. Useful for responders and periodic emails.",
-    "help": "Wait for a specified duration. Useful for responders and periodic emails.",
+    "info": "Wait for a specified duration before next action. Useful for responders and periodic emails.",
+    "help": "Wait for a specified duration before next action. Useful for responders and periodic emails.",
     "author": "John",
     "company": "mantra",
     "language": "en",
@@ -33,7 +33,7 @@
 			"fieldType": "select",
 			"type": "select" 
          },{
-            "label": "Wait for a specified duration in your campaign workflow.",
+            "label": "Wait for a specified duration before proceeding to the next step.<br/>For example, send email-1, wait for 2 days and then send email-2.",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 

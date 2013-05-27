@@ -72,7 +72,7 @@ public class SQLUtil
     public static JSONArray getLogs(String campaignId, String subscriberId,
 	    String domain, String limit)
     {
-	String logs = "SELECT *, UNIX_TIMESTAMP(log_time) AS time FROM campaign_logs WHERE"
+	String logs = "SELECT *, UNIX_TIMESTAMP(log_time) AS time FROM campaign_logs WHERE log_type <> 'EMAIL_SLEEP' AND "
 		+ getWhereConditionOfLogs(campaignId, subscriberId, domain)
 		+ " ORDER BY log_time DESC" + appendLimitToQuery(limit);
 	try

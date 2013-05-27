@@ -2,8 +2,8 @@
     "name": "Tweet",
     "thumbnail": "json/nodes/images/social/twitter.png",
     "icon": "json/nodes/icons/social/twitter.png",
-    "info": "Tweet or mention automatically",
-    "help": "Tweet or mention automatically",
+    "info": "Tweet or mention automatically.",
+    "help": "Tweet or mention automatically.",
     "author": "John",
     "company": "mantra",
     "language": "en",
@@ -79,7 +79,7 @@
          }
 		,
 		 {
-            "label": "Tweet or send mentions automatically to your prospect. Please note that AgileCRM will not tweet more than 500 tweets a day.<br>",
+            "label": "Automatically send tweets (@mention) to contacts using your/company twitter account.<br/><br/>You need to give access to Agile CRM to your account and provide a message to be posted. The message you provide will be preceded with a @contactTwitterId and posted as status message in your/company Twitter.",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 

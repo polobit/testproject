@@ -2,8 +2,8 @@
     "name": "Score",
     "thumbnail": "json/nodes/images/email/score.png",
     "icon": "json/nodes/icons/email/score.png",
-    "info": "Add or subtract a score for your customer. You can sort your subscribers based on score or generate reports accordingly.",
-    "help": "Add or subtract a score for your customer. You can sort your subscribers based on score or generate reports accordingly. ",
+    "info": "Add or subtract score to your contact to identify hot leads based on total score.",
+    "help": "Add or subtract score to your contact to identify hot leads based on total score.",
     "author": "John",
     "company": "mantra",
     "language": "en",
@@ -33,7 +33,7 @@
 			"fieldType": "input",
             "type": "number"
             },{
-            "label": "Add or subtract a score for your subscriber. You can sort your customers based on score or generate reports accordingly.",
+            "label": "You can increase or decrease the Lead Score using this option.<br/><br/>For example, if the user opened your email, add a score of 5 and on clicking a link add 10.",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 

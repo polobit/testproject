@@ -76,6 +76,15 @@ public class Log
     public String level;
 
     /**
+     * Log Types
+     * 
+     */
+    public enum LogType
+    {
+	EMAIL_SENT, EMAIL_OPENED, EMAIL_CLICKED, WAIT, CLICKED, AB, URL_VISITED, TWEET, ADD_NOTE, TAGS, CHECK_TAGS, CONDITION, JSONIO, SCORE, ADD_TASK, GENDER, EMAIL_SLEEP
+    };
+
+    /**
      * Default Log.
      */
     public Log()

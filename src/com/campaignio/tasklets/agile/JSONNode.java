@@ -6,7 +6,10 @@ import java.util.Iterator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.agilecrm.util.DBUtil;
 import com.agilecrm.util.HTTPUtil;
+import com.campaignio.logger.Log.LogType;
+import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 
@@ -111,23 +114,25 @@ public class JSONNode extends TaskletAdapter
 		else
 		    url = url + "?" + httpParams;
 
-		// Creates log for JSONNode for method Get type
-		log(campaignJSON, subscriberJSON, nodeJSON,
-			"Accessed GET URL: " + url);
-
 		output = HTTPUtil.accessURL(url);
+
+		// Creates log for JSONNode for method Get type
+		LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
+			DBUtil.getId(subscriberJSON), "GET: " + url
+				+ "<br>Status: SUCCESS",
+			LogType.JSONIO.toString());
 
 	    }
 	    else
 	    {
-		// Creates log for JSONNode for method Post type
-		log(campaignJSON, subscriberJSON, nodeJSON,
-			"Accessed Post URL: " + url + " " + httpParams);
 		output = HTTPUtil.accessURLUsingPost(url, httpParams);
-	    }
 
-	    // Creates log for JSONNode for output
-	    log(campaignJSON, subscriberJSON, nodeJSON, "Output: " + output);
+		// Creates log for JSONNode for method Post type
+		LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
+			DBUtil.getId(subscriberJSON), "POST: " + url + " "
+				+ httpParams + "<br>Status: SUCCESS",
+			LogType.JSONIO.toString());
+	    }
 
 	    JSONObject returnJSON = new JSONObject(output);
 
@@ -152,8 +157,10 @@ public class JSONNode extends TaskletAdapter
 	    data.put("error", e.getMessage());
 
 	    // Creates log for JSONNode for error
-	    log(campaignJSON, subscriberJSON, nodeJSON,
-		    "Error Occurred " + e.getMessage());
+	    LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
+		    DBUtil.getId(subscriberJSON),
+		    "Error Occurred " + e.getMessage(),
+		    LogType.JSONIO.toString());
 
 	    // Execute Next One in Loop
 	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,

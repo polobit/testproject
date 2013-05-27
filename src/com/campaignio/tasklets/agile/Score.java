@@ -5,6 +5,8 @@ import org.json.JSONObject;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.util.DBUtil;
+import com.campaignio.logger.Log.LogType;
+import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 
@@ -65,16 +67,19 @@ public class Score extends TaskletAdapter
 		contact.addScore(Integer.parseInt(value));
 
 		// Creates log when score is added
-		log(campaignJSON, subscriberJSON, nodeJSON, "Score added by "
-			+ value);
+		LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
+			DBUtil.getId(subscriberJSON), "Score increased by "
+				+ value, LogType.SCORE.toString());
 	    }
 	    else
 	    {
 		contact.subtractScore(Integer.parseInt(value));
 
 		// Creates log when score is subtracted
-		log(campaignJSON, subscriberJSON, nodeJSON,
-			"Score subtracted by " + value);
+		LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
+			DBUtil.getId(subscriberJSON), "Score decreased by "
+				+ value, LogType.SCORE.toString());
+
 	    }
 	}
 

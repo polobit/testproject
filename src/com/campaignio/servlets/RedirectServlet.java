@@ -19,6 +19,7 @@ import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.URLShortener;
+import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.servlets.deferred.EmailClickDeferredTask;
 import com.campaignio.util.URLShortenerUtil;
@@ -96,7 +97,7 @@ public class RedirectServlet extends HttpServlet
 		LogUtil.addLogToSQL(urlShortener.campaign_id, subscriberId,
 			"Email link clicked " + urlShortener.long_url
 				+ " of campaign " + workflow.name,
-			"Email Clicked");
+			LogType.EMAIL_CLICKED.toString());
 	    }
 
 	    // System.out.println(urlShortener);

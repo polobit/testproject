@@ -73,6 +73,12 @@ function load_timeline_details(el, contactId, callback1)
 				// If timeline is not defined yet, calls setup_timeline for the first time
 				if(timelineView.collection.length == 0){
 					$.each(logsCollection.toJSON(), function(index, model){
+						
+						if(model.log_type == 'WAIT' || model.log_type == 'ADD_NOTE' 
+							|| model.log_type == 'TAGS' || model.log_type == 'ADD_TASK' 
+								|| model.log_type == 'JSONIO')
+							return true;
+						
 							timelineView.collection.add(model);							
 					});
 								
@@ -97,7 +103,12 @@ function load_timeline_details(el, contactId, callback1)
 					 * by validating the status of isotope initialization.
 					 */   
 					$.each(logsCollection.toJSON(), function(index, model) {						
-							
+						
+						if(model.log_type == 'WAIT' || model.log_type == 'ADD_NOTE' 
+							|| model.log_type == 'TAGS' || model.log_type == 'ADD_TASK' 
+								|| model.log_type == 'JSONIO')
+							return true;
+						
 						logs_array.push(model);																			
 						//validate_insertion(JSON.parse(model.logs), timelineViewMore);
 					});

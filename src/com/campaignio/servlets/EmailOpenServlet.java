@@ -14,6 +14,7 @@ import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.google.appengine.api.NamespaceManager;
 
@@ -59,8 +60,8 @@ public class EmailOpenServlet extends HttpServlet
 	    if (workflow != null)
 	    {
 		LogUtil.addLogToSQL(campaignId, subscriberId,
-			"Email Opened of campaign - " + workflow.name,
-			"Email Opened");
+			"Email Opened of campaign " + workflow.name,
+			LogType.EMAIL_OPENED.toString());
 	    }
 
 	    Contact contact = ContactUtil.getContact(Long

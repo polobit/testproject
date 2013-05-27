@@ -219,7 +219,7 @@
 	                "type": "select" 
 	            },
 	            {
-		            "label": "Send email in text or HTML format. You can choose your delivery day and time.<br/><br/>Links can be automatically tracked for clicks. Optional Personalized links can be created while shortening the links.",
+		            "label": "Send email in TEXT or HTML format. You can choose from email-id and name, and optionally specify a different email-id the replies should go to.<br/><br/>You can track if the links in your email are clicked by the recepient. You can set a time when the email should be delivered to the recepient.",
 		            "category": "Help",
 		            "fieldType": "label",
 		            "type": "label" 

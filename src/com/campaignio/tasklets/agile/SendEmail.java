@@ -9,6 +9,8 @@ import org.json.JSONObject;
 
 import com.agilecrm.util.DBUtil;
 import com.agilecrm.util.Util;
+import com.campaignio.logger.Log.LogType;
+import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.campaignio.util.URLShortenerUtil;
@@ -456,9 +458,9 @@ public class SendEmail extends TaskletAdapter
 	}
 
 	// Creates log for sending email
-	log(campaignJSON, subscriberJSON, nodeJSON, "From: " + fromEmail
-		+ "<br>" + "To: " + to + "<br>" + "Subject: " + subject
-		+ "<br>" + "Text: " + text);
+	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
+		DBUtil.getId(subscriberJSON), "Subject: " + subject,
+		LogType.EMAIL_SENT.toString());
 
 	// Send Message
 	if (html != null && html.length() > 10)
@@ -511,16 +513,25 @@ public class SendEmail extends TaskletAdapter
 	{
 
 	    // Avoid image urls
-	    if (tokens[i].startsWith("http")
-		    && !tokens[i].startsWith("http://goo.gl")
-		    && !tokens[i].startsWith("http://usertracker")
-		    && !tokens[i].startsWith("http://unscr.be")
-		    && !tokens[i].endsWith(".png")
-		    && !tokens[i].endsWith(".jpg")
-		    && !tokens[i].endsWith(".jpeg")
-		    && !tokens[i].endsWith(".gif")
-		    && !tokens[i].endsWith(".bmp")
-		    && !tokens[i].endsWith(".dtd"))
+	    if (tokens[i].toLowerCase().startsWith("http")
+		    && !tokens[i].toLowerCase().startsWith("http://goo.gl")
+		    && !tokens[i].toLowerCase()
+			    .startsWith("http://usertracker")
+		    && !tokens[i].toLowerCase().startsWith("http://unscr.be")
+		    && !tokens[i].toLowerCase().endsWith(".png")
+		    && !tokens[i].toLowerCase().endsWith(".jpg")
+		    && !tokens[i].toLowerCase().endsWith(".jpeg")
+		    && !tokens[i].toLowerCase().endsWith(".jp2")// jpg 2000
+		    && !tokens[i].toLowerCase().endsWith(".jpx")// jpg 2000
+		    && !tokens[i].toLowerCase().endsWith(".gif")
+		    && !tokens[i].toLowerCase().endsWith(".bmp")
+		    && !tokens[i].toLowerCase().endsWith(".tiff")
+		    && !tokens[i].toLowerCase().endsWith(".tif")
+		    && !tokens[i].toLowerCase().endsWith(".ppm")
+		    && !tokens[i].toLowerCase().endsWith(".pgm")
+		    && !tokens[i].toLowerCase().endsWith(".pbm")
+		    && !tokens[i].toLowerCase().endsWith(".pnm")
+		    && !tokens[i].toLowerCase().endsWith(".dtd"))
 	    {
 		// Shorten URL
 		String url = URLShortenerUtil.getShortURL(tokens[i], keyword,

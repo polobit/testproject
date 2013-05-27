@@ -9,10 +9,6 @@
     "language": "en",
     "branches": "yes",
     "type":"voice",
-    "phonesystem": {
-        "type": "static-vxml-form-url",
-        "url": "/vxml/wait.jsp" 
-    },
     "workflow_tasklet_class_name":"com.campaignio.tasklets.agile.Tags",
     "category": "Utilities",
     "ui": [{
@@ -39,7 +35,7 @@
             "type": "text" 
 			
 		},{
-            "label": "Add or delete tag for your customer. You can sort your customers based on tags or generate reports accordingly.",
+            "label": "Add/remove tags to a contact.<br/><br/>For example, if a customer visits a particular product page on your website, you may add a tag with the product name to the contact.",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 

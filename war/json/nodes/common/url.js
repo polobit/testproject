@@ -1,9 +1,9 @@
 {
-    "name": "URL Visited",
+    "name": "URL Visited?",
     "thumbnail": "json/nodes/images/common/url.png",
     "icon": "json/nodes/icons/common/url.png",
-    "info": "Check if the URL has been visited by the customer",
-    "help": "AgileCRM can check if the subscriber (Email address) has visited a web page (URL).",
+    "info": "Check if a URL has been visited by the contact earlier.",
+    "help": "Check if a URL has been visited by the contact earlier.",
     "author": "John",
     "company": "Invox",
     "language": "en",
@@ -34,7 +34,7 @@
 			  "type": "type"
 		},
         {
-            "label": "Specify your visited url.",
+            "label": "Check if a URL (on your website) has been visited by the contact. This works when you have the tracking code setup on your web page.<br/><br/>The 'Type' option allows you to specify a partial match of url. For example, if you just mention 'product' in the URL field and select Type as 'Contains', then the condition will be evaluated to True if the user visited any page containing 'product' in the URL",
             "category": "Help",
             "componet": "label",
             "type": "label" 

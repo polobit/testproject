@@ -13,6 +13,8 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.util.DBUtil;
+import com.campaignio.logger.Log.LogType;
+import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 
@@ -176,9 +178,12 @@ public class AddTask extends TaskletAdapter
 	}
 
 	// Creates log for AddTask
-	log(campaignJSON, subscriberJSON, nodeJSON, "Added task "
-		+ task.subject + " having type " + task.entity_type
-		+ " and due date " + new Date(dueDateInEpoch * 1000));
+	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
+		DBUtil.getId(subscriberJSON), "Task: " + task.subject
+			+ "<br/> Category: " + task.type + "<br/> Type: "
+			+ task.priority_type + " <br/> Date: "
+			+ new Date(dueDateInEpoch * 1000),
+		LogType.ADD_TASK.toString());
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,

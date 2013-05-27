@@ -7,6 +7,8 @@ import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.util.DBUtil;
+import com.campaignio.logger.Log.LogType;
+import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.googlecode.objectify.Key;
@@ -81,8 +83,10 @@ public class AddNote extends TaskletAdapter
 	}
 
 	// Creates log for note
-	log(campaignJSON, subscriberJSON, nodeJSON, "Subject - " + subject
-		+ "<br>Description - " + description);
+	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
+		DBUtil.getId(subscriberJSON), "Subject: " + subject
+			+ "<br>Description: " + description,
+		LogType.ADD_NOTE.toString());
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,

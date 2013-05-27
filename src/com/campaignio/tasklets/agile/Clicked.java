@@ -2,8 +2,11 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
+import com.agilecrm.util.DBUtil;
 import com.campaignio.cron.Cron;
 import com.campaignio.cron.util.CronUtil;
+import com.campaignio.logger.Log.LogType;
+import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 
@@ -94,8 +97,10 @@ public class Clicked extends TaskletAdapter
 	    throws Exception
     {
 	// Creates log for clicked node when interrupted
-	log(campaignJSON, subscriberJSON, nodeJSON, "Link clicked - "
-		+ customData.getString("long_url"));
+	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
+		DBUtil.getId(subscriberJSON),
+		"Link clicked - " + customData.getString("long_url"),
+		LogType.CLICKED.toString());
 
 	// Execute Next One in Loop (Yes)
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
@@ -136,7 +141,9 @@ public class Clicked extends TaskletAdapter
 	 */
 
 	// Creates log for clicked when there are no clicks
-	log(campaignJSON, subscriberJSON, nodeJSON, "No Clicks");
+	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
+		DBUtil.getId(subscriberJSON), "No Clicks",
+		LogType.CLICKED.toString());
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,

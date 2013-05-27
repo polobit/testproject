@@ -2,6 +2,9 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
+import com.agilecrm.util.DBUtil;
+import com.campaignio.logger.Log.LogType;
+import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.thirdparty.Rapleaf;
@@ -58,13 +61,16 @@ public class Gender extends TaskletAdapter
 	    JSONObject rapleafJSON = Rapleaf.getRapportiveValue(email);
 	    if (rapleafJSON != null)
 	    {
-		log(campaignJSON, subscriberJSON, nodeJSON, "Rapleaf "
-			+ rapleafJSON);
 		data.put(Rapleaf.RAPLEAF, rapleafJSON);
+		LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
+			DBUtil.getId(subscriberJSON), "Rapleaf " + rapleafJSON,
+			LogType.GENDER.toString());
 	    }
 	    else
-		log(campaignJSON, subscriberJSON, nodeJSON,
-			"Could not retrieve data from Rapleaf");
+		LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
+			DBUtil.getId(subscriberJSON),
+			"Could not retrieve data from Rapleaf",
+			LogType.GENDER.toString());
 	}
 
 	String branch = BRANCH_UNKNOWN;

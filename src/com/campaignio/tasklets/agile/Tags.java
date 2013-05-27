@@ -5,6 +5,8 @@ import org.json.JSONObject;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.util.DBUtil;
+import com.campaignio.logger.Log.LogType;
+import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 
@@ -77,16 +79,19 @@ public class Tags extends TaskletAdapter
 	    if (type.equals(ADD))
 	    {
 		contact.addTags(tagsArray);
-		log(campaignJSON, subscriberJSON, nodeJSON, "Tags added - "
-			+ tagNames);
+		LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
+			DBUtil.getId(subscriberJSON), "Tags added - "
+				+ tagNames, LogType.TAGS.toString());
+
 	    }
 
 	    // Delete Tags based on contact
 	    else
 	    {
 		contact.removeTags(tagsArray);
-		log(campaignJSON, subscriberJSON, nodeJSON, "Tags deleted - "
-			+ tagNames);
+		LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
+			DBUtil.getId(subscriberJSON), "Tags deleted - "
+				+ tagNames, LogType.TAGS.toString());
 	    }
 	}
 

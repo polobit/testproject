@@ -2,8 +2,11 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
+import com.agilecrm.util.DBUtil;
 import com.campaignio.cron.Cron;
 import com.campaignio.cron.util.CronUtil;
+import com.campaignio.logger.Log.LogType;
+import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 
@@ -44,8 +47,10 @@ public class Wait extends TaskletAdapter
 
 	System.out.println("Waiting for " + duration + " " + durationType);
 
-	log(campaignJSON, subscriberJSON, nodeJSON, "Waiting for - " + duration
-		+ " " + durationType);
+	// Creates log for sending email
+	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
+		DBUtil.getId(subscriberJSON), "Wait duration - " + duration
+			+ " " + durationType, LogType.WAIT.toString());
 
 	// Add ourselves to Cron Queue
 	long timeout = CronUtil.getTimer(duration, durationType);
@@ -65,8 +70,6 @@ public class Wait extends TaskletAdapter
 	    throws Exception
     {
 	System.out.println("Wake up from wait. Executing next one.");
-
-	log(campaignJSON, subscriberJSON, nodeJSON, "Wait Duration Completed.");
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,

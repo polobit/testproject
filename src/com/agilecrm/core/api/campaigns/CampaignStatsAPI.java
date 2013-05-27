@@ -45,7 +45,7 @@ public class CampaignStatsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public String getCampaignStatsForGraph() throws Exception
     {
-	String type[] = { "Send E-mail", "Email Opened", "Email Clicked",
+	String type[] = { "EMAIL_SENT", "EMAIL_OPENED", "EMAIL_CLICKED",
 		"total" };
 
 	LinkedHashMap<String, Integer> emailStats = CampaignStatsReportsUtil
@@ -98,9 +98,9 @@ public class CampaignStatsAPI
 	}
 
 	String campaignStatsString = JSONSerializer.toJSON(campaignStats)
-		.toString().replace("Send E-mail", "Email Sent")
-		.replace("Email Opened", "Email Opened")
-		.replace("Email Clicked", "Unique Clicks")
+		.toString().replace("EMAIL_SENT", "Email Sent")
+		.replace("EMAIL_OPENED", "Email Opened")
+		.replace("EMAIL_CLICKED", "Unique Clicks")
 		.replace("total", "Total Clicks");
 
 	return campaignStatsString;
@@ -172,8 +172,8 @@ public class CampaignStatsAPI
 
 	    System.out.println("Email logs: " + emailLogs);
 
-	    String[] emailType = { "Send E-mail", "Email Opened",
-		    "Email Clicked", "total" };
+	    String[] emailType = { "EMAIL_SENT", "EMAIL_OPENED",
+		    "EMAIL_CLICKED", "total" };
 
 	    // Populate graph's x-axis with given date-range.
 	    LinkedHashMap<String, LinkedHashMap> dateHashtable = EmailReportsUtil
@@ -221,9 +221,9 @@ public class CampaignStatsAPI
 	    }
 
 	    reportsString = JSONSerializer.toJSON(dateHashtable).toString()
-		    .replace("Send E-mail", "Email Sent")
-		    .replace("Email Opened", "Email Opened")
-		    .replace("Email Clicked", "Unique Clicks")
+		    .replace("EMAIL_SENT", "Email Sent")
+		    .replace("EMAIL_OPENED", "Email Opened")
+		    .replace("EMAIL_CLICKED", "Unique Clicks")
 		    .replace("total", "Total Clicks");
 
 	    System.out.println("Sorted reports: " + reportsString);
