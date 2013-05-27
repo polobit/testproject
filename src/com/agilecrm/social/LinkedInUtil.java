@@ -166,11 +166,15 @@ public class LinkedInUtil
 	    if (person.getDistance() != null && person.getDistance() == 1)
 		result.is_connected = true;
 
+	    System.out.println("in linkeidn");
+
 	    // Changes http to https to avoid client side warnings by browser,
 	    // Changes certificate from m3 to m3-s to fix ssl broken image link
 	    if (result.picture != null)
-		result.picture = result.picture.replace("http:", "https:")
-			.replace("m3", "m3-s");
+		result.picture = result.picture.replaceAll("http:", "https:")
+			.replaceAll("m3", "m3-s");
+	    
+	    System.out.println(result.picture);
 
 	    // Sets number of connects if provided
 	    result.num_connections = (person.getNumConnections() != null) ? person

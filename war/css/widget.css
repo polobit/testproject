@@ -184,11 +184,12 @@
 	-moz-box-sizing: border-box;
 	-o-box-sizing: border-box;
 	box-sizing: border-box;
-	border-bottom:1px solid #d6d6d6;
 	border-top:1px solid #d6d6d6;
+	background: rgba(240, 240, 240, .2);
 	padding:10px;
 	float:left;
 	width:100%;
+	margin-top:-1px;
 }
 
 .img-rounded {
