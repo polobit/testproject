@@ -890,4 +890,16 @@ $(function() {
 		if(operator == "/")
 			return operand1 / operand2;
 	});
+	
+	Handlebars.registerHelper('check_length', function(content, length, options) {
+		console.log('in');
+		console.log(content);
+		console.log(content.length);
+		console.log(length);
+		if(parseInt(content.length) > parseInt(length))
+			return options.fn(this);
+		
+		return options.inverse(this);
+	});
+	
 });
