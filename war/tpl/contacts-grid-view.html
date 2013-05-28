@@ -44,29 +44,20 @@
 				Contacts <small> {{count}}</small>
 			</h1>
 
+
 			<div class="btn-group pull-left" id="bulk-actions"
-				style="position: relative; display: none; top: -29px; margin-left: -20px;">
-				<div class="btn-group offset3">
-  						<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"> Bulk Actions
-    							<span class="caret"></span>
- 	 					</a>
-  						    </button>
-                    <ul class="dropdown-menu" id="view-actions">
-                        <li>
-                            <a href="#" id="bulk-owner">Change owner</a>
-                        </li>
-                        <li>
-                            <a href="#" id="bulk-campaigns">Add to campaign</a>	
-                        </li>
-                        <li class="hide">
-                            <a href="#" id="bulk-email">Send email</a>
-                        </li>
-                        <li>
-                            <a href="#" id="bulk-tags">Add tags</a>
-                        </li>
-                    </ul>
-					</div>
-				</div>
+				style="display: none; top: -29px;margin-left:27%;">
+					<div class="btn">Bulk Actions</div>
+					<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu" id="view-actions">
+						<li><a href="#" id="bulk-owner">Change owner</a></li>
+						<li><a href="#" id="bulk-campaigns">Add to campaign</a></li>
+						<li class="hide"><a href="#" id="bulk-email">Send email</a></li>
+						<li><a href="#" id="bulk-tags">Add tags</a></li>
+					</ul>
+			</div>
             <div class="btn-group right" id="view-list" style="top:-29px;position:relative"></div>
             <div class="btn-group right" id="filter-list" style="top:-29px;position:relative;margin-right:5px"></div>
 		</div>
