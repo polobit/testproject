@@ -231,3 +231,21 @@ function saveEntity(object, url, callback)
    				}
    		});
 }
+
+function getGMTTimeFromDate(date) {
+	
+	var timeZoneShift = -(date.getTimezoneOffset() / 60);
+	
+	var timeZoneShiftMills = ((parseInt(timeZoneShift)/10) * 60 * 60) + ((parseInt(timeZoneShift) % 10) * 60 * 60);
+	
+	return timeZoneShiftMills * 1000;	
+}
+
+function getLocalTimeFromGMTMilliseconds(time_in_milliseconds) {
+	
+	var offSetTime = -(new Date().getTimezoneOffset() / 60);
+	
+	return parseInt(time_in_milliseconds) - (((parseInt(offSetTime)/10) * 60 * 60) + ((parseInt(offSetTime) % 10) * 60 * 60)) * 1000;
+	
+}
+

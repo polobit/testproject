@@ -230,10 +230,8 @@ $(function ()
     {
     	e1.preventDefault();
     	
-    	if(Twitter_following_ids){
-    		console.log('iam');
+    	if(Twitter_following_ids)
     		return;
-    	}
     	
     	Twitter_following_ids = [];
 
