@@ -30,7 +30,7 @@
 <div class="tab-content" id="myTabContent">
 	<div id="updates" class="tab-pane fade active in">
 		{{#if current_update}}
-			<ul class="widget_tab_content" id="linkedin_current_activity">
+			<ul class="widget_tab_content linkedin_current_activity" style="display:none">
 				<li >	
 					{{#is_link current_update}}
 	        			<a href="{{url}}" target="_blank" >{{name}}</a> shared a link {{show_link_in_statement current_update}}
@@ -40,7 +40,7 @@
 				</li>
 			</ul>
 		{{else}}
-			<ul class="widget_tab_content">
+			<ul class="widget_tab_content linkedin_current_activity" style="display:none">
 				<li>	
 					No updates available
 				</li>
