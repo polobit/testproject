@@ -53,14 +53,18 @@ var CalendarRouter = Backbone.Router.extend({
 		
 		$('#content').html(getTemplate("tasks-list-header", {}));
 		
-		// Owners
-		fillSelect("owner-tasks", '/core/api/users', 'domainUser',function fillOwner() 
+		var domainUserId;
+	
+		fillSelect("owner-tasks", '/core/api/current-user', 'domainUser', function fillOwner() 
 		{
+			// To get current domain user task list by default
+			domainUserId = $('#content').find("#owner-tasks").find("a").attr('href');
+			
 			$('#content').find("#owner-tasks").prepend("<li><a href=''>All Tasks</a></li>");
-		}, "<li><a href='{{id}}'>{{name}}</a></li>");
-		
-		// To Updated task list based on user selection of type and owner 
-		initOwnerslist();
+			
+			// To Updated task list based on user selection of type and owner 
+			initOwnerslist(domainUserId);
+		}, "<li><a href='{{id}}'>My Tasks</a></li>");
 		
 		$(".active").removeClass("active");
 		$("#calendarmenu").addClass("active");
