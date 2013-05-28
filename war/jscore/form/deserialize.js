@@ -63,6 +63,7 @@ function deserializeForm(data, form)
                  */
                 if (fel.hasClass('date'))
                 {
+                	
                     fel.val(new Date(el * 1000)
                         .format('mm/dd/yyyy'));
 
@@ -317,8 +318,11 @@ function deserializeChainedSelect(form, el)
             	// Fills date in to fields and initialize datepicker on the field
                 if ($(input_element).hasClass('date'))
                 {
+                	value = getLocalTimeFromGMTMilliseconds(value);
+                	 
                     $(input_element).val(new Date(parseInt(value))
                         .format('mm/dd/yyyy'));
+                    
                     $(input_element).datepicker(
                     {
                         format: 'mm/dd/yyyy',
