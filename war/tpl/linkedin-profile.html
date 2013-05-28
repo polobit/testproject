@@ -23,20 +23,26 @@
 <div class="" id="linkedin-error-panel" style="display:none;">
 </div>
 <ul class="nav nav-tabs" id="myTab">
-	<li class="active" style="width:33.33333%"><a data-toggle="tab" href="#updates"><h3>Activity</h3><small></small></a></li>
-	<li style="width:33.33333%"><a data-toggle="tab" href="#experience" id="linkedin_experience"><h3>Work</h3><small></small></a></li>
-	<li style="width:33.33333%"><a data-toggle="tab" href="#connections" id="linkedin_shared_connections"><h3>Shared</h3><small></small></a></li>
+	<li class="active" style="width:33.33333%" align="center"><a data-toggle="tab" href="#updates"><h3>Activity</h3><small></small></a></li>
+	<li style="width:33.33333%" align="center"><a data-toggle="tab" href="#experience" id="linkedin_experience"><h3>Work</h3><small></small></a></li>
+	<li style="width:33.33333%" align="center"><a data-toggle="tab" href="#connections" id="linkedin_shared_connections"><h3>Shared</h3><small></small></a></li>
 </ul>
 <div class="tab-content" id="myTabContent">
 	<div id="updates" class="tab-pane fade active in">
 		{{#if current_update}}
-			<ul class="widget_tab_content" id="linkedin_current_activity" style="display:none;">
-				<li>	
+			<ul class="widget_tab_content linkedin_current_activity" style="display:none">
+				<li >	
 					{{#is_link current_update}}
 	        			<a href="{{url}}" target="_blank" >{{name}}</a> shared a link {{show_link_in_statement current_update}}
 					{{else}}
 						{{current_update}}
 					{{/is_link}}
+				</li>
+			</ul>
+		{{else}}
+			<ul class="widget_tab_content linkedin_current_activity" style="display:none">
+				<li>	
+					No updates available
 				</li>
 			</ul>
 		{{/if}}

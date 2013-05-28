@@ -187,6 +187,7 @@ $(function ()
 	    	 },
 		     function(error)
 		     {
+	    		 Twitter_follower_ids = undefined;
 	    		 $('#tweet_load').remove();
 		    	 $('#follower-error-panel').html(error.responseText);
 		    	 $('#follower-error-panel').show();
@@ -230,10 +231,8 @@ $(function ()
     {
     	e1.preventDefault();
     	
-    	if(Twitter_following_ids){
-    		console.log('iam');
+    	if(Twitter_following_ids)
     		return;
-    	}
     	
     	Twitter_following_ids = [];
 
@@ -281,6 +280,7 @@ $(function ()
 	    	},
 	    	function(error)
 	    	{
+	    		Twitter_following_ids = undefined;
 	    		$('#tweet_load').remove();
 	    		$('#following-error-panel').html(error.responseText);
 	    		$('#following-error-panel').show();
@@ -410,7 +410,7 @@ function showTwitterMatchingProfiles(plugin_id)
                 //Hide pop over after clicking on any picture
                 $('#' + id).popover('hide');
                 
-                var url = $(this).attr('url');
+                var screen_name = $(this).attr('screen_name');
 
                 // If id (Twitter id) is defined, shows modal and prompts user to save 
                 // picture to contact
@@ -449,7 +449,7 @@ function showTwitterMatchingProfiles(plugin_id)
                 	}
                 		
                 	// save url to contact
-	                agile_crm_save_contact_properties_subtype("website", "TWITTER", url);
+	                agile_crm_save_contact_properties_subtype("website", "TWITTER", "@" + screen_name);
 	                
 	                if($('#save_twitter_image').is(':checked'))
 	                	 agile_crm_update_contact("image", twitter_image);

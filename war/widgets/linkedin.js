@@ -290,7 +290,6 @@ function showLinkedinProfile(linkedin_id, plugin_id)
         if (data.updateStream && data.updateStream.length != 0)
         {
         	// Current update heading, refresh button is shown
-            $('#linkedin_update_heading').show();
             $('#linkedin_refresh_stream').show();
             
             // Sets the update stream into a local variable for this method
@@ -307,14 +306,8 @@ function showLinkedinProfile(linkedin_id, plugin_id)
             return;
         }
 
-        // If no updates are available, current update is shown if present
-        if (data.current_update)
-        {
-        	// Current update heading and current update is shown
-            $('#linkedin_update_heading').show();
-            $('#linkedin_current_activity', $('#Linkedin')).show();
-        }
-
+        $('.linkedin_current_activity',  $('#Linkedin')).show();
+        
     }, function (data)
     {
     	// Remove loading image on error 
@@ -493,6 +486,7 @@ function showLinkedinProfile(linkedin_id, plugin_id)
         });
     });
 }
+
 
 
 
@@ -780,12 +774,17 @@ function getLinkedinIdByUrl(plugin_id, web_url, callback)
 		    		return;
 		    	}
 		    	
-		        // Shows error message to the user returned by LinkedIn
-		        alert("URL provided for linkedin is not valid " + data.responseText);
-		
-		        // Delete the LinkedIn URL associated with contact as it is incorrect
-		        agile_crm_delete_contact_property_by_subtype('website', 'LINKEDIN', web_url);
-
+		    	if(data.responseText.indexOf("Public profile URL is not correct") != -1)
+		    	{
+		    		// Shows error message to the user returned by LinkedIn
+			        alert("URL provided for linkedin is not valid " + data.responseText);
+			
+			        // Delete the LinkedIn URL associated with contact as it is incorrect
+			        agile_crm_delete_contact_property_by_subtype('website', 'LINKEDIN', web_url);
+			        return;
+		    	}
+		        
+		    	linkedinMainError(data.responseText);
 		 });
 }
 

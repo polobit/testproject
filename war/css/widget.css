@@ -128,8 +128,7 @@
 
 .widget_container > .widgets > .nav-tabs {
 	background: rgba(240, 240, 240, .2);
-	border-bottom:1px solid #ddd;	
-	margin:0;
+	margin-bottom:0px;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	-o-box-sizing: border-box;
@@ -143,16 +142,12 @@
 	color: #555555;
 }
 
-.widget_container > .widgets > .nav-tabs > li {
-  margin-bottom: 0px;
-}
-
-
 .widget_container > .widgets > .nav-tabs > li > a,
 .widget_container > .widgets > .nav-pills > li > a {
-	padding:10px;
+	padding: 5px;
 	line-height: 14px;
-	border:none;
+	margin-top: 5px;
+	margin-right: 1px;
 }
 
 
@@ -160,8 +155,6 @@
 .widget_container > .widgets > .nav-tabs > .active > a:hover {
 	color: #b2b0b1;
 	cursor: default;
-	background-color: #eeeff1;
-	border: none;
 }
 
 .widget_container > .widgets > .nav-tabs > .active > a > h3,
@@ -171,6 +164,7 @@
 
 .widget_container > .widgets > .nav > li > a:hover {
 	background-color: #eeeff1;
+	border-radius:4px;
 }
 
 .widget_tab_title{

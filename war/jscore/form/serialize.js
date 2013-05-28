@@ -85,7 +85,8 @@ function serializeForm(form_id) {
 
 			// If type of the field is "date" then return epoch time
 			if ($(data).hasClass("date")) {
-				value = new Date($(data).val()).getTime();
+				var date = new Date($(data).val());
+				value = date.getTime() + getGMTTimeFromDate(date);
 			}
 
 			// Value of input/select

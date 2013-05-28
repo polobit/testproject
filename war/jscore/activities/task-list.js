@@ -1,6 +1,6 @@
 
-function initOwnerslist() {
-
+function initOwnerslist(domainUserId) {
+	
 	// Click events to agents dropdown and department
 	$("ul#owner-tasks li a, ul#type-tasks li a").die()
 			.live("click", function(e) {
@@ -15,7 +15,7 @@ function initOwnerslist() {
 
 						updateData(getParams());
 					});
-	updateData(getParams());
+	updateData(getParams(), domainUserId);
 }
 
 var allTasksListView;
@@ -27,10 +27,13 @@ var allTasksListView;
  * @param params
  *            query string contains date, agentId & widgetId
  */
-function updateData(params) {
-
+function updateData(params, id) {
+	
 	// Shows loading image untill data gets ready for displaying
 	$('#task-list-based-condition').html(LOADING_HTML);
+
+	if(params == "?" && id)
+		params = "?&owner=" + id;
 
 	// Creates backbone collection view
 	allTasksListView = new Base_Collection_View({
@@ -153,7 +156,6 @@ function bulk_complete_operation(url, index_array, table, data_array){
 			$(".bulk-complete-loading").remove();
 			
 			var tbody = $(table).find('tbody');
-			
 			// To remove table rows on delete 
 			for(var i = 0; i < index_array.length; i++) 
 				$(tbody).find('tr:eq(' + index_array[i] + ')').find("div:lt(3)").css("text-decoration","line-through");
