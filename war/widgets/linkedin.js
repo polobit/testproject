@@ -290,7 +290,6 @@ function showLinkedinProfile(linkedin_id, plugin_id)
         if (data.updateStream && data.updateStream.length != 0)
         {
         	// Current update heading, refresh button is shown
-            $('#linkedin_update_heading').show();
             $('#linkedin_refresh_stream').show();
             
             // Sets the update stream into a local variable for this method
@@ -305,14 +304,6 @@ function showLinkedinProfile(linkedin_id, plugin_id)
         	})
         	
             return;
-        }
-
-        // If no updates are available, current update is shown if present
-        if (data.current_update)
-        {
-        	// Current update heading and current update is shown
-            $('#linkedin_update_heading').show();
-            $('#linkedin_current_activity', $('#Linkedin')).show();
         }
 
     }, function (data)
