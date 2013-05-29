@@ -103,7 +103,7 @@ String CSS_PATH = "/";
 				<a class="btn btn-navbar" data-toggle="collapse"
 					data-target=".nav-collapse"> <span class="icon-bar"></span> <span
 					class="icon-bar"></span> <span class="icon-bar"></span>
-				</a> <a class="brand" href="#dashboard"><i class='icon-cloud'></i> Agile CRM</a>
+				</a> <a class="brand" href="#dashboard"> Agile CRM</a>
 
 				<div class="nav-collapse">
 
@@ -143,14 +143,14 @@ String CSS_PATH = "/";
 						<li class="dropdown" id="menu1"><a class="dropdown-toggle"
 							data-toggle="dropdown" href="#menu1">Add New <i class='caret'></i></a>
 							<ul class="dropdown-menu">
-								<li><a href="#personModal" data-toggle="modal" id="person"><i class="icon-user"></i> Contact</a>
+								<li><a href="#personModal" data-toggle="modal" id="person"> Contact</a>
 								</li>
 								<li><a href="#companyModal" data-toggle="modal"
-									id="company"><i class="icon-building"></i> Company</a></li>
-								<li><a href="#" id="show-activity"><i class="icon-list-alt"></i> Activity</a></li>
+									id="company"> Company</a></li>
+								<li><a href="#" id="show-activity"> Activity</a></li>
 
-								<li><a href="#deals-add" id="activity"><i class="icon-money"></i> Deal</a></li>
-								<li><a href="#" id="show-note"><i class="icon-file-alt"></i> Note</a></li>
+								<li><a href="#deals-add" id="activity"> Deal</a></li>
+								<li><a href="#" id="show-note"> Note</a></li>
 							</ul> <!-- 
 							<img style='display:hidden' id='ajax'
 								src='img/ajax-loader.gif' />
