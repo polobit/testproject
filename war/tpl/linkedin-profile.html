@@ -16,7 +16,7 @@
 		<a href="#connect" class="btn pull-left" id="linkedin_connect" name="{{name}}">Connect</a>
 	{{/if}}
 	<div class="pull-right" style="text-align: right;">
-		<b style="color:#0088CC;">{{num_connections}}</b>
+		<b style="color:#0088CC;">{{#if_equals num_connections "500"}}{{num_connections}}+{{else}}{{num_connections}}{{/if_equals}}</b>
 		<div style="font-size: 11px;margin-top: -5px;">Connections</div>
 	</div>
 </div>
@@ -219,7 +219,7 @@
 
 <script id="linkedin-error-panel-template" type="text/html">
 {{#check_length message "140"}}
-	<div style="height: 140px;overflow-y: scroll;line-height:160%;word-wrap: break-word;padding:10px">
+	<div class="ellipsis-multi-line collapse-25" title="{{message}}" style="height:110px;overflow: hidden;line-height:160%;word-wrap: break-word;padding:10px">
 		{{message}}
 	</div>
 {{else}}
