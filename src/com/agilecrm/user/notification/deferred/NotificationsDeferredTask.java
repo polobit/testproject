@@ -49,10 +49,8 @@ public class NotificationsDeferredTask implements DeferredTask
      * 
      * @see java.lang.Runnable#run()
      */
-    @SuppressWarnings({ "deprecation", "unchecked", "unused" })
     public void run()
     {
-	String response = PubNub.accessPubNubPublish(channel, message);
-	System.out.println("Pubnub response: " + response);
+	PubNub.accessPubNubPublish(channel, message);
     }
 }

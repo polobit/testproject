@@ -97,6 +97,7 @@ public class NotificationPrefsUtil
 
 	if (object == null)
 	    return;
+
 	try
 	{
 	    // Converting object to json
@@ -168,11 +169,17 @@ public class NotificationPrefsUtil
 
 	    // Remove other fields except first-name,last-name, email, image and
 	    // owner.
+	    if (json.getString("tagsWithTime") != null)
+		json.remove("tagsWithTime");
+
 	    if (json.getString("tags") != null)
 		json.remove("tags");
 
 	    if (json.getString("widget_properties") != null)
 		json.remove("widget_properties");
+
+	    if (json.getString("campaignStatus") != null)
+		json.remove("campaignStatus");
 
 	    JSONObject ownerJSON = new JSONObject();
 	    if (json.getString("owner") != null)
