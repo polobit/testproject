@@ -16,8 +16,8 @@ import twitter4j.QueryResult;
 import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.Twitter;
-import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
+import twitter4j.TwitterRuntimeException;
 import twitter4j.URLEntity;
 import twitter4j.User;
 import twitter4j.UserMentionEntity;
@@ -521,7 +521,7 @@ public class TwitterUtil
 		result.friends_count = user.getFriendsCount() + "";
 
 	    }
-	    catch (TwitterException e)
+	    catch (TwitterRuntimeException e)
 	    {
 		continue;
 	    }
