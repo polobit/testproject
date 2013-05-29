@@ -146,9 +146,11 @@ function agile_type_ahead(id, el, callback, isSearch){
                 		// Sets data-value to name
                 		i = $(that.options.item).attr('data-value', fullname);
 
+                		// To add border to all after li except to last one
+                		i.addClass('typeahead-border');
+                		
                 		// Returns template, can be contact or company compares in template
                 		i.find('a').html(getTemplate('typeahead-contacts', item));
-
                 		return i[0];
             		});
             

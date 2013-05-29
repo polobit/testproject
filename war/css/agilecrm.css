@@ -770,3 +770,12 @@ body
 #show-help p {
 	margin-left:25px;
 }
+
+.typeahead-border {
+	border-bottom : 1px solid whitesmoke;
+	
+}
+
+.typeahead-border:last-child {
+	border-bottom: none !important;
+}
