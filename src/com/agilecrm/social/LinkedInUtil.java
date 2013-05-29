@@ -173,7 +173,7 @@ public class LinkedInUtil
 	    if (result.picture != null)
 		result.picture = result.picture.replaceAll("http:", "https:")
 			.replaceAll("m3", "m3-s");
-	    
+
 	    System.out.println(result.picture);
 
 	    // Sets number of connects if provided
@@ -474,6 +474,7 @@ public class LinkedInUtil
     }
 
     public static String getIdByUrl(Widget widget, String webUrl)
+	    throws Exception
     {
 
 	final LinkedInApiClient client = factory.createLinkedInApiClient(
