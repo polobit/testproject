@@ -134,8 +134,18 @@ public class CronUtil
 	if (!StringUtils.isEmpty(campaignId))
 	    searchMap.put("campaign_id", campaignId);
 
-	List<Key<Cron>> keys = dao.listKeysByProperty(searchMap);
-	dao.deleteKeys(keys);
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	try
+	{
+	    List<Key<Cron>> keys = dao.listKeysByProperty(searchMap);
+	    dao.deleteKeys(keys);
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
     }
 
     /**
