@@ -160,7 +160,8 @@ $(function ()
 	    	 }
 	    	 
     		 // Get 20 from array and remove 20 from array
-	    	 var temp = Twitter_follower_ids.splice(0, 20);	    	 
+	    	 var temp = Twitter_follower_ids.splice(0, 20);	
+	    	 //var temp = Twitter_follower_ids;
 	    	 console.log(temp);
 	    	 
 	    	 // Get the Twitter profile for 20 Twitter IDs
@@ -197,6 +198,9 @@ $(function ()
 	    	 $('#more_followers').die().live('click', function (e2)
 	    	 {
 	    		 e2.preventDefault();
+	    		 
+	    		 if(!Twitter_follower_ids)
+	        		 return;
 	    		 
 	        	 //$('#twitter_follower_panel').append(TWITTER_UPDATE_LOAD_IMAGE);
 	        	 $('#spinner-followers').show();
@@ -291,6 +295,9 @@ $(function ()
     	    {
     			e2.preventDefault();
 	    		 
+    			if(!Twitter_following_ids)
+	        		 return;
+    			
     			//$('#twitter_following_panel').append(TWITTER_UPDATE_LOAD_IMAGE);
     			$('#spinner-following').show();
     			
@@ -583,6 +590,9 @@ function showTwitterProfile(twitter_id, plugin_id)
         
         console.log(tweet_id);
 
+        if(!Twitter_current_update_id)
+        	return;
+        
         // It is undefined in case if person does not share his updates
         if (!tweet_id)
         {
@@ -682,13 +692,13 @@ function showTwitterProfile(twitter_id, plugin_id)
 
             // On first click of see less, less attribute is made true and text will be
             // changed as see more button 
-            $(this).text("See Less..");
+            $(this).text("Show Less..");
             $('#twitter_refresh_stream').show();
         }
         else
         {
         	$(this).attr("less", "true");
-        	$(this).text("See More..");
+        	$(this).text("Show More..");
 	        $('#twitter_current_activity').show();
 	        $('#twitter_refresh_stream').hide();
         }

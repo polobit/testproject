@@ -157,20 +157,19 @@ String CSS_PATH = "/";
 								--></li>
                      
 						<li id="fat-menu" class="dropdown"><a href=""
-							class="dropdown-toggle" data-toggle="dropdown" style="padding:4px 4px 4px 11px">
-								
+							class="dropdown-toggle" data-toggle="dropdown"><i
+								class="agilecrm-profile-dropdown"></i> </a>
+							<ul class="dropdown-menu">
+								<li><a href='#settings'>
+			
 								<%
 								if(!StringUtils.isEmpty(currentUserPrefs.pic))
-								    out.println("<img src='"+currentUserPrefs.pic+"' style='width:33px;height:33px;border-radius:2px'></img>");
+								    out.println("<img src='"+currentUserPrefs.pic+"' style='width:25px;height:25px;border-radius:1px;margin-right:2px' class='float-left'></img>");
 								else
-								    out.println("<img src='img/gravatar.png' style='width:33px;height:33px;border-radius:2px'></img>");
-								%>		
-									
-								<i class='caret' style='vertical-align:text-top;margin-left:4px'></i>	
-							 </a>
-							 
-							<ul class="dropdown-menu">
-								<li><a href='#settings'><%=user.getEmail()%></a></li>
+								    out.println("<img src='img/gravatar.png' style='width:25px;height:25px;border-radius:1px;margin-right:2px' class='float-left'></img>");
+								%>	
+									<%=user.getEmail()%>			
+								</a></li>
 								<li class="divider"></li>
 								<li><a href="#settings"><i class="icon-cog"></i>
 										Preferences</a></li>
@@ -182,7 +181,7 @@ String CSS_PATH = "/";
 
 						<li><a href="#contact-us"><i class="icon-pencil"></i>
 								Contact Us</a></li>
-						
+
 						<li><a href="<%=logoutURL%>"><i class="icon-off"></i>
 								Logout</a></li>
 
