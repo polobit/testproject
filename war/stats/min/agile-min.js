@@ -503,7 +503,7 @@ var _agile =
 {
 	init : function() 
 	{
-		var _agile_methods = _agile_methods || [];
+		_agile_methods = _agile_methods || [];
 	},
 	setAccount : function(APIKey, domain)
 	{
