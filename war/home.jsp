@@ -160,16 +160,21 @@ String CSS_PATH = "/";
 							class="dropdown-toggle" data-toggle="dropdown"><i
 								class="agilecrm-profile-dropdown"></i> </a>
 							<ul class="dropdown-menu">
-								<li><a href='#settings'>
-			
-								<%
-								if(!StringUtils.isEmpty(currentUserPrefs.pic))
-								    out.println("<img src='"+currentUserPrefs.pic+"' style='width:25px;height:25px;border-radius:1px;margin-right:2px' class='float-left'></img>");
-								else
-								    out.println("<img src='img/gravatar.png' style='width:25px;height:25px;border-radius:1px;margin-right:2px' class='float-left'></img>");
-								%>	
-									<%=user.getEmail()%>			
-								</a></li>
+									<li><a href='#settings'
+											style="padding-left: 8px !important; padding-right: 8px !important;">
+												<%
+												    if (!StringUtils.isEmpty(currentUserPrefs.pic))
+																	out.println("<img src='"
+																			+ currentUserPrefs.pic
+																			+ "' style='height: 20px; width: 20px; margin-right: 3px; display: inline;' class='thumbnail'></img>");
+																else
+																	out.println("<img src='img/gravatar.png' style='height: 20px; width: 20px; margin-right: 3px; display: inline;' class='thumbnail'></img>");
+												%> 
+												<span>
+													<b style="font-size: 13px;"><%=user.getEmail()%></b>
+												</span>
+													
+										</a></li>
 								<li class="divider"></li>
 								<li><a href="#settings"><i class="icon-cog"></i>
 										Preferences</a></li>
