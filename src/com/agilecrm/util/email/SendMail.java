@@ -44,7 +44,7 @@ public class SendMail
     public static final String SUBSCRIPTION_DELETED_SUBJECT = "Your Account Deleted";
 
     public static final String REPORTS = "reports";
-    public static final String REPORTS_SUBJECT = "AgileCrm Reports";
+    public static final String REPORTS_SUBJECT = "Agile CRM Reports";
 
     public static final String WELCOME = "welcome";
     public static final String WELCOME_SUBJECT = "Welcome to AgileCRM";
