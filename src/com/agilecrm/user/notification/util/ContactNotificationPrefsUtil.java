@@ -49,8 +49,9 @@ public class ContactNotificationPrefsUtil
 		NotificationPrefs.Type.CONTACT_CREATED, contact);
 
 	// Executes Notification for tags added along with new Contact
-	if (!contact.tags.isEmpty())
+	if (!contact.getContactTags().isEmpty())
 	    TagNotificationPrefsUtil.executeNotificationWhenTagsAdded(contact);
+
     }
 
     /**

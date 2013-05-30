@@ -72,7 +72,6 @@ public class ContactTriggerUtil
 	try
 	{
 	    for (Trigger trigger : triggersList)
-
 	    {
 		WorkflowUtil
 			.subscribeDeferred(contactList, trigger.campaign_id);
@@ -84,7 +83,9 @@ public class ContactTriggerUtil
 	}
 
 	// Executes Trigger for tags added along with new Contact
-	if (!contact.tags.isEmpty())
-	    TagsTriggerUtil.executeTriggerForTags(contact, contact.tags);
+	if (!contact.getContactTags().isEmpty())
+	    TagsTriggerUtil.executeTriggerForTags(contact,
+		    contact.getContactTags());
+
     }
 }
