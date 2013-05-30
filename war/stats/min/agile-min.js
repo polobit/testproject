@@ -202,7 +202,7 @@ function agile_propertyJSON(name, id, type) {
 function agile_createContact(data, tags)
 {
  var properties = [];
-	 
+	 console.log(tags);
 	 for (var key in data) {
 		  if (data.hasOwnProperty(key)) {
 		    //alert(key + " -> " + p[key]);
@@ -212,6 +212,8 @@ function agile_createContact(data, tags)
 	 
 	 var model = {};
 	 model.properties = properties;
+	 model.tags = tags['tags'];
+	 
 	 //var params = "contact={0}&tags={1}".format(encodeURIComponent(data), encodeURIComponent(JSON.stringify(tags)));
 	 // Get
 	 var agile_url = agile_id.getURL() + "/contacts?callback=?&id=" + agile_id.get() + "&contact=" + encodeURIComponent(JSON.stringify(model));
@@ -421,7 +423,6 @@ String.prototype.format = function() {
 
 function agile_trackPageview()
 {	
- 	
  	// Guid
  	var guid = agile_guid.get();
  	
@@ -498,25 +499,101 @@ var agile_id =
 		}
 	};
 
+var _agile = 
+{
+	init : function() 
+	{
+		var _agile_methods = _agile_methods || [];
+	},
+	setAccount : function(APIKey, domain)
+	{
+		_agile_methods.push(this.buildCommand('_setAccount', arguments));
+		_agile_execute();
+	},
+	setEmail : function(email)
+	{
+		_agile_methods.push(this.buildCommand('_setEmail', arguments));
+		_agile_execute();
+	},
+	trackPageview : function()
+	{
+		_agile_methods.push(this.buildCommand('_trackPageview', arguments));	
+		_agile_execute();
+	},
+	createContact : function(contact)
+	{
+		_agile_methods.push(this.buildCommand('_createContact', arguments));		
+		_agile_execute();
+	},
+	deleteContact : function(email)
+	{
+		_agile_methods.push(this.buildCommand('_deleteContact', arguments));		
+		_agile_execute();
+	},
+	addTag : function(data)
+	{
+		_agile_methods.push(this.buildCommand('_addTag', arguments));		
+		_agile_execute();
+	},
+	removeTag: function(data)
+	{
+		_agile_methods.push(this.buildCommand('_removeTag', arguments));		
+		_agile_execute();
+	},
+	addScore : function(data)
+	{
+		_agile_methods.push(this.buildCommand('_addScore', arguments));		
+		_agile_execute();
+	},
+	subtractScore : function(data)
+	{
+		_agile_methods.push(this.buildCommand('_subtractScore', arguments));		
+		_agile_execute();
+	},
+	
+	buildCommand : function(name, arguments)
+	{
+		var param = [];
+		param.push(name);
+		for(var i=0; i<arguments.length; i++)
+		{
+			param.push(arguments[i]);
+		}
+		return param;
+	}
+};
+
 function _agile_execute()
 {
 	// Enable the console(IE not support console by default)
 	agile_enable_console_logging();
-	console.log("Initing Agile-crm " + _agile);
-	
+	//console.log("Initing Agile-crm " + _agile_methods);
+	if(!_agile_methods)
+		return;
 	// Iterate
-	for(i=0; i < _agile.length; i++)
+	for(i=0; i < _agile_methods.length; i++)
 	{
 		var args = new Array();
-	    for (var j = 1; j < _agile[i].length; j++)
-	        args.push(_agile[i][j]);
+	    for (var j = 1; j < _agile_methods[i].length; j++)
+	        args.push(_agile_methods[i][j]);
 
-	    console.log("Executing " + _agile[i][0] + " with " + args);
-	    window["agile" + _agile[i][0]].apply(this, args);
+	    console.log("Executing " + _agile_methods[i][0] + " with " + args);
+	    window["agile" + _agile_methods[i][0]].apply(this, args);
 	}
 }
 
+var _agile_methods;
+
 // Init Function
 (function () {  
+	_agile.init();
 	_agile_execute();
 })();
+
+try {
+	window.onload = $AgileAPI
+}
+catch (err)
+{
+	
+}
