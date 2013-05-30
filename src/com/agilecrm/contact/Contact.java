@@ -568,6 +568,18 @@ public class Contact extends Cursor
 	    updated_time = System.currentTimeMillis() / 1000;
 	}
 
+	// If tags are not empty, considering they are simple tags and adds them
+	// to tagsWithTime
+	if (!tags.isEmpty())
+	{
+	    for (String tag : tags)
+	    {
+		Tag tagObject = new Tag(tag);
+		if (!tagsWithTime.contains(tagObject))
+		    tagsWithTime.add(tagObject);
+	    }
+	}
+
 	for (Tag tag : tagsWithTime)
 	{
 	    if (tag.createdTime == 0L)
