@@ -127,8 +127,10 @@
 					
 					var json = serializeForm("sharemailForm");
 					
-					json.body = json.body.replace("Hey,","Hey,<br/>");
-					json.body = json.body.replace("too.","too.<br/><br/>");
+					json.body = json.body.replace("Hi,","Hi,<br/><br/>");
+					json.body = json.body.replace("online.","online.<br/><br/>");
+					json.body = json.body.replace("do.","do.<br/><br/>");
+					json.body = json.body.replace("more.","more.<br/><br/>");
 		
 					var url =  'core/api/send-email?from=' + encodeURIComponent(json.from) + '&to=' + 
 					 encodeURIComponent(json.to) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + 
