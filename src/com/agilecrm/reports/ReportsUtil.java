@@ -89,7 +89,8 @@ public class ReportsUtil
 	    if (results == null)
 		results = new HashMap<String, Object>();
 
-	    SendMail.sendMail(report.sendTo, SendMail.REPORTS_SUBJECT,
+	    SendMail.sendMail(report.sendTo, report.name + " - "
+		    + SendMail.REPORTS_SUBJECT,
 		    SendMail.REPORTS, new Object[] { results, fieldsList });
 	}
     }

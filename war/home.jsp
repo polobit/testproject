@@ -110,7 +110,7 @@ String CSS_PATH = "/";
 					<ul class="nav agile-menu">
 						<li id="homemenu" class="active"></li>
 						<%
-					        if("admin".equals(domainUser.domain)){
+					        if("admin".equals(domainUser.domain)) {
 					           out.println("<li><a href='#all-domain-users'><i class='icon-group'></i> All Domain Users</a></li></ul>");
 						       out.println("<ul class='nav pull-right' style='float:right!important;'><li><a href="+ logoutURL +"><i class='icon-off'></i>Logout</a></li>");
 					        }
@@ -160,17 +160,21 @@ String CSS_PATH = "/";
 							class="dropdown-toggle" data-toggle="dropdown"><i
 								class="agilecrm-profile-dropdown"></i> </a>
 							<ul class="dropdown-menu">
-								<li><a href='#settings'>
-			
-								<%
-								if(!StringUtils.isEmpty(currentUserPrefs.pic))
-								    out.println("<img src='"+currentUserPrefs.pic+"' style='width:25px;height:25px;border-radius:1px;margin-right:2px' class='float-left'></img>");
-								else
-								    out.println("<img src='img/gravatar.png' style='width:25px;height:25px;border-radius:1px;margin-right:2px' class='float-left'></img>");
-								%>	
-									<%=user.getEmail()%>			
-								</a></li>
-								<li class="divider"></li>
+									<li><a href='#settings'
+											style="padding-left: 8px !important; padding-right: 8px !important; padding-bottom:5px!important; margin-bottom:5px !important; border-bottom:1px solid #e5e5e5">
+												<%
+												    if (!StringUtils.isEmpty(currentUserPrefs.pic))
+																	out.println("<img src='"
+																			+ currentUserPrefs.pic
+																			+ "'style='height: 26px; width: 26px; margin-right: 3px; display: inline;padding:2px !important' class='thumbnail'></img>");
+																else
+																	out.println("<img src='img/gravatar.png' style='height: 26px; width: 26px; margin-right: 3px; display: inline;padding:2px !important' class='thumbnail'></img>");
+												%> 
+												<span>
+													<b style="font-size: 13px;"><%=user.getEmail()%></b>
+												</span>
+													
+										</a></li>
 								<li><a href="#settings"><i class="icon-cog"></i>
 										Preferences</a></li>
 
