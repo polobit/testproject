@@ -9,6 +9,7 @@ $(function() {
 	        '</img></center>';
 	
 	items = {};
+	Errorjson = {};
 	
     // Gets widget id from widget object, fetched using script API
     var plugin_id = agile_crm_get_plugin(FRESHBOOKS_PLUGIN_NAME).id;
@@ -32,8 +33,7 @@ $(function() {
     // Checks if contact has email, if undefined shows message in FreshBooks panel
     if (!Email)
     {
-        $('#FreshBooks').html('<div class="widget_content" style="border-bottom:none;padding: 10px;' +
-            'line-height:160%;">No email is associated with this contact</div>');
+    	freshbooksError('FreshBooks', "No email is associated with this contact");
         return;
     }
 
@@ -185,9 +185,11 @@ function getInvoicesOfClient(plugin_id, client_id)
 		  
 	}, 'json').error(function(data)
 	{		
-		$('#freshbooks_invoice_panel').html('<div class="widget_content" ' +
+		/*$('#freshbooks_invoice_panel').html('<div class="widget_content" ' +
 				'style="border-bottom:none;padding: 10px;line-height:160%;">' +
-				data.responseText + '</div>');
+				data.responseText + '</div>');*/
+		
+		freshbooksError("freshbooks_invoice_panel", data.responseText);
 	});
 }
 
@@ -216,9 +218,11 @@ function getItemsInFreshBooks(plugin_id, callback)
 	{		
 		$('#freshbooks_invoice_load').remove();
 		
-		$('#freshbooks_items_panel').html('<div class="widget_content" ' +
+	/*	$('#freshbooks_items_panel').html('<div class="widget_content" ' +
 				'style="border-bottom:none;padding: 10px;line-height:160%;">' + 
-				data.responseText + '</div>');
+				data.responseText + '</div>');*/
+		freshbooksError("freshbooks_items_panel", data.responseText);
+
 	});
 }
 
@@ -234,8 +238,10 @@ function addClientToFreshBooks(plugin_id, first_name, last_name, email)
 			
 	},  'json').error(function(data) 
 	{
-		$('#FreshBooks').html('<div class="widget_content" style="border-bottom:none;padding: 10px;' +
-		         'line-height:160%;">'+ data.responseText + '</div>');
+		/*$('#FreshBooks').html('<div class="widget_content" style="border-bottom:none;padding: 10px;' +
+		         'line-height:160%;">'+ data.responseText + '</div>');*/
+		
+		freshbooksError("FreshBooks", data.responseText);
 	});
 	
 }
@@ -318,3 +324,8 @@ function addInvoiceToClientInFreshBooks(plugin_id, first_name, last_name, email)
     });
 }
 
+function freshbooksError(id, message)
+{
+	Errorjson['message'] = message;
+	$('#' + id).html(getTemplate('freshbooks-error', Errorjson));
+}

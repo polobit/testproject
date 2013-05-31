@@ -56,7 +56,7 @@ $(function() {
     	
     	var from = $('#twilio_from').val();
     	console.log(from);
-    	$('#Twilio').html('Verifying........');
+    	$('#Twilio').html('<div class="widget_content">Verifying........</div>');
     	
     	$.getJSON("/core/api/widgets/twilio/verify/numbers/" + plugin_id + "/" + from, 
     	function(verified_data)
@@ -245,10 +245,7 @@ function getIncomingNumbers(plugin_id, callback)
 
 }
 
-function recordCallInTwilio(plugin_id)
-{
-	
-}
+
 function setUpTwilio(token, plugin_id, from){
 	
 	 var start_time;
