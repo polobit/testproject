@@ -87,29 +87,31 @@ function showRapleafDetails(plugin_id) {
 	var url = "core/api/widgets/rapleaf/"
 			+ agile_crm_get_plugin_prefs(RAPLEAF_PLUGIN_NAME) + "/" + email;
 
-		queueGetRequest("widget_queue", url, 'json', function success(data) {
+		queueGetRequest("widget_queue", url, 'json', 
+		function success(data) 
+		{
 						// console.log(data);
 						// &fields=gender,age,education,marital_status
-						$('#Rapleaf').html(
-								RAPLEAF_PLUGIN_HEADER + '<div></div>');
+						var el = "<div class='widget_content'>";
+						
 						if (data.gender == "Female")
-							$('#Rapleaf')
-									.append(
-											'<img style="float:left;width:20px;height:20px;" src=\"img/user_female.png\"></img>');
+							el = el + '<img style="width:20px;height:20px;" src=\"img/user_female.png\"></img>';
 						else
-							$('#Rapleaf')
-									.append(
-											'<img style="float:left;width:30px;height:30px;margin-top:-5px" src=\"img/user_male.jpg\"></img>');
+							el = el + '<img style="width:30px;height:30px;" src=\"img/user_male.jpg\"></img>';
 
 						$.each(data, function(index, value) {
 							if (index != "result") {
-								$('#Rapleaf').append(
-										'<li style="text-transform:capitalize;">'
-												+ index + ': ' + value
-												+ '</li>');
+								el = el + '<li style="text-transform:capitalize;">'
+												+ index + ': ' + value + '</li>';
 							}
 						});
-					});
+						
+						$('#Rapleaf').html(el + '</div>');
+						
+		}, function error(data)
+		{
+			$('#Rapleaf').html("<div class='widget_content'>" + data.responseText + "</div>");
+		});
 
 }
 

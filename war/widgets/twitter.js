@@ -549,7 +549,7 @@ function showTwitterProfile(twitter_id, plugin_id)
 
             head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
             		$(".time-ago", element).timeago();
-            	})
+            	});
             	
             // Template is populated with update details and shown
             $('#twitter_social_stream')

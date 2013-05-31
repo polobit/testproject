@@ -13,6 +13,7 @@ $(function ()
         '\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
 
     AgentInfo = null;
+    Errorjson = {};
        
     // Gets plugin id from plugin object, fetched using script API
     var plugin_id = agile_crm_get_plugin(ZENDESK_PLUGIN_NAME).id;
@@ -36,8 +37,7 @@ $(function ()
     // Checks if contact has email, if undefined shows message in Zendesk panel
     if (!Email)
     {
-        $('#Zendesk').html('<div class="widget_content" style="border-bottom:none;padding: 10px;' +
-            'line-height:160%;">No email is associated with this contact</div>');
+    	zendeskError("Zendesk", "No email is associated with this contact");
         return;
     }
 
@@ -98,8 +98,7 @@ function setupZendeskOAuth(plugin_id)
         	// Checks if contact has email, if undefined shows message in Zendesk panel
             if (!Email)
             {
-                $('#Zendesk').html('<div class="widget_content" style="border-bottom:none;padding: 10px;' +
-                    'line-height:160%;">No email is associated with this contact</div>');
+                zendeskError("Zendesk", "No email is associated with this contact");
                 return;
             }
             
@@ -111,49 +110,6 @@ function setupZendeskOAuth(plugin_id)
 
     })
 }
-
-/**
- * Shows tickets from Zendesk matching with the given email
- *  
- * @param plugin_id
- * 			To get the widget and save tokens in it.
- * @param email
- * 			Email of the contact to get the tickets
- */
-function showTicketsFromZendesk(plugin_id, email)
-{
-    // Shows loading until tickets are shown
-    $('#Zendesk').html(ZENDESK_UPDATE_LOAD_IMAGE);
-
-    // Sends request to the URL "/core/api/widgets/zendesk/get/" with plugin id and 
-    // email as path parameters and calls WidgetsAPI class
-    $.get("/core/api/widgets/zendesk/get/" + plugin_id + "/" + email,
-
-    function (data)
-    {
-        try
-        {
-            // populates template with data to show tickets
-            $('#Zendesk').html(getTemplate('zendesk-ticket_stream', JSON.parse(data)));
-
-        }
-        catch (err)
-        {
-            // Else the error message is shown
-            $('#Zendesk').html('<div style="padding: 10px;' +
-                'word-wrap: break-word;">' + data + '</div>');
-        }
-
-
-    }).error(function (data)
-    {
-        // Error message is shown if error occurs
-        $('#Zendesk').html('<div style="padding: 10px;' +
-            'word-wrap: break-word;">' + data + '</div>');
-    });
-
-}
-
 
 /**
  * Adds a ticket in Zendesk with the contact email based on plugin id
@@ -224,7 +180,9 @@ function addTicketToZendesk(plugin_id, email)
         {
             // If error occurs modal is removed and error message is shown in panel
             $('#zendesk_messageModal').remove();
-            alert(data.responseText);
+            zendeskError('add-ticket-error-panel', data.responseText);
+   		    $('#add-ticket-error-panel').show();
+   		    $('#add-ticket-error-panel').fadeOut(10000);
         });
     });
 }
@@ -246,8 +204,7 @@ function updateTicketInZendesk(plugin_id, ticket_id)
     json["headline"] = "Update Ticket";
 
     // Information to be shown in the modal to the user
-    json["info"] = "Updates Ticket No " + ticket_id +
-        " in your Zendesk account associated with Agile CRM";
+    json["info"] = "Updates Ticket No " + ticket_id + " in Zendesk";
 
     // Id of the ticket to update it
     json["id"] = ticket_id;
@@ -296,6 +253,7 @@ function updateTicketInZendesk(plugin_id, ticket_id)
             // If error occurs modal is removed and error message is shown in panel
             $('#zendesk_messageModal').remove();
             alert(data.responseText);
+   		    
         });
     });
 }
@@ -389,21 +347,25 @@ function showZendeskProfile(plugin_id, email)
 	    	 e.preventDefault();
 	    	 
 	    	 if(!all_tickets)
-	    	 {
-	    		 alert('No tickets');
 	    		 return;
-	    	 }
+
+	    	 $('#spinner-tickets').show();
+	    	 
 	    	 var more_tickets = all_tickets.splice(0, 5);	
 	    	 console.log(more_tickets);
 	    	 
 	    	 if(more_tickets.length == 0)
 	    	 {
-	    		 alert('No more tickets');
+	    		 $('#spinner-tickets').hide();
+	    		 zendeskError("tickets-error-panel", 'No more tickets');
+	    		 $('#tickets-error-panel').show();
+	    		 $('#tickets-error-panel').fadeOut(10000);
 	    		 return;
 	    	 }
 	    	 
 	    	 var more_tickets_template = $(getTemplate('zendesk-ticket-stream', more_tickets));	
-			 
+	    	 $('#spinner-tickets').hide();
+	    	 
 			 $('#all_tickets_panel').append(more_tickets_template);	
 			 
 			  head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
@@ -417,8 +379,13 @@ function showZendeskProfile(plugin_id, email)
 		$('#tickets_load').remove();
 		
         // Else the error message is shown
-        $('#Zendesk').html('<div style="padding: 10px;' +
-            'word-wrap: break-word;">' + data + '</div>');
+        zendeskError("Zendesk", data);
 	});
 	
+}
+
+function zendeskError(id, message)
+{
+	Errorjson['message'] = message;
+	$('#' + id).html(getTemplate('zendesk-error', Errorjson))
 }

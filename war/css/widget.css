@@ -136,7 +136,7 @@
 }
 
 
-.widget_container > .widgets > .nav-tabs > li > a > h3{
+.widget_container > .widgets > .nav-tabs > li > a > h4{
 	margin:0px;
 	line-height:30px;
 	color: #555555;
@@ -157,8 +157,8 @@
 	cursor: default;
 }
 
-.widget_container > .widgets > .nav-tabs > .active > a > h3,
-.widget_container > .widgets > .nav-tabs > .active > a:hover > h3{
+.widget_container > .widgets > .nav-tabs > .active > a > h4,
+.widget_container > .widgets > .nav-tabs > .active > a:hover > h4{
 	color: #0088CC;
 }
 

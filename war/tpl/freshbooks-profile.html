@@ -3,7 +3,7 @@
 		<form class="widget_content" style="border-bottom:none;" id="freshbooks_login_form" name="freshbooks_login_form" method="post">
 	    	<fieldset>
 				<p class="ml_5" style='line-height:140%;'>Cloud Accounting Specialist for Small Business Owners</p>
-				<input type="text" id="freshbooks_url" class="input-medium required ml_5" placeholder="FreshBooks url" value="" name="url"></input>
+				<input type="text" id="freshbooks_url" class="input-medium required ml_5" placeholder="https://company.freshbooks.com" value="" name="url"></input>
 				<input type="text" id="freshbooks_apikey" class="input-medium required ml_5" placeholder="Api key" value="" name="api_key"></input><br/>
 				<button id="freshbooks_save_token" class="btn ml_5"><a href="#">Save</a></button>
 			 </fieldset>
@@ -68,9 +68,9 @@
 	</div>
 	<div class="sub_header">
 		{{#isArray client}}
-			<a href="{{client.0.links.statement}}" target="_blank"><h3>Invoices</h3></a>
+			<a href="{{client.0.links.statement}}" target="_blank"><h4>Invoices</h4></a>
 		{{else}}
-			<a href="{{client.links.statement}}" target="_blank"><h3>Invoices</h3></a>
+			<a href="{{client.links.statement}}" target="_blank"><h4>Invoices</h4></a>
 		{{/isArray}}
 	</div>
 	<ul style="margin:0px;" id="freshbooks_invoice_panel">
@@ -317,4 +317,16 @@
        <span class="save-status"></span>
     </div>
 </div>
+</script>
+
+<script id="freshbooks-error-template" type="text/html">
+{{#check_length message "140"}}
+	<div class="ellipsis-multi-line collapse-25" title="{{message}}" style="height:110px;overflow: hidden;line-height:160%;word-wrap: break-word;padding:10px">
+		{{message}}
+	</div>
+{{else}}
+	<div style="line-height:160%;word-wrap: break-word;padding:10px">
+		{{message}}
+	</div>
+{{/check_length}}
 </script>

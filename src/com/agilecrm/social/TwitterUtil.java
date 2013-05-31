@@ -176,8 +176,8 @@ public class TwitterUtil
 	    result.current_update = user.getStatus().getText();
 	    result.current_update_id = user.getStatus().getId();
 
-	    result.updateStream = getNetworkUpdates(widget,
-		    Long.parseLong(twitterId), result.current_update_id, 5);
+	    result.updateStream = getNetworkUpdates(widget, user.getId(),
+		    result.current_update_id, 5);
 	}
 
 	return result;

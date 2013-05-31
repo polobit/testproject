@@ -777,35 +777,60 @@ public class LinkedInUtil
     public static void main(String[] args)
     {
 	final LinkedInApiClient client = factory.createLinkedInApiClient(
-		// "4c1b1828-e275-4e09-b7f9-1f85ee32c22e", // devikkah
-		// "4abc6b56-a41e-4864-a759-22c36c36e460");
-		// "f71d216b-16b7-41d5-a593-92c928b6fa13", // revathi
-		// "9c9a2635-3efd-474c-8459-61251a5006e1");
-		// "3382f692-f598-4b72-9dd3-891853fec2fc", // test
-		// "7984afcf-f0f7-4fb3-b39c-cb7379d0336e");
-		"742877e1-5f85-4b49-a10c-08009f98005f",
-		"846cae2c-d653-45bf-98b4-39c24655ba2d");
+	// "4c1b1828-e275-4e09-b7f9-1f85ee32c22e", // devikkah
+	// "4abc6b56-a41e-4864-a759-22c36c36e460");
+		"f71d216b-16b7-41d5-a593-92c928b6fa13", // revathi
+		"9c9a2635-3efd-474c-8459-61251a5006e1");
+	// "3382f692-f598-4b72-9dd3-891853fec2fc", // test
+	// "7984afcf-f0f7-4fb3-b39c-cb7379d0336e");
+	// "742877e1-5f85-4b49-a10c-08009f98005f",
+	// "846cae2c-d653-45bf-98b4-39c24655ba2d");
 
-	Person cons = client
-		.getProfileById(
-			"6ZlRac2KIO",
-			EnumSet.of(
-				ProfileField.DISTANCE,
-				ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS,
-				ProfileField.RELATION_TO_VIEWER,
-				ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_HEADLINE,
-				ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_PUBLIC_PROFILE_URL,
-				ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_LAST_NAME,
-				ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_FIRST_NAME,
-				ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_PICTURE_URL,
-				ProfileField.RELATION_TO_VIEWER_CONNECTIONS));
+	// Person cons = client
+	// .getProfileById(
+	// "6ZlRac2KIO",
+	// EnumSet.of(
+	// ProfileField.DISTANCE,
+	// ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS,
+	// ProfileField.RELATION_TO_VIEWER,
+	// ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_HEADLINE,
+	// ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_PUBLIC_PROFILE_URL,
+	// ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_LAST_NAME,
+	// ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_FIRST_NAME,
+	// ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_PICTURE_URL,
+	// ProfileField.RELATION_TO_VIEWER_CONNECTIONS));
+	//
+	// ObjectMapper mapper = new ObjectMapper();
+	// String json;
+	// try
+	// {
+	//
+	// json = mapper.writeValueAsString(cons);
+	// System.out.println(json);
+	//
+	// }
+	// catch (Exception e)
+	// {
+	// e.getMessage();
+	// }
+
+	Person person = client.getProfileByUrl(
+		"http://www.linkedin.com/pub/digvijay-sable/1a/539/512",
+		ProfileType.STANDARD, EnumSet.of(ProfileField.PICTURE_URL,
+			ProfileField.FIRST_NAME, ProfileField.LAST_NAME,
+			ProfileField.SUMMARY, ProfileField.HEADLINE,
+			ProfileField.LOCATION_NAME,
+			ProfileField.NUM_CONNECTIONS,
+			ProfileField.PUBLIC_PROFILE_URL, ProfileField.ID,
+			ProfileField.DISTANCE, ProfileField.CURRENT_SHARE,
+			ProfileField.CURRENT_STATUS));
 
 	ObjectMapper mapper = new ObjectMapper();
 	String json;
 	try
 	{
 
-	    json = mapper.writeValueAsString(cons);
+	    json = mapper.writeValueAsString(person);
 	    System.out.println(json);
 
 	}
@@ -813,6 +838,5 @@ public class LinkedInUtil
 	{
 	    e.getMessage();
 	}
-
     }
 }
