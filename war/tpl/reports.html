@@ -43,11 +43,7 @@
 	<td>
     	{{ucfirst duration}}
 	</td>
-	<td>
-  		{{#each fields_set}}
-	 		{{report_property this}}</br> 
-  		{{/each}}
-	</td>
+	<td><div style="width:17em;">{{#reports_Field_Element fields_set}}{{/reports_Field_Element}}</div></td>
 	<td>
 		<a href="#report-results/{{id}}" data={{id}} id="report-instant-results">Show Results</a> 			
 	</td>
