@@ -377,7 +377,7 @@ function agile_removeTag(data)
     
 }
 
-function agile_addScore(socre)
+function agile_addScore(email, score)
 {
 	if(!score)
 		return;
@@ -393,7 +393,7 @@ function agile_addScore(socre)
     
 }
 
-function agile_subtractScore(socre)
+function agile_subtractScore(email, score)
 {
 	if(!score)
 		return;
@@ -501,65 +501,41 @@ var agile_id =
 
 var _agile = 
 {
-	init : function() 
+	set_account : function(APIKey, domain)
 	{
-		_agile_methods = _agile_methods || [];
+		agile_setAccount(APIKey, domain);
 	},
-	setAccount : function(APIKey, domain)
+	set_email : function(email)
 	{
-		_agile_methods.push(this.buildCommand('_setAccount', arguments));
-		_agile_execute();
+		agile_setEmail(email);
 	},
-	setEmail : function(email)
+	tracke_pageview : function()
 	{
-		_agile_methods.push(this.buildCommand('_setEmail', arguments));
-		_agile_execute();
+		agile_trackPageview();
 	},
-	trackPageview : function()
+	create_contact : function(properties, tags)
 	{
-		_agile_methods.push(this.buildCommand('_trackPageview', arguments));	
-		_agile_execute();
+		agile_createContact(properties, tags);
 	},
-	createContact : function(contact)
+	delete_contact : function(email)
 	{
-		_agile_methods.push(this.buildCommand('_createContact', arguments));		
-		_agile_execute();
+		agile_deleteContact(email);
 	},
-	deleteContact : function(email)
+	add_tag : function(email, tags)
 	{
-		_agile_methods.push(this.buildCommand('_deleteContact', arguments));		
-		_agile_execute();
+		agile_addTag(email, tags);
 	},
-	addTag : function(data)
+	remove_tag: function(email, tags)
 	{
-		_agile_methods.push(this.buildCommand('_addTag', arguments));		
-		_agile_execute();
+		agile_removeTag(email, tags)
 	},
-	removeTag: function(data)
+	add_score : function(email, score)
 	{
-		_agile_methods.push(this.buildCommand('_removeTag', arguments));		
-		_agile_execute();
+		agile_addScore(email, score)
 	},
-	addScore : function(data)
+	subtract_score : function(email, score)
 	{
-		_agile_methods.push(this.buildCommand('_addScore', arguments));		
-		_agile_execute();
-	},
-	subtractScore : function(data)
-	{
-		_agile_methods.push(this.buildCommand('_subtractScore', arguments));		
-		_agile_execute();
-	},
-	
-	buildCommand : function(name, arguments)
-	{
-		var param = [];
-		param.push(name);
-		for(var i=0; i<arguments.length; i++)
-		{
-			param.push(arguments[i]);
-		}
-		return param;
+		agile_subtractScore(email, score);
 	}
 };
 
@@ -586,12 +562,11 @@ var _agile_methods;
 
 // Init Function
 (function () {  
-	_agile.init();
 	_agile_execute();
 })();
 
 try {
-	window.onload = $AgileAPI
+	window.onload = $agile
 }
 catch (err)
 {

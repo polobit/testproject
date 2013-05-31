@@ -779,3 +779,22 @@ body
 .typeahead-border:last-child {
 	border-bottom: none !important;
 }
+
+.contact-details-widget:before {
+	content:"" !important;
+	float: left !important;
+	width: 5px !important; 
+	height: 120px !important;
+}
+
+.contact-details-widget:after {
+	left:86%;
+}
+
+.contact-details-property {
+	overflow: hidden; 
+	width: 17em; 
+	word-wrap: normal; 
+	text-overflow: ellipsis; 
+	white-space: nowrap;
+}

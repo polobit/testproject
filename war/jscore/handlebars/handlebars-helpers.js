@@ -492,14 +492,11 @@ $(function() {
 	/**
 	 * Counts the existence of property name which occurred multiple times.
 	 */
-	Handlebars.registerHelper('multiple_Property_Count', function(name,
-			properties) {
-		var count = 0;
-		for ( var i = 0, l = properties.length; i < l; i++) {
-			if (properties[i].name == name)
-				count++;
-		}
-		return count;
+	Handlebars.registerHelper('property_is_exists', function(name,
+			properties, options) {
+
+		if(getPropertyValue(properties, name))
+			return options.fn(this);
 	});
 
 	/**
