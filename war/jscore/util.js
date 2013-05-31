@@ -182,9 +182,13 @@ function delete_contact_tag(contact, tagName) {
 	$.each(contact.tagsWithTime, function(index, tagObject) {
 		if(tagObject.tag == tagName)
 		{
+			// Tag should be removed from tags also, 
+			// or deleted tag will be added again
+			contact.tags.splice(index, 1);
 			contact.tagsWithTime.splice(index, 1);
 			return false;
 		}
+		contact.tags.push(tagObject.tag);
 	});
 	
 	return contact;
@@ -235,6 +239,9 @@ function saveEntity(object, url, callback)
 function getGMTTimeFromDate(date) {
 	
 	var timeZoneShift = -(date.getTimezoneOffset() / 60);
+	
+	console.log((parseFloat(date.getTimezoneOffset() / 60)));
+	console.log((date.getTimezoneOffset() % 60));
 	
 	var timeZoneShiftMills = ((parseInt(timeZoneShift)/10) * 60 * 60) + ((parseInt(timeZoneShift) % 10) * 60 * 60);
 	
