@@ -156,31 +156,13 @@ $(function() {
 	
 	/**
 	 * 
-	 * @method report_property
+	 * @method task_property
 	 * @param {String}
 	 *            change property value in view
 	 * @returns converted string
 	 */
-	Handlebars.registerHelper('report_property', function(value) {
-		if (value == "properties_first_name")
-			return "First Name";
-		else if (value == "properties_last_name")
-			return "Last Name";
-		else if (value == "properties_email")
-			return "Email";
-		else if (value == "properties_image")
-			return "Image";
-		else if (value == "properties_title")
-			return "Title";
-		else if (value == "properties_company")
-			return "Company";
-		else if (value == "created_time")
-			return "Created Date";
-		else if (value == "updated_time")
-			return "Updated Date";
-		else if (value == "tags")
-			return "Tags";
-		else if (value == "EMAIL")
+	Handlebars.registerHelper('task_property', function(value) {
+		if (value == "EMAIL")
 			return "Email";
 		else if (value == "MEETING")
 			return "Meeting";
@@ -563,6 +545,44 @@ $(function() {
 			}
 		}
 	});
+	
+	/**
+	 * Converts reports field element as comma seprated values and returns as handlebars safe
+	 * string.
+	 */
+	Handlebars.registerHelper('reports_Field_Element', function(properties) {
+				var el = "";
+				var count = properties.length;
+				$.each(properties, function(key, value) {
+					
+					if (value == "properties_first_name")
+						value = "First Name";
+					else if (value == "properties_last_name")
+						value = "Last Name";
+					else if (value == "properties_email")
+						value = "Email";
+					else if (value == "properties_image")
+						value = "Image";
+					else if (value == "properties_title")
+						value = "Title";
+					else if (value == "properties_company")
+						value = "Company";
+					else if (value == "created_time")
+						value = "Created Date";
+					else if (value == "updated_time")
+						value = "Updated Date";
+					else if (value == "tags")
+						value = "Tags";
+					
+					if (--count == 0) {
+						el = el.concat(value + ".");
+						return;
+					}
+					el = el.concat(value + ", ");
+				});
+				
+				return new Handlebars.SafeString(el);
+	});
 
 	/**
 	 * Converts string to JSON
@@ -700,7 +720,7 @@ $(function() {
 			return options.inverse(this);
 		else
 			return options.fn(this);
-	})
+	});
 
 	/**
 	 * Adds Custom Fields to forms, where this helper function is called

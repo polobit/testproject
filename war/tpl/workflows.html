@@ -13,11 +13,8 @@
     <td>
         <div>
 		    {{#stringToJSON this "subscribersCount"}}{{/stringToJSON}} 	
-            <small><span>Active:&nbsp;</span>{{#if subscribersCount.active}}{{subscribersCount.active}}{{else}} - {{/if}}</small>
-        </div>
-        <br/>
-        <div>
-            <small><span>Done:&nbsp;&nbsp;</span>{{#if subscribersCount.done}}{{subscribersCount.done}}{{else}} - {{/if}}</small>
+			{{#if subscribersCount.done}}{{subscribersCount.done}}&nbsp;completed{{#if subscribersCount.active}},{{/if}} {{/if}}
+            {{#if subscribersCount.active}}{{subscribersCount.active}}&nbsp;active{{/if}}
         </div>
     </td>
 	<td><a href="#workflows/logs/{{id}}" class="workflow-results">View Logs</a></td>

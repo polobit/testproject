@@ -27,11 +27,11 @@
 <script id="tasks-list-model-template" type="text/html">
 {{#if is_complete}}
 	<td><div style="text-decoration:line-through;text-overflow:ellipsis;text-align:justify;white-space:nowrap;width:15em;overflow:hidden;">{{ucfirst subject}}</div></td>
-    <td><div style="text-decoration:line-through"><i class="{{icons type}}"></i>&nbsp;<span>{{report_property type}}</span></div></td>
+    <td><div style="text-decoration:line-through"><i class="{{icons type}}"></i>&nbsp;<span>{{task_property type}}</span></div></td>
     <td><div style="text-decoration:line-through"><time class="task-due-time" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" due}}</time></div></td>	
 {{else}}
 	<td><div style="overflow:hidden;text-overflow:ellipsis;text-align:justify;white-space:nowrap;width:15em;">{{ucfirst subject}}</div></td>
-    <td><div><i class="{{icons type}}"></i>&nbsp;<span>{{report_property type}}</span></div></td>
+    <td><div><i class="{{icons type}}"></i>&nbsp;<span>{{task_property type}}</span></div></td>
 	<td><div><time class="task-due-time" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" due}}</time></div></td>	
 {{/if}}
     <td><span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></td>
