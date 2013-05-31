@@ -68,7 +68,12 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			url : '/core/api/users',
 			restKey : "domainUser",
 			templateKey : "admin-settings-users",
-			individual_tag_name : 'tr'
+			individual_tag_name : 'tr',
+			postRenderCallback : function(el) {
+            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+           		 $(".last-login-time", el).timeago();
+             	});
+			}
 		});
 
 		this.usersListView.collection.fetch();

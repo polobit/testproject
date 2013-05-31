@@ -17,8 +17,6 @@
                         <th>User Email</th>
                         <th>Created On</th>
                         <th>Last LoggedIn</th>
-                        <th>Is Admin</th>
-                        <th>Is Disabled</th>
                     </tr>
                  </thead>
                  <tbody id='admin-settings-users-model-list' route='user-edit/' style="overflow:scroll;">
@@ -59,8 +57,7 @@
         </div>
     </td>
     <td><div style='text-overflow:ellipsis;width:7em;overflow:hidden;'>{{epochToDate info_json_string "created_time"}}</div></td>
-    <td><div style='text-overflow:ellipsis;width:8em;overflow:hidden;'>{{epochToDate info_json_string "logged_in_time"}}</div></td>
-    <td><div style='text-overflow:ellipsis;width:5em;overflow:hidden;'>{{is_admin}}</div></td>
-    <td><div style='text-overflow:ellipsis;width:6em;overflow:hidden;'>{{is_disabled}}</div></td>
+    <td><time class="last-login-time" datetime="{{epochToDate info_json_string "logged_in_time"}}" style="border-bottom:dotted 1px #999">{{epochToDate info_json_string "logged_in_time"}}</time></td>
+    <td><div style='text-overflow:ellipsis;width:6em;overflow:hidden;'>{{#if is_admin}}<span class="label">Admin</span>{{/if}}{{#if is_disabled}}<span class="label label-important">Disabled</span>{{/if}}</div></td>
     
 </script>

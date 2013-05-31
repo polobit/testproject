@@ -8,6 +8,11 @@
  */
 $(function(){
 	
+	// To stop propagation to edit page
+	$(".workflow-results").die().live('click', function(e){
+		e.stopPropagation();
+	});
+	
 	 // Save Workflow
     
 	/**
