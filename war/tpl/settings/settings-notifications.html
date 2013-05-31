@@ -5,23 +5,13 @@
             <form id="notificationsForm" name="notificationsForm" class="form-horizontal">
                 <fieldset>
                     <legend>Notifications</legend>
+                    <input type="checkbox" id="control_notifications" class="left" style="margin-top:-110px;margin-left:160px" name="control_notifications" value="true" />   
                     {{#if control_notifications}}
                     <span id="desktop-notification-content" class="right" style="margin-top:-52px"></span>
                     <a href="#notification-prefs" class="btn right" id="set-desktop-notification" style="margin-top:-62px;"><i class="icon-bullhorn"></i> Set Desktop Notifications</a>
                     {{/if}}
                     <input name="id" type="hidden" value="{{id}}" /> 
-                    <div class="control-group">
-                        <label class="control-label"><b>Notifications:</b></label>
-                        <div class="controls">
-                            <label class="checkbox">
-                            <input type="checkbox" id="control_notifications" name="control_notifications" value="true" /> 
-                            Show Notifications
-                            </label>
-                        </div>
-                    </div>
                   {{#if control_notifications}}
-                    <legend></legend>
-                    <p></p>
                     <div class="control-group">
                         <label class="control-label"><b>Browsing:</b></label>
                         <div class="controls">
@@ -123,8 +113,6 @@
                         </div>
                     </div>
                    {{else}}
-                      <legend></legend>
-                    <p></p>
                     <div class="control-group">
                         <label class="control-label"><b>Browsing:</b></label>
                         <div class="controls">
