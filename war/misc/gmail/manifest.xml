@@ -57,7 +57,7 @@
 <!-- GADGET -->
 <Extension id="AgileCRMGadget" type="gadget">
   <Name>AgileCRM - Built with Love for Small Businesses - contextual gadget</Name>
-  <Url>https://agile-crm-cloud.appspot.com/misc/gmail/gadget.xml</Url>
+  <Url>https://ga.agilecrm.com/misc/gmail/gadget.xml</Url>
   <Container name="mail"/>
 </Extension>
 
