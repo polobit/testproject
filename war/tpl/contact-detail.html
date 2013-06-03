@@ -21,7 +21,7 @@
 							</form>
 						</div>
 						<div
-							style='margin-top: -4%; width: 18em; display: inline-block; vertical-align: middle'>
+							style='margin-top: 0%; width: 16em; display: inline-block; vertical-align: middle'>
 							<div
 								style="height: auto; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
 								<b> <font size="5">{{getPropertyValue properties
@@ -30,11 +30,28 @@
 
 								{{#if_propertyName "title"}} {{value}} {{/if_propertyName}}
 
-								{{#if_propertyName "company"}} {{value}} {{/if_propertyName}}
+								{{#if_propertyName "company"}} {{value}} {{/if_propertyName}} <br />
+								<div class="span2" style="padding-top: 5px; margin: 0px">
+									{{#property_subtype_is_exists "website" "LINKEDIN" properties}}
+									<span style="margin-right: 5px"> <a target="_blank"
+										href="{{getPropertyValueBySubtype properties "
+										website" "LINKEDIN"}}" style="text-decoration: none"> <i
+											class="icon-linkedin-sign"
+											style="font-size: 1.4em !important"></i>
+									</a>
+									</span> {{/property_subtype_is_exists}} {{#property_subtype_is_exists
+									"website" "TWITTER" properties}} <span
+										style="margin-right: 5px"> <a target="_blank"
+										href="{{getPropertyValueBySubtype properties "
+										website" "TWITTER"}}" style="text-decoration: none"> <i
+											class="icon-twitter-sign" style="font-size: 1.4em !important"></i>
+									</a>
+									</span> {{/property_subtype_is_exists}}
+								</div>
 							</div>
 						</div>
 					</div>
-					<div class="right" style='position: relative; padding-left: 20px'>
+					<div class="right">
 						<div class="btn-group right" style='position: relative'>
 							<div id='star'
 								style='padding-bottom: 13px; width: auto !important'></div>
@@ -96,23 +113,6 @@
 								</ul>
 							</div>
 						</div>
-					</div>
-			
-					<div class="span2" style="padding-top:10px;margin:0px">
-					{{#property_subtype_is_exists "website" "LINKEDIN" properties}}
-						<span style="margin-right:5px">
-							<a target="_blank" href="{{getPropertyValueBySubtype properties "website" "LINKEDIN"}}" style="text-decoration:none">
-								<i class="icon-linkedin-sign" style="font-size:1.4em !important"></i>
-							</a>
-						</span>
-					{{/property_subtype_is_exists}}	
-					{{#property_subtype_is_exists "website" "TWITTER" properties}}
-						<span style="margin-right:5px">
-							<a target="_blank" href="{{getPropertyValueBySubtype properties "website" "TWITTER"}}" style="text-decoration:none">
-								<i class="icon-twitter-sign" style="font-size:1.4em !important"></i>
-							</a>
-						</span>
-					{{/property_subtype_is_exists}}	
 					</div>
 				</div>
 				<div class="span4 ellipsis-multi-line contact-details-widget"
