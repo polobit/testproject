@@ -56,16 +56,16 @@
 
 <script id="twilio-initial-template" type="text/html" >
 	<div class="widget_content">
-		<div>Make calls as </div>
-		<input type="text" placeholder="Enter number" name="twilio_from" id="twilio_from" class="required digits" style="width:auto" maxlength="15"/><br>	
-		<div>You will recieve a verification call, please enter the code you see subsequently in the verification call.</div>
+		<p>Make calls as </p>
+		<input type="text" placeholder="Enter number" name="twilio_from" id="twilio_from" class="required digits" style="width:90%" maxlength="15"/><br>	
+		<p>You will recieve a verification call, please enter the code you see subsequently in the verification call.</p>
 		<a href="#verify" class="btn" id="twilio_verify" style="font-size:13px;">Verify</a>						
 	</div>
 </script>
 
 <script id="twilio-verify-template" type="text/html" >
 	<div class="widget_content">
-		<p>Please enter this code <b>{{ValidationRequest.ValidationCode}}</b> to verify your number after you receive a call from Twilio</p>
+		<p>Please enter this code <b>{{ValidationRequest.ValidationCode}}</b> to verify your number after you receive a call from Twilio.</p>
 		<a href="#proceed" class="btn" id="twilio_proceed" style="font-size:13px;">Proceed</a>						
 	</div>
 </script>
