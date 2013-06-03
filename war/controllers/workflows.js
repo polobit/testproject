@@ -153,7 +153,7 @@ var WorkflowsRouter = Backbone.Router
 
 						// Show bar graph for campaign stats
 						showBar('/core/api/campaign-stats/stats/',
-								'campaign-stats-chart', 'Campaign Stats',
+								'campaign-stats-chart', 'Campaigns Comparison',
 								'Email Stats', null);
 
 				$(".active").removeClass("active");
