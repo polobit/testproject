@@ -11,12 +11,26 @@
 <div class="row">
 	<div class="span8">
 		<ul class="nav nav-tabs" id="APITab">
-			<li class="active"><a data-toggle="tab" href="#analytics-code">Analytics
+			<li class="active"><a data-toggle="tab" href="#api">API Key</a></li>
+			<li class=""><a data-toggle="tab" href="#analytics-code">Analytics
 					Code</a></li>
-			<li class=""><a data-toggle="tab" href="#api">API Key</a></li>
 		</ul>
 		<div class="tab-content">
-			<div class="tab-pane active" id="analytics-code">
+
+			<!--  API Key templete -->
+			<div class="tab-pane active" id="api">
+Here is your API key you can use to access through various clients<div class="clearfix"></div><br/>
+				<div class="row">
+    				<div class="span7">
+        				<pre class="prettyprint linenums">
+'{{api_key}}'
+</pre>
+    				</div>
+				</div>
+			</div>
+			<!-- End of API Key templete-->
+
+			<div class="tab-pane" id="analytics-code">
 
 <div class="row">
 	<div class="span7">
@@ -104,16 +118,6 @@ _agile.add_score('john@example.com', -5);
 	</div>
 </div>
 
-			</div>
-			<!--  API Key templete-->
-			<div class="tab-pane" id="api">
-				<div class="row">
-    				<div class="span7">
-        				<pre class="prettyprint linenums">
-API-KEY  '{{api_key}}'
-</pre>
-    				</div>
-				</div>
 			</div>
 
 		</div>
