@@ -74,27 +74,28 @@ function setUpDashboardEntities(el) {
 }
 
 function setupSubscriptionDetails(el)
-{
-	$.getJSON('core/api/subscription', function(data){
-		console.log(data);
-		if(data)
-			{
-				head.js(LIB_PATH + 'lib/prettify-min.js', function() {
-					var view = new Base_Model_View({
-					url : '/core/api/api-key',
-					template : "dashboard-api-key-model",
-					postRenderCallback : function(el) {
-						prettyPrint();
-					}
-				});
+{					
+	var view = new Base_Model_View({
+		url : 'core/api/subscription',
+		template : "dashboard-account-info",
+	});
 
-					$("#subscription-stats").html(view.el);
-				});
+		view.model.fetch({success: function(data){
+			if(!$.isEmptyObject(data.toJSON())) {
+				$("#subscription-stats").html(view.render(true).el);
 				return;
 			}
-		$("#subscription-stats").html(getTemplate('user-billing', data));
-	});
-	
+			
+			$.get('core/api/users/count', function(count) {
+				var plandata = {};
+				plandata.users_count = count;
+				plandata.plan = "free";
+				
+				console.log(plandata);
+				
+				$("#subscription-stats").html(getTemplate('user-billing', plandata));
+			});
+		}})
 }
 
 
