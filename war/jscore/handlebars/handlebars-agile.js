@@ -121,6 +121,19 @@ function getPropertyValue(items, name) {
 }
 
 /**
+ * Returns contact property based on its property name and subtype
+ */
+function getPropertyValueBySubtype(items, name, subtype) {
+	if (items == undefined)
+		return;
+
+	for ( var i = 0, l = items.length; i < l; i++) {
+		if (items[i].name == name && items[i].subtype == subtype)
+			return items[i].value;
+	}
+}
+
+/**
  * Turns the first letter of the given string to upper-case and the remaining to
  * lower-case (EMaiL to Email).
  * 

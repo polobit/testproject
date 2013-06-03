@@ -15,6 +15,11 @@ $(function() {
 
 		return getPropertyValue(items, name);
 	});
+	
+	Handlebars.registerHelper('getPropertyValueBySubtype', function(items, name, subtype) {
+
+		return getPropertyValueBySubtype(items, name, subtype);
+	});
 
 	Handlebars.registerHelper('urlEncode', function(url, key, data) {
 
@@ -497,6 +502,13 @@ $(function() {
 
 		if(getPropertyValue(properties, name))
 			return options.fn(this);
+	});
+	
+	Handlebars.registerHelper('property_subtype_is_exists', function(name, subtype, properties, options) {
+
+		if(getPropertyValueBySubtype(properties, name, subtype))
+			return options.fn(this);
+		return options.inverse(this);
 	});
 
 	/**
