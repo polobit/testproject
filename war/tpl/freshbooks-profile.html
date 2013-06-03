@@ -2,10 +2,13 @@
 	<div display:inline;  line-height:12px;word-wrap: break-word;">
 		<form class="widget_content" style="border-bottom:none;" id="freshbooks_login_form" name="freshbooks_login_form" method="post">
 	    	<fieldset>
-				<p class="ml_5" style='line-height:140%;'>Cloud Accounting Specialist for Small Business Owners</p>
-				<input type="text" id="freshbooks_url" class="input-medium required ml_5" placeholder="https://company.freshbooks.com" value="" name="url"></input>
-				<input type="text" id="freshbooks_apikey" class="input-medium required ml_5" placeholder="Api key" value="" name="api_key"></input><br/>
-				<button id="freshbooks_save_token" class="btn ml_5"><a href="#">Save</a></button>
+				<p style='line-height:140%;'>Create and manage customer invoices and track payments with Freshbooks. To start using, </p>
+				<p>
+				<label>Enter your Freshbooks details: </label>
+				<input type="text" id="freshbooks_url" class="input-medium required" style="width:90%" placeholder="https://company.freshbooks.com" value="" name="url"></input>
+				<input type="text" id="freshbooks_apikey" class="input-medium required" style="width:90%" placeholder="Api Token" value="" name="api_key"></input>
+				</p>
+				<button id="freshbooks_save_token" class="btn"><a href="#" style="text-decoration:none;">Save</a></button>
 			 </fieldset>
 	    </form>
 	</div>
@@ -14,7 +17,7 @@
 <script id="freshbooks-profile-template" type="text/html">
 {{#if_equals total "0"}}
 	<div class="widget_content">
-		No clients matching this contact.
+		<div>No clients matching this contact.</div>
 		<a href="#add" class="btn" id="freshbooks_add_client" style="margin-top:10px;"><i class="icon-plus"></i>Add client</a>
 	</div>
 {{else}}

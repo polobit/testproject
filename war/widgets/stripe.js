@@ -71,8 +71,8 @@ function setupStripeOAuth(plugin_id)
         '&plugin_id=' + encodeURIComponent(plugin_id);
 
     $('#Stripe').html('<div class="widget_content" style="border-bottom:none;line-height: 160%;" >' +
-        'Stripe enables individuals and businesses to accept payments over the ' +
-        'internet.<p style="margin: 10px 0px 5px 0px;"><a href=' + url + '>' +
+        'See the customer\'s subscriptions history and payments from your Stripe account.' +
+        '<p style="margin: 10px 0px 5px 0px;"><a href=' + url + '>' +
         '<img src="/img/plugins/stripe-connect-button.png" style="width: 190px;' +
         'height: 33px;"></a></p></div>');
 }

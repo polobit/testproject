@@ -509,7 +509,7 @@ var _agile =
 	{
 		agile_setEmail(email);
 	},
-	tracke_pageview : function()
+	tracke_page_view : function()
 	{
 		agile_trackPageview();
 	},

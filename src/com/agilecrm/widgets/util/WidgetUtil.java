@@ -6,6 +6,7 @@ import java.util.List;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.Widget.widgetType;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -143,37 +144,37 @@ public class WidgetUtil
 		"Linkedin",
 		" LinkedIn helps build professional relationships with contacts and helps keep tabs about their business interests.",
 		"/widgets/linkedin.js", "/img/plugins/linkedin.png",
-		"/widgets/linkedin-logo-small.png", null));
+		"/widgets/linkedin-logo-small.png", null, widgetType.SOCIAL));
 	widgets.add(new Widget(
 		"Twitter",
 		" Twitter offers a great way of engaging with contacts in real time based on what they tweet.",
 		"/widgets/twitter.js", "/img/plugins/twitter.jpg",
-		"/widgets/twitter-logo-small.png", null));
+		"/widgets/twitter-logo-small.png", null, widgetType.SOCIAL));
 	widgets.add(new Widget(
 		"Rapleaf",
 		" Rapleaf makes it incredibly easy for you to personalize content for your customers.",
 		"/widgets/rapleaf.js", "/img/plugins/rapleaf.jpeg",
-		"/widgets/rapleaf-logo-small.jpeg", null));
+		"/widgets/rapleaf-logo-small.jpeg", null, widgetType.SOCIAL));
 	widgets.add(new Widget(
 		"Twilio",
 		" Stay connected to your users with Twilio phone numbers in 40 countries all over the globe.",
 		"/widgets/twilio.js", "/img/plugins/twilio.png",
-		"/widgets/twilio-logo-small.jpg", null));
+		"/widgets/twilio-logo-small.jpg", null, widgetType.CALL));
 	widgets.add(new Widget(
 		"Stripe",
 		"Stripe enables individuals and businesses to accept payments over the internet.",
 		"/widgets/stripe.js", "/img/plugins/stripe-logo.jpg",
-		"/widgets/stripe-logo-small.jpeg", null));
+		"/widgets/stripe-logo-small.jpeg", null, widgetType.BILLING));
 	widgets.add(new Widget(
 		"Zendesk",
 		"Zendesk streamlines communication within a ticket that has organized workflow towards resolution of the customer issue.",
 		"/widgets/zendesk.js", "/img/plugins/zendesk_logo.png",
-		"/widgets/zendesk-logo-small.png", null));
+		"/widgets/zendesk-logo-small.png", null, widgetType.SUPPORT));
 	widgets.add(new Widget(
 		"FreshBooks",
 		"FreshBooks enables the ability to create and manage invoices, estimates, expenses, and projects all in one place.",
 		"/widgets/freshbooks.js", "/img/plugins/freshbooks-logo.jpg",
-		"/widgets/freshbooks-logo-small.jpg", null));
+		"/widgets/freshbooks-logo-small.jpg", null, widgetType.BILLING));
 
 	return widgets;
 
