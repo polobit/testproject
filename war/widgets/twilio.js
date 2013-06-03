@@ -29,7 +29,7 @@ $(function() {
 	
 	if(Numbers.length == 0)
 	 {
-	  $("#Twilio").html("<div style='padding: 10px;line-height:160%;'>" +
+	  $("#Twilio").html("<div class='widget_content'>" +
 	    "No contact number is associated with this contact</div>");
 	        return;
 	 }
@@ -107,8 +107,8 @@ function setupTwilioOAuth(plugin_id) {
 	$('#Twilio').html(TWILIO_LOGS_LOAD_IMAGE);
 	
 	 $('#Twilio').html('<p class="widget_content" style="border-bottom:none">' 
-			 + 'Stay connected to your users with Twilio phone numbers in 40 countries ' 
-			 + 'all over the globe. </p><a id="twilio-connect-button" ' 
+			 + 'Call your contacts directly using your Twilio account. To start using, ' 
+			 + 'connect your Twilio account. </p><a id="twilio-connect-button" ' 
 			 + 'href="https://www.twilio.com/authorize/CNf63bca035414be121d517a116066a5f8?state=' 
 			 + encodeURIComponent(window.location.href) + '" style="margin-bottom: 10px;"></a>');	
 				
@@ -157,7 +157,7 @@ function showTwilioDetails(token, plugin_id)
 	
 	if(Numbers.length == 0)
 	{
-	  $("#Twilio").html("<div style='padding: 10px;line-height:160%;'>" +
+	  $("#Twilio").html("<div class='widget_content'>" +
 	    "No contact number is associated with this contact</div>");
 	        return;
 	}
@@ -310,7 +310,7 @@ function setUpTwilio(token, plugin_id, from){
 						from:from,
 						PhoneNumber:to,
 						record:record,
-					    Url:"https://teju-first.appspot.com/twilio/voice?record=" + record
+					    Url:"https://agile-crm-cloud.appspot.com/twilio/voice?record=" + record
 				    });
 			 });
 			   

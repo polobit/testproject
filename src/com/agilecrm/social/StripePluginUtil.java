@@ -29,13 +29,13 @@ public class StripePluginUtil
 	invoiceParams.put("customer", customerId);
 	List<Invoice> invoiceList = Invoice.all(invoiceParams, apiKey)
 		.getData();
-	System.out.println(Invoice.all(invoiceParams, apiKey));
-	System.out.println(invoiceList);
+	// System.out.println(Invoice.all(invoiceParams, apiKey));
+	// System.out.println(invoiceList);
 	JSONArray list = new JSONArray(new Gson().toJson(invoiceList));
-	System.out.println(list);
+	// System.out.println(list);
 	customer_info.put("customer", StripeUtil.getJSONFromCustomer(customer));
 	customer_info.put("invoice", list);
-	System.out.println(customer_info);
+	// System.out.println(customer_info);
 	return customer_info;
 
     }
@@ -44,6 +44,7 @@ public class StripePluginUtil
     {
 	try
 	{
+	    // "sk_test_R4iHedrh8cDnCsNthKyXSKTj";
 	    System.out.println(getCustomerDetails(null, "cus_1HB4FFdQLR4g7X"));
 	}
 	catch (Exception e)

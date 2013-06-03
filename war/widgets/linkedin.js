@@ -122,10 +122,10 @@ function setupLinkedinOAuth(plugin_id)
 
     //Shows a link button in the UI which connects to the above URL
     $('#Linkedin').html("<div class='widget_content' style='border-bottom:none;line-height: 160%;' >" + 
-    		"Build and engage with your professional network. Access knowledge, " + 
-    		"insights and opportunities.<p style='margin: 10px 0px 5px 0px;' >" + 
-    		"<button class='btn' ><a href='" + url + "'>Link Your LinkedIn</a>" + 
-    		"</p></button></div>");
+    		"Build professional relationships with contacts and keep a tab on " +  
+    		"their business interests.<p style='margin: 10px 0px 5px 0px;' >" + 
+    		"<button class='btn' ><a href='" + url + "' style='text-decoration: none;'>" + 
+    		"Link Your LinkedIn</a></p></button></div>");
 }
 
 /**

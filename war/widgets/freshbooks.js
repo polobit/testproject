@@ -164,7 +164,6 @@ function showFreshBooksClient(plugin_id, email)
         agile_crm_save_widget_prefs(FRESHBOOKS_PLUGIN_NAME, JSON.stringify(prefs));
 		
         alert(data.responseText);
-		
 		setUpFreshbooksAuth(plugin_id);
 	});
 }
@@ -185,10 +184,6 @@ function getInvoicesOfClient(plugin_id, client_id)
 		  
 	}, 'json').error(function(data)
 	{		
-		/*$('#freshbooks_invoice_panel').html('<div class="widget_content" ' +
-				'style="border-bottom:none;padding: 10px;line-height:160%;">' +
-				data.responseText + '</div>');*/
-		
 		freshbooksError("freshbooks_invoice_panel", data.responseText);
 	});
 }
@@ -218,9 +213,6 @@ function getItemsInFreshBooks(plugin_id, callback)
 	{		
 		$('#freshbooks_invoice_load').remove();
 		
-	/*	$('#freshbooks_items_panel').html('<div class="widget_content" ' +
-				'style="border-bottom:none;padding: 10px;line-height:160%;">' + 
-				data.responseText + '</div>');*/
 		freshbooksError("freshbooks_items_panel", data.responseText);
 
 	});
@@ -238,9 +230,6 @@ function addClientToFreshBooks(plugin_id, first_name, last_name, email)
 			
 	},  'json').error(function(data) 
 	{
-		/*$('#FreshBooks').html('<div class="widget_content" style="border-bottom:none;padding: 10px;' +
-		         'line-height:160%;">'+ data.responseText + '</div>');*/
-		
 		freshbooksError("FreshBooks", data.responseText);
 	});
 	
