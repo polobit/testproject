@@ -69,6 +69,10 @@ var CONTENT_JSON = {
 		"button_text" : "Add view",
 		"route" : "#contact-view-add",
 		"image" : "/img/clipboard.png"
+	},
+	"dashboard" : {
+		"title" : "Your recent activity, upcoming tasks and deals are shown here. You currently do not have much activity.",
+		"image" : "/img/clipboard.png"
 	}
 	
 };

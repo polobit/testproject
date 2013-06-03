@@ -1,11 +1,8 @@
 <!-- Opportunity template -->
 <script id="dashboard-opportunities-collection-template" type="text/html">
+{{#if this.length}}
 <div style="margin-left:0px">
 <h2 style="border-bottom:1px solid #f5f5f5; margin-bottom:10px">Upcoming Deals</h2>
-{{#unless this.length}}
-	<b>You don't own any deals</b>
-{{/unless}}
-{{#if this.length}}
 <table class="table table-striped">
                     <thead>
                         <tr style="background-color:#EDF3FE;">
@@ -19,8 +16,8 @@
               <tbody id="dashboard-opportunities-model-list">
           </tbody>
 	</table>
-{{/if}}
 </div>
+{{/if}}
 </script>
 
 <script id="dashboard-opportunities-model-template" type="text/html">
@@ -43,9 +40,6 @@
 
 <!-- Notes Template -->
 <script id="dashboard-notes-collection-template" type="text/html">
-{{#unless this.length}}
-	<b>You don't own any notes</b>
-{{/unless}}
 {{#if this.length}}
 <table class="table">
     <thead>
@@ -68,13 +62,9 @@
 
 <!-- Tasks Template -->
 <script id="dashboard1-tasks-collection-template" type="text/html">
+{{#if this.length}}
 <div style="margin-left:0px">
 <h2 style="border-bottom:1px solid #f5f5f5; margin-bottom:10px">Tasks</h2>
-
-{{#unless this.length}}
-	<b>You don't own any Tasks</b>
-{{/unless}}
-{{#if this.length}}
     <div class="data-container">
         <table class="table table-striped" url="core/api/tasks/bulk">
             <thead>
@@ -90,8 +80,8 @@
             </tbody>
         </table>
     </div>
-{{/if}}
 </div>
+{{/if}}
 </script>
 
 <script id="dashboard1-tasks-model-template" type="text/html">
@@ -159,12 +149,9 @@
 </script>
 
 <script id="dashboard-contacts-collection-template" type="text/html">
-
-
+{{#if this.length}}
 <div style="margin-left:0px">
 <h2 style="border-bottom:1px solid #f5f5f5; margin-bottom:10px">Recently Viewed  <small>Contacts</small></h2>
-{{#unless this.length}}
- {{else}}
 		<div class="data">
 			<div class="data-container">
 			<table id="contacts" class="table table-striped "
@@ -184,8 +171,8 @@
 			</div>
 			</div>
 	</div>
-{{/unless}}
 </div>
+{{/if}}
 </script>
 
 <!-- Workflows template-->
@@ -199,12 +186,9 @@
 </script>
 
 <script id="dashboard-workflows-collection-template" type="text/html">
+{{#if this.length}}
 <div style="margin-left:0px">
 <h2 style="border-bottom:1px solid #f5f5f5; margin-bottom:10px">Workflows</h2>
-{{#unless this.length}}
-	<b>You don't own any Workflows</b>
-{{/unless}}
-{{#if this.length}}
                 <table class="table table-striped">
                     <thead>
                        <tr style="background-color:#EDF3FE;">
@@ -217,18 +201,14 @@
                     </thead>
                     <tbody id="dashboard-workflows-model-list"> </tbody>
                 </table>
-{{/if}}
 </div>
+{{/if}}
 </script>
 
 <script id="dashboard-tasks-collection-template" type="text/html">
+{{#if this.length}}
 <div style="margin-left:0px">
 <h2 style="border-bottom:1px solid #f5f5f5; margin-bottom:10px">Tasks</h2>
-
-{{#unless this.length}}
-<img src="/img/funtime.jpg" /></img>
-{{/unless}}
-{{#if this.length}}
 <section>
         <table class="table hide">
             <b id="overdue-heading" style="display: none">Overdue</b>
@@ -251,8 +231,8 @@
     <a href="#tasks" class="tasks-table" id="tasks-list">All Tasks</a>
     <div class="right add-task"><a href="#"><i class="icon-plus" /> Add New</a></div>
 </div>
-{{/if}}
 </div>
+{{/if}}
 </script>
 
 <script id="dashboard-tasks-model-template" type="text/html">
@@ -299,29 +279,9 @@ Account Overview</span></strong>
 </script>
 
 <script id="dashboard-campaign-logs-collection-template" type="text/html">
+{{#if this.length}}
 <div style="margin-left:0px">
 <h2 style="border-bottom:1px solid #f5f5f5; margin-bottom:10px">Recent Campaign Logs</h2>
-
-    {{#unless this.length}}
-    <div class="slate">
-        <div class="slate-content">
-            <div class="box-left">
-            <img alt="Clipboard" src="/img/clipboard.png">
-            </div>
-            <div class="box-right">
-                <h3>No log exists.</h3>
-                <div class="text">
-                Recent logs are not yet created. May be no campaign run yet.
-                </div>
-                <a href="#">Learn more about logs.</a>
-                <br>
-               <!-- <span class="btn blue btn-slate-action"><i class="icon-plus-sign"></i> Add the first task!</span> -->
-            </div>
-        </div>
-    </div>
-    {{/unless}}
-
-    {{#if this.length}}
     <div class="data">
         <div class="data-container">
             <table class="table table-striped onlySorting" id="logs-table" url="core/api/campaigns/logs/bulk">
@@ -338,8 +298,8 @@ Account Overview</span></strong>
             </table>
         </div>
     </div>
-    {{/if}}
 </div>
+{{/if}}
 </script>
 
 <script id="dashboard-campaign-logs-model-template" type="text/html">
