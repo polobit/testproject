@@ -1,17 +1,15 @@
 <script id="admin-settings-account-prefs-template" type="text/html">
 <!--  Contact View Detail in Detailed mode - when only one contact is shown -->
-<div class="span7 well">
+<div class="span8 well">
     <form id="accountPrefs" class="form-horizontal">
         <fieldset>
             <input name="id" type="hidden" value="{{id}}" />
             <legend>Account Preferences<a href="#subscribe" class="pull-right">Manage Subscription</a></legend>
-            <div class="row" style="margin-bottom:-30px;">
-                <div class="span4">
-                    <div class="span4" style="margin-bottom:5px; margin-left:50px">
-                        <div class="span1">	
-                            <label style="text-align: right;padding-right: 14px;">Plan</label> 
-                        </div>
-                        <div class="span2" style="margin-left:10px">
+            <div class="row">
+				<div class="span5">
+                    <div class="control-group" style="margin-bottom:10px;">
+                        <label class="control-label" style="text-align: right;padding-right: 14px;">Plan</label> 
+                        <div class="controls" style="margin-top: 5px;">
                             {{#if plan.plan_id}}
                             {{plan.plan_id}}
                             {{else}}
@@ -19,11 +17,9 @@
                             {{/if}}
                         </div>
                     </div>
-                    <div class="span4" style="margin-bottom:5px; margin-left:50px">
-                        <div class="span1">	
-                            <label>Quantity</label>
-                        </div>
-                        <div class="span2" style="margin-left:10px">
+                    <div class="control-group">
+                        <label class="control-label">Quantity</label>
+                        <div class="controls" style="margin-top: 5px;">
                             {{#if plan.quantity}}
                             {{plan.quantity}}
                             {{else}}
@@ -31,36 +27,34 @@
                             {{/if}}
                         </div>
                     </div>
-                    <div style="margin-left:-20px;">
-                        <div class="control-group">
-                            <label class="control-label">Company <span class="field_req">*</span></label> 
-                            <div class="controls">
-                                <input name="company_name" class="required" type="text" value="{{company_name}}" />
-                            </div>
+                    <div class="control-group" style="margin-bottom:10px;">
+                        <label class="control-label">Company <span class="field_req">*</span></label> 
+                        <div class="controls">
+                            <input name="company_name" class="input-medium required" type="text" value="{{company_name}}" />
                         </div>
                     </div>
-                </div>
-                <div class="span3">
-                    <div class="control-group">
+				</div>
+                <div style="margin-right:80px;">
+                    <div class="right">
                         <div id="upload-container" messg="User image has been uploaded">
-                            <div class="controls">
+                            <div class="clearfix">
                                 <div class="imgholder">
                                     {{#if logo}}
-                                    <img src="{{logo}}" height="100" width="100" />
+                                    <img src="{{logo}}" height="75" width="75" />
                                     {{else}}
-                                    <img src="https://contactuswidget.appspot.com/images/pic.png" height="100" width="100" />
+                                    <img src="https://contactuswidget.appspot.com/images/pic.png" height="75" width="75" />
                                     {{/if}}													
                                 </div>
-                                <p style="margin-top:-10px"><br /></p>
                                 <p>
                                     <input type="hidden" id="upload_url" name="logo" />  
-                                    <input class="upload_s3 btn" type="button" id="account_prefs_image" value="Upload" />
+                                    <input style="margin: 10px 0px 0px;" class="upload_s3 btn" type="button" id="account_prefs_image" value="Upload" />
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="clearfix"></div>
             <div class="form-actions">
                 <a href="#" type="submit" class="save btn btn-primary">Save Changes</a> 
                 <a href="#admin" class="btn ">Cancel</a>
