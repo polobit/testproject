@@ -584,7 +584,7 @@ $(function() {
 						value = "Tags";
 					
 					if (--count == 0) {
-						el = el.concat(value + ".");
+						el = el.concat(value);
 						return;
 					}
 					el = el.concat(value + ", ");

@@ -1,10 +1,30 @@
 <script id="admin-settings-api-key-model-template" type="text/html">
 <!-- -->
 <div class="row">
-	<div class="span7">
-You can use javascript API to track page views on your site, add/delete contacts from your website or blog directly.
-    <div class="clerfix"/><br/>
-<pre class="prettyprint linenums " ">
+	<div class="span12">
+		<div class="page-header">
+			<h1>API & Analytics</h1>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="span8">
+		<ul class="nav nav-tabs" id="APITab">
+			<li class="active"><a data-toggle="tab" href="#analytics-code">Analytics
+					Code</a></li>
+			<li class=""><a data-toggle="tab" href="#api">API Key</a></li>
+		</ul>
+		<div class="tab-content">
+			<div class="tab-pane active" id="analytics-code">
+
+				<div class="row">
+					<div class="span7">
+						You can use javascript API to track page views on your site,
+						add/delete contacts from your website or blog directly.
+						<div class="clerfix"></div>
+						<br />
+						<pre class="prettyprint linenums">
 &lt;script type="text/javascript" &gt;
 $agile = (function() {
  _agile.set_account('{{api_key}}', '{{getCurrentDomain}}');
@@ -19,80 +39,112 @@ var s = document.getElementsByTagName('script')[0];
 s.parentNode.insertBefore(aj, s);
 &lt;/script&gt;
 </pre>
-	</div>
-</div>
+					</div>
+				</div>
 
-Set Email (Optional)<div class="clerfix"/><br/>
-<div class="row">
-	<div class="span7">
-<pre class="prettyprint linenums " ">
+				Set Email (Optional)
+				<div class="clearfix"></div>
+				<br />
+				<div class="row">
+					<div class="span7">
+						<pre class="prettyprint linenums">
  _agile.set_email('jim@example.com');
 </pre>
-	</div>
-</div>
+					</div>
+				</div>
 
-Track Page View<div class="clerfix"/><br/>
-<div class="row">
-	<div class="span7">
-<pre class="prettyprint linenums " ">
+				Track Page View
+				<div class="clearfix"></div>
+				<br />
+				<div class="row">
+					<div class="span7">
+						<pre class="prettyprint linenums">
  _agile.track_pageview();
 </pre>
-	</div>
-</div>
+					</div>
+				</div>
 
 
-Create Contact<div class="clerfix"/><br/>
-<div class="row">
-	<div class="span7">
-<pre class="prettyprint linenums " ">
+				Create Contact
+				<div class="clearfix"></div>
+				<br />
+				<div class="row">
+					<div class="span7">
+						<pre class="prettyprint linenums">
  _agile.create_contact({"email": "jim@example.com", "first_name":"Jim", "last_name":"Brown"}, "tag1, tag2"]);
 </pre>
-	</div>
-</div>
+					</div>
+				</div>
 
-Delete Contact<div class="clerfix"/><br/>
-<div class="row">
-	<div class="span7">
-<pre class="prettyprint linenums " ">
+				Delete Contact
+				<div class="clearfix"></div>
+				<br />
+				<div class="row">
+					<div class="span7">
+						<pre class="prettyprint linenums">
  _agile.delete_contact('jim@example.com');
 </pre>
-	</div>
-</div>
+					</div>
+				</div>
 
-Add Tag<div class="clerfix"/><br/>
-<div class="row">
-	<div class="span7">
-<pre class="prettyprint linenums " ">
+				Add Tag
+				<div class="clearfix"></div>
+				<br />
+				<div class="row">
+					<div class="span7">
+						<pre class="prettyprint linenums">
  _agile.add_tag('john@example.com', 'tags2, tag3, tag4');
 </pre>
-	</div>
-</div>
+					</div>
+				</div>
 
-Remove Tag<div class="clerfix"/><br/>
-<div class="row">
-	<div class="span7">
-<pre class="prettyprint linenums " ">
+				Remove Tag
+				<div class="clearfix"></div>
+				<br />
+				<div class="row">
+					<div class="span7">
+						<pre class="prettyprint linenums">
  _agile.remove_tag('bob@example.com', 'tag4, tag5, tag6');
 </pre>
-	</div>
-</div>
+					</div>
+				</div>
 
 
-Add Score<div class="clerfix"/><br/>
-<div class="row">
-	<div class="span7">
-<pre class="prettyprint linenums " ">
+				Add Score
+				<div class="clearfix"></div>
+				<br />
+				<div class="row">
+					<div class="span7">
+						<pre class="prettyprint linenums">
 _agile.add_score('john@example.com', 10);
 </pre>
-	</div>
-</div>
+					</div>
+				</div>
 
-Subtract Score<div class="clerfix"/><br/>
-<div class="row">
-	<div class="span7">
-<pre class="prettyprint linenums " ">
+				Subtract Score
+				<div class="clearfix"></div>
+				<br />
+				<div class="row">
+					<div class="span7">
+						<pre class="prettyprint linenums">
 _agile.subtract_score('john@example.com', 10);
 </pre>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="tab-pane" id="api">
+				<div class="row">
+    				<div class="span7">
+        				<pre class="prettyprint linenums">
+API-KEY  '{{api_key}}'
+</pre>
+    				</div>
+				</div>
+			</div>
+
+		</div>
 	</div>
 </div>
 
