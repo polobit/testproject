@@ -100,7 +100,7 @@ var DealsRouter = Backbone.Router.extend({
     		// Gets a deal from deals collection based on id
     		var model = dealsView.collection.get(id);
     	
-    	console.log(model.toJSON());
+    	//console.log(model.toJSON());
     	
     	
         var view = new Base_Model_View({

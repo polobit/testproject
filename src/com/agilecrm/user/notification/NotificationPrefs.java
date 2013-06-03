@@ -49,58 +49,17 @@ public class NotificationPrefs
     public boolean control_notifications = true;
 
     /**
-     * Contact browsing notification - default true.
+     * Type of contact.
+     * 
      */
-    @NotSaved(IfDefault.class)
-    public boolean contact_browsing = true;
+    public enum ContactType
+    {
+	ANY_CONTACT, CONTACT_ASSIGNED, CONTACT_ASSIGNED_AND_STARRED
+    };
 
-    /**
-     * Contact assigned browsing notification - default true.
-     */
-    @NotSaved(IfDefault.class)
-    public boolean contact_assigned_browsing = true;
-
-    /**
-     * Contact assigned and starred browsing notification - default true.
-     */
-    @NotSaved(IfDefault.class)
-    public boolean contact_assigned_starred_browsing = true;
-
-    /**
-     * Contact opened email notification - default true.
-     */
-    @NotSaved(IfDefault.class)
-    public boolean contact_opened_email = true;
-
-    /**
-     * Contact assigned opened email notification - default true.
-     */
-    @NotSaved(IfDefault.class)
-    public boolean contact_assigned_opened_email = true;
-
-    /**
-     * Contact assigned and starred opened email notification - default true.
-     */
-    @NotSaved(IfDefault.class)
-    public boolean contact_assigned_starred_opened_email = true;
-
-    /**
-     * Contact clicked link notification - default true.
-     */
-    @NotSaved(IfDefault.class)
-    public boolean contact_clicked_link = true;
-
-    /**
-     * Contact assigned clicked link notification - default true.
-     */
-    @NotSaved(IfDefault.class)
-    public boolean contact_assigned_clicked_link = true;
-
-    /**
-     * Contact assigned and starred clicked link notification - default true.
-     */
-    @NotSaved(IfDefault.class)
-    public boolean contact_assigned_starred_clicked_link = true;
+    public ContactType browsing;
+    public ContactType email_opened;
+    public ContactType link_clicked;
 
     /**
      * Deal created notification - default true.
@@ -204,28 +163,16 @@ public class NotificationPrefs
      *            Tag deleted status.
      */
     public NotificationPrefs(Long userId, boolean control_notifications,
-	    boolean contact_browsing, boolean contact_assigned_browsing,
-	    boolean contact_assigned_starred_browsing,
-	    boolean contact_opened_email,
-	    boolean contact_assigned_opened_email,
-	    boolean contact_assigned_starred_opened_email,
-	    boolean contact_clicked_link,
-	    boolean contact_assigned_clicked_link,
-	    boolean contact_assigned_starred_clicked_link,
-	    boolean deal_created, boolean deal_closed, boolean contact_created,
+	    ContactType browsing, ContactType email_opened,
+	    ContactType link_clicked, boolean deal_created,
+	    boolean deal_closed, boolean contact_created,
 	    boolean contact_deleted, boolean tag_created, boolean tag_deleted,
 	    String notification_sound)
     {
 	this.control_notifications = control_notifications;
-	this.contact_browsing = contact_browsing;
-	this.contact_assigned_browsing = contact_assigned_browsing;
-	this.contact_assigned_starred_browsing = contact_assigned_starred_browsing;
-	this.contact_opened_email = contact_opened_email;
-	this.contact_assigned_opened_email = contact_assigned_opened_email;
-	this.contact_assigned_starred_opened_email = contact_assigned_starred_opened_email;
-	this.contact_clicked_link = contact_clicked_link;
-	this.contact_assigned_clicked_link = contact_assigned_clicked_link;
-	this.contact_assigned_starred_clicked_link = contact_assigned_starred_clicked_link;
+	this.browsing = browsing;
+	this.email_opened = email_opened;
+	this.link_clicked = link_clicked;
 	this.deal_created = deal_created;
 	this.deal_closed = deal_closed;
 	this.contact_created = contact_created;

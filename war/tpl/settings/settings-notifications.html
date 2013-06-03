@@ -5,7 +5,10 @@
             <form id="notificationsForm" name="notificationsForm" class="form-horizontal">
                 <fieldset>
                     <legend>Notifications</legend>
-                    <input type="checkbox" id="control_notifications" class="left" style="margin-top:-110px;margin-left:160px" name="control_notifications" value="true" />   
+                    <label class="checkbox right" style="margin-top: -52px;float: left;margin-left: 160px;">
+                        <input type="checkbox" id="control_notifications" class="left" style="" name="control_notifications" value="true" checked="checked"> 
+                        Enable/Disable all
+                    </label>
                     {{#if control_notifications}}
                     <span id="desktop-notification-content" class="right" style="margin-top:-52px"></span>
                     <a href="#notification-prefs" class="btn right" id="set-desktop-notification" style="margin-top:-62px;"><i class="icon-bullhorn"></i> Set Desktop Notifications</a>
@@ -15,57 +18,42 @@
                     <div class="control-group">
                         <label class="control-label"><b>Browsing:</b></label>
                         <div class="controls">
-                            <label class="checkbox">
-                            <input type="checkbox" id="contact_browsing" name="contact_browsing" value="true" /> 
-                            Contact is browsing
-                            </label>
-                            <label class="checkbox">
-                            <input type="checkbox" id="contact_assigned_browsing" name="contact_assigned_browsing" value="true" /> 
-                            Contact <em>assigned to me&nbsp;</em> is browsing
-                            </label>
-                            <label class="checkbox">
-                            <input type="checkbox" id="contact_assigned_starred_browsing" name="contact_assigned_starred_browsing" value="true" /> 
-                            Contact <em>assigned to me & starred&nbsp;</em> is browsing
-                            </label>
+                            <select id="browsing" name="browsing">
+                                <option value="ANY_CONTACT">Any Contact</option>
+                                <option value="CONTACT_ASSIGNED">Contact assigned to me</option>
+                                <option value="CONTACT_ASSIGNED_AND_STARRED">Contact assigned to me & starred</option>
+                            </select>
                         </div>
+                        <span style="margin-left:160px;"><i class="icon-lightbulb"></i></span>
+                        <small style="padding-top: -6px;padding-left: 5px;">Get notified when a contact is browsing your website.</small>
                     </div>
                     <legend></legend>
                     <p></p>
                     <div class="control-group">
                         <label class="control-label"><b>Email Opened:</b></label>
                         <div class="controls">
-                            <label class="checkbox">
-                            <input type="checkbox" id="contact_opened_email" name="contact_opened_email" value="true" /> 
-                            Contact has opened email
-                            </label>
-                            <label class="checkbox">
-                            <input type="checkbox" id="contact_assigned_opened_email" name="contact_assigned_opened_email" value="true" /> 
-                            Contact <em>assigned to me&nbsp;</em> has opened email
-                            </label>
-                            <label class="checkbox">
-                            <input type="checkbox" id="contact_assigned_starred_opened_email" name="contact_assigned_starred_opened_email" value="true" /> 
-                            Contact <em>assigned to me & starred&nbsp;</em> has opened email
-                            </label>
+                            <select id="email-opened" name="email_opened">
+                                <option value="ANY_CONTACT">Any Contact</option>
+                                <option value="CONTACT_ASSIGNED">Contact assigned to me</option>
+                                <option value="CONTACT_ASSIGNED_AND_STARRED">Contact assigned to me & starred</option>
+                            </select>
                         </div>
+                        <span style="margin-left:160px;"><i class="icon-lightbulb"></i></span>
+<small style="padding-top: -6px;padding-left: 5px;">Get notified when a contact opens the email sent (via a campaign or personally)</small>
                     </div>
                     <legend></legend>
                     <p></p>
                     <div class="control-group">
                         <label class="control-label"><b>Link Clicked:</b></label>
                         <div class="controls">
-                            <label class="checkbox">
-                            <input type="checkbox" id="contact_clicked_link" name="contact_clicked_link" value="true" /> 
-                            Contact has clicked a link
-                            </label>
-                            <label class="checkbox">
-                            <input type="checkbox" id="contact_assigned_clicked_link" name="contact_assigned_clicked_link" value="true" /> 
-                            Contact <em>assigned to me&nbsp;</em> has clicked a link
-                            </label>
-                            <label class="checkbox">
-                            <input type="checkbox" id="contact_assigned_starred_clicked_link" name="contact_assigned_starred_clicked_link" value="true" /> 
-                            Contact <em>assigned to me & starred&nbsp;</em> has clicked a link
-                            </label>
+                            <select id="link-clicked" name="link_clicked">
+                                <option value="ANY_CONTACT">Any Contact</option>
+                                <option value="CONTACT_ASSIGNED">Contact assigned to me</option>
+                                <option value="CONTACT_ASSIGNED_AND_STARRED">Contact assigned to me & starred</option>
+                            </select>
                         </div>
+                        <span style="margin-left:160px;"><i class="icon-lightbulb"></i></span>
+                        <small style="padding-top: -6px;padding-left: 5px;">Get notified when a contact clicks a link in email.</small>
                     </div>
                     <legend></legend>
                     <p></p>
@@ -116,57 +104,42 @@
                     <div class="control-group">
                         <label class="control-label"><b>Browsing:</b></label>
                         <div class="controls">
-                            <label class="checkbox">
-                            <input type="checkbox" id="contact_browsing" name="contact_browsing" value="true" disabled="disabled"/> 
-                            Contact is browsing
-                            </label>
-                            <label class="checkbox">
-                            <input type="checkbox" id="contact_assigned_browsing" name="contact_assigned_browsing" value="true" disabled="disabled"/> 
-                            Contact <em>assigned to me&nbsp;</em> is browsing
-                            </label>
-                            <label class="checkbox">
-                            <input type="checkbox" id="contact_assigned_starred_browsing" name="contact_assigned_starred_browsing" value="true" disabled="disabled"/> 
-                            Contact <em>assigned to me & starred&nbsp;</em> is browsing
-                            </label>
+                            <select id="browsing" name="browsing" disabled="disabled">
+                                <option value="ANY_CONTACT">Any Contact</option>
+                                <option value="CONTACT_ASSIGNED">Contact assigned to me</option>
+                                <option value="CONTACT_ASSIGNED_AND_STARRED">Contact assigned to me & starred</option>
+                            </select>
                         </div>
+                        <span style="margin-left:160px;"><i class="icon-lightbulb"></i></span>
+                        <small style="padding-top: -6px;padding-left: 5px;">Get notified when a contact is browsing your website.</small>
                     </div>
                     <legend></legend>
                     <p></p>
                     <div class="control-group">
                         <label class="control-label"><b>Email Opened:</b></label>
                         <div class="controls">
-                            <label class="checkbox">
-                            <input type="checkbox" id="contact_opened_email" name="contact_opened_email" value="true" disabled="disabled"/> 
-                            Contact has opened email
-                            </label>
-                            <label class="checkbox">
-                            <input type="checkbox" id="contact_assigned_opened_email" name="contact_assigned_opened_email" value="true" disabled="disabled"/> 
-                            Contact <em>assigned to me&nbsp;</em> has opened email
-                            </label>
-                            <label class="checkbox">
-                            <input type="checkbox" id="contact_assigned_starred_opened_email" name="contact_assigned_starred_opened_email" value="true" disabled="disabled"/> 
-                            Contact <em>assigned to me & starred&nbsp;</em> has opened email
-                            </label>
+                            <select id="email-opened" name="email_opened" disabled="disabled">
+                                <option value="ANY_CONTACT">Any Contact</option>
+                                <option value="CONTACT_ASSIGNED">Contact assigned to me</option>
+                                <option value="CONTACT_ASSIGNED_AND_STARRED">Contact assigned to me & starred</option>
+                            </select>
                         </div>
+                        <span style="margin-left:160px;"><i class="icon-lightbulb"></i></span>
+<small style="padding-top: -6px;padding-left: 5px;">Get notified when a contact opens the email sent (via a campaign)</small>
                     </div>
                     <legend></legend>
                     <p></p>
                     <div class="control-group">
                         <label class="control-label"><b>Link Clicked:</b></label>
                         <div class="controls">
-                            <label class="checkbox">
-                            <input type="checkbox" id="contact_clicked_link" name="contact_clicked_link" value="true" disabled="disabled"/> 
-                            Contact has clicked a link
-                            </label>
-                            <label class="checkbox">
-                            <input type="checkbox" id="contact_assigned_clicked_link" name="contact_assigned_clicked_link" value="true" disabled="disabled"/> 
-                            Contact <em>assigned to me&nbsp;</em> has clicked a link
-                            </label>
-                            <label class="checkbox">
-                            <input type="checkbox" id="contact_assigned_starred_clicked_link" name="contact_assigned_starred_clicked_link" value="true" disabled="disabled"/> 
-                            Contact <em>assigned to me & starred&nbsp;</em> has clicked a link
-                            </label>
+                            <select id="link-clicked" name="link_clicked" disabled="disabled">
+                                <option value="ANY_CONTACT">Any Contact</option>
+                                <option value="CONTACT_ASSIGNED">Contact assigned to me</option>
+                                <option value="CONTACT_ASSIGNED_AND_STARRED">Contact assigned to me & starred</option>
+                            </select>
                         </div>
+                        <span style="margin-left:160px;"><i class="icon-lightbulb"></i></span>
+                        <small style="padding-top: -6px;padding-left: 5px;">Get notified when a contact clicks a link in email.</small>
                     </div>
                     <legend></legend>
                     <p></p>

@@ -3,11 +3,15 @@ package com.agilecrm.user.notification.util;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.contact.Contact;
+import com.agilecrm.deals.Opportunity;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.notification.NotificationPrefs;
+import com.agilecrm.user.notification.NotificationPrefs.ContactType;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.deferred.NotificationsDeferredTask;
 import com.google.appengine.api.NamespaceManager;
@@ -75,8 +79,9 @@ public class NotificationPrefsUtil
     private static NotificationPrefs getDefaultNotifications(AgileUser agileUser)
     {
 	NotificationPrefs notifications = new NotificationPrefs(agileUser.id,
-		true, false, true, true, false, false, false, false, true,
-		true, false, true, true, true, true, true, "alert_1");
+		true, ContactType.ANY_CONTACT, ContactType.ANY_CONTACT,
+		ContactType.ANY_CONTACT, false, true, false, false, true,
+		false, "alert_1");
 	notifications.save();
 	return notifications;
     }
@@ -91,48 +96,20 @@ public class NotificationPrefsUtil
      **/
     public static void executeNotification(Type type, Object object)
     {
-	String objectJson = null;
-	JSONObject json = null;
 	String domain = null;
 
 	if (object == null)
 	    return;
 
-	try
-	{
-	    // Converting object to json
-	    ObjectMapper mapper = new ObjectMapper();
-	    objectJson = mapper.writeValueAsString(object);
-
-	    // Including type into json object as notification key
-	    json = new JSONObject(objectJson);
-	    json.put("notification", type.toString());
-
-	    if (SessionManager.get() != null)
-	    {
-		AgileUser agileUser = AgileUser.getCurrentAgileUser();
-		json.put("current_user", mapper.writeValueAsString(agileUser));
-	    }
-
-	    System.out.println("object: " + json);
-
-	    json = reduceObjectSize(json, type);
-
-	    System.out.println("Object json of notification: " + json);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return;
-	}
-
 	// Our channel for pubnub is current namespace.
 	domain = NamespaceManager.get();
 
-	System.out.println("Namespace in NotificationPrefsUtil: " + domain);
+	// Optimizing object to reduce its size. PubNub restricts and costs
+	// based on object size.
+	JSONObject json = optimizeObjectForNotification(type, object);
 
 	// If domain is empty return
-	if (StringUtils.isEmpty(domain))
+	if (StringUtils.isEmpty(domain) || json == null)
 	    return;
 
 	NotificationsDeferredTask notificationsDeferredTask = new NotificationsDeferredTask(
@@ -141,97 +118,178 @@ public class NotificationPrefsUtil
 	queue.add(TaskOptions.Builder.withPayload(notificationsDeferredTask));
     }
 
-    /**
-     * Optimising object to reduce it's size, before sending to pubnub.
-     * 
-     * @param json
-     *            - Contact or Deal Object.
-     * @param type
-     *            - Notification Type.
-     * @return JSONObject.
-     */
-    private static JSONObject reduceObjectSize(JSONObject json, Type type)
+    private static JSONObject optimizeObjectForNotification(Type type,
+	    Object object)
     {
+	String objectStr = null;
+
 	try
 	{
-	    // Deletes related contacts list and prefs of deals to reduce
-	    // message size.
-	    if (type == Type.DEAL_CREATED || type == Type.DEAL_CLOSED)
+	    ObjectMapper mapper = new ObjectMapper();
+	    objectStr = mapper.writeValueAsString(object);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
+	JSONObject json = new JSONObject();
+
+	if (object instanceof Contact)
+	{
+	    try
 	    {
-		if (json.getString("contacts") != null)
-		    json.remove("contacts");
-
-		if (json.getString("prefs") != null)
-		    json.remove("prefs");
-
-		return json;
+		json = getContactJSONForNotification(new JSONObject(objectStr));
 	    }
-
-	    // Remove other fields except first-name,last-name, email, image and
-	    // owner.
-	    if (json.getString("tagsWithTime") != null)
-		json.remove("tagsWithTime");
-
-	    if (json.getString("tags") != null)
-		json.remove("tags");
-
-	    if (json.getString("widget_properties") != null)
-		json.remove("widget_properties");
-
-	    if (json.getString("campaignStatus") != null)
-		json.remove("campaignStatus");
-
-	    JSONObject ownerJSON = new JSONObject();
-	    if (json.getString("owner") != null)
+	    catch (Exception e)
 	    {
-		JSONObject owner = json.getJSONObject("owner");
-		json.remove("owner");
-
-		ownerJSON.put("id", owner.getString("id"));
-		ownerJSON.put("domain", owner.getString("domain"));
-		ownerJSON.put("name", owner.getString("name"));
-		ownerJSON.put("email", owner.getString("email"));
+		e.printStackTrace();
 	    }
-	    json.put("owner", ownerJSON);
+	}
 
-	    if (json.getString("properties") != null)
+	if (object instanceof Opportunity)
+	{
+	    try
 	    {
-		JSONArray properties = json.getJSONArray("properties");
-		json.remove("properties");
-
-		JSONArray propertyArray = new JSONArray();
-
-		for (int index = 0; index < properties.length(); index++)
-		{
-		    JSONObject property = properties.getJSONObject(index);
-
-		    if (json.getString("type").equals("PERSON"))
-		    {
-			if (property.getString("name").equals("first_name")
-				|| property.getString("name").equals(
-					"last_name")
-				|| property.getString("name").equals("email")
-				|| property.getString("name").equals("image"))
-			    propertyArray.put(property);
-		    }
-
-		    if (json.getString("type").equals("COMPANY"))
-		    {
-			if (property.getString("name").equals("name"))
-			    propertyArray.put(property);
-		    }
-
-		}
-		json.put("properties", propertyArray);
+		json = getDealJSONForNotification(new JSONObject(objectStr));
+	    }
+	    catch (JSONException e)
+	    {
+		e.printStackTrace();
 	    }
 
 	}
 
+	try
+	{
+	    // Insert notification-type into json
+	    json.put("notification", type.toString());
+
+	    // To show notifications for all other users except action
+	    // performer. It doesn't works for tags added from campaigns,
+	    // browsing, link-clicked
+	    // and email-opened notifications as there won't be any session. All
+	    // users get notifications in these cases.
+	    if (SessionManager.get() != null)
+	    {
+		AgileUser agileUser = AgileUser.getCurrentAgileUser();
+
+		if (agileUser != null)
+		    json.put("current_user_name",
+			    agileUser.getDomainUser().name);
+	    }
+
+	    System.out.println("Object json of notification: " + json);
+	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
 	}
 
 	return json;
+    }
+
+    /**
+     * Returns JSONObject with required contact fields for notification.
+     * 
+     * @param contactJSON
+     *            - Contact Object JSON.
+     * @return JSONObject.
+     */
+    private static JSONObject getContactJSONForNotification(
+	    JSONObject contactJSON)
+    {
+	JSONObject json = new JSONObject();
+
+	try
+	{
+	    json.put("id", contactJSON.getString("id"));
+
+	    // to know starred contact i.e., star-value > 0
+	    json.put("star_value", contactJSON.getString("star_value"));
+
+	    // PERSON or COMPANY
+	    json.put("type", contactJSON.getString("type"));
+	    json.put("properties", getContactProperties(contactJSON));
+	    json.put("owner_name", contactJSON.getJSONObject("owner")
+		    .getString("name"));
+	    return json;
+	}
+	catch (JSONException e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Returns required contact properties.
+     * 
+     * @param contactJSON
+     *            - Contact JSON object.
+     * @return
+     */
+    private static JSONArray getContactProperties(JSONObject contactJSON)
+    {
+	JSONArray propertyArray = new JSONArray();
+
+	try
+	{
+	    JSONArray properties = contactJSON.getJSONArray("properties");
+
+	    for (int index = 0; index < properties.length(); index++)
+	    {
+		JSONObject property = properties.getJSONObject(index);
+
+		if (contactJSON.getString("type").equals("PERSON"))
+		{
+		    if (property.getString("name").equals("first_name")
+			    || property.getString("name").equals("last_name")
+			    || property.getString("name").equals("email")
+			    || property.getString("name").equals("image"))
+			propertyArray.put(property);
+		}
+
+		if (contactJSON.getString("type").equals("COMPANY"))
+		{
+		    if (property.getString("name").equals("name"))
+			propertyArray.put(property);
+		}
+
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+	return propertyArray;
+    }
+
+    /**
+     * Returns Deal JSONObject with required Deal attributes for notification.
+     * 
+     * @param dealJSON
+     *            - Deal Object JSON.
+     * @return JSONObject
+     */
+    private static JSONObject getDealJSONForNotification(JSONObject dealJSON)
+    {
+	JSONObject json = new JSONObject();
+	try
+	{
+	    json.put("id", dealJSON.getString("id"));
+	    json.put("name", dealJSON.getString("name"));
+	    json.put("entity_type", dealJSON.getString("entity_type"));
+	    json.put("owner_name",
+		    dealJSON.getJSONObject("owner").getString("name"));
+	    return json;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+
     }
 }

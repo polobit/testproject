@@ -64,15 +64,9 @@ public class NotificationsAPI
 		    .getCurrentUserNotificationPrefs();
 
 	    notifications.control_notifications = notify.control_notifications;
-	    notifications.contact_browsing = notify.contact_browsing;
-	    notifications.contact_assigned_browsing = notify.contact_assigned_browsing;
-	    notifications.contact_assigned_starred_browsing = notify.contact_assigned_starred_browsing;
-	    notifications.contact_opened_email = notify.contact_opened_email;
-	    notifications.contact_assigned_opened_email = notify.contact_assigned_opened_email;
-	    notifications.contact_assigned_starred_opened_email = notify.contact_assigned_starred_opened_email;
-	    notifications.contact_clicked_link = notify.contact_clicked_link;
-	    notifications.contact_assigned_clicked_link = notify.contact_assigned_clicked_link;
-	    notifications.contact_assigned_starred_clicked_link = notify.contact_assigned_starred_clicked_link;
+	    notifications.browsing = notify.browsing;
+	    notifications.email_opened = notify.email_opened;
+	    notifications.link_clicked = notify.link_clicked;
 	    notifications.deal_created = notify.deal_created;
 	    notifications.deal_closed = notify.deal_closed;
 	    notifications.contact_created = notify.contact_created;
