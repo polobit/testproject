@@ -76,7 +76,7 @@ public class UserPrefsUtil
 		null,
 		null,
 		"default",
-		"-fluid",
+		"",
 		"- Powered by <a href=\"https://www.agilecrm.com\" target=\"_blank\" rel=\"nofollow\" title=\"Link: https://www.agilecrm.com\">AgileCRM</a>",
 		true);
 	userPrefs.save();
