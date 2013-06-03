@@ -50,34 +50,39 @@
 
 <script id="user-billing-template" type="text/html">
 <div style="background-color: #F8F8B9; margin-bottom:10px;padding: 15px;">
+{{#if_equals users_count "2"}}
 	<strong style="font-size: 20px;">Oops. You are out of users.</strong>
+{{else}}
+	<strong style="font-size: 20px;">Account info</strong>
+{{/if_equals}}
 	<p style="padding-top: 10px;">
+		Plan  : Free Plan <br/>
+		Users : {{users_count}} <br/>
 		Allowed Users : 2<br /> 
-		User Plan : Free User<br /> 
-		Account Status : Active
 	</p>
 	<p>
-		<a style="text-decoration: underline;" href="#subscribe">Please
+		<a style="text-decoration: underline;" href="#contact-us">Please
 			upgrade your account</a> to create more users. It takes only 10 seconds.
-	</p>
-	<p>
-		<strong style="color: red;">Special Upgrade Offer:</strong><br /> <a
-			style="text-decoration: underline;" href="#subscribe">Upgrade
-			today</a> and <strong>save $5</strong> on your next month.
 	</p>
 </div>
 </script>
 
+<script id="dashboard-account-info-template" type="text/html">
 
-<script id="dashboard-api-key-model-template" type="text/html">
-<!-- -->
-<h3 style="border-bottom:1px solid #f5f5f5">API Key</h3>
-<div style="margin-top:10px; margin-bottom:10px;">
-<pre class="prettyprint">
-'{{api_key}}'
-</pre>
-	</div>
-</div>
+<div style="background-color: #F8F8B9; margin-bottom:10px;padding: 15px;">
+	<strong style="font-size: 20px;">Account info</strong>
+	<p style="padding-top: 10px;">
+		Plan  : {{plan.plan_id}}<br />
+		Users : {{userCount}} <br /> 
+		Allowed User : {{plan.quantity}}
+	</p>
+	{{#if_equals userCount plan.quantity}}
+	<p>
+		<a style="text-decoration: underline;" href="#contact-us">Please
+			upgrade your account</a> to create more users. It takes only 10 seconds.
+	</p>
+	{{/if_equals}}
+
 </div>
 </script>
 
