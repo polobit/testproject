@@ -68,6 +68,13 @@ public class Widget
     // Mini Logo
     public String mini_logo_url = null;
 
+    public static enum widgetType
+    {
+	SOCIAL, SUPPORT, EMAIL, CALL, BILLING
+    };
+
+    public widgetType widget_type = null;
+
     /**
      * Prefs are access token and secret key to connect to linkedin/twitter.
      * Prefs represent JSON string contains access tokens, saved from
@@ -104,7 +111,7 @@ public class Widget
     }
 
     public Widget(String name, String description, String url, String logo,
-	    String mini_logo, String fav_ico)
+	    String mini_logo, String fav_ico, widgetType type)
     {
 
 	this.name = name;
@@ -113,6 +120,7 @@ public class Widget
 	this.logo_url = logo;
 	this.fav_ico_url = fav_ico;
 	this.mini_logo_url = mini_logo;
+	this.widget_type = type;
 	this.user = new Key<AgileUser>(AgileUser.class,
 		AgileUser.getCurrentAgileUser().id);
     }

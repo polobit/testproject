@@ -869,8 +869,17 @@ public class WidgetsAPI
     public String getRapleafDetails(@PathParam("apikey") String apikey,
 	    @PathParam("email") String email)
     {
-	// Return rapportive results
-	return Rapleaf.getRapportiveValue(email, apikey).toString();
+	try
+	{
+	    // Return rapportive results
+	    return Rapleaf.getRapportiveValue(email, apikey).toString();
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
     }
 
     /**

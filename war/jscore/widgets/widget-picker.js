@@ -18,14 +18,43 @@ function pickWidget() {
 		url : '/core/api/widgets/default',
 		restKey : "widget",
 		templateKey : "widgets-add",
+		sort_collection : false,
 		individual_tag_name : 'div'
 	});
 
+	Catalog_Widgets_View.appendItem = organize_widgets;
 	// Fetch the list of widgets
 	Catalog_Widgets_View.collection.fetch();
 
 	// Shows available widgets in the content
 	$('#content').html(Catalog_Widgets_View.el);
+}
+
+function organize_widgets(base_model)
+{
+	var itemView = new Base_List_View({
+		model : base_model,
+		template : this.options.templateKey + "-model",
+		tagName : 'div',
+	});
+
+	// add to the right box - overdue, today, tomorrow etc.
+	var widget_type = base_model.get('widget_type');
+	
+	if (widget_type == "SOCIAL")
+		$('#social', this.el).append($(itemView.render().el).addClass('span4'));
+		
+	if(widget_type == "SUPPORT")
+		$('#support', this.el).append($(itemView.render().el).addClass('span4'));
+	
+	if(widget_type == "EMAIL")
+		$('#email', this.el).append($(itemView.render().el).addClass('span4'));
+	
+	if(widget_type == "CALL")
+		$('#call', this.el).append($(itemView.render().el).addClass('span4'));
+	
+	if(widget_type == "BILLING")
+		$('#billing', this.el).append($(itemView.render().el).addClass('span4'));
 }
 
 /**

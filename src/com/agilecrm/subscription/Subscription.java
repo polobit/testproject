@@ -17,6 +17,7 @@ import com.agilecrm.subscription.stripe.StripeImpl;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.ClickDeskEncryption;
 import com.google.gson.Gson;
 import com.googlecode.objectify.Objectify;
@@ -182,6 +183,15 @@ public class Subscription
 	save();
 
 	return this;
+    }
+
+    /**
+     * Returns number of users in account along with subscription details
+     */
+    @XmlElement(name = "user_count")
+    public Integer getUserCount()
+    {
+	return DomainUserUtil.count();
     }
 
     /**

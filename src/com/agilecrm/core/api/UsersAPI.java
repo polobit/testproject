@@ -94,6 +94,14 @@ public class UsersAPI
 	}
     }
 
+    @GET
+    @Path("count")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String domainUserCount()
+    {
+	return String.valueOf(DomainUserUtil.count());
+    }
+
     /**
      * Updates the existing user
      * 

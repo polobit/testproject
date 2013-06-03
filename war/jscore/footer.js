@@ -113,8 +113,13 @@
 			
 				var model = data.toJSON();
 				//$("#sharemailForm").find( 'input[name="from"]' ).val(model.email);
-		
+
 				var emailModal = $(getTemplate("share-by-email", model));
+				
+				var description = $(emailModal).find('textarea').val();
+				description = description.replace( /<br\/>/g,"\r\n");
+				$(emailModal).find('textarea').val(description);
+		
 				emailModal.modal('show');
 		
 				$('#shareMail').die().live('click',function(e){
@@ -127,11 +132,8 @@
 					
 					var json = serializeForm("sharemailForm");
 					
-					json.body = json.body.replace("Hi,","Hi,<br/><br/>");
-					json.body = json.body.replace("online.","online.<br/><br/>");
-					json.body = json.body.replace("do.","do.<br/><br/>");
-					json.body = json.body.replace("more.","more.<br/><br/>");
-		
+					json.body = json.body.replace(/\r\n/g,"<br/>");
+					
 					var url =  'core/api/send-email?from=' + encodeURIComponent(json.from) + '&to=' + 
 					 encodeURIComponent(json.to) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + 
 						 encodeURIComponent(json.body);

@@ -6,7 +6,7 @@
             <input name="id" type="hidden" value="{{id}}" /> 		
             <legend>Personal Preferences</legend>
             <div class="row">
-                <div class="span5" style="margin-right:80px;">
+                <div class="span5">
                     <div class="control-group">
                         <label class="control-label">Name <span class="field_req">*</span></label>
                         <div class="controls">
@@ -19,7 +19,7 @@
                             <select name="template" id="userPrefsTemplate" class="required">
                                 <option value="blue">Blue</option>
                                 <option value="green">Green</option>
-                                <option value="pink">Pink</option>
+                                <option value="pink">Purple</option>
                                 <option value="brown">Brown</option>
                             </select>
                         </div>
@@ -34,18 +34,19 @@
                         </div>
                     </div>
                 </div>
-                <div class="">
-                    <div class="control-group">
+                <div style="margin-right:80px;">
+                    <div class="right">
                         <div id="upload-container" messg="User image has been uploaded">
-                            <div class="controls">
-                                <div class="span1 imgholder">
-                                    {{#if pic}}
+                            <div class="clearfix">
+                                <div class="imgholder">
+                                  {{#if pic}}
                                     <img src="{{pic}}" style="height:75px!important;width:75px!important;" />
-                                    {{else}}
+                                  {{else}}
                                     <img src="https://contactuswidget.appspot.com/images/pic.png" style="height:75px!important;width:75px!important;" />
-                                    {{/if}}													
-                                </div>
-                                <p class="span2"><input type="hidden" id="upload_url" name="pic" />  
+                                  {{/if}}
+								</div>												
+                                <p>
+									<input type="hidden" id="upload_url" name="pic"/>  
                                     <input style="margin: 10px 0px 0px;" class="upload_s3 btn" type="button" id="user_prefs_image" value="Upload"/>
                                 </p>
                             </div>
