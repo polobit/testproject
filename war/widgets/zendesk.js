@@ -55,7 +55,6 @@ $(function ()
 
 });
 
-
 /**
  * Shows setup if user adds Zendesk widget for the first time. Uses ScribeServlet 
  * to create a client and get preferences and save it to the widget.
@@ -65,7 +64,6 @@ $(function ()
  */
 function setupZendeskOAuth(plugin_id)
 {
-
     // Shows loading image until set up is shown 
     $('#Zendesk').html(ZENDESK_UPDATE_LOAD_IMAGE);
 
@@ -101,10 +99,7 @@ function setupZendeskOAuth(plugin_id)
                 zendeskError("Zendesk", "No email is associated with this contact");
                 return;
             }
-            
-            // Show tickets method called to show tickets after saving preferences
-            // showTicketsFromZendesk(plugin_id, Email);
-            
+                    
             showZendeskProfile(plugin_id, Email);
         });
 
@@ -181,6 +176,7 @@ function addTicketToZendesk(plugin_id, email)
             // If error occurs modal is removed and error message is shown in panel
             $('#zendesk_messageModal').remove();
             zendeskError('add-ticket-error-panel', data.responseText);
+            
    		    $('#add-ticket-error-panel').show();
    		    $('#add-ticket-error-panel').fadeOut(10000);
         });

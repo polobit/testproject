@@ -8,7 +8,10 @@ $(function() {
 
 	// Plugin name as a global variable
 	RAPLEAF_PLUGIN_NAME = "Rapleaf";
-	RAPLEAF_PLUGIN_HEADER = '<div></div>'
+	RAPLEAF_PLUGIN_HEADER = '<div></div>';
+	
+	Rapleaf_loader = '<div id="rap_info_load"><center><img  src=\"img/ajax-loader-cursor.gif\" ' + 
+						'style="margin-top: 10px;margin-bottom: 14px;"></img></center></div>';
 
 	// Gets plugin id from plugin object, fetched using script API
 	var plugin_id = agile_crm_get_plugin(RAPLEAF_PLUGIN_NAME).id;
@@ -49,10 +52,10 @@ function setupRapleafOAuth(plugin_id) {
 	$('#Rapleaf')
 			.html(
 					RAPLEAF_PLUGIN_HEADER
-							+ '<div class="widget_content" style="border-bottom:none"><p >Rapleaf helps you learn more about your customers, provides data (age, gender, marital status, income, etc., ) on US consumer email addresses.To access </p>'
-							+ '<p style="padding:5px;"><label><b>Enter Your API key</b></label>'
+							+ '<div class="widget_content" style="border-bottom:none"><p >Rapleaf helps you learn more about your customers, provides data (age, gender, marital status, income, etc., ) on US consumer email addresses.To access, </p>'
+							+ '<p><label>Enter Your API key</label>'
 							+ '<input type="text" id="rapleaf_api_key" class="input-medium required" placeholder="API Key" value=""></input></p>'
-							+ '<button id="save_api_key" class="btn" style="margin-left:5px;"><a href="#">Save</a></button><br/>'
+							+ '<button id="save_api_key" class="btn" ><a href="#" style="text-decoration:none;">Save</a></button><br/>'
 							+ '<p style="line-height: 25px;padding:5px;">Don\'t have an API key? <a href="https://www.rapleaf.com/developers/api_access"> SignUp </a></p></div>');
 
 	// Saves the api key
@@ -80,8 +83,7 @@ function setupRapleafOAuth(plugin_id) {
 function showRapleafDetails(plugin_id) {
 
 	// Shows loading, until info is fetched
-	$('#Rapleaf').html(
-			RAPLEAF_PLUGIN_HEADER + '<img src=\"img/1-0.gif\"></img>');
+	$('#Rapleaf').html(Rapleaf_loader);
 
 	var email = agile_crm_get_contact_property('email');
 	var url = "core/api/widgets/rapleaf/"
