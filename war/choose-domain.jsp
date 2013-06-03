@@ -21,7 +21,7 @@ if(!StringUtils.isEmpty(domain))
 	}
 	else
 	{
-	    error = "Domain "+ domain +" already exists.";
+	    error = "Domain '"+ domain +"' already exists. If you already have an account, you can login <a href='https://" + domain + ".agilecrm.com/login" + "'>here</a>.";
 	}
 }
 
