@@ -142,13 +142,6 @@ public class CampaignStatsAPI
 		calendar.add(Calendar.DAY_OF_MONTH, -6);
 		startTime = calendar.getTimeInMillis() + "";
 	    }
-	    // Hourly
-	    else if (StringUtils.equalsIgnoreCase(type, "hour"))
-	    {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(Long.parseLong(endTime));
-		startTime = calendar.getTimeInMillis() + "";
-	    }
 
 	    Calendar endCal = Calendar.getInstance();
 	    endCal.setTimeInMillis(Long.parseLong(endTime));
