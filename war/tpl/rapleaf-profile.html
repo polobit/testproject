@@ -1,0 +1,105 @@
+<script id="rapleaf-profile-template" type="text/html">
+<ul style="margin:0px;padding:10px;border-bottom:1px solid #ddd;">
+	{{#if_equals this.result "success"}}
+	{{#if gender}}
+		<li >	
+		<div class="row-fluid">
+			<div class="span5">
+				<div class="pull-right">:</div> Gender
+			</div>
+			<div class="span6" style="margin-left: 10px;">
+				{{gender}}
+			</div>
+		</div>
+		</li>
+	{{/if}}
+	{{#if age}}
+		<li>	
+		<div class="row-fluid">
+			<div class="span5">
+				<div class="pull-right">:</div> Age
+			</div>
+			<div class="span6" style="margin-left: 10px;">
+				{{age}}
+			</div>
+		</div>
+		</li>
+	{{/if}}
+	{{#if occupation}}
+		<li >
+		<div class="row-fluid">	
+			<div class="span5">
+				<div class="pull-right">:</div> Occupation
+			</div>
+							
+			<div class="span6" style="margin-left: 10px;">
+				{{occupation}}
+			</div>
+		</div>
+		</li>
+	{{/if}}
+	{{#if education}}
+		<li>	
+		<div class="row-fluid">
+			<div class="span5">
+				<div class="pull-right">:</div> Education
+			</div>
+			<div class="span6" style="margin-left: 10px;">
+				{{education}}
+			</div>
+		</div>
+		</li>
+	{{/if}}
+	{{#if marital_status}}
+		<li>		
+		<div class="row-fluid">
+			<div class="span5">
+				<div class="pull-right">:</div> Marital status
+			</div>
+			<div class="span6" style="margin-left: 10px;">
+				{{marital_status}}
+			</div>
+		</div>
+		</li>
+	{{/if}}
+	{{#if household_income}}
+		<li >		
+		<div class="row-fluid">
+			<div class="span5">
+				<div class="pull-right">:</div> Household income
+			</div>
+			<div class="span6" style="margin-left: 10px;">
+				{{household_income}}
+			</div>
+		</div>
+		</li>
+	{{/if}}	
+	{{#if home_owner_status}}
+		<li >		
+		<div class="row-fluid">
+			<div class="span5">
+				<div class="pull-right">:</div> Home owner status
+			</div>
+			<div class="span6" style="margin-left: 10px;">
+				{{home_owner_status}}
+			</div>
+		</div>
+		</li>
+	{{/if}}	
+	{{else}}
+		<li style='color: #999;'>
+	    	No Details available
+		</li>
+	{{/if_equals}}
+</ul>
+{{#if this.interests}}
+<div class="sub_header">
+	<h4>Interests</h4>
+</div>
+<ul style="margin:0px;padding:10px">
+	{{#iterate_json this.interests}}
+		{{#if value}}<li style="line-height:20px;">{{property}}</li>{{/if}}
+	{{/iterate_json}}
+</ul>
+{{/if}}
+</script>

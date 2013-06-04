@@ -931,4 +931,13 @@ $(function() {
 		return options.inverse(this);
 	});
 	
+	Handlebars.registerHelper('iterate_json', function(context, options) {
+	    var result = "";
+	    for(var prop in context)
+	    {
+	    	result = result + options.fn({ property:prop, value:context[prop] });
+	    }
+	    return result;
+	});
+	
 });
