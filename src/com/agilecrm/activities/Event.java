@@ -108,7 +108,7 @@ public class Event
     /**
      * Default constructor
      */
-    Event()
+    public Event()
     {
 
     }

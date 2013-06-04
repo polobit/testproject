@@ -138,7 +138,7 @@ public class Task
     /**
      * Default constructor
      */
-    Task()
+    public Task()
     {
 
     }

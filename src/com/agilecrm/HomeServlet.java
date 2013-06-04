@@ -26,7 +26,6 @@ public class HomeServlet extends HttpServlet
 	// First Time User
 	String isFirstTimerUser = req.getParameter("w");
 
-
 	// Get Agile User
 	AgileUser agileUser = AgileUser.getCurrentAgileUser();
 
@@ -34,8 +33,7 @@ public class HomeServlet extends HttpServlet
 	// redirects its to homeservlet again.
 	if (agileUser == null && StringUtils.equals(isFirstTimerUser, "1"))
 	{
-	    req.getRequestDispatcher("/home?w=1").forward(req,
-		    resp);
+	    req.getRequestDispatcher("/home?w=1").forward(req, resp);
 	    return;
 	}
 
@@ -47,11 +45,16 @@ public class HomeServlet extends HttpServlet
 
 	    System.out.println(agileUser);
 
-	    req.getRequestDispatcher("/home?w=1").forward(req,
-		    resp);
+	    req.getRequestDispatcher("/home?w=1").forward(req, resp);
 	    return;
 	}
-
+	if (isFirstTimerUser != null && DomainUserUtil.count() == 1)
+	{
+	    InitDefaults.getDefaultContacts();
+	    InitDefaults.getDefaultTasks();
+	    InitDefaults.getDefaultEvent();
+	    InitDefaults.getDefaultWorkflow();
+	}
 	// Save Logged in time
 	try
 	{
