@@ -28,8 +28,27 @@
 </script>
 
 <script id="widgets-collection-template" type="text/html">
+{{#unless this.length}}
+	<div class="widget_container">
+		<div class="widget_header">
+			<div class="pull-left">
+				<i class="icon-plus-sign"></i>&nbsp;&nbsp;
+				<strong>Add Widgets</strong>
+			</div>
+		</div>
+		<div class="widgets">
+			<p style="margin:10px;">You can add widgets here to see more infomation about your contacts.
+			Choose the widgets you want from the Manage Widgets button below.</p>
+			<div class="clearfix"></div>
+			<a class="btn btn-primary" href='#add-widget' style="margin: 0px 10px 10px;"><i class="icon-plus-sign"></i>&nbsp;&nbsp;Manage widgets</a>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+
+{{else}}
  <ul class="widget-sortable" id="widgets-model-list" style="margin:0px 0px"></ul>
  <a class="btn btn-primary pull-right" href='#add-widget'><i class="icon-plus-sign"></i>&nbsp;&nbsp;Manage widgets</a>
+{{/unless}}
 </script>
 
 <!-- <li><a href="#" id="{{name}}_plugin_delete" rel="tooltip" title="Delete this person"><i class="icon-remove icon-gray"></i></a></li>
