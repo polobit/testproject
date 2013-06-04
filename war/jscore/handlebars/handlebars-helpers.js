@@ -933,10 +933,24 @@ $(function() {
 	
 	Handlebars.registerHelper('iterate_json', function(context, options) {
 	    var result = "";
+	    var count = 0;
+	    var length = 0;
 	    for(var prop in context)
 	    {
-	    	result = result + options.fn({ property:prop, value:context[prop] });
+	    	length++;
 	    }
+	    
+	    for(var prop in context)
+	    {
+	    	count++;
+	    	if(count == length)
+	    		result = result + options.fn({ property:prop, value:context[prop], last:true });
+	    	else
+	    		result = result + options.fn({ property:prop, value:context[prop], last:false });
+	    	
+	    }
+	    
+	    console.log(result);
 	    return result;
 	});
 	

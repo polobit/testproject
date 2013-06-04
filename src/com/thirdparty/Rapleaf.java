@@ -48,7 +48,7 @@ public class Rapleaf
      */
     public static JSONObject getRapportiveValue(String email) throws Exception
     {
-	return getRapportiveValue(email, "ed79fc56eacd8b6ace0559d3149c6f1e");// "15fd166425666ca2ddc857d00e777bee");
+	return getRapportiveValue(email, "15fd166425666ca2ddc857d00e777bee");
     }
 
     /**
@@ -95,6 +95,10 @@ public class Rapleaf
     {
 	try
 	{
+	    String tef = "{\"age\":\"21-24\",\"gender\":\"Male\",\"interests\":{\"Blogging\":true,\"High-End Brand Buyer\":true,\"Sports\":true},\"education\":\"Completed Graduate School\","
+		    + "\"occupation\":\"Professional\",\"children\":\"No\",\"household_income\":\"75k-100k\",\"marital_status\":\"Single\",\"home_owner_status\":\"Rent\"}";
+	    JSONObject json = new JSONObject(tef);
+
 	    System.out.println(Rapleaf
 		    .getRapportiveValue("stevejobs@gmail.com"));
 
