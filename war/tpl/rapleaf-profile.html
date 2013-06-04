@@ -86,20 +86,24 @@
 		</div>
 		</li>
 	{{/if}}	
+	{{#if this.interests}}
+		<li >		
+		<div class="row-fluid">
+			<div class="span5">
+				<div class="pull-right">:</div> Interests
+			</div>
+			<div class="span6" style="margin-left: 10px;font-style: italic;">
+				{{#iterate_json this.interests}}
+						{{#if value}}{{property}}{{#unless last}}, {{/unless}}{{/if}}
+				{{/iterate_json}}
+			</div>
+		</div>
+		</li>
+	{{/if}}
 	{{else}}
 		<li style='color: #999;'>
 	    	No Details available
 		</li>
 	{{/if_equals}}
 </ul>
-{{#if this.interests}}
-<div class="sub_header">
-	<h4>Interests</h4>
-</div>
-<ul style="margin:0px;padding:10px">
-	{{#iterate_json this.interests}}
-		{{#if value}}<li style="line-height:20px;">{{property}}</li>{{/if}}
-	{{/iterate_json}}
-</ul>
-{{/if}}
 </script>
