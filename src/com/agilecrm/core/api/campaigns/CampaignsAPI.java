@@ -117,7 +117,8 @@ public class CampaignsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Log> getCampaignLogs(@PathParam("campaign-id") String campaignId)
     {
-	return LogUtil.getSQLLogs(campaignId, null, null);
+	// limited logs to 100
+	return LogUtil.getSQLLogs(campaignId, null, "100");
     }
 
     /**
