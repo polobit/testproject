@@ -73,8 +73,11 @@ public class HTTPUtil
 	URLConnection conn = url.openConnection();
 	conn.setDoOutput(true);
 	OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-	wr.write(data);
-	wr.flush();
+	if (data != null)
+	{
+	    wr.write(data);
+	    wr.flush();
+	}
 
 	// Get the response
 	BufferedReader reader = new BufferedReader(new InputStreamReader(
@@ -128,6 +131,7 @@ public class HTTPUtil
 	}
 	catch (Exception e)
 	{
+	    System.out.println(e.getMessage());
 	    throw new Exception(conn.getResponseMessage());
 	}
     }

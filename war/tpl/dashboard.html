@@ -56,9 +56,8 @@
 	<strong style="font-size: 20px;">Account info</strong>
 {{/if_equals}}
 	<p style="padding-top: 10px;">
-		Plan  : Free Plan <br/>
-		Users : {{users_count}} <br/>
-		Allowed Users : 2<br /> 
+		Plan: Free Plan <br/>
+		Users: {{users_count}} of 2<br/>
 	</p>
 	<p>
 		<a style="text-decoration: underline;" href="#contact-us">Please
@@ -72,9 +71,8 @@
 <div style="background-color: #F8F8B9; margin-bottom:10px;padding: 15px;">
 	<strong style="font-size: 20px;">Account info</strong>
 	<p style="padding-top: 10px;">
-		Plan  : {{plan.plan_id}}<br />
-		Users : {{userCount}} <br /> 
-		Allowed User : {{plan.quantity}}
+		Plan: {{plan.plan_id}}<br />
+		Users: {{userCount}} of {{plan.quantity}} <br />
 	</p>
 	{{#if_equals userCount plan.quantity}}
 	<p>

@@ -92,23 +92,7 @@ function showRapleafDetails(plugin_id) {
 		queueGetRequest("widget_queue", url, 'json', 
 		function success(data) 
 		{
-						// console.log(data);
-						// &fields=gender,age,education,marital_status
-						var el = "<div class='widget_content'>";
-						
-						if (data.gender == "Female")
-							el = el + '<img style="width:20px;height:20px;" src=\"img/user_female.png\"></img>';
-						else
-							el = el + '<img style="width:30px;height:30px;" src=\"img/user_male.jpg\"></img>';
-
-						$.each(data, function(index, value) {
-							if (index != "result") {
-								el = el + '<li style="text-transform:capitalize;">'
-												+ index + ': ' + value + '</li>';
-							}
-						});
-						
-						$('#Rapleaf').html(el + '</div>');
+			$('#Rapleaf').html(getTemplate('rapleaf-profile', data))
 						
 		}, function error(data)
 		{

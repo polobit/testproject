@@ -51,7 +51,11 @@
 		</li>
 	{{/each}}
 {{else}}
-	<li class="sub_header_li" >{{this}}</li>
+	{{#if_equals this "There are no tickets for this user"}}
+		<li class="sub_header_li" >No tickets</li>
+	{{else}}
+		<li class="sub_header_li" >{{this}}</li>
+	{{/if_equals}}
 {{/isArray}}
 </script>
 

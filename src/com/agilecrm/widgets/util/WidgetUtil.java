@@ -156,25 +156,25 @@ public class WidgetUtil
 		"/widgets/rapleaf.js", "/img/plugins/rapleaf.jpeg",
 		"/widgets/rapleaf-logo-small.jpeg", null, widgetType.SOCIAL));
 	widgets.add(new Widget(
-		"Twilio",
-		" Stay connected to your users with Twilio phone numbers in 40 countries all over the globe.",
-		"/widgets/twilio.js", "/img/plugins/twilio.png",
-		"/widgets/twilio-logo-small.jpg", null, widgetType.CALL));
-	widgets.add(new Widget(
-		"Stripe",
-		"Stripe enables individuals and businesses to accept payments over the internet.",
-		"/widgets/stripe.js", "/img/plugins/stripe-logo.jpg",
-		"/widgets/stripe-logo-small.jpeg", null, widgetType.BILLING));
-	widgets.add(new Widget(
 		"Zendesk",
 		"Zendesk streamlines communication within a ticket that has organized workflow towards resolution of the customer issue.",
 		"/widgets/zendesk.js", "/img/plugins/zendesk_logo.png",
 		"/widgets/zendesk-logo-small.png", null, widgetType.SUPPORT));
 	widgets.add(new Widget(
+		"Twilio",
+		" Stay connected to your users with Twilio phone numbers in 40 countries all over the globe.",
+		"/widgets/twilio.js", "/img/plugins/twilio-logo.png",
+		"/widgets/twilio-logo-small.jpg", null, widgetType.CALL));
+	widgets.add(new Widget(
 		"FreshBooks",
 		"FreshBooks enables the ability to create and manage invoices, estimates, expenses, and projects all in one place.",
-		"/widgets/freshbooks.js", "/img/plugins/freshbooks-logo.jpg",
+		"/widgets/freshbooks.js", "/img/plugins/freshbooks-logo.png",
 		"/widgets/freshbooks-logo-small.jpg", null, widgetType.BILLING));
+	widgets.add(new Widget(
+		"Stripe",
+		"Stripe enables individuals and businesses to accept payments over the internet.",
+		"/widgets/stripe.js", "/img/plugins/Stripe.png",
+		"/widgets/stripe-logo-small.jpeg", null, widgetType.BILLING));
 
 	return widgets;
 

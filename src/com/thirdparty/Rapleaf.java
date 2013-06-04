@@ -48,7 +48,7 @@ public class Rapleaf
      */
     public static JSONObject getRapportiveValue(String email) throws Exception
     {
-	return getRapportiveValue(email, "ed79fc56eacd8b6ace0559d3149c6f1e");// "15fd166425666ca2ddc857d00e777bee");
+	return getRapportiveValue(email, "15fd166425666ca2ddc857d00e777bee");
     }
 
     /**
@@ -63,8 +63,6 @@ public class Rapleaf
     public static JSONObject getRapportiveValue(String email, String api_key)
 	    throws Exception
     {
-	// try
-	// {
 	// Replaces contact email in the url
 	String url = RAPPORT_URL.replace("$email", email);
 
@@ -73,10 +71,15 @@ public class Rapleaf
 
 	// Access the url with email address and api key in it returns
 	// response a JSON String
-	String rapleafResponse = HTTPUtil.accessURL(url);
+	String rapleafResponse = HTTPUtil.accessURLUsingPost(url, null);
 
-	if (rapleafResponse == null)
-	    return new JSONObject();
+	System.out.println("respone " + rapleafResponse);
+	if (rapleafResponse == null || rapleafResponse.equals("{}"))
+	    return new JSONObject().put(RAPPORTIVE_RESULT,
+		    RAPPORTIVE_RESULT_FAILURE);
+
+	if (!rapleafResponse.startsWith("{"))
+	    throw new Exception("Invalid Api Key");
 
 	// Converts JSON string into JSONObject
 	JSONObject rapleafJSONObject = new JSONObject(rapleafResponse);
@@ -85,33 +88,20 @@ public class Rapleaf
 	// "result" and success in addition to information sent from rapleaf
 	return rapleafJSONObject.put(RAPPORTIVE_RESULT,
 		RAPPORTIVE_RESULT_SUCCESS);
-	//
-	// }
-	// catch (Exception e)
-	// {
-	// e.printStackTrace();
-	// try
-	// {
-	// // If an exception raised failure message is sent in json object
-	// return new JSONObject().put(RAPPORTIVE_RESULT,
-	// RAPPORTIVE_RESULT_FAILURE);
-	// }
-	// catch (JSONException e1)
-	// {
-	// e1.printStackTrace();
-	//
-	// }
-	// }
 
-	// return new JSONObject();
     }
 
     public static void main(String[] args)
     {
 	try
 	{
+	    String tef = "{\"age\":\"21-24\",\"gender\":\"Male\",\"interests\":{\"Blogging\":true,\"High-End Brand Buyer\":true,\"Sports\":true},\"education\":\"Completed Graduate School\","
+		    + "\"occupation\":\"Professional\",\"children\":\"No\",\"household_income\":\"75k-100k\",\"marital_status\":\"Single\",\"home_owner_status\":\"Rent\"}";
+	    JSONObject json = new JSONObject(tef);
+
 	    System.out.println(Rapleaf
 		    .getRapportiveValue("stevejobs@gmail.com"));
+
 	}
 	catch (Exception e)
 	{

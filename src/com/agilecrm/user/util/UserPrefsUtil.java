@@ -75,7 +75,7 @@ public class UserPrefsUtil
 		agileUser.id,
 		null,
 		null,
-		"default",
+		"pink",
 		"",
 		"- Powered by <a href=\"https://www.agilecrm.com\" target=\"_blank\" rel=\"nofollow\" title=\"Link: https://www.agilecrm.com\">AgileCRM</a>",
 		true);
