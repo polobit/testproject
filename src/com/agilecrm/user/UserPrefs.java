@@ -56,7 +56,7 @@ public class UserPrefs
      * Default template.
      */
     @NotSaved(IfDefault.class)
-    public String template = "red";
+    public String template = "pink";
 
     /**
      * Fixed or Fluid layout.
