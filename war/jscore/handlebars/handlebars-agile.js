@@ -126,11 +126,33 @@ function getPropertyValue(items, name) {
 function getPropertyValueBySubtype(items, name, subtype) {
 	if (items == undefined)
 		return;
+	
 
 	for ( var i = 0, l = items.length; i < l; i++) {
 		if (items[i].name == name && items[i].subtype == subtype)
 			return items[i].value;
 	}
+}
+
+function getPropertyValueBytype(items, name, type, subtype) {
+	if (items == undefined)
+		return;
+	
+	for ( var i = 0, l = items.length; i < l; i++) {
+		if (items[i].name == name)
+			{
+				if(type && type == items[i].type)
+					{
+						if(subtype && subtype == items[i].subtype)
+							return items[i].value;
+					}
+				
+				if(subtype && subtype == items[i].subtype)
+					{
+						return items[i].value;
+					}
+			}
+		}
 }
 
 /**
