@@ -1,22 +1,3 @@
-<script id="contactss-grid-model-template" type="text/html">
-<div class="span3">
-    <div style="border: 1px solid #DDD;">
-        <a href="#contact/{{id}}">
-        <img class="thumbnail" src="{{gravatarurl properties 50}}" width="50px" height="50px" style="display:inline" />
-        <br />
-        {{getPropertyValue properties "email"}}
-        {{getPropertyValue properties "first_name"}}
-        {{getPropertyValue properties "last_name"}}
-        <br/>
-        {{#each tags}}
-        	<b>{{this}}</b>
-        {{/each}}
-        <br/>
-        </a>
-    </div>
-</div>
-</script>
-
 <script id="contacts-model-template" type="text/html">
 	<td class="data" data="{{id}}">
     	<div style="display:inline;padding-right:10px;height:auto;">
@@ -28,7 +9,7 @@
         		<img class="thumbnail" src="img/company.png" width="40px" height="40px" style="display:inline" />
         	{{/if_contact_type}}
     	</div>
-    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:12em;overflow:hidden;">
+    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:75%;overflow:hidden;">
         	{{#if_contact_type "PERSON"}}
         		<b>	{{getPropertyValue properties "first_name"}}
         		{{getPropertyValue properties "last_name"}} </b>
@@ -47,13 +28,13 @@
     	{{getPropertyValue properties "company"}}
 	</td>
 	<td> 
-<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:clip;white-space:nowrap;width:15em;overflow:hidden;">
+<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:clip;white-space:nowrap;width:95%;overflow:hidden;">
 	{{#each tags}}
     	<b><span class="label">{{this}}</span></b>
     {{/each}}
 </div>
 	</td>
-	<td>{{lead_score}}</td>
+	<td style="width:13%">{{lead_score}}</td>
 </script>
 
 <script id="contacts-collection-template" type="text/html">
