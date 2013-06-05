@@ -538,17 +538,18 @@ $(function() {
 		for ( var i = 0, l = properties.length; i < l; i++) {
 
 			if (properties[i].name == "address") {
-				var el = '<div style="display:inline-block;vertical-align: top;"><i class="icon-map-marker"></i>&nbsp;&nbsp;</div>';
+				var el = '<div style="display: inline-block; vertical-align: top;text-align:right;style="color:gray"" class="span3"><span><strong style="color:gray">Address</strong></span></div>';
 				var address = JSON.parse(properties[i].value);
 				
 				// Gets properties (keys) count of given json object
 				var count = countJsonProperties(address);
 
-				el =  el.concat('<div style="padding-left:5px;display:inline;"><span>');
+				el =  el.concat('<div style="display:inline;" class="span9"><span>');
 				
 				$.each(address, function(key, val) {
 					if (--count == 0) {
-						el = el.concat(val + ".</span></div>");
+						alert("last");
+						el = el.concat(val + ".");
 						return;
 					}
 					el = el.concat(val + ", ");
@@ -556,6 +557,7 @@ $(function() {
 
 				if (properties[i].subtype)
 					el = el.concat(" (" + properties[i].subtype + ")");
+				el = el.concat('</span></div>');
 				return new Handlebars.SafeString(el);
 			}
 		}

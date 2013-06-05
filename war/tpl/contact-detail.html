@@ -207,61 +207,41 @@
 		<div class="widget_container" id="{{name}}-container">
 			<div class="widget_header">
 				<div class="pull-left">
-					<i class="icon-user "></i> <strong>Contact details</strong>
+					<i class="icon-user "></i> <strong>{{getPropertyValue properties
+										"first_name"}}'s contact info</strong>
 				</div>
-			</div>
+			</div> 
 			<!-- <div id="qrcode"><img src="img/1-0.gif"></div> -->
 			<div class="clearfix"></div>
-			<div style='padding: 4% 8% 10px; word-wrap: break-word;'>
-				<div style="padding-bottom: 10px">
-					<div class="change-owner-succes"></div>
-					<span title="Owner"><i class="icon-group"></i>&nbsp;&nbsp;<span
-						id="contact-owner" data={{owner.id}} style="display: inline-block">{{owner.name}}</span>
-						<span> <a href="#"> <i class="icon-edit"
-								style="vertical-align: middle;" rel="popover"
-								data-placement="top" data-title="Lead Owner"
-								data-content="Click here to change owner."
-								id="change-owner-element" data-trigger="hover"></i></a>
-					</span>
-						<div class="btn-group" id="change-owner-ul"
-							style="vertical-align: middle; display: none">
-							<a class="btn dropdown-toggle" data-toggle="dropdown"> Change
-								owner <span class="caret"></span>
-							</a>
-							<ul id='contact-detail-owner' class="dropdown-menu pull-right">
-							</ul>
-						</div> <!--<select id='contact-detail-owner' class="input-block-level">
-                                <option class="contact-detail-owner" value="">Select..</option>
-                            </select>--> </span>
-				</div>
-
+			<div style='word-wrap: break-word;'>
+	
 				{{#property_is_exists "phone" properties}}
-				<div class="pull-left row-fluid" style="padding-bottom: 5px">
+				<div class="pull-left row-fluid" style="padding-bottom: 5px;">
 					{{#multiple_Property_Element "phone" properties}}
-					<div style="display: inline-block; vertical-align: top;">
-						<i class="icon-phone pull-left"></i>
+					<div style="display: inline-block; vertical-align: top;text-align:right" class="span3">
+						<span><strong style="color:gray">Phone</strong><span>
 					</div>
-					<div style="padding-left: 5px; display: inline-block;">
+					<div style="padding-right:10px; display: inline-block;border-bottom:2px solid whitesmoke;padding-bottom:2px;line-height:20px" class="span9">
 						{{#each this}}
 						<div>
 							<a href="tel:{{value}}">{{value}}</a>{{#if subtype}}
-							({{subtype}}) {{/if}}
+							<sub style="bottom:-0.05px !important">{{subtype}}</sub> {{/if}}
 						</div>
 						{{/each}}
 					</div>
 					{{/multiple_Property_Element}}
 				</div>
 				{{/property_is_exists}} {{#property_is_exists "email" properties}}
-				<div class="pull-left row-fluid" style="padding-bottom: 5px">
+				<div class="pull-left row-fluid" style="padding-bottom: 5px;">
 					{{#multiple_Property_Element "email" properties}}
-					<div style="display: inline-block; vertical-align: top;">
-						<i class="icon-envelope-alt pull-left"> </i>
+					<div style="display: inline-block; vertical-align: top;text-align:right" class="span3">
+						<span><strong style="color:gray">Email</strong><span>
 					</div>
-					<div style="padding-left: 5px; display: inline-block;">
+					<div style="padding-right: 10px; display: inline-block;border-bottom:2px solid whitesmoke;padding-bottom:2px;line-height:20px" class="span9">
 						{{#each this}}
 						<div>
 							<a href="mailto:{{value}}">{{value}}</a> {{#if subtype}}
-							({{subtype}}) {{/if}}
+							<sub style="bottom:-0.05em">{{subtype}}</sub> {{/if}}
 						</div>
 						{{/each}}
 					</div>
@@ -269,17 +249,32 @@
 				</div>
 				{{/property_is_exists}}
 
-				<div class="pull-left row-fluid" style="padding-bottom: 5px">
-					{{#each properties}} {{#if_property "first_name" "last_name"
-					"company" "title" "image" "email" "phone" "website" "address"}} <span
-						style='display: inline'><icon class="{{name}}"></icon> <small><b>{{ucfirst
-								name}}</b></small></span> {{#if subtype}} ({{subtype}}): {{else}} : {{/if}}
-					{{value}} <br /> {{/if_property}} {{/each}}
+				<div class="pull-left row-fluid " style="padding-bottom: 5px">
+				 	{{#address_Element properties}}{{/address_Element}} 
 				</div>
-				<br /> {{#address_Element properties}}{{/address_Element}}
-				<div id="map"
-					style="width: auto; height: 200px; display: none; margin-bottom: 10px; margin-top: 10px">
+				<div class="pull-left row-fluid">
+					<div id="map"
+					style="width: auto; height: 200px; display: none;margin:10px">
+				</div>	 	
 				</div>
+					<h3 style="margin-left:10px;margin-bottom:10px;border-bottom:1px solid #f5f5f5">Custom info</h3>
+						{{#each properties}}
+							 {{#if_property "first_name" "last_name" "company" "title" "image" "email" "phone" "website" "address"}} 
+								<div class="pull-left row-fluid">
+									<div style="display: inline-block; vertical-align: top;text-align:right" class="span3">			
+										<span><strong style="color:gray">{{ucfirst name}}</strong><span>
+											{{#if subtype}} 
+												({{subtype}}): 
+													{{else}} : 
+												{{/if}}
+									</div>
+									<div class="span9" style="padding-right: 10px; display: inline-block;border-bottom:2px solid whitesmoke;margin-bottom:5px">{{value}} </div>
+								</div>
+							{{/if_property}} 
+						{{/each}}
+				<br /> 
+
+
 			</div>
 			<div class="clearfix"></div>
 		</div>
@@ -289,6 +284,5 @@
 		<div id="widgets"></div>
 	</div>
 </div>
-</div>
-</div>
+
 </script>
