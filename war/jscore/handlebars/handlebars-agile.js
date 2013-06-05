@@ -127,7 +127,6 @@ function getPropertyValueBySubtype(items, name, subtype) {
 	if (items == undefined)
 		return;
 	
-	console.log(items);
 
 	for ( var i = 0, l = items.length; i < l; i++) {
 		if (items[i].name == name && items[i].subtype == subtype)
@@ -144,11 +143,11 @@ function getPropertyValueBytype(items, name, type, subtype) {
 			{
 				if(type && type == items[i].type)
 					{
-						if(subtype && subtype = items[i].subtype)
+						if(subtype && subtype == items[i].subtype)
 							return items[i].value;
 					}
 				
-				if(subtype && subtype = items[i].subtype)
+				if(subtype && subtype == items[i].subtype)
 					{
 						return items[i].value;
 					}
