@@ -874,7 +874,7 @@
                 },
                 {
                     "name": "subject",
-                    "value": "Check out our new products"
+                    "value": "Check out our new stock"
                 },
                 {
                     "name": "replyto_email",
@@ -882,7 +882,7 @@
                 },
                 {
                     "name": "text_email",
-                    "value": "Hello {{first_name}},\r\n\r\nThank you for registering with Jefferson Automobiles, your one stop shop for everything auto.\r\n\r\nWe deal in automotive spare parts and automobile services. As a new customer, you are probably curious about our products and the services we offer. Please take a moment to browse through our website. \r\n\r\nWe look forward to having a long working relationship with you!\r\n\r\nRegards,\r\nJeff"
+                    "value": "Hello {{first_name}},\r\n\r\nThank you for registering with Jefferson Automobiles, your one stop shop for everything auto.\r\n\r\nWe deal in automotive spare parts and automobile services. As a new customer, you are probably curious about our products and the services we offer. Please take a moment to browse through our website. \r\n\r\nwww.jeff-auto.com\r\n\r\nWe look forward to having a long working relationship with you!\r\n\r\nRegards,\r\nJeff"
                 },
                 {
                     "name": "html_email",
@@ -911,7 +911,83 @@
             ],
             "States": [
                 {
-                    "yes": "PBXpdo3lnTVaQ"
+                    "yes": "PBXKWrwGBwh2k"
+                }
+            ]
+        },
+        {
+            "NodeDefinition": {
+                "name": "Clicked?",
+                "thumbnail": "json/nodes/images/email/clicked.png",
+                "icon": "json/nodes/icons/email/clicked.png",
+                "info": "Check if a link in the email is clicked within a specified duration.",
+                "help": "Check if a link in the email is clicked within a specified duration.",
+                "author": "John",
+                "company": "mantra",
+                "language": "en",
+                "branches": "no,yes",
+                "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.Clicked",
+                "category": "Email",
+                "ui": [
+                    {
+                        "label": " Max wait time",
+                        "required": "required",
+                        "category": "Info",
+                        "name": "duration",
+                        "id": "duration",
+                        "title": "Enter the max wait time.",
+                        "fieldType": "input",
+                        "type": "number",
+                        "min": "0"
+                    },
+                    {
+                        "label": "Type",
+                        "required": "required",
+                        "category": "Info",
+                        "name": "duration_type",
+                        "id": "duration_type",
+                        "title": "Select the type of duration.",
+                        "options": {
+                            "Days": "days",
+                            "Hours": "hours",
+                            "Minutes": "mins"
+                        },
+                        "fieldType": "select",
+                        "type": "select"
+                    },
+                    {
+                        "label": "Check if the email recepient has clicked on a link in the email. Here, you need to mention the maximum waiting period before it proceeds to the next step. <br/><br/>This node has 2 exit paths - Yes and No.<br/><ul><li>If there is a click, then the control moves through the 'Yes' path without waiting any further.</li><br/><li> If the recepient did not click any link in the preceding email, it waits here for specified time. If there is no click till the max wait time, it moves through the 'No' path. </li></ul>",
+                        "category": "Help",
+                        "fieldType": "label",
+                        "type": "label"
+                    }
+                ],
+                "url": "json/nodes/email/clicked.js"
+            },
+            "id": "PBXKWrwGBwh2k",
+            "xPosition": 478,
+            "yPosition": 275,
+            "displayname": "Purchased?",
+            "JsonValues": [
+                {
+                    "name": "nodename",
+                    "value": "Purchased?"
+                },
+                {
+                    "name": "duration",
+                    "value": "2"
+                },
+                {
+                    "name": "duration_type",
+                    "value": "days"
+                }
+            ],
+            "States": [
+                {
+                    "no": "hangup"
+                },
+                {
+                    "yes": "PBX7xvtOua933"
                 }
             ]
         },
@@ -1004,30 +1080,30 @@
                 ],
                 "url": "json/nodes/social/tweet.js"
             },
-            "id": "PBXpdo3lnTVaQ",
-            "xPosition": 496,
-            "yPosition": 309,
-            "displayname": "Tweet",
+            "id": "PBX7xvtOua933",
+            "xPosition": 618,
+            "yPosition": 423,
+            "displayname": "Send Tweet",
             "JsonValues": [
                 {
                     "name": "nodename",
-                    "value": "Tweet"
+                    "value": "Send Tweet"
                 },
                 {
                     "name": "twitter_account",
-                    "value": "gashokvr"
+                    "value": "account_name"
                 },
                 {
                     "name": "twitter_token",
-                    "value": "220009456-CkP5bt1k9xyMG20nINkbeE2zDlIyDqUpjaO3vTti"
+                    "value": "twitter_token"
                 },
                 {
                     "name": "twitter_token_secret",
-                    "value": "CG7RnLEcu6c3vD6be5sjgAYs88C7yfD65qNKi7t54A"
+                    "value": "twitter_token_secret"
                 },
                 {
                     "name": "message",
-                    "value": "@david Thanks for the purchase today. Will keep you posted on our new products."
+                    "value": "@{{TWITTER}} Thanks for the purchase. We'll keep you posted on our new stock."
                 },
                 {
                     "name": "rate_limit",

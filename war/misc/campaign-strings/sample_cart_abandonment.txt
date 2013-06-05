@@ -862,11 +862,11 @@
                 },
                 {
                     "name": "from_name",
-                    "value": "My company"
+                    "value": "Animal Chow"
                 },
                 {
                     "name": "from_email",
-                    "value": "hello@mycompany.com"
+                    "value": "hello@animalchow.com"
                 },
                 {
                     "name": "to_email",
@@ -874,7 +874,7 @@
                 },
                 {
                     "name": "subject",
-                    "value": "Check our new product"
+                    "value": "Hello, pet owner!"
                 },
                 {
                     "name": "replyto_email",
@@ -882,7 +882,7 @@
                 },
                 {
                     "name": "text_email",
-                    "value": "Hello {{first_name}},\r\n\r\nThank you for registering with Animal Chow. \r\n\r\nWe have a whole new exciting product lineup this week. Check out our new products - http://www.mycompany.com/new-products\r\n\r\nWe offer all kinds of food for every kind of pet. Buy from us to keep your pet happy and healthy! \r\n\r\nYou received this email because you registered to receive promotional emails. To UNSUBSCRIBE from such emails or update your email preferences, click here. Please allow 7-10 days for your request to be processed."
+                    "value": "Hello {{first_name}},\r\n\r\nThank you for registering with Animal Chow. \r\n\r\nWe have a whole new exciting product lineup this week. Check out our new products - http://www.mycompany.com/new-products\r\n\r\nWe offer all kinds of food for every kind of pet. Buy from us to keep your pet happy and healthy! "
                 },
                 {
                     "name": "html_email",
