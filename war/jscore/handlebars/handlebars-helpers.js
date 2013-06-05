@@ -17,9 +17,13 @@ $(function() {
 	});
 	
 	Handlebars.registerHelper('getPropertyValueBySubtype', function(items, name, subtype) {
-
 		return getPropertyValueBySubtype(items, name, subtype);
 	});
+	
+	Handlebars.registerHelper('getPropertyValueBytype', function(items, name, type, subtype) {
+		return getPropertyValueBytype(items, name, type, subtype);
+	});
+	
 
 	Handlebars.registerHelper('urlEncode', function(url, key, data) {
 
@@ -534,15 +538,17 @@ $(function() {
 		for ( var i = 0, l = properties.length; i < l; i++) {
 
 			if (properties[i].name == "address") {
-				var el = "<span><i class='icon-map-marker'></i>&nbsp;&nbsp;";
+				var el = '<div style="display:inline-block;vertical-align: top;"><i class="icon-map-marker"></i>&nbsp;&nbsp;</div>';
 				var address = JSON.parse(properties[i].value);
-
+				
 				// Gets properties (keys) count of given json object
 				var count = countJsonProperties(address);
 
+				el =  el.concat('<div style="padding-left:5px;display:inline;"><span>');
+				
 				$.each(address, function(key, val) {
 					if (--count == 0) {
-						el = el.concat(val + ".</span>");
+						el = el.concat(val + ".</span></div>");
 						return;
 					}
 					el = el.concat(val + ", ");
@@ -953,5 +959,38 @@ $(function() {
 	    console.log(result);
 	    return result;
 	});
+	
+	Handlebars.registerHelper('get_social_icon', function(name)
+	{
+		var icon_json = {
+							"TWITTER" : "icon-twitter-sign", 
+							"LINKEDIN" : "icon-linkedin-sign", 
+							"URL" : "icon-globe",
+							"GOOGLE_PLUS" : "icon-google-plus-sign",
+							"FACEBOOK" : "icon-facebook-sign"
+						}
+		if(icon_json[name])
+			return icon_json[name];
+		
+		return "icon-globe";
+		
+	});
+	
+	Handlebars.registerHelper("each_with_index", function(array, fn) {
+		 var buffer = "";
+		 for (var i = 0, j = array.length; i < j; i++) {
+		  var item = array[i];
+		 
+		  // stick an index property onto the item, starting with 1, may make configurable later
+		  item.index = i+1;
+		 
+		  // show the inside of the block
+		  buffer += fn(item);
+		 }
+		 
+		 // return the finished buffer
+		 return buffer;
+		 
+		});
 	
 });
