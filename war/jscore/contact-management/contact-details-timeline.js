@@ -55,6 +55,8 @@ function load_timeline_details(el, contactId, callback1)
 	        return item.get('id');
 		}
 		
+		var contact = App_Contacts.contactDetailView.model.toJSON();
+		
 		// Fetches logs related to the contact
 		var LogsCollection = Backbone.Collection.extend({
 			url: '/core/api/campaigns/logs/contact/' + contactId,
@@ -69,7 +71,7 @@ function load_timeline_details(el, contactId, callback1)
 				$('#time-line', el).find('.loading-img-log').remove();
 				if(logsCollection.length == 0)
 					return;
-					
+	
 				// If timeline is not defined yet, calls setup_timeline for the first time
 				if(timelineView.collection.length == 0){
 					$.each(logsCollection.toJSON(), function(index, model){
@@ -219,9 +221,27 @@ function load_timeline_details(el, contactId, callback1)
 			var view = new View();
 			view.fetch({
 				success: function(){
-					
 					if(view.length > 0)
 						arrayView.collection.add(view.models);
+					
+					if(loading_count  == 0)
+					{
+						if(timelineView.collection.length == 0) {
+							timelineView.collection.add(contact);
+						
+							setup_timeline(timelineView.collection.toJSON(), el, function(el){
+							});
+						} else {
+							var newItem = $(getTemplate("timeline", contact));
+							
+							newItem.find('.inner').append('<a href="#" class="open-close"></a>');
+							/*
+							 * Inserts mails to timeline with out validating the isotope status,
+							 * as it takes more time to fetch.
+							 */  
+							$('#timeline', el).isotope( 'insert', newItem);
+						}
+					}
 					
 					// If all the urls got their responses, goes for timeline
 					if(++loading_count == fetchContactDetails.length){
@@ -241,7 +261,7 @@ function load_timeline_details(el, contactId, callback1)
 							 * Calls setup_timeline with a callback function to insert other models 
 							 * (fetched while initializing the isotope) if available.
 							 */
-							setup_timeline(timelineView.collection.toJSON(), el, function(el){
+							setup_timeline(timelineView.collection.toJSON(), el, function(el) {
 								
 								$.each(timelineViewMore.collection.toJSON(), function(index,data){
 									var newItem = $(getTemplate("timeline", data));
@@ -363,17 +383,17 @@ function entity_created_month_year(model){
  * @param month_years
  * @param is_insert
  */
-function create_month_marker(month_years, is_insert){
+function create_month_marker(month_years, is_insert, el){
 	// add a year marker for each year that has a post
 	$.each(month_years, function(i, val){
 		var monthYear = val.split('-');
 		var timestamp = getTimestamp(monthYear[0], monthYear[1]) / 1000;
 		var context = {year: monthArray[monthYear[0]].split(' ')[0], timestamp: timestamp};
 		if(is_insert){
-			$('#timeline').isotope( 'insert', $(getTemplate("year-marker", context)));
+			$('#timeline', el).isotope( 'insert', $(getTemplate("year-marker", context)));
 		}	
 		else{
-			$('#timeline').append(getTemplate("year-marker", context));
+			$('#timeline', el).append(getTemplate("year-marker", context));
 		}	
 	});
 }
@@ -407,6 +427,8 @@ function setup_timeline(models, el, callback) {
 		 */ 
 		customize_isotope();
 		
+		console.log(models);
+		
 		/*
 		 * Appends each model to timeline, by loading their corresponding
 		 * templates using handlebars
@@ -415,20 +437,25 @@ function setup_timeline(models, el, callback) {
 			
 			// saves the month and years so we can create month markers
 			var month_year = entity_created_month_year(model);
+			
 					
 			if (MONTH_YEARS.indexOf(month_year) < 0)
 				MONTH_YEARS[MONTH_YEARS.length] = month_year;
 			
+			console.log(MONTH_YEARS);
+			
 			// combine data & template
-			$('#timeline', el).append(getTemplate("timeline", model));
+			$('#timeline').append(getTemplate("timeline", model));
 		}); //each
 
 		// add a month marker for each month that has a post
-		create_month_marker(MONTH_YEARS, false);
-		
+		create_month_marker(MONTH_YEARS, false, el);
+		console.log(el);
+		var $container = $("#timeline");
+		console.log($container);
 		// Initializes isotope with options (sorts the data based on created time)
-		$('#timeline',el).imagesLoaded(function(){
-			$('#timeline').isotope({
+		$('#timeline').imagesLoaded(function(){
+			$container.isotope({
 				itemSelector : '.item',
 				transformsEnabled: true,
 				layoutMode: 'spineAlign',
@@ -453,12 +480,11 @@ function setup_timeline(models, el, callback) {
 		});
 		*/
 		// add open/close buttons to each post
-		$('#timeline .item.post').each(function(){
+		$('#timeline .item.post', el).each(function(){
 			$(this).find('.inner').append('<a href="#" class="open-close"></a>');
 		});
-
 		// Resizes the line height based on entities overall height
-		$('#timeline').resize(function(){ // uses "jQuery resize event" plugin
+		$('#timeline').resize(function(){
 			adjust_line();
 		});
 		
@@ -652,7 +678,6 @@ function remove_loading_img(el){
 
 				                        }
 			                           });
-				
 				
 				// If timeline is not defined yet, calls setup_timeline for the first time
 				if(timelineView.collection.length == 0)

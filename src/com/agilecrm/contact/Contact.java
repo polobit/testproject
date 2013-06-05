@@ -172,6 +172,9 @@ public class Contact extends Cursor
     @NotSaved
     private DomainUser Owner = null;
 
+    @NotSaved
+    public String entity_type = "contact";
+
     /**
      * Stores the property names in final variables, for reading flexibility of
      * the property values

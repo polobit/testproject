@@ -31,6 +31,16 @@
             </div>
         {{/if_entity}}
 
+        {{#if_entity "contact"}}
+            <div class="timestamp">{{created_time}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-tasks"></i></a></span> Created on</h3></div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body">
+                <div class="caption" style="margin-top:-8px"><i class="{{icons type}}"></i> ({{type}})</div>         
+                <div class="text" style="color: #333333">{{epochToHumanDate "mmm dd, yyyy hh:mm tt" created_time}}</div>
+            </div>
+        {{/if_entity}}
+
         {{#if_entity "deal"}}
             <div class="timestamp">{{created_time}}</div>
             <div class="title"><h3><span><a class="no-line"><i class="icon-money"></i></a></span> Deal</h3></div>
