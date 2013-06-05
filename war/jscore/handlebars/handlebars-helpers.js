@@ -544,11 +544,10 @@ $(function() {
 				// Gets properties (keys) count of given json object
 				var count = countJsonProperties(address);
 
-				el =  el.concat('<div style="display:inline;" class="span9"><span>');
+				el =  el.concat('<div style="display:inline;border-top:2px solid whitesmoke;margin-top:-3px;" class="span9"><span>');
 				
 				$.each(address, function(key, val) {
 					if (--count == 0) {
-						alert("last");
 						el = el.concat(val + ".");
 						return;
 					}
