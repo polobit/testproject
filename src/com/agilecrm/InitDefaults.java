@@ -24,8 +24,6 @@ public class InitDefaults
      */
     public static void getDefaultContacts()
     {
-	System.out.println("default contact >>>>>>>>>>>>>>>>>>>>.");
-
 	LinkedHashSet<String> tags = new LinkedHashSet<String>();
 	tags.add("Business Owner");
 	tags.add("Frequent Buyer");
@@ -95,7 +93,6 @@ public class InitDefaults
      */
     public static void getDefaultTasks()
     {
-	System.out.println("default task >>>>>>>>>>>>>>>>>>>>.");
 	Task task = new Task();
 	task.subject = "Give feedback on Agile";
 	task.is_complete = false;
@@ -103,7 +100,7 @@ public class InitDefaults
 	task.type = Type.SEND;
 	task.priority_type = PriorityType.NORMAL;
 
-	DateUtil date = new DateUtil().toMidnight().addDays(16);
+	DateUtil date = new DateUtil().toMidnight().addDays(15);
 	task.due = date.getTime().getTime() / 1000;
 
 	task.contacts = new ArrayList<String>();
@@ -123,17 +120,15 @@ public class InitDefaults
      */
     public static void getDefaultEvent()
     {
-	System.out.println("default event >>>>>>>>>>>>>>>>>>>>.");
 	Event event = new Event();
 	event.title = "Gossip at water cooler";
 	event.color = "green";
 	event.allDay = false;
-
 	DateUtil date = new DateUtil().toMidnight().addDays(1)
 		.addMinutes(16 * 60);
 
 	event.start = date.getTime().getTime() / 1000;
-	event.end = date.getTime().getTime() / 1000 + 900;
+	event.end = date.getTime().getTime() / 1000 + 1800;
 	event.save();
     }
 
@@ -142,7 +137,6 @@ public class InitDefaults
      */
     public static void getDefaultWorkflow()
     {
-	System.out.println("default workflow >>>>>>>>>>>>>>>>>>>>.");
 	Workflow workflow = new Workflow(
 		"Sample Auto Responder",
 		Util.readResource("misc/campaign-strings/sample_auto_responder.txt"));
