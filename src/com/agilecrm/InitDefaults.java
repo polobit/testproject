@@ -53,8 +53,8 @@ public class InitDefaults
 	contactFields1.add(new ContactField(Contact.EMAIL, "work",
 		"sixfeetsix@nba.com"));
 	contactFields1.add(new ContactField(Contact.COMPANY, null, "NBA"));
-	contactFields1
-		.add(new ContactField(Contact.TITLE, null, "Sportsperson"));
+	contactFields1.add(new ContactField(Contact.TITLE, null,
+		"Sports Legend"));
 	contactFields1
 		.add(new ContactField(
 			"image",
@@ -96,27 +96,42 @@ public class InitDefaults
 	Task task = new Task();
 	task.subject = "Give feedback on Agile";
 	task.is_complete = false;
-
 	task.type = Type.SEND;
-	task.priority_type = PriorityType.NORMAL;
-
-	DateUtil date = new DateUtil().toMidnight().addDays(15);
+	task.priority_type = PriorityType.HIGH;
+	DateUtil date = new DateUtil().addDays(15);
 	task.due = date.getTime().getTime() / 1000;
-
 	task.contacts = new ArrayList<String>();
-
 	List<Contact> contacts = ContactUtil.getAllContacts();
 	for (Contact contact : contacts)
 	{
 	    task.contacts.add(String.valueOf(contact.id));
 	}
 	task.owner_id = String.valueOf(SessionManager.get().getDomainId());
-
 	task.save();
+
+	Task task1 = new Task();
+	task1.subject = "Like Agile on Facebook";
+	task1.is_complete = false;
+	task1.type = Type.SEND;
+	task1.priority_type = PriorityType.NORMAL;
+	DateUtil date1 = new DateUtil().addDays(1);
+	task1.due = date1.getTime().getTime() / 1000;
+	task1.owner_id = String.valueOf(SessionManager.get().getDomainId());
+	task1.save();
+
+	Task task2 = new Task();
+	task2.subject = "Tweet about Agile";
+	task2.is_complete = false;
+	task2.type = Type.SEND;
+	task2.priority_type = PriorityType.LOW;
+	DateUtil date2 = new DateUtil().addDays(2);
+	task2.due = date2.getTime().getTime() / 1000;
+	task2.owner_id = String.valueOf(SessionManager.get().getDomainId());
+	task2.save();
     }
 
     /**
-     * Creates default Workflow.
+     * Creates default Event.
      */
     public static void getDefaultEvent()
     {
@@ -133,7 +148,7 @@ public class InitDefaults
     }
 
     /**
-     * Creates default Workflow.
+     * Creates default Workflows.
      */
     public static void getDefaultWorkflow()
     {
@@ -148,8 +163,8 @@ public class InitDefaults
 	workflow1.save();
 
 	Workflow workflow2 = new Workflow(
-		"Sample Multi Channel Campaign",
-		Util.readResource("misc/campaign-strings/sample_multi_channel_campaign.txt"));
+		"Sample Email & Social Campaign",
+		Util.readResource("misc/campaign-strings/sample_email_n_social_campaign.txt"));
 	workflow2.save();
 
     }
