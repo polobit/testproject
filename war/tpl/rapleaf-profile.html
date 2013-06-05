@@ -80,7 +80,7 @@
 			<div class="span5">
 				<div class="pull-right">:</div> Home owner status
 			</div>
-			<div class="span6" style="margin-left: 10px;">
+			<div class="span6" style="margin-left: 10px;text-align:bottom;">
 				{{home_owner_status}}
 			</div>
 		</div>
@@ -92,7 +92,7 @@
 			<div class="span5">
 				<div class="pull-right">:</div> Interests
 			</div>
-			<div class="span6" style="margin-left: 10px;font-style: italic;">
+			<div class="span6" style="margin-left: 10px;">
 				{{#iterate_json this.interests}}
 						{{#if value}}{{property}}{{#unless last}}, {{/unless}}{{/if}}
 				{{/iterate_json}}
