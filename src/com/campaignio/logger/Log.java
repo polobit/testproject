@@ -8,6 +8,7 @@ import org.codehaus.jackson.annotate.JsonAutoDetect;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
+import com.googlecode.objectify.annotation.NotSaved;
 
 /**
  * 
@@ -74,6 +75,12 @@ public class Log
      * Log level
      */
     public String level;
+
+    /**
+     * To get log in contact-timeline.
+     */
+    @NotSaved
+    public String entity_type = "log";
 
     /**
      * Log Types
