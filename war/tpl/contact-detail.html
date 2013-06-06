@@ -213,8 +213,24 @@
 			</div> 
 			<!-- <div id="qrcode"><img src="img/1-0.gif"></div> -->
 			<div class="clearfix"></div>
-			<div style='word-wrap: break-word;'>
-	
+			<div style='word-wrap: break-word;margin-top:10px'>
+			{{#property_is_exists "phone" properties}}
+				{{else}}
+					{{#property_is_exists "email" properties}}
+						{{else}}
+							{{#property_is_exists "address" properties}}		
+								{{else}}
+									<div class="pull-left row-fluid" style="padding-bottom: 5px;">
+										<div style="display: inline-block; vertical-align: top;text-align:right" class="span3">
+											<span><strong style="color:gray">Created</strong><span>
+										</div>
+										<div class="span9" style="padding-right: 10px; display: inline-block;margin-bottom:5px">			
+											<span>{{epochToHumanDate "mmm dd, yyyy 'at' hh:mm tt" created_time}}</span>									
+										</div>
+									</div>
+							{{/property_is_exists}}
+					{{/property_is_exists}}
+			{{/property_is_exists}}
 				{{#property_is_exists "phone" properties}}
 				<div class="pull-left row-fluid" style="padding-bottom: 5px;">
 					{{#multiple_Property_Element "phone" properties}}
@@ -266,18 +282,24 @@
 				{{/property_is_exists}} 
 				
 				{{#getContactCustomProperties properties}}
-{{this}}
+				<div class="pull-left row-fluid">
 					<h3 style="margin-left:10px;margin-bottom:10px;border-bottom:1px solid #f5f5f5">Custom info</h3>
-						{{#each this}}
-								<div class="pull-left row-fluid">
+						{{#each_with_index this}}
+								<div class="pull-left row-fluid" style="margin-bottom:5px">
 									<div style="display: inline-block; vertical-align: top;text-align:right" class="span3">			
 										<span><strong style="color:gray">{{ucfirst name}}</strong><span>
 										
 									</div>
-									<div class="span9" style="padding-right: 10px; display: inline-block;border-bottom:2px solid whitesmoke;margin-bottom:5px">{{value}} </div>
+									{{#if_equals index ../this.length}}
+										<div class="span9" style="padding-right: 10px; display: inline-block;margin-bottom:5px">
+									{{else}}
+										<div class="span9" style="padding-right: 10px; display: inline-block;border-bottom:2px solid whitesmoke;margin-bottom:5px">
+									{{/if_equals}}
+										{{value}} 
+									</div>
 								</div>
-						{{/each}}
-				<br /> 
+						{{/each_with_index}}
+				</div>
 				{{/getContactCustomProperties}}
 
 

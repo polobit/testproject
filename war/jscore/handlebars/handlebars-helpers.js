@@ -26,11 +26,10 @@ $(function() {
 	
 	Handlebars.registerHelper('getContactCustomProperties', function(items, options) {
 		var fields = getContactCustomProperties(items);
-		console.log(fields);
 		if(fields.length == 0)
 			return options.inverse(fields);
 		
-		return options.inverse(fields);
+		return options.fn(fields);
 		
 	});
 	
