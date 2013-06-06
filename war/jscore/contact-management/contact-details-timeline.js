@@ -46,6 +46,9 @@ function load_timeline_details(el, contactId, callback1)
 			if (item.get('created_time')) {
 	            return item.get('created_time');
 	        }
+			if (item.get('createdTime')) {
+		        	return item.get('createdTime')/1000;
+		    }
 	        if (item.get('time')) {
 	        	return item.get('time')/1000;
 	        }
@@ -228,9 +231,13 @@ function load_timeline_details(el, contactId, callback1)
 					{
 						if(timelineView.collection.length == 0) {
 							timelineView.collection.add(contact);
-						
-							setup_timeline(timelineView.collection.toJSON(), el, function(el){
-							});
+							
+							// Add tags in timeline
+							$.each(contact.get('tagsWithTime'), function(index, tag){
+								timelineView.collection.add(tag);
+							})
+							setup_timeline(timelineView.collection.toJSON(), el);
+
 						} else {
 							var newItem = $(getTemplate("timeline", contact));
 							
@@ -372,6 +379,8 @@ function getTimestamp(month_index, year){
 function entity_created_month_year(model){
 	if(model.created_time)
 		return month_year = new Date(model.created_time * 1000).getMonth() + '-' + new Date(model.created_time * 1000).getFullYear();
+	if(model.createdTime)
+		return month_year = new Date(model.createdTime * 1000).getMonth() + '-' + new Date(model.createdTime * 1000).getFullYear();
 	else if(model.time)
 		return month_year = new Date(model.time * 1000).getMonth() + '-' + new Date(model.time * 1000).getFullYear();
 	else if(model.date_secs)
@@ -426,8 +435,6 @@ function setup_timeline(models, el, callback) {
 		 * arrangement of data position added to timeline etc..
 		 */ 
 		customize_isotope();
-		
-		console.log(models);
 		
 		/*
 		 * Appends each model to timeline, by loading their corresponding
