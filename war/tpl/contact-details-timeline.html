@@ -36,16 +36,16 @@
             <div class="title"><h3><span><a class="no-line"><i class="icon-tasks"></i></a></span> Created</h3></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body" style="padding:5px">
-                <div class="text" style="color: #333333" >{{epochToHumanDate "mmm dd, yyyy 'at' hh:mm tt" created_time}}</div>
+                <div class="text" style="color: #333333" >{{epochToHumanDate "mmmm dd, yyyy 'at' hh:mm tt" created_time}}</div>
             </div>
         {{/if_entity}}
 	
 	  {{#if_entity "tag"}}
             <div class="timestamp">{{createdTime}}</div>
             <div class="title"><h3><span><a class="no-line"><i class="icon-tag"></i></a></span> Tag Added - {{tag}}</h3></div>
-            <div class="date">{{epochToTaskDate createdTime}}</div>
+            <div class="date">{{epochToHumanDate "mmmm d" createdTime}}</div>
             <div class="body" style="padding:5px">
-                <div class="text" style="color: #333333" >Created on {{epochToHumanDate "mmm dd, yyyy 'at' hh:mm tt" createdTime}}</div>
+                <div class="text" style="color: #333333" >{{epochToHumanDate "mmmm dd, yyyy 'at' hh:mm tt" createdTime}}</div>
             </div>
         {{/if_entity}}
 
