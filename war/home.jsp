@@ -71,6 +71,7 @@ String CSS_PATH = "/";
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/jslider.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/planandupgrade.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/daterangepicker.css" />
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrapSwitch.css" />
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
@@ -252,8 +253,8 @@ String CSS_PATH = "/";
 <script src='lib/headjs-min.js'></script>
 	
 	<script>
-	var LIB_PATH = "//da4o37ei6ybbh.cloudfront.net/js/";
-	// var LIB_PATH = "/";
+	 var LIB_PATH = "//da4o37ei6ybbh.cloudfront.net/js/";
+	 //var LIB_PATH = "/";
 	
 	var IS_CONSOLE_ENABLED = <%=debug%>;
 	

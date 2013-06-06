@@ -83,7 +83,7 @@ public class CampaignsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public List<Log> getContactLogs(@PathParam("contact-id") String contactId)
     {
-	return LogUtil.getSQLLogs(null, contactId, null);
+	return LogUtil.getSQLLogs(null, contactId, "100");
     }
 
     /**

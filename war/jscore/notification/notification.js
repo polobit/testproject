@@ -35,8 +35,6 @@ $(function() {
 
 });
 
-
-
 /**
  * Fetches notification preferences for current user
  */
@@ -86,8 +84,8 @@ function getDomainFromCurrentUser() {
 	user.fetch({
 		success : function(data) {
 			var domain = data.get('domain');
-				subscribeToPubNub(domain);
-				}
+			subscribeToPubNub(domain);
+		}
 	});
 }
 
@@ -114,8 +112,9 @@ function subscribeToPubNub(domain) {
 						pubnub.subscribe({
 							channel : domain,
 							callback : function(message) {
-								//console.log(unescape(message.replace('/\+/g', " ")));
-								//console.log(message);
+								// console.log(unescape(message.replace('/\+/g',
+								// " ")));
+								// console.log(message);
 								_setupNotification(message);
 							}
 						});
@@ -129,7 +128,7 @@ function subscribeToPubNub(domain) {
  *            object data such as contact
  */
 function _setupNotification(object) {
-	
+
 	// Inorder to avoid navigating to the contact or deal deleted
 	// when clicking on notification.
 	if (object.notification == 'CONTACT_DELETED'
@@ -145,34 +144,33 @@ function _setupNotification(object) {
 		return;
 	}
 
-	if (object.notification == 'BROWSING')
-	{
+	if (object.notification == 'BROWSING') {
 		notificationForBrowsing(object);
 		return;
 	}
 
-	// Verify whether current_user key exists. It doesn't exists when tag added through
-	// campaign, or notification for email-clicked etc. since session doesn't exist.
-	if('current_user_name' in object)
-	{	
-	    if(notification_prefs.prefs.currentDomainUserName == object.current_user_name)
-		    return;
+	// Verify whether current_user key exists. It doesn't exists when tag added
+	// through
+	// campaign, or notification for email-clicked etc. since session doesn't
+	// exist.
+	if ('current_user_name' in object) {
+		if (notification_prefs.prefs.currentDomainUserName == object.current_user_name)
+			return;
 	}
-	
+
 	/**
 	 * Checks notification preferences and compare with notification type. If it
 	 * is set true then show notification. For e.g. If Deal created is true then
 	 * notification when 'deal is created' is shown.
-	 */	
+	 */
 	$.each(notification_prefs, function(key, value) {
 
 		if (key == object.notification.toLowerCase()) {
 			if (notification_prefs[key])
-			showNoty('information', html, 'bottomRight');
+				showNoty('information', html, 'bottomRight');
 		}
 
-	    });
-	
+	});
 
 	/*
 	 * console.log(parse_data); for(var i=0;i<parse_data.contacts.length;i++) { //
@@ -194,7 +192,7 @@ function _setupNotification(object) {
  *            notification template.
  */
 function notificationForClickedAndOpened(contact, html) {
-	
+
 	// Current user who logged_in
 	var current_user = notification_prefs.prefs.currentDomainUserName;
 
@@ -204,58 +202,51 @@ function notificationForClickedAndOpened(contact, html) {
 	// console.log(contact.owner_name);
 
 	// Clicked Link
-	if(contact.notification == "CLICKED_LINK")
-	{
-		if (notification_prefs.link_clicked == 'ANY_CONTACT')
-	    {
+	if (contact.notification == "CLICKED_LINK") {
+		if (notification_prefs.link_clicked == 'ANY_CONTACT') {
 			showNoty('information', html, 'bottomRight');
 			return;
-	    }
-		
+		}
+
 		// Checks for starred contact
-		if(notification_prefs.link_clicked == 'CONTACT_ASSIGNED_AND_STARRED' && contact.star_value > 0) 
-		{
-			if (current_user == contact_created_by)
-			{
-			showNoty('information', html, 'bottomRight');
-		    return;
+		if (notification_prefs.link_clicked == 'CONTACT_ASSIGNED_AND_STARRED'
+				&& contact.star_value > 0) {
+			if (current_user == contact_created_by) {
+				showNoty('information', html, 'bottomRight');
+				return;
 			}
 		}
-		
+
 		// Notification for assigned and starred contacts
 		if (notification_prefs.link_clicked == 'CONTACT_ASSIGNED') {
 
 			// Show notifications for contacts of same user
-			if (current_user == contact_created_by)
-			{	showNoty('information', html, 'bottomRight');
-			     return;
+			if (current_user == contact_created_by) {
+				showNoty('information', html, 'bottomRight');
+				return;
 			}
 		}
-		
+
 	}
-	
+
 	// Opened Email
-	if (notification_prefs.email_opened == 'ANY_CONTACT')
-	{
-            showNoty('information', html, 'bottomRight');
-		    return;
-	}
-		
-	if(notification_prefs.email_opened == 'CONTACT_ASSIGNED_AND_STARRED' && contact.star_value > 0) 
-	{
-		if (current_user == contact_created_by)
-		{
+	if (notification_prefs.email_opened == 'ANY_CONTACT') {
 		showNoty('information', html, 'bottomRight');
-	    return;
+		return;
+	}
+
+	if (notification_prefs.email_opened == 'CONTACT_ASSIGNED_AND_STARRED'
+			&& contact.star_value > 0) {
+		if (current_user == contact_created_by) {
+			showNoty('information', html, 'bottomRight');
+			return;
 		}
 	}
 
 	// Notification for assigned and starred contacts
-	if (notification_prefs.email_opened == 'CONTACT_ASSIGNED')
-	{
+	if (notification_prefs.email_opened == 'CONTACT_ASSIGNED') {
 		// Show notifications for contacts of same user
-		if (current_user == contact_created_by)
-		{
+		if (current_user == contact_created_by) {
 			showNoty('information', html, 'bottomRight');
 			return;
 		}
@@ -303,7 +294,7 @@ function fetchContactAndNotify(email) {
  *            Contact object that obtained with respect to email
  */
 function notificationForBrowsing(contact) {
-	
+
 	// Current user who logged_in
 	var current_user = notification_prefs.prefs.currentDomainUserName;
 
@@ -314,83 +305,92 @@ function notificationForBrowsing(contact) {
 
 	// console.log(contact.owner_name);
 
-	if (notification_prefs.browsing == 'ANY_CONTACT')
-    {
+	if (notification_prefs.browsing == 'ANY_CONTACT') {
 		showNoty('information', html, 'bottomRight');
 		return;
-    }
-	
-	if(notification_prefs.browsing == 'CONTACT_ASSIGNED_AND_STARRED' && contact.star_value > 0) 
-	{
-		if (current_user == contact_created_by)
-		{
-		showNoty('information', html, 'bottomRight');
-	    return;
+	}
+
+	if (notification_prefs.browsing == 'CONTACT_ASSIGNED_AND_STARRED'
+			&& contact.star_value > 0) {
+		if (current_user == contact_created_by) {
+			showNoty('information', html, 'bottomRight');
+			return;
 		}
 	}
-	
+
 	if (notification_prefs.browsing == 'CONTACT_ASSIGNED') {
 
 		// Show notifications for contacts of same user
-		if (current_user == contact_created_by)
-		{	showNoty('information', html, 'bottomRight');
-		     return;
+		if (current_user == contact_created_by) {
+			showNoty('information', html, 'bottomRight');
+			return;
 		}
 	}
 }
 
-/**
+/*******************************************************************************
  * Checks browser notifications
- ***/
-function checkBrowserNotifications(el)
-{
-	// Checked - Enable all notifications; Unchecked - Disable all notifications
-	$('#control_notifications',el).die().live('click',function(e){
-		 if(!$(this).is(':checked'))
-		 {  
-			 $(el).find('input[type=checkbox]').not('#control_notifications').attr('disabled','disabled');
-			 $(el).find('select').not('#control_notifications').attr('disabled','disabled');
-		 }
-		 else
-		 { 
-			 $(el).find('input[type=checkbox]').not('#control_notifications').removeAttr('disabled');
-			 $(el).find('select').not('#control_notifications').removeAttr('disabled');
-		 }
+ ******************************************************************************/
+function checkBrowserNotifications(el) {
+	
+	// Verify desktop notification settings.
+	// Check if browser support
+	if (!window.webkitNotifications) {
+		$('#set-desktop-notification').css('display', 'none');
+	}
+
+	// Allowed
+	if (window.webkitNotifications
+			&& window.webkitNotifications.checkPermission() == 0) {
+		$('#set-desktop-notification').css('display', 'none');
+		$('#desktop-notification-content')
+				.html(
+						"<i>Desktop Notifications are Enabled in browser settings. <a href=\"#\" id=\"disable-notification\" style=\"text-decoration:underline;\">Disable it.</a></i>");
+	}
+
+	// Denied
+	if (window.webkitNotifications
+			&& window.webkitNotifications.checkPermission() == 2) {
+		$('#set-desktop-notification').css('display', 'none');
+		$('#desktop-notification-content')
+				.html(
+						"<i>Desktop Notifications are Disabled in browser settings. <a href=\"#\" id=\"enable-notification\" style=\"text-decoration:underline;\">Enable it.</a></i>")
+	}
+
+	$('#enable-notification', el).die().live('click', function(e) {
+		e.preventDefault();
+		$('#notification-enable-help-modal').modal("show");
 	});
 
-	    // Verify desktop notification settings. 
-	    
-	    // Check if browser support
-	    if(!window.webkitNotifications)
-	    {  
-	    	$('#set-desktop-notification').css('display','none');
-	    }
-	      
-	    // Allowed
-	    if(window.webkitNotifications && window.webkitNotifications.checkPermission() == 0)
-	    { 
-	     $('#set-desktop-notification').css('display','none');
-	     $('#desktop-notification-content').html
-	        ("<i>Desktop Notifications are Enabled in browser settings. <a href=\"#\" id=\"disable-notification\" style=\"text-decoration:underline;\">Disable it.</a></i>");
-	    }
-	    
-	    // Denied
-	    if(window.webkitNotifications && window.webkitNotifications.checkPermission() == 2)
-	    {
-	    	$('#set-desktop-notification').css('display','none');
-	    	$('#desktop-notification-content').html
-	    	   ("<i>Desktop Notifications are Disabled in browser settings. <a href=\"#\" id=\"enable-notification\" style=\"text-decoration:underline;\">Enable it.</a></i>")
-	    }
-	    
-	    $('#enable-notification',el).die().live('click',function(e){
-	    	e.preventDefault();
-	    	$('#notification-enable-help-modal').modal("show");
-	    });
-	    
-	    $('#disable-notification',el).die().live('click',function(e){
-	    	e.preventDefault();
-	    	$('#notification-disable-help-modal').modal("show");
-	    });    
+	$('#disable-notification', el).die().live('click', function(e) {
+		e.preventDefault();
+		$('#notification-disable-help-modal').modal("show");
+	});
+}
+
+function showSwitchChanges(el)
+{
+	$('#notification-switch', el).die().live(
+			'switch-change',
+			function() {
+				var status = $('#notification-switch')
+						.bootstrapSwitch('status');
+				
+				// if ON - status is true
+				if (status) {
+					$(el).find('input[type=checkbox]').not(
+							'#control_notifications,#notification_sound').removeAttr('disabled');
+					$(el).find('select').not('#control_notifications')
+							.removeAttr('disabled');
+				} else {
+					$(el).find('input[type=checkbox]').not(
+							'#control_notifications').attr('disabled',
+							'disabled');
+					$(el).find('select').not('#control_notifications, #notification_sound').attr(
+							'disabled', 'disabled');
+				}
+
+			});
 }
 
 /**
@@ -436,14 +436,14 @@ function notify(type, message, position, closable) {
  *            notification type - TAG CREATED, TAG DELETED etc.
  */
 function showNoty(type, message, position) {
-	
+
 	// Don't show notifications when disabled by user
-	if(!notification_prefs.control_notifications)
+	if (!notification_prefs.control_notifications)
 		return;
 
 	// Check for html5 notification permission.
-	if (window.webkitNotifications && 
-			 window.webkitNotifications.checkPermission() == 0) {
+	if (window.webkitNotifications
+			&& window.webkitNotifications.checkPermission() == 0) {
 		show_desktop_notification(getImageUrl(message),
 				getNotificationType(message), getTextMessage(message),
 				getId(message));
