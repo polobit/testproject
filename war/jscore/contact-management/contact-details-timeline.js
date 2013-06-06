@@ -380,7 +380,7 @@ function entity_created_month_year(model){
 	if(model.created_time)
 		return month_year = new Date(model.created_time * 1000).getMonth() + '-' + new Date(model.created_time * 1000).getFullYear();
 	if(model.createdTime)
-		return month_year = new Date(model.createdTime * 1000).getMonth() + '-' + new Date(model.createdTime * 1000).getFullYear();
+		return month_year = new Date(model.createdTime).getMonth() + '-' + new Date(model.createdTime).getFullYear();
 	else if(model.time)
 		return month_year = new Date(model.time * 1000).getMonth() + '-' + new Date(model.time * 1000).getFullYear();
 	else if(model.date_secs)
@@ -471,7 +471,13 @@ function setup_timeline(models, el, callback) {
 				},
 				getSortData: {
 					timestamp: function($elem){
-						return parseFloat($elem.find('.timestamp').text());
+						var time = parseFloat($elem.find('.timestamp').text());
+						
+						// If time is in milliseconds then return time in seconds
+						if ((time / 100000000000) > 1)
+							return time/1000;
+						
+						return time
 					}
 				},
 				sortBy: 'timestamp',
