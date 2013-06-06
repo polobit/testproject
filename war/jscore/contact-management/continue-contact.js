@@ -62,13 +62,13 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     
     // Stores all the property objects
     var properties = [];
-    
+
     // Contact should be fetched based on id from any of the following views. It is required so other properties saved are not lost.
     if(id)
     	{
 
 			// If user refreshes in contact details page, then none of the list views are defined so, contact will be fetched from detailed view
-			if(App_Contacts.contactDetailView && App_Contacts.contactDetailView.model != null)
+			if(App_Contacts.contactDetailView && App_Contacts.contactDetailView.model != null && App_Contacts.contactDetailView.model.get('id') == id)
 				obj = App_Contacts.contactDetailView.model.toJSON();
 		
     		// If contact list view is defined, then contact is fetched from list.
@@ -87,8 +87,10 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     
     // Reads custom fields and pushes into properties
     var custom_field_elements =  $('#' + form_id).find('.custom_field');
+    var custom_fields_in_template = [];
     $.each(custom_field_elements, function(index, element){
     	var id = $(element).attr('id'), name = $(element).attr('name');
+    	custom_fields_in_template.push(name);
     	
     	if (isValidField(id)) properties.push(property_JSON(name, id, 'CUSTOM'));
     });
@@ -190,10 +192,12 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
      * There are chances user adds a property(may be stripe id..) using developers API, in order not to loose them 
      * following verification is done
      */
+    
     if(obj.properties)
+    	{
+    	var properties_temp = properties;
     	$.each(obj.properties, function(contact_property_index, contact_property) {
-    		
-    		$.each(properties, function(new_property_index, new_property) {	
+    		$.each(properties_temp, function(new_property_index, new_property) {	
     			
     			// If property name exists in new property, no changes are made considering property is updated.
     			if(new_property.name == contact_property.name) {
@@ -201,15 +205,15 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     				return false;
     			}
     		
+    
     			// If property name is missing in new properties then preserving them.
-    			else if(new_property_index == properties.index)
+    			else if(new_property_index == (properties_temp.length - 1) && custom_fields_in_template.indexOf(contact_property.name) == -1 && contact_property.type == "CUSTOM")
     			{
-    				properties.push(new_property);
+    				properties.push(contact_property);
     			}
-    		
     		});
     	});
-    
+    	}
     
     // Stores json object with "properties" as value
     var propertiesList = [];

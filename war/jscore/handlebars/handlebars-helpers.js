@@ -24,6 +24,15 @@ $(function() {
 		return getPropertyValueBytype(items, name, type, subtype);
 	});
 	
+	Handlebars.registerHelper('getContactCustomProperties', function(items, options) {
+		var fields = getContactCustomProperties(items);
+		if(fields.length == 0)
+			return options.inverse(fields);
+		
+		return options.fn(fields);
+		
+	});
+	
 
 	Handlebars.registerHelper('urlEncode', function(url, key, data) {
 
@@ -506,6 +515,7 @@ $(function() {
 
 		if(getPropertyValue(properties, name))
 			return options.fn(this);
+		return options.inverse(this);
 	});
 	
 	Handlebars.registerHelper('property_subtype_is_exists', function(name, subtype, properties, options) {

@@ -38,7 +38,7 @@ function getTemplate(templateName, context, download) {
 		// Store it in template
 		Handlebars_Compiled_Templates[templateName] = template;
 
-		//alert("template");
+		//de("template");
 		return template(context);
 	}
 
@@ -153,6 +153,25 @@ function getPropertyValueBytype(items, name, type, subtype) {
 					}
 			}
 		}
+}
+
+/**
+ * Returns custom properties list from properties 
+ * @param items
+ * @returns
+ */
+function getContactCustomProperties(items) {
+	if(items == undefined)
+		return items;
+	
+	var fields = [];
+	for(var i = 0; i<items.length ; i++) {
+		if(items[i].type == "CUSTOM")
+			{
+				fields.push(items[i]);
+			}
+	}
+	return fields;
 }
 
 /**

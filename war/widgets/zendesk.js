@@ -287,11 +287,11 @@ function showZendeskProfile(plugin_id, email)
 
 	var all_tickets;
 	
-	queueGetRequest("widget_queue", "/core/api/widgets/zendesk/profile/" + plugin_id + "/" + email, 'json',		
+	queueGetRequest("widget_queue", "/core/api/widgets/zendesk/profile/" + plugin_id + "/" + email, "json",	
 	function success(data)
 	{
-		 $('#Zendesk').html(getTemplate('zendesk-profile', data));
-
+		 $('#Zendesk').html(getTemplate('zendesk-profile', data)); 
+		 
 		 var first_five;
 		 try
 		 {

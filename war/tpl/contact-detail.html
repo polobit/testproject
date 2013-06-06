@@ -28,7 +28,7 @@
 										"first_name"}} {{getPropertyValue properties "last_name"}}</font>
 								</b>{{#if_propertyName "email"}}</br> {{value}}{{/if_propertyName}}
 
-								{{#if_propertyName "title"}}</br> {{value}} {{/if_propertyName}}
+								{{#if_propertyName "title"}}</br> {{value}}, {{/if_propertyName}}
 
 								{{#if_propertyName "company"}} {{value}} {{/if_propertyName}} <br />
 								<div class="span2" style="padding-top: 5px; margin: 0px">
@@ -50,7 +50,6 @@
 									{{/property_is_exists}}
 								</div>
 							</div>
-						</div>
 					</div>
 					<div class="right" style='position: relative'>
 						<div class="btn-group right" style='position: relative'>
@@ -114,6 +113,9 @@
 								</ul>
 							</div>
 						</div>
+						</div>
+							<!-- Owner block --> 
+							<div style="float-right !important">sdfsdfdsfsdf</div>
 					</div>
 				</div>
 			</div>
@@ -213,8 +215,24 @@
 			</div> 
 			<!-- <div id="qrcode"><img src="img/1-0.gif"></div> -->
 			<div class="clearfix"></div>
-			<div style='word-wrap: break-word;'>
-	
+			<div style='word-wrap: break-word;padding-top:10px'>
+			{{#property_is_exists "phone" properties}}
+				{{else}}
+					{{#property_is_exists "email" properties}}
+						{{else}}
+							{{#property_is_exists "address" properties}}		
+								{{else}}
+									<div class="pull-left row-fluid" style="padding-bottom: 5px;">
+										<div style="display: inline-block; vertical-align: top;text-align:right" class="span3">
+											<span><strong style="color:gray">Created</strong><span>
+										</div>
+										<div class="span9" style="padding-right: 10px; display: inline-block;margin-bottom:5px">			
+											<span>{{epochToHumanDate "mmm dd, yyyy 'at' hh:mm tt" created_time}}</span>									
+										</div>
+									</div>
+							{{/property_is_exists}}
+					{{/property_is_exists}}
+			{{/property_is_exists}}
 				{{#property_is_exists "phone" properties}}
 				<div class="pull-left row-fluid" style="padding-bottom: 5px;">
 					{{#multiple_Property_Element "phone" properties}}
@@ -237,7 +255,11 @@
 					<div style="display: inline-block; vertical-align: top;text-align:right" class="span3">
 						<span><strong style="color:gray">Email</strong><span>
 					</div>
-					<div style="padding-right: 10px; display: inline-block;border-top:2px solid whitesmoke;margin-top:-3px;padding-bottom:2px;line-height:20px" class="span9">
+					{{#property_is_exists "phone" ../properties}}
+						<div style="padding-right: 10px; display: inline-block;border-top:2px solid whitesmoke;margin-top:-3px;padding-bottom:2px;line-height:20px" class="span9">
+						{{else}}
+						<div style="padding-right: 10px; display: inline-block;padding-bottom:2px;" class="span9">
+					{{/property_is_exists}}
 						{{#each this}}
 						<div>
 							<a href="mailto:{{value}}">{{value}}</a> {{#if subtype}}
@@ -248,31 +270,39 @@
 					{{/multiple_Property_Element}}
 				</div>
 				{{/property_is_exists}}
-
-				<div class="pull-left row-fluid " style="padding-bottom: 5px">
-				 	{{#address_Element properties}}{{/address_Element}} 
-				</div>
-				<div class="pull-left row-fluid">
+				
+				{{#property_is_exists "address" properties}}
+					<div class="pull-left row-fluid " style="padding-bottom: 5px">
+				 		{{#address_Element properties}}{{/address_Element}} 
+					</div>
+				
+					<div class="pull-left row-fluid">
 					<div id="map"
 					style="width: auto; height: 200px; display: none;margin:10px">
 				</div>	 	
 				</div>
-					<h3 style="margin-left:10px;margin-bottom:10px;border-bottom:1px solid #f5f5f5">Custom info</h3>
-						{{#each properties}}
-							 {{#if_property "first_name" "last_name" "company" "title" "image" "email" "phone" "website" "address"}} 
-								<div class="pull-left row-fluid">
+				{{/property_is_exists}} 
+				
+				{{#getContactCustomProperties properties}}
+				<div class="pull-left row-fluid">
+					<h3 style="margin-left:10px;margin-bottom:10px;border-bottom:1px solid #f5f5f5">Custom Fields</h3>
+						{{#each_with_index this}}
+								<div class="pull-left row-fluid" style="margin-bottom:5px">
 									<div style="display: inline-block; vertical-align: top;text-align:right" class="span3">			
 										<span><strong style="color:gray">{{ucfirst name}}</strong><span>
-											{{#if subtype}} 
-												({{subtype}}): 
-													{{else}} : 
-												{{/if}}
+										
 									</div>
-									<div class="span9" style="padding-right: 10px; display: inline-block;border-bottom:2px solid whitesmoke;margin-bottom:5px">{{value}} </div>
+									{{#if_equals index ../this.length}}
+										<div class="span9" style="padding-right: 10px; display: inline-block;margin-bottom:5px">
+									{{else}}
+										<div class="span9" style="padding-right: 10px; display: inline-block;border-bottom:2px solid whitesmoke;margin-bottom:5px">
+									{{/if_equals}}
+										{{value}} 
+									</div>
 								</div>
-							{{/if_property}} 
-						{{/each}}
-				<br /> 
+						{{/each_with_index}}
+				</div>
+				{{/getContactCustomProperties}}
 
 
 			</div>

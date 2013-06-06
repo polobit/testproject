@@ -154,7 +154,7 @@ public class WidgetUtil
 		"Rapleaf",
 		" Rapleaf makes it incredibly easy for you to personalize content for your customers.",
 		"/widgets/rapleaf.js", "/img/plugins/rapleaf.jpeg",
-		"/widgets/rapleaf-logo-small.jpeg", null, widgetType.SOCIAL));
+		"/widgets/rapleaf-logo-small.png", null, widgetType.SOCIAL));
 	widgets.add(new Widget(
 		"Zendesk",
 		"Zendesk streamlines communication within a ticket that has organized workflow towards resolution of the customer issue.",

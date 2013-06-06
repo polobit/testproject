@@ -314,10 +314,8 @@ function agile_addDeal(email, data)
 	 	});
 }
 
-function agile_getTagsData(data)
+function agile_getTagsData(email, tags)
 {
-	var email = data.email;
-	var tags = data.tags;
 	if(!tags)
 	{
 		console.log("Tags are missing. Not adding tag");
@@ -341,9 +339,9 @@ function agile_getTagsData(data)
 
 }
 
-function agile_addTag(data)
+function agile_addTag(email, tags)
 {
-	var params = agile_getTagsData(data);
+	var params = agile_getTagsData(email, tags);
 	if(!params)
 		return;
 	
@@ -359,9 +357,9 @@ function agile_addTag(data)
     
 }
 
-function agile_removeTag(data)
+function agile_removeTag(email, tags)
 {
-	var params = agile_getTagsData(data);
+	var params = agile_getTagsData(email, tags);
 	if(!params)
 		return;
 	

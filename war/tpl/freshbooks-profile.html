@@ -97,7 +97,7 @@
 		{{#isArray invoice}}
 			{{#each invoice}}
 				<li class="row-fluid sub_header_li">
-					<a class="pull-left" data-toggle="collapse" href="#collapse-{{invoice_id}}" >{{status}}</a>
+					<a class="pull-left" data-toggle="collapse" href="#collapse-{{invoice_id}}" >{{ucfirst status}}</a>
 					<div class="pull-right">$ {{amount}}</div><br>
 					<div id="collapse-{{invoice_id}}" class="collapse">
 						{{#isArray lines.line}}						
@@ -135,7 +135,7 @@
 			{{/each}}
 		{{else}}
 			<li class="row-fluid sub_header_li">
-					<a class="pull-left" data-toggle="collapse" href="#collapse-{{invoice.invoice_id}}" >{{invoice.status}}</a>
+					<a class="pull-left" data-toggle="collapse" href="#collapse-{{invoice.invoice_id}}" >{{ucfirst invoice.status}}</a>
 					<div class="pull-right">{{invoice.amount}}</div><br>
 					<div id="collapse-{{invoice.invoice_id}}" class="collapse">
 						{{#isArray invoice.lines.line}}      
