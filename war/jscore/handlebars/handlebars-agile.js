@@ -156,6 +156,25 @@ function getPropertyValueBytype(items, name, type, subtype) {
 }
 
 /**
+ * Returns custom properties list from properties 
+ * @param items
+ * @returns
+ */
+function getContactCustomProperties(items) {
+	if(items == undefined)
+		return items;
+	
+	var fields = [];
+	for(var i = 0; i<items.length ; i++) {
+		if(items[i].type == "CUSTOM")
+			{
+				fields.push(items[i]);
+			}
+	}
+	return fields;
+}
+
+/**
  * Turns the first letter of the given string to upper-case and the remaining to
  * lower-case (EMaiL to Email).
  * 
