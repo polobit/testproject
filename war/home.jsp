@@ -238,7 +238,7 @@ String CSS_PATH = "/";
 	 		<span style="margin:0 10px;"><a id="share-email" href="#"><i class="icon-envelope-alt"></i></a></span>
         </div>
         <div style="display:inline;">
-            <a style="font-weight:bold;cursor:pointer;margin-left:10%;" id="help-page">Help</a>
+            <a style="font-weight:bold;cursor:pointer;margin-left:62%;" id="help-page">Help</a>
         </div>
      		<!-- <div style="margin-right:5px;display:inline-block;vertical-align:top;">Refer your friends.</div>
      		

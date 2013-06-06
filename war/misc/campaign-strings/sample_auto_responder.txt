@@ -1806,13 +1806,13 @@
                 "url": "json/nodes/email/send_email.jsp"
             },
             "id": "PBX8Kn1KOUB8i",
-            "xPosition": 441,
-            "yPosition": 384,
-            "displayname": "Welcome reminder Email",
+            "xPosition": 466,
+            "yPosition": 392,
+            "displayname": "Reminder Email",
             "JsonValues": [
                 {
                     "name": "nodename",
-                    "value": "Welcome reminder Email"
+                    "value": "Reminder Email"
                 },
                 {
                     "name": "from_name",
