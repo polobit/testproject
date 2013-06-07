@@ -416,7 +416,7 @@ $(function() {
 		if (this.entity_type == item) {
 			return options.fn(this);
 		}
-		if (this[item] != undefined) {
+		if (!this.entity && this[item] != undefined) {
 			if (this.date_secs) {
 
 				// For emails convert milliseconds into seconds
@@ -548,13 +548,13 @@ $(function() {
 		for ( var i = 0, l = properties.length; i < l; i++) {
 
 			if (properties[i].name == "address") {
-				var el = '<div style="display: inline-block; vertical-align: top;text-align:right;style="color:gray"" class="span3"><span><strong style="color:gray">Address</strong></span></div>';
+				var el = '<div style="display: inline-block; vertical-align: top;text-align:right;" class="span3"><span><strong style="color:gray">Address</strong></span></div>';
 				var address = JSON.parse(properties[i].value);
 				
 				// Gets properties (keys) count of given json object
 				var count = countJsonProperties(address);
 
-				el =  el.concat('<div style="display:inline;border-top:2px solid whitesmoke;margin-top:-3px;" class="span9"><span>');
+				el =  el.concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span9"><div style="border-top: 1px solid #f5f5f5;margin-top:-5px;padding-top:3px;"><span>');
 				
 				$.each(address, function(key, val) {
 					if (--count == 0) {
@@ -566,7 +566,7 @@ $(function() {
 
 				if (properties[i].subtype)
 					el = el.concat(" (" + properties[i].subtype + ")");
-				el = el.concat('</span></div>');
+				el = el.concat('</span></div></div>');
 				return new Handlebars.SafeString(el);
 			}
 		}

@@ -290,13 +290,13 @@
 								</div>
 								{{#property_is_exists "phone" ../properties}}
 								<div
-									style="padding-right: 10px; display: inline-block; border-top: 2px solid whitesmoke; margin-top: -3px; padding-bottom: 2px; line-height: 20px"
-									class="span9">
+									class="span9 contact-detail-entity-list">
 									{{else}}
 									<div
 										style="padding-right: 10px; display: inline-block; padding-bottom: 2px;"
 										class="span9">
-										{{/property_is_exists}} {{#each this}}
+										{{/property_is_exists}} 
+								{{#each this}}
 										<div>
 											<a href="mailto:{{value}}">{{value}}</a> {{#if subtype}} <sub
 												style="bottom: -0.05em">{{subtype}}</sub> {{/if}}
@@ -307,7 +307,7 @@
 								</div>
 								{{/property_is_exists}} {{#property_is_exists "address"
 								properties}}
-								<div class="pull-left row-fluid " style="padding-bottom: 5px">
+								<div class="pull-left row-fluid " style="padding-bottom: 5px;margin-top:-5px">
 									{{#address_Element properties}}{{/address_Element}}</div>
 
 								<div class="pull-left row-fluid">
