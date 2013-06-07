@@ -119,14 +119,8 @@
 <!-- Owner block --> 
 <br/>
 <div style="float: right;margin-top: -7px;">
-
-
-
-
-
-
 <div class="change-owner-succes"></div>
-					<span title="Owner"><i class="icon-group"></i>&nbsp;&nbsp;<span
+					<span title="Owner"><strong style="color:gray">Owner:</strong>&nbsp;&nbsp;<span
 						id="contact-owner" data={{owner.id}} style="display: inline-block">{{owner.name}}</span>
 						<span> <a href="#"> <i class="icon-edit"
 								style="vertical-align: middle;" rel="popover"
@@ -144,14 +138,6 @@
 						</div> <!--<select id='contact-detail-owner' class="input-block-level">
                                 <option class="contact-detail-owner" value="">Select..</option>
                             </select>--> </span>
-
-
-
-
-
-
-
-
 </div>							
 				</div>
 
@@ -245,9 +231,9 @@
 	<div class="span3">
 		<div class="widget_container" id="{{name}}-container">
 			<div class="widget_header">
-				<div class="pull-left">
-					<i class="icon-user "></i> <strong>{{getPropertyValue properties
-										"first_name"}}'s contact info</strong>
+				<div class="pull-left" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;width:18em">
+					<i class="icon-user "></i> <strong>contact {{getPropertyValue properties
+										"first_name"}}</strong>
 				</div>
 			</div> 
 			<!-- <div id="qrcode"><img src="img/1-0.gif"></div> -->
