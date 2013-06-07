@@ -28,7 +28,7 @@ $(function ()
     	
     	e.preventDefault();
     	
-    	agile_crm_save_widget_prefs(Stripe_PLUGIN_NAME,
+    	agile_crm_save_widget_prefs(ZENDESK_PLUGIN_NAME,
 		        undefined , function (data)
         {
     		setupZendeskOAuth(plugin_id);

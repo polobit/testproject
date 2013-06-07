@@ -24,7 +24,7 @@ $(function() {
 	    	
 	    	e.preventDefault();
 	    	
-	    	agile_crm_save_widget_prefs(Stripe_PLUGIN_NAME,
+	    	agile_crm_save_widget_prefs(RAPLEAF_PLUGIN_NAME,
 			        undefined , function (data)
 	        {
 	    		setupRapleafOAuth(plugin_id);
