@@ -7,17 +7,20 @@
     <div class="modal-body agile-modal-body" style="max-height:420px !important">
         <form id="personForm" name="personForm" method="post">
             <fieldset>
+            
                 <div class="control-group">
-                    <label class="control-label"><b>Name:</b> <span class="field_req">*</span></label>
-                    <div class="control-group">
+                <label class="control-label"><b>Name:</b> <span class="field_req">*</span></label>
+                    <div class="row-fluid">
+                    <div class="control-group span6" style="margin-bottom:0px;">
                         <span class="controls">
                         <input name="first_name" type="text" class="required" id="fname" placeholder="First name" />
                         </span>
                     </div>
-                    <div class="control-group">
+                    <div class="control-group span6" style="margin-bottom:0px;">
                         <span class="controls">
                         <input name="last_name" class="required" type="text" id="lname" placeholder="Last name" />
                         </span>
+                    </div>
                     </div>
                 </div>
                 <div class="control-group">
@@ -27,17 +30,19 @@
                         <span id="pic" style="padding-left:20px;display:none;"></span>
                     </div>
                 </div>
-                <div class="control-group">
+                <div class="row-fluid">
+                <div class="control-group span6">
                     <label class="control-label"><b>Company:</b></label>
                     <div class="controls">
                         <input name="company" type="text" id="contact_company" placeholder="Company" />
                     </div>
                 </div>
-                <div class="control-group">
+                <div class="control-group span6">
                     <label class="control-label"><b>Job Description:</b></label>
                     <div class="controls">
                         <input name="title" type="text" id="job_title" placeholder="Job title" />
                     </div>
+                </div>
                 </div>
                 <div class="row">
                     <div class="span5  duplicate-email">
