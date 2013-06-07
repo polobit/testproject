@@ -17,6 +17,11 @@
 	-o-box-sizing: border-box;
 }
 
+.widget_container > widget_input_box{	
+	margin-bottom:0px;
+	margin-top:9px;
+}
+
 .widget_header{
 	padding:10px;
 	background:rgba(240, 240, 240, 3);
