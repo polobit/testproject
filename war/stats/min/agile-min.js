@@ -214,6 +214,8 @@ function agile_createContact(data, tags)
 	 model.properties = properties;
 	 model.tags = tags['tags'];
 	 
+	 console.log(tags);
+	 
 	 //var params = "contact={0}&tags={1}".format(encodeURIComponent(data), encodeURIComponent(JSON.stringify(tags)));
 	 // Get
 	 var agile_url = agile_id.getURL() + "/contacts?callback=?&id=" + agile_id.get() + "&contact=" + encodeURIComponent(JSON.stringify(model));
@@ -507,7 +509,7 @@ var _agile =
 	{
 		agile_setEmail(email);
 	},
-	tracke_page_view : function()
+	track_page_view : function()
 	{
 		agile_trackPageview();
 	},

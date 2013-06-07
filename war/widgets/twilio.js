@@ -21,6 +21,17 @@ $(function() {
 	// fetch details
 	var plugin_prefs = plugin.prefs;
 	
+	$('#Twilio_plugin_delete').die().live('click', function (e) {
+    	
+    	e.preventDefault();
+    	
+    	agile_crm_save_widget_prefs(Stripe_PLUGIN_NAME,
+		        undefined , function (data)
+        {
+    		setupTwilioOAuth(plugin_id);
+        });
+    });
+	
 	// If not found - considering first time usage, setupTwilioOAuth called
 	if (plugin_prefs == undefined) {
 		setupTwilioOAuth(plugin_id);

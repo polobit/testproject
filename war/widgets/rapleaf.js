@@ -20,6 +20,17 @@ $(function() {
 	// fetch details
 	var plugin_prefs = agile_crm_get_plugin_prefs(RAPLEAF_PLUGIN_NAME);
 
+	 $('#Rapleaf_plugin_delete').die().live('click', function (e) {
+	    	
+	    	e.preventDefault();
+	    	
+	    	agile_crm_save_widget_prefs(Stripe_PLUGIN_NAME,
+			        undefined , function (data)
+	        {
+	    		setupRapleafOAuth(plugin_id);
+	        });
+	    });
+	 
 	// If not found - considering first time usage of widget, setupRapleafOAuth
 	// called
 	if (plugin_prefs == undefined) {

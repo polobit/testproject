@@ -50,109 +50,96 @@
 									{{/property_is_exists}}
 								</div>
 							</div>
-					</div>
-					<div class="right" style='position: relative'>
-						<div class="btn-group right" style='position: relative'>
-							<div id='star'
-								style='padding-bottom: 13px; width: auto !important'></div>
-							<a class="btn" href="#"><i class="icon-wrench"></i></a> <a
-								class="btn dropdown-toggle" data-toggle="dropdown"> Actions
-								<span class="caret"></span>
-							</a>
-							<ul class="dropdown-menu">
-								<li><a href='#contact-edit'><i class="icon-edit"></i>
-										Edit</a></li>
-								<li><a href='#' id='contact-actions-delete'><i
-										class="icon-trash"></i> Delete</a></li>
-								<li class='divider'></li>
-								<li><a href='#' class="contact-add-note"><i
-										class="icon-file"></i> Add Note</a></li>
-								<li><a href='#' class="contact-add-task"><i
-										class="icon-tasks"></i> Add Task</a></li>
-								<li><a href='#add-opportunity'><i class="icon-money"></i>
-										Add Opportunity</a></li>
-								<li class='divider'></li>
-								<li><a href='#contact-duplicate'><i class="icon-copy"></i>
-										Duplicate</a></li>
-								<li class='divider'></li>
-								<li><a href='#bulk-campaigns' class="contact-add-campaign"
-									id="contact-add-campaign"><i class="icon-sitemap"></i> Add
-										to Campaign</a></li>
-								<li><a href='#send-email' id="contact-send-email"><i
-										class="icon-envelope-alt"></i> Send Email</a></li>
-							</ul>
 						</div>
-					</div>
-					<div class="well right unselectable" id="score" unselectable="on"
-						style="height: 43px; margin-right: 70px; padding-top: 0px; padding-right: 10px; padding-left: 15px"
-						onselectstart="return false">
-						<div style="font-size: 22px; display: inline-block">
-							Score <span style="vertical-align: text-top; margin-left: -5px">
-								<img border="0" src="/img/help.png"
-								style="height: 6px; vertical-align: middle" rel="popover"
-								data-placement="bottom" data-title="Lead Score"
-								data-content="Score your leads to get high quality leads to appear on top. Manually assign scores or automate the process based on user behavior using Workflow automation."
-								id="element" data-trigger="hover">
-							</span>
-						</div>
-						<div>
-							<div style="display: inline-block; vertical-align: middle">
-								{{#if lead_score}} <span id="lead-score"
-									style="font-size: 28px; padding-left: 12px;">{{lead_score}}</span>&nbsp;
-								{{else}} <span id="lead-score"
-									style="font-size: 28px; padding-left: 12px;">0</span>&nbsp;
-								{{/if}}
-							</div>
-							<div style="display: inline-block">
-								<ul
-									style="display: inline-block; list-style-type: none; margin-left: 2px">
-									<li style="height: 9px"><i class="icon-sort-up" id="add"
-										style="height: 10px; cursor: pointer"></i></li>
-									<li><i class="icon-sort-down" id="minus"
-										style="height: 10px; cursor: pointer"></i></li>
+						<div class="right" style='position: relative'>
+							<div class="btn-group right" style='position: relative'>
+								<div id='star'
+									style='padding-bottom: 13px; width: auto !important'></div>
+								<a class="btn" href="#"><i class="icon-wrench"></i></a> <a
+									class="btn dropdown-toggle" data-toggle="dropdown"> Actions
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu">
+									<li><a href='#contact-edit'><i class="icon-edit"></i>
+											Edit</a></li>
+									<li><a href='#' id='contact-actions-delete'><i
+											class="icon-trash"></i> Delete</a></li>
+									<li class='divider'></li>
+									<li><a href='#' class="contact-add-note"><i
+											class="icon-file"></i> Add Note</a></li>
+									<li><a href='#' class="contact-add-task"><i
+											class="icon-tasks"></i> Add Task</a></li>
+									<li><a href='#add-opportunity'><i class="icon-money"></i>
+											Add Opportunity</a></li>
+									<li class='divider'></li>
+									<li><a href='#contact-duplicate'><i class="icon-copy"></i>
+											Duplicate</a></li>
+									<li class='divider'></li>
+									<li><a href='#bulk-campaigns' class="contact-add-campaign"
+										id="contact-add-campaign"><i class="icon-sitemap"></i> Add
+											to Campaign</a></li>
+									<li><a href='#send-email' id="contact-send-email"><i
+											class="icon-envelope-alt"></i> Send Email</a></li>
 								</ul>
 							</div>
 						</div>
+						<div class="well right unselectable" id="score" unselectable="on"
+							style="height: 43px; margin-right: 70px; padding-top: 0px; padding-right: 10px; padding-left: 15px"
+							onselectstart="return false">
+							<div style="font-size: 22px; display: inline-block">
+								Score <span style="vertical-align: text-top; margin-left: -5px">
+									<img border="0" src="/img/help.png"
+									style="height: 6px; vertical-align: middle" rel="popover"
+									data-placement="bottom" data-title="Lead Score"
+									data-content="Score your leads to get high quality leads to appear on top. Manually assign scores or automate the process based on user behavior using Workflow automation."
+									id="element" data-trigger="hover">
+								</span>
+							</div>
+							<div>
+								<div style="display: inline-block; vertical-align: middle">
+									{{#if lead_score}} <span id="lead-score"
+										style="font-size: 28px; padding-left: 12px;">{{lead_score}}</span>&nbsp;
+									{{else}} <span id="lead-score"
+										style="font-size: 28px; padding-left: 12px;">0</span>&nbsp;
+									{{/if}}
+								</div>
+								<div style="display: inline-block">
+									<ul
+										style="display: inline-block; list-style-type: none; margin-left: 2px">
+										<li style="height: 9px"><i class="icon-sort-up" id="add"
+											style="height: 10px; cursor: pointer"></i></li>
+										<li><i class="icon-sort-down" id="minus"
+											style="height: 10px; cursor: pointer"></i></li>
+									</ul>
+								</div>
+							</div>
 						</div>
-							
+
 					</div>
-<!-- Owner block --> 
-<br/>
-<div style="float: right;margin-top: -7px;">
-
-
-
-
-
-
-<div class="change-owner-succes"></div>
-					<span title="Owner"><i class="icon-group"></i>&nbsp;&nbsp;<span
-						id="contact-owner" data={{owner.id}} style="display: inline-block">{{owner.name}}</span>
-						<span> <a href="#"> <i class="icon-edit"
-								style="vertical-align: middle;" rel="popover"
-								data-placement="top" data-title="Lead Owner"
-								data-content="Click here to change owner."
-								id="change-owner-element" data-trigger="hover"></i></a>
-					</span>
-						<div class="btn-group" id="change-owner-ul"
-							style="vertical-align: middle; display: none">
-							<a class="btn dropdown-toggle" data-toggle="dropdown"> Change
-								owner <span class="caret"></span>
-							</a>
-							<ul id='contact-detail-owner' class="dropdown-menu pull-right">
-							</ul>
-						</div> <!--<select id='contact-detail-owner' class="input-block-level">
+					<!-- Owner block -->
+					<br />
+					<div style="float: right; margin-top: -7px;">
+						<div class="change-owner-succes"></div>
+						<span title="Owner"><strong style="color: gray">Owner:</strong>&nbsp;&nbsp;<span
+							id="contact-owner" data={{owner.id}}
+							style="display: inline-block">{{owner.name}}</span> <span>
+								<a href="#"> <i class="icon-edit"
+									style="vertical-align: middle;" rel="popover"
+									data-placement="top" data-title="Lead Owner"
+									data-content="Click here to change owner."
+									id="change-owner-element" data-trigger="hover"></i></a>
+						</span>
+							<div class="btn-group" id="change-owner-ul"
+								style="vertical-align: middle; display: none">
+								<a class="btn dropdown-toggle" data-toggle="dropdown">
+									Change owner <span class="caret"></span>
+								</a>
+								<ul id='contact-detail-owner' class="dropdown-menu pull-right">
+								</ul>
+							</div> <!--<select id='contact-detail-owner' class="input-block-level">
                                 <option class="contact-detail-owner" value="">Select..</option>
                             </select>--> </span>
-
-
-
-
-
-
-
-
-</div>							
+					</div>
 				</div>
 
 			</div>
@@ -243,113 +230,128 @@
 	</div>
 	<!-- Contact Details -->
 	<div class="span3">
-		<div class="widget_container" id="{{name}}-container">
-			<div class="widget_header">
-				<div class="pull-left">
-					<i class="icon-user "></i> <strong>{{getPropertyValue properties
-										"first_name"}}'s contact info</strong>
-				</div>
-			</div> 
-			<!-- <div id="qrcode"><img src="img/1-0.gif"></div> -->
-			<div class="clearfix"></div>
-			<div style='word-wrap: break-word;padding-top:10px'>
-			{{#property_is_exists "phone" properties}}
-				{{else}}
+
+
+		{{#property_is_exists "phone" properties}}
+			<div class="widget_container" id="{{name}}-container">
+				{{else}} 
 					{{#property_is_exists "email" properties}}
-						{{else}}
-							{{#property_is_exists "address" properties}}		
-								{{else}}
-									<div class="pull-left row-fluid" style="padding-bottom: 5px;">
-										<div style="display: inline-block; vertical-align: top;text-align:right" class="span3">
-											<span><strong style="color:gray">Created</strong><span>
-										</div>
-										<div class="span9" style="padding-right: 10px; display: inline-block;margin-bottom:5px">			
-											<span>{{epochToHumanDate "mmm dd, yyyy 'at' hh:mm tt" created_time}}</span>									
-										</div>
-									</div>
-							{{/property_is_exists}}
-					{{/property_is_exists}}
-			{{/property_is_exists}}
-				{{#property_is_exists "phone" properties}}
-				<div class="pull-left row-fluid" style="padding-bottom: 5px;">
-					{{#multiple_Property_Element "phone" properties}}
-					<div style="display: inline-block; vertical-align: top;text-align:right" class="span3">
-						<span><strong style="color:gray">Phone</strong><span>
-					</div>
-					<div style="padding-right:10px; display: inline-block;padding-bottom:2px;line-height:20px" class="span9">
-						{{#each this}}
-						<div>
-							<a href="tel:{{value}}">{{value}}</a>{{#if subtype}}
-							<sub style="bottom:-0.05px !important">{{subtype}}</sub> {{/if}}
-						</div>
-						{{/each}}
-					</div>
-					{{/multiple_Property_Element}}
-				</div>
-				{{/property_is_exists}} {{#property_is_exists "email" properties}}
-				<div class="pull-left row-fluid" style="padding-bottom: 5px;">
-					{{#multiple_Property_Element "email" properties}}
-					<div style="display: inline-block; vertical-align: top;text-align:right" class="span3">
-						<span><strong style="color:gray">Email</strong><span>
-					</div>
-					{{#property_is_exists "phone" ../properties}}
-						<div style="padding-right: 10px; display: inline-block;border-top:2px solid whitesmoke;margin-top:-3px;padding-bottom:2px;line-height:20px" class="span9">
-						{{else}}
-						<div style="padding-right: 10px; display: inline-block;padding-bottom:2px;" class="span9">
-					{{/property_is_exists}}
-						{{#each this}}
-						<div>
-							<a href="mailto:{{value}}">{{value}}</a> {{#if subtype}}
-							<sub style="bottom:-0.05em">{{subtype}}</sub> {{/if}}
-						</div>
-						{{/each}}
-					</div>
-					{{/multiple_Property_Element}}
-				</div>
-				{{/property_is_exists}}
-				
-				{{#property_is_exists "address" properties}}
-					<div class="pull-left row-fluid " style="padding-bottom: 5px">
-				 		{{#address_Element properties}}{{/address_Element}} 
-					</div>
-				
-					<div class="pull-left row-fluid">
-					<div id="map"
-					style="width: auto; height: 200px; display: none;margin:10px">
-				</div>	 	
-				</div>
-				{{/property_is_exists}} 
-				
-				{{#getContactCustomProperties properties}}
-				<div class="pull-left row-fluid">
-					<h3 style="margin-left:10px;margin-bottom:10px;border-bottom:1px solid #f5f5f5">Custom Fields</h3>
-						{{#each_with_index this}}
-								<div class="pull-left row-fluid" style="margin-bottom:5px">
-									<div style="display: inline-block; vertical-align: top;text-align:right" class="span3">			
-										<span><strong style="color:gray">{{ucfirst name}}</strong><span>
-										
-									</div>
-									{{#if_equals index ../this.length}}
-										<div class="span9" style="padding-right: 10px; display: inline-block;margin-bottom:5px">
+						<div class="widget_container" id="{{name}}-container">
+						{{else}} 
+							{{#property_is_exists "address" properties}}
+									<div class="widget_container" id="{{name}}-container">
 									{{else}}
-										<div class="span9" style="padding-right: 10px; display: inline-block;border-bottom:2px solid whitesmoke;margin-bottom:5px">
-									{{/if_equals}}
-										{{value}} 
+										{{#getContactCustomProperties properties}}
+											<div class="widget_container" id="{{name}}-container">
+											{{else}}
+												<div class="widget_container hide" id="{{name}}-container">
+										{{/getContactCustomProperties }}
+							{{/property_is_exists}} 
+					{{/property_is_exists}}
+		{{/property_is_exists}}
+						<div class="widget_header">
+							<div class="pull-left"
+								style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; width: 18em">
+								<i class="icon-user "></i> <strong>Contact
+									{{getPropertyValue properties "first_name"}}</strong>
+							</div>
+						</div>
+						<!-- <div id="qrcode"><img src="img/1-0.gif"></div> -->
+						<div class="clearfix"></div>
+						<div style='word-wrap: break-word; padding-top: 10px'>
+							{{#property_is_exists "phone" properties}}
+							<div class="pull-left row-fluid" style="padding-bottom: 5px;">
+								{{#multiple_Property_Element "phone" properties}}
+								<div
+									style="display: inline-block; vertical-align: top; text-align: right"
+									class="span3">
+									<span><strong style="color: gray">Phone</strong><span>
+								</div>
+								<div
+									style="padding-right: 10px; display: inline-block; padding-bottom: 2px; line-height: 20px"
+									class="span9">
+									{{#each this}}
+									<div>
+										<a href="tel:{{value}}">{{value}}</a>{{#if subtype}} <sub
+											style="bottom: -0.05px !important">{{subtype}}</sub> {{/if}}
+									</div>
+									{{/each}}
+								</div>
+								{{/multiple_Property_Element}}
+							</div>
+							{{/property_is_exists}} {{#property_is_exists "email"
+							properties}}
+							<div class="pull-left row-fluid" style="padding-bottom: 5px;">
+								{{#multiple_Property_Element "email" properties}}
+								<div
+									style="display: inline-block; vertical-align: top; text-align: right"
+									class="span3">
+									<span><strong style="color: gray">Email</strong><span>
+								</div>
+								{{#property_is_exists "phone" ../properties}}
+								<div
+									class="span9 contact-detail-entity-list">
+									{{else}}
+									<div
+										style="padding-right: 10px; display: inline-block; padding-bottom: 2px;"
+										class="span9">
+										{{/property_is_exists}} 
+								{{#each this}}
+										<div>
+											<a href="mailto:{{value}}">{{value}}</a> {{#if subtype}} <sub
+												style="bottom: -0.05em">{{subtype}}</sub> {{/if}}
+										</div>
+										{{/each}}
+									</div>
+									{{/multiple_Property_Element}}
+								</div>
+								{{/property_is_exists}} {{#property_is_exists "address"
+								properties}}
+								<div class="pull-left row-fluid " style="padding-bottom: 5px;margin-top:-5px">
+									{{#address_Element properties}}{{/address_Element}}</div>
+
+								<div class="pull-left row-fluid">
+									<div id="map"
+										style="width: auto; height: 200px; display: none; margin: 10px">
 									</div>
 								</div>
-						{{/each_with_index}}
-				</div>
-				{{/getContactCustomProperties}}
+								{{/property_is_exists}} {{#getContactCustomProperties
+								properties}}
+								<div class="pull-left row-fluid">
+									<h3
+										style="margin-left: 10px; margin-bottom: 10px; border-bottom: 1px solid #f5f5f5">Custom
+										Fields</h3>
+									{{#each_with_index this}}
+									<div class="pull-left row-fluid" style="margin-bottom: 5px">
+										<div
+											style="display: inline-block; vertical-align: top; text-align: right"
+											class="span3">
+											<span><strong style="color: gray">{{ucfirst
+													name}}</strong><span>
+										</div>
+										{{#if_equals index ../this.length}}
+										<div class="span9"
+											style="padding-right: 10px; display: inline-block; margin-bottom: 5px">
+											{{else}}
+											<div class="span9"
+												style="padding-right: 10px; display: inline-block; border-bottom: 2px solid whitesmoke; margin-bottom: 5px">
+												{{/if_equals}} {{value}}</div>
+										</div>
+										{{/each_with_index}}
+									</div>
+									{{/getContactCustomProperties}}
 
 
-			</div>
-			<div class="clearfix"></div>
-		</div>
+								</div>
+								<div class="clearfix"></div>
+							</div>
 
 
 
-		<div id="widgets"></div>
-	</div>
-</div>
 
-</script>
+
+							<div id="widgets"></div>
+						</div>
+					</div>
+
+					</script>
