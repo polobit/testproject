@@ -96,9 +96,7 @@ function setupZendeskOAuth(plugin_id)
     $('#save_prefs').die().live('click', function (e)
     {
         e.preventDefault();
-        console.log($(this).length);
-        console.log($(this).parents("form#zendesk_login_form").length);
-        console.log($("#zendesk_login_form", $('#Zendesk')).length);
+       
         // Checks whether all input fields are given
         if (!isValidForm($("#zendesk_login_form")))
         {

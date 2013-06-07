@@ -164,17 +164,17 @@ public class WidgetUtil
 		"Twilio",
 		" Stay connected to your users with Twilio phone numbers in 40 countries all over the globe.",
 		"/widgets/twilio.js", "/img/plugins/twilio-logo.png",
-		"/widgets/twilio-logo-small.jpg", null, widgetType.CALL));
+		"/widgets/twilio-small-logo.png", null, widgetType.CALL));
 	widgets.add(new Widget(
 		"FreshBooks",
 		"FreshBooks enables the ability to create and manage invoices, estimates, expenses, and projects all in one place.",
 		"/widgets/freshbooks.js", "/img/plugins/freshbooks-logo.png",
-		"/widgets/freshbooks-logo-small.jpg", null, widgetType.BILLING));
+		"/widgets/freshbooks-small-logo.png", null, widgetType.BILLING));
 	widgets.add(new Widget(
 		"Stripe",
 		"Stripe enables individuals and businesses to accept payments over the internet.",
 		"/widgets/stripe.js", "/img/plugins/Stripe.png",
-		"/widgets/stripe-logo-small.jpeg", null, widgetType.BILLING));
+		"/widgets/stripe-small-logo.png", null, widgetType.BILLING));
 
 	return widgets;
 

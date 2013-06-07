@@ -91,9 +91,14 @@ public class TwitterUtil
 	String firstName = contact.getContactFieldValue(Contact.FIRST_NAME);
 	String lastName = contact.getContactFieldValue(Contact.LAST_NAME);
 
+	List<SocialSearchResult> searchResults = new ArrayList<SocialSearchResult>();
+
 	// returns null if firstname or lastname of contact is null
 	if (StringUtils.isBlank(firstName) && StringUtils.isBlank(lastName))
-	    return null;
+	    return searchResults;
+
+	firstName = (firstName != null) ? firstName : "";
+	lastName = (lastName != null) ? lastName : "";
 
 	// Creates a twitter object to connect with twitter
 	Twitter twitter = getTwitter(widget);
@@ -101,8 +106,6 @@ public class TwitterUtil
 	// Searches twitter profiles based on first name and last name
 	ResponseList<User> users = twitter.searchUsers(firstName + " "
 		+ lastName, 1);
-
-	List<SocialSearchResult> searchResults = new ArrayList<SocialSearchResult>();
 
 	// Iterates through Twitter results and wraps the profile details in to
 	// SocialSearchResult and adds to list

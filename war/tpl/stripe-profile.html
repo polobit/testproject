@@ -110,8 +110,14 @@
 </script>
 
 <script id="stripe-custom-field-template" type="text/html">
-<div class="widget_content" style="word-wrap:break-word;">
-<input type="text" id="stripe_custom_field_name" class="input-medium required" style="width:90%" placeholder="Custom Field Name" value="" name="stripe_field_name"></input>
-<button  class="btn"><a href="#" id="save_stripe_name" style="text-decoration:none;">Save</a></button>
+<div display:inline;  line-height:12px;word-wrap: break-word;">
+		<form class="widget_content" style="border-bottom:none;" id="stipe_field_form" name="stipe_field_form" method="post">
+	    	<fieldset>
+				<p></p>
+				<div class="control-group" style="margin-bottom:0px;"><div class="controls"><input type="text" id="stripe_custom_field_name" class="input-medium required" style="width:90%" placeholder="Custom Field Name" value="" name="stripe_field_name"></input></div></div>
+				<button  class="btn"><a href="#" id="save_stripe_name" style="text-decoration:none;">Save</a></button>
+			</fieldset>
+	    </form>
+	</div>
 </div>
 </script>
