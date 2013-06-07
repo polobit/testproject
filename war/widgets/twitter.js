@@ -372,7 +372,7 @@ function showTwitterMatchingProfiles(plugin_id)
      */
     getTwitterMatchingProfiles(plugin_id, function (data)
     {
-        var el = "<div style='padding:10px'><p>Please choose the right Twitter profile for this contact</p>";
+        var el = "<div style='padding:10px'><p>Locate the contact on Twitter.</p>";
 
         // If no matches found display message
         if (data.length == 0)

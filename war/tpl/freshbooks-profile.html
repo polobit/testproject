@@ -6,7 +6,7 @@
 				<p>
 				<label>Enter your Freshbooks details: </label>
 				<input type="text" id="freshbooks_url" class="input-medium required" style="width:90%" placeholder="https://company.freshbooks.com" value="" name="url"></input>
-				<input type="text" id="freshbooks_apikey" class="input-medium required" style="width:90%" placeholder="Api Token" value="" name="api_key"></input>
+				<input type="text" id="freshbooks_apikey" class="input-medium required" style="width:90%" placeholder="API Token" value="" name="api_key"></input>
 				</p>
 				<button id="freshbooks_save_token" class="btn"><a href="#" style="text-decoration:none;">Save</a></button>
 			 </fieldset>
@@ -24,7 +24,10 @@
 	<div class="widget_content">
 		{{#isArray client}}
 			{{#if client.0.username}}
-				<a href="{{client.0.links.statement}}" target="_blank"><h4 style="text-transform: capitalize;"><b>{{client.0.first_name}} {{client.0.last_name}}</b></h4></a>
+				<div  style="display:inline-block;">
+					<div  class="title_txt" style="display:inline-block;"><a href="{{client.0.links.statement}}" target="_blank"><h4 style="text-transform: capitalize;"><b>{{client.0.first_name}} {{client.0.last_name}}</b></h4></a></div>, 
+					<div style="display:inline-block;"><a href="{{client.0.links.view}}" target="_blank"><h4 style="text-transform: capitalize;">{{client.0.organization}}</h4></a></div>
+				</div>
 			{{/if}}
 			<p style="font-size: 13px;">
 				{{#if client.0.p_street1}}
@@ -40,13 +43,15 @@
 					{{client.0.p_country}}
 				{{/if}}
 			</p>
-			<div style="margin-bottom:10px;"><b>Organization:</b>&nbsp<a href="{{client.0.links.view}}" target="_blank">{{client.0.organization}}</a></div>		
 			{{#if client.0.home_phone}}<i class="icon-phone"></i><a href="tel:{{client.0.home_phone}}" > {{client.0.home_phone}} (home)<br> </a>{{/if}}
 			{{#if client.0.work_phone}}<i class="icon-phone"></i><a href="tel:{{client.0.work_phone}}" > {{client.0.work_phone}} (work)<br> </a>{{/if}}
 			{{#if client.0.mobile}}<i class="icon-mobile-phone"></i><a href="tel:{{client.0.mobile}}"> {{client.0.mobile}} (mobile)</a>{{/if}}
 		{{else}}
 			{{#if client.username}}
-				<a href="{{client.links.statement}}" target="_blank"><h4 style="text-transform: capitalize;"><b>{{client.first_name}} {{client.last_name}}</b></h4></a>
+				<div style="display:inline-block;">
+					<div class="title_txt" style="display:inline-block;"><a href="{{client.links.statement}}" target="_blank"><h4 style="text-transform: capitalize;"><b>{{client.first_name}} {{client.last_name}}</b></h4></a></div>, 
+					<div style="display:inline-block;"><a href="{{client.links.view}}" target="_blank"><h4 style="text-transform: capitalize;">{{client.organization}}</h4></a></div>
+				</div>
 			{{/if}}
 			<p style="font-size: 13px;">
 				{{#if client.p_street1}}
@@ -62,7 +67,6 @@
 					{{client.p_country}}
 				{{/if}}
 			</p>	
-			<div style="margin-bottom:10px;"><b>Organization:</b>&nbsp<a href="{{client.links.view}}" target="_blank"><i class="icon-building"></i> {{client.organization}}</a></div>	
 			{{#if client.home_phone}}<i class="icon-phone"></i><a href="tel:{{client.home_phone}}" > {{client.home_phone}} (home)<br> </a>{{/if}}
 			{{#if client.work_phone}}<i class="icon-phone"></i><a href="tel:{{client.work_phone}}" > {{client.work_phone}} (work)<br> </a>{{/if}}
 			{{#if client.mobile}}<i class="icon-phone"></i><a href="tel:{{client.mobile}}"> {{client.mobile}} (mobile)</a>{{/if}}
@@ -99,7 +103,7 @@
 				<li class="row-fluid sub_header_li">
 					<a class="pull-left" data-toggle="collapse" href="#collapse-{{invoice_id}}" >{{ucfirst status}}</a>
 					<div class="pull-right">$ {{amount}}</div><br>
-					<div id="collapse-{{invoice_id}}" class="collapse">
+					<div id="collapse-{{invoice_id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
 						{{#isArray lines.line}}						
 							{{#each lines.line}}	
 								{{#if name}}
@@ -129,6 +133,10 @@
 								{{/if}}
 							{{/if}}
 						{{/isArray}}
+						{{#if discount}}
+							<div class="pull-left">Discount</div>
+							<div class="pull-right">{{discount}}%</div><br>
+						{{/if}}
 					</div>
 					<small><time class="time-ago pull-left" datetime="{{updated}}">{{updated}}</time></small>
 				</li>
@@ -137,7 +145,7 @@
 			<li class="row-fluid sub_header_li">
 					<a class="pull-left" data-toggle="collapse" href="#collapse-{{invoice.invoice_id}}" >{{ucfirst invoice.status}}</a>
 					<div class="pull-right">{{invoice.amount}}</div><br>
-					<div id="collapse-{{invoice.invoice_id}}" class="collapse">
+					<div id="collapse-{{invoice.invoice_id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
 						{{#isArray invoice.lines.line}}      
 							{{#each invoice.lines.line}}	
 								{{#if name}}
@@ -167,6 +175,10 @@
 								{{/if}}
 							{{/if}}
 						{{/isArray}}
+						{{#if invoice.discount}}
+							<div class="pull-left">Discount</div>
+							<div class="pull-right">{{invoice.discount}}%</div><br>
+						{{/if}}
 					</div>
 					<small><time class="time-ago pull-left" datetime="{{invoice.updated}}">{{invoice.updated}}</time></small>
 			</li>

@@ -107,8 +107,8 @@ function setupTwilioOAuth(plugin_id) {
 	$('#Twilio').html(TWILIO_LOGS_LOAD_IMAGE);
 	
 	 $('#Twilio').html('<p class="widget_content" style="border-bottom:none">' 
-			 + 'Call your contacts directly using your Twilio account. To start using, ' 
-			 + 'connect your Twilio account. </p><a id="twilio-connect-button" ' 
+			 + 'Call your contacts directly using your Twilio account.</p>'
+			 + '<a id="twilio-connect-button" ' 
 			 + 'href="https://www.twilio.com/authorize/CNf63bca035414be121d517a116066a5f8?state=' 
 			 + encodeURIComponent(window.location.href) + '" style="margin-bottom: 10px;"></a>');	
 				

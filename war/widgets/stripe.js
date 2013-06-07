@@ -71,7 +71,7 @@ function setupStripeOAuth(plugin_id)
         '&plugin_id=' + encodeURIComponent(plugin_id);
 
     $('#Stripe').html('<div class="widget_content" style="border-bottom:none;line-height: 160%;" >' +
-        'See the customer\'s subscriptions history and payments from your Stripe account.' +
+        'See the contact\'s subscriptions history and payments from your Stripe account.' +
         '<p style="margin: 10px 0px 5px 0px;"><a href=' + url + '>' +
         '<img src="/img/plugins/stripe-connect-button.png" style="width: 190px;' +
         'height: 33px;"></a></p></div>');
@@ -97,9 +97,18 @@ function showStripeProfile(plugin_id, customer_id)
     {
 		console.log(data);
 		
-        //populates the template with and shows in the widget panel
-        $('#Stripe').html(getTemplate("stripe-profile", data));
-
+		var stripe_template = $(getTemplate("stripe-profile", data));
+	
+        head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+      		$(".time-ago", stripe_template).each(function(index,element){
+      			$(element).timeago();
+      		})
+      		console.log($(".time-ago", stripe_template));
+      	  });
+        
+   	 //populates the template with and shows in the widget panel
+        $('#Stripe').html(stripe_template);
+        
         // if error occurs
     }, function error(data)
     {

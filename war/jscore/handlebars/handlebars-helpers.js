@@ -1004,4 +1004,27 @@ $(function() {
 		 
 		});
 	
+	Handlebars.registerHelper('if_json', function(context, options) {
+		
+		try
+		{
+			 var json = $.parseJSON(context);
+			
+			if(typeof json === 'object')
+				return options.fn(this);
+			return options.inverse(this);
+		}
+		catch(err)
+		{
+			return options.inverse(this);
+		}
+	});
+	
+		
+	Handlebars.registerHelper('getTwitterURLBySubtype', function(items, name, subtype) {
+		
+		
+		return getPropertyValueBySubtype(items, name, subtype).value();
+	});
+	
 });
