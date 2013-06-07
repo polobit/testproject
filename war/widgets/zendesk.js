@@ -53,6 +53,16 @@ $(function ()
         
     });
 
+    $('.zendesk_ticket_hover').live('mouseenter', function (e)
+    {
+        $(this).find('.zendesk_tab_link').show();
+    });
+
+    $('.zendesk_ticket_hover').live('mouseleave', function (e)
+    {
+        $('.zendesk_tab_link').hide();
+    });
+    
 });
 
 /**
