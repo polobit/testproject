@@ -23,6 +23,18 @@ $(function ()
     // to fetch details
     var plugin_prefs = agile_crm_get_plugin_prefs(ZENDESK_PLUGIN_NAME);
 
+    
+    $('#Zendesk_plugin_delete').die().live('click', function (e) {
+    	
+    	e.preventDefault();
+    	
+    	agile_crm_save_widget_prefs(Stripe_PLUGIN_NAME,
+		        undefined , function (data)
+        {
+    		setupZendeskOAuth(plugin_id);
+        });
+    });
+ 
     // Stores email of the contact as global variable
     Email = agile_crm_get_contact_property('email');
     

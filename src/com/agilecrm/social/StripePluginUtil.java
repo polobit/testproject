@@ -44,7 +44,7 @@ public class StripePluginUtil
     {
 	try
 	{
-	    // "sk_test_R4iHedrh8cDnCsNthKyXSKTj";
+	    // "sk_test_uNE2ED6qihcFPXMEiYDCWYux";
 	    System.out.println(getCustomerDetails(null, "cus_1xsotInCyOLyiz"));// cus_1HB4FFdQLR4g7X
 	}
 	catch (Exception e)
