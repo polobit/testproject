@@ -144,7 +144,7 @@ function _setupNotification(object) {
 		return;
 	}
 
-	if (object.notification == 'BROWSING') {
+	if (object.notification == 'IS_BROWSING') {
 		notificationForBrowsing(object);
 		return;
 	}
@@ -167,7 +167,17 @@ function _setupNotification(object) {
 
 		if (key == object.notification.toLowerCase()) {
 			if (notification_prefs[key])
-				showNoty('information', html, 'bottomRight');
+			{
+			 
+			   // Replace CONTACT with COMPANY for contact-type COMPANY
+			   if((object.notification == "CONTACT_CREATED" || object.notification == "CONTACT_DELETED") && object.type == "COMPANY")
+			   { 
+				   var company = object.notification.replace('CONTACT', 'COMPANY');
+				   object.notification = company;
+			   }
+			   
+		      showNoty('information', html, 'bottomRight', object.notification);
+			}
 		}
 
 	});
@@ -204,7 +214,7 @@ function notificationForClickedAndOpened(contact, html) {
 	// Clicked Link
 	if (contact.notification == "CLICKED_LINK") {
 		if (notification_prefs.link_clicked == 'ANY_CONTACT') {
-			showNoty('information', html, 'bottomRight');
+			showNoty('information', html, 'bottomRight', "CLICKED_LINK");
 			return;
 		}
 
@@ -212,7 +222,7 @@ function notificationForClickedAndOpened(contact, html) {
 		if (notification_prefs.link_clicked == 'CONTACT_ASSIGNED_AND_STARRED'
 				&& contact.star_value > 0) {
 			if (current_user == contact_created_by) {
-				showNoty('information', html, 'bottomRight');
+				showNoty('information', html, 'bottomRight', "CLICKED_LINK");
 				return;
 			}
 		}
@@ -222,7 +232,7 @@ function notificationForClickedAndOpened(contact, html) {
 
 			// Show notifications for contacts of same user
 			if (current_user == contact_created_by) {
-				showNoty('information', html, 'bottomRight');
+				showNoty('information', html, 'bottomRight', "CLICKED_LINK");
 				return;
 			}
 		}
@@ -231,14 +241,14 @@ function notificationForClickedAndOpened(contact, html) {
 
 	// Opened Email
 	if (notification_prefs.email_opened == 'ANY_CONTACT') {
-		showNoty('information', html, 'bottomRight');
+		showNoty('information', html, 'bottomRight', "EMAIL_OPENED");
 		return;
 	}
 
 	if (notification_prefs.email_opened == 'CONTACT_ASSIGNED_AND_STARRED'
 			&& contact.star_value > 0) {
 		if (current_user == contact_created_by) {
-			showNoty('information', html, 'bottomRight');
+			showNoty('information', html, 'bottomRight',"EMAIL_OPENED");
 			return;
 		}
 	}
@@ -247,7 +257,7 @@ function notificationForClickedAndOpened(contact, html) {
 	if (notification_prefs.email_opened == 'CONTACT_ASSIGNED') {
 		// Show notifications for contacts of same user
 		if (current_user == contact_created_by) {
-			showNoty('information', html, 'bottomRight');
+			showNoty('information', html, 'bottomRight',"EMAIL_OPENED");
 			return;
 		}
 	}
@@ -306,14 +316,14 @@ function notificationForBrowsing(contact) {
 	// console.log(contact.owner_name);
 
 	if (notification_prefs.browsing == 'ANY_CONTACT') {
-		showNoty('information', html, 'bottomRight');
+		showNoty('information', html, 'bottomRight', "BROWSING");
 		return;
 	}
 
 	if (notification_prefs.browsing == 'CONTACT_ASSIGNED_AND_STARRED'
 			&& contact.star_value > 0) {
 		if (current_user == contact_created_by) {
-			showNoty('information', html, 'bottomRight');
+			showNoty('information', html, 'bottomRight', "BROWSING");
 			return;
 		}
 	}
@@ -322,7 +332,7 @@ function notificationForBrowsing(contact) {
 
 		// Show notifications for contacts of same user
 		if (current_user == contact_created_by) {
-			showNoty('information', html, 'bottomRight');
+			showNoty('information', html, 'bottomRight', "BROWSING");
 			return;
 		}
 	}
@@ -435,7 +445,7 @@ function notify(type, message, position, closable) {
  * @param notification_type -
  *            notification type - TAG CREATED, TAG DELETED etc.
  */
-function showNoty(type, message, position) {
+function showNoty(type, message, position,notification_type) {
 
 	// Don't show notifications when disabled by user
 	if (!notification_prefs.control_notifications)
@@ -445,7 +455,7 @@ function showNoty(type, message, position) {
 	if (window.webkitNotifications
 			&& window.webkitNotifications.checkPermission() == 0) {
 		show_desktop_notification(getImageUrl(message),
-				getNotificationType(message), getTextMessage(message),
+				notification_type.replace(/_/g, ' '), getTextMessage(message),
 				getId(message));
 		return;
 	}
@@ -512,16 +522,6 @@ function getTextMessage(message) {
 
 	name = $(message).find('#notification-deal-id').text();
 	return name + " " + type;
-}
-
-/**
- * Returns notification type from notification template.
- * 
- * @param {String}
- *            message - notification template.
- */
-function getNotificationType(message) {
-	return $(message).find('#notification-type').text().toUpperCase();
 }
 
 /**

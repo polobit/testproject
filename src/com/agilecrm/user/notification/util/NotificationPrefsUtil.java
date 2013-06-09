@@ -80,7 +80,7 @@ public class NotificationPrefsUtil
     {
 	NotificationPrefs notifications = new NotificationPrefs(agileUser.id,
 		true, ContactType.ANY_CONTACT, ContactType.ANY_CONTACT,
-		ContactType.ANY_CONTACT, false, true, false, false, true,
+		ContactType.ANY_CONTACT, false, true, false, false, false,
 		false, "alert_1");
 	notifications.save();
 	return notifications;
@@ -94,7 +94,8 @@ public class NotificationPrefsUtil
      * @param object
      *            Objects like Contact,Deal etc.
      **/
-    public static void executeNotification(Type type, Object object)
+    public static void executeNotification(Type type, Object object,
+	    JSONObject customValue)
     {
 	String domain = null;
 
@@ -106,7 +107,8 @@ public class NotificationPrefsUtil
 
 	// Optimizing object to reduce its size. PubNub restricts and costs
 	// based on object size.
-	JSONObject json = optimizeObjectForNotification(type, object);
+	JSONObject json = optimizeObjectForNotification(type, object,
+		customValue);
 
 	// If domain is empty return
 	if (StringUtils.isEmpty(domain) || json == null)
@@ -119,7 +121,7 @@ public class NotificationPrefsUtil
     }
 
     private static JSONObject optimizeObjectForNotification(Type type,
-	    Object object)
+	    Object object, JSONObject customValue)
     {
 	String objectStr = null;
 
@@ -165,10 +167,15 @@ public class NotificationPrefsUtil
 	    // Insert notification-type into json
 	    json.put("notification", type.toString());
 
+	    if (customValue != null)
+		// to insert tag-value and url link in notification
+		json.put("custom_value", customValue.getString("custom_value"));
+
 	    // To show notifications for all other users except action
 	    // performer. It doesn't works for tags added from campaigns,
 	    // browsing, link-clicked
-	    // and email-opened notifications as there won't be any session. All
+	    // and email-opened notifications as there won't be any session.
+	    // All
 	    // users get notifications in these cases.
 	    if (SessionManager.get() != null)
 	    {

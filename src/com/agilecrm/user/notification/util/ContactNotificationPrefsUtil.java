@@ -46,11 +46,12 @@ public class ContactNotificationPrefsUtil
     public static void executeNotificationForNewContact(Contact contact)
     {
 	NotificationPrefsUtil.executeNotification(
-		NotificationPrefs.Type.CONTACT_CREATED, contact);
+		NotificationPrefs.Type.CONTACT_CREATED, contact, null);
 
 	// Executes Notification for tags added along with new Contact
 	if (!contact.getContactTags().isEmpty())
-	    TagNotificationPrefsUtil.executeNotificationWhenTagsAdded(contact);
+	    TagNotificationPrefsUtil.executeNotificationWhenTagsAdded(contact,
+		    contact.getContactTags());
 
     }
 
@@ -63,6 +64,6 @@ public class ContactNotificationPrefsUtil
     public static void executeNotificationForDeleteContact(Contact contact)
     {
 	NotificationPrefsUtil.executeNotification(
-		NotificationPrefs.Type.CONTACT_DELETED, contact);
+		NotificationPrefs.Type.CONTACT_DELETED, contact, null);
     }
 }

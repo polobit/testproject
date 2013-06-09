@@ -458,9 +458,25 @@ $(function() {
 			var temp = arr[0].replace('CONTACT', 'COMPANY') + " " + arr[1];
 			return temp.toLowerCase();
 		}
-
+		
 		// Replaces '_' with ' '
 		var str = this.notification.replace(/_/g, ' ');
+		
+		if(str == "IS BROWSING")
+		{
+			return str.toLowerCase() + " " + this.custom_value;
+		}
+		
+		if(str == "CLICKED LINK"  || str == "OPENED EMAIL")
+		{
+			return str.toLowerCase() + " " + " of campaign " + this.custom_value;
+		}	
+		
+		if(str == 'TAG CREATED' || str == 'TAG DELETED')
+		{
+			return str.toLowerCase().split(' ')[0] + " " + "<a href=\"#tags/"+this.custom_value +"\" style=\"color:black;display:inline-block;font-weight:bold\">" + this.custom_value + "</a> "  + " has been " + str.toLowerCase().split(' ')[1];
+		}
+		
 		return str.toLowerCase();
 
 		// return temp.charAt(0).toUpperCase() + temp.slice(1);
@@ -472,6 +488,10 @@ $(function() {
 	 */
 	Handlebars.registerHelper('epochToLogDate', function(logTime) {
 		return new Date(logTime * 1000);
+	});
+	
+	Handlebars.registerHelper('getCountryName', function(countrycode){
+		return getCode(countrycode);
 	});
 
 	/**

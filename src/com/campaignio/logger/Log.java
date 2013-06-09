@@ -83,7 +83,8 @@ public class Log
     public String entity_type = "log";
 
     /**
-     * Log Types
+     * Log Types. These names are also dependent to show images (img/campaigns)
+     * for contact-detail-campaigns.
      * 
      */
     public enum LogType
