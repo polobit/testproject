@@ -54,7 +54,7 @@ public class InitDefaults
 	tags1.add("Sports");
 	List<ContactField> contactFields1 = new ArrayList<ContactField>();
 	contactFields1
-		.add(new ContactField(Contact.FIRST_NAME, null, "Michel"));
+		.add(new ContactField(Contact.FIRST_NAME, null, "Michael"));
 	contactFields1.add(new ContactField(Contact.LAST_NAME, null, "Jordan"));
 	contactFields1.add(new ContactField(Contact.EMAIL, "work",
 		"sixfeetsix@nba.com"));

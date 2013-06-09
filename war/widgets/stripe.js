@@ -53,6 +53,12 @@ $(function ()
         	
         	e.preventDefault();
         	
+        	 // Checks whether all input fields are given
+            if (!isValidForm($("#stipe_field_form")))
+            {
+                return;
+            }
+        	
         	stripe_custom_field_name = $('#stripe_custom_field_name').val();
         	
         	prefs['stripe_field_name'] = stripe_custom_field_name;
