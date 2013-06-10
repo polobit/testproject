@@ -1007,7 +1007,7 @@ $(function() {
 		
 	});
 	
-	Handlebars.registerHelper("each_with_index", function(array, fn) {
+	Handlebars.registerHelper("each_with_index", function(array, options) {
 		 var buffer = "";
 		 for (var i = 0, j = array.length; i < j; i++) {
 		  var item = array[i];
@@ -1016,7 +1016,7 @@ $(function() {
 		  item.index = i+1;
 		 
 		  // show the inside of the block
-		  buffer += fn(item);
+		  buffer += options.fn(item);
 		 }
 		 
 		 // return the finished buffer
@@ -1045,6 +1045,11 @@ $(function() {
 		
 		
 		return getPropertyValueBySubtype(items, name, subtype).value();
+	});
+	
+	
+	Handlebars.registerHelper('addTag', function(tag) {
+		addTagAgile(tag);
 	});
 	
 });
