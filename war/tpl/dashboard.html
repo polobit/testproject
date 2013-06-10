@@ -96,11 +96,11 @@
 <div class="span2"><strong>{{this.total}} % </strong></div>
 </div>
 <ul>
-{{#unless WIDGETS}}
-<li>Configure your widgets <a href="#add-widget">here</a></li>
-{{/unless}}
 {{#unless EMAIL}}
 <li>Configure your Gmail <a href="#email">here</a></li>
+{{/unless}}
+{{#unless WIDGETS}}
+<li>Configure your widgets <a href="#add-widget">here</a></li>
 {{/unless}}
 {{#unless USER_INVITED}}
 <li>Invite more users <a href="#users">here</a></li>
