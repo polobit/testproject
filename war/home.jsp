@@ -229,7 +229,9 @@ String CSS_PATH = "/";
 
 	<footer id="footer" class="footer container"
 		style="padding: 0px !important;overflow-x:hidden;overflow-y:hidden;margin-top:15px;">
-
+        <div style="display:inline;float:right;">
+            <a style="font-weight:bold;cursor:pointer;vertical-align:-17px;margin-right: 30px;" id="help-page">Help</a>
+        </div>
 	 	<div style="width:290px;display:inline-block;margin-top:15px;">
 	 	    Like AgileCRM?<b> Share it -</b>
 	 		<script src="https://platform.twitter.com/widgets.js" type="text/javascript"></script>
@@ -238,9 +240,7 @@ String CSS_PATH = "/";
 	 		<span style="margin-left:10px;"><a data="Linkedin" class="email-share" href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fwww.agilecrm.com&title=AgileCRM&summary=Sell%20like%20a%20pro%20with%20%23AgileCRM%20-%20&source=https%3A%2F%2Fwww.agilecrm.com" target="_blank"><i class="icon-linkedin"></i></a></span>
 	 		<span style="margin:0 10px;"><a id="share-email" href="#"><i class="icon-envelope-alt"></i></a></span>
         </div>
-        <div style="display:inline;">
-            <a style="font-weight:bold;cursor:pointer;margin-left:62%;" id="help-page">Help</a>
-        </div>
+
      		<!-- <div style="margin-right:5px;display:inline-block;vertical-align:top;">Refer your friends.</div>
      		
      		

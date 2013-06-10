@@ -3,6 +3,10 @@ package com.agilecrm.user.notification.util;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.agilecrm.contact.Contact;
 import com.agilecrm.user.notification.NotificationPrefs;
 
@@ -27,7 +31,6 @@ public class TagNotificationPrefsUtil
     public static void checkTagsChange(Contact oldContact,
 	    Contact updatedContact)
     {
-
 	Set<String> oldTags = new HashSet<String>(oldContact.getContactTags());
 	Set<String> updatedTags = new HashSet<String>(
 		updatedContact.getContactTags());
@@ -38,7 +41,7 @@ public class TagNotificationPrefsUtil
 
 	// Executes Notification for added tags
 	if (!addedTags.isEmpty())
-	    executeNotificationWhenTagsAdded(updatedContact);
+	    executeNotificationWhenTagsAdded(updatedContact, addedTags);
 
 	// Tags that are deleted
 	Set<String> deletedTags = new HashSet<String>(oldTags);
@@ -46,7 +49,7 @@ public class TagNotificationPrefsUtil
 
 	// Executes notification for deleted tags
 	if (!deletedTags.isEmpty())
-	    executeNotificationWhenTagsDeleted(updatedContact);
+	    executeNotificationWhenTagsDeleted(updatedContact, deletedTags);
     }
 
     /**
@@ -55,10 +58,22 @@ public class TagNotificationPrefsUtil
      * @param contact
      *            Contact object to which tag is added.
      */
-    public static void executeNotificationWhenTagsAdded(Contact contact)
+    public static void executeNotificationWhenTagsAdded(Contact contact,
+	    Set<String> tags)
     {
+	JSONObject tagsJSON = new JSONObject();
+	try
+	{
+	    // Inorder to avoid square-brackets around tags set.
+	    String tag = StringUtils.join(tags, ",");
+	    tagsJSON.put("custom_value", tag);
+	}
+	catch (JSONException e)
+	{
+	    e.printStackTrace();
+	}
 	NotificationPrefsUtil.executeNotification(
-		NotificationPrefs.Type.TAG_CREATED, contact);
+		NotificationPrefs.Type.TAG_CREATED, contact, tagsJSON);
     }
 
     /**
@@ -67,9 +82,21 @@ public class TagNotificationPrefsUtil
      * @param contact
      *            Contact object to which tag is deleted.
      */
-    public static void executeNotificationWhenTagsDeleted(Contact contact)
+    public static void executeNotificationWhenTagsDeleted(Contact contact,
+	    Set<String> tags)
     {
+	JSONObject tagsJSON = new JSONObject();
+	try
+	{
+	    // Inorder to avoid square-brackets around tags set.
+	    String tag = StringUtils.join(tags, ",");
+	    tagsJSON.put("custom_value", tag);
+	}
+	catch (JSONException e)
+	{
+	    e.printStackTrace();
+	}
 	NotificationPrefsUtil.executeNotification(
-		NotificationPrefs.Type.TAG_DELETED, contact);
+		NotificationPrefs.Type.TAG_DELETED, contact, tagsJSON);
     }
 }

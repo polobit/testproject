@@ -1,15 +1,17 @@
 <script id="stripe-profile-template" type="text/html">
 <div class="widget_content">
 	{{#if customer.activeCard.name}}
-		<h4 style="text-transform: capitalize;"><b>{{customer.activeCard.name}}</b></h4>
-	{{/if}}
-	{{#if customer.activeCard.addressState}}
-		<p style="font-size: 13px;margin-bottom:0px;">
-			{{customer.activeCard.addressState}}
-			{{#if customer.activeCard.addressCountry}} 
-				, {{customer.activeCard.addressCountry}}
-			{{/if}}
-		</p>
+		<a href="https://manage.stripe.com/customers/{{customer.id}}" target="_blank"><h4 style="text-transform: capitalize;"><b>{{customer.activeCard.name}}</b></h4></a>
+		{{#if customer.activeCard.addressCountry}}
+			<p style="font-size: 13px;margin-bottom:0px;">
+				{{#if customer.activeCard.addressCountry}} 
+					{{customer.activeCard.addressState}}, 
+				{{/if}}
+				{{customer.activeCard.addressCountry}}
+			</p>
+		{{/if}}
+	{{else}}
+		<div><b>Id: </b><a href="https://manage.stripe.com/customers/{{customer.id}}" target="_blank">{{customer.id}}</a></div>
 	{{/if}}
 </div>
 <div class="sub_header">
@@ -105,4 +107,17 @@
 	</li>
 {{/if}}
 </ul>
+</script>
+
+<script id="stripe-custom-field-template" type="text/html">
+<div display:inline;  line-height:12px;word-wrap: break-word;">
+		<form class="widget_content" style="border-bottom:none;" id="stipe_field_form" name="stipe_field_form" method="post">
+	    	<fieldset>
+				<p></p>
+				<div class="control-group" style="margin-bottom:0px;"><div class="controls"><input type="text" id="stripe_custom_field_name" class="input-medium required" style="width:90%" placeholder="Custom Field Name" value="" name="stripe_field_name"></input></div></div>
+				<button  class="btn"><a href="#" id="save_stripe_name" style="text-decoration:none;">Save</a></button>
+			</fieldset>
+	    </form>
+	</div>
+</div>
 </script>

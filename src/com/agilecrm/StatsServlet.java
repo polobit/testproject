@@ -8,9 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.db.util.AnalyticsUtil;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -81,13 +82,26 @@ public class StatsServlet extends HttpServlet
 	long reqTime = date.getTime() / 1000;
 
 	// Insert into table
-	AnalyticsUtil.addToPageViews(domain, guid, email, sid, url, ip, isNew,
-		ref, userAgent, country, region, city, cityLatLong, reqTime);
+	// AnalyticsUtil.addToPageViews(domain, guid, email, sid, url, ip,
+	// isNew,
+	// ref, userAgent, country, region, city, cityLatLong, reqTime);
 
 	// Show notification
 	if (!StringUtils.isEmpty(email))
-	    NotificationPrefsUtil.executeNotification(Type.BROWSING,
-		    ContactUtil.searchContactByEmail(email));
+	{
+	    JSONObject json = new JSONObject();
+	    try
+	    {
+		json.put("custom_value", url);
+	    }
+	    catch (JSONException e)
+	    {
+		e.printStackTrace();
+	    }
+
+	    NotificationPrefsUtil.executeNotification(Type.IS_BROWSING,
+		    ContactUtil.searchContactByEmail(email), json);
+	}
     }
 
     /**

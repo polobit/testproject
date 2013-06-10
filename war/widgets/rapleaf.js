@@ -20,6 +20,17 @@ $(function() {
 	// fetch details
 	var plugin_prefs = agile_crm_get_plugin_prefs(RAPLEAF_PLUGIN_NAME);
 
+	 $('#Rapleaf_plugin_delete').die().live('click', function (e) {
+	    	
+	    	e.preventDefault();
+	    	
+	    	agile_crm_save_widget_prefs(RAPLEAF_PLUGIN_NAME,
+			        undefined , function (data)
+	        {
+	    		setupRapleafOAuth(plugin_id);
+	        });
+	    });
+	 
 	// If not found - considering first time usage of widget, setupRapleafOAuth
 	// called
 	if (plugin_prefs == undefined) {
@@ -50,22 +61,21 @@ function setupRapleafOAuth(plugin_id) {
 	
 	// Shows an input filed to save the the prefs (api key provided by rapleaf)
 	$('#Rapleaf')
-			.html(
-					RAPLEAF_PLUGIN_HEADER
-							+ '<div class="widget_content" style="border-bottom:none"><p >Rapleaf helps you learn more about your customers, provides data (age, gender, marital status, income, etc., ) on US consumer email addresses.To access, </p>'
-							+ '<p><label>Enter Your API key</label>'
-							+ '<input type="text" id="rapleaf_api_key" class="input-medium required" placeholder="API Key" value=""></input></p>'
-							+ '<button id="save_api_key" class="btn" ><a href="#" style="text-decoration:none;">Save</a></button><br/>'
-							+ '<p style="line-height: 25px;padding:5px;">Don\'t have an API key? <a href="https://www.rapleaf.com/developers/api_access"> SignUp </a></p></div>');
+			.html(getTemplate('rapleaf-login', ""));
 
 	// Saves the api key
 	$('#save_api_key').die().live('click', function(e) {
 		e.preventDefault();
+		
+		 // Checks whether all input fields are given
+        if (!isValidForm($("#rapleaf_login_form")))
+        {
+            return;
+        }
+        
 		var api_key = $("#rapleaf_api_key").val();
 		
-		// If input field is empty return
-		if(api_key == "")
-			return;
+		
 		// api_key = "f3e71aadbbc564750d2057612a775ec6";
 		agile_crm_save_widget_prefs(RAPLEAF_PLUGIN_NAME, api_key);
 		

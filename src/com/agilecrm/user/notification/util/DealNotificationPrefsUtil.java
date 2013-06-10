@@ -26,7 +26,7 @@ public class DealNotificationPrefsUtil
     {
 	if (opportunity != null)
 	    NotificationPrefsUtil.executeNotification(
-		    NotificationPrefs.Type.DEAL_CREATED, opportunity);
+		    NotificationPrefs.Type.DEAL_CREATED, opportunity, null);
     }
 
     /**
@@ -53,7 +53,7 @@ public class DealNotificationPrefsUtil
 		    // Executes notification when deal is deleted
 		    NotificationPrefsUtil.executeNotification(
 			    NotificationPrefs.Type.DEAL_CLOSED,
-			    opportunityObject);
+			    opportunityObject, null);
 		}
 	    }
 	    catch (Exception e)

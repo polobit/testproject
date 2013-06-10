@@ -23,6 +23,18 @@ $(function ()
     // to fetch details
     var plugin_prefs = agile_crm_get_plugin_prefs(ZENDESK_PLUGIN_NAME);
 
+    
+    $('#Zendesk_plugin_delete').die().live('click', function (e) {
+    	
+    	e.preventDefault();
+    	
+    	agile_crm_save_widget_prefs(ZENDESK_PLUGIN_NAME,
+		        undefined , function (data)
+        {
+    		setupZendeskOAuth(plugin_id);
+        });
+    });
+ 
     // Stores email of the contact as global variable
     Email = agile_crm_get_contact_property('email');
     
@@ -84,9 +96,7 @@ function setupZendeskOAuth(plugin_id)
     $('#save_prefs').die().live('click', function (e)
     {
         e.preventDefault();
-        console.log($(this).length);
-        console.log($(this).parents("form#zendesk_login_form").length);
-        console.log($("#zendesk_login_form", $('#Zendesk')).length);
+       
         // Checks whether all input fields are given
         if (!isValidForm($("#zendesk_login_form")))
         {
