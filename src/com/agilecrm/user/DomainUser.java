@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import com.agilecrm.Globals;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.user.ProfileStatus.Field;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.email.SendMail;
@@ -297,6 +298,9 @@ public class DomainUser extends Cursor implements Cloneable
 		e.printStackTrace();
 	    }
 	}
+
+	ProfileStatus status = ProfileStatus.getUserProfileStatus();
+	status.setStatus(Field.USER_INVITED, true);
 
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set("");
