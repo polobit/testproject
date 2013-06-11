@@ -11,7 +11,7 @@ var LOADING_ON_CURSOR = '<img class="loading" style="padding-right:5px" src= "im
 /**
  * Default image shown for contacts if image is not available
  */
-var DEFAULT_GRAVATAR_url = "https://d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png";
+var DEFAULT_GRAVATAR_url = "https://da4o37ei6ybbh.cloudfront.net/css/images/pic.png";
 
 // Read a page's GET URL variables and return them as an associative array.
 function getUrlVars() {
@@ -256,3 +256,21 @@ function getLocalTimeFromGMTMilliseconds(time_in_milliseconds) {
 	
 }
 
+
+/*function addTagAgile(tag) {
+	if(checkTagAgile(tag))
+		return;
+	
+	//_agile.add_tag(CURRENT_DOMAIN_USER['email'], tag);
+	if(AGILE_CONTACT && AGILE_CONTACT.tags)
+		AGILE_CONTACT.tags.push(tag);
+}
+
+function checkTagAgile(tag) {
+	
+	if(AGILE_CONTACT && AGILE_CONTACT.tags)
+		return AGILE_CONTACT.tags.indexOf(tag) > 0;
+	
+	return false;
+}
+*/
