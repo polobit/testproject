@@ -799,6 +799,12 @@ function getExperienceOfPerson(plugin_id, linkedin_id)
 		 
 		 var e1 = "";
 		 
+		 if(data.three_current_positions.length == 0 && data.three_past_positions.length == 0)
+		 {			 
+			 $('#linkedin_experience_panel').html('<div class="widget_content">Work status unavailable</div>');
+			 return;
+		 }
+			 
 		 if(data.three_current_positions)
 		 {
 			 e1 = e1.concat(getTemplate("linkedin-experience", data.three_current_positions));
