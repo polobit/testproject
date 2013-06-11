@@ -84,6 +84,32 @@
 </div>
 </script>
 
+<script id="profile-meter-template" type="text/html">
+<div style="background-color: #F8F8B9; margin-bottom:30px;padding: 15px;">
+<div><h3>Get started<h3></div>
+<div class="row-fluid" style="margin-top:10px">
+<div class="span10">
+<div class="progress" style="margin-bottom:0px !important;">
+  <div class="bar" style="width: {{this.total}}%;"></div>
+</div>
+</div>
+<div class="span2"><strong>{{this.total}} % </strong></div>
+</div>
+<ul>
+{{#unless EMAIL}}
+<li>Configure your Gmail <a href="#email">here</a></li>
+{{/unless}}
+{{#unless WIDGETS}}
+<li>Configure your widgets <a href="#add-widget">here</a></li>
+{{/unless}}
+{{#unless USER_INVITED}}
+<li>Invite more users <a href="#users">here</a></li>
+{{/unless}}
+</ul>
+</div>
+
+
+</script>
 
 <script id="dashboard1-template" type="text/html">
 <div class="row">
@@ -162,6 +188,8 @@
 	
 	
 <div class="span3">
+		<div id = "profile-meter">
+		</div>
         <div id="subscription-stats"></div>
 		</br>
 		<div class="data-block">

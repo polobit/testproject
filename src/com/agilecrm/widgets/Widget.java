@@ -3,12 +3,15 @@ package com.agilecrm.widgets;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.ScribeServlet;
 import com.agilecrm.core.api.widgets.WidgetsAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.ProfileStatus;
+import com.agilecrm.user.ProfileStatus.Field;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Parent;
@@ -152,6 +155,12 @@ public class Widget
     {
 	this.user = new Key<AgileUser>(AgileUser.class,
 		AgileUser.getCurrentAgileUser().id);
+
+	if(!StringUtils.isEmpty(prefs))
+	{
+	    ProfileStatus status = ProfileStatus.getUserProfileStatus();
+	    status.setStatus(Field.WIDGETS, true);
+	}
 	dao.put(this);
     }
 

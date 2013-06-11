@@ -70,7 +70,7 @@ $(function() {
 			return agent_image;
 
 		// Default image
-		var img = "https://d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png";
+		var img = DEFAULT_GRAVATAR_url;
 
 		var email = getPropertyValue(items, "email");
 		if (email) {
@@ -85,7 +85,7 @@ $(function() {
 
 	Handlebars.registerHelper('defaultGravatarurl', function(width) {
 		// Default image
-		var img = "https://d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png";
+		var img = DEFAULT_GRAVATAR_url;
 
 		return 'https://secure.gravatar.com/avatar/' + MD5("") + '.jpg?s='
 				+ width + "&d=" + escape(img);
@@ -93,7 +93,7 @@ $(function() {
 
 	Handlebars.registerHelper('emailGravatarurl', function(width, email) {
 		// Default image
-		var img = "https://d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png";
+		var img = DEFAULT_GRAVATAR_url;
 
 		if (email) {
 			return 'https://secure.gravatar.com/avatar/' + MD5(email)
@@ -1007,7 +1007,7 @@ $(function() {
 		
 	});
 	
-	Handlebars.registerHelper("each_with_index", function(array, fn) {
+	Handlebars.registerHelper("each_with_index", function(array, options) {
 		 var buffer = "";
 		 for (var i = 0, j = array.length; i < j; i++) {
 		  var item = array[i];
@@ -1016,7 +1016,7 @@ $(function() {
 		  item.index = i+1;
 		 
 		  // show the inside of the block
-		  buffer += fn(item);
+		  buffer += options.fn(item);
 		 }
 		 
 		 // return the finished buffer
@@ -1045,6 +1045,11 @@ $(function() {
 		
 		
 		return getPropertyValueBySubtype(items, name, subtype).value();
+	});
+	
+	
+	Handlebars.registerHelper('addTag', function(tag) {
+		addTagAgile(tag);
 	});
 	
 });
