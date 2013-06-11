@@ -46,7 +46,7 @@ public class ContactNotificationPrefsUtil
     public static void executeNotificationForNewContact(Contact contact)
     {
 	NotificationPrefsUtil.executeNotification(
-		NotificationPrefs.Type.CONTACT_CREATED, contact, null);
+		NotificationPrefs.Type.CONTACT_ADDED, contact, null);
 
 	// Executes Notification for tags added along with new Contact
 	if (!contact.getContactTags().isEmpty())

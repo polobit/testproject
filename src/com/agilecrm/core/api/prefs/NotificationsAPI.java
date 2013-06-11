@@ -69,7 +69,7 @@ public class NotificationsAPI
 	    notifications.link_clicked = notify.link_clicked;
 	    notifications.deal_created = notify.deal_created;
 	    notifications.deal_closed = notify.deal_closed;
-	    notifications.contact_created = notify.contact_created;
+	    notifications.contact_added = notify.contact_added;
 	    notifications.contact_deleted = notify.contact_deleted;
 	    notifications.tag_added = notify.tag_added;
 	    notifications.tag_deleted = notify.tag_deleted;
