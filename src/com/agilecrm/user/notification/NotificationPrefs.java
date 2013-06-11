@@ -77,7 +77,7 @@ public class NotificationPrefs
      * Tag created notification - default true.
      */
     @NotSaved(IfDefault.class)
-    public boolean tag_created = true;
+    public boolean tag_added = true;
 
     /**
      * Tag deleted notification - default true.
@@ -103,7 +103,7 @@ public class NotificationPrefs
      */
     public enum Type
     {
-	IS_BROWSING, OPENED_EMAIL, CLICKED_LINK, DEAL_CREATED, DEAL_CLOSED, TAG_CREATED, TAG_DELETED, CONTACT_CREATED, CONTACT_DELETED
+	IS_BROWSING, OPENED_EMAIL, CLICKED_LINK, DEAL_CREATED, DEAL_CLOSED, TAG_ADDED, TAG_DELETED, CONTACT_CREATED, CONTACT_DELETED
     };
 
     /** Notification type. */
@@ -157,8 +157,8 @@ public class NotificationPrefs
      *            Contact created status.
      * @param contact_deleted
      *            Contact deleted status.
-     * @param tag_created
-     *            Tag created status.
+     * @param tag_added
+     *            Tag added status.
      * @param tag_deleted
      *            Tag deleted status.
      */
@@ -166,7 +166,7 @@ public class NotificationPrefs
 	    ContactType browsing, ContactType email_opened,
 	    ContactType link_clicked, boolean deal_created,
 	    boolean deal_closed, boolean contact_created,
-	    boolean contact_deleted, boolean tag_created, boolean tag_deleted,
+	    boolean contact_deleted, boolean tag_added, boolean tag_deleted,
 	    String notification_sound)
     {
 	this.control_notifications = control_notifications;
@@ -177,7 +177,7 @@ public class NotificationPrefs
 	this.deal_closed = deal_closed;
 	this.contact_created = contact_created;
 	this.contact_deleted = contact_deleted;
-	this.tag_created = tag_created;
+	this.tag_added = tag_added;
 	this.tag_deleted = tag_deleted;
 	this.notification_sound = notification_sound;
 

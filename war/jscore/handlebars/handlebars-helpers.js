@@ -464,9 +464,9 @@ $(function() {
 			return str.toLowerCase() + " " + " of campaign " + this.custom_value;
 		}	
 		
-		if(str == 'TAG CREATED' || str == 'TAG DELETED')
+		if(str == 'TAG ADDED' || str == 'TAG DELETED')
 		{
-			return str.toLowerCase().split(' ')[0] + " " + "<a href=\"#tags/"+this.custom_value +"\" style=\"color:black;display:inline-block;font-weight:bold\">" + this.custom_value + "</a> "  + " has been " + str.toLowerCase().split(' ')[1];
+			return " - " + "\"" + this.custom_value + "\" "  + str.toLowerCase().split(' ')[0]+ " has been " + str.toLowerCase().split(' ')[1];
 		}
 		
 		return str.toLowerCase();

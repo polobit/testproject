@@ -73,7 +73,7 @@ public class TagNotificationPrefsUtil
 	    e.printStackTrace();
 	}
 	NotificationPrefsUtil.executeNotification(
-		NotificationPrefs.Type.TAG_CREATED, contact, tagsJSON);
+		NotificationPrefs.Type.TAG_ADDED, contact, tagsJSON);
     }
 
     /**
