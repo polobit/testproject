@@ -22,7 +22,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
- <meta name="globalsign-domain-verification" content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx"/>
+<meta name="globalsign-domain-verification" content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx"/>
 
 <!-- Le styles -->
 <%
@@ -65,6 +65,8 @@ String CSS_PATH = "/";
 	%>
 					
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-responsive.min.css"/>
+
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/agilecrm.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/widget.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/timeline.css" />
@@ -72,6 +74,10 @@ String CSS_PATH = "/";
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/planandupgrade.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/daterangepicker.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrapSwitch.css" />
+
+<!-- Unified CSS for All Lib -->
+<link rel='stylesheet' type='text/css' href='<%=CSS_PATH%>css/lib.css' />
+
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
@@ -257,7 +263,7 @@ String CSS_PATH = "/";
 	
 	<script>
 	 var LIB_PATH = "//da4o37ei6ybbh.cloudfront.net/js/";
-	 //var LIB_PATH = "/";
+	 // var LIB_PATH = "/";
 	
 	var IS_CONSOLE_ENABLED = <%=debug%>;
 	
@@ -290,9 +296,6 @@ String CSS_PATH = "/";
 		$("img.init-loading", $('#content')).attr("src", "/img/ajax-loader-cursor.gif");
 	});
 	</script>
-	
-	<!-- Unified CSS for All Lib -->
-	<link rel='stylesheet' type='text/css' href='<%=CSS_PATH%>css/lib.css' />
 
 </body>
 </html>
