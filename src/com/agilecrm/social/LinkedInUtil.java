@@ -130,25 +130,28 @@ public class LinkedInUtil
 	if (StringUtils.isBlank(firstName) && StringUtils.isBlank(lastName))
 	    return searchResults;
 
-	firstName = (firstName != null) ? firstName : "";
-	lastName = (lastName != null) ? lastName : "";
-
-	// Sets name as filter to search profiles
-	searchParameters.put(SearchParameter.KEYWORDS, firstName + " "
-		+ lastName);
-
 	// Creates client using token and secret to connect with LinkedIn
 	final LinkedInApiClient client = factory.createLinkedInApiClient(
 		widget.getProperty("token"), widget.getProperty("secret"));
 
+	firstName = (firstName != null) ? firstName : "";
+	lastName = (lastName != null) ? lastName : "";
+
+	// Sets name as filter to search profiles
+	searchParameters.put(SearchParameter.FIRST_NAME, firstName);
+	searchParameters.put(SearchParameter.LAST_NAME, lastName);
+
 	// Search profiles based on the searchParameters given, and specifies
 	// field to be returned for result profiles
-	People people = client.searchPeople(searchParameters, EnumSet.of(
-		ProfileField.PICTURE_URL, ProfileField.FIRST_NAME,
-		ProfileField.LAST_NAME, ProfileField.SUMMARY,
-		ProfileField.HEADLINE, ProfileField.LOCATION_NAME,
-		ProfileField.NUM_CONNECTIONS, ProfileField.PUBLIC_PROFILE_URL,
-		ProfileField.ID, ProfileField.DISTANCE));
+	People people = searchPeopleInLinkedIn(client, searchParameters);
+
+	if (people.getPersonList().size() == 0)
+	{
+	    searchParameters.clear();
+	    searchParameters.put(SearchParameter.KEYWORDS, firstName + " "
+		    + lastName);
+	    people = searchPeopleInLinkedIn(client, searchParameters);
+	}
 
 	// Iterates through resutls fetched and creates SocialSearchResult
 	// wrapper class and adds results to a list
@@ -194,6 +197,19 @@ public class LinkedInUtil
 	}
 
 	return searchResults;
+    }
+
+    public static People searchPeopleInLinkedIn(LinkedInApiClient client,
+	    Map<SearchParameter, String> searchParameters)
+    {
+	People people = client.searchPeople(searchParameters, EnumSet.of(
+		ProfileField.PICTURE_URL, ProfileField.FIRST_NAME,
+		ProfileField.LAST_NAME, ProfileField.SUMMARY,
+		ProfileField.HEADLINE, ProfileField.LOCATION_NAME,
+		ProfileField.NUM_CONNECTIONS, ProfileField.PUBLIC_PROFILE_URL,
+		ProfileField.ID, ProfileField.DISTANCE), 0, 20);
+
+	return people;
     }
 
     /**
@@ -777,7 +793,7 @@ public class LinkedInUtil
 	return searchResults;
     }
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws Exception
     {
 	final LinkedInApiClient client = factory.createLinkedInApiClient(
 		// "4c1b1828-e275-4e09-b7f9-1f85ee32c22e", // devikkah
@@ -786,10 +802,10 @@ public class LinkedInUtil
 		// "9c9a2635-3efd-474c-8459-61251a5006e1");
 		// "3382f692-f598-4b72-9dd3-891853fec2fc", // test
 		// "7984afcf-f0f7-4fb3-b39c-cb7379d0336e");
-		// "742877e1-5f85-4b49-a10c-08009f98005f",
-		// "846cae2c-d653-45bf-98b4-39c24655ba2d");
-		"024330d0-5e64-477e-acbc-152c7e96cee8",
-		"49f9e0fd-6a3b-4628-9b3a-cc36921f4d58");
+		"742877e1-5f85-4b49-a10c-08009f98005f",
+		"846cae2c-d653-45bf-98b4-39c24655ba2d");
+	// "024330d0-5e64-477e-acbc-152c7e96cee8",
+	// "49f9e0fd-6a3b-4628-9b3a-cc36921f4d58");
 
 	// Person cons = client
 	// .getProfileById(
@@ -833,37 +849,49 @@ public class LinkedInUtil
 	Map<SearchParameter, String> searchParameters = new EnumMap<SearchParameter, String>(
 		SearchParameter.class);
 
-	String firstName = "Alekhya";
-	String lastName = "Test";
+	String firstName = "Joe";
+	String lastName = "dinardo";
+	String title = "Marketer Digital agency";
 
 	firstName = (firstName != null) ? firstName : "";
 	lastName = (lastName != null) ? lastName : "";
+	title = (title != null) ? title : "";
 
 	// Sets name as filter to search profiles
-	// searchParameters.put(SearchParameter.FIRST_NAME, firstName);
-	// searchParameters.put(SearchParameter.LAST_NAME, lastName);
-	searchParameters.put(SearchParameter.KEYWORDS, firstName + " "
-		+ lastName);
+	searchParameters.put(SearchParameter.FIRST_NAME, firstName);
+	searchParameters.put(SearchParameter.LAST_NAME, lastName);
+	searchParameters.put(SearchParameter.KEYWORDS, title);
 
-	People people = client.searchPeople(searchParameters, EnumSet.of(
-		ProfileField.PICTURE_URL, ProfileField.FIRST_NAME,
-		ProfileField.LAST_NAME, ProfileField.SUMMARY,
-		ProfileField.HEADLINE, ProfileField.LOCATION_NAME,
-		ProfileField.NUM_CONNECTIONS, ProfileField.PUBLIC_PROFILE_URL,
-		ProfileField.ID, ProfileField.DISTANCE));
+	// Search profiles based on the searchParameters given, and specifies
+	// field to be returned for result profiles
+	People people = searchPeopleInLinkedIn(client, searchParameters);
 
 	ObjectMapper mapper = new ObjectMapper();
 	String json;
-	try
-	{
 
-	    json = mapper.writeValueAsString(people);
-	    System.out.println(json);
+	System.out.println("-----first,last name and keywords-----"
+		+ people.getPersonList().size());
+	json = mapper.writeValueAsString(people);
+	System.out.println(json);
 
-	}
-	catch (Exception e)
-	{
-	    e.getMessage();
-	}
+	searchParameters.remove(SearchParameter.KEYWORDS);
+	people = searchPeopleInLinkedIn(client, searchParameters);
+
+	System.out.println("--------removing key words--------"
+		+ people.getPersonList().size());
+	json = mapper.writeValueAsString(people);
+	System.out.println(json);
+
+	searchParameters.clear();
+	searchParameters.put(SearchParameter.KEYWORDS, firstName + " "
+		+ lastName);
+	people = searchPeopleInLinkedIn(client, searchParameters);
+
+	System.out.println("--------first and last name as key words--------"
+		+ people.getPersonList().size());
+
+	json = mapper.writeValueAsString(people);
+	System.out.println(json);
+
     }
 }
