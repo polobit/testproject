@@ -91,7 +91,7 @@ public class StatsServlet extends HttpServlet
 	AnalyticsUtil.addToPageViews(domain, guid, email, sid, url, ip, isNew,
 		ref, userAgent, country, region, city, cityLatLong);
 
-	// Show notification
+	// Show notification with url
 	if (!StringUtils.isEmpty(email))
 	{
 	    JSONObject json = new JSONObject();

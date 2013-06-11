@@ -11,7 +11,7 @@
 			</p>
 		{{/if}}
 	{{else}}
-		<div><b>Id: </b><a href="https://manage.stripe.com/customers/{{customer.id}}" target="_blank">{{customer.id}}</a></div>
+		<a href="https://manage.stripe.com/customers/{{customer.id}}" target="_blank">{{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}</a>
 	{{/if}}
 </div>
 <div class="sub_header">
@@ -110,14 +110,19 @@
 </script>
 
 <script id="stripe-custom-field-template" type="text/html">
-<div display:inline;  line-height:12px;word-wrap: break-word;">
-		<form class="widget_content" style="border-bottom:none;" id="stipe_field_form" name="stipe_field_form" method="post">
-	    	<fieldset>
-				<p></p>
-				<div class="control-group" style="margin-bottom:0px;"><div class="controls"><input type="text" id="stripe_custom_field_name" class="input-medium required" style="width:90%" placeholder="Custom Field Name" value="" name="stripe_field_name"></input></div></div>
-				<button  class="btn"><a href="#" id="save_stripe_name" style="text-decoration:none;">Save</a></button>
-			</fieldset>
-	    </form>
-	</div>
+<div class="widget_content">
+{{#if_equals this.length "0"}}
+	<p>Stripe id for each contact is stored in a text custom field. You have no custom fields defined. Please <a href="#custom-fields">create one</a>.</p>
+{{else}}
+	<p>Stripe id for each contact is stored in a text custom field. Select the custom field to be used.</p>
+	<select name="stripe_field" id="stripe_custom_field_name" class="required span10" style="width:100%" >
+		{{#each this}}
+			<option value="{{field_label}}">{{field_label}} 
+			</option>
+		{{/each}}
+	</select>
+	<p>Or, you can <a href="#custom-fields">create </a> a new text custom field.</p>
+	<button  class="btn"><a href="#" id="save_stripe_name" style="text-decoration:none;">Save</a></button>
+{{/if_equals}}
 </div>
 </script>

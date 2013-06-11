@@ -27,6 +27,7 @@ import com.agilecrm.account.APIKey;
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.db.Analytics;
 import com.agilecrm.db.util.AnalyticsUtil;
 import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.user.AgileUser;
@@ -141,15 +142,9 @@ public class API
     @Path("stats")
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
-    public String getStats(@QueryParam("e") String searchEmail)
+    public List<Analytics> getStats(@QueryParam("e") String searchEmail)
     {
-	String domain = NamespaceManager.get();
-	String stats = AnalyticsUtil.getPageViews(searchEmail, domain);
-
-	System.out.println("Stats of given email: " + searchEmail + " are: "
-		+ stats);
-
-	return stats;
+	return AnalyticsUtil.getPageViews(searchEmail);
     }
 
     // Contact view Save Author: Yaswanth 08-10-2012
@@ -448,7 +443,7 @@ public class API
 
 	return mainJSON.toString();
     }
-    
+
     @Path("profile-status")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
