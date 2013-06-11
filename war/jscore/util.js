@@ -257,20 +257,21 @@ function getLocalTimeFromGMTMilliseconds(time_in_milliseconds) {
 }
 
 
-/*function addTagAgile(tag) {
+function addTagAgile(tag) {
 	if(checkTagAgile(tag))
 		return;
 	
-	//_agile.add_tag(CURRENT_DOMAIN_USER['email'], tag);
-	if(AGILE_CONTACT && AGILE_CONTACT.tags)
-		AGILE_CONTACT.tags.push(tag);
+	_agile.add_tag(getPropertyValue(AGILE_CONTACT.properties, "email"), tag, function(data){
+		AGILE_CONTACT = data;
+		if(!checkTagAgile(tag))
+			AGILE_CONTACT.tags.push(tag)	
+	});
 }
 
 function checkTagAgile(tag) {
 	
 	if(AGILE_CONTACT && AGILE_CONTACT.tags)
-		return AGILE_CONTACT.tags.indexOf(tag) > 0;
+		return AGILE_CONTACT.tags.indexOf(tag) > -1;
 	
 	return false;
 }
-*/

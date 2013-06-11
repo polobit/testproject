@@ -42,13 +42,11 @@ public class AnalyticsUtil
      *            - userAgent header.
      * @param appHeader
      *            - appengine header values.
-     * @param created_time
-     *            - requested time.
      */
     public static void addToPageViews(String domain, String guid, String email,
 	    String sid, String url, String ip, String isNew, String ref,
 	    String userAgent, String country, String region, String city,
-	    String cityLatLong, long created_time)
+	    String cityLatLong)
     {
 	String insertToPageViews = "INSERT INTO page_views (domain,guid,email,sid,url,ip,is_new,ref,user_agent,country,region,city,city_lat_long,stats_time) VALUES("
 		+ SQLUtil.encodeSQLColumnValue(domain)
@@ -93,23 +91,23 @@ public class AnalyticsUtil
     }
 
     /**
-     * Gets all sessions from table having guids equal with given email
+     * Gets all sessions from table having sids equal with given email
      * 
      * @param email
      *            - email-id
      */
     public static String getPageViews(String email, String domain)
     {
-	// Gets Guids (clients) based on Email from database
-	String guids = "(SELECT guid FROM page_views WHERE email ="
+	// Gets sessions based on Email from database
+	String sessions = "(SELECT sid FROM page_views WHERE email ="
 		+ SQLUtil.encodeSQLColumnValue(email) + " AND domain = "
 		+ SQLUtil.encodeSQLColumnValue(domain) + ")";
 
-	System.out.println("guids query is: " + guids);
+	System.out.println("sids query is: " + sessions);
 
-	// Gets all Sessions based on above obtained guids
-	String pageViews = "SELECT *, UNIX_TIMESTAMP(stats_time) AS created_time FROM page_views WHERE guid IN "
-		+ guids;
+	// Gets all Sessions based on above obtained sids
+	String pageViews = "SELECT *, UNIX_TIMESTAMP(stats_time) AS created_time FROM page_views WHERE sid IN "
+		+ sessions;
 
 	System.out.println("Select query: " + pageViews);
 
@@ -121,7 +119,7 @@ public class AnalyticsUtil
 	    if (arr == null)
 		return "";
 
-	    System.out.println("Sessions based on guids and email: " + arr);
+	    System.out.println("Sessions based on email: " + arr);
 	}
 	catch (Exception e)
 	{

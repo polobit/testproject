@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class JSONPRequestFilter implements Filter
 {
-    private String callbackParameter;
+    private String callbackParameter = "callback";
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
     {
@@ -38,7 +38,6 @@ public class JSONPRequestFilter implements Filter
 	if (isJSONPRequest(httpRequest))
 	{
 	    ServletOutputStream out = response.getOutputStream();
-
 	    out.println(getCallbackParameter(httpRequest) + "(");
 	    chain.doFilter(request, response);
 	    out.println(");");
@@ -53,7 +52,7 @@ public class JSONPRequestFilter implements Filter
 
     private String getCallbackMethod(HttpServletRequest httpRequest)
     {
-	return httpRequest.getParameter("callback");
+	return httpRequest.getParameter(callbackParameter);
     }
 
     private boolean isJSONPRequest(HttpServletRequest httpRequest)
@@ -65,11 +64,6 @@ public class JSONPRequestFilter implements Filter
     private String getCallbackParameter(HttpServletRequest request)
     {
 	return request.getParameter(callbackParameter);
-    }
-
-    public void init(FilterConfig filterConfig) throws ServletException
-    {
-	callbackParameter = filterConfig.getInitParameter("callbackParameter");
     }
 
     public void destroy()
@@ -248,5 +242,12 @@ public class JSONPRequestFilter implements Filter
 		return Integer.parseInt(val);
 	    }
 	}
+    }
+
+    @Override
+    public void init(FilterConfig arg0) throws ServletException
+    {
+	// TODO Auto-generated method stub
+
     }
 }
