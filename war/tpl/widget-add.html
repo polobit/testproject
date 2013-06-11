@@ -17,7 +17,7 @@
 </div>
 </script>
 
-<script id="widgets-add-collection-template" type="text/html">
+<!-- <script id="widgets-add-collection-template" type="text/html">
 <div class="row">
     <div class="span12">
         <div class="page-header">
@@ -59,5 +59,70 @@
 		<div id="billing" class="row-fluid">
 		</div><br/>
     </div>
+</div>
+</script>
+ -->
+ 
+<script id="widgets-add-collection-template" type="text/html">
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h2>Manage Widgets</h2>
+        </div>
+    </div>
+	<ul class="nav nav-tabs row-fluid" id="myTab">
+		<li class="active" align="center"><a data-toggle="tab" href="#social_tab"><h4>Social</h4></a></li>
+		<li align="center"><a data-toggle="tab" href="#support_tab" id="support_software_id"><h4>Support</h4></a></li>
+		<li align="center"><a data-toggle="tab" href="#email_tab" id="email_id"><h4>Email</h4></a></li>
+		<li align="center"><a data-toggle="tab" href="#call_tab" id="call_id"><h4>Call</h4></a></li>
+		<li align="center"><a data-toggle="tab" href="#billing_tab" id="billing_id"><h4>Billing</h4></a></li>
+	</ul>
+	<div class="tab-content" id="myTabContent">
+	<div id="social_tab" class="tab-pane fade active in">
+		<div class="span12">
+        	<div class="page-header">
+            	<h2>Social <small>Know your customer social activity</small></h2>
+        	</div>
+			<div id="social" class="row-fluid">
+			</div>
+    	</div>
+	</div>
+	<div id="support_tab" class="tab-pane fade">
+		<div  class="span12">
+        	<div class="page-header">
+            	<h2>Support Software <small>View tickets and chats</small></h2>
+        	</div>
+			<div id="support" class="row-fluid">
+			</div>
+    	</div>
+	</div>
+	<div id="call_tab" class="tab-pane fade">
+		<div class="span12">
+        	<div class="page-header">
+            	<h2>Call <small>Make & Receive calls from Agile</small></h2>
+        	</div>
+			<div id="call" class="row-fluid">
+			</div>
+    	</div>
+	</div>
+	<div id="billing_tab" class="tab-pane fade">
+		<div class="span12">
+        	<div class="page-header">
+            	<h2>Billing <small>View and send invoices</small></h2>
+        	</div>
+			<div id="billing" class="row-fluid">
+			</div><br/>
+    	</div>
+	</div>
+	<div id="email_tab" class="tab-pane fade">
+		<div class="span12">
+	        <div class="page-header">
+	            <h2>Email <small>Send and Receive Email</small></h2>
+        	</div>
+			<div id="email" class="row-fluid">	
+			</div>
+    	</div>
+	</div>
+	</div>
 </div>
 </script>
