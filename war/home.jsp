@@ -65,7 +65,7 @@ String CSS_PATH = "/";
 	%>
 					
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
-<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/1-bootstrap-responsive.min.css"/>
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-responsive.min.css"/>
 
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/agilecrm.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/widget.css" />
