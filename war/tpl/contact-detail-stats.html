@@ -40,6 +40,23 @@
 						{{url}}
 					</div>
 				</li>
+                {{#if_equals ref "null"}}
+                 <li></li>
+                 {{else}}
+                <li class="row-fluid">	
+					<div class="span2"><b>Referred URL</b>
+						<div class="pull-right">:</div>
+					</div>
+							
+					<div class="span6" style="margin-left: 10px;">
+						{{ref}}
+					</div>
+				</li>
+               {{/if_equals}}
+               
+               {{#if_equals ip "null"}}
+                 <li></li>
+                 {{else}}
 				<li class="row-fluid">	
 					<div class="span2"><b>IP Address</b>
 						<div class="pull-right">:</div>
@@ -48,15 +65,48 @@
 						{{ip}}
 					</div>
 				</li>
+               {{/if_equals}}
 
+              {{#if_equals user_agent "null"}}
+                 <li></li>
+                 {{else}}
 				<li class="row-fluid">	
+					<div class="span2"><b>Browser & OS</b>
+						<div class="pull-right">:</div>
+					</div>		
+					{{#stringToJSON this "parsedUserAgent"}}{{/stringToJSON}}
+                    <div class="span6" style="margin-left: 10px;">
+						{{parsedUserAgent.browser_name}}, {{titleFromEnums parsedUserAgent.os}}
+					</div>
+				</li>
+               {{/if_equals}}
+
+                {{#if_equals user_agent "null"}}
+                 <li></li>
+                 {{else}}
+				<li class="row-fluid">	
+					<div class="span2"><b>Device Type</b>
+						<div class="pull-right">:</div>
+					</div>		
+					{{#stringToJSON this "parsedUserAgent"}}{{/stringToJSON}}
+                    <div class="span6" style="margin-left: 10px;">
+						{{ucfirst parsedUserAgent.device_type}}
+					</div>
+				</li>
+               {{/if_equals}}
+
+				{{#if_equals city "null"}}
+                <li></li>
+                 {{else}}
+                <li class="row-fluid">	
 					<div class="span2"><b>Location</b>
 						<div class="pull-right">:</div>
 					</div>		
 					<div class="span6" style="margin-left: 10px;">
-						{{ucfirst city}}, {{region}}, {{country}}
+						{{ucfirst city}}, {{ucfirst region}}, {{getCountryName country}}
 					</div>
 				</li>
+               {{/if_equals}}
 		</ul>
 
 	<div class="clear">

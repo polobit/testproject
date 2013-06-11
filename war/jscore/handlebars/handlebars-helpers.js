@@ -601,25 +601,17 @@ $(function() {
 				var count = properties.length;
 				$.each(properties, function(key, value) {
 					
-					if (value == "properties_first_name")
-						value = "First Name";
-					else if (value == "properties_last_name")
-						value = "Last Name";
-					else if (value == "properties_email")
-						value = "Email";
-					else if (value == "properties_image")
-						value = "Image";
-					else if (value == "properties_title")
-						value = "Title";
-					else if (value == "properties_company")
-						value = "Company";
+					if (value.indexOf("properties_") != -1)
+						value = value.split("properties_")[1];
+					else if (value.indexOf("custom_") != -1)
+						value = value.split("custom_")[1];
 					else if (value == "created_time")
 						value = "Created Date";
 					else if (value == "updated_time")
 						value = "Updated Date";
-					else if (value == "tags")
-						value = "Tags";
 					
+					value = value.replace("_", " ");
+
 					if (--count == 0) {
 						el = el.concat(value);
 						return;

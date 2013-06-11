@@ -47,18 +47,25 @@ $(function ()
     
     if(!stripe_custom_field_name)
     {
-    	$('#Stripe').html(getTemplate('stripe-custom-field', ""));
+    	
+    	 $.get("/core/api/custom-fields/type/text", function(data) { 
+    	    	
+    	    	console.log(data);
+    	    	$('#Stripe').html(getTemplate('stripe-custom-field', data));
+    	    	
+    	 }, "json")
+    	 .error(function(data) {
+    		 
+    		 $('#Stripe').html('<div style="padding: 10px;line-height:160%;' +
+    		            'word-wrap: break-word;" >' + data.responseText + '</div>');
+    	 });
+    	 
+    	
     	
     	$('#save_stripe_name').die().live('click', function (e) {
         	
         	e.preventDefault();
-        	
-        	 // Checks whether all input fields are given
-            if (!isValidForm($("#stipe_field_form")))
-            {
-                return;
-            }
-        	
+        	        	
         	stripe_custom_field_name = $('#stripe_custom_field_name').val();
         	
         	prefs['stripe_field_name'] = stripe_custom_field_name;
@@ -111,6 +118,9 @@ function setupStripeOAuth(plugin_id)
         '<p style="margin: 10px 0px 5px 0px;"><a href=' + url + '>' +
         '<img src="/img/plugins/stripe-connect-button.png" style="width: 190px;' +
         'height: 33px;"></a></p></div>');
+    
+    
+   
 }
 
 /**

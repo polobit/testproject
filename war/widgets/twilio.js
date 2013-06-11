@@ -63,7 +63,11 @@ $(function() {
 	$('#twilio_verify').die().live('click', function(e) {
     	e.preventDefault();
 
-    	
+    	 // Checks whether all input fields are given
+        if (!isValidForm($("#twilio_call_form")))
+        {
+            return;
+        }
     	
     	var from = $('#twilio_from').val();
     	console.log(from);

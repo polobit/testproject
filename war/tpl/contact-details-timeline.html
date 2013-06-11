@@ -96,7 +96,23 @@
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                 <div class="text" style="color: #333333"><b>URL:</b></br> {{url}}</div>
-                <div class="text" style="color: #333333"><b>ADDRESS:</b></br> {{ucfirst city}}, {{region}}, {{getCountryName country}}</div>
+                {{#if_equals ref "null"}}
+                 <div></div> 
+                 {{else}} 
+                     <div class="text" style="color: #333333"><b>Referred URL:</b></br> {{ref}}</div>
+                {{/if_equals}}
+
+                {{#if_equals user_agent "null"}}
+                 <div></div>
+                 {{else}}
+                    {{#stringToJSON this "parsedUserAgent"}}{{/stringToJSON}}
+                    <div class="text" style="color: #333333"><b>Browser & OS:</b></br>{{parsedUserAgent.browser_name}}, {{titleFromEnums parsedUserAgent.os}}</div>
+                {{/if_equals}}
+                {{#if_equals city "null"}}
+                   <div></div>
+                {{else}}
+                   <div class="text" style="color: #333333"><b>ADDRESS:</b></br> {{ucfirst city}}, {{ucfirst region}}, {{getCountryName country}}</div>
+                {{/if_equals}}
             </div>
      {{/if_entity}}
   </div>

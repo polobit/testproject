@@ -56,10 +56,14 @@
 
 <script id="twilio-initial-template" type="text/html" >
 	<div class="widget_content">
-		<p>To start making calls, you need to verify your number.</p>
-		<input type="text" placeholder="Enter number" name="twilio_from" id="twilio_from" class="required digits" style="width:90%" maxlength="15"/><br>	
-		<p>You will receive a verification call asking for a code. Enter the code you see after clicking verify.</p>
-		<a href="#verify" class="btn" id="twilio_verify" style="font-size:13px;">Verify</a>						
+		<form style="border-bottom:none;" id="twilio_call_form" name="twilio_call_form" method="post">
+	    	<fieldset>
+				<p>To start making calls, you need to verify your number.</p>
+				<div class="control-group" ><div class="controls"><input type="text" placeholder="Enter number" name="twilio_from" id="twilio_from" class="required digits" style="width:90%" maxlength="15"/></div</div>	
+				<p>You will receive a verification call asking for a code. Enter the code you see after clicking verify.</p>
+				<button id="twilio_verify" class="btn"><a href="#verify" style="text-decoration:none;">Verify</a></button>		
+			</fieldset>
+	    </form>				
 	</div>
 </script>
 
