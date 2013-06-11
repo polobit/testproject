@@ -166,7 +166,7 @@ function getContactCustomProperties(items) {
 	
 	var fields = [];
 	for(var i = 0; i<items.length ; i++) {
-		if(items[i].type == "CUSTOM")
+		if(items[i].type == "CUSTOM" && items[i].name != "image")
 			{
 				fields.push(items[i]);
 			}

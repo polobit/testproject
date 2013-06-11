@@ -89,21 +89,21 @@
 <div><h3>Get started<h3></div>
 <div class="row-fluid" style="margin-top:10px">
 <div class="span10">
-<div class="progress" style="margin-bottom:0px !important;">
+<div class="progress progress-warning" style="margin-bottom:0px !important;">
   <div class="bar" style="width: {{this.total}}%;"></div>
 </div>
 </div>
-<div class="span2"><strong>{{this.total}} % </strong></div>
+<span style="margin-left:2px"><strong> {{this.total}} %</strong></span>
 </div>
 <ul>
-{{#unless EMAIL}}
-<li>Configure your Gmail <a href="#email">here</a></li>
+{{#unless Email}}
+<li>Link your Gmail <a href="#email">here</a></li>
 {{/unless}}
-{{#unless WIDGETS}}
-<li>Configure your widgets <a href="#add-widget">here</a></li>
-{{/unless}}
-{{#unless USER_INVITED}}
+{{#unless User_invited}}
 <li>Invite more users <a href="#users">here</a></li>
+{{/unless}}
+{{#unless Widgets}}
+<li>Configure your widgets <a href="#add-widget">here</a></li>
 {{/unless}}
 </ul>
 </div>
@@ -180,7 +180,7 @@
 	
 <div id="dashboard-entities">
 	<div id="recent-contacts" style="margin-top:50px"></div>
-	<div id="my-tasks" style="margin-top:50px">sdfsdf</div>
+	<div id="my-tasks" style="margin-top:50px"></div>
 	<div id="my-deals" style="margin-top:50px"></div>
 	<div id="my-logs" style="margin-top:50px"></div>
 </div>

@@ -272,6 +272,9 @@ String CSS_PATH = "/";
 	// Get current user prefs json
 	var CURRENT_USER_PREFS = <%=mapper.writeValueAsString(currentUserPrefs)%>;
 	
+	// Get current domain user json
+	var CURRENT_DOMAIN_USER = <%=mapper.writeValueAsString(domainUser)%>;
+	
 	//var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
 	 var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
 	
@@ -286,6 +289,36 @@ String CSS_PATH = "/";
 	head.js(LIB_PATH + 'lib/handlebars-1.0.0.beta.6-min.js');
 	
 	
+	var AGILE_CONTACT = {};
+	head.js('https://our.agilecrm.com/stats/min/agile-min.js', function(){
+			_agile.set_account('td2h2iv4njd4mbalruce18q7n4', 'our');
+			_agile.set_email(CURRENT_DOMAIN_USER['email']);
+			
+				// Gets contact based on the the email of the user logged in
+				agile_getContact(CURRENT_DOMAIN_USER['email'], function(data){
+					AGILE_CONTACT = data;
+					
+					// If contact does not exist, new contact is created 
+					// considering it is a new contact
+					if(!AGILE_CONTACT["id"])
+					{
+						var name = CURRENT_DOMAIN_USER['name'];
+						var first_name = name, last_name = name;
+
+						// Split name into first and last name
+						if(name.indexOf(' '))
+							{
+								first_name = name.substr(0, name.indexOf(' '));
+								last_name = name.substr(name.indexOf(' ')+1);
+							}
+						
+						// Creates a new contact and assigns it to global value 
+						 _agile.create_contact({"email": CURRENT_DOMAIN_USER['email'], "first_name" : first_name, "last_name": last_name, "tags":"Signup"}, function(data){
+							 AGILE_CONTACT = data;
+						 });
+					}
+				});
+	});
 	
 	head.ready(function() {	
 		head.js('jscore/min/js-all-min.js');
