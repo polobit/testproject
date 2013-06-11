@@ -58,6 +58,28 @@ public class CustomFieldsAPI
     }
 
     /**
+     * Gets all custom fields by type
+     * 
+     * @return List of custom fields
+     */
+    @Path("/type/{field_type}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<CustomFieldDef> getCustomFieldsByType(
+	    @PathParam("field_type") String type)
+    {
+	try
+	{
+	    return CustomFieldDefUtil.getFieldByType(type);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
      * Deletes the custom field based on 'id' from the database
      * 
      * @param id

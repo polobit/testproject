@@ -65,4 +65,10 @@ public class CustomFieldDefUtil
     {
 	return dao.getByProperty("field_label", field_label);
     }
+
+    public static List<CustomFieldDef> getFieldByType(String type)
+    {
+	return dao.listByProperty("field_type",
+		CustomFieldDef.Type.valueOf(type.toUpperCase()));
+    }
 }
