@@ -40,13 +40,6 @@ var Current_Route;
 function currentRoute(route) {
 	Current_Route = window.location.hash.split("#")[1];
 	console.log("in app/js : " + Current_Route);
-	try{
-		_agile.track_page_view();
-	}
-	catch(err)
-	{
-		
-	}
 	activateInfiniScroll();
 	//disposeEvents();
 }
