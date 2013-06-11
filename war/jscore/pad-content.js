@@ -55,7 +55,7 @@ var CONTENT_JSON = {
 		"image" : "/img/clipboard.png"
 	},
 	"contact-filters" : {
-		"title" : "You do not have any filter currently.",
+		"title" : "You do not have any filters currently.",
 		"description" : "Filters are used to sort contacts with a specific criteria to find patterns.",
 		//"learn_more" : "click here to learn more",
 		"button_text" : "Add filter",
@@ -72,6 +72,13 @@ var CONTENT_JSON = {
 	},
 	"dashboard" : {
 		"title" : "Your recent activity, upcoming tasks and deals are shown here. You currently do not have much activity.",
+		"image" : "/img/clipboard.png"
+	},
+	"email-templates" : {
+		"title" : "You do not have any Email templates currently.",
+		"description" : "Personalize and customize email templates for every scenario in the sales cycle.",
+		"button_text" : "Add Email Template",
+		"route" : "#email-template-add",
 		"image" : "/img/clipboard.png"
 	}
 	
