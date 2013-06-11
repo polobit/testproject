@@ -11,7 +11,7 @@ function setupDashboard(el)
 	tasks_count = undefined;
 	workflow_count = undefined;
 	
-	setupSubscriptionDetails(el);
+	//setupSubscriptionDetails(el);
 	/*setupDashboardTimeline();
 	setUpDashboardNavtabs(el);*/
 	setUpDashboardEntities(el);
