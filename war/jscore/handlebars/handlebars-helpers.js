@@ -70,7 +70,7 @@ $(function() {
 			return agent_image;
 
 		// Default image
-		var img = "https://d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png";
+		var img = DEFAULT_GRAVATAR_url;
 
 		var email = getPropertyValue(items, "email");
 		if (email) {
@@ -85,7 +85,7 @@ $(function() {
 
 	Handlebars.registerHelper('defaultGravatarurl', function(width) {
 		// Default image
-		var img = "https://d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png";
+		var img = DEFAULT_GRAVATAR_url;
 
 		return 'https://secure.gravatar.com/avatar/' + MD5("") + '.jpg?s='
 				+ width + "&d=" + escape(img);
@@ -93,7 +93,7 @@ $(function() {
 
 	Handlebars.registerHelper('emailGravatarurl', function(width, email) {
 		// Default image
-		var img = "https://d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png";
+		var img = DEFAULT_GRAVATAR_url;
 
 		if (email) {
 			return 'https://secure.gravatar.com/avatar/' + MD5(email)

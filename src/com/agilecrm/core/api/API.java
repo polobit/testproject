@@ -32,6 +32,7 @@ import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.IMAPEmailPrefs;
+import com.agilecrm.user.ProfileStatus;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.SocialPrefs.Type;
 import com.agilecrm.user.UserPrefs;
@@ -446,6 +447,23 @@ public class API
 	mainJSON.put("timeline", object1);
 
 	return mainJSON.toString();
+    }
+    
+    @Path("profile-status")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getProfilesStatus()
+    {
+	try
+	{
+	    return ProfileStatus.getUserProfileStatus().getStats();
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	    return null;
+	}
     }
 
 }
