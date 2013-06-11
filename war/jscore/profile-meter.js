@@ -13,10 +13,19 @@ var INITIAL_TOTAL = 65;
 // Calculate based on tags added in 'OUR' domain
 function calculateProfile()
 {
+	var profile_info = {
+			"Email" : false,
+			"User_invited" : false,
+			"Widgets" : false,
+			"total" : INITIAL_TOTAL
+	};
+	
 	// Get tags from global contact
 	var tags = AGILE_CONTACT.tags;
+	if(!tags)
+		return profile_info;
 	
-	var profile_info = {};
+	
 	var total = INITIAL_TOTAL;
 	
 	$.each(PROFILE_SETTINGS, function(key, value){
@@ -39,5 +48,6 @@ function calculateProfile()
 function setProfileMeter()
 {
 	var profile_stats = calculateProfile();
+	
 	$("#profile-meter").html(getTemplate("profile-meter", profile_stats));
 }
