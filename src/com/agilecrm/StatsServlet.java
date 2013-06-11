@@ -1,7 +1,6 @@
 package com.agilecrm;
 
 import java.io.IOException;
-import java.util.Date;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.db.util.AnalyticsUtil;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -33,29 +33,50 @@ public class StatsServlet extends HttpServlet
 	doPost(request, response);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest
+     * , javax.servlet.http.HttpServletResponse)
+     */
     public void doPost(HttpServletRequest req, HttpServletResponse res)
 	    throws IOException
     {
 	// Domain
 	String domain = NamespaceManager.get();
 
-	System.out.println("Namespace in StatsServlet: " + domain);
-
+	// Differentiates clients (browsers).
 	String guid = req.getParameter("guid");
+
+	// Session Id.
 	String sid = req.getParameter("sid");
+
+	// Request URL
 	String url = req.getParameter("url");
+
+	// Email if set in cookie.
 	String email = req.getParameter("email");
 
-	String ip = null;
-	String isNew = null;
-	String ref = null;
-	String userAgent = null;
-	String country = null;
-	String region = null;
-	String city = null;
-	String cityLatLong = null;
+	// Client IP Address
+	String ip = getClientIP(req);
 
-	// If new
+	// For New Session
+	String isNew = null;
+
+	// Reference URL
+	String ref = null;
+
+	// UserAgent to know browser, OS etc
+	String userAgent = req.getHeader("User-Agent");
+
+	// AppEngine Headers
+	String country = req.getHeader("X-AppEngine-Country");
+	String region = req.getHeader("X-AppEngine-Region");
+	String city = req.getHeader("X-AppEngine-City");
+	String cityLatLong = req.getHeader("X-AppEngine-CityLatLong");
+
+	// If new session only, we get new and ref as query params.
 	if (!StringUtils.isEmpty(req.getParameter("new")))
 	{
 	    isNew = req.getParameter("new");
@@ -64,27 +85,11 @@ public class StatsServlet extends HttpServlet
 	    // If ref is empty
 	    if (StringUtils.isEmpty(ref))
 		ref = null;
-
-	    ip = getClientIP(req);
-
-	    // Get Visitor Info
-	    userAgent = req.getHeader("User-Agent");
-
-	    // App-Engine Headers
-	    country = req.getHeader("X-AppEngine-Country");
-	    region = req.getHeader("X-AppEngine-Region");
-	    city = req.getHeader("X-AppEngine-City");
-	    cityLatLong = req.getHeader("X-AppEngine-CityLatLong");
 	}
 
-	// Get request time
-	Date date = new Date();
-	long reqTime = date.getTime() / 1000;
-
 	// Insert into table
-	// AnalyticsUtil.addToPageViews(domain, guid, email, sid, url, ip,
-	// isNew,
-	// ref, userAgent, country, region, city, cityLatLong, reqTime);
+	AnalyticsUtil.addToPageViews(domain, guid, email, sid, url, ip, isNew,
+		ref, userAgent, country, region, city, cityLatLong);
 
 	// Show notification
 	if (!StringUtils.isEmpty(email))
