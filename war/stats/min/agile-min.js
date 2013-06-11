@@ -199,12 +199,11 @@ function agile_propertyJSON(name, id, type) {
     return json;
 }
 
-function agile_createContact(data, tags)
+function agile_createContact(data, callback)
 {
  var properties = [];
-	 console.log(tags);
 	 for (var key in data) {
-		  if (data.hasOwnProperty(key)) {
+		  if (data.hasOwnProperty(key) && key != "tags") {
 		    //alert(key + " -> " + p[key]);
 			  properties.push(agile_propertyJSON(key, data[key]));
 		  }
@@ -212,19 +211,25 @@ function agile_createContact(data, tags)
 	 
 	 var model = {};
 	 model.properties = properties;
-	 model.tags = tags['tags'];
+	 if(data["tags"])
+	{
+		 var tags = data["tags"];
+		 var tags_string = tags.trim().replace("/ /g", " ");
 	 
-	 console.log(tags);
+		 // Replace ,space with ,
+		 tags_string = tags.replace("/, /g", ",");
+	    
+		 model.tags = tags_string.split(",");
+	}	 
 	 
 	 //var params = "contact={0}&tags={1}".format(encodeURIComponent(data), encodeURIComponent(JSON.stringify(tags)));
 	 // Get
 	 var agile_url = agile_id.getURL() + "/contacts?callback=?&id=" + agile_id.get() + "&contact=" + encodeURIComponent(JSON.stringify(model));
 	 
-	 agile_getJSONP(agile_url, function(data){
-	 	    var success = data.flag === 'successful';
-	 	    if(success) {
-	 	        alert('The POST to abc.com WORKED SUCCESSFULLY');
-	 	    }
+	 agile_getJSONP(agile_url, function(data){	 	    
+	 	    	if (callback && typeof(callback) === "function") {
+	 			 	callback(data);
+	 			}
 	 	});
 }
 
@@ -248,7 +253,7 @@ function agile_getContact(email, callback)
 	 var params = "email={0}".format(encodeURIComponent(email));
 	 // Get
 	 var agile_url = agile_id.getURL() + "/contact/email?callback=?&id=" + agile_id.get() + "&" + params ;
-	 console.log(agile_url);
+	
 	 agile_getJSONP(agile_url, function(data){
 	 	  if (callback && typeof(callback) === "function") {
 		 	callback(data);
@@ -341,7 +346,7 @@ function agile_getTagsData(email, tags)
 
 }
 
-function agile_addTag(email, tags)
+function agile_addTag(email, tags, callback)
 {
 	var params = agile_getTagsData(email, tags);
 	if(!params)
@@ -351,10 +356,10 @@ function agile_addTag(email, tags)
 	 var agile_url = agile_id.getURL() + "/contacts/add-tags?callback=?&id=" + agile_id.get() + "&" + params;
 	 
 	 agile_getJSONP(agile_url,function(data){
-	 	    var success = data.flag === 'successful';
-	 	    if(success) {
-	 	        alert('The POST to abc.com WORKED SUCCESSFULLY');
-	 	    }
+		 
+		  if (callback && typeof(callback) === "function") {
+			 	callback(data);
+				}
 	 	});  
     
 }
@@ -431,6 +436,7 @@ function agile_trackPageview()
 	
  	// Page
 	var url = document.location.href;
+	console.log(url);
  	if(url !== undefined && url != null)
  		url = encodeURIComponent(url);
  	else
@@ -513,17 +519,17 @@ var _agile =
 	{
 		agile_trackPageview();
 	},
-	create_contact : function(properties, tags)
+	create_contact : function(properties, callback)
 	{
-		agile_createContact(properties, tags);
+		agile_createContact(properties, callback);
 	},
 	delete_contact : function(email)
 	{
 		agile_deleteContact(email);
 	},
-	add_tag : function(email, tags)
+	add_tag : function(email, tags, callback)
 	{
-		agile_addTag(email, tags);
+		agile_addTag(email, tags, callback);
 	},
 	remove_tag: function(email, tags)
 	{

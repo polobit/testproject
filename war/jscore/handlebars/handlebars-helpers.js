@@ -1048,7 +1048,7 @@ $(function() {
 	});
 	
 	
-	Handlebars.registerHelper('addTag', function(tag) {
+	Handlebars.registerHelper('add_tag', function(tag) {
 		addTagAgile(tag);
 	});
 	

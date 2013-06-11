@@ -61,10 +61,9 @@ public class JSAPI
     @Path("contact/email")
     @GET
     @Produces("application/x-javascript")
-    public Contact getContact(@QueryParam("email") String email,
+    public String getContact(@QueryParam("email") String email,
 	    @QueryParam("callback") String jsoncallback)
     {
-
 	try
 	{
 	    // Search contact based on email, returns empty contact if contact
@@ -74,7 +73,8 @@ public class JSAPI
 	    if (contact == null)
 		contact = new Contact();
 
-	    return contact;
+	    ObjectMapper mapper = new ObjectMapper();
+	    return mapper.writeValueAsString(contact);
 
 	}
 	catch (Exception e)
@@ -105,7 +105,7 @@ public class JSAPI
     @Path("contacts")
     @GET
     @Produces("application/x-javascript")
-    public Contact createContact(@QueryParam("contact") String json,
+    public String createContact(@QueryParam("contact") String json,
 	    @QueryParam("id") String apiKey,
 	    @QueryParam("callback") String jsoncallback)
     {
@@ -132,7 +132,8 @@ public class JSAPI
 	    // If zero, save it
 	    contact.save();
 
-	    return contact;
+	    return mapper.writeValueAsString(contact);
+
 	}
 	catch (Exception e)
 	{
@@ -333,7 +334,7 @@ public class JSAPI
      */
     @Path("contacts/add-tags")
     @GET
-    @Produces("application/x-javascript")
+    @Produces(MediaType.APPLICATION_JSON)
     public Contact addTags(@QueryParam("email") String email,
 	    @QueryParam("tags") String tags,
 	    @QueryParam("callback") String jsoncallback)

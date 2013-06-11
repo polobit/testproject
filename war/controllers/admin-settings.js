@@ -89,7 +89,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			url : 'core/api/users',
 			template : "admin-settings-user-add",
 			isNew : true,
-			window : 'users'
+			window : 'users',
+			postRenderCallback: function(el) {
+				if(view.model.get("id"))
+					addTagAgile("User invited");
+			}
 		});
 
 		$('#content').html(view.render().el);

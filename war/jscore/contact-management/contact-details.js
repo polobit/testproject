@@ -107,7 +107,7 @@ $(function(){
 	 */ 
 	$('.remove-tags').live('click', function(e){
 		e.preventDefault();
-		var tag = $(this).attr("id");
+		var tag = $(this).attr("tag");
 		$(this).closest("li").remove();
      	var json = App_Contacts.contactDetailView.model.toJSON();
      	
@@ -393,7 +393,4 @@ $(function(){
     	else
     		$('#change-owner-ul').css('display', 'inline-block');
     });
-
 });
-
-
