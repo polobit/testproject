@@ -180,20 +180,12 @@ $(function() {
 	 * @returns converted string
 	 */
 	Handlebars.registerHelper('task_property', function(value) {
-		if (value == "EMAIL")
-			return "Email";
-		else if (value == "MEETING")
-			return "Meeting";
-		else if (value == "SEND")
-			return "Send";
-		else if (value == "MILESTONE")
-			return "Milestone";
-		else if (value == "FOLLOW_UP")
+
+		if (value == "FOLLOW_UP")
 			return "Follow Up";
-		else if (value == "TWEET")
-			return "Tweet";
-		else if (value == "CALL")
-			return "Call";
+		else
+			return ucfirst(value);
+		
 	});
 	
 	// Tip on using Gravar with JS:
