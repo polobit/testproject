@@ -71,7 +71,7 @@ public class AnalyticsUtil
 		+ ","
 		+ SQLUtil.encodeSQLColumnValue(ip)
 		+ ","
-		+ isNew
+		+ SQLUtil.encodeSQLColumnValue(isNew)
 		+ ","
 		+ SQLUtil.encodeSQLColumnValue(ref)
 		+ ","
@@ -114,9 +114,11 @@ public class AnalyticsUtil
 
 	System.out.println("sids query is: " + sessions);
 
-	// Gets all Sessions based on above obtained sids
+	// Gets all Sessions based on above obtained sids and required email
 	String pageViews = "SELECT *, UNIX_TIMESTAMP(stats_time) AS created_time FROM page_views WHERE sid IN "
-		+ sessions;
+		+ sessions
+		+ " AND email = "
+		+ SQLUtil.encodeSQLColumnValue(email);
 
 	System.out.println("Select query: " + pageViews);
 
