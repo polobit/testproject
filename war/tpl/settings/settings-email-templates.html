@@ -10,6 +10,8 @@
 </div>
 <div class="row">
     <div class="span9">
+	<div id="slate"></div>
+	{{#if this.length}}
         <table class="table table-bordered table-striped showCheckboxes" url="core/api/email/templates/bulk">
             <thead>
                 <tr>
@@ -21,6 +23,7 @@
             <tbody id="settings-email-templates-model-list" route="email-template/">
             </tbody>
         </table>
+	{{/if}}
     </div>
     <div class="span3">
         <div class="well">
