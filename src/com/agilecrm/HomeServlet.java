@@ -50,10 +50,8 @@ public class HomeServlet extends HttpServlet
 	}
 	if (isFirstTimerUser != null && DomainUserUtil.count() == 1)
 	{
-	    InitDefaults.getDefaultContacts();
-	    InitDefaults.getDefaultTasks();
-	    InitDefaults.getDefaultEvent();
-	    InitDefaults.getDefaultWorkflow();
+	    // To get Default Samples.
+	    new InitDefaults();
 	}
 	// Save Logged in time
 	try
