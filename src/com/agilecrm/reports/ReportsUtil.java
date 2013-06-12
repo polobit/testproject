@@ -89,6 +89,10 @@ public class ReportsUtil
 	    if (results == null)
 		results = new HashMap<String, Object>();
 
+	    // Set number of results in count variable
+	    results.put("count", results.size());
+
+	    // Send reports email
 	    SendMail.sendMail(report.sendTo, report.name + " - "
 		    + SendMail.REPORTS_SUBJECT,
 		    SendMail.REPORTS, new Object[] { results, fieldsList });
