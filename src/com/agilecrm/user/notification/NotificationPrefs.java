@@ -77,7 +77,7 @@ public class NotificationPrefs
      * Tag created notification - default true.
      */
     @NotSaved(IfDefault.class)
-    public boolean tag_created = true;
+    public boolean tag_added = true;
 
     /**
      * Tag deleted notification - default true.
@@ -89,7 +89,7 @@ public class NotificationPrefs
      * Contact created notification - default true.
      */
     @NotSaved(IfDefault.class)
-    public boolean contact_created = true;
+    public boolean contact_added = true;
 
     /**
      * Contact deleted notification - default true.
@@ -103,7 +103,7 @@ public class NotificationPrefs
      */
     public enum Type
     {
-	IS_BROWSING, OPENED_EMAIL, CLICKED_LINK, DEAL_CREATED, DEAL_CLOSED, TAG_CREATED, TAG_DELETED, CONTACT_CREATED, CONTACT_DELETED
+	IS_BROWSING, OPENED_EMAIL, CLICKED_LINK, DEAL_CREATED, DEAL_CLOSED, TAG_ADDED, TAG_DELETED, CONTACT_ADDED, CONTACT_DELETED
     };
 
     /** Notification type. */
@@ -153,20 +153,20 @@ public class NotificationPrefs
      *            Deal created status.
      * @param deal_closed
      *            Deal deleted status.
-     * @param contact_created
-     *            Contact created status.
+     * @param contact_added
+     *            Contact added status.
      * @param contact_deleted
      *            Contact deleted status.
-     * @param tag_created
-     *            Tag created status.
+     * @param tag_added
+     *            Tag added status.
      * @param tag_deleted
      *            Tag deleted status.
      */
     public NotificationPrefs(Long userId, boolean control_notifications,
 	    ContactType browsing, ContactType email_opened,
 	    ContactType link_clicked, boolean deal_created,
-	    boolean deal_closed, boolean contact_created,
-	    boolean contact_deleted, boolean tag_created, boolean tag_deleted,
+	    boolean deal_closed, boolean contact_added,
+	    boolean contact_deleted, boolean tag_added, boolean tag_deleted,
 	    String notification_sound)
     {
 	this.control_notifications = control_notifications;
@@ -175,9 +175,9 @@ public class NotificationPrefs
 	this.link_clicked = link_clicked;
 	this.deal_created = deal_created;
 	this.deal_closed = deal_closed;
-	this.contact_created = contact_created;
+	this.contact_added = contact_added;
 	this.contact_deleted = contact_deleted;
-	this.tag_created = tag_created;
+	this.tag_added = tag_added;
 	this.tag_deleted = tag_deleted;
 	this.notification_sound = notification_sound;
 

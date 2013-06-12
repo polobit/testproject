@@ -447,8 +447,8 @@ $(function() {
 		// Makes 'CONTACT CREATED' To 'COMPANY CREATED'
 		if (this.type == "COMPANY") {
 			var arr = this.notification.split('_');
-			var temp = arr[0].replace('CONTACT', 'COMPANY') + " " + arr[1];
-			return temp.toLowerCase();
+			var temp = ucfirst(arr[0].replace('CONTACT', 'COMPANY')) + " " + ucfirst(arr[1]);
+			return " - " + temp;
 		}
 		
 		// Replaces '_' with ' '
@@ -464,9 +464,13 @@ $(function() {
 			return str.toLowerCase() + " " + " of campaign " + this.custom_value;
 		}	
 		
-		if(str == 'TAG CREATED' || str == 'TAG DELETED')
+		if(str == "CONTACT ADDED" || str == "CONTACT DELETED")
 		{
-			return str.toLowerCase().split(' ')[0] + " " + "<a href=\"#tags/"+this.custom_value +"\" style=\"color:black;display:inline-block;font-weight:bold\">" + this.custom_value + "</a> "  + " has been " + str.toLowerCase().split(' ')[1];
+			return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1])
+		}
+		if(str == 'TAG ADDED' || str == 'TAG DELETED')
+		{
+			return " - " + "\"" + this.custom_value + "\" "  + str.toLowerCase().split(' ')[0]+ " has been " + str.toLowerCase().split(' ')[1];
 		}
 		
 		return str.toLowerCase();

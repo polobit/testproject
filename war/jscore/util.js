@@ -265,6 +265,7 @@ function addTagAgile(tag) {
 		AGILE_CONTACT = data;
 		if(!checkTagAgile(tag))
 			AGILE_CONTACT.tags.push(tag)	
+			setProfileMeter();
 	});
 }
 

@@ -216,4 +216,36 @@ public class AnalyticsUtil
 
 	return count;
     }
+
+    /**
+     * Returns page-views count if any with respect to domain.
+     * 
+     * @param domain
+     *            - domain name.
+     * @return int
+     */
+    public static int getPageViewsCountForGivenDomain(String domain)
+    {
+	String pageViewsCount = "SELECT COUNT(*) FROM page_views WHERE domain = "
+		+ SQLUtil.encodeSQLColumnValue(domain);
+
+	int count = 0;
+
+	ResultSet rs = GoogleSQL.executeQuery(pageViewsCount);
+
+	try
+	{
+	    if (rs.next())
+	    {
+		// Gets first column
+		count = rs.getInt(1);
+	    }
+	}
+	catch (SQLException e)
+	{
+	    e.printStackTrace();
+	}
+
+	return count;
+    }
 }
