@@ -663,35 +663,28 @@ function remove_loading_img(el){
 				{
 				var addressJSON = {};
 				
-				addressJSON.city = data.toJSON()[0].city;
-				addressJSON.state = data.toJSON()[0].region;
-				addressJSON.country = data.toJSON()[0].country;
+				if(data.toJSON()[0].city != "")
+				{
+				    addressJSON.city = ucfirst(data.toJSON()[0].city);
+				    addressJSON.state = ucfirst(data.toJSON()[0].region);
+				    addressJSON.country = getCode(data.toJSON()[0].country);
 				
-				$.each(data.toJSON(), function(index,model){
-					if(addressJSON.city != model.city || addressJSON.state != model.region || addressJSON.country != model.country)
-						{
-						addressJSON.city = model.city;
-						addressJSON.state = model.region;
-						addressJSON.country = model.country;
-						}
-				});
-				
-				// If contact has no address property push the new one
-				contact.properties.push({
+					// If contact has no address property push the new one
+					contact.properties.push({
 					"name" : "address",
 					"value" : JSON.stringify(addressJSON)
 				                       });
+					
+					// Update contact with the browsing address
+					var contactModel = new Backbone.Model();
+					contactModel.url = 'core/api/contacts';
+					contactModel.save(contact, {
+						success : function(obj) {
+						                        }
+					                  });
+				  }
 				}
-				
-			// Update contact with the browsing address
-			var contactModel = new Backbone.Model();
-			contactModel.url = 'core/api/contacts';
-			contactModel.save(contact, {
-				success : function(obj) {
-
-				                        }
-			                           });
-				
+								
 				// If timeline is not defined yet, calls setup_timeline for the first time
 				if(timelineView.collection.length == 0)
 				{					
