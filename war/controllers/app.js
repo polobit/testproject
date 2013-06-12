@@ -42,5 +42,11 @@ function currentRoute(route) {
 	console.log("in app/js : " + Current_Route);
 	activateInfiniScroll();
 	setProfileMeter();
+	console.log(tour);
+	if(tour)
+		{
+		tour.end();
+		tour = null;
+		}
 	//disposeEvents();
 }

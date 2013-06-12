@@ -156,7 +156,9 @@ var ContactsRouter = Backbone.Router.extend({
             	  /* Show list of filters dropdown in contacts list, If filter is saved in cookie
             	   * then show the filter name on dropdown button
             	   */
-            	  setupContactFilterList(cel);            	  
+            	  setupContactFilterList(cel);    
+            	  startTour("contacts", el);
+
               }             
           });
 
@@ -272,6 +274,7 @@ var ContactsRouter = Backbone.Router.extend({
                 show_map(el);
                 
                 fill_owners(el, contact.toJSON());
+                startTour("contact-details", el);
                }
         });
         

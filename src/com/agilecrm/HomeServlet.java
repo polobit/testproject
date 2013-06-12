@@ -53,6 +53,11 @@ public class HomeServlet extends HttpServlet
 	    // To get Default Samples.
 	    new InitDefaults();
 	}
+	if (isFirstTimerUser != null)
+	{
+	    InitDefaults.setFirstTimerCookie(resp);
+	}
+
 	// Save Logged in time
 	try
 	{

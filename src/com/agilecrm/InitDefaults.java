@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.Task.PriorityType;
@@ -231,6 +237,27 @@ public class InitDefaults
 
 	report.save();
 
+    }
+
+    public static void setFirstTimerCookie(HttpServletResponse response)
+    {
+	JSONObject tourJson = new JSONObject();
+	try
+	{
+	    tourJson.put("contact", true);
+	    tourJson.put("workflow", true);
+	    tourJson.put("calendar", true);
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	System.out.println(tourJson.toString());
+	Cookie tourCookie = new Cookie("agile_tour", tourJson.toString());
+	tourCookie.setPath("/");
+	response.addCookie(tourCookie);
     }
 
 }

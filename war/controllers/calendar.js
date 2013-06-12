@@ -37,6 +37,8 @@ var CalendarRouter = Backbone.Router.extend({
             	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
             		 $(".task-due-time", el).timeago();
               	});
+            	
+                 	startTour("calendar", el);
             }
 		});
 
