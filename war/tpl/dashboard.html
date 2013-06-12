@@ -224,7 +224,11 @@
   <div id="notify-container">
       <div id="notify-1-7497345" style="background-color:#F4A83D;border-bottom:1px solid #D6800C;color: black;font-size:16px !important;font-weight:normal !important;">
        <span class="notify-close"><a title="dismiss this notification" style="text-decoration:none;">x</a></span>
-       <a href={{this.route}} style=" text-decoration: none;"><span class="notify-text">{{{this.message}}}</span></a>
+		{{#if route}}
+       		<a href={{this.route}} style=" text-decoration: none;"><span class="notify-text">{{{this.message}}}</span></a>
+			{{else}}
+			<span class="notify-text">{{{this.message}}}</span>
+		{{/if}}
       </div>
    </div>
 </script>

@@ -10,48 +10,57 @@ var PROFILE_SETTINGS = {
 
 var PROFILE_SETUP_MESSAGES = {};
 
-PROFILE_SETUP_MESSAGES.Email = "Sync your email with Agile";
-PROFILE_SETUP_MESSAGES.User_invited = "Invite new colleagues to Agile"; 
-PROFILE_SETUP_MESSAGES.Share = "Spread the love"; 
+PROFILE_SETUP_MESSAGES.Welcome =  "Welcome to Agile - the next generation CRM. I will be your tour guide.<a href='#' id='noty-welcome-user' style='text-decoration: none;'> Let's get you started."
+PROFILE_SETUP_MESSAGES.Email = "Shake Hands. Let's sync your emails first. It's simple and secure.";
+PROFILE_SETUP_MESSAGES.User_invited = "Emails will show up in the awesome timeline. It's time to invite your colleague"; 
+PROFILE_SETUP_MESSAGES.Share = "Are you liking Agile? Spread the love."; 
 
 // Initial percentage after first time login
 var INITIAL_TOTAL = 65;
 
+var PROFILE_INFO = {
+		"Welcome" : false,
+		"Email" : false,
+		"User_invited" : false,
+		//"Widgets" : false,
+		"total" : INITIAL_TOTAL
+};
+
 // Calculate based on tags added in 'OUR' domain
 function calculateProfile()
 {
-	var profile_info = {
-			"Email" : false,
-			"User_invited" : false,
-			//"Widgets" : false,
-			"total" : INITIAL_TOTAL
-	};
-	
+
 	// Get tags from global contact
 	var tags = AGILE_CONTACT.tags;
 	if(!tags)
-		return profile_info;
+		return PROFILE_INFO;
 	
 	
 	var total = INITIAL_TOTAL;
 	
+	var is_first_time_user = false;
 	$.each(PROFILE_SETTINGS, function(key, value){
 		var temp_key = key.indexOf("_") != -1 ? key.replace("_", " ") : key;
-		console.log(temp_key);
-		console.log(tags);
+
 		if(tags.indexOf(temp_key) != -1)
 		{
-			profile_info[key] = true;
+			PROFILE_INFO[key] = true;
 			total = total + value;
+			is_first_time_user = true;
 			return;
 		}
 		
-		profile_info[key] = false;
+		PROFILE_INFO[key] = false;
 	});
 	
-	profile_info["total"] = total;
+	if(is_first_time_user)
+	{
+		PROFILE_INFO["Welcome"] = is_first_time_user;	
+	}
 	
-	return profile_info
+	PROFILE_INFO["total"] = total;
+	
+	return PROFILE_INFO
 }
 
 function setProfileMeter()
@@ -60,7 +69,6 @@ function setProfileMeter()
 	console.log(profile_stats);
 
   	removeProfileNoty();
-  	
    	$.each(profile_stats, function(key, value){
    		if(value == false)
    		{
@@ -104,6 +112,12 @@ $(function(){
        	 $('body').find('#wrap').find('.navbar-fixed-top').css('margin-top','0px'); 
        	 $('body').find('#wrap').find('#agilecrm-container').css('padding-top','60px');
        });
-      
 	}); 
+	
+	$('#noty-welcome-user').die().live('click', function(e) {
+		e.preventDefault();
+		delete PROFILE_INFO["Welcome"];
+		setProfileMeter();
+		
+	})	
 });
