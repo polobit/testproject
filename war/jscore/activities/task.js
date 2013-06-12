@@ -370,6 +370,86 @@ function append_tasks(base_model) {
 	// this.el).append(itemView.render().el);
 }
 
+
+////dash board tasks based on conditions..
+
+
+
+function append_tasks_dashboard(base_model) {
+	
+
+	var itemView = new Base_List_View({
+		model : base_model,
+		"view" : "inline",
+		template : this.options.templateKey + "-model",
+		tagName : 'tr',
+	
+	});
+     
+	// add to the right box - overdue, today, tomorrow etc.
+	
+	
+	var due = get_due(base_model.get('due'));
+	//console.log(base_model.toJSON());
+	//console.log("dueeeeeeeeeeeeeeeeeee="+due);
+	var pendingTask=base_model.get("is_complete");
+	//console.log("Is Complete="+pendingTask);
+	//console.log("subject="+base_model.get('subject'));
+	
+	
+	if(pendingTask == false){
+	//  if(totalRows <= 7){
+		 
+		if (due < 0) {
+			
+			
+			$('#overdue', this.el).append(itemView.render().el);
+		    $('#overdue', this.el).find('tr:last').data(base_model);
+		    $('#overdue', this.el).parent('table').show();
+		    $('#overdue-heading', this.el).show();
+		    $('#overdue', this.el).show();
+		    $('#label_color').addClass("label-important");
+		}
+		// Today tasks
+		if (due == 0) {
+		   $('#today', this.el).append(itemView.render().el);
+           $('#today', this.el).find('tr:last').data(base_model);
+           $('#today', this.el).parent('table').show();
+           $('#today', this.el).show();
+           $('#today-heading', this.el).show();
+           $('#label_color').addClass("label-warning");
+         }
+		// Tomorrow
+	    if (due == 1 ) {
+		$('#tomorrow', this.el).append(itemView.render().el);
+		$('#tomorrow', this.el).find('tr:last').data(base_model);
+		$('#tomorrow', this.el).parent('table').show();
+		$('#tomorrow', this.el).show();
+		$('#tomorrow-heading', this.el).show();
+		$('#label_color').addClass("label-info");
+		}
+	  // Next Week
+	    console.log("next week subject="+base_model.get('subject'));
+	    
+	  if (due > 1 && (due < 7-(new Date().getDay()))) {
+		 // alert("next week="+(due > 1));
+		$('#next-week', this.el).append(itemView.render().el);
+		$('#next-week', this.el).find('tr:last').data(base_model);
+		$('#next-week', this.el).parent('table').show();
+		$('#next-week', this.el).show();
+		$('#next-week-heading', this.el).show();
+		$('#label_color').addClass("label-inverse");
+	}
+	   
+     //alert("total rows="+totalRows+" =due"+(due > 1)+" --due"+(7-(new Date().getDay())));
+	
+	 // totalRows++;
+	  //}
+	}
+	
+	
+}
+
 /**
  * 
  * Turns the pending task as completed
