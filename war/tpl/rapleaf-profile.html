@@ -66,7 +66,7 @@
 		<li >		
 		<div class="row-fluid">
 			<div class="span5">
-				<div class="pull-right">:</div> Household income
+				<div class="pull-right">:</div> Household Income
 			</div>
 			<div class="span6" style="margin-left: 10px;">
 				{{household_income}}
@@ -78,7 +78,7 @@
 		<li >		
 		<div class="row-fluid">
 			<div class="span5">
-				<div class="pull-right">:</div> Home owner status
+				<div class="pull-right">:</div> Home Owner Status
 			</div>
 			<div class="span6" style="margin-left: 10px;text-align:bottom;">
 				{{home_owner_status}}
@@ -107,3 +107,18 @@
 	{{/if_equals}}
 </ul>
 </script>
+
+<script id="rapleaf-login-template" type="text/html">
+	<div display:inline;  line-height:12px;word-wrap: break-word;">
+		<form class="widget_content" style="border-bottom:none;" id="rapleaf_login_form" name="rapleaf_login_form" method="post">
+	    	<fieldset>
+				<p >Rapleaf helps you learn more about your customers, provides data (age, gender, marital status, income, etc., ) on US consumer email addresses.To access, </p>
+				<p>
+				<label>Enter Your API key</label>
+				<div class="control-group" style="margin-bottom:0px;"><div class="controls"><input type="text" id="rapleaf_api_key" class="input-medium required" placeholder="API Key" value=""></input></div></div>
+				</p>
+				<button id="save_api_key" class="btn" ><a href="#" style="text-decoration:none;">Save</a></button><br/>
+				<p style="line-height: 25px;padding:5px;">Don't have an API key? <a href="https://www.rapleaf.com/developers/api_access" target="_blank"> SignUp </a></p></div>
+</script>
+
+

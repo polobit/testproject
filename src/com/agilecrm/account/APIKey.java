@@ -168,8 +168,14 @@ public class APIKey
      */
     public static AgileUser getAgileUserRelatedToAPIKey(String apiKey)
     {
-	Key<DomainUser> domainUserKey = dao.ofy().query(APIKey.class)
-		.filter("api_key", apiKey).get().owner;
+	APIKey key = dao.ofy().query(APIKey.class).filter("api_key", apiKey)
+		.get();
+
+	if (key == null)
+	    return null;
+
+	Key<DomainUser> domainUserKey = key.owner;
+
 	return AgileUser.getCurrentAgileUserFromDomainUser(domainUserKey
 		.getId());
     }

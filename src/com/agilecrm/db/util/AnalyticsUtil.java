@@ -2,11 +2,16 @@ package com.agilecrm.db.util;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
 
+import com.agilecrm.db.Analytics;
 import com.agilecrm.db.GoogleSQL;
 import com.campaignio.tasklets.agile.URLVisited;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>AnalyticsUtil</code> is the base class for handling SQL queries to
@@ -19,8 +24,7 @@ import com.campaignio.tasklets.agile.URLVisited;
 public class AnalyticsUtil
 {
     /**
-     * Inserts values into page_views table. Guid is unique, so update when
-     * duplicate guid is given.
+     * Inserts values into page_views table.
      * 
      * @param domain
      *            - current namespace.
@@ -40,15 +44,19 @@ public class AnalyticsUtil
      *            -reference.
      * @param userAgent
      *            - userAgent header.
-     * @param appHeader
-     *            - appengine header values.
-     * @param created_time
-     *            - requested time.
+     * @param country
+     *            - appengine header country value.
+     * @param region
+     *            - appengine header region (or state) value
+     * @param city
+     *            - appengine header city value.
+     * @param cityLatLong
+     *            - appengine header city latitudes and longitudes.
      */
     public static void addToPageViews(String domain, String guid, String email,
 	    String sid, String url, String ip, String isNew, String ref,
 	    String userAgent, String country, String region, String city,
-	    String cityLatLong, long created_time)
+	    String cityLatLong)
     {
 	String insertToPageViews = "INSERT INTO page_views (domain,guid,email,sid,url,ip,is_new,ref,user_agent,country,region,city,city_lat_long,stats_time) VALUES("
 		+ SQLUtil.encodeSQLColumnValue(domain)
@@ -75,10 +83,7 @@ public class AnalyticsUtil
 		+ ","
 		+ SQLUtil.encodeSQLColumnValue(city)
 		+ ","
-		+ SQLUtil.encodeSQLColumnValue(cityLatLong)
-		+ ", NOW()"
-		+ ") ON DUPLICATE KEY UPDATE email = "
-		+ SQLUtil.encodeSQLColumnValue(email) + "";
+		+ SQLUtil.encodeSQLColumnValue(cityLatLong) + ", NOW()" + ")";
 
 	System.out.println("Insert Query to PageViews: " + insertToPageViews);
 
@@ -93,42 +98,54 @@ public class AnalyticsUtil
     }
 
     /**
-     * Gets all sessions from table having guids equal with given email
+     * Gets all sessions from table having sids equal with given email
      * 
      * @param email
      *            - email-id
      */
-    public static String getPageViews(String email, String domain)
+    public static List<Analytics> getPageViews(String email)
     {
-	// Gets Guids (clients) based on Email from database
-	String guids = "(SELECT guid FROM page_views WHERE email ="
+	String domain = NamespaceManager.get();
+
+	// Gets sessions based on Email from database
+	String sessions = "(SELECT sid FROM page_views WHERE email ="
 		+ SQLUtil.encodeSQLColumnValue(email) + " AND domain = "
 		+ SQLUtil.encodeSQLColumnValue(domain) + ")";
 
-	System.out.println("guids query is: " + guids);
+	System.out.println("sids query is: " + sessions);
 
-	// Gets all Sessions based on above obtained guids
-	String pageViews = "SELECT *, UNIX_TIMESTAMP(stats_time) AS created_time FROM page_views WHERE guid IN "
-		+ guids;
+	// Gets all Sessions based on above obtained sids
+	String pageViews = "SELECT *, UNIX_TIMESTAMP(stats_time) AS created_time FROM page_views WHERE sid IN "
+		+ sessions;
 
 	System.out.println("Select query: " + pageViews);
 
-	JSONArray arr = new JSONArray();
+	JSONArray stats = null;
 	try
 	{
-	    arr = GoogleSQL.getJSONQuery(pageViews);
+	    stats = GoogleSQL.getJSONQuery(pageViews);
+	}
+	catch (Exception e1)
+	{
+	    e1.printStackTrace();
+	}
 
-	    if (arr == null)
-		return "";
+	if (stats == null)
+	    return null;
 
-	    System.out.println("Sessions based on guids and email: " + arr);
+	try
+	{
+	    // to attach parsed user-agent string
+	    return new ObjectMapper().readValue(stats.toString(),
+		    new TypeReference<List<Analytics>>()
+		    {
+		    });
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
 	    return null;
 	}
-	return arr.toString();
     }
 
     /**
@@ -183,6 +200,38 @@ public class AnalyticsUtil
 	int count = 0;
 
 	ResultSet rs = GoogleSQL.executeQuery(urlCountQuery);
+
+	try
+	{
+	    if (rs.next())
+	    {
+		// Gets first column
+		count = rs.getInt(1);
+	    }
+	}
+	catch (SQLException e)
+	{
+	    e.printStackTrace();
+	}
+
+	return count;
+    }
+
+    /**
+     * Returns page-views count if any with respect to domain.
+     * 
+     * @param domain
+     *            - domain name.
+     * @return int
+     */
+    public static int getPageViewsCountForGivenDomain(String domain)
+    {
+	String pageViewsCount = "SELECT COUNT(*) FROM page_views WHERE domain = "
+		+ SQLUtil.encodeSQLColumnValue(domain);
+
+	int count = 0;
+
+	ResultSet rs = GoogleSQL.executeQuery(pageViewsCount);
 
 	try
 	{

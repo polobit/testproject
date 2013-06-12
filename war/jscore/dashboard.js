@@ -14,10 +14,20 @@ function setupDashboard(el)
 	setupSubscriptionDetails(el);
 	/*setupDashboardTimeline();
 	setUpDashboardNavtabs(el);*/
+	setProfileMeter();
 	setUpDashboardEntities(el);
 }
 
 function setUpDashboardEntities(el) {
+	
+	/*var profileMeter = new Base_Model_View({
+		url : 'core/api/profile-status',		
+        template: "profile-meter"
+	})
+	
+	$("#profile-meter").html(profileMeter.render().el);
+	*/
+	
 	
 	var myRecentContacts = new Base_Collection_View({
 		url: 'core/api/contacts/recent?page_size=5' ,

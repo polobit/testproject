@@ -31,13 +31,21 @@
             </div>
         {{/if_entity}}
 
-        {{#if_entity "contact"}}
+        {{#if_entity "contact_entity"}}
             <div class="timestamp">{{created_time}}</div>
-            <div class="title"><h3><span><a class="no-line"><i class="icon-tasks"></i></a></span> Created on</h3></div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-tasks"></i></a></span> Created</h3></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
-            <div class="body">
-                <div class="caption" style="margin-top:-8px"><i class="{{icons type}}"></i> ({{type}})</div>         
-                <div class="text" style="color: #333333">{{epochToHumanDate "mmm dd, yyyy hh:mm tt" created_time}}</div>
+            <div class="body" style="padding:5px">
+                <div class="text" style="color: #333333" >{{epochToHumanDate "mmmm dd, yyyy 'at' hh:mm tt" created_time}}</div>
+            </div>
+        {{/if_entity}}
+	
+	  {{#if_entity "tag"}}
+            <div class="timestamp">{{createdTime}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-tag"></i></a></span> Tag Added - {{tag}}</h3></div>
+            <div class="date">{{epochToHumanDate "mmmm d" createdTime}}</div>
+            <div class="body" style="padding:5px">
+                <div class="text" style="color: #333333" >{{epochToHumanDate "mmmm dd, yyyy 'at' hh:mm tt" createdTime}}</div>
             </div>
         {{/if_entity}}
 
@@ -51,7 +59,7 @@
             </div>
         {{/if_entity}}
 
-        {{#if_entity "campaign_id"}}
+        {{#if_entity "log"}}
             <div class="timestamp">{{time}}</div>
             <div class="title"><h3><span><a class="no-line"><i class="icon-inbox"></i></a></span> {{titleFromEnums log_type}}</h3></div>
             <div class="date">{{epochToTaskDate time}}</div>
@@ -88,7 +96,23 @@
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                 <div class="text" style="color: #333333"><b>URL:</b></br> {{url}}</div>
-                <div class="text" style="color: #333333"><b>ADDRESS:</b></br> {{ucfirst city}}, {{region}}, {{country}}</div>
+                {{#if_equals ref "null"}}
+                 <div></div> 
+                 {{else}} 
+                     <div class="text" style="color: #333333"><b>Referred URL:</b></br> {{ref}}</div>
+                {{/if_equals}}
+
+                {{#if_equals user_agent "null"}}
+                 <div></div>
+                 {{else}}
+                    {{#stringToJSON this "parsedUserAgent"}}{{/stringToJSON}}
+                    <div class="text" style="color: #333333"><b>Browser & OS:</b></br>{{parsedUserAgent.browser_name}}, {{titleFromEnums parsedUserAgent.os}}</div>
+                {{/if_equals}}
+                {{#if_equals city "null"}}
+                   <div></div>
+                {{else}}
+                   <div class="text" style="color: #333333"><b>ADDRESS:</b></br> {{ucfirst city}}, {{ucfirst region}}, {{getCountryName country}}</div>
+                {{/if_equals}}
             </div>
      {{/if_entity}}
   </div>

@@ -23,6 +23,18 @@ $(function ()
     // to fetch details
     var plugin_prefs = agile_crm_get_plugin_prefs(ZENDESK_PLUGIN_NAME);
 
+    
+    $('#Zendesk_plugin_delete').die().live('click', function (e) {
+    	
+    	e.preventDefault();
+    	
+    	agile_crm_save_widget_prefs(ZENDESK_PLUGIN_NAME,
+		        undefined , function (data)
+        {
+    		setupZendeskOAuth(plugin_id);
+        });
+    });
+ 
     // Stores email of the contact as global variable
     Email = agile_crm_get_contact_property('email');
     
@@ -53,6 +65,16 @@ $(function ()
         
     });
 
+    $('.zendesk_ticket_hover').live('mouseenter', function (e)
+    {
+        $(this).find('.zendesk_tab_link').show();
+    });
+
+    $('.zendesk_ticket_hover').live('mouseleave', function (e)
+    {
+        $('.zendesk_tab_link').hide();
+    });
+    
 });
 
 /**
@@ -74,9 +96,7 @@ function setupZendeskOAuth(plugin_id)
     $('#save_prefs').die().live('click', function (e)
     {
         e.preventDefault();
-        console.log($(this).length);
-        console.log($(this).parents("form#zendesk_login_form").length);
-        console.log($("#zendesk_login_form", $('#Zendesk')).length);
+       
         // Checks whether all input fields are given
         if (!isValidForm($("#zendesk_login_form")))
         {
@@ -287,11 +307,11 @@ function showZendeskProfile(plugin_id, email)
 
 	var all_tickets;
 	
-	queueGetRequest("widget_queue", "/core/api/widgets/zendesk/profile/" + plugin_id + "/" + email, 'json',		
+	queueGetRequest("widget_queue", "/core/api/widgets/zendesk/profile/" + plugin_id + "/" + email, "json",	
 	function success(data)
 	{
-		 $('#Zendesk').html(getTemplate('zendesk-profile', data));
-
+		 $('#Zendesk').html(getTemplate('zendesk-profile', data)); 
+		 
 		 var first_five;
 		 try
 		 {

@@ -101,39 +101,39 @@ public class HTTPUtil
 	URL url;
 	HttpURLConnection conn = null;
 
-	try
+	// try
+	// {
+	// Send data
+	url = new URL(postURL);
+	conn = (HttpURLConnection) url.openConnection();
+	conn.setDoOutput(true);
+	// conn.setRequestProperty("Content-Type", "application/json");
+	conn.setRequestMethod(methodType.toUpperCase());
+	OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+	wr.write(data);
+	wr.flush();
+
+	// Get the response
+	BufferedReader reader = new BufferedReader(new InputStreamReader(
+		conn.getInputStream()));
+	String output = "";
+	String inputLine;
+	while ((inputLine = reader.readLine()) != null)
 	{
-	    // Send data
-	    url = new URL(postURL);
-	    conn = (HttpURLConnection) url.openConnection();
-	    conn.setDoOutput(true);
-	    // conn.setRequestProperty("Content-Type", "application/json");
-	    conn.setRequestMethod(methodType.toUpperCase());
-	    OutputStreamWriter wr = new OutputStreamWriter(
-		    conn.getOutputStream());
-	    wr.write(data);
-	    wr.flush();
-
-	    // Get the response
-	    BufferedReader reader = new BufferedReader(new InputStreamReader(
-		    conn.getInputStream()));
-	    String output = "";
-	    String inputLine;
-	    while ((inputLine = reader.readLine()) != null)
-	    {
-		output += inputLine;
-	    }
-
-	    wr.close();
-	    reader.close();
-
-	    return output;
+	    output += inputLine;
 	}
-	catch (Exception e)
-	{
-	    System.out.println(e.getMessage());
-	    throw new Exception(conn.getResponseMessage());
-	}
+
+	wr.close();
+	reader.close();
+
+	return output;
+	// }
+	// catch (Exception e)
+	// {
+	// System.out.println(e.getMessage());
+	// System.out.println(conn.getResponseCode());
+	// throw new Exception(conn.getResponseMessage());
+	// }
     }
 
 }

@@ -200,7 +200,17 @@ var SettingsRouter = Backbone.Router.extend({
 			reload : true,
 			postRenderCallback:function(el)
 			{
-				checkBrowserNotifications(el);
+				head.js(LIB_PATH+'lib/bootstrapSwitch.js',function(){							
+					showSwitchChanges(el);
+					checkBrowserNotifications(el);					
+				});	
+				try
+				{
+				$('#notification-switch',el).bootstrapSwitch();}
+				catch(err)
+				{
+					console.log(err);
+				}
 			}
 		});
 

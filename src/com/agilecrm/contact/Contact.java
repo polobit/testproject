@@ -173,7 +173,7 @@ public class Contact extends Cursor
     private DomainUser Owner = null;
 
     @NotSaved
-    public String entity_type = "contact";
+    public String entity_type = "contact_entity";
 
     /**
      * Stores the property names in final variables, for reading flexibility of
@@ -585,7 +585,9 @@ public class Contact extends Cursor
 
 	for (Tag tag : tagsWithTime)
 	{
-	    if (tag.createdTime == 0L)
+	    // Check if it is null, it can be null tag is created using
+	    // developers api
+	    if (tag.createdTime == null || tag.createdTime == 0L)
 		tag.createdTime = System.currentTimeMillis();
 	}
 

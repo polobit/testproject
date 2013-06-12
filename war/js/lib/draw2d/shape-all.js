@@ -668,7 +668,7 @@ shape.uml.Class.prototype.remove = function () {
         //do nothing
     } else {
         //Sends the command to remove figure from workflow
-        if (confirm("Do you really want to delete this phone component?")) {
+        if (confirm("Delete this item?")) {
             workflow.commandStack.execute(new CommandDelete(this));
         }
     }

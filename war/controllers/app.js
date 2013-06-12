@@ -5,7 +5,7 @@
 
 // All Routers are global
 var App_Contacts, App_Workflows, App_Deals, App_Admin_Settings, App_Calendar, App_Settings, App_Reports;
-
+var Collection_View = {};
 $(function() {
 	App_Contacts = new ContactsRouter();
 	App_Workflows = new WorkflowsRouter();
@@ -19,6 +19,8 @@ $(function() {
 	// Binds an event to activate infinite page scrolling
 	Backbone.history.bind("all", currentRoute)
 
+//	Backbone.history.bind("change", routeChange)
+	
 	/*
 	 * Start Backbone history a necessary step to begin monitoring hashchange
 	 * events, and dispatching routes
@@ -39,4 +41,6 @@ function currentRoute(route) {
 	Current_Route = window.location.hash.split("#")[1];
 	console.log("in app/js : " + Current_Route);
 	activateInfiniScroll();
+	setProfileMeter();
+	//disposeEvents();
 }

@@ -24,6 +24,15 @@ $(function() {
 		return getPropertyValueBytype(items, name, type, subtype);
 	});
 	
+	Handlebars.registerHelper('getContactCustomProperties', function(items, options) {
+		var fields = getContactCustomProperties(items);
+		if(fields.length == 0)
+			return options.inverse(fields);
+		
+		return options.fn(fields);
+		
+	});
+	
 
 	Handlebars.registerHelper('urlEncode', function(url, key, data) {
 
@@ -61,7 +70,7 @@ $(function() {
 			return agent_image;
 
 		// Default image
-		var img = "https://d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png";
+		var img = DEFAULT_GRAVATAR_url;
 
 		var email = getPropertyValue(items, "email");
 		if (email) {
@@ -76,7 +85,7 @@ $(function() {
 
 	Handlebars.registerHelper('defaultGravatarurl', function(width) {
 		// Default image
-		var img = "https://d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png";
+		var img = DEFAULT_GRAVATAR_url;
 
 		return 'https://secure.gravatar.com/avatar/' + MD5("") + '.jpg?s='
 				+ width + "&d=" + escape(img);
@@ -84,7 +93,7 @@ $(function() {
 
 	Handlebars.registerHelper('emailGravatarurl', function(width, email) {
 		// Default image
-		var img = "https://d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png";
+		var img = DEFAULT_GRAVATAR_url;
 
 		if (email) {
 			return 'https://secure.gravatar.com/avatar/' + MD5(email)
@@ -171,20 +180,12 @@ $(function() {
 	 * @returns converted string
 	 */
 	Handlebars.registerHelper('task_property', function(value) {
-		if (value == "EMAIL")
-			return "Email";
-		else if (value == "MEETING")
-			return "Meeting";
-		else if (value == "SEND")
-			return "Send";
-		else if (value == "MILESTONE")
-			return "Milestone";
-		else if (value == "FOLLOW_UP")
+
+		if (value == "FOLLOW_UP")
 			return "Follow Up";
-		else if (value == "TWEET")
-			return "Tweet";
-		else if (value == "CALL")
-			return "Call";
+		else
+			return ucfirst(value);
+		
 	});
 	
 	// Tip on using Gravar with JS:
@@ -407,7 +408,7 @@ $(function() {
 		if (this.entity_type == item) {
 			return options.fn(this);
 		}
-		if (this[item] != undefined) {
+		if (!this.entity && this[item] != undefined) {
 			if (this.date_secs) {
 
 				// For emails convert milliseconds into seconds
@@ -446,12 +447,32 @@ $(function() {
 		// Makes 'CONTACT CREATED' To 'COMPANY CREATED'
 		if (this.type == "COMPANY") {
 			var arr = this.notification.split('_');
-			var temp = arr[0].replace('CONTACT', 'COMPANY') + " " + arr[1];
-			return temp.toLowerCase();
+			var temp = ucfirst(arr[0].replace('CONTACT', 'COMPANY')) + " " + ucfirst(arr[1]);
+			return " - " + temp;
 		}
-
+		
 		// Replaces '_' with ' '
 		var str = this.notification.replace(/_/g, ' ');
+		
+		if(str == "IS BROWSING")
+		{
+			return str.toLowerCase() + " " + this.custom_value;
+		}
+		
+		if(str == "CLICKED LINK"  || str == "OPENED EMAIL")
+		{
+			return str.toLowerCase() + " " + " of campaign " + this.custom_value;
+		}	
+		
+		if(str == "CONTACT ADDED" || str == "CONTACT DELETED" || str == "DEAL CREATED" || str == "DEAL CLOSED")
+		{			
+			return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1])
+		}
+		if(str == 'TAG ADDED' || str == 'TAG DELETED')
+		{
+			return " - " + "\"" + this.custom_value + "\" "  + str.toLowerCase().split(' ')[0]+ " has been " + str.toLowerCase().split(' ')[1];
+		}
+		
 		return str.toLowerCase();
 
 		// return temp.charAt(0).toUpperCase() + temp.slice(1);
@@ -463,6 +484,10 @@ $(function() {
 	 */
 	Handlebars.registerHelper('epochToLogDate', function(logTime) {
 		return new Date(logTime * 1000);
+	});
+	
+	Handlebars.registerHelper('getCountryName', function(countrycode){
+		return getCode(countrycode);
 	});
 
 	/**
@@ -506,6 +531,7 @@ $(function() {
 
 		if(getPropertyValue(properties, name))
 			return options.fn(this);
+		return options.inverse(this);
 	});
 	
 	Handlebars.registerHelper('property_subtype_is_exists', function(name, subtype, properties, options) {
@@ -538,13 +564,13 @@ $(function() {
 		for ( var i = 0, l = properties.length; i < l; i++) {
 
 			if (properties[i].name == "address") {
-				var el = '<div style="display: inline-block; vertical-align: top;text-align:right;style="color:gray"" class="span3"><span><strong style="color:gray">Address</strong></span></div>';
+				var el = '<div style="display: inline-block; vertical-align: top;text-align:right;" class="span3"><span><strong style="color:gray">Address</strong></span></div>';
 				var address = JSON.parse(properties[i].value);
 				
 				// Gets properties (keys) count of given json object
 				var count = countJsonProperties(address);
 
-				el =  el.concat('<div style="display:inline;border-top:2px solid whitesmoke;margin-top:-3px;" class="span9"><span>');
+				el =  el.concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span9"><div style="border-top: 1px solid #f5f5f5;margin-top:-5px;padding-top:3px;"><span>');
 				
 				$.each(address, function(key, val) {
 					if (--count == 0) {
@@ -556,7 +582,7 @@ $(function() {
 
 				if (properties[i].subtype)
 					el = el.concat(" (" + properties[i].subtype + ")");
-				el = el.concat('</span></div>');
+				el = el.concat('</span></div></div>');
 				return new Handlebars.SafeString(el);
 			}
 		}
@@ -571,25 +597,17 @@ $(function() {
 				var count = properties.length;
 				$.each(properties, function(key, value) {
 					
-					if (value == "properties_first_name")
-						value = "First Name";
-					else if (value == "properties_last_name")
-						value = "Last Name";
-					else if (value == "properties_email")
-						value = "Email";
-					else if (value == "properties_image")
-						value = "Image";
-					else if (value == "properties_title")
-						value = "Title";
-					else if (value == "properties_company")
-						value = "Company";
+					if (value.indexOf("properties_") != -1)
+						value = value.split("properties_")[1];
+					else if (value.indexOf("custom_") != -1)
+						value = value.split("custom_")[1];
 					else if (value == "created_time")
 						value = "Created Date";
 					else if (value == "updated_time")
 						value = "Updated Date";
-					else if (value == "tags")
-						value = "Tags";
 					
+					value = value.replace("_", " ");
+
 					if (--count == 0) {
 						el = el.concat(value);
 						return;
@@ -977,7 +995,7 @@ $(function() {
 		
 	});
 	
-	Handlebars.registerHelper("each_with_index", function(array, fn) {
+	Handlebars.registerHelper("each_with_index", function(array, options) {
 		 var buffer = "";
 		 for (var i = 0, j = array.length; i < j; i++) {
 		  var item = array[i];
@@ -986,12 +1004,40 @@ $(function() {
 		  item.index = i+1;
 		 
 		  // show the inside of the block
-		  buffer += fn(item);
+		  buffer += options.fn(item);
 		 }
 		 
 		 // return the finished buffer
 		 return buffer;
 		 
 		});
+	
+	Handlebars.registerHelper('if_json', function(context, options) {
+		
+		try
+		{
+			 var json = $.parseJSON(context);
+			
+			if(typeof json === 'object')
+				return options.fn(this);
+			return options.inverse(this);
+		}
+		catch(err)
+		{
+			return options.inverse(this);
+		}
+	});
+	
+		
+	Handlebars.registerHelper('getTwitterURLBySubtype', function(items, name, subtype) {
+		
+		
+		return getPropertyValueBySubtype(items, name, subtype).value();
+	});
+	
+	
+	Handlebars.registerHelper('add_tag', function(tag) {
+		addTagAgile(tag);
+	});
 	
 });

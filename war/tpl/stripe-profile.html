@@ -1,19 +1,18 @@
 <script id="stripe-profile-template" type="text/html">
 <div class="widget_content">
 	{{#if customer.activeCard.name}}
-		<h4 style="text-transform: capitalize;"><b>{{customer.activeCard.name}}</b></h4>
+		<a href="https://manage.stripe.com/customers/{{customer.id}}" target="_blank"><h4 style="text-transform: capitalize;"><b>{{customer.activeCard.name}}</b></h4></a>
+		{{#if customer.activeCard.addressCountry}}
+			<p style="font-size: 13px;margin-bottom:0px;">
+				{{#if customer.activeCard.addressCountry}} 
+					{{customer.activeCard.addressState}}, 
+				{{/if}}
+				{{customer.activeCard.addressCountry}}
+			</p>
+		{{/if}}
+	{{else}}
+		<a href="https://manage.stripe.com/customers/{{customer.id}}" target="_blank">{{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}</a>
 	{{/if}}
-	{{#if customer.activeCard.addressState}}
-		<p style="font-size: 13px;">
-			{{customer.activeCard.addressState}}
-			{{#if customer.activeCard.addressCountry}} 
-				, {{customer.activeCard.addressCountry}}
-			{{/if}}
-		</p>
-	{{/if}}
-	<div style="margin-bottom: 10px;">
-		<b>Id:</b> {{customer.id}}
-	</div>
 </div>
 <div class="sub_header">
 	<h4>Subscription Details</h4>
@@ -24,21 +23,20 @@
 			<div class="span5">Start Date
 				<div class="pull-right">:</div>
 			</div>
-							
 			<div class="span6" style="margin-left: 10px;">
-				{{epochToHumanDate "dd-mmm-yyyy" customer.subscription.start}}
+				<time class="time-ago" datetime="{{epochToHumanDate "" customer.subscription.start}}">{{epochToHumanDate "" customer.subscription.start}}</time>
 			</div>
 		</li>
+		{{#if customer.subscription.currentPeriodEnd}}
 		<li class="row-fluid">	
 			<div class="span5">End Date
 				<div class="pull-right">:</div>
 			</div>
-							
 			<div class="span6" style="margin-left: 10px;">
-				{{epochToHumanDate "dd-mmm-yyyy" customer.subscription.currentPeriodEnd}}
+				<time class="time-ago" datetime="{{epochToHumanDate "" customer.subscription.currentPeriodEnd}}">{{epochToHumanDate "" customer.subscription.currentPeriodEnd}}</time>
 			</div>
 		</li>
-
+		{{/if}}
 		<li class="row-fluid">	
 			<div class="span5">Current Plan
 				<div class="pull-right">:</div>
@@ -74,14 +72,33 @@
 </ul>
 
 <div class="sub_header">
-		<h4>Subscription History</h4>
+		<h4>Invoices</h4>
 </div>
 <ul style="margin:0px;">
 {{#if invoice.length}}
 	{{#each invoice}}
-		<li class="sub_header_li row-fluid">
-			<div class="span3">{{lines.data.0.plan.name}} <small>plan</small></div>
-			<div class="span9">{{epochToHumanDate "dd-mmm-yyyy" periodStart}} to {{epochToHumanDate "dd-mmm-yyyy" periodEnd}}</div>
+		<li class="row-fluid sub_header_li">
+					<a class="pull-left" data-toggle="collapse" href="#collapse-{{id}}" >{{#if_equals paid true}}Paid{{else}}Pending{{/if_equals}}</a>
+					<div class="pull-right">$ {{numeric_operation total 100 "/"}}</div><br>
+					<div id="collapse-{{id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
+							{{#each lines.data}}	
+								{{#if_equals type "invoiceitem"}}
+									<div class="pull-left">{{description}}</div>					
+									<div class="pull-right">$ {{numeric_operation amount 100 "/"}}</div><br>
+								{{/if_equals}}
+								{{#if_equals type "subscription"}}
+									<div class="pull-left">{{plan.name}}</div>					
+									<div class="pull-right">$ {{numeric_operation plan.amount 100 "/"}}</div><br>
+									<div class="pull-left">Quantity</div>					
+									<div class="pull-right">{{quantity}}</div><br>
+									<div style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%"><small>
+											{{epochToHumanDate "dd-mmm-yy" period.start}}&nbspto 
+											{{epochToHumanDate "dd-mmm-yy" period.end}}
+									</small></div>
+								{{/if_equals}}	         
+							{{/each}}
+					</div>
+					<small><time class="time-ago pull-left" datetime="{{epochToHumanDate "" date}}">{{epochToHumanDate "" date}}</time></small>
 		</li>
 	{{/each}}
 {{else}}
@@ -90,4 +107,22 @@
 	</li>
 {{/if}}
 </ul>
+</script>
+
+<script id="stripe-custom-field-template" type="text/html">
+<div class="widget_content">
+{{#if_equals this.length "0"}}
+	<p>Stripe id for each contact is stored in a text custom field. You have no custom fields defined. Please <a href="#custom-fields">create one</a>.</p>
+{{else}}
+	<p>Stripe id for each contact is stored in a text custom field. Select the custom field to be used.</p>
+	<select name="stripe_field" id="stripe_custom_field_name" class="required span10" style="width:100%" >
+		{{#each this}}
+			<option value="{{field_label}}">{{field_label}} 
+			</option>
+		{{/each}}
+	</select>
+	<p>Or, you can <a href="#custom-fields">create </a> a new text custom field.</p>
+	<button  class="btn"><a href="#" id="save_stripe_name" style="text-decoration:none;">Save</a></button>
+{{/if_equals}}
+</div>
 </script>

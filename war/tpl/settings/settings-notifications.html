@@ -5,15 +5,17 @@
             <form id="notificationsForm" name="notificationsForm" class="form-horizontal">
                 <fieldset>
                     <legend>Notifications</legend>
-                    <label class="checkbox right" style="margin-top: -52px;float: left;margin-left: 160px;">
-                        <input type="checkbox" id="control_notifications" class="left" style="" name="control_notifications" value="true" checked="checked"> 
-                        Enable/Disable all
-                    </label>
+                    <div class="right" style="margin-top:-60px;float:left;margin-left: 158px;">
+                        <div class="switch switch-small" id="notification-switch">
+                            <input type="checkbox" id="control_notifications" class="left" style="" name="control_notifications" value="true" checked="checked">
+                        </div>
+                    </div>
                     {{#if control_notifications}}
                     <span id="desktop-notification-content" class="right" style="margin-top:-52px"></span>
                     <a href="#notification-prefs" class="btn right" id="set-desktop-notification" style="margin-top:-62px;"><i class="icon-bullhorn"></i> Set Desktop Notifications</a>
                     {{/if}}
                     <input name="id" type="hidden" value="{{id}}" /> 
+
                   {{#if control_notifications}}
                     <div class="control-group">
                         <label class="control-label"><b>Browsing:</b></label>
@@ -24,8 +26,7 @@
                                 <option value="CONTACT_ASSIGNED_AND_STARRED">Contact assigned to me & starred</option>
                             </select>
                         </div>
-                        <span style="margin-left:160px;"><i class="icon-lightbulb"></i></span>
-                        <small style="padding-top: -6px;">Get notified when a contact is browsing your website.</small>
+                        <p class="help-block" style="margin-left:160px; margin-top:8px">Get notified when a contact is browsing your website.</p>
                     </div>
                     <legend></legend>
                     <p></p>
@@ -38,8 +39,7 @@
                                 <option value="CONTACT_ASSIGNED_AND_STARRED">Contact assigned to me & starred</option>
                             </select>
                         </div>
-                        <span style="margin-left:160px;"><i class="icon-lightbulb"></i></span>
-<small style="padding-top: -6px;">Get notified when a contact opens the email sent (via a campaign)</small>
+                        <p class="help-block" style="margin-left:160px; margin-top:8px">Get notified when a contact opens the email sent (via a campaign)</p>
                     </div>
                     <legend></legend>
                     <p></p>
@@ -52,8 +52,7 @@
                                 <option value="CONTACT_ASSIGNED_AND_STARRED">Contact assigned to me & starred</option>
                             </select>
                         </div>
-                        <span style="margin-left:160px;"><i class="icon-lightbulb"></i></span>
-                        <small style="padding-top: -6px;">Get notified when a contact clicks a link in email.</small>
+                        <p class="help-block" style="margin-left:160px; margin-top:8px">Get notified when a contact clicks a link in email.</p>
                     </div>
                     <legend></legend>
                     <p></p>
@@ -76,7 +75,7 @@
                         <label class="control-label"><b>Tag:</b></label>
                         <div class="controls">
                             <label class="checkbox">
-                            <input type="checkbox" id="tag_created" name="tag_created" value="true" /> 
+                            <input type="checkbox" id="tag_added" name="tag_added" value="true" /> 
                             Tag is created
                             </label>
                             <label class="checkbox">
@@ -91,7 +90,7 @@
                         <label class="control-label"><b>Contact:</b></label>
                         <div class="controls">
                             <label class="checkbox">
-                            <input type="checkbox" id="contact_created" name="contact_created" value="true" /> 
+                            <input type="checkbox" id="contact_added" name="contact_added" value="true" /> 
                             Contact is created
                             </label>
                             <label class="checkbox">
@@ -100,7 +99,9 @@
                             </label>
                         </div>
                     </div>
+
                    {{else}}
+
                     <div class="control-group">
                         <label class="control-label"><b>Browsing:</b></label>
                         <div class="controls">
@@ -110,8 +111,7 @@
                                 <option value="CONTACT_ASSIGNED_AND_STARRED">Contact assigned to me & starred</option>
                             </select>
                         </div>
-                        <span style="margin-left:160px;"><i class="icon-lightbulb"></i></span>
-                        <small style="padding-top: -6px;">Get notified when a contact is browsing your website.</small>
+                        <p class="help-block" style="margin-left:160px; margin-top:8px">Get notified when a contact is browsing your website.</p>
                     </div>
                     <legend></legend>
                     <p></p>
@@ -124,8 +124,7 @@
                                 <option value="CONTACT_ASSIGNED_AND_STARRED">Contact assigned to me & starred</option>
                             </select>
                         </div>
-                        <span style="margin-left:160px;"><i class="icon-lightbulb"></i></span>
-      <small style="padding-top: -6px;">Get notified when a contact opens the email sent (via a campaign)</small>
+                    <p class="help-block" style="margin-left:160px; margin-top:8px">Get notified when a contact opens the email sent (via a campaign)</p>
                     </div>
                     <legend></legend>
                     <p></p>
@@ -138,8 +137,7 @@
                                 <option value="CONTACT_ASSIGNED_AND_STARRED">Contact assigned to me & starred</option>
                             </select>
                         </div>
-                        <span style="margin-left:160px;"><i class="icon-lightbulb"></i></span>
-                        <small style="padding-top: -6px;">Get notified when a contact clicks a link in email.</small>
+                        <p class="help-block" style="margin-left:160px; margin-top:8px">Get notified when a contact clicks a link in email.</p>
                     </div>
                     <legend></legend>
                     <p></p>
@@ -162,7 +160,7 @@
                         <label class="control-label"><b>Tag:</b></label>
                         <div class="controls">
                             <label class="checkbox">
-                            <input type="checkbox" id="tag_created" name="tag_created" value="true" disabled="disabled"/> 
+                            <input type="checkbox" id="tag_added" name="tag_added" value="true" disabled="disabled"/> 
                             Tag is created
                             </label>
                             <label class="checkbox">
@@ -177,7 +175,7 @@
                         <label class="control-label"><b>Contact:</b></label>
                         <div class="controls">
                             <label class="checkbox">
-                            <input type="checkbox" id="contact_created" name="contact_created" value="true" disabled="disabled"/> 
+                            <input type="checkbox" id="contact_added" name="contact_added" value="true" disabled="disabled"/> 
                             Contact is created
                             </label>
                             <label class="checkbox">
@@ -193,12 +191,12 @@
                         <label class="control-label"><b>Notification Sounds: </b></label>
                         <div class="controls">
                                     <select id="notification_sound" name="notification_sound">
-                                        <option value="alert_1">Alert - 1</option>
-                                        <option value="alert_2">Alert - 2</option>
-                                        <option value="alert_3">Alert - 3</option>
-                                        <option value="alert_4">Alert - 4</option>
-                                        <option value="alert_5">Alert - 5</option>
-                                        <option value="no_sound">No Sound</option>
+                                        <option value="alert_1">Notes</option>
+                                        <option value="alert_2">Twinkle</option>
+                                        <option value="alert_3">Bubble</option>
+                                        <option value="alert_4">Triple Tone</option>
+                                        <option value="alert_5">Chime</option>
+                                        <option value="no_sound">Silent</option>
                                     </select>
                         <button class="btn" id="notification-sound-play" style="margin-left: 10px;display:inline-block;"><i class="icon-play"></i></button>
                         </div>

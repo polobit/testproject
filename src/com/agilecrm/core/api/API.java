@@ -27,11 +27,13 @@ import com.agilecrm.account.APIKey;
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.db.Analytics;
 import com.agilecrm.db.util.AnalyticsUtil;
 import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.IMAPEmailPrefs;
+import com.agilecrm.user.ProfileStatus;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.SocialPrefs.Type;
 import com.agilecrm.user.UserPrefs;
@@ -140,15 +142,9 @@ public class API
     @Path("stats")
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
-    public String getStats(@QueryParam("e") String searchEmail)
+    public List<Analytics> getStats(@QueryParam("e") String searchEmail)
     {
-	String domain = NamespaceManager.get();
-	String stats = AnalyticsUtil.getPageViews(searchEmail, domain);
-
-	System.out.println("Stats of given email: " + searchEmail + " are: "
-		+ stats);
-
-	return stats;
+	return AnalyticsUtil.getPageViews(searchEmail);
     }
 
     // Contact view Save Author: Yaswanth 08-10-2012
@@ -446,6 +442,23 @@ public class API
 	mainJSON.put("timeline", object1);
 
 	return mainJSON.toString();
+    }
+
+    @Path("profile-status")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getProfilesStatus()
+    {
+	try
+	{
+	    return ProfileStatus.getUserProfileStatus().getStats();
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	    return null;
+	}
     }
 
 }

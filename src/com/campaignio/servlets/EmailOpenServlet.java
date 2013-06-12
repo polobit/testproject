@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
@@ -54,6 +55,9 @@ public class EmailOpenServlet extends HttpServlet
 
 	try
 	{
+	    Contact contact = ContactUtil.getContact(Long
+		    .parseLong(subscriberId));
+
 	    Workflow workflow = WorkflowUtil.getWorkflow(Long
 		    .parseLong(campaignId));
 
@@ -62,12 +66,19 @@ public class EmailOpenServlet extends HttpServlet
 		LogUtil.addLogToSQL(campaignId, subscriberId,
 			"Email Opened of campaign " + workflow.name,
 			LogType.EMAIL_OPENED.toString());
-	    }
 
-	    Contact contact = ContactUtil.getContact(Long
-		    .parseLong(subscriberId));
-	    NotificationPrefsUtil.executeNotification(Type.OPENED_EMAIL,
-		    contact);
+		try
+		{
+		    NotificationPrefsUtil
+			    .executeNotification(Type.OPENED_EMAIL, contact,
+				    new JSONObject().put("custom_value",
+					    workflow.name));
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+	    }
 
 	}
 	finally

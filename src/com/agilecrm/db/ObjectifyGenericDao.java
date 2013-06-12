@@ -31,6 +31,7 @@ import com.agilecrm.subscription.Subscription;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.IMAPEmailPrefs;
+import com.agilecrm.user.ProfileStatus;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.notification.NotificationPrefs;
@@ -112,6 +113,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	// Reports
 	ObjectifyService.register(Reports.class);
+
+	// Reports
+	ObjectifyService.register(ProfileStatus.class);
     }
 
     /**

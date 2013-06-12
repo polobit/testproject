@@ -18,6 +18,17 @@ $(function() {
     // to fetch details
     var plugin_prefs = agile_crm_get_plugin_prefs(FRESHBOOKS_PLUGIN_NAME);
 
+    $('#FreshBooks_plugin_delete').die().live('click', function (e) {
+    	
+    	e.preventDefault();
+    	
+    	agile_crm_save_widget_prefs(FRESHBOOKS_PLUGIN_NAME,
+		        undefined , function (data)
+        {
+    		setUpFreshbooksAuth(plugin_id);
+        });
+    });
+ 
     // Stores email of the contact as global variable
     Email = agile_crm_get_contact_property('email');
     

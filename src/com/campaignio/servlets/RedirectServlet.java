@@ -86,9 +86,6 @@ public class RedirectServlet extends HttpServlet
 
 	    contact = ContactUtil.getContact(Long.parseLong(subscriberId));
 
-	    NotificationPrefsUtil.executeNotification(Type.CLICKED_LINK,
-		    contact);
-
 	    Workflow workflow = WorkflowUtil.getWorkflow(Long
 		    .parseLong(urlShortener.campaign_id));
 
@@ -98,6 +95,18 @@ public class RedirectServlet extends HttpServlet
 			"Email link clicked " + urlShortener.long_url
 				+ " of campaign " + workflow.name,
 			LogType.EMAIL_CLICKED.toString());
+
+		try
+		{
+		    NotificationPrefsUtil
+			    .executeNotification(Type.CLICKED_LINK, contact,
+				    new JSONObject().put("custom_value",
+					    workflow.name));
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
 	    }
 
 	    // System.out.println(urlShortener);

@@ -21,6 +21,17 @@ $(function() {
 	// fetch details
 	var plugin_prefs = plugin.prefs;
 	
+	$('#Twilio_plugin_delete').die().live('click', function (e) {
+    	
+    	e.preventDefault();
+    	
+    	agile_crm_save_widget_prefs(Twilio_PLUGIN_NAME,
+		        undefined , function (data)
+        {
+    		setupTwilioOAuth(plugin_id);
+        });
+    });
+	
 	// If not found - considering first time usage, setupTwilioOAuth called
 	if (plugin_prefs == undefined) {
 		setupTwilioOAuth(plugin_id);
@@ -52,7 +63,11 @@ $(function() {
 	$('#twilio_verify').die().live('click', function(e) {
     	e.preventDefault();
 
-    	
+    	 // Checks whether all input fields are given
+        if (!isValidForm($("#twilio_call_form")))
+        {
+            return;
+        }
     	
     	var from = $('#twilio_from').val();
     	console.log(from);
@@ -107,8 +122,8 @@ function setupTwilioOAuth(plugin_id) {
 	$('#Twilio').html(TWILIO_LOGS_LOAD_IMAGE);
 	
 	 $('#Twilio').html('<p class="widget_content" style="border-bottom:none">' 
-			 + 'Call your contacts directly using your Twilio account. To start using, ' 
-			 + 'connect your Twilio account. </p><a id="twilio-connect-button" ' 
+			 + 'Call your contacts directly using your Twilio account.</p>'
+			 + '<a id="twilio-connect-button" ' 
 			 + 'href="https://www.twilio.com/authorize/CNf63bca035414be121d517a116066a5f8?state=' 
 			 + encodeURIComponent(window.location.href) + '" style="margin-bottom: 10px;"></a>');	
 				

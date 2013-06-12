@@ -21,7 +21,18 @@ $(function ()
     // Gets plugin Preferences to check whether to show setup button or to
     // fetch details
     var plugin_prefs = plugin.prefs;
-
+    
+    $('#Stripe_plugin_delete').die().live('click', function (e) {
+    	
+    	e.preventDefault();
+    	
+    	agile_crm_save_widget_prefs(Stripe_PLUGIN_NAME,
+		        undefined , function (data)
+        {
+			setupStripeOAuth(plugin_id);
+        });
+    });
+    
     // If not found - considering first time usage of widget, setupStripeOAuth
     // method is called 
     if (plugin_prefs == undefined)
@@ -30,20 +41,52 @@ $(function ()
         return;
     }
 
-    // Retrieves the customer id of stripe saved to contact
-    var customer_id = agile_crm_get_contact_property("Stripe Customer Id");
-    console.log("customer id " + customer_id);
-
-    // If customer id is undefined, message is shown
-    if (!customer_id)
+    var prefs = JSON.parse(plugin_prefs);
+    
+    var stripe_custom_field_name = prefs['stripe_field_name'];
+    
+    if(!stripe_custom_field_name)
     {
-        $('#Stripe').html("<div style='padding: 10px;line-height:160%;'>" +
-            "No stripe customer id is related to this contact</div>");
-        return;
+    	
+    	 $.get("/core/api/custom-fields/type/text", function(data) { 
+    	    	
+    	    	console.log(data);
+    	    	$('#Stripe').html(getTemplate('stripe-custom-field', data));
+    	    	
+    	 }, "json")
+    	 .error(function(data) {
+    		 
+    		 $('#Stripe').html('<div style="padding: 10px;line-height:160%;' +
+    		            'word-wrap: break-word;" >' + data.responseText + '</div>');
+    	 });
+    	 
+    	
+    	
+    	$('#save_stripe_name').die().live('click', function (e) {
+        	
+        	e.preventDefault();
+        	        	
+        	stripe_custom_field_name = $('#stripe_custom_field_name').val();
+        	
+        	prefs['stripe_field_name'] = stripe_custom_field_name;
+        	
+        	agile_crm_save_widget_prefs(Stripe_PLUGIN_NAME,
+        		        JSON.stringify(prefs), function (data)
+            {
+        		console.log(data);
+        	    // If defined, shows the details of the customer in Stripe panel
+        	    showStripeProfile(plugin_id, stripe_custom_field_name);
+        		        
+            });
+        	
+        });
+    	
+    	return;
     }
-
+    
+  
     // If defined, shows the details of the customer in Stripe panel
-    showStripeProfile(plugin_id, customer_id);
+    showStripeProfile(plugin_id, stripe_custom_field_name);
 
 });
 
@@ -71,10 +114,13 @@ function setupStripeOAuth(plugin_id)
         '&plugin_id=' + encodeURIComponent(plugin_id);
 
     $('#Stripe').html('<div class="widget_content" style="border-bottom:none;line-height: 160%;" >' +
-        'See the customer\'s subscriptions history and payments from your Stripe account.' +
+        'See the contact\'s subscriptions history and payments from your Stripe account.' +
         '<p style="margin: 10px 0px 5px 0px;"><a href=' + url + '>' +
         '<img src="/img/plugins/stripe-connect-button.png" style="width: 190px;' +
         'height: 33px;"></a></p></div>');
+    
+    
+   
 }
 
 /**
@@ -85,10 +131,23 @@ function setupStripeOAuth(plugin_id)
  * @param customer_id
  * 			Stripe customer id based on which details are retrieved
  */
-function showStripeProfile(plugin_id, customer_id)
+function showStripeProfile(plugin_id, stripe_custom_field_name)
 {
     //Shows loading until the profile is retrieved
     $('#Stripe').html(STRIPE_PROFILE_LOAD_IMAGE);
+    
+    // Retrieves the customer id of stripe saved to contact
+    var customer_id = agile_crm_get_contact_property(stripe_custom_field_name);
+    console.log("customer id " + customer_id);
+    
+    // If customer id is undefined, message is shown
+    if (!customer_id)
+    {
+        $('#Stripe').html("<div style='padding: 10px;line-height:160%;'>" +
+            "No stripe customer id is related to this contact</div>");
+        return;
+    }
+
 
     // Sends request to url "/core/api/widgets/stripe/" with plugin id and customer id 
     // as path parameters which calls WidgetsAPI class 
@@ -97,9 +156,18 @@ function showStripeProfile(plugin_id, customer_id)
     {
 		console.log(data);
 		
-        //populates the template with and shows in the widget panel
-        $('#Stripe').html(getTemplate("stripe-profile", data));
-
+		var stripe_template = $(getTemplate("stripe-profile", data));
+	
+        head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+      		$(".time-ago", stripe_template).each(function(index,element){
+      			$(element).timeago();
+      		})
+      		console.log($(".time-ago", stripe_template));
+      	  });
+        
+   	 //populates the template with and shows in the widget panel
+        $('#Stripe').html(stripe_template);
+        
         // if error occurs
     }, function error(data)
     {

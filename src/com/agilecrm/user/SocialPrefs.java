@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.ScribeServlet;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.user.ProfileStatus.Field;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Parent;
@@ -139,6 +140,10 @@ public class SocialPrefs
      */
     public void save()
     {
+
+	ProfileStatus status = ProfileStatus.getUserProfileStatus();
+	status.setStatus(Field.EMAIL, true);
+
 	dao.put(this);
     }
 

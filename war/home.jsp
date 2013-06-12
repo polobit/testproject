@@ -22,7 +22,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
- <meta name="globalsign-domain-verification" content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx"/>
+<meta name="globalsign-domain-verification" content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx"/>
 
 <!-- Le styles -->
 <%
@@ -65,12 +65,19 @@ String CSS_PATH = "/";
 	%>
 					
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-responsive.min.css"/>
+
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/agilecrm.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/widget.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/timeline.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/jslider.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/planandupgrade.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/daterangepicker.css" />
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrapSwitch.css" />
+
+<!-- Unified CSS for All Lib -->
+<link rel='stylesheet' type='text/css' href='<%=CSS_PATH%>css/lib.css' />
+
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
@@ -106,7 +113,7 @@ String CSS_PATH = "/";
 				</a> <a class="brand" href="#dashboard"> Agile CRM</a>
 
 				<div class="nav-collapse">
-
+				
 					<ul class="nav agile-menu">
 						<li id="homemenu" class="active"></li>
 						<%
@@ -130,7 +137,7 @@ String CSS_PATH = "/";
 								
 						<li>
 							<form id="searchForm" class=" navbar-search"
-									style="display: inline;margin:5px;">
+									style="margin:5px;">
 									<input id="searchText" type="text" data-provide="typeahead"
 										class="typeahead typeahead_contacts search-query"
 										placeholder="Search"></input> <input id="search-results"
@@ -138,7 +145,7 @@ String CSS_PATH = "/";
 							</form>
 						</li>
 					</ul>
-				   
+													   
 					<ul class="nav pull-right">
 						<li class="dropdown" id="menu1"><a class="dropdown-toggle"
 							data-toggle="dropdown" href="#menu1">Add New <i class='caret'></i></a>
@@ -228,7 +235,9 @@ String CSS_PATH = "/";
 
 	<footer id="footer" class="footer container"
 		style="padding: 0px !important;overflow-x:hidden;overflow-y:hidden;margin-top:15px;">
-
+        <div style="display:inline;float:right;">
+            <a style="font-weight:bold;cursor:pointer;vertical-align:-17px;margin-right: 30px;" id="help-page">Help</a>
+        </div>
 	 	<div style="width:290px;display:inline-block;margin-top:15px;">
 	 	    Like AgileCRM?<b> Share it -</b>
 	 		<script src="https://platform.twitter.com/widgets.js" type="text/javascript"></script>
@@ -237,9 +246,7 @@ String CSS_PATH = "/";
 	 		<span style="margin-left:10px;"><a data="Linkedin" class="email-share" href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fwww.agilecrm.com&title=AgileCRM&summary=Sell%20like%20a%20pro%20with%20%23AgileCRM%20-%20&source=https%3A%2F%2Fwww.agilecrm.com" target="_blank"><i class="icon-linkedin"></i></a></span>
 	 		<span style="margin:0 10px;"><a id="share-email" href="#"><i class="icon-envelope-alt"></i></a></span>
         </div>
-        <div style="display:inline;">
-            <a style="font-weight:bold;cursor:pointer;margin-left:10%;" id="help-page">Help</a>
-        </div>
+
      		<!-- <div style="margin-right:5px;display:inline-block;vertical-align:top;">Refer your friends.</div>
      		
      		
@@ -252,8 +259,8 @@ String CSS_PATH = "/";
 <script src='lib/headjs-min.js'></script>
 	
 	<script>
-	var LIB_PATH = "//da4o37ei6ybbh.cloudfront.net/js/";
-	// var LIB_PATH = "/";
+	 var LIB_PATH = "//da4o37ei6ybbh.cloudfront.net/js/";
+	 // var LIB_PATH = "/";
 	
 	var IS_CONSOLE_ENABLED = <%=debug%>;
 	
@@ -261,6 +268,9 @@ String CSS_PATH = "/";
 	
 	// Get current user prefs json
 	var CURRENT_USER_PREFS = <%=mapper.writeValueAsString(currentUserPrefs)%>;
+	
+	// Get current domain user json
+	var CURRENT_DOMAIN_USER = <%=mapper.writeValueAsString(domainUser)%>;
 	
 	//var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
 	 var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
@@ -276,6 +286,36 @@ String CSS_PATH = "/";
 	head.js(LIB_PATH + 'lib/handlebars-1.0.0.beta.6-min.js');
 	
 	
+	var AGILE_CONTACT = {};
+	head.js('https://our.agilecrm.com/stats/min/agile-min.js', function(){
+			_agile.set_account('td2h2iv4njd4mbalruce18q7n4', 'our');
+			_agile.set_email(CURRENT_DOMAIN_USER['email']);
+			
+				// Gets contact based on the the email of the user logged in
+				agile_getContact(CURRENT_DOMAIN_USER['email'], function(data){
+					AGILE_CONTACT = data;
+					
+					// If contact does not exist, new contact is created 
+					// considering it is a new contact
+					if(!AGILE_CONTACT["id"])
+					{
+						var name = CURRENT_DOMAIN_USER['name'];
+						var first_name = name, last_name = name;
+
+						// Split name into first and last name
+						if(name.indexOf(' '))
+							{
+								first_name = name.substr(0, name.indexOf(' '));
+								last_name = name.substr(name.indexOf(' ')+1);
+							}
+						
+						// Creates a new contact and assigns it to global value 
+						 _agile.create_contact({"email": CURRENT_DOMAIN_USER['email'], "first_name" : first_name, "last_name": last_name, "tags":"Signup"}, function(data){
+							 AGILE_CONTACT = data;
+						 });
+					}
+				});
+	});
 	
 	head.ready(function() {	
 		head.js('jscore/min/js-all-min.js');
@@ -286,9 +326,6 @@ String CSS_PATH = "/";
 		$("img.init-loading", $('#content')).attr("src", "/img/ajax-loader-cursor.gif");
 	});
 	</script>
-	
-	<!-- Unified CSS for All Lib -->
-	<link rel='stylesheet' type='text/css' href='<%=CSS_PATH%>css/lib.css' />
 
 </body>
 </html>

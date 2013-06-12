@@ -15,7 +15,7 @@ function show_desktop_notification(imageURL, title, message, link) {
 	if (window.webkitNotifications
 			&& window.webkitNotifications.checkPermission() == 0) {
 		var notification = window.webkitNotifications.createNotification(
-				imageURL, title.replace(/_/g, " "), message);
+				imageURL, title, message);
 
 		notification.onclick = function(x) {
 			window.focus();
@@ -32,7 +32,12 @@ function show_desktop_notification(imageURL, title, message, link) {
 		}, '30000');
 		// Show when tab is inactive
 		if (!window.closed)
+		{	
+			if (notification_prefs.notification_sound != 'no_sound')
+				playRecvSound(notification_prefs.notification_sound);
+			
 			notification.show();
+		}
 
 	}
 }

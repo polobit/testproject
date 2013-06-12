@@ -10,7 +10,6 @@ import com.agilecrm.activities.Task.PriorityType;
 import com.agilecrm.activities.Task.Type;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
-import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.Util;
@@ -34,6 +33,13 @@ public class InitDefaults
 		"theboss@apple.com"));
 	contactFields.add(new ContactField(Contact.COMPANY, null, "Apple"));
 	contactFields.add(new ContactField(Contact.TITLE, null, "CEO"));
+	contactFields.add(new ContactField("website", "TWITTER",
+		"@stevejobsceo"));
+	contactFields
+		.add(new ContactField(
+			"address",
+			"office",
+			"{\"address\":\"1 Infinite Loop\",\"city\":\"Cupertino\",\"state\":\"CA\",\"zip\":\"95014\"}"));
 	contactFields
 		.add(new ContactField(
 			"image",
@@ -48,7 +54,7 @@ public class InitDefaults
 	tags1.add("Sports");
 	List<ContactField> contactFields1 = new ArrayList<ContactField>();
 	contactFields1
-		.add(new ContactField(Contact.FIRST_NAME, null, "Michel"));
+		.add(new ContactField(Contact.FIRST_NAME, null, "Michael"));
 	contactFields1.add(new ContactField(Contact.LAST_NAME, null, "Jordan"));
 	contactFields1.add(new ContactField(Contact.EMAIL, "work",
 		"sixfeetsix@nba.com"));
@@ -98,14 +104,10 @@ public class InitDefaults
 	task.is_complete = false;
 	task.type = Type.SEND;
 	task.priority_type = PriorityType.HIGH;
-	DateUtil date = new DateUtil().addDays(15);
+	DateUtil date = new DateUtil().addDays(15).toMidnight()
+		.addMinutes(16 * 60);
 	task.due = date.getTime().getTime() / 1000;
 	task.contacts = new ArrayList<String>();
-	List<Contact> contacts = ContactUtil.getAllContacts();
-	for (Contact contact : contacts)
-	{
-	    task.contacts.add(String.valueOf(contact.id));
-	}
 	task.owner_id = String.valueOf(SessionManager.get().getDomainId());
 	task.save();
 
@@ -113,18 +115,20 @@ public class InitDefaults
 	task1.subject = "Like Agile on Facebook";
 	task1.is_complete = false;
 	task1.type = Type.SEND;
-	task1.priority_type = PriorityType.NORMAL;
-	DateUtil date1 = new DateUtil().addDays(1);
+	task1.priority_type = PriorityType.LOW;
+	DateUtil date1 = new DateUtil().addDays(1).toMidnight()
+		.addMinutes(16 * 60);
 	task1.due = date1.getTime().getTime() / 1000;
 	task1.owner_id = String.valueOf(SessionManager.get().getDomainId());
 	task1.save();
 
 	Task task2 = new Task();
-	task2.subject = "Tweet about Agile";
+	task2.subject = "Call Grandmother";
 	task2.is_complete = false;
-	task2.type = Type.SEND;
-	task2.priority_type = PriorityType.LOW;
-	DateUtil date2 = new DateUtil().addDays(2);
+	task2.type = Type.CALL;
+	task2.priority_type = PriorityType.NORMAL;
+	DateUtil date2 = new DateUtil().addDays(2).toMidnight()
+		.addMinutes(16 * 60);
 	task2.due = date2.getTime().getTime() / 1000;
 	task2.owner_id = String.valueOf(SessionManager.get().getDomainId());
 	task2.save();
