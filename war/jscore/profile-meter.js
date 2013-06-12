@@ -5,7 +5,7 @@
 var IS_PROFILE_GUIDER_CLOSED = false;
 var PROFILE_SETTINGS = {
 		"Email" : "#email",
-		"User_invited" : "#users",
+		//"User_invited" : "#users",
 		//"Widgets" : 10
 		//"Share" : "#",
 }
@@ -23,7 +23,7 @@ var INITIAL_TOTAL = 65;
 var PROFILE_INFO = {
 		"Welcome" : false,
 		"Email" : false,
-		"User_invited" : false,
+		//"User_invited" : false,
 		//"Widgets" : false,
 		"total" : INITIAL_TOTAL
 };
