@@ -40,11 +40,9 @@
 						{{url}}
 					</div>
 				</li>
-                {{#if_equals ref "null"}}
-                 <li></li>
-                 {{else}}
+                {{#if ref}}
                 <li class="row-fluid">	
-					<div class="span2"><b>Referred URL</b>
+					<div class="span2"><b>Referred</b>
 						<div class="pull-right">:</div>
 					</div>
 							
@@ -52,11 +50,9 @@
 						{{ref}}
 					</div>
 				</li>
-               {{/if_equals}}
+               {{/if}}
                
-               {{#if_equals ip "null"}}
-                 <li></li>
-                 {{else}}
+               {{#if ip}}
 				<li class="row-fluid">	
 					<div class="span2"><b>IP Address</b>
 						<div class="pull-right">:</div>
@@ -65,11 +61,9 @@
 						{{ip}}
 					</div>
 				</li>
-               {{/if_equals}}
+               {{/if}}
 
-              {{#if_equals user_agent "null"}}
-                 <li></li>
-                 {{else}}
+              {{#if user_agent}}
 				<li class="row-fluid">	
 					<div class="span2"><b>Browser & OS</b>
 						<div class="pull-right">:</div>
@@ -79,11 +73,9 @@
 						{{parsedUserAgent.browser_name}}, {{titleFromEnums parsedUserAgent.os}}
 					</div>
 				</li>
-               {{/if_equals}}
+               {{/if}}
 
-                {{#if_equals user_agent "null"}}
-                 <li></li>
-                 {{else}}
+                {{#if user_agent}}
 				<li class="row-fluid">	
 					<div class="span2"><b>Device Type</b>
 						<div class="pull-right">:</div>
@@ -93,11 +85,9 @@
 						{{ucfirst parsedUserAgent.device_type}}
 					</div>
 				</li>
-               {{/if_equals}}
+               {{/if}}
 
-				{{#if_equals city "null"}}
-                <li></li>
-                 {{else}}
+				{{#if city}}
                 <li class="row-fluid">	
 					<div class="span2"><b>Location</b>
 						<div class="pull-right">:</div>
@@ -106,7 +96,7 @@
 						{{ucfirst city}}, {{ucfirst region}}, {{getCountryName country}}
 					</div>
 				</li>
-               {{/if_equals}}
+               {{/if}}
 		</ul>
 
 	<div class="clear">

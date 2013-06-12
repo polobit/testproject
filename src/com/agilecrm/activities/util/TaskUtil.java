@@ -1,6 +1,7 @@
 package com.agilecrm.activities.util;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -129,6 +130,30 @@ public class TaskUtil
 	try
 	{
 	    return dao.listByProperty("is_complete", false);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+    
+  //Gets the current user pending tasks maximum 7 only
+    public static List<Task> getAllPendingTasksForCurrentUser()
+    {
+	try
+	{
+		
+		/*Date date=new Date();
+		
+	    int thisWeekDate = (7-date.getDay());
+	    System.out.println("all pending tasks this week="+thisWeekDate);*/
+	    return  dao
+	    		.ofy()
+	    		.query(Task.class)
+	    		.filter("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+	    		.order("due")
+	    		.filter("is_complete", false).limit(7).list();
 	}
 	catch (Exception e)
 	{

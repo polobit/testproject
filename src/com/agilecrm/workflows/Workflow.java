@@ -1,5 +1,8 @@
 package com.agilecrm.workflows;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
@@ -17,6 +20,8 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
+import com.agilecrm.workflows.triggers.Trigger;
+import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -216,6 +221,30 @@ public class Workflow extends Cursor
 	    e.printStackTrace();
 	}
 	return subscribersCount.toString();
+    }
+
+    /**
+     * Returns list of triggers with respect to campaign, so that user can know
+     * triggers with respect to workflow.
+     * 
+     * @return - List
+     */
+    @XmlElement
+    public List<String> getTriggers()
+    {
+	List<Trigger> triggers = TriggerUtil.getTriggersByCampaignId(id);
+
+	List<String> triggerNames = new ArrayList<String>();
+
+	for (Trigger trigger : triggers)
+	{
+	    if (trigger == null)
+		continue;
+
+	    triggerNames.add(trigger.name);
+	}
+
+	return triggerNames;
     }
 
     /**

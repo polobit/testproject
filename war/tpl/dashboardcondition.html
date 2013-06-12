@@ -1,0 +1,85 @@
+<div id="task-lista-based-condition"></div>
+
+</script><script id="tasks-dashboard1-collection-template" type="text/html">
+{{#unless this.length}}
+<h2 style="border-bottom:1px solid #f5f5f5; margin-bottom:10px">Tasks Due</h2>
+<table class="table" style="margin-bottom:2px !important;">
+            
+             <thead>
+                  <tr style="background-color:#EDF3FE; margin-bottom:0px !important;">
+                    
+                    <th>Task Name</th>
+                    <th>Priority Type</th>
+                    <th>Category</th>
+                    <th>Due Date</th>
+                    <th>Related To</th>
+                  </tr>   
+                
+ 
+             </thead>
+              
+        </table>
+<h4>No Tasks Due this week.</h4>
+{{/unless}}
+{{#if this.length}}
+<section>
+    <form>
+        <h2 style="border-bottom:1px solid #f5f5f5; margin-bottom:10px">Tasks Due</h2>
+        <table class="table" style="margin-bottom:2px !important;">
+            
+             <thead>
+                  <tr style="background-color:#EDF3FE; margin-bottom:0px !important;">
+                    
+                    <th style="width:8em">Task Name</th>
+                    <th style="width:5.4em">Priority Type</th>
+                    <th style="width:7em">Category</th>
+                    <th style="width:10em">Due Date</th>
+                    <th style="width:9em;margin-left:10px">Related To</th>
+                  </tr>   
+                
+ 
+             </thead>
+              
+        </table>
+       <table class="table hide" style="margin-bottom:0px !important;">
+           <i id="overdue-heading" style="padding-top:20px;display: none;"><div   style="background-color:#F2F2F2;padding-top:3px;">OverDue </div></i>         	
+            <tbody id="overdue" style="display: none;">
+            
+           </tbody>
+        </table>
+     
+        <table class="table hide " style="margin-bottom:0px !important;">
+           <i id="today-heading" style="display: none"><div    style="background-color:#F2F2F2;padding-top:3px; ">Today</div></i>          	
+            <tbody id="today" style="display: none;"></tbody>
+        </table>
+     <table class="table hide " style="margin-bottom:0px !important;">
+           <i id="tomorrow-heading" style="display: none"><div   style="background-color:#F2F2F2;padding-top:3px;">Tomorrow</div></i>
+              	
+            <tbody id="tomorrow" style="display: none;"></tbody>
+        </table>
+     <table class="table hide ">
+         <i id="next-week-heading" style="display: none" style=" margin-bottom:0px !important;"><div   style="background-color:#F2F2F2;padding-top:3px;">This Week</div></i>
+              	
+            <tbody id="next-week" style="display: none;"></tbody>
+        </table>
+     </form>
+</section>
+<br/>
+{{/if}}
+</script>
+
+<script id="tasks-dashboard1-model-template" type="text/html">
+
+	<td style="border-top:1px dotted #DDD;height:34px;"><div style="text-align:justify;white-space:nowrap;width:6em;overflow:hidden;margin-left:10px;"><b>{{ucfirst subject}}</b> </div></td>
+    <td><div style="text-align:justify;white-space:nowrap;width:5em;overflow:hidden;"><span style="margin-right:10px;" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></div> </td>
+    <td><div style="text-align:justify;white-space:nowrap;width:6em;overflow:hidden;"><i class="{{icons type}}"></i>&nbsp;<span>{{type}}</span></div></td>
+    <td><div style="text-align:justify;white-space:nowrap;width:10em;overflow:hidden;"> <time class="task-due-time" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999; ">{{epochToHumanDate "" due}}</time></div></td>
+    <td>
+		<div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:78px;overflow:hidden;display:inline-block;">
+        	{{#each contacts}}
+          	 <img src="{{gravatarurl properties 50}}" style="margin-left:0px;" width="37px" height="37px" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
+        	{{/each}}</div>
+       {{#if_greater this.contacts.length "3"}}<span style="margin-right:-14px">...</span>{{/if_greater}}
+    </td>
+ 
+</script>

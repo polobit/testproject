@@ -3,6 +3,7 @@ package com.agilecrm.db;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlElement;
 
+import org.datanucleus.util.StringUtils;
 import org.json.JSONObject;
 
 import eu.bitwalker.useragentutils.UserAgent;
@@ -103,8 +104,8 @@ public class Analytics
     @XmlElement
     public String getParsedUserAgent() throws Exception
     {
-	if (user_agent == null)
-	    return null;
+	if (StringUtils.isEmpty(user_agent))
+	    return "";
 
 	JSONObject userAgentJSON = new JSONObject();
 	try
