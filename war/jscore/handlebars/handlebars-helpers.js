@@ -464,8 +464,8 @@ $(function() {
 			return str.toLowerCase() + " " + " of campaign " + this.custom_value;
 		}	
 		
-		if(str == "CONTACT ADDED" || str == "CONTACT DELETED")
-		{
+		if(str == "CONTACT ADDED" || str == "CONTACT DELETED" || str == "DEAL CREATED" || str == "DEAL CLOSED")
+		{			
 			return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1])
 		}
 		if(str == 'TAG ADDED' || str == 'TAG DELETED')
