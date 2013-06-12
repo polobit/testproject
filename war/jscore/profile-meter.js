@@ -1,6 +1,8 @@
 /*
  * Global values of each step. 
  */
+
+var IS_PROFILE_GUIDER_CLOSED = false;
 var PROFILE_SETTINGS = {
 		"Email" : "#email",
 		"User_invited" : "#users",
@@ -89,6 +91,9 @@ function setProfileMeter()
 
 function showNotyOnTopOfPanel(content)
 {
+	if(IS_PROFILE_GUIDER_CLOSED)
+		return;
+	
 	$('body').find('#wrap').find('#notify-container').remove();
 	$('body').find('#wrap').find('.navbar-fixed-top').css('margin-top','0px'); 
   	$('body').find('#wrap').find('#agilecrm-container').css('padding-top','60px');
@@ -107,7 +112,7 @@ function removeProfileNoty() {
 
 $(function(){
 	$('span.notify-close').die().live('click' , function(){
-	      
+		IS_PROFILE_GUIDER_CLOSED = true;
         $(this).parent().slideUp("slow", function () {
        	 $('body').find('#wrap').find('.navbar-fixed-top').css('margin-top','0px'); 
        	 $('body').find('#wrap').find('#agilecrm-container').css('padding-top','60px');
