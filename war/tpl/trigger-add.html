@@ -1,23 +1,16 @@
 <script id="trigger-add-template" type="text/html">
 <div class="row">
     <div class="span12">
-        <div class="page-header">
-            {{#if id}}
-            <h1>Edit Trigger</h1>
-            {{else}}
-            <h1>New Trigger</h1>
-            {{/if}}
-        </div>
         <div class="span8">
             <div class="well">
                 <form id="addTriggerForm" name="addTriggerForm" class="form-horizontal">
-                    <fieldset>
-                        {{#if id}}
+                    {{#if id}}
                         <legend>Edit Trigger</legend>
                         <input name="id" type="hidden" value="{{id}}" />
-                        {{else}}
-                        <legend>Add Trigger</legend>
-                        {{/if}} 		
+                    {{else}}
+                        <legend><i class="icon-plus-sign"></i> Add Trigger</legend>
+                    {{/if}} 
+                    <fieldset>
                         <div class="control-group">
                             <label class="control-label">Name <span class="field_req">*</span></label>
                             <div class="controls">
