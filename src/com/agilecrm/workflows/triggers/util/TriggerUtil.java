@@ -77,4 +77,18 @@ public class TriggerUtil
 	conditionsMap.put("type", condition);
 	return dao.listByProperty(conditionsMap);
     }
+
+    /**
+     * Returns list of triggers with respect to campaign-id
+     * 
+     * @param campaignId
+     *            - Campaign Id.
+     * @return List
+     */
+    public static List<Trigger> getTriggersByCampaignId(Long campaignId)
+    {
+	Map<String, Object> campaignIdMap = new HashMap<String, Object>();
+	campaignIdMap.put("campaign_id", campaignId);
+	return dao.listByProperty(campaignIdMap);
+    }
 }
