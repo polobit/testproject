@@ -74,7 +74,7 @@ String CSS_PATH = "/";
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/planandupgrade.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/daterangepicker.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrapSwitch.css" />
-
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-tour.min.css"/>
 <!-- Unified CSS for All Lib -->
 <link rel='stylesheet' type='text/css' href='<%=CSS_PATH%>css/lib.css' />
 
@@ -114,7 +114,38 @@ String CSS_PATH = "/";
 
 				<div class="nav-collapse">
 				
-								   
+					<ul class="nav agile-menu">
+						<li id="homemenu" class="active"></li>
+						<%
+					        if("admin".equals(domainUser.domain)) {
+					           out.println("<li><a href='#all-domain-users'><i class='icon-group'></i> All Domain Users</a></li></ul>");
+						       out.println("<ul class='nav pull-right' style='float:right!important;'><li><a href="+ logoutURL +"><i class='icon-off'></i>Logout</a></li>");
+					        }
+					        else{
+						%>
+
+						<li id="contactsmenu"><a href="#contacts"><i
+								class="icon-user icon-white"></i> Contacts</a></li>
+						<li id="calendarmenu"><a href="#calendar"><i
+								class="icon-calendar icon-white"></i> Calendar</a></li>
+						<li id="dealsmenu"><a href="#deals"><i
+								class="icon-money icon-white"></i> Deals</a></li>
+						<li id="workflowsmenu"><a href="#workflows"><i
+								class="icon-sitemap icon-white"></i> Campaigns</a></li>
+						<li id="reportsmenu"><a href="#reports"><i
+								class="icon-share icon-white"></i> Reports</a></li>
+								
+						<li>
+							<form id="searchForm" class=" navbar-search"
+									style="margin:5px;">
+									<input id="searchText" type="text" data-provide="typeahead"
+										class="typeahead typeahead_contacts search-query"
+										placeholder="Search"></input> <input id="search-results"
+										type="image" src="img/SearchIcon.png" class="searchbox" />
+							</form>
+						</li>
+					</ul>
+													   
 					<ul class="nav pull-right">
 						<li class="dropdown" id="menu1"><a class="dropdown-toggle"
 							data-toggle="dropdown" href="#menu1">Add New <i class='caret'></i></a>
@@ -167,42 +198,8 @@ String CSS_PATH = "/";
 
 					</ul>
 					</li>
-					
+					<%} %>
 					</ul>
-
-					<ul class="nav agile-menu">
-						<li id="homemenu" class="active"></li>
-						<%
-					        if("admin".equals(domainUser.domain)) {
-					           out.println("<li><a href='#all-domain-users'><i class='icon-group'></i> All Domain Users</a></li></ul>");
-						       out.println("<ul class='nav pull-right' style='float:right!important;'><li><a href="+ logoutURL +"><i class='icon-off'></i>Logout</a></li>");
-					        }
-					        else{
-						%>
-
-						<li id="contactsmenu"><a href="#contacts"><i
-								class="icon-user icon-white"></i> Contacts</a></li>
-						<li id="calendarmenu"><a href="#calendar"><i
-								class="icon-calendar icon-white"></i> Calendar</a></li>
-						<li id="dealsmenu"><a href="#deals"><i
-								class="icon-money icon-white"></i> Deals</a></li>
-						<li id="workflowsmenu"><a href="#workflows"><i
-								class="icon-sitemap icon-white"></i> Campaigns</a></li>
-						<li id="reportsmenu"><a href="#reports"><i
-								class="icon-share icon-white"></i> Reports</a></li>
-								
-						<li>
-							<form id="searchForm" class=" navbar-search"
-									style="margin:5px;">
-									<input id="searchText" type="text" data-provide="typeahead"
-										class="typeahead typeahead_contacts search-query"
-										placeholder="Search"></input> <input id="search-results"
-										type="image" src="img/SearchIcon.png" class="searchbox" />
-							</form>
-						</li>
-						<%} %>
-					</ul>
-
 				</div>
 				<!--/.nav-collapse -->
 			</div>

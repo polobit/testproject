@@ -4,12 +4,24 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.Task.PriorityType;
 import com.agilecrm.activities.Task.Type;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.reports.Reports;
+import com.agilecrm.reports.Reports.Duration;
+import com.agilecrm.reports.Reports.ReportType;
+import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
+import com.agilecrm.search.ui.serialize.SearchRule.RuleType;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.Util;
@@ -17,11 +29,20 @@ import com.agilecrm.workflows.Workflow;
 
 public class InitDefaults
 {
+    public InitDefaults()
+    {
+	getDefaultContacts();
+	getDefaultTasks();
+	getDefaultEvent();
+	getDefaultWorkflow();
+	getDefaultReport();
+
+    }
 
     /**
      * Creates default Contacts.
      */
-    public static void getDefaultContacts()
+    private static void getDefaultContacts()
     {
 	LinkedHashSet<String> tags = new LinkedHashSet<String>();
 	tags.add("Business Owner");
@@ -92,12 +113,26 @@ public class InitDefaults
 	contact2.lead_score = 10;
 	contact2.save();
 
+	List<ContactField> contactFields3 = new ArrayList<ContactField>();
+	contactFields3.add(new ContactField(Contact.NAME, null, "Apple"));
+	contactFields3.add(new ContactField(Contact.URL, null,
+		"https://www.apple.com"));
+	contactFields3
+		.add(new ContactField(
+			"address",
+			"office",
+			"{\"address\":\"1 Infinite Loop\",\"city\":\"Cupertino\",\"state\":\"CA\",\"zip\":\"95014\"}"));
+	Contact contact3 = new Contact();
+	contact3.type = Contact.Type.COMPANY;
+	contact3.properties = contactFields3;
+	contact3.save();
+
     }
 
     /**
      * Creats default Tasks.
      */
-    public static void getDefaultTasks()
+    private static void getDefaultTasks()
     {
 	Task task = new Task();
 	task.subject = "Give feedback on Agile";
@@ -137,7 +172,7 @@ public class InitDefaults
     /**
      * Creates default Event.
      */
-    public static void getDefaultEvent()
+    private static void getDefaultEvent()
     {
 	Event event = new Event();
 	event.title = "Gossip at water cooler";
@@ -154,7 +189,7 @@ public class InitDefaults
     /**
      * Creates default Workflows.
      */
-    public static void getDefaultWorkflow()
+    private static void getDefaultWorkflow()
     {
 	Workflow workflow = new Workflow(
 		"Sample Auto Responder",
@@ -171,6 +206,58 @@ public class InitDefaults
 		Util.readResource("misc/campaign-strings/sample_email_n_social_campaign.txt"));
 	workflow2.save();
 
+    }
+
+    /**
+     * Creates default Report.
+     */
+    private static void getDefaultReport()
+    {
+	Reports report = new Reports();
+	report.duration = Duration.DAILY;
+	report.name = "New Contacts";
+	report.sendTo = SessionManager.get().getEmail();
+	report.report_type = ReportType.Contact;
+
+	LinkedHashSet<String> fields = new LinkedHashSet<String>();
+	fields.add("properties_image");
+	fields.add("properties_first_name");
+	fields.add("properties_last_name");
+	fields.add("properties_email");
+	report.fields_set = fields;
+
+	SearchRule rule = new SearchRule();
+	rule.LHS = "created_time";
+	rule.CONDITION = RuleCondition.LAST;
+	rule.RHS = "1";
+	rule.ruleType = RuleType.Contact;
+	ArrayList<SearchRule> rulelist = new ArrayList<SearchRule>();
+	rulelist.add(rule);
+	report.rules = rulelist;
+
+	report.save();
+
+    }
+
+    public static void setFirstTimerCookie(HttpServletResponse response)
+    {
+	JSONObject tourJson = new JSONObject();
+	try
+	{
+	    tourJson.put("contact", true);
+	    tourJson.put("workflow", true);
+	    tourJson.put("calendar", true);
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	System.out.println(tourJson.toString());
+	Cookie tourCookie = new Cookie("agile_tour", tourJson.toString());
+	tourCookie.setPath("/");
+	response.addCookie(tourCookie);
     }
 
 }

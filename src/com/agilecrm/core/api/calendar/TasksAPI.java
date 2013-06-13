@@ -206,6 +206,15 @@ public class TasksAPI
 	    e.printStackTrace();
 	}
     }
+    @Path("/my/dashboardtaskstasks")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Task> getDashboardTasksToCurrentUser()
+    {
+    	  System.out.println("current user pending tasks api called");
+	 //return TaskUtil.getAllPendingTasks();
+    	return   TaskUtil.getAllPendingTasksForCurrentUser();
+    }
 
     @Path("/my/tasks")
     @GET

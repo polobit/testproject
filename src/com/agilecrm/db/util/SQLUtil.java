@@ -131,7 +131,9 @@ public class SQLUtil
 
 	    // If both are not null
 	    if (!StringUtils.isEmpty(subscriberId))
-		condition += " AND ";
+		return condition += " AND " + " subscriber_id = "
+			+ encodeSQLColumnValue(subscriberId) + " AND "
+			+ appendDomainToQuery(domain);
 	}
 
 	if (!StringUtils.isEmpty(subscriberId))
@@ -206,8 +208,9 @@ public class SQLUtil
      */
     public static String encodeSQLColumnValue(String value)
     {
+	// If value is null, insert empty but not null
 	if (value == null)
-	    return null;
+	    return "\'\'";
 
 	// Removes single quotation on start and end.
 	String replaceSingleQuote = value.replaceAll("(^')|('$)", "");

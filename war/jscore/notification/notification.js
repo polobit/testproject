@@ -170,7 +170,7 @@ function _setupNotification(object) {
 			{
 			 
 			   // Replace CONTACT with COMPANY for contact-type COMPANY
-			   if((object.notification == "CONTACT_CREATED" || object.notification == "CONTACT_DELETED") && object.type == "COMPANY")
+			   if((object.notification == "CONTACT_ADDED" || object.notification == "CONTACT_DELETED") && object.type == "COMPANY")
 			   { 
 				   var company = object.notification.replace('CONTACT', 'COMPANY');
 				   object.notification = company;
@@ -455,7 +455,7 @@ function showNoty(type, message, position,notification_type) {
 	if (window.webkitNotifications
 			&& window.webkitNotifications.checkPermission() == 0) {
 		show_desktop_notification(getImageUrl(message),
-				notification_type.replace(/_/g, ' '), getTextMessage(message),
+				getNotificationType(notification_type), getTextMessage(message),
 				getId(message));
 		return;
 	}
@@ -522,6 +522,17 @@ function getTextMessage(message) {
 
 	name = $(message).find('#notification-deal-id').text();
 	return name + " " + type;
+}
+
+/**
+ * Returns converted notification-type. E.g., TAG_ADDED to Tag Added
+ ***/
+function getNotificationType(notification_type)
+{
+	if(notification_type == "CONTACT_ADDED" || notification_type == "TAG_ADDED" || notification_type == "DEAL_CREATED")
+		return "New " + ucfirst(notification_type.split('_')[0]);
+		
+	return ucfirst(notification_type.split('_')[0]) + " " + ucfirst(notification_type.split('_')[1]);
 }
 
 /**

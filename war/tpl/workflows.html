@@ -17,6 +17,7 @@
             {{#if subscribersCount.active}}{{subscribersCount.active}}&nbsp;active{{/if}}
         </div>
     </td>
+    <td>{{triggers}}</td>
 	<td><a href="#workflows/logs/{{id}}" class="workflow-results">Logs</a></td>
     <td><a href="#email-reports/{{id}}" class="workflow-results">Stats</a></td>
     <td> 
@@ -59,13 +60,14 @@
         {{#if this.length}}
         <div class="data-block">
             <div class="data-container">
-                <table class="table table-striped showCheckboxes" url="core/api/workflows/bulk">
+                <table class="table table-striped showCheckboxes" url="core/api/workflows/bulk" id="workflows-tour-step">
                     <thead>
                         <tr>
                             <th class="hide">Id</th>
                             <th>Name</th>
                        <!-- <th>Creator</th> -->
                             <th>Subscribers</th>
+                            <th>Triggers</th>
                         </tr>
                     </thead>
                     <tbody id="workflows-model-list" style="cursor:pointer;" route="workflow/"> </tbody>
@@ -74,7 +76,7 @@
         </div>
         {{/if}}
     </div>
-    <div class="span3">
+    <div class="span3" id="learn-workflows">
         <div class="well">
             <h3>
                 What is Workflow Automation?

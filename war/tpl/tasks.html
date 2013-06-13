@@ -9,7 +9,7 @@
     </h3>
 </header>
 {{#unless this.length}}
-<img src="/img/funtime.jpg" /></img>
+<p><strong>No Task Due</strong></p>
 {{/unless}}
 {{#if this.length}}
 <section>
@@ -32,12 +32,13 @@
         </table>
     </form>
 </section>
-<br />
-<div>
+{{/if}}
+
+<div style="margin-top:10px;">
     <a href="#tasks" class="tasks-table" id="tasks-list">All Tasks</a>
     <div class="right add-task"><a href="#"><i class="icon-plus" /> Add New</a></div>
 </div>
-{{/if}}
+
 </script>
 
 <script id="tasks-model-template" type="text/html">

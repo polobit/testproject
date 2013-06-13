@@ -14,6 +14,7 @@ function setupDashboard(el)
 	setupSubscriptionDetails(el);
 	/*setupDashboardTimeline();
 	setUpDashboardNavtabs(el);*/
+	setProfileMeter();
 	setUpDashboardEntities(el);
 }
 
@@ -26,7 +27,7 @@ function setUpDashboardEntities(el) {
 	
 	$("#profile-meter").html(profileMeter.render().el);
 	*/
-	setProfileMeter();
+	
 	
 	var myRecentContacts = new Base_Collection_View({
 		url: 'core/api/contacts/recent?page_size=5' ,
@@ -43,26 +44,28 @@ function setUpDashboardEntities(el) {
 	
     	$('#recent-contacts', el).html(myRecentContacts.render().el);
 
-    	var tasksListView = new Base_Collection_View({
-			url : '/core/api/tasks/my/tasks',
+    	var tasksDashboardListView = new Base_Collection_View({
+			url : '/core/api/tasks/my/dashboardtaskstasks',
 			restKey : "task",
-			templateKey : "dashboard1-tasks",
+			sortKey : "due",
+			templateKey   : "tasks-dashboard1",
 			individual_tag_name : 'tr',
 			postRenderCallback: function(el) {
 				head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
            		 $(".task-due-time", el).timeago();
-           			tasks_count = tasksListView.collection.length;
-           			showPadContentIfNoActivity();
-             	});
+           		});
 			}
 		});
-    	//tasksListView.appendItem = append_tasks;
-		tasksListView.collection.fetch();
-
-		$('#my-tasks').html(tasksListView.el);
-		
+    	
+    	
+    		totalRows=1;
+    		tasksDashboardListView.appendItem = append_tasks_dashboard;
+    		tasksDashboardListView.collection.fetch();
+            $('#my-tasks').html(tasksDashboardListView.el);
+            
+            
 			var myDeals = new Base_Collection_View({
-				url: 'core/api/opportunity/my/upcoming-deals' ,
+				url: 'core/api/opportunity/my/upcoming-deals',
 	            restKey: "opportunity",
 	            templateKey: "dashboard-opportunities",
 	            individual_tag_name: 'tr',

@@ -1,3 +1,11 @@
+Backbone.View.prototype.close = function(){
+  this.remove();
+  this.unbind();
+  if (this.onClose){
+	    this.onClose();
+	 }
+}
+
 var BaseModel = Backbone.Model.extend({});
 
 /**
@@ -291,7 +299,7 @@ var Base_Collection_View = Backbone.View
 													+ '</div>');
 								}
 							});
-
+					
 					/*
 					 * Adds infiniscroll objects in to a map with current route
 					 * as key, to manage the infiniscroll if view changes i.e.,
@@ -299,6 +307,8 @@ var Base_Collection_View = Backbone.View
 					 * necessary.
 					 */
 					addInfiniScrollToRoute(this.infiniScroll);
+					
+					//disposePreviousView(this.options.templateKey + '-collection', this);
 
 					// Store in a variable for us to access in the custom fetch
 					// as this is different
@@ -466,6 +476,8 @@ var Base_Collection_View = Backbone.View
 
 				// Add checkboxes to specified tables by triggering this event
 				$('body').trigger('agile_collection_loaded');
+				
+				$(this.el).trigger('agile_collection_loaded');
 
 				// For the first time fetch, disable Scroll bar if results are
 				// lesser
@@ -476,5 +488,5 @@ var Base_Collection_View = Backbone.View
 				}
 
 				return this;
-			}
+			},
 		});

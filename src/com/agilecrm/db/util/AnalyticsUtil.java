@@ -71,7 +71,7 @@ public class AnalyticsUtil
 		+ ","
 		+ SQLUtil.encodeSQLColumnValue(ip)
 		+ ","
-		+ isNew
+		+ SQLUtil.encodeSQLColumnValue(isNew)
 		+ ","
 		+ SQLUtil.encodeSQLColumnValue(ref)
 		+ ","
@@ -114,9 +114,11 @@ public class AnalyticsUtil
 
 	System.out.println("sids query is: " + sessions);
 
-	// Gets all Sessions based on above obtained sids
+	// Gets all Sessions based on above obtained sids and required email
 	String pageViews = "SELECT *, UNIX_TIMESTAMP(stats_time) AS created_time FROM page_views WHERE sid IN "
-		+ sessions;
+		+ sessions
+		+ " AND email = "
+		+ SQLUtil.encodeSQLColumnValue(email);
 
 	System.out.println("Select query: " + pageViews);
 
@@ -200,6 +202,38 @@ public class AnalyticsUtil
 	int count = 0;
 
 	ResultSet rs = GoogleSQL.executeQuery(urlCountQuery);
+
+	try
+	{
+	    if (rs.next())
+	    {
+		// Gets first column
+		count = rs.getInt(1);
+	    }
+	}
+	catch (SQLException e)
+	{
+	    e.printStackTrace();
+	}
+
+	return count;
+    }
+
+    /**
+     * Returns page-views count if any with respect to domain.
+     * 
+     * @param domain
+     *            - domain name.
+     * @return int
+     */
+    public static int getPageViewsCountForGivenDomain(String domain)
+    {
+	String pageViewsCount = "SELECT COUNT(*) FROM page_views WHERE domain = "
+		+ SQLUtil.encodeSQLColumnValue(domain);
+
+	int count = 0;
+
+	ResultSet rs = GoogleSQL.executeQuery(pageViewsCount);
 
 	try
 	{
