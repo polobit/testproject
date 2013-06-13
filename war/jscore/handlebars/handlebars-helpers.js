@@ -595,7 +595,7 @@ $(function() {
 				});
 
 				if (properties[i].subtype)
-					el = el.concat(" <span class='label'>"+ properties[i].subtype +"</span>");
+					el = el.concat(" (" + properties[i].subtype + ")");
 				el = el.concat('</span></div></div>');
 				return new Handlebars.SafeString(el);
 			}
@@ -1000,7 +1000,13 @@ $(function() {
 							"LINKEDIN" : "icon-linkedin-sign", 
 							"URL" : "icon-globe",
 							"GOOGLE_PLUS" : "icon-google-plus-sign",
-							"FACEBOOK" : "icon-facebook-sign"
+							"FACEBOOK" : "icon-facebook-sign",
+							"SKYPE" : "icon-skype",
+							"XING" : "icon-xing",
+							"FLICKR" : "icon-flickr",
+							"GITHUB" : "icon-github",
+							"YOUTUBE" : "icon-youtube",
+							"FEED" : "icon-rss"
 						}
 		
 		name = name.trim();
