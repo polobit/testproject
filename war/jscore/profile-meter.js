@@ -100,8 +100,8 @@ function showNotyOnTopOfPanel(content)
 
    	$('body').find('#wrap').find('#notify-container').remove();
 			$('body').find('#wrap').prepend(getTemplate("sticky-noty", content));
-			$('body').find('#wrap').find('.navbar-fixed-top').css('margin-top','35px');
-			$('body').find('#wrap').find('#agilecrm-container').css('padding-top','95px');
+			$('body').find('#wrap').find('.navbar-fixed-top').css('margin-top','34px');
+			$('body').find('#wrap').find('#agilecrm-container').css('padding-top','96px');
 }		
 
 function removeProfileNoty() {
