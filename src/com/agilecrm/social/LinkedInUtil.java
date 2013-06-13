@@ -181,8 +181,8 @@ public class LinkedInUtil
 	    // Changes http to https to avoid client side warnings by browser,
 	    // Changes certificate from m3 to m3-s to fix ssl broken image link
 	    if (result.picture != null)
-		result.picture = result.picture.replaceAll("http:", "https:")
-			.replaceAll("m3", "m3-s");
+		result.picture = result.picture.replaceFirst("http:", "https:")
+			.replaceFirst("m3", "m3-s");
 
 	    System.out.println(result.picture);
 
@@ -273,8 +273,8 @@ public class LinkedInUtil
 	// Change http to https to avoid client side warnings by browser
 	// Change certificate from m3 to m3-s to fix ssl broken image link
 	if (result.picture != null)
-	    result.picture = result.picture.replace("http:", "https:").replace(
-		    "m3", "m3-s");
+	    result.picture = result.picture.replaceFirst("http:", "https:")
+		    .replaceFirst("m3", "m3-s");
 
 	return result;
 
@@ -577,8 +577,8 @@ public class LinkedInUtil
 			// by browser, Changes certificate from m3 to m3-s to
 			// fix ssl broken image link
 			p.setPictureUrl(p.getPictureUrl()
-				.replace("http:", "https:")
-				.replace("m3", "m3-s"));
+				.replaceFirst("http:", "https:")
+				.replaceFirst("m3", "m3-s"));
 
 			json = new JSONObject(p);
 		    }
@@ -647,8 +647,8 @@ public class LinkedInUtil
 	    // Changes http to https to avoid client side warnings by browser,
 	    // Changes certificate from m3 to m3-s to fix ssl broken image link
 	    if (result.picture != null)
-		result.picture = result.picture.replace("http:", "https:")
-			.replace("m3", "m3-s");
+		result.picture = result.picture.replaceFirst("http:", "https:")
+			.replaceFirst("m3", "m3-s");
 
 	    // Sets number of connects if provided
 	    result.num_connections = (person.getNumConnections() != null) ? person
@@ -696,7 +696,8 @@ public class LinkedInUtil
 			CompanyField.INDUSTRY, CompanyField.TICKER));
 
 		company.setLogoUrl(company.getLogoUrl()
-			.replace("http:", "https:").replace("m3", "m3-s"));
+			.replaceFirst("http:", "https:")
+			.replaceFirst("m3", "m3-s"));
 		position.setCompany(company);
 	    }
 
@@ -718,7 +719,8 @@ public class LinkedInUtil
 			CompanyField.INDUSTRY, CompanyField.TICKER));
 
 		company.setLogoUrl(company.getLogoUrl()
-			.replace("http:", "https:").replace("m3", "m3-s"));
+			.replaceFirst("http:", "https:")
+			.replaceFirst("m3", "m3-s"));
 		position.setCompany(company);
 
 	    }
@@ -777,8 +779,8 @@ public class LinkedInUtil
 	    // Changes http to https to avoid client side warnings by browser,
 	    // Changes certificate from m3 to m3-s to fix ssl broken image link
 	    if (result.picture != null)
-		result.picture = result.picture.replace("http:", "https:")
-			.replace("m3", "m3-s");
+		result.picture = result.picture.replaceFirst("http:", "https:")
+			.replaceFirst("m3", "m3-s");
 
 	    // Sets number of connects if provided
 	    result.num_connections = (person.getNumConnections() != null) ? person
