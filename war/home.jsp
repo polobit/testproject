@@ -74,7 +74,7 @@ String CSS_PATH = "/";
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/planandupgrade.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/daterangepicker.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrapSwitch.css" />
-
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/bootstrap-tour.min.css"/>
 <!-- Unified CSS for All Lib -->
 <link rel='stylesheet' type='text/css' href='<%=CSS_PATH%>css/lib.css' />
 

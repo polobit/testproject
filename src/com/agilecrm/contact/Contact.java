@@ -103,10 +103,14 @@ public class Contact extends Cursor
     /**
      * Viewed time of the contact, in milliseconds
      */
-    @NotSaved(IfDefault.class)
-    @Indexed
+    @NotSaved
     public Long viewed_time = 0L;
-
+    
+    @NotSaved(IfDefault.class)
+    @Embedded
+    @Indexed
+    public ViewedDetails viewed = new ViewedDetails();
+    
     /**
      * Stores current domain user key as owner, if it is null should not save in
      * database
@@ -569,6 +573,11 @@ public class Contact extends Cursor
 	else
 	{
 	    updated_time = System.currentTimeMillis() / 1000;
+	    if(viewed_time != 0L)
+	    {
+	    	viewed.viewed_time = viewed_time;
+	    	viewed.viewer_id = SessionManager.get().getDomainId();
+	    }
 	}
 
 	// If tags are not empty, considering they are simple tags and adds them
@@ -616,4 +625,15 @@ public class Contact extends Cursor
 		+ " properties: " + properties;
     }
 
+}
+
+@XmlRootElement
+class ViewedDetails
+{
+	public Long viewed_time = 0L;
+	public Long viewer_id = null;
+	public ViewedDetails()
+	{
+		
+	}
 }

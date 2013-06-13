@@ -44,7 +44,9 @@ var WorkflowsRouter = Backbone.Router
 					postRenderCallback : function(el) {
 						head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
 							$("time.campaign-created-time", el).timeago();
+							
 						});
+						 startTour("workflows", el);
 					},
 					appendItemCallback:function(el)
 					{
@@ -77,6 +79,7 @@ var WorkflowsRouter = Backbone.Router
 				this.workflow_model = undefined;
 
 				$('#content').html(getTemplate('workflow-add', {}));
+				initiateTour("workflows-add", $('#content'));
 			},
 
 			/**
@@ -99,10 +102,11 @@ var WorkflowsRouter = Backbone.Router
 				this.workflow_model = this.workflowsListView.collection.get(id);
 				this.workflow_json = this.workflow_model.get("rules");
 
-				$('#content').html(getTemplate('workflow-add', {}));
+				var el = $(getTemplate('workflow-add', {}));
+				$('#content').html(el);
 
 				// Set the name
-				$('#workflow-name').val(this.workflow_model.get("name"));
+				$('#workflow-name').val(el);
 			},
 
 			/**
