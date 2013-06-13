@@ -9,11 +9,10 @@ function create_tour_steps(el) {
 	                     				"content" : "View your contacts, leads and accounts (companies) all at one place.<br/>",
 	                     				"placement" : "bottom",
 	                     				"el": el,
-	                     				
-	                     			
+	                     				"backdrop" : true
 	                                 },
 	                                 {
-	                                	 "element" : "#filter-list",
+	                                	 "element" : "#filters-tour-step",
 	                     				"title" : "Companies (Accounts)",
 	                     				"content" : "Accounts are stored as Companies in Agile.<br/><br/> You can switch between contacts and companies  here.<br/>",
 	                     				"placement" : "bottom",
@@ -42,25 +41,25 @@ function create_tour_steps(el) {
 	                    				"placement" : "right",
 	                    				"el": el,
 	                    				"backdrop" : true
-								     },
-										{
-											"element" : "#score",
-											"container": "#score",
-											"title" : "Score your leads",
-											"content" : "Assign lead scores for every contact to keep high quality leads swimming on top. <br/><br/> Use workflows to automate the process based on user behavior.<br/>",
-											"placement" : "bottom",
-											"el": el,
-											"backdrop" : true
-										},
-										{
-											"element" : "#widgets",
-											"title" : "Widgets & Integrations",
-											"content" : "Get more information about the contact from social media, helpdesk tickets, chats, and from billing systems.<br/>",
-											"placement" : "left",
-											"el": el,
-											"backdrop" : true,
-										}, 
-								];
+							                    			},
+									{
+										"element" : "#score",
+										"container": "#score",
+										"title" : "Score your leads",
+										"content" : "Assign lead scores for every contact to keep high quality leads swimming on top. <br/><br/> Use workflows to automate the process based on user behavior.<br/>",
+										"placement" : "bottom",
+										"el": el,
+										"backdrop" : true
+									},
+									{
+										"element" : "#widgets",
+										"title" : "Widgets & Integrations",
+										"content" : "Get more information about the contact from social media, helpdesk tickets, chats, and from billing systems.<br/>",
+										"placement" : "left",
+										"el": el,
+										"backdrop" : true,
+									}, 
+							];
 	
 	/**
 	 * Calendar
@@ -134,19 +133,27 @@ function create_tour_steps(el) {
 }
 
 var tour;
+var tour_flag = false;
 function startTour(key, el) {
+	tour = undefined;
+	var tour_flag = false;
+	
 	 $(el).live('agile_collection_loaded', function(){
-
-		 initiateTour(key, el)
+		if(tour_flag)
+			return;
+		
+		initiateTour(key, el);
+		tour_flag = true;
 	 });
 }
 function initiateTour(key, el)
-{
+{ 
 	var tourStatusCookie = readCookie("agile_tour");
 	if (!tourStatusCookie)
 		return;
 	if (!key)
 		return;
+	console.log(tour);
 		
 	tourStatusCookie = JSON.parse(JSON.parse(tourStatusCookie));
 	tourStatus = tourStatusCookie[key];
@@ -166,7 +173,7 @@ function initiateTour(key, el)
 		            next: 'Next &raquo;',
 		            prev: '&laquo; Prev'
 		          },
-		   //   debug:true,
+		     debug:true,
 			useLocalStorage : true,
 			onEnd : function(tour) {
 				
