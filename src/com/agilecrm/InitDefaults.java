@@ -69,6 +69,7 @@ public class InitDefaults
 
 	Contact contact = new Contact(Contact.Type.PERSON, tags, contactFields);
 	contact.lead_score = 50;
+	contact.star_value = 4;
 	contact.save();
 
 	LinkedHashSet<String> tags1 = new LinkedHashSet<String>();
@@ -90,6 +91,7 @@ public class InitDefaults
 
 	Contact contact1 = new Contact(Contact.Type.PERSON, tags1,
 		contactFields1);
+	contact1.star_value = 3;
 	contact1.lead_score = 10;
 	contact1.save();
 
@@ -110,6 +112,7 @@ public class InitDefaults
 			"https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1370348006468?id=contact-container"));
 	Contact contact2 = new Contact(Contact.Type.PERSON, tags2,
 		contactFields2);
+	contact2.star_value = 5;
 	contact2.lead_score = 10;
 	contact2.save();
 
@@ -135,7 +138,7 @@ public class InitDefaults
     private static void getDefaultTasks()
     {
 	Task task = new Task();
-	task.subject = "Give feedback on Agile";
+	task.subject = "Give feedback about Agile";
 	task.is_complete = false;
 	task.type = Type.SEND;
 	task.priority_type = PriorityType.HIGH;
