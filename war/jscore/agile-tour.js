@@ -62,7 +62,7 @@ function create_tour_steps(el) {
 	/**
 	 * Calendar
 	 */
-	/*AGILE_TOUR["calendar"] = [
+	AGILE_TOUR["calendar"] = [
 	                          {
 		                        	"element" : "#calendar",
 		              				"title" : "Calendar Events",
@@ -88,7 +88,7 @@ function create_tour_steps(el) {
 		              				"backdrop" : true,
 		                      },
 	                          
-	                          ];*/
+	                          ];
 	
 	AGILE_TOUR["workflows"] = [
 	                        	   	{
