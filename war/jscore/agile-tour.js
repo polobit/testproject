@@ -62,7 +62,7 @@ function create_tour_steps(el) {
 	/**
 	 * Calendar
 	 */
-	/*AGILE_TOUR["calendar"] = [
+	AGILE_TOUR["calendar"] = [
 	                          {
 		                        	"element" : "#calendar",
 		              				"title" : "Calendar Events",
@@ -88,7 +88,7 @@ function create_tour_steps(el) {
 		              				"backdrop" : true,
 		                      },
 	                          
-	                          ];*/
+	                          ];
 	
 	AGILE_TOUR["workflows"] = [
 	                        	   	{
@@ -139,24 +139,22 @@ function startTour(key, el) {
 }
 function initiateTour(key, el)
 {
-	var tourStatus = readCookie("agile_tour");
-	if (!tourStatus)
+	var tourStatusCookie = readCookie("agile_tour");
+	if (!tourStatusCookie)
 		return;
 	if (!key)
 		return;
 		
-	var tourStatus = JSON.parse(JSON.parse(tourStatus))[key];
-	
+	tourStatusCookie = JSON.parse(JSON.parse(tourStatusCookie));
+	tourStatus = tourStatusCookie[key];
 	if(!tourStatus)
 		return;
 
 	if ($.isEmptyObject(AGILE_TOUR))
 		create_tour_steps(el);
 
-	
 
-	create_tour_steps(el);
-
+	if(AGILE_TOUR[key])
 	head.js('lib/bootstrap-tour.min.js', function() {
 		tour = new Tour({
 			 name: key + "-tour",
@@ -164,9 +162,9 @@ function initiateTour(key, el)
 			onEnd : function(tour) {
 				
 				$("."+key + "-tour").remove();
-				delete tourStatus[key];
+				delete tourStatusCookie[key];
 				
-				if ($.isEmptyObject(tourStatus)) {
+				if ($.isEmptyObject(tourStatusCookie)) {
 					eraseCookie("agile_tour");
 					return;
 				}
@@ -174,12 +172,11 @@ function initiateTour(key, el)
 				// Stringified it twice to maintain consistency with the cookie
 				// set from backend
 				createCookie("agile_tour", JSON.stringify(JSON
-						.stringify(tourStatus)));
+						.stringify(tourStatusCookie)));
 				// }
 			}
 		});
 		
-		if(AGILE_TOUR[key])
 			tour.addSteps(AGILE_TOUR[key]);
 
 			tour.start(true);
