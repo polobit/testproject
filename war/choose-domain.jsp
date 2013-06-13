@@ -107,7 +107,7 @@ padding-left:10px!important;
 	<div class="account-container">
 		<div class="content clearfix">
 				 <h1>Register (Step 1 of 2)</h1>
-				 <form name='choose_domain' id="choose_domain" method='post' style="padding:10px 0 15px;border-top: 1px dotted #CCC;">
+				 <form name='choose_domain' id="choose_domain" method='post' onsubmit="return validateAndSubmit();" style="padding:10px 0 15px;border-top: 1px dotted #CCC;">
 						<div id="domain-error"></div>
 						<% if(!StringUtils.isEmpty(error)){%>
 					 <div class="alert alert-error login-error">
@@ -126,7 +126,8 @@ padding-left:10px!important;
 						   	   name="subdomain" class="input-medium field required" autocapitalize="off"><b> .agilecrm.com</b>
 				   </div>
 				</form>
-				<div style="margin-left:30%"><input class="btn btn-large btn-primary" type="submit" value="Submit"></div>
+				  <div style="margin-left:30%"><input class="btn btn-large btn-primary" type="submit" value="Submit"></div>
+				
 				
 					<div class="clearfix"></div>
 		
@@ -151,27 +152,32 @@ padding-left:10px!important;
 		$(function() {
 			$("#subdomain").focus();
 			$(".btn").click(function(e) {
-				
-				var subdomain = $("#subdomain").val();
-				// validates the domain value
-				if(subdomain == null || subdomain == "" || subdomain.length < 4 || subdomain.length > 12 
-			        || !isAlphaNumeric(subdomain) || !isNotValid(subdomain))
-				{
-					//shows error message
-					if(!error)error = "Domain should be 4 to 12 characters."
-					$("#domain-error").html('<div class="alert alert-error domain-error">'
-							+ '<a class="close" data-dismiss="alert" href="#">×</a>'+ error +'</div>');
-					error = "";
-					return false;
-				}
-				$(".domain-error").hide();
-				console.log("submited");
-				//Form is self submitted
-				$('#choose_domain').submit();
-				e.preventDefault();
-			});
-
+				$("#choose_domain").submit();
+			})
+			
 		});
+		
+		/* Validate 'domain' on submit */
+		function validateAndSubmit() {
+			var subdomain = $("#subdomain").val();
+			// validates the domain value
+			if(subdomain == null || subdomain == "" || subdomain.length < 4 || subdomain.length > 12 
+		        || !isAlphaNumeric(subdomain) || !isNotValid(subdomain))
+			{
+				//shows error message
+				if(!error)error = "Domain should be 4 to 12 characters."
+				$("#domain-error").html('<div class="alert alert-error domain-error">'
+						+ '<a class="close" data-dismiss="alert" href="#">×</a>'+ error +'</div>');
+				error = "";
+				return false;
+			}
+			
+			$(".domain-error").hide();
+			return true;
+			console.log("submited");
+			//Form is self submitted
+		}
+		
 		function isNotValid(subdomain) {
 			subdomain = subdomain.toString();
 			var sub_domain = ["my", "agile", "googleapps", "sales", "support", "login", "register", "google", "yahoo", "twitter", "facebook", "aol", "hotmail"];

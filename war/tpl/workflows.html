@@ -17,7 +17,7 @@
             {{#if subscribersCount.active}}{{subscribersCount.active}}&nbsp;active{{/if}}
         </div>
     </td>
-    <td>{{triggers}}</td>
+    <td>{{#if triggers}} {{triggers}} {{else}} - {{/if}}</td>
 	<td><a href="#workflows/logs/{{id}}" class="workflow-results">Logs</a></td>
     <td><a href="#email-reports/{{id}}" class="workflow-results">Stats</a></td>
     <td> 

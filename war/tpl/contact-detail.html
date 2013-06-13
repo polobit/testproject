@@ -35,8 +35,8 @@
 									{{#property_is_exists "website" properties}}
 									{{#multiple_Property_Element "website" properties}} {{#each
 									this}} {{#if_equals subtype "TWITTER"}} <span
-										style="margin-right: 5px"> <a target="_blank"
-										href="https://twitter.com/{{value}}"
+										style="margin-right: 5px"><a target="_blank"
+										href="https://twitter.com/{{getTwitterHandleByURL value}}"
 										style="text-decoration: none"> <i
 											class="{{get_social_icon "
 											TWITTER"}}" style="font-size: 1.4em !important"></i>

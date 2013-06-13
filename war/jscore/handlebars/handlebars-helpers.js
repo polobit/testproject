@@ -17,11 +17,25 @@ $(function() {
 	});
 	
 	Handlebars.registerHelper('getPropertyValueBySubtype', function(items, name, subtype) {
+		
 		return getPropertyValueBySubtype(items, name, subtype);
 	});
 	
 	Handlebars.registerHelper('getPropertyValueBytype', function(items, name, type, subtype) {
 		return getPropertyValueBytype(items, name, type, subtype);
+	});
+	
+	
+	
+	Handlebars.registerHelper('getTwitterHandleByURL', function(value) {
+		
+		if (value.indexOf("https://twitter.com/") != -1)
+		    return value;
+
+		value = value.substring(value.lastIndexOf("/") + 1);
+		console.log(value);
+		
+		return value;
 	});
 	
 	Handlebars.registerHelper('getContactCustomProperties', function(items, options) {
@@ -988,6 +1002,9 @@ $(function() {
 							"GOOGLE_PLUS" : "icon-google-plus-sign",
 							"FACEBOOK" : "icon-facebook-sign"
 						}
+		
+		name = name.trim();
+		
 		if(icon_json[name])
 			return icon_json[name];
 		
@@ -1026,13 +1043,6 @@ $(function() {
 		{
 			return options.inverse(this);
 		}
-	});
-	
-		
-	Handlebars.registerHelper('getTwitterURLBySubtype', function(items, name, subtype) {
-		
-		
-		return getPropertyValueBySubtype(items, name, subtype).value();
 	});
 	
 	
