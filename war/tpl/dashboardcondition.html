@@ -1,27 +1,9 @@
 <div id="task-lista-based-condition"></div>
 
 </script><script id="tasks-dashboard1-collection-template" type="text/html">
-{{#unless this.length}}
 <h2 style="border-bottom:1px solid #f5f5f5; margin-bottom:10px">Tasks Due</h2>
-<table class="table" style="margin-bottom:2px !important;">
-            
-             <thead>
-                  <tr style="background-color:#EDF3FE; margin-bottom:0px !important;">
-                    
-                    <th>Task Name</th>
-                    <th>Priority Type</th>
-                    <th>Category</th>
-                    <th>Due Date</th>
-                    <th>Related To</th>
-                  </tr>   
-                
- 
-             </thead>
-              
-        </table>
-<h4>No Tasks Due this week.</h4>
-{{/unless}}
 {{#if this.length}}
+
 <section>
     <form>
         <h2 style="border-bottom:1px solid #f5f5f5; margin-bottom:10px">Tasks Due</h2>
@@ -65,6 +47,8 @@
      </form>
 </section>
 <br/>
+{{else}}
+{{set_up_dashboard_padcontent "tasks"}}
 {{/if}}
 </script>
 

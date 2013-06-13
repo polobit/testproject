@@ -1,10 +1,24 @@
 <script id="empty-collection-model-template" type="text/html">
 <div class="slate">
     <div class="slate-content">
-        <div class="box-left">
-            <img alt="Clipboard" src="{{image}}" />
-        </div>
-        <div class="box-right">
+        
+			{{#if image}}	
+				<div class="box-left">
+ 	           		<img alt="Clipboard" src="{{image}}" />
+				</div>
+				{{else}}
+					{{#if icon}}
+						<div class="box-left" style="margin-top:5px">
+							<i class="{{icon}}" style="margin-top:5px"></i>
+						</div>
+					{{/if}}
+			{{/if}}
+        
+		{{#if icon}}
+	        	<div class="box-right" style="margin-left:60px !important">
+			{{else}}
+				<div class="box-right">
+		{{/if}}
             <h3>{{title}}</h3>
             {{#if description}}<div class="text">{{description}}</div>{{/if}}
 			{{#if learn_more}}

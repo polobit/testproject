@@ -761,6 +761,7 @@ body
 
 .icon-3x{font-size:3em}
 .icon-3x.icon-border{border-width:3px;-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px}
+.icon-4x{font-size:4em}.icon-4x.icon-border{border-width:4px;-webkit-border-radius:6px;-moz-border-radius:6px;border-radius:6px}.icon-5x{font-size:5em}
 
 #show-help p {
 	margin-left:25px;
@@ -823,3 +824,4 @@ text-decoration:underline;
 
 #notify-container span.notify-close
 {background-color: whiteSmoke;float: right;margin-right: 20px;border: 2px solid #735005;padding-left: 4px;padding-right: 4px;padding-bottom:3px;text-decoration: none;display: block;cursor: pointer;margin-top: -3px;}
+
