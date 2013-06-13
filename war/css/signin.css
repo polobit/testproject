@@ -1,6 +1,6 @@
 
 /** Base Body Styles **/
-body{ background: url(../../img/body-bg.png); color:#838383; font: 13px/1.7em 'PT Sans';}
+body{color:#838383; font: 13px/1.7em 'PT Sans';}
 
 
 .account-container {
@@ -47,13 +47,6 @@ body{ background: url(../../img/body-bg.png); color:#838383; font: 13px/1.7em 'P
 	box-shadow: inset 2px 2px 4px #f1f1f1;
 }
 
-.username-field { background: url(../../img/signin/user.png) no-repeat; }
-
-.password-field { background: url(../../img/signin/password.png) no-repeat; }
-
-
-
-
 .login-actions {
 	float: left;
 	
@@ -94,8 +87,6 @@ span.login-checkbox > input[type='checkbox'] + label {
     
     font-size: 12px;
     line-height: 1.2em;
-    
-    background: url(../../img/signin/check.png) no-repeat 0 0;
     
     cursor: pointer;
 }

@@ -42,7 +42,7 @@ var CONTENT_JSON = {
 		"title" : "You do not have any deals currently.",
 		"description" : "Deals are sales opportunities you track continuously throughout its lifecycle.",
 		//"learn_more" : "click here to learn more",
-		"button_text" : "Add deal",
+		"button_text" : "Add Deal",
 		"route" : "#deals-add",
 		"image" : "/img/clipboard.png"
 	},
@@ -58,7 +58,7 @@ var CONTENT_JSON = {
 		"title" : "You do not have any filters currently.",
 		"description" : "Filters are used to sort contacts with a specific criteria to find patterns.",
 		//"learn_more" : "click here to learn more",
-		"button_text" : "Add filter",
+		"button_text" : "Add Filter",
 		"route" : "#contact-filter-add",
 		"image" : "/img/clipboard.png"
 	},
@@ -66,7 +66,7 @@ var CONTENT_JSON = {
 		"title" : "You do not have any custom views currently.",
 		"description" : "View is collection of different fields and the order in which you would like them to appear.",
 		//"learn_more" : "click here to learn more",
-		"button_text" : "Add view",
+		"button_text" : "Add View",
 		"route" : "#contact-view-add",
 		"image" : "/img/clipboard.png"
 	},
