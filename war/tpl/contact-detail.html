@@ -272,8 +272,7 @@
 									class="span9">
 									{{#each this}}
 									<div>
-										<a href="tel:{{value}}">{{value}}</a>{{#if subtype}} <sub
-											style="bottom: -0.05px !important">{{subtype}}</sub> {{/if}}
+										<a href="tel:{{value}}">{{value}}</a> {{#if subtype}}<span class="label">{{subtype}}</span> {{/if}}
 									</div>
 									{{/each}}
 								</div>
@@ -298,8 +297,7 @@
 										{{/property_is_exists}} 
 								{{#each this}}
 										<div>
-											<a href="mailto:{{value}}">{{value}}</a> {{#if subtype}} <sub
-												style="bottom: -0.05em">{{subtype}}</sub> {{/if}}
+											<a href="mailto:{{value}}">{{value}}</a> {{#if subtype}} <span class="label">{{subtype}}</span> {{/if}}
 										</div>
 										{{/each}}
 									</div>

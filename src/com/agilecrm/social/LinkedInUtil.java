@@ -162,6 +162,10 @@ public class LinkedInUtil
 	    if (person.getId().equalsIgnoreCase("private"))
 		continue;
 
+	    if (person.getFirstName().equalsIgnoreCase("private")
+		    || person.getLastName().equalsIgnoreCase("private"))
+		continue;
+
 	    result.id = person.getId();
 	    result.name = person.getFirstName() + " " + person.getLastName();
 	    result.picture = person.getPictureUrl();
@@ -177,8 +181,8 @@ public class LinkedInUtil
 	    // Changes http to https to avoid client side warnings by browser,
 	    // Changes certificate from m3 to m3-s to fix ssl broken image link
 	    if (result.picture != null)
-		result.picture = result.picture.replaceAll("http:", "https:")
-			.replaceAll("m3", "m3-s");
+		result.picture = result.picture.replaceFirst("http:", "https:")
+			.replaceFirst("m3", "m3-s");
 
 	    System.out.println(result.picture);
 
@@ -269,8 +273,8 @@ public class LinkedInUtil
 	// Change http to https to avoid client side warnings by browser
 	// Change certificate from m3 to m3-s to fix ssl broken image link
 	if (result.picture != null)
-	    result.picture = result.picture.replace("http:", "https:").replace(
-		    "m3", "m3-s");
+	    result.picture = result.picture.replaceFirst("http:", "https:")
+		    .replaceFirst("m3", "m3-s");
 
 	return result;
 
@@ -573,8 +577,8 @@ public class LinkedInUtil
 			// by browser, Changes certificate from m3 to m3-s to
 			// fix ssl broken image link
 			p.setPictureUrl(p.getPictureUrl()
-				.replace("http:", "https:")
-				.replace("m3", "m3-s"));
+				.replaceFirst("http:", "https:")
+				.replaceFirst("m3", "m3-s"));
 
 			json = new JSONObject(p);
 		    }
@@ -643,8 +647,8 @@ public class LinkedInUtil
 	    // Changes http to https to avoid client side warnings by browser,
 	    // Changes certificate from m3 to m3-s to fix ssl broken image link
 	    if (result.picture != null)
-		result.picture = result.picture.replace("http:", "https:")
-			.replace("m3", "m3-s");
+		result.picture = result.picture.replaceFirst("http:", "https:")
+			.replaceFirst("m3", "m3-s");
 
 	    // Sets number of connects if provided
 	    result.num_connections = (person.getNumConnections() != null) ? person
@@ -692,7 +696,8 @@ public class LinkedInUtil
 			CompanyField.INDUSTRY, CompanyField.TICKER));
 
 		company.setLogoUrl(company.getLogoUrl()
-			.replace("http:", "https:").replace("m3", "m3-s"));
+			.replaceFirst("http:", "https:")
+			.replaceFirst("m3", "m3-s"));
 		position.setCompany(company);
 	    }
 
@@ -714,7 +719,8 @@ public class LinkedInUtil
 			CompanyField.INDUSTRY, CompanyField.TICKER));
 
 		company.setLogoUrl(company.getLogoUrl()
-			.replace("http:", "https:").replace("m3", "m3-s"));
+			.replaceFirst("http:", "https:")
+			.replaceFirst("m3", "m3-s"));
 		position.setCompany(company);
 
 	    }
@@ -773,8 +779,8 @@ public class LinkedInUtil
 	    // Changes http to https to avoid client side warnings by browser,
 	    // Changes certificate from m3 to m3-s to fix ssl broken image link
 	    if (result.picture != null)
-		result.picture = result.picture.replace("http:", "https:")
-			.replace("m3", "m3-s");
+		result.picture = result.picture.replaceFirst("http:", "https:")
+			.replaceFirst("m3", "m3-s");
 
 	    // Sets number of connects if provided
 	    result.num_connections = (person.getNumConnections() != null) ? person
@@ -846,52 +852,75 @@ public class LinkedInUtil
 	// ProfileField.DISTANCE, ProfileField.CURRENT_SHARE,
 	// ProfileField.CURRENT_STATUS));
 
-	Map<SearchParameter, String> searchParameters = new EnumMap<SearchParameter, String>(
-		SearchParameter.class);
+	// Map<SearchParameter, String> searchParameters = new
+	// EnumMap<SearchParameter, String>(
+	// SearchParameter.class);
+	//
+	// String firstName = "Joe";
+	// String lastName = "dinardo";
+	// String title = "Marketer Digital agency";
+	//
+	// firstName = (firstName != null) ? firstName : "";
+	// lastName = (lastName != null) ? lastName : "";
+	// title = (title != null) ? title : "";
+	//
+	// // Sets name as filter to search profiles
+	// searchParameters.put(SearchParameter.FIRST_NAME, firstName);
+	// searchParameters.put(SearchParameter.LAST_NAME, lastName);
+	// searchParameters.put(SearchParameter.KEYWORDS, title);
+	//
+	// // Search profiles based on the searchParameters given, and specifies
+	// // field to be returned for result profiles
+	// People people = searchPeopleInLinkedIn(client, searchParameters);
+	//
+	// ObjectMapper mapper = new ObjectMapper();
+	// String json;
+	//
+	// System.out.println("-----first,last name and keywords-----"
+	// + people.getPersonList().size());
+	// json = mapper.writeValueAsString(people);
+	// System.out.println(json);
+	//
+	// searchParameters.remove(SearchParameter.KEYWORDS);
+	// people = searchPeopleInLinkedIn(client, searchParameters);
+	//
+	// System.out.println("--------removing key words--------"
+	// + people.getPersonList().size());
+	// json = mapper.writeValueAsString(people);
+	// System.out.println(json);
+	//
+	// searchParameters.clear();
+	// searchParameters.put(SearchParameter.KEYWORDS, firstName + " "
+	// + lastName);
+	// people = searchPeopleInLinkedIn(client, searchParameters);
+	//
+	// System.out.println("--------first and last name as key words--------"
+	// + people.getPersonList().size());
+	//
+	// json = mapper.writeValueAsString(people);
+	// System.out.println(json);
 
-	String firstName = "Joe";
-	String lastName = "dinardo";
-	String title = "Marketer Digital agency";
-
-	firstName = (firstName != null) ? firstName : "";
-	lastName = (lastName != null) ? lastName : "";
-	title = (title != null) ? title : "";
-
-	// Sets name as filter to search profiles
-	searchParameters.put(SearchParameter.FIRST_NAME, firstName);
-	searchParameters.put(SearchParameter.LAST_NAME, lastName);
-	searchParameters.put(SearchParameter.KEYWORDS, title);
-
-	// Search profiles based on the searchParameters given, and specifies
-	// field to be returned for result profiles
-	People people = searchPeopleInLinkedIn(client, searchParameters);
+	Person person = client.getProfileById("3nVYdEy7R6", EnumSet.of(
+		ProfileField.PICTURE_URL, ProfileField.FIRST_NAME,
+		ProfileField.LAST_NAME, ProfileField.SUMMARY,
+		ProfileField.HEADLINE, ProfileField.LOCATION_NAME,
+		ProfileField.NUM_CONNECTIONS, ProfileField.PUBLIC_PROFILE_URL,
+		ProfileField.ID, ProfileField.DISTANCE,
+		ProfileField.CURRENT_SHARE, ProfileField.CURRENT_STATUS));
 
 	ObjectMapper mapper = new ObjectMapper();
 	String json;
+	try
+	{
 
-	System.out.println("-----first,last name and keywords-----"
-		+ people.getPersonList().size());
-	json = mapper.writeValueAsString(people);
-	System.out.println(json);
+	    json = mapper.writeValueAsString(person);
+	    System.out.println(json);
 
-	searchParameters.remove(SearchParameter.KEYWORDS);
-	people = searchPeopleInLinkedIn(client, searchParameters);
-
-	System.out.println("--------removing key words--------"
-		+ people.getPersonList().size());
-	json = mapper.writeValueAsString(people);
-	System.out.println(json);
-
-	searchParameters.clear();
-	searchParameters.put(SearchParameter.KEYWORDS, firstName + " "
-		+ lastName);
-	people = searchPeopleInLinkedIn(client, searchParameters);
-
-	System.out.println("--------first and last name as key words--------"
-		+ people.getPersonList().size());
-
-	json = mapper.writeValueAsString(people);
-	System.out.println(json);
+	}
+	catch (Exception e)
+	{
+	    e.getMessage();
+	}
 
     }
 }

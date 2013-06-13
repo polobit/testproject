@@ -1000,7 +1000,9 @@ $(function() {
 							"LINKEDIN" : "icon-linkedin-sign", 
 							"URL" : "icon-globe",
 							"GOOGLE_PLUS" : "icon-google-plus-sign",
-							"FACEBOOK" : "icon-facebook-sign"
+							"FACEBOOK" : "icon-facebook-sign",
+							"GITHUB" : "icon-github",
+							"FEED" : "icon-rss"
 						}
 		
 		name = name.trim();
@@ -1048,6 +1050,11 @@ $(function() {
 	
 	Handlebars.registerHelper('add_tag', function(tag) {
 		addTagAgile(tag);
+	});
+	
+	Handlebars.registerHelper('set_up_dashboard_padcontent', function(key){
+		return new Handlebars.SafeString(getTemplate("empty-collection-model",
+				CONTENT_JSON.dashboard[key]));
 	});
 	
 });
