@@ -1004,8 +1004,8 @@ $(function() {
 							"SKYPE" : "icon-skype",
 							"XING" : "icon-xing",
 							"FLICKR" : "icon-flickr",
-							"GITHUB" : "icon-github",
 							"YOUTUBE" : "icon-youtube",
+							"GITHUB" : "icon-github",
 							"FEED" : "icon-rss"
 						}
 		
