@@ -490,6 +490,9 @@ function showTwitterProfile(twitter_id, plugin_id)
 	queueGetRequest("widget_queue", "/core/api/widgets/profile/" + plugin_id + "/" + twitter_id, 'json',
     function (data)
     {
+		if(!data)
+			return;
+		
         //shows delete button in the Twitter panel
         $('#Twitter_plugin_delete').show();
 
