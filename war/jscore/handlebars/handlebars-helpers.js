@@ -1001,10 +1001,6 @@ $(function() {
 							"URL" : "icon-globe",
 							"GOOGLE_PLUS" : "icon-google-plus-sign",
 							"FACEBOOK" : "icon-facebook-sign",
-							"SKYPE" : "icon-skype",
-							"XING" : "icon-xing",
-							"FLICKR" : "icon-flickr",
-							"YOUTUBE" : "icon-youtube",
 							"GITHUB" : "icon-github",
 							"FEED" : "icon-rss"
 						}
