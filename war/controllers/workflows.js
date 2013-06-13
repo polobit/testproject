@@ -106,7 +106,7 @@ var WorkflowsRouter = Backbone.Router
 				$('#content').html(el);
 
 				// Set the name
-				$('#workflow-name').val(el);
+				  $('#workflow-name').val(this.workflow_model.get("name"));
 			},
 
 			/**
