@@ -276,7 +276,7 @@ $(function() {
 		}
 		// date form milliseconds
 		var d = new Date(parseInt(date) * 1000).format(format);
-		console.log(d);
+		
 		return d
 
 		// return $.datepicker.formatDate(format , new Date( parseInt(date) *
@@ -940,8 +940,6 @@ $(function() {
 	Handlebars.registerHelper('numeric_operation', function(operand1, operand2, operator) {
 		
 		var operators = "/*-+";
-		
-		console.log(operator);
 		
 		if (operators.indexOf(operator) == -1)
 			return "";
