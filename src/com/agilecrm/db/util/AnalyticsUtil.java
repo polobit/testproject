@@ -116,9 +116,7 @@ public class AnalyticsUtil
 
 	// Gets all Sessions based on above obtained sids and required email
 	String pageViews = "SELECT *, UNIX_TIMESTAMP(stats_time) AS created_time FROM page_views WHERE sid IN "
-		+ sessions
-		+ " AND email = "
-		+ SQLUtil.encodeSQLColumnValue(email);
+		+ sessions;
 
 	System.out.println("Select query: " + pageViews);
 
