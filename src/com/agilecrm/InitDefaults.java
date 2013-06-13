@@ -244,9 +244,12 @@ public class InitDefaults
 	JSONObject tourJson = new JSONObject();
 	try
 	{
-	    tourJson.put("contact", true);
-	    tourJson.put("workflow", true);
+	    tourJson.put("contacts", true);
+	    tourJson.put("contact-details", true);
+	    tourJson.put("workflows", true);
 	    tourJson.put("calendar", true);
+	    tourJson.put("workflows-add", true);
+
 	}
 	catch (JSONException e)
 	{
