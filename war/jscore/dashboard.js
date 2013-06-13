@@ -1,16 +1,7 @@
 var contacts_count, deals_count, tasks_count, workflow_count
 
 function setupDashboard(el)
-{
-	/*
-	 * There variables should be made undefined before setting dashboard,
-	 *  which are used to check whether any entities are available
-	 */
-	contacts_count = undefined;
-	deals_count = undefined;
-	tasks_count = undefined;
-	workflow_count = undefined;
-	
+{	
 	setupSubscriptionDetails(el);
 	/*setupDashboardTimeline();
 	setUpDashboardNavtabs(el);*/
@@ -35,10 +26,6 @@ function setUpDashboardEntities(el) {
         templateKey: "dashboard-contacts",
         individual_tag_name: 'tr',
         sort_collection: false,
-        postRenderCallback: function(el) {
-        	contacts_count = myRecentContacts.collection.length;
-        	showPadContentIfNoActivity();
-        }
     });
 	myRecentContacts.collection.fetch();
 	
@@ -75,8 +62,6 @@ function setUpDashboardEntities(el) {
 	            postRenderCallback: function(el) {
 	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
 	            		 $(".deal-created-time", el).timeago();
-	            		 deals_count = myDeals.collection.length;
-	            		 showPadContentIfNoActivity();
 	            	})
 	            }
 	        });
@@ -92,9 +77,6 @@ function setUpDashboardEntities(el) {
 				postRenderCallback : function(el) {
 					head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
 						$("time.log-created-time", el).timeago();
-						workflow_count = workflowsListView.collection.length;
-						console.log(workflow_count);
-						showPadContentIfNoActivity();
 					});
 	        }
 			});
@@ -128,18 +110,3 @@ function setupSubscriptionDetails(el)
 			});
 		}})
 }
-
-/**
- * Show pad content in dashboard if no entities are available
- */
-
-function showPadContentIfNoActivity()
-{
-	if((contacts_count + deals_count + tasks_count + workflow_count) == 0)
-		{
-		$("#dashboard-entities").html(
-				getTemplate("empty-collection-model",
-						CONTENT_JSON["dashboard"]));
-		}
-}
-

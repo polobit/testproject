@@ -1056,4 +1056,9 @@ $(function() {
 		addTagAgile(tag);
 	});
 	
+	Handlebars.registerHelper('set_up_dashboard_padcontent', function(key){
+		return new Handlebars.SafeString(getTemplate("empty-collection-model",
+				CONTENT_JSON.dashboard[key]));
+	});
+	
 });

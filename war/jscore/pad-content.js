@@ -71,8 +71,22 @@ var CONTENT_JSON = {
 		"image" : "/img/clipboard.png"
 	},
 	"dashboard" : {
-		"title" : "Your recent activity, upcoming tasks and deals are shown here. You currently do not have much activity.",
-		"image" : "/img/clipboard.png"
+		"contacts" : {
+			"title" : "No activity on contacts yet.",
+			"icon" : "icon-group icon-3x"
+		},
+		"tasks" : {
+			"title" : "You have no tasks due.",
+			"icon" : "icon-edit icon-3x"
+		},
+		"deals" : {
+			"title" : "No upcoming deals for you.",
+			"icon" : "icon-money icon-3x"
+		},
+		"workflows" : {
+			"title" : "No campaign activity yet.",
+			"icon" : "icon-sitemap icon-3x"
+		}
 	},
 	"email-templates" : {
 		"title" : "You do not have any Email templates currently.",
