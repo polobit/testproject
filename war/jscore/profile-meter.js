@@ -4,7 +4,7 @@
 
 var IS_PROFILE_GUIDER_CLOSED = false;
 var PROFILE_SETTINGS = {
-		"Email" : "#email",
+		"Email" : "",
 		//"User_invited" : "#users",
 		//"Widgets" : 10
 		//"Share" : "#",
@@ -13,7 +13,7 @@ var PROFILE_SETTINGS = {
 var PROFILE_SETUP_MESSAGES = {};
 
 PROFILE_SETUP_MESSAGES.Welcome =  "Welcome to Agile - the next generation CRM. I will be your tour guide.<a href='#' id='noty-welcome-user' style='text-decoration: none;'> Let's get you started."
-PROFILE_SETUP_MESSAGES.Email = "Shake Hands. Let's sync your emails first. It's simple and secure.";
+PROFILE_SETUP_MESSAGES.Email = "Shake Hands. <a href='#email' style='text-decoration: none;'> Let's sync your emails first</a>. It's simple and secure.";
 PROFILE_SETUP_MESSAGES.User_invited = "Emails will show up in the awesome timeline. It's time to invite your colleague"; 
 PROFILE_SETUP_MESSAGES.Share = "Are you liking Agile? Spread the love."; 
 
@@ -63,6 +63,7 @@ function calculateProfile()
 	PROFILE_INFO["total"] = total;
 	
 	return PROFILE_INFO
+	
 }
 
 function setProfileMeter()
