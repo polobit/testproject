@@ -551,12 +551,13 @@ html {
 
 
 .tooltip-title {
-	font-size:14px;
 	white-space:nowrap;
 	text-overflow:ellipsis;
 	overflow:hidden;
-	display:block;	
 	text-align:center;
+	font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;
+	 font-size: 12px; 
+	 display: block;
 }
 
 .highcharts-tool-tip {
@@ -571,6 +572,7 @@ html {
 .tooltip-default-message {
 	font-family : Georgia, serif;
 	display:block;
+	font-size: 12px !important; 
 }
 
 /* To show the loading image in the beginning */
