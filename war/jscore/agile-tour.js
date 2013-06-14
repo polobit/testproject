@@ -168,13 +168,9 @@ function initiateTour(key, el)
 	head.js('lib/bootstrap-tour.min.js', function() {
 		tour = new Tour({
 			 name: key + "-tour",
-			  labels: {
-		            end: '',
-		            next: 'Next &raquo;',
-		            prev: '&laquo; Prev'
-		          },
 		     debug:true,
 			useLocalStorage : true,
+			endOnLast: true,
 			onEnd : function(tour) {
 				
 				$("."+key + "-tour").remove();
