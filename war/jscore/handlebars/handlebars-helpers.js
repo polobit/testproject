@@ -489,28 +489,30 @@ $(function() {
 		// Replaces '_' with ' '
 		var str = this.notification.replace(/_/g, ' ');
 		
-		if(str == "IS BROWSING")
+		switch(str)
 		{
-			return str.toLowerCase() + " " + this.custom_value;
-		}
-		
-		if(str == "CLICKED LINK"  || str == "OPENED EMAIL")
-		{
-			return str.toLowerCase() + " " + " of campaign " + this.custom_value;
-		}	
-		
-		if(str == "CONTACT ADDED" || str == "CONTACT DELETED" || str == "DEAL CREATED" || str == "DEAL CLOSED")
-		{			
-			return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1])
-		}
-		if(str == 'TAG ADDED' || str == 'TAG DELETED')
-		{
-			return " - " + "\"" + this.custom_value + "\" "  + str.toLowerCase().split(' ')[0]+ " has been " + str.toLowerCase().split(' ')[1];
-		}
-		
-		return str.toLowerCase();
+		case "IS BROWSING": return str.toLowerCase() + " " + this.custom_value;
+		                   
+		case "CLICKED LINK": var customJSON = JSON.parse(this.custom_value);
+		                     return str.toLowerCase() + " " + customJSON.url_clicked + 
+		                            " of campaign " + "\"" + customJSON.workflow_name + "\"";
+			                 
+		case "OPENED EMAIL": return str.toLowerCase() + " " + " of campaign " + "\"" + this.custom_value + "\"";
+			
+		case "CONTACT ADDED": return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
+			
+		case "CONTACT DELETED": return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
+			
+		case "DEAL CREATED": return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
+		                     
+		case "DEAL CLOSED": return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
+			
+		case "TAG ADDED": return " - " + "\"" + this.custom_value + "\" "  + str.toLowerCase().split(' ')[0]+ " has been " + str.toLowerCase().split(' ')[1];
+			
+		case "TAG DELETED": return " - " + "\"" + this.custom_value + "\" "  + str.toLowerCase().split(' ')[0]+ " has been " + str.toLowerCase().split(' ')[1];
 
-		// return temp.charAt(0).toUpperCase() + temp.slice(1);
+		default: return str.toLowerCase();               
+		}
 	});
 
 	/**
