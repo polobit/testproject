@@ -37,7 +37,7 @@ $(function() {
 		setupRapleafOAuth(plugin_id);
 		return;
 	}
-
+	
 	// Gets Contact properties for this widget, based on plugin name (using
 	// Third party script API)
 	var rapleaf_id = agile_crm_get_widget_property_from_contact(RAPLEAF_PLUGIN_NAME);
@@ -95,9 +95,18 @@ function showRapleafDetails(plugin_id) {
 	// Shows loading, until info is fetched
 	$('#Rapleaf').html(Rapleaf_loader);
 
-	var email = agile_crm_get_contact_property('email');
+	// Stores email of the contact as global variable
+    Email = agile_crm_get_contact_property('email');
+    
+    // Checks if contact has email, if undefined shows message in Zendesk panel
+    if (!Email)
+    {
+    	rapleafError("Rapleaf", "No email is associated with this contact");
+        return;
+    }
+    
 	var url = "core/api/widgets/rapleaf/"
-			+ agile_crm_get_plugin_prefs(RAPLEAF_PLUGIN_NAME) + "/" + email;
+			+ agile_crm_get_plugin_prefs(RAPLEAF_PLUGIN_NAME) + "/" + Email;
 
 		queueGetRequest("widget_queue", url, 'json', 
 		function success(data) 
@@ -112,3 +121,9 @@ function showRapleafDetails(plugin_id) {
 }
 
 
+
+function rapleafError(id, message)
+{
+	Errorjson['message'] = message;
+	$('#' + id).html(getTemplate('rapleaf-error', Errorjson))
+}

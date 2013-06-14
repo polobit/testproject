@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.WordUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONException;
@@ -90,7 +91,13 @@ public class ReportsUtil
 		results = new HashMap<String, Object>();
 
 	    // Set number of results in count variable
-	    results.put("count", results.size());
+	    if (results.get("report_results") != null)
+		results.put("count",
+		    ((Collection) results.get("report_results")).size());
+
+	    results.put("duration",
+		    WordUtils.capitalizeFully((report.duration.toString())));
+
 
 	    // Send reports email
 	    SendMail.sendMail(report.sendTo, report.name + " - "

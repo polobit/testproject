@@ -99,9 +99,17 @@ public class RedirectServlet extends HttpServlet
 		try
 		{
 		    NotificationPrefsUtil
-			    .executeNotification(Type.CLICKED_LINK, contact,
-				    new JSONObject().put("custom_value",
-					    workflow.name));
+			    .executeNotification(
+				    Type.CLICKED_LINK,
+				    contact,
+				    new JSONObject()
+					    .put("custom_value",
+						    new JSONObject()
+							    .put("workflow_name",
+								    workflow.name)
+							    .put("url_clicked",
+								    urlShortener.long_url)
+							    .toString()));
 		}
 		catch (Exception e)
 		{

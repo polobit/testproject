@@ -525,11 +525,11 @@ function getTextMessage(message) {
 }
 
 /**
- * Returns converted notification-type. E.g., TAG_ADDED to Tag Added
+ * Returns converted notification-type. E.g., TAG_ADDED to New Tag
  ***/
 function getNotificationType(notification_type)
 {
-	if(notification_type == "CONTACT_ADDED" || notification_type == "TAG_ADDED" || notification_type == "DEAL_CREATED")
+	if(notification_type == "CONTACT_ADDED" || notification_type == "COMPANY_ADDED"|| notification_type == "TAG_ADDED" || notification_type == "DEAL_CREATED")
 		return "New " + ucfirst(notification_type.split('_')[0]);
 		
 	return ucfirst(notification_type.split('_')[0]) + " " + ucfirst(notification_type.split('_')[1]);

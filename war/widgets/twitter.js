@@ -487,7 +487,7 @@ function showTwitterProfile(twitter_id, plugin_id)
     var stream_data;
 
     // Calls WidgetsAPI class to get Twitter profile of contact
-	queueGetRequest("widget_queue", "/core/api/widgets/profile/" + plugin_id + "/" + twitter_id, 'json',
+	$.get("/core/api/widgets/profile/" + plugin_id + "/" + twitter_id, 
     function (data)
     {
 		if(!data)
@@ -572,7 +572,7 @@ function showTwitterProfile(twitter_id, plugin_id)
         $('#twitter_social_stream').html("<div style='padding:10px;'>" + 
         		Twitter_current_profile_user_name + " hasn't tweeted yet");
         
-    }, function (data)
+    }, "json").error(function (data)
     {
         // Remove loading image on error 
         $('#tweet_load').remove();
@@ -1119,7 +1119,7 @@ function getTwitterIdByUrl(plugin_id, web_url, callback)
 
     // Sends post request to URL "/core/api/widgets/getidbyurl/" bye sending plugin id 
     // as path parameter and json as post data
-    $.post("/core/api/widgets/getidbyurl/" + plugin_id, url_json, function (data)
+    queuePostRequest("widget_queue","/core/api/widgets/getidbyurl/" + plugin_id, url_json, function (data)
     {
         // If Twitter id is undefined
         if (!data)
@@ -1142,7 +1142,7 @@ function getTwitterIdByUrl(plugin_id, web_url, callback)
             callback(data);
         }
 
-    }).error(function (data)
+    }, function (data)
     {
     	// If time out exception occurs, ask user to refresh and return
     	if(data.responseText == "TimeOut")

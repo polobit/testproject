@@ -45,6 +45,7 @@ $(function ()
         getLinkedinIdByUrl(plugin_id, web_url, function (data)
         {
             linkedin_id = data;
+            console.log('id from url' + linkedin_id);
             
             showLinkedinProfile(linkedin_id, plugin_id);
         });
@@ -183,8 +184,13 @@ function showLinkedinMatchingProfiles(plugin_id)
                 //Hide pop over after clicking on any picture
                 $('#' + id).popover('hide');
                 
+                console.log('on click in search');
+                console.log(id);
+                
                 var url = $(this).attr('url');
-
+                console.log(url);
+                console.log(linkedin_image);
+                
                 // If id (LinkedIn id) is defined, shows modal and prompts user to save 
                 // picture to contact
                 if (id)
@@ -256,7 +262,7 @@ function showLinkedinProfile(linkedin_id, plugin_id)
     var stream_data;
     
     // Calls WidgetsAPI class to get LinkedIn profile of contact
-    queueGetRequest("widget_queue", "/core/api/widgets/profile/" + plugin_id + "/" + linkedin_id, 'json', 
+    $.get("/core/api/widgets/profile/" + plugin_id + "/" + linkedin_id, 
     function (data)
     {
     	if(!data)
@@ -311,7 +317,7 @@ function showLinkedinProfile(linkedin_id, plugin_id)
 
         $('.linkedin_current_activity',  $('#Linkedin')).show();
         
-    }, function (data)
+    },"json").error(function (data)
     {
     	// Remove loading image on error 
     	$('#status_load').remove();

@@ -165,16 +165,12 @@ function initiateTour(key, el)
 
 
 	if(AGILE_TOUR[key])
-	head.js('lib/bootstrap-tour.min.js', function() {
+	head.js('lib/bootstrap-tour-agile.min.js', function() {
 		tour = new Tour({
 			 name: key + "-tour",
-			  labels: {
-		            end: '',
-		            next: 'Next &raquo;',
-		            prev: '&laquo; Prev'
-		          },
 		     debug:true,
 			useLocalStorage : true,
+			endOnLast: true,
 			onEnd : function(tour) {
 				
 				$("."+key + "-tour").remove();

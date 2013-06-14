@@ -143,17 +143,17 @@ function load_timeline_details(el, contactId, callback1)
 					
 					$('#time-line', el).find('.loading-img-email').remove();
 					
-					if(emailsCollection.toJSON()[0]['emails'].length > 0){
+					if(emailsCollection.toJSON()[0]['emails'] && emailsCollection.toJSON()[0]['emails'].length > 0){
 						
 						// If timeline is not defined yet, calls setup_timeline for the first time
-						if(timelineView.collection.length == 0){
+						if(timelineView.collection.length == 0 && emailsCollection.toJSON()[0]){
 							
 							timelineView.collection.add(emailsCollection.toJSON()[0]['emails']);
 							
 							// No callback function is taken as the email takes more time to fetch
 							setup_timeline(timelineView.collection.toJSON(), el);
 						}else{
-							$.each(emailsCollection.toJSON()[0]['emails'], function(index, data){
+							$.each(emailsCollection.toJSON()[0] && emailsCollection.toJSON()[0]['emails'], function(index, data) {
 								var newItem = $(getTemplate("timeline", data));
 								
 								newItem.find('.inner').append('<a href="#" class="open-close"></a>');
