@@ -4,6 +4,7 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.googlecode.objectify.annotation.NotSaved;
 
 /**
  * <code>Tag</code> class stores tags (of a contact in particular). The id of
@@ -31,6 +32,9 @@ public class Tag
     // Dao
     private static ObjectifyGenericDao<Tag> dao = new ObjectifyGenericDao<Tag>(
 	    Tag.class);
+
+    @NotSaved
+    public String entity_type = "tag";
 
     /**
      * Default constructor

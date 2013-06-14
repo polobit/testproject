@@ -226,7 +226,7 @@ function getTwilioLogs(plugin_id, to, callback)
 
 function getOutgoingNumbers(plugin_id, callback)
 {
-	queueGetRequest("widget_queue","/core/api/widgets/twilio/numbers/" + plugin_id, 'json'
+	queueGetRequest("widget_queue","/core/api/widgets/twilio/numbers/" + plugin_id, 'json', 
 		function (data) {
 		
 		if (callback && typeof (callback) === "function")

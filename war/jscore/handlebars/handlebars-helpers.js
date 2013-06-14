@@ -831,7 +831,7 @@ $(function() {
 											"<a href='$1' target='_blank' class='cd_hyperlink'>$1</a>");
 							return new Handlebars.SafeString(value);
 						} catch (err) {
-							return text;
+							return value;
 						}
 
 					});
