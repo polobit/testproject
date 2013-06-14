@@ -68,7 +68,7 @@
 
 <script id="dashboard-account-info-template" type="text/html">
 
-<div style="background-color: #F8F8B9; margin-bottom:10px;padding: 15px;">
+<div style="background-color: #F8F8B9; margin-bottom:10px;padding: 15px;position:absolute">
 	<strong style="font-size: 20px;">Account info</strong>
 	<p style="padding-top: 10px;">
 		Plan: {{plan.plan_id}}<br />
@@ -222,7 +222,7 @@
 
 <script id="sticky-noty-template" type="text/html">
   <div id="notify-container">
-      <div id="notify-1-7497345" style="background-color:#F4A83D;border-bottom:1px solid #D6800C;color: black;font-size:16px !important;font-weight:normal !important;">
+      <div id="notify-1-7497345" style="background-color:#ffc;color: black;font-size:16px !important;font-weight:normal !important;">
        <span class="notify-close"><a title="dismiss this notification" style="text-decoration:none;">x</a></span>
 		{{#if route}}
        		<a href={{this.route}} style=" text-decoration: none;"><span class="notify-text">{{{this.message}}}</span></a>

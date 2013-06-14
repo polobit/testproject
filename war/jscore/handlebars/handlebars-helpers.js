@@ -187,6 +187,27 @@ $(function() {
 	});
 	
 	/**
+	 * Returns Contact short name
+	 */
+	Handlebars.registerHelper('contactShortName', function() {
+		if (App_Contacts.contactDetailView
+				&& App_Contacts.contactDetailView.model) {
+			
+			var contact_properties = App_Contacts.contactDetailView.model
+					.get('properties');
+				for ( var i = 0; i < contact_properties.length; i++) {
+					if (contact_properties[i].name == "first_name")
+						return contact_properties[i].value;
+					else if (contact_properties[i].name == "last_name")
+						return contact_properties[i].value;
+					else 
+						return "Contact";
+				}
+			}
+	});
+	
+	
+	/**
 	 * 
 	 * @method task_property
 	 * @param {String}
@@ -276,7 +297,7 @@ $(function() {
 		}
 		// date form milliseconds
 		var d = new Date(parseInt(date) * 1000).format(format);
-		console.log(d);
+		
 		return d
 
 		// return $.datepicker.formatDate(format , new Date( parseInt(date) *
@@ -940,8 +961,6 @@ $(function() {
 	Handlebars.registerHelper('numeric_operation', function(operand1, operand2, operator) {
 		
 		var operators = "/*-+";
-		
-		console.log(operator);
 		
 		if (operators.indexOf(operator) == -1)
 			return "";

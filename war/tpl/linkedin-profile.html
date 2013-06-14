@@ -84,7 +84,7 @@
 							{{#if message.current-share.content}}
 								<div class="span2 mr_5"><a href="{{message.current-share.content.shortenedUrl}}" target="_blank"><img src="{{message.current-share.content.thumbnailUrl}}" width="30" height="30" alt="" class="img-rounded pull-left"/></a></div>
 								<div class="pull-left span9" >
-									<p class="mb_0" style="word-breal:normal">
+									<p class="mb_0" style="word-break:normal; word-wrap:break-word;">
 										{{#if message.current-share.content.title}}
 											{{#if message.current-share.comment}}									
 												{{show_link_in_statement message.current-share.comment}}<br /><a target="_blank" href="{{message.current-share.content.shortenedUrl}}">{{message.current-share.content.title}}</a>									
@@ -103,7 +103,7 @@
 							{{else}}
 								<div class="span2 mr_5"><img src="widgets/linkedin-logo-small.png" width="30" height="30" alt="" class="img-rounded pull-left"/></div>
 								<div class="pull-left span9" >
-									<p class="mb_0" style="word-break:normal">
+									<p class="mb_0" style="word-break:normal;word-wrap:break-word;">
 										{{show_link_in_statement message.current-share.comment}}
 									</p>
 									<small><time class="time-ago" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "" created_time}}</time></small>
@@ -113,7 +113,7 @@
 						{{#if_equals type "CONNECTION_ADDED_CONNECTIONS"}}
 							<div class="span2 mr_5" ><a href="{{message.publicProfileUrl}}" target="_blank"><img src="{{message.pictureUrl}}" width="30" height="30" alt="" class="img-rounded pull-left"/></a></div>
 							<div class="pull-left span9" >
-								<p class="mb_0" style="word-break:normal">
+								<p class="mb_0" style="word-break:normal; word-wrap:break-word;">
 									Connected to 
 									<a href="{{message.publicProfileUrl}}" target="_blank">{{message.firstName}}&nbsp{{message.lastName}}</a>
 									{{#if message.headline}}, {{message.headline}}{{/if}}
@@ -146,8 +146,8 @@
 				</div>
 			</div>			
 			{{#if summary}}
-				<p class="mb_0 space_pre_line" style="word-break:normal">				
-					{{summary}}
+				<p class="mb_0 space_pre_line" style="word-break:normal;word-wrap:break-word;">				
+					{{show_link_in_statement summary}}
 				</p>
 			{{/if}}			
 			<small>

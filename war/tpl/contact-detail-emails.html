@@ -1,5 +1,10 @@
 <script id="email-social-collection-template" type="text/html">
+{{#unless this.length}}
+    <h3>No emails to/from {{contactShortName}}.</h3>
+{{/unless}}
+{{#if this.length}}
 	<ul id="email-social-model-list" class="ativity-block-ul"></ul>
+{{/if}}
 </script>
 
 <!-- Imap-Email model -->

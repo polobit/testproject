@@ -1,5 +1,5 @@
 <script id="campaigns-collection-template" type="text/html">
-<div class="right add-campaign" style="margin-top:-32px">
+<div class="right add-campaign" style="margin-bottom:20px">
    <!-- <select class="campaignSelect" id='campaignSelect' name="campaignSelect">
         <option class="campaignSelectOptions" value="">
             Add to Campaign...
@@ -8,8 +8,7 @@
     <a class="btn" href="#" id="add-selected-campaign" name="add-selected-campaign" style="margin-left: 10px; margin-bottom:9px">Add</a>-->
     <a class="btn right contact-add-campaign" href="#bulk-campaigns"><i class="icon-plus-sign"></i> Add {{getCurrentContactProperty "first_name"}} to Campaign</a>
 </div>
-<div style="margin-top:30px"><h2>Campaign Log</h2></div>
-
+<div class="clearfix"></div>
 		{{#unless this.length}}
         <div class="slate">
             <div class="slate-content">
@@ -17,17 +16,16 @@
                     <img alt="Clipboard" src="/img/clipboard.png" />
                 </div>
                 <div class="box-right">
-                    <h3>{{getCurrentContactProperty "first_name"}} has no campaign logs.</h3>
+                    <h3>No campaign activity for {{contactShortName}}.</h3>
                     <div class="text">
-                        You can subscribe {{getCurrentContactProperty "first_name"}} to a campaign, by selecting and adding campaign from the below drop down list or from "actions" dropdown.
-                    </div>
-                    <a href="#">Click here to learn more</a>
-                    <br />
+						Contacts campaing activity like email opens and link clicks are shown here.
+					</div>
                 </div>
             </div>
         </div>
         {{/unless}}
         {{#if this.length}}
+          <div style="margin-top:30px"><h2>Campaign Log</h2></div>
 				<ul id="campaigns-model-list" class="ativity-block-ul"></ul>
 		{{/if}}
 </script>

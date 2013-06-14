@@ -259,6 +259,9 @@ function showLinkedinProfile(linkedin_id, plugin_id)
     queueGetRequest("widget_queue", "/core/api/widgets/profile/" + plugin_id + "/" + linkedin_id, 'json', 
     function (data)
     {
+    	if(!data)
+    		return;
+    	
         // Sets the LinkedIn name of the profile to the global variable
         Linkedin_current_profile_user_name = data.name;
 

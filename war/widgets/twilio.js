@@ -226,7 +226,7 @@ function getTwilioLogs(plugin_id, to, callback)
 
 function getOutgoingNumbers(plugin_id, callback)
 {
-	$.get("/core/api/widgets/twilio/numbers/" + plugin_id, 
+	queueGetRequest("widget_queue","/core/api/widgets/twilio/numbers/" + plugin_id, 'json'
 		function (data) {
 		
 		if (callback && typeof (callback) === "function")
@@ -234,7 +234,7 @@ function getOutgoingNumbers(plugin_id, callback)
 			callback(data);
 		}
 		
-	},"json").error( function (data) {
+	}, function (data) {
 		
 		$('#twilio_profile_load').remove();
 		$('#Twilio').html('<div style="padding:10px">' + data.responseText + '</div>');

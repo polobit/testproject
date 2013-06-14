@@ -91,7 +91,9 @@ function populateUsers(id, el , value, key, callback) {
 			if(value[key])
 				// While deserialize set agile user id from user prefs, to save agile user key in opportunity 
 				$('#' + id, el).find('option[value='+value[key].id+']').attr("selected", "selected");
-		}	
+		}
+		else
+			$('#' + id, el).find('option[value='+CURRENT_DOMAIN_USER.id+']').attr("selected", "selected");
 		// If callback is present, it is called to deserialize
 		// the select field
 		if (callback && typeof (callback) === "function") {
