@@ -26,7 +26,7 @@
 								style="height: auto; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
 								<b> <font size="5">{{getPropertyValue properties
 										"first_name"}} {{getPropertyValue properties "last_name"}}</font>
-								</b>{{#if_propertyName "email"}}</br> {{value}}{{/if_propertyName}}
+								</b>{{#if_propertyName "email"}}</br> <a href='#send-email'>{{value}}</a>{{/if_propertyName}}
 
 								{{#if_propertyName "title"}}</br> {{value}}, {{/if_propertyName}}
 
@@ -297,7 +297,7 @@
 										{{/property_is_exists}} 
 								{{#each this}}
 										<div>
-											<a href="mailto:{{value}}">{{value}}</a> {{#if subtype}} <span class="label">{{subtype}}</span> {{/if}}
+											<a href='#send-email'>{{value}}</a> {{#if subtype}} <span class="label">{{subtype}}</span> {{/if}}
 										</div>
 										{{/each}}
 									</div>

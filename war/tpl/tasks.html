@@ -45,7 +45,7 @@
 	<td style="border-top:1px dotted #DDD"> <input type="checkbox" data='{{id}}' class='tasks-select'> </td>
 	<td style="border-top:1px dotted #DDD">
 		<div>
-  			<p style="word-break: break-word;"><b>{{show_link_in_statement subject}}</b></p>
+  			<p style="word-break: break-word;">{{#is_link subject}}<b class="activate-link">{{else}}<b>{{/is_link}}{{safe_string subject}}</b></p>
   			<p style="margin:5px 0px;"> 
 				<span class="label">{{task_property type}}</span><span style="margin-left:5px;" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
 			</p>

@@ -1,12 +1,9 @@
-<div id="task-lista-based-condition"></div>
-
-</script><script id="tasks-dashboard1-collection-template" type="text/html">
+<script id="tasks-dashboard1-collection-template" type="text/html">
 <h2 style="border-bottom:1px solid #f5f5f5; margin-bottom:10px">Tasks Due</h2>
 {{#if this.length}}
 
 <section>
     <form>
-        <h2 style="border-bottom:1px solid #f5f5f5; margin-bottom:10px">Tasks Due</h2>
         <table class="table" style="margin-bottom:2px !important;">
             
              <thead>
@@ -18,24 +15,22 @@
                     <th style="width:10em">Due Date</th>
                     <th style="width:9em;margin-left:10px">Related To</th>
                   </tr>   
-                
- 
              </thead>
               
         </table>
        <table class="table hide" style="margin-bottom:0px !important;">
-           <i id="overdue-heading" style="padding-top:20px;display: none;"><div   style="background-color:#F2F2F2;padding-top:3px;">OverDue </div></i>         	
+           <i id="overdue-heading" style="padding-top:20px;display: none;"><div style="background-color:#F2F2F2;padding-top:3px;">OverDue </div></i>         	
             <tbody id="overdue" style="display: none;">
             
            </tbody>
         </table>
      
         <table class="table hide " style="margin-bottom:0px !important;">
-           <i id="today-heading" style="display: none"><div    style="background-color:#F2F2F2;padding-top:3px; ">Today</div></i>          	
+           <i id="today-heading" style="display: none"><div style="background-color:#F2F2F2;padding-top:3px; ">Today</div></i>          	
             <tbody id="today" style="display: none;"></tbody>
         </table>
      <table class="table hide " style="margin-bottom:0px !important;">
-           <i id="tomorrow-heading" style="display: none"><div   style="background-color:#F2F2F2;padding-top:3px;">Tomorrow</div></i>
+           <i id="tomorrow-heading" style="display: none"><div style="background-color:#F2F2F2;padding-top:3px;">Tomorrow</div></i>
               	
             <tbody id="tomorrow" style="display: none;"></tbody>
         </table>
@@ -54,7 +49,7 @@
 
 <script id="tasks-dashboard1-model-template" type="text/html">
 
-	<td style="border-top:1px dotted #DDD;height:34px;"><div style="text-align:justify;white-space:nowrap;width:6em;overflow:hidden;margin-left:10px;"><b>{{ucfirst subject}}</b> </div></td>
+	<td style="border-top:1px dotted #DDD;height:34px;"><div style="text-align:justify;white-space:nowrap;width:6em;overflow:hidden;margin-left:10px;">{{#is_link subject}}<b class="activate-link">{{else}}<b>{{/is_link}}{{safe_string subject}}</b></div></td>
     <td><div style="text-align:justify;white-space:nowrap;width:5em;overflow:hidden;"><span style="margin-right:10px;" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></div> </td>
     <td><div style="text-align:justify;white-space:nowrap;width:6em;overflow:hidden;"><i class="{{icons type}}"></i>&nbsp;<span>{{type}}</span></div></td>
     <td><div style="text-align:justify;white-space:nowrap;width:10em;overflow:hidden;"> <time class="task-due-time" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999; ">{{epochToHumanDate "" due}}</time></div></td>

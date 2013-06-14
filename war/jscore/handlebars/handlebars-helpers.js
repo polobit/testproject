@@ -616,7 +616,7 @@ $(function() {
 				});
 
 				if (properties[i].subtype)
-					el = el.concat(" (" + properties[i].subtype + ")");
+					el = el.concat(" <span class='label'>" + properties[i].subtype + "</span>");
 				el = el.concat('</span></div></div>');
 				return new Handlebars.SafeString(el);
 			}

@@ -461,4 +461,13 @@ public class API
 	}
     }
 
+    @Path("JSAPI-status")
+    @GET
+    @Produces({ MediaType.TEXT_PLAIN, "application/x-javascript" })
+    public int getJSAPIStatus()
+    {
+	String domain = NamespaceManager.get();
+	return AnalyticsUtil.getPageViewsCountForGivenDomain(domain);
+    }
+
 }

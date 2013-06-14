@@ -9,6 +9,11 @@
 
 $(function() {
 
+	// To stop propagation to edit page
+	$(".activate-link").die().live('click', function(e){
+		e.stopPropagation();
+	});
+	
 	/**
 	 * Activates all features of a task form (highlighting the task form,
 	 * relatedTo field typeahead, changing color and font-weight) when we click

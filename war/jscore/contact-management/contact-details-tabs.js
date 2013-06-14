@@ -203,7 +203,14 @@ $(function(){
 		if(!email){
 			$('#stats', App_Contacts.contactDetailView.model.el).html('<div class="alert alert-error span4" style="margin-top:30px"><a class="close" data-dismiss="alert" href="#">×</a>Sorry! this contact has no email to get the stats.</div>').show().delay(3000).hide(1);
 			return;	
-		}	
+		}
+		
+		$.get('core/api/JSAPI-status',function(data){
+			if(data == 0){
+				$('#stats', App_Contacts.contactDetailView.model.el).html('<h4><p>You have not yet setup the Javascrip API on your website.</p><p>Please <a href="#analytics-code">set it up</a> to see the contact\'s site visits here.</p></h4>');
+				return;
+			}
+		});
 		
 		var statsView = new Base_Collection_View({
 			url: 'core/api/stats?e=' + encodeURIComponent(email) ,

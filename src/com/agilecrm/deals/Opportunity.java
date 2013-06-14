@@ -64,7 +64,7 @@ public class Opportunity
      * Contact ids of related contacts for a deal.
      */
     @NotSaved
-    private List<String> contact_ids = new ArrayList<String>();
+    public List<String> contact_ids = new ArrayList<String>();
 
     /**
      * Related contact objects fetched using contact ids.
@@ -149,7 +149,7 @@ public class Opportunity
     /**
      * Default Constructor.
      */
-    Opportunity()
+    public Opportunity()
     {
 
     }
