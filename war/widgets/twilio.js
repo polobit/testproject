@@ -32,6 +32,8 @@ $(function() {
         });
     });
 	
+	console.log('in twilio');
+	
 	// If not found - considering first time usage, setupTwilioOAuth called
 	if (plugin_prefs == undefined) {
 		setupTwilioOAuth(plugin_id);
@@ -120,6 +122,8 @@ $(function() {
 function setupTwilioOAuth(plugin_id) {	
 
 	$('#Twilio').html(TWILIO_LOGS_LOAD_IMAGE);
+	
+	console.log('twilio auth');
 	
 	 $('#Twilio').html('<p class="widget_content" style="border-bottom:none">' 
 			 + 'Call your contacts directly using your Twilio account.</p>'

@@ -31,6 +31,8 @@ $(function() {
 	        });
 	    });
 	 
+	 console.log('in rapleaf');
+	 
 	// If not found - considering first time usage of widget, setupRapleafOAuth
 	// called
 	if (plugin_prefs == undefined) {
@@ -63,6 +65,8 @@ function setupRapleafOAuth(plugin_id) {
 	$('#Rapleaf')
 			.html(getTemplate('rapleaf-login', ""));
 
+	console.log('rapleaf oauth');
+	
 	// Saves the api key
 	$('#save_api_key').die().live('click', function(e) {
 		e.preventDefault();

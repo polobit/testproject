@@ -33,6 +33,8 @@ $(function ()
         });
     });
     
+    console.log('in stripe');
+    
     // If not found - considering first time usage of widget, setupStripeOAuth
     // method is called 
     if (plugin_prefs == undefined)
@@ -104,6 +106,8 @@ function setupStripeOAuth(plugin_id)
 
     // URL to return, after authenticating from Stripe
     var callbackURL = window.location.href;
+    
+    console.log('stripe oauth');
 
     /*
      * Creates a URL, which on click can connect to scribe using parameters sent

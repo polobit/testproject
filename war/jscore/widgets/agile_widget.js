@@ -91,6 +91,7 @@ function agile_crm_update_contact(propertyName, value, callback) {
 	// Reads properties fied from the contact
 	var properties = contact_model.toJSON()['properties'];
 
+	
 	if (agile_crm_get_contact_property(propertyName)) {
 		$.each(properties, function(key, property) {
 			// Checks if property name given already exists in list
@@ -122,6 +123,64 @@ function agile_crm_update_contact(propertyName, value, callback) {
 	});
 	
 }
+
+function agile_crm_update_contact_properties(propertiesArray, callback) {
+
+	 // Gets current contact model from the contactDetailView object
+	 var contact_model = App_Contacts.contactDetailView.model;
+
+	 // Reads properties fied from the contact
+	 var properties = contact_model.toJSON()['properties'];
+
+	for(var i in propertiesArray)
+	{
+		
+	  if (agile_crm_get_contact_property(propertiesArray[i].name)) 
+		  $.each(properties, function(index, property) {
+			    
+			  // Checks if property name given already exists in list
+			    // If property name already exists then updates the value
+			    if (property.name == propertiesArray[i].name) {
+			    	
+			     
+			    	if(propertiesArray[i].name == "website")
+			    	{
+				    	if(propertiesArray[i].subtype)
+				    	{
+					    	property.subtype = propertiesArray[i].subtype;
+					    	property.value = propertiesArray[i].value;
+				    	}
+			    	}
+			    	else
+			    		property.value = propertiesArray[i].value;
+			    }
+		  });
+	  
+	  else
+		  properties.push({
+			    "name" : propertiesArray[i].name,
+			    "value" : propertiesArray[i].value,
+			    "subtype" :  propertiesArray[i].subtype,
+			    "type" : "CUSTOM"
+			   });
+
+	}
+	 // If property is new then new field is created
+	 
+	 contact_model.set("properties", properties);
+	 contact_model.url = "core/api/contacts";
+	 // Save model
+	 contact_model.save(
+	 {
+		 success: function(model, response)
+		  {
+		 
+		    if(callback && typeof (callback) == "function")
+		        callback();
+		  }
+	 });
+}
+	
 
 function agile_crm_get_contact() {
 	return App_Contacts.contactDetailView.model.toJSON();
@@ -413,3 +472,4 @@ function agile_crm_save_contact_properties_subtype(propertyName, subtype, value)
     contact_model.save()
 
 }
+

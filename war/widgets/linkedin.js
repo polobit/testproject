@@ -226,12 +226,20 @@ function showLinkedinMatchingProfiles(plugin_id)
                 		showLinkedinMatchingProfiles(plugin_id);
                 		return;
                 	}
-                		
-                	// save url to contact
-	                agile_crm_save_contact_properties_subtype("website", "LINKEDIN", url);
+	                
+	                var propertiesArray = [
+	                        {"name"  : "image",
+	                        "value" : linkedin_image },
+	                        {"name"  : "website",
+		                     "value" : url,
+		                     "subtype" : "LINKEDIN"},
+		                        ];
 	                
 	                if($('#save_linkedin_image').is(':checked'))
-	                	 agile_crm_update_contact("image", linkedin_image);
+	                	agile_crm_update_contact_properties(propertiesArray);
+	                else
+	                	// save url to contact
+		                agile_crm_save_contact_properties_subtype("website", "LINKEDIN", url);
 	                
                 });
             

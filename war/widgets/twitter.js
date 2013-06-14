@@ -455,11 +455,19 @@ function showTwitterMatchingProfiles(plugin_id)
                 		return;
                 	}
                 		
-                	// save url to contact
-	                agile_crm_save_contact_properties_subtype("website", "TWITTER", "@" + screen_name);
-	                
-	                if($('#save_twitter_image').is(':checked'))
-	                	 agile_crm_update_contact("image", twitter_image);
+	                var propertiesArray = [
+	           	                        {"name"  : "image",
+	           	                        "value" : twitter_image },
+	           	                        {"name"  : "website",
+	           		                     "value" : url,
+	           		                     "subtype" : "TWITTER"},
+	           		                        ];
+	           	                
+	                if($('#save_linkedin_image').is(':checked'))
+   	                	agile_crm_update_contact_properties(propertiesArray);
+   	                else
+   	                	// save url to contact
+   		                agile_crm_save_contact_properties_subtype("website", "TWITTER", "@" + screen_name);
 	                
                 });
             });

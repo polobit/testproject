@@ -29,8 +29,12 @@ $(function() {
         });
     });
  
+    console.log('before email');
+    
     // Stores email of the contact as global variable
     Email = agile_crm_get_contact_property('email');
+    
+    console.log('after email');
     
     // If not found - considering first time usage of widget, setUpFreshbooksAuth
     // called
@@ -81,6 +85,8 @@ function setUpFreshBooksOauth(plugin_id)
 {
 	 // URL to return, after fetching token and secret key from LinkedIn
     var callbackURL = window.location.href;
+    
+    console.log('feshboooks auth');
 
     /*
      * Creates a URL, which on click can connect to scribe using parameters sent
@@ -170,12 +176,7 @@ function showFreshBooksClient(plugin_id, email)
 	{
 		$('#freshbooks_invoice_load').remove();
 		
-		var prefs = undefined;
-		// Saves the preferences into widget with FreshBooks widget name
-        agile_crm_save_widget_prefs(FRESHBOOKS_PLUGIN_NAME, JSON.stringify(prefs));
-		
-        alert(data.responseText);
-		setUpFreshbooksAuth(plugin_id);
+		freshbooksError("FreshBooks", data.responseText);
 	});
 }
 

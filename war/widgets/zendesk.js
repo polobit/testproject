@@ -35,8 +35,12 @@ $(function ()
         });
     });
  
+    console.log('before email zendesk');
+    
     // Stores email of the contact as global variable
     Email = agile_crm_get_contact_property('email');
+    
+    console.log('after email zendesk');
     
     // If not found - considering first time usage of widget, setupZendeskOAuth
     // called
@@ -89,6 +93,8 @@ function setupZendeskOAuth(plugin_id)
     // Shows loading image until set up is shown 
     $('#Zendesk').html(ZENDESK_UPDATE_LOAD_IMAGE);
 
+    console.log('zendesk auth');
+    
     // Shows input fields to save the zendesk preferences
     $('#Zendesk').html(getTemplate('zendesk-login', {}));
 
