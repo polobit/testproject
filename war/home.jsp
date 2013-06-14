@@ -284,10 +284,11 @@ String CSS_PATH = "/";
 	<!-- Handle bars -->
 	head.js(LIB_PATH + 'lib/handlebars-1.0.0.beta.6-min.js');
 	
-	
+	// Fetch/Create contact from our domain
 	var AGILE_CONTACT = {};
-	head.js('https://our.agilecrm.com/stats/min/agile-min.js', function(){
-			_agile.set_account('td2h2iv4njd4mbalruce18q7n4', 'our');
+	head.js('https://our.agilecrm.com/stats/min/agile-min.js', function() {
+	try {
+		_agile.set_account('td2h2iv4njd4mbalruce18q7n4', 'our');
 			_agile.set_email(CURRENT_DOMAIN_USER['email']);
 			
 				// Gets contact based on the the email of the user logged in
@@ -312,8 +313,20 @@ String CSS_PATH = "/";
 						 _agile.create_contact({"email": CURRENT_DOMAIN_USER['email'], "first_name" : first_name, "last_name": last_name, "tags":"Signup"}, function(data){
 							 AGILE_CONTACT = data;
 						 });
+						return;
 					}
+					
+					if(AGILE_CONTACT.tags || AGILE_CONTACT.tags.indexOf("Signup") < 0)
+						{
+							_agile.add_tag(getPropertyValue(AGILE_CONTACT.properties, "email"), "Signup", function(data) {
+								AGILE_CONTACT = data;
+							});
+						}
 				});
+			} catch(err)
+			{
+				
+			}
 	});
 	
 	head.ready(function() {	
