@@ -54,6 +54,19 @@ function request_notification_permission() {
 
 		$('#set-desktop-notification').live('click', function() {
 			window.webkitNotifications.requestPermission(function() {
+				if(window.webkitNotifications.checkPermission() == 0)
+				{	
+					$('#set-desktop-notification').css('display', 'none');
+				    $('#desktop-notification-content')
+						.html(
+								"<i>Desktop Notifications are Enabled in browser settings. <a href=\"#\" id=\"disable-notification\" style=\"text-decoration:underline;\">Disable it.</a></i>");
+				}
+				else
+				{
+					$('#set-desktop-notification').css('display', 'none');
+		            $('#desktop-notification-content').html(
+						"<i>Desktop Notifications are Disabled in browser settings. <a href=\"#\" id=\"enable-notification\" style=\"text-decoration:underline;\">Enable it.</a></i>")
+                 }	
 			});
 		});
 

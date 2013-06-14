@@ -35,7 +35,7 @@
         },
         {
             "NodeDefinition": {
-                "name": "Send E-mail",
+                "name": "Send Email",
                 "thumbnail": "json/nodes/images/email/sendemail.png",
                 "icon": "json/nodes/icons/email/sendemail.png",
                 "info": "Send email in text or HTML format. You can choose your delivery day and time.",
@@ -852,13 +852,13 @@
                 "url": "json/nodes/email/send_email.jsp"
             },
             "id": "PBX8mQ655KuDn",
-            "xPosition": 478,
-            "yPosition": 147,
-            "displayname": "Send E-mail",
+            "xPosition": 481,
+            "yPosition": 142,
+            "displayname": "Send Email",
             "JsonValues": [
                 {
                     "name": "nodename",
-                    "value": "Send E-mail"
+                    "value": "Send Email"
                 },
                 {
                     "name": "from_name",
@@ -965,13 +965,13 @@
                 "url": "json/nodes/email/clicked.js"
             },
             "id": "PBXKWrwGBwh2k",
-            "xPosition": 478,
-            "yPosition": 275,
-            "displayname": "Purchased?",
+            "xPosition": 488,
+            "yPosition": 261,
+            "displayname": "Clicked?",
             "JsonValues": [
                 {
                     "name": "nodename",
-                    "value": "Purchased?"
+                    "value": "Clicked?"
                 },
                 {
                     "name": "duration",

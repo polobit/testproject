@@ -202,8 +202,8 @@ public class InitDefaults
 	workflow1.save();
 
 	Workflow workflow2 = new Workflow(
-		"Sample Email & Social Campaign",
-		Util.readResource("misc/campaign-strings/sample_email_n_social_campaign.txt"));
+		"Sample Email & Twitter Campaign",
+		Util.readResource("misc/campaign-strings/sample_email_n_twitter_campaign.txt"));
 	workflow2.save();
 
     }
