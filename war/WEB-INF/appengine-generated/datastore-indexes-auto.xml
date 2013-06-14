@@ -10,7 +10,7 @@
     <!-- Used 19 times in query history -->
     <datastore-index kind="Task" ancestor="false" source="auto">
         <property name="owner" direction="asc"/>
-        <property name="created_time" direction="desc"/>
+        <property name="is_complete" direction="asc"/>
         <property name="due" direction="asc"/>
     </datastore-index>
 
