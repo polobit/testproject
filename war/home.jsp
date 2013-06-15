@@ -318,7 +318,7 @@ String CSS_PATH = "/";
 					
 					if(AGILE_CONTACT.tags || AGILE_CONTACT.tags.indexOf("Signup") < 0)
 						{
-							_agile.add_tag(getPropertyValue(CURRENT_DOMAIN_USER['email'], "Signup", function(data) {
+							_agile.add_tag(CURRENT_DOMAIN_USER['email'], "Signup", function(data) {
 								AGILE_CONTACT = data;
 							});
 						}
