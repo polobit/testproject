@@ -167,8 +167,12 @@ function setupContactFilterList(cel)
 					var filter_name = "Recent";
 
 				else
-					if (filter_id.toLowerCase().indexOf('lead') >= 0)
-						var filter_name = "My Lead";
+					if (filter_id.toLowerCase().indexOf('contacts') >= 0)
+						var filter_name = "My Contacts";
+				
+				else
+					if (filter_id.toLowerCase().indexOf('leads') >= 0)
+						var filter_name = "Leads";
 
 					// If is not system type get the name of the filter from
 					// id(from cookie)

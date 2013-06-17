@@ -128,21 +128,17 @@ public class ContactFilterAPI
 	    if (id.contains("system"))
 	    {
 		// Seperates "system-" from id and checks the type of the filter
-		// (RECETN of LEAD), accordingly contacts are fetched and
+		// (RECETN of LEADS or CONTACTS), accordingly contacts are
+		// fetched and
 		// returned
 		id = id.split("-")[1];
 
-		if (id.equalsIgnoreCase("RECENT"))
-		{
-		    return ContactFilter.getContacts(DefaultFilter.RECENT);
-		}
-		else if (id.equalsIgnoreCase("LEAD"))
-		{
-		    return ContactFilter.getContacts(DefaultFilter.MY_LEAD);
-		}
+		DefaultFilter filter = DefaultFilter.valueOf(id);
+		if (filter != null)
+		    return ContactFilter.getContacts(filter);
 
 		// If requested id contains "system" in it, but it doesn't match
-		// with RECENT/LEAD then return null
+		// with RECENT/LEAD/CONTACTS then return null
 		return null;
 	    }
 

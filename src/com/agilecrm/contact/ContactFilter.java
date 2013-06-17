@@ -9,6 +9,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -58,7 +59,7 @@ public class ContactFilter
      */
     public enum DefaultFilter
     {
-	MY_LEAD, RECENT
+	LEADS, RECENT, CONTACTS;
     };
 
     /**
@@ -171,7 +172,7 @@ public class ContactFilter
 	    return contact_query.filter("created_time < ", current_time)
 		    .order("-created_time").limit(20).list();
 	}
-	else if (type == DefaultFilter.MY_LEAD)
+	else if (type == DefaultFilter.CONTACTS)
 	{
 	    // Creates a DomainUser key based on current domain user id
 	    Key<DomainUser> userKey = new Key<DomainUser>(DomainUser.class,
@@ -180,6 +181,11 @@ public class ContactFilter
 	    // Queries contacts whose owner_key is equal to current domain user
 	    // key
 	    return ofy.query(Contact.class).filter("owner_key", userKey).list();
+	}
+	else if (type == DefaultFilter.LEADS)
+	{
+	    return ContactUtil.getContactsForTag("lead");
+
 	}
 
 	return null;
