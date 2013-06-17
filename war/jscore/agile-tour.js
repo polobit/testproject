@@ -137,7 +137,9 @@ var tour_flag = false;
 function startTour(key, el) {
 	tour = undefined;
 	var tour_flag = false;
-	
+	if(!key)
+		key = Current_Route;
+			
 	 $(el).live('agile_collection_loaded', function(){
 		if(tour_flag)
 			return;
@@ -151,8 +153,16 @@ function initiateTour(key, el)
 	var tourStatusCookie = readCookie("agile_tour");
 	if (!tourStatusCookie)
 		return;
+
 	if (!key)
-		return;
+		{
+			if(!Current_Route)
+				return;
+			
+			key = Current_Route; 
+		}
+		
+			
 	console.log(tour);
 		
 	tourStatusCookie = JSON.parse(JSON.parse(tourStatusCookie));
@@ -200,3 +210,45 @@ function initiateTour(key, el)
 function endCurrentTour(){
 	
 }
+
+function reinitialize_tour_on_current_route() {
+	
+	// Return of tour is already enabled on that route
+	var tourStatusCookie = readCookie("agile_tour");
+	var key = Current_Route;
+
+	// If current view is contact details page we cannot initialize 
+	// tour based on route name, so we should be changing it to "contact-details" 
+	if(Current_Route.indexOf("contact/") != -1)
+		key = "contact-details";
+
+	// If cookie exists, checks the state of tour in curent route.
+	if(tourStatusCookie)
+	{
+		tourStatusCookie = JSON.parse(JSON.parse(tourStatusCookie));
+		
+		if(tourStatusCookie[key] == true)
+			return;
+		
+		localStorage.removeItem(key + "-tour_current_step");
+	}
+	
+	else
+		tourStatusCookie = {};
+	
+	// Set tour back to true and save in cookie.
+	tourStatusCookie[key] = true;
+		
+	createCookie("agile_tour", JSON.stringify(JSON
+			.stringify(tourStatusCookie)));
+	
+	// Initialize tour
+	initiateTour(key);
+}
+
+$(function(){
+	$('#agile-page-tour').click(function(e) {
+		e.preventDefault();
+		reinitialize_tour_on_current_route();
+	});
+});
