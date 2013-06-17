@@ -86,12 +86,13 @@
 					</div>	                
 	                <div class="control-group">
 	                    <label class="control-label"><b>Message: </b><span class="field_req">*</span></label>
-	                    <div class="controls">
+	                    <div class="controls span4" style="margin-left:0px;">
 							{{#if_equals headline "Tweet"}}
-								<textarea rows="4" class="required span4" placeholder="Detailed Message" name="message" id="message" maxlength="140" style="max-width:500px;">{{description}}&nbsp</textarea>
+								<textarea rows="4" class="required span4" placeholder="Detailed Message" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" maxlength="140" style="max-width:500px;">{{description}}&nbsp</textarea>
 							{{else}}
-	                        	<textarea rows="4" class="required span4" placeholder="Detailed Message" name="message" id="message" maxlength="140" style="max-width:500px;"></textarea>
+	                        	<textarea rows="4" class="required span4" placeholder="Detailed Message" name="message" id="twit-message" data-provide="limit" data-counter="#counter" maxlength="140" style="max-width:500px;"></textarea>
 							{{/if_equals}}  
+							<div class="right"><small>Max Length(<em id="counter" style="">140</em>/140)</small></div>
 	                    </div>
 	                </div>
 	            </fieldset>
@@ -99,6 +100,7 @@
 	    </div>
 	    <div class="modal-footer">
 	        <a href="#" class="btn btn-primary" id="send_request">Send</a>
+			<span><img src="img/ajax-spinner.gif" id="spinner-modal" style="display:none;"></img></span>
 	        <span class="save-status"></span>
 	    </div>
 	</div>

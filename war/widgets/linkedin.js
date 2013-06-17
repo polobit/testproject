@@ -594,6 +594,17 @@ function sendLinkedInAddRequest(plugin_id, linkedin_id)
     // Append the form into the content
     $('#content').append(message_form_modal);
 
+    $('#linkedin_messageModal').on('shown', function () {
+		  
+		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
+			  $(".linkedin_connect_limit").limit({
+			  	  maxChars: 300
+			  	});
+			  
+			  $('#linkedin_messageModal').find('#link-connect').focus();
+		  });
+	});
+    
     // Shows the modal after filling with details
     $('#linkedin_messageModal').modal("show");
 
@@ -608,6 +619,8 @@ function sendLinkedInAddRequest(plugin_id, linkedin_id)
             return;
         }
 
+        $("#spinner-modal-linked").show();
+        
         // Sends post request to url "core/api/widgets/connect/" to call WidgetsAPI 
         // with plugin id and LinkedIn id as path parameters and form as post data
         $.post("/core/api/widgets/connect/" + plugin_id + "/" + linkedin_id, 
@@ -615,7 +628,9 @@ function sendLinkedInAddRequest(plugin_id, linkedin_id)
 
         function (data)
         {
-            // On success, shows the status as sent
+        	$("#spinner-modal-linked").hide();
+        	
+        	// On success, shows the status as sent
             $('#linkedin_messageModal').find('span.save-status').html("sent");
 
             // Hides the modal after 2 seconds after the sent is shown
@@ -626,6 +641,8 @@ function sendLinkedInAddRequest(plugin_id, linkedin_id)
 
         }).error(function (data)
         {
+        	$("#spinner-modal-linked").hide();
+
             // If error occurs while posting modal is removed and error message is shown
             $('#linkedin_messageModal').remove();
             linkedinError(data.responseText);
@@ -663,6 +680,18 @@ function sendLinkedInMessage(plugin_id, linkedin_id)
 
     // Append the form into the content
     $('#content').append(message_form_modal);
+    
+    $('#linkedin_messageModal').on('shown', function () {
+		  
+		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
+			  $(".limit" ).find($('.linkedin_message_limit')).limit({
+			  	  limit: 300, counter:300
+			  	});
+			  
+			  $('#linkedin_messageModal').find('#link-message').focus();
+		  });
+	});
+  
 
     // Shows the modal after filling with details
     $('#linkedin_messageModal').modal("show");
@@ -677,6 +706,8 @@ function sendLinkedInMessage(plugin_id, linkedin_id)
         {
             return;
         }
+        
+        $("#spinner-modal-linked").show();
 
         // Sends post request to url "core/api/widgets/message/" and Calls WidgetsAPI with 
         // plugin id and LinkedIn id as path parameters and form as post data
@@ -685,6 +716,8 @@ function sendLinkedInMessage(plugin_id, linkedin_id)
 
         function (data)
         {
+        	 $("#spinner-modal-linked").hide();
+        	 
             // On success, shows the status as sent
             $('#linkedin_messageModal').find('span.save-status').html("sent");
 
@@ -696,6 +729,9 @@ function sendLinkedInMessage(plugin_id, linkedin_id)
 
         }).error(function (data)
         {
+        	
+        	$("#spinner-modal-linked").hide();
+        	 
             // If error occurs while posting modal is removed and error message is shown
             $('#linkedin_messageModal').remove();
             
