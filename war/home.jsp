@@ -234,6 +234,9 @@ String CSS_PATH = "/";
 
 	<footer id="footer" class="footer container"
 		style="padding: 0px !important;overflow-x:hidden;overflow-y:hidden;margin-top:15px;">
+        <!-- <div style="display:inline;float:right;">
+            <a style="font-weight:bold;cursor:pointer;vertical-align:-17px;margin-right: 30px;" id="agile-page-tour">Tour</a>
+        </div> -->
         <div style="display:inline;float:right;">
             <a style="font-weight:bold;cursor:pointer;vertical-align:-17px;margin-right: 30px;" id="help-page">Help</a>
         </div>
@@ -262,6 +265,7 @@ String CSS_PATH = "/";
 	 // var LIB_PATH = "/";
 	
 	var IS_CONSOLE_ENABLED = <%=debug%>;
+	var LOCAL_SERVER = <%=debug%>;
 	
 	var IS_FLUID = <%=is_fluid%>;
 	
@@ -286,10 +290,18 @@ String CSS_PATH = "/";
 	
 	// Fetch/Create contact from our domain
 	var AGILE_CONTACT = {};
-	head.js('https://our.agilecrm.com/stats/min/agile-min.js', function() {
+	
+	head.js('/stats/min/agile-min.js', function() {
 	try {
-		_agile.set_account('td2h2iv4njd4mbalruce18q7n4', 'our');
-			_agile.set_email(CURRENT_DOMAIN_USER['email']);
+
+		// If it is local server then add contacts to local domain instead of our domain
+		if(LOCAL_SERVER)
+			_agile.set_account('7n7762stfek4hj61jnpce7uedi', 'local');
+			
+		else
+			_agile.set_account('td2h2iv4njd4mbalruce18q7n4', 'our');
+			
+		_agile.set_email(CURRENT_DOMAIN_USER['email']);
 			
 				// Gets contact based on the the email of the user logged in
 				agile_getContact(CURRENT_DOMAIN_USER['email'], function(data){
