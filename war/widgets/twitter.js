@@ -944,10 +944,21 @@ function sendTwitterMessage(plugin_id, twitter_id, message)
 
     // Append the form into the content
     $('#content').append(message_form_modal);
-
+    
+    $('#twitter_messageModal').on('shown', function () {
+		  
+		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
+			  $(".limit").limit({
+			  	  maxChars: 140
+			  	});
+			  
+			  $('#twitter_messageModal').find('#twit-message').focus();
+		  });
+	});
+    
     // Shows the modal after filling with details
     $('#twitter_messageModal').modal("show");
-
+    
     // On click of send button in the modal, message request is sent    
     $('#send_request').click(function (e)
     {
@@ -959,6 +970,8 @@ function sendTwitterMessage(plugin_id, twitter_id, message)
             return;
         }
 
+        $("#spinner-modal").show();
+    
         // Sends post request to url "core/api/widgets/message/" and Calls WidgetsAPI with 
         // plugin id and Twitter id as path parameters and form as post data
         $.post("/core/api/widgets/message/" + plugin_id + "/" + twitter_id,
@@ -966,6 +979,8 @@ function sendTwitterMessage(plugin_id, twitter_id, message)
 
         function (data)
         {
+        	 $("#spinner-modal").hide();
+        	 
             // On success, shows the status as sent
             $('#twitter_messageModal').find('span.save-status').html("sent");
 
@@ -977,6 +992,8 @@ function sendTwitterMessage(plugin_id, twitter_id, message)
 
         }).error(function (data)
         {
+        	 $("#spinner-modal").hide();
+        	 
             // If error occurs while posting modal is removed and error message is shown
             $('#twitter_messageModal').remove();
 
@@ -1017,9 +1034,20 @@ function tweetInTwitter(plugin_id, twitter_id)
     // Append the form into the content
     $('#content').append(message_form_modal);
 
+    $('#twitter_messageModal').on('shown', function () {
+		  
+		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
+			  $(".limit").limit({
+			  	  maxChars: 140
+			  	});
+			  
+			  $('#twitter_messageModal').find('#twit-tweet').focus();
+		  });
+	});
+    
     // Shows the modal after filling with details
     $('#twitter_messageModal').modal("show");
-
+    
     // On click of send button in the modal, tweet request is sent 
     $('#send_request').click(function (e)
     {
@@ -1031,6 +1059,8 @@ function tweetInTwitter(plugin_id, twitter_id)
             return;
         }
 
+        $("#spinner-modal").show();
+        
         // Sends post request to url "core/api/widgets/message/" and Calls WidgetsAPI with 
         // plugin id and Twitter id as path parameters and form as post data
         $.post("/core/api/widgets/tweet/" + plugin_id ,
@@ -1038,6 +1068,8 @@ function tweetInTwitter(plugin_id, twitter_id)
 
         function (data)
         {
+        	 $("#spinner-modal").hide();
+        	 
             // On success, shows the status as sent
             $('#twitter_messageModal').find('span.save-status').html("sent");
 
@@ -1049,6 +1081,8 @@ function tweetInTwitter(plugin_id, twitter_id)
 
         }).error(function (data)
         {
+        	 $("#spinner-modal").hide();
+        	 
             // If error occurs while posting modal is removed and error message is shown
             $('#twitter_messageModal').remove();
 
