@@ -142,17 +142,29 @@ function agile_crm_update_contact_properties(propertiesArray, callback) {
 			    // If property name already exists then updates the value
 			    if (property.name == propertiesArray[i].name) {
 			    	
-			     
-			    	if(propertiesArray[i].name == "website")
-			    	{
-				    	if(propertiesArray[i].subtype)
-				    	{
-					    	property.subtype = propertiesArray[i].subtype;
+			    	alert(property.name + " " +  property.subtype);
+			    	alert(propertiesArray[i].name + " " +  propertiesArray[i].subtype);
+			    	
+			    	if(propertiesArray[i].subtype) {
+			    		
+			    		if (propertiesArray[i].subtype == property.subtype)
+			    		{
+			    			property.subtype = propertiesArray[i].subtype;
 					    	property.value = propertiesArray[i].value;
-				    	}
-			    	}
-			    	else
-			    		property.value = propertiesArray[i].value;
+			    		}
+			    		else
+			    		{
+			    			properties.push({
+			    			    "name" : propertiesArray[i].name,
+			    			    "value" : propertiesArray[i].value,
+			    			    "subtype" :  propertiesArray[i].subtype,
+			    			    "type" : "CUSTOM"
+			    			   });
+			    		}
+			    		
+			    	} else 
+				    		property.value = propertiesArray[i].value;
+			 
 			    }
 		  });
 	  
