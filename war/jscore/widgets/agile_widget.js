@@ -142,9 +142,6 @@ function agile_crm_update_contact_properties(propertiesArray, callback) {
 			    // If property name already exists then updates the value
 			    if (property.name == propertiesArray[i].name) {
 			    	
-			    	alert(property.name + " " +  property.subtype);
-			    	alert(propertiesArray[i].name + " " +  propertiesArray[i].subtype);
-			    	
 			    	if(propertiesArray[i].subtype) {
 			    		
 			    		if (propertiesArray[i].subtype == property.subtype)
