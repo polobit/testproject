@@ -243,7 +243,7 @@ public class InitDefaults
 	deal.expected_value = 2000000l;
 	deal.probability = 98;
 	deal.milestone = "Open";
-	DateUtil date = new DateUtil().toMidnight().addDays(61);
+	DateUtil date = new DateUtil().toMidnight().addDays(20);
 	deal.close_date = date.getTime().getTime() / 1000;
 	/*
 	 * List<Contact> contacts = ContactUtil.getAllContacts(); for (Contact

@@ -9,7 +9,7 @@
         		<img class="thumbnail" src="img/company.png" width="40px" height="40px" style="display:inline" />
         	{{/if_contact_type}}
     	</div>
-    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:13em;overflow:hidden;">
+    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:14em;overflow:hidden;">
         	{{#if_contact_type "PERSON"}}
         		<b>	{{getPropertyValue properties "first_name"}}
         		{{getPropertyValue properties "last_name"}} </b>
@@ -22,10 +22,9 @@
         		{{getPropertyValue properties "url"}}
         	{{/if_contact_type}}
     	</div>
-    	<div style="float:right"></div>
 	</td>
-	<td>{{getPropertyValue properties "title"}}<br />
-    	{{getPropertyValue properties "company"}}
+	<td><div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:8em;overflow:hidden;">{{getPropertyValue properties "title"}}<br />
+    	{{getPropertyValue properties "company"}}</div>
 	</td>
 	<td> 
 <div style="height:auto;display:inline-block;vertical-align:top;text-overflow:clip;white-space:nowrap;width:15em;overflow:hidden;">

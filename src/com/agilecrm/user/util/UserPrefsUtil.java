@@ -77,7 +77,7 @@ public class UserPrefsUtil
 		null,
 		"pink",
 		"",
-		"- Powered by <a href=\"https://www.agilecrm.com\" target=\"_blank\" rel=\"nofollow\" title=\"Link: https://www.agilecrm.com\">AgileCRM</a>",
+		"- Sent using <a href=\"https://www.agilecrm.com\" target=\"_blank\" rel=\"nofollow\" title=\"Link: https://www.agilecrm.com\">AgileCRM</a>",
 		true);
 	userPrefs.save();
 	return userPrefs;
