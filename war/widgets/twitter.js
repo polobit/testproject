@@ -455,6 +455,8 @@ function showTwitterMatchingProfiles(plugin_id)
                 		return;
                 	}
                 		
+                	var url = "@" + screen_name;
+                	
 	                var propertiesArray = [
 	           	                        {"name"  : "image",
 	           	                        "value" : twitter_image },
@@ -463,11 +465,11 @@ function showTwitterMatchingProfiles(plugin_id)
 	           		                     "subtype" : "TWITTER"},
 	           		                        ];
 	           	                
-	                if($('#save_linkedin_image').is(':checked'))
+	                if($('#save_twitter_image').is(':checked'))
    	                	agile_crm_update_contact_properties(propertiesArray);
    	                else
    	                	// save url to contact
-   		                agile_crm_save_contact_properties_subtype("website", "TWITTER", "@" + screen_name);
+   		                agile_crm_save_contact_properties_subtype("website", "TWITTER", url);	              
 	                
                 });
             });
