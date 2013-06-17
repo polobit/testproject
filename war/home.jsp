@@ -234,12 +234,13 @@ String CSS_PATH = "/";
 
 	<footer id="footer" class="footer container"
 		style="padding: 0px !important;overflow-x:hidden;overflow-y:hidden;margin-top:15px;">
-        <!-- <div style="display:inline;float:right;">
-            <a style="font-weight:bold;cursor:pointer;vertical-align:-17px;margin-right: 30px;" id="agile-page-tour">Tour</a>
-        </div> -->
-        <div style="display:inline;float:right;">
+		<div style="display:inline;float:right;">
             <a style="font-weight:bold;cursor:pointer;vertical-align:-17px;margin-right: 30px;" id="help-page">Help</a>
         </div>
+        <div style="display:inline;float:right;">
+            <a style="font-weight:bold;cursor:pointer;vertical-align:-17px;margin-right: 30px;" id="agile-page-tour">Tour</a>
+        </div>
+
 	 	<div style="width:290px;display:inline-block;margin-top:15px;">
 	 	    Like AgileCRM?<b> Share it -</b>
 	 		<script src="https://platform.twitter.com/widgets.js" type="text/javascript"></script>
