@@ -343,6 +343,10 @@ public class LinkedInUtil
 	ArrayList<String> list = new ArrayList<String>();
 	list.add(recipientId);
 
+	String agile = " - Sent from Agile CRM (www.agilecrm.com)";
+	if (message.length() < (7000 - agile.length()))
+	    message = message + agile;
+
 	// sends message to a person in LinkedIn based on list
 	client.sendMessage(list, subject, message);
 	return "Message sent successfully";

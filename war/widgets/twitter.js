@@ -949,7 +949,8 @@ function sendTwitterMessage(plugin_id, twitter_id, message)
 		  
 		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
 			  $(".limit").limit({
-			  	  maxChars: 140
+			  	  maxChars: 140,
+			  	  counter: "#counter"
 			  	});
 			  
 			  $('#twitter_messageModal').find('#twit-message').focus();
@@ -1014,7 +1015,7 @@ function sendTwitterMessage(plugin_id, twitter_id, message)
  */
 function tweetInTwitter(plugin_id, twitter_id)
 {
-    // Store info in a json, to send it to the modal window when making send tweet request
+	// Store info in a json, to send it to the modal window when making send tweet request
     var json = {};
 
     // Set headline of modal window as Send Message
@@ -1025,6 +1026,7 @@ function tweetInTwitter(plugin_id, twitter_id)
         " on Twitter";
 
     json["description"] = "@" + Twitter_current_profile_screen_name;
+	    
     // If modal already exists remove to show a new one
     $('#twitter_messageModal').remove();
 
@@ -1038,7 +1040,8 @@ function tweetInTwitter(plugin_id, twitter_id)
 		  
 		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
 			  $(".limit").limit({
-			  	  maxChars: 140
+			  	  maxChars: 140,
+			  	  counter: "#counter"
 			  	});
 			  
 			  $('#twitter_messageModal').find('#twit-tweet').focus();

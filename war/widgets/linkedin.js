@@ -597,9 +597,10 @@ function sendLinkedInAddRequest(plugin_id, linkedin_id)
     $('#linkedin_messageModal').on('shown', function () {
 		  
 		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
-			  $(".linkedin_connect_limit").limit({
-			  	  maxChars: 300
-			  	});
+			  $('.linkedin_connect_limit').limit({
+			       maxChars:300,
+			       counter: "#counter"
+			      });
 			  
 			  $('#linkedin_messageModal').find('#link-connect').focus();
 		  });
@@ -609,7 +610,7 @@ function sendLinkedInAddRequest(plugin_id, linkedin_id)
     $('#linkedin_messageModal').modal("show");
 
     // On click of send button in the modal, connect request is sent
-    $('#send_request').click(function (e)
+    $('#send_linked_request').click(function (e)
     {
         e.preventDefault();
 
@@ -680,24 +681,12 @@ function sendLinkedInMessage(plugin_id, linkedin_id)
 
     // Append the form into the content
     $('#content').append(message_form_modal);
-    
-    $('#linkedin_messageModal').on('shown', function () {
-		  
-		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
-			  $(".limit" ).find($('.linkedin_message_limit')).limit({
-			  	  limit: 300, counter:300
-			  	});
-			  
-			  $('#linkedin_messageModal').find('#link-message').focus();
-		  });
-	});
-  
 
     // Shows the modal after filling with details
     $('#linkedin_messageModal').modal("show");
 
     // On click of send button in the modal, message request is sent    
-    $('#send_request').click(function (e)
+    $('#send_linked_request').click(function (e)
     {
         e.preventDefault();
 
