@@ -3,7 +3,9 @@ package com.agilecrm.search.query;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.reports.Reports;
@@ -14,7 +16,7 @@ import com.agilecrm.search.ui.serialize.SearchRule.RuleType;
 import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.util.DateUtil;
 import com.google.appengine.api.search.Cursor;
-import com.google.appengine.api.search.Field;
+import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Index;
 import com.google.appengine.api.search.Query;
 import com.google.appengine.api.search.QueryOptions;
@@ -76,6 +78,26 @@ public class QueryDocument implements QueryInterface
 
 	// return query results
 	return processQuery(query, RuleType.Contact, count, cursor);
+    }
+
+    public List<Long> getContactIds(List<SearchRule> rules, Integer count,
+	    String cursor)
+    {
+
+	String query = constructQuery(rules);
+
+	// return query results
+	Collection<ScoredDocument> contact_documents = getContactDocuments(
+		query, RuleType.Contact, count, cursor);
+
+	List<Long> entity_ids = new ArrayList<Long>();
+
+	for (Document document : contact_documents)
+	{
+	    entity_ids.add(Long.parseLong(document.getId()));
+	}
+
+	return entity_ids;
     }
 
     /**
@@ -299,11 +321,10 @@ public class QueryDocument implements QueryInterface
 		Date toDate = new DateUtil(new Date(Long.parseLong(rhs_new)))
 			.addDays(1).toMidnight().getTime();
 
-
 		String toDateEpoch = String.valueOf(toDate.getTime() / 1000);
 
 		String epochQuery = lhs + "_epoch >= " + startDateEpoch;
-		
+
 		epochQuery = buildQuery("AND", epochQuery, lhs + "_epoch <= "
 			+ toDateEpoch);
 
@@ -311,7 +332,7 @@ public class QueryDocument implements QueryInterface
 			.parseLong(rhs_new));
 
 		String dateQuery = lhs + " >= " + date;
-			
+
 		dateQuery = buildQuery("AND", dateQuery, lhs + " <= " + to_date);
 
 		String timeQuery = "((" + epochQuery + ") OR (" + dateQuery
@@ -333,9 +354,9 @@ public class QueryDocument implements QueryInterface
 	    String epochQuery = lhs + "_epoch >= "
 		    + String.valueOf(fromDateInSecs);
 
-	    epochQuery = buildQuery("AND", epochQuery,
-		    lhs + "_epoch <= " + String.valueOf(currentEpochTime));
-	    
+	    epochQuery = buildQuery("AND", epochQuery, lhs + "_epoch <= "
+		    + String.valueOf(currentEpochTime));
+
 	    String fromDate = SearchUtil
 		    .getDateWithoutTimeComponent(fromDateInSecs * 1000);
 
@@ -343,7 +364,7 @@ public class QueryDocument implements QueryInterface
 		    .getDateWithoutTimeComponent(currentEpochTime * 1000);
 
 	    String dateQuery = lhs + " >= " + fromDate;
-	    
+
 	    dateQuery = buildQuery("AND", dateQuery, lhs + " <= " + toDate);
 
 	    String timeQuery = "((" + epochQuery + ") OR (" + dateQuery + "))";
@@ -430,34 +451,25 @@ public class QueryDocument implements QueryInterface
 	return ofy.get(Contact.class, entity_ids).values();
     }
 
-    private static Collection processQuery(String query, RuleType type,
-	    int page, String cursor)
+    @SuppressWarnings("unchecked")
+    public static Collection<ScoredDocument> getContactDocuments(String query,
+	    RuleType type, Integer page, String cursor)
     {
 
-	QueryOptions options;
-	/*
-	 * Set query options only to get id of document (enough to get get
-	 * respective contacts)
-	 */
-	if (cursor == null)
+	QueryOptions options = buildOptions(query, type, page, cursor);
 
-	    options = QueryOptions.newBuilder().setLimit(page)
-		    .setCursor(Cursor.newBuilder().setPerResult(true).build())
-		    .build();
-	else
-	{
-	    options = QueryOptions
-		    .newBuilder()
-		    .setLimit(page)
-		    .setCursor(
-			    Cursor.newBuilder().setPerResult(true)
-				    .build(cursor)).build();
+	return (Collection<ScoredDocument>) performQueryWithOptions(options,
+		query).get("fetchedDocuments");
+    }
 
-	}
-
+    private static Map<String, Object> performQueryWithOptions(
+	    QueryOptions options, String query)
+    {
 	// Build query on query options
-	com.google.appengine.api.search.Query query_string = com.google.appengine.api.search.Query
-		.newBuilder().setOptions(options).build(query);
+	com.google.appengine.api.search.Query query_string = null;
+
+	query_string = com.google.appengine.api.search.Query.newBuilder()
+		.setOptions(options).build(query);
 
 	// Get results on query
 	Index index = null;
@@ -476,25 +488,84 @@ public class QueryDocument implements QueryInterface
 	if (index == null)
 	    return null;
 
+	System.out.println("-----------------------------------------");
+
+	System.out.println(index.search(query_string).getNumberFound());
+	Collection<ScoredDocument> searchResults = index.search(query_string).getResults();
+	Map<String, Object> documents = new HashMap<String, Object>();
+	
+	if(searchResults.size() == options.getLimit())
+	    documents.put("availableDocuments", index.search(query_string).getNumberFound());
+	else
+	    documents.put("availableDocuments",
+		    Long.valueOf(searchResults.size()));
+	
+	documents.put("fetchedDocuments", searchResults);
+	
 	// Gets sorted documents
-	Collection<ScoredDocument> contact_documents = index.search(
-		query_string).getResults();
+	return documents;
+    }
+
+    private static QueryOptions buildOptions(String query, RuleType type,
+	    Integer page, String cursor)
+    {
+
+	QueryOptions options;
+
+	if (page != null)
+	{
+	    /*
+	     * Set query options only to get id of document (enough to get get
+	     * respective contacts)
+	     */
+	    if (cursor == null)
+
+		options = QueryOptions
+			.newBuilder()
+			.setFieldsToReturn("DocId")
+			.setLimit(page)
+			.setCursor(
+				Cursor.newBuilder().setPerResult(true).build())
+			.build();
+	    else
+	    {
+		options = QueryOptions
+			.newBuilder()
+			.setFieldsToReturn("DocId")
+			.setLimit(page)
+			.setCursor(
+				Cursor.newBuilder().setPerResult(true)
+					.build(cursor)).build();
+
+	    }
+	}
+	else
+	    options = QueryOptions.newBuilder().setFieldsToReturn("DocId")
+		    .build();
+
+	return options;
+    }
+
+    private static Collection processQuery(String query, RuleType type,
+	    int page, String cursor)
+    {
+
+	QueryOptions options = buildOptions(query, type, page, cursor);
+
+	Map<String, Object> results = performQueryWithOptions(
+		options, query);
+	
+	Collection<ScoredDocument> documents = (Collection<ScoredDocument>) results
+		.get("fetchedDocuments");
+	System.out.println(results.get("availableDocuments"));
+	Long availableResults = (Long) results.get("availableDocuments");
 
 	List<Long> entity_ids = new ArrayList<Long>();
 
 	// Iterate through contact_documents and add document ids(contact ids)
 	// to list
-	for (ScoredDocument doc : contact_documents)
+	for (ScoredDocument doc : documents)
 	{
-
-	    System.out.println(doc.getFieldNames());
-	    for (Field field : doc.getFields())
-	    {
-		System.out.println("field name : " + field.getName() + ", type"
-			+ field.getType());
-		if (field.getType() == Field.FieldType.DATE)
-		    System.out.println(field.getDate());
-	    }
 	    entity_ids.add(Long.parseLong(doc.getId()));
 	    cursor = doc.getCursor().toWebSafeString();
 	}
@@ -504,33 +575,17 @@ public class QueryDocument implements QueryInterface
 	// Returns contact related to doc_ids
 	Collection<Contact> contactResults = ofy.get(Contact.class, entity_ids)
 		.values();
-	int max = contactResults.size();
 
-	int countOfContacts = 0;
-	for (Contact contact : contactResults)
-	{
-	    if (++countOfContacts == max)
-	    {
-		contact.cursor = cursor;
-		// contact.count = max;
-	    }
-	}
+	List<Contact> contacts = new ArrayList<Contact>(contactResults);
 
-	System.out.println(query);
+	if (contacts.isEmpty())
+	    return contacts;
 
-	System.out.println(query_string);
+	System.out.println(options.getNumberFoundAccuracy());
+	contacts.get(0).count = availableResults.intValue();
+	contacts.get(contacts.size() - 1).cursor = cursor;
 
-	System.out.println(com.google.appengine.api.search.DateUtil
-		.deserializeDate(String.valueOf(System.currentTimeMillis())));
-
-	/*
-	 * System.out.println("contact query : " + index.search(
-	 * "agilecrm_time: " + com.google.appengine.api.search.DateUtil //
-	 * .deserializeDate(date))
-	 */
-	// .getNumberFound());
-
-	return contactResults;
+	return contacts;
     }
 
     public static String constructQuery(List<SearchRule> rules)
