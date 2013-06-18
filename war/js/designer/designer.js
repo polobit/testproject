@@ -448,8 +448,6 @@ function deserializePhoneSystemTemplate(json)
 function serializePhoneSystem() {
 	
 	var workflowJSON = new JSONSerializer().toJSON(workflow.getDocument());
-	console.log(JSON.stringify(workflowJSON)); 	
-	console.log(workflowJSON);
 	return 	JSON.stringify(workflowJSON);
 }
 
