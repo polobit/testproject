@@ -599,7 +599,7 @@ function sendLinkedInAddRequest(plugin_id, linkedin_id)
 		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
 			  $('.linkedin_connect_limit').limit({
 			       maxChars:300,
-			       counter: "#counter"
+			       counter: "#linkedin_counter"
 			      });
 			  
 			  $('#linkedin_messageModal').find('#link-connect').focus();

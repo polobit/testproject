@@ -949,14 +949,15 @@ function sendTwitterMessage(plugin_id, twitter_id, message)
     $('#twitter_messageModal').on('shown', function () {
 		  
 		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
-			  $(".limit").limit({
-			  	  maxChars: 140,
-			  	  counter: "#counter"
+			  $(".twit-message-limit").limit({
+			  	  maxChars: 125,
+			  	  counter: "#twitter-counter"
 			  	});
-			  
 			  $('#twitter_messageModal').find('#twit-message').focus();
 		  });
 	});
+    
+   //
     
     // Shows the modal after filling with details
     $('#twitter_messageModal').modal("show");
@@ -1040,14 +1041,15 @@ function tweetInTwitter(plugin_id, twitter_id)
     $('#twitter_messageModal').on('shown', function () {
 		  
 		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
-			  $(".limit").limit({
-			  	  maxChars: 140,
-			  	  counter: "#counter"
+			  $(".twit-tweet-limit").limit({
+			  	  maxChars: 125,
+			  	  counter: "#twitter-counter"
 			  	});
-			  
 			  $('#twitter_messageModal').find('#twit-tweet').focus();
 		  });
 	});
+    
+  //  
     
     // Shows the modal after filling with details
     $('#twitter_messageModal').modal("show");
