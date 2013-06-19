@@ -163,16 +163,7 @@ function deserializeForm(data, form)
                      * tag_name represent the name of the contact
                      * first_name and last_name
                      */
-                    if(contact.type == "COMPANY")
-                    	tag_name = getPropertyValue(
-                                contact.properties,
-                                    "name");
-                    else
-                    	tag_name = getPropertyValue(
-                    			contact.properties,
-                        "first_name") + " " + getPropertyValue(
-                        		contact.properties,
-                        "last_name");
+                    	tag_name = getContactName(contact);
 
                     /*
                      * Creates a tag for each contact and appends to
