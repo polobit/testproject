@@ -138,7 +138,7 @@ function agile_type_ahead(id, el, callback, isSearch){
                 		 * and last name of person
                 		 */
                 		if (item.type == "COMPANY") 
-                			var fullname = getPropertyValue(item.properties, "name") + item.id;
+                			var fullname = getPropertyValue(item.properties, "name") +  "-" +  item.id;
                 		else 
                 			var fullname = getPropertyValue(item.properties, 
                 						   		"first_name") + " " + getPropertyValue(item.properties, "last_name") + "-" +  item.id;
@@ -282,7 +282,7 @@ function contacts_typeahead(data)
         if (contact.type == "COMPANY"){
         	
             // Gets name of the company
-            contact_name = getPropertyValue(contact.properties, "name");
+            contact_name = getPropertyValue(contact.properties, "name") + "-" + contact.id;
                 
             // push company name in to the list
             contact_names_list.push(contact_name);

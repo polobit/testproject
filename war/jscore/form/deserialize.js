@@ -144,7 +144,6 @@ function deserializeForm(data, form)
              */
             else if (fel.hasClass('tagsinput') && tag == "ul" && fel.hasClass('contacts'))
             {
-            	
                 // Iterates through contacts to create a tag
                 // element for each contact
                 $.each(
@@ -164,10 +163,15 @@ function deserializeForm(data, form)
                      * tag_name represent the name of the contact
                      * first_name and last_name
                      */
-                    tag_name = getPropertyValue(
-                    contact.properties,
+                    if(contact.type == "COMPANY")
+                    	tag_name = getPropertyValue(
+                                contact.properties,
+                                    "name");
+                    else
+                    	tag_name = getPropertyValue(
+                    			contact.properties,
                         "first_name") + " " + getPropertyValue(
-                    contact.properties,
+                        		contact.properties,
                         "last_name");
 
                     /*
