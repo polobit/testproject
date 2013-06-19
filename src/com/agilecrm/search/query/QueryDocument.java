@@ -488,9 +488,6 @@ public class QueryDocument implements QueryInterface
 	if (index == null)
 	    return null;
 
-	System.out.println("-----------------------------------------");
-
-	System.out.println(index.search(query_string).getNumberFound());
 	Collection<ScoredDocument> searchResults = index.search(query_string).getResults();
 	Map<String, Object> documents = new HashMap<String, Object>();
 	
@@ -557,7 +554,6 @@ public class QueryDocument implements QueryInterface
 	
 	Collection<ScoredDocument> documents = (Collection<ScoredDocument>) results
 		.get("fetchedDocuments");
-	System.out.println(results.get("availableDocuments"));
 	Long availableResults = (Long) results.get("availableDocuments");
 
 	List<Long> entity_ids = new ArrayList<Long>();
@@ -581,7 +577,6 @@ public class QueryDocument implements QueryInterface
 	if (contacts.isEmpty())
 	    return contacts;
 
-	System.out.println(options.getNumberFoundAccuracy());
 	contacts.get(0).count = availableResults.intValue();
 	contacts.get(contacts.size() - 1).cursor = cursor;
 
