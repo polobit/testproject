@@ -137,11 +137,7 @@ function agile_type_ahead(id, el, callback, isSearch){
                 		 * company name instead of first name
                 		 * and last name of person
                 		 */
-                		if (item.type == "COMPANY") 
-                			var fullname = getPropertyValue(item.properties, "name") +  "-" +  item.id;
-                		else 
-                			var fullname = getPropertyValue(item.properties, 
-                						   		"first_name") + " " + getPropertyValue(item.properties, "last_name") + "-" +  item.id;
+                			var fullname = getContactName(item) +  "-" +  item.id;
 
                 		// Sets data-value to name
                 		i = $(that.options.item).attr('data-value', fullname);
@@ -171,7 +167,7 @@ function agile_type_ahead(id, el, callback, isSearch){
          * name as tag to the field. Also shows all the matched entities in other page 
          * when search symbol is clicked. 
          */
-        updater: function (items){
+        updater: function (items) {
         
             // To verify whether the entity (task, deal etc..) related to same contact twice 
         	var tag_not_exist = true;
@@ -220,7 +216,7 @@ function agile_type_ahead(id, el, callback, isSearch){
             if (tag_not_exist)
             	{
             	
-            		$('.tags', el).append('<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_TAGS[items] + '">' + items_temp + '<a class="close" id="remove_tag">&times</a></li>');
+            		$('.tags', el).append('<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_TAGS[items] + '"><a href="#contact/' + TYPEHEAD_TAGS[items] +'">' + items_temp + '</a><a class="close" id="remove_tag">&times</a></li>');
             	}
         },
         
@@ -276,21 +272,8 @@ function contacts_typeahead(data)
             
     	var contact_name;
 
-        /* If contact type is company then name of the 
-         * company is store in a field name "name"
-         */
-        if (contact.type == "COMPANY"){
-        	
-            // Gets name of the company
-            contact_name = getPropertyValue(contact.properties, "name") + "-" + contact.id;
-                
-            // push company name in to the list
-            contact_names_list.push(contact_name);
-            return;
-        }
-
         // Appends first and last name to push in to a list
-        contact_name = getPropertyValue(contact.properties, "first_name") + getPropertyValue(contact.properties, "last_name") +"-"+ contact.id;
+        contact_name = getContactName(contact) +"-"+ contact.id;
             
         // Spaces are removed from the name, name should be used as a key in map "TYPEHEAD_TAGS"
         contact_names_list.push(contact_name.split(" ").join(""));
@@ -299,4 +282,22 @@ function contacts_typeahead(data)
     // Returns list of contact/company names
     return contact_names_list;
     
+}
+
+
+function getContactName(contact)
+{
+	var first_name = getPropertyValue(contact.properties, "first_name");
+	var last_name = getPropertyValue(contact.properties, "last_name");
+	last_name = last_name != undefined ? last_name : "";
+	
+	var name;
+
+    /* If contact type is company then name of the 
+     * company is store in a field name "name"
+     */
+	if(contact.type == "COMPANY")
+		return (getPropertyValue(contact.properties, "name")).trim();
+
+	return (first_name +" "+ last_name).trim();
 }

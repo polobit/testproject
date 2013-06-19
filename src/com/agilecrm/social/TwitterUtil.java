@@ -285,17 +285,20 @@ public class TwitterUtil
      *            {@link Widget} for accessing token and secret key
      * @param twitterId
      *            {@link String} to access recipient twitter account
-     * @param text
+     * @param message
      *            {@link String} message to tweet
      * @return
      * @throws Exception
      */
-    public static String tweetInTwitter(Widget widget, String text)
+    public static String tweetInTwitter(Widget widget, String message)
 	    throws Exception
     {
 	Twitter twitter = getTwitter(widget);
 
-	Status status = twitter.updateStatus(text);
+	String agile = " via @Agile_CRM";
+	// if (message.length() < (140 - agile.length()))
+	// message = message + agile;
+	Status status = twitter.updateStatus(message + agile);
 	System.out.println(Util.toJSONString(status));
 	return "Successfull";
     }
