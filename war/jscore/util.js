@@ -276,3 +276,9 @@ function checkTagAgile(tag) {
 	
 	return false;
 }
+
+$(function(){
+	$("input").die().live('click', function(e){
+		$(this).focus();
+	});
+})
