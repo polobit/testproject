@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.google.appengine.api.NamespaceManager;
@@ -225,5 +226,32 @@ public class Util
 	    System.out.println(e.getMessage());
 	    return "";
 	}
+    }
+
+    /**
+     * Appends tracking image for html body
+     * 
+     * @param html
+     *            - html body.
+     * @param campaignId
+     *            - CampaignId.
+     * @param subsciberId
+     *            - SubscriberId.
+     * @return html string with appended image.
+     **/
+    public static String appendTrackingImage(String html, String campaignId,
+	    String subscriberId)
+    {
+	String namespace = NamespaceManager.get();
+
+	if (StringUtils.isEmpty(campaignId))
+	    campaignId = "";
+
+	String trackingImage = "<div><img src=\"https://" + namespace
+		+ ".agilecrm.com/backend/open?n=" + namespace + "&c="
+		+ campaignId + "&s=" + subscriberId
+		+ "\" nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
+
+	return html + trackingImage;
     }
 }

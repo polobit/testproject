@@ -45,9 +45,7 @@ public class EmailOpenServlet extends HttpServlet
 	String namespace = request.getParameter("n");
 	String campaignId = request.getParameter("c");
 
-	if (StringUtils.isEmpty(campaignId)
-		|| StringUtils.isEmpty(subscriberId)
-		|| StringUtils.isEmpty(namespace))
+	if (StringUtils.isEmpty(namespace))
 	    return;
 
 	String oldNamespace = NamespaceManager.get();
@@ -58,28 +56,36 @@ public class EmailOpenServlet extends HttpServlet
 	    Contact contact = ContactUtil.getContact(Long
 		    .parseLong(subscriberId));
 
-	    Workflow workflow = WorkflowUtil.getWorkflow(Long
-		    .parseLong(campaignId));
-
-	    if (workflow != null)
+	    if (!StringUtils.isEmpty(campaignId))
 	    {
-		LogUtil.addLogToSQL(campaignId, subscriberId,
-			"Email Opened of campaign " + workflow.name,
-			LogType.EMAIL_OPENED.toString());
+		Workflow workflow = WorkflowUtil.getWorkflow(Long
+			.parseLong(campaignId));
 
-		try
+		if (workflow != null)
 		{
-		    NotificationPrefsUtil
-			    .executeNotification(Type.OPENED_EMAIL, contact,
-				    new JSONObject().put("custom_value",
-					    workflow.name));
-		}
-		catch (Exception e)
-		{
-		    e.printStackTrace();
+		    LogUtil.addLogToSQL(campaignId, subscriberId,
+			    "Email Opened of campaign " + workflow.name,
+			    LogType.EMAIL_OPENED.toString());
+
+		    try
+		    {
+			// For Campaign Emails
+			NotificationPrefsUtil.executeNotification(
+				Type.OPENED_EMAIL, contact, new JSONObject()
+					.put("custom_value", workflow.name));
+		    }
+		    catch (Exception e)
+		    {
+			e.printStackTrace();
+		    }
 		}
 	    }
-
+	    else
+	    {
+		// For Simple Emails
+		NotificationPrefsUtil.executeNotification(Type.OPENED_EMAIL,
+			contact, null);
+	    }
 	}
 	finally
 	{

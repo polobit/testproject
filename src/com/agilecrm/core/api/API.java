@@ -4,9 +4,12 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -126,6 +129,46 @@ public class API
 	{
 
 	    e.printStackTrace();
+	}
+    }
+
+    @Path("contact/send-email")
+    @POST
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public void sendEmail(@QueryParam("from") String fromEmail,
+	    @QueryParam("to") String to, @QueryParam("subject") String subject,
+	    @QueryParam("body") String body)
+    {
+	Set<String> toEmailSet = new HashSet<String>();
+	StringTokenizer st = new StringTokenizer(to, ",");
+
+	while (st.hasMoreTokens())
+	{
+	    toEmailSet.add(st.nextToken());
+	}
+
+	String htmlBody = null;
+
+	for (String toEmail : toEmailSet)
+	{
+	    Contact contact = ContactUtil.searchContactByEmail(toEmail);
+
+	    // append image if contact exists.
+	    if (contact != null)
+		htmlBody = Util.appendTrackingImage(body, null,
+			contact.id.toString());
+	    else
+		htmlBody = body;
+
+	    try
+	    {
+		Util.sendMail(fromEmail, fromEmail, toEmail, subject,
+			fromEmail, htmlBody, null);
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
 	}
     }
 

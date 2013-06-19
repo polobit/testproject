@@ -3,7 +3,6 @@ package com.campaignio.tasklets.agile;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -14,7 +13,6 @@ import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.campaignio.util.URLShortenerUtil;
-import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.SendGridEmail;
 
 /**
@@ -465,7 +463,8 @@ public class SendEmail extends TaskletAdapter
 	// Send Message
 	if (html != null && html.length() > 10)
 	{
-	    html = appendTrackingImage(html, campaignJSON, subscriberJSON);
+	    html = Util.appendTrackingImage(html, DBUtil.getId(campaignJSON),
+		    DBUtil.getId(subscriberJSON));
 
 	    // Util.sendEmailUsingMailgun(fromEmail, fromName, to, subject,
 	    // replyTo, html, text, subscriberJSON, campaignJSON);
@@ -567,35 +566,5 @@ public class SendEmail extends TaskletAdapter
 	    System.out.println("Replaced " + input + " with " + replacedString);
 
 	return replacedString.trim();
-    }
-
-    /**
-     * Appends tracking image for html body
-     * 
-     * @param html
-     *            - html body.
-     * @param campaignJSON
-     *            - CampaignJSON.
-     * @param subsciberJSON
-     *            - SubscriberJSON.
-     * @return html string with appended image.
-     **/
-    public String appendTrackingImage(String html, JSONObject campaignJSON,
-	    JSONObject subsciberJSON)
-    {
-	String namespace = NamespaceManager.get();
-	String campaignId = DBUtil.getId(campaignJSON);
-	String subscriberId = DBUtil.getId(subsciberJSON);
-
-	if (StringUtils.isEmpty(namespace) || StringUtils.isEmpty(campaignId)
-		|| StringUtils.isEmpty(subscriberId))
-	    return html;
-
-	String trackingImage = "<div><img src=\"https://" + namespace
-		+ ".agilecrm.com/backend/open?n=" + namespace + "&c="
-		+ campaignId + "&s=" + subscriberId
-		+ "\" nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
-
-	return html + trackingImage;
     }
 }

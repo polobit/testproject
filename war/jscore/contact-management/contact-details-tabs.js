@@ -323,7 +323,7 @@ $(function(){
 		
 		var json = serializeForm("emailForm");
 
-		var url =  'core/api/send-email?from=' + encodeURIComponent(json.from) + '&to=' + 
+		var url =  'core/api/contact/send-email?from=' + encodeURIComponent(json.from) + '&to=' + 
 			 encodeURIComponent(json.to + "," + json.email_cc) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + 
 				 encodeURIComponent(json.body) + '<br/><div><br/><br/>' + encodeURIComponent(json.signature) + '</div>';
 		
