@@ -389,9 +389,12 @@ public class Contact extends Cursor
 	    tagsWithTime.remove(new Tag(tag));
 
 	    tagslist.add(tag);
+
 	}
 
+	this.tags.clear();
 	this.save();
+
 
 	// Delete tags from Tag class
 	TagUtil.deleteTags(tagslist);
@@ -473,6 +476,26 @@ public class Contact extends Cursor
     {
 	List<Contact> contacts_list = ContactUtil
 		.getContactsBulk(contactsJSONArray);
+	if (contacts_list.size() == 0)
+	{
+	    return;
+	}
+
+	Key<DomainUser> newOwnerKey = new Key<DomainUser>(DomainUser.class,
+		Long.parseLong(new_owner));
+
+	for (Contact contact : contacts_list)
+	{
+	    contact.owner_key = newOwnerKey;
+
+	    contact.save();
+	}
+
+    }
+
+    public static void changeOwnerToContactsBulk(List<Contact> contacts_list,
+	    String new_owner)
+    {
 	if (contacts_list.size() == 0)
 	{
 	    return;

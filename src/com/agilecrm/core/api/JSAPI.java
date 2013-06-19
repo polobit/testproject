@@ -384,7 +384,7 @@ public class JSAPI
      */
     @Path("contacts/remove-tags")
     @GET
-    @Produces("application/x-javascript")
+    @Produces(MediaType.APPLICATION_JSON)
     public Contact removeTags(@QueryParam("email") String email,
 	    @QueryParam("tags") String tags,
 	    @QueryParam("callback") String jsoncallback)
