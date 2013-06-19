@@ -216,7 +216,7 @@ function agile_type_ahead(id, el, callback, isSearch){
             if (tag_not_exist)
             	{
             	
-            		$('.tags', el).append('<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_TAGS[items] + '">' + items_temp + '<a class="close" id="remove_tag">&times</a></li>');
+            		$('.tags', el).append('<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_TAGS[items] + '"><a href="#contact/' + TYPEHEAD_TAGS[items] +'">' + items_temp + '</a><a class="close" id="remove_tag">&times</a></li>');
             	}
         },
         

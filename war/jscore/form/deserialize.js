@@ -173,7 +173,7 @@ function deserializeForm(data, form)
                      */
                     $('.tagsinput', form)
                         .append(
-                        '<li class="tag" data="' + tag_id + '" class="tag"  style="display: inline-block; ">' + tag_name + '<a class="close" id="remove_tag">&times</a></li>');
+                        '<li class="tag" data="' + tag_id + '" class="tag"  style="display: inline-block; "><a href="#contact/'+contact.id+'">' + tag_name + '</a><a class="close" id="remove_tag">&times</a></li>');
                 });
             }
 
