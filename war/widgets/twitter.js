@@ -350,8 +350,9 @@ function setupTwitterOAuth(plugin_id)
     //Shows a link button in the UI which connects to the above URL
     $('#Twitter').html("<div class='widget_content' style='border-bottom:none;line-height: 160%;' >" + 
     		"Engage with contacts in real time based on what they tweet." + 
-    		"<p style='margin: 10px 0px 5px 0px;'><button class='btn' >" + 
-    		"<a href=" + url + " style='text-decoration:none;'>Link Your Twitter</a></button></p></div>");
+    		"<p style='margin: 10px 0px 5px 0px;'>" + 
+    		"<a class='btn' href=\"" + url + "\" style='text-decoration:none;'>" + 
+    		"Link Your Twitter</a></p></div>");
 }
 
 /**
