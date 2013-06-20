@@ -1,7 +1,5 @@
 package com.agilecrm.activities.util;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +10,6 @@ import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
-import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.DateUtil;
 import com.googlecode.objectify.Key;
@@ -137,23 +134,26 @@ public class TaskUtil
 	    return null;
 	}
     }
-    
-  //Gets the current user pending tasks maximum 7 only
+
+    // Gets the current user pending tasks maximum 7 only
     public static List<Task> getAllPendingTasksForCurrentUser()
     {
 	try
 	{
-		
-		/*Date date=new Date();
-		
-	    int thisWeekDate = (7-date.getDay());
-	    System.out.println("all pending tasks this week="+thisWeekDate);*/
-	    return  dao
-	    		.ofy()
-	    		.query(Task.class)
-	    		.filter("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
-	    		.order("due")
-	    		.filter("is_complete", false).limit(7).list();
+
+	    /*
+	     * Date date=new Date();
+	     * 
+	     * int thisWeekDate = (7-date.getDay());
+	     * System.out.println("all pending tasks this week="+thisWeekDate);
+	     */
+	    return dao
+		    .ofy()
+		    .query(Task.class)
+		    .filter("owner",
+			    new Key<DomainUser>(DomainUser.class,
+				    SessionManager.get().getDomainId()))
+		    .order("due").filter("is_complete", false).limit(7).list();
 	}
 	catch (Exception e)
 	{
@@ -212,7 +212,7 @@ public class TaskUtil
      *         days and related to the same owner
      */
     public static List<Task> getPendingTasksToRemind(int numDays,
-	    Key<AgileUser> owner)
+	    Long domainUserId)
     {
 	// Gets Today's date
 	DateUtil startDateUtil = new DateUtil();
@@ -226,30 +226,15 @@ public class TaskUtil
 	System.out.println("check for " + startTime + " " + endTime);
 
 	// Gets list of tasks filtered on given conditions
-	List<Task> tasks = dao.ofy().query(Task.class)
+	List<Task> dueTasks = dao
+		.ofy()
+		.query(Task.class)
+		.filter("owner",
+			new Key<DomainUser>(DomainUser.class, domainUserId))
 		.filter("due >", startTime).filter("due <=", endTime)
 		.filter("is_complete", false).list();
 
-	System.out.println("Due tasks: " + tasks);
-
-	if (tasks.isEmpty())
-	    return tasks;
-
-	List<Task> dueTasksList = new ArrayList<Task>();
-
-	for (Task task : tasks)
-	{
-	    if (task == null)
-		continue;
-
-	    // Compare task owner with current owner.
-	    boolean value = task.compareTaskOwner(owner);
-
-	    if (value)
-		dueTasksList.add(task);
-	}
-
-	return dueTasksList;
+	return dueTasks;
     }
 
     public static List<Task> getTasksRelatedToCurrentUser()

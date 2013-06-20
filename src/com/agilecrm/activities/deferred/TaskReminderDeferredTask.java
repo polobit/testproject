@@ -14,7 +14,6 @@ import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
-import com.googlecode.objectify.Key;
 
 /**
  * <code>TaskReminderDeferredTask</code> implements google appengene's
@@ -56,8 +55,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 
 	try
 	{
-	    List<com.agilecrm.user.DomainUser> domainUsers = DomainUserUtil
-		    .getUsers(domain);
+	    List<DomainUser> domainUsers = DomainUserUtil.getUsers(domain);
 
 	    System.out
 		    .println("List of Domain Users in DeferredTask of TaskReminder "
@@ -83,12 +81,10 @@ public class TaskReminderDeferredTask implements DeferredTask
 		    continue;
 
 		List<Task> taskList = TaskUtil.getPendingTasksToRemind(1,
-			new Key<AgileUser>(AgileUser.class, agileUser.id));
+			domainUser.id);
 
 		if (taskList.isEmpty())
-		{
 		    continue;
-		}
 
 		String date = null;
 
