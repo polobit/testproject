@@ -95,7 +95,7 @@
 											{{message.current-share.author.firstName}} shared a link {{show_link_in_statement message.current-share.content.shortenedUrl}}
 										{{/if}}
 									</p>
-									<small><time class="time-ago" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "" created_time}}</time></small>
+									<small><time class="time-ago" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time></small>
 									<ul class="widget_tab_link">										
 										<li><a href="#share" rel="tooltip" title="Share activity in LinkedIn"><i class="linkedin_share icon-share" id="{{id}}"></i></a></li>
 									</ul>
@@ -106,7 +106,7 @@
 									<p class="mb_0" style="word-break:normal;word-wrap:break-word;">
 										{{show_link_in_statement message.current-share.comment}}
 									</p>
-									<small><time class="time-ago" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "" created_time}}</time></small>
+									<small><time class="time-ago" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time></small>
 								</div>
 							{{/if}}							
 						{{/if_equals}}
@@ -118,7 +118,7 @@
 									<a href="{{message.publicProfileUrl}}" target="_blank">{{message.firstName}}&nbsp{{message.lastName}}</a>
 									{{#if message.headline}}, {{message.headline}}{{/if}}
 								</p>
-								<small><time class="time-ago" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "" created_time}}</time></small>
+								<small><time class="time-ago" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time></small>
 							</div>
 						{{/if_equals}}							
 				</div>					

@@ -38,7 +38,10 @@ function loadWidgets(el, contact)
                 var url = model.get("url");
  
                 if(!model.get("is_minimized"))
-                	$.get(url, "script");
+                	$.get(url, "script", function(data){
+                		console.log('script');
+                		console.log(model.get('name'));
+                	});
 
                 
                 // Sets the data element in the div
@@ -49,52 +52,56 @@ function loadWidgets(el, contact)
             // Loads jquery-ui to get sortable functionality on widgets
             head.js(LIB_PATH + 'lib/jquery-ui.min.js', function ()
             {
+            	
+            	console.log('sortable');
+            	$('.widget-sortable').sortable();
+        		$('.widget-sortable').sortable("option", "containment", $('.widget-sortable'));
+        		$('.widget-sortable').sortable( "option", "handle", ".icon-move" );	
+			
+        		$('.widget-sortable').on( "sortstop", function( event, ui ) {
+        			
+    				var models = [];
 
-                // Make widgets sortable
-                $(".widget-sortable", newEl).sortable(
-                {
-                    update: function (event, ui)
+                    // Store the save
+                    $('.widget-sortable > li').each(function (index, element)
                     {
-                        var models = [];
-
-                        // Store the save
-                        $('.widget-sortable > li').each(function (index, element)
+                    	var model_nam = $(element).find('.widgets').attr('id');
+                    	
+                    	console.log(model_nam);
+                    	
+                        // Get Model, model is set as data to widget element
+                        var model = $('#' + model_nam).data('model');
+                        
+                        models.push(
                         {
-                        	var model_name = $(element).find('.widgets').attr('id');
-                        	
-                            // Get Model, model is set as data to widget element
-                            var model = $('#' + model_name).data('model');
-                            
-                            models.push(
-                            {
-                                id: model.get("id"),
-                                position: index
-                            });
+                            id: model.get("id"),
+                            position: index
                         });
+                    });
 
-                        // Stores the positions at server
-                        $.ajax(
-                        {
-                            type: 'POST',
-                            url: '/core/api/widgets/positions',
-                            data: JSON.stringify(models),
-                            contentType: "application/json; charset=utf-8",
-                            dataType: 'json'
-                        });
-                    }
-                });
-                
-                // Disable selection after sorted
-                $(".widget-sortable", newEl)
-                    .disableSelection();
+                    // Stores the positions at server
+                    $.ajax(
+                    {
+                        type: 'POST',
+                        url: '/core/api/widgets/positions',
+                        data: JSON.stringify(models),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: 'json'
+                    });
+                    
+    			});
             });
         }
     });
-
+    
     var newEl = view.render().el;
+    
+    console.log('neew wsr')
+    console.log(newEl);
 
     $('#widgets', el).html(newEl);
     
+	
 	
 	$('.widget-minimize').die().live('click', function(e){
 		e.preventDefault();
@@ -157,24 +164,35 @@ function queueGetRequest(queueName, url, dataType, successcallback, errorCallbac
 	$.ajaxq(queueName, {
 		 url : url,
 		 cache: false,
+		 
 		 dataType: dataType,
 		    success: function(data)
 		    {
-		    	console.log(data);
+		    	//console.log('suceess queue get');
+		    	
 		    	
 		    	// If defined, execute the callback function
 		        if (successcallback && typeof (successcallback) === "function")
 		        {
+		        	console.log('suceess queue get');
 		        	successcallback(data);
 		        }
 		    },
+		   
 		    error: function(data)
             {
+		    	
 		    	// If defined, execute the callback function
 		        if (errorCallback && typeof (errorCallback) === "function")
 		        {
+		        	console.log('error queue get' + data);
 		        	errorCallback(data);
 		        }
+            },
+            
+            complete: function(data)
+            {
+            	console.log('completed get');
             },
 		});
 	});
@@ -187,25 +205,34 @@ function queuePostRequest(queueName, url, data, successcallback, errorCallback)
 		type:'POST',
 		 url : url,
 		 cache: false,
+		
 		 data:data,
 		    success: function(data)
 		    {
-		    	console.log(data);
+		    	//console.log('suceess queue post');
+		    	
 		    	
 		    	// If defined, execute the callback function
 		        if (successcallback && typeof (successcallback) === "function")
 		        {
+		        	console.log('suceess queue post');
+		        	
 		        	successcallback(data);
 		        }
 		    },
 		    error: function(data)
             {
+		    	
 		    	// If defined, execute the callback function
 		        if (errorCallback && typeof (errorCallback) === "function")
 		        {
+		        	console.log('error queue post');
 		        	errorCallback(data);
 		        }
-            },
+            },complete: function(data)
+            {
+            	console.log('completed post');
+            }
 		});
 	});
 }

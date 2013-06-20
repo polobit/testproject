@@ -80,7 +80,8 @@ public class QueryDocument implements QueryInterface
 	return processQuery(query, RuleType.Contact, count, cursor);
     }
 
-    public List<Long> getContactIds(List<SearchRule> rules, Integer count,
+    public static List<Long> getContactIds(List<SearchRule> rules,
+	    Integer count,
 	    String cursor)
     {
 
@@ -406,16 +407,16 @@ public class QueryDocument implements QueryInterface
     private static Collection processQuery(String query, RuleType type)
     {
 	/*
-	 * Set query options only to get id of document (enough to get get
-	 * respective contacts)
+	 * List<ScoredDocument> contact_documents1 = new
+	 * ArrayList<ScoredDocument>( getContactDocuments(query, type, 50,
+	 * null));
+	 * 
+	 * List<Long> entity_ids = new ArrayList<Long>();
+	 * 
+	 * for (ScoredDocument doc : contact_documents1) {
+	 * entity_ids.add(Long.parseLong(doc.getId()));
+	 * System.out.println(doc.getCursor()); }
 	 */
-	QueryOptions options = QueryOptions.newBuilder()
-		.setFieldsToReturn("id").build();
-
-	// Build query on query options
-	Query query_string = Query.newBuilder().setOptions(options)
-		.build(query);
-
 	// Get results on query
 	Index index = null;
 	try
@@ -432,18 +433,40 @@ public class QueryDocument implements QueryInterface
 	if (index == null)
 	    return null;
 
-	// Gets sorted documents
-	Collection<ScoredDocument> contact_documents = index.search(
-		query_string).getResults();
-
 	List<Long> entity_ids = new ArrayList<Long>();
 
-	// Iterate through contact_documents and add document ids(contact ids)
-	// to list
+	/*
+	 * Set query options only to get id of document (enough to get get
+	 * respective contacts)
+	 */
+	System.out.println("$$$$$$$$$$$$$$$$$"
+		+ index.search(query).getNumberFound());
+	QueryOptions options = QueryOptions
+		.newBuilder()
+		.setLimit(
+			Long.valueOf(index.search(query).getNumberFound())
+				.intValue()).setReturningIdsOnly(true).build();
+	// Long.valueOf(index.search(query).getNumberFound())
+
+	// Build query on query options
+	Query query_string = Query.newBuilder().setOptions(options)
+		.build(query);
+
+	// Gets sorted documents
+	Collection<ScoredDocument> contact_documents = new ArrayList<ScoredDocument>(
+		index.search(query_string).getResults());
+
+	System.out.println(query_string);
+	System.out.println(contact_documents.size());
+
+	// List<Long> entity_ids = new ArrayList<Long>();
+
 	for (ScoredDocument doc : contact_documents)
 	{
 	    entity_ids.add(Long.parseLong(doc.getId()));
 	}
+
+	System.out.println(entity_ids);
 
 	Objectify ofy = ObjectifyService.begin();
 
@@ -488,17 +511,19 @@ public class QueryDocument implements QueryInterface
 	if (index == null)
 	    return null;
 
-	Collection<ScoredDocument> searchResults = index.search(query_string).getResults();
+	Collection<ScoredDocument> searchResults = index.search(query_string)
+		.getResults();
 	Map<String, Object> documents = new HashMap<String, Object>();
-	
-	if(searchResults.size() == options.getLimit())
-	    documents.put("availableDocuments", index.search(query_string).getNumberFound());
+
+	if (searchResults.size() == options.getLimit())
+	    documents.put("availableDocuments", index.search(query_string)
+		    .getNumberFound());
 	else
 	    documents.put("availableDocuments",
 		    Long.valueOf(searchResults.size()));
-	
+
 	documents.put("fetchedDocuments", searchResults);
-	
+
 	// Gets sorted documents
 	return documents;
     }
@@ -535,34 +560,59 @@ public class QueryDocument implements QueryInterface
 					.build(cursor)).build();
 
 	    }
-	}
-	else
-	    options = QueryOptions.newBuilder().setFieldsToReturn("DocId")
-		    .build();
 
-	return options;
+	    return options;
+	}
+
+	// Get results on query
+	Index index = null;
+	try
+	{
+	    // Get index of document based on type of query
+	    // Get index of document based on type of query
+	    index = new ContactDocument().getIndex();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
+	// If index is null return without querying
+	if (index == null)
+	    return null;
+
+	return QueryOptions
+		.newBuilder()
+		.setReturningIdsOnly(true)
+		.setLimit(
+			Long.valueOf(index.search(query).getNumberFound())
+				.intValue()).build();
+
     }
 
     private static Collection processQuery(String query, RuleType type,
-	    int page, String cursor)
+	    Integer page, String cursor)
     {
 
 	QueryOptions options = buildOptions(query, type, page, cursor);
 
-	Map<String, Object> results = performQueryWithOptions(
-		options, query);
-	
+	Map<String, Object> results = performQueryWithOptions(options, query);
+
 	Collection<ScoredDocument> documents = (Collection<ScoredDocument>) results
 		.get("fetchedDocuments");
 	Long availableResults = (Long) results.get("availableDocuments");
+
+	List<ScoredDocument> DocumentList = new ArrayList<ScoredDocument>(
+		documents);
 
 	List<Long> entity_ids = new ArrayList<Long>();
 
 	// Iterate through contact_documents and add document ids(contact ids)
 	// to list
-	for (ScoredDocument doc : documents)
+	for (ScoredDocument doc : DocumentList)
 	{
 	    entity_ids.add(Long.parseLong(doc.getId()));
+	    if (page != null && doc.getCursor() != null)
 	    cursor = doc.getCursor().toWebSafeString();
 	}
 

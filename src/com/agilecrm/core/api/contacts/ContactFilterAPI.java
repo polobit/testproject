@@ -135,7 +135,8 @@ public class ContactFilterAPI
 
 		DefaultFilter filter = DefaultFilter.valueOf(id);
 		if (filter != null)
-		    return ContactFilter.getContacts(filter);
+		    return ContactFilter.getContacts(filter,
+			    Integer.parseInt(count), cursor);
 
 		// If requested id contains "system" in it, but it doesn't match
 		// with RECENT/LEAD/CONTACTS then return null

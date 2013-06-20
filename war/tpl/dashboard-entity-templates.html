@@ -251,7 +251,7 @@
 <td style="border-top:1px dotted #DDD;width:1%"> <input type="checkbox" data='{{id}}' class='tasks-select'> </td>
 	<td style="border-top:1px dotted #DDD;width:11em"><p style="text-overflow:ellipsis;overflow:hidden;white-space:nowrap;"><span style="font-size:14px;"><b>{{ subject}}</b></span></br><span class="label" style="margin-left:10px">{{ucfirst type}}</span> <span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></p>
         <span>
-        	<time class="task-due-time" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" due}}</time>
+        	<time class="task-due-time" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</time>
 	   </span>
 	</td>
 	<td></td>
@@ -331,7 +331,7 @@ Account Overview</span></strong>
 </td>
 <td style="width:30em;">{{{message}}}</td>
 <td><small class="edit-hover"> 
-		<time class="log-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "" time}}</time>
+		<time class="log-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
 	</small></td>
 <br/>
 </script>

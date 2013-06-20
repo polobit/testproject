@@ -1,9 +1,12 @@
 package com.agilecrm.contact;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
@@ -48,7 +51,7 @@ import com.googlecode.objectify.condition.IfDefault;
  * @author Yaswanth
  */
 @XmlRootElement
-public class ContactFilter
+public class ContactFilter implements Serializable
 {
     // Key
     @Id
@@ -82,6 +85,11 @@ public class ContactFilter
     public ContactFilter()
     {
 
+    }
+
+    public ContactFilter(List<SearchRule> rules)
+    {
+	this.rules = rules;
     }
 
     public ContactFilter(String name, List<SearchRule> rules)
@@ -136,7 +144,7 @@ public class ContactFilter
      * @return {@link Collection}
      */
     @SuppressWarnings("rawtypes")
-    public Collection queryContacts(int count, String cursor)
+    public Collection queryContacts(Integer count, String cursor)
     {
 
 	return AppengineSearch.getAdvacnedSearchResults(rules, count, cursor);
@@ -150,7 +158,8 @@ public class ContactFilter
      *            {@link DefaultFilter}
      * @return {@link List} of {@link Contact}s
      */
-    public static List<Contact> getContacts(DefaultFilter type)
+    public static List<Contact> getContacts(DefaultFilter type, Integer max,
+	    String cursor)
     {
 	Objectify ofy = ObjectifyService.begin();
 	Query<Contact> contact_query = ofy.query(Contact.class);
@@ -180,11 +189,17 @@ public class ContactFilter
 
 	    // Queries contacts whose owner_key is equal to current domain user
 	    // key
-	    return ofy.query(Contact.class).filter("owner_key", userKey).list();
+	    Map<String, Object> searchMap = new HashMap<String, Object>();
+	    searchMap.put("owner_key", userKey);
+	    
+	    if (max != null)
+		return Contact.dao.fetchAll(max, cursor, searchMap);
+
+	    return Contact.dao.listByProperty(searchMap);
 	}
 	else if (type == DefaultFilter.LEADS)
 	{
-	    return ContactUtil.getContactsForTag("lead");
+	    return ContactUtil.getContactsForTag("lead", max, cursor);
 
 	}
 

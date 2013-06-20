@@ -11,6 +11,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.json.JSONObject;
@@ -69,11 +70,18 @@ public class TagsAPI
     @Path("{tag}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Contact> getContacts(@PathParam("tag") String tag)
+    public List<Contact> getContacts(@PathParam("tag") String tag,
+	    @QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count)
     {
 	try
 	{
-	    return ContactUtil.getContactsForTag(tag);
+	    if (count != null)
+		return ContactUtil.getContactsForTag(tag,
+			Integer.parseInt(count), cursor);
+
+	    return ContactUtil.getContactsForTag(tag, null, null);
+
 	}
 	catch (Exception e)
 	{
