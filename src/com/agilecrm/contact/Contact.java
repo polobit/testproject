@@ -353,7 +353,8 @@ public class Contact extends Cursor
     {
 	for (Tag tag : tags)
 	{
-	    tagsWithTime.add(tag);
+	    if (!tagsWithTime.contains(tag))
+		tagsWithTime.add(tag);
 	}
 
 	this.save();
