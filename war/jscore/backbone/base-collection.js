@@ -28,6 +28,8 @@ var BaseCollection = Backbone.Collection.extend({
 		// Set false if sorting is not required. Used when order returned 
 		// from server is to be preserved.
 		this.sort_collection = options.sort_collection;
+		if(this.sort_collection == false)
+			this.comparator = false;
 	},
 	/*
 	 * Sorts the order of the collection based on the sortKey. When models are
@@ -36,7 +38,6 @@ var BaseCollection = Backbone.Collection.extend({
 	 */
 	comparator : function(item)
 	{
-		
 		if (this.sortKey)
 		{	
 			if(this.descending == true)
@@ -44,14 +45,7 @@ var BaseCollection = Backbone.Collection.extend({
 			// console.log("Sorting on " + this.sortKey);
 			return item.get(this.sortKey);
 		}
-		
-		// If sort_collection is set false then order of collection is not changed
-		if(this.sort_collection == false)
-		{
-			return 0;
-		}
-		
-		return item.get('id');
+			return item.get('id');		
 	},
 	/*
 	 * Gets the corresponding objects based on the key from the response object
@@ -280,7 +274,6 @@ var Base_Collection_View = Backbone.View
 									 * collection are show in the view
 									 */
 									$(".scroll-loading", that.el).remove();
-									
 								},
 								untilAttr : 'cursor',
 								param : 'cursor',
@@ -423,6 +416,7 @@ var Base_Collection_View = Backbone.View
 					return;
 				}
 
+				
 				// Populate template with collection and view element is created
 				// with content, is used to fill heading of the table
 				$(this.el).html(

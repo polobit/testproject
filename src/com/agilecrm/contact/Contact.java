@@ -490,8 +490,9 @@ public class Contact extends Cursor
 	{
 	    contact.owner_key = newOwnerKey;
 
-	    contact.save();
 	}
+
+	dao.putAll(contacts_list);
 
     }
 
@@ -510,8 +511,8 @@ public class Contact extends Cursor
 	{
 	    contact.owner_key = newOwnerKey;
 
-	    contact.save();
 	}
+	dao.putAll(contacts_list);
 
     }
 

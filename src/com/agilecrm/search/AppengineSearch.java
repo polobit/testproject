@@ -65,7 +65,7 @@ public class AppengineSearch<T>
 
     @SuppressWarnings("rawtypes")
     public static Collection getAdvacnedSearchResults(List<SearchRule> rules,
-	    int count, String cursor)
+	    Integer count, String cursor)
     {
 	return new QueryDocument().advancedSearch(rules, count, cursor);
     }

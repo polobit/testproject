@@ -1,6 +1,7 @@
 package com.agilecrm.cursor;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.googlecode.objectify.annotation.NotSaved;
 
 /**
  * <code>Cursor</code> is used to fetch entities using
@@ -19,10 +20,12 @@ public class Cursor
     /**
      * Represents {@link com.google.appengine.api.datastore.Cursor} string,
      */
+    @NotSaved
     public String cursor = null;
 
     /**
      * Represents number of entities to be fetched per request
      */
+    @NotSaved
     public Integer count = null;
 }
