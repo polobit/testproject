@@ -95,7 +95,7 @@ $(function ()
     });
 
     $('#linkedin_shared_connections').die().live('click', function (e)
-    		{
+    {
     	e.preventDefault();
     	getLinkedInSharedConnections(plugin_id, linkedin_id);
     });
