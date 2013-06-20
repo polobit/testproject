@@ -209,10 +209,12 @@ public class TwitterUtil
 	Twitter twitter = getTwitter(widget);
 	long id = twitter.getId();
 
+	String agile = " via @agile_crm";
 	if (!twitter.showFriendship(id, profile_id).isSourceFollowedByTarget())
 	    return "You can send a message only to persons who is following you";
 
-	DirectMessage dirMess = twitter.sendDirectMessage(profile_id, message);
+	DirectMessage dirMess = twitter.sendDirectMessage(profile_id, message
+		+ agile);
 	if (dirMess.getId() == 0)
 	    return "Unsuccessfull try again";
 	return "Message sent Successfully";
@@ -295,7 +297,7 @@ public class TwitterUtil
     {
 	Twitter twitter = getTwitter(widget);
 
-	String agile = " via @Agile_CRM";
+	String agile = " via @agile_crm";
 	// if (message.length() < (140 - agile.length()))
 	// message = message + agile;
 	Status status = twitter.updateStatus(message + agile);

@@ -311,7 +311,9 @@ public class LinkedInUtil
 	Person person = client.getProfileById(recipientId, EnumSet.of(
 		ProfileField.ID, ProfileField.API_STANDARD_PROFILE_REQUEST));
 
-	client.sendInviteToPerson(person, subject, message);
+	String agile = " - Sent from Agile CRM";
+
+	client.sendInviteToPerson(person, subject, message + agile);
 	return "Add request sent successfully";
     }
 
@@ -814,10 +816,10 @@ public class LinkedInUtil
 		// "7984afcf-f0f7-4fb3-b39c-cb7379d0336e");
 		// "742877e1-5f85-4b49-a10c-08009f98005f",
 		// "846cae2c-d653-45bf-98b4-39c24655ba2d");//praveen
-		// "024330d0-5e64-477e-acbc-152c7e96cee8",
-		// "49f9e0fd-6a3b-4628-9b3a-cc36921f4d58");// teju faxdesk
-		"1a6ebcd2-8038-4198-b59c-25b01cf229c0",
-		"29571011-8ce5-42a4-90cc-44022c55d77f");// teju test
+		"024330d0-5e64-477e-acbc-152c7e96cee8",
+		"49f9e0fd-6a3b-4628-9b3a-cc36921f4d58");// teju faxdesk
+	// "1a6ebcd2-8038-4198-b59c-25b01cf229c0",
+	// "29571011-8ce5-42a4-90cc-44022c55d77f");// teju test
 
 	// Person cons = client
 	// .getProfileById(
@@ -906,9 +908,17 @@ public class LinkedInUtil
 	// json = mapper.writeValueAsString(people);
 	// System.out.println(json);
 
-	Person person = client.getProfileById("EmhsvCHDN7", EnumSet.of(
+	Person person = client.getProfileById("Q-MbShvCM7", EnumSet.of(
 		ProfileField.PICTURE_URL, ProfileField.FIRST_NAME,
-		ProfileField.LAST_NAME, ProfileField.SUMMARY,
+		ProfileField.LAST_NAME, ProfileField.MEMBER_URL_NAME,
+		ProfileField.LANGUAGES_PROFICIENCY_NAME,
+		ProfileField.LANGUAGES_LANGUAGE_NAME,
+		ProfileField.PATENTS_INVENTORS_NAME,
+		ProfileField.PATENTS_OFFICE_NAME,
+		ProfileField.PATENTS_STATUS_NAME,
+		ProfileField.API_STANDARD_PROFILE_REQUEST,
+		ProfileField.CERTIFICATIONS_AUTHORITY_NAME,
+		ProfileField.PUBLICATIONS_AUTHORS_NAME, ProfileField.SUMMARY,
 		ProfileField.HEADLINE, ProfileField.LOCATION_NAME,
 		ProfileField.NUM_CONNECTIONS, ProfileField.PUBLIC_PROFILE_URL,
 		ProfileField.ID, ProfileField.DISTANCE,
@@ -928,5 +938,7 @@ public class LinkedInUtil
 	    e.getMessage();
 	}
 
+	String agile = " - Sent from Agile CRM";
+	System.out.println(agile.length());
     }
 }

@@ -21,6 +21,10 @@ $(function(){
 	 **/
 	$('#save-workflow').live('click', function (e) {
            e.preventDefault();
+           
+           if($('#workflowform').find('#save-workflow').attr('disabled'))
+   			return;
+           
     	// Check if the form is valid
     	if (!isValidForm('#workflowform')) {
     		$('#workflowform').find("input").focus();
@@ -38,6 +42,14 @@ $(function(){
             return;
         }
 
+        // Disables save button to prevent multiple save on click event issues
+        $('#workflowform').find('#save-workflow').attr('disabled', 'disabled');
+        
+        // Load image while saving
+		$save_info = $('<div style="display:inline-block"><img src="img/1-0.gif" height="15px" width="15px"></img></div>');
+		$(".save-workflow-img").html($save_info);
+		$save_info.show();
+		
         var workflowJSON = {};
 
         // When workflow is updated,set workflow model with name and rules
@@ -46,6 +58,11 @@ $(function(){
             App_Workflows.workflow_model.set("name", name);
             App_Workflows.workflow_model.set("rules", designerJSON);
             App_Workflows.workflow_model.save({}, {success: function(){
+            	
+               $('#workflowform').find('#save-workflow').removeAttr('disabled');
+               
+               $(".save-workflow-img").remove();
+  
             	Backbone.history.navigate("workflows", {
                     trigger: true
                 });
@@ -63,14 +80,18 @@ $(function(){
             var workflow = new Backbone.Model(workflowJSON);
             App_Workflows.workflowsListView.collection.create(workflow,{
             	    success:function(){  
+
+            	    	// Removes disabled attribute of save button
+            	    	$('#workflowform').find('#save-workflow').removeAttr('disabled');
             	    	
+            	    	$(".save-workflow-img").remove();
+            	    	            	    	
             	    	Backbone.history.navigate("workflows", {
                         trigger: true
             	    	
             	    	});
             	    }
             });
-          
         }
 
         /**/

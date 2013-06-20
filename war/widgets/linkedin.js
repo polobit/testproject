@@ -598,7 +598,7 @@ function sendLinkedInAddRequest(plugin_id, linkedin_id)
 		  
 		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
 			  $('.linkedin_connect_limit').limit({
-			       maxChars:300,
+			       maxChars:275,
 			       counter: "#linkedin_counter"
 			      });
 			  
