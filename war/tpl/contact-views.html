@@ -38,10 +38,7 @@
 <script id="contact-custom-view-model-template" type="text/html">
 <td data='{{id}}' class='data'></td>  	
 <td> {{name}} </td>
-<td>
-  {{#each fields_set}}
-	 {{ucfirst this}}</br> 
-  {{/each}}
+<td><div style="text-transform:capitalize;">{{#views_Field_Element fields_set}}{{/views_Field_Element}}</div>
 </td>
 <br/>
 </script>
