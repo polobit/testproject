@@ -93,13 +93,14 @@ $(function()
 	$('#companies-filter').live('click', function(e){
 		
 				e.preventDefault();
+				eraseCookie('contact_filter');
+				createCookie('company_filter', "Companies");
 				
 				if(readCookie('contact_view'))
 				{
 					App_Contacts.contact_custom_view.collection.url = "core/api/contacts/companies"
 					App_Contacts.contact_custom_view.collection.fetch();
-					
-					$('.filter-dropdown', App_Contacts.contact_custom_view.el).append(filter_name);
+					//$('.filter-dropdown', App_Contacts.contact_custom_view.el).append(filter_name);
 
 				}
 				/*
@@ -108,14 +109,10 @@ $(function()
 				 */
 				if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection) 
 				{ 
-					eraseCookie('contact_filter');
-					createCookie('company_filter', "Companies");
-					
 					// Set url to default view to load filter results
 					App_Contacts.contactsListView.collection.url = "core/api/contacts/companies";
 					App_Contacts.contactsListView.collection.fetch();
-					console.log(App_Contacts.contactsListView.el);
-					$('.filter-dropdown', App_Contacts.contactsListView.el).append(filter_name);
+					//$('.filter-dropdown', App_Contacts.contactsListView.el).append(filter_name);
 				}
 	 }); 
 	
