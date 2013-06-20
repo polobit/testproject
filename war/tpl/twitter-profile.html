@@ -15,9 +15,9 @@
 <div class="" id="twitter-error-panel" style="display:none;" >
 </div>
 <ul class="nav nav-tabs row-fluid" id="myTab">
-	<li class="active" style="width:32%; margin-left:2%;" align="center"><a data-toggle="tab" href="#tweets"><h4>{{tweet_count}}</h4><small>Tweets</small></a></li>
-	<li style="width:32%" align="center"><a data-toggle="tab" href="#followers" id="twitter_followers"><h4>{{num_connections}}</h4><small>Followers</small></a></li>
-	<li style="width:32%" align="center"><a data-toggle="tab" href="#following" id="twitter_following"><h4>{{friends_count}}</h4><small>Following</small></a></li>
+	<li class="active" style="width:32%; margin-left:2%;text-align: center;" align="center"><a data-toggle="tab" href="#tweets"><h4>{{tweet_count}}</h4><small>Tweets</small></a></li>
+	<li style="width:32%;text-align: center;" align="center"><a data-toggle="tab" href="#followers" id="twitter_followers"><h4>{{num_connections}}</h4><small>Followers</small></a></li>
+	<li style="width:32%;text-align: center;" align="center"><a data-toggle="tab" href="#following" id="twitter_following"><h4>{{friends_count}}</h4><small>Following</small></a></li>
 </ul>
 <div class="tab-content" id="myTabContent">
 	<div id="tweets" class="tab-pane fade active in">
@@ -88,11 +88,11 @@
 	                    <label class="control-label"><b>Message: </b><span class="field_req">*</span></label>
 	                    <div class="controls span4" style="margin-left:0px;">
 							{{#if_equals headline "Tweet"}}
-								<textarea rows="4" class="required span4" placeholder="Detailed Message" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" maxlength="140" style="max-width:500px;">{{description}}&nbsp</textarea>
+								<textarea rows="4" class="required span4 twit-tweet-limit" placeholder="Detailed Message" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" maxlength="125" style="max-width:500px;">{{description}}&nbsp</textarea>
 							{{else}}
-	                        	<textarea rows="4" class="required span4" placeholder="Detailed Message" name="message" id="twit-message" data-provide="limit" data-counter="#counter" maxlength="140" style="max-width:500px;"></textarea>
+	                        	<textarea rows="4" class="required span4 twit-message-limit" placeholder="Detailed Message" name="message" id="twit-message" data-provide="limit" data-counter="#counter" maxlength="125" style="max-width:500px;"></textarea>
 							{{/if_equals}}  
-							<div class="right"><em id="counter" style="margin-right:5px;">140</em><small>Max(140)</small></div>
+							<div class="right"><em id="twitter-counter" style="margin-right:5px;">125</em><small>&nbspLeft</small></div>
 	                    </div>
 	                </div>
 	            </fieldset>

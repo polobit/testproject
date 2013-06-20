@@ -715,6 +715,9 @@ var ContactsRouter = Backbone.Router.extend({
             page_size: 25,
             postRenderCallback: function(el) {
           
+          	  	// To set heading in template
+          	  	if(readCookie('company_filter'))$('#contact-heading',el).text('Companies');
+          	  
             	// To set chats and view when contacts are fetch by infiniscroll
             	setup_tags(el);
             	

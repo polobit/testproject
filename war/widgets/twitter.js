@@ -350,8 +350,9 @@ function setupTwitterOAuth(plugin_id)
     //Shows a link button in the UI which connects to the above URL
     $('#Twitter').html("<div class='widget_content' style='border-bottom:none;line-height: 160%;' >" + 
     		"Engage with contacts in real time based on what they tweet." + 
-    		"<p style='margin: 10px 0px 5px 0px;'><button class='btn' >" + 
-    		"<a href=" + url + " style='text-decoration:none;'>Link Your Twitter</a></button></p></div>");
+    		"<p style='margin: 10px 0px 5px 0px;'>" + 
+    		"<a class='btn' href=\"" + url + "\" style='text-decoration:none;'>" + 
+    		"Link Your Twitter</a></p></div>");
 }
 
 /**
@@ -948,14 +949,15 @@ function sendTwitterMessage(plugin_id, twitter_id, message)
     $('#twitter_messageModal').on('shown', function () {
 		  
 		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
-			  $(".limit").limit({
-			  	  maxChars: 140,
-			  	  counter: "#counter"
+			  $(".twit-message-limit").limit({
+			  	  maxChars: 125,
+			  	  counter: "#twitter-counter"
 			  	});
-			  
 			  $('#twitter_messageModal').find('#twit-message').focus();
 		  });
 	});
+    
+   //
     
     // Shows the modal after filling with details
     $('#twitter_messageModal').modal("show");
@@ -1039,14 +1041,15 @@ function tweetInTwitter(plugin_id, twitter_id)
     $('#twitter_messageModal').on('shown', function () {
 		  
 		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
-			  $(".limit").limit({
-			  	  maxChars: 140,
-			  	  counter: "#counter"
+			  $(".twit-tweet-limit").limit({
+			  	  maxChars: 125,
+			  	  counter: "#twitter-counter"
 			  	});
-			  
 			  $('#twitter_messageModal').find('#twit-tweet').focus();
 		  });
 	});
+    
+  //  
     
     // Shows the modal after filling with details
     $('#twitter_messageModal').modal("show");

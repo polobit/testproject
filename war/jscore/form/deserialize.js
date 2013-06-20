@@ -144,7 +144,6 @@ function deserializeForm(data, form)
              */
             else if (fel.hasClass('tagsinput') && tag == "ul" && fel.hasClass('contacts'))
             {
-            	
                 // Iterates through contacts to create a tag
                 // element for each contact
                 $.each(
@@ -164,11 +163,7 @@ function deserializeForm(data, form)
                      * tag_name represent the name of the contact
                      * first_name and last_name
                      */
-                    tag_name = getPropertyValue(
-                    contact.properties,
-                        "first_name") + " " + getPropertyValue(
-                    contact.properties,
-                        "last_name");
+                    	tag_name = getContactName(contact);
 
                     /*
                      * Creates a tag for each contact and appends to
@@ -178,7 +173,7 @@ function deserializeForm(data, form)
                      */
                     $('.tagsinput', form)
                         .append(
-                        '<li class="tag" data="' + tag_id + '" class="tag"  style="display: inline-block; ">' + tag_name + '<a class="close" id="remove_tag">&times</a></li>');
+                        '<li class="tag" data="' + tag_id + '" class="tag"  style="display: inline-block; "><a href="#contact/'+contact.id+'">' + tag_name + '</a><a class="close" id="remove_tag">&times</a></li>');
                 });
             }
 
