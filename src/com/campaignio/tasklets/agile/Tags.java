@@ -1,5 +1,6 @@
 package com.campaignio.tasklets.agile;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
@@ -60,7 +61,8 @@ public class Tags extends TaskletAdapter
 	String contactId = DBUtil.getId(subscriberJSON);
 	Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
 
-	if (contact != null)
+	// Execute next node if contact is null and given tags are empty.
+	if (contact != null && !StringUtils.isEmpty(tagNames))
 	{
 	    String tags = "";
 

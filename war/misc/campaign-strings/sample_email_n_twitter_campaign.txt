@@ -1103,7 +1103,7 @@
                 },
                 {
                     "name": "message",
-                    "value": "@{{TWITTER}} Thanks for the purchase. We'll keep you posted on our new stock."
+                    "value": "{{twitter_id}} Thanks for the purchase. We'll keep you posted on our new stock."
                 },
                 {
                     "name": "rate_limit",
