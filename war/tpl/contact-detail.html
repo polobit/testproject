@@ -28,8 +28,8 @@
 										"first_name"}} {{getPropertyValue properties "last_name"}}</font>
 								</b>{{#if_propertyName "email"}}</br> <a href='#send-email'>{{value}}</a>{{/if_propertyName}}
 
-								{{#if_propertyName "title"}}</br> {{value}}, {{/if_propertyName}}
-
+								</br>{{#if_propertyName "title"}} {{value}} {{/if_propertyName}}
+								{{#comma_in_between_property "title" "company" properties}}{{/comma_in_between_property}}
 								{{#if_propertyName "company"}} {{value}} {{/if_propertyName}} <br />
 								<div class="span2" style="padding-top: 5px; margin: 0px">
 									{{#property_is_exists "website" properties}}
@@ -278,9 +278,9 @@
 								</div>
 								{{/multiple_Property_Element}}
 							</div>
-							{{/property_is_exists}} {{#property_is_exists "email"
-							properties}}
-							<div class="pull-left row-fluid" style="padding-bottom: 5px;">
+							{{/property_is_exists}}
+ 							{{#property_is_exists "email" properties}}
+							<div class="pull-left row-fluid" style="padding-bottom: 5px;margin-bottom:5px;">
 								{{#multiple_Property_Element "email" properties}}
 								<div
 									style="display: inline-block; vertical-align: top; text-align: right"
