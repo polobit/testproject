@@ -125,8 +125,8 @@ function setupLinkedinOAuth(plugin_id)
     $('#Linkedin').html("<div class='widget_content' style='border-bottom:none;line-height: 160%;' >" + 
     		"Build professional relationships with contacts and keep a tab on " +  
     		"their business interests.<p style='margin: 10px 0px 5px 0px;' >" + 
-    		"<button class='btn' ><a href='" + url + "' style='text-decoration: none;'>" + 
-    		"Link Your LinkedIn</a></p></button></div>");
+    		"<a class='btn' href=\"" + url + "\" style='text-decoration: none;'>" + 
+    		"Link Your LinkedIn</a></p></div>");
 }
 
 /**
@@ -599,7 +599,7 @@ function sendLinkedInAddRequest(plugin_id, linkedin_id)
 		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
 			  $('.linkedin_connect_limit').limit({
 			       maxChars:300,
-			       counter: "#counter"
+			       counter: "#linkedin_counter"
 			      });
 			  
 			  $('#linkedin_messageModal').find('#link-connect').focus();

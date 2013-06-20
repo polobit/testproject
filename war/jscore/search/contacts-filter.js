@@ -10,10 +10,7 @@ var filter_name;
 $(function()
 {
 	// Filter Contacts- Clone Multiple
-	$("i.filter-contacts-multiple-add").die().live(
-			'click',
-			function(e)
-			{
+	$("i.filter-contacts-multiple-add").die().live('click', function(e){
 				// To solve chaining issue when cloned
 				var htmlContent = $(getTemplate("filter-contacts", {})).find(
 						'tr').clone();
@@ -33,49 +30,48 @@ $(function()
 	});
 
 	// Fetch filter result without changing route on click
-	$('.filter')
-			.live(
-					'click',
-					function(e)
-					{
-						e.preventDefault();
-						var filter_id = $(this).attr('id');
+	$('.filter').live('click', function(e){
+		
+			e.preventDefault();
+			eraseCookie('company_filter');
+			
+			var filter_id = $(this).attr('id');
 
-						// Saves Filter in cookie
-						createCookie('contact_filter', filter_id)
+			// Saves Filter in cookie
+			createCookie('contact_filter', filter_id)
 
-						// Gets name of the filter, which is set as data
-						// attribute in filter
-						filter_name = $(this).attr('data');
+			// Gets name of the filter, which is set as data
+			// attribute in filter
+			filter_name = $(this).attr('data');
 
-						/*
-						 * Reads the custom view cookie, if cookie is available
-						 * then load filter results in custom view
-						 */
-						if (readCookie("contact_view"))
-						{
-							// Set url to custom view to load filter results
-							App_Contacts.contact_custom_view.collection.url = "core/api/filters/query/"
-									+ filter_id;
-							App_Contacts.contact_custom_view.collection.fetch();
-							return;
-						}
+			/*
+			 * Reads the custom view cookie, if cookie is available
+			 * then load filter results in custom view
+			 */
+			if (readCookie("contact_view"))
+			{
+				// Set url to custom view to load filter results
+				App_Contacts.contact_custom_view.collection.url = "core/api/filters/query/"
+						+ filter_id;
+				App_Contacts.contact_custom_view.collection.fetch();
+				return;
+			}
 
-						/*
-						 * If contactsListView is defined (default view) then
-						 * load filter results in default view
-						 */
-						if (App_Contacts.contactsListView
-								&& App_Contacts.contactsListView.collection)
-						{
-							// Set url to default view to load filter results
-							App_Contacts.contactsListView.collection.url = "core/api/filters/query/"
-									+ filter_id;
-							App_Contacts.contactsListView.collection.sort_collection = false;
-							
-							App_Contacts.contactsListView.collection.fetch();
-						}
-					});
+			/*
+			 * If contactsListView is defined (default view) then
+			 * load filter results in default view
+			 */
+			if (App_Contacts.contactsListView
+					&& App_Contacts.contactsListView.collection)
+			{
+				// Set url to default view to load filter results
+				App_Contacts.contactsListView.collection.url = "core/api/filters/query/"
+						+ filter_id;
+				App_Contacts.contactsListView.collection.sort_collection = false;
+				
+				App_Contacts.contactsListView.collection.fetch();
+			}
+		});
 
 	/*
 	 * If default filter is selected, removes filter cookies an load contacts
@@ -94,37 +90,34 @@ $(function()
 
 	})
 
-	$('#companies-filter')
-			.live(
-					'click',
-					function(e)
-					{
-						e.preventDefault();
-						
-						
-						if(readCookie('contact_view'))
-						{
-							App_Contacts.contact_custom_view.collection.url = "core/api/contacts/companies"
-							App_Contacts.contact_custom_view.collection.fetch();
-							
-							$('.filter-dropdown', App_Contacts.contact_custom_view.el).append(filter_name);
+	$('#companies-filter').live('click', function(e){
+		
+				e.preventDefault();
+				
+				if(readCookie('contact_view'))
+				{
+					App_Contacts.contact_custom_view.collection.url = "core/api/contacts/companies"
+					App_Contacts.contact_custom_view.collection.fetch();
+					
+					$('.filter-dropdown', App_Contacts.contact_custom_view.el).append(filter_name);
 
-						}
-						/*
-						 * If contactsListView is defined (default view) then
-						 * load filter results in default view 
-						 */
-						if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection) 
-						{ 
-							eraseCookie('contact_filter');
-							createCookie('company_filter', "Companies");
-							// Set url to default view to load filter results
-							App_Contacts.contactsListView.collection.url = "core/api/contacts/companies";
-							App_Contacts.contactsListView.collection.fetch();
-							console.log(App_Contacts.contactsListView.el);
-							$('.filter-dropdown', App_Contacts.contactsListView.el).append(filter_name);
-						}
-			 }); 
+				}
+				/*
+				 * If contactsListView is defined (default view) then
+				 * load filter results in default view 
+				 */
+				if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection) 
+				{ 
+					eraseCookie('contact_filter');
+					createCookie('company_filter', "Companies");
+					
+					// Set url to default view to load filter results
+					App_Contacts.contactsListView.collection.url = "core/api/contacts/companies";
+					App_Contacts.contactsListView.collection.fetch();
+					console.log(App_Contacts.contactsListView.el);
+					$('.filter-dropdown', App_Contacts.contactsListView.el).append(filter_name);
+				}
+	 }); 
 	
 	$('.lhs_chanined_parent').die().live('change' , function(e){
 		e.preventDefault();
@@ -153,9 +146,6 @@ function setupContactFilterList(cel)
 		individual_tag_name : 'li',
 		postRenderCallback : function(el)
 		{
-			if(filter_id = readCookie('company_filter'))
-				el.find('.filter-dropdown').append(filter_id);
-				
 			// Set saved filter name on dropdown button
 			if (filter_id = readCookie('contact_filter'))
 			{
@@ -183,6 +173,8 @@ function setupContactFilterList(cel)
 
 				el.find('.filter-dropdown').append(filter_name);
 			}
+			if(filter_id = readCookie('company_filter'))
+				el.find('.filter-dropdown').append(filter_id);
 		}
 	});
 

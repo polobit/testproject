@@ -195,14 +195,15 @@ $(function() {
 			
 			var contact_properties = App_Contacts.contactDetailView.model
 					.get('properties');
+			
 				for ( var i = 0; i < contact_properties.length; i++) {
-					if (contact_properties[i].name == "first_name")
+					
+					if (contact_properties[i].name == "last_name")
 						return contact_properties[i].value;
-					else if (contact_properties[i].name == "last_name")
+					else if (contact_properties[i].name == "first_name")
 						return contact_properties[i].value;
-					else 
-						return "Contact";
 				}
+				return "Contact";
 			}
 	});
 	
