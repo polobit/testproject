@@ -369,6 +369,7 @@ public class Contact extends Cursor
 	    tagslist.add(tag.tag);
 	}
 
+	this.tags.clear();
 	this.save();
 
 	// Delete tags from Tag class
