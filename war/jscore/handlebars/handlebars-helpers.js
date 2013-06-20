@@ -575,6 +575,15 @@ $(function() {
 		return options.inverse(this);
 	});
 	
+	/*
+	 * To add comma in between the elements.
+	 */
+	Handlebars.registerHelper('comma_in_between_property', function(value1, value2, properties, options) {
+
+		if(getPropertyValue(properties, value1) && getPropertyValue(properties, value2))
+			return ",";
+	});
+	
 	Handlebars.registerHelper('property_subtype_is_exists', function(name, subtype, properties, options) {
 
 		if(getPropertyValueBySubtype(properties, name, subtype))
@@ -641,6 +650,34 @@ $(function() {
 					if (value.indexOf("properties_") != -1)
 						value = value.split("properties_")[1];
 					else if (value.indexOf("custom_") != -1)
+						value = value.split("custom_")[1];
+					else if (value == "created_time")
+						value = "Created Date";
+					else if (value == "updated_time")
+						value = "Updated Date";
+					
+					value = value.replace("_", " ");
+
+					if (--count == 0) {
+						el = el.concat(value);
+						return;
+					}
+					el = el.concat(value + ", ");
+				});
+				
+				return new Handlebars.SafeString(el);
+	});
+	
+	/**
+	 * Converts views field element as comma seprated values and returns as handlebars safe
+	 * string.
+	 */
+	Handlebars.registerHelper('views_Field_Element', function(properties) {
+				var el = "";
+				var count = properties.length;
+				$.each(properties, function(key, value) {
+					
+					if (value.indexOf("custom_") != -1)
 						value = value.split("custom_")[1];
 					else if (value == "created_time")
 						value = "Created Date";
