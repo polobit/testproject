@@ -106,13 +106,20 @@ public class WorkflowUtil
 	    JSONObject subscriberJSON = new JSONObject();
 
 	    List<ContactField> properties = contact.getProperties();
-	    System.out.println("List properties" + properties);
+	    System.out.println("List of properties for subscriberJSON: "
+		    + properties);
 
 	    for (ContactField field : properties)
 	    {
-		System.out.println(field);
 		if (field.name != null && field.value != null)
+		{
+		    // Gets twitter-id from website property
+		    if (field.name.equals("website")
+			    && field.subtype.equals("TWITTER"))
+			field.name = "twitter_id";
+
 		    subscriberJSON.put(field.name, field.value);
+		}
 	    }
 
 	    // Add Id and data
