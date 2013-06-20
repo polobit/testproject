@@ -52,7 +52,7 @@
 	<td style="border-top:1px dotted #DDD;height:34px;"><div style="text-align:justify;width:8em;overflow:hidden;margin-left:10px;">{{#is_link subject}}<b class="activate-link">{{else}}<b>{{/is_link}}{{safe_string subject}}</b></div></td>
     <td><div style="text-align:justify;white-space:nowrap;width:5em;overflow:hidden;"><span style="margin-right:10px;" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></div> </td>
     <td><div style="text-align:justify;white-space:nowrap;width:6em;overflow:hidden;"><i class="{{icons type}}"></i>&nbsp;<span>{{type}}</span></div></td>
-    <td><div style="text-align:justify;white-space:nowrap;width:10em;overflow:hidden;"> <time class="task-due-time" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999; ">{{epochToHumanDate "" due}}</time></div></td>
+    <td><div style="text-align:justify;white-space:nowrap;width:10em;overflow:hidden;"> <time class="task-due-time" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999; ">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</time></div></td>
     <td>
 		<div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:78px;overflow:hidden;display:inline-block;">
         	{{#each contacts}}

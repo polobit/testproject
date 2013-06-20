@@ -116,7 +116,7 @@
 					<div class="span2 mr_5"><a href="{{tweeted_person_profile_url}}" target="_blank"><img src="{{tweeted_person_pic_url}}" width="30" height="30" alt="" class="img-rounded pull-left"/></a></div>
 					<div class="pull-left span9" >
 						<p class="mb_0" style="word-break:normal;word-wrap:break-word;">{{safe_string message}}</p>
-						<small><time class="time-ago" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "" created_time}}</time></small>
+						<small><time class="time-ago" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time></small>
 						<ul class="widget_tab_link">
 							{{#if is_retweeted}}
 								<li><a href="#retweeted" rel="tooltip" title="Retweeted"><i class="icon-retweet"  id="{{id}}" ></i></a></li>

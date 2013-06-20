@@ -289,7 +289,9 @@ $(function() {
 	 * Helper function to return date string from epoch time
 	 */
 	Handlebars.registerHelper('epochToHumanDate', function(format, date) {
-
+			
+		if(!format)format = "mmm dd yyyy HH:MM:ss";
+		
 		if (!date)
 			return;
 
