@@ -13,7 +13,7 @@ $(function(){
     * Customizes the delete operation
     * Deletes the entities
     */	
-	$('#delete-checked').live('click', function(event){
+	$('#delete-checked, .delete-checked-contacts').live('click', function(event){
 		event.preventDefault();
 		var id_array = [];
 		var index_array = [];
@@ -45,6 +45,13 @@ $(function(){
 			
 			
 			$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
+			
+			if(SELECT_ALL == true)
+			{
+				id_array = [];
+				id_array.push(-1);
+				id_array.push(getSelectionCriteria());
+			}
 			
 			bulk_delete_operation($(table).attr('url'), id_array, index_array, table, undefined, data_array);
 		}	

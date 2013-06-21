@@ -19,11 +19,11 @@ import com.agilecrm.account.EmailTemplates;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.ContactFilter;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.customview.CustomView;
+import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.reports.Reports;
@@ -483,6 +483,26 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	{
 	    q.filter(propName, map.get(propName));
 	}
+	return asKeyList(q.fetchKeys());
+    }
+
+    /**
+     * List keys by property with order specified
+     * 
+     * @param map
+     * @return
+     */
+    public List<Key<T>> listKeyByProperty(Map<String, Object> map,
+	    String orderBy, Integer limit)
+    {
+	Query<T> q = ofy().query(clazz);
+	for (String propName : map.keySet())
+	{
+	    q.filter(propName, map.get(propName));
+	}
+	if (limit != null)
+	    q.limit(limit);
+	q.order(orderBy);
 	return asKeyList(q.fetchKeys());
     }
 

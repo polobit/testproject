@@ -133,10 +133,11 @@ $(function()
  * @method setupContactFilterList @param cel Html form
  * element to append filters list,
  */
+var contactFiltersListView 
 function setupContactFilterList(cel)
 {
 	var filter_id;
-	var contactFiltersListView = new Base_Collection_View({
+	contactFiltersListView = new Base_Collection_View({
 		url : '/core/api/filters',
 		restKey : "ContactFilter",
 		templateKey : "contact-filter-list",

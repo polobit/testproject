@@ -44,6 +44,7 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.TypeAheadAPI.class);
 	s.add(com.agilecrm.core.api.API.class);
 	s.add(com.agilecrm.core.api.widgets.WidgetsAPI.class);
+	s.add(com.agilecrm.core.api.bulkactions.backends.BulkActionsAPI.class);
 
 	return s;
     }

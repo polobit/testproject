@@ -19,6 +19,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
@@ -219,6 +220,19 @@ public class ContactUtil
 	List<Contact> contacts_list = new ArrayList<Contact>();
 	contacts_list.addAll(dao.ofy().get(contactKeys).values());
 	return contacts_list;
+    }
+
+    public static List<Contact> getContactsBulk(List<Long> contactsArray)
+    {
+	List<Key<Contact>> contactKeys = new ArrayList<Key<Contact>>();
+
+	for (Long id : contactsArray)
+	{
+	    contactKeys.add(new Key<Contact>(Contact.class, id));
+	}
+	System.out.println(dao.fetchAllByKeys(contactKeys));
+
+	return dao.fetchAllByKeys(contactKeys);
     }
 
     /**
@@ -432,5 +446,13 @@ public class ContactUtil
     {
 	if (ids.length() > 0)
 	    dao.deleteBulkByIds(ids);
+
+	AppengineSearch search = new AppengineSearch<Contact>(Contact.class);
+    }
+
+    public static void deleteContactsbyKeys(List<Key<Contact>> contactKeys)
+    {
+	if (contactKeys.size() > 0)
+	    dao.deleteKeys(contactKeys);
     }
 }

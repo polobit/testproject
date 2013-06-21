@@ -34,11 +34,13 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.VcardString;
+import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.util.CSVUtil;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>ContactsAPI</code> includes REST calls to interact with {@link Contact}
@@ -176,13 +178,11 @@ public class ContactsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public List<Contact> createMultipleContact(List<Contact> contacts)
     {
-	if (contacts.size() > 1000)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Sorry, Cannot upload more than 1000 contacts.")
-		    .build());
-	}
+	/*
+	 * if (contacts.size() > 1000) { throw new
+	 * WebApplicationException(Response .status(Response.Status.BAD_REQUEST)
+	 * .entity("Sorry, Cannot upload more than 1000 contacts.") .build()); }
+	 */
 
 	for (Contact contact : contacts)
 	{
@@ -434,22 +434,17 @@ public class ContactsAPI
      *            array of contact ids as String
      * @throws JSONException
      */
-    @Path("bulk")
+
+    @Path("bulk/{current_user}")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteContacts(@FormParam("ids") String model_ids)
+    public void deleteContacts(@FormParam("ids") String model_ids,
+	    @FormParam("filter") String filter,
+	    @PathParam("current_user") Long current_user_id)
 	    throws JSONException
     {
-	JSONArray contactsJSONArray = new JSONArray(model_ids);
-
-	for (int i = 0; i < contactsJSONArray.length(); i++)
-	{
-	    Contact contact = ContactUtil.getContact(Long
-		    .parseLong(contactsJSONArray.getString(i)));
-
-	    if (contact != null)
-		contact.delete();
-	}
+	ContactUtil.deleteContactsbyKeys(BulkActionUtil
+		.getContactKeysForBulkOperations(model_ids, current_user_id));
     }
 
     /**
@@ -462,15 +457,23 @@ public class ContactsAPI
      * 
      * @throws JSONException
      */
-    @Path("bulk/owner/{new_owner}")
+    @Path("bulk/owner/{new_owner}/{current_user}")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void changeOwnerToContacts(
 	    @FormParam("contact_ids") String contact_ids,
-	    @PathParam("new_owner") String new_owner) throws JSONException
+	    @PathParam("new_owner") String new_owner,
+	    @FormParam("filter") String filter,
+	    @PathParam("current_user") Long current_user) throws JSONException
     {
-	JSONArray contactsJSONArray = new JSONArray(contact_ids);
-	Contact.changeOwnerToContactsBulk(contactsJSONArray, new_owner);
+	if (StringUtils.isEmpty(contact_ids))
+	{
+	    return;
+	}
+
+	Contact.changeOwnerToContactsBulk(BulkActionUtil
+		.getContactForBulkOperations(contact_ids, current_user),
+		new_owner);
     }
 
     /**
@@ -482,13 +485,21 @@ public class ContactsAPI
      *            array of tags as string
      * @throws JSONException
      */
-    @Path("bulk/tags")
+    @SuppressWarnings("unchecked")
+    @Path("bulk/tags/{current_user}")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void addTagsToContacts(@FormParam("contact_ids") String contact_ids,
-	    @FormParam("tags") String tagsString) throws JSONException
+	    @FormParam("tags") String tagsString,
+	    @FormParam("filter") String filter,
+	    @PathParam("current_user") Long current_user) throws JSONException
     {
-	System.out.println(tagsString);
+	System.out.println("current user : " + current_user);
+	System.out.println("domain : " + NamespaceManager.get());
+	if (StringUtils.isEmpty(contact_ids))
+	{
+	    return;
+	}
 
 	JSONArray tagsJSONArray = new JSONArray(tagsString);
 
@@ -507,9 +518,9 @@ public class ContactsAPI
 	if (tagsArray == null)
 	    return;
 
-	JSONArray contactsJSONArray = new JSONArray(contact_ids);
-
-	ContactUtil.addTagsToContactsBulk(contactsJSONArray, tagsArray);
+	ContactUtil.addTagsToContactsBulk(BulkActionUtil
+		.getContactForBulkOperations(contact_ids, current_user),
+		tagsArray);
     }
 
     /**
@@ -604,6 +615,7 @@ public class ContactsAPI
 	if (tagsArray == null)
 	    return;
 
+	contact.tags.clear();
 	contact.removeTags(tagsArray);
     }
 

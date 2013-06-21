@@ -46,7 +46,7 @@ var WorkflowsRouter = Backbone.Router
 							$("time.campaign-created-time", el).timeago();
 							
 						});
-						 startTour("workflows", el);
+						  startTour(undefined, el);
 					},
 					appendItemCallback:function(el)
 					{

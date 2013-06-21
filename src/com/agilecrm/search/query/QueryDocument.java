@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.search.QueryInterface;
 import com.agilecrm.search.document.ContactDocument;
@@ -81,8 +82,7 @@ public class QueryDocument implements QueryInterface
     }
 
     public static List<Long> getContactIds(List<SearchRule> rules,
-	    Integer count,
-	    String cursor)
+	    Integer count, String cursor)
     {
 
 	String query = constructQuery(rules);
@@ -212,13 +212,9 @@ public class QueryDocument implements QueryInterface
 	    long fromDateInSecs = new DateUtil()
 		    .removeDays(Integer.parseInt(rhs) - 1).getTime().getTime();
 
-	    System.out.println(new DateUtil(new Date(fromDateInSecs)).getTime()
-		    .toGMTString());
 
 	    String fromDate = SearchUtil
 		    .getDateWithoutTimeComponent(fromDateInSecs);
-
-	    System.out.println("from date = " + fromDate + " lhs = " + lhs);
 
 	    query = buildQuery("AND", query, lhs + " >= " + fromDate);
 	}
@@ -439,39 +435,49 @@ public class QueryDocument implements QueryInterface
 	 * Set query options only to get id of document (enough to get get
 	 * respective contacts)
 	 */
-	System.out.println("$$$$$$$$$$$$$$$$$"
-		+ index.search(query).getNumberFound());
-	QueryOptions options = QueryOptions
-		.newBuilder()
-		.setLimit(
-			Long.valueOf(index.search(query).getNumberFound())
-				.intValue()).setReturningIdsOnly(true).build();
-	// Long.valueOf(index.search(query).getNumberFound())
+	QueryOptions options = QueryOptions.newBuilder().setLimit(1000)
+		.setCursor(Cursor.newBuilder().setPerResult(true).build())
+		.setReturningIdsOnly(true).build();
 
 	// Build query on query options
 	Query query_string = Query.newBuilder().setOptions(options)
 		.build(query);
 
 	// Gets sorted documents
-	Collection<ScoredDocument> contact_documents = new ArrayList<ScoredDocument>(
+	List<ScoredDocument> contact_documents = new ArrayList<ScoredDocument>(
 		index.search(query_string).getResults());
 
-	System.out.println(query_string);
-	System.out.println(contact_documents.size());
-
 	// List<Long> entity_ids = new ArrayList<Long>();
+
+	if (contact_documents.size() == 1000
+		&& contact_documents.get(999).getCursor() != null)
+	{
+	    options = QueryOptions
+		    .newBuilder()
+		    .setLimit(1000)
+		    .setCursor(
+			    Cursor.newBuilder()
+				    .setPerResult(true)
+				    .build(contact_documents.get(999)
+					    .getCursor().toWebSafeString()))
+		    .setReturningIdsOnly(true).build();
+
+	    // Build query on query options
+	    query_string = Query.newBuilder().setOptions(options).build(query);
+
+	    contact_documents.addAll(new ArrayList<ScoredDocument>(index
+		    .search(query_string).getResults()));
+	}
 
 	for (ScoredDocument doc : contact_documents)
 	{
 	    entity_ids.add(Long.parseLong(doc.getId()));
 	}
 
-	System.out.println(entity_ids);
-
 	Objectify ofy = ObjectifyService.begin();
 
-	// Returns contact related to doc_ids
 	return ofy.get(Contact.class, entity_ids).values();
+	// Returns contact related to doc_ids
     }
 
     @SuppressWarnings("unchecked")
@@ -513,6 +519,7 @@ public class QueryDocument implements QueryInterface
 
 	Collection<ScoredDocument> searchResults = index.search(query_string)
 		.getResults();
+
 	Map<String, Object> documents = new HashMap<String, Object>();
 
 	if (searchResults.size() == options.getLimit())
@@ -544,7 +551,7 @@ public class QueryDocument implements QueryInterface
 
 		options = QueryOptions
 			.newBuilder()
-			.setFieldsToReturn("DocId")
+			.setReturningIdsOnly(true)
 			.setLimit(page)
 			.setCursor(
 				Cursor.newBuilder().setPerResult(true).build())
@@ -553,7 +560,7 @@ public class QueryDocument implements QueryInterface
 	    {
 		options = QueryOptions
 			.newBuilder()
-			.setFieldsToReturn("DocId")
+			.setReturningIdsOnly(true)
 			.setLimit(page)
 			.setCursor(
 				Cursor.newBuilder().setPerResult(true)
@@ -593,6 +600,8 @@ public class QueryDocument implements QueryInterface
     private static Collection processQuery(String query, RuleType type,
 	    Integer page, String cursor)
     {
+	if(page == null)
+	    return processQuery(query, type);
 
 	QueryOptions options = buildOptions(query, type, page, cursor);
 
@@ -600,6 +609,7 @@ public class QueryDocument implements QueryInterface
 
 	Collection<ScoredDocument> documents = (Collection<ScoredDocument>) results
 		.get("fetchedDocuments");
+
 	Long availableResults = (Long) results.get("availableDocuments");
 
 	List<ScoredDocument> DocumentList = new ArrayList<ScoredDocument>(
@@ -612,25 +622,17 @@ public class QueryDocument implements QueryInterface
 	for (ScoredDocument doc : DocumentList)
 	{
 	    entity_ids.add(Long.parseLong(doc.getId()));
-	    if (page != null && doc.getCursor() != null)
 	    cursor = doc.getCursor().toWebSafeString();
 	}
 
-	Objectify ofy = ObjectifyService.begin();
 
 	// Returns contact related to doc_ids
-	Collection<Contact> contactResults = ofy.get(Contact.class, entity_ids)
-		.values();
+	List<Contact> contactResults = ContactUtil.getContactsBulk(entity_ids);
 
-	List<Contact> contacts = new ArrayList<Contact>(contactResults);
+	contactResults.get(0).count = availableResults.intValue();
+	contactResults.get(contactResults.size() - 1).cursor = cursor;
 
-	if (contacts.isEmpty())
-	    return contacts;
-
-	contacts.get(0).count = availableResults.intValue();
-	contacts.get(contacts.size() - 1).cursor = cursor;
-
-	return contacts;
+	return contactResults;
     }
 
     public static String constructQuery(List<SearchRule> rules)

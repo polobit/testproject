@@ -69,10 +69,8 @@ $(function(){
 		$('.tbody_check').attr('checked', this.checked);
 	
 		// Show bulk operations only when thead check box is checked
-		if($(this).is(':checked'))
-			$('#bulk-actions').css('display', 'block');
-		else
-			$('#bulk-actions').css('display', 'none');
+		toggle_contacts_bulk_actions_dropdown(this, true);
+		
 	});
 	
    /**

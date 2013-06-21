@@ -14,10 +14,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log;
@@ -159,26 +159,21 @@ public class CampaignsAPI
      *            campaign id that the contacts to be enrolled.
      * @throws JSONException
      */
-    @Path("enroll/bulk/{workflow-id}")
+    @Path("enroll/bulk/{workflow-id}/{current_user_id}")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public void subscribeContactsBulk(
 	    @FormParam("contact_ids") String contact_ids,
-	    @PathParam("workflow-id") Long workflowId) throws JSONException
+	    @PathParam("workflow-id") Long workflowId,
+	    @FormParam("filter") String filter,
+	    @PathParam("current_user_id") Long current_user_id)
+	    throws JSONException
     {
-	JSONArray contactsJSONArray = new JSONArray(contact_ids);
+	List<Contact> contact_list = BulkActionUtil
+		.getContactForBulkOperations(contact_ids, current_user_id);
 
-	// Get contacts list
-	List<Contact> contacts_list = ContactUtil
-		.getContactsBulk(contactsJSONArray);
-	if (contacts_list.size() == 0)
-	{
-	    System.out.println("Null contact");
-	    // return "true";
-	}
-
-	WorkflowUtil.subscribeDeferred(contacts_list, workflowId);
-	// return "true";
+	WorkflowUtil.subscribeDeferred(contact_list, workflowId);
     }
+
 }

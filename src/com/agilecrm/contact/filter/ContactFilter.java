@@ -1,28 +1,17 @@
-package com.agilecrm.contact;
+package com.agilecrm.contact.filter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.ui.serialize.SearchRule;
-import com.agilecrm.session.SessionManager;
-import com.agilecrm.user.DomainUser;
-import com.agilecrm.util.DateUtil;
-import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
-import com.googlecode.objectify.Query;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -148,61 +137,5 @@ public class ContactFilter implements Serializable
     {
 
 	return AppengineSearch.getAdvacnedSearchResults(rules, count, cursor);
-    }
-
-    // Get Contacts based on system filters
-    /**
-     * Queries contacts based on the {@link DefaultFilter} type.
-     * 
-     * @param type
-     *            {@link DefaultFilter}
-     * @return {@link List} of {@link Contact}s
-     */
-    public static List<Contact> getContacts(DefaultFilter type, Integer max,
-	    String cursor)
-    {
-	Objectify ofy = ObjectifyService.begin();
-	Query<Contact> contact_query = ofy.query(Contact.class);
-
-	// Checks the type of default filter and returns results based on the
-	// filter
-	if (type == DefaultFilter.RECENT)
-	{
-	    // Gets current date
-	    DateUtil current_date = new DateUtil(new Date());
-
-	    // Gets the current time, to query on contact which are created with
-	    // in last 24 hrs
-	    long current_time = current_date.getTime().getTime() / 1000;
-
-	    // Gets last 20 recently created. Queries for last 20 contacts
-	    // created prior to current time and returns list sorted based on
-	    // current_time
-	    return contact_query.filter("created_time < ", current_time)
-		    .order("-created_time").limit(20).list();
-	}
-	else if (type == DefaultFilter.CONTACTS)
-	{
-	    // Creates a DomainUser key based on current domain user id
-	    Key<DomainUser> userKey = new Key<DomainUser>(DomainUser.class,
-		    SessionManager.get().getDomainId());
-
-	    // Queries contacts whose owner_key is equal to current domain user
-	    // key
-	    Map<String, Object> searchMap = new HashMap<String, Object>();
-	    searchMap.put("owner_key", userKey);
-	    
-	    if (max != null)
-		return Contact.dao.fetchAll(max, cursor, searchMap);
-
-	    return Contact.dao.listByProperty(searchMap);
-	}
-	else if (type == DefaultFilter.LEADS)
-	{
-	    return ContactUtil.getContactsForTag("lead", max, cursor);
-
-	}
-
-	return null;
     }
 }

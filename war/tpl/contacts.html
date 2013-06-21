@@ -45,7 +45,7 @@
 				style="top: -29px;"></div>
 			<div class="btn-group right" id="filter-list"
 				style="top: -29px;margin-right: 5px"></div>
-
+			<div>
 			<div class="btn-group pull-left" id="bulk-actions"
 				style="display: none; top: -29px;margin-left:26%;">
 					<div class="btn">Bulk Actions</div>
@@ -57,8 +57,11 @@
 						<li><a href="#" id="bulk-campaigns">Add to campaign</a></li>
 						<li class="hide"><a href="#" id="bulk-email">Send email</a></li>
 						<li><a href="#" id="bulk-tags">Add tags</a></li>
+						<li><a href="#" class="delete-checked-contacts">Delete</a></li>
 					</ul>
 			</div>
+			<div  class="btn-group pull-left" style="display: none;top:-25px;left:10px" id="bulk-select"></div>
+		</div>
 		</div>
 	</div>
 </div>
@@ -90,7 +93,7 @@
 		<div class="data">
 			<div class="data-container"></div>
 			<table id="contacts" class="table table-striped showCheckboxes"
-				url="core/api/contacts/bulk" style="overflow: scroll">
+				url="core/api/bulk/filter/update1?action_type=DELETE" style="overflow: scroll">
 				<thead>
 					<tr>
 						<th>Name</th>

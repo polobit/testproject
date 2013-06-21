@@ -14,12 +14,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.ContactFilter;
-import com.agilecrm.contact.ContactFilter.DefaultFilter;
+import com.agilecrm.contact.filter.ContactFilter;
+import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.search.ui.serialize.SearchRule;
 
 /**
@@ -120,42 +121,12 @@ public class ContactFilterAPI
 	    @QueryParam("page_size") String count,
 	    @QueryParam("cursor") String cursor)
     {
-	try
-	{
+	System.out.println("cursor : " + cursor);
+	if (!StringUtils.isEmpty(count))
+	    return ContactFilterUtil.getContacts(id, Integer.parseInt(count),
+		    cursor);
 
-	    // Checks if Filter id contacts "system", which indicates the
-	    // request is to load results based on the default filters provided
-	    if (id.contains("system"))
-	    {
-		// Seperates "system-" from id and checks the type of the filter
-		// (RECETN of LEADS or CONTACTS), accordingly contacts are
-		// fetched and
-		// returned
-		id = id.split("-")[1];
-
-		DefaultFilter filter = DefaultFilter.valueOf(id);
-		if (filter != null)
-		    return ContactFilter.getContacts(filter,
-			    Integer.parseInt(count), cursor);
-
-		// If requested id contains "system" in it, but it doesn't match
-		// with RECENT/LEAD/CONTACTS then return null
-		return null;
-	    }
-
-	    // If Request is not on default filters, then fetch Filter based on
-	    // id
-	    ContactFilter filter = ContactFilter.getContactFilter(Long
-		    .parseLong(id));
-
-	    // Queries based on list of search rules in the filter object
-	    return filter.queryContacts(Integer.parseInt(count), cursor);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
+	return ContactFilterUtil.getContacts(id, null, null);
     }
 
     /**
