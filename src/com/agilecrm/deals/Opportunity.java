@@ -64,7 +64,7 @@ public class Opportunity
      * Contact ids of related contacts for a deal.
      */
     @NotSaved
-    public List<String> contact_ids = new ArrayList<String>();
+    private List<String> contact_ids = new ArrayList<String>();
 
     /**
      * Related contact objects fetched using contact ids.

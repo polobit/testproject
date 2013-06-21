@@ -250,7 +250,7 @@ public class InitDefaults
 	 * contact : contacts) {
 	 * deal.contact_ids.add(String.valueOf(contact.id)); }
 	 */
-	deal.contact_ids.add(String.valueOf(ContactUtil
+	deal.addContactIds(String.valueOf(ContactUtil
 		.searchContactByEmail("sixfeetsix@nba.com").id));
 	deal.save();
     }

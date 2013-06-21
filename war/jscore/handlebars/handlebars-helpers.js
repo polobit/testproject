@@ -1059,6 +1059,9 @@ $(function() {
 	
 	Handlebars.registerHelper('get_social_icon', function(name)
 	{
+		if(!name)
+			return;
+		
 		var icon_json = {
 							"TWITTER" : "icon-twitter-sign", 
 							"LINKEDIN" : "icon-linkedin-sign", 
@@ -1068,6 +1071,7 @@ $(function() {
 							"GITHUB" : "icon-github",
 							"FEED" : "icon-rss"
 						}
+		
 		
 		name = name.trim();
 		
