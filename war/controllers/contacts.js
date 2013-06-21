@@ -90,7 +90,7 @@ var ContactsRouter = Backbone.Router.extend({
     	}
     	// Default url for contacts route
     	var url = '/core/api/contacts';
-    	var collection_is_reverse = true;
+    	var collection_is_reverse = false;
     	// Tags, Search & default browse comes to the same function
     	if(tag_id)
     	{
@@ -714,6 +714,7 @@ var ContactsRouter = Backbone.Router.extend({
             cursor: true,
             page_size: 25,
             postRenderCallback: function(el) {
+            	App_Contacts.contactsListView = App_Contacts.contact_custom_view;
           
           	  	// To set heading in template
           	  	if(readCookie('company_filter'))$('#contact-heading',el).text('Companies');
