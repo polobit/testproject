@@ -1068,6 +1068,8 @@ $(function() {
 							"GITHUB" : "icon-github",
 							"FEED" : "icon-rss"
 						}
+		if(!name)
+			return;
 		
 		name = name.trim();
 		
