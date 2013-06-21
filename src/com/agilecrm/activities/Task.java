@@ -219,25 +219,6 @@ public class Task
     }
 
     /**
-     * Compares task owner with given owner. TaskUtil uses this method to
-     * compare task owners.
-     * 
-     * @param owner
-     *            - Current owner.
-     * @return boolean value - true if equal otherwise false.
-     */
-    public boolean compareTaskOwner(Key<AgileUser> owner)
-    {
-	System.out.println("comaparing owners agile user and domain user");
-	System.out.println("agile user key :" + owner);
-	System.out.println("domain user key :" + this.owner);
-	if (owner.equals(this.owner))
-	    return true;
-
-	return false;
-    }
-
-    /**
      * Gets picture of owner who created deal. Owner picture is retrieved from
      * user prefs of domain user who created deal and is used to display owner
      * picture in deals list.
