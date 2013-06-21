@@ -55,7 +55,7 @@ function loadWidgets(el, contact)
             	
             	console.log('sortable');
             	$('.widget-sortable').sortable();
-        		$('.widget-sortable').sortable("option", "containment", $('.widget-sortable'));
+        		//$('.widget-sortable').sortable("option", "containment", $('.widget-sortable'));
         		$('.widget-sortable').sortable( "option", "handle", ".icon-move" );	
 			
         		$('.widget-sortable').on( "sortstop", function( event, ui ) {
