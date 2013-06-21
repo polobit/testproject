@@ -193,8 +193,12 @@ var ContactsRouter = Backbone.Router.extend({
      */
     contactDetails: function (id, contact) {
     	
+    	var contact_collection;
+    	
     	if(!contact && this.contactDetailView && this.contactDetailView.model != null)
     	{
+    		contact_collection = this.contactDetailView;
+
     		if(id == this.contactDetailView.model.toJSON()['id'])
     		{	
     			App_Contacts.contactDetails(id, this.contactDetailView.model);
@@ -214,7 +218,7 @@ var ContactsRouter = Backbone.Router.extend({
         		    return '/core/api/contacts/'+this.id;
         		  }
         		});
-        	
+
         	var model = new contact_details_model();
         	model.id = id;
         	model.fetch({ success: function(data) { 
@@ -234,6 +238,8 @@ var ContactsRouter = Backbone.Router.extend({
         		// Set url to core/api/contacts (If filters are loaded contacts url is changed so set it back)
         		this.contactsListView.collection.url = "core/api/contacts";
         		contact = this.contactsListView.collection.get(id);
+        		contact_collection = this.contactsListView.collection;
+
         	}
         
         // If contact is of type company just edit it.
@@ -272,6 +278,10 @@ var ContactsRouter = Backbone.Router.extend({
                 starify(el);
                 
                 show_map(el);
+                
+                // To navigate between contacts details 
+                if(contact_collection != null)
+                	contact_detail_view_navigation(id, contact_collection, el);
                 
                 fill_owners(el, contact.toJSON());
                 startTour("contact-details", el);

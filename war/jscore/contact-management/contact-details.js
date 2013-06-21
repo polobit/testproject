@@ -267,6 +267,36 @@ function qr_load(){
 		});
 }
 
+/**
+ * To navigate from one contact detail view to other
+ */
+function contact_detail_view_navigation(id, contact_collection, el){
+	console.log("collection >>>>>>>>>>>>>>>>");
+	console.log(contact_collection);
+	
+	var collection_length = contact_collection.length;
+    var current_index = contact_collection.indexOf(contact_collection.get(id));
+    var previous_contact_id;
+    var next_contact_id;
+
+    if (collection_length > 1 && current_index < collection_length && contact_collection.at(current_index + 1) && contact_collection.at(current_index + 1).has("id")) {
+     
+    	next_contact_id = contact_collection.at(current_index + 1).id
+    }
+
+    if (collection_length > 0 && current_index != 0) {
+
+    	previous_contact_id = contact_collection.at(current_index - 1).id
+    }
+
+    if(previous_contact_id != null)
+    	$('.navigation', el).append('<a style="float:left;" href="#contact/' + previous_contact_id + '" class=""><i class="icon-caret-left"></i>&nbsp;Previous</a>');
+    if(next_contact_id != null)
+    	$('.navigation', el).append('<a style="float:right;" href="#contact/'+ next_contact_id + '" class="">Next&nbsp;&nbsp;<i class="icon-caret-right"></i></a>');
+	
+}
+
+
 $(function(){
 	
 	$(".tooltip_info").die().live("hover", function() {
