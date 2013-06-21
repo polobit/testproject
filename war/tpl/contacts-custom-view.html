@@ -1,22 +1,3 @@
-<script id="contactss-grid-model-template" type="text/html">
-<div class="span3">
-    <div style="border: 1px solid #DDD;">
-        <a href="#contact/{{id}}">
-        <img src="{{gravatarurl properties 50}}" width="50px" height="50px" />
-        <br />
-        {{getPropertyValue properties "email"}}
-        {{getPropertyValue properties "first_name"}}
-        {{getPropertyValue properties "last_name"}}
-        <br />
-        {{#each tags}}
-        <b>{{this}}</b>
-        {{/each}}
-        <br />
-        </a>
-    </div>
-</div>
-</script>
-
 <script id="contacts-custom-view-model-template" type="text/html">
 <!--
 {{#each fields_set}}
