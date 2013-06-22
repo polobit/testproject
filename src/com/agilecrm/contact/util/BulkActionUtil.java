@@ -25,7 +25,7 @@ public class BulkActionUtil
 {
     public static enum ActionType
     {
-	DELETE("/core/api/bulk-actions/delete/contacts/bulk"), ASIGN_WORKFLOW(
+	DELETE("/core/api/bulk-actions/delete/contacts"), ASIGN_WORKFLOW(
 		"/core/api/bulk-actions/enroll-campaign/%s"), CHANGE_OWNER(
 		"/core/api/bulk-actions/change-owner/%s"), ADD_TAG(
 		"/core/api/bulk-actions/contact/tags"), CONTACTS_UPLOAD(
