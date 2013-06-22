@@ -34,13 +34,11 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.VcardString;
-import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.util.CSVUtil;
-import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>ContactsAPI</code> includes REST calls to interact with {@link Contact}
@@ -425,102 +423,6 @@ public class ContactsAPI
 	    }
 	}
 	return contacts_list;
-    }
-
-    /**
-     * Deletes selected contacts based on ids
-     * 
-     * @param model_ids
-     *            array of contact ids as String
-     * @throws JSONException
-     */
-
-    @Path("bulk/{current_user}")
-    @POST
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteContacts(@FormParam("ids") String model_ids,
-	    @FormParam("filter") String filter,
-	    @PathParam("current_user") Long current_user_id)
-	    throws JSONException
-    {
-	ContactUtil.deleteContactsbyKeys(BulkActionUtil
-		.getContactKeysForBulkOperations(model_ids, current_user_id));
-    }
-
-    /**
-     * Change the owner of selected contacts
-     * 
-     * @param contact_ids
-     *            array of contact ids as String
-     * @param new_owner
-     *            id of new owner (DomainUser id)
-     * 
-     * @throws JSONException
-     */
-    @Path("bulk/owner/{new_owner}/{current_user}")
-    @POST
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void changeOwnerToContacts(
-	    @FormParam("contact_ids") String contact_ids,
-	    @PathParam("new_owner") String new_owner,
-	    @FormParam("filter") String filter,
-	    @PathParam("current_user") Long current_user) throws JSONException
-    {
-	if (StringUtils.isEmpty(contact_ids))
-	{
-	    return;
-	}
-
-	Contact.changeOwnerToContactsBulk(BulkActionUtil
-		.getContactForBulkOperations(contact_ids, current_user),
-		new_owner);
-    }
-
-    /**
-     * Add tags to selected contacts
-     * 
-     * @param contact_ids
-     *            array of contact ids as String
-     * @param tagsString
-     *            array of tags as string
-     * @throws JSONException
-     */
-    @SuppressWarnings("unchecked")
-    @Path("bulk/tags/{current_user}")
-    @POST
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void addTagsToContacts(@FormParam("contact_ids") String contact_ids,
-	    @FormParam("tags") String tagsString,
-	    @FormParam("filter") String filter,
-	    @PathParam("current_user") Long current_user) throws JSONException
-    {
-	System.out.println("current user : " + current_user);
-	System.out.println("domain : " + NamespaceManager.get());
-	if (StringUtils.isEmpty(contact_ids))
-	{
-	    return;
-	}
-
-	JSONArray tagsJSONArray = new JSONArray(tagsString);
-
-	String[] tagsArray = null;
-	try
-	{
-	    tagsArray = new ObjectMapper().readValue(tagsJSONArray.toString(),
-		    String[].class);
-	}
-	catch (Exception e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
-
-	if (tagsArray == null)
-	    return;
-
-	ContactUtil.addTagsToContactsBulk(BulkActionUtil
-		.getContactForBulkOperations(contact_ids, current_user),
-		tagsArray);
     }
 
     /**

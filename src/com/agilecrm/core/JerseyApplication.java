@@ -45,6 +45,7 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.API.class);
 	s.add(com.agilecrm.core.api.widgets.WidgetsAPI.class);
 	s.add(com.agilecrm.core.api.bulkactions.backends.BulkActionsAPI.class);
+	s.add(com.agilecrm.core.api.bulkactions.backends.BulkOperationsAPI.class);
 
 	return s;
     }

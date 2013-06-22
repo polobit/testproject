@@ -25,11 +25,11 @@ public class BulkActionUtil
 {
     public static enum ActionType
     {
-	DELETE("/core/api/contacts/bulk"), ASIGN_WORKFLOW(
-		"/core/api/campaigns/enroll/bulk/%s"), CHANGE_OWNER(
-		"/core/api/contacts/bulk/owner/%s"), ADD_TAG(
-		"/core/api/contacts/bulk/tags"), CONTACTS_UPLOAD(
-		"/core/api/contacts/multi/upload");
+	DELETE("/core/api/bulk-actions/delete/contacts/bulk"), ASIGN_WORKFLOW(
+		"/core/api/bulk-actions/enroll-campaign/%s"), CHANGE_OWNER(
+		"/core/api/bulk-actions/change-owner/%s"), ADD_TAG(
+		"/core/api/bulk-actions/contact/tags"), CONTACTS_UPLOAD(
+		"/core/api/bulk-actions/contacts/multi/upload");
 
 	String url;
 

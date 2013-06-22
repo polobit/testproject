@@ -1,0 +1,149 @@
+package com.agilecrm.core.api.bulkactions.backends;
+
+import java.util.List;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.BulkActionUtil;
+import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.workflows.util.WorkflowUtil;
+import com.google.appengine.api.NamespaceManager;
+
+@Path("/api/bulk-actions")
+public class BulkOperationsAPI
+{
+    /**
+     * Deletes selected contacts based on ids
+     * 
+     * @param model_ids
+     *            array of contact ids as String
+     * @throws JSONException
+     */
+
+    @Path("delete/contacts/{current_user}")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void deleteContacts(@FormParam("ids") String model_ids,
+	    @FormParam("filter") String filter,
+	    @PathParam("current_user") Long current_user_id)
+	    throws JSONException
+    {
+	ContactUtil.deleteContactsbyKeys(BulkActionUtil
+		.getContactKeysForBulkOperations(model_ids, current_user_id));
+    }
+
+    /**
+     * Change the owner of selected contacts
+     * 
+     * @param contact_ids
+     *            array of contact ids as String
+     * @param new_owner
+     *            id of new owner (DomainUser id)
+     * 
+     * @throws JSONException
+     */
+    @Path("/change-owner/{new_owner}/{current_user}")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void changeOwnerToContacts(
+	    @FormParam("contact_ids") String contact_ids,
+	    @PathParam("new_owner") String new_owner,
+	    @FormParam("filter") String filter,
+	    @PathParam("current_user") Long current_user) throws JSONException
+    {
+	if (StringUtils.isEmpty(contact_ids))
+	{
+	    return;
+	}
+
+	Contact.changeOwnerToContactsBulk(BulkActionUtil
+		.getContactForBulkOperations(contact_ids, current_user),
+		new_owner);
+    }
+
+    /**
+     * Enrolls selected contacts to a campaign.
+     * 
+     * @param contact_ids
+     *            array of contact ids as String.
+     * @param workflowId
+     *            campaign id that the contacts to be enrolled.
+     * @throws JSONException
+     */
+    @Path("enroll-campaign/{workflow-id}/{current_user_id}")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void subscribeContactsBulk(
+	    @FormParam("contact_ids") String contact_ids,
+	    @PathParam("workflow-id") Long workflowId,
+	    @FormParam("filter") String filter,
+	    @PathParam("current_user_id") Long current_user_id)
+	    throws JSONException
+    {
+	List<Contact> contact_list = BulkActionUtil
+		.getContactForBulkOperations(contact_ids, current_user_id);
+
+	WorkflowUtil.subscribeDeferred(contact_list, workflowId);
+    }
+
+    /**
+     * Add tags to selected contacts
+     * 
+     * @param contact_ids
+     *            array of contact ids as String
+     * @param tagsString
+     *            array of tags as string
+     * @throws JSONException
+     */
+    @SuppressWarnings("unchecked")
+    @Path("contact/tags/{current_user}")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void addTagsToContacts(@FormParam("contact_ids") String contact_ids,
+	    @FormParam("tags") String tagsString,
+	    @FormParam("filter") String filter,
+	    @PathParam("current_user") Long current_user) throws JSONException
+    {
+	System.out.println("current user : " + current_user);
+	System.out.println("domain : " + NamespaceManager.get());
+	if (StringUtils.isEmpty(contact_ids))
+	{
+	    return;
+	}
+
+	JSONArray tagsJSONArray = new JSONArray(tagsString);
+
+	String[] tagsArray = null;
+	try
+	{
+	    tagsArray = new ObjectMapper().readValue(tagsJSONArray.toString(),
+		    String[].class);
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	if (tagsArray == null)
+	    return;
+
+	ContactUtil.addTagsToContactsBulk(BulkActionUtil
+		.getContactForBulkOperations(contact_ids, current_user),
+		tagsArray);
+    }
+
+}

@@ -3,21 +3,15 @@ package com.agilecrm.core.api.campaigns;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.json.JSONException;
-
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log;
@@ -148,32 +142,6 @@ public class CampaignsAPI
     public void deleteCampaignLogs(@PathParam("campaign-id") String id)
     {
 	LogUtil.deleteSQLLogs(id, null);
-    }
-
-    /**
-     * Enrolls selected contacts to a campaign.
-     * 
-     * @param contact_ids
-     *            array of contact ids as String.
-     * @param workflowId
-     *            campaign id that the contacts to be enrolled.
-     * @throws JSONException
-     */
-    @Path("enroll/bulk/{workflow-id}/{current_user_id}")
-    @POST
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void subscribeContactsBulk(
-	    @FormParam("contact_ids") String contact_ids,
-	    @PathParam("workflow-id") Long workflowId,
-	    @FormParam("filter") String filter,
-	    @PathParam("current_user_id") Long current_user_id)
-	    throws JSONException
-    {
-	List<Contact> contact_list = BulkActionUtil
-		.getContactForBulkOperations(contact_ids, current_user_id);
-
-	WorkflowUtil.subscribeDeferred(contact_list, workflowId);
     }
 
 }
