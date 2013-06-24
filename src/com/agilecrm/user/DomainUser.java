@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import com.agilecrm.Globals;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.subscription.Subscription;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.email.SendMail;
@@ -272,15 +273,26 @@ public class DomainUser extends Cursor implements Cloneable
 			"Domain is empty. Please login again & try.");
 	    }
 
-	// Check if new and more than three users
-	if (DomainUserUtil.count() >= Globals.TRIAL_USERS_COUNT
-		&& this.id == null)
-	    throw new Exception(
-		    "Please upgrade. You cannot add more than 2 users in the free plan");
-
 	// Sends email, if the user is new
 	if (this.id == null)
 	{
+	    // Get subscription details of account
+	    Subscription subscription = Subscription.getSubscription();
+
+	    // If subscription is null, it indicates user is in free plan.
+	    // Limits users to global trail users count
+	    if (subscription == null)
+		throw new Exception("Please upgrade. You cannot add more than "
+			+ Globals.TRIAL_USERS_COUNT + " users in the free plan");
+
+	    // If Subscription is not null then limits users to current plan
+	    // quantity).
+	    if (subscription != null
+		    && DomainUserUtil.count() >= subscription.plan.quantity)
+		throw new Exception("Please upgrade. You cannot add more than "
+			+ subscription.plan.quantity
+			+ " users in the current plan");
+
 	    try
 	    {
 		DomainUser user = (DomainUser) this.clone();

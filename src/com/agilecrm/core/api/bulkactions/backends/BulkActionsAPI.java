@@ -47,30 +47,27 @@ public class BulkActionsAPI
 	System.out.println(request.getParameterMap());
 	String contentType = request.getHeader("Content-Type");
 
-	if (ActionType.DELETE.equals(ActionType.valueOf(action_type)))
-	    BulkActionUtil.postDataToBulkActionBackend(bytes,
-		    ActionType.DELETE.getUrl(), contentType, Method.POST);
+	
 
-	else if (ActionType.ADD_TAG.equals(ActionType.valueOf(action_type)))
-	    BulkActionUtil.postDataToBulkActionBackend(bytes,
-		    ActionType.ADD_TAG.getUrl(), contentType, Method.POST);
-
-	else if (ActionType.CONTACTS_UPLOAD.equals(ActionType
-		.valueOf(action_type)))
-	    BulkActionUtil.postDataToBulkActionBackend(bytes,
-		    ActionType.CONTACTS_UPLOAD.getUrl(), contentType,
-		    Method.POST);
-
-	else if (ActionType.CHANGE_OWNER
+	if (ActionType.CHANGE_OWNER
 		.equals(ActionType.valueOf(action_type)))
+	{
 	    BulkActionUtil.changeOwner(bytes, request.getParameterMap(),
 		    ActionType.CHANGE_OWNER.getUrl(), contentType, Method.POST);
-
-	else if (ActionType.ASIGN_WORKFLOW.equals(ActionType
+	    return;
+	}
+	if (ActionType.ASIGN_WORKFLOW.equals(ActionType
 		.valueOf(action_type)))
+	{
 	    BulkActionUtil.enrollCampaign(bytes, request.getParameterMap(),
 		    ActionType.ASIGN_WORKFLOW.getUrl(), contentType,
 		    Method.POST);
+	    return;
+	}
+
+	BulkActionUtil.postDataToBulkActionBackend(bytes,
+		ActionType.valueOf(action_type).getUrl(), contentType,
+		Method.POST);
 	
     }
 }
