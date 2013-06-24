@@ -629,6 +629,9 @@ public class QueryDocument implements QueryInterface
 	// Returns contact related to doc_ids
 	List<Contact> contactResults = ContactUtil.getContactsBulk(entity_ids);
 
+	if (contactResults.isEmpty())
+	    return contactResults;
+
 	contactResults.get(0).count = availableResults.intValue();
 	contactResults.get(contactResults.size() - 1).cursor = cursor;
 

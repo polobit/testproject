@@ -140,6 +140,9 @@ function showLinkedinMatchingProfiles(plugin_id)
 {
     // Shows loading image, until matches profiles are fetched
     $('#Linkedin').html(LINKEDIN_UPDATE_LOAD_IMAGE);
+    
+    var contact_image = agile_crm_get_contact_property("image");
+    console.log("conatact_image " + contact_image);
 
     /*
      *  Fetches matching profiles from LinkedIn based on widget preferences, and uses 
@@ -163,18 +166,15 @@ function showLinkedinMatchingProfiles(plugin_id)
             // Unique LinkedIn Id from widget 
             var id = $(this).attr('id');
 
-            //Get image link which can be used to save image for contact
-            var linkedin_image = $(this).attr('src');
-
             // Aligns details to left in the pop over
-            $('#' + id).popover(
+            $(this).popover(
             {
                 placement: 'left'
             });
 
             // Called show to overcome pop over bug (not showing pop over on mouse hover 
             // for first time)
-            $('#' + id).popover('show');
+            $(this).popover('show');
 
             // on click of any profile, save it to the contact
             $('#' + id).die().live('click', function (e)
@@ -182,67 +182,41 @@ function showLinkedinMatchingProfiles(plugin_id)
                 e.preventDefault();
 
                 //Hide pop over after clicking on any picture
-                $('#' + id).popover('hide');
+                $(this).popover('hide');
                 
                 console.log('on click in search');
-                console.log(id);
                 
+                // Web url of linkedin for this profile
                 var url = $(this).attr('url');
-                console.log(url);
-                console.log(linkedin_image);
                 
-                // If id (LinkedIn id) is defined, shows modal and prompts user to save 
-                // picture to contact
-                if (id)
+                console.log(url);
+                var propertiesArray = [
+                                       {"name"  : "website",
+	                     				"value" : url,
+	                     				"subtype" : "LINKEDIN"}
+                					   ];
+                if(!contact_image)
                 {
-                	$('#linkedin-image-save-modal').remove();
-                	
-                    // Creates a modal element which is to be appended to content to show
-                    var modal = $(getTemplate('linkedin-profile-add', {}));
-
-                    // Checks if modal is already added to content
-                    if ($('#linkedin-image-save-modal').size() == 0)
-                    {
-                        // If not added, appends modal element again
-                        $('#content').append(modal);
-                    }
-
-                    // If added call show on modal and ask for confirmation about 
-                    // adding image to contact
-                    $('#linkedin-image-save-modal').modal('show');
-
+                	if($(this).attr('is_gravatar_pic') == "false")
+                	{
+                		//Get image link which can be used to save image for contact
+                        var linkedin_image = $(this).attr('src');
+                		propertiesArray.push({"name"  : "image","value" : linkedin_image });
+                	}
+                }
+              	                        
+                // If contact title is undefined, saves headline of the LinkedIn profile
+            	// to the contact title
+                if(!agile_crm_get_contact_property("title"))
+                {
+                	var summary = $(this).attr("summary");
+                	propertiesArray.push({"name" : "title", "value" : summary});
                 }
                 
-                // On click of yes on modal, image is saved as contact image
-                $('.save-linkedin-profile').die().live('click', function (e)
-                {
-                	e.preventDefault();
-                	
-                	// Hides modal after confirmation
-                    $('#linkedin-image-save-modal').modal('hide');
-                    
-                	if($(this).attr('resp') == "no")
-                	{
-                		showLinkedinMatchingProfiles(plugin_id);
-                		return;
-                	}
-	                
-	                var propertiesArray = [
-	                        {"name"  : "image",
-	                        "value" : linkedin_image },
-	                        {"name"  : "website",
-		                     "value" : url,
-		                     "subtype" : "LINKEDIN"},
-		                        ];
-	                
-	                if($('#save_linkedin_image').is(':checked'))
-	                	agile_crm_update_contact_properties(propertiesArray);
-	                else
-	                	// save url to contact
-		                agile_crm_save_contact_properties_subtype("website", "LINKEDIN", url);
-	                
-                });
-            
+                console.log(propertiesArray);
+               
+                agile_crm_update_contact_properties(propertiesArray);
+              
             });
 
         });
@@ -572,7 +546,7 @@ function getLinkedinMatchingProfiles(plugin_id, callback)
  */
 function sendLinkedInAddRequest(plugin_id, linkedin_id)
 {
-    // Stores info in a JSON, to send it to the modal window when making a connect request
+	// Stores info in a JSON, to send it to the modal window when making a connect request
     var json = {};
 
     // Set headline of modal window as Connect
@@ -595,13 +569,13 @@ function sendLinkedInAddRequest(plugin_id, linkedin_id)
     $('#content').append(message_form_modal);
 
     $('#linkedin_messageModal').on('shown', function () {
-		  
+
 		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
 			  $('.linkedin_connect_limit').limit({
 			       maxChars:275,
 			       counter: "#linkedin_counter"
 			      });
-			  
+
 			  $('#linkedin_messageModal').find('#link-connect').focus();
 		  });
 	});
@@ -663,7 +637,7 @@ function sendLinkedInAddRequest(plugin_id, linkedin_id)
  */
 function sendLinkedInMessage(plugin_id, linkedin_id)
 {
-    // Store info in a json, to send it to the modal window when making send message request
+	// Store info in a json, to send it to the modal window when making send message request
     var json = {};
 
     // Set headline of modal window as Send Message

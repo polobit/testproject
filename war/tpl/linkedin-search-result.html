@@ -3,8 +3,8 @@
 <p>Locate the contact on LinkedIn. </p>
 {{#each this}}
 {{#if picture}}
-<img  rel='popover' data-original-title='LinkedIn Profile' class='linkedinImage thumbnail' id="{{id}}" src ="{{picture}}" url="{{url}}"
-   style='width: 35px;height: 35px; display:inline-block; margin-right:2px; margin-bottom:2px; cursor:pointer;'
+<img  rel='popover' data-original-title='LinkedIn Profile' class='linkedinImage thumbnail' id="{{id}}" is_gravatar_pic="false" src ="{{picture}}" url="{{url}}"
+   summary="{{summary}}" style='width: 35px;height: 35px; display:inline-block; margin-right:2px; margin-bottom:2px; cursor:pointer;'
    data-content="
        
  		<div class='row-fluid' style='padding-bottom:10px;'>
@@ -21,8 +21,8 @@
 	  </div>
 "></img>
 {{else}}
-<img  rel='popover' data-original-title='LinkedIn Profile' class='linkedinImage thumbnail' id="{{id}}" src ="{{defaultGravatarurl 35}}" url="{{url}}"
-   style='width: 35px;height: 35px; display:inline-block; margin-right:2px; margin-bottom:2px; cursor:pointer;'
+<img  rel='popover' data-original-title='LinkedIn Profile' class='linkedinImage thumbnail' id="{{id}}" is_gravatar_pic="true" src ="{{defaultGravatarurl 35}}" url="{{url}}"
+   summary="{{summary}}" style='width: 35px;height: 35px; display:inline-block; margin-right:2px; margin-bottom:2px; cursor:pointer;'
    data-content="
        
  		<div class='row-fluid' style='padding-bottom:10px;'>
