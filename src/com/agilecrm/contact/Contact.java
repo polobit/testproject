@@ -266,7 +266,7 @@ public class Contact extends Cursor
 	ContactNotificationPrefsUtil.executeNotificationToContact(oldContact,
 		this);
 
-	if (isDocumentUpdateRequired(oldContact))
+	if (oldContact != null && isDocumentUpdateRequired(oldContact))
 	    return;
 
 	// Enables to build "Document" search on current entity
