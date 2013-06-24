@@ -57,7 +57,7 @@ $(function(){
 			
 			 
 			var new_owner = $('#ownerBulkSelect option:selected').attr('value');
-			url = '/core/api/bulk/filter/update1?action_type=CHANGE_OWNER&owner='+new_owner;
+			url = '/core/api/bulk/update?action_type=CHANGE_OWNER&owner='+new_owner;
 			var json = {};
 			json.contact_ids = id_array;
 			postBulkOperationData(url, json, $form)
@@ -110,7 +110,7 @@ $(function(){
 		    $('#campaignsBulkForm').find('span.save-status').html(LOADING_HTML);
 		    
 			var workflow_id = $('#campaignBulkSelect option:selected').attr('value');
-			var url = '/core/api/bulk/filter/update1?workflow_id=' + workflow_id +"&action_type=ASIGN_WORKFLOW";
+			var url = '/core/api/bulk/update?workflow_id=' + workflow_id +"&action_type=ASIGN_WORKFLOW";
 			
 			var json = {};
 			json.contact_ids = id_array;
@@ -150,7 +150,7 @@ $(function(){
 				// Show loading symbol until model get saved
 			    $('#tagsBulkForm').find('span.save-status').html(LOADING_HTML);
 			    
-			    var url = '/core/api/bulk/filter/update1?action_type=ADD_TAG';
+			    var url = '/core/api/bulk/update?action_type=ADD_TAG';
 			    var json = {};
 			    json.tags = JSON.stringify(tags[0].value);
 				json.contact_ids = id_array;
