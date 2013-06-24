@@ -367,6 +367,9 @@ function showTwitterMatchingProfiles(plugin_id)
     // Shows loading image, until matches profiles are fetched
     $('#Twitter').html(TWITTER_UPDATE_LOAD_IMAGE);
 
+    var contact_image = agile_crm_get_contact_property("image");
+    console.log("conatact_image " + contact_image);
+    
     /*
      *  Fetches matching profiles from Twitter based on widget preferences, and uses 
      *  call back function to get template and view matches
@@ -392,23 +395,18 @@ function showTwitterMatchingProfiles(plugin_id)
         // Displays Twitter profile details on mouse hover and saves profile on click
         $(".twitterImage").die().live('mouseover', function ()
         {
-            // Unique Twitter Id from widget 
+        	// Unique Twitter Id from widget 
             var id = $(this).attr('id');
-            
-            console.log(id);
-
-            //Get image link which can be used to save image for contact
-            var twitter_image = $(this).attr('src');
 
             // Aligns details to left in the pop over
-            $('#' + id).popover(
+            $(this).popover(
             {
                 placement: 'left'
             });
 
-            // Called show to overcome pop over bug (not showing pop over on mouse 
-            // hover for first time)
-            $('#' + id).popover('show');
+            // Called show to overcome pop over bug (not showing pop over on mouse hover 
+            // for first time)
+            $(this).popover('show');
 
             // on click of any profile, save it to the contact
             $('#' + id).die().live('click', function (e)
@@ -416,63 +414,38 @@ function showTwitterMatchingProfiles(plugin_id)
                 e.preventDefault();
 
                 //Hide pop over after clicking on any picture
-                $('#' + id).popover('hide');
+                $(this).popover('hide');
                 
-                var screen_name = $(this).attr('screen_name');
-
-                // If id (Twitter id) is defined, shows modal and prompts user to save 
-                // picture to contact
-                if (id)
+                console.log('on click in search');
+                
+                // Web url of twitter for this profile
+                var url = "@" + $(this).attr('screen_name');
+                
+                console.log(url);
+                var propertiesArray = [
+                                       {"name"  : "website",
+	                     				"value" : url,
+	                     				"subtype" : "TWITTER"}
+                					   ];
+                if(!contact_image)
                 {
-                	$('#twitter-image-save-modal').remove();
-                	
-                    // Creates a modal element which is to be appended to content to show
-                    var modal = $(getTemplate('twitter-profile-add', {}));
-
-                    // Checks if modal is already added to content
-                    if ($('#twitter-image-save-modal').size() == 0)
-                    {
-                        // If not added, appends modal element again
-                        $('#content').append(modal);
-                    }
-
-                    // If added call show on modal and ask for confirmation about 
-                    // adding image to contact
-                    $('#twitter-image-save-modal').modal('show');
-
+                		//Get image link which can be used to save image for contact
+                        var twitter_image = $(this).attr('src');
+                		propertiesArray.push({"name"  : "image","value" : twitter_image });
+                }
+              	                        
+                // If contact title is undefined, saves headline of the Twitter profile
+            	// to the contact title
+                if(!agile_crm_get_contact_property("title"))
+                {
+                	var summary = $(this).attr("summary");
+                	propertiesArray.push({"name" : "title", "value" : summary});
                 }
                 
-                // On click of yes on modal, image is saved as contact image
-                $('.save-twitter-profile').die().live('click', function (e)
-                {
-                	e.preventDefault();
-                	
-                	// Hides modal after confirmation
-                    $('#twitter-image-save-modal').modal('hide');
-                    
-                	if($(this).attr('resp') == "no")
-                	{
-                		showTwitterMatchingProfiles(plugin_id);
-                		return;
-                	}
-                		
-                	var url = "@" + screen_name;
-                	
-	                var propertiesArray = [
-	           	                        {"name"  : "image",
-	           	                        "value" : twitter_image },
-	           	                        {"name"  : "website",
-	           		                     "value" : url,
-	           		                     "subtype" : "TWITTER"},
-	           		                        ];
-	           	                
-	                if($('#save_twitter_image').is(':checked'))
-   	                	agile_crm_update_contact_properties(propertiesArray);
-   	                else
-   	                	// save url to contact
-   		                agile_crm_save_contact_properties_subtype("website", "TWITTER", url);	              
-	                
-                });
+                console.log(propertiesArray);
+               
+                agile_crm_update_contact_properties(propertiesArray);
+              
             });
         });
     });    
