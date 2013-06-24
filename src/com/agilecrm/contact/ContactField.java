@@ -82,4 +82,20 @@ public class ContactField
     {
 	return "[" + this.type + " " + this.name + " " + this.value + "] ";
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+	ContactField field = (ContactField) o;
+
+	if (!this.name.equals(field.name) || !this.value.equals(field.value))
+	    return false;
+	
+	if ((this.subtype != null && !this.subtype.equals(field.subtype))
+		|| (this.type != null && !this.type.equals(field.type)))
+	    return false;
+
+	return true;
+    }
+
 }
