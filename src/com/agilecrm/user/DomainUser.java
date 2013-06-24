@@ -283,7 +283,8 @@ public class DomainUser extends Cursor implements Cloneable
 
 		// If subscription is null, it indicates user is in free plan.
 		// Limits users to global trail users count
-		if (subscription == null)
+		if (subscription == null
+			&& DomainUserUtil.count() >= Globals.TRIAL_USERS_COUNT)
 		    throw new Exception(
 			    "Please upgrade. You cannot add more than "
 				    + Globals.TRIAL_USERS_COUNT
