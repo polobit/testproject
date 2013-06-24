@@ -630,7 +630,7 @@ public class QueryDocument implements QueryInterface
 	List<Contact> contactResults = ContactUtil.getContactsBulk(entity_ids);
 
 	if (contactResults.isEmpty())
-	    return null;
+	    return contactResults;
 
 	contactResults.get(0).count = availableResults.intValue();
 	contactResults.get(contactResults.size() - 1).cursor = cursor;
