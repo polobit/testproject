@@ -229,7 +229,6 @@ function reinitialize_tour_on_current_route() {
 		
 		if(tourStatusCookie[key] == true)
 			return;
-		
 		localStorage.removeItem(key + "-tour_current_step");
 	}
 	
@@ -238,6 +237,8 @@ function reinitialize_tour_on_current_route() {
 	
 	// Set tour back to true and save in cookie.
 	tourStatusCookie[key] = true;
+	
+	localStorage.removeItem(key + "-tour_current_step");
 		
 	createCookie("agile_tour", JSON.stringify(JSON
 			.stringify(tourStatusCookie)));
