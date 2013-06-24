@@ -166,7 +166,7 @@ String CSS_PATH = "/";
 							class="dropdown-toggle" data-toggle="dropdown"><i
 								class="agilecrm-profile-dropdown"></i> </a>
 							<ul class="dropdown-menu">
-									<li><a href='#settings'
+									<li><a href='#user-prefs'
 											style="padding-left: 8px !important; padding-right: 8px !important; padding-bottom:5px!important; margin-bottom:5px !important; border-bottom:1px solid #e5e5e5">
 												<%
 												    if (!StringUtils.isEmpty(currentUserPrefs.pic))
@@ -181,7 +181,7 @@ String CSS_PATH = "/";
 												</span>
 													
 										</a></li>
-								<li><a href="#settings"><i class="icon-cog"></i>
+								<li><a href="#user-prefs"><i class="icon-cog"></i>
 										Preferences</a></li>
 
 								<%

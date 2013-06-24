@@ -32,20 +32,21 @@ var SettingsRouter = Backbone.Router.extend({
 	/**
 	 * Shows all the options to access user's Preferences
 	 */
-	settings : function() {
+	/*settings : function() {
 		var html = getTemplate("settings", {});
 		$('#content').html(html);
 
 		// Update Menu
 		$(".active").removeClass("active");
 		$("#settingsmenu").addClass("active");
-	},
+	},*/
 
 	/**
 	 * Creates a Model to show and edit Personal Preferences, and sets HTML
 	 * Editor. Reloads the page on save success.
 	 */
 	userPrefs : function() {
+		$("#content").html(getTemplate("settings"), {});
 		var view = new Base_Model_View({
 			url : '/core/api/user-prefs',
 			template : "settings-user-prefs",
@@ -55,8 +56,10 @@ var SettingsRouter = Backbone.Router.extend({
 				setupHTMLEditor($('#WYSItextarea'));
 			}
 		});
-
-		$('#content').html(view.render().el);
+        $('#prefs-tabs-content').html(view.render().el);
+        $('#PrefsTab .active').removeClass('active');
+        $('.user-prefs-tab').addClass('active'); 
+		//$('#content').html(view.render().el);
 	},
 	
 	/**
@@ -64,6 +67,7 @@ var SettingsRouter = Backbone.Router.extend({
 	 * linkedIn and then appends Twitter to the view
 	 */
 	socialPrefs : function() {
+		$("#content").html(getTemplate("settings"), {});
 		var data = {
 			"service" : "linkedin"
 		};
@@ -73,7 +77,7 @@ var SettingsRouter = Backbone.Router.extend({
 			data : data
 		});
 
-		$('#content').html(itemView.render().el);
+		$('#prefs-tabs-content').html(itemView.render().el);
 
 		data = {
 			"service" : "twitter"
@@ -84,7 +88,9 @@ var SettingsRouter = Backbone.Router.extend({
 			data : data
 		});
 
-		$('#content').append(itemView2.render().el);
+		$('#prefs-tabs-content').append(itemView2.render().el);
+        $('#PrefsTab .active').removeClass('active');
+        $('.social-prefs-tab').addClass('active');
 	},
 
 	/**
@@ -92,7 +98,7 @@ var SettingsRouter = Backbone.Router.extend({
 	 * communicated mails between contact and logged in preference.
 	 */
 	email : function() {
-		
+		$("#content").html(getTemplate("settings"), {});
 		// Gets Social Prefs (Same as Linkedin/Twitter) for Gmail
 		var data = {
 			"service" : "Gmail",
@@ -106,7 +112,7 @@ var SettingsRouter = Backbone.Router.extend({
 		itemView.model.fetch();
 		
 		// Adds Gmail Prefs
-		$('#content').html(itemView.render().el);
+		$('#prefs-tabs-content').html(itemView.render().el);
 
 		// Gets IMAP Prefs
 		var itemView2 = new Base_Model_View({
@@ -115,7 +121,9 @@ var SettingsRouter = Backbone.Router.extend({
 		});
 
 		// Appends IMAP
-		$('#content').append(itemView2.render().el);
+		$('#prefs-tabs-content').append(itemView2.render().el);
+        $('#PrefsTab .active').removeClass('active');
+        $('.email-tab').addClass('active'); 
 	},
 	
 	/**
@@ -123,6 +131,7 @@ var SettingsRouter = Backbone.Router.extend({
 	 * 
 	 */
 	emailTemplates : function() {
+		$("#content").html(getTemplate("settings"), {});
 		this.emailTemplatesListView = new Base_Collection_View({
 			url : '/core/api/email/templates',
 			restKey : "emailTemplates",
@@ -131,7 +140,10 @@ var SettingsRouter = Backbone.Router.extend({
 		});
 
 		this.emailTemplatesListView.collection.fetch();
-		$('#content').html(this.emailTemplatesListView.el);
+        $('#prefs-tabs-content').html(this.emailTemplatesListView.el);
+        $('#PrefsTab .active').removeClass('active');
+        $('.email-templates-tab').addClass('active'); 
+		//$('#content').html(this.emailTemplatesListView.el);
 	},
 	
 	/**
@@ -139,6 +151,7 @@ var SettingsRouter = Backbone.Router.extend({
 	 * Navigates to list of email templates on save success.
 	 */
 	emailTemplateAdd : function() {
+		$("#content").html(getTemplate("settings"), {});
 		var view = new Base_Model_View({
 			url : '/core/api/email/templates',
 			template : "settings-email-template-add",
@@ -149,7 +162,10 @@ var SettingsRouter = Backbone.Router.extend({
 				setupHTMLEditor($('#email-template-html', el));
 			}
 		});
-		$('#content').html(view.render().el);
+        $('#prefs-tabs-content').html(view.render().el);
+        $('#PrefsTab .active').removeClass('active');
+        $('.email-templates-tab').addClass('active'); 
+		//$('#content').html(view.render().el);
 	},
 	
 	/**
@@ -160,7 +176,7 @@ var SettingsRouter = Backbone.Router.extend({
 	 *            EmailTemplate Id
 	 */
 	emailTemplateEdit : function(id) {
-		
+		$("#content").html(getTemplate("settings"), {});
 		// Navigates to list of email templates, if it is not defined
 		if (!this.emailTemplatesListView
 				|| this.emailTemplatesListView.collection.length == 0) {
@@ -185,7 +201,10 @@ var SettingsRouter = Backbone.Router.extend({
 		});
 
 		var view = view.render();
-		$("#content").html(view.el);
+        $('#prefs-tabs-content').html(view.el);
+        $('#PrefsTab .active').removeClass('active');
+        $('.email-templates-tab').addClass('active'); 
+		//$("#content").html(view.el);
 	},
 	
 	/**
@@ -193,7 +212,7 @@ var SettingsRouter = Backbone.Router.extend({
 	 * page on save success.
 	 */
 	notificationPrefs : function() {
-
+		$("#content").html(getTemplate("settings"), {});
 		var view = new Base_Model_View({
 			url : 'core/api/notifications',
 			template : 'settings-notification-prefs',
@@ -213,8 +232,10 @@ var SettingsRouter = Backbone.Router.extend({
 				}
 			}
 		});
-
-		$('#content').html(view.render().el);		
+        $('#prefs-tabs-content').html(view.render().el);
+        $('#PrefsTab .active').removeClass('active');
+        $('.notification-prefs-tab').addClass('active'); 
+		//$('#content').html(view.render().el);		
 	},
 	contactUsEmail : function() {
 		$("#content").html(getTemplate("help-mail-form"), {});
