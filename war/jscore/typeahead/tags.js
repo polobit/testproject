@@ -91,7 +91,7 @@ function setup_tags_typeahead() {
     			// Checks if tag already exists in contact
     			if($.inArray(tag, json.tags) >= 0)
     				return;
-    			console.log(json.tagsWithTime);
+
     			json.tagsWithTime.push({"tag" : tag});
     			
     			saveEntity(json, 'core/api/contacts', function(data){
@@ -105,6 +105,8 @@ function setup_tags_typeahead() {
 	       				old_tags.push($(element).attr('data'));
        				});
 	       			
+	       			App_Contacts.contactDetailView.model.set({'tags' : data.get("tags")}, {silent : true});
+	       				       			
 	       			// Append to the list, when no match is found 
 	       			if ($.inArray(tag, old_tags) == -1) 
 	       				$('#added-tags-ul').append('<li style="display:inline-block;" class="tag" data="' + tag + '"><span><a class="anchor" href="#tags/'+ tag + '">'+ tag + '</a><a class="close remove-tags" id="' + tag + '">&times</a></span></li>');
@@ -159,6 +161,10 @@ function setup_tags_typeahead() {
     			contact_json.tagsWithTime.push({"tag" : tag});
     	    	
     			saveEntity(contact_json, 'core/api/contacts',  function(data) {
+    			
+    				// Updates to both model and collection
+    				App_Contacts.contactDetailView.model.set({'tags' : data.get("tags")}, {silent : true});
+    				
     				tagsCollection.add( {"tag" : tag} );
     			$("#addTagsForm").css("display", "none");
     		    $("#add-tags").css("display", "block");

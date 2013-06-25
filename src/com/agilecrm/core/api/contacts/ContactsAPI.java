@@ -159,6 +159,7 @@ public class ContactsAPI
 	}
 
 	contact.save();
+	System.out.println("contact tags : " + contact.tags);
 	return contact;
     }
 
@@ -254,6 +255,7 @@ public class ContactsAPI
     public Contact updateContact(Contact contact)
     {
 	contact.save();
+	System.out.println("returned tags : " + contact.tags);
 	return contact;
     }
 
@@ -469,7 +471,10 @@ public class ContactsAPI
 	}
 	if (tagsArray == null)
 	    return;
+
+	System.out.println("Tags to add : " + tagsArray);
 	contact.addTags(tagsArray);
+	System.out.println("Tags after added : " + contact.tagsWithTime);
     }
 
     /**
@@ -517,8 +522,9 @@ public class ContactsAPI
 	if (tagsArray == null)
 	    return;
 
-	contact.tags.clear();
+	System.out.println("tags to delete : " + tagsArray);
 	contact.removeTags(tagsArray);
+	System.out.println("tags after delete : " + contact.tagsWithTime);
     }
 
     /**

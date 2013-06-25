@@ -6,10 +6,10 @@
  * @param {Object} el
  * 			html object of contact detail view
  */
-function starify(el){
+function starify(el) {
     head.js(LIB_PATH + 'lib/jquery.raty.min.js', function(){
     	
-    	var contact_model =  App_Contacts.contactDetailView.model.toJSON();
+    	var contact_model  =  App_Contacts.contactDetailView.model;
     	
     	// Set URL - is this required?
     	// contact_model.url = 'core/api/contacts';
@@ -29,13 +29,12 @@ function starify(el){
         		// Save model
            		contact_model.save();*/
            		
-           		contact_model.star_value = score;
-        		
+        		App_Contacts.contactDetailView.model.set({'star_value': score}, {silent : true});
+        		contact_model =  App_Contacts.contactDetailView.model.toJSON();
         		var new_model = new Backbone.Model();
         		new_model.url = 'core/api/contacts';
-        		new_model.save(contact_model,{
+        		new_model.save(contact_model, {
         			success: function(model){
-
         			}
         		});
 
@@ -44,7 +43,7 @@ function starify(el){
         	/**
         	 * Highlights the stars based on star_value of the contact
         	 */
-        	score: contact_model.star_value
+        	score: contact_model.get('star_value')
             
         });
     });
@@ -118,7 +117,10 @@ $(function(){
         contact.url = 'core/api/contacts';
         contact.save(json,{
        		success: function(data)
-       			{
+       			{ 	      			
+       				App_Contacts.contactDetailView.model.set({'tags' : data.get("tags")}, {silent : true});
+       			
+
        				// Also deletes from Tag class if no more contacts are found with this tag
        				$.ajax({
        					url: 'core/api/tags/' + tag,
@@ -174,11 +176,15 @@ $(function(){
 	        contact.url = 'core/api/contacts';
 	        contact.save(json,{
 	       		success: function(data){
+	       			
 	       			// Get all existing tags of the contact to compare with the added tags
 	       			var old_tags = [];
 	       			$.each($('#added-tags-ul').children(), function(index, element){
 	       				old_tags.push($(element).attr('data'));
        				});
+	       			
+	       			// Updates to both model and collection
+    				App_Contacts.contactDetailView.model.set({'tags' : data.get("tags")}, {silent : true});
 	       			
 	       			// Append to the list, when no match is found 
 	       			if ($.inArray(new_tags, old_tags) == -1) 
@@ -320,8 +326,8 @@ $(function(){
 	    // Changes score in UI
 	    $('#lead-score').text(add_score);
        
-	    // Changes lead_score of the contact and save it.
-	    var contact_model =  App_Contacts.contactDetailView.model.toJSON();
+	    App_Contacts.contactDetailView.model.set({'lead_score': add_score}, {silent: true});
+		var contact_model =  App_Contacts.contactDetailView.model.toJSON();
 	    
 	  /* // Refreshing the view ({silent: true} not working)
 	    contact_model.url = 'core/api/contacts';
@@ -330,8 +336,6 @@ $(function(){
 	    // Save model
 	    contact_model.save();*/
 	    
-	    contact_model.lead_score = add_score;
-		
 		var new_model = new Backbone.Model();
 		new_model.url = 'core/api/contacts';
 		new_model.save(contact_model,{
@@ -364,16 +368,8 @@ $(function(){
 		$('#lead-score').text(sub_score);
 		
 		// Changes lead_score of the contact and save it.
+		App_Contacts.contactDetailView.model.set({'lead_score': sub_score}, {silent: true});
 		var contact_model =  App_Contacts.contactDetailView.model.toJSON();
-			
-	   /* contact_model.url = 'core/api/contacts';
-		contact_model.set('lead_score', sub_score, {silent: true});
-	 
-		// Save model
-		contact_model.save();
-	    */
-	   
-	    contact_model.lead_score = sub_score;
 		
 		var new_model = new Backbone.Model();
 		new_model.url = 'core/api/contacts';
