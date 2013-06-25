@@ -241,7 +241,6 @@ public class Contact extends Cursor
      */
     public void save()
     {
-
 	// Stores current contact id in to a temporary variable, to check
 	// whether contact is newly created or being edited.
 	Long id = this.id;
@@ -670,6 +669,7 @@ public class Contact extends Cursor
 	}
 
 	System.out.println(tagsWithTime);
+	tags = getContactTags();
 
 	// Update Tags - Create a deferred task
 	TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(
