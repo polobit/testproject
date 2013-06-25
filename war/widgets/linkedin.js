@@ -52,8 +52,9 @@ $(function ()
     }
     else
     {
+    	console.log('hi there');
         // Shows all the matches in linkedin for the contact 
-        showLinkedinMatchingProfiles(plugin_id);
+        getLinkedinMatchingProfiles(plugin_id);
     }
    
 
@@ -99,6 +100,32 @@ $(function ()
     	e.preventDefault();
     	getLinkedInSharedConnections(plugin_id, linkedin_id);
     });
+    
+    $('.linkedin_modify_search').die().live('click', function(e){
+    	e.preventDefault();
+    	
+    	var details = {};
+    	details['firstname'] = agile_crm_get_contact_property("first_name");
+    	details['lastname'] = agile_crm_get_contact_property("last_name");
+    	details['keywords'] = details.firstname + " " + details.lastname;
+    	details['company'] = agile_crm_get_contact_property("company");
+    	details['title'] = agile_crm_get_contact_property("title");
+    	
+    	console.log(details);
+    	$('#Linkedin').html(getTemplate('linkedin-modified-search',details));
+    });
+    
+    $('#linkedin_search_btn').die().live('click', function(e){
+    	e.preventDefault();
+    	
+    	getModifiedLinkedinMatchingProfiles(plugin_id);
+    });
+    
+    $('#linkedin_search_close').die().live('click', function(e){
+    	e.preventDefault();
+    	
+    	getLinkedinMatchingProfiles(plugin_id);
+    });
 });
 
 /**
@@ -136,7 +163,7 @@ function setupLinkedinOAuth(plugin_id)
  * @param plugin_id :
  *            To get the widget and access tokens saved in it.
  */
-function showLinkedinMatchingProfiles(plugin_id)
+function showLinkedinMatchingProfiles(plugin_id, data)
 {
     // Shows loading image, until matches profiles are fetched
     $('#Linkedin').html(LINKEDIN_UPDATE_LOAD_IMAGE);
@@ -144,84 +171,151 @@ function showLinkedinMatchingProfiles(plugin_id)
     var contact_image = agile_crm_get_contact_property("image");
     console.log("conatact_image " + contact_image);
 
-    /*
-     *  Fetches matching profiles from LinkedIn based on widget preferences, and uses 
-     *  call back function to get template and view matches
-     */
-    getLinkedinMatchingProfiles(plugin_id, function (data)
+    console.log(data.length)
+    // If no matches found display message
+    if (data.length == 0)
     {
-        // If no matches found display message
-        if (data.length == 0)
-        {
-        	linkedinMainError("No Matches Found");
-            return;
-        }
+    	linkedinMainError("No Matches Found. " + 
+    			"<a href='#search' class='linkedin_modify_search'>Modify Search</a>");
+        return;
+    }
+    
+    console.log('Nothinig whd');
 
-        // Show matching profiles in LinkedIn panel
-        $('#Linkedin').html(getTemplate("linkedin-search-result", data));
+    // Show matching profiles in LinkedIn panel
+    $('#Linkedin').html(getTemplate("linkedin-search-result", data));
         
-        // Displays LinkedIn profile details on mouse hover and saves profile on click
-        $(".linkedinImage").die().live('mouseover', function ()
+    // Displays LinkedIn profile details on mouse hover and saves profile on click
+    $(".linkedinImage").die().live('mouseover', function ()
+    {
+    	 // Unique LinkedIn Id from widget 
+        var id = $(this).attr('id');
+
+        // Aligns details to left in the pop over
+        $(this).popover(
         {
-            // Unique LinkedIn Id from widget 
-            var id = $(this).attr('id');
-
-            // Aligns details to left in the pop over
-            $(this).popover(
-            {
-                placement: 'left'
-            });
-
-            // Called show to overcome pop over bug (not showing pop over on mouse hover 
-            // for first time)
-            $(this).popover('show');
-
-            // on click of any profile, save it to the contact
-            $('#' + id).die().live('click', function (e)
-            {
-                e.preventDefault();
-
-                //Hide pop over after clicking on any picture
-                $(this).popover('hide');
-                
-                console.log('on click in search');
-                
-                // Web url of linkedin for this profile
-                var url = $(this).attr('url');
-                
-                console.log(url);
-                var propertiesArray = [
-                                       {"name"  : "website",
-	                     				"value" : url,
-	                     				"subtype" : "LINKEDIN"}
-                					   ];
-                if(!contact_image)
-                {
-                	if($(this).attr('is_gravatar_pic') == "false")
-                	{
-                		//Get image link which can be used to save image for contact
-                        var linkedin_image = $(this).attr('src');
-                		propertiesArray.push({"name"  : "image","value" : linkedin_image });
-                	}
-                }
-              	                        
-                // If contact title is undefined, saves headline of the LinkedIn profile
-            	// to the contact title
-                if(!agile_crm_get_contact_property("title"))
-                {
-                	var summary = $(this).attr("summary");
-                	propertiesArray.push({"name" : "title", "value" : summary});
-                }
-                
-                console.log(propertiesArray);
-               
-                agile_crm_update_contact_properties(propertiesArray);
-              
-            });
-
+            placement: 'left'
         });
 
+        // Called show to overcome pop over bug (not showing pop over on mouse hover 
+        // for first time)
+        $(this).popover('show');
+
+        // on click of any profile, save it to the contact
+        $('#' + id).die().live('click', function (e)
+        {
+            e.preventDefault();
+
+            //Hide pop over after clicking on any picture
+            $(this).popover('hide');
+            
+            console.log('on click in search');
+            
+            // Web url of linkedin for this profile
+            var url = $(this).attr('url');
+            
+            console.log(url);
+            var propertiesArray = [
+                                   {"name"  : "website",
+                     				"value" : url,
+                     				"subtype" : "LINKEDIN"}
+            					   ];
+            if(!contact_image)
+            {
+            	if($(this).attr('is_gravatar_pic') == "false")
+            	{
+            		//Get image link which can be used to save image for contact
+                    var linkedin_image = $(this).attr('src');
+            		propertiesArray.push({"name"  : "image","value" : linkedin_image });
+            	}
+            }
+          	                        
+            // If contact title is undefined, saves headline of the LinkedIn profile
+        	// to the contact title
+            if(!agile_crm_get_contact_property("title"))
+            {
+            	var summary = $(this).attr("summary");
+            	propertiesArray.push({"name" : "title", "value" : summary});
+            }
+            
+            console.log(propertiesArray);
+           
+            agile_crm_update_contact_properties(propertiesArray);
+          
+        });
     });
+
+}
+
+
+/**
+ * Fetches LinkedIn matching profiles based on plugin id
+ * 
+ * @param plugin_id 
+ * 			plugin id to fetch widget preferences
+ * @param callback 
+ * 			callback to create template and show matching profiles
+ */
+function getLinkedinMatchingProfiles(plugin_id)
+{
+    // Gets contact id, to save social results of a particular id
+    var contact_id = agile_crm_get_contact()['id'];
+
+    // Reads from cookie (local storage HTML5), since widgets are saved using local 
+    // storage when matches are fetched for the first time on the contact
+    var data = localStorage.getItem('Agile_linkedin_matches_' + contact_id);
+
+    // If cookie is not available, fetches results from LinkedIn
+    if (!data)
+    {
+        // Sends request to url "core/api/widgets/match/" and Calls WidgetsAPI with contact
+        // id and plugin id as path parameters
+        queueGetRequest("widget_queue", "/core/api/widgets/match/" + plugin_id + "/" + contact_id, 'json', 
+        function(data){
+            // Store social results in cookie of particular contact
+            localStorage.setItem('Agile_linkedin_matches_' + contact_id, JSON.stringify(data));
+
+            console.log('hi here');
+            showLinkedinMatchingProfiles(plugin_id, data);
+        	
+        }, 
+        function (data) {
+        	// Remove loading image on error 
+        	$('#status_load').remove();
+        	
+        	// Shows error message if error occurs
+            linkedinMainError(data.responseText);            
+        });
+
+    }
+    else
+    {
+    	console.log(JSON.parse(data));
+    	showLinkedinMatchingProfiles(plugin_id, JSON.parse(data));
+    }
+}
+
+function getModifiedLinkedinMatchingProfiles(plugin_id, callback)
+{
+	$.post("/core/api/widgets/modified/match/" + plugin_id, $('#linkedin-search_form').serialize(), 
+	function(data){
+		
+		console.log(data);
+		
+		showLinkedinMatchingProfiles(plugin_id, data);
+		
+		// Call back to show LinkedIn matching profiles
+        if (callback && typeof (callback) === "function")
+        {
+            // execute the callback, passing parameters as necessary
+            callback(JSON.parse(data));
+        }
+        
+	},"json"). error( function(data){
+		
+    	// Shows error message if error occurs
+        linkedinMainError(data.responseText);    
+	});
 }
 
 /**
@@ -481,59 +575,7 @@ function showLinkedinProfile(linkedin_id, plugin_id)
 
 
 
-/**
- * Fetches LinkedIn matching profiles based on plugin id
- * 
- * @param plugin_id 
- * 			plugin id to fetch widget preferences
- * @param callback 
- * 			callback to create template and show matching profiles
- */
-function getLinkedinMatchingProfiles(plugin_id, callback)
-{
-    // Gets contact id, to save social results of a particular id
-    var contact_id = agile_crm_get_contact()['id'];
 
-    // Reads from cookie (local storage HTML5), since widgets are saved using local 
-    // storage when matches are fetched for the first time on the contact
-    var data = localStorage.getItem('Agile_linkedin_matches_' + contact_id);
-
-    // If cookie is not available, fetches results from LinkedIn
-    if (!data)
-    {
-        // Sends request to url "core/api/widgets/match/" and Calls WidgetsAPI with contact
-        // id and plugin id as path parameters
-        queueGetRequest("widget_queue", "/core/api/widgets/match/" + plugin_id + "/" + contact_id, 'json', function(data){
-            // Store social results in cookie of particular contact
-            localStorage.setItem('Agile_linkedin_matches_' + contact_id, JSON.stringify(data));
-
-            // Call back to show LinkedIn matching profiles from cookie
-            if (callback && typeof (callback) === "function")
-            {
-                // Execute the callback, passing parameters as necessary
-                callback(data);
-            }	
-        	
-        }, 
-        function (data) {
-        	// Remove loading image on error 
-        	$('#status_load').remove();
-        	
-        	// Shows error message if error occurs
-            linkedinMainError(data.responseText);            
-        });
-
-    }
-    else
-    {
-        // Call back to show LinkedIn matching profiles from cookie
-        if (callback && typeof (callback) === "function")
-        {
-            // execute the callback, passing parameters as necessary
-            callback(JSON.parse(data));
-        }
-    }
-}
 
 /**
  * Sends a connect request in LinkedIn based on plugin id and LinkedIn Id of the profile 
@@ -760,20 +802,21 @@ function getLinkedinIdByUrl(plugin_id, web_url, callback)
 
     // Sends post request to URL "/core/api/widgets/getidbyurl/" bye sending plugin id 
     // as path parameter and json as post data
-    	queuePostRequest("widget_queue", "/core/api/widgets/getidbyurl/" + plugin_id, url_json, function(data){
-    		// If LinkedIn id is undefined
-    		if (!data)
-    		{
-    			// Shows message that URL is invalid to the user
-    			alert("URL provided for linkedin is not valid ");
-
-    			// Shows LinkedIn matching profiles based on contact name
-    			showLinkedinMatchingProfiles(plugin_id);
+    	queuePostRequest("widget_queue", "/core/api/widgets/getidbyurl/" + plugin_id, url_json, 
+    	function(data){
+	    		// If LinkedIn id is undefined
+	    		if (!data)
+	    		{
+	    			// Shows message that URL is invalid to the user
+	    			alert("URL provided for linkedin is not valid ");
 	
-	            // Delete the LinkedIn URL associated with contact as it is incorrect
-	            agile_crm_delete_contact_property_by_subtype('website', 'LINKEDIN', web_url);
+	    			// Shows LinkedIn matching profiles based on contact name
+	    			getLinkedinMatchingProfiles(plugin_id);
+		
+		            // Delete the LinkedIn URL associated with contact as it is incorrect
+		            agile_crm_delete_contact_property_by_subtype('website', 'LINKEDIN', web_url);
 	
-	            return;
+		            return;
 		        }
 		
 		        // If defined, execute the callback function
