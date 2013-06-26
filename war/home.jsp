@@ -186,7 +186,7 @@ String CSS_PATH = "/";
 
 								<%
 								    if (domainUser != null && domainUser.is_admin)
-										out.println("<li><a href='#admin'><i class='icon-fire'></i> Admin Settings</a></li>");
+										out.println("<li><a href='#account-prefs'><i class='icon-fire'></i> Admin Settings</a></li>");
 								%>
 
 						<li><a href="#contact-us"><i class="icon-pencil"></i>
