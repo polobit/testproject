@@ -163,9 +163,6 @@ function setupLinkedinOAuth(plugin_id)
  */
 function showLinkedinMatchingProfiles(plugin_id, data)
 {
-    // Shows loading image, until matches profiles are fetched
-    $('#Linkedin').html(LINKEDIN_UPDATE_LOAD_IMAGE);
-    
     var contact_image = agile_crm_get_contact_property("image");
     console.log("conatact_image " + contact_image);
 
@@ -254,6 +251,9 @@ function showLinkedinMatchingProfiles(plugin_id, data)
  */
 function getLinkedinMatchingProfiles(plugin_id)
 {
+	// Shows loading image, until matches profiles are fetched
+    $('#Linkedin').html(LINKEDIN_UPDATE_LOAD_IMAGE);
+    
     // Gets contact id, to save social results of a particular id
     var contact_id = agile_crm_get_contact()['id'];
 
@@ -285,27 +285,24 @@ function getLinkedinMatchingProfiles(plugin_id)
 
     }
     else
-    {
     	showLinkedinMatchingProfiles(plugin_id, JSON.parse(data));
-    }
 }
 
-function getModifiedLinkedinMatchingProfiles(plugin_id, callback)
+function getModifiedLinkedinMatchingProfiles(plugin_id)
 {
-	$.post("/core/api/widgets/modified/match/" + plugin_id, $('#linkedin-search_form').serialize(), 
+	$('#spinner-linked-search').show();
+    
+	$.post("/core/api/widgets/modified/match/linkedin/" + plugin_id, 
+			$('#linkedin-search_form').serialize(), 
 	function(data)
 	{
-		
+		$('#spinner-linked-search').hide();
 		showLinkedinMatchingProfiles(plugin_id, data);
-		
-		// Call back to show LinkedIn matching profiles
-        if (callback && typeof (callback) === "function")
-        {
-            // execute the callback, passing parameters as necessary
-            callback(JSON.parse(data));
-        }
         
-	},"json"). error( function(data){
+	},"json"). error( function(data)
+	{
+		// Remove loading image on error 
+    	$('#spinner-linked-search').remove();
 		
     	// Shows error message if error occurs
         linkedinMainError(data.responseText);    
@@ -565,11 +562,6 @@ function showLinkedinProfile(linkedin_id, plugin_id)
         });
     });
 }
-
-
-
-
-
 
 /**
  * Sends a connect request in LinkedIn based on plugin id and LinkedIn Id of the profile 

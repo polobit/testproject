@@ -137,11 +137,11 @@
 <script id="twitter-error-panel-template" type="text/html">
 {{#check_length message "140"}}
 	<div class="ellipsis-multi-line collapse-25" title="{{message}}" style="height:110px;overflow: hidden;line-height:160%;word-wrap: break-word;padding:10px">
-		{{message}}
+		{{{message}}}
 	</div>
 {{else}}
 	<div style="line-height:160%;word-wrap: break-word;padding:10px">
-		{{message}}
+		{{{message}}}
 	</div>
 {{/check_length}}	
 </script>
@@ -191,3 +191,18 @@
 {{/each}}
 </script>
 
+<script id="twitter-modified-search-template" type="text/html">
+	<div display:inline;  line-height:12px;word-wrap: break-word;">
+		<form class="widget_content" style="border-bottom:none;" id="twitter-search_form" name="twitter-search_form" method="get">
+	    	<fieldset>
+				<p>
+				<label>Enter Search details</label>
+				<input type="text" id="twitter_keywords" class="input-medium widget_input_box" style="width:90%" rel="tooltip" title="Key Words" placeholder="Key Words" value="{{keywords}}" name="keywords"></input>
+				</p>
+				<a href="#" id="twitter_search_btn" class="btn" style="text-decoration:none;">Search</a>
+				<span><img src="img/ajax-spinner.gif" id="spinner-twitter-search" style="display:none;"></img></span>
+				<a href="#" id="twitter_search_close" class="btn close" style="float:none;margin-left:5px;">Close</a>
+			 </fieldset>
+	    </form>
+	</div>
+</script>

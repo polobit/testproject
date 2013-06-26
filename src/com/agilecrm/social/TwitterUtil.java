@@ -133,6 +133,64 @@ public class TwitterUtil
     }
 
     /**
+     * Searches Twitter profiles based on search string, result fetched are
+     * represented by class {@link SocialSearchResult} including details id,
+     * name, image_url, url etc..
+     * 
+     * <p>
+     * Token and secret required to connect are retrieved from the widget
+     * </p>
+     * 
+     * @param widget
+     *            {@link Widget}
+     * @param searchString
+     *            {@link String} to be searched
+     * @return {@link List} of {@link SocialSearchResult}
+     * @throws Exception
+     *             If twitter throws an exception
+     */
+    public static List<SocialSearchResult> searchTwitterProfiles(Widget widget,
+	    String searchString) throws Exception
+    {
+
+	List<SocialSearchResult> searchResults = new ArrayList<SocialSearchResult>();
+
+	// returns null if String to be searched is null
+	if (StringUtils.isBlank(searchString))
+	    return searchResults;
+
+	// Creates a twitter object to connect with twitter
+	Twitter twitter = getTwitter(widget);
+
+	// Searches twitter profiles based on first name and last name
+	ResponseList<User> users = twitter.searchUsers(searchString, 1);
+
+	// Iterates through Twitter results and wraps the profile details in to
+	// SocialSearchResult and adds to list
+	for (User user : users)
+	{
+	    SocialSearchResult result = new SocialSearchResult();
+
+	    result.id = user.getId() + "";
+	    result.name = user.getName();
+	    result.screen_name = user.getScreenName();
+	    result.picture = user.getBiggerProfileImageURLHttps().toString();
+	    result.location = user.getLocation();
+	    result.summary = user.getDescription();
+	    result.num_connections = user.getFollowersCount() + "";
+	    result.tweet_count = user.getStatusesCount() + "";
+	    result.friends_count = user.getFriendsCount() + "";
+	    result.url = "https://twitter.com/" + user.getScreenName();
+
+	    // Adds each result in to list
+	    searchResults.add(result);
+	}
+
+	// Returns list of matching profiles
+	return searchResults;
+    }
+
+    /**
      * Fetches Twitter profiles based on the profile id, token and secret are
      * retrieved from the widget object and Twitter sent. Result is wrapped in
      * to {@link SocialSearchResult} class
