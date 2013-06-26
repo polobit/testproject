@@ -22,14 +22,24 @@ function loadWidgets(el, contact)
 	        individual_tag_name: 'li',
 	        sortKey: 'position',
 	        modelData: data,
-	        postRenderCallback : function(widgets_el) {
-	        	// Calls widget setup and also enable sorting on it
-	        	set_up_widgets(el, widgets_el);
+	        postRenderCallback : function(el) {
+	        	
 	        }
 	    });
-	   		
-	   		var newEl = WIDGETS_VIEW.render().el;
-	    	$('#widgets', el).html(newEl);	    	
+	
+	    // Fetches the widget collection, on success widget scripts are loaded form
+	    // the url specified in widget model attribute url.
+	    WIDGETS_VIEW.collection.fetch(
+	    {
+	        success: function ()
+	        {
+	        	set_up_widgets(el);
+	        }
+	    });
+	    
+	    	var newEl = WIDGETS_VIEW.render().el;
+	    	set_up_widgets(el);
+	    	$('#widgets', el).html(newEl);
     }
     else
     {
@@ -40,12 +50,7 @@ function loadWidgets(el, contact)
         $(el).live('agile_model_loaded', function(e) {
         	if(flag == false)
         	{
-        		// Sort needs to be called as there could be position change
-        		 WIDGETS_VIEW.collection.sort();
-        		 
         		$('#widgets', el).html(WIDGETS_VIEW.render(true).el);
-        		
-        		// Sets up widget
         		set_up_widgets(el, WIDGETS_VIEW.el);
         	}
         	flag = true;
@@ -155,16 +160,12 @@ function enableWidgetSoring(el)
                 // Get Model, model is set as data to widget element
                 var model = $('#' + model_name).data('model');
                 
-                model.set({'position' : index}, {silent : true});
-                                
                 models.push(
                 {
                     id: model.get("id"),
                     position: index
                 });
             });
-            
-           
 
             // Stores the positions at server
             $.ajax(
@@ -191,9 +192,13 @@ function queueGetRequest(queueName, url, dataType, successcallback, errorCallbac
 		 dataType: dataType,
 		    success: function(data)
 		    {
+		    	//console.log('suceess queue get');
+		    	
+		    	
 		    	// If defined, execute the callback function
 		        if (successcallback && typeof (successcallback) === "function")
 		        {
+		        	console.log('suceess queue get');
 		        	successcallback(data);
 		        }
 		    },
@@ -204,6 +209,7 @@ function queueGetRequest(queueName, url, dataType, successcallback, errorCallbac
 		    	// If defined, execute the callback function
 		        if (errorCallback && typeof (errorCallback) === "function")
 		        {
+		        	console.log('error queue get' + data);
 		        	errorCallback(data);
 		        }
             },
@@ -227,6 +233,9 @@ function queuePostRequest(queueName, url, data, successcallback, errorCallback)
 		 data:data,
 		    success: function(data)
 		    {
+		    	//console.log('suceess queue post');
+		    	
+		    	
 		    	// If defined, execute the callback function
 		        if (successcallback && typeof (successcallback) === "function")
 		        {
