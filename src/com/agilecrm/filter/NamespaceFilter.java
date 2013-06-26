@@ -229,6 +229,14 @@ public class NamespaceFilter implements Filter
 	    chain.doFilter(request, response);
 	    return;
 	}
+	
+	if (path.startsWith("/core/api/bulk-actions"))
+	{
+	    chain.doFilter(request, response);
+	    return;
+	}
+	
+
 
 	// Returns true if name space is set or namespace is already set for the
 	// application. If request is not to access the
