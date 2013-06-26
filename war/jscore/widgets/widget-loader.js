@@ -4,6 +4,7 @@
 var WIDGETS_VIEW;
 function loadWidgets(el, contact)
 {
+
     // Create Data JSON
     var data = {
         contact: contact
@@ -23,11 +24,13 @@ function loadWidgets(el, contact)
 	        sortKey: 'position',
 	        modelData: data,
 	        postRenderCallback : function(widgets_el) {
-	        	set_up_widgets(el, widgets_el);
+	        	
 	        }
 	    });
 	   
-	   WIDGETS_VIEW.collection.fetch();
+	   WIDGETS_VIEW.collection.fetch({success: function(data){
+		   set_up_widgets(el, WIDGETS_VIEW.el);
+	   }});
 	   	   		
 	   		var newEl = WIDGETS_VIEW.render().el;
 	    	$('#widgets', el).html(newEl);	    	
@@ -41,6 +44,7 @@ function loadWidgets(el, contact)
         $(el).live('agile_model_loaded', function(e) {
         	if(flag == false)
         	{
+        		flag = true;
         		// Sort needs to be called as there could be position change
         		 WIDGETS_VIEW.collection.sort();
         		 
@@ -49,7 +53,7 @@ function loadWidgets(el, contact)
         		// Sets up widget
         		set_up_widgets(el, WIDGETS_VIEW.el);
         	}
-        	flag = true;
+        	
         });
     }
 
