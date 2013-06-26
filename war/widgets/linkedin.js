@@ -108,8 +108,6 @@ $(function ()
     	details['firstname'] = agile_crm_get_contact_property("first_name");
     	details['lastname'] = agile_crm_get_contact_property("last_name");
     	details['keywords'] = details.firstname + " " + details.lastname;
-    	details['company'] = agile_crm_get_contact_property("company");
-    	details['title'] = agile_crm_get_contact_property("title");
     	
     	console.log(details);
     	$('#Linkedin').html(getTemplate('linkedin-modified-search',details));

@@ -745,7 +745,7 @@ public class LinkedInUtil
     }
 
     public static SocialSearchResult getExperience(Widget widget,
-	    String linkedInId)
+	    String linkedInId) throws Exception
     {
 	final LinkedInApiClient client = factory.createLinkedInApiClient(
 		widget.getProperty("token"), widget.getProperty("secret"));
@@ -772,9 +772,10 @@ public class LinkedInUtil
 			CompanyField.DESCRIPTION, CompanyField.ID,
 			CompanyField.INDUSTRY, CompanyField.TICKER));
 
-		company.setLogoUrl(company.getLogoUrl()
-			.replaceFirst("http:", "https:")
-			.replaceFirst("m3", "m3-s"));
+		if (company.getLogoUrl() != null)
+		    company.setLogoUrl(company.getLogoUrl()
+			    .replaceFirst("http:", "https:")
+			    .replaceFirst("m3", "m3-s"));
 		position.setCompany(company);
 	    }
 
@@ -795,9 +796,10 @@ public class LinkedInUtil
 			CompanyField.DESCRIPTION, CompanyField.ID,
 			CompanyField.INDUSTRY, CompanyField.TICKER));
 
-		company.setLogoUrl(company.getLogoUrl()
-			.replaceFirst("http:", "https:")
-			.replaceFirst("m3", "m3-s"));
+		if (company.getLogoUrl() != null)
+		    company.setLogoUrl(company.getLogoUrl()
+			    .replaceFirst("http:", "https:")
+			    .replaceFirst("m3", "m3-s"));
 		position.setCompany(company);
 
 	    }
@@ -808,6 +810,7 @@ public class LinkedInUtil
 		.getPositionList();
 
 	return experience;
+
     }
 
     public static List<SocialSearchResult> getSharedConnections(Widget widget,
