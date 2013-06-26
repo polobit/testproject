@@ -168,7 +168,7 @@ $(function ()
 	    	 getListOfProfilesByIDsinTwitter(plugin_id, temp, function(result) {	    		 
 	    		 	
 	    		 // Show matching profiles in Twitter panel
-	    		 $('#twitter_follower_panel').html(getTemplate("twitter-search-result", result));
+	    		 $('#twitter_follower_panel').html(getTemplate("twitter-follower-following", result));
 	    		 
 	    		 $(".twitterImage").die().live('mouseover', function ()
 	    	     {
@@ -216,7 +216,7 @@ $(function ()
 		    		 $('#spinner-followers').hide();
 		    		 
 		    		 // Show matching profiles in Twitter panel
-		    		 $('#twitter_follower_panel').append(getTemplate('twitter-search-result', result));
+		    		 $('#twitter_follower_panel').append(getTemplate('twitter-follower-following', result));
 		    	 },
 		    	 function(error)
 			     {
@@ -264,7 +264,7 @@ $(function ()
 	    	getListOfProfilesByIDsinTwitter(plugin_id, temp, function(result) {	    		 
 	    		 	   			    		 
 	    		// Show matching profiles in Twitter panel
-	    		$('#twitter_following_panel').html(getTemplate("twitter-search-result", result));
+	    		$('#twitter_following_panel').html(getTemplate("twitter-follower-following", result));
 	    		
 	    		 $(".twitterImage").die().live('mouseover', function ()
 	    		 {
@@ -312,7 +312,7 @@ $(function ()
 		    		 $('#spinner-following').hide();
 		    		
 		    		// Show matching profiles in Twitter panel
-		    		$('#twitter_following_panel').append(getTemplate('twitter-search-result', result));
+		    		$('#twitter_following_panel').append(getTemplate('twitter-follower-following', result));
 		    	},
 		    	function(error)
 		    	{
@@ -539,8 +539,7 @@ function showTwitterProfile(twitter_id, plugin_id)
             	});
             	
             // Template is populated with update details and shown
-            $('#twitter_social_stream')
-                .append(element);          
+            $('#twitter_social_stream').append(element);          
 
             return;
         }
