@@ -133,6 +133,18 @@ var ContactsRouter = Backbone.Router.extend({
 
       	console.log("while creating new base collection view : " + collection_is_reverse);
       	
+      	/**
+		 * If collection is already defined and contacts are fetched the
+		 * show results instead of initializing collection again
+		 */
+		if (this.contactsListView) {
+			$('#content').html(this.contactsListView.render(true).el);
+
+			$(".active").removeClass("active");
+			$("#contactsmenu").addClass("active");
+			return;
+		}
+		
       	/*
       	 * cursor and page_size options are taken to activate infiniScroll
       	 */
@@ -145,6 +157,11 @@ var ContactsRouter = Backbone.Router.extend({
               sort_collection : collection_is_reverse,
               postRenderCallback: function(el) {
             	  
+            	  	// Contacts are fetched when the app loads in
+					// the initialize
+					var cel = App_Contacts.contactsListView.el;
+					var collection = App_Contacts.contactsListView.collection;
+					
             	  // To set heading in template
             	  if(readCookie('company_filter'))$('#contact-heading',el).text('Companies');
             	  
@@ -163,8 +180,6 @@ var ContactsRouter = Backbone.Router.extend({
           });
 
           // Contacts are fetched when the app loads in the initialize
-          var cel = this.contactsListView.el;
-          var collection = this.contactsListView.collection;
           this.contactsListView.collection.fetch();
 
           $('#content').html(this.contactsListView.render().el);
@@ -259,7 +274,10 @@ var ContactsRouter = Backbone.Router.extend({
             // loop while changing attributes of contact
             var recentViewedTime = new Backbone.Model();
             recentViewedTime.url = "core/api/contacts/viewed-at/" + contact.get('id');
-            recentViewedTime.save();          	  
+            recentViewedTime.save();          
+            
+        	if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection && App_Contacts.contactsListView.collection.get(id))
+				App_Contacts.contactsListView.collection.get(id).attributes = contact.attributes;
           	  
             	loadWidgets(el, contact.toJSON());
 
@@ -715,6 +733,11 @@ var ContactsRouter = Backbone.Router.extend({
 			url = "core/api/contacts";
 		}
     	
+    	if(this.contact_custom_view)
+    	{
+            $('#content').html(this.contact_custom_view.render(true).el);
+            return;
+    	}
         this.contact_custom_view = new Base_Collection_View({
             url: url,
             restKey: "contact",

@@ -263,3 +263,10 @@ small{
 	margin-bottom:5px;
 }
 
+.widget_edit_icons ul{
+	visibility: hidden;
+}
+
+.widget_edit_icons:hover ul{
+ visibility:visible;
+}

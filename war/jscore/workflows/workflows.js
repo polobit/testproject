@@ -127,4 +127,22 @@ $(function(){
     	    }
     	});
     });
+	
+	// Shows workflow-help modal
+	$('#workflow-designer-help').live('click',function(e){
+		e.preventDefault();
+		$('#workflow-designer-help-modal').modal("show");
+	});
+	
+	// Plays video on modal shown
+	$('#workflow-designer-help-modal').on("shown", function(){
+		window.frames[0].postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+	});
+	
+	// Stops video on modal hidden
+	$('#workflow-designer-help-modal').on("hidden", function(){
+		$("#workflow-designer-help-modal iframe").attr("src", $("#workflow-designer-help-modal iframe").attr("src"));
+	});
+	
+	
 });

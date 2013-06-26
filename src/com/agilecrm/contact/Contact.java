@@ -105,12 +105,12 @@ public class Contact extends Cursor
      */
     @NotSaved
     public Long viewed_time = 0L;
-    
+
     @NotSaved(IfDefault.class)
     @Embedded
     @Indexed
     public ViewedDetails viewed = new ViewedDetails();
-    
+
     /**
      * Stores current domain user key as owner, if it is null should not save in
      * database
@@ -241,7 +241,6 @@ public class Contact extends Cursor
      */
     public void save()
     {
-
 	// Stores current contact id in to a temporary variable, to check
 	// whether contact is newly created or being edited.
 	Long id = this.id;
@@ -266,6 +265,9 @@ public class Contact extends Cursor
 	ContactNotificationPrefsUtil.executeNotificationToContact(oldContact,
 		this);
 
+	if (oldContact != null && isDocumentUpdateRequired(oldContact))
+	    return;
+
 	// Enables to build "Document" search on current entity
 	AppengineSearch<Contact> search = new AppengineSearch<Contact>(
 		Contact.class);
@@ -277,6 +279,47 @@ public class Contact extends Cursor
 	    return;
 	}
 	search.edit(this);
+    }
+
+    /**
+     * Checks if search document record is to be updated.
+     * 
+     * @param object
+     * @return
+     */
+    public boolean isDocumentUpdateRequired(Object object)
+    {
+	Contact contact = (Contact) object;
+	Set<String> currentContactTags = getContactTags();
+
+	// If tags and properties length differ, contact is considered to be
+	// changed
+	if (contact.tags.size() != currentContactTags.size()
+		|| contact.properties.size() != properties.size()
+		|| contact.star_value != star_value
+		|| contact.lead_score != lead_score)
+	    return false;
+
+	// Checks if tags are changed
+	for (String tag : contact.tags)
+	{
+	    if (!currentContactTags.contains(tag))
+		return false;
+	}
+
+	// Checks of properties has any change
+	for (ContactField property : contact.properties)
+	{
+	    if (!properties.contains(property))
+		return false;
+	}
+
+	// Checks if owner changed. It should be considered as contact update
+	// and update the document with updated time
+	if (!contact.owner_key.equals(owner_key))
+	    return false;
+
+	return true;
     }
 
     /**
@@ -396,7 +439,6 @@ public class Contact extends Cursor
 
 	this.tags.clear();
 	this.save();
-
 
 	// Delete tags from Tag class
 	TagUtil.deleteTags(tagslist);
@@ -599,10 +641,10 @@ public class Contact extends Cursor
 	else
 	{
 	    updated_time = System.currentTimeMillis() / 1000;
-	    if(viewed_time != 0L)
+	    if (viewed_time != 0L)
 	    {
-	    	viewed.viewed_time = viewed_time;
-	    	viewed.viewer_id = SessionManager.get().getDomainId();
+		viewed.viewed_time = viewed_time;
+		viewed.viewer_id = SessionManager.get().getDomainId();
 	    }
 	}
 
@@ -627,6 +669,7 @@ public class Contact extends Cursor
 	}
 
 	System.out.println(tagsWithTime);
+	tags = getContactTags();
 
 	// Update Tags - Create a deferred task
 	TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(
@@ -656,10 +699,11 @@ public class Contact extends Cursor
 @XmlRootElement
 class ViewedDetails
 {
-	public Long viewed_time = 0L;
-	public Long viewer_id = null;
-	public ViewedDetails()
-	{
-		
-	}
+    public Long viewed_time = 0L;
+    public Long viewer_id = null;
+
+    public ViewedDetails()
+    {
+
+    }
 }

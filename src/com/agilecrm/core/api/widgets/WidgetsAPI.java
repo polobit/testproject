@@ -194,6 +194,103 @@ public class WidgetsAPI
 	return null;
     }
 
+    /**
+     * Connects to {@link LinkedInUtil} based on the name given in widget and
+     * fetches matching profiles for the contact in LinkedIn based on given
+     * parameters
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param firstName
+     *            {@link String} first name of contact
+     * @param lastName
+     *            {@link String} last name of contact
+     * @param title
+     *            {@link String} title of contact
+     * @param company
+     *            {@link String} company name of contact
+     * @param keywords
+     *            {@link String} keywords of contact
+     * @return {@link List} of {@link SocialSearchResult}
+     */
+    @Path("/modified/match/linkedin/{widget-id}")
+    @POST
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
+    public List<SocialSearchResult> getModifiedSocialResultsInLinkeidn(
+	    @PathParam("widget-id") Long widgetId,
+	    @FormParam("firstname") String firstName,
+	    @FormParam("lastname") String lastName,
+	    @FormParam("title") String title,
+	    @FormParam("company") String company,
+	    @FormParam("keywords") String keywords)
+    {
+	try
+	{
+	    // Get contact and widget based on their id
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+
+	    // Returns null if widget doesn't exist with given widget id
+	    if (widget == null)
+		return null;
+
+	    // Profiles are searched based on first and last name of contact
+	    // Gets profiles from LinkedInUtil based on contact
+	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
+		return LinkedInUtil.modifiedSearchForLinkedInProfiles(widget,
+			firstName, lastName, keywords, company, title);
+
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+	return null;
+    }
+
+    /**
+     * Connects to {@link TwitterUtil} based on the name given in widget and
+     * fetches matching profiles for Twitter, based on search string
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param searchString
+     *            {@link String} to be searched
+     * @return {@link List} of {@link SocialSearchResult}
+     */
+    @Path("/modified/match/twitter/{widget-id}/{search-string}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<SocialSearchResult> getModifiedSocialResultsInTwitter(
+	    @PathParam("widget-id") Long widgetId,
+	    @PathParam("search-string") String searchString)
+    {
+	try
+	{
+	    // Get contact and widget based on their id
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+
+	    // Returns null if widget doesn't exist with given widget id
+	    if (widget == null)
+		return null;
+
+	    // Profiles are searched based on first and last name of contact
+	    // Gets profiles from LinkedInUtil based on contact
+	    if (widget.name.equalsIgnoreCase("TWITTER"))
+		return TwitterUtil.searchTwitterProfiles(widget, searchString);
+
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+	return null;
+    }
+
     // Get widget
     /**
      * Connects to {@link LinkedInUtil} or {@link TwitterUtil} based on the name

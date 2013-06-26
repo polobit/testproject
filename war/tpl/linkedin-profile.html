@@ -146,7 +146,7 @@
 				</div>
 			</div>			
 			{{#if summary}}
-				<p class="mb_0 space_pre_line" style="word-break:normal;word-wrap:break-word;">				
+				<p class="space_pre_line" style="word-break:normal;word-wrap:break-word;">				
 					{{show_link_in_statement summary}}
 				</p>
 			{{/if}}			
@@ -222,11 +222,11 @@
 <script id="linkedin-error-panel-template" type="text/html">
 {{#check_length message "140"}}
 	<div class="ellipsis-multi-line collapse-25" title="{{message}}" style="height:110px;overflow: hidden;line-height:160%;word-wrap: break-word;padding:10px">
-		{{message}}
+		{{{message}}}
 	</div>
 {{else}}
 	<div style="line-height:160%;word-wrap: break-word;padding:10px">
-		{{message}}
+		{{{message}}}
 	</div>
 {{/check_length}}	
 </script>
@@ -262,8 +262,10 @@
         <div class="modal-body" >
 		<p>Associate LinkedIn profile to contact?</p>
         <p>
-			<input type="checkbox" name="add-image" id="save_linkedin_image" checked="checked"/>
-			Add LinkedIn image to contact
+			{{#if image}}
+				<input type="checkbox" name="add-image" id="save_linkedin_image"/>
+				Add LinkedIn image to contact
+			{{/if}}
 		</p>
 	</div>
 	<div class="modal-footer" >
@@ -271,4 +273,24 @@
 		<a href="#" class="btn close save-linkedin-profile" resp="no">No</a>
 	</div>
 </div>
+</script>
+
+<script id="linkedin-modified-search-template" type="text/html">
+	<div display:inline;  line-height:12px;word-wrap: break-word;">
+		<form class="widget_content" style="border-bottom:none;" id="linkedin-search_form" name="linkedin-search_form" method="post">
+	    	<fieldset>
+				<p>
+				<label>Enter Search details</label>
+				<input type="text" id="linkedin_keywords" class="input-medium widget_input_box" style="width:90%" rel="tooltip" title="Key Words" placeholder="Key Words" value="{{keywords}}" name="keywords"></input>
+				<input type="text" id="linkedin_firstname" class="input-medium widget_input_box" style="width:90%" rel="tooltip" title="First Name" placeholder="First Name" value="" name="firstname"></input>
+				<input type="text" id="linkedin_lastname" class="input-medium widget_input_box" style="width:90%" rel="tooltip" title="Last Name" placeholder="Last Name" value="" name="lastname"></input>
+				<input type="text" id="linkedin_company" class="input-medium widget_input_box" style="width:90%" rel="tooltip" title="Company" placeholder="Company" value="" name="company"></input>
+				<input type="text" id="linkedin_title" class="input-medium widget_input_box" style="width:90%" rel="tooltip" title="Title" placeholder="Title" value="" name="title"></input>
+				</p>
+				<a href="#" id="linkedin_search_btn" class="btn" style="text-decoration:none;">Search</a>
+				<span><img src="img/ajax-spinner.gif" id="spinner-linked-search" style="display:none;"></img></span>
+				<a href="#" id="linkedin_search_close" class="btn close" style="float:none;margin-left:5px;">Close</a>
+			 </fieldset>
+	    </form>
+	</div>
 </script>
