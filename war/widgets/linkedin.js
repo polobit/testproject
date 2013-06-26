@@ -180,8 +180,6 @@ function showLinkedinMatchingProfiles(plugin_id, data)
         return;
     }
     
-    console.log('Nothinig whd');
-
     // Show matching profiles in LinkedIn panel
     $('#Linkedin').html(getTemplate("linkedin-search-result", data));
         
@@ -290,7 +288,6 @@ function getLinkedinMatchingProfiles(plugin_id)
     }
     else
     {
-    	console.log(JSON.parse(data));
     	showLinkedinMatchingProfiles(plugin_id, JSON.parse(data));
     }
 }
@@ -298,9 +295,8 @@ function getLinkedinMatchingProfiles(plugin_id)
 function getModifiedLinkedinMatchingProfiles(plugin_id, callback)
 {
 	$.post("/core/api/widgets/modified/match/" + plugin_id, $('#linkedin-search_form').serialize(), 
-	function(data){
-		
-		console.log(data);
+	function(data)
+	{
 		
 		showLinkedinMatchingProfiles(plugin_id, data);
 		
