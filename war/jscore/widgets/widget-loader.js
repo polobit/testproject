@@ -22,25 +22,14 @@ function loadWidgets(el, contact)
 	        individual_tag_name: 'li',
 	        sortKey: 'position',
 	        modelData: data,
-	        postRenderCallback : function(el) {
-	        	
+	        postRenderCallback : function(widgets_el) {
+	        	// Calls widget setup and also enable sorting on it
+	        	set_up_widgets(el, widgets_el);
 	        }
 	    });
-	
-	    // Fetches the widget collection, on success widget scripts are loaded form
-	    // the url specified in widget model attribute url.
-	    WIDGETS_VIEW.collection.fetch(
-	    {
-	        success: function ()
-	        {
-	        	set_up_widgets(el);
-	        }
-	    });
-	    
-	    	var newEl = WIDGETS_VIEW.render().el;
-	    	$('#widgets', el).html(newEl);
-	    	
-	    	set_up_widgets(el);
+	   		
+	   		var newEl = WIDGETS_VIEW.render().el;
+	    	$('#widgets', el).html(newEl);	    	
     }
     else
     {
@@ -51,8 +40,12 @@ function loadWidgets(el, contact)
         $(el).live('agile_model_loaded', function(e) {
         	if(flag == false)
         	{
+        		// Sort needs to be called as there could be position change
         		 WIDGETS_VIEW.collection.sort();
+        		 
         		$('#widgets', el).html(WIDGETS_VIEW.render(true).el);
+        		
+        		// Sets up widget
         		set_up_widgets(el, WIDGETS_VIEW.el);
         	}
         	flag = true;
