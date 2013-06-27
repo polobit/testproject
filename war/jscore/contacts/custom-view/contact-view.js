@@ -39,6 +39,17 @@ function contactTableView(base_model) {
 	// Iterates through, each field name and appends the field according to
 	// order of the fields
 	$.each(fields, function(index, field_name) {
+		var property = getProperty(contact.properties, field_name);
+		if(property)
+			{
+				if(property.type == 'CUSTOM')
+					{
+						$('#contacts-custom-view-model-template').append(
+							getTemplate('contacts-custom-view-custom', property));
+						
+						return;
+					}
+			}
 		$('#contacts-custom-view-model-template').append(
 				getTemplate('contacts-custom-view-' + field_name, contact));
 	});
@@ -152,6 +163,9 @@ $(function() {
 		eraseCookie("contact_view");
 		eraseCookie("agile_contact_view");
 
+		if(App_Contacts.contactsListView)
+			App_Contacts.contactsListView = undefined;
+		
 		// Loads the contacts
 		App_Contacts.contacts();
 
@@ -166,6 +180,9 @@ $(function() {
 		eraseCookie("contact_view");
 		// Creates the cookie
 		createCookie("agile_contact_view", "grid_view");
+		
+		if(App_Contacts.contactsListView)
+			App_Contacts.contactsListView = undefined;
 
 		// Loads the contacts
 		App_Contacts.contacts(undefined, undefined, true);

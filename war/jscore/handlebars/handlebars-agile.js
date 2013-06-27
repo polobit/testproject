@@ -120,6 +120,16 @@ function getPropertyValue(items, name) {
 	}
 }
 
+function getProperty(items, name) {
+	if (items == undefined)
+		return;
+
+	for ( var i = 0, l = items.length; i < l; i++) {
+		if (items[i].name == name)
+			return items[i];
+	}
+}
+
 /**
  * Returns contact property based on its property name and subtype
  */
