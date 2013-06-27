@@ -171,7 +171,7 @@ var ContactsRouter = Backbone.Router.extend({
 		 * show results instead of initializing collection again
 		 */
 		if (this.contactsListView && this.contactsListView.collection) {
-			$('#content').html(this.contactsListView.el);
+			$('#content').html(this.contactsListView.render(true).el);
 
 			$(".active").removeClass("active");
 			$("#contactsmenu").addClass("active");
