@@ -312,7 +312,12 @@ public class LinkedInUtil
 		ProfileField.HEADLINE, ProfileField.LOCATION_NAME,
 		ProfileField.NUM_CONNECTIONS, ProfileField.PUBLIC_PROFILE_URL,
 		ProfileField.ID, ProfileField.DISTANCE,
-		ProfileField.CURRENT_SHARE, ProfileField.CURRENT_STATUS));
+		ProfileField.CURRENT_SHARE, ProfileField.CURRENT_STATUS,
+		ProfileField.POSITIONS_COMPANY,
+		ProfileField.THREE_CURRENT_POSITIONS,
+		ProfileField.THREE_PAST_POSITIONS,
+		ProfileField.POSITIONS_COMPANY_INDUSTRY,
+		ProfileField.POSITIONS_COMPANY_TICKER));
 
 	SocialSearchResult result = new SocialSearchResult();
 
@@ -328,24 +333,15 @@ public class LinkedInUtil
 	result.num_connections = String.valueOf(person.getNumConnections());
 
 	if (!(person.getDistance() > 1l))
-	{
 	    result.is_connected = true;
-	    try
-	    {
-		result.updateStream = getNetworkUpdates(widget, linkedInId, 0,
-			5);
-	    }
-	    catch (Exception e)
-	    {
-		result.updateStream = new ArrayList<SocialUpdateStream>();
-	    }
-	}
 
 	// Change http to https to avoid client side warnings by browser
 	// Change certificate from m3 to m3-s to fix ssl broken image link
 	if (result.picture != null)
 	    result.picture = result.picture.replaceFirst("http:", "https:")
 		    .replaceFirst("m3", "m3-s");
+
+	result.searchResult = getExperience(person, linkedInId, client);
 
 	return result;
 
@@ -765,18 +761,33 @@ public class LinkedInUtil
 	{
 	    if (position.getCompany().getId() != null)
 	    {
-		Company company = client.getCompanyById(position.getCompany()
-			.getId(), EnumSet.of(CompanyField.LOCATIONS_ADDRESS,
-			CompanyField.LOGO_URL, CompanyField.NAME,
-			CompanyField.NUM_FOLLOWERS, CompanyField.BLOG_RSS_URL,
-			CompanyField.DESCRIPTION, CompanyField.ID,
-			CompanyField.INDUSTRY, CompanyField.TICKER));
+		try
+		{
+		    Company company = client.getCompanyById(position
+			    .getCompany().getId(), EnumSet.of(
+			    CompanyField.LOCATIONS_ADDRESS,
+			    CompanyField.LOGO_URL, CompanyField.NAME,
+			    CompanyField.NUM_FOLLOWERS,
+			    CompanyField.BLOG_RSS_URL,
+			    CompanyField.DESCRIPTION, CompanyField.ID,
+			    CompanyField.INDUSTRY, CompanyField.TICKER));
 
-		if (company.getLogoUrl() != null)
-		    company.setLogoUrl(company.getLogoUrl()
-			    .replaceFirst("http:", "https:")
-			    .replaceFirst("m3", "m3-s"));
-		position.setCompany(company);
+		    if (company.getLogoUrl() != null)
+			company.setLogoUrl(company.getLogoUrl()
+				.replaceFirst("http:", "https:")
+				.replaceFirst("m3", "m3-s"));
+		    position.setCompany(company);
+		}
+		catch (Exception e)
+		{
+		    System.out.println(e.getMessage());
+		    // If company's id is some irrelevant and not related to
+		    // company, company details are skipped
+		    if (e.getMessage().contains("Company with ID {"))
+			continue;
+		    else
+			throw new Exception(e.getMessage());
+		}
 	    }
 
 	}
@@ -789,19 +800,124 @@ public class LinkedInUtil
 	{
 	    if (position.getCompany().getId() != null)
 	    {
-		Company company = client.getCompanyById(position.getCompany()
-			.getId(), EnumSet.of(CompanyField.LOCATIONS_ADDRESS,
-			CompanyField.LOGO_URL, CompanyField.NAME,
-			CompanyField.NUM_FOLLOWERS, CompanyField.BLOG_RSS_URL,
-			CompanyField.DESCRIPTION, CompanyField.ID,
-			CompanyField.INDUSTRY, CompanyField.TICKER));
+		try
+		{
+		    Company company = client.getCompanyById(position
+			    .getCompany().getId(), EnumSet.of(
+			    CompanyField.LOCATIONS_ADDRESS,
+			    CompanyField.LOGO_URL, CompanyField.NAME,
+			    CompanyField.NUM_FOLLOWERS,
+			    CompanyField.BLOG_RSS_URL,
+			    CompanyField.DESCRIPTION, CompanyField.ID,
+			    CompanyField.INDUSTRY, CompanyField.TICKER));
 
-		if (company.getLogoUrl() != null)
-		    company.setLogoUrl(company.getLogoUrl()
-			    .replaceFirst("http:", "https:")
-			    .replaceFirst("m3", "m3-s"));
-		position.setCompany(company);
+		    if (company.getLogoUrl() != null)
+			company.setLogoUrl(company.getLogoUrl()
+				.replaceFirst("http:", "https:")
+				.replaceFirst("m3", "m3-s"));
+		    position.setCompany(company);
 
+		}
+		catch (Exception e)
+		{
+		    System.out.println(e.getMessage());
+		    // If company's id is some irrelevant and not related to
+		    // company, company details are skipped
+		    if (e.getMessage().contains("Company with ID {"))
+			continue;
+		    else
+			throw new Exception(e.getMessage());
+		}
+	    }
+
+	}
+
+	experience.three_past_positions = person.getThreePastPositions()
+		.getPositionList();
+
+	return experience;
+
+    }
+
+    public static SocialSearchResult getExperience(Person person,
+	    String linkedInId, LinkedInApiClient client) throws Exception
+    {
+
+	SocialSearchResult experience = new SocialSearchResult();
+	experience.id = linkedInId;
+
+	for (Position position : person.getThreeCurrentPositions()
+		.getPositionList())
+	{
+	    if (position.getCompany().getId() != null)
+	    {
+		try
+		{
+		    Company company = client.getCompanyById(position
+			    .getCompany().getId(), EnumSet.of(
+			    CompanyField.LOCATIONS_ADDRESS,
+			    CompanyField.LOGO_URL, CompanyField.NAME,
+			    CompanyField.NUM_FOLLOWERS,
+			    CompanyField.BLOG_RSS_URL,
+			    CompanyField.DESCRIPTION, CompanyField.ID,
+			    CompanyField.INDUSTRY, CompanyField.TICKER));
+
+		    if (company.getLogoUrl() != null)
+			company.setLogoUrl(company.getLogoUrl()
+				.replaceFirst("http:", "https:")
+				.replaceFirst("m3", "m3-s"));
+		    position.setCompany(company);
+		}
+		catch (Exception e)
+		{
+		    System.out.println(e.getMessage());
+		    // If company's id is some irrelevant and not related to
+		    // company, company details are skipped
+		    if (e.getMessage().contains("Company with ID {"))
+			continue;
+		    else
+			throw new Exception(e.getMessage());
+		}
+	    }
+
+	}
+
+	experience.three_current_positions = person.getThreeCurrentPositions()
+		.getPositionList();
+
+	for (Position position : person.getThreePastPositions()
+		.getPositionList())
+	{
+	    if (position.getCompany().getId() != null)
+	    {
+		try
+		{
+		    Company company = client.getCompanyById(position
+			    .getCompany().getId(), EnumSet.of(
+			    CompanyField.LOCATIONS_ADDRESS,
+			    CompanyField.LOGO_URL, CompanyField.NAME,
+			    CompanyField.NUM_FOLLOWERS,
+			    CompanyField.BLOG_RSS_URL,
+			    CompanyField.DESCRIPTION, CompanyField.ID,
+			    CompanyField.INDUSTRY, CompanyField.TICKER));
+
+		    if (company.getLogoUrl() != null)
+			company.setLogoUrl(company.getLogoUrl()
+				.replaceFirst("http:", "https:")
+				.replaceFirst("m3", "m3-s"));
+		    position.setCompany(company);
+
+		}
+		catch (Exception e)
+		{
+		    System.out.println(e.getMessage());
+		    // If company's id is some irrelevant and not related to
+		    // company, company details are skipped
+		    if (e.getMessage().contains("Company with ID {"))
+			continue;
+		    else
+			throw new Exception(e.getMessage());
+		}
 	    }
 
 	}
@@ -895,34 +1011,6 @@ public class LinkedInUtil
 	// "1a6ebcd2-8038-4198-b59c-25b01cf229c0",
 	// "29571011-8ce5-42a4-90cc-44022c55d77f");// teju test
 
-	// Person cons = client
-	// .getProfileById(
-	// "6ZlRac2KIO",
-	// EnumSet.of(
-	// ProfileField.DISTANCE,
-	// ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS,
-	// ProfileField.RELATION_TO_VIEWER,
-	// ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_HEADLINE,
-	// ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_PUBLIC_PROFILE_URL,
-	// ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_LAST_NAME,
-	// ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_FIRST_NAME,
-	// ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_PICTURE_URL,
-	// ProfileField.RELATION_TO_VIEWER_CONNECTIONS));
-	//
-	// ObjectMapper mapper = new ObjectMapper();
-	// String json;
-	// try
-	// {
-	//
-	// json = mapper.writeValueAsString(cons);
-	// System.out.println(json);
-	//
-	// }
-	// catch (Exception e)
-	// {
-	// e.getMessage();
-	// }
-
 	Person person = client.getProfileByUrl(
 		"http://www.linkedin.com/pub/digvijay-sable/1a/539/512",
 		ProfileType.STANDARD, EnumSet.of(ProfileField.PICTURE_URL,
@@ -986,35 +1074,6 @@ public class LinkedInUtil
 	json = mapper.writeValueAsString(people);
 	System.out.println(json);
 
-	// Person person = client.getProfileById("Q-MbShvCM7", EnumSet.of(
-	// ProfileField.PICTURE_URL, ProfileField.FIRST_NAME,
-	// ProfileField.LAST_NAME, ProfileField.MEMBER_URL_NAME,
-	// ProfileField.LANGUAGES_PROFICIENCY_NAME,
-	// ProfileField.LANGUAGES_LANGUAGE_NAME,
-	// ProfileField.PATENTS_INVENTORS_NAME,
-	// ProfileField.PATENTS_OFFICE_NAME,
-	// ProfileField.PATENTS_STATUS_NAME,
-	// ProfileField.API_STANDARD_PROFILE_REQUEST,
-	// ProfileField.CERTIFICATIONS_AUTHORITY_NAME,
-	// ProfileField.PUBLICATIONS_AUTHORS_NAME, ProfileField.SUMMARY,
-	// ProfileField.HEADLINE, ProfileField.LOCATION_NAME,
-	// ProfileField.NUM_CONNECTIONS, ProfileField.PUBLIC_PROFILE_URL,
-	// ProfileField.ID, ProfileField.DISTANCE,
-	// ProfileField.CURRENT_SHARE, ProfileField.CURRENT_STATUS));
-	//
-	// ObjectMapper mapper = new ObjectMapper();
-	// String json;
-	// try
-	// {
-	//
-	// json = mapper.writeValueAsString(person);
-	// System.out.println(json);
-	//
-	// }
-	// catch (Exception e)
-	// {
-	// e.getMessage();
-	// }
-
+	// IZDqVhjks-
     }
 }
