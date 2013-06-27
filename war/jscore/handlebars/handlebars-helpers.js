@@ -207,6 +207,19 @@ $(function() {
 			}
 	});
 	
+	/**
+	 * Returns workflow name surrounded by quotations if exists, otherwise this
+	 ***/
+	Handlebars.registerHelper('workflowName',function(){
+		if(App_Workflows.workflow_model)
+			{
+			var workflowName = App_Workflows.workflow_model.get("name");
+			return "\'" + workflowName + "\'";
+			}
+		
+		return "this";
+	});
+	
 	
 	/**
 	 * 
@@ -1124,5 +1137,4 @@ $(function() {
 		return new Handlebars.SafeString(getTemplate("empty-collection-model",
 				CONTENT_JSON.dashboard[key]));
 	});
-	
 });

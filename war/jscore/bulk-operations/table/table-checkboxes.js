@@ -31,7 +31,7 @@ $(function(){
 		if($('.grid-view').hasClass('showCheckboxes'))
 		{
 			if($(this).find('#delete-checked-grid').length == 0)
-					var element = $('.showCheckboxes').after('<div class="row"><div class="span6  select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked-grid" style="margin-bottom: 15px"> Delete</a>');		
+					var element = $('.showCheckboxes').after('<div class="row-fluid"><div class="span6 select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked-grid" style="margin-bottom: 15px"> Delete</a>');		
 			console.log(element);
 			return;
 		}
@@ -54,7 +54,7 @@ $(function(){
 		
 	  
 		
-		$(table).after('<div class="row"><div class="span6  select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked" style="margin-bottom: 15px"> Delete</a>');
+		$(table).after('<div class="row-fluid"><div class="span6  select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked" style="margin-bottom: 15px"> Delete</a>');
 		
 		// Sorts the tables based on their column values
 		sort_tables(table);
