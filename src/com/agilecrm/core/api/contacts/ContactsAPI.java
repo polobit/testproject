@@ -2,6 +2,7 @@ package com.agilecrm.core.api.contacts;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -522,7 +523,7 @@ public class ContactsAPI
 	if (tagsArray == null)
 	    return;
 
-	System.out.println("tags to delete : " + tagsArray);
+	System.out.println("tags to delete : " + Arrays.toString(tagsArray));
 	contact.removeTags(tagsArray);
 	System.out.println("tags after delete : " + contact.tagsWithTime);
     }
