@@ -739,6 +739,55 @@ public class WidgetsAPI
 
     /**
      * Connects to {@link LinkedInUtil} based on the name given in widget and
+     * fetches posts based on index in LinkedIn
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param socialId
+     *            {@link String} LinkedIn id or Twitter id of the contact
+     * @param startIndex
+     *            {@link String}
+     * @param endIndex
+     *            {@link String}
+     * @return {@link List} of {@link SocialUpdateStream}
+     */
+    @Path("/updates/index/{widget-id}/{social-id}/{startIndex}/{endIndex}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<SocialUpdateStream> getSocialNetworkUpdatesByIndex(
+	    @PathParam("widget-id") Long widgetId,
+	    @PathParam("social-id") String socialId,
+	    @PathParam("startIndex") String startIndex,
+	    @PathParam("endIndex") String endIndex)
+    {
+	try
+	{
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+	    if (widget == null)
+		return null;
+
+	    // Profiles are searched based on first and last name of contact
+	    // Calls LinkedUtil method to send message to person by socialId
+	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
+		return LinkedInUtil.getNetworkUpdates(widget, socialId);
+
+	    else if (widget.name.equalsIgnoreCase("TWITTER"))
+		return TwitterUtil.getNetworkUpdates(widget,
+			Long.parseLong(socialId));
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+	return null;
+    }
+
+    /**
+     * Connects to {@link LinkedInUtil} based on the name given in widget and
      * fetches specified number of posts LinkedIn based on the parameter social
      * id
      * 

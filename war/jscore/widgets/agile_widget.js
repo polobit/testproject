@@ -125,7 +125,6 @@ function agile_crm_update_contact(propertyName, value, callback) {
 }
 
 function agile_crm_update_contact_properties(propertiesArray, callback) {
-	alert("update contact");
 	 // Gets current contact model from the contactDetailView object
 	 var contact_model = App_Contacts.contactDetailView.model;
 
