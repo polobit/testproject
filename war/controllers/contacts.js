@@ -735,31 +735,36 @@ var ContactsRouter = Backbone.Router.extend({
     	// If id is defined get the respective custom view object 
     	if (id && !view_data) 
 		{
-			var view = new Backbone.Model();
-			view.url = 'core/api/contact-view/' + id;
-			view.fetch({
-				success: function(data)
-				{
-					// If custom view object is empty i.e., custom view is deleted. 
-					// custom view cookie is eraised and default view is shown
-					if($.isEmptyObject(data.toJSON()))
-						{
-							// Erase custom_view cookie, since 
-							// view object with given id is not available
-							eraseCookie("contact_view");
-							
-							// Loads default contact view
-							App_Contacts.contacts();
-							return;
-						}
-						
-					App_Contacts.contactViewModel = data.toJSON();
-					
-					App_Contacts.customView(undefined, App_Contacts.contactViewModel, url);
-
-				}
-			});
-			return;
+    		// Once view id fetched we use it without fetching it.
+    		if(!App_Contacts.contactViewModel)
+    		{
+				var view = new Backbone.Model();
+				view.url = 'core/api/contact-view/' + id;
+				view.fetch({
+					success: function(data)
+					{
+						// If custom view object is empty i.e., custom view is deleted. 
+						// custom view cookie is eraised and default view is shown
+						if($.isEmptyObject(data.toJSON()))
+							{
+								// Erase custom_view cookie, since 
+								// view object with given id is not available
+								eraseCookie("contact_view");
+								
+								// Loads default contact view
+								App_Contacts.contacts();
+								return;
+							}
+						App_Contacts.contactViewModel = data.toJSON();
+						App_Contacts.customView(undefined, App_Contacts.contactViewModel, url);
+	
+					}
+				});
+				return;
+    		}
+    		
+    		view_data = App_Contacts.contactViewModel;
+			
 		}
     	
     	// If url is not defined set defult url to contacts
