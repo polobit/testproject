@@ -85,9 +85,11 @@ $(function()
 		// erase filter cookie
 		eraseCookie('contact_filter');
 		eraseCookie('company_filter');
-		
+
 		if(App_Contacts.contactsListView)
 			App_Contacts.contactsListView = undefined;
+		if(App_Contacts.contact_custom_view)
+			App_Contacts.contact_custom_view = undefined;
 		
 		// Loads contacts
 		App_Contacts.contacts();
