@@ -781,6 +781,7 @@ var ContactsRouter = Backbone.Router.extend({
             individual_tag_name: 'tr',
             cursor: true,
             page_size: 25,
+            sort_collection : false,
             postRenderCallback: function(el) {
             	App_Contacts.contactsListView = App_Contacts.contact_custom_view;
           
