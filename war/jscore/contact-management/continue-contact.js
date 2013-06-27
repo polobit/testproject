@@ -297,6 +297,11 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
         			App_Contacts.contact_custom_view.collection.add(data);
         		}
+        		
+        		else if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection)
+        		{
+        			App_Contacts.contactsListView.collection.add(data);
+        		}
             	
             	App_Contacts.navigate("contact/" + data.id, {
                 	trigger: true
@@ -304,6 +309,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
             	               
             }
         	else {
+        			
             		// Navigates to contacts as there is no detail view for companies
         		    Backbone.history.loadUrl("contacts", {trigger: true});
             }
