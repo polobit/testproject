@@ -479,6 +479,8 @@ var Base_Model_View = Backbone.View
 						$(this.el).find('div.row').removeClass('row').addClass(
 								'row-fluid');
 					}
+					
+					$(this.el).trigger('agile_model_loaded');
 				}
 				// Shows loading in the view, if render conditions are
 				// satisfied

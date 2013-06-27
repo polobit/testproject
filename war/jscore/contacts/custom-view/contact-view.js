@@ -1,5 +1,6 @@
 /**
  * contactTableView is customized function (customization of appendedItem
+
  * function in Base_Collection_View), when custom view is selected, this
  * function is called whenever a new contact is added or contact list is fetched
  * (called on each contact model from Base_collection_View render function) .
@@ -14,6 +15,7 @@
  * 
  * @param base_model
  */
+var CURRENT_VIEW_OBJECT;
 function contactTableView(base_model) {
 
 	// Creates list view for
@@ -39,6 +41,17 @@ function contactTableView(base_model) {
 	// Iterates through, each field name and appends the field according to
 	// order of the fields
 	$.each(fields, function(index, field_name) {
+		var property = getProperty(contact.properties, field_name);
+		if(property)
+			{
+				if(property.type == 'CUSTOM')
+					{
+						$('#contacts-custom-view-model-template').append(
+							getTemplate('contacts-custom-view-custom', property));
+						
+						return;
+					}
+			}
 		$('#contacts-custom-view-model-template').append(
 				getTemplate('contacts-custom-view-' + field_name, contact));
 	});
@@ -109,7 +122,13 @@ $(function() {
 	$('.ContactView').die().live('click', function(e) {
 
 				e.preventDefault();
+				
+				if(App_Contacts.contactViewModel)
+					App_Contacts.contactViewModel = undefined;
 
+				if(App_Contacts.contact_custom_view)
+					App_Contacts.contact_custom_view = undefined;
+				
 				// Gets id of the view
 				var id = $(this).attr('id');
 
@@ -151,7 +170,14 @@ $(function() {
 		// Erases the cookie
 		eraseCookie("contact_view");
 		eraseCookie("agile_contact_view");
+		
+		// Undefines current global view object
+		if(App_Contacts.contactViewModel)
+		App_Contacts.contactViewModel = undefined;
 
+		if(App_Contacts.contactsListView)
+			App_Contacts.contactsListView = undefined;
+		
 		// Loads the contacts
 		App_Contacts.contacts();
 
@@ -166,6 +192,9 @@ $(function() {
 		eraseCookie("contact_view");
 		// Creates the cookie
 		createCookie("agile_contact_view", "grid_view");
+		
+		if(App_Contacts.contactsListView)
+			App_Contacts.contactsListView = undefined;
 
 		// Loads the contacts
 		App_Contacts.contacts(undefined, undefined, true);

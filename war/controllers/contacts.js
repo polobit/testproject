@@ -84,7 +84,7 @@ var ContactsRouter = Backbone.Router.extend({
     	var max_contacts_count = 20;
     	var template_key = "contacts";
     	var individual_tag_name = "tr";
-    	if(grid_view || readCookie("agile_contact_view")){
+    	if(grid_view || readCookie("agile_contact_view")) {
     		template_key = "contacts-grid";
         	individual_tag_name = "div";
     	}
@@ -94,7 +94,40 @@ var ContactsRouter = Backbone.Router.extend({
     	// Tags, Search & default browse comes to the same function
     	if(tag_id)
     	{
+    		// erase filter cookie
+    		eraseCookie('contact_filter');
+    		eraseCookie('company_filter');
+
+    		if(this.contactsListView && this.contactsListView.collection)
+    		{
+    			
+    			if(this.contactsListView.collection.url.indexOf('core/api/tags/'  + tag_id) == -1)
+    			{
+    				this.contactsListView = undefined;
+    			}
+    		}
+    		
+    		if(readCookie("contact_view"))
+    		{      
+          		this.customView(readCookie("contact_view"), undefined, 'core/api/tags/'  + tag_id);
+          		return;
+    		}
+    		
+    		filter_id = null;
+    		
     		url = '/core/api/tags/' + tag_id;
+    	}
+    	else
+    	{
+    		if(this.contactsListView && this.contactsListView.collection)
+    		{
+    			
+    			if(this.contactsListView.collection.url.indexOf('core/api/tags/') != -1)
+    			{
+    				console.log(window.location.hash = '#contacts');
+    				this.contactsListView = undefined;
+    			}
+    		}
     	}
     	
     	if(readCookie('company_filter'))
@@ -137,7 +170,7 @@ var ContactsRouter = Backbone.Router.extend({
 		 * If collection is already defined and contacts are fetched the
 		 * show results instead of initializing collection again
 		 */
-		if (this.contactsListView) {
+		if (this.contactsListView && this.contactsListView.collection) {
 			$('#content').html(this.contactsListView.render(true).el);
 
 			$(".active").removeClass("active");
@@ -279,6 +312,7 @@ var ContactsRouter = Backbone.Router.extend({
         	if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection && App_Contacts.contactsListView.collection.get(id))
 				App_Contacts.contactsListView.collection.get(id).attributes = contact.attributes;
           	  
+
             	loadWidgets(el, contact.toJSON());
 
                 load_timeline_details(el, id);
@@ -307,7 +341,7 @@ var ContactsRouter = Backbone.Router.extend({
         });
         
        
-        var el = this.contactDetailView.render().el;
+        var el = this.contactDetailView.render(true).el;
       
         $('#content').html(el);
 
@@ -492,7 +526,7 @@ var ContactsRouter = Backbone.Router.extend({
     	$('body').trigger('fill_campaigns_contact');
     },
          
-    contactViewAdd: function(){
+    contactViewAdd: function() {
     	var view = new Base_Model_View({
     		url: 'core/api/contact-view',
     		isNew: true,
@@ -500,7 +534,7 @@ var ContactsRouter = Backbone.Router.extend({
     		template: "contact-view",
     		postRenderCallback: function(el) {
     			
-    			$("#content").html(LOADING_HTML);
+    			
     			head.js(LIB_PATH + 'lib/jquery.multi-select.js',LIB_PATH + 'lib/jquery-ui.min.js', function(){
     			
     				$('#multipleSelect', el).multiSelect();
@@ -513,6 +547,7 @@ var ContactsRouter = Backbone.Router.extend({
     		}
     		 
     	});
+    	$("#content").html(LOADING_HTML);
     	view.render();
     },
     contactViews: function() {
@@ -700,31 +735,36 @@ var ContactsRouter = Backbone.Router.extend({
     	// If id is defined get the respective custom view object 
     	if (id && !view_data) 
 		{
-			var view = new Backbone.Model();
-			view.url = 'core/api/contact-view/' + id;
-			view.fetch({
-				success: function(data)
-				{
-					// If custom view object is empty i.e., custom view is deleted. 
-					// custom view cookie is eraised and default view is shown
-					if($.isEmptyObject(data.toJSON()))
-						{
-							// Erase custom_view cookie, since 
-							// view object with given id is not available
-							eraseCookie("contact_view");
-							
-							// Loads default contact view
-							App_Contacts.contacts();
-							return;
-						}
-						
-					App_Contacts.contactViewModel = data.toJSON();
-					
-					App_Contacts.customView(undefined, App_Contacts.contactViewModel, url);
-
-				}
-			});
-			return;
+    		// Once view id fetched we use it without fetching it.
+    		if(!App_Contacts.contactViewModel)
+    		{
+				var view = new Backbone.Model();
+				view.url = 'core/api/contact-view/' + id;
+				view.fetch({
+					success: function(data)
+					{
+						// If custom view object is empty i.e., custom view is deleted. 
+						// custom view cookie is eraised and default view is shown
+						if($.isEmptyObject(data.toJSON()))
+							{
+								// Erase custom_view cookie, since 
+								// view object with given id is not available
+								eraseCookie("contact_view");
+								
+								// Loads default contact view
+								App_Contacts.contacts();
+								return;
+							}
+						App_Contacts.contactViewModel = data.toJSON();
+						App_Contacts.customView(undefined, App_Contacts.contactViewModel, url);
+	
+					}
+				});
+				return;
+    		}
+    		
+    		view_data = App_Contacts.contactViewModel;
+			
 		}
     	
     	// If url is not defined set defult url to contacts
@@ -746,6 +786,7 @@ var ContactsRouter = Backbone.Router.extend({
             individual_tag_name: 'tr',
             cursor: true,
             page_size: 25,
+            sort_collection : false,
             postRenderCallback: function(el) {
             	App_Contacts.contactsListView = App_Contacts.contact_custom_view;
           

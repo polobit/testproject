@@ -182,10 +182,9 @@ public class ContactFilterUtil
 	    // Gets last 20 recently created. Queries for last 20 contacts
 	    // created prior to current time and returns list sorted based on
 	    // current_time
-	    Map<String, Object> query = new HashMap<String, Object>();
-	    query.put("created_time < ", current_time);
 
-	    return Contact.dao.listKeyByProperty(query, "-created_time", 20);
+	    return Contact.dao.ofy().query(Contact.class)
+		    .order("-created_time").limit(20).listKeys();
 
 	}
 	else if (type == ContactFilter.DefaultFilter.CONTACTS)

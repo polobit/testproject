@@ -109,7 +109,7 @@ function agile_crm_update_contact(propertyName, value, callback) {
 			"type" : "CUSTOM"
 		});
 
-	contact_model.set("properties", properties);
+	contact_model.set({"properties": properties}, {silent : true});
 	contact_model.url = "core/api/contacts";
 	// Save model
 	contact_model.save(
@@ -125,7 +125,7 @@ function agile_crm_update_contact(propertyName, value, callback) {
 }
 
 function agile_crm_update_contact_properties(propertiesArray, callback) {
-
+	alert("update contact");
 	 // Gets current contact model from the contactDetailView object
 	 var contact_model = App_Contacts.contactDetailView.model;
 
@@ -176,7 +176,7 @@ function agile_crm_update_contact_properties(propertiesArray, callback) {
 	}
 	 // If property is new then new field is created
 	 
-	 contact_model.set("properties", properties);
+	 contact_model.set({"properties" : properties}, {silent : true});
 	 contact_model.url = "core/api/contacts";
 	 // Save model
 	 contact_model.save(

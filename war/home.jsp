@@ -186,7 +186,7 @@ String CSS_PATH = "/";
 
 								<%
 								    if (domainUser != null && domainUser.is_admin)
-										out.println("<li><a href='#admin'><i class='icon-fire'></i> Admin Settings</a></li>");
+										out.println("<li><a href='#account-prefs'><i class='icon-fire'></i> Admin Settings</a></li>");
 								%>
 
 						<li><a href="#contact-us"><i class="icon-pencil"></i>
@@ -237,9 +237,9 @@ String CSS_PATH = "/";
 		<div style="display:inline;float:right;">
             <a style="font-weight:bold;cursor:pointer;vertical-align:-17px;margin-right: 30px;" id="help-page">Help</a>
         </div>
-        <div style="display:inline;float:right;">
+      <!--   <div style="display:inline;float:right;">
             <a style="font-weight:bold;cursor:pointer;vertical-align:-17px;margin-right: 30px;" id="agile-page-tour">Tour</a>
-        </div>
+        </div> -->
 
 	 	<div style="width:290px;display:inline-block;margin-top:15px;">
 	 	    Like AgileCRM?<b> Share it -</b>

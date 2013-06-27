@@ -57,7 +57,7 @@ $(function ()
     else
     {
         // Shows all the matches in Twitter for the contact 
-        showTwitterMatchingProfiles(plugin_id);
+        getTwitterMatchingProfiles(plugin_id);
     }
     
     // Deletes Twitter  profile on click of delete button in template
@@ -132,6 +132,33 @@ $(function ()
 
     });
     
+    $('.twitter_modify_search').die().live('click', function(e){
+    	e.preventDefault();
+    	
+    	var details = {};
+    	details['firstname'] = agile_crm_get_contact_property("first_name");
+    	details['lastname'] = agile_crm_get_contact_property("last_name");
+    	details['keywords'] = details.firstname + " " + details.lastname;
+    	
+    	console.log(details);
+    	$('#Twitter').html(getTemplate('twitter-modified-search',details));
+    });
+    
+    $('#twitter_search_btn').die().live('click', function(e){
+    	e.preventDefault();
+    	
+    	var search_string = $('#twitter_keywords').val();
+    	console.log(search_string);
+    	getModifiedTwitterMatchingProfiles(plugin_id, search_string);
+    	
+    });
+    
+    $('#twitter_search_close').die().live('click', function(e){
+    	e.preventDefault();
+    	
+    	getTwitterMatchingProfiles(plugin_id);
+    });
+    
     // On click of followers in twitter panel
     $('#twitter_followers').die().live('click', function (e1)
     {
@@ -168,7 +195,7 @@ $(function ()
 	    	 getListOfProfilesByIDsinTwitter(plugin_id, temp, function(result) {	    		 
 	    		 	
 	    		 // Show matching profiles in Twitter panel
-	    		 $('#twitter_follower_panel').html(getTemplate("twitter-search-result", result));
+	    		 $('#twitter_follower_panel').html(getTemplate("twitter-follower-following", result));
 	    		 
 	    		 $(".twitterImage").die().live('mouseover', function ()
 	    	     {
@@ -216,7 +243,7 @@ $(function ()
 		    		 $('#spinner-followers').hide();
 		    		 
 		    		 // Show matching profiles in Twitter panel
-		    		 $('#twitter_follower_panel').append(getTemplate('twitter-search-result', result));
+		    		 $('#twitter_follower_panel').append(getTemplate('twitter-follower-following', result));
 		    	 },
 		    	 function(error)
 			     {
@@ -264,7 +291,7 @@ $(function ()
 	    	getListOfProfilesByIDsinTwitter(plugin_id, temp, function(result) {	    		 
 	    		 	   			    		 
 	    		// Show matching profiles in Twitter panel
-	    		$('#twitter_following_panel').html(getTemplate("twitter-search-result", result));
+	    		$('#twitter_following_panel').html(getTemplate("twitter-follower-following", result));
 	    		
 	    		 $(".twitterImage").die().live('mouseover', function ()
 	    		 {
@@ -312,7 +339,7 @@ $(function ()
 		    		 $('#spinner-following').hide();
 		    		
 		    		// Show matching profiles in Twitter panel
-		    		$('#twitter_following_panel').append(getTemplate('twitter-search-result', result));
+		    		$('#twitter_following_panel').append(getTemplate('twitter-follower-following', result));
 		    	},
 		    	function(error)
 		    	{
@@ -362,93 +389,158 @@ function setupTwitterOAuth(plugin_id)
  * @param plugin_id :
  *            To get the widget and access tokens saved in it.
  */
-function showTwitterMatchingProfiles(plugin_id)
+function showTwitterMatchingProfiles(plugin_id, data)
 {
-    // Shows loading image, until matches profiles are fetched
-    $('#Twitter').html(TWITTER_UPDATE_LOAD_IMAGE);
-
     var contact_image = agile_crm_get_contact_property("image");
     console.log("conatact_image " + contact_image);
     
-    /*
-     *  Fetches matching profiles from Twitter based on widget preferences, and uses 
-     *  call back function to get template and view matches
-     */
-    getTwitterMatchingProfiles(plugin_id, function (data)
+    var el = "<div style='padding:10px'><p>Locate the contact on Twitter. " +
+    		"<a href='#' class='twitter_modify_search'>Modify search</a></p>";
+
+    // If no matches found display message
+    if (data.length == 0)
     {
-        var el = "<div style='padding:10px'><p>Locate the contact on Twitter.</p>";
+    	twitterMainError("No Matches Found " +
+    			"<a href='#' class='twitter_modify_search'>Modify search</a>");
+        return;
+    }
+   
+    el = el.concat(getTemplate("twitter-search-result", data));
+    el = el + "</div>";
 
-        // If no matches found display message
-        if (data.length == 0)
+    // Show matching profiles in Twitter panel
+    $('#Twitter').html(el);
+    
+    // Displays Twitter profile details on mouse hover and saves profile on click
+    $(".twitterImage").die().live('mouseover', function ()
+    {
+    	// Unique Twitter Id from widget 
+        var id = $(this).attr('id');
+
+        // Aligns details to left in the pop over
+        $(this).popover(
         {
-        	twitterMainError("No Matches Found");
-            return;
-        }
-
-       
-        el = el.concat(getTemplate("twitter-search-result", data));
-        el = el + "</div>";
-
-        // Show matching profiles in Twitter panel
-        $('#Twitter').html(el);
-        
-        // Displays Twitter profile details on mouse hover and saves profile on click
-        $(".twitterImage").die().live('mouseover', function ()
-        {
-        	// Unique Twitter Id from widget 
-            var id = $(this).attr('id');
-
-            // Aligns details to left in the pop over
-            $(this).popover(
-            {
-                placement: 'left'
-            });
-
-            // Called show to overcome pop over bug (not showing pop over on mouse hover 
-            // for first time)
-            $(this).popover('show');
-
-            // on click of any profile, save it to the contact
-            $('#' + id).die().live('click', function (e)
-            {
-                e.preventDefault();
-
-                //Hide pop over after clicking on any picture
-                $(this).popover('hide');
-                
-                console.log('on click in search');
-                
-                // Web url of twitter for this profile
-                var url = "@" + $(this).attr('screen_name');
-                
-                console.log(url);
-                var propertiesArray = [
-                                       {"name"  : "website",
-	                     				"value" : url,
-	                     				"subtype" : "TWITTER"}
-                					   ];
-                if(!contact_image)
-                {
-                		//Get image link which can be used to save image for contact
-                        var twitter_image = $(this).attr('src');
-                		propertiesArray.push({"name"  : "image","value" : twitter_image });
-                }
-              	                        
-                // If contact title is undefined, saves headline of the Twitter profile
-            	// to the contact title
-                if(!agile_crm_get_contact_property("title"))
-                {
-                	var summary = $(this).attr("summary");
-                	propertiesArray.push({"name" : "title", "value" : summary});
-                }
-                
-                console.log(propertiesArray);
-               
-                agile_crm_update_contact_properties(propertiesArray);
-              
-            });
+            placement: 'left'
         });
-    });    
+
+        // Called show to overcome pop over bug (not showing pop over on mouse hover 
+        // for first time)
+        $(this).popover('show');
+
+        // on click of any profile, save it to the contact
+        $('#' + id).die().live('click', function (e)
+        {
+            e.preventDefault();
+
+            //Hide pop over after clicking on any picture
+            $(this).popover('hide');
+            
+            console.log('on click in search');
+            
+            // Web url of twitter for this profile
+            var url = "@" + $(this).attr('screen_name');
+            
+            console.log(url);
+            var propertiesArray = [
+                                   {"name"  : "website",
+                     				"value" : url,
+                     				"subtype" : "TWITTER"}
+            					   ];
+            if(!contact_image)
+            {
+            		//Get image link which can be used to save image for contact
+                    var twitter_image = $(this).attr('src');
+            		propertiesArray.push({"name"  : "image","value" : twitter_image });
+            }
+          	                        
+            // If contact title is undefined, saves headline of the Twitter profile
+        	// to the contact title
+            if(!agile_crm_get_contact_property("title"))
+            {
+            	var summary = $(this).attr("summary");
+            	propertiesArray.push({"name" : "title", "value" : summary});
+            }
+            
+            console.log(propertiesArray);
+           
+            agile_crm_update_contact_properties(propertiesArray);
+          
+        });
+    });
+   
+}
+
+/**
+ * Fetches Twitter matching profiles based on plugin id
+ * 
+ * @param plugin_id 
+ * 			plugin id to fetch widget preferences
+ */
+function getTwitterMatchingProfiles(plugin_id)
+{
+	// Shows loading image, until matches profiles are fetched
+    $('#Twitter').html(TWITTER_UPDATE_LOAD_IMAGE);
+    
+    // Gets contact id, to save social results of a particular id
+    var contact_id = agile_crm_get_contact()['id'];
+
+    // Reads from cookie (local storage HTML5), since widgets are saved using local 
+    // storage when matches are fetched for the first time on the contact
+    var data = localStorage.getItem('Agile_twitter_matches_' + contact_id);
+
+    // If cookie is not available fetch results from Twitter
+    if (!data)
+    {
+        // Sends request to url "core/api/widgets/match/" and Calls WidgetsAPI with contact
+        // id and plugin id as path parameters
+   		queueGetRequest("widget_queue", "core/api/widgets/match/" + plugin_id + "/" +contact_id, 'json', 
+   		function success(data)
+        {
+            // Save social results in cookie of particular contact
+            localStorage.setItem('Agile_twitter_matches_' + contact_id, JSON.stringify(data));
+
+            showTwitterMatchingProfiles(plugin_id, data);
+            
+        }, function error(data)
+        {
+            // Remove loading image on error 
+            $('#tweet_load').remove();
+
+            // Shows error message if error occurs
+            twitterMainError(data.responseText);
+        });
+    }
+    else
+    	showTwitterMatchingProfiles(plugin_id, JSON.parse(data));
+}
+
+/**
+ * Fetches Twitter matching profiles based on plugin id and search string
+ * 
+ * @param plugin_id 
+ * 			plugin id to fetch widget preferences
+ */
+function getModifiedTwitterMatchingProfiles(plugin_id, search_string)
+{
+	// Shows loading image, until matches profiles are fetched
+    $('#spinner-twitter-search').show();
+    
+	// Sends request to url "core/api/widgets/match/twitter" and Calls WidgetsAPI with 
+	// plugin id and search string as path parameters
+	$.get("core/api/widgets/modified/match/twitter/" + plugin_id + "/" + search_string , 
+	function (data)
+    {
+		$('#spinner-twitter-search').hide();
+        showTwitterMatchingProfiles(plugin_id, data);
+        
+    }, "json").error( function(data)
+    {
+    	// Remove loading image on error 
+    	$('#spinner-twitter-search').remove();
+        
+        // Shows error message if error occurs
+        twitterMainError(data.responseText);
+    });
 }
 
 /**
@@ -539,8 +631,7 @@ function showTwitterProfile(twitter_id, plugin_id)
             	});
             	
             // Template is populated with update details and shown
-            $('#twitter_social_stream')
-                .append(element);          
+            $('#twitter_social_stream').append(element);          
 
             return;
         }
@@ -741,59 +832,6 @@ function showTwitterProfile(twitter_id, plugin_id)
     });
 }
 
-/**
- * Fetches Twitter matching profiles based on plugin id
- * 
- * @param plugin_id 
- * 			plugin id to fetch widget preferences
- * @param callback 
- * 			callback to create template and show matching profiles
- */
-function getTwitterMatchingProfiles(plugin_id, callback)
-{
-    // Gets contact id, to save social results of a particular id
-    var contact_id = agile_crm_get_contact()['id'];
-
-    // Reads from cookie (local storage HTML5), since widgets are saved using local 
-    // storage when matches are fetched for the first time on the contact
-    var data = localStorage.getItem('Agile_twitter_matches_' + contact_id);
-
-    // If cookie is not available fetch results from Twitter
-    if (!data)
-    {
-        // Sends request to url "core/api/widgets/match/" and Calls WidgetsAPI with contact
-        // id and plugin id as path parameters
-   		queueGetRequest("widget_queue", "core/api/widgets/match/" + plugin_id + "/" +contact_id, 'json', 
-   		function success(data)
-        {
-            // Save social results in cookie of particular contact
-            localStorage.setItem('Agile_twitter_matches_' + contact_id, JSON.stringify(data));
-
-            // Call back to show Twitter matching profiles from cookie
-            if (callback && typeof (callback) === "function")
-            {
-                // execute the callback, passing parameters as necessary
-                callback(data);
-            }
-        }, function error(data)
-        {
-            // Remove loading image on error 
-            $('#tweet_load').remove();
-
-            // Shows error message if error occurs
-            twitterMainError(data.responseText);
-        });
-    }
-    else
-    {
-        // Call back to show Twitter matching profiles from cookie
-        if (callback && typeof (callback) === "function")
-        {
-            // execute the callback, passing parameters as necessary
-            callback(JSON.parse(data));
-        }
-    }
-}
 
 /**
  * Sends a follow request in Twitter based on plugin id and Twitter Id of the profile 
@@ -1151,7 +1189,7 @@ function getTwitterIdByUrl(plugin_id, web_url, callback)
             alert("URL provided for Twitter is not valid ");
 
             // Shows Twitter matching profiles based on contact name
-            showTwitterMatchingProfiles(plugin_id);
+            getTwitterMatchingProfiles(plugin_id);
 
             // Delete the Twitter URL associated with contact as it is incorrect
             agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url);

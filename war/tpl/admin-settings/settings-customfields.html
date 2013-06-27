@@ -1,13 +1,11 @@
 <script id="admin-settings-customfields-collection-template" type="text/html">
-<div class="row">
-    <div class="span12">
-        <div class="page-header">
-            <h1>Custom Fields</h1>
+<div class="" style="margin-bottom: 15px;">
+            <h3><strong>List of Custom Fields</strong></h3>
             <ul class="nav right">
                 <li class="dropdown" id="menu2">
-                    <a href="#custom-fields-add" class="dropdown-toggle btn right" data-toggle="dropdown" id="addUser" style="top:-29px;position:relative">
+                    <a href="#custom-fields-add" class="dropdown-toggle btn right" data-toggle="dropdown" id="addUser" style="top:-27px;position:relative;">
                     <span><i class="icon-plus-sign" /></span> Add Custom Field</a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu pull-right">
                         <li>
                             <a href="#textModal" class="fieldmodal" id="text">Text Field</a>
                         </li>
@@ -26,12 +24,11 @@
                     </ul>
                 </li>
             </ul>
-        </div>
-    </div>
 </div>
 <div class="row">
     <div class="span9">
         {{#unless this.length}}
+		<div style="height: 230px;">
         <div class="slate">
             <div class="slate-content">
                 <div class="box-left">
@@ -65,6 +62,7 @@
                 </div>
             </div>
         </div>
+		</div>
         {{/unless}}
         {{#if this.length}}
         <div class="data-block">
@@ -85,8 +83,8 @@
         {{/if}}
     </div>
 </div>
-<div id="custom-field-modal">
-</div>
+<div id="custom-field-modal"></div>
+
 </script>
 <script id="admin-settings-customfields-model-template" type="text/html">
     <td>{{field_label}} </td>

@@ -30,7 +30,8 @@ $(function()
 	});
 
 	// Fetch filter result without changing route on click
-	$('.filter').live('click', function(e){
+	$('.filter').live('click', function(e) {
+		
 		
 			e.preventDefault();
 			eraseCookie('company_filter');
@@ -84,6 +85,11 @@ $(function()
 		// erase filter cookie
 		eraseCookie('contact_filter');
 		eraseCookie('company_filter');
+
+		if(App_Contacts.contactsListView)
+			App_Contacts.contactsListView = undefined;
+		if(App_Contacts.contact_custom_view)
+			App_Contacts.contact_custom_view = undefined;
 		
 		// Loads contacts
 		App_Contacts.contacts();
@@ -94,7 +100,9 @@ $(function()
 		
 				e.preventDefault();
 				eraseCookie('contact_filter');
+				
 				createCookie('company_filter', "Companies");
+								
 				
 				if(readCookie('contact_view'))
 				{

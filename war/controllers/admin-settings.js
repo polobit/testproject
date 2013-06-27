@@ -1,3 +1,31 @@
+var isAdmintemplate;
+$(function() {
+	this.adminView = new Base_Model_View({
+		url : "/core/api/current-user",
+		template : "admin-settings"
+	});
+	this.adminView.model.fetch();
+	isAdmintemplate = this.adminView.render().el;
+});
+
+function getAdminSettings(callback){
+	App_Admin_Settings.adminViewTemp = new Base_Model_View({
+		url : "/core/api/current-user",
+		template : "admin-settings"
+	});
+
+	App_Admin_Settings.adminViewTemp.model.fetch({
+		success : function() {
+				if (callback && typeof (callback) === "function") {
+					// execute the callback, passing parameters as
+					// necessary
+					$('#content').html(App_Admin_Settings.adminViewTemp.render().el);
+					callback();
+				}
+		}
+	});
+}
+
 /**
  * Creates a backbone router to perform admin activities (account preferences,
  * users management, custom fields, milestones and etc..).
@@ -36,7 +64,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	 * access
 	 * 
 	 */
-	adminSettings : function() {
+/*	adminSettings : function() {
+		
 		this.adminView = new Base_Model_View({
 			url : "/core/api/current-user",
 			template : "admin-settings"
@@ -45,25 +74,36 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		this.adminView.model.fetch();
 		$('#content').html(this.adminView.render().el);
 
-	},
+	},*/
 
 	/**
 	 * Loads a template to show account preferences, with "subscription" option
 	 * to change the plan
 	 */
 	accountPrefs : function() {
+		$('#content').html(isAdmintemplate);
 		var view = new Base_Model_View({
 			url : '/core/api/account-prefs',
 			template : "admin-settings-account-prefs"
 		});
 
-		$('#content').html(view.render().el);
+		//$('#content').html(view.render().el);
+        if(($('#content').find('#admin-prefs-tabs-content').html()) == null){
+        	console.log("nooooooooooooo ele accountPrefs");
+        	getAdminSettings(function(){
+        		App_Admin_Settings.accountPrefs();
+        	});
+        }
+		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
+		$('#content').find('#AdminPrefsTab .active').removeClass('active');
+		$('#content').find('.account-prefs-tab').addClass('active');
 	},
 
 	/**
 	 * Shows list of all the users with an option to add new user
 	 */
 	users : function() {
+		$('#content').html(isAdmintemplate);
 		this.usersListView = new Base_Collection_View({
 			url : '/core/api/users',
 			restKey : "domainUser",
@@ -75,9 +115,18 @@ var AdminSettingsRouter = Backbone.Router.extend({
              	});
 			}
 		});
-
 		this.usersListView.collection.fetch();
-		$('#content').html(this.usersListView.el);
+		
+		//$('#content').html(this.usersListView.el);
+        if(($('#content').find('#admin-prefs-tabs-content').html()) == null){
+        	console.log("nooooooooooooo ele users");
+        	getAdminSettings(function(){
+        		App_Admin_Settings.users();
+        	});
+        }
+		$('#content').find('#admin-prefs-tabs-content').html(this.usersListView.el);
+		$('#content').find('#AdminPrefsTab .active').removeClass('active');
+		$('#content').find('.users-tab').addClass('active');
 	},
 
 	/**
@@ -85,6 +134,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	 * user
 	 */
 	usersAdd : function() {
+		$('#content').html(isAdmintemplate);
 		var view = new Base_Model_View({
 			url : 'core/api/users',
 			template : "admin-settings-user-add",
@@ -96,7 +146,16 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			}
 		});
 
-		$('#content').html(view.render().el);
+		//$('#content').html(view.render().el);
+        if(($('#content').find('#admin-prefs-tabs-content').html()) == null){
+        	console.log("nooooooooooooo ele usersAdd");
+        	getAdminSettings(function(){
+        		App_Admin_Settings.usersAdd();
+        	});
+        }
+		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
+		$('#content').find('#AdminPrefsTab .active').removeClass('active');
+		$('#content').find('.users-tab').addClass('active');
 
 	},
 
@@ -105,7 +164,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	 * defined or not
 	 */
 	userEdit : function(id) {
-
+		$('#content').html(isAdmintemplate);
 		// If users list is not defined then take back to users template
 		if (!this.usersListView || !this.usersListView.collection.get(id)) {
 			this.navigate("users", {
@@ -128,7 +187,17 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			window : 'users'
 		});
 
-		$('#content').html(view.render().el);
+		//$('#content').html(view.render().el);
+        if(($('#content').find('#admin-prefs-tabs-content').html()) == null){
+        	console.log("nooooooooooooo ele userEdit");
+        	getAdminSettings(function(){
+        		App_Admin_Settings.userEdit(id);
+        	});
+        }
+		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
+		$('#content').find('#AdminPrefsTab .active').removeClass('active');
+		$('#content').find('.users-tab').addClass('active'); 
+        
 	},
 
 	/**
@@ -136,7 +205,13 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	 * desired type
 	 * 
 	 */
+	/**
+	 * Shows list of custom fields with an option to add new custom field of
+	 * desired type
+	 * 
+	 */
 	customFields : function() {
+		$('#content').html(isAdmintemplate);
 		this.customFieldsListView = new Base_Collection_View({
 			url : '/core/api/custom-fields',
 			restKey : "customFieldDefs",
@@ -145,7 +220,16 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		});
 
 		this.customFieldsListView.collection.fetch();
-		$('#content').html(this.customFieldsListView.el);
+		//$('#content').html(this.customFieldsListView.el);
+        if(($('#content').find('#admin-prefs-tabs-content').html()) == null){
+        	console.log("nooooooooooooo ele customFields");
+        	getAdminSettings(function(){
+        		App_Admin_Settings.customFields();
+        	});
+        }
+		$('#content').find('#admin-prefs-tabs-content').html(this.customFieldsListView.el);
+		$('#content').find('#AdminPrefsTab .active').removeClass('active');
+		$('#content').find('.custom-fields-tab').addClass('active');
 	},
 
 	/**
@@ -162,7 +246,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					prettyPrint();
 				}
 			});
-			$('#content').html(view.el);
+			$('#content').html(isAdmintemplate);
+	        $('#admin-prefs-tabs-content').html(view.el);
+	        $('#AdminPrefsTab .active').removeClass('active');
+	        $('.analytics-code-tab').addClass('active');
+			//$('#content').html(view.el);
 		});
 	},
 
@@ -178,7 +266,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					prettyPrint();
 				}
 			});
-			$('#content').html(view.el);
+			$('#content').html(isAdmintemplate);
+	        $('#admin-prefs-tabs-content').html(view.el);
+	        $('#AdminPrefsTab .active').removeClass('active');
+	        $('.analytics-code-tab').addClass('active');
+			//$('#content').html(view.el);
 		});
 	},
 
@@ -187,13 +279,22 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	 * success
 	 */
 	milestones : function() {
+		$('#content').html(isAdmintemplate);
 		var view = new Base_Model_View({
 			url : '/core/api/milestone',
 			template : "admin-settings-milestones",
 			reload : true
 		});
-
-		$('#content').html(view.render().el);
+		//$('#content').html(view.render().el);
+        if(($('#content').find('#admin-prefs-tabs-content').html()) == null){
+        	console.log("nooooooooooooo ele milestones");
+        	getAdminSettings(function(){
+        		App_Admin_Settings.milestones();
+        	});
+        }
+		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
+        $('#content').find('#AdminPrefsTab .active').removeClass('active');
+        $('#content').find('.milestones-tab').addClass('active');
 	},
 	
 	/**
