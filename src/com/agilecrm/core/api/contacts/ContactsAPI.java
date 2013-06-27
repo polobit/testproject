@@ -523,7 +523,7 @@ public class ContactsAPI
 	if (tagsArray == null)
 	    return;
 
-	System.out.println("tags to delete : " + Arrays.toString(tagsArray));
+	System.out.println("tags to delete : " + Arrays.asList(tagsArray));
 	contact.removeTags(tagsArray);
 	System.out.println("tags after delete : " + contact.tagsWithTime);
     }
