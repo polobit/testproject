@@ -69,7 +69,7 @@ $(function(){
 	* Shows all the workflows as drop down list to select one of them  
 	* to subscribe the selected contacts
 	*/
-	$("#bulk-campaigns").live('click', function(e){
+	$("#bulk-campaigns").live('click', function(e) {
 		e.preventDefault();
 		
 		var id_array = [];
@@ -152,7 +152,7 @@ $(function(){
 			    
 			    var url = '/core/api/bulk/update?action_type=ADD_TAG';
 			    var json = {};
-			    json.tags = JSON.stringify(tags[0].value);
+			    json.data = JSON.stringify(tags[0].value);
 				json.contact_ids = id_array;
 								
 				postBulkOperationData(url, json, $('#tagsBulkForm'), undefined, function(data){
@@ -314,7 +314,6 @@ function getSelectionCriteria()
 		{
 			return filter_id;
 		}
-	
 	if(_BULK_CONTACTS)
 		{
 			return _BULK_CONTACTS;
@@ -323,14 +322,19 @@ function getSelectionCriteria()
 
 function postBulkOperationData(url, data, form, contentType, callback)
 {
-	if(data.contact_ids && data.contact_ids.length == 0)
-	{	
-		data.contact_ids.push(-1);
-		data.contact_ids.push(getSelectionCriteria());
-	}
 	
+	if(data.contact_ids && data.contact_ids.length == 0)
+	{
+		console.log(data.contact_ids);
+		console.log(getSelectionCriteria());
+		url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+		console.log(url);
+	}
+	else
+		
 	data.contact_ids = JSON.stringify(data.contact_ids);
 	
+	console.log(url);
 	contentType = contentType !=undefined ? contentType : "application/x-www-form-urlencoded"
 	$.ajax({
 		url: url,

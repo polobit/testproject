@@ -46,14 +46,14 @@ $(function(){
 			
 			$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
 			
+			var url = $(table).attr('url');
 			if(SELECT_ALL == true)
 			{
-				id_array = [];
-				id_array.push(-1);
-				id_array.push(getSelectionCriteria());
+				if($(table).attr('id') == "contacts")
+					url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
 			}
 			
-			bulk_delete_operation($(table).attr('url'), id_array, index_array, table, undefined, data_array);
+			bulk_delete_operation(url, id_array, index_array, table, undefined, data_array);
 		}	
 		else
             $('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">×</a>You have not selected any records to delete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
