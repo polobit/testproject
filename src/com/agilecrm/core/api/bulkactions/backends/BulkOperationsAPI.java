@@ -1,6 +1,5 @@
 package com.agilecrm.core.api.bulkactions.backends;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -20,10 +19,8 @@ import org.json.JSONObject;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.googlecode.objectify.Key;
 
 @Path("/api/bulk-actions")
 public class BulkOperationsAPI
@@ -44,24 +41,13 @@ public class BulkOperationsAPI
 	    @PathParam("current_user") Long current_user_id)
 	    throws JSONException
     {
-	List<Key<Contact>> contact_list = new ArrayList<Key<Contact>>();
-
 	if (!StringUtils.isEmpty(filter))
-	    contact_list.addAll(BulkActionUtil.getFilterContactsKeys(filter,
-		    current_user_id));
+	    ContactUtil.deleteContactsbyList(BulkActionUtil.getFilterContacts(
+		    filter, current_user_id));
+
 	else if (!StringUtils.isEmpty(model_ids))
-
-	    contact_list.addAll(BulkActionUtil.getContactKeysForBulkOperations(
-		    model_ids, current_user_id));
-
-	System.out.println(contact_list);
-
-	ContactUtil.deleteContactsbyKeys(contact_list);
-	
-	for (Key<Contact> key : contact_list)
-	    new AppengineSearch<Contact>(Contact.class).delete(String
-		    .valueOf(key.getId()));
-
+	    ContactUtil.deleteContactsbyList(ContactUtil
+		    .getContactsBulk(new JSONArray(model_ids)));
     }
 
     /**
