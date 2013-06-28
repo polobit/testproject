@@ -14,13 +14,16 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
+
+import edu.emory.mathcs.backport.java.util.Arrays;
 
 @Path("/api/bulk-actions")
 public class BulkOperationsAPI
@@ -41,13 +44,27 @@ public class BulkOperationsAPI
 	    @PathParam("current_user") Long current_user_id)
 	    throws JSONException
     {
+	Integer count = 0;
 	if (!StringUtils.isEmpty(filter))
-	    ContactUtil.deleteContactsbyList(BulkActionUtil.getFilterContacts(
-		    filter, current_user_id));
+	{
+	    List<Contact> contacts = BulkActionUtil.getFilterContacts(filter,
+		    current_user_id);
+
+	    ContactUtil.deleteContactsbyList(contacts);
+	    count = contacts.size();
+	}
 
 	else if (!StringUtils.isEmpty(model_ids))
-	    ContactUtil.deleteContactsbyList(ContactUtil
-		    .getContactsBulk(new JSONArray(model_ids)));
+	{
+	    List<Contact> contacts = ContactUtil.getContactsBulk(new JSONArray(
+		    model_ids));
+
+	    ContactUtil.deleteContactsbyList(contacts);
+	    count = contacts.size();
+	}
+
+	BulkActionNotifications.publishconfirmation(
+		BulkAction.BULK_ACTIONS.DELETE, String.valueOf(count));
     }
 
     /**
@@ -81,6 +98,10 @@ public class BulkOperationsAPI
 		    contact_ids));
 
 	Contact.changeOwnerToContactsBulk(contact_list, new_owner);
+
+	BulkActionNotifications.publishconfirmation(
+		BulkAction.BULK_ACTIONS.OWNER_CHANGE,
+		String.valueOf(contact_list.size()));
     }
 
     /**
@@ -113,6 +134,10 @@ public class BulkOperationsAPI
 		    contact_ids));
 
 	WorkflowUtil.subscribeDeferred(contact_list, workflowId);
+
+	BulkActionNotifications.publishconfirmation(
+		BulkAction.BULK_ACTIONS.ENROLL_CAMPAIGN,
+		String.valueOf(contact_list.size()));
     }
 
     /**
@@ -159,17 +184,25 @@ public class BulkOperationsAPI
 	if (tagsArray == null)
 	    return;
 
+	int count = 0;
 	if (!StringUtils.isEmpty(filter))
 	{
-	    ContactUtil.addTagsToContactsBulk(
-		    BulkActionUtil.getFilterContacts(filter, current_user),
-		    tagsArray);
+	    List<Contact> contacts = BulkActionUtil.getFilterContacts(filter,
+		    current_user);
+	    ContactUtil.addTagsToContactsBulk(contacts, tagsArray);
+
+	    count = contacts.size();
 	}
 	else if (!StringUtils.isEmpty(contact_ids))
-	    ContactUtil.addTagsToContactsBulk(
-		    ContactUtil.getContactsBulk(new JSONArray(contact_ids)),
-		    tagsArray);
+	{
+	    List<Contact> contacts = ContactUtil.getContactsBulk(new JSONArray(
+		    contact_ids));
 
-	JSONObject object = new JSONObject();
+	    ContactUtil.addTagsToContactsBulk(contacts, tagsArray);
+	    count = contacts.size();
+	}
+	BulkActionNotifications.publishconfirmation(
+		BulkAction.BULK_ACTIONS.ADD_TAGS,
+		Arrays.asList(tagsArray).toString(), String.valueOf(count));
     }
 }
