@@ -1,5 +1,7 @@
 package com.agilecrm.social;
 
+import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -113,7 +115,8 @@ public class LinkedInUtil
      * @return {@link List} of {@link SocialSearchResult}
      */
     public static List<SocialSearchResult> searchLinkedInProfiles(
-	    Widget widget, Contact contact) throws Exception
+	    Widget widget, Contact contact) throws SocketTimeoutException,
+	    IOException, Exception
     {
 	List<SocialSearchResult> searchResults = new ArrayList<SocialSearchResult>();
 
@@ -173,7 +176,8 @@ public class LinkedInUtil
      * @throws Exception
      */
     public static List<SocialSearchResult> modifiedSearchForLinkedInProfiles(
-	    Widget widget, String keywords)
+	    Widget widget, String keywords) throws SocketTimeoutException,
+	    IOException, Exception
     {
 	// Creates map to fetch results based on searchParameters using
 	// SearchParameter provided by LinkedIn
@@ -210,6 +214,7 @@ public class LinkedInUtil
     public static List<SocialSearchResult> searchPeopleInLinkedIn(
 	    LinkedInApiClient client,
 	    Map<SearchParameter, String> searchParameters)
+	    throws SocketTimeoutException, IOException, Exception
     {
 	People people = client.searchPeople(searchParameters, EnumSet.of(
 		ProfileField.PICTURE_URL, ProfileField.FIRST_NAME,
@@ -283,7 +288,8 @@ public class LinkedInUtil
      * @throws Exception
      */
     public static SocialSearchResult getLinkedinProfileById(Widget widget,
-	    String linkedInId) throws Exception
+	    String linkedInId) throws SocketTimeoutException, IOException,
+	    Exception
     {
 	final LinkedInApiClient client = factory.createLinkedInApiClient(
 		widget.getProperty("token"), widget.getProperty("secret"));
@@ -350,7 +356,7 @@ public class LinkedInUtil
      */
     public static String sendLinkedInAddRequest(Widget widget,
 	    String recipientId, String subject, String message)
-	    throws Exception
+	    throws SocketTimeoutException, IOException, Exception
     {
 	final LinkedInApiClient client = factory.createLinkedInApiClient(
 		widget.getProperty("token"), widget.getProperty("secret"));
@@ -387,7 +393,7 @@ public class LinkedInUtil
      */
     public static String sendLinkedInMessageById(Widget widget,
 	    String recipientId, String subject, String message)
-	    throws Exception
+	    throws SocketTimeoutException, IOException, Exception
     {
 	final LinkedInApiClient client = factory.createLinkedInApiClient(
 		widget.getProperty("token"), widget.getProperty("secret"));
@@ -418,7 +424,8 @@ public class LinkedInUtil
      *             access to his profile
      */
     public static List<SocialUpdateStream> getNetworkUpdates(Widget widget,
-	    String linkedInId) throws Exception
+	    String linkedInId) throws SocketTimeoutException, IOException,
+	    Exception
     {
 	final NetworkUpdatesApiClient client = factory
 		.createNetworkUpdatesApiClient(widget.getProperty("token"),
@@ -454,7 +461,8 @@ public class LinkedInUtil
      *             access to his profile
      */
     public static List<SocialUpdateStream> getNetworkUpdates(Widget widget,
-	    String linkedInId, int startIndex, int endIndex) throws Exception
+	    String linkedInId, int startIndex, int endIndex)
+	    throws SocketTimeoutException, IOException, Exception
     {
 	final NetworkUpdatesApiClient client = factory
 		.createNetworkUpdatesApiClient(widget.getProperty("token"),
@@ -497,7 +505,8 @@ public class LinkedInUtil
      */
     public static List<SocialUpdateStream> getNetworkUpdates(Widget widget,
 	    String linkedInId, int startIndex, int endIndex, String startDate,
-	    String endDate) throws Exception
+	    String endDate) throws SocketTimeoutException, IOException,
+	    Exception
     {
 	final NetworkUpdatesApiClient client = factory
 		.createNetworkUpdatesApiClient(widget.getProperty("token"),
@@ -540,7 +549,7 @@ public class LinkedInUtil
      * @throws Exception
      */
     public static String reshareLinkedInPost(Widget widget, String shareId,
-	    String text) throws Exception
+	    String text) throws SocketTimeoutException, IOException, Exception
     {
 	final NetworkUpdatesApiClient client = factory
 		.createNetworkUpdatesApiClient(widget.getProperty("token"),
@@ -580,7 +589,8 @@ public class LinkedInUtil
      * @throws Exception
      */
     private static List<SocialUpdateStream> getListFromNetwork(Network network,
-	    LinkedInApiClient client1) throws Exception
+	    LinkedInApiClient client1) throws SocketTimeoutException,
+	    IOException, Exception
     {
 	List<SocialUpdateStream> list = new ArrayList<SocialUpdateStream>();
 
@@ -669,7 +679,8 @@ public class LinkedInUtil
      *             access to his profile
      */
     public static List<SocialSearchResult> getConnections(Widget widget,
-	    String linkedInId) throws Exception
+	    String linkedInId) throws SocketTimeoutException, IOException,
+	    Exception
     {
 	final LinkedInApiClient client = factory.createLinkedInApiClient(
 		widget.getProperty("token"), widget.getProperty("secret"));
@@ -724,7 +735,8 @@ public class LinkedInUtil
     }
 
     public static SocialSearchResult getExperience(Widget widget,
-	    String linkedInId) throws Exception
+	    String linkedInId) throws SocketTimeoutException, IOException,
+	    Exception
     {
 	final LinkedInApiClient client = factory.createLinkedInApiClient(
 		widget.getProperty("token"), widget.getProperty("secret"));
@@ -823,7 +835,8 @@ public class LinkedInUtil
     }
 
     public static SocialSearchResult getExperience(Person person,
-	    String linkedInId, LinkedInApiClient client) throws Exception
+	    String linkedInId, LinkedInApiClient client)
+	    throws SocketTimeoutException, IOException, Exception
     {
 
 	SocialSearchResult experience = new SocialSearchResult();
@@ -913,7 +926,8 @@ public class LinkedInUtil
     }
 
     public static List<SocialSearchResult> getSharedConnections(Widget widget,
-	    String linkedInId) throws Exception
+	    String linkedInId) throws SocketTimeoutException, IOException,
+	    Exception
     {
 
 	final LinkedInApiClient client = factory.createLinkedInApiClient(
@@ -945,7 +959,13 @@ public class LinkedInUtil
 	{
 	    SocialSearchResult result = new SocialSearchResult();
 
-	    result.id = person.getId();
+	    if (person.getId() != "")
+		result.id = person.getId();
+
+	    if (person.getFirstName().equalsIgnoreCase("private")
+		    || person.getLastName().equalsIgnoreCase("private"))
+		continue;
+
 	    result.name = person.getFirstName() + " " + person.getLastName();
 	    result.picture = person.getPictureUrl();
 	    result.url = person.getPublicProfileUrl();

@@ -139,6 +139,12 @@ $(function ()
     $('#linkedin_search_btn').die().live('click', function(e){
     	e.preventDefault();
     	
+    	// Checks whether all input fields are given
+        if (!isValidForm($("#linkedin-search_form")))
+        {
+            return;
+        }
+
     	getModifiedLinkedinMatchingProfiles(plugin_id);
     });
     
