@@ -152,10 +152,12 @@
 			{{/if}}			
 			<small>
 				{{#if startDate}}
-					{{startDate.month}}, {{startDate.year}} - 
+					{{#if startDate.month}}{{startDate.month}}, {{/if}}
+					{{#if startDate.year}}{{startDate.year}} - {{/if}}
 				{{/if}}
 				{{#if endDate}}
- 					{{endDate.month}}, {{endDate.year}}
+					{{#if endDate.month}}{{endDate.month}}, {{/if}}
+					{{#if endDate.year}}{{endDate.year}}{{/if}}
 				{{else}}
 					{{#if isCurrent}}
 						present
