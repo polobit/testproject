@@ -37,6 +37,7 @@ function agile_type_ahead(id, el, callback, isSearch){
         	/* Stores type ahead object in temporary variable */
         	var that = this;
 
+        	that.$menu.empty();
         	/* Sets css to html data to be displayed */
         	that.$menu.css("width", 300);
 
@@ -45,18 +46,19 @@ function agile_type_ahead(id, el, callback, isSearch){
         	 * even before first result is fetched to show
         	 * loading 
         	 */
-        	this.render();
+        
 
         	/*
         	 * If loading image is not available in menu then
         	 * appends it to menu
         	 */
         	if (!$(this.$menu.find('li').last()).hasClass('loading-results')){
-        			this.$menu.append('<li class="divider"></li><li class="loading-results"><p align="center">' + LOADING_ON_CURSOR + '</p></li>');
+        			that.$menu.html('<li class="divider"></li><li class="loading-results"><p align="center">' + LOADING_ON_CURSOR + '</p></li>');
+        			that.render();
         	}
 
         	// Drop down with loading image is shown
-        	this.shown = true;
+        	//this.shown = true;
 
         	// Get data on query
         	$.getJSON("core/api/search/" + query+"?page_size=10", function (data){
@@ -79,7 +81,8 @@ function agile_type_ahead(id, el, callback, isSearch){
         		 */
         		if (data.length == 0) {
         			
-        			that.$menu.html('<p align="center"><b>No Results Found</b><p>');
+        			that.$menu.html('<div style="margin-top:10px"><p align="center"><b>No Results Found</b><p></div>');
+        			that.render();
         			return;
         		}
 

@@ -132,8 +132,8 @@ public class OpportunityUtil
 	    try
 	    {
 		// Total and Pipeline (total * probability)
-		long total = opportunity.expected_value;
-		long pipeline = opportunity.expected_value
+		double total = opportunity.expected_value;
+		double pipeline = opportunity.expected_value
 			* opportunity.probability / 100;
 
 		/*
@@ -150,15 +150,15 @@ public class OpportunityUtil
 		Date firstDayOfMonth = calendar.getTime();
 		String mmYY = Math.round(firstDayOfMonth.getTime() / 1000) + "";
 
-		Long oldTotal = 0L, oldPipeline = 0L;
+		Double oldTotal = 0D, oldPipeline = 0D;
 
 		// Read from previous object if present
 		if (dealsObject.containsKey(mmYY))
 		{
 		    JSONObject totalAndPipeline = dealsObject
 			    .getJSONObject(mmYY);
-		    oldTotal = totalAndPipeline.getLong(TOTAL);
-		    oldPipeline = totalAndPipeline.getLong(PIPELINE);
+		    oldTotal = totalAndPipeline.getDouble(TOTAL);
+		    oldPipeline = totalAndPipeline.getDouble(PIPELINE);
 		}
 
 		// If already present, get the previous one and add total and
@@ -283,8 +283,7 @@ public class OpportunityUtil
 		.filter("ownerKey",
 			new Key<DomainUser>(DomainUser.class, SessionManager
 				.get().getDomainId())).order("-created_time")
-		.limit(10)
-		.list();
+		.limit(10).list();
     }
 
     public static List<Opportunity> getUpcomingDealsRelatedToCurrentUser(
