@@ -41,17 +41,20 @@ function contactTableView(base_model) {
 	// Iterates through, each field name and appends the field according to
 	// order of the fields
 	$.each(fields, function(index, field_name) {
-		var property = getProperty(contact.properties, field_name);
-		if(property)
+		if(field_name.indexOf("CUSTOM_") != -1)
+		{
+			field_name = field_name.split("CUSTOM_")[1]; 			
+			var property = getProperty(contact.properties, field_name);
+			if(!property)
 			{
-				if(property.type == 'CUSTOM')
-					{
-						$('#contacts-custom-view-model-template').append(
-							getTemplate('contacts-custom-view-custom', property));
-						
-						return;
-					}
+				$('#contacts-custom-view-model-template').append(getTemplate('contacts-custom-view-custom', {}));
+				return;
 			}
+			
+			$('#contacts-custom-view-model-template').append(getTemplate('contacts-custom-view-custom', property));
+			return;
+		}
+		
 		$('#contacts-custom-view-model-template').append(
 				getTemplate('contacts-custom-view-' + field_name, contact));
 	});

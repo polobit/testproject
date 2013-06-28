@@ -533,8 +533,8 @@ var ContactsRouter = Backbone.Router.extend({
     		window: "contact-views",
     		template: "contact-view",
     		postRenderCallback: function(el) {
-    			
-    			
+    			fillSelect("custom-fields-optgroup", "core/api/custom-fields", undefined,  function(data) {
+    			console.log(data);
     			head.js(LIB_PATH + 'lib/jquery.multi-select.js',LIB_PATH + 'lib/jquery-ui.min.js', function(){
     			
     				$('#multipleSelect', el).multiSelect();
@@ -544,8 +544,9 @@ var ContactsRouter = Backbone.Router.extend({
     				
     				$('.ms-selection').children('ul').addClass('multiSelect').attr("name", "fields_set").sortable();
     			});
-    		}
+    		}, '<option value="CUSTOM_{{field_label}}">{{field_label}}</option>', true, el);
     		 
+    	}
     	});
     	$("#content").html(LOADING_HTML);
     	view.render();
@@ -558,7 +559,7 @@ var ContactsRouter = Backbone.Router.extend({
                individual_tag_name: 'tr'
            });
     	   this.contactViewListView.collection.fetch();
-    	   $('#content').html(this.contactViewListView.el);
+    	   $('#content').html(this.contactViewListView.render().el);
     },
     editContactView: function(id) {    	
     	
@@ -577,29 +578,28 @@ var ContactsRouter = Backbone.Router.extend({
     		model: contact_view_model,
     		template: "contact-view",
     		restKey: "contactView",
-            window: 'contact-views',
+    		window: "contact-views",
             postRenderCallback: function(el) {
-
-            	$("#content").html(LOADING_HTML);
-       			head.js(LIB_PATH + 'lib/jquery.multi-select.js', LIB_PATH + 'lib/jquery-ui.min.js', function(){
-       					
-       		
-       					$("#content").html(el);
-       					
-       					$('#multipleSelect').multiSelect();
-       					
-       				    $('.ms-selection').children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id","fields_set").sortable();
-       					       					
-       					$.each(contact_view_model.toJSON()['fields_set'], function(index, field){
-       						$('#multipleSelect').multiSelect('select', field); 
-       					});
-       					
-       				});
-       			}
-
+            	fillSelect("custom-fields-optgroup", "core/api/custom-fields", undefined,  function(data) {    
+           			head.js(LIB_PATH + 'lib/jquery.multi-select.js', LIB_PATH + 'lib/jquery-ui.min.js', function(){
+           					
+           		
+           					
+           					$(el)
+           					$('#multipleSelect').multiSelect();
+           					
+           				    $('.ms-selection').children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id","fields_set").sortable();
+           					       					
+           					$.each(contact_view_model.toJSON()['fields_set'], function(index, field){
+           						$('#multipleSelect').multiSelect('select', field); 
+           					});
+           					
+           				});
+           			
+        		}, '<option value="CUSTOM_{{field_label}}">{{field_label}}</option>', true, el);
+    	}
     	});
-    	
-    	contactView.render();
+    	$("#content").html(contactView.render().el);
     	
     },
     
