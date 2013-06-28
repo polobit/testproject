@@ -210,7 +210,7 @@ function setup_tags_typeahead() {
  * 			contacts list view page as html object
  */
 function setup_tags(cel) {
-	if(!tagsCollection || (tagsCollection && tagsCollection.length <= 0))
+	if(!tagsCollection || (tagsCollection && tagsCollection.length <= 20))
 	{
 	    // Add Tags
 	    var TagsCollection = Backbone.Collection.extend({
