@@ -81,7 +81,7 @@ public class Opportunity
      * Estimated value of a deal.
      */
     @NotSaved(IfDefault.class)
-    public Long expected_value = null;
+    public Double expected_value = null;
 
     /**
      * Milestone string.
@@ -172,7 +172,7 @@ public class Opportunity
      * @param ownerId
      *            - Owner id.
      */
-    public Opportunity(String name, String description, Long expectedValue,
+    public Opportunity(String name, String description, Double expectedValue,
 	    String milestone, int probability, String track, String ownerId)
     {
 	this.name = name;
