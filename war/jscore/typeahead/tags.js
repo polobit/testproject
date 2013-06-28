@@ -8,6 +8,7 @@
 var TAGS;
 var tagsCollection;
 var isTagsTypeaheadActive;
+var tagsTemplate;
 /**
  * Creates a list (tags_list) only with tag values (i.e excludes the keys), 
  * by fetching the tags from server side, if they do not exist at client side (in TAGS). 
@@ -209,25 +210,30 @@ function setup_tags_typeahead() {
  * 			contacts list view page as html object
  */
 function setup_tags(cel) {
-    // Add Tags
-    var TagsCollection = Backbone.Collection.extend({
-        url: '/core/api/tags',
-        sortKey: 'tag'
-    });
-    tagsCollection = new TagsCollection();
-    tagsCollection.fetch({
-        success: function () {
-            var tagsHTML = getTemplate('tagslist', tagsCollection.toJSON());
-            var len = $('#tagslist', cel).length;
-            $('#tagslist', cel).html(tagsHTML);
-
-            TAGS = tagsCollection.models
-           
-            // Called to initiate typeahead to the fields with class attribute "tags_typeahead"
-            setup_tags_typeahead();
-        }
-    });
-
+	if(!tagsCollection || (tagsCollection && tagsCollection.length <= 0))
+	{
+	    // Add Tags
+	    var TagsCollection = Backbone.Collection.extend({
+	        url: '/core/api/tags',
+	        sortKey: 'tag'
+	    });
+	    tagsCollection = new TagsCollection();
+	    tagsCollection.fetch({
+	        success: function () {
+	        	tagsTemplate = getTemplate('tagslist', tagsCollection.toJSON());
+	            var len = $('#tagslist', cel).length;
+	            $('#tagslist', cel).html(tagsTemplate);
+	
+	            TAGS = tagsCollection.models
+	           
+	            // Called to initiate typeahead to the fields with class attribute "tags_typeahead"
+	            setup_tags_typeahead();
+	        }
+	    });
+	    
+	    return;
+	}
+	  $('#tagslist', cel).html(tagsTemplate);
 }
 
 /**
