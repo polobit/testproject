@@ -147,7 +147,9 @@ var Base_Model_View = Backbone.View
 			 * server(to URL set to model in initialize function)
 			 */
 			deleteItem : function(e) {
-				
+				e.preventDefault();
+				if(!confirm("Are you sure you want to delete?"))
+		    		return;
 				/*
 				 * Sends delete request, and reloads view on success
 				 */
@@ -156,7 +158,7 @@ var Base_Model_View = Backbone.View
 						location.reload(true);
 					}
 				});
-				e.preventDefault();
+				
 			},
 			/**
 			 * Defines action to be performed for click event on HTML element

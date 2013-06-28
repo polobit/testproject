@@ -147,6 +147,12 @@ $(function ()
     $('#twitter_search_btn').die().live('click', function(e){
     	e.preventDefault();
     	
+    	// Checks whether all input fields are given
+        if (!isValidForm($("#twitter-search_form")))
+        {
+            return;
+        }
+
     	var search_string = $('#twitter_keywords').val();
     	console.log(search_string);
     	getModifiedTwitterMatchingProfiles(plugin_id, search_string);
