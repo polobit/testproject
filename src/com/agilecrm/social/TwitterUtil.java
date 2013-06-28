@@ -1,5 +1,7 @@
 package com.agilecrm.social;
 
+import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -85,7 +87,8 @@ public class TwitterUtil
      *             If twitter throws an exception
      */
     public static List<SocialSearchResult> searchTwitterProfiles(Widget widget,
-	    Contact contact) throws Exception
+	    Contact contact) throws SocketTimeoutException, IOException,
+	    Exception
     {
 	// Gets first name and last name of the contact to search profiles
 	String firstName = contact.getContactFieldValue(Contact.FIRST_NAME);
@@ -150,7 +153,8 @@ public class TwitterUtil
      *             If twitter throws an exception
      */
     public static List<SocialSearchResult> searchTwitterProfiles(Widget widget,
-	    String searchString) throws Exception
+	    String searchString) throws SocketTimeoutException, IOException,
+	    Exception
     {
 
 	List<SocialSearchResult> searchResults = new ArrayList<SocialSearchResult>();
@@ -203,7 +207,8 @@ public class TwitterUtil
      * @throws Exception
      */
     public static SocialSearchResult getTwitterProfileById(Widget widget,
-	    String twitterId) throws Exception
+	    String twitterId) throws SocketTimeoutException, IOException,
+	    Exception
     {
 	// Creates a twitter object to connect with twitter
 	Twitter twitter = getTwitter(widget);
@@ -261,7 +266,8 @@ public class TwitterUtil
      *             twitter
      */
     public static String sendTwitterMessageById(Widget widget,
-	    String twitterId, String message) throws Exception
+	    String twitterId, String message) throws SocketTimeoutException,
+	    IOException, Exception
     {
 	long profile_id = Long.parseLong(twitterId);
 	Twitter twitter = getTwitter(widget);
@@ -290,7 +296,7 @@ public class TwitterUtil
      * @throws Exception
      */
     public static String reTweetByTweetId(Widget widget, Long tweetId)
-	    throws Exception
+	    throws SocketTimeoutException, IOException, Exception
     {
 	Twitter twitter = getTwitter(widget);
 	Status reTweet = twitter.retweetStatus(tweetId);
@@ -309,7 +315,7 @@ public class TwitterUtil
      * @throws Exception
      */
     public static String unfollow(Widget widget, Long twitterId)
-	    throws Exception
+	    throws SocketTimeoutException, IOException, Exception
     {
 	Twitter twitter = getTwitter(widget);
 	User user = twitter.destroyFriendship(twitterId);
@@ -328,7 +334,8 @@ public class TwitterUtil
      * @return {@link String} with success message
      * @throws Exception
      */
-    public static String follow(Widget widget, Long twitterId) throws Exception
+    public static String follow(Widget widget, Long twitterId)
+	    throws SocketTimeoutException, IOException, Exception
     {
 	Twitter twitter = getTwitter(widget);
 	User user = twitter.createFriendship(twitterId);
@@ -351,7 +358,7 @@ public class TwitterUtil
      * @throws Exception
      */
     public static String tweetInTwitter(Widget widget, String message)
-	    throws Exception
+	    throws SocketTimeoutException, IOException, Exception
     {
 	Twitter twitter = getTwitter(widget);
 
@@ -376,7 +383,8 @@ public class TwitterUtil
      *             If {@link Twitter} throws an exception
      */
     public static List<SocialUpdateStream> getNetworkUpdates(Widget widget,
-	    Long twitterId) throws Exception
+	    Long twitterId) throws SocketTimeoutException, IOException,
+	    Exception
     {
 	Twitter twitter = getTwitter(widget);
 	User user = twitter.showUser(twitterId);
@@ -404,7 +412,8 @@ public class TwitterUtil
      *             If {@link Twitter} throws an exception
      */
     public static List<SocialUpdateStream> getNetworkUpdates(Widget widget,
-	    Long twitterId, long statusId, int count) throws Exception
+	    Long twitterId, long statusId, int count)
+	    throws SocketTimeoutException, IOException, Exception
     {
 	Twitter twitter = getTwitter(widget);
 	User user = twitter.showUser(twitterId);
@@ -430,7 +439,8 @@ public class TwitterUtil
      *             If {@link Twitter} throws an exception
      */
     public static List<Status> getTweetsByName(Twitter twitter,
-	    String screenName) throws Exception
+	    String screenName) throws SocketTimeoutException, IOException,
+	    Exception
     {
 	Query query = new Query("from:" + screenName);
 	QueryResult result = twitter.search(query);
@@ -451,7 +461,7 @@ public class TwitterUtil
      *             If {@link Twitter} throws an exception
      */
     public static String getTwitterIdByUrl(Widget widget, String webUrl)
-	    throws Exception
+	    throws SocketTimeoutException, IOException, Exception
     {
 
 	// Creates a twitter object to connect with twitter
@@ -492,7 +502,7 @@ public class TwitterUtil
      *             If {@link Twitter} throws an exception
      */
     public static List<Long> getFollowersIDs(Widget widget, String twitterId)
-	    throws Exception
+	    throws SocketTimeoutException, IOException, Exception
     {
 	// Creates a twitter object to connect with twitter
 	Twitter twitter = getTwitter(widget);
@@ -527,7 +537,7 @@ public class TwitterUtil
      *             If {@link Twitter} throws an exception
      */
     public static List<Long> getFollowingIDs(Widget widget, String twitterId)
-	    throws Exception
+	    throws SocketTimeoutException, IOException, Exception
     {
 	// Creates a twitter object to connect with twitter
 	Twitter twitter = getTwitter(widget);
@@ -563,7 +573,8 @@ public class TwitterUtil
      *             If {@link Twitter} throws an exception
      */
     public static List<SocialSearchResult> getListOfProfiles(Widget widget,
-	    JSONArray ids) throws Exception
+	    JSONArray ids) throws SocketTimeoutException, IOException,
+	    Exception
     {
 	Twitter twitter = getTwitter(widget);
 	List<SocialSearchResult> profilesList = new ArrayList<SocialSearchResult>();
@@ -615,7 +626,8 @@ public class TwitterUtil
      *             If {@link Twitter} throws an exception
      */
     private static List<SocialUpdateStream> getListOfSocialUpdateStream(
-	    User user, Twitter twitter, QueryResult result) throws Exception
+	    User user, Twitter twitter, QueryResult result)
+	    throws SocketTimeoutException, IOException, Exception
     {
 	List<SocialUpdateStream> updateStream = new ArrayList<SocialUpdateStream>();
 
