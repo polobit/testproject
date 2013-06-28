@@ -19,7 +19,6 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
@@ -442,17 +441,9 @@ public class ContactUtil
 		.filter("campaignStatus.status", status).count();
     }
 
-    public static void deleteContactsbyIds(JSONArray ids)
+    public static void deleteContactsbyList(List<Contact> contacts)
     {
-	if (ids.length() > 0)
-	    dao.deleteBulkByIds(ids);
-
-	AppengineSearch search = new AppengineSearch<Contact>(Contact.class);
-    }
-
-    public static void deleteContactsbyKeys(List<Key<Contact>> contactKeys)
-    {
-	if (contactKeys.size() > 0)
-	    dao.deleteKeys(contactKeys);
+	for (Contact contact : contacts)
+	    contact.delete();
     }
 }

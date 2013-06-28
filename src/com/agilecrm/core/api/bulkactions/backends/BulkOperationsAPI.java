@@ -14,6 +14,7 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.BulkActionUtil;
@@ -40,8 +41,13 @@ public class BulkOperationsAPI
 	    @PathParam("current_user") Long current_user_id)
 	    throws JSONException
     {
-	ContactUtil.deleteContactsbyKeys(BulkActionUtil
-		.getContactKeysForBulkOperations(model_ids, current_user_id));
+	if (!StringUtils.isEmpty(filter))
+	    ContactUtil.deleteContactsbyList(BulkActionUtil.getFilterContacts(
+		    filter, current_user_id));
+
+	else if (!StringUtils.isEmpty(model_ids))
+	    ContactUtil.deleteContactsbyList(ContactUtil
+		    .getContactsBulk(new JSONArray(model_ids)));
     }
 
     /**
@@ -63,14 +69,18 @@ public class BulkOperationsAPI
 	    @FormParam("filter") String filter,
 	    @PathParam("current_user") Long current_user) throws JSONException
     {
-	if (StringUtils.isEmpty(contact_ids))
-	{
-	    return;
-	}
+	List<Contact> contact_list = null;
 
-	Contact.changeOwnerToContactsBulk(BulkActionUtil
-		.getContactForBulkOperations(contact_ids, current_user),
-		new_owner);
+	if (!StringUtils.isEmpty(filter))
+	{
+	    contact_list = BulkActionUtil.getFilterContacts(filter,
+		    current_user);
+	}
+	else if (!StringUtils.isEmpty(contact_ids))
+	    contact_list = ContactUtil.getContactsBulk(new JSONArray(
+		    contact_ids));
+
+	Contact.changeOwnerToContactsBulk(contact_list, new_owner);
     }
 
     /**
@@ -93,8 +103,14 @@ public class BulkOperationsAPI
 	    @PathParam("current_user_id") Long current_user_id)
 	    throws JSONException
     {
-	List<Contact> contact_list = BulkActionUtil
-		.getContactForBulkOperations(contact_ids, current_user_id);
+	List<Contact> contact_list = null;
+
+	if (!StringUtils.isEmpty(filter))
+	    contact_list = BulkActionUtil.getFilterContacts(filter,
+		    current_user_id);
+	else if (!StringUtils.isEmpty(contact_ids))
+	    contact_list = ContactUtil.getContactsBulk(new JSONArray(
+		    contact_ids));
 
 	WorkflowUtil.subscribeDeferred(contact_list, workflowId);
     }
@@ -113,16 +129,18 @@ public class BulkOperationsAPI
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void addTagsToContacts(@FormParam("contact_ids") String contact_ids,
-	    @FormParam("tags") String tagsString,
+	    @FormParam("data") String tagsString,
 	    @FormParam("filter") String filter,
 	    @PathParam("current_user") Long current_user) throws JSONException
     {
+	System.out.println(filter);
 	System.out.println("current user : " + current_user);
 	System.out.println("domain : " + NamespaceManager.get());
-	if (StringUtils.isEmpty(contact_ids))
-	{
+	System.out.println(contact_ids);
+	System.out.println(tagsString);
+
+	if (StringUtils.isEmpty(tagsString))
 	    return;
-	}
 
 	JSONArray tagsJSONArray = new JSONArray(tagsString);
 
@@ -141,9 +159,17 @@ public class BulkOperationsAPI
 	if (tagsArray == null)
 	    return;
 
-	ContactUtil.addTagsToContactsBulk(BulkActionUtil
-		.getContactForBulkOperations(contact_ids, current_user),
-		tagsArray);
-    }
+	if (!StringUtils.isEmpty(filter))
+	{
+	    ContactUtil.addTagsToContactsBulk(
+		    BulkActionUtil.getFilterContacts(filter, current_user),
+		    tagsArray);
+	}
+	else if (!StringUtils.isEmpty(contact_ids))
+	    ContactUtil.addTagsToContactsBulk(
+		    ContactUtil.getContactsBulk(new JSONArray(contact_ids)),
+		    tagsArray);
 
+	JSONObject object = new JSONObject();
+    }
 }
