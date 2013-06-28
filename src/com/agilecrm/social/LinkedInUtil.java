@@ -173,28 +173,15 @@ public class LinkedInUtil
      * @throws Exception
      */
     public static List<SocialSearchResult> modifiedSearchForLinkedInProfiles(
-	    Widget widget, String firstName, String lastName, String keywords,
-	    String company, String title) throws Exception
+	    Widget widget, String keywords)
     {
 	// Creates map to fetch results based on searchParameters using
 	// SearchParameter provided by LinkedIn
 	Map<SearchParameter, String> searchParameters = new EnumMap<SearchParameter, String>(
 		SearchParameter.class);
 
-	if (!StringUtils.isBlank(firstName))
-	    searchParameters.put(SearchParameter.FIRST_NAME, firstName);
-
-	if (!StringUtils.isBlank(lastName))
-	    searchParameters.put(SearchParameter.LAST_NAME, lastName);
-
 	if (!StringUtils.isBlank(keywords))
 	    searchParameters.put(SearchParameter.KEYWORDS, keywords);
-
-	if (!StringUtils.isBlank(company))
-	    searchParameters.put(SearchParameter.COMPANY_NAME, company);
-
-	if (!StringUtils.isBlank(title))
-	    searchParameters.put(SearchParameter.TITLE, title);
 
 	List<SocialSearchResult> searchResults = new ArrayList<SocialSearchResult>();
 
@@ -206,10 +193,6 @@ public class LinkedInUtil
 		widget.getProperty("token"), widget.getProperty("secret"));
 
 	searchResults = searchPeopleInLinkedIn(client, searchParameters);
-
-	System.out.println("in modified search");
-	System.out.println(searchResults);
-	System.out.println(searchResults.size());
 
 	return searchResults;
     }

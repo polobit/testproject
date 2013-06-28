@@ -219,10 +219,7 @@ public class WidgetsAPI
     @Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
     public List<SocialSearchResult> getModifiedSocialResultsInLinkeidn(
 	    @PathParam("widget-id") Long widgetId,
-	    @FormParam("firstname") String firstName,
-	    @FormParam("lastname") String lastName,
-	    @FormParam("title") String title,
-	    @FormParam("company") String company,
+
 	    @FormParam("keywords") String keywords)
     {
 	try
@@ -238,7 +235,7 @@ public class WidgetsAPI
 	    // Gets profiles from LinkedInUtil based on contact
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
 		return LinkedInUtil.modifiedSearchForLinkedInProfiles(widget,
-			firstName, lastName, keywords, company, title);
+			keywords);
 
 	}
 	catch (Exception e)
