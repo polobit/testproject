@@ -207,8 +207,6 @@ $(function(){
 	$('.contact-owner-list').live('click', function(){
 	
 		$('#change-owner-ul').css('display', 'none');
-		var id_array = [];
-		id_array.push(App_Contacts.contactDetailView.model.get('id'));
 		
 		// Reads the owner id from the selected option
 		var new_owner_id = $(this).attr('data');
@@ -222,25 +220,22 @@ $(function(){
 			  show_owner();
 			  return;
 			}
+		
+		  var contactModel = new BaseModel();
+		    contactModel.url = '/core/api/contacts/change-owner/' + new_owner_id + "/" + App_Contacts.contactDetailView.model.get('id');
+		    contactModel.save(App_Contacts.contactDetailView.model.toJSON(), {success: function(model){
 
-		var url = '/core/api/contacts/bulk/owner/' + new_owner_id;
-		var json = {};
-		json.contact_ids = JSON.stringify(id_array);
-		$.post(url, json, function(data){
-			
-			// Replaces old owner details with changed one
-			$('#contact-owner').text(new_owner_name);
-			$('#contact-owner').attr('data', new_owner_id);
-			
-			// Showing updated owner
-			show_owner(); 
-			// Shows acknowledgement of owner change
-			// $(".change-owner-succes").html('<div class="alert alert-success"><a class="close" data-dismiss="alert" href="#">×</a>Owner has been changed successfully.</div>');
-		});
-
+		    	// Replaces old owner details with changed one
+				$('#contact-owner').text(new_owner_name);
+				$('#contact-owner').attr('data', new_owner_id);
+				
+				// Showing updated owner
+				show_owner(); 
+				App_Contacts.contactDetailView.model = model;
+				
+		    }});
    	});
 });
-
 /**
  * To download vcard
  */

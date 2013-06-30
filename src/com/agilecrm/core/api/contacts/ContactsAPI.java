@@ -379,6 +379,21 @@ public class ContactsAPI
 	}
     }
 
+    @Path("/change-owner/{new_owner}/{contact_id}")
+    @PUT
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Contact changeOwnerToContacts(Contact contact,
+	    @PathParam("new_owner") String new_owner,
+	    @PathParam("contact_id") Long contact_id) throws JSONException
+    {
+	List<Contact> contacts = new ArrayList<Contact>();
+	contacts.add(contact);
+
+	Contact.changeOwnerToContactsBulk(contacts, new_owner);
+	return contact;
+    }
+
     /**
      * Gets a contact based on its email
      * 
