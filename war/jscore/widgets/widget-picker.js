@@ -95,7 +95,12 @@ $(function() {
 				var widgetModel = new Backbone.Model();
 				widgetModel.url = '/core/api/widgets';
 				widgetModel.save(models[0].toJSON(), {
-					success : function() {
+					success : function(data) {
+						
+						// Add it to widgets collections so it do not have to fetch all the contacts
+						if(WIDGETS_VIEW && WIDGETS_VIEW.collection)
+							WIDGETS_VIEW.collection.add(new BaseModel(data.toJSON()));
+						
 						if(!App_Contacts || !App_Contacts.contactDetailView || !App_Contacts.contactDetailView.model)
 						{	
 							Backbone.history.navigate("contacts", {
@@ -135,6 +140,16 @@ $(function() {
 			url : '/core/api/widgets/' + widget_name,
 			contentType : "application/json; charset=utf-8",
 			success : function(data) {
+				
+				// Remove widgets from widget collection
+				if(WIDGETS_VIEW && WIDGETS_VIEW.collection)
+					{
+						var model = WIDGETS_VIEW.collection.where({
+							name : widget_name
+						});
+						
+						WIDGETS_VIEW.collection.remove(model);
+					}
 
 				// Call Fetch to update widget models
 				Catalog_Widgets_View.collection.fetch();
