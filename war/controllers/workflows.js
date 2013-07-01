@@ -47,6 +47,19 @@ var WorkflowsRouter = Backbone.Router
 							
 						});
 						  startTour(undefined, el);
+
+						  // Shows pending triggers content when there are no triggers.
+						  if (App_Workflows.workflowsListView
+									&& !(App_Workflows.workflowsListView.collection.length === 0))
+						  {
+							  $.get('/core/api/triggers',function(data){
+							      
+								  if(data.length===0)
+								  $('#triggers-verification',el).css('display','block');
+								  
+						      });
+						  }
+						 
 					},
 					appendItemCallback:function(el)
 					{

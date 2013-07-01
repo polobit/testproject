@@ -17,7 +17,7 @@
             {{#if subscribersCount.active}}{{subscribersCount.active}}&nbsp;active{{/if}}
         </div>
     </td>
-    <td>{{#if triggers}} {{triggers}} {{else}} <a href="#trigger-add" class="workflow-results"><i class="icon-plus" style="font-size:10px;margin-left:15px"></i></a> {{/if}}</td>
+    <td>{{#if triggers}} {{triggers}} {{else}} <a href="#trigger-add" class="workflow-results"><i class="icon-plus" style="font-size:10px;margin-left:15px"></i> Add</a> {{/if}}</td>
 	<td><a href="#workflows/logs/{{id}}" class="workflow-results">Logs</a></td>
     <td><a href="#email-reports/{{id}}" class="workflow-results">Stats</a></td>
     <td> 
@@ -53,6 +53,18 @@
 </div>
 <div class="row">
     <div class="span9">
+      <!-- Pending Triggers Content -->
+        <div id="triggers-verification" style="margin-top:-10px;display:none;">
+            <div class="alert danger info-block" style="color: black;background-color: rgb(255,255,204);border: 1px solid rgb(211,211,211);">
+                <div>
+                <i class="icon-warning-sign"></i><strong style="">PENDING TRIGGERS. <!--<a href="#trigger-add" style="float: right;cursor: pointer;font-weight: normal;">How to add trigger?</a>--></strong>
+                <p>You have at least one campaign but no triggers yet. <br/></p>
+                <p>Campaigns can be manually run on contact(s) or you can setup a trigger to run the campaign automatically based on certain conditions. <a href="#trigger-add">Setup a new trigger.</a></p>
+                </div>
+            </div>
+        </div>
+        <!-- End of Pending Triggers Content -->
+
         {{#unless this.length}}
         <div id="slate">
         </div>
