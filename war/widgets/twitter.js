@@ -132,14 +132,21 @@ $(function ()
 
     });
     
+    var search_string;
+    var search_data;
+    
     $('.twitter_modify_search').die().live('click', function(e){
     	e.preventDefault();
     	
     	var details = {};
-    	details['firstname'] = agile_crm_get_contact_property("first_name");
-    	details['lastname'] = agile_crm_get_contact_property("last_name");
-    	details['keywords'] = details.firstname + " " + details.lastname;
-    	
+    	if(search_string)
+    		details['keywords'] = search_string;
+    	else
+    	{
+    		details['firstname'] = agile_crm_get_contact_property("first_name");
+        	details['lastname'] = agile_crm_get_contact_property("last_name");
+        	details['keywords'] = details.firstname + " " + details.lastname;
+    	}	
     	console.log(details);
     	$('#Twitter').html(getTemplate('twitter-modified-search',details));
     });
@@ -153,16 +160,22 @@ $(function ()
             return;
         }
 
-    	var search_string = $('#twitter_keywords').val();
-    	console.log(search_string);
-    	getModifiedTwitterMatchingProfiles(plugin_id, search_string);
+        search_string = $('#twitter_keywords').val();
+    	
+        getModifiedTwitterMatchingProfiles(plugin_id, search_string, function(data) {
+    		search_data = data;
+    		showTwitterMatchingProfiles(plugin_id, data);
+    	});
     	
     });
     
     $('#twitter_search_close').die().live('click', function(e){
     	e.preventDefault();
     	
-    	getTwitterMatchingProfiles(plugin_id);
+    	if(search_data)
+    		showTwitterMatchingProfiles(plugin_id, search_data);
+    	else
+    		getTwitterMatchingProfiles(plugin_id);
     });
     
     // On click of followers in twitter panel
@@ -398,7 +411,6 @@ function setupTwitterOAuth(plugin_id)
 function showTwitterMatchingProfiles(plugin_id, data)
 {
     var contact_image = agile_crm_get_contact_property("image");
-    console.log("conatact_image " + contact_image);
     
     var el = "<div style='padding:10px'><p>Locate the contact on Twitter. " +
     		"<a href='#' class='twitter_modify_search'>Modify search</a></p>";
@@ -526,7 +538,7 @@ function getTwitterMatchingProfiles(plugin_id)
  * @param plugin_id 
  * 			plugin id to fetch widget preferences
  */
-function getModifiedTwitterMatchingProfiles(plugin_id, search_string)
+function getModifiedTwitterMatchingProfiles(plugin_id, search_string, callback)
 {
 	// Shows loading image, until matches profiles are fetched
     $('#spinner-twitter-search').show();
@@ -537,7 +549,12 @@ function getModifiedTwitterMatchingProfiles(plugin_id, search_string)
 	function (data)
     {
 		$('#spinner-twitter-search').hide();
-        showTwitterMatchingProfiles(plugin_id, data);
+        
+		// If defined, execute the callback function
+		if (callback && typeof (callback) === "function")
+	    {
+			callback(data);
+	    }
         
     }, "json").error( function(data)
     {
@@ -1203,14 +1220,9 @@ function getTwitterIdByUrl(plugin_id, web_url, callback)
 
     }, function (data)
     {
-    	// If time out exception occurs, ask user to refresh and return
-    	if(data.responseText == "TimeOut")
-    	{
-    		twitterMainError("Time Out while fetching Twitter profile. Reload and try again");
-    		return;
-    	}
-    	
-    	if(data.responseText == "URL provided for Twitter is invalid. No such user exists.")
+    	var temp = "Sorry, that page doesn't exist!";
+    	console.log(data.responseText.substring(0, temp.length));
+    	if(data.responseText.substring(0, temp.length) === temp)
     	{
     		alert(data.responseText);
     		
