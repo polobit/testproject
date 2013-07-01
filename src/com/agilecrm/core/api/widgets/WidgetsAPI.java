@@ -1,5 +1,6 @@
 package com.agilecrm.core.api.widgets;
 
+import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.List;
 
@@ -185,6 +186,19 @@ public class WidgetsAPI
 	    else if (widget.name.equalsIgnoreCase("TWITTER"))
 		return TwitterUtil.searchTwitterProfiles(widget, contact);
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response
@@ -238,6 +252,19 @@ public class WidgetsAPI
 			keywords);
 
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response
@@ -278,6 +305,19 @@ public class WidgetsAPI
 	    if (widget.name.equalsIgnoreCase("TWITTER"))
 		return TwitterUtil.searchTwitterProfiles(widget, searchString);
 
+	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
 	}
 	catch (Exception e)
 	{
@@ -324,16 +364,24 @@ public class WidgetsAPI
 		return TwitterUtil.getTwitterProfileById(widget, socialId);
 	}
 
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
-	    e.printStackTrace();
-
-	    String error = "[invalid.profile.access].";
-	    error = (e.getMessage().contains(error)) ? e.getMessage().replace(
-		    error, "") : e.getMessage().trim();
-
 	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(error).build());
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
 	return null;
     }
@@ -375,7 +423,16 @@ public class WidgetsAPI
 	}
 	catch (SocketTimeoutException e)
 	{
-	    return "TimeOut";
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
 	}
 	catch (Exception e)
 	{
@@ -416,6 +473,19 @@ public class WidgetsAPI
 		return TwitterUtil.getFollowersIDs(widget, socialId);
 
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response
@@ -455,6 +525,19 @@ public class WidgetsAPI
 	    if (widget.name.equalsIgnoreCase("TWITTER"))
 		return TwitterUtil.getFollowingIDs(widget, socialId);
 
+	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
 	}
 	catch (Exception e)
 	{
@@ -498,6 +581,19 @@ public class WidgetsAPI
 		return TwitterUtil.getListOfProfiles(widget,
 			twitterIdsJsonArray);
 
+	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
 	}
 	catch (Exception e)
 	{
@@ -547,9 +643,21 @@ public class WidgetsAPI
 	    else if (widget.name.equalsIgnoreCase("TWITTER"))
 		return TwitterUtil.follow(widget, Long.parseLong(socialId));
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
-
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
@@ -585,9 +693,21 @@ public class WidgetsAPI
 	    if (widget.name.equalsIgnoreCase("TWITTER"))
 		return TwitterUtil.unfollow(widget, Long.parseLong(socialId));
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
-
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
@@ -635,6 +755,19 @@ public class WidgetsAPI
 		return TwitterUtil.sendTwitterMessageById(widget, socialId,
 			message);
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response
@@ -681,6 +814,19 @@ public class WidgetsAPI
 			Long.parseLong(shareId));
 
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response
@@ -724,9 +870,21 @@ public class WidgetsAPI
 			Long.parseLong(socialId));
 
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
-	    e.printStackTrace();
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
@@ -773,9 +931,21 @@ public class WidgetsAPI
 			Long.parseLong(socialId));
 
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
-	    e.printStackTrace();
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
@@ -831,9 +1001,21 @@ public class WidgetsAPI
 	    }
 
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
-	    e.printStackTrace();
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
@@ -878,9 +1060,21 @@ public class WidgetsAPI
 			Integer.parseInt(endIndex));
 
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
-	    e.printStackTrace();
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
@@ -918,6 +1112,19 @@ public class WidgetsAPI
 		return TwitterUtil.tweetInTwitter(widget, message);
 
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response
@@ -953,6 +1160,19 @@ public class WidgetsAPI
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
 		return LinkedInUtil.getExperience(widget, socialId);
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response
@@ -987,6 +1207,19 @@ public class WidgetsAPI
 
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
 		return LinkedInUtil.getSharedConnections(widget, socialId);
+	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
 	}
 	catch (Exception e)
 	{
@@ -1051,6 +1284,19 @@ public class WidgetsAPI
 	    return StripePluginUtil.getCustomerDetails(widget, customerId)
 		    .toString();
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response
@@ -1085,9 +1331,21 @@ public class WidgetsAPI
 
 	    return ZendeskUtil.getContactTickets(widget, email);
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
-	    System.out.println(e.getMessage());
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
@@ -1132,6 +1390,19 @@ public class WidgetsAPI
 	    return ZendeskUtil.addTicket(widget, name, email, subject,
 		    description);
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response
@@ -1170,6 +1441,19 @@ public class WidgetsAPI
 
 	    return ZendeskUtil.updateTicket(widget, ticketNumber, description);
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response
@@ -1198,6 +1482,19 @@ public class WidgetsAPI
 		return null;
 
 	    return ZendeskUtil.getUserInfo(widget);
+	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
 	}
 	catch (Exception e)
 	{
@@ -1234,13 +1531,25 @@ public class WidgetsAPI
 
 	    return ZendeskUtil.getTicketsByStatus(widget, email, status);
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
 	}
-
     }
 
     /**
@@ -1267,9 +1576,21 @@ public class WidgetsAPI
 
 	    return ZendeskUtil.getZendeskProfile(widget, email);
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
-
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
@@ -1299,12 +1620,24 @@ public class WidgetsAPI
 	{
 	    return FreshBooksUtil.getClients(widget, email);
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
-
 	}
 
     }
@@ -1333,12 +1666,24 @@ public class WidgetsAPI
 	{
 	    return FreshBooksUtil.getInvoicesOfClient(widget, clientId);
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
-
 	}
 
     }
@@ -1363,14 +1708,25 @@ public class WidgetsAPI
 	{
 	    return FreshBooksUtil.getItems(widget);
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
-
 	}
-
     }
 
     /**
@@ -1393,12 +1749,24 @@ public class WidgetsAPI
 	{
 	    return FreshBooksUtil.getTaxes(widget);
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
-
 	}
 
     }
@@ -1431,14 +1799,25 @@ public class WidgetsAPI
 	{
 	    return FreshBooksUtil.addClient(widget, firstName, lastName, email);
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
-
 	}
-
     }
 
     /**
@@ -1476,14 +1855,25 @@ public class WidgetsAPI
 	    return FreshBooksUtil.addInvoice(widget, firstName, lastName,
 		    email, linesInfo);
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
-
 	}
-
     }
 
     /**
@@ -1507,12 +1897,24 @@ public class WidgetsAPI
 	{
 	    return TwilioUtil.getCallLogsWithRecordings(widget, to).toString();
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
-
 	}
 
     }
@@ -1546,12 +1948,24 @@ public class WidgetsAPI
 	{
 	    return TwilioUtil.makeCall(widget, from, to, url).toString();
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
-
 	}
     }
 
@@ -1575,12 +1989,24 @@ public class WidgetsAPI
 	{
 	    return TwilioUtil.getOutgoingNumbers(widget).toString();
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
-
 	}
     }
 
@@ -1604,12 +2030,24 @@ public class WidgetsAPI
 	{
 	    return TwilioUtil.verifyOutgoingNumbers(widget, from).toString();
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
-
 	}
     }
 
@@ -1633,12 +2071,24 @@ public class WidgetsAPI
 	{
 	    return TwilioUtil.getIncomingNumbers(widget).toString();
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
-
 	}
     }
 
@@ -1664,12 +2114,24 @@ public class WidgetsAPI
 	{
 	    return TwilioUtil.generateTwilioToken(widget);
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
-
 	}
 
     }
@@ -1694,12 +2156,24 @@ public class WidgetsAPI
 	{
 	    return TwilioUtil.getTwilioAppSID(widget);
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
-
 	}
     }
 
@@ -1717,12 +2191,24 @@ public class WidgetsAPI
 	    return TwilioUtil.getRecordingsExample(widget,
 		    "CA4a612d4fb2ba5a8ec2fa13f37b21de95");
 	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
 	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
-
 	}
     }
 

@@ -124,14 +124,22 @@ $(function ()
     	getLinkedInNetworkUpdates(plugin_id, linkedin_id);
     });
     
+    var past_search_input;
+    var past_search_data;
+    
     $('.linkedin_modify_search').die().live('click', function(e){
     	e.preventDefault();
     	
     	var details = {};
-    	details['firstname'] = agile_crm_get_contact_property("first_name");
-    	details['lastname'] = agile_crm_get_contact_property("last_name");
-    	details['keywords'] = details.firstname + " " + details.lastname;
     	
+    	if(past_search_input)
+    		details['keywords'] = past_search_input;
+    	else
+    	{
+    		details['firstname'] = agile_crm_get_contact_property("first_name");
+    		details['lastname'] = agile_crm_get_contact_property("last_name");
+    		details['keywords'] = details.firstname + " " + details.lastname;
+    	}
     	console.log(details);
     	$('#Linkedin').html(getTemplate('linkedin-modified-search',details));
     });
@@ -144,14 +152,22 @@ $(function ()
         {
             return;
         }
+        
+        past_search_input = $('#linkedin_keywords').val();
 
-    	getModifiedLinkedinMatchingProfiles(plugin_id);
+    	getModifiedLinkedinMatchingProfiles(plugin_id, function(data) {
+    		past_search_data = data;
+    		showLinkedinMatchingProfiles(plugin_id, data);
+    	});
     });
     
     $('#linkedin_search_close').die().live('click', function(e){
     	e.preventDefault();
     	
-    	getLinkedinMatchingProfiles(plugin_id);
+    	if(past_search_data)
+    		showLinkedinMatchingProfiles(plugin_id, past_search_data);
+    	else
+    		getLinkedinMatchingProfiles(plugin_id);
     });
 });
 
@@ -317,7 +333,7 @@ function getLinkedinMatchingProfiles(plugin_id)
     	showLinkedinMatchingProfiles(plugin_id, JSON.parse(data));
 }
 
-function getModifiedLinkedinMatchingProfiles(plugin_id)
+function getModifiedLinkedinMatchingProfiles(plugin_id, callback)
 {
 	$('#spinner-linked-search').show();
     
@@ -326,7 +342,12 @@ function getModifiedLinkedinMatchingProfiles(plugin_id)
 	function(data)
 	{
 		$('#spinner-linked-search').hide();
-		showLinkedinMatchingProfiles(plugin_id, data);
+		
+		 // If defined, execute the callback function
+        if (callback && typeof (callback) === "function")
+        {
+            callback(data);
+        }
         
 	},"json"). error( function(data)
 	{
@@ -883,12 +904,6 @@ function getLinkedinIdByUrl(plugin_id, web_url, callback)
 		
 		    }, function (data)
 		    {
-		    	if(data.responseText == "TimeOut")
-		    	{
-		    		linkedinMainError("Time Out while fetching LinkedIn profile. Reload and try again");
-		    		return;
-		    	}
-		    	
 		    	if(data.responseText.indexOf("Public profile URL is not correct") != -1)
 		    	{
 		    		// Shows error message to the user returned by LinkedIn
