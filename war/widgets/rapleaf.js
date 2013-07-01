@@ -119,7 +119,7 @@ function showRapleafDetails(plugin_id) {
 						
 		}, function error(data)
 		{
-			$('#Rapleaf').html("<div class='widget_content'>" + data.responseText + "</div>");
+			rapleafError("Rapleaf", data.responseText);
 		});
 
 }

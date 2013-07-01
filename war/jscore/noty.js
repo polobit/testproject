@@ -37,7 +37,6 @@
 //	
 //});
 
-
 //function showNotyP(type, message, position)
 //{
 //	// Download the lib
@@ -73,16 +72,44 @@
 //	 
 //}
 
-function get_random_message()
-{
-	
-var messages = [
-"Thanks for trying Agile CRM.",
-"You can upgrade here."
-];
+function bulkActivitiesNoty(type, message, position) {
+	// Download the lib
+	head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
+			+ 'lib/noty/layouts/bottom.js', LIB_PATH
+			+ 'lib/noty/layouts/top.js', LIB_PATH
+			+ 'lib/noty/themes/default.js', function() {
 
-var random = Math.floor((Math.random()* messages.length));
-// console.log(random + messages[random]);
+		// Close all
+		$.noty.closeAll()
 
-return messages[random];
+		var n = noty({
+			text : message.message,
+			layout : position,
+			type : type,
+			animation : {
+				open : {
+					height : 'toggle'
+				},
+				close : {
+					height : 'toggle'
+				},
+				easing : 'swing',
+				speed : 500
+				// opening & closing animation speed
+			},
+			timeout : 2000, // delay for closing event. Set false for sticky
+							// notifications
+		});
+	});
+
+}
+
+function get_random_message() {
+
+	var messages = [ "Thanks for trying Agile CRM.", "You can upgrade here." ];
+
+	var random = Math.floor((Math.random() * messages.length));
+	// console.log(random + messages[random]);
+
+	return messages[random];
 }

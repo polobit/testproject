@@ -18,8 +18,12 @@ import org.json.JSONException;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
+
+import edu.emory.mathcs.backport.java.util.Arrays;
 
 @Path("/api/bulk-actions")
 public class BulkOperationsAPI
@@ -40,8 +44,27 @@ public class BulkOperationsAPI
 	    @PathParam("current_user") Long current_user_id)
 	    throws JSONException
     {
-	ContactUtil.deleteContactsbyKeys(BulkActionUtil
-		.getContactKeysForBulkOperations(model_ids, current_user_id));
+	Integer count = 0;
+	if (!StringUtils.isEmpty(filter))
+	{
+	    List<Contact> contacts = BulkActionUtil.getFilterContacts(filter,
+		    current_user_id);
+
+	    ContactUtil.deleteContactsbyList(contacts);
+	    count = contacts.size();
+	}
+
+	else if (!StringUtils.isEmpty(model_ids))
+	{
+	    List<Contact> contacts = ContactUtil.getContactsBulk(new JSONArray(
+		    model_ids));
+
+	    ContactUtil.deleteContactsbyList(contacts);
+	    count = contacts.size();
+	}
+
+	BulkActionNotifications.publishconfirmation(
+		BulkAction.BULK_ACTIONS.DELETE, String.valueOf(count));
     }
 
     /**
@@ -63,14 +86,22 @@ public class BulkOperationsAPI
 	    @FormParam("filter") String filter,
 	    @PathParam("current_user") Long current_user) throws JSONException
     {
-	if (StringUtils.isEmpty(contact_ids))
-	{
-	    return;
-	}
+	List<Contact> contact_list = null;
 
-	Contact.changeOwnerToContactsBulk(BulkActionUtil
-		.getContactForBulkOperations(contact_ids, current_user),
-		new_owner);
+	if (!StringUtils.isEmpty(filter))
+	{
+	    contact_list = BulkActionUtil.getFilterContacts(filter,
+		    current_user);
+	}
+	else if (!StringUtils.isEmpty(contact_ids))
+	    contact_list = ContactUtil.getContactsBulk(new JSONArray(
+		    contact_ids));
+
+	Contact.changeOwnerToContactsBulk(contact_list, new_owner);
+
+	BulkActionNotifications.publishconfirmation(
+		BulkAction.BULK_ACTIONS.OWNER_CHANGE,
+		String.valueOf(contact_list.size()));
     }
 
     /**
@@ -93,10 +124,20 @@ public class BulkOperationsAPI
 	    @PathParam("current_user_id") Long current_user_id)
 	    throws JSONException
     {
-	List<Contact> contact_list = BulkActionUtil
-		.getContactForBulkOperations(contact_ids, current_user_id);
+	List<Contact> contact_list = null;
+
+	if (!StringUtils.isEmpty(filter))
+	    contact_list = BulkActionUtil.getFilterContacts(filter,
+		    current_user_id);
+	else if (!StringUtils.isEmpty(contact_ids))
+	    contact_list = ContactUtil.getContactsBulk(new JSONArray(
+		    contact_ids));
 
 	WorkflowUtil.subscribeDeferred(contact_list, workflowId);
+
+	BulkActionNotifications.publishconfirmation(
+		BulkAction.BULK_ACTIONS.ENROLL_CAMPAIGN,
+		String.valueOf(contact_list.size()));
     }
 
     /**
@@ -113,16 +154,18 @@ public class BulkOperationsAPI
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void addTagsToContacts(@FormParam("contact_ids") String contact_ids,
-	    @FormParam("tags") String tagsString,
+	    @FormParam("data") String tagsString,
 	    @FormParam("filter") String filter,
 	    @PathParam("current_user") Long current_user) throws JSONException
     {
+	System.out.println(filter);
 	System.out.println("current user : " + current_user);
 	System.out.println("domain : " + NamespaceManager.get());
-	if (StringUtils.isEmpty(contact_ids))
-	{
+	System.out.println(contact_ids);
+	System.out.println(tagsString);
+
+	if (StringUtils.isEmpty(tagsString))
 	    return;
-	}
 
 	JSONArray tagsJSONArray = new JSONArray(tagsString);
 
@@ -141,9 +184,25 @@ public class BulkOperationsAPI
 	if (tagsArray == null)
 	    return;
 
-	ContactUtil.addTagsToContactsBulk(BulkActionUtil
-		.getContactForBulkOperations(contact_ids, current_user),
-		tagsArray);
-    }
+	int count = 0;
+	if (!StringUtils.isEmpty(filter))
+	{
+	    List<Contact> contacts = BulkActionUtil.getFilterContacts(filter,
+		    current_user);
+	    ContactUtil.addTagsToContactsBulk(contacts, tagsArray);
 
+	    count = contacts.size();
+	}
+	else if (!StringUtils.isEmpty(contact_ids))
+	{
+	    List<Contact> contacts = ContactUtil.getContactsBulk(new JSONArray(
+		    contact_ids));
+
+	    ContactUtil.addTagsToContactsBulk(contacts, tagsArray);
+	    count = contacts.size();
+	}
+	BulkActionNotifications.publishconfirmation(
+		BulkAction.BULK_ACTIONS.ADD_TAGS,
+		Arrays.asList(tagsArray).toString(), String.valueOf(count));
+    }
 }

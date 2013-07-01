@@ -240,7 +240,7 @@ public class InitDefaults
 	Opportunity deal = new Opportunity();
 	deal.name = "Nike Endorsement";
 	deal.description = "Advertisements and apparel for Nike";
-	deal.expected_value = 2000000l;
+	deal.expected_value = 2000000d;
 	deal.probability = 98;
 	deal.milestone = "Open";
 	DateUtil date = new DateUtil().toMidnight().addDays(20);

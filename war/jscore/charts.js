@@ -379,7 +379,7 @@ function showLine(url, selector, name, yaxis_name) {
 					formatter : function() {
 						return '<b>' + this.series.name + '</b><br/>'
 								+ Highcharts.dateFormat('%e. %b', this.x)
-								+ ': ' + this.y;
+								+ ': ' + this.y.toFixed(2);
 					}
 				},
 				legend : {

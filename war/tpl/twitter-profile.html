@@ -9,8 +9,8 @@
 	<p>{{show_link_in_statement summary}}</p>
 	<a href="#" class="btn" id="twitter_follow" name="{{name}}" style="display:none;"><i class="icon-twitter"></i>&nbsp;Follow</a>
 	<a href="#" class="btn btn-primary span5" id="twitter_unfollow" name="{{name}}" style="display:none;">Following</a>
-	<a href="#" class="btn ml_5" id="twitter_tweet" rel="tooltip" title="Compose a new Tweet" style="display:none;">Tweet</a>
-	<a href="#" class="btn ml_5 icon-envelope" id="twitter_message" rel="tooltip" title="Send Direct Message" style="display:none;"></a>					
+	<a href="#" class="btn ml_5" id="twitter_tweet" rel="tooltip" title="Compose a new Tweet">Tweet</a>
+	{{#if is_followed_by_target}}<a href="#" class="btn ml_5 icon-envelope" id="twitter_message" rel="tooltip" title="Send Direct Message"></a>{{/if}}					
 </div>
 <div class="" id="twitter-error-panel" style="display:none;" >
 </div>
@@ -25,6 +25,16 @@
 			<ul class="widget_tab_content"  id="twitter_current_activity" style="display:none;">
 				<li>	
 					{{show_link_in_statement current_update}}
+				</li>
+			</ul>
+		{{else}}
+			<ul class="widget_tab_content"  id="twitter_current_activity" style="display:none;">
+				<li>	
+					{{#if is_connected}}
+						{{name}} hasn't tweeted yet
+					{{else}}
+						Only confirmed followers have access to {{name}}'s Tweets and complete profile. Click the "Follow" button to send a follow request.
+					{{/if}}
 				</li>
 			</ul>
 		{{/if}}
@@ -130,7 +140,7 @@
 		{{/each}}
 	</div>
 {{else}}
-		<li style="color: #999999;">This person does not share his/her updates</li>
+		<li style="color: #999999;">This person does not share his/her tweets</li>
 {{/if}}
 </script>
 
@@ -197,7 +207,7 @@
 	    	<fieldset>
 				<p>
 				<label>Enter Search details</label>
-				<input type="text" id="twitter_keywords" class="input-medium widget_input_box" style="width:90%" rel="tooltip" title="Key Words" placeholder="Key Words" value="{{keywords}}" name="keywords"></input>
+				<div class="control-group"><div class="controls"><input type="text" id="twitter_keywords" class="input-medium required widget_input_box" style="width:90%" placeholder="Key Words" value="{{keywords}}" name="keywords"></input></div></div>
 				</p>
 				<a href="#" id="twitter_search_btn" class="btn" style="text-decoration:none;">Search</a>
 				<span><img src="img/ajax-spinner.gif" id="spinner-twitter-search" style="display:none;"></img></span>

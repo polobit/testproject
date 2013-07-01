@@ -147,6 +147,12 @@ $(function ()
     $('#twitter_search_btn').die().live('click', function(e){
     	e.preventDefault();
     	
+    	// Checks whether all input fields are given
+        if (!isValidForm($("#twitter-search_form")))
+        {
+            return;
+        }
+
     	var search_string = $('#twitter_keywords').val();
     	console.log(search_string);
     	getModifiedTwitterMatchingProfiles(plugin_id, search_string);
@@ -587,32 +593,19 @@ function showTwitterProfile(twitter_id, plugin_id)
 
         // Checks if the agile user is following the contact's Twitter profile
         if (data.is_connected)
-        {
             // If following unFollow and compose tweet buttons are shown
             $('#twitter_unfollow').show();
-            $('#twitter_tweet').show();
 
-            // Checks if the contact's Twitter profile is following agile user
-            if (data.is_followed_by_target)
-            {
-                // If following, send direct message icon is shown
-                $('#twitter_message').show();
-            }
-        }
         else
         {
             // Checks if follow request is sent, if not sent follow button is shown
             if (!data.is_follow_request_sent)
-            {
                 $('#twitter_follow').show();
-            }
             else
-            {
                 // If follow request sent, then button is disabled showing the text as
                 // follow request sent
                 $('#twitter_follow').text("Follow Request Sent")
                     .attr("disabled", "disabled").show();
-            }
         }
 
         // If updates are available, show recent updates in Twitter profile
@@ -636,16 +629,9 @@ function showTwitterProfile(twitter_id, plugin_id)
             return;
         }
 
-        // If no updates are available, current update is shown if present
-        if (Twitter_current_update_id)
-        {
-            // Current update heading and current update is shown
-            $('#twitter_current_activity').show();
-            return;
-        }
+        // Current current update is shown
+        $('#twitter_current_activity').show();
         
-        $('#twitter_social_stream').html("<div style='padding:10px;'>" + 
-        		Twitter_current_profile_user_name + " hasn't tweeted yet");
         
     }, "json").error(function (data)
     {
@@ -677,13 +663,13 @@ function showTwitterProfile(twitter_id, plugin_id)
             // Checks if person is already following in Twitter to agile user
             if (twitter_connected)
             {
-            	tweetError("This member doesn't share his/her updates");
+            	tweetError("This member doesn't share his/her tweets");
                 return;
             }
 
             // If not following, advice user to follow him/her to see updates
             // Error message is shown to the user
-            tweetError("Member does not share his/her updates. Follow him/her and try");
+            tweetError("Member does not share his/her tweets. Follow him/her and try");
             return;
         }
 
@@ -854,14 +840,17 @@ function sendFollowRequest(plugin_id, twitter_id)
             // Compose a new tweet and unfollow buttons are shown and follow hidden
             $('#twitter_follow').hide();
             $('#twitter_unfollow').show();
-            $('#twitter_tweet').show();
+        }
+        else
+        {
+        	$('#twitter_follow').text("Follow Request Sent")
+            .attr("disabled", "disabled").show();
+        	return;
         }
 
         // If current activity is undefined, then no updates can be retrieved 
         if (!Twitter_current_update_id) 
-        {
         	return;
-        }
 
         // Sends request to get five updates before current update when follow is clicked
         $.getJSON("/core/api/widgets/updates/more/" + plugin_id + "/" + twitter_id +
@@ -871,6 +860,7 @@ function sendFollowRequest(plugin_id, twitter_id)
         {
             // Populates the template with the data and shows refresh button
             $("#twitter_social_stream").html(getTemplate("twitter-update-stream", data));
+            $('#twitter_current_activity').hide();
             $('#twitter_refresh_stream').show();
 
             // Checks if stream available, 
@@ -878,6 +868,7 @@ function sendFollowRequest(plugin_id, twitter_id)
             {
                 // See Less is shown and see more is hidden
                 $("#twitter_stream").hide();
+                $('#twitter_current_activity').show();
                 $('#twitter_less').show();
                 return;
             }
@@ -893,6 +884,7 @@ function sendFollowRequest(plugin_id, twitter_id)
 
     }).error(function (data)
     {
+    	console.log(data);
         // Error message is shown if error occurs
     	twitterError(data.responseText);
     });
@@ -914,8 +906,6 @@ function sendUnfollowRequest(plugin_id, twitter_id)
     $.get("/core/api/widgets/disconnect/" + plugin_id + "/" + twitter_id, function (data)
     {
         // On success, unFollow, tweet and message buttons are hidden and follow shown
-        $('#twitter_message').hide();
-        $('#twitter_tweet').hide();
         $("#twitter_follow").show();
         $('#twitter_unfollow').hide();
 

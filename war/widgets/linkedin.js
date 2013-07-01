@@ -19,6 +19,11 @@ $(function ()
     
     // Current contact user name in LinkedIn profile
     Linkedin_current_profile_user_name = "";   
+    
+    // Stores the initial update stream of the contact's LinkedIn profile
+    Stream_Data = [];
+    Experience_data = "";
+    Shared_Connections = [];
 
     // Gets plugin id from plugin object, fetched using script API
     var plugin_id = agile_crm_get_plugin(LINKEDIN_PLUGIN_NAME).id;
@@ -92,13 +97,31 @@ $(function ()
     $('#linkedin_experience').die().live('click', function (e)
     {
     	e.preventDefault();
+    	
+    	if(Experience_data || Experience_data != "")
+    		return;
+    		
     	getExperienceOfPerson(plugin_id, linkedin_id);
     });
 
     $('#linkedin_shared_connections').die().live('click', function (e)
     {
     	e.preventDefault();
+    	
+    	if(Shared_Connections.length != 0)
+    		return;
+    	
     	getLinkedInSharedConnections(plugin_id, linkedin_id);
+    });
+    
+    $('#linkedin_update_tab').die().live('click', function (e)
+    {
+    	e.preventDefault();
+    	
+    	if(Stream_Data.length != 0)
+    		return;
+    	
+    	getLinkedInNetworkUpdates(plugin_id, linkedin_id);
     });
     
     $('.linkedin_modify_search').die().live('click', function(e){
@@ -116,6 +139,12 @@ $(function ()
     $('#linkedin_search_btn').die().live('click', function(e){
     	e.preventDefault();
     	
+    	// Checks whether all input fields are given
+        if (!isValidForm($("#linkedin-search_form")))
+        {
+            return;
+        }
+
     	getModifiedLinkedinMatchingProfiles(plugin_id);
     });
     
@@ -325,9 +354,6 @@ function showLinkedinProfile(linkedin_id, plugin_id)
     //Stores connected status of agile user with contact LinkedIn profile
     var linkedin_connected;
 
-    // Stores the initial update stream of the contact's LinkedIn profile
-    var stream_data;
-    
     // Calls WidgetsAPI class to get LinkedIn profile of contact
     $.get("/core/api/widgets/profile/" + plugin_id + "/" + linkedin_id, 
     function (data)
@@ -346,43 +372,39 @@ function showLinkedinProfile(linkedin_id, plugin_id)
         {
             data.picture = 'https://contactuswidget.appspot.com/images/pic.png';
         }
-
-    	// If contact title is undefined, saves headline of the LinkedIn profile
-    	// to the contact title
-    	if(!agile_crm_get_contact_property("title"))
-    		agile_crm_update_contact("title", data.summary, function(el) 
-    		{
-    			// Gets LinkedIn profile template and populate the fields with details
-    			$('#Linkedin').html(getTemplate("linkedin-profile", data));
-    		});
-    	else
-    	{
-    		// Gets LinkedIn profile template and populate the fields with details
-            $('#Linkedin').html(getTemplate("linkedin-profile", data));
-    	}
+    	
+   		// Gets LinkedIn profile template and populate the fields with details
+        $('#Linkedin').html(getTemplate("linkedin-profile", data));
         
-        
-        // If updates are available, show recent updates in LinkedIn profile
-        if (data.updateStream && data.updateStream.length != 0)
+        console.log(data.searchResult);
+        if(data.searchResult)
         {
-        	// Current update heading, refresh button is shown
-            $('#linkedin_refresh_stream').show();
-            
-            // Sets the update stream into a local variable for this method
-            stream_data = data.updateStream;
-            
-            // Template is populated with update details and shown
-            $('#linkedin_social_stream')
-            	.append(getTemplate("linkedin-update-stream", data.updateStream));        
-           
-            head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-        		$(".time-ago", $('#linkedin_social_stream')).timeago();
-        	})
-        	
-            return;
+	        var e1 = "";
+			 
+			 if(data.searchResult.three_current_positions.length == 0 && data.searchResult.three_past_positions.length == 0)
+			 {			 
+				 $('#linkedin_experience_panel').html('<div class="widget_content">Work status unavailable</div>');
+				 return;
+			 }
+				 
+			 Experience_data = data;
+			 
+			 if(data.searchResult.three_current_positions)
+			 {
+				 console.log(data.searchResult.three_current_positions);
+				 e1 = e1.concat(getTemplate("linkedin-experience", data.searchResult.three_current_positions));
+			 }
+			 
+			 if(data.searchResult.three_past_positions)
+			 {
+				 console.log(data.searchResult.three_past_positions);
+				 e1 = e1.concat(getTemplate("linkedin-experience", data.searchResult.three_past_positions));
+			 }
+			 
+			 console.log($('#linkedin_experience_panel').html(e1).html());
+			 $('#linkedin_experience_panel').html(e1);
         }
-
-        $('.linkedin_current_activity',  $('#Linkedin')).show();
+        
         
     },"json").error(function (data)
     {
@@ -400,7 +422,7 @@ function showLinkedinProfile(linkedin_id, plugin_id)
     	linkedinMainError(data.responseText);
     	
     });
-
+    
     // On click of see more link, more updates are retrieved
     $('.linkedin_stream').die().live('click', function (e)
     {
@@ -456,7 +478,7 @@ function showLinkedinProfile(linkedin_id, plugin_id)
                 $('#linkedin_refresh_stream').show();
 
                 // If user have overall updates more than 3, less button is shown
-                if (stream_data.length > 3)
+                if (Stream_Data.length > 3)
                 {
                     $("#linkedin_stream").hide();
                     $('#linkedin_less').show();
@@ -532,6 +554,10 @@ function showLinkedinProfile(linkedin_id, plugin_id)
             // Populates the template with the data 
             $("#linkedin_social_stream").html(getTemplate("linkedin-update-stream", data));
             
+            head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+	    		$(".time-ago", $('#linkedin_social_stream')).timeago();
+	    	});
+            
             // If no updates are available for person return
             if (data.length == 0)
             {
@@ -550,11 +576,11 @@ function showLinkedinProfile(linkedin_id, plugin_id)
             // Remove loading button on error
             $('#status_load').remove();            
            
-            if(stream_data)
+            if(Stream_Data)
             {
             	// Populates the template with the initial update stream on error
             	$("#linkedin_social_stream")
-            		.html(getTemplate("linkedin-update-stream", stream_data));
+            		.html(getTemplate("linkedin-update-stream", Stream_Data));
             }
             
             // Error message is displayed to user 
@@ -563,6 +589,50 @@ function showLinkedinProfile(linkedin_id, plugin_id)
     });
 }
 
+
+function getLinkedInNetworkUpdates(plugin_id, linkedin_id)
+{
+	 // Loading button is displayed until updates are shown
+    $("#linkedin_social_stream").html(LINKEDIN_UPDATE_LOAD_IMAGE);
+
+    // Calls WidgetsAPI class to get the updates based on plugin id
+    $.getJSON("/core/api/widgets/updates/index/" + plugin_id + "/" + linkedin_id + "/0/5",
+
+    function (data)
+    {
+        // Remove loading button on success
+        $('#status_load').remove();
+
+        if (data && data.length != 0)
+        {
+	        // Populates the template with the data 
+	        $("#linkedin_social_stream").html(getTemplate("linkedin-update-stream", data));
+	        
+	        // Current update heading, refresh button is shown
+	        $('#linkedin_refresh_stream').show();
+	        
+	        // Sets the update stream into a local variable for this method
+	        Stream_Data = data;
+	        
+	        head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+	    		$(".time-ago", $('#linkedin_social_stream')).timeago();
+	    	});
+	        
+	        return;
+        }
+        
+        $('.linkedin_current_activity',  $('#Linkedin')).show();
+       
+    }).error(function (data)
+    {
+        // Remove loading button on error
+        $('#status_load').remove();            
+       
+        Errorjson['message'] = data.responseText;
+        // Error message is displayed to user 
+        $("#linkedin_social_stream").html(getTemplate('linkedin-error-panel', Errorjson));
+    });
+}
 /**
  * Sends a connect request in LinkedIn based on plugin id and LinkedIn Id of the profile 
  * set to the contact
@@ -849,6 +919,8 @@ function getExperienceOfPerson(plugin_id, linkedin_id)
 			 $('#linkedin_experience_panel').html('<div class="widget_content">Work status unavailable</div>');
 			 return;
 		 }
+		 
+		 Experience_data = data;
 			 
 		 if(data.three_current_positions)
 		 {
@@ -868,10 +940,11 @@ function getExperienceOfPerson(plugin_id, linkedin_id)
     	// Remove loading image on error 
      	$('#status_load').remove();
      	
+     	Experience_data = undefined;
+     	
      	Errorjson['message'] = data.responseText;
      	$('#linkedin_experience_panel').html(getTemplate('linkedin-error-panel', Errorjson))
      	
-    	// alert(data.responseText);
      });
      
 }
@@ -896,6 +969,8 @@ function getLinkedInSharedConnections(plugin_id, linkedin_id)
 	            return;
 	        }
 
+	        Shared_Connections = data;
+	        
 	        // If matches found, Iterates through each profile
 	        $.each(data, function (key, value)
 	        {

@@ -23,12 +23,17 @@
 <div class="" id="linkedin-error-panel" style="display:none;">
 </div>
 <ul class="nav nav-tabs" id="myTab">
-	<li class="active" style="width:32%; margin-left: 2%;text-align: center;" align="center"><a data-toggle="tab" href="#updates"><h4>Activity</h4><small></small></a></li>
-	<li style="width:32%; text-align: center;" align="center"><a data-toggle="tab" href="#experience" id="linkedin_experience"><h4>Work</h4><small></small></a></li>
+	<li class="active" style="width:32%; margin-left: 2%; text-align: center;" align="center"><a data-toggle="tab" href="#experience" id="linkedin_experience"><h4>Work</h4><small></small></a></li>
+	<li style="width:32%; text-align: center;" align="center"><a data-toggle="tab" href="#updates" id="linkedin_update_tab"><h4>Activity</h4><small></small></a></li>
 	<li style="width:32%;text-align: center;" align="center"><a data-toggle="tab" href="#connections" id="linkedin_shared_connections"><h4>Shared</h4><small></small></a></li>
 </ul>
 <div class="tab-content" id="myTabContent">
-	<div id="updates" class="tab-pane fade active in">
+	<div id="experience" class="tab-pane fade active in">
+		<ul class="widget_tab_content" id="linkedin_experience_panel">
+						
+		</ul>
+	</div>
+	<div id="updates" class="tab-pane fade">
 		{{#if current_update}}
 			<ul class="widget_tab_content linkedin_current_activity" style="display:none">
 				<li >	
@@ -57,11 +62,6 @@
 			<img src="img/ajax-spinner.gif" id="spinner-status" style="display:none;"></img>
 			<a href="#refresh" id="linkedin_refresh_stream" class="icon-refresh pull-right" rel="tooltip" title="Refresh to get current updates" style="display:none"></a>
 		</div>
-	</div>
-	<div id="experience" class="tab-pane fade">
-		<ul class="widget_tab_content" id="linkedin_experience_panel">
-						
-		</ul>
 	</div>
 	<div id="connections" class="tab-pane fade">
 		<ul class="widget_tab_content" id="linkedin_shared_panel">
@@ -152,10 +152,12 @@
 			{{/if}}			
 			<small>
 				{{#if startDate}}
-					{{startDate.month}}, {{startDate.year}} - 
+					{{#if startDate.month}}{{startDate.month}}, {{/if}}
+					{{#if startDate.year}}{{startDate.year}} - {{/if}}
 				{{/if}}
 				{{#if endDate}}
- 					{{endDate.month}}, {{endDate.year}}
+					{{#if endDate.month}}{{endDate.month}}, {{/if}}
+					{{#if endDate.year}}{{endDate.year}}{{/if}}
 				{{else}}
 					{{#if isCurrent}}
 						present
@@ -281,11 +283,7 @@
 	    	<fieldset>
 				<p>
 				<label>Enter Search details</label>
-				<input type="text" id="linkedin_keywords" class="input-medium widget_input_box" style="width:90%" rel="tooltip" title="Key Words" placeholder="Key Words" value="{{keywords}}" name="keywords"></input>
-				<input type="text" id="linkedin_firstname" class="input-medium widget_input_box" style="width:90%" rel="tooltip" title="First Name" placeholder="First Name" value="" name="firstname"></input>
-				<input type="text" id="linkedin_lastname" class="input-medium widget_input_box" style="width:90%" rel="tooltip" title="Last Name" placeholder="Last Name" value="" name="lastname"></input>
-				<input type="text" id="linkedin_company" class="input-medium widget_input_box" style="width:90%" rel="tooltip" title="Company" placeholder="Company" value="" name="company"></input>
-				<input type="text" id="linkedin_title" class="input-medium widget_input_box" style="width:90%" rel="tooltip" title="Title" placeholder="Title" value="" name="title"></input>
+				<div class="control-group"><div class="controls"><input type="text" id="linkedin_keywords" class="input-medium required widget_input_box" style="width:90%" placeholder="Key Words" value="{{keywords}}" name="keywords"></input></div></div>
 				</p>
 				<a href="#" id="linkedin_search_btn" class="btn" style="text-decoration:none;">Search</a>
 				<span><img src="img/ajax-spinner.gif" id="spinner-linked-search" style="display:none;"></img></span>

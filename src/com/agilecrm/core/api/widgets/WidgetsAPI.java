@@ -219,10 +219,7 @@ public class WidgetsAPI
     @Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
     public List<SocialSearchResult> getModifiedSocialResultsInLinkeidn(
 	    @PathParam("widget-id") Long widgetId,
-	    @FormParam("firstname") String firstName,
-	    @FormParam("lastname") String lastName,
-	    @FormParam("title") String title,
-	    @FormParam("company") String company,
+
 	    @FormParam("keywords") String keywords)
     {
 	try
@@ -238,7 +235,7 @@ public class WidgetsAPI
 	    // Gets profiles from LinkedInUtil based on contact
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
 		return LinkedInUtil.modifiedSearchForLinkedInProfiles(widget,
-			firstName, lastName, keywords, company, title);
+			keywords);
 
 	}
 	catch (Exception e)
@@ -710,6 +707,55 @@ public class WidgetsAPI
     public List<SocialUpdateStream> getSocialNetworkUpdates(
 	    @PathParam("widget-id") Long widgetId,
 	    @PathParam("social-id") String socialId)
+    {
+	try
+	{
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+	    if (widget == null)
+		return null;
+
+	    // Profiles are searched based on first and last name of contact
+	    // Calls LinkedUtil method to send message to person by socialId
+	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
+		return LinkedInUtil.getNetworkUpdates(widget, socialId);
+
+	    else if (widget.name.equalsIgnoreCase("TWITTER"))
+		return TwitterUtil.getNetworkUpdates(widget,
+			Long.parseLong(socialId));
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+	return null;
+    }
+
+    /**
+     * Connects to {@link LinkedInUtil} based on the name given in widget and
+     * fetches posts based on index in LinkedIn
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param socialId
+     *            {@link String} LinkedIn id or Twitter id of the contact
+     * @param startIndex
+     *            {@link String}
+     * @param endIndex
+     *            {@link String}
+     * @return {@link List} of {@link SocialUpdateStream}
+     */
+    @Path("/updates/index/{widget-id}/{social-id}/{startIndex}/{endIndex}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<SocialUpdateStream> getSocialNetworkUpdatesByIndex(
+	    @PathParam("widget-id") Long widgetId,
+	    @PathParam("social-id") String socialId,
+	    @PathParam("startIndex") String startIndex,
+	    @PathParam("endIndex") String endIndex)
     {
 	try
 	{
