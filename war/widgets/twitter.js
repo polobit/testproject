@@ -22,6 +22,9 @@ $(function ()
     Twitter_current_profile_screen_name = "";
     var Twitter_follower_ids;
     var Twitter_following_ids;
+    
+    // Global twitter id
+    var twitter_id = "";
 
     // Gets plugin id from plugin object, fetched using script API
     var plugin_id = agile_crm_get_plugin(TWITTER_PLUGIN_NAME).id;
@@ -35,9 +38,6 @@ $(function ()
         setupTwitterOAuth(plugin_id);
         return;
     }
-
-    // Global twitter id
-    var twitter_id = "";
 
     //Get website URL for Twitter from contact to get profile based on it
     var web_url = agile_crm_get_contact_property_by_subtype('website', 'TWITTER');
@@ -800,16 +800,20 @@ function showTwitterProfile(twitter_id, plugin_id)
 
             // See more,refresh  buttons are shown and less is hidden
             $("#twitter_stream").show();
-            $('#twitter_less').hide();                   
+            $('#twitter_less').hide(); 
+            $('#twitter_current_activity').hide();
 
         }).error(function (data)
         {
             // Remove loading button on error
             $('#tweet_load').remove();
+            $("#twitter_stream").show();
+            $('#twitter_less').hide();
             
-            // Populates the template with the initial update stream on error
-            $("#twitter_social_stream")
-            		.html(getTemplate("twitter-update-stream", stream_data));
+            if(stream_data && stream_data.length != 0)
+            	 // Populates the template with the initial update stream on error
+                $("#twitter_social_stream")
+                		.html(getTemplate("twitter-update-stream", stream_data));
             
             // Error message is shown to the user
             tweetError(data.responseText);
