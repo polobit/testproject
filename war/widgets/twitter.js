@@ -815,6 +815,8 @@ function showTwitterProfile(twitter_id, plugin_id)
                 $("#twitter_social_stream")
                 		.html(getTemplate("twitter-update-stream", stream_data));
             
+            $(".time-ago", $("#twitter_social_stream")).timeago();
+            
             // Error message is shown to the user
             tweetError(data.responseText);
             
@@ -867,6 +869,8 @@ function sendFollowRequest(plugin_id, twitter_id)
             $('#twitter_current_activity').hide();
             $('#twitter_refresh_stream').show();
 
+            $(".time-ago", $("#twitter_social_stream")).timeago();
+            
             // Checks if stream available, 
             if (data.length == 0)
             {
