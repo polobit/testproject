@@ -184,7 +184,7 @@ $(function(){
        				});
 	       			
 	       			// Updates to both model and collection
-    				App_Contacts.contactDetailView.model.set({'tags' : data.get("tags")}, {silent : true});
+	       			App_Contacts.contactDetailView.model.set(data.toJSON(), {silent : true});
 	       			
 	       			// Append to the list, when no match is found 
 	       			if ($.inArray(new_tags, old_tags) == -1) 
@@ -193,7 +193,7 @@ $(function(){
 	       			
 	       			// Adds the added tags (if new) to tags collection
 	       			$.each(new_tags,function(index, tag){
-	       				tagsCollection.add( {"tag" : tag} );
+	       				tagsCollection.add({"tag" : tag});
 	       			});
 	       		}
 	        });

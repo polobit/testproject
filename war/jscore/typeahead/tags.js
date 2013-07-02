@@ -106,7 +106,7 @@ function setup_tags_typeahead() {
 	       				old_tags.push($(element).attr('data'));
        				});
 	       			
-	       			App_Contacts.contactDetailView.model.set({'tags' : data.get("tags")}, {silent : true});
+	       			App_Contacts.contactDetailView.model.set(data.toJSON(), {silent : true});
 	       				       			
 	       			// Append to the list, when no match is found 
 	       			if ($.inArray(tag, old_tags) == -1) 
@@ -164,7 +164,8 @@ function setup_tags_typeahead() {
     			saveEntity(contact_json, 'core/api/contacts',  function(data) {
     			
     				// Updates to both model and collection
-    				App_Contacts.contactDetailView.model.set({'tags' : data.get("tags")}, {silent : true});
+    				App_Contacts.contactDetailView.model.set(data.toJSON(), {silent : true});
+    				console.log(App_Contacts.contactDetailView.model);
     				
     				tagsCollection.add( {"tag" : tag} );
     			$("#addTagsForm").css("display", "none");
