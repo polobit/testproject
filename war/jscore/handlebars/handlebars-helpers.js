@@ -925,7 +925,6 @@ $(function() {
 	});
 
 	Handlebars.registerHelper('isArray', function(data, options) {
-		console.log(data);
 		if (isArray(data))
 			return options.fn(this);
 		return options.inverse(this);
@@ -940,8 +939,6 @@ $(function() {
 	
 	Handlebars.registerHelper("bindData", function(data) {
 		
-		//console.log("in handle");
-		//console.log(JSON.stringify(data));
 		return  JSON.stringify(data);
 	});
 
@@ -1039,10 +1036,7 @@ $(function() {
 	});
 	
 	Handlebars.registerHelper('check_length', function(content, length, options) {
-		console.log('in');
-		console.log(content);
-		console.log(content.length);
-		console.log(length);
+		
 		if(parseInt(content.length) > parseInt(length))
 			return options.fn(this);
 		

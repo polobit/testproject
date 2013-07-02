@@ -22,6 +22,9 @@ $(function ()
     Twitter_current_profile_screen_name = "";
     var Twitter_follower_ids;
     var Twitter_following_ids;
+    
+    // Global twitter id
+    var twitter_id = "";
 
     // Gets plugin id from plugin object, fetched using script API
     var plugin_id = agile_crm_get_plugin(TWITTER_PLUGIN_NAME).id;
@@ -35,9 +38,6 @@ $(function ()
         setupTwitterOAuth(plugin_id);
         return;
     }
-
-    // Global twitter id
-    var twitter_id = "";
 
     //Get website URL for Twitter from contact to get profile based on it
     var web_url = agile_crm_get_contact_property_by_subtype('website', 'TWITTER');
@@ -132,14 +132,23 @@ $(function ()
 
     });
     
+    search_string = undefined;
+    search_data = undefined;
+    
     $('.twitter_modify_search').die().live('click', function(e){
     	e.preventDefault();
     	
     	var details = {};
-    	details['firstname'] = agile_crm_get_contact_property("first_name");
-    	details['lastname'] = agile_crm_get_contact_property("last_name");
-    	details['keywords'] = details.firstname + " " + details.lastname;
+    	details['plugin_id'] = plugin_id;
     	
+    	if(search_string)
+    		details['keywords'] = search_string;
+    	else
+    	{
+    		details['firstname'] = agile_crm_get_contact_property("first_name");
+        	details['lastname'] = agile_crm_get_contact_property("last_name");
+        	details['keywords'] = details.firstname + " " + details.lastname;
+    	}	
     	console.log(details);
     	$('#Twitter').html(getTemplate('twitter-modified-search',details));
     });
@@ -147,22 +156,16 @@ $(function ()
     $('#twitter_search_btn').die().live('click', function(e){
     	e.preventDefault();
     	
-    	// Checks whether all input fields are given
-        if (!isValidForm($("#twitter-search_form")))
-        {
-            return;
-        }
-
-    	var search_string = $('#twitter_keywords').val();
-    	console.log(search_string);
-    	getModifiedTwitterMatchingProfiles(plugin_id, search_string);
-    	
+    	getModifiedTwitterMatchingProfiles(plugin_id);
     });
     
     $('#twitter_search_close').die().live('click', function(e){
     	e.preventDefault();
     	
-    	getTwitterMatchingProfiles(plugin_id);
+    	if(search_data)
+    		showTwitterMatchingProfiles(plugin_id, search_data);
+    	else
+    		getTwitterMatchingProfiles(plugin_id);
     });
     
     // On click of followers in twitter panel
@@ -398,7 +401,6 @@ function setupTwitterOAuth(plugin_id)
 function showTwitterMatchingProfiles(plugin_id, data)
 {
     var contact_image = agile_crm_get_contact_property("image");
-    console.log("conatact_image " + contact_image);
     
     var el = "<div style='padding:10px'><p>Locate the contact on Twitter. " +
     		"<a href='#' class='twitter_modify_search'>Modify search</a></p>";
@@ -526,18 +528,28 @@ function getTwitterMatchingProfiles(plugin_id)
  * @param plugin_id 
  * 			plugin id to fetch widget preferences
  */
-function getModifiedTwitterMatchingProfiles(plugin_id, search_string)
+function getModifiedTwitterMatchingProfiles(plugin_id)
 {
+	// Checks whether all input fields are given
+    if (!isValidForm($("#twitter-search_form")))
+    {
+        return;
+    }
+    
 	// Shows loading image, until matches profiles are fetched
     $('#spinner-twitter-search').show();
-    
+
+    search_string = $('#twitter_keywords').val();
+	
 	// Sends request to url "core/api/widgets/match/twitter" and Calls WidgetsAPI with 
 	// plugin id and search string as path parameters
 	$.get("core/api/widgets/modified/match/twitter/" + plugin_id + "/" + search_string , 
 	function (data)
     {
 		$('#spinner-twitter-search').hide();
-        showTwitterMatchingProfiles(plugin_id, data);
+        
+		search_data = data;
+		showTwitterMatchingProfiles(plugin_id, data);
         
     }, "json").error( function(data)
     {
@@ -800,16 +812,22 @@ function showTwitterProfile(twitter_id, plugin_id)
 
             // See more,refresh  buttons are shown and less is hidden
             $("#twitter_stream").show();
-            $('#twitter_less').hide();                   
+            $('#twitter_less').hide(); 
+            $('#twitter_current_activity').hide();
 
         }).error(function (data)
         {
             // Remove loading button on error
             $('#tweet_load').remove();
+            $("#twitter_stream").show();
+            $('#twitter_less').hide();
             
-            // Populates the template with the initial update stream on error
-            $("#twitter_social_stream")
-            		.html(getTemplate("twitter-update-stream", stream_data));
+            if(stream_data && stream_data.length != 0)
+            	 // Populates the template with the initial update stream on error
+                $("#twitter_social_stream")
+                		.html(getTemplate("twitter-update-stream", stream_data));
+            
+            $(".time-ago", $("#twitter_social_stream")).timeago();
             
             // Error message is shown to the user
             tweetError(data.responseText);
@@ -863,6 +881,8 @@ function sendFollowRequest(plugin_id, twitter_id)
             $('#twitter_current_activity').hide();
             $('#twitter_refresh_stream').show();
 
+            $(".time-ago", $("#twitter_social_stream")).timeago();
+            
             // Checks if stream available, 
             if (data.length == 0)
             {
@@ -1195,14 +1215,9 @@ function getTwitterIdByUrl(plugin_id, web_url, callback)
 
     }, function (data)
     {
-    	// If time out exception occurs, ask user to refresh and return
-    	if(data.responseText == "TimeOut")
-    	{
-    		twitterMainError("Time Out while fetching Twitter profile. Reload and try again");
-    		return;
-    	}
-    	
-    	if(data.responseText == "URL provided for Twitter is invalid. No such user exists.")
+    	var temp = "Sorry, that page doesn't exist!";
+    	console.log(data.responseText.substring(0, temp.length));
+    	if(data.responseText.substring(0, temp.length) === temp)
     	{
     		alert(data.responseText);
     		

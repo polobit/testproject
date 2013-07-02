@@ -21,6 +21,7 @@ import com.agilecrm.core.api.widgets.WidgetsAPI;
 import com.agilecrm.util.Util;
 import com.agilecrm.widgets.Widget;
 import com.google.code.linkedinapi.client.LinkedInApiClient;
+import com.google.code.linkedinapi.client.LinkedInApiClientException;
 import com.google.code.linkedinapi.client.LinkedInApiClientFactory;
 import com.google.code.linkedinapi.client.NetworkUpdatesApiClient;
 import com.google.code.linkedinapi.client.enumeration.CompanyField;
@@ -291,6 +292,7 @@ public class LinkedInUtil
 	    String linkedInId) throws SocketTimeoutException, IOException,
 	    Exception
     {
+
 	final LinkedInApiClient client = factory.createLinkedInApiClient(
 		widget.getProperty("token"), widget.getProperty("secret"));
 
@@ -701,6 +703,10 @@ public class LinkedInUtil
 	    if (person.getId().equalsIgnoreCase("private"))
 		continue;
 
+	    if (person.getFirstName().equalsIgnoreCase("private")
+		    || person.getLastName().equalsIgnoreCase("private"))
+		continue;
+
 	    result.id = person.getId();
 	    result.name = person.getFirstName() + " " + person.getLastName();
 	    result.picture = person.getPictureUrl();
@@ -773,7 +779,7 @@ public class LinkedInUtil
 				.replaceFirst("m3", "m3-s"));
 		    position.setCompany(company);
 		}
-		catch (Exception e)
+		catch (LinkedInApiClientException e)
 		{
 		    System.out.println(e.getMessage());
 		    // If company's id is some irrelevant and not related to
@@ -813,7 +819,7 @@ public class LinkedInUtil
 		    position.setCompany(company);
 
 		}
-		catch (Exception e)
+		catch (LinkedInApiClientException e)
 		{
 		    System.out.println(e.getMessage());
 		    // If company's id is some irrelevant and not related to
@@ -864,9 +870,10 @@ public class LinkedInUtil
 				.replaceFirst("m3", "m3-s"));
 		    position.setCompany(company);
 		}
-		catch (Exception e)
+		catch (LinkedInApiClientException e)
 		{
 		    System.out.println(e.getMessage());
+		    e.printStackTrace();
 		    // If company's id is some irrelevant and not related to
 		    // company, company details are skipped
 		    if (e.getMessage().contains("Company with ID {"))
@@ -904,9 +911,10 @@ public class LinkedInUtil
 		    position.setCompany(company);
 
 		}
-		catch (Exception e)
+		catch (LinkedInApiClientException e)
 		{
 		    System.out.println(e.getMessage());
+		    e.printStackTrace();
 		    // If company's id is some irrelevant and not related to
 		    // company, company details are skipped
 		    if (e.getMessage().contains("Company with ID {"))
@@ -1023,60 +1031,19 @@ public class LinkedInUtil
 			ProfileField.NUM_CONNECTIONS,
 			ProfileField.PUBLIC_PROFILE_URL, ProfileField.ID,
 			ProfileField.DISTANCE, ProfileField.CURRENT_SHARE,
-			ProfileField.CURRENT_STATUS));
-
-	Map<SearchParameter, String> searchParameters = new EnumMap<SearchParameter, String>(
-		SearchParameter.class);
-
-	String firstName = "Test";
-	String lastName = "Test";
-	String title = "Software Developer";
-	String company = "Clickdesk";
-
-	firstName = (firstName != null) ? firstName : "";
-	lastName = (lastName != null) ? lastName : "";
-	// title = (title != null) ? title : "";
-	// company = (company != null) ? company : "";
-
-	// Sets name as filter to search profiles
-	searchParameters.put(SearchParameter.FIRST_NAME, firstName);
-	searchParameters.put(SearchParameter.LAST_NAME, lastName);
-	// searchParameters.put(SearchParameter.KEYWORDS, company);
-	// searchParameters.put(SearchParameter.COMPANY_NAME, company);
-	// searchParameters.put(SearchParameter.TITLE, title);
-
-	// Search profiles based on the searchParameters given, and specifies
-	// field to be returned for result profiles
-	List<SocialSearchResult> people = searchPeopleInLinkedIn(client,
-		searchParameters);
+			ProfileField.CURRENT_STATUS,
+			ProfileField.POSITIONS_COMPANY,
+			ProfileField.THREE_CURRENT_POSITIONS,
+			ProfileField.THREE_PAST_POSITIONS,
+			ProfileField.POSITIONS_COMPANY_INDUSTRY,
+			ProfileField.POSITIONS_COMPANY_TICKER));
 
 	ObjectMapper mapper = new ObjectMapper();
 	String json;
 
-	System.out.println("-----first,last name and keywords-----"
-		+ people.size());
-	json = mapper.writeValueAsString(people);
+	json = mapper.writeValueAsString(getExperience(person, "IZDqVhjks-",
+		client));
 	System.out.println(json);
 
-	searchParameters.remove(SearchParameter.KEYWORDS);
-	people = searchPeopleInLinkedIn(client, searchParameters);
-
-	System.out
-		.println("--------removing key words--------" + people.size());
-	json = mapper.writeValueAsString(people);
-	System.out.println(json);
-
-	searchParameters.clear();
-	searchParameters.put(SearchParameter.KEYWORDS, firstName + " "
-		+ lastName);
-	people = searchPeopleInLinkedIn(client, searchParameters);
-
-	System.out.println("--------first and last name as key words--------"
-		+ people.size());
-
-	json = mapper.writeValueAsString(people);
-	System.out.println(json);
-
-	// IZDqVhjks-
     }
 }

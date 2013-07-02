@@ -303,6 +303,11 @@ $(function(){
 				template = Handlebars.compile(model.text);
 				var text =  template(json);
 						
+				text = text.replace(/<br>/gi, "\n");
+				text = text.replace(/<p.*>/gi, "\n");
+				text = text.replace(/<a.*href="(.*?)".*>(.*?)<\/a>/gi, " $2 ");
+				text = text.replace(/<(?:.|\s)*?>/g, "");
+				  
 				// Fill subject and body of send email form
 				$("#emailForm").find( 'input[name="subject"]' ).val(subject);
 				$("#emailForm").find( 'textarea[name="body"]' ).val(text);
@@ -322,7 +327,9 @@ $(function(){
 	      }
 		
 		var json = serializeForm("emailForm");
-
+		
+		json.body = json.body.replace(/\r\n/g,"<br/>");
+		
 		var url =  'core/api/contact/send-email?from=' + encodeURIComponent(json.from) + '&to=' + 
 			 encodeURIComponent(json.to + "," + json.email_cc) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + 
 				 encodeURIComponent(json.body) + '<br/><div><br/><br/>' + encodeURIComponent(json.signature) + '</div>';
