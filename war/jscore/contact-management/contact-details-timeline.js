@@ -152,7 +152,7 @@ function load_timeline_details(el, contactId, callback1)
 							
 							// No callback function is taken as the email takes more time to fetch
 							setup_timeline(timelineView.collection.toJSON(), el);
-						}else{
+						} else{
 							$.each(emailsCollection.toJSON()[0] && emailsCollection.toJSON()[0]['emails'], function(index, data) {
 								var newItem = $(getTemplate("timeline", data));
 								
@@ -229,25 +229,7 @@ function load_timeline_details(el, contactId, callback1)
 					
 					if(loading_count  == 0)
 					{
-						if(timelineView.collection.length == 0) {
-							timelineView.collection.add(contact);
-							
-							// Add tags in timeline
-							$.each(contact.get('tagsWithTime'), function(index, tag){
-								timelineView.collection.add(tag);
-							})
-							setup_timeline(timelineView.collection.toJSON(), el);
-
-						} else {
-							var newItem = $(getTemplate("timeline", contact));
-							
-							newItem.find('.inner').append('<a href="#" class="open-close"></a>');
-							/*
-							 * Inserts mails to timeline with out validating the isotope status,
-							 * as it takes more time to fetch.
-							 */  
-							$('#timeline', el).isotope( 'insert', newItem);
-						}
+						addTagsToTimeline(contact, el);
 					}
 					
 					// If all the urls got their responses, goes for timeline
@@ -636,7 +618,7 @@ function remove_loading_img(el){
  *            contact present in contact detail view
  * @param {Object}
  *            backbone element.
- */function get_stats(email,contact,el)
+ */function get_stats(email, contact, el)
 {
 	var StatsCollection = Backbone.Collection.extend({
 		                        url:'core/api/stats?e='+ encodeURIComponent(email)
@@ -720,6 +702,67 @@ function remove_loading_img(el){
 		}
 	});
 	}
+ 
+function addTagsToTimeline(contact, el)
+{
+	if(timelineView.collection.length == 0) {
+		timelineView.collection.add(contact);
+		
+		// Add tags in timeline
+		$.each(contact.get('tagsWithTime'), function(index, tag){
+			console.log(tag);
+			timelineView.collection.add(tag);
+		})
+		setup_timeline(timelineView.collection.toJSON(), el);
+
+	} else {
+		var newItem = $(getTemplate("timeline", contact));
+		var newItem = $(getTemplate("timeline", contact));
+		
+		newItem.find('.inner').append('<a href="#" class="open-close"></a>');
+		/*
+		 * Inserts mails to timeline with out validating the isotope status,
+		 * as it takes more time to fetch.
+		 */  
+		$('#timeline', el).isotope( 'insert', newItem);
+	}
+}
+
+function addTagToTimelineDynamically(tags)
+{	
+	if(timelineView.collection.length == 0)
+	{
+		$.each(tags, function(index, tag) {
+			timelineView.collection.add(tag);
+		});
+		
+		setup_timeline(timelineView.collection.toJSON(), el);
+		return;
+	}
+	
+	$.each(tags, function(index, tag){
+		if(!timelineView.collection.where(tag).length == 0)
+			return;
+		
+		timelineView.collection.add(tag);
+		var newItem = $(getTemplate("timeline", tag));
+		
+		newItem.find('.inner').append('<a href="#" class="open-close"></a>');
+		
+		$('#timeline').isotope( 'insert', newItem);
+		
+	});
+	
+/*	var newItem = $(getTemplate("timeline", tag));
+	
+	newItem.find('.inner').append('<a href="#" class="open-close"></a>');
+	
+	 * Inserts mails to timeline with out validating the isotope status,
+	 * as it takes more time to fetch.
+	   
+	$('#timeline', el).isotope( 'insert', newItem);*/
+	
+}
 
 /**
  * Handles the events (click and mouseenter) of mail and log entities of 

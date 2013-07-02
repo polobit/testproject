@@ -177,6 +177,8 @@ $(function(){
 	        contact.save(json,{
 	       		success: function(data){
 	       			
+	       			addTagToTimelineDynamically(data.get("tagsWithTime"));
+	       			
 	       			// Get all existing tags of the contact to compare with the added tags
 	       			var old_tags = [];
 	       			$.each($('#added-tags-ul').children(), function(index, element){
@@ -192,7 +194,7 @@ $(function(){
 	       			
 	       			
 	       			// Adds the added tags (if new) to tags collection
-	       			$.each(new_tags,function(index, tag){
+	       			$.each(new_tags,function(index, tag) {
 	       				tagsCollection.add({"tag" : tag});
 	       			});
 	       		}
