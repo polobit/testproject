@@ -83,6 +83,14 @@ $(function()
 		e.preventDefault();
 		revertToDefaultContacts();
 	});
+	
+	$('.default_contact_remove_tag').die().live('click', function(e) {
+		e.preventDefault();
+		// Navigate to show form
+		Backbone.history.navigate("contacts", {
+            trigger: true
+        });
+	});
 
 	$('#companies-filter').live('click', function(e){
 		
@@ -130,8 +138,11 @@ $(function()
  * element to append filters list,
  */
 var contactFiltersListView 
-function setupContactFilterList(cel)
+function setupContactFilterList(cel, tag_id)
 {
+	if(tag_id)
+		$('.filter-criteria', cel).html('<ul id="added-tags-ul" class="tagsinput" style="display: inline; vertical-align: top; margin-bottom: 10px"><li style="display: inline-block;" class="tag" data="developer"><span>Tag: [' + tag_id +']<a class="close default_contact_remove_tag" style="margin-left:5px">&times</a></span></li></ul>')
+	
 	contactFiltersListView = new Base_Collection_View({
 		url : '/core/api/filters',
 		restKey : "ContactFilter",
@@ -173,7 +184,7 @@ function setupContactFilterList(cel)
 			if(!filter_name)
 				return;
 			
-			$('.filter-criteria', cel).html('<ul id="added-tags-ul" class="tagsinput" style="display: inline; vertical-align: top; margin-bottom: 10px"><li style="display: inline-block;" class="tag" data="developer"><span>' + filter_name +'<a class="close default_filter" style="margin-left:5px">&times</a></span></li></ul>')
+			$('.filter-criteria', cel).html('<ul id="added-tags-ul" class="tagsinput" style="display: inline; vertical-align: top; margin-bottom: 10px"><li style="display: inline-block;" class="tag" data="developer"><span> Filter: [' + filter_name +']<a class="close default_filter" style="margin-left:5px">&times</a></span></li></ul>')
 		}
 	});
 
