@@ -50,14 +50,11 @@ $(function ()
         getLinkedinIdByUrl(plugin_id, web_url, function (data)
         {
             linkedin_id = data;
-            console.log('id from url' + linkedin_id);
-            
             showLinkedinProfile(linkedin_id, plugin_id);
         });
     }
     else
     {
-    	console.log('hi there');
         // Shows all the matches in linkedin for the contact 
         getLinkedinMatchingProfiles(plugin_id);
     }
@@ -124,13 +121,14 @@ $(function ()
     	getLinkedInNetworkUpdates(plugin_id, linkedin_id);
     });
     
-    var past_search_input;
-    var past_search_data;
+    past_search_input = undefined;
+    past_search_data = undefined;
     
     $('.linkedin_modify_search').die().live('click', function(e){
     	e.preventDefault();
     	
     	var details = {};
+    	details['plugin_id'] = plugin_id;
     	
     	if(past_search_input)
     		details['keywords'] = past_search_input;
@@ -140,26 +138,15 @@ $(function ()
     		details['lastname'] = agile_crm_get_contact_property("last_name");
     		details['keywords'] = details.firstname + " " + details.lastname;
     	}
-    	console.log(details);
     	$('#Linkedin').html(getTemplate('linkedin-modified-search',details));
     });
     
     $('#linkedin_search_btn').die().live('click', function(e){
     	e.preventDefault();
     	
-    	// Checks whether all input fields are given
-        if (!isValidForm($("#linkedin-search_form")))
-        {
-            return;
-        }
-        
-        past_search_input = $('#linkedin_keywords').val();
-
-    	getModifiedLinkedinMatchingProfiles(plugin_id, function(data) {
-    		past_search_data = data;
-    		showLinkedinMatchingProfiles(plugin_id, data);
-    	});
+    	getModifiedLinkedinMatchingProfiles(plugin_id);
     });
+    
     
     $('#linkedin_search_close').die().live('click', function(e){
     	e.preventDefault();
@@ -209,9 +196,7 @@ function setupLinkedinOAuth(plugin_id)
 function showLinkedinMatchingProfiles(plugin_id, data)
 {
     var contact_image = agile_crm_get_contact_property("image");
-    console.log("conatact_image " + contact_image);
 
-    console.log(data.length)
     // If no matches found display message
     if (data.length == 0)
     {
@@ -276,8 +261,6 @@ function showLinkedinMatchingProfiles(plugin_id, data)
             	propertiesArray.push({"name" : "title", "value" : summary});
             }
             
-            console.log(propertiesArray);
-           
             agile_crm_update_contact_properties(propertiesArray);
           
         });
@@ -316,7 +299,6 @@ function getLinkedinMatchingProfiles(plugin_id)
             // Store social results in cookie of particular contact
             localStorage.setItem('Agile_linkedin_matches_' + contact_id, JSON.stringify(data));
 
-            console.log('hi here');
             showLinkedinMatchingProfiles(plugin_id, data);
         	
         }, 
@@ -333,21 +315,27 @@ function getLinkedinMatchingProfiles(plugin_id)
     	showLinkedinMatchingProfiles(plugin_id, JSON.parse(data));
 }
 
-function getModifiedLinkedinMatchingProfiles(plugin_id, callback)
+
+function getModifiedLinkedinMatchingProfiles(plugin_id)
 {
 	$('#spinner-linked-search').show();
+	
+	// Checks whether all input fields are given
+    if (!isValidForm($("#linkedin-search_form")))
+    {
+        return;
+    }
     
+    past_search_input = $('#linkedin_keywords').val();
+
 	$.post("/core/api/widgets/modified/match/linkedin/" + plugin_id, 
 			$('#linkedin-search_form').serialize(), 
 	function(data)
 	{
 		$('#spinner-linked-search').hide();
 		
-		 // If defined, execute the callback function
-        if (callback && typeof (callback) === "function")
-        {
-            callback(data);
-        }
+		past_search_data = data;
+		showLinkedinMatchingProfiles(plugin_id, data);
         
 	},"json"). error( function(data)
 	{
@@ -397,7 +385,6 @@ function showLinkedinProfile(linkedin_id, plugin_id)
    		// Gets LinkedIn profile template and populate the fields with details
         $('#Linkedin').html(getTemplate("linkedin-profile", data));
         
-        console.log(data.searchResult);
         if(data.searchResult)
         {
 	        var e1 = "";
@@ -411,18 +398,11 @@ function showLinkedinProfile(linkedin_id, plugin_id)
 			 Experience_data = data;
 			 
 			 if(data.searchResult.three_current_positions)
-			 {
-				 console.log(data.searchResult.three_current_positions);
 				 e1 = e1.concat(getTemplate("linkedin-experience", data.searchResult.three_current_positions));
-			 }
 			 
 			 if(data.searchResult.three_past_positions)
-			 {
-				 console.log(data.searchResult.three_past_positions);
 				 e1 = e1.concat(getTemplate("linkedin-experience", data.searchResult.three_past_positions));
-			 }
 			 
-			 console.log($('#linkedin_experience_panel').html(e1).html());
 			 $('#linkedin_experience_panel').html(e1);
         }
         
@@ -925,8 +905,6 @@ function getExperienceOfPerson(plugin_id, linkedin_id)
 	 
 	 $.get("/core/api/widgets/experience/" + plugin_id + "/" + linkedin_id, function (data)
      {
-		 console.log(data);
-		 
 		 var e1 = "";
 		 
 		 if(data.three_current_positions.length == 0 && data.three_past_positions.length == 0)
@@ -949,8 +927,6 @@ function getExperienceOfPerson(plugin_id, linkedin_id)
 		 
 		 $('#linkedin_experience_panel').html(e1);
 		 
-		 console.log(e1);
-		 
      }).error(function(data){
     	// Remove loading image on error 
      	$('#status_load').remove();
@@ -972,8 +948,6 @@ function getLinkedInSharedConnections(plugin_id, linkedin_id)
 	 $.get("/core/api/widgets/shared/connections/" + plugin_id + "/" + linkedin_id, 
 	 function (data)
      {
-		 console.log(data);
-		 
 		 	var el = "<div style='padding:10px'>";
 
 	        // If no matches found display message

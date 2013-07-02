@@ -132,13 +132,15 @@ $(function ()
 
     });
     
-    var search_string;
-    var search_data;
+    search_string = undefined;
+    search_data = undefined;
     
     $('.twitter_modify_search').die().live('click', function(e){
     	e.preventDefault();
     	
     	var details = {};
+    	details['plugin_id'] = plugin_id;
+    	
     	if(search_string)
     		details['keywords'] = search_string;
     	else
@@ -154,19 +156,7 @@ $(function ()
     $('#twitter_search_btn').die().live('click', function(e){
     	e.preventDefault();
     	
-    	// Checks whether all input fields are given
-        if (!isValidForm($("#twitter-search_form")))
-        {
-            return;
-        }
-
-        search_string = $('#twitter_keywords').val();
-    	
-        getModifiedTwitterMatchingProfiles(plugin_id, search_string, function(data) {
-    		search_data = data;
-    		showTwitterMatchingProfiles(plugin_id, data);
-    	});
-    	
+    	getModifiedTwitterMatchingProfiles(plugin_id);
     });
     
     $('#twitter_search_close').die().live('click', function(e){
@@ -538,11 +528,19 @@ function getTwitterMatchingProfiles(plugin_id)
  * @param plugin_id 
  * 			plugin id to fetch widget preferences
  */
-function getModifiedTwitterMatchingProfiles(plugin_id, search_string, callback)
+function getModifiedTwitterMatchingProfiles(plugin_id)
 {
+	// Checks whether all input fields are given
+    if (!isValidForm($("#twitter-search_form")))
+    {
+        return;
+    }
+    
 	// Shows loading image, until matches profiles are fetched
     $('#spinner-twitter-search').show();
-    
+
+    search_string = $('#twitter_keywords').val();
+	
 	// Sends request to url "core/api/widgets/match/twitter" and Calls WidgetsAPI with 
 	// plugin id and search string as path parameters
 	$.get("core/api/widgets/modified/match/twitter/" + plugin_id + "/" + search_string , 
@@ -550,11 +548,8 @@ function getModifiedTwitterMatchingProfiles(plugin_id, search_string, callback)
     {
 		$('#spinner-twitter-search').hide();
         
-		// If defined, execute the callback function
-		if (callback && typeof (callback) === "function")
-	    {
-			callback(data);
-	    }
+		search_data = data;
+		showTwitterMatchingProfiles(plugin_id, data);
         
     }, "json").error( function(data)
     {
