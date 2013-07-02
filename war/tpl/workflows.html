@@ -17,7 +17,7 @@
             {{#if subscribersCount.active}}{{subscribersCount.active}}&nbsp;active{{/if}}
         </div>
     </td>
-    <td>{{#if triggers}} {{triggers}} {{else}} <a href="#trigger-add" class="workflow-results"><i class="icon-plus" style="font-size:10px;margin-left:15px"></i> Add</a> {{/if}}</td>
+    <td>{{#if triggers}} {{#toLinkTrigger triggers}} <a href="#trigger/{{id}}" class="workflow-results">{{name}}</a> {{/toLinkTrigger}} {{else}} <a href="#trigger-add/{{id}}" class="workflow-results"><i class="icon-plus" style="font-size:10px;margin-left:15px"></i> Add</a> {{/if}}</td>
 	<td><a href="#workflows/logs/{{id}}" class="workflow-results">Logs</a></td>
     <td><a href="#email-reports/{{id}}" class="workflow-results">Stats</a></td>
     <td> 

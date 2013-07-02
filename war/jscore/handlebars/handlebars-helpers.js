@@ -324,9 +324,9 @@ $(function() {
 	 * Helper function to return task date (MM dd, ex: Jan 10 ) from epoch time
 	 */
 	Handlebars.registerHelper('epochToTaskDate', function(date) {
+		
 		var intMonth = new Date(parseInt(date) * 1000).getMonth();
 		var intDay = new Date(parseInt(date) * 1000).getDate();
-
 		var monthArray = [ "Jan", "Feb", "March", "April", "May", "June",
 				"July", "Aug", "Sept", "Oct", "Nov", "Dec" ];
 
@@ -456,12 +456,14 @@ $(function() {
 	 * 
 	 */
 	Handlebars.registerHelper('if_entity', function(item, options) {
+
 		if (this.entity_type == item) {
 			return options.fn(this);
 		}
 		if (!this.entity && this[item] != undefined) {
+			
 			if (this.date_secs) {
-
+                
 				// For emails convert milliseconds into seconds
 				this.date_secs = this.date_secs / 1000;
 			}
@@ -1137,4 +1139,21 @@ $(function() {
 		return new Handlebars.SafeString(getTemplate("empty-collection-model",
 				CONTENT_JSON.dashboard[key]));
 	});
+	
+	/**
+	 * Shows list of triggers separated by comma
+	 **/
+	Handlebars.registerHelper('toLinkTrigger', function(context,options){
+		var ret = "";
+		  for(var i=0, j=context.length; i<j; i++) {
+		    ret = ret + options.fn(context[i]);
+		    
+		    // Avoid comma appending to last element
+		    if (i<j-1) {
+		      ret = ret + ", ";
+		    };
+		  }
+		  return ret;
+	});
+	
 });
