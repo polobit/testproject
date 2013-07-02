@@ -301,16 +301,16 @@ $(function(){
 				var subject =  template(json);
 				
 				template = Handlebars.compile(model.text);
-				var str =  template(json);
+				var text =  template(json);
 						
-				str=str.replace(/<br>/gi, "\n");
-				str=str.replace(/<p.*>/gi, "\n");
-				str=str.replace(/<a.*href="(.*?)".*>(.*?)<\/a>/gi, " $2 ");
-				str=str.replace(/<(?:.|\s)*?>/g, "");
+				text = text.replace(/<br>/gi, "\n");
+				text = text.replace(/<p.*>/gi, "\n");
+				text = text.replace(/<a.*href="(.*?)".*>(.*?)<\/a>/gi, " $2 ");
+				text = text.replace(/<(?:.|\s)*?>/g, "");
 				  
 				// Fill subject and body of send email form
 				$("#emailForm").find( 'input[name="subject"]' ).val(subject);
-				$("#emailForm").find( 'textarea[name="body"]' ).val(str);
+				$("#emailForm").find( 'textarea[name="body"]' ).val(text);
 			}});
 		    
 	});
@@ -332,7 +332,7 @@ $(function(){
 		
 		var url =  'core/api/contact/send-email?from=' + encodeURIComponent(json.from) + '&to=' + 
 			 encodeURIComponent(json.to + "," + json.email_cc) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + 
-				 encodeURIComponent(body) + '<br/><div><br/><br/>' + encodeURIComponent(json.signature) + '</div>';
+				 encodeURIComponent(json.body) + '<br/><div><br/><br/>' + encodeURIComponent(json.signature) + '</div>';
 		
 		// Shows message 
 	    $save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><p class="text-success" style="color:#008000; font-size:15px; display:inline-block"> <i>Sending mail...</i></p></span>');
