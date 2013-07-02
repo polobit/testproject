@@ -1,6 +1,5 @@
 package com.agilecrm.workflows;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Id;
@@ -230,21 +229,10 @@ public class Workflow extends Cursor
      * @return - List
      */
     @XmlElement
-    public List<String> getTriggers()
+    public List<Trigger> getTriggers()
     {
 	List<Trigger> triggers = TriggerUtil.getTriggersByCampaignId(id);
-
-	List<String> triggerNames = new ArrayList<String>();
-
-	for (Trigger trigger : triggers)
-	{
-	    if (trigger == null)
-		continue;
-
-	    triggerNames.add(trigger.name);
-	}
-
-	return triggerNames;
+	return triggers;
     }
 
     /**

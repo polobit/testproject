@@ -88,12 +88,20 @@
 		</div>
 	</div>
 	<div class="span9">
-		<div id="slate"></div>
+		{{#unless this.length}}
+			<div class="filter-criteria">
+					
+			</div>
+			<div id="slate"></div>
+	{{/unless}}
 		{{#if this.length}}
 		<div class="data">
 			<div class="data-container"></div>
 			<table id="contacts" class="table table-striped showCheckboxes"
 				url="core/api/bulk/update?action_type=DELETE" style="overflow: scroll">
+				<div class="filter-criteria">
+					
+				</div>
 				<thead>
 					<tr>
 						<th>Name</th>

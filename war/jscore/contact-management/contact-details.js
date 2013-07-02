@@ -177,6 +177,8 @@ $(function(){
 	        contact.save(json,{
 	       		success: function(data){
 	       			
+	       			addTagToTimelineDynamically(data.get("tagsWithTime"));
+	       			
 	       			// Get all existing tags of the contact to compare with the added tags
 	       			var old_tags = [];
 	       			$.each($('#added-tags-ul').children(), function(index, element){
@@ -184,7 +186,7 @@ $(function(){
        				});
 	       			
 	       			// Updates to both model and collection
-    				App_Contacts.contactDetailView.model.set({'tags' : data.get("tags")}, {silent : true});
+	       			App_Contacts.contactDetailView.model.set(data.toJSON(), {silent : true});
 	       			
 	       			// Append to the list, when no match is found 
 	       			if ($.inArray(new_tags, old_tags) == -1) 
@@ -192,8 +194,8 @@ $(function(){
 	       			
 	       			
 	       			// Adds the added tags (if new) to tags collection
-	       			$.each(new_tags,function(index, tag){
-	       				tagsCollection.add( {"tag" : tag} );
+	       			$.each(new_tags,function(index, tag) {
+	       				tagsCollection.add({"tag" : tag});
 	       			});
 	       		}
 	        });
