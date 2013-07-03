@@ -59,10 +59,20 @@
 		</div>
     </div>
     <div class="span9">
+		{{#unless this.length}}
+			<div class="filter-criteria">
+					
+			</div>
+			<div id="slate"></div>
+		{{/unless}}
         <div class="data">
             <div class="dta-contatiner">
-                <table id="contacts" class="table table-striped showCheckboxes" style="overflow:scroll" url="core/api/contacts/bulk">
-                    <thead>
+
+                <table id="contacts" class="table table-striped showCheckboxes" style="overflow:scroll" url="core/api/contacts/bulk">                
+					<div class="filter-criteria">
+					
+					</div>
+					<thead>
                         <tr style="text-transform: capitalize;">
                             {{contactTableHeadings "fields_set"}}
                         </tr>

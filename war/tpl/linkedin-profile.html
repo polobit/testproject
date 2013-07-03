@@ -146,10 +146,15 @@
 				</div>
 			</div>			
 			{{#if summary}}
-				<p class="space_pre_line" style="word-break:normal;word-wrap:break-word;">				
-					{{show_link_in_statement summary}}
-				</p>
+				<div class="ellipsis-multi-line summary-expand-{{id}}" id="summary-elip-{{id}}" style="word-break:normal;word-wrap:break-word;margin-top: 15px;height:36px;">				
+					<p>{{show_link_in_statement summary}}</p></div>
+				</div>
+			<div id="summary-expand-{{id}}" class="collapse space_pre_line" style="word-break:normal;word-wrap:break-word;">				
+					<p style="margin-bottom:-10px;">{{show_link_in_statement summary}}</p>
+			</div>
 			{{/if}}			
+			<div style="margin-top:5px;">
+			<a href="#summary-expand-{{id}}" class="right show-summary" id={{id}} hide="false" style="">More</a>
 			<small>
 				{{#if startDate}}
 					{{#if startDate.month}}{{startDate.month}}, {{/if}}
@@ -164,6 +169,7 @@
 					{{/if}}
 				{{/if}}
 			</small>
+			</div>
 		</li>
 	{{/each}}
 </script>

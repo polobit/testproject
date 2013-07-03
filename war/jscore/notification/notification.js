@@ -121,10 +121,9 @@ function subscribeToPubNub(domain) {
 								// console.log(unescape(message.replace('/\+/g',
 								// " ")));
 								// console.log(message);
-								
 								if(message.type == "BULK_ACTIONS")
 									{	
-										bulkActivitiesNoty('information', message, 'top');
+										bulkActivitiesNoty('information', message);
 										return;
 									}
 								_setupNotification(message);
