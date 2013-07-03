@@ -325,14 +325,25 @@ $(function() {
 	 */
 	Handlebars.registerHelper('epochToTaskDate', function(date) {
 		
-		var intMonth = new Date(parseInt(date) * 1000).getMonth();
-		var intDay = new Date(parseInt(date) * 1000).getDate();
-		var monthArray = [ "Jan", "Feb", "March", "April", "May", "June",
+		var intMonth, intDay;
+		
+		// Verifies whether date is in milliseconds, then 
+		//no need to multiply with 1000
+		if ((date / 100000000000) > 1) {
+			intMonth =  new Date(date).getMonth();
+			intDay = new Date(date).getDate();
+		} 
+		else
+		{
+			intMonth = new Date(parseInt(date) * 1000).getMonth();
+		    intDay = new Date(parseInt(date) * 1000).getDate();
+		}
+		 var monthArray = [ "Jan", "Feb", "March", "April", "May", "June",
 				"July", "Aug", "Sept", "Oct", "Nov", "Dec" ];
 
 		return (monthArray[intMonth] + " " + intDay);
 	});
-
+	
 	/**
 	 * Helper function to return task color based on it's priority
 	 */
@@ -461,12 +472,6 @@ $(function() {
 			return options.fn(this);
 		}
 		if (!this.entity && this[item] != undefined) {
-			
-			if (this.date_secs) {
-                
-				// For emails convert milliseconds into seconds
-				this.date_secs = this.date_secs / 1000;
-			}
 			return options.fn(this);
 		}
 	});
@@ -1132,6 +1137,13 @@ $(function() {
 	Handlebars.registerHelper('set_up_dashboard_padcontent', function(key){
 		return new Handlebars.SafeString(getTemplate("empty-collection-model",
 				CONTENT_JSON.dashboard[key]));
+	});
+	
+	/**
+	 * Removes surrounded square brackets
+	 ***/
+	Handlebars.registerHelper('removeSquareBrackets', function(value){
+		return value.replace(/[\[\]]+/g,'');
 	});
 	
 	/**

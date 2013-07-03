@@ -173,14 +173,26 @@ $(function(){
           	head.js(LIB_PATH + 'lib/jquery.timeago.js', function() { 
     			$(".email-sent-time", el).each(function(index, element) {
     				
-    				console.log("before :" + $(element).html())
-    				console.log("converted manually" + jQuery.timeago($(element).html()));
+    				//console.log("before :" + $(element).html())
+    				//console.log("converted manually" + jQuery.timeago($(element).html()));
     				$(element).timeago();
-    				console.log($(element).html())
+    				//console.log($(element).html())
     			});
 			});
+          	
+          	 var imap;
+          	 queueGetRequest('email_prefs_queue','/core/api/imap','json', 
+          			 function(data){
+          		     imap = data;
+          	 });
+
+          	 queueGetRequest('email_prefs_queue','/core/api/social-prefs/GMAIL', 'json',
+          			 function(gmail){
+          		 if(!imap && !gmail)
+              		 $('#email-prefs-verification',el).css('display','block');
+             });
             }
-        });
+		});
         mailsView.collection.fetch();
         $('#mail', App_Contacts.contactDetailView.model.el).html(mailsView.el);
 	});

@@ -22,6 +22,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,6 +31,8 @@ import org.json.JSONObject;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.email.ContactEmail;
+import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.Analytics;
 import com.agilecrm.db.util.AnalyticsUtil;
@@ -147,23 +151,25 @@ public class API
 	    toEmailSet.add(st.nextToken());
 	}
 
-	String htmlBody = null;
-
 	for (String toEmail : toEmailSet)
 	{
+	    if (StringUtils.isEmpty(toEmail))
+		continue;
+
 	    Contact contact = ContactUtil.searchContactByEmail(toEmail);
 
-	    // append image if contact exists.
+	    // Save email to contact
 	    if (contact != null)
-		htmlBody = Util.appendTrackingImage(body, null,
-			contact.id.toString());
-	    else
-		htmlBody = body;
+	    {
+		ContactEmail email = new ContactEmail(contact.id, fromEmail,
+			to, subject, body);
+		email.save();
+	    }
 
 	    try
 	    {
 		Util.sendMail(fromEmail, fromEmail, toEmail, subject,
-			fromEmail, htmlBody, null);
+			fromEmail, body, null);
 	    }
 	    catch (Exception e)
 	    {
@@ -197,7 +203,6 @@ public class API
     public String getEmails(@QueryParam("e") String searchEmail,
 	    @QueryParam("c") String count, @QueryParam("o") String offset)
     {
-
 	String url = null;
 
 	String userName = "";
@@ -207,7 +212,7 @@ public class API
 		.getCurrentAgileUser());
 	if (imapPrefs != null)
 	{
-	    userName = imapPrefs.email;
+	    userName = imapPrefs.user_name;
 	    String host = imapPrefs.server_name;
 	    String password = imapPrefs.password;
 	    String port = "993";
@@ -280,45 +285,57 @@ public class API
 	    }
 	}
 
-	String jsonResult = "";
-	if (url != null)
-	    jsonResult = HTTPUtil.accessURL(url);
-
-	if (url == null || jsonResult == null)
+	try
 	{
-	    // If url is null throw exception to configure email prefs
-	    if (url == null)
+	    // Initialize jsonResult as {"emails":[]}, as we get empty imap in
+	    // this format
+	    String jsonResult = new JSONObject().put("emails", new JSONArray())
+		    .toString();
+
+	    // Returns imap emails
+	    if (url != null)
+		jsonResult = HTTPUtil.accessURL(url);
+
+	    // Fetches contact emails
+	    List<ContactEmail> contactEmails = ContactEmailUtil
+		    .getContactEmails(ContactUtil
+			    .searchContactByEmail(searchEmail).id);
+
+	    // If url is null and no contact emails, throw exception to
+	    // configure email prefs
+	    if (url == null && contactEmails.size() == 0)
+	    {
 		throw new WebApplicationException(
 			Response.status(Response.Status.BAD_REQUEST)
 				.entity("You have not yet configured your email. Please click <a href='#email'>here</a> to get started.")
 				.build());
-	    else
-		throw new WebApplicationException(Response
-			.status(Response.Status.BAD_REQUEST)
-			.entity("No Emails.").build());
+	    }
 
-	}
+	    JSONObject emails = new JSONObject(jsonResult);
 
-	JSONObject emails = new JSONObject();
-	try
-	{
-	    // for(String value : emails)
-	    emails = new JSONObject(jsonResult);
 	    JSONArray emailsArray = emails.getJSONArray("emails");
+
 	    for (int i = 0; i < emailsArray.length(); i++)
 	    {
 		emailsArray.getJSONObject(i).put("owner_email",
 			URLDecoder.decode(userName));
 	    }
 
-	}
-	catch (JSONException e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
+	    // Merge contact emails and imap emails.
+	    for (ContactEmail contactEmail : contactEmails)
+	    {
+		ObjectMapper mapper = new ObjectMapper();
+		String emailString = mapper.writeValueAsString(contactEmail);
+		emailsArray.put(new JSONObject(emailString));
+	    }
 
-	return emails.toString();
+	    return emails.toString();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
 
     }
 
