@@ -26,7 +26,7 @@ var WorkflowsRouter = Backbone.Router
 				"triggers" : "triggers",
 				
 				// Appends campaign-id to show selected campaign-name in add trigger form.
-				"trigger-add/:campaign-id" : "triggerAdd",
+				"trigger-add/:id" : "triggerAdd",
 				
 				"trigger-add": "triggerAdd",
 				"trigger/:id" : "triggerEdit"

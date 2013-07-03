@@ -2,6 +2,14 @@
 {{#unless this.length}}
     <h3>No emails to/from {{contactShortName}}.</h3>
 {{/unless}}
+        <ul id="email-prefs-verification" style="margin-top:-5px;display:none;">
+            <div class="alert danger info-block" style="color:red;background-color: rgb(252, 239, 212);border: 1px solid rgb(250, 225, 198);">
+                <div>
+                <i class="icon-warning-sign"></i><strong style="">PENDING EMAIL CONFIGURATION.</strong>
+                <p>You have not yet configured your email. Please click <a href='#email'>here</a> to get started.</p>
+                </div>
+            </div>
+        </ul>
 {{#if this.length}}
 	<ul id="email-social-model-list" class="ativity-block-ul"></ul>
 {{/if}}

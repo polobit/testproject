@@ -47,7 +47,7 @@ function load_timeline_details(el, contactId, callback1)
 	            return item.get('created_time');
 	        }
 			if (item.get('createdTime')) {
-		        	return item.get('createdTime')/1000;
+				return item.get('createdTime')/1000;
 		    }
 	        if (item.get('time')) {
 	        	return item.get('time')/1000;
@@ -123,6 +123,7 @@ function load_timeline_details(el, contactId, callback1)
 			}
 		});
 		
+		/** Emails Collection Starts**/
 		var contact = App_Contacts.contactDetailView.model;
 		var json = contact.toJSON();
 		 
@@ -143,7 +144,7 @@ function load_timeline_details(el, contactId, callback1)
 					
 					$('#time-line', el).find('.loading-img-email').remove();
 					
-					if(emailsCollection.toJSON()[0]['emails'] && emailsCollection.toJSON()[0]['emails'].length > 0){
+					if(emailsCollection.toJSON()[0] && emailsCollection.toJSON()[0]['emails'] && emailsCollection.toJSON()[0]['emails'].length > 0){
 						
 						// If timeline is not defined yet, calls setup_timeline for the first time
 						if(timelineView.collection.length == 0 && emailsCollection.toJSON()[0]){
@@ -151,25 +152,23 @@ function load_timeline_details(el, contactId, callback1)
 							timelineView.collection.add(emailsCollection.toJSON()[0]['emails']);
 							
 							// No callback function is taken as the email takes more time to fetch
-							setup_timeline(timelineView.collection.toJSON(), el);
-						} else{
-							$.each(emailsCollection.toJSON()[0] && emailsCollection.toJSON()[0]['emails'], function(index, data) {
-								var newItem = $(getTemplate("timeline", data));
-								
-								newItem.find('.inner').append('<a href="#" class="open-close"></a>');
-								/*
-								 * Inserts mails to timeline with out validating the isotope status,
-								 * as it takes more time to fetch.
-								 */  
-								$('#timeline', el).isotope( 'insert', newItem);
-								
-								/*// Using autoellipsis for showing 3 lines of message
-								head.js(LIB_PATH + 'lib/jquery.autoellipsis.min.js', function(){
-									newItem.find("#autoellipsis").ellipsis();
-									$('#timeline', el).isotope('reLayout');
-								});*/
+							setup_timeline(timelineView.collection.toJSON(), el, function(el) {
+
+								$.each(timelineViewMore.collection.toJSON(), function(index,data){
+									var newItem = $(getTemplate("timeline", data));
+									newItem.find('.inner').append('<a href="#" class="open-close"></a>');
+									$('#timeline', el).isotope( 'insert', newItem);
+								});
 							});
-						}
+						}else{
+							    var emailsArray = [];
+							    
+								$.each(emailsCollection.toJSON()[0]['emails'], function(index, model){
+									emailsArray.push(model);
+								});
+								
+							validate_insertion(emailsArray, timelineViewMore);
+							}
 					}
 				},
 				error: function(){
@@ -196,6 +195,7 @@ function load_timeline_details(el, contactId, callback1)
 			$('#time-line', el).find('.loading-img-email').remove();
 			$('#time-line',el).find('.loading-img-stats').remove();
 		}
+		/**End of Emails Collection**/
 		
 		/**
 		 * Defines a collection to store the response of all the request urls (notes, deals 
@@ -400,7 +400,7 @@ function create_month_marker(month_years, is_insert, el){
  * @param el
  * 			html object of the contact detail view
  * @param callback
- * 			function to insert models into timelin on its initialization
+ * 			function to insert models into timeline on its initialization
  */
 function setup_timeline(models, el, callback) {
 	
@@ -431,7 +431,7 @@ function setup_timeline(models, el, callback) {
 			if (MONTH_YEARS.indexOf(month_year) < 0)
 				MONTH_YEARS[MONTH_YEARS.length] = month_year;
 			
-			console.log(MONTH_YEARS);
+			//console.log(MONTH_YEARS);
 			
 			// combine data & template
 			$('#timeline').append(getTemplate("timeline", model));
@@ -439,9 +439,9 @@ function setup_timeline(models, el, callback) {
 
 		// add a month marker for each month that has a post
 		create_month_marker(MONTH_YEARS, false, el);
-		console.log(el);
+
 		var $container = $("#timeline");
-		console.log($container);
+		
 		// Initializes isotope with options (sorts the data based on created time)
 		$('#timeline').imagesLoaded(function(){
 			$container.isotope({
@@ -674,7 +674,7 @@ function remove_loading_img(el){
 						timelineView.collection.add(model);
 					});					
 					
-					// No callback function is taken as the email takes more time to fetch
+					// No callback function is taken as the stats takes more time to fetch
 					setup_timeline(timelineView.collection.toJSON(), el);							
 				}
 				else

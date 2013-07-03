@@ -156,6 +156,21 @@ $(function ()
     	else
     		getLinkedinMatchingProfiles(plugin_id);
     });
+    
+    $('.show-summary').die().live('click', function(e){
+		 e.preventDefault();
+		 var href = $(this).attr("href");
+			var id = $(this).attr('id');
+			$('#' + id).text("Hide");
+			$(".summary-expand-" + id).hide();
+			$(href).collapse('toggle');
+			 
+			$(href).on("hidden", function(){
+				$(".summary-expand-" + id).show();
+				$('#' + id).text("More");
+			});
+    });
+	
 });
 
 /**
@@ -926,6 +941,8 @@ function getExperienceOfPerson(plugin_id, linkedin_id)
 		 }
 		 
 		 $('#linkedin_experience_panel').html(e1);
+		 
+		
 		 
      }).error(function(data){
     	// Remove loading image on error 

@@ -23,6 +23,7 @@ import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.customview.CustomView;
+import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
@@ -89,6 +90,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(SocialPrefs.class);
 	ObjectifyService.register(AccountPrefs.class);
 	ObjectifyService.register(NotificationPrefs.class);
+	ObjectifyService.register(ContactEmail.class);
 
 	ObjectifyService.register(Task.class);
 	ObjectifyService.register(Event.class);
