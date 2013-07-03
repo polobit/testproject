@@ -1,7 +1,6 @@
 package com.agilecrm.contact.email;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
@@ -67,7 +66,7 @@ public class ContactEmail
      * timeline
      */
     @NotSaved
-    public Date date = null;
+    public String date = null;
 
     /**
      * To show the reply icon under mails tab. Not saved as it need only to show
@@ -142,6 +141,6 @@ public class ContactEmail
 	owner_email = from;
 
 	// As imap email consists of date field
-	date = Calendar.getInstance().getTime();
+	date = Calendar.getInstance().getTime().toString();
     }
 }

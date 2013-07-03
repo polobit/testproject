@@ -161,8 +161,9 @@ public class API
 	    // Save email to contact
 	    if (contact != null)
 	    {
+		// Remove trailing commas for to emails
 		ContactEmail email = new ContactEmail(contact.id, fromEmail,
-			to, subject, body);
+			to.replaceAll(",$", ""), subject, body);
 		email.save();
 	    }
 
