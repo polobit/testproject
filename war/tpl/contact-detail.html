@@ -290,11 +290,11 @@
 										style="padding-right: 10px; display: inline-block; padding-bottom: 2px;"
 										class="span9">
 										{{/property_is_exists}} 
-								{{#each this}}
+									{{#each this}}
 										<div>
-											<a href='#send-email'>{{value}}</a> {{#if subtype}} <span class="label">{{subtype}}</span> {{/if}}
+											<a href='#send-email/{{value}}'>{{value}}</a> {{#if subtype}} <span class="label">{{subtype}}</span> {{/if}}
 										</div>
-										{{/each}}
+									{{/each}}
 									</div>
 									{{/multiple_Property_Element}}
 								</div>

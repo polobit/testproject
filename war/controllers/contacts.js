@@ -20,6 +20,7 @@ var ContactsRouter = Backbone.Router.extend({
         "contact-duplicate":"duplicateContact",
         "tags/:tag": "contacts",
         "send-email": "sendEmail",
+        "send-email/:id": "sendEmail",
       //"add-opportunity": "addOpportunityToContact",
         "add-campaign": "addContactToCampaign",
          
@@ -606,7 +607,7 @@ var ContactsRouter = Backbone.Router.extend({
      * and templates etc..). To prefill the fields the function 
      * populate_send_email_details is called from the postRenderCallback.
      */
-    sendEmail: function(){
+    sendEmail: function(id){
     	
     	// Show the email form with the email prefilled from the curtrent contact
     	var model =  this.contactDetailView.model;
@@ -614,7 +615,8 @@ var ContactsRouter = Backbone.Router.extend({
             model: model,
             template: "send-email",
             postRenderCallback: function(el) {
-
+            	if(id)
+            	$("#emailForm").find( 'input[name="to"]' ).val(id);
             	// Populate from address and templates
             	populate_send_email_details(el);
             }
