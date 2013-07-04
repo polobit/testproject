@@ -146,10 +146,15 @@
 				</div>
 			</div>			
 			{{#if summary}}
-				<p class="space_pre_line" style="word-break:normal;word-wrap:break-word;">				
-					{{show_link_in_statement summary}}
-				</p>
+				<div class="ellipsis-multi-line summary-expand-{{id}}" id="summary-elip-{{id}}" style="word-break:normal;word-wrap:break-word;margin-top: 15px;height:36px;">				
+					<p>{{show_link_in_statement summary}}</p></div>
+				</div>
+			<div id="summary-expand-{{id}}" class="collapse space_pre_line" style="word-break:normal;word-wrap:break-word;">				
+					<p style="margin-bottom:-10px;">{{show_link_in_statement summary}}</p>
+			</div>
 			{{/if}}			
+			<div style="margin-top:5px;">
+			<a href="#summary-expand-{{id}}" class="right show-summary" id={{id}} hide="false" style="">More</a>
 			<small>
 				{{#if startDate}}
 					{{#if startDate.month}}{{startDate.month}}, {{/if}}
@@ -164,6 +169,7 @@
 					{{/if}}
 				{{/if}}
 			</small>
+			</div>
 		</li>
 	{{/each}}
 </script>
@@ -282,7 +288,9 @@
 		<form class="widget_content" style="border-bottom:none;" id="linkedin-search_form" name="linkedin-search_form" method="post">
 	    	<fieldset>
 				<p><label>Enter Search details</label></p>
-				<div class="control-group"><div class="controls"><input type="text" id="linkedin_keywords" class="input-medium required widget_input_box" style="width:90%" placeholder="Key Words" value="{{keywords}}" name="keywords"></input></div></div>
+				<div class="control-group"><div class="controls">
+					<input type="text" id="linkedin_keywords" class="input-medium required widget_input_box" style="width:90%" placeholder="Key Words" value="{{keywords}}" name="keywords" onkeydown="if (event.keyCode == 13) { getModifiedLinkedinMatchingProfiles({{plugin_id}}); return false; }"></input>
+				</div></div>
 				<a href="#" id="linkedin_search_btn" class="btn" style="text-decoration:none;">Search</a>
 				<span><img src="img/ajax-spinner.gif" id="spinner-linked-search" style="display:none;"></img></span>
 				<a href="#" id="linkedin_search_close" class="btn close" style="float:none;margin-left:5px;">Close</a>

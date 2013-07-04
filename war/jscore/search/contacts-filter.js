@@ -81,20 +81,16 @@ $(function()
 	$('.default_filter').live('click', function(e)
 	{
 		e.preventDefault();
-		
-		// erase filter cookie
-		eraseCookie('contact_filter');
-		eraseCookie('company_filter');
-
-		if(App_Contacts.contactsListView)
-			App_Contacts.contactsListView = undefined;
-		if(App_Contacts.contact_custom_view)
-			App_Contacts.contact_custom_view = undefined;
-		
-		// Loads contacts
-		App_Contacts.contacts();
-
-	})
+		revertToDefaultContacts();
+	});
+	
+	$('.default_contact_remove_tag').die().live('click', function(e) {
+		e.preventDefault();
+		// Navigate to show form
+		Backbone.history.navigate("contacts", {
+            trigger: true
+        });
+	});
 
 	$('#companies-filter').live('click', function(e){
 		
@@ -142,9 +138,11 @@ $(function()
  * element to append filters list,
  */
 var contactFiltersListView 
-function setupContactFilterList(cel)
+function setupContactFilterList(cel, tag_id)
 {
-	var filter_id;
+	if(tag_id)
+		$('.filter-criteria', cel).html(' <b>Tag</b>: &nbsp <ul id="added-tags-ul" class="tagsinput" style="display: inline; vertical-align: top; margin-bottom: 10px"><li style="display: inline-block;" class="tag" data="developer"><span style="margin-left:5px">' + tag_id +'<a class="close default_contact_remove_tag" style="margin-left:5px">&times</a></span></li></ul>')
+	
 	contactFiltersListView = new Base_Collection_View({
 		url : '/core/api/filters',
 		restKey : "ContactFilter",
@@ -152,35 +150,41 @@ function setupContactFilterList(cel)
 		individual_tag_name : 'li',
 		postRenderCallback : function(el)
 		{
+			var filter_name;
 			// Set saved filter name on dropdown button
-			if (filter_id = readCookie('contact_filter'))
+			if (filter_name = readCookie('contact_filter'))
 			{
 				/*
 				 * Check whether filter contains recent of lead to set system
 				 * filter names, to load results based on those filters
 				 */
-				if (filter_id.toLowerCase().indexOf('recent') >= 0)
-					var filter_name = "Recent";
+				if (filter_name.toLowerCase().indexOf('recent') >= 0)
+					filter_name = "Recent";
 
 				else
-					if (filter_id.toLowerCase().indexOf('contacts') >= 0)
-						var filter_name = "My Contacts";
+					if (filter_name.toLowerCase().indexOf('contacts') >= 0)
+						filter_name = "My Contacts";
 				
 				else
-					if (filter_id.toLowerCase().indexOf('leads') >= 0)
-						var filter_name = "Leads";
+					if (filter_name.toLowerCase().indexOf('leads') >= 0)
+						filter_name = "Leads";
 
 					// If is not system type get the name of the filter from
 					// id(from cookie)
 					else
-						if (filter_id.indexOf("system") < 0)
-							var filter_name = contactFiltersListView.collection
-									.get(filter_id).toJSON().name;
+						if (filter_name.indexOf("system") < 0)
+							filter_name = contactFiltersListView.collection
+									.get(filter_name).toJSON().name;
 
 				el.find('.filter-dropdown').append(filter_name);
 			}
-			if(filter_id = readCookie('company_filter'))
-				el.find('.filter-dropdown').append(filter_id);
+			else if(filter_name = readCookie('company_filter'))
+				el.find('.filter-dropdown').append(filter_name);
+			
+			if(!filter_name)
+				return;
+			
+			$('.filter-criteria', cel).html(' <b>Filter</b>: &nbsp<ul id="added-tags-ul" class="tagsinput" style="display: inline; vertical-align: top; margin-bottom: 10px"><li style="display: inline-block;" class="tag" data="developer"><span style="margin-left:5px">' + filter_name + '<a class="close default_filter" style="margin-left:5px;">&times</a></span></li></ul>')
 		}
 	});
 
@@ -191,6 +195,20 @@ function setupContactFilterList(cel)
 
 	// Shows in contacts list
 	$('#filter-list', cel).html(contactFiltersListView.render().el);
+}
+
+function revertToDefaultContacts() {
+	// erase filter cookie
+	eraseCookie('contact_filter');
+	eraseCookie('company_filter');
+
+	if(App_Contacts.contactsListView)
+		App_Contacts.contactsListView = undefined;
+	if(App_Contacts.contact_custom_view)
+		App_Contacts.contact_custom_view = undefined;
+	
+	// Loads contacts
+	App_Contacts.contacts();
 }
 
 function chainFilters(el)

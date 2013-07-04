@@ -24,7 +24,11 @@ var WorkflowsRouter = Backbone.Router
 
 				/* Triggers */
 				"triggers" : "triggers",
-				"trigger-add" : "triggerAdd",
+				
+				// Appends campaign-id to show selected campaign-name in add trigger form.
+				"trigger-add/:id" : "triggerAdd",
+				
+				"trigger-add": "triggerAdd",
 				"trigger/:id" : "triggerEdit"
 			},
 
@@ -228,9 +232,10 @@ var WorkflowsRouter = Backbone.Router
 			/**
 			 * Saves new trigger. Loads jquery.chained.js to link Conditions and
 			 * Value of input field.Fills campaign list using fillSelect
-			 * function
+			 * function.
+			 * When + Add is clicked in workflows, fill with selected campaign-name
 			 */
-			triggerAdd : function() {
+			triggerAdd : function(campaign_id) {
 				this.triggerModelview = new Base_Model_View(
 						{
 							url : 'core/api/triggers',
@@ -266,6 +271,22 @@ var WorkflowsRouter = Backbone.Router
 
 								var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 
+								// fill the selected campaign-id
+								if(campaign_id)
+								{
+									fillSelect('campaign-select','/core/api/workflows','workflow', function(id){
+										$('#campaign-select', el)
+										.find(
+												'option[value='
+														+ campaign_id
+														+ ']')
+										.attr('selected',
+												'selected');
+									}, optionsTemplate);
+
+								}
+								else
+								{
 								/**
 								 * Fills campaign select with existing
 								 * Campaigns.
@@ -284,6 +305,7 @@ var WorkflowsRouter = Backbone.Router
 								fillSelect('campaign-select',
 										'/core/api/workflows', 'workflow',
 										'no-callback', optionsTemplate);
+								}
 							}
 						});
 

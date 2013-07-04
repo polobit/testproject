@@ -106,8 +106,10 @@ function setup_tags_typeahead() {
 	       				old_tags.push($(element).attr('data'));
        				});
 	       			
-	       			App_Contacts.contactDetailView.model.set({'tags' : data.get("tags")}, {silent : true});
-	       				       			
+	       			App_Contacts.contactDetailView.model.set(data.toJSON(), {silent : true});
+	       			
+	       			addTagToTimelineDynamically(data.get("tagsWithTime"));
+	       			
 	       			// Append to the list, when no match is found 
 	       			if ($.inArray(tag, old_tags) == -1) 
 	       				$('#added-tags-ul').append('<li style="display:inline-block;" class="tag" data="' + tag + '"><span><a class="anchor" href="#tags/'+ tag + '">'+ tag + '</a><a class="close remove-tags" id="' + tag + '">&times</a></span></li>');
@@ -164,7 +166,8 @@ function setup_tags_typeahead() {
     			saveEntity(contact_json, 'core/api/contacts',  function(data) {
     			
     				// Updates to both model and collection
-    				App_Contacts.contactDetailView.model.set({'tags' : data.get("tags")}, {silent : true});
+    				App_Contacts.contactDetailView.model.set(data.toJSON(), {silent : true});
+    				addTagToTimelineDynamically(data.get("tagsWithTime"));
     				
     				tagsCollection.add( {"tag" : tag} );
     			$("#addTagsForm").css("display", "none");
@@ -187,6 +190,11 @@ function setup_tags_typeahead() {
     	  return;
     	
     	var tag = $(this).val();
+    	
+    	if(!tag || (/^\s*$/).test(tag))
+		{
+			return;
+		}
     	
     	// To make a tag when "," keydown and check input is not empty
     	if(e.which == 188 && tag != "")

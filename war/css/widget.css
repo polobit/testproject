@@ -270,3 +270,40 @@ small{
 .widget_edit_icons:hover ul{
  visibility:visible;
 }
+
+.multiline_ellipsis{
+	overflow: hidden;
+    height: 36px;
+}
+
+.ellipsis-multi-line:before {
+	content:"";
+	float: left;
+	width: 5px; height: 36px;
+
+		}
+
+.ellipsis-multi-line > *:first-child {
+	float: right;
+	width: 100%;
+	margin-left: -5px; }	
+	
+.multiline_ellipsis:after {
+	content: "\02026";
+	float: right;
+	box-sizing: content-box;
+			-webkit-box-sizing: content-box;
+			-moz-box-sizing: content-box;
+	 position: relative;
+	top: -18px; left: 90%; 
+	width: 3em; margin-left: -3em;
+	padding-right: 5px;
+	text-align: right;
+	  background: white;
+		background: -webkit-gradient(linear, left top, right top,
+				from(rgba(255, 255, 255, 0)), to(white), color-stop(50%, white));
+			background: -moz-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);			
+			background: -o-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+			background: -ms-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+			background: linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white)
+}

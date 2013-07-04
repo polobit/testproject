@@ -109,7 +109,7 @@ var ContactsRouter = Backbone.Router.extend({
     		
     		if(readCookie("contact_view"))
     		{      
-          		this.customView(readCookie("contact_view"), undefined, 'core/api/tags/'  + tag_id);
+          		this.customView(readCookie("contact_view"), undefined, 'core/api/tags/'  + tag_id, tag_id);
           		return;
     		}
     		
@@ -147,7 +147,7 @@ var ContactsRouter = Backbone.Router.extend({
       		if(readCookie('contact_filter'))
       		{	
       			// Then call customview function with filter url
-      			this.customView(readCookie("contact_view"), undefined, "core/api/filters/query/" + readCookie('contact_filter'));
+      			this.customView(readCookie("contact_view"), undefined, "core/api/filters/query/" + readCookie('contact_filter'), tag_id);
       			return;
       		}
       		
@@ -206,7 +206,7 @@ var ContactsRouter = Backbone.Router.extend({
             	  /* Show list of filters dropdown in contacts list, If filter is saved in cookie
             	   * then show the filter name on dropdown button
             	   */
-            	  setupContactFilterList(cel);    
+            	  setupContactFilterList(cel, tag_id);    
             	  startTour("contacts", el);
 
               }             
@@ -344,8 +344,6 @@ var ContactsRouter = Backbone.Router.extend({
         var el = this.contactDetailView.render(true).el;
       
         $('#content').html(el);
-
-       
     },
     
     /**
@@ -731,7 +729,7 @@ var ContactsRouter = Backbone.Router.extend({
     },
     
     // Id = custom-view-id, view_data = custom view data if already availabel, url = filter url if there is any filter
-    customView : function(id, view_data, url) {
+    customView : function(id, view_data, url, tag_id) {
     	// If id is defined get the respective custom view object 
     	if (id && !view_data) 
 		{
@@ -756,7 +754,7 @@ var ContactsRouter = Backbone.Router.extend({
 								return;
 							}
 						App_Contacts.contactViewModel = data.toJSON();
-						App_Contacts.customView(undefined, App_Contacts.contactViewModel, url);
+						App_Contacts.customView(undefined, App_Contacts.contactViewModel, url, tag_id);
 	
 					}
 				});
@@ -773,12 +771,13 @@ var ContactsRouter = Backbone.Router.extend({
 			url = "core/api/contacts";
 		}
     	
-    	if(this.contact_custom_view)
+       	if(this.contact_custom_view && this.contact_custom_view.url == url)
     	{
             $('#content').html(this.contact_custom_view.render(true).el);
             return;
     	}
-        this.contact_custom_view = new Base_Collection_View({
+    	
+         this.contact_custom_view = new Base_Collection_View({
             url: url,
             restKey: "contact",
             modelData: view_data ,
@@ -798,9 +797,8 @@ var ContactsRouter = Backbone.Router.extend({
             	
                 pieTags(el);
                 setupViews(el, view_data.name);
-                
           	  	// show list of filters dropdown in contacts list
-          	  	setupContactFilterList(el);        
+          	  	setupContactFilterList(el, tag_id);        
             }
         });
         
