@@ -10,7 +10,7 @@
                     <div class="text">
 						All Deals that have this contact in the 'Related to' field are shown here.
                     </div>
-                    <a href="#add-opportunity" class="btn blue btn-slate-action"><i class="icon-plus-sign"></i>  Add Deal !</a>
+                    <a href="#" class="contact-add-deal btn blue btn-slate-action"><i class="icon-plus-sign"></i>  Add Deal !</a>
                 </div>
             </div>
         </div>
@@ -18,7 +18,7 @@
 
 {{#if this.length}}
 <div class="page-header" style="margin-top: 0px !important">
-   <a href="#add-opportunity" class="btn right" style="position:relative"><span><i class='icon-plus-sign'/></span> Add Deal</a> 
+   <a href="#" class="contact-add-deal btn right" style="position:relative"><span><i class='icon-plus-sign'/></span> Add Deal</a> 
 </div>
 	<ul id="deals-model-list" class="ativity-block-ul"></ul>
 {{/if}}
@@ -70,7 +70,7 @@
 			<time class="deal-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
 		</small>
 		<span class="actions pull-right">
-			 <a title="Edit"  data="{{id}}" href="#deals/{{id}}" class="deal-edit-contact-tab" style="cursor:pointer;text-decoration: none;padding-right:10px"> <i class="icon-pencil"></i> </a>
+			 <a title="Edit"  data="{{id}}" href="#" class="deal-edit-contact-tab" style="cursor:pointer;text-decoration: none;padding-right:10px"> <i class="icon-pencil"></i> </a>
              <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/opportunity/bulk"></span></a>
         </span>
 	</div>
