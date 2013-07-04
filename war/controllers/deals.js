@@ -8,8 +8,8 @@ var DealsRouter = Backbone.Router.extend({
     	
     	 /* Deals/Opportunity */
         "deals": "deals",
-        "deals-add": "dealsAdd",
-        "deals/:id": "dealsDetails"
+        //"deals-add": "dealsAdd",
+        //"deals/:id": "dealsDetails"
     },
     
     /**

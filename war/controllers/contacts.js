@@ -20,7 +20,7 @@ var ContactsRouter = Backbone.Router.extend({
         "contact-duplicate":"duplicateContact",
         "tags/:tag": "contacts",
         "send-email": "sendEmail",
-        "add-opportunity": "addOpportunityToContact",
+      //"add-opportunity": "addOpportunityToContact",
         "add-campaign": "addContactToCampaign",
          
         /* Views */

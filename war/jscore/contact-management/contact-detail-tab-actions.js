@@ -16,7 +16,7 @@ $(function(){
 			}
 			$("#updateTaskModal").modal('show');
 		});
-	})
+	});
 	
 	$(".complete-task").die().live('click', function(e){
 		e.preventDefault();
@@ -30,4 +30,43 @@ $(function(){
 			});
 		}
 	});
+	
+	// For adding new deal from contact-details
+	$(".contact-add-deal").die().live('click', function(e){
+		e.preventDefault();
+		var el = $("#opportunityForm");
+		
+		// Fills owner select element
+		populateUsers("owners-list", el, undefined, undefined, function(data){
+			
+			$("#opportunityForm").find("#owners-list").html(data);
+			$("#owners-list", $("#opportunityForm")).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
+			// Contacts type-ahead
+			agile_type_ahead("relates_to", el, contacts_typeahead);
+			
+			// Fills milestone select element
+			populateMilestones(el, undefined, undefined, function(data){
+				$("#milestone", el).html(data);
+			});
+
+			// Enable the datepicker
+			$('#close_date', el).datepicker({
+				format : 'mm/dd/yyyy',
+			});
+			
+        	var json = App_Contacts.contactDetailView.model.toJSON();
+        	var contact_name = getPropertyValue(json.properties, "first_name")+ " " + getPropertyValue(json.properties, "last_name");
+        	$('.tags',el).append('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ json.id +'">'+contact_name+'</li>');
+			
+			$("#opportunityModal").modal('show');
+		});
+	});
+	
+	// For updating a deal from contact-details
+	$(".deal-edit-contact-tab").die().live('click', function(e){
+		e.preventDefault();
+		var id = $(this).attr('data');
+		updateDeal(dealsView.collection.get(id));
+	});
+	
 });

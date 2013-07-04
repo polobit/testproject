@@ -69,7 +69,7 @@ $(function () {
  * @param value - Deal object
  * @param key - key name in the value.It is passed during declaration
  **/
-function populateUsers(id, el , value, key, callback) {
+function populateUsers(id, el ,value, key, callback) {
 		
 	// Users set id of agile user to save agileuser key in opportunities
 	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
@@ -94,11 +94,9 @@ function populateUsers(id, el , value, key, callback) {
 		}
 		else
 			$('#' + id, el).find('option[value='+CURRENT_DOMAIN_USER.id+']').attr("selected", "selected");
-		// If callback is present, it is called to deserialize
-		// the select field
+		// If callback is present, it is called to deserialize the select field
 		if (callback && typeof (callback) === "function") {
-			// execute the callback, passing parameters as
-			// necessary
+			// execute the callback, passing parameters as necessary
 			callback($('#' + id).html());
 		}
 	}, optionsTemplate); 
@@ -116,7 +114,7 @@ function populateUsers(id, el , value, key, callback) {
  * @param dealDetails - dealDetails value
  * @param value - Deal Object
  **/
-function populateMilestones(el, dealsDetails, value){
+function populateMilestones(el, dealsDetails, value, callback){
 
 	 // Fill milestones in select options
     var milestone_model = Backbone.Model.extend({
@@ -152,6 +150,12 @@ function populateMilestones(el, dealsDetails, value){
 							// Quotes required for option value because milestone can have spaces in between
 							if(value && value.milestone)
 								$("#milestone",el).find('option[value=\"'+value.milestone+'\"]').attr("selected", "selected");
+								
+							// If callback is present, it is called to deserialize the select field
+							if (callback && typeof (callback) === "function") {
+								// execute the callback, passing parameters as necessary
+								callback($('#milestone').html());
+							}
 						});
     			   }
     });

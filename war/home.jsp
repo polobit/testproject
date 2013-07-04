@@ -147,7 +147,7 @@ String CSS_PATH = "/";
 													   
 					<ul class="nav pull-right">
 						<li class="dropdown" id="menu1"><a class="dropdown-toggle"
-							data-toggle="dropdown" href="#menu1">Add New <i class='caret'></i></a>
+							data-toggle="dropdown" href="">Add New <i class='caret'></i></a>
 							<ul class="dropdown-menu">
 								<li><a href="#personModal" data-toggle="modal" id="person"> Contact</a>
 								</li>
@@ -155,7 +155,7 @@ String CSS_PATH = "/";
 									id="company"> Company</a></li>
 								<li><a href="#" id="show-activity"> Activity</a></li>
 
-								<li><a href="#deals-add" id="activity"> Deal</a></li>
+								<li><a href="#" class="deals-add"> Deal</a></li>
 								<li><a href="#" id="show-note"> Note</a></li>
 							</ul> <!-- 
 							<img style='display:hidden' id='ajax'
