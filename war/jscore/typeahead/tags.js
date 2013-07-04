@@ -191,6 +191,11 @@ function setup_tags_typeahead() {
     	
     	var tag = $(this).val();
     	
+    	if(!tag || (/^\s*$/).test(tag))
+		{
+			return;
+		}
+    	
     	// To make a tag when "," keydown and check input is not empty
     	if(e.which == 188 && tag != "")
     	{
