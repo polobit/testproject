@@ -162,7 +162,15 @@ $(function() {
 
 				// If filter is not set then show view on the default contacts
 				// list
-				App_Contacts.customView(id);
+				if(!App_Contacts.tag_id)
+				{
+					App_Contacts.customView(id);
+					return;
+				}
+				
+				// If tag filter is applied send tags fetch url and tag_id, which is tobe shown on contacts table.
+				App_Contacts.customView(id, undefined, 'core/api/tags/' + App_Contacts.tag_id, App_Contacts.tag_id);
+				
 			});
 
 	// If default view is selected, contacts are loaded with default view and
@@ -181,8 +189,16 @@ $(function() {
 		if(App_Contacts.contactsListView)
 			App_Contacts.contactsListView = undefined;
 		
-		// Loads the contacts
-		App_Contacts.contacts();
+		// If filter is not set then show view on the default contacts
+		// list
+		if(!App_Contacts.tag_id)
+		{
+			App_Contacts.contacts();
+			return;
+		}
+		
+		// If tag filter is applied send tags fetch url and tag_id, which is tobe shown on contacts table.
+		App_Contacts.contacts(App_Contacts.tag_id);
 
 	});
 	

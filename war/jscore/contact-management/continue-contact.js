@@ -114,6 +114,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     	var tags = get_tags(form_id);
     	if (tags != undefined && tags.length != 0) 
     	{
+    		obj.tags = [];
     		obj['tagsWithTime'] = [];
     		
     		$.each(tags[0].value, function(index, value){

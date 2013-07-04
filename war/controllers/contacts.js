@@ -92,6 +92,7 @@ var ContactsRouter = Backbone.Router.extend({
     	// Default url for contacts route
     	var url = '/core/api/contacts';
     	var collection_is_reverse = false;
+    	this.tag_id = tag_id;
     	// Tags, Search & default browse comes to the same function
     	if(tag_id)
     	{
@@ -732,6 +733,20 @@ var ContactsRouter = Backbone.Router.extend({
     
     // Id = custom-view-id, view_data = custom view data if already availabel, url = filter url if there is any filter
     customView : function(id, view_data, url, tag_id) {
+    	
+    	App_Contacts.tag_id = tag_id;
+    	// If url is not defined set defult url to contacts
+    	if(!url)
+		{
+			url = "core/api/contacts";
+		}
+    	
+     	if(this.contact_custom_view && this.contact_custom_view.url == url)
+    	{
+            $('#content').html(this.contact_custom_view.render(true).el);
+            return;
+    	}
+     	
     	// If id is defined get the respective custom view object 
     	if (id && !view_data) 
 		{
@@ -766,18 +781,6 @@ var ContactsRouter = Backbone.Router.extend({
     		view_data = App_Contacts.contactViewModel;
 			
 		}
-    	
-    	// If url is not defined set defult url to contacts
-    	if(!url)
-		{
-			url = "core/api/contacts";
-		}
-    	
-       	if(this.contact_custom_view && this.contact_custom_view.url == url)
-    	{
-            $('#content').html(this.contact_custom_view.render(true).el);
-            return;
-    	}
     	
          this.contact_custom_view = new Base_Collection_View({
             url: url,
