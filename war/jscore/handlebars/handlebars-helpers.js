@@ -1162,4 +1162,18 @@ $(function() {
 		  return ret;
 	});
 	
+	// Gets minutes from milli seconds
+	Handlebars.registerHelper('millSecondsToMinutes', function(timeInMill) {
+		 if (isNaN(timeInMill))
+		  return;
+		 var sec = timeInMill / 1000;
+		 var min = Math.floor(sec / 60);
+	
+		 if (min < 1)
+		  return Math.ceil(sec) + " secs";
+	
+		 var remainingSec = Math.ceil(sec % 60);
+	
+		 return min + " mins, " + remainingSec + " secs";
+	});
 });
