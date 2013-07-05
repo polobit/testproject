@@ -11,6 +11,7 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.Workflow;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
@@ -43,8 +44,7 @@ public class WorkflowUtil
     /**
      * Initialize DataAccessObject.
      */
-    private static ObjectifyGenericDao<Workflow> dao = new ObjectifyGenericDao<Workflow>(
-	    Workflow.class);
+    private static ObjectifyGenericDao<Workflow> dao = new ObjectifyGenericDao<Workflow>(Workflow.class);
 
     /**
      * Locates workflow based on id.
@@ -106,25 +106,32 @@ public class WorkflowUtil
 	    JSONObject subscriberJSON = new JSONObject();
 
 	    List<ContactField> properties = contact.getProperties();
-	    System.out.println("List of properties for subscriberJSON: "
-		    + properties);
 
 	    for (ContactField field : properties)
 	    {
 		if (field.name != null && field.value != null)
 		{
 		    // Gets twitter-id from website property
-		    if (field.name.equals("website")
-			    && field.subtype.equals("TWITTER"))
+		    if (field.name.equals("website") && field.subtype.equals("TWITTER"))
 			field.name = "twitter_id";
 
 		    subscriberJSON.put(field.name, field.value);
 		}
 	    }
 
+	    DomainUser domainUser = DomainUserUtil.getDomainCurrentUser();
+
+	    JSONObject owner = new JSONObject();
+	    owner.put("name", domainUser.name);
+	    owner.put("email", domainUser.email);
+
+	    // Inserts current owner-name and owner-email.
+	    subscriberJSON.put("owner", owner);
+
+	    System.out.println("SubscriberJSON in WorkflowUtil: " + subscriberJSON);
+
 	    // Add Id and data
-	    return new JSONObject().put("data", subscriberJSON).put("id",
-		    contact.id);
+	    return new JSONObject().put("data", subscriberJSON).put("id", contact.id);
 	}
 	catch (Exception e)
 	{
@@ -226,11 +233,9 @@ public class WorkflowUtil
 
 	    // TaskletUtil.executeWorkflow(campaignJSON, subscriberJSONObject);
 
-	    TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(
-		    workflowId.toString(), subscriberJSONObject.toString());
+	    TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(workflowId.toString(), subscriberJSONObject.toString());
 	    Queue queue = QueueFactory.getQueue("campaign-queue");
-	    queue.add(TaskOptions.Builder
-		    .withPayload(taskletWorkflowDeferredTask));
+	    queue.add(TaskOptions.Builder.withPayload(taskletWorkflowDeferredTask));
 	}
 	catch (Exception e)
 	{
@@ -281,16 +286,10 @@ public class WorkflowUtil
 
     }
 
-    public static List<Workflow> getWorkflowsRelatedToCurrentUser(
-	    String page_size)
+    public static List<Workflow> getWorkflowsRelatedToCurrentUser(String page_size)
     {
 	System.out.println("owner id : " + SessionManager.get().getDomainId());
-	return dao
-		.ofy()
-		.query(Workflow.class)
-		.filter("creator_key",
-			new Key<DomainUser>(DomainUser.class, SessionManager
-				.get().getDomainId())).order("-created_time")
-		.limit(Integer.parseInt(page_size)).list();
+	return dao.ofy().query(Workflow.class).filter("creator_key", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+		.order("-created_time").limit(Integer.parseInt(page_size)).list();
     }
 }
