@@ -50,7 +50,7 @@ public class AgileAuthFilter implements Filter
 	    final ServletResponse response, final FilterChain chain)
 	    throws IOException, ServletException
     {
-	// System.out.println("Agile Auth Filter");
+	System.out.println("Agile Auth Filter");
 
 	// Reset the thread local
 	SessionManager.set((UserInfo) null);
@@ -60,7 +60,9 @@ public class AgileAuthFilter implements Filter
 
 	// If it is JS API, we will pass it through JSAPIFilter is used to
 	// filter the request i.e., to check the API key allocated to the domain
-	if (httpRequest.getRequestURI().contains("js/api"))
+	if (httpRequest.getRequestURI().contains("js/api")
+		|| httpRequest.getRequestURI().contains(
+			"/core/api/bulk-actions"))
 	{
 	    System.out.println("JS API - ignoring filter");
 	    chain.doFilter(request, response);

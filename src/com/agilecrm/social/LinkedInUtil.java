@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
@@ -60,6 +59,8 @@ public class LinkedInUtil
 	    .newInstance(Globals.LINKED_IN_API_KEY,
 		    Globals.LINKED_IN_SECRET_KEY);
 
+    private static final String LINKEDINURLFORMAT = "https://m3-s.licdn.com";
+
     /**
      * Creates a client to connect to LinkedIn using developers API key and
      * secret key. Fetches profile for the current user who connects to LinkedIn
@@ -91,7 +92,7 @@ public class LinkedInUtil
 	properties.put("id", profile.getId());
 	properties.put("name",
 		profile.getFirstName() + " " + profile.getLastName());
-	properties.put("pic", profile.getPictureUrl());
+	properties.put("pic", changeImageUrl(profile.getPictureUrl()));
 	properties.put("distance", profile.getDistance() + "");
 
 	// Returns profile details as a map
@@ -254,8 +255,7 @@ public class LinkedInUtil
 	    // Changes http to https to avoid client side warnings by browser,
 	    // Changes certificate from m3 to m3-s to fix ssl broken image link
 	    if (result.picture != null)
-		result.picture = result.picture.replaceFirst("http:", "https:")
-			.replaceFirst("m3", "m3-s");
+		result.picture = changeImageUrl(result.picture);
 
 	    System.out.println(result.picture);
 
@@ -329,8 +329,7 @@ public class LinkedInUtil
 	// Change http to https to avoid client side warnings by browser
 	// Change certificate from m3 to m3-s to fix ssl broken image link
 	if (result.picture != null)
-	    result.picture = result.picture.replaceFirst("http:", "https:")
-		    .replaceFirst("m3", "m3-s");
+	    result.picture = changeImageUrl(result.picture);
 
 	result.searchResult = getExperience(person, linkedInId, client);
 
@@ -644,9 +643,7 @@ public class LinkedInUtil
 			// Changes http to https to avoid client side warnings
 			// by browser, Changes certificate from m3 to m3-s to
 			// fix ssl broken image link
-			p.setPictureUrl(p.getPictureUrl()
-				.replaceFirst("http:", "https:")
-				.replaceFirst("m3", "m3-s"));
+			p.setPictureUrl(changeImageUrl(p.getPictureUrl()));
 
 			json = new JSONObject(p);
 		    }
@@ -720,8 +717,7 @@ public class LinkedInUtil
 	    // Changes http to https to avoid client side warnings by browser,
 	    // Changes certificate from m3 to m3-s to fix ssl broken image link
 	    if (result.picture != null)
-		result.picture = result.picture.replaceFirst("http:", "https:")
-			.replaceFirst("m3", "m3-s");
+		result.picture = changeImageUrl(result.picture);
 
 	    // Sets number of connects if provided
 	    result.num_connections = (person.getNumConnections() != null) ? person
@@ -774,9 +770,7 @@ public class LinkedInUtil
 			    CompanyField.INDUSTRY, CompanyField.TICKER));
 
 		    if (company.getLogoUrl() != null)
-			company.setLogoUrl(company.getLogoUrl()
-				.replaceFirst("http:", "https:")
-				.replaceFirst("m3", "m3-s"));
+			company.setLogoUrl(changeImageUrl(company.getLogoUrl()));
 		    position.setCompany(company);
 		}
 		catch (LinkedInApiClientException e)
@@ -813,9 +807,7 @@ public class LinkedInUtil
 			    CompanyField.INDUSTRY, CompanyField.TICKER));
 
 		    if (company.getLogoUrl() != null)
-			company.setLogoUrl(company.getLogoUrl()
-				.replaceFirst("http:", "https:")
-				.replaceFirst("m3", "m3-s"));
+			company.setLogoUrl(changeImageUrl(company.getLogoUrl()));
 		    position.setCompany(company);
 
 		}
@@ -865,9 +857,7 @@ public class LinkedInUtil
 			    CompanyField.INDUSTRY, CompanyField.TICKER));
 
 		    if (company.getLogoUrl() != null)
-			company.setLogoUrl(company.getLogoUrl()
-				.replaceFirst("http:", "https:")
-				.replaceFirst("m3", "m3-s"));
+			company.setLogoUrl(changeImageUrl(company.getLogoUrl()));
 		    position.setCompany(company);
 		}
 		catch (LinkedInApiClientException e)
@@ -905,9 +895,7 @@ public class LinkedInUtil
 			    CompanyField.INDUSTRY, CompanyField.TICKER));
 
 		    if (company.getLogoUrl() != null)
-			company.setLogoUrl(company.getLogoUrl()
-				.replaceFirst("http:", "https:")
-				.replaceFirst("m3", "m3-s"));
+			company.setLogoUrl(changeImageUrl(company.getLogoUrl()));
 		    position.setCompany(company);
 
 		}
@@ -986,8 +974,7 @@ public class LinkedInUtil
 	    // Changes http to https to avoid client side warnings by browser,
 	    // Changes certificate from m3 to m3-s to fix ssl broken image link
 	    if (result.picture != null)
-		result.picture = result.picture.replaceFirst("http:", "https:")
-			.replaceFirst("m3", "m3-s");
+		result.picture = changeImageUrl(result.picture);
 
 	    // Sets number of connects if provided
 	    result.num_connections = (person.getNumConnections() != null) ? person
@@ -1022,28 +1009,42 @@ public class LinkedInUtil
 	// "1a6ebcd2-8038-4198-b59c-25b01cf229c0",
 	// "29571011-8ce5-42a4-90cc-44022c55d77f");// teju test
 
-	Person person = client.getProfileByUrl(
-		"http://www.linkedin.com/pub/digvijay-sable/1a/539/512",
-		ProfileType.STANDARD, EnumSet.of(ProfileField.PICTURE_URL,
-			ProfileField.FIRST_NAME, ProfileField.LAST_NAME,
-			ProfileField.SUMMARY, ProfileField.HEADLINE,
-			ProfileField.LOCATION_NAME,
-			ProfileField.NUM_CONNECTIONS,
-			ProfileField.PUBLIC_PROFILE_URL, ProfileField.ID,
-			ProfileField.DISTANCE, ProfileField.CURRENT_SHARE,
-			ProfileField.CURRENT_STATUS,
-			ProfileField.POSITIONS_COMPANY,
-			ProfileField.THREE_CURRENT_POSITIONS,
-			ProfileField.THREE_PAST_POSITIONS,
-			ProfileField.POSITIONS_COMPANY_INDUSTRY,
-			ProfileField.POSITIONS_COMPANY_TICKER));
+	// Person person = client.getProfileByUrl(
+	// "http://www.linkedin.com/pub/digvijay-sable/1a/539/512",
+	// ProfileType.STANDARD, EnumSet.of(ProfileField.PICTURE_URL,
+	// ProfileField.FIRST_NAME, ProfileField.LAST_NAME,
+	// ProfileField.SUMMARY, ProfileField.HEADLINE,
+	// ProfileField.LOCATION_NAME,
+	// ProfileField.NUM_CONNECTIONS,
+	// ProfileField.PUBLIC_PROFILE_URL, ProfileField.ID,
+	// ProfileField.DISTANCE, ProfileField.CURRENT_SHARE,
+	// ProfileField.CURRENT_STATUS,
+	// ProfileField.POSITIONS_COMPANY,
+	// ProfileField.THREE_CURRENT_POSITIONS,
+	// ProfileField.THREE_PAST_POSITIONS,
+	// ProfileField.POSITIONS_COMPANY_INDUSTRY,
+	// ProfileField.POSITIONS_COMPANY_TICKER));
+	//
+	// ObjectMapper mapper = new ObjectMapper();
+	// String json;
+	//
+	// json = mapper.writeValueAsString(getExperience(person, "IZDqVhjks-",
+	// client));
+	// System.out.println(json);
 
-	ObjectMapper mapper = new ObjectMapper();
-	String json;
-
-	json = mapper.writeValueAsString(getExperience(person, "IZDqVhjks-",
-		client));
-	System.out.println(json);
+	System.out
+		.println(changeImageUrl("https://m.c.lnkd.licdn.com/mpr/mprx/0_1C0R39OydOFyN2cUPiOe3NOrdj8yq7cUl5Ik3Nah94NuIIhRxkfc7qsaFPh_Be9B-TjLa1K05B2a"));
 
     }
+
+    public static String changeImageUrl(String url)
+    {
+	if (!StringUtils.isBlank(url) && url.contains("licdn.com"))
+	    url = url.replace(url.substring(0, url.indexOf(".com") + 4),
+		    LINKEDINURLFORMAT);
+
+	System.out.println(url);
+	return url;
+    }
+
 }

@@ -73,17 +73,45 @@
 //}
 
 function bulkActivitiesNoty(type, message, position) {
-	// Download the lib
-	head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
-			+ 'lib/noty/layouts/bottom.js', LIB_PATH
-			+ 'lib/noty/layouts/top.js', LIB_PATH
-			+ 'lib/noty/themes/default.js', function() {
+	if(!position)
+	{
+		showNoty1(type, message.message, "bottomRight")
+		return;
+	}
+		
+	showNoty1(type, message.message, position)
+}
+function showNoty1(type, message, position) {
+	
+	var scripts = ""
+	if(position == "top")
+		head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
+		+ 'lib/noty/layouts/top.js', LIB_PATH
+		+ 'lib/noty/themes/default.js', function(){
+			notySetup(type, message, position)
+		});
+	
+	if(position == "bottomRight")
+		head.js(LIB_PATH + 'lib/noty/jquery.noty.js',  LIB_PATH
+				+ 'lib/noty/layouts/bottom.js', LIB_PATH
+				+ 'lib/noty/layouts/bottomRight.js', LIB_PATH
+				+ 'lib/noty/themes/default.js', function(){
+					notySetup(type, message, position)
+				});
+	
+	if(position == "bottomLeft")
+		head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
+				+ 'lib/noty/layouts/bottomLeft.js', LIB_PATH
+				+ 'lib/noty/themes/default.js', function(){
+						notySetup(type, message, position)
+				});		
+}
 
-		// Close all
+function notySetup(type, message, position) {
 		$.noty.closeAll()
 
 		var n = noty({
-			text : message.message,
+			text : message,
 			layout : position,
 			type : type,
 			animation : {
@@ -100,9 +128,7 @@ function bulkActivitiesNoty(type, message, position) {
 			timeout : 2000, // delay for closing event. Set false for sticky
 							// notifications
 		});
-	});
-
-}
+	}
 
 function get_random_message() {
 
