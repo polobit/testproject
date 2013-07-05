@@ -17,7 +17,7 @@
     String[] DEVELOPERS_CATALOG = { "json/nodes/developers/jsonio.js",
 		    "json/nodes/developers/condition.js" };
     String[] CRM_CATALOG = { "json/nodes/crm/addnote.js",
-		    "json/nodes/crm/addtask.js","json/nodes/common/check_tags.js" };
+		    "json/nodes/crm/addtask.jsp","json/nodes/common/check_tags.js" };
 
     // Download Each Catalog
     JSONArray jsonArray = new JSONArray();

@@ -153,7 +153,7 @@ public class Task
      * @param agileUserId
      *            Agile user id to create owner
      */
-    public Task(Type type, Long due, Long agileUserId)
+    public Task(Type type, Long due)
     {
 	this.type = type;
 	this.due = due;
