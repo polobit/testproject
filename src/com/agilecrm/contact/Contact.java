@@ -24,6 +24,7 @@ import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
+import com.agilecrm.social.LinkedInUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.notification.util.ContactNotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -686,6 +687,11 @@ public class Contact extends Cursor
     private void postLoad()
     {
 	tags = getContactTags();
+	ContactField field = this.getContactField("image");
+	System.out.println(LinkedInUtil.changeImageUrl(field.value));
+	if (field != null)
+	    field.value = LinkedInUtil.changeImageUrl(field.value);
+
     }
 
     @Override

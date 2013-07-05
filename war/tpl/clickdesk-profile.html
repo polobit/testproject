@@ -15,7 +15,6 @@
 </script>
 
 <script id="clickdesk-profile-template" type="text/html">
-{{#if_json this}}
 <p class="widget_content" style="margin-bottom: 0px;">Conversations and tickets related to {{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}</p>
 <ul class="nav nav-tabs" id="myTab">
 	<li class="active" style="width:48%; margin-left: 2%; text-align: center;" align="center"><a data-toggle="tab" href="#chats" id="clickdesk_chats"><h4>Chats</h4><small></small></a></li>
@@ -47,9 +46,6 @@
 		</div>
 	</div>
 </div>
-{{else}}
-Something went wrong
-{{/if_json}}
 </script>
 
 <script id="clickdesk-chat-stream-template" type="text/html">
