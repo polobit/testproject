@@ -43,7 +43,8 @@ var CONTENT_JSON = {
 		"description" : "Deals are sales opportunities you track continuously throughout its lifecycle.",
 		//"learn_more" : "click here to learn more",
 		"button_text" : "Add Deal",
-		"route" : "#deals-add",
+		"route" : "#",
+		"modal_id" : "opportunityModal",
 		"image" : "/img/clipboard.png"
 	},
 	"reports" : {
@@ -128,6 +129,9 @@ $(function() {
 	$('.modal-form').live('click', function(e) {
 		e.preventDefault();
 		var id = $(this).attr('modal_id');
-		$("#" + id).modal('show');
+		if(id == "opportunityModal")
+			showDeal();
+		else
+			$("#" + id).modal('show');
 	});
 });

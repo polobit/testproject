@@ -319,7 +319,8 @@ $(function(){
 				text = text.replace(/<p.*>/gi, "\n");
 				text = text.replace(/<a.*href="(.*?)".*>(.*?)<\/a>/gi, " $2 ");
 				text = text.replace(/<(?:.|\s)*?>/g, "");
-				  
+				text = text.replace(/&nbsp;/g, " ");
+				
 				// Fill subject and body of send email form
 				$("#emailForm").find( 'input[name="subject"]' ).val(subject);
 				//var value = $("#emailForm").find( 'textarea[name="body"]' ).val(text);

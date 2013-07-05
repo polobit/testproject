@@ -20,7 +20,8 @@ var ContactsRouter = Backbone.Router.extend({
         "contact-duplicate":"duplicateContact",
         "tags/:tag": "contacts",
         "send-email": "sendEmail",
-        "add-opportunity": "addOpportunityToContact",
+        "send-email/:id": "sendEmail",
+      //"add-opportunity": "addOpportunityToContact",
         "add-campaign": "addContactToCampaign",
          
         /* Views */
@@ -91,6 +92,7 @@ var ContactsRouter = Backbone.Router.extend({
     	// Default url for contacts route
     	var url = '/core/api/contacts';
     	var collection_is_reverse = false;
+    	this.tag_id = tag_id;
     	// Tags, Search & default browse comes to the same function
     	if(tag_id)
     	{
@@ -109,7 +111,7 @@ var ContactsRouter = Backbone.Router.extend({
     		
     		if(readCookie("contact_view"))
     		{      
-          		this.customView(readCookie("contact_view"), undefined, 'core/api/tags/'  + tag_id);
+          		this.customView(readCookie("contact_view"), undefined, 'core/api/tags/'  + tag_id, tag_id);
           		return;
     		}
     		
@@ -147,7 +149,7 @@ var ContactsRouter = Backbone.Router.extend({
       		if(readCookie('contact_filter'))
       		{	
       			// Then call customview function with filter url
-      			this.customView(readCookie("contact_view"), undefined, "core/api/filters/query/" + readCookie('contact_filter'));
+      			this.customView(readCookie("contact_view"), undefined, "core/api/filters/query/" + readCookie('contact_filter'), tag_id);
       			return;
       		}
       		
@@ -606,7 +608,7 @@ var ContactsRouter = Backbone.Router.extend({
      * and templates etc..). To prefill the fields the function 
      * populate_send_email_details is called from the postRenderCallback.
      */
-    sendEmail: function(){
+    sendEmail: function(id){
     	
     	// Show the email form with the email prefilled from the curtrent contact
     	var model =  this.contactDetailView.model;
@@ -614,7 +616,8 @@ var ContactsRouter = Backbone.Router.extend({
             model: model,
             template: "send-email",
             postRenderCallback: function(el) {
-
+            	if(id)
+            	$("#emailForm").find( 'input[name="to"]' ).val(id);
             	// Populate from address and templates
             	populate_send_email_details(el);
             	
@@ -732,7 +735,21 @@ var ContactsRouter = Backbone.Router.extend({
     },
     
     // Id = custom-view-id, view_data = custom view data if already availabel, url = filter url if there is any filter
-    customView : function(id, view_data, url) {
+    customView : function(id, view_data, url, tag_id) {
+    	
+    	App_Contacts.tag_id = tag_id;
+    	// If url is not defined set defult url to contacts
+    	if(!url)
+		{
+			url = "core/api/contacts";
+		}
+    	
+     	if(this.contact_custom_view && this.contact_custom_view.url == url)
+    	{
+            $('#content').html(this.contact_custom_view.render(true).el);
+            return;
+    	}
+     	
     	// If id is defined get the respective custom view object 
     	if (id && !view_data) 
 		{
@@ -757,7 +774,7 @@ var ContactsRouter = Backbone.Router.extend({
 								return;
 							}
 						App_Contacts.contactViewModel = data.toJSON();
-						App_Contacts.customView(undefined, App_Contacts.contactViewModel, url);
+						App_Contacts.customView(undefined, App_Contacts.contactViewModel, url, tag_id);
 	
 					}
 				});
@@ -768,18 +785,7 @@ var ContactsRouter = Backbone.Router.extend({
 			
 		}
     	
-    	// If url is not defined set defult url to contacts
-    	if(!url)
-		{
-			url = "core/api/contacts";
-		}
-    	
-    	if(this.contact_custom_view)
-    	{
-            $('#content').html(this.contact_custom_view.render(true).el);
-            return;
-    	}
-        this.contact_custom_view = new Base_Collection_View({
+         this.contact_custom_view = new Base_Collection_View({
             url: url,
             restKey: "contact",
             modelData: view_data ,
@@ -799,9 +805,8 @@ var ContactsRouter = Backbone.Router.extend({
             	
                 pieTags(el);
                 setupViews(el, view_data.name);
-                
           	  	// show list of filters dropdown in contacts list
-          	  	setupContactFilterList(el);        
+          	  	setupContactFilterList(el, tag_id);        
             }
         });
         
