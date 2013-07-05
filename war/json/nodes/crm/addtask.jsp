@@ -63,11 +63,49 @@
 			"type":"number",
 			"min":"0"
 
-		},{
+		},
+        {
+            "label": "Owner",
+            "required": "Yes",
+            "category": "Info",
+            "name": "owner_id",
+            "title": "Select the owner.",
+            "options": {
+            	<%@page import="com.agilecrm.user.util.DomainUserUtil"%>
+            	<%@page import="com.agilecrm.user.DomainUser" %>
+            	<%@page import="java.util.List" %>
+            	<%@page import="com.google.appengine.api.NamespaceManager" %>
+                <%
+                String domain = NamespaceManager.get();
+                
+                System.out.println("Domain in addtask.jsp is: " + domain);
+                
+				List<DomainUser> domainUsers = DomainUserUtil.getUsers(domain);
+				System.out.println("DomainUsers obtained in addtask.jsp are: " + domainUsers);
+				
+				Object arr[] = domainUsers.toArray();
+				for (int i = 0; i < arr.length; i++)
+				{
+				    DomainUser domainUser = (DomainUser) arr[i];
+				    
+				    String id = domainUser.id.toString();
+				    String name = domainUser.name;
+
+				    if (i == arr.length - 1)
+					out.println("\"" + name + "\":\"" + id + "\"");
+				    else
+				    out.println("\"" + name + "\":\"" + id + "\",");
+				}
+				%>
+            	
+            },
+            "fieldType": "select",
+            "type": "select" 
+        },{
             "label": "Add a task related to a contact in the CRM.<br/><br/>For example, if a contact opens and clicks a link in your email, then you might want to add a task to your list for Calling him/her. <br/><br/>When this task is created, the contact is automatically added to the 'Related to' field in the task.",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 
-        } 
+        }
     ]
 }

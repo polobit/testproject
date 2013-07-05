@@ -11,7 +11,6 @@ import com.agilecrm.activities.Task.PriorityType;
 import com.agilecrm.activities.Task.Type;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.user.AgileUser;
 import com.agilecrm.util.DBUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
@@ -98,6 +97,11 @@ public class AddTask extends TaskletAdapter
      */
     public static String DUE_DAYS = "due_days";
 
+    /**
+     * DomainUsers
+     */
+    public static String OWNER_ID = "owner_id";
+
     /*
      * (non-Javadoc)
      * 
@@ -115,6 +119,8 @@ public class AddTask extends TaskletAdapter
 		PRIORITY);
 	String dueDays = getStringValue(nodeJSON, subscriberJSON, data,
 		DUE_DAYS);
+	String ownerId = getStringValue(nodeJSON, subscriberJSON, data,
+		OWNER_ID);
 
 	Calendar calendar = Calendar.getInstance();
 
@@ -131,6 +137,8 @@ public class AddTask extends TaskletAdapter
 		+ category + ",priority: " + priority + " and Due Date : "
 		+ dueDateInEpoch);
 
+	System.out.println("The given owner for AddTask is: " + ownerId);
+
 	// Get Contact Id and Contact
 	String contactId = DBUtil.getId(subscriberJSON);
 	Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
@@ -141,22 +149,8 @@ public class AddTask extends TaskletAdapter
 	{
 	    try
 	    {
-		// Get DomainUser id who created workflow
-		Long domainId = campaignJSON.getLong("domainUserId");
 
-		if (domainId == null)
-		{
-		    // Execute Next One in Loop
-		    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON,
-			    data, nodeJSON, null);
-		    return;
-		}
-
-		AgileUser agileuser = AgileUser
-			.getCurrentAgileUserFromDomainUser(domainId);
-
-		task = new Task(Type.valueOf(category), dueDateInEpoch,
-			agileuser.id);
+		task = new Task(Type.valueOf(category), dueDateInEpoch);
 
 		// Intialize task contacts with contact id
 		task.contacts = new ArrayList<String>();
@@ -165,6 +159,9 @@ public class AddTask extends TaskletAdapter
 		// Initialize task priority and subject values
 		task.priority_type = PriorityType.valueOf(priority);
 		task.subject = subject;
+
+		// Assign owner-id to task
+		task.owner_id = ownerId;
 
 		// Save Task
 		task.save();
