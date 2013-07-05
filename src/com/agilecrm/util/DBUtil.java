@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import com.agilecrm.db.util.AnalyticsUtil;
+import com.agilecrm.db.util.AnalyticsSQLUtil;
 import com.agilecrm.db.util.SQLUtil;
 import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -224,7 +224,7 @@ public class DBUtil
 
 
 		// Deletes page stats from sql.
-		AnalyticsUtil.deleteStatsBasedOnNamespace(namespace);
+		AnalyticsSQLUtil.deleteStatsBasedOnNamespace(namespace);
 
 		ContactDocument.deleteAllData(namespace);
 

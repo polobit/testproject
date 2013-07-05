@@ -134,7 +134,7 @@ function load_timeline_details(el, contactId, callback1)
 		if(email){
 			
 			var EmailsCollection = Backbone.Collection.extend({
-				url: 'core/api/email?e=' + encodeURIComponent(email) + '&c=10&o=0',
+				url: 'core/api/emails/imap-email?e=' + encodeURIComponent(email) + '&c=10&o=0',
 			});
 			var emailsCollection = new EmailsCollection();
 			emailsCollection .fetch({
@@ -621,7 +621,7 @@ function remove_loading_img(el){
  */function get_stats(email, contact, el)
 {
 	var StatsCollection = Backbone.Collection.extend({
-		                        url:'core/api/stats?e='+ encodeURIComponent(email)
+		                        url:'core/api/web-stats?e='+ encodeURIComponent(email)
 		                                             });
 	var statsCollection = new StatsCollection();
 	statsCollection.fetch({
@@ -710,7 +710,7 @@ function addTagsToTimeline(contact, el)
 		
 		// Add tags in timeline
 		$.each(contact.get('tagsWithTime'), function(index, tag){
-			console.log(tag);
+			//console.log(tag);
 			timelineView.collection.add(tag);
 		})
 		setup_timeline(timelineView.collection.toJSON(), el);

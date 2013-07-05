@@ -134,7 +134,7 @@
 					
 					json.body = json.body.replace(/\r\n/g,"<br/>");
 					
-					var url =  'core/api/send-email?from=' + encodeURIComponent(json.from) + '&to=' + 
+					var url =  'core/api/emails/send-email?from=' + encodeURIComponent(json.from) + '&to=' + 
 					 encodeURIComponent(json.to) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + 
 						 encodeURIComponent(json.body);
 					

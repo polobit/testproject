@@ -1,15 +1,10 @@
 package com.agilecrm.core.api;
 
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -17,13 +12,10 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,27 +23,16 @@ import org.json.JSONObject;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.email.ContactEmail;
-import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.db.Analytics;
-import com.agilecrm.db.util.AnalyticsUtil;
 import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.IMAPEmailPrefs;
 import com.agilecrm.user.ProfileStatus;
-import com.agilecrm.user.SocialPrefs;
-import com.agilecrm.user.SocialPrefs.Type;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.user.util.IMAPEmailPrefsUtil;
-import com.agilecrm.user.util.SocialPrefsUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DBUtil;
-import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.NamespaceUtil;
-import com.agilecrm.util.Util;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.QueryResultIterator;
 import com.googlecode.objectify.Objectify;
@@ -88,17 +69,12 @@ public class API
 	}
     }
 
-    // Logs
-
-    // User Prefs -
-
-    // Register
+    // Logs User Prefs - Register
     @Path("domain-availability/{domain}")
     @POST
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Map<String, String> register(@PathParam("email") String domain)
     {
-
 	// Get Users for this domain to see if it is free
 	List<com.agilecrm.user.DomainUser> usersList = DomainUserUtil
 		.getUsers(domain);
@@ -117,68 +93,6 @@ public class API
 	return result;
     }
 
-    @Path("send-email")
-    @POST
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public void createEmail(@QueryParam("from") String fromEmail,
-	    @QueryParam("to") String to, @QueryParam("subject") String subject,
-	    @QueryParam("body") String body)
-    {
-	try
-	{
-	    Util.sendMail(fromEmail, fromEmail, to, subject, fromEmail, body,
-		    null);
-	}
-	catch (Exception e)
-	{
-
-	    e.printStackTrace();
-	}
-    }
-
-    @Path("contact/send-email")
-    @POST
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public void sendEmail(@QueryParam("from") String fromEmail,
-	    @QueryParam("to") String to, @QueryParam("subject") String subject,
-	    @QueryParam("body") String body)
-    {
-	Set<String> toEmailSet = new HashSet<String>();
-	StringTokenizer st = new StringTokenizer(to, ",");
-
-	while (st.hasMoreTokens())
-	{
-	    toEmailSet.add(st.nextToken());
-	}
-
-	for (String toEmail : toEmailSet)
-	{
-	    if (StringUtils.isEmpty(toEmail))
-		continue;
-
-	    Contact contact = ContactUtil.searchContactByEmail(toEmail);
-
-	    // Save email to contact
-	    if (contact != null)
-	    {
-		// Remove trailing commas for to emails
-		ContactEmail email = new ContactEmail(contact.id, fromEmail,
-			to.replaceAll(",$", ""), subject, body);
-		email.save();
-	    }
-
-	    try
-	    {
-		Util.sendMail(fromEmail, fromEmail, toEmail, subject,
-			fromEmail, body, null);
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-	    }
-	}
-    }
-
     // API Key
     // This method is called if TEXT_PLAIN is request
     @Path("api-key")
@@ -189,164 +103,12 @@ public class API
 	return APIKey.getAPIKey();
     }
 
-    @Path("stats")
-    @GET
-    @Produces({ MediaType.APPLICATION_JSON })
-    public List<Analytics> getStats(@QueryParam("e") String searchEmail)
-    {
-	return AnalyticsUtil.getPageViews(searchEmail);
-    }
-
-    // Contact view Save Author: Yaswanth 08-10-2012
-    @Path("email")
-    @GET
-    @Produces({ MediaType.APPLICATION_JSON })
-    public String getEmails(@QueryParam("e") String searchEmail,
-	    @QueryParam("c") String count, @QueryParam("o") String offset)
-    {
-	String url = null;
-
-	String userName = "";
-
-	// Get Imap Prefs
-	IMAPEmailPrefs imapPrefs = IMAPEmailPrefsUtil.getIMAPPrefs(AgileUser
-		.getCurrentAgileUser());
-	if (imapPrefs != null)
-	{
-	    userName = imapPrefs.user_name;
-	    String host = imapPrefs.server_name;
-	    String password = imapPrefs.password;
-	    String port = "993";
-
-	    // URL Encode Params
-	    userName = URLEncoder.encode(userName);
-	    host = URLEncoder.encode(host);
-	    password = URLEncoder.encode(password);
-	    port = URLEncoder.encode(port);
-
-	    url = "http://stats.agilecrm.com:8080/AgileCRMEmail/imap?user_name="
-		    + userName
-		    + "&search_email="
-		    + searchEmail
-		    + "&host="
-		    + host
-		    + "&port="
-		    + port
-		    + "&offset="
-		    + offset
-		    + "&count="
-		    + count + "&command=imap_email&password=" + password;
-	}
-	else
-	{
-	    // Get Gmail Social Prefs
-	    Type socialPrefsTypeEnum = SocialPrefs.Type.GMAIL;
-	    SocialPrefs gmailPrefs = SocialPrefsUtil.getPrefs(
-		    AgileUser.getCurrentAgileUser(), socialPrefsTypeEnum);
-
-	    if (gmailPrefs != null)
-	    {
-
-		userName = gmailPrefs.email;
-		String host = "imap.gmail.com";
-		String port = "993";
-		String consumerKey = "anonymous";
-		String consumerSecret = "anonymous";
-
-		String oauth_key = gmailPrefs.token;
-		String oauth_secret = gmailPrefs.secret;
-
-		// URL Encode Params
-		userName = URLEncoder.encode(userName);
-		host = URLEncoder.encode(host);
-		port = URLEncoder.encode(port);
-		consumerKey = URLEncoder.encode(consumerKey);
-		consumerSecret = URLEncoder.encode(consumerSecret);
-		oauth_key = URLEncoder.encode(oauth_key);
-		oauth_secret = URLEncoder.encode(oauth_secret);
-
-		url = "http://stats.agilecrm.com:8080/AgileCRMEmail/imap?command=oauth_email&user_name="
-			+ userName
-			+ "&search_email="
-			+ searchEmail
-			+ "&host="
-			+ host
-			+ "&port="
-			+ port
-			+ "&offset="
-			+ offset
-			+ "&count="
-			+ count
-			+ "&consumer_key="
-			+ consumerKey
-			+ "&consumer_secret="
-			+ consumerSecret
-			+ "&oauth_key="
-			+ oauth_key + "&oauth_secret=" + oauth_secret;
-	    }
-	}
-
-	try
-	{
-	    // Initialize jsonResult as {"emails":[]}, as we get empty imap in
-	    // this format
-	    String jsonResult = new JSONObject().put("emails", new JSONArray())
-		    .toString();
-
-	    // Returns imap emails
-	    if (url != null)
-		jsonResult = HTTPUtil.accessURL(url);
-
-	    // Fetches contact emails
-	    List<ContactEmail> contactEmails = ContactEmailUtil
-		    .getContactEmails(ContactUtil
-			    .searchContactByEmail(searchEmail).id);
-
-	    // If url is null and no contact emails, throw exception to
-	    // configure email prefs
-	    if (url == null && contactEmails.size() == 0)
-	    {
-		throw new WebApplicationException(
-			Response.status(Response.Status.BAD_REQUEST)
-				.entity("You have not yet configured your email. Please click <a href='#email'>here</a> to get started.")
-				.build());
-	    }
-
-	    JSONObject emails = new JSONObject(jsonResult);
-
-	    JSONArray emailsArray = emails.getJSONArray("emails");
-
-	    for (int i = 0; i < emailsArray.length(); i++)
-	    {
-		emailsArray.getJSONObject(i).put("owner_email",
-			URLDecoder.decode(userName));
-	    }
-
-	    // Merge contact emails and imap emails.
-	    for (ContactEmail contactEmail : contactEmails)
-	    {
-		ObjectMapper mapper = new ObjectMapper();
-		String emailString = mapper.writeValueAsString(contactEmail);
-		emailsArray.put(new JSONObject(emailString));
-	    }
-
-	    return emails.toString();
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-
-    }
-
     // Get Agile Users
     @Path("agileusers")
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
     public List<AgileUser> getAgileUsers()
     {
-
 	return AgileUser.getUsers();
     }
 
@@ -521,14 +283,4 @@ public class API
 	    return null;
 	}
     }
-
-    @Path("JSAPI-status")
-    @GET
-    @Produces({ MediaType.TEXT_PLAIN, "application/x-javascript" })
-    public int getJSAPIStatus()
-    {
-	String domain = NamespaceManager.get();
-	return AnalyticsUtil.getPageViewsCountForGivenDomain(domain);
-    }
-
 }

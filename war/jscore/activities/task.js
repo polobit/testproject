@@ -22,11 +22,16 @@ $(function() {
 	 */
 	$("#task").click(function(e) {
 		e.preventDefault();
-		highlight_task();
-
 		var el = $("#taskForm");
-		agile_type_ahead("task_related_to", el, contacts_typeahead);
-		populateUsers("owners-list", el);
+		
+		// Fills owner select element
+		populateUsers("owners-list", $("#taskForm"), undefined, undefined,
+				function(data) {
+					$("#taskForm").find("#owners-list").html(data);
+					$("#owners-list", el).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
+					agile_type_ahead("task_related_to", el, contacts_typeahead);
+					highlight_task();
+		});
 	});
 
 	/**
@@ -34,11 +39,17 @@ $(function() {
 	 */
 	$(".add-task").live('click', function(e) {
 		e.preventDefault();
-		$('#activityModal').modal('show');
-		highlight_task();
+
 		var el = $("#taskForm");
-		agile_type_ahead("task_related_to", el, contacts_typeahead);
-		populateUsers("owners-list", el);
+		// Fills owner select element
+		populateUsers("owners-list", $("#taskForm"), undefined, undefined,
+				function(data) {
+					$("#taskForm").find("#owners-list").html(data);
+					$("#owners-list", el).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
+					agile_type_ahead("task_related_to", el, contacts_typeahead);
+					$('#activityModal').modal('show');
+					highlight_task();
+		});
 
 	});
 

@@ -11,7 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.db.util.AnalyticsUtil;
+import com.agilecrm.db.util.AnalyticsSQLUtil;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -88,8 +88,8 @@ public class StatsServlet extends HttpServlet
 	}
 
 	// Insert into table
-	AnalyticsUtil.addToPageViews(domain, guid, email, sid, url, ip, isNew,
-		ref, userAgent, country, region, city, cityLatLong);
+	AnalyticsSQLUtil.addToPageViews(domain, guid, email, sid, url, ip,
+		isNew, ref, userAgent, country, region, city, cityLatLong);
 
 	// Show notification with url
 	if (!StringUtils.isEmpty(email))
