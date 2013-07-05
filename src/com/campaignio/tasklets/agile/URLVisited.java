@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.db.util.AnalyticsUtil;
+import com.agilecrm.db.util.AnalyticsSQLUtil;
 import com.agilecrm.util.DBUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
@@ -63,7 +63,7 @@ public class URLVisited extends TaskletAdapter
 	String email = contact.getContactFieldValue(Contact.EMAIL);
 
 	// Gets URL count from table.
-	int count = AnalyticsUtil.getCountForGivenURL(url, domain, email, type);
+	int count = AnalyticsSQLUtil.getCountForGivenURL(url, domain, email, type);
 
 	if (count == 0)
 	{

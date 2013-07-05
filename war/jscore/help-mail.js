@@ -8,7 +8,7 @@ $('#helpMail').die().live('click',function(e){
       	return;
       }
 	var json = serializeForm("helpmailForm");
-	var url =  'core/api/send-email?from=' + encodeURIComponent(json.from) + '&to=' + 
+	var url =  'core/api/emails/send-email?from=' + encodeURIComponent(json.from) + '&to=' + 
 	   										 encodeURIComponent(json.to) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + 
 	   										 encodeURIComponent(json.body);
 	

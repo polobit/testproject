@@ -2,6 +2,7 @@ package com.thirdparty;
 
 import java.net.URLEncoder;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -25,6 +26,9 @@ public class SendGridEmail
 
     // Post param to
     public static final String SENDGRID_API_PARAM_TO = "to";
+
+    // Post param to[]
+    public static final String SENDGRID_API_PARAM_MULTIPLE_TO = "to[]";
 
     // Post param replyto
     public static final String SENDGRID_API_PARAM_REPLY_TO = "replyto";
@@ -53,64 +57,77 @@ public class SendGridEmail
     {
 	// Set to remove duplicates
 	Set<String> toEmailSet = new HashSet<String>();
+
 	// Tokenize
 	StringTokenizer st = new StringTokenizer(to, ",");
+
 	while (st.hasMoreTokens())
 	{
 	    String email = st.nextToken();
 	    toEmailSet.add(email);
 	}
+
 	// Send email
 	String response = "";
 
-	for (String email : toEmailSet)
+	try
 	{
-	    try
+	    // Query string
+	    String queryString = "";
+
+	    queryString = defaultQueryString + SENDGRID_API_PARAM_SUBJECT + "="
+		    + URLEncoder.encode(subject) + "&"
+		    + SENDGRID_API_PARAM_FROM + "="
+		    + URLEncoder.encode(fromEmail) + "&"
+		    + SENDGRID_API_PARAM_FROM_NAME + "="
+		    + URLEncoder.encode(fromName);
+
+	    // Adds multiple - to[]="email1" & to[]="email2"
+	    Iterator<String> itr = toEmailSet.iterator();
+	    String multipleTo = "";
+
+	    while (itr.hasNext())
 	    {
-		// Query string
-		String queryString = "";
+		multipleTo += SENDGRID_API_PARAM_MULTIPLE_TO + "="
+			+ URLEncoder.encode(itr.next());
 
-		queryString = defaultQueryString + SENDGRID_API_PARAM_TO + "="
-			+ URLEncoder.encode(email.trim()) + "&"
-			+ SENDGRID_API_PARAM_SUBJECT + "="
-			+ URLEncoder.encode(subject) + "&"
-			+ SENDGRID_API_PARAM_FROM + "="
-			+ URLEncoder.encode(fromEmail) + "&"
-			+ SENDGRID_API_PARAM_FROM_NAME + "="
-			+ URLEncoder.encode(fromName);
-
-		if (!StringUtils.isEmpty(replyTo))
-		    queryString += "&" + SENDGRID_API_PARAM_REPLY_TO + "="
-			    + URLEncoder.encode(replyTo);
-
-		// Check type of email
-
-		// Text email
-		if (text != null)
-		{
-		    queryString += "&" + SENDGRID_API_PARAM_TEXT_BODY + "="
-			    + URLEncoder.encode(text);
-		}
-		// HTML email
-		if (html != null)
-		{
-		    queryString += "&" + SENDGRID_API_PARAM_HTML_BODY + "="
-			    + URLEncoder.encode(html);
-		}
-
-		System.out.println("QueryString  \n" + queryString + "\n\n");
-
-		response = HTTPUtil.accessURLUsingPost(SENDGRID_API_POST_URL,
-			queryString);
-
-		System.out.println("Response " + response);
-
+		if (itr.hasNext())
+		    multipleTo += "&";
 	    }
-	    catch (Exception e)
+
+	    queryString += "&" + multipleTo;
+
+	    if (!StringUtils.isEmpty(replyTo))
+		queryString += "&" + SENDGRID_API_PARAM_REPLY_TO + "="
+			+ URLEncoder.encode(replyTo);
+
+	    // Check type of email
+
+	    // Text email
+	    if (text != null)
 	    {
-		e.printStackTrace();
-		return null;
+		queryString += "&" + SENDGRID_API_PARAM_TEXT_BODY + "="
+			+ URLEncoder.encode(text);
 	    }
+	    // HTML email
+	    if (html != null)
+	    {
+		queryString += "&" + SENDGRID_API_PARAM_HTML_BODY + "="
+			+ URLEncoder.encode(html);
+	    }
+
+	    System.out.println("QueryString  \n" + queryString + "\n\n");
+
+	    response = HTTPUtil.accessURLUsingPost(SENDGRID_API_POST_URL,
+		    queryString);
+
+	    System.out.println("Response " + response);
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
 	}
 
 	return response;

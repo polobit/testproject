@@ -617,6 +617,9 @@ var ContactsRouter = Backbone.Router.extend({
 
             	// Populate from address and templates
             	populate_send_email_details(el);
+            	
+            	// Setup HTML Editor
+				setupHTMLEditor($('#body', el));
             }
         });
     	$("#content").html(sendEmailView.render().el);

@@ -162,7 +162,7 @@ $(function(){
 		
 		// Fetches mails collection
 		var mailsView = new Base_Collection_View({
-			url: 'core/api/email?e=' + encodeURIComponent(email) + '&c=10&o=0',
+			url: 'core/api/emails/imap-email?e=' + encodeURIComponent(email) + '&c=10&o=0',
             templateKey: "email-social",
             restKey: "emails",
             sortKey:"date_secs",
@@ -217,7 +217,7 @@ $(function(){
 			return;	
 		}
 		
-		$.get('core/api/JSAPI-status',function(data){
+		$.get('core/api/web-stats/JSAPI-status',function(data){
 			if(data == 0){
 				$('#stats', App_Contacts.contactDetailView.model.el).html('<h4><p>You have not yet setup the Javascrip API on your website.</p><p>Please <a href="#analytics-code">set it up</a> to see the contact\'s site visits here.</p></h4>');
 				return;
@@ -225,7 +225,7 @@ $(function(){
 		});
 		
 		var statsView = new Base_Collection_View({
-			url: 'core/api/stats?e=' + encodeURIComponent(email) ,
+			url: 'core/api/web-stats?e=' + encodeURIComponent(email) ,
 			templateKey: "stats",
             individual_tag_name: 'li',
             postRenderCallback: function(el)
@@ -322,7 +322,16 @@ $(function(){
 				  
 				// Fill subject and body of send email form
 				$("#emailForm").find( 'input[name="subject"]' ).val(subject);
-				$("#emailForm").find( 'textarea[name="body"]' ).val(text);
+				//var value = $("#emailForm").find( 'textarea[name="body"]' ).val(text);
+				
+				//Fill html editor with template body
+				var wysihtml5 = $('#body').data('wysihtml5');
+				
+				if(wysihtml5){
+					editor.focus();
+					wysihtml5.editor.composer.commands.exec("insertHTML",text);
+				}	
+				
 			}});
 		    
 	});
@@ -342,7 +351,7 @@ $(function(){
 		
 		json.body = json.body.replace(/\r\n/g,"<br/>");
 		
-		var url =  'core/api/contact/send-email?from=' + encodeURIComponent(json.from) + '&to=' + 
+		var url =  'core/api/emails/contact/send-email?from=' + encodeURIComponent(json.from) + '&to=' + 
 			 encodeURIComponent(json.to + "," + json.email_cc) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + 
 				 encodeURIComponent(json.body) + '<br/><div><br/><br/>' + encodeURIComponent(json.signature) + '</div>';
 		
