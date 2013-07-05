@@ -688,7 +688,6 @@ public class Contact extends Cursor
     {
 	tags = getContactTags();
 	ContactField field = this.getContactField("image");
-	System.out.println(LinkedInUtil.changeImageUrl(field.value));
 	if (field != null)
 	    field.value = LinkedInUtil.changeImageUrl(field.value);
 
