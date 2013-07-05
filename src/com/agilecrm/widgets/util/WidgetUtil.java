@@ -156,6 +156,11 @@ public class WidgetUtil
 		"/widgets/rapleaf.js", "/img/plugins/rapleaf.jpeg",
 		"/widgets/rapleaf-logo-small.png", null, widgetType.SOCIAL));
 	widgets.add(new Widget(
+		"ClickDesk",
+		"Convert chat sessions with potential customers into contacts in Agile along with the conversation.",
+		"/widgets/clickdesk.js", "/img/plugins/clickdesk-logo.png",
+		"/widgets/clickdesk-logo-small.png", null, widgetType.SUPPORT));
+	widgets.add(new Widget(
 		"Zendesk",
 		"Zendesk streamlines communication within a ticket that has organized workflow towards resolution of the customer issue.",
 		"/widgets/zendesk.js", "/img/plugins/zendesk_logo.png",

@@ -136,4 +136,68 @@ public class HTTPUtil
 	// }
     }
 
+    /**
+     * This method makes POST request to the URL by authenticating the user with
+     * the given parameters
+     * 
+     * @param postURL
+     *            URL to connect with the server
+     * @param username
+     *            {@link String} username
+     * @param password
+     *            {@link String} password
+     * @param data
+     *            {@link String} data to be posted
+     * @return {@link String} response from server
+     * @throws Exception
+     *             If server throws an exception
+     */
+    public static String accessUrlusingAuthentication(String postURL,
+	    String username, String password, String data, String contentType,
+	    String requestMethod) throws Exception
+    {
+	HttpURLConnection connection = null;
+
+	URL yahoo = new URL(postURL);
+	connection = (HttpURLConnection) yahoo.openConnection();
+
+	String userPass = Base64Encoder.encode(
+		(username + ":" + password).getBytes()).replace("\n", "");
+
+	// Authorization with CRM API
+	connection.setRequestProperty("Authorization", "Basic " + userPass);
+
+	connection.setDoOutput(true);
+
+	requestMethod = (requestMethod == null) ? "GET" : requestMethod;
+	connection.setRequestMethod(requestMethod);
+
+	contentType = (contentType == null) ? "text/plain" : contentType;
+	connection.setRequestProperty("Content-type", contentType);
+
+	if (data != null)
+	{
+	    OutputStreamWriter wr = new OutputStreamWriter(
+		    connection.getOutputStream());
+
+	    wr.write(data);
+	    wr.flush();
+	    wr.close();
+	}
+
+	System.out.println("responseCode = " + connection.getResponseMessage());
+
+	BufferedReader reader = new BufferedReader(new InputStreamReader(
+		connection.getInputStream()));
+
+	String output = "";
+	String inputLine;
+	while ((inputLine = reader.readLine()) != null)
+	{
+	    output += inputLine;
+	}
+	reader.close();
+
+	return output;
+    }
 }

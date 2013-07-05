@@ -24,6 +24,7 @@ import twitter4j.Twitter;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.social.ClickDeskUtil;
 import com.agilecrm.social.FreshBooksUtil;
 import com.agilecrm.social.LinkedInUtil;
 import com.agilecrm.social.SocialSearchResult;
@@ -2212,4 +2213,74 @@ public class WidgetsAPI
 	}
     }
 
+    @Path("clickdesk/chats/{widget-id}/{email}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public JSONObject getClickdeskChats(@PathParam("widget-id") Long widgetId,
+	    @PathParam("email") String email)
+    {
+	Widget widget = WidgetUtil.getWidget(widgetId);
+	if (widget == null)
+	    return null;
+
+	try
+	{
+	    return ClickDeskUtil.getChats(widget, email);
+	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+    }
+
+    @Path("clickdesk/tickets/{widget-id}/{email}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public JSONObject getClickdeskTickets(
+	    @PathParam("widget-id") Long widgetId,
+	    @PathParam("email") String email)
+    {
+	Widget widget = WidgetUtil.getWidget(widgetId);
+	if (widget == null)
+	    return null;
+
+	try
+	{
+	    return ClickDeskUtil.getTickets(widget, email);
+	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+    }
 }
