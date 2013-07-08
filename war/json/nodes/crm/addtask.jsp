@@ -69,7 +69,7 @@
             "required": "Yes",
             "category": "Info",
             "name": "owner_id",
-            "title": "Select the owner.",
+            "title": "Select Owner of the task.",
             "options": {
             	<%@page import="com.agilecrm.user.util.DomainUserUtil"%>
             	<%@page import="com.agilecrm.user.DomainUser" %>
@@ -83,6 +83,9 @@
 				List<DomainUser> domainUsers = DomainUserUtil.getUsers(domain);
 				System.out.println("DomainUsers obtained in addtask.jsp are: " + domainUsers);
 				
+				// Contact Owner
+				out.println("\"" + "Contact\'s Owner" + "\":\"" + "contact_owner" + "\",");
+				
 				Object arr[] = domainUsers.toArray();
 				for (int i = 0; i < arr.length; i++)
 				{
@@ -95,6 +98,8 @@
 					out.println("\"" + name + "\":\"" + id + "\"");
 				    else
 				    out.println("\"" + name + "\":\"" + id + "\",");
+				    
+				    
 				}
 				%>
             	
