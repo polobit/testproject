@@ -298,6 +298,23 @@ $(function() {
 		return html;
 	});
 	
+	// To show milestones as columns
+	Handlebars.registerHelper('milestone_element', function(item) {
+		var html = "";
+		var str;
+		$.each(item, function(key, value) {
+			str = value.milestones;
+		});
+		
+		var milestones = str.split(",");
+		
+		for(var i in milestones){
+			html += "<th>" + milestones[i].trim()+"</th>";
+		}
+		return html;
+	});
+
+	
 	/**
 	 * Helper function to return date string from epoch time
 	 */
