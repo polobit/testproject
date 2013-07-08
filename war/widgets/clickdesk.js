@@ -213,8 +213,11 @@ function showClickDeskProfile(plugin_id, Email)
 	{
 		$('#chats_load').remove();
 		
-        // Else the error message is shown
-		clickDeskStreamError("clickdesk-chat-stream", data);
+		console.log('in error' + data);
+		console.log('in error' + data.responseText);
+
+		// Else the error message is shown
+		clickDeskError("ClickDesk", data.responseText );
 	});
 }
 
@@ -293,7 +296,7 @@ function getClickDeskTickets(plugin_id, Email)
 		Tickets_clicked = false;
 		
         // Else the error message is shown
-		clickDeskStreamError("clickdesk-ticket-stream", data);
+		clickDeskError("clickdesk_tickets_panel", data.responseText);
 	});
 	
 	
