@@ -65,4 +65,6 @@ public class Globals
     // Cheat Code
     public static final String MASTER_CODE_INTO_SYSTEM = "agilerocks";
 
+    public static final String BULK_ACTION_BACKENDS_URL = "b1";
+
 }

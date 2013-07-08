@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.session.SessionManager;
@@ -79,6 +80,8 @@ public class BulkActionUtil
     public static void postDataToBulkActionBackend(byte[] data, String uri,
 	    String contentType, Method type)
     {
+	System.out.println(BackendServiceFactory.getBackendService()
+		.getBackendAddress("b1"));
 
 	// Create Task and push it into Task Queue
 	Queue queue = QueueFactory.getQueue("bulk-actions-queue");
@@ -87,9 +90,8 @@ public class BulkActionUtil
 		.payload(data)
 		.header("Content-Type", contentType)
 		.header("Host",
-			BackendServiceFactory.getBackendService()
-				.getBackendAddress("bulk-actions"))
-		.method(type);
+			"https://" + Globals.BULK_ACTION_BACKENDS_URL
+				+ ".agile-crm-cloud.com").method(type);
 
 	queue.add(taskOptions);
     }
@@ -125,9 +127,8 @@ public class BulkActionUtil
 		    .param("data", data[1])
 		    .header("Content-Type", contentType)
 		    .header("Host",
-			    BackendServiceFactory.getBackendService()
-				    .getBackendAddress("bulk-actions"))
-		    .method(type);
+			    "https://" + Globals.BULK_ACTION_BACKENDS_URL
+				    + ".agile-crm-cloud.com").method(type);
 	    queue.add(taskOptions);
 	    return;
 	}
@@ -137,9 +138,8 @@ public class BulkActionUtil
 		.param("filter", data[0])
 		.header("Content-Type", contentType)
 		.header("Host",
-			BackendServiceFactory.getBackendService()
-				.getBackendAddress("bulk-actions"))
-		.method(type);
+			"https://" + Globals.BULK_ACTION_BACKENDS_URL
+				+ ".agile-crm-cloud.com").method(type);
 
 	queue.add(taskOptions);
     }
