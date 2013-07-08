@@ -60,10 +60,10 @@ public class ClickDeskUtil
 
     public static void initilaizePrefs(Widget widget)
     {
-	// clickDeskUserName = widget.getProperty("clickdesk_username");
-	// clickDeskAPIKey = widget.getProperty("clickdesk_api_key");
+	clickDeskUserName = widget.getProperty("clickdesk_username");
+	clickDeskAPIKey = widget.getProperty("clickdesk_api_key");
 
-	clickDeskUserName = "govindarajulu3@gmail.com";
-	clickDeskAPIKey = "j65p3kfqtflvjkcddcfo3bmpnp";
+	// clickDeskUserName = "govindarajulu3@gmail.com";
+	// clickDeskAPIKey = "j65p3kfqtflvjkcddcfo3bmpnp";
     }
 }
