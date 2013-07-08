@@ -35,8 +35,7 @@ public class OpportunityUtil
     /**
      * ObjectifyDao of Opportunity.
      */
-    private static ObjectifyGenericDao<Opportunity> dao = new ObjectifyGenericDao<Opportunity>(
-	    Opportunity.class);
+    private static ObjectifyGenericDao<Opportunity> dao = new ObjectifyGenericDao<Opportunity>(Opportunity.class);
 
     /**
      * Gets opportunity based on id.
@@ -69,6 +68,30 @@ public class OpportunityUtil
     }
 
     /**
+     * Gets list of all opportunities by milestones.
+     * 
+     * @return DealsByMilestones JSONObjects with respect to given milestones.
+     */
+    public static JSONObject getDealsByMilestone()
+    {
+	// Milestones object
+	JSONObject milestonesObject = new JSONObject();
+
+	// Array of milestones
+	Opportunity.MILESTONES = MilestoneUtil.getMilestones().milestones.split(",");
+
+	// Iterate through all possible milestones
+	for (String milestone : Opportunity.MILESTONES)
+	{
+	    List<Opportunity> dealslist = dao.ofy().query(Opportunity.class).filter("milestone = ", milestone.trim()).list();
+	    milestonesObject.put(milestone, dealslist);
+	}
+
+	System.out.println(milestonesObject);
+	return milestonesObject;
+    }
+
+    /**
      * Gets list of opportunities with respect to closed date and given time
      * period.
      * 
@@ -81,9 +104,7 @@ public class OpportunityUtil
      */
     public static List<Opportunity> getOpportunities(long minTime, long maxTime)
     {
-	return dao.ofy().query(Opportunity.class)
-		.filter("close_date >= ", minTime)
-		.filter("close_date <= ", maxTime).list();
+	return dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime).filter("close_date <= ", maxTime).list();
     }
 
     /**
@@ -98,8 +119,7 @@ public class OpportunityUtil
 	Objectify ofy = ObjectifyService.begin();
 	Key<Contact> contact_key = new Key<Contact>(Contact.class, id);
 
-	return ofy.query(Opportunity.class)
-		.filter("related_contacts = ", contact_key).list();
+	return ofy.query(Opportunity.class).filter("related_contacts = ", contact_key).list();
     }
 
     /**
@@ -133,8 +153,7 @@ public class OpportunityUtil
 	    {
 		// Total and Pipeline (total * probability)
 		double total = opportunity.expected_value;
-		double pipeline = opportunity.expected_value
-			* opportunity.probability / 100;
+		double pipeline = opportunity.expected_value * opportunity.probability / 100;
 
 		/*
 		 * //mm-yy DateFormat formatter = new SimpleDateFormat("MM-yy");
@@ -155,8 +174,7 @@ public class OpportunityUtil
 		// Read from previous object if present
 		if (dealsObject.containsKey(mmYY))
 		{
-		    JSONObject totalAndPipeline = dealsObject
-			    .getJSONObject(mmYY);
+		    JSONObject totalAndPipeline = dealsObject.getJSONObject(mmYY);
 		    oldTotal = totalAndPipeline.getDouble(TOTAL);
 		    oldPipeline = totalAndPipeline.getDouble(PIPELINE);
 		}
@@ -166,8 +184,7 @@ public class OpportunityUtil
 		JSONObject totalAndPipeline;
 
 		// Check whether dealsObject is null
-		if (dealsObject.containsKey(mmYY)
-			&& dealsObject.getJSONObject(mmYY) == null)
+		if (dealsObject.containsKey(mmYY) && dealsObject.getJSONObject(mmYY) == null)
 		{
 		    totalAndPipeline = dealsObject.getJSONObject(mmYY);
 		}
@@ -202,13 +219,9 @@ public class OpportunityUtil
      *            - Given milestone.
      * @return Count of total number of milestones.
      */
-    public static int getTotalNumberOfMilestones(long minTime, long maxTime,
-	    String milestone)
+    public static int getTotalNumberOfMilestones(long minTime, long maxTime, String milestone)
     {
-	return dao.ofy().query(Opportunity.class)
-		.filter("close_date >= ", minTime)
-		.filter("close_date <= ", maxTime)
-		.filter("milestone", milestone).count();
+	return dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime).filter("close_date <= ", maxTime).filter("milestone", milestone).count();
     }
 
     /**
@@ -228,14 +241,12 @@ public class OpportunityUtil
 	JSONObject milestonesObject = new JSONObject();
 
 	// Array of milestones
-	Opportunity.MILESTONES = MilestoneUtil.getMilestones().milestones
-		.split(",");
+	Opportunity.MILESTONES = MilestoneUtil.getMilestones().milestones.split(",");
 
 	// Iterate through all possible milestones
 	for (String milestone : Opportunity.MILESTONES)
 	{
-	    int numOpportunities = getTotalNumberOfMilestones(minTime, maxTime,
-		    milestone.trim());
+	    int numOpportunities = getTotalNumberOfMilestones(minTime, maxTime, milestone.trim());
 	    milestonesObject.put(milestone, numOpportunities);
 	}
 
@@ -258,18 +269,14 @@ public class OpportunityUtil
     public static JSONObject getConversionDetails(long minTime, long maxTime)
     {
 	// Gets total count of opportunities within the given period
-	int numOpportunities = dao.ofy().query(Opportunity.class)
-		.filter("close_date >= ", minTime)
-		.filter("close_date <= ", maxTime).count();
+	int numOpportunities = dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime).filter("close_date <= ", maxTime).count();
 
 	JSONObject conversionObject = new JSONObject();
 
 	// Gets total number of opportunities with milestone won
-	int closedNumOpportunities = getTotalNumberOfMilestones(minTime,
-		maxTime, "won");
+	int closedNumOpportunities = getTotalNumberOfMilestones(minTime, maxTime, "won");
 
-	conversionObject.put("conversion", (closedNumOpportunities * 100)
-		/ numOpportunities);
+	conversionObject.put("conversion", (closedNumOpportunities * 100) / numOpportunities);
 
 	System.out.println(conversionObject);
 	return conversionObject;
@@ -277,25 +284,14 @@ public class OpportunityUtil
 
     public static List<Opportunity> getDealsRelatedToCurrentUser()
     {
-	return dao
-		.ofy()
-		.query(Opportunity.class)
-		.filter("ownerKey",
-			new Key<DomainUser>(DomainUser.class, SessionManager
-				.get().getDomainId())).order("-created_time")
-		.limit(10).list();
+	return dao.ofy().query(Opportunity.class).filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+		.order("-created_time").limit(10).list();
     }
 
-    public static List<Opportunity> getUpcomingDealsRelatedToCurrentUser(
-	    String pageSize)
+    public static List<Opportunity> getUpcomingDealsRelatedToCurrentUser(String pageSize)
     {
-	return dao
-		.ofy()
-		.query(Opportunity.class)
-		.filter("ownerKey",
-			new Key<DomainUser>(DomainUser.class, SessionManager
-				.get().getDomainId())).order("close_date")
-		.limit(Integer.parseInt(pageSize)).list();
+	return dao.ofy().query(Opportunity.class).filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+		.order("close_date").limit(Integer.parseInt(pageSize)).list();
     }
 
 }
