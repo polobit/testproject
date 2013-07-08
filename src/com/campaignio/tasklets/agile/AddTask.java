@@ -108,19 +108,14 @@ public class AddTask extends TaskletAdapter
      * @see com.campaignio.tasklets.TaskletAdapter#run(org.json.JSONObject,
      * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
      */
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
-	    JSONObject data, JSONObject nodeJSON) throws Exception
+    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
 	// Get Task Values
 	String subject = getStringValue(nodeJSON, subscriberJSON, data, SUBJECT);
-	String category = getStringValue(nodeJSON, subscriberJSON, data,
-		CATEGORY);
-	String priority = getStringValue(nodeJSON, subscriberJSON, data,
-		PRIORITY);
-	String dueDays = getStringValue(nodeJSON, subscriberJSON, data,
-		DUE_DAYS);
-	String ownerId = getStringValue(nodeJSON, subscriberJSON, data,
-		OWNER_ID);
+	String category = getStringValue(nodeJSON, subscriberJSON, data, CATEGORY);
+	String priority = getStringValue(nodeJSON, subscriberJSON, data, PRIORITY);
+	String dueDays = getStringValue(nodeJSON, subscriberJSON, data, DUE_DAYS);
+	String ownerId = getStringValue(nodeJSON, subscriberJSON, data, OWNER_ID);
 
 	Calendar calendar = Calendar.getInstance();
 
@@ -133,9 +128,7 @@ public class AddTask extends TaskletAdapter
 
 	Long dueDateInEpoch = calendar.getTimeInMillis() / 1000;
 
-	System.out.println("Given Task Name: " + subject + ",category: "
-		+ category + ",priority: " + priority + " and Due Date : "
-		+ dueDateInEpoch);
+	System.out.println("Given Task Name: " + subject + ",category: " + category + ",priority: " + priority + " and Due Date : " + dueDateInEpoch);
 
 	System.out.println("The given owner for AddTask is: " + ownerId);
 
@@ -160,8 +153,11 @@ public class AddTask extends TaskletAdapter
 		task.priority_type = PriorityType.valueOf(priority);
 		task.subject = subject;
 
-		// Assign owner-id to task
-		task.owner_id = ownerId;
+		// If contact_owner, then owner is contact owner
+		if (ownerId.equals("contact_owner"))
+		    task.owner_id = contact.getOwner().id.toString();
+		else
+		    task.owner_id = ownerId;
 
 		// Save Task
 		task.save();
@@ -175,15 +171,10 @@ public class AddTask extends TaskletAdapter
 	}
 
 	// Creates log for AddTask
-	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
-		DBUtil.getId(subscriberJSON), "Task: " + task.subject
-			+ "<br/> Category: " + task.type + "<br/> Type: "
-			+ task.priority_type + " <br/> Date: "
-			+ new Date(dueDateInEpoch * 1000),
-		LogType.ADD_TASK.toString());
+	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON), DBUtil.getId(subscriberJSON), "Task: " + task.subject + "<br/> Category: " + task.type + "<br/> Type: "
+		+ task.priority_type + " <br/> Date: " + new Date(dueDateInEpoch * 1000), LogType.ADD_TASK.toString());
 
 	// Execute Next One in Loop
-	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
-		nodeJSON, null);
+	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
     }
 }

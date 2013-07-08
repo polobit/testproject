@@ -1193,4 +1193,17 @@ $(function() {
 	
 		 return min + " mins, " + remainingSec + " secs";
 	});
+	
+	Handlebars.registerHelper('if_overflow', function(content, div_height, options) {
+		
+		var element = $("<div id='test_flow' style='word-break:normal;word-wrap:break-word;display:none;position:absolute'>" 
+			+ content + "</div>");
+		
+		$("#content").append(element);
+				
+		if($('#test_flow').height() > parseInt(div_height))
+			   return options.fn(this);
+		return options.inverse(this);
+	});
+	
 });
