@@ -11,7 +11,6 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.Workflow;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
@@ -119,13 +118,18 @@ public class WorkflowUtil
 		}
 	    }
 
-	    DomainUser domainUser = DomainUserUtil.getDomainCurrentUser();
-
 	    JSONObject owner = new JSONObject();
-	    owner.put("name", domainUser.name);
-	    owner.put("email", domainUser.email);
 
-	    // Inserts current owner-name and owner-email.
+	    // Get contact owner.
+	    DomainUser domainUser = contact.getOwner();
+
+	    if (domainUser != null)
+	    {
+		owner.put("name", contact.getOwner().name);
+		owner.put("email", contact.getOwner().email);
+	    }
+
+	    // Inserts contact owner-name and owner-email.
 	    subscriberJSON.put("owner", owner);
 
 	    System.out.println("SubscriberJSON in WorkflowUtil: " + subscriberJSON);
