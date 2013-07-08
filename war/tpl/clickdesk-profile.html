@@ -8,14 +8,13 @@
 				<div class="control-group" style="margin-bottom:0px"><div class="controls"><input type="text" id="clickdesk_username" class="input-medium required widget_input_box" style="width:90%" placeholder="User Name" value="" name="username"></input></div></div>
 				<div class="control-group"><div class="controls"><input type="text" id="clickdesk_api_key" class="input-medium required widget_input_box" style="width:90%" placeholder="API Key" value="" name="api_key"></input><br/></div></div>			
 				</p>
-				<a href="#" id="save_clickdesk_prefs" class="btn" style="text-decoration:none;">Retrieve chats</a>
+				<a id="save_clickdesk_prefs" class="btn" style="text-decoration:none;cursor:pointer;">Retrieve chats</a>
 			 </fieldset>
 	    </form>
 	</div>
 </script>
 
 <script id="clickdesk-profile-template" type="text/html">
-{{#if_json this}}
 <p class="widget_content" style="margin-bottom: 0px;">Conversations and tickets related to {{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}</p>
 <ul class="nav nav-tabs" id="myTab">
 	<li class="active" style="width:48%; margin-left: 2%; text-align: center;" align="center"><a data-toggle="tab" href="#chats" id="clickdesk_chats"><h4>Chats</h4><small></small></a></li>
@@ -29,8 +28,8 @@
 		<div class="clearfix" id="clickdesk-chats-error-panel" style="display:none;">
 		</div>
 		<div class="widget_tab_footer" align="center">
-			<a href="#more" class="more_chats_link" id="more_chats_link" rel="tooltip" title="Click to see more chats">Show More</a>
-			<a href="#less" data-toggle="collapse" data-target="#clickdesk_chats_panel" id="less_chats_link" style="display:none">Show Less..</a>
+			<a class="more_chats_link" id="more_chats_link" style="cursor: pointer;" rel="tooltip" title="Click to see more chats">Show More</a>
+			<a data-toggle="collapse" data-target="#clickdesk_chats_panel" id="less_chats_link" style="display:none;cursor:pointer;">Show Less..</a>
 			<img src="img/ajax-spinner.gif" id="spinner-clickdesk-chats" style="display:none;"></img>
 		</div>
 	</div>
@@ -41,15 +40,12 @@
 		<div class="clearfix" id="clickdesk-tickets-error-panel" style="display:none;">
 		</div>
 		<div class="widget_tab_footer" align="center">
-			<a href="#more" class="more_tickets_link" id="more_tickets_link" rel="tooltip" title="Click to see more tickets">Show More</a>
-			<a href="#less" data-toggle="collapse" data-target="#clickdesk_tickets_panel" id="less_tickets_link" style="display:none">Show Less..</a>
+			<a class="more_tickets_link" id="more_tickets_link" style="cursor: pointer;" rel="tooltip" title="Click to see more tickets">Show More</a>
+			<a data-toggle="collapse" data-target="#clickdesk_tickets_panel" id="less_tickets_link" style="display:none;cursor:pointer;">Show Less..</a>
 			<img src="img/ajax-spinner.gif" id="spinner-clickdesk-tickets" style="display:none;"></img>
 		</div>
 	</div>
 </div>
-{{else}}
-Something went wrong
-{{/if_json}}
 </script>
 
 <script id="clickdesk-chat-stream-template" type="text/html">
@@ -62,7 +58,7 @@ Something went wrong
 					<small><time class="time-ago" datetime="{{epochToHumanDate "" start_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" start_time}}</time></small>
 				</div>
 				<div class="sub_header_tab_link clickdesk_chat_tab_link" style="float:left;margin:0px;display:none;">
-					<div><a href="#show" url="{{chat_history_url}}" id="clickdesk_chat_show" rel="tooltip" title="Show chat transcript" data-attr="{{bindData this}}">Show</a></div>
+					<div><a url="{{chat_history_url}}" id="clickdesk_chat_show" style="cursor: pointer;" rel="tooltip" title="Show chat transcript" data-attr="{{bindData this}}">Show</a></div>
 				</div>
 			</li>
 		{{/each}}
@@ -78,7 +74,7 @@ Something went wrong
 				<small><time class="time-ago" datetime="{{epochToHumanDate "" received_at}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" received_at}}</time></small>
 			</div>
 			<div class="sub_header_tab_link clickdesk_ticket_tab_link" style="float:left;margin:0px;display:none;">
-				<div><a href="#show" url="{{ticket_url}}" id="clickdesk_ticket_show" rel="tooltip" title="Show more information of ticket" data-attr="{{bindData this}}">Show</a></div>
+				<div><a url="{{ticket_url}}" id="clickdesk_ticket_show" style="cursor: pointer;" rel="tooltip" title="Show more information of ticket" data-attr="{{bindData this}}">Show</a></div>
 			</div>
 		</li>
 	{{/each}}

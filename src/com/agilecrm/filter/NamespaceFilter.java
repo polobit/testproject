@@ -78,6 +78,9 @@ public class NamespaceFilter implements Filter
 	// Read Subdomain
 	String subdomain = request.getServerName().split("\\.")[0];
 
+	if (subdomain.equalsIgnoreCase(Globals.BULK_ACTION_BACKENDS_URL))
+	    return true;
+
 	// Lowercase
 	subdomain = subdomain.toLowerCase();
 
@@ -229,14 +232,12 @@ public class NamespaceFilter implements Filter
 	    chain.doFilter(request, response);
 	    return;
 	}
-	
+
 	if (path.startsWith("/core/api/bulk-actions"))
 	{
 	    chain.doFilter(request, response);
 	    return;
 	}
-	
-
 
 	// Returns true if name space is set or namespace is already set for the
 	// application. If request is not to access the

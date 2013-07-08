@@ -56,15 +56,15 @@ $(function ()
     // showTicketsFromClickDesk(plugin_id, Email);
     showClickDeskProfile(plugin_id, Email);
     
-    var tickets_clicked = false;
+    Tickets_clicked = false;
     $('#clickdesk_tickets').die().live('click', function(e) {
     	
     	e.preventDefault();
-    	if(tickets_clicked)
+    	if(Tickets_clicked)
     		return;
     	
     	getClickDeskTickets(plugin_id, Email);
-    	tickets_clicked = true;
+    	Tickets_clicked = true;
     	
     });
 
@@ -213,8 +213,11 @@ function showClickDeskProfile(plugin_id, Email)
 	{
 		$('#chats_load').remove();
 		
-        // Else the error message is shown
-		clickDeskStreamError("clickdesk-chat-stream", data);
+		console.log('in error' + data);
+		console.log('in error' + data.responseText);
+
+		// Else the error message is shown
+		clickDeskError("ClickDesk", data.responseText );
 	});
 }
 
@@ -290,9 +293,10 @@ function getClickDeskTickets(plugin_id, Email)
 	}, "json").error(function(data) {
 		
 		$('#chats_load').remove();
+		Tickets_clicked = false;
 		
         // Else the error message is shown
-		clickDeskStreamError("clickdesk-ticket-stream", data);
+		clickDeskError("clickdesk_tickets_panel", data.responseText);
 	});
 	
 	
