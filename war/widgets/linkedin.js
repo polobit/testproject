@@ -157,11 +157,21 @@ $(function ()
     		getLinkedinMatchingProfiles(plugin_id);
     });
     
+    $('.experience_li').live('mouseenter', function (e)
+    {
+    	$(this).find('.show-summary').show();
+    });
+    
+    $('.experience_li').live('mouseleave', function (e)
+    {
+    	$(this).find('.show-summary').hide();
+    });
+    
     $('.show-summary').die().live('click', function(e){
 		 e.preventDefault();
 		 var href = $(this).attr("href");
 			var id = $(this).attr('id');
-			$('#' + id).text("Hide");
+			$('#' + id).text("Less");
 			$(".summary-expand-" + id).hide();
 			$(href).collapse('toggle');
 			 

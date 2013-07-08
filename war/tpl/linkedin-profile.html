@@ -133,7 +133,7 @@
 
 <script id="linkedin-experience-template" type="text/html">
 	{{#each this}}
-		<li>
+		<li class="experience_li">
 			<div class="row-fluid" >
 				<div class="pull-left span9">
 					<b>{{title}}</b><br>
@@ -144,17 +144,23 @@
 						<img src="{{company.logoUrl}}" width="36" height="36" alt="" class="img-rounded pull-right"/>
 					{{/if}}
 				</div>
-			</div>			
-			{{#if summary}}
-				<div class="ellipsis-multi-line summary-expand-{{id}}" id="summary-elip-{{id}}" style="word-break:normal;word-wrap:break-word;margin-top: 15px;height:36px;">				
-					<p>{{show_link_in_statement summary}}</p>
-				</div>
-			<div id="summary-expand-{{id}}" class="collapse space_pre_line" style="word-break:normal;word-wrap:break-word;">				
-					<p style="margin-bottom:-10px;">{{show_link_in_statement summary}}</p>
-			</div>
+			</div>	
+			{{#if summary}}	
+				{{#if_overflow summary "36px"}}
+					<div class="multiline_ellipsis summary-expand-{{id}}" id="summary-elip-{{id}}" style="word-break:normal;word-wrap:break-word;margin-top: 15px;height:36px;">				
+						<p>{{show_link_in_statement summary}}</p>
+					</div>
+					<div id="summary-expand-{{id}}" class="collapse space_pre_line" style="word-break:normal;word-wrap:break-word;">				
+						<p style="margin-bottom:-10px;">{{show_link_in_statement summary}}</p>
+					</div>
+				{{else}}
+					<div style="word-break:normal;word-wrap:break-word;margin-top: 15px;">				
+						<p>{{show_link_in_statement summary}}</p>
+					</div>
+				{{/if_overflow}}
 			{{/if}}			
 			<div style="margin-top:5px;">
-			{{#if summary}}<a href="#summary-expand-{{id}}" class="right show-summary" id={{id}} hide="false" style="">More</a>{{/if}}
+			{{#if summary}}{{#if_overflow summary "36px"}}<a href="#summary-expand-{{id}}" class="right show-summary" id={{id}} hide="false" style="display:none">More</a>{{/if_overflow}}{{/if}}
 			<small>
 				{{#if startDate}}
 					{{#if startDate.month}}{{startDate.month}}, {{/if}}
