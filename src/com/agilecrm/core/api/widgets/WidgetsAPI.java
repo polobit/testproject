@@ -2213,11 +2213,11 @@ public class WidgetsAPI
 	}
     }
 
-    @Path("clickdesk/chats/{widget-id}/{email}")
+    @Path("clickdesk/chats/{widget-id}/{email}/{offset}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public JSONObject getClickdeskChats(@PathParam("widget-id") Long widgetId,
-	    @PathParam("email") String email)
+	    @PathParam("email") String email, @PathParam("offset") String offset)
     {
 	Widget widget = WidgetUtil.getWidget(widgetId);
 	if (widget == null)
@@ -2225,7 +2225,7 @@ public class WidgetsAPI
 
 	try
 	{
-	    return ClickDeskUtil.getChats(widget, email);
+	    return ClickDeskUtil.getChats(widget, email, offset);
 	}
 	catch (SocketTimeoutException e)
 	{
@@ -2248,12 +2248,12 @@ public class WidgetsAPI
 	}
     }
 
-    @Path("clickdesk/tickets/{widget-id}/{email}")
+    @Path("clickdesk/tickets/{widget-id}/{email}/{offset}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public JSONObject getClickdeskTickets(
 	    @PathParam("widget-id") Long widgetId,
-	    @PathParam("email") String email)
+	    @PathParam("email") String email, @PathParam("offset") String offset)
     {
 	Widget widget = WidgetUtil.getWidget(widgetId);
 	if (widget == null)
@@ -2261,7 +2261,7 @@ public class WidgetsAPI
 
 	try
 	{
-	    return ClickDeskUtil.getTickets(widget, email);
+	    return ClickDeskUtil.getTickets(widget, email, offset);
 	}
 	catch (SocketTimeoutException e)
 	{
