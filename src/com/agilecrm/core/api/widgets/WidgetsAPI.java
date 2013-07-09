@@ -2216,7 +2216,7 @@ public class WidgetsAPI
     @Path("clickdesk/chats/{widget-id}/{email}/{offset}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public JSONObject getClickdeskChats(@PathParam("widget-id") Long widgetId,
+    public JSONArray getClickdeskChats(@PathParam("widget-id") Long widgetId,
 	    @PathParam("email") String email, @PathParam("offset") String offset)
     {
 	Widget widget = WidgetUtil.getWidget(widgetId);
@@ -2251,8 +2251,7 @@ public class WidgetsAPI
     @Path("clickdesk/tickets/{widget-id}/{email}/{offset}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public JSONObject getClickdeskTickets(
-	    @PathParam("widget-id") Long widgetId,
+    public JSONArray getClickdeskTickets(@PathParam("widget-id") Long widgetId,
 	    @PathParam("email") String email, @PathParam("offset") String offset)
     {
 	Widget widget = WidgetUtil.getWidget(widgetId);
