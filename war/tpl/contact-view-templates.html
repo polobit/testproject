@@ -1,118 +1,110 @@
 <script id = "contacts-custom-view-image-template" type="text/html">
-	<td class="data" data="{{id}}">
+	<td class="data" data="{{id}}"><a class="active-link no-style-a" href="#contact/{{id}}">
     	<div style="width:4em;overflow:hidden;">
         	<img src="{{gravatarurl properties 40}}" width="40px" height="40px" />
-    	</div>
-    	<!--<div style="height:auto;display:inline-block;vertical-align:text-top;">
-        	<b>
-        	{{getPropertyValue properties "first_name"}}
-        	{{getPropertyValue properties "last_name"}}
-        	</b>
-        	<br />
-        	{{getPropertyValue properties "email"}}
-    	</div>-->
+    	</div></a>
 	</td>
 </script>
 
 <script id = "contacts-custom-view-first_name-template" type="text/html">
-	<td class="data" data="{{id}}">
+	<td class="data" data="{{id}}"><a class="active-link no-style-a" href="#contact/{{id}}">
     	<div style="text-overflow:ellipsis;width:10em;white-space:nowrap;overflow:hidden;">
     	<b>{{getPropertyValue properties "first_name"}}</b>
-    	</div>
+    	</div></a>
 	</td>
 </script>
 
 <script id = "contacts-custom-view-last_name-template" type="text/html">
-	<td class="data" data="{{id}}">
+	<td class="data" data="{{id}}"><a class="active-link no-style-a" href="#contact/{{id}}">
     	<div style="text-overflow:ellipsis;width:10em;white-space:nowrap;overflow:hidden;">
         <b>{{getPropertyValue properties "last_name"}}</b>
-        </div>
+        </div></a>
 	</td>
 </script>
 
 <script id = "contacts-custom-view-email-template" type="text/html">
-	<td class="data" data="{{id}}">
+	<td class="data" data="{{id}}"><a class="active-link no-style-a" href="#contact/{{id}}">
         <div style="text-overflow:ellipsis;width:10em;white-space:nowrap;overflow:hidden;">
     	{{getPropertyValue properties "email"}}
-        </div>
+        </div></a>
 	</td>
 </script>
 
 <script id = "contacts-custom-view-company-template" type="text/html">
-	<td class="data" data="{{id}}">
+	<td class="data" data="{{id}}"><a class="active-link no-style-a" href="#contact/{{id}}">
       <div style="text-overflow:ellipsis;width:10em;white-space:nowrap;overflow:hidden;">
     	{{getPropertyValue properties "company"}}
-      </div>
+      </div></a>
 	</td>
 </script>
 
 <script id = "contacts-custom-view-tags-template" type="text/html">
-	<td class="data" data="{{id}}"> 
+	<td class="data" data="{{id}}"><a class="active-link no-style-a" href="#contact/{{id}}"> 
     <div style="text-overflow:clip;width:10em;white-space:nowrap;overflow:hidden;">
     	{{#each tags}}
     	<b>
     	<span class="label">{{this}}</span>
     	</b>
     	{{/each}}
-    </div>
+    </div></a>
 	</td>
 </script>
 
 <script id = "contacts-custom-view-created_time-template" type="text/html">
-	<td class='data' data='{{id}}'>
+	<td class='data' data='{{id}}'><a class="active-link no-style-a" href="#contact/{{id}}">
     <div style="text-overflow:ellipsis;width:8em;overflow:hidden;">
 		{{epochToHumanDate "mm-dd-yy" created_time}}
-    </div>
+    </div></a>
 	</td>
 </script>
 
 <script id = "contacts-custom-view-updated_time-template" type="text/html">
-	<td class='data' data='{{id}}'>
+	<td class='data' data='{{id}}'><a class="active-link no-style-a" href="#contact/{{id}}">
     <div style="text-overflow:ellipsis;width:8em;overflow:hidden;">
 		{{#if updated_time}}
 			{{epochToHumanDate "mm-dd-yy" updated_time}}
 		{{/if}}
-    </div>
+    </div></a>
 	</td>
 </script>
 
 <script id = "contacts-custom-view-title-template" type="text/html">
-	<td class='data' data='{{id}}'>
+	<td class='data' data='{{id}}'><a class="active-link no-style-a" href="#contact/{{id}}">
     <div style="text-overflow:ellipsis;width:7em;overflow:hidden;">
 		{{getPropertyValue properties "title"}}
-    </div>
+    </div></a>
 	</td>
 </script>
 
 <script id = "contacts-custom-view-lead_owner-template" type="text/html">
-	<td class='data' data='{{id}}'>
+	<td class='data' data='{{id}}'><a class="active-link no-style-a" href="#contact/{{id}}">
        <div style="text-overflow:ellipsis;width:7em;overflow:hidden;">
 		  <b>{{owner.name}}</b>
-       </div>
+       </div></a>
 	</td>
 </script>
 
 <script id = "contacts-custom-view-star_value-template" type="text/html">
-	<td class='data' data='{{id}}'>
+	<td class='data' data='{{id}}'><a class="active-link no-style-a" href="#contact/{{id}}">
        <div style="text-overflow:ellipsis;width:7em;overflow:hidden;">
 		  <b>{{star_value}}</b>
-       </div>
+       </div></a>
 	</td>
 </script>
 
 <script id = "contacts-custom-view-lead_score-template" type="text/html">
-	<td class='data' data='{{id}}'>
+	<td class='data' data='{{id}}'><a class="active-link no-style-a" href="#contact/{{id}}">
        <div style="text-overflow:ellipsis;width:7em;overflow:hidden;">
 		  <b>{{lead_score}}</b>
-       </div>
+       </div></a>
 	</td>
 </script>
 
 
 <script id = "contacts-custom-view-custom-template" type="text/html">
-	<td class='data' data=''>
+	<td class='data' data=''><a class="active-link no-style-a" href="#contact/{{id}}">
        <div style="text-overflow:ellipsis;width:7em;overflow:hidden;">
 		  <b>{{value}}</b>
-       </div>
+       </div></a>
 	</td>
 </script>
