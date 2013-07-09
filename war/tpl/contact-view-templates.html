@@ -94,9 +94,12 @@
 
 <script id = "contacts-custom-view-star_value-template" type="text/html">
 	<td class='data' data='{{id}}'>
-       <div style="text-overflow:ellipsis;width:7em;overflow:hidden;">
-		  <b>{{star_value}}</b>
-       </div>
+
+
+			
+		 <ul style="margin: 0; padding: 0; list-style-type: none;width:8em">
+			{{setupRating star_value}}
+		</ul> 
 	</td>
 </script>
 
