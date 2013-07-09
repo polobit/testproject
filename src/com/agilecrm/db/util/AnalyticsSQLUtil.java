@@ -49,10 +49,8 @@ public class AnalyticsSQLUtil
      * @param cityLatLong
      *            - appengine header city latitudes and longitudes.
      */
-    public static void addToPageViews(String domain, String guid, String email,
-	    String sid, String url, String ip, String isNew, String ref,
-	    String userAgent, String country, String region, String city,
-	    String cityLatLong)
+    public static void addToPageViews(String domain, String guid, String email, String sid, String url, String ip, String isNew, String ref, String userAgent,
+	    String country, String region, String city, String cityLatLong)
     {
 	String insertToPageViews = "INSERT INTO page_views (domain,guid,email,sid,url,ip,is_new,ref,user_agent,country,region,city,city_lat_long,stats_time) VALUES("
 		+ SQLUtil.encodeSQLColumnValue(domain)
@@ -104,15 +102,14 @@ public class AnalyticsSQLUtil
 	String domain = NamespaceManager.get();
 
 	// Gets sessions based on Email from database
-	String sessions = "(SELECT sid FROM page_views WHERE email ="
-		+ SQLUtil.encodeSQLColumnValue(email) + " AND domain = "
+	String sessions = "(SELECT sid FROM page_views WHERE email =" + SQLUtil.encodeSQLColumnValue(email) + " AND domain = "
 		+ SQLUtil.encodeSQLColumnValue(domain) + ")";
 
 	System.out.println("sids query is: " + sessions);
 
 	// Gets all Sessions based on above obtained sids and required email
-	String pageViews = "SELECT *, UNIX_TIMESTAMP(stats_time) AS created_time FROM page_views WHERE sid IN "
-		+ sessions + " GROUP BY sid, url";
+	String pageViews = "SELECT *, UNIX_TIMESTAMP(stats_time) AS created_time FROM page_views WHERE sid IN " + sessions
+		+ " GROUP BY sid, url ORDER BY stats_time";
 
 	System.out.println("Select query: " + pageViews);
 
@@ -135,8 +132,7 @@ public class AnalyticsSQLUtil
      */
     public static void deleteStatsBasedOnNamespace(String namespace)
     {
-	String deleteQuery = "DELETE FROM page_views WHERE"
-		+ SQLUtil.appendDomainToQuery(namespace);
+	String deleteQuery = "DELETE FROM page_views WHERE" + SQLUtil.appendDomainToQuery(namespace);
 
 	try
 	{
@@ -161,12 +157,9 @@ public class AnalyticsSQLUtil
      *            - Exact or Like
      * @return int
      */
-    public static int getCountForGivenURL(String url, String domain,
-	    String email, String type)
+    public static int getCountForGivenURL(String url, String domain, String email, String type)
     {
-	String urlCountQuery = "SELECT COUNT(*) FROM page_views WHERE domain = "
-		+ SQLUtil.encodeSQLColumnValue(domain)
-		+ " AND email = "
+	String urlCountQuery = "SELECT COUNT(*) FROM page_views WHERE domain = " + SQLUtil.encodeSQLColumnValue(domain) + " AND email = "
 		+ SQLUtil.encodeSQLColumnValue(email) + " AND url LIKE ";
 
 	if (type.equals(URLVisited.EXACT_MATCH))
@@ -205,8 +198,7 @@ public class AnalyticsSQLUtil
      */
     public static int getPageViewsCountForGivenDomain(String domain)
     {
-	String pageViewsCount = "SELECT COUNT(*) FROM page_views WHERE domain = "
-		+ SQLUtil.encodeSQLColumnValue(domain);
+	String pageViewsCount = "SELECT COUNT(*) FROM page_views WHERE domain = " + SQLUtil.encodeSQLColumnValue(domain);
 
 	int count = 0;
 

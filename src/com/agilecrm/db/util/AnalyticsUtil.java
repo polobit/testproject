@@ -1,6 +1,8 @@
 package com.agilecrm.db.util;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -25,7 +27,8 @@ public class AnalyticsUtil
 	if (pageViews == null)
 	    return null;
 
-	JSONArray mergedJSONArray = new JSONArray();
+	// HashMap having sid as key and respective pageView JSON as Value.
+	Map<String, JSONObject> mergedPageViewsMap = new HashMap<String, JSONObject>();
 
 	try
 	{
@@ -34,26 +37,27 @@ public class AnalyticsUtil
 	    {
 		JSONObject pageView = pageViews.getJSONObject(i);
 
-		// Insert pageViews with is_new not empty into separate
-		// jsonArray
-		if (!StringUtils.isEmpty(pageView.getString("is_new")))
-		    mergedJSONArray.put(pageView);
+		String sid = pageView.getString("sid");
 
-		// Iterate over mergeJSONArray
-		for (int j = 0; j < mergedJSONArray.length(); j++)
+		// Verify for sid and updates respective sid JSONObject
+		if (mergedPageViewsMap.containsKey(sid))
 		{
-		    // Merge urls with is_new urls
-		    if (mergedJSONArray.getJSONObject(j).getString("sid")
-			    .equals(pageView.getString("sid"))
-			    && StringUtils
-				    .isEmpty(pageView.getString("is_new")))
-		    {
-			String mergeUrls = mergedJSONArray.getJSONObject(j)
-				.getString("url");
-			mergeUrls += ", " + pageView.getString("url");
-			mergedJSONArray.getJSONObject(j).put("url", mergeUrls);
-		    }
+		    JSONObject sessionJSON = mergedPageViewsMap.get(sid);
+
+		    String url = sessionJSON.getString("url");
+		    url += ", " + pageView.getString("url");
+
+		    // Updates with urls, latest stats_time and created_time of
+		    // that session
+		    sessionJSON.put("url", url);
+		    sessionJSON.put("stats_time", pageView.getString("stats_time"));
+		    sessionJSON.put("created_time", pageView.getString("created_time"));
+
+		    mergedPageViewsMap.put(sid, sessionJSON);
 		}
+		else
+		    // Insert new session
+		    mergedPageViewsMap.put(sid, pageView);
 	    }
 	}
 	catch (Exception e)
@@ -61,11 +65,7 @@ public class AnalyticsUtil
 	    e.printStackTrace();
 	}
 
-	// If all pageViews having is_new empty, then return without
-	// merging
-	if (mergedJSONArray.length() == 0)
-	    return pageViews;
-
-	return mergedJSONArray;
+	// Return JSONArray of merged map values
+	return new JSONArray(mergedPageViewsMap.values());
     }
 }
