@@ -77,12 +77,13 @@ function setup_tags_typeahead() {
     	 * a tag from the list of matched items provided by the source method   
     	 */
     	updater: function(tag) {
-    		console.log(tag);
+    		
     		if(!tag || (/^\s*$/).test(tag))
     			{
     				return;
     			}
     	
+    		tag = tag.trim();
     	
     		// Saves the selected tag to the contact
     		if((this.$element).closest(".control-group").hasClass('save-tag')){
@@ -94,6 +95,8 @@ function setup_tags_typeahead() {
     				return;
 
     			json.tagsWithTime.push({"tag" : tag});
+    			
+    			console.log( App_Contacts.contactDetailView.model.toJSON());
     			
     			saveEntity(json, 'core/api/contacts', function(data){
     				$("#addTagsForm").css("display", "none");
@@ -112,7 +115,7 @@ function setup_tags_typeahead() {
 	       			
 	       			// Append to the list, when no match is found 
 	       			if ($.inArray(tag, old_tags) == -1) 
-	       				$('#added-tags-ul').append('<li style="display:inline-block;" class="tag" data="' + tag + '"><span><a class="anchor" href="#tags/'+ tag + '">'+ tag + '</a><a class="close remove-tags" id="' + tag + '">&times</a></span></li>');
+	       				$('#added-tags-ul').append('<li style="display:inline-block;" class="tag" data="' + tag + '"><span><a class="anchor" href="#tags/'+ tag + '" >'+ tag + '</a><a class="close remove-tags" id="' + tag + '" tag="'+tag+'">&times</a></span></li>');
     				
     			});
     	        return;
@@ -149,6 +152,7 @@ function setup_tags_typeahead() {
     				return;
     			}
     			
+    			tag = tag.trim();
     			
     			// Get all existing tags of the contact to compare with the added tags
     			var old_tags = [];
@@ -173,7 +177,7 @@ function setup_tags_typeahead() {
     			$("#addTagsForm").css("display", "none");
     		    $("#add-tags").css("display", "block");
 
-       				$('#added-tags-ul').append('<li style="display:inline-block;" class="tag" data="' + tag + '"><span><a class="anchor" href="#tags/'+ tag + '">'+ tag + '</a><a class="close remove-tags" id="' + tag + '">&times</a></span></li>');
+       				$('#added-tags-ul').append('<li style="display:inline-block;" class="tag" data="' + tag + '" ><span><a class="anchor" href="#tags/'+ tag + '">'+ tag + '</a><a class="close remove-tags" id="' + tag + '" tag="'+tag+'">&times</a></span></li>');
     			});
     		}
     });
@@ -203,7 +207,7 @@ function setup_tags_typeahead() {
     	
     		// Prevents comma (",") as an argument to the input field
     		$(this).val("");
-    		$(this).closest(".control-group").find('ul.tags').append('<li class="tag"  style="display: inline-block;" data="'+ tag+'">'+tag+'<a class="close" id="remove_tag">&times</a></li>');
+    		$(this).closest(".control-group").find('ul.tags').append('<li class="tag"  style="display: inline-block;" data="'+ tag+'">'+tag+'<a class="close" id="remove_tag" tag="'+tag+'">&times</a></li>');
     	}
     });
 }

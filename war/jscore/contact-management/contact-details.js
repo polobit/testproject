@@ -106,7 +106,10 @@ $(function(){
 	 */ 
 	$('.remove-tags').live('click', function(e){
 		e.preventDefault();
+		
 		var tag = $(this).attr("tag");
+		console.log("test");
+		removeItemFromTimeline($("#" + tag+ '-tag-timeline-element', $('#timeline')).parent('.inner'))
 		$(this).closest("li").remove();
      	var json = App_Contacts.contactDetailView.model.toJSON();
      	
@@ -189,7 +192,7 @@ $(function(){
 	       			
 	       			// Append to the list, when no match is found 
 	       			if ($.inArray(new_tags, old_tags) == -1) 
-	       				$('#added-tags-ul').append('<li style="display:inline-block;" class="tag" data="' + new_tags + '"><span><a class="anchor" href="#tags/'+ new_tags + '">'+ new_tags + '</a><a class="close remove-tags" id="' + new_tags + '">&times</a></span></li>');
+	       				$('#added-tags-ul').append('<li style="display:inline-block;" class="tag" data="' + new_tags + '"><span><a class="anchor" href="#tags/'+ new_tags + '" >'+ new_tags + '</a><a class="close remove-tags" id="' + new_tags + '" tag="'+new_tags+'">&times</a></span></li>');
 	       			
 	       			
 	       			// Adds the added tags (if new) to tags collection

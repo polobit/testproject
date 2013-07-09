@@ -765,6 +765,17 @@ function addTagToTimelineDynamically(tags)
 }
 
 /**
+ * Removes an element from timeline
+ * @param element
+ */
+function removeItemFromTimeline(element) {
+	console.log(element);
+	$('#timeline').isotope( 'remove', element, function(){
+		$('#timeline').isotope( 'reLayout')
+	});
+}
+
+/**
  * Handles the events (click and mouseenter) of mail and log entities of 
  * tiemline 
  */
