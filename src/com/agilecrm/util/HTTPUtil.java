@@ -154,13 +154,15 @@ public class HTTPUtil
      */
     public static String accessUrlusingAuthentication(String postURL,
 	    String username, String password, String data, String contentType,
-	    String requestMethod) throws Exception
+	    String requestMethod, String acceptType) throws Exception
     {
 	HttpURLConnection connection = null;
 
 	URL yahoo = new URL(postURL);
 	connection = (HttpURLConnection) yahoo.openConnection();
 
+	System.out.println(username);
+	System.out.println(password);
 	String userPass = Base64Encoder.encode(
 		(username + ":" + password).getBytes()).replace("\n", "");
 
@@ -174,6 +176,9 @@ public class HTTPUtil
 
 	contentType = (contentType == null) ? "text/plain" : contentType;
 	connection.setRequestProperty("Content-type", contentType);
+
+	if (acceptType != null)
+	    connection.setRequestProperty("accept", acceptType);
 
 	if (data != null)
 	{
@@ -198,6 +203,7 @@ public class HTTPUtil
 	}
 	reader.close();
 
+	System.out.println("outpiut" + output);
 	return output;
     }
 }
