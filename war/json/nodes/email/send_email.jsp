@@ -42,6 +42,15 @@
 		            "type": "email"
 				},
 				{
+					"label": "CC",
+					"category": "Info",
+					"name": "cc_email",
+		            "id":"cc_email",
+					"title": "Enter CC email address",
+					"fieldType": "input",
+		            "type": "email"
+				},
+				{
 					"label": "Subject",
 					"category": "Info",
 					"name": "subject",

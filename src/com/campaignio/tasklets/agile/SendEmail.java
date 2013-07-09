@@ -3,6 +3,7 @@ package com.campaignio.tasklets.agile;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -50,6 +51,11 @@ public class SendEmail extends TaskletAdapter
      * Recipient email id
      */
     public static String TO = "to_email";
+
+    /**
+     * CC email id.
+     */
+    public static String CC = "cc_email";
 
     /**
      * HTML content of email
@@ -181,8 +187,7 @@ public class SendEmail extends TaskletAdapter
      * @see com.campaignio.tasklets.TaskletAdapter#run(org.json.JSONObject,
      * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
      */
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
-	    JSONObject data, JSONObject nodeJSON) throws Exception
+    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
 	// Get Scheduled Time and Day
 	String on = getStringValue(nodeJSON, subscriberJSON, data, ON);
@@ -198,8 +203,7 @@ public class SendEmail extends TaskletAdapter
 
 	// Schedule the time and date
 	// Set Timezone
-	String timeZoneString = getStringValue(nodeJSON, subscriberJSON, data,
-		TIME_ZONE);
+	String timeZoneString = getStringValue(nodeJSON, subscriberJSON, data, TIME_ZONE);
 	TimeZone timeZone = TimeZone.getTimeZone(timeZoneString);
 	Calendar calendar = Calendar.getInstance(timeZone);
 
@@ -240,8 +244,7 @@ public class SendEmail extends TaskletAdapter
 	// Sleep till that day
 	// Add ourselves to Cron Queue
 	long timeout = calendar.getTimeInMillis();
-	addToCron(campaignJSON, subscriberJSON, data, nodeJSON, timeout, null,
-		null, null);
+	addToCron(campaignJSON, subscriberJSON, data, nodeJSON, timeout, null, null, null);
     }
 
     /*
@@ -251,9 +254,7 @@ public class SendEmail extends TaskletAdapter
      * com.campaignio.tasklets.TaskletAdapter#timeOutComplete(org.json.JSONObject
      * , org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
      */
-    public void timeOutComplete(JSONObject campaignJSON,
-	    JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
-	    throws Exception
+    public void timeOutComplete(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
 	// TimeOut - Cron Job Wakes it up
 	System.out.println("Wake up from wait. Executing next one.");
@@ -281,53 +282,42 @@ public class SendEmail extends TaskletAdapter
 	// Check if day matches - otherwise return false
 	if (weekday == Calendar.MONDAY)
 	{
-	    if (on.equalsIgnoreCase(ON_MON_FRI)
-		    || on.equalsIgnoreCase(ON_MON_SAT)
-		    || on.equalsIgnoreCase(ON_MONDAY))
+	    if (on.equalsIgnoreCase(ON_MON_FRI) || on.equalsIgnoreCase(ON_MON_SAT) || on.equalsIgnoreCase(ON_MONDAY))
 		return true;
 	}
 
 	// Check if day matches - otherwise return false
 	if (weekday == Calendar.TUESDAY)
 	{
-	    if (on.equalsIgnoreCase(ON_MON_FRI)
-		    || on.equalsIgnoreCase(ON_MON_SAT)
-		    || on.equalsIgnoreCase(ON_TUESDAY))
+	    if (on.equalsIgnoreCase(ON_MON_FRI) || on.equalsIgnoreCase(ON_MON_SAT) || on.equalsIgnoreCase(ON_TUESDAY))
 		return true;
 	}
 
 	// Check if day matches - otherwise return false
 	if (weekday == Calendar.WEDNESDAY)
 	{
-	    if (on.equalsIgnoreCase(ON_MON_FRI)
-		    || on.equalsIgnoreCase(ON_MON_SAT)
-		    || on.equalsIgnoreCase(ON_WED))
+	    if (on.equalsIgnoreCase(ON_MON_FRI) || on.equalsIgnoreCase(ON_MON_SAT) || on.equalsIgnoreCase(ON_WED))
 		return true;
 	}
 
 	// Check if day matches - otherwise return false
 	if (weekday == Calendar.THURSDAY)
 	{
-	    if (on.equalsIgnoreCase(ON_MON_FRI)
-		    || on.equalsIgnoreCase(ON_MON_SAT)
-		    || on.equalsIgnoreCase(ON_THU))
+	    if (on.equalsIgnoreCase(ON_MON_FRI) || on.equalsIgnoreCase(ON_MON_SAT) || on.equalsIgnoreCase(ON_THU))
 		return true;
 	}
 
 	// Check if day matches - otherwise return false
 	if (weekday == Calendar.FRIDAY)
 	{
-	    if (on.equalsIgnoreCase(ON_MON_FRI)
-		    || on.equalsIgnoreCase(ON_MON_SAT)
-		    || on.equalsIgnoreCase(ON_FRI))
+	    if (on.equalsIgnoreCase(ON_MON_FRI) || on.equalsIgnoreCase(ON_MON_SAT) || on.equalsIgnoreCase(ON_FRI))
 		return true;
 	}
 
 	// Check if day matches - otherwise return false
 	if (weekday == Calendar.SATURDAY)
 	{
-	    if (on.equalsIgnoreCase(ON_MON_SAT) || on.equalsIgnoreCase(ON_SAT)
-		    || on.equalsIgnoreCase(ON_SAT_SUN))
+	    if (on.equalsIgnoreCase(ON_MON_SAT) || on.equalsIgnoreCase(ON_SAT) || on.equalsIgnoreCase(ON_SAT_SUN))
 		return true;
 	}
 
@@ -354,43 +344,41 @@ public class SendEmail extends TaskletAdapter
      *            Current Node data
      * @throws Exception
      */
-    public void sendEmail(JSONObject campaignJSON, JSONObject subscriberJSON,
-	    JSONObject data, JSONObject nodeJSON) throws Exception
+    public void sendEmail(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
 	// Add Unsubscription Link
 	try
 	{
 	    // Get Data
 	    if (subscriberJSON.has("data"))
-		subscriberJSON.getJSONObject("data").put("UnsubscribeLink",
-			UNSUBSCRIBE_LINK + DBUtil.getId(subscriberJSON));
+		subscriberJSON.getJSONObject("data").put("UnsubscribeLink", UNSUBSCRIBE_LINK + DBUtil.getId(subscriberJSON));
 	}
 	catch (Exception e)
 	{
 	}
 
 	// Get From, Message
-	String fromEmail = getStringValue(nodeJSON, subscriberJSON, data,
-		FROM_EMAIL);
-	String fromName = getStringValue(nodeJSON, subscriberJSON, data,
-		FROM_NAME);
+	String fromEmail = getStringValue(nodeJSON, subscriberJSON, data, FROM_EMAIL);
+	String fromName = getStringValue(nodeJSON, subscriberJSON, data, FROM_NAME);
 
 	String to = getStringValue(nodeJSON, subscriberJSON, data, TO);
+	String cc = getStringValue(nodeJSON, subscriberJSON, data, CC);
+
+	// Combine to and cc email
+	if (!StringUtils.isEmpty(cc))
+	    to = to + ", " + cc;
+
 	String subject = getStringValue(nodeJSON, subscriberJSON, data, SUBJECT);
 	String html = getStringValue(nodeJSON, subscriberJSON, data, HTML_EMAIL);
 	String text = getStringValue(nodeJSON, subscriberJSON, data, TEXT_EMAIL);
-	String replyTo = getStringValue(nodeJSON, subscriberJSON, data,
-		REPLY_TO);
+	String replyTo = getStringValue(nodeJSON, subscriberJSON, data, REPLY_TO);
 
-	String keyword = getStringValue(nodeJSON, subscriberJSON, data,
-		PURL_KEYWORD);
+	String keyword = getStringValue(nodeJSON, subscriberJSON, data, PURL_KEYWORD);
 
-	String trackClicks = getStringValue(nodeJSON, subscriberJSON, data,
-		TRACK_CLICKS);
+	String trackClicks = getStringValue(nodeJSON, subscriberJSON, data, TRACK_CLICKS);
 
 	// Check if we need to convert links
-	if (trackClicks != null
-		&& trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES))
+	if (trackClicks != null && trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES))
 	{
 	    try
 	    {
@@ -399,54 +387,26 @@ public class SendEmail extends TaskletAdapter
 		data.put(TRACKING_ID, Calendar.getInstance().getTimeInMillis());
 
 		// Get Keyword
-		text = convertLinks(text, " ", data, keyword,
-			DBUtil.getId(subscriberJSON),
-			DBUtil.getId(campaignJSON));
-		html = convertLinks(html, " ", data, keyword,
-			DBUtil.getId(subscriberJSON),
-			DBUtil.getId(campaignJSON));
+		text = convertLinks(text, " ", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
+		html = convertLinks(html, " ", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
 
-		text = convertLinks(text, "\n", data, keyword,
-			DBUtil.getId(subscriberJSON),
-			DBUtil.getId(campaignJSON));
-		html = convertLinks(html, "\n", data, keyword,
-			DBUtil.getId(subscriberJSON),
-			DBUtil.getId(campaignJSON));
+		text = convertLinks(text, "\n", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
+		html = convertLinks(html, "\n", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
 
-		text = convertLinks(text, "\r", data, keyword,
-			DBUtil.getId(subscriberJSON),
-			DBUtil.getId(campaignJSON));
-		html = convertLinks(html, "\r", data, keyword,
-			DBUtil.getId(subscriberJSON),
-			DBUtil.getId(campaignJSON));
+		text = convertLinks(text, "\r", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
+		html = convertLinks(html, "\r", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
 
-		text = convertLinks(text, "<", data, keyword,
-			DBUtil.getId(subscriberJSON),
-			DBUtil.getId(campaignJSON));
-		html = convertLinks(html, "<", data, keyword,
-			DBUtil.getId(subscriberJSON),
-			DBUtil.getId(campaignJSON));
+		text = convertLinks(text, "<", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
+		html = convertLinks(html, "<", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
 
-		text = convertLinks(text, "\"", data, keyword,
-			DBUtil.getId(subscriberJSON),
-			DBUtil.getId(campaignJSON));
-		html = convertLinks(html, "\"", data, keyword,
-			DBUtil.getId(subscriberJSON),
-			DBUtil.getId(campaignJSON));
+		text = convertLinks(text, "\"", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
+		html = convertLinks(html, "\"", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
 
-		text = convertLinks(text, "'", data, keyword,
-			DBUtil.getId(subscriberJSON),
-			DBUtil.getId(campaignJSON));
-		html = convertLinks(html, "'", data, keyword,
-			DBUtil.getId(subscriberJSON),
-			DBUtil.getId(campaignJSON));
+		text = convertLinks(text, "'", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
+		html = convertLinks(html, "'", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
 
-		text = convertLinks(text, "\"", data, keyword,
-			DBUtil.getId(subscriberJSON),
-			DBUtil.getId(campaignJSON));
-		html = convertLinks(html, "\"", data, keyword,
-			DBUtil.getId(subscriberJSON),
-			DBUtil.getId(campaignJSON));
+		text = convertLinks(text, "\"", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
+		html = convertLinks(html, "\"", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
 
 	    }
 	    catch (Exception e)
@@ -456,32 +416,26 @@ public class SendEmail extends TaskletAdapter
 	}
 
 	// Creates log for sending email
-	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
-		DBUtil.getId(subscriberJSON), "Subject: " + subject,
-		LogType.EMAIL_SENT.toString());
+	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON), DBUtil.getId(subscriberJSON), "Subject: " + subject, LogType.EMAIL_SENT.toString());
 
 	// Send Message
 	if (html != null && html.length() > 10)
 	{
-	    html = Util.appendTrackingImage(html, DBUtil.getId(campaignJSON),
-		    DBUtil.getId(subscriberJSON));
+	    html = Util.appendTrackingImage(html, DBUtil.getId(campaignJSON), DBUtil.getId(subscriberJSON));
 
 	    // Util.sendEmailUsingMailgun(fromEmail, fromName, to, subject,
 	    // replyTo, html, text, subscriberJSON, campaignJSON);
-	    SendGridEmail.sendMail(fromEmail, fromName, to, subject, replyTo,
-		    html, text, subscriberJSON, campaignJSON);
+	    SendGridEmail.sendMail(fromEmail, fromName, to, subject, replyTo, html, text, subscriberJSON, campaignJSON);
 	}
 	else
 	{
 	    // Util.sendEmailUsingMailgun(fromEmail, fromName, to, subject,
 	    // replyTo, null, text, subscriberJSON, campaignJSON);
-	    SendGridEmail.sendMail(fromEmail, fromName, to, subject, replyTo,
-		    null, text, subscriberJSON, campaignJSON);
+	    SendGridEmail.sendMail(fromEmail, fromName, to, subject, replyTo, null, text, subscriberJSON, campaignJSON);
 	}
 
 	// Execute Next One in Loop
-	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
-		nodeJSON, null);
+	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
     }
 
     /**
@@ -500,9 +454,7 @@ public class SendEmail extends TaskletAdapter
      * @return shortened url with purl keyword if given
      * @throws Exception
      */
-    public String convertLinks(String input, String delimiter, JSONObject data,
-	    String keyword, String subscriberId, String campaignId)
-	    throws Exception
+    public String convertLinks(String input, String delimiter, JSONObject data, String keyword, String subscriberId, String campaignId) throws Exception
     {
 	boolean converted = false;
 
@@ -512,30 +464,20 @@ public class SendEmail extends TaskletAdapter
 	{
 
 	    // Avoid image and shorten urls
-	    if (tokens[i].toLowerCase().startsWith("http")
-		    && !tokens[i].toLowerCase().startsWith("http://goo.gl")
-		    && !tokens[i].toLowerCase().startsWith("http://agle.cc")
-		    && !tokens[i].toLowerCase()
-			    .startsWith("http://usertracker")
+	    if (tokens[i].toLowerCase().startsWith("http") && !tokens[i].toLowerCase().startsWith("http://goo.gl")
+		    && !tokens[i].toLowerCase().startsWith("http://agle.cc") && !tokens[i].toLowerCase().startsWith("http://usertracker")
 		    && !tokens[i].toLowerCase().startsWith("http://unscr.be")
 		    && !tokens[i].toLowerCase().endsWith(".png")
 		    && !tokens[i].toLowerCase().endsWith(".jpg")
 		    && !tokens[i].toLowerCase().endsWith(".jpeg")
 		    && !tokens[i].toLowerCase().endsWith(".jp2")// jpg 2000
 		    && !tokens[i].toLowerCase().endsWith(".jpx")// jpg 2000
-		    && !tokens[i].toLowerCase().endsWith(".gif")
-		    && !tokens[i].toLowerCase().endsWith(".bmp")
-		    && !tokens[i].toLowerCase().endsWith(".tiff")
-		    && !tokens[i].toLowerCase().endsWith(".tif")
-		    && !tokens[i].toLowerCase().endsWith(".ppm")
-		    && !tokens[i].toLowerCase().endsWith(".pgm")
-		    && !tokens[i].toLowerCase().endsWith(".pbm")
-		    && !tokens[i].toLowerCase().endsWith(".pnm")
-		    && !tokens[i].toLowerCase().endsWith(".dtd"))
+		    && !tokens[i].toLowerCase().endsWith(".gif") && !tokens[i].toLowerCase().endsWith(".bmp") && !tokens[i].toLowerCase().endsWith(".tiff")
+		    && !tokens[i].toLowerCase().endsWith(".tif") && !tokens[i].toLowerCase().endsWith(".ppm") && !tokens[i].toLowerCase().endsWith(".pgm")
+		    && !tokens[i].toLowerCase().endsWith(".pbm") && !tokens[i].toLowerCase().endsWith(".pnm") && !tokens[i].toLowerCase().endsWith(".dtd"))
 	    {
 		// Shorten URL
-		String url = URLShortenerUtil.getShortURL(tokens[i], keyword,
-			subscriberId, data.getString(TRACKING_ID), campaignId);
+		String url = URLShortenerUtil.getShortURL(tokens[i], keyword, subscriberId, data.getString(TRACKING_ID), campaignId);
 
 		if (url == null)
 		    continue;
