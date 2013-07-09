@@ -237,7 +237,17 @@ $(function(){
     			});
             }
         });
+		
         statsView.collection.fetch();
+        
+        // Organises collection based on created_time in decreasing order
+        statsView.collection.comparator = function(model)
+        {
+        	if (model.get('created_time'))
+	            return -model.get('created_time');
+	                                      
+        }
+        
         $('#stats',this.el).html(statsView.el);
 	});
 	
