@@ -13,8 +13,10 @@ $(function(){
     	var form_id = $(this).closest('.opportunity-modal').find('form').attr("id");
     	
        	var json = serializeForm(form_id);
-       	saveDeal(form_id, modal_id, this, json);
-    	
+       	if(form_id == "opportunityForm")
+       		saveDeal(form_id, modal_id, this, json, false);
+       	else
+       		saveDeal(form_id, modal_id, this, json,true);
 	});
 	
 	/**
@@ -134,8 +136,7 @@ function showDeal(){
 }
 
 // Updates or Saves a deal
-function saveDeal(formId, modalId, saveBtn, json){
-	
+function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 	// Returns, if the save button has disabled attribute
 	if ($(saveBtn).attr('disabled'))
 		return;
@@ -209,10 +210,20 @@ function saveDeal(formId, modalId, saveBtn, json){
 				});
 			}
 			else if (Current_Route == 'deals') {
-				location.reload(true);
+				if (isUpdate)
+					 App_Deals.opportunityCollectionView.collection.remove(json);
+					
+				// Shows Milestones Pie
+				pieMilestones();
+				
+				// Shows deals chart
+				pieDetails();
+				App_Deals.opportunityCollectionView.collection.add(data);
+				App_Deals.opportunityCollectionView.render(true);
+
 			}
 			else {
-				App_Calendar.navigate("deals", {
+				App_Deals.navigate("deals", {
 					trigger : true
 				});
 			}

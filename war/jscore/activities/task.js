@@ -254,7 +254,17 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 				App_Calendar.tasksListView.render(true);
 
 			} else if (Current_Route == 'tasks') {
-				location.reload(true);
+				
+		/*	To do without reloading the page should check the condition of (Owner and Category)location.reload(true);	*/
+  				/*var model = App_Calendar.allTasksListView.collection.get(json.id);
+  				var old_owner_id = model.toJSON().taskOwner.id;
+  				var old_type = model.toJSON().type;*/
+
+  				if (isUpdate)
+					App_Calendar.allTasksListView.collection.remove(json);
+
+  				App_Calendar.allTasksListView.collection.add(data);
+				App_Calendar.allTasksListView.render(true);
 			}
 			// Updates data to temeline
 			else if (App_Contacts.contactDetailView
@@ -332,7 +342,7 @@ function get_due(due) {
  * 
  */
 function append_tasks(base_model) {
-	console.log(this.options);
+	
 	var itemView = new Base_List_View({
 		model : base_model,
 		"view" : "inline",
@@ -406,12 +416,8 @@ function append_tasks_dashboard(base_model) {
 	
 	
 	var due = get_due(base_model.get('due'));
-	//console.log(base_model.toJSON());
-	//console.log("dueeeeeeeeeeeeeeeeeee="+due);
-	var pendingTask=base_model.get("is_complete");
-	//console.log("Is Complete="+pendingTask);
-	//console.log("subject="+base_model.get('subject'));
-	
+
+	var pendingTask = base_model.get("is_complete");
 	
 	if(pendingTask == false){
 	//  if(totalRows <= 7){

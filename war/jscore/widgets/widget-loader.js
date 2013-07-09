@@ -70,14 +70,14 @@ function loadWidgets(el, contact)
 		var widget = WIDGETS_VIEW.collection.where({name: widget_name})[0]
 		var widgetJSON = widget.toJSON();
 		
-		widget.set({'is_minimized' : true })
+		widget.set({'is_minimized' : true}, {silent : true});
 		widgetJSON['is_minimized'] = true;
 		
 		var model = new BaseModel();
 		model.url = "core/api/widgets";
 		model.save(widgetJSON, {silent:true});
 		
-		widget = model;
+		
 	});
 	
 	$('.widget-maximize').die().live('click', function(e){
@@ -95,8 +95,6 @@ function loadWidgets(el, contact)
 		model.url = "core/api/widgets";
 		model.save(widgetJSON, {silent:true});
 		
-		widget = model;
-
 		var is_collapsed = $(this).hasClass('collapsed');
 		$(this).removeClass();
 		$(this).addClass('widget-minimize');

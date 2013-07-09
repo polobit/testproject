@@ -36,7 +36,7 @@ function updateData(params, id) {
 		params = "?&owner=" + id;
 
 	// Creates backbone collection view
-	allTasksListView = new Base_Collection_View({
+		this.App_Calendar.allTasksListView = new Base_Collection_View({
 		url : '/core/api/tasks/based' + params,
 		restKey : "task",
 		templateKey : "tasks-list",
@@ -50,10 +50,10 @@ function updateData(params, id) {
 	});
 
 	// Fetches data from server
-	allTasksListView.collection.fetch();
+	this.App_Calendar.allTasksListView.collection.fetch();
 
 	// Renders data to tasks list page.
-	$('#task-list-based-condition').html(allTasksListView.render().el);
+	$('#task-list-based-condition').html(this.App_Calendar.allTasksListView.render().el);
 
 }
 

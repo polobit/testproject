@@ -1206,4 +1206,22 @@ $(function() {
 		return options.inverse(this);
 	});
 	
+	/**
+	 * To set up star rating in contacts listing
+	 */
+	Handlebars.registerHelper('setupRating', function(value){
+		
+		var element = "";
+		for(var i = 0; i < 5; i++)
+		{
+			if(i < parseInt(value))
+				{
+					element = element.concat('<li style="display: inline;"><img src="img/star-on.png" alt="'+i+'"></li>');
+					continue;
+				}
+			element = element.concat('<li style="display: inline;"><img src="img/star-off.png" alt="'+i+'"></li>');
+		}
+		return new Handlebars.SafeString(element);
+	});
+	
 });
