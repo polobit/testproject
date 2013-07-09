@@ -117,10 +117,9 @@ $(function(){
         contact.url = 'core/api/contacts';
         contact.save(json,{
        		success: function(data)
-       			{ 	      			
-       				App_Contacts.contactDetailView.model.set({'tags' : data.get("tags")}, {silent : true});
-       			
-
+       			{ 	      		
+       				App_Contacts.contactDetailView.model.set({'tags' : data.get('tags')}, {silent : true}, {merge:false});
+       				
        				// Also deletes from Tag class if no more contacts are found with this tag
        				$.ajax({
        					url: 'core/api/tags/' + tag,
