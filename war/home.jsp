@@ -218,10 +218,19 @@ String CSS_PATH = "/";
 	<div class='notifications bottom-left'></div>
 	<div class='notifications bottom-right'></div>
 
+	<div id='templates'></div>
+		<script type="text/javascript">
+			var tpl;	
+		
+			if (window.XMLHttpRequest)tpl=new XMLHttpRequest(); ///for chrome
+			else tpl=new ActiveXObject("Microsoft.XMLHTTP");     //for IE6 & before
 
+			tpl.open("GET","tpl/min/tpl.js",false);              //script load from browser
+			tpl.send();
+			document.getElementById('templates').innerHTML=tpl.responseText;   //insert in dummy div
+		</script>
 
-	<!-- Templates -->
-	<%@ include file="tpl/min/tpl.js" %>	
+	<!-- Templates from : tpl/min/tpl.js -->
 	
 	<!-- Determine Console.logging - we log in local boxes -->
 	<%

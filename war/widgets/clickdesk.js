@@ -144,30 +144,26 @@ function showClickDeskProfile(plugin_id, Email)
 {
 	$('#ClickDesk').html(CLICKDESK_UPDATE_LOAD_IMAGE);
 	
-	var all_chats;
 	var flag = false;
 	queueGetRequest("widget_queue", "/core/api/widgets/clickdesk/chats/" + plugin_id + "/" + Email + "/0", "json",	
 	function success(data)
 	{
 		 $('#ClickDesk').html(getTemplate('clickdesk-profile', data)); 
 		 
-		 if(!data.sessions)
-		 {
-			 $('#clickdesk_chats_panel').html('<li class="sub_header_li">' + data + '</li>');
+		 if(!data)
 			 return;
-		 }
 		 
-		 if(!data.sessions.session)
+		 if(data.length == 0)
 		 {
 			 $('#clickdesk_chats_panel').html('<li class="sub_header_li">No chats</li>');	
 			 return;
 		 }
 		 
-		 if(data.sessions.session.length >= 5)
+		 if(data.length >= 5)
 			 flag = true;
 		 
 		  $('#clickdesk_chats_panel').html(
-				  getTemplate('clickdesk-chat-stream', data.sessions.session.splice(0,5)));	
+				  getTemplate('clickdesk-chat-stream', data));	
 		 
 		  head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
      		$(".time-ago", $('#clickdesk_chats_panel')).timeago();
@@ -195,12 +191,6 @@ function showClickDeskProfile(plugin_id, Email)
 		  {
 			  e.preventDefault();
 			    
-			  if(data.sessions.session.length != 0)
-			  {
-				  showMoreChats(data);
-				  return;
-			  }
-
 			  if(!flag)
 			  {
 				  clickDeskStreamError("clickdesk-chats-error-panel", 'No more chats');
@@ -214,8 +204,7 @@ function showClickDeskProfile(plugin_id, Email)
 			  $.get("/core/api/widgets/clickdesk/chats/" + plugin_id + "/" + Email + "/" + offset, 
 			  function(data1)
 		      {
-				    data = data1;
-				    showMoreChats(data);
+				    showMoreChats(data1);
 				    
 		      }, "json").error(function(data1) {
 		    	  
@@ -237,15 +226,14 @@ function showClickDeskProfile(plugin_id, Email)
 
 function showMoreChats(data)
 {
-	
-	if(data.sessions.session.length == 0)
+	if(data.length == 0)
 	{
 		clickDeskStreamError("clickdesk-chats-error-panel", 'No more chats');
+		$('#spinner-clickdesk-chats').hide();
 		return;
 	}
 	 
-	var more_chats_template = getTemplate('clickdesk-chat-stream', 
-			  data.sessions.session.splice(0, 5));
+	var more_chats_template = getTemplate('clickdesk-chat-stream', data);
 	  
 	$('#spinner-clickdesk-chats').hide();
 	 
@@ -262,25 +250,20 @@ function getClickDeskTickets(plugin_id, Email)
 	$.get("/core/api/widgets/clickdesk/tickets/" + plugin_id + "/" + Email + "/0", 
 	function(data)
 	{
-		 if(!data.tickets)
-		 {
-			 $('#clickdesk_tickets_panel').html('<li class="sub_header_li">' + data + '</li>');
+		 if(!data)
 			 return;
-		 }
 		 
-		 if(!data.tickets.ticket)
+		 if(data.length == 0)
 		 {
 			 $('#clickdesk_tickets_panel').html('<li class="sub_header_li">No tickets</li>');	
 			 return;
 		 }
 		 
-		 if(data.tickets.ticket.length >= 5)
+		 if(data.length >= 5)
 			 flag = true;
 		 
-		 var all_tickets_template = getTemplate('clickdesk-ticket-stream', 
-				 data.tickets.ticket.splice(0,5));	
-		 
-		  $('#clickdesk_tickets_panel').html(all_tickets_template);	
+		  $('#clickdesk_tickets_panel').html(
+				  getTemplate('clickdesk-ticket-stream', data));	
 		 
 		  head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
 			$(".time-ago", $('#clickdesk_tickets_panel')).timeago();
@@ -309,12 +292,6 @@ function getClickDeskTickets(plugin_id, Email)
 		  {
 			  e.preventDefault();
 			    
-			  if(data.tickets.ticket.length != 0)
-			  {
-				  showMoreTickets(data);
-				  return;
-			  }
-
 			  if(!flag)
 			  {
 				  clickDeskStreamError("clickdesk-tickets-error-panel", 'No more tickets');
@@ -328,8 +305,7 @@ function getClickDeskTickets(plugin_id, Email)
 			  $.get("/core/api/widgets/clickdesk/tickets/" + plugin_id + "/" + Email + "/" + offset, 
 			  function(data1)
 			  {
-				  data = data1;
-				  showMoreTickets(data);
+				  showMoreTickets(data1);
 				  
 			  }, "json").error(function(data1) {
 			      
@@ -354,14 +330,14 @@ function getClickDeskTickets(plugin_id, Email)
 
 function showMoreTickets(data)
 {
-	if(data.tickets.ticket.length == 0)
+	if(data.length == 0)
 	{
 		clickDeskStreamError("clickdesk-tickets-error-panel", 'No more tickets');
+		$('#spinner-clickdesk-tickets').hide();
 		return;
 	}
 	 
-	var more_tickets_template = getTemplate('clickdesk-ticket-stream', 
-			  data.tickets.ticket.splice(0, 5));
+	var more_tickets_template = getTemplate('clickdesk-ticket-stream', data);
 	  
 	$('#spinner-clickdesk-tickets').hide();
    	 

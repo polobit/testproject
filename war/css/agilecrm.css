@@ -827,3 +827,8 @@ text-decoration:underline;
 #notify-container span.notify-close
 {background-color: whiteSmoke;float: right;margin-right: 20px;border: 2px solid #735005;padding-left: 4px;padding-right: 4px;padding-bottom:3px;text-decoration: none;display: block;cursor: pointer;margin-top: -3px;}
 
+tbody a.no-style-a {
+	color:black;
+	text-decoration:none;
+}
+
