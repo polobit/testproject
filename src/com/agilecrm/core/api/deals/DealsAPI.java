@@ -14,6 +14,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import net.sf.json.JSONObject;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -64,6 +66,23 @@ public class DealsAPI
     public Opportunity getOpportunity(@PathParam("opportunity-id") Long id)
     {
 	Opportunity opportunity = OpportunityUtil.getOpportunity(id);
+	return opportunity;
+    }
+
+    /**
+     * Return opportunity with respect to Id. This method is called if XML is
+     * request.
+     * 
+     * @param id
+     *            - Opportunity Id to be fetched.
+     * @return Opportunity object.
+     */
+    @Path("/byMilestone")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public JSONObject getOpportunitiesByMilestone()
+    {
+	JSONObject opportunity = OpportunityUtil.getDealsByMilestone();
 	return opportunity;
     }
 
@@ -127,8 +146,7 @@ public class DealsAPI
     @Path("stats/milestones")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public String getDealsStatsForMilestones(@QueryParam("min") Long min,
-	    @QueryParam("max") Long max)
+    public String getDealsStatsForMilestones(@QueryParam("min") Long min, @QueryParam("max") Long max)
     {
 	return OpportunityUtil.getMilestones(min, max).toString();
     }
@@ -146,8 +164,7 @@ public class DealsAPI
     @Path("stats/conversions")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public String getConversions(@QueryParam("min") Long min,
-	    @QueryParam("max") Long max)
+    public String getConversions(@QueryParam("min") Long min, @QueryParam("max") Long max)
     {
 	return OpportunityUtil.getConversionDetails(min, max).toString();
     }
@@ -166,8 +183,7 @@ public class DealsAPI
     @Path("stats/details")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public String getDealsDetails(@QueryParam("min") Long min,
-	    @QueryParam("max") Long max)
+    public String getDealsDetails(@QueryParam("min") Long min, @QueryParam("max") Long max)
     {
 	return OpportunityUtil.getDealsDetails(min, max).toString();
     }
@@ -183,8 +199,7 @@ public class DealsAPI
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteOpportunities(@FormParam("ids") String model_ids)
-	    throws JSONException
+    public void deleteOpportunities(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray opportunitiesJSONArray = new JSONArray(model_ids);
 
@@ -192,12 +207,11 @@ public class DealsAPI
 	DealTriggerUtil.executeTriggerForDeleteDeal(opportunitiesJSONArray);
 
 	// Executes notification when deal is deleted
-	DealNotificationPrefsUtil
-		.executeNotificationForDeleteDeal(opportunitiesJSONArray);
+	DealNotificationPrefsUtil.executeNotificationForDeleteDeal(opportunitiesJSONArray);
 
 	Opportunity.dao.deleteBulkByIds(opportunitiesJSONArray);
     }
-    
+
     @Path("/my/deals")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -205,16 +219,14 @@ public class DealsAPI
     {
 	return OpportunityUtil.getDealsRelatedToCurrentUser();
     }
-    
+
     @Path("/my/upcoming-deals")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Opportunity> getUpcomingDealsRelatedToCurrentUser(
-	    @QueryParam("page_size") String page_size)
+    public List<Opportunity> getUpcomingDealsRelatedToCurrentUser(@QueryParam("page_size") String page_size)
     {
 	if (page_size != null)
-	    return OpportunityUtil
-		    .getUpcomingDealsRelatedToCurrentUser(page_size);
+	    return OpportunityUtil.getUpcomingDealsRelatedToCurrentUser(page_size);
 
 	return OpportunityUtil.getUpcomingDealsRelatedToCurrentUser("10");
     }
