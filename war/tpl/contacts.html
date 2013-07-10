@@ -1,5 +1,5 @@
 <script id="contacts-model-template" type="text/html">
-	<td class="data" data="{{id}}"><a class="active-link no-style-a" href="#contact/{{id}}">
+	<td class="data" data="{{id}}">
     	<div style="display:inline;padding-right:10px;height:auto;">
         	{{#if_contact_type "PERSON"}}
         		<img class="thumbnail" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline" />
@@ -21,19 +21,19 @@
         		<b>{{getPropertyValue properties "name"}}</b></br>
         		{{getPropertyValue properties "url"}}
         	{{/if_contact_type}}
-    	</div></a>
+    	</div>
 	</td>
-	<td><a class="active-link no-style-a" href="#contact/{{id}}"><div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:8em;overflow:hidden;">{{getPropertyValue properties "title"}}<br />
-    	{{getPropertyValue properties "company"}}</div></a>
+	<td><div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:8em;overflow:hidden;">{{getPropertyValue properties "title"}}<br />
+    	{{getPropertyValue properties "company"}}</div>
 	</td>
-	<td><a class="active-link no-style-a" href="#contact/{{id}}"> 
+	<td> 
 <div style="height:auto;display:inline-block;vertical-align:top;text-overflow:clip;white-space:nowrap;width:15em;overflow:hidden;">
 	{{#each tags}}
     	<b><span class="label">{{this}}</span></b>
     {{/each}}
-</div></a>
+</div>
 	</td>
-	<td><a class="active-link no-style-a" href="#contact/{{id}}"><div>{{lead_score}}</div></a></td>
+	<td><div>{{lead_score}}</div></td>
 </script>
 
 <script id="contacts-collection-template" type="text/html">
