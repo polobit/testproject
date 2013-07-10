@@ -22,7 +22,13 @@ var DealsRouter = Backbone.Router.extend({
             url: 'core/api/opportunity',
             restKey: "opportunity",
             templateKey: "opportunities",
-            individual_tag_name: 'tr'
+            individual_tag_name: 'tr',
+			postRenderCallback: function(el) {
+            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+            		 $(".deal-close-time", el).timeago();
+              	});
+
+            }
         });
 
         /* Fetches Milestones Pie-Chart and Details Graph */
@@ -37,7 +43,6 @@ var DealsRouter = Backbone.Router.extend({
         				pieDetails();
         				}
         		});
-        
         $('#content').html(this.opportunityCollectionView.render().el);
 
         $(".active").removeClass("active");
