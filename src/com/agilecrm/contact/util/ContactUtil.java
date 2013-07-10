@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -150,7 +151,17 @@ public class ContactUtil
     {
 	Map<String, Object> searchMap = new HashMap<String, Object>();
 	searchMap.put("type", Type.PERSON);
-	return dao.fetchAll(max, cursor, searchMap);
+	if (max != 0 && !StringUtils.isEmpty(cursor))
+	    return dao.fetchAll(max, cursor, searchMap);
+
+	return dao.listByProperty(searchMap);
+    }
+
+    public static List<Key<Contact>> getAllContactKey()
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	searchMap.put("type", Type.PERSON);
+	return dao.listKeysByProperty(searchMap);
     }
 
     /**

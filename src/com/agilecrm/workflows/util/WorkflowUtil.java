@@ -120,13 +120,16 @@ public class WorkflowUtil
 
 	    // Get contact owner.
 	    DomainUser domainUser = contact.getOwner();
+	    JSONObject owner = new JSONObject();
 
 	    if (domainUser != null)
 	    {
-		// Inserts contact owner-name and owner-email.
-		subscriberJSON.put("owner_name", contact.getOwner().name);
-		subscriberJSON.put("owner_email", contact.getOwner().email);
+		owner.put("name", contact.getOwner().name);
+		owner.put("email", contact.getOwner().email);
 	    }
+
+	    // Inserts contact owner-name and owner-email.
+	    subscriberJSON.put("owner", owner);
 
 	    System.out.println("SubscriberJSON in WorkflowUtil: " + subscriberJSON);
 
