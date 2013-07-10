@@ -30,10 +30,29 @@ function isValidForm(form) {
 						return this.optional(element)
 								|| (((date - new Date().getTime()) / one_day) > 90);
 					}, "Card should be atleast 3 months valid");
+	
+	// Validates multiple emails separated by comma entered in textbox
+	jQuery.validator.addMethod("multipleEmails", function(value, element) {
+        
+		if (this.optional(element)) // return true on optional element
+            return true;
+        
+        var emails = value.split(/[,]+/); // split element by , 
+        valid = true;
+        
+        for (var i in emails) {
+            value = emails[i];
+            valid = valid &&
+                    jQuery.validator.methods.email.call(this, $.trim(value), element);
+        }
+        
+        return valid;
+    }, "Please enter valid email each separated by comma.");
 
 	$(form).validate({
 		rules : {
-			atleastThreeMonths : true
+			atleastThreeMonths : true,
+			multipleEmails: true
 		},
 		debug : true,
 		errorElement : 'span',

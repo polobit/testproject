@@ -1,5 +1,5 @@
 <script id="send-email-template" type="text/html">
-<div class="span8">
+<div class="span9">
     <div class="well">
         <form id='emailForm' name="emailForm" class="form-horizontal">
             <fieldset>
@@ -14,14 +14,14 @@
                 <div class="control-group">
                     <label class="control-label">To</label>
                     <div class="controls">
-                        <input type="text" class="span4 email required" name="to" id="to" value="{{getPropertyValue properties "email"}}" />
+                        <input type="text" class="span4 multipleEmails required" name="to" id="to" value="{{getPropertyValue properties "email"}}" />
                     </div>
                 </div>
                     
                 <div class="control-group">
                     <label class="control-label">Add Cc</label>
                     <div class="controls">
-                        <input type="text" class="span4 email" name="email_cc" id="email_cc" />
+                        <input type="text" class="span4 multipleEmails" name="email_cc" id="email_cc" />
                     </div>
                 </div>
         
