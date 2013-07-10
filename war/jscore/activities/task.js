@@ -255,15 +255,17 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 
 			} else if (Current_Route == 'tasks') {
 				
-		/*	To do without reloading the page should check the condition of (Owner and Category)location.reload(true);	*/
-  				/*var model = App_Calendar.allTasksListView.collection.get(json.id);
-  				var old_owner_id = model.toJSON().taskOwner.id;
-  				var old_type = model.toJSON().type;*/
+				/*	To do without reloading the page should check the condition of (Owner and Category)*/
+  				
+  				var old_owner_id = $('#content').find('.type-task-button').find(".selected_name").text();
+  				var old_type = $('#content').find('.owner-task-button').find(".selected_name").text();
 
   				if (isUpdate)
 					App_Calendar.allTasksListView.collection.remove(json);
 
-  				App_Calendar.allTasksListView.collection.add(data);
+  				if((old_owner_id == "All Categories" || old_owner_id.toUpperCase() == json.type) && (old_type == "All Tasks" || json.owner_id == CURRENT_DOMAIN_USER.id))
+  					App_Calendar.allTasksListView.collection.add(data);
+  				
 				App_Calendar.allTasksListView.render(true);
 			}
 			// Updates data to temeline
