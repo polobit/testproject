@@ -34,7 +34,7 @@ function updateData(params, id) {
 
 	if(params == "?" && id)
 		params = "?&owner=" + id;
-
+	
 	// Creates backbone collection view
 		this.App_Calendar.allTasksListView = new Base_Collection_View({
 		url : '/core/api/tasks/based' + params,
@@ -73,8 +73,12 @@ function getParams() {
 		params += ("&type=" + type);
 	// Get owner name and append it to params
 	var owner = $('#owner-tasks').data("selected_item");
+	
 	if (owner)
 		params += ("&owner=" + owner);
+	else if(owner == undefined)
+		params += ("&owner=" + CURRENT_DOMAIN_USER.id);
+	
 	return params;
 }
 
