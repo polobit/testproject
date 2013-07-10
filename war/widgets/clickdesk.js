@@ -30,12 +30,8 @@ $(function ()
         });
     });
  
-    console.log('before email ClickDesk');
-    
     // Stores email of the contact as global variable
     Email = agile_crm_get_contact_property('email');
-    
-    console.log('after email ClickDesk');
     
     // If not found - considering first time usage of widget, setupClickDeskOAuth
     // called
@@ -51,22 +47,10 @@ $(function ()
     	clickDeskError("ClickDesk", "No email is associated with this contact");
         return;
     }
-
+    
     // If defined, shows tickets from ClickDesk if any with that email
     // showTicketsFromClickDesk(plugin_id, Email);
     showClickDeskProfile(plugin_id, Email);
-    
-    Tickets_clicked = false;
-    $('#clickdesk_tickets').die().live('click', function(e) {
-    	
-    	e.preventDefault();
-    	if(Tickets_clicked)
-    		return;
-    	
-    	getClickDeskTickets(plugin_id, Email);
-    	Tickets_clicked = true;
-    	
-    });
 
     $('.clickdesk_ticket_hover').live('mouseenter', function (e)
     {
@@ -222,6 +206,18 @@ function showClickDeskProfile(plugin_id, Email)
 		// Else the error message is shown
 		clickDeskError("ClickDesk", data.responseText );
 	});
+	
+	 Tickets_clicked = false;
+	    $('#clickdesk_tickets').die().live('click', function(e) {
+	    	
+	    	e.preventDefault();
+	    	if(Tickets_clicked)
+	    		return;
+	    	
+	    	getClickDeskTickets(plugin_id, Email);
+	    	Tickets_clicked = true;
+	    	
+	    });
 }
 
 function showMoreChats(data)
