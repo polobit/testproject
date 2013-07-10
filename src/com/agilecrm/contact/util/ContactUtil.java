@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -151,7 +150,7 @@ public class ContactUtil
     {
 	Map<String, Object> searchMap = new HashMap<String, Object>();
 	searchMap.put("type", Type.PERSON);
-	if (max != 0 && !StringUtils.isEmpty(cursor))
+	if (max != 0)
 	    return dao.fetchAll(max, cursor, searchMap);
 
 	return dao.listByProperty(searchMap);
