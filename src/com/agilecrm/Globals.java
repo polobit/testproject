@@ -32,8 +32,8 @@ public class Globals
     public static final String GMAIL_SECRET_KEY = "anonymous";
 
     // LINKED IN
-    public static final String LINKED_IN_API_KEY = "kuft8xqzrnfi";
-    public static final String LINKED_IN_SECRET_KEY = "BPN9L6QQvWwum7kn";
+    public static final String LINKED_IN_API_KEY = "kuft8xqzrnfi";// "zh4a4mmt5o9i";
+    public static final String LINKED_IN_SECRET_KEY = "BPN9L6QQvWwum7kn";// "ZbgecRN4QI4HhAz4";
 
     // TWITTER
     public static final String TWITTER_API_KEY = "BuHxUT4CouZKfLiX9bqDDw";

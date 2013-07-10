@@ -414,7 +414,8 @@ function showLinkedinProfile(linkedin_id, plugin_id)
         {
 	        var e1 = "";
 			 
-			 if(data.searchResult.three_current_positions.length == 0 && data.searchResult.three_past_positions.length == 0)
+			 if((!data.searchResult.three_current_positions ||data.searchResult.three_current_positions.length == 0) &&
+					 (!data.searchResult.three_past_positions || data.searchResult.three_past_positions.length == 0))
 			 {			 
 				 $('#linkedin_experience_panel').html('<div class="widget_content">Work status unavailable</div>');
 				 return;
@@ -931,13 +932,13 @@ function getExperienceOfPerson(plugin_id, linkedin_id)
 	 $.get("/core/api/widgets/experience/" + plugin_id + "/" + linkedin_id, function (data)
      {
 		 var e1 = "";
-		 
-		 if(data.three_current_positions.length == 0 && data.three_past_positions.length == 0)
+		 console.log('guyg');
+		
+		 if((!data.three_current_positions || data.three_current_positions.length == 0) && (!data.three_past_positions || data.three_past_positions.length == 0))
 		 {			 
 			 $('#linkedin_experience_panel').html('<div class="widget_content">Work status unavailable</div>');
 			 return;
 		 }
-		 
 		 Experience_data = data;
 			 
 		 if(data.three_current_positions)

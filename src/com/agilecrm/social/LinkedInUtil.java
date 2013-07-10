@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
@@ -753,80 +754,13 @@ public class LinkedInUtil
 	SocialSearchResult experience = new SocialSearchResult();
 	experience.id = linkedInId;
 
-	for (Position position : person.getThreeCurrentPositions()
-		.getPositionList())
-	{
-	    if (position.getCompany().getId() != null)
-	    {
-		try
-		{
-		    Company company = client.getCompanyById(position
-			    .getCompany().getId(), EnumSet.of(
-			    CompanyField.LOCATIONS_ADDRESS,
-			    CompanyField.LOGO_URL, CompanyField.NAME,
-			    CompanyField.NUM_FOLLOWERS,
-			    CompanyField.BLOG_RSS_URL,
-			    CompanyField.DESCRIPTION, CompanyField.ID,
-			    CompanyField.INDUSTRY, CompanyField.TICKER));
+	if ((person.getThreeCurrentPositions() == null || person
+		.getThreeCurrentPositions().getPositionList() == null)
+		&& (person.getThreePastPositions() == null || person
+			.getThreePastPositions().getPositionList() == null))
+	    return experience;
 
-		    if (company.getLogoUrl() != null)
-			company.setLogoUrl(changeImageUrl(company.getLogoUrl()));
-		    position.setCompany(company);
-		}
-		catch (LinkedInApiClientException e)
-		{
-		    System.out.println(e.getMessage());
-		    // If company's id is some irrelevant and not related to
-		    // company, company details are skipped
-		    if (e.getMessage().contains("Company with ID {"))
-			continue;
-		    else
-			throw new Exception(e.getMessage());
-		}
-	    }
-
-	}
-
-	experience.three_current_positions = person.getThreeCurrentPositions()
-		.getPositionList();
-
-	for (Position position : person.getThreePastPositions()
-		.getPositionList())
-	{
-	    if (position.getCompany().getId() != null)
-	    {
-		try
-		{
-		    Company company = client.getCompanyById(position
-			    .getCompany().getId(), EnumSet.of(
-			    CompanyField.LOCATIONS_ADDRESS,
-			    CompanyField.LOGO_URL, CompanyField.NAME,
-			    CompanyField.NUM_FOLLOWERS,
-			    CompanyField.BLOG_RSS_URL,
-			    CompanyField.DESCRIPTION, CompanyField.ID,
-			    CompanyField.INDUSTRY, CompanyField.TICKER));
-
-		    if (company.getLogoUrl() != null)
-			company.setLogoUrl(changeImageUrl(company.getLogoUrl()));
-		    position.setCompany(company);
-
-		}
-		catch (LinkedInApiClientException e)
-		{
-		    System.out.println(e.getMessage());
-		    // If company's id is some irrelevant and not related to
-		    // company, company details are skipped
-		    if (e.getMessage().contains("Company with ID {"))
-			continue;
-		    else
-			throw new Exception(e.getMessage());
-		}
-	    }
-
-	}
-
-	experience.three_past_positions = person.getThreePastPositions()
-		.getPositionList();
+	experience = getExperienceInLinkedIn(person, experience, client);
 
 	return experience;
 
@@ -840,43 +774,70 @@ public class LinkedInUtil
 	SocialSearchResult experience = new SocialSearchResult();
 	experience.id = linkedInId;
 
-	for (Position position : person.getThreeCurrentPositions()
-		.getPositionList())
-	{
-	    if (position.getCompany().getId() != null)
-	    {
-		try
-		{
-		    Company company = client.getCompanyById(position
-			    .getCompany().getId(), EnumSet.of(
-			    CompanyField.LOCATIONS_ADDRESS,
-			    CompanyField.LOGO_URL, CompanyField.NAME,
-			    CompanyField.NUM_FOLLOWERS,
-			    CompanyField.BLOG_RSS_URL,
-			    CompanyField.DESCRIPTION, CompanyField.ID,
-			    CompanyField.INDUSTRY, CompanyField.TICKER));
+	if ((person.getThreeCurrentPositions() == null || person
+		.getThreeCurrentPositions().getPositionList() == null)
+		&& (person.getThreePastPositions() == null || person
+			.getThreePastPositions().getPositionList() == null))
+	    return experience;
 
-		    if (company.getLogoUrl() != null)
-			company.setLogoUrl(changeImageUrl(company.getLogoUrl()));
-		    position.setCompany(company);
-		}
-		catch (LinkedInApiClientException e)
+	experience = getExperienceInLinkedIn(person, experience, client);
+
+	return experience;
+
+    }
+
+    private static SocialSearchResult getExperienceInLinkedIn(Person person,
+	    SocialSearchResult experience, LinkedInApiClient client)
+	    throws Exception
+    {
+
+	if (person.getThreeCurrentPositions() != null
+		&& person.getThreeCurrentPositions().getPositionList() != null)
+	{
+	    for (Position position : person.getThreeCurrentPositions()
+		    .getPositionList())
+	    {
+		if (position.getCompany().getId() != null)
 		{
-		    System.out.println(e.getMessage());
-		    e.printStackTrace();
-		    // If company's id is some irrelevant and not related to
-		    // company, company details are skipped
-		    if (e.getMessage().contains("Company with ID {"))
-			continue;
-		    else
-			throw new Exception(e.getMessage());
+		    try
+		    {
+			Company company = client.getCompanyById(position
+				.getCompany().getId(), EnumSet.of(
+				CompanyField.LOCATIONS_ADDRESS,
+				CompanyField.LOGO_URL, CompanyField.NAME,
+				CompanyField.NUM_FOLLOWERS,
+				CompanyField.BLOG_RSS_URL,
+				CompanyField.DESCRIPTION, CompanyField.ID,
+				CompanyField.INDUSTRY, CompanyField.TICKER));
+
+			if (company.getLogoUrl() != null)
+			    company.setLogoUrl(changeImageUrl(company
+				    .getLogoUrl()));
+			position.setCompany(company);
+		    }
+		    catch (LinkedInApiClientException e)
+		    {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			// If company's id is some irrelevant and not related to
+			// company, company details are skipped
+			if (e.getMessage().contains("Company with ID {"))
+			    continue;
+			else
+			    throw new Exception(e.getMessage());
+		    }
 		}
+
 	    }
 
 	}
 
 	experience.three_current_positions = person.getThreeCurrentPositions()
 		.getPositionList();
+
+	if (person.getThreePastPositions() == null
+		|| person.getThreePastPositions().getPositionList() == null)
+	    return experience;
 
 	for (Position position : person.getThreePastPositions()
 		.getPositionList())
@@ -993,50 +954,6 @@ public class LinkedInUtil
 	return searchResults;
     }
 
-    public static void main(String[] args) throws Exception
-    {
-	final LinkedInApiClient client = factory.createLinkedInApiClient(
-		// "4c1b1828-e275-4e09-b7f9-1f85ee32c22e", // devikkah
-		// "4abc6b56-a41e-4864-a759-22c36c36e460");
-		// "f71d216b-16b7-41d5-a593-92c928b6fa13", // revathi
-		// "9c9a2635-3efd-474c-8459-61251a5006e1");
-		// "3382f692-f598-4b72-9dd3-891853fec2fc", // test
-		// "7984afcf-f0f7-4fb3-b39c-cb7379d0336e");
-		// "742877e1-5f85-4b49-a10c-08009f98005f",
-		// "846cae2c-d653-45bf-98b4-39c24655ba2d");//praveen
-		"024330d0-5e64-477e-acbc-152c7e96cee8",
-		"49f9e0fd-6a3b-4628-9b3a-cc36921f4d58");// teju faxdesk
-	// "1a6ebcd2-8038-4198-b59c-25b01cf229c0",
-	// "29571011-8ce5-42a4-90cc-44022c55d77f");// teju test
-
-	// Person person = client.getProfileByUrl(
-	// "http://www.linkedin.com/pub/digvijay-sable/1a/539/512",
-	// ProfileType.STANDARD, EnumSet.of(ProfileField.PICTURE_URL,
-	// ProfileField.FIRST_NAME, ProfileField.LAST_NAME,
-	// ProfileField.SUMMARY, ProfileField.HEADLINE,
-	// ProfileField.LOCATION_NAME,
-	// ProfileField.NUM_CONNECTIONS,
-	// ProfileField.PUBLIC_PROFILE_URL, ProfileField.ID,
-	// ProfileField.DISTANCE, ProfileField.CURRENT_SHARE,
-	// ProfileField.CURRENT_STATUS,
-	// ProfileField.POSITIONS_COMPANY,
-	// ProfileField.THREE_CURRENT_POSITIONS,
-	// ProfileField.THREE_PAST_POSITIONS,
-	// ProfileField.POSITIONS_COMPANY_INDUSTRY,
-	// ProfileField.POSITIONS_COMPANY_TICKER));
-	//
-	// ObjectMapper mapper = new ObjectMapper();
-	// String json;
-	//
-	// json = mapper.writeValueAsString(getExperience(person, "IZDqVhjks-",
-	// client));
-	// System.out.println(json);
-
-	System.out
-		.println(changeImageUrl("https://m.c.lnkd.licdn.com/mpr/mprx/0_1C0R39OydOFyN2cUPiOe3NOrdj8yq7cUl5Ik3Nah94NuIIhRxkfc7qsaFPh_Be9B-TjLa1K05B2a"));
-
-    }
-
     public static String changeImageUrl(String url)
     {
 	if (!StringUtils.isBlank(url) && url.contains("licdn.com"))
@@ -1047,4 +964,53 @@ public class LinkedInUtil
 	return url;
     }
 
+    public static void main(String[] args) throws Exception
+    {
+	final LinkedInApiClient client = factory.createLinkedInApiClient(
+		// "4c1b1828-e275-4e09-b7f9-1f85ee32c22e", // devikkah
+		// "4abc6b56-a41e-4864-a759-22c36c36e460");
+		// "f71d216b-16b7-41d5-a593-92c928b6fa13", // revathi
+		// "9c9a2635-3efd-474c-8459-61251a5006e1");
+		// "3382f692-f598-4b72-9dd3-891853fec2fc", // test
+		// "7984afcf-f0f7-4fb3-b39c-cb7379d0336e");
+		"742877e1-5f85-4b49-a10c-08009f98005f",
+		"846cae2c-d653-45bf-98b4-39c24655ba2d");// praveen
+	// "0ca1359f-4e95-414c-9f96-68865947021d",
+	// "7b1e20eb-f4a6-47d0-9a4e-bb2a98bd1cfd");// teju faxdesk
+	// "1a6ebcd2-8038-4198-b59c-25b01cf229c0",
+	// "29571011-8ce5-42a4-90cc-44022c55d77f");// teju test
+
+	Person person = client.getProfileById("VMmYbjFvmy", EnumSet.of(
+		ProfileField.PICTURE_URL, ProfileField.PICTURE_URL,
+		ProfileField.FIRST_NAME, ProfileField.LAST_NAME,
+		ProfileField.SUMMARY, ProfileField.HEADLINE,
+		ProfileField.LOCATION_NAME, ProfileField.NUM_CONNECTIONS,
+		ProfileField.PUBLIC_PROFILE_URL, ProfileField.ID,
+		ProfileField.DISTANCE, ProfileField.CURRENT_SHARE,
+		ProfileField.CURRENT_STATUS, ProfileField.POSITIONS_COMPANY,
+		ProfileField.THREE_CURRENT_POSITIONS,
+		ProfileField.THREE_PAST_POSITIONS,
+		ProfileField.POSITIONS_COMPANY_INDUSTRY,
+		ProfileField.POSITIONS_COMPANY_TICKER));
+
+	ObjectMapper mapper = new ObjectMapper();
+	String json;
+
+	json = mapper.writeValueAsString(person);
+	System.out.println(json);
+
+	json = mapper.writeValueAsString(getLinkedinProfileById(null,
+	// "RsXAQtEdjS"));
+		"VMmYbjFvmy"));
+
+	System.out.println(json);
+
+	json = mapper.writeValueAsString(getExperience(person, "Cof5YM5XPr",
+		client));
+
+	System.out.println(json);
+	// System.out
+	// .println(changeImageUrl("https://m.c.lnkd.licdn.com/mpr/mprx/0_1C0R39OydOFyN2cUPiOe3NOrdj8yq7cUl5Ik3Nah94NuIIhRxkfc7qsaFPh_Be9B-TjLa1K05B2a"));
+
+    }
 }
