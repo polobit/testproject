@@ -27,9 +27,10 @@
 						<li><a href="#" id="bulk-campaigns">Add to campaign</a></li>
 						<li class="hide"><a href="#" id="bulk-email">Send email</a></li>
 						<li><a href="#" id="bulk-tags">Add tags</a></li>
+						<li><a href="#" class="delete-checked-contacts">Delete</a></li>
 					</ul>
 			</div>
-
+		<div  class="btn-group pull-left" style="display: none;top:-25px;left:10px" id="bulk-select"></div>
             <div id="view-list" style="top:-29px;position:relative">
             </div>
             <div class="btn-group right" id="filter-list" style="top:-29px; position:relative;margin-right:5px">
@@ -68,7 +69,7 @@
         <div class="data">
             <div class="dta-contatiner">
 
-                <table id="contacts" class="table table-striped showCheckboxes" style="overflow:scroll" url="core/api/contacts/bulk">                
+                <table id="contacts" class="table table-striped showCheckboxes" style="overflow:scroll" url="core/api/bulk/update?action_type=DELETE">                
 					<div class="filter-criteria">
 					
 					</div>

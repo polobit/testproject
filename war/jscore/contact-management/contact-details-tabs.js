@@ -324,12 +324,13 @@ $(function(){
 				
 				template = Handlebars.compile(model.text);
 				var text =  template(json);
-						
-				text = text.replace(/<br>/gi, "\n");
-				text = text.replace(/<p.*>/gi, "\n");
-				text = text.replace(/<a.*href="(.*?)".*>(.*?)<\/a>/gi, " $2 ");
-				text = text.replace(/<(?:.|\s)*?>/g, "");
-				text = text.replace(/&nbsp;/g, " ");
+				
+				// Commented as we appended HTML editor to text body.						
+				//text = text.replace(/<br>/gi, "\n");
+				//text = text.replace(/<p.*>/gi, "\n");
+				//text = text.replace(/<a.*href="(.*?)".*>(.*?)<\/a>/gi, " $2 ");
+				//text = text.replace(/<(?:.|\s)*?>/g, "");
+				//text = text.replace(/&nbsp;/g, " ");
 				
 				// Fill subject and body of send email form
 				$("#emailForm").find( 'input[name="subject"]' ).val(subject);
