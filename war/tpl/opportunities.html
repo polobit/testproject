@@ -67,22 +67,27 @@
 
 <script id="opportunities-model-template" type="text/html">
 <td data="{{id}}" class="data">
-	<div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:83px;overflow:hidden;display:inline-block;">
-        	{{#each contacts}}
-          	 	<img src="{{gravatarurl properties 50}}" width="40px" height="40px" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
+	<b style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:7em;overflow:hidden;display:inline-block;">{{name}}</b><br/>
+	<div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:103px;max-height:50px;overflow:hidden;display:inline-block;">
+		{{#each contacts}}
+          	 	<img class="thumbnail" src="{{gravatarurl properties 50}}" style="display:inline;" width="40px" height="40px" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
        {{/each}}</div>
        {{#if_greater this.contacts.length "3"}}<span>...</span>{{/if_greater}}
-   <br/><b style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:7em;overflow:hidden;display:inline-block;">{{name}}</b>
+
 </td>
 <td><div style="">{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}}{{expected_value}}</div></td>
 <td><div style="">{{milestone}} ({{probability}}%) </div></td>
 <td><div style="">
     {{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}}{{calculatePipeline expected_value probability pipeline}} </div>
 </td>
-<td><div style="width:6em;">{{epochToHumanDate "mm-dd-yy" close_date}}</div></td>
+<td><div style="width:8em;">{{epochToHumanDate "mm-dd-yy" close_date}}<br><time class="deal-close-time" datetime="{{epochToHumanDate "" close_date}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time></div></td>
 <td>
-    <div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:5em;overflow:hidden;">
-        <img src="{{pic}}" width="40px" height="40px" /><br/> <b> {{owner.name}}</b>
+    <div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:4em;overflow:hidden;">
+       {{#if pic}}
+        <img class="thumbnail" src="{{pic}}" width="40px" height="40px" title="{{owner.name}}" />
+	   {{else}}
+		<img class="thumbnail" src="{{defaultGravatarurl 50}}" width="40px" height="40px" title="{{owner.name}}" />
+       {{/if}}
     </div>
 </td>
 </script>
