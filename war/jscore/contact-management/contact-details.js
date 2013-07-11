@@ -108,7 +108,6 @@ $(function(){
 		e.preventDefault();
 		
 		var tag = $(this).attr("tag");
-		console.log("test");
 		removeItemFromTimeline($("#" + tag+ '-tag-timeline-element', $('#timeline')).parent('.inner'))
 		$(this).closest("li").remove();
      	var json = App_Contacts.contactDetailView.model.toJSON();
@@ -160,18 +159,22 @@ $(function(){
 			console.log(new_tags);
 			return;
 		}
+		console.log(new_tags);
 		
 		if(new_tags) {
 			var json = App_Contacts.contactDetailView.model.toJSON();
-	    	
-	    	// Push the new tags 
-	    	//for(var i = 0; i < new_tags.length; i++)
-	    		json.tagsWithTime.push({"tag" : new_tags.toString()});
+	    		
 	    	
 	    	// Reset form
 	    	$('#addTagsForm').each (function(){
    		  	  	this.reset();
    		  	});
+	    	
+	    	// Checks if tag already exists in contact
+			if($.inArray(new_tags, json.tags) >= 0)
+				return;
+	    	
+	    	json.tagsWithTime.push({"tag" : new_tags.toString()});
    			
 	    	// Save the contact with added tags
 	    	var contact = new Backbone.Model();
