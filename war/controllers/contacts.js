@@ -533,6 +533,10 @@ var ContactsRouter = Backbone.Router.extend({
     		window: "contact-views",
     		template: "contact-view",
     		postRenderCallback: function(el) {
+    			
+    			// Check if model is new or not. If it is not new then there is no need to perform post render
+    			if(view.model && view.model.get('id'))
+    				return;
     			fillSelect("custom-fields-optgroup", "core/api/custom-fields", undefined,  function(data) {
     			console.log(data);
     			head.js(LIB_PATH + 'lib/jquery.multi-select.js',LIB_PATH + 'lib/jquery-ui.min.js', function(){
