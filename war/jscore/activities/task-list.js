@@ -1,21 +1,20 @@
 
-function initOwnerslist(domainUserId) {
+function initOwnerslist() {
 	
 	// Click events to agents dropdown and department
-	$("ul#owner-tasks li a, ul#type-tasks li a").die()
-			.live("click", function(e) {
-						e.preventDefault();
+	$("ul#owner-tasks li a, ul#type-tasks li a").die().live("click", function(e) {
+				e.preventDefault();
 
-						// Show selected name
-						var name = $(this).html(), id = $(this).attr("href");
+				// Show selected name
+				var name = $(this).html(), id = $(this).attr("href");
 
-						$(this).closest("ul").data("selected_item", id);
-						$(this).closest(".btn-group").find(".selected_name")
-								.text(name);
+				$(this).closest("ul").data("selected_item", id);
+				$(this).closest(".btn-group").find(".selected_name")
+						.text(name);
 
-						updateData(getParams());
-					});
-	updateData(getParams(), domainUserId);
+				updateData(getParams());
+	});
+	updateData(getParams());
 }
 
 var allTasksListView;
@@ -27,13 +26,10 @@ var allTasksListView;
  * @param params
  *            query string contains date, agentId & widgetId
  */
-function updateData(params, id) {
+function updateData(params) {
 	
 	// Shows loading image untill data gets ready for displaying
 	$('#task-list-based-condition').html(LOADING_HTML);
-
-	if(params == "?" && id)
-		params = "?&owner=" + id;
 	
 	// Creates backbone collection view
 		this.App_Calendar.allTasksListView = new Base_Collection_View({
@@ -73,7 +69,6 @@ function getParams() {
 		params += ("&type=" + type);
 	// Get owner name and append it to params
 	var owner = $('#owner-tasks').data("selected_item");
-	
 	if (owner)
 		params += ("&owner=" + owner);
 	else if(owner == undefined)

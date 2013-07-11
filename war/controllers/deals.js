@@ -27,22 +27,18 @@ var DealsRouter = Backbone.Router.extend({
             	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
             		 $(".deal-close-time", el).timeago();
               	});
+ 				
+ 				// Shows Milestones Pie
+ 				pieMilestones();
+ 				
+ 				// Shows deals chart
+ 				pieDetails();
 
             }
         });
 
-        /* Fetches Milestones Pie-Chart and Details Graph */
-    	this.opportunityCollectionView.collection.fetch(
-        		{
-        			success:function(){ 
-        				
-        				// Shows Milestones Pie
-        				pieMilestones();
-        				
-        				// Shows deals chart
-        				pieDetails();
-        				}
-        		});
+    	this.opportunityCollectionView.collection.fetch();
+    	
         $('#content').html(this.opportunityCollectionView.render().el);
 
         $(".active").removeClass("active");

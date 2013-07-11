@@ -212,12 +212,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 			else if (Current_Route == 'deals') {
 				if (isUpdate)
 					 App_Deals.opportunityCollectionView.collection.remove(json);
-					
-				// Shows Milestones Pie
-				pieMilestones();
 				
-				// Shows deals chart
-				pieDetails();
 				App_Deals.opportunityCollectionView.collection.add(data);
 				App_Deals.opportunityCollectionView.render(true);
 
