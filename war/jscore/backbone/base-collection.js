@@ -363,8 +363,12 @@ var Base_Collection_View = Backbone.View
 				if($('table', this.el).hasClass('onlySorting'))
 					return;
 				
-				$('tr:last', this.model_list_element).prepend('<td><input class="tbody_check" type="checkbox"/></td>');
-				
+				// If select all is chosen then all the upcomming models with in table should have checked checkboxes
+				if(SELECT_ALL == true)
+					$('tr:last', this.model_list_element).prepend('<td><input class="tbody_check" type="checkbox" checked="checked"/></td>');
+				else
+					$('tr:last', this.model_list_element).prepend('<td><input class="tbody_check" type="checkbox"/></td>');
+					
                 // callback for newly added models
 				var appendItemCallback = this.options.appendItemCallback;
 				

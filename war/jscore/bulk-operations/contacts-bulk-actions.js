@@ -206,12 +206,18 @@ $(function(){
 		SELECT_ALL = true;
 		_BULK_CONTACTS = window.location.hash;
 		$('body').find('#bulk-select').css('display', 'block').html('Selected All ' + getAvailableContacts() + ' contacts. <a hrer="#" id="select-all-revert">Select chosen contacts only</a>');
+		
+		// On choosing select all option, all the visible checkboxes in the table should be checked
+		$.each($('.tbody_check'), function(index, element){
+			$(element).attr('checked', "checked");
+		})
 	})
 	
 	$("#select-all-revert").die().live('click', function(e){
 		e.preventDefault();
 		SELECT_ALL = false;
 		_BULK_CONTACTS = undefined;
+		
 		$('body').find('#bulk-select').css('display', 'block').html("Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a href='#'  id='select-all-available-contacts' >Select all " +getAvailableContacts()+ " contacts</a>");	
 	})
 });
