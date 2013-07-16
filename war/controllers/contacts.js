@@ -617,7 +617,7 @@ var ContactsRouter = Backbone.Router.extend({
             template: "send-email",
             postRenderCallback: function(el) {
             	if(id)
-            	$("#emailForm").find( 'input[name="to"]' ).val(id);
+            	$("#emailForm", el).find( 'input[name="to"]' ).val(id);
             	// Populate from address and templates
             	populate_send_email_details(el);
             	
