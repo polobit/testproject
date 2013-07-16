@@ -40,6 +40,11 @@ public class GMailGadgetServlet extends HttpServlet
 
 	NamespaceManager.set(domainUser.domain);
 
+	UserInfo userInfo = new UserInfo("agilecrm.com", domainUser.email,
+		domainUser.name);
+
+	SessionManager.set(userInfo);
+
 	// Get API Key
 	String apiKey = APIKey.getAPIKey().api_key;
 
