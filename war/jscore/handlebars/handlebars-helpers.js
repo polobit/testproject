@@ -313,7 +313,19 @@ $(function() {
 		}
 		return html;
 	});
-
+	
+	// To show milestones as columns an deals
+	Handlebars.registerHelper('deals_by_milestones', function(data) {
+		var html = "";
+		$.each(data, function(key, value) {
+			html += "<ul class='span3 milestones' milestone='"+ key +"' style='margin:0px 3px;text-align: center;display:inline-block;list-style:none;vertical-align: top;border-top:1px dotted;border-style:outset;'><b>" + key +"</b>";
+			for(var i in value){
+				html += "<li>" + getTemplate("opportunities-grid-view", value[i]) + "</li>";
+			}
+			html +=	"</ul>";
+		});
+		return html;
+	});
 	
 	/**
 	 * Helper function to return date string from epoch time
