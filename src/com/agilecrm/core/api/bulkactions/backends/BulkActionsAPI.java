@@ -107,7 +107,7 @@ public class BulkActionsAPI
 	    {
 		BulkActionUtil.enrollCampaign(filterId,
 			request.getParameterMap(),
-			ActionType.CHANGE_OWNER.getUrl(), contentType,
+			ActionType.ASIGN_WORKFLOW.getUrl(), contentType,
 			Method.POST);
 		return;
 	    }

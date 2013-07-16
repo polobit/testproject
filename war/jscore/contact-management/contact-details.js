@@ -109,17 +109,21 @@ $(function(){
 		
 		var tag = $(this).attr("tag");
 		removeItemFromTimeline($("#" + tag+ '-tag-timeline-element', $('#timeline')).parent('.inner'))
-		$(this).closest("li").remove();
+		console.log($(this).closest("li").parent('ul').append(LOADING_HTML));
+		
      	var json = App_Contacts.contactDetailView.model.toJSON();
      	
      	// Returns contact with deleted tag value
      	json = delete_contact_tag(json, tag);
-     	
+     	var that = this;
+     	$(this).unbind("click");
         var contact = new Backbone.Model();
         contact.url = 'core/api/contacts';
         contact.save(json,{
        		success: function(data)
        			{ 	      		
+       				$(that).closest("li").parent('ul').find('.loading').remove();
+       				$(that).closest("li").remove();
        				App_Contacts.contactDetailView.model.set({'tags' : data.get('tags')}, {silent : true}, {merge:false});
        				
        				// Also deletes from Tag class if no more contacts are found with this tag
