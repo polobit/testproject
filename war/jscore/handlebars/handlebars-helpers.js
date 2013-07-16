@@ -1208,12 +1208,19 @@ $(function() {
 	
 	Handlebars.registerHelper('if_overflow', function(content, div_height, options) {
 		
-		var element = $("<div id='test_flow' style='word-break:normal;word-wrap:break-word;display:none;position:absolute'>" 
+		if(!content)
+			return;
+		
+		console.log($('#Linkedin').width());
+		content =  content.trim();
+		var element = $("<div style='width:" + $('#Linkedin').width() + "px;" +
+				"word-break:normal;word-wrap:break-word;display:none;'>" 
 			+ content + "</div>");
 		
 		$("#content").append(element);
 				
-		if($('#test_flow').height() > parseInt(div_height))
+		console.log(element.height() + " "  + parseInt(div_height))
+		if(element.height() > parseInt(div_height))
 			   return options.fn(this);
 		return options.inverse(this);
 	});
