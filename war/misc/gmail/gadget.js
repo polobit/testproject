@@ -9,7 +9,7 @@ var LIB_PATH;
 function login() {
    
     var domain = gadgets.util.getUrlParameters()['parent'].match(/.+\/a\/(.+)\/html/)[1];
-    var url = 'https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/gmail?hd=dhirubhai';
+    var url = 'https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/gmail';
     console.log("Osapi from " + url);
    
      // Hit the server, passing in a signed request (and OpenSocial ID), to

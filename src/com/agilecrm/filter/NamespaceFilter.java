@@ -144,28 +144,28 @@ public class NamespaceFilter implements Filter
 	{
 		try
 		{
+
+			String owner_id = request.getParameter("opensocial_owner_id");
+			System.out.println("open id in namespace filter : " + owner_id);
+			// If Gadget Level API which does not understand redirect, we
+			// just set the namespace
+			if (!StringUtils.isEmpty(request.getParameter(GMailGadgetServlet.SESSION_KEY_NAME)))
+				return true;
+
+			if (owner_id != null)
+			{
+				return true;
+			}
+
 			// Using openid, we are not able to support wildcard realms
 			String appsDomain = request.getParameter("hd");
 			if (appsDomain != null)
 			{
 				String namespace = appsDomain.split("\\.")[0];
 				System.out.println("Setting Google Apps - Namespace " + appsDomain);
-
-				String owner_id = request.getParameter("opensocial_owner_id");
-				System.out.println("open id in namespace filter : " + owner_id);
-				// If Gadget Level API which does not understand redirect, we
-				// just set the namespace
-				if (!StringUtils.isEmpty(request.getParameter(GMailGadgetServlet.SESSION_KEY_NAME)))
-					return true;
-
-				if (owner_id != null)
-				{
-					return true;
-				}
-
 				String url = getFullUrl((HttpServletRequest) request);
 				System.out.println(url);
-				url = url.replace(Globals.GOOGLE_APPS_DOMAIN + ".", namespace + ".");
+				url = url.replace(Globals.GOOGLE_APPS_DOMAIN + ".", namespace + "");
 
 				HttpServletResponse httpResponse = (HttpServletResponse) response;
 				System.out.println("Redirecting it to " + url);
