@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+	<ModulePrefs title="AgileCRM" description="Built with Love for Small Businesses"
+		height="100" author="" author_email="" author_location="">
+
+		<!-- Declare feature dependencies. -->
+
+		<!-- This one is not specific to Gmail contextual gadgets. -->
+		<Require feature="dynamic-height" />
+
+		<!-- The next feature, google.contentmatch, is required for all Gmail contextual 
+			gadgets. <Param> - specify one or more comma-separated extractor IDs in a 
+			param named "extractors". This line is overridden by the extractor ID in 
+			the manifest, but is still expected to be present. -->
+		<Require feature="google.contentmatch">
+			<Param name="extractors">
+				google.com:SenderEmailExtractor,google.com:EmailAddressExtractor
+			</Param>
+		</Require>
+
+		<!-- Single Sign on -->
+		<Require feature="opensocial-0.9" /> 
+		<Require feature="osapi" />
+
+	</ModulePrefs>
+
+	<!-- Define the content type and display location. The settings "html" and 
+		"card" are required for all Gmail contextual gadgets. -->
+	<Content type="html" view="card">
+    <![CDATA[
+      
+    <link rel="stylesheet" type="text/css" href="https://googleapps.agilecrm.com/css/bootstrap-red.min.css" />
+    <style>
+		.error{color:red;}
+		body{font-size:12px;}
+		h1{font-size:20px;line-height:25px;}
+		input{height:28px;}
+    </style>
+    <br/>
+	<div id="content">
+    	<img id='loading' class="loading" style="padding-right:5px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
+    </div>
+   	
+	<script src='https://googleapps.agilecrm.com/lib/headjs-min.js'></script>
+	<script src='https://agile-gmail-gadget.appspot.com/js/gadget.js'></script>
+   	
+   	<script type="text/javascript">
+		init_agile_gadget();   
+	</script>
+   	
+	<script id="gadget-template" type="text/html">
+	
+	{{#if id}}
+		<div class="span9 well gadget_contact_details_tab" >
+	  		<div class="row gadget_contact" style='margin-bottom: 5px;'> 
+	    		<div class="span1">
+					<div style='display:inline;padding-right:10px;height:auto;'>
+						<img  class='thumbnail' src="{{defaultGravatarurl properties 50}}" width="50" height="50" style='display:inline'/>
+					</div>
+	    		</div>
+	    		<div class="span3" style='height:auto;display:inline-block;vertical-align:-23px;'>
+					<b>
+						<h1>{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</h1>
+					</b></br>
+					{{#if_propertyName "email"}}
+						{{value}}</br>
+					{{/if_propertyName}}
+			
+					{{#if_propertyName "title"}}
+						{{value}}
+					{{/if_propertyName}}
+			
+					{{#if_propertyName "company"}}
+						{{value}}
+					{{/if_propertyName}}
+				</div>		
+			     	
+			    <div class="span2">
+					<ul style='list-style:none;color:blue;'>
+			      		<li><a class="gadget-add-note" href="#">Add Note</a></li>
+			      		<li><a class="gadget-add-task" href="#">Add Task</a></li>
+			      		<li><a class="gadget-add-deal" href="#">Add Deal</a></li>
+			    	</ul>
+	    		</div>
+	   		</div>
+	
+	    	<div class="show_form" class="span9">
+				<div class="gadget-note" style="display:none;">
+					<form class='gadget_note_form' name="gadget_note_form" method="post">
+						<fieldset>
+	                    	<legend><b>Add Note</b></legend>
+	                    	<input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
+							<div class="control-group">
+	                    		<label class="control-label"><b>Subject: </b><span class="field_req">*</span></label>
+								<div class="controls">
+									<input type="text" placeholder="About" name="subject" id="subject" class="required"/>
+								</div>
+							</div>
+							<div class="control-group">
+	                    		<label class="control-label"><b>Description:</b><span class="field_req">*</span></label>
+								<div class="controls">
+									<textarea rows="3" placeholder="Detailed Note" name="description" id="description" class="required"></textarea> 
+								</div>
+							</div>
+	                    	<div>
+								<a type="submit" class="btn btn-primary gadget-note-validate">Add Note</a>
+								<a class="cancel btn">Cancel</a>
+								<span class="status" style="display:none;"><i>Successfully Saved</i></span> 
+	                  		</div>
+						</fieldset>
+					</form>
+			 	</div>
+	
+	  	   		<div class="gadget-task" style="display:none;">
+	           		<form class='gadget_task_form' name="gadget_task_form" method="post">
+						<fieldset>
+	                    	<legend><b>Add Task</b></legend>
+	                        <input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
+							<div class="row">
+								<div id="addTask" class="span3 control-group">
+									<label for="subject" class="control-label"> <b>Task:</b> <span class="field_req">*</span></label>
+									<div class="controls"><span class="input "><input id="subject" type="text" placeholder="Task name"
+								  		  name="subject" size="40" class="required"> </span>
+								  	</div>
+								</div>
+								<div id="taskCategory" class="span2 control-group">					
+									<label for="type" class="control-label"><b> Category: </b><span class="field_req">*</span></label>
+									<div class="controls">
+										<span class="input">
+										<select name="type" id="type" size="1" class="input-small required">
+											<option value="">Select</option>
+											<option value="CALL">Call</option>
+											<option value="EMAIL">Email</option>
+											<option value="FOLLOW_UP">Follow-up</option>
+											<option value="MEETING">Meeting</option>
+											<option value="MILESTONE">Milestone</option>
+											<option value="SEND">Send</option>
+											<option value="TWEET">Tweet</option>
+										</select> </span>
+									</div>
+								</div>
+						  	</div>
+						    <div class="row">
+						    	<div class="span3 control-group">
+									<label for="due" class="control-label"><b>Date (Due): </b><span class="field_req">*</span></label>
+									<div class="controls">
+										<input type="text" name="due" placeholder="MM-DD-YYYY" id="task-date-1" class="required">
+									</div>
+								</div>
+								<div class="span2 control-group" >
+									<label for="priority_type" class="control-label"><b>Priority: </b></label>
+									<div class="controls"> 
+										<span class="input ">
+											<select	name="priority_type" id="priority_type" size="1" class="input-small">
+												<option value="HIGH">High</option>
+												<option value="NORMAL" selected="selected">Normal</option>
+												<option value="LOW">Low</option>
+											</select> 
+										</span>
+									</div>
+								</div>
+							</div> 
+	                        <div>
+								<a type="submit" class="btn btn-primary gadget-task-validate">Add Task</a>
+								<a class="cancel btn">Cancel</a>
+								<span class="status" style="display:none;"><i>Successfully Saved</i></span>
+	                        </div>
+						</fieldset>				
+					</form>	
+	        	</div>
+	
+	  	   		<div class="gadget-deal" style="display:none;">
+					<form class="gadget_deal_form" name="gadget_deal_form" method="post">
+			  			<fieldset>
+	                    	<legend><b>Add Deal</b></legend>
+	                    	<input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
+							<div class="control-group">			
+								<label class="control-label"><b>Name: </b> <span class="field_req">*</span></label>
+								<div class="controls">
+									<input id="name" name="name" type="text" class=" required" placeholder="Name of deal"/>
+					  			</div>
+							</div>
+	                   		<div class="row">
+						  		<div class="span3 control-group">
+	               					<label class="control-label"><b>Value: </b> <span class="field_req">*</span></label>
+	                				<div class="controls"> 
+										<input type="text" name="expected_value" class="input-small required  digits" placeholder="Value of deal"/>
+									</div>
+						  		</div>
+						  		<div class="span2 control-group">				
+									<label class="control-label"><b>Milestone: </b> <span class="field_req">*</span></label>
+									<div class="controls">
+										<select id="milestone" name="milestone" class="input-small required" 
+												Style="width:100px">
+											<option value="">Select</option>
+			                                <option value="Open">Open</option>
+											<option value="Won">Won</option>
+			                                <option value="Stage 1">Stage 1</option>
+			                                <option value="Lost">Lost</option>
+										</select>	
+						  			</div>
+						 		</div>
+	                    	</div>
+	                    	<div class="row">
+						  		<div class=" span3 control-group">	
+									<label class="control-label"><b>Probability (%): </b> <span class="field_req">*</span></label>
+									<div class="controls">
+										<input type="text" id="probability" name="probability" class="input-small required digits" max="100" placeholder="Probability %"/>				
+						  			</div>
+								</div>
+								<div class=" span2 control-group">
+									<label class="control-label"><b>Close Date: </b> <span class="field_req">*</span></label>
+									<div class="controls">
+										<input id="close_date" type="text" name="close_date" class="input required" placeholder="MM/DD/YY"/>				
+									</div>
+								</div>
+	                    	</div>
+		                    <div>
+		                        <a type="submit" class="btn btn-primary gadget-deal-validate">Add Deal</a> 
+					            <a class="cancel btn" >Cancel</a>
+		                        <span class="status" style="display:none;"><i>Successfully Saved</i></span>
+							</div>
+			  			</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+	{{else}}
+		<div class="span9 well gadget_contact_details_tab">
+	    	<div class="show_form">
+		        <div class="gadget-no-contact">
+				  No Contact Found. <a href="#" class="gadget-add-contact">Add Contact</a> with {{email}}.
+		        </div>
+	        	<div class="gadget-contact" style="display:none;">
+					<form class='gadget_contact_form' name="gadget_contact_form" method="post">
+				  		<fieldset>
+		                <legend><b>Add Contact To Agile CRM</b></legend>
+						<div class="control-group" style="margin-top:0px;">
+		                	<label class="control-label"><b>Name:</b> <span class="field_req">*</span></label>
+						  	<div class="row">
+								<span class="controls  span3">
+							   		<input name="first_name" type="text" class="required" id="fname" placeholder="First name" />
+								</span>
+						    	<span class="controls span2">
+							    	<input name="last_name" class="required" type="text"	id="lname" placeholder="Last name" />
+								</span>
+						  	</div>
+					    </div>
+					    
+						<div class="row">
+	                  		<div class="span3 control-group">
+	                   		<label class="control-label"><b>Email:</b> </label>
+							<div class="controls">
+								 <span><input name="email" type="text" id="email" placeholder="Email" value = "{{email}}"/></span>
+							</div>
+					  	</div>
+	                  	<div class="span2 control-group">
+		                   	<label class="control-label"><b>Tags:</b> </label>
+							<div class="controls">
+								 <span><input name="tags" type="text" id="tags" placeholder="Tags"/></span>
+							</div>
+					    </div>
+		                <div class="row">
+							<div class="control-group span3">
+			                   	<label class="control-label"><b>Company:</b></label>
+								<div class="controls">
+									<input name="company" type="text" id="contact_company" placeholder="Company" />
+								</div>
+						  	</div>
+						  	<div class="control-group span6">
+		                   		<label class="control-label"><b>Job Description:</b></label>
+								<div class="controls">
+									<input name="title" type="text" id="job_title" placeholder="Job title" />
+								</div>
+						  	</div>
+		                </div>
+		                <div>
+							<a type="submit" class="btn btn-primary gadget-contact-validate">Add Contact</a>
+							<a class="cancel btn">Cancel</a>
+							<span class="status" style="display:none;"><i>Successfully Saved</i></span>
+		               	</div>
+						</fieldset>
+		  			</form>
+				</div>
+			</div>
+		</div>
+	{{/if}}
+	</script>
+	
+	<div id="output" style="margin:0 0 5px 5px;"></div>
+	]]>
+	</Content>
+</Module>
