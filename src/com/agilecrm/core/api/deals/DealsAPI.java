@@ -62,7 +62,7 @@ public class DealsAPI
      */
     @Path("{opportunity-id}")
     @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON })
     public Opportunity getOpportunity(@PathParam("opportunity-id") Long id)
     {
 	Opportunity opportunity = OpportunityUtil.getOpportunity(id);
@@ -76,10 +76,11 @@ public class DealsAPI
      * @param id
      *            - Opportunity Id to be fetched.
      * @return Opportunity object.
+     * @throws JSONException
      */
     @Path("/byMilestone")
     @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON })
     public JSONObject getOpportunitiesByMilestone()
     {
 	JSONObject opportunity = OpportunityUtil.getDealsByMilestone();

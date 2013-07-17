@@ -6,6 +6,8 @@ import java.util.List;
 
 import net.sf.json.JSONObject;
 
+import org.codehaus.jackson.map.ObjectMapper;
+
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
@@ -70,25 +72,45 @@ public class OpportunityUtil
     /**
      * Gets list of all opportunities by milestones.
      * 
-     * @return DealsByMilestones JSONObjects with respect to given milestones.
+     * @return DealsByMilestones JSONObjects with respect to given
+     *         milestonesJSONObject
+     * @throws JSONException
      */
     public static JSONObject getDealsByMilestone()
     {
-	// Milestones object
 	JSONObject milestonesObject = new JSONObject();
 
 	// Array of milestones
 	Opportunity.MILESTONES = MilestoneUtil.getMilestones().milestones.split(",");
-
+	ObjectMapper mapper = new ObjectMapper();
 	// Iterate through all possible milestones
 	for (String milestone : Opportunity.MILESTONES)
 	{
-	    List<Opportunity> dealslist = dao.ofy().query(Opportunity.class).filter("milestone = ", milestone.trim()).list();
-	    milestonesObject.put(milestone, dealslist);
-	}
+	    String json = "";
+	    List<Opportunity> dealslist = getDealsWithMilestone(milestone);
+	    try
+	    {
+		json = mapper.writeValueAsString(dealslist);
+		json = json.replace("null", "\"\"");
+		milestonesObject.put(milestone, json);
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
 
-	System.out.println(milestonesObject);
+	}
 	return milestonesObject;
+    }
+
+    /**
+     * Gets list of all opportunities with milestones.
+     * 
+     * @return DealsByMilestones List with respect to given milestone
+     */
+    public static List<Opportunity> getDealsWithMilestone(String milestone)
+    {
+	return dao.ofy().query(Opportunity.class).filter("milestone = ", milestone.trim()).list();
     }
 
     /**
@@ -293,5 +315,4 @@ public class OpportunityUtil
 	return dao.ofy().query(Opportunity.class).filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
 		.order("close_date").limit(Integer.parseInt(pageSize)).list();
     }
-
 }

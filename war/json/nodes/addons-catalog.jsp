@@ -10,7 +10,7 @@
 		    "json/nodes/email/ab.js", "json/nodes/email/clicked.js"};
     String[] UTILITIES_CATALOG = { "json/nodes/common/wait.js",
 		    "json/nodes/common/score.js", "json/nodes/common/tags.js",
-		    "json/nodes/common/transfer.js",
+		    "json/nodes/crm/transfer.jsp",
 		    "json/nodes/social/tweet.js" };
     /* String[] MOBILE_CATALOG = { "json/nodes/sms/sendmessage.js",
 		    "json/nodes/sms/getmessage.js", "json/nodes/sms/menusms.js" };  */
