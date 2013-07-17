@@ -165,7 +165,7 @@ public class NamespaceFilter implements Filter
 				System.out.println("Setting Google Apps - Namespace " + appsDomain);
 				String url = getFullUrl((HttpServletRequest) request);
 				System.out.println(url);
-				url = url.replace(Globals.GOOGLE_APPS_DOMAIN + ".", namespace + "");
+				url = url.replace(Globals.GOOGLE_APPS_DOMAIN + ".", namespace + ".");
 
 				HttpServletResponse httpResponse = (HttpServletResponse) response;
 				System.out.println("Redirecting it to " + url);
