@@ -9,7 +9,7 @@ var LIB_PATH;
 function login() {
    
     var domain = gadgets.util.getUrlParameters()['parent'].match(/.+\/a\/(.+)\/html/)[1];
-    var url = 'https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/gmail';
+    var url = 'https://googleapps.agilecrm.com/gmail?hd=' + domain;
     console.log("Osapi from " + url);
    
      // Hit the server, passing in a signed request (and OpenSocial ID), to
@@ -61,9 +61,9 @@ function login() {
        // The example below shows a regular expression for use with Gmail. For
 		// Calendar, use this regular
        // expression instead: /calendar\/hosted\/([^\/]+)/
-		// var domain = gadgets.util.getUrlParameters()['parent'].match(/.+\/a\/(.+)\/html/)[1];
+		var domain = gadgets.util.getUrlParameters()['parent'].match(/.+\/a\/(.+)\/html/)[1];
     	
-    	var url_root = data.content.popup;
+    	var url_root = data.content.popup + "&hd=" + domain;
         var textNode = document.createElement('p');
 		var text = document.createTextNode('Associate your account - one time setup');
         var inpbox = document.createElement('input');
@@ -97,7 +97,7 @@ function login() {
 			userDomain.focus();
 			userDomain.select();
 		} else {
-			url += '&hd=' + userDomain.value;
+			url += '&domain=' + userDomain.value;
 			userDomain.value = 'Enter your Domain';
 		
 			var popup = window.open(url, 'OpenID','height=400,width=400');
@@ -147,7 +147,7 @@ function init_agile_gadget()
 	else
 	{
 		gadgets.window.adjustHeight();
-		LIB_PATH = "https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/";
+		LIB_PATH = "https://googleapps.agilecrm.com/";
 		
 		// Login - this will call download scripts if everything is good
 		login();

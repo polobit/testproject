@@ -124,7 +124,7 @@ public class GMailGadgetServlet extends HttpServlet
 		req.getSession().setAttribute(LoginServlet.RETURN_PATH_SESSION_PARAM_NAME,
 				"/gmail?" + SESSION_KEY_NAME + "=" + oneTimeSessionKey + "&openid=done&hd=" + req.getParameter("hd"));
 
-		resp.sendRedirect("/openid" + "?hd=" + req.getParameter("hd"));
+		resp.sendRedirect("/openid" + "?hd=" + req.getParameter("hd") + "&domain=" + req.getParameter("domain"));
 	}
 
 	// Generate One Time session which will be used before openid authentication

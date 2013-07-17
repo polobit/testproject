@@ -158,7 +158,7 @@ public class NamespaceFilter implements Filter
 			}
 
 			// Using openid, we are not able to support wildcard realms
-			String appsDomain = request.getParameter("hd");
+			String appsDomain = request.getParameter("domain");
 			if (appsDomain != null)
 			{
 				String namespace = appsDomain.split("\\.")[0];
