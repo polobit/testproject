@@ -69,4 +69,38 @@ $(function(){
 		updateDeal(dealsView.collection.get(id));
 	});
 	
+	
+	//For Adding new case from contacts/cases
+	
+	$(".contact-add-case").die().live('click', function(e){
+		e.preventDefault();
+		var el = $("#casesForm");
+		
+		// Fills owner select element
+		populateUsers("owners-list", el, undefined, undefined, function(data){
+			
+			$("#casesForm").find("#owners-list").html(data);
+			$("#owners-list", $("#casesForm")).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
+			// Contacts type-ahead
+			agile_type_ahead("contacts-typeahead-input", el, contacts_typeahead);
+			
+			// Enable the datepicker
+			$('#close_date', el).datepicker({
+				format : 'mm/dd/yyyy',
+			});
+			
+        	var json = App_Contacts.contactDetailView.model.toJSON();
+        	var contact_name = getPropertyValue(json.properties, "first_name")+ " " + getPropertyValue(json.properties, "last_name");
+        	$('.tags',el).append('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ json.id +'">'+contact_name+'</li>');
+			
+			$("#casesModal").modal('show');
+		});
+	});
+	
+	// For updating a case from contact-details
+	$(".cases-edit-contact-tab").die().live('click', function(e){
+		e.preventDefault();
+		var id = $(this).attr('data');
+		updatecases(dealsView.collection.get(id));
+	});
 });

@@ -26,6 +26,48 @@ function getAdminSettings(callback){
 	});
 }
 
+//function to save settings of navbar, 
+function saveSettings(event)
+{
+	var saveUrl='/core/api/navbarsets';
+	var json=serializeForm('navmodsSelect');
+	var succ_txt='<div style="display:inline-block"><small><p class="text-success"><i>Saved Successfully</i></p></small></div>';
+	var fail_txt='<div style="display:inline-block"><small><p class="text-success"><i>Save Failed</i></p></small></div>';
+	
+	$.ajax({
+	type		:'POST',
+	url 		:saveUrl,
+	contentType	:'application/json',
+	dataType	:'json',
+	data		:JSON.stringify(json),
+	success		:function(data,stat,jqXHR)
+				{
+					if(data.id)
+					{
+						$('#navmodsSelect #div-success').show().delay(3000).hide(1);
+						var res=data;
+						
+						if(data.input_cases==true)$('#casesmenu').show();
+						else $('#casesmenu').hide();
+						
+						if(data.input_calendar==true)$('#calendarmenu').show();
+						else $('#calendarmenu').hide();
+						
+						if(data.input_deals==true)$('#dealsmenu').show();
+						else $('#dealsmenu').hide();
+						
+						if(data.input_campaign==true)$('#workflowsmenu').show();
+						else $('#workflowsmenu').hide();
+					}
+					else $('#navmodsSelect #div-fail').show().delay(3000).hide(1);
+				},
+	error		:function(jqXHR, textStatus, errorThrown)
+				{
+					$('#navmodsSelect #div-fail').show().delay(3000).hide(1);
+				}
+	});
+}
+
 /**
  * Creates a backbone router to perform admin activities (account preferences,
  * users management, custom fields, milestones and etc..).
@@ -56,7 +98,36 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		"milestones" : "milestones",
 		
 		/* All Domain Users */
-		"all-domain-users" : "allDomainUsers"
+		"all-domain-users" : "allDomainUsers",
+		
+		//Navbar settings
+		"navmodules":"navbarSetting"
+	},
+	
+	/**
+		Show navbar modules selection & saving option
+	**/
+	navbarSetting : function()
+	{
+		$('#content').html(isAdmintemplate);
+		var view = new Base_Model_View({
+			url : '/core/api/navbarsets',
+			template : "admin-settings-navmodules"
+		});
+
+		//$('#content').html(view.render().el);
+        if(($('#content').find('#admin-prefs-tabs-content').html()) == null){
+        	console.log("nooooooooooooo ele accountPrefs");
+        	getAdminSettings(function(){
+        		App_Admin_Settings.navbarSetting();
+        	});
+        }
+		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
+		$('#content').find('#AdminPrefsTab .active').removeClass('active');
+		$('#content').find('.navmodules-tab').addClass('active');
+		
+		$('#navmodsSelect').on('click','.btn-primary',function(){ console.log('WRITING='); });
+		
 	},
 
 	/**
