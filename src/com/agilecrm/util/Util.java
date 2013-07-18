@@ -13,6 +13,9 @@ import java.util.TimeZone;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.memcache.MemcacheService;
@@ -128,11 +131,9 @@ public class Util
      * @param text
      * @return response of the remote object
      */
-    public static String sendMail(String fromEmail, String fromName, String to,
-	    String subject, String replyTo, String html, String text)
+    public static String sendMail(String fromEmail, String fromName, String to, String subject, String replyTo, String html, String text)
     {
-	return SendGridEmail.sendMail(fromEmail, fromName, to, subject,
-		replyTo, html, text, null, null);
+	return SendGridEmail.sendMail(fromEmail, fromName, to, subject, replyTo, html, text, null, null);
 
     }
 
@@ -239,19 +240,61 @@ public class Util
      *            - SubscriberId.
      * @return html string with appended image.
      **/
-    public static String appendTrackingImage(String html, String campaignId,
-	    String subscriberId)
+    public static String appendTrackingImage(String html, String campaignId, String subscriberId)
     {
 	String namespace = NamespaceManager.get();
 
 	if (StringUtils.isEmpty(campaignId))
 	    campaignId = "";
 
-	String trackingImage = "<div><img src=\"https://" + namespace
-		+ ".agilecrm.com/backend/open?n=" + namespace + "&c="
-		+ campaignId + "&s=" + subscriberId
-		+ "\" nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
+	String trackingImage = "<div class=\"ag-img\"><img src=\"https://" + namespace + ".agilecrm.com/backend/open?n=" + namespace + "&c=" + campaignId
+		+ "&s=" + subscriberId + "\" nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
 
 	return html + trackingImage;
     }
+
+    /**
+     * Parses html body of an email using jsoup.
+     * 
+     * @param emailBody
+     *            - email body
+     * @return String
+     */
+    public static String parseEmailData(String emailBody)
+    {
+	emailBody = emailBody.replace("&amp;amp;", "&").replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">").replace("&quot;", "\"")
+		.replace("&nbsp;", "").replace("\n", "<br>").replace("<br>", "<div></div>").replace("<br />", "<div></div>");
+
+	try
+	{
+	    if (emailBody != null && emailBody.length() > 0)
+	    {
+		Document doc = Jsoup.parse(emailBody);
+
+		// Remove agile tracking images, if exists
+		Elements divs = doc.select("div.ag-img");
+
+		if (!divs.isEmpty())
+		    divs.first().remove();
+
+		emailBody = doc.select("body").toString();
+	    }
+
+	    // Remove script tags.
+	    String[] htmltags = new String[] { "(?)(<script.*?|<SCRIPT.*?)(.+?)(</script>|</SCRIPT>)" };
+
+	    for (String str : htmltags)
+	    {
+		emailBody = emailBody.replaceAll(str, "");
+	    }
+
+	}
+	catch (Exception e)
+	{
+	    emailBody = "";
+	}
+
+	return emailBody;
+    }
+
 }

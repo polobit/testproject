@@ -791,8 +791,7 @@ $(function () {
 		// var htmlstring = $(this).closest('div.text').html();
 		// htmlstring = htmlstring.replace("icon-plus", "");
 
-		// Add pre tag to the string to consider white spaces
-		$("#mail-in-detail").html("<pre style='background:none;border:none;'>" + htmlstring + "</pre>");
+		$("#mail-in-detail").html("<div style='background:none;border:none;'>" + htmlstring + "</div>");
 		
 		$("#timelineMailModal").modal("show");
         

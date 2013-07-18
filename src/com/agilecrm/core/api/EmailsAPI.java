@@ -51,14 +51,12 @@ public class EmailsAPI
     @Path("send-email")
     @POST
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public void createEmail(@QueryParam("from") String fromEmail,
-	    @QueryParam("to") String to, @QueryParam("subject") String subject,
+    public void createEmail(@QueryParam("from") String fromEmail, @QueryParam("to") String to, @QueryParam("subject") String subject,
 	    @QueryParam("body") String body)
     {
 	try
 	{
-	    Util.sendMail(fromEmail, fromEmail, to, subject, fromEmail, body,
-		    null);
+	    Util.sendMail(fromEmail, fromEmail, to, subject, fromEmail, body, null);
 	}
 	catch (Exception e)
 	{
@@ -81,18 +79,15 @@ public class EmailsAPI
     @Path("contact/send-email")
     @POST
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public void sendEmail(@QueryParam("from") String fromEmail,
-	    @QueryParam("to") String to, @QueryParam("subject") String subject,
+    public void sendEmail(@QueryParam("from") String fromEmail, @QueryParam("to") String to, @QueryParam("subject") String subject,
 	    @QueryParam("body") String body)
     {
 	// Saves Contact Email.
-	ContactEmailUtil
-		.saveContactEmailBasedOnTo(fromEmail, to, subject, body);
+	ContactEmailUtil.saveContactEmailBasedOnTo(fromEmail, to, subject, body);
 
 	try
 	{
-	    Util.sendMail(fromEmail, fromEmail, to, subject, fromEmail, body,
-		    null);
+	    Util.sendMail(fromEmail, fromEmail, to, subject, fromEmail, body, null);
 	}
 	catch (Exception e)
 	{
@@ -116,16 +111,14 @@ public class EmailsAPI
     @Path("imap-email")
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
-    public String getEmails(@QueryParam("e") String searchEmail,
-	    @QueryParam("c") String count, @QueryParam("o") String offset)
+    public String getEmails(@QueryParam("e") String searchEmail, @QueryParam("c") String count, @QueryParam("o") String offset)
     {
 	String url = null;
 
 	String userName = "";
 
 	// Get Imap Prefs
-	IMAPEmailPrefs imapPrefs = IMAPEmailPrefsUtil.getIMAPPrefs(AgileUser
-		.getCurrentAgileUser());
+	IMAPEmailPrefs imapPrefs = IMAPEmailPrefsUtil.getIMAPPrefs(AgileUser.getCurrentAgileUser());
 	if (imapPrefs != null)
 	{
 	    userName = imapPrefs.user_name;
@@ -139,25 +132,14 @@ public class EmailsAPI
 	    password = URLEncoder.encode(password);
 	    port = URLEncoder.encode(port);
 
-	    url = "http://stats.agilecrm.com:8080/AgileCRMEmail/imap?user_name="
-		    + userName
-		    + "&search_email="
-		    + searchEmail
-		    + "&host="
-		    + host
-		    + "&port="
-		    + port
-		    + "&offset="
-		    + offset
-		    + "&count="
-		    + count + "&command=imap_email&password=" + password;
+	    url = "http://stats.agilecrm.com:8080/AgileCRMEmail/imap?user_name=" + userName + "&search_email=" + searchEmail + "&host=" + host + "&port="
+		    + port + "&offset=" + offset + "&count=" + count + "&command=imap_email&password=" + password;
 	}
 	else
 	{
 	    // Get Gmail Social Prefs
 	    Type socialPrefsTypeEnum = SocialPrefs.Type.GMAIL;
-	    SocialPrefs gmailPrefs = SocialPrefsUtil.getPrefs(
-		    AgileUser.getCurrentAgileUser(), socialPrefsTypeEnum);
+	    SocialPrefs gmailPrefs = SocialPrefsUtil.getPrefs(AgileUser.getCurrentAgileUser(), socialPrefsTypeEnum);
 
 	    if (gmailPrefs != null)
 	    {
@@ -180,61 +162,40 @@ public class EmailsAPI
 		oauth_key = URLEncoder.encode(oauth_key);
 		oauth_secret = URLEncoder.encode(oauth_secret);
 
-		url = "http://stats.agilecrm.com:8080/AgileCRMEmail/imap?command=oauth_email&user_name="
-			+ userName
-			+ "&search_email="
-			+ searchEmail
-			+ "&host="
-			+ host
-			+ "&port="
-			+ port
-			+ "&offset="
-			+ offset
-			+ "&count="
-			+ count
-			+ "&consumer_key="
-			+ consumerKey
-			+ "&consumer_secret="
-			+ consumerSecret
-			+ "&oauth_key="
-			+ oauth_key + "&oauth_secret=" + oauth_secret;
+		url = "http://stats.agilecrm.com:8080/AgileCRMEmail/imap?command=oauth_email&user_name=" + userName + "&search_email=" + searchEmail + "&host="
+			+ host + "&port=" + port + "&offset=" + offset + "&count=" + count + "&consumer_key=" + consumerKey + "&consumer_secret="
+			+ consumerSecret + "&oauth_key=" + oauth_key + "&oauth_secret=" + oauth_secret;
 	    }
 	}
 
+	System.out.println("IMAP Emails url is: " + url);
 	try
 	{
 	    // Initialize jsonResult as {"emails":[]}, as we get empty imap in
 	    // this format
-	    String jsonResult = new JSONObject().put("emails", new JSONArray())
-		    .toString();
+	    String jsonResult = new JSONObject().put("emails", new JSONArray()).toString();
 
 	    // Returns imap emails
 	    if (url != null)
 		jsonResult = HTTPUtil.accessURL(url);
 
 	    // Fetches contact emails
-	    List<ContactEmail> contactEmails = ContactEmailUtil
-		    .getContactEmails(ContactUtil
-			    .searchContactByEmail(searchEmail).id);
-
-	    // // If url is null and no contact emails, throw exception to
-	    // // configure email prefs
-	    // if (url == null && contactEmails.size() == 0)
-	    // {
-	    // throw new WebApplicationException(
-	    // Response.status(Response.Status.BAD_REQUEST)
-	    // .entity("You have not yet configured your email. Please click <a href='#email'>here</a> to get started.")
-	    // .build());
-	    // }
+	    List<ContactEmail> contactEmails = ContactEmailUtil.getContactEmails(ContactUtil.searchContactByEmail(searchEmail).id);
 
 	    JSONObject emails = new JSONObject(jsonResult);
+
+	    System.out.println("JSONResult in json is " + emails);
 
 	    JSONArray emailsArray = emails.getJSONArray("emails");
 
 	    for (int i = 0; i < emailsArray.length(); i++)
 	    {
-		emailsArray.getJSONObject(i).put("owner_email",
-			URLDecoder.decode(userName));
+		emailsArray.getJSONObject(i).put("owner_email", URLDecoder.decode(userName));
+
+		// Parse html body
+		String updatedMessage = Util.parseEmailData(emailsArray.getJSONObject(i).getString("message"));
+
+		emailsArray.getJSONObject(i).put("message", updatedMessage);
 	    }
 
 	    // Merge contact emails and imap emails.
@@ -252,6 +213,5 @@ public class EmailsAPI
 	    e.printStackTrace();
 	    return null;
 	}
-
     }
 }
