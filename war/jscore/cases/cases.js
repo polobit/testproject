@@ -260,9 +260,9 @@ function savecases(formId, modalId, saveBtn, json)
 					{						
 						App_Cases.casesCollectionView.collection.remove(json);
 						App_Cases.casesCollectionView.collection.add(data);
-						App_Cases.casesCollectionView.render(true);
 						//location.reload(true);
 					}
+					App_Cases.casesCollectionView.render(true);
 				}
 				else App_Calendar.navigate("cases",{trigger:true}); 
 		}
