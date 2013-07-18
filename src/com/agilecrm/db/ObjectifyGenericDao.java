@@ -16,8 +16,10 @@ import org.json.JSONArray;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.EmailTemplates;
+import com.agilecrm.account.NavSetting;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
+import com.agilecrm.cases.CaseData;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.Note;
@@ -118,6 +120,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	// Reports
 	ObjectifyService.register(ProfileStatus.class);
+	
+	ObjectifyService.register(CaseData.class);
+	ObjectifyService.register(NavSetting.class);
     }
 
     /**

@@ -10,6 +10,8 @@
 var notesView;
 var dealsView; 
 var tasksView;
+var casesView;
+
 $(function(){ 
 
 	var id;
@@ -118,6 +120,30 @@ $(function(){
         });
         dealsView.collection.fetch();
         $('#deals').html(dealsView.el);
+		
+	});
+
+	/**
+	 * Fetches all the cases related to the contact and shows the collection.
+	 */
+	$('#contactDetailsTab a[href="#cases"]').live('click', function (e){
+		e.preventDefault();
+		id = App_Contacts.contactDetailView.model.id;
+		dealsView = new Base_Collection_View({
+			url: 'core/api/contacts/'+ id + "/cases" ,
+            restKey: "cases",
+            templateKey: "cases-contact",
+            individual_tag_name: 'li',
+            sortKey:"created_time",
+            descending: true,
+            postRenderCallback: function(el) {
+            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+            		 $(".deal-created-time", el).timeago();
+            	})
+            }
+        });
+        dealsView.collection.fetch();
+        $('#cases').html(dealsView.el);
 		
 	});
 	

@@ -1,0 +1,49 @@
+<script id="admin-settings-navmodules-template" type="text/html">
+<!--  Contact View Detail in Detailed mode - when only one contact is shown -->
+<div class="span8 well">
+    <form id="navmodsSelect" class="form-horizontal">
+        <fieldset>
+            {{#if id}}
+			<input name="id" type="hidden" value="{{id}}" />
+			{{/if}}
+            <legend>Select modules to show in navbar ( the top of the page ).</legend>
+            <div class="row">
+				<div class="span5">
+                    <div class="control-group" style="margin-bottom:10px;">
+                        <label class="control-label" style="text-align: right;padding-right: 14px;">Calendar</label> 
+                        <div class="controls" style="margin-top: 5px;">
+                            <input name='input_calendar' type='checkbox' />
+                        </div>
+                    </div>
+                    <div class="control-group" style="margin-bottom:10px;">
+                        <label class="control-label" style="text-align: right;padding-right: 14px;">Cases</label> 
+                        <div class="controls" style="margin-top: 5px;">
+                            <input name='input_cases' type='checkbox' />
+                        </div>
+                    </div><div class="control-group" style="margin-bottom:10px;">
+                        <label class="control-label" style="text-align: right;padding-right: 14px;">Deals</label> 
+                        <div class="controls" style="margin-top: 5px;">
+                            <input name='input_deals' type='checkbox' />
+                        </div>
+                    </div><div class="control-group" style="margin-bottom:10px;">
+                        <label class="control-label" style="text-align: right;padding-right: 14px;">Campaigns</label> 
+                        <div class="controls" style="margin-top: 5px;">
+                            <input name='input_campaign' type='checkbox' />
+                        </div>
+                    </div>
+				</div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="form-actions">
+                <a type="submit" class="btn btn-primary" onclick="saveSettings();">Save Changes</a>
+					<p style='display:inline-block;'>
+						<i><small>
+							<span id='div-success' style='display:none;'>Saved Successfully</span>
+							<span id='div-fail' style='display:none; color:#B94A48; font-size:14px'>Save Failed</span>
+						</small></i>
+					</p>
+			 </div>
+        </fieldset>
+    </form>
+</div>
+</script>
