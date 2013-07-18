@@ -34,7 +34,6 @@
                             <th>Title</th>
                             <th>Owner</th>
                             <th>Status</th>
-                            <th>Close Date</th>
                             <th>Contacts</th>
                         </tr>
                     </thead>
@@ -56,7 +55,7 @@
                 </h3>
                 <br />
                 <p>
-                    A case is a.
+                    You can use cases to track and resolve customer issues. You can create a case when customers/prospects ask questions, report bugs or complain about your service. You can relate a case to contacts, assign an owner to it, and keep track of it
                 </p>
             </div>
         </div>
@@ -85,14 +84,11 @@
 	</div>
 </td>
 <td>
-	<div style="width:6em;">
-		{{epochToHumanDate "mm-dd-yy" close_date}}
-	</div>
-</td>
-<td>
-	<div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:83px;overflow:hidden;display:inline-block;">
+	<div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:157px;overflow:hidden;display:inline-block;">
         	{{#each contacts}}
-          	 	<img src="{{gravatarurl properties 50}}" width="40px" height="40px" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
+			<div style="display:inline-block;">
+          	 	<img class='thumbnail' src="{{gravatarurl properties 50}}" width="40px" height="40px" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
+			</div>
 			{{/each}}
 	</div>
        {{#if_greater this.contacts.length "3"}}<span>...</span>{{/if_greater}}
@@ -116,21 +112,22 @@
 					<div class="control-group span5">
 						<label class="control-label"><b>Title </b><span
 							class="field_req">*</span></label>
-						<div class="controls">
-							<span><input id="title" name="title" type="text"
+						<div class="controls" style="margin-right:10px;">
+							<span><input id="title" name="title" type="text" width='100%' 
 								class=" required" placeholder="Title of the Case" /></span>
 						</div>
 					</div>
-					<div class="control-group span5" style="margin-left: 30px;">
+					
+				</div>
+				<div class="row-fluid">
+					<div class="control-group span5">
 						<label class="control-label"><b>Owner </b><span
 							class="field_req">*</span></label>
 						<div class="controls" id="owners">
 							<select id="owners-list" class="required" name="owner_id"></select>
 						</div>
 					</div>
-				</div>
-				<div class="row-fluid">
-					<div class="control-group span5">
+					<div class="control-group span5" style="margin-left: 30px;">
 						<label class="control-label"><b>Status </b><span class="field_req">*</span></label>
 						<div class="controls" id='status'>
 							<span>
@@ -139,14 +136,6 @@
 									<option value='CLOSE'>Closed</option>
 								</select>
 							</span>
-						</div>
-					</div>
-					
-					<div class="control-group span5" style="margin-left: 30px;">
-						<label class="control-label"><b>Close Date </b><span class="field_req">*</span></label>
-						<div class="controls">
-							<span><input id="close_date" type="text" name="close_date"
-								class="input required date" placeholder="MM/DD/YY" /></span>
 						</div>
 					</div>
 				</div>
@@ -201,16 +190,18 @@
 								class=" required" placeholder="Title of the Case" /></span>
 						</div>
 					</div>
-					<div class="control-group span5" style="margin-left: 30px;">
+					
+				</div>
+				<div class="row-fluid">
+					<div class="control-group span5">
 						<label class="control-label"><b>Owner </b><span
 							class="field_req">*</span></label>
 						<div class="controls" id="owners">
 							<select id="owners-list" class="required" name="owner_id"></select>
 						</div>
 					</div>
-				</div>
-				<div class="row-fluid">
-					<div class="control-group span5">
+					
+					<div class="control-group span5"  style="margin-left: 30px;">
 						<label class="control-label"><b>Status </b><span class="field_req">*</span></label>
 						<div class="controls" id='status'>
 							<span>
@@ -219,14 +210,6 @@
 									<option value='CLOSE'>Closed</option>
 								</select>
 							</span>
-						</div>
-					</div>
-					
-					<div class="control-group span5" style="margin-left: 30px;">
-						<label class="control-label"><b>Close Date </b><span class="field_req">*</span></label>
-						<div class="controls">
-							<span><input id="close_date" type="text" name="close_date"
-								class="input required date" placeholder="MM/DD/YY" /></span>
 						</div>
 					</div>
 				</div>

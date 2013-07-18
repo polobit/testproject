@@ -44,7 +44,7 @@ public class CaseData
 	List<String> related_contacts_id = new ArrayList<String>();
 	private List<Key<Contact>> relatedContactsKey = new ArrayList<Key<Contact>>();
 
-	public Long close_date;
+	//public Long close_date;
 
 	public String status;
 
@@ -57,7 +57,7 @@ public class CaseData
 		String str = title + "," + description + "\n" + owner_id + "\n";
 		for (String s : related_contacts_id)
 			str += "\n\t" + s;
-		str += "\n" + close_date.toString() + "," + status;
+		str += "\n" + "," + status;
 
 		return str;
 	}
