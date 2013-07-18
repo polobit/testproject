@@ -18,6 +18,15 @@
 		<servlet-name>Scribe</servlet-name>
 		<url-pattern>/scribe</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>GoogleServlet</servlet-name>
+		<servlet-class>com.agilecrm.plugin.oauth.GoogleServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GoogleServlet</servlet-name>
+		<url-pattern>/backend/googleservlet</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>GmailContextualGadget</servlet-name>

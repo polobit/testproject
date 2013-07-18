@@ -7,6 +7,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * <code>HTTPUtil</code> is a utility class used to access data from remote
  * objects by connecting to those based on url
@@ -163,11 +165,15 @@ public class HTTPUtil
 
 	System.out.println(username);
 	System.out.println(password);
-	String userPass = Base64Encoder.encode(
-		(username + ":" + password).getBytes()).replace("\n", "");
 
-	// Authorization with CRM API
-	connection.setRequestProperty("Authorization", "Basic " + userPass);
+	if (!StringUtils.isBlank(username) && !StringUtils.isBlank(password))
+	{
+	    String userPass = Base64Encoder.encode(
+		    (username + ":" + password).getBytes()).replace("\n", "");
+
+	    // Authorization with CRM API
+	    connection.setRequestProperty("Authorization", "Basic " + userPass);
+	}
 
 	connection.setDoOutput(true);
 

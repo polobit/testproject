@@ -31,6 +31,10 @@ public class Globals
     public static final String GMAIL_API_KEY = "anonymous";
     public static final String GMAIL_SECRET_KEY = "anonymous";
 
+    // GMAIL
+    public static final String GOOGLE_CLIENT_ID = "535619830546.apps.googleusercontent.com";// "391091478365.apps.googleusercontent.com";
+    public static final String GOOGLE_SECRET_KEY = "obKsz9sdEc8nk2eHz8Tguuk8";// "21kj3QAnEAkCJs6fmrcDghAI";
+
     // LINKED IN
     public static final String LINKED_IN_API_KEY = "kuft8xqzrnfi";// "zh4a4mmt5o9i";
     public static final String LINKED_IN_SECRET_KEY = "BPN9L6QQvWwum7kn";// "ZbgecRN4QI4HhAz4";
