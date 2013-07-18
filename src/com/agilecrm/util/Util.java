@@ -262,8 +262,7 @@ public class Util
      */
     public static String parseEmailData(String emailBody)
     {
-	emailBody = emailBody.replace("&amp;amp;", "&").replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">").replace("&quot;", "\"")
-		.replace("&nbsp;", "").replace("\n", "<br>").replace("<br>", "<div></div>").replace("<br />", "<div></div>");
+	emailBody = emailBody.replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">").replace("&quot;", "\"").replace("&nbsp;", "");
 
 	try
 	{
