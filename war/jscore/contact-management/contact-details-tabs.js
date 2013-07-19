@@ -314,10 +314,13 @@ $(function(){
 		// To remove previous errors
 		$('#emailForm').find('.error').removeClass('error');
 		$('#emailForm').find('.help-inline').css('display','none');
+
+		// Removes previous body content
+		$("#emailForm").find( 'textarea[name="body"]' ).parent().find('iframe.wysihtml5-sandbox').contents().find('body').text("");
 		
 		var model_id = $('.emailSelect option:selected').attr('value');
 	
-		 // When default option selected make subject and body empty
+		// When default option selected make subject and body empty
 		if(!model_id)
 			{
 			// Fill subject and body of send email form
@@ -361,6 +364,8 @@ $(function(){
 				// Fill subject and body of send email form
 				$("#emailForm").find( 'input[name="subject"]' ).val(subject);
 				//var value = $("#emailForm").find( 'textarea[name="body"]' ).val(text);
+				//$("#emailForm").find( 'textarea[name="body"]' ).val("");
+				
 				
 				//Fill html editor with template body
 				var wysihtml5 = $('#body').data('wysihtml5');
