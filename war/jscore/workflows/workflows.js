@@ -145,7 +145,7 @@ $(function(){
 		
 		// Plays video on modal shown
 		$(workflow_help_modal).on("shown", function(){
-			$(this).children('div.modal-body').find('div#workflow-help-detail').html('<h3 style="margin-left:165px">Easy. Peasy.</h3><iframe width="420" height="345" src="https://www.youtube.com/embed/WF3-UmwLr6Y?enablejsapi=10&amp;autoplay=1" frameborder="0" allowfullscreen></iframe>');
+			$(this).children('div.modal-body').find('div#workflow-help-detail').html('<h3 style="margin-left:165px">Easy. Peasy.</h3><iframe width="420" height="345" src="//www.youtube.com/embed/P84welPSnFA?enablejsapi=10&amp;autoplay=1" frameborder="0" allowfullscreen></iframe>');
             //window.frames[1].postMessage('{"event":"command","func":"playVideo","args":""}', '*');
 		});
 		

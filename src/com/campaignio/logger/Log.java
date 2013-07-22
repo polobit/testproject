@@ -89,7 +89,7 @@ public class Log
      */
     public enum LogType
     {
-	EMAIL_SENT, EMAIL_OPENED, EMAIL_CLICKED, WAIT, CLICKED, AB, URL_VISITED, TWEET, ADD_NOTE, TAGS, CHECK_TAGS, CONDITION, JSONIO, SCORE, ADD_TASK, GENDER, EMAIL_SLEEP
+	EMAIL_SENT, EMAIL_OPENED, EMAIL_CLICKED, WAIT, CLICKED, AB, URL_VISITED, TWEET, ADD_NOTE, TAGS, CHECK_TAGS, CONDITION, JSONIO, SCORE, ADD_TASK, TRANSFER, GENDER, EMAIL_SLEEP
     };
 
     /**
@@ -111,8 +111,7 @@ public class Log
     {
 	if (subscriber_id != null)
 	{
-	    Contact contact = ContactUtil.getContact(Long
-		    .parseLong(subscriber_id));
+	    Contact contact = ContactUtil.getContact(Long.parseLong(subscriber_id));
 
 	    if (contact != null)
 		return contact;

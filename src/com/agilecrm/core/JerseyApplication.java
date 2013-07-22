@@ -48,7 +48,8 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.bulkactions.backends.BulkOperationsAPI.class);
 	s.add(com.agilecrm.core.api.EmailsAPI.class);
 	s.add(com.agilecrm.core.api.StatsAPI.class);
-
+	s.add(com.agilecrm.core.api.cases.CasesAPI.class);
+	s.add(com.agilecrm.core.api.prefs.NavbarSettingAPI.class);
 	return s;
     }
 }

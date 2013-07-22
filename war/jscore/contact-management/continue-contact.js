@@ -127,9 +127,11 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     	// Stores company's continue editing form template key
     	template = 'continue-company';
 
+
     	// Creates properties of contact (company)
-    	if (isValidField('name')) properties.push(property_JSON('name', 'name'));
-    
+    	if (isValidField('company_name'))
+    		properties.push(property_JSON('name', 'company_name'));
+    	
     	if (isValidField('url')) properties.push(property_JSON('url', 'url'));
     
     	var type = $('#' + form_id + ' input[name=type]').val();
@@ -274,7 +276,6 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
             } 
         	else if(is_person) {
         
-        		
         		if(App_Contacts.contactDetailView)
         		{
         			App_Contacts.contactDetailView.model = data
@@ -284,7 +285,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
             	 * If contactsListView is defined, it is getting the contact from there not the updated one.
             	 * Delete the old one and add the updated one to the listView. 
             	 */
-        		else if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection.get(data.id) != null) {
+        		if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection.get(data.id) != null) {
 
             		App_Contacts.contactsListView.collection.remove(obj);
             	
@@ -292,16 +293,17 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
             	}
             	
             	// If contact list is under a selected custom view, then add changed contact to that list
-        		else if(App_Contacts.contact_custom_view && App_Contacts.contact_custom_view.collection.get(id) != null)
+        		if(App_Contacts.contact_custom_view && App_Contacts.contact_custom_view.collection.get(id) != null)
         		{
         			App_Contacts.contact_custom_view.collection.remove(obj);
 
         			App_Contacts.contact_custom_view.collection.add(data);
         		}
         		
-        		else if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection)
+        		if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection)
         		{
         			App_Contacts.contactsListView.collection.add(data);
+        			console.log(App_Contacts.contactsListView.collection.length);
         		}
             	
             	App_Contacts.navigate("contact/" + data.id, {

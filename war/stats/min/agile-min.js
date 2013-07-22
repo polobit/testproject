@@ -2,14 +2,20 @@
 //Enables Dummy Console Logging (IE does not have one)
 function agile_enable_console_logging() {
    // Added debug dummy function 
-    var debugging = true; // or true
+    var debugging = false; // or true
     if (typeof console === "undefined" || !debugging) {
         console = {
-            log: function () {}
+            log: function () {},
+        	error: function(){}
         };
     }
     if (typeof(console.log) === "undefined" || !debugging) {
         console.log = function () {
+            return 0;
+        };
+    }
+    if (typeof(console.error) === "undefined" || !debugging) {
+        console.error = function () {
             return 0;
         };
     }
@@ -251,6 +257,9 @@ function agile_getContact(email, callback)
 {
 	
 	 var params = "email={0}".format(encodeURIComponent(email));
+	 console.log(agile_id);
+	 console.log(agile_id.getURL());
+	 console.log(agile_id.get());
 	 // Get
 	 var agile_url = agile_id.getURL() + "/contact/email?callback=?&id=" + agile_id.get() + "&" + params ;
 	
@@ -271,8 +280,8 @@ function agile_addNote(email, data)
 	var params = "email={0}&note={1}".format(encodeURIComponent(email.email), encodeURIComponent(JSON.stringify(data)));
 	
 	 // Get
-	 var agile_url = agile_id.getURL() + "/js/note?callback=?&id=" + agile_id.get() + "&" + params ;
-	 
+	 var agile_url = agile_id.getURL() + "/note?callback=?&id=" + agile_id.get() + "&" + params ;
+	 console.log(agile_url);
 	 agile_getJSONP(agile_url, function(data){
 	 	    var success = data.flag === 'successful';
 	 	    if(success) {
@@ -485,11 +494,15 @@ var agile_id =
 	{
 		set: function(id, namespace)
 		{
+			
 			this.id = id;
 			this.namespace = namespace;
+			console.log(id);
+			console.log(namespace);
 		},
 		get: function()
 		{
+			console.log("get id" + this.id);
 			return this.id;
 		},
 		getURL: function()
@@ -542,6 +555,9 @@ var _agile =
 	subtract_score : function(email, score)
 	{
 		agile_subtractScore(email, score);
+	},
+	add_note : function(email, data, callback) {
+		agile_addNote(email, data, callback);
 	}
 };
 

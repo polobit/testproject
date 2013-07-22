@@ -10,6 +10,8 @@
 var notesView;
 var dealsView; 
 var tasksView;
+var casesView;
+
 $(function(){ 
 
 	var id;
@@ -118,6 +120,30 @@ $(function(){
         });
         dealsView.collection.fetch();
         $('#deals').html(dealsView.el);
+		
+	});
+
+	/**
+	 * Fetches all the cases related to the contact and shows the collection.
+	 */
+	$('#contactDetailsTab a[href="#cases"]').live('click', function (e){
+		e.preventDefault();
+		id = App_Contacts.contactDetailView.model.id;
+		dealsView = new Base_Collection_View({
+			url: 'core/api/contacts/'+ id + "/cases" ,
+            restKey: "cases",
+            templateKey: "cases-contact",
+            individual_tag_name: 'li',
+            sortKey:"created_time",
+            descending: true,
+            postRenderCallback: function(el) {
+            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+            		 $(".deal-created-time", el).timeago();
+            	})
+            }
+        });
+        dealsView.collection.fetch();
+        $('#cases').html(dealsView.el);
 		
 	});
 	
@@ -288,10 +314,13 @@ $(function(){
 		// To remove previous errors
 		$('#emailForm').find('.error').removeClass('error');
 		$('#emailForm').find('.help-inline').css('display','none');
+
+		// Removes previous body content
+		$("#emailForm").find( 'textarea[name="body"]' ).parent().find('iframe.wysihtml5-sandbox').contents().find('body').text("");
 		
 		var model_id = $('.emailSelect option:selected').attr('value');
 	
-		 // When default option selected make subject and body empty
+		// When default option selected make subject and body empty
 		if(!model_id)
 			{
 			// Fill subject and body of send email form
@@ -335,6 +364,8 @@ $(function(){
 				// Fill subject and body of send email form
 				$("#emailForm").find( 'input[name="subject"]' ).val(subject);
 				//var value = $("#emailForm").find( 'textarea[name="body"]' ).val(text);
+				//$("#emailForm").find( 'textarea[name="body"]' ).val("");
+				
 				
 				//Fill html editor with template body
 				var wysihtml5 = $('#body').data('wysihtml5');

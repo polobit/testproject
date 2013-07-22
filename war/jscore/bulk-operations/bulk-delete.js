@@ -56,7 +56,7 @@ $(function(){
 			bulk_delete_operation(url, id_array, index_array, table, undefined, data_array);
 		}	
 		else
-            $('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">�</a>You have not selected any records to delete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
+            $('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to delete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
 			
 	});
 	
@@ -99,7 +99,7 @@ $(function(){
 				bulk_delete_operation($(table).attr('url'), id_array, index_array, table, true, data_array);
 			}	
 			else
-	            $('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">�</a>You have not selected any records to delete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
+	            $('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to delete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
 				
 		});
 	
