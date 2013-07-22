@@ -71,8 +71,8 @@
 
 <td>
     <div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:5em;overflow:hidden;">
-	   {{#if pic}}
-        <img class="thumbnail" src="{{pic}}" width="40px" height="40px" title="{{owner.name}}" />
+	   {{#if ownerPic}}
+        <img class="thumbnail" src="{{ownerPic}}" width="40px" height="40px" title="{{owner.name}}" />
 	   {{else}}
 		<img class="thumbnail" src="{{defaultGravatarurl 50}}" width="40px" height="40px" title="{{owner.name}}" />
        {{/if}}
@@ -87,7 +87,13 @@
 	<div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:157px;overflow:hidden;display:inline-block;">
         	{{#each contacts}}
 			<div style="display:inline-block;">
+				{{#if_equals type "PERSON"}}
           	 	<img class='thumbnail' src="{{gravatarurl properties 50}}" width="40px" height="40px" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
+				{{/if_equals}}
+
+				{{#if_equals type "COMPANY"}}
+				<img class='thumbnail' src="/img/company.png" width="40px" height="40px" title="{{getPropertyValue properties "name"}}" />
+				{{/if_equals}}
 			</div>
 			{{/each}}
 	</div>
@@ -247,7 +253,7 @@
 
 <!-- popover -->
 <script id="cases-detail-popover-template" type="text/html">
-<div class="row-fluid">
+<div class="row-fluid" id='cases_detail_popover-div'>
     <div class="span9" style="margin-left:0px;">
         <div>
             <div style="line-height:20px;font-style:italic;margin-bottom:5px;">
@@ -259,10 +265,18 @@
                 <div>
 				{{#each contacts}}
                 	<div class="span4" style="display:inline-block;margin:5px;margin-left:25px;">
+					{{#if_equals type "PERSON"}}
                     	<img class="thumbnail" src="{{gravatarurl properties 50}}" width="40px" height="40px" />
                     	<div style="display:inline-block;text-overflow:ellipsis;white-space:nowrap;width:90px;overflow:hidden;">
-                        	{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}},
-                    	</div>
+                        	{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}
+					{{/if_equals}}
+					{{#if_equals type "COMPANY"}}
+                    	<img class="thumbnail" src="/img/company.png" width="40px" height="40px" />
+                    	<div style="display:inline-block;text-overflow:ellipsis;white-space:nowrap;width:90px;overflow:hidden;">
+                        	{{getPropertyValue properties "name"}}
+					{{/if_equals}}
+						<span class='comma_popover_case'>,</span>
+						</div>
                 	</div>
                 {{/each}}
                 </div>
@@ -270,5 +284,6 @@
         </div>
     </div>
 </div>
+
 </script>
 <!--end popover-->
