@@ -15,7 +15,6 @@ function agile_enable_console_logging() {
     }
 }
 
-
 // Read Cookie
 function agile_read_cookie(name) {
 	
@@ -44,6 +43,7 @@ function agile_create_cookie(name, value, days) {
 	}
 	else var expires = "";
 	document.cookie = name+"="+escape(value)+expires+"; path=/";
+	
 }
 
 var agile_guid =
@@ -52,6 +52,7 @@ var agile_guid =
 		{
 			this.cookie_name = 'agile-crm-guid';
 			this.cookie_email = 'agile-email';
+			this.cookie_originalref = 'agile-originalreferrer';
 		},
 		random: function() {
 		    var S4 = function() {
@@ -63,8 +64,7 @@ var agile_guid =
 		{
 			var guid =  agile_read_cookie(this.cookie_name);
 			if(!guid)
-				guid = this.generate();
-			
+			guid = this.generate();
 			return guid;
 		},
 		generate:function()
@@ -72,6 +72,9 @@ var agile_guid =
 			console.log("Generating new guid " + this.cookie_name);
 			guid = this.random();
 			agile_create_cookie(this.cookie_name, guid, 365*5);
+			
+			// while new Guid is generated original referrer is set
+			this.set_original_referrer();
 			return guid;
 		},
 		reset:function()
@@ -90,9 +93,8 @@ var agile_guid =
 				if(email)
 				{	
 					this.reset();
-					agile_session.reset();
+				 	agile_session.reset();
 				}
-				
 				agile_create_cookie(this.cookie_email, this.email, 365*5);
 			}
 		},
@@ -106,8 +108,16 @@ var agile_guid =
 			// Read from cookie
 			var email =  agile_read_cookie(this.cookie_email);
 			return email;
-		}
-	};
+		},
+		set_original_referrer: function(){
+			
+			// Capturing original referrer 
+			var original_referrer = document.referrer;
+	 		
+	 		// Writing original referrer to cookie 
+			agile_create_cookie(this.cookie_originalref, original_referrer, 365*5);
+			},
+};
 
 agile_guid.init();
 
@@ -160,6 +170,7 @@ var agile_session =
 			agile_create_cookie(this.cookie_start_time, "", -1);
 		}
 	};
+
 agile_session.init();
 
 function agile_getJSONP(URL, success){
@@ -202,15 +213,21 @@ function agile_propertyJSON(name, id, type) {
 function agile_createContact(data, callback)
 {
  var properties = [];
-	 for (var key in data) {
+ 
+for (var key in data) {
 		  if (data.hasOwnProperty(key) && key != "tags") {
 		    //alert(key + " -> " + p[key]);
 			  properties.push(agile_propertyJSON(key, data[key]));
 		  }
 		}
-	 
+
+	var original_ref = "original_ref";
+	properties.push(agile_propertyJSON(original_ref, agile_read_cookie(agile_guid.cookie_originalref)));
+
+
 	 var model = {};
 	 model.properties = properties;
+	 console.log(model);
 	 if(data["tags"])
 	{
 		 var tags = data["tags"];
@@ -245,8 +262,6 @@ function agile_deleteContact(email)
 	 	});
 }
 
-
-
 function agile_getContact(email, callback)
 {
 	
@@ -265,7 +280,6 @@ function agile_addNote(email, data)
 {
 	if(!email.email)
 	{
-		console.log("Email not found. Note is not added.");
 		return;
 	}
 	var params = "email={0}&note={1}".format(encodeURIComponent(email.email), encodeURIComponent(JSON.stringify(data)));
@@ -285,7 +299,6 @@ function agile_addTask(email, data)
 {
 	if(!email.email)
 	{
-		console.log("Email not found. Task is not added.");
 		return;
 	}
 	var params = "email={0}&task={1}".format(encodeURIComponent(email.email), encodeURIComponent(JSON.stringify(data)));
@@ -305,9 +318,9 @@ function agile_addDeal(email, data)
 {
 	if(!email.email)
 	{
-		console.log("Email not found. Deal is not added.");
 		return;
 	}
+	
 	var params = "email={0}&opportunity={1}".format(encodeURIComponent(email.email), encodeURIComponent(JSON.stringify(data)));
 	
 	 // Get
@@ -321,34 +334,26 @@ function agile_addDeal(email, data)
 	 	});
 }
 
-function agile_getTagsData(email, tags)
+function agile_getTagsData(tags)
 {
 	if(!tags)
 	{
-		console.log("Tags are missing. Not adding tag");
-		return;
+		return;		// No tags found
 	}
 
-	
-	// If email is not there, get it from cookie
-	if(!email)
+		if (!agile_guid.get_email()){
+		return;		// Email not found in session and cookie
+		}
 		email = agile_guid.get_email();
 	
-	if(!email)
-	{
-		console.log("Email not found. Not adding tag");
-		return;
-	}
-			
 	var params = "email={0}&tags={1}".format(encodeURIComponent(email), encodeURIComponent(tags));
 	
 	return params;
-
 }
 
-function agile_addTag(email, tags, callback)
+function agile_addTag(tags, callback)
 {
-	var params = agile_getTagsData(email, tags);
+	var params = agile_getTagsData(tags);
 	if(!params)
 		return;
 	
@@ -361,10 +366,9 @@ function agile_addTag(email, tags, callback)
 			 	callback(data);
 				}
 	 	});  
-    
 }
 
-function agile_removeTag(email, tags)
+function agile_removeTag(tags)
 {
 	var params = agile_getTagsData(email, tags);
 	if(!params)
@@ -382,10 +386,15 @@ function agile_removeTag(email, tags)
     
 }
 
-function agile_addScore(email, score)
+function agile_addScore(score, callback)
 {
 	if(!score)
 		return;
+	
+		if (!agile_guid.get_email()){
+		return;		// Email not found in session and cookie
+		}
+		email = agile_guid.get_email();
 	
 	// Post
 	 var agile_url = agile_id.getURL() + "/contacts/add-score?callback=?&id=" + agile_id.get() + "&score=" +score+"&email="+encodeURIComponent(email);
@@ -398,11 +407,17 @@ function agile_addScore(email, score)
     
 }
 
-function agile_subtractScore(email, score)
+function agile_subtractScore(score)
 {
 	if(!score)
 		return;
-	
+	if(!email)
+	{
+		if (!agile_guid.get_email()){
+		return;		 // Email not found in session and cookie
+		}
+		email = agile_guid.get_email();
+	}	
 	// Post
 	 var agile_url = agile_id.getURL() + "/contacts/subtract-score?callback=?&id=" + agile_id.get() + "&score=" +score+"&email="+encodeURIComponent(email);
 	 
@@ -412,9 +427,6 @@ function agile_subtractScore(email, score)
 			}
 	 	});
 }
-
-
-
 
 String.prototype.format = function() {
 	  var args = arguments;
@@ -433,6 +445,7 @@ function agile_trackPageview()
  	
 	// Session-id
  	var session_id = agile_session.get();
+ 	
 	
  	// Page
 	var url = document.location.href;
@@ -446,9 +459,8 @@ function agile_trackPageview()
  	
  	var params = "";
  	
- 	
- 	console.log("New session " + agile_session.new_session);
- 	
+	console.log("New session " + agile_session.new_session);
+  	
  	// Get Visitor Info if session is new
  	if(agile_session.new_session)
  	{	
@@ -475,11 +487,8 @@ function agile_trackPageview()
  	        alert('The POST to abc.com WORKED SUCCESSFULLY');
  	    }
  	});
-
- 	
  	//agile_ajax.send(url, ajax_data);	
 }
-
 
 var agile_id = 
 	{
@@ -527,21 +536,21 @@ var _agile =
 	{
 		agile_deleteContact(email);
 	},
-	add_tag : function(email, tags, callback)
+	add_tag : function(tags, callback)
 	{
-		agile_addTag(email, tags, callback);
+		agile_addTag(tags, callback);
 	},
-	remove_tag: function(email, tags)
+	remove_tag: function(tags)
 	{
-		agile_removeTag(email, tags)
+		agile_removeTag(tags);
 	},
-	add_score : function(email, score)
+	add_score : function(score)
 	{
-		agile_addScore(email, score)
+		agile_addScore(score);
 	},
-	subtract_score : function(email, score)
+	subtract_score : function(score)
 	{
-		agile_subtractScore(email, score);
+		agile_subtractScore(score);
 	}
 };
 
