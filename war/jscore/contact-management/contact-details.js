@@ -116,10 +116,13 @@ $(function(){
      	// Returns contact with deleted tag value
      	json = delete_contact_tag(json, tag);
      	var that = this;
+     	
+     	// Unbinds click so user cannot select delete again
      	$(this).unbind("click");
+     	
         var contact = new Backbone.Model();
         contact.url = 'core/api/contacts';
-        contact.save(json,{
+        contact.save(json, {
        		success: function(data)
        			{ 	      		
        				$(that).closest("li").parent('ul').find('.loading').remove();

@@ -72,7 +72,11 @@
 //	 
 //}
 
+var CONTACTS_HARD_RELOAD = false;
+
 function bulkActivitiesNoty(type, message, position) {
+	CONTACTS_HARD_RELOAD = true;
+	
 	if(!position)
 	{
 		showNoty1(type, message.message, "bottomRight")

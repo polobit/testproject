@@ -172,6 +172,12 @@ var ContactsRouter = Backbone.Router.extend({
 		 * If collection is already defined and contacts are fetched the
 		 * show results instead of initializing collection again
 		 */
+      	if(CONTACTS_HARD_RELOAD == true)
+      		{
+      			this.contactsListView = undefined;
+      			CONTACTS_HARD_RELOAD = false;
+      		}
+      	
 		if (this.contactsListView && this.contactsListView.collection) {
 			$('#content').html(this.contactsListView.render(true).el);
 
@@ -747,6 +753,12 @@ var ContactsRouter = Backbone.Router.extend({
 		{
 			url = "core/api/contacts";
 		}
+    	
+    	if(CONTACTS_HARD_RELOAD == true)
+  		{
+    		this.contact_custom_view = undefined;
+    		CONTACTS_HARD_RELOAD = false;
+  		}
     	
      	if(this.contact_custom_view && this.contact_custom_view.url == url)
     	{

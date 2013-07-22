@@ -307,9 +307,19 @@ public class LinkedInUtil
 		ProfileField.CURRENT_SHARE, ProfileField.CURRENT_STATUS,
 		ProfileField.POSITIONS_COMPANY,
 		ProfileField.THREE_CURRENT_POSITIONS,
-		ProfileField.THREE_PAST_POSITIONS,
+		ProfileField.THREE_PAST_POSITIONS, ProfileField.POSITIONS,
+		ProfileField.POSITIONS_ID, ProfileField.POSITIONS_TITLE,
+		ProfileField.POSITIONS_SUMMARY,
+		ProfileField.POSITIONS_START_DATE,
+		ProfileField.POSITIONS_END_DATE,
+		ProfileField.POSITIONS_IS_CURRENT,
+		ProfileField.POSITIONS_TITLE,
+		ProfileField.POSITIONS_COMPANY_ID,
 		ProfileField.POSITIONS_COMPANY_INDUSTRY,
-		ProfileField.POSITIONS_COMPANY_TICKER));
+		ProfileField.POSITIONS_COMPANY_TICKER,
+		ProfileField.POSITIONS_COMPANY_NAME,
+		ProfileField.POSITIONS_COMPANY_SIZE,
+		ProfileField.POSITIONS_COMPANY));
 
 	SocialSearchResult result = new SocialSearchResult();
 
@@ -754,10 +764,8 @@ public class LinkedInUtil
 	SocialSearchResult experience = new SocialSearchResult();
 	experience.id = linkedInId;
 
-	if ((person.getThreeCurrentPositions() == null || person
-		.getThreeCurrentPositions().getPositionList() == null)
-		&& (person.getThreePastPositions() == null || person
-			.getThreePastPositions().getPositionList() == null))
+	if (person.getPositions() == null
+		&& person.getPositions().getPositionList() == null)
 	    return experience;
 
 	experience = getExperienceInLinkedIn(person, experience, client);
@@ -774,10 +782,8 @@ public class LinkedInUtil
 	SocialSearchResult experience = new SocialSearchResult();
 	experience.id = linkedInId;
 
-	if ((person.getThreeCurrentPositions() == null || person
-		.getThreeCurrentPositions().getPositionList() == null)
-		&& (person.getThreePastPositions() == null || person
-			.getThreePastPositions().getPositionList() == null))
+	if (person.getPositions() == null
+		&& person.getPositions().getPositionList() == null)
 	    return experience;
 
 	experience = getExperienceInLinkedIn(person, experience, client);
@@ -791,56 +797,7 @@ public class LinkedInUtil
 	    throws Exception
     {
 
-	if (person.getThreeCurrentPositions() != null
-		&& person.getThreeCurrentPositions().getPositionList() != null)
-	{
-	    for (Position position : person.getThreeCurrentPositions()
-		    .getPositionList())
-	    {
-		if (position.getCompany().getId() != null)
-		{
-		    try
-		    {
-			Company company = client.getCompanyById(position
-				.getCompany().getId(), EnumSet.of(
-				CompanyField.LOCATIONS_ADDRESS,
-				CompanyField.LOGO_URL, CompanyField.NAME,
-				CompanyField.NUM_FOLLOWERS,
-				CompanyField.BLOG_RSS_URL,
-				CompanyField.DESCRIPTION, CompanyField.ID,
-				CompanyField.INDUSTRY, CompanyField.TICKER));
-
-			if (company.getLogoUrl() != null)
-			    company.setLogoUrl(changeImageUrl(company
-				    .getLogoUrl()));
-			position.setCompany(company);
-		    }
-		    catch (LinkedInApiClientException e)
-		    {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
-			// If company's id is some irrelevant and not related to
-			// company, company details are skipped
-			if (e.getMessage().contains("Company with ID {"))
-			    continue;
-			else
-			    throw new Exception(e.getMessage());
-		    }
-		}
-
-	    }
-
-	}
-
-	experience.three_current_positions = person.getThreeCurrentPositions()
-		.getPositionList();
-
-	if (person.getThreePastPositions() == null
-		|| person.getThreePastPositions().getPositionList() == null)
-	    return experience;
-
-	for (Position position : person.getThreePastPositions()
-		.getPositionList())
+	for (Position position : person.getPositions().getPositionList())
 	{
 	    if (position.getCompany().getId() != null)
 	    {
@@ -858,7 +815,6 @@ public class LinkedInUtil
 		    if (company.getLogoUrl() != null)
 			company.setLogoUrl(changeImageUrl(company.getLogoUrl()));
 		    position.setCompany(company);
-
 		}
 		catch (LinkedInApiClientException e)
 		{
@@ -875,7 +831,7 @@ public class LinkedInUtil
 
 	}
 
-	experience.three_past_positions = person.getThreePastPositions()
+	experience.three_current_positions = person.getPositions()
 		.getPositionList();
 
 	return experience;
@@ -973,44 +929,43 @@ public class LinkedInUtil
 		// "9c9a2635-3efd-474c-8459-61251a5006e1");
 		// "3382f692-f598-4b72-9dd3-891853fec2fc", // test
 		// "7984afcf-f0f7-4fb3-b39c-cb7379d0336e");
-		"742877e1-5f85-4b49-a10c-08009f98005f",
-		"846cae2c-d653-45bf-98b4-39c24655ba2d");// praveen
-	// "0ca1359f-4e95-414c-9f96-68865947021d",
-	// "7b1e20eb-f4a6-47d0-9a4e-bb2a98bd1cfd");// teju faxdesk
+		// "742877e1-5f85-4b49-a10c-08009f98005f",
+		// "846cae2c-d653-45bf-98b4-39c24655ba2d");// praveen
+		"f78887f7-5947-4d5b-8968-05ea3884df79",
+		"d3820d60-8bd0-49dc-8ca3-dc9aa41dc67b");// teju faxdesk
 	// "1a6ebcd2-8038-4198-b59c-25b01cf229c0",
 	// "29571011-8ce5-42a4-90cc-44022c55d77f");// teju test
 
-	Person person = client.getProfileById("VMmYbjFvmy", EnumSet.of(
+	Person person = client.getProfileById("9R0Iux07gA", EnumSet.of(
 		ProfileField.PICTURE_URL, ProfileField.PICTURE_URL,
 		ProfileField.FIRST_NAME, ProfileField.LAST_NAME,
 		ProfileField.SUMMARY, ProfileField.HEADLINE,
 		ProfileField.LOCATION_NAME, ProfileField.NUM_CONNECTIONS,
 		ProfileField.PUBLIC_PROFILE_URL, ProfileField.ID,
 		ProfileField.DISTANCE, ProfileField.CURRENT_SHARE,
-		ProfileField.CURRENT_STATUS, ProfileField.POSITIONS_COMPANY,
+		ProfileField.CURRENT_STATUS,
+		ProfileField.API_STANDARD_PROFILE_REQUEST,
+		ProfileField.POSITIONS_COMPANY,
 		ProfileField.THREE_CURRENT_POSITIONS,
-		ProfileField.THREE_PAST_POSITIONS,
+		ProfileField.THREE_PAST_POSITIONS, ProfileField.POSITIONS,
+		ProfileField.POSITIONS_ID, ProfileField.POSITIONS_TITLE,
+		ProfileField.POSITIONS_SUMMARY,
+		ProfileField.POSITIONS_START_DATE,
+		ProfileField.POSITIONS_END_DATE,
+		ProfileField.POSITIONS_IS_CURRENT,
+		ProfileField.POSITIONS_TITLE,
+		ProfileField.POSITIONS_COMPANY_ID,
 		ProfileField.POSITIONS_COMPANY_INDUSTRY,
-		ProfileField.POSITIONS_COMPANY_TICKER));
+		ProfileField.POSITIONS_COMPANY_TICKER,
+		ProfileField.POSITIONS_COMPANY_NAME,
+		ProfileField.POSITIONS_COMPANY_SIZE,
+		ProfileField.POSITIONS_COMPANY));
 
 	ObjectMapper mapper = new ObjectMapper();
 	String json;
 
 	json = mapper.writeValueAsString(person);
 	System.out.println(json);
-
-	json = mapper.writeValueAsString(getLinkedinProfileById(null,
-	// "RsXAQtEdjS"));
-		"VMmYbjFvmy"));
-
-	System.out.println(json);
-
-	json = mapper.writeValueAsString(getExperience(person, "Cof5YM5XPr",
-		client));
-
-	System.out.println(json);
-	// System.out
-	// .println(changeImageUrl("https://m.c.lnkd.licdn.com/mpr/mprx/0_1C0R39OydOFyN2cUPiOe3NOrdj8yq7cUl5Ik3Nah94NuIIhRxkfc7qsaFPh_Be9B-TjLa1K05B2a"));
 
     }
 }
