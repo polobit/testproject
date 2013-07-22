@@ -18,11 +18,16 @@ var DealsRouter = Backbone.Router.extend({
      *  
      */
     deals: function () {
+    	
+    	var url = 'core/api/opportunity';
+        var template_key = "opportunities";
+        var individual_tag_name = 'tr';
+
     	this.opportunityCollectionView = new Base_Collection_View({
-            url: 'core/api/opportunity',
-            restKey: "opportunity",
-            templateKey: "opportunities",
-            individual_tag_name: 'tr',
+            url: url,
+            //restKey: "opportunity",
+            templateKey: template_key,
+            individual_tag_name: individual_tag_name,
 			postRenderCallback: function(el) {
             	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
             		 $(".deal-close-time", el).timeago();
@@ -38,8 +43,38 @@ var DealsRouter = Backbone.Router.extend({
         });
 
     	this.opportunityCollectionView.collection.fetch();
-    	
-        $('#content').html(this.opportunityCollectionView.render().el);
+
+    	if(readCookie("agile_deal_view")) {
+    		template_key = "opportunities-by-milestones";
+        	individual_tag_name = "div";
+        	url = 'core/api/opportunity/byMilestone';
+        	this.opportunityMilestoneCollectionView = new Base_Collection_View({
+                url: url,
+                templateKey: template_key,
+                individual_tag_name: individual_tag_name,
+    			postRenderCallback: function(el) {
+                	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+                		 $(".deal-close-time", el).timeago();
+                  	});
+                	$('#opportunities-by-milestones-model-list > div').css({"white-space" : "nowrap" , "overflow" : "auto"});
+                	
+                	setup_deals_in_milestones();
+            		
+     				// Shows Milestones Pie
+     				pieMilestones();
+     				
+     				// Shows deals chart
+     				pieDetails();
+
+                }
+            });
+
+        	this.opportunityMilestoneCollectionView.collection.fetch();
+
+        	$('#content').html(this.opportunityMilestoneCollectionView.render().el);
+    	}
+    	else
+    		$('#content').html(this.opportunityCollectionView.render().el);
 
         $(".active").removeClass("active");
         $("#dealsmenu").addClass("active");        

@@ -56,7 +56,7 @@ $(function(){
 			bulk_delete_operation(url, id_array, index_array, table, undefined, data_array);
 		}	
 		else
-            $('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">×</a>You have not selected any records to delete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
+            $('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to delete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
 			
 	});
 	
@@ -67,7 +67,7 @@ $(function(){
 	    * Customizes the delete operation
 	    * Deletes the entities
 	    */	
-		$('#delete-checked-grid').live('click', function(event){
+		$('#delete-checked-grid').die().live('click', function(event){
 			event.preventDefault();
 			var id_array = [];
 			var index_array = [];
@@ -99,7 +99,7 @@ $(function(){
 				bulk_delete_operation($(table).attr('url'), id_array, index_array, table, true, data_array);
 			}	
 			else
-	            $('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">×</a>You have not selected any records to delete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
+	            $('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to delete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
 				
 		});
 	
@@ -123,7 +123,7 @@ function customize_bulk_delete(id_array, data_array){
 			}	
 		});
 		if(id_array.length == 0){
-			$('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">×</a>Sorry, you can not delete user who is admin.</div>').show().delay(3000).hide(1);
+			$('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">ï¿½</a>Sorry, you can not delete user who is admin.</div>').show().delay(3000).hide(1);
 			return false;
 		}
 	}

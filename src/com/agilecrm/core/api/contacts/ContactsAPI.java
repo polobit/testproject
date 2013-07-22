@@ -31,6 +31,8 @@ import org.json.JSONObject;
 
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.TaskUtil;
+import com.agilecrm.cases.CaseData;
+import com.agilecrm.cases.CasesUtility;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
@@ -331,6 +333,18 @@ public class ContactsAPI
 	    return null;
 	}
     }
+    
+    /**
+    Get Cases related to this contact
+    */
+   @Path("/{contact-id}/cases")
+   @GET
+   @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+   public List<CaseData> getCurrentContactCases(
+	    @PathParam("contact-id") Long id)
+   {
+	return CasesUtility.getByContactId(id);
+   }
 
     /**
      * Notes of a contact, which is in contact detail view

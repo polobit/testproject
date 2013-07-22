@@ -2,41 +2,55 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.util.DBUtil;
-import com.agilecrm.util.HTTPUtil;
+import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.util.WorkflowUtil;
+import com.campaignio.logger.Log.LogType;
+import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
+import com.campaignio.tasklets.util.TaskletUtil;
 
+/**
+ * <code>Transfer</code> represents transfer node in campaigns to subscribe same
+ * contact to different campaign. It considers campaign-id as input and
+ * subscribes the current contact to given campaign.
+ * 
+ * @author Naresh
+ * 
+ */
 public class Transfer extends TaskletAdapter
 {
     // Fields
-    public static String LIST = "list";
-
-    // Transfer link
-    public static final String USER_TRACKER_URL = "http://usertracker.contactuswidget.appspot.com/cd?command=transfer&subscriber_id=$subscriberId&list_id=$listId";
+    public static String CAMPAIGN_ID = "campaign_id";
 
     // Run
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
-	    JSONObject data, JSONObject nodeJSON) throws Exception
+    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
-	// Get List
-	String listId = getStringValue(nodeJSON, subscriberJSON, data, LIST);
+	// Get CampaignId
+	String campaignId = getStringValue(nodeJSON, subscriberJSON, data, CAMPAIGN_ID);
 
-	// Get Subscriber Id
+	// Get Contact
 	String subscriberId = DBUtil.getId(subscriberJSON);
+	Contact contact = ContactUtil.getContact(Long.parseLong(subscriberId));
 
-	System.out.println("Transfer List for " + subscriberId
-		+ " to new list: " + listId);
+	// Add contact to given campaign.
+	WorkflowUtil.subscribe(contact, Long.parseLong(campaignId));
 
-	// Transfer to a different list
-	String url = USER_TRACKER_URL.replace("$subscriberId", subscriberId)
-		.replace("$listId", listId);
+	// Current campaign
+	Workflow fromWorkflow = WorkflowUtil.getWorkflow(Long.parseLong(DBUtil.getId(campaignJSON)));
 
-	// Access URL
-	String retVal = HTTPUtil.accessURL(url);
+	// Given campaign
+	Workflow toWorkflow = WorkflowUtil.getWorkflow(Long.parseLong(campaignId));
 
-	System.out.println(retVal);
+	System.out.println(contact.getContactFieldValue("first_name") + " is transferred from " + fromWorkflow.name + " to " + toWorkflow.name);
 
-	// We do not execute anything after transfer - we are done
+	// Creates log for Transfer
+	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON), DBUtil.getId(subscriberJSON), contact.getContactFieldValue("first_name") + " transferred from "
+		+ fromWorkflow.name + " to " + toWorkflow.name, LogType.TRANSFER.toString());
 
+	// Execute Next One in Loop
+	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
     }
 }

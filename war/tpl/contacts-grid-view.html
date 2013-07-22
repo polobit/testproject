@@ -40,11 +40,12 @@
 <div class="row">
     <div class="span12">
 <div class="page-header">
-			<h1>
-				<span id="contact-heading">Contacts</span><small> {{count}}</small>
-			</h1>
-
-
+			<h1><span id="contact-heading">Contacts</span> <small> {{count}}</small></h1>
+			<div class="btn-group right" id="view-list"
+				style="top: -29px;"></div>
+			<div class="btn-group right" id="filter-list"
+				style="top: -29px;margin-right: 5px"></div>
+			<div>
 			<div class="btn-group pull-left" id="bulk-actions"
 				style="display: none; top: -29px;margin-left:26%;">
 					<div class="btn">Bulk Actions</div>
@@ -56,11 +57,12 @@
 						<li><a href="#" id="bulk-campaigns">Add to campaign</a></li>
 						<li class="hide"><a href="#" id="bulk-email">Send email</a></li>
 						<li><a href="#" id="bulk-tags">Add tags</a></li>
+						<li><a href="#" id="delete-checked-grid">Delete</a></li>
 					</ul>
 			</div>
-            <div class="btn-group right" id="view-list" style="top:-29px;position:relative"></div>
-            <div class="btn-group right" id="filter-list" style="top:-29px;position:relative;margin-right:5px"></div>
+			<div  class="btn-group pull-left" style="display: none;top:-25px;left:10px" id="bulk-select"></div>
 		</div>
+
         </div>
     </div>
 <div class="row">
@@ -88,7 +90,7 @@
         {{#if this.length}}
         <div class="data">
             <div class="data-container">
-                <div id="contacts-grid-model-list" class="contacts-model-list grid-view showCheckboxes" route="contact/"  url="core/api/contacts/bulk" style="overflow:auto;margin-left:-20px;"></div>
+                <div id="contacts-grid-model-list" class="contacts-model-list grid-view showCheckboxes" route="contact/"  url="core/api/bulk/update?action_type=DELETE" style="overflow:auto;margin-left:-20px;"></div>
             </div>
         </div>
         {{/if}}

@@ -343,13 +343,13 @@ function getLinkedinMatchingProfiles(plugin_id)
 
 function getModifiedLinkedinMatchingProfiles(plugin_id)
 {
-	$('#spinner-linked-search').show();
-	
 	// Checks whether all input fields are given
     if (!isValidForm($("#linkedin-search_form")))
     {
         return;
     }
+    
+    $('#spinner-linked-search').show();
     
     past_search_input = $('#linkedin_keywords').val();
 

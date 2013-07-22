@@ -1,6 +1,6 @@
 var _agile = _agile || [];
 
-var Is_Localhost = true;
+var Is_Localhost = false;
 
 // Global Lib Path - set automaticlaly in init based on localhost or production
 var LIB_PATH;
@@ -12,7 +12,8 @@ function login() {
     var url = 'https://googleapps.agilecrm.com/gmail?hd=' + domain;
     console.log("Osapi from " + url);
    
-     // Hit the server, passing in a signed request (and OpenSocial ID), to see if we know who the user is.
+     // Hit the server, passing in a signed request (and OpenSocial ID), to
+		// see if we know who the user is.
      osapi.http.get({
        'href' : url,
        'format' : 'json',
@@ -37,52 +38,81 @@ function login() {
        
        console.log("Fetched " + api_key + " " + domain);
        
-       _agile.push(['_setAccount', api_key, domain]);      
-       
+// _agile.push(['_setAccount', api_key, domain]);
+       $agile = (function() {
+			 _agile.set_account(api_key, domain);
+			 console.log("agile setting account");
+		});
        // Hide Loading Icon
        document.getElementById('loading').style.display = 'block';
        
-       download_scripts(build_ui);
+       download_scripts(function() {
+    	   _agile.set_account(api_key, domain);
+			 console.log("agile setting account");
+			 build_ui();
+       });
        
      } else {
-       var url_root = data.content.popup;
-       // Retrieve the domain of the current user. gadgets.util.getUrlParameters()['parent'] returns a value
-       // of of the form: http(s)://mail.google.com/mail/domain.com/html for Gmail (other containers are similar).
-       // The example below shows a regular expression for use with Gmail. For Calendar, use this regular
+       
+       // Retrieve the domain of the current user.
+		// gadgets.util.getUrlParameters()['parent'] returns a value
+       // of of the form: http(s)://mail.google.com/mail/domain.com/html for
+		// Gmail (other containers are similar).
+       // The example below shows a regular expression for use with Gmail. For
+		// Calendar, use this regular
        // expression instead: /calendar\/hosted\/([^\/]+)/
-       var domain = gadgets.util.getUrlParameters()['parent'].match(/.+\/a\/(.+)\/html/)[1];
-
-       var url = url_root + '&hd=' + domain;
-
-       var button = document.createElement('a');
-       button.setAttribute('href', 'javascript:void(0);');
-       button.setAttribute('onclick', 'openPopup("' + url + '")');
-
-       var text = document.createTextNode('Associate your account - one time setup');
-       button.appendChild(text);
-
-       document.getElementById('output').innerHTML ="";
-       document.getElementById('output').appendChild(button);
-       
-       // Hide Loading Icon
-       document.getElementById('loading').style.display = 'none';
-       
-       gadgets.window.adjustHeight();
-     }
+		var domain = gadgets.util.getUrlParameters()['parent'].match(/.+\/a\/(.+)\/html/)[1];
+    	
+    	var url_root = data.content.popup + "&hd=" + domain;
+        var textNode = document.createElement('p');
+		var text = document.createTextNode('Associate your account - one time setup');
+        var inpbox = document.createElement('input');
+		var butGo = document.createElement('input');
+		
+		textNode.appendChild(text);
+		inpbox.setAttribute('id', 'user_domain');
+		inpbox.setAttribute('value','Enter your Domain');
+		inpbox.style.margin = '0 10px 0 0';
+		
+		butGo.setAttribute('type','button');
+		butGo.setAttribute('value','Go');
+		butGo.setAttribute('onclick', 'openPopup("' + url_root + '")');
+		
+		document.getElementById('output').innerHTML ="";
+		var nodeArray = [textNode, inpbox, butGo];
+		for(var node=0; node<nodeArray.length; node++){
+			document.getElementById('output').appendChild(nodeArray[node]);
+		}       
+        // Hide Loading Icon
+        document.getElementById('loading').style.display = 'none';
+        gadgets.window.adjustHeight();
+     } 
    }
 
    function openPopup(url) {
-     var popup = window.open(url, 'OpenID','height=200,width=200');
+	   
+	   var userDomain = document.getElementById('user_domain');
+	   if(userDomain.value == 'Enter your Domain' || userDomain.value == '') {
+			alert("Please enter your domain !");
+			userDomain.focus();
+			userDomain.select();
+		} else {
+			url += '&domain=' + userDomain.value;
+			userDomain.value = 'Enter your Domain';
+		
+			var popup = window.open(url, 'OpenID','height=400,width=400');
 
-     // Check every 100 ms if the popup is closed.
-     finishedInterval = setInterval(function() {
-       // If the popup is closed, we've either finished OpenID, or the user closed it. Verify with the server in case the
-       // user closed the popup.
-       if (popup.closed) {
-	         login();
-	         clearInterval(finishedInterval);
-       }
-     }, 100);
+			// Check every 100 ms if the popup is closed.
+			finishedInterval = setInterval(function() {
+		       // If the popup is closed, we've either finished OpenID, or the user
+				// closed it. Verify with the server in case the
+		       // user closed the popup.
+				if (popup.closed) {
+			         login();
+			         clearInterval(finishedInterval);
+				}
+			}, 100);
+		}
    }
 
 // Init Agile Gadget
@@ -90,7 +120,6 @@ function init_agile_gadget()
 {
 	
 	// Check if localhost
-	console.log(window.location.host);
 	if (window.location.host.indexOf("localhost") != -1)
 	{
 		Is_Localhost = true;
@@ -98,12 +127,18 @@ function init_agile_gadget()
 		
 		// Set API Key first - agile-min.js executes at the very beginning
 		// Sukanya Localhost
-		// _agile.push(['_setAccount', 't87mbpn15789194cojt6j0ujd5', 'localhost']);
+		// _agile.push(['_setAccount', 't87mbpn15789194cojt6j0ujd5',
+		// 'localhost']);
 		
 		// MC Localhost
-		_agile.push(['_setAccount', 'g0ge03gebtspp3s18pa7gfeprl', 'localhost']);
+		// _agile.push(['_setAccount', 'g0ge03gebtspp3s18pa7gfeprl',
+		// 'localhost']);
+		$agile = (function() {
+			 _agile.set_account('tf8246t84gkqc0e435qvh0a6it', 'localhost');
+			 build_ui();
+		});
 		
-		//_agile.push(['_setAccount', 'fbl6p636276j2ff7tp2m023t0q', 'test']);
+		// _agile.push(['_setAccount', 'fbl6p636276j2ff7tp2m023t0q', 'test']);
 		
 		// Download scripts and load UI
 		download_scripts(build_ui);
@@ -130,10 +165,10 @@ function download_scripts(callback)
 	var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
 	
 	<!-- Load Jquery and validate -->
-	head.js(JQUERY_LIB_PATH, LIB_PATH + 'lib/jquery.validate.min.js', LIB_PATH + 'lib/handlebars-1.0.0.beta.6-min.js', LIB_PATH + 'jscore/handlebars-agile.js');
+	head.js(JQUERY_LIB_PATH, LIB_PATH + 'lib/jquery.validate.min.js', LIB_PATH + 'lib/handlebars-1.0.0.beta.6-min.js', LIB_PATH + 'jscore/handlebars/handlebars-agile.js', LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', LIB_PATH + 'jscore/util.js');
 	
 	<!-- Handle bars -->
-	//head.js(LIB_PATH + 'lib/handlebars-1.0.0.beta.6-min.js');
+	// head.js(LIB_PATH + 'lib/handlebars-1.0.0.beta.6-min.js');
 	
 	<!-- MD5 & Handlebars -->
 	head.js(LIB_PATH + 'jscore/md5.js');
@@ -142,6 +177,7 @@ function download_scripts(callback)
 	head.js(LIB_PATH + 'stats/min/agile-min.js');
 	
 	head.ready(function() {	
+		 
 		if (callback && typeof(callback) === "function") {
 			
 			console.log("Downloading scripts done");
@@ -183,8 +219,10 @@ function build_ui()
 {
 	// Get Emails
 	var emails;
-	if(!Is_Localhost)
+	if(!Is_Localhost){
 		emails = get_emails();
+		console.log("inside if condition for finding mails.");
+	}
 	else
 		emails = ["manohar@invox.com","manohar123@invox.com"];
 	
@@ -211,7 +249,7 @@ function build_ui_for_emails(email_ids){
 			agile_getContact(email, function(val)
 					{
 						val.email = email;
-						fill_individual_template_ui(val, $('#content'));
+						fill_individual_template_ui(val.email, $('#content'));
 					});
 		});
 		
@@ -227,7 +265,7 @@ function fill_individual_template_ui(val, selector, append){
 	// If not append, empty it - useful while refreshing the same div
 	if(!append)
 		selector.empty();
-	
+	console.log(val);
 	// Add to content
 	var individualTemplate = getTemplate('gadget', val, 'no');	
 	
@@ -243,7 +281,7 @@ function isValidForm(form){
 	return $(form).valid();
 }
 
-//Validating and serialize form data
+// Validating and serialize form data
 function serializeForm(form){
 	if(!isValidForm(form))
     {	
@@ -258,6 +296,7 @@ function init_handlers() {
 	// Adding contact from gadget
 	$('.gadget-contact-validate').die().live('click', function(e){
 		e.preventDefault();
+		alert("here click event");
 		var el = $(this).closest("div.gadget_contact_details_tab").find(".gadget_contact_form");
 		  var json = [];
 		  var data = {};
@@ -270,15 +309,20 @@ function init_handlers() {
 			  else
 				  data[val.name] = val.value;
 			});
-		  _agile = [];
-		  _agile.push(["_createContact", data, tags, function(response)
-		               {    
-			                // Refresh the views
-			  				var selector = $(this).closest("div.gadget_contact_details_tab").find(".gadget_contact");
-			  				fill_individual_template_ui(response, selector, false);
-			  				build_ui();
-			           }]);
-		  _agile_execute();
+		  
+		  
+		  console.log(data)
+		  console.log(tags);	
+		  
+		  _agile.create_contact(data);
+		  
+/*
+ * _agile = []; _agile.push(["_createContact", data, tags, function(response) { //
+ * Refresh the views var selector =
+ * $(this).closest("div.gadget_contact_details_tab").find(".gadget_contact");
+ * fill_individual_template_ui(response, selector, false); build_ui(); }]);
+ * _agile_execute();
+ */
 	});
 	
 	// Adding Note for contact
@@ -305,7 +349,7 @@ function init_handlers() {
 		  _agile_execute();
 	});
 	
-	//Adding Task for contact
+	// Adding Task for contact
 	$('.gadget-task-validate').die().live('click', function(e){
 		e.preventDefault();
 		var el = $(this).closest("div.gadget_contact_details_tab").find(".gadget_task_form");
@@ -329,7 +373,7 @@ function init_handlers() {
 		  _agile_execute();
 	});
 	
-	//Adding Deal for contact
+	// Adding Deal for contact
 	$('.gadget-deal-validate').die().live('click', function(e){
 		e.preventDefault();
 		var el = $(this).closest("div.gadget_contact_details_tab").find(".gadget_deal_form");
@@ -354,7 +398,7 @@ function init_handlers() {
 		  _agile_execute();
 	});
 	
-	//toggle event for add note
+	// toggle event for add note
 	$(".gadget-add-note").die().live('click', function(e){
 		e.preventDefault();
 		var el = $(this).closest("div.gadget_contact_details_tab").find("div.show_form");
@@ -363,7 +407,7 @@ function init_handlers() {
 		$(".gadget-note", el).toggle();
 	});
 
-	//toggle event for add task
+	// toggle event for add task
 	$(".gadget-add-task").die().live('click', function(e){
 		e.preventDefault();
 		var el = $(this).closest("div.gadget_contact_details_tab").find("div.show_form");
@@ -372,7 +416,7 @@ function init_handlers() {
 		$(".gadget-task", el).toggle();
 	});
 	
-	//toggle event for add deal
+	// toggle event for add deal
 	$(".gadget-add-deal").die().live('click', function(e){
 		e.preventDefault();
 		var el = $(this).closest("div.gadget_contact_details_tab").find("div.show_form");
@@ -381,7 +425,7 @@ function init_handlers() {
 		$(".gadget-deal", el).toggle();
 	});
 	
-	//toggle event for add contact
+	// toggle event for add contact
 	$(".gadget-add-contact").die().live('click', function(e){
 		e.preventDefault();
 		var el = $(this).closest("div.gadget_contact_details_tab").find("div.show_form");
@@ -389,7 +433,7 @@ function init_handlers() {
 		$(".gadget-contact", el).toggle();
 	});
 	
-	//cancel event for buttons
+	// cancel event for buttons
 	$(".cancel").die().live('click', function(e){
 		e.preventDefault();
 		var el = $(this).closest("div.gadget_contact_details_tab").find("div.show_form");

@@ -1,0 +1,76 @@
+<script id="opportunities-by-milestones-collection-template" type="text/html">
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h1>Deals <small>Opportunities By Milestones</small></h1>
+			<a href="#deals-add" class="deals-add btn right" style="top:-30px;position: relative;"><i class="icon-plus-sign" /> Add Deal</a>
+			<div class="btn-group right" id="deals-view"
+				style="display: inline; top: -30px;margin-right:20px;">
+					<div class="btn">Deals View List</div>
+					<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a href="#" class="deals-default-view">Default View</a></li>
+						<li><a href="#" class="deals-pipelined-view">Milestone View</a></li>
+					</ul>
+			</div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="span9">
+        <div id="slate">
+        </div>
+        {{#if this.length}}
+        <div id="total-pipeline-chart" style="width:100%; height:300px"></div>
+        <br /><br />
+        <div class="row-fluid">
+            <div class="well clearfix">
+				<div id="opportunities-by-milestones-model-list" url="core/api/opportunity/bulk" style=""></div>
+            </div>
+        </div>
+        {{/if}}
+    </div>
+    <div class="span3">
+        <div class="data-block">
+            <div class="well">
+                <header>
+                    <h3><span><i class="icon-briefcase"></i></span> Milestones</h3>
+                </header>
+                <div id="pie-deals-chart" style="width:100%; height:400px"></div>
+                <h3>
+                    What are Milestones?
+                </h3>
+                <br />
+                <p>
+                    Milestones are used to define the status of the deal.
+                </p>
+                <p>
+                    e.g. Use 'won' in case of a successfully completed deal or 'open' for an ongoing deal or 'stage1' for a newly initiated deal.
+                </p>
+                <br />
+                <h3>
+                    What are Deals?
+                </h3>
+                <br />
+                <p>
+                    Deals are opportunities you can continuously track throughout its life cycle. You may add contacts related to the deal, add description, monetary value and timelines. You can also setup milestones to constantly track the status of the deal.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+</script>
+
+<script id="opportunities-by-milestones-model-template" type="text/html">
+{{#deals_by_milestones this}}{{/deals_by_milestones}}
+</script>
+
+<script id="opportunities-grid-view-template" type="text/html">
+<div data="{{id}}" class="data" style='text-align:left;margin:5px 0px;border: 1px solid #DDD;border-radius:4px;padding: 10px;background-color:#f5f5dc'>
+	<b style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:7em;overflow:hidden;display:inline-block;">{{name}}</b><br/>
+	<div>{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}}{{expected_value}}</div>
+	<div style="text-overflow:ellipsis;white-space:nowrap;width:11em;overflow:hidden;"><time class="deal-close-time" datetime="{{epochToHumanDate "" close_date}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time></div>
+</div>
+</script>

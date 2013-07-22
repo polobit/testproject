@@ -12,6 +12,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
+
+import com.agilecrm.GMailGadgetServlet;
 import com.agilecrm.Globals;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -32,235 +35,230 @@ import com.google.appengine.api.utils.SystemProperty;
  */
 public class NamespaceFilter implements Filter
 {
-    /**
-     * Sets the namespace to the subdomain in the request url, when namespace is
-     * not aready set or request is to create a new domain, forgot domain.
-     * 
-     * @param request
-     * @param response
-     * @return
-     * @throws IOException
-     */
-    private boolean setNamespace(ServletRequest request,
-	    ServletResponse response) throws IOException
-    {
-	// Reset the thread local, which is again set after user loggedin or
-	// when registered () i.e., AgileAuthFilter redirects to login page if
-	// userInfo is null
-	SessionManager.set((UserInfo) null);
-
-	// If namespace is already set, then returns true to allow access
-	// further
-	if (NamespaceManager.get() != null)
-	    return true;
-
-	// If Localhost - just return
-	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+	/**
+	 * Sets the namespace to the subdomain in the request url, when namespace is
+	 * not aready set or request is to create a new domain, forgot domain.
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 */
+	private boolean setNamespace(ServletRequest request, ServletResponse response) throws IOException
 	{
-	    return true;
-	}
+		// Reset the thread local, which is again set after user loggedin or
+		// when registered () i.e., AgileAuthFilter redirects to login page if
+		// userInfo is null
+		SessionManager.set((UserInfo) null);
 
-	// If it is choose domain, just return
-	if (((HttpServletRequest) request).getRequestURI().contains(
-		"choose-domain"))
-	    return true;
+		// If namespace is already set, then returns true to allow access
+		// further
+		if (NamespaceManager.get() != null)
+			return true;
 
-	// If it is enter domain, just return
-	if (((HttpServletRequest) request).getRequestURI().contains(
-		"enter-domain"))
-	    return true;
-
-	// If it is forgot domain, just return
-	if (((HttpServletRequest) request).getRequestURI().contains(
-		"forgot-domain"))
-	    return true;
-
-	// Read Subdomain
-	String subdomain = request.getServerName().split("\\.")[0];
-
-	if (subdomain.equalsIgnoreCase(Globals.BULK_ACTION_BACKENDS_URL))
-	    return true;
-
-	// Lowercase
-	subdomain = subdomain.toLowerCase();
-
-	// Get Server URL without subdomain
-	String url = request.getServerName().replaceAll(subdomain, "");
-	if (url.startsWith("."))
-	    url = url.substring(1);
-
-	// If not agilecrm.com or helptor.com etc. - show chooseDomain
-	if (!Arrays.asList(Globals.URLS).contains(url.toLowerCase()))
-	{
-	    redirectToChooseDomain(request, response);
-	    return false;
-	}
-
-	// If my or any special domain - support etc, choose subdomain
-	if (Arrays.asList(Globals.LOGIN_DOMAINS).contains(subdomain))
-	{
-	    redirectToChooseDomain(request, response);
-	    return false;
-	}
-
-	// Set Google Apps Namespace if googleapps
-	if (subdomain.equalsIgnoreCase(Globals.GOOGLE_APPS_DOMAIN))
-	{
-	    return setupGoogleAppsNameSpace(request, response);
-
-	}
-
-	// Set the subdomain as name space
-	System.out.println("Setting the domain " + subdomain + " "
-		+ ((HttpServletRequest) request).getRequestURL());
-	NamespaceManager.set(subdomain);
-	return true;
-    }
-
-    /**
-     * Creates a full url with query parameters in the request appended to the
-     * url
-     * 
-     * @param req
-     * @return
-     */
-    private static String getFullUrl(HttpServletRequest req)
-    {
-	String reqUrl = req.getRequestURL().toString();
-	String queryString = req.getQueryString(); // d=789
-	if (queryString != null)
-	{
-	    reqUrl += "?" + queryString;
-	}
-	return reqUrl;
-    }
-
-    /**
-     * Sets up google apps
-     * 
-     * @param request
-     * @param response
-     * @return
-     */
-    private boolean setupGoogleAppsNameSpace(ServletRequest request,
-	    ServletResponse response)
-    {
-	try
-	{
-	    // Using openid, we are not able to support wildcard realms
-	    String appsDomain = request.getParameter("hd");
-	    if (appsDomain != null)
-	    {
-		String namespace = appsDomain.split("\\.")[0];
-		System.out.println("Setting Google Apps - Namespace "
-			+ appsDomain);
-
-		// If Gadget Level API which does not understand redirect, we
-		// just set the namespace
-		if (request.getParameter("opensocial_owner_id") != null)
+		// If Localhost - just return
+		if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
 		{
-		    // Set the namespace
-		    NamespaceManager.set(namespace);
-		    return true;
+			return true;
 		}
 
-		String url = getFullUrl((HttpServletRequest) request);
-		url = url.replace(Globals.GOOGLE_APPS_DOMAIN + ".", namespace
-			+ ".");
+		// If it is choose domain, just return
+		if (((HttpServletRequest) request).getRequestURI().contains("choose-domain"))
+			return true;
 
-		HttpServletResponse httpResponse = (HttpServletResponse) response;
-		System.out.println("Redirecting it to " + url);
-		httpResponse.sendRedirect(url);
+		// If it is enter domain, just return
+		if (((HttpServletRequest) request).getRequestURI().contains("enter-domain"))
+			return true;
+
+		// If it is forgot domain, just return
+		if (((HttpServletRequest) request).getRequestURI().contains("forgot-domain"))
+			return true;
+
+		// Read Subdomain
+		String subdomain = request.getServerName().split("\\.")[0];
+
+		if (subdomain.equalsIgnoreCase(Globals.BULK_ACTION_BACKENDS_URL))
+			return true;
+
+		// Lowercase
+		subdomain = subdomain.toLowerCase();
+
+		// Get Server URL without subdomain
+		String url = request.getServerName().replaceAll(subdomain, "");
+		if (url.startsWith("."))
+			url = url.substring(1);
+
+		// If not agilecrm.com or helptor.com etc. - show chooseDomain
+		if (!Arrays.asList(Globals.URLS).contains(url.toLowerCase()))
+		{
+			redirectToChooseDomain(request, response);
+			return false;
+		}
+
+		// If my or any special domain - support etc, choose subdomain
+		if (Arrays.asList(Globals.LOGIN_DOMAINS).contains(subdomain))
+		{
+			redirectToChooseDomain(request, response);
+			return false;
+		}
+
+		// Set Google Apps Namespace if googleapps
+		if (subdomain.equalsIgnoreCase(Globals.GOOGLE_APPS_DOMAIN))
+		{
+			return setupGoogleAppsNameSpace(request, response);
+
+		}
+
+		// Set the subdomain as name space
+		System.out.println("Setting the domain " + subdomain + " " + ((HttpServletRequest) request).getRequestURL());
+		NamespaceManager.set(subdomain);
+		return true;
+	}
+
+	/**
+	 * Creates a full url with query parameters in the request appended to the
+	 * url
+	 * 
+	 * @param req
+	 * @return
+	 */
+	private static String getFullUrl(HttpServletRequest req)
+	{
+		String reqUrl = req.getRequestURL().toString();
+		String queryString = req.getQueryString(); // d=789
+		if (queryString != null)
+		{
+			reqUrl += "?" + queryString;
+		}
+		return reqUrl;
+	}
+
+	/**
+	 * Sets up google apps
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	private boolean setupGoogleAppsNameSpace(ServletRequest request, ServletResponse response)
+	{
+		try
+		{
+
+			String owner_id = request.getParameter("opensocial_owner_id");
+			System.out.println("open id in namespace filter : " + owner_id);
+			// If Gadget Level API which does not understand redirect, we
+			// just set the namespace
+			if (!StringUtils.isEmpty(request.getParameter(GMailGadgetServlet.SESSION_KEY_NAME)))
+				return true;
+
+			if (owner_id != null)
+			{
+				return true;
+			}
+
+			// Using openid, we are not able to support wildcard realms
+			String appsDomain = request.getParameter("domain");
+			if (appsDomain != null)
+			{
+				String namespace = appsDomain.split("\\.")[0];
+				System.out.println("Setting Google Apps - Namespace " + appsDomain);
+				String url = getFullUrl((HttpServletRequest) request);
+				System.out.println(url);
+				url = url.replace(Globals.GOOGLE_APPS_DOMAIN + ".", namespace + ".");
+
+				HttpServletResponse httpResponse = (HttpServletResponse) response;
+				System.out.println("Redirecting it to " + url);
+				httpResponse.sendRedirect(url);
+				return false;
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		redirectToChooseDomain(request, response);
 		return false;
-	    }
 	}
-	catch (Exception e)
+
+	/**
+	 * Redirects to choose domain.
+	 * 
+	 * @param request
+	 * @param response
+	 */
+	public void redirectToChooseDomain(ServletRequest request, ServletResponse response)
 	{
-	    e.printStackTrace();
+		// Redirect to choose domain page if not localhost - on localhost - we
+		// do it on empty namespace
+		if (!request.getServerName().equalsIgnoreCase("localhost")
+				&& !request.getServerName().equalsIgnoreCase("127.0.0.1"))
+		{
+			try
+			{
+				HttpServletResponse httpResponse = (HttpServletResponse) response;
+				httpResponse.sendRedirect(Globals.CHOOSE_DOMAIN);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+
+			}
+		}
 	}
 
-	redirectToChooseDomain(request, response);
-	return false;
-    }
-
-    /**
-     * Redirects to choose domain.
-     * 
-     * @param request
-     * @param response
-     */
-    public void redirectToChooseDomain(ServletRequest request,
-	    ServletResponse response)
-    {
-	// Redirect to choose domain page if not localhost - on localhost - we
-	// do it on empty namespace
-	if (!request.getServerName().equalsIgnoreCase("localhost")
-		&& !request.getServerName().equalsIgnoreCase("127.0.0.1"))
+	/**
+	 * Sets namespace or redirects to choose domain based on the url and
+	 * sessions. If url path starts with "/backend", reqeust is forwarded
+	 * without setting a namespace or redirecting to choose domain page
+	 * 
+	 * @param request
+	 * @param response
+	 * @param chain
+	 */
+	@Override
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
+			ServletException
 	{
-	    try
-	    {
-		HttpServletResponse httpResponse = (HttpServletResponse) response;
-		httpResponse.sendRedirect(Globals.CHOOSE_DOMAIN);
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
+		// If URL path stats with "/backend", then request is forwarded with out
+		// namespace verification i.e., no filter on url which starts with
+		// "/backend" (crons, StripeWebhooks)
+		String path = ((HttpServletRequest) request).getRequestURI();
+		if (path.startsWith("/backend"))
+		{
+			chain.doFilter(request, response);
+			return;
+		}
 
-	    }
+		if (path.startsWith("/core/api/bulk-actions"))
+		{
+			chain.doFilter(request, response);
+			return;
+		}
+
+		// Returns true if name space is set or namespace is already set for the
+		// application. If request is not to access the
+		// application but to create new domain (choosing domain) then it
+		// returns true, allowing further access
+		boolean handled = setNamespace(request, response);
+
+		// Chain into the next request if not redirected
+		if (handled)
+			chain.doFilter(request, response);
 	}
-    }
 
-    /**
-     * Sets namespace or redirects to choose domain based on the url and
-     * sessions. If url path starts with "/backend", reqeust is forwarded
-     * without setting a namespace or redirecting to choose domain page
-     * 
-     * @param request
-     * @param response
-     * @param chain
-     */
-    @Override
-    public void doFilter(ServletRequest request, ServletResponse response,
-	    FilterChain chain) throws IOException, ServletException
-    {
-	// If URL path stats with "/backend", then request is forwarded with out
-	// namespace verification i.e., no filter on url which starts with
-	// "/backend" (crons, StripeWebhooks)
-	String path = ((HttpServletRequest) request).getRequestURI();
-	if (path.startsWith("/backend"))
+	@Override
+	public void init(FilterConfig arg0) throws ServletException
 	{
-	    chain.doFilter(request, response);
-	    return;
+		// Nothing to do
+
 	}
 
-	if (path.startsWith("/core/api/bulk-actions"))
+	@Override
+	public void destroy()
 	{
-	    chain.doFilter(request, response);
-	    return;
+		// Nothing to do
 	}
-
-	// Returns true if name space is set or namespace is already set for the
-	// application. If request is not to access the
-	// application but to create new domain (choosing domain) then it
-	// returns true, allowing further access
-	boolean handled = setNamespace(request, response);
-
-	// Chain into the next request if not redirected
-	if (handled)
-	    chain.doFilter(request, response);
-    }
-
-    @Override
-    public void init(FilterConfig arg0) throws ServletException
-    {
-	// Nothing to do
-
-    }
-
-    @Override
-    public void destroy()
-    {
-	// Nothing to do
-    }
 
 }

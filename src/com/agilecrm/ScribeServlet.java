@@ -50,6 +50,7 @@ public class ScribeServlet extends HttpServlet
     public static final String SERVICE_TYPE_LINKED_IN = "linkedin";
     public static final String SERVICE_TYPE_TWITTER = "twitter";
     public static final String SERVICE_TYPE_GMAIL = "gmail";
+    public static final String SERVICE_TYPE_GOOGLE = "google";
     public static final String SERVICE_TYPE_STRIPE = "stripe";
     public static final String SERVICE_TYPE_FRESHBOOKS = "freshbooks";
 
@@ -134,6 +135,21 @@ public class ScribeServlet extends HttpServlet
 	    req.getSession().setAttribute("oauth.service", SERVICE_TYPE_STRIPE);
 	}
 
+	else if (serviceType.equalsIgnoreCase(SERVICE_TYPE_GOOGLE))
+
+	{
+	    // Creates a Service, by specifying API key, Secret key
+	    service = new ServiceBuilder()
+		    .provider(com.agilecrm.GoogleApi.class).callback(callback)
+		    .apiKey(Globals.GOOGLE_CLIENT_ID)
+		    .apiSecret(Globals.GOOGLE_SECRET_KEY)
+		    .scope("https://www.google.com/m8/feeds/").build();
+
+	    // Gets session and sets attribute "oauth.service" to Twitter type
+	    // as specified by Scribe
+	    req.getSession().setAttribute("oauth.service", SERVICE_TYPE_GOOGLE);
+	}
+
 	else
 	{
 	    // Creates a Service, by specifying API key, Secret key
@@ -178,9 +194,11 @@ public class ScribeServlet extends HttpServlet
 	Token accessToken = null;
 	OAuthService service = null;
 
-	if (serviceName.equalsIgnoreCase("Stripe"))
+	if (serviceName.equalsIgnoreCase("Stripe")
+		|| serviceName.equalsIgnoreCase("google"))
 	{
 	    code = req.getParameter("code");
+	    System.out.println(code);
 	}
 	else
 	{
@@ -242,6 +260,7 @@ public class ScribeServlet extends HttpServlet
 	    Map<String, String> properties = new HashMap<String, String>();
 	    properties.put("token", accessToken.getToken());
 	    properties.put("secret", accessToken.getSecret());
+	    properties.put("time", String.valueOf(System.currentTimeMillis()));
 
 	    saveWidgetPrefs(widgetId, properties);
 	}
@@ -301,6 +320,35 @@ public class ScribeServlet extends HttpServlet
 	    saveWidgetPrefs(widgetId, properties);
 	}
 
+	else if (serviceNameInSession.equalsIgnoreCase(SERVICE_TYPE_GOOGLE))
+	{
+	    System.out.println("In save token");
+
+	    OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST,
+		    "https://accounts.google.com/o/oauth2/token");
+
+	    oAuthRequest
+		    .addBodyParameter("client_id", Globals.GOOGLE_CLIENT_ID);
+	    oAuthRequest.addBodyParameter("client_secret",
+		    Globals.GOOGLE_SECRET_KEY);
+	    oAuthRequest.addBodyParameter("scope", "");
+	    oAuthRequest.addBodyParameter("redirect_uri",
+		    "http://localhost:8888/backend/googleservlet");
+	    oAuthRequest.addBodyParameter("code", code);
+	    oAuthRequest.addBodyParameter("grant_type", "authorization_code");
+
+	    Response response = oAuthRequest.send();
+	    // Creates HashMap from CreditCard JSON string
+	    HashMap<String, String> properties = new ObjectMapper().readValue(
+		    response.getBody(),
+		    new TypeReference<HashMap<String, String>>()
+		    {
+		    });
+
+	    System.out.println(properties.toString());
+	    System.out.println(response.getBody());
+
+	}
 	String returnURL = (String) req.getSession().getAttribute("return_url");
 	System.out.println("return url" + returnURL);
 
@@ -344,7 +392,8 @@ public class ScribeServlet extends HttpServlet
 	    resp.sendRedirect(return_url);
 	    return;
 	}
-	if (serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE))
+	if (serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE)
+		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE))
 	{
 	    url = service.getAuthorizationUrl(null);
 
@@ -360,12 +409,13 @@ public class ScribeServlet extends HttpServlet
 	    Response res = oAuthRequest.send();
 	    System.out.println(res.getBody());
 	    url = "";
-	    System.out.println("Stripe redirect url" + url);
+	    System.out.println("freshboooks redirect url" + url);
 
 	}
 	else
 	{
 	    token = service.getRequestToken();
+
 	    url = service.getAuthorizationUrl(token);
 	    System.out.println("redirect url" + url);
 	}
@@ -402,6 +452,9 @@ public class ScribeServlet extends HttpServlet
 	// authorization page
 	String oAuthToken = req.getParameter("oauth_token");
 	String oAuthVerifier = req.getParameter("oauth_verifier");
+
+	System.out.println(oAuthToken);
+	System.out.println(oAuthVerifier);
 
 	String code = req.getParameter("code");
 
