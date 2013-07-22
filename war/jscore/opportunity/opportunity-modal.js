@@ -64,6 +64,13 @@ $(function(){
 		e.preventDefault();
 		updateDeal($(this).data());
 	});
+	
+	$('#opportunities-by-milestones-model-list > div > div > ul > li').live('click', function(e) {
+		e.preventDefault();
+        var data = $(this).find('.data').attr('data');
+        var currentDeal = App_Deals.opportunityCollectionView.collection.get(data);
+		updateDeal(currentDeal);
+	});
     
 });
 
@@ -210,9 +217,44 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 				});
 			}
 			else if (Current_Route == 'deals') {
+
+				if(readCookie("agile_deal_view")) {
+					var modelJSON = App_Deals.opportunityMilestoneCollectionView.collection.models[0];
+					var newMilestone = json.milestone;
+					if (isUpdate)
+					{
+						var oldDealJSON = App_Deals.opportunityCollectionView.collection.get(json.id).toJSON();
+						var oldMilestone = oldDealJSON.milestone;
+						var milestone = modelJSON.get(oldMilestone);
+						for(var i in milestone)
+						{
+							if(milestone[i].id == json.id)
+							{
+								if(newMilestone != oldMilestone)
+								{
+									milestone[i].owner_id = milestone[i].owner.id;
+									milestone[i].milestone = newMilestone;
+									modelJSON.get(newMilestone).push(milestone[i]);
+									milestone.splice(i, 1);
+								}
+								else 
+								{
+									deal.owner_id = milestone[i].owner.id;
+									milestone.splice(i, 1);
+									modelJSON.get(oldMilestone).push(deal);
+								}
+								
+							}
+						}
+					}
+					else
+					  modelJSON.get(newMilestone).push(deal);
+					
+					App_Deals.opportunityMilestoneCollectionView.render(true);
+				}
 				if (isUpdate)
-					 App_Deals.opportunityCollectionView.collection.remove(json);
-				
+				 App_Deals.opportunityCollectionView.collection.remove(json);
+			
 				App_Deals.opportunityCollectionView.collection.add(data);
 				App_Deals.opportunityCollectionView.render(true);
 
