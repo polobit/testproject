@@ -1,6 +1,5 @@
 var milestoneTemplate;
 var milestoneCollection;
-
 function setup_milestones(el){
 	if(!milestoneCollection)
 		{
@@ -74,11 +73,17 @@ function setup_deals_in_milestones(){
 		$('ul.milestones').sortable({
 		      connectWith: "ul",
 		      cursor: "move",
-		      containment: "#opportunities-by-milestones-model-list > div",
-		      scrollSensitivity : 10,
-		      scroll:true,
-		      change:function(event, ui){
-		      	$('#opportunities-by-milestones-model-list > div').scrollLeft($(this).position().left);
+		      containment: "#opportunities-by-milestones-model-list",
+		      scroll: false,
+		      change : function(event, ui){
+		    	  var scrollX = $('#opportunities-by-milestones-model-list > div').scrollLeft();
+		    	  if(event.pageX > 650)
+		    		  $('#opportunities-by-milestones-model-list > div').scrollLeft($('#opportunities-by-milestones-model-list > div').scrollLeft() + 5);
+		    	  else if(event.pageX < 100)
+		    		  $('#opportunities-by-milestones-model-list > div').scrollLeft($('#opportunities-by-milestones-model-list > div').scrollLeft() - 5);
+		    	  
+		    	//  $('#opportunities-by-milestones-model-list > div').scrollLeft(event.pageX);
+		      	//$('#opportunities-by-milestones-model-list > div').scrollLeft($(this).position().left);
 		      },
 		      update: function(event, ui) {
 					var id = ui.item[0].id;
