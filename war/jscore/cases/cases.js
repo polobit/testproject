@@ -32,9 +32,6 @@ $(function () {
         	"data-content" :  ele
         });
         $(this).popover('show');
-        
-        var commas = $('.comma_popover_case');
-        commas[commas.length-1].innerHTML='';   /// for handling commas
      });
     
 	
