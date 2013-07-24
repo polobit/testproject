@@ -318,11 +318,11 @@ $(function() {
 	Handlebars.registerHelper('deals_by_milestones', function(data) {
 		var html = "";
 		$.each(data, function(key, value) {
-			html += "<ul class='span3 milestones' milestone='"+ key +"' style='margin:0px 3px;text-align: center;display:inline-block;list-style:none;vertical-align: top;border-top:1px dotted;border-style:outset;'><b>" + key +"</b>";
+			html += "<div style='width:26%;vertical-align:top;border-right:1px solid #d5d5d5;display:inline-block;'><p style='padding: 4px 0px;text-align:center;color:white;background-color:grey;'><b>" + key +"</b></p><ul class='milestones "+ key +"' milestone='"+ key +"' style='height:489px;overflow-y:auto!important;list-style:none;margin-left:0px;'>";
 			for(var i in value){
-				html += "<li>" + getTemplate("opportunities-grid-view", value[i]) + "</li>";
+				html += "<li style='margin:0px 5px;' id='"+ value[i].id +"'>" + getTemplate("opportunities-grid-view", value[i]) + "</li>";
 			}
-			html +=	"</ul>";
+			html +=	"</ul></div>";
 		});
 		return html;
 	});

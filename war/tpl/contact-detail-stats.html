@@ -14,8 +14,12 @@
             </div>
         </div>
         {{/unless}}
-
 {{#if this.length}}
+<div style="float: right; margin-top:-30px;">
+	<p>
+		<b>Original Referrer: </b>{{getCurrentContactProperty "original_ref"}} 
+	</p>
+</div>
 	<ul id="stats-model-list" class="ativity-block-ul"></ul>
 {{/if}}
 

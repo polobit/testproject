@@ -11,7 +11,7 @@ $(function () {
 	 * When mouseover on any row of opportunities list, the popover of deal is shown
 	 **/
 	$('#opportunities-model-list > tr').live('mouseenter', function () {
-        
+        //, #opportunities-by-milestones-model-list > div > div > ul > li
         var data = $(this).find('.data').attr('data');
 
         var currentDeal = App_Deals.opportunityCollectionView.collection.get(data);

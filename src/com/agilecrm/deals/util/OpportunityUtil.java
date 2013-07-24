@@ -92,7 +92,7 @@ public class OpportunityUtil
 	    {
 		json = mapper.writeValueAsString(dealslist);
 		json = json.replace("null", "\"\"");
-		milestonesObject.put(milestone, json);
+		milestonesObject.put(milestone.trim(), json);
 	    }
 	    catch (Exception e)
 	    {
