@@ -81,9 +81,6 @@ function setup_deals_in_milestones(){
 		    		  $('#opportunities-by-milestones-model-list > div').scrollLeft($('#opportunities-by-milestones-model-list > div').scrollLeft() + 5);
 		    	  else if(event.pageX < 100)
 		    		  $('#opportunities-by-milestones-model-list > div').scrollLeft($('#opportunities-by-milestones-model-list > div').scrollLeft() - 5);
-		    	  
-		    	//  $('#opportunities-by-milestones-model-list > div').scrollLeft(event.pageX);
-		      	//$('#opportunities-by-milestones-model-list > div').scrollLeft($(this).position().left);
 		      },
 		      update: function(event, ui) {
 					var id = ui.item[0].id;
