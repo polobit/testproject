@@ -454,7 +454,7 @@ function notify(type, message, position, closable) {
  * @param position -
  *            position of pop-up within the webpage.
  * @param notification_type -
- *            notification type - TAG CREATED, TAG DELETED etc.
+ *            notification type - TAG_CREATED, TAG_DELETED etc.
  */
 function showNoty(type, message, position,notification_type) {
 
@@ -467,7 +467,7 @@ function showNoty(type, message, position,notification_type) {
 			&& window.webkitNotifications.checkPermission() == 0) {
 		show_desktop_notification(getImageUrl(message),
 				getNotificationType(notification_type), getTextMessage(message),
-				getId(message));
+				getId(message), getId(message).split('/')[1]+'-'+notification_type);
 		return;
 	}
 

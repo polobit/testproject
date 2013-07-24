@@ -9,13 +9,18 @@
  *            title - Notification type.
  * @param {String}
  *            message - Notification message.
+ * @param {String}
+ *            link - link to navigate when clicked on popup.
+ * @param {String}
+ *            tag - to set tag property of Notification. Here tag is contact-id + notification-type
  */
-function show_desktop_notification(imageURL, title, message, link) {
+function show_desktop_notification(imageURL, title, message, link, tag) {
 
-	if (window.webkitNotifications
-			&& window.webkitNotifications.checkPermission() == 0) {
-		var notification = window.webkitNotifications.createNotification(
-				imageURL, title, message);
+		var notification = new Notification(title, {
+		    body : message,
+		    tag :  tag,
+		    icon : imageURL
+		});
 
 		notification.onclick = function(x) {
 			window.focus();
@@ -38,8 +43,6 @@ function show_desktop_notification(imageURL, title, message, link) {
 			
 			notification.show();
 		}
-
-	}
 }
 
 /**
