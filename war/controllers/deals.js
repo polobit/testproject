@@ -61,8 +61,8 @@ var DealsRouter = Backbone.Router.extend({
 					$('#opportunities-by-milestones-model-list > div').css({
 						"white-space" : "nowrap",
 						"overflow" : "auto",
-						"width" : "720px",
-						"height" : "550px",
+						"width" : "100%",
+						"height" : "517px",
 						"border" : "1px solid #d5d5d5",
 						"border-radius" : "3px"
 					});

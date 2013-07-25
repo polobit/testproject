@@ -76,11 +76,12 @@ function setup_deals_in_milestones(){
 		      containment: "#opportunities-by-milestones-model-list",
 		      scroll: false,
 		      change : function(event, ui){
+		    	  var width = $('#opportunities-by-milestones-model-list > div').width();
 		    	  var scrollX = $('#opportunities-by-milestones-model-list > div').scrollLeft();
-		    	  if(event.pageX > 650)
-		    		  $('#opportunities-by-milestones-model-list > div').scrollLeft($('#opportunities-by-milestones-model-list > div').scrollLeft() + 5);
+		    	  if(event.pageX > (width-70))
+		    		  $('#opportunities-by-milestones-model-list > div').scrollLeft(scrollX + 5);
 		    	  else if(event.pageX < 100)
-		    		  $('#opportunities-by-milestones-model-list > div').scrollLeft($('#opportunities-by-milestones-model-list > div').scrollLeft() - 5);
+		    		  $('#opportunities-by-milestones-model-list > div').scrollLeft(scrollX - 5);
 		      },
 		      update: function(event, ui) {
 					var id = ui.item[0].id;
@@ -117,7 +118,7 @@ function update_milestone(data, id, newMilestone, oldMilestone){
 		success : function(model, response) {
 			App_Deals.opportunityCollectionView.collection.remove(DealJSON);
 			App_Deals.opportunityCollectionView.collection.add(model);
-			App_Deals.opportunityCollectionView.render();
+			App_Deals.opportunityCollectionView.render(true);
 		}
 	});
 
