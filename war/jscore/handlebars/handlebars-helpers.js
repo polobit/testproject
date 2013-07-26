@@ -297,30 +297,14 @@ $(function() {
 
 		return html;
 	});
-	
-	// To show milestones as columns
-	Handlebars.registerHelper('milestone_element', function(item) {
-		var html = "";
-		var str;
-		$.each(item, function(key, value) {
-			str = value.milestones;
-		});
-		
-		var milestones = str.split(",");
-		
-		for(var i in milestones){
-			html += "<th>" + milestones[i].trim()+"</th>";
-		}
-		return html;
-	});
-	
+
 	// To show milestones as columns an deals
 	Handlebars.registerHelper('deals_by_milestones', function(data) {
 		var html = "";
 		$.each(data, function(key, value) {
-			html += "<div style='width:24.9%;vertical-align:top;border-right:1px solid gray;display:inline-block;'><p style='padding: 7px 0px;text-align:center;font-size:17px;background-color:lightgrey;'><b>" + key +"</b></p><ul class='milestones "+ key +"' milestone='"+ key +"' style='height:450px;overflow-y:auto!important;list-style:none;margin-left:0px;'>";
+			html += "<div class='milestone-column'><p class='milestone-heading'><b>" + key +"</b></p><ul class='milestones' milestone='"+ key +"'>";
 			for(var i in value){
-				html += "<li style='margin:0px 5px;cursor:move;' id='"+ value[i].id +"'>" + getTemplate("opportunities-grid-view", value[i]) + "</li>";
+				html += "<li id='"+ value[i].id +"'>" + getTemplate("opportunities-grid-view", value[i]) + "</li>";
 			}
 			html +=	"</ul></div>";
 		});

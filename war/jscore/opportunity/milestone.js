@@ -1,3 +1,4 @@
+/* 
 var milestoneTemplate;
 var milestoneCollection;
 function setup_milestones(el){
@@ -21,7 +22,23 @@ function setup_milestones(el){
 	$(el).html(milestoneTemplate);
 }
 
-/*    	var deals_by_milestones_collection = new Backbone.Collection();
+// To show milestones as columns
+Handlebars.registerHelper('milestone_element', function(item) {
+	var html = "";
+	var str;
+	$.each(item, function(key, value) {
+		str = value.milestones;
+	});
+	
+	var milestones = str.split(",");
+	
+	for(var i in milestones){
+		html += "<th>" + milestones[i].trim()+"</th>";
+	}
+	return html;
+});
+
+var deals_by_milestones_collection = new Backbone.Collection();
 deals_by_milestones_collection.url = "core/api/opportunity/byMilestone"
 
 // Fetches the deals by milestones
@@ -68,9 +85,9 @@ $(function(){
 	});
 });
 
+// To perform actions on deals arranged in milestones
 function setup_deals_in_milestones(){
 	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function() {
-		$('#opportunities-by-milestones-model-list > div  div:last-child').find("ul").closest('div').css({"border-right":"none"});
 		$('ul.milestones').sortable({
 		      connectWith: "ul",
 		      cursor: "move",
@@ -97,6 +114,7 @@ function setup_deals_in_milestones(){
 	});
 }
 
+// To change the milestone of the deal when it is dropped in other column
 function update_milestone(data, id, newMilestone, oldMilestone){
 	//App_Deals.opportunityMilestoneCollectionView.collection.remove(data);
 	var milestone = data.get(oldMilestone);
@@ -112,7 +130,7 @@ function update_milestone(data, id, newMilestone, oldMilestone){
 			milestone.splice(i, 1);
 		}
 	}
-
+   // Saving that deal object
 	var up_deal = new Backbone.Model();
 	up_deal.url = '/core/api/opportunity';
 	up_deal.save(DealJSON, {

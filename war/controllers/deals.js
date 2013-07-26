@@ -58,15 +58,10 @@ var DealsRouter = Backbone.Router.extend({
 					{
 						$(".deal-close-time", el).timeago();
 					});
-					$('#opportunities-by-milestones-model-list > div').css({
-						"white-space" : "nowrap",
-						"overflow" : "auto",
-						"width" : "100%",
-						"height" : "517px",
-						"border" : "1px solid #d5d5d5",
-						"border-radius" : "3px"
-					});
-
+					
+					$('#opportunities-by-milestones-model-list > div').addClass("milestone-main");
+					$('.milestone-main :last-child').find("ul").closest('div').css({"border-right":"none"});
+					
 					setup_deals_in_milestones();
 
 					// Shows Milestones Pie
