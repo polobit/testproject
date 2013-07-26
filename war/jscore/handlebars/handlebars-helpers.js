@@ -318,9 +318,9 @@ $(function() {
 	Handlebars.registerHelper('deals_by_milestones', function(data) {
 		var html = "";
 		$.each(data, function(key, value) {
-			html += "<div style='width:25%;vertical-align:top;border-right:1px solid gray;display:inline-block;'><p style='padding: 7px 0px;text-align:center;font-size:17px;background-color:lightgrey;'><b>" + key +"</b></p><ul class='milestones "+ key +"' milestone='"+ key +"' style='height:450px;overflow-y:auto!important;list-style:none;margin-left:0px;'>";
+			html += "<div style='width:24.9%;vertical-align:top;border-right:1px solid gray;display:inline-block;'><p style='padding: 7px 0px;text-align:center;font-size:17px;background-color:lightgrey;'><b>" + key +"</b></p><ul class='milestones "+ key +"' milestone='"+ key +"' style='height:450px;overflow-y:auto!important;list-style:none;margin-left:0px;'>";
 			for(var i in value){
-				html += "<li style='margin:0px 5px;' id='"+ value[i].id +"'>" + getTemplate("opportunities-grid-view", value[i]) + "</li>";
+				html += "<li style='margin:0px 5px;cursor:move;' id='"+ value[i].id +"'>" + getTemplate("opportunities-grid-view", value[i]) + "</li>";
 			}
 			html +=	"</ul></div>";
 		});

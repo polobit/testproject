@@ -70,6 +70,7 @@ $(function(){
 
 function setup_deals_in_milestones(){
 	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function() {
+		$('#opportunities-by-milestones-model-list > div  div:last-child').find("ul").closest('div').css({"border-right":"none"});
 		$('ul.milestones').sortable({
 		      connectWith: "ul",
 		      cursor: "move",
@@ -78,7 +79,7 @@ function setup_deals_in_milestones(){
 		      change : function(event, ui){
 		    	  var width = $('#opportunities-by-milestones-model-list > div').width();
 		    	  var scrollX = $('#opportunities-by-milestones-model-list > div').scrollLeft();
-		    	  if(event.pageX > (width-70))
+		    	  if(event.pageX > (width-100))
 		    		  $('#opportunities-by-milestones-model-list > div').scrollLeft(scrollX + 5);
 		    	  else if(event.pageX < 100)
 		    		  $('#opportunities-by-milestones-model-list > div').scrollLeft(scrollX - 5);
