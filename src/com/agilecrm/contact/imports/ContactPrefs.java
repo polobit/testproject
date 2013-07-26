@@ -80,7 +80,6 @@ public class ContactPrefs implements Serializable
      */
     public void save()
     {
-
 	dao.put(this);
     }
 
