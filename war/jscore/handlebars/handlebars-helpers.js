@@ -673,6 +673,26 @@ $(function() {
 		}
 	});
 	
+	// To show related to contacts for contacts as well as companies
+	Handlebars.registerHelper('related_to_contacts', function(data, options) {
+		var el = "";
+		var count = data.length;
+		$.each(data, function(key, value) {
+			var html = getTemplate("related-to-contacts", value);
+			if (--count == 0) {
+				el = el.concat(html);
+				return;
+			}
+			el = el.concat(html + ", ");
+		});
+		return new Handlebars.SafeString(el);
+	});
+	
+	// To show only one related to contacts or companies in deals
+	Handlebars.registerHelper('related_to_one', function(data, options) {
+		return "<span>" + getTemplate("related-to-contacts", data[0]) + "</span>";
+	});
+	
 	/**
 	 * Converts reports field element as comma seprated values and returns as handlebars safe
 	 * string.
@@ -1008,8 +1028,7 @@ $(function() {
 	Handlebars.registerHelper('isDuplicateContactProperty', function(properties, key,  options) {
 		if (App_Contacts.contactDetailView
 				&& App_Contacts.contactDetailView.model) {
-			var contact_properties = App_Contacts.contactDetailView.model
-					.get('properties')
+			var contact_properties = App_Contacts.contactDetailView.model.get('properties')
 					var currentContactEntity = getPropertyValue(contact_properties, key);
 					var contactEntity = getPropertyValue(properties, key);
 					
@@ -1227,4 +1246,42 @@ $(function() {
 		return new Handlebars.SafeString(element);
 	});
 	
+
+	/**
+	 * To check and return value of original referrer
+	 */
+	Handlebars.registerHelper('checkOriginalRef', function(original_ref)
+	{
+
+		if (!getCurrentContactProperty(original_ref))
+			return "unknown";
+		else
+			return new Handlebars.SafeString(
+					'<a style="text-decoration: none" target="_blank" href="' + getCurrentContactProperty(original_ref) + '">' + getCurrentContactProperty(
+							original_ref).slice(0, 40) + '</a>');
+	});
+
+	/**
+	 * To check google url and key words
+	 */
+	Handlebars.registerHelper('queryWords', function(original_ref)
+	{
+		if (getCurrentContactProperty(original_ref))
+		{
+			var turl = getCurrentContactProperty(original_ref);
+			var rurl = 'http://www.google.';
+			var uurl = turl.slice(0, 18);
+			if (uurl === rurl)
+			{
+				var k = turl.indexOf('q=');
+				turl = turl.slice(url.indexOf('q='), url.indexOf('&', k));
+				var s = turl.length;
+				turl = turl.slice(2, s);
+				turl = turl.replace('+', ' ');
+				return new Handlebars.SafeString('( Keyword : ' + turl + ' )');
+			}
+			else
+				return;
+		}
+	});
 });
