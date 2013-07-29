@@ -694,10 +694,10 @@ $(function() {
 	});
 	
 	/**
-	 * Converts reports field element as comma seprated values and returns as handlebars safe
+	 * Converts reports/view field element as comma seprated values and returns as handlebars safe
 	 * string.
 	 */
-	Handlebars.registerHelper('reports_Field_Element', function(properties) {
+	Handlebars.registerHelper('field_Element', function(properties) {
 				var el = "";
 				var count = properties.length;
 				$.each(properties, function(key, value) {
@@ -723,34 +723,6 @@ $(function() {
 				return new Handlebars.SafeString(el);
 	});
 	
-	/**
-	 * Converts views field element as comma seprated values and returns as handlebars safe
-	 * string.
-	 */
-	Handlebars.registerHelper('views_Field_Element', function(properties) {
-				var el = "";
-				var count = properties.length;
-				$.each(properties, function(key, value) {
-					
-					if (value.indexOf("custom_") != -1)
-						value = value.split("custom_")[1];
-					else if (value == "created_time")
-						value = "Created Date";
-					else if (value == "updated_time")
-						value = "Updated Date";
-					
-					value = value.replace("_", " ");
-
-					if (--count == 0) {
-						el = el.concat(value);
-						return;
-					}
-					el = el.concat(value + ", ");
-				});
-				
-				return new Handlebars.SafeString(el);
-	});
-
 	/**
 	 * Converts string to JSON
 	 */
@@ -1246,42 +1218,4 @@ $(function() {
 		return new Handlebars.SafeString(element);
 	});
 	
-
-	/**
-	 * To check and return value of original referrer
-	 */
-	Handlebars.registerHelper('checkOriginalRef', function(original_ref)
-	{
-
-		if (!getCurrentContactProperty(original_ref))
-			return "unknown";
-		else
-			return new Handlebars.SafeString(
-					'<a style="text-decoration: none" target="_blank" href="' + getCurrentContactProperty(original_ref) + '">' + getCurrentContactProperty(
-							original_ref).slice(0, 40) + '</a>');
-	});
-
-	/**
-	 * To check google url and key words
-	 */
-	Handlebars.registerHelper('queryWords', function(original_ref)
-	{
-		if (getCurrentContactProperty(original_ref))
-		{
-			var turl = getCurrentContactProperty(original_ref);
-			var rurl = 'http://www.google.';
-			var uurl = turl.slice(0, 18);
-			if (uurl === rurl)
-			{
-				var k = turl.indexOf('q=');
-				turl = turl.slice(url.indexOf('q='), url.indexOf('&', k));
-				var s = turl.length;
-				turl = turl.slice(2, s);
-				turl = turl.replace('+', ' ');
-				return new Handlebars.SafeString('( Keyword : ' + turl + ' )');
-			}
-			else
-				return;
-		}
-	});
 });

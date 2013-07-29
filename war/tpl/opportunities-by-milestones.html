@@ -66,17 +66,17 @@
 </script>
 
 <script id="opportunities-grid-view-template" type="text/html">
-<div data="{{id}}" class="data">
-	<b class="agile-overflow-ellipsis deal-edit" style="height:auto;display:inline-block;cursor:pointer;">{{name}}</b><br/>
-	<div class="agile-overflow-ellipsis" style="width:157px!important;">
+<div data="{{id}}" class="data agile-overflow-ellipsis">
+	<b class="deal-edit" style="cursor:pointer;">{{name}}</b><br/>
+	<div class="agile-overflow-ellipsis">
 		<span>{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}}{{expected_value}}</span>
 		{{#if this.contacts}}
 			<span style="margin:0px 5px;border:1px solid #d5d5d5"></span>
 			{{#related_to_one contacts}}{{/related_to_one}}
+			{{#if_greater this.contacts.length "2"}}<span>,..</span>{{/if_greater}}
 		{{/if}}
-		{{#if_greater this.contacts.length "2"}}<span>,..</span>{{/if_greater}}
 	</div>
-	<div class="agile-overflow-ellipsis" style="width:11em;"><small><time class="deal-close-time" datetime="{{epochToHumanDate "" close_date}}" style="border-bottom:dotted 1px #999;">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time></small></div>
+	<div><small><time class="deal-close-time" datetime="{{epochToHumanDate "" close_date}}" style="border-bottom:dotted 1px #999;">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time></small></div>
 </div>
 </script>
 
