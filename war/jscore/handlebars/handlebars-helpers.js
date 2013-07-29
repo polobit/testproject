@@ -673,6 +673,26 @@ $(function() {
 		}
 	});
 	
+	// To show related to contacts for contacts as well as companies
+	Handlebars.registerHelper('related_to_contacts', function(data, options) {
+		var el = "";
+		var count = data.length;
+		$.each(data, function(key, value) {
+			var html = getTemplate("related-to-contacts", value);
+			if (--count == 0) {
+				el = el.concat(html);
+				return;
+			}
+			el = el.concat(html + ", ");
+		});
+		return new Handlebars.SafeString(el);
+	});
+	
+	// To show only one related to contacts or companies in deals
+	Handlebars.registerHelper('related_to_one', function(data, options) {
+		return "<span>" + getTemplate("related-to-contacts", data[0]) + "</span>";
+	});
+	
 	/**
 	 * Converts reports field element as comma seprated values and returns as handlebars safe
 	 * string.
@@ -1008,8 +1028,7 @@ $(function() {
 	Handlebars.registerHelper('isDuplicateContactProperty', function(properties, key,  options) {
 		if (App_Contacts.contactDetailView
 				&& App_Contacts.contactDetailView.model) {
-			var contact_properties = App_Contacts.contactDetailView.model
-					.get('properties')
+			var contact_properties = App_Contacts.contactDetailView.model.get('properties')
 					var currentContactEntity = getPropertyValue(contact_properties, key);
 					var contactEntity = getPropertyValue(properties, key);
 					
