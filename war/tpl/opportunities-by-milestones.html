@@ -68,20 +68,23 @@
 <script id="opportunities-grid-view-template" type="text/html">
 <div data="{{id}}" class="data">
 	<b class="agile-overflow-ellipsis deal-edit" style="height:auto;display:inline-block;cursor:pointer;">{{name}}</b><br/>
-	<div class="agile-overflow-ellipsis" style="width:150px!important;">
+	<div class="agile-overflow-ellipsis" style="width:157px!important;">
 		<span>{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}}{{expected_value}}</span>
-		{{#if this.contacts}}<span style="margin:0px 5px;border:1px solid #d5d5d5"></span>{{/if}}
-		<span>
-			{{#each contacts}}
-				{{#if_contact_type "PERSON"}}	
-					<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
-        		{{/if_contact_type}}
-				{{#if_contact_type "COMPANY"}}
-        			<a href="#contact/{{id}}">{{getPropertyValue properties "name"}}</a>,
-        		{{/if_contact_type}}
-			{{/each}}
-		</span>
+		{{#if this.contacts}}
+			<span style="margin:0px 5px;border:1px solid #d5d5d5"></span>
+			{{#related_to_one contacts}}{{/related_to_one}}
+		{{/if}}
+		{{#if_greater this.contacts.length "2"}}<span>,..</span>{{/if_greater}}
 	</div>
 	<div class="agile-overflow-ellipsis" style="width:11em;"><small><time class="deal-close-time" datetime="{{epochToHumanDate "" close_date}}" style="border-bottom:dotted 1px #999;">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time></small></div>
 </div>
+</script>
+
+<script id="related-to-contacts-template" type="text/html">
+	{{#if_contact_type "PERSON"}}	
+		<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
+    {{/if_contact_type}}
+	{{#if_contact_type "COMPANY"}}
+     			<a href="#contact/{{id}}">{{getPropertyValue properties "name"}}</a>
+    {{/if_contact_type}}
 </script>
