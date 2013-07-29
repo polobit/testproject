@@ -694,10 +694,10 @@ $(function() {
 	});
 	
 	/**
-	 * Converts reports field element as comma seprated values and returns as handlebars safe
+	 * Converts reports/view field element as comma seprated values and returns as handlebars safe
 	 * string.
 	 */
-	Handlebars.registerHelper('reports_Field_Element', function(properties) {
+	Handlebars.registerHelper('field_Element', function(properties) {
 				var el = "";
 				var count = properties.length;
 				$.each(properties, function(key, value) {
@@ -723,34 +723,6 @@ $(function() {
 				return new Handlebars.SafeString(el);
 	});
 	
-	/**
-	 * Converts views field element as comma seprated values and returns as handlebars safe
-	 * string.
-	 */
-	Handlebars.registerHelper('views_Field_Element', function(properties) {
-				var el = "";
-				var count = properties.length;
-				$.each(properties, function(key, value) {
-					
-					if (value.indexOf("custom_") != -1)
-						value = value.split("custom_")[1];
-					else if (value == "created_time")
-						value = "Created Date";
-					else if (value == "updated_time")
-						value = "Updated Date";
-					
-					value = value.replace("_", " ");
-
-					if (--count == 0) {
-						el = el.concat(value);
-						return;
-					}
-					el = el.concat(value + ", ");
-				});
-				
-				return new Handlebars.SafeString(el);
-	});
-
 	/**
 	 * Converts string to JSON
 	 */

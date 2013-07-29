@@ -891,8 +891,9 @@ tbody a.no-style-a {
 	background-color:#f5f5dc;
 }
 .agile-overflow-ellipsis{
+	display: inline-block;
 	text-overflow:ellipsis;
 	white-space:nowrap;
-	width:10em;
+	width:100%;
 	overflow:hidden;
 }
