@@ -37,20 +37,21 @@ public class StatsAPI
      */
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
-    public List<Analytics> getStatsGroupedBySessions(
-	    @QueryParam("e") String searchEmail)
+    public List<Analytics> getStatsGroupedBySessions(@QueryParam("e") String searchEmail)
     {
 	JSONArray pageViewsList = AnalyticsSQLUtil.getPageViews(searchEmail);
 
-	JSONArray mergedStats = AnalyticsUtil
-		.mergePageViewsBasedOnSessions(pageViewsList);
+	JSONArray mergedStats = AnalyticsUtil.mergePageViewsBasedOnSessions(pageViewsList);
+
+	if (mergedStats == null)
+	    return null;
+
 	try
 	{
 	    // to attach parsed user-agent string
-	    return new ObjectMapper().readValue(mergedStats.toString(),
-		    new TypeReference<List<Analytics>>()
-		    {
-		    });
+	    return new ObjectMapper().readValue(mergedStats.toString(), new TypeReference<List<Analytics>>()
+	    {
+	    });
 	}
 	catch (Exception e)
 	{

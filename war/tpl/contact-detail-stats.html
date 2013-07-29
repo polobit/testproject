@@ -35,12 +35,14 @@
 		
 		<ul style="list-style: none;">
 			<li class="row-fluid">	
-					<div class="span2"><b>URL</b>
+					<div class="span2"><b>URL-TimeSpent</b>
 						<div class="pull-right">:</div>
 					</div>
 							
 					<div class="span6" style="margin-left: 10px;">
-						{{url}}
+                      {{#stringToJSON this "urls_with_time_spent"}}{{/stringToJSON}}
+          	          
+					{{#each urls_with_time_spent}}{{url}} - {{convertSecondsToHour time_spent}}<br/> {{/each}}
 					</div>
 				</li>
                 {{#if ref}}
