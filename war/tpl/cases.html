@@ -263,7 +263,7 @@
                 <p><b>Owner</b> : {{owner.name}}</p>
                 <p><b>Related To</b> : </p> 
                 <div>
-				{{#each contacts}}
+				{{#each_with_index contacts}}
                 	<div class="span4" style="display:inline-block;margin:5px;margin-left:25px;">
 					{{#if_equals type "PERSON"}}
                     	<img class="thumbnail" src="{{gravatarurl properties 50}}" width="40px" height="40px" />
@@ -275,10 +275,14 @@
                     	<div style="display:inline-block;text-overflow:ellipsis;white-space:nowrap;width:90px;overflow:hidden;">
                         	{{getPropertyValue properties "name"}}
 					{{/if_equals}}
-						<span class='comma_popover_case'>,</span>
+
+					{{#if_equals index ../contacts.length}}
+					{{else}}
+						,
+					{{/if_equals}}
 						</div>
                 	</div>
-                {{/each}}
+                {{/each_with_index}}
                 </div>
             </div>
         </div>

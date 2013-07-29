@@ -205,7 +205,7 @@ $(function(){
 		e.preventDefault();
 		SELECT_ALL = true;
 		_BULK_CONTACTS = window.location.hash;
-		$('body').find('#bulk-select').css('display', 'block').html('Selected All ' + getAvailableContacts() + ' contacts. <a hrer="#" id="select-all-revert">Select chosen contacts only</a>');
+		$('body').find('#bulk-select').css('display', 'block').html('Selected All ' + getAvailableContacts() + ' contacts. <a hrer="#" id="select-all-revert" style="cursor:pointer">Select chosen contacts only</a>');
 		
 		// On choosing select all option, all the visible checkboxes in the table should be checked
 		$.each($('.tbody_check'), function(index, element){

@@ -297,30 +297,14 @@ $(function() {
 
 		return html;
 	});
-	
-	// To show milestones as columns
-	Handlebars.registerHelper('milestone_element', function(item) {
-		var html = "";
-		var str;
-		$.each(item, function(key, value) {
-			str = value.milestones;
-		});
-		
-		var milestones = str.split(",");
-		
-		for(var i in milestones){
-			html += "<th>" + milestones[i].trim()+"</th>";
-		}
-		return html;
-	});
-	
+
 	// To show milestones as columns an deals
 	Handlebars.registerHelper('deals_by_milestones', function(data) {
 		var html = "";
 		$.each(data, function(key, value) {
-			html += "<div style='width:26%;vertical-align:top;border-right:1px solid #d5d5d5;display:inline-block;'><p style='text-align:center;'><b>" + key +"</b></p><ul class='milestones' milestone='"+ key +"' style='height:465px!important;overflow-y:auto!important;list-style:none;margin-left:0px;'>";
+			html += "<div class='milestone-column'><p class='milestone-heading'><b>" + key +"</b></p><ul class='milestones' milestone='"+ key +"'>";
 			for(var i in value){
-				html += "<li style='margin-left: 5px;' id='"+ value[i].id +"'>" + getTemplate("opportunities-grid-view", value[i]) + "</li>";
+				html += "<li id='"+ value[i].id +"'>" + getTemplate("opportunities-grid-view", value[i]) + "</li>";
 			}
 			html +=	"</ul></div>";
 		});
@@ -689,6 +673,26 @@ $(function() {
 		}
 	});
 	
+	// To show related to contacts for contacts as well as companies
+	Handlebars.registerHelper('related_to_contacts', function(data, options) {
+		var el = "";
+		var count = data.length;
+		$.each(data, function(key, value) {
+			var html = getTemplate("related-to-contacts", value);
+			if (--count == 0) {
+				el = el.concat(html);
+				return;
+			}
+			el = el.concat(html + ", ");
+		});
+		return new Handlebars.SafeString(el);
+	});
+	
+	// To show only one related to contacts or companies in deals
+	Handlebars.registerHelper('related_to_one', function(data, options) {
+		return "<span>" + getTemplate("related-to-contacts", data[0]) + "</span>";
+	});
+	
 	/**
 	 * Converts reports field element as comma seprated values and returns as handlebars safe
 	 * string.
@@ -1024,8 +1028,7 @@ $(function() {
 	Handlebars.registerHelper('isDuplicateContactProperty', function(properties, key,  options) {
 		if (App_Contacts.contactDetailView
 				&& App_Contacts.contactDetailView.model) {
-			var contact_properties = App_Contacts.contactDetailView.model
-					.get('properties')
+			var contact_properties = App_Contacts.contactDetailView.model.get('properties')
 					var currentContactEntity = getPropertyValue(contact_properties, key);
 					var contactEntity = getPropertyValue(properties, key);
 					

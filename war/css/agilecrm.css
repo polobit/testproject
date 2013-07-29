@@ -832,3 +832,67 @@ tbody a.no-style-a {
 	text-decoration:none;
 }
 
+/* For scroll in deals milestones */
+/* Vertical scroll */
+#opportunities-by-milestones-model-list ::-webkit-scrollbar {
+    width: 5px;
+}
+/* Horizontal scroll */
+#opportunities-by-milestones-model-list ::-webkit-scrollbar:horizontal {
+	height:9px;
+}
+/* Track */
+#opportunities-by-milestones-model-list ::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+/* Handle */
+#opportunities-by-milestones-model-list ::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: rgba(185, 182, 182, 0.8);
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+/* For UI in deals milestones */
+.milestone-main{
+	white-space:nowrap;
+	overflow:auto;
+	width:100%;
+	height:517px;
+	border:1px solid #d5d5d5;
+	border-radius:3px;
+}
+.milestone-column{
+	width:24.9%;
+	vertical-align:top;
+	border-right:1px solid #bbb;
+	display:inline-block;
+}
+.milestone-heading{
+	padding: 7px 0px;
+	text-align:center;
+	font-size:17px;
+	background-color:lightgrey;
+}
+.milestone-column > ul {
+	height:450px;
+	overflow-y:auto!important;
+	list-style:none;
+	margin-left:0px;
+}
+.milestone-column > ul > li {
+	margin:5px;
+	cursor:move;
+	text-align:left;
+	border: 1px solid #DDD;
+	border-radius:4px;
+	padding: 10px;
+	background-color:#f5f5dc;
+}
+.agile-overflow-ellipsis{
+	text-overflow:ellipsis;
+	white-space:nowrap;
+	width:10em;
+	overflow:hidden;
+}
