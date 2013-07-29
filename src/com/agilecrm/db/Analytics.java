@@ -4,6 +4,7 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.json.JSONObject;
 
 import eu.bitwalker.useragentutils.UserAgent;
@@ -40,6 +41,7 @@ public class Analytics
     /**
      * URL of page where analytics code is pasted
      */
+    @JsonIgnore
     public String url;
 
     /**
@@ -88,6 +90,11 @@ public class Analytics
     public String email;
 
     /**
+     * JsonArray string having urls with their respective time
+     */
+    public String urls_with_time_spent;
+
+    /**
      * Constructs Default Analytics
      */
     public Analytics()
@@ -111,23 +118,16 @@ public class Analytics
 	try
 	{
 	    // Browser Name
-	    userAgentJSON.put("browser_name",
-		    UserAgent.parseUserAgentString(user_agent).getBrowser()
-			    .getName());
+	    userAgentJSON.put("browser_name", UserAgent.parseUserAgentString(user_agent).getBrowser().getName());
 
 	    // Browser version
-	    userAgentJSON.put("browser_version",
-		    UserAgent.parseUserAgentString(user_agent).getBrowser()
-			    .getVersion(user_agent).getMajorVersion());
+	    userAgentJSON.put("browser_version", UserAgent.parseUserAgentString(user_agent).getBrowser().getVersion(user_agent).getMajorVersion());
 
 	    // OS
-	    userAgentJSON.put("os", UserAgent.parseUserAgentString(user_agent)
-		    .getOperatingSystem());
+	    userAgentJSON.put("os", UserAgent.parseUserAgentString(user_agent).getOperatingSystem());
 
 	    // Device Type
-	    userAgentJSON.put("device_type",
-		    UserAgent.parseUserAgentString(user_agent)
-			    .getOperatingSystem().getDeviceType());
+	    userAgentJSON.put("device_type", UserAgent.parseUserAgentString(user_agent).getOperatingSystem().getDeviceType());
 	}
 	catch (Exception e)
 	{

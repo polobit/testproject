@@ -221,3 +221,18 @@ function countJsonProperties(obj) {
 	  }
 	  return propCount;
 	}
+
+/**
+ * Get the current contact property 
+ * @param value
+ * @returns {String}
+ */
+function getCurrentContactProperty(value)
+{
+	if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
+	{
+		var contact_properties = App_Contacts.contactDetailView.model.get('properties')
+		console.log(App_Contacts.contactDetailView.model.toJSON());
+		return getPropertyValue(contact_properties, value);
+	}
+}

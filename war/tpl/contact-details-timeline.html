@@ -17,7 +17,7 @@
             <div class="title"><h3><span><a class="no-line"><i class="icon-list-alt"></i></a></span> {{subject}}</h3></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
-                <div class="text" style="color: #999999">{{description}}</div>
+                <pre class="text" style="color: #999999;background:none;border:none;">{{description}}</pre>
             </div>
         {{/if_entity}}
 
@@ -96,7 +96,14 @@
             <div class="title"><h3><span><a class="no-line"><i class="icon-list-alt"></i></a></span> Web</h3></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
-                <div class="text" style="color: #333333"><b>URL:</b></br> {{url}}</div>
+                <div class="text" style="color: #333333">
+                    <div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;">
+                        <div><b>URL-TimeSpent:</b></br> 
+                        {{#stringToJSON this "urls_with_time_spent"}}{{/stringToJSON}}
+					    {{#each urls_with_time_spent}}{{url}}-{{convertSecondsToHour time_spent}}{{/each}}
+                        </div>
+                    </div>
+                </div>
                 {{#if ref}}
                      <div class="text" style="color: #333333"><b>Referred:</b></br> {{ref}}</div>
                 {{/if}}
