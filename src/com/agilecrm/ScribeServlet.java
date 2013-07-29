@@ -23,6 +23,9 @@ import org.scribe.model.Verb;
 import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
+import com.agilecrm.contact.imports.ContactPrefs;
+import com.agilecrm.contact.imports.ContactPrefs.Type;
+import com.agilecrm.contact.imports.util.ContactsImporter;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.widgets.Widget;
@@ -92,20 +95,19 @@ public class ScribeServlet extends HttpServlet
 		    SERVICE_TYPE_LINKED_IN);
 	}
 
-	// If service is null or service type is Twitter service is built
-	else if (serviceType.equalsIgnoreCase(SERVICE_TYPE_FRESHBOOKS))
-
-	{
-	    // Creates a Service, by specifying API key, Secret key
-	    service = new ServiceBuilder().provider(FreshBooksApi.class)
-		    .callback(callback).apiKey(Globals.FRESHBOOKS_API_KEY)
-		    .apiSecret(Globals.FRESHBOOKS_SECRET_KEY).build();
-
-	    // Gets session and sets attribute "oauth.service" to Twitter type
-	    // as specified by Scribe
-	    req.getSession().setAttribute("oauth.service",
-		    SERVICE_TYPE_FRESHBOOKS);
-	}
+	// else if (serviceType.equalsIgnoreCase(SERVICE_TYPE_FRESHBOOKS))
+	//
+	// {
+	// // Creates a Service, by specifying API key, Secret key
+	// service = new ServiceBuilder().provider(FreshBooksApi.class)
+	// .callback(callback).apiKey(Globals.FRESHBOOKS_API_KEY)
+	// .apiSecret(Globals.FRESHBOOKS_SECRET_KEY).build();
+	//
+	// // Gets session and sets attribute "oauth.service" to Twitter type
+	// // as specified by Scribe
+	// req.getSession().setAttribute("oauth.service",
+	// SERVICE_TYPE_FRESHBOOKS);
+	// }
 
 	// If service is null or service type is Twitter service is built
 	else if (serviceType.equalsIgnoreCase(SERVICE_TYPE_TWITTER))
@@ -247,9 +249,7 @@ public class ScribeServlet extends HttpServlet
 	// secret key
 	if (serviceNameInSession.equalsIgnoreCase(SERVICE_TYPE_TWITTER)
 		|| serviceNameInSession
-			.equalsIgnoreCase(SERVICE_TYPE_LINKED_IN)
-		|| serviceNameInSession
-			.equalsIgnoreCase(SERVICE_TYPE_FRESHBOOKS))
+			.equalsIgnoreCase(SERVICE_TYPE_LINKED_IN))
 	{
 	    // Gets widget Id from the session
 	    String widgetId = (String) req.getSession().getAttribute(
@@ -292,7 +292,7 @@ public class ScribeServlet extends HttpServlet
 
 	else if (serviceNameInSession.equalsIgnoreCase(SERVICE_TYPE_STRIPE))
 	{
-	    System.out.println("In save token");
+	    System.out.println("In stripe save");
 
 	    OAuthRequest oAuthRequest = new OAuthRequest(
 		    Verb.POST,
@@ -304,7 +304,6 @@ public class ScribeServlet extends HttpServlet
 		    + Globals.STRIPE_API_KEY);
 
 	    Response response = oAuthRequest.send();
-	    // Creates HashMap from CreditCard JSON string
 	    HashMap<String, String> properties = new ObjectMapper().readValue(
 		    response.getBody(),
 		    new TypeReference<HashMap<String, String>>()
@@ -322,7 +321,7 @@ public class ScribeServlet extends HttpServlet
 
 	else if (serviceNameInSession.equalsIgnoreCase(SERVICE_TYPE_GOOGLE))
 	{
-	    System.out.println("In save token");
+	    System.out.println("In google save token");
 
 	    OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST,
 		    "https://accounts.google.com/o/oauth2/token");
@@ -338,15 +337,33 @@ public class ScribeServlet extends HttpServlet
 	    oAuthRequest.addBodyParameter("grant_type", "authorization_code");
 
 	    Response response = oAuthRequest.send();
-	    // Creates HashMap from CreditCard JSON string
-	    HashMap<String, String> properties = new ObjectMapper().readValue(
+
+	    // Creates HashMap from response JSON string
+	    HashMap<String, Object> properties = new ObjectMapper().readValue(
 		    response.getBody(),
-		    new TypeReference<HashMap<String, String>>()
+		    new TypeReference<HashMap<String, Object>>()
 		    {
 		    });
 
 	    System.out.println(properties.toString());
-	    System.out.println(response.getBody());
+
+	    if (properties.containsKey("error"))
+		System.out.println(properties.get("error"));
+	    else
+	    {
+
+		// after getting access token save prefs in db
+		ContactPrefs contactPrefs = new ContactPrefs(Type.GOOGLE,
+			((String) properties.get("access_token")), null,
+			(Long.parseLong((String.valueOf(properties
+				.get("expires_in"))))),
+			((String) properties.get("refresh_token")));
+		contactPrefs.save();
+
+		// initialize backend to save contacts
+		ContactsImporter.initilaizeImportBackend(contactPrefs);
+
+	    }
 
 	}
 	String returnURL = (String) req.getSession().getAttribute("return_url");
@@ -397,21 +414,21 @@ public class ScribeServlet extends HttpServlet
 	{
 	    url = service.getAuthorizationUrl(null);
 
-	    System.out.println("Stripe redirect url" + url);
+	    System.out.println("redirect url" + url);
 	}
-	else if (serviceName.equalsIgnoreCase(SERVICE_TYPE_FRESHBOOKS))
-	{
-
-	    // token = service.getRequestToken();
-	    // System.out.println(token);
-	    OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST,
-		    FreshBooksApi.REQUEST_TOKEN_URL);
-	    Response res = oAuthRequest.send();
-	    System.out.println(res.getBody());
-	    url = "";
-	    System.out.println("freshboooks redirect url" + url);
-
-	}
+	// else if (serviceName.equalsIgnoreCase(SERVICE_TYPE_FRESHBOOKS))
+	// {
+	//
+	// // token = service.getRequestToken();
+	// // System.out.println(token);
+	// OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST,
+	// FreshBooksApi.REQUEST_TOKEN_URL);
+	// Response res = oAuthRequest.send();
+	// System.out.println(res.getBody());
+	// url = "";
+	// System.out.println("freshboooks redirect url" + url);
+	//
+	// }
 	else
 	{
 	    token = service.getRequestToken();

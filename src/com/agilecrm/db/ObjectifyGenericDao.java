@@ -27,6 +27,7 @@ import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.customview.CustomView;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.filter.ContactFilter;
+import com.agilecrm.contact.imports.ContactPrefs;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.reports.Reports;
@@ -120,9 +121,12 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	// Reports
 	ObjectifyService.register(ProfileStatus.class);
-	
+
 	ObjectifyService.register(CaseData.class);
 	ObjectifyService.register(NavSetting.class);
+
+	// Contacts import
+	ObjectifyService.register(ContactPrefs.class);
     }
 
     /**
