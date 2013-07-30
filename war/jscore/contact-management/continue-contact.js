@@ -20,9 +20,11 @@
  * 			verifies to show continue editing form
  * @param {Boolean} is_person
  * 			verifies whether person or company
+ * @param {String}
+ * 			id within which to search for tags, if ignored tags will be searched in form_id
  * @returns object get saved
  */
-function serialize_and_save_continue_contact(e, form_id, modal_id, continueContact, is_person, saveBtn) {
+function serialize_and_save_continue_contact(e, form_id, modal_id, continueContact, is_person, saveBtn, tagsSourceId) {
 	
 	// Prevents the default event, if any 
 	e.preventDefault();
@@ -105,13 +107,32 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
    
     	if (isValidField('lname'))properties.push(property_JSON('last_name', 'lname'));
     
-    	if (isValidField('contact_company')) properties.push(property_JSON('company', 'contact_company'));
+    	///give preference to autofilled company, ignore any text in textfield for filling company name
+    	var company_el=$("#"+form_id+" [name='contact_company_id']").find('li');
+    	if(company_el && company_el.length)	
+    	{
+    		var company_id=$(company_el.get(0)).attr('data');
+    		var company_name=$(company_el.get(0)).find('a:first').html();
+    		
+    		obj.contact_company_id=company_id;
+    		properties.push({type:"SYSTEM",name:"company",value:company_name});
+    	}
+    	else if (isValidField('contact_company'))
+    	{
+    		obj.contact_company_id=null;
+    		properties.push(property_JSON('company', 'contact_company'));
+    	}
+    	else obj.contact_company_id=null;
 
     	if (isValidField('email')) properties.push(property_JSON('email', 'email'));
 
     	if (isValidField('job_title')) properties.push(property_JSON('title', 'job_title'));
     
-    	var tags = get_tags(form_id);
+   
+    	if(tagsSourceId===undefined || !tagsSourceId || tagsSourceId.length<=0)	tagsSourceId=form_id;
+    	
+    	
+    	var tags = get_tags(tagsSourceId);
     	if (tags != undefined && tags.length != 0) 
     	{
     		obj.tags = [];
@@ -129,10 +150,12 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
 
     	// Creates properties of contact (company)
+
     	if (isValidField('company_name'))
     		properties.push(property_JSON('name', 'company_name'));
     	
-    	if (isValidField('url')) properties.push(property_JSON('url', 'url'));
+    	if (isValidField('company_url')) properties.push(property_JSON('url', 'company_url'));
+
     
     	var type = $('#' + form_id + ' input[name=type]').val();
     	obj.type = type;
@@ -274,7 +297,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
                 });
                 
             } 
-        	else if(is_person) {
+        	else {
         
         		if(App_Contacts.contactDetailView)
         		{
@@ -311,11 +334,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
             	});
             	               
             }
-        	else {
-        			
-            		// Navigates to contacts as there is no detail view for companies
-        		    Backbone.history.loadUrl("contacts", {trigger: true});
-            }
+        	
         	
         	// Hides the modal
         	$('#' + modal_id).modal('hide');
@@ -361,6 +380,9 @@ function deserialize_contact(contact, template) {
     // Loads the form based on template value  
     var form = $("#content").html(getTemplate(template, contact));
     
+    console.log('CONTACT = ');
+    console.log(contact);
+    
     // Add placeholder and date picker to date custom fields
     $('.date_input').attr("placeholder","MM/DD/YYYY");
     
@@ -381,6 +403,26 @@ function deserialize_contact(contact, template) {
         // Generate and populate multiple fields
         fill_multi_options(field_element, element);
     });
+    
+    var fxn_display_company=function(data,item)
+	{
+		$("#content [name='contact_company_id']").html('<li class="tag"  style="display: inline-block;" data="' + data + '"><a href="#contact/' + data +'">' + item + '</a><a class="close" id="remove_tag">&times</a></li>');
+		$("#content #contact_company").hide();
+	}
+	agile_type_ahead("contact_company",$('#content'), contacts_typeahead,fxn_display_company,'type=COMPANY','<b>No Results</b> <br/> We will add a new one');
+
+	if(contact.contact_company_id && contact.contact_company_id.length>0)
+	{
+		for(var i=0;i<contact.properties.length;++i)
+		{	
+			if(contact.properties[i].name =='company')
+			{	
+				$("#content #contact_company").hide();
+				$("#content [name='contact_company_id']")
+					.html('<li class="tag"  style="display: inline-block;" data="' + contact.contact_company_id + '"><a href="#contact/' + contact.contact_company_id +'">' +contact.properties[i].value + '</a><a class="close" id="remove_tag">&times</a></li>');
+			}
+		}
+	}
 }
 
 /**
@@ -450,6 +492,12 @@ function property_JSON(name, id, type) {
 
 // UI Handlers for Continue-contact and continue-company
 $(function () {
+
+	
+	$("#content [name='contact_company_id'] a.close").live('click',function(){
+		$("#content #contact_company").show();
+		$("#content [name='contact_company_id']").html('');
+	})
 	
     // Clones multiple fields
     $("a.multiple-add").die().live('click', function (e) {
@@ -472,12 +520,18 @@ $(function () {
 
     // Continue editing of new-person-modal 
     $('#continue-contact').click(function (e) {
-          var model = serialize_and_save_continue_contact(e, 'personForm','personModal', true, true, this);
+          var model = serialize_and_save_continue_contact(e, 'personForm','personModal', true, true, this,'tags_source_person_modal');
     });
 
     // Update button click event in continue-contact form
     $("#update").die().live('click', function (e) {
-          serialize_and_save_continue_contact(e, 'continueform', 'personModal', false, true, this);
+          var model=serialize_and_save_continue_contact(e, 'continueform', 'personModal', false, true, this,"tags_source_continue_contact");
+          
+          if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection)	
+          {
+          	App_Contacts.contactsListView.collection.remove(model.id);
+          	App_Contacts.contactsListView.collection.add(model);
+          }
     });
     
     // Close button click event in continue-contact form
@@ -500,7 +554,12 @@ $(function () {
     
  // Update button click event in continue-company
     $("#company-update").die().live('click', function (e) {
-        serialize_and_save_continue_contact(e, 'continueCompanyForm', 'companyModal', false, false, this);
+        var model=serialize_and_save_continue_contact(e, 'continueCompanyForm', 'companyModal', false, false, this);
+        
+        if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection)	
+        {
+        	App_Contacts.contactsListView.collection.remove(model.id);
+        	App_Contacts.contactsListView.collection.add(model);
+        }
     });
-
 });

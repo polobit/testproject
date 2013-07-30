@@ -15,13 +15,31 @@
                         value="{{getPropertyValue properties "last_name"}}"/> 
                     </div>
                 </div>
-                <div class="control-group">
+
+                <!--div class="control-group">
                     <label class="control-label">Organization</label>
                     <div class="controls">
                         <input name="company" type="text" id="contact_company" placeholder="Company"
                         value="{{getPropertyValue properties "company"}}"/>
                     </div>
-                </div>
+                </div-->
+
+				<div class="control-group" id='company_source_person_modal'>
+	                    <label class="control-label">Organization</label>
+	                    <div class="controls">
+							<div class="pull-left" style="display:inline-block;">
+								<ul name="contact_company_id" class="contacts tagsinput tags">
+								{{#if contact_company_id}}
+									<li class="tag"  style="display: inline-block;" data="{{contact_company_id}}">
+										<a href="#contact/{{contact_company_id}}">{{getPropertyValue properties "company"}}</a><a class="close" id="remove_tag">&times</a>
+									</li>
+								{{/if}}
+								</ul>
+							</div>
+	                        <input name="company" type="text" id="contact_company" placeholder="Company Name"/>
+	                    </div>
+	                </div>
+
                 <div class="control-group">
                     <label class="control-label">Job Description</label>
                     <div class="controls"> 
@@ -29,7 +47,7 @@
                         value="{{getPropertyValue properties "title"}}"/>
                     </div>
                 </div>
-                <div class="control-group">
+                <div class="control-group" id="tags_source_continue_contact">
                     <label class="control-label">Tag</label>
                     <div class="controls">
                         <div class="pull-left">

@@ -495,7 +495,7 @@ $(function() {
 		if (!value)
 			return;
 		
-		var str = value.replace(/_/g, ' ');
+		var str = value.replace(/_/, ' ');
 		return ucfirst(str.toLowerCase());
 
 	});
@@ -521,7 +521,7 @@ $(function() {
 		}
 		
 		// Replaces '_' with ' '
-		var str = this.notification.replace(/_/g, ' ');
+		var str = this.notification.replace(/_/, ' ');
 		
 		switch(str)
 		{
@@ -569,7 +569,7 @@ $(function() {
 	 */
 	Handlebars.registerHelper('replace_plus_symbol', function(name) {
 
-		return name.replace(/\+/g, ' ');
+		return name.replace(/\+/, ' ');
 	});
 
 	/**
@@ -577,7 +577,7 @@ $(function() {
 	 */
 	Handlebars.registerHelper('removeSlash', function(value) {
 		if (value == 'A/B')
-			return value.replace(/\//g, '');
+			return value.replace(/\//, '');
 
 		return value;
 	});
@@ -748,6 +748,54 @@ $(function() {
 			if (this.properties[i].name == pname)
 				return options.fn(this.properties[i]);
 		}
+		return options.inverse(this);
+	});
+	
+	
+	/*Get company image , first check image if uploaded, then url for favicon, finally img.company.png
+	  for favicon, show in 32x32 size, fill rest with padding, others scale to requested size
+	  ---Also has event onError defined, so when the image can't be loaded, default company.png is shown
+	  ---Adjusts CSS via inline JS hooked onto onError event.
+	  --- additional_style is 2nd parameter used to setup additional styles like , display:inline
+	 @author Chandan
+	*/
+	Handlebars.registerHelper('getCompanyImage',function(frame_size,additional_style){
+		
+		var full_size=parseInt(frame_size); /// size requested, full frame
+		var size_diff=4+((full_size-32)/2); // calculating padding, for small favicon 16x16 as 32x32 while frame should be full size
+		
+		//default when we can't find image uploaded or url to fetch from
+		var default_return="src='img/company.png' style='width:"+full_size+"px; height="+full_size+"px;"+additional_style+"'";
+		
+		//when the image from uploaded one or favicon can't be fetched, then show company.png, adjust CSS ( if broken by favicon ).
+		var error_fxn="";
+		
+		for ( var i = 0; i < this.properties.length; i++) 
+		{
+			if (this.properties[i].name == "image")
+			{	
+				default_return="src='"+this.properties[i].value+"' style='width:"+full_size+"px; height="+full_size+"px;"+additional_style+";'";
+				// found uploaded image, break no need to lookup url
+				
+				var error_fxn="this.src='img/company.png'; this.onerror=null;";
+				// no need to resize, company.png is of good quality & can be scaled to this size
+				
+				break;
+			}
+			if(this.properties[i].name == "url")
+			{	
+				default_return="src='http://www.google.com/s2/favicons?domain="+this.properties[i].value+"' "+
+								"style='width:32px; height:32px; padding:"+size_diff+"px; "+additional_style+" ;'";
+				//favicon fetch -- Google S2 Service, 32x32, rest padding added
+				
+				error_fxn="this.src='img/company.png'; "+
+							"$(this).css('width','"+frame_size+"px'); $(this).css('height','"+frame_size+"px');"+
+							"$(this).css('padding','4px'); this.onerror=null;";
+				//resize needed as favicon is 16x16 & scaled to just 32x32, company.png is adjusted on error
+			}
+		}
+		//return safe string so that our html is not escaped
+		return new Handlebars.SafeString(default_return+" onError=\""+error_fxn+"\"");
 	});
 
 	// Get Count
@@ -916,7 +964,7 @@ $(function() {
 
 	Handlebars.registerHelper('safe_string', function(data) {
 
-		data = data.replace(/\n/g, "<br/>");
+		data = data.replace(/\n/, "<br/>");
 		return new Handlebars.SafeString(data);
 	});
 
@@ -1138,7 +1186,7 @@ $(function() {
 	 * Removes surrounded square brackets
 	 ***/
 	Handlebars.registerHelper('removeSquareBrackets', function(value){
-		return value.replace(/[\[\]]+/g,'');
+		return value.replace(/[\[\]]+/,'');
 	});
 	
 	/**

@@ -34,10 +34,12 @@ import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.twitter.util.TwitterQueueUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.AlsoLoad;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -181,7 +183,17 @@ public class Contact extends Cursor
 
     @NotSaved
     public String entity_type = "contact_entity";
-
+    
+    
+// related company id, only if this is person entity, ignored for company entity    
+    @JsonIgnore
+    @NotSaved(IfDefault.class)
+    @Indexed
+    public Key<Contact> contactCompanyKey=null;
+    
+    @NotSaved
+    public String contact_company_id;
+    
     /**
      * Stores the property names in final variables, for reading flexibility of
      * the property values
@@ -626,7 +638,35 @@ public class Contact extends Cursor
     @PrePersist
     private void PrePersist()
     {
-
+    	if(this.type==Type.PERSON)
+    	{
+    		System.out.println("Branching to type PERSON");
+    		
+    		if(this.contact_company_id!=null && this.contact_company_id.length()>0)
+    		{
+    			//update id, for existing company
+    			this.contactCompanyKey=new Key<Contact>(Contact.class,Long.parseLong(this.contact_company_id));
+    		}
+    		else if(this.properties.size()>0)
+    		{
+    			ContactField cf=this.getContactFieldByName(Contact.COMPANY);
+    			
+    			if(cf!=null && cf.value!=null && cf.value.isEmpty()==false)
+    			{
+					// Create new Company
+					System.out.println("Creating new Company ---------------");
+					Contact ct = new Contact();
+					ct.properties = new ArrayList<ContactField>();
+					ct.properties.add(new ContactField(Contact.NAME, null,cf.value));
+					ct.type = Type.COMPANY;
+					ct.save();
+					this.contactCompanyKey = new Key<Contact>(Contact.class,ct.id);
+				}
+    			else this.contactCompanyKey=null;
+    		}
+    	}
+    	
+    	
 	// Set owner, when only the owner_key is null
 	if (owner_key == null)
 	{
@@ -690,7 +730,53 @@ public class Contact extends Cursor
 	ContactField field = this.getContactField("image");
 	if (field != null)
 	    field.value = LinkedInUtil.changeImageUrl(field.value);
-
+	
+	if(this.contactCompanyKey!=null) // fill company name in properties['COMPANY']
+	{	
+		this.contact_company_id=String.valueOf(this.contactCompanyKey.getId());
+		try {
+				Contact companytmp=dao.get(contactCompanyKey);
+				boolean isset=false;
+			
+				for(ContactField f:properties)
+				{
+					if(f.name!=null && f.name.equalsIgnoreCase("company"))
+					{
+						f.value=companytmp.getContactFieldValue(NAME);	
+						isset=true;
+						break;
+					}
+				}
+			
+				if(!isset)
+				{
+					ContactField f=new ContactField();
+					f.name=Contact.COMPANY;
+					f.value=companytmp.getContactFieldValue(Contact.NAME);
+					this.properties.add(f);
+				}
+			} 
+			catch (EntityNotFoundException e) 
+			{
+				//company id not found, remove company association for this contact.
+				this.contactCompanyKey=null;
+				this.contact_company_id=null;
+				e.printStackTrace();
+			}
+	}
+	else
+	{
+		for(ContactField f:properties)
+		{
+			if(f.name!=null && f.name.equalsIgnoreCase("company"))
+			{
+				properties.remove(f);
+				break;
+			}
+		}
+		this.contact_company_id=null;
+	}
+	
     }
 
     @Override

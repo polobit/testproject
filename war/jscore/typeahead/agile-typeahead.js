@@ -20,8 +20,11 @@ var TYPEHEAD_TAGS = {};
  *            Callback to override functionalities of updater function
  * @module Search
  * @author Yaswanth
+ * 
+ * @param urlParams
+ * 			  Extra url parameters, e.g. type=COMPANY 
  */
-function agile_type_ahead(id, el, callback, isSearch){
+function agile_type_ahead(id, el, callback, isSearch,urlParams,noResultText){
 
     // Turn off browser default auto complete
     $('#' + id, el).attr("autocomplete", "off");
@@ -61,7 +64,12 @@ function agile_type_ahead(id, el, callback, isSearch){
         	//this.shown = true;
 
         	// Get data on query
-        	$.getJSON("core/api/search/" + query+"?page_size=10", function (data){
+        	
+        	var type_url="";
+        	
+        	if(urlParams && urlParams.length)type_url='&'+urlParams;
+        	
+        	$.getJSON("core/api/search/" + query+"?page_size=10"+type_url, function (data){
 
         	    /*
         		 * Stores query results to use them in updater and render
@@ -80,8 +88,9 @@ function agile_type_ahead(id, el, callback, isSearch){
         		 * type-ahead drop-down and return
         		 */
         		if (data.length == 0) {
-        			
-        			that.$menu.html('<div style="margin-top:10px"><p align="center"><b>No Results Found</b><p></div>');
+        			var txt='<b>No Results Found</b>';
+        			if(noResultText && noResultText.length)txt=noResultText;
+        			that.$menu.html('<div style="margin-top:10px"><p align="center">'+txt+'<p></div>');
         			that.render();
         			return;
         		}
@@ -199,7 +208,7 @@ function agile_type_ahead(id, el, callback, isSearch){
                 }
                 
                 // Navigates the item to its detail view
-                isSearch(TYPEHEAD_TAGS[items]);
+                isSearch(TYPEHEAD_TAGS[items],items_temp);
                 return;
             }
 

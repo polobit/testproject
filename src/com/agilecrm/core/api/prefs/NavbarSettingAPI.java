@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.NavSetting;
 import com.agilecrm.account.util.AccountPrefsUtil;
+import com.agilecrm.account.util.NavSettingUtil;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 
@@ -19,32 +20,22 @@ public class NavbarSettingAPI
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public NavSetting getNavbarSetting()
     {
-		System.out.println("HITTING.... navsets");
-		Objectify ofy=ObjectifyService.begin();
-		NavSetting nv=ofy.query(NavSetting.class).get();
-		
-		if(nv==null || nv.id==null ){ nv=new NavSetting(); nv.setDefault(); }
-		
-		return nv;
+		return NavSettingUtil.getNavSetting();
     }
 	
 	@POST
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public NavSetting setNavbarSetting(NavSetting nv)
+	public NavSetting setNavbarSettingPOST(NavSetting nv)
 	{
-		Objectify ofy=ObjectifyService.begin();
-		ofy.put(nv);
-		if(nv.id==null)return null;
-		return nv;
+		return NavSettingUtil.setNavSetting(nv);
 	}
 	
 	@PUT
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public void setNavbarSetting2(NavSetting nv)
+	public void setNavbarSettingPUT(NavSetting nv)
 	{
-		Objectify ofy=ObjectifyService.begin();
-		ofy.put(nv);
+		NavSettingUtil.setNavSetting(nv);
 	}
 }

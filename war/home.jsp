@@ -15,7 +15,7 @@
 <%@page import="com.google.appengine.api.users.UserService"%>
 <%@page import="org.codehaus.jackson.map.ObjectMapper"%>
 <%@page import="com.agilecrm.account.NavSetting"%>
-<%@page import="com.agilecrm.core.api.prefs.NavbarSettingAPI"%>
+<%@page import="com.agilecrm.account.util.NavSettingUtil"%>
 
 <html lang="en">
 <head>
@@ -141,7 +141,7 @@
 							<li id="contactsmenu"><a href="#contacts"><i
 									class="icon-user icon-white"></i> Contacts</a></li>
 							<% 
-								NavSetting nv=(new NavbarSettingAPI()).getNavbarSetting();
+								NavSetting nv=NavSettingUtil.getNavSetting();
 								String style_cal="",style_cases="",style_deals="",style_campaign="";
 								if(nv.input_calendar==false)style_cal=" style='display:none;'";
 								if(nv.input_cases==false)style_cases=" style='display:none;'";

@@ -155,6 +155,19 @@ public class ContactUtil
 
 	return dao.listByProperty(searchMap);
     }
+    
+    //Fetch all contacts, which are related to Company-companyId,i.e. Organization
+    public static List<Contact> getAllContactsOfCompany(String companyId,int max, String cursor)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	searchMap.put("type", Type.PERSON);
+	//searchMap.put("related_company_id",new Key<Contact>(Contact.class,Long.valueOf(companyId)));
+	searchMap.put("contactCompanyKey",new Key<Contact>(Contact.class,Long.valueOf(companyId)));
+	if (max != 0)
+	    return dao.fetchAll(max, cursor, searchMap);
+
+	return dao.listByProperty(searchMap);
+    }
 
     public static List<Key<Contact>> getAllContactKey()
     {

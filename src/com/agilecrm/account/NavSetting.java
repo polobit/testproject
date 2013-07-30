@@ -3,6 +3,11 @@ package com.agilecrm.account;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+import com.agilecrm.db.ObjectifyGenericDao;
+import com.googlecode.objectify.annotation.NotSaved;
+
 @XmlRootElement
 public class NavSetting
 {
@@ -17,4 +22,15 @@ public class NavSetting
 	}
 	
 	public NavSetting(){}
+
+	private static ObjectifyGenericDao<NavSetting> dao=new ObjectifyGenericDao<NavSetting>(NavSetting.class);
+	
+	@JsonIgnore
+	public void save()
+	{
+		dao.put(this);
+	}
+	
 }
+
+
