@@ -91,16 +91,15 @@ function setup_deals_in_milestones(){
 		$('ul.milestones').sortable({
 		      connectWith : "ul",
 		      cursor : "move",
-		      forceHelperSize: true,
 		      containment : "#opportunities-by-milestones-model-list",
 		      scroll : false,
-		      over : function(event, ui){
+		      change : function(event, ui){
 		    	  var width = $('#opportunities-by-milestones-model-list > div').width();
 		    	  var scrollX = $('#opportunities-by-milestones-model-list > div').scrollLeft();
-		    	  if(event.pageX > (width * 0.75))
+		    	  if(event.pageX > (width * 0.9))
 		    		  $('#opportunities-by-milestones-model-list > div').scrollLeft(scrollX + 10);
-		    	  else if(event.pageX < (width * 0.26))
-		    		  $('#opportunities-by-milestones-model-list > div').scrollLeft(scrollX - 10);
+		    	  else if(event.pageX < (width * 0.1))
+		    		  $('#opportunities-by-milestones-model-list > div').scrollLeft(scrollX - 15);
 		      },
 		      update : function(event, ui) {
 					var id = ui.item[0].id;
