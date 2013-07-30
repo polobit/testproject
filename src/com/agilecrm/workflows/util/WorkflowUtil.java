@@ -100,6 +100,9 @@ public class WorkflowUtil
      */
     public static JSONObject getSubscriberJSON(Contact contact)
     {
+	if (contact == null)
+	    return null;
+
 	try
 	{
 	    JSONObject subscriberJSON = new JSONObject();
@@ -138,6 +141,7 @@ public class WorkflowUtil
 	}
 	catch (Exception e)
 	{
+	    e.printStackTrace();
 	    return null;
 	}
     }

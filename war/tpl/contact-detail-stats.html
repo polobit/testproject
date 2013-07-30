@@ -14,11 +14,18 @@
             </div>
         </div>
         {{/unless}}
+
 {{#if this.length}}
-<div style="float: right; margin-top:-30px;">
-	<p>
-		<b>Original Referrer: </b>{{getCurrentContactProperty "original_ref"}} 
-	</p>
+<div style="margin-left: 25px">
+	<span>
+		<h5>
+	  	    <a style="text-decoration: none"><b>Initial Referrer URL</b></a><img border="0" src="/img/help.png"
+		    style="height: 6px; vertical-align: text-top" rel="popover"
+			data-placement="bottom" data-title="Referrer URL"
+			data-content="This is the web page from where this contact has come to your website the very first time."
+			id="element" data-trigger="hover"> : {{checkOriginalRef "original_ref"}} {{#if this.length}}{{queryWords "original_ref"}}{{/if}}
+		</h5>
+	</span>	
 </div>
 	<ul id="stats-model-list" class="ativity-block-ul"></ul>
 {{/if}}
@@ -30,17 +37,19 @@
 <div style="display:block;" class="activity">
 	<div id="notes" class="activity-text-block">
 		<span class="activity-block-owner">
-		</span>
+		</span><br>
 		<h4><a style="text-decoration: none"><b>Page View Analytics</b></a></h4></br>
-		
+
 		<ul style="list-style: none;">
 			<li class="row-fluid">	
-					<div class="span2"><b>URL</b>
+					<div class="span2"><b>URL-TimeSpent</b>
 						<div class="pull-right">:</div>
 					</div>
 							
 					<div class="span6" style="margin-left: 10px;">
-						{{url}}
+                      {{#stringToJSON this "urls_with_time_spent"}}{{/stringToJSON}}
+          	          
+					{{#each urls_with_time_spent}}{{url}} - {{convertSecondsToHour time_spent}}<br/> {{/each}}
 					</div>
 				</li>
                 {{#if ref}}

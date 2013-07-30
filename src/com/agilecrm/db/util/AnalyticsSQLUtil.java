@@ -108,8 +108,7 @@ public class AnalyticsSQLUtil
 	System.out.println("sids query is: " + sessions);
 
 	// Gets all Sessions based on above obtained sids and required email
-	String pageViews = "SELECT *, UNIX_TIMESTAMP(stats_time) AS created_time FROM page_views WHERE sid IN " + sessions
-		+ " GROUP BY sid, url ORDER BY stats_time";
+	String pageViews = "SELECT *, UNIX_TIMESTAMP(stats_time) AS created_time FROM page_views WHERE sid IN " + sessions + " ORDER BY stats_time";
 
 	System.out.println("Select query: " + pageViews);
 

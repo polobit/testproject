@@ -1,7 +1,11 @@
 <script id="linkedin-search-result-template" type="text/html">
 <div style="padding:10px" id="linkedin-search">
-<p>Locate the contact on LinkedIn. <a href="#" class="linkedin_modify_search">Modify search</a></p>
-{{#each this}}
+{{#if_equals this.keywords ""}}
+<p>Search results. <a href="#" class="linkedin_modify_search">Modify search</a></p>
+{{else}}
+<p>Search results for <a href="#" class="linkedin_modify_search">{{this.keywords}}</a></p>
+{{/if_equals}}
+{{#each this.search_results}}
 {{#if picture}}
 <img  rel='popover' data-original-title='LinkedIn Profile' class='linkedinImage thumbnail' id="{{id}}" is_gravatar_pic="false" src ="{{picture}}" url="{{url}}"
    summary="{{summary}}" style='width: 35px;height: 35px; display:inline-block; margin-right:2px; margin-bottom:2px; cursor:pointer;'

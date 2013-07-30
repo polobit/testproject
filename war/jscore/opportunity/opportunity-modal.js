@@ -65,9 +65,9 @@ $(function(){
 		updateDeal($(this).data());
 	});
 	
-	$('#opportunities-by-milestones-model-list > div > div > ul > li').live('click', function(e) {
+	$('.deal-edit').live('click', function(e) {
 		e.preventDefault();
-        var data = $(this).find('.data').attr('data');
+        var data = $(this).closest('.data').attr('data');
         var currentDeal = App_Deals.opportunityCollectionView.collection.get(data);
 		updateDeal(currentDeal);
 	});

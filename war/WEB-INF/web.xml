@@ -29,6 +29,15 @@
 	</servlet-mapping>
 
 	<servlet>
+		<servlet-name>ContactUtilServlet</servlet-name>
+		<servlet-class>com.agilecrm.contact.imports.ContactUtilServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ContactUtilServlet</servlet-name>
+		<url-pattern>/backend/contactsutilservlet</url-pattern>
+		<url-pattern>/auth/contactsutilservlet</url-pattern>
+	</servlet-mapping>
+	<servlet>
 		<servlet-name>GmailContextualGadget</servlet-name>
 		<servlet-class>com.agilecrm.GMailGadgetServlet</servlet-class>
 	</servlet>
@@ -288,6 +297,7 @@
 		<url-pattern>/scribe</url-pattern>
 		<url-pattern>/upload.jsp</url-pattern>
 		<url-pattern>/upload-contacts.jsp</url-pattern>
+		<url-pattern>/auth/*</url-pattern>
 	</filter-mapping>
 
 	<filter-mapping>

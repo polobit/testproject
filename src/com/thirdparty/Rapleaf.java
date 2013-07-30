@@ -79,7 +79,7 @@ public class Rapleaf
 		    RAPPORTIVE_RESULT_FAILURE);
 
 	if (!rapleafResponse.startsWith("{"))
-	    throw new Exception("Invalid Api Key");
+	    throw new Exception("Invalid API Key");
 
 	// Converts JSON string into JSONObject
 	JSONObject rapleafJSONObject = new JSONObject(rapleafResponse);

@@ -1,3 +1,4 @@
+/* 
 var milestoneTemplate;
 var milestoneCollection;
 function setup_milestones(el){
@@ -21,7 +22,23 @@ function setup_milestones(el){
 	$(el).html(milestoneTemplate);
 }
 
-/*    	var deals_by_milestones_collection = new Backbone.Collection();
+// To show milestones as columns
+Handlebars.registerHelper('milestone_element', function(item) {
+	var html = "";
+	var str;
+	$.each(item, function(key, value) {
+		str = value.milestones;
+	});
+	
+	var milestones = str.split(",");
+	
+	for(var i in milestones){
+		html += "<th>" + milestones[i].trim()+"</th>";
+	}
+	return html;
+});
+
+var deals_by_milestones_collection = new Backbone.Collection();
 deals_by_milestones_collection.url = "core/api/opportunity/byMilestone"
 
 // Fetches the deals by milestones
@@ -68,21 +85,23 @@ $(function(){
 	});
 });
 
+// To perform actions on deals arranged in milestones
 function setup_deals_in_milestones(){
 	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function() {
 		$('ul.milestones').sortable({
-		      connectWith: "ul",
-		      cursor: "move",
-		      containment: "#opportunities-by-milestones-model-list",
-		      scroll: false,
+		      connectWith : "ul",
+		      cursor : "move",
+		      containment : "#opportunities-by-milestones-model-list",
+		      scroll : false,
 		      change : function(event, ui){
+		    	  var width = $('#opportunities-by-milestones-model-list > div').width();
 		    	  var scrollX = $('#opportunities-by-milestones-model-list > div').scrollLeft();
-		    	  if(event.pageX > 650)
-		    		  $('#opportunities-by-milestones-model-list > div').scrollLeft($('#opportunities-by-milestones-model-list > div').scrollLeft() + 5);
-		    	  else if(event.pageX < 100)
-		    		  $('#opportunities-by-milestones-model-list > div').scrollLeft($('#opportunities-by-milestones-model-list > div').scrollLeft() - 5);
+		    	  if(event.pageX > (width * 0.9))
+		    		  $('#opportunities-by-milestones-model-list > div').scrollLeft(scrollX + 10);
+		    	  else if(event.pageX < (width * 0.1))
+		    		  $('#opportunities-by-milestones-model-list > div').scrollLeft(scrollX - 15);
 		      },
-		      update: function(event, ui) {
+		      update : function(event, ui) {
 					var id = ui.item[0].id;
 					var DealJSON = App_Deals.opportunityCollectionView.collection.get(id).toJSON();
 					var oldMilestone = DealJSON.milestone;
@@ -95,6 +114,7 @@ function setup_deals_in_milestones(){
 	});
 }
 
+// To change the milestone of the deal when it is dropped in other column
 function update_milestone(data, id, newMilestone, oldMilestone){
 	//App_Deals.opportunityMilestoneCollectionView.collection.remove(data);
 	var milestone = data.get(oldMilestone);
@@ -110,14 +130,14 @@ function update_milestone(data, id, newMilestone, oldMilestone){
 			milestone.splice(i, 1);
 		}
 	}
-
+   // Saving that deal object
 	var up_deal = new Backbone.Model();
 	up_deal.url = '/core/api/opportunity';
 	up_deal.save(DealJSON, {
 		success : function(model, response) {
 			App_Deals.opportunityCollectionView.collection.remove(DealJSON);
 			App_Deals.opportunityCollectionView.collection.add(model);
-			App_Deals.opportunityCollectionView.render();
+			App_Deals.opportunityCollectionView.render(true);
 		}
 	});
 
