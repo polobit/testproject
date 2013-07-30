@@ -6,8 +6,7 @@ import org.scribe.utils.OAuthEncoder;
 
 public class GoogleApi extends DefaultApi20
 {
-
-    private static final String AUTHORIZE_URL = "https://accounts.google.com/o/oauth2/auth?client_id=%s&scope=%s&state=%s&redirect_uri=%s&access_type=offline&response_type=code&approval_prompt=auto";
+    private static final String AUTHORIZE_URL = "https://accounts.google.com/o/oauth2/auth?client_id=%s&scope=%s&state=%s&redirect_uri=%s&access_type=offline&response_type=code&approval_prompt=force";
 
     private static final String ACCESS_TOKEN_URL = "https://accounts.google.com/o/oauth2/token";
 
