@@ -700,12 +700,15 @@ $(function() {
 	Handlebars.registerHelper('field_Element', function(properties) {
 				var el = "";
 				var count = properties.length;
+				console.log(properties);
 				$.each(properties, function(key, value) {
 					
 					if (value.indexOf("properties_") != -1)
 						value = value.split("properties_")[1];
 					else if (value.indexOf("custom_") != -1)
 						value = value.split("custom_")[1];
+					else if (value.indexOf("CUSTOM_") != -1)
+						value = value.split("CUSTOM_")[1];
 					else if (value == "created_time")
 						value = "Created Date";
 					else if (value == "updated_time")
