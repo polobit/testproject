@@ -248,7 +248,7 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 					App_Calendar.tasksListView.collection.remove(json);
 
 				// Updates task list view
-				if (!data.toJSON().is_complete)
+				if (!data.toJSON().is_complete && data.toJSON().owner_id == CURRENT_DOMAIN_USER.id)
 					App_Calendar.tasksListView.collection.add(data);
 
 				App_Calendar.tasksListView.render(true);

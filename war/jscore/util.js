@@ -261,7 +261,7 @@ function addTagAgile(tag) {
 	if(checkTagAgile(tag))
 		return;
 	
-	_agile.add_tag(getPropertyValue(AGILE_CONTACT.properties, "email"), tag, function(data){
+	_agile.add_tag(tag, function(data){
 		AGILE_CONTACT = data;
 		if(!checkTagAgile(tag))
 			AGILE_CONTACT.tags.push(tag)	

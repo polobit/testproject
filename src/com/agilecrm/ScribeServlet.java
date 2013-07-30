@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,7 +26,7 @@ import org.scribe.oauth.OAuthService;
 
 import com.agilecrm.contact.imports.ContactPrefs;
 import com.agilecrm.contact.imports.ContactPrefs.Type;
-import com.agilecrm.contact.imports.util.ContactsImporter;
+import com.agilecrm.contact.imports.util.ContactsImportUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.widgets.Widget;
@@ -361,7 +362,7 @@ public class ScribeServlet extends HttpServlet
 		contactPrefs.save();
 
 		// initialize backend to save contacts
-		ContactsImporter.initilaizeImportBackend(contactPrefs);
+		ContactsImportUtil.initilaizeImportBackend(contactPrefs);
 
 	    }
 
@@ -449,6 +450,8 @@ public class ScribeServlet extends HttpServlet
 	if (pluginId != null)
 	    req.getSession().setAttribute("plugin_id", pluginId);
 
+	System.out.println("in response redirect");
+	System.out.println(resp);
 	// Redirect URL
 	resp.sendRedirect(url);
     }
@@ -492,6 +495,13 @@ public class ScribeServlet extends HttpServlet
 
     }
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+	    throws ServletException, IOException
+    {
+	doGet(req, resp);
+    }
+
     /**
      * Saves the preferences of widgets into widget by widget id with the key
      * value pairs in map
@@ -528,4 +538,5 @@ public class ScribeServlet extends HttpServlet
 	// Saves widget
 	widget.save();
     }
+
 }
