@@ -12,6 +12,27 @@ var dealsView;
 var tasksView;
 var casesView;
 
+function fill_company_related_contacts(companyId, htmlId)
+{
+	$('#'+htmlId).html(LOADING_HTML);
+	
+	var companyContactsView = new Base_Collection_View({
+		url : 'core/api/contacts/related/' + companyId,
+		templateKey : 'company-contacts',
+		individual_tag_name : 'tr',
+		cursor : true,
+		page_size : 25,
+		sort_collection : false,
+		postRenderCallback : function(el) {
+			// var cel = App_Contacts.contactsListView.el;
+			// var collection = App_Contacts.contactsListView.collection;
+		}
+	});
+
+	companyContactsView.collection.fetch();
+
+	$('#' + htmlId).html(companyContactsView.render().el);
+}
 $(function(){ 
 
 	var id;
@@ -302,6 +323,12 @@ $(function(){
 		campaignsView.collection.fetch();	
         $('#campaigns', this.el).html(campaignsView.el);
 	});
+	
+	$('#contactDetailsTab a[href="#company-contacts"]').live('click',function(e)
+	{
+		e.preventDefault();
+		fill_company_related_contacts(App_Contacts.contactDetailView.model.id,'company-contacts');       
+	});
 	    
 	 
 	/**
@@ -577,11 +604,21 @@ function populate_send_email_details(el){
  * also deactivates the other activated tabs.
  * 
  * @method activate_timeline_tab
+ * 
+ * Changed to activate first tab in the list ( on contact-details page , works even on company-details page
+ * @modified Chandan
  */
 function activate_timeline_tab(){
 	$('#contactDetailsTab').find('li.active').removeClass('active');
 	$('#contactDetailsTab li:first-child').addClass('active');
 	
 	$('div.tab-content').find('div.active').removeClass('active');
-	$('#time-line').addClass('active');
+	$('div.tab-content > div:first-child').addClass('active');
+	
+	//	$('#time-line').addClass('active');  //old original code for flicking timeline
+	
+	if(App_Contacts.contactDetailView.model.get('type')=='COMPANY')
+	{
+		fill_company_related_contacts(App_Contacts.contactDetailView.model.id,'company-contacts'); 
+	}
 }

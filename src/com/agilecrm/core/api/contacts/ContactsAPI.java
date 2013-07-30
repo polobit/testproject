@@ -34,14 +34,17 @@ import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.cases.CaseData;
 import com.agilecrm.cases.CasesUtility;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.VcardString;
+import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.util.CSVUtil;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>ContactsAPI</code> includes REST calls to interact with {@link Contact}
@@ -86,7 +89,22 @@ public class ContactsAPI
 
 	return ContactUtil.getAllContacts();
     }
+    
+    /*Fetch all contacts related to a company*/
+    @Path("/related/{id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Contact> getContactsOfCompany(@QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count,@PathParam("id") String id)
+    {
+	if (count != null)
+	{
+	    System.out.println("Fetching page by page - by comapnyID");
+	    return ContactUtil.getAllContactsOfCompany(id,Integer.parseInt(count), cursor);
+	}
 
+	return ContactUtil.getAllContacts();
+    }    
     @Path("/recent")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -160,8 +178,11 @@ public class ContactsAPI
 			    .entity("Sorry, duplicate contact found with the same email address.")
 			    .build());
 	}
-
+	
 	contact.save();
+	
+	System.out.println("Contacts properties = ");
+	for(ContactField f:contact.properties){ System.out.println("\t"+f.name+" - "+f.value); }
 	System.out.println("contact tags : " + contact.tags);
 	return contact;
     }
@@ -257,9 +278,9 @@ public class ContactsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Contact updateContact(Contact contact)
     {
-	contact.save();
-	System.out.println("returned tags : " + contact.tags);
-	return contact;
+    	contact.save();
+    	System.out.println("returned tags : " + contact.tags);
+    	return contact;
     }
 
     /**

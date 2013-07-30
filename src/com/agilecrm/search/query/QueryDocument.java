@@ -74,8 +74,39 @@ public class QueryDocument implements QueryInterface
 
 		// return query results
 		return processQuery(query, RuleType.Contact);
+    }
 
-	}
+    /**
+     * Queries for contacts based on keywords(Simple search). Trims spaces in
+     * the keyword and calls processQuery to execute the condition
+     * 
+     * @param keyword
+     *            {@link String}
+     * @return {@link Collection}
+     */
+    public Collection simpleSearch(String keyword, Integer count, String cursor)
+    {
+	// Normalizes the string
+	SearchUtil.normalizeString(keyword);
+
+	// Builds the query, search on field search_tokens(since contact
+	// properties are split in to fragments, and saved in document with
+	// filed
+	// name search_tokens)
+	String query = "search_tokens : " + keyword;
+	// if (cursor != null)
+	return processQuery(query, RuleType.Contact, count, cursor);
+
+	// return processQuery(query, RuleType.Contact);
+    }
+    
+    public Collection simpleSearchWithType(String keyword,Integer count,String cursor,String type)
+    {
+    	SearchUtil.normalizeString(keyword);
+    	return processQuery("search_tokens:"+keyword+" AND type:"+type, RuleType.Contact,count,cursor);
+    }
+
+
 
 	@Override
 	@SuppressWarnings("rawtypes")
@@ -112,31 +143,6 @@ public class QueryDocument implements QueryInterface
 		}
 
 		return entity_ids;
-	}
-
-	/**
-	 * Queries for contacts based on keywords(Simple search). Trims spaces in
-	 * the keyword and calls processQuery to execute the condition
-	 * 
-	 * @param keyword
-	 *            {@link String}
-	 * @return {@link Collection}
-	 */
-	@Override
-	public Collection simpleSearch(String keyword, Integer count, String cursor)
-	{
-		// Normalizes the string
-		SearchUtil.normalizeString(keyword);
-
-		// Builds the query, search on field search_tokens(since contact
-		// properties are split in to fragments, and saved in document with
-		// filed
-		// name search_tokens)
-		String query = "search_tokens : " + keyword;
-		// if (cursor != null)
-		return processQuery(query, RuleType.Contact, count, cursor);
-
-		// return processQuery(query, RuleType.Contact);
 	}
 
 	// Build query based on condition AND, NOT..
@@ -560,8 +566,7 @@ public class QueryDocument implements QueryInterface
 
 	private static Collection processQuery(String query, RuleType type, Integer page, String cursor)
 	{
-		if (page == null)
-			return processQuery(query, type);
+		if (page == null)return processQuery(query, type);
 
 		QueryOptions options = buildOptions(query, type, page, cursor);
 

@@ -15,14 +15,14 @@
                 <div class="control-group">
                     <label class="control-label">Url</label>
                     <div class="controls">
-                        <input name="url" class="required" type="text" id="url" value="{{getPropertyValue properties "url"}}"/>
+                        <input name="url" class="required" type="text" id="company_url" value="{{getPropertyValue properties "url"}}"/>
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label">Add Email <span><a href="#" class="multiple-add"><i class="icon-plus"></i></a></span></label>
                     <div class="controls hide">
                         <div class="email multiple-template" data="email">
-                            <input type="text" id="email" class="required" name="email" placeholder="Email" />
+                            <input type="text" id="email" name="email" placeholder="Email" />
                             <select class="email-select" name="email-select" style="width:100px">
                                 <option></option>
                                 <option value="work">Work</option>
@@ -33,7 +33,7 @@
                     </div>
                     <div class="controls second">
                         <div class="email multiple-template" data="email">
-                            <input type="text" id="email" class="required" name="email" placeholder="Email" />
+                            <input type="text" id="email" name="email" placeholder="Email" />
                             <select class="email-select" name="email-select" style="width:100px">
                                 <option></option>
                                 <option value="work">Work</option>
@@ -47,7 +47,7 @@
                     <label class="control-label">Add Phone <span><a href="#" class="multiple-add"><i class="icon-plus"></i></a></span></label>
                     <div class="controls hide">
                         <div class="phone multiple-template" data="phone">
-                            <input type="text" id="phone" name="phone" class="required" placeholder="Phone number" />
+                            <input type="text" id="phone" name="phone" placeholder="Phone number" />
                             <select class="phone-select" name="phone-select" style="width:100px">
                                 <option></option>
                                 <option value="work">Work</option>
@@ -63,7 +63,7 @@
                     </div>
                     <div class="controls second">
                         <div class="phone multiple-template" data="phone">
-                            <input type="text" id="phone" name="phone" class="required" placeholder="Phone number" />
+                            <input type="text" id="phone" name="phone" placeholder="Phone number" />
                             <select class="phone-select" name="phone-select" style="width:100px">
                                 <option></option>
                                 <option value="work">Work test</option>
@@ -83,7 +83,7 @@
                     <label class="control-label">Website <span><a href="#" class="multiple-add"><i class="icon-plus"></i></a></span></label>
                     <div class="controls hide">
                         <div class="website multiple-template style=" display:none" data="website">
-                            <input type="text" id="website" class="required" name="website" style="width:105px" placeholder="Website" /> 
+                            <input type="text" id="website" name="website" style="width:105px" placeholder="Website" /> 
                             <select class="website-select" name="website-select" style="width:100px">
                                 <option></option>
                                 <option value="URL">Website</option>
@@ -103,7 +103,7 @@
                     </div>
                     <div class="controls second">
                         <div class="website multiple-template style=" display:none" data="website">
-                            <input type="text" id="website" style="width:105px" class="required" name="website" placeholder="Website" /> 
+                            <input type="text" id="website" style="width:105px" name="website" placeholder="Website" /> 
                             <select class="website-select" name="website-select" style="width:100px">
                                 <option></option>
                                 <option value="URL">Website</option>
@@ -127,7 +127,7 @@
                     <label class="control-label">Add Address</label>
                     <div class="controls">
                         <div class="address multiple-template" data="address">
-                            <input type="text" id="address" name="address" placeholder="address" /> 
+                            <input type="text" id="address" placeholder="address" /> 
                             <select class="address-type" name="address-type" style="width:100px">
                                 <option></option>
                                 <option value="home">Home</option>
@@ -393,7 +393,7 @@
                 <input type="text" name="type" class="hide" value="COMPANY" />
                 <div class="form-actions">
                     <a href="#" type="submit" class="save btn btn-primary" id="company-update">Update</a>
-                    <a href="#contacts" onclick="Backbone.history.navigate('back');" class="btn">Close</a>
+                    <a onclick="history.back();" class="btn">Close</a>
                     <span class="save-status"></span>
                 </div>
             </fieldset>

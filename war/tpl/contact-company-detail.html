@@ -1,4 +1,4 @@
-<script id="contact-detail-template" type="text/html">
+<script id="company-detail-template" type="text/html">
 <div class="row-fluid"><small class="navigation span9" style="min-height:10px!important;font-size:smaller;line-height:6px;"></small></div>
 <div class="row">
 	<div class="span9">
@@ -13,10 +13,9 @@
 								<a href="#" class="tooltip_info" data-placement="top"
 									data-toggle="tooltip"
 									title="<i class='icon-edit icon-white icon'></i> Change Picture"
-									style='text-decoration: none;'> <img
-									class='thumbnail upload_pic imgholder submit' type="submit"
-									src="{{gravatarurl properties 80}}"
-									style='display: inline; height: 80px; width: 80px' />
+									style='text-decoration: none;'> 
+								<img class='thumbnail upload_pic imgholder submit' type="submit"
+									{{getCompanyImage "80" "display:inline;"}} />
 								</a> <input type="hidden" id="upload_url" name="gravatarurl">
 								<a style="display: none;" class="save_img submit" type="submit">Save</a>
 							</form>
@@ -25,15 +24,13 @@
 							style='margin-top: 0%; width: 16em; display: inline-block; vertical-align: middle'>
 							<div
 								style="height: auto; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-								<b> <font size="5">{{getPropertyValue properties
-										"first_name"}} {{getPropertyValue properties "last_name"}}</font>
-								</b>{{#if_propertyName "email"}}</br> <a href='#send-email'>{{value}}</a>{{/if_propertyName}}
 
-								</br>{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}
-								{{#comma_in_between_property "title" "company" properties}}{{/comma_in_between_property}}
-								{{#if_propertyName "company"}} 
-									{{value}}
-								{{/if_propertyName}} <br />
+								<b> <font size="5">{{getPropertyValue properties "name"}}</font></b>
+								{{#if_propertyName "url"}}</br>
+									<a href="{{value}}" target="_blank">{{value}}</a>
+								{{/if_propertyName}}
+								<br/>
+								<br/>
 								<div class="span2" style="padding-top: 5px; margin: 0px">
 									{{#property_is_exists "website" properties}}
 									{{#multiple_Property_Element "website" properties}} {{#each
@@ -56,8 +53,7 @@
 						</div>
 						<div class="right" style='position: relative'>
 							<div class="btn-group right" style='position: relative'>
-								<div id='star'
-									style='padding-bottom: 13px; width: auto !important'></div>
+								<div id='star' style='padding-bottom: 13px; width: auto !important'></div>
 								<a class="btn" href="#"><i class="icon-wrench"></i></a> <a
 									class="btn dropdown-toggle" data-toggle="dropdown"> Actions
 									<span class="caret"></span>
@@ -68,53 +64,17 @@
 									<li><a href='#' id='contact-actions-delete'><i
 											class="icon-trash"></i> Delete</a></li>
 									<li class='divider'></li>
-									<li><a href='#' class="contact-add-note"><i
-											class="icon-file"></i> Add Note</a></li>
-									<li><a href='#' class="contact-add-task"><i
-											class="icon-tasks"></i> Add Task</a></li>
+									<li><a href='#' class="contact-add-case"><i
+											class="icon-briefcase"></i> Add Case</a></li>
 									<li><a href='#' class="contact-add-deal"><i class="icon-money"></i>
 											Add Opportunity</a></li>
 									<li class='divider'></li>
 									<li><a href='#contact-duplicate'><i class="icon-copy"></i>
 											Duplicate</a></li>
 									<li class='divider'></li>
-									<li><a href='#bulk-campaigns' class="contact-add-campaign"
-										id="contact-add-campaign"><i class="icon-sitemap"></i> Add
-											to Campaign</a></li>
 									<li><a href='#send-email' id="contact-send-email"><i
 											class="icon-envelope-alt"></i> Send Email</a></li>
 								</ul>
-							</div>
-						</div>
-						<div class="well right unselectable" id="score" unselectable="on"
-							style="height: 43px; margin-right: 70px; padding-top: 0px; padding-right: 10px; padding-left: 15px"
-							onselectstart="return false">
-							<div style="font-size: 22px; display: inline-block">
-								Score <span style="vertical-align: text-top; margin-left: -5px">
-									<img border="0" src="/img/help.png"
-									style="height: 6px; vertical-align: middle" rel="popover"
-									data-placement="bottom" data-title="Lead Score"
-									data-content="Score your leads to get high quality leads to appear on top. Manually assign scores or automate the process based on user behavior using Workflow automation."
-									id="element" data-trigger="hover">
-								</span>
-							</div>
-							<div>
-								<div style="display: inline-block; vertical-align: middle">
-									{{#if lead_score}} <span id="lead-score"
-										style="font-size: 28px; padding-left: 12px;">{{lead_score}}</span>&nbsp;
-									{{else}} <span id="lead-score"
-										style="font-size: 28px; padding-left: 12px;">0</span>&nbsp;
-									{{/if}}
-								</div>
-								<div style="display: inline-block">
-									<ul
-										style="display: inline-block; list-style-type: none; margin-left: 2px">
-										<li style="height: 9px"><i class="icon-sort-up" id="add"
-											style="height: 10px; cursor: pointer"></i></li>
-										<li><i class="icon-sort-down" id="minus"
-											style="height: 10px; cursor: pointer"></i></li>
-									</ul>
-								</div>
 							</div>
 						</div>
 
@@ -146,86 +106,18 @@
 				</div>
 
 			</div>
-			<div style="background-color: whitesmoke">
-				<div style="padding: 20px 10px 20px 23px">
-					<ul id="added-tags-ul" class="tagsinput"
-						style="display: inline; vertical-align: top; margin-bottom: 10px">
-						{{#if tagsWithTime.length}} {{#each tagsWithTime}}
-						<li style="display: inline-block;" class="tag" data="{{this.tag}}"><span><a
-								class="anchor" href="#tags/{{this.tag}}">{{this.tag}}</a><a
-								class="close remove-tags" tag="{{this.tag}}">&times</a></span></li> {{/each}}
-						{{/if}}
-					</ul>
-					<div style="display: inline-block; margin-top: 3px;">
-						<form id="addTagsForm" style="display: none; margin-bottom: 0px;">
-							<div class="control-group save-tag" style="margin-bottom: 0px">
-								<input name="" type="text" id="addTags"
-									class="tags-typeahead ignore-comma-keydown"
-									style="margin-bottom: -1px; width: 60%" placeholder="Enter tag" />
-								<span><a href="#" class="btn" id="contact-add-tags"
-									style="margin-left: 10px; margin-right: 5px">Add</a></span>
-							</div>
-						</form>
-						<a href="#" id="add-tags" rel="tooltip"
-							data-original-title="addtag" data-placement="top"><i
-							class="icon-plus-sign"></i> <span>Add tags</span></a>
-					</div>
-				</div>
-			</div>
 		</div>
 		<div class="">
 			<ul class="nav nav-tabs" id="contactDetailsTab">
-				<li class="active"><a data-toggle="tab" href="#timeline">Timeline</a></li>
-				<li class=""><a data-toggle="tab" href="#notes">Notes</a></li>
-				<li class=""><a data-toggle="tab" href="#tasks">Tasks</a></li>
+				<li class="active"><a data-toggle="tab" href="#company-contacts">Contacts</a></li>
 				<li class=""><a data-toggle="tab" href="#deals">Deals</a></li>
 				<li class=""><a data-toggle="tab" href="#cases">Cases</a></li>
-				<li class=""><a data-toggle="tab" href="#campaigns">Campaigns</a></li>
-				<li class=""><a data-toggle="tab" href="#stats">Web Stats</a></li>
-				<li class=""><a data-toggle="tab" href="#mail">Mail</a></li>
+				
 			</ul>
 			<div class="tab-content well" id="contact-tab-content">
-				<div class="tab-pane active" id="time-line">
-					<div class="timeline-loading-img" style="width:35px;max-height:30px;overflow:hidden;">
-						<img class="loading-img-log" src="img/21-0.gif"></img>
-						<img class="loading-img-email" src="img/21-0.gif"></img>
-						<img class="loading-img" src="img/21-0.gif"></img>
-						<img class="loading-img-stats" src="img/21-0.gif"></img>
-					</div>
-
-					<div class="slate" id="timeline-slate"
-						style="margin-top: 30px; display: none">
-						<div class="slate-content">
-							<div class="box-left">
-								<img alt="Clipboard" src="/img/clipboard.png" />
-							</div>
-							<div class="box-right">
-								<h3>{{getPropertyValue properties "first_name"}} has no
-									entities (Notes, Tasks, Deals and etc..) related, to show in
-									the Timeline.</h3>
-								<div class="text">You can add entities related to it by
-									selecting suitable option from the above "actions" drop down
-									button.</div>
-								<a href="#">Click here to learn more</a> <br />
-							</div>
-						</div>
-					</div>
-
-					<div style="margin: auto; width: 700px">
-						<div id="timeline">
-							<div id="line-container">
-								<div id="line"></div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="tab-pane" id="notes">...</div>
-				<div class="tab-pane" id="tasks">...</div>
+				<div class="tab-pane active" id="company-contacts">...</div>
 				<div class="tab-pane" id="deals">...</div>
 				<div class="tab-pane" id="cases">...</div>
-				<div class="tab-pane" id="campaigns">...</div>
-				<div class="tab-pane" id="stats">...</div>
-				<div class="tab-pane" id="mail">...</div>
 			</div>
 		</div>
 	</div>
@@ -354,3 +246,73 @@
 					</div>
 
 					</script>
+					
+<script id="company-contacts-model-template" type="text/html">
+	<td class="data" data="{{id}}">
+    	<div style="display:inline;padding-right:10px;height:auto;">
+        		<img class="thumbnail" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline" />
+    	</div>
+    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:14em;overflow:hidden;">
+        		<b>	{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </b>
+        		<br />
+        		{{getPropertyValue properties "email"}}
+    	</div>
+	</td>
+	<td><div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:8em;overflow:hidden;">{{getPropertyValue properties "title"}}<br />
+    	{{getPropertyValue properties "company"}}</div>
+	</td>
+	<td> 
+<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:clip;white-space:nowrap;width:15em;overflow:hidden;">
+	{{#each tags}}
+    	<b><span class="label">{{this}}</span></b>
+    {{/each}}
+</div>
+	</td>
+	<td><div>{{lead_score}}</div></td>
+</script>
+
+<script id="company-contacts-collection-template" type="text/html">
+
+{{#if this.length}}
+	<div style='height:30px'>
+		<a href="#" class="contact-add-contact btn right" style="position:relative;margin-bottom:10px;">
+			<span><i class="icon-plus-sign"></i></span> Add Contact
+		</a>
+	</div>
+	<br/>
+		
+			<table id="contacts" class="table table-striped" style="overflow: scroll; border-radius: 5px; -webkit-border-radius: 5px; margin-bottom:0px; border: 1px solid #dddddd; border-collapse: separate;">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Work</th>
+						<th>Tags</th>
+						<th>Lead Score</th>
+					</tr>
+				</thead>
+				<tbody id="company-contacts-model-list" class="contacts-model-list"
+					route="contact/" style="overflow: scroll;">
+				</tbody>
+			</table>
+
+		{{else}}
+			<div class="slate">
+            	<div class="slate-content">
+                	<div class="box-left">
+                    	<img alt="Clipboard" src="/img/clipboard.png">
+                	</div>
+                	<div class="box-right">
+                    	<h3>Company is not associated with any person/contact. </h3>
+                    	<div class="text">
+							All Contacts that have this company in the 'Organization' or 'Company' field are shown here.
+							<br/>
+							<a href="#" class="contact-add-contact btn left" style="margin-top:10px; margin-bottom:10px;">
+								<i class="icon-plus-sign"></i> Add Contact
+							</a>
+                    	</div>
+                	</div>
+            	</div>
+        	</div>
+		{{/if}}
+</script>
