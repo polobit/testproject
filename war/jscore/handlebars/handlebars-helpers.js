@@ -416,25 +416,23 @@ $(function() {
 	 * @param {Number}
 	 *            probability of the deal
 	 */
-	Handlebars.registerHelper('calculatePipeline',
-			function(value, probability) {
+	Handlebars.registerHelper('calculatePipeline', function(value, probability) {
 
 				var pipeline = parseInt(value) * parseInt(probability) / 100;
 				return pipeline;
-			});
+	});
 
 	/**
 	 * Returns required log (time or message) from logs (campaign logs)
 	 */
-	Handlebars.registerHelper('getRequiredLog',
-			function(log_array_string, name) {
+	Handlebars.registerHelper('getRequiredLog', function(log_array_string, name) {
 				var logArray = JSON.parse(log_array_string);
 				if (name == "t") {
 					var readableTime = new Date(logArray[0][name] * 1000);
 					return readableTime;
 				}
 				return logArray[0][name];
-			});
+	});
 
 	/**
 	 * Returns table headings for custom contacts list view
@@ -630,15 +628,12 @@ $(function() {
 	 * Displays multiple times occurred properties of a contact in its detail
 	 * view in single entity
 	 */
-	Handlebars
-			.registerHelper(
-					'multiple_Property_Element',
-					function(name, properties, options) {
+	Handlebars.registerHelper('multiple_Property_Element', function(name, properties, options) {
 
-						var matching_properties_list = agile_crm_get_contact_properties_list(name)
-						if (matching_properties_list.length > 0)
-							return options.fn(matching_properties_list);
-					});
+		var matching_properties_list = agile_crm_get_contact_properties_list(name)
+		if (matching_properties_list.length > 0)
+			return options.fn(matching_properties_list);
+	});
 
 	/**
 	 * Converts address as comma seprated values and returns as handlebars safe
@@ -700,12 +695,15 @@ $(function() {
 	Handlebars.registerHelper('field_Element', function(properties) {
 				var el = "";
 				var count = properties.length;
+				
 				$.each(properties, function(key, value) {
 					
 					if (value.indexOf("properties_") != -1)
 						value = value.split("properties_")[1];
 					else if (value.indexOf("custom_") != -1)
 						value = value.split("custom_")[1];
+					else if (value.indexOf("CUSTOM_") != -1)
+						value = value.split("CUSTOM_")[1];
 					else if (value == "created_time")
 						value = "Created Date";
 					else if (value == "updated_time")
@@ -864,8 +862,7 @@ $(function() {
 	/**
 	 * Adds Custom Fields to forms, where this helper function is called
 	 */
-	Handlebars.registerHelper('show_custom_fields', function(custom_fields,
-			properties) {
+	Handlebars.registerHelper('show_custom_fields', function(custom_fields, properties) {
 
 		var el = show_custom_fields_helper(custom_fields, properties);
 		return new Handlebars.SafeString(fill_custom_field_values($(el),
@@ -873,36 +870,30 @@ $(function() {
 
 	});
 
-	Handlebars
-			.registerHelper(
-					'is_link',
-					function(value, options) {
+	Handlebars.registerHelper('is_link', function(value, options) {
 
-						var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+		var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
 
-						if (value.search(exp) != -1)
-							return options.fn(this);
-						else
-							return options.inverse(this);
-					});
+		if (value.search(exp) != -1)
+			return options.fn(this);
+		else
+			return options.inverse(this);
+	});
 
-	Handlebars
-			.registerHelper(
-					'show_link_in_statement',
-					function(value) {
+	Handlebars.registerHelper('show_link_in_statement', function(value) {
 
-						var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+		var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
 
-						try {
-							value = value
-									.replace(exp,
-											"<a href='$1' target='_blank' class='cd_hyperlink'>$1</a>");
-							return new Handlebars.SafeString(value);
-						} catch (err) {
-							return value;
-						}
+		try {
+			value = value
+					.replace(exp,
+							"<a href='$1' target='_blank' class='cd_hyperlink'>$1</a>");
+			return new Handlebars.SafeString(value);
+		} catch (err) {
+			return value;
+		}
 
-					});
+	});
 
 	/**
 	 * Returns table headings for custom contacts list view
