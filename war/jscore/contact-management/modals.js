@@ -71,7 +71,15 @@ $(function(){
 		 * Saves the contact using the function "serialize_and_save_continue_contact"
 		 */
 	    $('#person_validate').live('click', function (e) {
-	    	serialize_and_save_continue_contact(e, 'personForm', 'personModal', false, true, this,'tags_source_person_modal');	        
+	    	var model=serialize_and_save_continue_contact(e, 'personForm', 'personModal', false, true, this,'tags_source_person_modal');	
+	    	
+	    	console.log(model);
+	    	
+	    	if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection)	
+	          {
+	          	App_Contacts.contactsListView.collection.remove(model.id);
+	          	App_Contacts.contactsListView.collection.add(model);
+	          }
 	    });
 	    
 	    /**
@@ -86,7 +94,13 @@ $(function(){
 		 * Saves the contact using the function "serialize_and_save_continue_contact"
 		 */
 	    $('#company_validate').live('click', function (e) {
-	    	serialize_and_save_continue_contact(e, 'companyForm', 'companyModal', false, false, this);	        
+	    	var model=serialize_and_save_continue_contact(e, 'companyForm', 'companyModal', false, false, this);	
+	    	
+	    	if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection)	
+	          {
+	          	App_Contacts.contactsListView.collection.remove(model.id);
+	          	App_Contacts.contactsListView.collection.add(model);
+	          }
 	    });
 	    
 	    /**

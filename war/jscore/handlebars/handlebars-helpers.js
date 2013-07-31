@@ -196,6 +196,8 @@ $(function() {
 			var contact_properties = App_Contacts.contactDetailView.model
 					.get('properties');
 			
+			if(App_Contacts.contactDetailView.model.get('type')=='PERSON')
+			{	
 				for ( var i = 0; i < contact_properties.length; i++) {
 					
 					if (contact_properties[i].name == "last_name")
@@ -204,6 +206,16 @@ $(function() {
 						return contact_properties[i].value;
 				}
 				return "Contact";
+			}
+			else
+			{
+				for ( var i = 0; i < contact_properties.length; i++) 
+				{	
+					if (contact_properties[i].name == "name")
+						return contact_properties[i].value;
+				}
+				return "Company";
+			}
 			}
 	});
 	
