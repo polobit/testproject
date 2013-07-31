@@ -14,7 +14,7 @@ import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.campaignio.util.URLShortenerUtil;
-import com.thirdparty.SendGridEmail;
+import com.thirdparty.SendGrid;
 
 /**
  * <code>SendEmail</code> represents SendEmail node in a workflow. Sends email
@@ -425,13 +425,13 @@ public class SendEmail extends TaskletAdapter
 
 	    // Util.sendEmailUsingMailgun(fromEmail, fromName, to, subject,
 	    // replyTo, html, text, subscriberJSON, campaignJSON);
-	    SendGridEmail.sendMail(fromEmail, fromName, to, subject, replyTo, html, text, subscriberJSON, campaignJSON);
+	    SendGrid.sendMail(fromEmail, fromName, to, subject, replyTo, html, text, subscriberJSON, campaignJSON);
 	}
 	else
 	{
 	    // Util.sendEmailUsingMailgun(fromEmail, fromName, to, subject,
 	    // replyTo, null, text, subscriberJSON, campaignJSON);
-	    SendGridEmail.sendMail(fromEmail, fromName, to, subject, replyTo, null, text, subscriberJSON, campaignJSON);
+	    SendGrid.sendMail(fromEmail, fromName, to, subject, replyTo, null, text, subscriberJSON, campaignJSON);
 	}
 
 	// Execute Next One in Loop

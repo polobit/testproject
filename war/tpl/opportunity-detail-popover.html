@@ -19,7 +19,7 @@
                     	</div>
         			{{/if_contact_type}}
 					{{#if_contact_type "COMPANY"}}
-        				<img class="thumbnail" src="img/company.png" width="40px" height="40px"/>
+        				<img class="thumbnail" {{getCompanyImage "40"}}/>
                     	<div style="display:inline-block;text-overflow:ellipsis;white-space:nowrap;width:90px;overflow:hidden;">
                         	{{getPropertyValue properties "name"}}
                     	</div>

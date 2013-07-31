@@ -117,6 +117,10 @@ public class WorkflowUtil
 		    if (field.name.equals("website") && field.subtype.equals("TWITTER"))
 			field.name = "twitter_id";
 
+		    // Get LinkedIn id
+		    if (field.name.equals("website") && field.subtype.equals("LINKEDIN"))
+			field.name = "linkedin_id";
+
 		    subscriberJSON.put(field.name, field.value);
 		}
 	    }

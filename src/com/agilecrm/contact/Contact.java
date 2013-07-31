@@ -711,12 +711,14 @@ public class Contact extends Cursor {
 
 		/*
 		 * A person must have contactCompanyKey, if not all company info is
-		 * removed from properties --checks if contactCompanyKey is valid, if
-		 * not removes it, otherwise get company name & fill in
-		 * properties['name=company']=CompanyName --removes blank entries in
-		 * properties['name=company'] to not confuse UI Observe that postLoad
-		 * can take care of company name while loading, its OK if we don't set
-		 * it in prePersist.
+		 * removed from properties
+		 * 
+		 * --checks if contactCompanyKey is valid, if not removes it, otherwise
+		 * get company name & fill in properties['name=company']=CompanyName
+		 * 
+		 * --removes blank entries in properties['name=company'] to not confuse
+		 * UI. Observe that postLoad can take care of company name while
+		 * loading, its OK if we don't set it in prePersist.
 		 */
 
 		if (this.contactCompanyKey != null) // fill company name in
