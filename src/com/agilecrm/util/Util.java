@@ -20,7 +20,7 @@ import org.jsoup.select.Elements;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
-import com.thirdparty.SendGridEmail;
+import com.thirdparty.SendGrid;
 
 /**
  * <code>Util</code> class includes utility methods to access from different
@@ -133,7 +133,7 @@ public class Util
      */
     public static String sendMail(String fromEmail, String fromName, String to, String subject, String replyTo, String html, String text)
     {
-	return SendGridEmail.sendMail(fromEmail, fromName, to, subject, replyTo, html, text, null, null);
+	return SendGrid.sendMail(fromEmail, fromName, to, subject, replyTo, html, text, null, null);
 
     }
 
@@ -277,6 +277,7 @@ public class Util
 		    divs.first().remove();
 
 		emailBody = doc.select("body").toString();
+		System.out.println("emailbody in parseEmail " + emailBody);
 	    }
 
 	    // Remove script tags.
@@ -290,6 +291,7 @@ public class Util
 	}
 	catch (Exception e)
 	{
+	    e.printStackTrace();
 	    emailBody = "";
 	}
 
