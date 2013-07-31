@@ -36,437 +36,412 @@ import com.googlecode.objectify.Key;
  * @author
  * 
  */
-public class ContactUtil
-{
-    // Dao
-    private static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(
-	    Contact.class);
+public class ContactUtil {
+	// Dao
+	private static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(
+			Contact.class);
 
-    /**
-     * Gets the number of contacts (count) present in the database with given
-     * tag name
-     * 
-     * @param tag
-     *            name of the tag
-     * @return count of the contacts
-     */
-    public static int getContactsCountForTag(String tag)
-    {
-	return dao.ofy().query(Contact.class)
-		.filter("tagsWithTime.tag = ", tag).count();
-    }
-
-    /**
-     * Gets all the contact objects, associated with the given tag
-     * 
-     * @param tag
-     *            name of the tag
-     * @return list of contacts
-     */
-    public static List<Contact> getContactsForTag(String tag, Integer count,
-	    String cursor)
-    {
-	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("tagsWithTime.tag", tag);
-	if (count != null)
-	    return dao.fetchAll(count, cursor, searchMap);
-
-	return dao.listByProperty(searchMap);
-    }
-
-    /**
-     * Fetches a contact based on its id
-     * 
-     * @param id
-     *            unique id of a contact
-     * @return {@link Contact} related to the id
-     */
-    public static Contact getContact(Long id)
-    {
-	try
-	{
-	    return dao.get(id);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-
-    /**
-     * Fetches all the contacts at once irrespective of their type
-     * (person/company)
-     * 
-     * @return List of contacts
-     */
-    public static List<Contact> getAllContacts()
-    {
-	return dao.fetchAll();
-    }
-
-    /**
-     * Fetches all the contacts but not all at once, step by step based on max
-     * parameter value (When scroll bar is scrolled down from client side, "max"
-     * no of contacts will be fetched, when only cursor is not null)
-     * 
-     * @param max
-     *            number of contacts to be fetched at once
-     * @param cursor
-     *            Activates infiniScroll in client side
-     * @return list of contacts
-     */
-    public static List<Contact> getAll(int max, String cursor)
-    {
-	return dao.fetchAll(max, cursor);
-    }
-
-    /**
-     * Fetches all the contacts of type company only (step by step)
-     * 
-     * @param max
-     *            number of contacts (of type company) to be fetched at once
-     * @param cursor
-     *            Activates infiniScroll at client side
-     * @return list of contacts (company)
-     */
-    public static List<Contact> getAllCompanies(int max, String cursor)
-    {
-	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("type", Type.COMPANY);
-	return dao.fetchAll(max, cursor, searchMap);
-    }
-
-    /**
-     * Fetches all the contacts of type person only (step by step)
-     * 
-     * @param max
-     *            number of contacts (of type person) to be fetched at once
-     * @param cursor
-     *            Activates infiniScroll at client side
-     * @return list of contacts (person)
-     */
-    public static List<Contact> getAllContacts(int max, String cursor)
-    {
-	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("type", Type.PERSON);
-	if (max != 0)
-	    return dao.fetchAll(max, cursor, searchMap);
-
-	return dao.listByProperty(searchMap);
-    }
-    
-    //Fetch all contacts, which are related to Company-companyId,i.e. Organization
-    public static List<Contact> getAllContactsOfCompany(String companyId,int max, String cursor)
-    {
-	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("type", Type.PERSON);
-	//searchMap.put("related_company_id",new Key<Contact>(Contact.class,Long.valueOf(companyId)));
-	searchMap.put("contactCompanyKey",new Key<Contact>(Contact.class,Long.valueOf(companyId)));
-	if (max != 0)
-	    return dao.fetchAll(max, cursor, searchMap);
-
-	return dao.listByProperty(searchMap);
-    }
-
-    public static List<Key<Contact>> getAllContactKey()
-    {
-	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("type", Type.PERSON);
-	return dao.listKeysByProperty(searchMap);
-    }
-
-    /**
-     * Gets a contact based on its email
-     * 
-     * @param email
-     *            email value to get a contact
-     * @return {@Contact} related to an email
-     */
-    public static Contact searchContactByEmail(String email)
-    {
-	if (email == null)
-	    return null;
-
-	return dao.getByProperty("properties.value = ", email);
-    }
-
-    public static boolean isExists(String email)
-    {
-	if (email == null)
-	    return false;
-
-	return dao.getCountByProperty("properties.value = ", email) != 0 ? true
-		: false;
-    }
-
-    /**
-     * Get Count of Contacts by Email - should be used in most of the cases
-     * unless the real entity is required
-     * 
-     * @param email
-     *            email value to get contact count with this email
-     * @return number of contacts with the given email
-     */
-    public static int searchContactCountByEmail(String email)
-    {
-	return dao.ofy().query(Contact.class)
-		.filter("properties.name = ", Contact.EMAIL)
-		.filter("properties.value = ", email).count();
-    }
-
-    /**
-     * Gets list of contacts based on array of ids
-     * 
-     * @param contactsJSONArray
-     *            JSONArray object of contact ids
-     * @return List of contacts
-     */
-    public static List<Contact> getContactsBulk(JSONArray contactsJSONArray)
-    {
-	List<Key<Contact>> contactKeys = new ArrayList<Key<Contact>>();
-
-	for (int i = 0; i < contactsJSONArray.length(); i++)
-	{
-	    try
-	    {
-		contactKeys.add(new Key<Contact>(Contact.class, Long
-			.parseLong(contactsJSONArray.getString(i))));
-	    }
-	    catch (JSONException e)
-	    {
-		e.printStackTrace();
-	    }
+	/**
+	 * Gets the number of contacts (count) present in the database with given
+	 * tag name
+	 * 
+	 * @param tag
+	 *            name of the tag
+	 * @return count of the contacts
+	 */
+	public static int getContactsCountForTag(String tag) {
+		return dao.ofy().query(Contact.class)
+				.filter("tagsWithTime.tag = ", tag).count();
 	}
 
-	List<Contact> contacts_list = new ArrayList<Contact>();
-	contacts_list.addAll(dao.ofy().get(contactKeys).values());
-	return contacts_list;
-    }
+	/**
+	 * Gets all the contact objects, associated with the given tag
+	 * 
+	 * @param tag
+	 *            name of the tag
+	 * @return list of contacts
+	 */
+	public static List<Contact> getContactsForTag(String tag, Integer count,
+			String cursor) {
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("tagsWithTime.tag", tag);
+		if (count != null)
+			return dao.fetchAll(count, cursor, searchMap);
 
-    public static List<Contact> getContactsBulk(List<Long> contactsArray)
-    {
-	List<Key<Contact>> contactKeys = new ArrayList<Key<Contact>>();
-
-	for (Long id : contactsArray)
-	{
-	    contactKeys.add(new Key<Contact>(Contact.class, id));
-	}
-	System.out.println(dao.fetchAllByKeys(contactKeys));
-
-	return dao.fetchAllByKeys(contactKeys);
-    }
-
-    /**
-     * Adds each tag in tags_array to each contact in contacts bulk and saves
-     * each contact
-     * 
-     * @param contactsJSONArray
-     *            JSONArray object containing contact ids
-     * @param tags_array
-     *            array of tags
-     */
-    public static void addTagsToContactsBulk(JSONArray contactsJSONArray,
-	    String[] tags_array)
-    {
-	List<Contact> contacts_list = ContactUtil
-		.getContactsBulk(contactsJSONArray);
-
-	if (contacts_list.size() == 0)
-	{
-	    System.out.println("Null contact");
-	    return;
+		return dao.listByProperty(searchMap);
 	}
 
-	for (Contact contact : contacts_list)
-	{
-
-	    contact.addTags(tags_array);
+	/**
+	 * Fetches a contact based on its id
+	 * 
+	 * @param id
+	 *            unique id of a contact
+	 * @return {@link Contact} related to the id
+	 */
+	public static Contact getContact(Long id) {
+		try {
+			return dao.get(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
-	dao.putAll(contacts_list);
-    }
-
-    public static void addTagsToContactsBulk(List<Contact> contacts_list,
-	    String[] tags_array)
-    {
-	if (contacts_list.size() == 0)
-	{
-	    System.out.println("Null contact");
-	    return;
+	/**
+	 * Fetches all the contacts at once irrespective of their type
+	 * (person/company)
+	 * 
+	 * @return List of contacts
+	 */
+	public static List<Contact> getAllContacts() {
+		return dao.fetchAll();
 	}
 
-	for (Contact contact : contacts_list)
-	{
-
-	    contact.addTags(tags_array);
+	/**
+	 * Fetches all the contacts but not all at once, step by step based on max
+	 * parameter value (When scroll bar is scrolled down from client side, "max"
+	 * no of contacts will be fetched, when only cursor is not null)
+	 * 
+	 * @param max
+	 *            number of contacts to be fetched at once
+	 * @param cursor
+	 *            Activates infiniScroll in client side
+	 * @return list of contacts
+	 */
+	public static List<Contact> getAll(int max, String cursor) {
+		return dao.fetchAll(max, cursor);
 	}
 
-	dao.putAll(contacts_list);
-    }
-
-    /**
-     * Converts CSV data in to JSON array, this method converts first 10 line of
-     * csv data as sample information, which is sent back to client to show
-     * uploaded sample details
-     * 
-     * @param csv
-     * @param duplicateFieldName
-     *            Duplicate field name
-     * @return
-     * @throws Exception
-     */
-    public static Hashtable convertCSVToJSONArrayPartially(String csv,
-	    String duplicateFieldName) throws Exception
-    {
-
-	CSVReader reader = new CSVReader(new StringReader(csv.trim()));
-
-	// Get Header Liner
-	String[] headers = reader.readNext();
-
-	if (headers == null)
-	{
-	    System.out.println("Empty List");
-	    new Exception("Empty List");
+	/**
+	 * Fetches all the contacts of type company only (step by step)
+	 * 
+	 * @param max
+	 *            number of contacts (of type company) to be fetched at once
+	 * @param cursor
+	 *            Activates infiniScroll at client side
+	 * @return list of contacts (company)
+	 */
+	public static List<Contact> getAllCompanies(int max, String cursor) {
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("type", Type.COMPANY);
+		return dao.fetchAll(max, cursor, searchMap);
 	}
 
-	// CSV Json Array
-	JSONArray csvJSONArray = new JSONArray();
+	/**
+	 * Fetches all the contacts of type person only (step by step)
+	 * 
+	 * @param max
+	 *            number of contacts (of type person) to be fetched at once
+	 * @param cursor
+	 *            Activates infiniScroll at client side
+	 * @return list of contacts (person)
+	 */
+	public static List<Contact> getAllContacts(int max, String cursor) {
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("type", Type.PERSON);
+		if (max != 0)
+			return dao.fetchAll(max, cursor, searchMap);
 
-	// HashTable of keys to check duplicates - we will store all keys into
-	// this hashtable and if there are any - we will exclude them
-	Vector<String> keys = new Vector();
-	Vector<String> duplicates = new Vector();
+		return dao.listByProperty(searchMap);
+	}
 
-	String[] csvValues;
+	// Fetch all contacts, which are related to Company-companyId,i.e.
+	// Organization
+	public static List<Contact> getAllContactsOfCompany(String companyId,
+			int max, String cursor) {
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("type", Type.PERSON);
+		// searchMap.put("related_company_id",new
+		// Key<Contact>(Contact.class,Long.valueOf(companyId)));
+		searchMap.put("contactCompanyKey",
+				new Key<Contact>(Contact.class, Long.valueOf(companyId)));
+		if (max != 0)
+			return dao.fetchAll(max, cursor, searchMap);
 
-	// Reads first 10 lines of csv data, and converts it into JSON object
-	// with heading as its repective keys
-	for (int i = 0; i < 10 && (csvValues = reader.readNext()) != null; i++)
-	{
-	    JSONObject csvJSONObject = new JSONObject();
+		return dao.listByProperty(searchMap);
+	}
 
-	    boolean isDuplicate = false;
-	    for (int j = 0; j < csvValues.length; j++)
-	    {
-		// Check if the header is same as duplicate name
-		if (duplicateFieldName != null
-			&& headers[j].equalsIgnoreCase(duplicateFieldName))
-		{
-		    System.out.println("If already present " + headers[j] + " "
-			    + csvValues[j]);
+	public static List<Key<Contact>> getAllContactKey() {
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("type", Type.PERSON);
+		return dao.listKeysByProperty(searchMap);
+	}
 
-		    // Check if is already present in already imported items
-		    if (keys.contains(csvValues[j]))
-		    {
-			duplicates.add(csvValues[j]);
-			isDuplicate = true;
-			break;
-		    }
+	/**
+	 * Gets a contact based on its email
+	 * 
+	 * @param email
+	 *            email value to get a contact
+	 * @return {@Contact} related to an email
+	 */
+	public static Contact searchContactByEmail(String email) {
+		if (email == null)
+			return null;
 
-		    keys.add(csvValues[j]);
+		return dao.getByProperty("properties.value = ", email);
+	}
+
+	public static boolean isExists(String email) {
+		if (email == null)
+			return false;
+
+		return dao.getCountByProperty("properties.value = ", email) != 0 ? true
+				: false;
+	}
+
+	/**
+	 * Get Count of Contacts by Email - should be used in most of the cases
+	 * unless the real entity is required
+	 * 
+	 * @param email
+	 *            email value to get contact count with this email
+	 * @return number of contacts with the given email
+	 */
+	public static int searchContactCountByEmail(String email) {
+		return dao.ofy().query(Contact.class)
+				.filter("properties.name = ", Contact.EMAIL)
+				.filter("properties.value = ", email).count();
+	}
+
+	/**
+	 * Gets list of contacts based on array of ids
+	 * 
+	 * @param contactsJSONArray
+	 *            JSONArray object of contact ids
+	 * @return List of contacts
+	 */
+	public static List<Contact> getContactsBulk(JSONArray contactsJSONArray) {
+		List<Key<Contact>> contactKeys = new ArrayList<Key<Contact>>();
+
+		for (int i = 0; i < contactsJSONArray.length(); i++) {
+			try {
+				contactKeys.add(new Key<Contact>(Contact.class, Long
+						.parseLong(contactsJSONArray.getString(i))));
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 		}
 
-		// Put field value respective to its heading, into JSON object
-		csvJSONObject.put(headers[j], csvValues[j]);
-	    }
-
-	    if (!isDuplicate)
-		csvJSONArray.put(csvJSONObject);
+		List<Contact> contacts_list = new ArrayList<Contact>();
+		contacts_list.addAll(dao.ofy().get(contactKeys).values());
+		return contacts_list;
 	}
 
-	Hashtable resultHashtable = new Hashtable();
-	resultHashtable.put("result", csvJSONArray);
+	public static List<Contact> getContactsBulk(List<Long> contactsArray) {
+		List<Key<Contact>> contactKeys = new ArrayList<Key<Contact>>();
 
-	// Put warning
-	if (duplicateFieldName != null && duplicates.size() > 0)
-	{
-	    resultHashtable.put("warning",
-		    "Duplicate Values (" + duplicates.size()
-			    + ") were not imported " + duplicates);
+		for (Long id : contactsArray) {
+			contactKeys.add(new Key<Contact>(Contact.class, id));
+		}
+		System.out.println(dao.fetchAllByKeys(contactKeys));
+
+		return dao.fetchAllByKeys(contactKeys);
 	}
 
-	System.out.println("Converted csv " + csv + " to " + resultHashtable);
-	return resultHashtable;
+	/**
+	 * Adds each tag in tags_array to each contact in contacts bulk and saves
+	 * each contact
+	 * 
+	 * @param contactsJSONArray
+	 *            JSONArray object containing contact ids
+	 * @param tags_array
+	 *            array of tags
+	 */
+	public static void addTagsToContactsBulk(JSONArray contactsJSONArray,
+			String[] tags_array) {
+		List<Contact> contacts_list = ContactUtil
+				.getContactsBulk(contactsJSONArray);
 
-    }
+		if (contacts_list.size() == 0) {
+			System.out.println("Null contact");
+			return;
+		}
 
-    public static void createContactsFromCSV(String csv, Contact contact,
-	    String ownerId) throws IOException
-    {
+		for (Contact contact : contacts_list) {
 
-	CSVReader reader = new CSVReader(new StringReader(csv.trim()));
+			contact.addTags(tags_array);
+		}
 
-	List<String[]> contacts = reader.readAll();
-
-	contact.type = Contact.Type.PERSON;
-	List<ContactField> properties = contact.properties;
-
-	Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class,
-		Long.parseLong(ownerId));
-
-	for (String[] csvValues : contacts)
-	{
-	    contact.id = null;
-	    contact.created_time = 0l;
-	    contact.setContactOwner(ownerKey);
-
-	    for (int j = 0; j < csvValues.length; j++)
-	    {
-		properties.get(j).value = csvValues[j];
-	    }
-	    contact.save();
+		dao.putAll(contacts_list);
 	}
-    }
 
-    /**
-     * Returns contact firstname and lastname from contact-id.
-     * 
-     * @param contactId
-     *            - Contact Id.
-     * @return Contact Name.
-     */
-    public static String getContactNameFromId(Long contactId)
-    {
-	Contact contact = getContact(contactId);
+	public static void addTagsToContactsBulk(List<Contact> contacts_list,
+			String[] tags_array) {
+		if (contacts_list.size() == 0) {
+			System.out.println("Null contact");
+			return;
+		}
 
-	if (contact == null)
-	    return "?";
+		for (Contact contact : contacts_list) {
 
-	String contactName = contact.getContactFieldValue(Contact.FIRST_NAME)
-		+ " " + contact.getContactFieldValue(Contact.LAST_NAME);
+			contact.addTags(tags_array);
+		}
 
-	return contactName;
-    }
+		dao.putAll(contacts_list);
+	}
 
-    public static List<Contact> getRecentContacts(String page_size)
-    {
-	return dao.ofy().query(Contact.class)
-		.filter("viewed.viewer_id", SessionManager.get().getDomainId())
-		.order("-viewed.viewed_time")
-		.limit(Integer.parseInt(page_size)).list();
-    }
+	/**
+	 * Converts CSV data in to JSON array, this method converts first 10 line of
+	 * csv data as sample information, which is sent back to client to show
+	 * uploaded sample details
+	 * 
+	 * @param csv
+	 * @param duplicateFieldName
+	 *            Duplicate field name
+	 * @return
+	 * @throws Exception
+	 */
+	public static Hashtable convertCSVToJSONArrayPartially(String csv,
+			String duplicateFieldName) throws Exception {
 
-    /**
-     * Returns total contacts count that are subscribed to a campaign having
-     * given status.
-     * 
-     * @param campaignId
-     *            - CampaignId.
-     * @param status
-     *            - Active or Done.
-     * @return int
-     */
-    public static int getSubscribersCount(String campaignId, String status)
-    {
-	return dao.ofy().query(Contact.class)
-		.filter("campaignStatus.status", status).count();
-    }
+		CSVReader reader = new CSVReader(new StringReader(csv.trim()));
 
-    public static void deleteContactsbyList(List<Contact> contacts)
-    {
-	for (Contact contact : contacts)
-	    contact.delete();
-    }
+		// Get Header Liner
+		String[] headers = reader.readNext();
+
+		if (headers == null) {
+			System.out.println("Empty List");
+			new Exception("Empty List");
+		}
+
+		// CSV Json Array
+		JSONArray csvJSONArray = new JSONArray();
+
+		// HashTable of keys to check duplicates - we will store all keys into
+		// this hashtable and if there are any - we will exclude them
+		Vector<String> keys = new Vector();
+		Vector<String> duplicates = new Vector();
+
+		String[] csvValues;
+
+		// Reads first 10 lines of csv data, and converts it into JSON object
+		// with heading as its repective keys
+		for (int i = 0; i < 10 && (csvValues = reader.readNext()) != null; i++) {
+			JSONObject csvJSONObject = new JSONObject();
+
+			boolean isDuplicate = false;
+			for (int j = 0; j < csvValues.length; j++) {
+				// Check if the header is same as duplicate name
+				if (duplicateFieldName != null
+						&& headers[j].equalsIgnoreCase(duplicateFieldName)) {
+					System.out.println("If already present " + headers[j] + " "
+							+ csvValues[j]);
+
+					// Check if is already present in already imported items
+					if (keys.contains(csvValues[j])) {
+						duplicates.add(csvValues[j]);
+						isDuplicate = true;
+						break;
+					}
+
+					keys.add(csvValues[j]);
+				}
+
+				// Put field value respective to its heading, into JSON object
+				csvJSONObject.put(headers[j], csvValues[j]);
+			}
+
+			if (!isDuplicate)
+				csvJSONArray.put(csvJSONObject);
+		}
+
+		Hashtable resultHashtable = new Hashtable();
+		resultHashtable.put("result", csvJSONArray);
+
+		// Put warning
+		if (duplicateFieldName != null && duplicates.size() > 0) {
+			resultHashtable.put("warning",
+					"Duplicate Values (" + duplicates.size()
+							+ ") were not imported " + duplicates);
+		}
+
+		System.out.println("Converted csv " + csv + " to " + resultHashtable);
+		return resultHashtable;
+
+	}
+
+	public static void createContactsFromCSV(String csv, Contact contact,
+			String ownerId) throws IOException {
+
+		CSVReader reader = new CSVReader(new StringReader(csv.trim()));
+
+		List<String[]> contacts = reader.readAll();
+
+		contact.type = Contact.Type.PERSON;
+		List<ContactField> properties = contact.properties;
+
+		Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class,
+				Long.parseLong(ownerId));
+
+		for (String[] csvValues : contacts) {
+			contact.id = null;
+			contact.created_time = 0l;
+			contact.setContactOwner(ownerKey);
+
+			for (int j = 0; j < csvValues.length; j++) {
+				properties.get(j).value = csvValues[j];
+			}
+			contact.save();
+		}
+	}
+
+	/**
+	 * Returns contact firstname and lastname from contact-id.
+	 * 
+	 * @param contactId
+	 *            - Contact Id.
+	 * @return Contact Name.
+	 */
+	public static String getContactNameFromId(Long contactId) {
+		Contact contact = getContact(contactId);
+
+		if (contact == null)
+			return "?";
+
+		String contactName = contact.getContactFieldValue(Contact.FIRST_NAME)
+				+ " " + contact.getContactFieldValue(Contact.LAST_NAME);
+
+		return contactName;
+	}
+
+	public static List<Contact> getRecentContacts(String page_size) {
+		return dao.ofy().query(Contact.class)
+				.filter("viewed.viewer_id", SessionManager.get().getDomainId())
+				.order("-viewed.viewed_time")
+				.limit(Integer.parseInt(page_size)).list();
+	}
+
+	/**
+	 * Returns total contacts count that are subscribed to a campaign having
+	 * given status.
+	 * 
+	 * @param campaignId
+	 *            - CampaignId.
+	 * @param status
+	 *            - Active or Done.
+	 * @return int
+	 */
+	public static int getSubscribersCount(String campaignId, String status) {
+		return dao.ofy().query(Contact.class)
+				.filter("campaignStatus.status", status).count();
+	}
+
+	public static void deleteContactsbyList(List<Contact> contacts) {
+		for (Contact contact : contacts)
+			contact.delete();
+	}
+
+	/**
+	 * Returns Key of a company by its name.
+	 * 
+	 * @param name
+	 *            - Company Name , show match exactly.
+	 * @return Key<Contact> - Corresponding DataStore key
+	 */
+	public static Key<Contact> getCompanyByName(String companyName) {
+		return dao.ofy().query(Contact.class).filter("type", "COMPANY")
+				.filter("properties.name", "name")
+				.filter("properties.value", companyName).getKey();
+
+	}
 }

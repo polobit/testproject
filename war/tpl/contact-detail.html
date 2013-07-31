@@ -31,9 +31,12 @@
 
 								</br>{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}
 								{{#comma_in_between_property "title" "company" properties}}{{/comma_in_between_property}}
-								{{#if_propertyName "company"}} 
-									{{value}}
-								{{/if_propertyName}} <br />
+								{{#if contact_company_id}} 
+									<a href="#contact/{{contact_company_id}}">{{getPropertyValue properties "company"}}</a>
+								{{else}}
+									{{getPropertyValue properties "company"}}
+								{{/if}}
+								<br />
 								<div class="span2" style="padding-top: 5px; margin: 0px">
 									{{#property_is_exists "website" properties}}
 									{{#multiple_Property_Element "website" properties}} {{#each

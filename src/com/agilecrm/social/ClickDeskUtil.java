@@ -24,7 +24,7 @@ public class ClickDeskUtil
 	System.out.println("from widegte"
 		+ widget.getProperty("clickdesk_username"));
 
-	response = HTTPUtil.accessUrlusingAuthentication(url,
+	response = HTTPUtil.accessURLUsingAuthentication(url,
 		widget.getProperty("clickdesk_username"),
 		widget.getProperty("clickdesk_api_key"), null,
 		"application/json", "GET", "application/json");
@@ -58,7 +58,7 @@ public class ClickDeskUtil
 	System.out.println("from widegte"
 		+ widget.getProperty("clickdesk_username"));
 
-	response = HTTPUtil.accessUrlusingAuthentication(url,
+	response = HTTPUtil.accessURLUsingAuthentication(url,
 		widget.getProperty("clickdesk_username"),
 		widget.getProperty("clickdesk_api_key"), null,
 		"application/json", "GET", "application/json");

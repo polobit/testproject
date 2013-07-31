@@ -1,6 +1,8 @@
 package com.agilecrm.contact.imports;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,9 +37,7 @@ public class ContactUtilServlet extends HttpServlet
     }
 
     /**
-     * Imports the contacts from Google based checking {@link ContactPrefs}.If
-     * called from backend requset has no parameters and continues with
-     * importing contacts
+     * Called from backends.
      */
     public void doGet(HttpServletRequest req, HttpServletResponse res)
     {
@@ -45,33 +45,20 @@ public class ContactUtilServlet extends HttpServlet
 	try
 	{
 
-	    // if request contains parameters, request is from import.js
-	    // else backends calls this servlet
-	    String returnUrl = req.getParameter("return_url");
-	    if (returnUrl != null)
-	    {
-		String type = req.getParameter("service");
-		ContactPrefs contactPrefs = ContactPrefs
-			.getPrefsByType(ContactPrefs.Type.valueOf(type
-				.toUpperCase()));
-
-		// if contact prefs exists for google initilaize backend
-		System.out.println("in ininin");
-		System.out.println(contactPrefs);
-		ContactsImportUtil.initilaizeImportBackend(contactPrefs);
-		return;
-	    }
-
-	    // retrieves contact prefs from db and saves conatct to agile
-	    System.out.println("in servlet");
+	    System.out.println("in contact util servlet");
 	    InputStream stream = req.getInputStream();
-	    String contactSyncerPrefsString = IOUtils.toString(stream);
+	    byte[] contactPrefsByteArray = IOUtils.toByteArray(stream);
 
-	    System.out.println(contactSyncerPrefsString);
-	    ContactPrefs contactPrefs = new ObjectMapper().readValue(
-		    contactSyncerPrefsString, ContactPrefs.class);
+	    ByteArrayInputStream b = new ByteArrayInputStream(
+		    contactPrefsByteArray);
+	    ObjectInputStream o = new ObjectInputStream(b);
 
-	    System.out.println(contactPrefs);
+	    System.out
+		    .println("contactPrefsByteArray " + contactPrefsByteArray);
+	    ContactPrefs contactPrefs = (ContactPrefs) o.readObject();
+
+	    System.out.println("domain user key in contacts util servlet "
+		    + contactPrefs.getDomainUser());
 	    importContacts(contactPrefs);
 
 	}
@@ -95,20 +82,20 @@ public class ContactUtilServlet extends HttpServlet
 	    throws Exception
     {
 
-	System.out.println(contactPrefs.token);
+	// contactPrefs = ContactPrefs.get(contactPrefs.id);
+
+	Key<DomainUser> key = contactPrefs.getDomainUser();
+	String nameSpace = DomainUserUtil.getDomainUser(key.getId()).domain;
+	System.out.println("namespace " + nameSpace);
+
+	NamespaceManager.set(nameSpace);
 
 	if ((contactPrefs.expires - 60000) <= System.currentTimeMillis())
 	    refreshPrefsandSave(contactPrefs);
 
+	System.out.println("contactprefs token : " + contactPrefs.token);
 	List<ContactEntry> entries = GoogleContactToAgileContactUtil
 		.retrieveContacts(contactPrefs.token);
-
-	Key<DomainUser> key = ContactPrefs.get(contactPrefs.id).getDomainUser();
-	String nameSpace = DomainUserUtil.getDomainUser(ContactPrefs
-		.get(contactPrefs.id).getDomainUser().getId()).domain;
-	System.out.println("namespace " + nameSpace);
-
-	NamespaceManager.set(nameSpace);
 
 	ContactsImportUtil.saveGoogleContactsInAgile(entries, key);
     }
@@ -116,7 +103,7 @@ public class ContactUtilServlet extends HttpServlet
     public static void refreshPrefsandSave(ContactPrefs contactPrefs)
 	    throws Exception
     {
-	System.out.println("in refresh token");
+	System.out.println("in refresh token og google contact prefs");
 	String response = GoogleContactToAgileContactUtil
 		.refreshTokenInGoogle(contactPrefs.refreshToken);
 
@@ -134,6 +121,8 @@ public class ContactUtilServlet extends HttpServlet
 	    contactPrefs.token = String.valueOf(properties.get("access_token"));
 	    contactPrefs.expires = Long.parseLong(String.valueOf(properties
 		    .get("expires_in")));
+	    System.out.println("domiain user key in refresh token method: "
+		    + contactPrefs.getDomainUser());
 	    contactPrefs.save();
 	}
 

@@ -302,7 +302,7 @@ $(function()
 				return;
 			}
 			
-			var url = '/auth/contactsutilservlet?service=google&return_url=' + encodeURIComponent(callbackURL);
+			var url = '/scribe?service_type=google';
 
 			$.post(url, function(data)
 			{
