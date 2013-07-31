@@ -35,7 +35,6 @@
 	<servlet-mapping>
 		<servlet-name>ContactUtilServlet</servlet-name>
 		<url-pattern>/backend/contactsutilservlet</url-pattern>
-		<url-pattern>/auth/contactsutilservlet</url-pattern>
 	</servlet-mapping>
 	<servlet>
 		<servlet-name>GmailContextualGadget</servlet-name>

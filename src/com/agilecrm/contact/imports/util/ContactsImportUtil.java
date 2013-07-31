@@ -1,11 +1,12 @@
 package com.agilecrm.contact.imports.util;
 
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
@@ -52,10 +53,15 @@ public class ContactsImportUtil
 	TaskOptions taskOptions;
 	try
 	{
+	    ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
+	    ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+		    byteArrayStream);
+	    objectOutputStream.writeObject(contactPrefs);
+	    System.out.println("byte array length in initialize backends: "
+		    + byteArrayStream.toByteArray().length);
 	    taskOptions = TaskOptions.Builder
 		    .withUrl("/backend/contactsutilservlet")
-		    .payload(
-			    new ObjectMapper().writeValueAsString(contactPrefs))
+		    .payload(byteArrayStream.toByteArray())
 		    .header("Host",
 			    BackendServiceFactory.getBackendService()
 				    .getBackendAddress("b1"))
@@ -78,8 +84,8 @@ public class ContactsImportUtil
      * @param ownerKey
      *            domian user key
      */
-    public static void saveGoogleContactsInAgile(
-	    List<ContactEntry> entries, Key<DomainUser> ownerKey)
+    public static void saveGoogleContactsInAgile(List<ContactEntry> entries,
+	    Key<DomainUser> ownerKey)
     {
 
 	System.out.println(entries.size());

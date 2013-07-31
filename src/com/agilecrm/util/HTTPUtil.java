@@ -154,7 +154,7 @@ public class HTTPUtil
      * @throws Exception
      *             If server throws an exception
      */
-    public static String accessUrlusingAuthentication(String postURL,
+    public static String accessURLUsingAuthentication(String postURL,
 	    String username, String password, String data, String contentType,
 	    String requestMethod, String acceptType) throws Exception
     {
@@ -229,7 +229,7 @@ public class HTTPUtil
      * @throws Exception
      *             If server throws an exception
      */
-    public static String accessUrl(String postURL, String username,
+    public static String accessURL(String postURL, String username,
 	    String password, String requestMethod, String data,
 	    String contentLength, String contentType, String acceptType)
 	    throws Exception
