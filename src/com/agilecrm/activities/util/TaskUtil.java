@@ -30,8 +30,7 @@ import com.googlecode.objectify.Query;
 public class TaskUtil
 {
     // Dao
-    private static ObjectifyGenericDao<Task> dao = new ObjectifyGenericDao<Task>(
-	    Task.class);
+    private static ObjectifyGenericDao<Task> dao = new ObjectifyGenericDao<Task>(Task.class);
 
     /**
      * Returns a Task based on Id. If no task is present with that id, returns
@@ -126,7 +125,10 @@ public class TaskUtil
     {
 	try
 	{
-	    return dao.listByProperty("is_complete", false);
+	    Map<String, Object> conditionsMap = new HashMap<String, Object>();
+	    conditionsMap.put("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()));
+	    conditionsMap.put("is_complete", false);
+	    return dao.listByProperty(conditionsMap);
 	}
 	catch (Exception e)
 	{
@@ -147,13 +149,8 @@ public class TaskUtil
 	     * int thisWeekDate = (7-date.getDay());
 	     * System.out.println("all pending tasks this week="+thisWeekDate);
 	     */
-	    return dao
-		    .ofy()
-		    .query(Task.class)
-		    .filter("owner",
-			    new Key<DomainUser>(DomainUser.class,
-				    SessionManager.get().getDomainId()))
-		    .order("due").filter("is_complete", false).limit(7).list();
+	    return dao.ofy().query(Task.class).filter("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId())).order("due")
+		    .filter("is_complete", false).limit(7).list();
 	}
 	catch (Exception e)
 	{
@@ -182,15 +179,12 @@ public class TaskUtil
 
 	    // Gets Date after numDays days
 	    DateUtil endDateUtil = new DateUtil();
-	    Long endTime = endDateUtil.addDays(numDays + 1).toMidnight()
-		    .getTime().getTime() / 1000;
+	    Long endTime = endDateUtil.addDays(numDays + 1).toMidnight().getTime().getTime() / 1000;
 
 	    System.out.println("check for " + startTime + " " + endTime);
 
 	    // Gets list of tasks filtered on given conditions
-	    return dao.ofy().query(Task.class).filter("due >=", startTime)
-		    .filter("due <=", endTime).filter("is_complete", false)
-		    .list();
+	    return dao.ofy().query(Task.class).filter("due >=", startTime).filter("due <=", endTime).filter("is_complete", false).list();
 	}
 	catch (Exception e)
 	{
@@ -211,8 +205,7 @@ public class TaskUtil
      * @return List of tasks that have been pending for particular number of
      *         days and related to the same owner
      */
-    public static List<Task> getPendingTasksToRemind(int numDays,
-	    Long domainUserId)
+    public static List<Task> getPendingTasksToRemind(int numDays, Long domainUserId)
     {
 	// Gets Today's date
 	DateUtil startDateUtil = new DateUtil();
@@ -220,31 +213,20 @@ public class TaskUtil
 
 	// Gets Date after numDays days
 	DateUtil endDateUtil = new DateUtil();
-	Long endTime = endDateUtil.addDays(numDays).toMidnight().getTime()
-		.getTime() / 1000;
+	Long endTime = endDateUtil.addDays(numDays).toMidnight().getTime().getTime() / 1000;
 
 	System.out.println("check for " + startTime + " " + endTime);
 
 	// Gets list of tasks filtered on given conditions
-	List<Task> dueTasks = dao
-		.ofy()
-		.query(Task.class)
-		.filter("owner",
-			new Key<DomainUser>(DomainUser.class, domainUserId))
-		.filter("due >", startTime).filter("due <=", endTime)
-		.filter("is_complete", false).list();
+	List<Task> dueTasks = dao.ofy().query(Task.class).filter("owner", new Key<DomainUser>(DomainUser.class, domainUserId)).filter("due >", startTime)
+		.filter("due <=", endTime).filter("is_complete", false).list();
 
 	return dueTasks;
     }
 
     public static List<Task> getTasksRelatedToCurrentUser()
     {
-	return dao
-		.ofy()
-		.query(Task.class)
-		.filter("owner",
-			new Key<DomainUser>(DomainUser.class, SessionManager
-				.get().getDomainId())).order("-created_time")
+	return dao.ofy().query(Task.class).filter("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId())).order("-created_time")
 		.limit(10).list();
     }
 
@@ -253,8 +235,7 @@ public class TaskUtil
      * 
      * @return List of tasks
      */
-    public static List<Task> getTasksRelatedToOwnerOfType(String type,
-	    String owner)
+    public static List<Task> getTasksRelatedToOwnerOfType(String type, String owner)
     {
 	try
 	{
@@ -263,8 +244,7 @@ public class TaskUtil
 		query = query.filter("type", type);
 
 	    if (StringUtils.isNotBlank(owner))
-		query = query.filter("owner", new Key<DomainUser>(
-			DomainUser.class, Long.parseLong(owner)));
+		query = query.filter("owner", new Key<DomainUser>(DomainUser.class, Long.parseLong(owner)));
 
 	    return query.list();
 

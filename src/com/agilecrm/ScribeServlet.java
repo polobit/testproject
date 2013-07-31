@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,7 +26,7 @@ import org.scribe.oauth.OAuthService;
 
 import com.agilecrm.contact.imports.ContactPrefs;
 import com.agilecrm.contact.imports.ContactPrefs.Type;
-import com.agilecrm.contact.imports.util.ContactsImporter;
+import com.agilecrm.contact.imports.util.ContactsImportUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.widgets.Widget;
@@ -361,7 +362,7 @@ public class ScribeServlet extends HttpServlet
 		contactPrefs.save();
 
 		// initialize backend to save contacts
-		ContactsImporter.initilaizeImportBackend(contactPrefs);
+		ContactsImportUtil.initilaizeImportBackend(contactPrefs);
 
 	    }
 
@@ -449,6 +450,8 @@ public class ScribeServlet extends HttpServlet
 	if (pluginId != null)
 	    req.getSession().setAttribute("plugin_id", pluginId);
 
+	System.out.println("in response redirect");
+	System.out.println(resp);
 	// Redirect URL
 	resp.sendRedirect(url);
     }
@@ -463,17 +466,24 @@ public class ScribeServlet extends HttpServlet
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
 	    throws IOException
     {
-
 	// Check if it is first time or returning from oauth authentication
 	// If token and verifier is present, we just store or redirect to the
 	// authorization page
 	String oAuthToken = req.getParameter("oauth_token");
 	String oAuthVerifier = req.getParameter("oauth_verifier");
 
-	System.out.println(oAuthToken);
-	System.out.println(oAuthVerifier);
-
+	// Ouath2.0 gives code, with this code we can post and get access token
 	String code = req.getParameter("code");
+
+	// If the request is from imports, we get this parameter
+	String serviceType = req.getParameter("service_type");
+
+	// Initializes backends to import contacts
+	if (serviceType != null)
+	{
+	    initializeBackendsToImportContacts(serviceType);
+	    return;
+	}
 
 	/*
 	 * If aAuthToken and oAuthVerifier is not null i.e., request is from
@@ -490,6 +500,13 @@ public class ScribeServlet extends HttpServlet
 	setupOAuth(req, resp);
 	return;
 
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+	    throws ServletException, IOException
+    {
+	doGet(req, resp);
     }
 
     /**
@@ -527,5 +544,21 @@ public class ScribeServlet extends HttpServlet
 
 	// Saves widget
 	widget.save();
+    }
+
+    public void initializeBackendsToImportContacts(String type)
+    {
+
+	ContactPrefs contactPrefs = ContactPrefs
+		.getPrefsByType(ContactPrefs.Type.valueOf(type.toUpperCase()));
+
+	System.out.println("in initialize backends scribe");
+	System.out.println(contactPrefs);
+
+	// if contact prefs exists for google initilaize backend
+	if (contactPrefs != null)
+	    ContactsImportUtil.initilaizeImportBackend(contactPrefs);
+	return;
+
     }
 }

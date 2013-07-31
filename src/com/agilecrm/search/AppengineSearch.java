@@ -74,7 +74,15 @@ public class AppengineSearch<T>
     public static Collection getSimpleSearchResults(String keyword,
 	    Integer count, String cursor)
     {
-	return new QueryDocument().simpleSearch(keyword, count, cursor);
+    	return new QueryDocument().simpleSearch(keyword, count, cursor);
+    }
+    
+    @SuppressWarnings("rawtypes")
+    public static Collection getSimpleSearchResults(String keyword,
+	    Integer count, String cursor,String type)
+    {
+    	if(type==null || type.length()<=0)return new QueryDocument().simpleSearch(keyword, count, cursor);
+    	return (new QueryDocument()).simpleSearchWithType(keyword, count, cursor, type);
     }
 
 }

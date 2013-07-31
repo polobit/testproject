@@ -43,10 +43,13 @@
 	                        <input name="title" type="text" id="job_title" placeholder="Job Title" />
 	                    </div>
 	                </div>
-	                <div class="control-group span6">
+	                <div class="control-group span6" id='company_source_person_modal'>
 	                    <label class="control-label"><b>Company:</b></label>
 	                    <div class="controls">
-	                        <input name="company" type="text" id="contact_company" placeholder="Company Name" />
+							<div class="pull-left" style="display:inline-block;">
+								<ul name="contact_company_id" class="contacts tagsinput tags"></ul>
+							</div>
+	                        <input type="text" id="contact_company" placeholder="Company Name" />
 	                    </div>
 	                </div>
                 </div>
@@ -54,7 +57,7 @@
                     <div class="span5  duplicate-email">
                     </div>
                 </div>
-                <div class="control-group">
+                <div class="control-group" id='tags_source_person_modal'>
                     <label class="control-label"><b>Tags:</b> </label>
                     <div class="pull-left">
                         <ul name="tags" class="tagsinput tags">

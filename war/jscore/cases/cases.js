@@ -31,6 +31,14 @@ $(function () {
         	"data-original-title" : currentCase.toJSON().name,
         	"data-content" :  ele
         });
+        
+        $('#cases-model-list > tr:first').attr({
+        	"rel" : "popover",
+        	"data-placement" : 'right',
+        	"data-original-title" : currentCase.toJSON().name,
+        	"data-content" :  ele
+        });
+        
         $(this).popover('show');
      });
     
@@ -215,10 +223,17 @@ function savecases(formId, modalId, saveBtn, json)
 /*If(TIMELINE) page*/			
 			if (App_Contacts.contactDetailView
 					&& Current_Route == "contact/"
-							+ App_Contacts.contactDetailView.model.get('id')) {
+							+ App_Contacts.contactDetailView.model.get('id')) 
+			{
 
+				if(App_Contacts.contactDetailView.model.get('type')=='COMPANY')
+				{
+					activate_timeline_tab();
+					fill_company_related_contacts(App_Contacts.contactDetailView.model.id,'company-contacts'); 
+					return;
+				}
 				
-				// Verifies whether the added task is related to the contact in
+				// Verifies whether the added case is related to the contact in
 				// contact detail view or not
 				//
 				$.each(cases.contacts, function(index, contact) {

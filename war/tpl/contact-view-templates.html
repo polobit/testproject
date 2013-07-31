@@ -2,7 +2,7 @@
 	<td class="data" data="{{id}}">
     	<div style="width:4em;overflow:hidden;">
 			{{#if_equals type "COMPANY"}}
-					<img class="thumbnail pull-left" src="img/company.png" style="width:40px;height:40px;" /></img>
+					<img class="thumbnail pull-left" {{getCompanyImage "40"}}/></img>
 				{{else}}
 					<img src="{{gravatarurl properties 40}}" width="40px" height="40px" />	
 			{{/if_equals}}

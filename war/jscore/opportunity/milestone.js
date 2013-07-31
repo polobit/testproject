@@ -89,19 +89,19 @@ $(function(){
 function setup_deals_in_milestones(){
 	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function() {
 		$('ul.milestones').sortable({
-		      connectWith: "ul",
-		      cursor: "move",
-		      containment: "#opportunities-by-milestones-model-list",
-		      scroll: false,
+		      connectWith : "ul",
+		      cursor : "move",
+		      containment : "#opportunities-by-milestones-model-list",
+		      scroll : false,
 		      change : function(event, ui){
 		    	  var width = $('#opportunities-by-milestones-model-list > div').width();
 		    	  var scrollX = $('#opportunities-by-milestones-model-list > div').scrollLeft();
-		    	  if(event.pageX > (width-100))
-		    		  $('#opportunities-by-milestones-model-list > div').scrollLeft(scrollX + 5);
-		    	  else if(event.pageX < 100)
-		    		  $('#opportunities-by-milestones-model-list > div').scrollLeft(scrollX - 5);
+		    	  if(event.pageX > (width * 0.9))
+		    		  $('#opportunities-by-milestones-model-list > div').scrollLeft(scrollX + 10);
+		    	  else if(event.pageX < (width * 0.1))
+		    		  $('#opportunities-by-milestones-model-list > div').scrollLeft(scrollX - 15);
 		      },
-		      update: function(event, ui) {
+		      update : function(event, ui) {
 					var id = ui.item[0].id;
 					var DealJSON = App_Deals.opportunityCollectionView.collection.get(id).toJSON();
 					var oldMilestone = DealJSON.milestone;

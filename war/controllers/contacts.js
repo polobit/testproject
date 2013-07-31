@@ -298,9 +298,34 @@ var ContactsRouter = Backbone.Router.extend({
 
         	}
         
-        // If contact is of type company just edit it.
-        if(contact.get('type') == 'COMPANY') {
-        	deserialize_contact(contact.toJSON(), 'continue-company');
+        // If contact is of type company , go to company details page
+        if(contact.get('type') == 'COMPANY') 
+        {
+        	this.contactDetailView = new Base_Model_View({
+                model : contact,
+                isNew: true,
+                template: "company-detail",
+                postRenderCallback: function(el) {
+
+                // Clone contact model, to avoid render and post-render fell in to 
+                // loop while changing attributes of contact
+                var recentViewedTime = new Backbone.Model();
+                recentViewedTime.url = "core/api/contacts/viewed-at/" + contact.get('id');
+                recentViewedTime.save();          
+                
+            	if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection && App_Contacts.contactsListView.collection.get(id))
+    				App_Contacts.contactsListView.collection.get(id).attributes = contact.attributes;              	  
+                
+            	starify(el);
+            	show_map(el);
+            	fill_owners(el, contact.toJSON());
+            	//loadWidgets(el, contact.toJSON());
+                }
+            });
+            
+            var el = this.contactDetailView.render(true).el;
+            $('#content').html(el);
+            fill_company_related_contacts(id,'company-contacts');
         	return;
         }
 
@@ -417,7 +442,11 @@ var ContactsRouter = Backbone.Router.extend({
 
    	 	// Contact Edit - take him to continue-contact form
     	add_custom_fields_to_form(contact, function(contact){
-    		deserialize_contact(contact, 'continue-contact');
+    		
+    		if(contact.type == 'COMPANY') 
+            	deserialize_contact(contact, 'continue-company');
+    		else 
+    			deserialize_contact(contact, 'continue-contact');
     	});
     },
     

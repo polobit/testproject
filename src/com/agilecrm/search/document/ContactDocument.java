@@ -116,6 +116,9 @@ public class ContactDocument implements BuilderInterface
 	System.out.println(truncatedDate);
 	doc.addField(Field.newBuilder().setName("created_time")
 		.setDate(truncatedDate));
+	
+	doc.addField(Field.newBuilder().setName("type")
+			.setText(contact.type.toString()));
 
 	doc.addField(Field.newBuilder().setName("created_time_epoch")
 		.setNumber(contact.created_time.doubleValue()));

@@ -5,14 +5,65 @@
  * @module Contact management
  * @author Rammohan
  */
+
+
+var forceCompany={}; /* to force company on personModal,
+						Should contain - 
+							doit - true to force
+							name - name of company
+							id - id of company
+						*/
 $(function(){
 	   
+		$("#personModal").on('show',function(data)
+		{
+			if(forceCompany.doit==true)
+			{
+				$("#personForm [name='contact_company_id']")
+					.html('<li class="tag"  style="display: inline-block;" data="' + forceCompany.id + 
+						'"><a href="#contact/' + forceCompany.id +'" id="contact_company_autofilled">' + forceCompany.name + 
+						'</a></li>');
+				$("#personForm #contact_company").hide();
+			
+				forceCompany.doit=false; // prevent forcing company next time
+			}
+			else
+			{
+				//default clean model
+				$("#personForm [name='contact_company_id']").html('');
+				$("#personForm #contact_company").show();
+				$("#personForm #contact_company").val('');
+			}	
+		});
+	
 		/**
 		 * "Shown" event of person modal 
-		 * Activates tags typeahead to tags field
+		 * Activates tags typeahead to tags field, company typeahead too
 		 */
-		$("#personModal").on('shown', function(){
+		$("#personModal").on('shown', function(data){
 			setup_tags_typeahead();
+			
+			var stat=$("#personForm #contact_company").attr('display');
+			if( stat!='none')
+			{
+			
+			/* Custom function for typeahead results, 
+			 * show at contact_company_id, data=id-of-company-contact and data=company-name
+			 * */
+				var fxn_display_company=function(data,item)
+				{
+					$("#personForm [name='contact_company_id']")
+						.html('<li class="tag"  style="display: inline-block;" data="' + data + 
+							'"><a href="#contact/' + data +'" id="contact_company_autofilled">' + item + 
+							'</a><a class="close" id="remove_tag">&times</a></li>');
+					$("#personForm #contact_company").hide();
+				}
+				agile_type_ahead("contact_company",$('#personForm'), contacts_typeahead,fxn_display_company,'type=COMPANY','<b>No Results</b> <br/> We will add a new one');
+			}
+		});
+		
+		$("#personForm [name='contact_company_id'] a.close").live('click',function(e){
+			$("#personForm #contact_company").show();
 		});
 	
 		/**
@@ -20,7 +71,15 @@ $(function(){
 		 * Saves the contact using the function "serialize_and_save_continue_contact"
 		 */
 	    $('#person_validate').live('click', function (e) {
-	    	serialize_and_save_continue_contact(e, 'personForm', 'personModal', false, true, this);	        
+	    	var model=serialize_and_save_continue_contact(e, 'personForm', 'personModal', false, true, this,'tags_source_person_modal');	
+	    	
+	    	console.log(model);
+	    	
+	    	if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection)	
+	          {
+	          	App_Contacts.contactsListView.collection.remove(model.id);
+	          	App_Contacts.contactsListView.collection.add(model);
+	          }
 	    });
 	    
 	    /**
@@ -35,7 +94,13 @@ $(function(){
 		 * Saves the contact using the function "serialize_and_save_continue_contact"
 		 */
 	    $('#company_validate').live('click', function (e) {
-	    	serialize_and_save_continue_contact(e, 'companyForm', 'companyModal', false, false, this);	        
+	    	var model=serialize_and_save_continue_contact(e, 'companyForm', 'companyModal', false, false, this);	
+	    	
+	    	if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection)	
+	          {
+	          	App_Contacts.contactsListView.collection.remove(model.id);
+	          	App_Contacts.contactsListView.collection.add(model);
+	          }
 	    });
 	    
 	    /**

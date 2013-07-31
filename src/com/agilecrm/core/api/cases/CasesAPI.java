@@ -17,8 +17,8 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.agilecrm.cases.CaseData;
-import com.agilecrm.cases.CasesUtility;
+import com.agilecrm.cases.Case;
+import com.agilecrm.cases.util.CaseUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -43,33 +43,33 @@ public class CasesAPI
 	
 	@GET
 	@Produces({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
-	public List<CaseData> getAll(){ return CasesUtility.getAllCaseData(); }
+	public List<Case> getAll(){ return CaseUtil.getAllCase(); }
 	
 	@Path("/{id}")
 	@GET
 	@Produces({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
-	public CaseData getCaseData(@PathParam("id") Long id){ return CasesUtility.getCaseData(id); }
+	public Case getCaseData(@PathParam("id") Long id){ return CaseUtil.getCase(id); }
 	
 	@POST
 	@Consumes({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
 	@Produces({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
-	public CaseData postCaseData(CaseData caseData)
+	public Case postCaseData(Case caseData)
 	{ 
-		return CasesUtility.save(caseData); 
+		return CaseUtil.save(caseData); 
 	}
 	
 	@PUT
 	@Consumes({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
 	@Produces({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
-	public CaseData putCaseData(CaseData caseData)
+	public Case putCaseData(Case caseData)
 	{ 
 		
-		return CasesUtility.save(caseData); 
+		return CaseUtil.save(caseData); 
 	}
 	
 	@DELETE
 	@Path("/{id}")
-	public void deleteCaseData(@PathParam("id") Long id){ CasesUtility.delete(id); } 
+	public void deleteCaseData(@PathParam("id") Long id){ CaseUtil.delete(id); } 
 	
 	@POST
 	@Path("/bulk")
@@ -77,6 +77,6 @@ public class CasesAPI
 	public void deleteCaseDataBulk(@FormParam("ids") String ids) throws JSONException
 	{
 		System.out.println("Del Bulk");
-		CaseData.dao.deleteBulkByIds(new JSONArray(ids));
+		Case.dao.deleteBulkByIds(new JSONArray(ids));
 	}
 }
