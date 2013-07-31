@@ -37,7 +37,7 @@ import com.googlecode.objectify.Key;
  * @author Tejaswi
  * 
  */
-public class ContactsImporter
+public class ContactsImportUtil
 {
     /**
      * Initializes backend with contact prefrences and hits
@@ -78,7 +78,7 @@ public class ContactsImporter
      * @param ownerKey
      *            domian user key
      */
-    public static void importGoogleContactsWithAgile(
+    public static void saveGoogleContactsInAgile(
 	    List<ContactEntry> entries, Key<DomainUser> ownerKey)
     {
 
@@ -226,6 +226,7 @@ public class ContactsImporter
 
 	    agileContact.tags = tags;
 
+	    // title is not given as job description instead displaying name
 	    // if (entry.getTitle() != null
 	    // && entry.getTitle().getPlainText() != null)
 	    // {

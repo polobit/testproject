@@ -4,7 +4,9 @@
         <div class="page-header">
             <h1>Import Contacts <small>Upload file</small>	</h1>
         </div>
-        <div id="file-upload-div"></div>
+        <div id="file-upload-div" style="display:inline-block;"></div>
+		<div class="btn" id="google-import" style="display:inline-block;">Import from google</div>
+
     </div>
 </div>
 </script>
@@ -17,15 +19,16 @@
             <ul name="tags" class="tagsinput tags"></ul>
         </div>
         <div class="controls">
-            <input id="tags-import" class="tags-typeahead" name="tags" type="text" placeholder="Tags sholud be separated by comma." />
+            <input id="tags-import" class="tags-typeahead" name="tags" type="text" placeholder="Tags should be separated by comma." />
         </div>
     </div>
 </form>
 <br />		
 <div id="import-validation-error">
 </div>
+<!-- <div style="text-align:center;padding-bottom:10px;font-size:15px">Showing {{data.length}} of {{available_contacts}} contacts</div> -->
 <table class="table table-bordered table-striped" style="border-collapse: collapse;">
-    <thead>
+    <thead id="import-header">
         <tr>
             {{#eachkeys data.[0]}}
             <th>
@@ -89,11 +92,12 @@
 <a class="btn" id="import-cancel" style="margin-left:2px">Cancel</a>
 </script>
 
-<script id="import-contacts-validation-message-template" type="text/html">
+<script id="import-contacts-validation-message-template"
+	type="text/html">
 <div class="row">
     <div class="span5">
         <div class="alert alert-error import_contact_error">
-            <a class="close" data-dismiss="alert" href="#">×</a>
+            <a class="close" data-dismiss="alert" href="#">&times</a>
           {{error_message}}
         </div>
     </div>

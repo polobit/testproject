@@ -1,6 +1,7 @@
 package com.agilecrm.contact.imports;
 
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServlet;
@@ -9,8 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 
-import com.agilecrm.contact.imports.util.ContactsImporter;
+import com.agilecrm.contact.imports.util.ContactsImportUtil;
 import com.agilecrm.social.GoogleContactToAgileContactUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -43,8 +45,8 @@ public class ContactUtilServlet extends HttpServlet
 	try
 	{
 
-	    // if request contains parameters, it is first time request and is
-	    // redirected to scribe
+	    // if request contains parameters, request is from import.js
+	    // else backends calls this servlet
 	    String returnUrl = req.getParameter("return_url");
 	    if (returnUrl != null)
 	    {
@@ -53,22 +55,14 @@ public class ContactUtilServlet extends HttpServlet
 			.getPrefsByType(ContactPrefs.Type.valueOf(type
 				.toUpperCase()));
 
-		// after getting token initilaizes backends
-		if (contactPrefs == null)
-		{
-		    res.sendRedirect("/scribe?service=" + type + "&return_url="
-			    + returnUrl);
-		    return;
-		}
-
 		// if contact prefs exists for google initilaize backend
 		System.out.println("in ininin");
 		System.out.println(contactPrefs);
-		ContactsImporter.initilaizeImportBackend(contactPrefs);
+		ContactsImportUtil.initilaizeImportBackend(contactPrefs);
 		return;
 	    }
 
-	    // retrives contact prefs from db and saves conatct to agile
+	    // retrieves contact prefs from db and saves conatct to agile
 	    System.out.println("in servlet");
 	    InputStream stream = req.getInputStream();
 	    String contactSyncerPrefsString = IOUtils.toString(stream);
@@ -101,8 +95,11 @@ public class ContactUtilServlet extends HttpServlet
 	    throws Exception
     {
 
-	System.out.println("import first");
 	System.out.println(contactPrefs.token);
+
+	if ((contactPrefs.expires - 60000) <= System.currentTimeMillis())
+	    refreshPrefsandSave(contactPrefs);
+
 	List<ContactEntry> entries = GoogleContactToAgileContactUtil
 		.retrieveContacts(contactPrefs.token);
 
@@ -113,6 +110,32 @@ public class ContactUtilServlet extends HttpServlet
 
 	NamespaceManager.set(nameSpace);
 
-	ContactsImporter.importGoogleContactsWithAgile(entries, key);
+	ContactsImportUtil.saveGoogleContactsInAgile(entries, key);
+    }
+
+    public static void refreshPrefsandSave(ContactPrefs contactPrefs)
+	    throws Exception
+    {
+	System.out.println("in refresh token");
+	String response = GoogleContactToAgileContactUtil
+		.refreshTokenInGoogle(contactPrefs.refreshToken);
+
+	// Creates HashMap from response JSON string
+	HashMap<String, Object> properties = new ObjectMapper().readValue(
+		response, new TypeReference<HashMap<String, Object>>()
+		{
+		});
+	System.out.println(properties.toString());
+
+	if (properties.containsKey("error"))
+	    throw new Exception(String.valueOf(properties.get("error")));
+	else if (properties.containsKey("access_token"))
+	{
+	    contactPrefs.token = String.valueOf(properties.get("access_token"));
+	    contactPrefs.expires = Long.parseLong(String.valueOf(properties
+		    .get("expires_in")));
+	    contactPrefs.save();
+	}
+
     }
 }

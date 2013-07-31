@@ -4,6 +4,8 @@ import java.net.URL;
 import java.util.List;
 
 import com.agilecrm.Globals;
+import com.agilecrm.GoogleApi;
+import com.agilecrm.util.HTTPUtil;
 import com.google.gdata.client.Query;
 import com.google.gdata.client.authn.oauth.GoogleOAuthParameters;
 import com.google.gdata.client.authn.oauth.OAuthHmacSha1Signer;
@@ -98,4 +100,17 @@ public class GoogleContactToAgileContactUtil
 	return resultFeed;
     }
 
+    public static String refreshTokenInGoogle(String refreshToken)
+	    throws Exception
+    {
+	String data = "client_id=" + Globals.GOOGLE_CLIENT_ID
+		+ "&client_secret=" + Globals.GOOGLE_SECRET_KEY
+		+ "&grant_type=refresh_token&refresh_token=" + refreshToken;
+
+	String response = HTTPUtil.accessUrl(
+		new GoogleApi().getAccessTokenEndpoint(), "", "", "POST", data,
+		String.valueOf(data.length()), "", "");
+
+	return response;
+    }
 }
