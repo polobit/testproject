@@ -107,7 +107,7 @@ public class GoogleContactToAgileContactUtil
 		+ "&client_secret=" + Globals.GOOGLE_SECRET_KEY
 		+ "&grant_type=refresh_token&refresh_token=" + refreshToken;
 
-	String response = HTTPUtil.accessUrl(
+	String response = HTTPUtil.accessURL(
 		new GoogleApi().getAccessTokenEndpoint(), "", "", "POST", data,
 		String.valueOf(data.length()), "", "");
 

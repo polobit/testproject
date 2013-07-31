@@ -89,8 +89,10 @@ public class ContactPrefs implements Serializable
 
 	createdAt = System.currentTimeMillis();
 	expires = createdAt + expires * 1000;
-	domainUser = new Key<DomainUser>(DomainUser.class, SessionManager.get()
-		.getDomainId());
+
+	if (domainUser == null)
+	    domainUser = new Key<DomainUser>(DomainUser.class, SessionManager
+		    .get().getDomainId());
     }
 
     /**
@@ -111,6 +113,7 @@ public class ContactPrefs implements Serializable
      */
     public Key<DomainUser> getDomainUser()
     {
+	System.out.println("domain user key : " + domainUser);
 	return domainUser;
     }
 

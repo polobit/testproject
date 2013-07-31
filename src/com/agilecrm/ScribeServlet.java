@@ -466,17 +466,24 @@ public class ScribeServlet extends HttpServlet
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
 	    throws IOException
     {
-
 	// Check if it is first time or returning from oauth authentication
 	// If token and verifier is present, we just store or redirect to the
 	// authorization page
 	String oAuthToken = req.getParameter("oauth_token");
 	String oAuthVerifier = req.getParameter("oauth_verifier");
 
-	System.out.println(oAuthToken);
-	System.out.println(oAuthVerifier);
-
+	// Ouath2.0 gives code, with this code we can post and get access token
 	String code = req.getParameter("code");
+
+	// If the request is from imports, we get this parameter
+	String serviceType = req.getParameter("service_type");
+
+	// Initializes backends to import contacts
+	if (serviceType != null)
+	{
+	    initializeBackendsToImportContacts(serviceType);
+	    return;
+	}
 
 	/*
 	 * If aAuthToken and oAuthVerifier is not null i.e., request is from
@@ -539,4 +546,19 @@ public class ScribeServlet extends HttpServlet
 	widget.save();
     }
 
+    public void initializeBackendsToImportContacts(String type)
+    {
+
+	ContactPrefs contactPrefs = ContactPrefs
+		.getPrefsByType(ContactPrefs.Type.valueOf(type.toUpperCase()));
+
+	System.out.println("in initialize backends scribe");
+	System.out.println(contactPrefs);
+
+	// if contact prefs exists for google initilaize backend
+	if (contactPrefs != null)
+	    ContactsImportUtil.initilaizeImportBackend(contactPrefs);
+	return;
+
+    }
 }
