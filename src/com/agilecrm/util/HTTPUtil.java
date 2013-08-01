@@ -97,19 +97,28 @@ public class HTTPUtil
 	return output;
     }
 
-    public static String accessHTTPURL(String postURL, String data,
+    /**
+     * Opens a HTTP connection and process request based on given method type
+     * 
+     * @param requestURL
+     *            base URL to which connection is opened
+     * @param data
+     *            data to be posted with URL
+     * @param methodType
+     *            request method(GET,PUT or POST)
+     * @return {@link String} response from server
+     * @throws Exception
+     */
+    public static String accessHTTPURL(String requestURL, String data,
 	    String methodType) throws Exception
     {
 	URL url;
 	HttpURLConnection conn = null;
 
-	// try
-	// {
 	// Send data
-	url = new URL(postURL);
+	url = new URL(requestURL);
 	conn = (HttpURLConnection) url.openConnection();
 	conn.setDoOutput(true);
-	// conn.setRequestProperty("Content-Type", "application/json");
 	conn.setRequestMethod(methodType.toUpperCase());
 	OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
 	wr.write(data);
@@ -129,18 +138,12 @@ public class HTTPUtil
 	reader.close();
 
 	return output;
-	// }
-	// catch (Exception e)
-	// {
-	// System.out.println(e.getMessage());
-	// System.out.println(conn.getResponseCode());
-	// throw new Exception(conn.getResponseMessage());
-	// }
+
     }
 
     /**
-     * This method makes POST request to the URL by authenticating the user with
-     * the given parameters
+     * This method makes request to the URL by authenticating the user with the
+     * given parameters
      * 
      * @param postURL
      *            URL to connect with the server
@@ -209,13 +212,13 @@ public class HTTPUtil
 	}
 	reader.close();
 
-	System.out.println("outpiut" + output);
+	System.out.println("output" + output);
 	return output;
     }
 
     /**
-     * This method makes POST request to the URL by authenticating the user with
-     * the given parameters
+     * This method makes request to the URL by authenticating the user with the
+     * given parameters
      * 
      * @param postURL
      *            URL to connect with the server
@@ -289,7 +292,7 @@ public class HTTPUtil
 	}
 	reader.close();
 
-	System.out.println("outpiut" + output);
+	System.out.println("output" + output);
 	return output;
     }
 

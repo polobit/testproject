@@ -1269,4 +1269,16 @@ $(function() {
 		return new Handlebars.SafeString(element);
 	});
 	
+	Handlebars.registerHelper('setupCSVUploadOptions', function(key, context){
+		//console.log(context.toJSON());
+		var template = getTemplate('csv_upload_options', context);
+		
+		console.log(key);
+		console.log($('select[name="options"]').find('option[value="'+key+'"]'));
+		//Using the value
+		$('select[name="options"]').find('option[value="'+key+'"]').attr("selected",true);
+		
+		return new Handlebars.SafeString(template);
+	})
+	
 });

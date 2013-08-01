@@ -14,14 +14,14 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.Defaults;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.users.User;
 
 @SuppressWarnings("serial")
 public class HomeServlet extends HttpServlet
 {
-    public void doGet(HttpServletRequest req, HttpServletResponse resp)
-	    throws IOException, ServletException
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException
     {
 	// First Time User
 	String isFirstTimerUser = req.getParameter("w");
@@ -48,14 +48,13 @@ public class HomeServlet extends HttpServlet
 	    req.getRequestDispatcher("/home?w=1").forward(req, resp);
 	    return;
 	}
-	if (isFirstTimerUser != null && DomainUserUtil.count() == 1)
-	{
-	    // To get Default Samples.
-	    new InitDefaults();
-	}
 	if (isFirstTimerUser != null)
 	{
-	    InitDefaults.setFirstTimerCookie(resp);
+	    // To get Default Samples.
+	    if (DomainUserUtil.count() == 1)
+		new Defaults();
+
+	    Defaults.setFirstTimerCookie(resp);
 	}
 
 	// Save Logged in time
@@ -63,8 +62,7 @@ public class HomeServlet extends HttpServlet
 	{
 	    // Logged in time
 	    DomainUser domainUser = DomainUserUtil.getDomainCurrentUser();
-	    domainUser.setInfo(DomainUser.LOGGED_IN_TIME,
-		    new Long(System.currentTimeMillis() / 1000));
+	    domainUser.setInfo(DomainUser.LOGGED_IN_TIME, new Long(System.currentTimeMillis() / 1000));
 
 	    domainUser.save();
 	}
@@ -76,8 +74,7 @@ public class HomeServlet extends HttpServlet
 	req.getRequestDispatcher("home.jsp").forward(req, resp);
     }
 
-    public void register(User user, HttpServletRequest req,
-	    HttpServletResponse resp) throws Exception
+    public void register(User user, HttpServletRequest req, HttpServletResponse resp) throws Exception
     {
 	// Register - check if there are any users for this domain - you cannot
 	// register
@@ -85,8 +82,7 @@ public class HomeServlet extends HttpServlet
 	List<DomainUser> listOfUsers = DomainUserUtil.getUsers(domain);
 	if (!listOfUsers.isEmpty())
 	{
-	    req.getRequestDispatcher("/error/auth-failed.jsp").include(req,
-		    resp);
+	    req.getRequestDispatcher("/error/auth-failed.jsp").include(req, resp);
 	    return;
 	}
 

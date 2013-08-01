@@ -23,7 +23,8 @@ import com.google.gdata.data.contacts.ContactEntry;
 import com.googlecode.objectify.Key;
 
 /**
- * <code>ContactUtilServlet</code> contains method to import contacts
+ * <code>ContactUtilServlet</code> contains method to get and import contacts
+ * into agile
  * 
  * @author Tejaswi
  * 
@@ -37,7 +38,7 @@ public class ContactUtilServlet extends HttpServlet
     }
 
     /**
-     * Called from backends.
+     * Called from backends to import contacts into agile
      */
     public void doGet(HttpServletRequest req, HttpServletResponse res)
     {
@@ -72,7 +73,8 @@ public class ContactUtilServlet extends HttpServlet
     }
 
     /**
-     * Calls {@link GoogleContactToAgileContactUtil} to retrieve contacts
+     * Calls {@link GoogleContactToAgileContactUtil} to retrieve contacts and
+     * saves it in agile
      * 
      * @param contactPrefs
      *            {@link ContactPrefs}
@@ -100,6 +102,15 @@ public class ContactUtilServlet extends HttpServlet
 	ContactsImportUtil.saveGoogleContactsInAgile(entries, key);
     }
 
+    /**
+     * If access token is expired, calls method in
+     * {@link GoogleContactToAgileContactUtil} to refresh access token and
+     * updates it in db
+     * 
+     * @param contactPrefs
+     *            {@link ContactPrefs}
+     * @throws Exception
+     */
     public static void refreshPrefsandSave(ContactPrefs contactPrefs)
 	    throws Exception
     {
