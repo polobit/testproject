@@ -9,6 +9,12 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 
+/**
+ * Provides additional functions for interacting with {@link Case}
+ * 
+ * @author Chandan
+ * 
+ */
 public class CaseUtil {
 	// dao
 	private static ObjectifyGenericDao<Case> dao = new ObjectifyGenericDao<Case>(
