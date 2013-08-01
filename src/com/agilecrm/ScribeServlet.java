@@ -31,8 +31,6 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
-import com.google.appengine.api.NamespaceManager;
-import com.thirdparty.PubNub;
 
 /**
  * <code>ScribeServlet</code> is used to create and configure a client to
@@ -338,9 +336,9 @@ public class ScribeServlet extends HttpServlet
 
 	    System.out.println(properties.toString());
 
+	    // if post gives error, we have to notify user- pending
 	    if (properties.containsKey("error"))
-		PubNub.accessPubNubPublish(NamespaceManager.get(),
-			"An error occured. Please try importing again");
+		System.out.println(properties.get("error"));
 	    else
 	    {
 
@@ -354,9 +352,6 @@ public class ScribeServlet extends HttpServlet
 
 		// initialize backend to save contacts
 		ContactsImportUtil.initilaizeImportBackend(contactPrefs);
-
-		PubNub.accessPubNubPublish(NamespaceManager.get(),
-			"Import scheduled");
 
 	    }
 
@@ -392,11 +387,7 @@ public class ScribeServlet extends HttpServlet
 	// Get service based on the params
 	String serviceName = req.getParameter("service");
 
-	// Build the scribe service, with the required credentails
-	OAuthService service = getService(req, resp, serviceName);
-
-	String url;
-	Token token = null;
+	System.out.println("in set up of scribe " + serviceName);
 
 	// On oauth cancel
 	if (serviceName == null)
@@ -404,10 +395,17 @@ public class ScribeServlet extends HttpServlet
 	    String return_url = (String) req.getSession().getAttribute(
 		    "return_url");
 
+	    System.out.println("return url in oauth cancel " + return_url);
 	    // Redirect URL
 	    resp.sendRedirect(return_url);
 	    return;
 	}
+
+	// Build the scribe service, with the required credentails
+	OAuthService service = getService(req, resp, serviceName);
+
+	String url;
+	Token token = null;
 
 	// oauth 2.0
 	if (serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE)
@@ -476,11 +474,19 @@ public class ScribeServlet extends HttpServlet
 	    return;
 	}
 
+	System.out.println("oAuthToken " + oAuthToken);
+	System.out.println("oAuthVerifier " + oAuthVerifier);
+
+	System.out.println("code " + "null".equals(code));
+
 	/*
 	 * If aAuthToken and oAuthVerifier is not null i.e., request is from
 	 * service provider, tokens are saved
+	 * 
+	 * sometimes code is given as string "null"
 	 */
-	if (code != null || (oAuthToken != null && oAuthVerifier != null))
+	if ((code != null && !("null".equals(code)))
+		|| (oAuthToken != null && oAuthVerifier != null))
 	{
 	    saveToken(req, resp);
 	    return;

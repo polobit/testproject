@@ -14,16 +14,27 @@ import com.google.gdata.client.contacts.ContactsService;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.contacts.ContactFeed;
 
+/**
+ * <code>GoogleContactToAgileContactUtil</code> class Contains methods to
+ * retrieve contacts data from Google
+ * 
+ * @author Tejaswi
+ * @since Aug 13
+ */
 public class GoogleContactToAgileContactUtil
 {
 
+    /**
+     * Base URL to retrieve Google contacts
+     */
     public final static String GOOGLE_CONTACTS_BASE_URL = "https://www.google.com/m8/feeds/";
 
     /**
      * Bulids contact service object with required parametes for authentication
      * 
      * @param token
-     * @return
+     *            {@link String} access token retrieved from oauth
+     * @return {@link ContactsService}
      * @throws Exception
      */
     public static ContactsService getService(String token) throws Exception
@@ -45,6 +56,7 @@ public class GoogleContactToAgileContactUtil
      * Retrieves contacts from Google querying for my contacts
      * 
      * @param accessToken
+     *            {@link String} access token retrieved from oauth
      * @return {@link List} of {@link ContactEntry}
      * @throws Exception
      */
@@ -73,8 +85,8 @@ public class GoogleContactToAgileContactUtil
 
 	resultFeed = contactService.query(myQuery, ContactFeed.class);
 
-	System.out.println(resultFeed.getTotalResults());
-	System.out.println(resultFeed.getItemsPerPage());
+	System.out.println("total results from google "
+		+ resultFeed.getTotalResults());
 
 	return resultFeed.getEntries();
     }
@@ -83,8 +95,10 @@ public class GoogleContactToAgileContactUtil
      * Retrieves available groups in google contacts
      * 
      * @param contactService
+     *            {@link ContactsService}
      * @param accessToken
-     * @return
+     *            {@link String} access token retrieved from oauth
+     * @return {@link ContactFeed}
      * @throws Exception
      */
     public static ContactFeed getGroups(ContactsService contactService,
@@ -100,6 +114,15 @@ public class GoogleContactToAgileContactUtil
 	return resultFeed;
     }
 
+    /**
+     * Exchanges refresh token for an access token after he expiry of access
+     * token
+     * 
+     * @param refreshToken
+     *            {@link String} refresh token retrieved from oauth
+     * @return {@link String} JSON response
+     * @throws Exception
+     */
     public static String refreshTokenInGoogle(String refreshToken)
 	    throws Exception
     {

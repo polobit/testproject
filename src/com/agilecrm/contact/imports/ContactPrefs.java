@@ -18,6 +18,14 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
+/**
+ * <code>ContactPrefs</code> class stores the details of different sources to
+ * import contacts.
+ * 
+ * @author Tejaswi
+ * @since July 2013
+ * 
+ */
 @XmlRootElement
 public class ContactPrefs implements Serializable
 {
@@ -25,21 +33,35 @@ public class ContactPrefs implements Serializable
     @Id
     public Long id;
 
+    /**
+     * Access token for OAuth or API key
+     */
     @NotSaved(IfDefault.class)
     public String token = null;
 
+    /**
+     * Secret token for OAuth
+     */
     @NotSaved(IfDefault.class)
     public String secret = null;
 
+    /**
+     * Refresh token for OAuth to exchange for access token
+     */
     @NotSaved(IfDefault.class)
     public String refreshToken = null;
 
+    /**
+     * If access token expire time is specified, we store it
+     */
     @NotSaved(IfDefault.class)
     public Long expires = 0L;
 
+    // created time
     @NotSaved(IfDefault.class)
     public Long createdAt = 0L;
 
+    // modified time
     @NotSaved(IfDefault.class)
     public Long lastModifedAt = 0L;
 
@@ -52,6 +74,9 @@ public class ContactPrefs implements Serializable
 	GOOGLE, ZOHO, SUGAR, SALESFORCE
     }
 
+    /**
+     * Enum type which specifies sources from which we import contacts
+     */
     @NotSaved(IfDefault.class)
     public Type type = null;
 
@@ -70,25 +95,29 @@ public class ContactPrefs implements Serializable
     }
 
     /**
-     * ContactSyncerPrefs Dao.
+     * ContactPrefs DAO.
      */
     private static ObjectifyGenericDao<ContactPrefs> dao = new ObjectifyGenericDao<ContactPrefs>(
 	    ContactPrefs.class);
 
     /**
-     * Saves ContactSyncerPrefs.
+     * Saves ContactPrefs in database
      */
     public void save()
     {
 	dao.put(this);
     }
 
+    /**
+     * sets created time,expire time for access token and domain user key
+     */
     @PrePersist
     public void prePersist()
     {
 
 	createdAt = System.currentTimeMillis();
-	expires = createdAt + expires * 1000;
+	if (expires != 0l)
+	    expires = createdAt + expires * 1000;
 
 	if (domainUser == null)
 	    domainUser = new Key<DomainUser>(DomainUser.class, SessionManager
@@ -96,7 +125,7 @@ public class ContactPrefs implements Serializable
     }
 
     /**
-     * Sets domianUser.
+     * Sets domianUser key.
      * 
      * @param domianUser
      *            - domianUser Key.
@@ -118,13 +147,20 @@ public class ContactPrefs implements Serializable
     }
 
     /**
-     * Deletes ContactSyncerPrefs.
+     * Deletes ContactPrefs.
      */
     public void delete()
     {
 	dao.delete(this);
     }
 
+    /**
+     * Retrieves {@link ContactPrefs} based on its id from database
+     * 
+     * @param id
+     *            {@link Long} id of {@link ContactPrefs}
+     * @return
+     */
     public static ContactPrefs get(Long id)
     {
 	try
@@ -139,6 +175,13 @@ public class ContactPrefs implements Serializable
 	}
     }
 
+    /**
+     * Retrieves {@link ContactPrefs} based on enum {@link Type}
+     * 
+     * @param type
+     *            {@link Type} from which contacts are imported
+     * @return
+     */
     public static ContactPrefs getPrefsByType(Type type)
     {
 
