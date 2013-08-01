@@ -31,7 +31,7 @@ var CONTENT_JSON = {
 		"image" : "/img/clipboard.png"
 	},
 	"workflows" : {
-		"title" : "You do not have any Campaigns currently",
+		"title" : "You do not have any Campaigns currently.",
 		"description" : "Campaign or workflow is an intelligent sales and marketing automation process for sending your contacts relevant information at the right time.",
 		//"learn_more" : "click here to learn more",
 		"button_text" : "Add Campaign",
@@ -73,19 +73,19 @@ var CONTENT_JSON = {
 	},
 	"dashboard" : {
 		"contacts" : {
-			"title" : "No activity on contacts yet.",
+			"title" : "No activity on contacts yet",
 			"icon" : "icon-group icon-3x"
 		},
 		"tasks" : {
-			"title" : "You have no tasks due.",
+			"title" : "You have no tasks due",
 			"icon" : "icon-edit icon-3x"
 		},
 		"deals" : {
-			"title" : "No upcoming deals for you.",
+			"title" : "No upcoming deals for you",
 			"icon" : "icon-money icon-3x"
 		},
 		"workflows" : {
-			"title" : "No campaign activity yet.",
+			"title" : "No campaign activity yet",
 			"icon" : "icon-sitemap icon-3x"
 		}
 	},

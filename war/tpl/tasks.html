@@ -9,7 +9,11 @@
     </h3>
 </header>
 {{#unless this.length}}
-<p><strong>No Task Due</strong></p>
+<div class="slate" style="padding:5px 2px;">
+    <div class="slate-content" style="text-align:center;">
+		<h3>You have no tasks due</h3>
+	</div>
+</div>
 {{/unless}}
 {{#if this.length}}
 <section>
