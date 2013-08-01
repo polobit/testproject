@@ -344,7 +344,7 @@ public class ContactsAPI {
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Case> getCurrentContactCases(@PathParam("contact-id") Long id) {
-		return CaseUtil.getByContactId(id);
+		return CaseUtil.getCasesByContactId(id);
 	}
 
 	/**
