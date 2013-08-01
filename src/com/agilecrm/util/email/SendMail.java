@@ -3,7 +3,7 @@ package com.agilecrm.util.email;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
 
-import com.thirdparty.SendGridEmail;
+import com.thirdparty.SendGrid;
 
 /**
  * <code>SendMail</code> is the base class to send email using different
@@ -213,7 +213,7 @@ public class SendMail
 	    }
 
 	    // Send Email
-	    SendGridEmail.sendMail(from, fromName, to, subject, from,
+	    SendGrid.sendMail(from, fromName, to, subject, from,
 		    emailHTML, emailBody, null, null);
 	}
 	catch (Exception e)

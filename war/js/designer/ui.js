@@ -150,12 +150,16 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 
 
 // Generate Select UI
-function generateSelectUI(uiFieldDefinition) {
+function generateSelectUI(uiFieldDefinition, selectEventHandler) {
 
     // Select options will be json pairs (key,values)	
     var options = uiFieldDefinition.options;
     var selectOptionAttributes = "";
 
+    // Gets MergeFields Option object
+    if(selectEventHandler !== undefined && selectEventHandler.indexOf("insertSelectedMergeField") === 0)
+    	options = getMergeFields();
+    	
     // Populate Options
     $.each(
     options, function (key, value) {
@@ -167,9 +171,12 @@ function generateSelectUI(uiFieldDefinition) {
     	else
         	selectOptionAttributes += "<option value='" + value + "'>" + key + "</option>";
     });
+    
+    // Returns select option with onchange EventHandler
+    if(selectEventHandler)
+    	return "<select onchange='"+ selectEventHandler+"' name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + selectOptionAttributes + "</select>";
      
 	  // retun select field with name and title attributes(Yasin(14-09-10)) 
-              
     return "<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + selectOptionAttributes + "</select>";
            
 }
@@ -210,7 +217,7 @@ function generateDefaultUI(uiFieldDefinition) {
 	  attributes += " checked";
 	 
 	  */ 
-     
+    
     // alert(tagName +":" + attributes);
     // Adds tag and attributes
 	if (tagName == 'textarea')
@@ -245,7 +252,7 @@ function generateHTMLEditor(uiFieldDefinition, container) {
 	var value = "";
 	if(uiFieldDefinition.value != undefined)
 		value = uiFieldDefinition.value;
-	
+
 	var htmlDiv = "<br/><label>HTML: <a href='#' onclick='loadTinyMCE(\"tinyMCE" + textAreaName + "\")'>(Load in HTML Editor)</a></label><br/><br/>";	
 	htmlDiv += "<textarea  id='tinyMCE" + textAreaName + "' name='" + textAreaName + "' rows='13' cols='75'>" + value + "</textarea>";		
 	htmlDiv += "<br/><p><i>You can leave empty if you do not wish to send html emails. Plain text emails would be sent. Only HTML emails would be tracked.</i></p>";	
@@ -380,8 +387,6 @@ function _generateUIFields(selector, ui) {
             continue;
         }
         
-        
-        
         // Options
         if (uiFieldType == "dynamicselect") {
             addLabel(uiFieldDefinition.label, container);
@@ -417,6 +422,14 @@ function _generateUIFields(selector, ui) {
             continue;
         }
         
+        // MergeFields Select Option
+        if(uiFieldType == "merge_fields")
+        {
+           addLabel(uiFieldDefinition.label, container);
+           uiField = generateSelectUI(uiFieldDefinition,"insertSelectedMergeField(this,\""+uiFieldDefinition.target_type+"\")");
+           $(uiField).appendTo(container);
+           continue;
+        }
         
         // Checkbox
         
@@ -588,4 +601,80 @@ function resetUI(selector)
 	selector.find("select").val("");
 	selector.find("textarea").val("");
 	
+}
+
+/**
+ * Inserts selected value of merge-fields into target-id field.
+ * 
+ * @param ele - select element.
+ * @param target_id - id of target field where value should be inserted.
+ * 
+ **/
+function insertSelectedMergeField(ele,target_id)
+{
+	// current value
+	var curValue = $(ele).find(':selected').val();
+	
+	// inserts text based on cursor.
+	insertAtCaret(target_id, curValue)
+}
+
+/**
+ * MergeFields function to fetch all available merge-fields.
+ **/
+function getMergeFields()
+{
+	var options=
+	{
+		"*Add Merge Field": "",
+		"First Name": "{{first_name}}",
+		"Last Name": "{{last_name}}",
+		"Email": "{{email}}",
+		"Company": "{{company}}",
+		"Title": "{{title}}",
+		"Website": "{{website}}",
+		"Phone":"{{phone}}",
+		"Twitter Id":"{{twitter_id}}",
+		"LinkedIn Id":"{{linkedin_id}}",
+		"Owner Name":"{{owner.name}}",
+		"Owner Email":"{{owner.email}}"
+	};
+	return options;
+}
+
+/**
+ * Function to insert text on cursor position in textarea.
+ **/
+function insertAtCaret(textareaId,text) {
+    var txtarea = document.getElementById(textareaId);
+    var scrollPos = txtarea.scrollTop;
+    var strPos = 0;
+    var br = ((txtarea.selectionStart || txtarea.selectionStart == '0') ? 
+    	"ff" : (document.selection ? "ie" : false ) );
+    if (br == "ie") { 
+    	txtarea.focus();
+    	var range = document.selection.createRange();
+    	range.moveStart ('character', -txtarea.value.length);
+    	strPos = range.text.length;
+    }
+    else if (br == "ff") strPos = txtarea.selectionStart;
+
+    var front = (txtarea.value).substring(0,strPos);  
+    var back = (txtarea.value).substring(strPos,txtarea.value.length); 
+    txtarea.value=front+text+back;
+    strPos = strPos + text.length;
+    if (br == "ie") { 
+    	txtarea.focus();
+    	var range = document.selection.createRange();
+    	range.moveStart ('character', -txtarea.value.length);
+    	range.moveStart ('character', strPos);
+    	range.moveEnd ('character', 0);
+    	range.select();
+    }
+    else if (br == "ff") {
+    	txtarea.selectionStart = strPos;
+    	txtarea.selectionEnd = strPos;
+    	txtarea.focus();
+    }
+    txtarea.scrollTop = scrollPos;
 }

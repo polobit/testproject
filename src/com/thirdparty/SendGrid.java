@@ -12,7 +12,7 @@ import org.json.JSONObject;
 import com.agilecrm.Globals;
 import com.agilecrm.util.HTTPUtil;
 
-public class SendGridEmail
+public class SendGrid
 {
 
     // Send grid REST API URL
@@ -47,12 +47,10 @@ public class SendGridEmail
     public static final String SENDGRID_API_PARAM_HTML_BODY = "html";
 
     // Default query string
-    public static String defaultQueryString = SENDGRID_API_PARAM_API_USER + "="
-	    + Globals.SENDGRID_API_USER_NAME + "&" + SENDGRID_API_PARAM_API_KEY
-	    + "=" + Globals.SENDGRID_API_KEY + "&";
+    public static String defaultQueryString = SENDGRID_API_PARAM_API_USER + "=" + Globals.SENDGRID_API_USER_NAME + "&" + SENDGRID_API_PARAM_API_KEY + "="
+	    + Globals.SENDGRID_API_KEY + "&";
 
-    public static String sendMail(String fromEmail, String fromName, String to,
-	    String subject, String replyTo, String html, String text,
+    public static String sendMail(String fromEmail, String fromName, String to, String subject, String replyTo, String html, String text,
 	    JSONObject subscriberJSON, JSONObject campaignJSON)
     {
 	// Set to remove duplicates
@@ -75,12 +73,8 @@ public class SendGridEmail
 	    // Query string
 	    String queryString = "";
 
-	    queryString = defaultQueryString + SENDGRID_API_PARAM_SUBJECT + "="
-		    + URLEncoder.encode(subject) + "&"
-		    + SENDGRID_API_PARAM_FROM + "="
-		    + URLEncoder.encode(fromEmail) + "&"
-		    + SENDGRID_API_PARAM_FROM_NAME + "="
-		    + URLEncoder.encode(fromName);
+	    queryString = defaultQueryString + SENDGRID_API_PARAM_SUBJECT + "=" + URLEncoder.encode(subject) + "&" + SENDGRID_API_PARAM_FROM + "="
+		    + URLEncoder.encode(fromEmail) + "&" + SENDGRID_API_PARAM_FROM_NAME + "=" + URLEncoder.encode(fromName);
 
 	    // Adds multiple - to[]="email1" & to[]="email2"
 	    Iterator<String> itr = toEmailSet.iterator();
@@ -88,8 +82,7 @@ public class SendGridEmail
 
 	    while (itr.hasNext())
 	    {
-		multipleTo += SENDGRID_API_PARAM_MULTIPLE_TO + "="
-			+ URLEncoder.encode(itr.next());
+		multipleTo += SENDGRID_API_PARAM_MULTIPLE_TO + "=" + URLEncoder.encode(itr.next());
 
 		if (itr.hasNext())
 		    multipleTo += "&";
@@ -98,28 +91,24 @@ public class SendGridEmail
 	    queryString += "&" + multipleTo;
 
 	    if (!StringUtils.isEmpty(replyTo))
-		queryString += "&" + SENDGRID_API_PARAM_REPLY_TO + "="
-			+ URLEncoder.encode(replyTo);
+		queryString += "&" + SENDGRID_API_PARAM_REPLY_TO + "=" + URLEncoder.encode(replyTo);
 
 	    // Check type of email
 
 	    // Text email
 	    if (text != null)
 	    {
-		queryString += "&" + SENDGRID_API_PARAM_TEXT_BODY + "="
-			+ URLEncoder.encode(text);
+		queryString += "&" + SENDGRID_API_PARAM_TEXT_BODY + "=" + URLEncoder.encode(text);
 	    }
 	    // HTML email
 	    if (html != null)
 	    {
-		queryString += "&" + SENDGRID_API_PARAM_HTML_BODY + "="
-			+ URLEncoder.encode(html);
+		queryString += "&" + SENDGRID_API_PARAM_HTML_BODY + "=" + URLEncoder.encode(html);
 	    }
 
 	    System.out.println("QueryString  \n" + queryString + "\n\n");
 
-	    response = HTTPUtil.accessURLUsingPost(SENDGRID_API_POST_URL,
-		    queryString);
+	    response = HTTPUtil.accessURLUsingPost(SENDGRID_API_POST_URL, queryString);
 
 	    System.out.println("Response " + response);
 
