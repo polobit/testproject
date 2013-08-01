@@ -10,7 +10,7 @@ public class GoogleApi extends DefaultApi20
 
     private static final String ACCESS_TOKEN_URL = "https://accounts.google.com/o/oauth2/token";
 
-    private static final String REDIRECT_URL = "http://localhost:8888/backend/googleservlet";
+    private static final String REDIRECT_URL = "https://null-dot-sandbox-dot-agile-crm-cloud.appspot.com/backend/googleservlet";
 
     @Override
     public String getAccessTokenEndpoint()

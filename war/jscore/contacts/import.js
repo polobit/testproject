@@ -291,32 +291,41 @@ $(function()
 
 		// URL to return, after fetching token and secret key from LinkedIn
 		var callbackURL = window.location.href;
+		console.log(callbackURL);
 
-		$.getJSON("/core/api/contactprefs/google", function(data)
-		{
+		// For every request of import, it will ask to grant access
+		window.location = "/scribe?service=google&return_url=" + encodeURIComponent(callbackURL);
 
-			console.log(data);
-			if (!data)
-			{
-				window.location = "/scribe?service=google&return_url=" + encodeURIComponent(callbackURL);
-				return;
-			}
-			
-			var url = '/scribe?service_type=google';
-
-			$.post(url, function(data)
-			{
-				console.log("in success");
-			}).error(function(data)
-			{
-				console.log(data.responseText);
-			});
-
-		}).error(function(data)
-		{
-
-		});
-
+		// this code is used, if once permission is granted, we refresh the
+		// tokens and import without asking for permission again and again
+		
+		// $.getJSON("/core/api/contactprefs/google", function(data)
+		// {
+		//		
+		// console.log(data);
+		// if (!data)
+		// {
+		// $("#google-delete-import").hide();
+		// window.location = "/scribe?service=google&return_url=" +
+		// encodeURIComponent(callbackURL);
+		// return;
+		// }
+		//					
+		// var url = '/scribe?service_type=google';
+		// $("#google-delete-import").show();
+		//		
+		// $.post(url, function(data)
+		// {
+		// console.log("in success");
+		// }).error(function(data)
+		// {
+		// console.log(data.responseText);
+		// });
+		//		
+		// }).error(function(data)
+		// {
+		//					
+		// });
 
 	});
 
