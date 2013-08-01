@@ -15,10 +15,10 @@ import com.googlecode.objectify.ObjectifyService;
  * @author Chandan
  * 
  */
-public class CaseUtil {
+public class CaseUtil
+{
 	// dao
-	private static ObjectifyGenericDao<Case> dao = new ObjectifyGenericDao<Case>(
-			Case.class);
+	private static ObjectifyGenericDao<Case> dao = new ObjectifyGenericDao<Case>(Case.class);
 
 	/**
 	 * Gets Case Entity base on id
@@ -27,10 +27,14 @@ public class CaseUtil {
 	 *            - id of Case Entity to fetch
 	 * @return Case entity
 	 */
-	public static Case getCase(Long id) {
-		try {
+	public static Case getCase(Long id)
+	{
+		try
+		{
 			return dao.get(id);
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			e.printStackTrace();
 			return null;
 		}
@@ -41,24 +45,27 @@ public class CaseUtil {
 	 * 
 	 * @return Cases as List
 	 */
-	public static List<Case> getAllCase() {
+	public static List<Case> getCases()
+	{
 		return dao.fetchAll();
 	}
 
 	/**
 	 * Saves the entity
 	 * 
-	 * @param caseData
+	 * @param newCase
 	 *            - entity to save
 	 * @return - null if save fails
 	 */
-	public static Case save(Case caseData) {
-		dao.put(caseData);
+	public static Case save(Case newCase)
+	{
+		dao.put(newCase);
 
-		if (caseData.id == null) {
+		if (newCase.id == null)
+		{
 			return null;
 		}
-		return caseData;
+		return newCase;
 	}
 
 	/**
@@ -70,14 +77,12 @@ public class CaseUtil {
 	 *            - id of contact
 	 * @return list of contacts
 	 */
-	public static List<Case> getByContactId(Long id) {
+	public static List<Case> getCasesByContactId(Long id)
+	{
 		Objectify ofy = ObjectifyService.begin();
-		List<Case> cs = ofy
-				.query(Case.class)
-				.filter("related_contacts_key = ",
-						new Key<Contact>(Contact.class, id)).list();
-		System.out.println("Contacts Length = " + String.valueOf(cs.size()));
-		return cs;
+		List<Case> casesList = ofy.query(Case.class)
+				.filter("related_contacts_key = ", new Key<Contact>(Contact.class, id)).list();
+		return casesList;
 	}
 
 	/**
@@ -86,7 +91,8 @@ public class CaseUtil {
 	 * @param id
 	 *            - id of case entity o delete
 	 */
-	public static void delete(Long id) {
+	public static void delete(Long id)
+	{
 		dao.deleteKey(Key.create(Case.class, id));
 	}
 }

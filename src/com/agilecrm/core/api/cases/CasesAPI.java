@@ -22,18 +22,21 @@ import com.agilecrm.user.util.DomainUserUtil;
 
 /**
  * <code>CasesAPI</code> includes REST calls to interact with {@link Case} class
- * to initiate User CRUD operations
+ * to initiate User CRUD operations.
  * <p>
- * It is called from client side to create, update, fetch and delete the cases.
- * It also interacts with {@link DomainUserUtil} class to fetch the data of
- * DomainUser class from database.
+ * It is called from client side to create, update, fetch and delete the
+ * cases.Uses {@link CaseUtil} for actual work. It also interacts with
+ * {@link DomainUserUtil} class to fetch the data of DomainUser class from
+ * database.<br/>
+ * Bulk delete support is also present via path suffix "/bulk".
  * </p>
  * 
  * @author Chandan
  */
 
 @Path("/api/cases")
-public class CasesAPI {
+public class CasesAPI
+{
 	/**
 	 * GET list of all cases
 	 * 
@@ -41,8 +44,9 @@ public class CasesAPI {
 	 */
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Case> getAll() {
-		return CaseUtil.getAllCase();
+	public List<Case> getAllCases()
+	{
+		return CaseUtil.getCases();
 	}
 
 	/**
@@ -54,37 +58,39 @@ public class CasesAPI {
 	@Path("/{id}")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Case getCaseData(@PathParam("id") Long id) {
+	public Case getCase(@PathParam("id") Long id)
+	{
 		return CaseUtil.getCase(id);
 	}
 
 	/**
 	 * Adds new Case to database
 	 * 
-	 * @param caseData
+	 * @param newCase
 	 *            - case which is to be added to db
 	 * @return Case from db
 	 */
 	@POST
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Case postCaseData(Case caseData) {
-		return CaseUtil.save(caseData);
+	public Case postCase(Case newCase)
+	{
+		return CaseUtil.save(newCase);
 	}
 
 	/**
 	 * Update Case
 	 * 
-	 * @param caseData
+	 * @param newCase
 	 *            - update with existing Id
 	 * @return updated Case
 	 */
 	@PUT
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Case putCaseData(Case caseData) {
-
-		return CaseUtil.save(caseData);
+	public Case putCase(Case newCase)
+	{
+		return CaseUtil.save(newCase);
 	}
 
 	/**
@@ -95,7 +101,8 @@ public class CasesAPI {
 	 */
 	@DELETE
 	@Path("/{id}")
-	public void deleteCaseData(@PathParam("id") Long id) {
+	public void deleteCase(@PathParam("id") Long id)
+	{
 		CaseUtil.delete(id);
 	}
 
@@ -109,9 +116,8 @@ public class CasesAPI {
 	@POST
 	@Path("/bulk")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public void deleteCaseDataBulk(@FormParam("ids") String ids)
-			throws JSONException {
-		System.out.println("Del Bulk");
+	public void deleteMultipleCases(@FormParam("ids") String ids) throws JSONException
+	{
 		Case.dao.deleteBulkByIds(new JSONArray(ids));
 	}
 }
