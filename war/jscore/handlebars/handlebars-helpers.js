@@ -1269,16 +1269,41 @@ $(function() {
 		return new Handlebars.SafeString(element);
 	});
 	
+	/**
+	 * Builds options to be shown in the table heading of CSV import. Also tries to match headings in select field
+	 */
 	Handlebars.registerHelper('setupCSVUploadOptions', function(key, context){
 		//console.log(context.toJSON());
-		var template = getTemplate('csv_upload_options', context);
-		
-		console.log(key);
-		console.log($('select[name="options"]').find('option[value="'+key+'"]'));
-		//Using the value
-		$('select[name="options"]').find('option[value="'+key+'"]').attr("selected",true);
-		
-		return new Handlebars.SafeString(template);
+		var template = $(getTemplate('csv_upload_options', context));
+
+		// Replaces _ with spaces
+		key = key.replace("_", " ");
+	
+		var isFound = false;
+	
+		// Iterates to create various combinations and check with the header
+		for(var i = 0; i < key.length - 3; i ++)
+		{
+			template.find('option').each(function(index, element){
+				if($(element).val().toLowerCase().indexOf(key) != -1)
+				{
+					isFound = true;
+					$(element).attr("selected", true);
+					return false;
+				}
+				else if($(element).val().toLowerCase().indexOf(key.substr( 0, key.length - i ).toLowerCase()) != -1)
+				{
+					isFound = true;
+					$(element).attr("selected", true);
+					return false;
+				}
+				
+			});
+			if(isFound)
+				break;
+		}	
+			
+		return new Handlebars.SafeString($('<div>').html(template).html());
 	})
 	
 });

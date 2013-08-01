@@ -4,11 +4,22 @@
         <div class="page-header">
             <h1>Import Contacts <small>Upload file</small>	</h1>
         </div>
-        <div id="file-upload-div" style="display:inline-block;"></div>
-		<div class="btn" id="google-import" style="display:inline-block;display:none">Import from google</div>
-
     </div>
 </div>
+
+<div class="span3 well">
+    <form id="imap-prefs-form">
+        <legend>CSV Upload</legend>
+		<div style="padding-bottom:10px">
+			Upload contacts using a CSV file. Max limit 10,000 contacts.
+		</div>
+        <fieldset>
+           <div class="btn" id="upload_contacts" style="display:inline-block;">Upload contacts</div>
+        </fieldset>
+    </form>
+</div>
+<div class="clearfix"></div>
+
 </script>
 
 <script id="import-contacts-2-template" type="text/html">
@@ -30,53 +41,16 @@
 <table class="table table-bordered table-striped" style="border-collapse: collapse;">
     <thead id="import-header">
         <tr>
-            {{#eachkeys data.[0]}}
-            <th>
-                <select class="import-select">
-                    <option value="properties_first_name">First Name</option>
-                    <option value="properties_last_name">Last Name</option>
-                    <option value="properties_company">Company</option>
-                    <option value="tags">Tag</option>
-                    <option value="properties_title">Job Description</option>
-                    <optgroup label="Email">
-                        <option value="properties_email">-</option>
-                        <option value="properties_home-email">Home</option>
-                        <option value="properties_work-email">Work</option>
-                    </optgroup>
-                    <optgroup label="Phone">
-                        <option value="properties_home-phone">Home</option>
-                        <option value="properties_work-phone">Work</option>
-                        <option value="properties_mobile-phone">Mobile</option>
-                        <option value="properties_main-phone">Main</option>
-                        <option value="properties_home fax-phone">Home fax</option>
-                        <option value="properties_work fax-phone">Work fax</option>
-                        <option value="properties_other-phone">Other</option>
-                    </optgroup>
-                    <optgroup label="Website">
-                        <option value="properties_URL-website">Website</option>
-                        <option value="properties_SKYPE-website">Skype</option>
-                        <option value="properties_TWITTER-website">Twitter</option>
-                        <option value="properties_LINKED_IN-website">LinkedIn</option>
-                        <option value="properties_FACEBOOK-website">Facebook</option>
-                        <option value="properties_XING-website">Xing</option>
-                        <option value="properties_FEED-website">Blog</option>
-                        <option value="properties_GOOGLE_PLUS-website">Google+</option>
-                        <option value="properties_FLICKR-website">Flickr</option>
-                        <option value="properties_GITHUB-website">GitHub</option>
-                        <option value="properties_YOUTUBE-website">YouTube</option>
-                    </optgroup>
-                    <optgroup label="Address">
-                        <option value="home-address">Home</option>
-                        <option value="address">Postal</option>
-                        <option value="address">Office</option>
-                        <option value="city">City</option>
-                        <option value="state">State</option>
-                        <option value="zip">Zip</option>
-                        <option value="country">Country</option>
-                    </optgroup>
-                </select>
-            </th>
-            {{/eachkeys}}
+	{{this.key}}
+           
+	
+    {{#eachkeys data.[0]}}
+ 		<th>
+			{{setupCSVUploadOptions this.key ../this}}
+        </th>
+	{{/eachkeys}}           
+
+
         </tr>
     </thead>
     <tbody id="import-tbody">
@@ -102,4 +76,61 @@
         </div>
     </div>
 </div>
+</script>
+
+<script id="csv_upload_options-template" type="text/html">
+<select class="import-select">
+<option value="properties__ignore_">-Ignore-</option>
+<option value="properties_first_name">First Name</option>
+<option value="properties_last_name">Last Name</option>
+<option value="properties_company">Company</option>
+<option value="tags">Tag</option>
+<option value="properties_title">Job Description</option>
+<optgroup label="Email">
+    <option value="properties_email">-</option>
+    <option value="properties_home-email">Home</option>
+    <option value="properties_work-email">Work</option>
+</optgroup>
+<optgroup label="Phone">
+    <option value="properties_home-phone">Home</option>
+    <option value="properties_work-phone">Work</option>
+    <option value="properties_mobile-phone">Mobile</option>
+    <option value="properties_main-phone">Main</option>
+    <option value="properties_home fax-phone">Home fax</option>
+    <option value="properties_work fax-phone">Work fax</option>
+    <option value="properties_other-phone">Other</option>
+</optgroup>
+<optgroup label="Website">
+    <option value="properties_URL-website">Website</option>
+    <option value="properties_SKYPE-website">Skype</option>
+    <option value="properties_TWITTER-website">Twitter</option>
+    <option value="properties_LINKED_IN-website">LinkedIn</option>
+    <option value="properties_FACEBOOK-website">Facebook</option>
+    <option value="properties_XING-website">Xing</option>
+    <option value="properties_FEED-website">Blog</option>
+    <option value="properties_GOOGLE_PLUS-website">Google+</option>
+    <option value="properties_FLICKR-website">Flickr</option>
+    <option value="properties_GITHUB-website">GitHub</option>
+    <option value="properties_YOUTUBE-website">YouTube</option>
+</optgroup>
+<optgroup label="Address">
+    <option value="home-address">Home</option>
+    <option value="address">Postal</option>
+    <option value="address">Office</option>
+    <option value="city">City</option>
+    <option value="state">State</option>
+    <option value="zip">Zip</option>
+    <option value="country">Country</option>
+</optgroup>
+ {{#if custom_fields}}
+<optgroup label="Custom field" id = "custom_fields">
+   
+		{{#each custom_fields}}
+			<option class="CUSTOM" value="properties_{{this.field_label}}">{{this.field_label}}</option>
+		{{/each}}
+</optgroup>
+{{/if}}
+</select>
+
+
 </script>
