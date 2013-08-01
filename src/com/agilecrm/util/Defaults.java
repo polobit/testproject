@@ -1,4 +1,4 @@
-package com.agilecrm;
+package com.agilecrm.util;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -25,27 +25,24 @@ import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleType;
 import com.agilecrm.session.SessionManager;
-import com.agilecrm.util.DateUtil;
-import com.agilecrm.util.Util;
 import com.agilecrm.workflows.Workflow;
 
-public class InitDefaults
+public class Defaults
 {
-    public InitDefaults()
+    public Defaults()
     {
-	getDefaultContacts();
-	getDefaultTasks();
-	getDefaultEvent();
-	getDefaultDeal();
-	getDefaultWorkflow();
-	getDefaultReport();
-
+	saveDefaultContacts();
+	saveDefaultTasks();
+	saveDefaultEvents();
+	saveDefaultDeals();
+	saveDefaultWorkflows();
+	saveDefaultReports();
     }
 
     /**
      * Creates default Contacts.
      */
-    private static void getDefaultContacts()
+    private void saveDefaultContacts()
     {
 	LinkedHashSet<String> tags = new LinkedHashSet<String>();
 	tags.add("Business Owner");
@@ -53,22 +50,12 @@ public class InitDefaults
 	List<ContactField> contactFields = new ArrayList<ContactField>();
 	contactFields.add(new ContactField(Contact.FIRST_NAME, null, "Steve"));
 	contactFields.add(new ContactField(Contact.LAST_NAME, null, "Jobs"));
-	contactFields.add(new ContactField(Contact.EMAIL, "work",
-		"theboss@apple.com"));
+	contactFields.add(new ContactField(Contact.EMAIL, "work", "theboss@apple.com"));
 	contactFields.add(new ContactField(Contact.COMPANY, null, "Apple"));
 	contactFields.add(new ContactField(Contact.TITLE, null, "CEO"));
-	contactFields.add(new ContactField("website", "TWITTER",
-		"@stevejobsceo"));
-	contactFields
-		.add(new ContactField(
-			"address",
-			"office",
-			"{\"address\":\"1 Infinite Loop\",\"city\":\"Cupertino\",\"state\":\"CA\",\"zip\":\"95014\"}"));
-	contactFields
-		.add(new ContactField(
-			"image",
-			null,
-			"https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1370348163437?id=contact-container"));
+	contactFields.add(new ContactField("website", "TWITTER", "@stevejobsceo"));
+	contactFields.add(new ContactField("address", "office", "{\"address\":\"1 Infinite Loop\",\"city\":\"Cupertino\",\"state\":\"CA\",\"zip\":\"95014\"}"));
+	contactFields.add(new ContactField("image", null, "https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1370348163437?id=contact-container"));
 
 	Contact contact = new Contact(Contact.Type.PERSON, tags, contactFields);
 	contact.lead_score = 50;
@@ -78,22 +65,14 @@ public class InitDefaults
 	LinkedHashSet<String> tags1 = new LinkedHashSet<String>();
 	tags1.add("Sports");
 	List<ContactField> contactFields1 = new ArrayList<ContactField>();
-	contactFields1
-		.add(new ContactField(Contact.FIRST_NAME, null, "Michael"));
+	contactFields1.add(new ContactField(Contact.FIRST_NAME, null, "Michael"));
 	contactFields1.add(new ContactField(Contact.LAST_NAME, null, "Jordan"));
-	contactFields1.add(new ContactField(Contact.EMAIL, "work",
-		"sixfeetsix@nba.com"));
+	contactFields1.add(new ContactField(Contact.EMAIL, "work", "sixfeetsix@nba.com"));
 	contactFields1.add(new ContactField(Contact.COMPANY, null, "NBA"));
-	contactFields1.add(new ContactField(Contact.TITLE, null,
-		"Sports Legend"));
-	contactFields1
-		.add(new ContactField(
-			"image",
-			null,
-			"https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1371205956656?id=contact-container"));
+	contactFields1.add(new ContactField(Contact.TITLE, null, "Sports Legend"));
+	contactFields1.add(new ContactField("image", null, "https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1371205956656?id=contact-container"));
 
-	Contact contact1 = new Contact(Contact.Type.PERSON, tags1,
-		contactFields1);
+	Contact contact1 = new Contact(Contact.Type.PERSON, tags1, contactFields1);
 	contact1.star_value = 3;
 	contact1.lead_score = 10;
 	contact1.save();
@@ -101,33 +80,21 @@ public class InitDefaults
 	LinkedHashSet<String> tags2 = new LinkedHashSet<String>();
 	tags2.add("Activist");
 	List<ContactField> contactFields2 = new ArrayList<ContactField>();
-	contactFields2.add(new ContactField(Contact.FIRST_NAME, null,
-		"Mohandas"));
+	contactFields2.add(new ContactField(Contact.FIRST_NAME, null, "Mohandas"));
 	contactFields2.add(new ContactField(Contact.LAST_NAME, null, "Gandhi"));
-	contactFields2.add(new ContactField(Contact.EMAIL, "work",
-		"passiveaggressivemonk@pietermaritzburg.org"));
-	contactFields2.add(new ContactField(Contact.TITLE, null,
-		"Philanthropist"));
-	contactFields2
-		.add(new ContactField(
-			"image",
-			null,
-			"https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1370348006468?id=contact-container"));
-	Contact contact2 = new Contact(Contact.Type.PERSON, tags2,
-		contactFields2);
+	contactFields2.add(new ContactField(Contact.EMAIL, "work", "passiveaggressivemonk@pietermaritzburg.org"));
+	contactFields2.add(new ContactField(Contact.TITLE, null, "Philanthropist"));
+	contactFields2.add(new ContactField("image", null, "https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1370348006468?id=contact-container"));
+	Contact contact2 = new Contact(Contact.Type.PERSON, tags2, contactFields2);
 	contact2.star_value = 5;
 	contact2.lead_score = 10;
 	contact2.save();
 
 	List<ContactField> contactFields3 = new ArrayList<ContactField>();
 	contactFields3.add(new ContactField(Contact.NAME, null, "Apple"));
-	contactFields3.add(new ContactField(Contact.URL, null,
-		"https://www.apple.com"));
+	contactFields3.add(new ContactField(Contact.URL, null, "https://www.apple.com"));
 	contactFields3
-		.add(new ContactField(
-			"address",
-			"office",
-			"{\"address\":\"1 Infinite Loop\",\"city\":\"Cupertino\",\"state\":\"CA\",\"zip\":\"95014\"}"));
+		.add(new ContactField("address", "office", "{\"address\":\"1 Infinite Loop\",\"city\":\"Cupertino\",\"state\":\"CA\",\"zip\":\"95014\"}"));
 	Contact contact3 = new Contact();
 	contact3.type = Contact.Type.COMPANY;
 	contact3.properties = contactFields3;
@@ -136,17 +103,16 @@ public class InitDefaults
     }
 
     /**
-     * Creats default Tasks.
+     * Creates default Tasks.
      */
-    private static void getDefaultTasks()
+    private void saveDefaultTasks()
     {
 	Task task = new Task();
 	task.subject = "Give feedback about Agile";
 	task.is_complete = false;
 	task.type = Type.SEND;
 	task.priority_type = PriorityType.HIGH;
-	DateUtil date = new DateUtil().addDays(15).toMidnight()
-		.addMinutes(16 * 60);
+	DateUtil date = new DateUtil().addDays(15).toMidnight().addMinutes(16 * 60);
 	task.due = date.getTime().getTime() / 1000;
 	task.owner_id = String.valueOf(SessionManager.get().getDomainId());
 	task.save();
@@ -156,8 +122,7 @@ public class InitDefaults
 	task1.is_complete = false;
 	task1.type = Type.SEND;
 	task1.priority_type = PriorityType.LOW;
-	DateUtil date1 = new DateUtil().addDays(1).toMidnight()
-		.addMinutes(16 * 60);
+	DateUtil date1 = new DateUtil().addDays(1).toMidnight().addMinutes(16 * 60);
 	task1.due = date1.getTime().getTime() / 1000;
 	task1.owner_id = String.valueOf(SessionManager.get().getDomainId());
 	task1.save();
@@ -167,8 +132,7 @@ public class InitDefaults
 	task2.is_complete = false;
 	task2.type = Type.CALL;
 	task2.priority_type = PriorityType.NORMAL;
-	DateUtil date2 = new DateUtil().addDays(2).toMidnight()
-		.addMinutes(16 * 60);
+	DateUtil date2 = new DateUtil().addDays(2).toMidnight().addMinutes(16 * 60);
 	task2.due = date2.getTime().getTime() / 1000;
 	task2.owner_id = String.valueOf(SessionManager.get().getDomainId());
 	task2.save();
@@ -185,16 +149,15 @@ public class InitDefaults
     }
 
     /**
-     * Creates default Event.
+     * Creates default Events.
      */
-    private static void getDefaultEvent()
+    private void saveDefaultEvents()
     {
 	Event event = new Event();
 	event.title = "Gossip at water cooler";
 	event.color = "green";
 	event.allDay = false;
-	DateUtil date = new DateUtil().toMidnight().addDays(1)
-		.addMinutes(16 * 60);
+	DateUtil date = new DateUtil().toMidnight().addDays(1).addMinutes(16 * 60);
 	event.start = date.getTime().getTime() / 1000;
 	event.end = date.getTime().getTime() / 1000 + 1800;
 	event.save();
@@ -203,8 +166,7 @@ public class InitDefaults
 	event1.title = "Discuss today's Dilbert strip";
 	event1.color = "blue";
 	event1.allDay = false;
-	DateUtil date1 = new DateUtil().toMidnight().addDays(2)
-		.addMinutes(18 * 60);
+	DateUtil date1 = new DateUtil().toMidnight().addDays(2).addMinutes(18 * 60);
 	event1.start = date1.getTime().getTime() / 1000;
 	event1.end = date1.getTime().getTime() / 1000 + 1800;
 	event1.save();
@@ -213,21 +175,15 @@ public class InitDefaults
     /**
      * Creates default Workflows.
      */
-    private static void getDefaultWorkflow()
+    private void saveDefaultWorkflows()
     {
-	Workflow workflow = new Workflow(
-		"Sample Auto Responder",
-		Util.readResource("misc/campaign-strings/sample_auto_responder.txt"));
+	Workflow workflow = new Workflow("Sample Auto Responder", Util.readResource("misc/campaign-strings/sample_auto_responder.txt"));
 	workflow.save();
 
-	Workflow workflow1 = new Workflow(
-		"Sample Cart Abandonment",
-		Util.readResource("misc/campaign-strings/sample_cart_abandonment.txt"));
+	Workflow workflow1 = new Workflow("Sample Cart Abandonment", Util.readResource("misc/campaign-strings/sample_cart_abandonment.txt"));
 	workflow1.save();
 
-	Workflow workflow2 = new Workflow(
-		"Sample Email & Twitter Campaign",
-		Util.readResource("misc/campaign-strings/sample_email_n_twitter_campaign.txt"));
+	Workflow workflow2 = new Workflow("Sample Email & Twitter Campaign", Util.readResource("misc/campaign-strings/sample_email_n_twitter_campaign.txt"));
 	workflow2.save();
 
     }
@@ -235,7 +191,7 @@ public class InitDefaults
     /**
      * Creates default Deal.
      */
-    private static void getDefaultDeal()
+    private void saveDefaultDeals()
     {
 	Opportunity deal = new Opportunity();
 	deal.name = "Nike Endorsement";
@@ -250,15 +206,14 @@ public class InitDefaults
 	 * contact : contacts) {
 	 * deal.contact_ids.add(String.valueOf(contact.id)); }
 	 */
-	deal.addContactIds(String.valueOf(ContactUtil
-		.searchContactByEmail("sixfeetsix@nba.com").id));
+	deal.addContactIds(String.valueOf(ContactUtil.searchContactByEmail("sixfeetsix@nba.com").id));
 	deal.save();
     }
 
     /**
      * Creates default Report.
      */
-    private static void getDefaultReport()
+    private void saveDefaultReports()
     {
 	Reports report = new Reports();
 	report.duration = Duration.DAILY;
@@ -286,6 +241,9 @@ public class InitDefaults
 
     }
 
+    /**
+     * Initiates Tour for first time user.
+     */
     public static void setFirstTimerCookie(HttpServletResponse response)
     {
 	JSONObject tourJson = new JSONObject();
@@ -296,15 +254,11 @@ public class InitDefaults
 	    tourJson.put("workflows", true);
 	    tourJson.put("calendar", true);
 	    tourJson.put("workflows-add", true);
-
 	}
 	catch (JSONException e)
 	{
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
-
-	System.out.println(tourJson.toString());
 	Cookie tourCookie = new Cookie("agile_tour", tourJson.toString());
 	tourCookie.setPath("/");
 	response.addCookie(tourCookie);
