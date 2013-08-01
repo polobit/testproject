@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.scribe.builder.ServiceBuilder;
+import org.scribe.builder.api.Api;
 import org.scribe.builder.api.GoogleApi;
 import org.scribe.builder.api.LinkedInApi;
 import org.scribe.builder.api.TwitterApi;
@@ -27,6 +28,8 @@ import org.scribe.oauth.OAuthService;
 import com.agilecrm.contact.imports.ContactPrefs;
 import com.agilecrm.contact.imports.ContactPrefs.Type;
 import com.agilecrm.contact.imports.util.ContactsImportUtil;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.widgets.Widget;
@@ -51,12 +54,176 @@ import com.agilecrm.widgets.util.WidgetUtil;
 @SuppressWarnings("serial")
 public class ScribeServlet extends HttpServlet
 {
+    /**
+     * 
+     */
     public static final String SERVICE_TYPE_LINKED_IN = "linkedin";
     public static final String SERVICE_TYPE_TWITTER = "twitter";
     public static final String SERVICE_TYPE_GMAIL = "gmail";
     public static final String SERVICE_TYPE_GOOGLE = "google";
     public static final String SERVICE_TYPE_STRIPE = "stripe";
     public static final String SERVICE_TYPE_FRESHBOOKS = "freshbooks";
+    public static final String STRIPE_SCOPE = "read_only";
+    public static final String GOOGLE_CONTACTS_SCOPE = "https://www.google.com/m8/feeds/";
+    public static final String GMAIL_SCOPE = "https://mail.google.com/ https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
+
+    /**
+     * Process the post request to servlet request, request can be sent either
+     * from application client or from service provider (After connecting to
+     * provider and returned). If request parameters have "oauth_token" and
+     * "oauth_verifier" then request is from provider with token keys which are
+     * saved in widget.
+     */
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+	    throws ServletException, IOException
+    {
+	doGet(req, resp);
+    }
+
+    /**
+     * Process the get request to servlet request, request can be sent either
+     * from application client or from service provider (After connecting to
+     * provider and returned). If request parameters have "oauth_token" and
+     * "oauth_verifier" then request is from provider with token keys which are
+     * saved in widget.
+     */
+    public void doGet(HttpServletRequest req, HttpServletResponse resp)
+	    throws IOException
+    {
+	/*
+	 * OAuth1.0 - Check if it is first time or returning from OAuth1.0
+	 * authentication.If token and verifier is present, we just store or
+	 * redirect to the authorization page
+	 */
+	String oAuthToken = req.getParameter("oauth_token");
+	String oAuthVerifier = req.getParameter("oauth_verifier");
+
+	/*
+	 * OAuth2.0 - Check if it is first time or returning from OAuth2.0
+	 * authentication.If code is present, we just store or redirect to the
+	 * authorization page
+	 */
+	String code = req.getParameter("code");
+
+	System.out.println("oAuthToken " + oAuthToken);
+	System.out.println("oAuthVerifier " + oAuthVerifier);
+	System.out.println("code " + code);
+
+	/*
+	 * If aAuthToken and oAuthVerifier or code is not null i.e., request is
+	 * from service provider, tokens are saved
+	 * 
+	 * sometimes code is given as string "null"
+	 */
+	if ((code != null && !("null".equals(code)))
+		|| (oAuthToken != null && oAuthVerifier != null))
+	{
+	    saveToken(req, resp);
+	    return;
+	}
+
+	/*
+	 * If the request is from imports we get this parameter, This happens
+	 * when we have the user google tokens with us, there is no need of
+	 * authenticating him again
+	 */
+	String serviceType = req.getParameter("service_type");
+
+	// If service type is not null, we have Contact preferences
+	if (serviceType != null)
+	{
+	    // Initializes backends to import contacts
+	    ContactsImportUtil.initializeImport(serviceType);
+	    return;
+	}
+
+	/*
+	 * If request is from application the setup, request is sent based on
+	 * service type
+	 */
+	setupOAuth(req, resp);
+	return;
+
+    }
+
+    // Set up OAuth
+    /**
+     * Reads service from the request, based on which it connects to respective
+     * Service providers. Calls getService method calls which connects with
+     * service providers and get Oauth tokens,
+     * 
+     * @param req
+     *            {@link HttpServletRequest}
+     * @param resp
+     *            {@link HttpServletResponse}
+     * @throws IOException
+     */
+    public void setupOAuth(HttpServletRequest req, HttpServletResponse resp)
+	    throws IOException
+    {
+
+	// Get service name from request
+	String serviceName = req.getParameter("service");
+
+	System.out.println("in set up of scribe " + serviceName);
+
+	// On oauth cancel
+	if (serviceName == null)
+	{
+	    String return_url = (String) req.getSession().getAttribute(
+		    "return_url");
+
+	    System.out.println("return url in oauth cancel " + return_url);
+	    // Redirect URL
+	    resp.sendRedirect(return_url);
+	    return;
+	}
+
+	// Build the scribe service, based on service name
+	OAuthService service = getService(req, resp, serviceName);
+
+	String url;
+	Token token = null;
+
+	// oauth 2.0
+	if (serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE)
+		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE))
+	{
+	    // After building service, redirects to authorization page
+	    url = service.getAuthorizationUrl(null);
+
+	    System.out.println("redirect url " + url);
+	}
+	// oauth 1.0
+	else
+	{
+	    token = service.getRequestToken();
+
+	    // After building service, redirects to authorization page
+	    url = service.getAuthorizationUrl(token);
+	    System.out.println("redirect url " + url);
+	}
+
+	/*
+	 * Save Token,Return URL and Plugin-Id in session as we need them after
+	 * it returns back
+	 */
+	req.getSession().setAttribute("oauth.request_token", token);
+
+	String returnURL = req.getParameter("return_url");
+	if (returnURL != null)
+	    req.getSession().setAttribute("return_url", returnURL);
+
+	String pluginId = req.getParameter("plugin_id");
+	if (pluginId != null)
+	    req.getSession().setAttribute("plugin_id", pluginId);
+
+	System.out.println("in setup of scribe response " + resp);
+
+	// Redirect URL
+	resp.sendRedirect(url);
+    }
 
     // Get Service
     /**
@@ -75,86 +242,88 @@ public class ScribeServlet extends HttpServlet
     public static OAuthService getService(HttpServletRequest req,
 	    HttpServletResponse resp, String serviceType)
     {
-	// Gets callback url
+	/*
+	 * Get callback url, to which the tokens are returned after
+	 * authentication
+	 */
 	String callback = req.getRequestURL().toString();
+	System.out.println("getService callback:" + callback);
 
-	System.out.println("getService:" + callback);
 	OAuthService service = null;
 
-	if (serviceType == null
-		|| serviceType.equalsIgnoreCase(SERVICE_TYPE_LINKED_IN))
-	{
-	    // Creates a Service, by specifying API key, Secret key
-	    service = new ServiceBuilder().provider(LinkedInApi.class)
-		    .callback(callback).apiKey(Globals.LINKED_IN_API_KEY)
-		    .apiSecret(Globals.LINKED_IN_SECRET_KEY).build();
+	// If service type LinkedIn, creates a Service, specific to LinkedIn
+	if (serviceType.equalsIgnoreCase(SERVICE_TYPE_LINKED_IN))
+	    service = getSpecificService(req, SERVICE_TYPE_LINKED_IN,
+		    LinkedInApi.class, callback, Globals.LINKED_IN_API_KEY,
+		    Globals.LINKED_IN_SECRET_KEY, null);
 
-	    // Gets session and sets attribute "oauth.service" to LinkedIn type
-	    // as specified by Scribe
-	    req.getSession().setAttribute("oauth.service",
-		    SERVICE_TYPE_LINKED_IN);
-	}
-
+	// If service type Twitter, creates a Service, specific to Twitter
 	else if (serviceType.equalsIgnoreCase(SERVICE_TYPE_TWITTER))
-	{
-	    // Creates a Service, by specifying API key, Secret key
-	    service = new ServiceBuilder().provider(TwitterApi.class)
-		    .callback(callback).apiKey(Globals.TWITTER_API_KEY)
-		    .apiSecret(Globals.TWITTER_SECRET_KEY).build();
+	    service = getSpecificService(req, SERVICE_TYPE_TWITTER,
+		    TwitterApi.class, callback, Globals.TWITTER_API_KEY,
+		    Globals.TWITTER_SECRET_KEY, null);
 
-	    // Gets session and sets attribute "oauth.service" to Twitter type
-	    // as specified by Scribe
-	    req.getSession()
-		    .setAttribute("oauth.service", SERVICE_TYPE_TWITTER);
-	}
-
+	// If service type Stripe, creates a Service, specific to Stripe
 	else if (serviceType.equalsIgnoreCase(SERVICE_TYPE_STRIPE))
+	    service = getSpecificService(req, SERVICE_TYPE_STRIPE,
+		    StripeApi.class, callback, Globals.STRIPE_CLIENT_ID,
+		    Globals.STRIPE_API_KEY, STRIPE_SCOPE);
 
-	{
-	    // Creates a Service, by specifying API key, Secret key
-	    service = new ServiceBuilder().provider(StripeApi.class)
-		    .callback(callback).apiKey(Globals.STRIPE_CLIENT_ID)
-		    .apiSecret(Globals.STRIPE_API_KEY).scope("read_only")
-		    .build();
-
-	    // Gets session and sets attribute "oauth.service" to Twitter type
-	    // as specified by Scribe
-	    req.getSession().setAttribute("oauth.service", SERVICE_TYPE_STRIPE);
-	}
-
+	// If service type Google, creates a Service, specific to Google
 	else if (serviceType.equalsIgnoreCase(SERVICE_TYPE_GOOGLE))
+	    service = getSpecificService(req, SERVICE_TYPE_GOOGLE,
+		    com.agilecrm.GoogleApi.class, callback,
+		    Globals.GOOGLE_CLIENT_ID, Globals.GOOGLE_SECRET_KEY,
+		    GOOGLE_CONTACTS_SCOPE);
 
-	{
-	    // Creates a Service, by specifying API key, Secret key
-	    service = new ServiceBuilder()
-		    .provider(com.agilecrm.GoogleApi.class).callback(callback)
-		    .apiKey(Globals.GOOGLE_CLIENT_ID)
-		    .apiSecret(Globals.GOOGLE_SECRET_KEY)
-		    .scope("https://www.google.com/m8/feeds/").build();
-
-	    // Gets session and sets attribute "oauth.service" to Twitter type
-	    // as specified by Scribe
-	    req.getSession().setAttribute("oauth.service", SERVICE_TYPE_GOOGLE);
-	}
-
+	// Creates a Service, specific to Gmail
 	else
-	{
-	    // Creates a Service, by specifying API key, Secret key
-	    service = new ServiceBuilder()
-		    .provider(GoogleApi.class)
-		    .callback(callback)
-		    .apiKey(Globals.GMAIL_API_KEY)
-		    .apiSecret(Globals.GMAIL_SECRET_KEY)
-		    .scope("https://mail.google.com/ https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile")
-		    .build();
-
-	    // Gets session and sets attribute "oauth.service" to Gmail type
-	    // as specified by Scribe
-	    req.getSession().setAttribute("oauth.service", SERVICE_TYPE_GMAIL);
-
-	}
+	    service = getSpecificService(req, SERVICE_TYPE_GMAIL,
+		    GoogleApi.class, callback, Globals.GMAIL_API_KEY,
+		    Globals.GMAIL_SECRET_KEY, GMAIL_SCOPE);
 
 	return service;
+    }
+
+    /**
+     * Based on the service type, builds an {@link OAuthService} with the given
+     * parameters
+     * 
+     * @param req
+     *            {@link HttpServletRequest} to store the name in session
+     * @param serviceType
+     *            {@link String} type of service to be built
+     * @param apiClass
+     *            {@link Class} extending {@link Api} class to be provided to
+     *            build a service based on service type
+     * @param callback
+     *            callback URL to which the tokens are returned after
+     *            authentication
+     * @param apiKey
+     *            API key or client Id of the application
+     * @param apiSecret
+     *            Secret key or client secret of the application
+     * @param scope
+     *            {@link String} scope to be appended to request if required
+     * @return configured {@link OAuthService}
+     */
+    public static OAuthService getSpecificService(HttpServletRequest req,
+	    String serviceType, Class<? extends Api> apiClass, String callback,
+	    String apiKey, String apiSecret, String scope)
+    {
+
+	// Gets session and sets attribute "oauth.service" to service type
+	req.getSession().setAttribute("oauth.service", serviceType);
+
+	// if scope is null return service without scope
+	if (scope == null)
+	    // Creates a Service, by configuring API key, Secret key
+	    return new ServiceBuilder().provider(apiClass).callback(callback)
+		    .apiKey(apiKey).apiSecret(apiSecret).build();
+
+	// if scope is needed in the service
+	return new ServiceBuilder().provider(apiClass).callback(callback)
+		.apiKey(apiKey).apiSecret(apiSecret).scope(scope).build();
     }
 
     /**
@@ -181,28 +350,29 @@ public class ScribeServlet extends HttpServlet
 	Token accessToken = null;
 	OAuthService service = null;
 
-	// oauth 2.0 requires code parameter
+	// OAuth 2.0 requires code parameter
 	if (serviceName.equalsIgnoreCase("Stripe")
 		|| serviceName.equalsIgnoreCase("google"))
-	{
 	    code = req.getParameter("code");
-	    System.out.println(code);
-	}
-	// oauth 1.0 requires token and verifier
+
+	// OAuth 1.0 requires token and verifier
 	else
 	{
+	    /*
+	     * If request token in not null, new token is created using
+	     * oAuthToken, which gets the access token from the provider
+	     */
 	    requestToken = (Token) req.getSession().getAttribute(
 		    "oauth.request_token");
 
-	    // if request token in not null, new token is created using
-	    // oAuthToken, which gets the access token from the provider
 	    if (requestToken == null)
 		return;
 
 	    // Token and verifier are read from request parameters
 	    String oAuthToken = req.getParameter("oauth_token");
 	    String oAuthVerifier = req.getParameter("oauth_verifier");
-	    // Get Service
+
+	    // Get Service to retrive access token
 	    service = getService(req, resp, serviceName);
 
 	    // Builds a verifier
@@ -214,7 +384,6 @@ public class ScribeServlet extends HttpServlet
 
 	    System.out.println("Token " + accessToken.getToken());
 	    System.out.println("Secret " + accessToken.getSecret());
-
 	}
 
 	// Get Agile User
@@ -225,292 +394,211 @@ public class ScribeServlet extends HttpServlet
 	    return;
 	}
 
-	// Gets service name from session
-	String serviceNameInSession = (String) req.getSession().getAttribute(
-		"oauth.service");
+	System.out.println("service name in save token " + serviceName);
 
-	// If service name is Twitter or LinkedIn, widget is fetched by
-	// plugin_id in session and widget is updated with new token key and
-	// secret key
-	if (serviceNameInSession.equalsIgnoreCase(SERVICE_TYPE_TWITTER)
-		|| serviceNameInSession
-			.equalsIgnoreCase(SERVICE_TYPE_LINKED_IN))
-	{
-	    // Gets widget Id from the session
-	    String widgetId = (String) req.getSession().getAttribute(
-		    "plugin_id");
+	/*
+	 * If service name is Twitter or LinkedIn, widget is fetched by
+	 * plugin_id in session and widget is updated with new token key and
+	 * secret key
+	 */
+	if (serviceName.equalsIgnoreCase(SERVICE_TYPE_TWITTER)
+		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_LINKED_IN))
+	    saveLinkedInOrTwitterPrefs(req, accessToken);
 
-	    System.out.println(widgetId);
+	// If Service type is Gmail, save preferences in social prefs
+	else if (serviceName.equalsIgnoreCase(SERVICE_TYPE_GMAIL))
+	    saveGmailPrefs(accessToken, service, agileUser);
 
-	    Map<String, String> properties = new HashMap<String, String>();
-	    properties.put("token", accessToken.getToken());
-	    properties.put("secret", accessToken.getSecret());
-	    properties.put("time", String.valueOf(System.currentTimeMillis()));
+	/*
+	 * if service type is stripe, we post the code and get the access token
+	 * and widget is updated with new access token and refresh token
+	 */
+	else if (serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE))
+	    saveStipePrefs(req, code);
 
-	    saveWidgetPrefs(widgetId, properties);
-	}
+	/*
+	 * if service type is google, we post the code and get the access token
+	 * and ContactPrefs object is saved with new access token and refresh
+	 * token
+	 */
+	else if (serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE))
+	    saveGooglePrefs(code);
 
-	// If Service type is Gmail
-	else if (serviceNameInSession.equalsIgnoreCase(SERVICE_TYPE_GMAIL))
-	{
-
-	    System.out.println("Saving Gmail Prefs");
-
-	    OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET,
-		    "https://www.googleapis.com/oauth2/v1/userinfo?alt=json");
-	    service.signRequest(accessToken, oAuthRequest);
-	    Response response = oAuthRequest.send();
-
-	    System.out.println(response.getBody());
-
-	    HashMap<String, String> properties = new ObjectMapper().readValue(
-		    response.getBody(),
-		    new TypeReference<HashMap<String, String>>()
-		    {
-		    });
-
-	    SocialPrefs gmailPrefs = new SocialPrefs(agileUser,
-		    SocialPrefs.Type.GMAIL, accessToken.getToken(),
-		    accessToken.getSecret(), properties);
-	    gmailPrefs.save();
-	}
-
-	// if service type is stripe, we post the code and get the access token
-	else if (serviceNameInSession.equalsIgnoreCase(SERVICE_TYPE_STRIPE))
-	{
-	    System.out.println("In stripe save");
-
-	    OAuthRequest oAuthRequest = new OAuthRequest(
-		    Verb.POST,
-		    String.format(
-			    "https://connect.stripe.com/oauth/token?code=%s&grant_type=%s",
-			    code, "authorization_code"));
-
-	    oAuthRequest.addHeader("Authorization", "Bearer "
-		    + Globals.STRIPE_API_KEY);
-
-	    Response response = oAuthRequest.send();
-	    HashMap<String, String> properties = new ObjectMapper().readValue(
-		    response.getBody(),
-		    new TypeReference<HashMap<String, String>>()
-		    {
-		    });
-
-	    // Gets widget Id from the session
-	    String widgetId = (String) req.getSession().getAttribute(
-		    "plugin_id");
-
-	    System.out.println(widgetId);
-
-	    saveWidgetPrefs(widgetId, properties);
-	}
-
-	// if service type is google, we post the code and get the access token
-	else if (serviceNameInSession.equalsIgnoreCase(SERVICE_TYPE_GOOGLE))
-	{
-	    System.out.println("In google save token");
-
-	    OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST,
-		    "https://accounts.google.com/o/oauth2/token");
-
-	    oAuthRequest
-		    .addBodyParameter("client_id", Globals.GOOGLE_CLIENT_ID);
-	    oAuthRequest.addBodyParameter("client_secret",
-		    Globals.GOOGLE_SECRET_KEY);
-	    oAuthRequest.addBodyParameter("scope", "");
-	    oAuthRequest
-		    .addBodyParameter(
-			    "redirect_uri",
-			    "https://null-dot-sandbox-dot-agile-crm-cloud.appspot.com/backend/googleservlet");
-	    oAuthRequest.addBodyParameter("code", code);
-	    oAuthRequest.addBodyParameter("grant_type", "authorization_code");
-
-	    Response response = oAuthRequest.send();
-
-	    // Creates HashMap from response JSON string
-	    HashMap<String, Object> properties = new ObjectMapper().readValue(
-		    response.getBody(),
-		    new TypeReference<HashMap<String, Object>>()
-		    {
-		    });
-
-	    System.out.println(properties.toString());
-
-	    // if post gives error, we have to notify user- pending
-	    if (properties.containsKey("error"))
-		System.out.println(properties.get("error"));
-	    else
-	    {
-
-		// after getting access token save prefs in db
-		ContactPrefs contactPrefs = new ContactPrefs(Type.GOOGLE,
-			((String) properties.get("access_token")), null,
-			(Long.parseLong((String.valueOf(properties
-				.get("expires_in"))))),
-			((String) properties.get("refresh_token")));
-		contactPrefs.save();
-
-		// initialize backend to save contacts
-		ContactsImportUtil.initilaizeImportBackend(contactPrefs);
-
-	    }
-
-	}
-
-	// return url is retrieved from session
+	// return URL is retrieved from session
 	String returnURL = (String) req.getSession().getAttribute("return_url");
-	System.out.println("return url" + returnURL);
+	System.out.println("return url " + returnURL);
 
-	// Get Back URL and send
+	// If return URL is null, redirect to dashboard
 	if (returnURL == null)
-	    resp.sendRedirect("/home#" + serviceName);
+	    resp.sendRedirect("/");
 	else
 	    resp.sendRedirect(returnURL);
     }
 
-    // Set up OAuth
     /**
-     * Reads service from the request, based on which it connects to respective
-     * Service providers. Calls getService method calls which connects with
-     * service providers and get Oauth tokens,
+     * If service name is Twitter or LinkedIn, widget is fetched by plugin_id in
+     * session and widget is updated with new token key and secret key
      * 
      * @param req
      *            {@link HttpServletRequest}
-     * @param resp
-     *            {@link HttpServletResponse}
+     * @param accessToken
+     *            {@link String} access token after OAuth
+     */
+    public static void saveLinkedInOrTwitterPrefs(HttpServletRequest req,
+	    Token accessToken)
+    {
+	System.out.println("Saving LinkedIn or Twitter Prefs");
+
+	// Gets widget Id from the session
+	String widgetId = (String) req.getSession().getAttribute("plugin_id");
+
+	Map<String, String> properties = new HashMap<String, String>();
+	properties.put("token", accessToken.getToken());
+	properties.put("secret", accessToken.getSecret());
+	properties.put("time", String.valueOf(System.currentTimeMillis()));
+
+	// update widget with tokens
+	saveWidgetPrefs(widgetId, properties);
+    }
+
+    /**
+     * If Service type is GMail, SocialPrefs object is created in database with
+     * the tokens
+     * 
+     * @param accessToken
+     *            {@link String} access token after OAuth
+     * @param service
+     *            configured {@link OAuthService}
+     * @param agileUser
+     *            current {@link AgileUser}
      * @throws IOException
      */
-    public void setupOAuth(HttpServletRequest req, HttpServletResponse resp)
-	    throws IOException
+    public static void saveGmailPrefs(Token accessToken, OAuthService service,
+	    AgileUser agileUser) throws IOException
     {
-
-	// Get service based on the params
-	String serviceName = req.getParameter("service");
-
-	System.out.println("in set up of scribe " + serviceName);
-
-	// On oauth cancel
-	if (serviceName == null)
-	{
-	    String return_url = (String) req.getSession().getAttribute(
-		    "return_url");
-
-	    System.out.println("return url in oauth cancel " + return_url);
-	    // Redirect URL
-	    resp.sendRedirect(return_url);
-	    return;
-	}
-
-	// Build the scribe service, with the required credentails
-	OAuthService service = getService(req, resp, serviceName);
-
-	String url;
-	Token token = null;
-
-	// oauth 2.0
-	if (serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE)
-		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE))
-	{
-	    // Redirect URL
-	    url = service.getAuthorizationUrl(null);
-
-	    System.out.println("redirect url" + url);
-	}
-	// oauth 1.0
-	else
-	{
-	    token = service.getRequestToken();
-
-	    url = service.getAuthorizationUrl(token);
-	    System.out.println("redirect url" + url);
-	}
-
-	// Save Token and Service as we need them after it returns back
-	req.getSession().setAttribute("oauth.request_token", token);
-
-	// Save Return URL and Plugin-Id
-	String returnURL = req.getParameter("return_url");
-	if (returnURL != null)
-	    req.getSession().setAttribute("return_url", returnURL);
-
-	String pluginId = req.getParameter("plugin_id");
-	if (pluginId != null)
-	    req.getSession().setAttribute("plugin_id", pluginId);
-
-	System.out.println("in setup of scribe response " + resp);
-
-	// Redirect URL
-	resp.sendRedirect(url);
-    }
-
-    /**
-     * Process the get request to servlet request, request can be sent either
-     * from application client or from service provider (After connecting to
-     * provider and returned). If request parameters have "oauth_token" and
-     * "oauth_verifier" then request is from provider with token keys which are
-     * saved in widget.
-     */
-    public void doGet(HttpServletRequest req, HttpServletResponse resp)
-	    throws IOException
-    {
-	// Check if it is first time or returning from oauth authentication
-	// If token and verifier is present, we just store or redirect to the
-	// authorization page
-	String oAuthToken = req.getParameter("oauth_token");
-	String oAuthVerifier = req.getParameter("oauth_verifier");
-
-	// Ouath2.0 gives code, with this code we can post and get access token
-	String code = req.getParameter("code");
-
-	// If the request is from imports we get this parameter
-	String serviceType = req.getParameter("service_type");
-
-	// This happens when we have the user gmail tokens with us, there is no
-	// need of authenticating him agian
-	if (serviceType != null)
-	{
-	    // Initializes backends to import contacts
-	    initializeBackendsToImportContacts(serviceType);
-	    return;
-	}
-
-	System.out.println("oAuthToken " + oAuthToken);
-	System.out.println("oAuthVerifier " + oAuthVerifier);
-
-	System.out.println("code " + "null".equals(code));
+	System.out.println("Saving Gmail Prefs");
 
 	/*
-	 * If aAuthToken and oAuthVerifier is not null i.e., request is from
-	 * service provider, tokens are saved
-	 * 
-	 * sometimes code is given as string "null"
+	 * Signed get request is made to retrieve access token and secret
 	 */
-	if ((code != null && !("null".equals(code)))
-		|| (oAuthToken != null && oAuthVerifier != null))
-	{
-	    saveToken(req, resp);
-	    return;
-	}
+	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET,
+		"https://www.googleapis.com/oauth2/v1/userinfo?alt=json");
+	service.signRequest(accessToken, oAuthRequest);
+	Response response = oAuthRequest.send();
 
-	// If request is from application the setup, request is sent based in
-	// service type
-	setupOAuth(req, resp);
-	return;
+	System.out.println(response.getBody());
 
+	HashMap<String, String> properties = new ObjectMapper().readValue(
+		response.getBody(),
+		new TypeReference<HashMap<String, String>>()
+		{
+		});
+
+	// save GMail prefs in db
+	SocialPrefs gmailPrefs = new SocialPrefs(agileUser,
+		SocialPrefs.Type.GMAIL, accessToken.getToken(),
+		accessToken.getSecret(), properties);
+	gmailPrefs.save();
     }
 
     /**
-     * Process the post request to servlet request, request can be sent either
-     * from application client or from service provider (After connecting to
-     * provider and returned). If request parameters have "oauth_token" and
-     * "oauth_verifier" then request is from provider with token keys which are
-     * saved in widget.
+     * If service type is stripe, we make a post request with the code and get
+     * the access token,widget is fetched by plugin_id in session and is updated
+     * with new access token and refresh token
+     * 
+     * @param {@link HttpServletRequest}
+     * @param code
+     *            {@link String} code retrieved after OAuth
+     * @throws IOException
      */
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-	    throws ServletException, IOException
+    public static void saveStipePrefs(HttpServletRequest req, String code)
+	    throws IOException
     {
-	doGet(req, resp);
+	System.out.println("In stripe save");
+
+	/*
+	 * Make a post request and retrieve tokens
+	 */
+	OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST, String.format(
+		"https://connect.stripe.com/oauth/token?code=%s&grant_type=%s",
+		code, "authorization_code"));
+
+	oAuthRequest.addHeader("Authorization", "Bearer "
+		+ Globals.STRIPE_API_KEY);
+
+	Response response = oAuthRequest.send();
+	HashMap<String, String> properties = new ObjectMapper().readValue(
+		response.getBody(),
+		new TypeReference<HashMap<String, String>>()
+		{
+		});
+
+	// Gets widget Id from the session
+	String widgetId = (String) req.getSession().getAttribute("plugin_id");
+
+	// save prefs in widget
+	saveWidgetPrefs(widgetId, properties);
+    }
+
+    /**
+     * If service type is google, we make a post request with the code and get
+     * the access token and ContactPrefs object is saved in database with new
+     * access token and refresh token
+     * 
+     * @param code
+     *            {@link String} code retrieved after OAuth
+     * @throws IOException
+     */
+    public static void saveGooglePrefs(String code) throws IOException
+    {
+	System.out.println("In google save token");
+
+	/*
+	 * Make a post request and retrieve tokens
+	 */
+	OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST,
+		"https://accounts.google.com/o/oauth2/token");
+
+	oAuthRequest.addBodyParameter("client_id", Globals.GOOGLE_CLIENT_ID);
+	oAuthRequest.addBodyParameter("client_secret",
+		Globals.GOOGLE_SECRET_KEY);
+	oAuthRequest.addBodyParameter("scope", "");
+	oAuthRequest
+		.addBodyParameter(
+			"redirect_uri",
+			"https://null-dot-sandbox-dot-agile-crm-cloud.appspot.com/backend/googleservlet");
+	oAuthRequest.addBodyParameter("code", code);
+	oAuthRequest.addBodyParameter("grant_type", "authorization_code");
+
+	Response response = oAuthRequest.send();
+
+	// Creates HashMap from response JSON string
+	HashMap<String, Object> properties = new ObjectMapper().readValue(
+		response.getBody(),
+		new TypeReference<HashMap<String, Object>>()
+		{
+		});
+
+	System.out.println(properties.toString());
+
+	// if post gives error, notifies user about it
+	if (properties.containsKey("error"))
+	    BulkActionNotifications.publishconfirmation(
+		    BulkAction.CONTACTS_IMPORT_MESSAGE,
+		    "Authentication failed. Please import again");
+	else
+	{
+	    // after getting access token save prefs in db
+	    ContactPrefs contactPrefs = new ContactPrefs(Type.GOOGLE,
+		    ((String) properties.get("access_token")), null,
+		    (Long.parseLong((String.valueOf(properties
+			    .get("expires_in"))))),
+		    ((String) properties.get("refresh_token")));
+	    contactPrefs.save();
+
+	    // initialize backend to save contacts
+	    ContactsImportUtil.initilaizeImportBackend(contactPrefs);
+	}
     }
 
     /**
@@ -535,8 +623,10 @@ public class ScribeServlet extends HttpServlet
 	}
 	System.out.println("Response from Plugin:" + properties.toString());
 
-	// If widget exists with id given, access token and secret are
-	// added to prefs in widget
+	/*
+	 * If widget exists with id given, access token and secret are added to
+	 * prefs in widget
+	 */
 	Iterator<Entry<String, String>> it = properties.entrySet().iterator();
 	while (it.hasNext())
 	{
@@ -550,26 +640,4 @@ public class ScribeServlet extends HttpServlet
 	widget.save();
     }
 
-    /**
-     * This is called when the user comes second time.Since we have his
-     * preferences, we can initialize backends with the available preferences
-     * 
-     * @param type
-     *            {@link ContactPrefs.Type}
-     */
-    public void initializeBackendsToImportContacts(String type)
-    {
-
-	ContactPrefs contactPrefs = ContactPrefs
-		.getPrefsByType(ContactPrefs.Type.valueOf(type.toUpperCase()));
-
-	System.out.println("in initialize backends scribe");
-	System.out.println(contactPrefs);
-
-	// if contact prefs exists for google initialize backends
-	if (contactPrefs != null)
-	    ContactsImportUtil.initilaizeImportBackend(contactPrefs);
-	return;
-
-    }
 }

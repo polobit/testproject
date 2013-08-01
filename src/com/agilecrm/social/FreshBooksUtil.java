@@ -76,7 +76,7 @@ public class FreshBooksUtil
 	JSONObject messageJSON = new JSONObject().put("client_id", clientId);
 
 	if (pluginPrefsJSON == null || messageJSON == null)
-	    throw new Exception("Freshbooks preferences null");
+	    throw new Exception("Something went wrong. Please try agian");
 
 	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON",
 		pluginPrefsJSON).put("messageJSON", messageJSON);
@@ -105,7 +105,7 @@ public class FreshBooksUtil
 	JSONObject pluginPrefsJSON = buildPluginPrefsJSON(widget);
 
 	if (pluginPrefsJSON == null)
-	    throw new Exception("Freshbooks preferences null");
+	    throw new Exception("Something went wrong. Please try agian");
 
 	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON",
 		pluginPrefsJSON);
@@ -134,7 +134,7 @@ public class FreshBooksUtil
 	JSONObject pluginPrefsJSON = buildPluginPrefsJSON(widget);
 
 	if (pluginPrefsJSON == null)
-	    throw new Exception("Freshbooks preferences null");
+	    throw new Exception("Something went wrong. Please try agian");
 
 	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON",
 		pluginPrefsJSON);
@@ -174,7 +174,7 @@ public class FreshBooksUtil
 		.put("last_name", lastName);
 
 	if (pluginPrefsJSON == null || contactPrefsJSON == null)
-	    throw new Exception("Freshbooks preferences null");
+	    throw new Exception("Something went wrong. Please try agian");
 
 	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON",
 		pluginPrefsJSON).put("visitorJSON", contactPrefsJSON);
@@ -222,7 +222,7 @@ public class FreshBooksUtil
 
 	if (pluginPrefsJSON == null || contactPrefsJSON == null
 		|| messageJSON == null)
-	    throw new Exception("Freshbooks preferences null");
+	    throw new Exception("Something went wrong. Please try agian");
 
 	JSONObject prefsJSON = new JSONObject()
 		.put("pluginPrefsJSON", pluginPrefsJSON)

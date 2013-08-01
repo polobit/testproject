@@ -14,8 +14,7 @@ public class BulkActionNotifications
 		"Tag(s) %s added to %s contacts"), ENROLL_CAMPAIGN(
 		"%s Contacts added to campaign"), OWNER_CHANGE(
 		"Owner changed for %s contacts"), CONTACTS_IMPORT(
-		"%s contacts uploaded"), CONTACTS_IMPORT_SCHEDULED(
-		"Import scheduled");
+		"%s contacts uploaded"), CONTACTS_IMPORT_MESSAGE("%s");
 
 	String message;
 

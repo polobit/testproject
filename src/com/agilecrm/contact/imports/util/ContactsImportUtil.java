@@ -40,6 +40,37 @@ import com.googlecode.objectify.Key;
  */
 public class ContactsImportUtil
 {
+
+    /**
+     * This is called when the user comes second time.Since we have his
+     * preferences, we can initialize backends with the available preferences
+     * 
+     * @param type
+     *            {@link ContactPrefs.Type}
+     */
+    public static void initializeImport(String type)
+    {
+	ContactPrefs contactPrefs = ContactPrefs
+		.getPrefsByType(ContactPrefs.Type.valueOf(type.toUpperCase()));
+
+	System.out.println("in initialize backends");
+	System.out.println(contactPrefs);
+
+	// if no preferences are saved, there might an error while
+	// authenticating
+	if (contactPrefs == null)
+	{
+	    // notifies user after adding contacts
+	    BulkActionNotifications.publishconfirmation(
+		    BulkAction.CONTACTS_IMPORT_MESSAGE,
+		    "Authentication failed. Please import again");
+	    return;
+	}
+
+	// if contact preferences exists for google, initialize backends
+	initilaizeImportBackend(contactPrefs);
+    }
+
     /**
      * Initializes backend with contact preferences and hits
      * {@link ContactUtilServlet}
@@ -50,8 +81,8 @@ public class ContactsImportUtil
     public static void initilaizeImportBackend(ContactPrefs contactPrefs)
     {
 	// notifies user after adding contacts
-	BulkActionNotifications
-		.publishconfirmation(BulkAction.CONTACTS_IMPORT_SCHEDULED);
+	BulkActionNotifications.publishconfirmation(
+		BulkAction.CONTACTS_IMPORT_MESSAGE, "Import scheduled");
 
 	Queue queue = QueueFactory.getQueue("bulk-actions-queue");
 	TaskOptions taskOptions;

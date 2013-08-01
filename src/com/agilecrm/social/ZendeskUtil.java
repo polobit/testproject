@@ -16,12 +16,11 @@ import com.agilecrm.widgets.Widget;
  * @author Tejaswi
  * @since February 2013
  */
-
 public class ZendeskUtil
 {
 
     /**
-     * Plugin Server URL
+     * ClickDesk plugins Server URL
      */
     public static final String pluginURL = "http://ec2-72-44-57-140.compute-1.amazonaws.com:8080/ClickdeskPlugins/";
 
@@ -38,7 +37,6 @@ public class ZendeskUtil
      * @throws Exception
      *             if the response is an exception
      */
-
     public static String getContactTickets(Widget widget, String email)
 	    throws Exception
     {
@@ -47,7 +45,7 @@ public class ZendeskUtil
 		email);
 
 	if (pluginPrefsJSON == null || contactPrefsJSON == null)
-	    throw new Exception("zendesk preferences null");
+	    throw new Exception("Something went wrong. Please try agian");
 
 	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON",
 		pluginPrefsJSON).put("visitorJSON", contactPrefsJSON);
@@ -88,7 +86,7 @@ public class ZendeskUtil
 		"message", description);
 
 	if (pluginPrefsJSON == null || contactPrefsJSON == null)
-	    throw new Exception("zendesk preferences null");
+	    throw new Exception("Something went wrong. Please try agian");
 
 	JSONObject json = new JSONObject()
 		.put("pluginPrefsJSON", pluginPrefsJSON)
@@ -128,7 +126,7 @@ public class ZendeskUtil
 		.put("message", description);
 
 	if (pluginPrefsJSON == null || messageJSON == null)
-	    throw new Exception("zendesk preferences null");
+	    throw new Exception("Something went wrong. Please try agian");
 
 	JSONObject json = new JSONObject().put("pluginPrefsJSON",
 		pluginPrefsJSON).put("messageJSON", messageJSON);
@@ -149,7 +147,7 @@ public class ZendeskUtil
 		email);
 
 	if (pluginPrefsJSON == null || contactPrefsJSON == null)
-	    throw new Exception("zendesk preferences null");
+	    throw new Exception("Something went wrong. Please try agian");
 
 	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON",
 		pluginPrefsJSON).put("visitorJSON", contactPrefsJSON);
