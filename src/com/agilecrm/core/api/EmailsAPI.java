@@ -95,7 +95,6 @@ public class EmailsAPI
 	}
     }
 
-    // Contact view Save Author: Yaswanth 08-10-2012
     /**
      * Returns imap emails merging with contact emails, when imap preferences
      * are set. Otherwise simply returns contact emails.
@@ -168,37 +167,47 @@ public class EmailsAPI
 	    }
 	}
 
-	System.out.println("IMAP Emails url is: " + url);
 	try
 	{
-	    // Initialize jsonResult as {"emails":[]}, as we get empty imap in
-	    // this format
-	    String jsonResult = new JSONObject().put("emails", new JSONArray()).toString();
+	    String jsonResult = "";
 
-	    // Returns imap emails
+	    // Returns imap emails, usually in form of {emails:[]}
 	    if (url != null)
 		jsonResult = HTTPUtil.accessURL(url);
 
-	    // Fetches contact emails
-	    List<ContactEmail> contactEmails = ContactEmailUtil.getContactEmails(ContactUtil.searchContactByEmail(searchEmail).id);
+	    System.out.println("Obtained imap emails: " + jsonResult);
 
 	    JSONObject emails = new JSONObject(jsonResult);
 
-	    System.out.println("JSONResult in json is " + emails);
+	    // if obtained result has no emails key.
+	    if (!emails.has("emails"))
+	    {
+		emails = new JSONObject().put("emails", new JSONArray());
 
+		if (new JSONObject(jsonResult).length() > 0)
+		    emails.getJSONArray("emails").put(new JSONObject(jsonResult));
+	    }
+
+	    // Fetch Emails Array
 	    JSONArray emailsArray = emails.getJSONArray("emails");
 
 	    for (int i = 0; i < emailsArray.length(); i++)
 	    {
 		emailsArray.getJSONObject(i).put("owner_email", URLDecoder.decode(userName));
 
-		// Parse html body
-		String updatedMessage = Util.parseEmailData(emailsArray.getJSONObject(i).getString("message"));
+		JSONObject email = emailsArray.getJSONObject(i);
 
-		emailsArray.getJSONObject(i).put("message", updatedMessage);
+		if (email.has("message"))
+		{
+		    String parsedHTML = Util.parseEmailData(emailsArray.getJSONObject(i).getString("message"));
+		    email.put("message", parsedHTML);
+		}
 	    }
 
-	    // Merge contact emails and imap emails.
+	    // Fetches contact emails
+	    List<ContactEmail> contactEmails = ContactEmailUtil.getContactEmails(ContactUtil.searchContactByEmail(searchEmail).id);
+
+	    // Merge Contact Emails with obtained imap emails
 	    for (ContactEmail contactEmail : contactEmails)
 	    {
 		ObjectMapper mapper = new ObjectMapper();
@@ -210,6 +219,7 @@ public class EmailsAPI
 	}
 	catch (Exception e)
 	{
+	    System.out.println("Got an exception in EmailsAPI: " + e);
 	    e.printStackTrace();
 	    return null;
 	}

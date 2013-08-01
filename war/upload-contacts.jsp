@@ -96,9 +96,6 @@ function isValid(){
 
 <legend>Upload CSV file</legend>
 
-
-<p>upload CSV file.</i></p>
-
 <br/>
  <form action="<%= BlobstoreServiceFactory.getBlobstoreService().createUploadUrl("/upload")  %>" method="post" enctype="multipart/form-data" onsubmit="return isValid();" id="form">
     

@@ -1,6 +1,10 @@
 <script id="tasks-list-collection-template" type="text/html">
 {{#unless this.length}}
-<h3>You have no tasks based on this condition.</h3>
+<div class="slate" style="padding:5px;">
+    <div class="slate-content" style="text-align:center;">
+		<h3> <icon class="icon-edit"></icon> No tasks found</h3>
+	</div>
+</div>
 {{else}}
 <div class="data-block span11">
     <div class="data-container">
