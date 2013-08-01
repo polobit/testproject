@@ -21,6 +21,15 @@ import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
+/**
+ * Entity Case <br/>
+ * Stores details of a Case, not created/viewed time. <br/>
+ * <code>status</code> is Open/Close and not otherwise, default is Open. It is
+ * kept as String so that in future one can add additional state to status.
+ * 
+ * @author Chandan
+ * 
+ */
 @XmlRootElement
 public class Case {
 
