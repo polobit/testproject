@@ -318,6 +318,7 @@ var ContactsRouter = Backbone.Router.extend({
                 
             	starify(el);
             	show_map(el);
+            	fill_owners(el, contact.toJSON());
             	//loadWidgets(el, contact.toJSON());
                 }
             });

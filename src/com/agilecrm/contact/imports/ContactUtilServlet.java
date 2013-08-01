@@ -103,7 +103,7 @@ public class ContactUtilServlet extends HttpServlet
     public static void refreshPrefsandSave(ContactPrefs contactPrefs)
 	    throws Exception
     {
-	System.out.println("in refresh token og google contact prefs");
+	System.out.println("in refresh token of google contact prefs");
 	String response = GoogleContactToAgileContactUtil
 		.refreshTokenInGoogle(contactPrefs.refreshToken);
 

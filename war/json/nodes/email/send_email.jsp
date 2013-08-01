@@ -68,16 +68,37 @@
 					"fieldType": "input",
 		            "type": "email"	
 				},
+				{
+				   "label": "Merge Fields",
+		           "category": "Text",
+		           "name": "merge_fields",
+		           "id": "merge_fields",
+		           "title":"Select required merge field to insert into below Text Field.",
+		           "fieldType":"merge_fields",
+		           "target_type":"text_email",
+		           "type":"select"
+		        },
 		        {
 		            "label": "Text",
 					"category": "Text",
 		            "name": "text_email",
+		            "id": "text_email",
 		            "title": "Enter text content here.",
 		            "cols": "75",
 		            "rows": "13",
 		            "required": "required",
 		            "fieldType": "textarea",
 		            "type": "textarea" 
+		        },
+		        {
+				   "label": "Merge Fields",
+		           "category": "HTML",
+		           "name": "merge_fields",
+		           "id": "merge_fields",
+		           "title":"Select required merge field to insert into below HTML Field.",
+		           "fieldType":"merge_fields",
+		           "target_type":"tinyMCEhtml_email",
+		           "type":"select"
 		        },
 		         {   
 					"label": "HTML Editor",

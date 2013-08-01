@@ -31,6 +31,8 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
+import com.google.appengine.api.NamespaceManager;
+import com.thirdparty.PubNub;
 
 /**
  * <code>ScribeServlet</code> is used to create and configure a client to
@@ -81,7 +83,6 @@ public class ScribeServlet extends HttpServlet
 	System.out.println("getService:" + callback);
 	OAuthService service = null;
 
-	// If service is null or service type is LinkedIn service is built
 	if (serviceType == null
 		|| serviceType.equalsIgnoreCase(SERVICE_TYPE_LINKED_IN))
 	{
@@ -96,21 +97,6 @@ public class ScribeServlet extends HttpServlet
 		    SERVICE_TYPE_LINKED_IN);
 	}
 
-	// else if (serviceType.equalsIgnoreCase(SERVICE_TYPE_FRESHBOOKS))
-	//
-	// {
-	// // Creates a Service, by specifying API key, Secret key
-	// service = new ServiceBuilder().provider(FreshBooksApi.class)
-	// .callback(callback).apiKey(Globals.FRESHBOOKS_API_KEY)
-	// .apiSecret(Globals.FRESHBOOKS_SECRET_KEY).build();
-	//
-	// // Gets session and sets attribute "oauth.service" to Twitter type
-	// // as specified by Scribe
-	// req.getSession().setAttribute("oauth.service",
-	// SERVICE_TYPE_FRESHBOOKS);
-	// }
-
-	// If service is null or service type is Twitter service is built
 	else if (serviceType.equalsIgnoreCase(SERVICE_TYPE_TWITTER))
 	{
 	    // Creates a Service, by specifying API key, Secret key
@@ -188,7 +174,7 @@ public class ScribeServlet extends HttpServlet
 	    HttpServletResponse resp) throws IOException
     {
 
-	// Retrieves Token and Service Name from session
+	// Retrieve Token and Service Name from session
 	String serviceName = (String) req.getSession().getAttribute(
 		"oauth.service");
 
@@ -197,32 +183,32 @@ public class ScribeServlet extends HttpServlet
 	Token accessToken = null;
 	OAuthService service = null;
 
+	// oauth 2.0 requires code parameter
 	if (serviceName.equalsIgnoreCase("Stripe")
 		|| serviceName.equalsIgnoreCase("google"))
 	{
 	    code = req.getParameter("code");
 	    System.out.println(code);
 	}
+	// oauth 1.0 requires token and verifier
 	else
 	{
 	    requestToken = (Token) req.getSession().getAttribute(
 		    "oauth.request_token");
 
+	    // if request token in not null, new token is created using
+	    // oAuthToken, which gets the access token from the provider
 	    if (requestToken == null)
 		return;
 
 	    // Token and verifier are read from request parameters
 	    String oAuthToken = req.getParameter("oauth_token");
 	    String oAuthVerifier = req.getParameter("oauth_verifier");
-	    // Gets Service
+	    // Get Service
 	    service = getService(req, resp, serviceName);
 
 	    // Builds a verifier
 	    Verifier verifier = new Verifier(oAuthVerifier);
-
-	    // if request token in not null, new token is created using
-	    // oAuthToken,
-	    // which gets the token from the provider
 
 	    Token token = new Token(oAuthToken, requestToken.getSecret());
 
@@ -291,6 +277,7 @@ public class ScribeServlet extends HttpServlet
 	    gmailPrefs.save();
 	}
 
+	// if service type is stripe, we post the code and get the access token
 	else if (serviceNameInSession.equalsIgnoreCase(SERVICE_TYPE_STRIPE))
 	{
 	    System.out.println("In stripe save");
@@ -320,6 +307,7 @@ public class ScribeServlet extends HttpServlet
 	    saveWidgetPrefs(widgetId, properties);
 	}
 
+	// if service type is google, we post the code and get the access token
 	else if (serviceNameInSession.equalsIgnoreCase(SERVICE_TYPE_GOOGLE))
 	{
 	    System.out.println("In google save token");
@@ -332,8 +320,10 @@ public class ScribeServlet extends HttpServlet
 	    oAuthRequest.addBodyParameter("client_secret",
 		    Globals.GOOGLE_SECRET_KEY);
 	    oAuthRequest.addBodyParameter("scope", "");
-	    oAuthRequest.addBodyParameter("redirect_uri",
-		    "http://localhost:8888/backend/googleservlet");
+	    oAuthRequest
+		    .addBodyParameter(
+			    "redirect_uri",
+			    "https://null-dot-sandbox-dot-agile-crm-cloud.appspot.com/backend/googleservlet");
 	    oAuthRequest.addBodyParameter("code", code);
 	    oAuthRequest.addBodyParameter("grant_type", "authorization_code");
 
@@ -349,7 +339,8 @@ public class ScribeServlet extends HttpServlet
 	    System.out.println(properties.toString());
 
 	    if (properties.containsKey("error"))
-		System.out.println(properties.get("error"));
+		PubNub.accessPubNubPublish(NamespaceManager.get(),
+			"An error occured. Please try importing again");
 	    else
 	    {
 
@@ -364,9 +355,14 @@ public class ScribeServlet extends HttpServlet
 		// initialize backend to save contacts
 		ContactsImportUtil.initilaizeImportBackend(contactPrefs);
 
+		PubNub.accessPubNubPublish(NamespaceManager.get(),
+			"Import scheduled");
+
 	    }
 
 	}
+
+	// return url is retrieved from session
 	String returnURL = (String) req.getSession().getAttribute("return_url");
 	System.out.println("return url" + returnURL);
 
@@ -395,6 +391,8 @@ public class ScribeServlet extends HttpServlet
 
 	// Get service based on the params
 	String serviceName = req.getParameter("service");
+
+	// Build the scribe service, with the required credentails
 	OAuthService service = getService(req, resp, serviceName);
 
 	String url;
@@ -410,26 +408,17 @@ public class ScribeServlet extends HttpServlet
 	    resp.sendRedirect(return_url);
 	    return;
 	}
+
+	// oauth 2.0
 	if (serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE)
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE))
 	{
+	    // Redirect URL
 	    url = service.getAuthorizationUrl(null);
 
 	    System.out.println("redirect url" + url);
 	}
-	// else if (serviceName.equalsIgnoreCase(SERVICE_TYPE_FRESHBOOKS))
-	// {
-	//
-	// // token = service.getRequestToken();
-	// // System.out.println(token);
-	// OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST,
-	// FreshBooksApi.REQUEST_TOKEN_URL);
-	// Response res = oAuthRequest.send();
-	// System.out.println(res.getBody());
-	// url = "";
-	// System.out.println("freshboooks redirect url" + url);
-	//
-	// }
+	// oauth 1.0
 	else
 	{
 	    token = service.getRequestToken();
@@ -450,8 +439,8 @@ public class ScribeServlet extends HttpServlet
 	if (pluginId != null)
 	    req.getSession().setAttribute("plugin_id", pluginId);
 
-	System.out.println("in response redirect");
-	System.out.println(resp);
+	System.out.println("in setup of scribe response " + resp);
+
 	// Redirect URL
 	resp.sendRedirect(url);
     }
@@ -475,12 +464,14 @@ public class ScribeServlet extends HttpServlet
 	// Ouath2.0 gives code, with this code we can post and get access token
 	String code = req.getParameter("code");
 
-	// If the request is from imports, we get this parameter
+	// If the request is from imports we get this parameter
 	String serviceType = req.getParameter("service_type");
 
-	// Initializes backends to import contacts
+	// This happens when we have the user gmail tokens with us, there is no
+	// need of authenticating him agian
 	if (serviceType != null)
 	{
+	    // Initializes backends to import contacts
 	    initializeBackendsToImportContacts(serviceType);
 	    return;
 	}
@@ -502,6 +493,13 @@ public class ScribeServlet extends HttpServlet
 
     }
 
+    /**
+     * Process the post request to servlet request, request can be sent either
+     * from application client or from service provider (After connecting to
+     * provider and returned). If request parameters have "oauth_token" and
+     * "oauth_verifier" then request is from provider with token keys which are
+     * saved in widget.
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 	    throws ServletException, IOException
@@ -546,6 +544,13 @@ public class ScribeServlet extends HttpServlet
 	widget.save();
     }
 
+    /**
+     * This is called when the user comes second time.Since we have his
+     * preferences, we can initialize backends with the available preferences
+     * 
+     * @param type
+     *            {@link ContactPrefs.Type}
+     */
     public void initializeBackendsToImportContacts(String type)
     {
 
@@ -555,7 +560,7 @@ public class ScribeServlet extends HttpServlet
 	System.out.println("in initialize backends scribe");
 	System.out.println(contactPrefs);
 
-	// if contact prefs exists for google initilaize backend
+	// if contact prefs exists for google initialize backends
 	if (contactPrefs != null)
 	    ContactsImportUtil.initilaizeImportBackend(contactPrefs);
 	return;

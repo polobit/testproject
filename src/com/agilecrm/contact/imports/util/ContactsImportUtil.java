@@ -108,7 +108,7 @@ public class ContactsImportUtil
 		{
 		    System.out.println(email.getAddress());
 
-		    // checks for dupliacte emails ansd skips contact
+		    // checks for duplicate emails and skips contact
 		    if (ContactUtil.isExists(email.getAddress()))
 			continue main;
 

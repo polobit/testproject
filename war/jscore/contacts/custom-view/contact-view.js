@@ -33,11 +33,11 @@ function contactTableView(base_model) {
 
 	// Converts base_model (contact) in to JSON
 	var contact = base_model.toJSON();
-
+	var el = itemView.el;
 	// Clears the template, because all the fields are appended, has to be reset
 	// for each contact
-	$('#contacts-custom-view-model-template').empty();
-
+	// $('#contacts-custom-view-model-template').empty();
+	
 	// Iterates through, each field name and appends the field according to
 	// order of the fields
 	$.each(fields, function(index, field_name) {
@@ -47,21 +47,21 @@ function contactTableView(base_model) {
 			var property = getProperty(contact.properties, field_name);
 			if(!property)
 			{
-				$('#contacts-custom-view-model-template').append(getTemplate('contacts-custom-view-custom', {}));
+				$(el).append(getTemplate('contacts-custom-view-custom', {}));
 				return;
 			}
 			
-			$('#contacts-custom-view-model-template').append(getTemplate('contacts-custom-view-custom', property));
+			$(el).append(getTemplate('contacts-custom-view-custom', property));
 			return;
 		}
 		
-		$('#contacts-custom-view-model-template').append(
-				getTemplate('contacts-custom-view-' + field_name, contact));
+/*		$('#contacts-custom-view-model-template').append(
+				getTemplate('contacts-custom-view-' + field_name, contact));*/
+		$(el).append(getTemplate('contacts-custom-view-' + field_name, contact));
 	});
 
 	// Appends model to model-list template in collection template
-	$(('#contacts-custom-view-model-list'), this.el).append(
-			itemView.render().el);
+	$(('#contacts-custom-view-model-list'), this.el).append(el);
 
 	// Sets data to tr
 	$(('#contacts-custom-view-model-list'), this.el).find('tr:last').data(
