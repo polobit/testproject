@@ -32,7 +32,7 @@ import com.google.gdata.data.extensions.StructuredPostalAddress;
 import com.googlecode.objectify.Key;
 
 /**
- * <code>ContactsImporter</code> contains methods to initilaize backend process
+ * <code>ContactsImporter</code> contains methods to initialize backend process
  * and save imported contacts in agile
  * 
  * @author Tejaswi
@@ -41,7 +41,7 @@ import com.googlecode.objectify.Key;
 public class ContactsImportUtil
 {
     /**
-     * Initializes backend with contact prefrences and hits
+     * Initializes backend with contact preferences and hits
      * {@link ContactUtilServlet}
      * 
      * @param contactPrefs
@@ -49,6 +49,10 @@ public class ContactsImportUtil
      */
     public static void initilaizeImportBackend(ContactPrefs contactPrefs)
     {
+	// notifies user after adding contacts
+	BulkActionNotifications
+		.publishconfirmation(BulkAction.CONTACTS_IMPORT_SCHEDULED);
+
 	Queue queue = QueueFactory.getQueue("bulk-actions-queue");
 	TaskOptions taskOptions;
 	try
@@ -82,7 +86,7 @@ public class ContactsImportUtil
      * @param entries
      *            {@link List} of {@link ContactEntry}
      * @param ownerKey
-     *            domian user key
+     *            domain user key
      */
     public static void saveGoogleContactsInAgile(List<ContactEntry> entries,
 	    Key<DomainUser> ownerKey)
@@ -106,7 +110,7 @@ public class ContactsImportUtil
 	    for (Email email : entry.getEmailAddresses())
 		if (email.getAddress() != null)
 		{
-		    System.out.println(email.getAddress());
+		    System.out.println("Email: " + email.getAddress());
 
 		    // checks for duplicate emails and skips contact
 		    if (ContactUtil.isExists(email.getAddress()))

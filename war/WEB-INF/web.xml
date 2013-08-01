@@ -265,6 +265,7 @@
 		<servlet-name>EnterDomain</servlet-name>
 		<url-pattern>/enter-domain</url-pattern>
 	</servlet-mapping>
+	
 
 
 	<filter>
@@ -383,6 +384,16 @@
 	<servlet-mapping>
 		<servlet-name>StatsServlet</servlet-name>
 		<url-pattern>/stats</url-pattern>
+	</servlet-mapping>
+	
+	
+	<servlet>
+		<servlet-name>upload_contacts</servlet-name>
+		<servlet-class>com.agilecrm.contact.upload.blob.UploadServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>upload_contacts</servlet-name>
+		<url-pattern>/upload</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
