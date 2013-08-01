@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -382,6 +383,19 @@ public class ContactUtil
 
 	}
 
+	/**
+	 * Creates contacts from CSV string using a contact prototype built from
+	 * import page. It takes owner id to sent contact owner explicitly instead
+	 * of using session manager, as there is a chance of getting null in
+	 * backends.
+	 * 
+	 * Contact is saved only if there is email exists and it is a valid email
+	 * 
+	 * @param csv
+	 * @param contact
+	 * @param ownerId
+	 * @throws IOException
+	 */
 	public static void createContactsFromCSV(String csv, Contact contact, String ownerId) throws IOException
 	{
 
@@ -392,6 +406,7 @@ public class ContactUtil
 		contact.type = Contact.Type.PERSON;
 		List<ContactField> properties = contact.properties;
 
+		// Creates domain user key, which is set as a contact owner
 		Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
 
 		for (String[] csvValues : contacts)
@@ -399,14 +414,35 @@ public class ContactUtil
 			contact.id = null;
 			contact.created_time = 0l;
 			contact.setContactOwner(ownerKey);
-
+			contact.properties = new ArrayList<ContactField>();
 			for (int j = 0; j < csvValues.length; j++)
 			{
-				properties.get(j).value = csvValues[j];
+
+				ContactField field = properties.get(j);
+
+				// To avoid saving ignore field value
+				if (field == null)
+					continue;
+
+				// This is hardcoding but found no way to know how to get tags
+				// from the CSV file
+				if (field.name.equals("tags"))
+				{
+					contact.tags.add(csvValues[j]);
+					System.out.println("field name " + field.name);
+					continue;
+				}
+				field.value = csvValues[j];
+
+				contact.properties.add(field);
 			}
 
-			// If contact has no email address, contact is not saved
-			if (ContactUtil.isExists(contact.getContactFieldValue(Contact.EMAIL)))
+			System.out.println(contact);
+
+			// If contact has no email address or duplicate email address,
+			// contact is not saved
+			if (StringUtils.isEmpty(contact.getContactFieldValue(Contact.EMAIL))
+					|| ContactUtil.isExists(contact.getContactFieldValue(Contact.EMAIL)))
 				continue;
 
 			// If contact has an invalid email address contact is not saved
