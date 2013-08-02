@@ -155,8 +155,18 @@ public class ContactUtil
 		return dao.listByProperty(searchMap);
 	}
 
-	// Fetch all contacts, which are related to Company-companyId,i.e.
-	// Organization
+	/**
+	 * Fetch all contacts, which are related to Company-companyId,i.e.
+	 * 
+	 * @param companyId
+	 *            - id of company whose related contacts we wanna fetch
+	 * @param max
+	 *            - max number of results
+	 * @param cursor
+	 *            - objectify cursor to continue where we left off last time
+	 * @return List of Contacts(PERSON) which have this company in
+	 *         Company/Organization Field
+	 */
 	public static List<Contact> getAllContactsOfCompany(String companyId, int max, String cursor)
 	{
 		Map<String, Object> searchMap = new HashMap<String, Object>();
