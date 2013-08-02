@@ -18,11 +18,11 @@ import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.util.WorkflowUtil;
-import com.campaignio.URLShortener;
+import com.campaignio.URLShortener.URLShortener;
+import com.campaignio.URLShortener.util.URLShortenerUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.servlets.deferred.EmailClickDeferredTask;
-import com.campaignio.util.URLShortenerUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -40,15 +40,13 @@ import com.google.appengine.api.taskqueue.TaskOptions;
 @SuppressWarnings("serial")
 public class RedirectServlet extends HttpServlet
 {
-    public void doPost(HttpServletRequest request, HttpServletResponse response)
-	    throws IOException
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
 	doGet(request, response);
     }
 
     @SuppressWarnings({ "unchecked", "deprecation" })
-    public void doGet(HttpServletRequest req, HttpServletResponse resp)
-	    throws IOException
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
     {
 	resp.setContentType("text/plain");
 
@@ -81,35 +79,24 @@ public class RedirectServlet extends HttpServlet
 
 	    Contact contact = null;
 
-	    System.out.println("Namespace in RedirectServlet: "
-		    + NamespaceManager.get());
+	    System.out.println("Namespace in RedirectServlet: " + NamespaceManager.get());
 
 	    contact = ContactUtil.getContact(Long.parseLong(subscriberId));
 
-	    Workflow workflow = WorkflowUtil.getWorkflow(Long
-		    .parseLong(urlShortener.campaign_id));
+	    Workflow workflow = WorkflowUtil.getWorkflow(Long.parseLong(urlShortener.campaign_id));
 
 	    if (workflow != null)
 	    {
-		LogUtil.addLogToSQL(urlShortener.campaign_id, subscriberId,
-			"Email link clicked " + urlShortener.long_url
-				+ " of campaign " + workflow.name,
+		LogUtil.addLogToSQL(urlShortener.campaign_id, subscriberId, "Email link clicked " + urlShortener.long_url + " of campaign " + workflow.name,
 			LogType.EMAIL_CLICKED.toString());
 
 		try
 		{
-		    NotificationPrefsUtil
-			    .executeNotification(
-				    Type.CLICKED_LINK,
-				    contact,
-				    new JSONObject()
-					    .put("custom_value",
-						    new JSONObject()
-							    .put("workflow_name",
-								    workflow.name)
-							    .put("url_clicked",
-								    urlShortener.long_url)
-							    .toString()));
+		    NotificationPrefsUtil.executeNotification(
+			    Type.CLICKED_LINK,
+			    contact,
+			    new JSONObject().put("custom_value", new JSONObject().put("workflow_name", workflow.name).put("url_clicked", urlShortener.long_url)
+				    .toString()));
 		}
 		catch (Exception e)
 		{
@@ -169,8 +156,7 @@ public class RedirectServlet extends HttpServlet
 		    e.printStackTrace();
 		}
 
-		params += ("&" + propertyName.trim() + "=" + URLEncoder
-			.encode(value.trim()));
+		params += ("&" + propertyName.trim() + "=" + URLEncoder.encode(value.trim()));
 	    }
 
 	    System.out.println("Forwarding it to " + longURL + " " + params);
@@ -184,11 +170,9 @@ public class RedirectServlet extends HttpServlet
 		urlJSON.put("long_url", longURL);
 
 		// Interrupt clicked in DeferredTask
-		EmailClickDeferredTask emailClickDeferredTask = new EmailClickDeferredTask(
-			urlShortener.tracker_id, urlJSON.toString());
+		EmailClickDeferredTask emailClickDeferredTask = new EmailClickDeferredTask(urlShortener.tracker_id, urlJSON.toString());
 		Queue queue = QueueFactory.getDefaultQueue();
-		queue.add(TaskOptions.Builder
-			.withPayload(emailClickDeferredTask));
+		queue.add(TaskOptions.Builder.withPayload(emailClickDeferredTask));
 	    }
 	    catch (Exception e)
 	    {

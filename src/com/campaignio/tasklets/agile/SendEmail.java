@@ -9,11 +9,11 @@ import org.json.JSONObject;
 
 import com.agilecrm.util.DBUtil;
 import com.agilecrm.util.Util;
+import com.campaignio.URLShortener.util.URLShortenerUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
-import com.campaignio.util.URLShortenerUtil;
 import com.thirdparty.SendGrid;
 
 /**
