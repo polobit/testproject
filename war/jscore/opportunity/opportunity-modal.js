@@ -60,7 +60,7 @@ $(function(){
 
     });
     
-	$('#opportunities-model-list > tr').live('click', function(e) {
+	$('#opportunities-model-list > tr, #dashboard-opportunities-model-list > tr').live('click', function(e) {
 		e.preventDefault();
 		updateDeal($(this).data());
 	});

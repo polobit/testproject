@@ -11,64 +11,64 @@ function setupDashboard(el)
 
 function setUpDashboardEntities(el) {
 	
-	/*var profileMeter = new Base_Model_View({
-		url : 'core/api/profile-status',		
-        template: "profile-meter"
-	})
-	
-	$("#profile-meter").html(profileMeter.render().el);
-	*/
-	
-	
-	var myRecentContacts = new Base_Collection_View({
-		url: 'core/api/contacts/recent?page_size=5' ,
-        restKey: "contacts",
-        templateKey: "dashboard-contacts",
-        individual_tag_name: 'tr',
-        sort_collection: false,
-    });
-	myRecentContacts.collection.fetch();
-	
-    	$('#recent-contacts', el).html(myRecentContacts.render().el);
-
-    	var tasksDashboardListView = new Base_Collection_View({
-			url : '/core/api/tasks/my/dashboardtaskstasks',
-			restKey : "task",
-			sortKey : "due",
-			templateKey   : "tasks-dashboard1",
-			individual_tag_name : 'tr',
-			postRenderCallback: function(el) {
-				head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-           		 $(".task-due-time", el).timeago();
-           		});
-			}
-		});
-    	
-    	
-    		totalRows=1;
-    		tasksDashboardListView.appendItem = append_tasks_dashboard;
-    		tasksDashboardListView.collection.fetch();
-            $('#my-tasks').html(tasksDashboardListView.el);
-            
-            
+			/*var profileMeter = new Base_Model_View({
+				url : 'core/api/profile-status',		
+		        template: "profile-meter"
+			})
+			
+			$("#profile-meter").html(profileMeter.render().el);
+			*/
+			
+			
+			var myRecentContacts = new Base_Collection_View({
+				url: 'core/api/contacts/recent?page_size=5' ,
+		        restKey: "contacts",
+		        templateKey: "dashboard-contacts",
+		        individual_tag_name: 'tr',
+		        sort_collection: false,
+		    });
+			myRecentContacts.collection.fetch();
+			
+		    $('#recent-contacts', el).html(myRecentContacts.render().el);
+		
+			var tasksDashboardListView = new Base_Collection_View({
+				url : '/core/api/tasks/my/dashboardtaskstasks',
+				restKey : "task",
+				sortKey : "due",
+				templateKey   : "tasks-dashboard1",
+				individual_tag_name : 'tr',
+				postRenderCallback: function(el) {
+					head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+		       		 	$(".task-due-time", el).timeago();
+		       		});
+				}
+			});
+			
+			
+			totalRows=1;
+			tasksDashboardListView.appendItem = append_tasks_dashboard;
+			tasksDashboardListView.collection.fetch();
+		    $('#my-tasks').html(tasksDashboardListView.el);
+		    
+		        
 			var myDeals = new Base_Collection_View({
 				url: 'core/api/opportunity/my/upcoming-deals',
-	            restKey: "opportunity",
-	            templateKey: "dashboard-opportunities",
-	            individual_tag_name: 'tr',
-	            page_size : 5,
-	            sortKey:"created_time",
-	            descending: true,
-	            postRenderCallback: function(el) {
-	            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-	            		 $(".deal-created-time", el).timeago();
-	            	})
-	            }
-	        });
+		        restKey: "opportunity",
+		        templateKey: "dashboard-opportunities",
+		        individual_tag_name: 'tr',
+		        page_size : 5,
+		        sortKey:"created_time",
+		        descending: true,
+		        postRenderCallback: function(el) {
+		        	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+		        		 $(".deal-close-time", el).timeago();
+		        	})
+		        }
+		    });
 			myDeals.collection.fetch();
-	        	$('#my-deals').html(myDeals.el);
-	        	
-	        var workflowsListView = new Base_Collection_View({
+		    	$('#my-deals').html(myDeals.el);
+		    	
+		    var workflowsListView = new Base_Collection_View({
 				url : '/core/api/campaigns/logs/recent?page_size=5',
 				restKey : "workflow",
 				templateKey : "dashboard-campaign-logs",
@@ -78,20 +78,20 @@ function setUpDashboardEntities(el) {
 					head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
 						$("time.log-created-time", el).timeago();
 					});
-	        }
+		    }
 			});
-	        
-
+		    
+		
 			workflowsListView.collection.fetch();
 			$('#my-logs').html(workflowsListView.el);
 }
 
 function setupSubscriptionDetails(el)
 {					
-	var view = new Base_Model_View({
-		url : 'core/api/subscription',
-		template : "dashboard-account-info",
-	});
+		var view = new Base_Model_View({
+			url : 'core/api/subscription',
+			template : "dashboard-account-info",
+		});
 
 		view.model.fetch({success: function(data){
 			if(!$.isEmptyObject(data.toJSON())) {

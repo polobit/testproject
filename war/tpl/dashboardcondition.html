@@ -41,24 +41,26 @@
         </table>
      </form>
 </section>
-<br/>
 {{else}}
 {{set_up_dashboard_padcontent "tasks"}}
 {{/if}}
 </script>
 
 <script id="tasks-dashboard1-model-template" type="text/html">
-
 	<td style="border-top:1px dotted #DDD;height:34px;"><div style="text-align:justify;width:8em;overflow:hidden;margin-left:10px;">{{#is_link subject}}<b class="activate-link">{{else}}<b>{{/is_link}}{{safe_string subject}}</b></div></td>
     <td><div style="text-align:justify;white-space:nowrap;width:5em;overflow:hidden;"><span style="margin-right:10px;" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></div> </td>
     <td><div style="text-align:justify;white-space:nowrap;width:6em;overflow:hidden;"><i class="{{icons type}}"></i>&nbsp;<span>{{type}}</span></div></td>
     <td><div style="text-align:justify;white-space:nowrap;width:10em;overflow:hidden;"> <time class="task-due-time" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999; ">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</time></div></td>
     <td>
-		<div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:78px;overflow:hidden;display:inline-block;">
-        	{{#each contacts}}
-          	 <img src="{{gravatarurl properties 50}}" style="margin-left:0px;" width="37px" height="37px" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
-        	{{/each}}</div>
+		<div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:103px;overflow:hidden;display:inline-block;">
+		{{#each contacts}}
+        	{{#if_contact_type "PERSON"}}
+        		<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline"  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+        	{{/if_contact_type}}
+			{{#if_contact_type "COMPANY"}}
+        		<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+        	{{/if_contact_type}}
+       {{/each}}</div>
        {{#if_greater this.contacts.length "3"}}<span style="margin-right:-14px">...</span>{{/if_greater}}
     </td>
- 
 </script>

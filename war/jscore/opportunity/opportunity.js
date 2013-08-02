@@ -11,7 +11,6 @@ $(function () {
 	 * When mouseover on any row of opportunities list, the popover of deal is shown
 	 **/
 	$('#opportunities-model-list > tr').live('mouseenter', function () {
-        //, #opportunities-by-milestones-model-list > div > div > ul > li
         var data = $(this).find('.data').attr('data');
 
         var currentDeal = App_Deals.opportunityCollectionView.collection.get(data);
@@ -26,7 +25,6 @@ $(function () {
         	"data-content" :  ele
         });
        
-       
         /**
          * Checks for last 'tr' and change placement of popover to 'top' inorder
          * to prevent scrolling on last row of list
@@ -39,13 +37,19 @@ $(function () {
         });
         $(this).popover('show');
      });
-    
 	
     /**
      * On mouse out on the row hides the popover.
      **/
 	$('#opportunities-model-list > tr').live('mouseleave', function(){
     	 $(this).popover('hide');
+    });
+	
+    /**
+     * On click on the row hides the popover.
+     **/
+	$('#opportunities-model-list > tr, .hide-popover').live('click', function(){
+    	 $(this).closest('tr').popover('hide');
     });
     
    /**
@@ -90,10 +94,10 @@ function populateUsers(id, el ,value, key, callback) {
 			// If domain user is deleted owner is undefined
 			if(value[key])
 				// While deserialize set agile user id from user prefs, to save agile user key in opportunity 
-				$('#' + id, el).find('option[value='+value[key].id+']').attr("selected", "selected");
+				$('#' + id, el).find('option[value='+ value[key].id +']').attr("selected", "selected");
 		}
 		else
-			$('#' + id, el).find('option[value='+CURRENT_DOMAIN_USER.id+']').attr("selected", "selected");
+			$('#' + id, el).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
 		// If callback is present, it is called to deserialize the select field
 		if (callback && typeof (callback) === "function") {
 			// execute the callback, passing parameters as necessary
@@ -149,7 +153,7 @@ function populateMilestones(el, dealsDetails, value, callback){
 														
 							// Quotes required for option value because milestone can have spaces in between
 							if(value && value.milestone)
-								$("#milestone",el).find('option[value=\"'+value.milestone+'\"]').attr("selected", "selected");
+								$("#milestone",el).find('option[value=\"'+ value.milestone +'\"]').attr("selected", "selected");
 								
 							// If callback is present, it is called to deserialize the select field
 							if (callback && typeof (callback) === "function") {
