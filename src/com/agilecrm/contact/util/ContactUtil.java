@@ -161,9 +161,7 @@ public class ContactUtil
 	{
 		Map<String, Object> searchMap = new HashMap<String, Object>();
 		searchMap.put("type", Type.PERSON);
-		// searchMap.put("related_company_id",new
-		// Key<Contact>(Contact.class,Long.valueOf(companyId)));
-		searchMap.put("contactCompanyKey", new Key<Contact>(Contact.class, Long.valueOf(companyId)));
+		searchMap.put("contact_company_key", new Key<Contact>(Contact.class, Long.valueOf(companyId)));
 		if (max != 0)
 			return dao.fetchAll(max, cursor, searchMap);
 
