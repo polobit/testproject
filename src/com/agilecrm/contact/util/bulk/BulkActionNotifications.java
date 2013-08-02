@@ -10,11 +10,8 @@ public class BulkActionNotifications
 {
     public static enum BulkAction
     {
-	BULK_ACTIONS(""), DELETE("%s Contacts deleted"), ADD_TAGS(
-		"Tag(s) %s added to %s contacts"), ENROLL_CAMPAIGN(
-		"%s Contacts added to campaign"), OWNER_CHANGE(
-		"Owner changed for %s contacts"), CONTACTS_IMPORT(
-		"%s contacts uploaded"), CONTACTS_IMPORT_MESSAGE("%s");
+	BULK_ACTIONS(""), DELETE("%s Contacts deleted"), ADD_TAGS("Tag(s) %s added to %s contacts"), ENROLL_CAMPAIGN("%s Contacts added to campaign"), OWNER_CHANGE(
+		"Owner changed for %s contacts"), CONTACTS_IMPORT("%s contacts uploaded"), CONTACTS_IMPORT_MESSAGE("%s");
 
 	String message;
 
@@ -30,14 +27,12 @@ public class BulkActionNotifications
 	}
     }
 
-    public static void publishconfirmation(BulkAction type,
-	    String... parameters)
+    public static void publishconfirmation(BulkAction type, String... parameters)
     {
 	JSONObject messageJSON = new JSONObject();
 	try
 	{
-	    messageJSON.put("message",
-		    String.format(type.getMessage(), parameters));
+	    messageJSON.put("message", String.format(type.getMessage(), parameters));
 
 	    messageJSON.put("type", BulkAction.BULK_ACTIONS);
 	    messageJSON.put("sub_type", type);
@@ -48,7 +43,6 @@ public class BulkActionNotifications
 	    e.printStackTrace();
 	}
 
-	PubNub.accessPubNubPublish(NamespaceManager.get(),
-		messageJSON.toString());
+	PubNub.pubNubPush(NamespaceManager.get(), messageJSON);
     }
 }

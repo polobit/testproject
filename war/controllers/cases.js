@@ -1,20 +1,15 @@
 /**
- * Creates backbone router for Deals/Opportunities create, read and update 
+ * Creates backbone router for Case create, read and update 
  * operations
  **/
 var CasesRouter = Backbone.Router.extend({
 
     routes: {
-    	
-    	 /* Deals/Opportunity */
         "cases": "listCases",
-        //"deals-add": "dealsAdd",
-        //"deals/:id": "dealsDetails"
     },
     
     /**
-     * Fetches all the opportunities and shows them as a list. Also fetches Miapplestones pie-chart 
-     * and Details graph if deals exist.
+     * Fetches all the case and shows them as a list. 
      *  
      */
     listCases: function () 
@@ -26,7 +21,6 @@ var CasesRouter = Backbone.Router.extend({
 			individual_tag_name: 'tr'
 		});
 
-        /* Fetches Milestones Pie-Chart and Details Graph */
     	this.casesCollectionView.collection.fetch();
         
         $('#content').html(this.casesCollectionView.render().el);

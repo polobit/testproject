@@ -1,8 +1,12 @@
+/**
+ * Case is modelled along the lines of Deals. So functionally they are very similar.
+ */
+
 //handle popover
 $(function () {
 	
 	/**
-	 * When mouseover on any row of opportunities list, the popover of deal is shown
+	 * When mouseover on any row of opportunities list, the pop-over of deal is shown
 	 **/
 	$('#cases-model-list > tr').live('mouseenter', function () {
         
@@ -13,6 +17,7 @@ $(function () {
         console.log(currentCase.toJSON());
         
         var ele = getTemplate("cases-detail-popover", currentCase.toJSON());
+        
         $(this).attr({
         	"rel" : "popover",
         	"data-placement" : 'right',
@@ -55,7 +60,6 @@ $(function () {
     **/
 	$('#close-case').live('click', function(e){
     	e.preventDefault();
-//    	window.history.back();
     });
 
 });
@@ -74,9 +78,7 @@ $(function(){
     	// To know updated or added cases form names
     	var modal_id = $(this).closest('.cases-modal').attr("id");
     	var form_id = $(this).closest('.cases-modal').find('form').attr("id");
-    	
        	var json = serializeForm(form_id);
-//		console.log(json);
        	savecases(form_id, modal_id, this, json);    	
 	});
 	
@@ -219,16 +221,16 @@ function savecases(formId, modalId, saveBtn, json)
 			});
 			
 			var cases = data.toJSON();
+			
 			// Updates data to timeline
-/*If(TIMELINE) page*/			
+/*If(Contact-Details) page*/			
 			if (App_Contacts.contactDetailView
-					&& Current_Route == "contact/"
-							+ App_Contacts.contactDetailView.model.get('id')) 
+					&& Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id')) 
 			{
 
 				if(App_Contacts.contactDetailView.model.get('type')=='COMPANY')
 				{
-					activate_timeline_tab();
+					activate_timeline_tab();  // if this contact is of type COMPANY, simply activate first tab & fill details
 					fill_company_related_contacts(App_Contacts.contactDetailView.model.id,'company-contacts'); 
 					return;
 				}
@@ -250,7 +252,7 @@ function savecases(formId, modalId, saveBtn, json)
 						 // If timeline is not defined yet, initiates with the
 						 // data else inserts
 						 
-						if (timelineView.collection.length == 0) {
+						if (timelineView.collection && timelineView.collection.length == 0) {
 							timelineView.collection.add(data);
 							
 							setup_timeline(timelineView.collection.toJSON(),
@@ -267,7 +269,7 @@ function savecases(formId, modalId, saveBtn, json)
 					}//end if
 				}); //end each
 			}//end if
-/*enf-if(TIMELINE) */
+/*end-if(Contact-Details) */
 				else if(Current_Route == 'cases')
 				{
 					if(newEntry==true)App_Cases.casesCollectionView.collection.add(data);
@@ -275,7 +277,6 @@ function savecases(formId, modalId, saveBtn, json)
 					{						
 						App_Cases.casesCollectionView.collection.remove(json);
 						App_Cases.casesCollectionView.collection.add(data);
-						//location.reload(true);
 					}
 					App_Cases.casesCollectionView.render(true);
 				}
