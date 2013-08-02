@@ -1,5 +1,7 @@
 package com.agilecrm.social;
 
+import java.io.IOException;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -74,7 +76,6 @@ public class ZendeskUtil
      * @throws Exception
      *             if the response is an exception
      */
-
     public static String addTicket(Widget widget, String name, String email,
 	    String subject, String description) throws Exception
     {
@@ -100,7 +101,6 @@ public class ZendeskUtil
 
     }
 
-    // Run - Post Chat
     /**
      * Calls chat method of zendesk class in ClickDeskPlugins server using REST
      * API to update ticket in Zendesk
@@ -117,7 +117,6 @@ public class ZendeskUtil
      * @throws Exception
      *             if the response is an exception
      */
-
     public static String updateTicket(Widget widget, String ticketNumber,
 	    String description) throws Exception
     {
@@ -138,6 +137,14 @@ public class ZendeskUtil
 
     }
 
+    /**
+     * Retrieves info of the Zendesk user based on his email.
+     * 
+     * @param widget
+     *            {@link Widget}
+     * @return {@link String} form of JSON
+     * @throws Exception
+     */
     public static String getUserInfo(Widget widget) throws Exception
     {
 	String email = widget.getProperty("zendesk_username");
@@ -155,9 +162,35 @@ public class ZendeskUtil
 	String response = HTTPUtil.accessHTTPURL(pluginURL
 		+ "core/agile/zendesk/users", prefsJSON.toString(), "PUT");
 
+	System.out.println("zendeks users " + response);
+	try
+	{
+	    new JSONObject(response);
+	}
+	catch (Exception e)
+	{
+	    if (response.contains("404"))
+		throw new IOException("");
+	    if (response.contains("401") || response.contains("302"))
+		throw new Exception("Authentication failed. Please try again");
+
+	}
+
 	return response;
     }
 
+    /**
+     * Retrieves tickets for an email and filters them on ticket status
+     * 
+     * @param widget
+     *            {@link Widget}
+     * @param email
+     *            {@link String} email, for which tickets are retrieved
+     * @param status
+     *            {@link String} status of ticket
+     * @return {@link String} form of JSON
+     * @throws Exception
+     */
     public static String getTicketsByStatus(Widget widget, String email,
 	    String status) throws Exception
     {
@@ -178,6 +211,17 @@ public class ZendeskUtil
 	return response;
     }
 
+    /**
+     * Retrieves info of Zendesk user and retrieves contacts based on the email
+     * of contact
+     * 
+     * @param widget
+     *            {@link Widget}
+     * @param email
+     *            {@link String} email, for which tickets are retrieved
+     * @return {@link String} form of JSON
+     * @throws Exception
+     */
     public static String getZendeskProfile(Widget widget, String email)
 	    throws Exception
     {
@@ -224,11 +268,6 @@ public class ZendeskUtil
 			    widget.getProperty("zendesk_password"))
 		    .put("zendesk_url", widget.getProperty("zendesk_url"));
 
-	    // JSONObject pluginPrefs = new JSONObject()
-	    // .put("zendesk_username", "gadamtest5@gmail.com")
-	    // .put("zendesk_password", "mantra123")
-	    // .put("zendesk_url", "https://devikatest.zendesk.com");
-
 	    return pluginPrefs;
 	}
 	catch (JSONException e)
@@ -239,22 +278,4 @@ public class ZendeskUtil
 
     }
 
-    public static void main(String[] args)
-    {
-	try
-	{
-	    System.out.println(ZendeskUtil.getUserInfo(null));
-	    // System.out.println(ZendeskUtil.addTicket(null, "te",
-	    // "test@agile.com", "test", "desc"));
-	    // System.out.println(ZendeskUtil.updateTicket(null, "1",
-	    // "hi choc"));
-	    // System.out.println(ZendeskUtil.getTicketsByStatus(null,
-	    // "test@zendesk.com", "solved"));
-	}
-	catch (Exception e)
-	{
-	    System.out.println(e.getMessage());
-	    e.printStackTrace();
-	}
-    }
 }

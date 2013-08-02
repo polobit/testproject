@@ -414,7 +414,7 @@ public class ScribeServlet extends HttpServlet
 	 * and widget is updated with new access token and refresh token
 	 */
 	else if (serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE))
-	    saveStipePrefs(req, code);
+	    saveStripePrefs(req, code);
 
 	/*
 	 * if service type is google, we post the code and get the access token
@@ -511,7 +511,7 @@ public class ScribeServlet extends HttpServlet
      *            {@link String} code retrieved after OAuth
      * @throws IOException
      */
-    public static void saveStipePrefs(HttpServletRequest req, String code)
+    public static void saveStripePrefs(HttpServletRequest req, String code)
 	    throws IOException
     {
 	System.out.println("In stripe save");
