@@ -39,6 +39,7 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.AlsoLoad;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -70,7 +71,8 @@ import com.googlecode.objectify.condition.IfDefault;
 @XmlRootElement
 @Unindexed
 @Cached
-public class Contact extends Cursor {
+public class Contact extends Cursor
+{
 	// Key
 	@Id
 	public Long id;
@@ -79,7 +81,8 @@ public class Contact extends Cursor {
 	 * Type of the contact (person or company)
 	 * 
 	 */
-	public static enum Type {
+	public static enum Type
+	{
 		PERSON, COMPANY
 	};
 
@@ -181,15 +184,17 @@ public class Contact extends Cursor {
 	@NotSaved
 	public String entity_type = "contact_entity";
 
-	/*
-	 * related company key of this person, ignored for company entity
+	/**
+	 * related company key of this person, ignored for company entity, this is
+	 * stored in db
 	 */
 	@JsonIgnore
 	@NotSaved(IfDefault.class)
 	@Indexed
-	public Key<Contact> contactCompanyKey = null;
+	@AlsoLoad("contactCompanyKey")
+	public Key<Contact> contact_company_key = null;
 
-	/*
+	/**
 	 * related company key, for network communication
 	 */
 	@NotSaved
@@ -208,13 +213,13 @@ public class Contact extends Cursor {
 	public static final String URL = "url";
 
 	// Dao
-	public static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(
-			Contact.class);
+	public static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
 
 	/**
 	 * Default constructor
 	 */
-	public Contact() {
+	public Contact()
+	{
 
 	}
 
@@ -230,10 +235,9 @@ public class Contact extends Cursor {
 	 * @param properties
 	 *            properties (name, email, address and etc..) of a contact
 	 */
-	public Contact(Type type, LinkedHashSet<String> tags,
-			List<ContactField> properties) {
+	public Contact(Type type, LinkedHashSet<String> tags, List<ContactField> properties)
+	{
 		this.type = type;
-
 		this.tags = tags;
 		this.properties = properties;
 
@@ -244,7 +248,8 @@ public class Contact extends Cursor {
 	 * 
 	 * @return properties as list
 	 */
-	public List<ContactField> getProperties() {
+	public List<ContactField> getProperties()
+	{
 		return properties;
 	}
 
@@ -252,14 +257,16 @@ public class Contact extends Cursor {
 	 * Saves (new) or updates (existing) a contact and executes trigger,
 	 * notification and also adds to search document
 	 */
-	public void save() {
+	public void save()
+	{
 		// Stores current contact id in to a temporary variable, to check
 		// whether contact is newly created or being edited.
 		Long id = this.id;
 
 		Contact oldContact = null;
 
-		if (id != null) {
+		if (id != null)
+		{
 			oldContact = ContactUtil.getContact(id);
 
 			// Sets tags into tags, so they can be compared in
@@ -273,18 +280,17 @@ public class Contact extends Cursor {
 		ContactTriggerUtil.executeTriggerToContact(oldContact, this);
 
 		// Execute notification for contacts
-		ContactNotificationPrefsUtil.executeNotificationToContact(oldContact,
-				this);
+		ContactNotificationPrefsUtil.executeNotificationToContact(oldContact, this);
 
 		if (oldContact != null && isDocumentUpdateRequired(oldContact))
 			return;
 
 		// Enables to build "Document" search on current entity
-		AppengineSearch<Contact> search = new AppengineSearch<Contact>(
-				Contact.class);
+		AppengineSearch<Contact> search = new AppengineSearch<Contact>(Contact.class);
 
 		// If contact is new then add it to document else edit document
-		if (id == null) {
+		if (id == null)
+		{
 			search.add(this);
 			return;
 		}
@@ -297,26 +303,27 @@ public class Contact extends Cursor {
 	 * @param object
 	 * @return
 	 */
-	public boolean isDocumentUpdateRequired(Object object) {
+	public boolean isDocumentUpdateRequired(Object object)
+	{
 		Contact contact = (Contact) object;
 		Set<String> currentContactTags = getContactTags();
 
 		// If tags and properties length differ, contact is considered to be
 		// changed
-		if (contact.tags.size() != currentContactTags.size()
-				|| contact.properties.size() != properties.size()
-				|| contact.star_value != star_value
-				|| contact.lead_score != lead_score)
+		if (contact.tags.size() != currentContactTags.size() || contact.properties.size() != properties.size()
+				|| contact.star_value != star_value || contact.lead_score != lead_score)
 			return false;
 
 		// Checks if tags are changed
-		for (String tag : contact.tags) {
+		for (String tag : contact.tags)
+		{
 			if (!currentContactTags.contains(tag))
 				return false;
 		}
 
 		// Checks of properties has any change
-		for (ContactField property : contact.properties) {
+		for (ContactField property : contact.properties)
+		{
 			if (!properties.contains(property))
 				return false;
 		}
@@ -338,16 +345,20 @@ public class Contact extends Cursor {
 	 *            etc..)
 	 * @return {@link ContactField} object with the given name
 	 */
-	public ContactField getContactField(String name) {
-		for (ContactField property : properties) {
+	public ContactField getContactField(String name)
+	{
+		for (ContactField property : properties)
+		{
 			if (name.equalsIgnoreCase(property.name))
 				return property;
 		}
 		return null;
 	}
 
-	public ContactField getContactFieldByName(String fieldName) {
-		for (ContactField field : properties) {
+	public ContactField getContactFieldByName(String fieldName)
+	{
+		for (ContactField field : properties)
+		{
 			if (field.name.equals(fieldName))
 				return field;
 		}
@@ -361,7 +372,8 @@ public class Contact extends Cursor {
 	 *            name of the object to get its value
 	 * @return value of the matched entity
 	 */
-	public String getContactFieldValue(String name) {
+	public String getContactFieldValue(String name)
+	{
 
 		ContactField contactField = getContactField(name);
 		if (contactField != null)
@@ -371,7 +383,8 @@ public class Contact extends Cursor {
 	}
 
 	@JsonIgnore
-	public ArrayList<Tag> getTagsList() {
+	public ArrayList<Tag> getTagsList()
+	{
 		return tagsWithTime;
 	}
 
@@ -380,8 +393,10 @@ public class Contact extends Cursor {
 	 * 
 	 * @param tags
 	 */
-	public void addTags(String[] tags) {
-		for (String tag : tags) {
+	public void addTags(String[] tags)
+	{
+		for (String tag : tags)
+		{
 			Tag tagObject = new Tag(tag);
 			if (!tagsWithTime.contains(tagObject))
 				tagsWithTime.add(tagObject);
@@ -391,8 +406,10 @@ public class Contact extends Cursor {
 
 	}
 
-	public void addTags(Tag[] tags) {
-		for (Tag tag : tags) {
+	public void addTags(Tag[] tags)
+	{
+		for (Tag tag : tags)
+		{
 			if (!tagsWithTime.contains(tag))
 				tagsWithTime.add(tag);
 		}
@@ -400,9 +417,11 @@ public class Contact extends Cursor {
 		this.save();
 	}
 
-	public void removeTags(Tag[] tags) {
+	public void removeTags(Tag[] tags)
+	{
 		Set<String> tagslist = new HashSet<String>();
-		for (Tag tag : tags) {
+		for (Tag tag : tags)
+		{
 			this.tagsWithTime.remove(tag);
 
 			tagslist.add(tag.tag);
@@ -421,9 +440,11 @@ public class Contact extends Cursor {
 	 * 
 	 * @param tags
 	 */
-	public void removeTags(String[] tags) {
+	public void removeTags(String[] tags)
+	{
 		Set<String> tagslist = new HashSet<String>();
-		for (String tag : tags) {
+		for (String tag : tags)
+		{
 			tagsWithTime.remove(new Tag(tag));
 
 			tagslist.add(tag);
@@ -444,7 +465,8 @@ public class Contact extends Cursor {
 	 * @param score
 	 *            value of the score to be added
 	 */
-	public void addScore(Integer score) {
+	public void addScore(Integer score)
+	{
 
 		this.lead_score = this.lead_score + score;
 		this.save();
@@ -457,7 +479,8 @@ public class Contact extends Cursor {
 	 * @param score
 	 *            value of the score to be subtracted
 	 */
-	public void subtractScore(Integer score) {
+	public void subtractScore(Integer score)
+	{
 
 		this.lead_score = this.lead_score - score;
 
@@ -470,7 +493,8 @@ public class Contact extends Cursor {
 	 * Deletes a contact from database and search document by executing a
 	 * notification and deleting its related notes and tags.
 	 */
-	public void delete() {
+	public void delete()
+	{
 		// Execute notification when contact is deleted
 		ContactNotificationPrefsUtil.executeNotificationForDeleteContact(this);
 
@@ -491,8 +515,7 @@ public class Contact extends Cursor {
 		LogUtil.deleteSQLLogs(null, id.toString());
 
 		// Deletes TwitterCron
-		TwitterQueueUtil.removeTwitterJobs(null, id.toString(),
-				NamespaceManager.get());
+		TwitterQueueUtil.removeTwitterJobs(null, id.toString(), NamespaceManager.get());
 	}
 
 	/**
@@ -505,18 +528,18 @@ public class Contact extends Cursor {
 	 * @param new_owner
 	 *            new owner (DomainUser) id
 	 */
-	public static void changeOwnerToContactsBulk(JSONArray contactsJSONArray,
-			String new_owner) {
-		List<Contact> contacts_list = ContactUtil
-				.getContactsBulk(contactsJSONArray);
-		if (contacts_list.size() == 0) {
+	public static void changeOwnerToContactsBulk(JSONArray contactsJSONArray, String new_owner)
+	{
+		List<Contact> contacts_list = ContactUtil.getContactsBulk(contactsJSONArray);
+		if (contacts_list.size() == 0)
+		{
 			return;
 		}
 
-		Key<DomainUser> newOwnerKey = new Key<DomainUser>(DomainUser.class,
-				Long.parseLong(new_owner));
+		Key<DomainUser> newOwnerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(new_owner));
 
-		for (Contact contact : contacts_list) {
+		for (Contact contact : contacts_list)
+		{
 			contact.owner_key = newOwnerKey;
 
 		}
@@ -525,16 +548,17 @@ public class Contact extends Cursor {
 
 	}
 
-	public static void changeOwnerToContactsBulk(List<Contact> contacts_list,
-			String new_owner) {
-		if (contacts_list.size() == 0) {
+	public static void changeOwnerToContactsBulk(List<Contact> contacts_list, String new_owner)
+	{
+		if (contacts_list.size() == 0)
+		{
 			return;
 		}
 
-		Key<DomainUser> newOwnerKey = new Key<DomainUser>(DomainUser.class,
-				Long.parseLong(new_owner));
+		Key<DomainUser> newOwnerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(new_owner));
 
-		for (Contact contact : contacts_list) {
+		for (Contact contact : contacts_list)
+		{
 			contact.owner_key = newOwnerKey;
 
 		}
@@ -549,7 +573,8 @@ public class Contact extends Cursor {
 	 * @param owner_key
 	 */
 	@JsonIgnore
-	public void setContactOwner(Key<DomainUser> owner_key) {
+	public void setContactOwner(Key<DomainUser> owner_key)
+	{
 		this.owner_key = owner_key;
 	}
 
@@ -559,10 +584,12 @@ public class Contact extends Cursor {
 	 * @return
 	 */
 	@JsonIgnore
-	public LinkedHashSet<String> getContactTags() {
+	public LinkedHashSet<String> getContactTags()
+	{
 		LinkedHashSet<String> tags = new LinkedHashSet<String>();
 
-		for (Tag tag : tagsWithTime) {
+		for (Tag tag : tagsWithTime)
+		{
 			tags.add(tag.tag);
 		}
 
@@ -576,14 +603,19 @@ public class Contact extends Cursor {
 	 * @return {@link DomainUser} object
 	 */
 	@XmlElement(name = "owner")
-	public DomainUser getOwner() {
-		if (owner_key != null) {
+	public DomainUser getOwner()
+	{
+		if (owner_key != null)
+		{
 			// If user is deleted no user is found with key so set user to null
 			// and return null
-			try {
+			try
+			{
 				// return dao.ofy().get(owner_key);
 				return DomainUserUtil.getDomainUser(owner_key.getId());
-			} catch (Exception e) {
+			}
+			catch (Exception e)
+			{
 				owner_key = null;
 				return null;
 			}
@@ -593,81 +625,84 @@ public class Contact extends Cursor {
 
 	/**
 	 * Assigns values to owner_key, created time or updated time and runs
-	 * deferred task for tags of a contact, before it is getting saved.
-	 * 
+	 * deferred task for tags of a contact, before it is getting saved. <br/>
+	 * <br/>
 	 * If a person is associated to a company, he must have
-	 * contact_company_id/contactCompanyKey If not, he is not associated with
+	 * contact_company_id/contact_company_key If not, he is not associated with
 	 * any company No setting properties['name=Company']=CompanyName saves, id
-	 * is required
-	 * 
-	 * PrePersist checks for erroneous entries -- if contact_company_id is not
-	 * set, and has a 'value' in properties['name=Company'], create a new
-	 * company -- store only id of company, ignore name ( the company may be
-	 * edited somewhere else )
+	 * is required <br/>
+	 * <br/>
+	 * PrePersist checks for erroneous entries <br/>
+	 * -- if contact_company_id is not set, and has a 'value' in
+	 * properties['name=Company'], create a new company <br/>
+	 * -- store only id of company, ignore name ( the company may be edited
+	 * somewhere else )
 	 */
 	@SuppressWarnings("unused")
 	@PrePersist
-	private void PrePersist() {
-		/*
-		 
-		 */
-		if (this.type == Type.PERSON) {
+	private void PrePersist()
+	{
+		if (this.type == Type.PERSON)
+		{
 			System.out.println("Branching to type PERSON");
 
-			if (this.contact_company_id != null
-					&& this.contact_company_id.length() > 0) {
+			if (this.contact_company_id != null && this.contact_company_id.length() > 0)
+			{
 				// update id, for existing company
-				this.contactCompanyKey = new Key<Contact>(Contact.class,
-						Long.parseLong(this.contact_company_id));
-			} else if (this.properties.size() > 0) {
-				ContactField contactField = this
-						.getContactFieldByName(Contact.COMPANY);
+				this.contact_company_key = new Key<Contact>(Contact.class, Long.parseLong(this.contact_company_id));
+			}
+			else if (this.properties.size() > 0)
+			{
+				ContactField contactField = this.getContactFieldByName(Contact.COMPANY);
 
-				if (contactField != null && contactField.value != null
-						&& contactField.value.isEmpty() == false) {
+				if (contactField != null && contactField.value != null && contactField.value.isEmpty() == false)
+				{
 					// Create new Company
-					Key<Contact> companyKey = ContactUtil
-							.getCompanyByName(contactField.value);
+					Key<Contact> companyKey = ContactUtil.getCompanyByName(contactField.value);
 
-					if (companyKey != null) {
-						this.contactCompanyKey = companyKey; // found company by
-																// name, so set
-																// it
-					} else {
+					if (companyKey != null)
+					{
+						// found company by its name, so set it
+						this.contact_company_key = companyKey;
+					}
+					else
+					{
 						// company name not found, create a new one
 						Contact newCompany = new Contact();
 						newCompany.properties = new ArrayList<ContactField>();
-						newCompany.properties.add(new ContactField(
-								Contact.NAME, null, contactField.value));
+						newCompany.properties.add(new ContactField(Contact.NAME, null, contactField.value));
 						newCompany.type = Type.COMPANY;
 						newCompany.save();
-						this.contactCompanyKey = new Key<Contact>(
-								Contact.class, newCompany.id); // assign key,
-																// necessary
-					}
 
-					this.contact_company_id = String.valueOf(contactCompanyKey
-							.getId());
+						// assign key, NECESSARY
+						this.contact_company_key = new Key<Contact>(Contact.class, newCompany.id);
+					}
+					this.contact_company_id = String.valueOf(contact_company_key.getId());
 					// / assigning here so we can update model after put
-				} else
-					this.contactCompanyKey = null;
+				}
+				else
+					this.contact_company_key = null;
 			}
 		}
 
 		// Set owner, when only the owner_key is null
-		if (owner_key == null) {
+		if (owner_key == null)
+		{
 			// Set lead owner(current domain user)
-			owner_key = new Key<DomainUser>(DomainUser.class, SessionManager
-					.get().getDomainId());
+			owner_key = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
 		}
 
 		// Store Created and Last Updated Time Check for id even if created
 		// time is 0(To check whether it is update request)
-		if (created_time == 0L && id == null) {
+		if (created_time == 0L && id == null)
+		{
 			created_time = System.currentTimeMillis() / 1000;
-		} else {
+		}
+		else
+		{
 			updated_time = System.currentTimeMillis() / 1000;
-			if (viewed_time != 0L) {
+			if (viewed_time != 0L)
+			{
 				viewed.viewed_time = viewed_time;
 				viewed.viewer_id = SessionManager.get().getDomainId();
 			}
@@ -675,15 +710,18 @@ public class Contact extends Cursor {
 
 		// If tags are not empty, considering they are simple tags and adds them
 		// to tagsWithTime
-		if (!tags.isEmpty()) {
-			for (String tag : tags) {
+		if (!tags.isEmpty())
+		{
+			for (String tag : tags)
+			{
 				Tag tagObject = new Tag(tag);
 				if (!tagsWithTime.contains(tagObject))
 					tagsWithTime.add(tagObject);
 			}
 		}
 
-		for (Tag tag : tagsWithTime) {
+		for (Tag tag : tagsWithTime)
+		{
 			// Check if it is null, it can be null tag is created using
 			// developers api
 			if (tag.createdTime == null || tag.createdTime == 0L)
@@ -694,96 +732,101 @@ public class Contact extends Cursor {
 		tags = getContactTags();
 
 		// Update Tags - Create a deferred task
-		TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(
-				getContactTags());
+		TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(getContactTags());
 
 		Queue queue = QueueFactory.getDefaultQueue();
 		queue.add(TaskOptions.Builder.withPayload(tagsDeferredTask));
 
 	}
 
+	/**
+	 * A person must have contact_company_key, if not all company info is
+	 * removed from properties <br/>
+	 * --checks if contact_company_key is valid, if not removes it, otherwise
+	 * get company name & fill in properties['name=company']=CompanyName <br/>
+	 * --removes blank entries in properties['name=company'] to not confuse UI.
+	 * Observe that postLoad can take care of company name while loading, its OK
+	 * if we don't set it in prePersist.
+	 */
 	@PostLoad
-	private void postLoad() {
+	private void postLoad()
+	{
 		tags = getContactTags();
 		ContactField field = this.getContactField("image");
 		if (field != null)
 			field.value = LinkedInUtil.changeImageUrl(field.value);
 
-		/*
-		 * A person must have contactCompanyKey, if not all company info is
-		 * removed from properties
-		 * 
-		 * --checks if contactCompanyKey is valid, if not removes it, otherwise
-		 * get company name & fill in properties['name=company']=CompanyName
-		 * 
-		 * --removes blank entries in properties['name=company'] to not confuse
-		 * UI. Observe that postLoad can take care of company name while
-		 * loading, its OK if we don't set it in prePersist.
-		 */
-
-		if (this.contactCompanyKey != null) // fill company name in
-											// properties['COMPANY']
+		if (this.contact_company_key != null) // fill company name in
+												// properties['COMPANY']
 		{
-			this.contact_company_id = String.valueOf(this.contactCompanyKey
-					.getId());
-			try {
-				Contact companytmp = dao.get(contactCompanyKey);
+			this.contact_company_id = String.valueOf(this.contact_company_key.getId());
+			try
+			{
+				Contact companyContact = dao.get(contact_company_key);
 				boolean isset = false;
 
-				for (ContactField f : properties) // / if we have a company
-													// properties, fill it with
-													// company's name
+				// if we have a 'company' properties, fill it with company's
+				// name
+				for (ContactField contactField : properties)
 				{
-					if (f.name != null && f.name.equalsIgnoreCase("company")) {
-						f.value = companytmp.getContactFieldValue(NAME);
+					if (contactField.name != null && contactField.name.equalsIgnoreCase("company"))
+					{
+						contactField.value = companyContact.getContactFieldValue(NAME);
 						isset = true;
 						break;
 					}
 				}
-
-				if (!isset) // / if no company in properties, fill it by reading
-							// from db, new ContactField
+				// if no company in properties, fill it by reading from db, add
+				// new ContactField
+				if (!isset)
 				{
-					ContactField f = new ContactField();
-					f.name = Contact.COMPANY;
-					f.value = companytmp.getContactFieldValue(Contact.NAME);
-					this.properties.add(f);
+					ContactField contactField = new ContactField();
+					contactField.name = Contact.COMPANY;
+					contactField.value = companyContact.getContactFieldValue(Contact.NAME);
+					this.properties.add(contactField);
 				}
-			} catch (EntityNotFoundException e) {
+			}
+			catch (EntityNotFoundException e)
+			{
 				// company id not found, remove company association for this
 				// contact.
-				this.contactCompanyKey = null;
+				this.contact_company_key = null;
 				this.contact_company_id = null;
 				e.printStackTrace();
 			}
-		} else {
-			// /remove any blank 'company' in properties before sending
-			for (ContactField f : properties) {
-				if (f.name != null && f.name.equalsIgnoreCase("company")) {
-					properties.remove(f);
+		}
+		else
+		{
+			// remove any blank 'company' in properties before sending
+			for (ContactField contactField : properties)
+			{
+				if (contactField.name != null && contactField.name.equalsIgnoreCase("company"))
+				{
+					properties.remove(contactField);
 					break;
 				}
 			}
 			this.contact_company_id = null;
 		}
-
 	}
 
 	@Override
-	public String toString() {
-		return "id: " + id + " created_time: " + created_time + " updated_time"
-				+ updated_time + " type: " + type + " tags: " + tags
-				+ " properties: " + properties;
+	public String toString()
+	{
+		return "id: " + id + " created_time: " + created_time + " updated_time" + updated_time + " type: " + type
+				+ " tags: " + tags + " properties: " + properties;
 	}
 
 }
 
 @XmlRootElement
-class ViewedDetails {
+class ViewedDetails
+{
 	public Long viewed_time = 0L;
 	public Long viewer_id = null;
 
-	public ViewedDetails() {
+	public ViewedDetails()
+	{
 
 	}
 }
