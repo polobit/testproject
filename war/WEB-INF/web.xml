@@ -44,6 +44,15 @@
 		<servlet-name>GmailContextualGadget</servlet-name>
 		<url-pattern>/gmail</url-pattern>
 	</servlet-mapping>
+	
+		<servlet>
+		<servlet-name>ContactsProcessServlet</servlet-name>
+		<servlet-class>com.agilecrm.contact.upload.blob.ContactsProcessServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ContactsProcessServlet</servlet-name>
+		<url-pattern>/backend/contacts-process</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Cron</servlet-name>

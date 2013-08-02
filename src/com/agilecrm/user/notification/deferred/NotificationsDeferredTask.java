@@ -1,5 +1,8 @@
 package com.agilecrm.user.notification.deferred;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.thirdparty.PubNub;
 
@@ -51,6 +54,16 @@ public class NotificationsDeferredTask implements DeferredTask
      */
     public void run()
     {
-	PubNub.accessPubNubPublish(channel, message);
+	JSONObject jsonMessage = null;
+	try
+	{
+	    jsonMessage = new JSONObject(message);
+	    PubNub.pubNubPush(channel, jsonMessage);
+	}
+	catch (JSONException e)
+	{
+	    e.printStackTrace();
+	    System.out.println("Got exception in NotificationDeferredTask " + e);
+	}
     }
 }

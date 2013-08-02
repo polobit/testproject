@@ -42,7 +42,7 @@ import com.agilecrm.user.notification.NotificationPrefs;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.triggers.Trigger;
-import com.campaignio.URLShortener;
+import com.campaignio.URLShortener.URLShortener;
 import com.campaignio.cron.Cron;
 import com.campaignio.logger.Log;
 import com.campaignio.twitter.TwitterQueue;
