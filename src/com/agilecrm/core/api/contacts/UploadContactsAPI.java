@@ -1,6 +1,5 @@
 package com.agilecrm.core.api.contacts;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
@@ -11,14 +10,13 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.agilecrm.Globals;
+import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.util.CacheUtil;
@@ -29,7 +27,6 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.taskqueue.TaskOptions.Method;
-import com.google.appengine.api.utils.SystemProperty;
 
 @Path("/api/upload")
 public class UploadContactsAPI
@@ -114,49 +111,32 @@ public class UploadContactsAPI
 
 	@Path("/save")
 	@POST
-	public void saveContacts(@Context HttpServletRequest request)
+	public void saveContacts(Contact contact, @QueryParam("key") String key)
 	{
 
-		try
-		{
-			String postURL = "https://" + Globals.BULK_ACTION_BACKENDS_URL + ".agile-crm-cloud.com";
-			// If Localhost - just return
-			if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
-			{
-				postURL = BackendServiceFactory.getBackendService().getBackendAddress("b1");
-			}
+		String postURL = BackendServiceFactory.getBackendService().getBackendAddress("b1");
+		/*
+		 * // If Localhost - just return if (SystemProperty.environment.value()
+		 * == SystemProperty.Environment.Value.Development) { postURL =
+		 * BackendServiceFactory.getBackendService().getBackendAddress("b1"); }
+		 */
 
-			InputStream stream = request.getInputStream();
-			byte[] bytes = IOUtils.toByteArray(stream);
+		Queue queue = QueueFactory.getQueue("bulk-actions-queue");
+		TaskOptions taskOptions;
 
-			System.out.println(bytes);
+		if (StringUtils.isEmpty(key))
+			return;
 
-			Queue queue = QueueFactory.getQueue("bulk-actions-queue");
-			TaskOptions taskOptions;
+		CacheUtil.setCache(key, true);
 
-			String key = request.getParameter("key");
-			if (StringUtils.isEmpty(key))
-				return;
+		CacheUtil.setCache("contact_" + key, contact);
+		taskOptions = TaskOptions.Builder.withUrl("/backend/contacts-process").param("key", key)
+				.param("owner_id", String.valueOf(SessionManager.get().getDomainId())).header("Host", postURL)
+				.method(Method.POST);
 
-			CacheUtil.setCache(key, true);
+		queue.add(taskOptions);
 
-			taskOptions = TaskOptions.Builder
-					.withUrl(
-							"/core/api/bulk-actions/upload/"
-									+ String.valueOf(SessionManager.get().getDomainId() + "/"
-											+ request.getParameter("key"))).payload(bytes)
-					.header("Content-Type", request.getContentType()).header("Host", postURL).method(Method.POST);
-
-			queue.add(taskOptions);
-
-			System.out.println("completed");
-		}
-
-		catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		System.out.println("completed");
 
 	}
 }
