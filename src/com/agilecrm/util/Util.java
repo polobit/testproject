@@ -268,11 +268,13 @@ public class Util
 	if (StringUtils.isEmpty(emailBody))
 	    return emailBody;
 
+	// Comment script tags.
+	emailBody = emailBody.replaceAll("(<script|<SCRIPT)", "<!--<script").replaceAll("(</script>|</SCRIPT>)", "<script>-->");
+
 	// If emailBody is text, replace '\n' with <br> is enough
-	if (!emailBody.contains("</"))
+	if (!(emailBody.contains("</")) || !(emailBody.contains("<body")))
 	{
-	    emailBody = emailBody.replaceAll("&amp;", "&").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&quot;", "\"").replaceAll("&nbsp;", "")
-		    .replaceAll("(\r\n|\n)", "<br />");
+	    emailBody = emailBody.replaceAll("(\r\n|\n)", "<br />");
 	    return emailBody;
 	}
 
@@ -288,18 +290,11 @@ public class Util
 		divs.first().remove();
 
 	    emailBody = doc.select("body").toString();
-
-	    // Remove script tags.
-	    String[] htmltags = new String[] { "(?)(<script.*?|<SCRIPT.*?)(.+?)(</script>|</SCRIPT>)" };
-
-	    for (String str : htmltags)
-		emailBody = emailBody.replaceAll(str, "");
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
 	    System.out.println("Got Exception while parsing email body " + e);
-	    return emailBody;
 	}
 
 	return emailBody;

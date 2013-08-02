@@ -215,6 +215,8 @@ public class EmailsAPI
 		emailsArray.put(new JSONObject(emailString));
 	    }
 
+	    System.out.println("Emails obtained after merging and parsing are " + emails);
+
 	    return emails.toString();
 	}
 	catch (Exception e)
