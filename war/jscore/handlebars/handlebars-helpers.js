@@ -764,7 +764,25 @@ $(function()
 	// To show only one related to contacts or companies in deals
 	Handlebars.registerHelper('related_to_one', function(data, options)
 	{
-		return "<span>" + getTemplate("related-to-contacts", data[0]) + "</span>";
+		//return "<span>" + getTemplate("related-to-contacts", data[0]) + "</span>";
+		var el = "";
+		var count = data.length;
+		$.each(data, function(key, value)
+		{
+			if( key <= 3)
+			{
+				var html = getTemplate("related-to-contacts", value);
+				if (--count == 0 || key == 3)
+				{
+					el = el.concat(html);
+					return;
+				}
+				el = el.concat(html + ", ");
+			}
+
+		});
+		return new Handlebars.SafeString(el);
+		
 	});
 
 	/**
