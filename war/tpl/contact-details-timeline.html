@@ -100,7 +100,7 @@
                     <div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;">
                         <div><b>URL-TimeSpent:</b></br> 
                         {{#stringToJSON this "urls_with_time_spent"}}{{/stringToJSON}}
-					    {{#each urls_with_time_spent}}{{url}}-{{convertSecondsToHour time_spent}}{{/each}}
+					    {{#each urls_with_time_spent}}{{url}} - {{convertSecondsToHour time_spent}}<br />{{/each}}
                         </div>
                     </div>
                 </div>
@@ -116,6 +116,8 @@
                 {{#if city}}
                    <div class="text" style="color: #333333"><b>ADDRESS:</b></br> {{ucfirst city}}, {{ucfirst region}}, {{getCountryName country}}</div>
                 {{/if}}
+
+                <div class="right" style="margin-top:-10px;"><a href="#" id="tl-analytics-popover"><i class="icon-plus"></i></a></div>
             </div>
      {{/if_entity}}
   </div>

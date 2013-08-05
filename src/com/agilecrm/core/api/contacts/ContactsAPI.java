@@ -614,4 +614,45 @@ public class ContactsAPI {
 		VcardString vcard = new VcardString(contact.getProperties());
 		return vcard.getVcardString();
 	}
+	
+	/**
+	 * Adds a contact property or replaces a contact property if it already
+	 * exists based on property name.
+	 * 
+	 * @param email
+	 *            email of the contact to add property.
+	 * @param ContactField
+	 * 
+	 * @return Contact
+	 */
+	@Path("/add/property")
+	@POST
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public Contact addProperty(ContactField field, @QueryParam("email") String email)
+	{
+		try
+		{
+			Contact contact = ContactUtil.searchContactByEmail(email);
+			System.out.println("contact" + contact);
+
+			if (contact == null)
+				return null;
+			ContactField contactField = contact.getContactFieldByName(field.name);
+			if (contactField == null)
+			{
+				contact.properties.add(field);
+			}
+			else
+				contactField.value = field.value;
+
+			contact.save();
+			return contact;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

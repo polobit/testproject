@@ -70,7 +70,7 @@ public class ContactField
      * @param value
      *            value of the field
      */
-    public ContactField(String name, String subtype, String value)
+    public ContactField(String name, String value, String subtype)
     {
 	this.type = FieldType.SYSTEM;
 	this.name = name;

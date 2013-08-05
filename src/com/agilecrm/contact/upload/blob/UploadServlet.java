@@ -1,13 +1,19 @@
 package com.agilecrm.contact.upload.blob;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.util.Map;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
+
 import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreInputStream;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 
@@ -47,6 +53,22 @@ public class UploadServlet extends HttpServlet
 
 		try
 		{
+
+			InputStream stream = new BlobstoreInputStream(blobKey);
+
+			LineNumberReader reader = new LineNumberReader(new InputStreamReader(stream));
+
+			String contactString = IOUtils.toString(stream);
+
+			int numberOfContacts = contactString.trim().split(System.getProperty("line.separator")).length;
+
+			if (numberOfContacts > 90)
+			{
+				BlobstoreServiceFactory.getBlobstoreService().delete(blobKey);
+				// Forward request back to JSP with blobkey as parameter
+				res.sendRedirect("/upload-contacts.jsp?f=1");
+				return;
+			}
 			// Forward request back to JSP with blobkey as parameter
 			res.sendRedirect("/upload-contacts.jsp?key=" + blobKey.getKeyString());
 		}

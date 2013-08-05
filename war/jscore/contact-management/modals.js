@@ -15,6 +15,12 @@ var forceCompany={}; /* to force company on personModal,
 						*/
 $(function(){
 	   
+		/**
+		 * show event of modal
+		 * Clean modal
+		 * if forceCompany - hide company input & show non-cancellable company name tag.
+		 * else - enable things by default
+		 */
 		$("#personModal").on('show',function(data)
 		{
 			if(forceCompany.doit==true)
@@ -62,6 +68,9 @@ $(function(){
 			}
 		});
 		
+		/**
+		 * Close clicked of company entered, this brings back text input field of company to fill again
+		 */
 		$("#personForm [name='contact_company_id'] a.close").live('click',function(e){
 			$("#personForm #contact_company").show();
 		});
@@ -75,6 +84,7 @@ $(function(){
 	    	
 	    	console.log(model);
 	    	
+	    	// update modal in contacts list view
 	    	if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection)	
 	          {
 	          	App_Contacts.contactsListView.collection.remove(model.id);

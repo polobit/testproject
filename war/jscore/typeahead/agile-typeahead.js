@@ -7,7 +7,9 @@ var TYPEHEAD_TAGS = {};
 /**
  * This script file defines simple search keywords entered in input fields are 
  * sent to back end as query through bootstrap typeahead. Methods render, matcher 
- * and updater are overridden for custom functionality
+ * and updater are overridden for custom functionality. Last 2 parameters were 
+ * added later for Companies autofill. They can be left undefined and things 
+ * will go to default, the way its normally used otherwise throughout the project.
  * 
  * @method agile_type_ahead
  * @param id
@@ -18,11 +20,13 @@ var TYPEHEAD_TAGS = {};
  *            To customer contacts to show in dropdown
  * @param isSearch
  *            Callback to override functionalities of updater function
+ * @param urlParams
+ * 			  [Added later] Additional parameters to be append, e.g. type=COMPANY
+ * @param noResultText           
+ * 			  [Added later] HTML text to display in case of no result
  * @module Search
  * @author Yaswanth
  * 
- * @param urlParams
- * 			  Extra url parameters, e.g. type=COMPANY 
  */
 function agile_type_ahead(id, el, callback, isSearch,urlParams,noResultText){
 
