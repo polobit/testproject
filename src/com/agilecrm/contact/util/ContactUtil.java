@@ -443,7 +443,7 @@ public class ContactUtil
 				ContactField field = properties.get(j);
 
 				// To avoid saving ignore field value
-				if (field == null)
+				if (field == null || field.name == null)
 					continue;
 
 				// This is hardcoding but found no way to know how to get tags
