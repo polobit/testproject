@@ -114,42 +114,31 @@ public class HTTPUtil
     {
 	URL url;
 	HttpURLConnection conn = null;
+	// Send data
+	url = new URL(requestURL);
+	conn = (HttpURLConnection) url.openConnection();
+	conn.setDoOutput(true);
+	conn.setConnectTimeout(60000);
+	conn.setReadTimeout(60000);
+	conn.setRequestMethod(methodType.toUpperCase());
+	OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+	wr.write(data);
+	wr.flush();
 
-	try
+	// Get the response
+	BufferedReader reader = new BufferedReader(new InputStreamReader(
+		conn.getInputStream()));
+	String output = "";
+	String inputLine;
+	while ((inputLine = reader.readLine()) != null)
 	{
-	    // Send data
-	    url = new URL(requestURL);
-	    conn = (HttpURLConnection) url.openConnection();
-	    conn.setDoOutput(true);
-	    conn.setConnectTimeout(60000);
-	    conn.setReadTimeout(60000);
-	    conn.setRequestMethod(methodType.toUpperCase());
-	    OutputStreamWriter wr = new OutputStreamWriter(
-		    conn.getOutputStream());
-	    wr.write(data);
-	    wr.flush();
-
-	    // Get the response
-	    BufferedReader reader = new BufferedReader(new InputStreamReader(
-		    conn.getInputStream()));
-	    String output = "";
-	    String inputLine;
-	    while ((inputLine = reader.readLine()) != null)
-	    {
-		output += inputLine;
-	    }
-
-	    wr.close();
-	    reader.close();
-
-	    return output;
+	    output += inputLine;
 	}
-	catch (Exception e)
-	{
-	    System.out.println(e.getMessage());
-	    e.printStackTrace();
-	    throw e;
-	}
+
+	wr.close();
+	reader.close();
+
+	return output;
 
     }
 
@@ -175,72 +164,59 @@ public class HTTPUtil
     {
 	HttpURLConnection connection = null;
 
-	try
+	URL yahoo = new URL(postURL);
+	connection = (HttpURLConnection) yahoo.openConnection();
+
+	System.out.println(username);
+	System.out.println(password);
+
+	if (!StringUtils.isBlank(username) && !StringUtils.isBlank(password))
 	{
-	    URL yahoo = new URL(postURL);
-	    connection = (HttpURLConnection) yahoo.openConnection();
+	    String userPass = Base64Encoder.encode(
+		    (username + ":" + password).getBytes()).replace("\n", "");
 
-	    System.out.println(username);
-	    System.out.println(password);
-
-	    if (!StringUtils.isBlank(username)
-		    && !StringUtils.isBlank(password))
-	    {
-		String userPass = Base64Encoder.encode(
-			(username + ":" + password).getBytes()).replace("\n",
-			"");
-
-		// Authorization with CRM API
-		connection.setRequestProperty("Authorization", "Basic "
-			+ userPass);
-	    }
-
-	    connection.setDoOutput(true);
-
-	    connection.setConnectTimeout(60000);
-	    connection.setReadTimeout(60000);
-	    requestMethod = (requestMethod == null) ? "GET" : requestMethod;
-	    connection.setRequestMethod(requestMethod);
-
-	    contentType = (contentType == null) ? "text/plain" : contentType;
-	    connection.setRequestProperty("Content-type", contentType);
-
-	    if (acceptType != null)
-		connection.setRequestProperty("accept", acceptType);
-
-	    if (data != null)
-	    {
-		OutputStreamWriter wr = new OutputStreamWriter(
-			connection.getOutputStream());
-
-		wr.write(data);
-		wr.flush();
-		wr.close();
-	    }
-
-	    System.out.println("responseCode = "
-		    + connection.getResponseMessage());
-
-	    BufferedReader reader = new BufferedReader(new InputStreamReader(
-		    connection.getInputStream()));
-
-	    String output = "";
-	    String inputLine;
-	    while ((inputLine = reader.readLine()) != null)
-	    {
-		output += inputLine;
-	    }
-	    reader.close();
-
-	    System.out.println("output: " + output);
-	    return output;
+	    // Authorization with CRM API
+	    connection.setRequestProperty("Authorization", "Basic " + userPass);
 	}
-	catch (Exception e)
+
+	connection.setDoOutput(true);
+
+	connection.setConnectTimeout(60000);
+	connection.setReadTimeout(60000);
+	requestMethod = (requestMethod == null) ? "GET" : requestMethod;
+	connection.setRequestMethod(requestMethod);
+
+	contentType = (contentType == null) ? "text/plain" : contentType;
+	connection.setRequestProperty("Content-type", contentType);
+
+	if (acceptType != null)
+	    connection.setRequestProperty("accept", acceptType);
+
+	if (data != null)
 	{
-	    System.out.println(e.getMessage());
-	    e.printStackTrace();
-	    throw e;
+	    OutputStreamWriter wr = new OutputStreamWriter(
+		    connection.getOutputStream());
+
+	    wr.write(data);
+	    wr.flush();
+	    wr.close();
 	}
+
+	System.out.println("responseCode = " + connection.getResponseMessage());
+
+	BufferedReader reader = new BufferedReader(new InputStreamReader(
+		connection.getInputStream()));
+
+	String output = "";
+	String inputLine;
+	while ((inputLine = reader.readLine()) != null)
+	{
+	    output += inputLine;
+	}
+	reader.close();
+
+	System.out.println("output: " + output);
+	return output;
     }
 
     /**

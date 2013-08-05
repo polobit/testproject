@@ -903,7 +903,7 @@ $(function()
 				default_return = "src='" + this.properties[i].value + "' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + ";'";
 								// found uploaded image, break, no need to lookup url
 
-				var error_fxn = "this.src='img/company.png'; this.onerror=null;";
+				error_fxn = "this.src='img/company.png'; this.onerror=null;";
 								// no need to resize, company.png is of good
 								// quality & can be scaled to this size
 
@@ -1026,10 +1026,14 @@ $(function()
 	Handlebars.registerHelper('if_equals', function(value, target, options)
 	{
 
-		if (!target)
+		/*
+		 * typeof is used beacuse !target returns true if it is empty string,
+		 * when string is empty it should go undefined
+		 */
+		if ((typeof target === undefined) || (typeof value === undefined))
 			return options.inverse(this);
 
-		if (value == target)
+		if (value.trim() == target.trim())
 			return options.fn(this);
 		else
 			return options.inverse(this);

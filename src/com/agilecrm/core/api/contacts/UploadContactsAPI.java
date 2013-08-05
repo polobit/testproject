@@ -7,11 +7,13 @@ import java.io.LineNumberReader;
 import java.util.Hashtable;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -121,9 +123,9 @@ public class UploadContactsAPI
 
 	@Path("/save")
 	@POST
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public void saveContacts(@Context HttpServletRequest request)
 	{
-
 		try
 		{
 			String postURL = BackendServiceFactory.getBackendService().getBackendAddress(
@@ -147,8 +149,6 @@ public class UploadContactsAPI
 			String key = request.getParameter("key");
 			if (StringUtils.isEmpty(key))
 				return;
-
-			System.out.println(request.getContentType());
 
 			CacheUtil.setCache(key, true);
 

@@ -27,12 +27,12 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.social.ClickDeskUtil;
 import com.agilecrm.social.FreshBooksUtil;
 import com.agilecrm.social.LinkedInUtil;
-import com.agilecrm.social.SocialSearchResult;
-import com.agilecrm.social.SocialUpdateStream;
 import com.agilecrm.social.StripePluginUtil;
 import com.agilecrm.social.TwilioUtil;
 import com.agilecrm.social.TwitterUtil;
 import com.agilecrm.social.ZendeskUtil;
+import com.agilecrm.social.stubs.SocialSearchResult;
+import com.agilecrm.social.stubs.SocialUpdateStream;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.thirdparty.Rapleaf;
@@ -1619,6 +1619,8 @@ public class WidgetsAPI
 	    return null;
 	try
 	{
+	    String response = FreshBooksUtil.getClients(widget, email);
+	    System.out.println(response);
 	    return FreshBooksUtil.getClients(widget, email);
 	}
 	catch (SocketTimeoutException e)
@@ -1636,6 +1638,7 @@ public class WidgetsAPI
 	}
 	catch (Exception e)
 	{
+	    e.printStackTrace();
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
@@ -1665,7 +1668,10 @@ public class WidgetsAPI
 	    return null;
 	try
 	{
-	    return FreshBooksUtil.getInvoicesOfClient(widget, clientId);
+	    String response = FreshBooksUtil.getInvoicesOfClient(widget,
+		    clientId);
+	    System.out.println(response);
+	    return response;
 	}
 	catch (SocketTimeoutException e)
 	{
@@ -1682,6 +1688,7 @@ public class WidgetsAPI
 	}
 	catch (Exception e)
 	{
+	    e.printStackTrace();
 	    throw new WebApplicationException(Response
 		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());

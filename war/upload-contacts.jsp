@@ -66,7 +66,6 @@ $(function()
 	//$('.error', $("#form")).remove();
 	if(fail && !key)
 		{	
-		alert	($("#fileextension", $('#form')).length);
 			$("#form").append('<label class="error">Max limit 10,000 contacts.</label>');	
 			return;
 		}

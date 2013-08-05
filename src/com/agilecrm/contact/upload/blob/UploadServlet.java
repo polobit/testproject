@@ -62,7 +62,7 @@ public class UploadServlet extends HttpServlet
 
 			int numberOfContacts = contactString.trim().split(System.getProperty("line.separator")).length;
 
-			if (numberOfContacts > 90)
+			if (numberOfContacts > 1000)
 			{
 				BlobstoreServiceFactory.getBlobstoreService().delete(blobKey);
 				// Forward request back to JSP with blobkey as parameter

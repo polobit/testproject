@@ -175,8 +175,8 @@ $(function() {
 										if (name.indexOf("-") != -1) {
 											var splits = name.split("-");
 											name = splits[1];
-											var type = splits[0];
-											property["subtype"] = type;
+											var subType = splits[0];
+											property["subtype"] = subType;
 											console.log($(select).attr('class'));
 											property["type"] = type;
 										}
@@ -221,7 +221,7 @@ $(function() {
 							type : 'POST',
 							url : "/core/api/upload/save?key=" + BLOB_KEY,
 							data : JSON.stringify(contact),
-							contentType : "application/json; charset=utf-8",
+							contentType : "application/json",
 							success : function(data) {
 
 								// Calls vefiryUploadStatus with data returned
