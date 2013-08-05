@@ -480,6 +480,34 @@ function agile_subtractScore(score, callback, email)
 	});
 }
 
+function agile_addProperty(name, id, callback, email)
+{
+	if (!email)
+	{
+		if (!agile_guid.get_email())
+		{
+			return;
+		}
+		else
+			email = agile_guid.get_email();
+	}
+	var data = {};
+	data.name = name;
+	data.value = id;
+
+	var params = "data={0}&email={1}".format(encodeURIComponent(JSON.stringify(data)), encodeURIComponent(email));
+
+	var agile_url = agile_id.getURL() + "/contacts/add-property?callback=?&id=" + agile_id.get() + "&" + params;
+
+	agile_getJSONP(agile_url, function(data)
+	{
+		if (callback && typeof (callback) === "function")
+		{
+			callback(data);
+		}
+	});
+}
+
 String.prototype.format = function()
 {
 	var args = arguments;
@@ -606,6 +634,10 @@ subtract_score : function(score, callback, email)
 add_note : function(email, data, callback)
 {
 	agile_addNote(email, data, callback);
+},
+add_property : function(name, id, callback, email)
+{
+	agile_addProperty(name, id, callback, email);
 } };
 
 function _agile_execute()

@@ -1492,7 +1492,7 @@ $(function()
 			if (uurl === rurl)
 			{
 				var k = turl.indexOf('q=');
-				turl = turl.slice(url.indexOf('q='), url.indexOf('&', k));
+				turl = turl.slice(k, turl.indexOf('&', k));
 				var s = turl.length;
 				turl = turl.slice(2, s);
 				turl = turl.replace('+', ' ');
