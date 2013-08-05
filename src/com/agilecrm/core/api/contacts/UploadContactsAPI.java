@@ -1,5 +1,6 @@
 package com.agilecrm.core.api.contacts;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
@@ -10,13 +11,13 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import org.codehaus.jettison.json.JSONObject;
 
-import com.agilecrm.contact.Contact;
+import com.agilecrm.Globals;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.util.CacheUtil;
@@ -27,6 +28,7 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.taskqueue.TaskOptions.Method;
+import com.google.appengine.api.utils.SystemProperty;
 
 @Path("/api/upload")
 public class UploadContactsAPI
@@ -43,7 +45,7 @@ public class UploadContactsAPI
 	 */
 	@Path("/process")
 	@GET
-	public String post(@QueryParam("blob-key") String key)
+	public JSONObject post(@QueryParam("blob-key") String key)
 	{
 		System.out.println("===========================================================================");
 		try
@@ -71,13 +73,13 @@ public class UploadContactsAPI
 			success.put("available_contacts", numberOfContacts);
 
 			// Stores results in to a map
-			JSONArray csvArray = (JSONArray) result.get("result");
+			// JSONArray csvArray = (JSONArray) result.get("result");
 
 			// returns CSV file as a json object with key "data"
-			success.put("data", csvArray);
+			success.put("data", result.get("result"));
 			System.out.println(success);
 
-			return success.toString();
+			return success;
 
 			/*
 			 * System.out.println(request.getContentType()); // Reads data from
@@ -111,32 +113,52 @@ public class UploadContactsAPI
 
 	@Path("/save")
 	@POST
-	public void saveContacts(Contact contact, @QueryParam("key") String key)
+	public void saveContacts(@Context HttpServletRequest request)
 	{
 
-		String postURL = BackendServiceFactory.getBackendService().getBackendAddress("b1");
-		/*
-		 * // If Localhost - just return if (SystemProperty.environment.value()
-		 * == SystemProperty.Environment.Value.Development) { postURL =
-		 * BackendServiceFactory.getBackendService().getBackendAddress("b1"); }
-		 */
+		try
+		{
+			String postURL = BackendServiceFactory.getBackendService().getBackendAddress(
+					Globals.BULK_ACTION_BACKENDS_URL);
 
-		Queue queue = QueueFactory.getQueue("bulk-actions-queue");
-		TaskOptions taskOptions;
+			// If Localhost - just return
+			if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+			{
+				postURL = BackendServiceFactory.getBackendService().getBackendAddress("b1");
+			}
 
-		if (StringUtils.isEmpty(key))
-			return;
+			InputStream stream = request.getInputStream();
+			byte[] bytes = IOUtils.toByteArray(stream);
 
-		CacheUtil.setCache(key, true);
+			System.out.println(bytes);
+			System.out.println("post url : " + postURL);
 
-		CacheUtil.setCache("contact_" + key, contact);
-		taskOptions = TaskOptions.Builder.withUrl("/backend/contacts-process").param("key", key)
-				.param("owner_id", String.valueOf(SessionManager.get().getDomainId())).header("Host", postURL)
-				.method(Method.POST);
+			Queue queue = QueueFactory.getQueue("bulk-actions-queue");
+			TaskOptions taskOptions;
 
-		queue.add(taskOptions);
+			String key = request.getParameter("key");
+			if (StringUtils.isEmpty(key))
+				return;
 
-		System.out.println("completed");
+			CacheUtil.setCache(key, true);
+
+			taskOptions = TaskOptions.Builder
+					.withUrl(
+							"/core/api/bulk-actions/upload/"
+									+ String.valueOf(SessionManager.get().getDomainId() + "/"
+											+ request.getParameter("key"))).payload(bytes)
+					.header("Content-Type", request.getContentType()).header("Host", postURL).method(Method.POST);
+
+			queue.add(taskOptions);
+
+			System.out.println("completed");
+		}
+
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 }

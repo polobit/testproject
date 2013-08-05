@@ -20,7 +20,6 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.taskqueue.TaskOptions.Method;
-import com.google.appengine.api.utils.SystemProperty;
 import com.googlecode.objectify.Key;
 
 /**
@@ -79,11 +78,7 @@ public class BulkActionUtil
 	public static void postDataToBulkActionBackend(byte[] data, String uri, String contentType, Method type)
 	{
 
-		String url = "https://" + Globals.BULK_ACTION_BACKENDS_URL + ".agile-crm-cloud.com";
-		if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
-		{
-			url = BackendServiceFactory.getBackendService().getBackendAddress("b1");
-		}
+		String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
 
 		// Create Task and push it into Task Queue
 		Queue queue = QueueFactory.getQueue("bulk-actions-queue");
@@ -113,12 +108,7 @@ public class BulkActionUtil
 		Queue queue = QueueFactory.getQueue("bulk-actions-queue");
 		TaskOptions taskOptions = null;
 
-		String url = "https://" + Globals.BULK_ACTION_BACKENDS_URL + ".agile-crm-cloud.com";
-
-		if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
-		{
-			url = BackendServiceFactory.getBackendService().getBackendAddress("b1");
-		}
+		String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
 
 		/*
 		 * If there are more than on argument in data then it is sent in
