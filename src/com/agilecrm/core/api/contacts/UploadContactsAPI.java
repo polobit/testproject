@@ -148,6 +148,8 @@ public class UploadContactsAPI
 			if (StringUtils.isEmpty(key))
 				return;
 
+			System.out.println(request.getContentType());
+
 			CacheUtil.setCache(key, true);
 
 			taskOptions = TaskOptions.Builder
