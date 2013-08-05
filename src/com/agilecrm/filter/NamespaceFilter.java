@@ -19,6 +19,7 @@ import com.agilecrm.Globals;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.backends.BackendServiceFactory;
 import com.google.appengine.api.utils.SystemProperty;
 
 /**
@@ -77,7 +78,9 @@ public class NamespaceFilter implements Filter
 		// Read Subdomain
 		String subdomain = request.getServerName().split("\\.")[0];
 
-		if (subdomain.equalsIgnoreCase(Globals.BULK_ACTION_BACKENDS_URL))
+		// Excludes if it is running in backends
+		if (subdomain.equalsIgnoreCase(Globals.BULK_ACTION_BACKENDS_URL)
+				|| BackendServiceFactory.getBackendService().getCurrentBackend() != null)
 			return true;
 
 		// Lowercase
