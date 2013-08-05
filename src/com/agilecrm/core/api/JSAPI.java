@@ -14,10 +14,12 @@ import org.codehaus.jackson.map.ObjectMapper;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 /**
  * <code>JSAPI</code> provides facility to perform actions, such as creating a
@@ -496,4 +498,52 @@ public class JSAPI
 
 	return true;
     }
+    
+    /**
+	 * Adds a contact property or replaces a contact property if it already
+	 * exists based on property name.
+	 * 
+	 * @param email
+	 *            email of the contact to add property.
+	 * @param data
+	 *            json object containing property data and value to be added.
+	 * @param jsoncallback
+	 * 
+	 * @return String
+	 */
+	@Path("contacts/add-property")
+	@GET
+	@Produces("application / x-javascript")
+	public String addProperty(@QueryParam("data") String json, @QueryParam("email") String email,
+			@QueryParam("callback") String jsoncallback)
+	{
+		try
+		{
+			Contact contact = ContactUtil.searchContactByEmail(email);
+			if (contact == null)
+				return null;
+			JSONObject property_json = new JSONObject(json);
+
+			System.out.println(property_json);
+			ContactField field = contact.getContactFieldByName(property_json.getString("name"));
+			if (field == null)
+			{
+				field = new ContactField(property_json.getString("name"), property_json.getString("value"), "");
+				contact.properties.add(field);
+			}
+			else
+				field.value = property_json.getString("value");
+
+			contact.save();
+
+			ObjectMapper mapper = new ObjectMapper();
+			return mapper.writeValueAsString(contact);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+    
 }
