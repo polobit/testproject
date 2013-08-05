@@ -73,7 +73,7 @@
 		{{#if this.contacts}}
 			<span style="margin:0px 5px;border:1px solid #d5d5d5"></span>
 			{{#related_to_one contacts}}{{/related_to_one}}
-		{{/if}}{{#if_greater this.contacts.length "2"}}<span>,..</span>{{/if_greater}}
+		{{/if}}{{#if_greater this.contacts.length "5"}}<span>,..</span>{{/if_greater}}
 	</div>
 	<div><small><time class="deal-close-time" datetime="{{epochToHumanDate "" close_date}}" style="border-bottom:dotted 1px #999;">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time></small></div>
 </div>
