@@ -5,6 +5,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -12,7 +13,6 @@ import java.util.Vector;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -334,7 +334,7 @@ public class ContactUtil
 		}
 
 		// CSV Json Array
-		JSONArray csvJSONArray = new JSONArray();
+		org.codehaus.jettison.json.JSONArray csvArray = new org.codehaus.jettison.json.JSONArray();
 
 		// HashTable of keys to check duplicates - we will store all keys into
 		// this hashtable and if there are any - we will exclude them
@@ -347,8 +347,10 @@ public class ContactUtil
 		// with heading as its repective keys
 		for (int i = 0; i < 10 && (csvValues = reader.readNext()) != null; i++)
 		{
-			JSONObject csvJSONObject = new JSONObject();
+			Map<String, String> csvMap = new LinkedHashMap<String, String>();
 
+			System.out.println(csvValues.length);
+			// System.out.println(csvValues);
 			boolean isDuplicate = false;
 			for (int j = 0; j < csvValues.length; j++)
 			{
@@ -368,17 +370,25 @@ public class ContactUtil
 					keys.add(csvValues[j]);
 				}
 
+				System.out.println(headers[j] + ", " + csvValues[j]);
 				// Put field value respective to its heading, into JSON object
-				csvJSONObject.put(headers[j], csvValues[j]);
+				csvMap.put(headers[j], csvValues[j]);
 			}
 
+			// Have to use jettison JSON as net JSON is changing the order of
+			// the elements
 			if (!isDuplicate)
-				csvJSONArray.put(csvJSONObject);
+				csvArray.put(new org.codehaus.jettison.json.JSONObject(csvMap));
+
 		}
 
 		Hashtable resultHashtable = new Hashtable();
-		resultHashtable.put("result", csvJSONArray);
 
+		System.out.println(csvArray);
+		System.out.println(csvArray);
+		resultHashtable.put("result", csvArray);
+
+		System.out.println(resultHashtable);
 		// Put warning
 		if (duplicateFieldName != null && duplicates.size() > 0)
 		{
@@ -419,12 +429,16 @@ public class ContactUtil
 
 		for (String[] csvValues : contacts)
 		{
+			System.out.println(csvValues.length);
+			System.out.println(csvValues);
+
 			contact.id = null;
 			contact.created_time = 0l;
 			contact.setContactOwner(ownerKey);
 			contact.properties = new ArrayList<ContactField>();
 			for (int j = 0; j < csvValues.length; j++)
 			{
+				System.out.println(csvValues[j]);
 
 				ContactField field = properties.get(j);
 
@@ -445,8 +459,7 @@ public class ContactUtil
 				contact.properties.add(field);
 			}
 
-			System.out.println(contact);
-
+			System.out.println(contact.getContactFieldValue(Contact.EMAIL));
 			// If contact has no email address or duplicate email address,
 			// contact is not saved
 			if (StringUtils.isEmpty(contact.getContactFieldValue(Contact.EMAIL))
@@ -459,6 +472,7 @@ public class ContactUtil
 
 			contact.save();
 		}
+		System.out.println("contact save completed");
 	}
 
 	/**

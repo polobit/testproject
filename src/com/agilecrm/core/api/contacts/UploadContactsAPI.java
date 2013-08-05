@@ -45,7 +45,7 @@ public class UploadContactsAPI
 	 */
 	@Path("/process")
 	@GET
-	public JSONObject post(@QueryParam("blob-key") String key)
+	public String post(@QueryParam("blob-key") String key)
 	{
 		System.out.println("===========================================================================");
 		try
@@ -79,7 +79,7 @@ public class UploadContactsAPI
 			success.put("data", result.get("result"));
 			System.out.println(success);
 
-			return success;
+			return success.toString();
 
 			/*
 			 * System.out.println(request.getContentType()); // Reads data from
