@@ -61,7 +61,15 @@ $(function()
 {
 	// Check if this was referred back again
 	var key = getUrlVars()["key"];
-	
+	var fail = getUrlVars()["f"];
+
+	//$('.error', $("#form")).remove();
+	if(fail && !key)
+		{	
+		alert	($("#fileextension", $('#form')).length);
+			$("#form").append('<label class="error">Max limit 10,000 contacts.</label>');	
+			return;
+		}
 	if(key != undefined)
 	{
 		returnBack(key);

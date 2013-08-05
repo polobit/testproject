@@ -32,18 +32,17 @@
         <div class="controls">
             <input id="tags-import" class="tags-typeahead" name="tags" type="text" placeholder="Tags should be separated by comma." />
         </div>
+		<p class="help-block">You can optionally add a tags to all new contacts being created.</p>
+		<p class="help-block"><strong>Note :</strong> You might want to <a href="#custom-fields">define Custom Fields</a> for some of the contact properties you have in your CSV file, and choose the approporate custom filed in the column headers here below.</p>
     </div>
 </form>
 <br />		
 <div id="import-validation-error">
 </div>
-<!-- <div style="text-align:center;padding-bottom:10px;font-size:15px">Showing {{data.length}} of {{available_contacts}} contacts</div> -->
+ <div style="text-align:center;padding-bottom:10px;font-size:15px">Showing {{data.length}} of {{available_contacts}} contacts</div>
 <table class="table table-bordered table-striped" style="border-collapse: collapse;">
     <thead id="import-header">
         <tr>
-	{{this.key}}
-           
-	
     {{#eachkeys data.[0]}}
  		<th>
 			{{setupCSVUploadOptions this.key ../this}}
@@ -87,18 +86,17 @@
 <option value="tags">Tag</option>
 <option value="properties_title">Job Description</option>
 <optgroup label="Email">
-    <option value="properties_email">-</option>
-    <option value="properties_home-email">Home</option>
-    <option value="properties_work-email">Work</option>
+    <option value="properties_home-email">Email (Home)</option>
+    <option value="properties_work-email">Email (Work)</option>
 </optgroup>
 <optgroup label="Phone">
-    <option value="properties_home-phone">Home</option>
-    <option value="properties_work-phone">Work</option>
-    <option value="properties_mobile-phone">Mobile</option>
-    <option value="properties_main-phone">Main</option>
-    <option value="properties_home fax-phone">Home fax</option>
-    <option value="properties_work fax-phone">Work fax</option>
-    <option value="properties_other-phone">Other</option>
+    <option value="properties_home-phone">Phone (Home)</option>
+    <option value="properties_work-phone">Phone (Work)</option>
+    <option value="properties_mobile-phone">Phone (Mobile)</option>
+    <option value="properties_main-phone">Phone (Main)</option>
+    <option value="properties_home fax-phone">Phone (Home fax)</option>
+    <option value="properties_work fax-phone">Phone (Work fax)</option>
+    <option value="properties_other-phone">Phone (Other)</option>
 </optgroup>
 <optgroup label="Website">
     <option value="properties_URL-website">Website</option>

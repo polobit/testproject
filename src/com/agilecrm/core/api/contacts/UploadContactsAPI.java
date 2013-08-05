@@ -24,6 +24,7 @@ import com.agilecrm.util.CacheUtil;
 import com.google.appengine.api.backends.BackendServiceFactory;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreInputStream;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -50,8 +51,9 @@ public class UploadContactsAPI
 		System.out.println("===========================================================================");
 		try
 		{
+			BlobKey blobKey = new BlobKey(key);
 
-			InputStream stream = new BlobstoreInputStream(new BlobKey(key));
+			InputStream stream = new BlobstoreInputStream(blobKey);
 
 			LineNumberReader reader = new LineNumberReader(new InputStreamReader(stream));
 
@@ -59,6 +61,12 @@ public class UploadContactsAPI
 
 			int numberOfContacts = contactString.trim().split(System.getProperty("line.separator")).length;
 
+			if (numberOfContacts > 10000)
+			{
+				JSONObject success = new JSONObject();
+				success.put("success", false);
+				BlobstoreServiceFactory.getBlobstoreService().delete(blobKey);
+			}
 			System.out.println(numberOfContacts);
 
 			System.out.println(new BlobstoreInputStream(new BlobKey(key)).read());
@@ -139,6 +147,8 @@ public class UploadContactsAPI
 			String key = request.getParameter("key");
 			if (StringUtils.isEmpty(key))
 				return;
+
+			System.out.println(request.getContentType());
 
 			CacheUtil.setCache(key, true);
 
