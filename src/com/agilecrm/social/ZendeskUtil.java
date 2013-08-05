@@ -46,16 +46,12 @@ public class ZendeskUtil
 	JSONObject contactPrefsJSON = new JSONObject().put("visitor_email",
 		email);
 
-	if (pluginPrefsJSON == null || contactPrefsJSON == null)
-	    throw new Exception("Something went wrong. Please try agian");
-
 	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON",
 		pluginPrefsJSON).put("visitorJSON", contactPrefsJSON);
 
-	String response = HTTPUtil.accessHTTPURL(pluginURL
-		+ "core/agile/zendesk/get", prefsJSON.toString(), "PUT");
-
-	return response;
+	// send request to plugins server and return response
+	return HTTPUtil.accessHTTPURL(pluginURL + "core/agile/zendesk/get",
+		prefsJSON.toString(), "PUT");
 
     }
 
@@ -86,18 +82,14 @@ public class ZendeskUtil
 	JSONObject messageJSON = new JSONObject().put("subject", subject).put(
 		"message", description);
 
-	if (pluginPrefsJSON == null || contactPrefsJSON == null)
-	    throw new Exception("Something went wrong. Please try agian");
-
 	JSONObject json = new JSONObject()
 		.put("pluginPrefsJSON", pluginPrefsJSON)
 		.put("visitorJSON", contactPrefsJSON)
 		.put("messageJSON", messageJSON);
 
-	String response = HTTPUtil.accessHTTPURL(pluginURL
-		+ "core/agile/zendesk/add", json.toString(), "PUT");
-
-	return response;
+	// send request to plugins server and return response
+	return HTTPUtil.accessHTTPURL(pluginURL + "core/agile/zendesk/add",
+		json.toString(), "PUT");
 
     }
 
@@ -124,16 +116,12 @@ public class ZendeskUtil
 	JSONObject messageJSON = new JSONObject().put("ticketId", ticketNumber)
 		.put("message", description);
 
-	if (pluginPrefsJSON == null || messageJSON == null)
-	    throw new Exception("Something went wrong. Please try agian");
-
 	JSONObject json = new JSONObject().put("pluginPrefsJSON",
 		pluginPrefsJSON).put("messageJSON", messageJSON);
 
-	String response = HTTPUtil.accessHTTPURL(pluginURL
-		+ "core/agile/zendesk/update", json.toString(), "PUT");
-
-	return response;
+	// send request to plugins server and return response
+	return HTTPUtil.accessHTTPURL(pluginURL + "core/agile/zendesk/update",
+		json.toString(), "PUT");
 
     }
 
@@ -147,33 +135,39 @@ public class ZendeskUtil
      */
     public static String getUserInfo(Widget widget) throws Exception
     {
+	// get user info for the user logged in
 	String email = widget.getProperty("zendesk_username");
 
 	JSONObject pluginPrefsJSON = buildPluginPrefsJSON(widget);
 	JSONObject contactPrefsJSON = new JSONObject().put("visitor_email",
 		email);
 
-	if (pluginPrefsJSON == null || contactPrefsJSON == null)
-	    throw new Exception("Something went wrong. Please try agian");
-
 	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON",
 		pluginPrefsJSON).put("visitorJSON", contactPrefsJSON);
 
+	// send request to plugins server
 	String response = HTTPUtil.accessHTTPURL(pluginURL
 		+ "core/agile/zendesk/users", prefsJSON.toString(), "PUT");
 
 	System.out.println("zendeks users " + response);
+	/*
+	 * Exceptions from plugins server are returned as strings, if response
+	 * is not JSON, it is an exception
+	 */
 	try
 	{
 	    new JSONObject(response);
 	}
 	catch (Exception e)
 	{
+	    /*
+	     * Zendesk returns 401 and 302 for improper details, 404 is thrown
+	     * in case of IO exceptions
+	     */
 	    if (response.contains("404"))
 		throw new IOException("");
 	    if (response.contains("401") || response.contains("302"))
 		throw new Exception("Authentication failed. Please try again");
-
 	}
 
 	return response;
@@ -204,11 +198,9 @@ public class ZendeskUtil
 		.put("visitorJSON", contactPrefsJSON)
 		.put("messageJSON", messageJSON);
 
-	String response = HTTPUtil.accessHTTPURL(pluginURL
+	return HTTPUtil.accessHTTPURL(pluginURL
 		+ "core/agile/zendesk/tickets/status", prefsJSON.toString(),
 		"PUT");
-
-	return response;
     }
 
     /**
@@ -225,13 +217,16 @@ public class ZendeskUtil
     public static String getZendeskProfile(Widget widget, String email)
 	    throws Exception
     {
-
+	// Get the info of Zendesk logged in user
 	String userInfo = getUserInfo(widget);
-	System.out.println("----------userinfo-------------");
-	System.out.println(userInfo);
-	String allTickets = getContactTickets(widget, email);
+	System.out.println("UserInfo in zendesk " + userInfo);
 
 	JSONObject zendeskInfo = new JSONObject();
+
+	/**
+	 * If many users are returned from Zendesk for the same email, return
+	 * the details of first person. If not array, it returns JSONObject
+	 */
 	try
 	{
 	    zendeskInfo.put("user_info",
@@ -243,6 +238,8 @@ public class ZendeskUtil
 	    zendeskInfo.put("user_info", userInfo);
 	}
 
+	// Retrieve tickets for the contact
+	String allTickets = getContactTickets(widget, email);
 	zendeskInfo.put("all_tickets", allTickets);
 
 	return zendeskInfo.toString();
@@ -256,11 +253,14 @@ public class ZendeskUtil
      *            {@link Widget} to retrieve Zendesk preferences from zendesk
      *            account of agile user
      * @return {@link JSONObject} with Zendesk preferences
+     * @throws Exception
      */
     public static JSONObject buildPluginPrefsJSON(Widget widget)
+	    throws Exception
     {
 	try
 	{
+	    // If widget properties null, exception occurs
 	    JSONObject pluginPrefs = new JSONObject()
 		    .put("zendesk_username",
 			    widget.getProperty("zendesk_username"))
@@ -272,8 +272,9 @@ public class ZendeskUtil
 	}
 	catch (JSONException e)
 	{
-	    System.out.println(e.getMessage());
-	    return null;
+	    System.out.println("Exception in buildinPrefs method in zendesk: "
+		    + e.getMessage());
+	    throw new Exception("Something went wrong. Please try again");
 	}
 
     }

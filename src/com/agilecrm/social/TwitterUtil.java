@@ -28,6 +28,8 @@ import twitter4j.auth.AccessToken;
 import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.core.api.widgets.WidgetsAPI;
+import com.agilecrm.social.stubs.SocialSearchResult;
+import com.agilecrm.social.stubs.SocialUpdateStream;
 import com.agilecrm.util.Util;
 import com.agilecrm.widgets.Widget;
 

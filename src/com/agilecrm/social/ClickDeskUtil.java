@@ -42,27 +42,35 @@ public class ClickDeskUtil
     {
 	String url = CLICKDESK_CHATS_URL.replace("<email>", email).replace(
 		"<offset>", offset);
-	System.out.println("Clickdesk request URL : " + url);
-	String response = "";
+	System.out.println("ClickDesk request URL : " + url);
 
-	response = HTTPUtil.accessURLUsingAuthentication(url,
+	// connect to ClickDesk
+	String response = HTTPUtil.accessURLUsingAuthentication(url,
 		widget.getProperty("clickdesk_username"),
 		widget.getProperty("clickdesk_api_key"), null,
 		"application/json", "GET", "application/json");
 	System.out.println("ClickDesk response : " + response);
 
-	// response is not JSON if the preferences are incorrect, and ClickDesk
-	// does not throws it as string instead of exception
+	/*
+	 * Exceptions from ClickDesk server are returned as HTML strings, if
+	 * response is not JSON, it is an exception
+	 */
 	try
 	{
 	    return new JSONArray(response);
 	}
 	catch (Exception e)
 	{
-	    System.out.println("in catch");
+	    System.out.println("In ClickDesk exception: ");
 	    e.printStackTrace();
-	    System.out.println(e.getMessage());
-	    throw new Exception("Authentication failed. Please try again");
+
+	    /*
+	     * ClickDesk returns 401 for improper details, else exception
+	     * returned from clickDesk is thrown
+	     */
+	    if (response.contains("401"))
+		throw new Exception("Authentication failed. Please try again");
+	    throw e;
 	}
 
     }
@@ -85,28 +93,17 @@ public class ClickDeskUtil
 
 	String url = CLICKDESK_TICKETS_URL.replace("<email>", email).replace(
 		"<offset>", offset);
-	System.out.println("Clickdesk request URL : " + url);
+	System.out.println("ClickDesk request URL : " + url);
 
-	String response = "";
-
-	response = HTTPUtil.accessURLUsingAuthentication(url,
+	// connect to ClickDesk and retrieve tickets
+	String response = HTTPUtil.accessURLUsingAuthentication(url,
 		widget.getProperty("clickdesk_username"),
 		widget.getProperty("clickdesk_api_key"), null,
 		"application/json", "GET", "application/json");
 
 	System.out.println("ClickDesk response : " + response);
-	try
-	{
-	    return new JSONArray(response);
-	}
-	catch (Exception e)
-	{
-	    System.out.println("in catch");
-	    e.printStackTrace();
-	    System.out.println(e.getMessage());
-	    throw new Exception("Authentication failed. Please try again");
-	}
 
+	return new JSONArray(response);
     }
 
 }

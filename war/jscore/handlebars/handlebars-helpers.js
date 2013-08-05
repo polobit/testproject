@@ -1008,10 +1008,14 @@ $(function()
 	Handlebars.registerHelper('if_equals', function(value, target, options)
 	{
 
-		if (!target)
+		/*
+		 * typeof is used beacuse !target returns true if it is empty string,
+		 * when string is empty it should go undefined
+		 */
+		if ((typeof target === undefined) || (typeof value === undefined))
 			return options.inverse(this);
 
-		if (value == target)
+		if (value.trim() == target.trim())
 			return options.fn(this);
 		else
 			return options.inverse(this);

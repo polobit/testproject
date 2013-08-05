@@ -18,15 +18,23 @@
 {{#if_equals total "0"}}
 	<div class="widget_content">
 		<div>No clients matching this contact.</div>
-		<a href="#add" class="btn" id="freshbooks_add_client" style="margin-top:10px;"><i class="icon-plus"></i>Add client</a>
+		<a class="btn" id="freshbooks_add_client" style="margin-top:10px;cursor:pointer;"><i class="icon-plus"></i>Add client</a>
 	</div>
 {{else}}
 	<div class="widget_content">
 		{{#isArray client}}
 			{{#if client.0.username}}
 				<div  style="display:inline-block;">
-					<div  class="title_txt" style="display:inline-block;"><a href="{{client.0.links.statement}}" target="_blank"><h4 style="text-transform: capitalize;"><b>{{client.0.first_name}} {{client.0.last_name}}</b></h4></a></div>, 
-					<div style="display:inline-block;"><a href="{{client.0.links.view}}" target="_blank"><h4 style="text-transform: capitalize;">{{client.0.organization}}</h4></a></div>
+					<div  class="title_txt" style="display:inline-block;">
+						<a href="{{client.0.links.statement}}" target="_blank"><h4 style="text-transform: capitalize;"><b>
+							{{#if_equals client.0.first_name ""}}{{#if_equals client.0.last_name ""}}
+								{{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}{{/if_equals}}
+							{{else}}
+								{{client.0.first_name}} {{client.0.last_name}}
+							{{/if_equals}}
+						</b></h4></a>
+					</div>
+					{{#if_equals client.0.organization ""}}<div></div>{{else}}, <div style="display:inline-block;"><a href="{{client.0.links.view}}" target="_blank"><h4 style="text-transform: capitalize;">{{client.0.organization}}</h4></a></div>{{/if_equals}}
 				</div>
 			{{/if}}
 			<p style="font-size: 13px;">
@@ -49,8 +57,16 @@
 		{{else}}
 			{{#if client.username}}
 				<div style="display:inline-block;">
-					<div class="title_txt" style="display:inline-block;"><a href="{{client.links.statement}}" target="_blank"><h4 style="text-transform: capitalize;"><b>{{client.first_name}} {{client.last_name}}</b></h4></a></div>, 
-					<div style="display:inline-block;"><a href="{{client.links.view}}" target="_blank"><h4 style="text-transform: capitalize;">{{client.organization}}</h4></a></div>
+					<div class="title_txt" style="display:inline-block;">
+						<a href="{{client.links.statement}}" target="_blank"><h4 style="text-transform: capitalize;"><b>
+							{{#if_equals client.first_name ""}}{{#if_equals client.last_name ""}}
+								{{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}{{/if_equals}}
+							{{else}}
+								{{client.first_name}} {{client.last_name}}
+							{{/if_equals}}
+						</b></h4></a>
+					</div>
+					{{#if_equals client.organization ""}}<div></div>{{else}}, <div style="display:inline-block;"><a href="{{client.links.view}}" target="_blank"><h4 style="text-transform: capitalize;">{{client.organization}}</h4></a></div>{{/if_equals}}
 				</div>
 			{{/if}}
 			<p style="font-size: 13px;">
@@ -71,7 +87,7 @@
 			{{#if client.work_phone}}<i class="icon-phone"></i><a href="tel:{{client.work_phone}}" > {{client.work_phone}} (work)<br> </a>{{/if}}
 			{{#if client.mobile}}<i class="icon-phone"></i><a href="tel:{{client.mobile}}"> {{client.mobile}} (mobile)</a>{{/if}}
 		{{/isArray}}
-		<div style="margin-bottom:10px;"><a href="#add" class="btn" id="freshbooks_add_invoice" item_name={{name}} rel="tooltip" title="Generate invoice and send an email for this item" style="display:none">Add Invoice</a></div>
+		<div style="margin-bottom:10px;"><a class="btn" id="freshbooks_add_invoice" item_name={{name}} rel="tooltip" title="Generate invoice and send an email for this item" style="display:none; cursor:pointer">Add Invoice</a></div>
 	</div>
 	<div class="sub_header">
 		{{#isArray client}}

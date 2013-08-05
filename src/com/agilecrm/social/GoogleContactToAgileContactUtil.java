@@ -63,8 +63,10 @@ public class GoogleContactToAgileContactUtil
     public static List<ContactEntry> retrieveContacts(String accessToken)
 	    throws Exception
     {
+	// build service with all the tokens
 	ContactsService contactService = getService(accessToken);
 
+	// Get all the avialable groups in gmail account
 	ContactFeed resultFeed = getGroups(contactService, accessToken);
 
 	String temp = "";
@@ -77,12 +79,14 @@ public class GoogleContactToAgileContactUtil
 	URL feedUrl = new URL(GOOGLE_CONTACTS_BASE_URL
 		+ "contacts/default/full?" + "access_token=" + accessToken);
 
+	// Build query with URL
 	Query myQuery = new Query(feedUrl);
 	myQuery.setStartIndex(1);
 	// sets my contacts group id
 	myQuery.setStringCustomParameter("group", temp);
 	myQuery.setMaxResults(2000);
 
+	// queries google for contacts
 	resultFeed = contactService.query(myQuery, ContactFeed.class);
 
 	System.out.println("total results from google "
@@ -107,33 +111,33 @@ public class GoogleContactToAgileContactUtil
 	URL feedUrl = new URL(GOOGLE_CONTACTS_BASE_URL + "groups/default/full?"
 		+ "access_token=" + accessToken);
 
+	// Build query with URL
 	Query myQuery = new Query(feedUrl);
 
-	ContactFeed resultFeed = contactService.query(myQuery,
-		ContactFeed.class);
-	return resultFeed;
+	// queries google for groups
+	return contactService.query(myQuery, ContactFeed.class);
     }
 
     /**
-     * Exchanges refresh token for an access token after he expiry of access
+     * Exchanges refresh token for an access token after the expire of access
      * token
      * 
      * @param refreshToken
-     *            {@link String} refresh token retrieved from oauth
+     *            {@link String} refresh token retrieved from OAuth
      * @return {@link String} JSON response
      * @throws Exception
      */
     public static String refreshTokenInGoogle(String refreshToken)
 	    throws Exception
     {
+	// Build data to post with all tokens
 	String data = "client_id=" + Globals.GOOGLE_CLIENT_ID
 		+ "&client_secret=" + Globals.GOOGLE_SECRET_KEY
 		+ "&grant_type=refresh_token&refresh_token=" + refreshToken;
 
-	String response = HTTPUtil.accessURL(
-		new GoogleApi().getAccessTokenEndpoint(), "", "", "POST", data,
-		String.valueOf(data.length()), "", "");
+	// send request and return response
+	return HTTPUtil.accessURL(new GoogleApi().getAccessTokenEndpoint(), "",
+		"", "POST", data, String.valueOf(data.length()), "", "");
 
-	return response;
     }
 }

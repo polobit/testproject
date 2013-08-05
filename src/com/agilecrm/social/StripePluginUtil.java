@@ -13,45 +13,58 @@ import com.google.gson.Gson;
 import com.stripe.model.Customer;
 import com.stripe.model.Invoice;
 
+/*       
+ * The <code>StripePluginUtil</code> class acts as a Client to Stripe
+ * server
+ * 
+ * <code>StripePluginUtil</code> class contains methods to retrieve stripe customers details
+ * 
+ * @author Tejaswi
+ * @since February 2013
+ */
 public class StripePluginUtil
 {
 
+    /**
+     * Retrieves Stripe customer details and invoices from Stripe plugin server
+     * 
+     * @param widget
+     *            {@link Widget} to retrieve stripe access token
+     * @param customerId
+     *            ID of the customer in Stripe
+     * @return {@link JSONObject} form of the response returned from Stripe
+     * @throws Exception
+     */
     public static JSONObject getCustomerDetails(Widget widget, String customerId)
 	    throws Exception
     {
-
 	JSONObject customer_info = new JSONObject();
-
 	String apiKey = widget.getProperty("access_token");
+
+	/*
+	 * Retrieves Stripe customer based on Stripe customer ID and Stripe
+	 * account API key
+	 */
 	Customer customer = Customer.retrieve(customerId, apiKey);
 
 	Map<String, Object> invoiceParams = new HashMap<String, Object>();
 	invoiceParams.put("customer", customerId);
+
+	/*
+	 * Retrieves list of invoices based on Stripe customer ID and Stripe
+	 * account API key
+	 */
 	List<Invoice> invoiceList = Invoice.all(invoiceParams, apiKey)
 		.getData();
-	// System.out.println(Invoice.all(invoiceParams, apiKey));
-	// System.out.println(invoiceList);
+
+	// Converts list to JSON using GSON and returns output in JSON format
 	JSONArray list = new JSONArray(new Gson().toJson(invoiceList));
-	// System.out.println(list);
 	customer_info.put("customer", StripeUtil.getJSONFromCustomer(customer));
 	customer_info.put("invoice", list);
-	// System.out.println(customer_info);
+
+	System.out.println("Stripe customer info : " + customer_info);
 	return customer_info;
 
-    }
-
-    public static void main(String[] args)
-    {
-	try
-	{
-	    // "sk_test_uNE2ED6qihcFPXMEiYDCWYux";
-	    System.out.println(getCustomerDetails(null, "cus_1xsotInCyOLyiz"));// cus_1HB4FFdQLR4g7X
-	}
-	catch (Exception e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
     }
 
 }
