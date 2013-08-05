@@ -885,7 +885,7 @@ $(function()
 				default_return = "src='" + this.properties[i].value + "' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + ";'";
 								// found uploaded image, break, no need to lookup url
 
-				var error_fxn = "this.src='img/company.png'; this.onerror=null;";
+				error_fxn = "this.src='img/company.png'; this.onerror=null;";
 								// no need to resize, company.png is of good
 								// quality & can be scaled to this size
 
