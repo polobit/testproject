@@ -812,6 +812,22 @@ $(function () {
 		$("#timelineLogModal").modal("show");
     });
 	
+	/**
+	 * Shows analytics popup modal with full details.
+	 **/
+	$("#tl-analytics-popover").live('click',function(e){
+		e.preventDefault();
+		var string = $(this).closest('div.body').html();
+		$("#analytics-in-detail").html("<div'>" + string + "</div>");
+		
+		// Hide plus sign
+		$("#timelineAnalyticsModal").on("show", function(){
+			$('#analytics-in-detail').find('div.right').css('display','none');
+		});
+		
+		$("#timelineAnalyticsModal").modal("show");
+	});
+	
 	/*
 	 * Shows the list of mails(mail sent to) as popover, when mouse is entered on
 	 * to address of the email
