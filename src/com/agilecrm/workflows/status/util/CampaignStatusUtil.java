@@ -6,6 +6,7 @@ import java.util.List;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.workflows.status.CampaignStatus;
+import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
@@ -29,8 +30,7 @@ public class CampaignStatusUtil
      * @param status
      *            - Campaign Status.
      */
-    public static void setStatusOfCampaign(String contactId, String campaignId,
-	    String status)
+    public static void setStatusOfCampaign(String contactId, String campaignId, String status)
     {
 	// Temporary flag to know old or new campaign-status.
 	boolean flag = false;
@@ -51,12 +51,11 @@ public class CampaignStatusUtil
 		continue;
 
 	    // If same campaign runs again, update campaign-status.
-	    if (status.equals(((campaignStatus.campaign_id)) + "-ACTIVE"))
+	    if (status.equals(((campaignStatus.campaign_id)) + "-" + Status.ACTIVE))
 	    {
 		campaignStatus.start_time = recordTime;
 		campaignStatus.end_time = null;
-		campaignStatus.status = (campaignStatus.campaign_id)
-			+ "-ACTIVE";
+		campaignStatus.status = (campaignStatus.campaign_id) + "-" + Status.ACTIVE;
 
 		// True to avoid new CampaignStatus to be created
 		flag = true;
@@ -64,19 +63,18 @@ public class CampaignStatusUtil
 	    }
 
 	    // Updates status from ACTIVE to DONE when campaign is completed.
-	    if (status.equals(((campaignStatus.campaign_id) + "-DONE")))
+	    if (status.equals(((campaignStatus.campaign_id) + "-" + Status.DONE)))
 	    {
 		campaignStatus.end_time = recordTime;
-		campaignStatus.status = ((campaignStatus.campaign_id) + "-DONE");
+		campaignStatus.status = ((campaignStatus.campaign_id) + "-" + Status.DONE);
 		break;
 	    }
 	}
 
 	// When campaign runs for the first-time
-	if (status.equals((campaignId + "-ACTIVE")) && !flag)
+	if (status.equals((campaignId + "-" + Status.ACTIVE)) && !flag)
 	{
-	    CampaignStatus campaignStatus = new CampaignStatus(recordTime,
-		    null, campaignId, (campaignId + "-ACTIVE"));
+	    CampaignStatus campaignStatus = new CampaignStatus(recordTime, null, campaignId, (campaignId + "-" + Status.ACTIVE));
 	    contact.campaignStatus.add(campaignStatus);
 	}
 

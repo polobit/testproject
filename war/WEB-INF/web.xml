@@ -65,7 +65,7 @@
 
 	<servlet>
 		<servlet-name>TwitterCron</servlet-name>
-		<servlet-class>com.campaignio.twitter.TwitterCron</servlet-class>
+		<servlet-class>com.campaignio.twitter.cron.TwitterCron</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>TwitterCron</servlet-name>

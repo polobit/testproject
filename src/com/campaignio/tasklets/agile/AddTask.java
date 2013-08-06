@@ -9,8 +9,6 @@ import org.json.JSONObject;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.Task.PriorityType;
 import com.agilecrm.activities.Task.Type;
-import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.util.DBUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
@@ -22,13 +20,13 @@ import com.campaignio.tasklets.util.TaskletUtil;
  * subscriber. Tasks are like to-dos. Result oriented. User can assign a
  * category such as call, email etc.
  * 
- * @author Manohar
+ * @author Naresh
  * 
  */
 public class AddTask extends TaskletAdapter
 {
     /**
-     * Subject of Note
+     * Subject of Task
      */
     public static String SUBJECT = "subject";
 
@@ -98,7 +96,7 @@ public class AddTask extends TaskletAdapter
     public static String DUE_DAYS = "due_days";
 
     /**
-     * DomainUsers
+     * Selected DomainUser Id.
      */
     public static String OWNER_ID = "owner_id";
 
@@ -115,7 +113,7 @@ public class AddTask extends TaskletAdapter
 	String category = getStringValue(nodeJSON, subscriberJSON, data, CATEGORY);
 	String priority = getStringValue(nodeJSON, subscriberJSON, data, PRIORITY);
 	String dueDays = getStringValue(nodeJSON, subscriberJSON, data, DUE_DAYS);
-	String ownerId = getStringValue(nodeJSON, subscriberJSON, data, OWNER_ID);
+	String givenOwnerId = getStringValue(nodeJSON, subscriberJSON, data, OWNER_ID);
 
 	Calendar calendar = Calendar.getInstance();
 
@@ -128,53 +126,68 @@ public class AddTask extends TaskletAdapter
 
 	Long dueDateInEpoch = calendar.getTimeInMillis() / 1000;
 
-	System.out.println("Given Task Name: " + subject + ",category: " + category + ",priority: " + priority + " and Due Date : " + dueDateInEpoch);
-
-	System.out.println("The given owner for AddTask is: " + ownerId);
-
-	// Get Contact Id and Contact
+	// Contact Id
 	String contactId = DBUtil.getId(subscriberJSON);
-	Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
 
-	Task task = null;
+	// Contact ownerId.
+	String contactOwnerId = DBUtil.getContactOwnerIdFromSubscriberJSON(subscriberJSON);
 
-	if (contact != null)
+	try
 	{
-	    try
-	    {
-
-		task = new Task(Type.valueOf(category), dueDateInEpoch);
-
-		// Intialize task contacts with contact id
-		task.contacts = new ArrayList<String>();
-		task.contacts.add(contactId);
-
-		// Initialize task priority and subject values
-		task.priority_type = PriorityType.valueOf(priority);
-		task.subject = subject;
-
-		// If contact_owner, then owner is contact owner
-		if (ownerId.equals("contact_owner"))
-		    task.owner_id = contact.getOwner().id.toString();
-		else
-		    task.owner_id = ownerId;
-
-		// Save Task
-		task.save();
-
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-		System.out.println("Exception occured while creating Task");
-	    }
+	    // Adds task
+	    addTask(subject, category, priority, dueDateInEpoch, contactId, givenOwnerId, contactOwnerId);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.out.println("Exception occured while creating Task.");
 	}
 
 	// Creates log for AddTask
-	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON), DBUtil.getId(subscriberJSON), "Task: " + task.subject + "<br/> Category: " + task.type + "<br/> Type: "
-		+ task.priority_type + " <br/> Date: " + new Date(dueDateInEpoch * 1000), LogType.ADD_TASK.toString());
+	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON), DBUtil.getId(subscriberJSON), "Task: " + subject + "<br/> Category: " + category + "<br/> Type: "
+		+ priority + " <br/> Date: " + new Date(dueDateInEpoch * 1000), LogType.ADD_TASK.toString());
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+    }
+
+    /**
+     * Adds task to subscribed contact.
+     * 
+     * @param subject
+     *            - Name of the Task.
+     * @param category
+     *            - Call, Email, Meeting etc.
+     * @param priority
+     *            - High, Low and Medium.
+     * @param dueDateInEpoch
+     *            - Epoch time of given due duration.
+     * @param contactId
+     *            - Contact Id.
+     * @param givenOwnerId
+     *            - Selected owner-id.
+     * @param contactOwnerId
+     *            - Contact owner-id.
+     */
+    private void addTask(String subject, String category, String priority, Long dueDateInEpoch, String contactId, String givenOwnerId, String contactOwnerId)
+    {
+	Task task = new Task(Type.valueOf(category), dueDateInEpoch);
+
+	// Intialize task contacts with contact id
+	task.contacts = new ArrayList<String>();
+	task.contacts.add(contactId);
+
+	// Initialize task priority and subject values
+	task.priority_type = PriorityType.valueOf(priority);
+	task.subject = subject;
+
+	// If contact_owner, then owner is contact owner
+	if (givenOwnerId.equals("contact_owner"))
+	    task.owner_id = contactOwnerId;
+	else
+	    task.owner_id = givenOwnerId;
+
+	// Save Task
+	task.save();
     }
 }

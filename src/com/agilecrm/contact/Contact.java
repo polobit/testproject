@@ -32,7 +32,7 @@ import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.triggers.util.ContactTriggerUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
-import com.campaignio.twitter.util.TwitterQueueUtil;
+import com.campaignio.twitter.util.TwitterJobQueueUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.taskqueue.Queue;
@@ -515,7 +515,7 @@ public class Contact extends Cursor
 		LogUtil.deleteSQLLogs(null, id.toString());
 
 		// Deletes TwitterCron
-		TwitterQueueUtil.removeTwitterJobs(null, id.toString(), NamespaceManager.get());
+		TwitterJobQueueUtil.removeTwitterJobs(null, id.toString(), NamespaceManager.get());
 	}
 
 	/**

@@ -19,7 +19,8 @@ import com.campaignio.logger.util.LogUtil;
  * <p>
  * Moreover, taskletadapter class provides Cron functionality for scheduled
  * tasks. TaskletAdapter class is used to get field values that are entered in a
- * node. It replaces the template by subscriber data.
+ * node. It replaces the template by subscriber data. It merges subscriberJSON
+ * and dataJSON into single JSONObject.
  * </p>
  * 
  * @author Manohar
@@ -40,8 +41,7 @@ public class TaskletAdapter implements Tasklet
      * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
      */
     @Override
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
-	    JSONObject data, JSONObject nodeJSON) throws Exception
+    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
 	System.out.println("Dummy run");
     }
@@ -54,8 +54,7 @@ public class TaskletAdapter implements Tasklet
      * org.json.JSONObject)
      */
     @Override
-    public void interrupted(JSONObject campaignJSON, JSONObject subscriberJSON,
-	    JSONObject data, JSONObject nodeJSON, JSONObject interruptCustomData)
+    public void interrupted(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON, JSONObject interruptCustomData)
 	    throws Exception
     {
 	System.out.println("Dummy Interrupted");
@@ -68,9 +67,7 @@ public class TaskletAdapter implements Tasklet
      * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
      */
     @Override
-    public void timeOutComplete(JSONObject campaignJSON,
-	    JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
-	    throws Exception
+    public void timeOutComplete(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
 	System.out.println("Dummy Timeout");
 
@@ -100,18 +97,14 @@ public class TaskletAdapter implements Tasklet
      * @throws Exception
      *             if any exception occurs in Cron.
      */
-    public void addToCron(JSONObject campaignJSON, JSONObject subscriberJSON,
-	    JSONObject data, JSONObject nodeJSON, long timeout, String custom1,
+    public void addToCron(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON, long timeout, String custom1,
 	    String custom2, String custom3) throws Exception
     {
 	// Add Log
-	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
-		DBUtil.getId(subscriberJSON), "Sleeping till " + timeout,
-		LogType.EMAIL_SLEEP.toString());
+	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON), DBUtil.getId(subscriberJSON), "Sleeping till " + timeout, LogType.EMAIL_SLEEP.toString());
 
 	// Enqueue Task
-	CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON,
-		timeout, custom1, custom2, custom3);
+	CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout, custom1, custom2, custom3);
     }
 
     /**
@@ -124,8 +117,7 @@ public class TaskletAdapter implements Tasklet
      * @throws Exception
      *             if any exception occurs in Cron.
      */
-    public void removeFromCron(String campaignID, String subscriberID)
-	    throws Exception
+    public void removeFromCron(String campaignID, String subscriberID) throws Exception
     {
 	// Remove from Cron Task
 	CronUtil.removeTask(campaignID, subscriberID);
@@ -147,9 +139,7 @@ public class TaskletAdapter implements Tasklet
      *         is replaced with subscriber and data json).
      * @throws Exception
      */
-    public String getStringValue(JSONObject nodeJSON,
-	    JSONObject subscriberJSON, JSONObject data, String keyName)
-	    throws Exception
+    public String getStringValue(JSONObject nodeJSON, JSONObject subscriberJSON, JSONObject data, String keyName) throws Exception
     {
 	Object returnValue = getValue(nodeJSON, subscriberJSON, data, keyName);
 	if (returnValue == null)
@@ -172,8 +162,7 @@ public class TaskletAdapter implements Tasklet
      * @return Value given at client side from UI JSON Values.
      * @throws Exception
      */
-    public Object getValue(JSONObject nodeJSON, JSONObject subscriberJSON,
-	    JSONObject data, String keyName) throws Exception
+    public Object getValue(JSONObject nodeJSON, JSONObject subscriberJSON, JSONObject data, String keyName) throws Exception
     {
 	// Check if JSON Value is present
 	if (!nodeJSON.has(JSON_VALUES))
@@ -217,8 +206,7 @@ public class TaskletAdapter implements Tasklet
      * @return replaced content.
      * @throws Exception
      */
-    public String replaceTokens(String value, JSONObject subscriberJSON,
-	    JSONObject data)
+    public String replaceTokens(String value, JSONObject subscriberJSON, JSONObject data)
     {
 	JSONObject mergedJson = null;
 	try
@@ -238,7 +226,7 @@ public class TaskletAdapter implements Tasklet
     }
 
     /**
-     * Merges two json objects into one json object.
+     * Merges subscriberJSON and data json
      * 
      * @param subscriberJSON
      *            Contact data that subscribes to campaign.
@@ -248,18 +236,16 @@ public class TaskletAdapter implements Tasklet
      * @throws Exception
      */
     @SuppressWarnings("rawtypes")
-    private static JSONObject mergeJSONObjects(JSONObject subscriberJSON,
-	    JSONObject data) throws Exception
+    private static JSONObject mergeJSONObjects(JSONObject subscriberJSON, JSONObject data) throws Exception
     {
 	// Temporary json object to merge subscriber and data json objects.
 	JSONObject mergedJson = new JSONObject();
 
-	// Merge two jsons,data object from subscriber json and data json
-	JSONObject[] objs = new JSONObject[] {
-		subscriberJSON.getJSONObject("data"), data };
+	// Merge two jsons, data object from subscriber json and data json
+	JSONObject[] dataJSONObjects = new JSONObject[] { subscriberJSON.getJSONObject("data"), data };
 	try
 	{
-	    for (JSONObject obj : objs)
+	    for (JSONObject obj : dataJSONObjects)
 	    {
 		Iterator it = obj.keys();
 		while (it.hasNext())
@@ -278,54 +264,6 @@ public class TaskletAdapter implements Tasklet
     }
 
     /**
-     * Replaces Tokens - Tokenize the values and find $, find in data and then
-     * replace.
-     * 
-     * @param value
-     *            given value.
-     * @param data
-     *            data within the workflow.
-     * @return replaced data.
-     * @throws Exception
-     */
-    public String replaceTokensOld(String value, JSONObject data)
-	    throws Exception
-    {
-	boolean replaced = false;
-
-	// Tokens
-	String[] tokens = value.split(" ");
-	for (int i = 0; i < tokens.length; i++)
-	{
-	    if (tokens[i].startsWith("$"))
-	    {
-		System.out.println("Converting param " + tokens[i] + " from "
-			+ data);
-		if (data.has(tokens[i]))
-		{
-		    tokens[i] = data.getString(tokens[i]);
-		    replaced = true;
-		}
-	    }
-	}
-
-	String replacedString = "";
-	for (int i = 0; i < tokens.length; i++)
-	{
-	    replacedString += (tokens[i] + " ");
-	}
-
-	if (replaced)
-	    System.out.println("Replaced "
-		    + value.replaceAll("\n", " ").replaceAll("\r", " ")
-		    + " with "
-		    + replacedString.replaceAll("\n", " ")
-			    .replaceAll("\r", " "));
-
-	return replacedString.trim();
-    }
-
-    /**
      * Creates log for the nodes using {@link Log}. Logs are useful to know the
      * information after execution. For e.g.for send-email node, logs are useful
      * whether emails are sent successfully or not.
@@ -338,16 +276,12 @@ public class TaskletAdapter implements Tasklet
      *            Message set in the node class.
      * @throws Exception
      */
-    public void log(JSONObject campaignJSON, JSONObject subscriberJSON,
-	    JSONObject nodeJSON, String message) throws Exception
+    public void log(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject nodeJSON, String message) throws Exception
     {
-	System.out.println("Log: "
-		+ message.replaceAll("\n", " ").replaceAll("\r", " ") + " "
-		+ subscriberJSON + " " + campaignJSON + " " + nodeJSON);
+	System.out.println("Log: " + message.replaceAll("\n", " ").replaceAll("\r", " ") + " " + subscriberJSON + " " + campaignJSON + " " + nodeJSON);
 
 	// Node name as log type.
-	String logType = nodeJSON.getJSONObject("NodeDefinition").getString(
-		"name");
+	String logType = nodeJSON.getJSONObject("NodeDefinition").getString("name");
 
 	String campaignId = DBUtil.getId(campaignJSON);
 	String subscriberId = DBUtil.getId(subscriberJSON);

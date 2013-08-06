@@ -11,16 +11,16 @@ import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.annotation.Indexed;
 
 /**
- * <code>TwitterQueue</code> is responsible to post tweets at regular intervals
- * set by user.
+ * <code>TwitterJobQueue</code> is responsible to post tweets at regular
+ * intervals set by user. TwitterJobQueues are stored in empty namespace.
  * 
  * @author Manohar
  * 
  */
-public class TwitterQueue
+public class TwitterJobQueue
 {
     /**
-     * TwitterQueue Id
+     * TwitterJobQueue Id
      */
     @Id
     public Long id;
@@ -61,35 +61,34 @@ public class TwitterQueue
     public static final String TWITTER_DB_RATE_LIMIT_HOURLY_20 = "rate_limit_20";
 
     /**
-     * Dao for TwitterQueue class
+     * Dao for TwitterJobQueue class
      */
-    private static ObjectifyGenericDao<TwitterQueue> dao = new ObjectifyGenericDao<TwitterQueue>(
-	    TwitterQueue.class);
+    private static ObjectifyGenericDao<TwitterJobQueue> dao = new ObjectifyGenericDao<TwitterJobQueue>(TwitterJobQueue.class);
 
     /**
-     * Default TwitterQueue
+     * Default TwitterJobQueue
      */
-    TwitterQueue()
+    TwitterJobQueue()
     {
 
     }
 
     /**
-     * Twitter Queue with account and ratelimit
+     * TwitterJobQueue with account and ratelimit
      * 
      * @param account
      *            Twitter account
      * @param rateLimit
      *            Rate Limit
      */
-    public TwitterQueue(String account, String rateLimit)
+    public TwitterJobQueue(String account, String rateLimit)
     {
 	this.account = account;
 	this.rate_limit = rateLimit;
     }
 
     /**
-     * Saves TwitterQueue
+     * Saves TwitterJobQueue
      */
     public void save()
     {
@@ -104,6 +103,10 @@ public class TwitterQueue
 	{
 	    dao.put(this);
 	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
 	finally
 	{
 	    NamespaceManager.set(oldNamespace);
@@ -111,11 +114,25 @@ public class TwitterQueue
     }
 
     /**
-     * Deletes TwitterQueue
+     * Deletes TwitterJobQueue
      */
     public void delete()
     {
-	dao.delete(this);
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	try
+	{
+	    dao.delete(this);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
     }
 
 }

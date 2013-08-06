@@ -2,8 +2,8 @@
     "name": "Transfer",
     "thumbnail": "json/nodes/images/common/transfer.png",
     "icon": "json/nodes/icons/common/transfer.png",
-    "info": "Transfer subscribers to different campaign.",
-    "help": "Transfer subscribers to different campaign.",
+    "info": "Transfer the contact into a different campaign.",
+    "help": "Transfer the contact into a different campaign.",
     "author": "Naresh",
     "company": "mantra",
     "language": "en",
@@ -43,7 +43,7 @@
             "fieldType": "select",
             "type": "select" 
         },{
-            "label": "Transfer subscribers from current campaign to other from the list. The other campaign executes immediately as soon as transfer node executes.",
+            "label": "Transfer the contact into a different campaign. For example, if a contact completes a purchase on your website, you can transfer the contact to a "Welcome Customer" campaign!",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 

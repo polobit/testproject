@@ -19,6 +19,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
+import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.googlecode.objectify.Key;
@@ -90,8 +91,7 @@ public class Workflow extends Cursor
     /**
      * Initialize DataAccessObject.
      */
-    public static ObjectifyGenericDao<Workflow> dao = new ObjectifyGenericDao<Workflow>(
-	    Workflow.class);
+    public static ObjectifyGenericDao<Workflow> dao = new ObjectifyGenericDao<Workflow>(Workflow.class);
 
     /**
      * Default Workflow.
@@ -178,8 +178,7 @@ public class Workflow extends Cursor
 	try
 	{
 	    // Get owner pic through agileuser prefs
-	    agileuser = AgileUser.getCurrentAgileUserFromDomainUser(creator_key
-		    .getId());
+	    agileuser = AgileUser.getCurrentAgileUserFromDomainUser(creator_key.getId());
 	    if (agileuser != null)
 		userprefs = UserPrefsUtil.getUserPrefs(agileuser);
 	    if (userprefs != null)
@@ -204,11 +203,9 @@ public class Workflow extends Cursor
     {
 	JSONObject subscribersCount = new JSONObject();
 
-	int active = ContactUtil.getSubscribersCount(id.toString(),
-		id.toString() + "-ACTIVE");
+	int active = ContactUtil.getSubscribersCount(id.toString(), id.toString() + "-" + Status.ACTIVE);
 
-	int done = ContactUtil.getSubscribersCount(id.toString(), id.toString()
-		+ "-DONE");
+	int done = ContactUtil.getSubscribersCount(id.toString(), id.toString() + "-" + Status.DONE);
 
 	try
 	{
@@ -262,8 +259,7 @@ public class Workflow extends Cursor
 	if (creator_key == null)
 	{
 	    // Set creator(current domain user)
-	    creator_key = new Key<DomainUser>(DomainUser.class, SessionManager
-		    .get().getDomainId());
+	    creator_key = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
 	}
 
 	// Store Created and Last Updated Time
@@ -278,7 +274,6 @@ public class Workflow extends Cursor
 
     public String toString()
     {
-	return "Name: " + name + " Rules: " + rules + " created_time: "
-		+ created_time + " updated_time" + updated_time;
+	return "Name: " + name + " Rules: " + rules + " created_time: " + created_time + " updated_time" + updated_time;
     }
 }

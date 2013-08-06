@@ -2,9 +2,7 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
-import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
-import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.util.DBUtil;
 import com.campaignio.logger.Log.LogType;
@@ -39,57 +37,67 @@ public class AddNote extends TaskletAdapter
      * @see com.campaignio.tasklets.TaskletAdapter#run(org.json.JSONObject,
      * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
      */
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
-	    JSONObject data, JSONObject nodeJSON) throws Exception
+    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
-	// Get Subject and Note
+	// Get Subject and Description
 	String subject = getStringValue(nodeJSON, subscriberJSON, data, SUBJECT);
-	String description = getStringValue(nodeJSON, subscriberJSON, data,
-		DESCRIPTION);
+	String description = getStringValue(nodeJSON, subscriberJSON, data, DESCRIPTION);
 
-	System.out.println(" Entered Subject: " + subject + " and Note : "
-		+ description);
-
-	// Get Contact Id
-	String contactId = DBUtil.getId(subscriberJSON);
-	Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
-
-	System.out.println(" Contact Details: " + contact);
-
-	if (contact != null)
+	try
 	{
-	    // Get DomainUser id who created workflow
-	    Long domainId = campaignJSON.getLong("domainUserId");
+	    // Get Contact Id
+	    String contactId = DBUtil.getId(subscriberJSON);
 
-	    if (domainId == null)
+	    // Get Contact Owner Id.
+	    String ownerId = DBUtil.getContactOwnerIdFromSubscriberJSON(subscriberJSON);
+
+	    if (ownerId == null)
 	    {
+		System.out.println("No owner");
+
 		// Execute Next One in Loop
-		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
-			nodeJSON, null);
+		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
 		return;
 	    }
 
-	    AgileUser agileUser = AgileUser
-		    .getCurrentAgileUserFromDomainUser(domainId);
-	    Key<AgileUser> owner = new Key<AgileUser>(AgileUser.class,
-		    agileUser.id);
+	    AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(Long.parseLong(ownerId));
+	    Key<AgileUser> owner = new Key<AgileUser>(AgileUser.class, agileUser.id);
 
-	    Note note = new Note(subject, description);
-
-	    note.addRelatedContacts(contactId);
-	    note.setOwner(owner);
-	    note.save();
-
+	    // Add note
+	    addNote(subject, description, contactId, owner);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.out.println("Got Exception while adding note.");
 	}
 
 	// Creates log for note
-	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
-		DBUtil.getId(subscriberJSON), "Subject: " + subject
-			+ "<br>Description: " + description,
+	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON), DBUtil.getId(subscriberJSON), "Subject: " + subject + "<br>Description: " + description,
 		LogType.ADD_NOTE.toString());
 
 	// Execute Next One in Loop
-	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
-		nodeJSON, null);
+	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+    }
+
+    /**
+     * Add note with subject and description to the contact of given contact-id
+     * along with contact-owner.
+     * 
+     * @param subject
+     *            - Note subject.
+     * @param description
+     *            - Note description.
+     * @param contactId
+     *            - Contact Id.
+     * @param owner
+     *            - Contact Owner.
+     */
+    private void addNote(String subject, String description, String contactId, Key<AgileUser> owner)
+    {
+	Note note = new Note(subject, description);
+	note.addRelatedContacts(contactId);
+	note.setOwner(owner);
+	note.save();
     }
 }

@@ -1,4 +1,4 @@
-package com.campaignio.twitter;
+package com.campaignio.twitter.cron;
 
 import java.io.IOException;
 
@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.campaignio.twitter.util.TwitterQueueUtil;
+import com.campaignio.twitter.util.TwitterJobQueueUtil;
 
 /**
  * <code>TwitterCron</code> is the servlet that is used to run TwitterQueue with
@@ -41,7 +41,7 @@ public class TwitterCron extends HttpServlet
 	}
 
 	System.out.println("Rate Limit " + rateLimit);
-	TwitterQueueUtil.runTwitterQueues(rateLimit);
+	TwitterJobQueueUtil.runTwitterQueues(rateLimit);
 
     }
 
