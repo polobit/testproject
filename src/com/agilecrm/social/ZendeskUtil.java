@@ -8,7 +8,7 @@ import org.json.JSONObject;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.widgets.Widget;
 
-/*       
+/**
  * The <code>ZendeskUtil</code> class acts as a Client to ClickDeskPlugins
  * server
  * 

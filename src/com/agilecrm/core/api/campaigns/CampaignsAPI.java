@@ -44,14 +44,13 @@ public class CampaignsAPI
     @Path("enroll/{contact-id}/{workflow-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void subscribeContact(@PathParam("contact-id") Long contactId,
-	    @PathParam("workflow-id") Long workflowId)
+    public void subscribeContact(@PathParam("contact-id") Long contactId, @PathParam("workflow-id") Long workflowId)
     {
 	Contact contact = ContactUtil.getContact(contactId);
 	if (contact == null)
 	{
 	    System.out.println("Null contact");
-	    // return "true";
+	    return;
 	}
 
 	/*
@@ -92,9 +91,7 @@ public class CampaignsAPI
     @Path("logs/contact/{contact-id}/{campaign-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Log> getCampaignContactLogs(
-	    @PathParam("contact-id") String contactId,
-	    @PathParam("campaign-id") String campaignId)
+    public List<Log> getCampaignContactLogs(@PathParam("contact-id") String contactId, @PathParam("campaign-id") String campaignId)
     {
 	return LogUtil.getSQLLogs(campaignId, contactId, null);
     }

@@ -4,7 +4,7 @@ import java.net.URL;
 import java.util.List;
 
 import com.agilecrm.Globals;
-import com.agilecrm.GoogleApi;
+import com.agilecrm.scribe.api.GoogleApi;
 import com.agilecrm.util.HTTPUtil;
 import com.google.gdata.client.Query;
 import com.google.gdata.client.authn.oauth.GoogleOAuthParameters;

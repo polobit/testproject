@@ -14,9 +14,10 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.workflows.Workflow;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
-import com.campaignio.tasklets.deferred.TaskletWorkflowDeferredTask;
+import com.campaignio.tasklets.util.TaskMain;
 import com.campaignio.tasklets.util.TaskletUtil;
-import com.campaignio.twitter.util.TwitterQueueUtil;
+import com.campaignio.tasklets.util.deferred.TaskletWorkflowDeferredTask;
+import com.campaignio.twitter.util.TwitterJobQueueUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -131,8 +132,9 @@ public class WorkflowUtil
 
 	    if (domainUser != null)
 	    {
-		owner.put("name", contact.getOwner().name);
-		owner.put("email", contact.getOwner().email);
+		owner.put("id", domainUser.id);
+		owner.put("name", domainUser.name);
+		owner.put("email", domainUser.email);
 	    }
 
 	    // Inserts contact owner-name and owner-email.
@@ -163,7 +165,8 @@ public class WorkflowUtil
 
 	for (Contact contact : contacts)
 	{
-	    subscriberJSONArray.put(getSubscriberJSON(contact));
+	    if (contact != null)
+		subscriberJSONArray.put(getSubscriberJSON(contact));
 	}
 
 	return subscriberJSONArray;
@@ -192,8 +195,8 @@ public class WorkflowUtil
 
 	    campaignJSON.put(TaskletUtil.CAMPAIGN_WORKFLOW_JSON, workflowJSON);
 	    campaignJSON.put("id", workflow.id);
-	    campaignJSON.put("domainUserId", workflow.getDomainUserId());
-
+	    campaignJSON.put("name", workflow.name);
+	    campaignJSON.put("domain_user_id", workflow.getDomainUserId());
 	    return campaignJSON;
 	}
 	catch (Exception e)
@@ -223,7 +226,7 @@ public class WorkflowUtil
 	if (campaignJSON == null)
 	    return;
 
-	TaskletUtil.executeCampaign(campaignJSON, subscriberJSONArray);
+	TaskMain.executeCampaign(campaignJSON, subscriberJSONArray);
     }
 
     /**
@@ -241,10 +244,28 @@ public class WorkflowUtil
 	{
 	    // Convert Contacts into JSON Array
 	    JSONObject subscriberJSONObject = getSubscriberJSON(contact);
+	    subscribeWithSubscriberJSON(subscriberJSONObject, workflowId);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+    }
 
-	    // TaskletUtil.executeWorkflow(campaignJSON, subscriberJSONObject);
-
-	    TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(workflowId.toString(), subscriberJSONObject.toString());
+    /**
+     * Subscribes subscriberJSON to the campaign of given workflow-id in
+     * deferredtask.
+     * 
+     * @param subscriberJSON
+     *            - SubscriberJSON.
+     * @param workflowId
+     *            - workflow-id.
+     */
+    public static void subscribeWithSubscriberJSON(JSONObject subscriberJSON, Long workflowId)
+    {
+	try
+	{
+	    TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(workflowId.toString(), subscriberJSON.toString());
 	    Queue queue = QueueFactory.getQueue("campaign-queue");
 	    queue.add(TaskOptions.Builder.withPayload(taskletWorkflowDeferredTask));
 	}
@@ -285,7 +306,7 @@ public class WorkflowUtil
 	    LogUtil.deleteSQLLogs(campaignId, null);
 
 	    // Deletes twitter-jobs of campaign
-	    TwitterQueueUtil.removeTwitterJobs(campaignId, null, namespace);
+	    TwitterJobQueueUtil.removeTwitterJobs(campaignId, null, namespace);
 	}
     }
 
@@ -302,5 +323,25 @@ public class WorkflowUtil
 	System.out.println("owner id : " + SessionManager.get().getDomainId());
 	return dao.ofy().query(Workflow.class).filter("creator_key", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
 		.order("-created_time").limit(Integer.parseInt(page_size)).list();
+    }
+
+    /**
+     * Returns campaignName with respect to campaign-id.
+     * 
+     * @param campaignId
+     *            - Campaign Id.
+     * @return String
+     */
+    public static String getCampaignName(String campaignId)
+    {
+	if (campaignId == null)
+	    return null;
+
+	Workflow workflow = getWorkflow(Long.parseLong(campaignId));
+
+	if (workflow != null)
+	    return workflow.name;
+
+	return "?";
     }
 }

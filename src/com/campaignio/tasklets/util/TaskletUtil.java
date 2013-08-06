@@ -6,12 +6,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.util.DBUtil;
+import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.campaignio.tasklets.Tasklet;
-import com.campaignio.tasklets.deferred.TaskletWorkflowDeferredTask;
-import com.google.appengine.api.taskqueue.Queue;
-import com.google.appengine.api.taskqueue.QueueFactory;
-import com.google.appengine.api.taskqueue.TaskOptions;
 
 /**
  * <code>TaskletUtil</code> class is the base class for campaigns. It can
@@ -69,23 +66,6 @@ public class TaskletUtil
     public static final String WORKFLOW_TASKLET_CLASS_NAME = "workflow_tasklet_class_name";
 
     /**
-     * Executes workflow for single contact starting with Start node.
-     * 
-     * @param campaignJSON
-     *            Campaign json with workflow having nodes connected to each
-     *            other.
-     * @param subscriberJSON
-     *            Contact that subscribes to campaign.
-     * @throws Exception
-     */
-    public static void executeWorkflow(JSONObject campaignJSON,
-	    JSONObject subscriberJSON) throws Exception
-    {
-	// Start from null currentNode
-	executeTasklet(campaignJSON, subscriberJSON, null, null, null);
-    }
-
-    /**
      * Executes Tasklet.
      * 
      * @param campaignJSON
@@ -101,9 +81,8 @@ public class TaskletUtil
      *            branches.
      * @throws Exception
      */
-    public static void executeTasklet(JSONObject campaignJSON,
-	    JSONObject subscriberJSON, JSONObject data,
-	    JSONObject currentNodeJSON, String branch) throws Exception
+    public static void executeTasklet(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject currentNodeJSON, String branch)
+	    throws Exception
     {
 	if (data == null)
 	    data = new JSONObject();
@@ -132,10 +111,8 @@ public class TaskletUtil
 
 		// Records end-time of campaign and change status to
 		// campaignId-DONE.
-		CampaignStatusUtil.setStatusOfCampaign(
-			DBUtil.getId(subscriberJSON),
-			DBUtil.getId(campaignJSON), DBUtil.getId(campaignJSON)
-				+ "-DONE");
+		CampaignStatusUtil
+			.setStatusOfCampaign(DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON), DBUtil.getId(campaignJSON) + "-" + Status.DONE);
 
 		return;
 	    }
@@ -147,82 +124,11 @@ public class TaskletUtil
 	// Get Tasklet
 	Tasklet tasklet = getTasklet(nodeJSON);
 
-	System.out.println("Executing Tasklet "
-		+ getNodeDefinitionValue(nodeJSON, "name"));
+	System.out.println("Executing Tasklet " + getNodeDefinitionValue(nodeJSON, "name"));
 
 	// Execute tasklet
 	if (tasklet != null)
 	    tasklet.run(campaignJSON, subscriberJSON, data, nodeJSON);
-    }
-
-    /**
-     * Executes campaign when there is a list of subscribers.
-     * 
-     * @param campaignJSON
-     *            nodes that are connected in a workflow.
-     * @param subscriberJSONArray
-     *            list of subscribers.
-     */
-    public static void executeCampaign(JSONObject campaignJSON,
-	    JSONArray subscriberJSONArray)
-    {
-	// Iterate through JSONArray
-	for (int i = 0; i < subscriberJSONArray.length(); i++)
-	{
-	    JSONObject subscriberJSON;
-	    try
-	    {
-		// Get Subscriber
-		subscriberJSON = subscriberJSONArray.getJSONObject(i);
-	    }
-	    catch (Exception e)
-	    {
-		System.err.println(e);
-		continue;
-	    }
-
-	    System.out.println("Executing " + subscriberJSON);
-
-	    String key = DBUtil.getId(subscriberJSON) + " "
-		    + DBUtil.getId(campaignJSON);
-
-	    if (key.contains("null"))
-		continue;
-
-	    System.out.println("Checking for duplicates " + key);
-
-	    // Check if this campaign has been executed for this user
-	    /*
-	     * if(CacheUtil.isPresent(key)) {
-	     * System.out.println("Duplicate found " + key + " " +
-	     * subscriberJSON + " " + campaignJSON); continue; } else { //
-	     * Campaign is new to new subscriber - let's add them to Cache
-	     * CacheUtil.put(key, new Boolean("true")); }
-	     */
-
-	    try
-	    {
-		// Execute it in a task queue each batch
-		// executeWorkflow(campaignJSON, subscriberJSON);
-
-		TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(
-			DBUtil.getId(campaignJSON), subscriberJSON.toString());
-		Queue queue = QueueFactory.getQueue("campaign-queue");
-		queue.add(TaskOptions.Builder
-			.withPayload(taskletWorkflowDeferredTask));
-	    }
-	    catch (Exception e)
-	    {
-		System.err.println("Exception " + e);
-	    }
-
-	    System.out.println("Done Executing " + subscriberJSON);
-	}
-
-	System.out.println("Campaign Completed ");
-
-	// If not
-	// executeWorkflow
     }
 
     /**
@@ -237,8 +143,7 @@ public class TaskletUtil
     public static Tasklet getTasklet(JSONObject nodeJSON) throws Exception
     {
 	// Get Name from nodeJSON
-	String className = getNodeDefinitionValue(nodeJSON,
-		WORKFLOW_TASKLET_CLASS_NAME);
+	String className = getNodeDefinitionValue(nodeJSON, WORKFLOW_TASKLET_CLASS_NAME);
 	if (className == null)
 	    throw new Exception("Cannot find tasklet class name " + nodeJSON);
 
@@ -258,15 +163,13 @@ public class TaskletUtil
      * @return the value associated with the key.
      * @throws Exception
      */
-    public static String getNodeDefinitionValue(JSONObject nodeJSON, String key)
-	    throws Exception
+    public static String getNodeDefinitionValue(JSONObject nodeJSON, String key) throws Exception
     {
 	// Get Name
 	if (!nodeJSON.has(WORKFLOW_NODE_DEFINITION))
 	    throw new Exception("Node Definition Missing" + nodeJSON);
 
-	JSONObject nodeDefinitionJSON = nodeJSON
-		.getJSONObject(WORKFLOW_NODE_DEFINITION);
+	JSONObject nodeDefinitionJSON = nodeJSON.getJSONObject(WORKFLOW_NODE_DEFINITION);
 
 	if (!nodeDefinitionJSON.has(key))
 	    return null;
@@ -287,8 +190,7 @@ public class TaskletUtil
      * @throws Exception
      */
     @SuppressWarnings("rawtypes")
-    public static String getNextNodeId(JSONObject campaignJSON,
-	    JSONObject currentNodeJSON, String branch) throws Exception
+    public static String getNextNodeId(JSONObject campaignJSON, JSONObject currentNodeJSON, String branch) throws Exception
     {
 	// Get the States
 	JSONArray states = currentNodeJSON.getJSONArray("States");
@@ -321,15 +223,13 @@ public class TaskletUtil
      * @return json object with that nodeId in a workflow.
      * @throws Exception
      */
-    public static JSONObject getNodeJSON(JSONObject campaignJSON, String nodeId)
-	    throws Exception
+    public static JSONObject getNodeJSON(JSONObject campaignJSON, String nodeId) throws Exception
     {
 	// Get Workflow Json
 	if (!campaignJSON.has(CAMPAIGN_WORKFLOW_JSON))
 	    return null;
 
-	JSONObject workflowJSON = campaignJSON
-		.getJSONObject(CAMPAIGN_WORKFLOW_JSON);
+	JSONObject workflowJSON = campaignJSON.getJSONObject(CAMPAIGN_WORKFLOW_JSON);
 
 	// Iterate through all keys and find if it matches currentNodeId
 

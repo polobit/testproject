@@ -1521,9 +1521,7 @@ $(function()
 			if (uurl === rurl)
 			{
 				var k = turl.indexOf('q=');
-				turl = turl.slice(k, turl.indexOf('&', k));
-				var s = turl.length;
-				turl = turl.slice(2, s);
+				turl = turl.slice(k+2, turl.indexOf('&', k));
 				turl = turl.replace('+', ' ');
 				return new Handlebars.SafeString('( Keyword : ' + turl + ' )');
 			}

@@ -32,7 +32,7 @@ import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.triggers.util.ContactTriggerUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
-import com.campaignio.twitter.util.TwitterQueueUtil;
+import com.campaignio.twitter.util.TwitterJobQueueUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.taskqueue.Queue;
@@ -521,7 +521,7 @@ public class Contact extends Cursor
 		LogUtil.deleteSQLLogs(null, id.toString());
 
 		// Deletes TwitterCron
-		TwitterQueueUtil.removeTwitterJobs(null, id.toString(), NamespaceManager.get());
+		TwitterJobQueueUtil.removeTwitterJobs(null, id.toString(), NamespaceManager.get());
 	}
 
 	/**
@@ -648,6 +648,13 @@ public class Contact extends Cursor
 	@PrePersist
 	private void PrePersist()
 	{
+		// Set owner, when only the owner_key is null
+		if (owner_key == null)
+		{
+			// Set lead owner(current domain user)
+			owner_key = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
+		}
+
 		if (this.type == Type.PERSON)
 		{
 			System.out.println("Branching to type PERSON");
@@ -696,13 +703,6 @@ public class Contact extends Cursor
 				else
 					this.contact_company_key = null;
 			}
-		}
-
-		// Set owner, when only the owner_key is null
-		if (owner_key == null)
-		{
-			// Set lead owner(current domain user)
-			owner_key = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
 		}
 
 		// Store Created and Last Updated Time Check for id even if created
