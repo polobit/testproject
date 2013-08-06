@@ -19,83 +19,89 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ContactField
 {
 
-    /*
-     * Cannot use Notsaved within embedded
-     */
-    /**
-     * Type of ContactField - System/Custom
-     */
-    public static enum FieldType
-    {
-	SYSTEM, CUSTOM
-    };
+	/*
+	 * Cannot use Notsaved within embedded
+	 */
+	/**
+	 * Type of ContactField - System/Custom
+	 */
+	public static enum FieldType
+	{
+		SYSTEM, CUSTOM
+	};
 
-    /**
-     * Specifies the type of ContactField
-     */
-    public FieldType type = FieldType.SYSTEM;
+	/**
+	 * Specifies the type of ContactField
+	 */
+	public FieldType type = FieldType.SYSTEM;
 
-    /**
-     * Field Name - Eg: email, phone, first_name etc.
-     * 
-     */
-    public String name = null;
+	/**
+	 * Field Name - Eg: email, phone, first_name etc.
+	 * 
+	 */
+	public String name = null;
 
-    /**
-     * Field Sub Name - work, email etc. - can be null
-     * 
-     */
-    public String subtype = null;
+	/**
+	 * Field Sub Name - work, email etc. - can be null
+	 * 
+	 */
+	public String subtype = null;
 
-    /**
-     * Value of the field
-     */
-    public String value = null;
+	/**
+	 * Value of the field
+	 */
+	public String value = null;
 
-    /**
-     * Default constructor
-     */
-    public ContactField()
-    {
+	/**
+	 * Default constructor
+	 */
+	public ContactField()
+	{
 
-    }
+	}
 
-    /**
-     * Creates a ContactField object with System field values
-     * 
-     * @param name
-     *            name of the field (name, email etc..)
-     * @param subtype
-     *            subtype of the field (work, home etc..)
-     * @param value
-     *            value of the field
-     */
-    public ContactField(String name, String value, String subtype)
-    {
-	this.type = FieldType.SYSTEM;
-	this.name = name;
-	this.subtype = subtype;
-	this.value = value;
-    }
+	/**
+	 * Creates a ContactField object with System field values
+	 * 
+	 * @param name
+	 *            name of the field (name, email etc..)
+	 * @param subtype
+	 *            subtype of the field (work, home etc..)
+	 * @param value
+	 *            value of the field
+	 */
+	public ContactField(String name, String value, String subtype)
+	{
+		this.type = FieldType.SYSTEM;
+		this.name = name;
+		this.subtype = subtype;
+		this.value = value;
+	}
 
-    public String toString()
-    {
-	return "[" + this.type + " " + this.name + " " + this.value + "] ";
-    }
+	public String toString()
+	{
+		return "[" + this.type + " " + this.name + " " + this.value + "] ";
+	}
 
-    @Override
-    public boolean equals(Object o)
-    {
-	ContactField field = (ContactField) o;
+	@Override
+	public boolean equals(Object o)
+	{
+		ContactField field = (ContactField) o;
 
-	if (!this.name.equals(field.name) || !this.value.equals(field.value))
-	    return false;
-	
-	if ((this.subtype != null && !this.subtype.equals(field.subtype))
-		|| (this.type != null && !this.type.equals(field.type)))
-	    return false;
+		if (this.name != field.name || this.value != field.value)
+			return false;
 
-	return true;
-    }
+		if ((this.name != null && !this.name.equals(field.name))
+				|| (this.value != null && !this.value.equals(field.value)))
+			// if(!this.name.equals(field.name) ||
+			// !this.value.equals(field.value))
+			return false;
+
+		if ((this.subtype != null && !this.subtype.equals(field.subtype))
+				|| (this.type != null && !this.type.equals(field.type)))
+			return false;
+
+		return true;
+	}
 
 }

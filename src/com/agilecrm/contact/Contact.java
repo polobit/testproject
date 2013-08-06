@@ -670,7 +670,7 @@ public class Contact extends Cursor
 						// company name not found, create a new one
 						Contact newCompany = new Contact();
 						newCompany.properties = new ArrayList<ContactField>();
-						newCompany.properties.add(new ContactField(Contact.NAME, null, contactField.value));
+						newCompany.properties.add(new ContactField(Contact.NAME, contactField.value, null));
 						newCompany.type = Type.COMPANY;
 						newCompany.save();
 
