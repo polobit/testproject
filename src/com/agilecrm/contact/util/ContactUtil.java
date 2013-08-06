@@ -442,8 +442,9 @@ public class ContactUtil
 
 				ContactField field = properties.get(j);
 
-				// To avoid saving ignore field value
-				if (field == null || field.name == null)
+				// To avoid saving ignore field value/ and avoid fields with
+				// empty values
+				if (field == null || field.name == null || StringUtils.isEmpty(field.value))
 					continue;
 
 				// This is hardcoding but found no way to know how to get tags
@@ -454,6 +455,7 @@ public class ContactUtil
 					System.out.println("field name " + field.name);
 					continue;
 				}
+
 				field.value = csvValues[j];
 
 				contact.properties.add(field);
