@@ -30,3 +30,8 @@ cron:
 - description: Twitter20
   url: /backend/cron/twitter?rate=rate_limit_20
   schedule: every 20 mins
+
+- description: Blobstore clean
+  url: /backend/cron/blobs-delete
+  schedule: every day 23:30
+

@@ -784,6 +784,14 @@ $(function()
 		return new Handlebars.SafeString(el);
 		
 	});
+	
+	/**
+	 * To represent a number with commas in deals
+	 */
+	Handlebars.registerHelper('numberWithCommas', function(value)
+	{
+		return value.toFixed(2).toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00','');
+	});
 
 	/**
 	 * Converts reports/view field element as comma seprated values and returns
@@ -1205,9 +1213,9 @@ $(function()
 				contactEntity = getPropertyValue(properties, "first_name") + " " + getPropertyValue(properties, "last_name");
 			}
 
-			if (getPropertyValue(contact_properties, key) == getPropertyValue(properties, key))
+			if (currentContactEntity == contactEntity)
 				return options.fn(this);
-
+			
 			return options.inverse(this)
 		}
 	});
@@ -1492,9 +1500,10 @@ $(function()
 		if (!getCurrentContactProperty(original_ref))
 			return "unknown";
 		else
-			return new Handlebars.SafeString(
-					'<a style="text-decoration: none" target="_blank" href="' + getCurrentContactProperty(original_ref) + '">' + getCurrentContactProperty(
-							original_ref).slice(0, 40) + '</a>');
+			var url = getCurrentContactProperty(original_ref);
+			url = url.split('/');
+			url = (url[0]+'//'+url[2]);
+			return new Handlebars.SafeString('<a style="text-decoration: none" target="_blank" href="' + getCurrentContactProperty(original_ref) + '">' + url + '</a>');
 	});
 
 	/**
@@ -1505,8 +1514,10 @@ $(function()
 		if (getCurrentContactProperty(original_ref))
 		{
 			var turl = getCurrentContactProperty(original_ref);
-			var rurl = 'http://www.google.';
-			var uurl = turl.slice(0, 18);
+			var rurl = 'www.google.';
+			var uurl = turl.split('/');
+			uurl = uurl[2];
+			uurl = uurl.slice(0,11);
 			if (uurl === rurl)
 			{
 				var k = turl.indexOf('q=');
