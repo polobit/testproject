@@ -88,20 +88,21 @@ public class ContactField
 	{
 		ContactField field = (ContactField) o;
 
-		if (this.name != field.name || this.value != field.value)
-			return false;
+		if (this.name != null && this.value != null && this.name.equals(field.name) && this.value.equals(field.value))
+		{
+			// Both name and value must be equal & not null,
+			// Additional check to prevent any chance of null pointer
+			// exception.
+			// Checking subtype & type now.
 
-		if ((this.name != null && !this.name.equals(field.name))
-				|| (this.value != null && !this.value.equals(field.value)))
-			// if(!this.name.equals(field.name) ||
-			// !this.value.equals(field.value))
-			return false;
+			if ((this.subtype != null && !this.subtype.equals(field.subtype))
+					|| (this.type != null && !this.type.equals(field.type)))
+				return false;
 
-		if ((this.subtype != null && !this.subtype.equals(field.subtype))
-				|| (this.type != null && !this.type.equals(field.type)))
-			return false;
-
-		return true;
+			return true;
+		}
+		return false; // if any of name or value is null, this entry might be
+						// erroneous entry from client
 	}
 
 }

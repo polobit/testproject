@@ -324,6 +324,12 @@ public class Contact extends Cursor
 		// Checks of properties has any change
 		for (ContactField property : contact.properties)
 		{
+			// If name or value is null, this might be erroneous entry from
+			// client-side
+			// Simply ignore these kind of entries
+			if (property.name == null || property.value == null)
+				continue;
+
 			if (!properties.contains(property))
 				return false;
 		}
