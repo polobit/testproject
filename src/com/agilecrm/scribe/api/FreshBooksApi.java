@@ -1,4 +1,4 @@
-package com.agilecrm;
+package com.agilecrm.scribe.api;
 
 import org.scribe.builder.api.DefaultApi10a;
 import org.scribe.model.Token;
