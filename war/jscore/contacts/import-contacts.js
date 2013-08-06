@@ -221,8 +221,7 @@ $(function() {
 
 				
 						// Shows Updating
-						$waiting.find('#status-message').html(
-								'Contacts import task scheduled');
+						$waiting.find('#status-message').html(LOADING_HTML);
 
 						
 
@@ -230,7 +229,7 @@ $(function() {
 						// order of properties
 						var contact = model;
 
-						console.log(contact);
+						console.log(contact);	
 
 						// Sends request to save the contacts uploaded from csv,
 						// present in the blobstore. Contact is sent to save
@@ -241,7 +240,14 @@ $(function() {
 							data : JSON.stringify(contact),
 							contentType : "application/json",
 							success : function(data) {
-
+								
+								$waiting.find('#status-message').html('Contacts import task scheduled ').show().delay(3000).hide(1, function(){
+									// Navigate to contacts page
+									Backbone.history.navigate("contacts", {
+							            trigger: true
+							        });
+								});
+	
 								// Calls vefiryUploadStatus with data returned
 								// from the url i.e., key of the memcache
 								// verifyUploadStatus(data);
@@ -269,9 +275,9 @@ function parseCSV(key) {
 		constructCustomfieldOptions(function(fields, el) {
 			
 			/*
-			$('#custom_fields', template).each(function(index, element) {
-				$(element).html(el);
-			});*/
+			 * $('#custom_fields', template).each(function(index, element) {
+			 * $(element).html(el); });
+			 */
 			data["custom_fields"] = fields.toJSON();
 			console.log(data);
 			var template = $(getTemplate("import-contacts-2", data));
