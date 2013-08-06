@@ -678,6 +678,13 @@ public class Contact extends Cursor
 						newCompany.properties = new ArrayList<ContactField>();
 						newCompany.properties.add(new ContactField(Contact.NAME, contactField.value, null));
 						newCompany.type = Type.COMPANY;
+
+						/*
+						 * We already have the owner of contact contact, which
+						 * should also be owner of contact. Instead of fetching
+						 * key from session in prepersist we can use the same.
+						 */
+						newCompany.setContactOwner(owner_key);
 						newCompany.save();
 
 						// assign key, NECESSARY
