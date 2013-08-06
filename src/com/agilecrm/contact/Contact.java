@@ -648,6 +648,13 @@ public class Contact extends Cursor
 	@PrePersist
 	private void PrePersist()
 	{
+		// Set owner, when only the owner_key is null
+		if (owner_key == null)
+		{
+			// Set lead owner(current domain user)
+			owner_key = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
+		}
+
 		if (this.type == Type.PERSON)
 		{
 			System.out.println("Branching to type PERSON");
@@ -696,13 +703,6 @@ public class Contact extends Cursor
 				else
 					this.contact_company_key = null;
 			}
-		}
-
-		// Set owner, when only the owner_key is null
-		if (owner_key == null)
-		{
-			// Set lead owner(current domain user)
-			owner_key = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
 		}
 
 		// Store Created and Last Updated Time Check for id even if created
