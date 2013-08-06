@@ -45,7 +45,7 @@ import com.agilecrm.workflows.triggers.Trigger;
 import com.campaignio.URLShortener.URLShortener;
 import com.campaignio.cron.Cron;
 import com.campaignio.logger.Log;
-import com.campaignio.twitter.TwitterQueue;
+import com.campaignio.twitter.TwitterJobQueue;
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.QueryResultIterator;
@@ -74,8 +74,7 @@ import com.googlecode.objectify.util.DAOBase;
 public class ObjectifyGenericDao<T> extends DAOBase
 {
 
-    static final int BAD_MODIFIERS = Modifier.FINAL | Modifier.STATIC
-	    | Modifier.TRANSIENT;
+    static final int BAD_MODIFIERS = Modifier.FINAL | Modifier.STATIC | Modifier.TRANSIENT;
 
     // Registers the classes with ObjectifyService
     static
@@ -106,7 +105,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	// Campaign
 	ObjectifyService.register(Cron.class);
-	ObjectifyService.register(TwitterQueue.class);
+	ObjectifyService.register(TwitterJobQueue.class);
 	ObjectifyService.register(Log.class);
 	ObjectifyService.register(URLShortener.class);
 	ObjectifyService.register(Trigger.class);
@@ -503,8 +502,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
      * @param map
      * @return
      */
-    public List<Key<T>> listKeyByProperty(Map<String, Object> map,
-	    String orderBy, Integer limit)
+    public List<Key<T>> listKeyByProperty(Map<String, Object> map, String orderBy, Integer limit)
     {
 	Query<T> q = ofy().query(clazz);
 	for (String propName : map.keySet())
@@ -593,11 +591,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	for (Field field : clazz.getDeclaredFields())
 	{
 	    // Ignore transient, embedded, array, and collection properties
-	    if (field.isAnnotationPresent(Transient.class)
-		    || (field.isAnnotationPresent(Embedded.class))
-		    || (field.getType().isArray())
-		    || (Collection.class.isAssignableFrom(field.getType()))
-		    || ((field.getModifiers() & BAD_MODIFIERS) != 0))
+	    if (field.isAnnotationPresent(Transient.class) || (field.isAnnotationPresent(Embedded.class)) || (field.getType().isArray())
+		    || (Collection.class.isAssignableFrom(field.getType())) || ((field.getModifiers() & BAD_MODIFIERS) != 0))
 		continue;
 
 	    field.setAccessible(true);

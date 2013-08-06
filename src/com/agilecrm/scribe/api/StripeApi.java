@@ -1,4 +1,4 @@
-package com.agilecrm;
+package com.agilecrm.scribe.api;
 
 import org.scribe.builder.api.DefaultApi20;
 import org.scribe.model.OAuthConfig;

@@ -93,7 +93,6 @@ public class URLShortenerUtil
 
 	// Gets current namespace to append url
 	String domain = NamespaceManager.get();
-	domain = "satish";
 	System.out.println("Namespace in URLShortenerUtil: " + domain);
 
 	String domainKey = "";

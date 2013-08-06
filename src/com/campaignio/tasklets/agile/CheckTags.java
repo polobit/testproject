@@ -11,7 +11,7 @@ import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
- * <code>TagExists</code> represents Tag exists node in workflow. It compares
+ * <code>CheckTags</code> represents CheckTags node in workflow. It compares
  * given tags with contact tags. If all given tags are present in contact tags,
  * then branch Yes is processed, otherwise branch No.
  * 
@@ -35,14 +35,10 @@ public class CheckTags extends TaskletAdapter
      */
     public static String BRANCH_NO = "no";
 
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
-	    JSONObject data, JSONObject nodeJSON) throws Exception
+    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
 	// Get Tags
-	String tagValue = getStringValue(nodeJSON, subscriberJSON, data,
-		TAG_VALUE);
-
-	System.out.println("The given tag values are: " + tagValue);
+	String tagValue = getStringValue(nodeJSON, subscriberJSON, data, TAG_VALUE);
 
 	// Get Contact Id and Contact
 	String contactId = DBUtil.getId(subscriberJSON);
@@ -51,16 +47,8 @@ public class CheckTags extends TaskletAdapter
 	if (contact == null)
 	    return;
 
-	String tags = "";
-
-	// remove leading and trailing spaces
-	tags = tagValue.trim();
-
-	// Remove trailing comma
-	tags = tags.replaceAll(",$", "");
-
-	// Replace ,space with space
-	tags = tags.replaceAll(", ", ",");
+	// Normalises the given string.
+	String tags = DBUtil.normalizeStringSeparatedByDelimiter(',', tagValue);
 
 	String[] tagsArray = tags.split(",");
 
@@ -74,18 +62,13 @@ public class CheckTags extends TaskletAdapter
 	// Contact tags.
 	LinkedHashSet<String> contactTags = contact.getContactTags();
 
-	System.out.println("Contact tags: " + contactTags + " and given tags: "
-		+ tagsSet);
-
 	// Check contact tags consists of all given tags.
 	if (contactTags.containsAll(tagsSet))
 	{
-	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
-		    nodeJSON, BRANCH_YES);
+	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_YES);
 	    return;
 	}
 
-	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
-		nodeJSON, BRANCH_NO);
+	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_NO);
     }
 }

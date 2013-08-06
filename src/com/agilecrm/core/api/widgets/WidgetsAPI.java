@@ -178,8 +178,10 @@ public class WidgetsAPI
 	    if (widget == null)
 		return null;
 
-	    // Profiles are searched based on first and last name of contact
-	    // Gets profiles from LinkedInUtil based on contact
+	    /*
+	     * Profiles are searched based on first and last name of contact
+	     * Gets profiles from LinkedInUtil based on contact
+	     */
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
 		return LinkedInUtil.searchLinkedInProfiles(widget, contact);
 
@@ -246,8 +248,10 @@ public class WidgetsAPI
 	    if (widget == null)
 		return null;
 
-	    // Profiles are searched based on first and last name of contact
-	    // Gets profiles from LinkedInUtil based on contact
+	    /*
+	     * Profiles are searched based on first and last name of contact
+	     * Gets profiles from LinkedInUtil based on contact
+	     */
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
 		return LinkedInUtil.modifiedSearchForLinkedInProfiles(widget,
 			keywords);
@@ -301,8 +305,10 @@ public class WidgetsAPI
 	    if (widget == null)
 		return null;
 
-	    // Profiles are searched based on first and last name of contact
-	    // Gets profiles from LinkedInUtil based on contact
+	    /*
+	     * Profiles are searched based on first and last name of contact
+	     * Retrieves profiles from LinkedInUtil based on contact
+	     */
 	    if (widget.name.equalsIgnoreCase("TWITTER"))
 		return TwitterUtil.searchTwitterProfiles(widget, searchString);
 
@@ -411,10 +417,10 @@ public class WidgetsAPI
 	    if (widget == null)
 		return null;
 
-	    System.out.println("in widgets api");
-	    System.out.println(webUrl);
-	    // Profiles are searched based on first and last name of contact
-	    // Calls LinkedUtil method to send message to person by socialId
+	    /*
+	     * Profiles are searched based on first and last name of contact
+	     * Calls LinkedUtil method to send message to person by socialId
+	     */
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
 		return LinkedInUtil.getIdByUrl(widget, webUrl);
 
@@ -634,8 +640,10 @@ public class WidgetsAPI
 	    if (widget == null)
 		return null;
 
-	    // Profiles are searched based on first and last name of contact
-	    // Calls LinkedUtil method to send message to person by socialId
+	    /*
+	     * Profiles are searched based on first and last name of contact
+	     * Calls LinkedUtil method to send message to person by socialId
+	     */
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
 		return LinkedInUtil.sendLinkedInAddRequest(widget, socialId,
 			subject, message);
@@ -745,8 +753,10 @@ public class WidgetsAPI
 	    if (widget == null)
 		return null;
 
-	    // Profiles are searched based on first and last name of contact
-	    // Calls LinkedUtil method to send message to person by socialId
+	    /*
+	     * Profiles are searched based on first and last name of contact
+	     * Calls LinkedUtil method to send message to person by socialId
+	     */
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
 		return LinkedInUtil.sendLinkedInMessageById(widget, socialId,
 			subject, message);
@@ -861,8 +871,10 @@ public class WidgetsAPI
 	    if (widget == null)
 		return null;
 
-	    // Profiles are searched based on first and last name of contact
-	    // Calls LinkedUtil method to send message to person by socialId
+	    /*
+	     * Profiles are searched based on first and last name of contact
+	     * Calls LinkedUtil method to send message to person by socialId
+	     */
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
 		return LinkedInUtil.getNetworkUpdates(widget, socialId);
 
@@ -922,8 +934,10 @@ public class WidgetsAPI
 	    if (widget == null)
 		return null;
 
-	    // Profiles are searched based on first and last name of contact
-	    // Calls LinkedUtil method to send message to person by socialId
+	    /*
+	     * Profiles are searched based on first and last name of contact
+	     * Calls LinkedUtil method to send message to person by socialId
+	     */
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
 		return LinkedInUtil.getNetworkUpdates(widget, socialId);
 
@@ -990,8 +1004,10 @@ public class WidgetsAPI
 	    if (widget == null)
 		return null;
 
-	    // Profiles are searched based on first and last name of contact
-	    // Calls LinkedUtil method to send message to person by socialId
+	    /*
+	     * Profiles are searched based on first and last name of contact
+	     * Calls LinkedUtil method to send message to person by socialId
+	     */
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
 	    {
 		if (endDate != null)
@@ -1055,6 +1071,7 @@ public class WidgetsAPI
 	    if (widget == null)
 		return null;
 
+	    // If request is from Twitter, fetches tweets
 	    if (widget.name.equalsIgnoreCase("TWITTER"))
 		return TwitterUtil.getNetworkUpdates(widget,
 			Long.parseLong(socialId), Long.parseLong(tweetId) - 5,
@@ -1107,8 +1124,10 @@ public class WidgetsAPI
 	    if (widget == null)
 		return null;
 
-	    // Profiles are searched based on first and last name of contact
-	    // Calls LinkedUtil method to send message to person by socialId
+	    /*
+	     * Profiles are searched based on first and last name of contact
+	     * Calls LinkedUtil method to send message to person by socialId
+	     */
 	    if (widget.name.equalsIgnoreCase("TWITTER"))
 		return TwitterUtil.tweetInTwitter(widget, message);
 
@@ -1885,6 +1904,173 @@ public class WidgetsAPI
     }
 
     /**
+     * Retrieves registered phone numbers from agent's Twilio account
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @return {@link String} form of {@link JSONArray}
+     */
+    @Path("twilio/numbers/{widget-id}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getOutgoingNumbersfromTwilio(
+	    @PathParam("widget-id") Long widgetId)
+    {
+	Widget widget = WidgetUtil.getWidget(widgetId);
+	if (widget == null)
+	    return null;
+	try
+	{
+	    return TwilioUtil.getOutgoingNumber(widget).toString();
+	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+    }
+
+    /**
+     * Verify phone number in agent's Twilio account
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @return {@link String} form of {@link JSONArray}
+     */
+    @Path("twilio/verify/numbers/{widget-id}/{from}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String verifyNumberInTwilio(@PathParam("widget-id") Long widgetId,
+	    @PathParam("from") String from)
+    {
+	Widget widget = WidgetUtil.getWidget(widgetId);
+	if (widget == null)
+	    return null;
+	try
+	{
+	    return TwilioUtil.verifyOutgoingNumbers(widget, from).toString();
+	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+    }
+
+    /**
+     * Connects to Twilio and fetches applicaiton sid based on the accountSID
+     * 
+     * @param accountSid
+     *            {@link String} accountSid of agent Twilio account
+     * @return {@link String} token generated from Twilio
+     */
+    @Path("twilio/appsid/{widget-id}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getTwilioAppSid(@PathParam("widget-id") Long widgetId)
+    {
+	Widget widget = WidgetUtil.getWidget(widgetId);
+	if (widget == null)
+	    return null;
+
+	try
+	{
+	    return TwilioUtil.getTwilioAppSID(widget);
+	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+    }
+
+    /**
+     * Connects to Twilio and fetches token based on the accountSID and appsid
+     * 
+     * @param accountSid
+     *            {@link String} accountSid of agent Twilio account
+     * @param appSID
+     *            {@link String} appSid of agent Twilio account
+     * @return {@link String} token generated from Twilio
+     */
+    @Path("twilio/token/{widget-id}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getTwilioToken(@PathParam("widget-id") Long widgetId)
+    {
+	Widget widget = WidgetUtil.getWidget(widgetId);
+	if (widget == null)
+	    return null;
+
+	try
+	{
+	    return TwilioUtil.generateTwilioToken(widget);
+	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+
+    }
+
+    /**
      * Connects to Twilio and fetches call logs based on the accountSID
      * 
      * @param widgetId
@@ -1978,88 +2164,6 @@ public class WidgetsAPI
     }
 
     /**
-     * Retrieves registered phone numbers from agent's Twilio account
-     * 
-     * @param widgetId
-     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
-     * @return {@link String} form of {@link JSONArray}
-     */
-    @Path("twilio/numbers/{widget-id}")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getOutgoingNumbersfromTwilio(
-	    @PathParam("widget-id") Long widgetId)
-    {
-	Widget widget = WidgetUtil.getWidget(widgetId);
-	if (widget == null)
-	    return null;
-	try
-	{
-	    return TwilioUtil.getOutgoingNumbers(widget).toString();
-	}
-	catch (SocketTimeoutException e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-	}
-    }
-
-    /**
-     * Verify phone number in agent's Twilio account
-     * 
-     * @param widgetId
-     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
-     * @return {@link String} form of {@link JSONArray}
-     */
-    @Path("twilio/verify/numbers/{widget-id}/{from}")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String verifyNumberInTwilio(@PathParam("widget-id") Long widgetId,
-	    @PathParam("from") String from)
-    {
-	Widget widget = WidgetUtil.getWidget(widgetId);
-	if (widget == null)
-	    return null;
-	try
-	{
-	    return TwilioUtil.verifyOutgoingNumbers(widget, from).toString();
-	}
-	catch (SocketTimeoutException e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-	}
-    }
-
-    /**
      * Retrieves registered incoming phone numbers from agent's Twilio account
      * 
      * @param widgetId
@@ -2077,7 +2181,7 @@ public class WidgetsAPI
 	    return null;
 	try
 	{
-	    return TwilioUtil.getIncomingNumbers(widget).toString();
+	    return TwilioUtil.getIncomingNumber(widget).toString();
 	}
 	catch (SocketTimeoutException e)
 	{
@@ -2101,125 +2205,16 @@ public class WidgetsAPI
     }
 
     /**
-     * Connects to Twilio and fetches token based on the accountSID and appsid
+     * Retrieves chats from ClickDesk server for the given email
      * 
-     * @param accountSid
-     *            {@link String} accountSid of agent Twilio account
-     * @param appSID
-     *            {@link String} appSid of agent Twilio account
-     * @return {@link String} token generated from Twilio
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param email
+     *            {@link String} email for which chats re retrieved
+     * @param offset
+     *            Number of chats to be retrieved
+     * @return {@link String} form of {@link JSONArray}
      */
-    @Path("twilio/token/{widget-id}")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getTwilioToken(@PathParam("widget-id") Long widgetId)
-    {
-	Widget widget = WidgetUtil.getWidget(widgetId);
-	if (widget == null)
-	    return null;
-
-	try
-	{
-	    return TwilioUtil.generateTwilioToken(widget);
-	}
-	catch (SocketTimeoutException e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-	}
-
-    }
-
-    /**
-     * Connects to Twilio and fetches applicaiton sid based on the accountSID
-     * 
-     * @param accountSid
-     *            {@link String} accountSid of agent Twilio account
-     * @return {@link String} token generated from Twilio
-     */
-    @Path("twilio/appsid/{widget-id}")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getTwilioAppSid(@PathParam("widget-id") Long widgetId)
-    {
-	Widget widget = WidgetUtil.getWidget(widgetId);
-	if (widget == null)
-	    return null;
-
-	try
-	{
-	    return TwilioUtil.getTwilioAppSID(widget);
-	}
-	catch (SocketTimeoutException e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-	}
-    }
-
-    @Path("twilio/appsid/{widget-id}")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getTwilioRecordings(@PathParam("widget-id") Long widgetId)
-    {
-	Widget widget = WidgetUtil.getWidget(widgetId);
-	if (widget == null)
-	    return null;
-
-	try
-	{
-	    return TwilioUtil.getRecordingsExample(widget,
-		    "CA4a612d4fb2ba5a8ec2fa13f37b21de95");
-	}
-	catch (SocketTimeoutException e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-	}
-    }
-
     @Path("clickdesk/chats/{widget-id}/{email}/{offset}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -2255,6 +2250,17 @@ public class WidgetsAPI
 	}
     }
 
+    /**
+     * Retrieves tickets from ClickDesk server for the given email
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param email
+     *            {@link String} email for which chats re retrieved
+     * @param offset
+     *            Number of chats to be retrieved
+     * @return {@link String} form of {@link JSONArray}
+     */
     @Path("clickdesk/tickets/{widget-id}/{email}/{offset}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)

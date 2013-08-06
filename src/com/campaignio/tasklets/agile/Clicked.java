@@ -53,20 +53,11 @@ public class Clicked extends TaskletAdapter
      */
     public static String LINK_CLICKED_SHORT = "link_clicked_short";
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.campaignio.tasklets.TaskletAdapter#run(org.json.JSONObject,
-     * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
-     */
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
-	    JSONObject data, JSONObject nodeJSON) throws Exception
+    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
 	// Get Duration, Type
-	String duration = getStringValue(nodeJSON, subscriberJSON, data,
-		DURATION);
-	String durationType = getStringValue(nodeJSON, subscriberJSON, data,
-		DURATION_TYPE);
+	String duration = getStringValue(nodeJSON, subscriberJSON, data, DURATION);
+	String durationType = getStringValue(nodeJSON, subscriberJSON, data, DURATION_TYPE);
 
 	// Add ourselves to Cron Queue
 	long timeout = CronUtil.getTimer(duration, durationType);
@@ -74,79 +65,57 @@ public class Clicked extends TaskletAdapter
 	// Get Tracker Id
 	if (data.has(SendEmail.TRACKING_ID))
 	{
-	    CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON,
-		    timeout, data.getString(SendEmail.TRACKING_ID), null, null);
+	    CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout, data.getString(SendEmail.TRACKING_ID), null, null);
 	}
 	else
 	{
-	    CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON,
-		    timeout, null, null, null);
+	    CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout, null, null, null);
 	}
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Executes when link clicked within the given period.
      * 
-     * @see
-     * com.campaignio.tasklets.TaskletAdapter#interrupted(org.json.JSONObject,
-     * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject,
-     * org.json.JSONObject)
-     */
-    public void interrupted(JSONObject campaignJSON, JSONObject subscriberJSON,
-	    JSONObject data, JSONObject nodeJSON, JSONObject customData)
-	    throws Exception
+     * @param campaignJSON
+     *            - CampaignJSON.
+     * @param subscriberJSON
+     *            - SubscriberJSON.
+     * @param data
+     *            - data json used within workflow.
+     * @param nodeJSON
+     *            - Node JSON.
+     * @param customData
+     *            - custom data if any like long-url.
+     * 
+     **/
+    public void interrupted(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON, JSONObject customData) throws Exception
     {
 	// Creates log for clicked node when interrupted
-	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
-		DBUtil.getId(subscriberJSON),
-		"Link clicked - " + customData.getString("long_url"),
+	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON), DBUtil.getId(subscriberJSON), "Link clicked - " + customData.getString("long_url"),
 		LogType.CLICKED.toString());
 
 	// Execute Next One in Loop (Yes)
-	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
-		nodeJSON, BRANCH_YES);
+	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_YES);
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Executes after given time-period in the clicked node completes.
      * 
-     * @see
-     * com.campaignio.tasklets.TaskletAdapter#timeOutComplete(org.json.JSONObject
-     * , org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
-     */
-    public void timeOutComplete(JSONObject campaignJSON,
-	    JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
-	    throws Exception
+     * @param campaignJSON
+     *            - CampaignJSON.
+     * @param subscriberJSON
+     *            - SubscriberJSON.
+     * @param data
+     *            - data json used within workflow.
+     * @param nodeJSON
+     *            - Node JSON.
+     **/
+    public void timeOutComplete(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
-	/*
-	 * 
-	 * NOT USED ANYMORE. INTERRUPTED IS PROVIDED IMMEDIATELy
-	 */
-
-	/*
-	 * // Checking if the link is clicked if
-	 * (data.has(SendEmail.URLS_SHORTENED)) {
-	 * 
-	 * JSONArray urls = data.getJSONArray(SendEmail.URLS_SHORTENED); for
-	 * (int i = 0; i < urls.length(); i++) { log(campaignJSON,
-	 * subscriberJSON, "Checking if email is clicked " + urls.getString(i));
-	 * if (Uti.isURLClicked(urls.getString(i))) {
-	 * 
-	 * log(campaignJSON, subscriberJSON, "Clicked URL: " +
-	 * urls.getString(i));
-	 * 
-	 * // Execute Next One in Loop
-	 * TaskletManager.executeTasklet(campaignJSON, subscriberJSON, data,
-	 * nodeJSON, BRANCH_YES); return; } } }
-	 */
-
 	// Creates log for clicked when there are no clicks
-	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
-		DBUtil.getId(subscriberJSON), "No Clicks",
-		LogType.CLICKED.toString());
+	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON), DBUtil.getId(subscriberJSON), "No Clicks", LogType.CLICKED.toString());
 
 	// Execute Next One in Loop
-	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
-		nodeJSON, BRANCH_NO);
+	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_NO);
     }
 }

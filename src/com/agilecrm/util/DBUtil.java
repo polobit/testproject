@@ -22,6 +22,8 @@ import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 
 /**
  * <code>DBUtil</code> class contains the utility methods to delete a name-space
@@ -42,7 +44,7 @@ public class DBUtil
     public final static String DATASTORE_KEY_IN_JSON = "id";
 
     /**
-     * Gets ID from JSONObject - gets id and then $oid
+     * Gets ID from JSONObject - gets id from json.
      * 
      * @param json
      *            JSONObject reference
@@ -129,8 +131,7 @@ public class DBUtil
 	if (namespace == null || namespace.isEmpty())
 	    return;
 
-	NamespaceDeleteDeferredTask namespaceDeleteDeferredTask = new NamespaceDeleteDeferredTask(
-		namespace);
+	NamespaceDeleteDeferredTask namespaceDeleteDeferredTask = new NamespaceDeleteDeferredTask(namespace);
 	Queue queue = QueueFactory.getDefaultQueue();
 	queue.add(TaskOptions.Builder.withPayload(namespaceDeleteDeferredTask));
     }
@@ -149,8 +150,7 @@ public class DBUtil
 	    List<Key> keys = new LinkedList<Key>();
 
 	    // Get a handle on the datastore itself
-	    DatastoreService datastore = DatastoreServiceFactory
-		    .getDatastoreService();
+	    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 	    Query q = new Query(kind).setKeysOnly();
 	    PreparedQuery pq = datastore.prepare(q);
@@ -222,7 +222,6 @@ public class DBUtil
 		// Deletes campaign logs from sql.
 		SQLUtil.deleteLogsBasedOnDomain(namespace);
 
-
 		// Deletes page stats from sql.
 		AnalyticsSQLUtil.deleteStatsBasedOnNamespace(namespace);
 
@@ -231,8 +230,7 @@ public class DBUtil
 	    }
 	    catch (Exception e)
 	    {
-		System.err.println("Exception occured in Cron "
-			+ e.getMessage());
+		System.err.println("Exception occured in Cron " + e.getMessage());
 		e.printStackTrace();
 	    }
 
@@ -240,5 +238,49 @@ public class DBUtil
 
 	    System.out.println("Deleted namespace " + namespace);
 	}
+    }
+
+    /**
+     * Returns contact owner-id from subscriberJSON.
+     * 
+     * @param subscriberJSON
+     *            - SubscriberJSON
+     * @return String
+     */
+    public static String getContactOwnerIdFromSubscriberJSON(JSONObject subscriberJSON)
+    {
+	String ownerId = null;
+
+	try
+	{
+	    JSONObject owner = subscriberJSON.getJSONObject("data").getJSONObject("owner");
+
+	    if (owner.length() != 0)
+		ownerId = owner.getString("id");
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return ownerId;
+    }
+
+    /**
+     * Normalizes the given string separated by any delimiter. Inorder to
+     * normalize, Splitter and Joiner methods are used. For e.g.,
+     * ",a,b ,c, d,e," is converted to "a,b,c,d,e"
+     * 
+     * @param separator
+     *            - Any separator like comma.
+     * @param str
+     *            - String that needs to be normalized.
+     * @return normalized String
+     */
+    public static String normalizeStringSeparatedByDelimiter(char separator, String str)
+    {
+	Splitter splitter = Splitter.on(separator).omitEmptyStrings().trimResults();
+	Joiner joiner = Joiner.on(separator).skipNulls();
+	return joiner.join(splitter.split(str));
     }
 }

@@ -8,8 +8,8 @@ import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
 
 import com.agilecrm.db.util.SQLUtil;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log;
-import com.campaignio.util.CampaignStatsUtil;
 import com.google.appengine.api.NamespaceManager;
 
 /**
@@ -35,19 +35,15 @@ public class LogUtil
      * @param logType
      *            - Log Type.
      */
-    public static void addLogToSQL(String campaignId, String subscriberId,
-	    String message, String logType)
+    public static void addLogToSQL(String campaignId, String subscriberId, String message, String logType)
     {
 	String domain = NamespaceManager.get();
 
-	if (StringUtils.isEmpty(domain) || StringUtils.isEmpty(campaignId)
-		|| StringUtils.isEmpty(subscriberId))
+	if (StringUtils.isEmpty(domain) || StringUtils.isEmpty(campaignId) || StringUtils.isEmpty(subscriberId))
 	    return;
 
 	// Insert to SQL
-	SQLUtil.addToCampaignLogs(domain, campaignId,
-		CampaignStatsUtil.getCampaignName(campaignId), subscriberId,
-		message, logType);
+	SQLUtil.addToCampaignLogs(domain, campaignId, WorkflowUtil.getCampaignName(campaignId), subscriberId, message, logType);
     }
 
     /**
@@ -61,8 +57,7 @@ public class LogUtil
      *            - limit to get number of logs.
      * @return logs array string.
      */
-    public static List<Log> getSQLLogs(String campaignId, String subscriberId,
-	    String limit)
+    public static List<Log> getSQLLogs(String campaignId, String subscriberId, String limit)
     {
 	String domain = NamespaceManager.get();
 
@@ -70,8 +65,7 @@ public class LogUtil
 	    return null;
 
 	// get SQL logs
-	JSONArray logs = SQLUtil.getLogs(campaignId, subscriberId, domain,
-		limit);
+	JSONArray logs = SQLUtil.getLogs(campaignId, subscriberId, domain, limit);
 
 	if (logs == null)
 	    return null;
@@ -79,10 +73,9 @@ public class LogUtil
 	try
 	{
 	    // to attach contact and campaign-name to each log.
-	    return new ObjectMapper().readValue(logs.toString(),
-		    new TypeReference<List<Log>>()
-		    {
-		    });
+	    return new ObjectMapper().readValue(logs.toString(), new TypeReference<List<Log>>()
+	    {
+	    });
 	}
 	catch (Exception e)
 	{
@@ -101,9 +94,7 @@ public class LogUtil
     {
 	String domain = NamespaceManager.get();
 
-	if (StringUtils.isEmpty(domain)
-		|| (StringUtils.isEmpty(campaignId) && StringUtils
-			.isEmpty(subscriberId)))
+	if (StringUtils.isEmpty(domain) || (StringUtils.isEmpty(campaignId) && StringUtils.isEmpty(subscriberId)))
 	    return;
 
 	SQLUtil.deleteLogsFromSQL(campaignId, subscriberId, domain);

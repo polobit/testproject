@@ -44,16 +44,6 @@
 		<servlet-name>GmailContextualGadget</servlet-name>
 		<url-pattern>/gmail</url-pattern>
 	</servlet-mapping>
-	
-		<servlet>
-		<servlet-name>ContactsProcessServlet</servlet-name>
-		<servlet-class>com.agilecrm.contact.upload.blob.ContactsProcessServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>ContactsProcessServlet</servlet-name>
-		<url-pattern>/backend/contacts-process</url-pattern>
-	</servlet-mapping>
-
 	<servlet>
 		<servlet-name>Cron</servlet-name>
 		<servlet-class>com.campaignio.cron.Cron</servlet-class>
@@ -65,7 +55,7 @@
 
 	<servlet>
 		<servlet-name>TwitterCron</servlet-name>
-		<servlet-class>com.campaignio.twitter.TwitterCron</servlet-class>
+		<servlet-class>com.campaignio.twitter.cron.TwitterCron</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>TwitterCron</servlet-name>
@@ -403,6 +393,15 @@
 	<servlet-mapping>
 		<servlet-name>upload_contacts</servlet-name>
 		<url-pattern>/upload</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>CleanBlobStore</servlet-name>
+		<servlet-class>com.agilecrm.contact.upload.blob.cron.BlobDeleteCron</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CleanBlobStore</servlet-name>
+		<url-pattern>/backend/cron/blobs-delete</url-pattern>
 	</servlet-mapping>
 
 	<servlet>

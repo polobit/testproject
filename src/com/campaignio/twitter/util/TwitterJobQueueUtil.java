@@ -11,17 +11,16 @@ import org.json.JSONObject;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.util.DBUtil;
 import com.campaignio.twitter.TwitterJob;
-import com.campaignio.twitter.TwitterQueue;
+import com.campaignio.twitter.TwitterJobQueue;
 import com.google.appengine.api.NamespaceManager;
 
-public class TwitterQueueUtil
+public class TwitterJobQueueUtil
 {
 
     /**
      * Dao for TwitterQueue class
      */
-    private static ObjectifyGenericDao<TwitterQueue> dao = new ObjectifyGenericDao<TwitterQueue>(
-	    TwitterQueue.class);
+    private static ObjectifyGenericDao<TwitterJobQueue> dao = new ObjectifyGenericDao<TwitterJobQueue>(TwitterJobQueue.class);
 
     /**
      * Add twitter jobs to twitter queue to post tweets at regular intervals
@@ -42,29 +41,26 @@ public class TwitterQueueUtil
      *            Campaign data
      * @return true if successfully added to queue otherwise false
      */
-    public static boolean addToTwitterQueue(String account, String token,
-	    String tokenSecret, String message, String rateLimit,
-	    JSONObject subscriberJSON, JSONObject campaignJSON)
+    public static boolean addToTwitterQueue(String account, String token, String tokenSecret, String message, String rateLimit, JSONObject subscriberJSON,
+	    JSONObject campaignJSON)
     {
 	// Add to Twitter Queue
 	try
 	{
 	    // Get Existing Queue
-	    TwitterQueue twitterQueue = getTwitterQueueForAccount(account,
-		    rateLimit);
+	    TwitterJobQueue twitterJobQueue = getTwitterQueueForAccount(account, rateLimit);
 
-	    if (twitterQueue == null)
+	    if (twitterJobQueue == null)
 	    {
-		twitterQueue = new TwitterQueue(account, rateLimit);
+		twitterJobQueue = new TwitterJobQueue(account, rateLimit);
 	    }
 
 	    // Add to Old JSONArray
 	    String campaignId = DBUtil.getId(campaignJSON);
 	    String subscriberId = DBUtil.getId(subscriberJSON);
-	    TwitterJob twitterJob = new TwitterJob(token, tokenSecret, message,
-		    subscriberId, campaignId);
-	    twitterQueue.twitter_jobs.add(twitterJob);
-	    twitterQueue.save();
+	    TwitterJob twitterJob = new TwitterJob(token, tokenSecret, message, subscriberId, campaignId);
+	    twitterJobQueue.twitter_jobs.add(twitterJob);
+	    twitterJobQueue.save();
 
 	    return true;
 
@@ -86,8 +82,7 @@ public class TwitterQueueUtil
      *            Number of tweets per hour
      * @return resultant twitter Queue
      */
-    public static TwitterQueue getTwitterQueueForAccount(String account,
-	    String rateLimit)
+    public static TwitterJobQueue getTwitterQueueForAccount(String account, String rateLimit)
     {
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set("");
@@ -98,7 +93,7 @@ public class TwitterQueueUtil
 	if (!StringUtils.isAlpha(rateLimit))
 	    searchMap.put("rate_limit", rateLimit);
 
-	TwitterQueue twitterQueue = dao.getByProperty(searchMap);
+	TwitterJobQueue twitterQueue = dao.getByProperty(searchMap);
 
 	NamespaceManager.set(oldNamespace);
 
@@ -112,13 +107,12 @@ public class TwitterQueueUtil
      *            Tweets limit per hour
      * @return list of twitter queues
      */
-    public static List<TwitterQueue> getTwitterQueue(String rateLimit)
+    public static List<TwitterJobQueue> getTwitterQueue(String rateLimit)
     {
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set("");
 
-	List<TwitterQueue> twitterQueues = dao.listByProperty("rate_limit",
-		rateLimit);
+	List<TwitterJobQueue> twitterQueues = dao.listByProperty("rate_limit", rateLimit);
 
 	NamespaceManager.set(oldNamespace);
 
@@ -132,14 +126,12 @@ public class TwitterQueueUtil
      *            - namespace.
      * @return TwitterQueue list.
      */
-    public static List<TwitterQueue> getTwitterQueueForNamespace(
-	    String namespace)
+    public static List<TwitterJobQueue> getTwitterQueueForNamespace(String namespace)
     {
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set("");
 
-	List<TwitterQueue> twitterQueues = dao.listByProperty("namespace",
-		namespace);
+	List<TwitterJobQueue> twitterQueues = dao.listByProperty("namespace", namespace);
 
 	NamespaceManager.set(oldNamespace);
 
@@ -155,12 +147,15 @@ public class TwitterQueueUtil
     public static void runTwitterQueues(String rateLimit)
     {
 	// Get All Queues for specified RateLimit
-	List<TwitterQueue> twitterQueues = getTwitterQueue(rateLimit);
+	List<TwitterJobQueue> twitterQueues = getTwitterQueue(rateLimit);
 
 	System.out.println("Tweeting " + twitterQueues.size());
 
-	for (TwitterQueue twitterQueue : twitterQueues)
+	for (TwitterJobQueue twitterQueue : twitterQueues)
 	{
+	    // Sets namespace for log.
+	    NamespaceManager.set(twitterQueue.namespace);
+
 	    try
 	    {
 		List<TwitterJob> twitterJobs = twitterQueue.twitter_jobs;
@@ -173,12 +168,7 @@ public class TwitterQueueUtil
 
 		    try
 		    {
-			// Sets namespace for log.
-			NamespaceManager.set(twitterQueue.namespace);
-			twitterJobs.get(0)
-				.postStatus(twitterJobs.get(0).status);
-
-			NamespaceManager.set("");
+			twitterJobs.get(0).postStatus(twitterJobs.get(0).status);
 		    }
 		    catch (Exception e)
 		    {
@@ -214,31 +204,25 @@ public class TwitterQueueUtil
      * @param namespace
      *            namespace.
      */
-    public static void removeTwitterJobs(String campaignId,
-	    String subscriberId, String namespace)
+    public static void removeTwitterJobs(String campaignId, String subscriberId, String namespace)
     {
-	List<TwitterQueue> twitterQueues = getTwitterQueueForNamespace(namespace);
+	List<TwitterJobQueue> twitterQueues = getTwitterQueueForNamespace(namespace);
 
 	if (twitterQueues == null)
 	    return;
 
-	for (TwitterQueue twitterQueue : twitterQueues)
+	for (TwitterJobQueue twitterQueue : twitterQueues)
 	{
-	    Iterator<TwitterJob> twitterJobIterator = twitterQueue.twitter_jobs
-		    .listIterator();
+	    Iterator<TwitterJob> twitterJobIterator = twitterQueue.twitter_jobs.listIterator();
 
 	    while (twitterJobIterator.hasNext())
 	    {
-		if (!StringUtils.isEmpty(campaignId)
-			&& twitterJobIterator.next().campaign_id
-				.equals(campaignId))
+		if (!StringUtils.isEmpty(campaignId) && twitterJobIterator.next().campaign_id.equals(campaignId))
 		{
 		    twitterJobIterator.remove();
 		}
 
-		else if (!StringUtils.isEmpty(subscriberId)
-			&& twitterJobIterator.next().subscriber_id
-				.equals(subscriberId))
+		else if (!StringUtils.isEmpty(subscriberId) && twitterJobIterator.next().subscriber_id.equals(subscriberId))
 		{
 		    twitterJobIterator.remove();
 		}

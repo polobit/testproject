@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
@@ -83,8 +82,10 @@ public class LinkedInUtil
 	final LinkedInApiClient client = factory.createLinkedInApiClient(token,
 		tokenSecret);
 
-	// Gets profile details, details are fetched based on the set that
-	// specifies the properties
+	/*
+	 * Gets profile details, details are fetched based on the set that
+	 * specifies the properties
+	 */
 	Person profile = client
 		.getProfileForCurrentUser(EnumSet.of(ProfileField.PICTURE_URL,
 			ProfileField.FIRST_NAME, ProfileField.LAST_NAME,
@@ -1062,52 +1063,4 @@ public class LinkedInUtil
 	return innerException;
     }
 
-    public static void main(String[] args) throws Exception
-    {
-	final LinkedInApiClient client = factory.createLinkedInApiClient(
-		// "4c1b1828-e275-4e09-b7f9-1f85ee32c22e", // devikkah
-		// "4abc6b56-a41e-4864-a759-22c36c36e460");
-		// "f71d216b-16b7-41d5-a593-92c928b6fa13", // revathi
-		// "9c9a2635-3efd-474c-8459-61251a5006e1");
-		// "3382f692-f598-4b72-9dd3-891853fec2fc", // test
-		// "7984afcf-f0f7-4fb3-b39c-cb7379d0336e");
-		// "742877e1-5f85-4b49-a10c-08009f98005f",
-		// "846cae2c-d653-45bf-98b4-39c24655ba2d");// praveen
-		"f78887f7-5947-4d5b-8968-05ea3884df79",
-		"d3820d60-8bd0-49dc-8ca3-dc9aa41dc67b");// teju faxdesk
-	// "1a6ebcd2-8038-4198-b59c-25b01cf229c0",
-	// "29571011-8ce5-42a4-90cc-44022c55d77f");// teju test
-
-	Person person = client.getProfileById("9R0Iux07gA", EnumSet.of(
-		ProfileField.PICTURE_URL, ProfileField.PICTURE_URL,
-		ProfileField.FIRST_NAME, ProfileField.LAST_NAME,
-		ProfileField.SUMMARY, ProfileField.HEADLINE,
-		ProfileField.LOCATION_NAME, ProfileField.NUM_CONNECTIONS,
-		ProfileField.PUBLIC_PROFILE_URL, ProfileField.ID,
-		ProfileField.DISTANCE, ProfileField.CURRENT_SHARE,
-		ProfileField.CURRENT_STATUS,
-		ProfileField.API_STANDARD_PROFILE_REQUEST,
-		ProfileField.POSITIONS_COMPANY,
-		ProfileField.THREE_CURRENT_POSITIONS,
-		ProfileField.THREE_PAST_POSITIONS, ProfileField.POSITIONS,
-		ProfileField.POSITIONS_ID, ProfileField.POSITIONS_TITLE,
-		ProfileField.POSITIONS_SUMMARY,
-		ProfileField.POSITIONS_START_DATE,
-		ProfileField.POSITIONS_END_DATE,
-		ProfileField.POSITIONS_IS_CURRENT,
-		ProfileField.POSITIONS_TITLE,
-		ProfileField.POSITIONS_COMPANY_ID,
-		ProfileField.POSITIONS_COMPANY_INDUSTRY,
-		ProfileField.POSITIONS_COMPANY_TICKER,
-		ProfileField.POSITIONS_COMPANY_NAME,
-		ProfileField.POSITIONS_COMPANY_SIZE,
-		ProfileField.POSITIONS_COMPANY));
-
-	ObjectMapper mapper = new ObjectMapper();
-	String json;
-
-	json = mapper.writeValueAsString(person);
-	System.out.println(json);
-
-    }
 }

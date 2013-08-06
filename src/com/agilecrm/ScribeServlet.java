@@ -30,6 +30,7 @@ import com.agilecrm.contact.imports.ContactPrefs.Type;
 import com.agilecrm.contact.imports.util.ContactsImportUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
+import com.agilecrm.scribe.api.StripeApi;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.widgets.Widget;
@@ -272,7 +273,7 @@ public class ScribeServlet extends HttpServlet
 	// If service type Google, creates a Service, specific to Google
 	else if (serviceType.equalsIgnoreCase(SERVICE_TYPE_GOOGLE))
 	    service = getSpecificService(req, SERVICE_TYPE_GOOGLE,
-		    com.agilecrm.GoogleApi.class, callback,
+		    com.agilecrm.scribe.api.GoogleApi.class, callback,
 		    Globals.GOOGLE_CLIENT_ID, Globals.GOOGLE_SECRET_KEY,
 		    GOOGLE_CONTACTS_SCOPE);
 

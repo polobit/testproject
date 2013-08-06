@@ -14,153 +14,317 @@ import com.thirdparty.twilio.sdk.TwilioRestResponse;
 import com.twilio.sdk.client.TwilioCapability;
 import com.twilio.sdk.client.TwilioCapability.DomainException;
 
+/**
+ * The <code>TwilioUtil</code> class acts as a Client to Twilio server
+ * 
+ * <code>TwilioUtil</code> class contains methods for making calls, recording
+ * calls, retrieving call logs and so on
+ * 
+ * @author Tejaswi
+ * @since February 2013
+ */
 public class TwilioUtil
 {
-    /* Twilio REST API version */
+    /** Twilio REST API version */
     public static final String APIVERSION = "2010-04-01";
 
-    public static String generateTwilioToken(Widget widget) throws Exception
+    /**
+     * Twilio authentication token of the account which contains Agile
+     * application
+     */
+    public static final String authToken = "5e7085bb019e378fb18822f319a3ec46";
+
+    /**
+     * Retrieves the outgoing number in Twilio account with the given account
+     * SID, to make calls from that account
+     * 
+     * @param widget
+     *            {@link Widget} to retrieve account SID
+     * @return {@link JSONObject} with outgoing number
+     * @throws Exception
+     */
+    public static JSONObject getOutgoingNumber(Widget widget) throws Exception
     {
-	// String authToken = "b6420aa8715bad58ad2cff61036b4640";
-	String authToken = "5e7085bb019e378fb18822f319a3ec46";
-
 	String accountSid = widget.getProperty("account_sid");
-	// String authToken = widget.getProperty("auth_token");
-	String appSid = widget.getProperty("app_sid");
 
-	TwilioCapability capability = new TwilioCapability(accountSid,
-		authToken);
-
-	capability.allowClientOutgoing(appSid);
-
-	String token = null;
-	try
-	{
-	    token = capability.generateToken();
-	    System.out.println(token);
-	    return token;
-	}
-	catch (DomainException e)
-	{
-	    System.out.println(e.getMessage());
-	    return "";
-	}
-    }
-
-    public static String getTwilioAppSID(Widget widget) throws Exception
-    {
-	// String authToken = "b6420aa8715bad58ad2cff61036b4640";
-	// test account token
-	String authToken = "5e7085bb019e378fb18822f319a3ec46";
-
-	String accountSid = widget.getProperty("account_sid");
-	// String authToken = widget.getProperty("auth_token");
-
+	/*
+	 * Build Twilio REST client with the account SID of the logged in person
+	 * and agile authentication token to request for retrieving outgoing
+	 * number from Agile user Twilio account
+	 */
 	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
 		null);
-	TwilioRestResponse response;
 
-	Map<String, String> params = new HashMap<String, String>();
-	params.put("FriendlyName", "Phone Me");
-	params.put("VoiceUrl", "https://teju-first.appspot.com/twilio/voice");
-	params.put("VoiceMethod", "GET");
+	TwilioRestResponse response = client.request("/" + APIVERSION
+		+ "/Accounts/" + client.getAccountSid() + "/OutgoingCallerIds",
+		"GET", null);
 
-	response = client.request(
-		"/2010-04-01/Accounts/" + client.getAccountSid()
-			+ "/Applications.json", "POST", params);
+	System.out.println("Twilio outgoing No: " + response.getResponseText());
 
+	/*
+	 * If error occurs, throw exception based on its status else return
+	 * outgoing numbers
+	 */
 	if (response.isError())
-	    throw new Exception("Error fetching recent calls: "
+	    throw new Exception("Error sending message: "
 		    + response.getHttpStatus() + "\n"
 		    + response.getResponseText());
 	else
 	{
-	    System.out.println(response.getResponseText());
-	    return new JSONObject(response.getResponseText()).getString("sid");
+	    JSONObject outgoingCallerIds = XML
+		    .toJSONObject(response.getResponseText())
+		    .getJSONObject("TwilioResponse")
+		    .getJSONObject("OutgoingCallerIds");
+
+	    System.out.println("OutgoingCallerID's: " + outgoingCallerIds);
+
+	    // If no numbers, return empty object
+	    if (Integer.parseInt(outgoingCallerIds.getString("total")) == 0)
+		return new JSONObject();
+
+	    /*
+	     * Response may be array or single object, check and return the
+	     * first number if it is an array
+	     */
+	    if (outgoingCallerIds.get("OutgoingCallerId") instanceof JSONObject)
+		return outgoingCallerIds.getJSONObject("OutgoingCallerId");
+	    return outgoingCallerIds.getJSONArray("OutgoingCallerId")
+		    .getJSONObject(0);
+
 	}
 
     }
 
     /**
-     * Retrieves the call logs from agent Twilio account based on his Twilio
-     * account SID
+     * Verifies a number whether it is verified in Twilio account associated
+     * with the given account SID
      * 
-     * @param accountSid
-     *            {@link String} accountSid of agent Twilio account
-     * @return {@link JSONArray} of calls
+     * @param widget
+     *            {@link Widget} to retrieve account SID
+     * @param from
+     *            "From" number to be verified
+     * @return {@link JSONObject} with the verification status
      * @throws Exception
      */
-    public static JSONArray getCallLogs(Widget widget, String to)
+    public static JSONObject verifyOutgoingNumbers(Widget widget, String from)
 	    throws Exception
     {
-
-	String authToken = "5e7085bb019e378fb18822f319a3ec46";
-
 	String accountSid = widget.getProperty("account_sid");
-	// String authToken = widget.getProperty("auth_token");
 
+	/*
+	 * Build Twilio REST client with the account SID of the logged in person
+	 * and agile authentication token to request for verifying outgoing
+	 * number from Agile user Twilio account
+	 */
 	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
 		null);
-	TwilioRestResponse response;
 
-	response = client.request(
-		"/" + APIVERSION + "/Accounts/" + client.getAccountSid()
-			+ "/Calls", "GET", null);
+	// parameters to be sent in the verification process
+	Map<String, String> params = new HashMap<String, String>();
+	params.put("PhoneNumber", from);
+	params.put("StatusCallback",
+		"https://agile-crm-cloud.appspot.com/backend/verification");
 
+	// make a post request to verify number
+	TwilioRestResponse response = client.request("/" + APIVERSION
+		+ "/Accounts/" + client.getAccountSid() + "/OutgoingCallerIds",
+		"POST", params);
+
+	System.out.println("Twilio verify: " + response.getResponseText());
+
+	/*
+	 * If error occurs, throw exception based on its status else return
+	 * response from Twilio
+	 */
+	if (response.isError())
+	    throw new Exception("Error sending message: "
+		    + response.getHttpStatus() + "\n"
+		    + response.getResponseText());
+	else
+	    return XML.toJSONObject(response.getResponseText()).getJSONObject(
+		    "TwilioResponse");
+
+    }
+
+    /**
+     * Creates an application on behalf on Agile in the Twilio account of Agile
+     * user and retrieves its SID, which is required further to generate token
+     * 
+     * @param widget
+     *            {@link Widget} to retrieve account SID
+     * @return {@link String} SID of the application
+     * @throws Exception
+     */
+    public static String getTwilioAppSID(Widget widget) throws Exception
+    {
+	String accountSid = widget.getProperty("account_sid");
+
+	/*
+	 * Build Twilio REST client to request for creating application
+	 */
+	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
+		null);
+
+	// parameters required to create application
+	Map<String, String> params = new HashMap<String, String>();
+	params.put("FriendlyName", "Agile CRM");
+	params.put("VoiceUrl",
+		"https://agile-crm-cloud.appspot.com/twilio/voice");
+	params.put("VoiceMethod", "GET");
+
+	// Make a POST request to create application
+	TwilioRestResponse response = client
+		.request("/2010-04-01/Accounts/" + client.getAccountSid()
+			+ "/Applications.json", "POST", params);
+
+	System.out.println("Twilio app sid : " + response.getResponseText());
+
+	/*
+	 * If error occurs, throw exception based on its status else return
+	 * application SID
+	 */
 	if (response.isError())
 	    throw new Exception("Error fetching recent calls: "
 		    + response.getHttpStatus() + "\n"
 		    + response.getResponseText());
 	else
+	    return new JSONObject(response.getResponseText()).getString("sid");
+
+    }
+
+    /**
+     * Generates token which is required to make calls specific to the
+     * application based on application SID
+     * 
+     * @param widget
+     *            {@link Widget} to retrieve account SID and application SID
+     * @return {@link String} token
+     * @throws Exception
+     */
+    public static String generateTwilioToken(Widget widget) throws Exception
+    {
+	String accountSid = widget.getProperty("account_sid");
+	String appSid = widget.getProperty("app_sid");
+
+	/*
+	 * Build Twilio capability object with the account SID of the logged in
+	 * person and agile authentication token
+	 */
+	TwilioCapability capability = new TwilioCapability(accountSid,
+		authToken);
+
+	// allow outgoing from agile application
+	capability.allowClientOutgoing(appSid);
+
+	try
 	{
-	    // System.out.println(response.getResponseText());
-	    try
+	    // generate token to make calls
+	    String token = capability.generateToken();
+	    System.out.println("Twilio token: " + token);
+	    return token;
+	}
+	catch (DomainException e)
+	{
+	    System.out.println("Twilio Exception while creating token : "
+		    + e.getMessage());
+	    return "";
+	}
+    }
+
+    /**
+     * Retrieves call logs for a specific number and also retrieves recording
+     * for each call if recorded
+     * 
+     * @param widget
+     *            {@link Widget} to retrieve account SID
+     * @param to
+     *            Number to which calls are made
+     * @return {@link JSONArray} of calls with their recordings
+     * @throws Exception
+     */
+    public static JSONArray getCallLogsWithRecordings(Widget widget, String to)
+	    throws Exception
+    {
+	String accountSid = widget.getProperty("account_sid");
+
+	/*
+	 * Build Twilio capability object with the account SID of the logged in
+	 * person and agile authentication token
+	 */
+	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
+		null);
+
+	JSONArray logs = new JSONArray();
+	try
+	{
+	    // retrieve call logs from Twilio
+	    JSONArray array = getCallLogs(client, to);
+	    String callSid;
+
+	    // Iterate through the array to get recordings
+	    for (int i = 0; i < array.length(); i++)
 	    {
-		JSONObject xml = XML.toJSONObject(response.getResponseText());
-		System.out.println(xml);
-		JSONArray array = xml.getJSONObject("TwilioResponse")
-			.getJSONObject("Calls").getJSONArray("Call");
-		JSONArray logs = new JSONArray();
+		JSONObject callWithRecordings = new JSONObject();
 
-		for (int i = 0; i < array.length(); i++)
-		{
-		    System.out.print(array.getJSONObject(i).get("From") + "-");
-		    System.out.println(array.getJSONObject(i).get("To"));
+		// Get call SID of each call
+		callSid = array.getJSONObject(i).getString("ParentCallSid");
 
-		    if (array.getJSONObject(i).getString("To").contains(to))
-			logs.put(array.getJSONObject(i));
-		}
-		System.out.println(logs);
-		return logs;
+		/*
+		 * This will be {} for the calls made by Twilio internally
+		 * before calling the "To" number
+		 */
+		if (callSid.equals("{}"))
+		    continue;
 
+		// Retrieves recorded details for each call
+		JSONObject recordings = getRecordings(client, callSid);
+
+		// Build JSON with call and recording details for each call
+		callWithRecordings.put("call", array.getJSONObject(i));
+		callWithRecordings.put("recording", recordings);
+		logs.put(callWithRecordings);
+
+		System.out.println("Call Details: " + callWithRecordings);
 	    }
-	    catch (JSONException e)
-	    {
-		return null;
-	    }
+
+	    System.out.println("Twilio call logs : " + logs);
+	    return logs;
+	}
+	catch (JSONException e)
+	{
+	    return logs;
 	}
 
     }
 
-    public static JSONArray getCallLogsWithRecordings(Widget widget, String to)
+    /**
+     * Retrieves call logs from Twilio based on the given configured
+     * {@link TwilioRestClient}
+     * 
+     * @param client
+     *            {@link TwilioRestClient} configured with account SID and
+     *            Authentication token
+     * @param to
+     *            Number to which calls are made
+     * @return {@link JSONArray} of call logs
+     * @throws Exception
+     */
+    private static JSONArray getCallLogs(TwilioRestClient client, String to)
 	    throws Exception
     {
-
-	String authToken = "5e7085bb019e378fb18822f319a3ec46";
-
-	String accountSid = widget.getProperty("account_sid");
-	// String authToken = widget.getProperty("auth_token");
-
-	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
-		null);
-	TwilioRestResponse response;
-
+	// parameters required to retrieve logs
 	Map<String, String> params = new HashMap<String, String>();
 	params.put("To", to);
-	response = client.request(
-		"/" + APIVERSION + "/Accounts/" + client.getAccountSid()
-			+ "/Calls", "GET", params);
 
+	// request the client to retrieve call logs
+	TwilioRestResponse response = client.request("/" + APIVERSION
+		+ "/Accounts/" + client.getAccountSid() + "/Calls", "GET",
+		params);
+
+	/*
+	 * If error occurs, throw exception based on its status else return call
+	 * logs
+	 */
 	if (response.isError())
 	    throw new Exception("Error fetching recent calls: "
 		    + response.getHttpStatus() + "\n"
@@ -170,92 +334,64 @@ public class TwilioUtil
 	    JSONArray logs = new JSONArray();
 	    try
 	    {
-		// System.out.println(response.getResponseText());
-		JSONObject xml = XML.toJSONObject(response.getResponseText());
-		System.out.println(xml);
-		System.out.println("in calls");
-		JSONObject calls = xml.getJSONObject("TwilioResponse")
-			.getJSONObject("Calls");
+		JSONObject calls = XML.toJSONObject(response.getResponseText())
+			.getJSONObject("TwilioResponse").getJSONObject("Calls");
 
+		// If no calls, return empty array
 		if (Integer.parseInt(calls.getString("total")) == 0)
 		    return logs;
 
-		JSONArray array = calls.getJSONArray("Call");
-
-		for (int i = 0; i < array.length(); i++)
-		{
-		    JSONObject callWithRecordings = new JSONObject();
-		    System.out.println("in loop " + i);
-
-		    String callSid = array.getJSONObject(i).getString(
-			    "ParentCallSid");
-
-		    if (callSid.equals("{}"))
-			continue;
-
-		    JSONObject recordings = getRecordings(client, callSid);
-		    callWithRecordings.put("call", array.getJSONObject(i));
-		    callWithRecordings.put("recording", recordings);
-		    System.out.println(callWithRecordings);
-		    logs.put(callWithRecordings);
-
-		}
-		// System.out.println(logs);
+		logs = calls.getJSONArray("Call");
 		return logs;
-
 	    }
 	    catch (JSONException e)
 	    {
-		e.printStackTrace();
 		return logs;
 	    }
 	}
-
     }
 
-    public static JSONObject getRecordings(TwilioRestClient client,
+    /**
+     * Retrieves recordings from Twilio based on the given configured
+     * {@link TwilioRestClient}
+     * 
+     * @param client
+     *            {@link TwilioRestClient} configured with account SID and
+     *            Authentication token
+     * @param callSid
+     *            SID of the call
+     * @return {@link JSONObject} with the recorded details for call
+     * @throws Exception
+     */
+    private static JSONObject getRecordings(TwilioRestClient client,
 	    String callSid) throws Exception
     {
-	// Calls/{CallSid}/
+	// request the client to retrieve recordings
+	TwilioRestResponse response = client.request("/" + APIVERSION
+		+ "/Accounts/" + client.getAccountSid() + "/Calls/" + callSid
+		+ "/Recordings", "GET", null);
 
-	TwilioRestResponse response = null;
+	System.out.println("Twilio recordings: " + response.getResponseText());
 
-	try
-	{
-	    System.out.println("in recordings");
-	    response = client.request(
-		    "/" + APIVERSION + "/Accounts/" + client.getAccountSid()
-			    + "/Calls/" + callSid + "/Recordings", "GET", null);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    throw new Exception(e.getMessage());
-	}
-
+	/*
+	 * If error occurs, throw exception based on its status else return
+	 * recordings
+	 */
 	if (response.isError())
-	{
 	    throw new Exception("Error sending message: "
 		    + response.getHttpStatus() + "\n"
 		    + response.getResponseText());
-	}
 	else
-	{
-
-	    System.out.println(response.getResponseText());
-
-	    JSONObject json = XML.toJSONObject(response.getResponseText());
-	    return json.getJSONObject("TwilioResponse").getJSONObject(
-		    "Recordings");
-
-	}
+	    return XML.toJSONObject(response.getResponseText())
+		    .getJSONObject("TwilioResponse")
+		    .getJSONObject("Recordings");
     }
 
     /**
      * Making an outgoing call based on account SID and the phone numbers
      * 
-     * @param accountSid
-     *            {@link String} accountSid of agent Twilio account
+     * @param widget
+     *            {@link Widget} to retrieve account SID
      * @param from
      *            {@link String} caller id of the phone call
      * @param to
@@ -267,12 +403,12 @@ public class TwilioUtil
     public static JSONObject makeCall(Widget widget, String from, String to,
 	    String url) throws Exception
     {
-
-	String authToken = "5e7085bb019e378fb18822f319a3ec46";
-
 	String accountSid = widget.getProperty("account_sid");
-	// String authToken = widget.getProperty("auth_token");
 
+	/*
+	 * Build Twilio capability object with the account SID of the logged in
+	 * person and agile authentication token
+	 */
 	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
 		null);
 
@@ -283,11 +419,14 @@ public class TwilioUtil
 	params.put("Url", url);
 	params.put("IfMachine", "Continue");
 
-	TwilioRestResponse response;
-	response = client.request(
-		"/" + APIVERSION + "/Accounts/" + client.getAccountSid()
-			+ "/Calls", "POST", params);
+	TwilioRestResponse response = client.request("/" + APIVERSION
+		+ "/Accounts/" + client.getAccountSid() + "/Calls", "POST",
+		params);
 
+	/*
+	 * If error occurs, throw exception based on its status else return
+	 * response from Twilio
+	 */
 	if (response.isError())
 	    throw new Exception("Error making outgoing call: "
 		    + response.getHttpStatus() + "\n"
@@ -296,11 +435,8 @@ public class TwilioUtil
 	{
 	    try
 	    {
-		JSONObject xml = XML.toJSONObject(response.getResponseText());
-		System.out.println(xml);
-		JSONObject callJSON = xml.getJSONObject("Call");
-
-		return callJSON;
+		return XML.toJSONObject(response.getResponseText())
+			.getJSONObject("Call");
 	    }
 	    catch (JSONException e)
 	    {
@@ -311,43 +447,125 @@ public class TwilioUtil
     }
 
     /**
-     * Retrieving recent error and warning notifications from your account
+     * Retrieves call logs from Agile user Twilio account based on his Twilio
+     * account SID
      * 
-     * @param accountSid
-     *            {@link String} accountSid of agent Twilio account
+     * @param widget
+     *            {@link Widget} to retrieve account SID
+     * @return {@link JSONArray} of calls
      * @throws Exception
      */
-    public static void getNotificationsExample(Widget widget) throws Exception
+    public static JSONArray getCallLogs(Widget widget, String to)
+	    throws Exception
     {
-
-	String authToken = "5e7085bb019e378fb18822f319a3ec46";
-
 	String accountSid = widget.getProperty("account_sid");
-	// String authToken = widget.getProperty("auth_token");
 
+	/*
+	 * Build Twilio REST client with the account SID of the logged in person
+	 * and agile authentication token to retrieve call logs
+	 */
 	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
 		null);
-
 	TwilioRestResponse response;
+
 	response = client.request(
 		"/" + APIVERSION + "/Accounts/" + client.getAccountSid()
-			+ "/Notifications", "GET", null);
+			+ "/Calls", "GET", null);
 
+	/*
+	 * If error occurs, throw exception based on its status else build call
+	 * logs and return them
+	 */
 	if (response.isError())
-	    System.out.println("Error fetching recent notifications: "
+	    throw new Exception("Error fetching recent calls: "
 		    + response.getHttpStatus() + "\n"
 		    + response.getResponseText());
 	else
 	{
-	    System.out.println(response.getResponseText());
+	    System.out.println("Twilio calls : " + response.getResponseText());
+	    JSONArray logs = new JSONArray();
+	    try
+	    {
+		JSONArray array = XML.toJSONObject(response.getResponseText())
+			.getJSONObject("TwilioResponse").getJSONObject("Calls")
+			.getJSONArray("Call");
+
+		/*
+		 * Check whether to number is available and return only those
+		 * calls which matches with the given "to" number
+		 */
+		for (int i = 0; i < array.length(); i++)
+		    if (array.getJSONObject(i).getString("To").contains(to))
+			logs.put(array.getJSONObject(i));
+
+		System.out.println("Twilio call logs : " + logs);
+		return logs;
+	    }
+	    catch (JSONException e)
+	    {
+		return logs;
+	    }
 	}
+
     }
 
     /**
-     * Example of retrieving the Recordings for an account, filtered by call id
+     * Retrieves incoming number in the Twilio account associated with the given
+     * account SID
      * 
-     * @param accountSid
-     *            {@link String} accountSid of agent Twilio account
+     * @param widget
+     *            {@link Widget} to retrieve account SID
+     * @return {@link JSONObject} with the incoming number
+     * @throws Exception
+     */
+    public static JSONObject getIncomingNumber(Widget widget) throws Exception
+    {
+	String accountSid = widget.getProperty("account_sid");
+
+	/*
+	 * Build Twilio REST client with the account SID of the logged in person
+	 * and agile authentication token
+	 */
+	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
+		null);
+
+	TwilioRestResponse response = client.request("/" + APIVERSION
+		+ "/Accounts/" + client.getAccountSid()
+		+ "/IncomingPhoneNumbers", "GET", null);
+
+	System.out.println(response.getResponseText());
+
+	/*
+	 * If error occurs, throw exception based on its status else return
+	 * outgoing numbers
+	 */
+	if (response.isError())
+	    throw new Exception("Error sending message: "
+		    + response.getHttpStatus() + "\n"
+		    + response.getResponseText());
+	else
+	{
+	    JSONObject result = XML.toJSONObject(response.getResponseText())
+		    .getJSONObject("TwilioResponse")
+		    .getJSONObject("IncomingPhoneNumbers");
+
+	    /*
+	     * Response may be array or single object, check and return the
+	     * first number if it is an array
+	     */
+	    if (result.get("IncomingPhoneNumber") instanceof JSONArray)
+		return result.getJSONArray("IncomingPhoneNumber")
+			.getJSONObject(0);
+	    return result.getJSONObject("IncomingPhoneNumber");
+	}
+
+    }
+
+    /**
+     * Example of retrieving the Recordings for an account, filtered by call SID
+     * 
+     * @param widget
+     *            {@link Widget} to retrieve account SID
      * @param callSid
      *            {@link String} SID of Twilio call for which recording is
      *            required
@@ -357,12 +575,12 @@ public class TwilioUtil
 	    throws Exception
     {
 
-	String authToken = "5e7085bb019e378fb18822f319a3ec46";
-
 	String accountSid = widget.getProperty("account_sid");
-	// String authToken = "b6420aa8715bad58ad2cff61036b4640";//
-	// widget.getProperty("auth_token");
 
+	/*
+	 * Build Twilio REST client with the account SID of the logged in person
+	 * and agile authentication token
+	 */
 	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
 		null);
 
@@ -370,210 +588,20 @@ public class TwilioUtil
 	Map<String, String> params = new HashMap<String, String>();
 	params.put("CallSid", callSid);
 
-	TwilioRestResponse response;
-	response = client.request(
-		"/" + APIVERSION + "/Accounts/" + client.getAccountSid()
-			+ "/Recordings.json", "GET", params);
+	TwilioRestResponse response = client.request("/" + APIVERSION
+		+ "/Accounts/" + client.getAccountSid() + "/Recordings.json",
+		"GET", params);
 
+	/*
+	 * If error occurs, throw exception based on its status else return
+	 * recordings
+	 */
 	if (response.isError())
 	    throw new Exception("Error fetching recordings: "
 		    + response.getHttpStatus() + "\n"
 		    + response.getResponseText());
 	else
-	{
 	    return response.getResponseText();
-	}
     }
 
-    /**
-     * Deleting a recording from agent Twilio account
-     * 
-     * @param accountSid
-     *            {@link String} accountSid of agent Twilio account
-     * @param recordingSid
-     *            {@link String} Twilio Recording Id you wish to delete
-     * @throws Exception
-     */
-    public static void deleteRecordingsExample(Widget widget,
-	    String recordingSid) throws Exception
-    {
-	String authToken = "5e7085bb019e378fb18822f319a3ec46";
-
-	String accountSid = widget.getProperty("account_sid");
-	// String authToken = widget.getProperty("auth_token");
-
-	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
-		null);
-
-	TwilioRestResponse response;
-	response = client.request(
-		"/" + APIVERSION + "/Accounts/" + client.getAccountSid()
-			+ "/Recordings/" + recordingSid, "GET", null);
-
-	if (response.isError())
-	    System.out.println("Error deleting recording: "
-		    + response.getHttpStatus() + "\n"
-		    + response.getResponseText());
-	else
-	{
-	    System.out.println(response.getResponseText());
-	}
-    }
-
-    public static JSONObject verifyOutgoingNumbers(Widget widget, String from)
-	    throws Exception
-    {
-
-	String authToken = "5e7085bb019e378fb18822f319a3ec46";
-
-	String accountSid = widget.getProperty("account_sid");
-	// "AC79bd0a3da6b29949f0dab6fc5221d5fb";
-	// "ACd1fe050ffa754cabc100a3acc93d8d1b";
-	// String authToken = widget.getProperty("auth_token");
-
-	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
-		null);
-	TwilioRestResponse response;
-
-	Map<String, String> params = new HashMap<String, String>();
-	params.put("PhoneNumber", from);
-	params.put("StatusCallback",
-		"https://agile-crm-cloud.appspot.com/backend/verification");
-
-	response = client.request(
-		"/" + APIVERSION + "/Accounts/" + client.getAccountSid()
-			+ "/OutgoingCallerIds", "POST", params);
-	// /2010-04-01/Accounts/AC0079cf757ae0a3e1915a3ce40d4c65ee/AvailablePhoneNumbers
-	if (response.isError())
-	{
-	    throw new Exception("Error sending message: "
-		    + response.getHttpStatus() + "\n"
-		    + response.getResponseText());
-	}
-	else
-	{
-
-	    System.out.println(response.getResponseText());
-
-	    JSONObject json = XML.toJSONObject(response.getResponseText());
-	    System.out.println(json);
-	    JSONObject responseJSON = json.getJSONObject("TwilioResponse");
-	    System.out.println(responseJSON);
-	    return responseJSON;
-
-	}
-
-    }
-
-    public static JSONObject getOutgoingNumbers(Widget widget) throws Exception
-    {
-
-	String authToken = "5e7085bb019e378fb18822f319a3ec46";
-
-	String accountSid = widget.getProperty("account_sid");
-	// "AC758e99f9fd7fea38f470f8cd7ddf465a";
-	// String authToken = widget.getProperty("auth_token");
-
-	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
-		null);
-	TwilioRestResponse response;
-
-	// Map<String, String> params = new HashMap<String, String>();
-	// params.put("PhoneNumber", from);
-	// params.put("VoiceUrl",
-	// "https://agile-crm-cloud.appspot.com/backend/voice");
-	// params.put("VoiceMethod", "GET");
-	// params.put("FriendlyName", "AGILECRM");
-	// params.put("AreaCode", "510");
-
-	response = client.request(
-		"/" + APIVERSION + "/Accounts/" + client.getAccountSid()
-			+ "/OutgoingCallerIds", "GET", null);
-	// /2010-04-01/Accounts/AC0079cf757ae0a3e1915a3ce40d4c65ee/AvailablePhoneNumbers
-	if (response.isError())
-	{
-	    throw new Exception("Error sending message: "
-		    + response.getHttpStatus() + "\n"
-		    + response.getResponseText());
-	}
-	else
-	{
-
-	    System.out.println(response.getResponseText());
-
-	    JSONObject json = XML.toJSONObject(response.getResponseText());
-
-	    System.out.println(json);
-	    JSONObject result = json.getJSONObject("TwilioResponse")
-		    .getJSONObject("OutgoingCallerIds");
-
-	    System.out.println(result);
-
-	    if (Integer.parseInt(result.getString("total")) == 0)
-		return new JSONObject();
-
-	    if (result.get("OutgoingCallerId") instanceof JSONObject)
-		return result.getJSONObject("OutgoingCallerId");
-	    return result.getJSONArray("OutgoingCallerId").getJSONObject(0);
-
-	}
-
-    }
-
-    public static JSONObject getIncomingNumbers(Widget widget) throws Exception
-    {
-
-	String authToken = "5e7085bb019e378fb18822f319a3ec46";
-
-	// String accountSid = "ACd1fe050ffa754cabc100a3acc93d8d1b";
-	// String accountSid = "AC79bd0a3da6b29949f0dab6fc5221d5fb";
-	String accountSid = widget.getProperty("account_sid");
-	// String authToken = widget.getProperty("auth_token");
-
-	TwilioRestClient client = new TwilioRestClient(accountSid, authToken,
-		null);
-	TwilioRestResponse response;
-
-	response = client.request(
-		"/" + APIVERSION + "/Accounts/" + client.getAccountSid()
-			+ "/IncomingPhoneNumbers", "GET", null);
-	// /2010-04-01/Accounts/AC0079cf757ae0a3e1915a3ce40d4c65ee/AvailablePhoneNumbers
-	if (response.isError())
-	{
-	    throw new Exception("Error sending message: "
-		    + response.getHttpStatus() + "\n"
-		    + response.getResponseText());
-	}
-	else
-	{
-
-	    System.out.println(response.getResponseText());
-
-	    JSONObject json = XML.toJSONObject(response.getResponseText());
-	    JSONObject result = json.getJSONObject("TwilioResponse")
-		    .getJSONObject("IncomingPhoneNumbers");
-
-	    if (result.get("IncomingPhoneNumber") instanceof JSONArray)
-		return result.getJSONArray("IncomingPhoneNumber")
-			.getJSONObject(0);
-	    return result.getJSONObject("IncomingPhoneNumber");
-	}
-
-    }
-
-    public static void main(String[] args)
-    {
-	try
-	{
-	    System.out.println("hi");
-	    System.out.println(TwilioUtil.getCallLogsWithRecordings(null,
-		    "+919533477545"));
-
-	}
-	catch (Exception e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
-    }
 }

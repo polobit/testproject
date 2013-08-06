@@ -13,11 +13,11 @@ import com.google.gson.Gson;
 import com.stripe.model.Customer;
 import com.stripe.model.Invoice;
 
-/*       
- * The <code>StripePluginUtil</code> class acts as a Client to Stripe
- * server
+/**
+ * The <code>StripePluginUtil</code> class acts as a Client to Stripe server
  * 
- * <code>StripePluginUtil</code> class contains methods to retrieve stripe customers details
+ * <code>StripePluginUtil</code> class contains methods to retrieve stripe
+ * customers details
  * 
  * @author Tejaswi
  * @since February 2013

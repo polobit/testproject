@@ -30,14 +30,14 @@ public class CampaignStatus
      */
     public String campaign_id = null;
 
-    // /**
-    // * Status of workflow.
-    // *
-    // */
-    // public enum Status
-    // {
-    // ACTIVE, DONE
-    // };
+    /**
+     * Status of workflow.
+     * 
+     */
+    public enum Status
+    {
+	ACTIVE, DONE
+    };
 
     public String status;
 
@@ -60,8 +60,7 @@ public class CampaignStatus
      * @param status
      *            - Active or Done.
      */
-    public CampaignStatus(Long start_time, Long end_time, String campaign_id,
-	    String status)
+    public CampaignStatus(Long start_time, Long end_time, String campaign_id, String status)
     {
 	this.start_time = start_time;
 	this.end_time = end_time;
