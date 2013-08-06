@@ -1,5 +1,23 @@
 BLOB_KEY = undefined;
 $(function() {
+	
+	// Cancels import, removes the contacts uploaded in to
+	// table, still calls
+	// fileUploadInit,
+	// so user can upload again if required
+	$('#import-cancel').die()
+			.live(
+					'click',
+					function(e) {
+
+						// Sends empty JSON to remove
+						// contact uploaded
+						$('#content').html(
+								getTemplate(
+										"import-contacts",
+										{}));
+					});
+	
 	$("#upload_contacts").die().live(
 			'click',
 			function(e) {
@@ -230,22 +248,7 @@ $(function() {
 							},
 						});
 
-						// Cancels import, removes the contacts uploaded in to
-						// table, still calls
-						// fileUploadInit,
-						// so user can upload again if required
-						$('#import-cancel').die()
-								.live(
-										'click',
-										function(e) {
-
-											// Sends empty JSON to remove
-											// contact uploaded
-											$('#content').html(
-													getTemplate(
-															"import-contacts",
-															{}));
-										});
+		
 
 					})
 });

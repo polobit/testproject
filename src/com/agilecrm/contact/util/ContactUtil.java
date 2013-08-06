@@ -19,6 +19,8 @@ import au.com.bytecode.opencsv.CSVReader;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
@@ -418,6 +420,9 @@ public class ContactUtil
 	{
 
 		CSVReader reader = new CSVReader(new StringReader(csv.trim()));
+		// StringWriter s = new StringWriter();
+		// CSVWriter writer = new CSVWriter(new BufferedWriter(s));
+		// writer.
 
 		List<String[]> contacts = reader.readAll();
 
@@ -427,6 +432,8 @@ public class ContactUtil
 		// Creates domain user key, which is set as a contact owner
 		Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
 
+		// Counters to count number of contacts saved contacts
+		int savedContacts = 0;
 		for (String[] csvValues : contacts)
 		{
 			System.out.println(csvValues.length);
@@ -462,6 +469,7 @@ public class ContactUtil
 			}
 
 			System.out.println(contact.getContactFieldValue(Contact.EMAIL));
+
 			// If contact has no email address or duplicate email address,
 			// contact is not saved
 			if (StringUtils.isEmpty(contact.getContactFieldValue(Contact.EMAIL))
@@ -473,7 +481,14 @@ public class ContactUtil
 				continue;
 
 			contact.save();
+
+			// Increase counter on each contact save
+			savedContacts++;
 		}
+
+		// Send notification after contacts save complete
+		BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
+
 		System.out.println("contact save completed");
 	}
 
