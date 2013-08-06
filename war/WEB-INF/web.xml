@@ -209,14 +209,6 @@
 	<servlet-mapping>
 		<servlet-name>TwilioVoiceServlet</servlet-name>
 		<url-pattern>/backend/voice</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>TwilioVerificationServlet</servlet-name>
-		<servlet-class>com.agilecrm.TwilioVerificationServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>TwilioVerificationServlet</servlet-name>
 		<url-pattern>/backend/verification</url-pattern>
 	</servlet-mapping>
 	
