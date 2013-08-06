@@ -324,6 +324,12 @@ public class Contact extends Cursor
 		// Checks of properties has any change
 		for (ContactField property : contact.properties)
 		{
+			// If name or value is null, this might be erroneous entry from
+			// client-side
+			// Simply ignore these kind of entries
+			if (property.name == null || property.value == null)
+				continue;
+
 			if (!properties.contains(property))
 				return false;
 		}
@@ -670,8 +676,15 @@ public class Contact extends Cursor
 						// company name not found, create a new one
 						Contact newCompany = new Contact();
 						newCompany.properties = new ArrayList<ContactField>();
-						newCompany.properties.add(new ContactField(Contact.NAME, null, contactField.value));
+						newCompany.properties.add(new ContactField(Contact.NAME, contactField.value, null));
 						newCompany.type = Type.COMPANY;
+
+						/*
+						 * We already have the owner of contact contact, which
+						 * should also be owner of contact. Instead of fetching
+						 * key from session in prepersist we can use the same.
+						 */
+						newCompany.setContactOwner(owner_key);
 						newCompany.save();
 
 						// assign key, NECESSARY

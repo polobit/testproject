@@ -337,7 +337,7 @@ function agile_addTask(email, data, callback)
 	var params = "email={0}&task={1}".format(encodeURIComponent(email.email), encodeURIComponent(JSON.stringify(data)));
 
 	// Get
-	var agile_url = agile_id.getURL() + "/js/task?callback=?&id=" + agile_id.get() + "&" + params;
+	var agile_url = agile_id.getURL() + "/task?callback=?&id=" + agile_id.get() + "&" + params;
 
 	agile_getJSONP(agile_url, function(data)
 	{
@@ -358,7 +358,7 @@ function agile_addDeal(email, data, callback)
 	var params = "email={0}&opportunity={1}".format(encodeURIComponent(email.email), encodeURIComponent(JSON.stringify(data)));
 
 	// Get
-	var agile_url = agile_id.getURL() + "/js/opportunity?callback=?&id=" + agile_id.get() + "&" + params;
+	var agile_url = agile_id.getURL() + "/opportunity?callback=?&id=" + agile_id.get() + "&" + params;
 
 	agile_getJSONP(agile_url, function(data)
 	{
