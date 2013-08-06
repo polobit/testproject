@@ -784,6 +784,14 @@ $(function()
 		return new Handlebars.SafeString(el);
 		
 	});
+	
+	/**
+	 * To represent a number with commas in deals
+	 */
+	Handlebars.registerHelper('numberWithCommas', function(value)
+	{
+		return value.toFixed(2).toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00','');
+	});
 
 	/**
 	 * Converts reports/view field element as comma seprated values and returns
@@ -1205,9 +1213,9 @@ $(function()
 				contactEntity = getPropertyValue(properties, "first_name") + " " + getPropertyValue(properties, "last_name");
 			}
 
-			if (getPropertyValue(contact_properties, key) == getPropertyValue(properties, key))
+			if (currentContactEntity == contactEntity)
 				return options.fn(this);
-
+			
 			return options.inverse(this)
 		}
 	});
@@ -1513,9 +1521,7 @@ $(function()
 			if (uurl === rurl)
 			{
 				var k = turl.indexOf('q=');
-				turl = turl.slice(k, turl.indexOf('&', k));
-				var s = turl.length;
-				turl = turl.slice(2, s);
+				turl = turl.slice(k+2, turl.indexOf('&', k));
 				turl = turl.replace('+', ' ');
 				return new Handlebars.SafeString('( Keyword : ' + turl + ' )');
 			}
