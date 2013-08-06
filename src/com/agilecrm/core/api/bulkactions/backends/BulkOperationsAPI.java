@@ -200,6 +200,7 @@ public class BulkOperationsAPI
 		System.out.println("backend running");
 
 		System.out.println(key);
+
 		// Creates a blobkey object from blobkey string
 		BlobKey blobKey = new BlobKey(key);
 
@@ -209,7 +210,8 @@ public class BulkOperationsAPI
 		{
 			blobStream = new BlobstoreInputStream(blobKey);
 			// Converts stream data into valid string data
-			String csv = IOUtils.toString(blobStream);
+
+			String csv = IOUtils.toString(blobStream, "UTF-8");
 
 			System.out.println(contact);
 
@@ -225,9 +227,9 @@ public class BulkOperationsAPI
 		finally
 		{
 			CacheUtil.deleteCache(key);
+
 			// Delete blob data after contacts are created
 			BlobstoreServiceFactory.getBlobstoreService().delete(blobKey);
 		}
-
 	}
 }
