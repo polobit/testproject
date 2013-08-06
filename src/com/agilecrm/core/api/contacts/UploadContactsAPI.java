@@ -2,8 +2,6 @@ package com.agilecrm.core.api.contacts;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
 import java.util.Hashtable;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +14,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONObject;
 
@@ -26,12 +25,10 @@ import com.agilecrm.util.CacheUtil;
 import com.google.appengine.api.backends.BackendServiceFactory;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreInputStream;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.taskqueue.TaskOptions.Method;
-import com.google.appengine.api.utils.SystemProperty;
 
 @Path("/api/upload")
 public class UploadContactsAPI
@@ -57,30 +54,25 @@ public class UploadContactsAPI
 
 			InputStream stream = new BlobstoreInputStream(blobKey);
 
-			LineNumberReader reader = new LineNumberReader(new InputStreamReader(stream));
+			LineIterator iterator = IOUtils.lineIterator(stream, "UTF-8");
 
-			String contactString = IOUtils.toString(stream);
+			int lines = 0;
+			String csv = "";
 
-			int numberOfContacts = contactString.trim().split(System.getProperty("line.separator")).length;
-
-			if (numberOfContacts > 10000)
+			// Iterates through first 10 lines
+			while (iterator.hasNext() && lines <= 10)
 			{
-				JSONObject success = new JSONObject();
-				success.put("success", false);
-				BlobstoreServiceFactory.getBlobstoreService().delete(blobKey);
+				csv = csv + "\n" + iterator.nextLine();
+				lines++;
 			}
-			System.out.println(numberOfContacts);
 
-			System.out.println(new BlobstoreInputStream(new BlobKey(key)).read());
-
-			Hashtable result = ContactUtil.convertCSVToJSONArrayPartially(contactString, "");
+			Hashtable result = ContactUtil.convertCSVToJSONArrayPartially(csv, "");
 
 			System.out.println(result);
 
 			JSONObject success = new JSONObject();
 			success.put("success", true);
 			success.put("blob_key", key);
-			success.put("available_contacts", numberOfContacts);
 
 			// Stores results in to a map
 			// JSONArray csvArray = (JSONArray) result.get("result");
@@ -130,12 +122,6 @@ public class UploadContactsAPI
 		{
 			String postURL = BackendServiceFactory.getBackendService().getBackendAddress(
 					Globals.BULK_ACTION_BACKENDS_URL);
-
-			// If Localhost - just return
-			if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
-			{
-				postURL = BackendServiceFactory.getBackendService().getBackendAddress("b1");
-			}
 
 			InputStream stream = request.getInputStream();
 			byte[] bytes = IOUtils.toByteArray(stream);
