@@ -1,9 +1,16 @@
-package com.campaignio.URLShortener.util;
+package com.campaignio.urlshortener.util;
 
+/**
+ * <code>Base62</code> handles conversion of numbers from Decimal base to Base62
+ * and vice versa.
+ * 
+ * @author Manohar
+ * 
+ */
 public class Base62
 {
     /**
-     * Base 62 having 62 digits
+     * Base62 having 62 digits.
      */
     private static final String baseDigits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 

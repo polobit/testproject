@@ -3,7 +3,7 @@ package com.campaignio.tasklets.util.deferred;
 import org.json.JSONObject;
 
 import com.agilecrm.workflows.util.WorkflowUtil;
-import com.campaignio.tasklets.util.TaskMain;
+import com.campaignio.tasklets.util.TaskCore;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
@@ -57,7 +57,7 @@ public class TaskletWorkflowDeferredTask implements DeferredTask
 		return;
 
 	    // Check in memcache if it is already executing
-	    TaskMain.executeWorkflow(campaignJSON, subscriberJSON);
+	    TaskCore.executeWorkflow(campaignJSON, subscriberJSON);
 	}
 	catch (Exception e)
 	{

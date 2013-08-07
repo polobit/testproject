@@ -55,9 +55,6 @@ import com.agilecrm.widgets.util.WidgetUtil;
 @SuppressWarnings("serial")
 public class ScribeServlet extends HttpServlet
 {
-    /**
-     * 
-     */
     public static final String SERVICE_TYPE_LINKED_IN = "linkedin";
     public static final String SERVICE_TYPE_TWITTER = "twitter";
     public static final String SERVICE_TYPE_GMAIL = "gmail";
@@ -248,7 +245,7 @@ public class ScribeServlet extends HttpServlet
 	 * authentication
 	 */
 	String callback = req.getRequestURL().toString();
-	System.out.println("getService callback:" + callback);
+	System.out.println("getService callback: " + callback);
 
 	OAuthService service = null;
 

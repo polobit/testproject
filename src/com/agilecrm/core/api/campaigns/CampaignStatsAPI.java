@@ -19,8 +19,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.db.util.CampaignStatsSQLUtil;
-import com.campaignio.stats.util.CampaignStatsReportsUtil;
-import com.campaignio.stats.util.DateUtil;
+import com.campaignio.reports.CampaignStatsReportsUtil;
+import com.campaignio.reports.DateUtil;
 
 /**
  * <code>CampaignStatsAPI</code> includes REST calls to interact with
