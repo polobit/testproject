@@ -1,4 +1,4 @@
-package com.campaignio.urlshortenerr.util;
+package com.campaignio.urlshortener.util;
 
 /**
  * <code>Rot13</code> handles encrypting and decrypting string using ROT13

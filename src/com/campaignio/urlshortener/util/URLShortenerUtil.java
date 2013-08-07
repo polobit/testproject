@@ -1,11 +1,11 @@
-package com.campaignio.urlshortenerr.util;
+package com.campaignio.urlshortener.util;
 
 import java.net.URLEncoder;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.campaignio.urlshortenerr.URLShortener;
+import com.campaignio.urlshortener.URLShortener;
 import com.google.appengine.api.NamespaceManager;
 
 /**
