@@ -14,7 +14,7 @@ import org.scribe.utils.OAuthEncoder;
 public class GoogleApi extends DefaultApi20
 {
     /**
-     * Authorize URL of Google for Oauth 2.0
+     * Scoped authorize URL of Google for OAuth 2.0
      */
     private static final String AUTHORIZE_URL = "https://accounts.google.com/o/oauth2/auth?client_id=%s&scope=%s&state=%s&redirect_uri=%s&access_type=offline&response_type=code&approval_prompt=force";
 
@@ -24,12 +24,12 @@ public class GoogleApi extends DefaultApi20
     private static final String ACCESS_TOKEN_URL = "https://accounts.google.com/o/oauth2/token";
 
     /**
-     * Redirect URL to which the code the returned after Oauth 2.0
+     * Redirect URL to which the code the returned after OAuth 2.0
      */
     private static final String REDIRECT_URL = "https://null-dot-sandbox-dot-agile-crm-cloud.appspot.com/backend/googleservlet";
 
     /**
-     * Returns access token URL of google
+     * Returns access token URL of Google
      */
     @Override
     public String getAccessTokenEndpoint()
@@ -39,8 +39,9 @@ public class GoogleApi extends DefaultApi20
     }
 
     /**
-     * Forms an authorize with the required parameters from {@link OAuthConfig}
-     * after building a service in scribe.
+     * Forms an authorize URL with the required parameters from
+     * {@link OAuthConfig} after building a service in scribe and returns the
+     * authorization URL
      * 
      * This is internally called from scribe
      */
