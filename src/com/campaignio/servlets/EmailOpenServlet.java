@@ -32,14 +32,12 @@ import com.google.appengine.api.NamespaceManager;
 @SuppressWarnings("serial")
 public class EmailOpenServlet extends HttpServlet
 {
-    public void doPost(HttpServletRequest req, HttpServletResponse res)
-	    throws IOException
+    public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException
     {
 	doGet(req, res);
     }
 
-    public void doGet(HttpServletRequest request, HttpServletResponse res)
-	    throws IOException
+    public void doGet(HttpServletRequest request, HttpServletResponse res) throws IOException
     {
 	String subscriberId = request.getParameter("s");
 	String namespace = request.getParameter("n");
@@ -53,39 +51,7 @@ public class EmailOpenServlet extends HttpServlet
 
 	try
 	{
-	    Contact contact = ContactUtil.getContact(Long
-		    .parseLong(subscriberId));
-
-	    if (!StringUtils.isEmpty(campaignId))
-	    {
-		Workflow workflow = WorkflowUtil.getWorkflow(Long
-			.parseLong(campaignId));
-
-		if (workflow != null)
-		{
-		    LogUtil.addLogToSQL(campaignId, subscriberId,
-			    "Email Opened of campaign " + workflow.name,
-			    LogType.EMAIL_OPENED.toString());
-
-		    try
-		    {
-			// For Campaign Emails
-			NotificationPrefsUtil.executeNotification(
-				Type.OPENED_EMAIL, contact, new JSONObject()
-					.put("custom_value", workflow.name));
-		    }
-		    catch (Exception e)
-		    {
-			e.printStackTrace();
-		    }
-		}
-	    }
-	    else
-	    {
-		// For Simple Emails
-		NotificationPrefsUtil.executeNotification(Type.OPENED_EMAIL,
-			contact, null);
-	    }
+	    addLogAndShowNotification(subscriberId, campaignId);
 	}
 	finally
 	{
@@ -95,4 +61,78 @@ public class EmailOpenServlet extends HttpServlet
 	// Redirect to image.
 	res.sendRedirect("/img/1X1.png");
     }
+
+    /**
+     * Adds log and show notification of Email Opened.
+     * 
+     * @param subscriberId
+     *            - Contact Id.
+     * @param campaignId
+     *            - Campaign Id.
+     */
+    private void addLogAndShowNotification(String subscriberId, String campaignId)
+    {
+	Contact contact = ContactUtil.getContact(Long.parseLong(subscriberId));
+
+	if (!StringUtils.isEmpty(campaignId))
+	{
+	    Workflow workflow = WorkflowUtil.getWorkflow(Long.parseLong(campaignId));
+
+	    if (workflow != null)
+	    {
+		// Adds log
+		addEmailOpenedLog(campaignId, subscriberId, workflow.name);
+
+		// Shows notification for campaign-emails
+		showEmailOpenedNotification(contact, workflow.name);
+	    }
+	}
+	else
+	{
+	    // Shows notification for simple emails.
+	    showEmailOpenedNotification(contact, null);
+	}
+    }
+
+    /**
+     * Adds EmailOpened log to SQL.
+     * 
+     * @param campaignId
+     *            - CampaignId.
+     * @param subscriberId
+     *            - SubscriberId
+     * @param workflowName
+     *            - Workflow Name of campaign with campaignId.
+     */
+    private void addEmailOpenedLog(String campaignId, String subscriberId, String workflowName)
+    {
+	LogUtil.addLogToSQL(campaignId, subscriberId, "Email Opened of campaign " + workflowName, LogType.EMAIL_OPENED.toString());
+    }
+
+    /**
+     * Shows EmailOpened Notification with contact and workflow name.
+     * 
+     * @param contact
+     *            - Contact object.
+     * @param workflowName
+     *            - Workflow Name.
+     */
+    private void showEmailOpenedNotification(Contact contact, String workflowName)
+    {
+	if (workflowName == null)
+	{
+	    NotificationPrefsUtil.executeNotification(Type.OPENED_EMAIL, contact, null);
+	    return;
+	}
+	try
+	{
+	    // For Campaign Emails
+	    NotificationPrefsUtil.executeNotification(Type.OPENED_EMAIL, contact, new JSONObject().put("custom_value", workflowName));
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+    }
+
 }

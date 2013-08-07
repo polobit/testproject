@@ -1,5 +1,6 @@
 package com.campaignio.tasklets.agile;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -464,17 +465,7 @@ public class SendEmail extends TaskletAdapter
 	{
 
 	    // Avoid image and shorten urls
-	    if (tokens[i].toLowerCase().startsWith("http") && !tokens[i].toLowerCase().startsWith("http://goo.gl")
-		    && !tokens[i].toLowerCase().startsWith("http://agle.cc") && !tokens[i].toLowerCase().startsWith("http://usertracker")
-		    && !tokens[i].toLowerCase().startsWith("http://unscr.be")
-		    && !tokens[i].toLowerCase().endsWith(".png")
-		    && !tokens[i].toLowerCase().endsWith(".jpg")
-		    && !tokens[i].toLowerCase().endsWith(".jpeg")
-		    && !tokens[i].toLowerCase().endsWith(".jp2")// jpg 2000
-		    && !tokens[i].toLowerCase().endsWith(".jpx")// jpg 2000
-		    && !tokens[i].toLowerCase().endsWith(".gif") && !tokens[i].toLowerCase().endsWith(".bmp") && !tokens[i].toLowerCase().endsWith(".tiff")
-		    && !tokens[i].toLowerCase().endsWith(".tif") && !tokens[i].toLowerCase().endsWith(".ppm") && !tokens[i].toLowerCase().endsWith(".pgm")
-		    && !tokens[i].toLowerCase().endsWith(".pbm") && !tokens[i].toLowerCase().endsWith(".pnm") && !tokens[i].toLowerCase().endsWith(".dtd"))
+	    if (isSpecialLink(tokens[i]))
 	    {
 		// Shorten URL
 		String url = URLShortenerUtil.getShortURL(tokens[i], keyword, subscriberId, data.getString(TRACKING_ID), campaignId);
@@ -508,5 +499,32 @@ public class SendEmail extends TaskletAdapter
 	    System.out.println("Replaced " + input + " with " + replacedString);
 
 	return replacedString.trim();
+    }
+
+    /**
+     * Validates links present in the email body (either in text or html)
+     * inorder which urls need to be shortened. It omits the links ended with
+     * image extensions and links like http://agle.cc
+     * 
+     * @param str
+     *            - String token obtained based on delimiters
+     * @return Boolean
+     */
+    private boolean isSpecialLink(String str)
+    {
+	String extensions[] = { ".png", ".jpg", ".jpeg", ".jp2", ".jpx", ".gif", ".tif", ".pbm", ".bmp", ".tiff", ".ppm", ".pgm", ".pnm", ".dtd" };
+	boolean isContains = false;
+
+	if (str.indexOf('.') == -1)
+	    return false;
+
+	// Compares string token with the extensions
+	isContains = Arrays.asList(extensions).contains(str.substring(str.lastIndexOf('.')).toLowerCase());
+
+	if ((str.toLowerCase().startsWith("http") || str.toLowerCase().startsWith("https")) && !str.toLowerCase().startsWith("http://goo.gl")
+		&& !str.toLowerCase().startsWith("http://agle.cc") && !str.toLowerCase().startsWith("http://unscr.be") && !isContains)
+	    return true;
+
+	return false;
     }
 }
