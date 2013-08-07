@@ -229,7 +229,7 @@ $(function()
 
 	/**
 	 * Returns workflow name surrounded by quotations if exists, otherwise this
-	 **/
+	 */
 	Handlebars.registerHelper('workflowName', function()
 	{
 		if (App_Workflows.workflow_model)
@@ -764,12 +764,13 @@ $(function()
 	// To show only one related to contacts or companies in deals
 	Handlebars.registerHelper('related_to_one', function(data, options)
 	{
-		//return "<span>" + getTemplate("related-to-contacts", data[0]) + "</span>";
+		// return "<span>" + getTemplate("related-to-contacts", data[0]) +
+		// "</span>";
 		var el = "";
 		var count = data.length;
 		$.each(data, function(key, value)
 		{
-			if( key <= 3)
+			if (key <= 3)
 			{
 				var html = getTemplate("related-to-contacts", value);
 				if (--count == 0 || key == 3)
@@ -782,15 +783,16 @@ $(function()
 
 		});
 		return new Handlebars.SafeString(el);
-		
+
 	});
-	
+
 	/**
 	 * To represent a number with commas in deals
 	 */
 	Handlebars.registerHelper('numberWithCommas', function(value)
 	{
-		return value.toFixed(2).toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00','');
+		if (value)
+			return value.toFixed(2).toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
 	});
 
 	/**
@@ -872,65 +874,79 @@ $(function()
 	/*
 	 * Gets company image from a contact object.
 	 * 
-	 * --If image uploaded, returns that ( the frame size requested ).
-	 * --Else if url present, fetch icon from the url via Google S2 service (frame size=32x32)
-	 * --Else return img/company.png ( the frame size requested ).
+	 * --If image uploaded, returns that ( the frame size requested ). --Else if
+	 * url present, fetch icon from the url via Google S2 service (frame
+	 * size=32x32) --Else return img/company.png ( the frame size requested ).
 	 * 
-	 * --CSS for frame is adjusted when fetching from url ( default padding = 4px , now 4+adjust ).
-	 * --'onError' is an attribute (js function) fired when 
-	 * 			image fails to download, maybe due to remote servers being down
-	 * --'onError' defaults to img/company.png which should be present in server as static file
+	 * --CSS for frame is adjusted when fetching from url ( default padding =
+	 * 4px , now 4+adjust ). --'onError' is an attribute (js function) fired
+	 * when image fails to download, maybe due to remote servers being down
+	 * --'onError' defaults to img/company.png which should be present in server
+	 * as static file
 	 * 
-	 * Usage:
-	 * e.g.
-	 * <img {{getCompanyImage "40" "display:inline"}} class="..." ... >
+	 * Usage: e.g. <img {{getCompanyImage "40" "display:inline"}} class="..."
+	 * ... >
 	 * 
-	 * This helper sets src,onError & style attribute. 
-	 * "40" is full frame size requested.
-	 * Additional styles like "display:inline;" or "display:block;" can be specified in 2nd param.
+	 * This helper sets src,onError & style attribute. "40" is full frame size
+	 * requested. Additional styles like "display:inline;" or "display:block;"
+	 * can be specified in 2nd param.
 	 * 
 	 * @author Chandan
 	 */
-	Handlebars.registerHelper('getCompanyImage',function(frame_size, additional_style){
+	Handlebars
+			.registerHelper(
+					'getCompanyImage',
+					function(frame_size, additional_style)
+					{
 
-		var full_size = parseInt(frame_size); // / size requested, full frame
-		var size_diff = 4 + ((full_size - 32) / 2); // calculating padding, for small favicon 16x16 as 32x32, 
-													// fill rest frame with padding
+						var full_size = parseInt(frame_size); // / size
+																// requested,
+																// full frame
+						var size_diff = 4 + ((full_size - 32) / 2); // calculating
+																	// padding,
+																	// for small
+																	// favicon
+																	// 16x16 as
+																	// 32x32,
+						// fill rest frame with padding
 
-		// default when we can't find image uploaded or url to fetch from
-		var default_return = "src='img/company.png' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
+						// default when we can't find image uploaded or url to
+						// fetch from
+						var default_return = "src='img/company.png' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
 
-		// when the image from uploaded one or favicon can't be
-		// fetched, then show company.png, adjust CSS ( if style broken by favicon ).
-		var error_fxn = "";
+						// when the image from uploaded one or favicon can't be
+						// fetched, then show company.png, adjust CSS ( if style
+						// broken by favicon ).
+						var error_fxn = "";
 
-		for ( var i = 0; i < this.properties.length; i++)
-		{
-			if (this.properties[i].name == "image")
-			{
-				default_return = "src='" + this.properties[i].value + "' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + ";'";
-								// found uploaded image, break, no need to lookup url
+						for ( var i = 0; i < this.properties.length; i++)
+						{
+							if (this.properties[i].name == "image")
+							{
+								default_return = "src='" + this.properties[i].value + "' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + ";'";
+								// found uploaded image, break, no need to
+								// lookup url
 
-				error_fxn = "this.src='img/company.png'; this.onerror=null;";
+								error_fxn = "this.src='img/company.png'; this.onerror=null;";
 								// no need to resize, company.png is of good
 								// quality & can be scaled to this size
 
-				break;
-			}
-			if (this.properties[i].name == "url")
-			{
-				default_return = "src='http://www.google.com/s2/favicons?domain=" + this.properties[i].value + "' " + "style='width:32px; height:32px; padding:" + size_diff + "px; " + additional_style + " ;'";
+								break;
+							}
+							if (this.properties[i].name == "url")
+							{
+								default_return = "src='http://www.google.com/s2/favicons?domain=" + this.properties[i].value + "' " + "style='width:32px; height:32px; padding:" + size_diff + "px; " + additional_style + " ;'";
 								// favicon fetch -- Google S2 Service, 32x32,
 								// rest padding added
 
-				error_fxn = "this.src='img/company.png'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
+								error_fxn = "this.src='img/company.png'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
 								// resize needed as favicon is 16x16 & scaled to
 								// just 32x32, company.png is adjusted on error
-			}
-		}
-		// return safe string so that our html is not escaped
-		return new Handlebars.SafeString(default_return + " onError=\"" + error_fxn + "\"");
-	});
+							}
+						}
+						// return safe string so that our html is not escaped
+						return new Handlebars.SafeString(default_return + " onError=\"" + error_fxn + "\"");
+					});
 
 	// Get Count
 	Handlebars.registerHelper('count', function()
@@ -1042,7 +1058,7 @@ $(function()
 		 */
 		if ((typeof target === "undefined") || (typeof value === "undefined"))
 			return options.inverse(this);
-		
+
 		if (value.toString().trim() == target.toString().trim())
 			return options.fn(this);
 		else
@@ -1217,7 +1233,7 @@ $(function()
 
 			if (currentContactEntity == contactEntity)
 				return options.fn(this);
-			
+
 			return options.inverse(this)
 		}
 	});
@@ -1350,7 +1366,7 @@ $(function()
 
 	/**
 	 * Removes surrounded square brackets
-	 **/
+	 */
 	Handlebars.registerHelper('removeSquareBrackets', function(value)
 	{
 		return value.replace(/[\[\]]+/, '');
@@ -1503,9 +1519,10 @@ $(function()
 			return "unknown";
 		else
 			var url = getCurrentContactProperty(original_ref);
-			url = url.split('/');
-			url = (url[0]+'//'+url[2]);
-			return new Handlebars.SafeString('<a style="text-decoration: none" target="_blank" href="' + getCurrentContactProperty(original_ref) + '">' + url + '</a>');
+		url = url.split('/');
+		url = (url[0] + '//' + url[2]);
+		return new Handlebars.SafeString(
+				'<a style="text-decoration: none" target="_blank" href="' + getCurrentContactProperty(original_ref) + '">' + url + '</a>');
 	});
 
 	/**
@@ -1519,11 +1536,11 @@ $(function()
 			var rurl = 'www.google.';
 			var uurl = turl.split('/');
 			uurl = uurl[2];
-			uurl = uurl.slice(0,11);
+			uurl = uurl.slice(0, 11);
 			if (uurl === rurl)
 			{
 				var k = turl.indexOf('q=');
-				turl = turl.slice(k+2, turl.indexOf('&', k));
+				turl = turl.slice(k + 2, turl.indexOf('&', k));
 				turl = turl.replace('+', ' ');
 				return new Handlebars.SafeString('( Keyword : ' + turl + ' )');
 			}
