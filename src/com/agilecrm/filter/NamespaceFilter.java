@@ -150,19 +150,19 @@ public class NamespaceFilter implements Filter
 
 			String owner_id = request.getParameter("opensocial_owner_id");
 			System.out.println("open id in namespace filter : " + owner_id);
-			// If Gadget Level API which does not understand redirect, we
-			// just set the namespace
-			if (!StringUtils.isEmpty(request.getParameter(GMailGadgetServlet.SESSION_KEY_NAME)))
-				return true;
-
-			if (owner_id != null)
-			{
-				return true;
-			}
 
 			// Using openid, we are not able to support wildcard realms
 			String appsDomain = request.getParameter("domain");
-			if (appsDomain != null)
+
+			/*
+			 * If Gadget Level API which does not understand redirect, we /*
+			 * just set the namespace.
+			 * 
+			 * Request url should be changed if there is one time session key,
+			 * so session
+			 */
+			if (!StringUtils.isEmpty(request.getParameter(GMailGadgetServlet.SESSION_KEY_NAME))
+					&& !StringUtils.isEmpty(appsDomain))
 			{
 				String namespace = appsDomain.split("\\.")[0];
 				System.out.println("Setting Google Apps - Namespace " + appsDomain);
@@ -173,8 +173,14 @@ public class NamespaceFilter implements Filter
 				HttpServletResponse httpResponse = (HttpServletResponse) response;
 				System.out.println("Redirecting it to " + url);
 				httpResponse.sendRedirect(url);
-				return false;
+				return true;
 			}
+
+			if (!StringUtils.isEmpty(owner_id))
+			{
+				return true;
+			}
+
 		}
 		catch (Exception e)
 		{
