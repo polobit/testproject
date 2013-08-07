@@ -334,7 +334,7 @@ function setUpTwilio(token, plugin_id, from)
 
 								console.log(record);
 								Twilio.Device.connect({ from : from, PhoneNumber : to, record : record,
-									Url : "https://agile-crm-cloud.appspot.com/twilio/voice?record=" + record });
+									Url : "https://agile-crm-cloud.appspot.com/backend/voice?record=" + record });
 							});
 				});
 

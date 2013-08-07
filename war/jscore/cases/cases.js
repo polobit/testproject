@@ -1,5 +1,7 @@
 /**
- * Case is modelled along the lines of Deals. So functionally they are very similar.
+ * Case is modelled along the lines of Deals. So functionality and coding style are very similar.
+ * 
+ * @author Chandan
  */
 
 //handle popover
@@ -11,11 +13,7 @@ $(function () {
 	$('#cases-model-list > tr').live('mouseenter', function () {
         
         var data = $(this).find('.data').attr('data');
-
         var currentCase = App_Cases.casesCollectionView.collection.get(data);
-       
-        console.log(currentCase.toJSON());
-        
         var ele = getTemplate("cases-detail-popover", currentCase.toJSON());
         
         $(this).attr({
@@ -24,7 +22,6 @@ $(function () {
         	"data-original-title" : currentCase.toJSON().title,
         	"data-content" :  ele
         });
-       
        
         /**
          * Checks for last 'tr' and change placement of popover to 'top' inorder
@@ -37,6 +34,9 @@ $(function () {
         	"data-content" :  ele
         });
         
+        /**
+         * make sure first popover is shown on the right
+         */
         $('#cases-model-list > tr:first').attr({
         	"rel" : "popover",
         	"data-placement" : 'right',
@@ -120,17 +120,19 @@ $(function(){
 		
 		// Removes validation error messages
 		remove_validation_errors('casesUpdateModal');
-
     });
     
 	$('#cases-model-list > tr').live('click', function(e) {
 		e.preventDefault();
 		updatecases($(this).data());
 	});
-    
 });
 
-// Show cases popup for editing
+/**
+ * Show cases popup for editing
+ * 
+ * @param ele
+ */
 function updatecases(ele) 
 {
 	var value = ele.toJSON();
@@ -143,17 +145,14 @@ function updatecases(ele)
 	agile_type_ahead("contacts-typeahead-input", casesForm, contacts_typeahead);
 	
 	// Fills owner select element
-	populateUsers("owners-list", casesForm, value, 'owner', function(data) 
+	populateUsers("owners-list", casesForm, value, 'owner', function(data)
 	{
-				casesForm.find("#owners-list").html(data);
-				if (value.owner) 
-				{
-					$("#owners-list", casesForm).find('option[value=' + value['owner'].id + ']')
-							.attr("selected", "selected");
-				}
-				
-				$("#casesUpdateModal").modal('show');
-
+		casesForm.find("#owners-list").html(data);
+		if (value.owner)
+		{
+			$("#owners-list", casesForm).find('option[value=' + value['owner'].id + ']').attr("selected", "selected");
+		}
+		$("#casesUpdateModal").modal('show');
 	});
 }
 
@@ -164,52 +163,47 @@ function showCases()
 	
 	// Fills owner select element
 	populateUsers("owners-list", el, undefined, undefined, function(data){
-		
-			$("#casesForm").find("#owners-list").html(data);
-			$("#owners-list",$("#casesForm")).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
-				// Contacts type-ahead
-			agile_type_ahead("contacts-typeahead-input", el, contacts_typeahead);
-		});
 
-		// Enable the datepicker
-		$('#close_date', el).datepicker({
-			format : 'mm/dd/yyyy'
-		});
+		$("#casesForm").find("#owners-list").html(data);
+		$("#owners-list", $("#casesForm")).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
+		// Contacts type-ahead
+		agile_type_ahead("contacts-typeahead-input", el, contacts_typeahead);
+	});
+
+	// Enable the datepicker
+	$('#close_date', el).datepicker({
+		format : 'mm/dd/yyyy'
+	});
 		
-		$("#casesModal").modal('show');
+	$("#casesModal").modal('show');
 }
 
 // Updates or Saves a cases
 function savecases(formId, modalId, saveBtn, json)
 {	
-	console.log(formId);
 	// Returns, if the save button has disabled attribute
 	if ($(saveBtn).attr('disabled'))return;
 
 	// Disables save button to prevent multiple click event issues
 	$(saveBtn).attr('disabled', 'disabled');
 	
-	if (!isValidForm('#' + formId)) {
-		// Removes disabled attribute of save button
-		$(saveBtn).removeAttr('disabled');
+	if (!isValidForm('#' + formId)){
+		$(saveBtn).removeAttr('disabled'); // Removes disabled attribute of save button
 		return false;
 	}
 	
 	// Shows loading symbol until model get saved
     $('#' + modalId).find('span.save-status').html(LOADING_HTML);
 	
-	var newEntry=false;
+	var newEntry=false; // test if this model is new, true => new model 
 	if(json.id===undefined)newEntry=true;
-	
-	console.log("MODEL ID="+json.id);
 	
 	var newcases = new Backbone.Model();
 	newcases.url = 'core/api/cases';
 	newcases.save(json, 
 	{
 		success : function(data) 
-		{
-			
+		{		
 			// Removes disabled attribute of save button
 			$(saveBtn).removeAttr('disabled');
 
@@ -223,35 +217,30 @@ function savecases(formId, modalId, saveBtn, json)
 			var cases = data.toJSON();
 			
 			// Updates data to timeline
-/*If(Contact-Details) page*/			
+			/*If(Contact-Details) page - then adjust timeline*/			
 			if (App_Contacts.contactDetailView
 					&& Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id')) 
 			{
-
 				if(App_Contacts.contactDetailView.model.get('type')=='COMPANY')
 				{
 					activate_timeline_tab();  // if this contact is of type COMPANY, simply activate first tab & fill details
 					fill_company_related_contacts(App_Contacts.contactDetailView.model.id,'company-contacts'); 
 					return;
 				}
+				/// Now Only models which have type 'PERSON' will through below.
 				
 				// Verifies whether the added case is related to the contact in
 				// contact detail view or not
-				//
 				$.each(cases.contacts, function(index, contact) {
 					
-					if (contact.id == App_Contacts.contactDetailView.model
-							.get('id')) {
-
-						
+					if (contact.id == App_Contacts.contactDetailView.model.get('id')) {
+				
 						// Activates timeline in contact detail tab and tab
-						// content
-						
+						// content		
 						activate_timeline_tab();
 						
 						 // If timeline is not defined yet, initiates with the
 						 // data else inserts
-						 
 						if (timelineView.collection && timelineView.collection.length == 0) {
 							timelineView.collection.add(data);
 							
@@ -269,18 +258,19 @@ function savecases(formId, modalId, saveBtn, json)
 					}//end if
 				}); //end each
 			}//end if
-/*end-if(Contact-Details) */
-				else if(Current_Route == 'cases')
-				{
-					if(newEntry==true)App_Cases.casesCollectionView.collection.add(data);
-					else
-					{						
-						App_Cases.casesCollectionView.collection.remove(json);
-						App_Cases.casesCollectionView.collection.add(data);
-					}
-					App_Cases.casesCollectionView.render(true);
+			/*end-if(Contact-Details) */
+			else if(Current_Route == 'cases')
+			{
+				//On cases page.. adjust current model
+				if(newEntry==true)App_Cases.casesCollectionView.collection.add(data);
+				else
+				{						
+					App_Cases.casesCollectionView.collection.remove(json);
+					App_Cases.casesCollectionView.collection.add(data);
 				}
-				else App_Calendar.navigate("cases",{trigger:true}); 
+				App_Cases.casesCollectionView.render(true);
+			}
+			else App_Calendar.navigate("cases",{trigger:true}); 
 		}
 	});
 }

@@ -7,7 +7,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
 
-import com.agilecrm.db.util.SQLUtil;
+import com.agilecrm.db.util.CampaignLogsSQLUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log;
 import com.google.appengine.api.NamespaceManager;
@@ -43,7 +43,7 @@ public class LogUtil
 	    return;
 
 	// Insert to SQL
-	SQLUtil.addToCampaignLogs(domain, campaignId, WorkflowUtil.getCampaignName(campaignId), subscriberId, message, logType);
+	CampaignLogsSQLUtil.addToCampaignLogs(domain, campaignId, WorkflowUtil.getCampaignName(campaignId), subscriberId, message, logType);
     }
 
     /**
@@ -65,7 +65,7 @@ public class LogUtil
 	    return null;
 
 	// get SQL logs
-	JSONArray logs = SQLUtil.getLogs(campaignId, subscriberId, domain, limit);
+	JSONArray logs = CampaignLogsSQLUtil.getLogs(campaignId, subscriberId, domain, limit);
 
 	if (logs == null)
 	    return null;
@@ -97,6 +97,6 @@ public class LogUtil
 	if (StringUtils.isEmpty(domain) || (StringUtils.isEmpty(campaignId) && StringUtils.isEmpty(subscriberId)))
 	    return;
 
-	SQLUtil.deleteLogsFromSQL(campaignId, subscriberId, domain);
+	CampaignLogsSQLUtil.deleteLogsFromSQL(campaignId, subscriberId, domain);
     }
 }
