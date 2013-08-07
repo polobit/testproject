@@ -99,6 +99,35 @@ public class WidgetUtil
     }
 
     /**
+     * Fetches widget by its name and current {@link AgileUser} key
+     * 
+     * @param name
+     *            {@link String}. Name of the widget
+     * @param id
+     *            {@link Long} agile user id
+     * @return {@link Widget}
+     */
+    public static Widget getWidget(String name, Long id)
+    {
+	try
+	{
+	    Objectify ofy = ObjectifyService.begin();
+
+	    // Gets the Current AgileUser key to query on widgets
+	    Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, id);
+
+	    // Queries on widget name, with current AgileUser Key
+	    return ofy.query(Widget.class).ancestor(userKey)
+		    .filter("name", name).get();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
      * Fetches all default widgets. Checks whether widgets are added already, if
      * widget is not added then is_added field in Widget is set false, so add
      * can be shown, delete button can be shown if already added

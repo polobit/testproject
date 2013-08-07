@@ -201,6 +201,7 @@
 	<servlet-mapping>
 		<servlet-name>TwilioServlet</servlet-name>
 		<url-pattern>/backend/TwilioServlet</url-pattern>
+		<url-pattern>/auth/TwilioServlet</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -210,7 +211,7 @@
 	<servlet-mapping>
 		<servlet-name>TwilioVoiceServlet</servlet-name>
 		<url-pattern>/backend/voice</url-pattern>
-		<url-pattern>/backend/verification</url-pattern>
+		<url-pattern>/verification</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
