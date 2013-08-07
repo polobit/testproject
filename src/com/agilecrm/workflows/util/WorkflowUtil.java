@@ -14,7 +14,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.workflows.Workflow;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
-import com.campaignio.tasklets.util.TaskMain;
+import com.campaignio.tasklets.util.TaskCore;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.campaignio.tasklets.util.deferred.TaskletWorkflowDeferredTask;
 import com.campaignio.twitter.util.TwitterJobQueueUtil;
@@ -226,7 +226,7 @@ public class WorkflowUtil
 	if (campaignJSON == null)
 	    return;
 
-	TaskMain.executeCampaign(campaignJSON, subscriberJSONArray);
+	TaskCore.executeCampaign(campaignJSON, subscriberJSONArray);
     }
 
     /**

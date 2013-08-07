@@ -20,12 +20,13 @@
 	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>GoogleServlet</servlet-name>
-		<servlet-class>com.agilecrm.plugin.oauth.GoogleServlet</servlet-class>
+		<servlet-name>OAuth2Servlet</servlet-name>
+		<servlet-class>com.agilecrm.plugin.oauth.OAuth2Servlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>GoogleServlet</servlet-name>
+		<servlet-name>OAuth2Servlet</servlet-name>
 		<url-pattern>/backend/googleservlet</url-pattern>
+		<url-pattern>/backend/StripeServlet</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -209,24 +210,7 @@
 	<servlet-mapping>
 		<servlet-name>TwilioVoiceServlet</servlet-name>
 		<url-pattern>/backend/voice</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>TwilioVerificationServlet</servlet-name>
-		<servlet-class>com.agilecrm.TwilioVerificationServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>TwilioVerificationServlet</servlet-name>
 		<url-pattern>/backend/verification</url-pattern>
-	</servlet-mapping>
-	
-	<servlet>
-		<servlet-name>StripeServlet</servlet-name>
-		<servlet-class>com.agilecrm.plugin.oauth.StripeServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>StripeServlet</servlet-name>
-		<url-pattern>/backend/StripeServlet</url-pattern>
 	</servlet-mapping>
 
 	<servlet>

@@ -66,17 +66,14 @@ public class JSONNode extends TaskletAdapter
      * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
      */
     @SuppressWarnings({ "deprecation", "rawtypes" })
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
-	    JSONObject data, JSONObject nodeJSON) throws Exception
+    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
 	// Get URL, Method Type
 	String url = getStringValue(nodeJSON, subscriberJSON, data, URL);
-	String methodType = getStringValue(nodeJSON, subscriberJSON, data,
-		METHOD_TYPE);
+	String methodType = getStringValue(nodeJSON, subscriberJSON, data, METHOD_TYPE);
 
 	// Parameters
-	String paramsJSONArrayString = getStringValue(nodeJSON, subscriberJSON,
-		data, PARAMETERS);
+	String paramsJSONArrayString = getStringValue(nodeJSON, subscriberJSON, data, PARAMETERS);
 
 	JSONArray paramsJSONArray = new JSONArray(paramsJSONArrayString);
 
@@ -96,11 +93,9 @@ public class JSONNode extends TaskletAdapter
 
 		// Construct data
 		if (i == 0)
-		    httpParams += URLEncoder.encode(key) + "="
-			    + URLEncoder.encode(value);
+		    httpParams += URLEncoder.encode(key) + "=" + URLEncoder.encode(value);
 		else
-		    httpParams += "&" + URLEncoder.encode(key) + "="
-			    + URLEncoder.encode(value);
+		    httpParams += "&" + URLEncoder.encode(key) + "=" + URLEncoder.encode(value);
 	    }
 
 	    System.out.println(httpParams);
@@ -117,10 +112,7 @@ public class JSONNode extends TaskletAdapter
 		output = HTTPUtil.accessURL(url);
 
 		// Creates log for JSONNode for method Get type
-		LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
-			DBUtil.getId(subscriberJSON), "GET: " + url
-				+ "<br>Status: SUCCESS",
-			LogType.JSONIO.toString());
+		LogUtil.addLogToSQL(DBUtil.getId(campaignJSON), DBUtil.getId(subscriberJSON), "GET: " + url + "<br>Status: SUCCESS", LogType.JSONIO.toString());
 
 	    }
 	    else
@@ -128,9 +120,7 @@ public class JSONNode extends TaskletAdapter
 		output = HTTPUtil.accessURLUsingPost(url, httpParams);
 
 		// Creates log for JSONNode for method Post type
-		LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
-			DBUtil.getId(subscriberJSON), "POST: " + url + " "
-				+ httpParams + "<br>Status: SUCCESS",
+		LogUtil.addLogToSQL(DBUtil.getId(campaignJSON), DBUtil.getId(subscriberJSON), "POST: " + url + " " + httpParams + "<br>Status: SUCCESS",
 			LogType.JSONIO.toString());
 	    }
 
@@ -141,14 +131,13 @@ public class JSONNode extends TaskletAdapter
 	    while (it.hasNext())
 	    {
 		String key = (String) it.next();
-		data.put("$" + key, returnJSON.get(key));
+		data.put(key, returnJSON.get(key));
 	    }
 
 	    System.out.println(returnJSON + " " + data);
 
 	    // Execute Next One in Loop
-	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
-		    nodeJSON, BRANCH_SUCCESS);
+	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_SUCCESS);
 
 	}
 	catch (Exception e)
@@ -157,14 +146,10 @@ public class JSONNode extends TaskletAdapter
 	    data.put("error", e.getMessage());
 
 	    // Creates log for JSONNode for error
-	    LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
-		    DBUtil.getId(subscriberJSON),
-		    "Error Occurred " + e.getMessage(),
-		    LogType.JSONIO.toString());
+	    LogUtil.addLogToSQL(DBUtil.getId(campaignJSON), DBUtil.getId(subscriberJSON), "Error Occurred " + e.getMessage(), LogType.JSONIO.toString());
 
 	    // Execute Next One in Loop
-	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
-		    nodeJSON, BRANCH_FAILURE);
+	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_FAILURE);
 	}
     }
 }

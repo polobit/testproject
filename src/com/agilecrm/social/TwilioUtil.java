@@ -169,7 +169,7 @@ public class TwilioUtil
 	Map<String, String> params = new HashMap<String, String>();
 	params.put("FriendlyName", "Agile CRM");
 	params.put("VoiceUrl",
-		"https://agile-crm-cloud.appspot.com/twilio/voice");
+		"https://agile-crm-cloud.appspot.com/backend/voice");
 	params.put("VoiceMethod", "GET");
 
 	// Make a POST request to create application

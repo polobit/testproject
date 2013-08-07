@@ -40,8 +40,7 @@ import com.googlecode.objectify.Key;
 public class DomainUserUtil
 {
     // Dao
-    private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(
-	    DomainUser.class);
+    private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(DomainUser.class);
 
     /**
      * Generates a password of length eight characters and sends an email to the
@@ -63,21 +62,20 @@ public class DomainUserUtil
 	{
 	    // If account is registered with open id new password is not
 	    // generated.
-	    if (domainUser.password.equals(DomainUser.MASKED_PASSWORD))
+	    // if (domainUser.password.equals(DomainUser.MASKED_PASSWORD))
+	    if (domainUser.getHashedString() == null)
 	    {
 		throw new Exception();
 	    }
 	    String oldNamespace = NamespaceManager.get();
 	    NamespaceManager.set("");
 
-	    String randomNumber = RandomStringUtils.randomAlphanumeric(8)
-		    .toUpperCase();
+	    String randomNumber = RandomStringUtils.randomAlphanumeric(8).toUpperCase();
 
 	    domainUser.password = randomNumber;
 
 	    // Send an email with the new password
-	    SendMail.sendMail(email, SendMail.FORGOT_PASSWORD_SUBJECT,
-		    SendMail.FORGOT_PASSWORD, domainUser);
+	    SendMail.sendMail(email, SendMail.FORGOT_PASSWORD_SUBJECT, SendMail.FORGOT_PASSWORD, domainUser);
 
 	    try
 	    {
@@ -268,9 +266,7 @@ public class DomainUserUtil
 
 	NamespaceManager.set("");
 
-	DomainUser user = dao.ofy().query(DomainUser.class)
-		.filter("domain", domain).filter("is_account_owner", true)
-		.get();
+	DomainUser user = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true).get();
 
 	NamespaceManager.set(oldNamespace);
 
@@ -293,8 +289,7 @@ public class DomainUserUtil
 	NamespaceManager.set("");
 
 	// Get keys of domain users in respective domain
-	List<Key<DomainUser>> domainUserKeys = dao.listKeysByProperty("domain",
-		namespace);
+	List<Key<DomainUser>> domainUserKeys = dao.listKeysByProperty("domain", namespace);
 
 	// Delete domain users in domain
 	dao.deleteKeys(domainUserKeys);
@@ -313,8 +308,7 @@ public class DomainUserUtil
 	NamespaceManager.set("");
 	try
 	{
-	    return dao.ofy().query(DomainUser.class).filter("domain", domain)
-		    .count();
+	    return dao.ofy().query(DomainUser.class).filter("domain", domain).count();
 	}
 	finally
 	{
@@ -328,8 +322,7 @@ public class DomainUserUtil
 	NamespaceManager.set("");
 	try
 	{
-	    return dao.ofy().query(DomainUser.class).filter("domain", domain)
-		    .count();
+	    return dao.ofy().query(DomainUser.class).filter("domain", domain).count();
 	}
 	finally
 	{
@@ -353,22 +346,19 @@ public class DomainUserUtil
 		userPrefs.delete();
 
 	    // Delete Social Prefs
-	    List<SocialPrefs> socialPrefsList = SocialPrefsUtil
-		    .getPrefs(agileUser);
+	    List<SocialPrefs> socialPrefsList = SocialPrefsUtil.getPrefs(agileUser);
 	    for (SocialPrefs socialPrefs : socialPrefsList)
 	    {
 		socialPrefs.delete();
 	    }
 
 	    // Delete IMAP PRefs
-	    IMAPEmailPrefs imapPrefs = IMAPEmailPrefsUtil
-		    .getIMAPPrefs(agileUser);
+	    IMAPEmailPrefs imapPrefs = IMAPEmailPrefsUtil.getIMAPPrefs(agileUser);
 	    if (imapPrefs != null)
 		imapPrefs.delete();
 
 	    // Delete Notification Prefs
-	    NotificationPrefs notificationPrefs = NotificationPrefsUtil
-		    .getNotificationPrefs(agileUser);
+	    NotificationPrefs notificationPrefs = NotificationPrefsUtil.getNotificationPrefs(agileUser);
 
 	    if (notificationPrefs != null)
 		notificationPrefs.delete();

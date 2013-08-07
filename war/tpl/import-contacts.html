@@ -23,22 +23,16 @@
 </script>
 
 <script id="import-contacts-2-template" type="text/html">
-<form id="import-contact-tags">
-    <div class="control-group">
-        <label class="control-label">Tags (Optional)</label>
-        <div class="pull-left" style="margin-top:0px">
-            <ul name="tags" class="tagsinput tags"></ul>
+<div class="row-fluid">
+    <div class="span12">
+        <div class="page-header">
+            <h1>Import Contacts <small>Upload file</small>	</h1>
         </div>
-        <div class="controls">
-            <input id="tags-import" class="tags-typeahead" name="tags" type="text" placeholder="Tags should be separated by comma." />
-        </div>
-		<p class="help-block">You can optionally add a tags to all new contacts being created.</p>
-		<p class="help-block"><strong>Note :</strong> You might want to <a href="#custom-fields">define Custom Fields</a> for some of the contact properties you have in your CSV file, and choose the approporate custom filed in the column headers here below.</p>
     </div>
-</form>
-<br />		
-<div id="import-validation-error">
 </div>
+
+<p class="help-block"><strong>Note :</strong> You might want to <a href="#custom-fields">define Custom Fields</a> for some of the contact properties you have in your CSV file, and choose the approporate custom filed in the column headers here below.</p>                </div>
+
  <div style="text-align:center;padding-bottom:10px;font-size:15px">Showing first {{data.length}} contacts.</div>
 <table class="table table-bordered table-striped" style="border-collapse: collapse;">
     <thead id="import-header">
@@ -61,6 +55,21 @@
         </tr>
         {{/each}}
 </table>
+<form id="import-contact-tags">
+    <div class="control-group">
+        <label class="control-label">Tags (Optional)</label>
+        <div class="pull-left" style="margin-top:0px">
+            <ul name="tags" class="tagsinput tags"></ul>
+        </div>
+        <div class="controls">
+            <input id="tags-import" class="tags-typeahead" name="tags" type="text" placeholder="Tags should be separated by comma." />
+        </div>
+		<p class="help-block">You can optionally add a tags to all new contacts being created.</p>
+	
+    </div>
+</form>
+
+<div id="import-validation-error"></div>
 <a class="btn btn-primary" id="import-contacts">Import</a>
 <a class="btn" id="import-cancel" style="margin-left:2px">Cancel</a>
 </script>

@@ -9,7 +9,7 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 
-public class TaskMain
+public class TaskCore
 {
     /**
      * Executes workflow for single contact starting with Start node.

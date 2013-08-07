@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
@@ -18,11 +17,11 @@ import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.util.WorkflowUtil;
-import com.campaignio.URLShortener.URLShortener;
-import com.campaignio.URLShortener.util.URLShortenerUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.servlets.deferred.EmailClickDeferredTask;
+import com.campaignio.urlshortener.URLShortener;
+import com.campaignio.urlshortener.util.URLShortenerUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -45,20 +44,17 @@ public class RedirectServlet extends HttpServlet
 	doGet(request, response);
     }
 
-    @SuppressWarnings({ "unchecked", "deprecation" })
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
     {
 	resp.setContentType("text/plain");
 
 	String url = req.getRequestURL().toString();
-	// System.out.println(url);
-
 	String domain = URLShortenerUtil.getDomainFromShortURL(url);
 
 	if (StringUtils.isEmpty(domain))
 	    return;
 
-	System.out.println("Domain from short url: " + domain);
+	System.out.println("Domain from short url is " + domain);
 
 	String oldNamespace = NamespaceManager.get();
 
@@ -76,54 +72,21 @@ public class RedirectServlet extends HttpServlet
 	    }
 
 	    String subscriberId = urlShortener.subscriber_id;
-
-	    Contact contact = null;
-
-	    System.out.println("Namespace in RedirectServlet: " + NamespaceManager.get());
-
-	    contact = ContactUtil.getContact(Long.parseLong(subscriberId));
+	    Contact contact = ContactUtil.getContact(Long.parseLong(subscriberId));
 
 	    Workflow workflow = WorkflowUtil.getWorkflow(Long.parseLong(urlShortener.campaign_id));
 
 	    if (workflow != null)
 	    {
-		LogUtil.addLogToSQL(urlShortener.campaign_id, subscriberId, "Email link clicked " + urlShortener.long_url + " of campaign " + workflow.name,
-			LogType.EMAIL_CLICKED.toString());
+		// Add log
+		addEmailClickedLog(urlShortener.campaign_id, subscriberId, urlShortener.long_url, workflow.name);
 
-		try
-		{
-		    NotificationPrefsUtil.executeNotification(
-			    Type.CLICKED_LINK,
-			    contact,
-			    new JSONObject().put("custom_value", new JSONObject().put("workflow_name", workflow.name).put("url_clicked", urlShortener.long_url)
-				    .toString()));
-		}
-		catch (Exception e)
-		{
-		    e.printStackTrace();
-		}
+		// Show notification
+		showEmailClickedNotification(contact, workflow.name, urlShortener.long_url);
 	    }
 
-	    // System.out.println(urlShortener);
-	    String longURL = urlShortener.long_url;
-
-	    // If URL has spaces or erroneous chars - we chop them
-	    if (longURL.contains(" "))
-	    {
-		System.out.println("Trimming " + longURL);
-		longURL = longURL.substring(0, longURL.indexOf(" "));
-	    }
-
-	    if (longURL.contains("\r"))
-	    {
-		System.out.println("Trimming " + longURL);
-		longURL = longURL.substring(0, longURL.indexOf("\r"));
-	    }
-	    if (longURL.contains("\n"))
-	    {
-		System.out.println("Trimming " + longURL);
-		longURL = longURL.substring(0, longURL.indexOf("\n"));
-	    }
+	    // url without spaces, \n and \r
+	    String normalisedLongURL = normaliseLongURL(urlShortener.long_url);
 
 	    String params = "?fwd=cd";
 
@@ -132,47 +95,125 @@ public class RedirectServlet extends HttpServlet
 
 	    if (contact == null)
 	    {
-		resp.sendRedirect(longURL);
+		resp.sendRedirect(normalisedLongURL);
 		return;
 	    }
 
-	    JSONObject contactJSON = WorkflowUtil.getSubscriberJSON(contact);
+	    // Append Contact properties to params
+	    params += appendContactPropertiesToParams(contact);
 
-	    // Iterate through JSON and construct all params
-	    Iterator<String> itr = contactJSON.keys();
+	    System.out.println("Forwarding it to " + normalisedLongURL + " " + params);
 
-	    while (itr.hasNext())
-	    {
-		// Get Property Name & Value
-		String propertyName = itr.next();
-		String value = "";
-		try
-		{
-		    value = contactJSON.getString(propertyName);
-		}
-		catch (JSONException e)
-		{
+	    resp.sendRedirect(normalisedLongURL + params);
 
-		    e.printStackTrace();
-		}
+	    // Interrupt cron tasks of clicked.
+	    interruptCronTasksOfClicked(urlShortener.tracker_id, normalisedLongURL);
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
 
-		params += ("&" + propertyName.trim() + "=" + URLEncoder.encode(value.trim()));
-	    }
+    /**
+     * Adds email clicked log to SQL.
+     * 
+     * @param campaignId
+     *            - Campaign Id
+     * @param subscriberId
+     *            - Contact Id
+     * @param longURL
+     *            - Original url
+     * @param workflowName
+     *            - Workflow Name.
+     */
+    private void addEmailClickedLog(String campaignId, String subscriberId, String longURL, String workflowName)
+    {
+	LogUtil.addLogToSQL(campaignId, subscriberId, "Email link clicked " + longURL + " of campaign " + workflowName, LogType.EMAIL_CLICKED.toString());
+    }
 
-	    System.out.println("Forwarding it to " + longURL + " " + params);
+    /**
+     * Shows email clicked notification to the contact.
+     * 
+     * @param contact
+     *            - Contact Object.
+     * @param workflowName
+     *            - Workflow Name.
+     * @param longURL
+     *            - Original URL.
+     */
+    private void showEmailClickedNotification(Contact contact, String workflowName, String longURL)
+    {
+	try
+	{
+	    NotificationPrefsUtil.executeNotification(Type.CLICKED_LINK, contact,
+		    new JSONObject().put("custom_value", new JSONObject().put("workflow_name", workflowName).put("url_clicked", longURL).toString()));
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+    }
 
-	    resp.sendRedirect(longURL + params);
+    /**
+     * Removes spaces and new line characters from longURL.
+     * 
+     * @param url
+     *            - Original url that is stored in URLShortener.
+     * @return String.
+     */
+    private String normaliseLongURL(String url)
+    {
+	String longURL = url;
 
+	// If URL has spaces or erroneous chars - we chop them
+	if (longURL.contains(" "))
+	{
+	    System.out.println("Trimming " + longURL);
+	    longURL = longURL.substring(0, longURL.indexOf(" "));
+	}
+
+	if (longURL.contains("\r"))
+	{
+	    System.out.println("Trimming " + longURL);
+	    longURL = longURL.substring(0, longURL.indexOf("\r"));
+	}
+	if (longURL.contains("\n"))
+	{
+	    System.out.println("Trimming " + longURL);
+	    longURL = longURL.substring(0, longURL.indexOf("\n"));
+	}
+
+	return longURL;
+    }
+
+    /**
+     * Appends contact-properties as params to the url before redirecting to
+     * original url.
+     * 
+     * @param contact
+     *            - Contact Object.
+     * @return String
+     */
+    @SuppressWarnings("unchecked")
+    private String appendContactPropertiesToParams(Contact contact)
+    {
+	String params = "";
+
+	JSONObject contactJSON = WorkflowUtil.getSubscriberJSON(contact);
+
+	// Iterate through JSON and construct all params
+	Iterator<String> itr = contactJSON.keys();
+
+	while (itr.hasNext())
+	{
+	    // Get Property Name & Value
+	    String propertyName = itr.next();
+	    String value = "";
 	    try
 	    {
-		// Insert long url as custom value.
-		JSONObject urlJSON = new JSONObject();
-		urlJSON.put("long_url", longURL);
-
-		// Interrupt clicked in DeferredTask
-		EmailClickDeferredTask emailClickDeferredTask = new EmailClickDeferredTask(urlShortener.tracker_id, urlJSON.toString());
-		Queue queue = QueueFactory.getDefaultQueue();
-		queue.add(TaskOptions.Builder.withPayload(emailClickDeferredTask));
+		value = contactJSON.getString(propertyName);
+		params += ("&" + propertyName.trim() + "=" + URLEncoder.encode(value.trim(), "UTF-8"));
 	    }
 	    catch (Exception e)
 	    {
@@ -180,10 +221,35 @@ public class RedirectServlet extends HttpServlet
 	    }
 
 	}
-	finally
-	{
-	    NamespaceManager.set(oldNamespace);
-	}
+	return params;
+    }
 
+    /**
+     * Interrupts crons that are saved by Clicked Node of Campaigns.
+     * 
+     * @param trackerId
+     *            - Tracking Id saved in URLShortener. It identifies related
+     *            cron object.
+     * @param longURL
+     *            - Original url to show as custom-data in clicked log.
+     */
+    private void interruptCronTasksOfClicked(String trackerId, String longURL)
+    {
+	try
+	{
+	    // Insert long url as custom value.
+	    JSONObject urlJSON = new JSONObject();
+	    urlJSON.put("long_url", longURL);
+
+	    // Interrupt clicked in DeferredTask
+	    EmailClickDeferredTask emailClickDeferredTask = new EmailClickDeferredTask(trackerId, urlJSON.toString());
+	    Queue queue = QueueFactory.getDefaultQueue();
+	    queue.add(TaskOptions.Builder.withPayload(emailClickDeferredTask));
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Got Exception in RedirectServlet " + e.getMessage());
+	    e.printStackTrace();
+	}
     }
 }
