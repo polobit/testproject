@@ -16,10 +16,11 @@ var forceCompany={}; /* to force company on personModal,
 $(function(){
 	   
 		/**
-		 * show event of modal
-		 * Clean modal
-		 * if forceCompany - hide company input & show non-cancellable company name tag.
-		 * else - enable things by default
+		 * "show" event of modal - 
+		 * To handle UI before its drawn on screen, even before rolling onto screen.
+		 * Clean modal.
+		 * If forceCompany - hide company input & show non-cancellable company name tag.
+		 * Else - enable things by default
 		 */
 		$("#personModal").on('show',function(data)
 		{
@@ -30,7 +31,8 @@ $(function(){
 						'"><a href="#contact/' + forceCompany.id +'" id="contact_company_autofilled">' + forceCompany.name + 
 						'</a></li>');
 				$("#personForm #contact_company").hide();
-			
+				//Force Company, disable input box so user can't enter a new Company.
+				
 				forceCompany.doit=false; // prevent forcing company next time
 			}
 			else
@@ -52,10 +54,11 @@ $(function(){
 			var stat=$("#personForm #contact_company").attr('display');
 			if( stat!='none')
 			{
-			
-			/* Custom function for typeahead results, 
-			 * show at contact_company_id, data=id-of-company-contact and data=company-name
-			 * */
+				/**
+				 * Activate company-typeahead only if required, i.e. there's a Company Input field
+				 * Custom function for typeahead results, 
+				 * show at contact_company_id, data=id-of-company-contact and data=company-name
+				 */
 				var fxn_display_company=function(data,item)
 				{
 					$("#personForm [name='contact_company_id']")
@@ -79,22 +82,21 @@ $(function(){
 		 * Click event of "Save Changes" button in person modal
 		 * Saves the contact using the function "serialize_and_save_continue_contact"
 		 */
-	    $('#person_validate').live('click', function (e) {
-	    	var model=serialize_and_save_continue_contact(e, 'personForm', 'personModal', false, true, this,'tags_source_person_modal');	
+	    $('#person_validate').live('click', function(e){
 	    	
-	    	console.log(model);
-	    	
+	    	var model = serialize_and_save_continue_contact(e, 'personForm', 'personModal', false, true, this, 'tags_source_person_modal');
+
 	    	// update modal in contacts list view
-	    	if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection)	
-	          {
-	          	App_Contacts.contactsListView.collection.remove(model.id);
-	          	App_Contacts.contactsListView.collection.add(model);
-	          }
+	    	if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection)
+	    	{
+	    		App_Contacts.contactsListView.collection.remove(model.id);
+	    		App_Contacts.contactsListView.collection.add(model);
+	    	}
 	    });
 	    
 	    /**
-	     * Navigates to controller to import contacts from a file
-	     */
+		 * Navigates to controller to import contacts from a file
+		 */
 	    $('#import-link').live('click', function (e) {
 	    	Backbone.history.navigate("import",{trigger: true});	        
 	    });
@@ -107,10 +109,10 @@ $(function(){
 	    	var model=serialize_and_save_continue_contact(e, 'companyForm', 'companyModal', false, false, this);	
 	    	
 	    	if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection)	
-	          {
-	          	App_Contacts.contactsListView.collection.remove(model.id);
+	        {
+	    		App_Contacts.contactsListView.collection.remove(model.id);
 	          	App_Contacts.contactsListView.collection.add(model);
-	          }
+	        }
 	    });
 	    
 	    /**
