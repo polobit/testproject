@@ -1,4 +1,4 @@
-package com.campaignio.urlshortener;
+package com.campaignio.urlshortenerr;
 
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;

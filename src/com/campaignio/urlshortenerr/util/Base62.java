@@ -1,4 +1,4 @@
-package com.campaignio.urlshortener.util;
+package com.campaignio.urlshortenerr.util;
 
 /**
  * <code>Base62</code> handles conversion of numbers from Decimal base to Base62
