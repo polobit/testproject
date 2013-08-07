@@ -95,11 +95,12 @@ public class AnalyticsSQLUtil
      * Gets all sessions from table having sids equal with given email
      * 
      * @param email
-     *            - email-id
+     *            - email-idcheckOriginalRef
      */
     public static JSONArray getPageViews(String email)
     {
 	String domain = NamespaceManager.get();
+	domain = "our";
 
 	// Gets sessions based on Email from database
 	String sessions = "(SELECT sid FROM page_views WHERE email =" + SQLUtil.encodeSQLColumnValue(email) + " AND domain = "

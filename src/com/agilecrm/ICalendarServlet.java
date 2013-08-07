@@ -1,8 +1,6 @@
 package com.agilecrm;
 
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
@@ -55,24 +53,86 @@ public class ICalendarServlet extends HttpServlet
 	try
 	{
 	    url = new URL(req.getRequestURL().toString());
+
+	    String apiKey = getAPIKeyFromICalURL(url);
+	    String namespace = getNamespaceFromURL(url);
+	    namespace = "";
+
+	    if (StringUtils.isEmpty(namespace) && StringUtils.isEmpty(apiKey))
+		return;
+
+	    // Returns events
+	    List<Event> events = getEvents(namespace, apiKey);
+
+	    System.out.println("Events obtained are " + events);
+
+	    if (events == null)
+		return;
+
+	    // Returns ICal
+	    Calendar iCal = getICalFromEvents(events);
+
+	    PrintWriter pw = res.getWriter();
+	    pw.println(iCal);
 	}
-	catch (MalformedURLException e1)
+	catch (Exception e)
 	{
-	    e1.printStackTrace();
+	    e.printStackTrace();
+	    System.out.println("Got exception in ICalendarServlet " + e.getMessage());
 	}
 
-	String apiKey = getAPIKeyFromICalURL(url);
-	String namespace = getNamespaceFromURL(url);
+    }
 
-	if (StringUtils.isEmpty(namespace) && StringUtils.isEmpty(apiKey))
-	    return;
+    /**
+     * Gets APIKey from URI path that is appended at the end.
+     * 
+     * @param uri
+     *            - Requested URI
+     * @return api key.
+     */
+    private String getAPIKeyFromICalURL(URL url)
+    {
+	String urlString = url.toString();
 
-	System.out.println("APIKey in ICalendarServlet " + apiKey);
-	System.out.println("Namespace in ICalendarServlet " + namespace);
+	// Checks whether uripath ends with /
+	while (urlString.endsWith("/"))
+	{
+	    urlString = urlString.substring(0, urlString.length() - 1);
+	}
 
-	AgileUser agileUser = null;
-	List<Event> events = null;
+	String tokens[] = urlString.split("/");
 
+	String apiKey = tokens[tokens.length - 1];
+
+	return apiKey;
+    }
+
+    /**
+     * Gets domain user's domain from url.
+     * 
+     * @param url
+     *            - Requested Url.
+     * @return domain name.
+     */
+    private String getNamespaceFromURL(URL url)
+    {
+	String host = url.getHost().toString();
+
+	// Eg., return 'admin' from 'admin.agilecrm.com'
+	return host.split("\\.")[0];
+    }
+
+    /**
+     * Returns list of events of agileUser with given apiKey.
+     * 
+     * @param namespace
+     *            - Namespace (or domain)
+     * @param apiKey
+     *            - API Key
+     * @return List
+     */
+    private List<Event> getEvents(String namespace, String apiKey)
+    {
 	String oldNamespace = NamespaceManager.get();
 
 	try
@@ -80,21 +140,28 @@ public class ICalendarServlet extends HttpServlet
 	    NamespaceManager.set(namespace);
 
 	    // Gets AgileUser with respect to APIKey.
-	    agileUser = APIKey.getAgileUserRelatedToAPIKey(apiKey);
+	    AgileUser agileUser = APIKey.getAgileUserRelatedToAPIKey(apiKey);
 
 	    if (agileUser == null)
-		return;
+		return null;
 
-	    events = EventUtil.getEventsByAgileUser(agileUser);
+	    return EventUtil.getEventsByAgileUser(agileUser);
 	}
 	finally
 	{
 	    NamespaceManager.set(oldNamespace);
 	}
+    }
 
-	if (events == null)
-	    return;
-
+    /**
+     * Returns ICal from events. It converts each event in VEvent format.
+     * 
+     * @param events
+     *            - List of Events
+     * @return iCal4j Calendar
+     */
+    private Calendar getICalFromEvents(List<Event> events)
+    {
 	// iCalendar
 	Calendar iCal = new Calendar();
 	iCal.getProperties().add(new ProdId("-//Agile CRM//iCal 1.0//EN"));
@@ -119,65 +186,14 @@ public class ICalendarServlet extends HttpServlet
 	    // Generate UID
 	    Uid uid = generateUid();
 
-	    VEvent iCalEvent = createVEvent(startTime, endTime, event.title,
-		    event.allDay, uid, createdTime);
+	    VEvent iCalEvent = createVEvent(startTime, endTime, event.title, event.allDay, uid, createdTime);
 
 	    // Add VEvent Component to iCalendar
 	    iCal.getComponents().add(iCalEvent);
 	}
 
-	PrintWriter pw = null;
-	try
-	{
-	    pw = res.getWriter();
-	}
-	catch (IOException e)
-	{
-	    e.printStackTrace();
-	}
+	return iCal;
 
-	pw.println(iCal);
-
-	// System.out.println(iCal);
-    }
-
-    /**
-     * Gets APIKey from URI path that is appended at the end.
-     * 
-     * @param uri
-     *            - Requested URI
-     * @return api key.
-     */
-    static String getAPIKeyFromICalURL(URL url)
-    {
-	String urlString = url.toString();
-
-	// Checks whether uripath ends with /
-	while (urlString.endsWith("/"))
-	{
-	    urlString = urlString.substring(0, urlString.length() - 1);
-	}
-
-	String tokens[] = urlString.split("/");
-
-	String apiKey = tokens[tokens.length - 1];
-
-	return apiKey;
-    }
-
-    /**
-     * Gets domain user's domain from url.
-     * 
-     * @param url
-     *            - Requested Url.
-     * @return domain name.
-     */
-    static String getNamespaceFromURL(URL url)
-    {
-	String host = url.getHost().toString();
-
-	// Eg., return 'admin' from 'admin.agilecrm.com'
-	return host.split("\\.")[0];
     }
 
     /**
@@ -185,11 +201,10 @@ public class ICalendarServlet extends HttpServlet
      * 
      * @return uid
      */
-    static Uid generateUid()
+    private Uid generateUid()
     {
 	// Generates unique id for each VEvent.
-	UidGenerator uidGenerator = new UidGenerator(new SimpleHostInfo(
-		"agilecrm.com"), "1");
+	UidGenerator uidGenerator = new UidGenerator(new SimpleHostInfo("agilecrm.com"), "1");
 	return uidGenerator.generateUid();
     }
 
@@ -210,8 +225,7 @@ public class ICalendarServlet extends HttpServlet
      *            - event creation time.
      * @return VEvent.
      */
-    static VEvent createVEvent(DateTime startTime, DateTime endTime,
-	    String eventName, boolean allDay, Uid uid, DateTime createdTime)
+    private VEvent createVEvent(DateTime startTime, DateTime endTime, String eventName, boolean allDay, Uid uid, DateTime createdTime)
     {
 	// Initializes iCal VEvent
 	VEvent iCalEvent = new VEvent(startTime, endTime, eventName);
@@ -219,10 +233,8 @@ public class ICalendarServlet extends HttpServlet
 	// Check for allDay event.
 	if (allDay)
 	{
-	    iCalEvent.getProperties().getProperty(Property.DTSTART)
-		    .getParameters().add(Value.DATE);
-	    iCalEvent.getProperties().getProperty(Property.DTEND)
-		    .getParameters().add(Value.DATE);
+	    iCalEvent.getProperties().getProperty(Property.DTSTART).getParameters().add(Value.DATE);
+	    iCalEvent.getProperties().getProperty(Property.DTEND).getParameters().add(Value.DATE);
 	}
 
 	iCalEvent.getProperties().add(uid);
@@ -230,4 +242,5 @@ public class ICalendarServlet extends HttpServlet
 
 	return iCalEvent;
     }
+
 }
