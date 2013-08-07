@@ -48,14 +48,14 @@ public class Defaults
 	tags.add("Business Owner");
 	tags.add("Frequent Buyer");
 	List<ContactField> contactFields = new ArrayList<ContactField>();
-	contactFields.add(new ContactField(Contact.FIRST_NAME, null, "Steve"));
-	contactFields.add(new ContactField(Contact.LAST_NAME, null, "Jobs"));
-	contactFields.add(new ContactField(Contact.EMAIL, "work", "theboss@apple.com"));
-	contactFields.add(new ContactField(Contact.COMPANY, null, "Apple"));
-	contactFields.add(new ContactField(Contact.TITLE, null, "CEO"));
-	contactFields.add(new ContactField("website", "TWITTER", "@stevejobsceo"));
-	contactFields.add(new ContactField("address", "office", "{\"address\":\"1 Infinite Loop\",\"city\":\"Cupertino\",\"state\":\"CA\",\"zip\":\"95014\"}"));
-	contactFields.add(new ContactField("image", null, "https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1370348163437?id=contact-container"));
+	contactFields.add(new ContactField(Contact.FIRST_NAME, "Steve", null));
+	contactFields.add(new ContactField(Contact.LAST_NAME, "Jobs", null));
+	contactFields.add(new ContactField(Contact.EMAIL, "theboss@apple.com", "work"));
+	contactFields.add(new ContactField(Contact.COMPANY, "Apple", null));
+	contactFields.add(new ContactField(Contact.TITLE, "CEO", null));
+	contactFields.add(new ContactField("website", "@stevejobsceo", "TWITTER"));
+	contactFields.add(new ContactField("address", "{\"address\":\"1 Infinite Loop\",\"city\":\"Cupertino\",\"state\":\"CA\",\"zip\":\"95014\"}", "office"));
+	contactFields.add(new ContactField("image", "https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1370348163437?id=contact-container", null));
 
 	Contact contact = new Contact(Contact.Type.PERSON, tags, contactFields);
 	contact.lead_score = 50;
@@ -65,12 +65,12 @@ public class Defaults
 	LinkedHashSet<String> tags1 = new LinkedHashSet<String>();
 	tags1.add("Sports");
 	List<ContactField> contactFields1 = new ArrayList<ContactField>();
-	contactFields1.add(new ContactField(Contact.FIRST_NAME, null, "Michael"));
-	contactFields1.add(new ContactField(Contact.LAST_NAME, null, "Jordan"));
-	contactFields1.add(new ContactField(Contact.EMAIL, "work", "sixfeetsix@nba.com"));
-	contactFields1.add(new ContactField(Contact.COMPANY, null, "NBA"));
-	contactFields1.add(new ContactField(Contact.TITLE, null, "Sports Legend"));
-	contactFields1.add(new ContactField("image", null, "https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1371205956656?id=contact-container"));
+	contactFields1.add(new ContactField(Contact.FIRST_NAME, "Michael", null));
+	contactFields1.add(new ContactField(Contact.LAST_NAME, "Jordan", null));
+	contactFields1.add(new ContactField(Contact.EMAIL, "sixfeetsix@nba.com", "work"));
+	contactFields1.add(new ContactField(Contact.COMPANY, "NBA", null));
+	contactFields1.add(new ContactField(Contact.TITLE, "Sports Legend", null));
+	contactFields1.add(new ContactField("image", "https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1371205956656?id=contact-container", null));
 
 	Contact contact1 = new Contact(Contact.Type.PERSON, tags1, contactFields1);
 	contact1.star_value = 3;
@@ -80,21 +80,21 @@ public class Defaults
 	LinkedHashSet<String> tags2 = new LinkedHashSet<String>();
 	tags2.add("Activist");
 	List<ContactField> contactFields2 = new ArrayList<ContactField>();
-	contactFields2.add(new ContactField(Contact.FIRST_NAME, null, "Mohandas"));
-	contactFields2.add(new ContactField(Contact.LAST_NAME, null, "Gandhi"));
-	contactFields2.add(new ContactField(Contact.EMAIL, "work", "passiveaggressivemonk@pietermaritzburg.org"));
-	contactFields2.add(new ContactField(Contact.TITLE, null, "Philanthropist"));
-	contactFields2.add(new ContactField("image", null, "https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1370348006468?id=contact-container"));
+	contactFields2.add(new ContactField(Contact.FIRST_NAME, "Mohandas", null));
+	contactFields2.add(new ContactField(Contact.LAST_NAME, "Gandhi", null));
+	contactFields2.add(new ContactField(Contact.EMAIL, "passiveaggressivemonk@pietermaritzburg.org", "work"));
+	contactFields2.add(new ContactField(Contact.TITLE, "Philanthropist", null));
+	contactFields2.add(new ContactField("image", "https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1370348006468?id=contact-container", null));
 	Contact contact2 = new Contact(Contact.Type.PERSON, tags2, contactFields2);
 	contact2.star_value = 5;
 	contact2.lead_score = 10;
 	contact2.save();
 
 	List<ContactField> contactFields3 = new ArrayList<ContactField>();
-	contactFields3.add(new ContactField(Contact.NAME, null, "Apple"));
-	contactFields3.add(new ContactField(Contact.URL, null, "https://www.apple.com"));
+	contactFields3.add(new ContactField(Contact.NAME, "Apple", null));
+	contactFields3.add(new ContactField(Contact.URL, "https://www.apple.com", null));
 	contactFields3
-		.add(new ContactField("address", "office", "{\"address\":\"1 Infinite Loop\",\"city\":\"Cupertino\",\"state\":\"CA\",\"zip\":\"95014\"}"));
+		.add(new ContactField("address", "{\"address\":\"1 Infinite Loop\",\"city\":\"Cupertino\",\"state\":\"CA\",\"zip\":\"95014\"}", "office"));
 	Contact contact3 = new Contact();
 	contact3.type = Contact.Type.COMPANY;
 	contact3.properties = contactFields3;
