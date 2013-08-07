@@ -104,13 +104,21 @@ $(function(){
 		updatecases(dealsView.collection.get(id));
 	});
 	
+	//Adding contact when user clicks Add contact button under Contacts tab in Company Page
 	$(".contact-add-contact").die().live('click',function(e)
 	{
 		e.preventDefault();
+		
+		//This is a hacky method. ( See jscore/contact-management/modals.js for its use )
+		//'forceCompany' is a global variable. It is used to enforce Company name on Add Contact modal.
+		//Prevents user from removing this company from the modal that is shown.
+		//Disables typeahead, as it won't be needed as there will be no Company input text box.
 		var json = App_Contacts.contactDetailView.model.toJSON();
-		forceCompany.name=getPropertyValue(json.properties, "name");
-		forceCompany.id=json.id;
-		forceCompany.doit=true;
+		forceCompany.name=getPropertyValue(json.properties, "name"); //name of Company
+		forceCompany.id=json.id;	// id of Company
+		forceCompany.doit=true;		// yes force it. If this is false the Company won't be forced.
+									// Also after showing modal, it is set to false internally, so 
+									// Company is not forced otherwise.
 		$('#personModal').modal('show');
 	});
 });
