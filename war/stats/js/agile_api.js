@@ -14,12 +14,6 @@ function agile_json(URL, success)
 	})());
 }
 
-function agile_callbackfunction(data)
-{
-	if (callback && typeof(callback)=== "function") {
-		callback(data);}
-}
-
 function agile_setAccount(id, namespace)
 {
 	console.log("Setting account " + id + " with namespace " + namespace);
