@@ -1,4 +1,4 @@
-package com.campaignio.stats.util;
+package com.campaignio.reports;
 
 import java.util.Calendar;
 import java.util.LinkedHashMap;

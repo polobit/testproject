@@ -1,5 +1,12 @@
-package com.campaignio.URLShortener.util;
+package com.campaignio.urlshortener.util;
 
+/**
+ * <code>Rot13</code> handles encrypting and decrypting string using ROT13
+ * algorithm.
+ * 
+ * @author Naresh
+ * 
+ */
 public class Rot13
 {
     /**

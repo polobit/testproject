@@ -33,12 +33,26 @@ public class PubNub
      */
     public static void pubNubPush(String channel, JSONObject messageJSON)
     {
-	Pubnub pubnub = new Pubnub(PUBLISH_KEY, SUBSCRIBE_KEY);
+	try
+	{
+	    Pubnub pubnub = new Pubnub(PUBLISH_KEY, SUBSCRIBE_KEY);
 
-	// Publish Message - response with 0 for any error, 1 for success.
-	JSONArray response = pubnub.publish(channel, messageJSON);
+	    // Publish Message - response with 0 for any error, 1 for success.
+	    JSONArray response = pubnub.publish(channel, messageJSON);
 
-	System.out.println(response);
+	    // if error
+	    if (response.length() != 0 && 0 == (Integer) response.get(0))
+	    {
+		System.err.println(response);
+		return;
+	    }
+
+	    System.out.println(response);
+
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured in PubNub " + e.getMessage());
+	}
     }
-
 }

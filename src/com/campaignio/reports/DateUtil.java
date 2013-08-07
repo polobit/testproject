@@ -1,4 +1,4 @@
-package com.campaignio.stats.util;
+package com.campaignio.reports;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

@@ -115,16 +115,8 @@ public class AddTask extends TaskletAdapter
 	String dueDays = getStringValue(nodeJSON, subscriberJSON, data, DUE_DAYS);
 	String givenOwnerId = getStringValue(nodeJSON, subscriberJSON, data, OWNER_ID);
 
-	Calendar calendar = Calendar.getInstance();
-
-	// Add duration and make time set to midnight of that day.
-	calendar.add(Calendar.DAY_OF_MONTH, Integer.parseInt(dueDays));
-	calendar.set(Calendar.HOUR_OF_DAY, 0);
-	calendar.set(Calendar.MINUTE, 0);
-	calendar.set(Calendar.SECOND, 0);
-	calendar.set(Calendar.MILLISECOND, 0);
-
-	Long dueDateInEpoch = calendar.getTimeInMillis() / 1000;
+	// Gets due date in epoch from dueDays
+	Long epochTime = getDueDateInEpoch(dueDays);
 
 	// Contact Id
 	String contactId = DBUtil.getId(subscriberJSON);
@@ -135,7 +127,7 @@ public class AddTask extends TaskletAdapter
 	try
 	{
 	    // Adds task
-	    addTask(subject, category, priority, dueDateInEpoch, contactId, givenOwnerId, contactOwnerId);
+	    addTask(subject, category, priority, epochTime, contactId, givenOwnerId, contactOwnerId);
 	}
 	catch (Exception e)
 	{
@@ -145,10 +137,31 @@ public class AddTask extends TaskletAdapter
 
 	// Creates log for AddTask
 	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON), DBUtil.getId(subscriberJSON), "Task: " + subject + "<br/> Category: " + category + "<br/> Type: "
-		+ priority + " <br/> Date: " + new Date(dueDateInEpoch * 1000), LogType.ADD_TASK.toString());
+		+ priority + " <br/> Date: " + new Date(epochTime * 1000), LogType.ADD_TASK.toString());
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+    }
+
+    /**
+     * Returns due date in millisecs.
+     * 
+     * @param dueDays
+     *            - Given number of due days for task.
+     * @return Long
+     */
+    private Long getDueDateInEpoch(String dueDays)
+    {
+	Calendar calendar = Calendar.getInstance();
+
+	// Add duration and make time set to midnight of that day.
+	calendar.add(Calendar.DAY_OF_MONTH, Integer.parseInt(dueDays));
+	calendar.set(Calendar.HOUR_OF_DAY, 0);
+	calendar.set(Calendar.MINUTE, 0);
+	calendar.set(Calendar.SECOND, 0);
+	calendar.set(Calendar.MILLISECOND, 0);
+
+	return calendar.getTimeInMillis() / 1000;
     }
 
     /**
