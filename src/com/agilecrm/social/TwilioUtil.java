@@ -8,9 +8,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
 
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.twilio.sdk.TwilioRestClient;
+import com.agilecrm.twilio.sdk.TwilioRestResponse;
 import com.agilecrm.widgets.Widget;
-import com.thirdparty.twilio.sdk.TwilioRestClient;
-import com.thirdparty.twilio.sdk.TwilioRestResponse;
+import com.google.appengine.api.NamespaceManager;
 import com.twilio.sdk.client.TwilioCapability;
 import com.twilio.sdk.client.TwilioCapability.DomainException;
 
@@ -122,8 +124,9 @@ public class TwilioUtil
 	// parameters to be sent in the verification process
 	Map<String, String> params = new HashMap<String, String>();
 	params.put("PhoneNumber", from);
-	params.put("StatusCallback",
-		"https://agile-crm-cloud.appspot.com/backend/verification");
+	params.put("StatusCallback", "https://" + NamespaceManager.get()
+		+ ".agilecrm.com/verification?user_id="
+		+ SessionManager.get().getDomainId());
 
 	// make a post request to verify number
 	TwilioRestResponse response = client.request("/" + APIVERSION

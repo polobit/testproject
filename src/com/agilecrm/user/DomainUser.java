@@ -136,8 +136,7 @@ public class DomainUser extends Cursor implements Cloneable
     public static final String IP_ADDRESS = "ip_address";
 
     // Dao
-    private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(
-	    DomainUser.class);
+    private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(DomainUser.class);
 
     /**
      * Default constructor
@@ -163,8 +162,7 @@ public class DomainUser extends Cursor implements Cloneable
      * @param isAccountOwner
      *            specifies ownership
      */
-    public DomainUser(String domain, String email, String name,
-	    String password, boolean isAdmin, boolean isAccountOwner)
+    public DomainUser(String domain, String email, String name, String password, boolean isAdmin, boolean isAccountOwner)
     {
 	this.domain = domain;
 	this.email = email;
@@ -201,13 +199,9 @@ public class DomainUser extends Cursor implements Cloneable
 	if (domainUser != null)
 	{
 	    // If domain user exists, not allowing to create new user
-	    if (this.id == null
-		    || (this.id != null && !this.id.equals(domainUser.id)))
+	    if (this.id == null || (this.id != null && !this.id.equals(domainUser.id)))
 	    {
-		throw new Exception(
-			"User already exists with this email address "
-				+ domainUser.email + "in" + domainUser.domain
-				+ "domain.");
+		throw new Exception("User already exists with this email address " + domainUser.email + "in" + domainUser.domain + "domain.");
 	    }
 
 	    // If domain user exists,setting to name if null
@@ -224,8 +218,7 @@ public class DomainUser extends Cursor implements Cloneable
 		if (!this.is_admin)
 		{
 		    this.is_admin = true;
-		    throw new Exception(
-			    "Super user should be Admin and cannot be disabled.");
+		    throw new Exception("Super user should be Admin and cannot be disabled.");
 		}
 	    }
 
@@ -235,13 +228,9 @@ public class DomainUser extends Cursor implements Cloneable
 		try
 		{
 		    if (domainUser.is_disabled == true)
-			SendMail.sendMail(this.email,
-				SendMail.USER_ENABLED_SUBJECT,
-				SendMail.USER_ENABLED_NOTIFICATION, this);
+			SendMail.sendMail(this.email, SendMail.USER_ENABLED_SUBJECT, SendMail.USER_ENABLED_NOTIFICATION, this);
 		    else
-			SendMail.sendMail(this.email,
-				SendMail.USER_DISABLED_SUBJECT,
-				SendMail.USER_DISABLED_NOTIFICATION, this);
+			SendMail.sendMail(this.email, SendMail.USER_DISABLED_SUBJECT, SendMail.USER_DISABLED_NOTIFICATION, this);
 
 		}
 		catch (Exception e)
@@ -269,8 +258,7 @@ public class DomainUser extends Cursor implements Cloneable
 	    if (StringUtils.isEmpty(this.domain))
 	    {
 		System.out.println("Domain user not created");
-		throw new Exception(
-			"Domain is empty. Please login again & try.");
+		throw new Exception("Domain is empty. Please login again & try.");
 	    }
 
 	// Sends email, if the user is new
@@ -283,21 +271,13 @@ public class DomainUser extends Cursor implements Cloneable
 
 		// If subscription is null, it indicates user is in free plan.
 		// Limits users to global trail users count
-		if (subscription == null
-			&& DomainUserUtil.count() >= Globals.TRIAL_USERS_COUNT)
-		    throw new Exception(
-			    "Please upgrade. You cannot add more than "
-				    + Globals.TRIAL_USERS_COUNT
-				    + " users in the free plan");
+		if (subscription == null && DomainUserUtil.count() >= Globals.TRIAL_USERS_COUNT)
+		    throw new Exception("Please upgrade. You cannot add more than " + Globals.TRIAL_USERS_COUNT + " users in the free plan");
 
 		// If Subscription is not null then limits users to current plan
 		// quantity).
-		if (subscription != null
-			&& DomainUserUtil.count() >= subscription.plan.quantity)
-		    throw new Exception(
-			    "Please upgrade. You cannot add more than "
-				    + subscription.plan.quantity
-				    + " users in the current plan");
+		if (subscription != null && DomainUserUtil.count() >= subscription.plan.quantity)
+		    throw new Exception("Please upgrade. You cannot add more than " + subscription.plan.quantity + " users in the current plan");
 	    }
 
 	    try
@@ -307,8 +287,7 @@ public class DomainUser extends Cursor implements Cloneable
 		if (user.password.equals(MASKED_PASSWORD))
 		    user.password = null;
 
-		SendMail.sendMail(this.email, SendMail.WELCOME_SUBJECT,
-			SendMail.WELCOME, user);
+		SendMail.sendMail(this.email, SendMail.WELCOME_SUBJECT, SendMail.WELCOME, user);
 
 	    }
 	    catch (Exception e)
@@ -415,7 +394,7 @@ public class DomainUser extends Cursor implements Cloneable
 	    setInfo(CREATED_TIME, new Long(System.currentTimeMillis() / 1000));
 
 	// Stores password
-	if (password != null && !password.equals(MASKED_PASSWORD))
+	if (!StringUtils.isEmpty(password) && !password.equals(MASKED_PASSWORD))
 	{
 	    // Encrypt password while saving
 	    encrypted_password = MD5Util.getMD5HashedPassword(password);
@@ -460,9 +439,8 @@ public class DomainUser extends Cursor implements Cloneable
     // To String
     public String toString()
     {
-	return "\n Email: " + this.email + " Domain: " + this.domain
-		+ "\n IsAdmin: " + this.is_admin + " DomainId: " + this.id
-		+ " Name: " + this.name + "\n " + info_json;
+	return "\n Email: " + this.email + " Domain: " + this.domain + "\n IsAdmin: " + this.is_admin + " DomainId: " + this.id + " Name: " + this.name + "\n "
+		+ info_json;
 
     }
 }

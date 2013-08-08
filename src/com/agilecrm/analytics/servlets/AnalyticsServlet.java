@@ -1,4 +1,4 @@
-package com.agilecrm;
+package com.agilecrm.analytics.servlets;
 
 import java.io.IOException;
 
@@ -10,14 +10,14 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.analytics.util.AnalyticsSQLUtil;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.db.util.AnalyticsSQLUtil;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.google.appengine.api.NamespaceManager;
 
 /**
- * <code>StatsServlet</code> handles page-view requests from javascript.It
+ * <code>AnalyticsServlet</code> handles page-view requests from javascript.It
  * handles page-views analysis. It will store the obtained values from query
  * string into google cloud sql. Fetches remote ip address to save in database.
  * 
@@ -25,7 +25,7 @@ import com.google.appengine.api.NamespaceManager;
  * 
  */
 @SuppressWarnings("serial")
-public class StatsServlet extends HttpServlet
+public class AnalyticsServlet extends HttpServlet
 {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
 	    throws IOException

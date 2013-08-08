@@ -1,13 +1,14 @@
-package com.agilecrm.db.util;
+package com.campaignio.reports;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
 import com.agilecrm.db.GoogleSQL;
+import com.agilecrm.db.util.SQLUtil;
 import com.google.appengine.api.NamespaceManager;
 
 /**
- * <code>CampaignStatsSQLUtil</code> is the base class for campaign stats
+ * <code>CampaignReportsSQLUtil</code> is the base class for campaign stats
  * reports. It builds required sql query and return respective results. It
  * compares all the available campaigns and also gets individual campaign
  * reports.
@@ -15,7 +16,7 @@ import com.google.appengine.api.NamespaceManager;
  * @author Naresh
  * 
  */
-public class CampaignStatsSQLUtil
+public class CampaignReportsSQLUtil
 {
     /**
      * Returns campaign stats of email campaigns with respect to campaign-id and
@@ -66,7 +67,7 @@ public class CampaignStatsSQLUtil
      *            - hour, day or date.
      * @return JSONArray.
      */
-    public static JSONArray getEmailCampaignStats(String campaignId, String startDate, String endDate, String timeZone, String type)
+    public static JSONArray getEachEmailCampaignStats(String campaignId, String startDate, String endDate, String timeZone, String type)
     {
 	String domain = NamespaceManager.get();
 

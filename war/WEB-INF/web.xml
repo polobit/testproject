@@ -12,7 +12,7 @@
 
 	<servlet>
 		<servlet-name>Scribe</servlet-name>
-		<servlet-class>com.agilecrm.ScribeServlet</servlet-class>
+		<servlet-class>com.agilecrm.scribe.ScribeServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Scribe</servlet-name>
@@ -201,16 +201,17 @@
 	<servlet-mapping>
 		<servlet-name>TwilioServlet</servlet-name>
 		<url-pattern>/backend/TwilioServlet</url-pattern>
+		<url-pattern>/auth/TwilioServlet</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>TwilioVoiceServlet</servlet-name>
-		<servlet-class>com.agilecrm.TwilioVoiceServlet</servlet-class>
+		<servlet-class>com.agilecrm.twilio.TwilioVoiceServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>TwilioVoiceServlet</servlet-name>
 		<url-pattern>/backend/voice</url-pattern>
-		<url-pattern>/backend/verification</url-pattern>
+		<url-pattern>/verification</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -361,11 +362,11 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>StatsServlet</servlet-name>
-		<servlet-class>com.agilecrm.StatsServlet</servlet-class>
+		<servlet-name>AnalyticsServlet</servlet-name>
+		<servlet-class>com.agilecrm.analytics.servlets.AnalyticsServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>StatsServlet</servlet-name>
+		<servlet-name>AnalyticsServlet</servlet-name>
 		<url-pattern>/stats</url-pattern>
 	</servlet-mapping>
 	

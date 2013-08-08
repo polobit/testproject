@@ -6,11 +6,11 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import com.agilecrm.db.util.AnalyticsSQLUtil;
-import com.agilecrm.db.util.CampaignLogsSQLUtil;
+import com.agilecrm.analytics.util.AnalyticsSQLUtil;
 import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.campaignio.cron.util.CronUtil;
+import com.campaignio.logger.util.CampaignLogsSQLUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -22,8 +22,6 @@ import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
-import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
 
 /**
  * <code>DBUtil</code> class contains the utility methods to delete a name-space
@@ -240,47 +238,4 @@ public class DBUtil
 	}
     }
 
-    /**
-     * Returns contact owner-id from subscriberJSON.
-     * 
-     * @param subscriberJSON
-     *            - SubscriberJSON
-     * @return String
-     */
-    public static String getContactOwnerIdFromSubscriberJSON(JSONObject subscriberJSON)
-    {
-	String ownerId = null;
-
-	try
-	{
-	    JSONObject owner = subscriberJSON.getJSONObject("data").getJSONObject("owner");
-
-	    if (owner.length() != 0)
-		ownerId = owner.getString("id");
-
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-	return ownerId;
-    }
-
-    /**
-     * Normalizes the given string separated by any delimiter. Inorder to
-     * normalize, Splitter and Joiner methods are used. For e.g.,
-     * ",a,b ,c, d,e," is converted to "a,b,c,d,e"
-     * 
-     * @param separator
-     *            - Any separator like comma.
-     * @param str
-     *            - String that needs to be normalized.
-     * @return normalized String
-     */
-    public static String normalizeStringSeparatedByDelimiter(char separator, String str)
-    {
-	Splitter splitter = Splitter.on(separator).omitEmptyStrings().trimResults();
-	Joiner joiner = Joiner.on(separator).skipNulls();
-	return joiner.join(splitter.split(str));
-    }
 }

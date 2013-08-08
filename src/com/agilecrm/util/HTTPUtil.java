@@ -35,11 +35,10 @@ public class HTTPUtil
 	{
 	    URL yahoo = new URL(url);
 	    URLConnection conn = yahoo.openConnection();
-	    conn.setConnectTimeout(60000);
-	    conn.setReadTimeout(60000);
+	    conn.setConnectTimeout(600000);
+	    conn.setReadTimeout(600000);
 
-	    BufferedReader reader = new BufferedReader(new InputStreamReader(
-		    conn.getInputStream()));
+	    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
 	    String output = "";
 	    String inputLine;
@@ -67,8 +66,7 @@ public class HTTPUtil
      * @return response of the remote object
      * @throws Exception
      */
-    public static String accessURLUsingPost(String postURL, String data)
-	    throws Exception
+    public static String accessURLUsingPost(String postURL, String data) throws Exception
     {
 	// Send data
 	URL url = new URL(postURL);
@@ -82,8 +80,7 @@ public class HTTPUtil
 	}
 
 	// Get the response
-	BufferedReader reader = new BufferedReader(new InputStreamReader(
-		conn.getInputStream()));
+	BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 	String output = "";
 	String inputLine;
 	while ((inputLine = reader.readLine()) != null)
@@ -109,8 +106,7 @@ public class HTTPUtil
      * @return {@link String} response from server
      * @throws Exception
      */
-    public static String accessHTTPURL(String requestURL, String data,
-	    String methodType) throws Exception
+    public static String accessHTTPURL(String requestURL, String data, String methodType) throws Exception
     {
 	URL url;
 	HttpURLConnection conn = null;
@@ -118,16 +114,15 @@ public class HTTPUtil
 	url = new URL(requestURL);
 	conn = (HttpURLConnection) url.openConnection();
 	conn.setDoOutput(true);
-	conn.setConnectTimeout(60000);
-	conn.setReadTimeout(60000);
+	conn.setConnectTimeout(600000);
+	conn.setReadTimeout(600000);
 	conn.setRequestMethod(methodType.toUpperCase());
 	OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
 	wr.write(data);
 	wr.flush();
 
 	// Get the response
-	BufferedReader reader = new BufferedReader(new InputStreamReader(
-		conn.getInputStream()));
+	BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 	String output = "";
 	String inputLine;
 	while ((inputLine = reader.readLine()) != null)
@@ -158,9 +153,8 @@ public class HTTPUtil
      * @throws Exception
      *             If server throws an exception
      */
-    public static String accessURLUsingAuthentication(String postURL,
-	    String username, String password, String data, String contentType,
-	    String requestMethod, String acceptType) throws Exception
+    public static String accessURLUsingAuthentication(String postURL, String username, String password, String data, String contentType, String requestMethod,
+	    String acceptType) throws Exception
     {
 	HttpURLConnection connection = null;
 
@@ -172,8 +166,7 @@ public class HTTPUtil
 
 	if (!StringUtils.isBlank(username) && !StringUtils.isBlank(password))
 	{
-	    String userPass = Base64Encoder.encode(
-		    (username + ":" + password).getBytes()).replace("\n", "");
+	    String userPass = Base64Encoder.encode((username + ":" + password).getBytes()).replace("\n", "");
 
 	    // Authorization with CRM API
 	    connection.setRequestProperty("Authorization", "Basic " + userPass);
@@ -181,8 +174,8 @@ public class HTTPUtil
 
 	connection.setDoOutput(true);
 
-	connection.setConnectTimeout(60000);
-	connection.setReadTimeout(60000);
+	connection.setConnectTimeout(600000);
+	connection.setReadTimeout(600000);
 	requestMethod = (requestMethod == null) ? "GET" : requestMethod;
 	connection.setRequestMethod(requestMethod);
 
@@ -194,8 +187,7 @@ public class HTTPUtil
 
 	if (data != null)
 	{
-	    OutputStreamWriter wr = new OutputStreamWriter(
-		    connection.getOutputStream());
+	    OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
 
 	    wr.write(data);
 	    wr.flush();
@@ -204,8 +196,7 @@ public class HTTPUtil
 
 	System.out.println("responseCode = " + connection.getResponseMessage());
 
-	BufferedReader reader = new BufferedReader(new InputStreamReader(
-		connection.getInputStream()));
+	BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
 	String output = "";
 	String inputLine;
@@ -235,17 +226,15 @@ public class HTTPUtil
      * @throws Exception
      *             If server throws an exception
      */
-    public static String accessURL(String postURL, String username,
-	    String password, String requestMethod, String data,
-	    String contentLength, String contentType, String acceptType)
-	    throws Exception
+    public static String accessURL(String postURL, String username, String password, String requestMethod, String data, String contentLength,
+	    String contentType, String acceptType) throws Exception
     {
 	HttpURLConnection connection = null;
 
 	URL url = new URL(postURL);
 	connection = (HttpURLConnection) url.openConnection();
-	connection.setConnectTimeout(60000);
-	connection.setReadTimeout(60000);
+	connection.setConnectTimeout(600000);
+	connection.setReadTimeout(600000);
 	connection.setDoOutput(true);
 
 	System.out.println(username);
@@ -253,8 +242,7 @@ public class HTTPUtil
 
 	if (!StringUtils.isBlank(username) && !StringUtils.isBlank(password))
 	{
-	    String userPass = Base64Encoder.encode(
-		    (username + ":" + password).getBytes()).replace("\n", "");
+	    String userPass = Base64Encoder.encode((username + ":" + password).getBytes()).replace("\n", "");
 
 	    // Authorization with CRM API
 	    connection.setRequestProperty("Authorization", "Basic " + userPass);
@@ -272,10 +260,8 @@ public class HTTPUtil
 	if (!StringUtils.isBlank(data))
 	{
 	    if (contentLength != null)
-		connection.setRequestProperty("Content-length",
-			String.valueOf(data.length()));
-	    OutputStreamWriter wr = new OutputStreamWriter(
-		    connection.getOutputStream());
+		connection.setRequestProperty("Content-length", String.valueOf(data.length()));
+	    OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
 
 	    wr.write(data);
 	    wr.flush();
@@ -284,8 +270,7 @@ public class HTTPUtil
 
 	System.out.println("responseCode = " + connection.getResponseMessage());
 
-	BufferedReader reader = new BufferedReader(new InputStreamReader(
-		connection.getInputStream()));
+	BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
 	String output = "";
 	String inputLine;
