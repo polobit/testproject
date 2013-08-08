@@ -10,6 +10,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
@@ -19,6 +20,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.core.api.widgets.WidgetsAPI;
 import com.agilecrm.social.stubs.SocialSearchResult;
 import com.agilecrm.social.stubs.SocialUpdateStream;
+import com.agilecrm.util.StringUtils2;
 import com.agilecrm.util.Util;
 import com.agilecrm.widgets.Widget;
 import com.google.code.linkedinapi.client.LinkedInApiClient;
@@ -61,7 +63,13 @@ public class LinkedInUtil
 	    .newInstance(Globals.LINKED_IN_API_KEY,
 		    Globals.LINKED_IN_SECRET_KEY);
 
-    private static final String LINKEDINURLFORMAT = "https://m3-s.licdn.com";
+    /**
+     * Basic LinkedIn URL for LinkedIn images.
+     * 
+     * As LinkedIn keeping on changing LinkedIn image URLs, we change the image
+     * URLs into this format
+     */
+    private static final String LINKEDINIMAGEURLFORMAT = "https://m3-s.licdn.com";
 
     /**
      * Creates a client to connect to LinkedIn using developers API key and
@@ -83,7 +91,7 @@ public class LinkedInUtil
 		tokenSecret);
 
 	/*
-	 * Gets profile details, details are fetched based on the set that
+	 * Retrieves profile details, details are fetched based on the set that
 	 * specifies the properties
 	 */
 	Person profile = client
@@ -128,7 +136,10 @@ public class LinkedInUtil
 	{
 	    List<SocialSearchResult> searchResults = new ArrayList<SocialSearchResult>();
 
-	    // Gets first name and last name of the contact to search profiles
+	    /*
+	     * Retrieves first name and last name of the contact to search
+	     * profiles
+	     */
 	    String firstName = contact.getContactFieldValue(Contact.FIRST_NAME);
 	    String lastName = contact.getContactFieldValue(Contact.LAST_NAME);
 
@@ -136,8 +147,10 @@ public class LinkedInUtil
 	    if (StringUtils.isBlank(firstName) && StringUtils.isBlank(lastName))
 		return searchResults;
 
-	    // Creates map to fetch results based on searchParameters using
-	    // SearchParameter provided by LinkedIn
+	    /*
+	     * Creates map to fetch results based on searchParameters using
+	     * SearchParameter provided by LinkedIn
+	     */
 	    Map<SearchParameter, String> searchParameters = new EnumMap<SearchParameter, String>(
 		    SearchParameter.class);
 
@@ -152,27 +165,30 @@ public class LinkedInUtil
 	    searchParameters.put(SearchParameter.KEYWORDS, firstName + " "
 		    + lastName);
 
-	    // Search profiles based on the searchParameters given, and
-	    // specifies
-	    // field to be returned for result profiles
+	    /*
+	     * Search profiles based on the searchParameters given, and returns
+	     * list of search results
+	     */
 	    searchResults = searchPeopleInLinkedIn(client, searchParameters);
 
-	    System.out.println("in search");
-	    System.out.println(searchResults);
-	    System.out.println(searchResults.size());
+	    System.out.println("In LinkedIn search : " + searchResults);
+	    System.out.println("No. of results : " + searchResults.size());
 
 	    return searchResults;
 	}
 	catch (Exception e)
 	{
+	    // Handles exception thrown by LinkedIn and throws proper exceptions
 	    throw handleExceptionInLinkedIn(e);
 	}
     }
 
     /**
-     * Searches LinkedIn profiles based on first name and last name specified,
-     * result fetched are represented by class {@link SocialSearchResult}
-     * include details id, name, image_url, url etc..
+     * Searches LinkedIn profiles based on widget id and the given keywords
+     * 
+     * <p>
+     * Key words would be first name and last name of contact
+     * </p>
      * 
      * @param widget
      *            {@link Widget}
@@ -195,11 +211,14 @@ public class LinkedInUtil
     {
 	try
 	{
-	    // Creates map to fetch results based on searchParameters using
-	    // SearchParameter provided by LinkedIn
+	    /*
+	     * Creates map to fetch results based on searchParameters using
+	     * SearchParameter provided by LinkedIn
+	     */
 	    Map<SearchParameter, String> searchParameters = new EnumMap<SearchParameter, String>(
 		    SearchParameter.class);
 
+	    // check if keywords exists
 	    if (!StringUtils.isBlank(keywords))
 		searchParameters.put(SearchParameter.KEYWORDS, keywords);
 
@@ -212,12 +231,14 @@ public class LinkedInUtil
 	    final LinkedInApiClient client = factory.createLinkedInApiClient(
 		    widget.getProperty("token"), widget.getProperty("secret"));
 
+	    // searches for LinkedIn profiles based on search parameters
 	    searchResults = searchPeopleInLinkedIn(client, searchParameters);
 
 	    return searchResults;
 	}
 	catch (Exception e)
 	{
+	    // Handles exception thrown by LinkedIn and throws proper exceptions
 	    throw handleExceptionInLinkedIn(e);
 	}
     }
@@ -249,12 +270,19 @@ public class LinkedInUtil
 
 	    List<SocialSearchResult> searchResults = new ArrayList<SocialSearchResult>();
 
-	    // Iterates through resutls fetched and creates SocialSearchResult
-	    // wrapper class and adds results to a list
+	    /*
+	     * Iterates through results fetched and wraps the details into
+	     * SocialSearchResult wrapper class and adds it to list
+	     */
 	    for (Person person : people.getPersonList())
 	    {
 		SocialSearchResult result = new SocialSearchResult();
 
+		/*
+		 * Id or name is private for the people who doesn't share their
+		 * information to third party applications, we skip those
+		 * profiles
+		 */
 		if (person.getId().equalsIgnoreCase("private"))
 		    continue;
 
@@ -273,18 +301,20 @@ public class LinkedInUtil
 		if (person.getDistance() != null && person.getDistance() == 1)
 		    result.is_connected = true;
 
-		System.out.println("in linkeidn");
-
-		// Changes http to https to avoid client side warnings by
-		// browser,
-		// Changes certificate from m3 to m3-s to fix ssl broken image
-		// link
+		/*
+		 * Changes http to https to avoid client side warnings by
+		 * browser, Changes certificate from m3 to m3-s to fix SSL
+		 * broken image link
+		 */
 		if (result.picture != null)
 		    result.picture = changeImageUrl(result.picture);
 
-		System.out.println(result.picture);
+		System.out.println("LinkedIn picture URL : " + result.picture);
 
-		// Sets number of connects if provided
+		/*
+		 * Set number of connections, location and distance(degree of
+		 * connection) if provided
+		 */
 		result.num_connections = (person.getNumConnections() != null) ? person
 			.getNumConnections().toString() : "";
 
@@ -294,15 +324,52 @@ public class LinkedInUtil
 		result.distance = (person.getDistance() != null) ? person
 			.getDistance().toString() : "";
 
-		// Add result wrapper object to the list
+		// Add wrapper filled with details to the list
 		searchResults.add(result);
 	    }
 	    return searchResults;
 	}
 	catch (Exception e)
 	{
+	    // Handles exception thrown by LinkedIn and throws proper exceptions
 	    throw handleExceptionInLinkedIn(e);
 	}
+    }
+
+    /**
+     * Retrieve LinkedIn Id from LinkedIn URL of person whose profile details
+     * are required
+     * 
+     * @param widget
+     *            {@link Widget} to retrieve token and secret of LinkedIn
+     *            account of agile user
+     * @param linkedInURL
+     *            {@link String} linkedIn URL
+     * @return {@link String} LinkedIn Id
+     * @throws Exception
+     */
+    public static String getIdByUrl(Widget widget, String linkedInURL)
+	    throws Exception
+    {
+
+	try
+	{
+	    // Create LinkedInApiClient to fetch profile by URL
+	    final LinkedInApiClient client = factory.createLinkedInApiClient(
+		    widget.getProperty("token"), widget.getProperty("secret"));
+
+	    // Creates a client specifying the fields to be returned
+	    Person person = client.getProfileByUrl(linkedInURL,
+		    ProfileType.PUBLIC, EnumSet.of(ProfileField.ID));
+
+	    return person.getId();
+	}
+	catch (Exception e)
+	{
+	    // Handles exception thrown by LinkedIn and throws proper exceptions
+	    throw handleExceptionInLinkedIn(e);
+	}
+
     }
 
     /**
@@ -312,8 +379,9 @@ public class LinkedInUtil
      * 
      * @param widget
      *            {@link Widget}, for accessing token and secret key
-     * @param id
-     *            {@link String}
+     * @param linkedInId
+     *            {@link String} LinkedIn Id of the person whose profile is
+     *            required
      * @return {@link SocialSearchResult}
      * @throws Exception
      */
@@ -324,10 +392,14 @@ public class LinkedInUtil
 
 	try
 	{
+	    // Creates a client with token and secret retrieved from widget
 	    final LinkedInApiClient client = factory.createLinkedInApiClient(
 		    widget.getProperty("token"), widget.getProperty("secret"));
 
-	    // Creates a client specifying the fields to be returned
+	    /*
+	     * Requests the client to return profile details by specifying the
+	     * fields to be returned
+	     */
 	    Person person = client.getProfileById(linkedInId, EnumSet.of(
 		    ProfileField.PICTURE_URL, ProfileField.FIRST_NAME,
 		    ProfileField.LAST_NAME, ProfileField.SUMMARY,
@@ -354,7 +426,7 @@ public class LinkedInUtil
 
 	    SocialSearchResult result = new SocialSearchResult();
 
-	    // Get details and set it to SocialSearchResult class
+	    // Get details and wrap into SocialSearchResult class
 	    result.id = person.getId();
 	    result.name = person.getFirstName() + " " + person.getLastName();
 	    result.picture = person.getPictureUrl();
@@ -365,28 +437,402 @@ public class LinkedInUtil
 	    result.current_update = person.getCurrentStatus();
 	    result.num_connections = String.valueOf(person.getNumConnections());
 
+	    /*
+	     * Distance is 1 for direct connections and 0 for their own profile
+	     */
 	    if (!(person.getDistance() > 1l))
 		result.is_connected = true;
 
-	    // Change http to https to avoid client side warnings by browser
-	    // Change certificate from m3 to m3-s to fix ssl broken image link
+	    /*
+	     * Change http to https to avoid client side warnings by browser
+	     * Change certificate from m3 to m3-s to fix SSL broken image link
+	     */
 	    if (result.picture != null)
 		result.picture = changeImageUrl(result.picture);
 
-	    result.searchResult = getExperience(person, linkedInId, client);
+	    // Retrieves work positions of the person
+	    result.searchResult = fetchExperienceOfPerson(person, linkedInId,
+		    client);
 
 	    return result;
 
 	}
 	catch (Exception e)
 	{
+	    // Handles exception thrown by LinkedIn and throws proper exceptions
 	    throw handleExceptionInLinkedIn(e);
 	}
     }
 
     /**
-     * Creates a client based on token and secret token and sends an add request
-     * to a person in LinkedIn based on his LinkedInId.
+     * Retrieves work positions of a given person in LinkedIn based on tokens in
+     * widget and LinkedIn Id and wraps the result into
+     * {@link SocialSearchResult}
+     * 
+     * @param widget
+     *            {@link Widget}, for accessing token and secret key
+     * @param linkedInId
+     *            {@link String} LinkedIn Id of the person whose work positions
+     *            are required
+     * @return {@link SocialSearchResult}
+     * @throws SocketTimeoutException
+     * @throws IOException
+     * @throws Exception
+     */
+    public static SocialSearchResult getExperience(Widget widget,
+	    String linkedInId) throws SocketTimeoutException, IOException,
+	    Exception
+    {
+	try
+	{
+	    // Creates a client with token and secret retrieved from widget
+	    final LinkedInApiClient client = factory.createLinkedInApiClient(
+		    widget.getProperty("token"), widget.getProperty("secret"));
+
+	    // Retrieve person details from client based on LinkedIn Id
+	    Person person = client.getProfileById(linkedInId, EnumSet.of(
+		    ProfileField.POSITIONS_COMPANY,
+		    ProfileField.THREE_CURRENT_POSITIONS,
+		    ProfileField.THREE_PAST_POSITIONS,
+		    ProfileField.POSITIONS_COMPANY_INDUSTRY,
+		    ProfileField.POSITIONS_COMPANY_TICKER));
+
+	    // retrieve company details of positions and return
+	    return fetchExperienceOfPerson(person, linkedInId, client);
+	}
+	catch (Exception e)
+	{
+	    // Handles exception thrown by LinkedIn and throws proper exceptions
+	    throw handleExceptionInLinkedIn(e);
+	}
+
+    }
+
+    /**
+     * Retrieves work positions of a given person in LinkedIn and wraps the
+     * result into {@link SocialSearchResult}
+     * 
+     * @param person
+     *            {@link Person}
+     * @param linkedInId
+     *            {@link String} LinkedIn Id of the person whose experience is
+     *            required
+     * @param client
+     *            {@link LinkedInApiClient}
+     * @return {@link SocialSearchResult} with work details
+     * @throws SocketTimeoutException
+     * @throws IOException
+     * @throws Exception
+     */
+    private static SocialSearchResult fetchExperienceOfPerson(Person person,
+	    String linkedInId, LinkedInApiClient client)
+	    throws SocketTimeoutException, IOException, Exception
+    {
+	SocialSearchResult experience = new SocialSearchResult();
+	experience.id = linkedInId;
+
+	// If no work positions, return empty result
+	if (person.getPositions() == null
+		&& person.getPositions().getPositionList() == null)
+	    return experience;
+
+	// For each position, fill company details
+	fillPositionsWithCompanyDetails(person, client);
+
+	// set positions in a wrapper
+	experience.three_current_positions = person.getPositions()
+		.getPositionList();
+
+	return experience;
+    }
+
+    /**
+     * Retrieves company details for each position and fills each position with
+     * company details
+     * 
+     * @param person
+     *            {@link Person}
+     * @param client
+     *            {@link LinkedInApiClient}
+     * @throws Exception
+     */
+    private static void fillPositionsWithCompanyDetails(Person person,
+	    LinkedInApiClient client) throws Exception
+    {
+
+	// Iterate each position and fill company details
+	for (Position position : person.getPositions().getPositionList())
+	{
+	    // If company details available
+	    if (position.getCompany().getId() != null)
+	    {
+		try
+		{
+		    // fetch company details based on its id
+		    position.setCompany(fetchCompanyDetails(position
+			    .getCompany().getId(), client));
+		}
+		catch (LinkedInApiClientException e)
+		{
+		    System.out.println("In fill positions exception "
+			    + e.getMessage());
+
+		    /*
+		     * If company's id is some irrelevant and not related to
+		     * company, company details are skipped
+		     */
+		    if (e.getMessage().contains("Company with ID {"))
+			continue;
+		    else
+			throw new Exception(e.getMessage());
+		}
+	    }
+
+	}
+
+    }
+
+    /**
+     * Retrieves company details of a work position based on position id
+     * 
+     * @param person
+     *            {@link Person}
+     * @param client
+     *            {@link LinkedInApiClient}
+     * @return {@link Company}
+     * @throws Exception
+     */
+    private static Company fetchCompanyDetails(String positionId,
+	    LinkedInApiClient client) throws Exception
+    {
+
+	Company company = client.getCompanyById(positionId, EnumSet.of(
+		CompanyField.LOCATIONS_ADDRESS, CompanyField.LOGO_URL,
+		CompanyField.NAME, CompanyField.NUM_FOLLOWERS,
+		CompanyField.BLOG_RSS_URL, CompanyField.DESCRIPTION,
+		CompanyField.ID, CompanyField.INDUSTRY, CompanyField.TICKER));
+
+	if (company.getLogoUrl() != null)
+	    company.setLogoUrl(changeImageUrl(company.getLogoUrl()));
+
+	return company;
+
+    }
+
+    /**
+     * Fetches the updates of the person based on his LinkedIn id and specific
+     * number of updates which are limited to start and end point and from
+     * specific start date to end date
+     * 
+     * @param widget
+     *            {@link Widget} to retrieve token and secret of LinkedIn
+     *            account of agile user
+     * @param linkedInId
+     *            LinkedIn Id of the person whose updates are required
+     * @param startIndex
+     * @param endIndex
+     * @param startDate
+     * @param endDate
+     * @return {@link List} of {@link SocialUpdateStream}
+     * @throws Exception
+     *             If the personId does not exists or person provides restricted
+     *             access to his profile
+     */
+    public static List<SocialUpdateStream> getNetworkUpdates(Widget widget,
+	    String linkedInId, int startIndex, int endIndex, String startDate,
+	    String endDate) throws SocketTimeoutException, IOException,
+	    Exception
+    {
+	try
+	{
+	    // Create network updates client, to fetch user network updates
+	    final NetworkUpdatesApiClient client = factory
+		    .createNetworkUpdatesApiClient(widget.getProperty("token"),
+			    widget.getProperty("secret"));
+
+	    // Retrieves filtered network updates based on parameters
+	    Network network = getSpecificNetwork(client, linkedInId,
+		    startIndex, endIndex, startDate, endDate);
+
+	    /*
+	     * LinkedInApiClient is required to retrieve person details in the
+	     * network connection updates
+	     */
+	    LinkedInApiClient client1 = factory.createLinkedInApiClient(
+		    widget.getProperty("token"), widget.getProperty("secret"));
+
+	    // Forms a list from retrieved updates and returned
+	    return getListFromNetworkUpdates(network, client1);
+	}
+	catch (Exception e)
+	{
+	    // Handles exception thrown by LinkedIn and throws proper exceptions
+	    throw handleExceptionInLinkedIn(e);
+	}
+    }
+
+    /**
+     * Fetches user updates from {@link NetworkUpdatesApiClient} based on the
+     * parameters provided
+     * 
+     * @param client
+     *            {@link NetworkUpdatesApiClient} configured with tokens
+     * @param linkedInId
+     *            {@link String} LinkedIn Id of the person whose updates are
+     *            required
+     * @param startIndex
+     * @param endIndex
+     * @param startDate
+     * @param endDate
+     * @return {@link Network} with user updates
+     * @throws SocketTimeoutException
+     * @throws IOException
+     * @throws Exception
+     */
+    private static Network getSpecificNetwork(NetworkUpdatesApiClient client,
+	    String linkedInId, int startIndex, int endIndex, String startDate,
+	    String endDate) throws SocketTimeoutException, IOException,
+	    Exception
+    {
+	// Set of details which are to be fetched
+	Set<NetworkUpdateType> enumSet = EnumSet.of(
+		NetworkUpdateType.PROFILE_UPDATE,
+		NetworkUpdateType.CONNECTION_UPDATE,
+		NetworkUpdateType.SHARED_ITEM,
+		NetworkUpdateType.EXTENDED_PROFILE_UPDATE);
+
+	// If start index and end index are provided, filter those updates
+	if (startIndex != 0 && endIndex != 0)
+	{
+	    // If start date and end date are provided, filter updates on it
+	    if (!StringUtils2
+		    .isNullOrEmpty(new String[] { startDate, endDate }))
+	    {
+		Calendar cal = Calendar.getInstance();
+
+		cal.setTimeInMillis(Long.parseLong(startDate) * 1000);
+		Date startDat = cal.getTime();
+
+		cal.setTimeInMillis(Long.parseLong(endDate) * 1000);
+		Date endDat = cal.getTime();
+
+		return client.getUserUpdates(linkedInId, enumSet, startIndex,
+			endIndex, startDat, endDat);
+	    }
+	    else
+	    {
+		// filters updates only on start and end index
+		return client.getUserUpdates(linkedInId, enumSet, startIndex,
+			endIndex);
+	    }
+
+	}
+	else
+	{
+	    // fetch all updates
+	    return client.getUserUpdates(linkedInId, enumSet);
+	}
+    }
+
+    /**
+     * Used to form a {@link List} of {@link SocialUpdateStream} from
+     * {@link Network} object
+     * 
+     * @param network
+     *            {@link Network}
+     * @param client1
+     *            {@link LinkedInApiClient}
+     * @return {@link List} of {@link SocialUpdateStream}
+     * @throws Exception
+     */
+    private static List<SocialUpdateStream> getListFromNetworkUpdates(
+	    Network network, LinkedInApiClient client1)
+	    throws SocketTimeoutException, IOException, Exception
+    {
+	List<SocialUpdateStream> list = new ArrayList<SocialUpdateStream>();
+
+	// Iterate for each object
+	for (Update update : network.getUpdates().getUpdateList())
+	{
+	    SocialUpdateStream stream = new SocialUpdateStream();
+	    JSONObject json = null;
+
+	    // If update is on share
+	    if (update.getUpdateContent().getPerson().getCurrentShare() != null)
+	    {
+		stream.id = update.getUpdateContent().getPerson()
+			.getCurrentShare().getId();
+		stream.type = update.getUpdateType().name();
+		stream.created_time = update.getTimestamp() / 1000;
+		json = new JSONObject().put(
+			"comment",
+			update.getUpdateContent().getPerson().getCurrentShare()
+				.getComment()).put(
+			"current-share",
+			Util.toJSONString(update.getUpdateContent().getPerson()
+				.getCurrentShare()));
+		stream.message = json.toString();
+		list.add(stream);
+	    }
+	    // If update is on connection
+	    else if (update.getUpdateContent().getPerson().getConnections() != null)
+	    {
+		/*
+		 * Person is connected to one person or more persons at a time.
+		 * For each person iterate the loop and it to list
+		 */
+		for (Person person : update.getUpdateContent().getPerson()
+			.getConnections().getPersonList())
+		{
+		    stream.id = person.getId();
+		    stream.type = update.getUpdateType().name();
+		    stream.created_time = update.getTimestamp() / 1000;
+
+		    /*
+		     * If person doesn't share information for third party
+		     * applications, that will be an exception, we skip those
+		     * profiles
+		     */
+		    try
+		    {
+			Person person1 = client1
+				.getProfileById(stream.id, EnumSet.of(
+					ProfileField.PUBLIC_PROFILE_URL,
+					ProfileField.LAST_NAME,
+					ProfileField.FIRST_NAME,
+					ProfileField.PICTURE_URL,
+					ProfileField.HEADLINE,
+					ProfileField.LOCATION_NAME,
+					ProfileField.NUM_CONNECTIONS,
+					ProfileField.ID, ProfileField.DISTANCE));
+
+			/*
+			 * Changes http to https to avoid client side warnings
+			 * by browser, Changes certificate from m3 to m3-s to
+			 * fix SSL broken image link
+			 */
+			person1.setPictureUrl(changeImageUrl(person1
+				.getPictureUrl()));
+
+			json = new JSONObject(person1);
+		    }
+		    catch (Exception e)
+		    {
+			continue;
+		    }
+		    stream.message = json.toString();
+		    list.add(stream);
+		}
+	    }
+
+	}
+
+	return list;
+    }
+
+    /**
+     * Creates a client based on token and secret token and sends connect
+     * request to a person in LinkedIn based on his LinkedInId.
      * 
      * @param widget
      *            {@link Widget} to retrieve token and secret of LinkedIn
@@ -402,30 +848,40 @@ public class LinkedInUtil
      *             If the recipientId does not exists or recipient provides
      *             restricted access to his profile
      */
-    public static String sendLinkedInAddRequest(Widget widget,
-	    String recipientId, String subject, String message)
-	    throws SocketTimeoutException, IOException, Exception
+    public static String connectInLinkedIn(Widget widget, String recipientId,
+	    String subject, String message) throws SocketTimeoutException,
+	    IOException, Exception
     {
 	try
 	{
+	    // Creates a client with token and secret retrieved from widget
 	    final LinkedInApiClient client = factory.createLinkedInApiClient(
 		    widget.getProperty("token"), widget.getProperty("secret"));
 
-	    System.out.println("id " + recipientId);
-	    // Fetches person details based on id since Header info present in
-	    // API_STANDARD_PROFILE_REQUEST field is required to send an add
-	    // request
+	    System.out.println("In connect LinkedInId : " + recipientId);
+
+	    /*
+	     * Fetches person details based on id since Header info present in
+	     * API_STANDARD_PROFILE_REQUEST field is required to connect with
+	     * another profile
+	     */
 	    Person person = client
 		    .getProfileById(recipientId, EnumSet.of(ProfileField.ID,
 			    ProfileField.API_STANDARD_PROFILE_REQUEST));
 
+	    /*
+	     * Message is added while sending connect request to specify request
+	     * is sent from Agile
+	     */
 	    String agile = " - Sent from Agile CRM";
 
+	    // send request to connect from client
 	    client.sendInviteToPerson(person, subject, message + agile);
 	    return "Add request sent successfully";
 	}
 	catch (Exception e)
 	{
+	    // Handles exception thrown by LinkedIn and throws proper exceptions
 	    throw handleExceptionInLinkedIn(e);
 	}
     }
@@ -454,174 +910,42 @@ public class LinkedInUtil
     {
 	try
 	{
+	    // Creates a client with token and secret retrieved from widget
 	    final LinkedInApiClient client = factory.createLinkedInApiClient(
 		    widget.getProperty("token"), widget.getProperty("secret"));
 
 	    ArrayList<String> list = new ArrayList<String>();
 	    list.add(recipientId);
 
+	    System.out.println("In message LinkedInId : " + recipientId);
+
+	    /*
+	     * Message is added while sending message to specify it is sent from
+	     * Agile
+	     */
 	    String agile = " - Sent from Agile CRM (www.agilecrm.com)";
+
+	    /*
+	     * check if message length exceeds 7000, if so agile message is
+	     * skipped
+	     */
 	    if (message.length() < (7000 - agile.length()))
 		message = message + agile;
 
-	    // sends message to a person in LinkedIn based on list
+	    // sends message to a person in LinkedIn based on LinkedInId in list
 	    client.sendMessage(list, subject, message);
 	    return "Message sent successfully";
 	}
 	catch (Exception e)
 	{
+	    // Handles exception thrown by LinkedIn and throws proper exceptions
 	    throw handleExceptionInLinkedIn(e);
 	}
     }
 
     /**
-     * Fetches the updates of the person based on his LInkedIn id.
-     * 
-     * @param widget
-     *            {@link Widget} to retrieve token and secret of LinkedIn
-     *            account of agile user
-     * @param linkedInId
-     *            Id of the person whose updates are required
-     * @return {@link List} of {@link SocialUpdateStream}
-     * @throws Exception
-     *             If the personId does not exists or person provides restricted
-     *             access to his profile
-     */
-    public static List<SocialUpdateStream> getNetworkUpdates(Widget widget,
-	    String linkedInId) throws SocketTimeoutException, IOException,
-	    Exception
-    {
-	try
-	{
-	    final NetworkUpdatesApiClient client = factory
-		    .createNetworkUpdatesApiClient(widget.getProperty("token"),
-			    widget.getProperty("secret"));
-
-	    Network network = client.getUserUpdates(linkedInId, EnumSet.of(
-		    NetworkUpdateType.PROFILE_UPDATE,
-		    NetworkUpdateType.CONNECTION_UPDATE,
-		    NetworkUpdateType.SHARED_ITEM,
-		    NetworkUpdateType.EXTENDED_PROFILE_UPDATE));
-
-	    LinkedInApiClient client1 = factory.createLinkedInApiClient(
-		    widget.getProperty("token"), widget.getProperty("secret"));
-
-	    return getListFromNetwork(network, client1);
-	}
-	catch (Exception e)
-	{
-	    throw handleExceptionInLinkedIn(e);
-	}
-
-    }
-
-    /**
-     * Fetches the updates of the person based on his LInkedIn id and specific
-     * number of updates which are limited to start and end point
-     * 
-     * @param widget
-     *            {@link Widget} to retrieve token and secret of LinkedIn
-     *            account of agile user
-     * @param linkedInId
-     *            Id of the person whose updates are required
-     * @param startIndex
-     * @param endIndex
-     * @return {@link List} of {@link SocialUpdateStream}
-     * @throws Exception
-     *             If the personId does not exists or person provides restricted
-     *             access to his profile
-     */
-    public static List<SocialUpdateStream> getNetworkUpdates(Widget widget,
-	    String linkedInId, int startIndex, int endIndex)
-	    throws SocketTimeoutException, IOException, Exception
-    {
-	try
-	{
-	    final NetworkUpdatesApiClient client = factory
-		    .createNetworkUpdatesApiClient(widget.getProperty("token"),
-			    widget.getProperty("secret"));
-
-	    Network network = null;
-
-	    network = client.getUserUpdates(linkedInId, EnumSet.of(
-		    NetworkUpdateType.PROFILE_UPDATE,
-		    NetworkUpdateType.CONNECTION_UPDATE,
-		    NetworkUpdateType.SHARED_ITEM,
-		    NetworkUpdateType.EXTENDED_PROFILE_UPDATE), startIndex,
-		    endIndex);
-
-	    LinkedInApiClient client1 = factory.createLinkedInApiClient(
-		    widget.getProperty("token"), widget.getProperty("secret"));
-
-	    return getListFromNetwork(network, client1);
-	}
-	catch (Exception e)
-	{
-	    throw handleExceptionInLinkedIn(e);
-	}
-
-    }
-
-    /**
-     * Fetches the updates of the person based on his LInkedIn id and specific
-     * number of updates which are limited to start and end point and from
-     * specific start date to end date
-     * 
-     * @param widget
-     *            {@link Widget} to retrieve token and secret of LinkedIn
-     *            account of agile user
-     * @param linkedInId
-     *            Id of the person whose updates are required
-     * @param startIndex
-     * @param endIndex
-     * @param startDate
-     * @param endDate
-     * @return {@link List} of {@link SocialUpdateStream}
-     * @throws Exception
-     *             If the personId does not exists or person provides restricted
-     *             access to his profile
-     */
-    public static List<SocialUpdateStream> getNetworkUpdates(Widget widget,
-	    String linkedInId, int startIndex, int endIndex, String startDate,
-	    String endDate) throws SocketTimeoutException, IOException,
-	    Exception
-    {
-	try
-	{
-	    final NetworkUpdatesApiClient client = factory
-		    .createNetworkUpdatesApiClient(widget.getProperty("token"),
-			    widget.getProperty("secret"));
-
-	    Calendar cal = Calendar.getInstance();
-
-	    cal.setTimeInMillis(Long.parseLong(startDate) * 1000);
-	    Date startDat = cal.getTime();
-
-	    cal.setTimeInMillis(Long.parseLong(endDate) * 1000);
-	    Date endDat = cal.getTime();
-
-	    Network network = client.getUserUpdates(linkedInId, EnumSet.of(
-		    NetworkUpdateType.PROFILE_UPDATE,
-		    NetworkUpdateType.CONNECTION_UPDATE,
-		    NetworkUpdateType.SHARED_ITEM,
-		    NetworkUpdateType.EXTENDED_PROFILE_UPDATE), startIndex,
-		    endIndex, startDat, endDat);
-
-	    LinkedInApiClient client1 = factory.createLinkedInApiClient(
-		    widget.getProperty("token"), widget.getProperty("secret"));
-
-	    return getListFromNetwork(network, client1);
-	}
-	catch (Exception e)
-	{
-	    throw handleExceptionInLinkedIn(e);
-	}
-
-    }
-
-    /**
-     * Connects to linkedIn basedon widget prefs and reshares a post in LinkedIn
-     * based on the given share id of the post.
+     * Connects to linkedIn based on widget preferences and re-shares a post in
+     * LinkedIn based on the given share id of the post.
      * 
      * @param widget
      *            {@link Widget} to retrieve token and secret of LinkedIn
@@ -629,7 +953,7 @@ public class LinkedInUtil
      * @param shareId
      *            Id of the post in LinkedIn
      * @param text
-     *            Comment message while resharing the post
+     *            Comment message while re-sharing the post
      * @return {@link String} with success message
      * @throws Exception
      */
@@ -638,10 +962,15 @@ public class LinkedInUtil
     {
 	try
 	{
+	    // Create network updates client, to re-share the post
 	    final NetworkUpdatesApiClient client = factory
 		    .createNetworkUpdatesApiClient(widget.getProperty("token"),
 			    widget.getProperty("secret"));
 
+	    /*
+	     * comment while re-sharing, we are not taking this parameter from
+	     * user
+	     */
 	    text = "";
 	    client.reShare(shareId, text, VisibilityType.ANYONE);
 
@@ -649,307 +978,26 @@ public class LinkedInUtil
 	}
 	catch (Exception e)
 	{
+	    // Handles exception thrown by LinkedIn and throws proper exceptions
 	    throw handleExceptionInLinkedIn(e);
 	}
     }
 
-    public static String getIdByUrl(Widget widget, String webUrl)
-	    throws Exception
-    {
-
-	try
-	{
-	    final LinkedInApiClient client = factory.createLinkedInApiClient(
-		    widget.getProperty("token"), widget.getProperty("secret"));
-
-	    // Creates a client specifying the fields to be returned
-	    Person person = client.getProfileByUrl(webUrl, ProfileType.PUBLIC,
-		    EnumSet.of(ProfileField.ID));
-
-	    System.out.println(person.getId());
-	    return person.getId();
-	}
-	catch (Exception e)
-	{
-	    throw handleExceptionInLinkedIn(e);
-	}
-
-    }
-
     /**
-     * Used to form a {@link List} of {@link SocialUpdateStream} from
-     * {@link Network} object
-     * 
-     * @param network
-     *            {@link Network}
-     * @param client1
-     *            {@link LinkedInApiClient}
-     * @return {@link List} of {@link SocialUpdateStream}
-     * @throws Exception
-     */
-    private static List<SocialUpdateStream> getListFromNetwork(Network network,
-	    LinkedInApiClient client1) throws SocketTimeoutException,
-	    IOException, Exception
-    {
-	List<SocialUpdateStream> list = new ArrayList<SocialUpdateStream>();
-
-	for (Update update : network.getUpdates().getUpdateList())
-	{
-	    SocialUpdateStream stream = new SocialUpdateStream();
-	    JSONObject json = null;
-
-	    if (update.getUpdateContent().getPerson().getCurrentShare() != null)
-	    {
-		stream.id = update.getUpdateContent().getPerson()
-			.getCurrentShare().getId();
-		stream.type = update.getUpdateType().name();
-		stream.created_time = update.getTimestamp() / 1000;
-		json = new JSONObject().put(
-			"comment",
-			update.getUpdateContent().getPerson().getCurrentShare()
-				.getComment()).put(
-			"current-share",
-			Util.toJSONString(update.getUpdateContent().getPerson()
-				.getCurrentShare()));
-		stream.message = json.toString();
-		list.add(stream);
-	    }
-	    else if (update.getUpdateContent().getPerson().getConnections() != null)
-	    {
-
-		for (Person person : update.getUpdateContent().getPerson()
-			.getConnections().getPersonList())
-		{
-
-		    stream.id = person.getId();
-		    stream.type = update.getUpdateType().name();
-		    stream.created_time = update.getTimestamp() / 1000;
-
-		    try
-		    {
-			Person p = client1
-				.getProfileById(stream.id, EnumSet.of(
-					ProfileField.PUBLIC_PROFILE_URL,
-					ProfileField.LAST_NAME,
-					ProfileField.FIRST_NAME,
-					ProfileField.PICTURE_URL,
-					ProfileField.HEADLINE,
-					ProfileField.LOCATION_NAME,
-					ProfileField.NUM_CONNECTIONS,
-					ProfileField.ID, ProfileField.DISTANCE));
-
-			// Changes http to https to avoid client side warnings
-			// by browser, Changes certificate from m3 to m3-s to
-			// fix ssl broken image link
-			p.setPictureUrl(changeImageUrl(p.getPictureUrl()));
-
-			json = new JSONObject(p);
-		    }
-		    catch (Exception e)
-		    {
-			continue;
-		    }
-		    stream.message = json.toString();
-		    list.add(stream);
-		}
-	    }
-
-	}
-
-	return list;
-    }
-
-    /**
-     * Retrieves connections profiles of the contacts LinkedIn profile
-     * 
-     * This method will not work as of now as LinkedIn does not give other
-     * person connections
+     * Retrieves common connections of a Agile user LinkedIn profile and the
+     * person with given LinkedIn Id (contact LinkedIn Profile)
      * 
      * @param widget
      *            {@link Widget} to retrieve token and secret of LinkedIn
      *            account of agile user
      * @param linkedInId
-     *            Id of the person whose updates are required
-     * @return {@link List} of {@link SocialUpdateStream}
+     *            {@link String} LinkedIn Id of the person whose updates are
+     *            required
+     * @return {@link List} of {@link SocialSearchResult}
+     * @throws SocketTimeoutException
+     * @throws IOException
      * @throws Exception
-     *             If the personId does not exists or person provides restricted
-     *             access to his profile
      */
-    public static List<SocialSearchResult> getConnections(Widget widget,
-	    String linkedInId) throws SocketTimeoutException, IOException,
-	    Exception
-    {
-	try
-	{
-	    final LinkedInApiClient client = factory.createLinkedInApiClient(
-		    widget.getProperty("token"), widget.getProperty("secret"));
-
-	    Connections connections = client.getConnectionsById(linkedInId,
-		    EnumSet.of(ProfileField.PUBLIC_PROFILE_URL,
-			    ProfileField.LAST_NAME, ProfileField.FIRST_NAME,
-			    ProfileField.PICTURE_URL, ProfileField.HEADLINE,
-			    ProfileField.LOCATION_NAME,
-			    ProfileField.NUM_CONNECTIONS, ProfileField.ID,
-			    ProfileField.DISTANCE));
-
-	    List<SocialSearchResult> persons = new ArrayList<SocialSearchResult>();
-
-	    for (Person person : connections.getPersonList())
-	    {
-		SocialSearchResult result = new SocialSearchResult();
-
-		if (person.getId().equalsIgnoreCase("private"))
-		    continue;
-
-		if (person.getFirstName().equalsIgnoreCase("private")
-			|| person.getLastName().equalsIgnoreCase("private"))
-		    continue;
-
-		result.id = person.getId();
-		result.name = person.getFirstName() + " "
-			+ person.getLastName();
-		result.picture = person.getPictureUrl();
-		result.url = person.getPublicProfileUrl();
-		result.summary = person.getHeadline();
-		result.distance = person.getDistance() + "";
-
-		if (person.getDistance() != null && person.getDistance() == 1)
-		    result.is_connected = true;
-
-		// Changes http to https to avoid client side warnings by
-		// browser,
-		// Changes certificate from m3 to m3-s to fix ssl broken image
-		// link
-		if (result.picture != null)
-		    result.picture = changeImageUrl(result.picture);
-
-		// Sets number of connects if provided
-		result.num_connections = (person.getNumConnections() != null) ? person
-			.getNumConnections().toString() : "";
-
-		result.location = (person.getLocation() != null) ? person
-			.getLocation().getName() : "";
-
-		result.distance = (person.getDistance() != null) ? person
-			.getDistance().toString() : "";
-
-		// Add result wrapper object to the list
-		persons.add(result);
-	    }
-
-	    return persons;
-	}
-	catch (Exception e)
-	{
-	    throw handleExceptionInLinkedIn(e);
-	}
-    }
-
-    public static SocialSearchResult getExperience(Widget widget,
-	    String linkedInId) throws SocketTimeoutException, IOException,
-	    Exception
-    {
-	try
-	{
-	    final LinkedInApiClient client = factory.createLinkedInApiClient(
-		    widget.getProperty("token"), widget.getProperty("secret"));
-
-	    Person person = client.getProfileById(linkedInId, EnumSet.of(
-		    ProfileField.POSITIONS_COMPANY,
-		    ProfileField.THREE_CURRENT_POSITIONS,
-		    ProfileField.THREE_PAST_POSITIONS,
-		    ProfileField.POSITIONS_COMPANY_INDUSTRY,
-		    ProfileField.POSITIONS_COMPANY_TICKER));
-
-	    SocialSearchResult experience = new SocialSearchResult();
-	    experience.id = linkedInId;
-
-	    if (person.getPositions() == null
-		    && person.getPositions().getPositionList() == null)
-		return experience;
-
-	    experience = getExperienceInLinkedIn(person, experience, client);
-
-	    return experience;
-	}
-	catch (Exception e)
-	{
-	    throw handleExceptionInLinkedIn(e);
-	}
-
-    }
-
-    public static SocialSearchResult getExperience(Person person,
-	    String linkedInId, LinkedInApiClient client)
-	    throws SocketTimeoutException, IOException, Exception
-    {
-
-	try
-	{
-	    SocialSearchResult experience = new SocialSearchResult();
-	    experience.id = linkedInId;
-
-	    if (person.getPositions() == null
-		    && person.getPositions().getPositionList() == null)
-		return experience;
-
-	    experience = getExperienceInLinkedIn(person, experience, client);
-
-	    return experience;
-	}
-	catch (Exception e)
-	{
-	    throw handleExceptionInLinkedIn(e);
-	}
-
-    }
-
-    private static SocialSearchResult getExperienceInLinkedIn(Person person,
-	    SocialSearchResult experience, LinkedInApiClient client)
-	    throws Exception
-    {
-
-	for (Position position : person.getPositions().getPositionList())
-	{
-	    if (position.getCompany().getId() != null)
-	    {
-		try
-		{
-		    Company company = client.getCompanyById(position
-			    .getCompany().getId(), EnumSet.of(
-			    CompanyField.LOCATIONS_ADDRESS,
-			    CompanyField.LOGO_URL, CompanyField.NAME,
-			    CompanyField.NUM_FOLLOWERS,
-			    CompanyField.BLOG_RSS_URL,
-			    CompanyField.DESCRIPTION, CompanyField.ID,
-			    CompanyField.INDUSTRY, CompanyField.TICKER));
-
-		    if (company.getLogoUrl() != null)
-			company.setLogoUrl(changeImageUrl(company.getLogoUrl()));
-		    position.setCompany(company);
-		}
-		catch (LinkedInApiClientException e)
-		{
-		    System.out.println(e.getMessage());
-		    e.printStackTrace();
-		    // If company's id is some irrelevant and not related to
-		    // company, company details are skipped
-		    if (e.getMessage().contains("Company with ID {"))
-			continue;
-		    else
-			throw new Exception(e.getMessage());
-		}
-	    }
-
-	}
-
-	experience.three_current_positions = person.getPositions()
-		.getPositionList();
-
-	return experience;
-
-    }
-
     public static List<SocialSearchResult> getSharedConnections(Widget widget,
 	    String linkedInId) throws SocketTimeoutException, IOException,
 	    Exception
@@ -1027,40 +1075,151 @@ public class LinkedInUtil
 	}
 	catch (Exception e)
 	{
+	    // Handles exception thrown by LinkedIn and throws proper exceptions
 	    throw handleExceptionInLinkedIn(e);
 	}
     }
 
+    /**
+     * Changes LinkedIn image URL to the basic LinkedIn image URL format
+     * 
+     * <p>
+     * This is done to get rid of broken images bug in LinkedIn
+     * </p>
+     * 
+     * @param url
+     *            {@link String} to be changed
+     * @return {@link String} URL
+     */
     public static String changeImageUrl(String url)
     {
 	if (!StringUtils.isBlank(url) && url.contains("licdn.com"))
 	    url = url.replace(url.substring(0, url.indexOf(".com") + 4),
-		    LINKEDINURLFORMAT);
+		    LINKEDINIMAGEURLFORMAT);
 
 	System.out.println(url);
 	return url;
     }
 
-    private static Exception handleExceptionInLinkedIn(Exception e)
+    /**
+     * LinkedIn exceptions are wrapped in {@link LinkedInApiClientException},
+     * this method extracts it into proper format
+     * 
+     * @param exception
+     *            {@link Exception}
+     * @return {@link Exception} with proper exception extracted
+     */
+    private static Exception handleExceptionInLinkedIn(Exception exception)
     {
 	Exception innerException = null;
 
-	if (e.getMessage().contains(":"))
+	if (exception.getMessage().contains(":"))
 	    try
 	    {
 		innerException = (Exception) Class.forName(
-			e.getMessage()
-				.substring(0, e.getMessage().indexOf(":")))
+			exception.getMessage().substring(0,
+				exception.getMessage().indexOf(":")))
 			.newInstance();
 	    }
 	    catch (Exception e2)
 	    {
-		return e;
+		return exception;
 	    }
 
 	if (innerException == null)
-	    return e;
+	    return exception;
 	return innerException;
+    }
+
+    /**
+     * Retrieves direct connections profiles of the LinkedIn profile based on
+     * LinkedIn Id
+     * 
+     * <p>
+     * Note: This method will not work as of now as LinkedIn does not give other
+     * person connections
+     * </p>
+     * 
+     * @param widget
+     *            {@link Widget} to retrieve token and secret of LinkedIn
+     *            account of agile user
+     * @param linkedInId
+     *            Id of the person whose updates are required
+     * @return {@link List} of {@link SocialUpdateStream}
+     * @throws Exception
+     *             If the personId does not exists or person provides restricted
+     *             access to his profile
+     */
+    public static List<SocialSearchResult> getConnections(Widget widget,
+	    String linkedInId) throws SocketTimeoutException, IOException,
+	    Exception
+    {
+	try
+	{
+	    final LinkedInApiClient client = factory.createLinkedInApiClient(
+		    widget.getProperty("token"), widget.getProperty("secret"));
+
+	    Connections connections = client.getConnectionsById(linkedInId,
+		    EnumSet.of(ProfileField.PUBLIC_PROFILE_URL,
+			    ProfileField.LAST_NAME, ProfileField.FIRST_NAME,
+			    ProfileField.PICTURE_URL, ProfileField.HEADLINE,
+			    ProfileField.LOCATION_NAME,
+			    ProfileField.NUM_CONNECTIONS, ProfileField.ID,
+			    ProfileField.DISTANCE));
+
+	    List<SocialSearchResult> persons = new ArrayList<SocialSearchResult>();
+
+	    for (Person person : connections.getPersonList())
+	    {
+		SocialSearchResult result = new SocialSearchResult();
+
+		if (person.getId().equalsIgnoreCase("private"))
+		    continue;
+
+		if (person.getFirstName().equalsIgnoreCase("private")
+			|| person.getLastName().equalsIgnoreCase("private"))
+		    continue;
+
+		result.id = person.getId();
+		result.name = person.getFirstName() + " "
+			+ person.getLastName();
+		result.picture = person.getPictureUrl();
+		result.url = person.getPublicProfileUrl();
+		result.summary = person.getHeadline();
+		result.distance = person.getDistance() + "";
+
+		if (person.getDistance() != null && person.getDistance() == 1)
+		    result.is_connected = true;
+
+		/*
+		 * Changes http to https to avoid client side warnings by
+		 * browser, Changes certificate from m3 to m3-s to fix SSL
+		 * broken image link
+		 */
+		if (result.picture != null)
+		    result.picture = changeImageUrl(result.picture);
+
+		// Sets number of connects if provided
+		result.num_connections = (person.getNumConnections() != null) ? person
+			.getNumConnections().toString() : "";
+
+		result.location = (person.getLocation() != null) ? person
+			.getLocation().getName() : "";
+
+		result.distance = (person.getDistance() != null) ? person
+			.getDistance().toString() : "";
+
+		// Add result wrapper object to the list
+		persons.add(result);
+	    }
+
+	    return persons;
+	}
+	catch (Exception e)
+	{
+	    // Handles exception thrown by LinkedIn and throws proper exceptions
+	    throw handleExceptionInLinkedIn(e);
+	}
     }
 
 }

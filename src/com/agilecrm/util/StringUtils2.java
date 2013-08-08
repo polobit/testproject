@@ -138,4 +138,27 @@ public class StringUtils2
 	return newString(bytes, "UTF-8");
     }
 
+    /**
+     * This method is used to check for the null or empty parameters in string
+     * array
+     * 
+     * @param params
+     *            {@link String} array of parameters to be checked.
+     * @return {@link Boolean} value false if parameters not null and true if
+     *         even one parameter is null or empty
+     */
+
+    public static boolean isNullOrEmpty(String[] params)
+    {
+
+	// Check for null and empty
+	for (String item : params)
+	{
+
+	    if (item == null || item.equals("null")
+		    || item.trim().length() == 0)
+		return true;
+	}
+	return false;
+    }
 }
