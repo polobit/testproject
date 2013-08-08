@@ -1498,14 +1498,13 @@ $(function()
 
 				// show only seconds if hours and mins are zero
 				if (hours == 0 && minutes == 0)
-					return (seconds < 10 ? "0" + seconds : seconds) + "secs ";
+					return (seconds == 1  ? seconds + "sec" : seconds + "secs");
 
 				// show mins and secs if hours are zero.
 				if (hours == 0)
-					return (minutes < 10 ? "0" + minutes : minutes) + "mins " + (seconds < 10 ? "0" + seconds : seconds) + "secs ";
+					return (minutes == 1 ? minutes + "min " : minutes + "mins ") + (seconds == 1 ? seconds + "sec" : seconds + "secs");
 
-				var result = (hours < 10 ? "0" + hours : hours) + "hrs " + (minutes < 10 ? "0" + minutes : minutes) + "mins " + (seconds < 10 ? "0" + seconds
-						: seconds) + "secs ";
+				var result = (hours == 1 ? hours + "hr " : hours + "hrs ")  + (minutes == 1 ? minutes + "min " : minutes + "mins ") + (seconds == 1 ? seconds + "sec" : seconds + "secs");
 				return result;
 			});
 

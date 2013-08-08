@@ -10,7 +10,7 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.Trigger.Type;
-import com.agilecrm.workflows.util.WorkflowUtil;
+import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 
 /**
  * <code>DealTriggerUtil</code> executes trigger for deals with conditions deal
@@ -63,14 +63,12 @@ public class DealTriggerUtil
 		    String id = OpportunityIds.get(i).toString();
 
 		    // Gets Opportunity based on id
-		    Opportunity opportunityObject = OpportunityUtil
-			    .getOpportunity(Long.parseLong(id));
+		    Opportunity opportunityObject = OpportunityUtil.getOpportunity(Long.parseLong(id));
 
 		    // Executes trigger for corresponding contacts
 		    for (Contact contact : opportunityObject.getContacts())
 		    {
-			executeTriggerForDeals(contact,
-				Trigger.Type.DEAL_IS_DELETED);
+			executeTriggerForDeals(contact, Trigger.Type.DEAL_IS_DELETED);
 		    }
 		}
 	    }
@@ -113,8 +111,7 @@ public class DealTriggerUtil
 	{
 	    for (Trigger trigger : triggersList)
 	    {
-		WorkflowUtil
-			.subscribeDeferred(contactList, trigger.campaign_id);
+		WorkflowSubscribeUtil.subscribeDeferred(contactList, trigger.campaign_id);
 	    }
 	}
 	catch (Exception e)

@@ -6,6 +6,7 @@ import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 
 import com.agilecrm.Globals;
+import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 
 /**
@@ -77,8 +78,7 @@ public class TwitterJob
      * @param campaignId
      *            Campaign Id
      */
-    public TwitterJob(String token, String tokenSecret, String status,
-	    String subscriberId, String campaignId)
+    public TwitterJob(String token, String tokenSecret, String status, String subscriberId, String campaignId)
     {
 	this.token = token;
 	this.token_secret = tokenSecret;
@@ -106,19 +106,15 @@ public class TwitterJob
 	    // twitter.getScreenName());
 
 	    Status status = twitter.updateStatus(tweet);
-	    LogUtil.addLogToSQL(
-		    campaign_id,
-		    subscriber_id,
-		    "Twitter - Successfully updated the status to ["
-			    + status.getText() + "].", "Tweet");
+	    LogUtil.addLogToSQL(campaign_id, subscriber_id, "Twitter - Successfully updated the status to [" + status.getText() + "].",
+		    LogType.TWEET.toString());
 
 	    return true;
 
 	}
 	catch (Exception e)
 	{
-	    LogUtil.addLogToSQL(campaign_id, campaign_id, "Tweeting failed "
-		    + e.getMessage(), "Tweet");
+	    LogUtil.addLogToSQL(campaign_id, campaign_id, "Tweeting failed " + e.getMessage(), LogType.TWEET.toString());
 	    return false;
 	}
     }

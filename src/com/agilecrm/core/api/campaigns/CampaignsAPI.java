@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log;
 import com.campaignio.logger.util.LogUtil;
@@ -60,7 +61,7 @@ public class CampaignsAPI
 	List<Contact> contactList = new ArrayList<Contact>();
 	contactList.add(contact);
 
-	WorkflowUtil.subscribeDeferred(contactList, workflowId);
+	WorkflowSubscribeUtil.subscribeDeferred(contactList, workflowId);
 	// return "true";
     }
 

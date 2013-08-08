@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.util.DBUtil;
 import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
@@ -41,7 +42,7 @@ public class Transfer extends TaskletAdapter
 	try
 	{
 	    // Add contact to given campaign.
-	    WorkflowUtil.subscribeWithSubscriberJSON(subscriberJSON, Long.parseLong(campaignId));
+	    WorkflowSubscribeUtil.subscribeWithSubscriberJSON(subscriberJSON, Long.parseLong(campaignId));
 
 	    // Current campaign
 	    Workflow fromWorkflow = WorkflowUtil.getWorkflow(Long.parseLong(DBUtil.getId(campaignJSON)));

@@ -14,11 +14,8 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
-import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
@@ -161,40 +158,10 @@ public class Workflow extends Cursor
     }
 
     /**
-     * Gets picture of owner who created workflow. Owner picture is retrieved
-     * from user prefs of domain user who created workflow and is used to
-     * display owner picture in deals list.
-     * 
-     * @return picture of owner.
-     * @throws Exception
-     *             when agileuser doesn't exist with respect to owner key.
-     */
-    @XmlElement
-    public String getPic() throws Exception
-    {
-	AgileUser agileuser = null;
-	UserPrefs userprefs = null;
-
-	try
-	{
-	    // Get owner pic through agileuser prefs
-	    agileuser = AgileUser.getCurrentAgileUserFromDomainUser(creator_key.getId());
-	    if (agileuser != null)
-		userprefs = UserPrefsUtil.getUserPrefs(agileuser);
-	    if (userprefs != null)
-		return userprefs.pic;
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-
-	}
-
-	return "";
-    }
-
-    /**
-     * Return subscribers count(active and done) of a workflow.
+     * Returns subscribers count (active and done) of a workflow. When campaign
+     * runs on single or bulk contacts, it means the contacts are active and we
+     * show the count of active subscribers. Similarly, when campaign completed
+     * on same number of contacts, we show the count of done subscribers.
      * 
      * @return String
      */
@@ -202,13 +169,14 @@ public class Workflow extends Cursor
     public String getSubscribersCount()
     {
 	JSONObject subscribersCount = new JSONObject();
-
-	int active = ContactUtil.getSubscribersCount(id.toString(), id.toString() + "-" + Status.ACTIVE);
-
-	int done = ContactUtil.getSubscribersCount(id.toString(), id.toString() + "-" + Status.DONE);
-
 	try
 	{
+	    // Fetches active contacts having "campaignId-ACTIVE"
+	    int active = ContactUtil.getSubscribersCount(id.toString(), id.toString() + "-" + Status.ACTIVE);
+
+	    // Fetches done contacts having "campaignId-DONE"
+	    int done = ContactUtil.getSubscribersCount(id.toString(), id.toString() + "-" + Status.DONE);
+
 	    subscribersCount.put("active", active);
 	    subscribersCount.put("done", done);
 	}

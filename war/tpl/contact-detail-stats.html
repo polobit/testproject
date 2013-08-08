@@ -42,7 +42,7 @@
 
 		<ul style="list-style: none;">
 			<li class="row-fluid">	
-					<div class="span2"><b>URL-TimeSpent</b>
+					<div class="span2"><b>Pages Visted</b>
 						<div class="pull-right">:</div>
 					</div>
 							
@@ -51,7 +51,9 @@
           	          
 					{{#each urls_with_time_spent}}{{url}} - {{convertSecondsToHour time_spent}}<br/> {{/each}}
 					</div>
-				</li>
+				</li>  
+                <br/>
+ 
                 {{#if ref}}
                 <li class="row-fluid">	
 					<div class="span2"><b>Referred</b>

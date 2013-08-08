@@ -817,13 +817,11 @@ $(function () {
 	 **/
 	$("#tl-analytics-popover").live('click',function(e){
 		e.preventDefault();
-		var string = $(this).closest('div.body').html();
-		$("#analytics-in-detail").html("<div'>" + string + "</div>");
 		
-		// Hide plus sign
-		$("#timelineAnalyticsModal").on("show", function(){
-			$('#analytics-in-detail').find('div.right').css('display','none');
-		});
+		var string = $(this).closest('div.body').html();
+		var pageViews = $(string).find('div.ellipsis-multi-line');
+
+		$("#analytics-in-detail").html("<div'>" + $(pageViews).html() + "</div>");
 		
 		$("#timelineAnalyticsModal").modal("show");
 	});

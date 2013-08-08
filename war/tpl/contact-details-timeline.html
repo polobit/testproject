@@ -98,7 +98,7 @@
             <div class="body">
                 <div class="text" style="color: #333333">
                     <div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;">
-                        <div><b>URL-TimeSpent:</b></br> 
+                        <div><b>Pages Visted:</b></br> 
                         {{#stringToJSON this "urls_with_time_spent"}}{{/stringToJSON}}
 					    {{#each urls_with_time_spent}}{{url}} - {{convertSecondsToHour time_spent}}<br />{{/each}}
                         </div>

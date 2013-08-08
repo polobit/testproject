@@ -7,7 +7,7 @@ import java.util.Map;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.workflows.triggers.Trigger;
-import com.agilecrm.workflows.util.WorkflowUtil;
+import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 
 /**
  * <code>ScoreTriggerUtil</code> executes trigger when contact score hits
@@ -29,20 +29,16 @@ public class ScoreTriggerUtil
      * @param updatedContact
      *            Contact object with updated score.
      */
-    public static void checkScoreChange(Contact oldContact,
-	    Contact updatedContact)
+    public static void checkScoreChange(Contact oldContact, Contact updatedContact)
     {
-	System.out.println("Score of updated contact: "
-		+ updatedContact.lead_score + "Score of old: "
-		+ oldContact.lead_score);
+	System.out.println("Score of updated contact: " + updatedContact.lead_score + "Score of old: " + oldContact.lead_score);
 
 	if (updatedContact.lead_score == oldContact.lead_score)
 	{
 	    return;
 	}
 
-	executeTriggerForScore(updatedContact, oldContact.lead_score,
-		updatedContact.lead_score);
+	executeTriggerForScore(updatedContact, oldContact.lead_score, updatedContact.lead_score);
     }
 
     /**
@@ -57,8 +53,7 @@ public class ScoreTriggerUtil
      * @param newScore
      *            Contact score after changes.
      */
-    public static void executeTriggerForScore(Contact contact,
-	    Integer oldScore, Integer newScore)
+    public static void executeTriggerForScore(Contact contact, Integer oldScore, Integer newScore)
     {
 	List<Trigger> triggersList = null;
 
@@ -84,8 +79,7 @@ public class ScoreTriggerUtil
 	{
 	    for (Trigger trigger : triggersList)
 	    {
-		WorkflowUtil
-			.subscribeDeferred(contactList, trigger.campaign_id);
+		WorkflowSubscribeUtil.subscribeDeferred(contactList, trigger.campaign_id);
 	    }
 	}
 	catch (Exception e)
