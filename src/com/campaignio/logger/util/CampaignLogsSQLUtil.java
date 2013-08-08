@@ -1,9 +1,10 @@
-package com.agilecrm.db.util;
+package com.campaignio.logger.util;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
 import com.agilecrm.db.GoogleSQL;
+import com.agilecrm.db.util.SQLUtil;
 
 /**
  * <code>CampaignLogsSQLUtil</code> is the SQL Utility class for campaign logs.

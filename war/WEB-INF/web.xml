@@ -361,11 +361,11 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>StatsServlet</servlet-name>
-		<servlet-class>com.agilecrm.StatsServlet</servlet-class>
+		<servlet-name>AnalyticsServlet</servlet-name>
+		<servlet-class>com.agilecrm.analytics.servlets.AnalyticsServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>StatsServlet</servlet-name>
+		<servlet-name>AnalyticsServlet</servlet-name>
 		<url-pattern>/stats</url-pattern>
 	</servlet-mapping>
 	

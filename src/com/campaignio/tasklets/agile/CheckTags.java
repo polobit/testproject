@@ -8,6 +8,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.util.DBUtil;
 import com.campaignio.tasklets.TaskletAdapter;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
@@ -48,7 +49,7 @@ public class CheckTags extends TaskletAdapter
 	    return;
 
 	// Normalises the given string.
-	String tags = DBUtil.normalizeStringSeparatedByDelimiter(',', tagValue);
+	String tags = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', tagValue);
 
 	String[] tagsArray = tags.split(",");
 

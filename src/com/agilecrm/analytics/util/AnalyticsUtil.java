@@ -1,4 +1,4 @@
-package com.agilecrm.db.util;
+package com.agilecrm.analytics.util;
 
 import java.util.HashMap;
 import java.util.Map;

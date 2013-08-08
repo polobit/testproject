@@ -7,7 +7,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
 
-import com.agilecrm.db.util.CampaignLogsSQLUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log;
 import com.google.appengine.api.NamespaceManager;

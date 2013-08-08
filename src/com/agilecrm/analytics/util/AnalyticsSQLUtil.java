@@ -1,4 +1,4 @@
-package com.agilecrm.db.util;
+package com.agilecrm.analytics.util;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.json.JSONArray;
 
 import com.agilecrm.db.GoogleSQL;
+import com.agilecrm.db.util.SQLUtil;
 import com.campaignio.tasklets.agile.URLVisited;
 import com.google.appengine.api.NamespaceManager;
 
@@ -100,7 +101,6 @@ public class AnalyticsSQLUtil
     public static JSONArray getPageViews(String email)
     {
 	String domain = NamespaceManager.get();
-	domain = "our";
 
 	// Gets sessions based on Email from database
 	String sessions = "(SELECT sid FROM page_views WHERE email =" + SQLUtil.encodeSQLColumnValue(email) + " AND domain = "
