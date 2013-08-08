@@ -71,12 +71,12 @@ public class Widget
     // Mini Logo
     public String mini_logo_url = null;
 
-    public static enum widgetType
+    public static enum WidgetType
     {
 	SOCIAL, SUPPORT, EMAIL, CALL, BILLING
     };
 
-    public widgetType widget_type = null;
+    public WidgetType widget_type = null;
 
     /**
      * Prefs are access token and secret key to connect to linkedin/twitter.
@@ -114,7 +114,7 @@ public class Widget
     }
 
     public Widget(String name, String description, String url, String logo,
-	    String mini_logo, String fav_ico, widgetType type)
+	    String mini_logo, String fav_ico, WidgetType type)
     {
 
 	this.name = name;
