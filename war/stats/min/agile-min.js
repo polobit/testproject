@@ -1,196 +1,4 @@
-/*!AgileCRM*/
-//Enables Dummy Console Logging (IE does not have one)
-function agile_enable_console_logging()
-{
-	// Added debug dummy function
-	var debugging = false; // or true
-	if (typeof console === "undefined" || !debugging)
-	{
-		console = { log : function()
-		{
-		}, error : function()
-		{
-		} };
-	}
-	if (typeof (console.log) === "undefined" || !debugging)
-	{
-		console.log = function()
-		{
-			return 0;
-		};
-	}
-	if (typeof (console.error) === "undefined" || !debugging)
-	{
-		console.error = function()
-		{
-			return 0;
-		};
-	}
-}
-
-// Read Cookie
-function agile_read_cookie(name)
-{
-
-	// Add Widget Id to cookie name to differentiate sites
-	name = agile_id.get() + "-" + name;
-
-	var nameEQ = name + "=";
-	var ca = document.cookie.split(';');
-	for ( var i = 0; i < ca.length; i++)
-	{
-		var c = ca[i];
-		while (c.charAt(0) == ' ')
-			c = c.substring(1, c.length);
-		if (c.indexOf(nameEQ) == 0)
-			return unescape(c.substring(nameEQ.length, c.length));
-	}
-	return null;
-}
-
-// Create Cookie
-function agile_create_cookie(name, value, days)
-{
-
-	// Add Widget Id to cookie name to differentiate sites
-	name = agile_id.get() + "-" + name;
-	if (days)
-	{
-		var date = new Date();
-		date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-		var expires = "; expires=" + date.toGMTString();
-	}
-	else
-		var expires = "";
-	document.cookie = name + "=" + escape(value) + expires + "; path=/";
-
-}
-
-var agile_guid = { init : function()
-{
-	this.cookie_name = 'agile-crm-guid';
-	this.cookie_email = 'agile-email';
-	this.cookie_originalref = 'agile-originalreferrer';
-}, 
-random : function()
-{
-	var S4 = function()
-	{
-		return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-	};
-	return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
-}, 
-get : function()
-{
-	var guid = agile_read_cookie(this.cookie_name);
-	if (!guid)
-		guid = this.generate();
-	return guid;
-}, 
-generate : function()
-{
-	console.log("Generating new guid " + this.cookie_name);
-	guid = this.random();
-	agile_create_cookie(this.cookie_name, guid, 365 * 5);
-
-	// while new Guid is generated original referrer is set
-	this.set_original_referrer();
-	return guid;
-}, 
-reset : function()
-{
-	agile_create_cookie(this.cookie_name, "", -1);
-}, 
-set_email : function(new_email)
-{
-	// retrieve from cookie - set it only if it is different
-	var email = agile_read_cookie(this.cookie_email);
-	if (!email || (email != new_email))
-	{
-		this.email = new_email;
-
-		// Reset Guid and session uid if old email is there
-		if (email)
-		{
-			this.reset();
-			agile_session.reset();
-		}
-		agile_create_cookie(this.cookie_email, this.email, 365 * 5);
-	}
-}, 
-get_email : function()
-{
-	// If email present in the session
-	if (this.email)
-		return this.email;
-
-	// Read from cookie
-	var email = agile_read_cookie(this.cookie_email);
-	return email;
-}, 
-set_original_referrer : function()
-{
-	// Capturing original referrer
-	var original_referrer = document.referrer;
-
-	// Writing original referrer to cookie
-	agile_create_cookie(this.cookie_originalref, original_referrer, 365 * 5);
-}, };
-
-agile_guid.init();
-
-var agile_session = { init : function()
-{
-	this.cookie_name = 'agile-crm-session_id';
-	this.cookie_start_time = 'agile-crm-session_start_time';
-	this.cookie_duration_secs = 60 * 1000;
-	this.new_session = false;
-
-}, 
-random : function()
-{
-	var S4 = function()
-	{
-		return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-	};
-	return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
-}, 
-get : function()
-{
-	var session_id = agile_read_cookie(this.cookie_name);
-	if (!session_id)
-		return this.generate();
-
-	// Check if it is valid for 1 hr
-	var prev_session_start_time = agile_read_cookie(this.cookie_start_time);
-	var current_time_secs = new Date().getUTCSeconds();
-	if ((current_time_secs < prev_session_start_time) || (current_time_secs > (prev_session_start_time + this.cookie_duration_secs)))
-	{
-		console.log("session expired");
-		return this.generate();
-	}
-
-	return session_id;
-}, 
-generate : function()
-{
-	// Create New Session - store start date and time in cookie
-	console.log("Creating new session");
-	var session_id = this.random();
-	agile_create_cookie(this.cookie_name, session_id, 0);
-	agile_create_cookie(this.cookie_start_time, new Date().getUTCSeconds(), 0);
-	this.new_session = true;
-	return session_id;
-}, 
-reset : function()
-{
-	agile_create_cookie(this.cookie_name, "", -1);
-	agile_create_cookie(this.cookie_start_time, "", -1);
-} };
-
-agile_session.init();
-
-function agile_getJSONP(URL, success)
+function agile_json(URL, success)
 {
 	var ud = 'json' + (Math.random() * 100).toString().replace(/\./g, '');
 	window[ud] = function(o)
@@ -204,6 +12,12 @@ function agile_getJSONP(URL, success)
 		s.src = URL.replace('callback=?', 'callback=' + ud);
 		return s;
 	})());
+}
+
+function agile_callback(callback, data){
+	if (callback && typeof(callback) === "function"){
+		callback(data);
+	}
 }
 
 function agile_setAccount(id, namespace)
@@ -246,7 +60,7 @@ function agile_createContact(data, callback)
 	}
 
 	var original_ref = "original_ref";
-	properties.push(agile_propertyJSON(original_ref, agile_read_cookie(agile_guid.cookie_originalref)));
+	properties.push(agile_propertyJSON(original_ref, agile_read_cookie(agile_guid.cookie_original_ref)));
 
 	var model = {};
 	model.properties = properties;
@@ -267,26 +81,14 @@ function agile_createContact(data, callback)
 	// Get
 	var agile_url = agile_id.getURL() + "/contacts?callback=?&id=" + agile_id.get() + "&contact=" + encodeURIComponent(JSON.stringify(model));
 
-	agile_getJSONP(agile_url, function(data)
-	{
-		if (callback && typeof (callback) === "function")
-		{
-			callback(data);
-		}
-	});
+	agile_json(agile_url, agile_callback(callback, data));
 }
 
 function agile_deleteContact(email, callback)
 {
 	var agile_url = agile_id.getURL() + "/contact/delete?callback=?&id=" + agile_id.get() + "&email=" + encodeURIComponent(email);
 
-	agile_getJSONP(agile_url, function(data)
-	{
-		if (callback && typeof (callback) === "function")
-		{
-			callback(data);
-		}
-	});
+	agile_json(agile_url, agile_callback(callback, data));
 }
 
 function agile_getContact(email, callback)
@@ -298,7 +100,7 @@ function agile_getContact(email, callback)
 	// Get
 	var agile_url = agile_id.getURL() + "/contact/email?callback=?&id=" + agile_id.get() + "&" + params;
 
-	agile_getJSONP(agile_url, function(data)
+	agile_json(agile_url, function(data)
 	{
 		if (callback && typeof (callback) === "function")
 		{
@@ -319,13 +121,7 @@ function agile_addNote(email, data, callback)
 	var agile_url = agile_id.getURL() + "/note?callback=?&id=" + agile_id.get() + "&" + params;
 	console.log(agile_url);
 
-	agile_getJSONP(agile_url, function(data)
-	{
-		if (callback && typeof (callback) === "function")
-		{
-			callback(data);
-		}
-	});
+	agile_json(agile_url, agile_callback(callback, data));
 }
 
 function agile_addTask(email, data, callback)
@@ -339,13 +135,7 @@ function agile_addTask(email, data, callback)
 	// Get
 	var agile_url = agile_id.getURL() + "/task?callback=?&id=" + agile_id.get() + "&" + params;
 
-	agile_getJSONP(agile_url, function(data)
-	{
-		if (callback && typeof (callback) === "function")
-		{
-			callback(data);
-		}
-	});
+	agile_json(agile_url, agile_callback(callback, data));
 }
 
 function agile_addDeal(email, data, callback)
@@ -360,13 +150,7 @@ function agile_addDeal(email, data, callback)
 	// Get
 	var agile_url = agile_id.getURL() + "/opportunity?callback=?&id=" + agile_id.get() + "&" + params;
 
-	agile_getJSONP(agile_url, function(data)
-	{
-		if (callback && typeof (callback) === "function")
-		{
-			callback(data);
-		}
-	});
+	agile_json(agile_url, agile_callback(callback, data));
 }
 
 function agile_getTagsData(tags, email)
@@ -400,13 +184,7 @@ function agile_addTag(tags, callback, email)
 	// Post
 	var agile_url = agile_id.getURL() + "/contacts/add-tags?callback=?&id=" + agile_id.get() + "&" + params;
 
-	agile_getJSONP(agile_url, function(data)
-	{
-		if (callback && typeof (callback) === "function")
-		{
-			callback(data);
-		}
-	});
+	agile_json(agile_url, agile_callback(callback));
 }
 
 function agile_removeTag(tags, callback, email)
@@ -418,13 +196,7 @@ function agile_removeTag(tags, callback, email)
 	// Post
 	var agile_url = agile_id.getURL() + "/contacts/remove-tags?callback=?&id=" + agile_id.get() + "&" + params;
 
-	agile_getJSONP(agile_url, function(data)
-	{
-		if (callback && typeof (callback) === "function")
-		{
-			callback(data);
-		}
-	});
+	agile_json(agile_url, agile_callback(callback, data));
 }
 
 function agile_addScore(score, callback, email)
@@ -445,14 +217,7 @@ function agile_addScore(score, callback, email)
 	// Post
 	var agile_url = agile_id.getURL() + "/contacts/add-score?callback=?&id=" + agile_id.get() + "&score=" + score + "&email=" + encodeURIComponent(email);
 
-	agile_getJSONP(agile_url, function(data)
-	{
-		if (callback && typeof (callback) === "function")
-		{
-			callback(data);
-		}
-	});
-
+	agile_json(agile_url, agile_callback(callback));
 }
 
 function agile_subtractScore(score, callback, email)
@@ -471,13 +236,7 @@ function agile_subtractScore(score, callback, email)
 	// Post
 	var agile_url = agile_id.getURL() + "/contacts/subtract-score?callback=?&id=" + agile_id.get() + "&score=" + score + "&email=" + encodeURIComponent(email);
 
-	agile_getJSONP(agile_url, function(data)
-	{
-		if (callback && typeof (callback) === "function")
-		{
-			callback(data);
-		}
-	});
+	agile_json(agile_url, agile_callback(callback, data));
 }
 
 function agile_addProperty(name, id, callback, email)
@@ -499,13 +258,7 @@ function agile_addProperty(name, id, callback, email)
 
 	var agile_url = agile_id.getURL() + "/contacts/add-property?callback=?&id=" + agile_id.get() + "&" + params;
 
-	agile_getJSONP(agile_url, function(data)
-	{
-		if (callback && typeof (callback) === "function")
-		{
-			callback(data);
-		}
-	});
+	agile_json(agile_url, agile_callback(callback, data));
 }
 
 String.prototype.format = function()
@@ -559,13 +312,7 @@ function agile_trackPageview(callback)
 
 	var agile_url = "https://" + agile_id.getNamespace() + ".agilecrm.com/stats?callback=?&" + params;
 
-	agile_getJSONP(agile_url, function(data)
-	{
-		if (callback && typeof (callback) === "function")
-		{
-			callback(data);
-		}
-	});
+	agile_json(agile_url, agile_callback(callback));
 	// agile_ajax.send(url, ajax_data);
 }
 
@@ -638,40 +385,186 @@ add_note : function(email, data, callback)
 add_property : function(name, id, callback, email)
 {
 	agile_addProperty(name, id, callback, email);
+} };var agile_guid = { init : function()
+{
+	this.cookie_name = 'agile-crm-guid';
+	this.cookie_email = 'agile-email';
+	this.cookie_original_ref = 'agile-original-referrer';
+}, 
+random : function()
+{
+	var S4 = function()
+	{
+		return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+	};
+	return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+}, 
+get : function()
+{
+	var guid = agile_read_cookie(this.cookie_name);
+	if (!guid)
+		guid = this.generate();
+	return guid;
+}, 
+generate : function()
+{
+	console.log("Generating new guid " + this.cookie_name);
+	guid = this.random();
+	agile_create_cookie(this.cookie_name, guid, 365 * 5);
+
+	// first referrer set
+	this.set_original_referrer();
+	return guid;
+}, 
+reset : function()
+{
+	agile_create_cookie(this.cookie_name, "", -1);
+}, 
+set_email : function(new_email)
+{
+	// retrieve from cookie - set it only if it is different
+	var email = agile_read_cookie(this.cookie_email);
+	if (!email || (email != new_email))
+	{
+		this.email = new_email;
+
+		// Reset Guid and session uid if old email is there
+		if (email)
+		{
+			this.reset();
+			agile_session.reset();
+		}
+		agile_create_cookie(this.cookie_email, this.email, 365 * 5);
+	}
+}, 
+get_email : function()
+{
+	// If email present in the session
+	if (this.email)
+		return this.email;
+
+	// Read from cookie
+	var email = agile_read_cookie(this.cookie_email);
+	return email;
+}, 
+set_original_referrer : function()
+{
+	// Capture first referrer
+	var original_referrer = document.referrer;
+
+	// Write to cookie
+	agile_create_cookie(this.cookie_original_ref, original_referrer, 365 * 5);
 } };
 
-function _agile_execute()
+agile_guid.init();var agile_session = { init : function()
 {
-	// Enable the console(IE not support console by default)
-	agile_enable_console_logging();
-	// console.log("Initing Agile-crm " + _agile_methods);
-	if (!_agile_methods)
-		return;
-	// Iterate
-	for (i = 0; i < _agile_methods.length; i++)
+	this.cookie_name = 'agile-crm-session_id';
+	this.cookie_start_time = 'agile-crm-session_start_time';
+	this.cookie_duration_secs = 60 * 1000;
+	this.new_session = false;
+
+}, 
+random : function()
+{
+	var S4 = function()
 	{
-		var args = new Array();
-		for ( var j = 1; j < _agile_methods[i].length; j++)
-			args.push(_agile_methods[i][j]);
+		return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+	};
+	return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+}, 
+get : function()
+{
+	var session_id = agile_read_cookie(this.cookie_name);
+	if (!session_id)
+		return this.generate();
 
-		console.log("Executing " + _agile_methods[i][0] + " with " + args);
-		window["agile" + _agile_methods[i][0]].apply(this, args);
+	// Check if it is valid for 1 hr
+	var prev_session_start_time = agile_read_cookie(this.cookie_start_time);
+	var current_time_secs = new Date().getUTCSeconds();
+	if ((current_time_secs < prev_session_start_time) || (current_time_secs > (prev_session_start_time + this.cookie_duration_secs)))
+	{
+		console.log("session expired");
+		return this.generate();
 	}
+
+	return session_id;
+}, 
+generate : function()
+{
+	// Create New Session - store start date and time in cookie
+	console.log("Creating new session");
+	var session_id = this.random();
+	agile_create_cookie(this.cookie_name, session_id, 0);
+	agile_create_cookie(this.cookie_start_time, new Date().getUTCSeconds(), 0);
+	this.new_session = true;
+	return session_id;
+}, 
+reset : function()
+{
+	agile_create_cookie(this.cookie_name, "", -1);
+	agile_create_cookie(this.cookie_start_time, "", -1);
+} };
+
+agile_session.init();// Read Cookie
+function agile_read_cookie(name)
+{
+
+	// Add Widget Id to cookie name to differentiate sites
+	name = agile_id.get() + "-" + name;
+
+	var nameEQ = name + "=";
+	var ca = document.cookie.split(';');
+	for ( var i = 0; i < ca.length; i++)
+	{
+		var c = ca[i];
+		while (c.charAt(0) == ' ')
+			c = c.substring(1, c.length);
+		if (c.indexOf(nameEQ) == 0)
+			return unescape(c.substring(nameEQ.length, c.length));
+	}
+	return null;
 }
 
-var _agile_methods;
-
-// Init Function
-(function()
-{
-	_agile_execute();
-})();
-
-try
-{
-	window.onload = $agile
-}
-catch (err)
+// Create Cookie
+function agile_create_cookie(name, value, days)
 {
 
+	// Add Widget Id to cookie name to differentiate sites
+	name = agile_id.get() + "-" + name;
+	if (days)
+	{
+		var date = new Date();
+		date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+		var expires = "; expires=" + date.toGMTString();
+	}
+	else
+		var expires = "";
+	document.cookie = name + "=" + escape(value) + expires + "; path=/";
+
+}function agile_enable_console_logging()
+{
+	// Added debug dummy function
+	var debugging = false; // or true
+	if (typeof console === "undefined" || !debugging)
+	{
+		console = { log : function()
+		{
+		}, error : function()
+		{
+		} };
+	}
+	if (typeof (console.log) === "undefined" || !debugging)
+	{
+		console.log = function()
+		{
+			return 0;
+		};
+	}
+	if (typeof (console.error) === "undefined" || !debugging)
+	{
+		console.error = function()
+		{
+			return 0;
+		};
+	}
 }
