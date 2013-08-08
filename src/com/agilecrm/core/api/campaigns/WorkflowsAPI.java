@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.util.WorkflowDeleteUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 
 /**
@@ -49,13 +50,11 @@ public class WorkflowsAPI
      */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Workflow> getWorkflows(@QueryParam("page_size") String count,
-	    @QueryParam("cursor") String cursor)
+    public List<Workflow> getWorkflows(@QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
     {
 	if (count != null)
 	{
-	    return WorkflowUtil
-		    .getAllWorkflows(Integer.parseInt(count), cursor);
+	    return WorkflowUtil.getAllWorkflows(Integer.parseInt(count), cursor);
 	}
 	return WorkflowUtil.getAllWorkflows();
     }
@@ -79,12 +78,11 @@ public class WorkflowsAPI
     @Path("/my/workflows")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Workflow> getNotesRelatedToCurrentUser(
-	    @QueryParam("page_size") String count)
+    public List<Workflow> getNotesRelatedToCurrentUser(@QueryParam("page_size") String count)
     {
 	if (count != null)
 	    return WorkflowUtil.getWorkflowsRelatedToCurrentUser(count);
-	
+
 	return WorkflowUtil.getWorkflowsRelatedToCurrentUser("10");
     }
 
@@ -132,13 +130,12 @@ public class WorkflowsAPI
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteWorkflows(@FormParam("ids") String model_ids)
-	    throws JSONException
+    public void deleteWorkflows(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray workflowsJSONArray = new JSONArray(model_ids);
 
 	// Deletes CampaignStats
-	WorkflowUtil.deleteRelatedEntities(workflowsJSONArray);
+	WorkflowDeleteUtil.deleteRelatedEntities(workflowsJSONArray);
 	Workflow.dao.deleteBulkByIds(workflowsJSONArray);
 
     }

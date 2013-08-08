@@ -25,7 +25,7 @@ public class GoogleSQL
      * 
      * @return connection object instance.
      */
-    public static Connection GetConnection()
+    public static Connection getGoogleSQLConnection()
     {
 	Connection conn = null;
 
@@ -61,7 +61,7 @@ public class GoogleSQL
 	try
 	{
 	    // get the connection object
-	    conn = GetConnection();
+	    conn = getGoogleSQLConnection();
 	    if (conn == null)
 		return;
 
@@ -109,7 +109,7 @@ public class GoogleSQL
 	try
 	{
 	    // get the connection object
-	    Connection conn = GetConnection();
+	    Connection conn = getGoogleSQLConnection();
 	    if (conn == null)
 		return null;
 
