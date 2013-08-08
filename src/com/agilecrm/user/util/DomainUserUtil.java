@@ -63,7 +63,7 @@ public class DomainUserUtil
 	    // If account is registered with open id new password is not
 	    // generated.
 	    // if (domainUser.password.equals(DomainUser.MASKED_PASSWORD))
-	    if (StringUtils.isBlank(domainUser.getHashedString()) || domainUser.getHashedString() == null)
+	    if (StringUtils.isEmpty(domainUser.getHashedString()))
 	    {
 		throw new Exception();
 	    }
