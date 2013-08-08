@@ -31,7 +31,7 @@ $(function()
 	 * fetch details
 	 */
 	var plugin_prefs = plugin.prefs;
-	
+
 	console.log("Plugin prefs in Twilio: " + plugin_prefs);
 
 	// If not found - considering first time usage, setupTwilioOAuth called
@@ -80,6 +80,9 @@ $(function()
 		{
 			console.log("verified_data " + verified_data);
 			$('#Twilio').html(getTemplate('twilio-verify', verified_data));
+		}).error(function(data)
+		{
+			$('#Twilio').html('<div class="widget_content">' + data.responseText + '</div>');
 		});
 
 	});
@@ -145,7 +148,11 @@ function generateTwilioToken(plugin_id, prefs, from)
 				setUpTwilio(token, plugin_id, from);
 				showTwilioDetails(token, plugin_id);
 				return;
+			}).error(function(data)
+					{
+				$('#Twilio').html('<div class="widget_content">' + data.responseText + '</div>');
 			});
+
 		}
 	}
 }
@@ -413,7 +420,8 @@ function setUpTwilio(token, plugin_id, from)
 			 * Called for each available client when this device becomes ready
 			 * and every time another client's availability changes.
 			 */
-			console.log(presenceEvent.from); // => name of client whose availablity changed
+			console.log(presenceEvent.from); // => name of client whose
+												// availablity changed
 			console.log(presenceEvent.available); // => true or false
 		});
 

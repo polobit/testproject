@@ -43,8 +43,7 @@ public class OAuth2Servlet extends HttpServlet
 	System.out.println("OAuth2Servlet code " + code);
 
 	/*
-	 * If state is not null, the response is redirected to the path
-	 * specified in state along with code as query parameter
+	 * If state is not null, the response is redirected to the path specified in state along with code as query parameter
 	 */
 	if (state != null)
 	    response.sendRedirect(state + "?code=" + code);

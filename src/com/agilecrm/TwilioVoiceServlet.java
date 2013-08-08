@@ -2,12 +2,11 @@ package com.agilecrm;
 
 import java.io.IOException;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.agilecrm.session.SessionManager;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.twilio.sdk.verbs.Dial;
@@ -42,38 +41,8 @@ public class TwilioVoiceServlet extends HttpServlet
 
 	if (record != null)
 	{
-	    // number to which call is made
-	    String phoneNumber = request.getParameter("PhoneNumber");
-	    System.out.println("Twilio phone number : " + phoneNumber);
-
-	    /* Caller Id from which call is initiated */
-	    String callerId = request.getParameter("from");
-
-	    // build a TWIML response, to initiate a call from Twilio
-	    TwiMLResponse twiml = new TwiMLResponse();
-	    Dial dial = new Dial();
-
-	    /*
-	     * Append to and from numbers to the Dial verb and append dial to
-	     * TWIML
-	     */
-	    try
-	    {
-		dial.setCallerId(callerId);
-		dial.set("record", record);
-		dial.append(new Number(phoneNumber));
-		twiml.append(dial);
-	    }
-	    catch (TwiMLException e)
-	    {
-		e.printStackTrace();
-	    }
-
-	    System.out.println("Twilio TWIML response: " + twiml.toXML());
-
-	    // TWIML response is converted to XML and returned
-	    response.setContentType("application/xml");
-	    response.getWriter().print(twiml.toXML());
+	    // returns TWIML response required to make call
+	    sendTWIMLResponseToTwilio(request, response, record);
 	    return;
 	}
 
@@ -87,32 +56,102 @@ public class TwilioVoiceServlet extends HttpServlet
 
 	if (verificationStatus != null)
 	{
-	    /*
-	     * Session is required to get the current Agile user and save
-	     * verification status in the widget
-	     */
-	    try
-	    {
-		SessionManager.set((HttpServletRequest) request);
-		System.out.println("Session set in Twilio");
-	    }
-	    catch (ServletException e)
-	    {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
+	    // retrieves verification status and saves it in widget
+	    verifyNumberInTwilio(request, response, verificationStatus);
+	    return;
+	}
 
-	    Widget widget = WidgetUtil.getWidget("Twilio");
+    }
+
+    /**
+     * Retrieves the parameters required for call and builds a TWIML response
+     * which is converted into XML and returned
+     * 
+     * @param request
+     *            {@link HttpServletRequest}
+     * @param response
+     *            {@link HttpServletResponse}
+     * @param record
+     *            {@link String} contains information about the call whether it
+     *            is to be recorded
+     * @throws IOException
+     */
+    public static void sendTWIMLResponseToTwilio(HttpServletRequest request,
+	    HttpServletResponse response, String record) throws IOException
+    {
+	// number to which call is made
+	String phoneNumber = request.getParameter("PhoneNumber");
+	System.out.println("Twilio phone number : " + phoneNumber);
+
+	/* Caller Id from which call is initiated */
+	String callerId = request.getParameter("from");
+
+	// build a TWIML response, to initiate a call from Twilio
+	TwiMLResponse twiml = new TwiMLResponse();
+	Dial dial = new Dial();
+
+	/*
+	 * Append to and from numbers to the Dial verb and append dial to TWIML
+	 */
+	try
+	{
+	    dial.setCallerId(callerId);
+	    dial.set("record", record);
+	    dial.append(new Number(phoneNumber));
+	    twiml.append(dial);
+	}
+	catch (TwiMLException e)
+	{
+	    e.printStackTrace();
+	}
+
+	System.out.println("Twilio TWIML response: " + twiml.toXML());
+
+	// TWIML response is converted to XML and returned
+	response.setContentType("application/xml");
+	response.getWriter().print(twiml.toXML());
+    }
+
+    /**
+     * Retrieves the verification status returned from Twilio and saves it in
+     * widget
+     * 
+     * @param request
+     *            {@link HttpServletRequest}
+     * @param response
+     *            {@link HttpServletResponse}
+     * @param verificationStatus
+     *            {@link String} contains information about the number whether
+     *            it is verified
+     */
+    public static void verifyNumberInTwilio(HttpServletRequest request,
+	    HttpServletResponse response, String verificationStatus)
+    {
+	// Retrieve domain user id from request
+	String userId = request.getParameter("user_id");
+	System.out.println("User Id in Twilio verifying number : " + userId);
+
+	if (userId != null)
+	{
+	    // Get current agile user from domain user id
+	    AgileUser agileUser = AgileUser
+		    .getCurrentAgileUserFromDomainUser(Long.parseLong(userId));
+
+	    // retrieve widget based on agile user id
+	    Widget widget = WidgetUtil.getWidget("Twilio", agileUser.id);
 
 	    // if widget not found for Twilio, return
 	    if (widget == null)
 		return;
 
+	    System.out.println("Widget retrieved: " + widget.toString());
+
 	    // save verification status in widget
 	    widget.addProperty("verificaton_status", verificationStatus);
 	    widget.save();
-	    return;
+	    System.out.println("widget saved");
 	}
 
+	return;
     }
 }
