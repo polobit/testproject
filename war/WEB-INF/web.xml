@@ -12,7 +12,7 @@
 
 	<servlet>
 		<servlet-name>Scribe</servlet-name>
-		<servlet-class>com.agilecrm.ScribeServlet</servlet-class>
+		<servlet-class>com.agilecrm.scribe.ScribeServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Scribe</servlet-name>
@@ -206,7 +206,7 @@
 
 	<servlet>
 		<servlet-name>TwilioVoiceServlet</servlet-name>
-		<servlet-class>com.agilecrm.TwilioVoiceServlet</servlet-class>
+		<servlet-class>com.agilecrm.twilio.TwilioVoiceServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>TwilioVoiceServlet</servlet-name>
