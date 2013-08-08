@@ -60,13 +60,11 @@ public class DomainUserUtil
 
 	if (email != null && domainUser != null)
 	{
-	    // If account is registered with open id new password is not
-	    // generated.
-	    // if (domainUser.password.equals(DomainUser.MASKED_PASSWORD))
-	    if (StringUtils.isEmpty(domainUser.getHashedString()))
-	    {
-		throw new Exception();
-	    }
+	    /*
+	     * Commented to send forgot password mail also to OpenId users
+	     * if(StringUtils.isEmpty(domainUser.getHashedString())) { throw new
+	     * Exception(); }
+	     */
 	    String oldNamespace = NamespaceManager.get();
 	    NamespaceManager.set("");
 
@@ -83,7 +81,6 @@ public class DomainUserUtil
 	    }
 	    catch (Exception e)
 	    {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	    }
 	    finally
