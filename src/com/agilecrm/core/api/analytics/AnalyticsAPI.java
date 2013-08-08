@@ -1,4 +1,4 @@
-package com.agilecrm.core.api;
+package com.agilecrm.core.api.analytics;
 
 import java.util.List;
 
@@ -12,21 +12,21 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
 
-import com.agilecrm.db.Analytics;
-import com.agilecrm.db.util.AnalyticsSQLUtil;
-import com.agilecrm.db.util.AnalyticsUtil;
+import com.agilecrm.analytics.Analytics;
+import com.agilecrm.analytics.util.AnalyticsSQLUtil;
+import com.agilecrm.analytics.util.AnalyticsUtil;
 import com.google.appengine.api.NamespaceManager;
 
 /**
- * <code>StatsAPI</code> is the API class that handles web-stats requests. It
- * fetches the page-views based on email. It also verifies for stats count based
- * on domain to know whether that domain uses the analytics or not.
+ * <code>AnalyticsAPI</code> is the API class that handles web-stats requests.
+ * It fetches the page-views based on email. It also verifies for stats count
+ * based on domain to know whether that domain uses the analytics or not.
  * 
  * @author Naresh
  * 
  */
 @Path("/api/web-stats")
-public class StatsAPI
+public class AnalyticsAPI
 {
     /**
      * Returns pageViews statistics
@@ -37,7 +37,7 @@ public class StatsAPI
      */
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
-    public List<Analytics> getStatsGroupedBySessions(@QueryParam("e") String searchEmail)
+    public List<Analytics> getAnalyticsGroupedBySessions(@QueryParam("e") String searchEmail)
     {
 	JSONArray pageViewsList = AnalyticsSQLUtil.getPageViews(searchEmail);
 

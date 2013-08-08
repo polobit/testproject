@@ -5,8 +5,8 @@ import java.util.Map;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.agilecrm.ScribeServlet;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.scribe.ScribeServlet;
 import com.agilecrm.user.ProfileStatus.Field;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;

@@ -12,7 +12,7 @@
 
 	<servlet>
 		<servlet-name>Scribe</servlet-name>
-		<servlet-class>com.agilecrm.ScribeServlet</servlet-class>
+		<servlet-class>com.agilecrm.scribe.ScribeServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Scribe</servlet-name>
@@ -206,7 +206,7 @@
 
 	<servlet>
 		<servlet-name>TwilioVoiceServlet</servlet-name>
-		<servlet-class>com.agilecrm.TwilioVoiceServlet</servlet-class>
+		<servlet-class>com.agilecrm.twilio.TwilioVoiceServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>TwilioVoiceServlet</servlet-name>
@@ -362,11 +362,11 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>StatsServlet</servlet-name>
-		<servlet-class>com.agilecrm.StatsServlet</servlet-class>
+		<servlet-name>AnalyticsServlet</servlet-name>
+		<servlet-class>com.agilecrm.analytics.servlets.AnalyticsServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>StatsServlet</servlet-name>
+		<servlet-name>AnalyticsServlet</servlet-name>
 		<url-pattern>/stats</url-pattern>
 	</servlet-mapping>
 	

@@ -18,23 +18,25 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.agilecrm.db.util.CampaignStatsSQLUtil;
-import com.campaignio.reports.CampaignStatsReportsUtil;
+import com.campaignio.reports.CampaignReportsSQLUtil;
+import com.campaignio.reports.CampaignReportsUtil;
 import com.campaignio.reports.DateUtil;
 
 /**
- * <code>CampaignStatsAPI</code> includes REST calls to interact with
- * {@link CampaignStats} class inorder to fetch CampaignStats with respect to
- * campaignId.
+ * <code>CampaignReportsAPI</code> includes REST calls to interact with SQL to
+ * fetch data required for campaign reports. It handles to fetches data for each
+ * campaign to show campaign-reports. It also handles to fetch data inorder to
+ * compare all available campaigns.
  * 
  * @author Naresh
  * 
  */
 @Path("/api/campaign-stats")
-public class CampaignStatsAPI
+public class CampaignReportsAPI
 {
     /**
-     * Returns all available campaign-stats for generating bar graph.
+     * Returns all available campaign-stats for generating bar graph. It fetches
+     * the data of all campaigns for comparison.
      * 
      * @return String.
      */
@@ -42,15 +44,15 @@ public class CampaignStatsAPI
     @Path("/stats")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public String getCampaignStatsForGraph() throws Exception
+    public String getAllCampaignStats() throws Exception
     {
 	String type[] = { "EMAIL_SENT", "EMAIL_OPENED", "EMAIL_CLICKED", "total" };
 
-	LinkedHashMap<String, Integer> emailStats = CampaignStatsReportsUtil.getDefaultCountTable(type);
+	LinkedHashMap<String, Integer> emailStats = CampaignReportsUtil.getDefaultCountTable(type);
 
 	LinkedHashMap<String, LinkedHashMap> campaignStats = new LinkedHashMap<String, LinkedHashMap>();
 
-	JSONArray campaignStatsArray = CampaignStatsSQLUtil.getAllEmailCampaignStats();
+	JSONArray campaignStatsArray = CampaignReportsSQLUtil.getAllEmailCampaignStats();
 
 	if (campaignStatsArray == null)
 	    return null;
@@ -78,7 +80,7 @@ public class CampaignStatsAPI
 	    else
 	    {
 		campaignStats.put(emailStatsJSON.getString("campaign_name"), emailStats);
-		emailStats = CampaignStatsReportsUtil.getDefaultCountTable(type);
+		emailStats = CampaignReportsUtil.getDefaultCountTable(type);
 	    }
 	}
 
@@ -107,7 +109,7 @@ public class CampaignStatsAPI
     @Path("/email/reports/{id}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public String getEmailReports(@PathParam("id") String campaignId, @QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime,
+    public String getEachCampaignStats(@PathParam("id") String campaignId, @QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime,
 	    @QueryParam("type") String type, @QueryParam("time_zone") String timeZone)
     {
 	String reportsString = "";
@@ -134,9 +136,7 @@ public class CampaignStatsAPI
 
 	    String endDate = DateUtil.getMySQLNowDateFormat(Long.parseLong(endTime), timeZone);
 
-	    campaignId = "601001";
-
-	    JSONArray emailLogs = CampaignStatsSQLUtil.getEmailCampaignStats(campaignId, startDate, endDate, timeZone, type);
+	    JSONArray emailLogs = CampaignReportsSQLUtil.getEachEmailCampaignStats(campaignId, startDate, endDate, timeZone, type);
 
 	    if (emailLogs == null)
 		return null;
@@ -146,11 +146,11 @@ public class CampaignStatsAPI
 	    String[] emailType = { "EMAIL_SENT", "EMAIL_OPENED", "EMAIL_CLICKED", "total" };
 
 	    // Populate graph's x-axis with given date-range.
-	    LinkedHashMap<String, LinkedHashMap<String, Integer>> dateHashtable = CampaignStatsReportsUtil.getDefaultDateTable(startTime, endTime, type,
-		    timeZone, emailType);
+	    LinkedHashMap<String, LinkedHashMap<String, Integer>> dateHashtable = CampaignReportsUtil.getDefaultDateTable(startTime, endTime, type, timeZone,
+		    emailType);
 
 	    // Initialize values with 0
-	    LinkedHashMap<String, Integer> statusTable = CampaignStatsReportsUtil.getDefaultCountTable(emailType);
+	    LinkedHashMap<String, Integer> statusTable = CampaignReportsUtil.getDefaultCountTable(emailType);
 
 	    for (int index = 0; index < emailLogs.length(); index++)
 	    {

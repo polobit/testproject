@@ -2,9 +2,9 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
+import com.agilecrm.analytics.util.AnalyticsSQLUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.db.util.AnalyticsSQLUtil;
 import com.agilecrm.util.DBUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;

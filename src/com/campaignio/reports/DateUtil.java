@@ -10,7 +10,7 @@ import com.agilecrm.db.util.SQLUtil;
 
 /**
  * <code>DateUtil</code> is the date utility class for
- * {@link CampaignStatsReportsUtil}. It provides methods to get round values of
+ * {@link CampaignReportsUtil}. It provides methods to get round values of
  * date. For e.g., if the time is 12:30 AM, it rounds to 12AM. Similarly for the
  * weekday and date values. It also provides method to convert date to MySql
  * date format, inorder to interact with mysql.

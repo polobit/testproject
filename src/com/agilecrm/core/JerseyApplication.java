@@ -33,7 +33,7 @@ public class JerseyApplication extends Application
 		s.add(com.agilecrm.core.api.prefs.AccountPrefsAPI.class);
 		s.add(com.agilecrm.core.api.deals.MilestoneAPI.class);
 		s.add(com.agilecrm.core.api.prefs.IMAPAPI.class);
-		s.add(com.agilecrm.core.api.campaigns.CampaignStatsAPI.class);
+		s.add(com.agilecrm.core.api.campaigns.CampaignReportsAPI.class);
 		s.add(com.agilecrm.core.api.prefs.EmailTemplatesPrefsAPI.class);
 		s.add(com.agilecrm.core.api.search.SearchAPI.class);
 		s.add(com.agilecrm.core.api.campaigns.TriggersAPI.class);
@@ -47,7 +47,7 @@ public class JerseyApplication extends Application
 		s.add(com.agilecrm.core.api.bulkactions.backends.BulkActionsAPI.class);
 		s.add(com.agilecrm.core.api.bulkactions.backends.BulkOperationsAPI.class);
 		s.add(com.agilecrm.core.api.EmailsAPI.class);
-		s.add(com.agilecrm.core.api.StatsAPI.class);
+		s.add(com.agilecrm.core.api.analytics.AnalyticsAPI.class);
 		s.add(com.agilecrm.core.api.cases.CasesAPI.class);
 		s.add(com.agilecrm.core.api.prefs.NavbarSettingAPI.class);
 		s.add(com.agilecrm.core.api.contacts.ContactPrefsAPI.class);

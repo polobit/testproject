@@ -1,0 +1,77 @@
+package com.campaignio.tasklets.agile.util;
+
+import org.json.JSONObject;
+
+import com.agilecrm.user.AgileUser;
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
+import com.googlecode.objectify.Key;
+
+/**
+ * <code>AgileTaskletUtil</code> is the utility class for agile tasklets. It
+ * fetches owner required for AddNote. It normalizes the tags string entered in
+ * Tags and CheckTags.
+ * 
+ * @author Naresh
+ * 
+ */
+public class AgileTaskletUtil
+{
+    /**
+     * Returns contact owner-id from subscriberJSON.
+     * 
+     * @param subscriberJSON
+     *            - SubscriberJSON
+     * @return String
+     */
+    public static String getContactOwnerIdFromSubscriberJSON(JSONObject subscriberJSON)
+    {
+	String ownerId = null;
+
+	try
+	{
+	    JSONObject owner = subscriberJSON.getJSONObject("data").getJSONObject("owner");
+
+	    if (owner.length() != 0)
+		ownerId = owner.getString("id");
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return ownerId;
+    }
+
+    /**
+     * Returns AgileUser key
+     * 
+     * @param ownerId
+     *            - DomainUser Id.
+     * @return Key
+     */
+    public static Key<AgileUser> getAgileUserKey(Long ownerId)
+    {
+	AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(ownerId);
+	Key<AgileUser> owner = new Key<AgileUser>(AgileUser.class, agileUser.id);
+	return owner;
+    }
+
+    /**
+     * Normalizes the given string separated by any delimiter. Inorder to
+     * normalize, Splitter and Joiner methods are used. For e.g.,
+     * ",a,b ,c, d,e," is converted to "a,b,c,d,e"
+     * 
+     * @param separator
+     *            - Any separator like comma.
+     * @param str
+     *            - String that needs to be normalized.
+     * @return normalized String
+     */
+    public static String normalizeStringSeparatedByDelimiter(char separator, String str)
+    {
+	Splitter splitter = Splitter.on(separator).omitEmptyStrings().trimResults();
+	Joiner joiner = Joiner.on(separator).skipNulls();
+	return joiner.join(splitter.split(str));
+    }
+}

@@ -6,19 +6,19 @@ import java.util.LinkedHashMap;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * <code>CampaignStatsReportsUtil</code> is the utility class that initializes
+ * <code>CampaignReportsUtil</code> is the utility class that initializes
  * graphs with default data. Inorder to built bar-charts with the values
  * obtained, first need to intialize the X-axis and Y-axis values with default
  * values.
  * <p>
- * <code>CampaignStatsReportsUtil</code> initializes the X-axis with hour or
+ * <code>CampaignReportsUtil</code> initializes the X-axis with hour or
  * week-day or date values based on type. Under each value, EmailsSent,
  * EmailsOpened, Clicks and Total Clicks are initialized with zero each.
  * </p>
  * 
  * @author Naresh
  */
-public class CampaignStatsReportsUtil
+public class CampaignReportsUtil
 {
     /**
      * Constructs a default LinkedHashMap for the dates between the given
