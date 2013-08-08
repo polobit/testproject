@@ -6,9 +6,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
-import com.agilecrm.ScribeServlet;
 import com.agilecrm.core.api.widgets.WidgetsAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.scribe.ScribeServlet;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.ProfileStatus;
 import com.agilecrm.user.ProfileStatus.Field;

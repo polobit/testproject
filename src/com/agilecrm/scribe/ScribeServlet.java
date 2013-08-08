@@ -1,4 +1,4 @@
-package com.agilecrm;
+package com.agilecrm.scribe;
 
 import java.io.IOException;
 
