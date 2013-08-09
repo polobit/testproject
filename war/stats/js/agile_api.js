@@ -32,10 +32,6 @@ function agile_setEmail(email)
 	agile_guid.set_email(email);
 }
 
-function agile_email(email){
-
-}
-
 function agile_propertyJSON(name, id, type)
 {
 	var json = {};
