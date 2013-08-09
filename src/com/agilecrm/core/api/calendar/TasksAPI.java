@@ -184,14 +184,16 @@ public class TasksAPI
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteContacts(@FormParam("ids") String model_ids)
-	    throws JSONException
+    public void deleteContacts(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray tasksJSONArray = new JSONArray(model_ids);
 
 	Task.dao.deleteBulkByIds(tasksJSONArray);
     }
 
+    /**
+     * Daily task reminder
+     */
     @Path("remainder")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -206,20 +208,31 @@ public class TasksAPI
 	    e.printStackTrace();
 	}
     }
-    @Path("/my/dashboardtaskstasks")
+
+    /**
+     * To represent Tasks on DashBoard
+     * 
+     * @return Task list
+     */
+    @Path("/my/dashboardtasks")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Task> getDashboardTasksToCurrentUser()
     {
-    	  System.out.println("current user pending tasks api called");
-	 //return TaskUtil.getAllPendingTasks();
-    	return   TaskUtil.getAllPendingTasksForCurrentUser();
+	System.out.println("current user pending tasks api called");
+	// return TaskUtil.getAllPendingTasks();
+	return TaskUtil.getAllPendingTasksForCurrentUser();
     }
 
+    /**
+     * All tasks related to current user
+     * 
+     * @return tasks list
+     */
     @Path("/my/tasks")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Task> getDealsRelatedToCurrentUser()
+    public List<Task> getTasksRelatedToCurrentUser()
     {
 	return TaskUtil.getTasksRelatedToCurrentUser();
     }
@@ -248,9 +261,7 @@ public class TasksAPI
     @Path("/based")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<Task> getTasksBasedOnOwnerOfType(
-	    @QueryParam("type") String type, @QueryParam("owner") String owner)
-	    throws Exception
+    public List<Task> getTasksBasedOnOwnerOfType(@QueryParam("type") String type, @QueryParam("owner") String owner) throws Exception
     {
 	return TaskUtil.getTasksRelatedToOwnerOfType(type, owner);
     }
