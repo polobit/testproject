@@ -31,8 +31,6 @@ function saveSettings(event)
 {
 	var saveUrl='/core/api/navbarsets';
 	var json=serializeForm('navmodsSelect');
-	var succ_txt='<div style="display:inline-block"><small><p class="text-success"><i>Saved Successfully</i></p></small></div>';
-	var fail_txt='<div style="display:inline-block"><small><p class="text-success"><i>Save Failed</i></p></small></div>';
 	
 	$.ajax({
 	type		:'POST',
@@ -42,21 +40,21 @@ function saveSettings(event)
 	data		:JSON.stringify(json),
 	success		:function(data,stat,jqXHR)
 				{
+					//Success only if data has id
 					if(data.id)
 					{
 						$('#navmodsSelect #div-success').show().delay(3000).hide(1);
-						var res=data;
 						
-						if(data.input_cases==true)$('#casesmenu').show();
+						if(data.cases==true)$('#casesmenu').show();
 						else $('#casesmenu').hide();
 						
-						if(data.input_calendar==true)$('#calendarmenu').show();
+						if(data.calendar==true)$('#calendarmenu').show();
 						else $('#calendarmenu').hide();
 						
-						if(data.input_deals==true)$('#dealsmenu').show();
+						if(data.deals==true)$('#dealsmenu').show();
 						else $('#dealsmenu').hide();
 						
-						if(data.input_campaign==true)$('#workflowsmenu').show();
+						if(data.campaign==true)$('#workflowsmenu').show();
 						else $('#workflowsmenu').hide();
 					}
 					else $('#navmodsSelect #div-fail').show().delay(3000).hide(1);

@@ -73,7 +73,7 @@ public class CasesAPI
 	@POST
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Case postCase(Case newCase)
+	public Case createCase(Case newCase)
 	{
 		return CaseUtil.save(newCase);
 	}
@@ -88,7 +88,7 @@ public class CasesAPI
 	@PUT
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Case putCase(Case newCase)
+	public Case updateCase(Case newCase)
 	{
 		return CaseUtil.save(newCase);
 	}

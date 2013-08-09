@@ -7,30 +7,77 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.googlecode.objectify.annotation.NotSaved;
+import com.googlecode.objectify.condition.IfDefault;
 
+/**
+ * NavSetting Entity <br/>
+ * <br/>
+ * Holds state of various tabs in Navbar.<code>true</code> implies enabled in
+ * view.
+ * 
+ * @author Chandan
+ * 
+ */
 @XmlRootElement
 public class NavSetting
 {
+	// dao
+	private static ObjectifyGenericDao<NavSetting> dao = new ObjectifyGenericDao<NavSetting>(NavSetting.class);
+
+	/**
+	 * Id of the entity
+	 */
 	@Id
-	public Long id=null;
-	public boolean input_cases,input_deals,input_calendar,input_campaign;  // status of various navtabs
-	
+	public Long id = null;
+
+	/**
+	 * State of Cases tab in Navbar. <code>true</code> implies visible in
+	 * Navbar.
+	 */
+	@NotSaved(IfDefault.class)
+	public boolean cases = true;
+
+	/**
+	 * State of Deals tab in Navbar. <code>true</code> implies visible in
+	 * Navbar.
+	 */
+	@NotSaved(IfDefault.class)
+	public boolean deals = true;
+
+	/**
+	 * State of Calendar tab in Navbar. <code>true</code> implies visible in
+	 * Navbar.
+	 */
+	@NotSaved(IfDefault.class)
+	public boolean calendar = true;
+
+	/**
+	 * State of Campaign tab in Navbar. <code>true</code> implies visible in
+	 * Navbar.
+	 */
+	@NotSaved(IfDefault.class)
+	public boolean campaign = true;
+
+	/**
+	 * Deafult - <br/>
+	 * Cases - not visible, Rest of the tabs - visible
+	 */
 	public void setDefault()
 	{
-		input_cases=false;
-		input_deals=input_calendar=input_campaign=true;
+		cases = false;
+		deals = calendar = campaign = true;
 	}
-	
-	public NavSetting(){}
 
-	private static ObjectifyGenericDao<NavSetting> dao=new ObjectifyGenericDao<NavSetting>(NavSetting.class);
-	
+	public NavSetting()
+	{
+	}
+
+	/**
+	 * Save this entity in Datastore
+	 */
 	@JsonIgnore
 	public void save()
 	{
 		dao.put(this);
 	}
-	
 }
-
-

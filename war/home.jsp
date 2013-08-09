@@ -138,23 +138,32 @@
 								} else {
 							%>
 
+							
+							<%
+									//Styling enable/disable navbar tabs(add display:none to diable)
+																																																							
+									NavSetting navSetting = NavSettingUtil.getNavSetting();
+									String style_calendar = "", style_cases = "", style_deals = "", style_campaign = "";
+									//style for calendar,cases,deals,campaign resp.
+									
+									if (!navSetting.calendar)
+										style_calendar = " display:none;";
+									if (!navSetting.cases)
+										style_cases = " display:none;";
+									if (!navSetting.deals)
+										style_deals = " display:none;";
+									if (!navSetting.campaign)
+										style_campaign = " display:none;";
+							%>
 							<li id="contactsmenu"><a href="#contacts"><i
-									class="icon-user icon-white"></i> Contacts</a></li>
-							<% 
-								NavSetting nv=NavSettingUtil.getNavSetting();
-								String style_cal="",style_cases="",style_deals="",style_campaign="";
-								if(nv.input_calendar==false)style_cal=" style='display:none;'";
-								if(nv.input_cases==false)style_cases=" style='display:none;'";
-								if(nv.input_deals==false)style_deals=" style='display:none;'";
-								if(nv.input_campaign==false)style_campaign=" style='display:none;'";
-							%>		
-							<li id="calendarmenu" <%=style_cal %> ><a href="#calendar"><i
+									class="icon-user icon-white"></i> Contacts</a></li>		
+							<li id="calendarmenu" style="<%=style_calendar %>" ><a href="#calendar"><i
 									class="icon-calendar icon-white"></i> Calendar</a></li>
-							<li id="casesmenu" <%=style_cases %> ><a href="#cases"><i
+							<li id="casesmenu" style="<%=style_cases %>" ><a href="#cases"><i
 									class="icon-suitcase icon-white"></i> Cases</a></li>
-							<li id="dealsmenu" <%=style_deals %> ><a href="#deals"><i
+							<li id="dealsmenu" style="<%=style_deals %>" ><a href="#deals"><i
 									class="icon-money icon-white"></i> Deals</a></li>
-							<li id="workflowsmenu" <%=style_campaign %> ><a href="#workflows"><i
+							<li id="workflowsmenu" style="<%=style_campaign %>" ><a href="#workflows"><i
 									class="icon-sitemap icon-white"></i> Campaigns</a></li>
 							<li id="reportsmenu"><a href="#reports"><i
 									class="icon-share icon-white"></i> Reports</a></li>
@@ -284,14 +293,14 @@
 				type="text/javascript"></script>
 			<span style="margin: 0 10px;"><a data="Twitter"
 				class="email-share"
-				href="https://twitter.com/share?url=https%3A%2F%2Fwww.agilecrm.com&text=Sell%20like%20a%20pro%20with%20%23AgileCRM%20-%20"
+				href="https://twitter.com/share?url=https%3A%2F%2Fwww.agilecrm.com&text=Sell%20like%20Fortune%20500%20with%20%23AgileCRM%20-%20"
 				target="_blank"><i class="icon-twitter"></i></a></span> <span><a
 				data="Facebook" class="email-share"
-				href="https://www.shareaholic.com/api/share/?v=1&apitype=1&apikey=8943b7fd64cd8b1770ff5affa9a9437b&service=5&title=Sell%20like%20a%20pro%20with%20%23AgileCRM%20-%20&link=https%3A%2F%2Fwww.agilecrm.com&notes=Sell%20like%20a%20pro%20with%20%23AgileCRM%20"
+				href="https://www.shareaholic.com/api/share/?v=1&apitype=1&apikey=8943b7fd64cd8b1770ff5affa9a9437b&service=5&title=Sell%20like%20Fortune%20500%20with%20%23AgileCRM%20-%20&link=https%3A%2F%2Fwww.agilecrm.com&notes=Sell%20like%20Fortune%20500%20with%20%23AgileCRM%20"
 				target="_blank"><i class="icon-facebook"></i></a></span> <span
 				style="margin-left: 10px;"><a data="Linkedin"
 				class="email-share"
-				href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fwww.agilecrm.com&title=AgileCRM&summary=Sell%20like%20a%20pro%20with%20%23AgileCRM%20-%20&source=https%3A%2F%2Fwww.agilecrm.com"
+				href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fwww.agilecrm.com&title=AgileCRM&summary=Sell%20like%20Fortune%20500%20with%20%23AgileCRM%20-%20&source=https%3A%2F%2Fwww.agilecrm.com"
 				target="_blank"><i class="icon-linkedin"></i></a></span> <span
 				style="margin: 0 10px;"><a id="share-email" href="#"><i
 					class="icon-envelope-alt"></i></a></span>

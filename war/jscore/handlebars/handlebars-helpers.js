@@ -893,8 +893,7 @@ $(function()
 	 * 
 	 * @author Chandan
 	 */
-	Handlebars
-			.registerHelper(
+	Handlebars.registerHelper(
 					'getCompanyImage',
 					function(frame_size, additional_style)
 					{
@@ -935,7 +934,7 @@ $(function()
 							}
 							if (this.properties[i].name == "url")
 							{
-								default_return = "src='http://www.google.com/s2/favicons?domain=" + this.properties[i].value + "' " + "style='width:32px; height:32px; padding:" + size_diff + "px; " + additional_style + " ;'";
+								default_return = "src='https://www.google.com/s2/favicons?domain=" + this.properties[i].value + "' " + "style='width:32px; height:32px; padding:" + size_diff + "px; " + additional_style + " ;'";
 								// favicon fetch -- Google S2 Service, 32x32,
 								// rest padding added
 
@@ -947,6 +946,12 @@ $(function()
 						// return safe string so that our html is not escaped
 						return new Handlebars.SafeString(default_return + " onError=\"" + error_fxn + "\"");
 					});
+	
+	Handlebars.registerHelper('getHyperlinkFromURL',function(url){
+		
+		if(url.match(/((http[s]|ftp|file):\/\/)/)!=null)return url;
+		return 'http://'+url;
+	});
 
 	// Get Count
 	Handlebars.registerHelper('count', function()

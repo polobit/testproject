@@ -350,15 +350,15 @@ var ContactsRouter = Backbone.Router.extend({
 
                 load_timeline_details(el, id);
                 
-                /*// To get QR code and download Vcard
-                $.get('/core/api/contacts/vcard/' + contact.toJSON().id, function(data){
+/*                // To get QR code and download Vcard
+                $.get('/core/api/VCard/' + contact.toJSON().id, function(data){
                 	console.log("Vcard string");
                 	console.log(data);
                 	var url = 'https://chart.googleapis.com/chart?cht=qr&chs=180x180&chld=0&choe=UTF-8&chl=' + encodeURIComponent(data);
                 	$("#qrcode", el).html('<img src="' + url + '" id="qr_code" alt="QR Code"/>');
                 	//$("#qrcode", el).html('<img style="display:inline-block!important;" src="' + url + '" id="qr_code" alt="QR Code" data="' + data + '" onload="qr_load();"/>');
                 	$("#qrcode", el).prepend('<span style="padding: 8% 0%;margin-right: 2px;float:right;" id="downloadify"></span>');
-                }); */
+                });*/ 
                 
                 starify(el);
                 

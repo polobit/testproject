@@ -90,7 +90,7 @@ public class JSAPI
      * 
      * <pre>
      * var contact_json = {tags:[tag1, tag2, tag3], lead_score:100, 
-     * 	properties:[{name:fist_name, type:person/company, value: harry},
+     * 	properties:[{name:first_name, type:person/company, value: harry},
      * {name: first_name, type:person/company, value:harry}]
      * }
      * 
@@ -195,52 +195,11 @@ public class JSAPI
 		return null;
 
 	    task.contacts = new ArrayList<String>();
-	    task.contacts.add(contact.id + "");
+	    task.contacts.add(contact.id.toString());
 
 	    task.save();
 
 	    return mapper.writeValueAsString(task);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-
-    /**
-     * Adds note to the contact, which is searched based on the email id
-     * 
-     * @param email
-     *            email of the contact to relate note to particular contact
-     * @param json
-     *            note object as JSON string format
-     * @param jsoncallback
-     * @return {@link JSONWithPadding} Returns note object which is saved and
-     *         calls the specified callback
-     */
-    @Path("/note")
-    @GET
-    @Produces("application/x-javascript")
-    public String createNote(@QueryParam("email") String email, @QueryParam("note") String json, @QueryParam("callback") String jsoncallback)
-    {
-	try
-	{
-	    ObjectMapper mapper = new ObjectMapper();
-	    Note note = mapper.readValue(json, Note.class);
-	    System.out.println(mapper.writeValueAsString(note));
-	    System.out.println(note);
-
-	    // Get Contact
-	    Contact contact = ContactUtil.searchContactByEmail(email);
-	    if (contact == null)
-		return null;
-
-	    note.addRelatedContacts(contact.id + "");
-	    note.save();
-
-	    return mapper.writeValueAsString(note);
-
 	}
 	catch (Exception e)
 	{
@@ -285,7 +244,7 @@ public class JSAPI
 	    if (contact == null)
 		return null;
 
-	    opportunity.addContactIds(contact.id + "");
+	    opportunity.addContactIds(contact.id.toString());
 
 	    // Set, owner id to opportunity (owner of the apikey is set as owner
 	    // to opportunity)
@@ -544,5 +503,39 @@ public class JSAPI
 	    return null;
 	}
     }
+    
+	/**
+	 * Adds a note to the contact based on email of contact
+	 * 
+	 * @param data
+	 *			json object containing the subject and decription fields of the note  
+	 * @param jsoncallback
+	 *
+	 * @return String
+	 */
+	@Path("contacts/add-note")
+	@GET
+	@Produces ("application / x-javascript")
+	public String addNote(@QueryParam("data") String json, @QueryParam("email") String email, @QueryParam("callback") String jsoncallback){
+		try {
+			Contact contact = ContactUtil.searchContactByEmail(email);
+			if (contact == null)
+				return null;
+
+			JSONObject note_json = new JSONObject(json);
+
+			Note note = new Note(note_json.getString("subject"), note_json.getString("description"));
+			String ContactID = contact.id.toString();
+			note.addRelatedContacts(ContactID);
+			note.save();
+			ObjectMapper mapper = new ObjectMapper();
+			return mapper.writeValueAsString(note);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 }

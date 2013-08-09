@@ -100,37 +100,45 @@ function agile_getContact(email, callback)
 	// Get
 	var agile_url = agile_id.getURL() + "/contact/email?callback=?&id=" + agile_id.get() + "&" + params;
 
-	agile_json(agile_url, function(data)
-	{
-		if (callback && typeof (callback) === "function")
-		{
-			callback(data);
-		}
-	});
+	agile_json(agile_url, agile_callback(callback, data));
 }
 
-function agile_addNote(email, data, callback)
+function agile_addNote(subject, description, callback, email)
 {
-	if (!email.email)
+	if (!email)
 	{
-		return;
+		if (!agile_guid.get_email())
+		{
+			return;
+		}
+		else
+			email = agile_guid.get_email();
 	}
-	var params = "email={0}&note={1}".format(encodeURIComponent(email.email), encodeURIComponent(JSON.stringify(data)));
-
+	var data ={};
+	data.subject = subject;
+	data.description = description;
+		
+	var params = "data={0}&email={1}".format(encodeURIComponent(JSON.stringify(data)), encodeURIComponent(email));
+	
 	// Get
-	var agile_url = agile_id.getURL() + "/note?callback=?&id=" + agile_id.get() + "&" + params;
+	var agile_url = agile_id.getURL() + "/contacts/add-note?callback=?&id=" + agile_id.get() + "&" + params;
 	console.log(agile_url);
 
 	agile_json(agile_url, agile_callback(callback, data));
 }
 
-function agile_addTask(email, data, callback)
+function agile_addTask(data, callback, email)
 {
-	if (!email.email)
+	if (!email)
 	{
-		return;
+		if (!agile_guid.get_email())
+		{
+			return;
+		}
+		else
+			email = agile_guid.get_email();
 	}
-	var params = "email={0}&task={1}".format(encodeURIComponent(email.email), encodeURIComponent(JSON.stringify(data)));
+	var params = "task={0}&email={1}".format(encodeURIComponent(JSON.stringify(data)), encodeURIComponent(email));
 
 	// Get
 	var agile_url = agile_id.getURL() + "/task?callback=?&id=" + agile_id.get() + "&" + params;
@@ -138,14 +146,19 @@ function agile_addTask(email, data, callback)
 	agile_json(agile_url, agile_callback(callback, data));
 }
 
-function agile_addDeal(email, data, callback)
+function agile_addDeal(data, callback, email)
 {
-	if (!email.email)
+	if (!email)
 	{
-		return;
+		if (!agile_guid.get_email())
+		{
+			return;
+		}
+		else
+			email = agile_guid.get_email();
 	}
 
-	var params = "email={0}&opportunity={1}".format(encodeURIComponent(email.email), encodeURIComponent(JSON.stringify(data)));
+	var params = "opportunity={0}&email={1}".format(encodeURIComponent(JSON.stringify(data)), encodeURIComponent(email));
 
 	// Get
 	var agile_url = agile_id.getURL() + "/opportunity?callback=?&id=" + agile_id.get() + "&" + params;
@@ -340,8 +353,8 @@ getNamespace : function()
 	return this.namespace;
 } };
 
-var _agile = { 
-		
+var _agile = {
+
 set_account : function(APIKey, domain)
 {
 	agile_setAccount(APIKey, domain);
@@ -378,13 +391,21 @@ subtract_score : function(score, callback, email)
 {
 	agile_subtractScore(score, callback, email);
 }, 
-add_note : function(email, data, callback)
+add_note : function(subject, description, callback, email)
 {
-	agile_addNote(email, data, callback);
+	agile_addNote(subject, description, callback, email);
 },
 add_property : function(name, id, callback, email)
 {
 	agile_addProperty(name, id, callback, email);
+},
+add_task : function(data, callback, email)
+{
+	agile_addTask(data, callback, email);
+},
+add_deal : function(data, callback, email)
+{
+	agile_addDeal(data, callback, email);
 } };var agile_guid = { init : function()
 {
 	this.cookie_name = 'agile-crm-guid';

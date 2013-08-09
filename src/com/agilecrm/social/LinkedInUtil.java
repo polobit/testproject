@@ -253,87 +253,94 @@ public class LinkedInUtil
      *            {@link Map} of {@link SearchParameter}
      * @return
      */
-    public static List<SocialSearchResult> searchPeopleInLinkedIn(
+    private static List<SocialSearchResult> searchPeopleInLinkedIn(
 	    LinkedInApiClient client,
 	    Map<SearchParameter, String> searchParameters)
 	    throws SocketTimeoutException, IOException, Exception
     {
-	try
-	{
-	    People people = client.searchPeople(searchParameters, EnumSet.of(
-		    ProfileField.PICTURE_URL, ProfileField.FIRST_NAME,
-		    ProfileField.LAST_NAME, ProfileField.SUMMARY,
-		    ProfileField.HEADLINE, ProfileField.LOCATION_NAME,
-		    ProfileField.NUM_CONNECTIONS,
-		    ProfileField.PUBLIC_PROFILE_URL, ProfileField.ID,
-		    ProfileField.DISTANCE), 0, 20);
 
-	    List<SocialSearchResult> searchResults = new ArrayList<SocialSearchResult>();
+	// search people
+	People people = client.searchPeople(searchParameters, EnumSet.of(
+		ProfileField.PICTURE_URL, ProfileField.FIRST_NAME,
+		ProfileField.LAST_NAME, ProfileField.SUMMARY,
+		ProfileField.HEADLINE, ProfileField.LOCATION_NAME,
+		ProfileField.NUM_CONNECTIONS, ProfileField.PUBLIC_PROFILE_URL,
+		ProfileField.ID, ProfileField.DISTANCE), 0, 20);
+
+	// wraps persons details into List of SocialSearchResult
+	return fillPersonsDeatilsInList(people.getPersonList());
+
+    }
+
+    /**
+     * Iterates through given {@link List} of persons and fills each
+     * {@link Person} details in {@link SocialSearchResult} and forms a
+     * {@link List}
+     * 
+     * @param persons
+     * @return
+     */
+    private static List<SocialSearchResult> fillPersonsDeatilsInList(
+	    List<Person> persons)
+    {
+	List<SocialSearchResult> searchResults = new ArrayList<SocialSearchResult>();
+
+	/*
+	 * Iterates through results fetched and wraps the details into
+	 * SocialSearchResult wrapper class and adds it to list
+	 */
+	for (Person person : persons)
+	{
+	    SocialSearchResult result = new SocialSearchResult();
 
 	    /*
-	     * Iterates through results fetched and wraps the details into
-	     * SocialSearchResult wrapper class and adds it to list
+	     * Id or name is private for the people who doesn't share their
+	     * information to third party applications, we skip those profiles
 	     */
-	    for (Person person : people.getPersonList())
-	    {
-		SocialSearchResult result = new SocialSearchResult();
+	    if (person.getId() != null
+		    && person.getId().equalsIgnoreCase("private"))
+		continue;
 
-		/*
-		 * Id or name is private for the people who doesn't share their
-		 * information to third party applications, we skip those
-		 * profiles
-		 */
-		if (person.getId().equalsIgnoreCase("private"))
-		    continue;
+	    if (person.getFirstName().equalsIgnoreCase("private")
+		    || person.getLastName().equalsIgnoreCase("private"))
+		continue;
 
-		if (person.getFirstName().equalsIgnoreCase("private")
-			|| person.getLastName().equalsIgnoreCase("private"))
-		    continue;
+	    result.id = person.getId();
+	    result.name = person.getFirstName() + " " + person.getLastName();
+	    result.picture = person.getPictureUrl();
+	    result.url = person.getPublicProfileUrl();
+	    result.summary = person.getHeadline();
+	    result.distance = (person.getDistance() != null) ? person
+		    .getDistance().toString() : "";
 
-		result.id = person.getId();
-		result.name = person.getFirstName() + " "
-			+ person.getLastName();
-		result.picture = person.getPictureUrl();
-		result.url = person.getPublicProfileUrl();
-		result.summary = person.getHeadline();
-		result.distance = person.getDistance() + "";
+	    // If degree of connection is 1, both profiles are connected
+	    if (result.distance != "" && Integer.parseInt(result.distance) == 1)
+		result.is_connected = true;
 
-		if (person.getDistance() != null && person.getDistance() == 1)
-		    result.is_connected = true;
+	    System.out.println("pic url : " + person.getPictureUrl());
+	    /*
+	     * Changes http to https to avoid client side warnings by browser,
+	     * Changes certificate from m3 to m3-s to fix SSL broken image link
+	     */
+	    if (result.picture != null)
+		result.picture = changeImageUrl(result.picture);
 
-		/*
-		 * Changes http to https to avoid client side warnings by
-		 * browser, Changes certificate from m3 to m3-s to fix SSL
-		 * broken image link
-		 */
-		if (result.picture != null)
-		    result.picture = changeImageUrl(result.picture);
+	    /*
+	     * Set number of connections, location and distance(degree of
+	     * connection) if provided
+	     */
+	    result.num_connections = (person.getNumConnections() != null) ? person
+		    .getNumConnections().toString() : "";
 
-		System.out.println("LinkedIn picture URL : " + result.picture);
+	    result.location = (person.getLocation() != null) ? person
+		    .getLocation().getName() : "";
 
-		/*
-		 * Set number of connections, location and distance(degree of
-		 * connection) if provided
-		 */
-		result.num_connections = (person.getNumConnections() != null) ? person
-			.getNumConnections().toString() : "";
+	    // Add wrapper filled with details to the list
+	    searchResults.add(result);
 
-		result.location = (person.getLocation() != null) ? person
-			.getLocation().getName() : "";
-
-		result.distance = (person.getDistance() != null) ? person
-			.getDistance().toString() : "";
-
-		// Add wrapper filled with details to the list
-		searchResults.add(result);
-	    }
-	    return searchResults;
 	}
-	catch (Exception e)
-	{
-	    // Handles exception thrown by LinkedIn and throws proper exceptions
-	    throw handleExceptionInLinkedIn(e);
-	}
+	return searchResults;
+
     }
 
     /**
@@ -645,6 +652,11 @@ public class LinkedInUtil
     {
 	try
 	{
+	    System.out.println("Start index: " + startIndex);
+	    System.out.println("End index: " + endIndex);
+	    System.out.println("Start Date: " + startDate);
+	    System.out.println("End Date: " + endDate);
+
 	    // Create network updates client, to fetch user network updates
 	    final NetworkUpdatesApiClient client = factory
 		    .createNetworkUpdatesApiClient(widget.getProperty("token"),
@@ -702,12 +714,13 @@ public class LinkedInUtil
 		NetworkUpdateType.EXTENDED_PROFILE_UPDATE);
 
 	// If start index and end index are provided, filter those updates
-	if (startIndex != 0 && endIndex != 0)
+	if (!(startIndex < 0) && !(endIndex <= 0))
 	{
 	    // If start date and end date are provided, filter updates on it
 	    if (!StringUtils2
 		    .isNullOrEmpty(new String[] { startDate, endDate }))
 	    {
+		System.out.println("In network updates indexed and dated");
 		Calendar cal = Calendar.getInstance();
 
 		cal.setTimeInMillis(Long.parseLong(startDate) * 1000);
@@ -721,6 +734,7 @@ public class LinkedInUtil
 	    }
 	    else
 	    {
+		System.out.println("In network updates indexed");
 		// filters updates only on start and end index
 		return client.getUserUpdates(linkedInId, enumSet, startIndex,
 			endIndex);
@@ -729,6 +743,7 @@ public class LinkedInUtil
 	}
 	else
 	{
+	    System.out.println("In network updates normal");
 	    // fetch all updates
 	    return client.getUserUpdates(linkedInId, enumSet);
 	}
@@ -806,6 +821,8 @@ public class LinkedInUtil
 					ProfileField.NUM_CONNECTIONS,
 					ProfileField.ID, ProfileField.DISTANCE));
 
+			System.out.println("pic url : "
+				+ person1.getPictureUrl());
 			/*
 			 * Changes http to https to avoid client side warnings
 			 * by browser, Changes certificate from m3 to m3-s to
@@ -1004,9 +1021,11 @@ public class LinkedInUtil
     {
 	try
 	{
+	    // Creates a client with token and secret retrieved from widget
 	    final LinkedInApiClient client = factory.createLinkedInApiClient(
 		    widget.getProperty("token"), widget.getProperty("secret"));
 
+	    // Get profile of person fetching his shared connections details
 	    Person profile = client
 		    .getProfileById(
 			    linkedInId,
@@ -1021,57 +1040,13 @@ public class LinkedInUtil
 				    ProfileField.RELATION_TO_VIEWER_RELATED_CONNECTIONS_PICTURE_URL,
 				    ProfileField.RELATION_TO_VIEWER_CONNECTIONS));
 
-	    List<SocialSearchResult> searchResults = new ArrayList<SocialSearchResult>();
-
+	    // If no connections found return empty list
 	    if (profile.getRelationToViewer().getRelatedConnections() == null)
-		return searchResults;
+		return new ArrayList<SocialSearchResult>();
 
-	    List<Person> persons = profile.getRelationToViewer()
-		    .getRelatedConnections().getPersonList();
-
-	    for (Person person : persons)
-	    {
-		SocialSearchResult result = new SocialSearchResult();
-
-		if (person.getId() != "")
-		    result.id = person.getId();
-
-		if (person.getFirstName().equalsIgnoreCase("private")
-			|| person.getLastName().equalsIgnoreCase("private"))
-		    continue;
-
-		result.name = person.getFirstName() + " "
-			+ person.getLastName();
-		result.picture = person.getPictureUrl();
-		result.url = person.getPublicProfileUrl();
-		result.summary = person.getHeadline();
-		result.distance = String.valueOf(person.getDistance());
-
-		if (person.getDistance() != null && person.getDistance() == 1)
-		    result.is_connected = true;
-
-		// Changes http to https to avoid client side warnings by
-		// browser,
-		// Changes certificate from m3 to m3-s to fix ssl broken image
-		// link
-		if (result.picture != null)
-		    result.picture = changeImageUrl(result.picture);
-
-		// Sets number of connects if provided
-		result.num_connections = (person.getNumConnections() != null) ? person
-			.getNumConnections().toString() : "";
-
-		result.location = (person.getLocation() != null) ? person
-			.getLocation().getName() : "";
-
-		result.distance = (person.getDistance() != null) ? person
-			.getDistance().toString() : "";
-
-		// Add result wrapper object to the list
-		searchResults.add(result);
-	    }
-
-	    return searchResults;
+	    // fill each shared connection details in list
+	    return fillPersonsDeatilsInList(profile.getRelationToViewer()
+		    .getRelatedConnections().getPersonList());
 	}
 	catch (Exception e)
 	{
@@ -1097,7 +1072,7 @@ public class LinkedInUtil
 	    url = url.replace(url.substring(0, url.indexOf(".com") + 4),
 		    LINKEDINIMAGEURLFORMAT);
 
-	System.out.println(url);
+	System.out.println("Changed URL in LinkedIn: " + url);
 	return url;
     }
 
@@ -1111,8 +1086,14 @@ public class LinkedInUtil
      */
     private static Exception handleExceptionInLinkedIn(Exception exception)
     {
+	System.out.println("Exception message: " + exception.getMessage());
 	Exception innerException = null;
 
+	/*
+	 * We extract the inner exception from LinkedIn exception, since it is
+	 * returned as string and make the exception out of string and throw
+	 * proper exception like (TimeoutException, IOException..)
+	 */
 	if (exception.getMessage().contains(":"))
 	    try
 	    {
@@ -1126,6 +1107,10 @@ public class LinkedInUtil
 		return exception;
 	    }
 
+	/*
+	 * If inner exception, is not an exception and a proper message from
+	 * LinkedIn , we throw it as it is
+	 */
 	if (innerException == null)
 	    return exception;
 	return innerException;
@@ -1137,7 +1122,7 @@ public class LinkedInUtil
      * 
      * <p>
      * Note: This method will not work as of now as LinkedIn does not give other
-     * person connections
+     * person(contact) direct connections
      * </p>
      * 
      * @param widget
@@ -1156,9 +1141,11 @@ public class LinkedInUtil
     {
 	try
 	{
+	    // Creates a client with token and secret retrieved from widget
 	    final LinkedInApiClient client = factory.createLinkedInApiClient(
 		    widget.getProperty("token"), widget.getProperty("secret"));
 
+	    // Get profile of person fetching his direct connections details
 	    Connections connections = client.getConnectionsById(linkedInId,
 		    EnumSet.of(ProfileField.PUBLIC_PROFILE_URL,
 			    ProfileField.LAST_NAME, ProfileField.FIRST_NAME,
@@ -1167,53 +1154,9 @@ public class LinkedInUtil
 			    ProfileField.NUM_CONNECTIONS, ProfileField.ID,
 			    ProfileField.DISTANCE));
 
-	    List<SocialSearchResult> persons = new ArrayList<SocialSearchResult>();
+	    // fill each shared connection details in list
+	    return fillPersonsDeatilsInList(connections.getPersonList());
 
-	    for (Person person : connections.getPersonList())
-	    {
-		SocialSearchResult result = new SocialSearchResult();
-
-		if (person.getId().equalsIgnoreCase("private"))
-		    continue;
-
-		if (person.getFirstName().equalsIgnoreCase("private")
-			|| person.getLastName().equalsIgnoreCase("private"))
-		    continue;
-
-		result.id = person.getId();
-		result.name = person.getFirstName() + " "
-			+ person.getLastName();
-		result.picture = person.getPictureUrl();
-		result.url = person.getPublicProfileUrl();
-		result.summary = person.getHeadline();
-		result.distance = person.getDistance() + "";
-
-		if (person.getDistance() != null && person.getDistance() == 1)
-		    result.is_connected = true;
-
-		/*
-		 * Changes http to https to avoid client side warnings by
-		 * browser, Changes certificate from m3 to m3-s to fix SSL
-		 * broken image link
-		 */
-		if (result.picture != null)
-		    result.picture = changeImageUrl(result.picture);
-
-		// Sets number of connects if provided
-		result.num_connections = (person.getNumConnections() != null) ? person
-			.getNumConnections().toString() : "";
-
-		result.location = (person.getLocation() != null) ? person
-			.getLocation().getName() : "";
-
-		result.distance = (person.getDistance() != null) ? person
-			.getDistance().toString() : "";
-
-		// Add result wrapper object to the list
-		persons.add(result);
-	    }
-
-	    return persons;
 	}
 	catch (Exception e)
 	{

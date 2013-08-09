@@ -106,7 +106,7 @@ padding-left:10px!important;
 
 	<div class="account-container">
 		<div class="content clearfix">
-				 <h1>Register (Step 1 of 2)</h1>
+				 <h1>Register - Step 1 of 2</h1>
 				 <form name='choose_domain' id="choose_domain" method='post' onsubmit="return validateAndSubmit();" style="padding:10px 0 15px;border-top: 1px dotted #CCC;">
 						<div id="domain-error"></div>
 						<% if(!StringUtils.isEmpty(error)){%>
@@ -122,11 +122,11 @@ padding-left:10px!important;
 					 <%}%>
 					 <h3><small>Choose your domain at Agile CRM</small></h3>
 					 <div style="padding-top:10px;">
-          				<input id='subdomain' type="text" placeholder="Choose your domain"
+          				<input id='subdomain' type="text" placeholder="Domain"
 						   	   name="subdomain" class="input-medium field required" autocapitalize="off"><b> .agilecrm.com</b>
 				   </div>
 				</form>
-				  <div style="margin-left:30%"><input class="btn btn-large btn-primary" type="submit" value="Submit"></div>
+				  <div><input class="btn btn-large btn-primary" type="submit" value="Next"></div>
 				
 				
 					<div class="clearfix"></div>
@@ -195,7 +195,7 @@ padding-left:10px!important;
 		  
 		  var regularExpression  = new RegExp(/^[A-Za-z][a-zA-Z0-9]{3,12}$/);
 		  if(!regularExpression.test(subdomain)) {
-		        error = "Domain should start with alphabet and special characters not allowed.";
+		        error = "Domain should start with an alphabet and special characters are not allowed.";
 				return false;
 		    }
 		  return true;
