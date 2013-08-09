@@ -21,6 +21,9 @@ import com.googlecode.objectify.condition.IfDefault;
 @XmlRootElement
 public class NavSetting
 {
+	// dao
+	private static ObjectifyGenericDao<NavSetting> dao = new ObjectifyGenericDao<NavSetting>(NavSetting.class);
+
 	/**
 	 * Id of the entity
 	 */
@@ -68,9 +71,6 @@ public class NavSetting
 	public NavSetting()
 	{
 	}
-
-	// dao
-	private static ObjectifyGenericDao<NavSetting> dao = new ObjectifyGenericDao<NavSetting>(NavSetting.class);
 
 	/**
 	 * Save this entity in Datastore

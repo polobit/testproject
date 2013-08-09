@@ -41,9 +41,14 @@ public class NavSettingUtil
 	 *            - the object to save
 	 * @return - the saved object
 	 */
-	public static NavSetting setNavSetting(NavSetting navSetting)
+	public static NavSetting saveNavSetting(NavSetting navSetting)
 	{
 		navSetting.save();
-		return navSetting;
+
+		// Check is save in datastore was successful
+		if (navSetting.id != null)
+			return navSetting;
+
+		return null;
 	}
 }

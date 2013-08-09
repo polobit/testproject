@@ -50,7 +50,7 @@ public class NavSettingAPI
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public NavSetting createNavSetting(NavSetting navSetting)
 	{
-		return NavSettingUtil.setNavSetting(navSetting);
+		return NavSettingUtil.saveNavSetting(navSetting);
 	}
 
 	/**
@@ -63,6 +63,6 @@ public class NavSettingAPI
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public void updateNavSetting(NavSetting navSetting)
 	{
-		NavSettingUtil.setNavSetting(navSetting);
+		NavSettingUtil.saveNavSetting(navSetting);
 	}
 }
