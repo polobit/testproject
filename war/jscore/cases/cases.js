@@ -229,8 +229,16 @@ function savecases(formId, modalId, saveBtn, json)
 				}
 				/// Now Only models which have type 'PERSON' will through below.
 				
+				activate_timeline_tab(); // switch to first tab in Contact-Detail View
+				
 				// Verifies whether the added case is related to the contact in
 				// contact detail view or not
+				
+				/**Code to add Info of Case to timeline
+				 * Not Fully Done, it was directly copied from Deals module.
+				 * 
+				 *  If you wanna add Case to timeline, edit below
+				 *
 				$.each(cases.contacts, function(index, contact) {
 					
 					if (contact.id == App_Contacts.contactDetailView.model.get('id')) {
@@ -257,6 +265,9 @@ function savecases(formId, modalId, saveBtn, json)
 						return false;
 					}//end if
 				}); //end each
+				
+				End of Adding data to timeline.
+				*/
 			}//end if
 			/*end-if(Contact-Details) */
 			else if(Current_Route == 'cases')
