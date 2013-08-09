@@ -325,7 +325,10 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         		
         		if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection)
         		{
-        			App_Contacts.contactsListView.collection.add(data);
+        			//Add to View only if of corresponding filter
+        			if( (data.get('type')=='PERSON' && !readCookie('company_filter')) || (data.get('type')=='COMPANY' && readCookie('company_filter')))
+        				App_Contacts.contactsListView.collection.add(data);
+        			
         			console.log(App_Contacts.contactsListView.collection.length);
         		}
             	
@@ -527,10 +530,10 @@ $(function () {
     $("#update").die().live('click', function (e) {
           var model=serialize_and_save_continue_contact(e, 'continueform', 'personModal', false, true, this,"tags_source_continue_contact");
           
-          if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection)	
+          if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection.get(model.id) != null)	
           {
-          	App_Contacts.contactsListView.collection.remove(model.id);
-          	App_Contacts.contactsListView.collection.add(model);
+        	  App_Contacts.contactsListView.collection.remove(model.id);
+        	  App_Contacts.contactsListView.collection.add(model); 
           }
     });
     
@@ -556,10 +559,10 @@ $(function () {
     $("#company-update").die().live('click', function (e) {
         var model=serialize_and_save_continue_contact(e, 'continueCompanyForm', 'companyModal', false, false, this);
         
-        if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection)	
+        if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection.get(model.id) != null)	
         {
         	App_Contacts.contactsListView.collection.remove(model.id);
-        	App_Contacts.contactsListView.collection.add(model);
+      		App_Contacts.contactsListView.collection.add(model);
         }
     });
 });

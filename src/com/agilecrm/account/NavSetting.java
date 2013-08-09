@@ -21,6 +21,9 @@ import com.googlecode.objectify.condition.IfDefault;
 @XmlRootElement
 public class NavSetting
 {
+	// dao
+	private static ObjectifyGenericDao<NavSetting> dao = new ObjectifyGenericDao<NavSetting>(NavSetting.class);
+
 	/**
 	 * Id of the entity
 	 */
@@ -32,28 +35,28 @@ public class NavSetting
 	 * Navbar.
 	 */
 	@NotSaved(IfDefault.class)
-	public boolean input_cases = true;
+	public boolean cases = true;
 
 	/**
 	 * State of Deals tab in Navbar. <code>true</code> implies visible in
 	 * Navbar.
 	 */
 	@NotSaved(IfDefault.class)
-	public boolean input_deals = true;
+	public boolean deals = true;
 
 	/**
 	 * State of Calendar tab in Navbar. <code>true</code> implies visible in
 	 * Navbar.
 	 */
 	@NotSaved(IfDefault.class)
-	public boolean input_calendar = true;
+	public boolean calendar = true;
 
 	/**
 	 * State of Campaign tab in Navbar. <code>true</code> implies visible in
 	 * Navbar.
 	 */
 	@NotSaved(IfDefault.class)
-	public boolean input_campaign = true;
+	public boolean campaign = true;
 
 	/**
 	 * Deafult - <br/>
@@ -61,16 +64,13 @@ public class NavSetting
 	 */
 	public void setDefault()
 	{
-		input_cases = false;
-		input_deals = input_calendar = input_campaign = true;
+		cases = false;
+		deals = calendar = campaign = true;
 	}
 
 	public NavSetting()
 	{
 	}
-
-	// dao
-	private static ObjectifyGenericDao<NavSetting> dao = new ObjectifyGenericDao<NavSetting>(NavSetting.class);
 
 	/**
 	 * Save this entity in Datastore

@@ -85,13 +85,6 @@ $(function(){
 	    $('#person_validate').live('click', function(e){
 	    	
 	    	var model = serialize_and_save_continue_contact(e, 'personForm', 'personModal', false, true, this, 'tags_source_person_modal');
-
-	    	// update modal in contacts list view
-	    	if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection)
-	    	{
-	    		App_Contacts.contactsListView.collection.remove(model.id);
-	    		App_Contacts.contactsListView.collection.add(model);
-	    	}
 	    });
 	    
 	    /**
@@ -107,12 +100,6 @@ $(function(){
 		 */
 	    $('#company_validate').live('click', function (e) {
 	    	var model=serialize_and_save_continue_contact(e, 'companyForm', 'companyModal', false, false, this);	
-	    	
-	    	if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection)	
-	        {
-	    		App_Contacts.contactsListView.collection.remove(model.id);
-	          	App_Contacts.contactsListView.collection.add(model);
-	        }
 	    });
 	    
 	    /**

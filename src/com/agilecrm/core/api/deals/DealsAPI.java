@@ -213,6 +213,11 @@ public class DealsAPI
 	Opportunity.dao.deleteBulkByIds(opportunitiesJSONArray);
     }
 
+    /**
+     * Deals related to current user
+     * 
+     * @return list of opportunities.
+     */
     @Path("/my/deals")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -221,6 +226,12 @@ public class DealsAPI
 	return OpportunityUtil.getDealsRelatedToCurrentUser();
     }
 
+    /**
+     * To display upcoming deals on DashBoard.
+     * 
+     * @param page_size
+     * @return list of opportunities.
+     */
     @Path("/my/upcoming-deals")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })

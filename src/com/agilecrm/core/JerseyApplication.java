@@ -43,15 +43,16 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.UsersAPI.class);
 	s.add(com.agilecrm.core.api.TypeAheadAPI.class);
 	s.add(com.agilecrm.core.api.API.class);
+	s.add(com.agilecrm.core.api.widgets.WidgetsAPI.class);
 	s.add(com.agilecrm.core.api.bulkactions.backends.BulkActionsAPI.class);
 	s.add(com.agilecrm.core.api.bulkactions.backends.BulkOperationsAPI.class);
 	s.add(com.agilecrm.core.api.EmailsAPI.class);
 	s.add(com.agilecrm.core.api.analytics.AnalyticsAPI.class);
 	s.add(com.agilecrm.core.api.cases.CasesAPI.class);
-	s.add(com.agilecrm.core.api.prefs.NavbarSettingAPI.class);
+	s.add(com.agilecrm.core.api.prefs.NavSettingAPI.class);
 	s.add(com.agilecrm.core.api.contacts.ContactPrefsAPI.class);
 	s.add(com.agilecrm.core.api.contacts.UploadContactsAPI.class);
-	s.add(com.agilecrm.core.api.widgets.WidgetsAPI.class);
+	s.add(com.agilecrm.core.api.contacts.VCardAPI.class);
 	s.add(com.agilecrm.core.api.widgets.ClickDeskWidgetsAPI.class);
 	s.add(com.agilecrm.core.api.widgets.FreshBooksWidgetsAPI.class);
 	s.add(com.agilecrm.core.api.widgets.LinkedInTwitterWidgetsAPI.class);

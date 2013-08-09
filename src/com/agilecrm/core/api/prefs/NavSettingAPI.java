@@ -18,11 +18,11 @@ import com.agilecrm.account.util.NavSettingUtil;
  * the utility class for providing various facilities e.g. read & write, to the
  * NavSetting object.
  * 
- * @author Clickdesk
+ * @author Chandan
  * 
  */
 @Path("/api/navbarsets")
-public class NavbarSettingAPI
+public class NavSettingAPI
 {
 
 	/**
@@ -32,7 +32,7 @@ public class NavbarSettingAPI
 	 */
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public NavSetting getNavbarSetting()
+	public NavSetting getNavSetting()
 	{
 		return NavSettingUtil.getNavSetting();
 	}
@@ -48,21 +48,21 @@ public class NavbarSettingAPI
 	@POST
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public NavSetting setNavbarSettingPOST(NavSetting navSetting)
+	public NavSetting createNavSetting(NavSetting navSetting)
 	{
-		return NavSettingUtil.setNavSetting(navSetting);
+		return NavSettingUtil.saveNavSetting(navSetting);
 	}
 
 	/**
-	 * Same as POST, update navSetting from client & return updated to client
+	 * Same as POST, update navSetting from client, don't return
 	 * 
 	 * @param navSetting
 	 */
 	@PUT
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public void setNavbarSettingPUT(NavSetting navSetting)
+	public void updateNavSetting(NavSetting navSetting)
 	{
-		NavSettingUtil.setNavSetting(navSetting);
+		NavSettingUtil.saveNavSetting(navSetting);
 	}
 }
