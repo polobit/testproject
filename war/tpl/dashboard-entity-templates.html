@@ -29,7 +29,7 @@
 		<b>{{name}}</b>
     </div>
 </td>
-<td><div style="height:auto;text-overflow:ellipsis;width:6em;overflow:hidden;">{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}} {{expected_value}}</div></td>
+<td><div style="height:auto;text-overflow:ellipsis;width:6em;overflow:hidden;">{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}}{{numberWithCommas expected_value}}</div></td>
 <td><div style="height:auto;text-overflow:ellipsis;width:6em;overflow:hidden;">{{milestone}}<br />({{probability}}%) </div></td>
 <td><div style="height:auto;text-overflow:ellipsis;width:8em;overflow:hidden;"><time class="deal-close-time" datetime="{{epochToHumanDate "" close_date}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time></div></td>
 <td>

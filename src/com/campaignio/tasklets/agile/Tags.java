@@ -9,6 +9,7 @@ import com.agilecrm.util.DBUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
@@ -62,8 +63,7 @@ public class Tags extends TaskletAdapter
 	    // Execute next node if contact is null and given tags are empty.
 	    if (contact != null && !StringUtils.isEmpty(tagNames))
 	    {
-		String tags = "";
-		tags = DBUtil.normalizeStringSeparatedByDelimiter(',', tagNames);
+		String tags = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', tagNames);
 
 		System.out.println("Normalized tags are " + tags);
 

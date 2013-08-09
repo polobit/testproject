@@ -206,6 +206,8 @@ public class Defaults
 	 * contact : contacts) {
 	 * deal.contact_ids.add(String.valueOf(contact.id)); }
 	 */
+	if (ContactUtil.searchContactByEmail("sixfeetsix@nba.com") == null)
+	    return;
 	deal.addContactIds(String.valueOf(ContactUtil.searchContactByEmail("sixfeetsix@nba.com").id));
 	deal.save();
     }

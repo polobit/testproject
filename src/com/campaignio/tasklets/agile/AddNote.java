@@ -8,6 +8,7 @@ import com.agilecrm.util.DBUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.googlecode.objectify.Key;
 
@@ -49,7 +50,7 @@ public class AddNote extends TaskletAdapter
 	    String contactId = DBUtil.getId(subscriberJSON);
 
 	    // Get Contact Owner Id.
-	    String ownerId = DBUtil.getContactOwnerIdFromSubscriberJSON(subscriberJSON);
+	    String ownerId = AgileTaskletUtil.getContactOwnerIdFromSubscriberJSON(subscriberJSON);
 
 	    if (ownerId == null)
 	    {
@@ -60,11 +61,8 @@ public class AddNote extends TaskletAdapter
 		return;
 	    }
 
-	    AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(Long.parseLong(ownerId));
-	    Key<AgileUser> owner = new Key<AgileUser>(AgileUser.class, agileUser.id);
-
 	    // Add note
-	    addNote(subject, description, contactId, owner);
+	    addNote(subject, description, contactId, AgileTaskletUtil.getAgileUserKey(Long.parseLong(ownerId)));
 	}
 	catch (Exception e)
 	{

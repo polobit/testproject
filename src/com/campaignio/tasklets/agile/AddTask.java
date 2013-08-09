@@ -13,6 +13,7 @@ import com.agilecrm.util.DBUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
@@ -122,7 +123,7 @@ public class AddTask extends TaskletAdapter
 	String contactId = DBUtil.getId(subscriberJSON);
 
 	// Contact ownerId.
-	String contactOwnerId = DBUtil.getContactOwnerIdFromSubscriberJSON(subscriberJSON);
+	String contactOwnerId = AgileTaskletUtil.getContactOwnerIdFromSubscriberJSON(subscriberJSON);
 
 	try
 	{

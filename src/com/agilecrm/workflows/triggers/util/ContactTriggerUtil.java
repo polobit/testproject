@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.workflows.triggers.Trigger;
-import com.agilecrm.workflows.util.WorkflowUtil;
+import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 
 /**
  * <code>ContactTriggerUtil</code> runs trigger when new contact is added. If
@@ -32,8 +32,7 @@ public class ContactTriggerUtil
      *            Contact object after changes
      * 
      */
-    public static void executeTriggerToContact(Contact oldContact,
-	    Contact newContact)
+    public static void executeTriggerToContact(Contact oldContact, Contact newContact)
     {
 	// Check if contact is new
 	if (oldContact == null)
@@ -66,15 +65,13 @@ public class ContactTriggerUtil
 	contactList.add(contact);
 
 	// Gets triggers with contact added condition
-	triggersList = TriggerUtil
-		.getTriggersByCondition(Trigger.Type.CONTACT_IS_ADDED);
+	triggersList = TriggerUtil.getTriggersByCondition(Trigger.Type.CONTACT_IS_ADDED);
 
 	try
 	{
 	    for (Trigger trigger : triggersList)
 	    {
-		WorkflowUtil
-			.subscribeDeferred(contactList, trigger.campaign_id);
+		WorkflowSubscribeUtil.subscribeDeferred(contactList, trigger.campaign_id);
 	    }
 	}
 	catch (Exception e)
@@ -84,8 +81,7 @@ public class ContactTriggerUtil
 
 	// Executes Trigger for tags added along with new Contact
 	if (!contact.getContactTags().isEmpty())
-	    TagsTriggerUtil.executeTriggerForTags(contact,
-		    contact.getContactTags());
+	    TagsTriggerUtil.executeTriggerForTags(contact, contact.getContactTags());
 
     }
 }

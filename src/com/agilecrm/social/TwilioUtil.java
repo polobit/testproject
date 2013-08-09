@@ -9,10 +9,10 @@ import org.json.JSONObject;
 import org.json.XML;
 
 import com.agilecrm.session.SessionManager;
+import com.agilecrm.twilio.sdk.TwilioRestClient;
+import com.agilecrm.twilio.sdk.TwilioRestResponse;
 import com.agilecrm.widgets.Widget;
 import com.google.appengine.api.NamespaceManager;
-import com.thirdparty.twilio.sdk.TwilioRestClient;
-import com.thirdparty.twilio.sdk.TwilioRestResponse;
 import com.twilio.sdk.client.TwilioCapability;
 import com.twilio.sdk.client.TwilioCapability.DomainException;
 

@@ -645,7 +645,7 @@ public class WidgetsAPI
 	     * Calls LinkedUtil method to send message to person by socialId
 	     */
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInUtil.sendLinkedInAddRequest(widget, socialId,
+		return LinkedInUtil.connectInLinkedIn(widget, socialId,
 			subject, message);
 
 	    // Calls TwitterUtil method to send message to person by socialId
@@ -876,7 +876,8 @@ public class WidgetsAPI
 	     * Calls LinkedUtil method to send message to person by socialId
 	     */
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInUtil.getNetworkUpdates(widget, socialId);
+		return LinkedInUtil.getNetworkUpdates(widget, socialId, 0, 0,
+			null, null);
 
 	    else if (widget.name.equalsIgnoreCase("TWITTER"))
 		return TwitterUtil.getNetworkUpdates(widget,
@@ -939,7 +940,9 @@ public class WidgetsAPI
 	     * Calls LinkedUtil method to send message to person by socialId
 	     */
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInUtil.getNetworkUpdates(widget, socialId);
+		return LinkedInUtil.getNetworkUpdates(widget, socialId,
+			Integer.parseInt(startIndex),
+			Integer.parseInt(endIndex), null, null);
 
 	    else if (widget.name.equalsIgnoreCase("TWITTER"))
 		return TwitterUtil.getNetworkUpdates(widget,
