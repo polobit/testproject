@@ -138,23 +138,32 @@
 								} else {
 							%>
 
+							
+							<%
+									//Styling enable/disable navbar tabs(add display:none to diable)
+																																																							
+									NavSetting navSetting = NavSettingUtil.getNavSetting();
+									String style_calendar = "", style_cases = "", style_deals = "", style_campaign = "";
+									//style for calendar,cases,deals,campaign resp.
+									
+									if (!navSetting.calendar)
+										style_calendar = " display:none;";
+									if (!navSetting.cases)
+										style_cases = " display:none;";
+									if (!navSetting.deals)
+										style_deals = " display:none;";
+									if (!navSetting.campaign)
+										style_campaign = " display:none;";
+							%>
 							<li id="contactsmenu"><a href="#contacts"><i
-									class="icon-user icon-white"></i> Contacts</a></li>
-							<% 
-								NavSetting nv=NavSettingUtil.getNavSetting();
-								String style_cal="",style_cases="",style_deals="",style_campaign="";
-								if(nv.input_calendar==false)style_cal=" style='display:none;'";
-								if(nv.input_cases==false)style_cases=" style='display:none;'";
-								if(nv.input_deals==false)style_deals=" style='display:none;'";
-								if(nv.input_campaign==false)style_campaign=" style='display:none;'";
-							%>		
-							<li id="calendarmenu" <%=style_cal %> ><a href="#calendar"><i
+									class="icon-user icon-white"></i> Contacts</a></li>		
+							<li id="calendarmenu" style="<%=style_calendar %>" ><a href="#calendar"><i
 									class="icon-calendar icon-white"></i> Calendar</a></li>
-							<li id="casesmenu" <%=style_cases %> ><a href="#cases"><i
+							<li id="casesmenu" style="<%=style_cases %>" ><a href="#cases"><i
 									class="icon-suitcase icon-white"></i> Cases</a></li>
-							<li id="dealsmenu" <%=style_deals %> ><a href="#deals"><i
+							<li id="dealsmenu" style="<%=style_deals %>" ><a href="#deals"><i
 									class="icon-money icon-white"></i> Deals</a></li>
-							<li id="workflowsmenu" <%=style_campaign %> ><a href="#workflows"><i
+							<li id="workflowsmenu" style="<%=style_campaign %>" ><a href="#workflows"><i
 									class="icon-sitemap icon-white"></i> Campaigns</a></li>
 							<li id="reportsmenu"><a href="#reports"><i
 									class="icon-share icon-white"></i> Reports</a></li>

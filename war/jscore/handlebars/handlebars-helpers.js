@@ -893,8 +893,7 @@ $(function()
 	 * 
 	 * @author Chandan
 	 */
-	Handlebars
-			.registerHelper(
+	Handlebars.registerHelper(
 					'getCompanyImage',
 					function(frame_size, additional_style)
 					{
@@ -947,6 +946,10 @@ $(function()
 						// return safe string so that our html is not escaped
 						return new Handlebars.SafeString(default_return + " onError=\"" + error_fxn + "\"");
 					});
+	
+	Handlebars.registerHelper('getHyperlinkFromURL',function(url){
+		return url;
+	});
 
 	// Get Count
 	Handlebars.registerHelper('count', function()
