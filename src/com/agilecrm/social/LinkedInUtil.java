@@ -317,6 +317,7 @@ public class LinkedInUtil
 	    if (result.distance != "" && Integer.parseInt(result.distance) == 1)
 		result.is_connected = true;
 
+	    System.out.println("pic url : " + person.getPictureUrl());
 	    /*
 	     * Changes http to https to avoid client side warnings by browser,
 	     * Changes certificate from m3 to m3-s to fix SSL broken image link
@@ -820,6 +821,8 @@ public class LinkedInUtil
 					ProfileField.NUM_CONNECTIONS,
 					ProfileField.ID, ProfileField.DISTANCE));
 
+			System.out.println("pic url : "
+				+ person1.getPictureUrl());
 			/*
 			 * Changes http to https to avoid client side warnings
 			 * by browser, Changes certificate from m3 to m3-s to

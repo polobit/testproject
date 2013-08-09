@@ -53,6 +53,13 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.contacts.ContactPrefsAPI.class);
 	s.add(com.agilecrm.core.api.contacts.UploadContactsAPI.class);
 	s.add(com.agilecrm.core.api.contacts.VCardAPI.class);
+	s.add(com.agilecrm.core.api.widgets.ClickDeskWidgetsAPI.class);
+	s.add(com.agilecrm.core.api.widgets.FreshBooksWidgetsAPI.class);
+	s.add(com.agilecrm.core.api.widgets.LinkedInTwitterWidgetsAPI.class);
+	s.add(com.agilecrm.core.api.widgets.RapleafWidgetsAPI.class);
+	s.add(com.agilecrm.core.api.widgets.StripeWidgetsAPI.class);
+	s.add(com.agilecrm.core.api.widgets.TwilioWidgetsAPI.class);
+	s.add(com.agilecrm.core.api.widgets.ZendeskWidgetsAPI.class);
 	return s;
     }
 }

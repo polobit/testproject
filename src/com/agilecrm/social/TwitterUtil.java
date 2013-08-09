@@ -77,8 +77,7 @@ public class TwitterUtil
 	{
 	    System.out.println("in twitter exception");
 
-	    String error = getErrorMessage(e.getMessage());
-	    throw new Exception(error);
+	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
     }
 
@@ -155,8 +154,7 @@ public class TwitterUtil
 	{
 	    System.out.println("in twitter exception");
 
-	    String error = getErrorMessage(e.getMessage());
-	    throw new Exception(error);
+	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
     }
 
@@ -225,8 +223,7 @@ public class TwitterUtil
 	{
 	    System.out.println("in twitter exception");
 
-	    String error = getErrorMessage(e.getMessage());
-	    throw new Exception(error);
+	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
     }
 
@@ -289,8 +286,7 @@ public class TwitterUtil
 	{
 	    System.out.println("in twitter exception");
 
-	    String error = getErrorMessage(e.getMessage());
-	    throw new Exception(error);
+	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
 
     }
@@ -336,8 +332,7 @@ public class TwitterUtil
 	{
 	    System.out.println("in twitter exception");
 
-	    String error = getErrorMessage(e.getMessage());
-	    throw new Exception(error);
+	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
     }
 
@@ -385,8 +380,7 @@ public class TwitterUtil
 	{
 	    System.out.println("in twitter exception");
 
-	    String error = getErrorMessage(e.getMessage());
-	    throw new Exception(error);
+	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
     }
 
@@ -416,8 +410,7 @@ public class TwitterUtil
 	{
 	    System.out.println("in twitter exception");
 
-	    String error = getErrorMessage(e.getMessage());
-	    throw new Exception(error);
+	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
     }
 
@@ -451,8 +444,7 @@ public class TwitterUtil
 	{
 	    System.out.println("in twitter exception");
 
-	    String error = getErrorMessage(e.getMessage());
-	    throw new Exception(error);
+	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
     }
 
@@ -485,8 +477,7 @@ public class TwitterUtil
 	{
 	    System.out.println("in twitter exception");
 
-	    String error = getErrorMessage(e.getMessage());
-	    throw new Exception(error);
+	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
     }
 
@@ -525,8 +516,7 @@ public class TwitterUtil
 	{
 	    System.out.println("in twitter exception");
 
-	    String error = getErrorMessage(e.getMessage());
-	    throw new Exception(error);
+	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
     }
 
@@ -557,8 +547,7 @@ public class TwitterUtil
 	{
 	    System.out.println("in twitter exception");
 
-	    String error = getErrorMessage(e.getMessage());
-	    throw new Exception(error);
+	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
     }
 
@@ -603,8 +592,7 @@ public class TwitterUtil
 
 	    System.out.println("in twitter exception");
 
-	    String error = getErrorMessage(e.getMessage());
-	    throw new Exception(error);
+	    throw new Exception(getErrorMessage(e.getMessage()));
 
 	}
 
@@ -651,8 +639,7 @@ public class TwitterUtil
 	{
 	    System.out.println("in twitter exception");
 
-	    String error = getErrorMessage(e.getMessage());
-	    throw new Exception(error);
+	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
     }
 
@@ -697,8 +684,7 @@ public class TwitterUtil
 	{
 	    System.out.println("in twitter exception");
 
-	    String error = getErrorMessage(e.getMessage());
-	    throw new Exception(error);
+	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
     }
 
@@ -759,8 +745,7 @@ public class TwitterUtil
 	{
 	    System.out.println("in twitter exception");
 
-	    String error = getErrorMessage(e.getMessage());
-	    throw new Exception(error);
+	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
     }
 
@@ -887,21 +872,20 @@ public class TwitterUtil
 	{
 	    System.out.println("in twitter exception");
 
-	    String error = getErrorMessage(e.getMessage());
-	    throw new Exception(error);
+	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
     }
 
     private static String getErrorMessage(String error)
     {
 
-	System.out.println(error);
+	System.out.println("Before changing error: " + error);
 
 	if (error.contains("message - ") && error.contains("code - "))
 	{
 	    error = error.substring(error.indexOf("message - ") + 10,
 		    error.indexOf("code - "));
-	    System.out.println(error);
+	    System.out.println("After changing error: " + error);
 	    return error;
 	}
 

@@ -585,7 +585,7 @@ function showTwitterProfile(twitter_id, plugin_id)
 	var stream_data;
 
 	// Calls WidgetsAPI class to get Twitter profile of contact
-	$.get("/core/api/widgets/profile/" + plugin_id + "/" + twitter_id, function(data)
+	$.get("/core/api/widgets/social/profile/" + plugin_id + "/" + twitter_id, function(data)
 	{
 		if (!data)
 			return;
@@ -703,7 +703,7 @@ function showTwitterProfile(twitter_id, plugin_id)
 		// Calls WidgetsAPI class to request for five more updates tweeted
 		// before the
 		// tweet id of the last update
-		$.getJSON("/core/api/widgets/updates/more/" + plugin_id + "/" + twitter_id + "/" + tweet_id + "/5",
+		$.getJSON("/core/api/widgets/social/updates/more/" + plugin_id + "/" + twitter_id + "/" + tweet_id + "/5",
 
 		function(data)
 		{
@@ -798,7 +798,7 @@ function showTwitterProfile(twitter_id, plugin_id)
 		$("#twitter_social_stream").html(TWITTER_UPDATE_LOAD_IMAGE);
 
 		// Calls WidgetsAPI class to get the updates based on plugin id
-		$.getJSON("/core/api/widgets/updates/" + plugin_id + "/" + twitter_id,
+		$.getJSON("/core/api/widgets/social/updates/" + plugin_id + "/" + twitter_id,
 
 		function(data)
 		{
@@ -859,7 +859,7 @@ function sendFollowRequest(plugin_id, twitter_id)
 	// Sends post request to url "core/api/widgets/connect/" and Calls
 	// WidgetsAPI with
 	// plugin id and Twitter id as path parameters
-	$.post("/core/api/widgets/connect/" + plugin_id + "/" + twitter_id, function(data)
+	$.post("/core/api/widgets/social/connect/" + plugin_id + "/" + twitter_id, function(data)
 	{
 		// Checks whether data is true, followed successfully in Twitter
 		if (data == "true")
@@ -881,7 +881,7 @@ function sendFollowRequest(plugin_id, twitter_id)
 
 		// Sends request to get five updates before current update when follow
 		// is clicked
-		$.getJSON("/core/api/widgets/updates/more/" + plugin_id + "/" + twitter_id + "/" + Twitter_current_update_id + "/5",
+		$.getJSON("/core/api/widgets/social/updates/more/" + plugin_id + "/" + twitter_id + "/" + Twitter_current_update_id + "/5",
 
 		function(data)
 		{
@@ -933,7 +933,7 @@ function sendUnfollowRequest(plugin_id, twitter_id)
 	// Sends get request to url "core/api/widgets/connect/" and Calls WidgetsAPI
 	// with
 	// plugin id and Twitter id as path parameters
-	$.get("/core/api/widgets/disconnect/" + plugin_id + "/" + twitter_id, function(data)
+	$.get("/core/api/widgets/social/disconnect/" + plugin_id + "/" + twitter_id, function(data)
 	{
 		// On success, unFollow, tweet and message buttons are hidden and follow
 		// shown
@@ -1009,7 +1009,7 @@ function sendTwitterMessage(plugin_id, twitter_id, message)
 		// Sends post request to url "core/api/widgets/message/" and Calls
 		// WidgetsAPI with
 		// plugin id and Twitter id as path parameters and form as post data
-		$.post("/core/api/widgets/message/" + plugin_id + "/" + twitter_id, $('#twitter_messageForm').serialize(),
+		$.post("/core/api/widgets/social/message/" + plugin_id + "/" + twitter_id, $('#twitter_messageForm').serialize(),
 
 		function(data)
 		{
@@ -1101,7 +1101,7 @@ function tweetInTwitter(plugin_id, twitter_id)
 		// Sends post request to url "core/api/widgets/message/" and Calls
 		// WidgetsAPI with
 		// plugin id and Twitter id as path parameters and form as post data
-		$.post("/core/api/widgets/tweet/" + plugin_id, $('#twitter_messageForm').serialize(),
+		$.post("/core/api/widgets/social/tweet/" + plugin_id, $('#twitter_messageForm').serialize(),
 
 		function(data)
 		{
@@ -1148,7 +1148,7 @@ function retweetTheTweet(plugin_id, share_id, message, element)
 	// Sends get request to url "core/api/widgets/reshare/" and Calls WidgetsAPI
 	// with
 	// plugin id, Twitter id and message as path parameters
-	$.get("/core/api/widgets/reshare/" + plugin_id + "/" + share_id + "/" + message,
+	$.get("/core/api/widgets/social/reshare/" + plugin_id + "/" + share_id + "/" + message,
 
 	function(data)
 	{
@@ -1200,10 +1200,10 @@ function getTwitterIdByUrl(plugin_id, web_url, callback)
 	url_json['web_url'] = proper_web_url;
 	console.log('in method');
 
-	// Sends post request to URL "/core/api/widgets/getidbyurl/" bye sending
+	// Sends post request to URL "/core/api/widgets/social/getidbyurl/" bye sending
 	// plugin id
 	// as path parameter and json as post data
-	queuePostRequest("widget_queue", "/core/api/widgets/getidbyurl/" + plugin_id, url_json, function(data)
+	queuePostRequest("widget_queue", "/core/api/widgets/social/getidbyurl/" + plugin_id, url_json, function(data)
 	{
 		// If Twitter id is undefined
 		if (!data)
@@ -1260,10 +1260,10 @@ function getTwitterIdByUrl(plugin_id, web_url, callback)
 function getFollowerIdsInTwitter(plugin_id, twitter_id, callback)
 {
 
-	// Sends get request to URL "/core/api/widgets/followers/" by sending plugin
+	// Sends get request to URL "/core/api/widgets/social/followers/" by sending plugin
 	// id
 	// and twitter id as path parameter
-	$.getJSON("/core/api/widgets/followers/" + plugin_id + "/" + twitter_id, function(data)
+	$.getJSON("/core/api/widgets/social/followers/" + plugin_id + "/" + twitter_id, function(data)
 	{
 		// If data is undefined, return
 		if (!data)
@@ -1299,10 +1299,10 @@ function getFollowerIdsInTwitter(plugin_id, twitter_id, callback)
  */
 function getFollowingIdsInTwitter(plugin_id, twitter_id, callback)
 {
-	// Sends get request to URL "/core/api/widgets/followers/" by sending plugin
+	// Sends get request to URL "/core/api/widgets/social/followers/" by sending plugin
 	// id
 	// and twitter id as path parameter
-	$.getJSON("/core/api/widgets/following/" + plugin_id + "/" + twitter_id, function(data)
+	$.getJSON("/core/api/widgets/social/following/" + plugin_id + "/" + twitter_id, function(data)
 	{
 		// If data is undefined, return
 		if (!data)
@@ -1342,9 +1342,9 @@ function getListOfProfilesByIDsinTwitter(plugin_id, twitter_ids, callback, error
 	var json = {};
 	json["twitter_ids"] = JSON.stringify(twitter_ids);
 
-	// Sends post request to URL "/core/api/widgets/profile/list/" by sending
+	// Sends post request to URL "/core/api/widgets/social/profile/list/" by sending
 	// plugin id as path parameter and array of twitter ids as post data
-	$.post("/core/api/widgets/profile/list/" + plugin_id, json, function(data)
+	$.post("/core/api/widgets/social/profile/list/" + plugin_id, json, function(data)
 	{
 		// If data is undefined, return
 		if (!data)
