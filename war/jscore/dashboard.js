@@ -32,10 +32,10 @@ function setUpDashboardEntities(el) {
 		    $('#recent-contacts', el).html(myRecentContacts.render().el);
 		
 			var tasksDashboardListView = new Base_Collection_View({
-				url : '/core/api/tasks/my/dashboardtaskstasks',
+				url : '/core/api/tasks/my/dashboardtasks',
 				restKey : "task",
 				sortKey : "due",
-				templateKey   : "tasks-dashboard1",
+				templateKey : "tasks-dashboard1",
 				individual_tag_name : 'tr',
 				postRenderCallback: function(el) {
 					head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
