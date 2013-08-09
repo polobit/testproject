@@ -49,7 +49,7 @@ public class JerseyApplication extends Application
 		s.add(com.agilecrm.core.api.EmailsAPI.class);
 		s.add(com.agilecrm.core.api.analytics.AnalyticsAPI.class);
 		s.add(com.agilecrm.core.api.cases.CasesAPI.class);
-		s.add(com.agilecrm.core.api.prefs.NavbarSettingAPI.class);
+		s.add(com.agilecrm.core.api.prefs.NavSettingAPI.class);
 		s.add(com.agilecrm.core.api.contacts.ContactPrefsAPI.class);
 		s.add(com.agilecrm.core.api.contacts.UploadContactsAPI.class);
 		return s;
