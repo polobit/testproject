@@ -73,7 +73,7 @@ var CONTENT_JSON = {
 	},
 	"dashboard" : {
 		"contacts" : {
-			"title" : "No activity on contacts yet",
+			"title" : "There is no recent activity",
 			"icon" : "icon-group icon-3x"
 		},
 		"tasks" : {
