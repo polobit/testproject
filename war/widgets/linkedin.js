@@ -330,7 +330,7 @@ function getLinkedinMatchingProfiles(plugin_id)
 		// Sends request to url "core/api/widgets/match/" and Calls WidgetsAPI
 		// with contact
 		// id and plugin id as path parameters
-		queueGetRequest("widget_queue", "/core/api/widgets/match/" + plugin_id + "/" + contact_id, 'json', function(data)
+		queueGetRequest("widget_queue", "/core/api/widgets/social/match/" + plugin_id + "/" + contact_id, 'json', function(data)
 		{
 			// Store social results in cookie of particular contact
 			localStorage.setItem('Agile_linkedin_matches_' + contact_id, JSON.stringify(data));
@@ -363,7 +363,7 @@ function getModifiedLinkedinMatchingProfiles(plugin_id)
 
 	past_search_input = $('#linkedin_keywords').val();
 
-	$.post("/core/api/widgets/modified/match/linkedin/" + plugin_id, $('#linkedin-search_form').serialize(), function(data)
+	$.post("/core/api/widgets/social/modified/match/linkedin/" + plugin_id, $('#linkedin-search_form').serialize(), function(data)
 	{
 		$('#spinner-linked-search').hide();
 
@@ -399,7 +399,7 @@ function showLinkedinProfile(linkedin_id, plugin_id)
 	// Calls WidgetsAPI class to get LinkedIn profile of contact
 	$
 			.get(
-					"/core/api/widgets/profile/" + plugin_id + "/" + linkedin_id,
+					"/core/api/widgets/social/profile/" + plugin_id + "/" + linkedin_id,
 					function(data)
 					{
 						if (!data)
@@ -501,7 +501,7 @@ function showLinkedinProfile(linkedin_id, plugin_id)
 		// Calls WidgetsAPI class to request for five more updates before the
 		// end time
 		// The start time is from January 1st 2010
-		$.getJSON("/core/api/widgets/updates/more/" + plugin_id + "/" + linkedin_id + "/0/5/1262304000/" + end_time,
+		$.getJSON("/core/api/widgets/social/updates/more/" + plugin_id + "/" + linkedin_id + "/0/5/1262304000/" + end_time,
 
 		function(data)
 		{
@@ -591,7 +591,7 @@ function showLinkedinProfile(linkedin_id, plugin_id)
 		$("#linkedin_social_stream").html(LINKEDIN_UPDATE_LOAD_IMAGE);
 
 		// Calls WidgetsAPI class to get the updates based on plugin id
-		$.getJSON("/core/api/widgets/updates/" + plugin_id + "/" + linkedin_id,
+		$.getJSON("/core/api/widgets/social/updates/" + plugin_id + "/" + linkedin_id,
 
 		function(data)
 		{
@@ -644,7 +644,7 @@ function getLinkedInNetworkUpdates(plugin_id, linkedin_id)
 	$("#linkedin_social_stream").html(LINKEDIN_UPDATE_LOAD_IMAGE);
 
 	// Calls WidgetsAPI class to get the updates based on plugin id
-	$.getJSON("/core/api/widgets/updates/index/" + plugin_id + "/" + linkedin_id + "/0/5",
+	$.getJSON("/core/api/widgets/social/updates/index/" + plugin_id + "/" + linkedin_id + "/0/5",
 
 	function(data)
 	{
@@ -748,7 +748,7 @@ function sendLinkedInAddRequest(plugin_id, linkedin_id)
 		// WidgetsAPI
 		// with plugin id and LinkedIn id as path parameters and form as post
 		// data
-		$.post("/core/api/widgets/connect/" + plugin_id + "/" + linkedin_id, $('#linkedin_messageForm').serialize(),
+		$.post("/core/api/widgets/social/connect/" + plugin_id + "/" + linkedin_id, $('#linkedin_messageForm').serialize(),
 
 		function(data)
 		{
@@ -825,7 +825,7 @@ function sendLinkedInMessage(plugin_id, linkedin_id)
 		// Sends post request to url "core/api/widgets/message/" and Calls
 		// WidgetsAPI with
 		// plugin id and LinkedIn id as path parameters and form as post data
-		$.post("/core/api/widgets/message/" + plugin_id + "/" + linkedin_id, $('#linkedin_messageForm').serialize(),
+		$.post("/core/api/widgets/social/message/" + plugin_id + "/" + linkedin_id, $('#linkedin_messageForm').serialize(),
 
 		function(data)
 		{
@@ -874,7 +874,7 @@ function reSharePost(plugin_id, share_id, message, element)
 	// Sends get request to url "core/api/widgets/reshare/" and Calls WidgetsAPI
 	// with
 	// plugin id, LinkedIn id and message as path parameters
-	$.get("/core/api/widgets/reshare/" + plugin_id + "/" + share_id + "/" + message,
+	$.get("/core/api/widgets/social/reshare/" + plugin_id + "/" + share_id + "/" + message,
 
 	function(data)
 	{
@@ -912,10 +912,10 @@ function getLinkedinIdByUrl(plugin_id, web_url, callback)
 	var url_json = {};
 	url_json['web_url'] = web_url;
 
-	// Sends post request to URL "/core/api/widgets/getidbyurl/" by sending
+	// Sends post request to URL "/core/api/widgets/social/getidbyurl/" by sending
 	// plugin id
 	// as path parameter and json as post data
-	queuePostRequest("widget_queue", "/core/api/widgets/getidbyurl/" + plugin_id, url_json, function(data)
+	queuePostRequest("widget_queue", "/core/api/widgets/social/getidbyurl/" + plugin_id, url_json, function(data)
 	{
 		// If LinkedIn id is undefined
 		if (!data)
@@ -963,7 +963,7 @@ function getExperienceOfPerson(plugin_id, linkedin_id)
 
 	$
 			.get(
-					"/core/api/widgets/experience/" + plugin_id + "/" + linkedin_id,
+					"/core/api/widgets/social/experience/" + plugin_id + "/" + linkedin_id,
 					function(data)
 					{
 						var e1 = "";
@@ -1007,7 +1007,7 @@ function getLinkedInSharedConnections(plugin_id, linkedin_id)
 
 	$('#linkedin_shared_panel').html(LINKEDIN_UPDATE_LOAD_IMAGE);
 
-	$.get("/core/api/widgets/shared/connections/" + plugin_id + "/" + linkedin_id, function(data)
+	$.get("/core/api/widgets/social/shared/connections/" + plugin_id + "/" + linkedin_id, function(data)
 	{
 		var el = "<div style='padding:10px'>";
 

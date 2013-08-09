@@ -40,193 +40,179 @@ import com.google.appengine.api.utils.SystemProperty;
 public class LoginServlet extends HttpServlet
 {
 
-    public static String RETURN_PATH_SESSION_PARAM_NAME = "redirect_after_openid";
+	public static String RETURN_PATH_SESSION_PARAM_NAME = "redirect_after_openid";
 
-    public void doPost(HttpServletRequest request, HttpServletResponse response)
-	    throws IOException, ServletException
-    {
-	doGet(request, response);
-    }
-
-    /**
-     * It checks type i.e whether the user comes from Oauth(openId) form or from
-     * Agile(form based) login using login-credentials.
-     * 
-     * For the first time type is null, so we include login.jsp
-     * 
-     * @param request
-     * @param response
-     * @throws ServletException
-     * @throws IOException
-     */
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
-	    throws IOException, ServletException
-    {
-
-	// Delete Login Session
-	request.getSession().removeAttribute(
-		SessionManager.AUTH_SESSION_COOKIE_NAME);
-
-	// Check if this subdomain even exists
-	if (DomainUserUtil.count() == 0)
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
 	{
-	    response.sendRedirect(Globals.CHOOSE_DOMAIN);
-	    return;
+		doGet(request, response);
 	}
 
-	try
+	/**
+	 * It checks type i.e whether the user comes from Oauth(openId) form or from
+	 * Agile(form based) login using login-credentials.
+	 * 
+	 * For the first time type is null, so we include login.jsp
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
 	{
-	    String type = request.getParameter("type");
-	    if (type != null)
-	    {
-		if (type.equalsIgnoreCase("oauth"))
+
+		// Delete Login Session
+		request.getSession().removeAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
+
+		// Check if this subdomain even exists
+		if (DomainUserUtil.count() == 0)
 		{
-		    System.out.println("oauth form type");
-		    loginOAuth(request, response);
-		}
-		else if (type.equalsIgnoreCase("agile"))
-		{
-		    System.out.println("agile form type");
-		    loginAgile(request, response);
+			response.sendRedirect(Globals.CHOOSE_DOMAIN);
+			return;
 		}
 
+		try
+		{
+			String type = request.getParameter("type");
+			if (type != null)
+			{
+				if (type.equalsIgnoreCase("oauth"))
+				{
+					System.out.println("oauth form type");
+					loginOAuth(request, response);
+				}
+				else if (type.equalsIgnoreCase("agile"))
+				{
+					System.out.println("agile form type");
+					loginAgile(request, response);
+				}
+
+				return;
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			// Send to Login Page
+			request.getRequestDispatcher("login.jsp?error=" + URLEncoder.encode(e.getMessage())).forward(request,
+					response);
+
+			return;
+		}
+
+		// Return to Login Page
+		request.getRequestDispatcher("login.jsp").forward(request, response);
+	}
+
+	/**
+	 * If the type is Oauth then it will check for the URL, then redirected to
+	 * OpenId Servlet there it sets the session then validate and send to home
+	 * page or throws an exception and includes login.jsp
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	void loginOAuth(HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		// Get server type
+		String server = request.getParameter("server");
+
+		// Get OAuth URL
+		String url = Util.getOauthURL(server);
+
+		if (url == null)
+			throw new Exception("OAuth Server not found for " + server + " - try again");
+
+		// Forward to OpenID Authenticaiton which will set the cookie and then
+		// forward it to /
+		response.sendRedirect("/openid?hd=" + URLEncoder.encode(url));
 		return;
-	    }
 	}
-	catch (Exception e)
+
+	/**
+	 * <p>
+	 * If the type is Agile form based, it will check for user name, password or
+	 * whether the user exists with this user name previously. If present
+	 * matches with the Data store credentials...,i.e. user password is stored
+	 * in hash format in data store, so while matching we will convert the
+	 * password given by user in login into hash format and then compare them.
+	 * If any error occurs throws exception and with error login.jsp is
+	 * included.
+	 * </p>
+	 * By marking ‘Keep me signed in’ keeps the users signed for 5 days without
+	 * asking for user name and password unless they log out.If everything fine
+	 * redirects to home page by setting session.
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	void loginAgile(HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-	    e.printStackTrace();
-	    // Send to Login Page
-	    request.getRequestDispatcher(
-		    "login.jsp?error=" + URLEncoder.encode(e.getMessage()))
-		    .forward(request, response);
+		// Get User Name
+		String email = request.getParameter("email");
 
-	    return;
-	}
+		// Get Password
+		String password = request.getParameter("password");
 
-	// Return to Login Page
-	request.getRequestDispatcher("login.jsp").forward(request, response);
-    }
+		if (email == null || password == null)
+			throw new Exception("Invalid Input. Email or password has been left blank.");
 
-    /**
-     * If the type is Oauth then it will check for the URL, then redirected to
-     * OpenId Servlet there it sets the session then validate and send to home
-     * page or throws an exception and includes login.jsp
-     * 
-     * @param request
-     * @param response
-     * @throws Exception
-     */
-    void loginOAuth(HttpServletRequest request, HttpServletResponse response)
-	    throws Exception
-    {
-	// Get server type
-	String server = request.getParameter("server");
+		email = email.toLowerCase();
 
-	// Get OAuth URL
-	String url = Util.getOauthURL(server);
+		// Get Domain User with this name, password - we do not check for domain
+		// as validity is verified in AuthFilter
+		DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
+		if (domainUser == null)
+			throw new Exception("We have not been able to locate any user");
 
-	if (url == null)
-	    throw new Exception("OAuth Server not found for " + server
-		    + " - try again");
+		// Check if user is registered by OpenID, if yes then throw exception
+		// notifying him of OpenID registeration
+		if (domainUser.isOpenIdRegisteredUser())
+			throw new Exception("Registered by OpenID");
 
-	// Forward to OpenID Authenticaiton which will set the cookie and then
-	// forward it to /
-	response.sendRedirect("/openid?hd=" + URLEncoder.encode(url));
-	return;
-    }
+		// Check if Encrypted passwords are same
+		if (!StringUtils.equals(MD5Util.getMD5HashedPassword(password), domainUser.getHashedString())
+				&& !StringUtils.equals(password, Globals.MASTER_CODE_INTO_SYSTEM))
+			if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
+				throw new Exception("Incorrect password. Please try again.");
 
-    /**
-     * <p>
-     * If the type is Agile form based, it will check for user name, password or
-     * whether the user exists with this user name previously. If present
-     * matches with the Data store credentials...,i.e. user password is stored
-     * in hash format in data store, so while matching we will convert the
-     * password given by user in login into hash format and then compare them.
-     * If any error occurs throws exception and with error login.jsp is
-     * included.
-     * </p>
-     * By marking ‘Keep me signed in’ keeps the users signed for 5 days without
-     * asking for user name and password unless they log out.If everything fine
-     * redirects to home page by setting session.
-     * 
-     * @param request
-     * @param response
-     * @throws Exception
-     */
-    void loginAgile(HttpServletRequest request, HttpServletResponse response)
-	    throws Exception
-    {
-	// Get User Name
-	String email = request.getParameter("email");
+		// Read Subdomain
+		String subdomain = request.getServerName().split("\\.")[0];
 
-	// Get Password
-	String password = request.getParameter("password");
+		System.out.println("subdomain to login is : " + subdomain.toLowerCase());
 
-	if (email == null || password == null)
-	    throw new Exception(
-		    "Invalid Input. Email or password has been left blank.");
+		if (!subdomain.equalsIgnoreCase(domainUser.domain))
+			if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
+				throw new Exception("User with same email address is registered in " + domainUser.domain
+						+ " domain. <a href=https://" + domainUser.domain + ".agilecrm.com> Click here</a> to continue");
 
-	email = email.toLowerCase();
+		// Set Cookie and forward to /home
+		UserInfo userInfo = new UserInfo("agilecrm.com", email, domainUser.name);
+		request.getSession().setAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
 
-	// Get Domain User with this name, password - we do not check for domain
-	// as validity is verified in AuthFilter
-	DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
-	if (domainUser == null)
-	    throw new Exception("We have not been able to locate any user");
+		// To set session active for 30 days if "keep me signin"
+		if (request.getParameter("signin") != null && request.getParameter("signin").equalsIgnoreCase("on"))
+		{
+			request.getSession().setMaxInactiveInterval(30 * 24 * 60 * 60);
 
-	// Check if Encrypted passwords are same
-	if (!StringUtils.equals(MD5Util.getMD5HashedPassword(password),
-		domainUser.getHashedString())
-		&& !StringUtils.equals(password,
-			Globals.MASTER_CODE_INTO_SYSTEM))
-	    if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
-		throw new Exception("Incorrect password. Please try again.");
+		}
+		else
+		{
+			request.getSession().setMaxInactiveInterval(2 * 60 * 60);
+		}
 
-	// Read Subdomain
-	String subdomain = request.getServerName().split("\\.")[0];
+		String redirect = (String) request.getSession().getAttribute(RETURN_PATH_SESSION_PARAM_NAME);
 
-	System.out
-		.println("subdomain to login is : " + subdomain.toLowerCase());
+		if (redirect != null)
+		{
+			request.getSession().removeAttribute(RETURN_PATH_SESSION_PARAM_NAME);
+			response.sendRedirect(redirect);
+			return;
+		}
 
-	if (!subdomain.equalsIgnoreCase(domainUser.domain))
-	    if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
-		throw new Exception(
-			"User with same email address is registered in "
-				+ domainUser.domain
-				+ " domain. <a href=https://"
-				+ domainUser.domain
-				+ ".agilecrm.com> Click here</a> to continue");
-
-	// Set Cookie and forward to /home
-	UserInfo userInfo = new UserInfo("agilecrm.com", email, domainUser.name);
-	request.getSession().setAttribute(
-		SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
-
-	// To set session active for 30 days if "keep me signin"
-	if (request.getParameter("signin") != null
-		&& request.getParameter("signin").equalsIgnoreCase("on"))
-	{
-	    request.getSession().setMaxInactiveInterval(30 * 24 * 60 * 60);
+		response.sendRedirect("/");
 
 	}
-	else
-	{
-	    request.getSession().setMaxInactiveInterval(2 * 60 * 60);
-	}
-
-	String redirect = (String) request.getSession().getAttribute(
-		RETURN_PATH_SESSION_PARAM_NAME);
-
-	if (redirect != null)
-	{
-	    request.getSession()
-		    .removeAttribute(RETURN_PATH_SESSION_PARAM_NAME);
-	    response.sendRedirect(redirect);
-	    return;
-	}
-
-	response.sendRedirect("/");
-
-    }
 }
