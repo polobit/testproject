@@ -639,6 +639,7 @@ function showLinkedinProfile(linkedin_id, plugin_id)
 
 function getLinkedInNetworkUpdates(plugin_id, linkedin_id)
 {
+	$('.linkedin_current_activity', $('#Linkedin')).hide();
 	// Loading button is displayed until updates are shown
 	$("#linkedin_social_stream").html(LINKEDIN_UPDATE_LOAD_IMAGE);
 
@@ -652,6 +653,8 @@ function getLinkedInNetworkUpdates(plugin_id, linkedin_id)
 
 		if (data && data.length != 0)
 		{
+			
+			
 			// Populates the template with the data
 			$("#linkedin_social_stream").html(getTemplate("linkedin-update-stream", data));
 
