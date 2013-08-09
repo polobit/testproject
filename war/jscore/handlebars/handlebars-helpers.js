@@ -934,7 +934,7 @@ $(function()
 							}
 							if (this.properties[i].name == "url")
 							{
-								default_return = "src='http://www.google.com/s2/favicons?domain=" + this.properties[i].value + "' " + "style='width:32px; height:32px; padding:" + size_diff + "px; " + additional_style + " ;'";
+								default_return = "src='https://www.google.com/s2/favicons?domain=" + this.properties[i].value + "' " + "style='width:32px; height:32px; padding:" + size_diff + "px; " + additional_style + " ;'";
 								// favicon fetch -- Google S2 Service, 32x32,
 								// rest padding added
 
@@ -948,7 +948,9 @@ $(function()
 					});
 	
 	Handlebars.registerHelper('getHyperlinkFromURL',function(url){
-		return url;
+		
+		if(url.match(/((http[s]|ftp|file):\/\/)/)!=null)return url;
+		return 'http://'+url;
 	});
 
 	// Get Count
