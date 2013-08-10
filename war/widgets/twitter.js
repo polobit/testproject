@@ -585,7 +585,7 @@ function showTwitterProfile(twitter_id, plugin_id)
 	var stream_data;
 
 	// Calls WidgetsAPI class to get Twitter profile of contact
-	$.get("/core/api/widgets/social/social/profile/" + plugin_id + "/" + twitter_id, function(data)
+	$.get("/core/api/widgets/social/profile/" + plugin_id + "/" + twitter_id, function(data)
 	{
 		if (!data)
 			return;
