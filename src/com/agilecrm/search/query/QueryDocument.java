@@ -2,28 +2,24 @@ package com.agilecrm.search.query;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.search.QueryInterface;
-import com.agilecrm.search.document.ContactDocument;
+import com.agilecrm.search.query.util.QueryDocumentUtil;
 import com.agilecrm.search.ui.serialize.SearchRule;
-import com.agilecrm.search.ui.serialize.SearchRule.RuleType;
 import com.agilecrm.search.util.SearchUtil;
-import com.agilecrm.util.DateUtil;
 import com.google.appengine.api.search.Cursor;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Index;
 import com.google.appengine.api.search.Query;
 import com.google.appengine.api.search.QueryOptions;
 import com.google.appengine.api.search.ScoredDocument;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 
@@ -49,71 +45,95 @@ import com.googlecode.objectify.ObjectifyService;
  * @author Yaswanth
  * @since November 2012
  */
-public class QueryDocument implements QueryInterface
+public class QueryDocument<T> implements QueryInterface
 {
+
+	private Index index;
+	public Class<T> clazz;
+
+	public QueryDocument(Index index, Class<T> clazz)
+	{
+		this.index = index;
+		this.clazz = clazz;
+	}
+
 	/**
-	 * Queries document based on {@link SearchRule} given and type of the
-	 * document(Contact, Opportunity..etc) , Executes the query and returns
-	 * collection of entities
+	 * Queries for contacts based on keywords(Simple search). Trims spaces in
+	 * the keyword and calls processQuery to execute the condition
+	 * 
+	 * @param keyword
+	 *            {@link String}
+	 * @return {@link Collection}
+	 */
+	public Collection simpleSearch(String keyword, Integer count, String cursor)
+	{
+		// Normalizes the string. Removes spaces from the string as space are
+		// excluded while saving in documents
+		SearchUtil.normalizeString(keyword);
+
+		/*
+		 * Builds the query, search on field search_tokens(since contact
+		 * properties are split in to fragments, and saved in document with
+		 * filed name search_tokens)
+		 */
+		String query = "search_tokens : " + keyword;
+
+		return processQuery(query, count, cursor);
+	}
+
+	/**
+	 * Simple search based on key words with type as extra parameter, which is
+	 * used to fetch a particular set of either Contact or list of companies.
+	 * 
+	 * @param keyword
+	 * @param count
+	 * @param cursor
+	 * @param type
+	 * @return
+	 */
+	public Collection<T> simpleSearchWithType(String keyword, Integer count, String cursor, String type)
+	{
+		SearchUtil.normalizeString(keyword);
+		return processQuery("search_tokens:" + keyword + " AND type:" + type, count, cursor);
+	}
+
+	/**
+	 * Queries document based on {@link SearchRule}, Executes the query and
+	 * returns collection of entities. This search is without cursor, it is used
+	 * to generate reports as all available entities should be sent
 	 * 
 	 * @param rules
 	 *            {@link List} of {@link SearchRule}
 	 * 
-	 * @return {@link Collection} query results of type
-	 *         {@link Reports.ReportType}
+	 * @return {@link Collection} query results of type {@link T}
 	 */
 	@Override
 	@SuppressWarnings("rawtypes")
-	public Collection advancedSearch(List<SearchRule> rules)
+	public Collection<T> advancedSearch(List<SearchRule> rules)
 	{
 
-		String query = constructQuery(rules);
+		// Construct query string based on SearchRule object
+		String query = QueryDocumentUtil.constructQuery(rules);
 
+		// If query is empty (It may happen if client side validation failed, or
+		// any de-serialization issue)
 		if (StringUtils.isEmpty(query))
-			return new ArrayList();
+			return new ArrayList<T>();
 
-		// return query results
-		return processQuery(query, RuleType.Contact);
-    }
+		// Return query results
+		return processQuery(query);
+	}
 
-    /**
-     * Queries for contacts based on keywords(Simple search). Trims spaces in
-     * the keyword and calls processQuery to execute the condition
-     * 
-     * @param keyword
-     *            {@link String}
-     * @return {@link Collection}
-     */
-    public Collection simpleSearch(String keyword, Integer count, String cursor)
-    {
-	// Normalizes the string
-	SearchUtil.normalizeString(keyword);
-
-	// Builds the query, search on field search_tokens(since contact
-	// properties are split in to fragments, and saved in document with
-	// filed
-	// name search_tokens)
-	String query = "search_tokens : " + keyword;
-	// if (cursor != null)
-	return processQuery(query, RuleType.Contact, count, cursor);
-
-	// return processQuery(query, RuleType.Contact);
-    }
-    
-    public Collection simpleSearchWithType(String keyword,Integer count,String cursor,String type)
-    {
-    	SearchUtil.normalizeString(keyword);
-    	return processQuery("search_tokens:"+keyword+" AND type:"+type, RuleType.Contact,count,cursor);
-    }
-
-
-
+	/**
+	 * Advanced search used with cursor, used to show filter results.
+	 */
 	@Override
 	@SuppressWarnings("rawtypes")
 	public Collection advancedSearch(List<SearchRule> rules, Integer count, String cursor)
 	{
 
-		String query = constructQuery(rules);
+		// Construct query based on rules
+		String query = QueryDocumentUtil.constructQuery(rules);
 
 		System.out.println("query build is : " + query);
 
@@ -121,270 +141,94 @@ public class QueryDocument implements QueryInterface
 			return new ArrayList();
 
 		// return query results
-		return processQuery(query, RuleType.Contact, count, cursor);
+		return processQuery(query, count, cursor);
 	}
 
-	public static List<Long> getContactIds(List<SearchRule> rules, Integer count, String cursor)
-	{
-
-		String query = constructQuery(rules);
-
-		if (StringUtils.isEmpty(query))
-			return new ArrayList();
-
-		// return query results
-		Collection<ScoredDocument> contact_documents = getContactDocuments(query, RuleType.Contact, count, cursor);
-
-		List<Long> entity_ids = new ArrayList<Long>();
-
-		for (Document document : contact_documents)
-		{
-			entity_ids.add(Long.parseLong(document.getId()));
-		}
-
-		return entity_ids;
-	}
-
-	// Build query based on condition AND, NOT..
 	/**
-	 * Builds Query based on Conditions AND, NOT
+	 * Builds query options and process queries based on the options builds with
+	 * cursor and limit.
 	 * 
-	 * @param condition
-	 *            {@link String}
 	 * @param query
-	 *            {@link String}
-	 * @param newQuery
-	 *            {@link String}
-	 * @return Returns query string built based on conditions {@link String}
+	 * @param page
+	 * @param cursor
+	 * @return
 	 */
-	private static String buildQuery(String condition, String query, String newQuery)
+	private Collection<T> processQuery(String query, Integer page, String cursor)
 	{
+		// If page size is not specified, returns results with out any limit
+		// (Returns are entities )
+		if (page == null)
+			return processQuery(query);
 
-		// If query string is empty return simple not query
-		if (query.isEmpty() && condition.equals("NOT"))
-		{
-			query = "NOT " + newQuery;
-			return query;
-		}
+		// Builds options based on the query string, page size (limit) and sets
+		// cursor.
+		QueryOptions options = buildOptions(query, page, cursor);
 
-		// If query String is not empty then create And condition with old query
-		// and add not query
-		if (!query.isEmpty() && condition.equals("NOT"))
-		{
-			query = "(" + query + ")" + " AND " + "(NOT " + newQuery + ")";
-			return query;
-		}
+		// Calls process the query with the options built. It returns results in
+		// a map with available entities count and document ids limited to count
+		// sent
+		Map<String, Object> results = processQueryWithOptions(options, query);
 
-		// If query is not empty should add AND condition
-		if (!query.isEmpty())
-		{
-			query = query + " " + condition + " " + newQuery;
-			return query;
-		}
-
-		// If query is empty and not "NOT" query return same new query
-		return newQuery;
+		// Fetches entities from datastore based on the document ids returned.
+		// The type of the it entities are fetched dynamically, based on the
+		// class template
+		return getDatastoreEntities(results, page, cursor);
 	}
 
-	public static String createTimeQuery1(String query, String lhs, SearchRule.RuleCondition condition, String rhs,
-			String rhs_new)
-	{
-		// Formated to build query
-		String date = SearchUtil.getDateWithoutTimeComponent(Long.parseLong(rhs));
-
-		// Created on date condition
-		if (condition.equals(SearchRule.RuleCondition.ON) || condition.equals(SearchRule.RuleCondition.EQUALS))
-		{
-			query = buildQuery("AND", query, lhs + "=" + date);
-		}
-
-		// Created after given date
-		else if (condition.equals(SearchRule.RuleCondition.AFTER))
-		{
-			query = buildQuery("AND", query, lhs + " >" + date);
-		}
-
-		// Created before particular date
-		else if (condition.equals(SearchRule.RuleCondition.BEFORE))
-		{
-			query = buildQuery("AND", query, lhs + " < " + date);
-		}
-
-		// Created Between given dates
-		else if (condition.equals(SearchRule.RuleCondition.BETWEEN))
-		{
-			if (rhs_new != null)
-			{
-				String to_date = SearchUtil.getDateWithoutTimeComponent(Long.parseLong(rhs_new));
-
-				query = buildQuery("AND", query, lhs + " >= " + date);
-				query = buildQuery("AND", query, lhs + " <= " + to_date);
-			}
-		}
-
-		// Created in last number of days
-		else if (condition.equals(SearchRule.RuleCondition.LAST))
-		{
-			long fromDateInSecs = new DateUtil().removeDays(Integer.parseInt(rhs) - 1).getTime().getTime();
-
-			String fromDate = SearchUtil.getDateWithoutTimeComponent(fromDateInSecs);
-
-			query = buildQuery("AND", query, lhs + " >= " + fromDate);
-		}
-		else if (condition.equals(SearchRule.RuleCondition.NEXT))
-		{
-			long limitTime = new DateUtil().addDays(Integer.parseInt(rhs) - 1).getTime().getTime();
-			String formatedLimitDate = SearchUtil.getDateWithoutTimeComponent(limitTime);
-
-			long currentTime = new Date().getTime();
-
-			String formatedCurrentDate = SearchUtil.getDateWithoutTimeComponent(currentTime);
-
-			query = buildQuery("AND", query, lhs + " >=" + formatedCurrentDate);
-			query = buildQuery("AND", query, lhs + " <= " + formatedLimitDate);
-
-		}
-
-		return query;
-
-	}
-
-	private static String createTimeQuery(String query, String lhs, SearchRule.RuleCondition condition, String rhs,
-			String rhs_new)
+	/**
+	 * Builds options based on cursor and page size. Number found accuracy
+	 * should be set to get correct number of results available in according to
+	 * text search documentation
+	 * 
+	 * @param query
+	 * @param page
+	 * @param cursor
+	 * @return
+	 */
+	private QueryOptions buildOptions(String query, Integer page, String cursor)
 	{
 
-		Date startDate = new DateUtil(new Date(Long.parseLong(rhs))).toMidnight().getTime();
+		QueryOptions options;
 
-		String startDateEpoch = String.valueOf(startDate.getTime() / 1000);
-
-		Date endDate = new DateUtil(startDate).addDays(1).toMidnight().getTime();
-
-		String endDateEpoch = String.valueOf(endDate.getTime() / 1000);
-
-		// Formated to build query
-		String date = SearchUtil.getDateWithoutTimeComponent(Long.parseLong(rhs));
-
-		// Created on date condition
-		if (condition.equals(SearchRule.RuleCondition.ON) || condition.equals(SearchRule.RuleCondition.EQUALS))
+		/*
+		 * If page size is not null, cursor is set and options are built
+		 * accordingly
+		 */
+		if (page != null)
 		{
 			/*
-			 * Date endDate = new Date(
-			 * com.google.appengine.api.search.DateUtil.getEpochPlusDays(days,
-			 * milliseconds)P 1, 0));
+			 * Set query options only to get id of document (enough to get get
+			 * respective contacts). Number found accuracy should be set to get
+			 * accurate total number of available documents.
 			 */
+			if (cursor == null)
 
-			String epochQuery = "";
-
-			// First create query based on epoch time, take it in to temp string
-			// as it should be combined with a OR query on date fields to
-			// support old data
-			epochQuery = lhs + "_epoch" + ">=" + startDateEpoch;
-
-			epochQuery = buildQuery("AND", epochQuery, lhs + "_epoch" + "<=" + endDateEpoch);
-
-			String dateQuery = lhs + ":" + date;
-
-			String timeQuery = "((" + epochQuery + ") OR (" + dateQuery + "))";
-
-			query = buildQuery("AND", query, timeQuery);
-
-		}
-
-		// Created after given date
-		else if (condition.equals(SearchRule.RuleCondition.AFTER))
-		{
-			String epochQuery = lhs + "_epoch >= " + endDateEpoch;
-
-			String dateQuery = lhs + " > " + date;
-
-			String timeQuery = "((" + epochQuery + ") OR (" + dateQuery + "))";
-
-			query = buildQuery("AND", query, timeQuery);
-		}
-
-		// Created before particular date
-		else if (condition.equals(SearchRule.RuleCondition.BEFORE))
-		{
-			String epochQuery = lhs + "_epoch < " + endDateEpoch;
-
-			String dateQuery = lhs + " < " + date;
-
-			String timeQuery = "((" + epochQuery + ") OR (" + dateQuery + "))";
-
-			query = buildQuery("AND", query, timeQuery);
-		}
-
-		// Created Between given dates
-		else if (condition.equals(SearchRule.RuleCondition.BETWEEN))
-		{
-			if (rhs_new != null)
+				options = QueryOptions.newBuilder().setReturningIdsOnly(true).setLimit(page)
+						.setCursor(Cursor.newBuilder().setPerResult(true).build()).setNumberFoundAccuracy(10000)
+						.build();
+			else
 			{
+				options = QueryOptions.newBuilder().setReturningIdsOnly(true).setLimit(page)
+						.setCursor(Cursor.newBuilder().setPerResult(true).build(cursor)).setNumberFoundAccuracy(10000)
+						.build();
 
-				Date toDate = new DateUtil(new Date(Long.parseLong(rhs_new))).addDays(1).toMidnight().getTime();
-
-				String toDateEpoch = String.valueOf(toDate.getTime() / 1000);
-
-				String epochQuery = lhs + "_epoch >= " + startDateEpoch;
-
-				epochQuery = buildQuery("AND", epochQuery, lhs + "_epoch <= " + toDateEpoch);
-
-				String to_date = SearchUtil.getDateWithoutTimeComponent(Long.parseLong(rhs_new));
-
-				String dateQuery = lhs + " >= " + date;
-
-				dateQuery = buildQuery("AND", dateQuery, lhs + " <= " + to_date);
-
-				String timeQuery = "((" + epochQuery + ") OR (" + dateQuery + "))";
-
-				query = buildQuery("AND", query, timeQuery);
 			}
+
+			return options;
 		}
 
-		// Created in last number of days
-		else if (condition.equals(SearchRule.RuleCondition.LAST))
-		{
-			long fromDateInSecs = new DateUtil().removeDays(Integer.parseInt(rhs)).toMidnight().getTime().getTime() / 1000;
+		// If index is null return without querying
+		if (index == null)
+			return null;
 
-			long currentEpochTime = new DateUtil().getTime().getTime() / 1000;
-
-			String epochQuery = lhs + "_epoch >= " + String.valueOf(fromDateInSecs);
-
-			epochQuery = buildQuery("AND", epochQuery, lhs + "_epoch <= " + String.valueOf(currentEpochTime));
-
-			String fromDate = SearchUtil.getDateWithoutTimeComponent(fromDateInSecs * 1000);
-
-			String toDate = SearchUtil.getDateWithoutTimeComponent(currentEpochTime * 1000);
-
-			String dateQuery = lhs + " >= " + fromDate;
-
-			dateQuery = buildQuery("AND", dateQuery, lhs + " <= " + toDate);
-
-			String timeQuery = "((" + epochQuery + ") OR (" + dateQuery + "))";
-
-			query = buildQuery("AND", query, timeQuery);
-
-		}
-		else if (condition.equals(SearchRule.RuleCondition.NEXT))
-		{
-			long limitTime = new DateUtil().addDays(Integer.parseInt(rhs) - 1).getTime().getTime();
-
-			String formatedLimitDate = SearchUtil.getDateWithoutTimeComponent(limitTime);
-
-			long currentTime = new Date().getTime();
-
-			String formatedCurrentDate = SearchUtil.getDateWithoutTimeComponent(currentTime);
-
-			query = buildQuery("AND", query, lhs + " >=" + formatedCurrentDate);
-			query = buildQuery("AND", query, lhs + " <= " + formatedLimitDate);
-
-		}
-
-		return query;
-
+		return QueryOptions.newBuilder().setReturningIdsOnly(true)
+				.setLimit(Long.valueOf(index.search(query).getNumberFound()).intValue()).build();
 	}
 
 	/**
-	 * processes query and return collection of contacts
+	 * processes query and return collection of contacts. It returns all the the
+	 * entities (entities from datastore related to document ids returned in
+	 * search)
 	 * 
 	 * @param query
 	 *            {@link String}
@@ -392,52 +236,32 @@ public class QueryDocument implements QueryInterface
 	 *            {@link Reports.ReportType}
 	 * @return
 	 */
-	private static Collection processQuery(String query, RuleType type)
+	private Collection<T> processQuery(String query)
 	{
-		/*
-		 * List<ScoredDocument> contact_documents1 = new
-		 * ArrayList<ScoredDocument>( getContactDocuments(query, type, 50,
-		 * null));
-		 * 
-		 * List<Long> entity_ids = new ArrayList<Long>();
-		 * 
-		 * for (ScoredDocument doc : contact_documents1) {
-		 * entity_ids.add(Long.parseLong(doc.getId()));
-		 * System.out.println(doc.getCursor()); }
-		 */
-		// Get results on query
-		Index index = null;
-		try
-		{
-			// Get index of document based on type of query
-			index = new ContactDocument().getIndex();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-
 		// If index is null return without querying
 		if (index == null)
 			return null;
 
-		List<Long> entity_ids = new ArrayList<Long>();
-
 		/*
-		 * Set query options only to get id of document (enough to get get
-		 * respective contacts)
+		 * Sets query options only to get id of document (enough to get get
+		 * respective contacts). Default query returns without page limit it max
+		 * 1000 entities. To all matching results, documents should be fetch in
+		 * sets of 1000 documents at time
 		 */
 		QueryOptions options = QueryOptions.newBuilder().setLimit(1000)
-				.setCursor(Cursor.newBuilder().setPerResult(true).build()).setReturningIdsOnly(true).build();
+				.setCursor(Cursor.newBuilder().setPerResult(true).build()).setReturningIdsOnly(true)
+				.setNumberFoundAccuracy(10000).build();
 
-		// Build query on query options
+		// Builds query on query options
 		Query query_string = Query.newBuilder().setOptions(options).build(query);
 
 		// Gets sorted documents
 		List<ScoredDocument> contact_documents = new ArrayList<ScoredDocument>(index.search(query_string).getResults());
 
-		// List<Long> entity_ids = new ArrayList<Long>();
-
+		/*
+		 * As text search returns only 1000 in a query, we fetch remaining
+		 * documents.
+		 */
 		if (contact_documents.size() == 1000 && contact_documents.get(999).getCursor() != null)
 		{
 			options = QueryOptions
@@ -451,63 +275,47 @@ public class QueryDocument implements QueryInterface
 			// Build query on query options
 			query_string = Query.newBuilder().setOptions(options).build(query);
 
+			// Fetches next 1000 documents and them to list
 			contact_documents.addAll(new ArrayList<ScoredDocument>(index.search(query_string).getResults()));
 		}
 
-		for (ScoredDocument doc : contact_documents)
-		{
-			entity_ids.add(Long.parseLong(doc.getId()));
-		}
-
-		Objectify ofy = ObjectifyService.begin();
-
-		return ofy.get(Contact.class, entity_ids).values();
-		// Returns contact related to doc_ids
+		// Return datastore entities based on documents.
+		return getDatastoreEntities(contact_documents);
 	}
 
-	@SuppressWarnings("unchecked")
-	public static Collection<ScoredDocument> getContactDocuments(String query, RuleType type, Integer page,
-			String cursor)
-	{
-
-		QueryOptions options = buildOptions(query, type, page, cursor);
-
-		return (Collection<ScoredDocument>) performQueryWithOptions(options, query).get("fetchedDocuments");
-	}
-
-	private static Map<String, Object> performQueryWithOptions(QueryOptions options, String query)
+	/**
+	 * Processes the query string further with the query options build.
+	 * 
+	 * @param options
+	 * @param query
+	 * @return
+	 */
+	private Map<String, Object> processQueryWithOptions(QueryOptions options, String query)
 	{
 		// Build query on query options
-		com.google.appengine.api.search.Query query_string = null;
-
-		query_string = com.google.appengine.api.search.Query.newBuilder().setOptions(options).build(query);
-
-		// Get results on query
-		Index index = null;
-		try
-		{
-			// Get index of document based on type of query
-			// Get index of document based on type of query
-			index = new ContactDocument().getIndex();
-			System.out.println("namespace to search : " + index.getNamespace());
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+		Query query_string = Query.newBuilder().setOptions(options).build(query);
 
 		// If index is null return without querying
 		if (index == null)
 			return null;
 
+		// Fetches documents based on query options
 		Collection<ScoredDocument> searchResults = index.search(query_string).getResults();
 
+		// Results fetched and total number of available contacts are set in map
 		Map<String, Object> documents = new HashMap<String, Object>();
 
-		if (searchResults.size() == options.getLimit())
-			documents.put("availableDocuments", index.search(query_string).getNumberFound());
-		else
-			documents.put("availableDocuments", Long.valueOf(searchResults.size()));
+		// If cursor is not set, considering it is first set of results, total
+		// number of availabe contacts is set
+		if (options.getCursor().toWebSafeString() == null)
+		{
+			// If search results size is less than limit set, the returned doc
+			// ids are considered as total local available documents.
+			if (options.getLimit() > searchResults.size())
+				documents.put("availableDocuments", Long.valueOf(searchResults.size()));
+			else
+				documents.put("availableDocuments", index.search(query_string).getNumberFound());
+		}
 
 		System.out.println("number found : " + documents.get("availableDocuments"));
 
@@ -517,161 +325,153 @@ public class QueryDocument implements QueryInterface
 		return documents;
 	}
 
-	private static QueryOptions buildOptions(String query, RuleType type, Integer page, String cursor)
+	/**
+	 * Returns documents ids list that are fetched in the query
+	 * 
+	 * @param rules
+	 * @param count
+	 * @param cursor
+	 * @return
+	 */
+	public List<Long> getDocumentIds(List<SearchRule> rules, Integer count, String cursor)
 	{
 
-		QueryOptions options;
+		String query = QueryDocumentUtil.constructQuery(rules);
 
-		if (page != null)
+		if (StringUtils.isEmpty(query))
+			return new ArrayList();
+
+		// return query results
+		Collection<ScoredDocument> contact_documents = getDocuments(query, count, cursor);
+
+		List<Long> entity_ids = new ArrayList<Long>();
+
+		for (Document document : contact_documents)
 		{
-			/*
-			 * Set query options only to get id of document (enough to get get
-			 * respective contacts)
-			 */
-			if (cursor == null)
-
-				options = QueryOptions.newBuilder().setReturningIdsOnly(true).setLimit(page)
-						.setCursor(Cursor.newBuilder().setPerResult(true).build()).build();
-			else
-			{
-				options = QueryOptions.newBuilder().setReturningIdsOnly(true).setLimit(page)
-						.setCursor(Cursor.newBuilder().setPerResult(true).build(cursor)).build();
-
-			}
-
-			return options;
+			entity_ids.add(Long.parseLong(document.getId()));
 		}
 
-		// Get results on query
-		Index index = null;
-		try
-		{
-			// Get index of document based on type of query
-			// Get index of document based on type of query
-			index = new ContactDocument().getIndex();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-
-		// If index is null return without querying
-		if (index == null)
-			return null;
-
-		return QueryOptions.newBuilder().setReturningIdsOnly(true)
-				.setLimit(Long.valueOf(index.search(query).getNumberFound()).intValue()).build();
-
+		return entity_ids;
 	}
 
-	private static Collection processQuery(String query, RuleType type, Integer page, String cursor)
+	/**
+	 * Returns documents after processing given query
+	 * 
+	 * @param query
+	 * @param page
+	 * @param cursor
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public Collection<ScoredDocument> getDocuments(String query, Integer page, String cursor)
 	{
-		if (page == null)return processQuery(query, type);
 
-		QueryOptions options = buildOptions(query, type, page, cursor);
+		QueryOptions options = buildOptions(query, page, cursor);
 
-		Map<String, Object> results = performQueryWithOptions(options, query);
+		return (Collection<ScoredDocument>) processQueryWithOptions(options, query).get("fetchedDocuments");
+	}
 
+	/**
+	 * Returns data store entities. fetches all the entities and sets total
+	 * number of entities available on first entity and cursor on last entity
+	 * 
+	 * @param results
+	 * @param page
+	 * @param cursor
+	 * @return
+	 */
+	public Collection<T> getDatastoreEntities(Map<String, Object> results, Integer page, String cursor)
+	{
 		Collection<ScoredDocument> documents = (Collection<ScoredDocument>) results.get("fetchedDocuments");
 
 		Long availableResults = (Long) results.get("availableDocuments");
 
+		// Converts collection of documents in to a list, it enable easy
+		// retrieval of documents based on index
 		List<ScoredDocument> DocumentList = new ArrayList<ScoredDocument>(documents);
 
+		System.out.println(DocumentList);
+
+		// Fetches Entites. It fetches based on the template type on the class
+		// in datastore and returns a list
+		List<T> entities = getDatastoreEntities(documents);
+
+		// If list is empty return
+		if (entities.size() == 0)
+			return entities;
+
+		// If cursor is null then total numer of available entities is set in
+		// first entity Cursor object
+		if (cursor == null && page > 0)
+		{
+			T entity = entities.get(0);
+			com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) entity;
+			agileCursor.count = availableResults.intValue();
+		}
+
+		return entities;
+	}
+
+	/**
+	 * Iterates though contact documents in and fetch respective entities from
+	 * datastore based on document ids. It also sets cursor on the last entity
+	 * if class supports {@link com.agilecrm.cursor.Cursor}
+	 * 
+	 * @param DocumentList
+	 * @return
+	 */
+	public List<T> getDatastoreEntities(Collection<ScoredDocument> DocumentList)
+	{
 		List<Long> entity_ids = new ArrayList<Long>();
+
+		List<Key<T>> keys = new ArrayList<Key<T>>();
+
+		String newCursor = null;
 
 		// Iterate through contact_documents and add document ids(contact ids)
 		// to list
 		for (ScoredDocument doc : DocumentList)
 		{
 			entity_ids.add(Long.parseLong(doc.getId()));
-			cursor = doc.getCursor().toWebSafeString();
+			newCursor = doc.getCursor().toWebSafeString();
 		}
 
-		// Returns contact related to doc_ids
-		List<Contact> contactResults = ContactUtil.getContactsBulk(entity_ids);
-
-		if (contactResults.isEmpty())
-			return contactResults;
-
-		contactResults.get(0).count = availableResults.intValue();
-		contactResults.get(contactResults.size() - 1).cursor = cursor;
-
-		return contactResults;
-	}
-
-	public static String constructQuery(List<SearchRule> rules)
-	{
-		String query = "";
-
-		// Sets to contact by default
-		SearchRule.RuleType ruleType = RuleType.Contact;
-
-		for (SearchRule rule : rules)
+		// Add keys
+		for (Long id : entity_ids)
 		{
-			// Checks Rules is built properly, as validations are not preset at
-			// client side. Improper query raises exceptions.
-			if (rule.LHS == null || rule.RHS == null || rule.CONDITION == null)
-				continue;
-
-			if (rule.nested_condition != null && rule.nested_lhs == null)
-				continue;
-
-			// Set type of rule (search on what?)
-			ruleType = rule.ruleType;
-
-			/*
-			 * Get condition parameters LHS(field_name in document) ,
-			 * condition(condition or query AND or NOT), RHS(field_value)
-			 */
-			String lhs = rule.LHS;
-			SearchRule.RuleCondition condition = rule.CONDITION;
-			String rhs = rule.RHS;
-			String rhs_new = rule.RHS_NEW;
-			SearchRule.RuleCondition nestedCondition = rule.nested_condition;
-			String nestedLhs = rule.nested_lhs;
-			String nestedRhs = rule.nested_rhs;
-
-			/*
-			 * Build equals and not equals queries conditions except time based
-			 * conditions
-			 */
-			if (!lhs.contains("time"))
+			try
 			{
-				/*
-				 * Create new query with LHS and RHS conditions to be processed
-				 * further for necessary queries
-				 */
-				String newQuery = lhs + ":" + SearchUtil.normalizeString(rhs);
-
-				// For equals condition
-				if (condition.equals(SearchRule.RuleCondition.EQUALS) || condition.equals(SearchRule.RuleCondition.ON))
-				{
-					/*
-					 * Build query by passing condition old query and new query
-					 */
-					query = buildQuery("AND", query, newQuery);
-				}
-
-				// For not queries
-				else
-				{
-					query = buildQuery("NOT", query, newQuery);
-				}
+				// Adds to keys list
+				keys.add(new Key<T>(clazz, id));
 			}
-
-			// Queries on created or updated times
-			if (lhs.contains("time") && !lhs.contains("tags"))
+			catch (Exception e)
 			{
-				query = createTimeQuery(query, lhs, condition, rhs, rhs_new);
-			}
-
-			if (lhs.contains("time") && lhs.contains("tags"))
-			{
-				query = createTimeQuery(query, SearchUtil.normalizeString(rhs) + "_time", nestedCondition, nestedLhs,
-						nestedRhs);
+				e.printStackTrace();
 			}
 		}
-		return query;
+
+		Objectify ofy = ObjectifyService.begin();
+
+		// Fetches entites based on the template type of current class
+		List<T> entities = new ArrayList<T>(ofy.get(clazz, entity_ids).values());
+
+		if (entities.size() == 0)
+			return entities;
+
+		if ((entities instanceof com.agilecrm.cursor.Cursor))
+		{
+			// Gets last entity to set cursor on it
+			T entity = entities.get(entities.size() - 1);
+
+			com.agilecrm.cursor.Cursor agileCursor = null;
+			if (newCursor != null)
+			{
+				agileCursor = (com.agilecrm.cursor.Cursor) entity;
+				agileCursor.cursor = newCursor;
+			}
+		}
+
+		return entities;
 	}
+
 }

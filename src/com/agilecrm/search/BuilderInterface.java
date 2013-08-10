@@ -14,30 +14,35 @@ import com.google.appengine.api.search.Index;
  */
 public interface BuilderInterface
 {
-    /**
-     * Defines an entity in search, so search is enabled on entity
-     * 
-     * @param entity
-     *            {@link Object}
-     */
-    public void add(Object entity);
+	/**
+	 * Defines an entity in search, so search is enabled on entity
+	 * 
+	 * @param entity
+	 *            {@link Object}
+	 */
+	public void add(Object entity);
 
-    /**
-     * Declares edit functionality on an entity in search
-     * 
-     * @param entity
-     */
-    public void edit(Object entity);
+	/**
+	 * Declares edit functionality on an entity in search
+	 * 
+	 * @param entity
+	 */
+	public void edit(Object entity);
 
-    /**
-     * Declares delete of an entity from search, removes object form search.
-     * Whenever an entity is deleted from database, this method is called to
-     * remove object from search
-     * 
-     * @param id
-     */
-    public void delete(String id);
+	/**
+	 * Declares delete of an entity from search, removes object form search.
+	 * Whenever an entity is deleted from database, this method is called to
+	 * remove object from search
+	 * 
+	 * @param id
+	 */
+	public void delete(String id);
 
-    public Index getIndex();
-
+	/**
+	 * Returns index of the document of implemented class (contacts, deals,
+	 * tasks).
+	 * 
+	 * @return
+	 */
+	public Index getIndex();
 }

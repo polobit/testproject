@@ -3,8 +3,11 @@ package com.agilecrm.search;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.search.query.QueryDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
+import com.google.appengine.api.search.Index;
 
 /**
  * The <Code>AppengineSearch</code> class is used to call build and search on
@@ -16,73 +19,76 @@ import com.agilecrm.search.ui.serialize.SearchRule;
  */
 public class AppengineSearch<T>
 {
-    public QueryInterface query;
-    public BuilderInterface builder;
+	public QueryInterface query;
+	public BuilderInterface builder;
+	public Index index;
+	public Class<T> clazz;
 
-    /**
-     * Constructor gets the respective builder object based on type of class.
-     * 
-     * @param clazz
-     */
-    public AppengineSearch(Class<T> clazz)
-    {
-	String type = clazz.getSimpleName();
-
-	try
+	/**
+	 * Constructor gets the respective builder object based on type of class.
+	 * 
+	 * @param clazz
+	 */
+	public AppengineSearch(Class<T> clazz)
 	{
-	    builder = (BuilderInterface) Class.forName(
-		    "com.agilecrm.search.document." + type + "Document")
-		    .newInstance();
+		String type = clazz.getSimpleName();
 
-	    query = new QueryDocument();
+		try
+		{
+			builder = (BuilderInterface) Class.forName("com.agilecrm.search.document." + type + "Document")
+					.newInstance();
+
+			index = builder.getIndex();
+			query = new QueryDocument<T>(index, clazz);
+			this.clazz = clazz;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
-	catch (Exception e)
+
+	public void add(T entity)
 	{
-	    e.printStackTrace();
+		builder.add(entity);
 	}
-    }
 
-    public void add(T entity)
-    {
-	builder.add(entity);
-    }
+	public void edit(T entity)
+	{
+		builder.edit(entity);
+	}
 
-    public void edit(T entity)
-    {
-	builder.edit(entity);
-    }
+	public void delete(String id)
+	{
+		builder.delete(id);
+	}
 
-    public void delete(String id)
-    {
-	builder.delete(id);
-    }
+	@SuppressWarnings("rawtypes")
+	public Collection getAdvacnedSearchResults(List<SearchRule> rules)
+	{
+		return query.advancedSearch(rules);
+	}
 
-    @SuppressWarnings("rawtypes")
-    public static Collection getAdvacnedSearchResults(List<SearchRule> rules)
-    {
-	return new QueryDocument().advancedSearch(rules);
-    }
+	@SuppressWarnings("rawtypes")
+	public Collection getAdvacnedSearchResults(List<SearchRule> rules, Integer count, String cursor)
+	{
+		return query.advancedSearch(rules, count, cursor);
+	}
 
-    @SuppressWarnings("rawtypes")
-    public static Collection getAdvacnedSearchResults(List<SearchRule> rules,
-	    Integer count, String cursor)
-    {
-	return new QueryDocument().advancedSearch(rules, count, cursor);
-    }
+	@SuppressWarnings("rawtypes")
+	public Collection getSimpleSearchResults(String keyword, Integer count, String cursor)
+	{
+		System.out.println("simple search");
+		return query.simpleSearch(keyword, count, cursor);
+	}
 
-    @SuppressWarnings("rawtypes")
-    public static Collection getSimpleSearchResults(String keyword,
-	    Integer count, String cursor)
-    {
-    	return new QueryDocument().simpleSearch(keyword, count, cursor);
-    }
-    
-    @SuppressWarnings("rawtypes")
-    public static Collection getSimpleSearchResults(String keyword,
-	    Integer count, String cursor,String type)
-    {
-    	if(type==null || type.length()<=0)return new QueryDocument().simpleSearch(keyword, count, cursor);
-    	return (new QueryDocument()).simpleSearchWithType(keyword, count, cursor, type);
-    }
+	@SuppressWarnings("rawtypes")
+	public Collection getSimpleSearchResults(String keyword, Integer count, String cursor, String type)
+	{
+		System.out.println("simple search with company");
+		if (StringUtils.isEmpty(type))
+			return query.simpleSearch(keyword, count, cursor);
+		return query.simpleSearchWithType(keyword, count, cursor, type);
+	}
 
 }
