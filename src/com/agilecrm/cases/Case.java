@@ -58,6 +58,17 @@ public class Case
 	public String owner_id;
 
 	/**
+	 * Creation time of the case.
+	 */
+	public Long created_time = 0L;
+
+	/**
+	 * Entity type.
+	 */
+	@NotSaved
+	public String entity_type = "case";
+
+	/**
 	 * ownerKey from Datastore, this is private & not passed in network.
 	 */
 	@NotSaved(IfDefault.class)
@@ -189,6 +200,9 @@ public class Case
 	@PrePersist
 	public void prePersist()
 	{
+		// initialize created time.
+		if (created_time == 0L)
+			created_time = System.currentTimeMillis() / 1000;
 
 		related_contacts_key = new ArrayList<Key<Contact>>();
 
