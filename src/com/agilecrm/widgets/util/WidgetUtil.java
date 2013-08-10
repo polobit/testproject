@@ -156,7 +156,7 @@ public class WidgetUtil
 
     /**
      * Creates default widgets and adds to list of widgets, default widgets are
-     * Linkedin, Twitter, Rapleaf.
+     * LinkedIn, Twitter, Rapleaf.
      * 
      * @return {@link List} of {@link Widget}
      */
@@ -166,8 +166,8 @@ public class WidgetUtil
 	List<Widget> widgets = new ArrayList<Widget>();
 
 	/*
-	 * Adds widget details to list, which specifies url to load the widget
-	 * and images, logos, description to be show in widgets pannel
+	 * Adds widget details to list, which specifies URL to load the widget
+	 * and images, logo's, description to be show in widgets panel
 	 */
 	widgets.add(new Widget(
 		"Linkedin",

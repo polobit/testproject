@@ -10,6 +10,19 @@ import javax.ws.rs.core.Response;
 
 import com.thirdparty.Rapleaf;
 
+/**
+ * <code>RapleafWidgetsAPI</code> class includes REST calls to interact with
+ * {@link Rapleaf} class
+ * 
+ * <p>
+ * It is called from client side for retrieving details of a person using
+ * Rapleaf server
+ * </p>
+ * 
+ * @author Tejaswi
+ * @since August 2013
+ * 
+ */
 @Path("/api/widgets/rapleaf")
 public class RapleafWidgetsAPI
 {
@@ -17,7 +30,7 @@ public class RapleafWidgetsAPI
      * Connects to Rapleaf and fetches information based on the email
      * 
      * @param apikey
-     *            {@link String} API key given by user from rapleaf account
+     *            {@link String} API key given by user from Rapleaf account
      * @param email
      *            {@link String} email of the contact
      * @return {@link String}
@@ -30,7 +43,7 @@ public class RapleafWidgetsAPI
     {
 	try
 	{
-	    // Return rapportive results
+	    // Retrieves details of persons from Rapleaf based on email
 	    return Rapleaf.getRapportiveValue(email, apikey).toString();
 	}
 	catch (Exception e)

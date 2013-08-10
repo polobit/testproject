@@ -15,6 +15,18 @@ import com.agilecrm.social.StripePluginUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 
+/**
+ * <code>StripeWidgetsAPI</code> class includes REST calls to interact with
+ * {@link StripePluginUtil} class
+ * 
+ * <p>
+ * It is called from client side for retrieving Stripe customer details
+ * </p>
+ * 
+ * @author Tejaswi
+ * @since August 2013
+ * 
+ */
 @Path("/api/widgets/stripe")
 public class StripeWidgetsAPI
 {
@@ -35,13 +47,17 @@ public class StripeWidgetsAPI
 	    @PathParam("widget-id") Long widgetId,
 	    @PathParam("customerId") String customerId)
     {
-
 	try
 	{
+	    // Retrieves widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
+
 	    if (widget == null)
 		return null;
 
+	    /*
+	     * Calls StripePluginUtil method to retrieve customer details
+	     */
 	    return StripePluginUtil.getCustomerDetails(widget, customerId)
 		    .toString();
 	}
