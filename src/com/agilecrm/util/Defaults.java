@@ -138,7 +138,7 @@ public class Defaults
 	task2.save();
 
 	Task task3 = new Task();
-	task3.subject = "<a href=\"https://twitter.com/share?url=https%3A%2F%2Fwww.agilecrm.com&amp;text=Sell%20like%20a%20pro%20with%20%23AgileCRM%20-%20\" target=\"_blank\"rel=\"nofollow\" title=\"Link: https://twitter.com/share?url=https%3A%2F%2Fwww.agilecrm.com&amp;text=Sell%20like%20a%20pro%20with%20%23AgileCRM%20-%20\">Tweet about Agile</a>";
+	task3.subject = "<a href=\"https://twitter.com/share?url=https%3A%2F%2Fwww.agilecrm.com&amp;text=Sell%20like%20Fortune%20500%20with%20%23AgileCRM%20-%20\" target=\"_blank\"rel=\"nofollow\" title=\"Link: https://twitter.com/share?url=https%3A%2F%2Fwww.agilecrm.com&amp;text=Sell%20like%20Fortune%20500%20with%20%23AgileCRM%20-%20\">Tweet about Agile</a>";
 	task3.is_complete = false;
 	task3.type = Type.TWEET;
 	task3.priority_type = PriorityType.NORMAL;
