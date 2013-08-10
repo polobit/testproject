@@ -47,6 +47,12 @@ import com.agilecrm.widgets.Widget;
 public class TwitterUtil
 {
 
+    /**
+     * Agile Twitter profile signature
+     * <p>
+     * We include it, while sending a message or tweet in Twitter from Agile
+     * </p>
+     */
     public static final String AGILETWITTERSOURCEMESSAGE = " via @agile_crm";
 
     /**
@@ -201,25 +207,33 @@ public class TwitterUtil
 	 * SocialSearchResult and adds to list
 	 */
 	for (User user : users)
-	{
-	    SocialSearchResult result = new SocialSearchResult();
-
-	    result.id = user.getId() + "";
-	    result.name = user.getName();
-	    result.screen_name = user.getScreenName();
-	    result.picture = user.getBiggerProfileImageURLHttps().toString();
-	    result.location = user.getLocation();
-	    result.summary = user.getDescription();
-	    result.num_connections = user.getFollowersCount() + "";
-	    result.tweet_count = user.getStatusesCount() + "";
-	    result.friends_count = user.getFriendsCount() + "";
-	    result.url = "https://twitter.com/" + user.getScreenName();
-
-	    // Adds each result in to list
-	    searchResults.add(result);
-	}
+	    // Wraps into SocialSearchResult and adds each result in to list
+	    searchResults.add(wrapUserDetailsInSearchResult(user));
 
 	return searchResults;
+    }
+
+    /**
+     * Fills user details in a {@link SocialSearchResult} from {@link User}
+     * object
+     * 
+     * @param user
+     *            {@link User}
+     * @return {@link SocialSearchResult}
+     */
+    private static SocialSearchResult wrapUserDetailsInSearchResult(User user)
+    {
+	SocialSearchResult result = new SocialSearchResult();
+	result.id = user.getId() + "";
+	result.name = user.getName();
+	result.picture = user.getBiggerProfileImageURLHttps().toString();
+	result.location = user.getLocation();
+	result.summary = user.getDescription();
+	result.url = "https://twitter.com/" + user.getScreenName();
+	result.num_connections = user.getFollowersCount() + "";
+	result.tweet_count = user.getStatusesCount() + "";
+	result.friends_count = user.getFriendsCount() + "";
+	return result;
     }
 
     /**
@@ -531,14 +545,14 @@ public class TwitterUtil
 	    Twitter twitter = getTwitter(widget);
 	    User user = twitter.showUser(twitterId);
 	    Query query = new Query("from:" + user.getScreenName());
-	    QueryResult result = twitter.search(query);
+	    QueryResult queryResult = twitter.search(query);
 
-	    return getListOfSocialUpdateStream(user, twitter, result);
+	    return getListOfSocialUpdateStream(user, twitter,
+		    queryResult.getTweets());
 	}
 	catch (TwitterRuntimeException e)
 	{
-	    System.out.println("in twitter exception");
-
+	    System.out.println("In network updates twitter exception");
 	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
     }
@@ -575,16 +589,146 @@ public class TwitterUtil
 	    Query query = new Query("from:" + user.getScreenName());
 	    query.maxId(statusId);
 	    query.setCount(count);
-	    QueryResult result = twitter.search(query);
+	    QueryResult queryResult = twitter.search(query);
 
-	    return getListOfSocialUpdateStream(user, twitter, result);
+	    return getListOfSocialUpdateStream(user, twitter,
+		    queryResult.getTweets());
 	}
 	catch (TwitterRuntimeException e)
 	{
-	    System.out.println("in twitter exception");
-
+	    System.out.println("In network updates twitter exception");
 	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
+    }
+
+    /**
+     * Forms a {@link List} of {@link SocialUpdateStream} from the {@link List}
+     * of {@link Status} (tweets)
+     * 
+     * @param user
+     *            {@link User} contact whose tweets are to be filled in list
+     * @param twitter
+     *            {@link Twitter} after setting authentication
+     * @param queryResult
+     *            {@link QueryResult} to retrieve tweets of the person
+     * @return {@link List} of {@link SocialUpdateStream}
+     * @throws Exception
+     *             If {@link Twitter} throws an exception
+     */
+    private static List<SocialUpdateStream> getListOfSocialUpdateStream(
+	    User user, Twitter twitter, List<Status> tweets)
+	    throws SocketTimeoutException, IOException, Exception
+    {
+	List<SocialUpdateStream> updateStream = new ArrayList<SocialUpdateStream>();
+
+	/*
+	 * For each tweet, retrieve the information and make it into proper
+	 * string with links to display it
+	 */
+	for (Status tweet : tweets)
+	    try
+	    {
+		SocialUpdateStream stream = new SocialUpdateStream();
+
+		stream.id = String.valueOf(tweet.getId());
+		stream.message = tweet.getText();
+		stream.is_retweet = tweet.isRetweet();
+		stream.is_retweeted = tweet.isRetweetedByMe();
+		stream.created_time = tweet.getCreatedAt().getTime() / 1000;
+
+		/*
+		 * If tweet is a retweet, get the picture URL and profile URL of
+		 * person who actually tweeted it, else get picture URL and
+		 * profile URL of the the contact's twitter profile
+		 */
+		if (tweet.isRetweet())
+		{
+		    User tweetor = twitter.showUser(tweet
+			    .getUserMentionEntities()[0].getScreenName());
+		    stream.tweeted_person_pic_url = tweetor
+			    .getMiniProfileImageURLHttps();
+		    stream.tweeted_person_profile_url = "https://twitter.com/"
+			    + tweetor.getScreenName();
+		}
+		else
+		{
+		    stream.tweeted_person_pic_url = user
+			    .getBiggerProfileImageURLHttps();
+		    stream.tweeted_person_profile_url = "https://twitter.com/"
+			    + user.getScreenName();
+		}
+
+		/*
+		 * For every user who retweeted the tweet, make its screen name
+		 * as link in the tweet string which can be redirected to
+		 * his/her twitter profile
+		 */
+		for (UserMentionEntity entity : tweet.getUserMentionEntities())
+		    stream.message = stream.message
+			    .replace(
+				    "@" + entity.getScreenName(),
+				    "<a href='https://twitter.com/"
+					    + entity.getScreenName()
+					    + "' target='_blank' class='cd_hyperlink'>@"
+					    + entity.getScreenName() + "</a>");
+
+		/*
+		 * For every hash tag, make its name as link in the tweet string
+		 * which can be redirected to twitter profile of it
+		 */
+		for (HashtagEntity entity : tweet.getHashtagEntities())
+		{
+		    String url = "https://twitter.com/search?q=%23"
+			    + entity.getText() + "&src=hash";
+		    stream.message = stream.message
+			    .replace(
+				    "#" + entity.getText(),
+				    "<a href='"
+					    + url
+					    + "' target='_blank' class='cd_hyperlink'>#"
+					    + entity.getText() + "</a>");
+		}
+
+		/*
+		 * If tweet contains links, replacing the link with its display
+		 * content returned from Twitter, which redirects with the
+		 * actual URL
+		 */
+		for (URLEntity entity : tweet.getURLEntities())
+		    stream.message = stream.message.replace(entity.getURL(),
+			    "<a href='" + entity.getURL()
+				    + "' target='_blank' class='cd_hyperlink'>"
+				    + entity.getDisplayURL() + "</a>");
+
+		/*
+		 * If still tweet contains URL, showing it as hyper link and
+		 * linking it with its own URL
+		 */
+		String[] words = stream.message.split(" ");
+		String exp = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+
+		for (String word : words)
+		    if (word.matches(exp))
+			stream.message = stream.message
+				.replace(
+					word,
+					"<a href='"
+						+ word
+						+ "' target='_blank' class='cd_hyperlink'>"
+						+ word + "</a>");
+
+		System.out.println("Tweet after showing links: "
+			+ stream.message);
+
+		// Each tweet is added in a list
+		updateStream.add(stream);
+	    }
+	    catch (TwitterRuntimeException e)
+	    {
+		System.out.println("In list of updates twitter exception");
+		throw new Exception(getErrorMessage(e.getMessage()));
+	    }
+	return updateStream;
     }
 
     /**
@@ -605,7 +749,7 @@ public class TwitterUtil
     {
 	try
 	{
-	    // Create a query with screen name and serach for tweets
+	    // Create a query with screen name and search for tweets
 	    QueryResult result = twitter
 		    .search(new Query("from:" + screenName));
 
@@ -613,8 +757,7 @@ public class TwitterUtil
 	}
 	catch (TwitterRuntimeException e)
 	{
-	    System.out.println("in twitter exception");
-
+	    System.out.println("In get tweets by screen name exception");
 	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
     }
@@ -622,6 +765,10 @@ public class TwitterUtil
     /**
      * Retrieves the list of follower IDs of the contact based on the contact's
      * twitter id and wraps the result into a {@link List}
+     * 
+     * <p>
+     * Retrieves 5000 IDs at a time
+     * </p>
      * 
      * @param widget
      *            {@link Widget} for accessing token and secret key
@@ -636,30 +783,28 @@ public class TwitterUtil
     {
 	try
 	{
-	    // Creates a twitter object to connect with twitter
-	    Twitter twitter = getTwitter(widget);
+
 	    IDs ids;
 	    List<Long> listOfIds = new ArrayList<Long>();
 	    long cursor = -1;
 
-	    System.out.println("Listing ids.");
-
-	    // If more than 5000 followers are required then unComment this do
-	    // while
+	    /*
+	     * Creates a twitter object to connect with twitter and retrieves
+	     * follower Twitter Ids based on Twitter ID. If more than 5000
+	     * followers are required then unComment this do while condition
+	     */
 	    // do {
-
-	    ids = twitter.getFollowersIDs(Long.parseLong(twitterId), cursor);
+	    ids = getTwitter(widget).getFollowersIDs(Long.parseLong(twitterId),
+		    cursor);
 	    listOfIds.addAll(Arrays.asList(ArrayUtils.toObject(ids.getIDs())));
-	    System.out.println(listOfIds);
-
+	    System.out.println("List of Ids: " + listOfIds);
 	    // } while ((cursor = ids.getNextCursor()) != 0);
 
 	    return listOfIds;
 	}
 	catch (TwitterRuntimeException e)
 	{
-	    System.out.println("in twitter exception");
-
+	    System.out.println("In follower Ids twitter exception ");
 	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
     }
@@ -681,30 +826,27 @@ public class TwitterUtil
     {
 	try
 	{
-	    // Creates a twitter object to connect with twitter
-	    Twitter twitter = getTwitter(widget);
 	    IDs ids;
 	    List<Long> listOfIds = new ArrayList<Long>();
 	    long cursor = -1;
 
-	    System.out.println("Listing ids.");
-
-	    // If more than 5000 following are required then unComment this do
-	    // while
+	    /*
+	     * Creates a twitter object to connect with twitter and retrieves
+	     * following Twitter Ids based on Twitter ID. If more than 5000
+	     * following Ids are required then unComment this do while condition
+	     */
 	    // do {
-
-	    ids = twitter.getFriendsIDs(Long.parseLong(twitterId), cursor);
+	    ids = getTwitter(widget).getFriendsIDs(Long.parseLong(twitterId),
+		    cursor);
 	    listOfIds.addAll(Arrays.asList(ArrayUtils.toObject(ids.getIDs())));
-	    System.out.println(listOfIds);
-
+	    System.out.println("List of Ids: " + listOfIds);
 	    // } while ((cursor = ids.getNextCursor()) != 0);
 
 	    return listOfIds;
 	}
 	catch (TwitterRuntimeException e)
 	{
-	    System.out.println("in twitter exception");
-
+	    System.out.println("In following Ids twitter exception ");
 	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
     }
@@ -715,184 +857,50 @@ public class TwitterUtil
      * 
      * @param widget
      *            {@link Widget} for accessing token and secret key
-     * @param ids
+     * @param arrayOfIds
      *            {@link List} of {@link Long} twitter IDs
      * @return {@link List} of {@link SocialSearchResult}
      * @throws Exception
      *             If {@link Twitter} throws an exception
      */
     public static List<SocialSearchResult> getListOfProfiles(Widget widget,
-	    JSONArray ids) throws SocketTimeoutException, IOException,
+	    JSONArray arrayOfIds) throws SocketTimeoutException, IOException,
 	    Exception
     {
 	try
 	{
+	    // Creates a twitter object from widget preferences
 	    Twitter twitter = getTwitter(widget);
 	    List<SocialSearchResult> profilesList = new ArrayList<SocialSearchResult>();
 
-	    for (int i = 0; i < ids.length(); i++)
-	    {
-		SocialSearchResult result = new SocialSearchResult();
-
+	    /*
+	     * Iterate through the array, retrieve user information for every
+	     * Id, wrap each user details into SocialSearchResult object and add
+	     * it to list
+	     */
+	    for (int i = 0; i < arrayOfIds.length(); i++)
 		try
 		{
-		    User user = twitter.showUser(Long.parseLong(ids
+		    User user = twitter.showUser(Long.parseLong(arrayOfIds
 			    .getString(i)));
-		    result.id = user.getId() + "";
-		    result.name = user.getName();
-		    result.picture = user.getBiggerProfileImageURLHttps()
-			    .toString();
-		    result.location = user.getLocation();
-		    result.summary = user.getDescription();
-		    result.url = "https://twitter.com/" + user.getScreenName();
-		    result.num_connections = user.getFollowersCount() + "";
-		    result.tweet_count = user.getStatusesCount() + "";
-		    result.friends_count = user.getFriendsCount() + "";
 
+		    // Wraps in object and adds each result in to list
+		    profilesList.add(wrapUserDetailsInSearchResult(user));
 		}
 		catch (TwitterRuntimeException e)
 		{
+		    /*
+		     * If user doesn't share information, we get a null pointer
+		     * exception and we skip his profile
+		     */
 		    continue;
 		}
 
-		System.out.println(result.url);
-		System.out.println(result);
-		// Adds each result in to list
-		profilesList.add(result);
-	    }
 	    return profilesList;
 	}
 	catch (TwitterRuntimeException e)
 	{
-	    System.out.println("in twitter exception");
-
-	    throw new Exception(getErrorMessage(e.getMessage()));
-	}
-    }
-
-    /**
-     * Forms a {@link List} of {@link SocialUpdateStream} with the tweets of the
-     * contact
-     * 
-     * @param user
-     *            {@link User} contact whose tweets are to be filled in list
-     * @param twitter
-     *            {@link Twitter} after setting authentication
-     * @param result
-     *            {@link QueryResult} to retrieve tweets of the person
-     * @return {@link List} of {@link SocialUpdateStream}
-     * @throws Exception
-     *             If {@link Twitter} throws an exception
-     */
-    private static List<SocialUpdateStream> getListOfSocialUpdateStream(
-	    User user, Twitter twitter, QueryResult result)
-	    throws SocketTimeoutException, IOException, Exception
-    {
-	try
-	{
-	    List<SocialUpdateStream> updateStream = new ArrayList<SocialUpdateStream>();
-
-	    for (Status tweet : result.getTweets())
-	    {
-		SocialUpdateStream stream = new SocialUpdateStream();
-
-		stream.id = String.valueOf(tweet.getId());
-		stream.message = tweet.getText();
-		stream.is_retweet = tweet.isRetweet();
-
-		// If tweet is a retweet, get the picture URL and profile URL of
-		// person who actually tweeted it, else get picture URL and
-		// profile
-		// URL of contact
-		if (tweet.isRetweet())
-		{
-		    User tweetor = twitter.showUser(tweet
-			    .getUserMentionEntities()[0].getScreenName());
-		    stream.tweeted_person_pic_url = tweetor
-			    .getMiniProfileImageURLHttps();
-		    stream.tweeted_person_profile_url = "https://twitter.com/"
-			    + tweetor.getScreenName();
-
-		}
-		else
-		{
-		    stream.tweeted_person_pic_url = user
-			    .getBiggerProfileImageURLHttps();
-		    stream.tweeted_person_profile_url = "https://twitter.com/"
-			    + user.getScreenName();
-
-		}
-
-		// For every tweetor who retweeted the tweet, linking his name
-		// with
-		// a URL which redirects to his/her twitter profile
-		for (UserMentionEntity entity : tweet.getUserMentionEntities())
-		{
-		    stream.message = stream.message
-			    .replace(
-				    "@" + entity.getScreenName(),
-				    "<a href='https://twitter.com/"
-					    + entity.getScreenName()
-					    + "' target='_blank' class='cd_hyperlink'>@"
-					    + entity.getScreenName() + "</a>");
-		}
-
-		// For every hash tag, linking it with a URL which redirects to
-		// twitter profile of it
-		for (HashtagEntity entity : tweet.getHashtagEntities())
-		{
-
-		    String url = "https://twitter.com/search?q=%23"
-			    + entity.getText() + "&src=hash";
-		    stream.message = stream.message
-			    .replace(
-				    "#" + entity.getText(),
-				    "<a href='"
-					    + url
-					    + "' target='_blank' class='cd_hyperlink'>#"
-					    + entity.getText() + "</a>");
-		}
-
-		// If tweet contains links, replacing the link with its display
-		// content returned from twitter and linking it with the actual
-		// URL
-		for (URLEntity entity : tweet.getURLEntities())
-		{
-
-		    stream.message = stream.message.replace(entity.getURL(),
-			    "<a href='" + entity.getURL()
-				    + "' target='_blank' class='cd_hyperlink'>"
-				    + entity.getDisplayURL() + "</a>");
-		}
-
-		// If still tweet contains URL, showing it as hyper link and
-		// linking
-		// it with its own URL
-		String[] words = stream.message.split(" ");
-		String exp = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
-
-		for (String word : words)
-		{
-		    if (word.matches(exp))
-			stream.message = stream.message
-				.replace(
-					word,
-					"<a href='"
-						+ word
-						+ "' target='_blank' class='cd_hyperlink'>"
-						+ word + "</a>");
-		}
-		System.out.println(stream.message);
-		stream.is_retweeted = tweet.isRetweetedByMe();
-		stream.created_time = tweet.getCreatedAt().getTime() / 1000;
-		updateStream.add(stream);
-	    }
-	    return updateStream;
-	}
-	catch (TwitterRuntimeException e)
-	{
-	    System.out.println("in twitter exception");
-
+	    System.out.println("In list of profiles twitter exception");
 	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
     }
@@ -909,6 +917,10 @@ public class TwitterUtil
 
 	System.out.println("Before changing error: " + error);
 
+	/*
+	 * It returns message and code, we extract the message from it and throw
+	 * it
+	 */
 	if (error.contains("message - ") && error.contains("code - "))
 	{
 	    error = error.substring(error.indexOf("message - ") + 10,

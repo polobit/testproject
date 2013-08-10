@@ -20,6 +20,19 @@ import com.agilecrm.social.FreshBooksUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 
+/**
+ * <code>FreshBooksWidgetsAPI</code> class includes REST calls to interact with
+ * {@link FreshBooksUtil} class
+ * 
+ * <p>
+ * It is called from client side to retrieve clients, invoices and client from
+ * FreshBooks account
+ * </p>
+ * 
+ * @author Tejaswi
+ * @since August 2013
+ * 
+ */
 @Path("/api/widgets/freshbooks")
 public class FreshBooksWidgetsAPI
 {
@@ -40,11 +53,15 @@ public class FreshBooksWidgetsAPI
 	    @PathParam("widget-id") Long widgetId,
 	    @PathParam("email") String email)
     {
+	// Retrieves widget based on its id
 	Widget widget = WidgetUtil.getWidget(widgetId);
+
 	if (widget == null)
 	    return null;
+
 	try
 	{
+	    // Calls FreshBooksUtil method to retrieve clients
 	    return FreshBooksUtil.getClients(widget, email);
 	}
 	catch (SocketTimeoutException e)
@@ -87,11 +104,15 @@ public class FreshBooksWidgetsAPI
 	    @PathParam("widget-id") Long widgetId,
 	    @PathParam("client_id") String clientId)
     {
+	// Retrieves widget based on its id
 	Widget widget = WidgetUtil.getWidget(widgetId);
+
 	if (widget == null)
 	    return null;
+
 	try
 	{
+	    // Calls FreshBooksUtil method to retrieve invoices of client
 	    return FreshBooksUtil.getInvoicesOfClient(widget, clientId);
 	}
 	catch (SocketTimeoutException e)
@@ -130,11 +151,18 @@ public class FreshBooksWidgetsAPI
     @Produces(MediaType.TEXT_PLAIN)
     public String getItemsFromFreshBooks(@PathParam("widget-id") Long widgetId)
     {
+	// Retrieves widget based on its id
 	Widget widget = WidgetUtil.getWidget(widgetId);
+
 	if (widget == null)
 	    return null;
+
 	try
 	{
+	    /*
+	     * Calls FreshBooksUtil method to retrieve items in FreshBooks
+	     * account
+	     */
 	    return FreshBooksUtil.getItems(widget);
 	}
 	catch (SocketTimeoutException e)
@@ -171,11 +199,18 @@ public class FreshBooksWidgetsAPI
     @Produces(MediaType.TEXT_PLAIN)
     public String getTaxesFromFreshBooks(@PathParam("widget-id") Long widgetId)
     {
+	// Retrieves widget based on its id
 	Widget widget = WidgetUtil.getWidget(widgetId);
+
 	if (widget == null)
 	    return null;
+
 	try
 	{
+	    /*
+	     * Calls FreshBooksUtil method to retrieve taxes in FreshBooks
+	     * account
+	     */
 	    return FreshBooksUtil.getTaxes(widget);
 	}
 	catch (SocketTimeoutException e)
@@ -221,11 +256,18 @@ public class FreshBooksWidgetsAPI
 	    @PathParam("last_name") String lastName,
 	    @PathParam("email") String email)
     {
+	// Retrieves widget based on its id
 	Widget widget = WidgetUtil.getWidget(widgetId);
+
 	if (widget == null)
 	    return null;
+
 	try
 	{
+	    /*
+	     * Calls FreshBooksUtil method to add client items in FreshBooks
+	     * account
+	     */
 	    return FreshBooksUtil.addClient(widget, firstName, lastName, email);
 	}
 	catch (SocketTimeoutException e)
@@ -270,17 +312,24 @@ public class FreshBooksWidgetsAPI
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public String addInvoiceToClientInFreshBooks(@PathParam("widget-id") Long widgetId,
+    public String addInvoiceToClientInFreshBooks(
+	    @PathParam("widget-id") Long widgetId,
 	    @FormParam("first_name") String firstName,
 	    @FormParam("last_name") String lastName,
 	    @FormParam("email") String email,
 	    @FormParam("lines_info") String linesInfo)
     {
+	// Retrieves widget based on its id
 	Widget widget = WidgetUtil.getWidget(widgetId);
+
 	if (widget == null)
 	    return null;
+
 	try
 	{
+	    /*
+	     * Calls FreshBooksUtil method to add invoice in FreshBooks account
+	     */
 	    return FreshBooksUtil.addInvoice(widget, firstName, lastName,
 		    email, linesInfo);
 	}
