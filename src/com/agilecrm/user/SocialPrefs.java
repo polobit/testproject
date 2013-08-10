@@ -7,7 +7,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.scribe.ScribeServlet;
-import com.agilecrm.user.ProfileStatus.Field;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Parent;
@@ -31,138 +30,132 @@ import com.googlecode.objectify.condition.IfDefault;
 @XmlRootElement
 public class SocialPrefs
 {
-    /**
-     * SocialPrefs Id.
-     */
-    @Id
-    public Long id;
+	/**
+	 * SocialPrefs Id.
+	 */
+	@Id
+	public Long id;
 
-    /**
-     * SocialPrefs types
-     * 
-     */
-    public enum Type
-    {
-	LINKEDIN, TWITTER, FACEBOOK, GMAIL, DUMMY
-    };
+	/**
+	 * SocialPrefs types
+	 * 
+	 */
+	public enum Type
+	{
+		LINKEDIN, TWITTER, FACEBOOK, GMAIL, DUMMY
+	};
 
-    /**
-     * SocialPrefs type.
-     */
-    public Type type;
+	/**
+	 * SocialPrefs type.
+	 */
+	public Type type;
 
-    /**
-     * AgileUser Key.
-     */
-    @Parent
-    private Key<AgileUser> agileUser;
+	/**
+	 * AgileUser Key.
+	 */
+	@Parent
+	private Key<AgileUser> agileUser;
 
-    /**
-     * Social group token.
-     */
-    public String token;
+	/**
+	 * Social group token.
+	 */
+	public String token;
 
-    /**
-     * Social group secret.
-     */
-    public String secret;
+	/**
+	 * Social group secret.
+	 */
+	public String secret;
 
-    /**
-     * Social Id. E.g.Id from gmail.
-     */
-    @NotSaved(IfDefault.class)
-    public String socialId = null;
+	/**
+	 * Social Id. E.g.Id from gmail.
+	 */
+	@NotSaved(IfDefault.class)
+	public String socialId = null;
 
-    /**
-     * Picture of user in social group.
-     */
-    @NotSaved(IfDefault.class)
-    public String picture = null;
+	/**
+	 * Picture of user in social group.
+	 */
+	@NotSaved(IfDefault.class)
+	public String picture = null;
 
-    /**
-     * User name in social group.
-     */
-    @NotSaved(IfDefault.class)
-    public String name = null;
+	/**
+	 * User name in social group.
+	 */
+	@NotSaved(IfDefault.class)
+	public String name = null;
 
-    /**
-     * User email in social group
-     */
-    @NotSaved(IfDefault.class)
-    public String email = null;
+	/**
+	 * User email in social group
+	 */
+	@NotSaved(IfDefault.class)
+	public String email = null;
 
-    /**
-     * SocialPrefs Dao.
-     */
-    private static ObjectifyGenericDao<SocialPrefs> dao = new ObjectifyGenericDao<SocialPrefs>(
-	    SocialPrefs.class);
+	/**
+	 * SocialPrefs Dao.
+	 */
+	private static ObjectifyGenericDao<SocialPrefs> dao = new ObjectifyGenericDao<SocialPrefs>(SocialPrefs.class);
 
-    /**
-     * Default SocialPrefs.
-     */
-    SocialPrefs()
-    {
-    }
+	/**
+	 * Default SocialPrefs.
+	 */
+	SocialPrefs()
+	{
+	}
 
-    /**
-     * Constructs a new {@link SocialPrefs}.
-     * 
-     * @param agileUser
-     *            - AgileUser object.
-     * @param type
-     *            - SocialPrefs type.
-     * @param token
-     *            - Social group token.
-     * @param secret
-     *            - Social group secret.
-     * @param properties
-     *            - Social group properties.
-     */
-    public SocialPrefs(AgileUser agileUser, Type type, String token,
-	    String secret, Map<String, String> properties)
-    {
-	this.token = token;
-	this.agileUser = new Key<AgileUser>(AgileUser.class, agileUser.id);
-	this.secret = secret;
-	this.type = type;
+	/**
+	 * Constructs a new {@link SocialPrefs}.
+	 * 
+	 * @param agileUser
+	 *            - AgileUser object.
+	 * @param type
+	 *            - SocialPrefs type.
+	 * @param token
+	 *            - Social group token.
+	 * @param secret
+	 *            - Social group secret.
+	 * @param properties
+	 *            - Social group properties.
+	 */
+	public SocialPrefs(AgileUser agileUser, Type type, String token, String secret, Map<String, String> properties)
+	{
+		this.token = token;
+		this.agileUser = new Key<AgileUser>(AgileUser.class, agileUser.id);
+		this.secret = secret;
+		this.type = type;
 
-	this.socialId = properties.get("id");
-	this.picture = properties.get("pic");
-	this.name = properties.get("name");
+		this.socialId = properties.get("id");
+		this.picture = properties.get("pic");
+		this.name = properties.get("name");
 
-	if (properties.containsKey("email"))
-	    this.email = properties.get("email");
-	System.out.println(properties);
-    }
+		if (properties.containsKey("email"))
+			this.email = properties.get("email");
+		System.out.println(properties);
+	}
 
-    /**
-     * Saves SocialPrefs.
-     */
-    public void save()
-    {
+	/**
+	 * Saves SocialPrefs.
+	 */
+	public void save()
+	{
+		dao.put(this);
+	}
 
-	ProfileStatus status = ProfileStatus.getUserProfileStatus();
-	status.setStatus(Field.EMAIL, true);
+	/**
+	 * Deletes SocialPrefs.
+	 */
+	public void delete()
+	{
+		dao.delete(this);
+	}
 
-	dao.put(this);
-    }
-
-    /**
-     * Deletes SocialPrefs.
-     */
-    public void delete()
-    {
-	dao.delete(this);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString()
-    {
-	return "Social - " + type + " Token: " + token + " " + secret;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString()
+	{
+		return "Social - " + type + " Token: " + token + " " + secret;
+	}
 }
