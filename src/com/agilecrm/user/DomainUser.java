@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
@@ -390,9 +391,11 @@ public class DomainUser extends Cursor implements Cloneable
 	/**
 	 * Check is user is registered via OpenID.<br/>
 	 * For OpenID we have <code>encrypted_password</code> as <code>null</code>.
+	 * This parameter is not sent on network when the object is serialized.
 	 * 
 	 * @return - true if user is registered via OpenId
 	 */
+	@JsonIgnore
 	public boolean isOpenIdRegisteredUser()
 	{
 		return StringUtils.isEmpty(encrypted_password);
