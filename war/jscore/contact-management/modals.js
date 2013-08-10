@@ -85,6 +85,9 @@ $(function(){
 	    $('#person_validate').live('click', function(e){
 	    	
 	    	var model = serialize_and_save_continue_contact(e, 'personForm', 'personModal', false, true, this, 'tags_source_person_modal');
+	    	
+	    	if(!readCookie('company-filter') && App_Contacts.contactsListView)
+	    		App_Contacts.contactsListView.collection.add(model);
 	    });
 	    
 	    /**
@@ -100,6 +103,9 @@ $(function(){
 		 */
 	    $('#company_validate').live('click', function (e) {
 	    	var model=serialize_and_save_continue_contact(e, 'companyForm', 'companyModal', false, false, this);	
+	    
+	    	if(readCookie('company-filter') && App_Contacts.contactsListView)
+	    		App_Contacts.contactsListView.collection.add(model);
 	    });
 	    
 	    /**
