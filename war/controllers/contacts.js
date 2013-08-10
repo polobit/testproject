@@ -133,7 +133,13 @@ var ContactsRouter = Backbone.Router.extend({
     	}
     	
     	if(readCookie('company_filter'))
+    	{	
+    		// Change template to companies - this template is seperate from contacts default template
     		url = "core/api/contacts/companies";
+    		
+    		if(!grid_view && !readCookie("agile_contact_view"))
+    			template_key="companies";
+    	}
     	
     	// If contact-filter cookie is defined set url to fetch respective filter results
     	if(filter_id || (filter_id = readCookie('contact_filter')))
@@ -143,7 +149,8 @@ var ContactsRouter = Backbone.Router.extend({
     	}
     	 
         // If view is set to custom view, load the custom view
-      	if(readCookie("contact_view"))
+    	// If Company filter active-don't load any Custom View Show default
+      	if(!readCookie('company_filter') && readCookie("contact_view"))
 		{      		
       		// If there is a filter saved in cookie then show filter results in custom view saved
       		if(readCookie('contact_filter'))
@@ -152,12 +159,13 @@ var ContactsRouter = Backbone.Router.extend({
       			this.customView(readCookie("contact_view"), undefined, "core/api/filters/query/" + readCookie('contact_filter'), tag_id);
       			return;
       		}
-      		
+      		/*
       		if(readCookie('company_filter'))
       		{
       			this.customView(readCookie("contact_view"), undefined, "core/api/contacts/companies")
       			return;
       		}
+      		*/
       		
       		// Else call customView function fetches results from default url : "core/api/contacts"
 			this.customView(readCookie("contact_view"), undefined);
@@ -204,7 +212,10 @@ var ContactsRouter = Backbone.Router.extend({
 					var collection = App_Contacts.contactsListView.collection;
 					
             	  // To set heading in template
-            	  if(readCookie('company_filter'))$('#contact-heading',el).text('Companies');
+            	  if(readCookie('company_filter'))
+            	  {
+            		  //$('#contact-heading',el).text('Companies');
+            	  }
             	  
             	  // To set chats and view when contacts are fetch by infiniscroll
             	  setup_tags(cel);
@@ -216,7 +227,6 @@ var ContactsRouter = Backbone.Router.extend({
             	   */
             	  setupContactFilterList(cel, tag_id);    
             	  startTour("contacts", el);
-
               }             
           });
 
