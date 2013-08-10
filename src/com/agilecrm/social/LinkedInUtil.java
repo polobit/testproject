@@ -3,7 +3,6 @@ package com.agilecrm.social;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.EnumMap;
 import java.util.EnumSet;
@@ -355,7 +354,7 @@ public class LinkedInUtil
      * @return {@link String} LinkedIn Id
      * @throws Exception
      */
-    public static String getIdByUrl(Widget widget, String linkedInURL)
+    public static String getLinkedInIdByUrl(Widget widget, String linkedInURL)
 	    throws Exception
     {
 
@@ -392,7 +391,7 @@ public class LinkedInUtil
      * @return {@link SocialSearchResult}
      * @throws Exception
      */
-    public static SocialSearchResult getLinkedinProfileById(Widget widget,
+    public static SocialSearchResult getLinkedInProfileById(Widget widget,
 	    String linkedInId) throws SocketTimeoutException, IOException,
 	    Exception
     {
@@ -721,13 +720,13 @@ public class LinkedInUtil
 		    .isNullOrEmpty(new String[] { startDate, endDate }))
 	    {
 		System.out.println("In network updates indexed and dated");
-		Calendar cal = Calendar.getInstance();
 
-		cal.setTimeInMillis(Long.parseLong(startDate) * 1000);
-		Date startDat = cal.getTime();
-
-		cal.setTimeInMillis(Long.parseLong(endDate) * 1000);
-		Date endDat = cal.getTime();
+		/*
+		 * Given epoch date is converted into milliseconds from seconds
+		 * and a date object is formed
+		 */
+		Date startDat = new Date(Long.parseLong(startDate) * 1000);
+		Date endDat = new Date(Long.parseLong(endDate) * 1000);
 
 		return client.getUserUpdates(linkedInId, enumSet, startIndex,
 			endIndex, startDat, endDat);

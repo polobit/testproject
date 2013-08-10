@@ -21,6 +21,19 @@ import com.agilecrm.social.ZendeskUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 
+/**
+ * <code>ZendeskWidgetsAPI</code> class includes REST calls to interact with
+ * {@link ZendeskUtil} class
+ * 
+ * <p>
+ * It is called from client side for adding, retrieving and updating tickets in
+ * Zendesk
+ * </p>
+ * 
+ * @author Tejaswi
+ * @since August 2013
+ * 
+ */
 @Path("/api/widgets/zendesk")
 public class ZendeskWidgetsAPI
 {
@@ -41,13 +54,15 @@ public class ZendeskWidgetsAPI
     public String getTicketsFromZendesk(@PathParam("widget-id") Long widgetId,
 	    @PathParam("email") String email)
     {
-
 	try
 	{
+	    // Retrieves widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
+
 	    if (widget == null)
 		return null;
 
+	    // Calls ZendeskUtil to retrieve tickets for contacts email
 	    return ZendeskUtil.getContactTickets(widget, email);
 	}
 	catch (SocketTimeoutException e)
@@ -99,13 +114,15 @@ public class ZendeskWidgetsAPI
 	    @FormParam("email") String email,
 	    @FormParam("message") String description)
     {
-
 	try
 	{
+	    // Retrieves widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
+
 	    if (widget == null)
 		return null;
 
+	    // Calls ZendeskUtil method to add a ticket in Zendesk
 	    return ZendeskUtil.addTicket(widget, name, email, subject,
 		    description);
 	}
@@ -151,13 +168,15 @@ public class ZendeskWidgetsAPI
 	    @FormParam("ticketNumber") String ticketNumber,
 	    @FormParam("message") String description)
     {
-
 	try
 	{
+	    // Retrieves widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
+
 	    if (widget == null)
 		return null;
 
+	    // Calls ZendeskUtil and updates ticket in Zendesk
 	    return ZendeskUtil.updateTicket(widget, ticketNumber, description);
 	}
 	catch (SocketTimeoutException e)
@@ -196,10 +215,13 @@ public class ZendeskWidgetsAPI
     {
 	try
 	{
+	    // Retrieves widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
+
 	    if (widget == null)
 		return null;
 
+	    // Calls ZendeskUtil and retrieves Zendesk account user information
 	    return ZendeskUtil.getUserInfo(widget);
 	}
 	catch (SocketTimeoutException e)
@@ -244,10 +266,13 @@ public class ZendeskWidgetsAPI
     {
 	try
 	{
+	    // Retrieves widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
+
 	    if (widget == null)
 		return null;
 
+	    // Calls ZendeskUtil and retrieves tickets by its status
 	    return ZendeskUtil.getTicketsByStatus(widget, email, status);
 	}
 	catch (SocketTimeoutException e)
@@ -289,10 +314,16 @@ public class ZendeskWidgetsAPI
     {
 	try
 	{
+	    // Retrieves widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
+
 	    if (widget == null)
 		return null;
 
+	    /*
+	     * Calls ZendeskUtil and retrives user inforamtion along with
+	     * tickets to show in the Zendesk widget
+	     */
 	    return ZendeskUtil.getZendeskProfile(widget, email);
 	}
 	catch (SocketTimeoutException e)

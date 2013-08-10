@@ -210,7 +210,10 @@ function load_timeline_details(el, contactId, callback1)
 		 * Stores all urls (notes, deals and tasks) in an array to fetch data using
 		 * same collection by changing its url.
 		 */ 
-		var fetchContactDetails = ['core/api/contacts/' + contactId + '/notes', 'core/api/contacts/'+ contactId + '/deals', 'core/api/contacts/'+ contactId + '/tasks'];
+		var fetchContactDetails = ['core/api/contacts/' + contactId + '/notes', 
+		                           'core/api/contacts/'+ contactId + '/deals',
+		                           'core/api/contacts/'+ contactId + '/cases', //Added to also fetch cases
+		                           'core/api/contacts/'+ contactId + '/tasks'];
 		var loading_count = 0;
 		
 		$.each(fetchContactDetails, function(index, url){

@@ -28,6 +28,19 @@ import com.agilecrm.social.stubs.SocialUpdateStream;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 
+/**
+ * <code>LinkedInTwitterWidgetsAPI</code> class includes REST calls to interact
+ * with {@link LinkedInUtil} and {@link TwitterUtil} class
+ * 
+ * <p>
+ * It is called from client side for searching, retrieving LinkedIn/ Twitter
+ * profiles
+ * </p>
+ * 
+ * @author Tejaswi
+ * @since August 2013
+ * 
+ */
 @Path("/api/widgets/social")
 public class LinkedInTwitterWidgetsAPI
 {
@@ -61,13 +74,12 @@ public class LinkedInTwitterWidgetsAPI
 		return null;
 
 	    /*
-	     * Profiles are searched based on first and last name of contact
-	     * Gets profiles from LinkedInUtil based on contact
+	     * Based on widget name, profiles are searched based on first and
+	     * last name of contact in LinkedIn and Twitter
 	     */
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
 		return LinkedInUtil.searchLinkedInProfiles(widget, contact);
 
-	    // Gets profiles from TwitterUtil based on contact
 	    else if (widget.name.equalsIgnoreCase("TWITTER"))
 		return TwitterUtil.searchTwitterProfiles(widget, contact);
 	}
@@ -123,7 +135,7 @@ public class LinkedInTwitterWidgetsAPI
     {
 	try
 	{
-	    // Get contact and widget based on their id
+	    // Get widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 
 	    // Returns null if widget doesn't exist with given widget id
@@ -131,8 +143,7 @@ public class LinkedInTwitterWidgetsAPI
 		return null;
 
 	    /*
-	     * Profiles are searched based on first and last name of contact
-	     * Gets profiles from LinkedInUtil based on contact
+	     * Profiles are searched based on given keywords in LinkedIn
 	     */
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
 		return LinkedInUtil.modifiedSearchForLinkedInProfiles(widget,
@@ -180,7 +191,7 @@ public class LinkedInTwitterWidgetsAPI
     {
 	try
 	{
-	    // Get contact and widget based on their id
+	    // Get widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 
 	    // Returns null if widget doesn't exist with given widget id
@@ -188,11 +199,11 @@ public class LinkedInTwitterWidgetsAPI
 		return null;
 
 	    /*
-	     * Profiles are searched based on first and last name of contact
-	     * Retrieves profiles from LinkedInUtil based on contact
+	     * Profiles are searched based on given search string
 	     */
 	    if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterUtil.searchTwitterProfiles(widget, searchString);
+		return TwitterUtil.modifiedSearchForTwitterProfiles(widget,
+			searchString);
 
 	}
 	catch (SocketTimeoutException e)
@@ -236,19 +247,23 @@ public class LinkedInTwitterWidgetsAPI
     {
 	try
 	{
+	    // Retrieve widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 
 	    if (widget == null)
 		return null;
 
 	    /*
-	     * Profiles are searched based on first and last name of contact
-	     * Calls LinkedUtil method to send message to person by socialId
+	     * Based on widget name, calls LinkedUtil method to get LinkedIn id
+	     * of a profile by LinkedIn URL
 	     */
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInUtil.getIdByUrl(widget, webUrl);
+		return LinkedInUtil.getLinkedInIdByUrl(widget, webUrl);
 
-	    // Calls TwitterUtil method to send message to person by socialId
+	    /*
+	     * Calls TwitterUtil method to Twitter id of a profile by Twitter
+	     * URL
+	     */
 	    else if (widget.name.equalsIgnoreCase("TWITTER"))
 		return TwitterUtil.getTwitterIdByUrl(widget, webUrl);
 	}
@@ -274,7 +289,6 @@ public class LinkedInTwitterWidgetsAPI
 	return null;
     }
 
-    // Get widget
     /**
      * Connects to {@link LinkedInUtil} or {@link TwitterUtil} based on the name
      * given in widget and fetches profile of the contact in LinkedIn or Twitter
@@ -293,7 +307,7 @@ public class LinkedInTwitterWidgetsAPI
 	    @PathParam("widget-id") Long widgetId,
 	    @PathParam("social-id") String socialId)
     {
-	// Gets widget based on id
+	// Retrieves widget based on id
 	Widget widget = WidgetUtil.getWidget(widgetId);
 
 	if (widget == null)
@@ -301,11 +315,11 @@ public class LinkedInTwitterWidgetsAPI
 
 	try
 	{
-	    // Gets profiles from LinkedInUtil based on socialId
+	    // Gets profile from LinkedInUtil based on socialId
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInUtil.getLinkedinProfileById(widget, socialId);
+		return LinkedInUtil.getLinkedInProfileById(widget, socialId);
 
-	    // Gets profiles from TwitterUtil based on socialId
+	    // Gets profile from TwitterUtil based on socialId
 	    else if (widget.name.equalsIgnoreCase("TWITTER"))
 		return TwitterUtil.getTwitterProfileById(widget, socialId);
 	}
@@ -333,8 +347,7 @@ public class LinkedInTwitterWidgetsAPI
     }
 
     /**
-     * Retrieves the experience information of a person in LinkedIn based on
-     * LinkedIn id
+     * Retrieves the work positions of a person in LinkedIn based on LinkedIn id
      * 
      * @param widgetId
      *            {@link Long} plugin-id/widget id, to get {@link Widget} object
@@ -351,10 +364,16 @@ public class LinkedInTwitterWidgetsAPI
     {
 	try
 	{
+	    // Retrieves widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
+
 	    if (widget == null)
 		return null;
 
+	    /*
+	     * If widget name is LinkedIn, retrieve the work positions of a
+	     * LinkedIn profile based on socialId
+	     */
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
 		return LinkedInUtil.getExperience(widget, socialId);
 	}
@@ -400,13 +419,15 @@ public class LinkedInTwitterWidgetsAPI
     {
 	try
 	{
+	    // Retrieves widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
+
 	    if (widget == null)
 		return null;
 
 	    /*
-	     * Profiles are searched based on first and last name of contact
-	     * Calls LinkedUtil method to send message to person by socialId
+	     * Based on widget name, Calls LinkedUtil or TwitterUtil method to
+	     * retrieve all network updates based on social id
 	     */
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
 		return LinkedInUtil.getNetworkUpdates(widget, socialId, 0, 0,
@@ -466,11 +487,16 @@ public class LinkedInTwitterWidgetsAPI
     {
 	try
 	{
+	    // Retrieves a widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 	    if (widget == null)
 		return null;
 
-	    // If request is from Twitter, fetches tweets
+	    /*
+	     * If widget name is Twitter, fetches tweets for twitter profile
+	     * with socialId and filter them to specific(endIndex) number of
+	     * tweets tweeted before the given tweet id
+	     */
 	    if (widget.name.equalsIgnoreCase("TWITTER"))
 		return TwitterUtil.getNetworkUpdates(widget,
 			Long.parseLong(socialId), Long.parseLong(tweetId) - 5,
@@ -524,13 +550,15 @@ public class LinkedInTwitterWidgetsAPI
     {
 	try
 	{
+	    // Retrieves a widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
+
 	    if (widget == null)
 		return null;
 
 	    /*
-	     * Profiles are searched based on first and last name of contact
-	     * Calls LinkedUtil method to send message to person by socialId
+	     * Calls LinkedUtil method to get specific number of network updates
+	     * based on index
 	     */
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
 		return LinkedInUtil.getNetworkUpdates(widget, socialId,
@@ -592,16 +620,22 @@ public class LinkedInTwitterWidgetsAPI
     {
 	try
 	{
+	    // Retrieve a widget by its Id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
+
 	    if (widget == null)
 		return null;
 
 	    /*
-	     * Profiles are searched based on first and last name of contact
-	     * Calls LinkedUtil method to send message to person by socialId
+	     * Calls LinkedUtil method to get specific number of network updates
+	     * based on index and between the given dates
 	     */
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
 	    {
+		/*
+		 * 5 seconds is delayed to avoid recent update, because it
+		 * includes the end date update also which we already have
+		 */
 		if (endDate != null)
 		    endDate = String.valueOf(Integer.parseInt(endDate) - 5);
 		return LinkedInUtil.getNetworkUpdates(widget, socialId,
@@ -655,15 +689,18 @@ public class LinkedInTwitterWidgetsAPI
     {
 	try
 	{
+	    // Retrieves widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
+
 	    if (widget == null)
 		return null;
 
-	    // Calls TwitterUtil method to send message to person by socialId
+	    // Calls LinkedInUtil method to reshare a share in LinkedIn by id
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
 		return LinkedInUtil.reshareLinkedInPost(widget, shareId,
 			comment);
 
+	    // Calls TwitterUtil method to retweet a tweet in Twitter by its ID
 	    else if (widget.name.equalsIgnoreCase("TWITTER"))
 		return TwitterUtil.reTweetByTweetId(widget,
 			Long.parseLong(shareId));
@@ -710,13 +747,16 @@ public class LinkedInTwitterWidgetsAPI
     {
 	try
 	{
+	    // Retrieve a widget by its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 
 	    if (widget == null)
 		return null;
 
-	    System.out.println("in widgets api");
-
+	    /*
+	     * If widget name is Twitter, retrieves follower IDs of the Twitter
+	     * profile with socialId
+	     */
 	    if (widget.name.equalsIgnoreCase("TWITTER"))
 		return TwitterUtil.getFollowersIDs(widget, socialId);
 
@@ -763,13 +803,13 @@ public class LinkedInTwitterWidgetsAPI
     {
 	try
 	{
+	    // Retrieve widget object from its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 
 	    if (widget == null)
 		return null;
 
-	    System.out.println("in widgets api");
-
+	    // If widget name equals Twitter, get following IDs
 	    if (widget.name.equalsIgnoreCase("TWITTER"))
 		return TwitterUtil.getFollowingIDs(widget, socialId);
 
@@ -816,15 +856,19 @@ public class LinkedInTwitterWidgetsAPI
     {
 	try
 	{
+	    // Retrieve widget object from its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 
 	    if (widget == null)
 		return null;
 
-	    System.out.println("in widgets api");
-
+	    /*
+	     * Form a JSONArray with the given twitter IDs to retrieve profiles
+	     * for those IDs
+	     */
 	    JSONArray twitterIdsJsonArray = new JSONArray(twitterIds);
 
+	    // If widget name equals Twitter, get profiles based on IDs
 	    if (widget.name.equalsIgnoreCase("TWITTER"))
 		return TwitterUtil.getListOfProfiles(widget,
 			twitterIdsJsonArray);
@@ -853,8 +897,13 @@ public class LinkedInTwitterWidgetsAPI
     }
 
     /**
-     * Retrieves the shared connections information of a person in LinkedIn
-     * based on LinkedIn id
+     * Retrieves the shared connections profiles of a person in LinkedIn based
+     * on LinkedIn id
+     * 
+     * <p>
+     * Connections between agile user and the LinkedIn profile with given
+     * socialId
+     * </p>
      * 
      * @param widgetId
      *            {@link Long} plugin-id/widget id, to get {@link Widget} object
@@ -871,10 +920,15 @@ public class LinkedInTwitterWidgetsAPI
     {
 	try
 	{
+	    // Retrieve widget object from its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 	    if (widget == null)
 		return null;
 
+	    /*
+	     * Based on widget name, calls LinkedInUtil method to get shared
+	     * connections between agile user and the profile with socialId
+	     */
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
 		return LinkedInUtil.getSharedConnections(widget, socialId);
 	}
@@ -925,13 +979,14 @@ public class LinkedInTwitterWidgetsAPI
     {
 	try
 	{
+	    // Retrieve widget object from its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 	    if (widget == null)
 		return null;
 
 	    /*
-	     * Profiles are searched based on first and last name of contact
-	     * Calls LinkedUtil method to send message to person by socialId
+	     * Based on widget name, Calls LinkedUtil method to send message to
+	     * person by socialId
 	     */
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
 		return LinkedInUtil.connectInLinkedIn(widget, socialId,
@@ -964,9 +1019,8 @@ public class LinkedInTwitterWidgetsAPI
     }
 
     /**
-     * Connects to {@link LinkedInUtil} or {@link TwitterUtil} user based on the
-     * name given in widget and disconnects or unfollows a contact in LinkedIn
-     * and Twitter based on the parameter social id
+     * Connects {@link TwitterUtil} user based on the name given in widget and
+     * unfollows a contact Twitter profile based on the parameter social id
      * 
      * @param widgetId
      *            {@link Long} plugin-id/widget id, to get {@link Widget} object
@@ -983,11 +1037,15 @@ public class LinkedInTwitterWidgetsAPI
     {
 	try
 	{
+	    // Retrieve widget object from its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 	    if (widget == null)
 		return null;
 
-	    // Calls TwitterUtil method to send message to person by socialId
+	    /*
+	     * Based on widget name, calls TwitterUtil method to unfollow a
+	     * profile in Twitter with given Twitter ID
+	     */
 	    if (widget.name.equalsIgnoreCase("TWITTER"))
 		return TwitterUtil.unfollow(widget, Long.parseLong(socialId));
 	}
@@ -1039,19 +1097,23 @@ public class LinkedInTwitterWidgetsAPI
     {
 	try
 	{
+	    // Retrieve widget object from its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 	    if (widget == null)
 		return null;
 
 	    /*
-	     * Profiles are searched based on first and last name of contact
-	     * Calls LinkedUtil method to send message to person by socialId
+	     * Calls LinkedUtil method to send message to person by socialId,
+	     * based on widget name
 	     */
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
 		return LinkedInUtil.sendLinkedInMessageById(widget, socialId,
 			subject, message);
 
-	    // Calls TwitterUtil method to send message to person by socialId
+	    /*
+	     * Calls TwitterUtil method to send message to person by socialId,
+	     * based on widget name
+	     */
 	    else if (widget.name.equalsIgnoreCase("TWITTER"))
 		return TwitterUtil.sendTwitterMessageById(widget, socialId,
 			message);
@@ -1079,15 +1141,15 @@ public class LinkedInTwitterWidgetsAPI
     }
 
     /**
-     * Connects to {@link TwitterUtil} and sends the post or tweet in Twitter
-     * based on the parameter social id
+     * Connects to {@link TwitterUtil} and sends a tweet in Twitter based on the
+     * parameter social id
      * 
      * @param widgetId
      *            {@link Long} plugin-id/widget id, to get {@link Widget} object
      * @param socialId
      *            {@link String} LinkedIn id or Twitter id of the contact
      * @param message
-     *            {@link String} message to send tweet
+     *            {@link String} message to tweet
      * @return {@link String}
      */
     @Path("/tweet/{widget-id}")
@@ -1098,13 +1160,14 @@ public class LinkedInTwitterWidgetsAPI
     {
 	try
 	{
+	    // Retrieve widget object from its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
 	    if (widget == null)
 		return null;
 
 	    /*
-	     * Profiles are searched based on first and last name of contact
-	     * Calls LinkedUtil method to send message to person by socialId
+	     * Calls TwitterUtil method to tweet to a person by their screen
+	     * name which is included in the message
 	     */
 	    if (widget.name.equalsIgnoreCase("TWITTER"))
 		return TwitterUtil.tweetInTwitter(widget, message);

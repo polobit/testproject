@@ -156,8 +156,9 @@ $(function() {
 				
 				if(readCookie('company_filter'))
       			{
-					App_Contacts.customView(readCookie("contact_view"), undefined, "core/api/contacts/companies")
-      				return;
+					//App_Contacts.customView(readCookie("contact_view"), undefined, "core/api/contacts/companies")
+      				App_Contacts.contacts();
+					return;
       			}
 
 				// If filter is not set then show view on the default contacts

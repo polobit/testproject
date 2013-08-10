@@ -16,11 +16,10 @@ import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 
 /**
- * <code>WidgetsAPI</code> class includes REST calls to interact with Widget
- * class, LinkedIn class, Twitter class to access social results
+ * <code>WidgetsAPI</code> class includes REST calls to interact with
+ * {@link WidgetUtil} class
  * <p>
- * It is called from client side for Adding a widget, Searching LinkedIn/
- * Twitter profiles, Rapleaf information. Also used to show available widgets,
+ * It is called from client side for adding a widget, show available widgets,
  * saves the position of the saved widgets in contacts details page
  * </p>
  * 
@@ -58,7 +57,7 @@ public class WidgetsAPI
 
     /**
      * Saves a widget, can also save custom widget by specifying script url to
-     * load and prefs to connect.
+     * load and preferences to connect.
      * 
      * @param widget
      *            {@link Widget}
