@@ -84,17 +84,17 @@ public class CampaignReportsSQLUtil
 		+ SQLUtil.encodeSQLColumnValue(startDate) + ") AND DATE(" + SQLUtil.encodeSQLColumnValue(endDate)
 		+ ") GROUP BY subscriber_id,log_type) subQuery";
 
-	String uniqueClicks = "(SELECT DATE_FORMAT(minTime," + SQLUtil.getDateFormatBasedOnType(type) + ")  AS logDate, log_type, COUNT(*) AS count FROM "
-		+ subQuery + " GROUP BY log_type, logDate)";
+	String uniqueClicks = "(SELECT DATE_FORMAT(minTime," + SQLUtil.getDateFormatBasedOnType(type) + ")  AS log_date, log_type, COUNT(*) AS count FROM "
+		+ subQuery + " GROUP BY log_type, log_date)";
 
 	String totalClicks = "(SELECT DATE_FORMAT(" + SQLUtil.addConvertTZ(timeZoneOffset) + "," + SQLUtil.getDateFormatBasedOnType(type)
-		+ ")  AS logDate,log_type, COUNT(*) AS total  FROM campaign_logs WHERE domain=" + SQLUtil.encodeSQLColumnValue(domain) + " AND campaign_id="
+		+ ")  AS log_date,log_type, COUNT(*) AS total  FROM campaign_logs WHERE domain=" + SQLUtil.encodeSQLColumnValue(domain) + " AND campaign_id="
 		+ SQLUtil.encodeSQLColumnValue(campaignId) + "  AND log_type IN ('EMAIL_CLICKED') AND DATE(" + SQLUtil.addConvertTZ(timeZoneOffset)
 		+ ") BETWEEN DATE(" + SQLUtil.encodeSQLColumnValue(startDate) + ")  AND DATE(" + SQLUtil.encodeSQLColumnValue(endDate)
-		+ ") GROUP BY log_type,logDate)";
+		+ ") GROUP BY log_type,log_date)";
 
-	String emailLogs = "SELECT  A.logDate,A.log_type, A.count, B.total FROM " + uniqueClicks + " A   LEFT OUTER JOIN  " + totalClicks
-		+ " B ON A.log_type = B.log_type and A.logDate=B.logDate";
+	String emailLogs = "SELECT  A.log_date,A.log_type, A.count, B.total FROM " + uniqueClicks + " A   LEFT OUTER JOIN  " + totalClicks
+		+ " B ON A.log_type = B.log_type and A.log_date=B.log_date";
 
 	try
 	{
