@@ -9,6 +9,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -42,100 +43,99 @@ import com.googlecode.objectify.condition.IfDefault;
 @XmlRootElement
 public class ContactFilter implements Serializable
 {
-    // Key
-    @Id
-    public Long id;
+	// Key
+	@Id
+	public Long id;
 
-    /**
-     * Default filters
-     */
-    public enum DefaultFilter
-    {
-	LEADS, RECENT, CONTACTS;
-    };
-
-    /**
-     * Name of the filter/Advanced search criteria
-     */
-    @NotSaved(IfDefault.class)
-    public String name = null;
-
-    /**
-     * Represents list of {@link SearchRule}, query is built on these list of
-     * conditions
-     */
-    @NotSaved(IfDefault.class)
-    @Embedded
-    public List<SearchRule> rules = new ArrayList<SearchRule>();
-
-    public static ObjectifyGenericDao<ContactFilter> dao = new ObjectifyGenericDao<ContactFilter>(
-	    ContactFilter.class);
-
-    public ContactFilter()
-    {
-
-    }
-
-    public ContactFilter(List<SearchRule> rules)
-    {
-	this.rules = rules;
-    }
-
-    public ContactFilter(String name, List<SearchRule> rules)
-    {
-	this.name = name;
-	this.rules = rules;
-    }
-
-    /**
-     * Fetches {@link ContactFilter} based on the id
-     * 
-     * @param id
-     *            {@link Long}
-     * @return {@link ContactFilter}
-     */
-    public static ContactFilter getContactFilter(Long id)
-    {
-	try
+	/**
+	 * Default filters
+	 */
+	public enum DefaultFilter
 	{
-	    return dao.get(id);
-	}
-	catch (Exception e)
+		LEADS, RECENT, CONTACTS;
+	};
+
+	/**
+	 * Name of the filter/Advanced search criteria
+	 */
+	@NotSaved(IfDefault.class)
+	public String name = null;
+
+	/**
+	 * Represents list of {@link SearchRule}, query is built on these list of
+	 * conditions
+	 */
+	@NotSaved(IfDefault.class)
+	@Embedded
+	public List<SearchRule> rules = new ArrayList<SearchRule>();
+
+	public static ObjectifyGenericDao<ContactFilter> dao = new ObjectifyGenericDao<ContactFilter>(ContactFilter.class);
+
+	public ContactFilter()
 	{
-	    e.printStackTrace();
-	    return null;
+
 	}
-    }
 
-    /**
-     * Fetches list of contact filters
-     * 
-     * @return {@link List} of {@link ContactFilter}
-     */
-    public static List<ContactFilter> getAllContactFilters()
-    {
-	return dao.fetchAll();
-    }
+	public ContactFilter(List<SearchRule> rules)
+	{
+		this.rules = rules;
+	}
 
-    /**
-     * Saves {@link ContactFilter} entity
-     */
-    public void save()
-    {
-	dao.put(this);
-    }
+	public ContactFilter(String name, List<SearchRule> rules)
+	{
+		this.name = name;
+		this.rules = rules;
+	}
 
-    /**
-     * Queries contacts based on {@link List} of {@link SearchRule} specified,
-     * applying 'AND' condition on after each {@link SearchRule}. Builds a query
-     * and returns search results using {@link AppengineSearch}.
-     * 
-     * @return {@link Collection}
-     */
-    @SuppressWarnings("rawtypes")
-    public Collection queryContacts(Integer count, String cursor)
-    {
+	/**
+	 * Fetches {@link ContactFilter} based on the id
+	 * 
+	 * @param id
+	 *            {@link Long}
+	 * @return {@link ContactFilter}
+	 */
+	public static ContactFilter getContactFilter(Long id)
+	{
+		try
+		{
+			return dao.get(id);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
 
-	return AppengineSearch.getAdvacnedSearchResults(rules, count, cursor);
-    }
+	/**
+	 * Fetches list of contact filters
+	 * 
+	 * @return {@link List} of {@link ContactFilter}
+	 */
+	public static List<ContactFilter> getAllContactFilters()
+	{
+		return dao.fetchAll();
+	}
+
+	/**
+	 * Saves {@link ContactFilter} entity
+	 */
+	public void save()
+	{
+		dao.put(this);
+	}
+
+	/**
+	 * Queries contacts based on {@link List} of {@link SearchRule} specified,
+	 * applying 'AND' condition on after each {@link SearchRule}. Builds a query
+	 * and returns search results using {@link AppengineSearch}.
+	 * 
+	 * @return {@link Collection}
+	 */
+	@SuppressWarnings("rawtypes")
+	public Collection queryContacts(Integer count, String cursor)
+	{
+
+		return new AppengineSearch<Contact>(Contact.class).getAdvacnedSearchResults(rules, count, cursor);
+	}
 }
