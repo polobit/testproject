@@ -192,7 +192,7 @@ public class LinkedInTwitterWidgetsAPI
 	     * Retrieves profiles from LinkedInUtil based on contact
 	     */
 	    if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterUtil.searchTwitterProfiles(widget, searchString);
+		return TwitterUtil.modifiedSearchForTwitterProfiles(widget, searchString);
 
 	}
 	catch (SocketTimeoutException e)

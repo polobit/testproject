@@ -46,6 +46,9 @@ import com.agilecrm.widgets.Widget;
  */
 public class TwitterUtil
 {
+
+    public static final String AGILETWITTERSOURCEMESSAGE = " via @agile_crm";
+
     /**
      * Creates a twitter instance and sets the consumer tokens (developer
      * keys)and access tokens (retrieved from widget) on it.
@@ -75,8 +78,7 @@ public class TwitterUtil
 	}
 	catch (TwitterRuntimeException e)
 	{
-	    System.out.println("in twitter exception");
-
+	    System.out.println("In get twitter exception");
 	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
     }
@@ -108,52 +110,30 @@ public class TwitterUtil
 	    String firstName = contact.getContactFieldValue(Contact.FIRST_NAME);
 	    String lastName = contact.getContactFieldValue(Contact.LAST_NAME);
 
-	    List<SocialSearchResult> searchResults = new ArrayList<SocialSearchResult>();
-
-	    // returns null if firstname or lastname of contact is null
+	    // returns empty if first name and last name both are null
 	    if (StringUtils.isBlank(firstName) && StringUtils.isBlank(lastName))
-		return searchResults;
+		return new ArrayList<SocialSearchResult>();
 
+	    /*
+	     * check first name and last name, if null put it as empty for
+	     * search
+	     */
 	    firstName = (firstName != null) ? firstName : "";
 	    lastName = (lastName != null) ? lastName : "";
 
-	    // Creates a twitter object to connect with twitter
-	    Twitter twitter = getTwitter(widget);
+	    /*
+	     * Creates a twitter object to connect with twitter and searches
+	     * twitter profiles based on first name and last name
+	     */
+	    ResponseList<User> users = getTwitter(widget).searchUsers(
+		    firstName + " " + lastName, 1);
 
-	    // Searches twitter profiles based on first name and last name
-	    ResponseList<User> users = twitter.searchUsers(firstName + " "
-		    + lastName, 1);
-
-	    // Iterates through Twitter results and wraps the profile details in
-	    // to
-	    // SocialSearchResult and adds to list
-	    for (User user : users)
-	    {
-		SocialSearchResult result = new SocialSearchResult();
-
-		result.id = user.getId() + "";
-		result.name = user.getName();
-		result.screen_name = user.getScreenName();
-		result.picture = user.getBiggerProfileImageURLHttps()
-			.toString();
-		result.location = user.getLocation();
-		result.summary = user.getDescription();
-		result.num_connections = user.getFollowersCount() + "";
-		result.tweet_count = user.getStatusesCount() + "";
-		result.friends_count = user.getFriendsCount() + "";
-		result.url = "https://twitter.com/" + user.getScreenName();
-
-		// Adds each result in to list
-		searchResults.add(result);
-	    }
-
-	    // Returns list of matching profiles
-	    return searchResults;
+	    // Fill user details in list and return
+	    return fillUsersDetailsInList(users);
 	}
 	catch (TwitterRuntimeException e)
 	{
-	    System.out.println("in twitter exception");
-
+	    System.out.println("In search twitter exception");
 	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
     }
@@ -175,56 +155,116 @@ public class TwitterUtil
      * @throws Exception
      *             If twitter throws an exception
      */
-    public static List<SocialSearchResult> searchTwitterProfiles(Widget widget,
-	    String searchString) throws SocketTimeoutException, IOException,
-	    Exception
+    public static List<SocialSearchResult> modifiedSearchForTwitterProfiles(
+	    Widget widget, String searchString) throws SocketTimeoutException,
+	    IOException, Exception
     {
 	try
 	{
-	    List<SocialSearchResult> searchResults = new ArrayList<SocialSearchResult>();
 
-	    // returns null if String to be searched is null
+	    // returns empty list if String to be searched is null
 	    if (StringUtils.isBlank(searchString))
-		return searchResults;
+		return new ArrayList<SocialSearchResult>();
 
-	    // Creates a twitter object to connect with twitter
-	    Twitter twitter = getTwitter(widget);
+	    /*
+	     * Creates a twitter object to connect with twitter Searches twitter
+	     * profiles based on the search string
+	     */
+	    ResponseList<User> users = getTwitter(widget).searchUsers(
+		    searchString, 1);
 
-	    // Searches twitter profiles based on first name and last name
-	    ResponseList<User> users = twitter.searchUsers(searchString, 1);
-
-	    // Iterates through Twitter results and wraps the profile details in
-	    // to
-	    // SocialSearchResult and adds to list
-	    for (User user : users)
-	    {
-		SocialSearchResult result = new SocialSearchResult();
-
-		result.id = user.getId() + "";
-		result.name = user.getName();
-		result.screen_name = user.getScreenName();
-		result.picture = user.getBiggerProfileImageURLHttps()
-			.toString();
-		result.location = user.getLocation();
-		result.summary = user.getDescription();
-		result.num_connections = user.getFollowersCount() + "";
-		result.tweet_count = user.getStatusesCount() + "";
-		result.friends_count = user.getFriendsCount() + "";
-		result.url = "https://twitter.com/" + user.getScreenName();
-
-		// Adds each result in to list
-		searchResults.add(result);
-	    }
-
-	    // Returns list of matching profiles
-	    return searchResults;
+	    // Fill user details in list and return
+	    return fillUsersDetailsInList(users);
 	}
 	catch (TwitterRuntimeException e)
 	{
-	    System.out.println("in twitter exception");
-
+	    System.out.println("In modified search twitter exception");
 	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
+    }
+
+    /**
+     * Fills each user details in a {@link SocialSearchResult} from the given
+     * users and forms a {@link List}
+     * 
+     * @param users
+     *            {@link ResponseList} of {@link User}
+     * @return
+     */
+    private static List<SocialSearchResult> fillUsersDetailsInList(
+	    ResponseList<User> users)
+    {
+	List<SocialSearchResult> searchResults = new ArrayList<SocialSearchResult>();
+
+	/*
+	 * Iterates through Twitter users and wraps the profile details in
+	 * SocialSearchResult and adds to list
+	 */
+	for (User user : users)
+	{
+	    SocialSearchResult result = new SocialSearchResult();
+
+	    result.id = user.getId() + "";
+	    result.name = user.getName();
+	    result.screen_name = user.getScreenName();
+	    result.picture = user.getBiggerProfileImageURLHttps().toString();
+	    result.location = user.getLocation();
+	    result.summary = user.getDescription();
+	    result.num_connections = user.getFollowersCount() + "";
+	    result.tweet_count = user.getStatusesCount() + "";
+	    result.friends_count = user.getFriendsCount() + "";
+	    result.url = "https://twitter.com/" + user.getScreenName();
+
+	    // Adds each result in to list
+	    searchResults.add(result);
+	}
+
+	return searchResults;
+    }
+
+    /**
+     * Retrieves the twitter profile of the contact based on URL provided for
+     * twitter.
+     * 
+     * @param widget
+     *            {@link Widget} for accessing token and secret key
+     * @param webUrl
+     *            {@link String} twitter URL of the contact
+     * @return {@link String} twitter id of the profile
+     * @throws Exception
+     *             If {@link Twitter} throws an exception
+     */
+    public static String getTwitterIdByUrl(Widget widget, String webUrl)
+	    throws SocketTimeoutException, IOException, Exception
+    {
+	// Check if it is twitter URl
+	if (!webUrl.startsWith("https://twitter.com/"))
+	    return null;
+
+	String screenName = webUrl.substring(webUrl.lastIndexOf("/") + 1);
+	System.out.println("Twitter screen name from URL: " + screenName);
+	try
+	{
+	    /*
+	     * Creates a twitter object to connect with twitter Fetch Twitter
+	     * user profile based on twitter Id
+	     */
+	    User user = getTwitter(widget).showUser(screenName);
+
+	    return String.valueOf(user.getId());
+	}
+	catch (TwitterRuntimeException e)
+	{
+	    // If status is 404, Twitter doesnot have that profile
+	    if (e.getMessage().startsWith("404"))
+		throw new Exception("Sorry, that page doesn't exist! @"
+			+ screenName);
+
+	    System.out.println("In get Twitter id exception");
+	    throw new Exception(getErrorMessage(e.getMessage()));
+
+	}
+
     }
 
     /**
@@ -253,8 +293,7 @@ public class TwitterUtil
 
 	    SocialSearchResult result = new SocialSearchResult();
 
-	    // Gets user details from twitter and maps to SocialSearchResult
-	    // class
+	    // Map user details to SocialSearchResult
 	    result.id = user.getId() + "";
 	    result.name = user.getName();
 	    result.screen_name = user.getScreenName();
@@ -272,6 +311,10 @@ public class TwitterUtil
 	    result.is_followed_by_target = twitter.showFriendship(
 		    twitter.getId(), user.getId()).isSourceFollowedByTarget();
 
+	    /*
+	     * If current status is not null, get network updates Assuming
+	     * current id as new status, 5 recent statuses are retrieved
+	     */
 	    if (user.getStatus() != null)
 	    {
 		result.current_update = user.getStatus().getText();
@@ -284,11 +327,130 @@ public class TwitterUtil
 	}
 	catch (TwitterRuntimeException e)
 	{
-	    System.out.println("in twitter exception");
-
+	    System.out.println("In get profile twitter exception");
 	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
 
+    }
+
+    /**
+     * Connects to the twitter based on widget prefs and creates friendship
+     * (follow) between agile user and the person with twitter id in twitter
+     * 
+     * @param widget
+     *            {@link Widget} for accessing token and secret key
+     * @param twitterId
+     *            {@link String} to access recipient twitter account
+     * @return {@link String} with success message
+     * @throws Exception
+     */
+    public static String follow(Widget widget, Long twitterId)
+	    throws SocketTimeoutException, IOException, Exception
+    {
+	// Get twitter object
+	Twitter twitter = getTwitter(widget);
+	try
+	{
+	    /*
+	     * Creates friendship (follow) and checks whether followed, because
+	     * some have restricted access for following
+	     */
+	    User user = twitter.createFriendship(twitterId);
+	    boolean connected = twitter.showFriendship(twitter.getId(),
+		    user.getId()).isSourceFollowingTarget();
+	    return (connected) ? "true" : "false";
+	}
+	catch (TwitterRuntimeException e)
+	{
+	    System.out.println("In follow twitter exception");
+	    throw new Exception(getErrorMessage(e.getMessage()));
+	}
+    }
+
+    /**
+     * Connects to the twitter based on widget prefs and destroys friendship
+     * (unfollow) between agile user and the person with twitter id in twitter
+     * 
+     * @param widget
+     *            {@link Widget} for accessing token and secret key
+     * @param twitterId
+     *            {@link String} to access recipient twitter account
+     * @return {@link String} with success message
+     * @throws Exception
+     */
+    public static String unfollow(Widget widget, Long twitterId)
+	    throws SocketTimeoutException, IOException, Exception
+    {
+	try
+	{
+	    // Get twitter object and unfollow a person in Twitter
+	    User user = getTwitter(widget).destroyFriendship(twitterId);
+	    return (user != null) ? "Unfollowed" : "Unsuccessfull";
+	}
+	catch (TwitterRuntimeException e)
+	{
+	    System.out.println("In unfollow twitter exception");
+	    throw new Exception(getErrorMessage(e.getMessage()));
+	}
+    }
+
+    /**
+     * Connects to the twitter based on widget prefs and post a tweet in twitter
+     * account of the contact based on twitter id
+     * 
+     * @param widget
+     *            {@link Widget} for accessing token and secret key
+     * @param twitterId
+     *            {@link String} to access recipient twitter account
+     * @param message
+     *            {@link String} message to tweet
+     * @return
+     * @throws Exception
+     */
+    public static String tweetInTwitter(Widget widget, String message)
+	    throws SocketTimeoutException, IOException, Exception
+    {
+	try
+	{
+	    // Get twitter object and tweet in twitter
+	    Status status = getTwitter(widget).updateStatus(
+		    message + AGILETWITTERSOURCEMESSAGE);
+	    System.out.println("Tweet: " + Util.toJSONString(status));
+	    return "Successfull";
+	}
+	catch (TwitterRuntimeException e)
+	{
+	    System.out.println("In tweet twitter exception");
+	    throw new Exception(getErrorMessage(e.getMessage()));
+	}
+    }
+
+    /**
+     * Connects to the twitter based on widget preferences and retweets the
+     * tweet based on the given tweet id
+     * 
+     * @param widget
+     *            {@link Widget} for accessing token and secret key
+     * @param tweetId
+     *            id of the {@link Tweet}
+     * @return {@link String} with success message
+     * @throws Exception
+     */
+    public static String reTweetByTweetId(Widget widget, Long tweetId)
+	    throws SocketTimeoutException, IOException, Exception
+    {
+	try
+	{
+	    // Get twitter object and retweet the status by its id
+	    Status reTweet = getTwitter(widget).retweetStatus(tweetId);
+	    return (reTweet != null) ? "Retweeted successfully"
+		    : "Unsuccessfull";
+	}
+	catch (TwitterRuntimeException e)
+	{
+	    System.out.println("In retweet twitter exception");
+	    throw new Exception(getErrorMessage(e.getMessage()));
+	}
     }
 
     /**
@@ -313,137 +475,33 @@ public class TwitterUtil
     {
 	try
 	{
-	    long profile_id = Long.parseLong(twitterId);
+	    // Creates a twitter object to connect with twitter
 	    Twitter twitter = getTwitter(widget);
-	    long id = twitter.getId();
 
-	    String agile = " via @agile_crm";
-	    if (!twitter.showFriendship(id, profile_id)
-		    .isSourceFollowedByTarget())
+	    // Current Twitter user id in agile
+	    long agileUserTwitterId = twitter.getId();
+
+	    /*
+	     * If the twitter profile with with given twitter Id (contact)
+	     * follows agile user Twitter profile, agile user can send a direct
+	     * message to contact
+	     */
+	    if (!twitter.showFriendship(agileUserTwitterId,
+		    Long.parseLong(twitterId)).isSourceFollowedByTarget())
 		return "You can send a message only to persons who is following you";
 
-	    DirectMessage dirMess = twitter.sendDirectMessage(profile_id,
-		    message + agile);
-	    if (dirMess.getId() == 0)
+	    DirectMessage directMessage = twitter.sendDirectMessage(
+		    Long.parseLong(twitterId), message
+			    + AGILETWITTERSOURCEMESSAGE);
+
+	    // If returned DM id is zero, message is not sent
+	    if (directMessage.getId() == 0)
 		return "Unsuccessfull try again";
 	    return "Message sent Successfully";
 	}
 	catch (TwitterRuntimeException e)
 	{
-	    System.out.println("in twitter exception");
-
-	    throw new Exception(getErrorMessage(e.getMessage()));
-	}
-    }
-
-    /**
-     * Connects to the twitter based on widget prefs and retweets the tweet
-     * based on the given tweet id
-     * 
-     * @param widget
-     *            {@link Widget} for accessing token and secret key
-     * @param tweetId
-     *            id of the {@link Tweet}
-     * @return {@link String} with success message
-     * @throws Exception
-     */
-    public static String reTweetByTweetId(Widget widget, Long tweetId)
-	    throws SocketTimeoutException, IOException, Exception
-    {
-	Twitter twitter = getTwitter(widget);
-	Status reTweet = twitter.retweetStatus(tweetId);
-	return (reTweet != null) ? "Retweeted successfully" : "Unsuccessfull";
-    }
-
-    /**
-     * Connects to the twitter based on widget prefs and destroys friendship
-     * (unfollow) between agile user and the person with twitter id in twitter
-     * 
-     * @param widget
-     *            {@link Widget} for accessing token and secret key
-     * @param twitterId
-     *            {@link String} to access recipient twitter account
-     * @return {@link String} with success message
-     * @throws Exception
-     */
-    public static String unfollow(Widget widget, Long twitterId)
-	    throws SocketTimeoutException, IOException, Exception
-    {
-	try
-	{
-	    Twitter twitter = getTwitter(widget);
-	    User user = twitter.destroyFriendship(twitterId);
-
-	    return (user != null) ? "Unfollowed" : "Unsuccessfull";
-	}
-	catch (TwitterRuntimeException e)
-	{
-	    System.out.println("in twitter exception");
-
-	    throw new Exception(getErrorMessage(e.getMessage()));
-	}
-    }
-
-    /**
-     * Connects to the twitter based on widget prefs and creates friendship
-     * (follow) between agile user and the person with twitter id in twitter
-     * 
-     * @param widget
-     *            {@link Widget} for accessing token and secret key
-     * @param twitterId
-     *            {@link String} to access recipient twitter account
-     * @return {@link String} with success message
-     * @throws Exception
-     */
-    public static String follow(Widget widget, Long twitterId)
-	    throws SocketTimeoutException, IOException, Exception
-    {
-	Twitter twitter = getTwitter(widget);
-	try
-	{
-	    User user = twitter.createFriendship(twitterId);
-	    boolean connected = twitter.showFriendship(twitter.getId(),
-		    user.getId()).isSourceFollowingTarget();
-	    return (connected) ? "true" : "false";
-	}
-	catch (TwitterRuntimeException e)
-	{
-	    System.out.println("in twitter exception");
-
-	    throw new Exception(getErrorMessage(e.getMessage()));
-	}
-    }
-
-    /**
-     * Connects to the twitter based on widget prefs and post a tweet in twitter
-     * account of the contact based on twitter id
-     * 
-     * @param widget
-     *            {@link Widget} for accessing token and secret key
-     * @param twitterId
-     *            {@link String} to access recipient twitter account
-     * @param message
-     *            {@link String} message to tweet
-     * @return
-     * @throws Exception
-     */
-    public static String tweetInTwitter(Widget widget, String message)
-	    throws SocketTimeoutException, IOException, Exception
-    {
-	try
-	{
-	    Twitter twitter = getTwitter(widget);
-	    String agile = " via @agile_crm";
-	    // if (message.length() < (140 - agile.length()))
-	    // message = message + agile;
-	    Status status = twitter.updateStatus(message + agile);
-	    System.out.println(Util.toJSONString(status));
-	    return "Successfull";
-	}
-	catch (TwitterRuntimeException e)
-	{
-	    System.out.println("in twitter exception");
-
+	    System.out.println("In DM twitter exception");
 	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
     }
@@ -466,6 +524,10 @@ public class TwitterUtil
     {
 	try
 	{
+	    /*
+	     * Get Twitter object and on that fetch user to get screen name,
+	     * form a query on screen name and search for tweets
+	     */
 	    Twitter twitter = getTwitter(widget);
 	    User user = twitter.showUser(twitterId);
 	    Query query = new Query("from:" + user.getScreenName());
@@ -503,6 +565,11 @@ public class TwitterUtil
     {
 	try
 	{
+	    /*
+	     * Get Twitter object and on that fetch user to get screen name,
+	     * form a query on screen name and search for tweets setting max
+	     * status id and count as 5 tweets
+	     */
 	    Twitter twitter = getTwitter(widget);
 	    User user = twitter.showUser(twitterId);
 	    Query query = new Query("from:" + user.getScreenName());
@@ -532,14 +599,15 @@ public class TwitterUtil
      * @throws Exception
      *             If {@link Twitter} throws an exception
      */
-    public static List<Status> getTweetsByName(Twitter twitter,
+    public static List<Status> getTweetsByScreenName(Twitter twitter,
 	    String screenName) throws SocketTimeoutException, IOException,
 	    Exception
     {
 	try
 	{
-	    Query query = new Query("from:" + screenName);
-	    QueryResult result = twitter.search(query);
+	    // Create a query with screen name and serach for tweets
+	    QueryResult result = twitter
+		    .search(new Query("from:" + screenName));
 
 	    return result.getTweets();
 	}
@@ -549,53 +617,6 @@ public class TwitterUtil
 
 	    throw new Exception(getErrorMessage(e.getMessage()));
 	}
-    }
-
-    /**
-     * Retrieves the twitter profile of the contact based on URL provided for
-     * twitter.
-     * 
-     * @param widget
-     *            {@link Widget} for accessing token and secret key
-     * @param webUrl
-     *            {@link String} twitter URL of the contact
-     * @return {@link String} twitter id of the profile
-     * @throws Exception
-     *             If {@link Twitter} throws an exception
-     */
-    public static String getTwitterIdByUrl(Widget widget, String webUrl)
-	    throws SocketTimeoutException, IOException, Exception
-    {
-
-	// Creates a twitter object to connect with twitter
-	Twitter twitter = getTwitter(widget);
-
-	if (!webUrl.startsWith("https://twitter.com/"))
-	    return null;
-
-	String screenName = webUrl.substring(webUrl.lastIndexOf("/") + 1);
-	System.out.println(screenName);
-	try
-	{
-
-	    // Fetch Twitter user profile based on twitter Id
-	    User user = twitter.showUser(screenName);
-
-	    return String.valueOf(user.getId());
-	}
-	catch (TwitterRuntimeException e)
-	{
-
-	    if (e.getMessage().startsWith("404"))
-		throw new Exception("Sorry, that page doesn't exist! @"
-			+ screenName);
-
-	    System.out.println("in twitter exception");
-
-	    throw new Exception(getErrorMessage(e.getMessage()));
-
-	}
-
     }
 
     /**
@@ -876,6 +897,13 @@ public class TwitterUtil
 	}
     }
 
+    /**
+     * Twitter exceptions are made proper and thrown by this method
+     * 
+     * @param error
+     *            {@link String} error message
+     * @return {@link String} proper error message
+     */
     private static String getErrorMessage(String error)
     {
 

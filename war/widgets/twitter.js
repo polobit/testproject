@@ -503,10 +503,10 @@ function getTwitterMatchingProfiles(plugin_id)
 	// If cookie is not available fetch results from Twitter
 	if (!data)
 	{
-		// Sends request to url "core/api/widgets/match/" and Calls WidgetsAPI
+		// Sends request to url "core/api/widgets/social/match/" and Calls WidgetsAPI
 		// with contact
 		// id and plugin id as path parameters
-		queueGetRequest("widget_queue", "core/api/widgets/match/" + plugin_id + "/" + contact_id, 'json', function success(data)
+		queueGetRequest("widget_queue", "core/api/widgets/social/match/" + plugin_id + "/" + contact_id, 'json', function success(data)
 		{
 			// Save social results in cookie of particular contact
 			localStorage.setItem('Agile_twitter_matches_' + contact_id, JSON.stringify(data));
@@ -545,10 +545,10 @@ function getModifiedTwitterMatchingProfiles(plugin_id)
 
 	search_string = $('#twitter_keywords').val();
 
-	// Sends request to url "core/api/widgets/match/twitter" and Calls
+	// Sends request to url "core/api/widgets/social/match/twitter" and Calls
 	// WidgetsAPI with
 	// plugin id and search string as path parameters
-	$.get("core/api/widgets/modified/match/twitter/" + plugin_id + "/" + search_string, function(data)
+	$.get("core/api/widgets/social/modified/match/twitter/" + plugin_id + "/" + search_string, function(data)
 	{
 		$('#spinner-twitter-search').hide();
 
@@ -856,7 +856,7 @@ function showTwitterProfile(twitter_id, plugin_id)
  */
 function sendFollowRequest(plugin_id, twitter_id)
 {
-	// Sends post request to url "core/api/widgets/connect/" and Calls
+	// Sends post request to url "core/api/widgets/social/connect/" and Calls
 	// WidgetsAPI with
 	// plugin id and Twitter id as path parameters
 	$.post("/core/api/widgets/social/connect/" + plugin_id + "/" + twitter_id, function(data)
@@ -930,7 +930,7 @@ function sendFollowRequest(plugin_id, twitter_id)
  */
 function sendUnfollowRequest(plugin_id, twitter_id)
 {
-	// Sends get request to url "core/api/widgets/connect/" and Calls WidgetsAPI
+	// Sends get request to url "core/api/widgets/social/connect/" and Calls WidgetsAPI
 	// with
 	// plugin id and Twitter id as path parameters
 	$.get("/core/api/widgets/social/disconnect/" + plugin_id + "/" + twitter_id, function(data)
@@ -1006,7 +1006,7 @@ function sendTwitterMessage(plugin_id, twitter_id, message)
 
 		$("#spinner-modal").show();
 
-		// Sends post request to url "core/api/widgets/message/" and Calls
+		// Sends post request to url "core/api/widgets/social/message/" and Calls
 		// WidgetsAPI with
 		// plugin id and Twitter id as path parameters and form as post data
 		$.post("/core/api/widgets/social/message/" + plugin_id + "/" + twitter_id, $('#twitter_messageForm').serialize(),
@@ -1098,7 +1098,7 @@ function tweetInTwitter(plugin_id, twitter_id)
 
 		$("#spinner-modal").show();
 
-		// Sends post request to url "core/api/widgets/message/" and Calls
+		// Sends post request to url "core/api/widgets/social/message/" and Calls
 		// WidgetsAPI with
 		// plugin id and Twitter id as path parameters and form as post data
 		$.post("/core/api/widgets/social/tweet/" + plugin_id, $('#twitter_messageForm').serialize(),
@@ -1145,7 +1145,7 @@ function tweetInTwitter(plugin_id, twitter_id)
  */
 function retweetTheTweet(plugin_id, share_id, message, element)
 {
-	// Sends get request to url "core/api/widgets/reshare/" and Calls WidgetsAPI
+	// Sends get request to url "core/api/widgets/social/reshare/" and Calls WidgetsAPI
 	// with
 	// plugin id, Twitter id and message as path parameters
 	$.get("/core/api/widgets/social/reshare/" + plugin_id + "/" + share_id + "/" + message,
