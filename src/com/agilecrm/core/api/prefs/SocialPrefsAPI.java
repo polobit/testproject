@@ -23,57 +23,55 @@ import com.agilecrm.user.util.SocialPrefsUtil;
 @Path("/api/social-prefs")
 public class SocialPrefsAPI
 {
-    /**
-     * Returns SocialPrefs associated with current AgileUser and given type.
-     * 
-     * @param type
-     *            - SocialPrefs type.
-     * @return SocialPrefs.
-     */
-    @Path("{type}")
-    @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public SocialPrefs getSocialPrefs(@PathParam("type") String type)
-    {
-	try
+	/**
+	 * Returns SocialPrefs associated with current AgileUser and given type.
+	 * 
+	 * @param type
+	 *            - SocialPrefs type.
+	 * @return SocialPrefs.
+	 */
+	@Path("{type}")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public SocialPrefs getSocialPrefs(@PathParam("type") String type)
 	{
-	    Type socialPrefsTypeEnum = Type.valueOf(type);
-	    if (socialPrefsTypeEnum == null)
-		return null;
+		try
+		{
+			Type socialPrefsTypeEnum = Type.valueOf(type);
+			if (socialPrefsTypeEnum == null)
+				return null;
 
-	    return SocialPrefsUtil.getPrefs(AgileUser.getCurrentAgileUser(),
-		    socialPrefsTypeEnum);
+			return SocialPrefsUtil.getPrefs(AgileUser.getCurrentAgileUser(), socialPrefsTypeEnum);
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
 	}
-	catch (Exception e)
-	{
-	    return null;
-	}
-    }
 
-    /**
-     * Deletes SocialPrefs associated with current AgileUser and given type.
-     * 
-     * @param type
-     *            - SocialPrefs type.
-     */
-    @Path("{type}")
-    @DELETE
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void deleteSocialPrefs(@PathParam("type") String type)
-    {
-	try
+	/**
+	 * Deletes SocialPrefs associated with current AgileUser and given type.
+	 * 
+	 * @param type
+	 *            - SocialPrefs type.
+	 */
+	@Path("{type}")
+	@DELETE
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public void deleteSocialPrefs(@PathParam("type") String type)
 	{
-	    Type socialPrefsTypeEnum = Type.valueOf(type);
-	    if (socialPrefsTypeEnum == null)
-		return;
+		try
+		{
+			Type socialPrefsTypeEnum = Type.valueOf(type);
+			if (socialPrefsTypeEnum == null)
+				return;
 
-	    SocialPrefs prefs = SocialPrefsUtil.getPrefs(
-		    AgileUser.getCurrentAgileUser(), socialPrefsTypeEnum);
-	    prefs.delete();
+			SocialPrefs prefs = SocialPrefsUtil.getPrefs(AgileUser.getCurrentAgileUser(), socialPrefsTypeEnum);
+			prefs.delete();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-    }
 }
