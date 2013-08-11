@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.Task.PriorityType;
 import com.agilecrm.activities.Task.Type;
-import com.agilecrm.util.DBUtil;
+import com.agilecrm.util.AccountDeleteUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
@@ -120,7 +120,7 @@ public class AddTask extends TaskletAdapter
 	Long epochTime = getDueDateInEpoch(dueDays);
 
 	// Contact Id
-	String contactId = DBUtil.getId(subscriberJSON);
+	String contactId = AccountDeleteUtil.getId(subscriberJSON);
 
 	// Contact ownerId.
 	String contactOwnerId = AgileTaskletUtil.getContactOwnerIdFromSubscriberJSON(subscriberJSON);
@@ -137,7 +137,7 @@ public class AddTask extends TaskletAdapter
 	}
 
 	// Creates log for AddTask
-	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON), DBUtil.getId(subscriberJSON), "Task: " + subject + "<br/> Category: " + category + "<br/> Type: "
+	LogUtil.addLogToSQL(AccountDeleteUtil.getId(campaignJSON), AccountDeleteUtil.getId(subscriberJSON), "Task: " + subject + "<br/> Category: " + category + "<br/> Type: "
 		+ priority + " <br/> Date: " + new Date(epochTime * 1000), LogType.ADD_TASK.toString());
 
 	// Execute Next One in Loop

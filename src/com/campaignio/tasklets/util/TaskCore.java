@@ -3,7 +3,7 @@ package com.campaignio.tasklets.util;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.agilecrm.util.DBUtil;
+import com.agilecrm.util.AccountDeleteUtil;
 import com.campaignio.tasklets.util.deferred.TaskletWorkflowDeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -54,7 +54,7 @@ public class TaskCore
 
 	    System.out.println("Executing " + subscriberJSON);
 
-	    String key = DBUtil.getId(subscriberJSON) + " " + DBUtil.getId(campaignJSON);
+	    String key = AccountDeleteUtil.getId(subscriberJSON) + " " + AccountDeleteUtil.getId(campaignJSON);
 
 	    if (key.contains("null"))
 		continue;
@@ -75,7 +75,7 @@ public class TaskCore
 		// Execute it in a task queue each batch
 		// executeWorkflow(campaignJSON, subscriberJSON);
 
-		TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(DBUtil.getId(campaignJSON), subscriberJSON.toString());
+		TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(AccountDeleteUtil.getId(campaignJSON), subscriberJSON.toString());
 		Queue queue = QueueFactory.getQueue("campaign-queue");
 		queue.add(TaskOptions.Builder.withPayload(taskletWorkflowDeferredTask));
 	    }

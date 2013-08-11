@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.util.DBUtil;
+import com.agilecrm.util.AccountDeleteUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
@@ -57,7 +57,7 @@ public class Tags extends TaskletAdapter
 	{
 
 	    // Get Contact Id and Contact
-	    String contactId = DBUtil.getId(subscriberJSON);
+	    String contactId = AccountDeleteUtil.getId(subscriberJSON);
 	    Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
 
 	    // Execute next node if contact is null and given tags are empty.
@@ -73,7 +73,7 @@ public class Tags extends TaskletAdapter
 		if (type.equals(ADD))
 		{
 		    contact.addTags(tagsArray);
-		    LogUtil.addLogToSQL(DBUtil.getId(campaignJSON), DBUtil.getId(subscriberJSON), "Tags added - " + tagNames, LogType.TAGS.toString());
+		    LogUtil.addLogToSQL(AccountDeleteUtil.getId(campaignJSON), AccountDeleteUtil.getId(subscriberJSON), "Tags added - " + tagNames, LogType.TAGS.toString());
 
 		}
 
@@ -81,7 +81,7 @@ public class Tags extends TaskletAdapter
 		else
 		{
 		    contact.removeTags(tagsArray);
-		    LogUtil.addLogToSQL(DBUtil.getId(campaignJSON), DBUtil.getId(subscriberJSON), "Tags deleted - " + tagNames, LogType.TAGS.toString());
+		    LogUtil.addLogToSQL(AccountDeleteUtil.getId(campaignJSON), AccountDeleteUtil.getId(subscriberJSON), "Tags deleted - " + tagNames, LogType.TAGS.toString());
 		}
 	    }
 	}

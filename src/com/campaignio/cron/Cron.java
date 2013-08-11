@@ -15,7 +15,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
-import com.agilecrm.util.DBUtil;
+import com.agilecrm.util.AccountDeleteUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
@@ -169,8 +169,8 @@ public class Cron extends HttpServlet
 	this.custom3 = custom3;
 
 	// Store Campaign and Subscriber ID for dequeueing while deletion
-	this.campaign_id = DBUtil.getId(campaignJSON);
-	this.subscriber_id = DBUtil.getId(subscriberJSON);
+	this.campaign_id = AccountDeleteUtil.getId(campaignJSON);
+	this.subscriber_id = AccountDeleteUtil.getId(subscriberJSON);
     }
 
     /*

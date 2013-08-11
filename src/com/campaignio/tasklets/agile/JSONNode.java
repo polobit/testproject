@@ -6,7 +6,7 @@ import java.util.Iterator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.agilecrm.util.DBUtil;
+import com.agilecrm.util.AccountDeleteUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
@@ -14,7 +14,7 @@ import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
- * <code>JSONNode</code> represents JSONIO node in the workflow. ‘JSON IO’ node
+ * <code>JSONNode</code> represents JSONIO node in the workflow. ï¿½JSON IOï¿½ node
  * is used to integrate workflow with web infrastructure using JSON. It consists
  * of two branches-success and failure. When url is accessed successfully
  * without any errors, then that node proceeds to success, otherwise failure.
@@ -112,7 +112,7 @@ public class JSONNode extends TaskletAdapter
 		output = HTTPUtil.accessURL(url);
 
 		// Creates log for JSONNode for method Get type
-		LogUtil.addLogToSQL(DBUtil.getId(campaignJSON), DBUtil.getId(subscriberJSON), "GET: " + url + "<br>Status: SUCCESS", LogType.JSONIO.toString());
+		LogUtil.addLogToSQL(AccountDeleteUtil.getId(campaignJSON), AccountDeleteUtil.getId(subscriberJSON), "GET: " + url + "<br>Status: SUCCESS", LogType.JSONIO.toString());
 
 	    }
 	    else
@@ -120,7 +120,7 @@ public class JSONNode extends TaskletAdapter
 		output = HTTPUtil.accessURLUsingPost(url, httpParams);
 
 		// Creates log for JSONNode for method Post type
-		LogUtil.addLogToSQL(DBUtil.getId(campaignJSON), DBUtil.getId(subscriberJSON), "POST: " + url + " " + httpParams + "<br>Status: SUCCESS",
+		LogUtil.addLogToSQL(AccountDeleteUtil.getId(campaignJSON), AccountDeleteUtil.getId(subscriberJSON), "POST: " + url + " " + httpParams + "<br>Status: SUCCESS",
 			LogType.JSONIO.toString());
 	    }
 
@@ -146,7 +146,7 @@ public class JSONNode extends TaskletAdapter
 	    data.put("error", e.getMessage());
 
 	    // Creates log for JSONNode for error
-	    LogUtil.addLogToSQL(DBUtil.getId(campaignJSON), DBUtil.getId(subscriberJSON), "Error Occurred " + e.getMessage(), LogType.JSONIO.toString());
+	    LogUtil.addLogToSQL(AccountDeleteUtil.getId(campaignJSON), AccountDeleteUtil.getId(subscriberJSON), "Error Occurred " + e.getMessage(), LogType.JSONIO.toString());
 
 	    // Execute Next One in Loop
 	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_FAILURE);

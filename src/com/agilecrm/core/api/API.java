@@ -30,7 +30,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
-import com.agilecrm.util.DBUtil;
+import com.agilecrm.util.AccountDeleteUtil;
 import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.QueryResultIterator;
@@ -146,7 +146,7 @@ public class API
 	{
 		try
 		{
-			DBUtil.deleteNamespace(NamespaceManager.get());
+			AccountDeleteUtil.deleteNamespace(NamespaceManager.get());
 		}
 		catch (Exception e)
 		{

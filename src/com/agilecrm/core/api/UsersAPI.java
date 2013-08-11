@@ -22,7 +22,7 @@ import org.json.JSONException;
 
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.util.DBUtil;
+import com.agilecrm.util.AccountDeleteUtil;
 import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.NamespaceManager;
 
@@ -254,7 +254,7 @@ public class UsersAPI
 
 	try
 	{
-	    DBUtil.deleteNamespace(namespace);
+	    AccountDeleteUtil.deleteNamespace(namespace);
 	}
 	catch (Exception e)
 	{

@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import com.agilecrm.analytics.util.AnalyticsSQLUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.util.DBUtil;
+import com.agilecrm.util.AccountDeleteUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -58,7 +58,7 @@ public class URLVisited extends TaskletAdapter
 	String type = getStringValue(nodeJSON, subscriberJSON, data, TYPE);
 	String domain = NamespaceManager.get();
 
-	String contactId = DBUtil.getId(subscriberJSON);
+	String contactId = AccountDeleteUtil.getId(subscriberJSON);
 	Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
 	String email = contact.getContactFieldValue(Contact.EMAIL);
 

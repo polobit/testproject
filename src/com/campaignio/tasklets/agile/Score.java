@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.util.DBUtil;
+import com.agilecrm.util.AccountDeleteUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
@@ -56,7 +56,7 @@ public class Score extends TaskletAdapter
 	System.out.println("Given Score Type " + type + " and Value " + value);
 
 	// Get Contact Id and Contact
-	String contactId = DBUtil.getId(subscriberJSON);
+	String contactId = AccountDeleteUtil.getId(subscriberJSON);
 	Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
 
 	if (contact != null)
@@ -67,8 +67,8 @@ public class Score extends TaskletAdapter
 		contact.addScore(Integer.parseInt(value));
 
 		// Creates log when score is added
-		LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
-			DBUtil.getId(subscriberJSON), "Score increased by "
+		LogUtil.addLogToSQL(AccountDeleteUtil.getId(campaignJSON),
+			AccountDeleteUtil.getId(subscriberJSON), "Score increased by "
 				+ value, LogType.SCORE.toString());
 	    }
 	    else
@@ -76,8 +76,8 @@ public class Score extends TaskletAdapter
 		contact.subtractScore(Integer.parseInt(value));
 
 		// Creates log when score is subtracted
-		LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
-			DBUtil.getId(subscriberJSON), "Score decreased by "
+		LogUtil.addLogToSQL(AccountDeleteUtil.getId(campaignJSON),
+			AccountDeleteUtil.getId(subscriberJSON), "Score decreased by "
 				+ value, LogType.SCORE.toString());
 
 	    }

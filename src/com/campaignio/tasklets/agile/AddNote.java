@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Note;
 import com.agilecrm.user.AgileUser;
-import com.agilecrm.util.DBUtil;
+import com.agilecrm.util.AccountDeleteUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
@@ -47,7 +47,7 @@ public class AddNote extends TaskletAdapter
 	try
 	{
 	    // Get Contact Id
-	    String contactId = DBUtil.getId(subscriberJSON);
+	    String contactId = AccountDeleteUtil.getId(subscriberJSON);
 
 	    // Get Contact Owner Id.
 	    String ownerId = AgileTaskletUtil.getContactOwnerIdFromSubscriberJSON(subscriberJSON);
@@ -71,7 +71,7 @@ public class AddNote extends TaskletAdapter
 	}
 
 	// Creates log for note
-	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON), DBUtil.getId(subscriberJSON), "Subject: " + subject + "<br>Description: " + description,
+	LogUtil.addLogToSQL(AccountDeleteUtil.getId(campaignJSON), AccountDeleteUtil.getId(subscriberJSON), "Subject: " + subject + "<br>Description: " + description,
 		LogType.ADD_NOTE.toString());
 
 	// Execute Next One in Loop

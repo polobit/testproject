@@ -35,7 +35,7 @@ import com.google.appengine.api.taskqueue.TaskOptions;
  * @author sree
  * 
  */
-public class DBUtil
+public class AccountDeleteUtil
 {
 
     // JSON - Google App Engine DB Key

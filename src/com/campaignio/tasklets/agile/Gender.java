@@ -2,7 +2,7 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
-import com.agilecrm.util.DBUtil;
+import com.agilecrm.util.AccountDeleteUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
@@ -10,7 +10,7 @@ import com.campaignio.tasklets.util.TaskletUtil;
 import com.thirdparty.Rapleaf;
 
 /**
- * <code>Gender</code> represents Gender node in the workflow. ‘Gender’ option
+ * <code>Gender</code> represents Gender node in the workflow. ï¿½Genderï¿½ option
  * is used to retrieve the gender of contact based on the email-id of that
  * contact. Gender class uses Rapleaf to get gender from email-ids. It consists
  * of three branches such as Male,Female and Unknown. If unable to retrieve the
@@ -62,13 +62,13 @@ public class Gender extends TaskletAdapter
 	    if (rapleafJSON != null)
 	    {
 		data.put(Rapleaf.RAPLEAF, rapleafJSON);
-		LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
-			DBUtil.getId(subscriberJSON), "Rapleaf " + rapleafJSON,
+		LogUtil.addLogToSQL(AccountDeleteUtil.getId(campaignJSON),
+			AccountDeleteUtil.getId(subscriberJSON), "Rapleaf " + rapleafJSON,
 			LogType.GENDER.toString());
 	    }
 	    else
-		LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
-			DBUtil.getId(subscriberJSON),
+		LogUtil.addLogToSQL(AccountDeleteUtil.getId(campaignJSON),
+			AccountDeleteUtil.getId(subscriberJSON),
 			"Could not retrieve data from Rapleaf",
 			LogType.GENDER.toString());
 	}

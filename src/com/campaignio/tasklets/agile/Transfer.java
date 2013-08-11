@@ -2,7 +2,7 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
-import com.agilecrm.util.DBUtil;
+import com.agilecrm.util.AccountDeleteUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
@@ -31,7 +31,7 @@ public class Transfer extends TaskletAdapter
 	String campaignId = getStringValue(nodeJSON, subscriberJSON, data, CAMPAIGN_ID);
 
 	// If both are same
-	if (DBUtil.getId(campaignJSON).equals(campaignId))
+	if (AccountDeleteUtil.getId(campaignJSON).equals(campaignId))
 	{
 	    System.out.println("Same workflow selected to transfer");
 	    return;
@@ -45,7 +45,7 @@ public class Transfer extends TaskletAdapter
 	    WorkflowSubscribeUtil.subscribeWithSubscriberJSON(subscriberJSON, Long.parseLong(campaignId));
 
 	    // Current campaign
-	    Workflow fromWorkflow = WorkflowUtil.getWorkflow(Long.parseLong(DBUtil.getId(campaignJSON)));
+	    Workflow fromWorkflow = WorkflowUtil.getWorkflow(Long.parseLong(AccountDeleteUtil.getId(campaignJSON)));
 	    fromWorkflowName = fromWorkflow.name;
 
 	    // Given campaign
@@ -72,7 +72,7 @@ public class Transfer extends TaskletAdapter
 	}
 
 	// Creates log for Transfer
-	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON), DBUtil.getId(subscriberJSON), subscriberJSON.getJSONObject("data").getString("first_name")
+	LogUtil.addLogToSQL(AccountDeleteUtil.getId(campaignJSON), AccountDeleteUtil.getId(subscriberJSON), subscriberJSON.getJSONObject("data").getString("first_name")
 		+ " transferred from " + fromWorkflowName + " to " + toWorkflowName, LogType.TRANSFER.toString());
 
 	// Execute Next One in Loop
