@@ -173,7 +173,7 @@ public class UsersAPI
 		    .build());
 	}
 
-	DomainUserUtil.deleteRelatedEntities(domainUser.id);
+	AccountDeleteUtil.deleteRelatedEntities(domainUser.id);
 
 	domainUser.delete();
     }

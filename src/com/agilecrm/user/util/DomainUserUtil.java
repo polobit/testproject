@@ -3,21 +3,13 @@ package com.agilecrm.user.util;
 import java.util.List;
 
 import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
-import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.IMAPEmailPrefs;
-import com.agilecrm.user.SocialPrefs;
-import com.agilecrm.user.UserPrefs;
-import com.agilecrm.user.notification.NotificationPrefs;
-import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
-import com.googlecode.objectify.Key;
 
 /**
  * <code>DomainUserUtil</code> is utility class used to process data of
@@ -40,7 +32,7 @@ import com.googlecode.objectify.Key;
 public class DomainUserUtil
 {
     // Dao
-    private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(DomainUser.class);
+    public static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(DomainUser.class);
 
     /**
      * Generates a password of length eight characters and sends an email to the
@@ -272,29 +264,6 @@ public class DomainUserUtil
     }
 
     /**
-     * Deletes all domain users in a domain
-     * 
-     * @param namespace
-     *            name of the domain
-     */
-    public static void deleteDomainUsers(String namespace)
-    {
-	if (StringUtils.isEmpty(namespace))
-	    return;
-
-	String oldNamespace = NamespaceManager.get();
-	NamespaceManager.set("");
-
-	// Get keys of domain users in respective domain
-	List<Key<DomainUser>> domainUserKeys = dao.listKeysByProperty("domain", namespace);
-
-	// Delete domain users in domain
-	dao.deleteKeys(domainUserKeys);
-
-	NamespaceManager.set(oldNamespace);
-    }
-
-    /**
      * Gets number of users in a domain
      * 
      * @return number of users in a domain
@@ -324,44 +293,6 @@ public class DomainUserUtil
 	finally
 	{
 	    NamespaceManager.set(oldNamespace);
-	}
-    }
-
-    /**
-     * Deletes All the entities(AgileUser, Userprefs, Imap prefs, notification
-     * prefs) before deleting domain users
-     */
-    public static void deleteRelatedEntities(Long id)
-    {
-	AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(id);
-
-	if (agileUser != null)
-	{
-	    // Delete UserPrefs
-	    UserPrefs userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
-	    if (userPrefs != null)
-		userPrefs.delete();
-
-	    // Delete Social Prefs
-	    List<SocialPrefs> socialPrefsList = SocialPrefsUtil.getPrefs(agileUser);
-	    for (SocialPrefs socialPrefs : socialPrefsList)
-	    {
-		socialPrefs.delete();
-	    }
-
-	    // Delete IMAP PRefs
-	    IMAPEmailPrefs imapPrefs = IMAPEmailPrefsUtil.getIMAPPrefs(agileUser);
-	    if (imapPrefs != null)
-		imapPrefs.delete();
-
-	    // Delete Notification Prefs
-	    NotificationPrefs notificationPrefs = NotificationPrefsUtil.getNotificationPrefs(agileUser);
-
-	    if (notificationPrefs != null)
-		notificationPrefs.delete();
-
-	    // Get and Delete AgileUser
-	    agileUser.delete();
 	}
     }
 }

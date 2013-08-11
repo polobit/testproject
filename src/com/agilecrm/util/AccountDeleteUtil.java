@@ -4,11 +4,22 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.analytics.util.AnalyticsSQLUtil;
 import com.agilecrm.search.document.ContactDocument;
+import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.IMAPEmailPrefs;
+import com.agilecrm.user.SocialPrefs;
+import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.notification.NotificationPrefs;
+import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.IMAPEmailPrefsUtil;
+import com.agilecrm.user.util.SocialPrefsUtil;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.CampaignLogsSQLUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -38,204 +49,266 @@ import com.google.appengine.api.taskqueue.TaskOptions;
 public class AccountDeleteUtil
 {
 
-    // JSON - Google App Engine DB Key
-    public final static String DATASTORE_KEY_IN_JSON = "id";
+	// JSON - Google App Engine DB Key
+	public final static String DATASTORE_KEY_IN_JSON = "id";
 
-    /**
-     * Gets ID from JSONObject - gets id from json.
-     * 
-     * @param json
-     *            JSONObject reference
-     * @return value of the id attribute of given json object
-     */
-    public static String getId(JSONObject json)
-    {
-	try
+	/**
+	 * Gets ID from JSONObject - gets id from json.
+	 * 
+	 * @param json
+	 *            JSONObject reference
+	 * @return value of the id attribute of given json object
+	 */
+	public static String getId(JSONObject json)
 	{
-	    return json.getString(DATASTORE_KEY_IN_JSON);
+		try
+		{
+			return json.getString(DATASTORE_KEY_IN_JSON);
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
 	}
-	catch (Exception e)
+
+	/**
+	 * Gets all the names (Contacts, Deals and etc..) of the entities of
+	 * particular name-space and stores in a list to return. Avoids the adding
+	 * of entity names (starts and ends with double underscore
+	 * ex:"__Stat_Total__"), which denotes statistics of the data-store.
+	 * 
+	 * @param namespace
+	 *            name of a particular name-space
+	 * @return list of entity names
+	 */
+	static List<String> getKinds(String namespace)
 	{
-	    return null;
+		String old = NamespaceManager.get();
+		List<String> results = new ArrayList<String>();
+		try
+		{
+			NamespaceManager.set(namespace);
+
+			DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+
+			// This works in dev and prod, but doesn't provide an entity count
+			Query q = new Query(Query.KIND_METADATA_KIND);
+			for (Entity e : ds.prepare(q).asIterable())
+			{
+				String name = e.getKey().getName();
+				if (!name.startsWith("__Stat_"))
+				{
+
+					/*
+					 * find out how many entities this kind has int count =
+					 * ds.prepare(new
+					 * Query(name)).countEntities(FetchOptions.Builder
+					 * .withDefaults());
+					 * 
+					 * results.add(new Kind(name));
+					 */
+
+					results.add(name);
+				}
+			}
+		}
+		finally
+		{
+			NamespaceManager.set(old);
+		}
+
+		// Don't show/include/delete these, it messes up mapreduce
+		results.remove("MapReduceState");
+		results.remove("ShardState");
+
+		return results;
 	}
-    }
 
-    /**
-     * Gets all the names (Contacts, Deals and etc..) of the entities of
-     * particular name-space and stores in a list to return. Avoids the adding
-     * of entity names (starts and ends with double underscore
-     * ex:"__Stat_Total__"), which denotes statistics of the data-store.
-     * 
-     * @param namespace
-     *            name of a particular name-space
-     * @return list of entity names
-     */
-    static List<String> getKinds(String namespace)
-    {
-	String old = NamespaceManager.get();
-	List<String> results = new ArrayList<String>();
-	try
+	/**
+	 * Deletes a name space and all its related entities from data-store by
+	 * creating a deferred task for the name-space.
+	 * 
+	 * @param namespace
+	 */
+	public static void deleteNamespace(String namespace)
 	{
-	    NamespaceManager.set(namespace);
 
-	    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+		/*
+		 * If name-space is null or empty return with out deleting entities, if
+		 * it happens deletes all the entities of all name-spaces
+		 */
+		if (namespace == null || namespace.isEmpty())
+			return;
 
-	    // This works in dev and prod, but doesn't provide an entity count
-	    Query q = new Query(Query.KIND_METADATA_KIND);
-	    for (Entity e : ds.prepare(q).asIterable())
-	    {
-		String name = e.getKey().getName();
-		if (!name.startsWith("__Stat_"))
+		NamespaceDeleteDeferredTask namespaceDeleteDeferredTask = new NamespaceDeleteDeferredTask(namespace);
+		Queue queue = QueueFactory.getDefaultQueue();
+		queue.add(TaskOptions.Builder.withPayload(namespaceDeleteDeferredTask));
+	}
+
+	/**
+	 * Deletes the entities of a particular kind by creating a list of keys of
+	 * entities of the kind and deleting the list at once
+	 * 
+	 * @param kind
+	 */
+	static void deleteKind(String kind)
+	{
+		try
+		{
+			// Stores all entity Keys of the Kind
+			List<Key> keys = new LinkedList<Key>();
+
+			// Get a handle on the datastore itself
+			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+			Query q = new Query(kind).setKeysOnly();
+			PreparedQuery pq = datastore.prepare(q);
+			for (Entity entity : pq.asIterable())
+			{
+				keys.add(entity.getKey());
+			}
+
+			try
+			{
+				datastore.delete(keys);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println("Error deleting");
+		}
+	}
+
+	/**
+	 * <code>NamespaceDeleteDeferredTask</code> class crates a deferred task,
+	 * which deletes all the entities of a particular name-space. Also deletes
+	 * domain users and crons of the name-space.
+	 * 
+	 * @author
+	 * 
+	 */
+	@SuppressWarnings("serial")
+	static class NamespaceDeleteDeferredTask implements DeferredTask
+	{
+		String namespace;
+
+		public NamespaceDeleteDeferredTask(String namespace)
+		{
+			this.namespace = namespace;
+		}
+
+		@Override
+		public void run()
 		{
 
-		    /*
-		     * find out how many entities this kind has int count =
-		     * ds.prepare(new
-		     * Query(name)).countEntities(FetchOptions.Builder
-		     * .withDefaults());
-		     * 
-		     * results.add(new Kind(name));
-		     */
+			String oldNameSpace = NamespaceManager.get();
 
-		    results.add(name);
+			NamespaceManager.set(namespace);
+			System.out.println("Deleting namespace " + namespace);
+
+			try
+			{
+
+				// Gets all entities of the given name-space
+				List<String> kinds = getKinds(namespace);
+
+				// Deletes each kind
+				for (String kind : kinds)
+					deleteKind(kind);
+
+				// Deletes crons
+				CronUtil.deleteCronsByNamespace(namespace);
+
+				// Deletes domain users
+				AccountDeleteUtil.deleteDomainUsers(namespace);
+
+				// Deletes campaign logs from sql.
+				CampaignLogsSQLUtil.deleteLogsBasedOnDomain(namespace);
+
+				// Deletes page stats from sql.
+				AnalyticsSQLUtil.deleteStatsBasedOnNamespace(namespace);
+
+				ContactDocument.deleteAllData(namespace);
+
+			}
+			catch (Exception e)
+			{
+				System.err.println("Exception occured in Cron " + e.getMessage());
+				e.printStackTrace();
+			}
+
+			NamespaceManager.set(oldNameSpace);
+
+			System.out.println("Deleted namespace " + namespace);
 		}
-	    }
-	}
-	finally
-	{
-	    NamespaceManager.set(old);
 	}
 
-	// Don't show/include/delete these, it messes up mapreduce
-	results.remove("MapReduceState");
-	results.remove("ShardState");
-
-	return results;
-    }
-
-    /**
-     * Deletes a name space and all its related entities from data-store by
-     * creating a deferred task for the name-space.
-     * 
-     * @param namespace
-     */
-    public static void deleteNamespace(String namespace)
-    {
-
-	/*
-	 * If name-space is null or empty return with out deleting entities, if
-	 * it happens deletes all the entities of all name-spaces
+	/**
+	 * Deletes all domain users in a domain
+	 * 
+	 * @param namespace
+	 *            name of the domain
 	 */
-	if (namespace == null || namespace.isEmpty())
-	    return;
-
-	NamespaceDeleteDeferredTask namespaceDeleteDeferredTask = new NamespaceDeleteDeferredTask(namespace);
-	Queue queue = QueueFactory.getDefaultQueue();
-	queue.add(TaskOptions.Builder.withPayload(namespaceDeleteDeferredTask));
-    }
-
-    /**
-     * Deletes the entities of a particular kind by creating a list of keys of
-     * entities of the kind and deleting the list at once
-     * 
-     * @param kind
-     */
-    static void deleteKind(String kind)
-    {
-	try
+	public static void deleteDomainUsers(String namespace)
 	{
-	    // Stores all entity Keys of the Kind
-	    List<Key> keys = new LinkedList<Key>();
+		if (StringUtils.isEmpty(namespace))
+			return;
 
-	    // Get a handle on the datastore itself
-	    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		String oldNamespace = NamespaceManager.get();
+		NamespaceManager.set("");
 
-	    Query q = new Query(kind).setKeysOnly();
-	    PreparedQuery pq = datastore.prepare(q);
-	    for (Entity entity : pq.asIterable())
-	    {
-		keys.add(entity.getKey());
-	    }
+		// Get keys of domain users in respective domain
+		List<com.googlecode.objectify.Key<DomainUser>> domainUserKeys = DomainUserUtil.dao.listKeysByProperty("domain",
+				namespace);
 
-	    try
-	    {
-		datastore.delete(keys);
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-	    }
+		// Delete domain users in domain
+		DomainUserUtil.dao.deleteKeys(domainUserKeys);
 
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.out.println("Error deleting");
-	}
-    }
-
-    /**
-     * <code>NamespaceDeleteDeferredTask</code> class crates a deferred task,
-     * which deletes all the entities of a particular name-space. Also deletes
-     * domain users and crons of the name-space.
-     * 
-     * @author
-     * 
-     */
-    @SuppressWarnings("serial")
-    static class NamespaceDeleteDeferredTask implements DeferredTask
-    {
-	String namespace;
-
-	public NamespaceDeleteDeferredTask(String namespace)
-	{
-	    this.namespace = namespace;
+		NamespaceManager.set(oldNamespace);
 	}
 
-	@Override
-	public void run()
+	/**
+	 * Deletes All the entities(AgileUser, Userprefs, Imap prefs, notification
+	 * prefs) before deleting domain users
+	 */
+	public static void deleteRelatedEntities(Long id)
 	{
+		AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(id);
 
-	    String oldNameSpace = NamespaceManager.get();
+		if (agileUser != null)
+		{
+			// Delete UserPrefs
+			UserPrefs userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
+			if (userPrefs != null)
+				userPrefs.delete();
 
-	    NamespaceManager.set(namespace);
-	    System.out.println("Deleting namespace " + namespace);
+			// Delete Social Prefs
+			List<SocialPrefs> socialPrefsList = SocialPrefsUtil.getPrefs(agileUser);
+			for (SocialPrefs socialPrefs : socialPrefsList)
+			{
+				socialPrefs.delete();
+			}
 
-	    try
-	    {
+			// Delete IMAP PRefs
+			IMAPEmailPrefs imapPrefs = IMAPEmailPrefsUtil.getIMAPPrefs(agileUser);
+			if (imapPrefs != null)
+				imapPrefs.delete();
 
-		// Gets all entities of the given name-space
-		List<String> kinds = getKinds(namespace);
+			// Delete Notification Prefs
+			NotificationPrefs notificationPrefs = NotificationPrefsUtil.getNotificationPrefs(agileUser);
 
-		// Deletes each kind
-		for (String kind : kinds)
-		    deleteKind(kind);
+			if (notificationPrefs != null)
+				notificationPrefs.delete();
 
-		// Deletes crons
-		CronUtil.deleteCronsByNamespace(namespace);
-
-		// Deletes domain users
-		DomainUserUtil.deleteDomainUsers(namespace);
-
-		// Deletes campaign logs from sql.
-		CampaignLogsSQLUtil.deleteLogsBasedOnDomain(namespace);
-
-		// Deletes page stats from sql.
-		AnalyticsSQLUtil.deleteStatsBasedOnNamespace(namespace);
-
-		ContactDocument.deleteAllData(namespace);
-
-	    }
-	    catch (Exception e)
-	    {
-		System.err.println("Exception occured in Cron " + e.getMessage());
-		e.printStackTrace();
-	    }
-
-	    NamespaceManager.set(oldNameSpace);
-
-	    System.out.println("Deleted namespace " + namespace);
+			// Get and Delete AgileUser
+			agileUser.delete();
+		}
 	}
-    }
 
 }
