@@ -132,10 +132,18 @@ public class JSAPI
 		}
 	}
 
+	/**
+	 * Deletes a contact. Fetches contact based on email and deletes.
+	 * 
+	 * It returns true if contact is found and deleted.
+	 * 
+	 * @param email
+	 * @return
+	 */
 	@Path("contact/delete")
 	@GET
 	@Produces("application/x-javascript")
-	public Boolean deleteContact(@QueryParam("email") String email, @QueryParam("id") String apiKey)
+	public Boolean deleteContact(@QueryParam("email") String email)
 	{
 		Contact contact = ContactUtil.searchContactByEmail(email);
 
@@ -221,8 +229,8 @@ public class JSAPI
 	@Path("/opportunity")
 	@GET
 	@Produces("application/x-javascript")
-	public String createOpportunity(@QueryParam("email") String email, @QueryParam("id") String apiKey,
-			@QueryParam("opportunity") String json)
+	public String createOpportunity(@QueryParam("email") String email, @QueryParam("opportunity") String json,
+			@QueryParam("id") String apiKey)
 	{
 		try
 		{
