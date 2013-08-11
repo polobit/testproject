@@ -48,7 +48,7 @@ import com.googlecode.objectify.ObjectifyService;
 public class QueryDocument<T> implements QueryInterface
 {
 
-	private Index index;
+	private final Index index;
 	public Class<T> clazz;
 
 	public QueryDocument(Index index, Class<T> clazz)
@@ -65,7 +65,8 @@ public class QueryDocument<T> implements QueryInterface
 	 *            {@link String}
 	 * @return {@link Collection}
 	 */
-	public Collection simpleSearch(String keyword, Integer count, String cursor)
+	@Override
+	public Collection<T> simpleSearch(String keyword, Integer count, String cursor)
 	{
 		// Normalizes the string. Removes spaces from the string as space are
 		// excluded while saving in documents
@@ -91,6 +92,7 @@ public class QueryDocument<T> implements QueryInterface
 	 * @param type
 	 * @return
 	 */
+	@Override
 	public Collection<T> simpleSearchWithType(String keyword, Integer count, String cursor, String type)
 	{
 		SearchUtil.normalizeString(keyword);
@@ -129,7 +131,7 @@ public class QueryDocument<T> implements QueryInterface
 	 */
 	@Override
 	@SuppressWarnings("rawtypes")
-	public Collection advancedSearch(List<SearchRule> rules, Integer count, String cursor)
+	public Collection<T> advancedSearch(List<SearchRule> rules, Integer count, String cursor)
 	{
 
 		// Construct query based on rules
@@ -138,7 +140,7 @@ public class QueryDocument<T> implements QueryInterface
 		System.out.println("query build is : " + query);
 
 		if (StringUtils.isEmpty(query))
-			return new ArrayList();
+			return new ArrayList<T>();
 
 		// return query results
 		return processQuery(query, count, cursor);
@@ -458,10 +460,11 @@ public class QueryDocument<T> implements QueryInterface
 		if (entities.size() == 0)
 			return entities;
 
+		// Gets last entity to set cursor on it
+		T entity = entities.get(entities.size() - 1);
+
 		if ((entities instanceof com.agilecrm.cursor.Cursor))
 		{
-			// Gets last entity to set cursor on it
-			T entity = entities.get(entities.size() - 1);
 
 			com.agilecrm.cursor.Cursor agileCursor = null;
 			if (newCursor != null)
