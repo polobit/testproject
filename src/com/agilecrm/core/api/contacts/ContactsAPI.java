@@ -418,7 +418,7 @@ public class ContactsAPI
 	List<Contact> contacts = new ArrayList<Contact>();
 	contacts.add(contact);
 
-	Contact.changeOwnerToContactsBulk(contacts, new_owner);
+	ContactUtil.changeOwnerToContactsBulk(contacts, new_owner);
 	return contact;
     }
 

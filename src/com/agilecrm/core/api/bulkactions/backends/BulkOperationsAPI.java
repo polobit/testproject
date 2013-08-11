@@ -94,7 +94,7 @@ public class BulkOperationsAPI
 	else if (!StringUtils.isEmpty(contact_ids))
 	    contact_list = ContactUtil.getContactsBulk(new JSONArray(contact_ids));
 
-	Contact.changeOwnerToContactsBulk(contact_list, new_owner);
+	ContactUtil.changeOwnerToContactsBulk(contact_list, new_owner);
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.OWNER_CHANGE, String.valueOf(contact_list.size()));
     }

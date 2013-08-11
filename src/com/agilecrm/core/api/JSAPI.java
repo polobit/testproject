@@ -477,24 +477,22 @@ public class JSAPI
 	{
 		try
 		{
+			// Fetches contact based on email
 			Contact contact = ContactUtil.searchContactByEmail(email);
+
+			// Returns if contact is null
 			if (contact == null)
 				return null;
-			JSONObject property_json = new JSONObject(json);
-
-			System.out.println(property_json);
-			ContactField field = contact.getContactFieldByName(property_json.getString("name"));
-			if (field == null)
-			{
-				field = new ContactField(property_json.getString("name"), property_json.getString("value"), "");
-				contact.properties.add(field);
-			}
-			else
-				field.value = property_json.getString("value");
-
-			contact.save();
 
 			ObjectMapper mapper = new ObjectMapper();
+
+			// Reads contact field object from json.
+			ContactField field = mapper.readValue(json, ContactField.class);
+
+			// Adds/updates field to contact and saves it
+			contact.addProperty(field);
+
+			// Returns updated contact
 			return mapper.writeValueAsString(contact);
 		}
 		catch (Exception e)

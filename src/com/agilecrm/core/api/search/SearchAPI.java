@@ -15,13 +15,11 @@ import com.agilecrm.search.AppengineSearch;
 @Path("api/search")
 public class SearchAPI
 {
-	// This method is called if XML is request
-	@SuppressWarnings("rawtypes")
 	@Path("/{keyword}")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Collection searchContacts(@PathParam("keyword") String keyword, @QueryParam("page_size") String count,
-			@QueryParam("cursor") String cursor, @QueryParam("type") String type)
+	public Collection<Contact> searchContacts(@PathParam("keyword") String keyword,
+			@QueryParam("page_size") String count, @QueryParam("cursor") String cursor, @QueryParam("type") String type)
 	{
 		return new AppengineSearch<Contact>(Contact.class).getSimpleSearchResults(keyword, Integer.parseInt(count),
 				cursor, type);
