@@ -151,7 +151,7 @@ public class HomeServlet extends HttpServlet
 		{
 			// Gets current domain user and saved current time as logged in
 			// time.
-			DomainUser domainUser = DomainUserUtil.getDomainCurrentUser();
+			DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 			domainUser.setInfo(DomainUser.LOGGED_IN_TIME, new Long(System.currentTimeMillis() / 1000));
 
 			domainUser.save();

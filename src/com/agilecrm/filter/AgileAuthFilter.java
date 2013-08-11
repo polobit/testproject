@@ -95,7 +95,7 @@ public class AgileAuthFilter implements Filter
 		AgileUser.class);
 
 	// Check if userinfo is valid for this namespace
-	DomainUser domainUser = DomainUserUtil.getDomainCurrentUser();
+	DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 
 	// Get Namespace
 	String domain = NamespaceManager.get();

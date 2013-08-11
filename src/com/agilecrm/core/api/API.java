@@ -57,7 +57,7 @@ public class API
 	{
 		try
 		{
-			DomainUser domainUser = DomainUserUtil.getDomainCurrentUser();
+			DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 			System.out.println(domainUser);
 			return domainUser;
 		}

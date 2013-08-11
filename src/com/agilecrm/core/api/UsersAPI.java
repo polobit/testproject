@@ -232,7 +232,7 @@ public class UsersAPI
 		    cursor);
 	}
 
-	return DomainUserUtil.getAllDomainUsers();
+	return DomainUserUtil.getAllUsers();
     }
 
     /**
