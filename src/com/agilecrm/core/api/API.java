@@ -18,9 +18,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
 import com.agilecrm.user.AgileUser;
-import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.AccountDeleteUtil;
 import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -43,10 +41,7 @@ public class API
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Map<String, String> register(@PathParam("email") String domain)
 	{
-		// Get Users for this domain to see if it is free
-		List<com.agilecrm.user.DomainUser> usersList = DomainUserUtil.getUsers(domain);
-
-		if (!usersList.isEmpty())
+		if (DomainUserUtil.count(domain) != 0)
 		{
 			Hashtable<String, String> result = new Hashtable<String, String>();
 			result.put("error", "domain does not exist");
@@ -77,15 +72,6 @@ public class API
 	public List<AgileUser> getAgileUsers()
 	{
 		return AgileUser.getUsers();
-	}
-
-	// Get All Users
-	@Path("deal-owners")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<UserPrefs> getAllUserPrefs()
-	{
-		return UserPrefsUtil.getAllUserPrefs();
 	}
 
 	// Get Stats

@@ -75,6 +75,7 @@ public class UsersAPI
 	{
 		try
 		{
+			// Fetches current domain user based on user info set in thread
 			DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 			System.out.println(domainUser);
 			return domainUser;
