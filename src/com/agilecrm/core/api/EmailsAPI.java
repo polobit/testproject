@@ -11,8 +11,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.email.util.ContactEmailUtil;
+import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
-import com.agilecrm.util.Util;
 
 /**
  * <code>EmailsAPI</code> is the API class for Emails. It handles sending email
@@ -43,7 +43,7 @@ public class EmailsAPI
     {
 	try
 	{
-	    Util.sendMail(fromEmail, fromEmail, to, subject, fromEmail, body, null);
+	    EmailUtil.sendMail(fromEmail, fromEmail, to, subject, fromEmail, body, null);
 	}
 	catch (Exception e)
 	{
@@ -74,7 +74,7 @@ public class EmailsAPI
 
 	try
 	{
-	    Util.sendMail(fromEmail, fromEmail, to, subject, fromEmail, body, null);
+	    EmailUtil.sendMail(fromEmail, fromEmail, to, subject, fromEmail, body, null);
 	}
 	catch (Exception e)
 	{

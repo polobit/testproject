@@ -19,8 +19,8 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.core.api.widgets.WidgetsAPI;
 import com.agilecrm.social.stubs.SocialSearchResult;
 import com.agilecrm.social.stubs.SocialUpdateStream;
+import com.agilecrm.util.JSONUtil;
 import com.agilecrm.util.StringUtils2;
-import com.agilecrm.util.Util;
 import com.agilecrm.widgets.Widget;
 import com.google.code.linkedinapi.client.LinkedInApiClient;
 import com.google.code.linkedinapi.client.LinkedInApiClientException;
@@ -783,7 +783,7 @@ public class LinkedInUtil
 			update.getUpdateContent().getPerson().getCurrentShare()
 				.getComment()).put(
 			"current-share",
-			Util.toJSONString(update.getUpdateContent().getPerson()
+			JSONUtil.toJSONString(update.getUpdateContent().getPerson()
 				.getCurrentShare()));
 		stream.message = json.toString();
 		list.add(stream);

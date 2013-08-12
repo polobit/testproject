@@ -34,129 +34,129 @@ import com.google.appengine.api.taskqueue.TaskOptions.Method;
 public class UploadContactsAPI
 {
 
-	/**
-	 * Handle request sent using file uploader, reads the details from the
-	 * uploaded file are returns the data which is processed and stored in to
-	 * map, so fields can be shown at the client side using the map
-	 * 
-	 * @param request
-	 *            {@link HttpServletRequest}
-	 * @return {@link String}
-	 */
-	@Path("/process")
-	@GET
-	public String post(@QueryParam("blob-key") String key)
+    /**
+     * Handle request sent using file uploader, reads the details from the
+     * uploaded file are returns the data which is processed and stored in to
+     * map, so fields can be shown at the client side using the map
+     * 
+     * @param request
+     *            {@link HttpServletRequest}
+     * @return {@link String}
+     */
+    @Path("/process")
+    @GET
+    public String post(@QueryParam("blob-key") String key)
+    {
+	System.out.println("===========================================================================");
+	try
 	{
-		System.out.println("===========================================================================");
-		try
-		{
-			BlobKey blobKey = new BlobKey(key);
+	    BlobKey blobKey = new BlobKey(key);
 
-			InputStream stream = new BlobstoreInputStream(blobKey);
+	    InputStream stream = new BlobstoreInputStream(blobKey);
 
-			LineIterator iterator = IOUtils.lineIterator(stream, "UTF-8");
+	    LineIterator iterator = IOUtils.lineIterator(stream, "UTF-8");
 
-			int lines = 0;
-			String csv = "";
+	    int lines = 0;
+	    String csv = "";
 
-			// Iterates through first 10 lines
-			while (iterator.hasNext() && lines <= 10)
-			{
-				csv = csv + "\n" + iterator.nextLine();
-				lines++;
-			}
+	    // Iterates through first 10 lines
+	    while (iterator.hasNext() && lines <= 10)
+	    {
+		csv = csv + "\n" + iterator.nextLine();
+		lines++;
+	    }
 
-			Hashtable result = ContactUtil.convertCSVToJSONArrayPartially(csv, "");
+	    Hashtable result = ContactUtil.convertCSVToJSONArrayPartially(csv, "");
 
-			System.out.println(result);
+	    System.out.println(result);
 
-			JSONObject success = new JSONObject();
-			success.put("success", true);
-			success.put("blob_key", key);
+	    JSONObject success = new JSONObject();
+	    success.put("success", true);
+	    success.put("blob_key", key);
 
-			// Stores results in to a map
-			// JSONArray csvArray = (JSONArray) result.get("result");
+	    // Stores results in to a map
+	    // JSONArray csvArray = (JSONArray) result.get("result");
 
-			// returns CSV file as a json object with key "data"
-			success.put("data", result.get("result"));
-			System.out.println(success);
+	    // returns CSV file as a json object with key "data"
+	    success.put("data", result.get("result"));
+	    System.out.println(success);
 
-			return success.toString();
+	    return success.toString();
 
-			/*
-			 * System.out.println(request.getContentType()); // Reads data from
-			 * the request object InputStream file = request.getInputStream();
-			 * 
-			 * String csv = IOUtils.toString(file);
-			 * 
-			 * System.out.println(csv);
-			 * 
-			 * JSONObject success = new JSONObject(); success.put("success",
-			 * true); // success.put("blob_key", blob_key); // Stores results in
-			 * to a map
-			 * 
-			 * Hashtable result =
-			 * ContactUtil.convertCSVToJSONArrayPartially(csv, "email");
-			 * JSONArray csvArray = (JSONArray) result.get("result");
-			 * 
-			 * // returns CSV file as a json object with key "data"
-			 * success.put("data", csvArray); System.out.println(success);
-			 * 
-			 * return success.toString();
-			 */
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-
-		return null;
+	    /*
+	     * System.out.println(request.getContentType()); // Reads data from
+	     * the request object InputStream file = request.getInputStream();
+	     * 
+	     * String csv = IOUtils.toString(file);
+	     * 
+	     * System.out.println(csv);
+	     * 
+	     * JSONObject success = new JSONObject(); success.put("success",
+	     * true); // success.put("blob_key", blob_key); // Stores results in
+	     * to a map
+	     * 
+	     * Hashtable result =
+	     * ContactUtil.convertCSVToJSONArrayPartially(csv, "email");
+	     * JSONArray csvArray = (JSONArray) result.get("result");
+	     * 
+	     * // returns CSV file as a json object with key "data"
+	     * success.put("data", csvArray); System.out.println(success);
+	     * 
+	     * return success.toString();
+	     */
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
 	}
 
-	@Path("/save")
-	@POST
-	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public void saveContacts(@Context HttpServletRequest request)
+	return null;
+    }
+
+    @Path("/save")
+    @POST
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void saveContacts(@Context HttpServletRequest request)
+    {
+	try
 	{
-		try
-		{
-			String postURL = BackendServiceFactory.getBackendService().getBackendAddress(
-					Globals.BULK_ACTION_BACKENDS_URL);
+	    String postURL = BackendServiceFactory.getBackendService().getBackendAddress(
+		    Globals.BULK_ACTION_BACKENDS_URL);
 
-			InputStream stream = request.getInputStream();
-			byte[] bytes = IOUtils.toByteArray(stream);
+	    InputStream stream = request.getInputStream();
+	    byte[] bytes = IOUtils.toByteArray(stream);
 
-			System.out.println(bytes);
-			System.out.println("post url : " + postURL);
+	    System.out.println(bytes);
+	    System.out.println("post url : " + postURL);
 
-			Queue queue = QueueFactory.getQueue("bulk-actions-queue");
-			TaskOptions taskOptions;
+	    Queue queue = QueueFactory.getQueue("bulk-actions-queue");
+	    TaskOptions taskOptions;
 
-			String key = request.getParameter("key");
-			if (StringUtils.isEmpty(key))
-				return;
+	    String key = request.getParameter("key");
+	    if (StringUtils.isEmpty(key))
+		return;
 
-			CacheUtil.setCache(key, true);
+	    CacheUtil.setCache(key, true);
 
-			taskOptions = TaskOptions.Builder
-					.withUrl(
-							"/core/api/bulk-actions/upload/"
-									+ String.valueOf(SessionManager.get().getDomainId() + "/"
-											+ request.getParameter("key"))).payload(bytes)
-					.header("Content-Type", request.getContentType()).header("Host", postURL).method(Method.POST);
+	    taskOptions = TaskOptions.Builder
+		    .withUrl(
+			    "/core/api/bulk-actions/upload/"
+				    + String.valueOf(SessionManager.get().getDomainId() + "/"
+					    + request.getParameter("key"))).payload(bytes)
+		    .header("Content-Type", request.getContentType()).header("Host", postURL).method(Method.POST);
 
-			queue.add(taskOptions);
+	    queue.add(taskOptions);
 
-			System.out.println("completed");
-		}
-
-		catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+	    System.out.println("completed");
 	}
+
+	catch (IOException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+    }
 }
 
 // /**

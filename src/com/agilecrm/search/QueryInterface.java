@@ -36,7 +36,7 @@ public interface QueryInterface
 	 * @param type
 	 * @return
 	 */
-	public Collection simpleSearchWithType(String keyword, Integer count, String cursor, String type);
+	public Collection<?> simpleSearchWithType(String keyword, Integer count, String cursor, String type);
 
 	/**
 	 * It declares advancedSearch based on the list of search Rules, should
@@ -57,6 +57,5 @@ public interface QueryInterface
 	 * @param cursor
 	 * @return
 	 */
-	public Collection<?> advancedSearch(List<SearchRule> rule, Integer count, String cursor);
-
+	Collection<?> advancedSearch(List<SearchRule> rules, Integer count, String cursor);
 }

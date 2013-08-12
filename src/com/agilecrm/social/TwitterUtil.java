@@ -30,7 +30,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.core.api.widgets.WidgetsAPI;
 import com.agilecrm.social.stubs.SocialSearchResult;
 import com.agilecrm.social.stubs.SocialUpdateStream;
-import com.agilecrm.util.Util;
+import com.agilecrm.util.JSONUtil;
 import com.agilecrm.widgets.Widget;
 
 /**
@@ -430,7 +430,7 @@ public class TwitterUtil
 	    // Get twitter object and tweet in twitter
 	    Status status = getTwitter(widget).updateStatus(
 		    message + AGILETWITTERSOURCEMESSAGE);
-	    System.out.println("Tweet: " + Util.toJSONString(status));
+	    System.out.println("Tweet: " + JSONUtil.toJSONString(status));
 	    return "Successfull";
 	}
 	catch (TwitterRuntimeException e)

@@ -15,7 +15,7 @@ import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
-import com.agilecrm.util.Util;
+import com.agilecrm.util.RegisterUtil;
 import com.google.appengine.api.utils.SystemProperty;
 
 /**
@@ -23,7 +23,7 @@ import com.google.appengine.api.utils.SystemProperty;
  * registered or added under a particular domain and gives access to agile crm
  * account.
  * 
- * Login page have Open ID’s and Sign in options for registered users
+ * Login page have Open IDï¿½s and Sign in options for registered users
  * <p>
  * When user wants to login using open ID from login page it navigates to the
  * Google account page after providing the credentials it will navigate to the
@@ -119,7 +119,7 @@ public class LoginServlet extends HttpServlet
 		String server = request.getParameter("server");
 
 		// Get OAuth URL
-		String url = Util.getOauthURL(server);
+		String url = RegisterUtil.getOauthURL(server);
 
 		if (url == null)
 			throw new Exception("OAuth Server not found for " + server + " - try again");
@@ -140,7 +140,7 @@ public class LoginServlet extends HttpServlet
 	 * If any error occurs throws exception and with error login.jsp is
 	 * included.
 	 * </p>
-	 * By marking ‘Keep me signed in’ keeps the users signed for 5 days without
+	 * By marking ï¿½Keep me signed inï¿½ keeps the users signed for 5 days without
 	 * asking for user name and password unless they log out.If everything fine
 	 * redirects to home page by setting session.
 	 * 

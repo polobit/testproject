@@ -13,7 +13,7 @@ import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.MappingJsonFactory;
 import org.json.JSONObject;
 
-import com.agilecrm.util.Util;
+import com.agilecrm.util.FileStreamUtil;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
@@ -85,7 +85,7 @@ public class MustacheUtil
 	    throws Exception
     {
 	// Read from path
-	String emailTemplate = Util
+	String emailTemplate = FileStreamUtil
 		.readResource(SendMail.TEMPLATES_PATH + path);
 	String value = null;
 	if (emailTemplate == null)

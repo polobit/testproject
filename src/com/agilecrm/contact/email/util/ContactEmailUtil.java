@@ -21,7 +21,7 @@ import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.SocialPrefs.Type;
 import com.agilecrm.user.util.IMAPEmailPrefsUtil;
 import com.agilecrm.user.util.SocialPrefsUtil;
-import com.agilecrm.util.Util;
+import com.agilecrm.util.EmailUtil;
 
 /**
  * <code>ConactEmailUtil</code> is the utility class for {@link ContactEmail}.
@@ -285,7 +285,7 @@ public class ContactEmailUtil
 
 		if (email.has("message"))
 		{
-		    String parsedHTML = Util.parseEmailData(emailsArray.getJSONObject(i).getString("message"));
+		    String parsedHTML = EmailUtil.parseEmailData(emailsArray.getJSONObject(i).getString("message"));
 		    email.put("message", parsedHTML);
 		}
 	    }

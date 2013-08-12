@@ -14,7 +14,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.util.Util;
+import com.agilecrm.util.RegisterUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
 
@@ -22,7 +22,7 @@ import com.google.appengine.api.utils.SystemProperty;
  * <code>RegisterServlet</code> class registers the user gives access to the
  * account in agile crm.
  * 
- * Register page have Open ID’s and Sign in options for registering users.
+ * Register page have Open IDï¿½s and Sign in options for registering users.
  * <p>
  * When user wants to register using open ID from register page it navigates to
  * the Google account page after providing the credentials it will navigate to
@@ -165,7 +165,7 @@ public class RegisterServlet extends HttpServlet
 	String server = request.getParameter("server");
 
 	// Get OAuth URL
-	String url = Util.getOauthURL(server);
+	String url = RegisterUtil.getOauthURL(server);
 	if (url == null)
 	    throw new Exception("OAuth Server not found for " + server
 		    + " - try again");

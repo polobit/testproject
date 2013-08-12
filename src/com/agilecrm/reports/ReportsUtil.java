@@ -47,10 +47,10 @@ public class ReportsUtil
      */
     public static void sendReportsToUsers(List<Reports> reportsList) throws JSONException
     {
-
 	for (Reports report : reportsList)
 	{
-
+	    // Each report is sent to email address which is saved in report. If
+	    // email in sendTo in empty, report is not processed further
 	    if (StringUtils.isEmpty(report.sendTo))
 		return;
 
@@ -99,7 +99,8 @@ public class ReportsUtil
 	    results.put("duration", WordUtils.capitalizeFully((report.duration.toString())));
 
 	    // Send reports email
-	    SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, SendMail.REPORTS, new Object[] { results, fieldsList });
+	    SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, SendMail.REPORTS,
+		    new Object[] { results, fieldsList });
 	}
     }
 
@@ -124,13 +125,21 @@ public class ReportsUtil
 
 	// If report_type if of contacts customize object to show properties
 	if (report.report_type.equals(Reports.ReportType.Contact))
-
 	    domain_details.put("report_results", customizeContactParameters(reportList, report.fields_set));
 
 	// Return results
 	return domain_details;
     }
 
+    /**
+     * In reports users has an option of choosing fields to be showin in reports
+     * and their order. In order to maintain those fields, we customize the
+     * object which is sent to mustache email template.
+     * 
+     * @param contactList
+     * @param fields_set
+     * @return
+     */
     public static Collection customizeContactParameters(Collection contactList, LinkedHashSet<String> fields_set)
     {
 
@@ -177,9 +186,10 @@ public class ReportsUtil
 
 			customFieldJSON = new ObjectMapper().writeValueAsString(contactField);
 
-			Map<String, Object> customField = new ObjectMapper().readValue(customFieldJSON, new TypeReference<HashMap<String, Object>>()
-			{
-			});
+			Map<String, Object> customField = new ObjectMapper().readValue(customFieldJSON,
+				new TypeReference<HashMap<String, Object>>()
+				{
+				});
 
 			customProperties.add(customField);
 		    }

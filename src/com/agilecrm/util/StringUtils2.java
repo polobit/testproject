@@ -161,4 +161,23 @@ public class StringUtils2
 	}
 	return false;
     }
+
+    /**
+     * Makes the given set of string as a single string and then splits into
+     * words, again into fragments, which are normalized to lower case.
+     * 
+     * @param strings
+     * @return set of fragmented strings
+     */
+    public static Set<String> getSearchTokens(Set<String> strings)
+    {
+        StringBuilder sb = new StringBuilder();
+        for (String s : strings)
+            sb.append(s + " ");
+    
+        String input = sb.toString();
+    
+        // Set<String> tokens = tokenize(input);
+        return breakdownFragments(input);
+    }
 }
