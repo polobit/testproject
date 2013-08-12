@@ -1,4 +1,5 @@
-var agile_guid = { init : function()
+var agile_guid = { 
+init : function()
 {
 	this.cookie_name = 'agile-crm-guid';
 	this.cookie_email = 'agile-email';

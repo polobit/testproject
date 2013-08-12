@@ -18,7 +18,7 @@ function agile_getTagsData(tags, email)
 		return; // No tags found
 	}
 
-	if (!email)	// check if email is passed else get it from cookie
+	if (!email) // check if email is passed else get it from cookie
 	{
 		if (!agile_guid.get_email())
 		{
@@ -39,15 +39,16 @@ function agile_getTagsData(tags, email)
  * 				callback for agile_addTag
  * @param email
  * 				email of the contact
- */		
+ */
 function agile_addTag(tags, callback, email)
 {
 	var params = agile_getTagsData(tags, email);
-	if (!params)		//if no params return 
+	if (!params)	//if no params return 
 		return;
 
 	// Post
 	var agile_url = agile_id.getURL() + "/contacts/add-tags?callback=?&id=" + agile_id.get() + "&" + params;
+	
 	//callback
 	agile_json(agile_url, callback);
 }
@@ -55,11 +56,12 @@ function agile_addTag(tags, callback, email)
 function agile_removeTag(tags, callback, email)
 {
 	var params = agile_getTagsData(tags, email);
-	if (!params)		//if no params return
+	if (!params)	//if no params return
 		return;
 
 	// Post
 	var agile_url = agile_id.getURL() + "/contacts/remove-tags?callback=?&id=" + agile_id.get() + "&" + params;
+	
 	//callback
 	agile_json(agile_url, callback);
 }

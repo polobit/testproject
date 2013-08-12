@@ -9,24 +9,24 @@
  * @param name
  *            name of the variable example : agile-email etc.
  * @param value
- *            value of the variable example: clickdesk@example.com
+ *            value of the variable example: agilecrm@example.com
  * @param days
  *            time in days before the variable expires example : 15*365
  * @returns cookie
  */
 function createCookie(name, value, days)
 {
-	//if days is not equal to null, undefined or ""
+	// if days is not equal to null, undefined or ""
 	if (days)
 	{
 		var date = new Date();
 
-		//set cookie variable's updated expire time in milliseconds
+		// set cookie variable's updated expire time in milliseconds
 		date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
 		var expires = "; expires=" + date.toGMTString();
 	}
 	else
-		//if days is null, undefined or "" set expires as ""
+		// if days is null, undefined or "" set expires as ""
 		var expires = "";
 	document.cookie = name + "=" + escape(value) + expires + "; path=/";
 }
@@ -35,25 +35,25 @@ function createCookie(name, value, days)
  * Used to read a particular variable's value from document.cookie
  * 
  * @param name
- *            the name of the cookie variable to read example : agile-crm-session_start_time
- * @returns 
- * 			value of the cookie variable else it returns null
+ *            the name of the cookie variable to read example :
+ *            agile-crm-session_start_time
+ * @returns value of the cookie variable else it returns null
  */
 function readCookie(name)
 {
 	var nameEQ = name + "=";
 
-	//split document.cookie into array at each ";" and iterate through it
+	// split document.cookie into array at each ";" and iterate through it
 	var ca = document.cookie.split(';');
 	for ( var i = 0; i < ca.length; i++)
 	{
 		var c = ca[i];
 
-		//check for ' ' and remove to get string from c
+		// check for ' ' and remove to get string from c
 		while (c.charAt(0) == ' ')
 			c = c.substring(1, c.length);
 
-		//check if nameEQ starts with c, if yes unescape and return its value
+		// check if nameEQ starts with c, if yes unescape and return its value
 		if (c.indexOf(nameEQ) == 0)
 			return unescape(c.substring(nameEQ.length, c.length));
 	}
@@ -61,12 +61,11 @@ function readCookie(name)
 }
 
 /**
- * Used to delete a variable from cookie
+ * Used to delete a variable from document.cookie
  * 
  * @param name
  *            name of the variable to be removed from the cookie
- * @returns 
- * 			cookie without the variable
+ * @returns cookie without the variable
  */
 function eraseCookie(name)
 {

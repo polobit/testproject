@@ -1,4 +1,5 @@
-var agile_session = { init : function()
+var agile_session = { 
+init : function()
 {
 	this.cookie_name = 'agile-crm-session_id';
 	this.cookie_start_time = 'agile-crm-session_start_time';
