@@ -1068,13 +1068,24 @@ $(function()
 	 */
 	Handlebars.registerHelper('if_greater', function(value, target, options)
 	{
-
 		if (target > value)
 			return options.inverse(this);
 		else
 			return options.fn(this);
 	});
-
+	
+	Handlebars.registerHelper('campaigns_heading', function(value, options)
+	{
+		var val = 0;
+		if(value && value[0] && value[0].count)
+		val = value[0].count;
+		
+		if(val <= 20)
+			return "Workflows";
+		
+		return "(" + val + " Total)";
+	});
+	
 	/**
 	 * Adds Custom Fields to forms, where this helper function is called
 	 */
