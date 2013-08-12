@@ -79,24 +79,7 @@ add_task : function(data, callback, email)
 add_deal : function(data, callback, email)
 {
 	agile_addDeal(data, callback, email);
-} };function agile_json(URL, callback, data)
-{
-	var ud = 'json' + (Math.random() * 100).toString().replace(/\./g, '');
-	window[ud] = function(o)
-	{
-		callback && callback(o);
-	};
-	document.getElementsByTagName('body')[0].appendChild((function()
-	{
-		var s = document.createElement('script');
-		s.type = 'text/javascript';
-		s.src = URL.replace('callback=?', 'callback=' + ud);
-		return s;
-	})());
-	if (callback && typeof(callback) === "function"){
-		callback(data);
-	}
-}function agile_createContact(data, callback)
+} };function agile_createContact(data, callback)
 {
 	var properties = [];
 
@@ -163,6 +146,24 @@ function agile_getContact(email, callback)
 	json.name = name;
 	json.value = id;
 	return json;
+}
+
+function agile_json(URL, callback, data)
+{
+	var ud = 'json' + (Math.random() * 100).toString().replace(/\./g, '');
+	window[ud] = function(data)
+	{
+		if (callback && typeof(callback) === "function"){
+			callback && callback(data);
+		}
+	};
+	document.getElementsByTagName('body')[0].appendChild((function()
+	{
+		var s = document.createElement('script');
+		s.type = 'text/javascript';
+		s.src = URL.replace('callback=?', 'callback=' + ud);
+		return s;
+	})());
 }
 
 String.prototype.format = function()
