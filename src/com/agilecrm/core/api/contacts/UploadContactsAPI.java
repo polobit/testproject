@@ -130,7 +130,8 @@ public class UploadContactsAPI
 	    Queue queue = QueueFactory.getQueue("bulk-actions-queue");
 
 	    // Task is created setting host as backends url. It takes payload
-	    // and blobkey as path parameter
+	    // and blobkey, current domain user id as path parameters. current
+	    // owner id is required to set owner of uploaded contacts
 	    TaskOptions taskOptions = TaskOptions.Builder
 		    .withUrl(
 			    "/core/api/bulk-actions/upload/"
