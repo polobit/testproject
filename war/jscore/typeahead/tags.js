@@ -207,7 +207,22 @@ function setup_tags_typeahead() {
     	
     		// Prevents comma (",") as an argument to the input field
     		$(this).val("");
-    		$(this).closest(".control-group").find('ul.tags').append('<li class="tag"  style="display: inline-block;" data="'+ tag+'">'+tag+'<a class="close" id="remove_tag" tag="'+tag+'">&times</a></li>');
+    		
+    		var tags_list=$(this).closest(".control-group").find('ul.tags');
+    		var add_tag=true;
+    		
+    		// Iterate over already present tags, to check if this is a new tag
+    		tags_list.find('li').each(function(index,elem){
+    			
+    			if(elem.getAttribute('data')==tag)
+    			{
+    				add_tag=false; // tag exists, don't add
+    				return false;
+    			}
+    		});
+    		
+    		if(add_tag)
+    			tags_list.append('<li class="tag"  style="display: inline-block;" data="'+ tag+'">'+tag+'<a class="close" id="remove_tag" tag="'+tag+'">&times</a></li>');
     	}
     });
 }
