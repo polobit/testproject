@@ -16,7 +16,7 @@ $(function(){
        	if(form_id == "opportunityForm")
        		saveDeal(form_id, modal_id, this, json, false);
        	else
-       		saveDeal(form_id, modal_id, this, json,true);
+       		saveDeal(form_id, modal_id, this, json, true);
 	});
 	
 	/**
@@ -218,7 +218,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 			}
 			else if (Current_Route == 'deals') {
 
-				if(readCookie("agile_deal_view")) {
+				if(!readCookie("agile_deal_view")) {
 					var modelJSON = App_Deals.opportunityMilestoneCollectionView.collection.models[0];
 					var newMilestone = json.milestone;
 					if (isUpdate)

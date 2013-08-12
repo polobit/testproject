@@ -60,11 +60,11 @@ $(function(){
 	
 	// If default view is selected, deals are loaded with default view and
 	// removes the view cookie set when view is selected
-	$('.deals-default-view').die().live('click', function(e) {
+	$('.deals-list-view').die().live('click', function(e) {
 		e.preventDefault();
-
-		// Erases the cookie
-		eraseCookie("agile_deal_view");
+		
+		// Creates the cookie
+		createCookie("agile_deal_view", "list_view");
 		
 		// Loads the deals
 		App_Deals.deals();
@@ -76,8 +76,8 @@ $(function(){
 	$('.deals-pipelined-view').die().live('click', function(e) {
 		e.preventDefault();
 
-		// Creates the cookie
-		createCookie("agile_deal_view", "pipelined_view");
+		// Erases the cookie
+		eraseCookie("agile_deal_view");
 
 		// Loads the deals
 		App_Deals.deals();

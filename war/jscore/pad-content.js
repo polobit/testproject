@@ -74,7 +74,12 @@ var CONTENT_JSON = {
 	"dashboard" : {
 		"contacts" : {
 			"title" : "There is no recent activity",
-			"icon" : "icon-group icon-3x"
+			"icon" : "icon-group icon-3x",
+			"description" : " Perhaps, you may want to create a ",
+			//"learn_more" : "click here to learn more",
+			"button_text" : "New Contact",
+			"route" : "#",
+			"modal_id" : "personModal",
 		},
 		"tasks" : {
 			"title" : "You have no tasks due",
@@ -86,7 +91,10 @@ var CONTENT_JSON = {
 		},
 		"workflows" : {
 			"title" : "No campaign activity yet",
-			"icon" : "icon-sitemap icon-3x"
+			"description" : "Campaigns help you automate your communication with your customers. You can create a",
+			"icon" : "icon-sitemap icon-3x",
+			"button_text" : "New Campaign",
+			"route" : "#workflow-add"
 		}
 	},
 	"email-templates" : {

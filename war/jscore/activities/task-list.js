@@ -11,8 +11,12 @@ function initOwnerslist() {
 				$(this).closest("ul").data("selected_item", id);
 				$(this).closest(".btn-group").find(".selected_name")
 						.text(name);
+				
 
 				updateData(getParams());
+	});
+	$("ul#owner-tasks li a").die().live("click", function() {
+		$('.task-heading').text($(this).html());
 	});
 	updateData(getParams());
 }
