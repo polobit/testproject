@@ -44,7 +44,7 @@ var WorkflowsRouter = Backbone.Router
 					templateKey : "workflows",
 					individual_tag_name : 'tr',
 					cursor : true,
-					page_size : 10,
+					page_size : 20,
 					postRenderCallback : function(el) {
 						head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
 							$("time.campaign-created-time", el).timeago();
