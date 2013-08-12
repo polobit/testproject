@@ -39,7 +39,7 @@ var DealsRouter = Backbone.Router.extend({
 					pieMilestones();
 		
 					// Shows deals chart
-					pieDetails();
+					dealsLineChart();
 		
 				}
 		});
@@ -71,7 +71,7 @@ var DealsRouter = Backbone.Router.extend({
 					pieMilestones();
 
 					// Shows deals chart
-					pieDetails();
+					dealsLineChart();
 
 				}
 			});
