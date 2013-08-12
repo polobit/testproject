@@ -229,6 +229,7 @@ public class TwitterUtil
 	result.picture = user.getBiggerProfileImageURLHttps().toString();
 	result.location = user.getLocation();
 	result.summary = user.getDescription();
+	result.screen_name = user.getScreenName();
 	result.url = "https://twitter.com/" + user.getScreenName();
 	result.num_connections = user.getFollowersCount() + "";
 	result.tweet_count = user.getStatusesCount() + "";
