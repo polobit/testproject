@@ -43,11 +43,12 @@ public class TaskReminderDeferredTask implements DeferredTask
 	this.domain = domain;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Fetches all the domain users within the domain and send email to those
+     * users having due tasks of that day, if that user activates to receive
+     * emails.
      * 
-     * @see java.lang.Runnable#run()
-     */
+     **/
     public void run()
     {
 	String oldNamespace = NamespaceManager.get();
@@ -55,33 +56,31 @@ public class TaskReminderDeferredTask implements DeferredTask
 
 	try
 	{
+	    // Get all domain users of that domain.
 	    List<DomainUser> domainUsers = DomainUserUtil.getUsers(domain);
-
-	    System.out
-		    .println("List of Domain Users in DeferredTask of TaskReminder "
-			    + domainUsers);
-
-	    System.out.println("Namespace in deferred task "
-		    + NamespaceManager.get());
 
 	    if (domainUsers == null)
 		return;
 
+	    // Iterates over domain users to fetch due tasks of each user.
 	    for (DomainUser domainUser : domainUsers)
 	    {
-		AgileUser agileUser = AgileUser
-			.getCurrentAgileUserFromDomainUser(domainUser.id);
+		// Gets agileUser with respect to domain-user id to fetch
+		// UserPrefs.
+		AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
 
 		if (agileUser == null)
 		    continue;
 
 		UserPrefs userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
 
+		// if user did not set to receive due tasks email, proceed to
+		// next user.
 		if (!userPrefs.task_reminder)
 		    continue;
 
-		List<Task> taskList = TaskUtil.getPendingTasksToRemind(1,
-			domainUser.id);
+		// Returns the due tasks of that day.
+		List<Task> taskList = TaskUtil.getPendingTasksToRemind(1, domainUser.id);
 
 		if (taskList.isEmpty())
 		    continue;
@@ -91,18 +90,16 @@ public class TaskReminderDeferredTask implements DeferredTask
 		// Changes time in milliseconds to Date format.
 		for (Task task : taskList)
 		{
-		    date = SearchUtil
-			    .getDateWithoutTimeComponent(task.due * 1000);
+		    date = SearchUtil.getDateWithoutTimeComponent(task.due * 1000);
 		    break;
 		}
 
-		HashMap map = new HashMap();
+		// Due tasks map
+		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("tasks", taskList);
-		map.put("due_date", date);
 
-		SendMail.sendMail(domainUser.email,
-			SendMail.DUE_TASK_REMINDER_SUBJECT,
-			SendMail.DUE_TASK_REMINDER, map);
+		// Sends mail to the domain user.
+		SendMail.sendMail(domainUser.email, SendMail.DUE_TASK_REMINDER_SUBJECT, SendMail.DUE_TASK_REMINDER, map);
 	    }
 
 	}
