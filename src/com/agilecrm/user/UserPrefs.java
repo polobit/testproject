@@ -151,7 +151,7 @@ public class UserPrefs
 	 */
 	public String getCurrentDomainUserName()
 	{
-		DomainUser currentDomainUser = DomainUserUtil.getDomainCurrentUser();
+		DomainUser currentDomainUser = DomainUserUtil.getCurrentDomainUser();
 		System.out.println(currentDomainUser.email);
 		System.out.println(currentDomainUser.name);
 		if (currentDomainUser != null && currentDomainUser.name != null)
@@ -166,7 +166,7 @@ public class UserPrefs
 	public void save()
 	{
 		// Wrapping UserPrefs name to DomainUser name
-		DomainUser currentDomainUser = DomainUserUtil.getDomainCurrentUser();
+		DomainUser currentDomainUser = DomainUserUtil.getCurrentDomainUser();
 
 		try
 		{

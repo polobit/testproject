@@ -5,7 +5,7 @@ import java.util.Iterator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.agilecrm.util.DBUtil;
+import com.agilecrm.util.AccountDeleteUtil;
 import com.agilecrm.util.email.MustacheUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.Log.LogType;
@@ -101,7 +101,7 @@ public class TaskletAdapter implements Tasklet
 	    String custom2, String custom3) throws Exception
     {
 	// Add Log
-	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON), DBUtil.getId(subscriberJSON), "Sleeping till " + timeout, LogType.EMAIL_SLEEP.toString());
+	LogUtil.addLogToSQL(AccountDeleteUtil.getId(campaignJSON), AccountDeleteUtil.getId(subscriberJSON), "Sleeping till " + timeout, LogType.EMAIL_SLEEP.toString());
 
 	// Enqueue Task
 	CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout, custom1, custom2, custom3);
@@ -283,8 +283,8 @@ public class TaskletAdapter implements Tasklet
 	// Node name as log type.
 	String logType = nodeJSON.getJSONObject("NodeDefinition").getString("name");
 
-	String campaignId = DBUtil.getId(campaignJSON);
-	String subscriberId = DBUtil.getId(subscriberJSON);
+	String campaignId = AccountDeleteUtil.getId(campaignJSON);
+	String subscriberId = AccountDeleteUtil.getId(subscriberJSON);
 
 	// Add Log
 	LogUtil.addLogToSQL(campaignId, subscriberId, message, logType);

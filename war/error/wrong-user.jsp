@@ -5,7 +5,9 @@
 <%@ page import="com.agilecrm.user.DomainUser"%>
 <%@ page language="java" import="java.util.*" pageEncoding="ISO-8859-1"%>
 
-<% DomainUser domainUser = DomainUserUtil.getDomainCurrentUser(); %>
+<%
+	DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+%>
 <% String href = UserServiceFactory.getUserService().createLogoutURL("register.jsp"); %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">

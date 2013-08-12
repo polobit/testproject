@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.util.DBUtil;
+import com.agilecrm.util.AccountDeleteUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
@@ -42,7 +42,7 @@ public class CheckTags extends TaskletAdapter
 	String tagValue = getStringValue(nodeJSON, subscriberJSON, data, TAG_VALUE);
 
 	// Get Contact Id and Contact
-	String contactId = DBUtil.getId(subscriberJSON);
+	String contactId = AccountDeleteUtil.getId(subscriberJSON);
 	Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
 
 	if (contact == null)

@@ -2,7 +2,7 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
-import com.agilecrm.util.DBUtil;
+import com.agilecrm.util.AccountDeleteUtil;
 import com.campaignio.cron.Cron;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.Log.LogType;
@@ -48,8 +48,8 @@ public class Wait extends TaskletAdapter
 	System.out.println("Waiting for " + duration + " " + durationType);
 
 	// Creates log for sending email
-	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON),
-		DBUtil.getId(subscriberJSON), "Wait duration - " + duration
+	LogUtil.addLogToSQL(AccountDeleteUtil.getId(campaignJSON),
+		AccountDeleteUtil.getId(subscriberJSON), "Wait duration - " + duration
 			+ " " + durationType, LogType.WAIT.toString());
 
 	// Add ourselves to Cron Queue

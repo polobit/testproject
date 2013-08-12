@@ -36,7 +36,7 @@
 		return;
 	}
 
-	DomainUser domainUser = DomainUserUtil.getDomainCurrentUser();
+	DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 	System.out.println("Domain user " + domainUser);
 
 	ObjectMapper mapper = new ObjectMapper();
@@ -51,7 +51,7 @@
 
 	// Check if someone is using old -11 etc templates
 	if (StringUtils.isNumeric(template)
-			|| template.equalsIgnoreCase("default"))
+	|| template.equalsIgnoreCase("default"))
 		template = "pink";
 
 	String width = currentUserPrefs.width;

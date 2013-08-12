@@ -22,7 +22,7 @@ import org.json.JSONException;
 
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.util.DBUtil;
+import com.agilecrm.util.AccountDeleteUtil;
 import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.NamespaceManager;
 
@@ -173,7 +173,7 @@ public class UsersAPI
 		    .build());
 	}
 
-	DomainUserUtil.deleteRelatedEntities(domainUser.id);
+	AccountDeleteUtil.deleteRelatedEntities(domainUser.id);
 
 	domainUser.delete();
     }
@@ -232,7 +232,7 @@ public class UsersAPI
 		    cursor);
 	}
 
-	return DomainUserUtil.getAllDomainUsers();
+	return DomainUserUtil.getAllUsers();
     }
 
     /**
@@ -254,7 +254,7 @@ public class UsersAPI
 
 	try
 	{
-	    DBUtil.deleteNamespace(namespace);
+	    AccountDeleteUtil.deleteNamespace(namespace);
 	}
 	catch (Exception e)
 	{

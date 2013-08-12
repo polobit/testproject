@@ -14,7 +14,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.json.JSONArray;
 
 import com.agilecrm.contact.deferred.TagsDeferredTask;
 import com.agilecrm.contact.util.ContactUtil;
@@ -179,7 +178,7 @@ public class Contact extends Cursor
 	 */
 	@SuppressWarnings("unused")
 	@NotSaved
-	private DomainUser Owner = null;
+	private final DomainUser Owner = null;
 
 	@NotSaved
 	public String entity_type = "contact_entity";
@@ -251,6 +250,19 @@ public class Contact extends Cursor
 	public List<ContactField> getProperties()
 	{
 		return properties;
+	}
+
+	public void addProperty(ContactField contactField)
+	{
+		ContactField field = this.getContactFieldByName(contactField.name);
+		if (field == null)
+		{
+			this.properties.add(contactField);
+		}
+		else
+			field = contactField;
+		save();
+
 	}
 
 	/**
@@ -522,54 +534,6 @@ public class Contact extends Cursor
 
 		// Deletes TwitterCron
 		TwitterJobQueueUtil.removeTwitterJobs(null, id.toString(), NamespaceManager.get());
-	}
-
-	/**
-	 * Creates owner key with the new owner id and changes owner key of the each
-	 * contact in the bulk and saves the contact. This method is not moved to
-	 * util, because can not read owner_key from out side of this class
-	 * 
-	 * @param contactsJSONArray
-	 *            JSONArray object containing contact ids
-	 * @param new_owner
-	 *            new owner (DomainUser) id
-	 */
-	public static void changeOwnerToContactsBulk(JSONArray contactsJSONArray, String new_owner)
-	{
-		List<Contact> contacts_list = ContactUtil.getContactsBulk(contactsJSONArray);
-		if (contacts_list.size() == 0)
-		{
-			return;
-		}
-
-		Key<DomainUser> newOwnerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(new_owner));
-
-		for (Contact contact : contacts_list)
-		{
-			contact.owner_key = newOwnerKey;
-
-		}
-
-		dao.putAll(contacts_list);
-
-	}
-
-	public static void changeOwnerToContactsBulk(List<Contact> contacts_list, String new_owner)
-	{
-		if (contacts_list.size() == 0)
-		{
-			return;
-		}
-
-		Key<DomainUser> newOwnerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(new_owner));
-
-		for (Contact contact : contacts_list)
-		{
-			contact.owner_key = newOwnerKey;
-
-		}
-		dao.putAll(contacts_list);
-
 	}
 
 	/**

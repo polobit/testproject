@@ -5,7 +5,7 @@ import java.util.Iterator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.agilecrm.util.DBUtil;
+import com.agilecrm.util.AccountDeleteUtil;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.campaignio.tasklets.Tasklet;
@@ -112,7 +112,7 @@ public class TaskletUtil
 		// Records end-time of campaign and change status to
 		// campaignId-DONE.
 		CampaignStatusUtil
-			.setStatusOfCampaign(DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON), DBUtil.getId(campaignJSON) + "-" + Status.DONE);
+			.setStatusOfCampaign(AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON), AccountDeleteUtil.getId(campaignJSON) + "-" + Status.DONE);
 
 		return;
 	    }

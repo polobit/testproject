@@ -8,7 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.agilecrm.util.DBUtil;
+import com.agilecrm.util.AccountDeleteUtil;
 import com.agilecrm.util.Util;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
@@ -352,7 +352,7 @@ public class SendEmail extends TaskletAdapter
 	{
 	    // Get Data
 	    if (subscriberJSON.has("data"))
-		subscriberJSON.getJSONObject("data").put("UnsubscribeLink", UNSUBSCRIBE_LINK + DBUtil.getId(subscriberJSON));
+		subscriberJSON.getJSONObject("data").put("UnsubscribeLink", UNSUBSCRIBE_LINK + AccountDeleteUtil.getId(subscriberJSON));
 	}
 	catch (Exception e)
 	{
@@ -388,26 +388,26 @@ public class SendEmail extends TaskletAdapter
 		data.put(TRACKING_ID, Calendar.getInstance().getTimeInMillis());
 
 		// Get Keyword
-		text = convertLinks(text, " ", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
-		html = convertLinks(html, " ", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
+		text = convertLinks(text, " ", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
+		html = convertLinks(html, " ", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
 
-		text = convertLinks(text, "\n", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
-		html = convertLinks(html, "\n", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
+		text = convertLinks(text, "\n", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
+		html = convertLinks(html, "\n", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
 
-		text = convertLinks(text, "\r", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
-		html = convertLinks(html, "\r", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
+		text = convertLinks(text, "\r", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
+		html = convertLinks(html, "\r", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
 
-		text = convertLinks(text, "<", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
-		html = convertLinks(html, "<", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
+		text = convertLinks(text, "<", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
+		html = convertLinks(html, "<", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
 
-		text = convertLinks(text, "\"", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
-		html = convertLinks(html, "\"", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
+		text = convertLinks(text, "\"", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
+		html = convertLinks(html, "\"", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
 
-		text = convertLinks(text, "'", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
-		html = convertLinks(html, "'", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
+		text = convertLinks(text, "'", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
+		html = convertLinks(html, "'", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
 
-		text = convertLinks(text, "\"", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
-		html = convertLinks(html, "\"", data, keyword, DBUtil.getId(subscriberJSON), DBUtil.getId(campaignJSON));
+		text = convertLinks(text, "\"", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
+		html = convertLinks(html, "\"", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
 
 	    }
 	    catch (Exception e)
@@ -417,12 +417,12 @@ public class SendEmail extends TaskletAdapter
 	}
 
 	// Creates log for sending email
-	LogUtil.addLogToSQL(DBUtil.getId(campaignJSON), DBUtil.getId(subscriberJSON), "Subject: " + subject, LogType.EMAIL_SENT.toString());
+	LogUtil.addLogToSQL(AccountDeleteUtil.getId(campaignJSON), AccountDeleteUtil.getId(subscriberJSON), "Subject: " + subject, LogType.EMAIL_SENT.toString());
 
 	// Send Message
 	if (html != null && html.length() > 10)
 	{
-	    html = Util.appendTrackingImage(html, DBUtil.getId(campaignJSON), DBUtil.getId(subscriberJSON));
+	    html = Util.appendTrackingImage(html, AccountDeleteUtil.getId(campaignJSON), AccountDeleteUtil.getId(subscriberJSON));
 
 	    // Util.sendEmailUsingMailgun(fromEmail, fromName, to, subject,
 	    // replyTo, html, text, subscriberJSON, campaignJSON);

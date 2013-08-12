@@ -66,7 +66,7 @@ public class StripeUtil
 	// Sets Description and Email for subscription
 	customerParams.put("description", NamespaceManager.get());
 	customerParams
-		.put("email", DomainUserUtil.getDomainCurrentUser().email);
+		.put("email", DomainUserUtil.getCurrentDomainUser().email);
 
 	return customerParams;
     }

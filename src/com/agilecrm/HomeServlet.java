@@ -1,99 +1,183 @@
 package com.agilecrm;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.Defaults;
-import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.users.User;
 
+/**
+ * <code>HomeServlet</code> handles request after login/new registration and
+ * checks for associated agile user, if user is not there then new user is
+ * created and defaults are initialized on it.
+ */
 @SuppressWarnings("serial")
 public class HomeServlet extends HttpServlet
 {
-    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException
-    {
-	// First Time User
-	String isFirstTimerUser = req.getParameter("w");
 
-	// Get Agile User
-	AgileUser agileUser = AgileUser.getCurrentAgileUser();
-
-	// If agileuser is null and if it occurs after first time login,
-	// redirects its to homeservlet again.
-	if (agileUser == null && StringUtils.equals(isFirstTimerUser, "1"))
+	/**
+	 * Checks whether there is Agile user associated with current Domain user.
+	 * If there is no Agile user for current user, it creates new AgileUser and
+	 * sets new user cookie.
+	 * 
+	 * @param req
+	 * @param resp
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	private void setUpAgileUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
-	    req.getRequestDispatcher("/home?w=1").forward(req, resp);
-	    return;
+
+		/**
+		 * Due to HRD eventual consistency, user cannot be retrieved immediately
+		 * after saving it. To avoid creating multiple users, after creating new
+		 * AgileUser, request is dispatched back to HomeServlelt with extra
+		 * parameter 'w', which indicates user is just saved in to datastore.
+		 */
+		String isFirstTimerUser = req.getParameter("w");
+
+		// If parameter 'w' is not empty, the user is created and it reached
+		// here due to eventual consistency. Request is forwared back to
+		// homeservlet again with out creating multiple users
+		if (!StringUtils.isEmpty(isFirstTimerUser))
+		{
+			redirectBack(req, resp);
+			return;
+		}
+
+		// Create New User - AgileUser (for this namespace)
+		new AgileUser(SessionManager.get().getDomainId()).save();
+
+		// It load defaults. If request is for the first user in the domain then
+		// default are created or else only tour cookie is set
+		loadDefaults(resp);
+
+		// Redirect back to home servlet.
+		redirectBack(req, resp);
 	}
 
-	if (agileUser == null)
+	/**
+	 * It loads defaults in account. If user logged in is just registered and
+	 * first user in domain then default contacts, deals, tasks are created
+	 * along with first time cookie, which is used to show page tour.
+	 * 
+	 * @param resp
+	 */
+	private void loadDefaults(HttpServletResponse resp)
 	{
-	    // Create New User - AgileUser (for this namespace)
-	    agileUser = new AgileUser(SessionManager.get().getDomainId());
-	    agileUser.save();
 
-	    System.out.println(agileUser);
+		// Sets cookie to show page tour
+		setTourCookie(resp);
 
-	    req.getRequestDispatcher("/home?w=1").forward(req, resp);
-	    return;
-	}
-	if (isFirstTimerUser != null)
-	{
-	    // To get Default Samples.
-	    if (DomainUserUtil.count() == 1)
-		new Defaults();
-
-	    Defaults.setFirstTimerCookie(resp);
-	}
-
-	// Save Logged in time
-	try
-	{
-	    // Logged in time
-	    DomainUser domainUser = DomainUserUtil.getDomainCurrentUser();
-	    domainUser.setInfo(DomainUser.LOGGED_IN_TIME, new Long(System.currentTimeMillis() / 1000));
-
-	    domainUser.save();
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
+		// Check if user registered is the first user in the domain, if user is
+		// first user then default contact, deals, tasks, etc are created
+		if (DomainUserUtil.count() == 1)
+			new Defaults();
 	}
 
-	req.getRequestDispatcher("home.jsp").forward(req, resp);
-    }
-
-    public void register(User user, HttpServletRequest req, HttpServletResponse resp) throws Exception
-    {
-	// Register - check if there are any users for this domain - you cannot
-	// register
-	String domain = NamespaceManager.get();
-	List<DomainUser> listOfUsers = DomainUserUtil.getUsers(domain);
-	if (!listOfUsers.isEmpty())
+	/**
+	 * Initiates Tour for first time user. sets true on the routes of the pages
+	 * where tour needs to be initialized.
+	 */
+	private static void setTourCookie(HttpServletResponse response)
 	{
-	    req.getRequestDispatcher("/error/auth-failed.jsp").include(req, resp);
-	    return;
+
+		JSONObject tourJson = new JSONObject();
+		try
+		{
+			tourJson.put("contacts", true);
+			tourJson.put("contact-details", true);
+			tourJson.put("workflows", true);
+			tourJson.put("calendar", true);
+			tourJson.put("workflows-add", true);
+		}
+		catch (JSONException e)
+		{
+			e.printStackTrace();
+		}
+
+		// Creates and saves a cookies
+		Cookie tourCookie = new Cookie("agile_tour", tourJson.toString());
+		tourCookie.setPath("/");
+		response.addCookie(tourCookie);
 	}
 
-	// Create New User - AgileUser (for that namespace)
-	// AgileUser agileUser = new AgileUser(user);
-	// agileUser.save();
+	/**
+	 * This redirect is back to the save servlet to read Agileuser after
+	 * creating a new one. It is required to overcome the eventual consistency
+	 * of HRD datasore. Parameter 'w' in URL indicated new agile is already
+	 * created
+	 * 
+	 * @param req
+	 * @param resp
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	private void redirectBack(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
+	{
+		req.getRequestDispatcher("/home?w=1").forward(req, resp);
+	}
 
-	// Create user in global namespace
-	// DomainUser domainUsers = new DomainUser(user, domain, true);
-	// domainUsers.save();
+	/**
+	 * Checks if any agile user associated with the current domain user
+	 * 
+	 * @return
+	 */
+	public boolean isNewUser()
+	{
+		// Gets current AgileUser
+		return AgileUser.getCurrentAgileUser() == null;
+	}
 
-	resp.sendRedirect("/home");
-    }
+	/**
+	 * Saved logged in time in domain user before request is forwared to
+	 * dashboard (home.jsp)
+	 */
+	private void setLoggedInTime()
+	{
+		try
+		{
+			// Gets current domain user and saved current time as logged in
+			// time.
+			DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+			domainUser.setInfo(DomainUser.LOGGED_IN_TIME, new Long(System.currentTimeMillis() / 1000));
+
+			domainUser.save();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException
+	{
+
+		// If user is not new, it calls method to set logged in time in current
+		// domain user and forwards request to home.jsp
+		if (!isNewUser())
+		{
+			// Saves logged in time in domain user.
+			setLoggedInTime();
+			req.getRequestDispatcher("home.jsp").forward(req, resp);
+			return;
+		}
+
+		// If user is new user it will create new AgileUser and set cookie for
+		// inital page tour. It also calls to initialize defaults, if user is
+		// first user in the domain.
+		setUpAgileUser(req, resp);
+	}
 }
