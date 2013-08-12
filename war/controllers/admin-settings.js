@@ -1,7 +1,7 @@
 var isAdmintemplate;
 $(function() {
 	this.adminView = new Base_Model_View({
-		url : "/core/api/current-user",
+		url : "/core/api/users/current-user",
 		template : "admin-settings"
 	});
 	this.adminView.model.fetch();
@@ -10,7 +10,7 @@ $(function() {
 
 function getAdminSettings(callback){
 	App_Admin_Settings.adminViewTemp = new Base_Model_View({
-		url : "/core/api/current-user",
+		url : "/core/api/users/current-user",
 		template : "admin-settings"
 	});
 
@@ -136,7 +136,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 /*	adminSettings : function() {
 		
 		this.adminView = new Base_Model_View({
-			url : "/core/api/current-user",
+			url : "/core/api/users/current-user",
 			template : "admin-settings"
 		});
 
