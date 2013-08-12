@@ -19,7 +19,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
-import com.agilecrm.util.Util;
+import com.agilecrm.util.StringUtils2;
 
 /**
  * <code> SearchUtil </code> contains utility methods normalizing, splitting in
@@ -218,7 +218,7 @@ public class SearchUtil
 
 	// Splits each token in to fragments to search based on keyword
 	if (tokens.size() != 0)
-	    tokens = Util.getSearchTokens(tokens);
+	    tokens = StringUtils2.getSearchTokens(tokens);
 
 	// Returns normalized set
 	return normalizeSet(tokens);

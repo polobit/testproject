@@ -1,29 +1,39 @@
+/**
+ * Checks if guid, session_id are assigned else sets them by calling get() from
+ * agile_guid.js and agile_session.js. Gets agile_id, and namespace by calling 
+ * agile_id.getNamespace() and agile_id.get(). Captures document.referrer 
+ * the session is new.
+ * 
+ * @param callback
+ * 					callback function for trackpageview
+ * @returns params
+ */
 function agile_trackPageview(callback)
 {
-	// Guid
+	// get Guid
 	var guid = agile_guid.get();
 
-	// Session-id
+	// get Session-id
 	var session_id = agile_session.get();
 
-	// Page
+	//Current url
 	var url = document.location.href;
 	console.log(url);
 	if (url !== undefined && url != null)
 		url = encodeURIComponent(url);
 	else
 		url = "";
-
+	//Get agile_id
 	var agile = agile_id.get();
 
 	var params = "";
 
 	console.log("New session " + agile_session.new_session);
 
-	// Get Visitor Info if session is new
+	//If it is a new session
 	if (agile_session.new_session)
 	{
-		// Set the referrer
+		//Set the referrer
 		var document_referrer = document.referrer;
 		if (document_referrer !== undefined && document_referrer != null && document_referrer != "null")
 			document_referrer = encodeURIComponent(document_referrer);
@@ -36,10 +46,9 @@ function agile_trackPageview(callback)
 		params = "guid={0}&sid={1}&url={2}&agile={3}".format(guid, session_id, url, agile);
 
 	if (agile_guid.get_email())
-		params += "&email=" + encodeURIComponent(agile_guid.get_email());
+		params += "&email=" + encodeURIComponent(agile_guid.get_email());	//get email
 
 	var agile_url = "https://" + agile_id.getNamespace() + ".agilecrm.com/stats?callback=?&" + params;
-
+	//callback
 	agile_json(agile_url, callback);
-	// agile_ajax.send(url, ajax_data);
 }

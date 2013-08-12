@@ -14,19 +14,29 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import net.sf.json.JSONException;
+
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.reports.Reports;
-import com.agilecrm.reports.deferred.ReportsDeferredTaskInstantEmail;
-import com.google.appengine.api.taskqueue.Queue;
-import com.google.appengine.api.taskqueue.QueueFactory;
-import com.google.appengine.api.taskqueue.TaskOptions;
+import com.agilecrm.reports.ReportsUtil;
 
+/**
+ * <code>ReportsAPI</code> lass includes REST calls to interact with
+ * {@link Reports} class to save, update, delete, generate reports.
+ * 
+ * @author Yaswanth
+ * 
+ */
 @Path("/api/reports")
-public class ReportsApi
+public class ReportsAPI
 {
+    /**
+     * Lists all the reports available in current domain
+     * 
+     * @return {@link List} of {@link Reports}
+     */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Reports> getListOfReports()
@@ -34,7 +44,12 @@ public class ReportsApi
 	return Reports.fetchAllReports();
     }
 
-    // Save Filter contacts
+    /**
+     * Saves repots
+     * 
+     * @param Report
+     * @return
+     */
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -44,7 +59,12 @@ public class ReportsApi
 	return Report;
     }
 
-    // Update filters
+    /**
+     * Updates a report
+     * 
+     * @param report
+     * @return
+     */
     @PUT
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -54,6 +74,12 @@ public class ReportsApi
 	return report;
     }
 
+    /**
+     * Fetches a report in domain based on reports id.
+     * 
+     * @param id
+     * @return {@link Reports}
+     */
     @Path("{report_id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -70,20 +96,28 @@ public class ReportsApi
 	}
     }
 
-    @Path("/query/{report_id}")
+    /**
+     * Generates reports results based on report id. It takes page size and
+     * cursor parameters to limit fetching of results.
+     * 
+     * @param id
+     * @param count
+     * @param cursor
+     * @return
+     */
+    @Path("/show-results/{report_id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Collection<Contact> getReportResults(
-	    @PathParam("report_id") String id,
-	    @QueryParam("page_size") String count,
-	    @QueryParam("cursor") String cursor)
+    public Collection<Contact> getReportResults(@PathParam("report_id") String id,
+	    @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
     {
 	try
 	{
+	    // Fetches report based on report id
 	    Reports report = Reports.getReport(Long.parseLong(id));
 
-	    Collection<Contact> contacts = report.generateReports(
-		    Integer.parseInt(count), cursor);
+	    // Generates report results
+	    Collection<Contact> contacts = report.generateReports(Integer.parseInt(count), cursor);
 
 	    return contacts;
 	}
@@ -93,6 +127,12 @@ public class ReportsApi
 	}
     }
 
+    /**
+     * Sends an instant request. Reads report based on its id, generates report
+     * and sends it. Report generation in initialized in a deferred task
+     * 
+     * @param id
+     */
     @Path("/send/{report_id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -100,15 +140,7 @@ public class ReportsApi
     {
 	try
 	{
-	    Reports report = Reports.getReport(Long.parseLong(id));
-
-	    ReportsDeferredTaskInstantEmail reportsDeferredTask = new ReportsDeferredTaskInstantEmail(
-		    Long.parseLong(id));
-
-	    Queue queue = QueueFactory.getDefaultQueue();
-
-	    // Add to queue
-	    queue.add(TaskOptions.Builder.withPayload(reportsDeferredTask));
+	    ReportsUtil.sendReport(Long.valueOf(id));
 	}
 	catch (Exception e)
 	{
@@ -116,16 +148,31 @@ public class ReportsApi
 	}
     }
 
-    // Bulk operations - delete
+    /**
+     * Reports delete funtionality
+     * 
+     * @param model_ids
+     * @throws JSONException
+     */
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteReports(@FormParam("ids") String model_ids)
-	    throws JSONException
+    public void deleteReports(@FormParam("ids") String model_ids) throws JSONException
     {
 
-	JSONArray reportsJSONArray = new JSONArray(model_ids);
-	Reports.dao.deleteBulkByIds(reportsJSONArray);
+	try
+	{
+	    JSONArray reportsJSONArray = new JSONArray(model_ids);
+
+	    // Deletes reports associated with the ids sent in request
+	    Reports.dao.deleteBulkByIds(reportsJSONArray);
+
+	}
+	catch (org.json.JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 
     }
 

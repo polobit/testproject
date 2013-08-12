@@ -9,7 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.util.AccountDeleteUtil;
-import com.agilecrm.util.Util;
+import com.agilecrm.util.DateUtil;
+import com.agilecrm.util.EmailUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
@@ -210,7 +211,7 @@ public class SendEmail extends TaskletAdapter
 
 	System.out.println("At  " + at + " On: " + on);
 
-	System.out.println(Util.getCalendarString(calendar.getTimeInMillis()));
+	System.out.println(DateUtil.getCalendarString(calendar.getTimeInMillis()));
 
 	// Any Time
 	if (!at.equalsIgnoreCase(AT_ANY_TIME))
@@ -240,7 +241,7 @@ public class SendEmail extends TaskletAdapter
 	}
 
 	System.out.println("Sleeping till ");
-	System.out.println(Util.getCalendarString(calendar.getTimeInMillis()));
+	System.out.println(DateUtil.getCalendarString(calendar.getTimeInMillis()));
 
 	// Sleep till that day
 	// Add ourselves to Cron Queue
@@ -422,7 +423,7 @@ public class SendEmail extends TaskletAdapter
 	// Send Message
 	if (html != null && html.length() > 10)
 	{
-	    html = Util.appendTrackingImage(html, AccountDeleteUtil.getId(campaignJSON), AccountDeleteUtil.getId(subscriberJSON));
+	    html = EmailUtil.appendTrackingImage(html, AccountDeleteUtil.getId(campaignJSON), AccountDeleteUtil.getId(subscriberJSON));
 
 	    // Util.sendEmailUsingMailgun(fromEmail, fromName, to, subject,
 	    // replyTo, html, text, subscriberJSON, campaignJSON);

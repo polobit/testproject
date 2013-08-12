@@ -8,7 +8,6 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.util.NamespaceUtil;
-import com.agilecrm.util.Util;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -37,8 +36,7 @@ public class TaskReminder
 
 	for (String domain : domains)
 	{
-	    TaskReminderDeferredTask taskReminderDeferredTask = new TaskReminderDeferredTask(
-		    domain);
+	    TaskReminderDeferredTask taskReminderDeferredTask = new TaskReminderDeferredTask(domain);
 	    Queue queue = QueueFactory.getDefaultQueue();
 	    queue.add(TaskOptions.Builder.withPayload(taskReminderDeferredTask));
 	}

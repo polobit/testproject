@@ -134,7 +134,7 @@ var ContactsRouter = Backbone.Router.extend({
     	
     	if(readCookie('company_filter'))
     	{	
-    		// Change template to companies - this template is seperate from contacts default template
+    		// Change template to companies - this template is separate from contacts default template
     		url = "core/api/contacts/companies";
     		
     		if(!grid_view && !readCookie("agile_contact_view"))
@@ -171,28 +171,20 @@ var ContactsRouter = Backbone.Router.extend({
 			this.customView(readCookie("contact_view"), undefined);
 			return;
 		}
-      	
-    	//console.log("Fetching from " + url);
 
       	console.log("while creating new base collection view : " + collection_is_reverse);
       	
       	/**
 		 * If collection is already defined and contacts are fetched the
 		 * show results instead of initializing collection again
-		 */
-      	//if(CONTACTS_HARD_RELOAD == true || readCookie('contact_filter'))
-      		{//always hard reload
+		 * 
+		 * Now always Hard-Reload
+		 *
+      	if(CONTACTS_HARD_RELOAD == true || readCookie('contact_filter'))
+      		{
       			this.contactsListView = undefined;
-      			CONTACTS_HARD_RELOAD = false;
+      		 	CONTACTS_HARD_RELOAD = false;
       		}
-      	
-		if (this.contactsListView && this.contactsListView.collection) {
-			$('#content').html(this.contactsListView.render(true).el);
-
-			$(".active").removeClass("active");
-			$("#contactsmenu").addClass("active");
-			return;
-		}
 		
       	/*
       	 * cursor and page_size options are taken to activate infiniScroll
@@ -796,12 +788,8 @@ var ContactsRouter = Backbone.Router.extend({
     		CONTACTS_HARD_RELOAD = false;
   		}
     	
-     	if(this.contact_custom_view && this.contact_custom_view.url == url)
-    	{
-            $('#content').html(this.contact_custom_view.render(true).el);
-            return;
-    	}
      	
+  		
     	// If id is defined get the respective custom view object 
     	if (id && !view_data) 
 		{
@@ -868,7 +856,10 @@ var ContactsRouter = Backbone.Router.extend({
         // Fetch collection
         this.contact_custom_view.collection.fetch();
         $('#content').html(this.contact_custom_view.el);
-    	
+        
+        //Activate Contacts Navbar tab
+        $(".active").removeClass("active");
+        $("#contactsmenu").addClass("active");  
     },
     
     /*search results*/

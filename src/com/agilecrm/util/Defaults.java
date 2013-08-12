@@ -180,15 +180,15 @@ public class Defaults
 	private void saveDefaultWorkflows()
 	{
 		Workflow workflow = new Workflow("Sample Auto Responder",
-				Util.readResource("misc/campaign-strings/sample_auto_responder.txt"));
+				FileStreamUtil.readResource("misc/campaign-strings/sample_auto_responder.txt"));
 		workflow.save();
 
 		Workflow workflow1 = new Workflow("Sample Cart Abandonment",
-				Util.readResource("misc/campaign-strings/sample_cart_abandonment.txt"));
+				FileStreamUtil.readResource("misc/campaign-strings/sample_cart_abandonment.txt"));
 		workflow1.save();
 
 		Workflow workflow2 = new Workflow("Sample Email & Twitter Campaign",
-				Util.readResource("misc/campaign-strings/sample_email_n_twitter_campaign.txt"));
+				FileStreamUtil.readResource("misc/campaign-strings/sample_email_n_twitter_campaign.txt"));
 		workflow2.save();
 
 	}

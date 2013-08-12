@@ -299,39 +299,10 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
             } 
         	else {
         
+        		// update contacts-details view
         		if(App_Contacts.contactDetailView)
-        		{
-        			App_Contacts.contactDetailView.model = data
-        		}
+        			App_Contacts.contactDetailView.model = data;
         		
-            	/*
-            	 * If contactsListView is defined, it is getting the contact from there not the updated one.
-            	 * Delete the old one and add the updated one to the listView. 
-            	 */
-        		if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection.get(data.id) != null) {
-
-            		App_Contacts.contactsListView.collection.remove(obj);
-            	
-            		App_Contacts.contactsListView.collection.add(data);
-            	}
-            	
-            	// If contact list is under a selected custom view, then add changed contact to that list
-        		if(App_Contacts.contact_custom_view && App_Contacts.contact_custom_view.collection.get(id) != null)
-        		{
-        			App_Contacts.contact_custom_view.collection.remove(obj);
-
-        			App_Contacts.contact_custom_view.collection.add(data);
-        		}
-        		
-        		if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection)
-        		{
-        			//Add to View only if of corresponding filter
-        			if( (data.get('type')=='PERSON' && !readCookie('company_filter')) || (data.get('type')=='COMPANY' && readCookie('company_filter')))
-        				App_Contacts.contactsListView.collection.add(data);
-        			
-        			console.log(App_Contacts.contactsListView.collection.length);
-        		}
-            	
             	App_Contacts.navigate("contact/" + data.id, {
                 	trigger: true
             	});

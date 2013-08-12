@@ -18,8 +18,12 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.reports.deferred.ReportsDeferredTaskInstantEmail;
 import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.util.email.SendMail;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 
 /**
  * <code>ReportsUtil</code> is utility class, it provides functionalities to
@@ -41,13 +45,12 @@ public class ReportsUtil
      * @param reportsList
      * @throws JSONException
      */
-    public static void sendReportsToUsers(List<Reports> reportsList)
-	    throws JSONException
+    public static void sendReportsToUsers(List<Reports> reportsList) throws JSONException
     {
-
 	for (Reports report : reportsList)
 	{
-
+	    // Each report is sent to email address which is saved in report. If
+	    // email in sendTo in empty, report is not processed further
 	    if (StringUtils.isEmpty(report.sendTo))
 		return;
 
@@ -79,8 +82,7 @@ public class ReportsUtil
 		    field = customFields[1].replace("_", " ");
 		}
 
-		String heading = field.substring(0, 1).toUpperCase()
-			+ field.substring(1);
+		String heading = field.substring(0, 1).toUpperCase() + field.substring(1);
 		reportHeadings.add(heading);
 	    }
 
@@ -92,17 +94,13 @@ public class ReportsUtil
 
 	    // Set number of results in count variable
 	    if (results.get("report_results") != null)
-		results.put("count",
-		    ((Collection) results.get("report_results")).size());
+		results.put("count", ((Collection) results.get("report_results")).size());
 
-	    results.put("duration",
-		    WordUtils.capitalizeFully((report.duration.toString())));
-
+	    results.put("duration", WordUtils.capitalizeFully((report.duration.toString())));
 
 	    // Send reports email
-	    SendMail.sendMail(report.sendTo, report.name + " - "
-		    + SendMail.REPORTS_SUBJECT,
-		    SendMail.REPORTS, new Object[] { results, fieldsList });
+	    SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, SendMail.REPORTS,
+		    new Object[] { results, fieldsList });
 	}
     }
 
@@ -127,16 +125,22 @@ public class ReportsUtil
 
 	// If report_type if of contacts customize object to show properties
 	if (report.report_type.equals(Reports.ReportType.Contact))
-
-	    domain_details.put("report_results",
-		    customizeContactParameters(reportList, report.fields_set));
+	    domain_details.put("report_results", customizeContactParameters(reportList, report.fields_set));
 
 	// Return results
 	return domain_details;
     }
 
-    public static Collection customizeContactParameters(Collection contactList,
-	    LinkedHashSet<String> fields_set)
+    /**
+     * In reports users has an option of choosing fields to be showin in reports
+     * and their order. In order to maintain those fields, we customize the
+     * object which is sent to mustache email template.
+     * 
+     * @param contactList
+     * @param fields_set
+     * @return
+     */
+    public static Collection customizeContactParameters(Collection contactList, LinkedHashSet<String> fields_set)
     {
 
 	List<Map<String, List<Map<String, Object>>>> newProperties = new ArrayList<Map<String, List<Map<String, Object>>>>();
@@ -158,8 +162,7 @@ public class ReportsUtil
 		{
 		    Map<String, Object> fieldsMap = new LinkedHashMap<String, Object>();
 		    String field_name = field.split("properties_")[1];
-		    ContactField contactField = contact
-			    .getContactField(field_name);
+		    ContactField contactField = contact.getContactField(field_name);
 
 		    if (contactField == null)
 			contactField = new ContactField();
@@ -173,8 +176,7 @@ public class ReportsUtil
 		{
 
 		    String field_name = field.split("custom_")[1];
-		    ContactField contactField = contact
-			    .getContactField(field_name);
+		    ContactField contactField = contact.getContactField(field_name);
 
 		    String customFieldJSON = null;
 		    try
@@ -182,15 +184,12 @@ public class ReportsUtil
 			if (contactField == null)
 			    contactField = new ContactField();
 
-			customFieldJSON = new ObjectMapper()
-				.writeValueAsString(contactField);
+			customFieldJSON = new ObjectMapper().writeValueAsString(contactField);
 
-			Map<String, Object> customField = new ObjectMapper()
-				.readValue(
-					customFieldJSON,
-					new TypeReference<HashMap<String, Object>>()
-					{
-					});
+			Map<String, Object> customField = new ObjectMapper().readValue(customFieldJSON,
+				new TypeReference<HashMap<String, Object>>()
+				{
+				});
 
 			customProperties.add(customField);
 		    }
@@ -210,14 +209,11 @@ public class ReportsUtil
 
 		    try
 		    {
-			contactJSON = new JSONObject(
-				mapper.writeValueAsString(contact));
+			contactJSON = new JSONObject(mapper.writeValueAsString(contact));
 			fieldValue = contactJSON.get(field).toString();
 
 			if (field.contains("time"))
-			    fieldValue = SearchUtil
-				    .getDateWithoutTimeComponent(Long
-					    .parseLong(fieldValue) * 1000);
+			    fieldValue = SearchUtil.getDateWithoutTimeComponent(Long.parseLong(fieldValue) * 1000);
 		    }
 		    catch (Exception e)
 		    {
@@ -227,8 +223,7 @@ public class ReportsUtil
 
 		    LinkedHashMap<String, Object> fieldsMap = new LinkedHashMap<String, Object>();
 
-		    System.out.println("field = " + field + "fieldValue = "
-			    + fieldValue);
+		    System.out.println("field = " + field + "fieldValue = " + fieldValue);
 
 		    if (fieldValue == null)
 			fieldsMap.put(field, new ContactField());
@@ -249,5 +244,15 @@ public class ReportsUtil
 
 	System.out.println(newProperties);
 	return newProperties;
+    }
+
+    public static void sendReport(Long report_id)
+    {
+	ReportsDeferredTaskInstantEmail reportsDeferredTask = new ReportsDeferredTaskInstantEmail(report_id);
+
+	Queue queue = QueueFactory.getDefaultQueue();
+
+	// Add to queue
+	queue.add(TaskOptions.Builder.withPayload(reportsDeferredTask));
     }
 }

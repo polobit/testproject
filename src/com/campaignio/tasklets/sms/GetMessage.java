@@ -2,9 +2,9 @@ package com.campaignio.tasklets.sms;
 
 import org.json.JSONObject;
 
-import com.agilecrm.util.Util;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.tasklets.TaskletAdapter;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 public class GetMessage extends TaskletAdapter
@@ -45,7 +45,7 @@ public class GetMessage extends TaskletAdapter
 	// Add to cron
 	if (from != null && to != null)
 	    addToCron(campaignJSON, subscriberJSON, data, nodeJSON, timeout,
-		    Util.changeNumber(to), Util.changeNumber(from), null);
+		    AgileTaskletUtil.changeNumber(to), AgileTaskletUtil.changeNumber(from), null);
 	else
 	{
 	    System.out.println("Cannot send a message");

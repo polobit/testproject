@@ -30,7 +30,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.core.api.widgets.WidgetsAPI;
 import com.agilecrm.social.stubs.SocialSearchResult;
 import com.agilecrm.social.stubs.SocialUpdateStream;
-import com.agilecrm.util.Util;
+import com.agilecrm.util.JSONUtil;
 import com.agilecrm.widgets.Widget;
 
 /**
@@ -229,6 +229,7 @@ public class TwitterUtil
 	result.picture = user.getBiggerProfileImageURLHttps().toString();
 	result.location = user.getLocation();
 	result.summary = user.getDescription();
+	result.screen_name = user.getScreenName();
 	result.url = "https://twitter.com/" + user.getScreenName();
 	result.num_connections = user.getFollowersCount() + "";
 	result.tweet_count = user.getStatusesCount() + "";
@@ -429,7 +430,7 @@ public class TwitterUtil
 	    // Get twitter object and tweet in twitter
 	    Status status = getTwitter(widget).updateStatus(
 		    message + AGILETWITTERSOURCEMESSAGE);
-	    System.out.println("Tweet: " + Util.toJSONString(status));
+	    System.out.println("Tweet: " + JSONUtil.toJSONString(status));
 	    return "Successfull";
 	}
 	catch (TwitterRuntimeException e)

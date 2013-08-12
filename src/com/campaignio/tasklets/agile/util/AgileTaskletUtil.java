@@ -74,4 +74,23 @@ public class AgileTaskletUtil
 	Joiner joiner = Joiner.on(separator).skipNulls();
 	return joiner.join(splitter.split(str));
     }
+
+    /**
+     * Makes the number as starting with "+1", if it does not so.
+     * 
+     * @param number
+     * @return number starts with +1
+     */
+    public static String changeNumber(String number)
+    {
+    
+        // Add if it does not start with 1 or +
+        if (number.startsWith("+"))
+            return number;
+    
+        if (number.startsWith("1"))
+            return "+" + number;
+    
+        return "+1" + number;
+    }
 }

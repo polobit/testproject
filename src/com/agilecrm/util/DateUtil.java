@@ -35,6 +35,7 @@ package com.agilecrm.util;
  * the words "Powered by Funambol".
  */
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -217,5 +218,26 @@ public class DateUtil
 	Calendar cal2 = Calendar.getInstance();
 	cal2.setTime(date);
 	return cal.after(cal2);
+    }
+
+    /**
+     * Gets Calendar in Pacific. Returns date in specified format and time zone
+     * for the give epoch time.
+     * 
+     * @param timeout
+     * @return date string
+     */
+    public static String getCalendarString(long timeout)
+    {
+        // Defines output format and print
+        SimpleDateFormat sdf = new SimpleDateFormat("d MMM yyyy hh:mm aaa");
+        TimeZone pst = TimeZone.getTimeZone("PST");
+    
+        sdf.setTimeZone(pst);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timeout);
+    
+        String date = sdf.format(calendar.getTime());
+        return date;
     }
 }
