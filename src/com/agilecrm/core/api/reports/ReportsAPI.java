@@ -32,148 +32,148 @@ import com.agilecrm.reports.ReportsUtil;
 @Path("/api/reports")
 public class ReportsAPI
 {
-	/**
-	 * Lists all the reports available in current domain
-	 * 
-	 * @return {@link List} of {@link Reports}
-	 */
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Reports> getListOfReports()
+    /**
+     * Lists all the reports available in current domain
+     * 
+     * @return {@link List} of {@link Reports}
+     */
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Reports> getListOfReports()
+    {
+	return Reports.fetchAllReports();
+    }
+
+    /**
+     * Saves repots
+     * 
+     * @param Report
+     * @return
+     */
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Reports createReport(Reports Report)
+    {
+	Report.save();
+	return Report;
+    }
+
+    /**
+     * Updates a report
+     * 
+     * @param report
+     * @return
+     */
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Reports updateReport(Reports report)
+    {
+	report.save();
+	return report;
+    }
+
+    /**
+     * Fetches a report in domain based on reports id.
+     * 
+     * @param id
+     * @return {@link Reports}
+     */
+    @Path("{report_id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Reports getReport(@PathParam("report_id") Long id)
+    {
+	try
 	{
-		return Reports.fetchAllReports();
+	    return Reports.getReport(id);
 	}
-
-	/**
-	 * Saves repots
-	 * 
-	 * @param Report
-	 * @return
-	 */
-	@POST
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Reports createReport(Reports Report)
+	catch (Exception e)
 	{
-		Report.save();
-		return Report;
+	    e.printStackTrace();
+	    return null;
 	}
+    }
 
-	/**
-	 * Updates a report
-	 * 
-	 * @param report
-	 * @return
-	 */
-	@PUT
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Reports updateReport(Reports report)
+    /**
+     * Generates reports results based on report id. It takes page size and
+     * cursor parameters to limit fetching of results.
+     * 
+     * @param id
+     * @param count
+     * @param cursor
+     * @return
+     */
+    @Path("/show-results/{report_id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Collection<Contact> getReportResults(@PathParam("report_id") String id,
+	    @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    {
+	try
 	{
-		report.save();
-		return report;
+	    // Fetches report based on report id
+	    Reports report = Reports.getReport(Long.parseLong(id));
+
+	    // Generates report results
+	    Collection<Contact> contacts = report.generateReports(Integer.parseInt(count), cursor);
+
+	    return contacts;
 	}
-
-	/**
-	 * Fetches a report in domain based on reports id.
-	 * 
-	 * @param id
-	 * @return {@link Reports}
-	 */
-	@Path("{report_id}")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Reports getReport(@PathParam("report_id") Long id)
+	catch (Exception e)
 	{
-		try
-		{
-			return Reports.getReport(id);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return null;
-		}
+	    return null;
 	}
+    }
 
-	/**
-	 * Generates reports results based on report id. It takes page size and
-	 * cursor parameters to limit fetching of results.
-	 * 
-	 * @param id
-	 * @param count
-	 * @param cursor
-	 * @return
-	 */
-	@Path("/show-results/{report_id}")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Collection<Contact> getReportResults(@PathParam("report_id") String id,
-			@QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    /**
+     * Sends an instant request. Reads report based on its id, generates report
+     * and sends it. Report generation in initialized in a deferred task
+     * 
+     * @param id
+     */
+    @Path("/send/{report_id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void sendReportResults(@PathParam("report_id") String id)
+    {
+	try
 	{
-		try
-		{
-			// Fetches report based on report id
-			Reports report = Reports.getReport(Long.parseLong(id));
-
-			// Generates report results
-			Collection<Contact> contacts = report.generateReports(Integer.parseInt(count), cursor);
-
-			return contacts;
-		}
-		catch (Exception e)
-		{
-			return null;
-		}
+	    ReportsUtil.sendReport(Long.valueOf(id));
 	}
-
-	/**
-	 * Sends an instant request. Reads report based on its id, generates report
-	 * and sends it. Report generation in initialized in a deferred task
-	 * 
-	 * @param id
-	 */
-	@Path("/send/{report_id}")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public void sendReportResults(@PathParam("report_id") String id)
+	catch (Exception e)
 	{
-		try
-		{
-			ReportsUtil.sendReport(Long.valueOf(id));
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+	    e.printStackTrace();
 	}
+    }
 
-	/**
-	 * Reports delete funtionality
-	 * 
-	 * @param model_ids
-	 * @throws JSONException
-	 */
-	@Path("bulk")
-	@POST
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public void deleteReports(@FormParam("ids") String model_ids) throws JSONException
+    /**
+     * Reports delete funtionality
+     * 
+     * @param model_ids
+     * @throws JSONException
+     */
+    @Path("bulk")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void deleteReports(@FormParam("ids") String model_ids) throws JSONException
+    {
+
+	try
 	{
+	    JSONArray reportsJSONArray = new JSONArray(model_ids);
 
-		try
-		{
-			JSONArray reportsJSONArray = new JSONArray(model_ids);
-
-			// Deletes reports associated with the ids sent in request
-			Reports.dao.deleteBulkByIds(reportsJSONArray);
-
-		}
-		catch (org.json.JSONException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	    // Deletes reports associated with the ids sent in request
+	    Reports.dao.deleteBulkByIds(reportsJSONArray);
 
 	}
+	catch (org.json.JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+    }
 
 }
