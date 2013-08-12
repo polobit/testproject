@@ -76,7 +76,7 @@ $('#send-ical-email').live('click', function(event){
 	  
 	  // Gets current user
 	  var CurrentuserModel = Backbone.Model.extend({
-		     url: '/core/api/current-user',
+		     url: '/core/api/users/current-user',
 		     restKey: "domainUser"
 		});
 		 
