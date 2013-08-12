@@ -180,8 +180,8 @@ var ContactsRouter = Backbone.Router.extend({
 		 * If collection is already defined and contacts are fetched the
 		 * show results instead of initializing collection again
 		 */
-      	if(CONTACTS_HARD_RELOAD == true || readCookie('contact_filter'))
-      		{
+      	//if(CONTACTS_HARD_RELOAD == true || readCookie('contact_filter'))
+      		{//always hard reload
       			this.contactsListView = undefined;
       			CONTACTS_HARD_RELOAD = false;
       		}
@@ -790,8 +790,8 @@ var ContactsRouter = Backbone.Router.extend({
 			url = "core/api/contacts";
 		}
     	
-    	if(CONTACTS_HARD_RELOAD == true || readCookie('contact_filter'))
-  		{
+    	//if(CONTACTS_HARD_RELOAD == true || readCookie('contact_filter'))
+  		{   //always hard reload
     		this.contact_custom_view = undefined;
     		CONTACTS_HARD_RELOAD = false;
   		}

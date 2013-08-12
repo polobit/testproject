@@ -1,5 +1,18 @@
+/**
+ * agile_core.js is a script file which contains the helper functions used in agile-min.js
+ * 
+ * @module Stats
+ *  
+ */ 
+
 function agile_propertyJSON(name, id, type)
 {
+	/**
+	 * Converts the parameters passed to it into a JSON object
+	 * @param name : name of the property. Example : "email"
+	 * @param id : value of the property. Example : "clickdesk@example.com"
+	 * @returns JSON
+	 */
 	var json = {};
 
 	if (type == undefined)
@@ -14,6 +27,13 @@ function agile_propertyJSON(name, id, type)
 
 function agile_json(URL, callback, data)
 {
+	/**
+	 * Generates the callback 
+	 * @param URL : callback url
+	 * @param callback : callback function
+	 * @param data : callback function parameter (used optionally depending on callback)
+	 * @returns element
+	 */
 	var ud = 'json' + (Math.random() * 100).toString().replace(/\./g, '');
 	window[ud] = function(data)
 	{

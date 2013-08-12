@@ -60,6 +60,8 @@ public class JerseyApplication extends Application
 		s.add(com.agilecrm.core.api.widgets.StripeWidgetsAPI.class);
 		s.add(com.agilecrm.core.api.widgets.TwilioWidgetsAPI.class);
 		s.add(com.agilecrm.core.api.widgets.ZendeskWidgetsAPI.class);
+		s.add(com.agilecrm.core.api.account.AccountDeletionAPI.class);
+		s.add(com.agilecrm.core.api.account.NamespaceStatsAPI.class);
 		return s;
 	}
 }
