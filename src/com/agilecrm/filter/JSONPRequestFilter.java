@@ -10,7 +10,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * <code>JSONRequestFilter</code> handles requests sent to JSAPI. It handles the
@@ -34,10 +33,12 @@ public class JSONPRequestFilter implements Filter
 	}
 
 	final HttpServletRequest httpRequest = (HttpServletRequest) request;
-	final HttpServletResponse httpResponse = (HttpServletResponse) response;
 
+	// Checks if request is JSONP request based on callback parameter
 	if (isJSONPRequest(httpRequest))
 	{
+	    // Gets response output streams, and writes response of JSAPI call
+	    // enclosed with in callback parameter.
 	    ServletOutputStream out = response.getOutputStream();
 	    out.println(getCallbackParameter(httpRequest) + "(");
 	    chain.doFilter(request, response);
