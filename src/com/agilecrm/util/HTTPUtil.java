@@ -1,11 +1,15 @@
 package com.agilecrm.util;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Enumeration;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -153,8 +157,8 @@ public class HTTPUtil
      * @throws Exception
      *             If server throws an exception
      */
-    public static String accessURLUsingAuthentication(String postURL, String username, String password, String data, String contentType, String requestMethod,
-	    String acceptType) throws Exception
+    public static String accessURLUsingAuthentication(String postURL, String username, String password, String data,
+	    String contentType, String requestMethod, String acceptType) throws Exception
     {
 	HttpURLConnection connection = null;
 
@@ -226,8 +230,8 @@ public class HTTPUtil
      * @throws Exception
      *             If server throws an exception
      */
-    public static String accessURL(String postURL, String username, String password, String requestMethod, String data, String contentLength,
-	    String contentType, String acceptType) throws Exception
+    public static String accessURL(String postURL, String username, String password, String requestMethod, String data,
+	    String contentLength, String contentType, String acceptType) throws Exception
     {
 	HttpURLConnection connection = null;
 
@@ -282,6 +286,61 @@ public class HTTPUtil
 
 	System.out.println("output" + output);
 	return output;
+    }
+
+    /**
+     * Prints the entire request headers, parameters and content
+     * 
+     * @param request
+     * @throws IOException
+     */
+    public void printRequest(HttpServletRequest request) throws IOException
+    {
+	{
+	    System.out.println("--------------Headers---------------");
+	    Enumeration en = request.getHeaderNames();
+	    while (en.hasMoreElements())
+	    {
+		String val = en.nextElement().toString();
+		System.out.println(val + " :");
+		Enumeration en1 = request.getHeaders(val);
+		while (en1.hasMoreElements())
+		{
+		    System.out.println("\t" + en1.nextElement());
+		}
+	    }
+	}
+	{
+	    System.out.println("------------Parameters--------------");
+	    Enumeration en = request.getParameterNames();
+	    while (en.hasMoreElements())
+	    {
+		String val = en.nextElement().toString();
+		System.out.println(val + " :");
+		String[] en1 = request.getParameterValues(val);
+		for (String val1 : en1)
+		{
+		    System.out.println("\t" + val1);
+		}
+	    }
+	}
+	System.out.println("---------------BODY--------------");
+	BufferedReader is = request.getReader();
+	String line;
+	while ((line = is.readLine()) != null)
+	{
+	    System.out.println(line);
+	}
+	System.out.println("---------------------------------");
+
+	System.out.println("ContentType: " + request.getContentType());
+	System.out.println("ContentLength: " + request.getContentLength());
+	System.out.println("characterEncodings: " + request.getCharacterEncoding());
+	System.out.println("AuthType: " + request.getAuthType());
+
+	System.out.println("ContextPath: " + request.getContextPath());
+	System.out.println("Method: " + request.getMethod());
+
     }
 
 }
