@@ -55,7 +55,7 @@ var CalendarRouter = Backbone.Router.extend({
 		
 		$('#content').html(getTemplate("tasks-list-header", {}));
 			
-		fillSelect("owner-tasks", '/core/api/current-user', 'domainUser', function fillOwner() 
+		fillSelect("owner-tasks", '/core/api/users/current-user', 'domainUser', function fillOwner() 
 		{
 			
 			$('#content').find("#owner-tasks").prepend("<li><a href=''>All Tasks</a></li>");

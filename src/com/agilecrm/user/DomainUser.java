@@ -174,6 +174,131 @@ public class DomainUser extends Cursor implements Cloneable
 	}
 
 	/**
+	 * Sends notification on disabling or enabling the domain user
+	 */
+	private void sendNotification()
+	{
+
+		try
+		{
+			if (is_disabled)
+				sendEmail(SendMail.USER_DISABLED_SUBJECT, SendMail.USER_DISABLED_NOTIFICATION);
+			else
+				sendEmail(SendMail.USER_ENABLED_NOTIFICATION, SendMail.USER_ENABLED_NOTIFICATION);
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Checks maximum users allowed in the domain, and throws exception if
+	 * maximum allowed users quantity exceeds
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	private boolean checkMaxUsersInPlan() throws Exception
+	{
+		if (DomainUserUtil.count() != 0)
+		{
+			// Get subscription details of account
+			Subscription subscription = Subscription.getSubscription();
+
+			// If subscription is null, it indicates user is in free plan.
+			// Limits users to global trail users count
+			if (subscription == null && DomainUserUtil.count() >= Globals.TRIAL_USERS_COUNT)
+				throw new Exception("Please upgrade. You cannot add more than " + Globals.TRIAL_USERS_COUNT
+						+ " users in the free plan");
+
+			// If Subscription is not null then limits users to current plan
+			// quantity).
+			if (subscription != null && DomainUserUtil.count() >= subscription.plan.quantity)
+				throw new Exception("Please upgrade. You cannot add more than " + subscription.plan.quantity
+						+ " users in the current plan");
+
+			return false;
+		}
+		return false;
+	}
+
+	/**
+	 * Sends welcome email to user on creating a new one. It clones user and
+	 * marks password as null if it is openid registration as it can be checked
+	 * in email template
+	 */
+	private void sendWelcomeEmail()
+	{
+		try
+		{
+			// Cloned as we change password to null if user from open id
+			// registration. so it can be checked in email template
+			// based on
+			// password field
+			DomainUser user = (DomainUser) this.clone();
+
+			if (user.password.equals(MASKED_PASSWORD))
+				user.password = null;
+
+			user.sendEmail(SendMail.WELCOME_SUBJECT, SendMail.WELCOME);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Checks if super user is being marked as not admin. It compares with
+	 * existing user with current change
+	 * 
+	 * @param user
+	 * @return
+	 * @throws Exception
+	 */
+	private void checkSuperUserDisabled(DomainUser user) throws Exception
+	{
+		// If existing domain user is Super User
+		if (user.is_account_owner)
+		{
+			// If user is account owner then account owner should be set to true
+			// when it is being updated
+			this.is_account_owner = true;
+
+			if (!is_admin)
+				throw new Exception("Super user should be Admin and cannot be disabled.");
+		}
+	}
+
+	/**
+	 * Checks if user is admin and disabled
+	 * 
+	 * @throws Exception
+	 */
+	private void checkAdminDisabled() throws Exception
+	{
+		// User cannot be admin and disabled
+		if (this.is_admin == true && this.is_disabled == true)
+		{
+			throw new Exception("User cannot be admin and disabled at a time.");
+		}
+	}
+
+	/**
+	 * Sends email with template and subject chosen, and sends to domain user's
+	 * email. It passes current domain user to fill the template.
+	 * 
+	 * @param subject
+	 * @param template
+	 */
+	private void sendEmail(String subject, String template)
+	{
+		SendMail.sendMail(this.email, subject, template, this);
+	}
+
+	/**
 	 * Gets encrypted password
 	 * 
 	 * @return encrypted password
@@ -206,48 +331,18 @@ public class DomainUser extends Cursor implements Cloneable
 						+ domainUser.domain + "domain.");
 			}
 
-			// If domain user exists,setting to name if null
-			if (this.name == null)
-			{
-				this.name = domainUser.name;
-			}
+			// Checks if super user is disabled, and throws exception if super
+			// is disabled
+			checkSuperUserDisabled(domainUser);
 
-			// If existing domain user is Super User
-			if (domainUser.is_account_owner)
-			{
-				this.is_account_owner = true;
-				this.is_disabled = false;
-				if (!this.is_admin)
-				{
-					this.is_admin = true;
-					throw new Exception("Super user should be Admin and cannot be disabled.");
-				}
-			}
+			// Checks and throws exception if user is admin and disabled
+			checkAdminDisabled();
 
 			// To send enabled/disabled user email notification
 			if (domainUser.is_disabled != this.is_disabled)
 			{
-				try
-				{
-					if (domainUser.is_disabled == true)
-						SendMail.sendMail(this.email, SendMail.USER_ENABLED_SUBJECT,
-								SendMail.USER_ENABLED_NOTIFICATION, this);
-					else
-						SendMail.sendMail(this.email, SendMail.USER_DISABLED_SUBJECT,
-								SendMail.USER_DISABLED_NOTIFICATION, this);
-
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
+				sendNotification();
 			}
-		}
-
-		// User cannot be admin and disabled
-		if (this.is_admin == true && this.is_disabled == true)
-		{
-			throw new Exception("User cannot be admin and disabled at a time.");
 		}
 
 		// Set to current namespace if it is empty
@@ -268,38 +363,10 @@ public class DomainUser extends Cursor implements Cloneable
 		// Sends email, if the user is new
 		if (this.id == null)
 		{
-			if (DomainUserUtil.count() != 0)
-			{
-				// Get subscription details of account
-				Subscription subscription = Subscription.getSubscription();
+			if (checkMaxUsersInPlan())
+				return;
 
-				// If subscription is null, it indicates user is in free plan.
-				// Limits users to global trail users count
-				if (subscription == null && DomainUserUtil.count() >= Globals.TRIAL_USERS_COUNT)
-					throw new Exception("Please upgrade. You cannot add more than " + Globals.TRIAL_USERS_COUNT
-							+ " users in the free plan");
-
-				// If Subscription is not null then limits users to current plan
-				// quantity).
-				if (subscription != null && DomainUserUtil.count() >= subscription.plan.quantity)
-					throw new Exception("Please upgrade. You cannot add more than " + subscription.plan.quantity
-							+ " users in the current plan");
-			}
-
-			try
-			{
-				DomainUser user = (DomainUser) this.clone();
-
-				if (user.password.equals(MASKED_PASSWORD))
-					user.password = null;
-
-				SendMail.sendMail(this.email, SendMail.WELCOME_SUBJECT, SendMail.WELCOME, user);
-
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
+			sendWelcomeEmail();
 		}
 
 		String oldNamespace = NamespaceManager.get();
@@ -456,6 +523,7 @@ public class DomainUser extends Cursor implements Cloneable
 	}
 
 	// To String
+	@Override
 	public String toString()
 	{
 		return "\n Email: " + this.email + " Domain: " + this.domain + "\n IsAdmin: " + this.is_admin + " DomainId: "
