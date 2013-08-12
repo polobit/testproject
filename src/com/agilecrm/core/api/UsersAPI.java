@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.AccountDeleteUtil;
@@ -290,5 +291,14 @@ public class UsersAPI
 		{
 			NamespaceManager.set(domain);
 		}
+	}
+
+	// Get Agile Users
+	@Path("agileusers")
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON })
+	public List<AgileUser> getAgileUsers()
+	{
+		return AgileUser.getUsers();
 	}
 }
