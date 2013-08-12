@@ -16,6 +16,7 @@ import com.agilecrm.activities.TaskReminder;
  * @author Naresh
  * 
  */
+@SuppressWarnings("serial")
 public class TaskReminderServlet extends HttpServlet
 {
     public void doPost(HttpServletRequest request, HttpServletResponse response)

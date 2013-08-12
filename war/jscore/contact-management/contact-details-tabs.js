@@ -203,7 +203,7 @@ $(function(){
 		
 		// Shows an error alert, when there is no email to the contact 
 		if(!email){
-			$('#mail', App_Contacts.contactDetailView.model.el).html('<div class="alert alert-error span4" style="margin-top:30px"><a class="close" data-dismiss="alert" href="#">×</a>Sorry! this contact has no email to get the mails.</div>').show().delay(3000).hide(1);
+			$('#mail', App_Contacts.contactDetailView.model.el).html('<div class="alert alert-error span4" style="margin-top:30px"><a class="close" data-dismiss="alert" href="#">ï¿½</a>Sorry! this contact has no email to get the mails.</div>').show().delay(3000).hide(1);
 			return;	
 		}	
 		
@@ -260,7 +260,7 @@ $(function(){
 		
 		// Shows an error alert, when there is no email to the contact 
 		if(!email){
-			$('#stats', App_Contacts.contactDetailView.model.el).html('<div class="alert alert-error span4" style="margin-top:30px"><a class="close" data-dismiss="alert" href="#">×</a>Sorry! this contact has no email to get the stats.</div>').show().delay(3000).hide(1);
+			$('#stats', App_Contacts.contactDetailView.model.el).html('<div class="alert alert-error span4" style="margin-top:30px"><a class="close" data-dismiss="alert" href="#">ï¿½</a>Sorry! this contact has no email to get the stats.</div>').show().delay(3000).hide(1);
 			return;	
 		}
 		
@@ -582,7 +582,7 @@ function populate_send_email_details(el){
 	 // Add From address to the form (FROM - current user email)
 	 var CurrentuserModel = Backbone.Model.extend({
 	     //url: '/core/api/imap',
-	     url: '/core/api/current-user',
+	     url: '/core/api/users/current-user',
 	     restKey: "domainUser"
 	});
 	var currentuserModel = new CurrentuserModel();

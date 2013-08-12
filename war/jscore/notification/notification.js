@@ -78,7 +78,7 @@ function registerForNotifications(prefs) {
  */
 function getDomainFromCurrentUser() {
 	var domain_user = Backbone.Model.extend({
-		url : 'core/api/current-user'
+		url : 'core/api/users/current-user'
 	});
 	var user = new domain_user();
 	user.fetch({

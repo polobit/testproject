@@ -103,7 +103,7 @@
         }
 		var CurrentuserModel = Backbone.Model.extend({
 		     //url: '/core/api/imap',
-		     url: '/core/api/current-user',
+		     url: '/core/api/users/current-user',
 		     restKey: "domainUser"
 		});
 		 

@@ -8,6 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
@@ -67,10 +68,14 @@ public class AnalyticsAPI
      */
     @Path("JSAPI-status")
     @GET
-    @Produces({ MediaType.TEXT_PLAIN, "application/x-javascript" })
+    @Produces({ MediaType.TEXT_PLAIN })
     public int getJSAPIStatus()
     {
 	String domain = NamespaceManager.get();
+
+	if (StringUtils.isEmpty(domain))
+	    return 0;
+
 	return AnalyticsSQLUtil.getPageViewsCountForGivenDomain(domain);
     }
 }
