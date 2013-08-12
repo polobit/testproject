@@ -33,27 +33,26 @@ import com.google.appengine.api.taskqueue.TaskOptions.Method;
 @Path("/api/upload")
 public class UploadContactsAPI
 {
-
     /**
-     * Handle request sent using file uploader, reads the details from the
-     * uploaded file are returns the data which is processed and stored in to
-     * map, so fields can be shown at the client side using the map
+     * Fetches Blob data from blobstore and based on the blob key sent after
+     * file upload. It fetches blob data and process first 10 lines of blob
+     * data, to return first 10 contacts. It is read using UTF-8 to support
+     * special characters
      * 
-     * @param request
-     *            {@link HttpServletRequest}
-     * @return {@link String}
+     * @param key
+     * @return
      */
     @Path("/process")
     @GET
     public String post(@QueryParam("blob-key") String key)
     {
-	System.out.println("===========================================================================");
 	try
 	{
 	    BlobKey blobKey = new BlobKey(key);
 
 	    InputStream stream = new BlobstoreInputStream(blobKey);
 
+	    // Reads blob data line by line upto first 10 line of file
 	    LineIterator iterator = IOUtils.lineIterator(stream, "UTF-8");
 
 	    int lines = 0;
@@ -66,6 +65,8 @@ public class UploadContactsAPI
 		lines++;
 	    }
 
+	    // It converts first 10 lines in the CSV and returns a JSONObject
+	    // (Now we are sending first 10 lines, normal method can be used).
 	    Hashtable result = ContactUtil.convertCSVToJSONArrayPartially(csv, "");
 
 	    System.out.println(result);
@@ -74,36 +75,11 @@ public class UploadContactsAPI
 	    success.put("success", true);
 	    success.put("blob_key", key);
 
-	    // Stores results in to a map
-	    // JSONArray csvArray = (JSONArray) result.get("result");
-
 	    // returns CSV file as a json object with key "data"
 	    success.put("data", result.get("result"));
 	    System.out.println(success);
 
 	    return success.toString();
-
-	    /*
-	     * System.out.println(request.getContentType()); // Reads data from
-	     * the request object InputStream file = request.getInputStream();
-	     * 
-	     * String csv = IOUtils.toString(file);
-	     * 
-	     * System.out.println(csv);
-	     * 
-	     * JSONObject success = new JSONObject(); success.put("success",
-	     * true); // success.put("blob_key", blob_key); // Stores results in
-	     * to a map
-	     * 
-	     * Hashtable result =
-	     * ContactUtil.convertCSVToJSONArrayPartially(csv, "email");
-	     * JSONArray csvArray = (JSONArray) result.get("result");
-	     * 
-	     * // returns CSV file as a json object with key "data"
-	     * success.put("data", csvArray); System.out.println(success);
-	     * 
-	     * return success.toString();
-	     */
 	}
 	catch (Exception e)
 	{
@@ -113,6 +89,16 @@ public class UploadContactsAPI
 	return null;
     }
 
+    /**
+     * Reads blobkey from the request and request also includes a contacts
+     * prototype (Order of the contact fields set on import table).
+     * 
+     * Request is sent to Backends from with payload contact and blob key.
+     * 
+     * @param request
+     *            {@link HttpServletRequest}
+     * @return {@link String}
+     */
     @Path("/save")
     @POST
     @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -120,31 +106,39 @@ public class UploadContactsAPI
     {
 	try
 	{
-	    String postURL = BackendServiceFactory.getBackendService().getBackendAddress(
-		    Globals.BULK_ACTION_BACKENDS_URL);
 
+	    // Reads the request body. It is included as payload to backends
 	    InputStream stream = request.getInputStream();
 	    byte[] bytes = IOUtils.toByteArray(stream);
 
 	    System.out.println(bytes);
-	    System.out.println("post url : " + postURL);
 
-	    Queue queue = QueueFactory.getQueue("bulk-actions-queue");
-	    TaskOptions taskOptions;
-
+	    // If blobkey is not present then request is returned
 	    String key = request.getParameter("key");
 	    if (StringUtils.isEmpty(key))
 		return;
 
+	    // Sets key in cache, which is used while deleting used Blob data
+	    // from cron
 	    CacheUtil.setCache(key, true);
 
-	    taskOptions = TaskOptions.Builder
+	    // Creates a backends url
+	    String postURL = BackendServiceFactory.getBackendService().getBackendAddress(
+		    Globals.BULK_ACTION_BACKENDS_URL);
+
+	    // Backends should be initialized using a task queue
+	    Queue queue = QueueFactory.getQueue("bulk-actions-queue");
+
+	    // Task is created setting host as backends url. It takes payload
+	    // and blobkey as path parameter
+	    TaskOptions taskOptions = TaskOptions.Builder
 		    .withUrl(
 			    "/core/api/bulk-actions/upload/"
 				    + String.valueOf(SessionManager.get().getDomainId() + "/"
 					    + request.getParameter("key"))).payload(bytes)
 		    .header("Content-Type", request.getContentType()).header("Host", postURL).method(Method.POST);
 
+	    // Task is added into queue
 	    queue.add(taskOptions);
 
 	    System.out.println("completed");
@@ -158,79 +152,3 @@ public class UploadContactsAPI
 
     }
 }
-
-// /**
-// * Returns whether the key of contacts list still exists in the memcache
-// * i.e., task is not completed. This method will be called repeatedly with
-// * specified time interval from client to check whether the uploaded
-// * contacts are saved. If contacts are save then key is removed from the
-// * memcache then this method will return true if key is moved from the
-// * memcache.
-// *
-// * @param key
-// * {@link String}, key of the contact list saved in memcache
-// * @return {@link Boolean} returns true if key is removed from memcache and
-// * vice-versa
-// */
-// @Path("save/status")
-// @POST
-// @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-// public boolean contactsUploadStatus(String memcache_key)
-// {
-//
-// if (CacheUtil.isPresent(memcache_key))
-// return false;
-//
-// return true;
-// }
-//
-// @Path("contacts/save")
-// @POST
-// @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-// @Produces(MediaType.TEXT_HTML)
-// public String saveBulkContacts(String contact, @QueryParam("key") String
-// blobKey) throws Exception
-// {
-//
-// String postURL =
-// BackendServiceFactory.getBackendService().getBackendAddress("contactsbulk").trim();
-//
-// CacheUtil.put(blobKey, blobKey);
-//
-// Queue queue = QueueFactory.getDefaultQueue();
-// // Add to queue
-// queue.add(TaskOptions.Builder.withPayload(new TaskRunner(contact, postURL,
-// blobKey)));
-//
-// return blobKey;
-//
-// }
-// }
-//
-// class TaskRunner implements DeferredTask
-// {
-// String contact;
-// String blobKey;
-// String postURL;
-//
-// public TaskRunner(String contact, String postURL, String blobKey)
-// {
-// this.contact = contact;
-// this.postURL = postURL;
-// this.blobKey = blobKey;
-// }
-//
-// public void run()
-// {
-// String URL = "http://" + postURL + "/backend/contactsbulk/?key=" + blobKey;
-// try
-// {
-// Util.accessURLUsingPost(URL, contact);
-// }
-// catch (Exception e)
-// {
-// // TODO Auto-generated catch block
-// e.printStackTrace();
-// }
-// }
-// }
