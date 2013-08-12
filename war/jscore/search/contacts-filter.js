@@ -32,47 +32,23 @@ $(function()
 	// Fetch filter result without changing route on click
 	$('.filter').live('click', function(e) {
 		
+		e.preventDefault();
+		eraseCookie('company_filter');
 		
-			e.preventDefault();
-			eraseCookie('company_filter');
-			
-			var filter_id = $(this).attr('id');
+		var filter_id = $(this).attr('id');
 
-			// Saves Filter in cookie
-			createCookie('contact_filter', filter_id)
+		// Saves Filter in cookie
+		createCookie('contact_filter', filter_id)
 
-			// Gets name of the filter, which is set as data
-			// attribute in filter
-			filter_name = $(this).attr('data');
+		// Gets name of the filter, which is set as data
+		// attribute in filter
+		filter_name = $(this).attr('data');
 
-			/*
-			 * Reads the custom view cookie, if cookie is available
-			 * then load filter results in custom view
-			 */
-			if (readCookie("contact_view"))
-			{
-				// Set url to custom view to load filter results
-				App_Contacts.contact_custom_view.collection.url = "core/api/filters/query/"
-						+ filter_id;
-				App_Contacts.contact_custom_view.collection.fetch();
-				return;
-			}
-
-			/*
-			 * If contactsListView is defined (default view) then
-			 * load filter results in default view
-			 */
-			if (App_Contacts.contactsListView
-					&& App_Contacts.contactsListView.collection)
-			{
-				// Set url to default view to load filter results
-				App_Contacts.contactsListView.collection.url = "core/api/filters/query/"
-						+ filter_id;
-				App_Contacts.contactsListView.collection.sort_collection = false;
-				
-				App_Contacts.contactsListView.collection.fetch();
-			}
-		});
+		App_Contacts.contacts();
+		return;
+		///removed old code from below,
+		// now filters will work only on contact, not company
+	});
 
 	/*
 	 * If default filter is selected, removes filter cookies an load contacts
