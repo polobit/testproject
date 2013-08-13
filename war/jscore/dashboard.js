@@ -35,7 +35,7 @@ function setUpDashboardEntities(el) {
 				url : '/core/api/tasks/my/dashboardtasks',
 				restKey : "task",
 				sortKey : "due",
-				templateKey : "tasks-dashboard1",
+				templateKey : "dashboard1-tasks",
 				individual_tag_name : 'tr',
 				postRenderCallback: function(el) {
 					head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
@@ -44,8 +44,6 @@ function setUpDashboardEntities(el) {
 				}
 			});
 			
-			
-			totalRows=1;
 			tasksDashboardListView.appendItem = append_tasks_dashboard;
 			tasksDashboardListView.collection.fetch();
 		    $('#my-tasks').html(tasksDashboardListView.el);
@@ -66,7 +64,7 @@ function setUpDashboardEntities(el) {
 		        }
 		    });
 			myDeals.collection.fetch();
-		    	$('#my-deals').html(myDeals.el);
+		    $('#my-deals').html(myDeals.el);
 		    	
 		    var workflowsListView = new Base_Collection_View({
 				url : '/core/api/campaigns/logs/recent?page_size=5',
@@ -78,7 +76,7 @@ function setUpDashboardEntities(el) {
 					head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
 						$("time.log-created-time", el).timeago();
 					});
-		    }
+				}
 			});
 		    
 		
