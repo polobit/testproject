@@ -18,7 +18,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
-import com.agilecrm.reports.deferred.ReportsDeferredTaskInstantEmail;
+import com.agilecrm.reports.deferred.ReportsInstantEmailDeferredTask;
 import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.taskqueue.Queue;
@@ -248,7 +248,7 @@ public class ReportsUtil
 
     public static void sendReport(Long report_id)
     {
-	ReportsDeferredTaskInstantEmail reportsDeferredTask = new ReportsDeferredTaskInstantEmail(report_id);
+	ReportsInstantEmailDeferredTask reportsDeferredTask = new ReportsInstantEmailDeferredTask(report_id);
 
 	Queue queue = QueueFactory.getDefaultQueue();
 
