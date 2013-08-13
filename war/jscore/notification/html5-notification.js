@@ -1,3 +1,10 @@
+$(function() {
+	
+	// Request for html5 notification permission.
+	request_notification_permission();
+
+});
+
 /**
  * Create the Notification if permissions allowed in the browser.
  * 

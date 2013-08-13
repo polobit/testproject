@@ -221,7 +221,7 @@ var SettingsRouter = Backbone.Router.extend({
 			{
 				head.js(LIB_PATH+'lib/bootstrapSwitch.js',function(){							
 					showSwitchChanges(el);
-					checkBrowserNotifications(el);					
+					check_browser_notification_settings(el);					
 				});	
 				try
 				{
@@ -230,6 +230,9 @@ var SettingsRouter = Backbone.Router.extend({
 				{
 					console.log(err);
 				}
+				
+				// plays notification sounds
+				notification_play_button()
 			}
 		});
         $('#prefs-tabs-content').html(view.render().el);
