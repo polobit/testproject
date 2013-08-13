@@ -3,7 +3,6 @@
  * chooses to add/manage widgets from any contact detailed view, list of
  * available widgets are shown to add or delete if already added.
  */
-
 var Catalog_Widgets_View = null;
 
 // Show when Add widget is selected by user in contact view
@@ -11,18 +10,16 @@ var Catalog_Widgets_View = null;
  * pickWidget method is called when add/manage widgets link in contact details
  * is clicked, it creates a view of widget collection showing add/delete based
  * on is_added variable in widget model, which is checked in template using
- * handlebars
+ * handle bars
  */
-function pickWidget() {
-	Catalog_Widgets_View = new Base_Collection_View({
-		url : '/core/api/widgets/default',
-		restKey : "widget",
-		templateKey : "widgets-add",
-		sort_collection : false,
-		individual_tag_name : 'div'
-	});
+function pickWidget()
+{
+	Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default', restKey : "widget", templateKey : "widgets-add",
+		sort_collection : false, individual_tag_name : 'div' });
 
+	// Append widgets into view by organizing them
 	Catalog_Widgets_View.appendItem = organize_widgets;
+
 	// Fetch the list of widgets
 	Catalog_Widgets_View.collection.fetch();
 
@@ -30,30 +27,37 @@ function pickWidget() {
 	$('#content').html(Catalog_Widgets_View.el);
 }
 
+/**
+ * Organizes widgets into different categories like (SOCIAL, SUPPORT, EMAIL,
+ * CALL, BILLING.. etc) to show in the add widget page, based on the widget_type
+ * fetched from Widget object
+ * 
+ * @param base_model
+ */
 function organize_widgets(base_model)
 {
-	var itemView = new Base_List_View({
-		model : base_model,
-		template : this.options.templateKey + "-model",
-		tagName : 'div',
-	});
+	var itemView = new Base_List_View({ model : base_model, template : this.options.templateKey + "-model", tagName : 'div', });
 
-	// add to the right box - overdue, today, tomorrow etc.
+	// Get widget type from model (widget object)
 	var widget_type = base_model.get('widget_type');
-	
+
+	/*
+	 * Appends the model (widget) to its specific div, based on the widget_type
+	 * as div id (div defined in widget_add.html)
+	 */
 	if (widget_type == "SOCIAL")
 		$('#social', this.el).append($(itemView.render().el).addClass('span4'));
-		
-	if(widget_type == "SUPPORT")
+
+	if (widget_type == "SUPPORT")
 		$('#support', this.el).append($(itemView.render().el).addClass('span4'));
-	
-	if(widget_type == "EMAIL")
+
+	if (widget_type == "EMAIL")
 		$('#email', this.el).append($(itemView.render().el).addClass('span4'));
-	
-	if(widget_type == "CALL")
+
+	if (widget_type == "CALL")
 		$('#call', this.el).append($(itemView.render().el).addClass('span4'));
-	
-	if(widget_type == "BILLING")
+
+	if (widget_type == "BILLING")
 		$('#billing', this.el).append($(itemView.render().el).addClass('span4'));
 }
 
@@ -62,71 +66,82 @@ function organize_widgets(base_model)
  * widget model, Add and delete functionalities of the widgets are defined in
  * this init function
  */
-$(function() {
-
+$(function()
+{
+	// adding widget
 	/**
 	 * When user clicks on add-widget, gets the widget-name which is set to add
 	 * anchor tag and gets the model from the collection with widget name and
 	 * add widget then navigates back to the contact-details page
 	 */
-	$('.add-widget').live(
-			'click',
-			function(e) {
+	$('.add-widget').live('click', function(e)
+	{
+		/*
+		 * We make add button on a widget disabled on click of it. This is done
+		 * to avoid continuous click in a short time, like double click on add
+		 * button
+		 */
+		if ($(this).attr("disabled"))
+			return;
 
-				if ($(this).attr("disabled"))
-			        return;
-			    
-			    $(this).attr("disabled", "disabled");
-			    
-				// Reads the name of the widget to be added
-				var widget_name = $(this).attr('widget-name');
-				if (Catalog_Widgets_View == null) {
-					return;
-				}
+		// set attribute disabled as disabled
+		$(this).attr("disabled", "disabled");
 
-				// Gets Widget Model from collection based on the name attribute
-				// of the widget model
-				var models = Catalog_Widgets_View.collection.where({
-					name : widget_name
-				});
+		// Reads the name of the widget to be added
+		var widget_name = $(this).attr('widget-name');
 
-				// Saves widget model and on success navigate back to contact
-				// detailed view
-				var widgetModel = new Backbone.Model();
-				widgetModel.url = '/core/api/widgets';
-				widgetModel.save(models[0].toJSON(), {
-					success : function(data) {
-						
-						// Add it to widgets collections so it do not have to fetch all the contacts
-						if(WIDGETS_VIEW && WIDGETS_VIEW.collection)
-							WIDGETS_VIEW.collection.add(new BaseModel(data.toJSON()));
-						
-						if(!App_Contacts || !App_Contacts.contactDetailView || !App_Contacts.contactDetailView.model)
-						{	
-							Backbone.history.navigate("contacts", {
-								trigger : true
-							});
-							
-							return;
-						}	
-						// Navigates back to the contact id form
-						Backbone.history.navigate("contact/"
-								+ App_Contacts.contactDetailView.model.id, {
-							trigger : true
-						});
-						
-					}
-				});
+		if (Catalog_Widgets_View == null)
+			return;
 
-			});
+		/*
+		 * Get widget model from collection based on the name attribute of the
+		 * widget model
+		 */
+		var models = Catalog_Widgets_View.collection.where({ name : widget_name });
+
+		/*
+		 * Saves widget model and on success navigate back to contact detailed
+		 * view
+		 */
+		var widgetModel = new Backbone.Model();
+
+		// URL to connect with widgets
+		widgetModel.url = '/core/api/widgets';
+
+		widgetModel.save(models[0].toJSON(), { success : function(data)
+		{
+			// Checks if Widget_View is defined and adds widget to collection
+			if (Widgets_View && Widgets_View.collection)
+				Widgets_View.collection.add(new BaseModel(data.toJSON()));
+
+			/*
+			 * If contacts view is not defined, redirected to list of contacts
+			 * page after adding widget
+			 */
+			if (!App_Contacts || !App_Contacts.contactDetailView || !App_Contacts.contactDetailView.model)
+			{
+				Backbone.history.navigate("contacts", { trigger : true });
+				return;
+			}
+
+			// Navigates back to the contact id form
+			Backbone.history.navigate("contact/" + App_Contacts.contactDetailView.model.id, { trigger : true });
+
+		} });
+
+	});
 
 	// Deleting widget
 	/**
 	 * When user chooses to delete a widget, on confirmation sends delete
 	 * request based on the name of the widget
 	 */
-	$('#delete-widget').die().live('click', function(e) {
+	$('#delete-widget').die().live('click', function(e)
+	{
+		// Fetch widget name from the widget on which delete is clicked
 		var widget_name = $(this).attr('widget-name');
+
+		// If not confirmed to delete, return
 		if (!confirm("Are you sure to delete " + widget_name))
 			return;
 
@@ -135,42 +150,36 @@ $(function() {
 		 * success fetches the widgets to reflect the changes is_added, to show
 		 * add widget in the view instead of delete option
 		 */
-		$.ajax({
-			type : 'DELETE',
-			url : '/core/api/widgets/' + widget_name,
-			contentType : "application/json; charset=utf-8",
-			success : function(data) {
-				
-				// Remove widgets from widget collection
-				if(WIDGETS_VIEW && WIDGETS_VIEW.collection)
-					{
-						var model = WIDGETS_VIEW.collection.where({
-							name : widget_name
-						});
-						
-						WIDGETS_VIEW.collection.remove(model);
-					}
+		$.ajax({ type : 'DELETE', url : '/core/api/widgets/' + widget_name, contentType : "application/json; charset=utf-8",
 
-				// Call Fetch to update widget models
-				Catalog_Widgets_View.collection.fetch();
-				$('#' + widget_name + "collection").remove();
-				
-				if(!App_Contacts || !App_Contacts.contactDetailView || !App_Contacts.contactDetailView.model)
-				{	
-					Backbone.history.navigate("contacts", {
-						trigger : true
-					});
-					
-					return;
-				}	
-				// Navigates back to the contact id form
-				Backbone.history.navigate("contact/"
-						+ App_Contacts.contactDetailView.model.id, {
-					trigger : true
-				});
-				
-			},
-			dataType : 'json'
-		});
+		success : function(data)
+		{
+			/*
+			 * If Widgets_View is defined, remove widgets from widget collection
+			 */
+			if (Widgets_View && Widgets_View.collection)
+			{
+				// Fetch widget from collection based on widget_name
+				var model = Widgets_View.collection.where({ name : widget_name });
+				Widgets_View.collection.remove(model);
+			}
+
+			// Call fetch on collection to update widget models
+			Catalog_Widgets_View.collection.fetch();
+
+			/*
+			 * If contacts view is not defined, redirected to list of contacts
+			 * page after adding widget
+			 */
+			if (!App_Contacts || !App_Contacts.contactDetailView || !App_Contacts.contactDetailView.model)
+			{
+				Backbone.history.navigate("contacts", { trigger : true });
+
+				return;
+			}
+			// Navigates back to the contact id form
+			Backbone.history.navigate("contact/" + App_Contacts.contactDetailView.model.id, { trigger : true });
+
+		}, dataType : 'json' });
 	});
 });
