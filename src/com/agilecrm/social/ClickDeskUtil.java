@@ -1,5 +1,7 @@
 package com.agilecrm.social;
 
+import java.io.IOException;
+
 import org.json.JSONArray;
 
 import com.agilecrm.util.HTTPUtil;
@@ -64,12 +66,17 @@ public class ClickDeskUtil
 	    System.out.println("In ClickDesk exception: ");
 	    e.printStackTrace();
 
-	    /*
-	     * ClickDesk returns 401 for improper details, else exception
-	     * returned from clickDesk is thrown
-	     */
+	    // ClickDesk returns 401 for improper details
 	    if (response.contains("401"))
 		throw new Exception("Authentication failed. Please try again");
+
+	    /*
+	     * ClickDesk returns 404 for IO exception, else exception returned
+	     * from clickDesk is thrown
+	     */
+	    if (response.contains("404"))
+		throw new IOException(e.getMessage());
+
 	    throw e;
 	}
 
