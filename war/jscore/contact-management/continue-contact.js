@@ -326,11 +326,11 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         	// Removes disabled attribute of save button
     		$(saveBtn).removeAttr('disabled');
     		
-        	// Remove loading image
+        	// Remove loading image [TODO]
         	$('#' + modal_id).find('span.save-status img').remove();
         	$('#' + form_id).find('span.save-status img').remove();
         	
-            // Shows eroor alert of duplicate contacts
+            // Shows error alert of duplicate contacts
         	$('#' + modal_id).find(".duplicate-email").html('<div class="alert alert-error" style="display:none"><a class="close" data-dismiss="alert" href="#">&times</a>Please change email. A contact already exists with this email.</div>');
 
             $('#' + modal_id).find(".alert").show();
@@ -528,12 +528,6 @@ $(function () {
     
  // Update button click event in continue-company
     $("#company-update").die().live('click', function (e) {
-        var model=serialize_and_save_continue_contact(e, 'continueCompanyForm', 'companyModal', false, false, this);
-        
-        if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection.get(model.id) != null)	
-        {
-        	App_Contacts.contactsListView.collection.remove(model.id);
-      		App_Contacts.contactsListView.collection.add(model);
-        }
+        serialize_and_save_continue_contact(e, 'continueCompanyForm', 'companyModal', false, false, this);
     });
 });

@@ -10,9 +10,12 @@ import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.contact.deferred.TagsDeferredTask;
@@ -285,6 +288,20 @@ public class Contact extends Cursor
 			// notifications/triggers with new tags
 			oldContact.tags = oldContact.getContactTags();
 		}
+
+		// Check for already existing email if any
+		String myMail = this.getContactFieldValue("EMAIL");
+		int countEmails = dao.getCountByProperty("properties.value = ", myMail);
+
+		// Throw BAD_REQUEST if countEmails>=2 ( sure duplicate contact, this
+		// and some other )
+		// otherwise if countEmails==1, make sure its not due to previous value
+		// of this(current) Contact
+		if (countEmails >= 2
+				|| (countEmails == 1 && (id == null || !StringUtils.equalsIgnoreCase(
+						oldContact.getContactFieldValue("EMAIL"), myMail))))
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("Sorry, duplicate contact found with the same email address.|" + myMail).build());
 
 		dao.put(this);
 

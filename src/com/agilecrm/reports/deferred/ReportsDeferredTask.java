@@ -1,22 +1,35 @@
 package com.agilecrm.reports.deferred;
 
-import java.util.List;
-import java.util.Map;
-
 import org.json.JSONException;
 
-import com.agilecrm.reports.Reports;
+import com.agilecrm.reports.ReportServlet;
 import com.agilecrm.reports.ReportsUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
+/**
+ * <code>ReportsDeferredTask</code> generates reports for the domain and sends
+ * generated reports. It fetches reports based on the duration(Daily, Weekly,
+ * Montly) set in reports.
+ * 
+ * Task is initialized from {@link ReportServlet}, which is called by cron with
+ * duration query parameter in URL
+ * 
+ * @author Yaswanth
+ * 
+ */
 @SuppressWarnings("serial")
 public class ReportsDeferredTask implements DeferredTask
 {
+    /**
+     * Domain of the account
+     */
+    private final String domain;
 
-    private Map<String, List<Reports>> reportsMap;
-    private String domain;
-    private String duration;
+    /**
+     * Duration of report
+     */
+    private final String duration;
 
     public ReportsDeferredTask(String domain, String duration)
     {
@@ -31,8 +44,9 @@ public class ReportsDeferredTask implements DeferredTask
 	NamespaceManager.set(domain);
 	try
 	{
-	    ReportsUtil.sendReportsToUsers(Reports
-		    .getAllReportsByDuration(duration));
+	    // Util function fetches reports based on duration, generates
+	    // reports and sends report
+	    ReportsUtil.sendReportsToUsers(ReportsUtil.getAllReportsByDuration(duration));
 	}
 	catch (JSONException e1)
 	{

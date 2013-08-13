@@ -16,7 +16,7 @@
 					{{else}}
 						<li><a href="#"><i widget="{{name}}" class="widget-minimize icon-minus"></i></a></li>
 					{{/if}}
-					<li><a href="#" id="{{name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="icon-wrench" style="font-size:1.12em;"></i></a></li>
+					<li><a id="{{name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="icon-wrench" style="font-size:1.12em;cursor:pointer;"></i></a></li>
 				</ul>
 			</div>
 		</div>
@@ -26,7 +26,6 @@
 			{{/unless}}
 		</div>
 	</div>
-
 </script>
 
 <script id="widgets-collection-template" type="text/html">
@@ -51,10 +50,3 @@
  <a class="btn btn-primary pull-right" href='#add-widget'><i class="icon-plus-sign"></i>&nbsp;&nbsp;Manage widgets</a>
 {{/unless}}
 </script>
-
-<!-- <li><a href="#" id="{{name}}_plugin_delete" rel="tooltip" title="Delete this person"><i class="icon-remove icon-gray"></i></a></li>
--->
-
-		
-		
-		
