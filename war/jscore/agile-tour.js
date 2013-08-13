@@ -81,9 +81,13 @@ function create_tour_steps(el)
 
 var tour;
 
+/**
+ * 
+ * @param key
+ * @param el
+ */
 function start_tour(key, el)
 {
-	var tour_flag = false;
 	tour = undefined;
 	var tour_flag = false;
 	if (!key)
@@ -98,6 +102,7 @@ function start_tour(key, el)
 		tour_flag = true;
 	});
 }
+
 function initiate_tour(key, el)
 {
 	var tour_status_cookie = readCookie("agile_tour");
