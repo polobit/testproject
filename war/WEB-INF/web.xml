@@ -45,6 +45,16 @@
 		<servlet-name>GmailContextualGadget</servlet-name>
 		<url-pattern>/gmail</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>GadgetServlet</servlet-name>
+		<servlet-class>com.agilecrm.gadget.GadgetServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GadgetServlet</servlet-name>
+		<url-pattern>/gmail-template</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>Cron</servlet-name>
 		<servlet-class>com.campaignio.cron.Cron</servlet-class>
