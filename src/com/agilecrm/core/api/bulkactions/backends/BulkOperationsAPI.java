@@ -46,8 +46,8 @@ public class BulkOperationsAPI
     @Path("delete/contacts/{current_user}")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteContacts(@FormParam("ids") String model_ids, @FormParam("filter") String filter, @PathParam("current_user") Long current_user_id)
-	    throws JSONException
+    public void deleteContacts(@FormParam("ids") String model_ids, @FormParam("filter") String filter,
+	    @PathParam("current_user") Long current_user_id) throws JSONException
     {
 	Integer count = 0;
 	if (!StringUtils.isEmpty(filter))
@@ -82,8 +82,9 @@ public class BulkOperationsAPI
     @Path("/change-owner/{new_owner}/{current_user}")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void changeOwnerToContacts(@FormParam("contact_ids") String contact_ids, @PathParam("new_owner") String new_owner,
-	    @FormParam("filter") String filter, @PathParam("current_user") Long current_user) throws JSONException
+    public void changeOwnerToContacts(@FormParam("contact_ids") String contact_ids,
+	    @PathParam("new_owner") String new_owner, @FormParam("filter") String filter,
+	    @PathParam("current_user") Long current_user) throws JSONException
     {
 	List<Contact> contact_list = null;
 
@@ -96,7 +97,8 @@ public class BulkOperationsAPI
 
 	ContactUtil.changeOwnerToContactsBulk(contact_list, new_owner);
 
-	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.OWNER_CHANGE, String.valueOf(contact_list.size()));
+	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.OWNER_CHANGE,
+		String.valueOf(contact_list.size()));
     }
 
     /**
@@ -112,8 +114,9 @@ public class BulkOperationsAPI
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void subscribeContactsBulk(@FormParam("contact_ids") String contact_ids, @PathParam("workflow-id") Long workflowId,
-	    @FormParam("filter") String filter, @PathParam("current_user_id") Long current_user_id) throws JSONException
+    public void subscribeContactsBulk(@FormParam("contact_ids") String contact_ids,
+	    @PathParam("workflow-id") Long workflowId, @FormParam("filter") String filter,
+	    @PathParam("current_user_id") Long current_user_id) throws JSONException
     {
 	List<Contact> contact_list = null;
 
@@ -124,7 +127,8 @@ public class BulkOperationsAPI
 
 	WorkflowSubscribeUtil.subscribeDeferred(contact_list, workflowId);
 
-	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ENROLL_CAMPAIGN, String.valueOf(contact_list.size()));
+	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ENROLL_CAMPAIGN,
+		String.valueOf(contact_list.size()));
     }
 
     /**
@@ -140,8 +144,8 @@ public class BulkOperationsAPI
     @Path("contact/tags/{current_user}")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void addTagsToContacts(@FormParam("contact_ids") String contact_ids, @FormParam("data") String tagsString, @FormParam("filter") String filter,
-	    @PathParam("current_user") Long current_user) throws JSONException
+    public void addTagsToContacts(@FormParam("contact_ids") String contact_ids, @FormParam("data") String tagsString,
+	    @FormParam("filter") String filter, @PathParam("current_user") Long current_user) throws JSONException
     {
 	System.out.println(filter);
 	System.out.println("current user : " + current_user);
@@ -183,15 +187,24 @@ public class BulkOperationsAPI
 	    ContactUtil.addTagsToContactsBulk(contacts, tagsArray);
 	    count = contacts.size();
 	}
-	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ADD_TAGS, Arrays.asList(tagsArray).toString(), String.valueOf(count));
+	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ADD_TAGS, Arrays.asList(tagsArray)
+		.toString(), String.valueOf(count));
     }
 
+    /**
+     * It runs in backends. Fetches blob data based on the blob key sent and
+     * call CSV utility function is called to create contacts, based on the
+     * contact prototype sent.
+     * 
+     * @param contact
+     * @param ownerId
+     * @param key
+     */
     @Path("/upload/{owner_id}/{key}")
     @POST
     @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public void contactsBulkSave(Contact contact, @PathParam("owner_id") String ownerId, @PathParam("key") String key)
     {
-	// Contact contact = null;
 	System.out.println("backend running");
 
 	System.out.println(key);

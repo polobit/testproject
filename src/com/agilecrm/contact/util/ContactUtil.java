@@ -442,7 +442,13 @@ public class ContactUtil
 
 	    contact.id = null;
 	    contact.created_time = 0l;
+
+	    // Sets owner of contact explicitly. If owner is not set, contact
+	    // prepersist
+	    // tries to read it from session, and session is not shared with
+	    // backends
 	    contact.setContactOwner(ownerKey);
+
 	    contact.properties = new ArrayList<ContactField>();
 	    for (int j = 0; j < csvValues.length; j++)
 	    {
@@ -609,13 +615,14 @@ public class ContactUtil
      */
     public static boolean validateEmail(final String hex)
     {
-    
-        String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-    
-        Pattern pattern = Pattern.compile(EMAIL_PATTERN);
-    
-        Matcher matcher = pattern.matcher(hex);
-        return matcher.matches();
-    
+
+	String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+		+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
+	Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+
+	Matcher matcher = pattern.matcher(hex);
+	return matcher.matches();
+
     }
 }

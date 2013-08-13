@@ -20,40 +20,41 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
  */
 public class UploadServlet extends HttpServlet
 {
-	private BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+    private final BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
 
-	public void service(HttpServletRequest req, HttpServletResponse res)
+    @Override
+    public void service(HttpServletRequest req, HttpServletResponse res)
+    {
+
+	System.out.println("blob services");
+
+	/*
+	 * Reads blobs in the request.
+	 */
+	Map<String, BlobKey> blobs = blobstoreService.getUploadedBlobs(req);
+
+	System.out.println(blobs);
+
+	System.out.println(req.getParameterNames());
+
+	// Read blobkey of the file uploaded (file is the field name in the
+	// form)
+	BlobKey blobKey = blobs.get("file");
+
+	System.out.println("blobkey : " + blobKey);
+
+	if (blobKey == null)
+	    return;
+
+	try
 	{
-
-		System.out.println("blob services");
-
-		/*
-		 * Reads blobs in the request.
-		 */
-		Map<String, BlobKey> blobs = blobstoreService.getUploadedBlobs(req);
-
-		System.out.println(blobs);
-
-		System.out.println(req.getParameterNames());
-
-		// Read blobkey of the file uploaded (file is the field name in the
-		// form)
-		BlobKey blobKey = blobs.get("file");
-
-		System.out.println("blobkey : " + blobKey);
-
-		if (blobKey == null)
-			return;
-
-		try
-		{
-			// Forward request back to JSP with blobkey as parameter
-			res.sendRedirect("/upload-contacts.jsp?key=" + blobKey.getKeyString());
-		}
-		catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	    // Forward request back to JSP with blobkey as parameter
+	    res.sendRedirect("/upload-contacts.jsp?key=" + blobKey.getKeyString());
 	}
+	catch (IOException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+    }
 }
