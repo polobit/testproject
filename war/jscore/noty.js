@@ -1,3 +1,4 @@
+/** The function is commented inorder to implement later. It shows Upgrade message to free users**/
 //$(function(){
 //
 //	var accountprefs = Backbone.Model.extend({
@@ -74,20 +75,46 @@
 
 var CONTACTS_HARD_RELOAD = false;
 
+/**
+ * Shows noty popup for bulk actions like bulk contacts deletion, 
+ * adding bulk contacts to campaign etc.
+ * 
+ * @param type - 
+ *             type of noty. For e.g. noty of information type is blue.
+ * @param message -
+ *             message to be shown on noty.
+ * @param position -
+ *             position of noty like bottomRight, top etc.            
+ *                     
+ */
 function bulkActivitiesNoty(type, message, position) {
 	CONTACTS_HARD_RELOAD = true;
 	
+	// if no position, default bottomRight
 	if(!position)
 	{
-		showNoty1(type, message.message, "bottomRight")
+		showNotyPopUp(type, message.message, "bottomRight")
 		return;
 	}
 		
-	showNoty1(type, message.message, position)
+	// shows noty in given position
+	showNotyPopUp(type, message.message, position)
 }
-function showNoty1(type, message, position) {
+
+/**
+ * Loads files required for noty and calls notySetup to show 
+ * noty with the given options.
+ *
+ * @param type - 
+ *             type of noty. For e.g. noty of information type is blue.
+ * @param message -
+ *             message to be shown on noty.
+ * @param position -
+ *             position of noty like bottomRight, top etc.
+ */
+function showNotyPopUp(type, message, position) {
 	
-	var scripts = ""
+	// for top position
 	if(position == "top")
 		head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
 		+ 'lib/noty/layouts/top.js', LIB_PATH
@@ -95,6 +122,7 @@ function showNoty1(type, message, position) {
 			notySetup(type, message, position)
 		});
 	
+	// for bottomRight position
 	if(position == "bottomRight")
 		head.js(LIB_PATH + 'lib/noty/jquery.noty.js',  LIB_PATH
 				+ 'lib/noty/layouts/bottom.js', LIB_PATH
@@ -103,6 +131,7 @@ function showNoty1(type, message, position) {
 					notySetup(type, message, position)
 				});
 	
+	// for bottomLeft position
 	if(position == "bottomLeft")
 		head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
 				+ 'lib/noty/layouts/bottomLeft.js', LIB_PATH
@@ -111,8 +140,19 @@ function showNoty1(type, message, position) {
 				});		
 }
 
+/**
+ * Sets noty popup to show message in the given position and type.
+ * 
+ * @param type - 
+ *             type of noty. For e.g. noty of information type is blue.
+ * @param message -
+ *             message to be shown on noty.
+ * @param position -
+ *             position of noty like bottomRight, top etc.*/
 function notySetup(type, message, position) {
-		$.noty.closeAll()
+		
+	    // close all other noty before showing current
+	    $.noty.closeAll()
 
 		var n = noty({
 			text : message,
@@ -134,7 +174,7 @@ function notySetup(type, message, position) {
 		});
 	}
 
-function get_random_message() {
+/*function get_random_message() {
 
 	var messages = [ "Thanks for trying Agile CRM.", "You can upgrade here." ];
 
@@ -142,4 +182,4 @@ function get_random_message() {
 	// console.log(random + messages[random]);
 
 	return messages[random];
-}
+}*/
