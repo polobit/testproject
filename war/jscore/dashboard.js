@@ -108,3 +108,13 @@ function setupSubscriptionDetails(el)
 			});
 		}})
 }
+
+$(function(){
+	$('#dashboard-contacts-model-list > tr').live('click', function(e) {
+		var id = $(this).find(".data").attr("data");
+		App_Contacts.navigate("contact/" + id , {
+			trigger : true
+		});
+	});
+	
+});

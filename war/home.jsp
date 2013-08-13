@@ -166,7 +166,7 @@
 							<li id="workflowsmenu" style="<%=style_campaign %>" ><a href="#workflows"><i
 									class="icon-sitemap icon-white"></i> Campaigns</a></li>
 							<li id="reportsmenu"><a href="#reports"><i
-									class="icon-share icon-white"></i> Reports</a></li>
+									class="icon-bar-chart icon-white"></i> Reports</a></li>
 
 							<li>
 								<form id="searchForm" class=" navbar-search"
