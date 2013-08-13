@@ -326,14 +326,24 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         	// Removes disabled attribute of save button
     		$(saveBtn).removeAttr('disabled');
     		
-        	// Remove loading image [TODO]
+        	// Remove loading image
         	$('#' + modal_id).find('span.save-status img').remove();
         	$('#' + form_id).find('span.save-status img').remove();
         	
             // Shows error alert of duplicate contacts
-        	$('#' + modal_id).find(".duplicate-email").html('<div class="alert alert-error" style="display:none"><a class="close" data-dismiss="alert" href="#">&times</a>Please change email. A contact already exists with this email.</div>');
+        	
+        	if($('#' + modal_id).css('display')!=='none')
+        	{
+        		$('#' + modal_id).find(".duplicate-email").html('<div class="alert alert-error" style="display:none"><a class="close" data-dismiss="alert" href="#">&times</a>Please change email. A contact already exists with this email.</div>');
 
-            $('#' + modal_id).find(".alert").show();
+        		$('#' + modal_id).find(".alert").show();
+        	}
+        	else if($('#' + form_id).css('display')!=='none')
+        	{
+        		$('#' + form_id).find(".duplicate-email").html('<div class="alert alert-error" style="display:none"><a class="close" data-dismiss="alert" href="#">&times</a>Please change email. <br/> A contact already exists with this email &lt; '+response.responseText.split('|')[1]+' &gt;.</div>');
+
+        		$('#' + form_id).find(".alert").show();
+        	}
         }
     });
 

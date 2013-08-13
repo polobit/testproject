@@ -8,9 +8,15 @@
 				</div>
 				{{else}}
 					{{#if icon}}
-						<div class="box-left" style="margin-top:5px">
-							<i class="{{icon}}" style="margin-top:10px"></i>
-						</div>
+						{{#if description}}
+							<div class="box-left" style="margin-top:15px">
+								<i class="{{icon}}"></i>
+							</div>
+						{{else}}
+							<div class="box-left" style="margin-top:5px">
+								<i class="{{icon}}"></i>
+							</div>
+						{{/if}}
 					{{/if}}
 			{{/if}}
         
@@ -20,7 +26,7 @@
 				<div class="box-right">
 		{{/if}}
             <h3>{{title}}</h3>
-            {{#if description}}<div class="text">{{description}}</div>{{/if}}
+            {{#if description}}<div class="text">{{{description}}}</div>{{/if}}
 			{{#if learn_more}}
             	<a href="#">{{learn_more}}</a><br />
 			{{/if}}
