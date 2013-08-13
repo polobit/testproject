@@ -149,7 +149,7 @@ public class ReportsAPI
     }
 
     /**
-     * Reports delete funtionality
+     * Reports delete functionality
      * 
      * @param model_ids
      * @throws JSONException
