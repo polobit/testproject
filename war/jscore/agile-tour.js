@@ -1,5 +1,9 @@
 var Agile_Tour = {};
 
+/**
+ * Returns Agile_tour steps JSON
+ * @param el
+ */
 function create_tour_steps(el)
 {
 
@@ -82,6 +86,7 @@ function create_tour_steps(el)
 var tour;
 
 /**
+ * gets the key and initializes the tour with steps from the JSON Object
  * 
  * @param key
  * @param el
@@ -93,22 +98,36 @@ function start_tour(key, el)
 	if (!key)
 		key = Current_Route;
 
+	// Tour should be initialized only after page is loaded
 	$(el).live('agile_collection_loaded', function()
 	{
 		if (tour_flag)
 			return;
 
+		// Initializes the tour and sets tour flag to ensure tour won't load
+		// again
 		initiate_tour(key, el);
 		tour_flag = true;
 	});
 }
 
+/**
+ * Initializes the tour with based fetched from JSON object defined. key can
+ * either be sent explicitly or it takes them from current route
+ * 
+ * @param key
+ * @param el
+ */
 function initiate_tour(key, el)
 {
+	// Reads cookie which is set in Homeservlet when new user is created
 	var tour_status_cookie = readCookie("agile_tour");
+
+	// If cookies is not preset it returns back
 	if (!tour_status_cookie)
 		return;
 
+	// If is undefined the current route is assigned to tour
 	if (!key)
 	{
 		if (!Current_Route)
@@ -117,22 +136,29 @@ function initiate_tour(key, el)
 		key = Current_Route;
 	}
 
-	console.log(tour);
-
+	// Parses cookie. It is parsed 2 times or it is returing string instead of
+	// JSON object
 	tour_status_cookie = JSON.parse(JSON.parse(tour_status_cookie));
+
+	// Reads whether tour is ended on current route
 	tourStatus = tour_status_cookie[key];
+
+	// If tour is not there on current page then it is returned back
 	if (!tourStatus)
 		return;
 
+	// If JSON Object is empty, then creates new JSON Object
 	if ($.isEmptyObject(Agile_Tour))
 		create_tour_steps(el);
 
 	if (Agile_Tour[key])
 		head.js('lib/bootstrap-tour-agile.min.js', function()
 		{
+			// Uses bootstrap tour
 			tour = new Tour({ name : key + "-tour", debug : true, useLocalStorage : true, endOnLast : true, onEnd : function(tour)
 			{
 
+				// Remove from cookie on ending tour
 				$("." + key + "-tour").remove();
 				delete tour_status_cookie[key];
 
@@ -142,10 +168,11 @@ function initiate_tour(key, el)
 					return;
 				}
 
-				// Stringified it twice to maintain consistency with the cookie
-				// set from backend
+				/*
+				 * Stringified it twice to maintain consistency with the cookie
+				 * set from backend. Creates JSON with current step removed.
+				 */
 				createCookie("agile_tour", JSON.stringify(JSON.stringify(tour_status_cookie)));
-				// }
 			} });
 
 			tour.addSteps(Agile_Tour[key]);
@@ -156,6 +183,9 @@ function initiate_tour(key, el)
 
 }
 
+/**
+ * Creates a tour cookie and initializes tour on current page.
+ */
 function reinitialize_tour_on_current_route()
 {
 
@@ -185,8 +215,10 @@ function reinitialize_tour_on_current_route()
 	// Set tour back to true and save in cookie.
 	tour_status_cookie[key] = true;
 
+	// Removes the current step from localstorage, it is set by bootstrap tour
 	localStorage.removeItem(key + "-tour_current_step");
 
+	// Creates a new tour cookie
 	createCookie("agile_tour", JSON.stringify(JSON.stringify(tour_status_cookie)));
 
 	// Initialize tour
@@ -195,6 +227,9 @@ function reinitialize_tour_on_current_route()
 
 $(function()
 {
+	/**
+	 * Selecting tour enables tour again.
+	 */
 	$('#agile-page-tour').click(function(e)
 	{
 		e.preventDefault();
