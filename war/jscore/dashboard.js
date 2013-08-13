@@ -12,12 +12,12 @@ function setup_dashboard(el)
 	set_profile_noty();
 	
 	// Show recently view contacts by current user
-	show_recent_contacts(el);
+	show_dashboard_contacts(el);
 
 	// Shows deals, tasks, workflows
-	show_tasks(el);
-	show_deals(el);
-	show_workflows(el);
+	show_dashboard_tasks(el);
+	show_dashboard_deals(el);
+	show_dashboard_workflows(el);
 }
 
 
@@ -26,7 +26,7 @@ function setup_dashboard(el)
  * 5 contacts
  * @param el
  */
-function show_recent_contacts(el)
+function show_dashboard_contacts(el)
 {
 	var my_recent_contacts = new Base_Collection_View({
 		url: 'core/api/contacts/recent?page_size=5' ,
@@ -44,7 +44,7 @@ function show_recent_contacts(el)
  * Fetches tasks due tasks
  * @param el
  */
-function show_tasks(el)
+function show_dashboard_tasks(el)
 {
 	var task_dashboard_list_view = new Base_Collection_View({
 		url : '/core/api/tasks/my/dashboardtasks',
@@ -68,7 +68,7 @@ function show_tasks(el)
  * Fetches upcomming deals related to current user
  * @param el
  */
-function show_deals(el)
+function show_dashboard_deals(el)
 {
 	var my_deals = new Base_Collection_View({
 		url: 'core/api/opportunity/my/upcoming-deals',
@@ -93,7 +93,7 @@ function show_deals(el)
  * 
  * @param el
  */
-function show_workflows(el)
+function show_dashboard_workflows(el)
 {
     var workflow_list_view = new Base_Collection_View({
 		url : '/core/api/campaigns/logs/recent?page_size=5',
@@ -119,7 +119,7 @@ function show_workflows(el)
  * @param el
  */
 
-function setup_subscription_details(el)
+function show_dashboard_subscription_details(el)
 {					
 	/**
 	 * Fetches subscription object
