@@ -27,7 +27,7 @@ $(function() {
 				if (sound == 'no_sound')
 					return;
 
-				playRecvSound(sound);
+				play_sound(sound);
 			});
 
 	setTimeout(downloadAndRegisterForNotifications, 2000);
@@ -487,7 +487,7 @@ function showNoty(type, message, position,notification_type) {
 		// Play sounds for only user notifications
 		if (n.options.type == 'information') {
 			if (notification_prefs.notification_sound != 'no_sound')
-				playRecvSound(notification_prefs.notification_sound);
+				play_sound(notification_prefs.notification_sound);
 		}
 
 		// Set the handler for click

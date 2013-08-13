@@ -39,7 +39,7 @@ function show_desktop_notification(imageURL, title, message, link, tag) {
 		if (!window.closed)
 		{	
 			if (notification_prefs.notification_sound != 'no_sound')
-				playRecvSound(notification_prefs.notification_sound);
+				play_sound(notification_prefs.notification_sound);
 			
 			notification.show();
 		}

@@ -230,9 +230,9 @@ public class NamespaceFilter implements Filter
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
 	    ServletException
     {
-	// If URL path stats with "/backend", then request is forwarded with out
+	// If URL path starts with "/backend", then request is forwarded without
 	// namespace verification i.e., no filter on url which starts with
-	// "/backend" (crons, StripeWebhooks)
+	// "/backend" (crons, StripeWebhooks etc..)
 	String path = ((HttpServletRequest) request).getRequestURI();
 	if (path.startsWith("/backend"))
 	{
