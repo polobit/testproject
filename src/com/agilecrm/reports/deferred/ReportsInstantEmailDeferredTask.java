@@ -36,7 +36,7 @@ public class ReportsInstantEmailDeferredTask implements DeferredTask
 	// Fetches report adds to list. It is added into list as there is
 	// utility function in ReportsUtil used for generating list of reports.
 	List<Reports> reports = new ArrayList<Reports>();
-	reports.add(Reports.getReport(report_id));
+	reports.add(ReportsUtil.getReport(report_id));
 
 	try
 	{
