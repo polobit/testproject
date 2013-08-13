@@ -233,6 +233,11 @@ function enableWidgetSoring(el)
  * Initializes an ajax queue with GET request for the given URL with the given
  * queue name
  * 
+ * <p>
+ * Requests with the same queue name are processes synchronously one after the
+ * other. This method is used by widgets
+ * </p>
+ * 
  * @param queueName
  *            Name of the queue
  * @param url
@@ -244,31 +249,31 @@ function enableWidgetSoring(el)
  * @param errorCallback
  *            Function to be executed on error
  */
-function queueGetRequest(queueName, url, dataType, successcallback, errorCallback)
+function queueGetRequest(queueName, url, dataType, successCallback, errorCallback)
 {
+	// Loads ajaxq to initialize queue
 	head.js('/js/lib/ajaxm/ajaxq.js', function()
 	{
-		$.ajaxq(queueName, { url : url, cache : false,
+		/*
+		 * Initialize a queue, with GET request
+		 */
+		$.ajaxq(queueName, { url : url, cache : false, dataType : dataType,
 
-		dataType : dataType, success : function(data)
+		// function to be executed on success, if successCallback is defined
+		success : function(data)
 		{
-			// If defined, execute the callback function
-			if (successcallback && typeof (successcallback) === "function")
-			{
-				successcallback(data);
-			}
+			if (successCallback && typeof (successCallback) === "function")
+				successCallback(data);
 		},
 
+		// function to be executed on success, if errorCallback is defined
 		error : function(data)
 		{
-
-			// If defined, execute the callback function
 			if (errorCallback && typeof (errorCallback) === "function")
-			{
 				errorCallback(data);
-			}
 		},
 
+		// function to be executed on completion of queue
 		complete : function(data)
 		{
 			console.log('completed get');
@@ -280,7 +285,12 @@ function queueGetRequest(queueName, url, dataType, successcallback, errorCallbac
  * Initializes an ajax queue with POST request for the given URL with the given
  * queue name
  * 
- *  @param queueName
+ * <p>
+ * Requests with the same queue name are processes synchronously one after the
+ * other. This method is used by widgets
+ * </p>
+ * 
+ * @param queueName
  *            Name of the queue
  * @param url
  *            URL to make request
@@ -293,29 +303,30 @@ function queueGetRequest(queueName, url, dataType, successcallback, errorCallbac
  */
 function queuePostRequest(queueName, url, data, successcallback, errorCallback)
 {
+	// Loads ajaxq to initialize queue
 	head.js('/js/lib/ajaxm/ajaxq.js', function()
 	{
-		$.ajaxq(queueName, { type : 'POST', url : url, cache : false,
+		/*
+		 * Initialize a queue, with POST request
+		 */
+		$.ajaxq(queueName, { type : 'POST', url : url, cache : false, data : data,
 
-		data : data, success : function(data)
+		// function to be executed on success, if successCallback is defined
+		success : function(data)
 		{
-			// If defined, execute the callback function
 			if (successcallback && typeof (successcallback) === "function")
-			{
-				console.log('suceess queue post');
-
 				successcallback(data);
-			}
-		}, error : function(data)
-		{
+		},
 
-			// If defined, execute the callback function
+		// function to be executed on success, if errorCallback is defined
+		error : function(data)
+		{
 			if (errorCallback && typeof (errorCallback) === "function")
-			{
-				console.log('error queue post');
 				errorCallback(data);
-			}
-		}, complete : function(data)
+		},
+
+		// function to be executed on completion of queue
+		complete : function(data)
 		{
 			console.log('completed post');
 		} });

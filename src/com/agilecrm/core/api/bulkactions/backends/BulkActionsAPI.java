@@ -40,8 +40,7 @@ public class BulkActionsAPI
     @POST
     @Path("/update")
     @Produces(MediaType.APPLICATION_FORM_URLENCODED)
-    public void PerformChangeAction(@Context HttpServletRequest request,
-	    @QueryParam("filter") String filterId,
+    public void PerformChangeAction(@Context HttpServletRequest request, @QueryParam("filter") String filterId,
 	    @QueryParam("action_type") String action_type)
     {
 
@@ -87,17 +86,16 @@ public class BulkActionsAPI
 	    if (filterId != null)
 	    {
 		System.out.println("filter id is not null");
-		BulkActionUtil.changeOwner(filterId, request.getParameterMap(),
-			ActionType.CHANGE_OWNER.getUrl(), contentType,
-			Method.POST);
+		BulkActionUtil.changeOwner(filterId, request.getParameterMap(), ActionType.CHANGE_OWNER.getUrl(),
+			contentType, Method.POST);
 		return;
 	    }
 
 	    /*
 	     * Else data will be sent as payload which takes byte data
 	     */
-	    BulkActionUtil.changeOwner(bytes, request.getParameterMap(),
-		    ActionType.CHANGE_OWNER.getUrl(), contentType, Method.POST);
+	    BulkActionUtil.changeOwner(bytes, request.getParameterMap(), ActionType.CHANGE_OWNER.getUrl(), contentType,
+		    Method.POST);
 	    return;
 	}
 	if (ActionType.ASIGN_WORKFLOW.equals(ActionType.valueOf(action_type)))
@@ -105,16 +103,13 @@ public class BulkActionsAPI
 
 	    if (filterId != null)
 	    {
-		BulkActionUtil.enrollCampaign(filterId,
-			request.getParameterMap(),
-			ActionType.ASIGN_WORKFLOW.getUrl(), contentType,
-			Method.POST);
+		BulkActionUtil.enrollCampaign(filterId, request.getParameterMap(), ActionType.ASIGN_WORKFLOW.getUrl(),
+			contentType, Method.POST);
 		return;
 	    }
 
-	    BulkActionUtil.enrollCampaign(bytes, request.getParameterMap(),
-		    ActionType.ASIGN_WORKFLOW.getUrl(), contentType,
-		    Method.POST);
+	    BulkActionUtil.enrollCampaign(bytes, request.getParameterMap(), ActionType.ASIGN_WORKFLOW.getUrl(),
+		    contentType, Method.POST);
 	    return;
 	}
 
@@ -125,16 +120,14 @@ public class BulkActionsAPI
 	if (filterId != null)
 	{
 	    System.out.println("filter id : " + filterId);
-	    BulkActionUtil.postDataToBulkActionBackend(
-		    ActionType.valueOf(action_type).getUrl(), contentType,
+	    BulkActionUtil.postDataToBulkActionBackend(ActionType.valueOf(action_type).getUrl(), contentType,
 		    Method.POST, filterId, request.getParameter("data"));
 	    return;
 	}
 
 	System.out.println(bytes.length);
 
-	BulkActionUtil.postDataToBulkActionBackend(bytes,
-		ActionType.valueOf(action_type).getUrl(), contentType,
+	BulkActionUtil.postDataToBulkActionBackend(bytes, ActionType.valueOf(action_type).getUrl(), contentType,
 		Method.POST);
     }
 }
