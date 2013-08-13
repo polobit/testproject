@@ -105,7 +105,7 @@ var CONTENT_JSON = {
  * Fills the slate with the content respective to the current route in the
  * CONTENT_JSON
  */
-function fillSlate(id, el) {
+function fill_slate(id, el) {
 
 	// If content for current route is available in the CONTENT_JSON, slate
 	// template is made with the content related to current route
@@ -119,7 +119,6 @@ function fillSlate(id, el) {
 				getTemplate("empty-collection-model",
 						CONTENT_JSON[Current_Route]));
 	}
-
 }
 
 /**
@@ -132,7 +131,7 @@ $(function() {
 		e.preventDefault();
 		var id = $(this).attr('modal_id');
 		if(id == "opportunityModal")
-			showDeal();
+			show_deal();
 		else
 			$("#" + id).modal('show');
 	});
