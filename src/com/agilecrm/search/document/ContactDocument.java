@@ -7,18 +7,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.util.SearchUtil;
-import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Field;
-import com.google.appengine.api.search.GetRequest;
-import com.google.appengine.api.search.GetResponse;
 import com.google.appengine.api.search.Index;
 import com.google.appengine.api.search.IndexSpec;
 import com.google.appengine.api.search.SearchService;
@@ -60,233 +56,200 @@ import com.googlecode.objectify.ObjectifyService;
 public class ContactDocument implements BuilderInterface
 {
 
-	/**
-	 * Initializes/get search service for the app
+    /**
+     * Initializes/get search service for the app
+     */
+    private final SearchService searchService = SearchServiceFactory.getSearchService();
+
+    /**
+     * Index for the contact Document, Required to search on contacts document
+     */
+    private final Index index = searchService.getIndex(IndexSpec.newBuilder().setName("contacts"));
+
+    /**
+     * Describes all the contact field values in the document based on the
+     * contact given, and adds to index, created_time and update_time are saved
+     * as DATE type, remaining field values are stored as TEXT type in Document
+     * 
+     * <p>
+     * Calls normalize on each field value and also normalizes the tags set and
+     * adds to document
+     * </p>
+     * 
+     * @param contact
+     *            {@link Contact}
+     */
+    @Override
+    public void add(Object entity)
+    {
+	Contact contact = (Contact) entity;
+
+	// Gets builder object required to build a document
+	Document.Builder doc = Document.newBuilder();
+
+	// Processes contact property fields and tags(in normalized form)
+	Map<String, String> fields = SearchUtil.getFieldsMap(contact);
+
+	/*
+	 * Sets fields to document from the map of contact fields values
 	 */
-	private SearchService searchService = SearchServiceFactory.getSearchService();
+	for (Map.Entry<String, String> e : fields.entrySet())
+	{
+	    doc.addField(Field.newBuilder().setName(e.getKey()).setText(e.getValue()));
+	}
 
-	/**
-	 * Index for the contact Document, Required to search on contacts document
+	// Sets created date to document with out time component(Search API
+	// support date without time component)
+	Date truncatedDate = DateUtils.truncate(new Date(contact.created_time * 1000), Calendar.DATE);
+
+	/*
+	 * Date date = DateUtil.deserializeDate(String.valueOf(truncatedDate
+	 * .getTime()));
 	 */
-	private Index index = searchService.getIndex(IndexSpec.newBuilder().setName("contacts"));
+	System.out.println(truncatedDate);
+	doc.addField(Field.newBuilder().setName("created_time").setDate(truncatedDate));
 
-	/**
-	 * Describes all the contact field values in the document based on the
-	 * contact given, and adds to index, created_time and update_time are saved
-	 * as DATE type, remaining field values are stored as TEXT type in Document
-	 * 
-	 * <p>
-	 * Calls normalize on each field value and also normalizes the tags set and
-	 * adds to document
-	 * </p>
-	 * 
-	 * @param contact
-	 *            {@link Contact}
+	doc.addField(Field.newBuilder().setName("type").setText(contact.type.toString()));
+
+	doc.addField(Field.newBuilder().setName("created_time_epoch").setNumber(contact.created_time.doubleValue()));
+
+	// Describes updated time document if updated time is not 0.
+	if (contact.updated_time > 0L)
+	{
+	    Date updatedDate = DateUtils.truncate(new Date(contact.updated_time * 1000), Calendar.DATE);
+
+	    System.out.println(updatedDate);
+	    doc.addField(Field.newBuilder().setName("updated_time").setDate(updatedDate));
+
+	    doc.addField(Field.newBuilder().setName("updated_time_epoch").setNumber(contact.updated_time));
+	}
+
+	// Adds Other fields in contacts to document
+	doc.addField(Field.newBuilder().setName("lead_score").setNumber(contact.lead_score));
+
+	// Adds Other fields in contacts to document
+	doc.addField(Field.newBuilder().setName("star_value").setNumber(contact.star_value));
+
+	addTagFields(contact.getTagsList(), doc);
+
+	/*
+	 * Get tokens from contact properties and adds it in document
+	 * "search_tokens"
 	 */
-	public void add(Object entity)
-	{
-		Contact contact = (Contact) entity;
+	doc.addField(Field.newBuilder().setName("search_tokens")
+		.setText(SearchUtil.getSearchTokens(contact.properties)));
 
-		// Gets builder object required to build a document
-		Document.Builder doc = Document.newBuilder();
+	// Adds document to Index
+	addToIndex(doc.setId(contact.id.toString()).build());
+    }
 
-		// Processes contact property fields and tags(in normalized form)
-		Map<String, String> fields = SearchUtil.getFieldsMap(contact);
+    @Override
+    public void edit(Object entity)
+    {
+	add(entity);
+    }
 
-		/*
-		 * Sets fields to document from the map of contact fields values
-		 */
-		for (Map.Entry<String, String> e : fields.entrySet())
-		{
-			doc.addField(Field.newBuilder().setName(e.getKey()).setText(e.getValue()));
-		}
+    /**
+     * Deletes an entity from document(called when contact is deleted then
+     * respective entity in document should be deleted)
+     * 
+     * @param id
+     *            {@link String}
+     * 
+     */
+    @Override
+    public void delete(String id)
+    {
+	index.delete(id);
+    }
 
-		// Sets created date to document with out time component(Search API
-		// support date without time component)
-		Date truncatedDate = DateUtils.truncate(new Date(contact.created_time * 1000), Calendar.DATE);
+    @Override
+    public Index getIndex()
+    {
+	// TODO Auto-generated method stub
+	return index;
+    }
 
-		/*
-		 * Date date = DateUtil.deserializeDate(String.valueOf(truncatedDate
-		 * .getTime()));
-		 */
-		System.out.println(truncatedDate);
-		doc.addField(Field.newBuilder().setName("created_time").setDate(truncatedDate));
+    /**
+     * Adds Document to index
+     * 
+     * @param doc
+     *            {@link Document}
+     */
+    private void addToIndex(Document doc)
+    {
+	// Adds document to index
+	index.put(doc);
+	System.out.println(index.getName());
+	// System.out.println(index.getConsistency());
+	System.out.println(index.getSchema());
 
-		doc.addField(Field.newBuilder().setName("type").setText(contact.type.toString()));
+    }
 
-		doc.addField(Field.newBuilder().setName("created_time_epoch").setNumber(contact.created_time.doubleValue()));
+    /**
+     * Add tag fields to document as <tagName>_time and it is saved as a date
+     * field.
+     * 
+     * @param tags_json_string
+     * @param doc
+     */
+    private void addTagFields(ArrayList<Tag> tags, Document.Builder doc)
+    {
+	if (tags == null || tags.isEmpty())
+	    return;
 
-		// Describes updated time document if updated time is not 0.
-		if (contact.updated_time > 0L)
-		{
-			Date updatedDate = DateUtils.truncate(new Date(contact.updated_time * 1000), Calendar.DATE);
-
-			System.out.println(updatedDate);
-			doc.addField(Field.newBuilder().setName("updated_time").setDate(updatedDate));
-
-			doc.addField(Field.newBuilder().setName("updated_time_epoch").setNumber(contact.updated_time));
-		}
-
-		// Adds Other fields in contacts to document
-		doc.addField(Field.newBuilder().setName("lead_score").setNumber(contact.lead_score));
-
-		// Adds Other fields in contacts to document
-		doc.addField(Field.newBuilder().setName("star_value").setNumber(contact.star_value));
-
-		addTagFields(contact.getTagsList(), doc);
-
-		/*
-		 * Get tokens from contact properties and adds it in document
-		 * "search_tokens"
-		 */
-		doc.addField(Field.newBuilder().setName("search_tokens")
-				.setText(SearchUtil.getSearchTokens(contact.properties)));
-
-		// Adds document to Index
-		addToIndex(doc.setId(contact.id.toString()).build());
-	}
-
-	@Override
-	public void edit(Object entity)
-	{
-		add(entity);
-	}
-
-	/**
-	 * Deletes an entity from document(called when contact is deleted then
-	 * respective entity in document should be deleted)
-	 * 
-	 * @param id
-	 *            {@link String}
-	 * 
-	 */
-	public void delete(String id)
-	{
-		index.delete(id);
-	}
-
-	@Override
-	public Index getIndex()
-	{
-		// TODO Auto-generated method stub
-		return index;
-	}
-
-	/**
-	 * Adds Document to index
-	 * 
-	 * @param doc
-	 *            {@link Document}
-	 */
-	private void addToIndex(Document doc)
-	{
-		// Adds document to index
-		index.put(doc);
-		System.out.println(index.getName());
-		// System.out.println(index.getConsistency());
-		System.out.println(index.getSchema());
-
-	}
-
-	/**
-	 * Add tag fields to document as <tagName>_time and it is saved as a date
-	 * field.
-	 * 
-	 * @param tags_json_string
-	 * @param doc
-	 */
-	private void addTagFields(ArrayList<Tag> tags, Document.Builder doc)
-	{
-		if (tags == null || tags.isEmpty())
-			return;
-
-		// Iterates through each tag and creates field for each tag i.e.,
-		// <tagName>_time.
-		for (Tag tag : tags)
-		{
-
-			System.out.println(tag);
-
-			// Tag value
-			String normalizedTag = SearchUtil.normalizeString(tag.tag);
-
-			// Created time
-			Long TagCreationTimeInMills = tag.createdTime;
-
-			/*
-			 * Truncate date Document search date is without time component
-			 */
-
-			Date TagCreatedDate = DateUtils.truncate(new Date(TagCreationTimeInMills), Calendar.DATE);
-
-			// If tag doesn't satisfies the regular expression of field name in
-			// document search, field is not added to avoid exceptions while
-			// searching.
-			if (!normalizedTag.matches("^[A-Za-z][A-Za-z0-9_]*$"))
-				continue;
-
-			System.out.println(normalizedTag);
-			// Adds Other fields in contacts to document
-			doc.addField(Field.newBuilder().setName(normalizedTag + "_time").setDate(TagCreatedDate));
-
-			doc.addField(Field.newBuilder().setName(normalizedTag + "_time_epoch")
-					.setNumber(TagCreationTimeInMills.doubleValue() / 1000));
-		}
-
-	}
-
-	public static void deleteAllData(String namespace)
+	// Iterates through each tag and creates field for each tag i.e.,
+	// <tagName>_time.
+	for (Tag tag : tags)
 	{
 
-		if (StringUtils.isEmpty(namespace))
-			return;
+	    System.out.println(tag);
 
-		String oldNamespace = NamespaceManager.get();
-		try
-		{
-			NamespaceManager.set(namespace);
+	    // Tag value
+	    String normalizedTag = SearchUtil.normalizeString(tag.tag);
 
-			List<String> docIds = new ArrayList<String>();
+	    // Created time
+	    Long TagCreationTimeInMills = tag.createdTime;
 
-			Index index = SearchServiceFactory.getSearchService().getIndex(IndexSpec.newBuilder().setName("contacts"));
+	    /*
+	     * Truncate date Document search date is without time component
+	     */
 
-			// Return a set of document IDs.
-			GetRequest request = GetRequest.newBuilder().setReturningIdsOnly(true).build();
+	    Date TagCreatedDate = DateUtils.truncate(new Date(TagCreationTimeInMills), Calendar.DATE);
 
-			GetResponse<Document> response = index.getRange(request);
+	    // If tag doesn't satisfies the regular expression of field name in
+	    // document search, field is not added to avoid exceptions while
+	    // searching.
+	    if (!normalizedTag.matches("^[A-Za-z][A-Za-z0-9_]*$"))
+		continue;
 
-			for (Document doc : response)
-			{
-				docIds.add(doc.getId());
-			}
+	    System.out.println(normalizedTag);
+	    // Adds Other fields in contacts to document
+	    doc.addField(Field.newBuilder().setName(normalizedTag + "_time").setDate(TagCreatedDate));
 
-			index.delete(docIds);
-
-		}
-		finally
-		{
-			NamespaceManager.set(oldNamespace);
-		}
-
+	    doc.addField(Field.newBuilder().setName(normalizedTag + "_time_epoch")
+		    .setNumber(TagCreationTimeInMills.doubleValue() / 1000));
 	}
 
-	/**
-	 * Gets contact collection related to given document ids
-	 * 
-	 * Since querying on ContactDocumet returns document ids, this method
-	 * returns related contacts to document ids
-	 * 
-	 * @param doc_ids
-	 *            {@link List}
-	 * @return {@link Collection}
-	 */
-	@SuppressWarnings("rawtypes")
-	public Collection getResults(List doc_ids)
-	{
-		Objectify ofy = ObjectifyService.begin();
+    }
 
-		// Returns contact related to doc_ids
-		return ofy.get(Contact.class, doc_ids).values();
-	}
+    /**
+     * Gets contact collection related to given document ids
+     * 
+     * Since querying on ContactDocumet returns document ids, this method
+     * returns related contacts to document ids
+     * 
+     * @param doc_ids
+     *            {@link List}
+     * @return {@link Collection}
+     */
+    @SuppressWarnings("rawtypes")
+    public Collection getResults(List doc_ids)
+    {
+	Objectify ofy = ObjectifyService.begin();
+
+	// Returns contact related to doc_ids
+	return ofy.get(Contact.class, doc_ids).values();
+    }
 
 }

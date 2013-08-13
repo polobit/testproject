@@ -74,12 +74,8 @@ var CONTENT_JSON = {
 	"dashboard" : {
 		"contacts" : {
 			"title" : "There is no recent activity",
-			"icon" : "icon-group icon-3x",
-			"description" : " Perhaps, you may want to create a ",
-			//"learn_more" : "click here to learn more",
-			"button_text" : "New Contact",
-			"route" : "#",
-			"modal_id" : "personModal",
+			"description" : "Perhaps, you may want to create a <a href='#' modal_id='personModal' class='modal-form'>new contact</a>.",
+			"icon" : "icon-group icon-3x"
 		},
 		"tasks" : {
 			"title" : "You have no tasks due",
@@ -91,10 +87,8 @@ var CONTENT_JSON = {
 		},
 		"workflows" : {
 			"title" : "No campaign activity yet",
-			"description" : "Campaigns help you automate your communication with your customers. You can create a",
-			"icon" : "icon-sitemap icon-3x",
-			"button_text" : "New Campaign",
-			"route" : "#workflow-add"
+			"description" : "Campaigns help you automate your communication with your customers.<br/>You can create a <a href='#workflow-add'>new campaign</a>.",
+			"icon" : "icon-sitemap icon-3x"
 		}
 	},
 	"email-templates" : {
@@ -111,7 +105,7 @@ var CONTENT_JSON = {
  * Fills the slate with the content respective to the current route in the
  * CONTENT_JSON
  */
-function fillSlate(id, el) {
+function fill_slate(id, el) {
 
 	// If content for current route is available in the CONTENT_JSON, slate
 	// template is made with the content related to current route
@@ -125,7 +119,6 @@ function fillSlate(id, el) {
 				getTemplate("empty-collection-model",
 						CONTENT_JSON[Current_Route]));
 	}
-
 }
 
 /**
@@ -138,7 +131,7 @@ $(function() {
 		e.preventDefault();
 		var id = $(this).attr('modal_id');
 		if(id == "opportunityModal")
-			showDeal();
+			show_deal();
 		else
 			$("#" + id).modal('show');
 	});

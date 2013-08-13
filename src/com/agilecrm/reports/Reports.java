@@ -14,11 +14,16 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.ui.serialize.SearchRule;
-import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
+/**
+ * <code>Reports</code> provides advanced report generation. It uses Document
+ * search to get the matching results based on the {@link SearchRule}.</p>
+ * 
+ * @author Yaswanth
+ */
 @SuppressWarnings("serial")
 @XmlRootElement
 public class Reports implements Serializable
@@ -76,9 +81,18 @@ public class Reports implements Serializable
 	this.rules = rules;
     }
 
-    /*
-     * Generate contacts based on the rule element based on type of
-     * report(contacts,deals..)
+    /**
+     * Saves the report
+     */
+    public void save()
+    {
+	dao.put(this);
+    }
+
+    /**
+     * Generate contacts based on the rule element
+     * 
+     * @return
      */
     @SuppressWarnings("rawtypes")
     public Collection generateReports()
@@ -86,49 +100,18 @@ public class Reports implements Serializable
 	return new AppengineSearch<Contact>(Contact.class).getAdvacnedSearchResults(rules);
     }
 
+    /**
+     * Generates results with cursor and count. It is used to show report
+     * results in report results page
+     * 
+     * @param count
+     * @param cursor
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     public Collection generateReports(int count, String cursor)
     {
 	return new AppengineSearch<Contact>(Contact.class).getAdvacnedSearchResults(rules, count, cursor);
     }
 
-    /* Get Contact Filter by id */
-    public static Reports getReport(Long id)
-    {
-	try
-	{
-	    return dao.get(id);
-	}
-	catch (EntityNotFoundException e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	    return null;
-	}
-
-    }
-
-    /* Get the list of Report entities related to current namespace */
-    public static List<Reports> fetchAllReports()
-    {
-	return dao.fetchAll();
-    }
-
-    /* Saved in empty namespace */
-    public void save()
-    {
-	dao.put(this);
-    }
-
-    /*
-     * Fetch all the Report entities in App with particular report duration,
-     * which are reports email enabled
-     */
-    public static List<Reports> getAllReportsByDuration(String duration)
-    {
-
-	System.out.println("fetching the reports");
-	return dao.ofy().query(Reports.class).filter("duration", duration).list();
-
-    }
 }

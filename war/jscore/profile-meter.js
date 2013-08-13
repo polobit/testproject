@@ -1,98 +1,98 @@
 /*
- * Global values of each step. 
+ * Global values of each step.   
  */
 
-var IS_PROFILE_GUIDER_CLOSED = false;
-var PROFILE_SETTINGS = {
+var Is_Profile_Guider_Closed = false;
+var Profile_Settings = {
 		"Email" : "",
 		//"User_invited" : "#users",
 		//"Widgets" : 10
 		//"Share" : "#",
 }
 
-var PROFILE_SETUP_MESSAGES = {};
+var Profile_Setup_Messages = {};
 
-PROFILE_SETUP_MESSAGES.Welcome =  "Welcome to Agile - the next generation CRM. I will be your tour guide.<a href='#' id='noty-welcome-user' style='text-decoration: none;'> Let's get you started."
-PROFILE_SETUP_MESSAGES.Email = "Shake Hands. <a href='#email' style='text-decoration: none;'> Let's sync your emails first</a>. It's simple and secure.";
-PROFILE_SETUP_MESSAGES.User_invited = "Emails will show up in the awesome timeline. It's time to invite your colleague"; 
-PROFILE_SETUP_MESSAGES.Share = "Are you liking Agile? Spread the love."; 
+Profile_Setup_Messages.Welcome =  "Welcome to Agile - the next generation CRM. I will be your tour guide.<a href='#' id='noty-welcome-user' style='text-decoration: none;'> Let's get you started."
+Profile_Setup_Messages.Email = "Shake Hands. <a href='#email' style='text-decoration: none;'> Let's sync your emails first</a>. It's simple and secure.";
+Profile_Setup_Messages.User_invited = "Emails will show up in the awesome timeline. It's time to invite your colleague"; 
+Profile_Setup_Messages.Share = "Are you liking Agile? Spread the love."; 
 
 // Initial percentage after first time login
-var INITIAL_TOTAL = 65;
+var Initial_Total = 65;
 
-var PROFILE_INFO = {
+var Profile_Info = {
 		"Welcome" : false,
 		"Email" : false,
 		//"User_invited" : false,
 		//"Widgets" : false,
-		"total" : INITIAL_TOTAL
+		"total" : Initial_Total
 };
 
 // Calculate based on tags added in 'OUR' domain
-function calculateProfile()
+function calculate_profile()
 {
 
 	// Get tags from global contact
-	var tags = AGILE_CONTACT.tags;
+	var tags = Agile_Contact.tags;
 	if(!tags)
-		return PROFILE_INFO;
+		return Profile_Info;
 	
 	
-	var total = INITIAL_TOTAL;
+	var total = Initial_Total;
 	
 	var is_first_time_user = false;
-	$.each(PROFILE_SETTINGS, function(key, value){
+	$.each(Profile_Settings, function(key, value){
 		var temp_key = key.indexOf("_") != -1 ? key.replace("_", " ") : key;
 
 		if(tags.indexOf(temp_key) != -1)
 		{
-			PROFILE_INFO[key] = true;
+			Profile_Info[key] = true;
 			total = total + value;
 			is_first_time_user = true;
 			return;
 		}
 		
-		PROFILE_INFO[key] = false;
+		Profile_Info[key] = false;
 	});
 	
 	if(is_first_time_user)
 	{
-		PROFILE_INFO["Welcome"] = is_first_time_user;	
+		Profile_Info["Welcome"] = is_first_time_user;	
 	}
 	
-	PROFILE_INFO["total"] = total;
+	Profile_Info["total"] = total;
 	
-	return PROFILE_INFO
+	return Profile_Info
 	
 }
 
-function setProfileMeter()
+function set_profile_meter()
 {
-	var profile_stats = calculateProfile();
+	var profile_stats = calculate_profile();
 	console.log(profile_stats);
 
-  	removeProfileNoty();
+  	remove_profile_noty();
    	$.each(profile_stats, function(key, value){
    		if(value == false)
    		{
    			var json = {};
-   			json.message = PROFILE_SETUP_MESSAGES[key];
-   			json.route = PROFILE_SETTINGS[key];
-   			showNotyOnTopOfPanel(json);
+   			json.message = Profile_Setup_Messages[key];
+   			json.route = Profile_Settings[key];
+   			show_noty_on_top_of_panel(json);
    			return false;
    		}
    	});
    	
  
-//	showNotyOnTopOfPanel(profile_stats);
+//	show_noty_on_top_of_panel(profile_stats);
 //	$("#profile-meter").html(getTemplate("profile-meter", profile_stats));
 }
 
 
 
-function showNotyOnTopOfPanel(content)
+function show_noty_on_top_of_panel(content)
 {
-	if(IS_PROFILE_GUIDER_CLOSED)
+	if(Is_Profile_Guider_Closed)
 		return;
 	
 	$('body').find('#wrap').find('#notify-container').remove();
@@ -105,7 +105,7 @@ function showNotyOnTopOfPanel(content)
 			$('body').find('#wrap').find('#agilecrm-container').css('padding-top','96px');
 }		
 
-function removeProfileNoty() {
+function remove_profile_noty() {
 	$('body').find('#wrap').find('#notify-container').remove();
 	$('body').find('#wrap').find('.navbar-fixed-top').css('margin-top','0px'); 
   	$('body').find('#wrap').find('#agilecrm-container').css('padding-top','60px');
@@ -113,7 +113,7 @@ function removeProfileNoty() {
 
 $(function(){
 	$('span.notify-close').die().live('click' , function(){
-		IS_PROFILE_GUIDER_CLOSED = true;
+		Is_Profile_Guider_Closed = true;
         $(this).parent().slideUp("slow", function () {
        	 $('body').find('#wrap').find('.navbar-fixed-top').css('margin-top','0px'); 
        	 $('body').find('#wrap').find('#agilecrm-container').css('padding-top','60px');
@@ -122,8 +122,8 @@ $(function(){
 	
 	$('#noty-welcome-user').die().live('click', function(e) {
 		e.preventDefault();
-		delete PROFILE_INFO["Welcome"];
-		setProfileMeter();
+		delete Profile_Info["Welcome"];
+		set_profile_meter();
 		
 	})	
 });

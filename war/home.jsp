@@ -347,7 +347,7 @@
 	head.js(LIB_PATH + 'lib/handlebars-1.0.0.beta.6-min.js');
 	
 	// Fetch/Create contact from our domain
-	var AGILE_CONTACT = {};
+	var Agile_Contact = {};
 	
 	head.js('/stats/min/agile-min.js', function() {
 	try {
@@ -363,11 +363,11 @@
 			
 				// Gets contact based on the the email of the user logged in
 				agile_getContact(CURRENT_DOMAIN_USER['email'], function(data){
-					AGILE_CONTACT = data;
+					Agile_Contact = data;
 					
 					// If contact does not exist, new contact is created 
 					// considering it is a new contact
-					if(!AGILE_CONTACT["id"])
+					if(!Agile_Contact["id"])
 					{
 						var name = CURRENT_DOMAIN_USER['name'];
 						var first_name = name, last_name = name;
@@ -381,15 +381,15 @@
 						
 						// Creates a new contact and assigns it to global value 
 						 _agile.create_contact({"email": CURRENT_DOMAIN_USER['email'], "first_name" : first_name, "last_name": last_name, "tags":"Signup"}, function(data){
-							 AGILE_CONTACT = data;
+							 Agile_Contact = data;
 						 });
 						return;
 					}
 					
-					if(AGILE_CONTACT.tags || AGILE_CONTACT.tags.indexOf("Signup") < 0)
+					if(Agile_Contact.tags || Agile_Contact.tags.indexOf("Signup") < 0)
 						{
-							_agile.add_tag(CURRENT_DOMAIN_USER['email'], "Signup", function(data) {
-								AGILE_CONTACT = data;
+							_agile.add_tag("Signup", function(data) {
+								Agile_Contact = data;
 							});
 						}
 				});

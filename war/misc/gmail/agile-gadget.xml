@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+	<ModulePrefs title="AgileCRM" description="Built with Love for Small Businesses"
+		height="100" author="" author_email="" author_location="">
+
+		<!-- Declare feature dependencies. -->
+
+		<!-- This one is not specific to Gmail contextual gadgets. -->
+		<Require feature="dynamic-height" />
+
+		<!-- The next feature, google.contentmatch, is required for all Gmail contextual 
+			gadgets. <Param> - specify one or more comma-separated extractor IDs in a 
+			param named "extractors". This line is overridden by the extractor ID in 
+			the manifest, but is still expected to be present. -->
+		<Require feature="google.contentmatch">
+			<Param name="extractors">
+				538277326378:Agile,google.com:EmailAddressExtractor
+			</Param>
+		</Require>
+
+		<!-- Single Sign on -->
+		<Require feature="opensocial-0.9" />
+		<Require feature="osapi" />
+
+	</ModulePrefs>
+
+	<!-- Define the content type and display location. The settings "html" and 
+		"card" are required for all Gmail contextual gadgets. -->
+	<Content type="html" view="card">
+    <![CDATA[
+      
+    <link rel="stylesheet" type="text/css" href="https://googleapps.agilecrm.com/css/bootstrap-pink.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://googleapps.agilecrm.com/css/lib/datepicker-min.css" />
+    <link rel="stylesheet" type="text/css" href="https://googleapps.agilecrm.com/css/bootstrap-responsive.min.css" />
+    <style>
+		.error{color:red;}
+		.field_req {color: red;}
+		legend {font-size: 16px; margin-bottom: 10px; line-height: 20px;}
+		fieldset {margin-top:15px;}
+		input {height:22px !important; padding: 0px 4px !important;}
+		select {height:22px; padding:0px;}
+    </style>
+    
+	<div class="container-fluid">
+		<div id="content" class="row">
+			<br/>
+			<img id="loading" style="padding-right:5px;display:none;width:25px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
+		</div>
+    </div>
+   	
+	<script src='https://googleapps.agilecrm.com/lib/headjs-min.js'></script>
+	<script src='https://agile-gmail-gadget.appspot.com/dj-js/agile-gadget.js'></script>
+   	
+   	<script type="text/javascript">
+		init_agile_gadget();   
+	</script>
+   		
+	<div id="output" style="margin:0 0 5px 5px;"></div>
+]]>
+	</Content>
+</Module>

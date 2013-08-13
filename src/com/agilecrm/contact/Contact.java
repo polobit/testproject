@@ -255,9 +255,18 @@ public class Contact extends Cursor
 		return properties;
 	}
 
+	/**
+	 * Adds {@link ContactField} to properties list.
+	 * 
+	 * @param contactField
+	 */
 	public void addProperty(ContactField contactField)
 	{
+		// Ties to get contact field from existing properties based on new field
+		// name.
 		ContactField field = this.getContactFieldByName(contactField.name);
+
+		// If field is null then new contact field is added to properties.
 		if (field == null)
 		{
 			this.properties.add(contactField);
@@ -289,19 +298,29 @@ public class Contact extends Cursor
 			oldContact.tags = oldContact.getContactTags();
 		}
 
-		// Check for already existing email if any
-		String myMail = this.getContactFieldValue("EMAIL");
-		int countEmails = dao.getCountByProperty("properties.value = ", myMail);
+		// Check for already existing email if any,
+		// loop through for checking multiple emails
+		for (ContactField contactField : this.properties)
+		{
+			if (!StringUtils.equalsIgnoreCase(contactField.name, "EMAIL"))
+				continue;
 
-		// Throw BAD_REQUEST if countEmails>=2 ( sure duplicate contact, this
-		// and some other )
-		// otherwise if countEmails==1, make sure its not due to previous value
-		// of this(current) Contact
-		if (countEmails >= 2
-				|| (countEmails == 1 && (id == null || !StringUtils.equalsIgnoreCase(
-						oldContact.getContactFieldValue("EMAIL"), myMail))))
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("Sorry, duplicate contact found with the same email address.|" + myMail).build());
+			String myMail = contactField.value;
+			int countEmails = 0; // to allow if this new entry doesn't have
+									// email-id
+
+			if (myMail != null && !myMail.isEmpty())
+				countEmails = dao.getCountByProperty("properties.value = ", myMail);
+
+			// Throw BAD_REQUEST if countEmails>=2 (sure duplicate contact)
+			// otherwise if countEmails==1, make sure its not due to previous
+			// value of this(current) Contact
+			if (countEmails >= 2
+					|| (countEmails == 1 && (id == null || !StringUtils.equalsIgnoreCase(
+							oldContact.getContactFieldValue("EMAIL"), myMail))))
+				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+						.entity("Sorry, duplicate contact found with the same email address.|" + myMail).build());
+		}
 
 		dao.put(this);
 
@@ -390,8 +409,15 @@ public class Contact extends Cursor
 		return null;
 	}
 
+	/**
+	 * Returns {@link ContactField} object based on the field name
+	 * 
+	 * @param fieldName
+	 * @return
+	 */
 	public ContactField getContactFieldByName(String fieldName)
 	{
+		// Iterates through all the properties and returns matching property
 		for (ContactField field : properties)
 		{
 			if (field.name.equals(fieldName))
@@ -417,6 +443,14 @@ public class Contact extends Cursor
 		return null;
 	}
 
+	/**
+	 * Retursn list of tags (list of {@link Tag}).
+	 * 
+	 * JsonIgnore is used as get do not want to return this field with contact
+	 * object
+	 * 
+	 * @return
+	 */
 	@JsonIgnore
 	public ArrayList<Tag> getTagsList()
 	{
@@ -424,37 +458,75 @@ public class Contact extends Cursor
 	}
 
 	/**
-	 * Adds tag(s) to a contact
+	 * Adds tag(s) to a contact. It is mostly used from developer API call,
+	 * where they try to add new tags to existing tags.
 	 * 
 	 * @param tags
 	 */
 	public void addTags(String[] tags)
 	{
+		int oldTagsCount = tagsWithTime.size();
+
+		// Iterates though each tag and checks if tag with the same name exists,
+		// add if it a new tag
 		for (String tag : tags)
 		{
 			Tag tagObject = new Tag(tag);
+
+			// Check whether tag already exists. Equals method is overridden in
+			// Tag class to use this contains functionality
 			if (!tagsWithTime.contains(tagObject))
 				tagsWithTime.add(tagObject);
 		}
 
+		// Returns without saving if there is no change in tags list length
+		if (oldTagsCount == tagsWithTime.size())
+			return;
+
 		this.save();
 
 	}
 
+	/**
+	 * Tags tags to existing tags. As tags can either be added in tags or
+	 * tagsWithTime object, this method takes array of tags object and adds to
+	 * existing tags
+	 * 
+	 * @param tags
+	 */
 	public void addTags(Tag[] tags)
 	{
+
+		int oldTagsCount = tagsWithTime.size();
 		for (Tag tag : tags)
 		{
-			if (!tagsWithTime.contains(tag))
-				tagsWithTime.add(tag);
+			// Adds to list if there it is a new tag
+			if (tagsWithTime.contains(tag))
+				continue;
+
+			tagsWithTime.add(tag);
 		}
+
+		// Contact is not saved if tags length is same before and after adding
+		// new tags
+		if (oldTagsCount == tagsWithTime.size())
+			return;
 
 		this.save();
 	}
 
+	/**
+	 * Removed tags from tagsWithTime object
+	 * 
+	 * @param tags
+	 */
 	public void removeTags(Tag[] tags)
 	{
 		Set<String> tagslist = new HashSet<String>();
+
+		/*
+		 * Removes tags from tagsWithTime field
+		 */
 		for (Tag tag : tags)
 		{
 			this.tagsWithTime.remove(tag);
@@ -462,6 +534,10 @@ public class Contact extends Cursor
 			tagslist.add(tag.tag);
 		}
 
+		// 'tags' field should be cleared as these two fields are compared. if
+		// there is an extra tag in 'tags' field, it gets added to tagsWithTime
+		// field
+		// before saving contact.
 		this.tags.clear();
 		this.save();
 
@@ -751,7 +827,7 @@ public class Contact extends Cursor
 			field.value = LinkedInUtil.changeImageUrl(field.value);
 
 		if (this.contact_company_key != null) // fill company name in
-												// properties['COMPANY']
+		// properties['COMPANY']
 		{
 			this.contact_company_id = String.valueOf(this.contact_company_key.getId());
 			try
@@ -813,10 +889,20 @@ public class Contact extends Cursor
 
 }
 
+/**
+ * <code>ViewedDetails</code> is used as an embedded field in {@link Contact}
+ * class to save recently viewed time and its related user id who viewed it
+ * 
+ * @author Yaswanth
+ * 
+ */
 @XmlRootElement
 class ViewedDetails
 {
+	// Viewed time in milli seconds
 	public Long viewed_time = 0L;
+
+	// Viewer id
 	public Long viewer_id = null;
 
 	public ViewedDetails()

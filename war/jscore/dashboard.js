@@ -2,14 +2,14 @@ var contacts_count, deals_count, tasks_count, workflow_count
 
 function setupDashboard(el)
 {	
-	setupSubscriptionDetails(el);
+	setup_subscription_details(el);
 	/*setupDashboardTimeline();
 	setUpDashboardNavtabs(el);*/
-	setProfileMeter();
-	setUpDashboardEntities(el);
+	set_profile_meter();
+	setup_dashboard_entities(el);
 }
 
-function setUpDashboardEntities(el) {
+function setup_dashboard_entities(el) {
 	
 			/*var profileMeter = new Base_Model_View({
 				url : 'core/api/profile-status',		
@@ -20,22 +20,22 @@ function setUpDashboardEntities(el) {
 			*/
 			
 			
-			var myRecentContacts = new Base_Collection_View({
+			var my_recent_contacts = new Base_Collection_View({
 				url: 'core/api/contacts/recent?page_size=5' ,
 		        restKey: "contacts",
 		        templateKey: "dashboard-contacts",
 		        individual_tag_name: 'tr',
 		        sort_collection: false,
 		    });
-			myRecentContacts.collection.fetch();
+			my_recent_contacts.collection.fetch();
 			
-		    $('#recent-contacts', el).html(myRecentContacts.render().el);
+		    $('#recent-contacts', el).html(my_recent_contacts.render().el);
 		
-			var tasksDashboardListView = new Base_Collection_View({
+			var task_dashboard_list_view = new Base_Collection_View({
 				url : '/core/api/tasks/my/dashboardtasks',
 				restKey : "task",
 				sortKey : "due",
-				templateKey : "tasks-dashboard1",
+				templateKey : "dashboard1-tasks",
 				individual_tag_name : 'tr',
 				postRenderCallback: function(el) {
 					head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
@@ -44,14 +44,12 @@ function setUpDashboardEntities(el) {
 				}
 			});
 			
-			
-			totalRows=1;
-			tasksDashboardListView.appendItem = append_tasks_dashboard;
-			tasksDashboardListView.collection.fetch();
-		    $('#my-tasks').html(tasksDashboardListView.el);
+			task_dashboard_list_view.appendItem = append_tasks_dashboard;
+			task_dashboard_list_view.collection.fetch();
+		    $('#my-tasks').html(task_dashboard_list_view.el);
 		    
 		        
-			var myDeals = new Base_Collection_View({
+			var my_deals = new Base_Collection_View({
 				url: 'core/api/opportunity/my/upcoming-deals',
 		        restKey: "opportunity",
 		        templateKey: "dashboard-opportunities",
@@ -65,10 +63,10 @@ function setUpDashboardEntities(el) {
 		        	})
 		        }
 		    });
-			myDeals.collection.fetch();
-		    	$('#my-deals').html(myDeals.el);
+			my_deals.collection.fetch();
+		    $('#my-deals').html(my_deals.el);
 		    	
-		    var workflowsListView = new Base_Collection_View({
+		    var workflow_list_view = new Base_Collection_View({
 				url : '/core/api/campaigns/logs/recent?page_size=5',
 				restKey : "workflow",
 				templateKey : "dashboard-campaign-logs",
@@ -78,15 +76,15 @@ function setUpDashboardEntities(el) {
 					head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
 						$("time.log-created-time", el).timeago();
 					});
-		    }
+				}
 			});
 		    
 		
-			workflowsListView.collection.fetch();
-			$('#my-logs').html(workflowsListView.el);
+			workflow_list_view.collection.fetch();
+			$('#my-logs').html(workflow_list_view.el);
 }
 
-function setupSubscriptionDetails(el)
+function setup_subscription_details(el)
 {					
 		var view = new Base_Model_View({
 			url : 'core/api/subscription',

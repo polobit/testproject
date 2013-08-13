@@ -3,7 +3,6 @@ package com.agilecrm.reports.deferred;
 import org.json.JSONException;
 
 import com.agilecrm.reports.ReportServlet;
-import com.agilecrm.reports.Reports;
 import com.agilecrm.reports.ReportsUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
@@ -47,7 +46,7 @@ public class ReportsDeferredTask implements DeferredTask
 	{
 	    // Util function fetches reports based on duration, generates
 	    // reports and sends report
-	    ReportsUtil.sendReportsToUsers(Reports.getAllReportsByDuration(duration));
+	    ReportsUtil.sendReportsToUsers(ReportsUtil.getAllReportsByDuration(duration));
 	}
 	catch (JSONException e1)
 	{

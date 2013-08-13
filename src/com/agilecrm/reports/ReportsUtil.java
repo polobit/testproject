@@ -21,6 +21,7 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.reports.deferred.ReportsInstantEmailDeferredTask;
 import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.util.email.SendMail;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -246,6 +247,11 @@ public class ReportsUtil
 	return newProperties;
     }
 
+    /**
+     * Creates a deferred task to send report based on the report id sent
+     * 
+     * @param report_id
+     */
     public static void sendReport(Long report_id)
     {
 	ReportsInstantEmailDeferredTask reportsDeferredTask = new ReportsInstantEmailDeferredTask(report_id);
@@ -254,5 +260,52 @@ public class ReportsUtil
 
 	// Add to queue
 	queue.add(TaskOptions.Builder.withPayload(reportsDeferredTask));
+    }
+
+    /**
+     * Fetch all the Report entities which are reports email enabled and with
+     * given duration.
+     * 
+     * @param duration
+     * @return @l{@link List} of {@link Reports}
+     * 
+     */
+    public static List<Reports> getAllReportsByDuration(String duration)
+    {
+
+	System.out.println("fetching the reports");
+	return Reports.dao.ofy().query(Reports.class).filter("duration", duration).list();
+
+    }
+
+    /**
+     * Fetches all the available reports
+     * 
+     * @return {@link List} of {@link Reports}
+     */
+    public static List<Reports> fetchAllReports()
+    {
+	return Reports.dao.fetchAll();
+    }
+
+    /**
+     * Get report based on given Id
+     * 
+     * @param id
+     * @return {@link Reports}
+     */
+    public static Reports getReport(Long id)
+    {
+	try
+	{
+	    return Reports.dao.get(id);
+	}
+	catch (EntityNotFoundException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	    return null;
+	}
+
     }
 }

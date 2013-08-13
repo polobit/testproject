@@ -41,7 +41,7 @@ public class ReportsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Reports> getListOfReports()
     {
-	return Reports.fetchAllReports();
+	return ReportsUtil.fetchAllReports();
     }
 
     /**
@@ -87,7 +87,7 @@ public class ReportsAPI
     {
 	try
 	{
-	    return Reports.getReport(id);
+	    return ReportsUtil.getReport(id);
 	}
 	catch (Exception e)
 	{
@@ -114,7 +114,7 @@ public class ReportsAPI
 	try
 	{
 	    // Fetches report based on report id
-	    Reports report = Reports.getReport(Long.parseLong(id));
+	    Reports report = ReportsUtil.getReport(Long.parseLong(id));
 
 	    // Generates report results
 	    Collection<Contact> contacts = report.generateReports(Integer.parseInt(count), cursor);

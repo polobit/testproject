@@ -42,7 +42,7 @@ function currentRoute(route) {
 	Current_Route = window.location.hash.split("#")[1];
 	console.log("in app/js : " + Current_Route);
 	activateInfiniScroll();
-	setProfileMeter();
+	set_profile_meter();
 	console.log(tour);
 	if(tour)
 		{
