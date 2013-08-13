@@ -30,8 +30,7 @@ public class Tag
     public Long createdTime = 0L;
 
     // Dao
-    private static ObjectifyGenericDao<Tag> dao = new ObjectifyGenericDao<Tag>(
-	    Tag.class);
+    private static ObjectifyGenericDao<Tag> dao = new ObjectifyGenericDao<Tag>(Tag.class);
 
     @NotSaved
     public String entity_type = "tag";
@@ -73,10 +72,15 @@ public class Tag
 	return tag;
     }
 
+    /**
+     * Equals method to compare to tags. It compares based on the 'tag' String
+     * field
+     */
     @Override
     public boolean equals(Object o)
     {
-	Tag tag = (Tag)o;
+	Tag tag = (Tag) o;
+
 	return this.tag.equalsIgnoreCase(tag.tag);
     }
 

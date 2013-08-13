@@ -60,14 +60,14 @@ public class Note
      */
     @NotSaved
     private List<String> contact_ids = new ArrayList<String>();
-    
+
     @NotSaved(IfDefault.class)
     private Key<AgileUser> owner = null;
 
     /**
      * List of contact keys, a note related to
      */
-    private List<Key<Contact>> related_contacts = new ArrayList<Key<Contact>>();
+    private final List<Key<Contact>> related_contacts = new ArrayList<Key<Contact>>();
 
     /**
      * Separates note from bulk of other models at client side (For timeline
@@ -77,8 +77,7 @@ public class Note
     public String entity_type = "note";
 
     // Dao
-    public static ObjectifyGenericDao<Note> dao = new ObjectifyGenericDao<Note>(
-	    Note.class);
+    public static ObjectifyGenericDao<Note> dao = new ObjectifyGenericDao<Note>(Note.class);
 
     /**
      * Default constructor
@@ -139,15 +138,13 @@ public class Note
 	System.out.println("contacts before saving : " + contact_ids);
 
 	// Create list of contact keys
-	    for (Object contact_id : this.contact_ids)
+	for (Object contact_id : this.contact_ids)
 	{
-	    this.related_contacts.add(new Key<Contact>(Contact.class, Long
-			.parseLong(contact_id.toString())));
+	    this.related_contacts.add(new Key<Contact>(Contact.class, Long.parseLong(contact_id.toString())));
 	}
 
 	if (owner == null)
-	    owner = new Key<AgileUser>(AgileUser.class,
-		    AgileUser.getCurrentAgileUser().id);
+	    owner = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);
 
 	// Store Created Time
 	if (created_time == 0L)
@@ -168,6 +165,11 @@ public class Note
 	return contacts_list;
     }
 
+    /**
+     * Returns contact ids related to note.
+     * 
+     * @return
+     */
     @XmlElement(name = "contact_ids")
     public List<String> getContact_ids()
     {
@@ -179,6 +181,12 @@ public class Note
 	return contact_ids;
     }
 
+    /**
+     * Returns {@link UserPrefs} Object related to current note
+     * 
+     * @return
+     * @throws Exception
+     */
     @XmlElement(name = "Prefs")
     public UserPrefs getPrefs() throws Exception
     {
@@ -200,7 +208,6 @@ public class Note
     @Override
     public String toString()
     {
-    	return "id: " + id + " created_time: " + created_time + " subj"
-    			+ subject + " description: " + description;
+	return "id: " + id + " created_time: " + created_time + " subj" + subject + " description: " + description;
     }
 }
