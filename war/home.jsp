@@ -166,7 +166,7 @@
 							<li id="workflowsmenu" style="<%=style_campaign %>" ><a href="#workflows"><i
 									class="icon-sitemap icon-white"></i> Campaigns</a></li>
 							<li id="reportsmenu"><a href="#reports"><i
-									class="icon-share icon-white"></i> Reports</a></li>
+									class="icon-bar-chart icon-white"></i> Reports</a></li>
 
 							<li>
 								<form id="searchForm" class=" navbar-search"
@@ -320,7 +320,7 @@
 
 	<script>
 	 var LIB_PATH = "//da4o37ei6ybbh.cloudfront.net/js/";
-	 // var LIB_PATH = "/";
+	 //var LIB_PATH = "/";
 	
 	var IS_CONSOLE_ENABLED = <%=debug%>;
 	var LOCAL_SERVER = <%=debug%>;
@@ -345,6 +345,9 @@
 	
 	<!-- Handle bars -->
 	head.js(LIB_PATH + 'lib/handlebars-1.0.0.beta.6-min.js');
+	
+	<!-- Country Names from country codes -->
+	head.js(LIB_PATH + 'lib/country-from-code.js');
 	
 	// Fetch/Create contact from our domain
 	var Agile_Contact = {};

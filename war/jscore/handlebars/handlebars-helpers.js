@@ -620,8 +620,12 @@ $(function()
 		return new Date(logTime * 1000);
 	});
 
+	/**
+	 * Returns country name from country code.
+	 **/
 	Handlebars.registerHelper('getCountryName', function(countrycode)
 	{
+		// retrieves country name from code using country-from-code.js
 		return getCode(countrycode);
 	});
 
@@ -1495,7 +1499,7 @@ $(function()
 
 	/**
 	 * Converts total seconds into hours, minutes and seconds. For e.g. 3600
-	 * secs - 01hrs 00 mins 00secs
+	 * secs - 1hr 0 mins 0secs
 	 */
 	Handlebars.registerHelper('convertSecondsToHour',
 			function(totalSec)

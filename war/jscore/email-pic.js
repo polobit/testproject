@@ -11,14 +11,15 @@ $(function()
 	{
 		e.preventDefault();
 
-		//if length of email is 0, do not display picture
+		// If length of email is 0, do not display picture
 		var val = $("#email").val();
 		if (val.length == 0)
 		{
 			$('#pic').css("display", "none");
 			return;
 		}
-		//if picture is not null and undefined, display it by given width, else display none
+		
+		// If picture is not null and undefined, display it by given width, else display none
 		var pic = getPicByEmail(val, 45);
 		if (pic != undefined && pic != null)
 		{
