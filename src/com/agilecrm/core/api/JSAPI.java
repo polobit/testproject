@@ -1,6 +1,7 @@
 package com.agilecrm.core.api;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -17,6 +18,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
@@ -538,5 +540,98 @@ public class JSAPI
 	    return null;
 	}
     }
+    
+    /**
+     * Get score from contact based on email of contact
+     * 
+     * @param email
+     * 				email of the contact
+     * 
+     * @return Integer
+     */
+    @Path ("contacts/get-score")
+    @GET
+    @Produces ("application / x-javascript")
+    public Integer getScore(@QueryParam("email") String email)
+    {
+    try
+    {
+    	Contact contact = ContactUtil.searchContactByEmail(email);
+    	if (contact == null)
+    		return null;
+    	Integer score;
+    	score = contact.lead_score;
+    	System.out.println("getting score" + score);
+    	return score;
+    }
+    catch(Exception e)
+    {
+    	e.printStackTrace();
+    	return null;
+    }
+    }
 
+    /**
+     * Get notes from contact based on email
+     * 
+     * @param email
+     * 				email of the contact
+     * 
+     * @return list
+     */
+    @Path ("contacts/get-note")
+    @GET
+    @Produces ("application / x-javascript")
+    public static List<Note> getNote(@QueryParam("email") String email)
+    {
+   	try 
+   	{
+   		Contact contact = ContactUtil.searchContactByEmail(email);
+   		if (contact == null)
+   			return null;
+   		List<Note> Notes = new ArrayList<Note>();
+    		Notes = NoteUtil.getNotes(contact.id);
+   		for(int i=0;i<Notes.size();i++)
+   		{
+   		System.out.println("getting notes" + Notes.get(i));
+   		}
+   		return Notes;
+    }
+    	catch(Exception e)
+    	{
+    		e.printStackTrace();
+    		return null;
+    	}
+    }
+
+    /**
+     * Get contact tags based on email
+     * 
+     * @param email
+     * 				email of the contact
+     * 
+     * @return String
+     */
+    @Path("contacts/get-tags")
+    @GET
+    @Produces ("application / x-javascript")
+    public String getTag(@QueryParam("email") String email)
+    {
+   	try
+   	{
+   		Contact contact = ContactUtil.searchContactByEmail(email);
+   		if (contact == null)
+   			return null;
+
+   		String tags = new String();
+    	tags = contact.tags.toString();
+    	System.out.println("getting tags" + tags);
+    	return tags;
+    }
+    catch(Exception e)
+    {
+    	e.printStackTrace();
+    	return null;
+    }
+    }
 }

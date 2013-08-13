@@ -28,16 +28,16 @@ function agile_propertyJSON(name, id, type)
 	return json;
 }
 
-function agile_json(URL, callback, data)
+function agile_json(URL, callback)
 {
 	/**
 	 * Generates the callback
 	 * 
-	 * @param URL 
+	 * @param URL
 	 *            callback url
-	 * @param callback 
+	 * @param callback
 	 *            callback function
-	 * @param data 
+	 * @param data
 	 *            callback function parameter (used optionally depending on callback)
 	 * @returns element
 	 */
