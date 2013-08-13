@@ -2,7 +2,7 @@ $(function(){
 
 	$('.deals-add').live('click', function(e) {
 		e.preventDefault();
-		showDeal();
+		show_deal();
 	});
 
 	$("#opportunity_validate").live('click', function(e){
@@ -116,7 +116,7 @@ function updateDeal(ele) {
 }
 
 // Show new deal popup
-function showDeal(){
+function show_deal(){
 	
 	var el = $("#opportunityForm");
 	

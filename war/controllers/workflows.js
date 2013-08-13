@@ -38,7 +38,7 @@ var WorkflowsRouter = Backbone.Router
 			 * workflows list increases.
 			 */
 			workflows : function() {
-				this.workflowsListView = new Base_Collection_View({
+				this.workflow_list_view = new Base_Collection_View({
 					url : '/core/api/workflows',
 					restKey : "workflow",
 					templateKey : "workflows",
@@ -50,11 +50,11 @@ var WorkflowsRouter = Backbone.Router
 							$("time.campaign-created-time", el).timeago();
 							
 						});
-						  startTour(undefined, el);
+						  start_tour(undefined, el);
 
 						  // Shows pending triggers content when there are no triggers.
-						  if (App_Workflows.workflowsListView
-									&& !(App_Workflows.workflowsListView.collection.length === 0))
+						  if (App_Workflows.workflow_list_view
+									&& !(App_Workflows.workflow_list_view.collection.length === 0))
 						  {
 							  $.get('/core/api/triggers',function(data){
 							      
@@ -71,8 +71,8 @@ var WorkflowsRouter = Backbone.Router
 					}
 				});
 
-				this.workflowsListView.collection.fetch();
-				$('#content').html(this.workflowsListView.el);
+				this.workflow_list_view.collection.fetch();
+				$('#content').html(this.workflow_list_view.el);
 
 				$(".active").removeClass("active");
 				$("#workflowsmenu").addClass("active");
@@ -83,8 +83,8 @@ var WorkflowsRouter = Backbone.Router
 			 * to workflows list.
 			 */
 			workflowAdd : function() {
-				if (!this.workflowsListView
-						|| !this.workflowsListView.collection) {
+				if (!this.workflow_list_view
+						|| !this.workflow_list_view.collection) {
 					this.navigate("workflows", {
 						trigger : true
 					});
@@ -96,7 +96,7 @@ var WorkflowsRouter = Backbone.Router
 				this.workflow_model = undefined;
 
 				$('#content').html(getTemplate('workflow-add', {}));
-				initiateTour("workflows-add", $('#content'));
+				initiate_tour("workflows-add", $('#content'));
 			},
 
 			/**
@@ -107,8 +107,8 @@ var WorkflowsRouter = Backbone.Router
 			 *            Workflow Id
 			 */
 			workflowEdit : function(id) {
-				if (!this.workflowsListView
-						|| this.workflowsListView.collection.length == 0) {
+				if (!this.workflow_list_view
+						|| this.workflow_list_view.collection.length == 0) {
 					this.navigate("workflows", {
 						trigger : true
 					});
@@ -116,7 +116,7 @@ var WorkflowsRouter = Backbone.Router
 				}
 
 				/* Set the designer JSON. This will be deserialized */
-				this.workflow_model = this.workflowsListView.collection.get(id);
+				this.workflow_model = this.workflow_list_view.collection.get(id);
 				this.workflow_json = this.workflow_model.get("rules");
 
 				var el = $(getTemplate('workflow-add', {}));
@@ -134,8 +134,8 @@ var WorkflowsRouter = Backbone.Router
 			 */
 			logsToCampaign : function(id) {
 				
-				if (!this.workflowsListView
-						|| this.workflowsListView.collection.length == 0) {
+				if (!this.workflow_list_view
+						|| this.workflow_list_view.collection.length == 0) {
 					this.navigate("workflows", {
 						trigger : true
 					});
@@ -143,7 +143,7 @@ var WorkflowsRouter = Backbone.Router
 				}
 				
 				/* Set the designer JSON. This will be deserialized */
-				this.workflow_model = this.workflowsListView.collection.get(id);
+				this.workflow_model = this.workflow_list_view.collection.get(id);
 				var workflowName = this.workflow_model.get("name");
 				
 				var logsListView = new Base_Collection_View({
@@ -183,8 +183,8 @@ var WorkflowsRouter = Backbone.Router
 
 			emailReports : function(id) {
 				
-				if (!this.workflowsListView
-						|| this.workflowsListView.collection.length == 0) {
+				if (!this.workflow_list_view
+						|| this.workflow_list_view.collection.length == 0) {
 					this.navigate("workflows", {
 						trigger : true
 					});
@@ -192,7 +192,7 @@ var WorkflowsRouter = Backbone.Router
 				}
 				
 				/* Set the designer JSON. This will be deserialized */
-				this.workflow_model = this.workflowsListView.collection.get(id);
+				this.workflow_model = this.workflow_list_view.collection.get(id);
 				var workflowName = this.workflow_model.get("name");
 				
 				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH

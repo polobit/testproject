@@ -38,7 +38,7 @@ var CalendarRouter = Backbone.Router.extend({
             		 $(".task-due-time", el).timeago();
               	});
         
-            	  startTour(undefined, el);
+            	  start_tour(undefined, el);
             }
 		});
 

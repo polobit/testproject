@@ -1,254 +1,197 @@
-var AGILE_TOUR = {};
+var Agile_Tour = {};
 
-function create_tour_steps(el) {
-	
-	AGILE_TOUR["contacts"] = [
-	                                 {
-	                                	 "element" : "#contacts",
-	                     				"title" : "Contact & Account Management",
-	                     				"content" : "View your contacts, leads and accounts (companies) all at one place.<br/>",
-	                     				"placement" : "bottom",
-	                     				"el": el,
-	                     				"backdrop" : true
-	                                 },
-	                                 {
-	                                	 "element" : "#filters-tour-step",
-	                     				"title" : "Companies (Accounts)",
-	                     				"content" : "Accounts are stored as Companies in Agile.<br/><br/> You can switch between contacts and companies  here.<br/>",
-	                     				"placement" : "bottom",
-	                     				"el": el,
-	                     				"backdrop" : true
-	                                 },
-	                                 {
-	                                	 "element" : "#tags",
-	                     				"title" : "Tags",
-	                     				"content" : "Tags help you effectively manage your contacts and companies.<br/><br/> For eg: you can add a lead tag to your contacts for leads.<br/>",
-	                     				"placement" : "right",
-	                     				"el": el,
-	                     				"backdrop" : true
-	                                 }
-	                                ]
-	
-	
+function create_tour_steps(el)
+{
+
+	Agile_Tour["contacts"] = [
+			{ "element" : "#contacts", "title" : "Contact & Account Management",
+				"content" : "View your contacts, leads and accounts (companies) all at one place.<br/>", "placement" : "bottom", "el" : el, "backdrop" : true },
+			{ "element" : "#filters-tour-step", "title" : "Companies (Accounts)",
+				"content" : "Accounts are stored as Companies in Agile.<br/><br/> You can switch between contacts and companies  here.<br/>",
+				"placement" : "bottom", "el" : el, "backdrop" : true },
+			{
+				"element" : "#tags",
+				"title" : "Tags",
+				"content" : "Tags help you effectively manage your contacts and companies.<br/><br/> For eg: you can add a lead tag to your contacts for leads.<br/>",
+				"placement" : "right", "el" : el, "backdrop" : true }
+	]
+
 	/**
 	 * Contacts details
 	 */
-	AGILE_TOUR["contact-details"] = [
-	                             	{
-	                    				"element" : "#contact-tab-content",
-	                    				"title" : "Facebook-Style Timeline",
-	                    				"content" : "Notice the awesome timeline with dates, emails exchanged, social messages & site visits.<br/>",
-	                    				"placement" : "right",
-	                    				"el": el,
-	                    				"backdrop" : true
-							                    			},
-									{
-										"element" : "#score",
-										"container": "#score",
-										"title" : "Score your leads",
-										"content" : "Assign lead scores for every contact to keep high quality leads swimming on top. <br/><br/> Use workflows to automate the process based on user behavior.<br/>",
-										"placement" : "bottom",
-										"el": el,
-										"backdrop" : true
-									},
-									{
-										"element" : "#widgets",
-										"title" : "Widgets & Integrations",
-										"content" : "Get more information about the contact from social media, helpdesk tickets, chats, and from billing systems.<br/>",
-										"placement" : "left",
-										"el": el,
-										"backdrop" : true,
-									}, 
-							];
-	
+	Agile_Tour["contact-details"] = [
+			{ "element" : "#contact-tab-content", "title" : "Facebook-Style Timeline",
+				"content" : "Notice the awesome timeline with dates, emails exchanged, social messages & site visits.<br/>", "placement" : "right", "el" : el,
+				"backdrop" : true },
+			{
+				"element" : "#score",
+				"container" : "#score",
+				"title" : "Score your leads",
+				"content" : "Assign lead scores for every contact to keep high quality leads swimming on top. <br/><br/> Use workflows to automate the process based on user behavior.<br/>",
+				"placement" : "bottom", "el" : el, "backdrop" : true },
+			{ "element" : "#widgets", "title" : "Widgets & Integrations",
+				"content" : "Get more information about the contact from social media, helpdesk tickets, chats, and from billing systems.<br/>",
+				"placement" : "left", "el" : el, "backdrop" : true, },
+	];
+
 	/**
 	 * Calendar
 	 */
-	AGILE_TOUR["calendar"] = [
-	                          {
-		                        	"element" : "#calendar",
-		              				"title" : "Calendar Events",
-		              				"content" : "Events are time based such as meetings.<br/> They show up in calendar.<br/>",  
-		              				"placement" : "left",
-		              			//	"el": el,
-		              				"backdrop" : true,
-		                      },
-	                          {
-	                        	"element" : ".todo-block",
-	              				"title" : "To Do Tasks",
-	              				"content" : "Tasks are like to-dos. Result oriented.<br/><br/> You can assign a category such as call, email.<br/>",  
-	              				"placement" : "right",
-	              				// "el": el,
-	              				"backdrop" : true,
-	                          },
-	                          {
-		                        	"element" : "#subscribe-ical",
-		              				"title" : "Calendar Sync",
-		              				"content" : "You can sync your Agile calendar with  Outlook, Google calendar or your mobile phone.<br/>",  
-		              				"placement" : "top",
-		              			//	"el": el,
-		              				"backdrop" : true,
-		                      },
-	                          
-	                          ];
-	
-	AGILE_TOUR["workflows"] = [
-	                        	   	{
-			                        	"element" : "#learn-workflows",
-			              				"title" : "Learn about Campaigns",
-			              				"content" : "Our customers love campaign workflows. You would too!<br/><br/>  <p class='text-error'><strong>Take a few mins and learn more about campaigns.</strong></p>",  
-			              				"placement" : "left",
-			              				"el": el,
-			              				"backdrop" : true,
-			                        },
-			                       	{
-			                        	"element" : "#add-trigger",
-			              				"title" : "Triggers",
-			              				"content" : "Create conditions to trigger your campaigns automatically. <br/><br/> <strong>Eg:</strong> when a tag is added or when a contact reaches a score.<br/>",  
-			              				"placement" : "bottom",
-			              				"el": el,
-			              				"backdrop" : true,
-			                        },
-			                     	{
-			                        	"element" : "#workflows-tour-step",
-			              				"title" : "Sample Campaigns",
-			              				"content" : "I have created few sample campaigns for you to get a hang of them.<br/><br/> <strong>Multistep Responders</strong> - simple email with an automated followup after few days <br/><br/> <strong>Multichannel Campaigns</strong> - email and engage on Twitter if they have opened your your email <br/><br/> <strong>Cart Abandonment made simple</strong> - send a coupon to someone who has added an item in the cart but hasn't finished the checkout in 3 days. <br/>",
-			              				"placement" : "right",
-			              				"el": el,
-			              				"backdrop" : true,
-			                        },
-	                           ]
-	AGILE_TOUR["workflows-add"] = [
-	                               {
-	                            	   "element" : "#workflowform",
-			              				"title" : "Visual Campaigns",
-			              				"content" : "Create your campaigns and workflows visually.<br/> Just drag and drop the nodes. Connect them to the workflow.<br/>",
-			              				"placement" : "top",
-			              				"el": el,
-			              				"backdrop" : true,
-			                        }
-									
-	                               ]		
-	
+	Agile_Tour["calendar"] = [
+			{ "element" : "#calendar", "title" : "Calendar Events", "content" : "Events are time based such as meetings.<br/> They show up in calendar.<br/>",
+				"placement" : "left",
+				// "el": el,
+				"backdrop" : true, },
+			{ "element" : ".todo-block", "title" : "To Do Tasks",
+				"content" : "Tasks are like to-dos. Result oriented.<br/><br/> You can assign a category such as call, email.<br/>", "placement" : "right",
+				// "el": el,
+				"backdrop" : true, },
+			{ "element" : "#subscribe-ical", "title" : "Calendar Sync",
+				"content" : "You can sync your Agile calendar with  Outlook, Google calendar or your mobile phone.<br/>", "placement" : "top",
+				// "el": el,
+				"backdrop" : true, },
+
+	];
+
+	Agile_Tour["workflows"] = [
+			{
+				"element" : "#learn-workflows",
+				"title" : "Learn about Campaigns",
+				"content" : "Our customers love campaign workflows. You would too!<br/><br/>  <p class='text-error'><strong>Take a few mins and learn more about campaigns.</strong></p>",
+				"placement" : "left", "el" : el, "backdrop" : true, },
+			{
+				"element" : "#add-trigger",
+				"title" : "Triggers",
+				"content" : "Create conditions to trigger your campaigns automatically. <br/><br/> <strong>Eg:</strong> when a tag is added or when a contact reaches a score.<br/>",
+				"placement" : "bottom", "el" : el, "backdrop" : true, },
+			{
+				"element" : "#workflows-tour-step",
+				"title" : "Sample Campaigns",
+				"content" : "I have created few sample campaigns for you to get a hang of them.<br/><br/> <strong>Multistep Responders</strong> - simple email with an automated followup after few days <br/><br/> <strong>Multichannel Campaigns</strong> - email and engage on Twitter if they have opened your your email <br/><br/> <strong>Cart Abandonment made simple</strong> - send a coupon to someone who has added an item in the cart but hasn't finished the checkout in 3 days. <br/>",
+				"placement" : "right", "el" : el, "backdrop" : true, },
+	]
+	Agile_Tour["workflows-add"] = [
+		{ "element" : "#workflowform", "title" : "Visual Campaigns",
+			"content" : "Create your campaigns and workflows visually.<br/> Just drag and drop the nodes. Connect them to the workflow.<br/>",
+			"placement" : "top", "el" : el, "backdrop" : true, }
+
+	]
+
 }
 
 var tour;
-var tour_flag = false;
-function startTour(key, el) {
+
+function start_tour(key, el)
+{
+	var tour_flag = false;
 	tour = undefined;
 	var tour_flag = false;
-	if(!key)
+	if (!key)
 		key = Current_Route;
-			
-	 $(el).live('agile_collection_loaded', function(){
-		if(tour_flag)
+
+	$(el).live('agile_collection_loaded', function()
+	{
+		if (tour_flag)
 			return;
-		
-		initiateTour(key, el);
+
+		initiate_tour(key, el);
 		tour_flag = true;
-	 });
+	});
 }
-function initiateTour(key, el)
-{ 
-	var tourStatusCookie = readCookie("agile_tour");
-	if (!tourStatusCookie)
+function initiate_tour(key, el)
+{
+	var tour_status_cookie = readCookie("agile_tour");
+	if (!tour_status_cookie)
 		return;
 
 	if (!key)
-		{
-			if(!Current_Route)
-				return;
-			
-			key = Current_Route; 
-		}
-		
-			
+	{
+		if (!Current_Route)
+			return;
+
+		key = Current_Route;
+	}
+
 	console.log(tour);
-		
-	tourStatusCookie = JSON.parse(JSON.parse(tourStatusCookie));
-	tourStatus = tourStatusCookie[key];
-	if(!tourStatus)
+
+	tour_status_cookie = JSON.parse(JSON.parse(tour_status_cookie));
+	tourStatus = tour_status_cookie[key];
+	if (!tourStatus)
 		return;
 
-	if ($.isEmptyObject(AGILE_TOUR))
+	if ($.isEmptyObject(Agile_Tour))
 		create_tour_steps(el);
 
+	if (Agile_Tour[key])
+		head.js('lib/bootstrap-tour-agile.min.js', function()
+		{
+			tour = new Tour({ name : key + "-tour", debug : true, useLocalStorage : true, endOnLast : true, onEnd : function(tour)
+			{
 
-	if(AGILE_TOUR[key])
-	head.js('lib/bootstrap-tour-agile.min.js', function() {
-		tour = new Tour({
-			 name: key + "-tour",
-		     debug:true,
-			useLocalStorage : true,
-			endOnLast: true,
-			onEnd : function(tour) {
-				
-				$("."+key + "-tour").remove();
-				delete tourStatusCookie[key];
-				
-				if ($.isEmptyObject(tourStatusCookie)) {
+				$("." + key + "-tour").remove();
+				delete tour_status_cookie[key];
+
+				if ($.isEmptyObject(tour_status_cookie))
+				{
 					eraseCookie("agile_tour");
 					return;
 				}
 
 				// Stringified it twice to maintain consistency with the cookie
 				// set from backend
-				createCookie("agile_tour", JSON.stringify(JSON
-						.stringify(tourStatusCookie)));
+				createCookie("agile_tour", JSON.stringify(JSON.stringify(tour_status_cookie)));
 				// }
-			}
-		});
-		
-			tour.addSteps(AGILE_TOUR[key]);
+			} });
+
+			tour.addSteps(Agile_Tour[key]);
 
 			tour.start(true);
 
-	})
+		})
 
 }
 
-function endCurrentTour(){
-	
-}
+function reinitialize_tour_on_current_route()
+{
 
-function reinitialize_tour_on_current_route() {
-	
 	// Return of tour is already enabled on that route
-	var tourStatusCookie = readCookie("agile_tour");
+	var tour_status_cookie = readCookie("agile_tour");
 	var key = Current_Route;
 
-	// If current view is contact details page we cannot initialize 
-	// tour based on route name, so we should be changing it to "contact-details" 
-	if(Current_Route.indexOf("contact/") != -1)
+	// If current view is contact details page we cannot initialize
+	// tour based on route name, so we should be changing it to
+	// "contact-details"
+	if (Current_Route.indexOf("contact/") != -1)
 		key = "contact-details";
 
 	// If cookie exists, checks the state of tour in curent route.
-	if(tourStatusCookie)
+	if (tour_status_cookie)
 	{
-		tourStatusCookie = JSON.parse(JSON.parse(tourStatusCookie));
-		
-		if(tourStatusCookie[key] == true)
+		tour_status_cookie = JSON.parse(JSON.parse(tour_status_cookie));
+
+		if (tour_status_cookie[key] == true)
 			return;
 		localStorage.removeItem(key + "-tour_current_step");
 	}
-	
+
 	else
-		tourStatusCookie = {};
-	
+		tour_status_cookie = {};
+
 	// Set tour back to true and save in cookie.
-	tourStatusCookie[key] = true;
-	
+	tour_status_cookie[key] = true;
+
 	localStorage.removeItem(key + "-tour_current_step");
-		
-	createCookie("agile_tour", JSON.stringify(JSON
-			.stringify(tourStatusCookie)));
-	
+
+	createCookie("agile_tour", JSON.stringify(JSON.stringify(tour_status_cookie)));
+
 	// Initialize tour
-	initiateTour(key);
+	initiate_tour(key);
 }
 
-$(function(){
-	$('#agile-page-tour').click(function(e) {
+$(function()
+{
+	$('#agile-page-tour').click(function(e)
+	{
 		e.preventDefault();
 		reinitialize_tour_on_current_route();
 	});

@@ -218,7 +218,7 @@ var ContactsRouter = Backbone.Router.extend({
             	   * then show the filter name on dropdown button
             	   */
             	  setupContactFilterList(cel, tag_id);    
-            	  startTour("contacts", el);
+            	  start_tour("contacts", el);
               }             
           });
 
@@ -371,7 +371,7 @@ var ContactsRouter = Backbone.Router.extend({
                 	contact_detail_view_navigation(id, contact_collection, el);
                 
                 fill_owners(el, contact.toJSON());
-                startTour("contact-details", el);
+                start_tour("contact-details", el);
                }
         });
         

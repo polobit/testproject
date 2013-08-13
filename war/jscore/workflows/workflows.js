@@ -78,7 +78,7 @@ $(function(){
             workflowJSON.rules = designerJSON;
 
             var workflow = new Backbone.Model(workflowJSON);
-            App_Workflows.workflowsListView.collection.create(workflow,{
+            App_Workflows.workflow_list_view.collection.create(workflow,{
             	    success:function(){  
 
             	    	// Removes disabled attribute of save button

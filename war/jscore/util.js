@@ -262,17 +262,17 @@ function addTagAgile(tag) {
 		return;
 	
 	_agile.add_tag(tag, function(data){
-		AGILE_CONTACT = data;
+		Agile_Contact = data;
 		if(!checkTagAgile(tag))
-			AGILE_CONTACT.tags.push(tag)	
-			setProfileMeter();
+			Agile_Contact.tags.push(tag)	
+			set_profile_meter();
 	});
 }
 
 function checkTagAgile(tag) {
 	
-	if(AGILE_CONTACT && AGILE_CONTACT.tags)
-		return AGILE_CONTACT.tags.indexOf(tag) > -1;
+	if(Agile_Contact && Agile_Contact.tags)
+		return Agile_Contact.tags.indexOf(tag) > -1;
 	
 	return false;
 }
