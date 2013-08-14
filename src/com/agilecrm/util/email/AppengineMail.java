@@ -15,13 +15,22 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
 
+/**
+ * <code>AppengineMail</code> is an alternative to send grid email, it is used
+ * to resend the password if user do not recieve/ if sendgrid fails to send
+ * mail.
+ * 
+ * It uses java mail API to send emails
+ * 
+ * @author Yaswanth
+ * 
+ */
 public class AppengineMail
 {
     public static final String FROM = "agilecrm@agile-crm-cloud.appspotmail.com";
     public static final String FRIENDLY_NAME = "AgileCRM";
 
-    public static boolean sendHTMLEmail(String to, String subject,
-	    String textBody, String htmlBody)
+    public static boolean sendHTMLEmail(String to, String subject, String textBody, String htmlBody)
     {
 
 	String from = FROM;
@@ -30,13 +39,13 @@ public class AppengineMail
 	// Send Email (HTML Email and Plain Text)
 	try
 	{
-
 	    Properties props = System.getProperties();
 	    Session session = Session.getDefaultInstance(props, null);
 
 	    // -- Create a new message --
 	    MimeMessage message = new MimeMessage(session);
 
+	    // From and reply to parameters are set
 	    // -- Set the FROM and TO fields --
 	    if (friendlyName != null)
 		message.setFrom(new InternetAddress(from, friendlyName));
@@ -46,6 +55,12 @@ public class AppengineMail
 	    // Set reply to (testing)
 	    message.setReplyTo(new InternetAddress[] { new InternetAddress(from) });
 
+	    /**
+	     * Mail can be sent to multiple people. It takes to parameters and
+	     * splits at ',' to get multiple email addresses. First email in to
+	     * is taken as direct address, and remaining are considered as
+	     * addresses to send CC.
+	     */
 	    if (to.contains(","))
 	    {
 		// Tokenize
@@ -55,19 +70,19 @@ public class AppengineMail
 		{
 		    if (isFirstToken)
 		    {
-			message.addRecipient(Message.RecipientType.TO,
-				new InternetAddress(st.nextToken().trim()));
+			message.addRecipient(Message.RecipientType.TO, new InternetAddress(st.nextToken().trim()));
 			isFirstToken = false;
 		    }
 		    else
-			message.addRecipient(Message.RecipientType.CC,
-				new InternetAddress(st.nextToken().trim()));
+			message.addRecipient(Message.RecipientType.CC, new InternetAddress(st.nextToken().trim()));
 		}
 	    }
 	    else
-		message.addRecipient(Message.RecipientType.TO,
-			new InternetAddress(to));
+		message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 
+	    /**
+	     * If content is of type html.
+	     */
 	    if (htmlBody != null && htmlBody.length() != 0)
 	    {
 
@@ -110,9 +125,8 @@ public class AppengineMail
 		message.setSubject(subject);
 	    }
 
-	    System.out.println("From: " + from + " - " + friendlyName + " To:"
-		    + to + " Sub:" + subject + " Html:" + htmlBody + " Text:"
-		    + textBody);
+	    System.out.println("From: " + from + " - " + friendlyName + " To:" + to + " Sub:" + subject + " Html:"
+		    + htmlBody + " Text:" + textBody);
 
 	    Transport.send(message);
 
@@ -129,8 +143,16 @@ public class AppengineMail
 	return false;
     }
 
-    public static void sendMail(String to, String subject, String template,
-	    Object object)
+    /**
+     * Builds email template using Mustache library and calls sendHTMLEmail to
+     * send emails accordingly
+     * 
+     * @param to
+     * @param subject
+     * @param template
+     * @param object
+     */
+    public static void sendMail(String to, String subject, String template, Object object)
     {
 
 	System.out.println(template + SendMail.TEMPLATE_HTML_EXT);
@@ -151,10 +173,7 @@ public class AppengineMail
 		for (Object eachObject : (Object[]) object)
 		{
 		    String className = eachObject.getClass().getSimpleName();
-		    content.put(
-			    className,
-			    new JSONObject(new ObjectMapper()
-				    .writeValueAsString(eachObject)));
+		    content.put(className, new JSONObject(new ObjectMapper().writeValueAsString(eachObject)));
 		}
 
 		jsonObjectArray = new JSONObject[] { content };
@@ -171,12 +190,10 @@ public class AppengineMail
 	    JSONObject mergedJSON = MustacheUtil.mergeJSONs(jsonObjectArray);
 
 	    // Read template - HTML
-	    String emailHTML = MustacheUtil.templatize(template
-		    + SendMail.TEMPLATE_HTML_EXT, mergedJSON);
+	    String emailHTML = MustacheUtil.templatize(template + SendMail.TEMPLATE_HTML_EXT, mergedJSON);
 
 	    // Read template - Body
-	    String emailBody = MustacheUtil.templatize(template
-		    + SendMail.TEMPLATE_BODY_EXT, mergedJSON);
+	    String emailBody = MustacheUtil.templatize(template + SendMail.TEMPLATE_BODY_EXT, mergedJSON);
 
 	    if (StringUtils.isEmpty(emailBody))
 		emailBody = " ";
