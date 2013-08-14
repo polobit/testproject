@@ -10,7 +10,7 @@ $(function()
 	CLICKDESK_PLUGIN_NAME = "ClickDesk";
 
 	// ClickDesk loading image declared as global
-	CLICKDESK_UPDATE_LOAD_IMAGE = '<center><img id="chats_load" src=\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+	CLICKDESK_UPDATE_LOAD_IMAGE = '<center><img id="chats_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
 
 	// Retrieves widget which is fetched using script API
 	var clickdesk_widget = agile_crm_get_plugin(CLICKDESK_PLUGIN_NAME);
@@ -20,7 +20,7 @@ $(function()
 
 	// ID of the ClickDesk widget as global variable
 	Plugin_Id = clickdesk_widget.id;
-	
+
 	// Stores email of the contact as global variable
 	Email = agile_crm_get_contact_property('email');
 	console.log('Email: ' + Email);
