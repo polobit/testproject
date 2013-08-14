@@ -41,10 +41,11 @@ public class HomeServlet extends HttpServlet
     {
 
 	/**
-	 * Due to HRD eventual consistency, user cannot be retrieved immediately
-	 * after saving it. To avoid creating multiple users, after creating new
-	 * AgileUser, request is dispatched back to HomeServlelt with extra
-	 * parameter 'w', which indicates user is just saved in to datastore.
+	 * Due to HRD eventual consistency, user entity cannot be retrieved
+	 * immediately after saving it. To avoid creating multiple users, after
+	 * creating new AgileUser, request is dispatched back to HomeServlelt
+	 * with extra parameter 'w', which indicates user is just saved in to
+	 * datastore.
 	 */
 	String isFirstTimerUser = req.getParameter("w");
 
@@ -142,14 +143,14 @@ public class HomeServlet extends HttpServlet
     }
 
     /**
-     * Saved logged in time in domain user before request is forwared to
+     * Saves logged in time in domain user before request is forwarded to
      * dashboard (home.jsp)
      */
     private void setLoggedInTime()
     {
 	try
 	{
-	    // Gets current domain user and saved current time as logged in
+	    // Gets current domain user and saves current time as logged in
 	    // time.
 	    DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 	    domainUser.setInfo(DomainUser.LOGGED_IN_TIME, new Long(System.currentTimeMillis() / 1000));
