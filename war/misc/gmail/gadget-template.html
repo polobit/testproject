@@ -3,7 +3,7 @@
 	{{#if id}}
 <!-- conteact exist -->			
 		<div class="contact-minified">
-			<i class="icon-expand-alt"></i><a class="gadget-show-contact" style="cursor:pointer; margin:0px 8px 0px 5px; text-decoration:underline;"><span>Show</span></a> {{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}
+			<i class="icon-expand-alt"></i><a class="gadget-show-contact" style="cursor:pointer; margin:0px 8px 0px 5px; text-decoration:underline; font-weight:bold;"><span>Show</span></a> {{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}
 		</div>
 		
 		<div class="row-fluid show-contact-summary" style="display:none;"> 
@@ -17,11 +17,11 @@
 <!--contact not exist, add contact -->
 		{{#if fname}}
 			<div class="gadget-no-contact">
-				<i class="icon-plus"></i><a class="gadget-add-contact" style="cursor:pointer; margin:0px 8px 0px 5px; text-decoration:underline;"><span>Add</span></a> {{fname}} {{lname}} to Agile Contacts
+				<i class="icon-plus"></i><a class="gadget-add-contact" style="cursor:pointer; margin:0px 8px 0px 5px; text-decoration:underline; font-weight:bold;"><span>Add</span></a> {{fname}} {{lname}} to Agile Contacts
 			</div>
 		{{else}}
 			<div class="gadget-no-contact">
-				<i class="icon-plus"></i><a class="gadget-add-contact" style="cursor:pointer; margin:0px 8px 0px 5px; text-decoration:underline;"><span>Add</span></a> {{email}} to Agile Contacts
+				<i class="icon-plus"></i><a class="gadget-add-contact" style="cursor:pointer; margin:0px 8px 0px 5px; text-decoration:underline; font-weight:bold;"><span>Add</span></a> {{email}} to Agile Contacts
 			</div>
 		{{/if}}
       	<div class="show-add-contact-form" style="display:none;">
@@ -126,6 +126,11 @@
 					</div>
 				</div>
 <!-- end of contact info-->
+			</div>
+<!-- 4th coloum (Hide button) -->
+			<br/>
+			<div class="pull-right" style="margin-top:-18px;">
+				<i class="icon-collapse-alt icon-large hide-contact-summery" style="cursor:pointer;"></i>
 			</div>
 		</div>
 </script>
