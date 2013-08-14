@@ -69,13 +69,13 @@ function request_notification_permission() {
 					$('#set-desktop-notification').css('display', 'none');
 				    $('#desktop-notification-content')
 						.html(
-								"<i>Desktop Notifications are Enabled in browser settings. <a href=\"#\" id=\"disable-notification\" style=\"text-decoration:underline;\">Disable</a></i>");
+								"<i>Desktop Notifications are now enabled. <a href=\"#\" id=\"disable-notification\" style=\"text-decoration:underline;\">Disable</a></i>");
 				}
 				else
 				{
 					$('#set-desktop-notification').css('display', 'none');
 		            $('#desktop-notification-content').html(
-						"<i>Desktop Notifications are Disabled in browser settings. <a href=\"#\" id=\"enable-notification\" style=\"text-decoration:underline;\">Enable</a></i>")
+						"<i>Desktop Notifications are now disabled. <a href=\"#\" id=\"enable-notification\" style=\"text-decoration:underline;\">Enable</a></i>")
                  }	
 			});
 		});
