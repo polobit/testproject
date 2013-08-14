@@ -19,7 +19,7 @@ $(function()
 	console.log(clickdesk_widget);
 
 	// ID of the ClickDesk widget as global variable
-	Plugin_Id = clickdesk_widget.id;
+	ClickDesk_Plugin_Id = clickdesk_widget.id;
 
 	// Stores email of the contact as global variable
 	Email = agile_crm_get_contact_property('email');
@@ -48,7 +48,7 @@ $(function()
 
 	/*
 	 * If ClickDesk widget preferences are defined, shows chats from ClickDesk
-	 * if any with that email
+	 * associated with current contact's email
 	 */
 	showClickDeskProfile();
 
@@ -202,7 +202,7 @@ function showClickDeskProfile()
 
 /**
  * Initializes an AJAX queue request to retrieve clickDesk chats based on given
- * Plugin_Id and Email
+ * ClickDesk_Plugin_Id and Email
  * 
  * <p>
  * Request is added to queue to make the requests from all the widgets
@@ -215,7 +215,7 @@ function getChats(callback)
 	 * Calls queueGetRequest method in widget_loader.js, with queue name as
 	 * "widget_queue" to retrieve chats
 	 */
-	queueGetRequest("widget_queue", "/core/api/widgets/clickdesk/chats/" + Plugin_Id + "/" + Email + "/0", "json", function success(data)
+	queueGetRequest("widget_queue", "/core/api/widgets/clickdesk/chats/" + ClickDesk_Plugin_Id + "/" + Email + "/0", "json", function success(data)
 	{
 		// If data is not defined return
 		if (!data)
@@ -351,10 +351,10 @@ function getMoreChats(offset, callback)
 	$('#spinner-clickdesk-chats').show();
 
 	/*
-	 * send GET request to the URL to retrieve chats based on plugin_id, email
-	 * and offset as path parameters
+	 * send GET request to the URL to retrieve chats based on
+	 * ClickDesk_Plugin_Id, email and offset as path parameters
 	 */
-	$.get("/core/api/widgets/clickdesk/chats/" + Plugin_Id + "/" + Email + "/" + offset, function(data)
+	$.get("/core/api/widgets/clickdesk/chats/" + ClickDesk_Plugin_Id + "/" + Email + "/" + offset, function(data)
 	{
 		// If defined, execute the callback function
 		if (callback && typeof (callback) === "function")
@@ -411,10 +411,10 @@ function getClickDeskTickets(offset, callback)
 	$('#clickdesk_tickets_panel').html(CLICKDESK_UPDATE_LOAD_IMAGE);
 
 	/*
-	 * send GET request to the URL to retrieve chats based on plugin_id, email
-	 * and offset as path parameters
+	 * send GET request to the URL to retrieve chats based on
+	 * ClickDesk_Plugin_Id, email and offset as path parameters
 	 */
-	$.get("/core/api/widgets/clickdesk/tickets/" + Plugin_Id + "/" + Email + "/" + offset, function(data)
+	$.get("/core/api/widgets/clickdesk/tickets/" + ClickDesk_Plugin_Id + "/" + Email + "/" + offset, function(data)
 	{
 		// If undefined return
 		if (!data)
@@ -554,10 +554,10 @@ function getMoreTickets(offset, callback)
 	$('#spinner-clickdesk-tickets').show();
 
 	/*
-	 * send GET request to the URL to retrieve tickets based on plugin_id, email
-	 * and offset as path parameters
+	 * send GET request to the URL to retrieve tickets based on
+	 * ClickDesk_Plugin_Id, email and offset as path parameters
 	 */
-	$.get("/core/api/widgets/clickdesk/tickets/" + Plugin_Id + "/" + Email + "/" + offset, function(data1)
+	$.get("/core/api/widgets/clickdesk/tickets/" + ClickDesk_Plugin_Id + "/" + Email + "/" + offset, function(data1)
 	{
 		// If defined, execute the callback function
 		if (callback && typeof (callback) === "function")
