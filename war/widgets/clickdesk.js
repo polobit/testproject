@@ -6,7 +6,7 @@
  */
 $(function()
 {
-	// ClickDesk name as a global variable
+	// ClickDesk widget name as a global variable
 	CLICKDESK_PLUGIN_NAME = "ClickDesk";
 
 	// ClickDesk loading image declared as global
@@ -28,7 +28,7 @@ $(function()
 	/*
 	 * Gets ClickDesk widget preferences, required to check whether to show
 	 * setup button or to fetch details. If undefined - considering first time
-	 * usage of widget, setupClickDeskOAuth is shown and returned
+	 * usage of widget, setupClickDeskAuth is shown and returned
 	 */
 	if (clickdesk_widget.prefs == undefined)
 	{
@@ -42,7 +42,7 @@ $(function()
 	 */
 	if (!Email)
 	{
-		clickDeskError("ClickDesk", "No email is associated with this contact");
+		clickDeskError(CLICKDESK_PLUGIN_NAME, "No email is associated with this contact");
 		return;
 	}
 
@@ -612,14 +612,14 @@ function showMoreTickets(data)
 function clickDeskError(id, message)
 {
 	// build JSON with error message
-	var errorjson = {};
-	errorjson['message'] = message;
+	var error_json = {};
+	error_json['message'] = message;
 
 	/*
 	 * Get error template and fill it with error message and show it in the div
 	 * with given id
 	 */
-	$('#' + id).html(getTemplate('clickdesk-error', errorjson));
+	$('#' + id).html(getTemplate('clickdesk-error', error_json));
 }
 
 /**

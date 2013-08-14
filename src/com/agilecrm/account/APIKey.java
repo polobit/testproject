@@ -153,13 +153,23 @@ public class APIKey
 	return dao.ofy().query(APIKey.class).filter("api_key", apiKey).get().owner;
     }
 
+    /**
+     * Returns domain user related ot API key. Domain user key is stored in
+     * APIKey entity. Queries with APIKey and fetches domain user based on key
+     * saved in owner field
+     * 
+     * @param apiKey
+     * @return
+     */
     public static DomainUser getDomainUserRelatedToAPIKey(String apiKey)
     {
+	// Fetches APIKey object and returns domain user key.
 	Key<DomainUser> userKey = dao.ofy().query(APIKey.class).filter("api_key", apiKey).get().owner;
 
 	if (userKey == null)
 	    return null;
 
+	// Fetches domain user based on domainUser id
 	return DomainUserUtil.getDomainUser(userKey.getId());
 
     }

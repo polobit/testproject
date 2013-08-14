@@ -1,3 +1,9 @@
+/**
+ * ===freshbooks.js==== It is a pluginIn to be integrated with CRM, developed
+ * based on the third party JavaScript API provided. It interacts with the
+ * application based on the function provided on agile_widgets.js (Third party
+ * API)
+ */
 $(function()
 {
 	// FreshBooks widget name as a global variable
@@ -22,7 +28,7 @@ $(function()
 	/*
 	 * Gets FreshBooks widget preferences, required to check whether to show
 	 * setup button or to fetch details. If undefined - considering first time
-	 * usage of widget, setupClickDeskOAuth is shown and returned
+	 * usage of widget, setUpFreshbooksAuth is shown and returned
 	 */
 	if (freshbooks_widget.prefs == undefined)
 	{
@@ -31,7 +37,7 @@ $(function()
 	}
 
 	/*
-	 * Checks if contact has email, if undefined shows message in ClickDesk
+	 * Checks if contact has email, if undefined shows message in FreshBooks
 	 * panel
 	 */
 	if (!Email)
@@ -81,6 +87,10 @@ $(function()
 
 });
 
+/**
+ * Shows setup if user adds FreshBooks widget for the first time or clicks on
+ * reset icon on FreshBooks panel in the UI
+ */
 function setUpFreshbooksAuth()
 {
 	// Shows loading image until set up is shown
@@ -209,14 +219,14 @@ function getInvoicesOfClient(client_id)
 		// Fill FreshBooks invoice template with invoice of client
 		var freshbooks_invoice_template = $(getTemplate('freshbooks-invoice', data));
 
-		// Show invoices in FreshBooks widget panel
-		$('#freshbooks_invoice_panel').html(freshbooks_invoice_template);
-
 		// Load jquery time ago function to show time ago in invoices
 		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 		{
 			$(".time-ago", freshbooks_invoice_template).timeago();
 		});
+
+		// Show invoices in FreshBooks widget panel
+		$('#freshbooks_invoice_panel').html(freshbooks_invoice_template);
 
 	}, 'json').error(function(data)
 	{

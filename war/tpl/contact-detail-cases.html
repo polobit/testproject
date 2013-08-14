@@ -43,7 +43,9 @@
 		</h4>		
     <p>{{description}} &nbsp;</p>
 	<div class="clear">
-		<div style="margin-bottom: 9px;"></div>
+		<small class="edit-hover" style="margin-right:10px">
+			<time class="deal-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+		</small>
 		<span class="actions pull-right">
 			 <a title="Edit"  data="{{id}}" href="#" class="cases-edit-contact-tab" style="cursor:pointer;text-decoration: none;padding-right:10px"> <i class="icon-pencil"></i> </a>
              <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/cases/bulk"></span></a>
@@ -53,3 +55,4 @@
 </div>
 </div>
 </script>
+

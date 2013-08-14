@@ -41,6 +41,7 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.NotFoundException;
 import com.googlecode.objectify.annotation.AlsoLoad;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
@@ -274,7 +275,14 @@ public class Contact extends Cursor
 	else
 	    field = contactField;
 	save();
+    }
 
+    public void removeProperty(String propertyName)
+    {
+	if (getContactField(propertyName) == null)
+	    return;
+
+	properties.remove(getContactField(propertyName));
     }
 
     /**
@@ -822,61 +830,49 @@ public class Contact extends Cursor
     private void postLoad()
     {
 	tags = getContactTags();
+
 	ContactField field = this.getContactField("image");
 	if (field != null)
 	    field.value = LinkedInUtil.changeImageUrl(field.value);
 
-	if (this.contact_company_key != null) // fill company name in
+	if (contact_company_key != null) // fill company name in
 	// properties['COMPANY']
 	{
-	    this.contact_company_id = String.valueOf(this.contact_company_key.getId());
+	    contact_company_id = String.valueOf(contact_company_key.getId());
+	    Contact companyContact;
 	    try
 	    {
-		Contact companyContact = dao.get(contact_company_key);
-		boolean isset = false;
-
-		// if we have a 'company' properties, fill it with company's
-		// name
-		for (ContactField contactField : properties)
-		{
-		    if (contactField.name != null && contactField.name.equalsIgnoreCase("company"))
-		    {
-			contactField.value = companyContact.getContactFieldValue(NAME);
-			isset = true;
-			break;
-		    }
-		}
-		// if no company in properties, fill it by reading from db, add
-		// new ContactField
-		if (!isset)
-		{
-		    ContactField contactField = new ContactField();
-		    contactField.name = Contact.COMPANY;
+		companyContact = dao.get(contact_company_key);
+		ContactField contactField = getContactField(COMPANY);
+		if (contactField == null)
+		    properties.add(new ContactField(Contact.COMPANY, companyContact.getContactFieldValue(Contact.NAME),
+			    null));
+		else
 		    contactField.value = companyContact.getContactFieldValue(Contact.NAME);
-		    this.properties.add(contactField);
-		}
 	    }
 	    catch (EntityNotFoundException e)
 	    {
+		System.out.println("entity not found exception");
+		// contact.
+		removeProperty(COMPANY);
+
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	    catch (NotFoundException e)
+	    {
+		System.out.println("not found exception");
+
 		// company id not found, remove company association for this
 		// contact.
-		this.contact_company_key = null;
-		this.contact_company_id = null;
+		removeProperty(COMPANY);
 		e.printStackTrace();
 	    }
 	}
 	else
 	{
 	    // remove any blank 'company' in properties before sending
-	    for (ContactField contactField : properties)
-	    {
-		if (contactField.name != null && contactField.name.equalsIgnoreCase("company"))
-		{
-		    properties.remove(contactField);
-		    break;
-		}
-	    }
-	    this.contact_company_id = null;
+	    removeProperty(COMPANY);
 	}
     }
 
