@@ -156,7 +156,9 @@ function agile_init_handlers() {
 		$('.score-value', el).text(Old_Score + 1);
 		// Add Score
 		_agile.add_score(1, function(response) {
-
+			// Merge Server response object with Contact_Json
+			// object.
+			$.extend(Contacts_Json[email], response);
 		}, email);
 	});
 
@@ -174,7 +176,9 @@ function agile_init_handlers() {
 			$('.score-value', el).text(Old_Score - 1);
 			// Subtract Score
 			_agile.add_score(-1, function(response) {
-
+				// Merge Server response object with Contact_Json
+				// object.
+				$.extend(Contacts_Json[email], response);
 			}, email);
 		}
 	});
@@ -207,6 +211,9 @@ function agile_init_handlers() {
 
 				$('.saving', el).hide();
 				$(".toggle-tag", el).toggle();
+				// Merge Server response object with Contact_Json
+				// object.
+				$.extend(Contacts_Json[email.email], response);
 				// Add tag to list.
 				agile_build_tag_ui($("#added_tags_ul", el), response);
 
@@ -237,6 +244,9 @@ function agile_init_handlers() {
 
 			$('.saving', el).hide();
 			$('.toggle-tag', el).show();
+			// Merge Server response object with Contact_Json
+			// object.
+			$.extend(Contacts_Json[email], response);
 			// Removing tag from list.
 			agile_build_tag_ui($("#added_tags_ul", el), response);
 
@@ -316,8 +326,8 @@ function agile_init_handlers() {
 					agile_build_form_template($(this), "gadget-task",
 							".show-individual-form", function() {
 								/*
-								 * Load and apply Bootstrap date picker on
-								 * text box in Task form.
+								 * Load and apply Bootstrap date picker on text
+								 * box in Task form.
 								 */
 								agile_load_datepicker($('.task-calender', el),
 										function() {
@@ -335,8 +345,8 @@ function agile_init_handlers() {
 					agile_build_form_template($(this), "gadget-deal",
 							".show-individual-form", function() {
 								/*
-								 * Load and apply Bootstrap date picker on
-								 * text box in Deal form.
+								 * Load and apply Bootstrap date picker on text
+								 * box in Deal form.
 								 */
 								agile_load_datepicker($('.deal-calender', el),
 										function() {
@@ -368,7 +378,8 @@ function agile_init_handlers() {
 				agile_getContact(email,
 						function(val) {
 
-							// Merge Server response object with Contact_Json object.
+							// Merge Server response object with Contact_Json
+							// object.
 							$.extend(Contacts_Json[email], val);
 
 							// Build show contact form template.
@@ -379,9 +390,13 @@ function agile_init_handlers() {
 										if (val.id == null)
 											$('.status', el).show().delay(1500)
 													.hide(1);
-										else
+										else {
+											$('.gadget-show-contact', el)
+													.trigger('click');
 											$('.contact-list', el).css(
 													'display', 'inline');
+										}
+
 									});
 						});
 
@@ -414,6 +429,23 @@ function agile_init_handlers() {
 								});
 					});
 
+	// Click event for hide contact info summery
+	$(".hide-contact-summery").die().live(
+			'click',
+			function(e) {
+				// Prevent default functionality.
+				e.preventDefault();
+				// Set context (HTML container where event is triggered).
+				var el = $(this).closest("div.gadget-contact-details-tab")
+						.find("div.show-form");
+
+				$(".contact-minified", el).toggle();
+				$(".show-contact-summary", el).toggle();
+				$(".gadget-note", el).hide();
+				$(".gadget-deal", el).hide();
+				$(".gadget-task", el).hide();
+			});
+
 	// Click event for toggle add contact.
 	$(".gadget-add-contact").die().live(
 			'click',
@@ -433,16 +465,19 @@ function agile_init_handlers() {
 			});
 
 	// Click event for cancel button.
-	$(".cancel").die().live('click', function(e) {
-		// Prevent default functionality.
-		e.preventDefault();
-		// Set context (HTML container where event is triggered).
-		var el = $(this).closest("div.gadget-contact-details-tab");
-		// Reset option (add/task/deal) drop down.
-		$('.option-drop-down', el).val($('.option-drop-down').prop('defaultSelected'));
-		$('.option-drop-down', el).trigger('change');
-		// Toggle add contact UI.
-		$(".show-add-contact-form", el).hide();
-		$(".gadget-no-contact", el).show();
-	});
+	$(".cancel").die().live(
+			'click',
+			function(e) {
+				// Prevent default functionality.
+				e.preventDefault();
+				// Set context (HTML container where event is triggered).
+				var el = $(this).closest("div.gadget-contact-details-tab");
+				// Reset option (add/task/deal) drop down.
+				$('.option-drop-down', el).val(
+						$('.option-drop-down').prop('defaultSelected'));
+				$('.option-drop-down', el).trigger('change');
+				// Toggle add contact UI.
+				$(".show-add-contact-form", el).hide();
+				$(".gadget-no-contact", el).show();
+			});
 }

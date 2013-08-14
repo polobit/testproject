@@ -72,7 +72,9 @@ function agile_build_ui_for_emails(Email_Ids) {
 
 	// Clear main HTML container.
 	$('#content').html('')
-
+	// Clear contact data.
+	Contacts_Json = {};
+	
 	// Iterate for each mails.
 	$.each(Email_Ids[0], function(index, email) {
 
