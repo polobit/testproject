@@ -1836,7 +1836,7 @@
                 },
                 {
                     "name": "text_email",
-                    "value": "Hi {{first_name}},\r\n\r\nWe noticed that you haven't logged in or made a purchase since you last registered on our website three days ago. We would once again like to extend you a warm welcome and inform you that your profile needs to be updated with your billing information to start making purchases.\r\n\r\nUpdating your profile is done in three easy steps:\r\n1. Log in to your account on the top right.\r\n2. Click on \"Payment options\".\r\n3. Fill out your details. \r\n\r\nAnd you're good to go! \r\n\r\nWe hope you have a memorable experience with us. \r\n\r\nWith warm love,\r\nAurora Team\r\n\r\n(To unsubscribe from future emails, please click here.)"
+                    "value": "Hi {{first_name}},\r\n\r\nWe noticed that you haven't logged in or made a purchase since you last registered on our website three days ago. We would once again like to extend you a warm welcome and inform you that your profile needs to be updated with your billing information to start making purchases.\r\n\r\nUpdating your profile is done in three easy steps:\r\n1. Log in to your account on the top right.\r\n2. Click on \"Payment options\".\r\n3. Fill out your details. \r\n\r\nAnd you're good to go! \r\n\r\nWe hope you have a memorable experience with us. \r\n\r\nWith warm love,\r\nAurora Team"
                 },
                 {
                     "name": "html_email",
