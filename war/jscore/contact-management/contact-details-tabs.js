@@ -407,32 +407,37 @@ $(function(){
 	});
 	
 	/**
-	 * Sends email to to the contact 
+	 * Sends email to the target email. Before sending, validates and serializes email form. 
 	 */ 
 	$('#sendEmail').die().live('click',function(e){
 		e.preventDefault();
 		
+		// Is valid
 		if(!isValidForm($('#emailForm')))
-	      {	
 	      	return;
-	      }
 		
+		// serialize form.
 		var json = serializeForm("emailForm");
 		
 		json.body = json.body.replace(/\r\n/g,"<br/>");
 		
-		var url =  'core/api/emails/contact/send-email?from=' + encodeURIComponent(json.from) + '&to=' + 
-			 encodeURIComponent(json.to + "," + json.email_cc) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + 
-				 encodeURIComponent(json.body) + '<br/><div><br/><br/>' + encodeURIComponent(json.signature) + '</div>';
-		
-		// Shows message 
+		// Shows message Sending email.
 	    $save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><p class="text-success" style="color:#008000; font-size:15px; display:inline-block"> <i>Sending mail...</i></p></span>');
 	    $("#msg", this.el).append($save_info);
 		$save_info.show().delay(2000).fadeOut("slow");
 		
 		// Navigates to previous page on sending email
-		$.post(url, function(){
-			window.history.back();
+		$.ajax({
+				type:'POST',
+				data: json,
+				url: 'core/api/emails/contact/send-email',
+				success:function(){
+			             window.history.back();
+		                 },
+		        error: function()
+		               {
+		        	      console.log("Error occured while sending email");
+		               }
 		});
 
 	});
