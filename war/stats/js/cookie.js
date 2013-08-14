@@ -21,12 +21,12 @@ function agile_read_cookie(name)
 	for ( var i = 0; i < ca.length; i++)
 	{
 		var c = ca[i];
-		
-		// check for ' ' and remove to get to string c
+
+		// Check for ' ' and remove to get to string c
 		while (c.charAt(0) == ' ')
 			c = c.substring(1, c.length);
-		
-		// check if nameEQ starts with c, if yes unescape and return its value
+
+		// Check if nameEQ starts with c, if yes unescape and return its value
 		if (c.indexOf(nameEQ) == 0)
 			return unescape(c.substring(nameEQ.length, c.length));
 	}
@@ -48,8 +48,8 @@ function agile_create_cookie(name, value, days)
 {
 	// Add Widget Id to cookie name to differentiate sites
 	name = agile_id.get() + "-" + name;
-	
-	// if days is not equal to null, undefined or ""
+
+	// If days is not equal to null, undefined or ""
 	if (days)
 	{
 		var date = new Date();
@@ -57,8 +57,8 @@ function agile_create_cookie(name, value, days)
 		var expires = "; expires=" + date.toGMTString();
 	}
 	else
-		
-		// if days is null, undefined or "" set expires as ""
+
+		// If days is null, undefined or "" set expires as ""
 		var expires = "";
 	document.cookie = name + "=" + escape(value) + expires + "; path=/";
 }

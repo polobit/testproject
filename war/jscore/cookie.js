@@ -16,17 +16,17 @@
  */
 function createCookie(name, value, days)
 {
-	// if days is not equal to null, undefined or ""
+	// If days is not equal to null, undefined or ""
 	if (days)
 	{
 		var date = new Date();
 
-		// set cookie variable's updated expire time in milliseconds
+		// Set cookie variable's updated expire time in milliseconds
 		date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
 		var expires = "; expires=" + date.toGMTString();
 	}
 	else
-		// if days is null, undefined or "" set expires as ""
+		// If days is null, undefined or "" set expires as ""
 		var expires = "";
 	document.cookie = name + "=" + escape(value) + expires + "; path=/";
 }
@@ -43,13 +43,13 @@ function readCookie(name)
 {
 	var nameEQ = name + "=";
 
-	// split document.cookie into array at each ";" and iterate through it
+	// Split document.cookie into array at each ";" and iterate through it
 	var ca = document.cookie.split(';');
 	for ( var i = 0; i < ca.length; i++)
 	{
 		var c = ca[i];
 
-		// check for ' ' and remove to get string from c
+		// Check for ' ' and remove to get string from c
 		while (c.charAt(0) == ' ')
 			c = c.substring(1, c.length);
 

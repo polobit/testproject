@@ -12,7 +12,7 @@
 
 function agile_addDeal(data, callback, email)
 {
-	// if email is not passed get it from cookie
+	// If email is not passed get it from cookie
 	if (!email)
 	{
 		if (!agile_guid.get_email())
@@ -27,7 +27,7 @@ function agile_addDeal(data, callback, email)
 
 	// Get
 	var agile_url = agile_id.getURL() + "/opportunity?callback=?&id=" + agile_id.get() + "&" + params;
-	
-	// callback
-	agile_json(agile_url, callback, data);
+
+	// Callback
+	agile_json(agile_url, callback);
 }

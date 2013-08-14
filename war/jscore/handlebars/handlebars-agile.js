@@ -68,7 +68,9 @@ function getTemplate(templateName, context, download) {
 	if (templateName.indexOf("continue") == 0) {
 		templateHTML = downloadSynchronously("tpl/min/continue.js");
 	}
-
+	if (templateName.indexOf("all-domain") == 0) {
+		templateHTML = downloadSynchronously("tpl/min/admin.js");
+	}
 	if (templateHTML) {
 		// console.log("Adding " + templateHTML);
 		$('body').append($(templateHTML));

@@ -43,99 +43,99 @@ import com.googlecode.objectify.condition.IfDefault;
 @XmlRootElement
 public class ContactFilter implements Serializable
 {
-	// Key
-	@Id
-	public Long id;
+    // Key
+    @Id
+    public Long id;
 
-	/**
-	 * Default filters
-	 */
-	public enum DefaultFilter
+    /**
+     * Default filters
+     */
+    public enum DefaultFilter
+    {
+	LEADS, RECENT, CONTACTS;
+    };
+
+    /**
+     * Name of the filter/Advanced search criteria
+     */
+    @NotSaved(IfDefault.class)
+    public String name = null;
+
+    /**
+     * Represents list of {@link SearchRule}, query is built on these list of
+     * conditions
+     */
+    @NotSaved(IfDefault.class)
+    @Embedded
+    public List<SearchRule> rules = new ArrayList<SearchRule>();
+
+    public static ObjectifyGenericDao<ContactFilter> dao = new ObjectifyGenericDao<ContactFilter>(ContactFilter.class);
+
+    public ContactFilter()
+    {
+
+    }
+
+    public ContactFilter(List<SearchRule> rules)
+    {
+	this.rules = rules;
+    }
+
+    public ContactFilter(String name, List<SearchRule> rules)
+    {
+	this.name = name;
+	this.rules = rules;
+    }
+
+    /**
+     * Fetches {@link ContactFilter} based on the id
+     * 
+     * @param id
+     *            {@link Long}
+     * @return {@link ContactFilter}
+     */
+    public static ContactFilter getContactFilter(Long id)
+    {
+	try
 	{
-		LEADS, RECENT, CONTACTS;
-	};
-
-	/**
-	 * Name of the filter/Advanced search criteria
-	 */
-	@NotSaved(IfDefault.class)
-	public String name = null;
-
-	/**
-	 * Represents list of {@link SearchRule}, query is built on these list of
-	 * conditions
-	 */
-	@NotSaved(IfDefault.class)
-	@Embedded
-	public List<SearchRule> rules = new ArrayList<SearchRule>();
-
-	public static ObjectifyGenericDao<ContactFilter> dao = new ObjectifyGenericDao<ContactFilter>(ContactFilter.class);
-
-	public ContactFilter()
-	{
-
+	    return dao.get(id);
 	}
-
-	public ContactFilter(List<SearchRule> rules)
+	catch (Exception e)
 	{
-		this.rules = rules;
+	    e.printStackTrace();
+	    return null;
 	}
+    }
 
-	public ContactFilter(String name, List<SearchRule> rules)
-	{
-		this.name = name;
-		this.rules = rules;
-	}
+    /**
+     * Fetches list of contact filters
+     * 
+     * @return {@link List} of {@link ContactFilter}
+     */
+    public static List<ContactFilter> getAllContactFilters()
+    {
+	return dao.fetchAll();
+    }
 
-	/**
-	 * Fetches {@link ContactFilter} based on the id
-	 * 
-	 * @param id
-	 *            {@link Long}
-	 * @return {@link ContactFilter}
-	 */
-	public static ContactFilter getContactFilter(Long id)
-	{
-		try
-		{
-			return dao.get(id);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return null;
-		}
-	}
+    /**
+     * Saves {@link ContactFilter} entity
+     */
+    public void save()
+    {
+	dao.put(this);
+    }
 
-	/**
-	 * Fetches list of contact filters
-	 * 
-	 * @return {@link List} of {@link ContactFilter}
-	 */
-	public static List<ContactFilter> getAllContactFilters()
-	{
-		return dao.fetchAll();
-	}
+    /**
+     * Queries contacts based on {@link List} of {@link SearchRule} specified,
+     * applying 'AND' condition on after each {@link SearchRule}. Builds a query
+     * and returns search results using {@link AppengineSearch}.
+     * 
+     * @return {@link Collection}
+     */
+    @SuppressWarnings("rawtypes")
+    public Collection queryContacts(Integer count, String cursor)
+    {
 
-	/**
-	 * Saves {@link ContactFilter} entity
-	 */
-	public void save()
-	{
-		dao.put(this);
-	}
-
-	/**
-	 * Queries contacts based on {@link List} of {@link SearchRule} specified,
-	 * applying 'AND' condition on after each {@link SearchRule}. Builds a query
-	 * and returns search results using {@link AppengineSearch}.
-	 * 
-	 * @return {@link Collection}
-	 */
-	@SuppressWarnings("rawtypes")
-	public Collection queryContacts(Integer count, String cursor)
-	{
-
-		return new AppengineSearch<Contact>(Contact.class).getAdvacnedSearchResults(rules, count, cursor);
-	}
+	return new AppengineSearch<Contact>(Contact.class).getAdvacnedSearchResults(rules, count, cursor);
+    }
 }

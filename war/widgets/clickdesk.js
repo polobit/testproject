@@ -1,358 +1,645 @@
-$(function ()
+/**
+ * ===clickdesk.js==== It is a pluginIn to be integrated with CRM, developed
+ * based on the third party JavaScript API provided. It interacts with the
+ * application based on the function provided on agile_widgets.js (Third party
+ * API)
+ */
+$(function()
 {
-    // Plugin name as a global variable
-    CLICKDESK_PLUGIN_NAME = "ClickDesk";
-    
-    // ClickDesk update loading image declared as global
-    CLICKDESK_UPDATE_LOAD_IMAGE = '<center><img id="chats_load" src=' +
-        '\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+	// ClickDesk widget name as a global variable
+	CLICKDESK_PLUGIN_NAME = "ClickDesk";
 
-    Errorjson = {};
-    console.log('in clikdesk');
-       
-    // Gets plugin id from plugin object, fetched using script API
-    var plugin_id = agile_crm_get_plugin(CLICKDESK_PLUGIN_NAME).id;
+	// ClickDesk loading image declared as global
+	CLICKDESK_UPDATE_LOAD_IMAGE = '<center><img id="chats_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
 
+	// Retrieves widget which is fetched using script API
+	var clickdesk_widget = agile_crm_get_plugin(CLICKDESK_PLUGIN_NAME);
 
-    // Gets plugin preferences, required to check whether to show setup button or 
-    // to fetch details
-    var plugin_prefs = agile_crm_get_plugin_prefs(CLICKDESK_PLUGIN_NAME);
+	console.log('In ClickDesk');
+	console.log(clickdesk_widget);
 
-    
-    $('#ClickDesk_plugin_delete').die().live('click', function (e) {
-    	
-    	e.preventDefault();
-    	
-    	agile_crm_save_widget_prefs(CLICKDESK_PLUGIN_NAME,
-		        undefined , function (data)
-        {
-    		setupClickDeskAuth(plugin_id);
-        });
-    });
- 
-    // Stores email of the contact as global variable
-    Email = agile_crm_get_contact_property('email');
-    
-    // If not found - considering first time usage of widget, setupClickDeskOAuth
-    // called
-    if (plugin_prefs == undefined)
-    {        
-        setupClickDeskAuth(plugin_id);
-        return;
-    }  
+	// ID of the ClickDesk widget as global variable
+	ClickDesk_Plugin_Id = clickdesk_widget.id;
 
-    // Checks if contact has email, if undefined shows message in ClickDesk panel
-    if (!Email)
-    {
-    	clickDeskError("ClickDesk", "No email is associated with this contact");
-        return;
-    }
-    
-    // If defined, shows tickets from ClickDesk if any with that email
-    // showTicketsFromClickDesk(plugin_id, Email);
-    showClickDeskProfile(plugin_id, Email);
+	// Stores email of the contact as global variable
+	Email = agile_crm_get_contact_property('email');
+	console.log('Email: ' + Email);
 
-    $('.clickdesk_ticket_hover').live('mouseenter', function (e)
-    {
-        $(this).find('.clickdesk_ticket_tab_link').show();
-    });
+	/*
+	 * Gets ClickDesk widget preferences, required to check whether to show
+	 * setup button or to fetch details. If undefined - considering first time
+	 * usage of widget, setupClickDeskAuth is shown and returned
+	 */
+	if (clickdesk_widget.prefs == undefined)
+	{
+		setupClickDeskAuth();
+		return;
+	}
 
-    $('.clickdesk_ticket_hover').live('mouseleave', function (e)
-    {
-        $('.clickdesk_ticket_tab_link').hide();
-    });
-    
-    $('.clickdesk_chat_hover').live('mouseenter', function (e)
-    {
-    	$(this).find('.clickdesk_chat_tab_link').show();
-    });
+	/*
+	 * Checks if contact has email, if undefined shows message in ClickDesk
+	 * panel
+	 */
+	if (!Email)
+	{
+		clickDeskError(CLICKDESK_PLUGIN_NAME, "No email is associated with this contact");
+		return;
+	}
 
-    $('.clickdesk_chat_hover').live('mouseleave', function (e)
-    {
-        $('.clickdesk_chat_tab_link').hide();
-    });
-    
+	/*
+	 * If ClickDesk widget preferences are defined, shows chats from ClickDesk
+	 * associated with current contact's email
+	 */
+	showClickDeskProfile();
+
+	// Register click events
+	/*
+	 * On click of reset button of ClickDesk widget, widget preferences are
+	 * deleted and initial set up is called
+	 */
+	$('#ClickDesk_plugin_delete').die().live('click', function(e)
+	{
+		e.preventDefault();
+
+		// preferences are saved as undefined and set up is shown
+		agile_crm_save_widget_prefs(CLICKDESK_PLUGIN_NAME, undefined, function(data)
+		{
+			setupClickDeskAuth();
+		});
+	});
+
+	/*
+	 * On mouse enter of ticket, show tab link which has a link to show detailed
+	 * description of ticket
+	 */
+	$('.clickdesk_ticket_hover').live('mouseenter', function(e)
+	{
+		$(this).find('.clickdesk_ticket_tab_link').show();
+	});
+
+	// On mouse leave of ticket, hides tab link
+	$('.clickdesk_ticket_hover').live('mouseleave', function(e)
+	{
+		$('.clickdesk_ticket_tab_link').hide();
+	});
+
+	/*
+	 * On mouse enter of chat, show tab link which has a link to show detailed
+	 * description of chat
+	 */
+	$('.clickdesk_chat_hover').live('mouseenter', function(e)
+	{
+		$(this).find('.clickdesk_chat_tab_link').show();
+	});
+
+	// On mouse leave of chat, hides tab link
+	$('.clickdesk_chat_hover').live('mouseleave', function(e)
+	{
+		$('.clickdesk_chat_tab_link').hide();
+	});
+
 });
 
 /**
- * Shows setup if user adds ClickDesk widget for the first time. Uses ScribeServlet 
- * to create a client and get preferences and save it to the widget.
- * 
- * @param plugin_id
- * 			To get the widget and save tokens in it.
+ * Shows setup if user adds ClickDesk widget for the first time or clicks on
+ * reset icon on ClickDesk panel in the UI
  */
-function setupClickDeskAuth(plugin_id)
+function setupClickDeskAuth()
 {
-    // Shows loading image until set up is shown 
-    $('#ClickDesk').html(CLICKDESK_UPDATE_LOAD_IMAGE);
+	// Shows loading image until set up is shown
+	$('#ClickDesk').html(CLICKDESK_UPDATE_LOAD_IMAGE);
 
-    console.log('ClickDesk auth');
-    
-    // Shows input fields to save the ClickDesk preferences
-    $('#ClickDesk').html(getTemplate('clickdesk-login', {}));
+	console.log('In ClickDesk Auth');
 
-    // On click of save button 
-    $('#save_clickdesk_prefs').die().live('click', function (e)
-    {
-        e.preventDefault();
-       
-        // Checks whether all input fields are given
-        if (!isValidForm($("#clickdesk_login_form")))
-        {
-            return;
-        }
+	// Shows input fields to save the ClickDesk preferences
+	$('#ClickDesk').html(getTemplate('clickdesk-login', {}));
 
-        // Store the data given by the user as JSON 
-        var ClickDesk_prefs = {};
-        ClickDesk_prefs["clickdesk_username"] = $("#clickdesk_username").val();
-        ClickDesk_prefs["clickdesk_api_key"] = $("#clickdesk_api_key").val();
+	// On click of save button, check input and save details
+	$('#save_clickdesk_prefs').die().live('click', function(e)
+	{
+		e.preventDefault();
 
-        // Saves the preferences into widget with ClickDesk plugin name
-        agile_crm_save_widget_prefs(CLICKDESK_PLUGIN_NAME,
-        JSON.stringify(ClickDesk_prefs), function (data)
-        {
-        	// Checks if contact has email, if undefined shows message in ClickDesk panel
-            if (!Email)
-            {
-                clickDeskError("ClickDesk", "No email is associated with this contact");
-                return;
-            }
-                    
-            showClickDeskProfile(plugin_id, Email);
-        });
+		// Checks whether all input fields are given
+		if (!isValidForm($("#clickdesk_login_form")))
+			return;
 
-    });
+		// Saves ClickDesk preferences in ClickDesk widget object
+		saveClickDeskPrefs();
+	});
 }
 
-function showClickDeskProfile(plugin_id, Email)
+/**
+ * Calls method in script API (agile_widget.js) to save ClickDesk preferences in
+ * ClickDesk widget object
+ */
+function saveClickDeskPrefs()
 {
+	// Retrieve and store the ClickDesk preferences entered by the user as JSON
+	var ClickDesk_prefs = {};
+	ClickDesk_prefs["clickdesk_username"] = $("#clickdesk_username").val();
+	ClickDesk_prefs["clickdesk_api_key"] = $("#clickdesk_api_key").val();
+
+	// Saves the preferences into widget with ClickDesk widget name
+	agile_crm_save_widget_prefs(CLICKDESK_PLUGIN_NAME, JSON.stringify(ClickDesk_prefs), function(data)
+	{
+		/*
+		 * Checks if contact has email, if undefined shows information in
+		 * ClickDesk panel
+		 */
+		if (!Email)
+		{
+			clickDeskError("ClickDesk", "No email is associated with this contact");
+			return;
+		}
+
+		// Retrieves and shows ClickDesk chats in the ClickDesk widget UI
+		showClickDeskProfile();
+	});
+}
+
+/**
+ * Show data retrieved from ClickDesk in the ClickDesk widget
+ */
+function showClickDeskProfile()
+{
+	// show loading until chats are retrieved
 	$('#ClickDesk').html(CLICKDESK_UPDATE_LOAD_IMAGE);
-	
-	var flag = false;
-	queueGetRequest("widget_queue", "/core/api/widgets/clickdesk/chats/" + plugin_id + "/" + Email + "/0", "json",	
-	function success(data)
-	{
-		 $('#ClickDesk').html(getTemplate('clickdesk-profile', data)); 
-		 
-		 if(!data)
-			 return;
-		 
-		 if(data.length == 0)
-		 {
-			 $('#clickdesk_chats_panel').html('<li class="sub_header_li">No chats</li>');	
-			 return;
-		 }
-		 
-		 if(data.length >= 5)
-			 flag = true;
-		 
-		  $('#clickdesk_chats_panel').html(
-				  getTemplate('clickdesk-chat-stream', data));	
-		 
-		  head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-     		$(".time-ago", $('#clickdesk_chats_panel')).timeago();
-     	  });
-	     
-		  // On click of show ticket, show ticket by ticket id method is called
-		  $('#clickdesk_chat_show').die().live('click', function (e)
-		  {
-			     e.preventDefault();
-		         var json = JSON.parse($(this).attr('data-attr'));
 
-		         // Remove the modal if already exists
-		         $('#clickdesk_chat_showModal').remove();
-
-		         // Append the form into the content
-		         $('#content').append(getTemplate("clickdesk-show-chat", json));
-		         
-		         $(".time-ago", $('#clickdesk_chat_showModal')).timeago();
-		         
-		         // Shows the modal after filling with details
-		         $('#clickdesk_chat_showModal').modal("show");
-		  });
-		  
-		  $('#more_chats_link').die().live('click', function (e)
-		  {
-			  e.preventDefault();
-			    
-			  if(!flag)
-			  {
-				  clickDeskStreamError("clickdesk-chats-error-panel", 'No more chats');
-				  return;
-			  }
-			  
-			  $('#spinner-clickdesk-chats').show();
-			  var offset = $('#chats ul li').length;
-			  console.log(offset);
-			  
-			  $.get("/core/api/widgets/clickdesk/chats/" + plugin_id + "/" + Email + "/" + offset, 
-			  function(data1)
-		      {
-				    showMoreChats(data1);
-				    
-		      }, "json").error(function(data1) {
-		    	  
-		    	  $('#spinner-clickdesk-chats').hide();
-		          // Else the error message is shown
-		       	  clickDeskStreamError("clickdesk-chats-error-panel", data1.responseText);
-		     });
-			 
-		  });
-	     
-	}, function error(data) 
+	// Retrieves chats and calls method to show them in chats panel
+	getChats(function(data)
 	{
+		showChats(data);
+	});
+
+	// boolean which stores information whether tickets tab is clicked
+	Tickets_clicked = false;
+
+	/*
+	 * On click of tickets tab in ClickDesk profile, retrieve tickets from
+	 * ClickDesk and show in the ClickDesk tickets panel
+	 */
+	$('#clickdesk_tickets').die().live('click', function(e)
+	{
+		e.preventDefault();
+
+		/*
+		 * If tickets tab is clicked once, it means we have retrieved tickets.
+		 * We show them on second click, instead of retrieving every time
+		 */
+		if (Tickets_clicked)
+			return;
+
+		// Retrieve tickets from ClickDesk and show in tickets panel
+		getClickDeskTickets(0, function(data)
+		{
+			showClickDeskTickets(data);
+		});
+
+		// set it to true on first click
+		Tickets_clicked = true;
+	});
+}
+
+/**
+ * Initializes an AJAX queue request to retrieve clickDesk chats based on given
+ * ClickDesk_Plugin_Id and Email
+ * 
+ * <p>
+ * Request is added to queue to make the requests from all the widgets
+ * synchronous
+ * </p>
+ */
+function getChats(callback)
+{
+	/*
+	 * Calls queueGetRequest method in widget_loader.js, with queue name as
+	 * "widget_queue" to retrieve chats
+	 */
+	queueGetRequest("widget_queue", "/core/api/widgets/clickdesk/chats/" + ClickDesk_Plugin_Id + "/" + Email + "/0", "json", function success(data)
+	{
+		// If data is not defined return
+		if (!data)
+			return;
+
+		// If defined, execute the callback function
+		if (callback && typeof (callback) === "function")
+			callback(data);
+
+		// Register click events
+		registerClickEventsInChat(data);
+
+	}, function error(data)
+	{
+		// Remove loading on error
 		$('#chats_load').remove();
 
-		// Else the error message is shown
-		clickDeskError("ClickDesk", data.responseText );
+		// Show error message in ClickDesk widget
+		clickDeskError("ClickDesk", data.responseText);
 	});
-	
-	 Tickets_clicked = false;
-	    $('#clickdesk_tickets').die().live('click', function(e) {
-	    	
-	    	e.preventDefault();
-	    	if(Tickets_clicked)
-	    		return;
-	    	
-	    	getClickDeskTickets(plugin_id, Email);
-	    	Tickets_clicked = true;
-	    	
-	    });
 }
 
-function showMoreChats(data)
+/**
+ * Appends data to the ClickDesk template and shows chats in the ClickDesk
+ * widget UI
+ * 
+ * @param data
+ *            Data required to show in ClcikDesk widget
+ */
+function showChats(data)
 {
-	if(data.length == 0)
+	// Fill template with chats and append it to ClickDesk panel
+	$('#ClickDesk').html(getTemplate('clickdesk-profile', data));
+
+	/*
+	 * If chats array length is zero, show information in the chats panel and
+	 * return, else show chats in chats panel
+	 */
+	if (data.length == 0)
 	{
-		clickDeskStreamError("clickdesk-chats-error-panel", 'No more chats');
-		$('#spinner-clickdesk-chats').hide();
+		$('#clickdesk_chats_panel').html('<li class="sub_header_li">No chats</li>');
 		return;
 	}
-	 
-	var more_chats_template = getTemplate('clickdesk-chat-stream', data);
-	  
+
+	// Fills chat template with chats and shows chat in chat panel
+	$('#clickdesk_chats_panel').html(getTemplate('clickdesk-chat-stream', data));
+
+	// Load jquery time ago function to show time ago in chats
+	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+	{
+		$(".time-ago", $('#clickdesk_chats_panel')).timeago();
+	});
+
+}
+
+/**
+ * Registers click events in ClickDesk chat panel
+ */
+function registerClickEventsInChat(chats_data)
+{
+	/*
+	 * On click of show chat, retrieve chat data appended to the chat element
+	 * clicked and show it in modal
+	 */
+	$('#clickdesk_chat_show').die().live('click', function(e)
+	{
+		e.preventDefault();
+
+		// retrieve appended data on element and parse it as JSON
+		var chat_json = JSON.parse($(this).attr('data-attr'));
+
+		// Show modal with chat data
+		showChatModal(chat_json);
+	});
+
+	/*
+	 * On click of show more link, retrieve more chats from ClickDesk if exists
+	 * and shows it in the ClickDesk panel
+	 */
+	$('#more_chats_link').die().live('click', function(e)
+	{
+		e.preventDefault();
+
+		/*
+		 * If initial chats retrieved are less than 5, we don't have to retrieve
+		 * chats on click of more chats and show information "no more chats"
+		 */
+		if (!chats_data.length >= 5)
+		{
+			clickDeskStreamError("clickdesk-chats-error-panel", 'No more chats');
+			return;
+		}
+
+		// Get length of chats panel to set offset
+		var offset = $('#chats ul li').length;
+		console.log("offset in more chats: " + offset);
+
+		// Retrieve more chats from ClickDesk, append and show in chats panel
+		getMoreChats(offset, function(data)
+		{
+			showMoreChats(data);
+		});
+	});
+}
+
+/**
+ * Shows chat information in a modal
+ * 
+ * @param data
+ *            chat data
+ */
+function showChatModal(data)
+{
+	// Remove the modal if already exists
+	$('#clickdesk_chat_showModal').remove();
+
+	// Append the form into the content
+	$('#content').append(getTemplate("clickdesk-show-chat", data));
+
+	// show time ago in modal
+	$(".time-ago", $('#clickdesk_chat_showModal')).timeago();
+
+	// Shows the modal after filling with details
+	$('#clickdesk_chat_showModal').modal("show");
+}
+
+/**
+ * Retrieves more chats from ClickDesk based on offset
+ */
+function getMoreChats(offset, callback)
+{
+	// Show spinner till chats are retrieved
+	$('#spinner-clickdesk-chats').show();
+
+	/*
+	 * send GET request to the URL to retrieve chats based on
+	 * ClickDesk_Plugin_Id, email and offset as path parameters
+	 */
+	$.get("/core/api/widgets/clickdesk/chats/" + ClickDesk_Plugin_Id + "/" + Email + "/" + offset, function(data)
+	{
+		// If defined, execute the callback function
+		if (callback && typeof (callback) === "function")
+			callback(data);
+
+	}, "json").error(function(data)
+	{
+		// Hide spinner on error
+		$('#spinner-clickdesk-chats').hide();
+
+		// Error message is shown in error panel for 10 seconds
+		clickDeskStreamError("clickdesk-chats-error-panel", data.responseText);
+	});
+}
+
+/**
+ * Shows more chats retrieved from ClickDesk in ClickDesk widget chat panel
+ * 
+ * @param data
+ *            More chats data
+ */
+function showMoreChats(data)
+{
+	// spinner is hidden after retrieving chats
 	$('#spinner-clickdesk-chats').hide();
-	 
-	$('#clickdesk_chats_panel').append(more_chats_template);	
-		 
+
+	/*
+	 * If chats array length is zero, show information in the chats error panel
+	 * and hide it after 10 seconds
+	 */
+	if (data.length == 0)
+	{
+		clickDeskStreamError("clickdesk-chats-error-panel", 'No more chats');
+		return;
+	}
+
+	// Get template and fill it with chats data and append it to chats panel
+	$('#clickdesk_chats_panel').append(getTemplate('clickdesk-chat-stream', data));
+
+	// Call time ago on more chats
 	$(".time-ago", $('#clickdesk_chats_panel')).timeago();
 }
 
-function getClickDeskTickets(plugin_id, Email)
+/**
+ * Retrieves tickets from ClickDesk based on offset
+ * 
+ * @param offset
+ *            start index to retrieve tickets
+ * @param callback
+ */
+function getClickDeskTickets(offset, callback)
 {
+	// Show loading image until tickets are retrieved
 	$('#clickdesk_tickets_panel').html(CLICKDESK_UPDATE_LOAD_IMAGE);
-	
-	var flag = false;
-	$.get("/core/api/widgets/clickdesk/tickets/" + plugin_id + "/" + Email + "/0", 
-	function(data)
+
+	/*
+	 * send GET request to the URL to retrieve chats based on
+	 * ClickDesk_Plugin_Id, email and offset as path parameters
+	 */
+	$.get("/core/api/widgets/clickdesk/tickets/" + ClickDesk_Plugin_Id + "/" + Email + "/" + offset, function(data)
 	{
-		 if(!data)
-			 return;
-		 
-		 if(data.length == 0)
-		 {
-			 $('#clickdesk_tickets_panel').html('<li class="sub_header_li">No tickets</li>');	
-			 return;
-		 }
-		 
-		 if(data.length >= 5)
-			 flag = true;
-		 
-		  $('#clickdesk_tickets_panel').html(
-				  getTemplate('clickdesk-ticket-stream', data));	
-		 
-		  head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-			$(".time-ago", $('#clickdesk_tickets_panel')).timeago();
-		  });
-		  
-		  // On click of show ticket, show ticket by ticket id method is called
-		  $('#clickdesk_ticket_show').die().live('click', function (e)
-		  {
-			     e.preventDefault();
-		         var json = JSON.parse($(this).attr('data-attr'));
+		// If undefined return
+		if (!data)
+			return;
 
-		         // Remove the modal if already exists
-		         $('#clickdesk_ticket_showModal').remove();
+		// If defined, execute the callback function
+		if (callback && typeof (callback) === "function")
+			callback(data);
 
-		         // Append the form into the content
-		         $('#content').append(getTemplate("clickdesk-show-ticket", json));
+		registerEventsInTickets(data);
 
-		         $(".time-ago",$('#clickdesk_ticket_showModal')).timeago();
-		         
-		         // Shows the modal after filling with details
-		         $('#clickdesk_ticket_showModal').modal("show");
-		  });
-		     
-		     
-		  $('#more_tickets_link').die().live('click', function (e)
-		  {
-			  e.preventDefault();
-			    
-			  if(!flag)
-			  {
-				  clickDeskStreamError("clickdesk-tickets-error-panel", 'No more tickets');
-				  return;
-			  }
-			  
-			  $('#spinner-clickdesk-tickets').show();
-			  var offset = $('#c_tickets ul li').length;
-			  console.log('offset ' + offset);
-			  
-			  $.get("/core/api/widgets/clickdesk/tickets/" + plugin_id + "/" + Email + "/" + offset, 
-			  function(data1)
-			  {
-				  showMoreTickets(data1);
-				  
-			  }, "json").error(function(data1) {
-			      
-				  $('#spinner-clickdesk-tickets').hide();
-				  
-				  // Else the error message is shown
-				  clickDeskStreamError("clickdesk-tickets-error-panel", data1.responseText);
-			  });
-		   	 
-		  });
-	}, "json").error(function(data) {
-		
+	}, "json").error(function(data)
+	{
+		// Remove loading on error
 		$('#chats_load').remove();
-		Tickets_clicked = false;
-		
-        // Else the error message is shown
+
+		/*
+		 * If offset is zero and error occurs, tickets tab clicked is made
+		 * false, so that on second click again we can retrieve tickets
+		 */
+		if (offset == 0)
+			Tickets_clicked = false;
+
+		// Error message is shown in tickets panel
 		clickDeskError("clickdesk_tickets_panel", data.responseText);
 	});
-	
-	
+
 }
 
-function showMoreTickets(data)
+/**
+ * Shows tickets in the ClickDesk widget UI
+ * 
+ * @param data
+ *            Data required to show in ClickDesk tickets panel
+ */
+function showClickDeskTickets(data)
 {
-	if(data.length == 0)
+	/*
+	 * If chats array length is zero, show information in the tickets panel and
+	 * return, else show tickets in tickets panel
+	 */
+	if (data.length == 0)
 	{
-		clickDeskStreamError("clickdesk-tickets-error-panel", 'No more tickets');
-		$('#spinner-clickdesk-tickets').hide();
+		$('#clickdesk_tickets_panel').html('<li class="sub_header_li">No tickets</li>');
 		return;
 	}
-	 
-	var more_tickets_template = getTemplate('clickdesk-ticket-stream', data);
-	  
-	$('#spinner-clickdesk-tickets').hide();
-   	 
-	$('#clickdesk_tickets_panel').append(more_tickets_template);	
-		 
-	$(".time-ago", $('#clickdesk_tickets_panel')).timeago();
+
+	// Fill template with tickets and append it to ClickDesk panel
+	$('#clickdesk_tickets_panel').html(getTemplate('clickdesk-ticket-stream', data));
+
+	// Load jquery time ago function to show time ago in tickets
+	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+	{
+		$(".time-ago", $('#clickdesk_tickets_panel')).timeago();
+	});
 }
 
+/**
+ * Registers click events in ClickDesk chat panel
+ */
+function registerEventsInTickets(tickets_data)
+{
+	/*
+	 * On click of show ticket, retrieve ticket data appended to the chat
+	 * element clicked and show it in modal
+	 */
+	$('#clickdesk_ticket_show').die().live('click', function(e)
+	{
+		e.preventDefault();
+
+		// retrieve appended data on element and parse it as JSON
+		var ticket_json = JSON.parse($(this).attr('data-attr'));
+
+		// Show modal with ticket data
+		showTicketModal(ticket_json);
+
+	});
+
+	$('#more_tickets_link').die().live('click', function(e)
+	{
+		e.preventDefault();
+
+		/*
+		 * If initial tickets retrieved are less than 5, we don't have to
+		 * retrieve tickets on click of more tickets and show information "no
+		 * more tickets"
+		 */
+		if (!tickets_data.length >= 5)
+		{
+			clickDeskStreamError("clickdesk-tickets-error-panel", 'No more tickets');
+			return;
+		}
+
+		// Get length of tickets panel to set offset
+		var offset = $('#c_tickets ul li').length;
+		console.log('offset ' + offset);
+
+		// Retrieve more tickets from ClickDesk, append & show in tickets panel
+		getMoreTickets(offset, function(tickets_data)
+		{
+			showMoreTickets(tickets_data);
+		});
+	});
+}
+
+/**
+ * Shows ticket information in a modal
+ * 
+ * @param data
+ *            ticket data
+ */
+function showTicketModal(data)
+{
+	// Remove the modal if already exists
+	$('#clickdesk_ticket_showModal').remove();
+
+	// Append the form into the content
+	$('#content').append(getTemplate("clickdesk-show-ticket", data));
+
+	// show time ago in modal
+	$(".time-ago", $('#clickdesk_ticket_showModal')).timeago();
+
+	// Shows the modal after filling with details
+	$('#clickdesk_ticket_showModal').modal("show");
+}
+
+/**
+ * Retrieves more tickets from ClickDesk based on offset
+ * 
+ * @param offset
+ *            start index to retrieve tickets
+ * @param callback
+ */
+function getMoreTickets(offset, callback)
+{
+	// Show spinner till tickets are retrieved
+	$('#spinner-clickdesk-tickets').show();
+
+	/*
+	 * send GET request to the URL to retrieve tickets based on
+	 * ClickDesk_Plugin_Id, email and offset as path parameters
+	 */
+	$.get("/core/api/widgets/clickdesk/tickets/" + ClickDesk_Plugin_Id + "/" + Email + "/" + offset, function(data1)
+	{
+		// If defined, execute the callback function
+		if (callback && typeof (callback) === "function")
+			callback(data1);
+
+	}, "json").error(function(data1)
+	{
+		// Hide spinner on error
+		$('#spinner-clickdesk-tickets').hide();
+
+		// Error message is shown in error panel for 10 seconds
+		clickDeskStreamError("clickdesk-tickets-error-panel", data1.responseText);
+	});
+}
+
+/**
+ * Shows more tickets retrieved from ClickDesk in ClickDesk widget ticket panel
+ * 
+ * @param data
+ */
+function showMoreTickets(data)
+{
+	// spinner is hidden after retrieving tickets
+	$('#spinner-clickdesk-tickets').hide();
+
+	/*
+	 * If chats array length is zero, show information in the chats error panel
+	 * and hide it after 10 seconds
+	 */
+	if (data.length == 0)
+	{
+		clickDeskStreamError("clickdesk-tickets-error-panel", 'No more tickets');
+		return;
+	}
+
+	// Get template and fill it with chats data and append it to chats panel
+	$('#clickdesk_tickets_panel').append(getTemplate('clickdesk-ticket-stream', data));
+
+	// Call time ago on more chats
+	$(".time-ago", $('#clickdesk_tickets_panel')).timeago();
+
+}
+
+/**
+ * Shows ClickDesk error message in the div allocated with given id
+ * 
+ * @param id
+ *            div id
+ * @param message
+ *            error message
+ */
 function clickDeskError(id, message)
 {
-	Errorjson['message'] = message;
-	$('#' + id).html(getTemplate('clickdesk-error', Errorjson));
+	// build JSON with error message
+	var error_json = {};
+	error_json['message'] = message;
+
+	/*
+	 * Get error template and fill it with error message and show it in the div
+	 * with given id
+	 */
+	$('#' + id).html(getTemplate('clickdesk-error', error_json));
 }
 
+/**
+ * Shows ClickDesk error message in the div allocated with given id and fades it
+ * out after 10 secs
+ * 
+ * @param id
+ *            div id
+ * @param message
+ *            error message
+ */
 function clickDeskStreamError(id, message)
 {
-	Errorjson['message'] = message;
-	$('#' + id).html(getTemplate('clickdesk-error', Errorjson));
-	
+	// Fill error template and show error message
+	clickDeskError(id, message);
+
+	/*
+	 * div allocated with the id here is hidden by default, we need to show it
+	 * with the error message and fade it out after 10 secs
+	 */
 	$('#' + id).show();
 	$('#' + id).fadeOut(10000);
 }

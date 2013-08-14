@@ -1,75 +1,90 @@
 /**
  * ===rapleaf.js==== It is a pluginIn to be integrated with CRM, developed based
- * on the third party javascript API provided. It interacts with the application
+ * on the third party JavaScript API provided. It interacts with the application
  * based on the function provided on agile_widgets.js (Third party API). Rapleaf
  * fetches information based on the email
  */
 $(function()
 {
-
-	// Plugin name as a global variable
+	// Rapleaf widget name declared as global variable
 	RAPLEAF_PLUGIN_NAME = "Rapleaf";
-	RAPLEAF_PLUGIN_HEADER = '<div></div>';
 
-	Rapleaf_loader = '<div id="rap_info_load"><center><img  src=\"img/ajax-loader-cursor.gif\" ' + 'style="margin-top: 10px;margin-bottom: 14px;"></img></center></div>';
+	// Rapleaf loading image declared as global
+	RAPLEAF_LOADING_IMAGE = '<div id="rap_info_load"><center><img  src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center></div>';
 
-	// Gets plugin id from plugin object, fetched using script API
-	var plugin_id = agile_crm_get_plugin(RAPLEAF_PLUGIN_NAME).id;
+	// Retrieves widget which is fetched using script API
+	var rapleaf_widget = agile_crm_get_plugin(RAPLEAF_PLUGIN_NAME);
 
-	// Gets Plugin Prefs, required to check whether to show setup button or to
-	// fetch details
-	var plugin_prefs = agile_crm_get_plugin_prefs(RAPLEAF_PLUGIN_NAME);
+	console.log('In Rapleaf');
+	console.log(rapleaf_widget);
 
+	// ID of the Rapleaf widget as global variable
+	Rapleaf_Plugin_Id = rapleaf_widget.id;
+
+	// Stores email of the contact as global variable
+	Email = agile_crm_get_contact_property('email');
+	console.log('Email: ' + Email);
+
+	/*
+	 * Gets Rapleaf widget preferences, required to check whether to show setup
+	 * button or to fetch details. If undefined - considering first time usage
+	 * of widget, setupRapleafAuth is shown and returned
+	 */
+	if (rapleaf_widget.prefs == undefined)
+	{
+		setupRapleafAuth();
+		return;
+	}
+
+	/*
+	 * Checks if contact has email, if undefined shows message in Rapleaf widget
+	 * panel
+	 */
+	if (!Email)
+	{
+		rapleafError(RAPLEAF_PLUGIN_NAME, "No email is associated with this contact");
+		return;
+	}
+
+	/*
+	 * If Rapleaf widget preferences are defined, shows details from Rapleaf
+	 * associated with current contact's email
+	 */
+	showRapleafDetails();
+
+	// Register click events
+	/*
+	 * On click of reset button of ClickDesk widget, widget preferences are
+	 * deleted and initial set up is called
+	 */
 	$('#Rapleaf_plugin_delete').die().live('click', function(e)
 	{
-
 		e.preventDefault();
 
+		// preferences are saved as undefined and set up is shown
 		agile_crm_save_widget_prefs(RAPLEAF_PLUGIN_NAME, undefined, function(data)
 		{
-			setupRapleafOAuth(plugin_id);
+			setupRapleafAuth();
 		});
 	});
-
-	console.log('in rapleaf');
-
-	// If not found - considering first time usage of widget, setupRapleafOAuth
-	// called
-	if (plugin_prefs == undefined)
-	{
-		setupRapleafOAuth(plugin_id);
-		return;
-	}
-
-	// Gets Contact properties for this widget, based on plugin name (using
-	// Third party script API)
-	var rapleaf_id = agile_crm_get_widget_property_from_contact(RAPLEAF_PLUGIN_NAME);
-
-	// If property with Rapleaf do not exist, all the matching profiles
-	if (!rapleaf_id)
-	{
-		showRapleafDetails(plugin_id);
-		return;
-	}
 
 });
 
 /**
- * Shows setup if user adds rapleaf widget for the first time, to set up
- * connection to rapleaf account. Enter and api key provided by Rapleaf access
- * functionalities
- * 
- * @param plugin_id
+ * Shows setup if user adds Rapleaf widget for the first time or clicks on reset
+ * icon on Rapleaf panel in the UI, to set up connection to Rapleaf account.
  */
-function setupRapleafOAuth(plugin_id)
+function setupRapleafAuth()
 {
-
-	// Shows an input filed to save the the prefs (api key provided by rapleaf)
+	/*
+	 * Shows an input filed to save Rapleaf preferences (API key provided by
+	 * Rapleaf)
+	 */
 	$('#Rapleaf').html(getTemplate('rapleaf-login', ""));
 
-	console.log('rapleaf oauth');
+	console.log('In Rapleaf Auth');
 
-	// Saves the api key
+	// Saves the API key
 	$('#save_api_key').die().live('click', function(e)
 	{
 		e.preventDefault();
@@ -80,55 +95,91 @@ function setupRapleafOAuth(plugin_id)
 			return;
 		}
 
-		var api_key = $("#rapleaf_api_key").val();
-
-		// api_key = "f3e71aadbbc564750d2057612a775ec6";
-		agile_crm_save_widget_prefs(RAPLEAF_PLUGIN_NAME, api_key);
-
-		// On saving prefs, called to show rapleaf details
-		showRapleafDetails(plugin_id);
+		// Saves Rapleaf preferences in Rapleaf widget object
+		saveRaplefPrefs();
 	});
 }
 
 /**
- * Shows details of contact using rapleaf
- * 
- * 
- * @param plugin_id :
- *            plugin_id to get prefs (api key saved in widgets) to connect to
- *            rapleaf
+ * Calls method in script API (agile_widget.js) to save Rapleaf preferences in
+ * Rapleaf widget object
  */
-function showRapleafDetails(plugin_id)
+function saveRaplefPrefs()
 {
+	// Retrieve and store the Rapleaf API key entered by the user
+	var Rapleaf_prefs = {};
+	Rapleaf_prefs["rapleaf_api_key"] = $("#rapleaf_api_key").val();
 
-	// Shows loading, until info is fetched
-	$('#Rapleaf').html(Rapleaf_loader);
-
-	// Stores email of the contact as global variable
-	Email = agile_crm_get_contact_property('email');
-
-	// Checks if contact has email, if undefined shows message in Zendesk panel
-	if (!Email)
+	// Saves the preferences into widget with Rapleaf widget name
+	agile_crm_save_widget_prefs(RAPLEAF_PLUGIN_NAME, JSON.stringify(Rapleaf_prefs), function(data)
 	{
-		rapleafError("Rapleaf", "No email is associated with this contact");
-		return;
-	}
+		/*
+		 * Checks if contact has email, if undefined shows information in
+		 * Rapleaf panel
+		 */
+		if (!Email)
+		{
+			rapleafError(RAPLEAF_PLUGIN_NAME, "No email is associated with this contact");
+			return;
+		}
 
-	var url = "core/api/widgets/rapleaf/" + agile_crm_get_plugin_prefs(RAPLEAF_PLUGIN_NAME) + "/" + Email;
+		// Retrieves and shows Rapleaf details in the Rapleaf widget UI
+		showRapleafDetails();
+	});
+}
 
+/**
+ * Shows details of contact from Rapleaf in Rapleaf widget panel. Initializes an
+ * AJAX queue request to retrieve Rapleaf details based on given
+ * ClickDesk_Plugin_Id and Email
+ * 
+ * <p>
+ * Request is added to queue to make the requests from all the widgets
+ * synchronous
+ * </p>
+ */
+function showRapleafDetails()
+{
+	// Shows loading, until info is fetched
+	$('#Rapleaf').html(RAPLEAF_LOADING_IMAGE);
+
+	// URL to connect with RapleafWidgetsAPI
+	var url = "core/api/widgets/rapleaf/" + Rapleaf_Plugin_Id + "/" + Email;
+
+	/*
+	 * Calls queueGetRequest method in widget_loader.js, with queue name as
+	 * "widget_queue" to retrieve details (age, gender.. etc)
+	 */
 	queueGetRequest("widget_queue", url, 'json', function success(data)
 	{
+		// Get and fill the template with data and show it in Rapleaf panel
 		$('#Rapleaf').html(getTemplate('rapleaf-profile', data))
 
 	}, function error(data)
 	{
-		rapleafError("Rapleaf", data.responseText);
+		// Show error message in Rapleaf widget
+		rapleafError(RAPLEAF_PLUGIN_NAME, data.responseText);
 	});
 
 }
 
+/**
+ * Shows Rapleaf error message in the div allocated with given id
+ * 
+ * @param id
+ *            div id
+ * @param message
+ *            error message
+ */
 function rapleafError(id, message)
 {
-	Errorjson['message'] = message;
-	$('#' + id).html(getTemplate('rapleaf-error', Errorjson))
+	// build JSON with error message
+	var error_json = {};
+	error_json['message'] = message;
+
+	/*
+	 * Get error template and fill it with error message and show it in the div
+	 * with given id
+	 */
+	$('#' + id).html(getTemplate('rapleaf-error', error_json));
 }

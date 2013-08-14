@@ -1,91 +1,97 @@
+/**
+ * ===freshbooks.js==== It is a pluginIn to be integrated with CRM, developed
+ * based on the third party JavaScript API provided. It interacts with the
+ * application based on the function provided on agile_widgets.js (Third party
+ * API)
+ */
 $(function()
 {
-
-	// Widget name as a global variable
+	// FreshBooks widget name as a global variable
 	FRESHBOOKS_PLUGIN_NAME = "FreshBooks";
 
 	// FreshBooks update loading image declared as global
-	FRESHBOOKS_LOGS_LOAD_IMAGE = '<center><img id="freshbooks_invoice_load" src=' + '\"img/ajax-loader-cursor.gif\" style="margin-top: 14px;margin-bottom: 10px;">' + '</img></center>';
+	FRESHBOOKS_LOGS_LOAD_IMAGE = '<center><img id="freshbooks_invoice_load" src="img/ajax-loader-cursor.gif" style="margin-top: 14px;margin-bottom: 10px;"></img></center>';
 
-	items = {};
-	Errorjson = {};
+	// Retrieves widget which is fetched using script API
+	var freshbooks_widget = agile_crm_get_plugin(FRESHBOOKS_PLUGIN_NAME);
 
-	// Gets widget id from widget object, fetched using script API
-	var plugin_id = agile_crm_get_plugin(FRESHBOOKS_PLUGIN_NAME).id;
+	console.log('In FreshBooks');
+	console.log(freshbooks_widget);
 
-	// Gets widget preferences, required to check whether to show setup button
-	// or
-	// to fetch details
-	var plugin_prefs = agile_crm_get_plugin_prefs(FRESHBOOKS_PLUGIN_NAME);
-
-	$('#FreshBooks_plugin_delete').die().live('click', function(e)
-	{
-
-		e.preventDefault();
-
-		agile_crm_save_widget_prefs(FRESHBOOKS_PLUGIN_NAME, undefined, function(data)
-		{
-			setUpFreshbooksAuth(plugin_id);
-		});
-	});
-
-	console.log('before email');
+	// ID of the FreshBooks widget as global variable
+	FreshBooks_Plugin_id = freshbooks_widget.id;
 
 	// Stores email of the contact as global variable
 	Email = agile_crm_get_contact_property('email');
-
-	console.log('after email');
+	console.log('Email: ' + Email);
 
 	/*
-	 * If not found - considering first time usage of widget,
-	 * setUpFreshbooksAuth called
+	 * Gets FreshBooks widget preferences, required to check whether to show
+	 * setup button or to fetch details. If undefined - considering first time
+	 * usage of widget, setUpFreshbooksAuth is shown and returned
 	 */
-	if (plugin_prefs == undefined)
+	if (freshbooks_widget.prefs == undefined)
 	{
-		setUpFreshbooksAuth(plugin_id);
+		setUpFreshbooksAuth();
 		return;
 	}
 
-	// Checks if contact has email, if undefined shows message in FreshBooks
-	// panel
+	/*
+	 * Checks if contact has email, if undefined shows message in FreshBooks
+	 * panel
+	 */
 	if (!Email)
 	{
-		freshbooksError('FreshBooks', "No email is associated with this contact");
+		freshBooksError(FRESHBOOKS_PLUGIN_NAME, "No email is associated with this contact");
 		return;
 	}
 
-	showFreshBooksClient(plugin_id, Email);
+	/*
+	 * If FreshBooks widget preferences are defined, shows invoices from
+	 * FreshBooks associated with current contact's email
+	 */
+	showFreshBooksClient();
 
+	// Register click events
+	/*
+	 * On click of reset button of FreshBooks widget, widget preferences are
+	 * deleted and initial set up is called
+	 */
+	$('#FreshBooks_plugin_delete').die().live('click', function(e)
+	{
+		e.preventDefault();
+
+		// preferences are saved as undefined and set up is shown
+		agile_crm_save_widget_prefs(FRESHBOOKS_PLUGIN_NAME, undefined, function(data)
+		{
+			setUpFreshbooksAuth();
+		});
+	});
+
+	/*
+	 * Retrieve first name and last name of contact, to add contact as client in
+	 * FreshBooks
+	 */
 	var first_name = agile_crm_get_contact_property("first_name");
 	var last_name = agile_crm_get_contact_property("last_name");
 
+	/*
+	 * On click of add client button in FreshBooks, calls method to add a client
+	 * in FreshBooks with contact's first name, last name and email
+	 */
 	$('#freshbooks_add_client').die().live('click', function(e)
 	{
 		e.preventDefault();
-
-		addClientToFreshBooks(plugin_id, first_name, last_name, Email);
-
-	});
-
-	$('#freshbooks_items').die().live('click', function(e)
-	{
-		e.preventDefault();
-
-		console.log(items.total);
-		if (!items.total)
-			getItemsInFreshBooks(plugin_id);
-	});
-
-	$('#freshbooks_add_invoice').die().live('click', function(e)
-	{
-		e.preventDefault();
-
-		addInvoiceToClientInFreshBooks(plugin_id, first_name, last_name, Email);
+		addClientToFreshBooks(first_name, last_name, Email);
 	});
 
 });
 
-function setUpFreshbooksAuth(plugin_id)
+/**
+ * Shows setup if user adds FreshBooks widget for the first time or clicks on
+ * reset icon on FreshBooks panel in the UI
+ */
+function setUpFreshbooksAuth()
 {
 	// Shows loading image until set up is shown
 	$('#FreshBooks').html(FRESHBOOKS_LOGS_LOAD_IMAGE);
@@ -93,232 +99,194 @@ function setUpFreshbooksAuth(plugin_id)
 	// Shows input fields to save the FreshBooks preferences
 	$('#FreshBooks').html(getTemplate('freshbooks-login', {}));
 
-	// On click of save button
-	$('#freshbooks_save_token')
-			.die()
-			.live(
-					'click',
-					function(e)
-					{
-						e.preventDefault();
+	// On click of save button, check input and save details
+	$('#freshbooks_save_token').die().live('click', function(e)
+	{
+		e.preventDefault();
 
-						// Checks whether all input fields are given
-						if (!isValidForm($("#freshbooks_login_form")))
-						{
-							return;
-						}
+		// Checks whether all input fields are given
+		if (!isValidForm($("#freshbooks_login_form")))
+		{
+			return;
+		}
 
-						// Store the data given by the user as JSON
-						var freshbooks_prefs = {};
-						freshbooks_prefs["freshbooks_apiKey"] = $("#freshbooks_apikey").val();
-						freshbooks_prefs["freshbooks_url"] = $("#freshbooks_url").val();
-
-						// Saves the preferences into widget with FreshBooks
-						// widget name
-						agile_crm_save_widget_prefs(
-								FRESHBOOKS_PLUGIN_NAME,
-								JSON.stringify(freshbooks_prefs),
-								function(data)
-								{
-									// Checks if contact has email, if undefined
-									// shows message in FreshBooks panel
-									if (!Email)
-									{
-										$('#FreshBooks')
-												.html(
-														'<div class="widget_content" style="border-bottom:none;padding: 10px;' + 'line-height:160%;">No email is associated with this contact</div>');
-										return;
-									}
-
-									showFreshBooksClient(plugin_id, Email);
-
-								});
-
-					});
+		// Saves FreshBooks preferences in FreshBooks widget object
+		savefreshBooksPrefs();
+	});
 }
 
-function showFreshBooksClient(plugin_id, email)
+/**
+ * Calls method in script API (agile_widget.js) to save FreshBooks preferences
+ * in FreshBooks widget object
+ */
+function savefreshBooksPrefs()
+{
+	// Store the data given by the user as JSON
+	var freshbooks_prefs = {};
+	freshbooks_prefs["freshbooks_apiKey"] = $("#freshbooks_apikey").val();
+	freshbooks_prefs["freshbooks_url"] = $("#freshbooks_url").val();
+
+	// Saves the preferences into widget with FreshBooks widget name
+	agile_crm_save_widget_prefs(FRESHBOOKS_PLUGIN_NAME, JSON.stringify(freshbooks_prefs), function(data)
+	{
+		/*
+		 * Checks if contact has email, if undefined shows information in
+		 * FreshBooks panel
+		 */
+		if (!Email)
+		{
+			freshBooksError(FRESHBOOKS_PLUGIN_NAME, "No email is associated with this contact");
+			return;
+		}
+
+		// Retrieves and shows FreshBooks invoices in the FreshBooks widget UI
+		showFreshBooksClient();
+	});
+}
+
+/**
+ * Initializes an AJAX queue request to retrieve FreshBooks client details and
+ * invoices of client based on given FreshBooks_Plugin_id and Email
+ * 
+ * <p>
+ * Request is added to queue to make the requests from all the widgets
+ * synchronous
+ * </p>
+ */
+function showFreshBooksClient()
 {
 	// Shows loading image until set up is shown
 	$('#FreshBooks').html(FRESHBOOKS_LOGS_LOAD_IMAGE);
 
-	queueGetRequest("widget_queue", "/core/api/widgets/freshbooks/clients/" + plugin_id + "/" + email, 'json', function success(data)
+	/*
+	 * Calls queueGetRequest method in widget_loader.js, with queue name as
+	 * "widget_queue" to retrieve clients
+	 */
+	queueGetRequest("widget_queue", "/core/api/widgets/freshbooks/clients/" + FreshBooks_Plugin_id + "/" + Email, 'json', function success(data)
 	{
+		console.log('In FreshBooks clients');
 		console.log(data);
 
+		// If data is not defined return
 		if (!data)
 			return;
 
+		// Fill FreshBooks widget template with FreshBooks clients data
 		$('#FreshBooks').html(getTemplate('freshbooks-profile', data));
 
+		// If no clients available, return
 		if (!data.client)
 			return;
 
+		/*
+		 * If clients exists, retrieve invoices relate to client. If more than
+		 * one client exists with same email, we get JSONArray of clients, we
+		 * take first client and retrieve invoices for its client id, else we
+		 * get JSONObject of client
+		 */
 		if (isArray(data.client))
-			getInvoicesOfClient(plugin_id, data.client[0].client_id);
+			getInvoicesOfClient(data.client[0].client_id);
 		else
-			getInvoicesOfClient(plugin_id, data.client.client_id);
+			getInvoicesOfClient(data.client.client_id);
+
 	}, function error(data)
 	{
+		console.log("In FreshBooks clients error ");
 		console.log(data);
-		console.log("in freshbooks error " + data.responseText);
+
+		// Remove loading on error
 		$('#freshbooks_invoice_load').remove();
 
-		freshbooksError("FreshBooks", data.responseText);
+		// Show FreshBooks error in FreshBooks Widget panel
+		freshBooksError("FreshBooks", data.responseText);
 	});
 }
 
-function getInvoicesOfClient(plugin_id, client_id)
+/**
+ * Retrieves invoices of client base on widget id and client id
+ * 
+ * @param client_id
+ *            id of client in FreshBooks
+ */
+function getInvoicesOfClient(client_id)
 {
-	$.get("/core/api/widgets/freshbooks/invoices/" + plugin_id + "/" + client_id, function(data)
+	/*
+	 * send GET request to the URL to retrieve invoices based on widget id and
+	 * client id as path parameters
+	 */
+	$.get("/core/api/widgets/freshbooks/invoices/" + FreshBooks_Plugin_id + "/" + client_id, function(data)
 	{
-
+		// Fill FreshBooks invoice template with invoice of client
 		var freshbooks_invoice_template = $(getTemplate('freshbooks-invoice', data));
 
-		$('#freshbooks_invoice_panel').html(freshbooks_invoice_template);
-
+		// Load jquery time ago function to show time ago in invoices
 		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 		{
 			$(".time-ago", freshbooks_invoice_template).timeago();
 		});
 
-	}, 'json').error(function(data)
-	{
-		freshbooksError("freshbooks_invoice_panel", data.responseText);
-	});
-}
-
-function getItemsInFreshBooks(plugin_id, callback)
-{
-	$('#freshbooks_items_panel').html(FRESHBOOKS_LOGS_LOAD_IMAGE);
-
-	$.get("/core/api/widgets/freshbooks/items/" + plugin_id + "/", function(data)
-	{
-		items = data;
-		console.log(items);
-		$('#freshbooks_items_panel').html(getTemplate('freshbooks-items', data));
-
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-		{
-			$(".time-ago", $('#freshbooks_items_panel')).timeago();
-		});
-
-		if (callback && typeof (callback) === "function")
-		{
-			// Execute the callback, passing parameters as necessary
-			callback(data);
-		}
+		// Show invoices in FreshBooks widget panel
+		$('#freshbooks_invoice_panel').html(freshbooks_invoice_template);
 
 	}, 'json').error(function(data)
 	{
-		$('#freshbooks_invoice_load').remove();
-
-		freshbooksError("freshbooks_items_panel", data.responseText);
-
+		// Show FreshBooks error in FreshBooks invoice panel
+		freshBooksError("freshbooks_invoice_panel", data.responseText);
 	});
 }
 
-function addClientToFreshBooks(plugin_id, first_name, last_name, email)
+/**
+ * Adds a client in FreshBooks account for the current contact with first name,
+ * last name and email
+ * 
+ * @param first_name
+ *            First name of contact
+ * @param last_name
+ *            Last name of contact
+ */
+function addClientToFreshBooks(first_name, last_name)
 {
-	$.get("/core/api/widgets/freshbooks/add/client/" + plugin_id + "/" + first_name + "/" + last_name + "/" + email, function(data)
+	/*
+	 * send GET request to the URL to add client in FreshBooks based on widget
+	 * id, first name, last name and email as path parameters
+	 */
+	$.get("/core/api/widgets/freshbooks/add/client/" + FreshBooks_Plugin_id + "/" + first_name + "/" + last_name + "/" + Email, function(data)
 	{
+		console.log('In FreshBooks add client ');
 		console.log(data);
+
+		/*
+		 * Response from freshBooks will be sent as "ok" if client is added,
+		 * check the response and show added client in FreshBooks widget panel
+		 */
 		if (data.status == "ok")
-			showFreshBooksClient(plugin_id, email);
+			showFreshBooksClient();
 
 	}, 'json').error(function(data)
 	{
-		freshbooksError("FreshBooks", data.responseText);
+		// Show FreshBooks error in FreshBooks invoice panel
+		freshBooksError("FreshBooks", data.responseText);
 	});
 
 }
 
-function addInvoiceToClientInFreshBooks(plugin_id, first_name, last_name, email)
+/**
+ * Shows FreshBooks error message in the div allocated with given id
+ * 
+ * @param id
+ *            div id
+ * @param message
+ *            error message
+ */
+function freshBooksError(id, message)
 {
+	// build JSON with error message
+	var error_json = {};
+	error_json['message'] = message;
 
-	// Store info in a json, to send it to the modal window when making send
-	// message request
-	var json = {};
-
-	// Set headline of modal window as Send Message
-	json["headline"] = "Add Invoice";
-
-	// Information to be shown in the modal to the user while sending message
-	json["info"] = "Generates an invoice for the item and sends an email to " + email;
-
-	getItemsInFreshBooks(plugin_id, function(data)
-	{
-		json["items"] = data;
-
-		console.log(json);
-
-		// If modal already exists remove to show a new one
-		$('#freshbooks_addModal').remove();
-
-		// Populate the modal template with the above json details in the form
-		var message_form_modal = getTemplate("freshbooks-modal", json);
-
-		// Append the form into the content
-		$('#content').append(message_form_modal);
-
-		// Shows the modal after filling with details
-		$(message_form_modal).modal("show");
-
-	});
-
-	// On click of send button in the modal, message request is sent
-	$('#send_request')
-			.click(
-					function(e)
-					{
-						e.preventDefault();
-
-						var quantity;
-
-						// Checks whether all the input fields are filled
-						if (!isValidForm($("#freshbooks_addForm")))
-						{
-							quantity = $('#quantity').val();
-							return;
-						}
-
-						if (!quantity)
-							quantity = 1;
-						var item_name = "pro";
-						console.log(quantity);
-
-						$
-								.get(
-										"/core/api/widgets/freshbooks/add/invoice/" + plugin_id + "/" + first_name + "/" + last_name + "/" + email + "/" + item_name + "/" + quantity,
-										function(data)
-										{
-											console.log(data);
-
-											if (data.status == "ok")
-												// On success, shows the status
-												// as sent
-												$('#freshbooks_addModal').find('span.save-status').html("sent");
-
-											// Hides the modal after 2 seconds
-											// after the sent is shown
-											setTimeout(function()
-											{
-												$('#freshbooks_addModal').modal("hide");
-											}, 2000);
-
-										}, 'json').error(function(data)
-								{
-									// Remove modal if an error occurs
-									$('#freshbooks_addModal').remove();
-
-									alert(data.responseText);
-								});
-
-					});
-}
-
-function freshbooksError(id, message)
-{
-	Errorjson['message'] = message;
-	$('#' + id).html(getTemplate('freshbooks-error', Errorjson));
+	/*
+	 * Get error template and fill it with error message and show it in the div
+	 * with given id
+	 */
+	$('#' + id).html(getTemplate('freshbooks-error', error_json));
 }

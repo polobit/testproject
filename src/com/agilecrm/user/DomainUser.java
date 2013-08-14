@@ -493,6 +493,10 @@ public class DomainUser extends Cursor implements Cloneable
 		// Get Old password
 		DomainUser oldDomainUser = DomainUserUtil.getDomainUser(id);
 		this.encrypted_password = oldDomainUser.encrypted_password;
+
+		// Somewhere name is going null which updating.
+		if (this.name == null)
+		    this.name = oldDomainUser.name;
 	    }
 	}
 

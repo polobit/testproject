@@ -57,7 +57,7 @@ var ContactsRouter = Backbone.Router.extend({
     /*	$(".active").removeClass("active");
         
       	 $("#content").html(getTemplate('dashboard-timline', {}));
-      	 setupDashboardTimeline();
+      	 setup_dashboardTimeline();
       	    */
       },
 
@@ -68,7 +68,7 @@ var ContactsRouter = Backbone.Router.extend({
 
       	var el = $(getTemplate('dashboard1', {}));
       	$("#content").html(el)
-      	setupDashboard(el);
+      	setup_dashboard(el);
       	//loadDynamicTimeline("my-timeline", el);
       },
     /**

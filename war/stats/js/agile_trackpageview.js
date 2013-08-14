@@ -10,10 +10,10 @@
  */
 function agile_trackPageview(callback)
 {
-	// get Guid
+	// Get guid
 	var guid = agile_guid.get();
 
-	// get Session-id
+	// Get Session-id
 	var session_id = agile_session.get();
 
 	// Current url
@@ -23,7 +23,7 @@ function agile_trackPageview(callback)
 		url = encodeURIComponent(url);
 	else
 		url = "";
-	
+
 	// Get agile_id
 	var agile = agile_id.get();
 
@@ -46,11 +46,10 @@ function agile_trackPageview(callback)
 		params = "guid={0}&sid={1}&url={2}&agile={3}".format(guid, session_id, url, agile);
 
 	if (agile_guid.get_email())
-		params += "&email=" + encodeURIComponent(agile_guid.get_email()); // get
-																			// email
+		params += "&email=" + encodeURIComponent(agile_guid.get_email()); // get email																			// email
 
 	var agile_url = "https://" + agile_id.getNamespace() + ".agilecrm.com/stats?callback=?&" + params;
-	
-	// callback
+
+	// Callback
 	agile_json(agile_url, callback);
 }

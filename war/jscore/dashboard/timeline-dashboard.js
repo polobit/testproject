@@ -1,5 +1,5 @@
     
-function setupDashboardTimeline(url)
+function setup_dashboardTimeline(url)
 {
 	if(!url)
 		url = "core/api/timeline/contact";

@@ -265,7 +265,7 @@ function addTagAgile(tag) {
 		Agile_Contact = data;
 		if(!checkTagAgile(tag))
 			Agile_Contact.tags.push(tag)	
-			set_profile_meter();
+			set_profile_noty();
 	});
 }
 

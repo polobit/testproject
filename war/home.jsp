@@ -166,7 +166,7 @@
 							<li id="workflowsmenu" style="<%=style_campaign %>" ><a href="#workflows"><i
 									class="icon-sitemap icon-white"></i> Campaigns</a></li>
 							<li id="reportsmenu"><a href="#reports"><i
-									class="icon-share icon-white"></i> Reports</a></li>
+									class="icon-bar-chart icon-white"></i> Reports</a></li>
 
 							<li>
 								<form id="searchForm" class=" navbar-search"
@@ -283,9 +283,9 @@
 				style="font-weight: bold; cursor: pointer; vertical-align: -17px; margin-right: 30px;"
 				id="help-page">Help</a>
 		</div>
-		<!--   <div style="display:inline;float:right;">
+		<div style="display:inline;float:right;">
             <a style="font-weight:bold;cursor:pointer;vertical-align:-17px;margin-right: 30px;" id="agile-page-tour">Tour</a>
-        </div> -->
+        </div> 
 
 		<div style="width: 290px; display: inline-block; margin-top: 15px;">
 			Like AgileCRM?<b> Share it -</b>

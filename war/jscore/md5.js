@@ -1,3 +1,7 @@
+/**
+ * md5.js deals with implementing the md5 cryptographic hash function 
+ * which takes arbitrary-sized data and output a fixed-length (16) hash value.
+ */
 var MD5 = function (string) {
 
         function RotateLeft(lValue, iShiftBits) {
@@ -226,5 +230,4 @@ var MD5 = function (string) {
         var temp = WordToHex(a) + WordToHex(b) + WordToHex(c) + WordToHex(d);
 
         return temp.toLowerCase();
-    }
-
+    };
