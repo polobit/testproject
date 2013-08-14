@@ -1,182 +1,249 @@
 /**
  * ===stripe.js==== It is a pluginIn to be integrated with CRM, developed based
  * on the third party JavaScript API provided. It interacts with the application
- * based on the function provided on agile_widgets.js (Third party API). 
+ * based on the function provided on agile_widgets.js (Third party API).
  */
-$(function ()
+$(function()
 {
-    // Plugin name as a global variable
-    Stripe_PLUGIN_NAME = "Stripe";
+	// Stripe widget name as a global variable
+	Stripe_PLUGIN_NAME = "Stripe";
 
-    // Stripe profile loading image declared as global
-    STRIPE_PROFILE_LOAD_IMAGE = '<center><img id="stripe_profile_load" src=\"img/ajax-loader-cursor.gif\" ' + 
-				'style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+	// Stripe profile loading image declared as global
+	STRIPE_PROFILE_LOAD_IMAGE = '<center><img id="stripe_profile_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
 
-    // Retrieves the plugin object saved with Stripe plugin name
-    var plugin = agile_crm_get_plugin(Stripe_PLUGIN_NAME);
+	// Retrieves widget which is fetched using script API
+	var stripe_widget = agile_crm_get_plugin(Stripe_PLUGIN_NAME);
 
-    // Gets plugin id from plugin object
-    var plugin_id = plugin.id;
+	console.log('In Stripe');
+	console.log(stripe_widget);
 
-    // Gets plugin Preferences to check whether to show setup button or to
-    // fetch details
-    var plugin_prefs = plugin.prefs;
-    
-    $('#Stripe_plugin_delete').die().live('click', function (e) {
-    	
-    	e.preventDefault();
-    	
-    	agile_crm_save_widget_prefs(Stripe_PLUGIN_NAME,
-		        undefined , function (data)
-        {
-			setupStripeOAuth(plugin_id);
-        });
-    });
-    
-    console.log('in stripe');
-    
-    // If not found - considering first time usage of widget, setupStripeOAuth
-    // method is called 
-    if (plugin_prefs == undefined)
-    {
-        setupStripeOAuth(plugin_id);
-        return;
-    }
+	// ID of the Stripe widget as global variable
+	Stripe_Plugin_Id = stripe_widget.id;
 
-    var prefs = JSON.parse(plugin_prefs);
-    
-    var stripe_custom_field_name = prefs['stripe_field_name'];
-    
-    if(!stripe_custom_field_name)
-    {
-    	
-    	 $.get("/core/api/custom-fields/type/text", function(data) { 
-    	    	
-    	    	console.log(data);
-    	    	$('#Stripe').html(getTemplate('stripe-custom-field', data));
-    	    	
-    	 }, "json")
-    	 .error(function(data) {
-    		 
-    		 $('#Stripe').html('<div style="padding: 10px;line-height:160%;' +
-    		            'word-wrap: break-word;" >' + data.responseText + '</div>');
-    	 });
-    	 
-    	
-    	
-    	$('#save_stripe_name').die().live('click', function (e) {
-        	
-        	e.preventDefault();
-        	        	
-        	stripe_custom_field_name = $('#stripe_custom_field_name').val();
-        	
-        	prefs['stripe_field_name'] = stripe_custom_field_name;
-        	
-        	agile_crm_save_widget_prefs(Stripe_PLUGIN_NAME,
-        		        JSON.stringify(prefs), function (data)
-            {
-        		console.log(data);
-        	    // If defined, shows the details of the customer in Stripe panel
-        	    showStripeProfile(plugin_id, stripe_custom_field_name);
-        		        
-            });
-        	
-        });
-    	
-    	return;
-    }
-    
-  
-    // If defined, shows the details of the customer in Stripe panel
-    showStripeProfile(plugin_id, stripe_custom_field_name);
+	/*
+	 * Gets Stripe widget preferences, required to check whether to show setup
+	 * button or to fetch details. If undefined - considering first time usage
+	 * of widget, setupStripeOAuth is shown and returned
+	 */
+	if (stripe_widget.prefs == undefined)
+	{
+		setupStripeOAuth();
+		return;
+	}
+
+	// Parse string Stripe widget preferences as JSON
+	var stripe_widget_prefs = JSON.parse(stripe_widget.prefs);
+
+	/*
+	 * Retrieve name of the custom field in which Stripe customer IDs are
+	 * stored. We store it as "stripe_field_name" in Stripe Widget preferences
+	 */
+	var stripe_custom_field_name = stripe_widget_prefs['stripe_field_name'];
+
+	/*
+	 * If stripe_custom_field_name is not defined, call setUpStripeCustomField
+	 * method which asks the user to select the field in which Stripe customer
+	 * IDs are stored from list of custom fields
+	 */
+	if (!stripe_custom_field_name)
+	{
+		setUpStripeCustomField(stripe_widget_prefs);
+		return;
+	}
+
+	/*
+	 * If stripe_custom_field_name is defined, shows customer details and
+	 * invoices from Stripe
+	 */
+	showStripeProfile(stripe_custom_field_name);
+
+	// Register click events
+	/*
+	 * On click of reset button of ClickDesk widget, Stripe widget preferences
+	 * are deleted and initial set up is called
+	 */
+	$('#Stripe_plugin_delete').die().live('click', function(e)
+	{
+		e.preventDefault();
+
+		// preferences are saved as undefined and set up Stripe OAuth is shown
+		agile_crm_save_widget_prefs(Stripe_PLUGIN_NAME, undefined, function(data)
+		{
+			setupStripeOAuth();
+		});
+	});
 
 });
 
 /**
- * Shows setup if user adds Stripe widget for the first time. Uses ScribeServlet 
+ * Shows setup if user adds Stripe widget for the first time. Uses ScribeServlet
  * to create a client and get preferences and save it to the widget.
- * 
- * @param plugin_id
- * 			To get the widget and save tokens in it.
  */
-function setupStripeOAuth(plugin_id)
+function setupStripeOAuth()
 {
-    // Shows loading until the set up is shown
-    $('#Stripe').html(STRIPE_PROFILE_LOAD_IMAGE);
+	// Shows loading until the set up is shown
+	$('#Stripe').html(STRIPE_PROFILE_LOAD_IMAGE);
 
-    // URL to return, after authenticating from Stripe
-    var callbackURL = window.location.href;
-    
-    console.log('stripe oauth');
+	// URL to return, after authenticating from Stripe
+	var callbackURL = window.location.href;
 
-    /*
-     * Creates a URL, which on click can connect to scribe using parameters sent
-     * and returns back to the profile based on return URL provided and saves widget  
-     * preferences in widget based on plugin id
-     */
-    var url = '/scribe?service=stripe&return_url=' + encodeURIComponent(callbackURL) +
-        '&plugin_id=' + encodeURIComponent(plugin_id);
+	console.log('In Stripe OAuth');
 
-    $('#Stripe').html('<div class="widget_content" style="border-bottom:none;line-height: 160%;" >' +
-        'See the contact\'s subscriptions history and payments from your Stripe account.' +
-        '<p style="margin: 10px 0px 5px 0px;"><a href=' + url + '>' +
-        '<img src="/img/plugins/stripe-connect-button.png" style="width: 190px;' +
-        'height: 33px;"></a></p></div>');
-    
-    
-   
+	/*
+	 * Creates a URL, which on click can connect to scribe using parameters sent
+	 * and returns back to the profile based on callbackURLL provided and saves
+	 * widget preferences in widget based on Stripe_Plugin_Id
+	 */
+	var url = '/scribe?service=stripe&return_url=' + encodeURIComponent(callbackURL) + '&plugin_id=' + encodeURIComponent(Stripe_Plugin_Id);
+
+	$('#Stripe')
+			.html(
+					'<div class="widget_content" style="border-bottom:none;line-height: 160%;">See the contact\'s subscriptions history and payments from your Stripe account.<p style="margin: 10px 0px 5px 0px;"><a href=' + url + '><img src="/img/plugins/stripe-connect-button.png" style="width: 190px;height: 33px;"></a></p></div>');
+
 }
 
 /**
- * Shows stripe profile based on customer Id and Plugin Id
+ * Shows setup to select Stripe custom field from list of custom fields in which
+ * Stripe Customer details are stored
  * 
- * @param plugin_id
- * 			plugin_id to get tokens saved to connect with Stripe
- * @param customer_id
- * 			Stripe customer id based on which details are retrieved
+ * @param stripe_widget_prefs
+ *            JSON Stripe widget preferences
  */
-function showStripeProfile(plugin_id, stripe_custom_field_name)
+function setUpStripeCustomField(stripe_widget_prefs)
 {
-    //Shows loading until the profile is retrieved
-    $('#Stripe').html(STRIPE_PROFILE_LOAD_IMAGE);
-    
-    // Retrieves the customer id of stripe saved to contact
-    var customer_id = agile_crm_get_contact_property(stripe_custom_field_name);
-    console.log("customer id " + customer_id);
-    
-    // If customer id is undefined, message is shown
-    if (!customer_id)
-    {
-        $('#Stripe').html("<div style='padding: 10px;line-height:160%;'>" +
-            "No stripe customer id is related to this contact</div>");
-        return;
-    }
+	// Retrieve all custom from Agile account
+	$.get("/core/api/custom-fields/type/text", function(data)
+	{
+		// Fill template with custom fields and show it in Stripe widget panel
+		$('#Stripe').html(getTemplate('stripe-custom-field', data));
 
+	}, "json").error(function(data)
+	{
+		// If error occurs, show error in Stripe Panel
+		stripeError(Stripe_PLUGIN_NAME, data.responseText);
+	});
 
-    // Sends request to url "/core/api/widgets/stripe/" with plugin id and customer id 
-    // as path parameters which calls WidgetsAPI class 
-	queueGetRequest("widget_queue", "/core/api/widgets/stripe/" + plugin_id + "/" + customer_id, 'json',
-    function success(data)
-    {
-		console.log(data);
-		
+	/*
+	 * On click of save button after setting Up Stripe custom field, widget
+	 * preferences are saved including stripe_field_name and Stripe profile of
+	 * customer is shown
+	 */
+	$('#save_stripe_name').die().live('click', function(e)
+	{
+		e.preventDefault();
+
+		// Get the selected value from list of custom fields
+		var stripe_custom_field_name = $('#stripe_custom_field_name').val();
+
+		// Include 'stripe_field_name' to stripe_widget_prefs and save
+		stripe_widget_prefs['stripe_field_name'] = stripe_custom_field_name;
+
+		// preferences are saved and Stripe profile of customer is shown
+		agile_crm_save_widget_prefs(Stripe_PLUGIN_NAME, JSON.stringify(stripe_widget_prefs), function(data)
+		{
+			showStripeProfile(stripe_custom_field_name);
+		});
+
+	});
+}
+
+/**
+ * Shows stripe profile based on customer Id and Stripe_Plugin_Id
+ * 
+ * @param stripe_custom_field_name
+ *            Stripe custom field name in which Stripe customer id related to
+ *            contact is stored
+ */
+function showStripeProfile(stripe_custom_field_name)
+{
+	// Shows loading until the profile is retrieved
+	$('#Stripe').html(STRIPE_PROFILE_LOAD_IMAGE);
+
+	/*
+	 * Retrieves the customer id of Stripe related to contact which is saved in
+	 * Stripe custom field
+	 */
+	var customer_id = agile_crm_get_contact_property(stripe_custom_field_name);
+	console.log("Stripe customer id " + customer_id);
+
+	// If customer id is undefined, message is shown
+	if (!customer_id)
+	{
+		stripeError(Stripe_PLUGIN_NAME, "No stripe customer id is related to this contact");
+		return;
+	}
+
+	// Retrieve Stripe profile and shows profile in Stripe panel on success
+	getStripeProfile(customer_id, function(data)
+	{
+		// Get and Fill the template with data
 		var stripe_template = $(getTemplate("stripe-profile", data));
-	
-        head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-      		$(".time-ago", stripe_template).each(function(index,element){
-      			$(element).timeago();
-      		})
-      		console.log($(".time-ago", stripe_template));
-      	  });
-        
-   	 //populates the template with and shows in the widget panel
-        $('#Stripe').html(stripe_template);
-        
-        // if error occurs
-    }, function error(data)
-    {
-        // Shows error message in the stripe panel
-        $('#Stripe').html('<div style="padding: 10px;line-height:160%;' +
-            'word-wrap: break-word;" >' + data.responseText + '</div>');
-    });
+
+		// Load jquery time ago function to show time ago in invoices
+		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+		{
+			$(".time-ago", stripe_template).timeago();
+		});
+
+		// Show the template in Stripe widget panel
+		$('#Stripe').html(stripe_template);
+	});
+
+}
+
+/**
+ * Initializes an AJAX queue request to retrieve Stripe customer details and
+ * invoices based on given Stripe customer id
+ * 
+ * <p>
+ * Request is added to queue to make the requests from all the widgets
+ * synchronous
+ * </p>
+ * 
+ * @param customer_id
+ *            {@link String} Stripe customer id
+ * @param callback
+ *            Function to be executed on success
+ */
+function getStripeProfile(customer_id, callback)
+{
+	/*
+	 * Calls queueGetRequest method in widget_loader.js, with queue name as
+	 * "widget_queue" to retrieve Stripe profile of customer
+	 */
+	queueGetRequest("widget_queue", "/core/api/widgets/stripe/" + Stripe_Plugin_Id + "/" + customer_id, 'json', function success(data)
+	{
+		console.log('In Stripe profile');
+		console.log(data);
+
+		// If defined, execute the callback function
+		if (callback && typeof (callback) === "function")
+			callback(data);
+
+	}, function error(data)
+	{
+		// If error occurs, show error in Stripe Panel
+		stripeError(Stripe_PLUGIN_NAME, data.responseText);
+	});
+}
+
+/**
+ * Shows Stripe error message in the div allocated with given id
+ * 
+ * @param id
+ *            div id
+ * @param message
+ *            error message
+ */
+function stripeError(id, message)
+{
+	// build JSON with error message
+	var error_json = {};
+	error_json['message'] = message;
+
+	/*
+	 * Get error template and fill it with error message and show it in the div
+	 * with given id
+	 */
+	$('#' + id).html(getTemplate('stripe-error', error_json));
 }
