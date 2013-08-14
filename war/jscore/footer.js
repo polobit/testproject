@@ -1,20 +1,19 @@
 (function($) {
-
-	addScrollTopAnimation(); // start
-
+	
+    // To show top button at the bottom of page
+	addScrollTopAnimation(); 
+	
+	// Starts scroll
 	function addScrollTopAnimation() {
 
 		var $scrolltop_link = $('#scroll-top');
 
+		// When click event is fired scrolls the page to top
 		$scrolltop_link.on('click', function(ev) {
 
 			ev.preventDefault();
 
-			$('html, body').animate({
-
-				scrollTop : 0
-
-			}, 700);
+			$('html, body').animate({ scrollTop : 0	}, 700);
 
 		})
 
@@ -49,27 +48,17 @@
 				 * the height of half a viewport from top, Hide it otherwise.
 				 */
 				if ($(this).scrollTop() > $(this).height() / 2) {
-
 					if (is_hidden) {
-
 						$scrolltop_link.fadeIn(600).data('hidden', 0);
-
 					}
 				}
-
 				else {
-
 					if (!is_hidden) {
-
 						$scrolltop_link.slideUp().data('hidden', 1);
-
 					}
 				}
-
 			}
-
 		}, 300);
-
 	}
 	
 	/* For toggling help modal popup */
@@ -78,6 +67,7 @@
 		var helpModal = $(getTemplate("show-help"),{});
 		helpModal.modal('show');
 	
+		// Hides help only when clicked on close button.
 	    $('.hide-modal', helpModal).click(function(){
 	    		helpModal.modal('hide');
 	    });
@@ -97,10 +87,13 @@
 	$('#share-email').die().live('click', function(e){
 		e.preventDefault();
 		
+		// If modal is already present removing it to submit new form
         if ($('#share-by-email').size() != 0)
         {
         	$('#share-by-email').remove();
         }
+        
+        // To append from address defaultly
 		var CurrentuserModel = Backbone.Model.extend({
 		     //url: '/core/api/imap',
 		     url: '/core/api/users/current-user',
@@ -109,19 +102,24 @@
 		 
 		var currentuserModel = new CurrentuserModel();
 		
-		currentuserModel.fetch({success: function(data){
+		currentuserModel.fetch({
+			
+			// Fetches email of Current Domain User
+			success: function(data){
 			
 				var model = data.toJSON();
 				//$("#sharemailForm").find( 'input[name="from"]' ).val(model.email);
 
 				var emailModal = $(getTemplate("share-by-email", model));
 				
+				// Replacing text area break lines
 				var description = $(emailModal).find('textarea').val();
 				description = description.replace( /<br\/>/g,"\r\n");
 				$(emailModal).find('textarea').val(description);
 		
 				emailModal.modal('show');
 		
+				// When send button is clicked form is validated
 				$('#shareMail').die().live('click',function(e){
 					e.preventDefault();
 					
@@ -134,6 +132,7 @@
 					
 					json.body = json.body.replace(/\r\n/g,"<br/>");
 					
+					// Constructs URL to send mail
 					var url =  'core/api/emails/send-email?from=' + encodeURIComponent(json.from) + '&to=' + 
 					 encodeURIComponent(json.to) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + 
 						 encodeURIComponent(json.body);
@@ -149,8 +148,8 @@
 					});
 		
 				});
-		
-		 }});
+			 }
+		});
 		
 	});
 	
