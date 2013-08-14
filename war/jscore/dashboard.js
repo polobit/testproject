@@ -6,7 +6,7 @@
 function setup_dashboard(el)
 {	
 	// Sets up subscription details
-	setup_subscription_details(el);
+	show_dashboard_subscription_details(el);
 
 	// Shows noty
 	set_profile_noty();
