@@ -168,6 +168,29 @@ function show_custom_fields_helper(custom_fields, properties){
 								+'"></div></div>');
 				return;
 			}
+		else if(field.field_type.toLowerCase() == "textarea")
+		{
+			field_type = "textarea";
+			if(field.is_required)
+				el = el.concat('<div class="control-group">	<label class="control-label">'
+							+ucfirst(field.field_label)
+							+' <span class="field_req">*</span></label><div class="controls"><textarea rows="3" class="'
+							+field.field_type.toLowerCase()
+							+'_input custom_field required" id='
+							+field.id+' name="'
+							+field.field_label
+							+'"></textarea></div></div>');
+			else
+				el = el.concat('<div class="control-group">	<label class="control-label">'
+							+ucfirst(field.field_label)
+							+'</label><div class="controls"><textarea rows="3" class="'
+							+field.field_type.toLowerCase()
+							+'_input custom_field" id='
+							+field.id+' name="'
+							+field.field_label
+							+'"></textarea></div></div>');
+			return;
+		}
 		
 		// If the field is not of type list or checkbox, create text field (plain text field or date field)
 		if(field.is_required)
