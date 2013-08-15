@@ -11,9 +11,11 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONArray;
 
 import com.agilecrm.account.APIKey;
 import com.agilecrm.activities.Task;
+import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
@@ -21,7 +23,6 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
-import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 /**
  * <code>JSAPI</code> provides facility to perform actions, such as creating a
@@ -519,28 +520,25 @@ public class JSAPI
     @Produces("application / x-javascript")
     public String addNote(@QueryParam("data") String json, @QueryParam("email") String email)
     {
-	try
-	{
-	    Contact contact = ContactUtil.searchContactByEmail(email);
-	    if (contact == null)
-		return null;
-
-	    JSONObject note_json = new JSONObject(json);
-
-	    Note note = new Note(note_json.getString("subject"), note_json.getString("description"));
-	    String ContactID = contact.id.toString();
-	    note.addRelatedContacts(ContactID);
-	    note.save();
-	    ObjectMapper mapper = new ObjectMapper();
-	    return mapper.writeValueAsString(note);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
+    try
+    {
+    	Contact contact = ContactUtil.searchContactByEmail(email);
+    	if (contact == null)
+    	return null;
+    	ObjectMapper mapper = new ObjectMapper();
+   		Note note = mapper.readValue(json, Note.class);
+   		note.addRelatedContacts(contact.id.toString());
+   		note.save();
+   		System.out.println("note saved");
+   		return mapper.writeValueAsString(note);
+   	}
+   	catch (Exception e)
+   	{
+   		e.printStackTrace();
+   		return null;
+   	}
     }
-    
+
     /**
      * Get score from contact based on email of contact
      * 
@@ -552,17 +550,19 @@ public class JSAPI
     @Path ("contacts/get-score")
     @GET
     @Produces ("application / x-javascript")
-    public Integer getScore(@QueryParam("email") String email)
+    public String getScore(@QueryParam("email") String email)
     {
     try
     {
     	Contact contact = ContactUtil.searchContactByEmail(email);
     	if (contact == null)
-    		return null;
-    	Integer score;
-    	score = contact.lead_score;
-    	System.out.println("getting score" + score);
-    	return score;
+    	return null;
+    	else
+    	{
+    		ObjectMapper mapper = new ObjectMapper();
+    		System.out.println("getting score" + contact.lead_score);
+    		return mapper.writeValueAsString(contact.lead_score);
+    	}
     }
     catch(Exception e)
     {
@@ -577,31 +577,36 @@ public class JSAPI
      * @param email
      * 				email of the contact
      * 
-     * @return list
+     * @return String (notes)
      */
-    @Path ("contacts/get-note")
+    @Path ("contacts/get-notes")
     @GET
     @Produces ("application / x-javascript")
-    public static List<Note> getNote(@QueryParam("email") String email)
+    public String getNotes(@QueryParam("email") String email)
     {
-   	try 
-   	{
-   		Contact contact = ContactUtil.searchContactByEmail(email);
-   		if (contact == null)
-   			return null;
-   		List<Note> Notes = new ArrayList<Note>();
-    		Notes = NoteUtil.getNotes(contact.id);
-   		for(int i=0;i<Notes.size();i++)
-   		{
-   		System.out.println("getting notes" + Notes.get(i));
-   		}
-   		return Notes;
-    }
-    	catch(Exception e)
-    	{
-    		e.printStackTrace();
+    try 
+    {
+    	Contact contact = ContactUtil.searchContactByEmail(email);
+    	if (contact == null)
     		return null;
+    	else
+    	{
+    		List<Note> Notes = new ArrayList<Note>();
+    		Notes = NoteUtil.getNotes(contact.id);
+    		ObjectMapper mapper = new ObjectMapper();
+    		JSONArray arr = new JSONArray();
+    		for(Note note : Notes)
+    		{
+    			arr.put(mapper.writeValueAsString(note));
+    		}
+    		return arr.toString();
     	}
+    }
+    catch(Exception e)
+    {
+    	e.printStackTrace();
+    	return null;
+    }
     }
 
     /**
@@ -610,23 +615,60 @@ public class JSAPI
      * @param email
      * 				email of the contact
      * 
-     * @return String
+     * @return String (tags)
      */
     @Path("contacts/get-tags")
     @GET
     @Produces ("application / x-javascript")
-    public String getTag(@QueryParam("email") String email)
+    public String getTags(@QueryParam("email") String email)
     {
-   	try
-   	{
-   		Contact contact = ContactUtil.searchContactByEmail(email);
-   		if (contact == null)
-   			return null;
+    try
+    {
+    	Contact contact = ContactUtil.searchContactByEmail(email);
+    	if (contact == null)
+    	return null;
+    	else
+    	{
+    		ObjectMapper mapper = new ObjectMapper();
+    		System.out.println("getting tags" + contact.tags);
+    		return mapper.writeValueAsString(contact.tags);
+    	}
+    }
+    catch(Exception e)
+    {
+    	e.printStackTrace();
+    	return null;
+    }
+    }
 
-   		String tags = new String();
-    	tags = contact.tags.toString();
-    	System.out.println("getting tags" + tags);
-    	return tags;
+    /**
+     * Get tasks based on email of the contact
+     * 
+     * @param email
+     * 				email of the contact
+     * 
+     * @return 
+     * 				String (tasks)
+     */
+    @Path("contacts/get-tasks")
+    @GET
+    @Produces ("application / x-javascript")
+    public String getTasks(@QueryParam("email") String email)
+    {
+    try
+    {
+    	Contact contact = ContactUtil.searchContactByEmail(email);
+    	if (contact==null)
+    	return null;
+    	List<Task> tasks = new ArrayList<Task>();
+    	tasks = TaskUtil.getContactTasks(contact.id);
+    	ObjectMapper mapper = new ObjectMapper();
+    	JSONArray arr = new JSONArray();
+    	for (Task task : tasks)
+    	{
+    		arr.put(mapper.writeValueAsString(task));
+    	}
+    	return arr.toString();
     }
     catch(Exception e)
     {
