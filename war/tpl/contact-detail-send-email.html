@@ -5,14 +5,14 @@
             <fieldset>
                 <legend>Send Email</legend>
                 <div class="control-group">
-                    <label class="control-label">From</label>
+                    <label class="control-label">From <span class="field_req">*</span></label>
                     <div class="controls">
                         <input type="text" class="span4 email required" id="from" name="from" />
                     </div>
                 </div>
 
                 <div class="control-group">
-                    <label class="control-label">To</label>
+                    <label class="control-label">To <span class="field_req">*</span></label>
                     <div class="controls">
                         <input type="text" class="span4 multipleEmails required" name="to" id="to" value="{{getPropertyValue properties "email"}}" />
                     </div>
@@ -35,14 +35,14 @@
                 </div>
                     
                 <div class="control-group">
-                    <label class="control-label">Subject</label>
+                    <label class="control-label">Subject <span class="field_req">*</span></label>
                     <div class="controls">
                         <input type="text" class="span4 required" name="subject" id="subject" placeholder="Subject" />
                     </div>
                 </div>
                     
                 <div class="control-group">
-                    <label class="control-label">Body</label>
+                    <label class="control-label">Body <span class="field_req">*</span></label>
                     <div class="controls">
                         <textarea class="span4 required" rows="8" name="body" id="body" placeholder="Description" style="width:520px; height: 150px"></textarea>
                     </div>
