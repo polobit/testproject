@@ -85,6 +85,7 @@ function contactTableView(base_model) {
 function setupViews(cel, button_name) {
 
 	// Creates a view for custom views
+	
 	var customView = new Base_Collection_View({
 		url : 'core/api/contact-view',
 		restKey : "contactView",
@@ -98,13 +99,18 @@ function setupViews(cel, button_name) {
 			if (button_name)
 				$(el).find('.custom_view').append(button_name);
 		}
-
 	});
 
 	// Fetches the list of custom fields, and shows is the the contact page
 	customView.collection.fetch({
 		success : function() {
 			$("#view-list", cel).html(customView.el);
+			
+			if(readCookie('company_filter'))
+			{
+				$('#contact-view-model-list>li').css('display','none');
+				$('#contact-view-model-list>li:first').css('display','list-item');
+			}
 		}
 	})
 }
