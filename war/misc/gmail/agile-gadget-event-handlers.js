@@ -63,7 +63,7 @@ function agile_init_handlers() {
 
 				$('.saving', el).show();
 				// Add Note
-				_agile.add_note(data.subject, data.description, function(
+				_agile.add_note(data, function(
 						response) {
 
 					$('.saving', el).hide(1);
