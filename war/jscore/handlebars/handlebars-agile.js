@@ -204,7 +204,8 @@ function getPropertyValueBytype(items, name, type, subtype)
 }
 
 /**
- * Returns custom properties list from properties
+ * Returns list of custom properties. used to fill custom data in fields in
+ * continue contact
  * 
  * @param items
  * @returns
