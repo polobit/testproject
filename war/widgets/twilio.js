@@ -1,66 +1,76 @@
 $(function()
 {
-
-	// Plugin name as a global variable
+	// Twilio widget name as a global variable
 	Twilio_PLUGIN_NAME = "Twilio";
-	Twilio_PLUGIN_HEADER = '<div></div>'
 
-	// Twilio update loading image declared as global
+	// Twilio loading image declared as global
 	TWILIO_LOGS_LOAD_IMAGE = '<center><img id="logs_load" src=\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
 
+	// Retrieves widget which is fetched using script API
+	var twilio_widget = agile_crm_get_plugin(Twilio_PLUGIN_NAME);
+
+	console.log('In Twilio');
+	console.log(twilio_widget);
+
+	// Retrieves list of phone numbers in agile contact
 	Numbers = agile_crm_get_contact_properties_list("phone");
-	console.log("Numbers in twilio: " + Numbers);
+	console.log(Numbers);
 
-	var plugin = agile_crm_get_plugin(Twilio_PLUGIN_NAME);
+	// ID of the ClickDesk widget as global variable
+	Twilio_Plugin_Id = twilio_widget.id;
+	console.log("Plugin prefs in Twilio: " + twilio_widget.prefs);
 
-	// Gets plugin id from plugin object, fetched using script API
-	var plugin_id = plugin.id;
+	/*
+	 * Gets Twilio widget preferences, required to check whether to show setup
+	 * button or to fetch details. If undefined - considering first time usage
+	 * of widget, setupTwilioOAuth is shown and returned
+	 */
+	if (twilio_widget.prefs == undefined)
+	{
+		setupTwilioOAuth();
+		return;
+	}
 
+	/*
+	 * Checks if contact has numbers, if undefined shows message in Twilio panel
+	 */
+	if (Numbers.length == 0)
+	{
+		twilioError(Twilio_PLUGIN_NAME, "No contact number is associated with this contact");
+		return;
+	}
+
+	// Parse string preferences as JSON
+	var twilio_prefs = JSON.parse(twilio_widget.prefs);
+	console.log(twilio_prefs);
+
+	/*
+	 * Check if Twilio account has registered numbers and shows set up to verify
+	 * if no numbers available, else generates token required to make calls
+	 */
+	checkTwilioNumbersAndGenerateToken(twilio_prefs);
+
+	// Register click events
+	/*
+	 * On click of reset button of Twilio widget, widget preferences are deleted
+	 * and initial set up is called
+	 */
 	$('#Twilio_plugin_delete').die().live('click', function(e)
 	{
 		e.preventDefault();
 
+		// preferences are saved as undefined and set up is shown
 		agile_crm_save_widget_prefs(Twilio_PLUGIN_NAME, undefined, function(data)
 		{
-			setupTwilioOAuth(plugin_id);
+			setupTwilioOAuth();
 		});
 	});
 
 	/*
-	 * Gets Plugin Prefs, required to check whether to show setup button or to
-	 * fetch details
+	 * If Twilio account doesn't have numbers, we need to verify numbers in
+	 * Twilio.On click of verify button in Twilio initial template,
+	 * verifyNumberFromTwilio is called to verify a number in Twilio
 	 */
-	var plugin_prefs = plugin.prefs;
-
-	console.log("Plugin prefs in Twilio: " + plugin_prefs);
-
-	// If not found - considering first time usage, setupTwilioOAuth called
-	if (plugin_prefs == undefined)
-	{
-		setupTwilioOAuth(plugin_id);
-		return;
-	}
-
-	if (Numbers.length == 0)
-	{
-		$("#Twilio").html("<div class='widget_content'>No contact number is associated with this contact</div>");
-		return;
-	}
-
-	var prefs = JSON.parse(plugin_prefs);
-	console.log(prefs);
-
-	getOutgoingNumbers(plugin_id, function(data)
-	{
-		console.log("Twilio outgoing numbers: " + data.PhoneNumber);
-		if (!data.PhoneNumber)
-		{
-			$('#Twilio').html(getTemplate('twilio-initial', {}));
-			return;
-		}
-		generateTwilioToken(plugin_id, prefs, data.PhoneNumber);
-	});
-
 	$('#twilio_verify').die().live('click', function(e)
 	{
 		e.preventDefault();
@@ -71,41 +81,38 @@ $(function()
 			return;
 		}
 
-		var from = $('#twilio_from').val();
-		console.log("twilio from: " + from);
+		// From number to make calls as entered by user
+		var from_number = $('#twilio_from').val();
+		console.log("Twilio verify from number: " + from_number);
 
-		$('#Twilio').html('<div class="widget_content">Verifying........</div>');
-
-		$.getJSON("/core/api/widgets/twilio/verify/numbers/" + plugin_id + "/" + from, function(verified_data)
+		/*
+		 * Verifies a number in Twilio and shows verification code in the Twilio
+		 * template with a procced button
+		 */
+		verifyNumberFromTwilio(from_number, function(verified_data)
 		{
-			console.log("verified_data " + verified_data);
 			$('#Twilio').html(getTemplate('twilio-verify', verified_data));
-		}).error(function(data)
-		{
-			$('#Twilio').html('<div class="widget_content">' + data.responseText + '</div>');
 		});
-
 	});
 
+	/*
+	 * On click of Twilio proceed button after verifying numbers, we will check
+	 * the verification status of the number and generate token to make calls,
+	 * else set up to verify number is shown again
+	 */
 	$('#twilio_proceed').die().live('click', function(e)
 	{
 		e.preventDefault();
 
-		var check_prefs = agile_crm_get_plugin_prefs(Twilio_PLUGIN_NAME);
+		// Get preferences of Twilio widget by its name
+		var check_twilio_prefs = agile_crm_get_plugin_prefs(Twilio_PLUGIN_NAME);
+		console.log("check_twilio_prefs : " + check_twilio_prefs);
 
-		if (!check_prefs.verificaton_status || check_prefs.verificaton_status == "success")
-		{
-			getOutgoingNumbers(plugin_id, function(data)
-			{
-				if (!data.PhoneNumber)
-				{
-					$('#Twilio').html(getTemplate('twilio-initial', {}));
-					return;
-				}
+		// check if verification status is success, generate token
+		if (!check_twilio_prefs.verificaton_status || check_twilio_prefs.verificaton_status == "success")
+			checkTwilioNumbersAndGenerateToken(check_twilio_prefs);
 
-				generateTwilioToken(plugin_id, prefs, data.PhoneNumber);
-			});
-		}
+		// else if it is failure, show set up to verify
 		else if (check_prefs.verificaton_status == "failure")
 			$('#Twilio').html(getTemplate('twilio-initial', {}));
 	});
@@ -113,178 +120,341 @@ $(function()
 });
 
 /**
- * Shows setup if user adds Twilio widget for the first time, to set up
- * connection to Twilio account. Enter and api key provided by Twilio access
- * functionalities
- * 
- * @param plugin_id
+ * Shows setup if user adds Twilio widget for the first time or clicks on reset
+ * icon on Twilio panel in the UI. Uses ScribeServlet for OAuth process
  */
-function setupTwilioOAuth(plugin_id)
+function setupTwilioOAuth()
 {
-
+	// Show loading until set up is shown
 	$('#Twilio').html(TWILIO_LOGS_LOAD_IMAGE);
+	console.log('In Twilio Auth');
 
-	console.log('twilio auth');
-
+	// Connects with ScribeServlet for authentication
 	$('#Twilio')
 			.html(
 					'<p class="widget_content" style="border-bottom:none">Call your contacts directly using your Twilio account.</p><a id="twilio-connect-button" href="https://www.twilio.com/authorize/CNf63bca035414be121d517a116066a5f8?state=' + encodeURIComponent(window.location.href) + '" style="margin-bottom: 10px;"></a>');
 
 }
 
-function generateTwilioToken(plugin_id, prefs, from)
+/**
+ * Initializes an AJAX queue request to retrieve Twilio outgoing numbers based
+ * on given Twilio_Plugin_Id
+ * 
+ * <p>
+ * Request is added to queue to make the requests from all the widgets
+ * synchronous
+ * </p>
+ * 
+ * @param callback
+ *            Function to be executed on success
+ */
+function getOutgoingNumbers(callback)
 {
-	if (prefs.account_sid)
+	/*
+	 * Calls queueGetRequest method in widget_loader.js, with queue name as
+	 * "widget_queue" to retrieve numbers
+	 */
+	queueGetRequest("widget_queue", "/core/api/widgets/twilio/numbers/" + Twilio_Plugin_Id, 'json', function(data)
 	{
-		if (!prefs.app_sid)
-		{
-			setUpApplication(plugin_id, prefs, from);
-		}
-		else
-		{
-			$.get("/core/api/widgets/twilio/token/" + plugin_id, function(token)
-			{
-				console.log("generated token : " + token);
-				setUpTwilio(token, plugin_id, from);
-				showTwilioDetails(token, plugin_id);
-				return;
-			}).error(function(data)
-					{
-				$('#Twilio').html('<div class="widget_content">' + data.responseText + '</div>');
-			});
+		// If data is not defined return
+		if (!data)
+			return;
 
-		}
-	}
-}
+		// If defined, execute the callback function
+		if (callback && typeof (callback) === "function")
+			callback(data);
 
-function setUpApplication(plugin_id, prefs, from)
-{
-	$.get("/core/api/widgets/twilio/appsid/" + plugin_id, function(data)
+	}, function(data)
 	{
+		// Remove loading on error
+		$('#twilio_profile_load').remove();
 
-		prefs['app_sid'] = data;
-		console.log(prefs);
-
-		agile_crm_save_widget_prefs(Twilio_PLUGIN_NAME, JSON.stringify(prefs), function(data)
-		{
-
-			generateTwilioToken(plugin_id, prefs, from);
-
-		});
+		// Show error message in Twilio widget
+		twilioError(Twilio_PLUGIN_NAME, data.responseText);
 	});
 
 }
 
-function showTwilioDetails(token, plugin_id)
+/**
+ * Verifies a given number In Twilio and returns verification code to verify in
+ * the Twilio Widget
+ * 
+ * @param from_number
+ *            {@link String} Number to verify
+ * @param callback
+ *            Function to be executed on success
+ */
+function verifyNumberFromTwilio(from_number, callback)
 {
+	// Shows verifying till the request is sent
+	$('#Twilio').html('<div class="widget_content">Verifying........</div>');
+
+	/*
+	 * Sends GET request to the URL "/core/api/widgets/twilio/verify/numbers/"
+	 * with Twilio_Plugin_Id and from_number as path parameters
+	 */
+	$.getJSON("/core/api/widgets/twilio/verify/numbers/" + Twilio_Plugin_Id + "/" + from_number, function(verified_data)
+	{
+		console.log("Twilio verified_data " + verified_data);
+
+		// If data is not defined return
+		if (!verified_data)
+			return;
+
+		// If defined, execute the callback function
+		if (callback && typeof (callback) === "function")
+			callback(verified_data);
+
+	}).error(function(data)
+	{
+		// Shows error if error occurs in Twilio widget panel
+		twilioError(Twilio_PLUGIN_NAME, data.responseText);
+	});
+}
+
+/**
+ * Retrieves outgoing numbers from Twilio to check whether the Twilio user has
+ * registered numbers with Twilio, If not set up to verify number is shown, else
+ * method is called to generate token
+ * 
+ * @returns
+ */
+function checkTwilioNumbersAndGenerateToken(twilio_prefs)
+{
+	// Retrieves outgoing numbers from Twilio
+	getOutgoingNumbers(function(data)
+	{
+		console.log("Twilio outgoing numbers: " + data.PhoneNumber);
+
+		// If no numbers, show set up
+		if (!data.PhoneNumber)
+		{
+			$('#Twilio').html(getTemplate('twilio-initial', {}));
+			return;
+		}
+
+		// Else generate Twilio token for calls
+		checkTwilioPrefsAndGenerateToken(twilio_prefs, data.PhoneNumber);
+	});
+}
+
+/**
+ * Checks if Twilio preferences has application SID, else creates one and after
+ * creating generates Twilio token show set up to make calls and show details in
+ * Twilio panel
+ * 
+ * <p>
+ * To generate a token in Twilio to make calls, we need to set up an application
+ * in Twilio on behalf of Agile specifying the URL to be called when a call is
+ * made
+ * </p>
+ * 
+ * @param twilio_prefs
+ *            JSONObject of Twilio preferences
+ * @param from_number
+ *            {@link String} Number to verify
+ */
+function checkTwilioPrefsAndGenerateToken(twilio_prefs, from_number)
+{
+	/*
+	 * If Twilio preferences has account SID after OAuth, checks for application
+	 * SID whether we have created an application in AgileUser Twilio account,
+	 * if created continues to generate token, else creates an application and
+	 * calls the same method saving application SID in Twilio prefrences
+	 */
+	if (twilio_prefs.account_sid)
+	{
+		// If no applicaiton SID
+		if (!twilio_prefs.app_sid)
+		{
+			// Create application in Twilio and return
+			createApplicationInTwilio(function(appSid)
+			{
+				twilio_prefs['app_sid'] = appSid;
+
+				// Save preferences with application SID set to Twilio
+				agile_crm_save_widget_prefs(Twilio_PLUGIN_NAME, JSON.stringify(twilio_prefs), function(data)
+				{
+					// Call same method after setting application SID
+					checkTwilioPrefsAndGenerateToken(twilio_prefs, from_number);
+				});
+			});
+			return;
+		}
+
+		/*
+		 * generates a token in Twilio and shows set up to make calls and shows
+		 * details in Twilio panel
+		 */
+		generateTokenInTwilio(from_number, function(token)
+		{
+			showTwilioDetails(token, from_number);
+			return;
+		});
+	}
+}
+
+/**
+ * Creates an application in Twilio for agile to make calls
+ * 
+ * @param callback
+ *            Function to be executed on success
+ */
+function createApplicationInTwilio(callback)
+{
+	/*
+	 * Sends GET request to the URL "/core/api/widgets/twilio/appsid/" with
+	 * Twilio_Plugin_Id as path parameter
+	 */
+	$.get("/core/api/widgets/twilio/appsid/" + Twilio_Plugin_Id, function(data)
+	{
+		console.log('Twilio app_sid: ' + data);
+
+		// If defined, execute the callback function
+		if (callback && typeof (callback) === "function")
+			callback(data);
+
+	}).error(function(data)
+	{
+		// Shows error if error occurs in Twilio widget panel
+		twilioError(Twilio_PLUGIN_NAME, data.responseText);
+	});
+}
+
+/**
+ * Generates token in Twilio to make calls
+ * 
+ * @returns
+ */
+function generateTokenInTwilio(from_number, callback)
+{
+	/*
+	 * Sends GET request to the URL "/core/api/widgets/twilio/token/" with
+	 * Twilio_Plugin_Id as path parameter
+	 */
+	$.get("/core/api/widgets/twilio/token/" + Twilio_Plugin_Id, function(token)
+	{
+		console.log("Twilio generated token : " + token);
+
+		// If defined, execute the callback function
+		if (callback && typeof (callback) === "function")
+			callback(token);
+
+	}).error(function(data)
+	{
+		// Shows error if error occurs in Twilio widget panel
+		twilioError(Twilio_PLUGIN_NAME, data.responseText);
+	});
+}
+
+/**
+ * Shows details in Twilio panel and calls Twilio set up to intialize events to
+ * handle calls
+ * 
+ * @param token
+ *            Token to make calls
+ */
+function showTwilioDetails(token, from_number)
+{
+	// Shows loading until details are fetched
 	$('#Twilio').html(TWILIO_LOGS_LOAD_IMAGE);
 
+	// If no numbers for contact, show message
 	if (Numbers.length == 0)
 	{
-		$("#Twilio").html("<div class='widget_content'>" + "No contact number is associated with this contact</div>");
+		// Shows information in Twilio widget panel
+		twilioError(Twilio_PLUGIN_NAME, "No contact number is associated with this contact");
 		return;
 	}
 
 	var numbers = {};
 	numbers['to'] = Numbers;
 
-	// setUpTwilio(token, plugin_id);
-
+	// Get template and show details in Twilio widget
 	$('#Twilio').html(getTemplate('twilio-profile', numbers));
 
-	$('#twilio_note').hide();
-	getTwilioLogs(plugin_id, Numbers[0].value);
+	// Twilio set up to intialize events to handle calls
+	setUpTwilio(token, from_number);
 
+	/*
+	 * Hide if a link to add note exists (If call is made we show this link,
+	 * after refresh we hide it)
+	 */
+	$('#twilio_note').hide();
+
+	// Retreive Twilio call logs and show it in Twilio widget panel
+	getTwilioLogs(Numbers[0].value);
+
+	/*
+	 * On change of number in select box, we retrieve call logs for it and show
+	 */
 	$('#contact_number').die().live('change', function(e)
 	{
 		var to = $('#contact_number').val();
-
-		getTwilioLogs(plugin_id, to);
+		getTwilioLogs(to);
 	});
 
 }
 
-function getTwilioLogs(plugin_id, to, callback)
+/**
+ * Retrives call logs from Twilio for the given number
+ * 
+ * @param to
+ *            {@link String} number to which calls are made
+ */
+function getTwilioLogs(to)
 {
+	// shows loading until logs are fetched
 	$('#twilio-logs-panel').html(TWILIO_LOGS_LOAD_IMAGE);
 
-	$.get("/core/api/widgets/twilio/call/logs/" + plugin_id + "/" + to, function(logs)
+	/*
+	 * Sends GET request to the URL "/core/api/widgets/twilio/call/logs/" with
+	 * Twilio_Plugin_Id and to as path parameters
+	 */
+	$.get("/core/api/widgets/twilio/call/logs/" + Twilio_Plugin_Id + "/" + to, function(logs)
 	{
-
+		console.log('In Twilio logs ');
 		console.log(logs);
 
+		// get and fill template with logs and show
 		var twilio_logs_template = $(getTemplate('twilio-logs', JSON.parse(logs)));
-
 		$('#twilio-logs-panel').html(twilio_logs_template);
 
+		// Load jquery time ago function to show time ago in logs
 		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 		{
 			$(".time-ago", twilio_logs_template).timeago();
 		});
 
-		if (callback && typeof (callback) === "function")
-		{
-			callback(data);
-		}
-
 	}).error(function(data)
 	{
-
+		// Remove loading if error occcurs
 		$('#logs_load').remove();
-		$('#twilio-logs-panel').html('<div style="padding:10px">' + data.responseText + '</div>');
+
+		// Shows error if error occurs in Twilio widget panel
+		twilioError('twilio-logs-panel', data.responseText);
 	});
 }
 
-function getOutgoingNumbers(plugin_id, callback)
+/**
+ * Set up Twilio devices and hadlers to handle calls
+ * 
+ * @param token
+ *            Token to make calls
+ * @param from_number
+ *            Number fromwhich calls should be made
+ */
+function setUpTwilio(token, from_number)
 {
-	queueGetRequest("widget_queue", "/core/api/widgets/twilio/numbers/" + plugin_id, 'json', function(data)
-	{
+	var to_number = $('#contact_number').val();
 
-		if (callback && typeof (callback) === "function")
-		{
-			callback(data);
-		}
-
-	}, function(data)
-	{
-
-		$('#twilio_profile_load').remove();
-		$('#Twilio').html('<div style="padding:10px">' + data.responseText + '</div>');
-	});
-
-}
-
-function getIncomingNumbers(plugin_id, callback)
-{
-	$.get("/core/api/widgets/twilio/incoming/numbers/" + plugin_id, function(data)
-	{
-
-		if (callback && typeof (callback) === "function")
-		{
-			callback(data);
-		}
-
-	}, "json").error(function(data)
-	{
-
-		$('#twilio_profile_load').remove();
-		$('#Twilio').html('<div style="padding:10px">' + data.responseText + '</div>');
-	});
-
-}
-
-function setUpTwilio(token, plugin_id, from)
-{
-
-	var start_time;
-	var end_time;
-	var status;
-	var to;
-
+	// Loads twilio min.js to intiliaze twilio call events
 	head.js("https://static.twilio.com/libs/twiliojs/1.1/twilio.min.js", function()
 	{
+		// setup Twilio device
 		Twilio.Device.setup(token);
 
+		// When set up is ready this is called
 		Twilio.Device.ready(function()
 		{
 			console.log("ready");
@@ -292,121 +462,35 @@ function setUpTwilio(token, plugin_id, from)
 
 		});
 
-		$("#record_sound_play").die().live("click", function(e)
-		{
-			e.preventDefault();
-			var sound_url = "https://api.twilio.com" + $(this).attr("sound_url");
-			console.log(sound_url);
-
-			playSound(sound_url, "true");
-		});
-
-		$("#twilio_call").die().live(
-				"click",
-				function(e)
-				{
-
-					e.preventDefault();
-					to = $('#contact_number').val();
-					var record = "false";
-
-					$("#twilio-record-modal").remove();
-
-					var to_display = {};
-					to_display['to'] = to;
-					to_display['name'] = agile_crm_get_contact_property('first_name') + " " + agile_crm_get_contact_property('last_name');
-
-					var record_modal = $(getTemplate('twilio-record', to_display));
-
-					// Append the form into the content
-					$('#content').append(record_modal);
-
-					// Shows the modal after filling with details
-					$("#twilio-record-modal").modal("show");
-
-					$('.enable-call').die().live(
-							'click',
-							function(e)
-							{
-								e.preventDefault();
-								$("#twilio-record-modal").modal("hide");
-
-								var confirm = $(this).attr('make_call');
-
-								if (confirm == "no")
-									return;
-
-								if ($('#enable-record').is(':checked'))
-									record = "true";
-
-								console.log(record);
-								Twilio.Device.connect({ from : from, PhoneNumber : to, record : record,
-									Url : "https://agile-crm-cloud.appspot.com/backend/voice?record=" + record });
-							});
-				});
-
-		Twilio.Device.offline(function()
-		{
-			// Called on network connection lost.
-			console.log("went offline");
-		});
-
-		Twilio.Device.incoming(function(conn)
-		{
-			console.log(conn.parameters.From); // who is calling
-			console.log(conn._status);
-			conn.status // => "pending"
-			conn.accept();
-			conn.status // => "connecting"
-
-			if (conn._status == "open")
-			{
-				start_time = new Date().getTime();
-				status = "incoming";
-				console.log(start_time + "incoming started");
-				$("#twilio_hangup").show();
-				$("#twilio_call").hide();
-			}
-
-		});
-
-		Twilio.Device.cancel(function(conn)
-		{
-			console.log(conn.parameters.From); // who canceled the call
-			conn.status // => "closed"
-			$("#twilio_hangup").hide();
-			$("#twilio_call").show();
-
-		});
-
+		// After call is connected
 		Twilio.Device.connect(function(conn)
 		{
-			console.log("call is connected");
+			console.log("Twilio call is connected");
 			// Called for all new connections
 			console.log(conn);
 			console.log(conn._status);
 
+			// After call connects, show hang up buttton and hide call button
 			if (conn._status == "open")
 			{
-				start_time = new Date().getTime();
-				status = "outgoing";
-				console.log(start_time + " outgoing started");
 				$("#twilio_hangup").show();
 				$("#twilio_call").hide();
 			}
 		});
 
+		// If call is ended or disconnected
 		Twilio.Device.disconnect(function(conn)
 		{
-			console.log("call is disconnected");
+			console.log("Twilio call is disconnected");
 			// Called for all disconnections
 			console.log(conn);
+
+			// On call end, hide hang up,show call and link to add note
 			if (conn._status == "closed")
 			{
-				end_time = new Date().getTime();
-				console.log(end_time + "ended");
-				// addCallNote(start_time,end_time,status);
-				getTwilioLogs(plugin_id, to);
+				to_number = $('#contact_number').val();
+				console.log("Twilio Number in disconect: " + to_number);
+				getTwilioLogs(to_number);
 				$('#twilio_note').show();
 				$("#twilio_hangup").hide();
 				$("#twilio_call").show();
@@ -414,35 +498,226 @@ function setUpTwilio(token, plugin_id, from)
 
 		});
 
+		// If any network failure, show error
+		Twilio.Device.offline(function()
+		{
+			// Called on network connection lost.
+			console.log("Twilio went offline");
+		});
+
+		// When incoming call comes to Twilio
+		Twilio.Device.incoming(function(conn)
+		{
+			// who is calling
+			console.log(conn.parameters.From);
+			// status before accepting call
+			console.log(conn._status);
+			conn.accept();
+
+			// If connection is opened, hide call and show hang up
+			if (conn._status == "open")
+			{
+				$("#twilio_hangup").show();
+				$("#twilio_call").hide();
+			}
+
+		});
+
+		// When call is cancelled, hide hang up and show call
+		Twilio.Device.cancel(function(conn)
+		{
+			// who canceled the call
+			console.log(conn.parameters.From);
+
+			$("#twilio_hangup").hide();
+			$("#twilio_call").show();
+
+		});
+
+		/*
+		 * Called for each available client when this device becomes ready and
+		 * every time another client's availability changes.
+		 */
 		Twilio.Device.presence(function(presenceEvent)
 		{
-			/*
-			 * Called for each available client when this device becomes ready
-			 * and every time another client's availability changes.
-			 */
-			console.log(presenceEvent.from); // => name of client whose
-												// availablity changed
-			console.log(presenceEvent.available); // => true or false
+			// name of client whose availablity changed
+			console.log(presenceEvent.from);
+
+			// true or false
+			console.log(presenceEvent.available);
 		});
 
+		/*
+		 * If error occurs while calling, hide hang up and show call
+		 */
 		Twilio.Device.error(function(e)
 		{
-			console.log("error");
-			console.log(e);
 			// 31205 error code
-			$("#twilio_hangup").hide();
-		});
+			console.log("Twilio error");
+			console.log(e);
 
-		$("#twilio_hangup").die().live('click', function(e)
-		{
-			e.preventDefault();
-			console.log("disconnected");
-
-			getTwilioLogs(plugin_id, to);
-			Twilio.Device.disconnectAll();
 			$("#twilio_hangup").hide();
 			$("#twilio_call").show();
 		});
 
+		registerClickEvents(from_number);
+
 	});
+}
+
+/**
+ * Registers click events required for twilio call
+ * 
+ * @param to_number
+ *            Number selected from select box
+ */
+function registerClickEvents(from_number)
+{
+	var to_number;
+	var record = "false";
+
+	/*
+	 * On click of Twilio hang up, logs are retrieved again and and all
+	 * connections are disconnected, hangup is hidden and call butoon is shown
+	 */
+	$("#twilio_hangup").die().live('click', function(e)
+	{
+		e.preventDefault();
+		console.log("Twilio call hang up");
+
+		to_number = $('#contact_number').val();
+		console.log("Twilio Number in hang up: " + to_number);
+		
+		// Get call logs and diconnect all connections
+		getTwilioLogs(to_number);
+		Twilio.Device.disconnectAll();
+		$("#twilio_hangup").hide();
+		$("#twilio_call").show();
+	});
+
+	/*
+	 * On click of play button in Twilio logs, call conversaion is played
+	 */
+	$("#record_sound_play").die().live("click", function(e)
+	{
+		e.preventDefault();
+
+		// Sound URL from Twilio to play call
+		var sound_url = "https://api.twilio.com" + $(this).attr("sound_url");
+		console.log("Twilio sound URL: " + sound_url);
+
+		// plays call conversion
+		playSound(sound_url, "true");
+	});
+
+	/*
+	 * On click of call in Twilio panel, shows a record modal asking for
+	 * confirmation to make call and whether to record it
+	 */
+	$("#twilio_call").die().live("click", function(e)
+	{
+		e.preventDefault();
+
+		// Retrieve to number from select box
+		to_number = $('#contact_number').val();
+		record = "false";
+
+		// remove record modal if exists
+		$("#twilio-record-modal").remove();
+
+		// parameters to show in record modal
+		var to_display = {};
+		to_display['to'] = to_number;
+		to_display['name'] = agile_crm_get_contact_property('first_name') + " " + agile_crm_get_contact_property('last_name');
+
+		// Get and fill template with details
+		var record_modal = $(getTemplate('twilio-record', to_display));
+
+		// Append the form into the content
+		$('#content').append(record_modal);
+
+		// Shows the modal after filling with details
+		$("#twilio-record-modal").modal("show");
+
+	});
+
+	/*
+	 * On click of button in record modal, calls connect method of Twilio to
+	 * make call
+	 */
+	$('.enable-call').die().live(
+			'click',
+			function(e)
+			{
+				e.preventDefault();
+
+				// hide record modal
+				$("#twilio-record-modal").modal("hide");
+
+				// To check if call is clicked or no is clicked
+				var confirm = $(this).attr('make_call');
+
+				// If no return
+				if (confirm == "no")
+					return;
+
+				// If record is checked, nake record as true
+				if ($('#enable-record').is(':checked'))
+					record = "true";
+
+				console.log("In Twilio call: " + record);
+
+				// Call connect method of Twilio
+				Twilio.Device.connect({ from : from_number, PhoneNumber : to_number, record : record,
+					Url : "https://agile-crm-cloud.appspot.com/backend/voice?record=" + record });
+			});
+}
+
+/**
+ * Retrieves incoming numbers from Twilio
+ * 
+ * @param callback
+ */
+function getIncomingNumbers(callback)
+{
+	/*
+	 * Sends GET request to the URL "/core/api/widgets/twilio/incoming/numbers/"
+	 * with Twilio_Plugin_Id as path parameter
+	 */
+	$.get("/core/api/widgets/twilio/incoming/numbers/" + Twilio_Plugin_Id, function(data)
+	{
+		if (callback && typeof (callback) === "function")
+			callback(data);
+
+	}, "json").error(function(data)
+	{
+		// Removes loading if error occurs
+		$('#twilio_profile_load').remove();
+
+		// Shows error if error occurs in Twilio widget panel
+		twilioError(Twilio_PLUGIN_NAME, data.responseText);
+	});
+
+}
+
+/**
+ * Shows Twilio error message in the div allocated with given id
+ * 
+ * @param id
+ *            div id
+ * @param message
+ *            error message
+ */
+function twilioError(id, message)
+{
+	console.log('In Twilio error template');
+	// build JSON with error message
+	var error_json = {};
+	error_json['message'] = message;
+
+	/*
+	 * Get error template and fill it with error message and show it in the div
+	 * with given id
+	 */
+	$('#' + id).html(getTemplate('twilio-error', error_json));
 }

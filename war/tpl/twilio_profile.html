@@ -59,7 +59,7 @@
 		<form style="border-bottom:none;" id="twilio_call_form" name="twilio_call_form" method="post">
 	    	<fieldset>
 				<p>To start making calls, you need to verify your number.</p>
-				<div class="control-group" ><div class="controls"><input type="text" placeholder="Enter number" name="twilio_from" id="twilio_from" class="required digits" style="width:90%" maxlength="15"/></div</div>	
+				<div class="control-group" ><div class="controls"><input type="text" placeholder="Enter number" name="twilio_from" id="twilio_from" class="required" style="width:90%" maxlength="15"/></div</div>	
 				<p>You will receive a verification call asking for a code. Enter the code you see after clicking verify.</p>
 				<a href="#verify" id="twilio_verify" class="btn"  style="text-decoration:none;">Verify</a>	
 			</fieldset>
@@ -93,3 +93,15 @@
 </div>
 </script>
 
+
+<script id="twilio-error-template" type="text/html">
+{{#check_length message "140"}}
+	<div class="ellipsis-multi-line collapse-25" title="{{message}}" style="height:110px;overflow: hidden;line-height:160%;word-wrap: break-word;padding:10px">
+		{{message}}
+	</div>
+{{else}}
+	<div style="line-height:160%;word-wrap: break-word;padding:10px">
+		{{message}}
+	</div>
+{{/check_length}}
+</script>

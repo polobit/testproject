@@ -67,7 +67,8 @@ public class Note
     /**
      * List of contact keys, a note related to
      */
-    private final List<Key<Contact>> related_contacts = new ArrayList<Key<Contact>>();
+    @NotSaved(IfDefault.class)
+    private List<Key<Contact>> related_contacts = new ArrayList<Key<Contact>>();
 
     /**
      * Separates note from bulk of other models at client side (For timeline

@@ -34,6 +34,7 @@ $(function()
 	{
 		setupClickDeskAuth();
 		return;
+
 	}
 
 	/*
@@ -313,7 +314,8 @@ function registerClickEventsInChat(chats_data)
 		var offset = $('#chats ul li').length;
 		console.log("offset in more chats: " + offset);
 
-		// Retrieve more chats from ClickDesk, append and show in chats panel
+		// Retrieve more chats from ClickDesk, append and show in chats
+		// panel
 		getMoreChats(offset, function(data)
 		{
 			showMoreChats(data);
@@ -512,7 +514,8 @@ function registerEventsInTickets(tickets_data)
 		var offset = $('#c_tickets ul li').length;
 		console.log('offset ' + offset);
 
-		// Retrieve more tickets from ClickDesk, append & show in tickets panel
+		// Retrieve more tickets from ClickDesk, append & show in
+		// tickets panel
 		getMoreTickets(offset, function(tickets_data)
 		{
 			showMoreTickets(tickets_data);
