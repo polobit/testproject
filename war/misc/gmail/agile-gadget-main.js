@@ -63,7 +63,7 @@ function agile_init_gadget() {
 				// Convert into string.
 				Cookie_Data = JSON.stringify(User_Seesion_Cookie);
 				// Create cookie
-				agile_gadget_create_cookie('Agile_Gadget_Cookie', Cookie_Data, 1);
+				agile_gadget_create_cookie('Agile_Gadget_Cookie', Cookie_Data);
 				// Set account
 				agile_generate_ui(value.api_key, value.domain);
 			}
@@ -126,10 +126,9 @@ function agile_login() {
 
 			// Convert into object.
 			var User_Data = $.parseJSON(Gadget_Cookie);
-			// Fetch user data from cookie.
-			for ( var value in User_Data)
-				agile_generate_ui(User_Data[value].api_key,
-						User_Data[value].domain);
+			
+			// Set account
+			agile_generate_ui(value.api_key, value.domain);
 		});
 	}
 }
@@ -144,7 +143,7 @@ function agile_login() {
 function agile_handle_load_response(data) {
 
 	// Create cookie
-	agile_gadget_create_cookie('Agile_Gadget_Cookie', JSON.stringify(data), 1);
+	agile_gadget_create_cookie('Agile_Gadget_Cookie', JSON.stringify(data));
 
 	// Check user exists, OpenID must have occurred previously.
 	if (data.content.user_exists) {

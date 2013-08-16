@@ -20,30 +20,32 @@ var Handlebars_Compiled_Templates = {};
  *            download verifies whether the template is found or not
  * @returns compiled html with the context
  */
-function getTemplate(templateName, context, download) {
+function getTemplate(templateName, context, download)
+{
 
 	// Check if it is (compiled template) present in templates
 	if (Handlebars_Compiled_Templates[templateName])
-			return Handlebars_Compiled_Templates[templateName](context);
+		return Handlebars_Compiled_Templates[templateName](context);
 	else
 		Handlebars_Compiled_Templates = {};
-	
-	
+
 	// Check if source is available in body
 	var source = $('#' + templateName + "-template").html();
-	if (source) {
-		
+	if (source)
+	{
+
 		var template = Handlebars.compile(source);
-		
+
 		// Store it in template
 		Handlebars_Compiled_Templates[templateName] = template;
 
-		//de("template");
+		// de("template");
 		return template(context);
 	}
 
 	// Check if the download is explicitly set to no
-	if (download == 'no') {
+	if (download == 'no')
+	{
 		console.log("Not found " + templateName);
 		return;
 	}
@@ -59,19 +61,24 @@ function getTemplate(templateName, context, download) {
 	 * document body. And call the function (getTemplate) again by setting the
 	 * download parameter to "no"
 	 */
-	if (templateName.indexOf("settings") == 0) {
+	if (templateName.indexOf("settings") == 0)
+	{
 		templateHTML = downloadSynchronously("tpl/min/settings.js");
 	}
-	if (templateName.indexOf("admin-settings") == 0) {
+	if (templateName.indexOf("admin-settings") == 0)
+	{
 		templateHTML = downloadSynchronously("tpl/min/admin-settings.js");
 	}
-	if (templateName.indexOf("continue") == 0) {
+	if (templateName.indexOf("continue") == 0)
+	{
 		templateHTML = downloadSynchronously("tpl/min/continue.js");
 	}
-	if (templateName.indexOf("all-domain") == 0) {
+	if (templateName.indexOf("all-domain") == 0)
+	{
 		templateHTML = downloadSynchronously("tpl/min/admin.js");
 	}
-	if (templateHTML) {
+	if (templateHTML)
+	{
 		// console.log("Adding " + templateHTML);
 		$('body').append($(templateHTML));
 	}
@@ -87,17 +94,14 @@ function getTemplate(templateName, context, download) {
  *            url location to download the template
  * @returns down-loaded template content
  */
-function downloadSynchronously(url) {
+function downloadSynchronously(url)
+{
 
 	var urlContent;
-	jQuery.ajax({
-		url : url,
-		dataType : 'html',
-		success : function(result) {
-			urlContent = result;
-		},
-		async : false
-	});
+	jQuery.ajax({ url : url, dataType : 'html', success : function(result)
+	{
+		urlContent = result;
+	}, async : false });
 
 	return urlContent;
 }
@@ -112,21 +116,34 @@ function downloadSynchronously(url) {
  *            name to get the value (of value atribute)
  * @returns value of the matched object
  */
-function getPropertyValue(items, name) {
+function getPropertyValue(items, name)
+{
 	if (items == undefined)
 		return;
 
-	for ( var i = 0, l = items.length; i < l; i++) {
+	for ( var i = 0, l = items.length; i < l; i++)
+	{
 		if (items[i].name == name)
 			return items[i].value;
 	}
 }
 
-function getProperty(items, name) {
+/**
+ * Returns contact property based on the name of the property
+ * 
+ * @param items :
+ *            porperties in contact object
+ * @param name :
+ *            name of the property
+ * @returns
+ */
+function getProperty(items, name)
+{
 	if (items == undefined)
 		return;
 
-	for ( var i = 0, l = items.length; i < l; i++) {
+	for ( var i = 0, l = items.length; i < l; i++)
+	{
 		if (items[i].name == name)
 			return items[i];
 	}
@@ -135,53 +152,75 @@ function getProperty(items, name) {
 /**
  * Returns contact property based on its property name and subtype
  */
-function getPropertyValueBySubtype(items, name, subtype) {
+function getPropertyValueBySubtype(items, name, subtype)
+{
 	if (items == undefined)
 		return;
-	
 
-	for ( var i = 0, l = items.length; i < l; i++) {
+	for ( var i = 0, l = items.length; i < l; i++)
+	{
 		if (items[i].name == name && items[i].subtype == subtype)
 			return items[i].value;
 	}
 }
 
-function getPropertyValueBytype(items, name, type, subtype) {
+/**
+ * Returns contact property based on the sub type (LINKEDIN, TWITTER, URL, SKYPE
+ * etc..) of the property
+ * 
+ * @param items :
+ *            properties list
+ * @param name :
+ *            name of the property
+ * @param type :
+ *            type of the property
+ * @param subtype :
+ *            subtype of property
+ * @returns
+ */
+function getPropertyValueBytype(items, name, type, subtype)
+{
 	if (items == undefined)
 		return;
-	
-	for ( var i = 0, l = items.length; i < l; i++) {
+
+	// Iterates though each property object and compares each property by name
+	// and its type
+	for ( var i = 0, l = items.length; i < l; i++)
+	{
 		if (items[i].name == name)
+		{
+			if (type && type == items[i].type)
 			{
-				if(type && type == items[i].type)
-					{
-						if(subtype && subtype == items[i].subtype)
-							return items[i].value;
-					}
-				
-				if(subtype && subtype == items[i].subtype)
-					{
-						return items[i].value;
-					}
+				if (subtype && subtype == items[i].subtype)
+					return items[i].value;
+			}
+
+			if (subtype && subtype == items[i].subtype)
+			{
+				return items[i].value;
 			}
 		}
+	}
 }
 
 /**
- * Returns custom properties list from properties 
+ * Returns custom properties list from properties
+ * 
  * @param items
  * @returns
  */
-function getContactCustomProperties(items) {
-	if(items == undefined)
+function getContactCustomProperties(items)
+{
+	if (items == undefined)
 		return items;
-	
+
 	var fields = [];
-	for(var i = 0; i<items.length ; i++) {
-		if(items[i].type == "CUSTOM" && items[i].name != "image")
-			{
-				fields.push(items[i]);
-			}
+	for ( var i = 0; i < items.length; i++)
+	{
+		if (items[i].type == "CUSTOM" && items[i].name != "image")
+		{
+			fields.push(items[i]);
+		}
 	}
 	return fields;
 }
@@ -194,38 +233,50 @@ function getContactCustomProperties(items) {
  *            value to convert as ucfirst
  * @returns converted string
  */
-function ucfirst(value) {
-	return (value && typeof value === 'string') ? (value.charAt(0)
-			.toUpperCase() + value.slice(1).toLowerCase()) : '';
+function ucfirst(value)
+{
+	return (value && typeof value === 'string') ? (value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()) : '';
 
 }
 
-function titleFromEnums(value){
+/**
+ * Creates titles from strings. Replaces underscore with spaces and capitalize
+ * first word of string.
+ * 
+ * @param value
+ * @returns
+ */
+function titleFromEnums(value)
+{
 	if (!value)
 		return;
-	
+
 	var str = value.replace(/_/g, ' ');
-	
+
 	return ucfirst(str.toLowerCase());
 }
 
 /**
- * Counts total number of attributes in a json object 
+ * Counts total number of attributes in a json object
+ * 
  * @param obj
  * @returns {Number}
  */
-function countJsonProperties(obj) {
-	  var prop;
-	  var propCount = 0;
+function countJsonProperties(obj)
+{
+	var prop;
+	var propCount = 0;
 
-	  for (prop in obj) {
-	    propCount++;
-	  }
-	  return propCount;
+	for (prop in obj)
+	{
+		propCount++;
 	}
+	return propCount;
+}
 
 /**
- * Get the current contact property 
+ * Get the current contact property
+ * 
  * @param value
  * @returns {String}
  */

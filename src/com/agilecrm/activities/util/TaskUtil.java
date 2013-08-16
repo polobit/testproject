@@ -125,10 +125,8 @@ public class TaskUtil
     {
 	try
 	{
-	    Map<String, Object> conditionsMap = new HashMap<String, Object>();
-	    conditionsMap.put("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()));
-	    conditionsMap.put("is_complete", false);
-	    return dao.listByProperty(conditionsMap);
+	    return dao.ofy().query(Task.class).filter("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId())).order("due")
+		    .filter("is_complete", false).limit(50).list();
 	}
 	catch (Exception e)
 	{
@@ -246,7 +244,7 @@ public class TaskUtil
 	    if (StringUtils.isNotBlank(owner))
 		query = query.filter("owner", new Key<DomainUser>(DomainUser.class, Long.parseLong(owner)));
 
-	    return query.list();
+	    return query.limit(50).list();
 
 	}
 	catch (Exception e)

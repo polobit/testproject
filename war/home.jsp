@@ -160,7 +160,7 @@
 							<li id="calendarmenu" style="<%=style_calendar %>" ><a href="#calendar"><i
 									class="icon-calendar icon-white"></i> Calendar</a></li>
 							<li id="casesmenu" style="<%=style_cases %>" ><a href="#cases"><i
-									class="icon-suitcase icon-white"></i> Cases</a></li>
+									class="icon-briefcase icon-white"></i> Cases</a></li>
 							<li id="dealsmenu" style="<%=style_deals %>" ><a href="#deals"><i
 									class="icon-money icon-white"></i> Deals</a></li>
 							<li id="workflowsmenu" style="<%=style_campaign %>" ><a href="#workflows"><i

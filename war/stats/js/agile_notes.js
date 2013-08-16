@@ -15,7 +15,7 @@
  * @param email {String}
  * 				email of the contact
  */
-function agile_addNote(subject, description, callback, email)
+function agile_addNote(data, callback, email)
 {
 	// Check if email is passed, else get from cookie
 	if (!email)
@@ -27,11 +27,6 @@ function agile_addNote(subject, description, callback, email)
 		else
 			email = agile_guid.get_email();
 	}
-	
-	// Converting the parameters to json object
-	var data = {};
-	data.subject = subject;
-	data.description = description;
 
 	var params = "data={0}&email={1}".format(encodeURIComponent(JSON.stringify(data)), encodeURIComponent(email));
 
@@ -50,7 +45,7 @@ function agile_addNote(subject, description, callback, email)
  * @param email
  * 				email of the contact
  */
-function agile_getNote(callback, email)
+function agile_getNotes(callback, email)
 {
 	if(!email)
 	{
@@ -63,7 +58,7 @@ function agile_getNote(callback, email)
 	}
 
 	// Get
-	var agile_url = agile_id.getURL() + "/contacts/get-note?callback=?&id=" + agile_id.get() + "&" + "email={0}".format(encodeURIComponent(email));
+	var agile_url = agile_id.getURL() + "/contacts/get-notes?callback=?&id=" + agile_id.get() + "&" + "email={0}".format(encodeURIComponent(email));
 	
 	// Callback
 	agile_json(agile_url, callback);

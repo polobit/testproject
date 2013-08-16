@@ -11,11 +11,11 @@ var _agile = {
 		}, 
 		set_email : function(email)
 		{
-			agile_setEmail(email);				// Set contact email
+			agile_setEmail(email);		// Set contact email
 		}, 
 		track_page_view : function(callback)
 		{
-			agile_trackPageview(callback);		// Track a particular page
+			agile_trackPageview(callback);	// Track a particular page
 		}, 
 		create_contact : function(properties, callback)
 		{
@@ -23,7 +23,7 @@ var _agile = {
 		}, 
 		delete_contact : function(email, callback)
 		{
-			agile_deleteContact(email, callback);		// Delete a contact
+			agile_deleteContact(email, callback);	// Delete a contact
 		}, 
 		add_tag : function(tags, callback, email)
 		{
@@ -31,7 +31,7 @@ var _agile = {
 		}, 
 		remove_tag : function(tags, callback, email)
 		{
-			agile_removeTag(tags, callback, email);	// Remove tags
+			agile_removeTag(tags, callback, email);		// Remove tags
 		}, 
 		add_score : function(score, callback, email)
 		{
@@ -43,7 +43,7 @@ var _agile = {
 		}, 
 		add_note : function(subject, description, callback, email)
 		{
-			agile_addNote(subject, description, callback, email); // Add note to contact
+			agile_addNote(subject, description, callback, email); 	// Add note to contact
 		},
 		add_property : function(name, id, callback, email)
 		{
@@ -61,11 +61,15 @@ var _agile = {
 		{
 			agile_getScore(callback, email);	// Get score from contact
 		},
-		get_tag : function (callback, email)
+		get_tags : function (callback, email)
 		{
-			agile_getTag(callback, email);	// Get tag from contact
+			agile_getTags(callback, email);		// Get tags related to contact
 		},
-		get_note : function (callback,email)
+		get_notes : function (callback, email)
 		{
-			agile_getNote(callback, email);		// Get task from contact
+			agile_getNotes(callback, email);	// Get notes related to contact
+		},
+		get_tasks : function (callback, email)
+		{
+			agile_getTasks(callback, email);	//	Get tasks related to contact
 		}};
