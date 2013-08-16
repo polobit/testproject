@@ -23,7 +23,7 @@ public class ReportsInstantEmailDeferredTask implements DeferredTask
 {
 
     // Report ID
-    private final Long report_id;
+    private Long report_id;
 
     public ReportsInstantEmailDeferredTask(Long report_id)
     {

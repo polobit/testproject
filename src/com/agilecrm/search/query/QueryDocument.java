@@ -48,7 +48,7 @@ import com.googlecode.objectify.ObjectifyService;
 public class QueryDocument<T> implements QueryInterface
 {
 
-    private final Index index;
+    private Index index;
     public Class<T> clazz;
 
     public QueryDocument(Index index, Class<T> clazz)

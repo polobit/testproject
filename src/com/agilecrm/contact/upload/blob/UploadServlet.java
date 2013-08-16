@@ -20,7 +20,7 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
  */
 public class UploadServlet extends HttpServlet
 {
-    private final BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+    private BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
 
     @Override
     public void service(HttpServletRequest req, HttpServletResponse res)
