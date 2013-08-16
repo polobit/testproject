@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
 import com.agilecrm.activities.Task;
@@ -22,7 +23,11 @@ import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
+import com.agilecrm.workflows.util.WorkflowUtil;
 
 /**
  * <code>JSAPI</code> provides facility to perform actions, such as creating a
@@ -526,7 +531,7 @@ public class JSAPI
     	if (contact == null)
     	return null;
     	ObjectMapper mapper = new ObjectMapper();
-   		Note note = mapper.readValue(json, Note.class);
+    	Note note = mapper.readValue(json, Note.class);
    		note.addRelatedContacts(contact.id.toString());
    		note.save();
    		System.out.println("note saved");
@@ -667,6 +672,109 @@ public class JSAPI
     	for (Task task : tasks)
     	{
     		arr.put(mapper.writeValueAsString(task));
+    	}
+    	return arr.toString();
+    }
+    catch(Exception e)
+    {
+    	e.printStackTrace();
+    	return null;
+    }
+    }
+    
+    /**
+     * Get deals based on the email of the contact
+     * 
+     * @param email
+     * 				email of the contact
+     * 
+     * @return String 
+     */
+    @Path("contacts/get-deals")
+    @GET
+    @Produces ("application / x-javascript")
+    public String getDeals(@QueryParam("email") String email)
+    {
+    try
+    {
+    	Contact contact = ContactUtil.searchContactByEmail(email);
+    	if(contact==null)
+    	return null;
+    	List<Opportunity> deals = new ArrayList<Opportunity>();
+    	deals = OpportunityUtil.getCurrentContactDeals(contact.id);
+    	ObjectMapper mapper = new ObjectMapper();
+    	JSONArray arr = new JSONArray();
+    	for (Opportunity deal : deals)
+    	{
+    		arr.put(mapper.writeValueAsString(deal));
+    	}
+    	return arr.toString();
+    }
+    catch(Exception e)
+    {
+    	e.printStackTrace();
+    	return null;
+    }
+    }
+    
+    /**
+     * Add campaign based on contact email to already existing workflow
+     * 
+     * @param email
+     * 				email of the contact
+     * 
+     * @return String
+     */
+    @Path("contacts/add-campaign")
+    @GET
+    @Produces ("application / x-javascript")
+    public String addCampaign(@QueryParam("data") String json, @QueryParam("email") String email)
+    {
+    try
+    {
+    	
+    	Contact contact = ContactUtil.searchContactByEmail(email);
+    	if (contact == null)
+    	return null;
+    	ObjectMapper mapper = new ObjectMapper();
+    	Workflow workflow = mapper.readValue(json, Workflow.class);
+    	WorkflowSubscribeUtil.subscribe(contact, workflow.id);
+    	return mapper.writeValueAsString(contact);
+    }
+    catch(Exception e)
+    {
+    	e.printStackTrace();
+    	return null;
+    }
+    }
+    
+    /**
+     * Get campaigns to which contact is subscribed by contact email
+     * 
+     * @param email
+     * 				email of the contact
+     * 
+     * @return String
+     */
+    @Path("contacts/get-campaigns")
+    @GET
+    @Produces("application / x-javascript")
+    public String getCampaigns(@QueryParam("email") String email)
+    {
+    try
+    {
+    	Contact contact = ContactUtil.searchContactByEmail(email);
+    	if (contact == null)
+    	return null;
+    	
+    	JSONArray arr = new JSONArray();
+    	List<CampaignStatus> campaignStatusList = contact.campaignStatus;
+    	for (CampaignStatus campaignStatus : campaignStatusList)
+    	{
+    		JSONObject workflow = WorkflowUtil.getWorkflowJSON(Long.parseLong(campaignStatus.campaign_id));
+    		if (workflow == null)
+    		continue;
+    		arr.put(workflow);
     	}
     	return arr.toString();
     }
