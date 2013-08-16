@@ -13,6 +13,9 @@
    		<div class="show-individual-form">
 			
 		</div>
+		<div class="option-tabs">
+
+		</div>
 	{{else}}
 <!--contact not exist, add contact -->
 		{{#if fname}}
@@ -28,6 +31,68 @@
 	
 		</div>
 	{{/if}}
+</script>
+
+<script id="gadget-add-contact-template" type="text/html">
+<form class='gadget-contact-form' name="gadget_contact_form" method="post">
+	<fieldset style="margin:0px;">
+	<legend><i class="icon-plus-sign"></i> Add Contact To Agile CRM</legend>
+	<div class="control-group" style="margin:0px;">
+		<label class="control-label"><b>Name:</b> <span class="field_req">*</span></label>
+  		<div class="row">
+			<span class="controls span3">
+	   			{{#if fname}}
+	   				<input name="first_name" type="text" class="required" id="fname" placeholder="First name" value="{{fname}}"/>
+				{{else}}
+					<input name="first_name" type="text" class="required" id="fname" placeholder="First name"/>
+				{{/if}}
+			</span>
+    		<span class="controls span2">
+	    		{{#if lname}}
+		    		<input name="last_name" class="required" type="text" id="lname" placeholder="Last name" value="{{lname}}"/>
+				{{else}}
+					<input name="last_name" class="required" type="text" id="lname" placeholder="Last name"/>
+				{{/if}}	
+			</span>
+  		</div>
+	</div>
+
+	<div class="row">
+			<div class="span3">
+   			<label class="control-label"><b>Email:</b> </label>
+			<div class="controls">
+				 <span><input name="email" type="text" id="email" placeholder="Email" value = "{{email}}"/></span>
+			</div>
+			</div>
+  		<div class="span2">
+       		<label class="control-label"><b>Tags:</b> </label>
+			<div class="controls">
+				 <span><input name="tags" type="text" id="tags" placeholder="Tags"/></span>
+			</div>
+    	</div>
+	</div>
+	<div class="row">
+		<div class="span3">
+           	<label class="control-label"><b>Company:</b></label>
+			<div class="controls">
+				<input name="company" type="text" id="contact_company" placeholder="Company" />
+			</div>
+  		</div>
+  		<div class="span3">
+       		<label class="control-label"><b>Job Description:</b></label>
+			<div class="controls">
+				<input name="title" type="text" id="job_title" placeholder="Job title" />
+			</div>
+	  	</div>
+	</div>
+	<div class="form-actions" style="padding:10px 0px 0px 0px; margin:0px;">
+		<a type="submit" class="btn btn-primary gadget-contact-validate" style="padding:2px 6px 2px;">Add Contact</a>
+		<a class="cancel btn" style="padding:2px 6px 2px;">Cancel</a>
+		<img class="saving" style="padding-right:5px;display:none;width:25px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
+		<span class="status" style="display:none;"><i>Successfully Saved</i></span>
+   	</div>
+</fieldset>
+</form>	
 </script>
 
 <script id="gadget-contact-summary-template" type="text/html">
@@ -135,66 +200,72 @@
 		</div>
 </script>
 
-<script id="gadget-add-contact-template" type="text/html">
-<form class='gadget-contact-form' name="gadget_contact_form" method="post">
-	<fieldset style="margin:0px;">
-	<legend><i class="icon-plus-sign"></i> Add Contact To Agile CRM</legend>
-	<div class="control-group" style="margin:0px;">
-		<label class="control-label"><b>Name:</b> <span class="field_req">*</span></label>
-  		<div class="row">
-			<span class="controls span3">
-	   			{{#if fname}}
-	   				<input name="first_name" type="text" class="required" id="fname" placeholder="First name" value="{{fname}}"/>
-				{{else}}
-					<input name="first_name" type="text" class="required" id="fname" placeholder="First name"/>
-				{{/if}}
-			</span>
-    		<span class="controls span2">
-	    		{{#if lname}}
-		    		<input name="last_name" class="required" type="text" id="lname" placeholder="Last name" value="{{lname}}"/>
-				{{else}}
-					<input name="last_name" class="required" type="text" id="lname" placeholder="Last name"/>
-				{{/if}}	
-			</span>
-  		</div>
-	</div>
+<script id="gadget-tabs-template" type="text/html">
+<!-- Gadget Tab -->
+		<ul id="gadget_tabs" class="nav nav-tabs" data-tabs="tabs" style="margin-top:15px;">
+	        <li><a href="#Notes" data-toggle="tab">Notes</a></li>
+	        <li class="active"><a href="#Tasks" data-toggle="tab">Tasks</a></li>
+			<li><a href="#Deals" data-toggle="tab">Deals</a></li>
+	    </ul>
+	    <div id="my_tab_content" class="tab-content">
+	        <div class="tab-pane" id="Notes">
+	            <h1>Notes</h1>
+	            <p>Add notes to contact.</p>
+	        </div>
+	        <div class="tab-pane active" id="Tasks">
+	            <div>
+					<ul class="gadget-tasks-tab-list" style="list-style-type:none;">
 
-	<div class="row">
-			<div class="span3">
-   			<label class="control-label"><b>Email:</b> </label>
-			<div class="controls">
-				 <span><input name="email" type="text" id="email" placeholder="Email" value = "{{email}}"/></span>
+					</ul>
+				</div>
+	        </div>
+			<div class="tab-pane" id="Deals">
+	            <h1>Deals</h1>
+	            <p>Add deals to contact.</p>
+	        </div>
+	    </div>
+</script>
+
+
+<script id="gadget-tasks-list-template" type="text/html">
+<li>
+	<div class="activity" style="display:block;">
+		{{#if is_complete}}
+			<div id="tasks" class="activity-text-block" style="background-color:#FFFAFA">
+		{{else}}
+			<div id="tasks" class="activity-text-block">
+		{{/if}}	
+			{{#if is_complete}}
+				<div style="margin-bottom: 9px;">
+					<span>&#10004;</span>
+					<h4 class="task-subject" style="text-decoration:line-through;display:inline;">
+						<b style="margin:0px 20px 0px 10px;">{{ucfirst subject}}</b>
+						<span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
+					</h4>
+				</div>
+			{{else}}
+				<div style="margin-bottom: 9px;">
+					<input data="{{id}}" class="complete-task" type="checkbox"/>
+					<h4 class="task-subject" style="display:inline;">
+						<b style="margin:0px 20px 0px 10px;">{{ucfirst subject}}</b>
+						<span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>	
+					</h4>
+				</div>
+			{{/if}}
+			<div style="margin-left:22px;">
+				<p>
+					<i class="{{icons type}}"></i>&nbsp;{{ucfirst type}}
+					<span style="margin-left:20px;">Due : <time class="task-created-time" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</span>
+				</p>
+				<div class="clear">
+					<small class="edit-hover" style="margin-right:10px"> 
+						<time class="task-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+					</small>
+				</div>
 			</div>
-			</div>
-  		<div class="span2">
-       		<label class="control-label"><b>Tags:</b> </label>
-			<div class="controls">
-				 <span><input name="tags" type="text" id="tags" placeholder="Tags"/></span>
-			</div>
-    	</div>
+		</div>
 	</div>
-	<div class="row">
-		<div class="span3">
-           	<label class="control-label"><b>Company:</b></label>
-			<div class="controls">
-				<input name="company" type="text" id="contact_company" placeholder="Company" />
-			</div>
-  		</div>
-  		<div class="span3">
-       		<label class="control-label"><b>Job Description:</b></label>
-			<div class="controls">
-				<input name="title" type="text" id="job_title" placeholder="Job title" />
-			</div>
-	  	</div>
-	</div>
-	<div class="form-actions" style="padding:10px 0px 0px 0px; margin:0px;">
-		<a type="submit" class="btn btn-primary gadget-contact-validate" style="padding:2px 6px 2px;">Add Contact</a>
-		<a class="cancel btn" style="padding:2px 6px 2px;">Cancel</a>
-		<img class="saving" style="padding-right:5px;display:none;width:25px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
-		<span class="status" style="display:none;"><i>Successfully Saved</i></span>
-   	</div>
-</fieldset>
-</form>	
+</li>
 </script>
 
 <script id="gadget-note-template" type="text/html">
