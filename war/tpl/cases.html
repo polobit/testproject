@@ -31,10 +31,10 @@
                 <table class="table table-striped showCheckboxes" url="core/api/cases/bulk" id="sort-table">
                     <thead>
                         <tr>
-                            <th>Title</th>
                             <th width="75px">Owner</th>
-                            <th width="60px">Status</th>
+							<th>Title</th>
                             <th width="200px">Contacts</th>
+                            <th width="60px"></th>
                         </tr>
                     </thead>
                     <tbody id="cases-model-list" style="cursor:pointer;"><!--route="cases/"-->
@@ -48,7 +48,7 @@
         <div class="data-block">
             <div class="well">
                 <header>
-                    <h3><span><i class="icon-suitcase"></i></span> Cases</h3>
+                    <h3><span><i class="icon-briefcase"></i></span> Cases</h3>
                 </header>
                 <h3>
                     What are Cases ?
@@ -65,13 +65,6 @@
 </script>
 
 <script id="cases-model-template" type="text/html">
-<td data="{{id}}" class="data">
-		<b style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:auto; max-width:20em; overflow:hidden;display:inline-block;">{{title}}</b>
-	<div style="height:3em; overflow:hidden; text-overflow:ellipsis; position:relative; padding-left:0.5em; padding-top:0.2em;">
-		{{description}}
-	</div>
-</td>
-
 <td>
     <div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:5em;overflow:hidden;">
 	   {{#if ownerPic}}
@@ -81,9 +74,10 @@
        {{/if}}
     </div>
 </td>
-<td>
-	<div style="">
-		{{status}}
+<td data="{{id}}" class="data">
+		<b style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:auto; max-width:20em; overflow:hidden;display:inline-block;">{{title}}</b>
+	<div style="height:3em; overflow:hidden; text-overflow:ellipsis; position:relative; padding-top:0.2em;">
+		{{description}}
 	</div>
 </td>
 <td>
@@ -103,6 +97,17 @@
 			{{/each}}
 	</div>
        {{#if_greater this.contacts.length "3"}}<span>...</span>{{/if_greater}}
+</td>
+<td>
+	{{#if_equals status "OPEN"}}
+	<div style="border-radius:4px; border: 1px solid; background-color:red; text-align:center; color:white; font-size:0.9em; ">
+		<b>OPEN</b>
+	</div>
+	{{else}}
+	<div style="border-radius:4px; border: 1px solid; background-color:grey; text-align:center; color:white; font-size:0.9em; ">
+		<b>CLOSE</b>
+	</div>
+	{{/if_equals}}
 </td>
 </script>
 

@@ -59,12 +59,12 @@ public class ContactDocument implements BuilderInterface
     /**
      * Initializes/get search service for the app
      */
-    private final SearchService searchService = SearchServiceFactory.getSearchService();
+    private SearchService searchService = SearchServiceFactory.getSearchService();
 
     /**
      * Index for the contact Document, Required to search on contacts document
      */
-    private final Index index = searchService.getIndex(IndexSpec.newBuilder().setName("contacts"));
+    private Index index = searchService.getIndex(IndexSpec.newBuilder().setName("contacts"));
 
     /**
      * Describes all the contact field values in the document based on the

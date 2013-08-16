@@ -5,15 +5,13 @@
  */
 
 /**
- * Creates a cookie variable with the given name, value and expire time in days
+ * Creates a session cookie variable with the given name and value.
  * 
  * @method agile_gadget_create_cookie
  * @param {String}
  *            name Name of the variable example : agile-email etc.
  * @param {String}
  *            value Value of the variable example: agilecrm@example.com
- * @param {Integer}
- *            days Time in days before the variable expires example : 15*365
  */
 function agile_gadget_create_cookie(name, value, days) {
 	// Check days, if not equal to null, undefined or ""
@@ -25,7 +23,7 @@ function agile_gadget_create_cookie(name, value, days) {
 		var expires = "; expires=" + date.toGMTString();
 	} else
 		var expires = "";
-	document.cookie = name + "=" + escape(value) + expires + "; path=/";
+	document.cookie = name + "=" + escape(value) + "; expires=0" + "; path=/";
 }
 
 /**

@@ -24,12 +24,12 @@ public class ReportsDeferredTask implements DeferredTask
     /**
      * Domain of the account
      */
-    private final String domain;
+    private String domain;
 
     /**
      * Duration of report
      */
-    private final String duration;
+    private String duration;
 
     public ReportsDeferredTask(String domain, String duration)
     {
