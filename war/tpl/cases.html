@@ -48,7 +48,7 @@
         <div class="data-block">
             <div class="well">
                 <header>
-                    <h3><span><i class="icon-suitcase"></i></span> Cases</h3>
+                    <h3><span><i class="icon-briefcase"></i></span> Cases</h3>
                 </header>
                 <h3>
                     What are Cases ?
@@ -82,9 +82,15 @@
     </div>
 </td>
 <td>
-	<div style="">
-		{{status}}
+	{{#if_equals status "OPEN"}}
+	<div style="border-radius:4px; border: 1px solid; background-color:red; text-align:center; color:white; font-size:0.9em; ">
+		<b>OPEN</b>
 	</div>
+	{{else}}
+	<div style="border-radius:4px; border: 1px solid; background-color:grey; text-align:center; color:white; font-size:0.9em; ">
+		<b>CLOSE</b>
+	</div>
+	{{/if_equals}}
 </td>
 <td>
 	<div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:157px;overflow:hidden;display:inline-block;">
