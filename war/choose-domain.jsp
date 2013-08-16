@@ -122,7 +122,7 @@ padding-left:10px!important;
 					 <%}%>
 					 <h3><small>Choose your domain at Agile CRM</small></h3>
 					 <div style="padding-top:10px;">
-          				<input id='subdomain' type="text" placeholder="Domain"
+          				<input id='subdomain' type="text" placeholder="Type Your Domain"
 						   	   name="subdomain" class="input-medium field required" autocapitalize="off"><b> .agilecrm.com</b>
 				   </div>
 				</form>
