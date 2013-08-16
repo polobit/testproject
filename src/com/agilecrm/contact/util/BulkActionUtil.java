@@ -205,10 +205,16 @@ public class BulkActionUtil
 	BulkActionUtil.postDataToBulkActionBackend(url, contentType, type, id);
     }
 
-    public static List<Key<Contact>> getContactKeysForBulkOperations(String contactIds, Long domainUserId)
+    /**
+     * Creates contact keys based on contact ids
+     * 
+     * @param contactIds
+     *            Stringified list of contact ids
+     * @param domainUserId
+     * @return
+     */
+    public static List<Key<Contact>> getContactKeysFormIds(String contactIds, Long domainUserId)
     {
-	setSessionManager(domainUserId);
-
 	JSONArray array = null;
 	try
 	{
@@ -237,13 +243,28 @@ public class BulkActionUtil
 	return keys;
     }
 
+    /**
+     * Based on the filter criteria it returns contacts keys. It checks whether
+     * filter criteria starts with #tags/ or #contacts, which is sent from
+     * client. If filter criteria is filter id, it queries based on filter rules
+     * and returns contact keys.
+     * 
+     * @param criteria
+     * @param domainUserId
+     * @return {@link List} of {@link Key}
+     */
     public static List<Key<Contact>> getFilterContactsKeys(String criteria, Long domainUserId)
     {
+	// If criteria is empty returns empty list
 	if (criteria.isEmpty())
 	    return new ArrayList<Key<Contact>>();
 
+	// Sets domain in session as 'my' contacts filter uses session manager
+	// to get current user contacts
 	setSessionManager(domainUserId);
 
+	// If criteria starts with '#tags/' then it splits after '#tags/' and
+	// gets tag and returns contact keys
 	if (criteria.startsWith("#tags/"))
 	{
 	    String[] tagCondition = StringUtils.split("#tags/");
@@ -252,12 +273,23 @@ public class BulkActionUtil
 	    return Contact.dao.listKeysByProperty("tagsWithTime.tag", tag);
 	}
 
+	// If criteria is '#contacts' then keys of all available contacts are
+	// returned
 	if (criteria.equals("#contacts"))
 	    return ContactUtil.getAllContactKey();
 
+	// If criteria is filter id then it returns contact keys based on filter
+	// id
 	return ContactFilterUtil.getContactsKeys(criteria, domainUserId);
     }
 
+    /**
+     * Filters based on search criteria
+     * 
+     * @param criteria
+     * @param domainUserId
+     * @return
+     */
     public static List<Contact> getFilterContacts(String criteria, Long domainUserId)
     {
 	if (criteria.isEmpty())
@@ -282,6 +314,12 @@ public class BulkActionUtil
 	return new ArrayList<Contact>(ContactFilterUtil.getContacts(criteria, null, null));
     }
 
+    /**
+     * Sets session manager, it is used to get current user when running in
+     * backends
+     * 
+     * @param domainUserId
+     */
     private static void setSessionManager(Long domainUserId)
     {
 	System.out.println("domain user setting session: " + domainUserId);
