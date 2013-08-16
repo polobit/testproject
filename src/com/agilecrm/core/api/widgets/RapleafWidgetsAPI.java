@@ -8,6 +8,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.util.WidgetUtil;
 import com.thirdparty.Rapleaf;
 
 /**
@@ -35,16 +37,21 @@ public class RapleafWidgetsAPI
      *            {@link String} email of the contact
      * @return {@link String}
      */
-    @Path("{apikey}/{email}")
+    @Path("{widget-id}/{email}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public String getRapleafDetails(@PathParam("apikey") String apikey,
+    public String getRapleafDetails(@PathParam("widget-id") Long widgetId,
 	    @PathParam("email") String email)
     {
+	// Retrieves widget based on its id
+	Widget widget = WidgetUtil.getWidget(widgetId);
+
+	if (widget == null)
+	    return null;
 	try
 	{
 	    // Retrieves details of persons from Rapleaf based on email
-	    return Rapleaf.getRapportiveValue(email, apikey).toString();
+	    return Rapleaf.getRapportiveValue(widget, email).toString();
 	}
 	catch (Exception e)
 	{

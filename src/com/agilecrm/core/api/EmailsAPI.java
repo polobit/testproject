@@ -1,5 +1,7 @@
 package com.agilecrm.core.api;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -65,16 +67,22 @@ public class EmailsAPI
      */
     @Path("contact/send-email")
     @POST
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public void sendEmail(@QueryParam("from") String fromEmail, @QueryParam("to") String to, @QueryParam("subject") String subject,
-	    @QueryParam("body") String body)
+    @Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
+    public void sendEmail(@FormParam("from") String from, @FormParam("to") String to, @FormParam("email_cc") String cc, @FormParam("subject") String subject,
+	    @FormParam("body") String body, @FormParam("signature") String signature)
     {
+	// combine to and cc separated by commas
+	to = to + "," + cc;
+
+	// combine body and signature.
+	body = body + "<br/><div><br/><br/>" + signature + "</div>";
+
 	// Saves Contact Email.
-	ContactEmailUtil.saveContactEmailBasedOnTo(fromEmail, to, subject, body);
+	ContactEmailUtil.saveContactEmailBasedOnTo(from, to, subject, body);
 
 	try
 	{
-	    EmailUtil.sendMail(fromEmail, fromEmail, to, subject, fromEmail, body, null);
+	    EmailUtil.sendMail(from, from, to, subject, from, body, null);
 	}
 	catch (Exception e)
 	{
@@ -139,4 +147,5 @@ public class EmailsAPI
 	    return null;
 	}
     }
+
 }

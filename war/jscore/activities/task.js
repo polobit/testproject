@@ -181,8 +181,8 @@ $(function() {
  */
 function highlight_task() {
 	$("#hiddentask").val("task");
-	$("#task").css("color", "black");
-	$("#event").css("color", "#DD4814");
+	$("#task").css({"color":"black","font-weight":"bold"});
+	$("#event").css({"color":"blue","font-weight":"normal"});
 	$("#relatedEvent").css("display", "none");
 	$("#relatedTask").css("display", "block");
 }

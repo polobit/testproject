@@ -79,7 +79,7 @@ function agile_removeTag(tags, callback, email)
  * @param email
  * 				email of the contact
  */
-function agile_getTag(callback, email)
+function agile_getTags(callback, email)
 {
 	if(!email)
 	{

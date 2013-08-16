@@ -5,73 +5,84 @@
  */
 $(function()
 {
-	// Plugin name as a global variable
+	// Zendesk widget name declared as global variable
 	ZENDESK_PLUGIN_NAME = "Zendesk";
 
-	// zendesk update loading image declared as global
+	// Zendesk update loading image declared as global
 	ZENDESK_UPDATE_LOAD_IMAGE = '<center><img id="tickets_load" src=' + '\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
 
-	AgentInfo = null;
-	Errorjson = {};
+	// Retrieves widget which is fetched using script API
+	var zendesk_widget = agile_crm_get_plugin(ZENDESK_PLUGIN_NAME);
 
-	// Gets plugin id from plugin object, fetched using script API
-	var plugin_id = agile_crm_get_plugin(ZENDESK_PLUGIN_NAME).id;
+	console.log('In Zendesk');
+	console.log(zendesk_widget);
+
+	// ID of the Zendesk widget as global variable
+	Zendesk_Plugin_Id = zendesk_widget.id;
+
+	// Stores email of the contact as global variable
+	Email = agile_crm_get_contact_property('email');
+	console.log('Email: ' + Email);
 
 	/*
-	 * Gets plugin preferences, required to check whether to show setup button
-	 * or to fetch details
+	 * Gets Zendesk widget preferences, required to check whether to show setup
+	 * button or to fetch details. If undefined - considering first time usage
+	 * of widget, setupZendeskAuth is shown and returned
 	 */
-	var plugin_prefs = agile_crm_get_plugin_prefs(ZENDESK_PLUGIN_NAME);
+	if (zendesk_widget.prefs == undefined)
+	{
+		setupZendeskAuth();
+		return;
+	}
 
+	/*
+	 * Checks if contact has email, if undefined shows message in Zendesk panel
+	 */
+	if (!Email)
+	{
+		zendeskError(ZENDESK_PLUGIN_NAME, "No email is associated with this contact");
+		return;
+	}
+
+	/*
+	 * If Zendesk widget preferences are defined, shows tickets from Zendesk
+	 * associated with current contact's email
+	 */
+	showZendeskProfile();
+
+	// Register click events
+	/*
+	 * On click of reset button of Zendesk widget, widget preferences are
+	 * deleted and initial set up is called
+	 */
 	$('#Zendesk_plugin_delete').die().live('click', function(e)
 	{
 		e.preventDefault();
 
+		// preferences are saved as undefined and set up is shown
 		agile_crm_save_widget_prefs(ZENDESK_PLUGIN_NAME, undefined, function(data)
 		{
-			setupZendeskOAuth(plugin_id);
+			setupZendeskAuth();
 		});
 	});
-
-	// Stores email of the contact as global variable
-	Email = agile_crm_get_contact_property('email');
-
-	/*
-	 * If not found - considering first time usage of widget, setupZendeskOAuth
-	 * called
-	 */
-	if (plugin_prefs == undefined)
-	{
-		setupZendeskOAuth(plugin_id);
-		return;
-	}
-
-	// Checks if contact has email, if undefined shows message in Zendesk panel
-	if (!Email)
-	{
-		zendeskError("Zendesk", "No email is associated with this contact");
-		return;
-	}
-
-	/*
-	 * If defined, shows tickets from Zendesk if any with that email
-	 * showTicketsFromZendesk(plugin_id, Email);
-	 */
-	showZendeskProfile(plugin_id, Email);
 
 	// On click of add ticket, add ticket method is called
 	$('#add_ticket').die().live('click', function(e)
 	{
 		e.preventDefault();
 		addTicketToZendesk(plugin_id, Email);
-
 	});
 
+	/*
+	 * On mouse enter of ticket, show tab link which has a link to show detailed
+	 * description of ticket and comment on it
+	 */
 	$('.zendesk_ticket_hover').live('mouseenter', function(e)
 	{
 		$(this).find('.zendesk_tab_link').show();
 	});
 
+	// On mouse leave of chat, hides tab link
 	$('.zendesk_ticket_hover').live('mouseleave', function(e)
 	{
 		$('.zendesk_tab_link').hide();
@@ -80,24 +91,23 @@ $(function()
 });
 
 /**
- * Shows setup if user adds Zendesk widget for the first time. Uses
- * ScribeServlet to create a client and get preferences and save it to the
- * widget.
+ * Shows setup if user adds Zendesk widget for the first time or clicks on reset
+ * icon on Zendesk panel in the UI
  * 
  * @param plugin_id
  *            To get the widget and save tokens in it.
  */
-function setupZendeskOAuth(plugin_id)
+function setupZendeskAuth()
 {
 	// Shows loading image until set up is shown
 	$('#Zendesk').html(ZENDESK_UPDATE_LOAD_IMAGE);
 
-	console.log('zendesk auth');
+	console.log('In Zendesk Auth');
 
-	// Shows input fields to save the zendesk preferences
+	// Shows input fields to save the Zendesk preferences
 	$('#Zendesk').html(getTemplate('zendesk-login', {}));
 
-	// On click of save button
+	// On click of save button, check input and save details
 	$('#save_prefs').die().live('click', function(e)
 	{
 		e.preventDefault();
@@ -107,42 +117,268 @@ function setupZendeskOAuth(plugin_id)
 		{
 			return;
 		}
+		// Saves Zendesk preferences in ClickDesk widget object
+		saveZendeskPrefs();
 
-		// Store the data given by the user as JSON
-		var zendesk_prefs = {};
-		zendesk_prefs["zendesk_username"] = $("#zendesk_username").val();
-		zendesk_prefs["zendesk_password"] = $("#zendesk_password").val();
-		zendesk_prefs["zendesk_url"] = $("#zendesk_url").val();
-
-		// Saves the preferences into widget with zendesk plugin name
-		agile_crm_save_widget_prefs(ZENDESK_PLUGIN_NAME, JSON.stringify(zendesk_prefs), function(data)
-		{
-			// Checks if contact has email, if undefined shows message in
-			// Zendesk panel
-			if (!Email)
-			{
-				zendeskError("Zendesk", "No email is associated with this contact");
-				return;
-			}
-
-			showZendeskProfile(plugin_id, Email);
-		});
-
-	})
+	});
 }
 
 /**
- * Adds a ticket in Zendesk with the contact email based on plugin id
- * 
- * @param plugin_id
- *            To get the widget and save tokens in it.
- * @param email
- *            Email of the contact to add the ticket
+ * Calls method in script API (agile_widget.js) to save Zendesk preferences in
+ * Zendesk widget object
  */
-function addTicketToZendesk(plugin_id, email)
+function saveZendeskPrefs()
 {
-	// Stores info as JSON, to send it to the modal when add ticket request is
-	// made
+	// Retrieve and store the Zendesk preferences entered by the user as JSON
+	var zendesk_prefs = {};
+	zendesk_prefs["zendesk_username"] = $("#zendesk_username").val();
+	zendesk_prefs["zendesk_password"] = $("#zendesk_password").val();
+	zendesk_prefs["zendesk_url"] = $("#zendesk_url").val();
+
+	// Saves the preferences into widget with zendesk widget name
+	agile_crm_save_widget_prefs(ZENDESK_PLUGIN_NAME, JSON.stringify(zendesk_prefs), function(data)
+	{
+		/*
+		 * Checks if contact has email, if undefined shows information in
+		 * Zendesk panel
+		 */
+		if (!Email)
+		{
+			zendeskError("Zendesk", "No email is associated with this contact");
+			return;
+		}
+
+		// Retrieves and shows Zendesk tickets in the Zendesk widget UI
+		showZendeskProfile();
+	});
+}
+
+/**
+ * Show data retrieved from Zendesk in the Zendesk widget
+ */
+function showZendeskProfile()
+{
+	// show loading until tickets are retrieved
+	$('#Zendesk').html(ZENDESK_UPDATE_LOAD_IMAGE);
+
+	// Retrieves tickets and calls method to show them in Zendesk tickets panel
+	getTicketsFromZendesk(function(data)
+	{
+		console.log("zendesk profile : " + data);
+
+		// Shows ticket in Zendesk panel
+		showTicketsInZendesk(data);
+
+		// Registers click events in Zendesk
+		registerClickEventsInZendesk();
+	});
+}
+
+/**
+ * Initializes an AJAX queue request to retrieve Zendesk tickets based on given
+ * Zendesk_Plugin_Id and Email
+ * 
+ * <p>
+ * Request is added to queue to make the requests from all the widgets
+ * synchronous
+ * </p>
+ * 
+ * @param callback
+ *            Function to be executed on success
+ */
+function getTicketsFromZendesk(callback)
+{
+	/*
+	 * Calls queueGetRequest method in widget_loader.js, with queue name as
+	 * "widget_queue" to retrieve tickets
+	 */
+	queueGetRequest("widget_queue", "/core/api/widgets/zendesk/profile/" + Zendesk_Plugin_Id + "/" + Email, "json", function success(data)
+	{
+		// If defined, execute the callback function
+		if (callback && typeof (callback) === "function")
+			callback(data);
+
+	}, function error(data)
+	{
+		// Loading is removed if error occurs
+		$('#tickets_load').remove();
+
+		// Error message is shown
+		zendeskError(ZENDESK_PLUGIN_NAME, data.responseText);
+	});
+}
+
+/**
+ * Shows retrieved tickets in Zendesk widget tickets Panel
+ * 
+ * @param data
+ *            List of tickets
+ */
+function showTicketsInZendesk(data)
+{
+	// Fill template with tickets and append it to Zendesk panel
+	$('#Zendesk').html(getTemplate('zendesk-profile', data));
+
+	// All tickets and first five tickets stored in variables to be used further
+	var all_tickets;
+	var first_five;
+
+	try
+	{
+		/*
+		 * If error occurs while retrieving tickets, we get it as string in
+		 * data.all_tickets, parse tickets as JSON if tickets are returned since
+		 * we splice 5 tickets and use it to show. If error is returned it is
+		 * taken care in handle bars
+		 */
+		all_tickets = JSON.parse(data.all_tickets);
+		first_five = all_tickets.splice(0, 5);
+	}
+	catch (err)
+	{
+		/*
+		 * If tickets contain error, store in first_five to show error in Zedesk
+		 * widget panel
+		 */
+		first_five = data.all_tickets;
+	}
+
+	// Get and fill the template with tickets
+	var all_tickets_template = $(getTemplate('zendesk-ticket-stream', first_five));
+
+	// show the tickets in Zendeks panel
+	$('#all_tickets_panel').html(all_tickets_template);
+
+	// Load jquery time ago function to show time ago in tickets
+	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+	{
+		$(".time-ago", all_tickets_template).timeago();
+	});
+
+	/*
+	 * On click of show more in tickets panel, we splice 5 tickets from
+	 * all_tickets and show every time
+	 */
+	$('#more_tickets').die().live('click', function(e)
+	{
+		e.preventDefault();
+
+		// If all tickets is not defined, return
+		if (!all_tickets)
+			return;
+
+		// More tickets are shown in the tickets panel
+		showMoreTickets(all_tickets.splice(0, 5));
+	});
+}
+
+/**
+ * Shows more tickets in the Zendesk ticket panel
+ * 
+ * @param more_tickets
+ *            List of tickets
+ */
+function showMoreTickets(more_tickets)
+{
+	// Show spinner until tickets are shown
+	$('#spinner-tickets').show();
+
+	/*
+	 * If length is zero, information is shown to user and hidden after 10
+	 * seconds and spinner is hidden
+	 */
+	if (more_tickets.length == 0)
+	{
+		$('#spinner-tickets').hide();
+		zendeskStreamError("tickets-error-panel", 'No more tickets');
+		return;
+	}
+
+	/*
+	 * Get and fill the template with more tickets information, append to the
+	 * ticket stream and hide the spinner
+	 */
+	var more_tickets_template = $(getTemplate('zendesk-ticket-stream', more_tickets));
+
+	$('#all_tickets_panel').append(more_tickets_template);
+	$('#spinner-tickets').hide();
+
+	// Load jquery time ago function to show time ago in tickets
+	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+	{
+		$(".time-ago", more_tickets_template).timeago();
+	});
+}
+
+/**
+ * Shows ticket from tickets data retrieved from zendesk based on ticket id
+ * 
+ * @param ticket_data
+ *            Data related to Ticket which is to be shown
+ * @param ticket_id
+ *            Id of the ticket to be shown
+ */
+function showTicketById(json, ticket_id)
+{
+	// Sets headline of modal as Ticket TicketId
+	json["headline"] = "Ticket " + ticket_id;
+
+	/*
+	 * If length of description of ticket is stored as boolean to check in
+	 * handle bars, if it is more than 200, scroll bar is shown for description
+	 */
+	json["desc_len"] = json['description'].length > 200;
+
+	// Remove the modal if already exists
+	$('#zendesk_showModal').remove();
+
+	// Append the form into the content
+	$('#content').append(getTemplate("zendesk-ticket-show", json));
+
+	// Shows the modal after filling with details
+	$('#zendesk_showModal').modal("show");
+}
+
+function registerClickEventsInZendesk()
+{
+	/*
+	 * On click of update ticket link for ticket, update ticket method is called
+	 */
+	$('#ticket_update').die().live('click', function(e)
+	{
+		e.preventDefault();
+
+		// Id of the ticket is retrieved to update ticket based on id
+		var ticket_id = $(this).attr('update_id');
+		updateTicketInZendesk(ticket_id);
+	});
+
+	// On click of show ticket, show ticket by ticket id method is called
+	$('#ticket_show').die().live('click', function(e)
+	{
+		e.preventDefault();
+
+		var json = JSON.parse($(this).attr('data-attr'));
+
+		// Id of the ticket is retrieved to show ticket based on id
+		var ticket_id = $(this).attr('ticket_id');
+
+		// Shows ticket in modal
+		showTicketById(json, ticket_id);
+	});
+
+}
+
+/**
+ * Adds a ticket in Zendesk with the contact first name, last name and email
+ * based on Zendesk widget id
+ */
+function addTicketToZendesk()
+{
+	/*
+	 * Stores info as JSON, to send it to the modal when add ticket request is
+	 * made
+	 */
 	var json = {};
 
 	// Set headline of modal window as Add Ticket
@@ -155,7 +391,7 @@ function addTicketToZendesk(plugin_id, email)
 	json["name"] = agile_crm_get_contact_property('first_name') + " " + agile_crm_get_contact_property('last_name');
 
 	// Email of the contact based on which ticket is added
-	json["email"] = email;
+	json["email"] = Email;
 
 	// Remove the modal if already exists
 	$('#zendesk_messageModal').remove();
@@ -169,7 +405,10 @@ function addTicketToZendesk(plugin_id, email)
 	// Shows the modal after filling with details
 	$('#zendesk_messageModal').modal("show");
 
-	// On click of send button in the modal, connect request is sent
+	/*
+	 * On click of send button in the modal, calls send request method to add a
+	 * ticket in Zendesk
+	 */
 	$('#send_request').click(function(e)
 	{
 		e.preventDefault();
@@ -180,36 +419,50 @@ function addTicketToZendesk(plugin_id, email)
 			return;
 		}
 
+		// Sends request to Zendesk to add ticket
+		sendRequestToAddTicket("zendesk_messageForm", "zendesk_messageModal", "add-ticket-error-panel");
+	});
+}
+
+/**
+ * Sends GET request to add a ticket in Zendesk on click of send button in
+ * ZendeskF add ticket modal and hides the modal on success callback
+ * 
+ * @param formId
+ *            form data to be sent to add ticket
+ * @param modalId
+ *            modal on which sent status is shown and hidden
+ * @param errorPanelId
+ *            Error div id where error is shown
+ */
+function sendRequestToAddTicket(formId, modalId, errorPanelId)
+{
+	/*
+	 * Sends post request to URL "core/api/widgets/zendesk/add" to call
+	 * ZendeskWidgetsAPI with widget id and LinkedIn id as path parameters and
+	 * form as post data
+	 */
+	$.post("/core/api/widgets/zendesk/add/" + Zendesk_Plugin_Id, $('#' + formId).serialize(),
+
+	function(data)
+	{
+		// On success, shows the status as sent
+		$('#' + modalId).find('span.save-status').html("sent");
+
+		// Hides the modal after 2 seconds after the sent is shown
+		setTimeout(function()
+		{
+			$('#' + modalId).modal("hide");
+		}, 2000);
+
+	}).error(function(data)
+	{
 		/*
-		 * Sends post request to url "core/api/widgets/zendesk/add" to call
-		 * WidgetsAPI with plugin id and LinkedIn id as path parameters and form
-		 * as post data
+		 * If error occurs modal is removed and error message is shown in
+		 * Zendesk panel
 		 */
-		$.post("/core/api/widgets/zendesk/add/" + plugin_id, $('#zendesk_messageForm').serialize(),
-
-		function(data)
-		{
-			// On success, shows the status as sent
-			$('#zendesk_messageModal').find('span.save-status').html("sent");
-
-			// Hides the modal after 2 seconds after the sent is shown
-			setTimeout(function()
-			{
-				$('#zendesk_messageModal').modal("hide");
-			}, 2000);
-
-		}).error(function(data)
-		{
-			/*
-			 * If error occurs modal is removed and error message is shown in
-			 * panel
-			 */
-			$('#zendesk_messageModal').remove();
-			zendeskError('add-ticket-error-panel', data.responseText);
-
-			$('#add-ticket-error-panel').show();
-			$('#add-ticket-error-panel').fadeOut(10000);
-		});
+		$('#' + modalId).remove();
+		zendeskStreamError(errorPanelId, data.responseText);
 	});
 }
 
@@ -223,8 +476,10 @@ function addTicketToZendesk(plugin_id, email)
  */
 function updateTicketInZendesk(plugin_id, ticket_id)
 {
-	// Stores info as JSON, to send it to the modal when update ticket request
-	// is made
+	/*
+	 * Stores info as JSON, to send it to the modal when update ticket request
+	 * is made
+	 */
 	var json = {};
 
 	// Set headline of modal window as Update Ticket
@@ -248,7 +503,10 @@ function updateTicketInZendesk(plugin_id, ticket_id)
 	// Shows the modal after filling with details
 	$('#zendesk_messageModal').modal("show");
 
-	// On click of send button in the modal, connect request is sent
+	/*
+	 * On click of send button in the modal, calls send request method to update
+	 * a ticket in Zendesk
+	 */
 	$('#send_request').click(function(e)
 	{
 		e.preventDefault();
@@ -259,169 +517,90 @@ function updateTicketInZendesk(plugin_id, ticket_id)
 			return;
 		}
 
-		/*
-		 * Sends post request to url "core/api/widgets/zendesk/update" to call
-		 * WidgetsAPI with plugin id and LinkedIn id as path parameters and form
-		 * as post data
-		 */
-		$.post("/core/api/widgets/zendesk/update/" + plugin_id, $('#zendesk_messageForm').serialize(),
-
-		function(data1)
-		{
-			// On success, shows the status as sent
-			$('#zendesk_messageModal').find('span.save-status').html("sent");
-
-			// Hides the modal after 2 seconds after the sent is shown
-			setTimeout(function()
-			{
-				$('#zendesk_messageModal').modal("hide");
-			}, 2000);
-
-		}).error(function(data)
-		{
-			// If error occurs modal is removed and error message is shown in
-			// panel
-			$('#zendesk_messageModal').remove();
-			alert(data.responseText);
-
-		});
+		sendRequestToUpdateTicket("zendesk_messageForm", "zendesk_messageModal", "add-ticket-error-panel");
 	});
 }
 
 /**
- * Shows ticket from tickets data retrieved from zendesk based on ticket id
+ * Sends GET request to update a ticket in Zendesk on click of send button in
+ * ZendeskF update ticket modal and hides the modal on success callback
  * 
- * @param tickets_data
- *            Tickets retrieved from Zendesk
- * @param ticket_id
- *            Id of the ticket to be shown
+ * @param formId
+ *            form data to be sent to add ticket
+ * @param modalId
+ *            modal on which sent status is shown and hidden
+ * @param errorPanelId
+ *            Error div id where error is shown
  */
-function showTicketById(json, ticket_id)
+function sendRequestToUpdateTicket(formId, modalId, errorPanelId)
 {
-	// Sets headline of modal as Ticket TicketId
-	json["headline"] = "Ticket " + ticket_id;
-
 	/*
-	 * If length of description of ticket is stored as boolean to check in
-	 * handlebars, if more, scroll bar is shown for description
+	 * Sends post request to URL "core/api/widgets/zendesk/update" to call
+	 * ZendeskWidgetsAPI with widget id and LinkedIn id as path parameters and
+	 * form as post data
 	 */
-	json["desc_len"] = json['description'].length > 200;
-
-	// Remove the modal if already exists
-	$('#zendesk_showModal').remove();
-
-	// Append the form into the content
-	$('#content').append(getTemplate("zendesk-ticket-show", json));
-
-	// Shows the modal after filling with details
-	$('#zendesk_showModal').modal("show");
-}
-
-function showZendeskProfile(plugin_id, email)
-{
-	$('#Zendesk').html(ZENDESK_UPDATE_LOAD_IMAGE);
-
-	var all_tickets;
-
-	queueGetRequest("widget_queue", "/core/api/widgets/zendesk/profile/" + plugin_id + "/" + email, "json", function success(data)
+	$.post("/core/api/widgets/zendesk/update/" + plugin_id, $('#' + formId).serialize(), function(data)
 	{
-		console.log("zendesk: " + data);
-		$('#Zendesk').html(getTemplate('zendesk-profile', data));
+		// On success, shows the status as sent
+		$('#' + modalId).find('span.save-status').html("sent");
 
-		var first_five;
-		try
+		// Hides the modal after 2 seconds after the sent is shown
+		setTimeout(function()
 		{
-			all_tickets = JSON.parse(data.all_tickets);
-			first_five = all_tickets.splice(0, 5);
-		}
-		catch (err)
-		{
-			first_five = data.all_tickets;
-		}
+			$('#' + modalId).modal("hide");
+		}, 2000);
 
-		var all_tickets_template = $(getTemplate('zendesk-ticket-stream', first_five));
-
-		$('#all_tickets_panel').html(all_tickets_template);
-
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-		{
-			$(".time-ago", all_tickets_template).timeago();
-		});
-
+	}).error(function(data)
+	{
 		/*
-		 * On click of update ticket link for ticket, update ticket method is
-		 * called
+		 * If error occurs modal is removed and error message is shown in
+		 * Zendesk panel
 		 */
-		$('#ticket_update').die().live('click', function(e)
-		{
-			e.preventDefault();
+		$('#' + modalId).remove();
+		zendeskStreamError(errorPanelId, data.responseText);
 
-			// Id of the ticket is retrieved to update ticket based on id
-			var ticket_id = $(this).attr('update_id');
-			updateTicketInZendesk(plugin_id, ticket_id);
-		});
-
-		// On click of show ticket, show ticket by ticket id method is called
-		$('#ticket_show').die().live('click', function(e)
-		{
-			e.preventDefault();
-
-			console.log($(this).attr('data-attr'));
-			var json = JSON.parse($(this).attr('data-attr'));
-
-			console.log(json);
-			// Id of the ticket is retrieved to show ticket based on id
-			var ticket_id = $(this).attr('ticket_id');
-
-			showTicketById(json, ticket_id);
-		});
-
-		$('#more_tickets').die().live('click', function(e)
-		{
-			e.preventDefault();
-
-			if (!all_tickets)
-				return;
-
-			$('#spinner-tickets').show();
-
-			var more_tickets = all_tickets.splice(0, 5);
-			console.log(more_tickets);
-
-			if (more_tickets.length == 0)
-			{
-				$('#spinner-tickets').hide();
-				zendeskError("tickets-error-panel", 'No more tickets');
-				$('#tickets-error-panel').show();
-				$('#tickets-error-panel').fadeOut(10000);
-				return;
-			}
-
-			var more_tickets_template = $(getTemplate('zendesk-ticket-stream', more_tickets));
-			$('#spinner-tickets').hide();
-
-			$('#all_tickets_panel').append(more_tickets_template);
-
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-			{
-				$(".time-ago", more_tickets_template).timeago();
-			});
-
-		});
-
-	}, function error(data)
-	{
-
-		$('#tickets_load').remove();
-
-		// Else the error message is shown
-		zendeskError("Zendesk", data.responseText);
 	});
-
 }
 
+/**
+ * Shows Zendesk error message in the div allocated with given id
+ * 
+ * @param id
+ *            div id
+ * @param message
+ *            error message
+ */
 function zendeskError(id, message)
 {
-	Errorjson['message'] = message;
-	$('#' + id).html(getTemplate('zendesk-error', Errorjson))
+	// build JSON with error message
+	var error_json = {};
+	error_json['message'] = message;
+
+	/*
+	 * Get error template and fill it with error message and show it in the div
+	 * with given id
+	 */
+	$('#' + id).html(getTemplate('zendesk-error', error_json));
+}
+
+/**
+ * Shows Zendesk error message in the div allocated with given id and fades it
+ * out after 10 secs
+ * 
+ * @param id
+ *            div id
+ * @param message
+ *            error message
+ */
+function zendeskStreamError(id, message)
+{
+	// Fill error template and show error message
+	zendeskError(id, message);
+
+	/*
+	 * div allocated with the id here is hidden by default, we need to show it
+	 * with the error message and fade it out after 10 secs
+	 */
+	$('#' + id).show();
+	$('#' + id).fadeOut(10000);
 }

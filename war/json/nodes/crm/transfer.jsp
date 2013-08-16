@@ -43,7 +43,7 @@
             "fieldType": "select",
             "type": "select" 
         },{
-            "label": "Transfer the contact into a different campaign. For example, if a contact completes a purchase on your website, you can transfer the contact to a "Welcome Customer" campaign!",
+            "label": "Transfer the contact into a different campaign. For example, if a contact completes a purchase on your website, you can transfer the contact to a \"Welcome Customer\" campaign!",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 

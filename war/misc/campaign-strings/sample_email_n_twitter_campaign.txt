@@ -119,7 +119,7 @@
                     },
                     {
                         "label": "Track Clicks:",
-                        "required": "No",
+                        "required": "Yes",
                         "category": "Settings",
                         "name": "track_clicks",
                         "title": "AgileCRM will track your Clicks.",
