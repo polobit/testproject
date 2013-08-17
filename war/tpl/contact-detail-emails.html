@@ -1,16 +1,30 @@
 <script id="email-social-collection-template" type="text/html">
 {{#unless this.length}}
-    <h3>No emails to/from {{contactShortName}}.</h3>
+    <div class="slate">
+            <div class="slate-content">
+                <div class="box-left">
+                    <img alt="Clipboard" src="/img/clipboard.png" />
+                </div>
+                <div class="box-right">
+                    <h3>You have no emails for {{contactShortName}}.</h3>
+                    <div class="text">
+                        Emails communicated with {{contactShortName}} through agilecrm or given imap email are shown here.
+                    </div>
+                    <a href="#send-email" class="btn blue btn-slate-action"><i class="icon-plus-sign"></i>  Send Email !</a>
+                </div>
+            </div>
+        </div>
 {{/unless}}
-        <ul id="email-prefs-verification" style="margin-top:-5px;display:none;">
-            <div class="alert danger info-block" style="color:red;background-color: rgb(252, 239, 212);border: 1px solid rgb(250, 225, 198);">
+        
+{{#if this.length}}
+       <ul id="email-prefs-verification" style="margin-top:-5px;display:none;">
+            <div class="alert danger info-block" style="color: black;background-color: rgb(255,255,204);border: 1px solid rgb(211,211,211);">
                 <div>
                 <i class="icon-warning-sign"></i><strong style="">PENDING EMAIL CONFIGURATION.</strong>
                 <p>You have not yet configured your email. Please click <a href='#email'>here</a> to get started.</p>
                 </div>
             </div>
         </ul>
-{{#if this.length}}
 	<ul id="email-social-model-list" class="ativity-block-ul"></ul>
 {{/if}}
 </script>
@@ -19,7 +33,10 @@
 <script id="email-social-model-template" type="text/html">
 <div style="display:block;0 1px 2px rgba(0,0,0,0.05)">
 	<div id="notes" class="activity-text-block">
-	<span class="activity-block-owner">	
+	{{#if errormssg}}
+    <span style="color:red;">IMAP Error: {{errormssg}}</span>
+    {{else}}
+    <span class="activity-block-owner">	
 			<img class="user-img thumbnail" width="40" height="40" src="{{#extractEmail from}}{{emailGravatarurl 40 this}}{{/extractEmail}}">
 	</span>
 		<div>
@@ -52,6 +69,7 @@
 		<small class="edit-hover"> 
 			<time class="email-sent-time" datetime="{{epochToHumanDate "" date_secs}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" date_secs}}</time>
 		</small>
+{{/if}}
 	</div>	
 </div>
 </script>
