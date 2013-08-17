@@ -143,22 +143,11 @@ $(function(){
     						
     						// Activates "Timeline" tab and its tab content in contact detail view 
     						activate_timeline_tab();
-
+    						add_entity_to_timeline(data);
     						/*
     						 * If timeline is not defined yet, initiates with the 
     						 * data else inserts
     						 */
-    						if (timelineView.collection.length == 0) {
-    							timelineView.collection.add(data);
-    							
-    							setup_timeline(timelineView.collection.toJSON(),
-    									App_Contacts.contactDetailView.el,
-    									undefined);
-    						} else{
-    							var newItem = $(getTemplate("timeline", data.toJSON()));
-    							newItem.find('.inner').append('<a href="#" class="open-close"></a>');
-    							$('#timeline').isotope('insert', newItem);
-    						}
     						return false;
     					}
     					
