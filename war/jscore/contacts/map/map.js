@@ -65,9 +65,16 @@ function display_google_map() {
 	var geocoder = new google.maps.Geocoder();
 
 	// Latitude and longitude were not saved to the contact (chances to update the address)
+	
+	if(!address.address)address.address="";
+	if(!address.city)address.city="";
+	if(!address.state)address.state="";
+	if(!address.country)address.country="";
+	if(!address.zip)address.zip="";
+	
 	geocoder.geocode({
 		'address' : '"' + address.address + ', ' + address.city + ', '
-				+ address.state + ', ' + address.country + '"'
+				+ address.state + ', ' + address.country + ', ' + address.zip + '"'
 	}, function(results, status) {
 		if (status == google.maps.GeocoderStatus.OK) {
 
