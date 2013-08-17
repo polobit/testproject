@@ -304,8 +304,9 @@ function openTwitter()
 	{
 		newwindow.focus();
 	}
-	
-	return false;
+
+	// to work in firefox, commented return false statement.
+	//return false;
 }
 
 function popupTwitterCallback(token, tokenSecret, account)
@@ -315,9 +316,7 @@ function popupTwitterCallback(token, tokenSecret, account)
 	$('#twitter_account').val(account);
 }
 
-
 // Iteratator for generating UI Fields
-
 function _generateUIFields(selector, ui) {
 
 

@@ -53,7 +53,7 @@
 {{#if_equals users_count "2"}}
 	<strong style="font-size: 20px;">Oops. You are out of users.</strong>
 {{else}}
-	<strong style="font-size: 20px;">Account info</strong>
+	<strong style="font-size: 20px;text-decoration:underline;">Account Info</strong>
 {{/if_equals}}
 	<p style="padding-top: 10px;">
 		Plan: Free Plan <br/>
@@ -74,6 +74,7 @@
 		Plan: {{plan.plan_id}}<br />
 		Users: {{userCount}} of {{plan.quantity}} <br />
 	</p>
+	<p>Thanks for enrolling in our preferred plan.</p>
 	{{#if_equals userCount plan.quantity}}
 	<p>
 		<a style="text-decoration: underline;" href="#contact-us">Please

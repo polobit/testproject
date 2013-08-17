@@ -1,65 +1,9 @@
-/* 
-var milestoneTemplate;
-var milestoneCollection;
-function setup_milestones(el){
-	if(!milestoneCollection)
-		{
-			var MilestoneCollection = Backbone.Collection.extend({
-				url : '/core/api/milestone',
-				sortKey: 'milestone'
-			});
-			milestoneCollection = new MilestoneCollection();
-			milestoneCollection.fetch({
-		        success: function () {
-		        	milestoneTemplate = getTemplate('Milestonelist', milestoneCollection.toJSON());
-		        	
-		            $(el).html(milestoneTemplate);
-		        }
-		    });
-		    return;
-		
-		}
-	$(el).html(milestoneTemplate);
-}
-
-// To show milestones as columns
-Handlebars.registerHelper('milestone_element', function(item) {
-	var html = "";
-	var str;
-	$.each(item, function(key, value) {
-		str = value.milestones;
-	});
-	
-	var milestones = str.split(",");
-	
-	for(var i in milestones){
-		html += "<th>" + milestones[i].trim()+"</th>";
-	}
-	return html;
-});
-
-var deals_by_milestones_collection = new Backbone.Collection();
-deals_by_milestones_collection.url = "core/api/opportunity/byMilestone"
-
-// Fetches the deals by milestones
-	deals_by_milestones_collection.fetch({
-
-	success : function(data) {
-		 console.log(data.toJSON());
-		this.dealByMilestonesCollection = data.toJSON();
-	}
-});*/
-
-//setup_milestones($("#milestonelist"));
-/*<script id="Milestonelist-template" type="text/html">
-{{#milestone_element this}}{{/milestone_element}}
-</script>*/
-
-
 $(function(){
 	
-	// If default view is selected, deals are loaded with default view and
-	// removes the view cookie set when view is selected
+	/**
+	 * If default view is selected, deals are loaded with default view and 
+	 * removes the view cookie set when view is selected
+	 */ 
 	$('.deals-list-view').die().live('click', function(e) {
 		e.preventDefault();
 		
@@ -71,8 +15,10 @@ $(function(){
 
 	});
 	
-	// If Pipelined View is selected, deals are loaded with pipelined view and
-	// creates the pipelined view cookie 
+	/**
+	 * If Pipelined View is selected, deals are loaded with pipelined view and 
+	 * creates the pipelined view cookie
+	 */
 	$('.deals-pipelined-view').die().live('click', function(e) {
 		e.preventDefault();
 
@@ -85,7 +31,10 @@ $(function(){
 	});
 });
 
-// To perform actions on deals arranged in milestones
+/** 
+ * To perform actions on deals arranged in milestones 
+ * using sortable.js when it is dropped in middle or dragged over.
+ */
 function setup_deals_in_milestones(){
 	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function() {
 		$('ul.milestones').sortable({
@@ -93,6 +42,7 @@ function setup_deals_in_milestones(){
 		      cursor : "move",
 		      containment : "#opportunities-by-milestones-model-list",
 		      scroll : false,
+		      // When deal is dragged to adjust the horizontal scroll
 		      change : function(event, ui){
 		    	  var width = $('#opportunities-by-milestones-model-list > div').width();
 		    	  var scrollX = $('#opportunities-by-milestones-model-list > div').scrollLeft();
@@ -101,11 +51,13 @@ function setup_deals_in_milestones(){
 		    	  else if(event.pageX < (width * 0.1))
 		    		  $('#opportunities-by-milestones-model-list > div').scrollLeft(scrollX - 15);
 		      },
+		      // When deal is dropped its milestone is changed 
 		      update : function(event, ui) {
 					var id = ui.item[0].id;
 					var DealJSON = App_Deals.opportunityCollectionView.collection.get(id).toJSON();
 					var oldMilestone = DealJSON.milestone;
 					var newMilestone = ($(this).closest('ul').attr("milestone")).trim();
+						// Checks current milestone is different from previous
 						if(newMilestone != oldMilestone)
 							update_milestone(App_Deals.opportunityMilestoneCollectionView.collection.models[0], id, newMilestone, oldMilestone);
 		        }
@@ -114,9 +66,12 @@ function setup_deals_in_milestones(){
 	});
 }
 
-// To change the milestone of the deal when it is dropped in other column
+/** 
+ * To change the milestone of the deal when it is 
+ * dropped in other milestone columns and saves or updates deal object.
+ */
 function update_milestone(data, id, newMilestone, oldMilestone){
-	//App_Deals.opportunityMilestoneCollectionView.collection.remove(data);
+	// Updates the collection without reloading
 	var milestone = data.get(oldMilestone);
 	var DealJSON;
 	for(var i in milestone)
@@ -134,6 +89,7 @@ function update_milestone(data, id, newMilestone, oldMilestone){
 	var up_deal = new Backbone.Model();
 	up_deal.url = '/core/api/opportunity';
 	up_deal.save(DealJSON, {
+		// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
 		success : function(model, response) {
 			App_Deals.opportunityCollectionView.collection.remove(DealJSON);
 			App_Deals.opportunityCollectionView.collection.add(model);
