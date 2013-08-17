@@ -313,6 +313,7 @@ function validate_insertion(models, timelineViewMore){
 					$('#timeline').isotope( 'insert', newItem);
 				});
 				
+				console.log(month_years);
 				// add a month marker for each month that has a post
 				create_month_marker(month_years, true);
 			}
@@ -390,6 +391,16 @@ function create_month_marker(month_years, is_insert, el){
 			$('#timeline', el).append(getTemplate("year-marker", context));
 		}	
 	});
+	$("#timline").isotope('reloadItems');
+}
+
+
+function add_entity_to_timeline(model)
+{
+	var list = [];
+	list.push(model.toJSON())
+	validate_insertion(list);	
+	 
 }
 
 /**
@@ -743,18 +754,17 @@ function addTagToTimelineDynamically(tags)
 		return;
 	}
 	
+	var tags_to_add = [];
 	$.each(tags, function(index, tag){
 		if(!timelineView.collection.where(tag).length == 0)
 			return;
 		
 		timelineView.collection.add(tag);
-		var newItem = $(getTemplate("timeline", tag));
-		
-		newItem.find('.inner').append('<a href="#" class="open-close"></a>');
-		
-		$('#timeline').isotope( 'insert', newItem);
-		
+		tags_to_add.push(tag);
 	});
+	
+	validate_insertion(tags_to_add);
+		
 	
 /*	var newItem = $(getTemplate("timeline", tag));
 	

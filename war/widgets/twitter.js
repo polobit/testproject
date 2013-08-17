@@ -413,9 +413,9 @@ function showTwitterMatchingProfiles(data)
 	if (data.length == 0)
 	{
 		if (Twitter_search_details['keywords'] && Twitter_search_details['keywords'] != "")
-			twitterMainError("No matches found for " + "<a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a>");
+			twitterMainError(TWITTER_PLUGIN_NAME,"No matches found for " + "<a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a>");
 		else
-			twitterMainError("No matches found. " + "<a href='#' class='twitter_modify_search'>Modify search</a>");
+			twitterMainError(TWITTER_PLUGIN_NAME, "No matches found. " + "<a href='#' class='twitter_modify_search'>Modify search</a>");
 		return;
 	}
 
@@ -528,7 +528,7 @@ function getTwitterMatchingProfiles()
 			$('#tweet_load').remove();
 
 			// Shows error message if error occurs
-			twitterMainError(data.responseText);
+			twitterMainError(TWITTER_PLUGIN_NAME, data.responseText);
 		});
 	}
 	else
@@ -568,7 +568,7 @@ function getModifiedTwitterMatchingProfiles()
 		$('#spinner-twitter-search').remove();
 
 		// Shows error message if error occurs
-		twitterMainError(data.responseText);
+		twitterMainError(TWITTER_PLUGIN_NAME, data.responseText);
 	});
 }
 
@@ -635,7 +635,7 @@ function getTwitterIdByUrl(web_url, callback)
 			return;
 		}
 
-		twitterMainError(data.responseText);
+		twitterMainError(TWITTER_PLUGIN_NAME, data.responseText);
 	});
 }
 
@@ -789,7 +789,7 @@ function showTwitterProfile(twitter_id)
 		// Remove loading image on error
 		$('#tweet_load').remove();
 
-		twitterMainError(data.responseText);
+		twitterMainError(TWITTER_PLUGIN_NAME, data.responseText);
 
 	});
 
