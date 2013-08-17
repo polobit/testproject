@@ -10,7 +10,7 @@
  * @param email	{String}
  * 				email of the contact, property should be added to
  */
-function agile_addProperty(name, id, callback, email)
+function agile_addProperty(data, callback, email)
 {
 	// Check if email passed as parameter, else get from cookie
 	if (!email)
@@ -23,11 +23,6 @@ function agile_addProperty(name, id, callback, email)
 			email = agile_guid.get_email();
 	}
 	
-	// Convert parameters to json object data
-	var data = {};
-	data.name = name;
-	data.value = id;
-
 	var params = "data={0}&email={1}".format(encodeURIComponent(JSON.stringify(data)), encodeURIComponent(email));
 
 	var agile_url = agile_id.getURL() + "/contacts/add-property?callback=?&id=" + agile_id.get() + "&" + params;

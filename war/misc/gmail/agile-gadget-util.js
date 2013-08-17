@@ -109,9 +109,8 @@ function agile_get_gadget_template(Template_Name, callback) {
 function agile_load_datepicker(calendar, callback) {
 	// Load Bootstrap libraries.
 	head.js(Lib_Path + 'lib/bootstrap.min.js', Lib_Path
-			+ 'lib/bootstrap-datepicker-min.js');
-
-	head.ready(function() {
+			+ 'lib/bootstrap-datepicker-min.js', function() {
+		
 		// Enables date picker.
 		calendar.datepicker({
 			format : 'mm/dd/yyyy'

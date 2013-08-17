@@ -182,7 +182,7 @@ $(function() {
 function highlight_task() {
 	$("#hiddentask").val("task");
 	$("#task").css({"color":"black","font-weight":"bold"});
-	$("#event").css({"color":"blue","font-weight":"normal"});
+	$("#event").css({"color":"red","font-weight":"normal"});
 	$("#relatedEvent").css("display", "none");
 	$("#relatedTask").css("display", "block");
 }

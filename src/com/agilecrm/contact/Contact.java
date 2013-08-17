@@ -323,9 +323,7 @@ public class Contact extends Cursor
 	    // Throw BAD_REQUEST if countEmails>=2 (sure duplicate contact)
 	    // otherwise if countEmails==1, make sure its not due to previous
 	    // value of this(current) Contact
-	    if (countEmails >= 2
-		    || (countEmails == 1 && (id == null || !StringUtils.equalsIgnoreCase(
-			    oldContact.getContactFieldValue("EMAIL"), myMail))))
+	    if (countEmails >= 2 || (countEmails == 1 && (id == null || !oldContact.isEmailExists(myMail))))
 		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 			.entity("Sorry, duplicate contact found with the same email address.|" + myMail).build());
 	}
@@ -692,6 +690,23 @@ public class Contact extends Cursor
 	    }
 	}
 	return null;
+    }
+
+    /**
+     * Checks if email exists, works for even multiple emails.
+     * 
+     * @param email
+     *            - to check if in any of the properties
+     * @return
+     */
+    public boolean isEmailExists(String email)
+    {
+	for (ContactField field : properties)
+	{
+	    if (StringUtils.equals(field.name, EMAIL) && StringUtils.equals(field.value, email))
+		return true;
+	}
+	return false;
     }
 
     /**
