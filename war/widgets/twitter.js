@@ -1264,8 +1264,6 @@ function tweetInTwitter(twitter_id)
 		});
 	});
 
-	//  
-
 	// Shows the modal after filling with details
 	$('#twitter_messageModal').modal("show");
 
@@ -1298,9 +1296,8 @@ function tweetInTwitter(twitter_id)
 function sendRequest(url, formId, modalId)
 {
 	/*
-	 * Sends post request to url "core/api/widgets/social/message/" and Calls
-	 * WidgetsAPI with plugin id and Twitter id as path parameters and form as
-	 * post data
+	 * Sends post request to given url and Calls LinkedInTwitterWidgetsAPI with
+	 * Twitter plugin id and Twitter Id as path parameters and form as post data
 	 */
 	$.post(url, $('#' + formId).serialize(),
 
