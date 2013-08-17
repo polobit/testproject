@@ -942,7 +942,7 @@ function anyFiveNetworkUpdates(twitter_id, tweet_id, stream_data, element)
 		$('#spinner-tweets').hide();
 
 		// See more link activated to get more updates
-		$(that).addClass('twitter_stream');
+		$(element).addClass('twitter_stream');
 		$('#twitter_refresh_stream').show();
 
 		// If no more updates available, less and refresh buttons are shown
@@ -1287,6 +1287,14 @@ function tweetInTwitter(twitter_id)
 	});
 }
 
+/**
+ * Sends post request to the given URL with the form data from form id and show
+ * the sent status in modal
+ * 
+ * @param url
+ * @param formId
+ * @param modalId
+ */
 function sendRequest(url, formId, modalId)
 {
 	/*
@@ -1313,8 +1321,10 @@ function sendRequest(url, formId, modalId)
 	{
 		$("#spinner-modal").hide();
 
-		// If error occurs while posting modal is removed and error message
-		// is shown
+		/*
+		 * If error occurs while posting modal is removed and error message is
+		 * shown
+		 */
 		$('#' + modalId).remove();
 
 		// Error message is shown if error occurs
