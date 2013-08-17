@@ -44,12 +44,12 @@ function agile_init_handlers() {
 		e.preventDefault();
 		// Set context (HTML container where event is triggered).
 		var el = $(this).closest("div.gadget-contact-details-tab")
-				.find(".gadget-note-form");
+				.find("div.show-form");
 		var json = [];
 		var data = {};
 		var email = {};
 		// Form serialization and validation.
-		json = agile_serialize_form($(el));
+		json = agile_serialize_form($(el).find(".gadget-note-form"));
 		$.each(json, function(index, val) {
 			if (val.name == "email")
 				email[val.name] = val.value;
@@ -62,10 +62,7 @@ function agile_init_handlers() {
 		_agile.add_note(data, function(response) {
 
 			$('.saving', el).hide(1);
-			$('.status', el).show().delay(3000).hide(1);
-			// Clear form fields.
-			$(el).validate().resetForm();
-			$(el).get(0).reset();
+			$('.gadget-notes-tab', el).trigger('click');
 		}, email.email);
 	});
 
@@ -75,12 +72,12 @@ function agile_init_handlers() {
 		e.preventDefault();
 		// Set context (HTML container where event is triggered).
 		var el = $(this).closest("div.gadget-contact-details-tab")
-				.find(".gadget-task-form");
+		.find("div.show-form");
 		var json = [];
 		var data = {};
 		var email = {};
 		// Form serialization and validation.
-		json = agile_serialize_form($(el));
+		json = agile_serialize_form($(el).find(".gadget-task-form"));
 		$.each(json, function(index, val) {
 			if (val.name == "email")
 				email[val.name] = val.value;
@@ -95,10 +92,7 @@ function agile_init_handlers() {
 		_agile.add_task(data, function(response) {
 
 			$('.saving', el).hide(1);
-			$('.status', el).show().delay(3000).hide(1);
-			// Clear form fields.
-			$(el).validate().resetForm();
-			$(el).get(0).reset();
+			$('.gadget-tasks-tab', el).trigger('click');
 		}, email.email);
 	});
 
@@ -108,12 +102,12 @@ function agile_init_handlers() {
 		e.preventDefault();
 		// Set context (HTML container where event is triggered).
 		var el = $(this).closest("div.gadget-contact-details-tab")
-				.find(".gadget-deal-form");
+		.find("div.show-form");
 		var json = [];
 		var data = {};
 		var email = {};
 		// Form serialization and validation.
-		json = agile_serialize_form($(el));
+		json = agile_serialize_form($(el).find(".gadget-deal-form"));
 		$.each(json, function(index, val) {
 			if (val.name == "email")
 				email[val.name] = val.value;
@@ -128,10 +122,7 @@ function agile_init_handlers() {
 		_agile.add_deal(data, function(response) {
 
 			$('.saving', el).hide(1);
-			$('.status', el).show().delay(3000).hide(1);
-			// Clear form fields.
-			$(el).validate().resetForm();
-			$(el).get(0).reset();
+			$('.gadget-deals-tab', el).trigger('click');
 		}, email.email);
 	});
 
@@ -275,77 +266,60 @@ function agile_init_handlers() {
 			$(this).next().trigger('click');
 		}
 	});
-
-	// Click event for select option (add note/task/deal).
-	$(".option-drop-down").die().live('change', function(e) {
+	
+	// Click event for Action Menu (add note).
+	$('.action-add-note').die().live('click', function(e) {
 		// Prevent default functionality.
 		e.preventDefault();
 		// Set context (HTML container where event is triggered).
 		var el = $(this).closest("div.gadget-contact-details-tab")
-				.find("div.show-form");
+					.find("div.show-form");
+		
+		agile_build_form_template($(this), "gadget-note",
+				".gadget-notes-tab-list", function() {
 
-		// Event for "New" option.
-		if ($(this).val() === 'New') {
-			$(".gadget-contact", el).hide();
-			$(".gadget-no-contact", el).show();
-			$(".gadget-note", el).hide();
-			$(".gadget-deal", el).hide();
-			$(".gadget-task", el).hide();
-		}
-
-		// Toggle event for add note.
-		if ($(this).val() === 'Note') {
-
-			// Build Note form template.
-			agile_build_form_template($(this), "gadget-note",
-					".show-individual-form", function() {
-
-						$(".gadget-task", el).hide();
-						$(".gadget-deal", el).hide();
-						$(".gadget-note", el).toggle();
-					});
-		}
-
-		// Toggle event for add Task.
-		if ($(this).val() === 'Task') {
-
-			// Build Task form template.
-			agile_build_form_template($(this), "gadget-task",
-					".show-individual-form", function() {
-						/*
-						 * Load and apply Bootstrap date picker on text
-						 * box in Task form.
-						 */
-						agile_load_datepicker($('.task-calender', el),
-								function() {
-									$(".gadget-deal", el).hide();
-									$(".gadget-note", el).hide();
-									$(".gadget-task", el).toggle();
-								});
-					});
-		}
-
-		// Toggle event for add deal.
-		if ($(this).val() === 'Deal') {
-
-			// Build Deal form template.
-			agile_build_form_template($(this), "gadget-deal",
-					".show-individual-form", function() {
-						/*
-						 * Load and apply Bootstrap date picker on text
-						 * box in Deal form.
-						 */
-						agile_load_datepicker($('.deal-calender', el),
-								function() {
-									$(".gadget-note", el).hide();
-									$(".gadget-task", el).hide();
-									$(".gadget-deal", el).toggle();
-								});
-					});
-		}
-
-		if (!Is_Localhost)
-			gadgets.window.adjustHeight();
+		});
+		$('.gadget-notes-tab a', el).tab('show');
+	});
+	
+	// Click event for Action Menu (add task).
+	$('.action-add-task').die().live('click', function(e) {
+		// Prevent default functionality.
+		e.preventDefault();
+		// Set context (HTML container where event is triggered).
+		var el = $(this).closest("div.gadget-contact-details-tab")
+					.find("div.show-form");
+		
+		agile_build_form_template($(this), "gadget-task",
+				".gadget-tasks-tab-list", function() {
+			/*
+			 * Load and apply Bootstrap date picker on text
+			 * box in Task form.
+			 */
+			agile_load_datepicker($('.task-calender', el), function() {
+				$('.gadget-tasks-tab a', el).tab('show');		
+			});
+		});
+	});
+	
+	// Click event for Action Menu (add deal).
+	$('.action-add-deal').die().live('click', function(e) {
+		// Prevent default functionality.
+		e.preventDefault();
+		// Set context (HTML container where event is triggered).
+		var el = $(this).closest("div.gadget-contact-details-tab")
+					.find("div.show-form");
+		
+		agile_build_form_template($(this), "gadget-deal",
+				".gadget-deals-tab-list", function() {
+			/*
+			 * Load and apply Bootstrap date picker on text
+			 * box in Deal form.
+			 */
+			agile_load_datepicker($('.deal-calender', el), function() {
+				$('.gadget-deals-tab a', el).tab('show');
+			});
+		});
 	});
 
 	// Click event for search contact.
@@ -405,30 +379,17 @@ function agile_init_handlers() {
 				head.js(Lib_Path + 'lib/bootstrap.min.js', function() {
 					
 					// Enables Tab.
-					$('#gadget_tabs', el).tab();
+					$('.dropdown-toggle').dropdown();
+					$('.gadget_tabs', el).tab();
 					$(".contact-minified", el).toggle();
 					$(".show-contact-summary", el).toggle();
+					$(".option-tabs", el).toggle();
+					$('.gadget-notes-tab', el).trigger('click');
 				});
-				var email = $(el).data("content");
-				// Get Notes, show notes list by default.
-				_agile.get_tasks(function(response) {
-					console.log(response);
-					console.log($.parseJSON(response[0]));
-					console.log($.parseJSON(response[1]));
-					head.js(Lib_Path + 'lib/date-formatter.js', Lib_Path + 'lib/jquery.timeago.js', function() {
-						agile_get_gadget_template("gadget-tasks-list-template", function(data) {
-							$.each(response, function(index) {
-								var Task_List_Template = getTemplate('gadget-tasks-list', $.parseJSON(response[index]), 'no');
-								$('.gadget-tasks-tab-list', el).append($(Task_List_Template));
-							});
-						});
-						$("time").timeago();
-					});
-				}, email);
 			});
 		});
 	});
-
+	
 	// Click event for hide contact info summery
 	$(".hide-contact-summery").die().live('click', function(e) {
 		// Prevent default functionality.
@@ -439,11 +400,77 @@ function agile_init_handlers() {
 
 		$(".contact-minified", el).toggle();
 		$(".show-contact-summary", el).toggle();
+		$(".option-tabs", el).toggle();
 		$(".gadget-note", el).hide();
 		$(".gadget-deal", el).hide();
 		$(".gadget-task", el).hide();
 	});
 
+	// Click event for notes tab.
+	$('.gadget-notes-tab').die().live('click', function(e) {
+		// Prevent default functionality.
+		e.preventDefault();
+		// Set context (HTML container where event is triggered).
+		var el = $(this).closest("div.gadget-contact-details-tab")
+		.find('.show-form');
+		$('.gadget-notes-tab-list', el).html("");
+		var email = $(el).data("content");
+		// Get Notes.
+		_agile.get_notes(function(response) {
+			console.log(response);
+			
+			head.js(Lib_Path + 'lib/date-formatter.js', Lib_Path + 'lib/jquery.timeago.js', function() {
+				agile_get_gadget_template("gadget-notes-list-template", function(data) {
+					
+					$('.gadget-notes-tab-list', el).html(getTemplate('gadget-notes-list', response, 'no'));
+				});
+				$("time", el).timeago();
+			});
+		}, email);
+	});
+	
+	// Click event for tasks tab.
+	$('.gadget-tasks-tab').die().live('click', function(e) {
+		// Prevent default functionality.
+		e.preventDefault();
+		// Set context (HTML container where event is triggered).
+		var el = $(this).closest("div.gadget-contact-details-tab")
+		.find('.show-form');
+		$('.gadget-tasks-tab-list', el).html("");
+		var email = $(el).data("content");
+		// Get Notes.
+		_agile.get_tasks(function(response) {
+			console.log(response);
+			
+			agile_get_gadget_template("gadget-tasks-list-template", function(data) {
+					
+				$('.gadget-tasks-tab-list', el).html(getTemplate('gadget-tasks-list', response, 'no'));
+			});
+			$("time", el).timeago();
+		}, email);
+	});
+	
+	// Click event for deals tab.
+	$('.gadget-deals-tab').die().live('click', function(e) {
+		// Prevent default functionality.
+		e.preventDefault();
+		// Set context (HTML container where event is triggered).
+		var el = $(this).closest("div.gadget-contact-details-tab")
+		.find('.show-form');
+		$('.gadget-deals-tab-list', el).html("");
+		var email = $(el).data("content");
+		// Get Notes.
+		_agile.get_deals(function(response) {
+			console.log(response);
+			
+			agile_get_gadget_template("gadget-deals-list-template", function(data) {
+					
+				$('.gadget-deals-tab-list', el).html(getTemplate('gadget-deals-list', response, 'no'));
+			});
+			$("time", el).timeago();
+		}, email);
+	});
+	
 	// Click event for toggle add contact.
 	$(".gadget-add-contact").die().live('click', function(e) {
 		// Prevent default functionality.
@@ -465,9 +492,7 @@ function agile_init_handlers() {
 		e.preventDefault();
 		// Set context (HTML container where event is triggered).
 		var el = $(this).closest("div.gadget-contact-details-tab");
-		// Reset option (add/task/deal) drop down.
-		$('.option-drop-down', el).val($('.option-drop-down').prop('defaultSelected'));
-		$('.option-drop-down', el).trigger('change');
+		
 		// Toggle add contact UI.
 		$(".show-add-contact-form", el).hide();
 		$(".gadget-no-contact", el).show();

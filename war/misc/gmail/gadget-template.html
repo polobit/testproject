@@ -10,10 +10,7 @@
   			
 		</div>
 
-   		<div class="show-individual-form">
-			
-		</div>
-		<div class="option-tabs">
+   		<div class="option-tabs" style="display:none;">
 
 		</div>
 	{{else}}
@@ -153,12 +150,21 @@
 
 <!-- 4th coloum (score/task/options) -->
 					<div class="pull-right" style="position:relative; display:inline-block; vertical-align: top;">
-						<select class="option-drop-down" style="width:70px; margin:0px 0px 0px -5px;">
+						<div class="btn-group">
+  							<a class="btn dropdown-toggle" data-toggle="dropdown">Action<span class="caret"></span></a>
+  							<ul class="dropdown-menu pull-right">
+    							<!-- dropdown menu links -->
+								<li class="action-add-note"><a style="cursor:default;">Add Note</a></li>
+								<li class="action-add-task"><a style="cursor:default;">Add Tasks</a></li>
+								<li class="action-add-deal"><a style="cursor:default;">Add Deals</a></li>
+  							</ul>
+						</div>						
+<!--<select class="option-drop-down" style="width:70px; margin:0px 0px 0px -5px;">
 							<option value="New" selected>New..</option>
 							<option value="Note">Note</option>
 							<option value="Task">Task</option>
 							<option value="Deal">Deal</option>
-						</select>
+						</select>-->
 					</div>
 					
 <!-- 3rd coloum (score) -->
@@ -202,32 +208,67 @@
 
 <script id="gadget-tabs-template" type="text/html">
 <!-- Gadget Tab -->
-		<ul id="gadget_tabs" class="nav nav-tabs" data-tabs="tabs" style="margin-top:15px;">
-	        <li><a href="#Notes" data-toggle="tab">Notes</a></li>
-	        <li class="active"><a href="#Tasks" data-toggle="tab">Tasks</a></li>
-			<li><a href="#Deals" data-toggle="tab">Deals</a></li>
+		<ul class="nav nav-tabs gadget_tabs" data-tabs="tabs" style="margin-top:15px;">
+	        <li class="active gadget-notes-tab"><a href="#Notes-{{id}}" data-toggle="tab">Notes</a></li>
+	        <li class="gadget-tasks-tab"><a href="#Tasks-{{id}}" data-toggle="tab">Tasks</a></li>
+			<li class="gadget-deals-tab"><a href="#Deals-{{id}}" data-toggle="tab">Deals</a></li>
 	    </ul>
-	    <div id="my_tab_content" class="tab-content">
-	        <div class="tab-pane" id="Notes">
-	            <h1>Notes</h1>
-	            <p>Add notes to contact.</p>
-	        </div>
-	        <div class="tab-pane active" id="Tasks">
-	            <div>
-					<ul class="gadget-tasks-tab-list" style="list-style-type:none;">
-
-					</ul>
+	    <div class="tab-content">
+	        <div class="tab-pane active" id="Notes-{{id}}">
+	            <div class="gadget-notes-tab-list">
+					
 				</div>
 	        </div>
-			<div class="tab-pane" id="Deals">
-	            <h1>Deals</h1>
-	            <p>Add deals to contact.</p>
+	        <div class="tab-pane" id="Tasks-{{id}}">
+	            <div class="gadget-tasks-tab-list">
+					
+				</div>
+	        </div>
+			<div class="tab-pane" id="Deals-{{id}}">
+	            <div class="gadget-deals-tab-list">
+					
+				</div>
 	        </div>
 	    </div>
 </script>
 
+<script id="gadget-notes-list-template" type="text/html">
+<ul style="list-style-type:none;">
+	{{#if this.length}}
+		{{#each this}}
+			{{#stringToJSON this ""}}
+				<li>
+					<div style="display:block;" class="activity">
+						<div id="notes" class="activity-text-block">
+							<h4><a style="text-decoration: none"><b>{{ucfirst subject}}</b></a></h4>
+							<pre style="background:none;border:none;">{{description}}</pre>	
+					 		<div class="clear">
+								<small class="edit-hover" style="margin-right:10px; color:#b2b0b1;"> 
+									<time class="note-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+								</small>
+							</div>
+						</div>
+					</div>
+				</li>
+			{{/stringToJSON}}
+		{{/each}}
+	{{else}}
+		<li>
+			<div style="display:block;" class="activity">
+				<div id="notes" class="activity-text-block">
+					<h4>You have no notes for this contact.</h4>
+				</div>
+			</div>
+		</li>
+	{{/if}}		
+</ul>
+</script>
 
 <script id="gadget-tasks-list-template" type="text/html">
+<ul style="list-style-type:none;">
+{{#if this.length}}
+		{{#each this}}
+			{{#stringToJSON this ""}}
 <li>
 	<div class="activity" style="display:block;">
 		{{#if is_complete}}
@@ -266,15 +307,60 @@
 		</div>
 	</div>
 </li>
+			{{/stringToJSON}}
+		{{/each}}
+	{{else}}
+		<li>
+			<div style="display:block;" class="activity">
+				<div id="notes" class="activity-text-block">
+					<h4>You have no tasks for this contact.</h4>
+				</div>
+			</div>
+		</li>
+	{{/if}}
+</ul>	
+</script>
+
+<script id="gadget-deals-list-template" type="text/html">
+<ul style="list-style-type:none;"> 
+{{#if this.length}}
+		{{#each this}}
+			{{#stringToJSON this ""}}
+<li>
+	<div style="display:block;" class="activity">
+		<div id="notes" class="activity-text-block">
+			<h4 style="margin-bottom: 9px;"><a style="text-decoration: none"><b>{{ucfirst name}}</b></a><span style="margin-left:20px;">{{milestone}} ({{probability}} %)</span></h4>
+			<p><span style="margin-right: 10px;">Value : </span>
+				{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}}{{numberWithCommas expected_value}}
+			</p>
+			<div class="clear">
+				<small class="edit-hover" style="margin-right:10px; color:#b2b0b1;">
+					<time class="deal-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+				</small>
+			</div>
+		</div>
+	</div>
+</li>
+			{{/stringToJSON}}
+		{{/each}}
+	{{else}}
+		<li>
+			<div style="display:block;" class="activity">
+				<div id="notes" class="activity-text-block">
+					<h4>You have no deals for this contact.</h4>
+				</div>
+			</div>
+		</li>
+	{{/if}}
+</ul>
 </script>
 
 <script id="gadget-note-template" type="text/html">
 <!--  Add Note Form -->
-	<div class="gadget-note" style="display:none;">
+	<div class="gadget-note" style="padding-left:30px;">
 		<form class='gadget-note-form' name="gadget_note_form" method="post">
-			<fieldset>
-                   <legend><i class="icon-plus-sign"></i> Add Note</legend>
-                   <input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
+			<fieldset style="margin:0px;">
+                <input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
 				<div class="row">
 					<div class="span3">
                    		<label class="control-label"><b>Subject: </b><span class="field_req">*</span></label>
@@ -304,11 +390,10 @@
 
 <script id="gadget-task-template" type="text/html">
 <!--  Add Task Form -->
-  	<div class="gadget-task" style="display:none;">
+  	<div class="gadget-task" style="padding-left:30px;">
        	<form class='gadget-task-form' name="gadget_task_form" method="post">
-			<fieldset>
-              	<legend><i class="icon-plus-sign"></i> Add Task</legend>
-                <input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
+			<fieldset style="margin:0px;">
+              	<input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
 				<div class="row">
 					<div id="addTask" class="span3">
 						<label for="subject" class="control-label"> <b>Task:</b> <span class="field_req">*</span></label>
@@ -367,10 +452,9 @@
 
 <script id="gadget-deal-template" type="text/html">
 <!--  Add Deal Form -->
-  	   	<div class="gadget-deal" style="display:none;">
+  	   	<div class="gadget-deal" style="padding-left:30px;">
 			<form class="gadget-deal-form" name="gadget_deal_form" method="post">
-				<fieldset>
-                   	<legend><i class="icon-plus-sign"></i> Add Deal</legend>
+				<fieldset style="margin:0px;">
                    	<input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
 					<div class="row">	
 						<div class="span3">		
