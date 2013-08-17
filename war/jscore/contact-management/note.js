@@ -126,7 +126,7 @@ $(function(){
     	        modal.modal('hide');
     			
        	        var note = data.toJSON();
-       	        notesView.add(new BaseModel(note));
+       	        notesView.appendItem(new BaseModel(note));
        	        
        	             	        /*
        	         * Updates data (saved note) to time-line, when contact detail view is defined and 
