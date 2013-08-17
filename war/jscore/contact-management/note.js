@@ -15,6 +15,9 @@ $(function(){
 		
 		// Clone modal, so we dont have to create a update modal.
 		// we can clone add change ids and use it as different modal
+		
+		$('#noteUpdateModal').remove();
+		
 		var noteModal = $("#noteModal").clone();
 
 		$("#noteForm > fieldset", noteModal).prepend('<input name="id" type="hidden"/>')
@@ -79,7 +82,6 @@ $(function(){
        	var json = serializeForm("noteForm");
     	
     	saveNote($("#noteForm"),  $("#noteModal"), this, json);
-
     });
     
     /**
@@ -126,7 +128,9 @@ $(function(){
     	        modal.modal('hide');
     			
        	        var note = data.toJSON();
-       	        notesView.add(new BaseModel(note));
+       	        
+       	        if(notesView && notesView.collection)
+       	        	notesView.collection.add(new BaseModel(note));
        	        
        	             	        /*
        	         * Updates data (saved note) to time-line, when contact detail view is defined and 

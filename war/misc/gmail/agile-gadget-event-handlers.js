@@ -412,15 +412,17 @@ function agile_init_handlers() {
 				var email = $(el).data("content");
 				// Get Notes, show notes list by default.
 				_agile.get_tasks(function(response) {
+					console.log(response);
 					console.log($.parseJSON(response[0]));
 					console.log($.parseJSON(response[1]));
-					head.js(Lib_Path + 'lib/date-formatter.js', function() {
+					head.js(Lib_Path + 'lib/date-formatter.js', Lib_Path + 'lib/jquery.timeago.js', function() {
 						agile_get_gadget_template("gadget-tasks-list-template", function(data) {
 							$.each(response, function(index) {
 								var Task_List_Template = getTemplate('gadget-tasks-list', $.parseJSON(response[index]), 'no');
 								$('.gadget-tasks-tab-list', el).append($(Task_List_Template));
 							});
 						});
+						$("time").timeago();
 					});
 				}, email);
 			});

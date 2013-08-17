@@ -18,17 +18,28 @@ $(function()
 		return getPropertyValue(items, name);
 	});
 
+	/**
+	 * Helper function to return the value of property based on sub-type of the
+	 * property
+	 */
 	Handlebars.registerHelper('getPropertyValueBySubtype', function(items, name, subtype)
 	{
-
 		return getPropertyValueBySubtype(items, name, subtype);
 	});
 
+	/**
+	 * Helper function to return the value of property based on type of the
+	 * property
+	 */
 	Handlebars.registerHelper('getPropertyValueBytype', function(items, name, type, subtype)
 	{
 		return getPropertyValueBytype(items, name, type, subtype);
 	});
 
+	/**
+	 * Returns twitter handle based on the twitter url of the profile. Accepts
+	 * string URL and splits at last "/" and returns handle.
+	 */
 	Handlebars.registerHelper('getTwitterHandleByURL', function(value)
 	{
 
@@ -41,6 +52,9 @@ $(function()
 		return value;
 	});
 
+	/**
+	 * 
+	 */
 	Handlebars.registerHelper('getContactCustomProperties', function(items, options)
 	{
 		var fields = getContactCustomProperties(items);
@@ -622,7 +636,7 @@ $(function()
 
 	/**
 	 * Returns country name from country code.
-	 **/
+	 */
 	Handlebars.registerHelper('getCountryName', function(countrycode)
 	{
 		// retrieves country name from code using country-from-code.js
@@ -878,16 +892,15 @@ $(function()
 	/*
 	 * Gets company image from a contact object.
 	 * 
-	 * --If image uploaded, returns that ( the frame size requested ). 
-	 * --Else if url present, fetch icon from the url via Google S2 service (frame size=32x32) 
-	 * --Else return img/company.png ( the frame size requested ).
+	 * --If image uploaded, returns that ( the frame size requested ). --Else if
+	 * url present, fetch icon from the url via Google S2 service (frame
+	 * size=32x32) --Else return img/company.png ( the frame size requested ).
 	 * 
 	 * --CSS for frame is adjusted when fetching from url ( default padding =
-	 * 4px , now 4+adjust ). 
-	 * --'onError' is an attribute (js function) fired
-	 * when image fails to download, maybe due to remote servers being down
-	 * It defaults to img/company.png which should be present in server
-	 * as static file
+	 * 4px , now 4+adjust ). --'onError' is an attribute (js function) fired
+	 * when image fails to download, maybe due to remote servers being down It
+	 * defaults to img/company.png which should be present in server as static
+	 * file
 	 * 
 	 * Usage: e.g. <img {{getCompanyImage "40" "display:inline"}} class="..."
 	 * ... >
@@ -898,55 +911,71 @@ $(function()
 	 * 
 	 * @author Chandan
 	 */
-	Handlebars.registerHelper('getCompanyImage',function(frame_size, additional_style)
+	Handlebars
+			.registerHelper(
+					'getCompanyImage',
+					function(frame_size, additional_style)
+					{
+
+						var full_size = parseInt(frame_size); // size
+																// requested,full
+																// frame
+						var size_diff = 4 + ((full_size - 32) / 2); // calculating
+																	// padding,
+																	// for small
+																	// favicon
+																	// 16x16 as
+																	// 32x32,
+						// fill rest frame with padding
+
+						// default when we can't find image uploaded or url to
+						// fetch from
+						var default_return = "src='img/company.png' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
+
+						// when the image from uploaded one or favicon can't be
+						// fetched, then show company.png, adjust CSS ( if style
+						// broken by favicon ).
+						var error_fxn = "";
+
+						for ( var i = 0; i < this.properties.length; i++)
+						{
+							if (this.properties[i].name == "image")
+							{
+								default_return = "src='" + this.properties[i].value + "' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + ";'";
+								// found uploaded image, break, no need to
+								// lookup url
+
+								error_fxn = "this.src='img/company.png'; this.onerror=null;";
+								// no need to resize, company.png is of good
+								// quality & can be scaled to this size
+
+								break;
+							}
+							if (this.properties[i].name == "url")
+							{
+								default_return = "src='https://www.google.com/s2/favicons?domain=" + this.properties[i].value + "' " + "style='width:32px; height:32px; padding:" + size_diff + "px; " + additional_style + " ;'";
+								// favicon fetch -- Google S2 Service, 32x32,
+								// rest padding added
+
+								error_fxn = "this.src='img/company.png'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
+								// resize needed as favicon is 16x16 & scaled to
+								// just 32x32, company.png is adjusted on error
+							}
+						}
+						// return safe string so that our html is not escaped
+						return new Handlebars.SafeString(default_return + " onError=\"" + error_fxn + "\"");
+					});
+
+	/**
+	 * Get appropriate link i.e. protocol://whatever.xxx. If no protocol
+	 * present, assume http
+	 */
+	Handlebars.registerHelper('getHyperlinkFromURL', function(url)
 	{
 
-		var full_size = parseInt(frame_size); //  size requested,full frame
-		var size_diff = 4 + ((full_size - 32) / 2); // calculating padding, for small favicon 16x16 as 32x32,
-													// fill rest frame with padding
-
-		// default when we can't find image uploaded or url to fetch from
-		var default_return = "src='img/company.png' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
-
-		// when the image from uploaded one or favicon can't be
-		// fetched, then show company.png, adjust CSS ( if style broken by favicon ).
-		var error_fxn = "";
-
-		for ( var i = 0; i < this.properties.length; i++)
-		{
-			if (this.properties[i].name == "image")
-			{
-				default_return = "src='" + this.properties[i].value + "' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + ";'";
-				// found uploaded image, break, no need to lookup url
-
-				error_fxn = "this.src='img/company.png'; this.onerror=null;";
-				// no need to resize, company.png is of good
-				// quality & can be scaled to this size
-
-				break;
-			}
-			if (this.properties[i].name == "url")
-			{
-				default_return = "src='https://www.google.com/s2/favicons?domain=" + this.properties[i].value + "' " + "style='width:32px; height:32px; padding:" + size_diff + "px; " + additional_style + " ;'";
-				// favicon fetch -- Google S2 Service, 32x32, rest padding added
-
-				error_fxn = "this.src='img/company.png'; " + "$(this).css('width','" + frame_size + "px'); $(this).css('height','" + frame_size + "px');" + "$(this).css('padding','4px'); this.onerror=null;";
-				// resize needed as favicon is 16x16 & scaled to
-				// just 32x32, company.png is adjusted on error
-			}
-		}
-		// return safe string so that our html is not escaped
-		return new Handlebars.SafeString(default_return + " onError=\"" + error_fxn + "\"");
-	});
-	
-	/**
-	 * Get appropriate link i.e. protocol://whatever.xxx.
-	 * If no protocol present, assume http
-	 */
-	Handlebars.registerHelper('getHyperlinkFromURL',function(url){
-		
-		if(url.match(/((http[s]|ftp|file):\/\/)/)!=null)return url;
-		return 'http://'+url;
+		if (url.match(/((http[s]|ftp|file):\/\/)/) != null)
+			return url;
+		return 'http://' + url;
 	});
 
 	// Get Count
@@ -1077,19 +1106,19 @@ $(function()
 		else
 			return options.fn(this);
 	});
-	
+
 	Handlebars.registerHelper('campaigns_heading', function(value, options)
 	{
 		var val = 0;
-		if(value && value[0] && value[0].count)
-		val = value[0].count;
-		
-		if(val <= 20)
+		if (value && value[0] && value[0].count)
+			val = value[0].count;
+
+		if (val <= 20)
 			return "Workflows";
-		
+
 		return "(" + val + " Total)";
 	});
-	
+
 	/**
 	 * Adds Custom Fields to forms, where this helper function is called
 	 */
@@ -1501,24 +1530,24 @@ $(function()
 	 * Converts total seconds into hours, minutes and seconds. For e.g. 3600
 	 * secs - 1hr 0 mins 0secs
 	 */
-	Handlebars.registerHelper('convertSecondsToHour',
-			function(totalSec)
-			{
-				var hours = parseInt(totalSec / 3600) % 24;
-				var minutes = parseInt(totalSec / 60) % 60;
-				var seconds = totalSec % 60;
+	Handlebars.registerHelper('convertSecondsToHour', function(totalSec)
+	{
+		var hours = parseInt(totalSec / 3600) % 24;
+		var minutes = parseInt(totalSec / 60) % 60;
+		var seconds = totalSec % 60;
 
-				// show only seconds if hours and mins are zero
-				if (hours == 0 && minutes == 0)
-					return (seconds == 1  ? seconds + "sec" : seconds + "secs");
+		// show only seconds if hours and mins are zero
+		if (hours == 0 && minutes == 0)
+			return (seconds == 1 ? seconds + "sec" : seconds + "secs");
 
-				// show mins and secs if hours are zero.
-				if (hours == 0)
-					return (minutes == 1 ? minutes + "min " : minutes + "mins ") + (seconds == 1 ? seconds + "sec" : seconds + "secs");
+		// show mins and secs if hours are zero.
+		if (hours == 0)
+			return (minutes == 1 ? minutes + "min " : minutes + "mins ") + (seconds == 1 ? seconds + "sec" : seconds + "secs");
 
-				var result = (hours == 1 ? hours + "hr " : hours + "hrs ")  + (minutes == 1 ? minutes + "min " : minutes + "mins ") + (seconds == 1 ? seconds + "sec" : seconds + "secs");
-				return result;
-			});
+		var result = (hours == 1 ? hours + "hr " : hours + "hrs ") + (minutes == 1 ? minutes + "min " : minutes + "mins ") + (seconds == 1 ? seconds + "sec"
+				: seconds + "secs");
+		return result;
+	});
 
 	/**
 	 * To check and return value of original referrer
