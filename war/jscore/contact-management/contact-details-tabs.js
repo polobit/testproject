@@ -203,7 +203,7 @@ $(function(){
 		
 		// Shows an error alert, when there is no email to the contact 
 		if(!email){
-			$('#mail', App_Contacts.contactDetailView.model.el).html('<div class="alert alert-error span4" style="margin-top:30px"><a class="close" data-dismiss="alert" href="#">�</a>Sorry! this contact has no email to get the mails.</div>').show().delay(3000).hide(1);
+			$('#mail', App_Contacts.contactDetailView.model.el).html('<div class="alert alert-error span5" style="margin-top:30px">Sorry! this contact has no email to get the mails.</div>').show();
 			return;	
 		}	
 		
@@ -260,7 +260,7 @@ $(function(){
 		
 		// Shows an error alert, when there is no email to the contact 
 		if(!email){
-			$('#stats', App_Contacts.contactDetailView.model.el).html('<div class="alert alert-error span4" style="margin-top:30px"><a class="close" data-dismiss="alert" href="#">�</a>Sorry! this contact has no email to get the stats.</div>').show().delay(3000).hide(1);
+			$('#stats', App_Contacts.contactDetailView.model.el).html('<div class="alert alert-error span5" style="margin-top:30px">Sorry! this contact has no email to get the stats.</div>').show();
 			return;	
 		}
 		
@@ -424,7 +424,7 @@ $(function(){
 		// Shows message Sending email.
 	    $save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><p class="text-success" style="color:#008000; font-size:15px; display:inline-block"> <i>Sending mail...</i></p></span>');
 	    $("#msg", this.el).append($save_info);
-		$save_info.show().delay(2000).fadeOut("slow");
+		$save_info.show();
 		
 		// Navigates to previous page on sending email
 		$.ajax({
@@ -432,6 +432,10 @@ $(function(){
 				data: json,
 				url: 'core/api/emails/contact/send-email',
 				success:function(){
+					
+					     // Hide Sending email note.
+					     $save_info.hide();
+					     
 			             window.history.back();
 		                 },
 		        error: function()

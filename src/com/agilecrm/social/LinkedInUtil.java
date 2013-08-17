@@ -497,6 +497,18 @@ public class LinkedInUtil
 
 	    // Retrieve person details from client based on LinkedIn Id
 	    Person person = client.getProfileById(linkedInId, EnumSet.of(
+		    ProfileField.POSITIONS, ProfileField.POSITIONS_ID,
+		    ProfileField.POSITIONS_TITLE,
+		    ProfileField.POSITIONS_SUMMARY,
+		    ProfileField.POSITIONS_START_DATE,
+		    ProfileField.POSITIONS_END_DATE,
+		    ProfileField.POSITIONS_IS_CURRENT,
+		    ProfileField.POSITIONS_TITLE,
+		    ProfileField.POSITIONS_COMPANY_ID,
+		    ProfileField.POSITIONS_COMPANY_INDUSTRY,
+		    ProfileField.POSITIONS_COMPANY_TICKER,
+		    ProfileField.POSITIONS_COMPANY_NAME,
+		    ProfileField.POSITIONS_COMPANY_SIZE,
 		    ProfileField.POSITIONS_COMPANY,
 		    ProfileField.THREE_CURRENT_POSITIONS,
 		    ProfileField.THREE_PAST_POSITIONS,
@@ -783,8 +795,8 @@ public class LinkedInUtil
 			update.getUpdateContent().getPerson().getCurrentShare()
 				.getComment()).put(
 			"current-share",
-			JSONUtil.toJSONString(update.getUpdateContent().getPerson()
-				.getCurrentShare()));
+			JSONUtil.toJSONString(update.getUpdateContent()
+				.getPerson().getCurrentShare()));
 		stream.message = json.toString();
 		list.add(stream);
 	    }

@@ -101,9 +101,8 @@ function subscribeToPubNub(domain)
 function _setupNotification(object)
 {
 
-	// Inorder to avoid navigating to the contact or deal deleted
-	// when clicking on notification.
-	if (object.notification == 'CONTACT_DELETED' || object.notification == 'DEAL_CLOSED')
+	// Inorder to avoid navigating to the contact
+	if (object.notification == 'CONTACT_DELETED')
 		object.id = "";
 
 	// gets notification template.
