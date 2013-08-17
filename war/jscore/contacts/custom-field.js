@@ -171,10 +171,16 @@ function show_custom_fields_helper(custom_fields, properties){
 		else if(field.field_type.toLowerCase() == "textarea")
 		{
 			field_type = "textarea";
+			var rows = 3;
+			
+			if(field.field_data)
+				rows = parseInt(field.field_data);
+				
 			if(field.is_required)
 				el = el.concat('<div class="control-group">	<label class="control-label">'
 							+ucfirst(field.field_label)
-							+' <span class="field_req">*</span></label><div class="controls"><textarea rows="3" class="'
+							+' <span class="field_req">*</span></label><div class="controls"><textarea rows="'
+							+rows+'" class="'
 							+field.field_type.toLowerCase()
 							+'_input custom_field required" id='
 							+field.id+' name="'
@@ -183,7 +189,8 @@ function show_custom_fields_helper(custom_fields, properties){
 			else
 				el = el.concat('<div class="control-group">	<label class="control-label">'
 							+ucfirst(field.field_label)
-							+'</label><div class="controls"><textarea rows="3" class="'
+							+'</label><div class="controls"><textarea rows="'
+							+rows+'" class="'
 							+field.field_type.toLowerCase()
 							+'_input custom_field" id='
 							+field.id+' name="'
