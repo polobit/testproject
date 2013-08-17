@@ -1,3 +1,6 @@
+/**
+ * When Admin settings are triggered to check whether the current user has admin privilege. 
+ */
 var isAdmintemplate;
 $(function() {
 	this.adminView = new Base_Model_View({
@@ -8,6 +11,10 @@ $(function() {
 	isAdmintemplate = this.adminView.render().el;
 });
 
+/**
+ * Appends Admin tabs to the page even when refreshed the page.
+ * @param callback
+ */
 function getAdminSettings(callback){
 	App_Admin_Settings.adminViewTemp = new Base_Model_View({
 		url : "/core/api/users/current-user",
