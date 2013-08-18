@@ -19,19 +19,14 @@ import com.campaignio.twitter.util.TwitterJobQueueUtil;
 public class TwitterCron extends HttpServlet
 {
 
-    public void doPost(HttpServletRequest request, HttpServletResponse response)
-	    throws IOException
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
 	doGet(request, response);
     }
 
     // Get Request
-    public void doGet(HttpServletRequest req, HttpServletResponse resp)
-	    throws IOException
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
     {
-
-	System.out.println("Twitter Cron");
-
 	// Get Rate
 	String rateLimit = req.getParameter("rate");
 	if (rateLimit == null)
@@ -40,9 +35,7 @@ public class TwitterCron extends HttpServlet
 	    return;
 	}
 
-	System.out.println("Rate Limit " + rateLimit);
+	System.out.println("Running Twitter Crons for Rate Limit " + rateLimit);
 	TwitterJobQueueUtil.runTwitterQueues(rateLimit);
-
     }
-
 }

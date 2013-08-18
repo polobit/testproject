@@ -118,5 +118,4 @@ public class TwitterJob
 	    return false;
 	}
     }
-
 }
