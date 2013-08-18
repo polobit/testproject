@@ -87,8 +87,7 @@ public class Trigger
     /**
      * Initialize DataAccessObject.
      */
-    private static ObjectifyGenericDao<Trigger> dao = new ObjectifyGenericDao<Trigger>(
-	    Trigger.class);
+    private static ObjectifyGenericDao<Trigger> dao = new ObjectifyGenericDao<Trigger>(Trigger.class);
 
     /**
      * Default Trigger.
@@ -161,7 +160,6 @@ public class Trigger
      */
     public String toString()
     {
-	return "Name: " + name + " Condition: " + type + "Campaign:"
-		+ campaign_id;
+	return "Name: " + name + " Condition: " + type + "Campaign:" + campaign_id;
     }
 }
