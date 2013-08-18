@@ -187,15 +187,18 @@ public class AccountDeleteUtil
 	@Override
 	public void run()
 	{
-
 	    String oldNameSpace = NamespaceManager.get();
 
 	    NamespaceManager.set(namespace);
 	    System.out.println("Deleting namespace " + namespace);
 
+	    // Check if name space is set, otherwise all the records will be
+	    // delete. Close the shop :)
+	    if (StringUtils.isEmpty(oldNameSpace))
+		return;
+
 	    try
 	    {
-
 		// Gets all entities of the given name-space
 		List<String> kinds = getKinds(namespace);
 
@@ -224,7 +227,6 @@ public class AccountDeleteUtil
 	    }
 
 	    NamespaceManager.set(oldNameSpace);
-
 	    System.out.println("Deleted namespace " + namespace);
 	}
     }
@@ -297,7 +299,6 @@ public class AccountDeleteUtil
      */
     public static void deleteTextSearchData(String namespace)
     {
-
 	// Returns if namespace is empty
 	if (StringUtils.isEmpty(namespace))
 	    return;
@@ -324,13 +325,10 @@ public class AccountDeleteUtil
 
 	    // Deletes all documents
 	    index.delete(docIds);
-
 	}
 	finally
 	{
 	    NamespaceManager.set(oldNamespace);
 	}
-
     }
-
 }

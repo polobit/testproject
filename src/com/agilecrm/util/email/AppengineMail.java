@@ -120,13 +120,11 @@ public class AppengineMail
 	    }
 	    catch (Exception e)
 	    {
-		// TODO: handle exception
 		System.out.println(e.getMessage());
 		message.setSubject(subject);
 	    }
 
-	    System.out.println("From: " + from + " - " + friendlyName + " To:" + to + " Sub:" + subject + " Html:"
-		    + htmlBody + " Text:" + textBody);
+	    System.out.println("From: " + from + " - " + friendlyName + " To:" + to + " Sub:" + subject + " Html:" + htmlBody + " Text:" + textBody);
 
 	    Transport.send(message);
 
@@ -137,7 +135,6 @@ public class AppengineMail
 	{
 	    e.printStackTrace();
 	    System.err.println("Email could not go 1 " + e.getMessage());
-
 	}
 
 	return false;
@@ -202,9 +199,7 @@ public class AppengineMail
 	}
 	catch (Exception e)
 	{
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
-
     }
 }

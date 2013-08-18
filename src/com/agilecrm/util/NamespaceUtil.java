@@ -15,7 +15,7 @@ import com.google.appengine.api.datastore.Query;
 
 /**
  * <code>NamespaceUtil</code> is a utility class which gives all the information
- * about "namespaces" in datasotre.
+ * about "namespaces" in datastore.
  * <P>
  * This utility class includes methods need to return all the namespaces (domain
  * names), namespace count and statistics.
@@ -33,10 +33,10 @@ public class NamespaceUtil
      */
     public static Set<String> getAllNamespaces()
     {
+	// Get All Users
 	List<DomainUser> domainList = DomainUserUtil.getAllUsers();
 
 	Set<String> domains = new HashSet<String>();
-
 	for (DomainUser domainUser : domainList)
 	{
 	    domains.add(domainUser.domain);
@@ -53,16 +53,14 @@ public class NamespaceUtil
      */
     public static JSONObject getNamespaceCount()
     {
-	DatastoreService datastore = DatastoreServiceFactory
-		.getDatastoreService();
+	DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 	/*
 	 * "__Stat_Total__" only has a single instance in the datastore that
 	 * contains the total number of entities stored and the total number of
 	 * bytes they take up.
 	 */
-	Entity globalStat = datastore.prepare(new Query("__Stat_Total__"))
-		.asSingleEntity();
+	Entity globalStat = datastore.prepare(new Query("__Stat_Total__")).asSingleEntity();
 	Long totalBytes = (Long) globalStat.getProperty("bytes");
 	Long totalEntities = (Long) globalStat.getProperty("count");
 
@@ -87,15 +85,13 @@ public class NamespaceUtil
      */
     public static JSONObject getNamespaceStats()
     {
-	DatastoreService datastore = DatastoreServiceFactory
-		.getDatastoreService();
+	DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 	/*
 	 * "__Stat_Ns_Total__" may be found in each specific namespace and
 	 * represent stats for that particular namespace
 	 */
-	Entity globalStat = datastore.prepare(new Query("__Stat_Ns_Total__"))
-		.asSingleEntity();
+	Entity globalStat = datastore.prepare(new Query("__Stat_Ns_Total__")).asSingleEntity();
 
 	Long totalBytes = (Long) globalStat.getProperty("bytes");
 	Long totalEntities = (Long) globalStat.getProperty("count");

@@ -81,12 +81,10 @@ public class MustacheUtil
      *             FileNotFoundException - if file cannot read from given path.
      */
     @SuppressWarnings("unused")
-    public static String templatize(String path, JSONObject emailJson)
-	    throws Exception
+    public static String templatize(String path, JSONObject emailJson) throws Exception
     {
 	// Read from path
-	String emailTemplate = FileStreamUtil
-		.readResource(SendMail.TEMPLATES_PATH + path);
+	String emailTemplate = FileStreamUtil.readResource(SendMail.TEMPLATES_PATH + path);
 	String value = null;
 	if (emailTemplate == null)
 	    return null;
@@ -115,8 +113,7 @@ public class MustacheUtil
 
 	    // Compile Source using mustache compiler
 	    MustacheFactory mf = new DefaultMustacheFactory();
-	    Mustache mustache = mf.compile(new StringReader(template),
-		    "example");
+	    Mustache mustache = mf.compile(new StringReader(template), "example");
 
 	    // Execute
 	    StringWriter out = new StringWriter();
@@ -158,8 +155,7 @@ public class MustacheUtil
 	    return new HashMap()
 	    {
 		{
-		    for (Iterator<Map.Entry<String, JsonNode>> i = node
-			    .getFields(); i.hasNext();)
+		    for (Iterator<Map.Entry<String, JsonNode>> i = node.getFields(); i.hasNext();)
 		    {
 			Map.Entry<String, JsonNode> next = i.next();
 			Object o = toObject(next.getValue());

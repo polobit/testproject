@@ -134,8 +134,7 @@ public class SendMail
      *            From name.
      */
     @SuppressWarnings("unused")
-    public static void sendMail(String to, String subject, String template,
-	    Object object, String from, String fromName)
+    public static void sendMail(String to, String subject, String template, Object object, String from, String fromName)
     {
 	try
 	{
@@ -174,19 +173,14 @@ public class SendMail
 		for (Object eachObject : (Object[]) object)
 		{
 		    String className = eachObject.getClass().getSimpleName();
-		    content.put(
-			    className,
-			    new JSONObject(new ObjectMapper()
-				    .writeValueAsString(eachObject)));
+		    content.put(className, new JSONObject(new ObjectMapper().writeValueAsString(eachObject)));
 		}
 
 		jsonObjectArray = new JSONObject[] { email, content };
 	    }
-
 	    else
 	    {
-		jsonObjectArray = new JSONObject[] { email,
-			new JSONObject(objectJson) };
+		jsonObjectArray = new JSONObject[] { email, new JSONObject(objectJson) };
 	    }
 
 	    // Merge JSONObjects as a single JSONObject in order to get all
@@ -196,25 +190,20 @@ public class SendMail
 	    System.out.println("mergedJson in sendemail" + mergedJSON);
 
 	    // Read template - HTML
-	    String emailHTML = MustacheUtil.templatize(template
-		    + TEMPLATE_HTML_EXT, mergedJSON);
+	    String emailHTML = MustacheUtil.templatize(template + TEMPLATE_HTML_EXT, mergedJSON);
 
 	    // Read template - Body
-	    String emailBody = MustacheUtil.templatize(template
-		    + TEMPLATE_BODY_EXT, mergedJSON);
+	    String emailBody = MustacheUtil.templatize(template + TEMPLATE_BODY_EXT, mergedJSON);
 
 	    // If both are null, nothing to be sent
 	    if (emailHTML == null && emailBody == null)
 	    {
-		System.err
-			.println("Email could not be sent as no matching templates were found "
-				+ template);
+		System.err.println("Email could not be sent as no matching templates were found " + template);
 		return;
 	    }
 
 	    // Send Email
-	    SendGrid.sendMail(from, fromName, to, subject, from,
-		    emailHTML, emailBody, null, null);
+	    SendGrid.sendMail(from, fromName, to, subject, from, emailHTML, emailBody, null, null);
 	}
 	catch (Exception e)
 	{
@@ -235,10 +224,8 @@ public class SendMail
      * @param object
      *            Respective object with the template.
      */
-    public static void sendMail(String to, String subject, String template,
-	    Object object)
+    public static void sendMail(String to, String subject, String template, Object object)
     {
-	sendMail(to, subject, template, object, AGILE_FROM_EMAIL,
-		AGILE_FROM_NAME);
+	sendMail(to, subject, template, object, AGILE_FROM_EMAIL, AGILE_FROM_NAME);
     }
 }
