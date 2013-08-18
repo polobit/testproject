@@ -152,5 +152,4 @@ public class CampaignLogsSQLUtil
 	    e.printStackTrace();
 	}
     }
-
 }

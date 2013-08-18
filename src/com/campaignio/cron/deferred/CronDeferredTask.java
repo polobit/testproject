@@ -64,10 +64,8 @@ public class CronDeferredTask implements DeferredTask
      * @param customDataString
      *            CustomData.
      */
-    public CronDeferredTask(String namespace, String campaignId,
-	    String dataString, String subscriberJSONString,
-	    String nodeJSONString, String wakeupOrInterrupt,
-	    String customDataString)
+    public CronDeferredTask(String namespace, String campaignId, String dataString, String subscriberJSONString, String nodeJSONString,
+	    String wakeupOrInterrupt, String customDataString)
     {
 	this.campaignId = campaignId;
 	this.dataString = dataString;
@@ -93,8 +91,7 @@ public class CronDeferredTask implements DeferredTask
 	try
 	{
 	    // Gets workflow json from campaignId.
-	    JSONObject campaignJSON = WorkflowUtil.getWorkflowJSON(Long
-		    .parseLong(campaignId));
+	    JSONObject campaignJSON = WorkflowUtil.getWorkflowJSON(Long.parseLong(campaignId));
 
 	    if (campaignJSON == null)
 		return;
@@ -111,11 +108,9 @@ public class CronDeferredTask implements DeferredTask
 		System.out.println("Executing tasklet from CRON ");
 
 		if (wakeupOrInterrupt.equalsIgnoreCase(Cron.CRON_TYPE_TIME_OUT))
-		    tasklet.timeOutComplete(campaignJSON, subscriberJSON, data,
-			    nodeJSON);
+		    tasklet.timeOutComplete(campaignJSON, subscriberJSON, data, nodeJSON);
 		else
-		    tasklet.interrupted(campaignJSON, subscriberJSON, data,
-			    nodeJSON, customData);
+		    tasklet.interrupted(campaignJSON, subscriberJSON, data, nodeJSON, customData);
 	    }
 	}
 	catch (Exception e)

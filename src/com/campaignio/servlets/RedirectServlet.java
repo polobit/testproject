@@ -48,34 +48,36 @@ public class RedirectServlet extends HttpServlet
     {
 	resp.setContentType("text/plain");
 
+	// Get Domain using Rot13 from URL
 	String url = req.getRequestURL().toString();
 	String domain = URLShortenerUtil.getDomainFromShortURL(url);
 
+	// If Domain not found, return. This could be if the URL is tampered or
+	// using contactspot URLs
 	if (StringUtils.isEmpty(domain))
 	    return;
 
 	System.out.println("Domain from short url is " + domain);
 
 	String oldNamespace = NamespaceManager.get();
-
 	try
 	{
 	    NamespaceManager.set(domain);
 
-	    // Gets URLShortener object based on key i.e., URLShortener id
+	    // Get URLShortener object based on key i.e., URLShortener id
 	    URLShortener urlShortener = URLShortenerUtil.getURLShortener(url);
-
 	    if (urlShortener == null)
 	    {
 		resp.getWriter().println("Invalid URL");
 		return;
 	    }
 
+	    // Get Contact
 	    String subscriberId = urlShortener.subscriber_id;
 	    Contact contact = ContactUtil.getContact(Long.parseLong(subscriberId));
 
+	    // Get Workflow to add to log (campaign name) and show notification
 	    Workflow workflow = WorkflowUtil.getWorkflow(Long.parseLong(urlShortener.campaign_id));
-
 	    if (workflow != null)
 	    {
 		// Add log
@@ -85,11 +87,11 @@ public class RedirectServlet extends HttpServlet
 		showEmailClickedNotification(contact, workflow.name, urlShortener.long_url);
 	    }
 
-	    // url without spaces, \n and \r
+	    // Remove spaces, \n and \r
 	    String normalisedLongURL = normaliseLongURL(urlShortener.long_url);
 
+	    // Add CD Params
 	    String params = "?fwd=cd";
-
 	    if (urlShortener.long_url.contains("?"))
 		params = "&fwd=cd";
 
