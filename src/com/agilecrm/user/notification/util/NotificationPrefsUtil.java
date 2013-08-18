@@ -57,11 +57,9 @@ public class NotificationPrefsUtil
     public static NotificationPrefs getNotificationPrefs(AgileUser agileUser)
     {
 	Objectify ofy = ObjectifyService.begin();
-	Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class,
-		agileUser.id);
+	Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, agileUser.id);
 
-	NotificationPrefs notifications = ofy.query(NotificationPrefs.class)
-		.ancestor(userKey).get();
+	NotificationPrefs notifications = ofy.query(NotificationPrefs.class).ancestor(userKey).get();
 
 	if (notifications == null)
 	    return getDefaultNotifications(agileUser);
@@ -78,10 +76,8 @@ public class NotificationPrefsUtil
      */
     private static NotificationPrefs getDefaultNotifications(AgileUser agileUser)
     {
-	NotificationPrefs notifications = new NotificationPrefs(agileUser.id,
-		true, ContactType.ANY_CONTACT, ContactType.ANY_CONTACT,
-		ContactType.ANY_CONTACT, false, true, false, false, false,
-		false, "alert_1");
+	NotificationPrefs notifications = new NotificationPrefs(agileUser.id, true, ContactType.ANY_CONTACT, ContactType.ANY_CONTACT, ContactType.ANY_CONTACT,
+		false, true, false, false, false, false, "alert_1");
 	notifications.save();
 	return notifications;
     }
@@ -94,8 +90,7 @@ public class NotificationPrefsUtil
      * @param object
      *            Objects like Contact,Deal etc.
      **/
-    public static void executeNotification(Type type, Object object,
-	    JSONObject customValue)
+    public static void executeNotification(Type type, Object object, JSONObject customValue)
     {
 	String domain = null;
 
@@ -107,21 +102,18 @@ public class NotificationPrefsUtil
 
 	// Optimizing object to reduce its size. PubNub restricts and costs
 	// based on object size.
-	JSONObject json = optimizeObjectForNotification(type, object,
-		customValue);
+	JSONObject json = optimizeObjectForNotification(type, object, customValue);
 
 	// If domain is empty return
 	if (StringUtils.isEmpty(domain) || json == null)
 	    return;
 
-	NotificationsDeferredTask notificationsDeferredTask = new NotificationsDeferredTask(
-		domain, json.toString());
+	NotificationsDeferredTask notificationsDeferredTask = new NotificationsDeferredTask(domain, json.toString());
 	Queue queue = QueueFactory.getQueue("notification-queue");
 	queue.add(TaskOptions.Builder.withPayload(notificationsDeferredTask));
     }
 
-    private static JSONObject optimizeObjectForNotification(Type type,
-	    Object object, JSONObject customValue)
+    private static JSONObject optimizeObjectForNotification(Type type, Object object, JSONObject customValue)
     {
 	String objectStr = null;
 
@@ -182,8 +174,7 @@ public class NotificationPrefsUtil
 		AgileUser agileUser = AgileUser.getCurrentAgileUser();
 
 		if (agileUser != null)
-		    json.put("current_user_name",
-			    agileUser.getDomainUser().name);
+		    json.put("current_user_name", agileUser.getDomainUser().name);
 	    }
 
 	    System.out.println("Object json of notification: " + json);
@@ -203,8 +194,7 @@ public class NotificationPrefsUtil
      *            - Contact Object JSON.
      * @return JSONObject.
      */
-    private static JSONObject getContactJSONForNotification(
-	    JSONObject contactJSON)
+    private static JSONObject getContactJSONForNotification(JSONObject contactJSON)
     {
 	JSONObject json = new JSONObject();
 
@@ -218,8 +208,7 @@ public class NotificationPrefsUtil
 	    // PERSON or COMPANY
 	    json.put("type", contactJSON.getString("type"));
 	    json.put("properties", getContactProperties(contactJSON));
-	    json.put("owner_name", contactJSON.getJSONObject("owner")
-		    .getString("name"));
+	    json.put("owner_name", contactJSON.getJSONObject("owner").getString("name"));
 	    return json;
 	}
 	catch (JSONException e)
@@ -250,10 +239,8 @@ public class NotificationPrefsUtil
 
 		if (contactJSON.getString("type").equals("PERSON"))
 		{
-		    if (property.getString("name").equals("first_name")
-			    || property.getString("name").equals("last_name")
-			    || property.getString("name").equals("email")
-			    || property.getString("name").equals("image"))
+		    if (property.getString("name").equals("first_name") || property.getString("name").equals("last_name")
+			    || property.getString("name").equals("email") || property.getString("name").equals("image"))
 			propertyArray.put(property);
 		}
 
@@ -288,8 +275,7 @@ public class NotificationPrefsUtil
 	    json.put("id", dealJSON.getString("id"));
 	    json.put("name", dealJSON.getString("name"));
 	    json.put("entity_type", dealJSON.getString("entity_type"));
-	    json.put("owner_name",
-		    dealJSON.getJSONObject("owner").getString("name"));
+	    json.put("owner_name", dealJSON.getJSONObject("owner").getString("name"));
 	    return json;
 	}
 	catch (Exception e)

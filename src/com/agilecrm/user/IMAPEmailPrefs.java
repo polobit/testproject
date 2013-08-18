@@ -100,8 +100,7 @@ public class IMAPEmailPrefs
     /**
      * IMAPEmailPrefs Dao.
      */
-    private static ObjectifyGenericDao<IMAPEmailPrefs> dao = new ObjectifyGenericDao<IMAPEmailPrefs>(
-	    IMAPEmailPrefs.class);
+    private static ObjectifyGenericDao<IMAPEmailPrefs> dao = new ObjectifyGenericDao<IMAPEmailPrefs>(IMAPEmailPrefs.class);
 
     /**
      * Default IMAPEmailPrefs.
@@ -129,8 +128,7 @@ public class IMAPEmailPrefs
      * @param smtpPort
      *            - SMTP port.
      */
-    IMAPEmailPrefs(String email, String serverName, String userName,
-	    String password, boolean isSecure, String smtpHost, String smtpPort)
+    IMAPEmailPrefs(String email, String serverName, String userName, String password, boolean isSecure, String smtpHost, String smtpPort)
     {
 	this.email = email;
 	this.server_name = serverName;
@@ -140,10 +138,8 @@ public class IMAPEmailPrefs
 	this.smtp_port = smtpPort;
 	this.is_secure = isSecure;
 
-	System.out.println("Agile user id is "
-		+ AgileUser.getCurrentAgileUser().id);
-	this.agileUser = new Key<AgileUser>(AgileUser.class,
-		AgileUser.getCurrentAgileUser().id);
+	System.out.println("Agile user id is " + AgileUser.getCurrentAgileUser().id);
+	this.agileUser = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);
     }
 
     /**
@@ -200,8 +196,7 @@ public class IMAPEmailPrefs
 	    if (this.id != null)
 	    {
 		// Get Old password
-		IMAPEmailPrefs oldIMAPEmailPrefs = IMAPEmailPrefsUtil
-			.getIMAPEmailPrefs(this.id, agileUser);
+		IMAPEmailPrefs oldIMAPEmailPrefs = IMAPEmailPrefsUtil.getIMAPEmailPrefs(this.id, agileUser);
 		this.encrypted_password = oldIMAPEmailPrefs.encrypted_password;
 	    }
 	}
@@ -231,7 +226,6 @@ public class IMAPEmailPrefs
      */
     public String toString()
     {
-	return "Email: " + email + " User name: " + user_name + " Server "
-		+ server_name;
+	return "Email: " + email + " User name: " + user_name + " Server " + server_name;
     }
 }

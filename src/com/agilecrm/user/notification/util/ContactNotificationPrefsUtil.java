@@ -23,8 +23,7 @@ public class ContactNotificationPrefsUtil
      * @param newContact
      *            Contact object after changes.
      */
-    public static void executeNotificationToContact(Contact oldContact,
-	    Contact newContact)
+    public static void executeNotificationToContact(Contact oldContact, Contact newContact)
     {
 	// Check if contact is new
 	if (oldContact == null)
@@ -45,13 +44,11 @@ public class ContactNotificationPrefsUtil
      */
     public static void executeNotificationForNewContact(Contact contact)
     {
-	NotificationPrefsUtil.executeNotification(
-		NotificationPrefs.Type.CONTACT_ADDED, contact, null);
+	NotificationPrefsUtil.executeNotification(NotificationPrefs.Type.CONTACT_ADDED, contact, null);
 
 	// Executes Notification for tags added along with new Contact
 	if (!contact.getContactTags().isEmpty())
-	    TagNotificationPrefsUtil.executeNotificationWhenTagsAdded(contact,
-		    contact.getContactTags());
+	    TagNotificationPrefsUtil.executeNotificationWhenTagsAdded(contact, contact.getContactTags());
 
     }
 
@@ -63,7 +60,6 @@ public class ContactNotificationPrefsUtil
      */
     public static void executeNotificationForDeleteContact(Contact contact)
     {
-	NotificationPrefsUtil.executeNotification(
-		NotificationPrefs.Type.CONTACT_DELETED, contact, null);
+	NotificationPrefsUtil.executeNotification(NotificationPrefs.Type.CONTACT_DELETED, contact, null);
     }
 }
