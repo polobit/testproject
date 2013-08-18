@@ -41,12 +41,10 @@ public class AB extends TaskletAdapter
      * @see com.campaignio.tasklets.TaskletAdapter#run(org.json.JSONObject,
      * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
      */
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
-	    JSONObject data, JSONObject nodeJSON) throws Exception
+    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
 	// Gets frequency value using TaskletAdapter's getStringValue method
-	String frequency = getStringValue(nodeJSON, subscriberJSON, data,
-		FREQUENCY);
+	String frequency = getStringValue(nodeJSON, subscriberJSON, data, FREQUENCY);
 
 	try
 	{
@@ -58,21 +56,18 @@ public class AB extends TaskletAdapter
 	    if (r < Double.parseDouble(frequency))
 	    {
 		// Execute Next One in Loop
-		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
-			nodeJSON, BRANCH_A);
+		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_A);
 	    }
 	    else
 	    {
 		// Execute Next One in Loop
-		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
-			nodeJSON, BRANCH_B);
+		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_B);
 	    }
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
-	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
-		    nodeJSON, BRANCH_A);
+	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_A);
 	}
 
 	return;

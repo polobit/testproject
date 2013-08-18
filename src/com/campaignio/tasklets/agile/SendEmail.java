@@ -8,12 +8,12 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.agilecrm.util.AccountDeleteUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.campaignio.urlshortener.util.URLShortenerUtil;
 import com.thirdparty.SendGrid;
@@ -353,7 +353,7 @@ public class SendEmail extends TaskletAdapter
 	{
 	    // Get Data
 	    if (subscriberJSON.has("data"))
-		subscriberJSON.getJSONObject("data").put("UnsubscribeLink", UNSUBSCRIBE_LINK + AccountDeleteUtil.getId(subscriberJSON));
+		subscriberJSON.getJSONObject("data").put("UnsubscribeLink", UNSUBSCRIBE_LINK + AgileTaskletUtil.getId(subscriberJSON));
 	}
 	catch (Exception e)
 	{
@@ -389,26 +389,26 @@ public class SendEmail extends TaskletAdapter
 		data.put(TRACKING_ID, Calendar.getInstance().getTimeInMillis());
 
 		// Get Keyword
-		text = convertLinks(text, " ", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
-		html = convertLinks(html, " ", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
+		text = convertLinks(text, " ", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
+		html = convertLinks(html, " ", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
 
-		text = convertLinks(text, "\n", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
-		html = convertLinks(html, "\n", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
+		text = convertLinks(text, "\n", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
+		html = convertLinks(html, "\n", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
 
-		text = convertLinks(text, "\r", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
-		html = convertLinks(html, "\r", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
+		text = convertLinks(text, "\r", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
+		html = convertLinks(html, "\r", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
 
-		text = convertLinks(text, "<", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
-		html = convertLinks(html, "<", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
+		text = convertLinks(text, "<", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
+		html = convertLinks(html, "<", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
 
-		text = convertLinks(text, "\"", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
-		html = convertLinks(html, "\"", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
+		text = convertLinks(text, "\"", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
+		html = convertLinks(html, "\"", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
 
-		text = convertLinks(text, "'", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
-		html = convertLinks(html, "'", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
+		text = convertLinks(text, "'", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
+		html = convertLinks(html, "'", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
 
-		text = convertLinks(text, "\"", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
-		html = convertLinks(html, "\"", data, keyword, AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON));
+		text = convertLinks(text, "\"", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
+		html = convertLinks(html, "\"", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
 
 	    }
 	    catch (Exception e)
@@ -418,12 +418,12 @@ public class SendEmail extends TaskletAdapter
 	}
 
 	// Creates log for sending email
-	LogUtil.addLogToSQL(AccountDeleteUtil.getId(campaignJSON), AccountDeleteUtil.getId(subscriberJSON), "Subject: " + subject, LogType.EMAIL_SENT.toString());
+	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Subject: " + subject, LogType.EMAIL_SENT.toString());
 
 	// Send Message
 	if (html != null && html.length() > 10)
 	{
-	    html = EmailUtil.appendTrackingImage(html, AccountDeleteUtil.getId(campaignJSON), AccountDeleteUtil.getId(subscriberJSON));
+	    html = EmailUtil.appendTrackingImage(html, AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON));
 
 	    // Util.sendEmailUsingMailgun(fromEmail, fromName, to, subject,
 	    // replyTo, html, text, subscriberJSON, campaignJSON);

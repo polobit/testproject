@@ -9,7 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.util.AccountDeleteUtil;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.twitter.TwitterJob;
 import com.campaignio.twitter.TwitterJobQueue;
 import com.google.appengine.api.NamespaceManager;
@@ -56,8 +56,8 @@ public class TwitterJobQueueUtil
 	    }
 
 	    // Add to Old JSONArray
-	    String campaignId = AccountDeleteUtil.getId(campaignJSON);
-	    String subscriberId = AccountDeleteUtil.getId(subscriberJSON);
+	    String campaignId = AgileTaskletUtil.getId(campaignJSON);
+	    String subscriberId = AgileTaskletUtil.getId(subscriberJSON);
 	    TwitterJob twitterJob = new TwitterJob(token, tokenSecret, message, subscriberId, campaignId);
 	    twitterJobQueue.twitter_jobs.add(twitterJob);
 	    twitterJobQueue.save();

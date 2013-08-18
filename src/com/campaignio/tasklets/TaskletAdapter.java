@@ -5,11 +5,11 @@ import java.util.Iterator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.agilecrm.util.AccountDeleteUtil;
 import com.agilecrm.util.email.MustacheUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 
 /**
  * <code>TaskletAdapter</code> is an adapter class which implements Tasklet
@@ -25,7 +25,6 @@ import com.campaignio.logger.util.LogUtil;
  * 
  * @author Manohar
  */
-
 public class TaskletAdapter implements Tasklet
 {
     /**
@@ -101,7 +100,8 @@ public class TaskletAdapter implements Tasklet
 	    String custom2, String custom3) throws Exception
     {
 	// Add Log
-	LogUtil.addLogToSQL(AccountDeleteUtil.getId(campaignJSON), AccountDeleteUtil.getId(subscriberJSON), "Sleeping till " + timeout, LogType.EMAIL_SLEEP.toString());
+	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Sleeping till " + timeout,
+		LogType.EMAIL_SLEEP.toString());
 
 	// Enqueue Task
 	CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout, custom1, custom2, custom3);
@@ -283,8 +283,8 @@ public class TaskletAdapter implements Tasklet
 	// Node name as log type.
 	String logType = nodeJSON.getJSONObject("NodeDefinition").getString("name");
 
-	String campaignId = AccountDeleteUtil.getId(campaignJSON);
-	String subscriberId = AccountDeleteUtil.getId(subscriberJSON);
+	String campaignId = AgileTaskletUtil.getId(campaignJSON);
+	String subscriberId = AgileTaskletUtil.getId(subscriberJSON);
 
 	// Add Log
 	LogUtil.addLogToSQL(campaignId, subscriberId, message, logType);

@@ -98,14 +98,11 @@ public class Condition extends TaskletAdapter
      * @see com.campaignio.tasklets.TaskletAdapter#run(org.json.JSONObject,
      * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
      */
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
-	    JSONObject data, JSONObject nodeJSON) throws Exception
+    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
 	// Get Variables
-	String variable1 = getStringValue(nodeJSON, subscriberJSON, data,
-		VARIABLE_1);
-	String variable2 = getStringValue(nodeJSON, subscriberJSON, data,
-		VARIABLE_2);
+	String variable1 = getStringValue(nodeJSON, subscriberJSON, data, VARIABLE_1);
+	String variable2 = getStringValue(nodeJSON, subscriberJSON, data, VARIABLE_2);
 
 	// Trim the variables-omitting whitespaces
 	if (variable1 != null)
@@ -120,11 +117,9 @@ public class Condition extends TaskletAdapter
 
 	String branch = BRANCH_NO;
 
-	String comparator = getStringValue(nodeJSON, subscriberJSON, data,
-		COMPARATOR);
+	String comparator = getStringValue(nodeJSON, subscriberJSON, data, COMPARATOR);
 
-	System.out.println("Variable 1: " + variable1 + " " + variable2 + " "
-		+ comparator);
+	System.out.println("Variable 1: " + variable1 + " " + variable2 + " " + comparator);
 
 	try
 	{
@@ -149,8 +144,7 @@ public class Condition extends TaskletAdapter
 		    branch = "yes";
 	    }
 
-	    if (comparator
-		    .equalsIgnoreCase(COMPARATOR_GREATER_THAN_OR_EQUAL_TO))
+	    if (comparator.equalsIgnoreCase(COMPARATOR_GREATER_THAN_OR_EQUAL_TO))
 	    {
 		if (Long.parseLong(variable1) >= Long.parseLong(variable2))
 		    branch = "yes";
@@ -162,8 +156,7 @@ public class Condition extends TaskletAdapter
 		    branch = "yes";
 	    }
 
-	    if (comparator
-		    .equalsIgnoreCase(COMPARATOR_GREATER_THAN_OR_EQUAL_TO))
+	    if (comparator.equalsIgnoreCase(COMPARATOR_GREATER_THAN_OR_EQUAL_TO))
 	    {
 		if (Long.parseLong(variable1) >= Long.parseLong(variable2))
 		    branch = "yes";
@@ -193,7 +186,6 @@ public class Condition extends TaskletAdapter
 	}
 
 	// Go to next tasks
-	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
-		nodeJSON, branch);
+	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, branch);
     }
 }

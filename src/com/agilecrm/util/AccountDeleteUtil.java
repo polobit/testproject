@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONObject;
 
 import com.agilecrm.analytics.util.AnalyticsSQLUtil;
 import com.agilecrm.user.AgileUser;
@@ -53,29 +52,6 @@ import com.google.appengine.api.taskqueue.TaskOptions;
  */
 public class AccountDeleteUtil
 {
-
-    // JSON - Google App Engine DB Key
-    public final static String DATASTORE_KEY_IN_JSON = "id";
-
-    /**
-     * Gets ID from JSONObject - gets id from json.
-     * 
-     * @param json
-     *            JSONObject reference
-     * @return value of the id attribute of given json object
-     */
-    public static String getId(JSONObject json)
-    {
-	try
-	{
-	    return json.getString(DATASTORE_KEY_IN_JSON);
-	}
-	catch (Exception e)
-	{
-	    return null;
-	}
-    }
-
     /**
      * Gets all the names (Contacts, Deals and etc..) of the entities of
      * particular name-space and stores in a list to return. Avoids the adding
@@ -268,8 +244,7 @@ public class AccountDeleteUtil
 	NamespaceManager.set("");
 
 	// Get keys of domain users in respective domain
-	List<com.googlecode.objectify.Key<DomainUser>> domainUserKeys = DomainUserUtil.dao.listKeysByProperty("domain",
-		namespace);
+	List<com.googlecode.objectify.Key<DomainUser>> domainUserKeys = DomainUserUtil.dao.listKeysByProperty("domain", namespace);
 
 	// Delete domain users in domain
 	DomainUserUtil.dao.deleteKeys(domainUserKeys);

@@ -2,13 +2,13 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
-import com.agilecrm.util.AccountDeleteUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
@@ -31,7 +31,7 @@ public class Transfer extends TaskletAdapter
 	String campaignId = getStringValue(nodeJSON, subscriberJSON, data, CAMPAIGN_ID);
 
 	// If both are same
-	if (AccountDeleteUtil.getId(campaignJSON).equals(campaignId))
+	if (AgileTaskletUtil.getId(campaignJSON).equals(campaignId))
 	{
 	    System.out.println("Same workflow selected to transfer");
 	    return;
@@ -45,7 +45,7 @@ public class Transfer extends TaskletAdapter
 	    WorkflowSubscribeUtil.subscribeWithSubscriberJSON(subscriberJSON, Long.parseLong(campaignId));
 
 	    // Current campaign
-	    Workflow fromWorkflow = WorkflowUtil.getWorkflow(Long.parseLong(AccountDeleteUtil.getId(campaignJSON)));
+	    Workflow fromWorkflow = WorkflowUtil.getWorkflow(Long.parseLong(AgileTaskletUtil.getId(campaignJSON)));
 	    fromWorkflowName = fromWorkflow.name;
 
 	    // Given campaign
@@ -72,8 +72,9 @@ public class Transfer extends TaskletAdapter
 	}
 
 	// Creates log for Transfer
-	LogUtil.addLogToSQL(AccountDeleteUtil.getId(campaignJSON), AccountDeleteUtil.getId(subscriberJSON), subscriberJSON.getJSONObject("data").getString("first_name")
-		+ " transferred from " + fromWorkflowName + " to " + toWorkflowName, LogType.TRANSFER.toString());
+	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+		subscriberJSON.getJSONObject("data").getString("first_name") + " transferred from " + fromWorkflowName + " to " + toWorkflowName,
+		LogType.TRANSFER.toString());
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
