@@ -89,7 +89,7 @@ public class WorkflowUtil
      *            Contact object that subscribes to workflow.
      * @return JsonObject of contact.
      */
-    public static JSONObject getSubscriberJSON2(Contact contact)
+    public static JSONObject getSubscriberJSON(Contact contact)
     {
 	if (contact == null)
 	    return null;
