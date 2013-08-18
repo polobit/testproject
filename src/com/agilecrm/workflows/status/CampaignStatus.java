@@ -67,5 +67,4 @@ public class CampaignStatus
 	this.campaign_id = campaign_id;
 	this.status = status;
     }
-
 }
