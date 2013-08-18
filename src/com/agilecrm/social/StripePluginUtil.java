@@ -35,8 +35,7 @@ public class StripePluginUtil
      * @return {@link JSONObject} form of the response returned from Stripe
      * @throws Exception
      */
-    public static JSONObject getCustomerDetails(Widget widget, String customerId)
-	    throws Exception
+    public static JSONObject getCustomerDetails(Widget widget, String customerId) throws Exception
     {
 	JSONObject customer_info = new JSONObject();
 	String apiKey = widget.getProperty("access_token");
@@ -54,8 +53,7 @@ public class StripePluginUtil
 	 * Retrieves list of invoices based on Stripe customer ID and Stripe
 	 * account API key
 	 */
-	List<Invoice> invoiceList = Invoice.all(invoiceParams, apiKey)
-		.getData();
+	List<Invoice> invoiceList = Invoice.all(invoiceParams, apiKey).getData();
 
 	// Converts list to JSON using GSON and returns output in JSON format
 	JSONArray list = new JSONArray(new Gson().toJson(invoiceList));

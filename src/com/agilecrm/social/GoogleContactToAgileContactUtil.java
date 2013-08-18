@@ -60,8 +60,7 @@ public class GoogleContactToAgileContactUtil
      * @return {@link List} of {@link ContactEntry}
      * @throws Exception
      */
-    public static List<ContactEntry> retrieveContacts(String accessToken)
-	    throws Exception
+    public static List<ContactEntry> retrieveContacts(String accessToken) throws Exception
     {
 	// build service with all the tokens
 	ContactsService contactService = getService(accessToken);
@@ -72,12 +71,10 @@ public class GoogleContactToAgileContactUtil
 	String temp = "";
 
 	for (int i = 0; i < resultFeed.getEntries().size(); i++)
-	    if (resultFeed.getEntries().get(i).getTitle().getPlainText()
-		    .contains("System Group: My Contacts"))
+	    if (resultFeed.getEntries().get(i).getTitle().getPlainText().contains("System Group: My Contacts"))
 		temp = resultFeed.getEntries().get(i).getId();
 
-	URL feedUrl = new URL(GOOGLE_CONTACTS_BASE_URL
-		+ "contacts/default/full?" + "access_token=" + accessToken);
+	URL feedUrl = new URL(GOOGLE_CONTACTS_BASE_URL + "contacts/default/full?" + "access_token=" + accessToken);
 
 	// Build query with URL
 	Query myQuery = new Query(feedUrl);
@@ -89,8 +86,7 @@ public class GoogleContactToAgileContactUtil
 	// queries google for contacts
 	resultFeed = contactService.query(myQuery, ContactFeed.class);
 
-	System.out.println("total results from google "
-		+ resultFeed.getTotalResults());
+	System.out.println("total results from google " + resultFeed.getTotalResults());
 
 	return resultFeed.getEntries();
     }
@@ -105,11 +101,9 @@ public class GoogleContactToAgileContactUtil
      * @return {@link ContactFeed}
      * @throws Exception
      */
-    public static ContactFeed getGroups(ContactsService contactService,
-	    String accessToken) throws Exception
+    public static ContactFeed getGroups(ContactsService contactService, String accessToken) throws Exception
     {
-	URL feedUrl = new URL(GOOGLE_CONTACTS_BASE_URL + "groups/default/full?"
-		+ "access_token=" + accessToken);
+	URL feedUrl = new URL(GOOGLE_CONTACTS_BASE_URL + "groups/default/full?" + "access_token=" + accessToken);
 
 	// Build query with URL
 	Query myQuery = new Query(feedUrl);
@@ -127,17 +121,14 @@ public class GoogleContactToAgileContactUtil
      * @return {@link String} JSON response
      * @throws Exception
      */
-    public static String refreshTokenInGoogle(String refreshToken)
-	    throws Exception
+    public static String refreshTokenInGoogle(String refreshToken) throws Exception
     {
 	// Build data to post with all tokens
-	String data = "client_id=" + Globals.GOOGLE_CLIENT_ID
-		+ "&client_secret=" + Globals.GOOGLE_SECRET_KEY
-		+ "&grant_type=refresh_token&refresh_token=" + refreshToken;
+	String data = "client_id=" + Globals.GOOGLE_CLIENT_ID + "&client_secret=" + Globals.GOOGLE_SECRET_KEY + "&grant_type=refresh_token&refresh_token="
+		+ refreshToken;
 
 	// send request and return response
-	return HTTPUtil.accessURL(new GoogleApi().getAccessTokenEndpoint(), "",
-		"", "POST", data, String.valueOf(data.length()), "", "");
+	return HTTPUtil.accessURL(new GoogleApi().getAccessTokenEndpoint(), "", "", "POST", data, String.valueOf(data.length()), "", "");
 
     }
 }
