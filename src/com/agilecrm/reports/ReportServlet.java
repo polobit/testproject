@@ -34,7 +34,6 @@ public class ReportServlet extends HttpServlet
      */
     public void doGet(HttpServletRequest req, HttpServletResponse res)
     {
-
 	// Get duration parameter to fetch filter for that duration
 	String duration = req.getParameter("duration");
 
@@ -42,21 +41,17 @@ public class ReportServlet extends HttpServlet
 	if (duration == null)
 	    return;
 
-	System.out.println("duration : " + duration);
-
+	System.out.println("Duration : " + duration);
 	Set<String> domains = NamespaceUtil.getAllNamespaces();
 
 	for (String domain : domains)
 	{
 	    // Created a deferred task for report generation
-	    ReportsDeferredTask reportsDeferredTask = new ReportsDeferredTask(
-		    domain, duration);
-
-	    Queue queue = QueueFactory.getQueue("reports-queue");
+	    ReportsDeferredTask reportsDeferredTask = new ReportsDeferredTask(domain, duration);
 
 	    // Add to queue
+	    Queue queue = QueueFactory.getQueue("reports-queue");
 	    queue.add(TaskOptions.Builder.withPayload(reportsDeferredTask));
 	}
-
     }
 }

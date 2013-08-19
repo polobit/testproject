@@ -21,7 +21,6 @@ import com.google.appengine.api.taskqueue.DeferredTask;
  */
 public class ReportsInstantEmailDeferredTask implements DeferredTask
 {
-
     // Report ID
     private Long report_id;
 
@@ -45,7 +44,6 @@ public class ReportsInstantEmailDeferredTask implements DeferredTask
 	}
 	catch (JSONException e)
 	{
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
     }
