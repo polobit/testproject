@@ -84,4 +84,12 @@ var _agile = {
 		get_campaigns : function (callback, email)
 		{
 			agile_getCampaigns(callback, email);					// Get campaign from contact
+		},
+		get_campaign_logs : function (callback, email)
+		{
+			agile_getCampaignlogs(callback, email);					// Get campaign logs of contact
+		},
+		get_workflows : function (callback)
+		{
+			agile_getWorkflows(callback);							// Get all work-flows created by domain user
 		}};

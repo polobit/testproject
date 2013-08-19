@@ -371,7 +371,7 @@ function showNoty(type, message, position, notification_type)
 	// Check for html5 notification permission.
 	if (window.webkitNotifications && window.webkitNotifications.checkPermission() == 0)
 	{
-		show_desktop_notification(getImageUrl(message), getNotificationType(notification_type), getTextMessage(message), getId(message), getId(message).split(
+		show_desktop_notification(getImageUrl(message,notification_type), getNotificationType(notification_type), getTextMessage(message), getId(message), getId(message).split(
 				'/')[1] + '-' + notification_type);
 		return;
 	}
@@ -474,11 +474,22 @@ function getId(message)
  * 
  * @param {String}
  *            message - notification template.
+ *            
+ * @param {String}
+ *            notification_type - notification-type like COMPANY_ADDED, DEAL_ADDED etc.
  */
-function getImageUrl(message)
+function getImageUrl(message, notification_type)
 {
 	if ($(message).find('#notification-contact-id').text() != "")
-		return $('span:first', message).attr('id');
+		{
+		
+		// if contact is company fetch company url
+		if(notification_type === 'COMPANY_ADDED' || notification_type === 'COMPANY_DELETED')
+			return $('span:eq(1)', message).attr('id');
+		
+		return $('span:eq(0)', message).attr('id');
+		}
+	
 
 	return '/img/deal.png';
 }

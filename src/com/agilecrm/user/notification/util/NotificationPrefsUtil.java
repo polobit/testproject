@@ -246,7 +246,7 @@ public class NotificationPrefsUtil
 
 		if (contactJSON.getString("type").equals("COMPANY"))
 		{
-		    if (property.getString("name").equals("name"))
+		    if (property.getString("name").equals("name") || property.getString("name").equals("url"))
 			propertyArray.put(property);
 		}
 
