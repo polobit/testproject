@@ -66,8 +66,17 @@ $(function(){
     * the status of table head check-box
     */	
 	$('.thead_check').live('click', function(event){
-		$('.tbody_check').attr('checked', this.checked);
+		console.log( $(this).is(':checked'));
+		if(!$(this).attr('checked'))
+		{
+			$('.tbody_check').removeAttr('checked');
+			toggle_contacts_bulk_actions_dropdown(undefined, true);
+		}
+		else
+			$('.tbody_check').attr('checked', 'checked');
 	
+		console.log($(this).attr('checked'));
+		
 		// Show bulk operations only when thead check box is checked
 		toggle_contacts_bulk_actions_dropdown(this, true);
 		

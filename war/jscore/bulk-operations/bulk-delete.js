@@ -152,6 +152,7 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 		success: function() {
 			$(".bulk-delete-loading").remove();
 			
+			
 			if(!is_grid_view)
 			{
 				var tbody = $(table).find('tbody');
@@ -167,6 +168,12 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 					$("."+id_array[i]).fadeOut(300, function() { $(this).remove(); });
 				
 			}
+			
+			$('.thead_check').attr("checked", false);
+			
+			// Show bulk operations only when thead check box is checked
+			toggle_contacts_bulk_actions_dropdown(undefined, true);
+			
 			// Tags re-fetching
 			if(App_Contacts.contactsListView){
 				setup_tags(App_Contacts.contactsListView.el);

@@ -179,7 +179,7 @@ function show_custom_fields_helper(custom_fields, properties){
 			if(field.is_required)
 				el = el.concat('<div class="control-group">	<label class="control-label">'
 							+ucfirst(field.field_label)
-							+' <span class="field_req">*</span></label><div class="controls"><textarea rows="'
+							+' <span class="field_req">*</span></label><div class="controls"><textarea style="max-width:420px;" rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
 							+'_input custom_field required" id='
@@ -189,7 +189,7 @@ function show_custom_fields_helper(custom_fields, properties){
 			else
 				el = el.concat('<div class="control-group">	<label class="control-label">'
 							+ucfirst(field.field_label)
-							+'</label><div class="controls"><textarea rows="'
+							+'</label><div class="controls"><textarea style="max-width:420px;" rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
 							+'_input custom_field" id='
@@ -248,7 +248,7 @@ function fill_custom_field_values(form, content)
 					}
 					var tagName = element[0].tagName.toLowerCase();
 					var type = element.attr("type");
-				
+
 				if(tagName == "input")
 					{
 						if(type == "checkbox" && property.value == "on")
@@ -259,9 +259,12 @@ function fill_custom_field_values(form, content)
 						
 						element.attr("value", property.value);							
 					}
+				if(tagName == "textarea")
+					{
+						element.html(property.value);							
+					}
 				if(tagName == "select")
 					{
-					
 						element.find('option[value='+property.value+']').attr("selected", "selected");
 					}
 			}
