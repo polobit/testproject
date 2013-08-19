@@ -233,6 +233,11 @@ var SettingsRouter = Backbone.Router.extend({
 				
 				// plays notification sounds
 				notification_play_button()
+				
+				// to show notification-switch in safari properly
+				if(navigator.userAgent.indexOf('Safari') !== -1 && 
+						navigator.userAgent.indexOf('Chrome') === -1)
+				$('#notification-switch').parent().css('margin-top','-32px');	
 			}
 		});
         $('#prefs-tabs-content').html(view.render().el);
