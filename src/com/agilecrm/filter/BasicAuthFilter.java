@@ -52,9 +52,7 @@ public class BasicAuthFilter implements Filter
      * and verifies them to allow access
      */
     @Override
-    public void doFilter(final ServletRequest request,
-	    final ServletResponse response, final FilterChain chain)
-	    throws IOException, ServletException
+    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException
     {
 	System.out.println("Basic OAuth Filter");
 
@@ -72,9 +70,7 @@ public class BasicAuthFilter implements Filter
 	    final int index = auth.indexOf(' ');
 	    if (index > 0)
 	    {
-		final String[] credentials = StringUtils.split(new String(
-			Base64.decodeBase64(auth.substring(index).getBytes()),
-			Charsets.UTF_8), ':');
+		final String[] credentials = StringUtils.split(new String(Base64.decodeBase64(auth.substring(index).getBytes()), Charsets.UTF_8), ':');
 
 		if (credentials.length == 2)
 		{
@@ -83,36 +79,23 @@ public class BasicAuthFilter implements Filter
 		    String password = credentials[1];
 
 		    // Get AgileUser
-		    DomainUser domainUser = DomainUserUtil
-			    .getDomainUserFromEmail(user);
+		    DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(user);
 
 		    // Gets APIKey, to authenticate the user
-		    String apiKey = APIKey
-			    .getAPIKeyRelatedToUser(domainUser.id).api_key;
+		    String apiKey = APIKey.getAPIKeyRelatedToUser(domainUser.id).api_key;
 
-		    System.out.println(user + " " + password + " " + domainUser
-			    + " " + apiKey);
+		    System.out.println(user + " " + password + " " + domainUser + " " + apiKey);
 
 		    // If domain user exists and the APIKey matches, request is
 		    // given access
 		    if (domainUser != null && password.equals(apiKey))
 		    {
 			// Set Cookie and forward to /home
-
-			UserInfo userInfo = (UserInfo) httpRequest
-				.getSession()
-				.getAttribute(
-					SessionManager.AUTH_SESSION_COOKIE_NAME);
-
+			UserInfo userInfo = (UserInfo) httpRequest.getSession().getAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
 			if (userInfo == null)
 			{
-			    userInfo = new UserInfo("agilecrm.com",
-				    domainUser.email, domainUser.name);
-
-			    httpRequest.getSession().setAttribute(
-				    SessionManager.AUTH_SESSION_COOKIE_NAME,
-				    userInfo);
-
+			    userInfo = new UserInfo("agilecrm.com", domainUser.email, domainUser.name);
+			    httpRequest.getSession().setAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
 			}
 
 			SessionManager.set(httpRequest);
@@ -125,8 +108,7 @@ public class BasicAuthFilter implements Filter
 	}
 
 	System.out.println("Error");
-	httpResponse.setHeader("WWW-Authenticate", "Basic realm=\"" + _realm
-		+ "\"");
+	httpResponse.setHeader("WWW-Authenticate", "Basic realm=\"" + _realm + "\"");
 	httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
     }
 
