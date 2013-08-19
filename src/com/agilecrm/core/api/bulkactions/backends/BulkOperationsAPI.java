@@ -2,6 +2,7 @@ package com.agilecrm.core.api.bulkactions.backends;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -50,9 +51,10 @@ public class BulkOperationsAPI
 	    @PathParam("current_user") Long current_user_id) throws JSONException
     {
 	Integer count = 0;
+	List<Contact> contacts = new ArrayList<Contact>();
 	if (!StringUtils.isEmpty(filter))
 	{
-	    List<Contact> contacts = BulkActionUtil.getFilterContacts(filter, current_user_id);
+	    contacts = BulkActionUtil.getFilterContacts(filter, current_user_id);
 
 	    ContactUtil.deleteContactsbyList(contacts);
 	    count = contacts.size();
@@ -60,13 +62,21 @@ public class BulkOperationsAPI
 
 	else if (!StringUtils.isEmpty(model_ids))
 	{
-	    List<Contact> contacts = ContactUtil.getContactsBulk(new JSONArray(model_ids));
+	    contacts = ContactUtil.getContactsBulk(new JSONArray(model_ids));
 
 	    ContactUtil.deleteContactsbyList(contacts);
 	    count = contacts.size();
 	}
 
-	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.DELETE, String.valueOf(count));
+	if (!contacts.isEmpty())
+	    if (contacts.get(0).type.equals(Contact.Type.PERSON))
+	    {
+		BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.DELETE, String.valueOf(count),
+			"contact(s)");
+		return;
+	    }
+
+	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.DELETE, String.valueOf(count), "companies");
     }
 
     /**
