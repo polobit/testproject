@@ -34,15 +34,13 @@ public class AgileUser
     public Long domain_user_id;
 
     // Dao
-    private static ObjectifyGenericDao<AgileUser> dao = new ObjectifyGenericDao<AgileUser>(
-	    AgileUser.class);
+    private static ObjectifyGenericDao<AgileUser> dao = new ObjectifyGenericDao<AgileUser>(AgileUser.class);
 
     /**
      * Default constructor
      */
     public AgileUser()
     {
-
     }
 
     /**
@@ -74,8 +72,7 @@ public class AgileUser
     public static AgileUser getCurrentAgileUser()
     {
 	// Gets user from Domain_id
-	return getCurrentAgileUserFromDomainUser(SessionManager.get()
-		.getDomainId());
+	return getCurrentAgileUserFromDomainUser(SessionManager.get().getDomainId());
     }
 
     /**
@@ -85,8 +82,7 @@ public class AgileUser
      *            domain user id to get its associated agile user
      * @return agile user corresponding to a domain user
      */
-    public static AgileUser getCurrentAgileUserFromDomainUser(
-	    Long domain_user_id)
+    public static AgileUser getCurrentAgileUserFromDomainUser(Long domain_user_id)
     {
 	return dao.getByProperty("domain_user_id", domain_user_id);
     }

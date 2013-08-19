@@ -48,7 +48,6 @@ public class PubNub
 	    }
 
 	    System.out.println(response);
-
 	}
 	catch (Exception e)
 	{

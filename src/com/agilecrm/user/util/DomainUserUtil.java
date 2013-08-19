@@ -134,7 +134,6 @@ public class DomainUserUtil
 	{
 	    NamespaceManager.set(oldNamespace);
 	}
-
     }
 
     /**
@@ -252,16 +251,12 @@ public class DomainUserUtil
     public static DomainUser getDomainOwner(String domain)
     {
 	String oldNamespace = NamespaceManager.get();
-
 	NamespaceManager.set("");
 
-	DomainUser user = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true)
-		.get();
+	DomainUser user = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true).get();
 
 	NamespaceManager.set(oldNamespace);
-
 	return user;
-
     }
 
     /**

@@ -41,7 +41,6 @@ public class ClickDeskEncryption
      */
     private static void generateKeys() throws IOException
     {
-
 	try
 	{
 
@@ -57,16 +56,13 @@ public class ClickDeskEncryption
 	    // generated
 	    KeyFactory fact = KeyFactory.getInstance("RSA");
 	    publicKey = fact.getKeySpec(kp.getPublic(), RSAPublicKeySpec.class);
-	    privateKey = fact.getKeySpec(kp.getPrivate(),
-		    RSAPrivateKeySpec.class);
+	    privateKey = fact.getKeySpec(kp.getPrivate(), RSAPrivateKeySpec.class);
 
 	    System.out.println("pubic key = " + publicKey.toString());
-	    System.out.println("Modulus = " + publicKey.getModulus()
-		    + "Exponent = " + publicKey.getPublicExponent() + "");
+	    System.out.println("Modulus = " + publicKey.getModulus() + "Exponent = " + publicKey.getPublicExponent() + "");
 
 	    System.out.println("private key = " + privateKey.toString());
-	    System.out.println("Modulus = " + privateKey.getModulus()
-		    + "Exponent = " + privateKey.getPrivateExponent() + "");
+	    System.out.println("Modulus = " + privateKey.getModulus() + "Exponent = " + privateKey.getPrivateExponent() + "");
 
 	}
 	catch (Exception e)
@@ -86,7 +82,6 @@ public class ClickDeskEncryption
     {
 	try
 	{
-
 	    // If public key is not available the creates a new public key
 	    if (publicKey == null)
 		generateKeys();
@@ -114,7 +109,6 @@ public class ClickDeskEncryption
     {
 	try
 	{
-
 	    if (privateKey == null)
 		generateKeys();
 
@@ -142,14 +136,12 @@ public class ClickDeskEncryption
      * @return
      * @throws Exception
      */
-    private static PublicKey getRSAPublicKeyWithExponent(String exponent)
-	    throws Exception
+    private static PublicKey getRSAPublicKeyWithExponent(String exponent) throws Exception
     {
 	try
 	{
 
-	    RSAPublicKeySpec keySpec = new RSAPublicKeySpec(new BigInteger(
-		    CLICKDESK_RSA_PUBLIC_KEY_MODULUS), new BigInteger(exponent));
+	    RSAPublicKeySpec keySpec = new RSAPublicKeySpec(new BigInteger(CLICKDESK_RSA_PUBLIC_KEY_MODULUS), new BigInteger(exponent));
 	    KeyFactory fact = KeyFactory.getInstance("RSA");
 	    return fact.generatePublic(keySpec);
 
@@ -170,15 +162,13 @@ public class ClickDeskEncryption
      * @return
      * @throws Exception
      */
-    private static PrivateKey getRSAPrivateKeyWithExponent(String exponent)
-	    throws Exception
+    private static PrivateKey getRSAPrivateKeyWithExponent(String exponent) throws Exception
     {
 	try
 	{
 
 	    KeyFactory fact = KeyFactory.getInstance("RSA");
-	    RSAPrivateKeySpec keySpec = new RSAPrivateKeySpec(new BigInteger(
-		    CLICKDESK_RSA_PUBLIC_KEY_MODULUS), new BigInteger(exponent));
+	    RSAPrivateKeySpec keySpec = new RSAPrivateKeySpec(new BigInteger(CLICKDESK_RSA_PUBLIC_KEY_MODULUS), new BigInteger(exponent));
 	    return fact.generatePrivate(keySpec);
 
 	}
@@ -214,7 +204,6 @@ public class ClickDeskEncryption
 	// Encodes encrypted data using base64Encoder
 	String encryptedValue = new Base64Encoder().encode(cipherData);
 	return encryptedValue;
-
     }
 
     /**
@@ -227,10 +216,8 @@ public class ClickDeskEncryption
      * @return {@link String} decrypted data
      * @throws Exception
      */
-    public static String RSADecrypt(byte[] data, String exponentKey)
-	    throws Exception
+    public static String RSADecrypt(byte[] data, String exponentKey) throws Exception
     {
-
 	// PrivateKey privateKey = getPrivateKey();
 	// Gets private key based on the exponent
 	PrivateKey privateKey = getRSAPrivateKeyWithExponent(exponentKey);
@@ -251,7 +238,6 @@ public class ClickDeskEncryption
 
 	// Returns decrypted data
 	return decryptedValue;
-
     }
 
     public static void main(String[] args) throws Exception
@@ -268,10 +254,7 @@ public class ClickDeskEncryption
 	System.out.println(encrytedString);
 
 	System.out.println("After Decryption");
-	String decrytedString = RSADecrypt(encrytedString.getBytes(),
-		CLICKDESK_RSA_PRIVATE_KEY);
+	String decrytedString = RSADecrypt(encrytedString.getBytes(), CLICKDESK_RSA_PRIVATE_KEY);
 	System.out.println(decrytedString);
-
     }
-
 }

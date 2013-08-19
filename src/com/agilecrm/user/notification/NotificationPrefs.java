@@ -115,8 +115,7 @@ public class NotificationPrefs
     /**
      * ObjectifyGenericDao for Notifications.
      */
-    private static ObjectifyGenericDao<NotificationPrefs> dao = new ObjectifyGenericDao<NotificationPrefs>(
-	    NotificationPrefs.class);
+    private static ObjectifyGenericDao<NotificationPrefs> dao = new ObjectifyGenericDao<NotificationPrefs>(NotificationPrefs.class);
 
     /**
      * Default NotificationPrefs.
@@ -162,11 +161,8 @@ public class NotificationPrefs
      * @param tag_deleted
      *            Tag deleted status.
      */
-    public NotificationPrefs(Long userId, boolean control_notifications,
-	    ContactType browsing, ContactType email_opened,
-	    ContactType link_clicked, boolean deal_created,
-	    boolean deal_closed, boolean contact_added,
-	    boolean contact_deleted, boolean tag_added, boolean tag_deleted,
+    public NotificationPrefs(Long userId, boolean control_notifications, ContactType browsing, ContactType email_opened, ContactType link_clicked,
+	    boolean deal_created, boolean deal_closed, boolean contact_added, boolean contact_deleted, boolean tag_added, boolean tag_deleted,
 	    String notification_sound)
     {
 	this.control_notifications = control_notifications;

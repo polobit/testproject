@@ -28,6 +28,8 @@ import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.campaignio.logger.Log;
+import com.campaignio.logger.util.LogUtil;
 
 /**
  * <code>JSAPI</code> provides facility to perform actions, such as creating a
@@ -775,6 +777,41 @@ public class JSAPI
     		if (workflow == null)
     		continue;
     		arr.put(workflow);
+    	}
+    	return arr.toString();
+    }
+    catch(Exception e)
+    {
+    	e.printStackTrace();
+    	return null;
+    }
+    }
+    
+    /**
+     * Get multiple campaign logs to which contact is subscribed based on his email
+     * 
+     * @param email
+     * 				email of the contact
+     * 
+     * @return 	String 
+     */
+    @Path("contacts/get-campaign-logs")
+    @GET
+    @Produces("application / x-javascript")
+    public String getCampaignLogs(@QueryParam("email") String email)
+    {
+    try
+    {
+    	Contact contact = ContactUtil.searchContactByEmail(email);
+    	if(contact == null)
+    		return null;
+    	JSONArray arr = new JSONArray();
+    	ObjectMapper mapper = new ObjectMapper();
+    	List<Log> logs = new ArrayList<Log>();
+    	logs = LogUtil.getSQLLogs(null, contact.id.toString(), "50");
+    	for (Log log : logs)
+    	{
+    		arr.put(mapper.writeValueAsString(log));
     	}
     	return arr.toString();
     }

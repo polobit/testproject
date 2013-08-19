@@ -37,17 +37,13 @@ public class ClickDeskUtil
      * @return {@link JSONArray} of chats
      * @throws Exception
      */
-    public static JSONArray getChats(Widget widget, String email, String offset)
-	    throws Exception
+    public static JSONArray getChats(Widget widget, String email, String offset) throws Exception
     {
-	String url = CLICKDESK_CHATS_URL.replace("<email>", email).replace(
-		"<offset>", offset);
+	String url = CLICKDESK_CHATS_URL.replace("<email>", email).replace("<offset>", offset);
 	System.out.println("ClickDesk request URL : " + url);
 
 	// connect to ClickDesk
-	String response = HTTPUtil.accessURLUsingAuthentication(url,
-		widget.getProperty("clickdesk_username"),
-		widget.getProperty("clickdesk_api_key"), null,
+	String response = HTTPUtil.accessURLUsingAuthentication(url, widget.getProperty("clickdesk_username"), widget.getProperty("clickdesk_api_key"), null,
 		"application/json", "GET", "application/json");
 	System.out.println("ClickDesk response : " + response);
 
@@ -85,18 +81,14 @@ public class ClickDeskUtil
      * @return {@link JSONArray} of tickets
      * @throws Exception
      */
-    public static JSONArray getTickets(Widget widget, String email,
-	    String offset) throws Exception
+    public static JSONArray getTickets(Widget widget, String email, String offset) throws Exception
     {
 
-	String url = CLICKDESK_TICKETS_URL.replace("<email>", email).replace(
-		"<offset>", offset);
+	String url = CLICKDESK_TICKETS_URL.replace("<email>", email).replace("<offset>", offset);
 	System.out.println("ClickDesk request URL : " + url);
 
 	// connect to ClickDesk and retrieve tickets
-	String response = HTTPUtil.accessURLUsingAuthentication(url,
-		widget.getProperty("clickdesk_username"),
-		widget.getProperty("clickdesk_api_key"), null,
+	String response = HTTPUtil.accessURLUsingAuthentication(url, widget.getProperty("clickdesk_username"), widget.getProperty("clickdesk_api_key"), null,
 		"application/json", "GET", "application/json");
 
 	System.out.println("ClickDesk response : " + response);

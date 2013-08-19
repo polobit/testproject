@@ -229,15 +229,15 @@ public class DateUtil
      */
     public static String getCalendarString(long timeout)
     {
-        // Defines output format and print
-        SimpleDateFormat sdf = new SimpleDateFormat("d MMM yyyy hh:mm aaa");
-        TimeZone pst = TimeZone.getTimeZone("PST");
-    
-        sdf.setTimeZone(pst);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(timeout);
-    
-        String date = sdf.format(calendar.getTime());
-        return date;
+	// Defines output format and print
+	SimpleDateFormat sdf = new SimpleDateFormat("d MMM yyyy hh:mm aaa");
+	TimeZone pst = TimeZone.getTimeZone("PST");
+
+	sdf.setTimeZone(pst);
+	Calendar calendar = Calendar.getInstance();
+	calendar.setTimeInMillis(timeout);
+
+	String date = sdf.format(calendar.getTime());
+	return date;
     }
 }

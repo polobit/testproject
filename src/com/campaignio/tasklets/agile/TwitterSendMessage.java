@@ -53,5 +53,4 @@ public class TwitterSendMessage extends TaskletAdapter
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
     }
-
 }

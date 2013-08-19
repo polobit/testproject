@@ -201,7 +201,7 @@ public class TasksAPI
     {
 	try
 	{
-	    TaskReminder.dailyTaskReminder();
+	    TaskReminder.sendDailyTaskReminders();
 	}
 	catch (IOException e)
 	{

@@ -2,20 +2,20 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
-import com.agilecrm.util.AccountDeleteUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.thirdparty.Rapleaf;
 
 /**
- * <code>Gender</code> represents Gender node in the workflow. �Gender� option
- * is used to retrieve the gender of contact based on the email-id of that
- * contact. Gender class uses Rapleaf to get gender from email-ids. It consists
- * of three branches such as Male,Female and Unknown. If unable to retrieve the
- * gender from the email-id that contact is taken as Unknown. This node helps to
- * target the contacts based on their gender.
+ * <code>Gender</code> represents Gender node in the workflow. �Gender�
+ * option is used to retrieve the gender of contact based on the email-id of
+ * that contact. Gender class uses Rapleaf to get gender from email-ids. It
+ * consists of three branches such as Male,Female and Unknown. If unable to
+ * retrieve the gender from the email-id that contact is taken as Unknown. This
+ * node helps to target the contacts based on their gender.
  * 
  * @author Manohar
  * 
@@ -50,8 +50,7 @@ public class Gender extends TaskletAdapter
      * @see com.campaignio.tasklets.TaskletAdapter#run(org.json.JSONObject,
      * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
      */
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
-	    JSONObject data, JSONObject nodeJSON) throws Exception
+    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
 	String email = getStringValue(nodeJSON, subscriberJSON, data, EMAIL);
 
@@ -62,14 +61,11 @@ public class Gender extends TaskletAdapter
 	    if (rapleafJSON != null)
 	    {
 		data.put(Rapleaf.RAPLEAF, rapleafJSON);
-		LogUtil.addLogToSQL(AccountDeleteUtil.getId(campaignJSON),
-			AccountDeleteUtil.getId(subscriberJSON), "Rapleaf " + rapleafJSON,
+		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Rapleaf " + rapleafJSON,
 			LogType.GENDER.toString());
 	    }
 	    else
-		LogUtil.addLogToSQL(AccountDeleteUtil.getId(campaignJSON),
-			AccountDeleteUtil.getId(subscriberJSON),
-			"Could not retrieve data from Rapleaf",
+		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Could not retrieve data from Rapleaf",
 			LogType.GENDER.toString());
 	}
 
@@ -80,24 +76,18 @@ public class Gender extends TaskletAdapter
 	{
 	    JSONObject rapLeafJSON = data.getJSONObject(Rapleaf.RAPLEAF);
 	    if (rapLeafJSON.has(Rapleaf.RAPPORTIVE_RESULT)
-		    && rapLeafJSON
-			    .getString(Rapleaf.RAPPORTIVE_RESULT)
-			    .equalsIgnoreCase(Rapleaf.RAPPORTIVE_RESULT_SUCCESS))
+		    && rapLeafJSON.getString(Rapleaf.RAPPORTIVE_RESULT).equalsIgnoreCase(Rapleaf.RAPPORTIVE_RESULT_SUCCESS))
 	    {
-		String gender = rapLeafJSON
-			.getString(Rapleaf.RAPPORTIVE_RESULT_GENDER);
-		if (gender
-			.equalsIgnoreCase(Rapleaf.RAPPORTIVE_RESULT_GENDER_FEMALE))
+		String gender = rapLeafJSON.getString(Rapleaf.RAPPORTIVE_RESULT_GENDER);
+		if (gender.equalsIgnoreCase(Rapleaf.RAPPORTIVE_RESULT_GENDER_FEMALE))
 		    branch = BRANCH_FEMALE;
 
-		if (gender
-			.equalsIgnoreCase(Rapleaf.RAPPORTIVE_RESULT_GENDER_MALE))
+		if (gender.equalsIgnoreCase(Rapleaf.RAPPORTIVE_RESULT_GENDER_MALE))
 		    branch = BRANCH_MALE;
 	    }
 	}
 
 	// Execute Next Branch
-	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
-		nodeJSON, branch);
+	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, branch);
     }
 }

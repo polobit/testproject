@@ -4,10 +4,10 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.util.AccountDeleteUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
@@ -46,8 +46,7 @@ public class Score extends TaskletAdapter
      * @see com.campaignio.tasklets.TaskletAdapter#run(org.json.JSONObject,
      * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
      */
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
-	    JSONObject data, JSONObject nodeJSON) throws Exception
+    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
 	// Get Score and Type
 	String type = getStringValue(nodeJSON, subscriberJSON, data, TYPE);
@@ -56,7 +55,7 @@ public class Score extends TaskletAdapter
 	System.out.println("Given Score Type " + type + " and Value " + value);
 
 	// Get Contact Id and Contact
-	String contactId = AccountDeleteUtil.getId(subscriberJSON);
+	String contactId = AgileTaskletUtil.getId(subscriberJSON);
 	Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
 
 	if (contact != null)
@@ -67,24 +66,21 @@ public class Score extends TaskletAdapter
 		contact.addScore(Integer.parseInt(value));
 
 		// Creates log when score is added
-		LogUtil.addLogToSQL(AccountDeleteUtil.getId(campaignJSON),
-			AccountDeleteUtil.getId(subscriberJSON), "Score increased by "
-				+ value, LogType.SCORE.toString());
+		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Score increased by " + value,
+			LogType.SCORE.toString());
 	    }
 	    else
 	    {
 		contact.subtractScore(Integer.parseInt(value));
 
 		// Creates log when score is subtracted
-		LogUtil.addLogToSQL(AccountDeleteUtil.getId(campaignJSON),
-			AccountDeleteUtil.getId(subscriberJSON), "Score decreased by "
-				+ value, LogType.SCORE.toString());
+		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Score decreased by " + value,
+			LogType.SCORE.toString());
 
 	    }
 	}
 
 	// Execute Next One in Loop
-	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
-		nodeJSON, null);
+	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
     }
 }

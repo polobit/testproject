@@ -53,9 +53,8 @@ public class URLShortenerUtil
 	    String urlKey = keys[keys.length - 1];
 
 	    long keyNumber = Base62.fromOtherBaseToDecimal(62, urlKey);
-
-	    // Increment Emails clicked count based on campaign
 	    URLShortener urlShortener = dao.get(keyNumber);
+
 	    return urlShortener;
 	}
 	catch (Exception e)

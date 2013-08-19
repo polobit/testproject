@@ -28,7 +28,7 @@ public class TaskReminderServlet extends HttpServlet
     {
 	try
 	{
-	    TaskReminder.dailyTaskReminder();
+	    TaskReminder.sendDailyTaskReminders();
 	}
 	catch (IOException e)
 	{

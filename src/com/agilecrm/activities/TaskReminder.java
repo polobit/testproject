@@ -30,10 +30,12 @@ import com.google.appengine.api.taskqueue.TaskOptions;
  */
 public class TaskReminder
 {
-    public static void dailyTaskReminder() throws IOException
+    public static void sendDailyTaskReminders() throws IOException
     {
+	// Get Namespaces / domains
 	Set<String> domains = NamespaceUtil.getAllNamespaces();
 
+	// Start a task queue for each domain
 	for (String domain : domains)
 	{
 	    TaskReminderDeferredTask taskReminderDeferredTask = new TaskReminderDeferredTask(domain);

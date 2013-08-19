@@ -5,8 +5,8 @@ import org.json.JSONObject;
 import com.agilecrm.analytics.util.AnalyticsSQLUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.util.AccountDeleteUtil;
 import com.campaignio.tasklets.TaskletAdapter;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 
@@ -50,15 +50,14 @@ public class URLVisited extends TaskletAdapter
      */
     public static String BRANCH_NO = "no";
 
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
-	    JSONObject data, JSONObject nodeJSON) throws Exception
+    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
 	// Get URL value and type
 	String url = getStringValue(nodeJSON, subscriberJSON, data, URL);
 	String type = getStringValue(nodeJSON, subscriberJSON, data, TYPE);
 	String domain = NamespaceManager.get();
 
-	String contactId = AccountDeleteUtil.getId(subscriberJSON);
+	String contactId = AgileTaskletUtil.getId(subscriberJSON);
 	Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
 	String email = contact.getContactFieldValue(Contact.EMAIL);
 
@@ -68,12 +67,10 @@ public class URLVisited extends TaskletAdapter
 	if (count == 0)
 	{
 	    System.out.println("Node JSON in url visited is: " + nodeJSON);
-	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
-		    nodeJSON, BRANCH_NO);
+	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_NO);
 	    return;
 	}
 
-	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
-		nodeJSON, BRANCH_YES);
+	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_YES);
     }
 }

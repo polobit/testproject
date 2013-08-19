@@ -14,7 +14,6 @@ import com.agilecrm.util.HTTPUtil;
 
 public class SendGrid
 {
-
     // Send grid REST API URL
     public static final String SENDGRID_API_POST_URL = "https://sendgrid.com/api/mail.send.json";
 

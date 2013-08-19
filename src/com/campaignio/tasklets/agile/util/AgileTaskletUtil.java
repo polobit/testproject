@@ -17,6 +17,9 @@ import com.googlecode.objectify.Key;
  */
 public class AgileTaskletUtil
 {
+    // JSON - Google App Engine DB Key
+    public final static String DATASTORE_KEY_IN_JSON = "id";
+
     /**
      * Returns contact owner-id from subscriberJSON.
      * 
@@ -83,14 +86,32 @@ public class AgileTaskletUtil
      */
     public static String changeNumber(String number)
     {
-    
-        // Add if it does not start with 1 or +
-        if (number.startsWith("+"))
-            return number;
-    
-        if (number.startsWith("1"))
-            return "+" + number;
-    
-        return "+1" + number;
+	// Add if it does not start with 1 or +
+	if (number.startsWith("+"))
+	    return number;
+
+	if (number.startsWith("1"))
+	    return "+" + number;
+
+	return "+1" + number;
+    }
+
+    /**
+     * Gets ID from JSONObject - gets id from json.
+     * 
+     * @param json
+     *            JSONObject reference
+     * @return value of the id attribute of given json object
+     */
+    public static String getId(JSONObject json)
+    {
+	try
+	{
+	    return json.getString(AgileTaskletUtil.DATASTORE_KEY_IN_JSON);
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
     }
 }

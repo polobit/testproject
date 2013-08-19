@@ -34,20 +34,15 @@ public class FreshBooksUtil
      * @throws Exception
      *             if the response is an exception
      */
-    public static String getClients(Widget widget, String email)
-	    throws Exception
+    public static String getClients(Widget widget, String email) throws Exception
     {
 	JSONObject pluginPrefsJSON = buildPluginPrefsJSON(widget);
-	JSONObject contactPrefsJSON = new JSONObject().put("visitor_email",
-		email);
+	JSONObject contactPrefsJSON = new JSONObject().put("visitor_email", email);
 
-	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON",
-		pluginPrefsJSON).put("visitorJSON", contactPrefsJSON);
+	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON", pluginPrefsJSON).put("visitorJSON", contactPrefsJSON);
 
 	// send request to plugins server
-	String response = HTTPUtil.accessHTTPURL(ZendeskUtil.pluginURL
-		+ "core/agile/freshbooks/clients/get", prefsJSON.toString(),
-		"PUT");
+	String response = HTTPUtil.accessHTTPURL(ZendeskUtil.pluginURL + "core/agile/freshbooks/clients/get", prefsJSON.toString(), "PUT");
 
 	System.out.println("response in freshbooks " + response);
 	/*
@@ -64,8 +59,7 @@ public class FreshBooksUtil
 	     * FreshBooks returns 401 and system does not exist messages for
 	     * improper details
 	     */
-	    if (response.contains("401")
-		    || response.contains("System does not exist"))
+	    if (response.contains("401") || response.contains("System does not exist"))
 		throw new Exception("Authentication failed. Please try again");
 	}
 	return response;
@@ -84,19 +78,15 @@ public class FreshBooksUtil
      * @throws Exception
      *             if the response is an exception
      */
-    public static String getInvoicesOfClient(Widget widget, String clientId)
-	    throws Exception
+    public static String getInvoicesOfClient(Widget widget, String clientId) throws Exception
     {
 	JSONObject pluginPrefsJSON = buildPluginPrefsJSON(widget);
 	JSONObject messageJSON = new JSONObject().put("client_id", clientId);
 
-	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON",
-		pluginPrefsJSON).put("messageJSON", messageJSON);
+	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON", pluginPrefsJSON).put("messageJSON", messageJSON);
 
 	// send request to plugins server and return response
-	return HTTPUtil.accessHTTPURL(ZendeskUtil.pluginURL
-		+ "core/agile/freshbooks/invoices/get", prefsJSON.toString(),
-		"PUT");
+	return HTTPUtil.accessHTTPURL(ZendeskUtil.pluginURL + "core/agile/freshbooks/invoices/get", prefsJSON.toString(), "PUT");
 
     }
 
@@ -115,13 +105,10 @@ public class FreshBooksUtil
     {
 	JSONObject pluginPrefsJSON = buildPluginPrefsJSON(widget);
 
-	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON",
-		pluginPrefsJSON);
+	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON", pluginPrefsJSON);
 
 	// send request to plugins server and return response
-	return HTTPUtil.accessHTTPURL(ZendeskUtil.pluginURL
-		+ "core/agile/freshbooks/items/get", prefsJSON.toString(),
-		"PUT");
+	return HTTPUtil.accessHTTPURL(ZendeskUtil.pluginURL + "core/agile/freshbooks/items/get", prefsJSON.toString(), "PUT");
 
     }
 
@@ -140,13 +127,10 @@ public class FreshBooksUtil
     {
 	JSONObject pluginPrefsJSON = buildPluginPrefsJSON(widget);
 
-	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON",
-		pluginPrefsJSON);
+	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON", pluginPrefsJSON);
 
 	// send request to plugins server and return response
-	return HTTPUtil.accessHTTPURL(ZendeskUtil.pluginURL
-		+ "core/agile/freshbooks/taxes/get", prefsJSON.toString(),
-		"PUT");
+	return HTTPUtil.accessHTTPURL(ZendeskUtil.pluginURL + "core/agile/freshbooks/taxes/get", prefsJSON.toString(), "PUT");
 
     }
 
@@ -167,22 +151,16 @@ public class FreshBooksUtil
      * @throws Exception
      *             if the response is an exception
      */
-    public static String addClient(Widget widget, String firstName,
-	    String lastName, String email) throws Exception
+    public static String addClient(Widget widget, String firstName, String lastName, String email) throws Exception
     {
 	JSONObject pluginPrefsJSON = buildPluginPrefsJSON(widget);
 
-	JSONObject contactPrefsJSON = new JSONObject()
-		.put("visitor_email", email).put("first_name", firstName)
-		.put("last_name", lastName);
+	JSONObject contactPrefsJSON = new JSONObject().put("visitor_email", email).put("first_name", firstName).put("last_name", lastName);
 
-	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON",
-		pluginPrefsJSON).put("visitorJSON", contactPrefsJSON);
+	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON", pluginPrefsJSON).put("visitorJSON", contactPrefsJSON);
 
 	// send request to plugins server and return response
-	return HTTPUtil.accessHTTPURL(ZendeskUtil.pluginURL
-		+ "core/agile/freshbooks/client/add", prefsJSON.toString(),
-		"PUT");
+	return HTTPUtil.accessHTTPURL(ZendeskUtil.pluginURL + "core/agile/freshbooks/client/add", prefsJSON.toString(), "PUT");
 
     }
 
@@ -207,27 +185,17 @@ public class FreshBooksUtil
      * @throws Exception
      *             if the response is an exception
      */
-    public static String addInvoice(Widget widget, String firstName,
-	    String lastName, String email, String invoiceLines)
-	    throws Exception
+    public static String addInvoice(Widget widget, String firstName, String lastName, String email, String invoiceLines) throws Exception
     {
 	JSONObject pluginPrefsJSON = buildPluginPrefsJSON(widget);
 
-	JSONObject contactPrefsJSON = new JSONObject()
-		.put("visitor_email", email).put("first_name", firstName)
-		.put("last_name", lastName);
-	JSONObject messageJSON = new JSONObject().put("lines_json",
-		invoiceLines);
+	JSONObject contactPrefsJSON = new JSONObject().put("visitor_email", email).put("first_name", firstName).put("last_name", lastName);
+	JSONObject messageJSON = new JSONObject().put("lines_json", invoiceLines);
 
-	JSONObject prefsJSON = new JSONObject()
-		.put("pluginPrefsJSON", pluginPrefsJSON)
-		.put("visitorJSON", contactPrefsJSON)
-		.put("messageJSON", messageJSON);
+	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON", pluginPrefsJSON).put("visitorJSON", contactPrefsJSON).put("messageJSON", messageJSON);
 
 	// send request to plugins server and return response
-	return HTTPUtil.accessHTTPURL(ZendeskUtil.pluginURL
-		+ "core/agile/freshbooks/invoice/add", prefsJSON.toString(),
-		"PUT");
+	return HTTPUtil.accessHTTPURL(ZendeskUtil.pluginURL + "core/agile/freshbooks/invoice/add", prefsJSON.toString(), "PUT");
 
     }
 
@@ -241,14 +209,12 @@ public class FreshBooksUtil
      * @return {@link JSONObject} with FreshBooks preferences
      * @throws Exception
      */
-    public static JSONObject buildPluginPrefsJSON(Widget widget)
-	    throws Exception
+    public static JSONObject buildPluginPrefsJSON(Widget widget) throws Exception
     {
 	try
 	{
 	    // If widget properties null, exception occurs
-	    JSONObject pluginPrefs = new JSONObject().put(FRESHBOOKS_API_KEY,
-		    widget.getProperty(FRESHBOOKS_API_KEY)).put(FRESHBOOKS_URL,
+	    JSONObject pluginPrefs = new JSONObject().put(FRESHBOOKS_API_KEY, widget.getProperty(FRESHBOOKS_API_KEY)).put(FRESHBOOKS_URL,
 		    widget.getProperty(FRESHBOOKS_URL));
 
 	    System.out.println("plugin prefs in freshbooks: " + pluginPrefs);

@@ -12,7 +12,7 @@ public class Base62
     /**
      * Base62 having 62 digits.
      */
-    private static final String baseDigits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    private static final String BASE_DIGITS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
     /**
      * Returns converted number to required base from decimal. This method is
@@ -32,7 +32,7 @@ public class Base62
 	while (decimalNumber != 0)
 	{
 	    mod = decimalNumber % base;
-	    tempVal = baseDigits.substring((int) mod, (int) mod + 1) + tempVal;
+	    tempVal = BASE_DIGITS.substring((int) mod, (int) mod + 1) + tempVal;
 	    decimalNumber = decimalNumber / base;
 	}
 
@@ -56,7 +56,7 @@ public class Base62
 
 	while (iterator > 0)
 	{
-	    returnValue = returnValue + (baseDigits.indexOf(number.substring(iterator - 1, iterator)) * multiplier);
+	    returnValue = returnValue + (BASE_DIGITS.indexOf(number.substring(iterator - 1, iterator)) * multiplier);
 	    multiplier = multiplier * base;
 	    --iterator;
 	}

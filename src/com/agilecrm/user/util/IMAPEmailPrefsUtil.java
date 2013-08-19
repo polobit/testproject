@@ -20,10 +20,9 @@ import com.googlecode.objectify.ObjectifyService;
 public class IMAPEmailPrefsUtil
 {
     /**
-     * IMAPEmailPrefs Dao.
+     * IMAPEmailPrefs Dao
      */
-    private static ObjectifyGenericDao<IMAPEmailPrefs> dao = new ObjectifyGenericDao<IMAPEmailPrefs>(
-	    IMAPEmailPrefs.class);
+    private static ObjectifyGenericDao<IMAPEmailPrefs> dao = new ObjectifyGenericDao<IMAPEmailPrefs>(IMAPEmailPrefs.class);
 
     /**
      * Returns IMAPPrefs with respect to agileuser.
@@ -37,12 +36,9 @@ public class IMAPEmailPrefsUtil
 	System.out.println("Retrieving Userid " + user.id);
 
 	Objectify ofy = ObjectifyService.begin();
-	Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class,
-		user.id);
+	Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, user.id);
 
-	System.out.println("Count "
-		+ ofy.query(IMAPEmailPrefs.class).ancestor(agileUserKey)
-			.count());
+	System.out.println("Count " + ofy.query(IMAPEmailPrefs.class).ancestor(agileUserKey).count());
 	return ofy.query(IMAPEmailPrefs.class).ancestor(agileUserKey).get();
     }
 
@@ -60,8 +56,7 @@ public class IMAPEmailPrefsUtil
     {
 	try
 	{
-	    return dao.get(new Key<IMAPEmailPrefs>(user, IMAPEmailPrefs.class,
-		    id));
+	    return dao.get(new Key<IMAPEmailPrefs>(user, IMAPEmailPrefs.class, id));
 	}
 	catch (EntityNotFoundException e)
 	{

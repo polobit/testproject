@@ -46,9 +46,7 @@ public class AgileAuthFilter implements Filter
      * to login page, where new session cookie is set.
      */
     @Override
-    public void doFilter(final ServletRequest request,
-	    final ServletResponse response, final FilterChain chain)
-	    throws IOException, ServletException
+    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException
     {
 	System.out.println("Agile Auth Filter");
 
@@ -60,9 +58,7 @@ public class AgileAuthFilter implements Filter
 
 	// If it is JS API, we will pass it through JSAPIFilter is used to
 	// filter the request i.e., to check the API key allocated to the domain
-	if (httpRequest.getRequestURI().contains("js/api")
-		|| httpRequest.getRequestURI().contains(
-			"/core/api/bulk-actions"))
+	if (httpRequest.getRequestURI().contains("js/api") || httpRequest.getRequestURI().contains("/core/api/bulk-actions"))
 	{
 	    System.out.println("JS API - ignoring filter");
 	    chain.doFilter(request, response);
@@ -77,11 +73,9 @@ public class AgileAuthFilter implements Filter
 	}
 
 	// Check if UserInfo is already there
-	UserInfo userInfo = (UserInfo) httpRequest.getSession().getAttribute(
-		SessionManager.AUTH_SESSION_COOKIE_NAME);
+	UserInfo userInfo = (UserInfo) httpRequest.getSession().getAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
 	if (userInfo == null)
 	{
-
 	    redirectToLogin(httpRequest, httpResponse);
 	    return;
 	}
@@ -91,8 +85,7 @@ public class AgileAuthFilter implements Filter
 
 	// For registering all entities - AgileUser is a just a random class we
 	// are using
-	ObjectifyGenericDao<AgileUser> dao = new ObjectifyGenericDao<AgileUser>(
-		AgileUser.class);
+	ObjectifyGenericDao<AgileUser> dao = new ObjectifyGenericDao<AgileUser>(AgileUser.class);
 
 	// Check if userinfo is valid for this namespace
 	DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
@@ -103,8 +96,7 @@ public class AgileAuthFilter implements Filter
 	// Send to register
 	if (domainUser == null)
 	{
-	    ((HttpServletRequest) request).getSession().removeAttribute(
-		    SessionManager.AUTH_SESSION_COOKIE_NAME);
+	    ((HttpServletRequest) request).getSession().removeAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
 
 	    // Remove user info from session, redirect to auth-failed.jsp.
 	    SessionManager.set((UserInfo) null);
@@ -113,27 +105,22 @@ public class AgileAuthFilter implements Filter
 
 	// Check if the domain of the user is same as namespace. Otherwise,
 	// Redirect
-	if (domainUser != null && domainUser.domain != null && domain != null
-		&& !domain.equalsIgnoreCase(domainUser.domain))
+	if (domainUser != null && domainUser.domain != null && domain != null && !domain.equalsIgnoreCase(domainUser.domain))
 	{
 	    // Probably forward to the domain again he registered
-	    System.out.println("Forwarding to actual domain "
-		    + domainUser.domain);
+	    System.out.println("Forwarding to actual domain " + domainUser.domain);
 
 	    // Remove from Current Session
-	    ((HttpServletRequest) request).getSession().removeAttribute(
-		    SessionManager.AUTH_SESSION_COOKIE_NAME);
+	    ((HttpServletRequest) request).getSession().removeAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
 
-	    httpResponse.sendRedirect("https://" + domainUser.domain
-		    + ".agilecrm.com");
+	    httpResponse.sendRedirect("https://" + domainUser.domain + ".agilecrm.com");
 	    return;
 	}
 
 	// If the user is disabled
 	if (domainUser != null && domainUser.is_disabled)
 	{
-	    httpRequest.getRequestDispatcher("/error/user-disabled.jsp")
-		    .include(request, response);
+	    httpRequest.getRequestDispatcher("/error/user-disabled.jsp").include(request, response);
 	    return;
 	}
 
@@ -156,10 +143,8 @@ public class AgileAuthFilter implements Filter
      * @param response
      * @throws IOException
      */
-    private void redirectToLogin(HttpServletRequest request,
-	    HttpServletResponse response) throws IOException
+    private void redirectToLogin(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
-
 	// Gets the reqeust uri
 	String uri = request.getRequestURI();
 
@@ -167,17 +152,14 @@ public class AgileAuthFilter implements Filter
 	// redirection
 	if (uri.contains("/core"))
 	{
-	    // Sends error response, so it user can be notified about session
+	    // Sends error response, so that user is notified about session
 	    // expiry
-	    response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
-		    "You are not logged in.");
-
+	    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You are not logged in.");
 	    return;
 	}
 
-	// Set
-	request.getSession().setAttribute(
-		LoginServlet.RETURN_PATH_SESSION_PARAM_NAME, uri);
+	// Store the URI so that we can redirect after he successfully logins
+	request.getSession().setAttribute(LoginServlet.RETURN_PATH_SESSION_PARAM_NAME, uri);
 
 	response.sendRedirect("/login");
     }

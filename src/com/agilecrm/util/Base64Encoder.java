@@ -39,8 +39,7 @@ import java.io.ByteArrayOutputStream;
 public class Base64Encoder
 {
 
-    static final char[] charTab = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-	    .toCharArray();
+    static final char[] charTab = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".toCharArray();
 
     /**
      * @param string
@@ -73,8 +72,7 @@ public class Base64Encoder
      * 
      * @return
      */
-    public static StringBuffer encode(byte[] data, int start, int len,
-	    StringBuffer buf)
+    public static StringBuffer encode(byte[] data, int start, int len, StringBuffer buf)
     {
 
 	if (buf == null)
@@ -86,8 +84,7 @@ public class Base64Encoder
 
 	while (i <= end)
 	{
-	    int d = (((data[i]) & 0x0ff) << 16)
-		    | (((data[i + 1]) & 0x0ff) << 8) | ((data[i + 2]) & 0x0ff);
+	    int d = (((data[i]) & 0x0ff) << 16) | (((data[i + 1]) & 0x0ff) << 8) | ((data[i + 2]) & 0x0ff);
 
 	    buf.append(charTab[(d >> 18) & 63]);
 	    buf.append(charTab[(d >> 12) & 63]);
@@ -150,9 +147,7 @@ public class Base64Encoder
 	    case '=':
 		return 0;
 	    default:
-		throw new RuntimeException(
-			new StringBuffer("unexpected code: ").append(c)
-				.toString());
+		throw new RuntimeException(new StringBuffer("unexpected code: ").append(c).toString());
 	    }
     }
 
@@ -179,10 +174,7 @@ public class Base64Encoder
 	    if (i == len)
 		break;
 
-	    int tri = (decode(s.charAt(i)) << 18)
-		    + (decode(s.charAt(i + 1)) << 12)
-		    + (decode(s.charAt(i + 2)) << 6)
-		    + (decode(s.charAt(i + 3)));
+	    int tri = (decode(s.charAt(i)) << 18) + (decode(s.charAt(i + 1)) << 12) + (decode(s.charAt(i + 2)) << 6) + (decode(s.charAt(i + 3)));
 
 	    bos.write((tri >> 16) & 255);
 	    if (s.charAt(i + 2) == '=')
@@ -196,5 +188,4 @@ public class Base64Encoder
 	}
 	return bos.toByteArray();
     }
-
 }

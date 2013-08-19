@@ -62,11 +62,9 @@ public class Rapleaf
      * @return {@link JSONObject} with Rapleaf details
      * @throws Exception
      */
-    public static JSONObject getRapportiveValue(Widget widget, String email)
-	    throws Exception
+    public static JSONObject getRapportiveValue(Widget widget, String email) throws Exception
     {
-	System.out.println("In Rapleaf widget api_key "
-		+ widget.getProperty("rapleaf_api_key"));
+	System.out.println("In Rapleaf widget api_key " + widget.getProperty("rapleaf_api_key"));
 	return getRapportiveValue(email, widget.getProperty("rapleaf_api_key"));
     }
 
@@ -81,8 +79,7 @@ public class Rapleaf
      * @return {@link JSONObject} returns details as a JSON
      * @throws Exception
      */
-    public static JSONObject getRapportiveValue(String email, String api_key)
-	    throws Exception
+    public static JSONObject getRapportiveValue(String email, String api_key) throws Exception
     {
 	// Replaces contact email in the URL
 	String url = RAPPORT_URL.replace("$email", email);
@@ -100,8 +97,7 @@ public class Rapleaf
 
 	// If response is null or empty, return failure
 	if (rapleafResponse == null || rapleafResponse.equals("{}"))
-	    return new JSONObject().put(RAPPORTIVE_RESULT,
-		    RAPPORTIVE_RESULT_FAILURE);
+	    return new JSONObject().put(RAPPORTIVE_RESULT, RAPPORTIVE_RESULT_FAILURE);
 
 	// If it is not JSON, an exception is raised
 	if (!rapleafResponse.startsWith("{"))
@@ -114,9 +110,6 @@ public class Rapleaf
 	 * Returns the response sent as a JSONObject mapped with key "result"
 	 * and success in addition to information sent from rapleaf
 	 */
-	return rapleafJSONObject.put(RAPPORTIVE_RESULT,
-		RAPPORTIVE_RESULT_SUCCESS);
-
+	return rapleafJSONObject.put(RAPPORTIVE_RESULT, RAPPORTIVE_RESULT_SUCCESS);
     }
-
 }

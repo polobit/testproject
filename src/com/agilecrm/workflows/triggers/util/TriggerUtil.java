@@ -20,8 +20,7 @@ public class TriggerUtil
     /**
      * Initializes DataAccessObject.
      */
-    public static ObjectifyGenericDao<Trigger> dao = new ObjectifyGenericDao<Trigger>(
-	    Trigger.class);
+    public static ObjectifyGenericDao<Trigger> dao = new ObjectifyGenericDao<Trigger>(Trigger.class);
 
     /**
      * Removes multiple triggers.

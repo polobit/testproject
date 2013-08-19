@@ -23,16 +23,14 @@ import com.google.appengine.api.utils.SystemProperty;
  * registered or added under a particular domain and gives access to agile crm
  * account.
  * 
- * Login page have Open ID�s and Sign in options for registered users
+ * Login page have Open IDs and Sign in options for registered users
  * <p>
- * When user wants to login using open ID from login page it navigates to the
- * Google account page after providing the credentials it will navigate to the
- * Dash board (Same applicable for the Yahoo).
+ * When user wants to login using open ID from login page, it navigates to the
+ * Google/Yahoo account page.
  * </p>
- * If user login using the Email ID, it will check for the correct credentials
- * if provided navigates to dashbord. if not shows error in login page.
+ * If user is using form based credentials, it will verify.
  * 
- * @author mantra
+ * @author Manohar (badly written doc by Sukanya)
  * 
  * @since October 2012
  */
@@ -62,7 +60,6 @@ public class LoginServlet extends HttpServlet
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
     {
-
 	// Delete Login Session
 	request.getSession().removeAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
 
@@ -73,6 +70,7 @@ public class LoginServlet extends HttpServlet
 	    return;
 	}
 
+	// Check the type of authentication
 	try
 	{
 	    String type = request.getParameter("type");
@@ -95,10 +93,9 @@ public class LoginServlet extends HttpServlet
 	catch (Exception e)
 	{
 	    e.printStackTrace();
-	    // Send to Login Page
-	    request.getRequestDispatcher("login.jsp?error=" + URLEncoder.encode(e.getMessage())).forward(request,
-		    response);
 
+	    // Send to Login Page
+	    request.getRequestDispatcher("login.jsp?error=" + URLEncoder.encode(e.getMessage())).forward(request, response);
 	    return;
 	}
 
@@ -107,9 +104,7 @@ public class LoginServlet extends HttpServlet
     }
 
     /**
-     * If the type is Oauth then it will check for the URL, then redirected to
-     * OpenId Servlet there it sets the session then validate and send to home
-     * page or throws an exception and includes login.jsp
+     * Forwards to openid for authentication
      * 
      * @param request
      * @param response
@@ -142,9 +137,9 @@ public class LoginServlet extends HttpServlet
      * If any error occurs throws exception and with error login.jsp is
      * included.
      * </p>
-     * By marking �Keep me signed in� keeps the users signed for 5 days without
-     * asking for user name and password unless they log out.If everything fine
-     * redirects to home page by setting session.
+     * By marking �Keep me signed in� keeps the users signed for 5 days
+     * without asking for user name and password unless they log out.If
+     * everything fine redirects to home page by setting session.
      * 
      * @param request
      * @param response
@@ -172,7 +167,7 @@ public class LoginServlet extends HttpServlet
 	// Check if user is registered by OpenID, if yes then throw exception
 	// notifying him of OpenID registeration
 	if (domainUser.isOpenIdRegisteredUser())
-	    throw new Exception("Registered by OpenID");
+	    throw new Exception("Please use Google or Yahoo Authentication mechanism to login.");
 
 	// Check if Encrypted passwords are same
 	if (!StringUtils.equals(MD5Util.getMD5HashedPassword(password), domainUser.getHashedString())
@@ -183,30 +178,29 @@ public class LoginServlet extends HttpServlet
 	// Read Subdomain
 	String subdomain = request.getServerName().split("\\.")[0];
 
-	System.out.println("subdomain to login is : " + subdomain.toLowerCase());
-
 	if (!subdomain.equalsIgnoreCase(domainUser.domain))
 	    if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
-		throw new Exception("User with same email address is registered in " + domainUser.domain
-			+ " domain. <a href=https://" + domainUser.domain + ".agilecrm.com> Click here</a> to continue");
+		throw new Exception("User with same email address is registered in " + domainUser.domain + " domain. <a href=https://" + domainUser.domain
+			+ ".agilecrm.com> Click here</a> to continue");
 
 	// Set Cookie and forward to /home
 	UserInfo userInfo = new UserInfo("agilecrm.com", email, domainUser.name);
 	request.getSession().setAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
 
-	// To set session active for 30 days if "keep me signin"
+	// Set session active for 30 days if remember me is set
 	if (request.getParameter("signin") != null && request.getParameter("signin").equalsIgnoreCase("on"))
 	{
 	    request.getSession().setMaxInactiveInterval(30 * 24 * 60 * 60);
-
 	}
 	else
 	{
 	    request.getSession().setMaxInactiveInterval(2 * 60 * 60);
 	}
 
+	// Redirect to page in session is present - eg: user can access #reports
+	// but we store reports in session and then forward to auth. After auth,
+	// we forward back to the old page
 	String redirect = (String) request.getSession().getAttribute(RETURN_PATH_SESSION_PARAM_NAME);
-
 	if (redirect != null)
 	{
 	    request.getSession().removeAttribute(RETURN_PATH_SESSION_PARAM_NAME);
@@ -215,6 +209,5 @@ public class LoginServlet extends HttpServlet
 	}
 
 	response.sendRedirect("/");
-
     }
 }

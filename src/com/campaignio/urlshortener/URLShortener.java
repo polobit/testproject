@@ -41,26 +41,21 @@ public class URLShortener
      */
     public String campaign_id;
 
-    /*
-     * Prefix for SHORTENER_URL "https://click.agilecrm.com/backend/click"
-     */
     /**
-     * Shortener Url.
+     * Shortener Url - "https://click.agilecrm.com/backend/click"
      */
     public static final String SHORTENER_URL = "http://agle.cc/";
 
     /**
      * Dao for URLShortener class.
      */
-    private static ObjectifyGenericDao<URLShortener> dao = new ObjectifyGenericDao<URLShortener>(
-	    URLShortener.class);
+    private static ObjectifyGenericDao<URLShortener> dao = new ObjectifyGenericDao<URLShortener>(URLShortener.class);
 
     /**
      * Default URLShortener.
      */
     public URLShortener()
     {
-
     }
 
     /**
@@ -73,8 +68,7 @@ public class URLShortener
      * @param trackerId
      *            Tracking id to track urls.
      */
-    public URLShortener(String longURL, String subscriberId, String trackerId,
-	    String campaignId)
+    public URLShortener(String longURL, String subscriberId, String trackerId, String campaignId)
     {
 	this.long_url = longURL;
 	this.subscriber_id = subscriberId;
@@ -92,8 +86,7 @@ public class URLShortener
 
     public String toString()
     {
-	return "Long URL: " + long_url + " Subscriber ID: " + subscriber_id
-		+ " Tracker ID: " + tracker_id + " Campaign ID: " + campaign_id;
+	return "Long URL: " + long_url + " Subscriber ID: " + subscriber_id + " Tracker ID: " + tracker_id + " Campaign ID: " + campaign_id;
 
     }
 }

@@ -171,10 +171,16 @@ function show_custom_fields_helper(custom_fields, properties){
 		else if(field.field_type.toLowerCase() == "textarea")
 		{
 			field_type = "textarea";
+			var rows = 3;
+			
+			if(field.field_data)
+				rows = parseInt(field.field_data);
+				
 			if(field.is_required)
 				el = el.concat('<div class="control-group">	<label class="control-label">'
 							+ucfirst(field.field_label)
-							+' <span class="field_req">*</span></label><div class="controls"><textarea rows="3" class="'
+							+' <span class="field_req">*</span></label><div class="controls"><textarea style="max-width:420px;" rows="'
+							+rows+'" class="'
 							+field.field_type.toLowerCase()
 							+'_input custom_field required" id='
 							+field.id+' name="'
@@ -183,7 +189,8 @@ function show_custom_fields_helper(custom_fields, properties){
 			else
 				el = el.concat('<div class="control-group">	<label class="control-label">'
 							+ucfirst(field.field_label)
-							+'</label><div class="controls"><textarea rows="3" class="'
+							+'</label><div class="controls"><textarea style="max-width:420px;" rows="'
+							+rows+'" class="'
 							+field.field_type.toLowerCase()
 							+'_input custom_field" id='
 							+field.id+' name="'
@@ -228,6 +235,7 @@ function show_custom_fields_helper(custom_fields, properties){
  */
 function fill_custom_field_values(form, content)
 {
+	console.log(content);
 	$.each(content, function(index , property){
 		if(property.type == "CUSTOM")
 			{
@@ -241,7 +249,7 @@ function fill_custom_field_values(form, content)
 					}
 					var tagName = element[0].tagName.toLowerCase();
 					var type = element.attr("type");
-				
+
 				if(tagName == "input")
 					{
 						if(type == "checkbox" && property.value == "on")
@@ -251,6 +259,10 @@ function fill_custom_field_values(form, content)
 							}
 						
 						element.attr("value", property.value);							
+					}
+				if(tagName == "textarea")
+					{
+						element.html(property.value);							
 					}
 				if(tagName == "select")
 					{

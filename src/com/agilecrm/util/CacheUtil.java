@@ -4,7 +4,6 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 
-
 /**
  * Util class to maintain the MemCache in the entire application Contains the
  * basic methods to handle the MemCacahe
@@ -26,14 +25,13 @@ public class CacheUtil
      */
     public static void setCache(String key, Object value)
     {
-    
-        String oldNamespace = NamespaceManager.get();
-        NamespaceManager.set("");
-    
-        MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
-        syncCache.put(key, value);
-    
-        NamespaceManager.set(oldNamespace);
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+	syncCache.put(key, value);
+
+	NamespaceManager.set(oldNamespace);
     }
 
     /**
@@ -45,15 +43,15 @@ public class CacheUtil
      */
     public static Object getCache(String key)
     {
-        String oldNamespace = NamespaceManager.get();
-        NamespaceManager.set("");
-    
-        MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
-        Object value = syncCache.get(key);
-    
-        NamespaceManager.set(oldNamespace);
-    
-        return value;
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+	Object value = syncCache.get(key);
+
+	NamespaceManager.set(oldNamespace);
+
+	return value;
     }
 
     /**
@@ -64,14 +62,13 @@ public class CacheUtil
      */
     public static void deleteCache(String key)
     {
-        String oldNamespace = NamespaceManager.get();
-        NamespaceManager.set("");
-    
-        MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
-        if (syncCache.contains(key))
-            syncCache.delete(key);
-    
-        NamespaceManager.set(oldNamespace);
-    }
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
 
+	MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+	if (syncCache.contains(key))
+	    syncCache.delete(key);
+
+	NamespaceManager.set(oldNamespace);
+    }
 }

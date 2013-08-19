@@ -134,5 +134,4 @@ public class EmailOpenServlet extends HttpServlet
 	    e.printStackTrace();
 	}
     }
-
 }

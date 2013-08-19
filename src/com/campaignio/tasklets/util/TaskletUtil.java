@@ -5,10 +5,10 @@ import java.util.Iterator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.agilecrm.util.AccountDeleteUtil;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.campaignio.tasklets.Tasklet;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 
 /**
  * <code>TaskletUtil</code> class is the base class for campaigns. It can
@@ -111,8 +111,8 @@ public class TaskletUtil
 
 		// Records end-time of campaign and change status to
 		// campaignId-DONE.
-		CampaignStatusUtil
-			.setStatusOfCampaign(AccountDeleteUtil.getId(subscriberJSON), AccountDeleteUtil.getId(campaignJSON), AccountDeleteUtil.getId(campaignJSON) + "-" + Status.DONE);
+		CampaignStatusUtil.setStatusOfCampaign(AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON),
+			AgileTaskletUtil.getId(campaignJSON) + "-" + Status.DONE);
 
 		return;
 	    }

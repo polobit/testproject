@@ -15,8 +15,8 @@ import org.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
-import com.agilecrm.util.AccountDeleteUtil;
 import com.campaignio.cron.util.CronUtil;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Indexed;
@@ -84,8 +84,7 @@ public class Cron extends HttpServlet
     /**
      * JSON Strings.
      */
-    public String campaign_json_string, data_string, node_json_string,
-	    subscriber_json_string;
+    public String campaign_json_string, data_string, node_json_string, subscriber_json_string;
 
     /**
      * Custom Values.
@@ -124,8 +123,7 @@ public class Cron extends HttpServlet
     /**
      * Cron Dao.
      */
-    private static ObjectifyGenericDao<Cron> dao = new ObjectifyGenericDao<Cron>(
-	    Cron.class);
+    private static ObjectifyGenericDao<Cron> dao = new ObjectifyGenericDao<Cron>(Cron.class);
 
     /**
      * Default Cron.
@@ -155,9 +153,8 @@ public class Cron extends HttpServlet
      * @param custom3
      *            Custom value3.
      */
-    public Cron(JSONObject campaignJSON, JSONObject subscriberJSON,
-	    JSONObject data, JSONObject nodeJSON, long timeOut, String custom1,
-	    String custom2, String custom3)
+    public Cron(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON, long timeOut, String custom1, String custom2,
+	    String custom3)
     {
 	this.campaign_json = campaignJSON;
 	this.subscriber_json = subscriberJSON;
@@ -169,8 +166,8 @@ public class Cron extends HttpServlet
 	this.custom3 = custom3;
 
 	// Store Campaign and Subscriber ID for dequeueing while deletion
-	this.campaign_id = AccountDeleteUtil.getId(campaignJSON);
-	this.subscriber_id = AccountDeleteUtil.getId(subscriberJSON);
+	this.campaign_id = AgileTaskletUtil.getId(campaignJSON);
+	this.subscriber_id = AgileTaskletUtil.getId(subscriberJSON);
     }
 
     /*
@@ -180,13 +177,11 @@ public class Cron extends HttpServlet
      * javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest
      * , javax.servlet.http.HttpServletResponse)
      */
-    public void doGet(HttpServletRequest req, HttpServletResponse resp)
-	    throws IOException
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
     {
 	// For registering all entities - AgileUser is a just a random class we
 	// are using
-	ObjectifyGenericDao<AgileUser> dao = new ObjectifyGenericDao<AgileUser>(
-		AgileUser.class);
+	ObjectifyGenericDao<AgileUser> dao = new ObjectifyGenericDao<AgileUser>(AgileUser.class);
 	System.out.println(dao.getClass());
 
 	try
@@ -243,8 +238,7 @@ public class Cron extends HttpServlet
     {
 	NamespaceManager.set(namespace);
 
-	List<Key<Cron>> cronKeys = dao.ofy().query(Cron.class)
-		.filter("namespace", namespace).listKeys();
+	List<Key<Cron>> cronKeys = dao.ofy().query(Cron.class).filter("namespace", namespace).listKeys();
 
 	dao.deleteKeys(cronKeys);
     }

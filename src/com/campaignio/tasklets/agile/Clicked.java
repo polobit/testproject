@@ -2,12 +2,12 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
-import com.agilecrm.util.AccountDeleteUtil;
 import com.campaignio.cron.Cron;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
@@ -91,7 +91,7 @@ public class Clicked extends TaskletAdapter
     public void interrupted(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON, JSONObject customData) throws Exception
     {
 	// Creates log for clicked node when interrupted
-	LogUtil.addLogToSQL(AccountDeleteUtil.getId(campaignJSON), AccountDeleteUtil.getId(subscriberJSON), "Link clicked - " + customData.getString("long_url"),
+	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Link clicked - " + customData.getString("long_url"),
 		LogType.CLICKED.toString());
 
 	// Execute Next One in Loop (Yes)
@@ -113,7 +113,7 @@ public class Clicked extends TaskletAdapter
     public void timeOutComplete(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
 	// Creates log for clicked when there are no clicks
-	LogUtil.addLogToSQL(AccountDeleteUtil.getId(campaignJSON), AccountDeleteUtil.getId(subscriberJSON), "No Clicks", LogType.CLICKED.toString());
+	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "No Clicks", LogType.CLICKED.toString());
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_NO);

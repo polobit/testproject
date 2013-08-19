@@ -37,7 +37,6 @@ import com.google.appengine.api.taskqueue.TaskOptions;
  */
 public class ReportsUtil
 {
-
     /**
      * Processes the reports and sends results to respective domain users. It
      * iterates through search report in reports list, fetches the results based
@@ -100,8 +99,7 @@ public class ReportsUtil
 	    results.put("duration", WordUtils.capitalizeFully((report.duration.toString())));
 
 	    // Send reports email
-	    SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, SendMail.REPORTS,
-		    new Object[] { results, fieldsList });
+	    SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, SendMail.REPORTS, new Object[] { results, fieldsList });
 	}
     }
 
@@ -187,10 +185,9 @@ public class ReportsUtil
 
 			customFieldJSON = new ObjectMapper().writeValueAsString(contactField);
 
-			Map<String, Object> customField = new ObjectMapper().readValue(customFieldJSON,
-				new TypeReference<HashMap<String, Object>>()
-				{
-				});
+			Map<String, Object> customField = new ObjectMapper().readValue(customFieldJSON, new TypeReference<HashMap<String, Object>>()
+			{
+			});
 
 			customProperties.add(customField);
 		    }
@@ -302,10 +299,8 @@ public class ReportsUtil
 	}
 	catch (EntityNotFoundException e)
 	{
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	    return null;
 	}
-
     }
 }

@@ -102,8 +102,7 @@ public class Event
     List<Long> search_range = null;
 
     // Dao
-    private static ObjectifyGenericDao<Event> dao = new ObjectifyGenericDao<Event>(
-	    Event.class);
+    private static ObjectifyGenericDao<Event> dao = new ObjectifyGenericDao<Event>(Event.class);
 
     /**
      * Default constructor
@@ -128,8 +127,7 @@ public class Event
      * @param agileUserId
      *            To create AgileUser Key, the owner of the event
      */
-    public Event(String title, Long start, Long end, boolean isEventStarred,
-	    Long contactId, Long agileUserId)
+    public Event(String title, Long start, Long end, boolean isEventStarred, Long contactId, Long agileUserId)
     {
 	this.title = title;
 	this.start = start;

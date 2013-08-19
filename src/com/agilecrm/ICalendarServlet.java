@@ -34,36 +34,38 @@ import com.google.appengine.api.NamespaceManager;
  * iCal data from Event object.
  * 
  * @author Naresh
- * 
  */
 @SuppressWarnings("serial")
 public class ICalendarServlet extends HttpServlet
 {
+    @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res)
     {
 	doPost(req, res);
     }
 
+    @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res)
     {
 	res.setContentType("text/plain");
 
-	URL url = null;
-
 	try
 	{
-	    url = new URL(req.getRequestURL().toString());
+	    // URL will be xxx.agilecrm.com/api-key
+	    URL url = new URL(req.getRequestURL().toString());
 
+	    // Get API Key
 	    String apiKey = getAPIKeyFromICalURL(url);
+
+	    // Get Namespace
 	    String namespace = getNamespaceFromURL(url);
 	    namespace = "";
 
 	    if (StringUtils.isEmpty(namespace) && StringUtils.isEmpty(apiKey))
 		return;
 
-	    // Returns events
+	    // Get events based on API key and Namespace
 	    List<Event> events = getEvents(namespace, apiKey);
-
 	    System.out.println("Events obtained are " + events);
 
 	    if (events == null)
@@ -80,7 +82,6 @@ public class ICalendarServlet extends HttpServlet
 	    e.printStackTrace();
 	    System.out.println("Got exception in ICalendarServlet " + e.getMessage());
 	}
-
     }
 
     /**
@@ -193,7 +194,6 @@ public class ICalendarServlet extends HttpServlet
 	}
 
 	return iCal;
-
     }
 
     /**
@@ -242,5 +242,4 @@ public class ICalendarServlet extends HttpServlet
 
 	return iCalEvent;
     }
-
 }

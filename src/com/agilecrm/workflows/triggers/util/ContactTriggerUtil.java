@@ -82,6 +82,5 @@ public class ContactTriggerUtil
 	// Executes Trigger for tags added along with new Contact
 	if (!contact.getContactTags().isEmpty())
 	    TagsTriggerUtil.executeTriggerForTags(contact, contact.getContactTags());
-
     }
 }

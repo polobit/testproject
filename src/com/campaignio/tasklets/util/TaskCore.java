@@ -3,7 +3,7 @@ package com.campaignio.tasklets.util;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.agilecrm.util.AccountDeleteUtil;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.deferred.TaskletWorkflowDeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -54,7 +54,7 @@ public class TaskCore
 
 	    System.out.println("Executing " + subscriberJSON);
 
-	    String key = AccountDeleteUtil.getId(subscriberJSON) + " " + AccountDeleteUtil.getId(campaignJSON);
+	    String key = AgileTaskletUtil.getId(subscriberJSON) + " " + AgileTaskletUtil.getId(campaignJSON);
 
 	    if (key.contains("null"))
 		continue;
@@ -69,13 +69,13 @@ public class TaskCore
 	     * Campaign is new to new subscriber - let's add them to Cache
 	     * CacheUtil.put(key, new Boolean("true")); }
 	     */
-
 	    try
 	    {
 		// Execute it in a task queue each batch
 		// executeWorkflow(campaignJSON, subscriberJSON);
 
-		TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(AccountDeleteUtil.getId(campaignJSON), subscriberJSON.toString());
+		TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(AgileTaskletUtil.getId(campaignJSON),
+			subscriberJSON.toString());
 		Queue queue = QueueFactory.getQueue("campaign-queue");
 		queue.add(TaskOptions.Builder.withPayload(taskletWorkflowDeferredTask));
 	    }
@@ -88,8 +88,5 @@ public class TaskCore
 	}
 
 	System.out.println("Campaign Completed ");
-
-	// If not
-	// executeWorkflow
     }
 }

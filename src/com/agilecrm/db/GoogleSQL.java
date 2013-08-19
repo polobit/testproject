@@ -32,8 +32,7 @@ public class GoogleSQL
 	try
 	{
 	    DriverManager.registerDriver(new AppEngineDriver());
-	    conn = DriverManager
-		    .getConnection("jdbc:google:rdbms://agiledbs:agile/stats");
+	    conn = DriverManager.getConnection("jdbc:google:rdbms://agiledbs:agile/stats");
 	}
 	catch (Exception ex)
 	{
@@ -72,9 +71,7 @@ public class GoogleSQL
 	    // UPDATE or 0 for other statements
 	    rowCount = stmt.executeUpdate(sql);
 
-	    System.out
-		    .println("Number of rows affected in SQL by DML statement: "
-			    + rowCount);
+	    System.out.println("Number of rows affected in SQL by DML statement: " + rowCount);
 	}
 	catch (SQLException ex)
 	{
@@ -176,8 +173,7 @@ public class GoogleSQL
 		    columnName = resultMetadata.getColumnName(i);
 
 		    // put column name and value in json array
-		    eachAgentJSON
-			    .put(columnName, "" + rs.getString(columnName));
+		    eachAgentJSON.put(columnName, "" + rs.getString(columnName));
 		}
 
 		// place result data in agentDetailsArray

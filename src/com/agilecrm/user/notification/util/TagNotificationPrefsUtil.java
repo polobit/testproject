@@ -28,12 +28,10 @@ public class TagNotificationPrefsUtil
      * @param updatedContact
      *            Contact object after changes.
      */
-    public static void checkTagsChange(Contact oldContact,
-	    Contact updatedContact)
+    public static void checkTagsChange(Contact oldContact, Contact updatedContact)
     {
 	Set<String> oldTags = new HashSet<String>(oldContact.getContactTags());
-	Set<String> updatedTags = new HashSet<String>(
-		updatedContact.getContactTags());
+	Set<String> updatedTags = new HashSet<String>(updatedContact.getContactTags());
 
 	// Tags that are added newly
 	Set<String> addedTags = new HashSet<String>(updatedTags);
@@ -58,8 +56,7 @@ public class TagNotificationPrefsUtil
      * @param contact
      *            Contact object to which tag is added.
      */
-    public static void executeNotificationWhenTagsAdded(Contact contact,
-	    Set<String> tags)
+    public static void executeNotificationWhenTagsAdded(Contact contact, Set<String> tags)
     {
 	JSONObject tagsJSON = new JSONObject();
 	try
@@ -72,8 +69,7 @@ public class TagNotificationPrefsUtil
 	{
 	    e.printStackTrace();
 	}
-	NotificationPrefsUtil.executeNotification(
-		NotificationPrefs.Type.TAG_ADDED, contact, tagsJSON);
+	NotificationPrefsUtil.executeNotification(NotificationPrefs.Type.TAG_ADDED, contact, tagsJSON);
     }
 
     /**
@@ -82,8 +78,7 @@ public class TagNotificationPrefsUtil
      * @param contact
      *            Contact object to which tag is deleted.
      */
-    public static void executeNotificationWhenTagsDeleted(Contact contact,
-	    Set<String> tags)
+    public static void executeNotificationWhenTagsDeleted(Contact contact, Set<String> tags)
     {
 	JSONObject tagsJSON = new JSONObject();
 	try
@@ -96,7 +91,6 @@ public class TagNotificationPrefsUtil
 	{
 	    e.printStackTrace();
 	}
-	NotificationPrefsUtil.executeNotification(
-		NotificationPrefs.Type.TAG_DELETED, contact, tagsJSON);
+	NotificationPrefsUtil.executeNotification(NotificationPrefs.Type.TAG_DELETED, contact, tagsJSON);
     }
 }

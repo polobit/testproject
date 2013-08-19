@@ -73,12 +73,10 @@ public class TwitterUtil
 	    Twitter twitter = new TwitterFactory().getInstance();
 
 	    // Sets authentication, sets developers api key and secret key
-	    twitter.setOAuthConsumer(Globals.TWITTER_API_KEY,
-		    Globals.TWITTER_SECRET_KEY);
+	    twitter.setOAuthConsumer(Globals.TWITTER_API_KEY, Globals.TWITTER_SECRET_KEY);
 
 	    // Sets AccessToken, sets twitter api key and secret key
-	    twitter.setOAuthAccessToken(new AccessToken(widget
-		    .getProperty("token"), widget.getProperty("secret")));
+	    twitter.setOAuthAccessToken(new AccessToken(widget.getProperty("token"), widget.getProperty("secret")));
 
 	    return twitter;
 	}
@@ -106,9 +104,7 @@ public class TwitterUtil
      * @throws Exception
      *             If twitter throws an exception
      */
-    public static List<SocialSearchResult> searchTwitterProfiles(Widget widget,
-	    Contact contact) throws SocketTimeoutException, IOException,
-	    Exception
+    public static List<SocialSearchResult> searchTwitterProfiles(Widget widget, Contact contact) throws SocketTimeoutException, IOException, Exception
     {
 	try
 	{
@@ -131,8 +127,7 @@ public class TwitterUtil
 	     * Creates a twitter object to connect with twitter and searches
 	     * twitter profiles based on first name and last name
 	     */
-	    ResponseList<User> users = getTwitter(widget).searchUsers(
-		    firstName + " " + lastName, 1);
+	    ResponseList<User> users = getTwitter(widget).searchUsers(firstName + " " + lastName, 1);
 
 	    // Fill user details in list and return
 	    return fillUsersDetailsInList(users);
@@ -161,9 +156,8 @@ public class TwitterUtil
      * @throws Exception
      *             If twitter throws an exception
      */
-    public static List<SocialSearchResult> modifiedSearchForTwitterProfiles(
-	    Widget widget, String searchString) throws SocketTimeoutException,
-	    IOException, Exception
+    public static List<SocialSearchResult> modifiedSearchForTwitterProfiles(Widget widget, String searchString) throws SocketTimeoutException, IOException,
+	    Exception
     {
 	try
 	{
@@ -176,8 +170,7 @@ public class TwitterUtil
 	     * Creates a twitter object to connect with twitter Searches twitter
 	     * profiles based on the search string
 	     */
-	    ResponseList<User> users = getTwitter(widget).searchUsers(
-		    searchString, 1);
+	    ResponseList<User> users = getTwitter(widget).searchUsers(searchString, 1);
 
 	    // Fill user details in list and return
 	    return fillUsersDetailsInList(users);
@@ -197,8 +190,7 @@ public class TwitterUtil
      *            {@link ResponseList} of {@link User}
      * @return
      */
-    private static List<SocialSearchResult> fillUsersDetailsInList(
-	    ResponseList<User> users)
+    private static List<SocialSearchResult> fillUsersDetailsInList(ResponseList<User> users)
     {
 	List<SocialSearchResult> searchResults = new ArrayList<SocialSearchResult>();
 
@@ -249,8 +241,7 @@ public class TwitterUtil
      * @throws Exception
      *             If {@link Twitter} throws an exception
      */
-    public static String getTwitterIdByUrl(Widget widget, String webUrl)
-	    throws SocketTimeoutException, IOException, Exception
+    public static String getTwitterIdByUrl(Widget widget, String webUrl) throws SocketTimeoutException, IOException, Exception
     {
 	// Check if it is twitter URl
 	if (!webUrl.startsWith("https://twitter.com/"))
@@ -272,8 +263,7 @@ public class TwitterUtil
 	{
 	    // If status is 404, Twitter doesnot have that profile
 	    if (e.getMessage().startsWith("404"))
-		throw new Exception("Sorry, that page doesn't exist! @"
-			+ screenName);
+		throw new Exception("Sorry, that page doesn't exist! @" + screenName);
 
 	    System.out.println("In get Twitter id exception");
 	    throw new Exception(getErrorMessage(e.getMessage()));
@@ -294,9 +284,7 @@ public class TwitterUtil
      * @return {@link SocialSearchResult}
      * @throws Exception
      */
-    public static SocialSearchResult getTwitterProfileById(Widget widget,
-	    String twitterId) throws SocketTimeoutException, IOException,
-	    Exception
+    public static SocialSearchResult getTwitterProfileById(Widget widget, String twitterId) throws SocketTimeoutException, IOException, Exception
     {
 	// Creates a twitter object to connect with twitter
 	Twitter twitter = getTwitter(widget);
@@ -321,10 +309,8 @@ public class TwitterUtil
 
 	    result.url = "https://twitter.com/" + user.getScreenName();
 	    result.is_follow_request_sent = user.isFollowRequestSent();
-	    result.is_connected = twitter.showFriendship(twitter.getId(),
-		    user.getId()).isSourceFollowingTarget();
-	    result.is_followed_by_target = twitter.showFriendship(
-		    twitter.getId(), user.getId()).isSourceFollowedByTarget();
+	    result.is_connected = twitter.showFriendship(twitter.getId(), user.getId()).isSourceFollowingTarget();
+	    result.is_followed_by_target = twitter.showFriendship(twitter.getId(), user.getId()).isSourceFollowedByTarget();
 
 	    /*
 	     * If current status is not null, get network updates Assuming
@@ -335,8 +321,7 @@ public class TwitterUtil
 		result.current_update = user.getStatus().getText();
 		result.current_update_id = user.getStatus().getId();
 
-		result.updateStream = getNetworkUpdates(widget, user.getId(),
-			result.current_update_id, 5);
+		result.updateStream = getNetworkUpdates(widget, user.getId(), result.current_update_id, 5);
 	    }
 	    return result;
 	}
@@ -359,8 +344,7 @@ public class TwitterUtil
      * @return {@link String} with success message
      * @throws Exception
      */
-    public static String follow(Widget widget, Long twitterId)
-	    throws SocketTimeoutException, IOException, Exception
+    public static String follow(Widget widget, Long twitterId) throws SocketTimeoutException, IOException, Exception
     {
 	// Get twitter object
 	Twitter twitter = getTwitter(widget);
@@ -371,8 +355,7 @@ public class TwitterUtil
 	     * some have restricted access for following
 	     */
 	    User user = twitter.createFriendship(twitterId);
-	    boolean connected = twitter.showFriendship(twitter.getId(),
-		    user.getId()).isSourceFollowingTarget();
+	    boolean connected = twitter.showFriendship(twitter.getId(), user.getId()).isSourceFollowingTarget();
 	    return (connected) ? "true" : "false";
 	}
 	catch (TwitterRuntimeException e)
@@ -393,8 +376,7 @@ public class TwitterUtil
      * @return {@link String} with success message
      * @throws Exception
      */
-    public static String unfollow(Widget widget, Long twitterId)
-	    throws SocketTimeoutException, IOException, Exception
+    public static String unfollow(Widget widget, Long twitterId) throws SocketTimeoutException, IOException, Exception
     {
 	try
 	{
@@ -422,14 +404,12 @@ public class TwitterUtil
      * @return
      * @throws Exception
      */
-    public static String tweetInTwitter(Widget widget, String message)
-	    throws SocketTimeoutException, IOException, Exception
+    public static String tweetInTwitter(Widget widget, String message) throws SocketTimeoutException, IOException, Exception
     {
 	try
 	{
 	    // Get twitter object and tweet in twitter
-	    Status status = getTwitter(widget).updateStatus(
-		    message + AGILETWITTERSOURCEMESSAGE);
+	    Status status = getTwitter(widget).updateStatus(message + AGILETWITTERSOURCEMESSAGE);
 	    System.out.println("Tweet: " + JSONUtil.toJSONString(status));
 	    return "Successfull";
 	}
@@ -451,15 +431,13 @@ public class TwitterUtil
      * @return {@link String} with success message
      * @throws Exception
      */
-    public static String reTweetByTweetId(Widget widget, Long tweetId)
-	    throws SocketTimeoutException, IOException, Exception
+    public static String reTweetByTweetId(Widget widget, Long tweetId) throws SocketTimeoutException, IOException, Exception
     {
 	try
 	{
 	    // Get twitter object and retweet the status by its id
 	    Status reTweet = getTwitter(widget).retweetStatus(tweetId);
-	    return (reTweet != null) ? "Retweeted successfully"
-		    : "Unsuccessfull";
+	    return (reTweet != null) ? "Retweeted successfully" : "Unsuccessfull";
 	}
 	catch (TwitterRuntimeException e)
 	{
@@ -484,9 +462,7 @@ public class TwitterUtil
      *             If the person with twitterId is not following agile user in
      *             twitter
      */
-    public static String sendTwitterMessageById(Widget widget,
-	    String twitterId, String message) throws SocketTimeoutException,
-	    IOException, Exception
+    public static String sendTwitterMessageById(Widget widget, String twitterId, String message) throws SocketTimeoutException, IOException, Exception
     {
 	try
 	{
@@ -501,13 +477,10 @@ public class TwitterUtil
 	     * follows agile user Twitter profile, agile user can send a direct
 	     * message to contact
 	     */
-	    if (!twitter.showFriendship(agileUserTwitterId,
-		    Long.parseLong(twitterId)).isSourceFollowedByTarget())
+	    if (!twitter.showFriendship(agileUserTwitterId, Long.parseLong(twitterId)).isSourceFollowedByTarget())
 		return "You can send a message only to persons who is following you";
 
-	    DirectMessage directMessage = twitter.sendDirectMessage(
-		    Long.parseLong(twitterId), message
-			    + AGILETWITTERSOURCEMESSAGE);
+	    DirectMessage directMessage = twitter.sendDirectMessage(Long.parseLong(twitterId), message + AGILETWITTERSOURCEMESSAGE);
 
 	    // If returned DM id is zero, message is not sent
 	    if (directMessage.getId() == 0)
@@ -533,9 +506,7 @@ public class TwitterUtil
      * @throws Exception
      *             If {@link Twitter} throws an exception
      */
-    public static List<SocialUpdateStream> getNetworkUpdates(Widget widget,
-	    Long twitterId) throws SocketTimeoutException, IOException,
-	    Exception
+    public static List<SocialUpdateStream> getNetworkUpdates(Widget widget, Long twitterId) throws SocketTimeoutException, IOException, Exception
     {
 	try
 	{
@@ -548,8 +519,7 @@ public class TwitterUtil
 	    Query query = new Query("from:" + user.getScreenName());
 	    QueryResult queryResult = twitter.search(query);
 
-	    return getListOfSocialUpdateStream(user, twitter,
-		    queryResult.getTweets());
+	    return getListOfSocialUpdateStream(user, twitter, queryResult.getTweets());
 	}
 	catch (TwitterRuntimeException e)
 	{
@@ -574,9 +544,8 @@ public class TwitterUtil
      * @throws Exception
      *             If {@link Twitter} throws an exception
      */
-    public static List<SocialUpdateStream> getNetworkUpdates(Widget widget,
-	    Long twitterId, long statusId, int count)
-	    throws SocketTimeoutException, IOException, Exception
+    public static List<SocialUpdateStream> getNetworkUpdates(Widget widget, Long twitterId, long statusId, int count) throws SocketTimeoutException,
+	    IOException, Exception
     {
 	try
 	{
@@ -592,8 +561,7 @@ public class TwitterUtil
 	    query.setCount(count);
 	    QueryResult queryResult = twitter.search(query);
 
-	    return getListOfSocialUpdateStream(user, twitter,
-		    queryResult.getTweets());
+	    return getListOfSocialUpdateStream(user, twitter, queryResult.getTweets());
 	}
 	catch (TwitterRuntimeException e)
 	{
@@ -616,9 +584,8 @@ public class TwitterUtil
      * @throws Exception
      *             If {@link Twitter} throws an exception
      */
-    private static List<SocialUpdateStream> getListOfSocialUpdateStream(
-	    User user, Twitter twitter, List<Status> tweets)
-	    throws SocketTimeoutException, IOException, Exception
+    private static List<SocialUpdateStream> getListOfSocialUpdateStream(User user, Twitter twitter, List<Status> tweets) throws SocketTimeoutException,
+	    IOException, Exception
     {
 	List<SocialUpdateStream> updateStream = new ArrayList<SocialUpdateStream>();
 
@@ -644,19 +611,14 @@ public class TwitterUtil
 		 */
 		if (tweet.isRetweet())
 		{
-		    User tweetor = twitter.showUser(tweet
-			    .getUserMentionEntities()[0].getScreenName());
-		    stream.tweeted_person_pic_url = tweetor
-			    .getMiniProfileImageURLHttps();
-		    stream.tweeted_person_profile_url = "https://twitter.com/"
-			    + tweetor.getScreenName();
+		    User tweetor = twitter.showUser(tweet.getUserMentionEntities()[0].getScreenName());
+		    stream.tweeted_person_pic_url = tweetor.getMiniProfileImageURLHttps();
+		    stream.tweeted_person_profile_url = "https://twitter.com/" + tweetor.getScreenName();
 		}
 		else
 		{
-		    stream.tweeted_person_pic_url = user
-			    .getBiggerProfileImageURLHttps();
-		    stream.tweeted_person_profile_url = "https://twitter.com/"
-			    + user.getScreenName();
+		    stream.tweeted_person_pic_url = user.getBiggerProfileImageURLHttps();
+		    stream.tweeted_person_profile_url = "https://twitter.com/" + user.getScreenName();
 		}
 
 		/*
@@ -665,13 +627,8 @@ public class TwitterUtil
 		 * his/her twitter profile
 		 */
 		for (UserMentionEntity entity : tweet.getUserMentionEntities())
-		    stream.message = stream.message
-			    .replace(
-				    "@" + entity.getScreenName(),
-				    "<a href='https://twitter.com/"
-					    + entity.getScreenName()
-					    + "' target='_blank' class='cd_hyperlink'>@"
-					    + entity.getScreenName() + "</a>");
+		    stream.message = stream.message.replace("@" + entity.getScreenName(), "<a href='https://twitter.com/" + entity.getScreenName()
+			    + "' target='_blank' class='cd_hyperlink'>@" + entity.getScreenName() + "</a>");
 
 		/*
 		 * For every hash tag, make its name as link in the tweet string
@@ -679,15 +636,9 @@ public class TwitterUtil
 		 */
 		for (HashtagEntity entity : tweet.getHashtagEntities())
 		{
-		    String url = "https://twitter.com/search?q=%23"
-			    + entity.getText() + "&src=hash";
-		    stream.message = stream.message
-			    .replace(
-				    "#" + entity.getText(),
-				    "<a href='"
-					    + url
-					    + "' target='_blank' class='cd_hyperlink'>#"
-					    + entity.getText() + "</a>");
+		    String url = "https://twitter.com/search?q=%23" + entity.getText() + "&src=hash";
+		    stream.message = stream.message.replace("#" + entity.getText(),
+			    "<a href='" + url + "' target='_blank' class='cd_hyperlink'>#" + entity.getText() + "</a>");
 		}
 
 		/*
@@ -697,9 +648,7 @@ public class TwitterUtil
 		 */
 		for (URLEntity entity : tweet.getURLEntities())
 		    stream.message = stream.message.replace(entity.getURL(),
-			    "<a href='" + entity.getURL()
-				    + "' target='_blank' class='cd_hyperlink'>"
-				    + entity.getDisplayURL() + "</a>");
+			    "<a href='" + entity.getURL() + "' target='_blank' class='cd_hyperlink'>" + entity.getDisplayURL() + "</a>");
 
 		/*
 		 * If still tweet contains URL, showing it as hyper link and
@@ -710,16 +659,9 @@ public class TwitterUtil
 
 		for (String word : words)
 		    if (word.matches(exp))
-			stream.message = stream.message
-				.replace(
-					word,
-					"<a href='"
-						+ word
-						+ "' target='_blank' class='cd_hyperlink'>"
-						+ word + "</a>");
+			stream.message = stream.message.replace(word, "<a href='" + word + "' target='_blank' class='cd_hyperlink'>" + word + "</a>");
 
-		System.out.println("Tweet after showing links: "
-			+ stream.message);
+		System.out.println("Tweet after showing links: " + stream.message);
 
 		// Each tweet is added in a list
 		updateStream.add(stream);
@@ -744,15 +686,12 @@ public class TwitterUtil
      * @throws Exception
      *             If {@link Twitter} throws an exception
      */
-    public static List<Status> getTweetsByScreenName(Twitter twitter,
-	    String screenName) throws SocketTimeoutException, IOException,
-	    Exception
+    public static List<Status> getTweetsByScreenName(Twitter twitter, String screenName) throws SocketTimeoutException, IOException, Exception
     {
 	try
 	{
 	    // Create a query with screen name and search for tweets
-	    QueryResult result = twitter
-		    .search(new Query("from:" + screenName));
+	    QueryResult result = twitter.search(new Query("from:" + screenName));
 
 	    return result.getTweets();
 	}
@@ -779,8 +718,7 @@ public class TwitterUtil
      * @throws Exception
      *             If {@link Twitter} throws an exception
      */
-    public static List<Long> getFollowersIDs(Widget widget, String twitterId)
-	    throws SocketTimeoutException, IOException, Exception
+    public static List<Long> getFollowersIDs(Widget widget, String twitterId) throws SocketTimeoutException, IOException, Exception
     {
 	try
 	{
@@ -795,8 +733,7 @@ public class TwitterUtil
 	     * followers are required then unComment this do while condition
 	     */
 	    // do {
-	    ids = getTwitter(widget).getFollowersIDs(Long.parseLong(twitterId),
-		    cursor);
+	    ids = getTwitter(widget).getFollowersIDs(Long.parseLong(twitterId), cursor);
 	    listOfIds.addAll(Arrays.asList(ArrayUtils.toObject(ids.getIDs())));
 	    System.out.println("List of Ids: " + listOfIds);
 	    // } while ((cursor = ids.getNextCursor()) != 0);
@@ -822,8 +759,7 @@ public class TwitterUtil
      * @throws Exception
      *             If {@link Twitter} throws an exception
      */
-    public static List<Long> getFollowingIDs(Widget widget, String twitterId)
-	    throws SocketTimeoutException, IOException, Exception
+    public static List<Long> getFollowingIDs(Widget widget, String twitterId) throws SocketTimeoutException, IOException, Exception
     {
 	try
 	{
@@ -837,8 +773,7 @@ public class TwitterUtil
 	     * following Ids are required then unComment this do while condition
 	     */
 	    // do {
-	    ids = getTwitter(widget).getFriendsIDs(Long.parseLong(twitterId),
-		    cursor);
+	    ids = getTwitter(widget).getFriendsIDs(Long.parseLong(twitterId), cursor);
 	    listOfIds.addAll(Arrays.asList(ArrayUtils.toObject(ids.getIDs())));
 	    System.out.println("List of Ids: " + listOfIds);
 	    // } while ((cursor = ids.getNextCursor()) != 0);
@@ -864,9 +799,7 @@ public class TwitterUtil
      * @throws Exception
      *             If {@link Twitter} throws an exception
      */
-    public static List<SocialSearchResult> getListOfProfiles(Widget widget,
-	    JSONArray arrayOfIds) throws SocketTimeoutException, IOException,
-	    Exception
+    public static List<SocialSearchResult> getListOfProfiles(Widget widget, JSONArray arrayOfIds) throws SocketTimeoutException, IOException, Exception
     {
 	try
 	{
@@ -882,8 +815,7 @@ public class TwitterUtil
 	    for (int i = 0; i < arrayOfIds.length(); i++)
 		try
 		{
-		    User user = twitter.showUser(Long.parseLong(arrayOfIds
-			    .getString(i)));
+		    User user = twitter.showUser(Long.parseLong(arrayOfIds.getString(i)));
 
 		    // Wraps in object and adds each result in to list
 		    profilesList.add(wrapUserDetailsInSearchResult(user));
@@ -924,8 +856,7 @@ public class TwitterUtil
 	 */
 	if (error.contains("message - ") && error.contains("code - "))
 	{
-	    error = error.substring(error.indexOf("message - ") + 10,
-		    error.indexOf("code - "));
+	    error = error.substring(error.indexOf("message - ") + 10, error.indexOf("code - "));
 	    System.out.println("After changing error: " + error);
 	    return error;
 	}

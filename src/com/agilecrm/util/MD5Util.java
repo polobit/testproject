@@ -13,7 +13,6 @@ import java.security.NoSuchAlgorithmException;
  */
 public class MD5Util
 {
-
     /**
      * Hash function MD5 for password, which takes arbitrary-sized data and
      * output a fixed-length (16) hash value.
@@ -23,13 +22,12 @@ public class MD5Util
      */
     public static String getMD5HashedPassword(String password)
     {
-	String hashedPassword = null;
-
 	if (password == null)
 	    return null;
+
+	String hashedPassword = null;
 	try
 	{
-
 	    // Create MessageDigest object for MD5
 	    MessageDigest digest = MessageDigest.getInstance("MD5");
 
@@ -38,11 +36,9 @@ public class MD5Util
 
 	    // Converts message digest value in base 16
 	    hashedPassword = new BigInteger(1, digest.digest()).toString(16);
-
 	}
 	catch (NoSuchAlgorithmException e)
 	{
-
 	    e.printStackTrace();
 	}
 	return hashedPassword;

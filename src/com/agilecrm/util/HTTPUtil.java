@@ -39,6 +39,8 @@ public class HTTPUtil
 	{
 	    URL yahoo = new URL(url);
 	    URLConnection conn = yahoo.openConnection();
+
+	    // Set Connection Timeout as Google AppEngine has 5 secs timeout
 	    conn.setConnectTimeout(600000);
 	    conn.setReadTimeout(600000);
 
@@ -114,12 +116,16 @@ public class HTTPUtil
     {
 	URL url;
 	HttpURLConnection conn = null;
+
 	// Send data
 	url = new URL(requestURL);
 	conn = (HttpURLConnection) url.openConnection();
 	conn.setDoOutput(true);
+
+	// Set Connection Timeout as Google AppEngine has 5 secs timeout
 	conn.setConnectTimeout(600000);
 	conn.setReadTimeout(600000);
+
 	conn.setRequestMethod(methodType.toUpperCase());
 	OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
 	wr.write(data);
@@ -138,7 +144,6 @@ public class HTTPUtil
 	reader.close();
 
 	return output;
-
     }
 
     /**
@@ -157,8 +162,8 @@ public class HTTPUtil
      * @throws Exception
      *             If server throws an exception
      */
-    public static String accessURLUsingAuthentication(String postURL, String username, String password, String data,
-	    String contentType, String requestMethod, String acceptType) throws Exception
+    public static String accessURLUsingAuthentication(String postURL, String username, String password, String data, String contentType, String requestMethod,
+	    String acceptType) throws Exception
     {
 	HttpURLConnection connection = null;
 
@@ -168,6 +173,7 @@ public class HTTPUtil
 	System.out.println(username);
 	System.out.println(password);
 
+	// Base64 Encode password and set authentication if required
 	if (!StringUtils.isBlank(username) && !StringUtils.isBlank(password))
 	{
 	    String userPass = Base64Encoder.encode((username + ":" + password).getBytes()).replace("\n", "");
@@ -178,8 +184,10 @@ public class HTTPUtil
 
 	connection.setDoOutput(true);
 
+	// Set Connection Timeout as Google AppEngine has 5 secs timeout
 	connection.setConnectTimeout(600000);
 	connection.setReadTimeout(600000);
+
 	requestMethod = (requestMethod == null) ? "GET" : requestMethod;
 	connection.setRequestMethod(requestMethod);
 
@@ -189,17 +197,18 @@ public class HTTPUtil
 	if (acceptType != null)
 	    connection.setRequestProperty("accept", acceptType);
 
+	// If data is present, send data- could be post
 	if (data != null)
 	{
 	    OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
-
 	    wr.write(data);
 	    wr.flush();
 	    wr.close();
 	}
 
-	System.out.println("responseCode = " + connection.getResponseMessage());
+	System.out.println("Response Code = " + connection.getResponseMessage());
 
+	// Read data
 	BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
 	String output = "";
@@ -210,7 +219,7 @@ public class HTTPUtil
 	}
 	reader.close();
 
-	System.out.println("output: " + output);
+	System.out.println("Output: " + output);
 	return output;
     }
 
@@ -230,15 +239,18 @@ public class HTTPUtil
      * @throws Exception
      *             If server throws an exception
      */
-    public static String accessURL(String postURL, String username, String password, String requestMethod, String data,
-	    String contentLength, String contentType, String acceptType) throws Exception
+    public static String accessURL(String postURL, String username, String password, String requestMethod, String data, String contentLength,
+	    String contentType, String acceptType) throws Exception
     {
 	HttpURLConnection connection = null;
 
 	URL url = new URL(postURL);
 	connection = (HttpURLConnection) url.openConnection();
+
+	// Set Connection Timeout as Google AppEngine has 5 secs timeout
 	connection.setConnectTimeout(600000);
 	connection.setReadTimeout(600000);
+
 	connection.setDoOutput(true);
 
 	System.out.println(username);
@@ -310,6 +322,7 @@ public class HTTPUtil
 		}
 	    }
 	}
+
 	{
 	    System.out.println("------------Parameters--------------");
 	    Enumeration en = request.getParameterNames();
@@ -324,6 +337,7 @@ public class HTTPUtil
 		}
 	    }
 	}
+
 	System.out.println("---------------BODY--------------");
 	BufferedReader is = request.getReader();
 	String line;
@@ -340,7 +354,5 @@ public class HTTPUtil
 
 	System.out.println("ContextPath: " + request.getContextPath());
 	System.out.println("Method: " + request.getMethod());
-
     }
-
 }

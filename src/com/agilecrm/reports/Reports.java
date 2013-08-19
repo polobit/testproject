@@ -113,5 +113,4 @@ public class Reports implements Serializable
     {
 	return new AppengineSearch<Contact>(Contact.class).getAdvacnedSearchResults(rules, count, cursor);
     }
-
 }

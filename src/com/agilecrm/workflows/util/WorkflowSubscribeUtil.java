@@ -89,5 +89,4 @@ public class WorkflowSubscribeUtil
 	    e.printStackTrace();
 	}
     }
-
 }

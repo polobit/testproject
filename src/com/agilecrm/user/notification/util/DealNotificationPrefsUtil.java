@@ -25,8 +25,7 @@ public class DealNotificationPrefsUtil
     public static void executeNotificationForNewDeal(Opportunity opportunity)
     {
 	if (opportunity != null)
-	    NotificationPrefsUtil.executeNotification(
-		    NotificationPrefs.Type.DEAL_CREATED, opportunity, null);
+	    NotificationPrefsUtil.executeNotification(NotificationPrefs.Type.DEAL_CREATED, opportunity, null);
     }
 
     /**
@@ -47,13 +46,10 @@ public class DealNotificationPrefsUtil
 		    String id = OpportunityIds.get(i).toString();
 
 		    // Gets Opportunity based on id
-		    Opportunity opportunityObject = OpportunityUtil
-			    .getOpportunity(Long.parseLong(id));
+		    Opportunity opportunityObject = OpportunityUtil.getOpportunity(Long.parseLong(id));
 
 		    // Executes notification when deal is deleted
-		    NotificationPrefsUtil.executeNotification(
-			    NotificationPrefs.Type.DEAL_CLOSED,
-			    opportunityObject, null);
+		    NotificationPrefsUtil.executeNotification(NotificationPrefs.Type.DEAL_CLOSED, opportunityObject, null);
 		}
 	    }
 	    catch (Exception e)

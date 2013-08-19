@@ -33,10 +33,8 @@ public class CSVUtil
      * @return hashtable of json objects
      * @throws Exception
      */
-    public static Hashtable convertCSVToJSONArray2(String csv,
-	    String duplicateFieldName) throws Exception
+    public static Hashtable convertCSVToJSONArray2(String csv, String duplicateFieldName) throws Exception
     {
-
 	CSVReader reader = new CSVReader(new StringReader(csv.trim()));
 
 	// Get Header Liner
@@ -66,11 +64,9 @@ public class CSVUtil
 	    for (int j = 0; j < csvValues.length; j++)
 	    {
 		// Check if the header is same as duplicate name
-		if (duplicateFieldName != null
-			&& headers[j].equalsIgnoreCase(duplicateFieldName))
+		if (duplicateFieldName != null && headers[j].equalsIgnoreCase(duplicateFieldName))
 		{
-		    System.out.println("If already present " + headers[j] + " "
-			    + csvValues[j]);
+		    System.out.println("If already present " + headers[j] + " " + csvValues[j]);
 
 		    // Check if is already present in already imported items
 		    if (keys.contains(csvValues[j]))
@@ -96,14 +92,11 @@ public class CSVUtil
 	// Put warning with the duplicate objects
 	if (duplicateFieldName != null && duplicates.size() > 0)
 	{
-	    resultHashtable.put("warning",
-		    "Duplicate Values (" + duplicates.size()
-			    + ") were not imported " + duplicates);
+	    resultHashtable.put("warning", "Duplicate Values (" + duplicates.size() + ") were not imported " + duplicates);
 	}
 
 	System.out.println("Converted csv " + csv + " to " + resultHashtable);
 	return resultHashtable;
 
     }
-
 }

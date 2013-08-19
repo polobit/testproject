@@ -49,7 +49,6 @@ public class CampaignReportsSQLUtil
 	    e.printStackTrace();
 	    return null;
 	}
-
     }
 
     /**
@@ -105,7 +104,5 @@ public class CampaignReportsSQLUtil
 	    e.printStackTrace();
 	    return null;
 	}
-
     }
-
 }
