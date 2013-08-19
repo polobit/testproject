@@ -821,4 +821,37 @@ public class JSAPI
     	return null;
     }
     }
+    
+    /**
+     *  Get all work-flows created by the current domain user
+     *  
+     *  @param pagesize
+     *  
+     *  @return 
+     */
+    @Path ("contacts/get-workflows")
+    @GET
+    @Produces("application / x-javascript")
+    public String getWorkflows()
+    {
+    try
+    {
+    	JSONArray arr = new JSONArray();
+    	List<Workflow> workflows = new ArrayList<Workflow>();
+    	workflows = WorkflowUtil.getWorkflowsRelatedToCurrentUser("50");
+    	for (Workflow workflow : workflows)
+    	{
+    		JSONObject obj = WorkflowUtil.getWorkflowJSON(workflow.id);
+    		arr.put(obj);
+    		if(obj == null)
+    		continue;
+    	}
+    	return arr.toString();
+    }
+    catch (Exception e)
+    {
+    	e.printStackTrace();
+    	return null;
+    }
+    }
 }

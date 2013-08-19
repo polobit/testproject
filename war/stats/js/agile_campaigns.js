@@ -73,3 +73,15 @@ function agile_getCampaignlogs(callback, email)
 	// Callback
 	agile_json(agile_url, callback);
 }
+
+/**
+* Get all work-flows created by current domain user
+*/
+function agile_getWorkflows(callback)
+{
+	// Get
+	var agile_url = agile_id.getURL() + "/contacts/get-workflows?callback=?&id=" + agile_id.get();
+	
+	// Callback
+	agile_json(agile_url, callback);
+}
