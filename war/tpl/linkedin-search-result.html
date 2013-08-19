@@ -1,9 +1,9 @@
 <script id="linkedin-search-result-template" type="text/html">
 <div style="padding:10px" id="linkedin-search">
 {{#if_equals this.keywords ""}}
-<p>Search results. <a href="#" class="linkedin_modify_search">Modify search</a></p>
+<p class="a-dotted">Search results. <a href="#" class="linkedin_modify_search">Modify search</a></p>
 {{else}}
-<p>Search results for <a href="#" class="linkedin_modify_search">{{this.keywords}}</a></p>
+<p class="a-dotted">Search results for <a href="#" class="linkedin_modify_search">{{this.keywords}}</a></p>
 {{/if_equals}}
 {{#each this.search_results}}
 {{#if picture}}
