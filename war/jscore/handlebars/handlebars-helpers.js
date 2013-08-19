@@ -1558,8 +1558,8 @@ $(function()
 
 		if (!getCurrentContactProperty(original_ref))
 			return "unknown";
-		else
-			var url = getCurrentContactProperty(original_ref);
+		
+		var url = getCurrentContactProperty(original_ref);
 		url = url.split('/');
 		url = (url[0] + '//' + url[2]);
 		return new Handlebars.SafeString(

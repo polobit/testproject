@@ -57,11 +57,12 @@ function agile_init_handlers() {
 				data[val.name] = val.value;
 		});
 
-		$('.saving', el).show();
+		$('.saving:last', el).show();
 		// Add Note
 		_agile.add_note(data, function(response) {
 
-			$('.saving', el).hide(1);
+			$('.saving:last', el).hide(1);
+			// Show notes list, after adding note.
 			$('.gadget-notes-tab', el).trigger('click');
 		}, email.email);
 	});
@@ -92,6 +93,7 @@ function agile_init_handlers() {
 		_agile.add_task(data, function(response) {
 
 			$('.saving', el).hide(1);
+			// Show tasks list, after adding task.
 			$('.gadget-tasks-tab', el).trigger('click');
 		}, email.email);
 	});
@@ -122,6 +124,7 @@ function agile_init_handlers() {
 		_agile.add_deal(data, function(response) {
 
 			$('.saving', el).hide(1);
+			// Show deals list, after adding deal.
 			$('.gadget-deals-tab', el).trigger('click');
 		}, email.email);
 	});
@@ -274,11 +277,12 @@ function agile_init_handlers() {
 		// Set context (HTML container where event is triggered).
 		var el = $(this).closest("div.gadget-contact-details-tab")
 					.find("div.show-form");
-		
+		// Build notes tab UI to add note.
 		agile_build_form_template($(this), "gadget-note",
 				".gadget-notes-tab-list", function() {
 
 		});
+		// Show notes tab.
 		$('.gadget-notes-tab a', el).tab('show');
 	});
 	
@@ -289,7 +293,7 @@ function agile_init_handlers() {
 		// Set context (HTML container where event is triggered).
 		var el = $(this).closest("div.gadget-contact-details-tab")
 					.find("div.show-form");
-		
+		// Build tasks tab UI to add task.
 		agile_build_form_template($(this), "gadget-task",
 				".gadget-tasks-tab-list", function() {
 			/*
@@ -309,7 +313,7 @@ function agile_init_handlers() {
 		// Set context (HTML container where event is triggered).
 		var el = $(this).closest("div.gadget-contact-details-tab")
 					.find("div.show-form");
-		
+		// Build deals tab UI to add deal.
 		agile_build_form_template($(this), "gadget-deal",
 				".gadget-deals-tab-list", function() {
 			/*
@@ -341,17 +345,17 @@ function agile_init_handlers() {
 
 			// Build show contact form template.
 			agile_build_form_template(that, "gadget-contact-list", ".contact-list", function() {
-
+				// Contact not found, show add contact in mail list for requested mail.
 				if (val.id == null) {
 					$('.saving', el).hide();
 					$('.status', el).show().delay(1500).hide(1);
 				}	
-
+				// Contact found, show Contact summary. 
 				else {
+					$('.saving, .status', el).remove();
 					$('.gadget-show-contact', el).trigger('click');
 					$('.contact-list', el).css('display', 'inline');
 				}
-				
 				$('.saving', el).hide();
 			});
 		});
@@ -378,32 +382,36 @@ function agile_init_handlers() {
 				// Load Bootstrap libraries.
 				head.js(Lib_Path + 'lib/bootstrap.min.js', function() {
 					
-					// Enables Tab.
+					// Enables Drop down.
 					$('.dropdown-toggle').dropdown();
+					// Enables Tab.
 					$('.gadget_tabs', el).tab();
+					// Hide list view of contact.
 					$(".contact-minified", el).toggle();
+					// Show contact summary.
 					$(".show-contact-summary", el).toggle();
+					// Show Tabs.
 					$(".option-tabs", el).toggle();
+					// Show notes tab by default.
 					$('.gadget-notes-tab', el).trigger('click');
 				});
 			});
 		});
 	});
 	
-	// Click event for hide contact info summery
+	// Click event for hide contact info summary
 	$(".hide-contact-summery").die().live('click', function(e) {
 		// Prevent default functionality.
 		e.preventDefault();
 		// Set context (HTML container where event is triggered).
 		var el = $(this).closest("div.gadget-contact-details-tab")
 				.find("div.show-form");
-
+		// Show list view of contact.
 		$(".contact-minified", el).toggle();
+		// hide contact summary.
 		$(".show-contact-summary", el).toggle();
+		// Hide Tabs.
 		$(".option-tabs", el).toggle();
-		$(".gadget-note", el).hide();
-		$(".gadget-deal", el).hide();
-		$(".gadget-task", el).hide();
 	});
 
 	// Click event for notes tab.
@@ -413,17 +421,19 @@ function agile_init_handlers() {
 		// Set context (HTML container where event is triggered).
 		var el = $(this).closest("div.gadget-contact-details-tab")
 		.find('.show-form');
+		// Clear notes tab data.
 		$('.gadget-notes-tab-list', el).html("");
 		var email = $(el).data("content");
 		// Get Notes.
 		_agile.get_notes(function(response) {
 			console.log(response);
-			
+			// Load Date formatter libraries.
 			head.js(Lib_Path + 'lib/date-formatter.js', Lib_Path + 'lib/jquery.timeago.js', function() {
 				agile_get_gadget_template("gadget-notes-list-template", function(data) {
-					
+					// Fill notes list in tab.
 					$('.gadget-notes-tab-list', el).html(getTemplate('gadget-notes-list', response, 'no'));
 				});
+				// Apply date formatter on date/time field.
 				$("time", el).timeago();
 			});
 		}, email);
@@ -436,6 +446,7 @@ function agile_init_handlers() {
 		// Set context (HTML container where event is triggered).
 		var el = $(this).closest("div.gadget-contact-details-tab")
 		.find('.show-form');
+		// Clear tasks tab data.
 		$('.gadget-tasks-tab-list', el).html("");
 		var email = $(el).data("content");
 		// Get Notes.
@@ -443,9 +454,10 @@ function agile_init_handlers() {
 			console.log(response);
 			
 			agile_get_gadget_template("gadget-tasks-list-template", function(data) {
-					
+				// Fill tasks list in tab.	
 				$('.gadget-tasks-tab-list', el).html(getTemplate('gadget-tasks-list', response, 'no'));
 			});
+			// Apply date formatter on date/time field.
 			$("time", el).timeago();
 		}, email);
 	});
@@ -464,9 +476,10 @@ function agile_init_handlers() {
 			console.log(response);
 			
 			agile_get_gadget_template("gadget-deals-list-template", function(data) {
-					
+				// Fill deals list in tab.	
 				$('.gadget-deals-tab-list', el).html(getTemplate('gadget-deals-list', response, 'no'));
 			});
+			// Apply date formatter on date/time field.
 			$("time", el).timeago();
 		}, email);
 	});
@@ -490,9 +503,12 @@ function agile_init_handlers() {
 	$(".cancel").die().live('click', function(e) {
 		// Prevent default functionality.
 		e.preventDefault();
+		
+		var $this = $(this).data('tab-identity');
+		// Show tabs default list.
+		$('.gadget-' + $this + '-tab').trigger('click');
 		// Set context (HTML container where event is triggered).
 		var el = $(this).closest("div.gadget-contact-details-tab");
-		
 		// Toggle add contact UI.
 		$(".show-add-contact-form", el).hide();
 		$(".gadget-no-contact", el).show();
