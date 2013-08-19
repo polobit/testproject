@@ -1,35 +1,9 @@
 <script id="notify-html-template" type="text/html">
-<!--<div style="display:inline;position:relative;color:#333">
-    <h3>Notification</h3>
-    <br/>
-    <div>
-        {{#if entity_type}}
-            {{#each contacts}}	
-                <img class="thumbnail" src="{{gravatarurl properties 50}}" width="50" height="50" style="display:inline-block; vertical-align:top" />			
-                <span style="height:auto;display:inline-block;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:15em;padding:10px">					
-                    <b>{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</b><br />
-                    	{{getPropertyValue properties "title"}} </br> {{getPropertyValue properties "company"}}		
-                </span>
-                <br />
-                {{/each}}
-                
-		{{else}}  
-                <img class="thumbnail" src="{{gravatarurl properties 50}}" width="50" height="50" style="display:inline; vertical-align:top" />			
-                <span style="height:auto;display:inline-block;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:15em;padding:10px">
-                   	<b>{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</b><br />
-                    	{{getPropertyValue properties "title"}} <br /> {{getPropertyValue properties "company"}}		
-                </span>
-                <br/>
-        {{/if}}
-                <br />
-                <span> 
-                <b>{{#if_notification_type}} {{notification}} {{/if_notification_type}}</b> 
-                </span>
-    </div>
-</div>-->
-
 <div> 
-<span type="hidden" id={{gravatarurl properties 50}}></span> 
+<!-- Image urls hidden to show in desktop notifications. First span is for contact image and second span is for company.--> 
+<span type="hidden" id={{gravatarurl properties 50}}></span>
+<span type="hidden" id="https://www.google.com/s2/favicons?domain={{getPropertyValue properties "url"}}"></span>
+
    {{#if entity_type}}
        <span><a href="#deals" id="notification-deal-id" style="color:black;font-weight:bold">{{name}}</a></span>
    {{else}}
