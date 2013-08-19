@@ -79,8 +79,7 @@ public class NamespaceFilter implements Filter
 	String subdomain = request.getServerName().split("\\.")[0];
 
 	// Excludes if it is running in backends
-	if (subdomain.equalsIgnoreCase(Globals.BULK_ACTION_BACKENDS_URL)
-		|| BackendServiceFactory.getBackendService().getCurrentBackend() != null)
+	if (subdomain.equalsIgnoreCase(Globals.BULK_ACTION_BACKENDS_URL) || BackendServiceFactory.getBackendService().getCurrentBackend() != null)
 	    return true;
 
 	// Lowercase
@@ -109,7 +108,6 @@ public class NamespaceFilter implements Filter
 	if (subdomain.equalsIgnoreCase(Globals.GOOGLE_APPS_DOMAIN))
 	{
 	    return setupGoogleAppsNameSpace(request, response);
-
 	}
 
 	// Set the subdomain as name space
@@ -147,7 +145,6 @@ public class NamespaceFilter implements Filter
     {
 	try
 	{
-
 	    String owner_id = request.getParameter("opensocial_owner_id");
 	    System.out.println("open id in namespace filter : " + owner_id);
 
@@ -155,17 +152,19 @@ public class NamespaceFilter implements Filter
 	    String appsDomain = request.getParameter("domain");
 
 	    /*
-	     * If Gadget Level API which does not understand redirect, we /*
-	     * just set the namespace.
+	     * If Gadget Level API which does not understand redirect, we just
+	     * set the namespace.
 	     * 
 	     * Request url should be changed if there is one time session key,
 	     * so session
 	     */
-	    if (!StringUtils.isEmpty(request.getParameter(GMailGadgetServlet.SESSION_KEY_NAME))
-		    && !StringUtils.isEmpty(appsDomain))
+	    if (!StringUtils.isEmpty(request.getParameter(GMailGadgetServlet.SESSION_KEY_NAME)) && !StringUtils.isEmpty(appsDomain))
 	    {
+		// Get Namespace
 		String namespace = appsDomain.split("\\.")[0];
 		System.out.println("Setting Google Apps - Namespace " + appsDomain);
+
+		// Get Current URL and Redirect to xxx.agilecrm.com
 		String url = getFullUrl((HttpServletRequest) request);
 		System.out.println(url);
 		url = url.replace(Globals.GOOGLE_APPS_DOMAIN + ".", namespace + ".");
@@ -180,7 +179,6 @@ public class NamespaceFilter implements Filter
 	    {
 		return true;
 	    }
-
 	}
 	catch (Exception e)
 	{
@@ -201,8 +199,7 @@ public class NamespaceFilter implements Filter
     {
 	// Redirect to choose domain page if not localhost - on localhost - we
 	// do it on empty namespace
-	if (!request.getServerName().equalsIgnoreCase("localhost")
-		&& !request.getServerName().equalsIgnoreCase("127.0.0.1"))
+	if (!request.getServerName().equalsIgnoreCase("localhost") && !request.getServerName().equalsIgnoreCase("127.0.0.1"))
 	{
 	    try
 	    {
@@ -227,8 +224,7 @@ public class NamespaceFilter implements Filter
      * @param chain
      */
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
-	    ServletException
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
     {
 	// If URL path starts with "/backend", then request is forwarded without
 	// namespace verification i.e., no filter on url which starts with
@@ -255,7 +251,6 @@ public class NamespaceFilter implements Filter
     public void init(FilterConfig arg0) throws ServletException
     {
 	// Nothing to do
-
     }
 
     @Override
@@ -263,5 +258,4 @@ public class NamespaceFilter implements Filter
     {
 	// Nothing to do
     }
-
 }
