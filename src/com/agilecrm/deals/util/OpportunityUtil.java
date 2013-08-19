@@ -83,6 +83,7 @@ public class OpportunityUtil
 	// Array of milestones
 	Opportunity.MILESTONES = MilestoneUtil.getMilestones().milestones.split(",");
 	ObjectMapper mapper = new ObjectMapper();
+
 	// Iterate through all possible milestones
 	for (String milestone : Opportunity.MILESTONES)
 	{
@@ -98,7 +99,6 @@ public class OpportunityUtil
 	    {
 		e.printStackTrace();
 	    }
-
 	}
 	return milestonesObject;
     }
