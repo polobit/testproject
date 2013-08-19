@@ -36,7 +36,7 @@ public class Case
      * Id of entity
      */
     @Id
-    public Long id;
+    Long id;
 
     /**
      * Title of the case

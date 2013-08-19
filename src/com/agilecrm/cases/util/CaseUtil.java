@@ -61,10 +61,9 @@ public class CaseUtil
     {
 	dao.put(newCase);
 
-	if (newCase.id == null)
-	{
-	    return null;
-	}
+	/*
+	 * if (newCase.id == null) { return null; }
+	 */
 	return newCase;
     }
 
