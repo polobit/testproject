@@ -36,7 +36,7 @@ public class Case
      * Id of entity
      */
     @Id
-    Long id;
+    public Long id;
 
     /**
      * Title of the case
@@ -64,7 +64,7 @@ public class Case
     public Long created_time = 0L;
 
     /**
-     * Entity type.
+     * Entity type for timeline
      */
     @NotSaved
     public String entity_type = "case";
