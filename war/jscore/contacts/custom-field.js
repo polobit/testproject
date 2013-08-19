@@ -235,7 +235,6 @@ function show_custom_fields_helper(custom_fields, properties){
  */
 function fill_custom_field_values(form, content)
 {
-	console.log(content);
 	$.each(content, function(index , property){
 		if(property.type == "CUSTOM")
 			{
@@ -266,7 +265,6 @@ function fill_custom_field_values(form, content)
 					}
 				if(tagName == "select")
 					{
-					
 						element.find('option[value='+property.value+']').attr("selected", "selected");
 					}
 			}

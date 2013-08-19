@@ -17,16 +17,18 @@ $(function(){
     	e.preventDefault();
 
     	var	el = $("#taskForm");
+		$('#activityModal').modal('show');
+		highlight_task();
+		// Displays contact name, to indicate the task is related to the contact
+		fill_relation(el);
+		agile_type_ahead("task_related_to", el, contacts_typeahead);
+
 		// Fills owner select element
 		populateUsers("owners-list", $("#taskForm"), undefined, undefined,
 				function(data) {
 					$("#taskForm").find("#owners-list").html(data);
 					$("#owners-list", el).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
-					// Displays contact name, to indicate the task is related to the contact
-					fill_relation(el);
-					agile_type_ahead("task_related_to", el, contacts_typeahead);
-					$('#activityModal').modal('show');
-					highlight_task();
+					$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();
 		});
     });
     
