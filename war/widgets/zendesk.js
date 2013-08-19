@@ -36,15 +36,6 @@ $(function()
 	}
 
 	/*
-	 * Checks if contact has email, if undefined shows message in Zendesk panel
-	 */
-	if (!Email)
-	{
-		zendeskError(ZENDESK_PLUGIN_NAME, "No email is associated with this contact");
-		return;
-	}
-
-	/*
 	 * If Zendesk widget preferences are defined, shows tickets from Zendesk
 	 * associated with current contact's email
 	 */
@@ -138,16 +129,6 @@ function saveZendeskPrefs()
 	// Saves the preferences into widget with zendesk widget name
 	agile_crm_save_widget_prefs(ZENDESK_PLUGIN_NAME, JSON.stringify(zendesk_prefs), function(data)
 	{
-		/*
-		 * Checks if contact has email, if undefined shows information in
-		 * Zendesk panel
-		 */
-		if (!Email)
-		{
-			zendeskError("Zendesk", "No email is associated with this contact");
-			return;
-		}
-
 		// Retrieves and shows Zendesk tickets in the Zendesk widget UI
 		showZendeskProfile();
 	});
@@ -160,6 +141,15 @@ function showZendeskProfile()
 {
 	// show loading until tickets are retrieved
 	$('#Zendesk').html(ZENDESK_UPDATE_LOAD_IMAGE);
+
+	/*
+	 * Checks if contact has email, if undefined shows message in Zendesk panel
+	 */
+	if (!Email)
+	{
+		zendeskError(ZENDESK_PLUGIN_NAME, "No email is associated with this contact");
+		return;
+	}
 
 	// Retrieves tickets and calls method to show them in Zendesk tickets panel
 	getTicketsFromZendesk(function(data)

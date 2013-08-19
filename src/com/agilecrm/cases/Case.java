@@ -23,216 +23,213 @@ import com.googlecode.objectify.condition.IfDefault;
 
 /**
  * Entity - Case <br/>
- * Stores details of a Case, not created/viewed time. <br/>
- * <code>status</code> is OPEN/CLOSE of enum <code>Status</code> and not
- * otherwise, default is OPEN.
+ * Stores details of a Case. <br/>
+ * <code>status</code> is OPEN/CLOSE of enum <code>Status</code> and default is
+ * OPEN.
  * 
  * @author Chandan
- * 
  */
 @XmlRootElement
 public class Case
 {
+    /**
+     * Id of entity
+     */
+    @Id
+    Long id;
 
-	/**
-	 * Id of entity
-	 */
-	public @Id
-	Long id;
+    /**
+     * Title of the case
+     */
+    @NotSaved(IfDefault.class)
+    public String title = null;
 
-	/**
-	 * Title and description of case
-	 */
-	@NotSaved(IfDefault.class)
-	public String title = null;
+    /**
+     * Description of the case
+     */
+    @NotSaved(IfDefault.class)
+    public String description = null;
 
-	@NotSaved(IfDefault.class)
-	public String description = null;
+    /**
+     * owner_id, owner of this case, not saved in datastore, instead owner_key
+     * is saved. Between the two, data is transformed appropriately in
+     * prePersist() and postLoad()
+     */
+    @NotSaved
+    public String owner_id;
 
-	/**
-	 * owner_id, owner of this case, not saved in datastore, instead owner_key
-	 * is saved. Between the two, data is transformed appropriately in
-	 * prePersist() and postLoad()
-	 */
-	@NotSaved
-	public String owner_id;
+    /**
+     * Creation time of the case.
+     */
+    public Long created_time = 0L;
 
-	/**
-	 * Creation time of the case.
-	 */
-	public Long created_time = 0L;
+    /**
+     * Entity type for timeline
+     */
+    @NotSaved
+    public String entity_type = "case";
 
-	/**
-	 * Entity type.
-	 */
-	@NotSaved
-	public String entity_type = "case";
+    /**
+     * ownerKey from Datastore, this is private & not passed in network.
+     */
+    @NotSaved(IfDefault.class)
+    private Key<DomainUser> owner_key = null;
 
-	/**
-	 * ownerKey from Datastore, this is private & not passed in network.
-	 */
-	@NotSaved(IfDefault.class)
-	private Key<DomainUser> owner_key = null;
+    /**
+     * List of related contacts, list of contact ids, returned in network
+     */
+    @NotSaved
+    List<String> related_contacts_id;
 
-	/**
-	 * List of related contacts, list of contact ids, returned in network
-	 */
-	public @NotSaved
-	List<String> related_contacts_id;
+    /**
+     * Keys of related contacts, private
+     */
+    @NotSaved(IfDefault.class)
+    private List<Key<Contact>> related_contacts_key = new ArrayList<Key<Contact>>();
 
-	/**
-	 * Keys of related contacts, private
-	 */
-	@NotSaved(IfDefault.class)
-	private List<Key<Contact>> related_contacts_key = new ArrayList<Key<Contact>>();
+    /**
+     * Status of case , OPEN or CLOSE. Can be extended later
+     * 
+     */
+    public static enum Status
+    {
+	OPEN, CLOSE
+    }
 
-	/**
-	 * Status of case , OPEN or CLOSE. Can be extended later
-	 * 
-	 */
-	public static enum Status
+    /**
+     * Status Open or Close, default=OPEN
+     */
+    @NotSaved(IfDefault.class)
+    public Status status = Status.OPEN;
+
+    // dao
+    public static ObjectifyGenericDao<Case> dao = new ObjectifyGenericDao<Case>(Case.class);
+
+    public Case()
+    {
+    }
+
+    /**
+     * Get Contact Entities of related contacts
+     * 
+     * @return List&lt;Contact&gt;
+     */
+    @XmlElement
+    public List<Contact> getContacts()
+    {
+	Objectify ofy = ObjectifyService.begin();
+	List<Contact> contactsList = new ArrayList<Contact>();
+	contactsList.addAll(ofy.get(this.related_contacts_key).values());
+	return contactsList;
+    }
+
+    /**
+     * Add Contact id
+     * 
+     * @param id
+     *            - contact id to add
+     */
+    public void addContactToCase(String id)
+    {
+	if (related_contacts_id == null)
+	    related_contacts_id = new ArrayList<String>();
+
+	related_contacts_id.add(id);
+    }
+
+    /**
+     * Gets domain user with respect to owner id if exists, otherwise null.
+     * 
+     * @return Domain user object.
+     * @throws Exception
+     *             when Domain User not exists with respect to id.
+     */
+    @XmlElement(name = "owner")
+    public DomainUser getOwner() throws Exception
+    {
+	if (owner_key != null)
 	{
-		OPEN, CLOSE
+	    try
+	    {
+		return DomainUserUtil.getDomainUser(owner_key.getId());
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+	return null;
+    }
+
+    /**
+     * Get link of owner image
+     * 
+     * @return url of the image
+     * @throws Exception
+     */
+    @XmlElement
+    public String getOwnerPic() throws Exception
+    {
+	AgileUser agileUser = null;
+	UserPrefs userPrefs = null;
+
+	try
+	{
+	    // Get owner pic through agileuser prefs
+	    agileUser = AgileUser.getCurrentAgileUserFromDomainUser(owner_key.getId());
+
+	    if (agileUser != null)
+		userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
+
+	    if (userPrefs != null)
+		return userPrefs.pic;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
 	}
 
-	/**
-	 * Status Open or Close, default=OPEN
-	 */
-	@NotSaved(IfDefault.class)
-	public Status status = Status.OPEN;
+	return "";
+    }
 
-	// dao
-	public static ObjectifyGenericDao<Case> dao = new ObjectifyGenericDao<Case>(Case.class);
+    /**
+     * Fill up ownerKey and relatedContactsKey
+     */
+    @PrePersist
+    public void prePersist()
+    {
+	// initialize created time.
+	if (created_time == 0L)
+	    created_time = System.currentTimeMillis() / 1000;
 
-	public Case()
-	{
-	}
+	related_contacts_key = new ArrayList<Key<Contact>>();
 
-	/**
-	 * Get Contact Entities of related contacts
-	 * 
-	 * @return List&lt;Contact&gt;
-	 */
-	@XmlElement
-	public List<Contact> getContacts()
-	{
-		Objectify ofy = ObjectifyService.begin();
-		List<Contact> contactsList = new ArrayList<Contact>();
-		contactsList.addAll(ofy.get(this.related_contacts_key).values());
-		return contactsList;
-	}
+	for (String contactId : related_contacts_id)
+	    related_contacts_key.add(new Key<Contact>(Contact.class, Long.parseLong(contactId)));
 
-	/**
-	 * Add Contact id
-	 * 
-	 * @param id
-	 *            - contact id to add
-	 */
-	public void addContactToCase(String id)
-	{
-		if (related_contacts_id == null)
-			related_contacts_id = new ArrayList<String>();
+	owner_key = new Key<DomainUser>(DomainUser.class, Long.parseLong(this.owner_id));
+    }
 
-		related_contacts_id.add(id);
-	}
+    /**
+     * Post Load , fill related_contacts_id
+     */
+    @javax.persistence.PostLoad
+    public void postLoad()
+    {
+	related_contacts_id = new ArrayList<String>();
 
-	/**
-	 * Gets domain user with respect to owner id if exists, otherwise null.
-	 * 
-	 * @return Domain user object.
-	 * @throws Exception
-	 *             when Domain User not exists with respect to id.
-	 */
-	@XmlElement(name = "owner")
-	public DomainUser getOwner() throws Exception
-	{
-		if (owner_key != null)
-		{
-			try
-			{
-				return DomainUserUtil.getDomainUser(owner_key.getId());// Gets
-																		// Domain
-																		// User
-																		// Object
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-		}
-		return null;
-	}
+	for (Key<Contact> contact : related_contacts_key)
+	    related_contacts_id.add(String.valueOf(contact.getId()));
+    }
 
-	/**
-	 * Get link of owner image
-	 * 
-	 * @return url of the image
-	 * @throws Exception
-	 */
-	@XmlElement
-	public String getOwnerPic() throws Exception
-	{
-		AgileUser agileUser = null;
-		UserPrefs userPrefs = null;
+    @Override
+    public String toString()
+    {
+	String str = title + "," + description + "\n" + owner_id + "\n";
+	for (String s : related_contacts_id)
+	    str += "\n\t" + s;
+	str += "\n" + "," + status;
 
-		try
-		{
-			// Get owner pic through agileuser prefs
-			agileUser = AgileUser.getCurrentAgileUserFromDomainUser(owner_key.getId());
-
-			if (agileUser != null)
-				userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
-
-			if (userPrefs != null)
-				return userPrefs.pic;
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-
-		return "";
-	}
-
-	/**
-	 * Fill up ownerKey and relatedContactsKey
-	 */
-	@PrePersist
-	public void prePersist()
-	{
-		// initialize created time.
-		if (created_time == 0L)
-			created_time = System.currentTimeMillis() / 1000;
-
-		related_contacts_key = new ArrayList<Key<Contact>>();
-
-		for (String contactId : related_contacts_id)
-			related_contacts_key.add(new Key<Contact>(Contact.class, Long.parseLong(contactId)));
-
-		owner_key = new Key<DomainUser>(DomainUser.class, Long.parseLong(this.owner_id));
-	}
-
-	/**
-	 * Post Load , fill related_contacts_id
-	 */
-	@javax.persistence.PostLoad
-	public void postLoad()
-	{
-		related_contacts_id = new ArrayList<String>();
-
-		for (Key<Contact> contact : related_contacts_key)
-			related_contacts_id.add(String.valueOf(contact.getId()));
-	}
-
-	@Override
-	public String toString()
-	{
-		String str = title + "," + description + "\n" + owner_id + "\n";
-		for (String s : related_contacts_id)
-			str += "\n\t" + s;
-		str += "\n" + "," + status;
-
-		return str;
-	}
-
+	return str;
+    }
 }

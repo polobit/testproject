@@ -38,16 +38,6 @@ $(function()
 	}
 
 	/*
-	 * Checks if contact has email, if undefined shows message in ClickDesk
-	 * panel
-	 */
-	if (!Email)
-	{
-		clickDeskError(CLICKDESK_PLUGIN_NAME, "No email is associated with this contact");
-		return;
-	}
-
-	/*
 	 * If ClickDesk widget preferences are defined, shows chats from ClickDesk
 	 * associated with current contact's email
 	 */
@@ -143,16 +133,6 @@ function saveClickDeskPrefs()
 	// Saves the preferences into widget with ClickDesk widget name
 	agile_crm_save_widget_prefs(CLICKDESK_PLUGIN_NAME, JSON.stringify(ClickDesk_prefs), function(data)
 	{
-		/*
-		 * Checks if contact has email, if undefined shows information in
-		 * ClickDesk panel
-		 */
-		if (!Email)
-		{
-			clickDeskError("ClickDesk", "No email is associated with this contact");
-			return;
-		}
-
 		// Retrieves and shows ClickDesk chats in the ClickDesk widget UI
 		showClickDeskProfile();
 	});
@@ -165,6 +145,16 @@ function showClickDeskProfile()
 {
 	// show loading until chats are retrieved
 	$('#ClickDesk').html(CLICKDESK_UPDATE_LOAD_IMAGE);
+
+	/*
+	 * Checks if contact has email, if undefined shows message in ClickDesk
+	 * panel
+	 */
+	if (!Email)
+	{
+		clickDeskError(CLICKDESK_PLUGIN_NAME, "No email is associated with this contact");
+		return;
+	}
 
 	// Retrieves chats and calls method to show them in chats panel
 	getChats(function(data)

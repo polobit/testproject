@@ -37,16 +37,6 @@ $(function()
 	}
 
 	/*
-	 * Checks if contact has email, if undefined shows message in Rapleaf widget
-	 * panel
-	 */
-	if (!Email)
-	{
-		rapleafError(RAPLEAF_PLUGIN_NAME, "No email is associated with this contact");
-		return;
-	}
-
-	/*
 	 * If Rapleaf widget preferences are defined, shows details from Rapleaf
 	 * associated with current contact's email
 	 */
@@ -113,16 +103,6 @@ function saveRaplefPrefs()
 	// Saves the preferences into widget with Rapleaf widget name
 	agile_crm_save_widget_prefs(RAPLEAF_PLUGIN_NAME, JSON.stringify(Rapleaf_prefs), function(data)
 	{
-		/*
-		 * Checks if contact has email, if undefined shows information in
-		 * Rapleaf panel
-		 */
-		if (!Email)
-		{
-			rapleafError(RAPLEAF_PLUGIN_NAME, "No email is associated with this contact");
-			return;
-		}
-
 		// Retrieves and shows Rapleaf details in the Rapleaf widget UI
 		showRapleafDetails();
 	});
@@ -142,6 +122,16 @@ function showRapleafDetails()
 {
 	// Shows loading, until info is fetched
 	$('#Rapleaf').html(RAPLEAF_LOADING_IMAGE);
+
+	/*
+	 * Checks if contact has email, if undefined shows message in Rapleaf widget
+	 * panel
+	 */
+	if (!Email)
+	{
+		rapleafError(RAPLEAF_PLUGIN_NAME, "No email is associated with this contact");
+		return;
+	}
 
 	// URL to connect with RapleafWidgetsAPI
 	var url = "core/api/widgets/rapleaf/" + Rapleaf_Plugin_Id + "/" + Email;

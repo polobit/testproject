@@ -143,15 +143,13 @@ public class Opportunity
     /**
      * ObjectifyDao of Opportunity.
      */
-    public static ObjectifyGenericDao<Opportunity> dao = new ObjectifyGenericDao<Opportunity>(
-	    Opportunity.class);
+    public static ObjectifyGenericDao<Opportunity> dao = new ObjectifyGenericDao<Opportunity>(Opportunity.class);
 
     /**
      * Default Constructor.
      */
     public Opportunity()
     {
-
     }
 
     /**
@@ -172,8 +170,7 @@ public class Opportunity
      * @param ownerId
      *            - Owner id.
      */
-    public Opportunity(String name, String description, Double expectedValue,
-	    String milestone, int probability, String track, String ownerId)
+    public Opportunity(String name, String description, Double expectedValue, String milestone, int probability, String track, String ownerId)
     {
 	this.name = name;
 	this.description = description;
@@ -288,8 +285,7 @@ public class Opportunity
 	try
 	{
 	    // Get owner pic through agileuser prefs
-	    agileuser = AgileUser.getCurrentAgileUserFromDomainUser(ownerKey
-		    .getId());
+	    agileuser = AgileUser.getCurrentAgileUserFromDomainUser(ownerKey.getId());
 	    if (agileuser != null)
 		userprefs = UserPrefsUtil.getUserPrefs(agileuser);
 	    if (userprefs != null)
@@ -313,8 +309,7 @@ public class Opportunity
 	{
 	    for (String contact_id : this.contact_ids)
 	    {
-		this.related_contacts.add(new Key<Contact>(Contact.class, Long
-			.parseLong(contact_id)));
+		this.related_contacts.add(new Key<Contact>(Contact.class, Long.parseLong(contact_id)));
 	    }
 
 	    // Executes trigger when new deal is created with related
@@ -362,8 +357,7 @@ public class Opportunity
 	}
 
 	// Saves domain user key
-	ownerKey = new Key<DomainUser>(DomainUser.class,
-		Long.parseLong(owner_id));
+	ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(owner_id));
 	System.out.println("OwnerKey" + ownerKey);
 
 	AgileUser user = AgileUser.getCurrentAgileUser();
@@ -382,10 +376,7 @@ public class Opportunity
      */
     public String toString()
     {
-	return "id: " + id + " relatesto: " + contact_ids + " close date"
-		+ close_date + " name: " + name + " description:" + description
-		+ " expectedValue: " + expected_value + " milestone: "
-		+ milestone + " probability: " + probability + " Track: "
-		+ track + " Owner " + owner_id;
+	return "id: " + id + " relatesto: " + contact_ids + " close date" + close_date + " name: " + name + " description:" + description + " expectedValue: "
+		+ expected_value + " milestone: " + milestone + " probability: " + probability + " Track: " + track + " Owner " + owner_id;
     }
 }
