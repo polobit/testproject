@@ -31,15 +31,6 @@ $(function()
 		return;
 	}
 
-	/*
-	 * Checks if contact has numbers, if undefined shows message in Twilio panel
-	 */
-	if (Numbers.length == 0)
-	{
-		twilioError(Twilio_PLUGIN_NAME, "No contact number is associated with this contact");
-		return;
-	}
-
 	// Parse string preferences as JSON
 	var twilio_prefs = JSON.parse(twilio_widget.prefs);
 	console.log(twilio_prefs);
@@ -587,7 +578,7 @@ function registerClickEvents(from_number)
 
 		to_number = $('#contact_number').val();
 		console.log("Twilio Number in hang up: " + to_number);
-		
+
 		// Get call logs and diconnect all connections
 		getTwilioLogs(to_number);
 		Twilio.Device.disconnectAll();
