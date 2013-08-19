@@ -80,16 +80,10 @@ function updateDeal(ele) {
 	var value = ele.toJSON();
 	
 	var dealForm = $("#opportunityUpdateForm");
-	// If we use only one modal for add and edit validation problems arises so done seperately.
-	//var dealModal = $("#opportunityModal").clone();
-	//dealModal.attr('id', "opportunityUpdateModal");
-	//dealModal.find('h3').html("Edit Deal");
-	//$("#opportunityForm > fieldset", dealModal).prepend('<input name="id" type="hidden"/>')
-	//$("#opportunityForm", dealModal).attr('name', "opportunityUpdateForm");
-	//$("#opportunityForm", dealModal).attr('id', "opportunityUpdateForm");
-
 	
 	deserializeForm(value, $("#opportunityUpdateForm"));
+	
+	$("#opportunityUpdateModal").modal('show');
 	
 	// Call setupTypeAhead to get contacts
 	agile_type_ahead("relates_to", dealForm, contacts_typeahead);
@@ -100,45 +94,47 @@ function updateDeal(ele) {
 				if (value.owner) {
 					$("#owners-list", dealForm).find('option[value=' + value['owner'].id + ']')
 							.attr("selected", "selected");
+					$("#owners-list", $("#opportunityUpdateForm")).closest('div').find('.loading-img').hide();
 				}
-				
-				// Fills milestone select element
-				populateMilestones(dealForm, undefined, value, function(data){
-					dealForm.find("#milestone").html(data);
-					if (value.milestone) {
-						$("#milestone", dealForm).find('option[value=\"'+value.milestone+'\"]')
-								.attr("selected", "selected");
-					}
-					$("#opportunityUpdateModal").modal('show');
-
-				});
-			});
+	});
+	
+	// Fills milestone select element
+	populateMilestones(dealForm, undefined, value, function(data){
+		dealForm.find("#milestone").html(data);
+		if (value.milestone) {
+			$("#milestone", dealForm).find('option[value=\"'+value.milestone+'\"]')
+					.attr("selected", "selected");
+		}
+		$("#milestone", dealForm).closest('div').find('.loading-img').hide();
+	});
 }
 
 // Show new deal popup
 function show_deal(){
 	
 	var el = $("#opportunityForm");
+
+	$("#opportunityModal").modal('show');
 	
 	// Fills owner select element
 	populateUsers("owners-list", el, undefined, undefined, function(data){
 		
 		$("#opportunityForm").find("#owners-list").html(data);
 		$("#owners-list", $("#opportunityForm")).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
-		// Contacts type-ahead
-		agile_type_ahead("relates_to", el, contacts_typeahead);
-		
-		// Fills milestone select element
-		populateMilestones(el, undefined, undefined, function(data){
-			$("#milestone", el).html(data);
-		});
+		$("#owners-list", $("#opportunityForm")).closest('div').find('.loading-img').hide();
+	});
+	// Contacts type-ahead
+	agile_type_ahead("relates_to", el, contacts_typeahead);
+	
+	// Fills milestone select element
+	populateMilestones(el, undefined, undefined, function(data){
+		$("#milestone", el).html(data);
+		$("#milestone", el).closest('div').find('.loading-img').hide();
+	});
 
-		// Enable the datepicker
-		$('#close_date', el).datepicker({
-			format : 'mm/dd/yyyy',
-		});
-		
-		$("#opportunityModal").modal('show');
+	// Enable the datepicker
+	$('#close_date', el).datepicker({
+		format : 'mm/dd/yyyy',
 	});
 }
 

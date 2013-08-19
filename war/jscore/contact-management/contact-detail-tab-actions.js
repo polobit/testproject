@@ -7,14 +7,14 @@ $(function(){
 		var value = tasksView.collection.get(id).toJSON();
 		deserializeForm(value, $("#updateTaskForm"));
     	console.log("contact details tab owner list");
+    	$("#updateTaskModal").modal('show');
 		// Fills owner select element
 		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data){
 			$("#updateTaskForm").find("#owners-list").html(data);
 			if(value.taskOwner)
-			{
 				$("#owners-list", $("#updateTaskForm")).find('option[value='+value['taskOwner'].id+']').attr("selected", "selected");
-			}
-			$("#updateTaskModal").modal('show');
+			
+			$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
 		});
 	});
 	
@@ -35,31 +35,33 @@ $(function(){
 	$(".contact-add-deal").die().live('click', function(e){
 		e.preventDefault();
 		var el = $("#opportunityForm");
+		$("#opportunityModal").modal('show');
 		
 		// Fills owner select element
 		populateUsers("owners-list", el, undefined, undefined, function(data){
 			
 			$("#opportunityForm").find("#owners-list").html(data);
 			$("#owners-list", $("#opportunityForm")).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
-			// Contacts type-ahead
-			agile_type_ahead("relates_to", el, contacts_typeahead);
-			
-			// Fills milestone select element
-			populateMilestones(el, undefined, undefined, function(data){
-				$("#milestone", el).html(data);
-			});
-
-			// Enable the datepicker
-			$('#close_date', el).datepicker({
-				format : 'mm/dd/yyyy',
-			});
-			
-        	var json = App_Contacts.contactDetailView.model.toJSON();
-        	var contact_name = (json.type==='COMPANY'? getPropertyValue(json.properties, "name") : getPropertyValue(json.properties, "first_name")+ " " + getPropertyValue(json.properties, "last_name"));
-        	$('.tags',el).append('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ json.id +'">'+contact_name+'</li>');
-			
-			$("#opportunityModal").modal('show');
+			$("#owners-list", $("#opportunityForm")).closest('div').find('.loading-img').hide();
 		});
+		// Contacts type-ahead
+		agile_type_ahead("relates_to", el, contacts_typeahead);
+		
+		// Fills milestone select element
+		populateMilestones(el, undefined, undefined, function(data){
+			$("#milestone", el).html(data);
+			$("#milestone", el).closest('div').find('.loading-img').hide();
+		});
+
+		// Enable the datepicker
+		$('#close_date', el).datepicker({
+			format : 'mm/dd/yyyy',
+		});
+		
+    	var json = App_Contacts.contactDetailView.model.toJSON();
+    	var contact_name = (json.type==='COMPANY'? getPropertyValue(json.properties, "name") : getPropertyValue(json.properties, "first_name")+ " " + getPropertyValue(json.properties, "last_name"));
+    	$('.tags',el).append('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ json.id +'">'+contact_name+'</li>');
+		
 	});
 	
 	// For updating a deal from contact-details

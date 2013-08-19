@@ -194,8 +194,8 @@ $(function() {
  */
 function highlight_vent() {
 	$("#hiddentask").val("event");
-	$("#event").css({"color":"black","font-weight":"bold"});
-	$("#task").css({"color":"red","font-weight":"normal"});
+	$("#event").css({"color":"black"});
+	$("#task").css({"color":"red"});
 	$("#relatedTask").css("display", "none");
 	$("#relatedEvent").css("display", "block");
 }

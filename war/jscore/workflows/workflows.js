@@ -13,8 +13,6 @@ $(function(){
 		e.stopPropagation();
 	});
 	
-	 // Save Workflow
-    
 	/**
 	 * Saves the content of workflow if the form is valid
 	 * 
@@ -146,7 +144,6 @@ $(function(){
 		// Plays video on modal shown
 		$(workflow_help_modal).on("shown", function(){
 			$(this).children('div.modal-body').find('div#workflow-help-detail').html('<h3 style="margin-left:165px">Easy. Peasy.</h3><iframe width="420" height="345" src="//www.youtube.com/embed/0Z-oqK6mWiE?enablejsapi=10&amp;autoplay=1" frameborder="0" allowfullscreen></iframe>');
-            //window.frames[1].postMessage('{"event":"command","func":"playVideo","args":""}', '*');
 		});
 		
 		// Stops video on modal hide

@@ -266,7 +266,7 @@ $(function(){
 		
 		$.get('core/api/web-stats/JSAPI-status',function(data){
 			if(data == 0){
-				$('#stats', App_Contacts.contactDetailView.model.el).html('<h4><p>You have not yet setup the Javascrip API on your website.</p><p>Please <a href="#analytics-code">set it up</a> to see the contact\'s site visits here.</p></h4>');
+				$('#stats', App_Contacts.contactDetailView.model.el).html('<h4><p>You have not yet setup the Javascript API on your website.</p><p>Please <a href="#analytics-code">set it up</a> to see the contact\'s site visits here.</p></h4>');
 				return;
 			}
 		});

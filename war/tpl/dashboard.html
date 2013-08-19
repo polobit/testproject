@@ -51,9 +51,9 @@
 <script id="user-billing-template" type="text/html">
 <div style="background-color: #F8F8B9; margin-bottom:10px;padding: 15px;">
 {{#if_equals users_count "2"}}
-	<strong style="font-size: 20px;">Oops. You are out of users.</strong>
+	<h3 style="font-size: 20px;">Oops. You are out of users.</h3>
 {{else}}
-	<strong style="font-size: 20px;text-decoration:underline;">Account Info</strong>
+	<h3 style="font-size: 20px;text-decoration:underline;">Account Info</h3>
 {{/if_equals}}
 	<p style="padding-top: 10px;">
 		Plan: Free Plan <br/>
@@ -69,7 +69,7 @@
 <script id="dashboard-account-info-template" type="text/html">
 
 <div style="background-color: #F8F8B9; margin-bottom:10px;padding: 15px;">
-	<strong style="font-size: 20px;text-decoration:underline;">Account Info</strong>
+	<h3 style="font-size: 20px;text-decoration:underline;">Account Info</h3>
 	<p style="padding-top: 10px;">
 		Plan: {{plan.plan_id}}<br />
 		Users: {{userCount}} of {{plan.quantity}} <br />

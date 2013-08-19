@@ -23,14 +23,14 @@ $(function() {
 	$("#task").click(function(e) {
 		e.preventDefault();
 		var el = $("#taskForm");
-		
+		highlight_task();
+		agile_type_ahead("task_related_to", el, contacts_typeahead);
 		// Fills owner select element
 		populateUsers("owners-list", $("#taskForm"), undefined, undefined,
 				function(data) {
 					$("#taskForm").find("#owners-list").html(data);
 					$("#owners-list", el).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
-					agile_type_ahead("task_related_to", el, contacts_typeahead);
-					highlight_task();
+					$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();
 		});
 	});
 
@@ -41,14 +41,17 @@ $(function() {
 		e.preventDefault();
 
 		var el = $("#taskForm");
+		
+		agile_type_ahead("task_related_to", el, contacts_typeahead);
+		$('#activityModal').modal('show');
+		highlight_task();
+		
 		// Fills owner select element
 		populateUsers("owners-list", $("#taskForm"), undefined, undefined,
 				function(data) {
 					$("#taskForm").find("#owners-list").html(data);
 					$("#owners-list", el).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
-					agile_type_ahead("task_related_to", el, contacts_typeahead);
-					$('#activityModal').modal('show');
-					highlight_task();
+					$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();
 		});
 
 	});
@@ -130,7 +133,7 @@ $(function() {
 	function update_task(ele) {
 		var value = $(ele).data().toJSON();
 		deserializeForm(value, $("#updateTaskForm"));
-
+		$("#updateTaskModal").modal('show');
 		// Fills owner select element
 		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner',
 				function(data) {
@@ -140,7 +143,7 @@ $(function() {
 								'option[value=' + value['taskOwner'].id + ']')
 								.attr("selected", "selected");
 					}
-					$("#updateTaskModal").modal('show');
+					$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
 				});
 	}
 
@@ -181,8 +184,8 @@ $(function() {
  */
 function highlight_task() {
 	$("#hiddentask").val("task");
-	$("#task").css({"color":"black","font-weight":"bold"});
-	$("#event").css({"color":"red","font-weight":"normal"});
+	$("#task").css({"color":"black"});
+	$("#event").css({"color":"red"});
 	$("#relatedEvent").css("display", "none");
 	$("#relatedTask").css("display", "block");
 }
