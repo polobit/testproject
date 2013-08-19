@@ -47,7 +47,6 @@ import com.googlecode.objectify.condition.IfDefault;
 @XmlRootElement
 public class Task
 {
-
     // Key
     @Id
     public Long id;
@@ -132,8 +131,7 @@ public class Task
     public String entity_type = "task";
 
     // Dao
-    public static ObjectifyGenericDao<Task> dao = new ObjectifyGenericDao<Task>(
-	    Task.class);
+    public static ObjectifyGenericDao<Task> dao = new ObjectifyGenericDao<Task>(Task.class);
 
     /**
      * Default constructor
@@ -236,8 +234,7 @@ public class Task
 	try
 	{
 	    // Get owner pic through agileuser prefs
-	    agileuser = AgileUser.getCurrentAgileUserFromDomainUser(owner
-		    .getId());
+	    agileuser = AgileUser.getCurrentAgileUserFromDomainUser(owner.getId());
 	    if (agileuser != null)
 		userprefs = UserPrefsUtil.getUserPrefs(agileuser);
 	    if (userprefs != null)
@@ -293,8 +290,7 @@ public class Task
 	    // Create list of Contact keys
 	    for (String contact_id : this.contacts)
 	    {
-		this.related_contacts.add(new Key<Contact>(Contact.class, Long
-			.parseLong(contact_id)));
+		this.related_contacts.add(new Key<Contact>(Contact.class, Long.parseLong(contact_id)));
 	    }
 
 	    this.contacts = null;
@@ -303,10 +299,8 @@ public class Task
 
 	// Saves domain user key
 	if (owner_id != null)
-	    owner = new Key<DomainUser>(DomainUser.class,
-		    Long.parseLong(owner_id));
+	    owner = new Key<DomainUser>(DomainUser.class, Long.parseLong(owner_id));
 
 	System.out.println("Owner : " + this.owner);
     }
-
 }
