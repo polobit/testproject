@@ -37,16 +37,6 @@ $(function()
 	}
 
 	/*
-	 * Checks if contact has email, if undefined shows message in FreshBooks
-	 * panel
-	 */
-	if (!Email)
-	{
-		freshBooksError(FRESHBOOKS_PLUGIN_NAME, "No email is associated with this contact");
-		return;
-	}
-
-	/*
 	 * If FreshBooks widget preferences are defined, shows invoices from
 	 * FreshBooks associated with current contact's email
 	 */
@@ -129,16 +119,6 @@ function savefreshBooksPrefs()
 	// Saves the preferences into widget with FreshBooks widget name
 	agile_crm_save_widget_prefs(FRESHBOOKS_PLUGIN_NAME, JSON.stringify(freshbooks_prefs), function(data)
 	{
-		/*
-		 * Checks if contact has email, if undefined shows information in
-		 * FreshBooks panel
-		 */
-		if (!Email)
-		{
-			freshBooksError(FRESHBOOKS_PLUGIN_NAME, "No email is associated with this contact");
-			return;
-		}
-
 		// Retrieves and shows FreshBooks invoices in the FreshBooks widget UI
 		showFreshBooksClient();
 	});
@@ -155,8 +135,19 @@ function savefreshBooksPrefs()
  */
 function showFreshBooksClient()
 {
+
 	// Shows loading image until set up is shown
 	$('#FreshBooks').html(FRESHBOOKS_LOGS_LOAD_IMAGE);
+
+	/*
+	 * Checks if contact has email, if undefined shows information in FreshBooks
+	 * panel
+	 */
+	if (!Email)
+	{
+		freshBooksError(FRESHBOOKS_PLUGIN_NAME, "No email is associated with this contact");
+		return;
+	}
 
 	/*
 	 * Calls queueGetRequest method in widget_loader.js, with queue name as
