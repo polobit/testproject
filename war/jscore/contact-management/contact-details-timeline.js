@@ -159,6 +159,12 @@ function load_timeline_details(el, contactId, callback1)
 							setup_timeline(timelineView.collection.toJSON(), el, function(el) {
 
 								$.each(timelineViewMore.collection.toJSON(), function(index,data){
+									
+									// if error occurs in imap (model is obtained with the error msg along with contact-email models),
+									// ignore that model
+									if(('errormssg' in data) || data.status === "error")
+										return true;
+									
 									var newItem = $(getTemplate("timeline", data));
 									newItem.find('.inner').append('<a href="#" class="open-close"></a>');
 									$('#timeline', el).isotope( 'insert', newItem);
@@ -168,6 +174,12 @@ function load_timeline_details(el, contactId, callback1)
 							    var emailsArray = [];
 							    
 								$.each(emailsCollection.toJSON()[0]['emails'], function(index, model){
+									
+									// if error occurs in imap (model is obtained with the error msg along with contact-email models),
+									// ignore that model
+									if(('errormssg' in model) || model.status === "error")
+										return true;
+									
 									emailsArray.push(model);
 								});
 								
