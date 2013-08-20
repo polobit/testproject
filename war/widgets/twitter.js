@@ -413,17 +413,20 @@ function showTwitterMatchingProfiles(data)
 	if (data.length == 0)
 	{
 		if (Twitter_search_details['keywords'] && Twitter_search_details['keywords'] != "")
-			twitterMainError(TWITTER_PLUGIN_NAME,"No matches found for " + "<a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a>");
+			twitterMainError(
+					TWITTER_PLUGIN_NAME,
+					"<p class='a-dotted' style='margin-bottom:0px;'>No matches found for <a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a>");
 		else
-			twitterMainError(TWITTER_PLUGIN_NAME, "No matches found. " + "<a href='#' class='twitter_modify_search'>Modify search</a>");
+			twitterMainError(TWITTER_PLUGIN_NAME,
+					"<p class='a-dotted' style='margin-bottom:0px;'>No matches found. <a href='#' class='twitter_modify_search'>Modify search</a>");
 		return;
 	}
 
 	var el;
 	if (Twitter_search_details['keywords'] && Twitter_search_details['keywords'] != "")
-		el = "<div style='padding:10px'><p>Search results for " + "<a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a></p>";
+		el = "<div style='padding:10px'><p class='a-dotted'>Search results for " + "<a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a></p>";
 	else
-		el = "<div style='padding:10px'><p>Search results. " + "<a href='#' class='twitter_modify_search'>Modify search</a></p>";
+		el = "<div style='padding:10px'><p class='a-dotted'>Search results. " + "<a href='#' class='twitter_modify_search'>Modify search</a></p>";
 
 	el = el.concat(getTemplate("twitter-search-result", data));
 	el = el + "</div>";

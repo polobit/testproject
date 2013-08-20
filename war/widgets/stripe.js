@@ -169,7 +169,7 @@ function showStripeProfile(stripe_custom_field_name)
 	// If customer id is undefined, message is shown
 	if (!customer_id)
 	{
-		stripeError(Stripe_PLUGIN_NAME, "No stripe customer id is related to this contact");
+		stripeError(Stripe_PLUGIN_NAME, "Please provide the Stripe customer id for this contact");
 		return;
 	}
 

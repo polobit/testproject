@@ -260,6 +260,16 @@ small {
 	margin-bottom: 5px;
 }
 
+.a-dotted>a {
+	text-decoration: none;
+	border-bottom: 1px dotted;
+}
+
+.a-dotted > a:hover {
+	text-decoration: none;
+	border-bottom: 1px solid;
+}
+
 .widget_edit_icons ul {
 	visibility: hidden;
 }

@@ -152,7 +152,7 @@ function showClickDeskProfile()
 	 */
 	if (!Email)
 	{
-		clickDeskError(CLICKDESK_PLUGIN_NAME, "No email is associated with this contact");
+		clickDeskError(CLICKDESK_PLUGIN_NAME, "Please provide email for this contact");
 		return;
 	}
 

@@ -35,8 +35,9 @@ public class Case
     /**
      * Id of entity
      */
+
     @Id
-    Long id;
+    public Long id;
 
     /**
      * Title of the case
@@ -79,7 +80,7 @@ public class Case
      * List of related contacts, list of contact ids, returned in network
      */
     @NotSaved
-    List<String> related_contacts_id;
+    public List<String> related_contacts_id = new ArrayList<String>();
 
     /**
      * Keys of related contacts, private
@@ -204,8 +205,9 @@ public class Case
 
 	related_contacts_key = new ArrayList<Key<Contact>>();
 
-	for (String contactId : related_contacts_id)
-	    related_contacts_key.add(new Key<Contact>(Contact.class, Long.parseLong(contactId)));
+	if (related_contacts_id != null)
+	    for (String contactId : related_contacts_id)
+		related_contacts_key.add(new Key<Contact>(Contact.class, Long.parseLong(contactId)));
 
 	owner_key = new Key<DomainUser>(DomainUser.class, Long.parseLong(this.owner_id));
     }

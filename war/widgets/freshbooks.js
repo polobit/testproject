@@ -145,7 +145,7 @@ function showFreshBooksClient()
 	 */
 	if (!Email)
 	{
-		freshBooksError(FRESHBOOKS_PLUGIN_NAME, "No email is associated with this contact");
+		freshBooksError(FRESHBOOKS_PLUGIN_NAME, "Please provide email for this contact");
 		return;
 	}
 

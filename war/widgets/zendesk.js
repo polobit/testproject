@@ -61,7 +61,7 @@ $(function()
 	$('#add_ticket').die().live('click', function(e)
 	{
 		e.preventDefault();
-		addTicketToZendesk(plugin_id, Email);
+		addTicketToZendesk();
 	});
 
 	/*
@@ -147,7 +147,7 @@ function showZendeskProfile()
 	 */
 	if (!Email)
 	{
-		zendeskError(ZENDESK_PLUGIN_NAME, "No email is associated with this contact");
+		zendeskError(ZENDESK_PLUGIN_NAME, "Please provide email for this contact");
 		return;
 	}
 
@@ -410,49 +410,7 @@ function addTicketToZendesk()
 		}
 
 		// Sends request to Zendesk to add ticket
-		sendRequestToAddTicket("zendesk_messageForm", "zendesk_messageModal", "add-ticket-error-panel");
-	});
-}
-
-/**
- * Sends GET request to add a ticket in Zendesk on click of send button in
- * ZendeskF add ticket modal and hides the modal on success callback
- * 
- * @param formId
- *            form data to be sent to add ticket
- * @param modalId
- *            modal on which sent status is shown and hidden
- * @param errorPanelId
- *            Error div id where error is shown
- */
-function sendRequestToAddTicket(formId, modalId, errorPanelId)
-{
-	/*
-	 * Sends post request to URL "core/api/widgets/zendesk/add" to call
-	 * ZendeskWidgetsAPI with widget id and LinkedIn id as path parameters and
-	 * form as post data
-	 */
-	$.post("/core/api/widgets/zendesk/add/" + Zendesk_Plugin_Id, $('#' + formId).serialize(),
-
-	function(data)
-	{
-		// On success, shows the status as sent
-		$('#' + modalId).find('span.save-status').html("sent");
-
-		// Hides the modal after 2 seconds after the sent is shown
-		setTimeout(function()
-		{
-			$('#' + modalId).modal("hide");
-		}, 2000);
-
-	}).error(function(data)
-	{
-		/*
-		 * If error occurs modal is removed and error message is shown in
-		 * Zendesk panel
-		 */
-		$('#' + modalId).remove();
-		zendeskStreamError(errorPanelId, data.responseText);
+		sendRequestToZendesk("/core/api/widgets/zendesk/add/" + Zendesk_Plugin_Id, "zendesk_messageForm", "zendesk_messageModal", "add-ticket-error-panel");
 	});
 }
 
@@ -464,7 +422,7 @@ function sendRequestToAddTicket(formId, modalId, errorPanelId)
  * @param ticket_id
  *            Id of the ticket to update it
  */
-function updateTicketInZendesk(plugin_id, ticket_id)
+function updateTicketInZendesk(ticket_id)
 {
 	/*
 	 * Stores info as JSON, to send it to the modal when update ticket request
@@ -507,14 +465,15 @@ function updateTicketInZendesk(plugin_id, ticket_id)
 			return;
 		}
 
-		sendRequestToUpdateTicket("zendesk_messageForm", "zendesk_messageModal", "add-ticket-error-panel");
+		sendRequestToZendesk("/core/api/widgets/zendesk/update/" + Zendesk_Plugin_Id, "zendesk_messageForm", "zendesk_messageModal", "add-ticket-error-panel");
 	});
 }
 
 /**
- * Sends GET request to update a ticket in Zendesk on click of send button in
- * ZendeskF update ticket modal and hides the modal on success callback
+ * Sends post request to the given URL with the form data from form id and show
+ * the sent status in modal
  * 
+ * @param url
  * @param formId
  *            form data to be sent to add ticket
  * @param modalId
@@ -522,14 +481,13 @@ function updateTicketInZendesk(plugin_id, ticket_id)
  * @param errorPanelId
  *            Error div id where error is shown
  */
-function sendRequestToUpdateTicket(formId, modalId, errorPanelId)
+function sendRequestToZendesk(url, formId, modalId, errorPanelId)
 {
 	/*
-	 * Sends post request to URL "core/api/widgets/zendesk/update" to call
-	 * ZendeskWidgetsAPI with widget id and LinkedIn id as path parameters and
-	 * form as post data
+	 * Sends post request to given url and Calls ZendeskWidgetsAPI with Zendesk
+	 * id as path parameter and form as post data
 	 */
-	$.post("/core/api/widgets/zendesk/update/" + plugin_id, $('#' + formId).serialize(), function(data)
+	$.post(url, $('#' + formId).serialize(), function(data)
 	{
 		// On success, shows the status as sent
 		$('#' + modalId).find('span.save-status').html("sent");
@@ -548,7 +506,6 @@ function sendRequestToUpdateTicket(formId, modalId, errorPanelId)
 		 */
 		$('#' + modalId).remove();
 		zendeskStreamError(errorPanelId, data.responseText);
-
 	});
 }
 
