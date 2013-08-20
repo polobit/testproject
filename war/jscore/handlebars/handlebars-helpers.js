@@ -918,14 +918,14 @@ $(function()
 					{
 
 						var full_size = parseInt(frame_size); // size
-																// requested,full
-																// frame
+						// requested,full
+						// frame
 						var size_diff = 4 + ((full_size - 32) / 2); // calculating
-																	// padding,
-																	// for small
-																	// favicon
-																	// 16x16 as
-																	// 32x32,
+						// padding,
+						// for small
+						// favicon
+						// 16x16 as
+						// 32x32,
 						// fill rest frame with padding
 
 						// default when we can't find image uploaded or url to
@@ -1347,8 +1347,8 @@ $(function()
 			return;
 
 		var icon_json = { "TWITTER" : "icon-twitter-sign", "LINKEDIN" : "icon-linkedin-sign", "URL" : "icon-globe", "GOOGLE-PLUS" : "icon-google-plus-sign",
-			"FACEBOOK" : "icon-facebook-sign", "GITHUB" : "icon-github", "FEED" : "icon-rss", 
-			"XING":"icon-xing-sign", "SKYPE":"icon-skype","YOUTUBE":"icon-youtube-play", "FLICKR":"icon-flickr" };
+			"FACEBOOK" : "icon-facebook-sign", "GITHUB" : "icon-github", "FEED" : "icon-rss", "XING" : "icon-xing-sign", "SKYPE" : "icon-skype",
+			"YOUTUBE" : "icon-youtube-play", "FLICKR" : "icon-flickr" };
 
 		name = name.trim();
 
@@ -1558,7 +1558,7 @@ $(function()
 
 		if (!getCurrentContactProperty(original_ref))
 			return "unknown";
-		
+
 		var url = getCurrentContactProperty(original_ref);
 		url = url.split('/');
 		url = (url[0] + '//' + url[2]);
@@ -1588,5 +1588,38 @@ $(function()
 			else
 				return;
 		}
+	});
+
+	/**
+	 * Returns contact full name if last-name exists, otherwise only first_name
+	 * for contact type PERSON. It returns company name for other contact type.
+	 * 
+	 */
+	Handlebars.registerHelper('contact_name', function(properties, type)
+	{
+
+		if (type === 'PERSON')
+		{
+			for ( var i = 0; i < properties.length; i++)
+			{
+
+				// if last-name exists, return full name.
+				if (properties[i].name === "last_name")
+					return (getPropertyValue(properties, "first_name") + " " + properties[i].value);
+
+				else if (properties[i].name === "first_name")
+					return properties[i].value;
+			}
+
+			return "Contact";
+		}
+
+		// COMPANY type
+		for ( var i = 0; i < contact_properties.length; i++)
+		{
+			if (contact_properties[i].name === "name")
+				return contact_properties[i].value;
+		}
+		return "Company";
 	});
 });
