@@ -34,9 +34,9 @@
 <form class='gadget-contact-form' name="gadget_contact_form" method="post">
 	<fieldset style="margin:0px;">
 	{{#if fname}}
-		<legend><i class="icon-plus-sign"></i> Add {{fname}} {{lname}} To Agile CRM</legend>
+		<legend><i class="icon-plus-sign"></i> Add <b>{{fname}} {{lname}}</b> To Agile CRM</legend>
 	{{else}}
-		<legend><i class="icon-plus-sign"></i> Add {{email}} To Agile CRM</legend>
+		<legend><i class="icon-plus-sign"></i> Add <b>{{email}}</b> To Agile CRM</legend>
 	{{/if}}
 	<div class="control-group" style="margin:0px;">
 		<label class="control-label"><b>Name:</b> <span class="field_req">*</span></label>
@@ -89,9 +89,8 @@
 	<div class="form-actions" style="padding:10px 0px 0px 0px; margin:0px;">
 		<a type="submit" class="btn btn-primary gadget-contact-validate" style="padding:2px 6px 2px;">Add Contact</a>
 		<a class="cancel btn" style="padding:2px 6px 2px;">Cancel</a>
-		<img class="saving" style="padding-right:5px;display:none;width:25px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
-		<span class="status" style="display:none;"><i>Successfully Saved</i></span>
-   	</div>
+		<img class="contact-add-waiting" style="padding-right:5px;display:none;width:24px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
+	</div>
 </fieldset>
 </form>	
 </script>
@@ -116,13 +115,13 @@
 							</b>
 						</div>
 					</div>
-					<a target="_blank" href="http://localhost:8888/#contact/{{id}}" style="margin-left:6px;"><i class="icon-external-link"></i></a><br/>
+					<a target="_blank" href="http://localhost:8888/#contact/{{id}}" style="margin-left:6px;"><i class="icon-external-link" title="Show in Agile"></i></a><br/>
 					{{#if_propertyName "title"}}
 						{{value}}
 					{{/if_propertyName}}
-	
+					{{#comma_in_between_property "title" "company" properties}}{{/comma_in_between_property}}
 					{{#if_propertyName "company"}}
-						, {{value}}
+						{{value}}
 					{{/if_propertyName}}
 						 		
 					<div class="add-tag">
@@ -130,8 +129,8 @@
 							<ul id="added_tags_ul" class="tagsinput" style="display: inline; vertical-align:top; margin-bottom:10px;">
 								<li class="tag" style="display: none; padding:1px 4px;">
 									<span>
-										<span class="anchor tag-name" style="float:left;">lead</span>
-										<a class="close remove-tag remove-tag-icon" style="float:left; line-height:16px;">&times;</a>
+										<span class="anchor tag-name" style="float:left; cursor:default;">lead</span>
+										<a class="close remove-tag remove-tag-icon" style="float:left; line-height:16px;" title="Remove Tag">&times;</a>
 									</span>
 								</li> 
 							</ul>
@@ -143,8 +142,8 @@
 										<a type="submit" class="btn" id="contact_add_tags" style="margin-left: 10px; padding: 1px 10px;">Add</a>
 									</div>
 								</form>
-								<img class="saving" style="display:none; width:25px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
-								<i id="add_tags" class="icon-plus toggle-tag" style="cursor:pointer; margin-top:4px; display:block;"></i>
+								<img class="tag-waiting" style="display:none; width:23px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
+								<i id="add_tags" class="icon-plus toggle-tag" style="cursor:pointer; margin-top:4px; display:block;" title="Add Tag"></i>
 							</div>
 						</div>
 					</div>
@@ -171,17 +170,17 @@
 						<ul style="margin:0; list-style-type:none; width:60px; height:auto; display:table; border:1px solid rgba(0, 0, 0, 0.05); box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05); border-radius:3px;">
 							<li style="text-align:center;">
 								<div style="width:56px; margin: 0 auto; border-bottom: 1px solid rgba(0, 0, 0, 0.05);">
-									<span style="font-weight:bold; font-size:13px;">Score</span>
+									<span style="font-weight:bold; font-size:13px; cursor:default;">Score</span>
 								</div>
 							</li>
 							<li style="line-height:30px;">
 								<div style="display:inline; height:auto; width:60px; text-align:center;">
 									{{#if lead_score}}
-										<div class="score-value" style="display:inline-block; width:55%; font-size:20px; margin-right:-2px; vertical-align:middle; text-align:right;">
+										<div class="score-value" style="display:inline-block; width:55%; font-size:20px; margin-right:-2px; vertical-align:middle; text-align:right; cursor:default;">
 											{{lead_score}}
 										</div>
 									{{else}}
-										<div class="score-value" style="display:inline-block; width:55%; font-size:20px; margin-right:-2px; vertical-align:middle; text-align:right;">
+										<div class="score-value" style="display:inline-block; width:55%; font-size:20px; margin-right:-2px; vertical-align:middle; text-align:right; cursor:default;">
 											0
 										</div>
 									{{/if}}
@@ -197,7 +196,7 @@
 <!-- 4th coloum (Hide button) -->
 					<br/><br/><br/>
 					<div class="pull-right" style="margin-right:1px;">
-						<i class="icon-collapse-alt icon-large hide-contact-summery" style="cursor:pointer;"></i>
+						<i class="icon-collapse-alt icon-large hide-contact-summery" style="cursor:pointer;" title="Hide Contact Details"></i>
 					</div>
 				</div>
 <!-- end of contact info-->
@@ -214,6 +213,7 @@
 			<li class="gadget-campaigns-tab"><a href="#Campaigns-{{id}}" data-toggle="tab">Campaigns</a></li>
 	    </ul>
 	    <div class="tab-content">
+		<img class="tab-waiting" style="display:none; width:25px; float:left;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
 	        <div class="tab-pane active" id="Notes-{{id}}">
 	            <div class="gadget-notes-tab-list">
 					
@@ -291,14 +291,14 @@
 				</div>
 			{{else}}
 				<div style="margin-bottom: 9px;">
-					<input data="{{id}}" class="complete-task" type="checkbox"/>
+					<input data="{{id}}" class="complete-task" type="checkbox" style="visibility:hidden;"/>
 					<h4 class="task-subject" style="display:inline;">
 						<b style="margin:0px 20px 0px 10px;">{{ucfirst subject}}</b>
 						<span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>	
 					</h4>
 				</div>
 			{{/if}}
-			<div style="margin-left:22px;">
+			<div style="margin-left:25px;">
 				<p>
 					<i class="{{icons type}}"></i>&nbsp;{{ucfirst type}}
 					<span style="margin-left:20px;">Due : <time class="task-created-time" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</span>
@@ -424,9 +424,8 @@
                    <div class="form-actions" style="padding: 10px 0px 0px 0px; margin:0px;">
                    	<a type="submit" class="btn btn-primary gadget-note-validate" style="padding:2px 6px 2px;">Add Note</a>
 	             	<a class="cancel btn" data-tab-identity="notes" style="padding:2px 6px 2px;">Cancel</a>
-                   	<img class="saving" style="padding-right:5px;display:none;width:20px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
-					<span class="status" style="display:none;"><i>Successfully Saved</i></span> 
-                 	</div>
+                   	<img class="note-add-waiting" style="padding-right:5px;display:none;width:24px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
+					</div>
 			</fieldset>
 		</form>
 	</div>
@@ -486,9 +485,8 @@
 	                  <div class="form-actions" style="padding:10px 0px 0px 0px; margin:0px;">
 	                  	<a type="submit" class="btn btn-primary gadget-task-validate" style="padding:2px 6px 2px;">Add Task</a>
 			       		<a class="cancel btn" data-tab-identity="tasks" style="padding:2px 6px 2px;">Cancel</a>
-						<img class="saving" style="padding-right:5px;display:none;width:20px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
-                     	<span class="status" style="display:none;"><i>Successfully Saved</i></span>
-	                  </div>
+						<img class="task-add-waiting" style="padding-right:5px;display:none;width:24px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
+                      </div>
 			</fieldset>				
 		</form>	
    	</div>
@@ -545,7 +543,7 @@
                		<div class="form-actions" style="padding:10px 0px 0px 0px; margin:0px;">
                			<a type="submit" class="btn btn-primary gadget-deal-validate" style="padding:2px 6px 2px;">Add Deal</a> 
 			   			<a class="cancel btn" data-tab-identity="deals" style="padding:2px 6px 2px;">Cancel</a>
-						<img class="saving" style="padding-right:5px;display:none;width:20px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
+						<img class="deal-add-waiting" style="padding-right:5px;display:none;width:24px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
                    	</div>
 		  		</fieldset>
 			</form>
@@ -561,7 +559,7 @@
                 <div class="control-group">         
                     <label class="control-label span2" style="margin-left:0px;">Select campaign: <span class="field_req">*</span></label>
                     <div class="controls">
-                        <select id="campaign-select" name="campaign-select" class="required">
+                        <select id="campaign-select" name="id" class="required">
 							<option value="">Select..</option>
 							{{#if this.length}}
 								{{#each this}}
@@ -574,7 +572,7 @@
                 <div class="form-actions" style="padding:10px 0px 0px 0px; margin:0px;">          
                     <a type="submit" class="btn btn-primary gadget-campaign-validate" style="padding:2px 6px 2px;">Add to Campaign</a> 
                     <a class="cancel btn " data-tab-identity="campaigns" style="padding:2px 6px 2px;">Cancel</a>
-					<img class="saving" style="padding-right:5px;display:none;width:20px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
+					<img class="campaign-add-waiting" style="padding-right:5px;display:none;width:24px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
                 </div>
             </fieldset>
         </form>

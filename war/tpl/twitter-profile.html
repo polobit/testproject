@@ -8,7 +8,7 @@
 	<div class="clearfix"></div>	
 	<p style="word-wrap:break-word;word-break:normal;">{{show_link_in_statement summary}}</p>
 	<a href="#" class="btn" id="twitter_follow" name="{{name}}" style="display:none;"><i class="icon-twitter"></i>&nbsp;Follow</a>
-	<a href="#" class="btn btn-primary span5" id="twitter_unfollow" name="{{name}}" style="display:none;">Following</a>
+	<a href="#" class="btn btn-primary ml_5" id="twitter_unfollow" name="{{name}}" style="display:none;">Following</a>
 	<a href="#" class="btn ml_5" id="twitter_tweet" rel="tooltip" title="Compose a new Tweet">Tweet</a>
 	{{#if is_followed_by_target}}<a href="#" class="btn ml_5 icon-envelope" id="twitter_message" rel="tooltip" title="Send Direct Message"></a>{{/if}}					
 </div>
@@ -73,8 +73,8 @@
 		</div>
 	</div>
 </div>
-</script> 
-			
+</script>
+
 <script id="twitter-message-template" type="text/html">
 	<!-- New (Note) Modal views -->
 	<div class="modal hide fade message-modal" id="twitter_messageModal" style="width:400px; left:55%;word-wrap: break-word;">
@@ -145,15 +145,21 @@
 </script>
 
 <script id="twitter-error-panel-template" type="text/html">
-{{#check_length message "140"}}
-	<div class="ellipsis-multi-line collapse-25" title="{{message}}" style="height:110px;overflow: hidden;line-height:160%;word-wrap: break-word;padding:10px">
-		{{{message}}}
-	</div>
-{{else}}
+{{#if disable_check}}
 	<div style="line-height:160%;word-wrap: break-word;padding:10px">
 		{{{message}}}
 	</div>
-{{/check_length}}	
+{{else}}
+	{{#check_length message "140"}}
+		<div class="ellipsis-multi-line collapse-25" title="{{message}}" style="height:110px;overflow: hidden;line-height:160%;word-wrap: break-word;padding:10px">
+			{{{message}}}
+		</div>
+	{{else}}
+		<div style="line-height:160%;word-wrap: break-word;padding:10px">
+			{{{message}}}
+		</div>
+	{{/check_length}}	
+{{/if}}
 </script>
 
 <script id="twitter-profile-add-template" type="text/html">
@@ -206,7 +212,7 @@
 		<form class="widget_content" style="border-bottom:none;" id="twitter-search_form" name="twitter-search_form" method="get">
 	    	<fieldset>
 				<p><label>Enter search details</label></p>
-				<div class="control-group"><div class="controls"><input type="text" id="twitter_keywords" class="input-medium required widget_input_box" style="width:90%" placeholder="Key Words" value="{{keywords}}" name="keywords" onkeydown="if (event.keyCode == 13) { getModifiedTwitterMatchingProfiles({{plugin_id}}); return false; }"></input></div></div>
+				<div class="control-group"><div class="controls"><input type="text" id="twitter_keywords" class="input-medium required widget_input_box" style="width:90%" placeholder="Key Words" value="{{keywords}}" name="keywords" onkeydown="if (event.keyCode == 13) { getModifiedTwitterMatchingProfiles({{plugin_id}}); return false; }" maxlength="40"></input></div></div>
 				<a href="#" id="twitter_search_btn" class="btn" style="text-decoration:none;">Search</a>
 				<span><img src="img/ajax-spinner.gif" id="spinner-twitter-search" style="display:none;"></img></span>
 				<a href="#" id="twitter_search_close" class="btn close" style="float:none;margin-left:5px;">Close</a>

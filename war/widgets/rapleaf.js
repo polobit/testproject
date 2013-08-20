@@ -25,6 +25,22 @@ $(function()
 	Email = agile_crm_get_contact_property('email');
 	console.log('Email: ' + Email);
 
+	// Register click events
+	/*
+	 * On click of reset button of ClickDesk widget, widget preferences are
+	 * deleted and initial set up is called
+	 */
+	$('#Rapleaf_plugin_delete').die().live('click', function(e)
+	{
+		e.preventDefault();
+
+		// preferences are saved as undefined and set up is shown
+		agile_crm_save_widget_prefs(RAPLEAF_PLUGIN_NAME, undefined, function(data)
+		{
+			setupRapleafAuth();
+		});
+	});
+
 	/*
 	 * Gets Rapleaf widget preferences, required to check whether to show setup
 	 * button or to fetch details. If undefined - considering first time usage
@@ -41,22 +57,6 @@ $(function()
 	 * associated with current contact's email
 	 */
 	showRapleafDetails();
-
-	// Register click events
-	/*
-	 * On click of reset button of ClickDesk widget, widget preferences are
-	 * deleted and initial set up is called
-	 */
-	$('#Rapleaf_plugin_delete').die().live('click', function(e)
-	{
-		e.preventDefault();
-
-		// preferences are saved as undefined and set up is shown
-		agile_crm_save_widget_prefs(RAPLEAF_PLUGIN_NAME, undefined, function(data)
-		{
-			setupRapleafAuth();
-		});
-	});
 
 });
 
@@ -129,7 +129,7 @@ function showRapleafDetails()
 	 */
 	if (!Email)
 	{
-		rapleafError(RAPLEAF_PLUGIN_NAME, "No email is associated with this contact");
+		rapleafError(RAPLEAF_PLUGIN_NAME, "Please provide email for this contact");
 		return;
 	}
 

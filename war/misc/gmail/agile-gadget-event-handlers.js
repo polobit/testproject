@@ -18,21 +18,21 @@ function agile_init_handlers() {
 		e.preventDefault();
 		// Set context (HTML container where event is triggered).
 		var el = $(this).closest("div.gadget-contact-details-tab")
-				.find(".gadget-contact-form");
+				.find(".div.show-form");
 		var json = [];
 		var data = {};
 		// Form serialization and validation.
-		json = agile_serialize_form($(el));
+		json = agile_serialize_form($(".gadget-contact-form", el));
 
 		$.each(json, function(index, val) {
 			data[val.name] = val.value;
 		});
 		// Show saving image.
-		$('.saving', el).show();
+		$('.contact-add-waiting', el).show();
 		// Add contact
 		_agile.create_contact(data, function(response) {
 			// Hide saving image.
-			$('.saving', el).hide(1);
+			$('.contact-add-waiting', el).hide(1);
 			// Re-build GUI
 			agile_build_ui();
 		});
@@ -57,11 +57,11 @@ function agile_init_handlers() {
 				data[val.name] = val.value;
 		});
 
-		$('.saving:last', el).show();
+		$('.note-add-waiting', el).show();
 		// Add Note
 		_agile.add_note(data, function(response) {
 
-			$('.saving:last', el).hide(1);
+			$('.note-add-waiting', el).hide(1);
 			// Show notes list, after adding note.
 			$('.gadget-notes-tab', el).trigger('click');
 		}, email.email);
@@ -88,11 +88,11 @@ function agile_init_handlers() {
 		// Format date.
 		data.due = new Date(data.due).getTime() / 1000.0;
 
-		$('.saving:last', el).show();
+		$('.task-add-waiting', el).show();
 		// Add Task
 		_agile.add_task(data, function(response) {
 
-			$('.saving:last', el).hide(1);
+			$('.task-add-waiting', el).hide(1);
 			// Show tasks list, after adding task.
 			$('.gadget-tasks-tab', el).trigger('click');
 		}, email.email);
@@ -119,11 +119,11 @@ function agile_init_handlers() {
 		// Format date.
 		data.close_date = new Date(data.close_date).getTime() / 1000.0;
 
-		$('.saving:last', el).show();
+		$('.deal-add-waiting', el).show();
 		// Add Deal
 		_agile.add_deal(data, function(response) {
 
-			$('.saving:last', el).hide(1);
+			$('.deal', el).hide(1);
 			// Show deals list, after adding deal.
 			$('.gadget-deals-tab', el).trigger('click');
 		}, email.email);
@@ -148,11 +148,11 @@ function agile_init_handlers() {
 				data[val.name] = val.value;
 		});
 		
-		$('.saving:last', el).show();
+		$('.campaign-add-waiting', el).show();
 		// Add Campaign
 		_agile.add_campaign(data, function(response) {
 
-			$('.saving:last', el).hide(1);
+			$('.campaign-add-waiting', el).hide(1);
 			// Show deals list, after adding deal.
 			$('.gadget-campaigns-tab', el).trigger('click');
 		}, email);
@@ -207,7 +207,7 @@ function agile_init_handlers() {
 		var tags = {};
 		var email = {};
 		// Form serialization.
-		json = agile_serialize_form($(el).find("#add_tags_form"));
+		json = agile_serialize_form($("#add_tags_form", el));
 
 		$.each(json, function(index, val) {
 			if (val.name == "email")
@@ -218,12 +218,12 @@ function agile_init_handlers() {
 
 		// Send request if tags are entered.
 		if (tags.tags.length != 0) {
-			$('.saving', el).show();
+			$('.tag-waiting', el).show();
 			$("#add_tags_form", el).toggle();
 			// Add Tags
 			_agile.add_tag(tags.tags, function(response) {
 
-				$('.saving', el).hide();
+				$('.tag-waiting', el).hide();
 				$(".toggle-tag", el).toggle();
 				// Merge Server response object with Contact_Json
 				// object.
@@ -251,12 +251,12 @@ function agile_init_handlers() {
 		var email = $(el).find('#add_tags_form input[name="email"]').val();
 		var tag = $(this).prev().text();
 
-		$('.saving', el).show();
+		$('.tag-waiting', el).show();
 		$('.toggle-tag', el).hide();
 		// Remove Tag
 		_agile.remove_tag(tag, function(response) {
 
-			$('.saving', el).hide();
+			$('.tag-waiting', el).hide();
 			$('.toggle-tag', el).show();
 			// Merge Server response object with Contact_Json
 			// object.
@@ -309,10 +309,11 @@ function agile_init_handlers() {
 		// Build notes tab UI to add note.
 		agile_build_form_template($(this), "gadget-note",
 				".gadget-notes-tab-list", function() {
-
+			// Show notes tab.
+			$('.gadget-notes-tab a', el).tab('show');
+			if (!Is_Localhost)
+				gadgets.window.adjustHeight();
 		});
-		// Show notes tab.
-		$('.gadget-notes-tab a', el).tab('show');
 	});
 	
 	// Click event for Action Menu (add task).
@@ -330,7 +331,9 @@ function agile_init_handlers() {
 			 * box in Task form.
 			 */
 			agile_load_datepicker($('.task-calender', el), function() {
-				$('.gadget-tasks-tab a', el).tab('show');		
+				$('.gadget-tasks-tab a', el).tab('show');
+				if (!Is_Localhost)
+					gadgets.window.adjustHeight();
 			});
 		});
 	});
@@ -351,6 +354,8 @@ function agile_init_handlers() {
 			 */
 			agile_load_datepicker($('.deal-calender', el), function() {
 				$('.gadget-deals-tab a', el).tab('show');
+				if (!Is_Localhost)
+					gadgets.window.adjustHeight();
 			});
 		});
 	});
@@ -374,9 +379,10 @@ function agile_init_handlers() {
 				// Insert template to container in HTML.
 				that.closest(".gadget-contact-details-tab").find(".gadget-campaigns-tab-list")
 						.html($(Handlebars_Template));
+				$('.gadget-campaigns-tab a', el).tab('show');
+				if (!Is_Localhost)
+					gadgets.window.adjustHeight();
 			});
-			
-			$('.gadget-campaigns-tab a', el).tab('show');
 		});
 	});
 
@@ -390,7 +396,7 @@ function agile_init_handlers() {
 		var that = $(this);
 		var email = $(el).data("content");
 
-		$('.saving', el).show();
+		$('.contact-search-waiting', el).show();
 		// Get contact status based on email.
 		agile_getContact(email, function(val) {
 
@@ -399,18 +405,17 @@ function agile_init_handlers() {
 
 			// Build show contact form template.
 			agile_build_form_template(that, "gadget-contact-list", ".contact-list", function() {
-				// Contact not found, show add contact in mail list for requested mail.
+				
+				$('.contact-search-waiting', el).hide();
+				// Contact not found for requested mail, show add contact in mail list.
 				if (val.id == null) {
-					$('.saving', el).hide();
-					$('.status', el).show().delay(1500).hide(1);
+					$('.contact-search-status', el).show().delay(1500).hide(1);
 				}	
-				// Contact found, show Contact summary. 
+				// Contact found, show contact summary. 
 				else {
-					$('.saving, .status', el).remove();
 					$('.gadget-show-contact', el).trigger('click');
 					$('.contact-list', el).css('display', 'inline');
 				}
-				$('.saving', el).hide();
 			});
 		});
 	});
@@ -466,6 +471,8 @@ function agile_init_handlers() {
 		$(".show-contact-summary", el).toggle();
 		// Hide Tabs.
 		$(".option-tabs", el).toggle();
+		if (!Is_Localhost)
+			gadgets.window.adjustHeight();
 	});
 
 	// Click event for notes tab.
@@ -478,17 +485,22 @@ function agile_init_handlers() {
 		// Clear notes tab data.
 		$('.gadget-notes-tab-list', el).html("");
 		var email = $(el).data("content");
+
+		$(".tab-waiting", el).show();
 		// Get Notes.
 		_agile.get_notes(function(response) {
-			console.log(response);
+			
 			// Load Date formatter libraries.
 			head.js(Lib_Path + 'lib/date-formatter.js', Lib_Path + 'lib/jquery.timeago.js', function() {
 				agile_get_gadget_template("gadget-notes-list-template", function(data) {
+					$(".tab-waiting", el).hide();
 					// Fill notes list in tab.
 					$('.gadget-notes-tab-list', el).html(getTemplate('gadget-notes-list', response, 'no'));
 				});
 				// Apply date formatter on date/time field.
 				$("time", el).timeago();
+				if (!Is_Localhost)
+					gadgets.window.adjustHeight();
 			});
 		}, email);
 	});
@@ -503,16 +515,20 @@ function agile_init_handlers() {
 		// Clear tasks tab data.
 		$('.gadget-tasks-tab-list', el).html("");
 		var email = $(el).data("content");
+		
+		$(".tab-waiting", el).show();
 		// Get Tasks.
 		_agile.get_tasks(function(response) {
-			console.log(response);
 			
 			agile_get_gadget_template("gadget-tasks-list-template", function(data) {
+				$(".tab-waiting", el).hide();
 				// Fill tasks list in tab.	
 				$('.gadget-tasks-tab-list', el).html(getTemplate('gadget-tasks-list', response, 'no'));
 			});
 			// Apply date formatter on date/time field.
 			$("time", el).timeago();
+			if (!Is_Localhost)
+				gadgets.window.adjustHeight();
 		}, email);
 	});
 	
@@ -526,16 +542,20 @@ function agile_init_handlers() {
 		// Clear deals tab data.
 		$('.gadget-deals-tab-list', el).html("");
 		var email = $(el).data("content");
+		
+		$(".tab-waiting", el).show();
 		// Get Deals.
 		_agile.get_deals(function(response) {
-			console.log(response);
 			
 			agile_get_gadget_template("gadget-deals-list-template", function(data) {
+				$(".tab-waiting", el).hide();
 				// Fill deals list in tab.	
 				$('.gadget-deals-tab-list', el).html(getTemplate('gadget-deals-list', response, 'no'));
 			});
 			// Apply date formatter on date/time field.
 			$("time", el).timeago();
+			if (!Is_Localhost)
+				gadgets.window.adjustHeight();
 		}, email);
 	});
 	
@@ -549,16 +569,20 @@ function agile_init_handlers() {
 		// Clear campaigns tab data.
 		$('.gadget-campaigns-tab-list', el).html("");
 		var email = $(el).data("content");
+		
+		$(".tab-waiting", el).show();
 		// Get Campaigns.
 		_agile.get_campaign_logs(function(response) {
-			console.log(response);
 			
 			agile_get_gadget_template("gadget-campaigns-list-template", function(data) {
+				$(".tab-waiting", el).hide();
 				// Fill campaigns list in tab.	
 				$('.gadget-campaigns-tab-list', el).html(getTemplate('gadget-campaigns-list', response, 'no'));
 			});
 			// Apply date formatter on date/time field.
 			$("time", el).timeago();
+			if (!Is_Localhost)
+				gadgets.window.adjustHeight();
 		}, email);
 	});
 	
@@ -574,6 +598,8 @@ function agile_init_handlers() {
 
 			$(".gadget-no-contact", el).toggle();
 			$(".show-add-contact-form", el).toggle();
+			if (!Is_Localhost)
+				gadgets.window.adjustHeight();
 		});
 	});
 
@@ -590,5 +616,7 @@ function agile_init_handlers() {
 		// Toggle add contact UI.
 		$(".show-add-contact-form", el).hide();
 		$(".gadget-no-contact", el).show();
+		if (!Is_Localhost)
+			gadgets.window.adjustHeight();
 	});
 }

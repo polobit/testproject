@@ -1,5 +1,7 @@
 package com.agilecrm.social;
 
+import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +10,7 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.subscription.stripe.StripeUtil;
+import com.agilecrm.util.StringUtils2;
 import com.agilecrm.widgets.Widget;
 import com.google.gson.Gson;
 import com.stripe.model.Customer;
@@ -35,10 +38,15 @@ public class StripePluginUtil
      * @return {@link JSONObject} form of the response returned from Stripe
      * @throws Exception
      */
-    public static JSONObject getCustomerDetails(Widget widget, String customerId) throws Exception
+    public static JSONObject getCustomerDetails(Widget widget, String customerId)
+	    throws SocketTimeoutException, IOException, Exception
     {
 	JSONObject customer_info = new JSONObject();
 	String apiKey = widget.getProperty("access_token");
+
+	if (StringUtils2.isNullOrEmpty(new String[] { customerId }))
+	    throw new Exception(
+		    "Please provide the Stripe customer id for this contact");
 
 	/*
 	 * Retrieves Stripe customer based on Stripe customer ID and Stripe
@@ -53,7 +61,8 @@ public class StripePluginUtil
 	 * Retrieves list of invoices based on Stripe customer ID and Stripe
 	 * account API key
 	 */
-	List<Invoice> invoiceList = Invoice.all(invoiceParams, apiKey).getData();
+	List<Invoice> invoiceList = Invoice.all(invoiceParams, apiKey)
+		.getData();
 
 	// Converts list to JSON using GSON and returns output in JSON format
 	JSONArray list = new JSONArray(new Gson().toJson(invoiceList));
@@ -64,5 +73,4 @@ public class StripePluginUtil
 	return customer_info;
 
     }
-
 }

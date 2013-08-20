@@ -20,6 +20,22 @@ $(function()
 	// ID of the Stripe widget as global variable
 	Stripe_Plugin_Id = stripe_widget.id;
 
+	// Register click events
+	/*
+	 * On click of reset button of ClickDesk widget, Stripe widget preferences
+	 * are deleted and initial set up is called
+	 */
+	$('#Stripe_plugin_delete').die().live('click', function(e)
+	{
+		e.preventDefault();
+
+		// preferences are saved as undefined and set up Stripe OAuth is shown
+		agile_crm_save_widget_prefs(Stripe_PLUGIN_NAME, undefined, function(data)
+		{
+			setupStripeOAuth();
+		});
+	});
+
 	/*
 	 * Gets Stripe widget preferences, required to check whether to show setup
 	 * button or to fetch details. If undefined - considering first time usage
@@ -56,22 +72,6 @@ $(function()
 	 * invoices from Stripe
 	 */
 	showStripeProfile(stripe_custom_field_name);
-
-	// Register click events
-	/*
-	 * On click of reset button of ClickDesk widget, Stripe widget preferences
-	 * are deleted and initial set up is called
-	 */
-	$('#Stripe_plugin_delete').die().live('click', function(e)
-	{
-		e.preventDefault();
-
-		// preferences are saved as undefined and set up Stripe OAuth is shown
-		agile_crm_save_widget_prefs(Stripe_PLUGIN_NAME, undefined, function(data)
-		{
-			setupStripeOAuth();
-		});
-	});
 
 });
 
@@ -169,7 +169,7 @@ function showStripeProfile(stripe_custom_field_name)
 	// If customer id is undefined, message is shown
 	if (!customer_id)
 	{
-		stripeError(Stripe_PLUGIN_NAME, "No stripe customer id is related to this contact");
+		stripeError(Stripe_PLUGIN_NAME, "Please provide the Stripe customer id for this contact");
 		return;
 	}
 

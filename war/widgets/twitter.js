@@ -413,17 +413,21 @@ function showTwitterMatchingProfiles(data)
 	if (data.length == 0)
 	{
 		if (Twitter_search_details['keywords'] && Twitter_search_details['keywords'] != "")
-			twitterMainError(TWITTER_PLUGIN_NAME,"No matches found for " + "<a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a>");
+			twitterMainError(
+					TWITTER_PLUGIN_NAME,
+					"<p class='a-dotted' style='margin-bottom:0px;'>No matches found for <a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a>",
+					true);
 		else
-			twitterMainError(TWITTER_PLUGIN_NAME, "No matches found. " + "<a href='#' class='twitter_modify_search'>Modify search</a>");
+			twitterMainError(TWITTER_PLUGIN_NAME,
+					"<p class='a-dotted' style='margin-bottom:0px;'>No matches found. <a href='#' class='twitter_modify_search'>Modify search</a>", true);
 		return;
 	}
 
 	var el;
 	if (Twitter_search_details['keywords'] && Twitter_search_details['keywords'] != "")
-		el = "<div style='padding:10px'><p>Search results for " + "<a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a></p>";
+		el = "<div style='padding:10px'><p class='a-dotted'>Search results for " + "<a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a></p>";
 	else
-		el = "<div style='padding:10px'><p>Search results. " + "<a href='#' class='twitter_modify_search'>Modify search</a></p>";
+		el = "<div style='padding:10px'><p class='a-dotted'>Search results. " + "<a href='#' class='twitter_modify_search'>Modify search</a></p>";
 
 	el = el.concat(getTemplate("twitter-search-result", data));
 	el = el + "</div>";
@@ -1488,10 +1492,13 @@ function getListOfProfilesByIDsinTwitter(twitter_ids, callback, errorcallback)
  *            div id
  * @param message
  *            error message
+ * @param disable_check
+ *            {@link Boolean} whether to check length of message while
+ *            displaying error
  */
-function tweetError(id, error)
+function tweetError(id, error, disable_check)
 {
-	twitterMainError(id, error);
+	twitterMainError(id, error, disable_check);
 	$('#' + id).show();
 
 	// Hides the modal after 2 seconds after the sent is shown
@@ -1506,12 +1513,17 @@ function tweetError(id, error)
  *            div id
  * @param message
  *            error message
+ * @param disable_check
+ *            {@link Boolean} whether to check length of message while
+ *            displaying error
  */
-function twitterMainError(id, error)
+function twitterMainError(id, error, disable_check)
 {
+	// build JSON with error message
 	// build JSON with error message
 	var error_json = {};
 	error_json['message'] = error;
+	error_json['disable_check'] = disable_check;
 
 	/*
 	 * Get error template and fill it with error message and show it in the div

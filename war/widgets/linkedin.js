@@ -243,10 +243,14 @@ function showLinkedinMatchingProfiles(data)
 	if (data.length == 0)
 	{
 		if (Search_details['keywords'] && Search_details['keywords'] != "")
-			linkedinMainError(LINKEDIN_PLUGIN_NAME,
-					"No matches found for " + "<a href='#search' class='linkedin_modify_search'>" + Search_details['keywords'] + "</a>");
+			linkedinMainError(
+					LINKEDIN_PLUGIN_NAME,
+					"<p class='a-dotted' style='margin-bottom:0px;'>No matches found for <a href='#search' class='linkedin_modify_search'>" + Search_details['keywords'] + "</a></p>",
+					true);
 		else
-			linkedinMainError(LINKEDIN_PLUGIN_NAME, "No matches found. " + "<a href='#search' class='linkedin_modify_search'>Modify search</a>");
+			linkedinMainError(LINKEDIN_PLUGIN_NAME,
+					"<p class='a-dotted' style='margin-bottom:0px;'>No matches found. <a href='#search' class='linkedin_modify_search'>Modify search</a></p>",
+					true);
 		return;
 	}
 
@@ -1165,6 +1169,33 @@ function getLinkedInSharedConnections(linkedin_id)
 }
 
 /**
+ * Regrants access to LinkedIn after the expiry of token
+ * 
+ * @param message
+ *            {@link String} message to inform that their tokens are expired
+ */
+function grantAccessToLinkedIn(message)
+{
+	// Shows loading until setup is shown
+	$('#Linkedin').html(LINKEDIN_UPDATE_LOAD_IMAGE);
+
+	// URL to return, after fetching token and secret key from LinkedIn
+	var callbackURL = window.location.href;
+
+	/*
+	 * Creates a URL, which on click can connect to scribe using parameters sent
+	 * and returns back to the profile based on return URL provided and saves
+	 * widget preferences in widget based on plugin id
+	 */
+	var url = '/scribe?service=linkedin&return_url=' + encodeURIComponent(callbackURL) + '&plugin_id=' + encodeURIComponent(LinkedIn_Plugin_Id);
+
+	// Shows a link button in the UI which connects to the above URL
+	$('#Linkedin')
+			.html(
+					"<div class='widget_content' style='border-bottom:none;line-height: 160%;' >" + message + "<p style='margin: 10px 0px 5px 0px;' ><a class='btn' href=\"" + url + "\" style='text-decoration: none;'>Regrant Access</a></p></div>");
+}
+
+/**
  * Shows LinkedIn error message in the div allocated with given id and fades it
  * out after 10 secs
  * 
@@ -1172,10 +1203,13 @@ function getLinkedInSharedConnections(linkedin_id)
  *            div id
  * @param message
  *            error message
+ * @param disable_check
+ *            {@link Boolean} whether to check length of message while
+ *            displaying error
  */
-function linkedinError(id, error)
+function linkedinError(id, error, disable_check)
 {
-	linkedinMainError(id, error);
+	linkedinMainError(id, error, enable_check);
 	$('#' + id).show();
 
 	// Hides the modal after 2 seconds after the sent is shown
@@ -1190,12 +1224,23 @@ function linkedinError(id, error)
  *            div id
  * @param message
  *            error message
+ * @param disable_check
+ *            {@link Boolean} whether to check length of message while
+ *            displaying error
  */
-function linkedinMainError(id, error)
+function linkedinMainError(id, error, disable_check)
 {
+	// check if tokens are expired, if so show him to grant access again
+	if (error == "Access granted to your linkedin account has expired.")
+	{
+		grantAccessToLinkedIn(error);
+		return;
+	}
+
 	// build JSON with error message
 	var error_json = {};
 	error_json['message'] = error;
+	error_json['disable_check'] = disable_check;
 
 	/*
 	 * Get error template and fill it with error message and show it in the div
