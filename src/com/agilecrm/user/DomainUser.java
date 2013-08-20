@@ -208,12 +208,14 @@ public class DomainUser extends Cursor implements Cloneable
 	    // If subscription is null, it indicates user is in free plan.
 	    // Limits users to global trail users count
 	    if (subscription == null && DomainUserUtil.count() >= Globals.TRIAL_USERS_COUNT)
-		throw new Exception("Please upgrade. You cannot add more than " + Globals.TRIAL_USERS_COUNT + " users in the free plan");
+		throw new Exception("Please upgrade. You cannot add more than " + Globals.TRIAL_USERS_COUNT
+			+ " users in the free plan");
 
 	    // If Subscription is not null then limits users to current plan
 	    // quantity).
 	    if (subscription != null && DomainUserUtil.count() >= subscription.plan.quantity)
-		throw new Exception("Please upgrade. You cannot add more than " + subscription.plan.quantity + " users in the current plan");
+		throw new Exception("Please upgrade. You cannot add more than " + subscription.plan.quantity
+			+ " users in the current plan");
 
 	    return false;
 	}
@@ -239,6 +241,45 @@ public class DomainUser extends Cursor implements Cloneable
 		user.password = null;
 
 	    user.sendEmail(SendMail.WELCOME_SUBJECT, SendMail.WELCOME);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+    }
+
+    /**
+     * Send password changed notification e-mail to user via function
+     * user.SendMail
+     * 
+     * @param oldPassword
+     *            - old encrypted password of the user, handles even if its null
+     */
+    private void sendPasswordChangedNotification(String oldPassword)
+    {
+	try
+	{
+	    if (StringUtils.equals(this.password, MASKED_PASSWORD))
+		return;
+
+	    String newhash = MD5Util.getMD5HashedPassword(this.password);
+
+	    if (StringUtils.equals(newhash, oldPassword))
+		return;
+
+	    // no need to send any mail, password hasn't changed.
+
+	    // Cloned as we change password to null if user from open id
+	    // registration. so it can be checked in email template
+	    // based on
+	    // password field
+	    DomainUser user = (DomainUser) this.clone();
+
+	    if (user.password.equals(MASKED_PASSWORD))
+		user.password = null;
+
+	    user.sendEmail(SendMail.PASSWORD_CHANGE_NOTIFICATION_SUBJECT, SendMail.PASSWORD_CHANGE_NOTIFICATION);
+	    System.out.println("SENT-CHANGED:-----------------");
 	}
 	catch (Exception e)
 	{
@@ -323,7 +364,8 @@ public class DomainUser extends Cursor implements Cloneable
 	    // If domain user exists, not allowing to create new user
 	    if (this.id == null || (this.id != null && !this.id.equals(domainUser.id)))
 	    {
-		throw new Exception("User already exists with this email address " + domainUser.email + "in" + domainUser.domain + "domain.");
+		throw new Exception("User already exists with this email address " + domainUser.email + "in"
+			+ domainUser.domain + "domain.");
 	    }
 
 	    // Checks if super user is disabled, and throws exception if super
@@ -338,6 +380,8 @@ public class DomainUser extends Cursor implements Cloneable
 	    {
 		sendNotification();
 	    }
+
+	    sendPasswordChangedNotification(domainUser.encrypted_password);
 	}
 
 	// Set to current namespace if it is empty
@@ -522,7 +566,7 @@ public class DomainUser extends Cursor implements Cloneable
     @Override
     public String toString()
     {
-	return "\n Email: " + this.email + " Domain: " + this.domain + "\n IsAdmin: " + this.is_admin + " DomainId: " + this.id + " Name: " + this.name + "\n "
-		+ info_json;
+	return "\n Email: " + this.email + " Domain: " + this.domain + "\n IsAdmin: " + this.is_admin + " DomainId: "
+		+ this.id + " Name: " + this.name + "\n " + info_json;
     }
 }
