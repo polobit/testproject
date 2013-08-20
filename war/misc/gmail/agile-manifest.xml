@@ -9,7 +9,7 @@
 	<!-- EXTRACTOR -->
 <Extension id="FromEmailAddressExtractor" type="contextExtractor">
   <Name>Email ids in From</Name>
-  <Url>538277326378:Agile</Url>
+  <Url>754069265943:Agile</Url>
   <Triggers ref="AgileCRMGadget"/>
   <Scope ref="emailFrom"/>
    <Scope ref="emailName"/>
