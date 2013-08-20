@@ -153,17 +153,24 @@ public class JSAPI
     @Path("contact/delete")
     @GET
     @Produces("application/x-javascript")
-    public Boolean deleteContact(@QueryParam("email") String email)
+    public String deleteContact(@QueryParam("email") String email)
+    {
+    try
     {
 	Contact contact = ContactUtil.searchContactByEmail(email);
-
-	if (contact != null)
+	
+	if(contact == null)
+	return null;
+    contact.delete();
+    JSONObject obj = new JSONObject();
+    obj.put("success", "Contact deleted successfully");
+	return obj.toString();
+    }
+	catch (Exception e)
 	{
-	    contact.delete();
-	    return true;
+	e.printStackTrace();
+	return null;
 	}
-
-	return false;
     }
 
     /**
@@ -423,17 +430,24 @@ public class JSAPI
     @Path("contacts/subtract-score")
     @GET
     @Produces("application/x-javascript")
-    public Boolean subtractScore(@QueryParam("email") String email, @QueryParam("score") Integer score)
+    public String subtractScore(@QueryParam("email") String email, @QueryParam("score") Integer score)
+    {
+    try
     {
 
 	// Get Contact
 	Contact contact = ContactUtil.searchContactByEmail(email);
 	if (contact == null)
-	    return false;
+	    return null;
 
 	contact.subtractScore(score);
-	return true;
-
+	return new ObjectMapper().writeValueAsString(contact);
+    }
+    catch (Exception e)
+    {
+    	e.printStackTrace();
+    	return null;
+    }
     }
 
     /**

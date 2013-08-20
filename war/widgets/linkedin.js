@@ -245,10 +245,12 @@ function showLinkedinMatchingProfiles(data)
 		if (Search_details['keywords'] && Search_details['keywords'] != "")
 			linkedinMainError(
 					LINKEDIN_PLUGIN_NAME,
-					"<p class='a-dotted' style='margin-bottom:0px;'>No matches found for <a href='#search' class='linkedin_modify_search'>" + Search_details['keywords'] + "</a></p>");
+					"<p class='a-dotted' style='margin-bottom:0px;'>No matches found for <a href='#search' class='linkedin_modify_search'>" + Search_details['keywords'] + "</a></p>",
+					true);
 		else
 			linkedinMainError(LINKEDIN_PLUGIN_NAME,
-					"<p class='a-dotted' style='margin-bottom:0px;'>No matches found. <a href='#search' class='linkedin_modify_search'>Modify search</a></p>");
+					"<p class='a-dotted' style='margin-bottom:0px;'>No matches found. <a href='#search' class='linkedin_modify_search'>Modify search</a></p>",
+					true);
 		return;
 	}
 
@@ -1167,53 +1169,6 @@ function getLinkedInSharedConnections(linkedin_id)
 }
 
 /**
- * Shows LinkedIn error message in the div allocated with given id and fades it
- * out after 10 secs
- * 
- * @param id
- *            div id
- * @param message
- *            error message
- */
-function linkedinError(id, error)
-{
-	linkedinMainError(id, error);
-	$('#' + id).show();
-
-	// Hides the modal after 2 seconds after the sent is shown
-	$('#' + id).fadeOut(10000);
-
-}
-
-/**
- * Shows LinkedIn error message in the div allocated with given id
- * 
- * @param id
- *            div id
- * @param message
- *            error message
- */
-function linkedinMainError(id, error)
-{
-	if (error == "Access granted to your linkedin account has expired.")
-	{
-		grantAccessToLinkedIn(error);
-		return;
-	}
-	
-	// build JSON with error message
-	var error_json = {};
-	error_json['message'] = error;
-
-	/*
-	 * Get error template and fill it with error message and show it in the div
-	 * with given id
-	 */
-	$('#' + id).html(getTemplate('linkedin-error-panel', error_json));
-
-}
-
-/**
  * Regrants access to LinkedIn after the expiry of token
  * 
  * @param message
@@ -1238,4 +1193,59 @@ function grantAccessToLinkedIn(message)
 	$('#Linkedin')
 			.html(
 					"<div class='widget_content' style='border-bottom:none;line-height: 160%;' >" + message + "<p style='margin: 10px 0px 5px 0px;' ><a class='btn' href=\"" + url + "\" style='text-decoration: none;'>Regrant Access</a></p></div>");
+}
+
+/**
+ * Shows LinkedIn error message in the div allocated with given id and fades it
+ * out after 10 secs
+ * 
+ * @param id
+ *            div id
+ * @param message
+ *            error message
+ * @param disable_check
+ *            {@link Boolean} whether to check length of message while
+ *            displaying error
+ */
+function linkedinError(id, error, disable_check)
+{
+	linkedinMainError(id, error, enable_check);
+	$('#' + id).show();
+
+	// Hides the modal after 2 seconds after the sent is shown
+	$('#' + id).fadeOut(10000);
+
+}
+
+/**
+ * Shows LinkedIn error message in the div allocated with given id
+ * 
+ * @param id
+ *            div id
+ * @param message
+ *            error message
+ * @param disable_check
+ *            {@link Boolean} whether to check length of message while
+ *            displaying error
+ */
+function linkedinMainError(id, error, disable_check)
+{
+	// check if tokens are expired, if so show him to grant access again
+	if (error == "Access granted to your linkedin account has expired.")
+	{
+		grantAccessToLinkedIn(error);
+		return;
+	}
+
+	// build JSON with error message
+	var error_json = {};
+	error_json['message'] = error;
+	error_json['disable_check'] = disable_check;
+
+	/*
+	 * Get error template and fill it with error message and show it in the div
+	 * with given id
+	 */
+	$('#' + id).html(getTemplate('linkedin-error-panel', error_json));
+
 }

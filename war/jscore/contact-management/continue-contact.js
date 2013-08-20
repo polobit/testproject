@@ -1,4 +1,28 @@
 /**
+ * Shows error text, providing support for custom validation.
+ * Shows error message in .errorClass, filling it with htmlText
+ * 
+ * @param modalId - id of modal, won't be used if modal hidden
+ * @param formId  - id of form, 
+ * @param htmlText - error message to display
+ * @param errorClass - class in which to fill error text, i.e. htmlText
+ */
+function show_error(modalId,formId,errorClass,htmlText)
+{
+	var modal_elem=$('#'+modalId);
+	var form_elem=$('#'+formId);
+	
+	if(modal_elem.css('display')!=='none')
+	{
+		modal_elem.find('.'+errorClass).html('<div class="alert alert-error" ><a class="close" data-dismiss="alert" href="#">&times</a>'+htmlText+'</div>').show();
+	}
+	else if(form_elem.css('display')!=='none')
+	{
+		form_elem.find('.'+errorClass).html('<div class="alert alert-error" ><a class="close" data-dismiss="alert" href="#">&times</a>'+htmlText+'</div>').show();
+	}
+}
+
+/**
  * Serializes both contact (person or company) modal form (with basic information) 
  * and its continue editing form (with detailed information) and saves the serialized
  * data into Contacts data base.
@@ -119,6 +143,16 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     	}
     	else if (isValidField('contact_company'))
     	{
+    		if($('#contact_company').attr('value').length > 100)
+    		{
+            	show_error(modal_id,form_id,'duplicate-email','Company name too long. Please restrict upto 100 characters.');
+            	
+            	$(saveBtn).removeAttr('disabled');
+            	// Remove loading image
+            	$('#' + modal_id).find('span.save-status img').remove();
+            	$('#' + form_id).find('span.save-status img').remove();
+            	return;
+    		}	
     		obj.contact_company_id=null;
     		properties.push(property_JSON('company', 'contact_company'));
     	}
@@ -332,18 +366,16 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         	
             // Shows error alert of duplicate contacts
         	
-        	if($('#' + modal_id).css('display')!=='none')
-        	{
-        		$('#' + modal_id).find(".duplicate-email").html('<div class="alert alert-error" style="display:none"><a class="close" data-dismiss="alert" href="#">&times</a>Please change email. A contact already exists with this email.</div>');
-
-        		$('#' + modal_id).find(".alert").show();
+        	if(response.status==400)
+        	{	
+        		// 400 is out custom code, thrown when duplicate email detected.
+        		var dupEmail=response.responseText.split('|')[1];
+        		if(!dupEmail)dupEmail="";
+        		// get the already existing email from response text.
+        		show_error(modal_id,form_id,'duplicate-email','Please change email. A contact already exists with the email '+dupEmail);
         	}
-        	else if($('#' + form_id).css('display')!=='none')
-        	{
-        		$('#' + form_id).find(".duplicate-email").html('<div class="alert alert-error" style="display:none"><a class="close" data-dismiss="alert" href="#">&times</a>Please change email. <br/> A contact already exists with this email &lt; '+response.responseText.split('|')[1]+' &gt;.</div>');
-
-        		$('#' + form_id).find(".alert").show();
-        	}
+        	else
+        		show_error(modal_id,form_id,'duplicate-email','Server Error - '+response.status+' :<br/>'+response.responseText);
         }
     });
 

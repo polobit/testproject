@@ -49,10 +49,21 @@ function isValidForm(form) {
         return valid;
     }, "Please enter valid email each separated by comma.");
 
+	// Internal regex of jQuery validator allows for special characters in e-mails.
+	// This regex solves that, overriding 'email'
+	jQuery.validator.addMethod("email", function(value, element){
+		
+		if(this.optional(element))
+			return true;
+		
+		return /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/i.test(value);
+	}," Please enter a valid email.");
+	
 	$(form).validate({
 		rules : {
 			atleastThreeMonths : true,
-			multipleEmails: true
+			multipleEmails: true,
+			email: true
 		},
 		debug : true,
 		errorElement : 'span',
