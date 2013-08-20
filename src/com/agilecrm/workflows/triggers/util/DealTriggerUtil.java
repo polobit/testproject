@@ -1,6 +1,5 @@
 package com.agilecrm.workflows.triggers.util;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -36,11 +35,7 @@ public class DealTriggerUtil
 	// Executes trigger when deal is created.
 	if (opportunity != null && opportunity.id == null)
 	{
-	    for (Contact contact : opportunity.getContacts())
-	    {
-		executeTriggerForDeals(contact, Trigger.Type.DEAL_IS_ADDED);
-	    }
-
+	    executeTriggerForDeals(opportunity.getContacts(), Trigger.Type.DEAL_IS_ADDED);
 	    return;
 	}
     }
@@ -48,34 +43,36 @@ public class DealTriggerUtil
     /**
      * Executes trigger when deal is deleted.
      * 
-     * @param OpportunityIds
+     * @param opportunityIds
      *            Opportunity Ids of deals that are selected for deletion.
      */
-    public static void executeTriggerForDeleteDeal(JSONArray OpportunityIds)
+    public static void executeTriggerForDeleteDeal(JSONArray opportunityIds)
     {
-	// Executes trigger when deal is deleted
-	if (OpportunityIds != null)
+	// if null
+	if (opportunityIds == null)
+	    return;
+
+	try
 	{
-	    try
+	    // Iterates over selected deal-ids for deletion
+	    for (int i = 0; i < opportunityIds.length(); i++)
 	    {
-		for (int i = 0; i < OpportunityIds.length(); i++)
-		{
-		    String id = OpportunityIds.get(i).toString();
+		String id = opportunityIds.get(i).toString();
 
-		    // Gets Opportunity based on id
-		    Opportunity opportunityObject = OpportunityUtil.getOpportunity(Long.parseLong(id));
+		// Gets Opportunity based on id
+		Opportunity opportunityObject = OpportunityUtil.getOpportunity(Long.parseLong(id));
 
-		    // Executes trigger for corresponding contacts
-		    for (Contact contact : opportunityObject.getContacts())
-		    {
-			executeTriggerForDeals(contact, Trigger.Type.DEAL_IS_DELETED);
-		    }
-		}
+		// if opportunity is null skip
+		if (opportunityObject == null)
+		    continue;
+
+		executeTriggerForDeals(opportunityObject.getContacts(), Trigger.Type.DEAL_IS_DELETED);
 	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.out.println("Got Exception in executeTriggerForDeleteDeal " + e.getMessage());
 	}
     }
 
@@ -83,35 +80,26 @@ public class DealTriggerUtil
      * Executes trigger when deal is created or deal is deleted based on the
      * trigger called.
      * 
-     * @param contact
+     * @param contactsList
      *            Contact related to deals.
      * @param condition
      *            Trigger condition for deals.
      */
-    public static void executeTriggerForDeals(Contact contact, Type condition)
+    public static void executeTriggerForDeals(List<Contact> contactsList, Type condition)
     {
-	List<Trigger> triggersList = null;
 
-	/*
-	 * Converts contact object to list, to send contact as list parameter to
-	 * WorkflowManager.
-	 */
-	List<Contact> contactList = new ArrayList<Contact>();
-	contactList.add(contact);
+	// if deal has no related contacts
+	if (contactsList.size() == 0)
+	    return;
 
 	// Gets triggers with deal condition.
-	triggersList = TriggerUtil.getTriggersByCondition(condition);
-
-	if (triggersList == null)
-	{
-	    return;
-	}
+	List<Trigger> triggersList = TriggerUtil.getTriggersByCondition(condition);
 
 	try
 	{
 	    for (Trigger trigger : triggersList)
 	    {
-		WorkflowSubscribeUtil.subscribeDeferred(contactList, trigger.campaign_id);
+		WorkflowSubscribeUtil.subscribeDeferred(contactsList, trigger.campaign_id);
 	    }
 	}
 	catch (Exception e)

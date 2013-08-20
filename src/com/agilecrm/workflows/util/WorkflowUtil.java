@@ -5,11 +5,8 @@ import java.util.List;
 import org.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.session.SessionManager;
-import com.agilecrm.user.DomainUser;
 import com.agilecrm.workflows.Workflow;
 import com.campaignio.tasklets.util.TaskletUtil;
-import com.googlecode.objectify.Key;
 
 /**
  * <code>WorkflowUtil</code> provides various static methods to convert contact
@@ -103,7 +100,6 @@ public class WorkflowUtil
 	    campaignJSON.put(TaskletUtil.CAMPAIGN_WORKFLOW_JSON, workflowJSON);
 	    campaignJSON.put("id", workflow.id);
 	    campaignJSON.put("name", workflow.name);
-	    campaignJSON.put("domain_user_id", workflow.getDomainUserId());
 	    return campaignJSON;
 	}
 	catch (Exception e)
@@ -119,13 +115,6 @@ public class WorkflowUtil
     public static void unsubscribe()
     {
 
-    }
-
-    public static List<Workflow> getWorkflowsRelatedToCurrentUser(String page_size)
-    {
-	System.out.println("owner id : " + SessionManager.get().getDomainId());
-	return dao.ofy().query(Workflow.class).filter("creator_key", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
-		.order("-created_time").limit(Integer.parseInt(page_size)).list();
     }
 
     /**
