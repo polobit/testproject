@@ -129,7 +129,7 @@ function showRapleafDetails()
 	 */
 	if (!Email)
 	{
-		rapleafError(RAPLEAF_PLUGIN_NAME, "No email is associated with this contact");
+		rapleafError(RAPLEAF_PLUGIN_NAME, "Please provide email for this contact");
 		return;
 	}
 

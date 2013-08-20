@@ -354,7 +354,7 @@ function showTwilioDetails(token, from_number)
 	if (Numbers.length == 0)
 	{
 		// Shows information in Twilio widget panel
-		twilioError(Twilio_PLUGIN_NAME, "No contact number is associated with this contact");
+		twilioError(Twilio_PLUGIN_NAME, "Please provide contact number for this contact");
 		return;
 	}
 
