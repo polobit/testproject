@@ -2,6 +2,8 @@ package com.agilecrm.cases.util;
 
 import java.util.List;
 
+import org.json.JSONObject;
+
 import com.agilecrm.cases.Case;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -57,15 +59,6 @@ public class CaseUtil
      *            - entity to save
      * @return - null if save fails
      */
-    public static Case save(Case newCase)
-    {
-	dao.put(newCase);
-
-	/*
-	 * if (newCase.id == null) { return null; }
-	 */
-	return newCase;
-    }
 
     /**
      * Gets all cases related to a contact, i.e. all cases which have this
@@ -76,21 +69,49 @@ public class CaseUtil
      *            - id of contact
      * @return list of contacts
      */
-    public static List<Case> getCasesByContactId(Long id)
+    public static List<Case> getCasesByContact(Long id)
     {
 	Objectify ofy = ObjectifyService.begin();
-	List<Case> casesList = ofy.query(Case.class).filter("related_contacts_key = ", new Key<Contact>(Contact.class, id)).list();
+	List<Case> casesList = ofy.query(Case.class)
+		.filter("related_contacts_key = ", new Key<Contact>(Contact.class, id)).list();
 	return casesList;
     }
 
     /**
-     * Remove a case
+     * Deletes a Case entity, specified by id
      * 
      * @param id
-     *            - id of case entity o delete
+     *            - id of case to delete
      */
     public static void delete(Long id)
     {
 	dao.deleteKey(Key.create(Case.class, id));
+    }
+
+    /**
+     * Gets counts of status enums.
+     * 
+     * @return - map with key as status, value as count of such entities.
+     */
+    public static JSONObject getStatusCount()
+    {
+	JSONObject stats = new JSONObject();
+
+	// OPEN status is not stored, count is found by total-<status:close>
+
+	int total = dao.count();
+	int close = dao.getCountByProperty("status", "CLOSE");
+
+	try
+	{
+	    stats.put(Case.Status.OPEN.toString(), total - close);
+	    stats.put(Case.Status.CLOSE.toString(), close);
+
+	    return stats;
+	}
+	catch (Exception ex)
+	{
+	    return new JSONObject();
+	}
     }
 }

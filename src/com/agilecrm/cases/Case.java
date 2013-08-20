@@ -194,6 +194,19 @@ public class Case
     }
 
     /**
+     * Save this object into datastore.
+     */
+    public void save()
+    {
+	dao.put(this);
+    }
+
+    public void delete()
+    {
+	dao.deleteKey(Key.create(Case.class, this.id));
+    }
+
+    /**
      * Fill up ownerKey and relatedContactsKey
      */
     @PrePersist
