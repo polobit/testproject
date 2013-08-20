@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import org.json.JSONArray;
 
 import com.agilecrm.db.GoogleSQL;
-import com.agilecrm.db.util.SQLUtil;
+import com.agilecrm.db.util.GoogleSQLUtil;
 import com.campaignio.tasklets.agile.URLVisited;
 import com.google.appengine.api.NamespaceManager;
 
@@ -54,31 +54,31 @@ public class AnalyticsSQLUtil
 	    String country, String region, String city, String cityLatLong)
     {
 	String insertToPageViews = "INSERT INTO page_views (domain,guid,email,sid,url,ip,is_new,ref,user_agent,country,region,city,city_lat_long,stats_time) VALUES("
-		+ SQLUtil.encodeSQLColumnValue(domain)
+		+ GoogleSQLUtil.encodeSQLColumnValue(domain)
 		+ ","
-		+ SQLUtil.encodeSQLColumnValue(guid)
+		+ GoogleSQLUtil.encodeSQLColumnValue(guid)
 		+ ","
-		+ SQLUtil.encodeSQLColumnValue(email)
+		+ GoogleSQLUtil.encodeSQLColumnValue(email)
 		+ ","
-		+ SQLUtil.encodeSQLColumnValue(sid)
+		+ GoogleSQLUtil.encodeSQLColumnValue(sid)
 		+ ","
-		+ SQLUtil.encodeSQLColumnValue(url)
+		+ GoogleSQLUtil.encodeSQLColumnValue(url)
 		+ ","
-		+ SQLUtil.encodeSQLColumnValue(ip)
+		+ GoogleSQLUtil.encodeSQLColumnValue(ip)
 		+ ","
-		+ SQLUtil.encodeSQLColumnValue(isNew)
+		+ GoogleSQLUtil.encodeSQLColumnValue(isNew)
 		+ ","
-		+ SQLUtil.encodeSQLColumnValue(ref)
+		+ GoogleSQLUtil.encodeSQLColumnValue(ref)
 		+ ","
-		+ SQLUtil.encodeSQLColumnValue(userAgent)
+		+ GoogleSQLUtil.encodeSQLColumnValue(userAgent)
 		+ ","
-		+ SQLUtil.encodeSQLColumnValue(country)
+		+ GoogleSQLUtil.encodeSQLColumnValue(country)
 		+ ","
-		+ SQLUtil.encodeSQLColumnValue(region)
+		+ GoogleSQLUtil.encodeSQLColumnValue(region)
 		+ ","
-		+ SQLUtil.encodeSQLColumnValue(city)
+		+ GoogleSQLUtil.encodeSQLColumnValue(city)
 		+ ","
-		+ SQLUtil.encodeSQLColumnValue(cityLatLong) + ", NOW()" + ")";
+		+ GoogleSQLUtil.encodeSQLColumnValue(cityLatLong) + ", NOW()" + ")";
 
 	System.out.println("Insert Query to PageViews: " + insertToPageViews);
 
@@ -103,8 +103,8 @@ public class AnalyticsSQLUtil
 	String domain = NamespaceManager.get();
 
 	// Gets sessions based on Email from database
-	String sessions = "(SELECT sid FROM page_views WHERE email =" + SQLUtil.encodeSQLColumnValue(email) + " AND domain = "
-		+ SQLUtil.encodeSQLColumnValue(domain) + ")";
+	String sessions = "(SELECT sid FROM page_views WHERE email =" + GoogleSQLUtil.encodeSQLColumnValue(email) + " AND domain = "
+		+ GoogleSQLUtil.encodeSQLColumnValue(domain) + ")";
 
 	System.out.println("sids query is: " + sessions);
 
@@ -132,7 +132,7 @@ public class AnalyticsSQLUtil
      */
     public static void deleteStatsBasedOnNamespace(String namespace)
     {
-	String deleteQuery = "DELETE FROM page_views WHERE" + SQLUtil.appendDomainToQuery(namespace);
+	String deleteQuery = "DELETE FROM page_views WHERE" + GoogleSQLUtil.appendDomainToQuery(namespace);
 
 	try
 	{
@@ -159,11 +159,11 @@ public class AnalyticsSQLUtil
      */
     public static int getCountForGivenURL(String url, String domain, String email, String type)
     {
-	String urlCountQuery = "SELECT COUNT(*) FROM page_views WHERE domain = " + SQLUtil.encodeSQLColumnValue(domain) + " AND email = "
-		+ SQLUtil.encodeSQLColumnValue(email) + " AND url LIKE ";
+	String urlCountQuery = "SELECT COUNT(*) FROM page_views WHERE domain = " + GoogleSQLUtil.encodeSQLColumnValue(domain) + " AND email = "
+		+ GoogleSQLUtil.encodeSQLColumnValue(email) + " AND url LIKE ";
 
 	if (type.equals(URLVisited.EXACT_MATCH))
-	    urlCountQuery += SQLUtil.encodeSQLColumnValue(url);
+	    urlCountQuery += GoogleSQLUtil.encodeSQLColumnValue(url);
 	else
 	    urlCountQuery += " \'%" + url + "%\'";
 
@@ -198,7 +198,7 @@ public class AnalyticsSQLUtil
      */
     public static int getPageViewsCountForGivenDomain(String domain)
     {
-	String pageViewsCount = "SELECT COUNT(*) FROM page_views WHERE domain = " + SQLUtil.encodeSQLColumnValue(domain);
+	String pageViewsCount = "SELECT COUNT(*) FROM page_views WHERE domain = " + GoogleSQLUtil.encodeSQLColumnValue(domain);
 
 	int count = 0;
 

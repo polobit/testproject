@@ -4,7 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
 import com.agilecrm.db.GoogleSQL;
-import com.agilecrm.db.util.SQLUtil;
+import com.agilecrm.db.util.GoogleSQLUtil;
 
 /**
  * <code>CampaignLogsSQLUtil</code> is the SQL Utility class for campaign logs.
@@ -34,9 +34,9 @@ public class CampaignLogsSQLUtil
     public static void addToCampaignLogs(String domain, String campaignId, String campaignName, String subscriberId, String message, String type)
     {
 	String insertToLogs = "INSERT INTO campaign_logs (domain, campaign_id, campaign_name, subscriber_id, log_time, message, log_type) VALUES("
-		+ SQLUtil.encodeSQLColumnValue(domain) + "," + SQLUtil.encodeSQLColumnValue(campaignId) + "," + SQLUtil.encodeSQLColumnValue(campaignName)
-		+ "," + SQLUtil.encodeSQLColumnValue(subscriberId) + ",NOW()" + "," + SQLUtil.encodeSQLColumnValue(message) + ","
-		+ SQLUtil.encodeSQLColumnValue(type) + ")";
+		+ GoogleSQLUtil.encodeSQLColumnValue(domain) + "," + GoogleSQLUtil.encodeSQLColumnValue(campaignId) + "," + GoogleSQLUtil.encodeSQLColumnValue(campaignName)
+		+ "," + GoogleSQLUtil.encodeSQLColumnValue(subscriberId) + ",NOW()" + "," + GoogleSQLUtil.encodeSQLColumnValue(message) + ","
+		+ GoogleSQLUtil.encodeSQLColumnValue(type) + ")";
 
 	System.out.println("Insert Query to CampaignLogs: " + insertToLogs);
 
@@ -64,7 +64,7 @@ public class CampaignLogsSQLUtil
     public static JSONArray getLogs(String campaignId, String subscriberId, String domain, String limit)
     {
 	String logs = "SELECT *, UNIX_TIMESTAMP(log_time) AS time FROM campaign_logs WHERE log_type <> 'EMAIL_SLEEP' AND "
-		+ getWhereConditionOfLogs(campaignId, subscriberId, domain) + " ORDER BY log_time DESC" + SQLUtil.appendLimitToQuery(limit);
+		+ getWhereConditionOfLogs(campaignId, subscriberId, domain) + " ORDER BY log_time DESC" + GoogleSQLUtil.appendLimitToQuery(limit);
 	try
 	{
 	    return GoogleSQL.getJSONQuery(logs);
@@ -114,21 +114,21 @@ public class CampaignLogsSQLUtil
 
 	if (!StringUtils.isEmpty(campaignId))
 	{
-	    condition = " campaign_id = " + SQLUtil.encodeSQLColumnValue(campaignId);
+	    condition = " campaign_id = " + GoogleSQLUtil.encodeSQLColumnValue(campaignId);
 
 	    // If both are not null
 	    if (!StringUtils.isEmpty(subscriberId))
-		return condition += " AND " + " subscriber_id = " + SQLUtil.encodeSQLColumnValue(subscriberId) + " AND " + SQLUtil.appendDomainToQuery(domain);
+		return condition += " AND " + " subscriber_id = " + GoogleSQLUtil.encodeSQLColumnValue(subscriberId) + " AND " + GoogleSQLUtil.appendDomainToQuery(domain);
 	}
 
 	if (!StringUtils.isEmpty(subscriberId))
-	    condition = " subscriber_id = " + SQLUtil.encodeSQLColumnValue(subscriberId);
+	    condition = " subscriber_id = " + GoogleSQLUtil.encodeSQLColumnValue(subscriberId);
 
 	// if both campaignId and subscriberId are null
 	if (StringUtils.isEmpty(campaignId) && StringUtils.isEmpty(subscriberId))
-	    return SQLUtil.appendDomainToQuery(domain);
+	    return GoogleSQLUtil.appendDomainToQuery(domain);
 
-	condition += " AND " + SQLUtil.appendDomainToQuery(domain);
+	condition += " AND " + GoogleSQLUtil.appendDomainToQuery(domain);
 
 	return condition;
     }
@@ -141,7 +141,7 @@ public class CampaignLogsSQLUtil
      */
     public static void deleteLogsBasedOnDomain(String namespace)
     {
-	String deleteLogs = "DELETE FROM campaign_logs WHERE" + SQLUtil.appendDomainToQuery(namespace);
+	String deleteLogs = "DELETE FROM campaign_logs WHERE" + GoogleSQLUtil.appendDomainToQuery(namespace);
 
 	try
 	{

@@ -116,6 +116,7 @@ public class AnalyticsUtil
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	    System.err.println("Exception occured in AnalyticsUtil " + e.getMessage());
 	}
 
 	// Return JSONArray of merged map values

@@ -6,7 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import com.agilecrm.db.util.SQLUtil;
+import com.agilecrm.db.util.GoogleSQLUtil;
 
 /**
  * <code>DateUtil</code> is the date utility class for
@@ -127,7 +127,7 @@ public class DateUtil
     {
 	Date date = new Date(timestamp);
 	DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	format.setTimeZone(TimeZone.getTimeZone("GMT" + SQLUtil.convertMinutesToTime(timeZoneOffset)));
+	format.setTimeZone(TimeZone.getTimeZone("GMT" + GoogleSQLUtil.convertMinutesToTime(timeZoneOffset)));
 	return format.format(date);
     }
 }

@@ -3,11 +3,11 @@ package com.agilecrm.db.util;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * <code>SQLUtil</code> is the base class for adding, getting and deleting rows
+ * <code>GoogleSQLUtil</code> is the base class for adding, getting and deleting rows
  * from SQL table.
  * 
  */
-public class SQLUtil
+public class GoogleSQLUtil
 {
     /**
      * Append limit to query to retrieve recent results.
@@ -74,7 +74,7 @@ public class SQLUtil
      */
     public static String addConvertTZ(String timeZoneOffset)
     {
-	return "CONVERT_TZ(log_time,'+00:00'," + SQLUtil.encodeSQLColumnValue(timeZoneOffset) + ")";
+	return "CONVERT_TZ(log_time,'+00:00'," + GoogleSQLUtil.encodeSQLColumnValue(timeZoneOffset) + ")";
     }
 
     /**
@@ -119,13 +119,13 @@ public class SQLUtil
     {
 	// 1 to 12 AM or PM Eg. 1 AM
 	if (type.equals("hour"))
-	    return SQLUtil.encodeSQLColumnValue("%l %p");
+	    return GoogleSQLUtil.encodeSQLColumnValue("%l %p");
 
 	// Sun to Sat Eg. Mon
 	else if (type.equals("day"))
-	    return SQLUtil.encodeSQLColumnValue("%a");
+	    return GoogleSQLUtil.encodeSQLColumnValue("%a");
 
 	// Jan to Dec 01 to 31 Eg. Jan 04
-	return SQLUtil.encodeSQLColumnValue("%b %d");
+	return GoogleSQLUtil.encodeSQLColumnValue("%b %d");
     }
 }
