@@ -67,7 +67,7 @@ $(function(){
 							'</a><a class="close" id="remove_tag">&times</a></li>');
 					$("#personForm #contact_company").hide();
 				}
-				agile_type_ahead("contact_company",$('#personForm'), contacts_typeahead,fxn_display_company,'type=COMPANY','<b>No Results</b> <br/> We will add a new one');
+				agile_type_ahead("contact_company",$('#personForm'), contacts_typeahead,fxn_display_company,'type=COMPANY','<b>No Results</b> <br/> Will add a new one');
 			}
 		});
 		
