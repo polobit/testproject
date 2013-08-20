@@ -291,14 +291,14 @@
 				</div>
 			{{else}}
 				<div style="margin-bottom: 9px;">
-					<input data="{{id}}" class="complete-task" type="checkbox"/>
+					<input data="{{id}}" class="complete-task" type="checkbox" style="visibility:hidden;"/>
 					<h4 class="task-subject" style="display:inline;">
 						<b style="margin:0px 20px 0px 10px;">{{ucfirst subject}}</b>
 						<span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>	
 					</h4>
 				</div>
 			{{/if}}
-			<div style="margin-left:22px;">
+			<div style="margin-left:25px;">
 				<p>
 					<i class="{{icons type}}"></i>&nbsp;{{ucfirst type}}
 					<span style="margin-left:20px;">Due : <time class="task-created-time" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</span>
@@ -561,7 +561,7 @@
                 <div class="control-group">         
                     <label class="control-label span2" style="margin-left:0px;">Select campaign: <span class="field_req">*</span></label>
                     <div class="controls">
-                        <select id="campaign-select" name="campaign-select" class="required">
+                        <select id="campaign-select" name="id" class="required">
 							<option value="">Select..</option>
 							{{#if this.length}}
 								{{#each this}}
