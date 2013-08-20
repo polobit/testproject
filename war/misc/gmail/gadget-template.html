@@ -115,7 +115,7 @@
 							</b>
 						</div>
 					</div>
-					<a target="_blank" href="http://localhost:8888/#contact/{{id}}" style="margin-left:6px;"><i class="icon-external-link" title="Show in Agile"></i></a><br/>
+					<a target="_blank" href="{{lib_path}}#contact/{{id}}" style="margin-left:6px;"><i class="icon-external-link" title="Show in Agile"></i></a><br/>
 					{{#if_propertyName "title"}}
 						{{value}}
 					{{/if_propertyName}}
@@ -213,7 +213,7 @@
 			<li class="gadget-campaigns-tab"><a href="#Campaigns-{{id}}" data-toggle="tab">Campaigns</a></li>
 	    </ul>
 	    <div class="tab-content">
-		<img class="tab-waiting" style="display:none; width:25px; float:left;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
+			<img class="tab-waiting" style="display:none; width:25px; float:left;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
 	        <div class="tab-pane active" id="Notes-{{id}}">
 	            <div class="gadget-notes-tab-list">
 					
@@ -238,6 +238,7 @@
 </script>
 
 <script id="gadget-notes-list-template" type="text/html">
+<!-- Notes list tab -->
 <ul style="list-style-type:none;">
 	{{#if this.length}}
 		{{#each this}}
@@ -270,6 +271,7 @@
 </script>
 
 <script id="gadget-tasks-list-template" type="text/html">
+<!-- Tasks list tab -->
 <ul style="list-style-type:none;">
 {{#if this.length}}
 		{{#each this}}
@@ -327,6 +329,7 @@
 </script>
 
 <script id="gadget-deals-list-template" type="text/html">
+<!-- Deals list tab -->
 <ul style="list-style-type:none;"> 
 {{#if this.length}}
 		{{#each this}}
@@ -361,9 +364,10 @@
 </script>
 
 <script id="gadget-campaigns-list-template" type="text/html">
+<!-- Campaign logs tab -->
 <ul style="list-style-type:none;"> 
-{{#if this.length}}
-		{{#each this}}
+{{#if this.response.length}}
+		{{#each this.response}}
 			{{#stringToJSON this ""}}
 <li>
 	<div style="display:block;">
@@ -379,7 +383,7 @@
 			<p>{{{message}}}</p>
 			<small class="edit-hover" style="margin-right:10px; color:#b2b0b1;">
 				<time class="log-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-	        	<a target="_blank" class="pull-right" href="http://localhost:8888/#workflow/{{campaign_id}}"> {{campaign_name}}</a>
+	        	<a target="_blank" class="pull-right" href="{{../../lib_path}}#workflow/{{campaign_id}}"> {{campaign_name}}</a>
 		        <p class="pull-right">Campaign - </p>
 			</small>	
 		</div>

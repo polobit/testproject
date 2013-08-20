@@ -576,8 +576,13 @@ function agile_init_handlers() {
 			
 			agile_get_gadget_template("gadget-campaigns-list-template", function(data) {
 				$(".tab-waiting", el).hide();
-				// Fill campaigns list in tab.	
-				$('.gadget-campaigns-tab-list', el).html(getTemplate('gadget-campaigns-list', response, 'no'));
+				var lib_json = {};
+				// Set library path for campaign link.
+				lib_json["lib_path"] = Lib_Path ;
+				lib_json["response"] = response; 
+				
+				// Fill campaigns list in tab.
+				$('.gadget-campaigns-tab-list', el).html(getTemplate('gadget-campaigns-list', lib_json, 'no'));
 			});
 			// Apply date formatter on date/time field.
 			$("time", el).timeago();

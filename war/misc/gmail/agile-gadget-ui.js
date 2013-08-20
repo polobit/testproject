@@ -88,7 +88,7 @@ function agile_build_ui_for_emails(Email_Ids) {
 		} else {
 			val.email = email;
 		}
-
+		val.lib_path = Lib_Path;
 		// Store user data for future use.
 		Contacts_Json[val.email] = val;
 		agile_fill_individual_template_ui(val, $('#content'));

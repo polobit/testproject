@@ -33,7 +33,7 @@
 	<Extension id="AgileCRMGadget" type="gadget">
 		<Name>AgileCRM - Built with Love for Small Businesses - contextual
 			gadget</Name>
-		<Url>https://agile-gmail-gadget.appspot.com/agile-gadget.xml</Url>
+		<Url>https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/misc/gmail/agile-gadget.xml</Url>
 		<Container name="mail" />
 	</Extension>
 
