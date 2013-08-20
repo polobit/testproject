@@ -243,10 +243,12 @@ function showLinkedinMatchingProfiles(data)
 	if (data.length == 0)
 	{
 		if (Search_details['keywords'] && Search_details['keywords'] != "")
-			linkedinMainError(LINKEDIN_PLUGIN_NAME,
-					"No matches found for " + "<a href='#search' class='linkedin_modify_search'>" + Search_details['keywords'] + "</a>");
+			linkedinMainError(
+					LINKEDIN_PLUGIN_NAME,
+					"<p class='a-dotted' style='margin-bottom:0px;'>No matches found for <a href='#search' class='linkedin_modify_search'>" + Search_details['keywords'] + "</a></p>");
 		else
-			linkedinMainError(LINKEDIN_PLUGIN_NAME, "No matches found. " + "<a href='#search' class='linkedin_modify_search'>Modify search</a>");
+			linkedinMainError(LINKEDIN_PLUGIN_NAME,
+					"<p class='a-dotted' style='margin-bottom:0px;'>No matches found. <a href='#search' class='linkedin_modify_search'>Modify search</a></p>");
 		return;
 	}
 
