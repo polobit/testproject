@@ -1,4 +1,4 @@
-package com.agilecrm.analytics.util;
+package com.analytics.util;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

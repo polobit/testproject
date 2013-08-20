@@ -13,9 +13,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
 
-import com.agilecrm.analytics.Analytics;
-import com.agilecrm.analytics.util.AnalyticsSQLUtil;
-import com.agilecrm.analytics.util.AnalyticsUtil;
+import com.analytics.Analytics;
+import com.analytics.util.AnalyticsSQLUtil;
+import com.analytics.util.AnalyticsUtil;
 import com.google.appengine.api.NamespaceManager;
 
 /**

@@ -1,4 +1,4 @@
-package com.agilecrm.analytics;
+package com.analytics;
 
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlElement;

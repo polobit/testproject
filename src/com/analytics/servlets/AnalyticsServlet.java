@@ -1,4 +1,4 @@
-package com.agilecrm.analytics.servlets;
+package com.analytics.servlets;
 
 import java.io.IOException;
 
@@ -10,10 +10,10 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.agilecrm.analytics.util.AnalyticsSQLUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
+import com.analytics.util.AnalyticsSQLUtil;
 import com.google.appengine.api.NamespaceManager;
 
 /**

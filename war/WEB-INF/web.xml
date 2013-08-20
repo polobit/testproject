@@ -364,7 +364,7 @@
 
 	<servlet>
 		<servlet-name>AnalyticsServlet</servlet-name>
-		<servlet-class>com.agilecrm.analytics.servlets.AnalyticsServlet</servlet-class>
+		<servlet-class>com.analytics.servlets.AnalyticsServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>AnalyticsServlet</servlet-name>

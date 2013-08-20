@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.agilecrm.analytics.util.AnalyticsSQLUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.IMAPEmailPrefs;
@@ -18,6 +17,7 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.IMAPEmailPrefsUtil;
 import com.agilecrm.user.util.SocialPrefsUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
+import com.analytics.util.AnalyticsSQLUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.CampaignLogsSQLUtil;
 import com.google.appengine.api.NamespaceManager;
