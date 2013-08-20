@@ -1195,6 +1195,7 @@ function linkedinError(id, error)
  */
 function linkedinMainError(id, error)
 {
+	// check if tokens are expired, if so show him to grant access again 
 	if (error == "Access granted to your linkedin account has expired.")
 	{
 		grantAccessToLinkedIn(error);
