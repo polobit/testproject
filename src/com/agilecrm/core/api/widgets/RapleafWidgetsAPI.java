@@ -1,5 +1,8 @@
 package com.agilecrm.core.api.widgets;
 
+import java.io.IOException;
+import java.net.SocketTimeoutException;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -52,6 +55,19 @@ public class RapleafWidgetsAPI
 	{
 	    // Retrieves details of persons from Rapleaf based on email
 	    return Rapleaf.getRapportiveValue(widget, email).toString();
+	}
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and try again.")
+		    .build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST)
+		    .entity("An error occured. Refresh and try again.").build());
 	}
 	catch (Exception e)
 	{

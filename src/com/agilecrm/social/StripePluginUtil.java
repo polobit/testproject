@@ -1,5 +1,7 @@
 package com.agilecrm.social;
 
+import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +39,7 @@ public class StripePluginUtil
      * @throws Exception
      */
     public static JSONObject getCustomerDetails(Widget widget, String customerId)
-	    throws Exception
+	    throws SocketTimeoutException, IOException, Exception
     {
 	JSONObject customer_info = new JSONObject();
 	String apiKey = widget.getProperty("access_token");

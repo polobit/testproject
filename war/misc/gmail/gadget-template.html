@@ -116,13 +116,13 @@
 							</b>
 						</div>
 					</div>
-					<a target="_blank" href="http://localhost:8888/#contact/{{id}}" style="margin-left:6px;"><i class="icon-external-link"></i></a><br/>
+					<a target="_blank" href="http://localhost:8888/#contact/{{id}}" style="margin-left:6px;"><i class="icon-external-link" title="Show in Agile"></i></a><br/>
 					{{#if_propertyName "title"}}
 						{{value}}
 					{{/if_propertyName}}
-	
+					{{#comma_in_between_property "title" "company" properties}}{{/comma_in_between_property}}
 					{{#if_propertyName "company"}}
-						, {{value}}
+						{{value}}
 					{{/if_propertyName}}
 						 		
 					<div class="add-tag">
@@ -130,8 +130,8 @@
 							<ul id="added_tags_ul" class="tagsinput" style="display: inline; vertical-align:top; margin-bottom:10px;">
 								<li class="tag" style="display: none; padding:1px 4px;">
 									<span>
-										<span class="anchor tag-name" style="float:left;">lead</span>
-										<a class="close remove-tag remove-tag-icon" style="float:left; line-height:16px;">&times;</a>
+										<span class="anchor tag-name" style="float:left; cursor:default;">lead</span>
+										<a class="close remove-tag remove-tag-icon" style="float:left; line-height:16px;" title="Remove Tag">&times;</a>
 									</span>
 								</li> 
 							</ul>
@@ -144,7 +144,7 @@
 									</div>
 								</form>
 								<img class="saving" style="display:none; width:25px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
-								<i id="add_tags" class="icon-plus toggle-tag" style="cursor:pointer; margin-top:4px; display:block;"></i>
+								<i id="add_tags" class="icon-plus toggle-tag" style="cursor:pointer; margin-top:4px; display:block;" title="Add Tag"></i>
 							</div>
 						</div>
 					</div>
@@ -171,17 +171,17 @@
 						<ul style="margin:0; list-style-type:none; width:60px; height:auto; display:table; border:1px solid rgba(0, 0, 0, 0.05); box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05); border-radius:3px;">
 							<li style="text-align:center;">
 								<div style="width:56px; margin: 0 auto; border-bottom: 1px solid rgba(0, 0, 0, 0.05);">
-									<span style="font-weight:bold; font-size:13px;">Score</span>
+									<span style="font-weight:bold; font-size:13px; cursor:default;">Score</span>
 								</div>
 							</li>
 							<li style="line-height:30px;">
 								<div style="display:inline; height:auto; width:60px; text-align:center;">
 									{{#if lead_score}}
-										<div class="score-value" style="display:inline-block; width:55%; font-size:20px; margin-right:-2px; vertical-align:middle; text-align:right;">
+										<div class="score-value" style="display:inline-block; width:55%; font-size:20px; margin-right:-2px; vertical-align:middle; text-align:right; cursor:default;">
 											{{lead_score}}
 										</div>
 									{{else}}
-										<div class="score-value" style="display:inline-block; width:55%; font-size:20px; margin-right:-2px; vertical-align:middle; text-align:right;">
+										<div class="score-value" style="display:inline-block; width:55%; font-size:20px; margin-right:-2px; vertical-align:middle; text-align:right; cursor:default;">
 											0
 										</div>
 									{{/if}}
@@ -197,7 +197,7 @@
 <!-- 4th coloum (Hide button) -->
 					<br/><br/><br/>
 					<div class="pull-right" style="margin-right:1px;">
-						<i class="icon-collapse-alt icon-large hide-contact-summery" style="cursor:pointer;"></i>
+						<i class="icon-collapse-alt icon-large hide-contact-summery" style="cursor:pointer;" title="Hide Contact Details"></i>
 					</div>
 				</div>
 <!-- end of contact info-->

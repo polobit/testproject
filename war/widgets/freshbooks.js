@@ -25,6 +25,22 @@ $(function()
 	Email = agile_crm_get_contact_property('email');
 	console.log('Email: ' + Email);
 
+	// Register click events
+	/*
+	 * On click of reset button of FreshBooks widget, widget preferences are
+	 * deleted and initial set up is called
+	 */
+	$('#FreshBooks_plugin_delete').die().live('click', function(e)
+	{
+		e.preventDefault();
+
+		// preferences are saved as undefined and set up is shown
+		agile_crm_save_widget_prefs(FRESHBOOKS_PLUGIN_NAME, undefined, function(data)
+		{
+			setUpFreshbooksAuth();
+		});
+	});
+
 	/*
 	 * Gets FreshBooks widget preferences, required to check whether to show
 	 * setup button or to fetch details. If undefined - considering first time
@@ -41,22 +57,6 @@ $(function()
 	 * FreshBooks associated with current contact's email
 	 */
 	showFreshBooksClient();
-
-	// Register click events
-	/*
-	 * On click of reset button of FreshBooks widget, widget preferences are
-	 * deleted and initial set up is called
-	 */
-	$('#FreshBooks_plugin_delete').die().live('click', function(e)
-	{
-		e.preventDefault();
-
-		// preferences are saved as undefined and set up is shown
-		agile_crm_save_widget_prefs(FRESHBOOKS_PLUGIN_NAME, undefined, function(data)
-		{
-			setUpFreshbooksAuth();
-		});
-	});
 
 	/*
 	 * Retrieve first name and last name of contact, to add contact as client in

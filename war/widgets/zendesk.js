@@ -24,6 +24,22 @@ $(function()
 	Email = agile_crm_get_contact_property('email');
 	console.log('Email: ' + Email);
 
+	// Register click events
+	/*
+	 * On click of reset button of Zendesk widget, widget preferences are
+	 * deleted and initial set up is called
+	 */
+	$('#Zendesk_plugin_delete').die().live('click', function(e)
+	{
+		e.preventDefault();
+
+		// preferences are saved as undefined and set up is shown
+		agile_crm_save_widget_prefs(ZENDESK_PLUGIN_NAME, undefined, function(data)
+		{
+			setupZendeskAuth();
+		});
+	});
+
 	/*
 	 * Gets Zendesk widget preferences, required to check whether to show setup
 	 * button or to fetch details. If undefined - considering first time usage
@@ -40,22 +56,6 @@ $(function()
 	 * associated with current contact's email
 	 */
 	showZendeskProfile();
-
-	// Register click events
-	/*
-	 * On click of reset button of Zendesk widget, widget preferences are
-	 * deleted and initial set up is called
-	 */
-	$('#Zendesk_plugin_delete').die().live('click', function(e)
-	{
-		e.preventDefault();
-
-		// preferences are saved as undefined and set up is shown
-		agile_crm_save_widget_prefs(ZENDESK_PLUGIN_NAME, undefined, function(data)
-		{
-			setupZendeskAuth();
-		});
-	});
 
 	// On click of add ticket, add ticket method is called
 	$('#add_ticket').die().live('click', function(e)
