@@ -19,8 +19,10 @@ function agile_addCampaign(data, callback, email)
 		else 
 			email = agile_guid.get_email();
 	}
+	var params = "data={0}&email={1}".format(encodeURIComponent(JSON.stringify(data)), encodeURIComponent(email));
+	
 	// Get
-	var agile_url = agile_id.getURL() + "/contacts/add-campaign?callback=?&id=" + agile_id.get() + "&" + "email={0}".format(encodeURIComponent(email));
+	var agile_url = agile_id.getURL() + "/contacts/add-campaign?callback=?&id=" + agile_id.get() + "&" + params;
 	
 	// Callback
 	agile_json(agile_url, callback);

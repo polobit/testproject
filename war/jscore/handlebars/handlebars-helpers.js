@@ -557,7 +557,7 @@ $(function()
 		if (!value)
 			return;
 
-		var str = value.replace(/_/, ' ');
+		var str = value.replace(/_/g, ' ');
 		return ucfirst(str.toLowerCase());
 
 	});

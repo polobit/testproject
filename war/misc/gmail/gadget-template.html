@@ -33,7 +33,11 @@
 <script id="gadget-add-contact-template" type="text/html">
 <form class='gadget-contact-form' name="gadget_contact_form" method="post">
 	<fieldset style="margin:0px;">
-	<legend><i class="icon-plus-sign"></i> Add Contact To Agile CRM</legend>
+	{{#if fname}}
+		<legend><i class="icon-plus-sign"></i> Add {{fname}} {{lname}} To Agile CRM</legend>
+	{{else}}
+		<legend><i class="icon-plus-sign"></i> Add {{email}} To Agile CRM</legend>
+	{{/if}}
 	<div class="control-group" style="margin:0px;">
 		<label class="control-label"><b>Name:</b> <span class="field_req">*</span></label>
   		<div class="row">
@@ -151,20 +155,15 @@
 <!-- 4th coloum (score/task/options) -->
 					<div class="pull-right" style="position:relative; display:inline-block; vertical-align: top;">
 						<div class="btn-group">
-  							<a class="btn dropdown-toggle" data-toggle="dropdown">Action<span class="caret"></span></a>
+  							<a class="btn dropdown-toggle" data-toggle="dropdown">Action<span class="caret" style="margin-left:5px;"></span></a>
   							<ul class="dropdown-menu pull-right">
     							<!-- dropdown menu links -->
 								<li class="action-add-note"><a style="cursor:default;">Add Note</a></li>
-								<li class="action-add-task"><a style="cursor:default;">Add Tasks</a></li>
-								<li class="action-add-deal"><a style="cursor:default;">Add Deals</a></li>
+								<li class="action-add-task"><a style="cursor:default;">Add Task</a></li>
+								<li class="action-add-deal"><a style="cursor:default;">Add Deal</a></li>
+								<li class="action-add-campaign"><a style="cursor:default;">Add to Campaign</a></li>
   							</ul>
 						</div>						
-<!--<select class="option-drop-down" style="width:70px; margin:0px 0px 0px -5px;">
-							<option value="New" selected>New..</option>
-							<option value="Note">Note</option>
-							<option value="Task">Task</option>
-							<option value="Deal">Deal</option>
-						</select>-->
 					</div>
 					
 <!-- 3rd coloum (score) -->
@@ -195,13 +194,13 @@
 							</li>
 						</ul>
 					</div>
+<!-- 4th coloum (Hide button) -->
+					<br/><br/><br/>
+					<div class="pull-right" style="margin-right:1px;">
+						<i class="icon-collapse-alt icon-large hide-contact-summery" style="cursor:pointer;"></i>
+					</div>
 				</div>
 <!-- end of contact info-->
-			</div>
-<!-- 4th coloum (Hide button) -->
-			<br/>
-			<div class="pull-right" style="margin-top:-18px;">
-				<i class="icon-collapse-alt icon-large hide-contact-summery" style="cursor:pointer;"></i>
 			</div>
 		</div>
 </script>
@@ -212,6 +211,7 @@
 	        <li class="active gadget-notes-tab"><a href="#Notes-{{id}}" data-toggle="tab">Notes</a></li>
 	        <li class="gadget-tasks-tab"><a href="#Tasks-{{id}}" data-toggle="tab">Tasks</a></li>
 			<li class="gadget-deals-tab"><a href="#Deals-{{id}}" data-toggle="tab">Deals</a></li>
+			<li class="gadget-campaigns-tab"><a href="#Campaigns-{{id}}" data-toggle="tab">Campaigns</a></li>
 	    </ul>
 	    <div class="tab-content">
 	        <div class="tab-pane active" id="Notes-{{id}}">
@@ -226,6 +226,11 @@
 	        </div>
 			<div class="tab-pane" id="Deals-{{id}}">
 	            <div class="gadget-deals-tab-list">
+					
+				</div>
+	        </div>
+			<div class="tab-pane" id="Campaigns-{{id}}">
+	            <div class="gadget-campaigns-tab-list">
 					
 				</div>
 	        </div>
@@ -355,6 +360,45 @@
 </ul>
 </script>
 
+<script id="gadget-campaigns-list-template" type="text/html">
+<ul style="list-style-type:none;"> 
+{{#if this.length}}
+		{{#each this}}
+			{{#stringToJSON this ""}}
+<li>
+	<div style="display:block;">
+		<div id="campaigns" class="activity-text-block">
+			<span class="activity-block-owner pull-right">
+				{{#if log_type}}
+					<img class="user-img" width="40" height="40" alt="" src="/img/campaigns/{{log_type}}.png">
+				{{else}}
+					<img class="user-img" width="40" height="40" src="https://d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png">
+				{{/if}}
+			</span>
+			<h4><b>{{titleFromEnums log_type}}</b></h4></br>
+			<p>{{{message}}}</p>
+			<small class="edit-hover" style="margin-right:10px; color:#b2b0b1;">
+				<time class="log-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+	        	<a target="_blank" class="pull-right" href="http://localhost:8888/#workflow/{{campaign_id}}"> {{campaign_name}}</a>
+		        <p class="pull-right">Campaign - </p>
+			</small>	
+		</div>
+	</div>
+</li>
+			{{/stringToJSON}}
+		{{/each}}
+	{{else}}
+		<li>
+			<div style="display:block;" class="activity">
+				<div id="notes" class="activity-text-block">
+					<h4>You have no campaigns for this contact.</h4>
+				</div>
+			</div>
+		</li>
+	{{/if}}
+</ul>
+</script>
+
 <script id="gadget-note-template" type="text/html">
 <!--  Add Note Form -->
 	<div class="gadget-note" style="padding-left:30px;">
@@ -380,7 +424,7 @@
                    <div class="form-actions" style="padding: 10px 0px 0px 0px; margin:0px;">
                    	<a type="submit" class="btn btn-primary gadget-note-validate" style="padding:2px 6px 2px;">Add Note</a>
 	             	<a class="cancel btn" data-tab-identity="notes" style="padding:2px 6px 2px;">Cancel</a>
-                   	<img class="saving" style="padding-right:5px;display:none;width:25px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
+                   	<img class="saving" style="padding-right:5px;display:none;width:20px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
 					<span class="status" style="display:none;"><i>Successfully Saved</i></span> 
                  	</div>
 			</fieldset>
@@ -442,7 +486,7 @@
 	                  <div class="form-actions" style="padding:10px 0px 0px 0px; margin:0px;">
 	                  	<a type="submit" class="btn btn-primary gadget-task-validate" style="padding:2px 6px 2px;">Add Task</a>
 			       		<a class="cancel btn" data-tab-identity="tasks" style="padding:2px 6px 2px;">Cancel</a>
-						<img class="saving" style="padding-right:5px;display:none;width:25px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
+						<img class="saving" style="padding-right:5px;display:none;width:20px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
                      	<span class="status" style="display:none;"><i>Successfully Saved</i></span>
 	                  </div>
 			</fieldset>				
@@ -501,10 +545,38 @@
                		<div class="form-actions" style="padding:10px 0px 0px 0px; margin:0px;">
                			<a type="submit" class="btn btn-primary gadget-deal-validate" style="padding:2px 6px 2px;">Add Deal</a> 
 			   			<a class="cancel btn" data-tab-identity="deals" style="padding:2px 6px 2px;">Cancel</a>
-						<img class="saving" style="padding-right:5px;display:none;width:25px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
-                   		<span class="status" style="display:none;"><i>Successfully Saved</i></span>
-					</div>
+						<img class="saving" style="padding-right:5px;display:none;width:20px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
+                   	</div>
 		  		</fieldset>
 			</form>
 		</div>
+</script>
+
+<script id="gadget-campaign-template" type="text/html">
+<!--  Add to Campaign Form -->
+	<div class="gadget-campaign" style="padding-left:30px;">
+        <form class="gadget-campaign-form" name="gadget_campaign_form" method="post">
+            <fieldset style="margin:0px;">
+				<input type="hidden" name="email" value='{{email}}' />
+                <div class="control-group">         
+                    <label class="control-label span2" style="margin-left:0px;">Select campaign: <span class="field_req">*</span></label>
+                    <div class="controls">
+                        <select id="campaign-select" name="campaign-select" class="required">
+							<option value="">Select..</option>
+							{{#if this.length}}
+								{{#each this}}
+									<option value="{{id}}">{{name}}</option>
+								{{/each}}
+							{{/if}}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions" style="padding:10px 0px 0px 0px; margin:0px;">          
+                    <a type="submit" class="btn btn-primary gadget-campaign-validate" style="padding:2px 6px 2px;">Add to Campaign</a> 
+                    <a class="cancel btn " data-tab-identity="campaigns" style="padding:2px 6px 2px;">Cancel</a>
+					<img class="saving" style="padding-right:5px;display:none;width:20px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
+                </div>
+            </fieldset>
+        </form>
+    </div>
 </script>

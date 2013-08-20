@@ -23,6 +23,7 @@
 							<th align="left" style="font-size: 12px"><strong>Subject</strong></th>
 							<th align="left" style="font-size: 12px"><strong>Type</strong></th>
 							<th align="left" style="font-size: 12px"><strong>Priority</strong></th>
+							<th align="left" style="font-size: 12px"><strong>Related Contacts</strong></th>
 		      			</tr>
 					</thead>
 					<tbody>
@@ -31,6 +32,44 @@
 						   <td align="left" style="font-size: 12px">{{{subject}}}</td>
 						   <td align="left" style="font-size: 12px">{{type}}</td>
 						   <td align="left" style="font-size: 12px">{{priority_type}}</td>
+						   <td align="left" style="font-size: 12px; position:relative; text-align: left; ">
+						   		{{#related_contacts}}
+						   		
+						   		<div style="display:inline-table; ">
+						   		
+						   		{{#taskOwner.domain}}
+						   			<a href="http://{{this}}.agilecrm.com#contact/{{/taskOwner.domain}}
+						   		{{^taskOwner.domain}}
+						   			<a href="http://localhost:8888#contact/{{/taskOwner.domain}}{{id}}" target="_blank">
+						   			{{#image}}
+						   				<img style="width:40px; height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px; " src="{{value}}"
+						   			{{/image}}
+						   			
+						   			{{^image}}
+						   				{{#first_name}}
+						   					<img style="width:40px; height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px;" src="1"
+						   				{{/first_name}}
+						   				{{^first_name}}
+						   					{{#url}}
+						   						<img style="width:32px; height:32px; padding:8px; border: 1px solid #ddd; border-radius: 5px; " src="https://www.google.com/s2/favicons?domain={{value}}"
+						   					{{/url}}
+						   					{{^url}}
+						   						{{#taskOwner.domain}}
+						   						<img src="http://{{this}}.agilecrm.com/img/company.png" style="width:40px; height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px;"
+						   						{{/taskOwner.domain}}
+						   						{{^taskOwner.domain}}
+						   						<img style="width:40px; height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px;"
+						   						{{/taskOwner.domain}}
+						   					{{/url}}
+						   				{{/first_name}}
+						   			{{/image}}
+						   			
+						   			title="{{#first_name}}{{value}}{{/first_name}}{{#last_name}} {{value}}{{/last_name}}{{#name}}{{value}}{{/name}}"
+						   			/>
+						   			</a>
+						   		</div>		
+						   		{{/related_contacts}}
+						   </td>
 						</tr>
 						{{/tasks}}
 				

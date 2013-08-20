@@ -192,7 +192,6 @@ public class JSAPI
 	{
 	    ObjectMapper mapper = new ObjectMapper();
 	    Task task = mapper.readValue(json, Task.class);
-	    System.out.println(mapper.writeValueAsString(task));
 	    System.out.println(task);
 
 	    // Get Contact
@@ -246,7 +245,6 @@ public class JSAPI
 	{
 	    ObjectMapper mapper = new ObjectMapper();
 	    Opportunity opportunity = mapper.readValue(json, Opportunity.class);
-	    System.out.println(mapper.writeValueAsString(opportunity));
 	    System.out.println(opportunity);
 
 	    // Get Contact
@@ -741,7 +739,7 @@ public class JSAPI
     	ObjectMapper mapper = new ObjectMapper();
     	Workflow workflow = mapper.readValue(json, Workflow.class);
     	WorkflowSubscribeUtil.subscribe(contact, workflow.id);
-    	return mapper.writeValueAsString(contact);
+    	return mapper.writeValueAsString(workflow);
     }
     catch(Exception e)
     {
