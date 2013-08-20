@@ -38,16 +38,16 @@
 						   		<div style="display:inline-table; ">
 						   		
 						   		{{#taskOwner.domain}}
-						   			<a href="http://{{this}}.agilecrm.com#contact/{{/taskOwner.domain}}
+						   			<a href="https://{{taskOwner.domain}}.agilecrm.com/#contact/{{/taskOwner.domain}}
 						   		{{^taskOwner.domain}}
 						   			<a href="http://localhost:8888#contact/{{/taskOwner.domain}}{{id}}" target="_blank">
 						   			{{#image}}
-						   				<img style="width:40px; height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px; " src="{{value}}"
+						   				<img style="width:40px; height:40px; max-width:40px; max-height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px; " src="{{value}}"
 						   			{{/image}}
 						   			
 						   			{{^image}}
 						   				{{#first_name}}
-						   					<img style="width:40px; height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px;" src="1"
+						   					<img style="width:40px; height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px;" src="https://secure.gravatar.com/avatar/d69f6d6be04a92525fbd0e486bea9d6a.jpg?s=40&d=https%3A//da4o37ei6ybbh.cloudfront.net/css/images/pic.png"
 						   				{{/first_name}}
 						   				{{^first_name}}
 						   					{{#url}}
@@ -55,7 +55,7 @@
 						   					{{/url}}
 						   					{{^url}}
 						   						{{#taskOwner.domain}}
-						   						<img src="http://{{this}}.agilecrm.com/img/company.png" style="width:40px; height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px;"
+						   						<img src="https://{{taskOwner.domain}}.agilecrm.com/img/company.png" style="width:40px; height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px;"
 						   						{{/taskOwner.domain}}
 						   						{{^taskOwner.domain}}
 						   						<img style="width:40px; height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px;"
