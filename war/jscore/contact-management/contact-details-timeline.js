@@ -79,9 +79,11 @@ function load_timeline_details(el, contactId, callback1)
 				if(timelineView.collection.length == 0){
 					$.each(logsCollection.toJSON(), function(index, model){
 						
+						// avoid these log-types in timeline
 						if(model.log_type == 'WAIT' || model.log_type == 'CLICKED' || model.log_type == 'ADD_NOTE' 
 							|| model.log_type == 'TAGS' || model.log_type == 'ADD_TASK' 
-								|| model.log_type == 'JSONIO' || model.log_type == 'TRANSFER')
+								|| model.log_type == 'JSONIO' || model.log_type == 'TRANSFER' 
+									|| model.log_type == 'EMAIL_SENDING_FAILED')
 							return true;
 						
 							timelineView.collection.add(model);							
@@ -109,9 +111,11 @@ function load_timeline_details(el, contactId, callback1)
 					 */   
 					$.each(logsCollection.toJSON(), function(index, model) {						
 						
-						if(model.log_type == 'WAIT' || model.log_type == 'ADD_NOTE' 
+						// avoid these log-types in timeline.
+						if(model.log_type == 'WAIT' || model.log_type == 'CLICKED' || model.log_type == 'ADD_NOTE' 
 							|| model.log_type == 'TAGS' || model.log_type == 'ADD_TASK' 
-								|| model.log_type == 'JSONIO')
+								|| model.log_type == 'JSONIO' || model.log_type == 'TRANSFER' 
+									|| model.log_type == 'EMAIL_SENDING_FAILED')
 							return true;
 						
 						logs_array.push(model);																			

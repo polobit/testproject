@@ -88,11 +88,11 @@ function agile_init_handlers() {
 		// Format date.
 		data.due = new Date(data.due).getTime() / 1000.0;
 
-		$('.saving', el).show();
+		$('.saving:last', el).show();
 		// Add Task
 		_agile.add_task(data, function(response) {
 
-			$('.saving', el).hide(1);
+			$('.saving:last', el).hide(1);
 			// Show tasks list, after adding task.
 			$('.gadget-tasks-tab', el).trigger('click');
 		}, email.email);
@@ -119,14 +119,43 @@ function agile_init_handlers() {
 		// Format date.
 		data.close_date = new Date(data.close_date).getTime() / 1000.0;
 
-		$('.saving', el).show();
+		$('.saving:last', el).show();
 		// Add Deal
 		_agile.add_deal(data, function(response) {
 
-			$('.saving', el).hide(1);
+			$('.saving:last', el).hide(1);
 			// Show deals list, after adding deal.
 			$('.gadget-deals-tab', el).trigger('click');
 		}, email.email);
+	});
+	
+	// Click event for add Campaign.
+	$('.gadget-campaign-validate').die().live('click', function(e) {
+		// Prevent default functionality.
+		e.preventDefault();
+		// Set context (HTML container where event is triggered).
+		var el = $(this).closest("div.gadget-contact-details-tab")
+		.find("div.show-form");
+		var json = [];
+		var data = {};
+		var email = $(el).data("content");
+		// Form serialization and validation.
+		json = agile_serialize_form($(el).find(".gadget-campaign-form"));
+		$.each(json, function(index, val) {
+			if (val.name == "email")
+				email[val.name] = val.value;
+			else
+				data[val.name] = val.value;
+		});
+		
+		$('.saving:last', el).show();
+		// Add Campaign
+		_agile.add_campaign(data, function(response) {
+
+			$('.saving:last', el).hide(1);
+			// Show deals list, after adding deal.
+			$('.gadget-campaigns-tab', el).trigger('click');
+		}, email);
 	});
 
 	// Click event for add Score.
@@ -325,6 +354,31 @@ function agile_init_handlers() {
 			});
 		});
 	});
+	
+	// Click event for Action Menu (add to campaign).
+	$('.action-add-campaign').die().live('click', function(e) {
+		// Prevent default functionality.
+		e.preventDefault();
+		// Set context (HTML container where event is triggered).
+		var el = $(this).closest("div.gadget-contact-details-tab")
+					.find("div.show-form");
+		var that = $(this);
+		// Send request for template.
+		agile_get_gadget_template("gadget-campaign-template", function(data) {
+
+			// Get campaign work-flow data.
+			_agile.get_workflows(function(response){
+				console.log(response);
+				// Compile template and generate UI.
+				var Handlebars_Template = getTemplate("gadget-campaign", response, 'no');
+				// Insert template to container in HTML.
+				that.closest(".gadget-contact-details-tab").find(".gadget-campaigns-tab-list")
+						.html($(Handlebars_Template));
+			});
+			
+			$('.gadget-campaigns-tab a', el).tab('show');
+		});
+	});
 
 	// Click event for search contact.
 	$(".gadget-search-contact").die().live('click', function(e) {
@@ -449,7 +503,7 @@ function agile_init_handlers() {
 		// Clear tasks tab data.
 		$('.gadget-tasks-tab-list', el).html("");
 		var email = $(el).data("content");
-		// Get Notes.
+		// Get Tasks.
 		_agile.get_tasks(function(response) {
 			console.log(response);
 			
@@ -469,15 +523,39 @@ function agile_init_handlers() {
 		// Set context (HTML container where event is triggered).
 		var el = $(this).closest("div.gadget-contact-details-tab")
 		.find('.show-form');
+		// Clear deals tab data.
 		$('.gadget-deals-tab-list', el).html("");
 		var email = $(el).data("content");
-		// Get Notes.
+		// Get Deals.
 		_agile.get_deals(function(response) {
 			console.log(response);
 			
 			agile_get_gadget_template("gadget-deals-list-template", function(data) {
 				// Fill deals list in tab.	
 				$('.gadget-deals-tab-list', el).html(getTemplate('gadget-deals-list', response, 'no'));
+			});
+			// Apply date formatter on date/time field.
+			$("time", el).timeago();
+		}, email);
+	});
+	
+	// Click event for campaigns tab.
+	$('.gadget-campaigns-tab').die().live('click', function(e) {
+		// Prevent default functionality.
+		e.preventDefault();
+		// Set context (HTML container where event is triggered).
+		var el = $(this).closest("div.gadget-contact-details-tab")
+		.find('.show-form');
+		// Clear campaigns tab data.
+		$('.gadget-campaigns-tab-list', el).html("");
+		var email = $(el).data("content");
+		// Get Campaigns.
+		_agile.get_campaign_logs(function(response) {
+			console.log(response);
+			
+			agile_get_gadget_template("gadget-campaigns-list-template", function(data) {
+				// Fill campaigns list in tab.	
+				$('.gadget-campaigns-tab-list', el).html(getTemplate('gadget-campaigns-list', response, 'no'));
 			});
 			// Apply date formatter on date/time field.
 			$("time", el).timeago();

@@ -191,6 +191,18 @@ public class SendEmail extends TaskletAdapter
      */
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
+	// No email
+	if (!subscriberJSON.getJSONObject("data").has("email"))
+	{
+	    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+		    "Email cannot be sent as there is no email-id for this contact.", LogType.EMAIL_SENDING_FAILED.toString());
+
+	    // Execute Next One in Loop
+	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+
+	    return;
+	}
+
 	// Get Scheduled Time and Day
 	String on = getStringValue(nodeJSON, subscriberJSON, data, ON);
 	String at = getStringValue(nodeJSON, subscriberJSON, data, AT);
