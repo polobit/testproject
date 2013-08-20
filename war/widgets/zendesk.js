@@ -61,7 +61,7 @@ $(function()
 	$('#add_ticket').die().live('click', function(e)
 	{
 		e.preventDefault();
-		addTicketToZendesk(Email);
+		addTicketToZendesk();
 	});
 
 	/*
