@@ -415,10 +415,11 @@ function showTwitterMatchingProfiles(data)
 		if (Twitter_search_details['keywords'] && Twitter_search_details['keywords'] != "")
 			twitterMainError(
 					TWITTER_PLUGIN_NAME,
-					"<p class='a-dotted' style='margin-bottom:0px;'>No matches found for <a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a>");
+					"<p class='a-dotted' style='margin-bottom:0px;'>No matches found for <a href='#' class='twitter_modify_search'>" + Twitter_search_details['keywords'] + "</a>",
+					true);
 		else
 			twitterMainError(TWITTER_PLUGIN_NAME,
-					"<p class='a-dotted' style='margin-bottom:0px;'>No matches found. <a href='#' class='twitter_modify_search'>Modify search</a>");
+					"<p class='a-dotted' style='margin-bottom:0px;'>No matches found. <a href='#' class='twitter_modify_search'>Modify search</a>", true);
 		return;
 	}
 
@@ -1491,10 +1492,13 @@ function getListOfProfilesByIDsinTwitter(twitter_ids, callback, errorcallback)
  *            div id
  * @param message
  *            error message
+ * @param disable_check
+ *            {@link Boolean} whether to check length of message while
+ *            displaying error
  */
-function tweetError(id, error)
+function tweetError(id, error, disable_check)
 {
-	twitterMainError(id, error);
+	twitterMainError(id, error, disable_check);
 	$('#' + id).show();
 
 	// Hides the modal after 2 seconds after the sent is shown
@@ -1509,12 +1513,17 @@ function tweetError(id, error)
  *            div id
  * @param message
  *            error message
+ * @param disable_check
+ *            {@link Boolean} whether to check length of message while
+ *            displaying error
  */
-function twitterMainError(id, error)
+function twitterMainError(id, error, disable_check)
 {
+	// build JSON with error message
 	// build JSON with error message
 	var error_json = {};
 	error_json['message'] = error;
+	error_json['disable_check'] = disable_check;
 
 	/*
 	 * Get error template and fill it with error message and show it in the div
