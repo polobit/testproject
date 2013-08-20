@@ -25,6 +25,22 @@ $(function()
 	Email = agile_crm_get_contact_property('email');
 	console.log('Email: ' + Email);
 
+	// Register click events
+	/*
+	 * On click of reset button of ClickDesk widget, widget preferences are
+	 * deleted and initial set up is called
+	 */
+	$('#ClickDesk_plugin_delete').die().live('click', function(e)
+	{
+		e.preventDefault();
+
+		// preferences are saved as undefined and set up is shown
+		agile_crm_save_widget_prefs(CLICKDESK_PLUGIN_NAME, undefined, function(data)
+		{
+			setupClickDeskAuth();
+		});
+	});
+
 	/*
 	 * Gets ClickDesk widget preferences, required to check whether to show
 	 * setup button or to fetch details. If undefined - considering first time
@@ -42,22 +58,6 @@ $(function()
 	 * associated with current contact's email
 	 */
 	showClickDeskProfile();
-
-	// Register click events
-	/*
-	 * On click of reset button of ClickDesk widget, widget preferences are
-	 * deleted and initial set up is called
-	 */
-	$('#ClickDesk_plugin_delete').die().live('click', function(e)
-	{
-		e.preventDefault();
-
-		// preferences are saved as undefined and set up is shown
-		agile_crm_save_widget_prefs(CLICKDESK_PLUGIN_NAME, undefined, function(data)
-		{
-			setupClickDeskAuth();
-		});
-	});
 
 	/*
 	 * On mouse enter of ticket, show tab link which has a link to show detailed
