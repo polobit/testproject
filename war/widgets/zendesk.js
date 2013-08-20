@@ -147,7 +147,7 @@ function showZendeskProfile()
 	 */
 	if (!Email)
 	{
-		zendeskError(ZENDESK_PLUGIN_NAME, "No email is associated with this contact");
+		zendeskError(ZENDESK_PLUGIN_NAME, "Please provide email for this contact");
 		return;
 	}
 
