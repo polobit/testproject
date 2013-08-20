@@ -1195,6 +1195,12 @@ function linkedinError(id, error)
  */
 function linkedinMainError(id, error)
 {
+	if (error == "Access granted to your linkedin account has expired.")
+	{
+		grantAccessToLinkedIn(error);
+		return;
+	}
+	
 	// build JSON with error message
 	var error_json = {};
 	error_json['message'] = error;
@@ -1205,4 +1211,31 @@ function linkedinMainError(id, error)
 	 */
 	$('#' + id).html(getTemplate('linkedin-error-panel', error_json));
 
+}
+
+/**
+ * Regrants access to LinkedIn after the expiry of token
+ * 
+ * @param message
+ *            {@link String} message to inform that their tokens are expired
+ */
+function grantAccessToLinkedIn(message)
+{
+	// Shows loading until setup is shown
+	$('#Linkedin').html(LINKEDIN_UPDATE_LOAD_IMAGE);
+
+	// URL to return, after fetching token and secret key from LinkedIn
+	var callbackURL = window.location.href;
+
+	/*
+	 * Creates a URL, which on click can connect to scribe using parameters sent
+	 * and returns back to the profile based on return URL provided and saves
+	 * widget preferences in widget based on plugin id
+	 */
+	var url = '/scribe?service=linkedin&return_url=' + encodeURIComponent(callbackURL) + '&plugin_id=' + encodeURIComponent(LinkedIn_Plugin_Id);
+
+	// Shows a link button in the UI which connects to the above URL
+	$('#Linkedin')
+			.html(
+					"<div class='widget_content' style='border-bottom:none;line-height: 160%;' >" + message + "<p style='margin: 10px 0px 5px 0px;' ><a class='btn' href=\"" + url + "\" style='text-decoration: none;'>Regrant Access</a></p></div>");
 }

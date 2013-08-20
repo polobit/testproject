@@ -20,6 +20,22 @@ $(function()
 	Twilio_Plugin_Id = twilio_widget.id;
 	console.log("Plugin prefs in Twilio: " + twilio_widget.prefs);
 
+	// Register click events
+	/*
+	 * On click of reset button of Twilio widget, widget preferences are deleted
+	 * and initial set up is called
+	 */
+	$('#Twilio_plugin_delete').die().live('click', function(e)
+	{
+		e.preventDefault();
+
+		// preferences are saved as undefined and set up is shown
+		agile_crm_save_widget_prefs(Twilio_PLUGIN_NAME, undefined, function(data)
+		{
+			setupTwilioOAuth();
+		});
+	});
+
 	/*
 	 * Gets Twilio widget preferences, required to check whether to show setup
 	 * button or to fetch details. If undefined - considering first time usage
@@ -40,22 +56,6 @@ $(function()
 	 * if no numbers available, else generates token required to make calls
 	 */
 	checkTwilioNumbersAndGenerateToken(twilio_prefs);
-
-	// Register click events
-	/*
-	 * On click of reset button of Twilio widget, widget preferences are deleted
-	 * and initial set up is called
-	 */
-	$('#Twilio_plugin_delete').die().live('click', function(e)
-	{
-		e.preventDefault();
-
-		// preferences are saved as undefined and set up is shown
-		agile_crm_save_widget_prefs(Twilio_PLUGIN_NAME, undefined, function(data)
-		{
-			setupTwilioOAuth();
-		});
-	});
 
 	/*
 	 * If Twilio account doesn't have numbers, we need to verify numbers in
