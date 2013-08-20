@@ -5,8 +5,11 @@ import java.util.List;
 import org.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.workflows.Workflow;
 import com.campaignio.tasklets.util.TaskletUtil;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>WorkflowUtil</code> provides various static methods to convert contact
@@ -115,6 +118,19 @@ public class WorkflowUtil
     public static void unsubscribe()
     {
 
+    }
+
+    /**
+     * Returns workflows list of current user in descending order.
+     * 
+     * @param page_size
+     *            - workflows limit
+     * @return List<Workflow>
+     */
+    public static List<Workflow> getWorkflowsOfCurrentUser(String page_size)
+    {
+	return dao.ofy().query(Workflow.class).filter("creator_key", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+		.order("-created_time").limit(Integer.parseInt(page_size)).list();
     }
 
     /**

@@ -855,7 +855,7 @@ public class JSAPI
     {
     	JSONArray arr = new JSONArray();
     	List<Workflow> workflows = new ArrayList<Workflow>();
-    	workflows = WorkflowUtil.getWorkflowsRelatedToCurrentUser("50");
+    	workflows = WorkflowUtil.getWorkflowsOfCurrentUser("50");
     	for (Workflow workflow : workflows)
     	{
     		JSONObject obj = WorkflowUtil.getWorkflowJSON(workflow.id);
