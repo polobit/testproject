@@ -8,14 +8,16 @@
  * author: Rammohan
  */
 
-$(function() {
+$(function()
+{
 
 	/**
 	 * Shows activity modal, and highlights the event form features (Shows event
 	 * form and hides task form, changes color and font-weight)
 	 * 
 	 */
-	$('#show-activity').live('click', function(e) {
+	$('#show-activity').live('click', function(e)
+	{
 		e.preventDefault();
 		highlight_vent();
 		$("#activityModal").modal('show');
@@ -24,10 +26,21 @@ $(function() {
 	/**
 	 * Shows the event form fields in activity modal
 	 */
-	$(".add-event").live('click', function(e) {
+	$(".add-event").live('click', function(e)
+	{
 		e.preventDefault();
 		$('#activityModal').modal('show');
 		highlight_vent();
+		/*
+		 * $('#task-date-1').val(new Date().format('mm/dd/yyyy'));
+		 * $("#event-date-1").val(new Date().format('mm/dd/yyyy'));
+		 * $("#event-date-2").val(new Date().format('mm/dd/yyyy'));
+		 */
+
+		// $("#event-date-2").datepicker('setValue', new
+		// Date().format('mm/dd/yyyy'));
+		$('input.date').val(new Date().format('mm/dd/yyyy'));
+		return;
 	});
 
 	/**
@@ -35,7 +48,8 @@ $(function() {
 	 * updated by calling save_event function
 	 * 
 	 */
-	$('#update_event_validate').die().live('click', function(e) {
+	$('#update_event_validate').die().live('click', function(e)
+	{
 		e.preventDefault();
 		save_event('updateActivityForm', 'updateActivityModal', true, this);
 	});
@@ -44,101 +58,73 @@ $(function() {
 	 * Deletes an event from calendar by calling ajax DELETE request with an
 	 * appropriate url
 	 */
-	$('#event_delete').die().live(
-			'click',
-			function(e) {
-				e.preventDefault();
+	$('#event_delete').die().live('click', function(e)
+	{
+		e.preventDefault();
 
-				/**
-				 * Confirmation alert to delete an event
-				 */
-				if (!confirm("Are you sure you want to delete?"))
-					return;
+		/**
+		 * Confirmation alert to delete an event
+		 */
+		if (!confirm("Are you sure you want to delete?"))
+			return;
 
-				var event_id = $('#updateActivityForm input[name=id]').val()
+		var event_id = $('#updateActivityForm input[name=id]').val()
 
-				/**
-				 * Shows loading symbol until model get saved
-				 */
-				$('#updateActivityModal').find('span.save-status').html(
-						LOADING_HTML);
-				$.ajax({
-					url : 'core/api/events/' + event_id,
-					type : 'DELETE',
-					success : function() {
+		/**
+		 * Shows loading symbol until model get saved
+		 */
+		$('#updateActivityModal').find('span.save-status').html(LOADING_HTML);
+		$.ajax({ url : 'core/api/events/' + event_id, type : 'DELETE', success : function()
+		{
 
-						$('#updateActivityModal').find('span.save-status img')
-								.remove();
+			$('#updateActivityModal').find('span.save-status img').remove();
 
-						$("#updateActivityModal").modal('hide');
+			$("#updateActivityModal").modal('hide');
 
-						$('#calendar').fullCalendar('removeEvents', event_id);
-					}
-				});
-			});
+			$('#calendar').fullCalendar('removeEvents', event_id);
+		} });
+	});
 
 	/**
 	 * Activates the date picker to the corresponding fields in activity modal
 	 * and activity-update modal
 	 */
-	$('#event-date-1').datepicker({
-		format : 'mm/dd/yyyy'
-	});
-	$('#event-date-2').datepicker({
-		format : 'mm/dd/yyyy'
-	});
-	$('#update-event-date-1').datepicker({
-		format : 'mm/dd/yyyy'
-	});
-	$('#update-event-date-2').datepicker({
-		format : 'mm/dd/yyyy'
-	});
+	var eventDate = $('#event-date-1').datepicker({ format : 'mm/dd/yyyy' });
+
+	$('#event-date-2').datepicker({ format : 'mm/dd/yyyy' });
+	$('#update-event-date-1').datepicker({ format : 'mm/dd/yyyy' });
+	$('#update-event-date-2').datepicker({ format : 'mm/dd/yyyy' });
 
 	/**
 	 * Activates time picker for start time to the fields with class
 	 * start-timepicker
 	 */
-	$('.start-timepicker').timepicker({
-		defaultTime : 'current',
-		showMeridian : false,
-		template : 'modal'
-	});
+	$('.start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false, template : 'modal' });
 
 	/**
 	 * Activates time picker for end time to the fields with class
 	 * end-timepicker
 	 */
-	$('.end-timepicker').timepicker({
-		defaultTime : get_hh_mm(true),
-		showMeridian : false,
-		template : 'modal'
-	});
+	$('.end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false, template : 'modal' });
 
 	/**
 	 * Activates time picker for start time to the fields with class
 	 * update-start-timepicker
 	 */
-	$('.update-start-timepicker').timepicker({
-		defaultTime : 'current',
-		showMeridian : false,
-		template : 'modal'
-	});
+	$('.update-start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false, template : 'modal' });
 
 	/**
 	 * Activates time picker for end time to the fields with class
 	 * update-end-timepicker
 	 */
-	$('.update-end-timepicker').timepicker({
-		defaultTime : get_hh_mm(true),
-		showMeridian : false,
-		template : 'modal'
-	});
+	$('.update-end-timepicker').timepicker({ defaultTime : get_hh_mm(true), showMeridian : false, template : 'modal' });
 
 	/**
 	 * Sets the start time with current time and end time half an hour more than
 	 * start time, when they have no values by the time the modal is shown.
 	 */
-	$('#activityModal').on('shown', function() {
+	$('#activityModal').on('shown', function()
+	{
 
 		/**
 		 * Fills current time only when there is no time in the fields
@@ -149,29 +135,36 @@ $(function() {
 		if ($('.end-timepicker').val() == '')
 			$('.end-timepicker').val(get_hh_mm(true));
 
+		// Update will highlight the date of in date picker
+		$("input.date").datepicker('update');
+
 	});
 
 	/**
 	 * To avoid showing previous errors of the modal.
 	 */
-	$('#updateActivityModal').on('show', function() {
-		
+	$('#updateActivityModal').on('show', function()
+	{
+
 		// Removes alert message of error related date and time.
 		$('#' + this.id).find('.alert').css('display', 'none');
-		
+
 		// Removes error class of input fields
 		$('#' + this.id).find('.error').removeClass('error');
 
+		$("input.date").datepicker('update');
+
 	});
-	
+
 	/**
 	 * To avoid showing previous errors of the modal.
 	 */
-	$('#activityModal').on('show', function() {
-		
+	$('#activityModal').on('show', function()
+	{
+
 		// Removes alert message of error related date and time.
 		$('#' + this.id).find('.alert').css('display', 'none');
-		
+
 		// Removes error class of input fields
 		$('#' + this.id).find('.error').removeClass('error');
 
@@ -181,7 +174,8 @@ $(function() {
 	 * Highlights the event features (Shows event form and hides task form,
 	 * changing color and font-weight)
 	 */
-	$("#event").click(function(e) {
+	$("#event").click(function(e)
+	{
 		e.preventDefault();
 		highlight_vent();
 	});
@@ -192,10 +186,11 @@ $(function() {
  * Highlights the event portion of activity modal (Shows event form and hides
  * task form, changes color and font-weight)
  */
-function highlight_vent() {
+function highlight_vent()
+{
 	$("#hiddentask").val("event");
-	$("#event").css({"color":"black"});
-	$("#task").css({"color":"red"});
+	$("#event").css({ "color" : "black" });
+	$("#task").css({ "color" : "red" });
 	$("#relatedTask").css("display", "none");
 	$("#relatedEvent").css("display", "block");
 }
@@ -217,31 +212,40 @@ function highlight_vent() {
  * @param {String}
  *            modalId the unique id for the modal to identify it
  */
-function is_valid_range(startDate, endDate, startTime, endTime, modalName) {
-	if (endDate - startDate >= 86400000) {
+function is_valid_range(startDate, endDate, startTime, endTime, modalName)
+{
+	if (endDate - startDate >= 86400000)
+	{
 		return true;
-	} else if (startDate > endDate) {
+	}
+	else if (startDate > endDate)
+	{
 		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
 						'<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times</a>Start date should not be greater than end date. Please change.</div>');
 
 		return false;
-	} else if (startTime[0] > endTime[0]) {
+	}
+	else if (startTime[0] > endTime[0])
+	{
 		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
 						'<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater than end time. Please change.</div>');
 
 		return false;
-	} else if (startTime[0] == endTime[0] && startTime[1] >= endTime[1]) {
+	}
+	else if (startTime[0] == endTime[0] && startTime[1] >= endTime[1])
+	{
 		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
 						'<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times</a>Start time should not be greater or equal to end time. Please change.</div>');
 
 		return false;
-	} else
+	}
+	else
 		return true;
 }
 
@@ -261,7 +265,8 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName) {
  *            or updating the existing one
  * 
  */
-function save_event(formId, modalName, isUpdate, saveBtn) {
+function save_event(formId, modalName, isUpdate, saveBtn)
+{
 
 	// Returns, if the save button has disabled attribute
 	if ($(saveBtn).attr('disabled'))
@@ -271,7 +276,8 @@ function save_event(formId, modalName, isUpdate, saveBtn) {
 	$(saveBtn).attr('disabled', 'disabled');
 
 	// Save functionality for event
-	if (!isValidForm('#' + formId)) {
+	if (!isValidForm('#' + formId))
+	{
 
 		// Removes disabled attribute of save button
 		$(saveBtn).removeAttr('disabled');
@@ -279,11 +285,12 @@ function save_event(formId, modalName, isUpdate, saveBtn) {
 	}
 
 	var json = serializeForm(formId);
+	console.log(json);
+	console.log(JSON.stringify(json));
 
 	// For validation
-	if (!is_valid_range(new Date(json.start).getTime(), new Date(json.end)
-			.getTime(), (json.start_time).split(":"), (json.end_time)
-			.split(":"), modalName)) {
+	if (!is_valid_range(json.start * 1000, json.end * 1000, (json.start_time).split(":"), (json.end_time).split(":"), modalName))
+	{
 
 		// Removes disabled attribute of save button
 		$(saveBtn).removeAttr('disabled');
@@ -295,15 +302,16 @@ function save_event(formId, modalName, isUpdate, saveBtn) {
 
 	// Appending start time to start date
 	var startarray = (json.start_time).split(":");
-	json.start = new Date(json.start).setHours(startarray[0], startarray[1]) / 1000.0;
+	json.start = new Date(json.start * 1000).setHours(startarray[0], startarray[1]) / 1000.0;
 
 	// Appending end time to end date
 	var endarray = (json.end_time).split(":");
-	json.end = new Date(json.end).setHours(endarray[0], endarray[1]) / 1000.0;
+	json.end = new Date(json.end * 1000).setHours(endarray[0], endarray[1]) / 1000.0;
 
 	$('#' + modalName).modal('hide');
 
-	$('#' + formId).each(function() {
+	$('#' + formId).each(function()
+	{
 		this.reset();
 	});
 
@@ -313,32 +321,30 @@ function save_event(formId, modalName, isUpdate, saveBtn) {
 
 	var eventModel = new Backbone.Model();
 	eventModel.url = 'core/api/events';
-	eventModel.save(json, {
-		success : function(data) {
+	eventModel.save(json, { success : function(data)
+	{
 
-			// Removes disabled attribute of save button
-			$(saveBtn).removeAttr('disabled');
+		// Removes disabled attribute of save button
+		$(saveBtn).removeAttr('disabled');
 
-			$('#' + formId).each(function() {
-				this.reset();
-			});
+		$('#' + formId).each(function()
+		{
+			this.reset();
+		});
 
-			$('#' + modalName).find('span.save-status img').remove();
-			$('#' + modalName).modal('hide');
+		$('#' + modalName).find('span.save-status img').remove();
+		$('#' + modalName).modal('hide');
 
-			// $('#calendar').fullCalendar( 'refetchEvents' );
+		// $('#calendar').fullCalendar( 'refetchEvents' );
 
-			// When updating an event remove the old event from fullCalendar
-			if (isUpdate)
-				$('#calendar').fullCalendar('removeEvents', json.id);
+		// When updating an event remove the old event from fullCalendar
+		if (isUpdate)
+			$('#calendar').fullCalendar('removeEvents', json.id);
 
-			$('#calendar').fullCalendar('renderEvent', data.toJSON());
+		$('#calendar').fullCalendar('renderEvent', data.toJSON());
 
-			App_Calendar.navigate("calendar", {
-				trigger : true
-			});
-		}
-	});
+		App_Calendar.navigate("calendar", { trigger : true });
+	} });
 }
 
 /**
@@ -349,7 +355,8 @@ function save_event(formId, modalName, isUpdate, saveBtn) {
  *            end_time to make end time 30 minutes more than start time
  * 
  */
-function get_hh_mm(end_time) {
+function get_hh_mm(end_time)
+{
 
 	var hours = new Date().getHours();
 	var minutes = new Date().getMinutes();
@@ -358,21 +365,28 @@ function get_hh_mm(end_time) {
 		minutes = minutes - (minutes % 15);
 
 	// Make end time 30 minutes more than start time
-	if (end_time) {
-		if (minutes == "30") {
+	if (end_time)
+	{
+		if (minutes == "30")
+		{
 			hours = hours + 1;
 			minutes = 0;
-		} else if (minutes == "45") {
+		}
+		else if (minutes == "45")
+		{
 			hours = hours + 1;
 			minutes = 15;
-		} else
+		}
+		else
 			minutes = minutes + 30;
 	}
 
-	if (hours < 10) {
+	if (hours < 10)
+	{
 		hours = "0" + hours;
 	}
-	if (minutes < 10) {
+	if (minutes < 10)
+	{
 		minutes = "0" + minutes;
 	}
 

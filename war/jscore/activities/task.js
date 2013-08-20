@@ -274,6 +274,15 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 					&& Current_Route == "contact/"
 							+ App_Contacts.contactDetailView.model.get('id')) {
 
+				// Add model to collection. Disabled sort while adding and called
+				// sort explicitly, as sort is not working when it is called by add
+				// function
+				if (tasksView && tasksView.collection)
+				{
+					tasksView.collection.add(new BaseModel(data), { sort : false });
+					tasksView.collection.sort();
+				}
+				
 				/*
 				 * Verifies whether the added task is related to the contact in
 				 * contact detail view or not
@@ -282,29 +291,10 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 					if (contact.id == App_Contacts.contactDetailView.model
 							.get('id')) {
 
-						/*
-						 * Activates timeline in contact detail tab and tab
-						 * content
-						 */
-						activate_timeline_tab();
-
-						/*
-						 * If timeline is not defined yet, initiates with the
-						 * data else inserts
-						 */
-						if (timelineView.collection.length == 0) {
-							timelineView.collection.add(data);
-
-							setup_timeline(timelineView.collection.toJSON(),
-									App_Contacts.contactDetailView.el,
-									undefined);
-						} else {
-							var newItem = $(getTemplate("timeline", data
-									.toJSON()));
-							newItem.find('.inner').append(
-									'<a href="#" class="open-close"></a>');
-							$('#timeline').isotope('insert', newItem);
-						}
+						// Activates "Timeline" tab and its tab content in
+						// contact detail view
+						// activate_timeline_tab();
+						add_entity_to_timeline(data);
 
 						return false;
 					}
