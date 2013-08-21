@@ -20,6 +20,7 @@ import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.servlets.deferred.EmailClickDeferredTask;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.urlshortener.URLShortener;
 import com.campaignio.urlshortener.util.URLShortenerUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -202,7 +203,7 @@ public class RedirectServlet extends HttpServlet
     {
 	String params = "";
 
-	JSONObject contactJSON = WorkflowUtil.getSubscriberJSON(contact);
+	JSONObject contactJSON = AgileTaskletUtil.getSubscriberJSON(contact);
 
 	// Iterate through JSON and construct all params
 	Iterator<String> itr = contactJSON.keys();
