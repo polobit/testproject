@@ -57,6 +57,7 @@ $(function()
 
 		var json = serializeForm("noteUpdateForm");
 		
+		
 /*		if(json.id)
 			{
 				if(notesView && notesView.collection && notesView.collection.get(json.id))
@@ -65,7 +66,7 @@ $(function()
 					}
 			}*/
 
-		saveNote($("#noteUpdateForm"), $("#noteUpdateModal"), this);
+		saveNote($("#noteUpdateForm"), $("#noteUpdateModal"), this, json);
 	});
 	/**
 	 * Saves note model using "Bcakbone.Model" object, and adds saved data to
@@ -127,6 +128,7 @@ $(function()
 	function saveNote(form, modal, element, note)
 	{
 
+		console.log(note);
 		var noteModel = new Backbone.Model();
 		noteModel.url = 'core/api/notes';
 		noteModel.save(note, { success : function(data)
@@ -146,6 +148,8 @@ $(function()
 
 			var note = data.toJSON();
 
+			console.log(note);
+			console.log(notesView.collection.toJSON());
 			// Add model to collection. Disabled sort while adding and called
 			// sort explicitly, as sort is not working when it is called by add
 			// function
