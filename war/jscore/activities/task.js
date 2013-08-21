@@ -188,6 +188,9 @@ function highlight_task() {
 	$("#event").css({"color":"red"});
 	$("#relatedEvent").css("display", "none");
 	$("#relatedTask").css("display", "block");
+	
+	// Date().format('mm/dd/yyyy'));
+	$('input.date', el).val(new Date().format('mm/dd/yyyy')).datepicker('update');
 }
 
 /**
@@ -226,8 +229,9 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 
 	var json = serializeForm(formId);
 	if (!isUpdate)
-		json.due = new Date(json.due).getTime() / 1000.0;
+		json.due = new Date(json.due).getTime();
 
+	console.log(json);
 	var newTask = new Backbone.Model();
 	newTask.url = 'core/api/tasks';
 	newTask.save(json, {
