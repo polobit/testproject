@@ -103,7 +103,7 @@ $(function(){
 	$(".cases-edit-contact-tab").die().live('click', function(e){
 		e.preventDefault();
 		var id = $(this).attr('data');
-		updatecases(dealsView.collection.get(id));
+		updatecases(casesView.collection.get(id));
 	});
 	
 	//Adding contact when user clicks Add contact button under Contacts tab in Company Page

@@ -216,11 +216,29 @@ function savecases(formId, modalId, saveBtn, json)
 			
 			var cases = data.toJSON();
 			
+			
+			
 			// Updates data to timeline
 			/*If(Contact-Details) page - then adjust timeline*/			
 			if (App_Contacts.contactDetailView
 					&& Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id')) 
 			{
+				// Add model to collection. Disabled sort while adding and called
+				// sort explicitly, as sort is not working when it is called by add
+				// function
+				if (casesView && casesView.collection)
+				{
+					if(casesView.collection.get(cases.id))
+					{
+						casesView.collection.get(cases.id).set(new BaseModel(cases));
+					}
+					else
+					{
+						casesView.collection.add(new BaseModel(cases), { sort : false });
+						casesView.collection.sort();
+					}
+				}
+				
 				if(App_Contacts.contactDetailView.model.get('type')=='COMPANY')
 				{
 					activate_timeline_tab();  // if this contact is of type COMPANY, simply activate first tab & fill details
@@ -243,25 +261,14 @@ function savecases(formId, modalId, saveBtn, json)
 					
 					if (contact.id == App_Contacts.contactDetailView.model.get('id')) {
 				
-						// Activates timeline in contact detail tab and tab
-						// content		
-						activate_timeline_tab();
-						
-						 // If timeline is not defined yet, initiates with the
-						 // data else inserts
-						if (timelineView.collection && timelineView.collection.length == 0) {
-							timelineView.collection.add(data);
-							
-							setup_timeline(timelineView.collection.toJSON(),
-									App_Contacts.contactDetailView.el,
-									undefined);
-						} else {
-							var newItem = $(getTemplate("timeline", data
-									.toJSON()));
-							newItem.find('.inner').append(
-									'<a href="#" class="open-close"></a>');
-							$('#timeline').isotope('insert', newItem);
-						}
+						// Activates "Timeline" tab and its tab content in
+						// contact detail view
+						// activate_timeline_tab();
+						add_entity_to_timeline(data);
+						/*
+						 * If timeline is not defined yet, initiates with the
+						 * data else inserts
+						 */
 						return false;
 					}//end if
 				}); //end each

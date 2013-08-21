@@ -118,7 +118,8 @@ function load_timeline_details(el, contactId, callback1)
 									|| model.log_type == 'EMAIL_SENDING_FAILED')
 							return true;
 						
-						logs_array.push(model);																			
+						logs_array.push(model);			
+						timelineView.collection.add(model);	
 						//validate_insertion(JSON.parse(model.logs), timelineViewMore);
 					});
 					validate_insertion(logs_array, timelineViewMore);
@@ -149,11 +150,12 @@ function load_timeline_details(el, contactId, callback1)
 					$('#time-line', el).find('.loading-img-email').remove();
 					
 					if(emailsCollection.toJSON()[0] && emailsCollection.toJSON()[0]['emails'] && emailsCollection.toJSON()[0]['emails'].length > 0){
-						
+					
+						timelineView.collection.add(emailsCollection.toJSON()[0]['emails']);
 						// If timeline is not defined yet, calls setup_timeline for the first time
 						if(timelineView.collection.length == 0 && emailsCollection.toJSON()[0]){
 							
-							timelineView.collection.add(emailsCollection.toJSON()[0]['emails']);
+							
 							
 							// No callback function is taken as the email takes more time to fetch
 							setup_timeline(timelineView.collection.toJSON(), el, function(el) {
@@ -261,10 +263,11 @@ function load_timeline_details(el, contactId, callback1)
 						if(arrayView.collection.length == 0)
 							return;
 						
+						timelineView.collection.add(arrayView.collection.models);
+						
 						// If timeline is not defined yet, calls setup_timeline for the first time
 						if(timelineView.collection.length == 0){
-							timelineView.collection.add(arrayView.collection.models);
-							
+	
 							/*
 							 * Calls setup_timeline with a callback function to insert other models 
 							 * (fetched while initializing the isotope) if available.
@@ -331,7 +334,7 @@ function validate_insertion(models, timelineViewMore){
 				
 				console.log(month_years);
 				// add a month marker for each month that has a post
-				create_month_marker(month_years, true);
+				create_month_marker(month_years, true, App_Contacts.contactDetailView.el);
 			}
 		});
 		
@@ -415,9 +418,28 @@ function add_entity_to_timeline(model)
 {
 	var list = [];
 	list.push(model.toJSON())
-	validate_insertion(list);	
-	 
+
+	console.log(model);
+	// console.log(model.get('id'));
+	console.log(!timelineView.collection.get(model.get('id')));
+
+	if (!timelineView.collection.get(model.get('id')))
+	{
+		timelineView.collection.add(model)
+		validate_insertion(list);
+		return;
+	}
+
+
+	update_entity_template(model);
+
 }
+
+function update_entity_template(model)
+{
+	$("#" + model.get("id"), $('#timeline', App_Contacts.contactDetailView.el)).html(getTemplate('timeline', model.toJSON()));
+}
+
 
 /**
  * Loads minified jquery.isotope plug-in and jquery.event.resize plug-in to 
@@ -733,76 +755,86 @@ function remove_loading_img(el){
 	});
 	}
  
-function addTagsToTimeline(contact, el)
-{
-	if(timelineView.collection.length == 0) {
-		timelineView.collection.add(contact);
-		
-		// Add tags in timeline
-		$.each(contact.get('tagsWithTime'), function(index, tag){
-			//console.log(tag);
-			timelineView.collection.add(tag);
-		})
-		setup_timeline(timelineView.collection.toJSON(), el);
+ function addTagsToTimeline(contact, el)
+ {
+ 	if (timelineView.collection.length == 0)
+ 	{
+ 		timelineView.collection.add(contact);
 
-	} else {
-		var newItem = $(getTemplate("timeline", contact));
-		var newItem = $(getTemplate("timeline", contact));
-		
-		newItem.find('.inner').append('<a href="#" class="open-close"></a>');
-		/*
-		 * Inserts mails to timeline with out validating the isotope status,
-		 * as it takes more time to fetch.
-		 */  
-		$('#timeline', el).isotope( 'insert', newItem);
-	}
-}
+ 		// Add tags in timeline
+ 		$.each(contact.get('tagsWithTime'), function(index, tag)
+ 		{
+ 			// console.log(tag);
+ 			timelineView.collection.add(tag);
+ 		})
+ 		setup_timeline(timelineView.collection.toJSON(), el);
 
-function addTagToTimelineDynamically(tags)
-{	
-	if(timelineView.collection.length == 0)
-	{
-		$.each(tags, function(index, tag) {
-			timelineView.collection.add(tag);
-		});
-		
-		setup_timeline(timelineView.collection.toJSON(), el);
-		return;
-	}
-	
-	var tags_to_add = [];
-	$.each(tags, function(index, tag){
-		if(!timelineView.collection.where(tag).length == 0)
-			return;
-		
-		timelineView.collection.add(tag);
-		tags_to_add.push(tag);
-	});
-	
-	validate_insertion(tags_to_add);
-		
-	
-/*	var newItem = $(getTemplate("timeline", tag));
-	
-	newItem.find('.inner').append('<a href="#" class="open-close"></a>');
-	
-	 * Inserts mails to timeline with out validating the isotope status,
-	 * as it takes more time to fetch.
-	   
-	$('#timeline', el).isotope( 'insert', newItem);*/
-	
-}
+ 	}
+ 	else
+ 	{
+ 		var newItem = $(getTemplate("timeline", contact));
+ 		var newItem = $(getTemplate("timeline", contact));
 
-/**
- * Removes an element from timeline
- * @param element
- */
-function removeItemFromTimeline(element) {
-	console.log(element);
-	$('#timeline').isotope( 'remove', element, function(){
-		$('#timeline').isotope( 'reLayout')
-	});
-}
+ 		newItem.find('.inner').append('<a href="#" class="open-close"></a>');
+ 		/*
+ 		 * Inserts mails to timeline with out validating the isotope status, as
+ 		 * it takes more time to fetch.
+ 		 */
+ 		$('#timeline', el).isotope('insert', newItem);
+ 	}
+ }
+
+ function addTagToTimelineDynamically(tags)
+ {
+ 	if (timelineView.collection.length == 0)
+ 	{
+ 		$.each(tags, function(index, tag)
+ 		{
+ 			timelineView.collection.add(tag);
+ 		});
+
+ 		setup_timeline(timelineView.collection.toJSON(), el);
+ 		return;
+ 	}
+
+ 	var tags_to_add = [];
+ 	$.each(tags, function(index, tag)
+ 	{
+ 		if (!timelineView.collection.where(tag).length == 0)
+ 			return;
+
+ 		timelineView.collection.add(tag);
+ 		tags_to_add.push(tag);
+ 	});
+
+ 	validate_insertion(tags_to_add);
+
+ 	/*
+ 	 * var newItem = $(getTemplate("timeline", tag));
+ 	 * 
+ 	 * newItem.find('.inner').append('<a href="#" class="open-close"></a>');
+ 	 * 
+ 	 * Inserts mails to timeline with out validating the isotope status, as it
+ 	 * takes more time to fetch.
+ 	 * 
+ 	 * $('#timeline', el).isotope( 'insert', newItem);
+ 	 */
+
+ }
+
+ /**
+  * Removes an element from timeline
+  * 
+  * @param element
+  */
+ function removeItemFromTimeline(element)
+ {
+ 	console.log(element);
+ 	$('#timeline').isotope('remove', element, function()
+ 	{
+ 		$("#timeline").isotope( 'reLayout')
+ 	});
+ }
 
 /**
  * Handles the events (click and mouseenter) of mail and log entities of 
@@ -882,4 +914,3 @@ $(function () {
 	});
 	
 });
-
