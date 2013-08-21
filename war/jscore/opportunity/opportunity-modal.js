@@ -177,6 +177,11 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 					&& Current_Route == "contact/"
 							+ App_Contacts.contactDetailView.model.get('id')) {
 
+				// Add model to collection. Disabled sort while adding and called
+				// sort explicitly, as sort is not working when it is called by add
+				// function
+				
+				
 				/*
 				 * Verifies whether the added task is related to the contact in
 				 * contact detail view or not
@@ -185,30 +190,31 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 					
 					if (contact.id == App_Contacts.contactDetailView.model
 							.get('id')) {
+						
+						
 
-						/*
-						 * Activates timeline in contact detail tab and tab
-						 * content
-						 */
-						activate_timeline_tab();
-						/*
-						 * If timeline is not defined yet, initiates with the
-						 * data else inserts
-						 */
-						if (timelineView.collection.length == 0) {
-							timelineView.collection.add(data);
-							
-							setup_timeline(timelineView.collection.toJSON(),
-									App_Contacts.contactDetailView.el,
-									undefined);
-						} else {
-							var newItem = $(getTemplate("timeline", data
-									.toJSON()));
-							newItem.find('.inner').append(
-									'<a href="#" class="open-close"></a>');
-							$('#timeline').isotope('insert', newItem);
+						if (dealsView && dealsView.collection)
+						{
+							if(dealsView.collection.get(deal.id))
+							{
+								dealsView.collection.get(deal.id).set(new BaseModel(deal));
+							}
+							else
+							{
+								dealsView.collection.add(new BaseModel(deal), { sort : false });
+								dealsView.collection.sort();
+							}
 						}
-						return false;
+						
+							// Activates "Timeline" tab and its tab content in
+							// contact detail view
+							// activate_timeline_tab();
+							add_entity_to_timeline(data);
+							/*
+							 * If timeline is not defined yet, initiates with the
+							 * data else inserts
+							 */
+							return false;
 					}
 				});
 			}
