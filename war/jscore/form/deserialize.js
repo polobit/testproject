@@ -322,6 +322,9 @@ function deserializeChainedSelect(form, el)
                     {
                         format: 'mm/dd/yyyy',
                     });
+                    
+                    $(input_element).datepicker('update');
+
                     return;
                 }
                 $(

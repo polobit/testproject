@@ -336,7 +336,17 @@ public class ContactUtil
 	    new Exception("Empty List");
 	}
 
-	// CSV Json Array
+	// If heading are left blank, the data will be lost as headings will be
+	// replaced in map.
+	for (int i = 0; i < headers.length; i++)
+	{
+	    // If header is blank then index is set as a header
+	    if (StringUtils.isBlank(headers[i]))
+		headers[i] = String.valueOf(i);
+	}
+
+	// CSV Json Array. Used JSONArray to maintain order of the fields, as
+	// normal JSON order is unpredictable
 	org.codehaus.jettison.json.JSONArray csvArray = new org.codehaus.jettison.json.JSONArray();
 
 	// HashTable of keys to check duplicates - we will store all keys into

@@ -21,6 +21,7 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.reports.deferred.ReportsInstantEmailDeferredTask;
 import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.util.email.SendMail;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -121,6 +122,7 @@ public class ReportsUtil
 	Map<String, Object> domain_details = new HashMap<String, Object>();
 
 	domain_details.put("report", report);
+	domain_details.put("domain", NamespaceManager.get());
 
 	// If report_type if of contacts customize object to show properties
 	if (report.report_type.equals(Reports.ReportType.Contact))

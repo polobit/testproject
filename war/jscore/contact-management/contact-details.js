@@ -157,11 +157,11 @@ $(function(){
 		e.preventDefault();
 		
 	    // Add Tags
-		var new_tags = get_new_tags('addTags');
+		var new_tags = get_new_tags('addTags').trim();
 		$('#add-tags').css("display", "block");
 		$("#addTagsForm").css("display", "none");
 		
-		if(!new_tags || (/^\s*$/).test(new_tags))
+		if(!new_tags || new_tags.length<=0 || (/^\s*$/).test(new_tags))
 		{
 			console.log(new_tags);
 			return;
