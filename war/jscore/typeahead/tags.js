@@ -143,7 +143,7 @@ function setup_tags_typeahead() {
 
     			var contact_json = App_Contacts.contactDetailView.model.toJSON();
     	
-    			var tag = $(this).val().replace(/\s/g,'');
+    			var tag = $(this).val().trim();
 
     			$("#addTags").val("");
     	
@@ -193,7 +193,7 @@ function setup_tags_typeahead() {
     	if($(this).hasClass('ignore-comma-keydown'))
     	  return;
     	
-    	var tag = $(this).val().replace(/\s/g,'');
+    	var tag = $(this).val().trim();
     	
     	if(!tag || tag.length<=0 || (/^\s*$/).test(tag))
 		{

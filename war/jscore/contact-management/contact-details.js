@@ -157,7 +157,7 @@ $(function(){
 		e.preventDefault();
 		
 	    // Add Tags
-		var new_tags = get_new_tags('addTags').replace(/\s/g,'');
+		var new_tags = get_new_tags('addTags').trim();
 		$('#add-tags').css("display", "block");
 		$("#addTagsForm").css("display", "none");
 		
