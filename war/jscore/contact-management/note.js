@@ -57,15 +57,15 @@ $(function()
 
 		var json = serializeForm("noteUpdateForm");
 		
-		if(json.id)
+/*		if(json.id)
 			{
 				if(notesView && notesView.collection && notesView.collection.get(json.id))
 					{
 						notesView.collection.get(json.id).set(json, {silent:true});
 					}
-			}
+			}*/
 
-		saveNote($("#noteUpdateForm"), $("#noteUpdateModal"), this, );
+		saveNote($("#noteUpdateForm"), $("#noteUpdateModal"), this);
 	});
 	/**
 	 * Saves note model using "Bcakbone.Model" object, and adds saved data to
