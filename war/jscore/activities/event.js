@@ -37,9 +37,7 @@ $(function()
 		 * $("#event-date-2").val(new Date().format('mm/dd/yyyy'));
 		 */
 
-		// $("#event-date-2").datepicker('setValue', new
-		// Date().format('mm/dd/yyyy'));
-		$('input.date').val(new Date().format('mm/dd/yyyy'));
+		
 		return;
 	});
 
@@ -193,6 +191,9 @@ function highlight_vent()
 	$("#task").css({ "color" : "red" });
 	$("#relatedTask").css("display", "none");
 	$("#relatedEvent").css("display", "block");
+
+	// Date().format('mm/dd/yyyy'));
+	$('input.date').val(new Date().format('mm/dd/yyyy'));
 }
 
 /**
