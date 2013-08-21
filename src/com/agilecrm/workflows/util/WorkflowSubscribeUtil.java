@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskCore;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.campaignio.tasklets.util.deferred.TaskletWorkflowDeferredTask;
@@ -34,7 +35,7 @@ public class WorkflowSubscribeUtil
     public static void subscribeDeferred(List<Contact> contacts, Long workflowId)
     {
 	// Convert Contacts into JSON Array
-	JSONArray subscriberJSONArray = WorkflowUtil.convertContactIntoJSON(contacts);
+	JSONArray subscriberJSONArray = AgileTaskletUtil.getSubscriberJSONArray(contacts);
 
 	// Get Campaign JSON
 	JSONObject campaignJSON = WorkflowUtil.getWorkflowJSON(workflowId);
@@ -58,7 +59,7 @@ public class WorkflowSubscribeUtil
 	try
 	{
 	    // Convert Contacts into JSON Array
-	    JSONObject subscriberJSONObject = WorkflowUtil.getSubscriberJSON(contact);
+	    JSONObject subscriberJSONObject = AgileTaskletUtil.getSubscriberJSON(contact);
 	    subscribeWithSubscriberJSON(subscriberJSONObject, workflowId);
 	}
 	catch (Exception e)
