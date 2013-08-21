@@ -1,8 +1,11 @@
 package com.agilecrm.core.api;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -10,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,6 +28,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.gadget.GadgetTemplate;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
@@ -866,4 +871,37 @@ public class JSAPI
     	return null;
     }
     }
+    
+    /**
+	 * @method service
+	 * 
+	 * @param {String} template template name.
+	 * */
+    @Path ("gmail-template")
+    @GET
+    @Produces("application / x-javascript")
+    public String getGadgetTemplate(@QueryParam("template") String template)
+	{
+
+		try {
+
+			if (StringUtils.isBlank(template))
+				throw new Exception("Invalid param for template");
+
+			JSONObject reponseJSON = new JSONObject();
+			// Creating response data
+			reponseJSON.put("status", "success");
+			reponseJSON.put("content",
+					GadgetTemplate.getGadgetTemplate(template));
+
+			// Returning data by calling callback function retrieved from
+			// request.
+			
+			return reponseJSON.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+			return null;
+		}
+	}
 }

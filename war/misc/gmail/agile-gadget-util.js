@@ -79,8 +79,8 @@ function agile_get_gadget_template(Template_Name, callback) {
 	}
 
 	// URL from where to get template.
-	var Agile_Url = Lib_Path
-			+ "gmail-template?callback=?&template=gadget-template";
+	var Agile_Url = agile_id.getURL()
+			+ "/gmail-template?callback=?&id=" + agile_id.get() + "&template=gadget-template";
 
 	// Send cross domain request.
 	agile_json(Agile_Url, function(data) {
