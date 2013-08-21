@@ -2,11 +2,8 @@ package com.agilecrm.workflows.util;
 
 import java.util.List;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.ContactField;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
@@ -80,86 +77,6 @@ public class WorkflowUtil
     public static List<Workflow> getAllWorkflows(int max, String cursor)
     {
 	return dao.fetchAll(max, cursor);
-    }
-
-    /**
-     * Converts contact object into json object.
-     * 
-     * @param contact
-     *            Contact object that subscribes to workflow.
-     * @return JsonObject of contact.
-     */
-    public static JSONObject getSubscriberJSON(Contact contact)
-    {
-	if (contact == null)
-	    return null;
-
-	try
-	{
-	    JSONObject subscriberJSON = new JSONObject();
-
-	    List<ContactField> properties = contact.getProperties();
-
-	    for (ContactField field : properties)
-	    {
-		if (field.name != null && field.value != null)
-		{
-		    // Gets twitter-id from website property
-		    if (field.name.equals("website") && field.subtype.equals("TWITTER"))
-			field.name = "twitter_id";
-
-		    // Get LinkedIn id
-		    if (field.name.equals("website") && field.subtype.equals("LINKEDIN"))
-			field.name = "linkedin_id";
-
-		    subscriberJSON.put(field.name, field.value);
-		}
-	    }
-
-	    // Get contact owner.
-	    DomainUser domainUser = contact.getOwner();
-	    JSONObject owner = new JSONObject();
-
-	    if (domainUser != null)
-	    {
-		owner.put("id", domainUser.id);
-		owner.put("name", domainUser.name);
-		owner.put("email", domainUser.email);
-	    }
-
-	    // Inserts contact owner-name and owner-email.
-	    subscriberJSON.put("owner", owner);
-
-	    System.out.println("SubscriberJSON in WorkflowUtil: " + subscriberJSON);
-
-	    // Add Id and data
-	    return new JSONObject().put("data", subscriberJSON).put("id", contact.id);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-
-    /**
-     * Converts list of contacts into JSONArray.
-     * 
-     * @param contacts
-     *            List of Contact objects subscribed to campaign.
-     * @return JSONArray of list of contacts.
-     */
-    static JSONArray convertContactIntoJSON(List<Contact> contacts)
-    {
-	JSONArray subscriberJSONArray = new JSONArray();
-
-	for (Contact contact : contacts)
-	{
-	    if (contact != null)
-		subscriberJSONArray.put(getSubscriberJSON(contact));
-	}
-
-	return subscriberJSONArray;
     }
 
     /**
