@@ -162,9 +162,15 @@ input[type="radio"][disabled],input[type="checkbox"][disabled],input[type="radio
 .control-group.warning>label,.control-group.warning .help-block,.control-group.warning .help-inline{color:#eca918;}
 .control-group.warning .checkbox,.control-group.warning .radio,.control-group.warning input,.control-group.warning select,.control-group.warning textarea{color:#eca918;border-color:#eca918;}.control-group.warning .checkbox:focus,.control-group.warning .radio:focus,.control-group.warning input:focus,.control-group.warning select:focus,.control-group.warning textarea:focus{border-color:#c18910;-webkit-box-shadow:0 0 6px #f4cc76;-moz-box-shadow:0 0 6px #f4cc76;box-shadow:0 0 6px #f4cc76;}
 .control-group.warning .input-prepend .add-on,.control-group.warning .input-append .add-on{color:#eca918;background-color:#fcefd4;border-color:#eca918;}
+
 .control-group.error>label,.control-group.error .help-block,.control-group.error .help-inline{color:#df382c;}
 .control-group.error .checkbox,.control-group.error .radio,.control-group.error input,.control-group.error select,.control-group.error textarea{color:#df382c;border-color:#df382c;}.control-group.error .checkbox:focus,.control-group.error .radio:focus,.control-group.error input:focus,.control-group.error select:focus,.control-group.error textarea:focus{border-color:#bc271c;-webkit-box-shadow:0 0 6px #ec8c85;-moz-box-shadow:0 0 6px #ec8c85;box-shadow:0 0 6px #ec8c85;}
 .control-group.error .input-prepend .add-on,.control-group.error .input-append .add-on{color:#df382c;background-color:#fadfdd;border-color:#df382c;}
+
+.single-error>label,.single-error .help-block,.single-error .help-inline{color:#df382c;}
+.single-error .checkbox,.single-error .radio,.single-error input,.single-error select,.single-error textarea{color:#df382c;border-color:#df382c;}.single-error .checkbox:focus,.single-error .radio:focus,.single-error input:focus,.single-error select:focus,.single-error textarea:focus{border-color:#bc271c;-webkit-box-shadow:0 0 6px #ec8c85;-moz-box-shadow:0 0 6px #ec8c85;box-shadow:0 0 6px #ec8c85;}
+.single-error .input-prepend .add-on,.single-error .input-append .add-on{color:#df382c;background-color:#fadfdd;border-color:#df382c;}
+
 .control-group.success>label,.control-group.success .help-block,.control-group.success .help-inline{color:#38b44a;}
 .control-group.success .checkbox,.control-group.success .radio,.control-group.success input,.control-group.success select,.control-group.success textarea{color:#38b44a;border-color:#38b44a;}.control-group.success .checkbox:focus,.control-group.success .radio:focus,.control-group.success input:focus,.control-group.success select:focus,.control-group.success textarea:focus{border-color:#2c8d3a;-webkit-box-shadow:0 0 6px #7cd689;-moz-box-shadow:0 0 6px #7cd689;box-shadow:0 0 6px #7cd689;}
 .control-group.success .input-prepend .add-on,.control-group.success .input-append .add-on{color:#38b44a;background-color:#caeecf;border-color:#38b44a;}

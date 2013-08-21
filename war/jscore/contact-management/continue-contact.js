@@ -438,7 +438,7 @@ function deserialize_contact(contact, template) {
 		$("#content [name='contact_company_id']").html('<li class="tag"  style="display: inline-block;" data="' + data + '"><a href="#contact/' + data +'">' + item + '</a><a class="close" id="remove_tag">&times</a></li>');
 		$("#content #contact_company").hide();
 	}
-	agile_type_ahead("contact_company",$('#content'), contacts_typeahead,fxn_display_company,'type=COMPANY','<b>No Results</b> <br/> We will add a new one');
+	agile_type_ahead("contact_company",$('#content'), contacts_typeahead,fxn_display_company,'type=COMPANY','<b>No Results</b> <br/> Will add a new one');
 
 	if(contact.contact_company_id && contact.contact_company_id.length>0)
 	{

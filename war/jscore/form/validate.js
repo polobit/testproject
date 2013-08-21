@@ -71,12 +71,12 @@ function isValidForm(form) {
 
 		// Higlights the field and addsClass error if validation failed
 		highlight : function(element, errorClass) {
-			$(element).closest(".control-group").addClass('error');
+			$(element).closest('.controls').addClass('single-error');
 		},
 
 		// Unhiglights and remove error field if validation check passes
 		unhighlight : function(element, errorClass) {
-			$(element).closest(".control-group").removeClass('error');
+			$(element).closest('.controls').removeClass('single-error');
 		},
 		invalidHandler : function(form, validator) {
 			var errors = validator.numberOfInvalids();
