@@ -143,11 +143,11 @@ function setup_tags_typeahead() {
 
     			var contact_json = App_Contacts.contactDetailView.model.toJSON();
     	
-    			var tag = $(this).val();
+    			var tag = $(this).val().replace(/\s/g,'');
 
     			$("#addTags").val("");
     	
-    			if(!tag || (/^\s*$/).test(tag))
+    			if(!tag || tag.length<=0 || (/^\s*$/).test(tag))
     			{
     				return;
     			}
@@ -193,9 +193,9 @@ function setup_tags_typeahead() {
     	if($(this).hasClass('ignore-comma-keydown'))
     	  return;
     	
-    	var tag = $(this).val();
+    	var tag = $(this).val().replace(/\s/g,'');
     	
-    	if(!tag || (/^\s*$/).test(tag))
+    	if(!tag || tag.length<=0 || (/^\s*$/).test(tag))
 		{
 			return;
 		}

@@ -186,7 +186,20 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     	// Creates properties of contact (company)
 
     	if (isValidField('company_name'))
+    	{	
+    		if($('#company_name').attr('value').length > 100)
+    		{
+    			// Company name too long, show error and return;
+            	show_error(modal_id,form_id,'duplicate-email','Company name too long. Please restrict upto 100 characters.');
+            	
+            	$(saveBtn).removeAttr('disabled');
+            	// Remove loading image
+            	$('#' + modal_id).find('span.save-status img').remove();
+            	$('#' + form_id).find('span.save-status img').remove();
+            	return;
+    		}	
     		properties.push(property_JSON('name', 'company_name'));
+    	}
     	
     	if (isValidField('company_url')) properties.push(property_JSON('url', 'company_url'));
 
