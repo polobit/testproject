@@ -12,94 +12,131 @@ import org.json.JSONObject;
 import com.agilecrm.Globals;
 import com.agilecrm.util.HTTPUtil;
 
+/**
+ * <code>SendGrid</code> is the core class that sends email using Send Grid API.
+ * Required parameters to send email like from, to, subject and body are added
+ * as query paramaters to Send Grid api URL.
+ * <p>
+ * SendGrid provides various options for sending email. Options can be viewed in
+ * http://sendgrid.com/docs/API_Reference/Web_API/mail.html.
+ * </p>
+ * 
+ */
 public class SendGrid
 {
-    // Send grid REST API URL
+    /**
+     * Send grid REST API URL
+     */
     public static final String SENDGRID_API_POST_URL = "https://sendgrid.com/api/mail.send.json";
 
-    // Post param api_user
+    /**
+     * Post param api_user
+     */
     public static final String SENDGRID_API_PARAM_API_USER = "api_user";
 
-    // Post param api_key
+    /**
+     * Post param api_key
+     */
     public static final String SENDGRID_API_PARAM_API_KEY = "api_key";
 
-    // Post param to
+    /**
+     * Post param to
+     */
     public static final String SENDGRID_API_PARAM_TO = "to";
 
-    // Post param to[]
+    /**
+     * Post param to[] - to add multiple to emails
+     */
     public static final String SENDGRID_API_PARAM_MULTIPLE_TO = "to[]";
 
-    // Post param replyto
+    /**
+     * Post param replyto
+     */
     public static final String SENDGRID_API_PARAM_REPLY_TO = "replyto";
 
-    // Post param from
+    /**
+     * Post param from email
+     */
     public static final String SENDGRID_API_PARAM_FROM = "from";
+
+    /**
+     * Post param from name
+     */
     public static final String SENDGRID_API_PARAM_FROM_NAME = "fromname";
 
-    // Post param subject
+    /**
+     * Post param subject
+     */
     public static final String SENDGRID_API_PARAM_SUBJECT = "subject";
 
-    // Post param text body
+    /**
+     * Post param text body
+     */
     public static final String SENDGRID_API_PARAM_TEXT_BODY = "text";
 
-    // Post param html body
+    /**
+     * Post param html body
+     */
     public static final String SENDGRID_API_PARAM_HTML_BODY = "html";
 
-    // Default query string
+    /**
+     * Default query string
+     */
     public static String defaultQueryString = SENDGRID_API_PARAM_API_USER + "=" + Globals.SENDGRID_API_USER_NAME + "&" + SENDGRID_API_PARAM_API_KEY + "="
 	    + Globals.SENDGRID_API_KEY + "&";
 
+    /**
+     * Sends email by adding required fields to Send Grid Api.
+     * 
+     * @param fromEmail
+     *            - from email-id
+     * @param fromName
+     *            - from name.
+     * @param to
+     *            - to email-id.
+     * @param subject
+     *            - email subject.
+     * @param replyTo
+     *            - email-id to reply
+     * @param html
+     *            - html body.
+     * @param text
+     *            - text body.
+     * @param subscriberJSON
+     *            - Contact object in json.
+     * @param campaignJSON
+     *            - Workflow object in json.
+     * @return String
+     */
     public static String sendMail(String fromEmail, String fromName, String to, String subject, String replyTo, String html, String text,
 	    JSONObject subscriberJSON, JSONObject campaignJSON)
     {
-	// Set to remove duplicates
-	Set<String> toEmailSet = new HashSet<String>();
 
-	// Tokenize
-	StringTokenizer st = new StringTokenizer(to, ",");
+	// String tokens obtained by delimiter are added to set
+	Set<String> toEmailSet = getStringTokenSet(to, ",");
 
-	while (st.hasMoreTokens())
-	{
-	    String email = st.nextToken();
-	    toEmailSet.add(email);
-	}
-
-	// Send email
+	// Email response
 	String response = "";
 
 	try
 	{
 	    // Query string
-	    String queryString = "";
-
-	    queryString = defaultQueryString + SENDGRID_API_PARAM_SUBJECT + "=" + URLEncoder.encode(subject) + "&" + SENDGRID_API_PARAM_FROM + "="
+	    String queryString = defaultQueryString + SENDGRID_API_PARAM_SUBJECT + "=" + URLEncoder.encode(subject) + "&" + SENDGRID_API_PARAM_FROM + "="
 		    + URLEncoder.encode(fromEmail) + "&" + SENDGRID_API_PARAM_FROM_NAME + "=" + URLEncoder.encode(fromName);
 
-	    // Adds multiple - to[]="email1" & to[]="email2"
-	    Iterator<String> itr = toEmailSet.iterator();
-	    String multipleTo = "";
+	    // Appends To emails
+	    queryString += "&" + addToEmailsToParams(toEmailSet);
 
-	    while (itr.hasNext())
-	    {
-		multipleTo += SENDGRID_API_PARAM_MULTIPLE_TO + "=" + URLEncoder.encode(itr.next());
-
-		if (itr.hasNext())
-		    multipleTo += "&";
-	    }
-
-	    queryString += "&" + multipleTo;
-
+	    // Reply To
 	    if (!StringUtils.isEmpty(replyTo))
 		queryString += "&" + SENDGRID_API_PARAM_REPLY_TO + "=" + URLEncoder.encode(replyTo);
 
-	    // Check type of email
-
-	    // Text email
+	    // Text body
 	    if (text != null)
 	    {
 		queryString += "&" + SENDGRID_API_PARAM_TEXT_BODY + "=" + URLEncoder.encode(text);
 	    }
-	    // HTML email
+	    // HTML body
 	    if (html != null)
 	    {
 		queryString += "&" + SENDGRID_API_PARAM_HTML_BODY + "=" + URLEncoder.encode(html);
@@ -119,5 +156,59 @@ public class SendGrid
 	}
 
 	return response;
+    }
+
+    /**
+     * Returns set collection with string tokens obtained from given string.
+     * 
+     * @param str
+     *            - String to be tokenized having delimiter like comma
+     * @param delimiter
+     *            - Delimiter string like comma.
+     * @return Set<String>
+     */
+    public static Set<String> getStringTokenSet(String str, String delimiter)
+    {
+	// Set to not allow duplicates
+	Set<String> tokenSet = new HashSet<String>();
+
+	// Generate tokens w.r.t delimiter
+	StringTokenizer st = new StringTokenizer(str, delimiter);
+
+	// add tokens to set
+	while (st.hasMoreTokens())
+	{
+	    String email = st.nextToken();
+	    tokenSet.add(email.trim());
+	}
+
+	return tokenSet;
+    }
+
+    /**
+     * Adds emails of the set to the params of Send Grid Api. Send Grid provides
+     * to[] option inorder to append multiple emails.
+     * 
+     * @param toEmails
+     *            - Set consisting of emails.
+     * @return String
+     */
+    private static String addToEmailsToParams(Set<String> toEmails)
+    {
+	String multipleTo = "";
+
+	Iterator<String> itr = toEmails.iterator();
+
+	// Adds multiple - to[]="email1" & to[]="email2"
+	while (itr.hasNext())
+	{
+	    multipleTo += SENDGRID_API_PARAM_MULTIPLE_TO + "=" + URLEncoder.encode(itr.next());
+
+	    // appends '&' except for last one.
+	    if (itr.hasNext())
+		multipleTo += "&";
+	}
+
+	return multipleTo;
     }
 }
