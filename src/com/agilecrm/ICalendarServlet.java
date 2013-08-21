@@ -38,20 +38,25 @@ import com.google.appengine.api.NamespaceManager;
 @SuppressWarnings("serial")
 public class ICalendarServlet extends HttpServlet
 {
-    @Override
-    public void doGet(HttpServletRequest req, HttpServletResponse res)
-    {
-	doPost(req, res);
-    }
 
-    @Override
-    public void doPost(HttpServletRequest req, HttpServletResponse res)
+    /**
+     * Returns iCal data in response. It fetches namespace (domain) and api-key
+     * from url. Calendar events are fetched based on agileuser with obtained
+     * api-key and convert them into iCal VEvents format.
+     * 
+     * @param req
+     *            - HttpServletRequest object.
+     * 
+     * @param res
+     *            - HttpServletResponse object.
+     **/
+    public void service(HttpServletRequest req, HttpServletResponse res)
     {
 	res.setContentType("text/plain");
 
 	try
 	{
-	    // URL will be xxx.agilecrm.com/api-key
+	    // iCal URL
 	    URL url = new URL(req.getRequestURL().toString());
 
 	    // Get API Key
@@ -59,7 +64,6 @@ public class ICalendarServlet extends HttpServlet
 
 	    // Get Namespace
 	    String namespace = getNamespaceFromURL(url);
-	    namespace = "";
 
 	    if (StringUtils.isEmpty(namespace) && StringUtils.isEmpty(apiKey))
 		return;
@@ -71,7 +75,7 @@ public class ICalendarServlet extends HttpServlet
 	    if (events == null)
 		return;
 
-	    // Returns ICal
+	    // Returns iCal data
 	    Calendar iCal = getICalFromEvents(events);
 
 	    PrintWriter pw = res.getWriter();
