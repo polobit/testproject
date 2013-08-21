@@ -71,4 +71,8 @@ public class Globals
 
     public static final String BULK_ACTION_BACKENDS_URL = "b1";
 
+    // PUBNUB Credentials
+    public static final String PUBNUB_PUBLISH_KEY = "pub-c-e4c8fdc2-40b1-443d-8bb0-2a9c8facd274";
+    public static final String PUBNUB_SUBSCRIBE_KEY = "sub-c-118f8482-92c3-11e2-9b69-12313f022c90";
+
 }

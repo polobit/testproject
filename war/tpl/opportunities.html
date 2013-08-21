@@ -81,7 +81,7 @@
 	<b style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:7em;overflow:hidden;display:inline-block;">{{name}}</b>
 </td>
 <td>
-	<div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:103px;max-height:50px;overflow:hidden;display:inline-block;">
+	<div style="height:auto;white-space:nowrap;width:103px;max-height:50px;overflow:hidden;display:inline-block;">
 		{{#each contacts}}
         	{{#if_contact_type "PERSON"}}
         		<a href="#contact/{{id}}" class="activate-link hide-popover"><img class="thumbnail" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline"  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>

@@ -224,11 +224,21 @@ public class ContactDocument implements BuilderInterface
 		continue;
 
 	    System.out.println(normalizedTag);
-	    // Adds Other fields in contacts to document
-	    doc.addField(Field.newBuilder().setName(normalizedTag + "_time").setDate(TagCreatedDate));
 
-	    doc.addField(Field.newBuilder().setName(normalizedTag + "_time_epoch")
-		    .setNumber(TagCreationTimeInMills.doubleValue() / 1000));
+	    try
+	    {
+		// Adds Other fields in contacts to document
+		doc.addField(Field.newBuilder().setName(normalizedTag + "_time").setDate(TagCreatedDate));
+
+		doc.addField(Field.newBuilder().setName(normalizedTag + "_time_epoch")
+			.setNumber(TagCreationTimeInMills.doubleValue() / 1000));
+	    }
+	    catch (IllegalArgumentException e)
+	    {
+		// TODO: handle exception
+		e.printStackTrace();
+
+	    }
 	}
 
     }

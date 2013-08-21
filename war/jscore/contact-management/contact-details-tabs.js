@@ -47,6 +47,8 @@ $(function(){
 		$('div.tab-content').find('div.active').removeClass('active');
 		
 		$('#time-line').addClass('active');
+		$("#timeline").isotope( 'reLayout', function(){
+		} )
 	});
 	
 	$('.email-subject').die().live('click', function(e) {
@@ -150,7 +152,7 @@ $(function(){
 	$('#contactDetailsTab a[href="#cases"]').live('click', function (e){
 		e.preventDefault();
 		id = App_Contacts.contactDetailView.model.id;
-		dealsView = new Base_Collection_View({
+		casesView = new Base_Collection_View({
 			url: 'core/api/contacts/'+ id + "/cases" ,
             restKey: "cases",
             templateKey: "cases-contact",
@@ -163,8 +165,8 @@ $(function(){
             	})
             }
         });
-        dealsView.collection.fetch();
-        $('#cases').html(dealsView.el);
+		casesView.collection.fetch();
+        $('#cases').html(casesView.el);
 		
 	});
 	
@@ -554,6 +556,7 @@ $(function(){
 			success: function() {
 				// Removes activity from list
 				$(that).parents(".activity").fadeOut(400, function(){ $(this).remove(); });
+				removeItemFromTimeline($("#" + entity_id, $("#timeline")));
 			}
 		});
 	});

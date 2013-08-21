@@ -3,6 +3,7 @@ package com.thirdparty;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.agilecrm.Globals;
 import com.pubnub.api.Pubnub;
 
 /**
@@ -19,8 +20,6 @@ import com.pubnub.api.Pubnub;
  */
 public class PubNub
 {
-    private static String PUBLISH_KEY = "pub-c-e4c8fdc2-40b1-443d-8bb0-2a9c8facd274";
-    private static String SUBSCRIBE_KEY = "sub-c-118f8482-92c3-11e2-9b69-12313f022c90";
 
     /**
      * Publishes message to the given channel.
@@ -35,7 +34,7 @@ public class PubNub
     {
 	try
 	{
-	    Pubnub pubnub = new Pubnub(PUBLISH_KEY, SUBSCRIBE_KEY);
+	    Pubnub pubnub = new Pubnub(Globals.PUBNUB_PUBLISH_KEY, Globals.PUBNUB_SUBSCRIBE_KEY);
 
 	    // Publish Message - response with 0 for any error, 1 for success.
 	    JSONArray response = pubnub.publish(channel, messageJSON);
@@ -47,7 +46,7 @@ public class PubNub
 		return;
 	    }
 
-	    System.out.println(response);
+	    System.out.println("Response " + response);
 	}
 	catch (Exception e)
 	{
