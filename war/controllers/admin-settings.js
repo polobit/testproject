@@ -34,8 +34,13 @@ function getAdminSettings(callback){
 }
 
 //function to save settings of navbar, 
-function saveSettings(event)
+function saveSettings()
 {
+	var saveBtn=$('#navmodsSelect .btn-primary');
+	
+	if(!saveBtn.attr('disabled'))
+		saveBtn.attr('disabled','disabled');
+	
 	var saveUrl='/core/api/navbarsets';
 	var json=serializeForm('navmodsSelect');
 	
@@ -65,10 +70,13 @@ function saveSettings(event)
 						else $('#workflowsmenu').hide();
 					}
 					else $('#navmodsSelect #div-fail').show().delay(3000).hide(1);
+					
+					saveBtn.removeAttr('disabled');
 				},
 	error		:function(jqXHR, textStatus, errorThrown)
 				{
 					$('#navmodsSelect #div-fail').show().delay(3000).hide(1);
+					saveBtn.removeAttr('disabled');
 				}
 	});
 }
@@ -130,9 +138,6 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.navmodules-tab').addClass('active');
-		
-		$('#navmodsSelect').on('click','.btn-primary',function(){ console.log('WRITING='); });
-		
 	},
 
 	/**
