@@ -190,7 +190,7 @@ function highlight_task() {
 	$("#relatedTask").css("display", "block");
 	
 	// Date().format('mm/dd/yyyy'));
-	$('input.date', el).val(new Date().format('mm/dd/yyyy')).datepicker('update');
+	$('input.date').val(new Date().format('mm/dd/yyyy')).datepicker('update');
 }
 
 /**
