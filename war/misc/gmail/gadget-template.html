@@ -115,7 +115,11 @@
 							</b>
 						</div>
 					</div>
-					<a target="_blank" href="{{lib_path}}#contact/{{id}}" style="margin-left:6px;"><i class="icon-external-link" title="Show in Agile"></i></a><br/>
+					{{#if lib_path}}
+						<a target="_blank" href="{{lib_path}}#contact/{{id}}" style="margin-left:6px;"><i class="icon-external-link" title="Show in Agile"></i></a><br/>
+					{{else}}
+						<a target="_blank" href="https://{{owner.domain}}.agilecrm.com/#contact/{{id}}" style="margin-left:6px;"><i class="icon-external-link" title="Show in Agile"></i></a><br/>
+					{{/if}}
 					{{#if_propertyName "title"}}
 						{{value}}
 					{{/if_propertyName}}
@@ -374,7 +378,7 @@
 		<div id="campaigns" class="activity-text-block">
 			<span class="activity-block-owner pull-right">
 				{{#if log_type}}
-					<img class="user-img" width="40" height="40" alt="" src="/img/campaigns/{{log_type}}.png">
+					<img class="user-img" width="40" height="40" alt="" src="{{../../lib_path}}/img/campaigns/{{log_type}}.png">
 				{{else}}
 					<img class="user-img" width="40" height="40" src="https://d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png">
 				{{/if}}
@@ -383,7 +387,11 @@
 			<p>{{{message}}}</p>
 			<small class="edit-hover" style="margin-right:10px; color:#b2b0b1;">
 				<time class="log-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-	        	<a target="_blank" class="pull-right" href="{{../../lib_path}}#workflow/{{campaign_id}}"> {{campaign_name}}</a>
+	        	{{#if ../../lib_path}}
+					<a target="_blank" class="pull-right" href="{{../../lib_path}}#workflow/{{campaign_id}}"> {{campaign_name}}</a>
+				{{else}}
+					<a target="_blank" class="pull-right" href="https://{{contact.owner.domain}}.agilecrm.com/#workflow/{{campaign_id}}"> {{campaign_name}}</a>
+				{{/if}}
 		        <p class="pull-right">Campaign - </p>
 			</small>	
 		</div>

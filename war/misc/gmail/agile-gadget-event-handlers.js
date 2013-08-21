@@ -18,11 +18,11 @@ function agile_init_handlers() {
 		e.preventDefault();
 		// Set context (HTML container where event is triggered).
 		var el = $(this).closest("div.gadget-contact-details-tab")
-				.find(".div.show-form");
+				.find(".gadget-contact-form");
 		var json = [];
 		var data = {};
 		// Form serialization and validation.
-		json = agile_serialize_form($(".gadget-contact-form", el));
+		json = agile_serialize_form(el);
 
 		$.each(json, function(index, val) {
 			data[val.name] = val.value;
@@ -453,6 +453,8 @@ function agile_init_handlers() {
 					$(".option-tabs", el).toggle();
 					// Show notes tab by default.
 					$('.gadget-notes-tab', el).trigger('click');
+					if (!Is_Localhost)
+						gadgets.window.adjustHeight();
 				});
 			});
 		});
@@ -577,8 +579,9 @@ function agile_init_handlers() {
 			agile_get_gadget_template("gadget-campaigns-list-template", function(data) {
 				$(".tab-waiting", el).hide();
 				var lib_json = {};
-				// Set library path for campaign link.
-				lib_json["lib_path"] = Lib_Path ;
+				// Set library path for campaign link, check for local host.
+				if(Is_Localhost)
+					lib_json["lib_path"] = Lib_Path;
 				lib_json["response"] = response; 
 				
 				// Fill campaigns list in tab.
