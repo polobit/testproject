@@ -126,8 +126,6 @@ public class LinkedInUtil
 	{
 		try
 		{
-			List<SocialSearchResult> searchResults = new ArrayList<SocialSearchResult>();
-
 			/*
 			 * Retrieves first name and last name of the contact to search
 			 * profiles
@@ -137,34 +135,17 @@ public class LinkedInUtil
 
 			// If first name of last name is null or empty return null
 			if (StringUtils.isBlank(firstName) && StringUtils.isBlank(lastName))
-				return searchResults;
-
-			/*
-			 * Creates map to fetch results based on searchParameters using
-			 * SearchParameter provided by LinkedIn
-			 */
-			Map<SearchParameter, String> searchParameters = new EnumMap<SearchParameter, String>(SearchParameter.class);
-
-			// Creates client using token and secret to connect with LinkedIn
-			final LinkedInApiClient client = factory.createLinkedInApiClient(widget.getProperty("token"),
-					widget.getProperty("secret"));
+				return new ArrayList<SocialSearchResult>();
 
 			firstName = (firstName != null) ? firstName : "";
 			lastName = (lastName != null) ? lastName : "";
-
-			// Sets name as filter to search profiles
-			searchParameters.put(SearchParameter.KEYWORDS, firstName + " " + lastName);
 
 			/*
 			 * Search profiles based on the searchParameters given, and returns
 			 * list of search results
 			 */
-			searchResults = searchPeopleInLinkedIn(client, searchParameters);
+			return modifiedSearchForLinkedInProfiles(widget, firstName + " " + lastName);
 
-			System.out.println("In LinkedIn search : " + searchResults);
-			System.out.println("No. of results : " + searchResults.size());
-
-			return searchResults;
 		}
 		catch (Exception e)
 		{
@@ -200,6 +181,9 @@ public class LinkedInUtil
 	{
 		try
 		{
+			// Create list to store results
+			List<SocialSearchResult> searchResults = new ArrayList<SocialSearchResult>();
+
 			/*
 			 * Creates map to fetch results based on searchParameters using
 			 * SearchParameter provided by LinkedIn
@@ -207,13 +191,10 @@ public class LinkedInUtil
 			Map<SearchParameter, String> searchParameters = new EnumMap<SearchParameter, String>(SearchParameter.class);
 
 			// check if keywords exists
-			if (!StringUtils.isBlank(keywords))
-				searchParameters.put(SearchParameter.KEYWORDS, keywords);
-
-			List<SocialSearchResult> searchResults = new ArrayList<SocialSearchResult>();
-
-			if (searchParameters.size() == 0)
+			if (StringUtils.isBlank(keywords))
 				return searchResults;
+
+			searchParameters.put(SearchParameter.KEYWORDS, keywords);
 
 			// Creates client using token and secret to connect with LinkedIn
 			final LinkedInApiClient client = factory.createLinkedInApiClient(widget.getProperty("token"),
