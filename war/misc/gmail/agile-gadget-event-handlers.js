@@ -434,7 +434,10 @@ function agile_init_handlers() {
 			var content = Contacts_Json[$(el).data("content")];
 			// Build tags list.
 			agile_build_tag_ui($("#added_tags_ul", el), content);
-			
+			// Hide list view of contact.
+			$(".contact-minified", el).toggle();
+			// Show contact summary.
+			$(".show-contact-summary", el).toggle();
 			// Build tabs.
 			agile_build_form_template(that, "gadget-tabs", ".option-tabs", function() {
 				
@@ -445,10 +448,6 @@ function agile_init_handlers() {
 					$('.dropdown-toggle').dropdown();
 					// Enables Tab.
 					$('.gadget_tabs', el).tab();
-					// Hide list view of contact.
-					$(".contact-minified", el).toggle();
-					// Show contact summary.
-					$(".show-contact-summary", el).toggle();
 					// Show Tabs.
 					$(".option-tabs", el).toggle();
 					// Show notes tab by default.
@@ -582,6 +581,8 @@ function agile_init_handlers() {
 				// Set library path for campaign link, check for local host.
 				if(Is_Localhost)
 					lib_json["lib_path"] = Lib_Path;
+				else
+					lib_json["lib_path"] = "https://"+ response.owner.domain +".agilecrm.com/";
 				lib_json["response"] = response; 
 				
 				// Fill campaigns list in tab.

@@ -16,7 +16,7 @@
  * which helps in loading contacts without sending server request.
  */
 var _agile = _agile || [];
-var Is_Localhost = true;
+var Is_Localhost = false;
 var Lib_Path;
 var Contacts_Json = {};
 
@@ -101,14 +101,14 @@ function agile_init_gadget() {
  */
 function agile_login() {
 
-	// var url = 'https://googleapps.agilecrm.com/gmail';
-	var url = Lib_Path + 'gmail';
 	// Cookie
 	var Gadget_Cookie = agile_gadget_read_cookie("Agile_Gadget_Cookie");
-	console.log("Osapi from " + url);
-
+	
 	// Check for cookie, if not there send login request.
 	if (Gadget_Cookie == null) {
+		// var url = 'https://googleapps.agilecrm.com/gmail';
+		var url = Lib_Path + 'gmail';
+		console.log("Osapi from " + url);
 		/*
 		 * Hit the server, passing in a signed request (and OpenSocial ID), to
 		 * see if we know who the user is.
@@ -127,8 +127,10 @@ function agile_login() {
 			// Convert into object.
 			var User_Data = $.parseJSON(Gadget_Cookie);
 			
-			// Set account
-			agile_generate_ui(value.api_key, value.domain);
+			head.ready(function() {
+				// Set account
+				agile_generate_ui(User_Data.api_key, User_Data.domain);
+			});
 		});
 	}
 }
@@ -143,7 +145,7 @@ function agile_login() {
 function agile_handle_load_response(data) {
 
 	// Create cookie
-	agile_gadget_create_cookie('Agile_Gadget_Cookie', JSON.stringify(data));
+	agile_gadget_create_cookie('Agile_Gadget_Cookie', JSON.stringify(data.content));
 
 	// Check user exists, OpenID must have occurred previously.
 	if (data.content.user_exists) {
