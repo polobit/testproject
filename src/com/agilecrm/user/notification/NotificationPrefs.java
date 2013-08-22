@@ -49,17 +49,22 @@ public class NotificationPrefs
     public boolean control_notifications = true;
 
     /**
-     * Type of contact.
-     * 
+     * Browsing
      */
-    public enum ContactType
-    {
-	ANY_CONTACT, CONTACT_ASSIGNED, CONTACT_ASSIGNED_AND_STARRED
-    };
+    @NotSaved(IfDefault.class)
+    public String browsing = null;
 
-    public ContactType browsing;
-    public ContactType email_opened;
-    public ContactType link_clicked;
+    /**
+     * Email Opened
+     */
+    @NotSaved(IfDefault.class)
+    public String email_opened = null;
+
+    /**
+     * Link Clicked
+     */
+    @NotSaved(IfDefault.class)
+    public String link_clicked = null;
 
     /**
      * Deal created notification - default true.
@@ -161,9 +166,8 @@ public class NotificationPrefs
      * @param tag_deleted
      *            Tag deleted status.
      */
-    public NotificationPrefs(Long userId, boolean control_notifications, ContactType browsing, ContactType email_opened, ContactType link_clicked,
-	    boolean deal_created, boolean deal_closed, boolean contact_added, boolean contact_deleted, boolean tag_added, boolean tag_deleted,
-	    String notification_sound)
+    public NotificationPrefs(Long userId, boolean control_notifications, String browsing, String email_opened, String link_clicked, boolean deal_created,
+	    boolean deal_closed, boolean contact_added, boolean contact_deleted, boolean tag_added, boolean tag_deleted, String notification_sound)
     {
 	this.control_notifications = control_notifications;
 	this.browsing = browsing;
