@@ -399,7 +399,13 @@ function agile_init_handlers() {
 		$('.contact-search-waiting', el).show();
 		// Get contact status based on email.
 		agile_getContact(email, function(val) {
-
+			
+			// Set library path for campaign link, check for local host.
+			if(Is_Localhost)
+				val.lib_path = Lib_Path;
+			else
+				val.lib_path = "https://"+ val.owner.domain +".agilecrm.com/";
+			
 			// Merge Server response object with Contact_Json object.
 			$.extend(Contacts_Json[email], val);
 
