@@ -62,7 +62,7 @@ var CalendarRouter = Backbone.Router.extend({
 			
 			// To Updated task list based on user selection of type and owner 
 			initOwnerslist();
-		}, "<li><a href='{{id}}'>My Tasks</a></li>");
+		}, "<li><a href='{{id}}'>My Tasks</a></li>",true);
 		
 		$(".active").removeClass("active");
 		$("#calendarmenu").addClass("active");
