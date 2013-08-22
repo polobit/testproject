@@ -655,13 +655,15 @@ function getProperURL(web_url, callback)
 {
 	var proper_web_url;
 
-	if (web_url.indexOf("https://twitter.com/") == -1)
+	if (web_url.indexOf("https://twitter.com/") == -1 && web_url.indexOf("http://twitter.com/") == -1)
 	{
 		if (web_url.indexOf('@') == 0)
 			proper_web_url = "https://twitter.com/" + web_url.substring(1);
 		else
 			proper_web_url = "https://twitter.com/" + web_url;
 	}
+	else if (web_url.indexOf("http://twitter.com/") != -1)
+		proper_web_url = web_url.replace("http://twitter.com/", "https://twitter.com/");
 	else
 		proper_web_url = web_url;
 

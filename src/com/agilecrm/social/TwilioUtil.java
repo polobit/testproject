@@ -140,8 +140,7 @@ public class TwilioUtil
 		 * response from Twilio
 		 */
 		if (response.isError())
-			throw new Exception("Error sending message: " + response.getHttpStatus() + "\n"
-					+ response.getResponseText());
+			throw new Exception("Error in Twilio : " + response.getHttpStatus() + "\n" + response.getResponseText());
 
 		return XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse");
 
@@ -178,8 +177,7 @@ public class TwilioUtil
 		 * application SID
 		 */
 		if (response.isError())
-			throw new Exception("Error fetching recent calls: " + response.getHttpStatus() + "\n"
-					+ response.getResponseText());
+			throw new Exception("Error in Twilio : " + response.getHttpStatus() + "\n" + response.getResponseText());
 
 		return new JSONObject(response.getResponseText()).getString("sid");
 
@@ -308,8 +306,7 @@ public class TwilioUtil
 		 * logs
 		 */
 		if (response.isError())
-			throw new Exception("Error fetching recent calls: " + response.getHttpStatus() + "\n"
-					+ response.getResponseText());
+			throw new Exception("Error in Twilio : " + response.getHttpStatus() + "\n" + response.getResponseText());
 
 		JSONArray logs = new JSONArray();
 		try
@@ -355,8 +352,7 @@ public class TwilioUtil
 		 * recordings
 		 */
 		if (response.isError())
-			throw new Exception("Error sending message: " + response.getHttpStatus() + "\n"
-					+ response.getResponseText());
+			throw new Exception("Error in Twilio : " + response.getHttpStatus() + "\n" + response.getResponseText());
 
 		return XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse").getJSONObject("Recordings");
 	}
@@ -383,8 +379,7 @@ public class TwilioUtil
 		 * logs and return them
 		 */
 		if (response.isError())
-			throw new Exception("Error fetching recent calls: " + response.getHttpStatus() + "\n"
-					+ response.getResponseText());
+			throw new Exception("Error in Twilio : " + response.getHttpStatus() + "\n" + response.getResponseText());
 
 		System.out.println("Twilio calls : " + response.getResponseText());
 		JSONArray logs = new JSONArray();
@@ -435,8 +430,7 @@ public class TwilioUtil
 		 * outgoing numbers
 		 */
 		if (response.isError())
-			throw new Exception("Error sending message: " + response.getHttpStatus() + "\n"
-					+ response.getResponseText());
+			throw new Exception("Error in Twilio : " + response.getHttpStatus() + "\n" + response.getResponseText());
 
 		JSONObject result = XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse")
 				.getJSONObject("IncomingPhoneNumbers");
