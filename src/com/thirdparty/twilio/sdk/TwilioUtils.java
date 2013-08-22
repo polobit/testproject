@@ -1,4 +1,4 @@
-package com.agilecrm.twilio.sdk;
+package com.thirdparty.twilio.sdk;
 
 /*
  Copyright (c) 2008 Twilio, Inc.

@@ -15,12 +15,12 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
 import com.agilecrm.contact.imports.util.ContactsImportUtil;
-import com.agilecrm.social.GoogleContactToAgileContactUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.googlecode.objectify.Key;
+import com.thirdparty.GoogleContactToAgileContactUtil;
 
 /**
  * <code>ContactUtilServlet</code> contains method to get and import contacts

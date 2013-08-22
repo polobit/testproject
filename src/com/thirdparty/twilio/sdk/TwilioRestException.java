@@ -1,4 +1,4 @@
-package com.agilecrm.twilio.sdk;
+package com.thirdparty.twilio.sdk;
 
 public class TwilioRestException extends Exception
 {
