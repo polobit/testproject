@@ -83,7 +83,7 @@ function agile_init_gadget() {
 
 		gadgets.window.adjustHeight();
 		// Set library path.
-		Lib_Path = "https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/";
+		Lib_Path = "https://googleapps.agilecrm.com/";
 
 		// Login
 		agile_login();
