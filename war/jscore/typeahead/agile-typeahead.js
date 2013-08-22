@@ -36,6 +36,7 @@ function agile_type_ahead(id, el, callback, isSearch,urlParams,noResultText){
     var CONTACTS = {};
 
     $('#' + id, el).typeahead({
+    	
         source: function (query, process){
 
         	/* Resets the results before query */
@@ -207,8 +208,8 @@ function agile_type_ahead(id, el, callback, isSearch,urlParams,noResultText){
                  */ 
                 if (!items)
                 {
-                    showSearchResults();
-                    return;
+                    showSearchResults(); // fails automatically for non main search bar typeaheads.
+                    return this.query; // return text of query to set in input field
                 }
                 
                 // Navigates the item to its detail view
