@@ -107,7 +107,7 @@
     			</div>
 
 <!-- 2nd coloum (conatct details) -->
-				<div style="margin-top: 0%; min-width:14em; width: 45%; display: inline-block; vertical-align: top;">
+				<div style="margin-top: 0%; min-width:12em; width: 40%; display: inline-block; vertical-align: top;">
 					<div style="display:inline-block; max-width: 16em;">
 						<div style=" height: auto; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
 							<b>
@@ -115,11 +115,8 @@
 							</b>
 						</div>
 					</div>
-					{{#if lib_path}}
-						<a target="_blank" href="{{lib_path}}#contact/{{id}}" style="margin-left:6px;"><i class="icon-external-link" title="Show in Agile"></i></a><br/>
-					{{else}}
-						<a target="_blank" href="https://{{owner.domain}}.agilecrm.com/#contact/{{id}}" style="margin-left:6px;"><i class="icon-external-link" title="Show in Agile"></i></a><br/>
-					{{/if}}
+					<a target="_blank" href="{{lib_path}}#contact/{{id}}" style="margin-left:6px;"><i class="icon-external-link" title="Show contact in Agile"></i></a><br/>
+					
 					{{#if_propertyName "title"}}
 						{{value}}
 					{{/if_propertyName}}
@@ -153,7 +150,7 @@
 					</div>
 				</div>
 				
-				<div style="display:inline; width:35%; min-width:12em;" class="pull-right">
+				<div style="display:inline; width:38%; min-width:11em;" class="pull-right">
 
 <!-- 4th coloum (score/task/options) -->
 					<div class="pull-right" style="position:relative; display:inline-block; vertical-align: top;">
@@ -387,12 +384,8 @@
 			<p>{{{message}}}</p>
 			<small class="edit-hover" style="margin-right:10px; color:#b2b0b1;">
 				<time class="log-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-	        	{{#if ../../lib_path}}
-					<a target="_blank" class="pull-right" href="{{../../lib_path}}#workflow/{{campaign_id}}"> {{campaign_name}}</a>
-				{{else}}
-					<a target="_blank" class="pull-right" href="https://{{contact.owner.domain}}.agilecrm.com/#workflow/{{campaign_id}}"> {{campaign_name}}</a>
-				{{/if}}
-		        <p class="pull-right">Campaign - </p>
+	        	<a target="_blank" class="pull-right" href="{{../../lib_path}}#workflow/{{campaign_id}}" title="Show Workflow in Agile"> {{campaign_name}}</a>
+				<p class="pull-right">Campaign - </p>
 			</small>	
 		</div>
 	</div>
