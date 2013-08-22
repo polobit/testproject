@@ -3,10 +3,7 @@ package com.agilecrm.core.api.widgets;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -15,7 +12,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import com.agilecrm.social.TwilioUtil;
 import com.agilecrm.widgets.Widget;
@@ -38,338 +34,257 @@ import com.agilecrm.widgets.util.WidgetUtil;
 public class TwilioWidgetsAPI
 {
 
-    /**
-     * Retrieves registered phone numbers from agent's Twilio account
-     * 
-     * @param widgetId
-     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
-     * @return {@link String} form of {@link JSONArray}
-     */
-    @Path("numbers/{widget-id}")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getOutgoingNumbersfromTwilio(
-	    @PathParam("widget-id") Long widgetId)
-    {
-	// Retrieve widget based on its id
-	Widget widget = WidgetUtil.getWidget(widgetId);
+	/**
+	 * Retrieves registered phone numbers from agent's Twilio account
+	 * 
+	 * @param widgetId
+	 *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+	 * @return {@link String} form of {@link JSONArray}
+	 */
+	@Path("numbers/{widget-id}")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getOutgoingNumbersfromTwilio(@PathParam("widget-id") Long widgetId)
+	{
+		// Retrieve widget based on its id
+		Widget widget = WidgetUtil.getWidget(widgetId);
 
-	if (widget == null)
-	    return null;
+		if (widget == null)
+			return null;
 
-	try
-	{
-	    // Calls TwilioUtil method to retrieve numbers
-	    return TwilioUtil.getOutgoingNumber(widget).toString();
-	}
-	catch (SocketTimeoutException e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-	}
-    }
-
-    /**
-     * Verify phone number in agent's Twilio account
-     * 
-     * @param widgetId
-     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
-     * @return {@link String} form of {@link JSONArray}
-     */
-    @Path("verify/numbers/{widget-id}/{from}")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String verifyNumberInTwilio(@PathParam("widget-id") Long widgetId,
-	    @PathParam("from") String from)
-    {
-	// Retrieve widget based on its id
-	Widget widget = WidgetUtil.getWidget(widgetId);
-
-	if (widget == null)
-	    return null;
-
-	try
-	{
-	    /*
-	     * Calls TwilioUtil method to verify a number in agile Twilio user
-	     * account
-	     */
-	    return TwilioUtil.verifyOutgoingNumbers(widget, from).toString();
-	}
-	catch (SocketTimeoutException e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-	}
-    }
-
-    /**
-     * Connects to Twilio and fetches applicaiton sid based on the accountSID
-     * 
-     * @param accountSid
-     *            {@link String} accountSid of agent Twilio account
-     * @return {@link String} token generated from Twilio
-     */
-    @Path("appsid/{widget-id}")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getTwilioAppSid(@PathParam("widget-id") Long widgetId)
-    {
-	// Retrieve widget based on its id
-	Widget widget = WidgetUtil.getWidget(widgetId);
-
-	if (widget == null)
-	    return null;
-
-	try
-	{
-	    /*
-	     * Create a Twilio Application for Agile in Agile User Twilio
-	     * account
-	     */
-	    return TwilioUtil.getTwilioAppSID(widget);
-	}
-	catch (SocketTimeoutException e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-	}
-    }
-
-    /**
-     * Connects to Twilio and generates a token which is used for making calls
-     * based on the accountSID and appsid
-     * 
-     * @param accountSid
-     *            {@link String} accountSid of agent Twilio account
-     * @param appSID
-     *            {@link String} appSid of agent Twilio account
-     * @return {@link String} token generated from Twilio
-     */
-    @Path("token/{widget-id}")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getTwilioToken(@PathParam("widget-id") Long widgetId)
-    {
-	// Retrieve widget based on its id
-	Widget widget = WidgetUtil.getWidget(widgetId);
-
-	if (widget == null)
-	    return null;
-
-	try
-	{
-	    /*
-	     * Calls TwilioUtil method to generate a token to make calls
-	     */
-	    return TwilioUtil.generateTwilioToken(widget);
-	}
-	catch (SocketTimeoutException e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+		try
+		{
+			// Calls TwilioUtil method to retrieve numbers
+			return TwilioUtil.getOutgoingNumber(widget).toString();
+		}
+		catch (SocketTimeoutException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("Request timed out. Refresh and try again.").build());
+		}
+		catch (IOException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("An error occured. Refresh and try again.").build());
+		}
+		catch (Exception e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
 	}
 
-    }
-
-    /**
-     * Connects to Twilio and fetches call logs for a given number based on the
-     * accountSID
-     * 
-     * @param widgetId
-     *            {@link String} widget id to get {@link Widget} preferences
-     * @return {@link String} form of {@link JSONArray} of call logs
-     */
-    @Path("call/logs/{widget-id}/{to}")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getCallLogsOfTwilio(@PathParam("widget-id") Long widgetId,
-	    @PathParam("to") String to)
-    {
-	// Retrieve widget based on its id
-	Widget widget = WidgetUtil.getWidget(widgetId);
-
-	if (widget == null)
-	    return null;
-
-	try
+	/**
+	 * Verify phone number in agent's Twilio account
+	 * 
+	 * @param widgetId
+	 *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+	 * @return {@link String} form of {@link JSONArray}
+	 */
+	@Path("verify/numbers/{widget-id}/{from}")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String verifyNumberInTwilio(@PathParam("widget-id") Long widgetId, @PathParam("from") String from)
 	{
+		// Retrieve widget based on its id
+		Widget widget = WidgetUtil.getWidget(widgetId);
 
-	    // Calls TwilioUtil method to retrieve call logs for the "to" number
-	    return TwilioUtil.getCallLogsWithRecordings(widget, to).toString();
-	}
-	catch (SocketTimeoutException e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+		if (widget == null)
+			return null;
+
+		try
+		{
+			/*
+			 * Calls TwilioUtil method to verify a number in agile Twilio user
+			 * account
+			 */
+			return TwilioUtil.verifyOutgoingNumbers(widget, from).toString();
+		}
+		catch (SocketTimeoutException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("Request timed out. Refresh and try again.").build());
+		}
+		catch (IOException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("An error occured. Refresh and try again.").build());
+		}
+		catch (Exception e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
 	}
 
-    }
+	/**
+	 * Connects to Twilio and fetches applicaiton sid based on the accountSID
+	 * 
+	 * @param accountSid
+	 *            {@link String} accountSid of agent Twilio account
+	 * @return {@link String} token generated from Twilio
+	 */
+	@Path("appsid/{widget-id}")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getTwilioAppSid(@PathParam("widget-id") Long widgetId)
+	{
+		// Retrieve widget based on its id
+		Widget widget = WidgetUtil.getWidget(widgetId);
 
-    /**
-     * Initiates a call from agent Twilio account to the given number
-     * 
-     * @param widgetId
-     *            {@link String} widget id to get {@link Widget} preferences
-     * @param from
-     *            {@link String} caller id of the phone call
-     * @param to
-     *            {@link String} phone number to be called
-     * @param url
-     *            {@link String} URL to execute when the called party answers
-     * @return {@link String} form of {@link JSONObject} of call made
-     */
-    @Path("call/{widget-id}")
-    @POST
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces(MediaType.TEXT_PLAIN)
-    public String makeCallFromTwilio(@PathParam("widget-id") Long widgetId,
-	    @FormParam("from") String from, @FormParam("to") String to,
-	    @FormParam("url") String url)
+		if (widget == null)
+			return null;
 
-    {
-	// Retrieve widget based on its id
-	Widget widget = WidgetUtil.getWidget(widgetId);
+		try
+		{
+			/*
+			 * Create a Twilio Application for Agile in Agile User Twilio
+			 * account
+			 */
+			return TwilioUtil.getTwilioAppSID(widget);
+		}
+		catch (SocketTimeoutException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("Request timed out. Refresh and try again.").build());
+		}
+		catch (IOException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("An error occured. Refresh and try again.").build());
+		}
+		catch (Exception e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
 
-	if (widget == null)
-	    return null;
-	try
+	/**
+	 * Connects to Twilio and generates a token which is used for making calls
+	 * based on the accountSID and appsid
+	 * 
+	 * @param accountSid
+	 *            {@link String} accountSid of agent Twilio account
+	 * @param appSID
+	 *            {@link String} appSid of agent Twilio account
+	 * @return {@link String} token generated from Twilio
+	 */
+	@Path("token/{widget-id}")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getTwilioToken(@PathParam("widget-id") Long widgetId)
 	{
-	    // Calls TwilioUtil method to make a call
-	    return TwilioUtil.makeCall(widget, from, to, url).toString();
-	}
-	catch (SocketTimeoutException e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-	}
-    }
+		// Retrieve widget based on its id
+		Widget widget = WidgetUtil.getWidget(widgetId);
 
-    /**
-     * Retrieves registered incoming phone numbers from agent's Twilio account
-     * 
-     * @param widgetId
-     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
-     * @return {@link String} form of {@link JSONArray}
-     */
-    @Path("incoming/numbers/{widget-id}")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getIncomingNumbersfromTwilio(
-	    @PathParam("widget-id") Long widgetId)
-    {
-	// Retrieve widget based on its id
-	Widget widget = WidgetUtil.getWidget(widgetId);
+		if (widget == null)
+			return null;
 
-	if (widget == null)
-	    return null;
-	try
-	{
-	    // Calls TwilioUtil method to retrive incoming numbers
-	    return TwilioUtil.getIncomingNumber(widget).toString();
+		try
+		{
+			/*
+			 * Calls TwilioUtil method to generate a token to make calls
+			 */
+			return TwilioUtil.generateTwilioToken(widget);
+		}
+		catch (SocketTimeoutException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("Request timed out. Refresh and try again.").build());
+		}
+		catch (IOException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("An error occured. Refresh and try again.").build());
+		}
+		catch (Exception e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
 	}
-	catch (SocketTimeoutException e)
+
+	/**
+	 * Connects to Twilio and fetches call logs for a given number based on the
+	 * accountSID
+	 * 
+	 * @param widgetId
+	 *            {@link String} widget id to get {@link Widget} preferences
+	 * @return {@link String} form of {@link JSONArray} of call logs
+	 */
+	@Path("call/logs/{widget-id}/{to}")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getCallLogsOfTwilio(@PathParam("widget-id") Long widgetId, @PathParam("to") String to)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+		// Retrieve widget based on its id
+		Widget widget = WidgetUtil.getWidget(widgetId);
+
+		if (widget == null)
+			return null;
+
+		try
+		{
+
+			// Calls TwilioUtil method to retrieve call logs for the "to" number
+			return TwilioUtil.getCallLogsWithRecordings(widget, to).toString();
+		}
+		catch (SocketTimeoutException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("Request timed out. Refresh and try again.").build());
+		}
+		catch (IOException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("An error occured. Refresh and try again.").build());
+		}
+		catch (Exception e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
 	}
-	catch (IOException e)
+
+	/**
+	 * Retrieves registered incoming phone numbers from agent's Twilio account
+	 * 
+	 * @param widgetId
+	 *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+	 * @return {@link String} form of {@link JSONArray}
+	 */
+	@Path("incoming/numbers/{widget-id}")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getIncomingNumbersfromTwilio(@PathParam("widget-id") Long widgetId)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+		// Retrieve widget based on its id
+		Widget widget = WidgetUtil.getWidget(widgetId);
+
+		if (widget == null)
+			return null;
+		try
+		{
+			// Calls TwilioUtil method to retrive incoming numbers
+			return TwilioUtil.getIncomingNumber(widget).toString();
+		}
+		catch (SocketTimeoutException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("Request timed out. Refresh and try again.").build());
+		}
+		catch (IOException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("An error occured. Refresh and try again.").build());
+		}
+		catch (Exception e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
 	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-	}
-    }
 }
