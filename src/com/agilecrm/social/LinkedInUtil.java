@@ -67,7 +67,7 @@ public class LinkedInUtil
 	 * As LinkedIn keeping on changing LinkedIn image URLs, we change the image
 	 * URLs into this format
 	 */
-	private static final String LINKEDINIMAGEURLFORMAT = "https://m3-s.licdn.com";
+	private static final String LINKEDIN_IMAGE_URL_FORMAT = "https://m3-s.licdn.com";
 
 	/**
 	 * Creates a client to connect to LinkedIn using developers API key and
@@ -990,7 +990,7 @@ public class LinkedInUtil
 	public static String changeImageUrl(String url)
 	{
 		if (!StringUtils.isBlank(url) && url.contains("licdn.com"))
-			url = url.replace(url.substring(0, url.indexOf(".com") + 4), LINKEDINIMAGEURLFORMAT);
+			url = url.replace(url.substring(0, url.indexOf(".com") + 4), LINKEDIN_IMAGE_URL_FORMAT);
 
 		System.out.println("Changed URL in LinkedIn: " + url);
 		return url;
