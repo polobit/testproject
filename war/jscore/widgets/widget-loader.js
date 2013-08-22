@@ -332,3 +332,41 @@ function queuePostRequest(queueName, url, data, successcallback, errorCallback)
 		} });
 	});
 }
+
+/**
+ * Shrink the widget header name width
+ * 
+ * <p> Shows the icons and decrease the width of widget header to avoid the
+ * widget name overflow on mouse hover
+ * 
+ * @param el
+ *            Element on which mouse entered (widget header)
+ */
+function showIcons(el)
+{
+	// Shows widget icons on hover
+	$(el).find('div.widget_header_icons').show();
+
+	// Changes width of widget name
+	$(el).find('div.widget_header_name').css({ "width" : "40%" });
+}
+
+/**
+ * Expand the widget header name width.
+ * 
+ * <p>
+ * Hide the icons and use the remaining width in widget header name DIV on mouse
+ * leave
+ * </p>
+ * 
+ * @param el
+ *            Element on which mouse left (widget header)
+ */
+function hideIcons(el)
+{
+	// Hide widget icons on hover
+	$(el).find('div.widget_header_icons').hide();
+	
+	// Changes width of widget name
+	$(el).find('div.widget_header_name').css({ "width" : "80%" });
+}
