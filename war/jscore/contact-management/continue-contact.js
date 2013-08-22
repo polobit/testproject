@@ -60,19 +60,19 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 		return;
 	
 	// Disables save button to prevent multiple click event issues
-	$(saveBtn).attr('disabled', 'disabled');
+	DisableSaveButton($(saveBtn));
 	
     // Validate Form
     if(!isValidForm($form)){
 
     	// Removes disabled attribute of save button
-		$(saveBtn).removeAttr('disabled');
+    	EnableSaveButton($(saveBtn));
     	return;
     }
     
     // Show loading symbol until model get saved
-    $('#' + modal_id).find('span.save-status').html(LOADING_HTML);
-    $('#' + form_id).find('span.save-status').html(LOADING_HTML);
+    //$('#' + modal_id).find('span.save-status').html(LOADING_HTML);
+    //$('#' + form_id).find('span.save-status').html(LOADING_HTML);
     
     // Read multiple values from contact form
     var properties = [];
@@ -147,10 +147,9 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     		{
             	show_error(modal_id,form_id,'duplicate-email','Company name too long. Please restrict upto 100 characters.');
             	
-            	$(saveBtn).removeAttr('disabled');
-            	// Remove loading image
-            	$('#' + modal_id).find('span.save-status img').remove();
-            	$('#' + form_id).find('span.save-status img').remove();
+            	EnableSaveButton($(saveBtn));// Remove loading image
+            	//$('#' + modal_id).find('span.save-status img').remove();
+            	//$('#' + form_id).find('span.save-status img').remove();
             	return;
     		}	
     		obj.contact_company_id=null;
@@ -192,10 +191,9 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     			// Company name too long, show error and return;
             	show_error(modal_id,form_id,'duplicate-email','Company name too long. Please restrict upto 100 characters.');
             	
-            	$(saveBtn).removeAttr('disabled');
-            	// Remove loading image
-            	$('#' + modal_id).find('span.save-status img').remove();
-            	$('#' + form_id).find('span.save-status img').remove();
+            	EnableSaveButton($(saveBtn));// Remove loading image
+            	// $('#' + modal_id).find('span.save-status img').remove();
+            	// $('#' + form_id).find('span.save-status img').remove();
             	return;
     		}	
     		properties.push(property_JSON('name', 'company_name'));
@@ -203,7 +201,6 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     	
     	if (isValidField('company_url')) properties.push(property_JSON('url', 'company_url'));
 
-    
     	var type = $('#' + form_id + ' input[name=type]').val();
     	obj.type = type;
     }
@@ -317,7 +314,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         	localStorage.removeItem("Agile_twitter_matches_" + data.get('id'));
 
         	// Removes disabled attribute of save button
-			$(saveBtn).removeAttr('disabled');
+        	DisableSaveButton($(saveBtn));
 			
         	// Adds the tags to tags collection 
         	if (tags != undefined && tags.length != 0)
@@ -328,8 +325,8 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         		}
         	
         	// Removes loading image
-        	$('#' + form_id).find('span.save-status img').remove();
-        	$('#' + modal_id).find('span.save-status img').remove();
+        	//$('#' + form_id).find('span.save-status img').remove();
+        	//$('#' + modal_id).find('span.save-status img').remove();
         	
         	// Removes person image form new-person-modal
         	$('#' + modal_id).find('img.person-img').remove();
@@ -371,11 +368,10 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         error: function (model, response) {
         	
         	// Removes disabled attribute of save button
-    		$(saveBtn).removeAttr('disabled');
-    		
+        	DisableSaveButton($(saveBtn));
         	// Remove loading image
-        	$('#' + modal_id).find('span.save-status img').remove();
-        	$('#' + form_id).find('span.save-status img').remove();
+        	//$('#' + modal_id).find('span.save-status img').remove();
+        	//$('#' + form_id).find('span.save-status img').remove();
         	
             // Shows error alert of duplicate contacts
         	

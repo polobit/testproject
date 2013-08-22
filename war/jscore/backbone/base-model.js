@@ -183,7 +183,7 @@ var Base_Model_View = Backbone.View
 					return;
 				
 				// Disables save button to prevent multiple click event issues
-				$form.find('.save').attr('disabled', 'disabled');
+				DisableSaveButton($form.find('.save'));
 				
 				// Represents validations result of the form, and json
 				// represents serialized data in the form
@@ -264,7 +264,7 @@ var Base_Model_View = Backbone.View
 				if (isValid == false || !isValidForm($form)) {
 					
 					// Removes disabled attribute of save button
-					$form.find('.save').removeAttr('disabled');
+					EnableSaveButton($form.find('.save'));
 					
 					return;
 				}
@@ -296,9 +296,9 @@ var Base_Model_View = Backbone.View
 				var modal = this.options.modal;
 
 				// Loading while saving
-				$save_info = $('<div style="display:inline-block"><img src="img/1-0.gif" height="15px" width="15px"></img></div>');
-				$(".form-actions", this.el).append($save_info);
-				$save_info.show();
+				//$save_info = $('<div style="display:inline-block"><img src="img/1-0.gif" height="15px" width="15px"></img></div>');
+				//$(".form-actions", this.el).append($save_info);
+				//$save_info.show();
 
 				// Calls save on the model
 				this.model
@@ -319,7 +319,7 @@ var Base_Model_View = Backbone.View
 									success : function(model, response) {
 										
 										// Removes disabled attribute of save button
-										$form.find('.save').removeAttr('disabled');
+										EnableSaveButton($form.find('.save'));
 										
 										// Reload the current page
 										if (reload)
@@ -358,12 +358,11 @@ var Base_Model_View = Backbone.View
 											 * Appends success message to form
 											 * actions block in form, if window
 											 * option is not set for view
+											 *
 											 */
 											$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>Saved Successfully</i></p></small></div>');
-											$(".form-actions", this.el).append(
-													$save_info);
-											$save_info.show().delay(3000).hide(
-													1);
+											$(".form-actions", this.el).append($save_info);
+											$save_info.show().delay(3000).hide(1);	
 										}
 									},
 
@@ -375,10 +374,10 @@ var Base_Model_View = Backbone.View
 									error : function(model, response) {
 										
 										// Removes disabled attribute of save button
-										$form.find('.save').removeAttr('disabled');
+										EnableSaveButton($form.find('.save'));
 										
 										// Hide loading on error
-										$save_info.hide();
+										//$save_info.hide();
 
 										// Show cause of error in saving
 										$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
@@ -494,3 +493,23 @@ var Base_Model_View = Backbone.View
 				return this;
 			}
 		});
+
+/**
+ * Functions Which take JQuery button elements and enable disable them.
+ * 
+ * Disable by setting original text in data-save-text attribute and adding disabled:disabled attribute
+ * Enable by reverse of the above
+ */
+function DisableSaveButton(elem)
+{
+	elem.attr('disabled', 'disabled')
+		.attr('data-save-text',elem.text())
+		.css('width','auto')
+		.css('min-width',elem.width()+'px');
+	elem.text('Saving...');
+}
+
+function EnableSaveButton(elem)
+{
+	elem.text(elem.attr('data-save-text')).removeAttr('disabled data-save-text');
+}
