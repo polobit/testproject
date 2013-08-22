@@ -402,9 +402,9 @@ function agile_init_handlers() {
 			
 			// Set library path for campaign link, check for local host.
 			if(Is_Localhost)
-				val.lib_path = Lib_Path;
+				val.ac_path = Lib_Path;
 			else
-				val.lib_path = "https://"+ val.owner.domain +".agilecrm.com/";
+				val.ac_path = "https://"+ agile_id.namespace +".agilecrm.com/";
 			
 			// Merge Server response object with Contact_Json object.
 			$.extend(Contacts_Json[email], val);
@@ -586,9 +586,11 @@ function agile_init_handlers() {
 				var lib_json = {};
 				// Set library path for campaign link, check for local host.
 				if(Is_Localhost)
-					lib_json["lib_path"] = Lib_Path;
-				else
-					lib_json["lib_path"] = "https://"+ response.owner.domain +".agilecrm.com/";
+					lib_json["ac_path"] = Lib_Path;
+				else{
+					lib_json["ac_path"] = "https://"+ agile_id.namespace +".agilecrm.com/";
+				}
+				lib_json["lib_path"] = Lib_Path;
 				lib_json["response"] = response; 
 				
 				// Fill campaigns list in tab.
