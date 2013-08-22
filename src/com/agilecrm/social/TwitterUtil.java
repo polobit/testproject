@@ -128,10 +128,7 @@ public class TwitterUtil
 			 * Creates a twitter object to connect with twitter and searches
 			 * twitter profiles based on first name and last name
 			 */
-			ResponseList<User> users = getTwitter(widget).searchUsers(firstName + " " + lastName, 1);
-
-			// Fill user details in list and return
-			return fillUsersDetailsInList(users);
+			return modifiedSearchForTwitterProfiles(widget, firstName + " " + lastName);
 		}
 		catch (TwitterRuntimeException e)
 		{
@@ -250,7 +247,7 @@ public class TwitterUtil
 		if (!webUrl.startsWith("https://twitter.com/") && !webUrl.startsWith("http://twitter.com/"))
 			return null;
 
-		// check if URL start with http, if so replace with https
+		// check if URL start with HTTP, if so replace with HTTPS
 		if (webUrl.startsWith("http://twitter.com/"))
 			webUrl = webUrl.replace("http://twitter.com/", "https://twitter.com/");
 
@@ -268,7 +265,7 @@ public class TwitterUtil
 		}
 		catch (TwitterRuntimeException e)
 		{
-			// If status is 404, Twitter doesnot have that profile
+			// If status is 404, Twitter doesn't have that profile
 			if (e.getMessage().startsWith("404"))
 				throw new Exception("Sorry, that page doesn't exist! @" + screenName);
 
@@ -528,12 +525,7 @@ public class TwitterUtil
 			 * Get Twitter object and on that fetch user to get screen name,
 			 * form a query on screen name and search for tweets
 			 */
-			Twitter twitter = getTwitter(widget);
-			User user = twitter.showUser(twitterId);
-			Query query = new Query("from:" + user.getScreenName());
-			QueryResult queryResult = twitter.search(query);
-
-			return getListOfSocialUpdateStream(user, twitter, queryResult.getTweets());
+			return getNetworkUpdates(widget, twitterId, 0, 0);
 		}
 		catch (TwitterRuntimeException e)
 		{
@@ -566,13 +558,20 @@ public class TwitterUtil
 			/*
 			 * Get Twitter object and on that fetch user to get screen name,
 			 * form a query on screen name and search for tweets setting max
-			 * status id and count as 5 tweets
+			 * status id and count
 			 */
 			Twitter twitter = getTwitter(widget);
 			User user = twitter.showUser(twitterId);
 			Query query = new Query("from:" + user.getScreenName());
-			query.maxId(statusId);
-			query.setCount(count);
+
+			// set max id if statusId is not zero
+			if (statusId != 0)
+				query.maxId(statusId);
+
+			// set max id if count is not zero
+			if (count != 0)
+				query.setCount(count);
+
 			QueryResult queryResult = twitter.search(query);
 
 			return getListOfSocialUpdateStream(user, twitter, queryResult.getTweets());
@@ -688,35 +687,6 @@ public class TwitterUtil
 				throw new Exception(getErrorMessage(e.getMessage()));
 			}
 		return updateStream;
-	}
-
-	/**
-	 * Searches in Twitter for the specified screen name and gets the tweets of
-	 * that person
-	 * 
-	 * @param twitter
-	 *            {@link Twitter}after setting authentication
-	 * @param screenName
-	 *            {@link String} twitter screen name
-	 * @return {@link List} of {@link Tweet}
-	 * @throws Exception
-	 *             If {@link Twitter} throws an exception
-	 */
-	public static List<Status> getTweetsByScreenName(Twitter twitter, String screenName) throws SocketTimeoutException,
-			IOException, Exception
-	{
-		try
-		{
-			// Create a query with screen name and search for tweets
-			QueryResult result = twitter.search(new Query("from:" + screenName));
-
-			return result.getTweets();
-		}
-		catch (TwitterRuntimeException e)
-		{
-			System.out.println("In get tweets by screen name exception");
-			throw new Exception(getErrorMessage(e.getMessage()));
-		}
 	}
 
 	/**
