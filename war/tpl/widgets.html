@@ -3,12 +3,8 @@
 	{{add_tag Widgets}}
 {{/if}}
 	<div class="widget_container" id="{{name}}-container">
-		<div class="widget_header widget_edit_icons">
-			<div class="pull-left">
-				<img src="{{mini_logo_url}}" width="24" height="24" alt=""/>
-				<strong>{{#if_equals name "Linkedin"}}LinkedIn{{else}}{{name}}{{/if_equals}}</strong>
-			</div>
-			<div class="pull-right">
+		<div class="widget_header widget_edit_icons" onmouseover="showIcons(this); return false;" onmouseout="hideIcons(this); return false;">
+			<div class="widget_header_icons pull-right clear-fix" style="display:none;">
 				<ul class="widget_header_control">
 					<li><i id="{{name}}-move" class="icon-move {{name}}-move"></i></li>
 					{{#if is_minimized}}
@@ -19,8 +15,14 @@
 					<li><a id="{{name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="icon-wrench" style="font-size:1.12em;cursor:pointer;"></i></a></li>
 				</ul>
 			</div>
+			<div style="width:14%">
+				<img src="{{mini_logo_url}}" class="pull-left" width="24" height="24" alt=""/>
+			</div>
+			<div class="widget_header_name overflow-elipsis" style="width:80%">
+				<strong>{{#if_equals name "Linkedin"}}LinkedIn{{else}}{{name}}{{/if_equals}}</strong>
+			</div>
 		</div>
-		<div class="widgets" id="{{name}}">
+		<div class="widgets" id="{{name}}" style="padding-bottom:3px;">
 			{{#unless is_minimized}}
 			<center><img id="widget_load_img" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>
 			{{/unless}}
