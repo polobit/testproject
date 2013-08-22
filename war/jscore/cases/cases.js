@@ -185,15 +185,15 @@ function savecases(formId, modalId, saveBtn, json)
 	if ($(saveBtn).attr('disabled'))return;
 
 	// Disables save button to prevent multiple click event issues
-	$(saveBtn).attr('disabled', 'disabled');
+	DisableSaveButton($(saveBtn));//$(saveBtn).attr('disabled', 'disabled');
 	
 	if (!isValidForm('#' + formId)){
-		$(saveBtn).removeAttr('disabled'); // Removes disabled attribute of save button
+		EnableSaveButton($(saveBtn));//$(saveBtn).removeAttr('disabled'); // Removes disabled attribute of save button
 		return false;
 	}
 	
 	// Shows loading symbol until model get saved
-    $('#' + modalId).find('span.save-status').html(LOADING_HTML);
+    //$('#' + modalId).find('span.save-status').html(LOADING_HTML);
 	
 	var newEntry=false; // test if this model is new, true => new model 
 	if(json.id===undefined)newEntry=true;
@@ -205,9 +205,9 @@ function savecases(formId, modalId, saveBtn, json)
 		success : function(data) 
 		{		
 			// Removes disabled attribute of save button
-			$(saveBtn).removeAttr('disabled');
+			EnableSaveButton($(saveBtn));//$(saveBtn).removeAttr('disabled');
 
-			$('#' + modalId).find('span.save-status img').remove();
+			//$('#' + modalId).find('span.save-status img').remove();
 			$('#' + modalId).modal('hide');
 
 			$('#' + formId).each(function() {
