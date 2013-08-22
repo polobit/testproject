@@ -88,9 +88,11 @@ function agile_build_ui_for_emails(Email_Ids) {
 		} else {
 			val.email = email;
 		}
-		// Flag for setting link URLs in Show in Agile and campaign link.
+		// Set library path for campaign link, check for local host.
 		if(Is_Localhost)
 			val.lib_path = Lib_Path;
+		else
+			val.lib_path = "https://"+ response.owner.domain +".agilecrm.com/";
 		// Store user data for future use.
 		Contacts_Json[val.email] = val;
 		agile_fill_individual_template_ui(val, $('#content'));
