@@ -38,8 +38,9 @@ function saveSettings()
 {
 	var saveBtn=$('#navmodsSelect .btn-primary');
 	
-	if(!saveBtn.attr('disabled'))
-		saveBtn.attr('disabled','disabled');
+	if(saveBtn.attr('disabled'))return;
+	
+	DisableSaveButton(saveBtn);
 	
 	var saveUrl='/core/api/navbarsets';
 	var json=serializeForm('navmodsSelect');
@@ -71,12 +72,12 @@ function saveSettings()
 					}
 					else $('#navmodsSelect #div-fail').show().delay(3000).hide(1);
 					
-					saveBtn.removeAttr('disabled');
+					EnableSaveButton(saveBtn);
 				},
 	error		:function(jqXHR, textStatus, errorThrown)
 				{
 					$('#navmodsSelect #div-fail').show().delay(3000).hide(1);
-					saveBtn.removeAttr('disabled');
+					EnableSaveButton(saveBtn);
 				}
 	});
 }

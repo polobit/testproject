@@ -215,17 +215,17 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 		return;
 
 	// Disables save button to prevent multiple click event issues
-	$(saveBtn).attr('disabled', 'disabled');
+	DisableSaveButton($(saveBtn));//$(saveBtn).attr('disabled', 'disabled');
 
 	if (!isValidForm('#' + formId)) {
 
 		// Removes disabled attribute of save button
-		$(saveBtn).removeAttr('disabled');
+		EnableSaveButton($(saveBtn));//$(saveBtn).removeAttr('disabled');
 		return false;
 	}
 
 	// Show loading symbol until model get saved
-	$('#' + modalId).find('span.save-status').html(LOADING_HTML);
+	//$('#' + modalId).find('span.save-status').html(LOADING_HTML);
 
 	var json = serializeForm(formId);
 	if (!isUpdate)
@@ -238,13 +238,13 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 		success : function(data) {
 
 			// Removes disabled attribute of save button
-			$(saveBtn).removeAttr('disabled');
+			EnableSaveButton($(saveBtn));//$(saveBtn).removeAttr('disabled');
 
 			$('#' + formId).each(function() {
 				this.reset();
 			});
 
-			$('#' + modalId).find('span.save-status img').remove();
+			//$('#' + modalId).find('span.save-status img').remove();
 			$('#' + modalId).modal('hide');
 
 			var task = data.toJSON();

@@ -274,14 +274,14 @@ function save_event(formId, modalName, isUpdate, saveBtn)
 		return;
 
 	// Disables save button to prevent multiple click event issues
-	$(saveBtn).attr('disabled', 'disabled');
+	DisableSaveButton($(saveBtn));
 
 	// Save functionality for event
 	if (!isValidForm('#' + formId))
 	{
 
 		// Removes disabled attribute of save button
-		$(saveBtn).removeAttr('disabled');
+		EnableSaveButton($(saveBtn));
 		return false;
 	}
 
@@ -294,12 +294,12 @@ function save_event(formId, modalName, isUpdate, saveBtn)
 	{
 
 		// Removes disabled attribute of save button
-		$(saveBtn).removeAttr('disabled');
+		EnableSaveButton($(saveBtn));
 		return;
 	}
 
 	// Show loading symbol until model get saved
-	$('#' + modalName).find('span.save-status').html(LOADING_HTML);
+	//$('#' + modalName).find('span.save-status').html(LOADING_HTML);
 
 	// Appending start time to start date
 	var startarray = (json.start_time).split(":");
@@ -326,14 +326,14 @@ function save_event(formId, modalName, isUpdate, saveBtn)
 	{
 
 		// Removes disabled attribute of save button
-		$(saveBtn).removeAttr('disabled');
+		EnableSaveButton($(saveBtn));//$(saveBtn).removeAttr('disabled');
 
 		$('#' + formId).each(function()
 		{
 			this.reset();
 		});
 
-		$('#' + modalName).find('span.save-status img').remove();
+		//$('#' + modalName).find('span.save-status img').remove();
 		$('#' + modalName).modal('hide');
 
 		// $('#calendar').fullCalendar( 'refetchEvents' );

@@ -33,7 +33,7 @@
 	<Extension id="AgileCRMGadget" type="gadget">
 		<Name>AgileCRM - Built with Love for Small Businesses - contextual
 			gadget</Name>
-		<Url>https://googleapps.agilecrm.com/misc/gmail/agile-gadget.xml</Url>
+		<Url>https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/misc/gmail/agile-gadget.xml</Url>
 		<Container name="mail" />
 	</Extension>
 
@@ -43,6 +43,7 @@
   <Reason>AgileCRM looks at from address to determine if there is a match in CRM.</Reason>
 </Scope>
 
+<!-- SCOPE -->
 <Scope id="emailName">
   <Url>tag:google.com,2010:auth/contextual/extractor/FROM_PERSONAL</Url>
   <Reason>AgileCRM looks at sender's name to prefill the new-contact information</Reason>

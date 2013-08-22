@@ -42,18 +42,18 @@ $(function()
 			return;
 
 		// Disables save button to prevent multiple click event issues
-		$(this).attr('disabled', 'disabled');
+		DisableSaveButton($(this));//$(this).attr('disabled', 'disabled');
 
 		if (!isValidForm('#noteUpdateForm'))
 		{
 
 			// Removes disabled attribute of save button
-			$(this).removeAttr('disabled');
+			EnableSaveButton($(this));
 			return;
 		}
 
 		// Shows loading symbol until model get saved
-		$('#noteUpdateModal').find('span.save-status').html(LOADING_HTML);
+		//$('#noteUpdateModal').find('span.save-status').html(LOADING_HTML);
 
 		var json = serializeForm("noteUpdateForm");
 		
@@ -81,13 +81,13 @@ $(function()
 			return;
 
 		// Disables save button to prevent multiple click event issues
-		$(this).attr('disabled', 'disabled');
+		DisableSaveButton($(this));//$(this).attr('disabled', 'disabled');
 
 		if (!isValidForm('#noteForm'))
 		{
 
 			// Removes disabled attribute of save button
-			$(this).removeAttr('disabled');
+			EnableSaveButton($(this));//$(this).removeAttr('disabled');
 			return;
 		}
 
@@ -135,7 +135,7 @@ $(function()
 		{
 
 			// Removes disabled attribute of save button
-			$(element).removeAttr('disabled');
+			EnableSaveButton($(element));//$(element).removeAttr('disabled');
 
 			form.each(function()
 			{
@@ -143,7 +143,7 @@ $(function()
 			});
 
 			// Removes loading symbol and hides the modal
-			modal.find('span.save-status img').remove();
+			//modal.find('span.save-status img').remove();
 			modal.modal('hide');
 
 			var note = data.toJSON();
