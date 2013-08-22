@@ -53,7 +53,7 @@ public class TwitterUtil
 	 * We include it, while sending a message or tweet in Twitter from Agile
 	 * </p>
 	 */
-	public static final String AGILETWITTERSOURCEMESSAGE = " via @agile_crm";
+	public static final String AGILE_TWITTER_SOURCE_MESSAGE = "-via @agile_crm";
 
 	/**
 	 * Creates a twitter instance and sets the consumer tokens (developer
@@ -419,7 +419,7 @@ public class TwitterUtil
 		try
 		{
 			// Get twitter object and tweet in twitter
-			Status status = getTwitter(widget).updateStatus(message + AGILETWITTERSOURCEMESSAGE);
+			Status status = getTwitter(widget).updateStatus(message + AGILE_TWITTER_SOURCE_MESSAGE);
 			System.out.println("Tweet: " + JSONUtil.toJSONString(status));
 			return "Successful";
 		}
@@ -493,7 +493,7 @@ public class TwitterUtil
 				return "You can send a message only to persons who is following you";
 
 			DirectMessage directMessage = twitter.sendDirectMessage(Long.parseLong(twitterId), message
-					+ AGILETWITTERSOURCEMESSAGE);
+					+ AGILE_TWITTER_SOURCE_MESSAGE);
 
 			// If returned DM id is zero, message is not sent
 			if (directMessage.getId() == 0)
