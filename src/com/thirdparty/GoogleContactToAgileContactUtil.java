@@ -1,4 +1,4 @@
-package com.agilecrm.social;
+package com.thirdparty;
 
 import java.net.URL;
 import java.util.List;
