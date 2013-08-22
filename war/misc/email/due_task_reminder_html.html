@@ -84,10 +84,19 @@
 				<br /> Best Wishes, <br /> AgileCRM Support. <br />
 				http://www.agilecrm.com
 				<div style="text-align: right">
-					<a href="{{domain}}.agilecrm.com" target="_blank"> <img
-						style="border: 0; margin-top: 10px"
-						src="https://agilecrm.s3.amazonaws.com/email/agilecrm-logo.jpg"
-						alt="Logo for AgileCRM" />
+					<a 
+						{{#tasks}}
+							{{#taskOwner.domain}}
+								href="https://{{taskOwner.domain}}.agilecrm.com"
+							{{/taskOwner.domain}}
+							{{^taskOwner.domain}}
+								href="https://www.agilecrm.com"
+							{{/taskOwner.domain}}
+						{{/tasks}} 
+						target="_blank"> 
+						<img style="border: 0; margin-top: 10px"
+							src="https://agilecrm.s3.amazonaws.com/email/agilecrm-logo.jpg"
+							alt="Logo for AgileCRM" />
 					</a>
 				</div>
 			</div>
