@@ -502,11 +502,10 @@ var Base_Model_View = Backbone.View
  */
 function DisableSaveButton(elem)
 {
-	elem.attr('disabled', 'disabled')
+	elem.css('min-width',elem.width()+'px')
+		.attr('disabled', 'disabled')
 		.attr('data-save-text',elem.text())
-		.css('width','auto')
-		.css('min-width',elem.width()+'px');
-	elem.text('Saving...');
+		.text('Saving...');
 }
 
 function EnableSaveButton(elem)
