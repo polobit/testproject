@@ -28,8 +28,7 @@ public class Start extends TaskletAdapter
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
 	// Set campaign-status as campaignId-ACTIVE.
-	CampaignStatusUtil.setStatusOfCampaign(AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON),
-		AgileTaskletUtil.getId(campaignJSON) + "-" + Status.ACTIVE);
+	CampaignStatusUtil.setStatusOfCampaign(AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON), Status.ACTIVE);
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, "start");
