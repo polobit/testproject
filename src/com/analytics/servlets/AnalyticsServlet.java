@@ -27,8 +27,7 @@ import com.google.appengine.api.NamespaceManager;
 @SuppressWarnings("serial")
 public class AnalyticsServlet extends HttpServlet
 {
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
-	    throws IOException
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
 	doPost(request, response);
     }
@@ -40,8 +39,7 @@ public class AnalyticsServlet extends HttpServlet
      * javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest
      * , javax.servlet.http.HttpServletResponse)
      */
-    public void doPost(HttpServletRequest req, HttpServletResponse res)
-	    throws IOException
+    public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException
     {
 	// Domain
 	String domain = NamespaceManager.get();
@@ -87,9 +85,12 @@ public class AnalyticsServlet extends HttpServlet
 		ref = null;
 	}
 
-	// Insert into table
-	AnalyticsSQLUtil.addToPageViews(domain, guid, email, sid, url, ip,
-		isNew, ref, userAgent, country, region, city, cityLatLong);
+	// if domain is empty, avoid adding to SQL.
+	if (!StringUtils.isEmpty(domain))
+	{
+	    // Insert into table
+	    AnalyticsSQLUtil.addToPageViews(domain, guid, email, sid, url, ip, isNew, ref, userAgent, country, region, city, cityLatLong);
+	}
 
 	// Show notification with url
 	if (!StringUtils.isEmpty(email))
@@ -104,8 +105,7 @@ public class AnalyticsServlet extends HttpServlet
 		e.printStackTrace();
 	    }
 
-	    NotificationPrefsUtil.executeNotification(Type.IS_BROWSING,
-		    ContactUtil.searchContactByEmail(email), json);
+	    NotificationPrefsUtil.executeNotification(Type.IS_BROWSING, ContactUtil.searchContactByEmail(email), json);
 	}
     }
 
