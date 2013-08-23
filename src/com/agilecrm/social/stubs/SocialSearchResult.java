@@ -5,8 +5,8 @@ import java.util.List;
 import javax.persistence.Embedded;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.agilecrm.social.TwitterUtil;
 import com.agilecrm.social.linkedin.LinkedInUtil;
+import com.agilecrm.social.twitter.TwitterUtil;
 
 /**
  * <code>SocialSearchResult</code> contains fields required by

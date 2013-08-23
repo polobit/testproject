@@ -21,7 +21,6 @@ import twitter4j.Twitter;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.social.TwitterUtil;
 import com.agilecrm.social.linkedin.LinkedInConnect;
 import com.agilecrm.social.linkedin.LinkedInConnections;
 import com.agilecrm.social.linkedin.LinkedInExperience;
@@ -32,6 +31,15 @@ import com.agilecrm.social.linkedin.LinkedInUpdates;
 import com.agilecrm.social.linkedin.LinkedInUtil;
 import com.agilecrm.social.stubs.SocialSearchResult;
 import com.agilecrm.social.stubs.SocialUpdateStream;
+import com.agilecrm.social.twitter.TwitterFollow;
+import com.agilecrm.social.twitter.TwitterFollowers;
+import com.agilecrm.social.twitter.TwitterFollowing;
+import com.agilecrm.social.twitter.TwitterMessage;
+import com.agilecrm.social.twitter.TwitterProfile;
+import com.agilecrm.social.twitter.TwitterSearch;
+import com.agilecrm.social.twitter.TwitterTweet;
+import com.agilecrm.social.twitter.TwitterUpdates;
+import com.agilecrm.social.twitter.TwitterUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 
@@ -88,7 +96,7 @@ public class LinkedInTwitterWidgetsAPI
 		return LinkedInSearch.searchLinkedInProfiles(widget, contact);
 
 	    else if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterUtil.searchTwitterProfiles(widget, contact);
+		return TwitterSearch.searchTwitterProfiles(widget, contact);
 	}
 	catch (SocketTimeoutException e)
 	{
@@ -209,7 +217,7 @@ public class LinkedInTwitterWidgetsAPI
 	     * Profiles are searched based on given search string
 	     */
 	    if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterUtil.modifiedSearchForTwitterProfiles(widget,
+		return TwitterSearch.modifiedSearchForTwitterProfiles(widget,
 			searchString);
 
 	}
@@ -328,7 +336,7 @@ public class LinkedInTwitterWidgetsAPI
 
 	    // Gets profile from TwitterUtil based on socialId
 	    else if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterUtil.getTwitterProfileById(widget, socialId);
+		return TwitterProfile.getTwitterProfileById(widget, socialId);
 	}
 
 	catch (SocketTimeoutException e)
@@ -441,7 +449,7 @@ public class LinkedInTwitterWidgetsAPI
 			null, null);
 
 	    else if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterUtil.getNetworkUpdates(widget,
+		return TwitterUpdates.getNetworkUpdates(widget,
 			Long.parseLong(socialId));
 
 	}
@@ -505,7 +513,7 @@ public class LinkedInTwitterWidgetsAPI
 	     * tweets tweeted before the given tweet id
 	     */
 	    if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterUtil.getNetworkUpdates(widget,
+		return TwitterUpdates.getNetworkUpdates(widget,
 			Long.parseLong(socialId), Long.parseLong(tweetId) - 5,
 			Integer.parseInt(endIndex));
 
@@ -709,7 +717,7 @@ public class LinkedInTwitterWidgetsAPI
 
 	    // Calls TwitterUtil method to retweet a tweet in Twitter by its ID
 	    else if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterUtil.reTweetByTweetId(widget,
+		return TwitterTweet.reTweetByTweetId(widget,
 			Long.parseLong(shareId));
 
 	}
@@ -765,7 +773,7 @@ public class LinkedInTwitterWidgetsAPI
 	     * profile with socialId
 	     */
 	    if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterUtil.getFollowersIDs(widget, socialId);
+		return TwitterFollowers.getFollowersIDs(widget, socialId);
 
 	}
 	catch (SocketTimeoutException e)
@@ -818,7 +826,7 @@ public class LinkedInTwitterWidgetsAPI
 
 	    // If widget name equals Twitter, get following IDs
 	    if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterUtil.getFollowingIDs(widget, socialId);
+		return TwitterFollowing.getFollowingIDs(widget, socialId);
 
 	}
 	catch (SocketTimeoutException e)
@@ -1001,7 +1009,7 @@ public class LinkedInTwitterWidgetsAPI
 
 	    // Calls TwitterUtil method to send message to person by socialId
 	    else if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterUtil.follow(widget, Long.parseLong(socialId));
+		return TwitterFollow.follow(widget, Long.parseLong(socialId));
 	}
 	catch (SocketTimeoutException e)
 	{
@@ -1054,7 +1062,7 @@ public class LinkedInTwitterWidgetsAPI
 	     * profile in Twitter with given Twitter ID
 	     */
 	    if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterUtil.unfollow(widget, Long.parseLong(socialId));
+		return TwitterFollow.unfollow(widget, Long.parseLong(socialId));
 	}
 	catch (SocketTimeoutException e)
 	{
@@ -1122,7 +1130,7 @@ public class LinkedInTwitterWidgetsAPI
 	     * based on widget name
 	     */
 	    else if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterUtil.sendTwitterMessageById(widget, socialId,
+		return TwitterMessage.sendTwitterMessageById(widget, socialId,
 			message);
 	}
 	catch (SocketTimeoutException e)
@@ -1177,7 +1185,7 @@ public class LinkedInTwitterWidgetsAPI
 	     * name which is included in the message
 	     */
 	    if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterUtil.tweetInTwitter(widget, message);
+		return TwitterTweet.tweetInTwitter(widget, message);
 
 	}
 	catch (SocketTimeoutException e)
