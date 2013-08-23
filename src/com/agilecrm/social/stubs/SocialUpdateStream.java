@@ -2,8 +2,8 @@ package com.agilecrm.social.stubs;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.agilecrm.social.LinkedInUtil;
 import com.agilecrm.social.TwitterUtil;
+import com.agilecrm.social.linkedin.LinkedInUtil;
 
 /**
  * <code>SocialUpdateStream</code> contains fields required by
