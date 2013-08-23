@@ -10,13 +10,11 @@
  */
 $(function() {
 
-	$('.agile-edit-row > tr').live('click', function(e) {
+	$('.agile-edit-row > tr > td:not(":first-child")').live('click', function(e) {
 		e.preventDefault();
+		
 		var route = $('.agile-edit-row').attr('route')
-		var data = $(this).find('.data').attr('data');
-
-		// Customize table edit
-		customize_table_edit(this, route);
+		var data = $(this).closest('tr').find('.data').attr('data');
 
 		console.log(data);
 		if (data) {
@@ -27,19 +25,3 @@ $(function() {
 	});
 });
 
-/**
- * Customizes the edit functionality based on route value. For example in deals
- * the popover should be hidden
- * 
- * @param {Object}
- *            that html object of clicked row.
- * @param {String} route
- * 				value of the route.
- * 			
- */
-function customize_table_edit(that, route) {
-
-	// Hide deals popover
-	if (route == 'deals/')
-		$(that).popover('hide');
-}
