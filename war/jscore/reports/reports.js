@@ -66,8 +66,11 @@ $(function(){
 })
 
 
-function reportsContactTableView(base_model) {
-
+function reportsContactTableView(base_model) 
+{
+/* Old Code :
+ * Using this fails on firefox, works on Chrome though
+ * 
 	// Creates list view for
 	var itemView = new Base_List_View({
 		model : base_model,
@@ -100,10 +103,29 @@ function reportsContactTableView(base_model) {
 
 	// Appends model to model-list template in collection template
 	$(("#" + this.options.templateKey + '-model-list'), this.el).append(
-			itemView.render().el);
+			itemView.render().el); // ----------- this line fails on Firefox
+*/
+	
+	var modelData = this.options.modelData;	// Reads the modelData (customView object)
+	var fields = modelData['fields_set']; // Reads fields_set from modelData
+	var contact = base_model.toJSON(); // Converts base_model (contact) in to JSON
+	var final_html_content="";
+	var element_tag=this.options.individual_tag_name;
+	
+	// Iterates through, each field name and appends the field according to
+	// order of the fields
+	$.each(fields, function(index, field_name) {
+		if(field_name.indexOf("properties_") != -1)
+			field_name = field_name.split("properties_")[1];
+		
+		final_html_content+=getTemplate('contacts-custom-view-' + field_name, contact);
+	});
 
+	// Appends model to model-list template in collection template
+	$(("#" + this.options.templateKey + '-model-list'), this.el).append(
+			'<'+element_tag+'>'+final_html_content+'</'+element_tag+'>');	
+	
 	// Sets data to tr
 	$(('#' + this.options.templateKey + '-model-list'), this.el).find('tr:last').data(
 			base_model);
-
 }
