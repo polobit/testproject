@@ -111,8 +111,7 @@ public class TaskletUtil
 
 		// Records end-time of campaign and change status to
 		// campaignId-DONE.
-		CampaignStatusUtil.setStatusOfCampaign(AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON),
-			AgileTaskletUtil.getId(campaignJSON) + "-" + Status.DONE);
+		CampaignStatusUtil.setStatusOfCampaign(AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON), Status.DONE);
 
 		return;
 	    }

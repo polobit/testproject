@@ -207,7 +207,7 @@
 
 	<servlet>
 		<servlet-name>TwilioVoiceServlet</servlet-name>
-		<servlet-class>com.agilecrm.twilio.TwilioVoiceServlet</servlet-class>
+		<servlet-class>com.thirdparty.twilio.TwilioVoiceServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>TwilioVoiceServlet</servlet-name>

@@ -5,6 +5,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -26,6 +29,7 @@ import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.workflows.status.CampaignStatus;
 import com.googlecode.objectify.Key;
 
 /**
@@ -529,6 +533,23 @@ public class ContactUtil
 	return contactName;
     }
 
+    public static Map<String, Object> getMapFromContact(Contact contact)
+    {
+	try
+	{
+	    Map<String, Object> mp = new HashMap<String, Object>();
+	    mp = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(contact),
+		    new TypeReference<HashMap<String, Object>>()
+		    {
+		    });
+	    return mp;
+	}
+	catch (Exception e)
+	{
+	    return new HashMap<String, Object>();
+	}
+    }
+
     public static List<Contact> getRecentContacts(String page_size)
     {
 	return dao.ofy().query(Contact.class).filter("viewed.viewer_id", SessionManager.get().getDomainId())
@@ -634,5 +655,55 @@ public class ContactUtil
 	Matcher matcher = pattern.matcher(hex);
 	return matcher.matches();
 
+    }
+
+    /**
+     * Returns list of contacts having campaignId in the campaignStatus.
+     * 
+     * @param campaignId
+     *            - Campaign Id
+     * @return List<Contact>
+     */
+    public static List<Contact> getContactsByCampaignId(String campaignId)
+    {
+	Map<String, Object> conditionsMap = new HashMap<String, Object>();
+	conditionsMap.put("campaignStatus.campaign_id", campaignId);
+	return dao.listByProperty(conditionsMap);
+    }
+
+    /**
+     * Removes campaignStatus from Contact when corresponding workflow is
+     * deleted.
+     * 
+     * @param campaignId
+     *            - CampaignId of campaign that gets deleted.
+     */
+    public static void removeCampaignStatus(String campaignId)
+    {
+
+	// Gets list of contacts whose campaignId matches in campaignStatus
+	List<Contact> contactList = getContactsByCampaignId(campaignId);
+
+	if (contactList == null)
+	    return;
+
+	// Iterate over contacts
+	for (Contact contact : contactList)
+	{
+	    Iterator<CampaignStatus> campaignStatusIterator = contact.campaignStatus.listIterator();
+
+	    // Iterates over campaignStatus list.
+	    while (campaignStatusIterator.hasNext())
+	    {
+		if (!StringUtils.isEmpty(campaignId) && campaignId.equals(campaignStatusIterator.next().campaign_id))
+		{
+		    campaignStatusIterator.remove();
+		    break;
+		}
+	    }
+
+	    // save changes
+	    contact.save();
+	}
     }
 }

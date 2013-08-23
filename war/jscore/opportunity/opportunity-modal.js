@@ -145,16 +145,16 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 		return;
 
 	// Disables save button to prevent multiple click event issues
-	$(saveBtn).attr('disabled', 'disabled');
+	DisableSaveButton($(saveBtn));//$(saveBtn).attr('disabled', 'disabled');
 	
 	if (!isValidForm('#' + formId)) {
 		// Removes disabled attribute of save button
-		$(saveBtn).removeAttr('disabled');
+		EnableSaveButton($(saveBtn));//$(saveBtn).removeAttr('disabled');
 		return false;
 	}
 	
 	// Shows loading symbol until model get saved
-    $('#' + modalId).find('span.save-status').html(LOADING_HTML);
+    // $('#' + modalId).find('span.save-status').html(LOADING_HTML);
 
 	var newDeal = new Backbone.Model();
 	newDeal.url = 'core/api/opportunity';
@@ -162,9 +162,9 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 		success : function(data) {
 
 			// Removes disabled attribute of save button
-			$(saveBtn).removeAttr('disabled');
+			EnableSaveButton($(saveBtn));//$(saveBtn).removeAttr('disabled');
 
-			$('#' + modalId).find('span.save-status img').remove();
+			//$('#' + modalId).find('span.save-status img').remove();
 			$('#' + modalId).modal('hide');
 
 			$('#' + formId).each(function() {

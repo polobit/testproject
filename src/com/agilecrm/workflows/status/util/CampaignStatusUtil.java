@@ -30,54 +30,99 @@ public class CampaignStatusUtil
      * @param status
      *            - Campaign Status.
      */
-    public static void setStatusOfCampaign(String contactId, String campaignId, String status)
+    public static void setStatusOfCampaign(String contactId, String campaignId, Status status)
     {
-	// Temporary flag to know old or new campaign-status.
-	boolean flag = false;
-
-	Long recordTime = Calendar.getInstance().getTimeInMillis() / 1000;
-
 	Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
 
 	if (contact == null)
 	    return;
 
+	// ACTIVE status
+	if (status.equals(Status.ACTIVE))
+	{
+	    setCampaignStatusActive(contact, campaignId);
+	    return;
+	}
+
+	// DONE
+	setCampaignStatusDone(contact, campaignId);
+    }
+
+    /**
+     * Sets campaign-status of contact to ACTIVE, when contact subscribes to
+     * campaign. The active status is set in Start node of campaign.
+     * <p>
+     * Here we have two conditions: 1. When contact subscribes to campaign for
+     * the first-time. 2. When contact subscribes once again to the same
+     * campaign.
+     * </p>
+     * 
+     * @param contact
+     *            - Contact subscribed to campaign.
+     * @param campaignId
+     *            - CampaignId of active campaign.
+     */
+    private static void setCampaignStatusActive(Contact contact, String campaignId)
+    {
+	boolean isNew = true;
+
+	Long statusTime = Calendar.getInstance().getTimeInMillis() / 1000;
+
 	List<CampaignStatus> campaignStatusList = contact.campaignStatus;
 
-	// Search for status of required campaign-id.
+	// if subscribed once again, update campaign status.
 	for (CampaignStatus campaignStatus : campaignStatusList)
 	{
-	    if (!campaignStatus.campaign_id.equals(campaignId))
-		continue;
-
-	    // If same campaign runs again, update campaign-status.
-	    if (status.equals(((campaignStatus.campaign_id)) + "-" + Status.ACTIVE))
+	    if (campaignStatus.campaign_id.equals(campaignId))
 	    {
-		campaignStatus.start_time = recordTime;
+		campaignStatus.start_time = statusTime;
 		campaignStatus.end_time = null;
-		campaignStatus.status = (campaignStatus.campaign_id) + "-" + Status.ACTIVE;
+		campaignStatus.status = campaignId + "-" + Status.ACTIVE;
 
-		// True to avoid new CampaignStatus to be created
-		flag = true;
-		break;
-	    }
-
-	    // Updates status from ACTIVE to DONE when campaign is completed.
-	    if (status.equals(((campaignStatus.campaign_id) + "-" + Status.DONE)))
-	    {
-		campaignStatus.end_time = recordTime;
-		campaignStatus.status = ((campaignStatus.campaign_id) + "-" + Status.DONE);
+		// False to avoid new CampaignStatus to be created
+		isNew = false;
 		break;
 	    }
 	}
 
-	// When campaign runs for the first-time
-	if (status.equals((campaignId + "-" + Status.ACTIVE)) && !flag)
+	// if subscribed first-time, add campaignStatus to the list.
+	if (isNew)
 	{
-	    CampaignStatus campaignStatus = new CampaignStatus(recordTime, null, campaignId, (campaignId + "-" + Status.ACTIVE));
+	    CampaignStatus campaignStatus = new CampaignStatus(statusTime, null, campaignId, (campaignId + "-" + Status.ACTIVE));
 	    contact.campaignStatus.add(campaignStatus);
 	}
 
 	contact.save();
     }
+
+    /**
+     * Sets campaign-status of contact to DONE, when campaign completed for that
+     * contact. Campaign status done is set when campaign came to hang-up node
+     * which is set in TaskletUtil.
+     * 
+     * @param contact
+     *            - Contact subscribed to campaign.
+     * @param campaignId
+     *            - CampaignId of done campaign.
+     */
+    private static void setCampaignStatusDone(Contact contact, String campaignId)
+    {
+	Long statusTime = Calendar.getInstance().getTimeInMillis() / 1000;
+
+	List<CampaignStatus> campaignStatusList = contact.campaignStatus;
+
+	// Sets end-time and updates status from ACTIVE to DONE.
+	for (CampaignStatus campaignStatus : campaignStatusList)
+	{
+	    if (campaignStatus.campaign_id.equals(campaignId))
+	    {
+		campaignStatus.end_time = statusTime;
+		campaignStatus.status = (campaignStatus.campaign_id) + "-" + Status.DONE;
+		break;
+	    }
+	}
+
+	contact.save();
+    }
+
 }

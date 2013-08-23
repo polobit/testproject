@@ -1,4 +1,4 @@
-package com.agilecrm.twilio;
+package com.thirdparty.twilio;
 
 import java.io.IOException;
 

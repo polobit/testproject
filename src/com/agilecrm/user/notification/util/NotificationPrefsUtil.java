@@ -11,7 +11,6 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.notification.NotificationPrefs;
-import com.agilecrm.user.notification.NotificationPrefs.ContactType;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.deferred.NotificationsDeferredTask;
 import com.google.appengine.api.NamespaceManager;
@@ -76,8 +75,8 @@ public class NotificationPrefsUtil
      */
     private static NotificationPrefs getDefaultNotifications(AgileUser agileUser)
     {
-	NotificationPrefs notifications = new NotificationPrefs(agileUser.id, true, ContactType.ANY_CONTACT, ContactType.ANY_CONTACT, ContactType.ANY_CONTACT,
-		false, true, false, false, false, false, "alert_1");
+	NotificationPrefs notifications = new NotificationPrefs(agileUser.id, true, "ANY_CONTACT", "ANY_CONTACT", "ANY_CONTACT", false, true, false, false,
+		false, false, "alert_1");
 	notifications.save();
 	return notifications;
     }
@@ -113,8 +112,67 @@ public class NotificationPrefsUtil
 	queue.add(TaskOptions.Builder.withPayload(notificationsDeferredTask));
     }
 
+    /**
+     * Optimizes object size that is sent in notification. PubNub restricts size
+     * of object that is sent based on billable, so sending only required
+     * content.
+     * 
+     * @param type
+     *            - notification type.
+     * @param object
+     *            - Object that is sent.
+     * @param customValue
+     *            - custom value like tag-name, url clicked etc.
+     * @return JSONObject
+     */
     private static JSONObject optimizeObjectForNotification(Type type, Object object, JSONObject customValue)
     {
+
+	try
+	{
+	    JSONObject json = getNotificationJSON(object);
+
+	    // Insert notification-type into json
+	    json.put("notification", type.toString());
+
+	    if (customValue != null)
+		// to insert tag-value and url link in notification
+		json.put("custom_value", customValue.getString("custom_value"));
+
+	    // To show notifications for all other users except action
+	    // performer. It doesn't works for tags added from campaigns,
+	    // browsing, link-clicked and email-opened notifications as there
+	    // won't be any session. All users get notifications in these cases.
+	    if (SessionManager.get() != null)
+	    {
+		AgileUser agileUser = AgileUser.getCurrentAgileUser();
+
+		if (agileUser != null)
+		    json.put("current_user_name", agileUser.getDomainUser().name);
+	    }
+
+	    System.out.println("Object json of notification: " + json);
+	    return json;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.out.println("Got exception while optimising notification " + e.getMessage());
+	    return null;
+	}
+
+    }
+
+    /**
+     * Returns object of notification in json.
+     * 
+     * @param object
+     *            - Object to be sent in notification such as Contact or Deal.
+     * @return JSONObject
+     */
+    private static JSONObject getNotificationJSON(Object object)
+    {
+
 	String objectStr = null;
 
 	try
@@ -129,6 +187,7 @@ public class NotificationPrefsUtil
 
 	JSONObject json = new JSONObject();
 
+	// Contact
 	if (object instanceof Contact)
 	{
 	    try
@@ -141,6 +200,7 @@ public class NotificationPrefsUtil
 	    }
 	}
 
+	// Deals
 	if (object instanceof Opportunity)
 	{
 	    try
@@ -152,36 +212,6 @@ public class NotificationPrefsUtil
 		e.printStackTrace();
 	    }
 
-	}
-
-	try
-	{
-	    // Insert notification-type into json
-	    json.put("notification", type.toString());
-
-	    if (customValue != null)
-		// to insert tag-value and url link in notification
-		json.put("custom_value", customValue.getString("custom_value"));
-
-	    // To show notifications for all other users except action
-	    // performer. It doesn't works for tags added from campaigns,
-	    // browsing, link-clicked
-	    // and email-opened notifications as there won't be any session.
-	    // All
-	    // users get notifications in these cases.
-	    if (SessionManager.get() != null)
-	    {
-		AgileUser agileUser = AgileUser.getCurrentAgileUser();
-
-		if (agileUser != null)
-		    json.put("current_user_name", agileUser.getDomainUser().name);
-	    }
-
-	    System.out.println("Object json of notification: " + json);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
 	}
 
 	return json;
@@ -219,11 +249,11 @@ public class NotificationPrefsUtil
     }
 
     /**
-     * Returns required contact properties.
+     * Returns required contact properties as JSONArray
      * 
      * @param contactJSON
      *            - Contact JSON object.
-     * @return
+     * @return JSONArray
      */
     private static JSONArray getContactProperties(JSONObject contactJSON)
     {
@@ -237,6 +267,7 @@ public class NotificationPrefsUtil
 	    {
 		JSONObject property = properties.getJSONObject(index);
 
+		// Contact properties of type PERSON
 		if (contactJSON.getString("type").equals("PERSON"))
 		{
 		    if (property.getString("name").equals("first_name") || property.getString("name").equals("last_name")
@@ -244,6 +275,7 @@ public class NotificationPrefsUtil
 			propertyArray.put(property);
 		}
 
+		// Contact properties of type COMPANY
 		if (contactJSON.getString("type").equals("COMPANY"))
 		{
 		    if (property.getString("name").equals("name") || property.getString("name").equals("url"))

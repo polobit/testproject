@@ -3,6 +3,7 @@ package com.agilecrm.workflows.util;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.contact.util.ContactUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.twitter.util.TwitterJobQueueUtil;
@@ -48,6 +49,10 @@ public class WorkflowDeleteUtil
 
 	    // Deletes twitter-jobs of campaign
 	    TwitterJobQueueUtil.removeTwitterJobs(campaignId, null, namespace);
+
+	    // Deletes CampaignStatus from contact
+	    ContactUtil.removeCampaignStatus(campaignId);
+
 	}
     }
 }

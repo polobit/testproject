@@ -1,4 +1,4 @@
-package com.agilecrm.twilio.sdk;
+package com.thirdparty.twilio.sdk;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

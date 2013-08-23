@@ -399,7 +399,13 @@ function agile_init_handlers() {
 		$('.contact-search-waiting', el).show();
 		// Get contact status based on email.
 		agile_getContact(email, function(val) {
-
+			
+			// Set library path for campaign link, check for local host.
+			if(Is_Localhost)
+				val.ac_path = Lib_Path;
+			else
+				val.ac_path = "https://"+ agile_id.namespace +".agilecrm.com/";
+			
 			// Merge Server response object with Contact_Json object.
 			$.extend(Contacts_Json[email], val);
 
@@ -580,9 +586,11 @@ function agile_init_handlers() {
 				var lib_json = {};
 				// Set library path for campaign link, check for local host.
 				if(Is_Localhost)
-					lib_json["lib_path"] = Lib_Path;
-				else
-					lib_json["lib_path"] = "https://"+ response.owner.domain +".agilecrm.com/";
+					lib_json["ac_path"] = Lib_Path;
+				else{
+					lib_json["ac_path"] = "https://"+ agile_id.namespace +".agilecrm.com/";
+				}
+				lib_json["lib_path"] = Lib_Path;
 				lib_json["response"] = response; 
 				
 				// Fill campaigns list in tab.
