@@ -17,11 +17,10 @@
  *            table as html object
  */
 function sort_tables(table) {
-
+	
 	head.js(LIB_PATH + "lib/jquery.tablesorter.min.js", function() {
 
 		$(table).tablesorter({
-
 			// Disable the sorting property to the first column of the table
 			// (first colon contains check-boxes)
 			// pass the headers argument and assign a object
@@ -29,10 +28,85 @@ function sort_tables(table) {
 				0 : {
 					// disable it by setting the property sorter to false
 					sorter : false
-				},
-
+				}
 			}
-
 		});
+		
+		$("#task-list").tablesorter({ 
+	        headers: {
+	        	0 : {sorter : false},
+	        	1 : {sorter : false},
+	        	2 : {sorter : 'text'},
+	        	3 : {sorter : 'text'},
+	            4: {sorter:'priority'},
+				5 : {sorter : 'time-ago'},
+				6 : {sorter : false}
+	        } 
+	    }); 
+		
+		$("#deal-list").tablesorter({ 
+	        headers: { 
+	        	0 : {sorter : false	},
+	        	1 : {sorter : 'text'},
+	        	2 : {sorter : false},
+	        	3 : {sorter : 'money'},
+	        	4 : {sorter : 'text'},
+				5 : {sorter : 'time-ago'},
+	        	6 : {sorter : false}
+	        },
+	    });
+	    
+	    // add parser through the tablesorter addParser method to sort tasks based on priority
+	    $.tablesorter.addParser({ 
+	        // set a unique id 
+	        id: 'priority', 
+	        is: function(s) { 
+	            // return false so this parser is not auto detected 
+	            return false; 
+	        }, 
+	        format: function(s) { 
+	            // format your data for normalization 
+	            return s.toLowerCase().replace(/high/,2).replace(/normal/,1).replace(/low/,0); 
+	        }, 
+	        // set type, either numeric or text 
+	        type: 'numeric' 
+	    }); 
+	    
+	    // add parser through the tablesorter addParser method to sort based on date
+	    $.tablesorter.addParser({ 
+	        // set a unique id 
+	        id: 'time-ago', 
+	        is: function(s) { 
+	            // return false so this parser is not auto detected 
+	            return false; 
+	        }, 
+	        format: function(s, table, cell, cellIndex) { 
+	        	// format your data for normalization
+	        	var time = cell.getElementsByTagName("time");
+	        	if(time)
+	              return $(time).attr("value"); 
+	        }, 
+	        // set type, either numeric or text 
+	        type: 'numeric' 
+	    });
+	    
+	    // add parser through the tablesorter addParser method to sort deal based on value
+	    $.tablesorter.addParser({ 
+	        // set a unique id 
+	        id: 'money', 
+	        is: function(s) { 
+	            // return false so this parser is not auto detected 
+	            return false; 
+	        }, 
+	        format: function(s, table, cell) { 
+	            // format your data for normalization 
+	            return cell.getAttribute("value"); 
+	        }, 
+	        // set type, either numeric or text 
+	        type: 'numeric' 
+	    }); 
+	    
 	});
 }
+
+

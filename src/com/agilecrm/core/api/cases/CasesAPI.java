@@ -37,87 +37,103 @@ import com.agilecrm.user.util.DomainUserUtil;
 @Path("/api/cases")
 public class CasesAPI
 {
-	/**
-	 * GET list of all cases
-	 * 
-	 * @return All Case as List
-	 */
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Case> getAllCases()
-	{
-		return CaseUtil.getCases();
-	}
+    /**
+     * GET list of all cases
+     * 
+     * @return All Case as List
+     */
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Case> getAllCases()
+    {
+	return CaseUtil.getCases();
+    }
 
-	/**
-	 * Get a specific based on id
-	 * 
-	 * @param id
-	 * @return Case with id = id
-	 */
-	@Path("/{id}")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Case getCase(@PathParam("id") Long id)
-	{
-		return CaseUtil.getCase(id);
-	}
+    /**
+     * Gets map of Status : Count of Case Entities.
+     * 
+     * @return - JSON String containing the map
+     */
+    @GET
+    @Path("/stats/count")
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getStatusCount()
+    {
+	return CaseUtil.getStatusCount().toString();
+    }
 
-	/**
-	 * Adds new Case to database
-	 * 
-	 * @param newCase
-	 *            - case which is to be added to db
-	 * @return Case from db
-	 */
-	@POST
-	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Case createCase(Case newCase)
-	{
-		return CaseUtil.save(newCase);
-	}
+    /**
+     * Get a specific based on id
+     * 
+     * @param id
+     * @return Case with id = id
+     */
+    @Path("/{id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Case getCase(@PathParam("id") Long id)
+    {
+	return CaseUtil.getCase(id);
+    }
 
-	/**
-	 * Update Case
-	 * 
-	 * @param newCase
-	 *            - update with existing Id
-	 * @return updated Case
-	 */
-	@PUT
-	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Case updateCase(Case newCase)
-	{
-		return CaseUtil.save(newCase);
-	}
+    /**
+     * Adds new Case to database
+     * 
+     * @param newCase
+     *            - case which is to be added to db
+     * @return Case from db
+     */
+    @POST
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Case createCase(Case newCase)
+    {
+	newCase.save();
+	return newCase;
+    }
 
-	/**
-	 * Delete a particular case
-	 * 
-	 * @param id
-	 *            - id of Case to delete
-	 */
-	@DELETE
-	@Path("/{id}")
-	public void deleteCase(@PathParam("id") Long id)
-	{
-		CaseUtil.delete(id);
-	}
+    /**
+     * Update Case
+     * 
+     * @param newCase
+     *            - update with existing Id
+     * @return updated Case
+     */
+    @PUT
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Case updateCase(Case newCase)
+    {
+	newCase.save();
+	return newCase;
+    }
 
-	/**
-	 * Bulk delete multiple Cases
-	 * 
-	 * @param ids
-	 *            - id(s) of cases to delete
-	 * @throws JSONException
-	 */
-	@POST
-	@Path("/bulk")
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public void deleteMultipleCases(@FormParam("ids") String ids) throws JSONException
-	{
-		Case.dao.deleteBulkByIds(new JSONArray(ids));
-	}
+    /**
+     * Delete a particular case
+     * 
+     * @param id
+     *            - id of Case to delete
+     */
+    @DELETE
+    @Path("/{id}")
+    public void deleteCase(@PathParam("id") Long id)
+    {
+	CaseUtil.delete(id);
+    }
+
+    /**
+     * Bulk delete multiple Cases
+     * 
+     * @param ids
+     *            - id(s) of cases to delete
+     * @throws JSONException
+     */
+    @POST
+    @Path("/bulk")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void deleteMultipleCases(@FormParam("ids") String ids) throws JSONException
+    {
+	Case.dao.deleteBulkByIds(new JSONArray(ids));
+    }
+
 }

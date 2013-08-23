@@ -20,7 +20,7 @@
                     <div class="text">
 						You can add case by clicking the button below or the one on the right side of the page.
                     </div>
-                    <a href="#" class="cases-add btn blue"><i class="icon-plus-sign"></i>  Add Case !</a>
+                    <a href="#" class="cases-add btn blue"><i class="icon-plus-sign"></i>  Add Case</a>
                 </div>
             </div>
         </div>
@@ -91,7 +91,7 @@
 			</div>
 			{{/each}}
 	</div>
-       {{#if_greater this.contacts.length "3"}}<span>...</span>{{/if_greater}}
+       {{#if_greater this.contacts.length "4"}}<span>...</span>{{/if_greater}}
 </td>
 <td>
 	{{#if_equals status "OPEN"}}
@@ -282,11 +282,10 @@
                     	<div style="display:inline-block;text-overflow:ellipsis;white-space:nowrap;width:90px;overflow:hidden;">
                         	{{getPropertyValue properties "name"}}
 					{{/if_equals}}
-
-					{{#if_equals index ../contacts.length}}
-					{{else}}
-						,
-					{{/if_equals}}
+						{{#if_equals index ../contacts.length}}
+						{{else}}
+							,
+						{{/if_equals}}
 						</div>
                 	</div>
                 {{/each_with_index}}
