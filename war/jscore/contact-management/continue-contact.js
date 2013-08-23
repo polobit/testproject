@@ -146,10 +146,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     		if($('#contact_company').attr('value').length > 100)
     		{
             	show_error(modal_id,form_id,'duplicate-email','Company name too long. Please restrict upto 100 characters.');
-            	
             	enable_save_button($(saveBtn));// Remove loading image
-            	//$('#' + modal_id).find('span.save-status img').remove();
-            	//$('#' + form_id).find('span.save-status img').remove();
             	return;
     		}	
     		obj.contact_company_id=null;
@@ -192,8 +189,6 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
             	show_error(modal_id,form_id,'duplicate-email','Company name too long. Please restrict upto 100 characters.');
             	
             	enable_save_button($(saveBtn));// Remove loading image
-            	// $('#' + modal_id).find('span.save-status img').remove();
-            	// $('#' + form_id).find('span.save-status img').remove();
             	return;
     		}	
     		properties.push(property_JSON('name', 'company_name'));
@@ -314,7 +309,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         	localStorage.removeItem("Agile_twitter_matches_" + data.get('id'));
 
         	// Removes disabled attribute of save button
-        	disable_save_button($(saveBtn));
+        	enable_save_button($(saveBtn));
 			
         	// Adds the tags to tags collection 
         	if (tags != undefined && tags.length != 0)
@@ -368,7 +363,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         error: function (model, response) {
         	
         	// Removes disabled attribute of save button
-        	disable_save_button($(saveBtn));
+        	enable_save_button($(saveBtn));
         	// Remove loading image
         	//$('#' + modal_id).find('span.save-status img').remove();
         	//$('#' + form_id).find('span.save-status img').remove();

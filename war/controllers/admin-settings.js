@@ -115,14 +115,14 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		"all-domain-users" : "allDomainUsers",
 		
 		/* Menu settings - select modules on menu bar*/
-		"menu-settings":"menu_setting"
+		"menu-settings":"menu_settings"
 	},
 	
 	/**
 		Show menu-settings modules selection ( calendar, cases, deals, campaign ) & saving option
 		@author Chandan
 	**/
-	menu_setting : function()
+	menu_settings : function()
 	{
 		$('#content').html(isAdmintemplate);
 		var view = new Base_Model_View({
@@ -133,7 +133,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
         if(($('#content').find('#admin-prefs-tabs-content').html()) == null){
         	console.log("nooooooooooooo ele accountPrefs");
         	getAdminSettings(function(){
-        		App_Admin_Settings.menu_setting();
+        		App_Admin_Settings.menu_settings();
         	});
         }
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);

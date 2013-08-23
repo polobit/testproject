@@ -79,20 +79,16 @@ $(function()
 		// Returns, if the save button has disabled attribute
 		if ($(this).attr('disabled'))
 			return;
-
-		// Disables save button to prevent multiple click event issues
-		disable_save_button($(this));//$(this).attr('disabled', 'disabled');
-
+		
 		if (!isValidForm('#noteForm'))
 		{
-
-			// Removes disabled attribute of save button
-			enable_save_button($(this));//$(this).removeAttr('disabled');
 			return;
 		}
 
+		disable_save_button($(this));
+		
 		// Shows loading symbol until model get saved
-		$('#noteModal').find('span.save-status').html(LOADING_HTML);
+		//$('#noteModal').find('span.save-status').html(LOADING_HTML);
 
 		var json = serializeForm("noteForm");
 

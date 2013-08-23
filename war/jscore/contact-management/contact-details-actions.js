@@ -84,15 +84,17 @@ $(function(){
     			
     			var $form = $('#contactCampaignForm');
 
-    			// Validate Form
-    		    if(!isValidForm($form))
+    			// Button disabled || Validate Form fails
+    		    if($(this).attr('disabled')=='disabled' || !isValidForm($form))
     		    {
-    		    	
     		    	return;
     		    }
     			
+    		    var saveButton=$(this);
+    		    disable_save_button(saveButton);
+    		    
     			// Show loading symbol until model get saved
-    		    $('#contactCampaignForm').find('span.save-status').html(LOADING_HTML);
+    		    //$('#contactCampaignForm').find('span.save-status').html(LOADING_HTML);
     		    
     			var workflow_id = $('#campaign-select option:selected').attr('value');
     						
@@ -104,8 +106,8 @@ $(function(){
     				success: function(){
    				
     					// Remove loading image
-    					$('#contactCampaignForm').find('span.save-status img').remove();
-					
+    					//$('#contactCampaignForm').find('span.save-status img').remove();
+    	    		    enable_save_button(saveButton);
     					// Navigate back to contact detail view
     					Backbone.history.navigate("contact/" + contact_id, {
     						trigger: true
