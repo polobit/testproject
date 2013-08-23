@@ -900,3 +900,31 @@ tbody a.no-style-a {
 	width:100%;
 	overflow:hidden;
 }
+
+
+.agile-overflow-ellipsis {
+	display: inline-block;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 100%;
+	overflow: hidden;
+}
+
+.agile-ellipsis-dynamic {
+overflow: scroll;width:100%;word-break: break-all;table-layout:fixed
+}
+
+ td *:not(.agile-ellipsis){	
+	max-width:100%;
+	height:auto;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+	overflow:hidden;
+}
+
+.agile-ellipsis {
+	width: 100% !important;
+	height:60px !important;
+	overflow: hidden !important;
+	text-overflow: ellipsis !important;
+}

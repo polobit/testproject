@@ -215,12 +215,12 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 		return;
 
 	// Disables save button to prevent multiple click event issues
-	DisableSaveButton($(saveBtn));//$(saveBtn).attr('disabled', 'disabled');
+	disable_save_button($(saveBtn));//$(saveBtn).attr('disabled', 'disabled');
 
 	if (!isValidForm('#' + formId)) {
 
 		// Removes disabled attribute of save button
-		EnableSaveButton($(saveBtn));//$(saveBtn).removeAttr('disabled');
+		enable_save_button($(saveBtn));//$(saveBtn).removeAttr('disabled');
 		return false;
 	}
 
@@ -238,7 +238,7 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 		success : function(data) {
 
 			// Removes disabled attribute of save button
-			EnableSaveButton($(saveBtn));//$(saveBtn).removeAttr('disabled');
+			enable_save_button($(saveBtn));//$(saveBtn).removeAttr('disabled');
 
 			$('#' + formId).each(function() {
 				this.reset();

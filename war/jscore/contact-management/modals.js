@@ -41,6 +41,7 @@ $(function(){
 				$("#personForm [name='contact_company_id']").html('');
 				$("#personForm #contact_company").show();
 				$("#personForm #contact_company").val('');
+				$("#personForm input").val('');
 			}	
 		});
 	
@@ -119,6 +120,7 @@ $(function(){
 	    	
 	    	// Removes validation error messages
 	    	remove_validation_errors('personModal');
+	    	$('#personModal input').val('');
 	    });
 	    
 	    /**
@@ -127,6 +129,7 @@ $(function(){
 	     */
 	    $('#companyModal').on('hidden', function () {
 	    	remove_validation_errors('companyModal');
+	    	$('#companyModal input').val('');
 	    });
 });
 

@@ -41,7 +41,7 @@ $(function(){
         }
 
         // Disables save button to prevent multiple save on click event issues
-        DisableSaveButton($('#workflowform').find('#save-workflow'));
+        disable_save_button($('#workflowform').find('#save-workflow'));
         //$('#workflowform').find('#save-workflow').attr('disabled', 'disabled');
         
         // Load image while saving
@@ -58,7 +58,7 @@ $(function(){
             App_Workflows.workflow_model.set("rules", designerJSON);
             App_Workflows.workflow_model.save({}, {success: function(){
             	
-            	EnableSaveButton($('#workflowform').find('#save-workflow'));
+            	enable_save_button($('#workflowform').find('#save-workflow'));
             	//$('#workflowform').find('#save-workflow').removeAttr('disabled');
                
                //$(".save-workflow-img").remove();
@@ -82,7 +82,7 @@ $(function(){
             	    success:function(){  
 
             	    	// Removes disabled attribute of save button
-            	    	EnableSaveButton($('#workflowform').find('#save-workflow'));
+            	    	enable_save_button($('#workflowform').find('#save-workflow'));
             	    	// $('#workflowform').find('#save-workflow').removeAttr('disabled');
             	    	
             	    	// $(".save-workflow-img").remove();

@@ -145,11 +145,11 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 		return;
 
 	// Disables save button to prevent multiple click event issues
-	DisableSaveButton($(saveBtn));//$(saveBtn).attr('disabled', 'disabled');
+	disable_save_button($(saveBtn));//$(saveBtn).attr('disabled', 'disabled');
 	
 	if (!isValidForm('#' + formId)) {
 		// Removes disabled attribute of save button
-		EnableSaveButton($(saveBtn));//$(saveBtn).removeAttr('disabled');
+		enable_save_button($(saveBtn));//$(saveBtn).removeAttr('disabled');
 		return false;
 	}
 	
@@ -162,7 +162,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 		success : function(data) {
 
 			// Removes disabled attribute of save button
-			EnableSaveButton($(saveBtn));//$(saveBtn).removeAttr('disabled');
+			enable_save_button($(saveBtn));//$(saveBtn).removeAttr('disabled');
 
 			//$('#' + modalId).find('span.save-status img').remove();
 			$('#' + modalId).modal('hide');

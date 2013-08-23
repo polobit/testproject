@@ -33,54 +33,6 @@ function getAdminSettings(callback){
 	});
 }
 
-//function to save settings of navbar, 
-function saveSettings()
-{
-	var saveBtn=$('#navmodsSelect .btn-primary');
-	
-	if(saveBtn.attr('disabled'))return;
-	
-	DisableSaveButton(saveBtn);
-	
-	var saveUrl='/core/api/navbarsets';
-	var json=serializeForm('navmodsSelect');
-	
-	$.ajax({
-	type		:'POST',
-	url 		:saveUrl,
-	contentType	:'application/json',
-	dataType	:'json',
-	data		:JSON.stringify(json),
-	success		:function(data,stat,jqXHR)
-				{
-					//Success only if data has id
-					if(data.id)
-					{
-						$('#navmodsSelect #div-success').show().delay(3000).hide(1);
-						
-						if(data.cases==true)$('#casesmenu').show();
-						else $('#casesmenu').hide();
-						
-						if(data.calendar==true)$('#calendarmenu').show();
-						else $('#calendarmenu').hide();
-						
-						if(data.deals==true)$('#dealsmenu').show();
-						else $('#dealsmenu').hide();
-						
-						if(data.campaign==true)$('#workflowsmenu').show();
-						else $('#workflowsmenu').hide();
-					}
-					else $('#navmodsSelect #div-fail').show().delay(3000).hide(1);
-					
-					EnableSaveButton(saveBtn);
-				},
-	error		:function(jqXHR, textStatus, errorThrown)
-				{
-					$('#navmodsSelect #div-fail').show().delay(3000).hide(1);
-					EnableSaveButton(saveBtn);
-				}
-	});
-}
 
 /**
  * Creates a backbone router to perform admin activities (account preferences,
@@ -114,31 +66,32 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		/* All Domain Users */
 		"all-domain-users" : "allDomainUsers",
 		
-		//Navbar settings
-		"navmodules":"navbarSetting"
+		/* Menu settings - select modules on menu bar*/
+		"menu-settings":"menu_settings"
 	},
 	
 	/**
-		Show navbar modules selection & saving option
+		Show menu-settings modules selection ( calendar, cases, deals, campaign ) & saving option
+		@author Chandan
 	**/
-	navbarSetting : function()
+	menu_settings : function()
 	{
 		$('#content').html(isAdmintemplate);
 		var view = new Base_Model_View({
 			url : '/core/api/navbarsets',
-			template : "admin-settings-navmodules"
+			template : "admin-settings-menu-settings",
+			reload : true
 		});
 
-		//$('#content').html(view.render().el);
         if(($('#content').find('#admin-prefs-tabs-content').html()) == null){
         	console.log("nooooooooooooo ele accountPrefs");
         	getAdminSettings(function(){
-        		App_Admin_Settings.navbarSetting();
+        		App_Admin_Settings.menu_settings();
         	});
         }
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
-		$('#content').find('.navmodules-tab').addClass('active');
+		$('#content').find('.menu-settings-tab').addClass('active');
 	},
 
 	/**

@@ -42,13 +42,13 @@ $(function()
 			return;
 
 		// Disables save button to prevent multiple click event issues
-		DisableSaveButton($(this));//$(this).attr('disabled', 'disabled');
+		disable_save_button($(this));//$(this).attr('disabled', 'disabled');
 
 		if (!isValidForm('#noteUpdateForm'))
 		{
 
 			// Removes disabled attribute of save button
-			EnableSaveButton($(this));
+			enable_save_button($(this));
 			return;
 		}
 
@@ -79,20 +79,16 @@ $(function()
 		// Returns, if the save button has disabled attribute
 		if ($(this).attr('disabled'))
 			return;
-
-		// Disables save button to prevent multiple click event issues
-		DisableSaveButton($(this));//$(this).attr('disabled', 'disabled');
-
+		
 		if (!isValidForm('#noteForm'))
 		{
-
-			// Removes disabled attribute of save button
-			EnableSaveButton($(this));//$(this).removeAttr('disabled');
 			return;
 		}
 
+		disable_save_button($(this));
+		
 		// Shows loading symbol until model get saved
-		$('#noteModal').find('span.save-status').html(LOADING_HTML);
+		//$('#noteModal').find('span.save-status').html(LOADING_HTML);
 
 		var json = serializeForm("noteForm");
 
@@ -135,7 +131,7 @@ $(function()
 		{
 
 			// Removes disabled attribute of save button
-			EnableSaveButton($(element));//$(element).removeAttr('disabled');
+			enable_save_button($(element));//$(element).removeAttr('disabled');
 
 			form.each(function()
 			{

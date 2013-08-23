@@ -46,14 +46,17 @@ $(function()
 
 			var $form = $('#ownerBulkForm');
 
-			// Validate Form
-			if (!isValidForm($form))
+			// Button Disabled or Validate Form failed
+			if ($(this).attr('disabled')=='disabled' || !isValidForm($form))
 			{
 				return;
 			}
-
+			
+			var saveButton=$(this);
+			
+			disable_save_button(saveButton);
 			// Show loading symbol until model get saved
-			$('#ownerBulkForm').find('span.save-status').html(LOADING_HTML);
+			//$('#ownerBulkForm').find('span.save-status').html(LOADING_HTML);
 
 			var url;
 
@@ -61,7 +64,9 @@ $(function()
 			url = '/core/api/bulk/update?action_type=CHANGE_OWNER&owner=' + new_owner;
 			var json = {};
 			json.contact_ids = id_array;
-			postBulkOperationData(url, json, $form)
+			postBulkOperationData(url, json, $form, undefined, function(data){
+				enable_save_button(saveButton);
+			})
 		});
 	});
 
@@ -101,22 +106,26 @@ $(function()
 
 			var $form = $('#campaignsBulkForm');
 
-			// Validate Form
-			if (!isValidForm($form))
+			// Button Disabled or Validate Form Failed
+			if ($(this).attr('disabled')=='disabled' || !isValidForm($form))
 			{
-
 				return;
 			}
+			
+			var saveButton=$(this);
 
+			disable_save_button(saveButton);
 			// Show loading symbol until model get saved
-			$('#campaignsBulkForm').find('span.save-status').html(LOADING_HTML);
+			//$('#campaignsBulkForm').find('span.save-status').html(LOADING_HTML);
 
 			var workflow_id = $('#campaignBulkSelect option:selected').attr('value');
 			var url = '/core/api/bulk/update?workflow_id=' + workflow_id + "&action_type=ASIGN_WORKFLOW";
 
 			var json = {};
 			json.contact_ids = id_array;
-			postBulkOperationData(url, json, $form);
+			postBulkOperationData(url, json, $form,undefined,function(data){
+				enable_save_button(saveButton);
+			});
 		});
 
 	});
@@ -150,7 +159,11 @@ $(function()
 			{
 
 				// Show loading symbol until model get saved
-				$('#tagsBulkForm').find('span.save-status').html(LOADING_HTML);
+				var saveButton=$(this);
+
+				disable_save_button(saveButton);
+				
+				//$('#tagsBulkForm').find('span.save-status').html(LOADING_HTML);
 
 				var url = '/core/api/bulk/update?action_type=ADD_TAG';
 				var json = {};
@@ -159,7 +172,7 @@ $(function()
 
 				postBulkOperationData(url, json, $('#tagsBulkForm'), undefined, function(data)
 				{
-
+					enable_save_button(saveButton);
 					// Add the added tags to the collection of tags
 					$.each(tags[0].value, function(index, tag)
 					{
@@ -412,12 +425,14 @@ function postBulkOperationData(url, data, form, contentType, callback)
 	$.ajax({ url : url, type : 'POST', data : data, contentType : contentType, success : function(data)
 	{
 
-		// Remove loading image
-		$(form).find('span.save-status img').remove();
-
 		$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>Task Scheduled.</i></p></small></div>');
 
-		$(form).find('.form-actions').append($save_info);
+		var save_msg=$(form).find('.form-actions');
+		
+		if(save_msg.find('.text-success'))
+			save_msg.find('.text-success').parent().parent().remove(); // erase previous message.
+
+		save_msg.append($save_info);
 
 		if (callback && typeof (callback) === "function")
 			callback(data);

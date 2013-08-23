@@ -55,24 +55,12 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
     var $form = $('#' + form_id);
     
-	// Returns, if the save button has disabled attribute 
-	if($(saveBtn).attr('disabled'))
+	// Returns, if the save button has disabled attribute, or form is invalid
+	if($(saveBtn).attr('disabled') || !isValidForm($form))
 		return;
 	
 	// Disables save button to prevent multiple click event issues
-	DisableSaveButton($(saveBtn));
-	
-    // Validate Form
-    if(!isValidForm($form)){
-
-    	// Removes disabled attribute of save button
-    	EnableSaveButton($(saveBtn));
-    	return;
-    }
-    
-    // Show loading symbol until model get saved
-    //$('#' + modal_id).find('span.save-status').html(LOADING_HTML);
-    //$('#' + form_id).find('span.save-status').html(LOADING_HTML);
+	disable_save_button($(saveBtn));
     
     // Read multiple values from contact form
     var properties = [];
@@ -146,10 +134,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     		if($('#contact_company').attr('value').length > 100)
     		{
             	show_error(modal_id,form_id,'duplicate-email','Company name too long. Please restrict upto 100 characters.');
-            	
-            	EnableSaveButton($(saveBtn));// Remove loading image
-            	//$('#' + modal_id).find('span.save-status img').remove();
-            	//$('#' + form_id).find('span.save-status img').remove();
+            	enable_save_button($(saveBtn));// Remove loading image
             	return;
     		}	
     		obj.contact_company_id=null;
@@ -191,9 +176,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     			// Company name too long, show error and return;
             	show_error(modal_id,form_id,'duplicate-email','Company name too long. Please restrict upto 100 characters.');
             	
-            	EnableSaveButton($(saveBtn));// Remove loading image
-            	// $('#' + modal_id).find('span.save-status img').remove();
-            	// $('#' + form_id).find('span.save-status img').remove();
+            	enable_save_button($(saveBtn));// Remove loading image
             	return;
     		}	
     		properties.push(property_JSON('name', 'company_name'));
@@ -314,7 +297,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         	localStorage.removeItem("Agile_twitter_matches_" + data.get('id'));
 
         	// Removes disabled attribute of save button
-        	DisableSaveButton($(saveBtn));
+        	enable_save_button($(saveBtn));
 			
         	// Adds the tags to tags collection 
         	if (tags != undefined && tags.length != 0)
@@ -368,16 +351,12 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         error: function (model, response) {
         	
         	// Removes disabled attribute of save button
-        	DisableSaveButton($(saveBtn));
-        	// Remove loading image
-        	//$('#' + modal_id).find('span.save-status img').remove();
-        	//$('#' + form_id).find('span.save-status img').remove();
+        	enable_save_button($(saveBtn));
         	
-            // Shows error alert of duplicate contacts
-        	
+            // Shows error alert of duplicate contacts        	
         	if(response.status==400)
         	{	
-        		// 400 is out custom code, thrown when duplicate email detected.
+        		// 400 is our custom code, thrown when duplicate email detected.
         		var dupEmail=response.responseText.split('|')[1];
         		if(!dupEmail)dupEmail="";
         		// get the already existing email from response text.

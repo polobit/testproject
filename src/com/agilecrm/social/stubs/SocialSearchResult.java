@@ -5,8 +5,8 @@ import java.util.List;
 import javax.persistence.Embedded;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.agilecrm.social.LinkedInUtil;
-import com.agilecrm.social.TwitterUtil;
+import com.agilecrm.social.linkedin.LinkedInUtil;
+import com.agilecrm.social.twitter.TwitterUtil;
 
 /**
  * <code>SocialSearchResult</code> contains fields required by
@@ -24,84 +24,83 @@ import com.agilecrm.social.TwitterUtil;
 @XmlRootElement
 public class SocialSearchResult
 {
-    /** LinkedIn Id or Twitter Id */
-    public String id = "";
+	/** LinkedIn Id or Twitter Id */
+	public String id = "";
 
-    /** Name of the LinkedIn or Twitter profile */
-    public String name = "";
+	/** Name of the LinkedIn or Twitter profile */
+	public String name = "";
 
-    /** Screen name of Twitter profile */
-    public String screen_name = "";
+	/** Screen name of Twitter profile */
+	public String screen_name = "";
 
-    /** Picture URL of LinkedIn or Twitter profile */
-    public String picture = "";
+	/** Picture URL of LinkedIn or Twitter profile */
+	public String picture = "";
 
-    /** Public URL of LinkedIn or Twitter profile */
-    public String url = "";
+	/** Public URL of LinkedIn or Twitter profile */
+	public String url = "";
 
-    /** Work summary of LinkedIn or Twitter profile */
-    public String summary = "";
+	/** Work summary of LinkedIn or Twitter profile */
+	public String summary = "";
 
-    /** Title of LinkedIn or Twitter profile */
-    public String headline = "";
+	/** Title of LinkedIn or Twitter profile */
+	public String headline = "";
 
-    /** No of connections in LinkedIn and followers in Twitter */
-    public String num_connections = "";
+	/** No of connections in LinkedIn and followers in Twitter */
+	public String num_connections = "";
 
-    /** No of tweets in Twitter */
-    public String tweet_count = "";
+	/** No of tweets in Twitter */
+	public String tweet_count = "";
 
-    /** Place information of LinkedIn or Twitter profile */
-    public String location = "";
+	/** Place information of LinkedIn or Twitter profile */
+	public String location = "";
 
-    /** No of connections in LinkedIn and following in Twitter */
-    public String friends_count = "";
+	/** No of connections in LinkedIn and following in Twitter */
+	public String friends_count = "";
 
-    /** Recent update or tweet of LinkedIn or Twitter profile */
-    public String current_update = "";
+	/** Recent update or tweet of LinkedIn or Twitter profile */
+	public String current_update = "";
 
-    /** Degree of connection in LinkedIn */
-    public String distance = "";
+	/** Degree of connection in LinkedIn */
+	public String distance = "";
 
-    /**
-     * Stores {@link Boolean} whether conatct's LinkedIn or Twitter profile is
-     * connected with Agile user LinkedIn or Twitter profile
-     */
-    public boolean is_connected;
+	/**
+	 * Stores {@link Boolean} whether conatct's LinkedIn or Twitter profile is
+	 * connected with Agile user LinkedIn or Twitter profile
+	 */
+	public boolean is_connected;
 
-    /**
-     * Stores {@link Boolean} whether Agile user follows Twitter profile of
-     * contact
-     */
-    public boolean is_follow_request_sent;
+	/**
+	 * Stores {@link Boolean} whether Agile user follows Twitter profile of
+	 * contact
+	 */
+	public boolean is_follow_request_sent;
 
-    /**
-     * Stores {@link Boolean} whether Agile user is followed by Twitter profile
-     * of contact
-     */
-    public boolean is_followed_by_target;
+	/**
+	 * Stores {@link Boolean} whether Agile user is followed by Twitter profile
+	 * of contact
+	 */
+	public boolean is_followed_by_target;
 
-    /** Recent update id or tweet id */
-    public long current_update_id;
+	/** Recent update id or tweet id */
+	public long current_update_id;
 
-    /** Three present work positions in LinkedIn */
-    @SuppressWarnings("rawtypes")
-    public List three_current_positions;
+	/** Three present work positions in LinkedIn */
+	@SuppressWarnings("rawtypes")
+	public List three_current_positions;
 
-    /** Three past work positions in LinkedIn */
-    @SuppressWarnings("rawtypes")
-    public List three_past_positions;
+	/** Three past work positions in LinkedIn */
+	@SuppressWarnings("rawtypes")
+	public List three_past_positions;
 
-    public SocialSearchResult searchResult;
+	public SocialSearchResult searchResult;
 
-    /** Stores list of tweets or updates */
-    @Embedded
-    public List<SocialUpdateStream> updateStream = null;
+	/** Stores list of tweets or updates */
+	@Embedded
+	public List<SocialUpdateStream> updateStream = null;
 
-    public String toString()
-    {
-	return id + " " + name + " " + picture + " " + url + " " + summary
-		+ " " + headline + " " + num_connections + " " + location + " "
-		+ friends_count + " " + current_update + " " + distance + " ";
-    }
+	public String toString()
+	{
+		return id + " " + name + " " + picture + " " + url + " " + summary + " " + headline + " " + num_connections
+				+ " " + location + " " + friends_count + " " + current_update + " " + distance + " ";
+	}
 }
