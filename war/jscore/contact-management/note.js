@@ -42,13 +42,13 @@ $(function()
 			return;
 
 		// Disables save button to prevent multiple click event issues
-		DisableSaveButton($(this));//$(this).attr('disabled', 'disabled');
+		disable_save_button($(this));//$(this).attr('disabled', 'disabled');
 
 		if (!isValidForm('#noteUpdateForm'))
 		{
 
 			// Removes disabled attribute of save button
-			EnableSaveButton($(this));
+			enable_save_button($(this));
 			return;
 		}
 
@@ -81,13 +81,13 @@ $(function()
 			return;
 
 		// Disables save button to prevent multiple click event issues
-		DisableSaveButton($(this));//$(this).attr('disabled', 'disabled');
+		disable_save_button($(this));//$(this).attr('disabled', 'disabled');
 
 		if (!isValidForm('#noteForm'))
 		{
 
 			// Removes disabled attribute of save button
-			EnableSaveButton($(this));//$(this).removeAttr('disabled');
+			enable_save_button($(this));//$(this).removeAttr('disabled');
 			return;
 		}
 
@@ -135,7 +135,7 @@ $(function()
 		{
 
 			// Removes disabled attribute of save button
-			EnableSaveButton($(element));//$(element).removeAttr('disabled');
+			enable_save_button($(element));//$(element).removeAttr('disabled');
 
 			form.each(function()
 			{

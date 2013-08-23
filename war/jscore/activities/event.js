@@ -274,14 +274,14 @@ function save_event(formId, modalName, isUpdate, saveBtn)
 		return;
 
 	// Disables save button to prevent multiple click event issues
-	DisableSaveButton($(saveBtn));
+	disable_save_button($(saveBtn));
 
 	// Save functionality for event
 	if (!isValidForm('#' + formId))
 	{
 
 		// Removes disabled attribute of save button
-		EnableSaveButton($(saveBtn));
+		enable_save_button($(saveBtn));
 		return false;
 	}
 
@@ -294,7 +294,7 @@ function save_event(formId, modalName, isUpdate, saveBtn)
 	{
 
 		// Removes disabled attribute of save button
-		EnableSaveButton($(saveBtn));
+		enable_save_button($(saveBtn));
 		return;
 	}
 
@@ -326,7 +326,7 @@ function save_event(formId, modalName, isUpdate, saveBtn)
 	{
 
 		// Removes disabled attribute of save button
-		EnableSaveButton($(saveBtn));//$(saveBtn).removeAttr('disabled');
+		enable_save_button($(saveBtn));//$(saveBtn).removeAttr('disabled');
 
 		$('#' + formId).each(function()
 		{

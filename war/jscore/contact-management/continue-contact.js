@@ -60,13 +60,13 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 		return;
 	
 	// Disables save button to prevent multiple click event issues
-	DisableSaveButton($(saveBtn));
+	disable_save_button($(saveBtn));
 	
     // Validate Form
     if(!isValidForm($form)){
 
     	// Removes disabled attribute of save button
-    	EnableSaveButton($(saveBtn));
+    	enable_save_button($(saveBtn));
     	return;
     }
     
@@ -147,7 +147,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     		{
             	show_error(modal_id,form_id,'duplicate-email','Company name too long. Please restrict upto 100 characters.');
             	
-            	EnableSaveButton($(saveBtn));// Remove loading image
+            	enable_save_button($(saveBtn));// Remove loading image
             	//$('#' + modal_id).find('span.save-status img').remove();
             	//$('#' + form_id).find('span.save-status img').remove();
             	return;
@@ -191,7 +191,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     			// Company name too long, show error and return;
             	show_error(modal_id,form_id,'duplicate-email','Company name too long. Please restrict upto 100 characters.');
             	
-            	EnableSaveButton($(saveBtn));// Remove loading image
+            	enable_save_button($(saveBtn));// Remove loading image
             	// $('#' + modal_id).find('span.save-status img').remove();
             	// $('#' + form_id).find('span.save-status img').remove();
             	return;
@@ -314,7 +314,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         	localStorage.removeItem("Agile_twitter_matches_" + data.get('id'));
 
         	// Removes disabled attribute of save button
-        	DisableSaveButton($(saveBtn));
+        	disable_save_button($(saveBtn));
 			
         	// Adds the tags to tags collection 
         	if (tags != undefined && tags.length != 0)
@@ -368,7 +368,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         error: function (model, response) {
         	
         	// Removes disabled attribute of save button
-        	DisableSaveButton($(saveBtn));
+        	disable_save_button($(saveBtn));
         	// Remove loading image
         	//$('#' + modal_id).find('span.save-status img').remove();
         	//$('#' + form_id).find('span.save-status img').remove();

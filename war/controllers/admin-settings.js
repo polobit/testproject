@@ -40,7 +40,7 @@ function saveSettings()
 	
 	if(saveBtn.attr('disabled'))return;
 	
-	DisableSaveButton(saveBtn);
+	disable_save_button(saveBtn);
 	
 	var saveUrl='/core/api/navbarsets';
 	var json=serializeForm('navmodsSelect');
@@ -72,12 +72,12 @@ function saveSettings()
 					}
 					else $('#navmodsSelect #div-fail').show().delay(3000).hide(1);
 					
-					EnableSaveButton(saveBtn);
+					enable_save_button(saveBtn);
 				},
 	error		:function(jqXHR, textStatus, errorThrown)
 				{
 					$('#navmodsSelect #div-fail').show().delay(3000).hide(1);
-					EnableSaveButton(saveBtn);
+					enable_save_button(saveBtn);
 				}
 	});
 }
@@ -114,14 +114,15 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		/* All Domain Users */
 		"all-domain-users" : "allDomainUsers",
 		
-		//Navbar settings
-		"navmodules":"navbarSetting"
+		/* Menu settings - select modules on menu bar*/
+		"menu-settings":"menu_setting"
 	},
 	
 	/**
-		Show navbar modules selection & saving option
+		Show menu-settings modules selection ( calendar, cases, deals, campaign ) & saving option
+		@author Chandan
 	**/
-	navbarSetting : function()
+	menu_setting : function()
 	{
 		$('#content').html(isAdmintemplate);
 		var view = new Base_Model_View({
@@ -129,11 +130,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			template : "admin-settings-navmodules"
 		});
 
-		//$('#content').html(view.render().el);
         if(($('#content').find('#admin-prefs-tabs-content').html()) == null){
         	console.log("nooooooooooooo ele accountPrefs");
         	getAdminSettings(function(){
-        		App_Admin_Settings.navbarSetting();
+        		App_Admin_Settings.menu_setting();
         	});
         }
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);

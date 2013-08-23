@@ -183,7 +183,7 @@ var Base_Model_View = Backbone.View
 					return;
 				
 				// Disables save button to prevent multiple click event issues
-				DisableSaveButton($form.find('.save'));
+				disable_save_button($form.find('.save'));
 				
 				// Represents validations result of the form, and json
 				// represents serialized data in the form
@@ -264,7 +264,7 @@ var Base_Model_View = Backbone.View
 				if (isValid == false || !isValidForm($form)) {
 					
 					// Removes disabled attribute of save button
-					EnableSaveButton($form.find('.save'));
+					enable_save_button($form.find('.save'));
 					
 					return;
 				}
@@ -319,7 +319,7 @@ var Base_Model_View = Backbone.View
 									success : function(model, response) {
 										
 										// Removes disabled attribute of save button
-										EnableSaveButton($form.find('.save'));
+										enable_save_button($form.find('.save'));
 										
 										// Reload the current page
 										if (reload)
@@ -374,7 +374,7 @@ var Base_Model_View = Backbone.View
 									error : function(model, response) {
 										
 										// Removes disabled attribute of save button
-										EnableSaveButton($form.find('.save'));
+										enable_save_button($form.find('.save'));
 										
 										// Hide loading on error
 										//$save_info.hide();
@@ -500,7 +500,7 @@ var Base_Model_View = Backbone.View
  * Disable by setting original text in data-save-text attribute and adding disabled:disabled attribute
  * Enable by reverse of the above
  */
-function DisableSaveButton(elem)
+function disable_save_button(elem)
 {
 	elem.css('min-width',elem.width()+'px')
 		.attr('disabled', 'disabled')
@@ -508,7 +508,7 @@ function DisableSaveButton(elem)
 		.text('Saving...');
 }
 
-function EnableSaveButton(elem)
+function enable_save_button(elem)
 {
 	elem.text(elem.attr('data-save-text')).removeAttr('disabled data-save-text');
 }

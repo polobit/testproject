@@ -185,10 +185,10 @@ function savecases(formId, modalId, saveBtn, json)
 	if ($(saveBtn).attr('disabled'))return;
 
 	// Disables save button to prevent multiple click event issues
-	DisableSaveButton($(saveBtn));//$(saveBtn).attr('disabled', 'disabled');
+	disable_save_button($(saveBtn));//$(saveBtn).attr('disabled', 'disabled');
 	
 	if (!isValidForm('#' + formId)){
-		EnableSaveButton($(saveBtn));//$(saveBtn).removeAttr('disabled'); // Removes disabled attribute of save button
+		enable_save_button($(saveBtn));//$(saveBtn).removeAttr('disabled'); // Removes disabled attribute of save button
 		return false;
 	}
 	
@@ -205,7 +205,7 @@ function savecases(formId, modalId, saveBtn, json)
 		success : function(data) 
 		{		
 			// Removes disabled attribute of save button
-			EnableSaveButton($(saveBtn));//$(saveBtn).removeAttr('disabled');
+			enable_save_button($(saveBtn));//$(saveBtn).removeAttr('disabled');
 
 			//$('#' + modalId).find('span.save-status img').remove();
 			$('#' + modalId).modal('hide');
