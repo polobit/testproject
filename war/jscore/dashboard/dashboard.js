@@ -101,6 +101,8 @@ function show_dashboard_workflows(el)
 		templateKey : "dashboard-campaign-logs",
 		individual_tag_name : 'tr',
 		page_size : 10,
+		sortKey: 'time',
+		descending: true,
 		postRenderCallback : function(el) {
 			head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
 				$("time.log-created-time", el).timeago();
