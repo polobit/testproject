@@ -11,9 +11,9 @@ import org.scribe.model.Token;
 import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
-import com.agilecrm.contact.imports.util.ContactsImportUtil;
 import com.agilecrm.scribe.util.ScribeUtil;
 import com.agilecrm.user.AgileUser;
+import com.thirdparty.google.ContactsImportUtil;
 
 /**
  * <code>ScribeServlet</code> is used to create and configure a client to

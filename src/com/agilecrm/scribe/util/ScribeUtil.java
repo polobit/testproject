@@ -23,9 +23,6 @@ import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
 
 import com.agilecrm.Globals;
-import com.agilecrm.contact.imports.ContactPrefs;
-import com.agilecrm.contact.imports.ContactPrefs.Type;
-import com.agilecrm.contact.imports.util.ContactsImportUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.scribe.ScribeServlet;
@@ -34,6 +31,9 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
+import com.thirdparty.google.ContactPrefs;
+import com.thirdparty.google.ContactsImportUtil;
+import com.thirdparty.google.ContactPrefs.Type;
 
 /**
  * <code>ScribeUtil</code> class contains methods to be used by

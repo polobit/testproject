@@ -31,7 +31,7 @@
 
 	<servlet>
 		<servlet-name>ContactUtilServlet</servlet-name>
-		<servlet-class>com.agilecrm.contact.imports.ContactUtilServlet</servlet-class>
+		<servlet-class>com.thirdparty.google.ContactUtilServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ContactUtilServlet</servlet-name>

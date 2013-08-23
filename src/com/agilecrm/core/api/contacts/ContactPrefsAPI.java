@@ -5,8 +5,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.agilecrm.contact.imports.ContactPrefs;
-import com.agilecrm.contact.imports.ContactPrefs.Type;
+import com.thirdparty.google.ContactPrefs;
+import com.thirdparty.google.ContactPrefs.Type;
 
 /**
  * <code>ContactPrefsAPI</code> includes REST calls to interact with

@@ -1,4 +1,4 @@
-package com.thirdparty;
+package com.thirdparty.google;
 
 import java.net.URL;
 import java.util.List;

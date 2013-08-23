@@ -1,4 +1,4 @@
-package com.agilecrm.contact.imports;
+package com.thirdparty.google;
 
 import java.io.Serializable;
 import java.util.HashMap;

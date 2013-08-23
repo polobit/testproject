@@ -27,7 +27,6 @@ import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.customview.CustomView;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.filter.ContactFilter;
-import com.agilecrm.contact.imports.ContactPrefs;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.reports.Reports;
@@ -52,6 +51,7 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
 import com.googlecode.objectify.util.DAOBase;
+import com.thirdparty.google.ContactPrefs;
 
 /**
  * <code>ObjectifyGenericDao</code> is a generic class for all the entities,
