@@ -497,7 +497,9 @@ var Base_Model_View = Backbone.View
 /**
  * Functions Which take JQuery button elements and enable disable them.
  * 
- * Disable by setting original text in data-save-text attribute and adding disabled:disabled attribute
+ * Disable by setting original text in data-save-text attribute and adding disabled:disabled attribute,
+ * Also set min width to current width so button can't collapse, but can expand if necessary
+ * 
  * Enable by reverse of the above
  */
 function disable_save_button(elem)
@@ -508,6 +510,10 @@ function disable_save_button(elem)
 		.text('Saving...');
 }
 
+/**
+ * Enables save button.
+ * @param elem
+ */
 function enable_save_button(elem)
 {
 	elem.text(elem.attr('data-save-text')).removeAttr('disabled data-save-text');

@@ -59,6 +59,8 @@ $(function()
 	$('#event_delete').die().live('click', function(e)
 	{
 		e.preventDefault();
+		
+		if($(this).attr('disabled')=='disabled')return;
 
 		/**
 		 * Confirmation alert to delete an event
@@ -67,16 +69,18 @@ $(function()
 			return;
 
 		var event_id = $('#updateActivityForm input[name=id]').val()
-
+		var save_button=$(this);
+		
+		disable_save_button(saveButton);
 		/**
 		 * Shows loading symbol until model get saved
 		 */
-		$('#updateActivityModal').find('span.save-status').html(LOADING_HTML);
+		//$('#updateActivityModal').find('span.save-status').html(LOADING_HTML);
 		$.ajax({ url : 'core/api/events/' + event_id, type : 'DELETE', success : function()
 		{
 
-			$('#updateActivityModal').find('span.save-status img').remove();
-
+			//$('#updateActivityModal').find('span.save-status img').remove();
+			enable_save_button(saveButton);
 			$("#updateActivityModal").modal('hide');
 
 			$('#calendar').fullCalendar('removeEvents', event_id);
