@@ -444,6 +444,8 @@ function agile_init_handlers() {
 			$(".contact-minified", el).toggle();
 			// Show contact summary.
 			$(".show-contact-summary", el).toggle();
+			if (!Is_Localhost)
+				gadgets.window.adjustHeight();
 			// Build tabs.
 			agile_build_form_template(that, "gadget-tabs", ".option-tabs", function() {
 				
