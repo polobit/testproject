@@ -16,7 +16,7 @@
               <img style='width:55px;height:55px;' src='{{picture}}'></img>
             </div>
             <div class='span8'>
-               <b style='color:#069;font-size:14px;'>{{name}}</b>
+               <b style='color:#069;font-size:14px;'>{{name}}</b><span class='badge badge-info pull-right'>{{distance}}</span> 
 			   <p>{{location}}<br/>{{#if_equals num_connections "500"}}{{num_connections}}+ connections{{else}}{{num_connections}} connections{{/if_equals}}</p>
             </div>		
       </div>
@@ -34,7 +34,7 @@
               <img style='width:55px;height:55px;' src ='{{defaultGravatarurl 35}}'></img>
             </div>
             <div class='span8'>
-               <b style='color:#069;font-size:14px;'>{{name}}</b>
+               <b style='color:#069;font-size:14px;'>{{name}}</b><span class='badge badge-info pull-right'>{{distance}}</span>
 			   <p>{{location}}<br/>{{num_connections}} Connections</p>
             </div>		
       </div>
