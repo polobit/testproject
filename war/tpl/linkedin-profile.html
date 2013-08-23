@@ -261,6 +261,7 @@
             </div>
             <div class='span8'>
                <b style='color:#069;font-size:14px;'>{{name}}</b>
+		       {{#if distance}}<span class='badge badge-info pull-right'>{{distance}}</span>{{/if}}
 			   <p>
 					{{#if location}}{{location}}{{/if}}<br/>
 					{{#if num_connections}}{{num_connections}} Connections{{/if}}
