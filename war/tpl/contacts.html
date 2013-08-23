@@ -1,6 +1,7 @@
 <script id="contacts-model-template" type="text/html">
 	<td class="data" data="{{id}}">
-    	<div style="display:inline;padding-right:10px;height:auto;">
+	<div class="row-fluid">
+    	<div class="span2" style="display:inline;padding-right:10px;height:auto;">
         	{{#if_contact_type "PERSON"}}
         		<img class="thumbnail" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline" />
         	{{/if_contact_type}}
@@ -9,7 +10,7 @@
         		<img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} />
         	{{/if_contact_type}}
     	</div>
-    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:14em;overflow:hidden;">
+    	<div  class="span9" style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;">
         	{{#if_contact_type "PERSON"}}
         		<b>	{{getPropertyValue properties "first_name"}}
         		{{getPropertyValue properties "last_name"}} </b>
@@ -22,14 +23,16 @@
         		{{getPropertyValue properties "url"}}
         	{{/if_contact_type}}
     	</div>
+	</div>
 	</td>
-	<td><div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:8em;overflow:hidden;">{{getPropertyValue properties "title"}}<br />
+	<td><div style="display:inline-block;vertical-align:top;">{{getPropertyValue properties "title"}}<br />
     	{{getPropertyValue properties "company"}}</div>
 	</td>
 	<td> 
-<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:clip;white-space:nowrap;width:15em;overflow:hidden;">
+<!-- <div style="height:auto;display:inline-block;vertical-align:top;text-overflow:clip;white-space:nowrap;width:15em;overflow:hidden;"> --> 
+	 <div class="agile-ellipsis" style="line-height:20px !important"> 	
 	{{#each tags}}
-    	<b><span class="label">{{this}}</span></b>
+    	<span class="label" >{{this}}</span>
     {{/each}}
 </div>
 	</td>
@@ -97,11 +100,14 @@
 		{{#if this.length}}
 		<div class="data">
 			<div class="data-container"></div>
-			<table id="contacts" class="table table-striped showCheckboxes"
-				url="core/api/bulk/update?action_type=DELETE" style="overflow: scroll">
-				<div class="filter-criteria">
-					
-				</div>
+			<table id="contacts" class="table table-striped showCheckboxes agile-ellipsis-dynamic"
+				url="core/api/bulk/update?action_type=DELETE">
+				<col width="30px">
+				<col width="41%">
+				<col width="24%">
+				<col width="24%">
+				<col width="12%">
+				<div class="filter-criteria"></div>
 				<thead>
 					<tr>
 						<th>Name</th>
@@ -111,7 +117,7 @@
 					</tr>
 				</thead>
 				<tbody id="contacts-model-list" class="contacts-model-list"
-					route="contact/" style="overflow: scroll;">
+					route="contact/" style="overflow: scroll;overflow:hidden;">
 				</tbody>
 			</table>
 		</div>

@@ -673,7 +673,6 @@ function getFirstFiveLinkedInNetworkUpdates(linkedin_id)
 	{
 		// Remove loading button on error
 		$('#status_load').remove();
-		console.log('in example' + data.responseText);
 
 		// Error message is displayed to user
 		linkedinMainError("linkedin_social_stream", data.responseText);

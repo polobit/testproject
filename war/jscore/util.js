@@ -228,7 +228,13 @@ function property_JSON(name, id, type)
 		json.type = type;
 
 	json.name = name;
-	json.value = $('#' + id).val();
+	
+	var elem=$('#' + id), elem_type=elem.attr('type'), elem_value;
+    
+    if(elem_type=='checkbox')elem_value=elem.is(':checked')?'on':'off';
+    else elem_value=elem.val();
+    
+	json.value = elem_value;
 	return json;
 }
 

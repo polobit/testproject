@@ -67,7 +67,7 @@ public class LinkedInUtil
 	 * As LinkedIn keeping on changing LinkedIn image URLs, we change the image
 	 * URLs into this format
 	 */
-	private static final String LINKEDINIMAGEURLFORMAT = "https://m3-s.licdn.com";
+	private static final String LINKEDIN_IMAGE_URL_FORMAT = "https://m3-s.licdn.com";
 
 	/**
 	 * Creates a client to connect to LinkedIn using developers API key and
@@ -255,7 +255,6 @@ public class LinkedInUtil
 		 */
 		for (Person person : persons)
 		{
-			SocialSearchResult result = new SocialSearchResult();
 
 			/*
 			 * Id or name is private for the people who doesn't share their
@@ -267,39 +266,56 @@ public class LinkedInUtil
 			if (person.getFirstName().equalsIgnoreCase("private") || person.getLastName().equalsIgnoreCase("private"))
 				continue;
 
-			result.id = person.getId();
-			result.name = person.getFirstName() + " " + person.getLastName();
-			result.picture = person.getPictureUrl();
-			result.url = person.getPublicProfileUrl();
-			result.summary = person.getHeadline();
-			result.distance = (person.getDistance() != null) ? person.getDistance().toString() : "";
-
-			// If degree of connection is 1, both profiles are connected
-			if (result.distance != "" && Integer.parseInt(result.distance) == 1)
-				result.is_connected = true;
-
-			System.out.println("pic url : " + person.getPictureUrl());
-			/*
-			 * Changes http to https to avoid client side warnings by browser,
-			 * Changes certificate from m3 to m3-s to fix SSL broken image link
-			 */
-			if (result.picture != null)
-				result.picture = changeImageUrl(result.picture);
-
-			/*
-			 * Set number of connections, location and distance(degree of
-			 * connection) if provided
-			 */
-			result.num_connections = (person.getNumConnections() != null) ? person.getNumConnections().toString() : "";
-
-			result.location = (person.getLocation() != null) ? person.getLocation().getName() : "";
-
 			// Add wrapper filled with details to the list
-			searchResults.add(result);
+			searchResults.add(wrapPersonDetailsInSearchResult(person));
 
 		}
 		return searchResults;
 
+	}
+
+	/**
+	 * Fills {@link Person} details in a {@link SocialSearchResult}
+	 * 
+	 * @param person
+	 *            {@link Person}
+	 * @return {@link SocialSearchResult}
+	 */
+	private static SocialSearchResult wrapPersonDetailsInSearchResult(Person person)
+	{
+		SocialSearchResult result = new SocialSearchResult();
+
+		result.id = person.getId();
+
+		// check if first name and last name is null and add them
+		result.name = (((person.getFirstName() != null) ? person.getFirstName() : "") + " " + ((person.getLastName() != null) ? person
+				.getLastName() : "")).trim();
+		result.picture = person.getPictureUrl();
+		result.url = person.getPublicProfileUrl();
+		result.summary = person.getHeadline();
+		result.distance = (person.getDistance() != null) ? person.getDistance().toString() : "";
+
+		result.location = (person.getLocation() != null) ? person.getLocation().getName() : "";
+
+		// If degree of connection is 1, both profiles are connected
+		if (result.distance != "" && Integer.parseInt(result.distance) == 1)
+			result.is_connected = true;
+
+		System.out.println("pic url : " + person.getPictureUrl());
+		/*
+		 * Changes http to https to avoid client side warnings by browser,
+		 * Changes certificate from m3 to m3-s to fix SSL broken image link
+		 */
+		if (result.picture != null)
+			result.picture = changeImageUrl(result.picture);
+
+		/*
+		 * Set number of connections, location and distance(degree of
+		 * connection) if provided
+		 */
+		result.num_connections = (person.getNumConnections() != null) ? person.getNumConnections().toString() : "";
+
+		return result;
 	}
 
 	/**
@@ -375,31 +391,16 @@ public class LinkedInUtil
 					ProfileField.POSITIONS_COMPANY_TICKER, ProfileField.POSITIONS_COMPANY_NAME,
 					ProfileField.POSITIONS_COMPANY_SIZE, ProfileField.POSITIONS_COMPANY));
 
-			SocialSearchResult result = new SocialSearchResult();
+			// wraps person details into a search result
+			SocialSearchResult result = wrapPersonDetailsInSearchResult(person);
 
-			// Get details and wrap into SocialSearchResult class
-			result.id = person.getId();
-			result.name = person.getFirstName() + " " + person.getLastName();
-			result.picture = person.getPictureUrl();
-			result.url = person.getPublicProfileUrl();
-			result.summary = person.getHeadline();
-			result.location = person.getLocation().getName();
-			result.distance = person.getDistance() + "";
 			result.current_update = person.getCurrentStatus();
-			result.num_connections = String.valueOf(person.getNumConnections());
 
 			/*
 			 * Distance is 1 for direct connections and 0 for their own profile
 			 */
 			if (!(person.getDistance() > 1l))
 				result.is_connected = true;
-
-			/*
-			 * Change http to https to avoid client side warnings by browser
-			 * Change certificate from m3 to m3-s to fix SSL broken image link
-			 */
-			if (result.picture != null)
-				result.picture = changeImageUrl(result.picture);
 
 			// Retrieves work positions of the person
 			result.searchResult = fetchExperienceOfPerson(person, linkedInId, client);
@@ -586,11 +587,6 @@ public class LinkedInUtil
 	{
 		try
 		{
-			System.out.println("Start index: " + startIndex);
-			System.out.println("End index: " + endIndex);
-			System.out.println("Start Date: " + startDate);
-			System.out.println("End Date: " + endDate);
-
 			// Create network updates client, to fetch user network updates
 			final NetworkUpdatesApiClient client = factory.createNetworkUpdatesApiClient(widget.getProperty("token"),
 					widget.getProperty("secret"));
@@ -717,6 +713,7 @@ public class LinkedInUtil
 				 */
 				for (Person person : update.getUpdateContent().getPerson().getConnections().getPersonList())
 				{
+
 					stream.id = person.getId();
 					stream.type = update.getUpdateType().name();
 					stream.created_time = update.getTimestamp() / 1000;
@@ -728,20 +725,20 @@ public class LinkedInUtil
 					 */
 					try
 					{
-						Person person1 = client1.getProfileById(stream.id, EnumSet.of(ProfileField.PUBLIC_PROFILE_URL,
-								ProfileField.LAST_NAME, ProfileField.FIRST_NAME, ProfileField.PICTURE_URL,
-								ProfileField.HEADLINE, ProfileField.LOCATION_NAME, ProfileField.NUM_CONNECTIONS,
-								ProfileField.ID, ProfileField.DISTANCE));
-
-						System.out.println("pic url : " + person1.getPictureUrl());
 						/*
-						 * Changes http to https to avoid client side warnings
-						 * by browser, Changes certificate from m3 to m3-s to
-						 * fix SSL broken image link
+						 * Id or name is private for the people who doesn't
+						 * share their information to third party applications,
+						 * we skip those profiles
 						 */
-						person1.setPictureUrl(changeImageUrl(person1.getPictureUrl()));
+						if (person.getId() != null && person.getId().equalsIgnoreCase("private"))
+							continue;
 
-						json = new JSONObject(person1);
+						if (person.getFirstName().equalsIgnoreCase("private")
+								|| person.getLastName().equalsIgnoreCase("private"))
+							continue;
+
+						// Fetches person details from LinkedIn
+						json = new JSONObject(fetchPersonDetailsInLinkedin(client1, person.getId()));
 					}
 					catch (Exception e)
 					{
@@ -755,6 +752,31 @@ public class LinkedInUtil
 		}
 
 		return list;
+	}
+
+	/**
+	 * Fetches person details from LinkedIn and changes picture URL
+	 * 
+	 * @param client
+	 *            {@link LinkedInApiClient}
+	 * @param linkedInId
+	 *            {@link String} LinkedIN Id
+	 * @return {@link Person}
+	 */
+	private static Person fetchPersonDetailsInLinkedin(LinkedInApiClient client, String linkedInId)
+	{
+		Person person1 = client.getProfileById(linkedInId, EnumSet.of(ProfileField.PUBLIC_PROFILE_URL,
+				ProfileField.LAST_NAME, ProfileField.FIRST_NAME, ProfileField.PICTURE_URL, ProfileField.HEADLINE,
+				ProfileField.LOCATION_NAME, ProfileField.NUM_CONNECTIONS, ProfileField.ID, ProfileField.DISTANCE));
+
+		System.out.println("pic url : " + person1.getPictureUrl());
+		/*
+		 * Changes http to https to avoid client side warnings by browser,
+		 * Changes certificate from m3 to m3-s to fix SSL broken image link
+		 */
+		person1.setPictureUrl(changeImageUrl(person1.getPictureUrl()));
+
+		return person1;
 	}
 
 	/**
@@ -968,7 +990,7 @@ public class LinkedInUtil
 	public static String changeImageUrl(String url)
 	{
 		if (!StringUtils.isBlank(url) && url.contains("licdn.com"))
-			url = url.replace(url.substring(0, url.indexOf(".com") + 4), LINKEDINIMAGEURLFORMAT);
+			url = url.replace(url.substring(0, url.indexOf(".com") + 4), LINKEDIN_IMAGE_URL_FORMAT);
 
 		System.out.println("Changed URL in LinkedIn: " + url);
 		return url;

@@ -14,6 +14,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -223,7 +225,8 @@ public class ContactUtil
      */
     public static int searchContactCountByEmail(String email)
     {
-	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL).filter("properties.value = ", email).count();
+	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
+		.filter("properties.value = ", email).count();
     }
 
     /**
@@ -406,7 +409,8 @@ public class ContactUtil
 	// Put warning
 	if (duplicateFieldName != null && duplicates.size() > 0)
 	{
-	    resultHashtable.put("warning", "Duplicate Values (" + duplicates.size() + ") were not imported " + duplicates);
+	    resultHashtable.put("warning", "Duplicate Values (" + duplicates.size() + ") were not imported "
+		    + duplicates);
 	}
 
 	System.out.println("Converted csv " + csv + " to " + resultHashtable);
@@ -489,7 +493,8 @@ public class ContactUtil
 
 	    // If contact has no email address or duplicate email address,
 	    // contact is not saved
-	    if (StringUtils.isEmpty(contact.getContactFieldValue(Contact.EMAIL)) || ContactUtil.isExists(contact.getContactFieldValue(Contact.EMAIL)))
+	    if (StringUtils.isEmpty(contact.getContactFieldValue(Contact.EMAIL))
+		    || ContactUtil.isExists(contact.getContactFieldValue(Contact.EMAIL)))
 		continue;
 
 	    // If contact has an invalid email address contact is not saved
@@ -522,15 +527,33 @@ public class ContactUtil
 	if (contact == null)
 	    return "?";
 
-	String contactName = contact.getContactFieldValue(Contact.FIRST_NAME) + " " + contact.getContactFieldValue(Contact.LAST_NAME);
+	String contactName = contact.getContactFieldValue(Contact.FIRST_NAME) + " "
+		+ contact.getContactFieldValue(Contact.LAST_NAME);
 
 	return contactName;
     }
 
+    public static Map<String, Object> getMapFromContact(Contact contact)
+    {
+	try
+	{
+	    Map<String, Object> mp = new HashMap<String, Object>();
+	    mp = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(contact),
+		    new TypeReference<HashMap<String, Object>>()
+		    {
+		    });
+	    return mp;
+	}
+	catch (Exception e)
+	{
+	    return new HashMap<String, Object>();
+	}
+    }
+
     public static List<Contact> getRecentContacts(String page_size)
     {
-	return dao.ofy().query(Contact.class).filter("viewed.viewer_id", SessionManager.get().getDomainId()).order("-viewed.viewed_time")
-		.limit(Integer.parseInt(page_size)).list();
+	return dao.ofy().query(Contact.class).filter("viewed.viewer_id", SessionManager.get().getDomainId())
+		.order("-viewed.viewed_time").limit(Integer.parseInt(page_size)).list();
     }
 
     /**
@@ -563,7 +586,8 @@ public class ContactUtil
      */
     public static Key<Contact> getCompanyByName(String companyName)
     {
-	return dao.ofy().query(Contact.class).filter("type", "COMPANY").filter("properties.name", "name").filter("properties.value", companyName).getKey();
+	return dao.ofy().query(Contact.class).filter("type", "COMPANY").filter("properties.name", "name")
+		.filter("properties.value", companyName).getKey();
 
     }
 
@@ -623,7 +647,8 @@ public class ContactUtil
     public static boolean validateEmail(final String hex)
     {
 
-	String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+	String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+		+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
 	Pattern pattern = Pattern.compile(EMAIL_PATTERN);
 
