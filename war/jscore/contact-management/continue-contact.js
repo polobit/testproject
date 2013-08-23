@@ -55,24 +55,12 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
     var $form = $('#' + form_id);
     
-	// Returns, if the save button has disabled attribute 
-	if($(saveBtn).attr('disabled'))
+	// Returns, if the save button has disabled attribute, or form is invalid
+	if($(saveBtn).attr('disabled') || !isValidForm($form))
 		return;
 	
 	// Disables save button to prevent multiple click event issues
 	disable_save_button($(saveBtn));
-	
-    // Validate Form
-    if(!isValidForm($form)){
-
-    	// Removes disabled attribute of save button
-    	enable_save_button($(saveBtn));
-    	return;
-    }
-    
-    // Show loading symbol until model get saved
-    //$('#' + modal_id).find('span.save-status').html(LOADING_HTML);
-    //$('#' + form_id).find('span.save-status').html(LOADING_HTML);
     
     // Read multiple values from contact form
     var properties = [];
@@ -364,15 +352,11 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         	
         	// Removes disabled attribute of save button
         	enable_save_button($(saveBtn));
-        	// Remove loading image
-        	//$('#' + modal_id).find('span.save-status img').remove();
-        	//$('#' + form_id).find('span.save-status img').remove();
         	
-            // Shows error alert of duplicate contacts
-        	
+            // Shows error alert of duplicate contacts        	
         	if(response.status==400)
         	{	
-        		// 400 is out custom code, thrown when duplicate email detected.
+        		// 400 is our custom code, thrown when duplicate email detected.
         		var dupEmail=response.responseText.split('|')[1];
         		if(!dupEmail)dupEmail="";
         		// get the already existing email from response text.
