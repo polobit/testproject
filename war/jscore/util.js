@@ -234,7 +234,7 @@ function property_JSON(name, id, type)
     if(elem_type=='checkbox')elem_value=elem.is(':checked')?'on':'off';
     else elem_value=elem.val();
     
-	json.value = $('#' + id).val();
+	json.value = elem_value;
 	return json;
 }
 
