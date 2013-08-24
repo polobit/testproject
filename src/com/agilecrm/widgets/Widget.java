@@ -73,9 +73,12 @@ public class Widget
 	 */
 	public static enum WidgetType
 	{
-		SOCIAL, SUPPORT, EMAIL, CALL, BILLING
+		SOCIAL, SUPPORT, EMAIL, CALL, BILLING, CUSTOM
 	};
 
+	/**
+	 * Widget type which stores info to categorize the widgets
+	 */
 	public WidgetType widget_type = null;
 
 	/**
@@ -113,8 +116,8 @@ public class Widget
 	/**
 	 * Stores {@link Boolean} info whether the widget is added
 	 */
-	@NotSaved
-	public boolean is_added = true;
+	@NotSaved(IfDefault.class)
+	public boolean is_added = false;
 
 	// Default constructor
 	Widget()
@@ -136,7 +139,6 @@ public class Widget
 	public Widget(String name, String description, String url, String logo, String mini_logo, String fav_ico,
 			WidgetType type)
 	{
-
 		this.name = name;
 		this.description = description;
 		this.url = url;

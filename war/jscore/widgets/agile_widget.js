@@ -210,16 +210,16 @@ function agile_crm_update_contact_properties(propertiesArray, callback)
 	}
 
 	// If property is new then new field is created
-	contact_model.set({ "properties" : properties }, { silent : true });
+	contact_model.set({ "properties" : properties });
 	contact_model.url = "core/api/contacts";
 
 	// Save model
 	contact_model.save({ success : function(model, response)
 	{
-
+		console.log('contact saving ');
 		if (callback && typeof (callback) == "function")
 			callback();
-	} });
+	} }, { silent : true });
 }
 
 /**
@@ -499,4 +499,19 @@ function agile_crm_save_contact_properties_subtype(propertyName, subtype, value)
 	// Save updated contact model
 	contact_model.save()
 
+}
+
+/**
+ * sample to test creating widget
+ */
+function createWidget()
+{
+	var json = {};
+	json["name"] = "custom1";
+	json["widget_type"]= "CUSTOM";
+	
+	var model = new BaseModel(json);
+	model.url = "core/api/widgets";
+	model.save();
+	
 }
