@@ -107,6 +107,9 @@ $(function()
 
 		// URL to connect with widgets
 		widgetModel.url = '/core/api/widgets';
+		
+		// is added is set true to show delete button
+		models[0].set('is_added', true);
 
 		widgetModel.save(models[0].toJSON(), { success : function(data)
 		{
