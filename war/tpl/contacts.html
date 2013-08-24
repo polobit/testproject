@@ -30,11 +30,12 @@
 	</td>
 	<td> 
 <!-- <div style="height:auto;display:inline-block;vertical-align:top;text-overflow:clip;white-space:nowrap;width:15em;overflow:hidden;"> --> 
-	 <div class="agile-ellipsis" style="line-height:20px !important"> 	
-	{{#each tags}}
-    	<span class="label" >{{this}}</span>
-    {{/each}}
-</div>
+	 <div class="ellipsis-multiline" style="line-height:20px !important; word-break:keep-all;"> 	
+		{{#each tags}}
+	    	<span class="label">{{this}}</span>	
+		{{/each}}
+	</div>
+	
 	</td>
 	<td><div>{{lead_score}}</div></td>
 </script>

@@ -914,7 +914,7 @@ tbody a.no-style-a {
 overflow: scroll;width:100%;word-break: break-all;table-layout:fixed
 }
 
- td *:not(.agile-ellipsis){	
+.agile-ellipsis-dynamic > tbody> tr > td *:not(.ellipsis-multiline){	
 	max-width:100%;
 	height:auto;
 	text-overflow:ellipsis;
@@ -922,9 +922,14 @@ overflow: scroll;width:100%;word-break: break-all;table-layout:fixed
 	overflow:hidden;
 }
 
-.agile-ellipsis {
-	width: 100% !important;
-	height:60px !important;
-	overflow: hidden !important;
-	text-overflow: ellipsis !important;
+.ellipsis-multiline {
+  width: 100% !important;
+  height:60px !important;
+  display: block; /* Fallback for non-webkit */
+  display: -webkit-box;
+  margin: 0 auto;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
