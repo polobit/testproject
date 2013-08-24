@@ -65,8 +65,7 @@ public class CustomFieldsAPI
     @Path("/type/{field_type}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<CustomFieldDef> getCustomFieldsByType(
-	    @PathParam("field_type") String type)
+    public List<CustomFieldDef> getCustomFieldsByType(@PathParam("field_type") String type)
     {
 	try
 	{
@@ -92,8 +91,7 @@ public class CustomFieldsAPI
     {
 	try
 	{
-	    CustomFieldDef customFieldDef = CustomFieldDefUtil
-		    .getCustomField(id);
+	    CustomFieldDef customFieldDef = CustomFieldDefUtil.getCustomField(id);
 	    if (customFieldDef != null)
 		customFieldDef.delete();
 	}
@@ -121,9 +119,8 @@ public class CustomFieldsAPI
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Sorry, duplicate custom field label.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Sorry, a custom field with that name is already present.")
+		    .build());
 	}
 	return customField;
     }
@@ -146,9 +143,8 @@ public class CustomFieldsAPI
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Sorry, duplicate custom field label.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Sorry, a custom field with that name is already present.")
+		    .build());
 	}
 	return customField;
     }
@@ -163,8 +159,7 @@ public class CustomFieldsAPI
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteCustomFields(@FormParam("ids") String model_ids)
-	    throws JSONException
+    public void deleteCustomFields(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray CustomFieldsJSONArray = new JSONArray(model_ids);
 	CustomFieldDef.dao.deleteBulkByIds(CustomFieldsJSONArray);

@@ -66,7 +66,7 @@ var DealsRouter = Backbone.Router.extend({
 					});
 					
 					$('#opportunities-by-milestones-model-list > div').addClass("milestone-main");
-					$('.milestone-main :last-child').find("ul").closest('div').css({"border-right":"none"});
+					//$('.milestone-main :last-child').find("ul").closest('div').css({"border-right":"none"});
 					
 					setup_deals_in_milestones();
 

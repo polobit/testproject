@@ -50,7 +50,7 @@ $(function(){
 		
 		$(table).find('thead tr').prepend('<th><input class="thead_check" name="" type="checkbox"/></th>');
 
-		$(table).find('tbody tr').prepend('<td><input class="tbody_check" type="checkbox"/></td>');
+		$(table).find('tbody tr').prepend('<td style="cursor:default;"><input class="tbody_check" type="checkbox"/></td>');
 		
 	  
 		

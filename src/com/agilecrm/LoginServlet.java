@@ -162,12 +162,12 @@ public class LoginServlet extends HttpServlet
 	// as validity is verified in AuthFilter
 	DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
 	if (domainUser == null)
-	    throw new Exception("We have not been able to locate any user");
+	    throw new Exception("We have not been able to locate any user " + email);
 
 	// Check if user is registered by OpenID, if yes then throw exception
 	// notifying him of OpenID registeration
 	if (domainUser.isOpenIdRegisteredUser())
-	    throw new Exception("Please use Google or Yahoo Authentication mechanism to login.");
+	    throw new Exception("Looks like you have registered using Google or Yahoo account. Please use the same to login. ");
 
 	// Check if Encrypted passwords are same
 	if (!StringUtils.equals(MD5Util.getMD5HashedPassword(password), domainUser.getHashedString())
@@ -181,7 +181,7 @@ public class LoginServlet extends HttpServlet
 	if (!subdomain.equalsIgnoreCase(domainUser.domain))
 	    if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 		throw new Exception("User with same email address is registered in " + domainUser.domain + " domain. <a href=https://" + domainUser.domain
-			+ ".agilecrm.com> Click here</a> to continue");
+			+ ".agilecrm.com> Click here</a> to login");
 
 	// Set Cookie and forward to /home
 	UserInfo userInfo = new UserInfo("agilecrm.com", email, domainUser.name);
