@@ -9,7 +9,9 @@
 
 $(function() {
 
-	// To stop propagation to edit page
+	/**
+	 * To stop propagation to edit page
+	 */ 
 	$(".activate-link").die().live('click', function(e){
 		e.stopPropagation();
 	});
@@ -18,7 +20,6 @@ $(function() {
 	 * Activates all features of a task form (highlighting the task form,
 	 * relatedTo field typeahead, changing color and font-weight) when we click
 	 * on task link in activities modal.
-	 * 
 	 */
 	$("#task").click(function(e) {
 		e.preventDefault();
@@ -60,7 +61,6 @@ $(function() {
 	 * Tasks are categorized into four types (overdue, today, tomorrow and
 	 * next-week) while displaying them in client side.Each category has it's
 	 * own table, so to edit tasks call update_task function for each category.
-	 * 
 	 */
 	$('#overdue > tr').live('click', function(e) {
 		e.preventDefault();
@@ -78,7 +78,19 @@ $(function() {
 		e.preventDefault();
 		update_task(this);
 	});
-	$('#tasks-list-model-list > tr, #dashboard1-tasks-model-list > tr').live('click', function(e) {
+	
+	/**
+	 * Task list edit
+	 */
+	$('#tasks-list-model-list > tr > td:not(":first-child")').live('click', function(e) {
+		e.preventDefault();
+		update_task($(this).closest('tr'));
+	});
+	
+	/**
+	 * Dash board edit
+	 */
+	$('#dashboard1-tasks-model-list > tr').live('click', function(e) {
 		e.preventDefault();
 		update_task(this);
 	});
@@ -86,12 +98,9 @@ $(function() {
 	/**
 	 * When clicked on update button of task-update-modal, the task will get
 	 * updated by calling save_task function
-	 * 
 	 */
-
 	$('#update_task_validate').click(function(e) {
 		e.preventDefault();
-
 		save_task('updateTaskForm', 'updateTaskModal', true, this);
 	});
 
@@ -110,7 +119,6 @@ $(function() {
 	 * Show event of update task modal Activates typeahead for task-update-modal
 	 */
 	$('#updateTaskModal').on('shown', function() {
-
 		var el = $("#updateTaskForm");
 		agile_type_ahead("update_task_related_to", el, contacts_typeahead);
 	});
@@ -149,7 +157,6 @@ $(function() {
 
 	/**
 	 * Makes the pending task as completed by calling complete_task function
-	 * 
 	 */
 	$('.tasks-select').live('click', function(e) {
 				e.stopPropagation();

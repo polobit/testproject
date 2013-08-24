@@ -122,9 +122,9 @@ $(function(){
 		remove_validation_errors('casesUpdateModal');
     });
     
-	$('#cases-model-list > tr').live('click', function(e) {
+	$('#cases-model-list > tr > td:not(":first-child")').live('click', function(e) {
 		e.preventDefault();
-		updatecases($(this).data());
+		updatecases($(this).closest('tr').data());
 	});
 });
 

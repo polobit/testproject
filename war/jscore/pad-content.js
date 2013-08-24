@@ -82,7 +82,7 @@ var CONTENT_JSON = {
 			"icon" : "icon-edit icon-3x"
 		},
 		"deals" : {
-			"title" : "No upcoming deals for you",
+			"title" : "No ongoing deals for you",
 			"icon" : "icon-money icon-3x"
 		},
 		"workflows" : {

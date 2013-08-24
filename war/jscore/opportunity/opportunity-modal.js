@@ -1,10 +1,16 @@
 $(function(){
-
+	
+	/**
+	 * Shows deal popup  
+	 */
 	$('.deals-add').live('click', function(e) {
 		e.preventDefault();
 		show_deal();
 	});
-
+	
+	/**
+	 * Validates deal and saves
+	 */
 	$("#opportunity_validate").live('click', function(e){
 		e.preventDefault();
 
@@ -60,11 +66,26 @@ $(function(){
 
     });
     
-	$('#opportunities-model-list > tr, #dashboard-opportunities-model-list > tr').live('click', function(e) {
+   /** 
+    * Deal list view edit
+    */
+    $('#opportunities-model-list > tr > td:not(":first-child")').live('click', function(e) {
+		e.preventDefault();
+		updateDeal($(this).closest('tr').data());
+	});
+    
+    /**
+     * Dash board edit
+     */
+	$('#dashboard-opportunities-model-list > tr').live('click', function(e) {
 		e.preventDefault();
 		updateDeal($(this).data());
 	});
 	
+	
+	/**
+	 * Milestone view edit
+	 */
 	$('.deal-edit').live('click', function(e) {
 		e.preventDefault();
         var data = $(this).closest('.data').attr('data');
@@ -74,7 +95,9 @@ $(function(){
     
 });
 
-// Show deal popup for editing
+/**
+ * Show deal popup for editing
+ */ 
 function updateDeal(ele) {
 	
 	var value = ele.toJSON();
@@ -109,7 +132,9 @@ function updateDeal(ele) {
 	});
 }
 
-// Show new deal popup
+/**
+ * Show new deal popup
+ */ 
 function show_deal(){
 	
 	var el = $("#opportunityForm");
@@ -138,7 +163,9 @@ function show_deal(){
 	});
 }
 
-// Updates or Saves a deal
+/**
+ * Updates or Saves a deal
+ */ 
 function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 	// Returns, if the save button has disabled attribute
 	if ($(saveBtn).attr('disabled'))
@@ -218,6 +245,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 					}
 				});
 			}
+			// When deal is added or updated from Deals route
 			else if (Current_Route == 'deals') {
 
 				if(!readCookie("agile_deal_view")) {
