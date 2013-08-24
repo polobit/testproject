@@ -22,22 +22,49 @@ public class DefaultWidgets
 	 */
 	public static List<Widget> getAvailableWidgets()
 	{
-		// Fetch all default widgets
-		List<Widget> availableWidgets = getDefaultWidgets();
+		// Store all widgets
+		List<Widget> allWidgets = new ArrayList<Widget>();
 
-		// Populate Widgets if they have already been added
-		for (Widget widget : availableWidgets)
+		// Fetch all default widgets
+		List<Widget> defaultWidgets = getDefaultWidgets();
+
+		// add default default widgets to all widgets
+		allWidgets.addAll(defaultWidgets);
+
+		System.out.println("get default ");
+		System.out.println(allWidgets);
+		List<Widget> currentWidgets = WidgetUtil.getWidgetsForCurrentUser();
+
+		for (Widget defaultWidget : defaultWidgets)
 		{
 			/*
-			 * Fetch widget by its name. If it is null, is_added field in widget
-			 * is made false to specify that widget is not added
+			 * Fetch all added widgets by current user, if added, remove the
+			 * default one from all widgets and add the current widget, this
+			 * gives the added status of widget of widget to show in add widget
+			 * page
 			 */
-			if (WidgetUtil.getWidget(widget.name) == null)
-				widget.is_added = false;
+			for (Widget currentWidget : currentWidgets)
+			{
+				if (currentWidget.name.equals(defaultWidget.name))
+				{
+					allWidgets.remove(defaultWidget);
+					allWidgets.add(currentWidget);
+					break;
+				}
+			}
 		}
+		System.out.println("get default and current ");
+		System.out.println(allWidgets);
 
-		// Returns list of widgets
-		return availableWidgets;
+		// add all custom widgets
+		allWidgets.addAll(WidgetUtil.getCustomWidgets());
+
+		System.out.println("get available widgets");
+		System.out.println(allWidgets);
+
+		System.out.println("exit");
+
+		return allWidgets;
 	}
 
 	/**
@@ -48,7 +75,6 @@ public class DefaultWidgets
 	 */
 	private static List<Widget> getDefaultWidgets()
 	{
-
 		List<Widget> widgets = new ArrayList<Widget>();
 
 		/*
@@ -92,6 +118,5 @@ public class DefaultWidgets
 				WidgetType.BILLING));
 
 		return widgets;
-
 	}
 }
