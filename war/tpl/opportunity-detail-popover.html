@@ -13,7 +13,7 @@
 				{{#each contacts}}
                 	<div class="span4" style="display:inline-block;margin:5px;margin-left:25px;">
         			{{#if_contact_type "PERSON"}}
-        				<img class="thumbnail" src="{{gravatarurl properties 50}}" width="40px" height="40px"/>
+        				<img class="thumbnail" src="{{gravatarurl properties 50}}" width="40px" height="40px" style="width:40px; height:40px; "/>
                     	<div style="display:inline-block;text-overflow:ellipsis;white-space:nowrap;width:90px;overflow:hidden;">
                         	{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}
                     	</div>
