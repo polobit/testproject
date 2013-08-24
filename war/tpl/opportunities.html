@@ -27,8 +27,9 @@
         <br /><br />
         <div class="data-block">
             <div class="data-container">
-                <table class="table table-striped showCheckboxes" url="core/api/opportunity/bulk" id="deal-list">
-                    <thead>
+                <table class="table table-striped showCheckboxes agile-ellipsis-dynamic" url="core/api/opportunity/bulk" id="deal-list">
+                    <col width="30px"><col width="20%"><col width="30%"><col width="13%"><col width="13%"><col width="15%"><col width="8%">
+					<thead>
                         <tr>
                             <th>Opportunity</th>
                             <th>Related To</th>
@@ -78,10 +79,10 @@
 
 <script id="opportunities-model-template" type="text/html">
 <td data="{{id}}" class="data">
-	<b style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:7em;overflow:hidden;display:inline-block;">{{name}}</b>
+	<b style="height:auto;display:inline-block;">{{name}}</b>
 </td>
 <td>
-	<div style="height:auto;white-space:nowrap;width:103px;max-height:50px;overflow:hidden;display:inline-block;">
+	<div style="height:auto;max-height:50px;display:inline-block;">
 		{{#each contacts}}
         	{{#if_contact_type "PERSON"}}
         		<a href="#contact/{{id}}" class="activate-link hide-popover"><img class="thumbnail" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline"  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>

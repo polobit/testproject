@@ -371,6 +371,14 @@
 		<url-pattern>/stats</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+	<servlet-name>UnbounceWebhook</servlet-name>
+	<servlet-class>com.agilecrm.forms.UnbounceWebhook</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UnbounceWebhook</servlet-name>
+		<url-pattern>/unbounce</url-pattern>
+	</servlet-mapping>
 	
 	<servlet>
 		<servlet-name>upload_contacts</servlet-name>
