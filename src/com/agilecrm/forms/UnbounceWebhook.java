@@ -1,3 +1,7 @@
+/**
+ * This servlet is used to read unbounce data and create contact 
+ * with properties specified to associated agile api key owner
+ */
 package com.agilecrm.forms;
 
 import java.io.IOException;
@@ -14,6 +18,7 @@ import com.agilecrm.account.APIKey;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.ContactField.FieldType;
+import com.agilecrm.contact.util.ContactUtil;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 @SuppressWarnings("serial")
@@ -23,30 +28,40 @@ protected void service(HttpServletRequest req, HttpServletResponse res) throws I
 {
 	try
 	{	
-		//we need to append agile api key to webhook integration url for it work
+		// Read API Key
 		String apiKey = req.getParameter("api-key");
 		
 		Contact contact = new Contact();
 		List<ContactField> properties = new ArrayList<ContactField>();
 		
-		System.out.println(req.getParameter("json.data"));
-		
+		// Read JSON data
 		JSONObject obj = new JSONObject(req.getParameter("json.data"));
+		
+		// Iterate over JSON data to get form fields
 		Iterator<?> keys = obj.keys();
 		while(keys.hasNext())
 		{
+			//Get name of form field
 			String key = (String) keys.next();
+			
+			// Get value of form field
 		    String value = obj.get(key).toString();
 		    String regex = "\\[|\\]";
 		    value = value.replaceAll(regex, "");
 		    value = value.replaceAll("\"", "");
+		    
+		    // Add property to list of properties
 			properties.add(buildProperty(key, value));
-			
 		}
-		System.out.println("properties" + properties);
+		// Add properties to contact and set contact owner
 		contact.properties = properties;
-		contact.setContactOwner(APIKey.getDomainUserKeyRelatedToAPIKey(apiKey));
-		contact.save();
+		if(APIKey.getDomainUserRelatedToAPIKey(apiKey)!= null)
+		{
+			contact.setContactOwner(APIKey.getDomainUserKeyRelatedToAPIKey(apiKey));
+			
+			// Save contact
+			contact.save();
+		}
 	}
 	catch(Exception e)
 	{
@@ -58,47 +73,58 @@ protected void service(HttpServletRequest req, HttpServletResponse res) throws I
 public static ContactField buildProperty(String name, String value)
 {
 	ContactField field = new ContactField();
-	if (name.equals("first_name") || name.equals("last_name") || name.equals("email") || name.equals("company") || name.equals("title") || name.equals("organisation")
-			|| name.equals("organization") || name.equals("designation") || name.equals("name") || name.equals("phone") || name.equals("phone_number") || name.equals("mobile"))
+	
+	// Set field type to SYSTEM for name, email, company, title, phone, all other fields save as CUSTOM.
+	if (name.equals(Contact.FIRST_NAME) || name.equals(Contact.LAST_NAME) || name.equals(Contact.COMPANY) || name.equals(Contact.TITLE))
 	{
 		field.type = FieldType.SYSTEM;
 	}
-	else field.type = FieldType.CUSTOM;
-	
 	if (name.equals("name"))
 	{
-	field.name = "first_name";
-	String[] nameArray = value.split(" ");
-	field.value = nameArray[0];
-	return field;
-	}
-	else if (name.equals("organisation")||name.equals("organization"))
-	{
-	field.name = "company";
+	field.name = Contact.FIRST_NAME;
 	field.value = value;
-	return field;
+	field.type = FieldType.SYSTEM;
+	}
+	else if (name.contains("organisation")||name.contains("organization"))
+	{
+	field.name = Contact.COMPANY;
+	field.value = value;
+	field.type = FieldType.SYSTEM;
 	}
 	else if (name.equals("designation"))
 	{
-	field.name = "title";
+	field.name = Contact.TITLE;
 	field.value = value;
-	return field;
+	field.type = FieldType.SYSTEM;
 	}
-	else if (name.equals("phone_number") || name.equals("phone"))
+	else if (name.contains("phone"))
 	{
 	field.name = "phone";
 	field.value = value;
+	field.type = FieldType.SYSTEM;
 	field.subtype = "work";
 	}
-	else if (name.equals("mobile"))
+	else if (name.contains("mobile"))
 	{
 	field.name = "phone";
 	field.value = value;
+	field.type = FieldType.SYSTEM;
 	field.subtype = "home";
 	}
+	else if (name.contains("email"))
+	{
+	if (ContactUtil.validateEmail(value))
+	{
+	field.name = Contact.EMAIL;
+	field.value = value;
+	field.type = FieldType.SYSTEM;
+	}}
 	else 
+	{
 	field.name = name;
 	field.value = value;
+	field.type = FieldType.CUSTOM;
+	}
 	return field;
 }
 }
