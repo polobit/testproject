@@ -381,6 +381,16 @@
 	</servlet-mapping>
 	
 	<servlet>
+	<servlet-name>WufooWebhook</servlet-name>
+	<servlet-class>com.agilecrm.forms.WufooWebhook</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>WufooWebhook</servlet-name>
+		<url-pattern>/wufoo</url-pattern>
+	</servlet-mapping>
+	
+	
+	<servlet>
 		<servlet-name>upload_contacts</servlet-name>
 		<servlet-class>com.agilecrm.contact.upload.blob.UploadServlet</servlet-class>
 	</servlet>
