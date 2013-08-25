@@ -166,7 +166,8 @@ $(function() {
 							});
 						}
 						
-						$('#import-header tr th').each(
+						console.log($('#import-header > tbody > tr > td.import-contact-fields').lenght);
+						$('td.import-contact-fields').each(
 								function(index, element) {
 
 									console.log(this);
