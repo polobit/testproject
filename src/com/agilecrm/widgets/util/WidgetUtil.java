@@ -20,7 +20,7 @@ public class WidgetUtil
 	private static ObjectifyGenericDao<Widget> dao = new ObjectifyGenericDao<Widget>(Widget.class);
 
 	/**
-	 * Fetches all {@link Widget}s for current {@link AgileUser}
+	 * Fetches all {@link Widget}s for current {@link AgileUser} which are added
 	 * 
 	 * @return {@link List} of {@link Widget}s
 	 */

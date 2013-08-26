@@ -59,6 +59,9 @@ function organize_widgets(base_model)
 
 	if (widget_type == "BILLING")
 		$('#billing', this.el).append($(itemView.render().el).addClass('span4'));
+	
+	if (widget_type == "CUSTOM")
+		$('#custom', this.el).append($(itemView.render().el).addClass('span4'));
 }
 
 /**
@@ -109,7 +112,7 @@ $(function()
 		widgetModel.url = '/core/api/widgets';
 		
 		// is added is set true to show delete button
-		models[0].set('is_added', true);
+		// models[0].set('is_added', true);
 
 		widgetModel.save(models[0].toJSON(), { success : function(data)
 		{
