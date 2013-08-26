@@ -75,23 +75,25 @@ public static ContactField buildProperty(String name, String value)
 	ContactField field = new ContactField();
 	
 	// Set field type to SYSTEM for name, email, company, title, phone, all other fields save as CUSTOM.
-	if (name.equals(Contact.FIRST_NAME) || name.equals(Contact.LAST_NAME) || name.equals(Contact.COMPANY) || name.equals(Contact.TITLE))
-	{
-		field.type = FieldType.SYSTEM;
-	}
-	if (name.equals("name"))
+	if (name.equals("name") || name.equals(Contact.FIRST_NAME))
 	{
 	field.name = Contact.FIRST_NAME;
 	field.value = value;
 	field.type = FieldType.SYSTEM;
 	}
-	else if (name.contains("organisation")||name.contains("organization"))
+	if (name.equals(Contact.LAST_NAME))
+	{
+	field.name = Contact.LAST_NAME;
+	field.value = value;
+	field.type = FieldType.SYSTEM;
+	}
+	else if (name.contains("organisation")||name.contains("organization") || name.equals(Contact.COMPANY))
 	{
 	field.name = Contact.COMPANY;
 	field.value = value;
 	field.type = FieldType.SYSTEM;
 	}
-	else if (name.equals("designation"))
+	else if (name.equals("designation") || name.equals(Contact.TITLE))
 	{
 	field.name = Contact.TITLE;
 	field.value = value;
