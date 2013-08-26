@@ -41,10 +41,19 @@ function agile_init_gadget() {
 		head.ready(function() {
 			// Set account and generate UI.
 			var Gadget_Cookie = agile_gadget_read_cookie("Agile_Gadget_Cookie");
-
+			// Convert into object.
+			var User_Data = $.parseJSON(Gadget_Cookie);
+			
+			// Cookie is present, Set account.
+			if (Gadget_Cookie != null && User_Data.api_key) {
+				
+				// Fetch user data from cookie.
+				agile_generate_ui(User_Data.api_key,
+							User_Data.domain);
+				
+			}
 			// Check for cookie, if not present create it then set account.
-			if (Gadget_Cookie == null) {
-
+			else {
 				/*
 				 * value - user data object, User_Seesion_Cookie - session
 				 * cookie osapi - dummy open social id, Cookie_Data - cookie
@@ -52,29 +61,17 @@ function agile_init_gadget() {
 				 */
 				var value = {};
 				var User_Seesion_Cookie = {};
-				var osapi = "abcdefghijkl";
 				var Cookie_Data = "";
 
 				value.api_key = '51ekokl790t85b11ivhim9ep7i';
 				value.domain = 'localhost';
 
-				// Set cookie value.
-				User_Seesion_Cookie[osapi] = value;
 				// Convert into string.
-				Cookie_Data = JSON.stringify(User_Seesion_Cookie);
+				Cookie_Data = JSON.stringify(value);
 				// Create cookie
 				agile_gadget_create_cookie('Agile_Gadget_Cookie', Cookie_Data);
 				// Set account
 				agile_generate_ui(value.api_key, value.domain);
-			}
-			// Cookie is present, Set account.
-			else {
-				// Convert into object.
-				var User_Data = $.parseJSON(Gadget_Cookie);
-				// Fetch user data from cookie.
-				for ( var value in User_Data)
-					agile_generate_ui(User_Data[value].api_key,
-							User_Data[value].domain);
 			}
 		});
 	}
@@ -104,9 +101,21 @@ function agile_login() {
 
 	// Cookie
 	var Gadget_Cookie = agile_gadget_read_cookie("Agile_Gadget_Cookie");
+	// Convert into object.
+	var User_Data = $.parseJSON(Gadget_Cookie);
 	
+	// Cookie present, Set account.
+	if (Gadget_Cookie != null && User_Data.api_key) {
+		// Download build UI JavaScript file.
+		head.js('https://agile-gadget.appspot.com/dj-js/agile-gadget-ui.js', function() {
+			head.ready(function() {
+				// Set account
+				agile_generate_ui(User_Data.api_key, User_Data.domain);
+			});
+		});
+	}
 	// Check for cookie, if not there send login request.
-	if (Gadget_Cookie == null) {
+	else {
 		// var url = 'https://googleapps.agilecrm.com/gmail';
 		var url = Lib_Path + 'gmail';
 		console.log("Osapi from " + url);
@@ -120,21 +129,8 @@ function agile_login() {
 			'authz' : 'signed'
 		}).execute(agile_handle_load_response);
 	}
-	// Cookie present, Set account.
-	else {
-		// Download build UI JavaScript file.
-		head.js(Lib_Path + 'misc/gmail/agile-gadget-ui.js', function() {
-
-			// Convert into object.
-			var User_Data = $.parseJSON(Gadget_Cookie);
-			
-			head.ready(function() {
-				// Set account
-				agile_generate_ui(User_Data.api_key, User_Data.domain);
-			});
-		});
-	}
 }
+
 /**
  * Handle login response either go to setup user for registration or load gadget
  * UI.
@@ -145,16 +141,17 @@ function agile_login() {
  */
 function agile_handle_load_response(data) {
 
-	// Create cookie
-	agile_gadget_create_cookie('Agile_Gadget_Cookie', JSON.stringify(data.content));
-
 	// Check user exists, OpenID must have occurred previously.
 	if (data.content.user_exists) {
+		// Create cookie
+		agile_gadget_create_cookie('Agile_Gadget_Cookie', JSON.stringify(data.content));
 		agile_login();
 	}
 
 	// User not exist, go for one time domain registration.
 	else {
+		// Create cookie
+		agile_gadget_create_cookie('Agile_Gadget_Cookie', JSON.stringify(data.content));
 		// Download build UI JavaScript file.
 		head.js(Lib_Path + 'misc/gmail/agile-gadget-setup.js', function() {
 			agile_user_setup(data);
