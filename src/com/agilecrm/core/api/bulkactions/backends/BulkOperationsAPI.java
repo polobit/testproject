@@ -24,6 +24,7 @@ import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
+import com.agilecrm.util.CSVUtil;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -36,218 +37,218 @@ import edu.emory.mathcs.backport.java.util.Arrays;
 @Path("/api/bulk-actions")
 public class BulkOperationsAPI
 {
-    /**
-     * Deletes selected contacts based on ids
-     * 
-     * @param model_ids
-     *            array of contact ids as String
-     * @throws JSONException
-     */
+	/**
+	 * Deletes selected contacts based on ids
+	 * 
+	 * @param model_ids
+	 *            array of contact ids as String
+	 * @throws JSONException
+	 */
 
-    @Path("delete/contacts/{current_user}")
-    @POST
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteContacts(@FormParam("ids") String model_ids, @FormParam("filter") String filter,
-	    @PathParam("current_user") Long current_user_id) throws JSONException
-    {
-	Integer count = 0;
-	List<Contact> contacts = new ArrayList<Contact>();
-	if (!StringUtils.isEmpty(filter))
+	@Path("delete/contacts/{current_user}")
+	@POST
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public void deleteContacts(@FormParam("ids") String model_ids, @FormParam("filter") String filter,
+			@PathParam("current_user") Long current_user_id) throws JSONException
 	{
-	    contacts = BulkActionUtil.getFilterContacts(filter, current_user_id);
+		Integer count = 0;
+		List<Contact> contacts = new ArrayList<Contact>();
+		if (!StringUtils.isEmpty(filter))
+		{
+			contacts = BulkActionUtil.getFilterContacts(filter, current_user_id);
 
-	    ContactUtil.deleteContactsbyList(contacts);
-	    count = contacts.size();
+			ContactUtil.deleteContactsbyList(contacts);
+			count = contacts.size();
+		}
+
+		else if (!StringUtils.isEmpty(model_ids))
+		{
+			contacts = ContactUtil.getContactsBulk(new JSONArray(model_ids));
+
+			ContactUtil.deleteContactsbyList(contacts);
+			count = contacts.size();
+		}
+
+		if (!contacts.isEmpty())
+			if (contacts.get(0).type.equals(Contact.Type.PERSON))
+			{
+				BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.DELETE, String.valueOf(count),
+						"contact(s)");
+				return;
+			}
+
+		BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.DELETE, String.valueOf(count), "companies");
 	}
 
-	else if (!StringUtils.isEmpty(model_ids))
+	/**
+	 * Change the owner of selected contacts
+	 * 
+	 * @param contact_ids
+	 *            array of contact ids as String
+	 * @param new_owner
+	 *            id of new owner (DomainUser id)
+	 * 
+	 * @throws JSONException
+	 */
+	@Path("/change-owner/{new_owner}/{current_user}")
+	@POST
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public void changeOwnerToContacts(@FormParam("contact_ids") String contact_ids,
+			@PathParam("new_owner") String new_owner, @FormParam("filter") String filter,
+			@PathParam("current_user") Long current_user) throws JSONException
 	{
-	    contacts = ContactUtil.getContactsBulk(new JSONArray(model_ids));
+		List<Contact> contact_list = null;
 
-	    ContactUtil.deleteContactsbyList(contacts);
-	    count = contacts.size();
+		if (!StringUtils.isEmpty(filter))
+		{
+			contact_list = BulkActionUtil.getFilterContacts(filter, current_user);
+		}
+		else if (!StringUtils.isEmpty(contact_ids))
+			contact_list = ContactUtil.getContactsBulk(new JSONArray(contact_ids));
+
+		ContactUtil.changeOwnerToContactsBulk(contact_list, new_owner);
+
+		BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.OWNER_CHANGE,
+				String.valueOf(contact_list.size()));
 	}
 
-	if (!contacts.isEmpty())
-	    if (contacts.get(0).type.equals(Contact.Type.PERSON))
-	    {
-		BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.DELETE, String.valueOf(count),
-			"contact(s)");
-		return;
-	    }
-
-	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.DELETE, String.valueOf(count), "companies");
-    }
-
-    /**
-     * Change the owner of selected contacts
-     * 
-     * @param contact_ids
-     *            array of contact ids as String
-     * @param new_owner
-     *            id of new owner (DomainUser id)
-     * 
-     * @throws JSONException
-     */
-    @Path("/change-owner/{new_owner}/{current_user}")
-    @POST
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void changeOwnerToContacts(@FormParam("contact_ids") String contact_ids,
-	    @PathParam("new_owner") String new_owner, @FormParam("filter") String filter,
-	    @PathParam("current_user") Long current_user) throws JSONException
-    {
-	List<Contact> contact_list = null;
-
-	if (!StringUtils.isEmpty(filter))
+	/**
+	 * Enrolls selected contacts to a campaign.
+	 * 
+	 * @param contact_ids
+	 *            array of contact ids as String.
+	 * @param workflowId
+	 *            campaign id that the contacts to be enrolled.
+	 * @throws JSONException
+	 */
+	@Path("enroll-campaign/{workflow-id}/{current_user_id}")
+	@POST
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public void subscribeContactsBulk(@FormParam("contact_ids") String contact_ids,
+			@PathParam("workflow-id") Long workflowId, @FormParam("filter") String filter,
+			@PathParam("current_user_id") Long current_user_id) throws JSONException
 	{
-	    contact_list = BulkActionUtil.getFilterContacts(filter, current_user);
-	}
-	else if (!StringUtils.isEmpty(contact_ids))
-	    contact_list = ContactUtil.getContactsBulk(new JSONArray(contact_ids));
+		List<Contact> contact_list = null;
 
-	ContactUtil.changeOwnerToContactsBulk(contact_list, new_owner);
+		if (!StringUtils.isEmpty(filter))
+			contact_list = BulkActionUtil.getFilterContacts(filter, current_user_id);
+		else if (!StringUtils.isEmpty(contact_ids))
+			contact_list = ContactUtil.getContactsBulk(new JSONArray(contact_ids));
 
-	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.OWNER_CHANGE,
-		String.valueOf(contact_list.size()));
-    }
+		WorkflowSubscribeUtil.subscribeDeferred(contact_list, workflowId);
 
-    /**
-     * Enrolls selected contacts to a campaign.
-     * 
-     * @param contact_ids
-     *            array of contact ids as String.
-     * @param workflowId
-     *            campaign id that the contacts to be enrolled.
-     * @throws JSONException
-     */
-    @Path("enroll-campaign/{workflow-id}/{current_user_id}")
-    @POST
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void subscribeContactsBulk(@FormParam("contact_ids") String contact_ids,
-	    @PathParam("workflow-id") Long workflowId, @FormParam("filter") String filter,
-	    @PathParam("current_user_id") Long current_user_id) throws JSONException
-    {
-	List<Contact> contact_list = null;
-
-	if (!StringUtils.isEmpty(filter))
-	    contact_list = BulkActionUtil.getFilterContacts(filter, current_user_id);
-	else if (!StringUtils.isEmpty(contact_ids))
-	    contact_list = ContactUtil.getContactsBulk(new JSONArray(contact_ids));
-
-	WorkflowSubscribeUtil.subscribeDeferred(contact_list, workflowId);
-
-	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ENROLL_CAMPAIGN,
-		String.valueOf(contact_list.size()));
-    }
-
-    /**
-     * Add tags to selected contacts
-     * 
-     * @param contact_ids
-     *            array of contact ids as String
-     * @param tagsString
-     *            array of tags as string
-     * @throws JSONException
-     */
-    @SuppressWarnings("unchecked")
-    @Path("contact/tags/{current_user}")
-    @POST
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void addTagsToContacts(@FormParam("contact_ids") String contact_ids, @FormParam("data") String tagsString,
-	    @FormParam("filter") String filter, @PathParam("current_user") Long current_user) throws JSONException
-    {
-	System.out.println(filter);
-	System.out.println("current user : " + current_user);
-	System.out.println("domain : " + NamespaceManager.get());
-	System.out.println(contact_ids);
-	System.out.println(tagsString);
-
-	if (StringUtils.isEmpty(tagsString))
-	    return;
-
-	JSONArray tagsJSONArray = new JSONArray(tagsString);
-
-	String[] tagsArray = null;
-	try
-	{
-	    tagsArray = new ObjectMapper().readValue(tagsJSONArray.toString(), String[].class);
-	}
-	catch (Exception e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+		BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ENROLL_CAMPAIGN,
+				String.valueOf(contact_list.size()));
 	}
 
-	if (tagsArray == null)
-	    return;
-
-	int count = 0;
-	if (!StringUtils.isEmpty(filter))
+	/**
+	 * Add tags to selected contacts
+	 * 
+	 * @param contact_ids
+	 *            array of contact ids as String
+	 * @param tagsString
+	 *            array of tags as string
+	 * @throws JSONException
+	 */
+	@SuppressWarnings("unchecked")
+	@Path("contact/tags/{current_user}")
+	@POST
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public void addTagsToContacts(@FormParam("contact_ids") String contact_ids, @FormParam("data") String tagsString,
+			@FormParam("filter") String filter, @PathParam("current_user") Long current_user) throws JSONException
 	{
-	    List<Contact> contacts = BulkActionUtil.getFilterContacts(filter, current_user);
-	    ContactUtil.addTagsToContactsBulk(contacts, tagsArray);
+		System.out.println(filter);
+		System.out.println("current user : " + current_user);
+		System.out.println("domain : " + NamespaceManager.get());
+		System.out.println(contact_ids);
+		System.out.println(tagsString);
 
-	    count = contacts.size();
+		if (StringUtils.isEmpty(tagsString))
+			return;
+
+		JSONArray tagsJSONArray = new JSONArray(tagsString);
+
+		String[] tagsArray = null;
+		try
+		{
+			tagsArray = new ObjectMapper().readValue(tagsJSONArray.toString(), String[].class);
+		}
+		catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		if (tagsArray == null)
+			return;
+
+		int count = 0;
+		if (!StringUtils.isEmpty(filter))
+		{
+			List<Contact> contacts = BulkActionUtil.getFilterContacts(filter, current_user);
+			ContactUtil.addTagsToContactsBulk(contacts, tagsArray);
+
+			count = contacts.size();
+		}
+		else if (!StringUtils.isEmpty(contact_ids))
+		{
+			List<Contact> contacts = ContactUtil.getContactsBulk(new JSONArray(contact_ids));
+
+			ContactUtil.addTagsToContactsBulk(contacts, tagsArray);
+			count = contacts.size();
+		}
+		BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ADD_TAGS, Arrays.asList(tagsArray)
+				.toString(), String.valueOf(count));
 	}
-	else if (!StringUtils.isEmpty(contact_ids))
+
+	/**
+	 * It runs in backends. Fetches blob data based on the blob key sent and
+	 * call CSV utility function is called to create contacts, based on the
+	 * contact prototype sent.
+	 * 
+	 * @param contact
+	 * @param ownerId
+	 * @param key
+	 */
+	@Path("/upload/{owner_id}/{key}")
+	@POST
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public void contactsBulkSave(Contact contact, @PathParam("owner_id") String ownerId, @PathParam("key") String key)
 	{
-	    List<Contact> contacts = ContactUtil.getContactsBulk(new JSONArray(contact_ids));
+		System.out.println("backend running");
 
-	    ContactUtil.addTagsToContactsBulk(contacts, tagsArray);
-	    count = contacts.size();
+		System.out.println(key);
+
+		// Creates a blobkey object from blobkey string
+		BlobKey blobKey = new BlobKey(key);
+
+		// Reads the stream from blobstore
+		InputStream blobStream;
+		try
+		{
+			blobStream = new BlobstoreInputStream(blobKey);
+			// Converts stream data into valid string data
+
+			String csv = IOUtils.toString(blobStream, "UTF-8");
+
+			System.out.println(contact);
+
+			// Calls utility method to save contacts in csv with owner id,
+			// according to contact prototype sent
+			CSVUtil.createContactsFromCSV(csv, contact, ownerId);
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally
+		{
+			CacheUtil.deleteCache(key);
+
+			// Delete blob data after contacts are created
+			BlobstoreServiceFactory.getBlobstoreService().delete(blobKey);
+		}
 	}
-	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ADD_TAGS, Arrays.asList(tagsArray)
-		.toString(), String.valueOf(count));
-    }
-
-    /**
-     * It runs in backends. Fetches blob data based on the blob key sent and
-     * call CSV utility function is called to create contacts, based on the
-     * contact prototype sent.
-     * 
-     * @param contact
-     * @param ownerId
-     * @param key
-     */
-    @Path("/upload/{owner_id}/{key}")
-    @POST
-    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void contactsBulkSave(Contact contact, @PathParam("owner_id") String ownerId, @PathParam("key") String key)
-    {
-	System.out.println("backend running");
-
-	System.out.println(key);
-
-	// Creates a blobkey object from blobkey string
-	BlobKey blobKey = new BlobKey(key);
-
-	// Reads the stream from blobstore
-	InputStream blobStream;
-	try
-	{
-	    blobStream = new BlobstoreInputStream(blobKey);
-	    // Converts stream data into valid string data
-
-	    String csv = IOUtils.toString(blobStream, "UTF-8");
-
-	    System.out.println(contact);
-
-	    // Calls utility method to save contacts in csv with owner id,
-	    // according to contact prototype sent
-	    ContactUtil.createContactsFromCSV(csv, contact, ownerId);
-	}
-	catch (IOException e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
-	finally
-	{
-	    CacheUtil.deleteCache(key);
-
-	    // Delete blob data after contacts are created
-	    BlobstoreServiceFactory.getBlobstoreService().delete(blobKey);
-	}
-    }
 }
