@@ -1,12 +1,16 @@
 package com.agilecrm.util;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.StringTokenizer;
+
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import com.google.appengine.api.NamespaceManager;
-import com.thirdparty.SendGrid;
+import com.thirdparty.Mandrill;
 
 public class EmailUtil
 {
@@ -81,6 +85,33 @@ public class EmailUtil
     }
 
     /**
+     * Returns set collection with string tokens obtained from given string.
+     * 
+     * @param str
+     *            - String to be tokenized having delimiter like comma
+     * @param delimiter
+     *            - Delimiter string like comma.
+     * @return Set<String>
+     */
+    public static Set<String> getStringTokenSet(String str, String delimiter)
+    {
+	// Set to not allow duplicates
+	Set<String> tokenSet = new HashSet<String>();
+
+	// Generate tokens w.r.t delimiter
+	StringTokenizer st = new StringTokenizer(str, delimiter);
+
+	// add tokens to set
+	while (st.hasMoreTokens())
+	{
+	    String email = st.nextToken();
+	    tokenSet.add(email.trim());
+	}
+
+	return tokenSet;
+    }
+
+    /**
      * Sends an email using to remote object <code>SendGridEmail</code>
      * 
      * @param fromEmail
@@ -92,9 +123,8 @@ public class EmailUtil
      * @param text
      * @return response of the remote object
      */
-    public static String sendMail(String fromEmail, String fromName, String to, String subject, String replyTo, String html, String text)
+    public static void sendMail(String fromEmail, String fromName, String to, String subject, String replyTo, String html, String text)
     {
-	return SendGrid.sendMail(fromEmail, fromName, to, subject, replyTo, html, text, null, null);
-
+	Mandrill.sendMail(fromEmail, fromName, to, subject, replyTo, html, text);
     }
 }
