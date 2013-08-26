@@ -43,8 +43,7 @@ public class RapleafWidgetsAPI
     @Path("{widget-id}/{email}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public String getRapleafDetails(@PathParam("widget-id") Long widgetId,
-	    @PathParam("email") String email)
+    public String getRapleafDetails(@PathParam("widget-id") Long widgetId, @PathParam("email") String email)
     {
 	// Retrieves widget based on its id
 	Widget widget = WidgetUtil.getWidget(widgetId);
@@ -58,22 +57,15 @@ public class RapleafWidgetsAPI
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
     }
 
