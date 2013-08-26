@@ -444,6 +444,15 @@ function pieMilestones()
 }
 
 /**
+ * Shows pie chart of tasks split by Type
+ * @param params - params e.g. owner=<owner-id>, directly sent with url as GET request
+ */
+function pieTasks(params)
+{
+	pie('core/api/tasks/stats'+params,'pie-tasks-chart','');
+}
+
+/**
  * Shows line chart for deal statistics. Compares deal totals and pipeline with respect to 
  * time
  */
