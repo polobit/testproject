@@ -5,12 +5,13 @@
             <fieldset>
                 <legend>Add tags to selected contacts</legend>
                 <div class="control-group">         
-                    <label class="control-label">Add tags</label>
+                    <label class="control-label">Add tags <span class="field_req">*</span></label>
                     <div class="controls">
                         <div class="pull-left">
                         <ul name="tags" class= "tagsinput tags"></ul>
                         </div>              
                         <input name="tags" type="text" id="addBulkTags" class="tags-typeahead" placeholder="Enter tags separated by comma"/>
+						<span class="error-tags" style="display:none;color:red;">This field is required.</span>
                     </div>
                 </div>
                 <div class="form-actions">          
