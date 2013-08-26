@@ -5,7 +5,6 @@ import java.util.List;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.widgets.Widget;
-import com.agilecrm.widgets.Widget.WidgetType;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -33,7 +32,7 @@ public class WidgetUtil
 		Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);
 
 		// Fetches list of widgets related to AgileUser key
-		return ofy.query(Widget.class).ancestor(userKey).list();
+		return DefaultWidgets.saveIsAddedStatus(ofy.query(Widget.class).ancestor(userKey).list());
 	}
 
 	/**
@@ -113,19 +112,24 @@ public class WidgetUtil
 	}
 
 	/**
-	 * Fetches all {@link Widget}s for current {@link AgileUser}
+	 * Fetches all available widgets (custom and default) in agile account.
 	 * 
 	 * @return {@link List} of {@link Widget}s
 	 */
-	public static List<Widget> getCustomWidgets()
+	public static List<Widget> getAvailableWidgets()
 	{
-		Objectify ofy = ObjectifyService.begin();
+		// Fetch all widgets(default and custom) added by current user
+		List<Widget> currentWidgets = getWidgetsForCurrentUser();
 
-		// Creates Current AgileUser key
-		Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);
+		/*
+		 * check in current widgets whether all default widgets are present and
+		 * add them if not present
+		 */
+		List<Widget> allWidgets = DefaultWidgets.checkAndAddDefaultWidgets(currentWidgets);
 
-		System.out.println(ofy.query(Widget.class).ancestor(userKey).filter("widget_type", WidgetType.CUSTOM).list());
-		// Fetches list of widgets related to AgileUser key
-		return ofy.query(Widget.class).ancestor(userKey).filter("widget_type", WidgetType.CUSTOM).list();
+		System.out.println("get available widgets");
+		System.out.println(allWidgets);
+
+		return allWidgets;
 	}
 }

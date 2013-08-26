@@ -79,6 +79,7 @@ $(function()
 	 */
 	$('.add-widget').live('click', function(e)
 	{
+		
 		/*
 		 * We make add button on a widget disabled on click of it. This is done
 		 * to avoid continuous click in a short time, like double click on add
@@ -112,7 +113,7 @@ $(function()
 		widgetModel.url = '/core/api/widgets';
 		
 		// is added is set true to show delete button
-		// models[0].set('is_added', true);
+		models[0].set('is_added', true);
 
 		widgetModel.save(models[0].toJSON(), { success : function(data)
 		{
