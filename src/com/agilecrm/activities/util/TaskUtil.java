@@ -1,10 +1,13 @@
 package com.agilecrm.activities.util;
 
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.WordUtils;
+import org.json.JSONObject;
 
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
@@ -125,8 +128,9 @@ public class TaskUtil
     {
 	try
 	{
-	    return dao.ofy().query(Task.class).filter("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId())).order("due")
-		    .filter("is_complete", false).limit(50).list();
+	    return dao.ofy().query(Task.class)
+		    .filter("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+		    .order("due").filter("is_complete", false).limit(50).list();
 	}
 	catch (Exception e)
 	{
@@ -147,8 +151,9 @@ public class TaskUtil
 	     * int thisWeekDate = (7-date.getDay());
 	     * System.out.println("all pending tasks this week="+thisWeekDate);
 	     */
-	    return dao.ofy().query(Task.class).filter("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId())).order("due")
-		    .filter("is_complete", false).limit(7).list();
+	    return dao.ofy().query(Task.class)
+		    .filter("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+		    .order("due").filter("is_complete", false).limit(7).list();
 	}
 	catch (Exception e)
 	{
@@ -182,7 +187,8 @@ public class TaskUtil
 	    System.out.println("check for " + startTime + " " + endTime);
 
 	    // Gets list of tasks filtered on given conditions
-	    return dao.ofy().query(Task.class).filter("due >=", startTime).filter("due <=", endTime).filter("is_complete", false).list();
+	    return dao.ofy().query(Task.class).filter("due >=", startTime).filter("due <=", endTime)
+		    .filter("is_complete", false).list();
 	}
 	catch (Exception e)
 	{
@@ -216,7 +222,8 @@ public class TaskUtil
 	System.out.println("check for " + startTime + " " + endTime);
 
 	// Gets list of tasks filtered on given conditions
-	List<Task> dueTasks = dao.ofy().query(Task.class).filter("owner", new Key<DomainUser>(DomainUser.class, domainUserId)).filter("due >", startTime)
+	List<Task> dueTasks = dao.ofy().query(Task.class)
+		.filter("owner", new Key<DomainUser>(DomainUser.class, domainUserId)).filter("due >", startTime)
 		.filter("due <=", endTime).filter("is_complete", false).list();
 
 	return dueTasks;
@@ -224,8 +231,9 @@ public class TaskUtil
 
     public static List<Task> getTasksRelatedToCurrentUser()
     {
-	return dao.ofy().query(Task.class).filter("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId())).order("-created_time")
-		.limit(10).list();
+	return dao.ofy().query(Task.class)
+		.filter("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+		.order("-created_time").limit(10).list();
     }
 
     /**
@@ -269,5 +277,49 @@ public class TaskUtil
 
 	// Updates all
 	Task.dao.putAll(tasks);
+    }
+
+    /**
+     * * Returns Count of tasks of a owner of a particular type, if owner is
+     * null returns count of all tasks of the type
+     * 
+     * @param taskType
+     *            - type of task
+     * @param owner
+     *            - owner of task, null to get all of the type
+     */
+    public static int getTaskCount(Task.Type taskType, String owner)
+    {
+	Query<Task> query = dao.ofy().query(Task.class).filter("type =", taskType);
+
+	if (StringUtils.isEmpty(owner))
+	    return query.count();
+
+	return query.filter("owner =", new Key<DomainUser>(DomainUser.class, Long.valueOf(owner))).count();
+    }
+
+    /**
+     * Returns JSON representation of stats of task types,<br/>
+     * "Meeting":42,"FollowUp":90,...
+     * 
+     * @param owner
+     *            - owner of the tasks, can be null for getting overall stats
+     * @return - the JSON object representing the stats
+     */
+    public static JSONObject getStats(String owner)
+    {
+	JSONObject obj = new JSONObject();
+
+	try
+	{
+	    for (Task.Type type : EnumSet.allOf(Task.Type.class))
+		obj.put(WordUtils.capitalizeFully(type.toString().replace('_', ' ')), getTaskCount(type, owner));
+
+	    return obj;
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
     }
 }

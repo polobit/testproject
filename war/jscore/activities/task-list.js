@@ -11,14 +11,14 @@ function initOwnerslist() {
 				$(this).closest("ul").data("selected_item", id);
 				$(this).closest(".btn-group").find(".selected_name")
 						.text(name);
-				
-
 				updateData(getParams());
 	});
 	$("ul#owner-tasks li a").die().live("click", function() {
 		$('.task-heading').text($(this).html());
+		pieTasks(getParams()); // Show tasks only when user changes My Tasks vs All Tasks
 	});
 	updateData(getParams());
+	pieTasks(getParams());
 }
 
 var allTasksListView;
@@ -120,7 +120,7 @@ $(function(){
 			bulk_complete_operation('/core/api/tasks/bulk/complete', index_array, table, data_array);
 		}	
 		else
-            $('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">×</a>You have not selected any records to complete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
+            $('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to complete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
 		
 	});
 	

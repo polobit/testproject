@@ -757,8 +757,11 @@ var ContactsRouter = Backbone.Router.extend({
      * Loads the tags template to add tags to the selected contacts
      */
     tagsBulk: function(){
-        
-    	$("#content").html(getTemplate("bulk-actions-tags", {}));
+        // On reloading redirecting to contacts list
+    	if (!this.contactsListView )
+    		Backbone.history.navigate("contacts", { trigger : true });
+    	else
+    		$("#content").html(getTemplate("bulk-actions-tags", {}));
     },
     
     /**

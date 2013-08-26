@@ -145,7 +145,7 @@ $(function()
 		Backbone.history.navigate("bulk-tags", { trigger : true });
 
 		setup_tags_typeahead();
-
+		
 		/**
 		 * Add the tags to the selected contacts by sending the contact ids and
 		 * tags through post request to the appropriate url
@@ -155,9 +155,9 @@ $(function()
 			e.preventDefault();
 
 			var tags = get_tags('tagsBulkForm');
+
 			if (tags[0].value.length > 0)
 			{
-
 				// Show loading symbol until model get saved
 				var saveButton=$(this);
 
@@ -178,10 +178,19 @@ $(function()
 					{
 						tagsCollection.add({ "tag" : tag });
 					});
+					// On save back to contacts list
+					Backbone.history.navigate("contacts", { trigger : true });
 				});
+			}
+			else 
+			{
+				$('#addBulkTags').focus();
+				$('.error-tags').show().delay(3000).hide(1);
+				return;
 			}
 		});
 	});
+
 
 	/**
 	 * Bulk operations - Send email Sends email to the bulk of contacts by
@@ -220,45 +229,35 @@ $(function()
 		Backbone.history.navigate("bulk-email", { trigger : true });
 	});
 
-	$("#select-all-available-contacts")
-			.die()
-			.live(
-					'click',
-					function(e)
-					{
-						e.preventDefault();
-						SELECT_ALL = true;
-						_BULK_CONTACTS = window.location.hash;
-						$('body')
-								.find('#bulk-select')
-								.css('display', 'block')
-								.html(
-										'Selected All ' + getAvailableContacts() + ' contacts. <a hrer="#" id="select-all-revert" style="cursor:pointer">Select chosen contacts only</a>');
+	$("#select-all-available-contacts").die().live('click', function(e)
+	{
+				e.preventDefault();
+				SELECT_ALL = true;
+				_BULK_CONTACTS = window.location.hash;
+				$('body')
+						.find('#bulk-select')
+						.css('display', 'block')
+						.html(
+								'Selected All ' + getAvailableContacts() + ' contacts. <a hrer="#" id="select-all-revert" style="cursor:pointer">Select chosen contacts only</a>');
 
-						// On choosing select all option, all the visible
-						// checkboxes in the table should be checked
-						$.each($('.tbody_check'), function(index, element)
-						{
-							$(element).attr('checked', "checked");
-						})
-					})
+				// On choosing select all option, all the visible
+				// checkboxes in the table should be checked
+				$.each($('.tbody_check'), function(index, element)
+				{
+					$(element).attr('checked', "checked");
+				});
+	});
 
-	$("#select-all-revert")
-			.die()
-			.live(
-					'click',
-					function(e)
-					{
+	$("#select-all-revert").die().live('click', function(e)
+	{
 						e.preventDefault();
 						SELECT_ALL = false;
 						_BULK_CONTACTS = undefined;
 
-						$('body')
-								.find('#bulk-select')
-								.css('display', 'block')
-								.html(
+						$('body').find('#bulk-select').css('display', 'block').html(
 										"Selected " + App_Contacts.contactsListView.collection.length + " contacts. <a href='#'  id='select-all-available-contacts' >Select all " + getAvailableContacts() + " contacts</a>");
-					})
+	});
+	
 });
 
 /**
