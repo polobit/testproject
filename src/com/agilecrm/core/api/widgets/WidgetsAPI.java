@@ -13,7 +13,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.agilecrm.widgets.Widget;
-import com.agilecrm.widgets.util.DefaultWidgets;
 import com.agilecrm.widgets.util.WidgetUtil;
 
 /**
@@ -40,7 +39,7 @@ public class WidgetsAPI
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Widget> getAvailableWidgets()
 	{
-		return DefaultWidgets.getAvailableWidgets();
+		return WidgetUtil.getAvailableWidgets();
 	}
 
 	/**
