@@ -15,7 +15,11 @@ var Catalog_Widgets_View = null;
 function pickWidget()
 {
 	Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default', restKey : "widget", templateKey : "widgets-add",
-		sort_collection : false, individual_tag_name : 'div' });
+		sort_collection : false, individual_tag_name : 'div', postRenderCallback : function(el)
+		{
+			build_custom_widget_form(el);
+
+		} });
 
 	// Append widgets into view by organizing them
 	Catalog_Widgets_View.appendItem = organize_widgets;
@@ -46,22 +50,22 @@ function organize_widgets(base_model)
 	 * as div id (div defined in widget_add.html)
 	 */
 	if (widget_type == "SOCIAL")
-		$('#social', this.el).append($(itemView.render().el).addClass('span4'));
+		$('#social', this.el).append($(itemView.render().el).addClass('span4').css("margin-left", "0px"));
 
 	if (widget_type == "SUPPORT")
-		$('#support', this.el).append($(itemView.render().el).addClass('span4'));
+		$('#support', this.el).append($(itemView.render().el).addClass('span4').css("margin-left", "0px"));
 
 	if (widget_type == "EMAIL")
-		$('#email', this.el).append($(itemView.render().el).addClass('span4'));
+		$('#email', this.el).append($(itemView.render().el).addClass('span4').css("margin-left", "0px"));
 
 	if (widget_type == "CALL")
-		$('#call', this.el).append($(itemView.render().el).addClass('span4'));
+		$('#call', this.el).append($(itemView.render().el).addClass('span4').css("margin-left", "0px"));
 
 	if (widget_type == "BILLING")
-		$('#billing', this.el).append($(itemView.render().el).addClass('span4'));
-	
+		$('#billing', this.el).append($(itemView.render().el).addClass('span4').css("margin-left", "0px"));
+
 	if (widget_type == "CUSTOM")
-		$('#custom', this.el).append($(itemView.render().el).addClass('span4'));
+		$('#custom', this.el).append($(itemView.render().el).addClass('span4').css("margin-left", "0px"));
 }
 
 /**
@@ -79,7 +83,7 @@ $(function()
 	 */
 	$('.add-widget').live('click', function(e)
 	{
-		
+
 		/*
 		 * We make add button on a widget disabled on click of it. This is done
 		 * to avoid continuous click in a short time, like double click on add
@@ -111,7 +115,7 @@ $(function()
 
 		// URL to connect with widgets
 		widgetModel.url = '/core/api/widgets';
-		
+
 		// is added is set true to show delete button
 		models[0].set('is_added', true);
 
@@ -189,4 +193,33 @@ $(function()
 
 		}, dataType : 'json' });
 	});
+
+	$('#add-custom-widget').die().live('click', function(e)
+	{
+		e.preventDefault();
+
+	});
+
 });
+
+function build_custom_widget_form(el)
+{
+	$('#add-custom-widget').die().live(
+			'click',
+			function(e)
+			{
+
+				var widget_custom_view = new Base_Model_View({ url : "/core/api/widgets", template : "add-custom-widget", isNew : false,
+					postRenderCallback : function(el)
+					{
+						console.log(el);
+					}, saveCallback : function(model)
+					{
+						Catalog_Widgets_View.collection.add(model);
+					} });
+
+				$('#custom-widget', el).html(widget_custom_view.render(true).el);
+			});
+
+}
+

@@ -254,6 +254,6 @@ public class Widget
 	@Override
 	public String toString()
 	{
-		return "Name: " + name + " Description: " + description;
+		return "[Name: " + name + ", Is added: " + is_added + "]";
 	}
 }

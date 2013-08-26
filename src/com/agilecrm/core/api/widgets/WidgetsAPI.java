@@ -13,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.Widget.WidgetType;
 import com.agilecrm.widgets.util.WidgetUtil;
 
 /**
@@ -52,7 +53,7 @@ public class WidgetsAPI
 	public List<Widget> getWidgets()
 	{
 		// Returns list of widgets saved by current user
-		return WidgetUtil.getWidgetsForCurrentUser();
+		return WidgetUtil.getAddedWidgetsForCurrentUser();
 	}
 
 	/**
@@ -68,6 +69,9 @@ public class WidgetsAPI
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Widget createWidget(Widget widget)
 	{
+		if (widget == null)
+			return null;
+
 		widget.save();
 		return widget;
 	}
@@ -84,6 +88,9 @@ public class WidgetsAPI
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Widget updateWidget(Widget widget)
 	{
+		if (widget == null)
+			return null;
+
 		widget.save();
 		return widget;
 	}
@@ -100,7 +107,49 @@ public class WidgetsAPI
 	public void deleteWidget(@PathParam("widget_name") String widget_name)
 	{
 		// Deletes widget based on name
-		WidgetUtil.getWidget(widget_name).delete();
+		Widget widget = WidgetUtil.getWidget(widget_name);
+
+		if (widget == null)
+			return;
+
+		/*
+		 * For custom widgets, we doesn't remove it from database and just make
+		 * is added button as false, as we get the information from database
+		 * every time unlike default widgets
+		 */
+		if (widget != null && widget.widget_type.equals(WidgetType.CUSTOM))
+		{
+			widget.is_added = false;
+			widget.save();
+			return;
+		}
+
+		// default widgets are removed from database on deletion
+		widget.delete();
+	}
+
+	/**
+	 * Removes a custom widget based on widget name from database
+	 * 
+	 * @param widget_name
+	 *            {@link String}
+	 */
+	@Path("/remove/{widget_name}")
+	@DELETE
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public void removeWidget(@PathParam("widget_name") String widget_name)
+	{
+		// Deletes widget based on name
+		Widget widget = WidgetUtil.getWidget(widget_name);
+
+		if (widget == null)
+			return;
+
+		// check if widget is custom widget and delete it
+		if (widget.widget_type.equals(WidgetType.CUSTOM))
+		{
+			widget.delete();
+		}
 	}
 
 	/**

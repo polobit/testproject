@@ -175,6 +175,8 @@ var Base_Model_View = Backbone.View
 				 */
 				var formId = $(this.el).find('form').attr('id');
 
+				var saveCallback = this.options.saveCallback;
+				
 				// Represents form element
 				var $form = $('#' + formId);
 				
@@ -350,7 +352,16 @@ var Base_Model_View = Backbone.View
 											if (modal) {
 												$(modal).modal('hide');
 											}
-										} else {
+										}
+										else if(saveCallback)
+											{
+												if (saveCallback && typeof (saveCallback) === "function") {
+													console.log(model)
+													// execute the callback, passing parameters as necessary
+													saveCallback(model);
+												}
+											}
+										else {
 											/* Hide loading on error
 											if($save_info)
 												$save_info.hide();
@@ -452,7 +463,7 @@ var Base_Model_View = Backbone.View
 					 * is provided as option when creating an model.
 					 */
 					var callback = this.options.postRenderCallback;
-
+					
 					/*
 					 * If callback is available for the view, callback functions
 					 * is called by sending el(current view html element) as

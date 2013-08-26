@@ -68,58 +68,6 @@ public class DefaultWidgets
 	}
 
 	/**
-	 * Checks if all default widgets provided by Agile are added by current
-	 * user, If not added, adds the remaining default widgets to the list and
-	 * returns all available widgets
-	 * 
-	 * @param currentWidgets
-	 *            All widgets (custom and default) added by current
-	 *            {@link AgileUser}
-	 * @return {@link List} of {@link Widget}s
-	 */
-	public static List<Widget> checkAndAddDefaultWidgets(List<Widget> currentWidgets)
-	{
-		// store all widgets (custom and default)
-		List<Widget> allWidgets = new ArrayList<Widget>();
-
-		// Add all current widgets to list
-		allWidgets.addAll(currentWidgets);
-
-		// Creates and fetches all default widgets (not from database)
-		List<Widget> defaultWidgets = getAvailableDefaultWidgets();
-
-		/*
-		 * From all default widgets, if name of default widget not equals with
-		 * the current added widget, add the default widget to all widgets
-		 * (remaining default widgets other than added by current user are
-		 * added)
-		 */
-		for (Widget defaultWidget : defaultWidgets)
-		{
-			boolean isPresent = false;
-			for (Widget currentWidget : currentWidgets)
-			{
-				// We check default widgets, custom widgets are already in list
-				if (currentWidget.widget_type.equals(WidgetType.CUSTOM))
-					continue;
-
-				// if default widget is present, make isPresent true and break
-				if (defaultWidget.name.equals(currentWidget.name))
-				{
-					isPresent = true;
-					break;
-				}
-			}
-
-			// If default widget is not in current widgets, add it
-			if (!isPresent)
-				allWidgets.add(defaultWidget);
-		}
-
-		return allWidgets;
-	}
-
-	/**
 	 * Adds is_added field to current added widgets by the current user as true,
 	 * if it is false and saves it in database
 	 * 
@@ -157,57 +105,63 @@ public class DefaultWidgets
 			}
 
 		}
+
+		System.out.println("In save widgets");
+		System.out.println(currentWidgets);
 		return currentWidgets;
 	}
 
 	/**
-	 * Checks whether widgets are added already, if widget is added then
-	 * is_added field in Widget is saved, so that add button can be shown or
-	 * delete button can be shown if already added
+	 * Checks if all default widgets provided by Agile are added by current
+	 * user, If not added, adds the remaining default widgets to the list and
+	 * returns all available widgets
 	 * 
+	 * @param currentWidgets
+	 *            All widgets (custom and default) added by current
+	 *            {@link AgileUser}
 	 * @return {@link List} of {@link Widget}s
 	 */
-	public static List<Widget> getDefaultWidgets()
+	public static List<Widget> checkAndAddDefaultWidgets(List<Widget> currentWidgets)
 	{
-		List<Widget> widgets = new ArrayList<Widget>();
+		List<Widget> allWidgets = new ArrayList<Widget>();
 
 		// Creates and fetches all default widgets (not from database)
 		List<Widget> defaultWidgets = getAvailableDefaultWidgets();
 
 		// add default widgets to all widgets
-		widgets.addAll(defaultWidgets);
+		allWidgets.addAll(defaultWidgets);
 
-		System.out.println("get default ");
-		System.out.println(widgets);
-
-		// All widgets(default and custom) added by current user
-		List<Widget> currentWidgets = WidgetUtil.getWidgetsForCurrentUser();
+		System.out.println("default widgets ");
+		System.out.println(defaultWidgets);
+		System.out.println(allWidgets);
 
 		/*
 		 * From all widgets added by current user, if name of default widget
-		 * equals with the current added widget, remove the default widget from
-		 * all widgets and add the current widget to list, this gives the added
-		 * status of widget to show in add widget page
+		 * equals with the current widget, remove the default widget from list
+		 * and add the current widget to list, this gives the added status of
+		 * widget to show in add widget page
 		 */
 		for (Widget currentWidget : currentWidgets)
 		{
-			// We check default widgets, current widgets are skipped
+			// If it is custom widget, add it at the last
 			if (currentWidget.widget_type.equals(WidgetType.CUSTOM))
-				continue;
-
-			for (Widget defaultWidget : defaultWidgets)
 			{
-				if (currentWidget.name.equals(defaultWidget.name))
+				allWidgets.add(currentWidget);
+				continue;
+			}
+
+			// check in default widgets and update it with the object in db
+			for (int i = 0; i < defaultWidgets.size(); i++)
+			{
+				if (currentWidget.name.equals(defaultWidgets.get(i).name))
 				{
-					widgets.remove(defaultWidget);
-					widgets.add(currentWidget);
+					allWidgets.remove(i);
+					allWidgets.add(i, currentWidget);
 					break;
 				}
 			}
 		}
 
-		System.out.println("get default and current ");
-		System.out.println(widgets);
-		return widgets;
+		return allWidgets;
 	}
 }

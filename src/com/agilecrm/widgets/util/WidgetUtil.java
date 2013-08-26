@@ -35,6 +35,17 @@ public class WidgetUtil
 		return DefaultWidgets.saveIsAddedStatus(ofy.query(Widget.class).ancestor(userKey).list());
 	}
 
+	public static List<Widget> getAddedWidgetsForCurrentUser()
+	{
+		Objectify ofy = ObjectifyService.begin();
+
+		// Creates Current AgileUser key
+		Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);
+
+		// Fetches list of widgets related to AgileUser key
+		return CustomWidgets.skipNotAddedCustomWidgets(ofy.query(Widget.class).ancestor(userKey).list());
+	}
+
 	/**
 	 * Gets {@link Widget} by its id, queries widget on id with user key
 	 * 

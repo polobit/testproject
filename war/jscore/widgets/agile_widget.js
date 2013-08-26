@@ -501,17 +501,3 @@ function agile_crm_save_contact_properties_subtype(propertyName, subtype, value)
 
 }
 
-/**
- * sample to test creating widget
- */
-function createWidget()
-{
-	var json = {};
-	json["name"] = "custom1";
-	json["widget_type"]= "CUSTOM";
-	
-	var model = new BaseModel(json);
-	model.url = "core/api/widgets";
-	model.save();
-	
-}
