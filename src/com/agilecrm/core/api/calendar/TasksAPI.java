@@ -261,8 +261,17 @@ public class TasksAPI
     @Path("/based")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<Task> getTasksBasedOnOwnerOfType(@QueryParam("type") String type, @QueryParam("owner") String owner) throws Exception
+    public List<Task> getTasksBasedOnOwnerOfType(@QueryParam("type") String type, @QueryParam("owner") String owner)
+	    throws Exception
     {
 	return TaskUtil.getTasksRelatedToOwnerOfType(type, owner);
+    }
+
+    @Path("/stats")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getTaskStatOfOwner(@QueryParam("owner") String owner)
+    {
+	return TaskUtil.getStats(owner).toString();
     }
 }
