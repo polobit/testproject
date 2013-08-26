@@ -45,7 +45,7 @@ $(function()
 	}
 
 	// Global LinkedIn id
-	var linkedin_id = "";
+	Linkedin_id = "";
 
 	// Get website URL for LinkedIn from contact to get profile based on it
 	var web_url = agile_crm_get_contact_property_by_subtype('website', 'LINKEDIN');
@@ -55,8 +55,8 @@ $(function()
 		// Get LinkedIn id from URL and show profile
 		getLinkedinIdByUrl(web_url, function(data)
 		{
-			linkedin_id = data;
-			showLinkedinProfile(linkedin_id);
+			Linkedin_id = data;
+			showLinkedinProfile(Linkedin_id);
 		});
 	}
 	else
@@ -78,14 +78,14 @@ $(function()
 	$('#linkedin_message').die().live('click', function(e)
 	{
 		e.preventDefault();
-		sendLinkedInMessage(linkedin_id);
+		sendLinkedInMessage(Linkedin_id);
 	});
 
 	// Sends an connect request to LinkedIn when clicked on connect button
 	$('#linkedin_connect').die().live('click', function(e)
 	{
 		e.preventDefault();
-		sendLinkedInAddRequest(linkedin_id);
+		sendLinkedInAddRequest(Linkedin_id);
 	});
 
 	// ReShares a post in LinkedIn on click of share link
@@ -104,7 +104,7 @@ $(function()
 		if (Experience_data || Experience_data != "")
 			return;
 
-		getExperienceOfPerson(linkedin_id);
+		getExperienceOfPerson(Linkedin_id);
 	});
 
 	// Retrieves shared connections between contact and agile user LinkedIn
@@ -115,7 +115,7 @@ $(function()
 		if (Shared_Connections.length != 0)
 			return;
 
-		getLinkedInSharedConnections(linkedin_id);
+		getLinkedInSharedConnections(Linkedin_id);
 	});
 
 	// on click of updates tab, retrieves network updates
@@ -126,7 +126,7 @@ $(function()
 		if (Stream_Data.length != 0)
 			return;
 
-		getFirstFiveLinkedInNetworkUpdates(linkedin_id);
+		getFirstFiveLinkedInNetworkUpdates(Linkedin_id);
 	});
 
 	// On click of name link in results to modify, shows modify template
@@ -266,7 +266,7 @@ function showLinkedinMatchingProfiles(data)
 	$(".linkedinImage").die().live('mouseover', function()
 	{
 		// Unique LinkedIn Id from widget
-		var id = $(this).attr('id');
+		Linkedin_id = $(this).attr('id');
 
 		// Aligns details to left in the pop over
 		$(this).popover({ placement : 'left' });
@@ -278,7 +278,7 @@ function showLinkedinMatchingProfiles(data)
 		$(this).popover('show');
 
 		// on click of any profile, save it to the contact
-		$('#' + id).die().live('click', function(e)
+		$('#' + Linkedin_id).die().live('click', function(e)
 		{
 			e.preventDefault();
 
@@ -322,6 +322,9 @@ function showLinkedinMatchingProfiles(data)
 
 			// Add all the properties to contact at once
 			agile_crm_update_contact_properties(propertiesArray);
+			
+			// show profile by id
+			showLinkedinProfile(Linkedin_id);
 
 		});
 	});
@@ -422,10 +425,10 @@ function getModifiedLinkedinMatchingProfiles()
 /**
  * Shows saved LinkedIn profile based on LinkedIn Id and widget Id
  * 
- * @param linkedin_id
+ * @param Linkedin_id
  *            Linkedin id to fetch profile from LinkedIn
  */
-function showLinkedinProfile(linkedin_id)
+function showLinkedinProfile(Linkedin_id)
 {
 	// Shows loading image, until profile is fetched
 	$('#Linkedin').html(LINKEDIN_UPDATE_LOAD_IMAGE);
@@ -434,7 +437,7 @@ function showLinkedinProfile(linkedin_id)
 	var linkedin_connected;
 
 	// Calls WidgetsAPI class to get LinkedIn profile of contact
-	$.get("/core/api/widgets/social/profile/" + LinkedIn_Plugin_Id + "/" + linkedin_id, function(data)
+	$.get("/core/api/widgets/social/profile/" + LinkedIn_Plugin_Id + "/" + Linkedin_id, function(data)
 	{
 		if (!data)
 			return;
@@ -489,7 +492,7 @@ function showLinkedinProfile(linkedin_id)
 
 	});
 
-	registerEventsInLinkedIn(linkedin_id, linkedin_connected, Stream_Data);
+	registerEventsInLinkedIn(Linkedin_id, linkedin_connected, Stream_Data);
 }
 
 /**
@@ -530,14 +533,14 @@ function showExperienceInLinkedIn(data)
 /**
  * Registers events in LinkedIn profile panel
  * 
- * @param linkedin_id
+ * @param Linkedin_id
  *            LinkedIn unique Id
  * @param linkedin_connected
  *            {@link Boolean} whether Agile user and given profile are connected
  * @param Stream_Data
  *            First five network updates
  */
-function registerEventsInLinkedIn(linkedin_id, linkedin_connected, Stream_Data)
+function registerEventsInLinkedIn(Linkedin_id, linkedin_connected, Stream_Data)
 {
 	// On click of see more link, more updates are retrieved
 	$('.linkedin_stream').die().live('click', function(e)
@@ -576,7 +579,7 @@ function registerEventsInLinkedIn(linkedin_id, linkedin_connected, Stream_Data)
 		 */
 		$(this).removeClass('twitter_stream');
 
-		getAnyFiveNetworkUpdatesInLinkedIn(linkedin_id, end_time, Stream_Data, that);
+		getAnyFiveNetworkUpdatesInLinkedIn(Linkedin_id, end_time, Stream_Data, that);
 	});
 
 	/*
@@ -623,16 +626,16 @@ function registerEventsInLinkedIn(linkedin_id, linkedin_connected, Stream_Data)
 		$("#linkedin_social_stream").html(LINKEDIN_UPDATE_LOAD_IMAGE);
 
 		// shows all recent updates in LinkedIn panel
-		getAllRecentNetworkUpdatesInLinkedIn(linkedin_id, Stream_Data);
+		getAllRecentNetworkUpdatesInLinkedIn(Linkedin_id, Stream_Data);
 	});
 }
 /**
  * Retrieves most recent five LinkedIn network updates
  * 
- * @param linkedin_id
+ * @param Linkedin_id
  *            LinkedIn unique Id
  */
-function getFirstFiveLinkedInNetworkUpdates(linkedin_id)
+function getFirstFiveLinkedInNetworkUpdates(Linkedin_id)
 {
 	// Hide if current activity is present while retrieving updates
 	$('.linkedin_current_activity', $('#Linkedin')).hide();
@@ -641,7 +644,7 @@ function getFirstFiveLinkedInNetworkUpdates(linkedin_id)
 	$("#linkedin_social_stream").html(LINKEDIN_UPDATE_LOAD_IMAGE);
 
 	// Calls WidgetsAPI class to get the updates based on plugin id
-	$.getJSON("/core/api/widgets/social/updates/index/" + LinkedIn_Plugin_Id + "/" + linkedin_id + "/0/5",
+	$.getJSON("/core/api/widgets/social/updates/index/" + LinkedIn_Plugin_Id + "/" + Linkedin_id + "/0/5",
 
 	function(data)
 	{
@@ -682,15 +685,15 @@ function getFirstFiveLinkedInNetworkUpdates(linkedin_id)
 /**
  * Fetches all recent network updates and shows it in LinkedIn
  * 
- * @param linkedin_id
+ * @param Linkedin_id
  *            LinkedIn unique Id
  * @param Stream_Data
  *            First five network updates
  */
-function getAllRecentNetworkUpdatesInLinkedIn(linkedin_id, Stream_Data)
+function getAllRecentNetworkUpdatesInLinkedIn(Linkedin_id, Stream_Data)
 {
 	// Calls WidgetsAPI class to get the updates based on plugin id
-	$.getJSON("/core/api/widgets/social/updates/" + LinkedIn_Plugin_Id + "/" + linkedin_id,
+	$.getJSON("/core/api/widgets/social/updates/" + LinkedIn_Plugin_Id + "/" + Linkedin_id,
 
 	function(data)
 	{
@@ -739,7 +742,7 @@ function getAllRecentNetworkUpdatesInLinkedIn(linkedin_id, Stream_Data)
 /**
  * Fetches five network updates making end time as maximum time to fetch details
  * 
- * @param linkedin_id
+ * @param Linkedin_id
  *            LinkedIn unique Id
  * @param end_time
  *            Maximum time, 5 updates before this time are retrieved
@@ -748,13 +751,13 @@ function getAllRecentNetworkUpdatesInLinkedIn(linkedin_id, Stream_Data)
  * @param element
  *            show more element
  */
-function getAnyFiveNetworkUpdatesInLinkedIn(linkedin_id, end_time, Stream_Data, element)
+function getAnyFiveNetworkUpdatesInLinkedIn(Linkedin_id, end_time, Stream_Data, element)
 {
 	/*
 	 * Calls WidgetsAPI class to request for five more updates before the end
 	 * time.The start time is from January 1st 2010
 	 */
-	$.getJSON("/core/api/widgets/social/updates/more/" + LinkedIn_Plugin_Id + "/" + linkedin_id + "/0/5/1262304000/" + end_time,
+	$.getJSON("/core/api/widgets/social/updates/more/" + LinkedIn_Plugin_Id + "/" + Linkedin_id + "/0/5/1262304000/" + end_time,
 
 	function(data)
 	{
@@ -809,10 +812,10 @@ function getAnyFiveNetworkUpdatesInLinkedIn(linkedin_id, end_time, Stream_Data, 
  * Sends a connect request in LinkedIn based on plugin id and LinkedIn Id of the
  * profile set to the contact
  * 
- * @param linkedin_id
+ * @param Linkedin_id
  *            LinkedIn Id to send connect request
  */
-function sendLinkedInAddRequest(linkedin_id)
+function sendLinkedInAddRequest(Linkedin_id)
 {
 	/*
 	 * Stores info in a JSON, to send it to the modal window when making a
@@ -865,7 +868,7 @@ function sendLinkedInAddRequest(linkedin_id)
 
 		$("#spinner-modal-linked").show();
 
-		sendRequestToLinkedIn("/core/api/widgets/social/connect/" + LinkedIn_Plugin_Id + "/" + linkedin_id, 'linkedin_messageForm', 'linkedin_messageModal');
+		sendRequestToLinkedIn("/core/api/widgets/social/connect/" + LinkedIn_Plugin_Id + "/" + Linkedin_id, 'linkedin_messageForm', 'linkedin_messageModal');
 	});
 }
 
@@ -873,10 +876,10 @@ function sendLinkedInAddRequest(linkedin_id)
  * Sends a message to the LinkedIn profile of the contact based on LinkedIn Id
  * of the profile set to the contact
  * 
- * @param linkedin_id
+ * @param Linkedin_id
  *            LinkedIn Id to send request
  */
-function sendLinkedInMessage(linkedin_id)
+function sendLinkedInMessage(Linkedin_id)
 {
 	/*
 	 * Store info in a json, to send it to the modal window when making send
@@ -915,7 +918,7 @@ function sendLinkedInMessage(linkedin_id)
 
 		$("#spinner-modal-linked").show();
 
-		sendRequestToLinkedIn("/core/api/widgets/social/message/" + LinkedIn_Plugin_Id + "/" + linkedin_id, 'linkedin_messageForm', 'linkedin_messageModal');
+		sendRequestToLinkedIn("/core/api/widgets/social/message/" + LinkedIn_Plugin_Id + "/" + Linkedin_id, 'linkedin_messageForm', 'linkedin_messageModal');
 	});
 
 }
@@ -1072,16 +1075,16 @@ function getLinkedinIdByUrl(web_url, callback)
 /**
  * Retrive experience of person (work positions from LinkedIn)
  * 
- * @param linkedin_id
+ * @param Linkedin_id
  */
-function getExperienceOfPerson(linkedin_id)
+function getExperienceOfPerson(Linkedin_id)
 {
 
 	// shows loading until positions are shown
 	$('#linkedin_experience_panel').html(LINKEDIN_UPDATE_LOAD_IMAGE);
 
 	// send get request to retrieve work positions
-	$.get("/core/api/widgets/social/experience/" + LinkedIn_Plugin_Id + "/" + linkedin_id, function(data)
+	$.get("/core/api/widgets/social/experience/" + LinkedIn_Plugin_Id + "/" + Linkedin_id, function(data)
 	{
 		// Shows data LinkedIn panel
 		showExperienceInLinkedIn(data);
@@ -1101,14 +1104,14 @@ function getExperienceOfPerson(linkedin_id)
 /**
  * Retrieves shared connections from LinkedIn and shows it in LinkedIn panel
  * 
- * @param linkedin_id
+ * @param Linkedin_id
  */
-function getLinkedInSharedConnections(linkedin_id)
+function getLinkedInSharedConnections(Linkedin_id)
 {
 
 	$('#linkedin_shared_panel').html(LINKEDIN_UPDATE_LOAD_IMAGE);
 
-	$.get("/core/api/widgets/social/shared/connections/" + LinkedIn_Plugin_Id + "/" + linkedin_id, function(data)
+	$.get("/core/api/widgets/social/shared/connections/" + LinkedIn_Plugin_Id + "/" + Linkedin_id, function(data)
 	{
 		var el = "<div style='padding:10px'>";
 
