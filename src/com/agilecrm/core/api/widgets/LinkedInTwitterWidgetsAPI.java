@@ -74,9 +74,7 @@ public class LinkedInTwitterWidgetsAPI
     @Path("/match/{widget-id}/{contact-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<SocialSearchResult> getSocialMatchingProfiles(
-	    @PathParam("contact-id") Long contactId,
-	    @PathParam("widget-id") Long widgetId)
+    public List<SocialSearchResult> getSocialMatchingProfiles(@PathParam("contact-id") Long contactId, @PathParam("widget-id") Long widgetId)
     {
 	try
 	{
@@ -100,22 +98,15 @@ public class LinkedInTwitterWidgetsAPI
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
 	return null;
     }
@@ -143,10 +134,9 @@ public class LinkedInTwitterWidgetsAPI
     @POST
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
-    public List<SocialSearchResult> getModifiedMatchingProfilesInLinkedIn(
-	    @PathParam("widget-id") Long widgetId,
+    public List<SocialSearchResult> getModifiedMatchingProfilesInLinkedIn(@PathParam("widget-id") Long widgetId,
 
-	    @FormParam("keywords") String keywords)
+    @FormParam("keywords") String keywords)
     {
 	try
 	{
@@ -161,28 +151,20 @@ public class LinkedInTwitterWidgetsAPI
 	     * Profiles are searched based on given keywords in LinkedIn
 	     */
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInSearch.modifiedSearchForLinkedInProfiles(widget,
-			keywords);
+		return LinkedInSearch.modifiedSearchForLinkedInProfiles(widget, keywords);
 
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
 	return null;
     }
@@ -200,9 +182,7 @@ public class LinkedInTwitterWidgetsAPI
     @Path("/modified/match/twitter/{widget-id}/{search-string}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<SocialSearchResult> getModifiedMatchingProfilesInTwitter(
-	    @PathParam("widget-id") Long widgetId,
-	    @PathParam("search-string") String searchString)
+    public List<SocialSearchResult> getModifiedMatchingProfilesInTwitter(@PathParam("widget-id") Long widgetId, @PathParam("search-string") String searchString)
     {
 	try
 	{
@@ -217,28 +197,20 @@ public class LinkedInTwitterWidgetsAPI
 	     * Profiles are searched based on given search string
 	     */
 	    if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterSearch.modifiedSearchForTwitterProfiles(widget,
-			searchString);
+		return TwitterSearch.modifiedSearchForTwitterProfiles(widget, searchString);
 
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
 	return null;
     }
@@ -257,8 +229,7 @@ public class LinkedInTwitterWidgetsAPI
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public String getSocialIdByUrl(@PathParam("widget-id") Long widgetId,
-	    @FormParam("web_url") String webUrl)
+    public String getSocialIdByUrl(@PathParam("widget-id") Long widgetId, @FormParam("web_url") String webUrl)
     {
 	try
 	{
@@ -284,22 +255,15 @@ public class LinkedInTwitterWidgetsAPI
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
 	return null;
     }
@@ -318,9 +282,7 @@ public class LinkedInTwitterWidgetsAPI
     @Path("profile/{widget-id}/{social-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public SocialSearchResult getSocialProfileById(
-	    @PathParam("widget-id") Long widgetId,
-	    @PathParam("social-id") String socialId)
+    public SocialSearchResult getSocialProfileById(@PathParam("widget-id") Long widgetId, @PathParam("social-id") String socialId)
     {
 	// Retrieves widget based on id
 	Widget widget = WidgetUtil.getWidget(widgetId);
@@ -341,22 +303,15 @@ public class LinkedInTwitterWidgetsAPI
 
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
 	return null;
     }
@@ -373,9 +328,7 @@ public class LinkedInTwitterWidgetsAPI
     @Path("/experience/{widget-id}/{social-id}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public SocialSearchResult getExperienceInLinkedIn(
-	    @PathParam("widget-id") Long widgetId,
-	    @PathParam("social-id") String socialId)
+    public SocialSearchResult getExperienceInLinkedIn(@PathParam("widget-id") Long widgetId, @PathParam("social-id") String socialId)
     {
 	try
 	{
@@ -394,22 +347,15 @@ public class LinkedInTwitterWidgetsAPI
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
 	return null;
     }
@@ -428,9 +374,7 @@ public class LinkedInTwitterWidgetsAPI
     @Path("/updates/{widget-id}/{social-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<SocialUpdateStream> getSocialNetworkUpdates(
-	    @PathParam("widget-id") Long widgetId,
-	    @PathParam("social-id") String socialId)
+    public List<SocialUpdateStream> getSocialNetworkUpdates(@PathParam("widget-id") Long widgetId, @PathParam("social-id") String socialId)
     {
 	try
 	{
@@ -445,32 +389,23 @@ public class LinkedInTwitterWidgetsAPI
 	     * retrieve all network updates based on social id
 	     */
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInUpdates.getNetworkUpdates(widget, socialId, 0, 0,
-			null, null);
+		return LinkedInUpdates.getNetworkUpdates(widget, socialId, 0, 0, null, null);
 
 	    else if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterUpdates.getNetworkUpdates(widget,
-			Long.parseLong(socialId));
+		return TwitterUpdates.getNetworkUpdates(widget, Long.parseLong(socialId));
 
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
 	return null;
     }
@@ -494,11 +429,8 @@ public class LinkedInTwitterWidgetsAPI
     @Path("/updates/more/{widget-id}/{social-id}/{tweet_id}/{endIndex}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<SocialUpdateStream> getSocialNetworkUpdatesInTwitter(
-	    @PathParam("widget-id") Long widgetId,
-	    @PathParam("social-id") String socialId,
-	    @PathParam("tweet_id") String tweetId,
-	    @PathParam("endIndex") String endIndex)
+    public List<SocialUpdateStream> getSocialNetworkUpdatesInTwitter(@PathParam("widget-id") Long widgetId, @PathParam("social-id") String socialId,
+	    @PathParam("tweet_id") String tweetId, @PathParam("endIndex") String endIndex)
     {
 	try
 	{
@@ -513,29 +445,20 @@ public class LinkedInTwitterWidgetsAPI
 	     * tweets tweeted before the given tweet id
 	     */
 	    if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterUpdates.getNetworkUpdates(widget,
-			Long.parseLong(socialId), Long.parseLong(tweetId) - 5,
-			Integer.parseInt(endIndex));
+		return TwitterUpdates.getNetworkUpdates(widget, Long.parseLong(socialId), Long.parseLong(tweetId) - 5, Integer.parseInt(endIndex));
 
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
 	return null;
     }
@@ -557,11 +480,8 @@ public class LinkedInTwitterWidgetsAPI
     @Path("/updates/index/{widget-id}/{social-id}/{startIndex}/{endIndex}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<SocialUpdateStream> getSocialNetworkUpdatesByIndex(
-	    @PathParam("widget-id") Long widgetId,
-	    @PathParam("social-id") String socialId,
-	    @PathParam("startIndex") String startIndex,
-	    @PathParam("endIndex") String endIndex)
+    public List<SocialUpdateStream> getSocialNetworkUpdatesByIndex(@PathParam("widget-id") Long widgetId, @PathParam("social-id") String socialId,
+	    @PathParam("startIndex") String startIndex, @PathParam("endIndex") String endIndex)
     {
 	try
 	{
@@ -576,29 +496,20 @@ public class LinkedInTwitterWidgetsAPI
 	     * based on index
 	     */
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInUpdates.getNetworkUpdates(widget, socialId,
-			Integer.parseInt(startIndex),
-			Integer.parseInt(endIndex), null, null);
+		return LinkedInUpdates.getNetworkUpdates(widget, socialId, Integer.parseInt(startIndex), Integer.parseInt(endIndex), null, null);
 
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
 	return null;
     }
@@ -625,12 +536,8 @@ public class LinkedInTwitterWidgetsAPI
     @Path("/updates/more/{widget-id}/{social-id}/{startIndex}/{endIndex}/{startDate}/{endDate}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<SocialUpdateStream> getSocialNetworkUpdatesByDate(
-	    @PathParam("widget-id") Long widgetId,
-	    @PathParam("social-id") String socialId,
-	    @PathParam("startIndex") String startIndex,
-	    @PathParam("endIndex") String endIndex,
-	    @PathParam("startDate") String startDate,
+    public List<SocialUpdateStream> getSocialNetworkUpdatesByDate(@PathParam("widget-id") Long widgetId, @PathParam("social-id") String socialId,
+	    @PathParam("startIndex") String startIndex, @PathParam("endIndex") String endIndex, @PathParam("startDate") String startDate,
 	    @PathParam("endDate") String endDate)
     {
 	try
@@ -653,30 +560,21 @@ public class LinkedInTwitterWidgetsAPI
 		 */
 		if (endDate != null)
 		    endDate = String.valueOf(Integer.parseInt(endDate) - 5);
-		return LinkedInUpdates.getNetworkUpdates(widget, socialId,
-			Integer.parseInt(startIndex),
-			Integer.parseInt(endIndex), startDate, endDate);
+		return LinkedInUpdates.getNetworkUpdates(widget, socialId, Integer.parseInt(startIndex), Integer.parseInt(endIndex), startDate, endDate);
 	    }
 
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
 	return null;
     }
@@ -697,10 +595,7 @@ public class LinkedInTwitterWidgetsAPI
     @Path("/reshare/{widget-id}/{share-id}/{comment}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String shareSocialNetworkupdates(
-	    @PathParam("widget-id") Long widgetId,
-	    @PathParam("share-id") String shareId,
-	    @PathParam("comment") String comment)
+    public String shareSocialNetworkupdates(@PathParam("widget-id") Long widgetId, @PathParam("share-id") String shareId, @PathParam("comment") String comment)
     {
 	try
 	{
@@ -712,33 +607,24 @@ public class LinkedInTwitterWidgetsAPI
 
 	    // Calls LinkedInUtil method to reshare a share in LinkedIn by id
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInUpdates.reshareLinkedInPost(widget, shareId,
-			comment);
+		return LinkedInUpdates.reshareLinkedInPost(widget, shareId, comment);
 
 	    // Calls TwitterUtil method to retweet a tweet in Twitter by its ID
 	    else if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterTweet.reTweetByTweetId(widget,
-			Long.parseLong(shareId));
+		return TwitterTweet.reTweetByTweetId(widget, Long.parseLong(shareId));
 
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
 	return "Unsuccessfull";
     }
@@ -756,9 +642,7 @@ public class LinkedInTwitterWidgetsAPI
     @Path("/followers/{widget-id}/{social-id}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
-    public List<Long> getFollowersListInTwitter(
-	    @PathParam("widget-id") Long widgetId,
-	    @PathParam("social-id") String socialId)
+    public List<Long> getFollowersListInTwitter(@PathParam("widget-id") Long widgetId, @PathParam("social-id") String socialId)
     {
 	try
 	{
@@ -778,22 +662,15 @@ public class LinkedInTwitterWidgetsAPI
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
 	return null;
     }
@@ -812,9 +689,7 @@ public class LinkedInTwitterWidgetsAPI
     @Path("/following/{widget-id}/{social-id}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
-    public List<Long> getFollowingListInTwitter(
-	    @PathParam("widget-id") Long widgetId,
-	    @PathParam("social-id") String socialId)
+    public List<Long> getFollowingListInTwitter(@PathParam("widget-id") Long widgetId, @PathParam("social-id") String socialId)
     {
 	try
 	{
@@ -831,22 +706,15 @@ public class LinkedInTwitterWidgetsAPI
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
 	return null;
     }
@@ -865,9 +733,7 @@ public class LinkedInTwitterWidgetsAPI
     @POST
     @Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<SocialSearchResult> getListOfProfilesByIdsInTwitter(
-	    @PathParam("widget-id") Long widgetId,
-	    @FormParam("twitter_ids") String twitterIds)
+    public List<SocialSearchResult> getListOfProfilesByIdsInTwitter(@PathParam("widget-id") Long widgetId, @FormParam("twitter_ids") String twitterIds)
     {
 	try
 	{
@@ -885,28 +751,20 @@ public class LinkedInTwitterWidgetsAPI
 
 	    // If widget name equals Twitter, get profiles based on IDs
 	    if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterUtil.getListOfProfiles(widget,
-			twitterIdsJsonArray);
+		return TwitterUtil.getListOfProfiles(widget, twitterIdsJsonArray);
 
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
 	return null;
     }
@@ -929,9 +787,7 @@ public class LinkedInTwitterWidgetsAPI
     @Path("/shared/connections/{widget-id}/{social-id}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<SocialSearchResult> getSharedConnectionsInLinkedIn(
-	    @PathParam("widget-id") Long widgetId,
-	    @PathParam("social-id") String socialId)
+    public List<SocialSearchResult> getSharedConnectionsInLinkedIn(@PathParam("widget-id") Long widgetId, @PathParam("social-id") String socialId)
     {
 	try
 	{
@@ -949,22 +805,15 @@ public class LinkedInTwitterWidgetsAPI
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
 	return null;
     }
@@ -987,9 +836,7 @@ public class LinkedInTwitterWidgetsAPI
     @Path("/connect/{widget-id}/{social-id}")
     @POST
     @Produces(MediaType.TEXT_PLAIN)
-    public String sendAddRequest(@PathParam("widget-id") Long widgetId,
-	    @PathParam("social-id") String socialId,
-	    @FormParam("subject") String subject,
+    public String sendAddRequest(@PathParam("widget-id") Long widgetId, @PathParam("social-id") String socialId, @FormParam("subject") String subject,
 	    @FormParam("message") String message)
     {
 	try
@@ -1004,8 +851,7 @@ public class LinkedInTwitterWidgetsAPI
 	     * person by socialId
 	     */
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInConnect.connectInLinkedIn(widget, socialId,
-			subject, message);
+		return LinkedInConnect.connectInLinkedIn(widget, socialId, subject, message);
 
 	    // Calls TwitterUtil method to send message to person by socialId
 	    else if (widget.name.equalsIgnoreCase("TWITTER"))
@@ -1013,22 +859,15 @@ public class LinkedInTwitterWidgetsAPI
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
 	return null;
     }
@@ -1046,8 +885,7 @@ public class LinkedInTwitterWidgetsAPI
     @Path("/disconnect/{widget-id}/{social-id}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String unfollowInTwitter(@PathParam("widget-id") Long widgetId,
-	    @PathParam("social-id") String socialId)
+    public String unfollowInTwitter(@PathParam("widget-id") Long widgetId, @PathParam("social-id") String socialId)
 
     {
 	try
@@ -1066,22 +904,15 @@ public class LinkedInTwitterWidgetsAPI
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
 	return null;
     }
@@ -1104,11 +935,8 @@ public class LinkedInTwitterWidgetsAPI
     @Path("/message/{widget-id}/{social-id}")
     @POST
     @Produces(MediaType.TEXT_PLAIN)
-    public String sendSocialMessageBySocialId(
-	    @PathParam("widget-id") Long widgetId,
-	    @PathParam("social-id") String socialId,
-	    @FormParam("subject") String subject,
-	    @FormParam("message") String message)
+    public String sendSocialMessageBySocialId(@PathParam("widget-id") Long widgetId, @PathParam("social-id") String socialId,
+	    @FormParam("subject") String subject, @FormParam("message") String message)
     {
 	try
 	{
@@ -1122,35 +950,26 @@ public class LinkedInTwitterWidgetsAPI
 	     * based on widget name
 	     */
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
-		return LinkedInMessage.sendLinkedInMessageById(widget, socialId,
-			subject, message);
+		return LinkedInMessage.sendLinkedInMessageById(widget, socialId, subject, message);
 
 	    /*
 	     * Calls TwitterUtil method to send message to person by socialId,
 	     * based on widget name
 	     */
 	    else if (widget.name.equalsIgnoreCase("TWITTER"))
-		return TwitterMessage.sendTwitterMessageById(widget, socialId,
-			message);
+		return TwitterMessage.sendTwitterMessageById(widget, socialId, message);
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
 	return null;
     }
@@ -1170,8 +989,7 @@ public class LinkedInTwitterWidgetsAPI
     @Path("/tweet/{widget-id}")
     @POST
     @Produces(MediaType.TEXT_PLAIN)
-    public String tweetInTwitter(@PathParam("widget-id") Long widgetId,
-	    @FormParam("message") String message)
+    public String tweetInTwitter(@PathParam("widget-id") Long widgetId, @FormParam("message") String message)
     {
 	try
 	{
@@ -1190,22 +1008,15 @@ public class LinkedInTwitterWidgetsAPI
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
 	return null;
     }

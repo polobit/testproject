@@ -22,7 +22,7 @@ $(function()
 	Twitter_search_details = {};
 
 	// Global twitter id
-	var twitter_id = "";
+	Twitter_id = "";
 
 	// Retrieves widget which is fetched using script API
 	var twitter_widget = agile_crm_get_plugin(TWITTER_PLUGIN_NAME);
@@ -54,8 +54,8 @@ $(function()
 		// Get Twitter id from URL and show profile
 		getTwitterIdByUrl(web_url, function(data)
 		{
-			twitter_id = data;
-			showTwitterProfile(twitter_id);
+			Twitter_id = data;
+			showTwitterProfile(Twitter_id);
 		});
 	}
 	else
@@ -77,7 +77,7 @@ $(function()
 	$('#twitter_message').die().live('click', function(e)
 	{
 		e.preventDefault();
-		sendTwitterMessage(twitter_id);
+		sendTwitterMessage(Twitter_id);
 	});
 
 	// Sends an follow request to Twitter when clicked on follow button
@@ -90,14 +90,14 @@ $(function()
 			return;
 
 		// Once if follow clicked, request sent and button is disabled
-		sendFollowRequest(twitter_id);
+		sendFollowRequest(Twitter_id);
 	});
 
 	// Sends an UnFollow request to Twitter when clicked on UnFollow button
 	$('#twitter_unfollow').die().live('click', function(e)
 	{
 		e.preventDefault();
-		sendUnfollowRequest(twitter_id);
+		sendUnfollowRequest(Twitter_id);
 	});
 
 	// On mouse enter unfollow
@@ -133,7 +133,7 @@ $(function()
 	$('#twitter_tweet').die().live('click', function(e)
 	{
 		e.preventDefault();
-		tweetInTwitter(twitter_id);
+		tweetInTwitter(Twitter_id);
 
 	});
 
@@ -185,7 +185,7 @@ $(function()
 		$('#twitter_follower_panel').html(TWITTER_UPDATE_LOAD_IMAGE);
 
 		// Retrieves the Twitter IDs of all the followers
-		getFollowerIdsInTwitter(twitter_id, function(data)
+		getFollowerIdsInTwitter(Twitter_id, function(data)
 		{
 			// Store array of IDs in a global variable
 			Twitter_follower_ids = data;
@@ -280,7 +280,7 @@ $(function()
 		$('#twitter_following_panel').html(TWITTER_UPDATE_LOAD_IMAGE);
 
 		// Retrieves the Twitter IDs of all the following persons
-		getFollowingIdsInTwitter(twitter_id, function(data)
+		getFollowingIdsInTwitter(Twitter_id, function(data)
 		{
 			// Store array of IDs in a global variable
 			Twitter_following_ids = data;
@@ -442,7 +442,7 @@ function showTwitterMatchingProfiles(data)
 	$(".twitterImage").die().live('mouseover', function()
 	{
 		// Unique Twitter Id from widget
-		var id = $(this).attr('id');
+		Twitter_id = $(this).attr('id');
 
 		// Aligns details to left in the pop over
 		$(this).popover({ placement : 'left' });
@@ -454,7 +454,7 @@ function showTwitterMatchingProfiles(data)
 		$(this).popover('show');
 
 		// on click of any profile, save it to the contact
-		$('#' + id).die().live('click', function(e)
+		$('#' + Twitter_id).die().live('click', function(e)
 		{
 			e.preventDefault();
 
@@ -490,6 +490,9 @@ function showTwitterMatchingProfiles(data)
 			console.log(propertiesArray);
 
 			agile_crm_update_contact_properties(propertiesArray);
+			
+			// show twitter profile by id
+			showTwitterProfile(Twitter_id);
 
 		});
 	});
@@ -708,10 +711,10 @@ function fetchTwitterIdFromUrl(url_json, successCallback, errorCallback)
 /**
  * Shows saved Twitter profile based on Twitter Id and Plugin Id
  * 
- * @param twitter_id
+ * @param Twitter_id
  *            Twitter id to fetch profile from Twitter
  */
-function showTwitterProfile(twitter_id)
+function showTwitterProfile(Twitter_id)
 {
 	// Shows loading, until profile is fetched
 	$('#Twitter').html(TWITTER_UPDATE_LOAD_IMAGE);
@@ -723,7 +726,7 @@ function showTwitterProfile(twitter_id)
 	var stream_data;
 
 	// Calls WidgetsAPI class to get Twitter profile of contact
-	$.get("/core/api/widgets/social/profile/" + Twitter_Plugin_Id + "/" + twitter_id, function(data)
+	$.get("/core/api/widgets/social/profile/" + Twitter_Plugin_Id + "/" + Twitter_id, function(data)
 	{
 		if (!data)
 			return;
@@ -800,20 +803,20 @@ function showTwitterProfile(twitter_id)
 	});
 
 	// Registers click events in Twitter profile
-	registerClickEventsInTwitter(twitter_id, twitter_connected, stream_data);
+	registerClickEventsInTwitter(Twitter_id, twitter_connected, stream_data);
 }
 
 /**
  * Registers click events in Twitter profile panel
  * 
- * @param twitter_id
+ * @param Twitter_id
  *            Twitter id to fetch profile from Twitter
  * @param twitter_connected
  *            {@link Boolean} whether agileuser is connected to given twitter id
  * @param stream_data
  *            First five network updates data
  */
-function registerClickEventsInTwitter(twitter_id, twitter_connected, stream_data)
+function registerClickEventsInTwitter(Twitter_id, twitter_connected, stream_data)
 {
 	// On click of see more link, more updates are retrieved
 	$('.twitter_stream').die().live('click', function(e)
@@ -862,7 +865,7 @@ function registerClickEventsInTwitter(twitter_id, twitter_connected, stream_data
 		$(this).removeClass('twitter_stream');
 
 		// Retrieves five updates tweeted before the tweet id given
-		anyFiveNetworkUpdates(twitter_id, tweet_id, stream_data, that);
+		anyFiveNetworkUpdates(Twitter_id, tweet_id, stream_data, that);
 
 	});
 
@@ -917,7 +920,7 @@ function registerClickEventsInTwitter(twitter_id, twitter_connected, stream_data
 		$("#twitter_social_stream").html(TWITTER_UPDATE_LOAD_IMAGE);
 
 		// shows all recent network updates
-		allNetworkUpdates(twitter_id, stream_data);
+		allNetworkUpdates(Twitter_id, stream_data);
 	});
 }
 
@@ -925,7 +928,7 @@ function registerClickEventsInTwitter(twitter_id, twitter_connected, stream_data
  * Retrieves five updates tweeted before the tweet id given and appends the data
  * to Twitter tweet panel
  * 
- * @param twitter_id
+ * @param Twitter_id
  *            Twitter unique Id
  * @param tweet_id
  *            Id of the tweet
@@ -934,13 +937,13 @@ function registerClickEventsInTwitter(twitter_id, twitter_connected, stream_data
  * @param element
  *            Show more element
  */
-function anyFiveNetworkUpdates(twitter_id, tweet_id, stream_data, element)
+function anyFiveNetworkUpdates(Twitter_id, tweet_id, stream_data, element)
 {
 	/*
 	 * Calls WidgetsAPI class to request for five more updates tweeted before
 	 * the tweet id of the last update
 	 */
-	$.getJSON("/core/api/widgets/social/updates/more/" + Twitter_Plugin_Id + "/" + twitter_id + "/" + tweet_id + "/5",
+	$.getJSON("/core/api/widgets/social/updates/more/" + Twitter_Plugin_Id + "/" + Twitter_id + "/" + tweet_id + "/5",
 
 	function(data)
 	{
@@ -994,16 +997,16 @@ function anyFiveNetworkUpdates(twitter_id, tweet_id, stream_data, element)
 /**
  * Retrive first five network updates and show it in tweets panel
  * 
- * @param twitter_id
+ * @param Twitter_id
  *            Twitter unique Id
  */
-function getFirstFiveNetworkUpdates(twitter_id)
+function getFirstFiveNetworkUpdates(Twitter_id)
 {
 	/*
 	 * Sends request to get five updates before current update when follow is
 	 * clicked
 	 */
-	$.getJSON("/core/api/widgets/social/updates/more/" + Twitter_Plugin_Id + "/" + twitter_id + "/" + Twitter_current_update_id + "/5",
+	$.getJSON("/core/api/widgets/social/updates/more/" + Twitter_Plugin_Id + "/" + Twitter_id + "/" + Twitter_current_update_id + "/5",
 
 	function(data)
 	{
@@ -1037,15 +1040,15 @@ function getFirstFiveNetworkUpdates(twitter_id)
 /**
  * Retrive all recent network updates and show it in tweets panel
  * 
- * @param twitter_id
+ * @param Twitter_id
  *            Twitter unique Id
  * @param stream_data
  *            First five network updates data
  */
-function allNetworkUpdates(twitter_id, stream_data)
+function allNetworkUpdates(Twitter_id, stream_data)
 {
 	// Calls WidgetsAPI class to get the updates based on plugin id
-	$.getJSON("/core/api/widgets/social/updates/" + Twitter_Plugin_Id + "/" + twitter_id,
+	$.getJSON("/core/api/widgets/social/updates/" + Twitter_Plugin_Id + "/" + Twitter_id,
 
 	function(data)
 	{
@@ -1096,16 +1099,16 @@ function allNetworkUpdates(twitter_id, stream_data)
  * Sends a follow request in Twitter based on plugin id and Twitter Id of the
  * profile set to the contact
  * 
- * @param twitter_id
+ * @param Twitter_id
  *            Twitter Id to send follow request
  */
-function sendFollowRequest(twitter_id)
+function sendFollowRequest(Twitter_id)
 {
 	/*
 	 * Sends post request to url "core/api/widgets/social/connect/" and Calls
 	 * WidgetsAPI with plugin id and Twitter id as path parameters
 	 */
-	$.post("/core/api/widgets/social/connect/" + Twitter_Plugin_Id + "/" + twitter_id, function(data)
+	$.post("/core/api/widgets/social/connect/" + Twitter_Plugin_Id + "/" + Twitter_id, function(data)
 	{
 		// Checks whether data is true, followed successfully in Twitter
 		if (data == "true")
@@ -1128,7 +1131,7 @@ function sendFollowRequest(twitter_id)
 			return;
 
 		// Show recent updates after following
-		getFirstFiveNetworkUpdates(twitter_id);
+		getFirstFiveNetworkUpdates(Twitter_id);
 
 	}).error(function(data)
 	{
@@ -1141,16 +1144,16 @@ function sendFollowRequest(twitter_id)
  * Sends unfollow request to unFollow the contact's Twitter profile in Twitter
  * based on plugin id and Twitter id *
  * 
- * @param twitter_id
+ * @param Twitter_id
  *            Twitter Id to send unfollow request
  */
-function sendUnfollowRequest(twitter_id)
+function sendUnfollowRequest(Twitter_id)
 {
 	/*
 	 * Sends get request to url "core/api/widgets/social/connect/" and Calls
 	 * WidgetsAPI with plugin id and Twitter id as path parameters
 	 */
-	$.get("/core/api/widgets/social/disconnect/" + Twitter_Plugin_Id + "/" + twitter_id, function(data)
+	$.get("/core/api/widgets/social/disconnect/" + Twitter_Plugin_Id + "/" + Twitter_id, function(data)
 	{
 		/*
 		 * On success, unFollow, tweet and message buttons are hidden and follow
@@ -1171,10 +1174,10 @@ function sendUnfollowRequest(twitter_id)
  * Sends a message to the Twitter profile of the contact based on Twitter Id of
  * the profile set to the contact
  * 
- * @param twitter_id
+ * @param Twitter_id
  *            Twitter Id to send request
  */
-function sendTwitterMessage(twitter_id, message)
+function sendTwitterMessage(Twitter_id, message)
 {
 	/*
 	 * Store info in a json, to send it to the modal window when making send
@@ -1225,7 +1228,7 @@ function sendTwitterMessage(twitter_id, message)
 
 		$("#spinner-modal").show();
 
-		sendRequest("/core/api/widgets/social/message/" + Twitter_Plugin_Id + "/" + twitter_id, "twitter_messageForm", "twitter_messageModal");
+		sendRequest("/core/api/widgets/social/message/" + Twitter_Plugin_Id + "/" + Twitter_id, "twitter_messageForm", "twitter_messageModal");
 
 	});
 }
@@ -1234,10 +1237,10 @@ function sendTwitterMessage(twitter_id, message)
  * Tweets to the Twitter profile of the contact based on Twitter Id of the
  * profile set to the contact
  * 
- * @param twitter_id
+ * @param Twitter_id
  *            Twitter Id to send tweet request
  */
-function tweetInTwitter(twitter_id)
+function tweetInTwitter(Twitter_id)
 {
 	// Store info in a json, to send it to the modal window when making send
 	// tweet request
@@ -1374,18 +1377,18 @@ function retweetTheTweet(share_id, message, element)
  * Retrieves Twitter Ids of the followers of Twitter profile of contact based on
  * twitter id of the contact
  * 
- * @param twitter_id
+ * @param Twitter_id
  *            Twitter Id to send tweet request
  * @param callback
  *            Callback to be executed to get the profiles
  */
-function getFollowerIdsInTwitter(twitter_id, callback)
+function getFollowerIdsInTwitter(Twitter_id, callback)
 {
 	/*
 	 * Sends get request to URL "/core/api/widgets/social/followers/" by sending
 	 * plugin id and twitter id as path parameter
 	 */
-	$.getJSON("/core/api/widgets/social/followers/" + Twitter_Plugin_Id + "/" + twitter_id, function(data)
+	$.getJSON("/core/api/widgets/social/followers/" + Twitter_Plugin_Id + "/" + Twitter_id, function(data)
 	{
 		// If data is undefined, return
 		if (!data)
@@ -1411,18 +1414,18 @@ function getFollowerIdsInTwitter(twitter_id, callback)
  * Retrieves Twitter Ids of persons whom contact twitter profile follows based
  * on twitter id of the contact
  * 
- * @param twitter_id
+ * @param Twitter_id
  *            Twitter Id to send tweet request
  * @param callback
  *            Callback to be executed to get the profiles
  */
-function getFollowingIdsInTwitter(twitter_id, callback)
+function getFollowingIdsInTwitter(Twitter_id, callback)
 {
 	/*
 	 * Sends get request to URL "/core/api/widgets/social/followers/" by sending
 	 * plugin id and twitter id as path parameter
 	 */
-	$.getJSON("/core/api/widgets/social/following/" + Twitter_Plugin_Id + "/" + twitter_id, function(data)
+	$.getJSON("/core/api/widgets/social/following/" + Twitter_Plugin_Id + "/" + Twitter_id, function(data)
 	{
 		// If data is undefined, return
 		if (!data)

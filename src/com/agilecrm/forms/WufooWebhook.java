@@ -55,7 +55,7 @@ try
 					JSONObject subObj = subArr.getJSONObject(j);
 					
 					// Add properties to list of properties
-					properties.add(buildProperty(subObj.getString("Label"), subObj.getString("ID")));
+					properties.add(buildProperty(subObj.getString("Label"), req.getParameter(subObj.getString("ID"))));
 				}
 			}
 		}
@@ -80,12 +80,6 @@ public static ContactField buildProperty(String name, String value)
 	ContactField field = new ContactField();
 	
 	// Set field type to SYSTEM for name, email, company, title, phone, all other fields save as CUSTOM.
-	if (name.equals(Contact.COMPANY) || name.equals(Contact.TITLE))
-	{
-		field.type = FieldType.SYSTEM;
-	}
-	else field.type = FieldType.CUSTOM;
-	
 	if (name.equals("name") || name.equals("first"))
 	{
 	field.name = Contact.FIRST_NAME;
@@ -98,13 +92,13 @@ public static ContactField buildProperty(String name, String value)
 	field.type = FieldType.SYSTEM;
 	field.value = value;
 	}
-	else if (name.contains("organisation")||name.contains("organization"))
+	else if (name.contains("organisation") || name.contains("organization") || name.equals(Contact.COMPANY))
 	{
 	field.name = Contact.COMPANY;
 	field.value = value;
 	field.type = FieldType.SYSTEM;
 	}
-	else if (name.contains("designation"))
+	else if (name.contains("designation") || name.equals(Contact.TITLE))
 	{
 	field.name = Contact.TITLE;
 	field.value = value;
@@ -136,6 +130,7 @@ public static ContactField buildProperty(String name, String value)
 	{
 	field.name = name;
 	field.value = value;
+	field.type = FieldType.CUSTOM;
 	}
 	return field;
 }

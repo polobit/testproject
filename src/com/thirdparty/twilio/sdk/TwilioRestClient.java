@@ -63,8 +63,7 @@ public class TwilioRestClient
      * array of data to send, for GET will be appended to the URL as query
      * params
      */
-    public TwilioRestResponse request(String path, String method,
-	    Map<String, String> vars) throws TwilioRestException
+    public TwilioRestResponse request(String path, String method, Map<String, String> vars) throws TwilioRestException
     {
 
 	String encoded = "";
@@ -74,8 +73,7 @@ public class TwilioRestClient
 	    {
 		try
 		{
-		    encoded += "&" + key + "="
-			    + URLEncoder.encode(vars.get(key), "UTF-8");
+		    encoded += "&" + key + "=" + URLEncoder.encode(vars.get(key), "UTF-8");
 		}
 		catch (UnsupportedEncodingException e)
 		{
@@ -96,11 +94,9 @@ public class TwilioRestClient
 	{
 	    URL resturl = new URL(url);
 
-	    HttpURLConnection con = (HttpURLConnection) resturl
-		    .openConnection();
+	    HttpURLConnection con = (HttpURLConnection) resturl.openConnection();
 	    String userpass = this.accountSid + ":" + this.authToken;
-	    String encodeuserpass = new String(Base64.encodeBase64(userpass
-		    .getBytes()));
+	    String encodeuserpass = new String(Base64.encodeBase64(userpass.getBytes()));
 
 	    con.setRequestProperty("Authorization", "Basic " + encodeuserpass);
 
@@ -114,16 +110,14 @@ public class TwilioRestClient
 	    else if (method.toUpperCase().equals("POST"))
 	    {
 		con.setRequestMethod("POST");
-		OutputStreamWriter out = new OutputStreamWriter(
-			con.getOutputStream());
+		OutputStreamWriter out = new OutputStreamWriter(con.getOutputStream());
 		out.write(encoded);
 		out.close();
 	    }
 	    else if (method.toUpperCase().equals("PUT"))
 	    {
 		con.setRequestMethod("PUT");
-		OutputStreamWriter out = new OutputStreamWriter(
-			con.getOutputStream());
+		OutputStreamWriter out = new OutputStreamWriter(con.getOutputStream());
 		out.write(encoded);
 		out.close();
 	    }
@@ -141,23 +135,20 @@ public class TwilioRestClient
 	    {
 		if (con.getInputStream() != null)
 		{
-		    in = new BufferedReader(new InputStreamReader(
-			    con.getInputStream()));
+		    in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 		}
 	    }
 	    catch (IOException e)
 	    {
 		if (con.getErrorStream() != null)
 		{
-		    in = new BufferedReader(new InputStreamReader(
-			    con.getErrorStream()));
+		    in = new BufferedReader(new InputStreamReader(con.getErrorStream()));
 		}
 	    }
 
 	    if (in == null)
 	    {
-		throw new TwilioRestException(
-			"Unable to read response from server");
+		throw new TwilioRestException("Unable to read response from server. Please try again");
 	    }
 
 	    StringBuffer decodedString = new StringBuffer();
@@ -171,8 +162,7 @@ public class TwilioRestClient
 	    // get result code
 	    int responseCode = con.getResponseCode();
 
-	    return new TwilioRestResponse(url, decodedString.toString(),
-		    responseCode);
+	    return new TwilioRestResponse(url, decodedString.toString(), responseCode);
 	}
 	catch (MalformedURLException e)
 	{

@@ -325,7 +325,7 @@ public class Contact extends Cursor
 	    // value of this(current) Contact
 	    if (countEmails >= 2 || (countEmails == 1 && (id == null || !oldContact.isEmailExists(myMail))))
 		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-			.entity("Sorry, a contact with this email already exists" + myMail).build());
+			.entity("Sorry, a contact with this email already exists " + myMail).build());
 	}
 
 	dao.put(this);

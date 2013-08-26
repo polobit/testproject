@@ -1,15 +1,14 @@
 package com.thirdparty;
 
 import java.net.URLEncoder;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
+import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
 
 /**
@@ -113,7 +112,7 @@ public class SendGrid
     {
 
 	// String tokens obtained by delimiter are added to set
-	Set<String> toEmailSet = getStringTokenSet(to, ",");
+	Set<String> toEmailSet = EmailUtil.getStringTokenSet(to, ",");
 
 	// Email response
 	String response = "";
@@ -156,33 +155,6 @@ public class SendGrid
 	}
 
 	return response;
-    }
-
-    /**
-     * Returns set collection with string tokens obtained from given string.
-     * 
-     * @param str
-     *            - String to be tokenized having delimiter like comma
-     * @param delimiter
-     *            - Delimiter string like comma.
-     * @return Set<String>
-     */
-    public static Set<String> getStringTokenSet(String str, String delimiter)
-    {
-	// Set to not allow duplicates
-	Set<String> tokenSet = new HashSet<String>();
-
-	// Generate tokens w.r.t delimiter
-	StringTokenizer st = new StringTokenizer(str, delimiter);
-
-	// add tokens to set
-	while (st.hasMoreTokens())
-	{
-	    String email = st.nextToken();
-	    tokenSet.add(email.trim());
-	}
-
-	return tokenSet;
     }
 
     /**

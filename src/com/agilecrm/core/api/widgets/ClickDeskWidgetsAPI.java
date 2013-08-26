@@ -48,8 +48,7 @@ public class ClickDeskWidgetsAPI
     @Path("chats/{widget-id}/{email}/{offset}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public JSONArray getClickdeskChats(@PathParam("widget-id") Long widgetId,
-	    @PathParam("email") String email, @PathParam("offset") String offset)
+    public JSONArray getClickdeskChats(@PathParam("widget-id") Long widgetId, @PathParam("email") String email, @PathParam("offset") String offset)
     {
 	// Retrieves widget based on its id
 	Widget widget = WidgetUtil.getWidget(widgetId);
@@ -64,22 +63,15 @@ public class ClickDeskWidgetsAPI
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
     }
 
@@ -97,8 +89,7 @@ public class ClickDeskWidgetsAPI
     @Path("tickets/{widget-id}/{email}/{offset}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public JSONArray getClickdeskTickets(@PathParam("widget-id") Long widgetId,
-	    @PathParam("email") String email, @PathParam("offset") String offset)
+    public JSONArray getClickdeskTickets(@PathParam("widget-id") Long widgetId, @PathParam("email") String email, @PathParam("offset") String offset)
     {
 	// Retrieves widget based on its id
 	Widget widget = WidgetUtil.getWidget(widgetId);
@@ -113,22 +104,15 @@ public class ClickDeskWidgetsAPI
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
     }
 }

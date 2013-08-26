@@ -117,7 +117,7 @@ public class Widget
 	 * Stores {@link Boolean} info whether the widget is added
 	 */
 	@NotSaved(IfDefault.class)
-	public boolean is_added = false;
+	public boolean is_added = true;
 
 	// Default constructor
 	Widget()

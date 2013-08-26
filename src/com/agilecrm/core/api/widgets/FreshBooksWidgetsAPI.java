@@ -49,9 +49,7 @@ public class FreshBooksWidgetsAPI
     @Path("clients/{widget-id}/{email}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String getClientsFromFreshBooks(
-	    @PathParam("widget-id") Long widgetId,
-	    @PathParam("email") String email)
+    public String getClientsFromFreshBooks(@PathParam("widget-id") Long widgetId, @PathParam("email") String email)
     {
 	// Retrieves widget based on its id
 	Widget widget = WidgetUtil.getWidget(widgetId);
@@ -66,23 +64,16 @@ public class FreshBooksWidgetsAPI
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
 
     }
@@ -100,9 +91,7 @@ public class FreshBooksWidgetsAPI
     @Path("invoices/{widget-id}/{client_id}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String getInvoicesFromFreshBooks(
-	    @PathParam("widget-id") Long widgetId,
-	    @PathParam("client_id") String clientId)
+    public String getInvoicesFromFreshBooks(@PathParam("widget-id") Long widgetId, @PathParam("client_id") String clientId)
     {
 	// Retrieves widget based on its id
 	Widget widget = WidgetUtil.getWidget(widgetId);
@@ -117,23 +106,16 @@ public class FreshBooksWidgetsAPI
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
 
     }
@@ -167,22 +149,15 @@ public class FreshBooksWidgetsAPI
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
     }
 
@@ -215,22 +190,15 @@ public class FreshBooksWidgetsAPI
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
 
     }
@@ -251,10 +219,8 @@ public class FreshBooksWidgetsAPI
     @Path("add/client/{widget-id}/{first_name}/{last_name}/{email}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String addClientToFreshBooks(@PathParam("widget-id") Long widgetId,
-	    @PathParam("first_name") String firstName,
-	    @PathParam("last_name") String lastName,
-	    @PathParam("email") String email)
+    public String addClientToFreshBooks(@PathParam("widget-id") Long widgetId, @PathParam("first_name") String firstName,
+	    @PathParam("last_name") String lastName, @PathParam("email") String email)
     {
 	// Retrieves widget based on its id
 	Widget widget = WidgetUtil.getWidget(widgetId);
@@ -272,22 +238,15 @@ public class FreshBooksWidgetsAPI
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
     }
 
@@ -312,12 +271,8 @@ public class FreshBooksWidgetsAPI
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public String addInvoiceToClientInFreshBooks(
-	    @PathParam("widget-id") Long widgetId,
-	    @FormParam("first_name") String firstName,
-	    @FormParam("last_name") String lastName,
-	    @FormParam("email") String email,
-	    @FormParam("lines_info") String linesInfo)
+    public String addInvoiceToClientInFreshBooks(@PathParam("widget-id") Long widgetId, @FormParam("first_name") String firstName,
+	    @FormParam("last_name") String lastName, @FormParam("email") String email, @FormParam("lines_info") String linesInfo)
     {
 	// Retrieves widget based on its id
 	Widget widget = WidgetUtil.getWidget(widgetId);
@@ -330,27 +285,19 @@ public class FreshBooksWidgetsAPI
 	    /*
 	     * Calls FreshBooksUtil method to add invoice in FreshBooks account
 	     */
-	    return FreshBooksUtil.addInvoice(widget, firstName, lastName,
-		    email, linesInfo);
+	    return FreshBooksUtil.addInvoice(widget, firstName, lastName, email, linesInfo);
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
     }
 }

@@ -43,9 +43,7 @@ public class StripeWidgetsAPI
     @Path("{widget-id}/{customerId}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String getStripeCustomerDetails(
-	    @PathParam("widget-id") Long widgetId,
-	    @PathParam("customerId") String customerId)
+    public String getStripeCustomerDetails(@PathParam("widget-id") Long widgetId, @PathParam("customerId") String customerId)
     {
 	try
 	{
@@ -58,27 +56,19 @@ public class StripeWidgetsAPI
 	    /*
 	     * Calls StripePluginUtil method to retrieve customer details
 	     */
-	    return StripePluginUtil.getCustomerDetails(widget, customerId)
-		    .toString();
+	    return StripePluginUtil.getCustomerDetails(widget, customerId).toString();
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response
-		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
 
     }
