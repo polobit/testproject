@@ -13,6 +13,7 @@
     	{{else}}
     		<a class="btn btn-primary add-widget" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
     	{{/if}}
+		{{#if_equals widget_type "CUSTOM"}}<a class="btn btn-danger" id="remove-widget" widget-name="{{name}}">Remove</a>{{/if_equals}}
 	</div>
 </div>
 </script>
@@ -93,7 +94,7 @@
 				<div class="control-group" style="margin-bottom:0px"><div class="controls"><input type="url" id="mini_logo_url" class="input-medium required widget_input_box" style="width:90%" placeholder="Mini logo URL" value="" name="mini_logo_url"></input></div></div>
 				<div class="form-actions" style="padding: 10px 20px 18px;margin-top: 10px;margin-bottom: 18px;">
                		<button id="save_custom_widget" type="submit" class="save btn btn-primary">Install</button>
-               		<a type="reset" href="#users" class="btn">Cancel</a>
+               		<a type="reset" href="#add-widget" class="btn">Cancel</a>
              	</div>
 			 </fieldset>
 	    </form>
