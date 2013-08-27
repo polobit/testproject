@@ -165,42 +165,64 @@ $(function()
 
 		success : function(data)
 		{
-			/*
-			 * If Widgets_View is defined, remove widgets from widget collection
-			 */
-			if (Widgets_View && Widgets_View.collection)
-			{
-				// Fetch widget from collection based on widget_name
-				var model = Widgets_View.collection.where({ name : widget_name });
-				Widgets_View.collection.remove(model);
-			}
-
-			// Call fetch on collection to update widget models
-			Catalog_Widgets_View.collection.fetch();
-
-			/*
-			 * If contacts view is not defined, redirected to list of contacts
-			 * page after adding widget
-			 */
-			if (!App_Contacts || !App_Contacts.contactDetailView || !App_Contacts.contactDetailView.model)
-			{
-				Backbone.history.navigate("contacts", { trigger : true });
-
-				return;
-			}
-			// Navigates back to the contact id form
-			Backbone.history.navigate("contact/" + App_Contacts.contactDetailView.model.id, { trigger : true });
+			update_collection(widget_name);
 
 		}, dataType : 'json' });
 	});
 
-	$('#add-custom-widget').die().live('click', function(e)
+	$('#remove-widget').die().live('click', function(e)
 	{
-		e.preventDefault();
+		// Fetch widget name from the widget on which delete is clicked
+		var widget_name = $(this).attr('widget-name');
 
+		// If not confirmed to delete, return
+		if (!confirm("Are you sure to remove " + widget_name))
+			return;
+
+		/*
+		 * Sends Delete request with widget name as path parameter, and on
+		 * success fetches the widgets to reflect the changes is_added, to show
+		 * add widget in the view instead of delete option
+		 */
+		$.ajax({ type : 'DELETE', url : '/core/api/widgets/remove/' + widget_name, contentType : "application/json; charset=utf-8",
+
+		success : function(data)
+		{
+			update_collection(widget_name);
+
+		}, dataType : 'json' });
 	});
 
 });
+
+function update_collection(widget_name)
+{
+	/*
+	 * If Widgets_View is defined, remove widgets from widget collection
+	 */
+	if (Widgets_View && Widgets_View.collection)
+	{
+		// Fetch widget from collection based on widget_name
+		var model = Widgets_View.collection.where({ name : widget_name });
+		Widgets_View.collection.remove(model);
+	}
+
+	// Call fetch on collection to update widget models
+	Catalog_Widgets_View.collection.fetch();
+
+	/*
+	 * If contacts view is not defined, redirected to list of contacts
+	 * page after adding widget
+	 */
+	if (!App_Contacts || !App_Contacts.contactDetailView || !App_Contacts.contactDetailView.model)
+	{
+		Backbone.history.navigate("contacts", { trigger : true });
+
+		return;
+	}
+	// Navigates back to the contact id form
+	Backbone.history.navigate("contact/" + App_Contacts.contactDetailView.model.id, { trigger : true });
+}
 
 function build_custom_widget_form(el)
 {
@@ -222,4 +244,3 @@ function build_custom_widget_form(el)
 			});
 
 }
-

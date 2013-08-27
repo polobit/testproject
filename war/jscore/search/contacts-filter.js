@@ -7,6 +7,21 @@
  * @module Search author: Yaswanth
  */
 var filter_name;
+
+/**
+ * Change name of input[name='temp'] to more random i.e. temp-<unique_number>.
+ * This is necessary for showing correct validation errors when multiple entries with same field-name are on the page.
+ * @param el
+ */
+var scrambled_index=0;
+function scramble_input_names(el)
+{
+	el.find("div[name='RHS']>input").each(function(){
+		$(this).attr('name','temp-'+scrambled_index);
+		scrambled_index+=1;
+	});
+}
+
 $(function()
 {
 	// Filter Contacts- Clone Multiple
@@ -14,6 +29,8 @@ $(function()
 	{
 		// To solve chaining issue when cloned
 		var htmlContent = $(getTemplate("filter-contacts", {})).find('tr').clone();
+		
+		scramble_input_names($(htmlContent));
 
 		chainFilters(htmlContent);
 

@@ -45,7 +45,9 @@ function showCalendar() {
                 
             } else {
                 $('#loading').hide();
+                
                 $('#subscribe-ical').css('display','block');
+                start_tour('calendar');
             }
         },
         selectable: true,
