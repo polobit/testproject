@@ -165,7 +165,7 @@ $(function()
 
 		success : function(data)
 		{
-			update_collection();
+			update_collection(widget_name);
 
 		}, dataType : 'json' });
 	});
@@ -188,14 +188,14 @@ $(function()
 
 		success : function(data)
 		{
-			update_collection();
+			update_collection(widget_name);
 
 		}, dataType : 'json' });
 	});
 
 });
 
-function update_collection()
+function update_collection(widget_name)
 {
 	/*
 	 * If Widgets_View is defined, remove widgets from widget collection
