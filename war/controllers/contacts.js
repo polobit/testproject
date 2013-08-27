@@ -180,11 +180,21 @@ var ContactsRouter = Backbone.Router.extend({
 		 * 
 		 * Now always Hard-Reload
 		 *
+		 */
       	if(CONTACTS_HARD_RELOAD == true || readCookie('contact_filter'))
       		{
       			this.contactsListView = undefined;
       		 	CONTACTS_HARD_RELOAD = false;
       		}
+      	
+    	if (this.contactsListView && this.contactsListView.collection) {
+			$('#content').html(this.contactsListView.render(true).el);
+
+			$(".active").removeClass("active");
+			$("#contactsmenu").addClass("active");
+			return;
+		}
+
 		
       	/*
       	 * cursor and page_size options are taken to activate infiniScroll
