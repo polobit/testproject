@@ -49,7 +49,7 @@ var ReportsRouter = Backbone.Router.extend({
 
 				head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 				{
-
+					scramble_input_names($(el));
 					chainFilters(el);
 				});
 			} });
@@ -103,7 +103,7 @@ var ReportsRouter = Backbone.Router.extend({
 
 					chainFilters(el);
 					deserializeChainedSelect($(el).find('form'), report.toJSON().rules);
-
+					scramble_input_names($(el));		
 				});
 
 			} });
