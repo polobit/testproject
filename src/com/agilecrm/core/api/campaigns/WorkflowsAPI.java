@@ -12,7 +12,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -71,7 +74,14 @@ public class WorkflowsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Workflow createWorkflow(Workflow workflow)
     {
-	workflow.save();
+	try
+	{
+	    workflow.save();
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build());
+	}
 	return workflow;
     }
 
@@ -88,7 +98,14 @@ public class WorkflowsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Workflow updateWorkflow(Workflow workflow)
     {
-	workflow.save();
+	try
+	{
+	    workflow.save();
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build());
+	}
 	return workflow;
     }
 
@@ -128,4 +145,5 @@ public class WorkflowsAPI
 	Workflow.dao.deleteBulkByIds(workflowsJSONArray);
 
     }
+
 }
