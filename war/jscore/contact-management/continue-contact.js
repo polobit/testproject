@@ -113,6 +113,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     
     	// Stores person's continue editing form template key
     	template = 'continue-contact';
+    	obj.type = 'PERSON';
     	
     	// Creates properties of contact (person)
     	if (isValidField('fname'))properties.push(property_JSON('first_name', 'fname'));
@@ -165,8 +166,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     	
     	// Stores company's continue editing form template key
     	template = 'continue-company';
-
-
+    	obj.type = 'COMPANY';
     	// Creates properties of contact (company)
 
     	if (isValidField('company_name'))
@@ -183,9 +183,6 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     	}
     	
     	if (isValidField('company_url')) properties.push(property_JSON('url', 'company_url'));
-
-    	var type = $('#' + form_id + ' input[name=type]').val();
-    	obj.type = type;
     }
     
     /*
@@ -560,7 +557,7 @@ $(function () {
 
     // Continue editing in the new-company-modal (to avoid changing the route event to be prevented.)
     $('#continue-company').click(function (e) {
-        var model = serialize_and_save_continue_contact(e, 'companyForm', 'companyModal', true, false);
+        var model = serialize_and_save_continue_contact(e, 'companyForm', 'companyModal', true, false, this);
          
     });
     
