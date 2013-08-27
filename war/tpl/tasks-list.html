@@ -30,7 +30,7 @@
 
 <script id="tasks-list-model-template" type="text/html">
 <td>  
-  <div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:5em;overflow:hidden;">
+  <div style="height:auto;text-overflow:ellipsis;white-space:nowrap;max-width:5em;overflow:hidden;">
 	{{#if ownerPic}}
         	<img class="thumbnail" src="{{ownerPic}}" width="40px" height="40px" title="{{taskOwner.name}}"/>
 	{{else}}
@@ -39,12 +39,12 @@
   </div>
 </td>
 {{#if is_complete}}
-	<td><div style="text-decoration:line-through;text-overflow:ellipsis;text-align:justify;white-space:nowrap;width:15em;overflow:hidden;">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span></div></td>
+	<td><div style="text-decoration:line-through;text-overflow:ellipsis;text-align:justify;white-space:nowrap;max-width:15em;overflow:hidden;">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span></div></td>
     <td><div style="text-decoration:line-through"><!--<i class="{{icons type}}"></i>&nbsp;--><span class="label">{{task_property type}}</span></div></td>
     <td><div style="text-decoration:line-through"><span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></div></td>
     <td><div style="text-decoration:line-through"><time class="task-due-time" value="{{due}}" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</time></div></td>	
 {{else}}
-	<td><div style="overflow:hidden;text-overflow:ellipsis;text-align:justify;white-space:nowrap;width:15em;">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span></div></td>
+	<td><div style="overflow:hidden;text-overflow:ellipsis;text-align:justify;white-space:nowrap;max-width:15em;">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span></div></td>
     <td><div><!--<i class="{{icons type}}"></i>&nbsp;--><span class="label">{{task_property type}}</span></div></td>
     <td><span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></td>
 	<td><div><time class="task-due-time" value="{{due}}" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</time></div></td>	
@@ -94,7 +94,7 @@
         </div>
     </div>
 </div>
-<div class="row-fluid">
+<div class="row-fluid span12">
 	<div id="task-list-based-condition" class="span9" ></div>
 	<div class="span3">
         <div class="data-block">

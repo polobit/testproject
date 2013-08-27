@@ -2,7 +2,9 @@ package com.agilecrm.core.api.contacts;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -14,13 +16,13 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.Globals;
-import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.SessionManager;
+import com.agilecrm.util.CSVUtil;
 import com.agilecrm.util.CacheUtil;
 import com.google.appengine.api.backends.BackendServiceFactory;
 import com.google.appengine.api.blobstore.BlobKey;
@@ -52,34 +54,18 @@ public class UploadContactsAPI
 
 	    InputStream stream = new BlobstoreInputStream(blobKey);
 
-	    // Reads blob data line by line upto first 10 line of file
-	    LineIterator iterator = IOUtils.lineIterator(stream, "UTF-8");
+	    List<String> headings = CSVUtil.getCSVHeadings(stream);
 
-	    int lines = 0;
-	    String csv = "";
-
-	    // Iterates through first 10 lines
-	    while (iterator.hasNext() && lines <= 10)
-	    {
-		csv = csv + "\n" + iterator.nextLine();
-		lines++;
-	    }
-
-	    // It converts first 10 lines in the CSV and returns a JSONObject
-	    // (Now we are sending first 10 lines, normal method can be used).
-	    Hashtable result = ContactUtil.convertCSVToJSONArrayPartially(csv, "");
-
-	    System.out.println(result);
-
-	    JSONObject success = new JSONObject();
+	    Map success = new HashMap();
 	    success.put("success", true);
 	    success.put("blob_key", key);
 
-	    // returns CSV file as a json object with key "data"
-	    success.put("data", result.get("result"));
-	    System.out.println(success);
+	    // Heading are stored in data key
+	    success.put("data", new JSONArray(headings));
 
-	    return success.toString();
+	    System.out.println(new JSONObject(success));
+
+	    return new JSONObject(success).toString();
 	}
 	catch (Exception e)
 	{

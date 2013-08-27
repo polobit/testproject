@@ -178,8 +178,6 @@ $(function()
 					{
 						tagsCollection.add({ "tag" : tag });
 					});
-					// On save back to contacts list
-					Backbone.history.navigate("contacts", { trigger : true });
 				});
 			}
 			else 
@@ -436,9 +434,7 @@ function postBulkOperationData(url, data, form, contentType, callback)
 		if (callback && typeof (callback) === "function")
 			callback(data);
 
-		/*
-		 * setInterval(function(){ Backbone.history.navigate("contacts", {
-		 * trigger: true }); },2000);
-		 */
+		// On save back to contacts list
+		Backbone.history.navigate("contacts", { trigger : true });
 	} });
 }

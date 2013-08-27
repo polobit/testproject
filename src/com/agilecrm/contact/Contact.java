@@ -214,6 +214,7 @@ public class Contact extends Cursor
     public static final String TITLE = "title";
     public static final String NAME = "name";
     public static final String URL = "url";
+    public static final String WEBSITE = "website";
 
     // Dao
     public static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
@@ -283,6 +284,26 @@ public class Contact extends Cursor
 	    return;
 
 	properties.remove(getContactField(propertyName));
+    }
+
+    /**
+     * Gets all the contact property fields with given field name. It returns
+     * list of matching contact properties
+     * 
+     * @param {@link {@link List} of {@link ContactField}
+     * @return
+     */
+    public List<ContactField> getContactPropertiesList(String fieldName)
+    {
+	List<ContactField> fields = new ArrayList<ContactField>();
+
+	// Iterates through all the properties and returns matching property
+	for (ContactField field : properties)
+	{
+	    if (field.name.equals(fieldName))
+		fields.add(field);
+	}
+	return fields;
     }
 
     /**
@@ -364,8 +385,8 @@ public class Contact extends Cursor
 
 	// If tags and properties length differ, contact is considered to be
 	// changed
-	if (contact.tags.size() != currentContactTags.size() || contact.properties.size() != properties.size() || contact.star_value != star_value
-		|| contact.lead_score != lead_score)
+	if (contact.tags.size() != currentContactTags.size() || contact.properties.size() != properties.size()
+		|| contact.star_value != star_value || contact.lead_score != lead_score)
 	    return false;
 
 	// Checks if tags are changed
@@ -860,7 +881,8 @@ public class Contact extends Cursor
 		companyContact = dao.get(contact_company_key);
 		ContactField contactField = getContactField(COMPANY);
 		if (contactField == null)
-		    properties.add(new ContactField(Contact.COMPANY, companyContact.getContactFieldValue(Contact.NAME), null));
+		    properties.add(new ContactField(Contact.COMPANY, companyContact.getContactFieldValue(Contact.NAME),
+			    null));
 		else
 		    contactField.value = companyContact.getContactFieldValue(Contact.NAME);
 	    }
@@ -896,8 +918,8 @@ public class Contact extends Cursor
     @Override
     public String toString()
     {
-	return "id: " + id + " created_time: " + created_time + " updated_time" + updated_time + " type: " + type + " tags: " + tags + " properties: "
-		+ properties;
+	return "id: " + id + " created_time: " + created_time + " updated_time" + updated_time + " type: " + type
+		+ " tags: " + tags + " properties: " + properties;
     }
 
 }

@@ -45,16 +45,16 @@
 			</th>
 		</thead>
  <tbody id="import-tbody">
-    {{#eachkeys data.[0]}}
+    {{#each data}}
 	 <tr>
  		<td>
-			{{this.key}}
+			{{this}}
         </td>
 		<td class="import-contact-fields">
-			{{setupCSVUploadOptions this.key ../this}}
+			{{setupCSVUploadOptions this ../this}}
 		</td>
 	 </tr>
-	{{/eachkeys}}           		          
+	{{/each}}           		          
 	</tbody>
 </table>
 </br>

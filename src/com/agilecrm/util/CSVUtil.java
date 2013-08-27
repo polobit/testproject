@@ -1,13 +1,29 @@
 package com.agilecrm.util;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.LineIterator;
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import au.com.bytecode.opencsv.CSVReader;
+
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
+import com.agilecrm.user.DomainUser;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>CSVUtil</code> is a utility class, which converts the given data of a
@@ -92,11 +108,140 @@ public class CSVUtil
 	// Put warning with the duplicate objects
 	if (duplicateFieldName != null && duplicates.size() > 0)
 	{
-	    resultHashtable.put("warning", "Duplicate Values (" + duplicates.size() + ") were not imported " + duplicates);
+	    resultHashtable.put("warning", "Duplicate Values (" + duplicates.size() + ") were not imported "
+		    + duplicates);
 	}
 
 	System.out.println("Converted csv " + csv + " to " + resultHashtable);
 	return resultHashtable;
 
+    }
+
+    /**
+     * Returns CSV headings from stream object. Reads first line
+     * 
+     * @param stream
+     * @return
+     * @throws Exception
+     */
+    public static List<String> getCSVHeadings(InputStream stream) throws Exception
+    {
+	// Reads blob data line by line upto first 10 line of file
+	LineIterator iterator = IOUtils.lineIterator(stream, "UTF-8");
+
+	// Reads the first line
+	String csv = iterator.nextLine();
+
+	// Creates csv reader from headings
+	CSVReader reader = new CSVReader(new StringReader(csv.trim()));
+
+	// Get Header Liner
+	String[] headers = reader.readNext();
+	if (headers == null)
+	{
+	    System.out.println("Empty List");
+	    new Exception("Empty List");
+	}
+
+	// Creates list of headings
+	List<String> headersList = new ArrayList<String>(Arrays.asList(headers));
+
+	return headersList;
+
+    }
+
+    /**
+     * Creates contacts from CSV string using a contact prototype built from
+     * import page. It takes owner id to sent contact owner explicitly instead
+     * of using session manager, as there is a chance of getting null in
+     * backends.
+     * 
+     * Contact is saved only if there is email exists and it is a valid email
+     * 
+     * @param csv
+     * @param contact
+     * @param ownerId
+     * @throws IOException
+     */
+    public static void createContactsFromCSV(String csv, Contact contact, String ownerId) throws IOException
+    {
+
+	CSVReader reader = new CSVReader(new StringReader(csv.trim()));
+	// StringWriter s = new StringWriter();
+	// CSVWriter writer = new CSVWriter(new BufferedWriter(s));
+	// writer.
+
+	List<String[]> contacts = reader.readAll();
+
+	contact.type = Contact.Type.PERSON;
+	List<ContactField> properties = contact.properties;
+
+	// Creates domain user key, which is set as a contact owner
+	Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
+
+	System.out.println(contacts.size());
+
+	// Counters to count number of contacts saved contacts
+	int savedContacts = 0;
+	List<String> emails = new ArrayList<String>();
+	for (String[] csvValues : contacts)
+	{
+	    contact.id = null;
+	    contact.created_time = 0l;
+
+	    // Sets owner of contact explicitly. If owner is not set, contact
+	    // prepersist
+	    // tries to read it from session, and session is not shared with
+	    // backends
+	    contact.setContactOwner(ownerKey);
+
+	    contact.properties = new ArrayList<ContactField>();
+	    for (int j = 0; j < csvValues.length; j++)
+	    {
+		System.out.println(csvValues[j]);
+		if (StringUtils.isBlank(csvValues[j]))
+
+		    continue;
+
+		ContactField field = properties.get(j);
+
+		// To avoid saving ignore field value/ and avoid fields with
+		// empty values
+		if (field == null || field.name == null || StringUtils.isEmpty(field.value))
+		    continue;
+
+		// This is hardcoding but found no way to know how to get tags
+		// from the CSV file
+		if (field.name.equals("tags"))
+		{
+		    contact.tags.add(csvValues[j]);
+		    continue;
+		}
+
+		field.value = csvValues[j];
+
+		contact.properties.add(field);
+	    }
+
+	    if (!ContactUtil.isValidFields(contact))
+		continue;
+
+	    try
+	    {
+		contact.save();
+	    }
+	    catch (Exception e)
+	    {
+		System.out.println("exception while saving contacts");
+		e.printStackTrace();
+	    }
+	    // Increase counter on each contact save
+	    savedContacts++;
+	}
+
+	// Send notification after contacts save complete
+	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
+
+	System.out.println("contact save completed");
     }
 }

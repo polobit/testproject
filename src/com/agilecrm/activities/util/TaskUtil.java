@@ -308,14 +308,18 @@ public class TaskUtil
      */
     public static JSONObject getStats(String owner)
     {
-	JSONObject obj = new JSONObject();
+	JSONObject stats = new JSONObject();
 
 	try
 	{
 	    for (Task.Type type : EnumSet.allOf(Task.Type.class))
-		obj.put(WordUtils.capitalizeFully(type.toString().replace('_', ' ')), getTaskCount(type, owner));
+	    {
+		stats.put(WordUtils.capitalizeFully(type.toString().replace('_', ' ')), getTaskCount(type, owner));
+		// Reformat type for front-end.
+		// e.g. MEETING -> Meeting, FOLLOW_UP -> Follow Up
+	    }
 
-	    return obj;
+	    return stats;
 	}
 	catch (Exception e)
 	{

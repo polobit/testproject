@@ -1,15 +1,10 @@
 package com.agilecrm.contact.util;
 
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,13 +14,9 @@ import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import au.com.bytecode.opencsv.CSVReader;
-
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
-import com.agilecrm.contact.util.bulk.BulkActionNotifications;
-import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
@@ -216,6 +207,65 @@ public class ContactUtil
     }
 
     /**
+     * Checks if contact have any duplicate email addresses. It iterates though
+     * all the email property fields if any of that email exists already. If
+     * contact is old, then it fetches old contact check whether duplicate email
+     * is newly added in to current contact
+     * 
+     * @param contact
+     * @return
+     */
+    public static boolean isDuplicateContact(Contact contact)
+    {
+	// Hold old contact if contact is not new.
+	Contact oldContact = null;
+
+	// Iterates though all email fields
+	for (ContactField emailField : contact.getContactPropertiesList(Contact.EMAIL))
+	{
+	    // In case email field value is empty it removes property from
+	    // contact and continue
+
+	    if (StringUtils.isBlank(emailField.value) || !ContactUtil.isValidEmail(emailField.value))
+	    {
+		System.out.println("it is blank");
+		System.out.println(contact.properties.contains(emailField));
+		contact.properties.remove(emailField);
+		continue;
+	    }
+
+	    // Gets contacts count with given email address
+	    int availableContactsCount = dao.getCountByProperty("properties.value = ", emailField.value);
+
+	    // If email is not available, then it iterates though other emails
+	    if (availableContactsCount == 0)
+		continue;
+
+	    // If count is not 0 and contact is new, then contact is contact is
+	    // duplicate and true is returned
+	    if (contact.id == null)
+		return true;
+
+	    // If contact is not new, then it checks if email exists in current
+	    // contact sent.
+	    if (contact.isEmailExists(emailField.value))
+	    {
+		if (oldContact == null)
+		    oldContact = ContactUtil.getContact(contact.id);
+
+		// If email exists in old contact, then it is not considered
+		// duplicate contact
+		if (oldContact.isEmailExists(emailField.value))
+		    continue;
+	    }
+
+	    return true;
+	}
+
+	return false;
+    }
+
+    /**
      * Get Count of Contacts by Email - should be used in most of the cases
      * unless the real entity is required
      * 
@@ -313,204 +363,6 @@ public class ContactUtil
 	}
 
 	dao.putAll(contacts_list);
-    }
-
-    /**
-     * Converts CSV data in to JSON array, this method converts first 10 line of
-     * csv data as sample information, which is sent back to client to show
-     * uploaded sample details
-     * 
-     * @param csv
-     * @param duplicateFieldName
-     *            Duplicate field name
-     * @return
-     * @throws Exception
-     */
-    public static Hashtable convertCSVToJSONArrayPartially(String csv, String duplicateFieldName) throws Exception
-    {
-
-	CSVReader reader = new CSVReader(new StringReader(csv.trim()));
-
-	// Get Header Liner
-	String[] headers = reader.readNext();
-
-	if (headers == null)
-	{
-	    System.out.println("Empty List");
-	    new Exception("Empty List");
-	}
-
-	// If heading are left blank, the data will be lost as headings will be
-	// replaced in map.
-	for (int i = 0; i < headers.length; i++)
-	{
-	    // If header is blank then index is set as a header
-	    if (StringUtils.isBlank(headers[i]))
-		headers[i] = String.valueOf(i);
-	}
-
-	// CSV Json Array. Used JSONArray to maintain order of the fields, as
-	// normal JSON order is unpredictable
-	org.codehaus.jettison.json.JSONArray csvArray = new org.codehaus.jettison.json.JSONArray();
-
-	// HashTable of keys to check duplicates - we will store all keys into
-	// this hashtable and if there are any - we will exclude them
-	Vector<String> keys = new Vector();
-	Vector<String> duplicates = new Vector();
-
-	String[] csvValues;
-
-	// Reads first 10 lines of csv data, and converts it into JSON object
-	// with heading as its repective keys
-	for (int i = 0; i < 10 && (csvValues = reader.readNext()) != null; i++)
-	{
-	    Map<String, String> csvMap = new LinkedHashMap<String, String>();
-
-	    System.out.println(csvValues.length);
-	    // System.out.println(csvValues);
-	    boolean isDuplicate = false;
-	    for (int j = 0; j < csvValues.length; j++)
-	    {
-		// Check if the header is same as duplicate name
-		if (duplicateFieldName != null && headers[j].equalsIgnoreCase(duplicateFieldName))
-		{
-		    System.out.println("If already present " + headers[j] + " " + csvValues[j]);
-
-		    // Check if is already present in already imported items
-		    if (keys.contains(csvValues[j]))
-		    {
-			duplicates.add(csvValues[j]);
-			isDuplicate = true;
-			break;
-		    }
-
-		    keys.add(csvValues[j]);
-		}
-
-		System.out.println(headers[j] + ", " + csvValues[j]);
-		// Put field value respective to its heading, into JSON object
-		csvMap.put(headers[j], csvValues[j]);
-	    }
-
-	    // Have to use jettison JSON as net JSON is changing the order of
-	    // the elements
-	    if (!isDuplicate)
-		csvArray.put(new org.codehaus.jettison.json.JSONObject(csvMap));
-
-	}
-
-	Hashtable resultHashtable = new Hashtable();
-
-	System.out.println(csvArray);
-	System.out.println(csvArray);
-	resultHashtable.put("result", csvArray);
-
-	System.out.println(resultHashtable);
-	// Put warning
-	if (duplicateFieldName != null && duplicates.size() > 0)
-	{
-	    resultHashtable.put("warning", "Duplicate Values (" + duplicates.size() + ") were not imported "
-		    + duplicates);
-	}
-
-	System.out.println("Converted csv " + csv + " to " + resultHashtable);
-	return resultHashtable;
-
-    }
-
-    /**
-     * Creates contacts from CSV string using a contact prototype built from
-     * import page. It takes owner id to sent contact owner explicitly instead
-     * of using session manager, as there is a chance of getting null in
-     * backends.
-     * 
-     * Contact is saved only if there is email exists and it is a valid email
-     * 
-     * @param csv
-     * @param contact
-     * @param ownerId
-     * @throws IOException
-     */
-    public static void createContactsFromCSV(String csv, Contact contact, String ownerId) throws IOException
-    {
-
-	CSVReader reader = new CSVReader(new StringReader(csv.trim()));
-	// StringWriter s = new StringWriter();
-	// CSVWriter writer = new CSVWriter(new BufferedWriter(s));
-	// writer.
-
-	List<String[]> contacts = reader.readAll();
-
-	contact.type = Contact.Type.PERSON;
-	List<ContactField> properties = contact.properties;
-
-	// Creates domain user key, which is set as a contact owner
-	Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
-
-	// Counters to count number of contacts saved contacts
-	int savedContacts = 0;
-	for (String[] csvValues : contacts)
-	{
-	    System.out.println(csvValues.length);
-	    System.out.println(csvValues);
-
-	    contact.id = null;
-	    contact.created_time = 0l;
-
-	    // Sets owner of contact explicitly. If owner is not set, contact
-	    // prepersist
-	    // tries to read it from session, and session is not shared with
-	    // backends
-	    contact.setContactOwner(ownerKey);
-
-	    contact.properties = new ArrayList<ContactField>();
-	    for (int j = 0; j < csvValues.length; j++)
-	    {
-		System.out.println(csvValues[j]);
-
-		ContactField field = properties.get(j);
-
-		// To avoid saving ignore field value/ and avoid fields with
-		// empty values
-		if (field == null || field.name == null || StringUtils.isEmpty(field.value))
-		    continue;
-
-		// This is hardcoding but found no way to know how to get tags
-		// from the CSV file
-		if (field.name.equals("tags"))
-		{
-		    contact.tags.add(csvValues[j]);
-		    System.out.println("field name " + field.name);
-		    continue;
-		}
-
-		field.value = csvValues[j];
-
-		contact.properties.add(field);
-	    }
-
-	    System.out.println(contact.getContactFieldValue(Contact.EMAIL));
-
-	    // If contact has no email address or duplicate email address,
-	    // contact is not saved
-	    if (StringUtils.isEmpty(contact.getContactFieldValue(Contact.EMAIL))
-		    || ContactUtil.isExists(contact.getContactFieldValue(Contact.EMAIL)))
-		continue;
-
-	    // If contact has an invalid email address contact is not saved
-	    if (!ContactUtil.validateEmail(contact.getContactFieldValue(Contact.EMAIL)))
-		continue;
-
-	    contact.save();
-
-	    // Increase counter on each contact save
-	    savedContacts++;
-	}
-
-	// Send notification after contacts save complete
-	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
-
-	System.out.println("contact save completed");
     }
 
     /**
@@ -637,6 +489,29 @@ public class ContactUtil
 
     }
 
+    public static boolean isValidFields(Contact contact)
+    {
+	if (StringUtils.isBlank(contact.getContactFieldValue(contact.FIRST_NAME))
+		&& StringUtils.isBlank(contact.getContactFieldValue(contact.LAST_NAME)))
+	    return false;
+
+	if (isDuplicateContact(contact))
+	    return false;
+
+	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.EMAIL)))
+	    return false;
+
+	Iterator<ContactField> iterator = contact.properties.iterator();
+	while (iterator.hasNext())
+	{
+	    ContactField field = iterator.next();
+	    if (Contact.WEBSITE.equals(field.name) && !isValidURL(field.value))
+		iterator.remove();
+	}
+
+	return true;
+    }
+
     /**
      * Validate hex with regular expression
      * 
@@ -644,13 +519,29 @@ public class ContactUtil
      *            hex for validation
      * @return true valid hex, false invalid hex
      */
-    public static boolean validateEmail(final String hex)
+    public static boolean isValidEmail(final String hex)
     {
 
 	String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
 		+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
 	Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+
+	Matcher matcher = pattern.matcher(hex);
+	return matcher.matches();
+
+    }
+
+    /**
+     * Validates url
+     * 
+     * @param hex
+     * @return
+     */
+    public static boolean isValidURL(final String hex)
+    {
+	String URL_PATTERN = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+	Pattern pattern = Pattern.compile(URL_PATTERN);
 
 	Matcher matcher = pattern.matcher(hex);
 	return matcher.matches();
