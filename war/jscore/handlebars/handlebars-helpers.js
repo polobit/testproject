@@ -1580,9 +1580,8 @@ $(function()
 			uurl = uurl.slice(0, 11);
 			if (uurl === rurl)
 			{
-				var k = turl.indexOf('q=');
-				turl = turl.slice(k + 2, turl.indexOf('&', k));
-				turl = turl.replace('+', ' ');
+				turl = turl.split("&q=");
+				turl = turl[1].split("+").join(" ");
 				return new Handlebars.SafeString('( Keyword : ' + turl + ' )');
 			}
 			else
