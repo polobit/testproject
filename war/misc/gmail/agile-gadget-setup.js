@@ -20,44 +20,39 @@ function agile_user_setup(data) {
 	var domain = gadgets.util.getUrlParameters()['parent']
 			.match(/.+\/a\/(.+)\/html/)[1];
 	// Make URL to set-up user account.
-	var Url_Root = data.content.popup + "&hd=" + domain;
+	var Url_Root = data.popup + "&hd=" + domain;
 
 	// Create UI to let user enter its desired agile domain name.
-	$('#output')
-			.append(
-					'<p>Associate your account - one time setup</p>'
-							+ '<input type="text" id="user_domain" placeholder="Enter your Domain." style="margin:0 10px 0 0;"/>'
-							+ '<input type="button" value="Go" onclick="open_popup("'
-							+ Url_Root
-							+ '")"/>'
-							+ '<p id="notify_user" style="display:none;">Please enter your domain.</p>');
+	$('#output').html('<p>Associate your account - one time setup</p>'
+			+'<input type="text" id="user_domain" placeholder="Enter your Domain." style="margin:0 10px 0 0;" />'
+			+'<input type="button" value="Go" onclick=agile_gadget_open_popup("'+Url_Root+'") >'
+			+'<span id="notify_user" style="display:none; margin-left:20px;">Please enter your domain.</span>');
 
 	// Hide Loading Icon
-	$('.loading').css('display', 'none');
+	$('#loading').css('display', 'none');
 	gadgets.window.adjustHeight();
 }
 
 /**
  * Open a pop-up window with URL for registration.
  * 
- * @method agile_open_popup
+ * @method agile_gadget_open_popup
  * @param {String}
  *            url URL for domain registration.
  */
-function agile_open_popup(url) {
+function agile_gadget_open_popup(url) {
 
 	var User_Domain = $('#user_domain');
 	// Text box validation for empty box.
 	if (User_Domain.val() == 'Enter your Domain' || User_Domain.val() == '') {
-		$('#notify_user').show().delay(3000).hide(1);
+		$('#notify_user').fadeIn().delay(3000).hide(1);
 		User_Domain.focus();
-		User_Domain.select();
 	}
 	// Open pop-up.
 	else {
 
-		url += '&domain=' + User_Domain.value;
-		User_Domain.val() = '';
+		url += '&domain=' + User_Domain.val();
+		User_Domain.val("");
 		console.log(url);
 
 		var popup = window.open(url, 'OpenID', 'height=400,width=400');
@@ -70,8 +65,8 @@ function agile_open_popup(url) {
 			 */
 			if (popup.closed) {
 				clearInterval(finished_interval);
-				agile_erase_cookie('Agile_Gadget_Cookie');
-				login();
+				agile_gadget_erase_cookie('Agile_Gadget_Cookie');
+				agile_login();
 			}
 		}, 100);
 	}

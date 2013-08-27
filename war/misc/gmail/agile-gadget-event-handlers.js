@@ -231,7 +231,7 @@ function agile_init_handlers() {
 				// Add tag to list.
 				agile_build_tag_ui($("#added_tags_ul", el), response);
 
-				gadget_adjust_height();
+				agile_gadget_adjust_height();
 			}, email.email);
 		}
 		// If tags are not entered, hide form.
@@ -263,7 +263,7 @@ function agile_init_handlers() {
 			// Removing tag from list.
 			agile_build_tag_ui($("#added_tags_ul", el), response);
 
-			gadget_adjust_height();
+			agile_gadget_adjust_height();
 		}, email);
 	});
 
@@ -277,7 +277,7 @@ function agile_init_handlers() {
 		$(".toggle-tag", el).hide();
 		// Focus on text box and clear value.
 		$('form input[name="tags"]', el).val("").focus();
-		gadget_adjust_height();
+		agile_gadget_adjust_height();
 	});
 
 	// Enter key press event for tag input box.
@@ -310,7 +310,7 @@ function agile_init_handlers() {
 			// Show notes tab.
 			$('.gadget-notes-tab a', el).tab('show');
 			$('.gadget-notes-tab-list', el).slideToggle(function(){
-				gadget_adjust_height();
+				agile_gadget_adjust_height();
 			});
 		});
 	});
@@ -333,7 +333,7 @@ function agile_init_handlers() {
 			agile_load_datepicker($('.task-calender', el), function() {
 				$('.gadget-tasks-tab a', el).tab('show');
 				$('.gadget-tasks-tab-list', el).slideToggle(function(){
-					gadget_adjust_height();
+					agile_gadget_adjust_height();
 				});
 			});
 		});
@@ -357,7 +357,7 @@ function agile_init_handlers() {
 			agile_load_datepicker($('.deal-calender', el), function() {
 				$('.gadget-deals-tab a', el).tab('show');
 				$('.gadget-deals-tab-list', el).slideToggle(function(){
-					gadget_adjust_height();
+					agile_gadget_adjust_height();
 				});
 			});
 		});
@@ -385,7 +385,7 @@ function agile_init_handlers() {
 						.html($(Handlebars_Template));
 				$('.gadget-campaigns-tab a', el).tab('show');
 				$('.gadget-campaigns-tab-list', el).slideToggle(function(){
-					gadget_adjust_height();
+					agile_gadget_adjust_height();
 				});
 			});
 		});
@@ -447,11 +447,11 @@ function agile_init_handlers() {
 			agile_build_tag_ui($("#added_tags_ul", el), content);
 			// Hide list view of contact.
 			$(".contact-minified", el).slideToggle(function(){
-				gadget_adjust_height();
+				agile_gadget_adjust_height();
 			});
 			// Show contact summary.
 			$(".show-contact-summary", el).slideToggle(function(){
-				gadget_adjust_height();
+				agile_gadget_adjust_height();
 			});
 			// Build tabs.
 			agile_build_form_template(that, "gadget-tabs", ".option-tabs", function() {
@@ -465,7 +465,7 @@ function agile_init_handlers() {
 					$('.gadget_tabs', el).tab();
 					// Show Tabs.
 					$(".option-tabs", el).slideToggle(function(){
-						gadget_adjust_height();
+						agile_gadget_adjust_height();
 					});
 					// Show notes tab by default.
 					$('.gadget-notes-tab', el).trigger('click');
@@ -483,14 +483,14 @@ function agile_init_handlers() {
 				.find("div.show-form");
 		// Show list view of contact.
 		$(".contact-minified", el).slideToggle(function(){
-			gadget_adjust_height();
+			agile_gadget_adjust_height();
 		});
 		// hide contact summary.
 		$(".show-contact-summary", el).slideToggle(function(){
-			gadget_adjust_height();
+			agile_gadget_adjust_height();
 		});
 		$(".option-tabs", el).slideToggle(function(){
-			gadget_adjust_height();
+			agile_gadget_adjust_height();
 		});
 	});
 
@@ -517,13 +517,11 @@ function agile_init_handlers() {
 					// Fill notes list in tab.
 					$('.gadget-notes-tab-list', el).html(getTemplate('gadget-notes-list', response, 'no'));
 					$('.gadget-notes-tab-list', el).slideToggle(function(){
-						gadget_adjust_height();
+						agile_gadget_adjust_height();
 					});
 				});
 				// Apply date formatter on date/time field.
 				$("time", el).timeago();
-				if (!Is_Localhost)
-					gadgets.window.adjustHeight();
 			});
 		}, email);
 	});
@@ -549,7 +547,7 @@ function agile_init_handlers() {
 				// Fill tasks list in tab.	
 				$('.gadget-tasks-tab-list', el).html(getTemplate('gadget-tasks-list', response, 'no'));
 				$('.gadget-tasks-tab-list', el).slideToggle(function(){
-					gadget_adjust_height();
+					agile_gadget_adjust_height();
 				});
 			});
 			// Apply date formatter on date/time field.
@@ -578,7 +576,7 @@ function agile_init_handlers() {
 				// Fill deals list in tab.	
 				$('.gadget-deals-tab-list', el).html(getTemplate('gadget-deals-list', response, 'no'));
 				$('.gadget-deals-tab-list', el).slideToggle(function(){
-					gadget_adjust_height();
+					agile_gadget_adjust_height();
 				});
 			});
 			// Apply date formatter on date/time field.
@@ -617,7 +615,7 @@ function agile_init_handlers() {
 				// Fill campaigns list in tab.
 				$('.gadget-campaigns-tab-list', el).html(getTemplate('gadget-campaigns-list', lib_json, 'no'));
 				$('.gadget-campaigns-tab-list', el).slideToggle(function(){
-					gadget_adjust_height();
+					agile_gadget_adjust_height();
 				});
 			});
 			// Apply date formatter on date/time field.
@@ -636,7 +634,7 @@ function agile_init_handlers() {
 		agile_build_form_template($(this), "gadget-add-contact", ".show-add-contact-form", function() {
 
 			$(".show-add-contact-form", el).slideToggle(function(){
-				gadget_adjust_height();
+				agile_gadget_adjust_height();
 			});
 		});
 	});
@@ -653,12 +651,12 @@ function agile_init_handlers() {
 		var el = $(this).closest("div.gadget-contact-details-tab");
 		// Toggle add contact UI.
 		$(".show-add-contact-form", el).slideToggle(function(){
-			gadget_adjust_height();
+			agile_gadget_adjust_height();
 		});
 	});
 }
 
-function gadget_adjust_height(){
+function agile_gadget_adjust_height(){
 	if (!Is_Localhost)
 		gadgets.window.adjustHeight();
 }

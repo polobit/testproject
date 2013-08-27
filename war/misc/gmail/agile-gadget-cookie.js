@@ -12,6 +12,8 @@
  *            name Name of the variable example : agile-email etc.
  * @param {String}
  *            value Value of the variable example: agilecrm@example.com
+ * @param {Integer} 
+ * 			  days Sets cookie expiration time example: days=0 sets session cookie.
  */
 function agile_gadget_create_cookie(name, value, days) {
 	// Check days, if not equal to null, undefined or ""
@@ -23,7 +25,7 @@ function agile_gadget_create_cookie(name, value, days) {
 		var expires = "; expires=" + date.toGMTString();
 	} else
 		var expires = "";
-	document.cookie = name + "=" + escape(value) + "; expires=0" + "; path=/";
+	document.cookie = name + "=" + escape(value) + expires + "; path=/";
 }
 
 /**
@@ -61,5 +63,5 @@ function agile_gadget_read_cookie(name) {
  *            name Name of the variable to be removed from the cookie.
  */
 function agile_gadget_erase_cookie(name) {
-	agile_create_cookie(name, "", -1);
+	agile_gadget_create_cookie(name, "", -1);
 }

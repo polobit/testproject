@@ -69,7 +69,7 @@ function agile_init_gadget() {
 				// Convert into string.
 				Cookie_Data = JSON.stringify(value);
 				// Create cookie
-				agile_gadget_create_cookie('Agile_Gadget_Cookie', Cookie_Data);
+				agile_gadget_create_cookie('Agile_Gadget_Cookie', Cookie_Data, 0);
 				// Set account
 				agile_generate_ui(value.api_key, value.domain);
 			}
@@ -86,8 +86,6 @@ function agile_init_gadget() {
 		// Login
 		agile_login();
 
-		// Download scripts parallel to login.
-		agile_download_scripts();
 		gadgets.window.adjustHeight();
 	}
 }
@@ -106,6 +104,8 @@ function agile_login() {
 	
 	// Cookie present, Set account.
 	if (Gadget_Cookie != null && User_Data.api_key) {
+		// Download scripts.
+		agile_download_scripts();
 		// Download build UI JavaScript file.
 		head.js('https://agile-gadget.appspot.com/dj-js/agile-gadget-ui.js', function() {
 			head.ready(function() {
@@ -114,6 +114,12 @@ function agile_login() {
 			});
 		});
 	}
+	
+	// Cookie present, but new user set domain.
+	if(Gadget_Cookie != null && !User_Data.user_exists) {
+		agile_user_setup_load(User_Data);
+	}
+	
 	// Check for cookie, if not there send login request.
 	else {
 		// var url = 'https://googleapps.agilecrm.com/gmail';
@@ -144,21 +150,31 @@ function agile_handle_load_response(data) {
 	// Check user exists, OpenID must have occurred previously.
 	if (data.content.user_exists) {
 		// Create cookie
-		agile_gadget_create_cookie('Agile_Gadget_Cookie', JSON.stringify(data.content));
+		agile_gadget_create_cookie('Agile_Gadget_Cookie', JSON.stringify(data.content), 0);
 		agile_login();
 	}
 
 	// User not exist, go for one time domain registration.
 	else {
 		// Create cookie
-		agile_gadget_create_cookie('Agile_Gadget_Cookie', JSON.stringify(data.content));
-		// Download build UI JavaScript file.
-		head.js(Lib_Path + 'misc/gmail/agile-gadget-setup.js', function() {
-			agile_user_setup(data);
-		});
+		agile_gadget_create_cookie('Agile_Gadget_Cookie', JSON.stringify(data.content), 0);
+		agile_user_setup_load(data.content);
 	}
 }
 
+/**
+ * Download setup file and set user domain.
+ * 
+ * @method agile_user_setup_load
+ * @param {Object} data accepts data used to setup user domain.
+ * */
+function agile_user_setup_load(data){
+	
+	// Download build UI JavaScript file.
+	head.js(Lib_Path + 'misc/gmail/agile-gadget-setup.js', function() {
+		agile_user_setup(data);
+	});
+}
 /**
  * Download library and supporting script file for GUI building.
  * 
