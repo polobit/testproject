@@ -41,7 +41,10 @@ $(function() {
 								"error_message" : "First Name is mandatory. Please select first name."
 							},
 							"last_name_missing" : {
-								"error_message" : "Last Name is mandatory. Please select lname."
+								"error_message" : "Last Name is mandatory. Please select last name."
+							},
+							"email_missing" : {
+								"error_message" : "Email is mandatory. Please select Email."
 							},
 							"first_name_duplicate" : {
 								"error_message" : " You have assigned First Name to more than one element. Please ensure that first name is assigned to only one element. "
@@ -53,7 +56,7 @@ $(function() {
 								"error_message" : "You have assigned Company to more than one element. Please ensure that last name is assigned to only one element."
 							},
 							"job_title_duplicate" : {
-								"error_message" : "You have assigned job description to more than one element. Please ensure that last name is assigned to only one element."
+								"error_message" : "You have assigned job description to more than one element. Please ensure that ljob description is assigned to only one element."
 							}
 						}
 
@@ -71,27 +74,24 @@ $(function() {
 						 * If validations failed the error alerts a explaining
 						 * the cause are shown
 						 */
-						var firstNameCount = $(".import-select")
-								.filter(
-										function() {
-											return $(this).val() == "properties_first_name";
-										});
-
-						var lastNameCount = $(".import-select")
-								.filter(
-										function() {
-											return $(this).val() == "properties_last_name";
-										});
-
-						var company = $(".import-select").filter(function() {
-							return $(this).val() == "properties_company";
-						});
-
-						var job_title = $(".import-select").filter(function() {
-							return $(this).val() == "properties_title";
-						});
-
-						if (firstNameCount.length == 0) {
+						
+						var fist_name_count = 0, last_name_count = 0, emails_count = 0, company_count = 0, job_title_count = 0 ;
+						$(".import-select").each(function(index, element) {
+							var value = $(element).val()
+							if(value == "properties_first_name")
+								fist_name_count += 1;
+							else if(value == "properties_last_name")
+								last_name_count += 1;
+							else if(value == "properties_company")
+								company_count += 0;
+							else if(value.indexOf("-email") != -1)
+								emails_count += 1; 
+							else if(value == "properties_title")
+								job_title_count += 1;
+						})
+						
+						
+						if (fist_name_count == 0) {
 							$("#import-validation-error")
 									.html(
 											getTemplate(
@@ -99,34 +99,42 @@ $(function() {
 													upload_valudation_errors.first_name_missing));
 							return false;
 						}
+						else if(emails_count == 0) {
+							$("#import-validation-error")
+							.html(
+									getTemplate(
+											"import-contacts-validation-message",
+											upload_valudation_errors.email_missing));
+								return false;
+						}
 						/*
 						 * else if(lastNameCount.length == 0) {
 						 * $("#import-validation-error").html(getTemplate("import-contacts-validation-message",
 						 * upload_valudation_errors.last_name_missing)); return
 						 * false; }
 						 */
-						else if (firstNameCount.length > 1) {
+						else if (fist_name_count > 1) {
 							$("#import-validation-error")
 									.html(
 											getTemplate(
 													"import-contacts-validation-message",
 													upload_valudation_errors.first_name_duplicate));
 							return false;
-						} else if (lastNameCount.length > 1) {
+						} else if (last_name_count > 1) {
 							$("#import-validation-error")
 									.html(
 											getTemplate(
 													"import-contacts-validation-message",
 													upload_valudation_errors.last_name_duplicate));
 							return false;
-						} else if (company.length > 1) {
+						} else if (company_count > 1) {
 							$("#import-validation-error")
 									.html(
 											getTemplate(
 													"import-contacts-validation-message",
 													upload_valudation_errors.company_duplicate));
 							return false;
-						} else if (job_title.length > 1) {
+						} else if (job_title_count > 1) {
 							$("#import-validation-error")
 									.html(
 											getTemplate(
@@ -166,7 +174,6 @@ $(function() {
 							});
 						}
 						
-						console.log($('#import-header > tbody > tr > td.import-contact-fields').lenght);
 						$('td.import-contact-fields').each(
 								function(index, element) {
 
@@ -182,10 +189,6 @@ $(function() {
 									var select = $(this).find('select');
 									console.log(select);
 									var name = $(select).val();
-									console.log($(select).find(":selected").length);
-									console.log($(select).find(":selected"));
-									console.log($(select).find(":selected").attr('class'));
-									console.log($(select).find(":selected").html());
 									var type = $(select).find(":selected").attr('class') == 'CUSTOM' ? 'CUSTOM': 'SYSTEM';
 									
 									if (name.indexOf("properties_") != -1) {
