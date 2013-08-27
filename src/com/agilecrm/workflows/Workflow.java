@@ -19,6 +19,7 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -58,6 +59,7 @@ public class Workflow extends Cursor
     /**
      * Workflow Name.
      */
+    @Indexed
     public String name;
 
     /**
@@ -201,10 +203,16 @@ public class Workflow extends Cursor
     }
 
     /**
-     * Saves the workflow object.
+     * Saves the workflow object. But before saving, verifies for duplicate
+     * names. If given name already exists, it throws exception. Same name
+     * causes confusion while assigning campaign.
      */
-    public void save()
+    public void save() throws Exception
     {
+
+	// Verifies for duplicate workflow name before save
+	checkForDuplicateName();
+
 	dao.put(this);
     }
 
@@ -214,6 +222,41 @@ public class Workflow extends Cursor
     public void delete()
     {
 	dao.delete(this);
+    }
+
+    /**
+     * Verifies whether given name is equivalent to any one of the existing
+     * workflow names. If names are equal, it throws exception.
+     * <p>
+     * For edit workflow, two cases exist. 1. If name is updated - should verify
+     * with existing ones. 2. If name is not updated - no need of verification.
+     * </p>
+     * 
+     * @throws Exception
+     */
+    private void checkForDuplicateName() throws Exception
+    {
+	// New workflow
+	if (id == null)
+	{
+	    if (WorkflowUtil.getCampaignNameCount(name) > 0)
+		throw new Exception("Please change the given name. Same kind of name already exists.");
+	}
+
+	// Old workflow
+	if (id != null)
+	{
+	    // to compare given name with existing ones.
+	    Workflow oldWorkflow = WorkflowUtil.getWorkflow(id);
+
+	    // Verifies only when workflow name updated
+	    if (!oldWorkflow.name.equals(name))
+	    {
+		// throws exception for duplicate name
+		if (WorkflowUtil.getCampaignNameCount(name) == 1)
+		    throw new Exception("Please change the given name. Same kind of name already exists.");
+	    }
+	}
     }
 
     /**

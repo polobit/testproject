@@ -14,13 +14,19 @@ $(function(){
 	});
 
 	/**
-	 * Saves the content of workflow if the form is valid
+	 * Saves the content of workflow if the form is valid. Verifies for duplicate workflow names.
+	 * Separate ids are given for buttons (as IDs are unique in html) but having same functionality, 
+	 * so ids are separated by comma in click event.
 	 * 
 	 **/
-	$('#save-workflow').live('click', function (e) {
+	$('#save-workflow-top, #save-workflow-bottom').live('click', function (e) {
            e.preventDefault();
            
-           if($('#workflowform').find('#save-workflow').attr('disabled'))
+           // Temporary variable to hold clicked button, either top or bottom. $ is preceded, just to show 
+           // it is holding jQuery object
+           var $clicked_button = $(this);
+           
+           if($(this).attr('disabled'))
    			return;
            
     	// Check if the form is valid
@@ -41,7 +47,7 @@ $(function(){
         }
 
         // Disables save button to prevent multiple save on click event issues
-        disable_save_button($('#workflowform').find('#save-workflow'));
+        disable_save_button($(this));
         //$('#workflowform').find('#save-workflow').attr('disabled', 'disabled');
         
         // Load image while saving
@@ -58,7 +64,7 @@ $(function(){
             App_Workflows.workflow_model.set("rules", designerJSON);
             App_Workflows.workflow_model.save({}, {success: function(){
             	
-            	enable_save_button($('#workflowform').find('#save-workflow'));
+            	enable_save_button($clicked_button);
             	//$('#workflowform').find('#save-workflow').removeAttr('disabled');
                
                //$(".save-workflow-img").remove();
@@ -67,7 +73,15 @@ $(function(){
                     trigger: true
                 });
             	
-            }});        
+            },
+            
+            error: function(jqXHR, status, errorThrown){ 
+              enable_save_button($clicked_button);
+              
+              // shows Exception message
+              alert(status.responseText);
+                }
+            });        
             
         } 
         // When workflow is created
@@ -82,7 +96,7 @@ $(function(){
             	    success:function(){  
 
             	    	// Removes disabled attribute of save button
-            	    	enable_save_button($('#workflowform').find('#save-workflow'));
+            	    	enable_save_button($clicked_button);
             	    	// $('#workflowform').find('#save-workflow').removeAttr('disabled');
             	    	
             	    	// $(".save-workflow-img").remove();
@@ -91,7 +105,14 @@ $(function(){
                         trigger: true
             	    	
             	    	});
-            	    }
+            	    },
+                    
+                    error: function(jqXHR, status, errorThrown){ 
+                      enable_save_button($clicked_button); 
+                      
+                      // shows exception message
+                      alert(status.responseText);
+                        }
             });
         }
 

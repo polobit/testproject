@@ -14,7 +14,7 @@
 			the manifest, but is still expected to be present. -->
 		<Require feature="google.contentmatch">
 			<Param name="extractors">
-				754069265943:Agile,google.com:EmailAddressExtractor
+				863502773390:Agile,google.com:EmailAddressExtractor
 			</Param>
 		</Require>
 
@@ -29,7 +29,7 @@
 	<Content type="html" view="card">
     <![CDATA[
       
-    <link rel="stylesheet" type="text/css" href="https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/css/bootstrap-pink.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/css/bootstrap-red.min.css" />
     <link rel="stylesheet" type="text/css" href="https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/css/lib/datepicker-min.css" />
     <link rel="stylesheet" type="text/css" href="https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/css/bootstrap-responsive.min.css" />
     <style>
@@ -48,10 +48,10 @@
 			border: solid 1px #ddd;
 			box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 		}
-		body{background-color: #F2F2F2;}
+		
     </style>
     <br/>
-	<div class="container-fluid">
+	<div class="container">
 		<div id="content" class="row">
 			<img id="loading" style="padding-right:5px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
 		</div>
@@ -63,22 +63,22 @@
 	<script src='https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/misc/gmail/agile-gadget-main.js'></script>
    	
 	<script id="gadget-template" type="text/html">
-		<div class="span8 well well-small gadget-contact-details-tab" style='margin: 0 0 5px 5px;'>
+		<div class="well well-small gadget-contact-details-tab" style='margin: 0 0 5px 5px;'>
 			<div class="show-form" data-content={{email}}>
 <!--email list -->
 				<div class="contact-list" style="display: inline-block;">
 					{{#if fname}}
 						<div class="gadget-no-contact">
-							<i class="icon-search"></i><a class="gadget-search-contact" style="cursor:pointer; margin:0px 8px 0px 5px; text-decoration:underline; font-weight:bold;"><span>Search</span></a> {{fname}} {{lname}} in Agile Contacts
+							<a class="gadget-search-contact" style="cursor:pointer; margin:0px 8px 0px 5px; text-decoration:underline; font-weight:bold;"><i class="icon-search" style="text-decoration:none; margin-right:5px;"></i><span>Search</span></a> {{fname}} {{lname}} ({{email}}) in Agile Contacts
 						</div>
 					{{else}}
 						<div class="gadget-no-contact">
-							<i class="icon-search"></i><a class="gadget-search-contact" style="cursor:pointer; margin:0px 5px; text-decoration:underline; font-weight:bold;"><span>Search</span></a> {{email}} in Agile Contacts
+							<a class="gadget-search-contact" style="cursor:pointer; margin:0px 8px 0px 5px; text-decoration:underline; font-weight:bold;"><i class="icon-search" style="text-decoration:none; margin-right:5px;"></i><span>Search</span></a> {{email}} in Agile Contacts
 						</div>
 					{{/if}}
 			    </div>
 				<div style="display: inline-block; margin-left: 10px; color:indianred;">
-					<img class="contact-search-waiting" style="padding-right:5px;display:none;width:20px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>
+					<img class="contact-search-waiting" style="padding-right:5px;display:none;width:13px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>
 					<span class="contact-search-status" style="display:none;"><i>Contact not found.</i></span>
 				</div>
 			</div>
