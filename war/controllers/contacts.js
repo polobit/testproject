@@ -745,10 +745,15 @@ var ContactsRouter = Backbone.Router.extend({
      * and triggers the custom event 'fill_owners' to fill the owners select drop down. This event is 
      */
     ownerBulk: function(){
-
-    	$("#content").html(getTemplate("bulk-actions-owner", {}));
-		
-    	$('body').trigger('fill_owners');
+    	
+	   	 // On reloading redirecting to contacts list
+	   	if (!this.contactsListView )
+	   		Backbone.history.navigate("contacts", { trigger : true });
+	   	else
+	   	{
+	    	$("#content").html(getTemplate("bulk-actions-owner", {}));
+	    	$('body').trigger('fill_owners');
+	   	}
     },
     
     /**
@@ -757,10 +762,16 @@ var ContactsRouter = Backbone.Router.extend({
      * binded to trigger on loading of the template
      */
     campaignsBulk: function(){
-    
-    	$("#content").html(getTemplate("bulk-actions-campaign", {}));
-		
-    	$('body').trigger('fill_campaigns');
+    	
+    	 // On reloading redirecting to contacts list
+    	if (!this.contactsListView )
+    		Backbone.history.navigate("contacts", { trigger : true });
+    	else
+    	{
+        	$("#content").html(getTemplate("bulk-actions-campaign", {}));
+        	$('body').trigger('fill_campaigns');
+    	}
+
     },
     
     /**
@@ -780,9 +791,15 @@ var ContactsRouter = Backbone.Router.extend({
      * on loading of the template
      */
     emailBulk: function(){
-
-    	$("#content").html(getTemplate("send-email", {}));
-    	$('body').trigger('fill_emails');
+    	
+	   	 // On reloading redirecting to contacts list
+	   	if (!this.contactsListView )
+	   		Backbone.history.navigate("contacts", { trigger : true });
+	   	else
+	   	{
+	    	$("#content").html(getTemplate("send-email", {}));
+	    	$('body').trigger('fill_emails');
+	   	}
     },
     
     // Id = custom-view-id, view_data = custom view data if already availabel, url = filter url if there is any filter

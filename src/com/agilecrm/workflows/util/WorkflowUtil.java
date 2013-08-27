@@ -152,4 +152,16 @@ public class WorkflowUtil
 
 	return "?";
     }
+
+    /**
+     * Returns campaign-name count. It avoids saving duplicate campaign-names.
+     * 
+     * @param campaignName
+     *            - Campaign name.
+     * @return int
+     */
+    public static int getCampaignNameCount(String campaignName)
+    {
+	return dao.ofy().query(Workflow.class).filter("name", campaignName).count();
+    }
 }
