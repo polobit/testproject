@@ -4,20 +4,22 @@
  * agile_widgets.js defines third party JavaScript API.
  * Functionalities provided by script API are
  * <pre>
- * -- Retrieves property of current contact 	     : agile_crm_get_contact_property(propertyName)
- * -- Retrieves properties list of current contact   : agile_crm_get_contact_properties_list(propertyName)
- * -- Updating a contact by specifying property name : agile_crm_update_contact(propertyName, Value)
- * -- Updates contact properties with given values   : agile_crm_update_contact_properties(propertiesArray, callback)
- * -- Retrieves current contact object				 : agile_crm_get_contact()
- * -- Add Note to current contact					 : agile_crm_add_note(subject, description)
  * -- Return widget object by widget name			 : agile_crm_get_plugin(pluginName)
  * -- Return widget preferences by widget name	     : agile_crm_get_plugin_prefs(pluginName)
  * -- Save widget preferences  by widget name		 : agile_crm_save_widget_prefs(pluginName, preferences)
+ * -- Delete widget preferences by widget name       : agile_crm_delete_widget_prefs(pluginName, callback)
+ * -- Saves widget property to contact               : agile_crm_save_widget_property_to_contact(propertyName, value)
  * -- Retrieves widget property from current contact : agile_crm_get_widget_property_from_contact(propertyName)
  * -- Delete widget property from current contact	 : agile_crm_delete_widget_property_from_contact(propertyName)
+ * -- Retrieves current contact object				 : agile_crm_get_contact()
+ * -- Retrieves property of current contact 	     : agile_crm_get_contact_property(propertyName)
+ * -- Retrieves properties list of current contact   : agile_crm_get_contact_properties_list(propertyName)
  * -- Retrieves contact property value by subtype    : agile_crm_get_contact_property_by_subtype(propertyName, subtype)
+ * -- Save property to contact for given subtype     : agile_crm_save_contact_property(propertyName, subtype, value, type)
+ * -- Updating a contact by specifying property name : agile_crm_update_contact(propertyName, Value)
+ * -- Updates contact properties with given values   : agile_crm_update_contact_properties(propertiesArray, callback)
  * -- Delete value given from contact by subtype     : agile_crm_delete_contact_property_by_subtype(propertyName, subtype, value)
- * -- Save property to contact for given subtype     : agile_crm_save_contact_properties_subtype(propertyName, subtype, value)
+ * -- Add Note to current contact					 : agile_crm_add_note(subject, description)
  * </pre>
  */
 
@@ -325,6 +327,19 @@ function agile_crm_save_widget_prefs(pluginName, prefs, callback)
 }
 
 /**
+ * Deletes widget preferences saved in widget under the field prefs in widget
+ * object
+ * 
+ * @param pluginName
+ *            name of the plugin specified
+ */
+function agile_crm_delete_widget_prefs(pluginName, callback)
+{
+	// saves prefs as undefined
+	agile_crm_save_widget_prefs(pluginName, undefined, callback);
+}
+
+/**
  * Returns widget property value from widget_properties field in contact
  * 
  * @param propertyName :
@@ -469,13 +484,20 @@ function agile_crm_delete_contact_property_by_subtype(propertyName, subtype, val
 
 /**
  * Saves contact property value to contact with the given property name and sub
- * type of the property and value of the property
+ * type of the property and value of the property.
+ * 
+ * <p>
+ * type should be given as "SYSTEM" if it already exists and "CUSTOM" if it is a
+ * new field
+ * </p>
+ * 
  * 
  * @param propertyName
  * @param subtype
  * @param value
+ * @param type
  */
-function agile_crm_save_contact_properties_subtype(propertyName, subtype, value)
+function agile_crm_save_contact_property(propertyName, subtype, value, type)
 {
 	// Reads current contact model form the contactDetailView
 	var contact_model = App_Contacts.contactDetailView.model;
@@ -487,6 +509,7 @@ function agile_crm_save_contact_properties_subtype(propertyName, subtype, value)
 	property["name"] = propertyName;
 	property["value"] = value;
 	property["subtype"] = subtype;
+	property["type"] = type;
 
 	properties.push(property);
 
@@ -501,3 +524,47 @@ function agile_crm_save_contact_properties_subtype(propertyName, subtype, value)
 
 }
 
+/**
+ * Saves the given property to widget_properties field in contact as key value
+ * pair, which is saved as JSON string object in field name widget_properties.
+ * 
+ * @param propertyName
+ * @param value
+ */
+function agile_crm_save_widget_property_to_contact(propertyName, value)
+{
+
+	// Gets Current Contact Model
+	var contact_model = App_Contacts.contactDetailView.model;
+
+	// Get WidgetProperties from Contact Model
+	var widget_properties = contact_model.get('widget_properties');
+
+	/*
+	 * If widget_properties are null i.e, contact do not contain any widget
+	 * properties yet, then create new JSON object to save widget properties
+	 */
+	if (!widget_properties)
+		widget_properties = {};
+
+	/*
+	 * If widget properties already exists then convert Stringified JSON in to
+	 * JSON object to add new properties
+	 */
+	else
+		widget_properties = JSON.parse(widget_properties);
+
+	/*
+	 * Adds the new property name and key value pair, in widget_properties JSON
+	 */
+	widget_properties[propertyName] = value;
+
+	// Stringifies widget_properties json in to string and set to contact model.
+	contact_model.set("widget_properties", JSON.stringify(widget_properties));
+
+	contact_model.url = "core/api/contacts";
+
+	// Saves updated model
+	contact_model.save();
+
+}
