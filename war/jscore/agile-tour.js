@@ -2,6 +2,7 @@ var Agile_Tour = {};
 
 /**
  * Returns Agile_tour steps JSON
+ * 
  * @param el
  */
 function create_tour_steps(el)
@@ -93,10 +94,49 @@ var tour;
  */
 function start_tour(key, el)
 {
-	tour = undefined;
-	var tour_flag = false;
 	if (!key)
 		key = Current_Route;
+
+	console.log(tour);
+
+	// If tour is defined and tour name is not equal to current route/key, then
+	// tour should be ended
+	if (tour && tour._options)
+	{
+		var step = tour._current;
+		console.log(step);
+		console.log(tour._options.name);
+		console.log(key + "-tour");
+
+		if (tour._options.name != key + "-tour")
+		{
+			tour.end();
+			tour = undefined;
+		}
+		else
+		{
+			// if user hits a button in the page, it reloads. On reload, current
+			// tour is stoped and reinitialized
+			tour.end();
+			tour.setCurrentStep(step);
+			tour.start(true);
+			return;
+		}
+	}
+
+	tour = undefined;
+	var tour_flag = false;
+
+	if (!el)
+	{
+		if (tour_flag)
+			return;
+
+		// Initializes the tour and sets tour flag to ensure tour won't load
+		// again
+		initiate_tour(key, el);
+		tour_flag = true;
+	}
 
 	// Tour should be initialized only after page is loaded
 	$(el).live('agile_collection_loaded', function()
@@ -177,6 +217,8 @@ function initiate_tour(key, el)
 
 			tour.addSteps(Agile_Tour[key]);
 
+			// Set current step to first step
+			tour.setCurrentStep(0);
 			tour.start(true);
 
 		})
@@ -188,6 +230,8 @@ function initiate_tour(key, el)
  */
 function reinitialize_tour_on_current_route()
 {
+
+	console.log(tour);
 
 	// Return of tour is already enabled on that route
 	var tour_status_cookie = readCookie("agile_tour");
@@ -214,6 +258,8 @@ function reinitialize_tour_on_current_route()
 
 	// Set tour back to true and save in cookie.
 	tour_status_cookie[key] = true;
+
+	console.log(JSON.stringify(tour_status_cookie));
 
 	// Removes the current step from localstorage, it is set by bootstrap tour
 	localStorage.removeItem(key + "-tour_current_step");
