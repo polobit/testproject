@@ -211,8 +211,8 @@ function update_collection(widget_name)
 	Catalog_Widgets_View.collection.fetch();
 
 	/*
-	 * If contacts view is not defined, redirected to list of contacts
-	 * page after adding widget
+	 * If contacts view is not defined, redirected to list of contacts page
+	 * after adding widget
 	 */
 	if (!App_Contacts || !App_Contacts.contactDetailView || !App_Contacts.contactDetailView.model)
 	{
@@ -226,11 +226,14 @@ function update_collection(widget_name)
 
 function build_custom_widget_form(el)
 {
+	var divClone;
+	
 	$('#add-custom-widget').die().live(
 			'click',
 			function(e)
 			{
-
+				divClone = $("#custom-widget").clone();
+				console.log(divClone.html());
 				var widget_custom_view = new Base_Model_View({ url : "/core/api/widgets", template : "add-custom-widget", isNew : false,
 					postRenderCallback : function(el)
 					{
@@ -241,6 +244,11 @@ function build_custom_widget_form(el)
 					} });
 
 				$('#custom-widget', el).html(widget_custom_view.render(true).el);
-			});
 
+				$('#cancel_custom_widget').die().live('click', function(e)
+				{
+					console.log(divClone.html());
+					$("#custom-widget").replaceWith(divClone); // Restore element back to original
+				});
+			});
 }

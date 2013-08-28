@@ -64,6 +64,9 @@ public class DefaultWidgets
 				"/widgets/stripe.js", "/img/plugins/Stripe.png", "/widgets/stripe-small-logo.png", null,
 				WidgetType.BILLING));
 
+		System.out.println("Default widgets ");
+		System.out.println(widgets);
+
 		return widgets;
 	}
 
@@ -82,6 +85,9 @@ public class DefaultWidgets
 	 */
 	public static List<Widget> saveIsAddedStatus(List<Widget> currentWidgets)
 	{
+		if (currentWidgets == null)
+			return new ArrayList<Widget>();
+
 		/*
 		 * From all widgets added by current user, if name of default widget
 		 * equals with the current added widget, remove the default widget from
@@ -106,7 +112,7 @@ public class DefaultWidgets
 
 		}
 
-		System.out.println("In save widgets");
+		System.out.println("In save default added widgets");
 		System.out.println(currentWidgets);
 		return currentWidgets;
 	}
@@ -125,15 +131,14 @@ public class DefaultWidgets
 	{
 		List<Widget> allWidgets = new ArrayList<Widget>();
 
+		if (currentWidgets == null)
+			return allWidgets;
+
 		// Creates and fetches all default widgets (not from database)
 		List<Widget> defaultWidgets = getAvailableDefaultWidgets();
 
 		// add default widgets to all widgets
 		allWidgets.addAll(defaultWidgets);
-
-		System.out.println("default widgets ");
-		System.out.println(defaultWidgets);
-		System.out.println(allWidgets);
 
 		/*
 		 * From all widgets added by current user, if name of default widget
@@ -144,7 +149,7 @@ public class DefaultWidgets
 		for (Widget currentWidget : currentWidgets)
 		{
 			// If it is custom widget, add it at the last
-			if (currentWidget.widget_type.equals(WidgetType.CUSTOM))
+			if (WidgetType.CUSTOM.equals(currentWidget.widget_type))
 			{
 				allWidgets.add(currentWidget);
 				continue;
