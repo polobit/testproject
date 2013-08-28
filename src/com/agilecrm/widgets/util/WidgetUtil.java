@@ -19,6 +19,29 @@ public class WidgetUtil
 	private static ObjectifyGenericDao<Widget> dao = new ObjectifyGenericDao<Widget>(Widget.class);
 
 	/**
+	 * Fetches all available widgets (custom and default) in agile account.
+	 * 
+	 * @return {@link List} of {@link Widget}s
+	 */
+	public static List<Widget> getAvailableWidgets()
+	{
+		// Fetch all widgets(default and custom) added by current user
+		List<Widget> currentWidgets = getWidgetsForCurrentUser();
+
+		/*
+		 * check in current widgets whether all default widgets are present and
+		 * add them if not present because we need to show all the available
+		 * widgets that Agile provide
+		 */
+		List<Widget> allWidgets = DefaultWidgets.checkAndAddDefaultWidgets(currentWidgets);
+
+		System.out.println("In get available widgets");
+		System.out.println(allWidgets);
+
+		return allWidgets;
+	}
+
+	/**
 	 * Fetches all {@link Widget}s for current {@link AgileUser}
 	 * 
 	 * <p>
@@ -144,26 +167,4 @@ public class WidgetUtil
 		}
 	}
 
-	/**
-	 * Fetches all available widgets (custom and default) in agile account.
-	 * 
-	 * @return {@link List} of {@link Widget}s
-	 */
-	public static List<Widget> getAvailableWidgets()
-	{
-		// Fetch all widgets(default and custom) added by current user
-		List<Widget> currentWidgets = getWidgetsForCurrentUser();
-
-		/*
-		 * check in current widgets whether all default widgets are present and
-		 * add them if not present because we need to show all the available
-		 * widgets that Agile provide
-		 */
-		List<Widget> allWidgets = DefaultWidgets.checkAndAddDefaultWidgets(currentWidgets);
-
-		System.out.println("In get available widgets");
-		System.out.println(allWidgets);
-
-		return allWidgets;
-	}
 }

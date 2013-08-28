@@ -12,6 +12,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.scribe.ScribeServlet;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.util.HTTPUtil;
+import com.agilecrm.widgets.util.DefaultWidgets;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Parent;
@@ -264,9 +265,20 @@ public class Widget
 	@PostLoad
 	private void postLoad()
 	{
+		System.out.println("In post load ");
+
 		// If widget type is custom, read the script
 		if (this.widget_type.equals(WidgetType.CUSTOM))
 			this.script = HTTPUtil.accessURLToReadScript(this.url);
+
+		/*
+		 * Some widgets are saved before setting widget type, those return
+		 * widget type as null, set widget type to those widgets based on name
+		 */
+		if (this.widget_type == null)
+			DefaultWidgets.checkAndFixWidgetType(this);
+
+		System.out.println(this);
 	}
 
 	/*
@@ -277,7 +289,7 @@ public class Widget
 	@Override
 	public String toString()
 	{
-		return "[Name: " + name + ", Is added: " + is_added + "]";
+		return "[Name: " + name + ", Is added: " + is_added + " Widget_Type " + widget_type + "]";
 	}
 
 }

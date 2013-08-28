@@ -98,21 +98,11 @@ public class DefaultWidgets
 		 */
 		for (Widget currentWidget : currentWidgets)
 		{
+			System.out.println(currentWidget.widget_type);
+
 			// Current widgets are skipped since is_added status is saved
 			if (WidgetType.CUSTOM.equals(currentWidget.widget_type))
 				continue;
-
-			/*
-			 * Some widgets are saved before setting widget type, those return
-			 * widget type as null, set widget type to those widgets based on
-			 * name
-			 */
-			if (currentWidget.widget_type == null)
-			{
-				WidgetType widgetType = getWidgetType(currentWidget.name);
-				if (widgetType != null)
-					currentWidget.widget_type = widgetType;
-			}
 
 			/*
 			 * If is_added is false for the added widget, set it as true and
@@ -123,7 +113,6 @@ public class DefaultWidgets
 				currentWidget.is_added = true;
 				currentWidget.save();
 			}
-
 		}
 
 		System.out.println("In save default added widgets");
@@ -208,4 +197,23 @@ public class DefaultWidgets
 		return null;
 	}
 
+	/**
+	 * checks if {@link Widget} has {@link WidgetType}, if it is null, fetches
+	 * and sets the {@link WidgetType} based on the name of {@link Widget}
+	 * 
+	 * @param widgets
+	 *            {@link Widget}
+	 * @return {@link Widget}
+	 */
+	public static Widget checkAndFixWidgetType(Widget widget)
+	{
+		System.out.println("In default widget type check " + widget);
+		if (widget.widget_type == null)
+		{
+			WidgetType widgetType = getWidgetType(widget.name);
+			if (widgetType != null)
+				widget.widget_type = widgetType;
+		}
+		return widget;
+	}
 }

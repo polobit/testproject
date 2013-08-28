@@ -1,5 +1,6 @@
 package com.agilecrm.widgets.util;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -39,6 +40,9 @@ public class CustomWidgets
 	 */
 	public static List<Widget> skipNotAddedCustomWidgets(List<Widget> currentWidgets)
 	{
+		if (currentWidgets == null)
+			return new ArrayList<Widget>();
+
 		Iterator<Widget> iterator = currentWidgets.iterator();
 
 		/*
