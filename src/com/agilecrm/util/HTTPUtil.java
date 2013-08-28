@@ -64,6 +64,51 @@ public class HTTPUtil
 	}
 
 	/**
+	 * Connects to the remote object based on the given url and reads the
+	 * response to return
+	 * 
+	 * @param url
+	 * @return response of remote object
+	 */
+	public static String accessURLToReadScript(String url)
+	{
+		try
+		{
+			URL yahoo = new URL(url);
+			URLConnection conn = yahoo.openConnection();
+
+			// Set Connection Timeout as Google AppEngine has 5 secs timeout
+			conn.setConnectTimeout(600000);
+			conn.setReadTimeout(600000);
+			conn.setRequestProperty("content-type", "text/javascript; charset=utf-8");
+
+			BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+			String output = "";
+			String inputLine;
+
+			while ((inputLine = reader.readLine()) != null)
+			{
+				/*
+				 * new line is added at the end of each line since it not
+				 * appending a new line for enter
+				 */
+				output += inputLine + "\n";
+			}
+			reader.close();
+			System.out.println("script");
+			System.out.println(output);
+			return output;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.err.println(e.getMessage());
+		}
+		return null;
+	}
+
+	/**
 	 * Connects to the remote object to write (post) the given data and reads
 	 * the response of it to return
 	 * 

@@ -48,7 +48,7 @@ public class CustomWidgets
 		while (iterator.hasNext())
 		{
 			Widget currentWidget = iterator.next();
-			if (currentWidget.widget_type.equals(WidgetType.CUSTOM))
+			if (WidgetType.CUSTOM.equals(currentWidget.widget_type))
 			{
 				// If is_added is false, remove it from list
 				if (!currentWidget.is_added)

@@ -164,16 +164,30 @@ function set_up_widgets(el, widgets_el)
 		var url = model.get("url");
 
 		/*
-		 * Checks if widget is minimized, if minimized script is not loaded
-		 */
-		if (!model.get("is_minimized"))
-			$.get(url, "script");
-
-		/*
 		 * Set the data element in the div so that we can retrieve this in get
 		 * plugin preferences
 		 */
 		$('#' + model.get('name'), el).data('model', model);
+
+		/*
+		 * Checks if widget is minimized, if minimized script is not loaded
+		 */
+		if (!model.get("is_minimized") && model.get("widget_type") != "CUSTOM")
+			$.get(url, "script");
+
+		/*
+		 * For custom widgets we load the scripts using HTTP connections and
+		 * store the script in script field of widget object, that is retrieved
+		 * and appended in the body
+		 */
+		if (model.get("widget_type") == "CUSTOM")
+		{
+			var myscript = document.createElement('script');
+			myscript.innerHTML = model.get("script");
+			myscript.type = "text/javascript";
+			document.body.appendChild(myscript);
+		}
+
 	}, this);
 
 	enableWidgetSoring(widgets_el);
@@ -336,8 +350,9 @@ function queuePostRequest(queueName, url, data, successcallback, errorCallback)
 /**
  * Shrink the widget header name width
  * 
- * <p> Shows the icons and decrease the width of widget header to avoid the
- * widget name overflow on mouse hover
+ * <p>
+ * Shows the icons and decrease the width of widget header to avoid the widget
+ * name overflow on mouse hover
  * 
  * @param el
  *            Element on which mouse entered (widget header)
@@ -366,7 +381,7 @@ function hideIcons(el)
 {
 	// Hide widget icons on hover
 	$(el).find('div.widget_header_icons').hide();
-	
+
 	// Changes width of widget name
 	$(el).find('div.widget_header_name').css({ "width" : "80%" });
 }
