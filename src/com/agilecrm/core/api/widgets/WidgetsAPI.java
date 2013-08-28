@@ -72,6 +72,8 @@ public class WidgetsAPI
 		if (widget == null)
 			return null;
 
+		System.out.println("In widgets api create");
+		System.out.println(widget);
 		widget.save();
 		return widget;
 	}
@@ -165,6 +167,9 @@ public class WidgetsAPI
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public void savePositions(List<Widget> widgets)
 	{
+		if (widgets == null)
+			return;
+
 		// UI sends only ID and Position
 		for (Widget widget : widgets)
 		{

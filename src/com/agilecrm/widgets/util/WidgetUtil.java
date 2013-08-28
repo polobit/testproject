@@ -19,22 +19,64 @@ public class WidgetUtil
 	private static ObjectifyGenericDao<Widget> dao = new ObjectifyGenericDao<Widget>(Widget.class);
 
 	/**
-	 * Fetches all {@link Widget}s for current {@link AgileUser} which are added
+	 * Fetches all available widgets (custom and default) in agile account.
+	 * 
+	 * @return {@link List} of {@link Widget}s
+	 */
+	public static List<Widget> getAvailableWidgets()
+	{
+		// Fetch all widgets(default and custom) added by current user
+		List<Widget> currentWidgets = getWidgetsForCurrentUser();
+
+		/*
+		 * check in current widgets whether all default widgets are present and
+		 * add them if not present because we need to show all the available
+		 * widgets that Agile provide
+		 */
+		List<Widget> allWidgets = DefaultWidgets.checkAndAddDefaultWidgets(currentWidgets);
+
+		System.out.println("In get available widgets");
+		System.out.println(allWidgets);
+
+		return allWidgets;
+	}
+
+	/**
+	 * Fetches all {@link Widget}s for current {@link AgileUser}
+	 * 
+	 * <p>
+	 * Default widgets - which are added and Custom widgets - which are added
+	 * and also not added. Saves is_added field as true for default widgets
+	 * which are added prior to development of custom widgets as that field is
+	 * later added
+	 * </p>
 	 * 
 	 * @return {@link List} of {@link Widget}s
 	 */
 	public static List<Widget> getWidgetsForCurrentUser()
 	{
-
 		Objectify ofy = ObjectifyService.begin();
 
 		// Creates Current AgileUser key
 		Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);
 
-		// Fetches list of widgets related to AgileUser key
+		/*
+		 * Fetches list of widgets related to AgileUser key and adds is_added
+		 * field as true to default widgets if not present
+		 */
 		return DefaultWidgets.saveIsAddedStatus(ofy.query(Widget.class).ancestor(userKey).list());
 	}
 
+	/**
+	 * Fetches all {@link Widget}s for current {@link AgileUser} which are added
+	 * 
+	 * <p>
+	 * Custom widgets - which are added and also not added are fetched and are
+	 * filtered to retrieve which are added.
+	 * </p>
+	 * 
+	 * @return {@link List} of {@link Widget}s
+	 */
 	public static List<Widget> getAddedWidgetsForCurrentUser()
 	{
 		Objectify ofy = ObjectifyService.begin();
@@ -42,7 +84,10 @@ public class WidgetUtil
 		// Creates Current AgileUser key
 		Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);
 
-		// Fetches list of widgets related to AgileUser key
+		/*
+		 * Fetches list of widgets related to AgileUser key and filters custom
+		 * widgets which are added
+		 */
 		return CustomWidgets.skipNotAddedCustomWidgets(ofy.query(Widget.class).ancestor(userKey).list());
 	}
 
@@ -122,25 +167,4 @@ public class WidgetUtil
 		}
 	}
 
-	/**
-	 * Fetches all available widgets (custom and default) in agile account.
-	 * 
-	 * @return {@link List} of {@link Widget}s
-	 */
-	public static List<Widget> getAvailableWidgets()
-	{
-		// Fetch all widgets(default and custom) added by current user
-		List<Widget> currentWidgets = getWidgetsForCurrentUser();
-
-		/*
-		 * check in current widgets whether all default widgets are present and
-		 * add them if not present
-		 */
-		List<Widget> allWidgets = DefaultWidgets.checkAndAddDefaultWidgets(currentWidgets);
-
-		System.out.println("get available widgets");
-		System.out.println(allWidgets);
-
-		return allWidgets;
-	}
 }

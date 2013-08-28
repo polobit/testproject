@@ -1,6 +1,8 @@
 package com.agilecrm.widgets;
 
 import javax.persistence.Id;
+import javax.persistence.PostLoad;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.json.JSONObject;
@@ -9,6 +11,8 @@ import com.agilecrm.core.api.widgets.WidgetsAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.scribe.ScribeServlet;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.util.HTTPUtil;
+import com.agilecrm.widgets.util.DefaultWidgets;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Parent;
@@ -118,6 +122,9 @@ public class Widget
 	 */
 	@NotSaved(IfDefault.class)
 	public boolean is_added = false;
+
+	@XmlElement(name = "custom_script")
+	public String script;
 
 	// Default constructor
 	Widget()
@@ -246,6 +253,34 @@ public class Widget
 		return null;
 	}
 
+	/**
+	 * For custom widgets, we fetch the script using HTTP connections from the
+	 * given url for it and store it as a string in script field.
+	 * 
+	 * <p>
+	 * This is done to overcome cross domain issue if we are fetching the script
+	 * directly from URL in the client side
+	 * </p>
+	 */
+	@PostLoad
+	private void postLoad()
+	{
+		System.out.println("In post load ");
+
+		/*
+		 * Some widgets are saved before setting widget type, those return
+		 * widget type as null, set widget type to those widgets based on name
+		 */
+		if (this.widget_type == null)
+			DefaultWidgets.checkAndFixWidgetType(this);
+
+		// If widget type is custom, read the script
+		if (WidgetType.CUSTOM.equals(this.widget_type))
+			this.script = HTTPUtil.accessURLToReadScript(this.url);
+
+		System.out.println(this);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -254,6 +289,7 @@ public class Widget
 	@Override
 	public String toString()
 	{
-		return "[Name: " + name + ", Is added: " + is_added + "]";
+		return "[Name: " + name + ", Is added: " + is_added + " Widget_Type " + widget_type + "]";
 	}
+
 }
