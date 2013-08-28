@@ -106,7 +106,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     	var id = $(element).attr('id'), name = $(element).attr('name');
     	custom_fields_in_template.push(name);
     	
-    	if (isValidField(id)) properties.push(property_JSON(name, id, 'CUSTOM'));
+    	if (isValidField(id)) properties.push(property_JSON(name, form_id+' '+id, 'CUSTOM'));
     });
     
     if(is_person){
@@ -116,9 +116,9 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     	obj.type = 'PERSON';
     	
     	// Creates properties of contact (person)
-    	if (isValidField('fname'))properties.push(property_JSON('first_name', 'fname'));
+    	if (isValidField(form_id+' #fname'))properties.push(property_JSON('first_name', form_id+' #fname'));
    
-    	if (isValidField('lname'))properties.push(property_JSON('last_name', 'lname'));
+    	if (isValidField(form_id+' #lname'))properties.push(property_JSON('last_name', form_id+' #lname'));
     
     	///give preference to autofilled company, ignore any text in textfield for filling company name
     	var company_el=$("#"+form_id+" [name='contact_company_id']").find('li');
@@ -130,22 +130,22 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     		obj.contact_company_id=company_id;
     		properties.push({type:"SYSTEM",name:"company",value:company_name});
     	}
-    	else if (isValidField('contact_company'))
+    	else if (isValidField(form_id+' #contact_company'))
     	{
-    		if($('#contact_company').attr('value').length > 100)
+    		if($form.find('#contact_company').attr('value').length > 100)
     		{
             	show_error(modal_id,form_id,'duplicate-email','Company name too long. Please restrict upto 100 characters.');
             	enable_save_button($(saveBtn));// Remove loading image
             	return;
     		}	
     		obj.contact_company_id=null;
-    		properties.push(property_JSON('company', 'contact_company'));
+    		properties.push(property_JSON('company', form_id+' #contact_company'));
     	}
     	else obj.contact_company_id=null;
 
-    	if (isValidField('email')) properties.push(property_JSON('email', 'email'));
+    	if (isValidField(form_id+' #email')) properties.push(property_JSON('email', form_id+' #email'));
 
-    	if (isValidField('job_title')) properties.push(property_JSON('title', 'job_title'));
+    	if (isValidField(form_id+' #job_title')) properties.push(property_JSON('title', form_id+' #job_title'));
     
    
     	if(tagsSourceId===undefined || !tagsSourceId || tagsSourceId.length<=0)	tagsSourceId=form_id;
@@ -171,7 +171,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
     	if (isValidField('company_name'))
     	{	
-    		if($('#company_name').attr('value').length > 100)
+    		if($form.find('#company_name').attr('value').length > 100)
     		{
     			// Company name too long, show error and return;
             	show_error(modal_id,form_id,'duplicate-email','Company name too long. Please restrict upto 100 characters.');
@@ -179,10 +179,10 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
             	enable_save_button($(saveBtn));// Remove loading image
             	return;
     		}	
-    		properties.push(property_JSON('name', 'company_name'));
+    		properties.push(property_JSON('name', form_id+' #company_name'));
     	}
     	
-    	if (isValidField('company_url')) properties.push(property_JSON('url', 'company_url'));
+    	if (isValidField(form_id+' #company_url')) properties.push(property_JSON('url', form_id+' #company_url'));
     }
     
     /*
@@ -530,16 +530,13 @@ $(function () {
     // Continue editing of new-person-modal 
     $('#continue-contact').click(function (e) {
           var model = serialize_and_save_continue_contact(e, 'personForm','personModal', true, true, this,'tags_source_person_modal');
+          add_contact_to_view(App_Contacts.contactsListView,model);
     });
 
     // Update button click event in continue-contact form
     $("#update").die().live('click', function (e) {
           var model=serialize_and_save_continue_contact(e, 'continueform', 'personModal', false, true, this,"tags_source_continue_contact");
-          
-          if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection.get(model.id) != null)	
-          {
-        	  App_Contacts.contactsListView.collection.get(model.id).set(model);
-          }
+          add_contact_to_view(App_Contacts.contactsListView,model);
     });
     
     // Close button click event in continue-contact form
@@ -557,11 +554,48 @@ $(function () {
     // Continue editing in the new-company-modal (to avoid changing the route event to be prevented.)
     $('#continue-company').click(function (e) {
         var model = serialize_and_save_continue_contact(e, 'companyForm', 'companyModal', true, false, this);
-         
+        add_company_to_view(App_Contacts.contactsListView,model);
     });
     
  // Update button click event in continue-company
     $("#company-update").die().live('click', function (e) {
-        serialize_and_save_continue_contact(e, 'continueCompanyForm', 'companyModal', false, false, this);
+        var model=serialize_and_save_continue_contact(e, 'continueCompanyForm', 'companyModal', false, false, this);
+        add_company_to_view(App_Contacts.contactsListView,model);
     });
 });
+
+/**
+ * Adds contact model to view checking if its ok with filters.
+ * There should be no company_filter or contact_filter cookie.
+ * @param appView - view to add/update model
+ * @param model - the model to be added to view
+ */
+function add_contact_to_view(appView,model)
+{
+	if(!appView)return;
+	
+	if(appView.collection.get(model.id) != null) // update existing model
+		appView.collection.get(model.id).set(model);
+	else if(!readCookie('company_filter'))
+	{
+		if(!readCookie('contact_filter')) // add model only if its in plain contact view
+			appView.collection.add(model);
+		else CONTACTS_HARD_RELOAD = true; // custom filter active, make sure to reload from server
+	}	
+}
+
+/**
+ * Add Company model to view, only when update necessary or company_filter is set
+ * @param appView
+ * @param model
+ */
+function add_company_to_view(appView,model)
+{
+	if(!appView)return;
+	
+	if(appView.collection.get(model.id) != null) // update existing model
+		appView.collection.get(model.id).set(model);
+	else if(readCookie('company_filter')) // add model only if its in plain contact view
+		appView.collection.add(model);
+	else CONTACTS_HARD_RELOAD = true; // reload contacts next time, because we may have edited Company, so reflect in Contact
+}

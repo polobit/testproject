@@ -82,6 +82,11 @@ var ContactsRouter = Backbone.Router
 				var url = '/core/api/contacts';
 				var collection_is_reverse = false;
 				this.tag_id = tag_id;
+				
+				if(readCookie('company_filter'))
+				{	
+					eraseCookie('contact_filter');
+				}
 				// Tags, Search & default browse comes to the same function
 				if (tag_id)
 				{
@@ -173,7 +178,7 @@ var ContactsRouter = Backbone.Router
 				 * Now always Hard-Reload
 				 * 
 				 */
-				if (CONTACTS_HARD_RELOAD == true || readCookie('contact_filter'))
+				if (CONTACTS_HARD_RELOAD == true)
 				{
 					this.contactsListView = undefined;
 					CONTACTS_HARD_RELOAD = false;
@@ -192,8 +197,13 @@ var ContactsRouter = Backbone.Router
 				 * cursor and page_size options are taken to activate
 				 * infiniScroll
 				 */
-				this.contactsListView = new Base_Collection_View({ url : url, templateKey : template_key, individual_tag_name : individual_tag_name,
-					cursor : true, page_size : 25, sort_collection : collection_is_reverse, postRenderCallback : function(el)
+				this.contactsListView = new Base_Collection_View({ 
+					url : url, 
+					templateKey : template_key, 
+					individual_tag_name : individual_tag_name,
+					cursor : true, page_size : 25, 
+					sort_collection : collection_is_reverse, 
+					postRenderCallback : function(el)
 					{
 
 						// Contacts are fetched when the app loads in
