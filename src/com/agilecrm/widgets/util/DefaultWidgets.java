@@ -97,7 +97,7 @@ public class DefaultWidgets
 		for (Widget currentWidget : currentWidgets)
 		{
 			// Current widgets are skipped since is_added status is saved
-			if (currentWidget.widget_type.equals(WidgetType.CUSTOM))
+			if (WidgetType.CUSTOM.equals(currentWidget.widget_type))
 				continue;
 
 			/*
