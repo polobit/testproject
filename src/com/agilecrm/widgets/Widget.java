@@ -267,16 +267,16 @@ public class Widget
 	{
 		System.out.println("In post load ");
 
-		// If widget type is custom, read the script
-		if (this.widget_type.equals(WidgetType.CUSTOM))
-			this.script = HTTPUtil.accessURLToReadScript(this.url);
-
 		/*
 		 * Some widgets are saved before setting widget type, those return
 		 * widget type as null, set widget type to those widgets based on name
 		 */
 		if (this.widget_type == null)
 			DefaultWidgets.checkAndFixWidgetType(this);
+
+		// If widget type is custom, read the script
+		if (WidgetType.CUSTOM.equals(this.widget_type))
+			this.script = HTTPUtil.accessURLToReadScript(this.url);
 
 		System.out.println(this);
 	}
