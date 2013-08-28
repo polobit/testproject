@@ -107,16 +107,15 @@ function agile_login() {
 		// Download scripts.
 		agile_download_scripts();
 		// Download build UI JavaScript file.
-		head.js('https://agile-gadget.appspot.com/dj-js/agile-gadget-ui.js', function() {
-			head.ready(function() {
-				// Set account
-				agile_generate_ui(User_Data.api_key, User_Data.domain);
-			});
+		head.js('https://agile-gadget.appspot.com/dj-js/agile-gadget-ui.js');
+		head.ready(function() {
+			// Set account
+			agile_generate_ui(User_Data.api_key, User_Data.domain);
 		});
 	}
 	
 	// Cookie present, but new user set domain.
-	if(Gadget_Cookie != null && !User_Data.user_exists) {
+	else if(Gadget_Cookie != null && !User_Data.user_exists) {
 		agile_user_setup_load(User_Data);
 	}
 	
