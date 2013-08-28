@@ -209,8 +209,7 @@
 																+ "'style='height: 26px; width: 26px; margin-right: 3px; display: inline;padding:2px !important' class='thumbnail'></img>");
 													else
 														out.println("<img src='img/gravatar.png' style='height: 26px; width: 26px; margin-right: 3px; display: inline;padding:2px !important' class='thumbnail'></img>");
-											%> <span> <b style="font-size: 13px;"><%=user.getEmail()%></b>
-										</span>
+											%> <span> <b style="font-size: 13px;margin-right: 20px;"><%=user.getEmail()%></b></span>
 
 									</a></li>
 									<li><a href="#user-prefs"><i class="icon-cog"></i>
