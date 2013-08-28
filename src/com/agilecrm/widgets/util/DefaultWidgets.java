@@ -7,6 +7,8 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.Widget.WidgetType;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
+
 /**
  * <code>DefaultWidgets</code> class provides static function to fetch available
  * widgets for current user and get default widgets provided by Agile
@@ -97,8 +99,20 @@ public class DefaultWidgets
 		for (Widget currentWidget : currentWidgets)
 		{
 			// Current widgets are skipped since is_added status is saved
-			if (currentWidget.widget_type.equals(WidgetType.CUSTOM))
+			if (WidgetType.CUSTOM.equals(currentWidget.widget_type))
 				continue;
+
+			/*
+			 * Some widgets are saved before setting widget type, those return
+			 * widget type as null, set widget type to those widgets based on
+			 * name
+			 */
+			if (currentWidget.widget_type == null)
+			{
+				WidgetType widgetType = getWidgetType(currentWidget.name);
+				if (widgetType != null)
+					currentWidget.widget_type = widgetType;
+			}
 
 			/*
 			 * If is_added is false for the added widget, set it as true and
@@ -169,4 +183,29 @@ public class DefaultWidgets
 
 		return allWidgets;
 	}
+
+	/**
+	 * Fetches {@link WidgetType} of {@link Widget} based on name of the widget
+	 * 
+	 * @param widgetName
+	 *            Name of the {@link Widget}
+	 * @return {@link WidgetType}
+	 */
+	public static WidgetType getWidgetType(String widgetName)
+	{
+		if (Arrays.asList(new String[] { "Linkedin", "Twitter", "Rapleaf" }).contains(widgetName))
+			return WidgetType.SOCIAL;
+
+		if (Arrays.asList(new String[] { "ClickDesk", "Zendesk" }).contains(widgetName))
+			return WidgetType.SUPPORT;
+
+		if (Arrays.asList(new String[] { "Twilio" }).contains(widgetName))
+			return WidgetType.CALL;
+
+		if (Arrays.asList(new String[] { "FreshBooks", "Stripe" }).contains(widgetName))
+			return WidgetType.BILLING;
+
+		return null;
+	}
+
 }
