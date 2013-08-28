@@ -1,4 +1,7 @@
 <script id="contacts-model-template" type="text/html">
+	<td style="cursor:default;">
+			<input class="tbody_check" type="checkbox"/>
+	</td>
 	<td class="data" data="{{id}}">
 	<div class="row-fluid">
     	<div class="span2" style="display:inline;padding-right:10px;height:auto;">
@@ -111,6 +114,7 @@
 				<div class="filter-criteria"></div>
 				<thead>
 					<tr>
+						<th><input class="thead_check" type="checkbox"></input></th>
 						<th>Name</th>
 						<th>Work</th>
 						<th>Tags</th>
@@ -132,6 +136,9 @@
 	Also when selecting Companies from filter drop-down, only this will be rendered, no custom view is supported for Companies.
 -->
 <script id="companies-model-template" type="text/html">
+<td style="cursor:default;">
+			<input class="tbody_check" type="checkbox"/>
+	</td>
 	<td class="data" data="{{id}}">
     	<div style="display:inline;padding-right:10px;height:auto;">
         		<img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} />

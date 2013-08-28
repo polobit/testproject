@@ -42,18 +42,23 @@ $(function(){
 		
 		//$(table).setAttribute('id', 'sort-table');
 
+		var table_body_row = $(table).find('tbody tr');
+		var table_header_row = $(table).find('thead tr');
+
+		var table_headers = $(table_header_row).find('.thead_check');
+		var table_cell = $(table_body_row).find('.tbody_check');
+
+		
 		// Remove, if rendere of a collection is called multiple times 
-		$(table).find('.thead_check').parent().remove();
-		$(table).find('.tbody_check').parent().remove();
-		$(this).find('.select-none').parent().remove();
+		if(table_headers.length == 0)
+			$(table_header_row).prepend('<th><input class="thead_check" type="checkbox"/></th>');
+		
+		if(table_cell.length == 0)
+			$(table_body_row).prepend('<td style="cursor:default;"><input class="tbody_check" type="checkbox"/></td>');	  
+		
 		$(this).find('#delete-checked').remove();
 		
-		$(table).find('thead tr').prepend('<th><input class="thead_check" name="" type="checkbox"/></th>');
 
-		$(table).find('tbody tr').prepend('<td style="cursor:default;"><input class="tbody_check" type="checkbox"/></td>');
-		
-	  
-		
 		$(table).after('<div class="row-fluid"><div class="span6  select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked" style="margin-bottom: 15px"> Delete</a>');
 		
 		// Sorts the tables based on their column values
