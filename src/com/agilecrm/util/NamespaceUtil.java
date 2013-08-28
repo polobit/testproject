@@ -1,5 +1,6 @@
 package com.agilecrm.util;
 
+import java.net.URL;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -108,5 +109,20 @@ public class NamespaceUtil
 
 	}
 	return statsJSON;
+    }
+
+    /**
+     * Gets domain user's domain from url.
+     * 
+     * @param url
+     *            - Requested Url.
+     * @return domain name.
+     */
+    public static String getNamespaceFromURL(URL url)
+    {
+	String host = url.getHost().toString();
+
+	// Eg., return 'admin' from 'admin.agilecrm.com'
+	return host.split("\\.")[0];
     }
 }

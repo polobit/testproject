@@ -78,16 +78,8 @@ public class EmailsAPI
 	body = body + "<br/><div><br/><br/>" + signature + "</div>";
 
 	// Saves Contact Email.
-	ContactEmailUtil.saveContactEmailBasedOnTo(from, to, subject, body);
+	ContactEmailUtil.saveContactEmailAndSend(from, to, subject, body);
 
-	try
-	{
-	    EmailUtil.sendMail(from, from, to, subject, from, body, null);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
     }
 
     /**

@@ -597,10 +597,12 @@ $(function()
 			return str.toLowerCase() + " " + customJSON.url_clicked + " " + " of campaign " + "\"" + customJSON.workflow_name + "\"";
 
 		case "OPENED EMAIL":
-			if ("custom_value" in this)
-				return str.toLowerCase() + " " + " of campaign " + "\"" + this.custom_value + "\"";
-
-			return str.toLowerCase();
+			var customJSON = JSON.parse(this.custom_value);
+			
+			if(customJSON.email_opened ===  "workflow")
+				return str.toLowerCase() + " " + " of campaign " + "\"" + customJSON.workflow_name + "\"";
+			
+			return str.toLowerCase() + " with subject " + "\"" + customJSON.email_subject + "\"";
 
 		case "CONTACT ADDED":
 			return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);

@@ -26,6 +26,7 @@ import com.agilecrm.account.APIKey;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.NamespaceManager;
 
 /**
@@ -63,7 +64,7 @@ public class ICalendarServlet extends HttpServlet
 	    String apiKey = getAPIKeyFromICalURL(url);
 
 	    // Get Namespace
-	    String namespace = getNamespaceFromURL(url);
+	    String namespace = NamespaceUtil.getNamespaceFromURL(url);
 
 	    if (StringUtils.isEmpty(namespace) && StringUtils.isEmpty(apiKey))
 		return;
@@ -110,21 +111,6 @@ public class ICalendarServlet extends HttpServlet
 	String apiKey = tokens[tokens.length - 1];
 
 	return apiKey;
-    }
-
-    /**
-     * Gets domain user's domain from url.
-     * 
-     * @param url
-     *            - Requested Url.
-     * @return domain name.
-     */
-    private String getNamespaceFromURL(URL url)
-    {
-	String host = url.getHost().toString();
-
-	// Eg., return 'admin' from 'admin.agilecrm.com'
-	return host.split("\\.")[0];
     }
 
     /**

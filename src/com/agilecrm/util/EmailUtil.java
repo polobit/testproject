@@ -71,15 +71,21 @@ public class EmailUtil
      *            - SubscriberId.
      * @return html string with appended image.
      **/
-    public static String appendTrackingImage(String html, String campaignId, String subscriberId)
+    public static String appendTrackingImage(String html, String campaignId, String subscriberId, Long trackerId)
     {
 	String namespace = NamespaceManager.get();
+	String queryParams = "";
 
-	if (StringUtils.isEmpty(campaignId))
-	    campaignId = "";
+	// for campaign email
+	if (!(StringUtils.isEmpty(campaignId) && StringUtils.isEmpty(subscriberId)))
+	    queryParams = "c=" + campaignId + "&s=" + subscriberId;
 
-	String trackingImage = "<div class=\"ag-img\"><img src=\"https://" + namespace + ".agilecrm.com/backend/open?n=" + namespace + "&c=" + campaignId
-		+ "&s=" + subscriberId + "\" nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
+	// for contact email append trackerId
+	else
+	    queryParams = "t=" + trackerId;
+
+	String trackingImage = "<div class=\"ag-img\"><img src=\"https://" + namespace + ".agilecrm.com/backend/open?" + queryParams
+		+ "\" nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
 
 	return html + trackingImage;
     }

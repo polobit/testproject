@@ -40,13 +40,21 @@
 			<img class="user-img thumbnail" width="40" height="40" src="{{#extractEmail from}}{{emailGravatarurl 40 this}}{{/extractEmail}}">
 	</span>
 		<div>
+        
 			<h4>
 	{{#containString owner_email from}}
 			<i class="icon-reply"></i>
 		{{else}}
 			<i class="icon-share-alt icon-flip-vertical"></i>
 	{{/containString}}
+
+    {{#if trackerId}}
+        {{#if is_email_opened}}
+            <i class="icon-folder-open-alt" title="Email Opened"></i>
+        {{/if}}
+    {{/if}}
 				<a class="email-subject" id={{id}} style="font-weight:bold" href="#collapse-{{id}}">{{subject}}</a>
+
 			</h4></br>
 			<div style="height:70px;margin-bottom:5px" class="ellipsis-multi-line collapse-{{id}}">
 				<div>

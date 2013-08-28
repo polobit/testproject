@@ -1,6 +1,7 @@
 package com.agilecrm.contact.email.util;
 
 import java.net.URLEncoder;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -47,6 +48,18 @@ public class ContactEmailUtil
     }
 
     /**
+     * Returns list of contact emails based on tracker id.
+     * 
+     * @param trackerId
+     *            - Tracker Id for email open
+     * @return List<ContactEmail>
+     */
+    public static List<ContactEmail> getContactEmailsBasedOnTrackerId(Long trackerId)
+    {
+	return dao.listByProperty("trackerId", trackerId);
+    }
+
+    /**
      * Saves email in datastore. It iterates over the given to emails and gets
      * the contact-id if exists for that email.
      * 
@@ -59,33 +72,59 @@ public class ContactEmailUtil
      * @param body
      *            - body
      */
-    public static void saveContactEmailBasedOnTo(String from, String to, String subject, String body)
+    public static void saveContactEmailAndSend(String from, String to, String subject, String body)
     {
-	Set<String> toEmailSet = new HashSet<String>();
-	StringTokenizer st = new StringTokenizer(to, ",");
-
-	while (st.hasMoreTokens())
+	try
 	{
-	    toEmailSet.add(st.nextToken());
-	}
+	    // Appends common tracking id
+	    long trackerId = Calendar.getInstance().getTimeInMillis();
 
-	for (String toEmail : toEmailSet)
-	{
-	    if (StringUtils.isEmpty(toEmail))
-		continue;
+	    Set<String> toEmailSet = new HashSet<String>();
+	    StringTokenizer st = new StringTokenizer(to, ",");
 
-	    // Get contact based on email.
-	    Contact contact = ContactUtil.searchContactByEmail(toEmail);
-
-	    // Saves email with contact-id
-	    if (contact != null)
+	    while (st.hasMoreTokens())
 	    {
-		// Remove trailing commas for to emails
-		ContactEmail contactEmail = new ContactEmail(contact.id, from, to.replaceAll(",$", ""), subject, body);
-		contactEmail.save();
+		toEmailSet.add(st.nextToken());
 	    }
 
+	    // Iterate over to email inorder to fetch contact.
+	    for (String toEmail : toEmailSet)
+	    {
+		if (StringUtils.isEmpty(toEmail))
+		    continue;
+
+		// Get contact based on email.
+		Contact contact = ContactUtil.searchContactByEmail(toEmail);
+
+		// Saves email with contact-id
+		if (contact != null)
+		{
+		    // Remove trailing commas for to emails
+		    ContactEmail contactEmail = new ContactEmail(contact.id, from, to.replaceAll(",$", ""), subject, body);
+
+		    if (toEmailSet.size() == 1)
+			contactEmail.trackerId = trackerId;
+
+		    contactEmail.save();
+		}
+
+	    }
+
+	    // Appends tracking image to body if only one email. It is not
+	    // possible to append image at the same time to show all given
+	    // emails to the recipient.
+	    if (toEmailSet.size() == 1)
+		body = EmailUtil.appendTrackingImage(body, null, null, trackerId);
+
+	    // Sends email
+	    EmailUtil.sendMail(from, from, to, subject, from, body, null);
 	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.out.println("Got Exception while sending email " + e.getMessage());
+	}
+
     }
 
     /**

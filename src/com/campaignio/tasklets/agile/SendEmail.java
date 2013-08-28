@@ -435,7 +435,7 @@ public class SendEmail extends TaskletAdapter
 	// Send Message
 	if (html != null && html.length() > 10)
 	{
-	    html = EmailUtil.appendTrackingImage(html, AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON));
+	    html = EmailUtil.appendTrackingImage(html, AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), null);
 
 	    // Util.sendEmailUsingMailgun(fromEmail, fromName, to, subject,
 	    // replyTo, html, text, subscriberJSON, campaignJSON);

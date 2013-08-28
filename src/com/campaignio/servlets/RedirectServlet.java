@@ -40,12 +40,17 @@ import com.google.appengine.api.taskqueue.TaskOptions;
 @SuppressWarnings("serial")
 public class RedirectServlet extends HttpServlet
 {
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException
-    {
-	doGet(request, response);
-    }
-
-    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
+    /**
+     * Tracks email link clicks of campaign. Shows notification that email link
+     * clicked. Interrupts clicked tasklet. Adds log to sql that email link
+     * clicked.
+     * 
+     * @param req
+     *            - HttpServlet Request
+     * @param resp
+     *            - HttpServlet Response
+     **/
+    public void service(HttpServletRequest req, HttpServletResponse resp) throws IOException
     {
 	resp.setContentType("text/plain");
 
@@ -150,7 +155,7 @@ public class RedirectServlet extends HttpServlet
 	try
 	{
 	    NotificationPrefsUtil.executeNotification(Type.CLICKED_LINK, contact,
-		    new JSONObject().put("custom_value", new JSONObject().put("workflow_name", workflowName).put("url_clicked", longURL).toString()));
+		    new JSONObject().put("custom_value", new JSONObject().put("workflow_name", workflowName).put("url_clicked", longURL)));
 	}
 	catch (Exception e)
 	{

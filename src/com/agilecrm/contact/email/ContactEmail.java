@@ -75,8 +75,19 @@ public class ContactEmail
     @NotSaved
     public String owner_email = null;
 
-    private static ObjectifyGenericDao<ContactEmail> dao = new ObjectifyGenericDao<ContactEmail>(
-	    ContactEmail.class);
+    /**
+     * Tracker id to track email opens.
+     */
+    @NotSaved(IfDefault.class)
+    public Long trackerId = null;
+
+    /**
+     * To track contact personal emails open
+     */
+    @NotSaved(IfDefault.class)
+    public Boolean is_email_opened = false;
+
+    private static ObjectifyGenericDao<ContactEmail> dao = new ObjectifyGenericDao<ContactEmail>(ContactEmail.class);
 
     /**
      * Constructs default {@link ContactEmail}
@@ -99,8 +110,7 @@ public class ContactEmail
      * @param message
      *            - Email body
      */
-    public ContactEmail(Long contact_id, String from, String to,
-	    String subject, String message)
+    public ContactEmail(Long contact_id, String from, String to, String subject, String message)
     {
 	this.contact_id = contact_id;
 	this.from = from;
@@ -123,11 +133,15 @@ public class ContactEmail
     @PrePersist
     private void prePersist()
     {
-	if (date_secs == 0L && id == null)
-	    date_secs = (System.currentTimeMillis() / 1000) * 1000;
+	// set date_secs and from for only new one
+	if (id == null)
+	{
+	    if (date_secs == 0L)
+		date_secs = (System.currentTimeMillis() / 1000) * 1000;
 
-	// From address should be same as imap format.
-	from = from + " " + "<" + from + ">";
+	    // From address should be same as imap format.
+	    from = from + " " + "<" + from + ">";
+	}
     }
 
     /**

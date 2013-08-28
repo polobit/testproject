@@ -1,6 +1,8 @@
 package com.campaignio.servlets;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.List;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -10,9 +12,12 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.email.ContactEmail;
+import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
+import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log.LogType;
@@ -32,16 +37,38 @@ import com.google.appengine.api.NamespaceManager;
 @SuppressWarnings("serial")
 public class EmailOpenServlet extends HttpServlet
 {
-    public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException
+    /**
+     * Tracks email opens for both campaign emails and contact emails. For
+     * campaign-emails, subscriber-id and campaign-id are obtained as parameters
+     * whereas for contact emails tracker id is obtained as parameter.
+     * 
+     * @param request
+     *            - HttpServletRequest
+     * @param response
+     *            - HttpServletResponse
+     **/
+    public void service(HttpServletRequest request, HttpServletResponse res) throws IOException
     {
-	doGet(req, res);
-    }
-
-    public void doGet(HttpServletRequest request, HttpServletResponse res) throws IOException
-    {
+	// Contact Id
 	String subscriberId = request.getParameter("s");
-	String namespace = request.getParameter("n");
+
+	// CampaignId
 	String campaignId = request.getParameter("c");
+
+	// TrackerId for contact emails
+	String trackerId = request.getParameter("t");
+
+	// Fetches domain name from url. E.g. From admin.agilecrm.com, returns
+	// admin
+	URL url = new URL(request.getRequestURL().toString());
+	String namespace = NamespaceUtil.getNamespaceFromURL(url);
+
+	// for sandbox url
+	if (namespace.contains("sandbox-dot-agile-crm-cloud"))
+	{
+	    System.out.println("Setting namespace for sandbox url " + namespace);
+	    namespace = namespace.split("-")[0];
+	}
 
 	if (StringUtils.isEmpty(namespace))
 	    return;
@@ -51,7 +78,7 @@ public class EmailOpenServlet extends HttpServlet
 
 	try
 	{
-	    addLogAndShowNotification(subscriberId, campaignId);
+	    addLogAndShowNotification(subscriberId, campaignId, trackerId);
 	}
 	finally
 	{
@@ -70,11 +97,10 @@ public class EmailOpenServlet extends HttpServlet
      * @param campaignId
      *            - Campaign Id.
      */
-    private void addLogAndShowNotification(String subscriberId, String campaignId)
+    private void addLogAndShowNotification(String subscriberId, String campaignId, String trackerId)
     {
-	Contact contact = ContactUtil.getContact(Long.parseLong(subscriberId));
-
-	if (!StringUtils.isEmpty(campaignId))
+	// Campaign Emails
+	if (!(StringUtils.isEmpty(campaignId) && StringUtils.isEmpty(subscriberId)))
 	{
 	    Workflow workflow = WorkflowUtil.getWorkflow(Long.parseLong(campaignId));
 
@@ -84,13 +110,24 @@ public class EmailOpenServlet extends HttpServlet
 		addEmailOpenedLog(campaignId, subscriberId, workflow.name);
 
 		// Shows notification for campaign-emails
-		showEmailOpenedNotification(contact, workflow.name);
+		showEmailOpenedNotification(ContactUtil.getContact(Long.parseLong(subscriberId)), workflow.name, null);
 	    }
+
 	}
-	else
+
+	// Personal Emails
+	if (!StringUtils.isEmpty(trackerId))
 	{
-	    // Shows notification for simple emails.
-	    showEmailOpenedNotification(contact, null);
+	    List<ContactEmail> contactEmails = ContactEmailUtil.getContactEmailsBasedOnTrackerId(Long.parseLong(trackerId));
+
+	    for (ContactEmail contactEmail : contactEmails)
+	    {
+		contactEmail.is_email_opened = true;
+		contactEmail.save();
+
+		// Shows notification for simple emails.
+		showEmailOpenedNotification(ContactUtil.getContact(contactEmail.contact_id), null, contactEmail.subject);
+	    }
 	}
     }
 
@@ -115,19 +152,24 @@ public class EmailOpenServlet extends HttpServlet
      * @param contact
      *            - Contact object.
      * @param workflowName
-     *            - Workflow Name.
+     *            - Workflow Name of campaign email.
+     * @param emailSubject
+     *            - Email subject for contact email
      */
-    private void showEmailOpenedNotification(Contact contact, String workflowName)
+    private void showEmailOpenedNotification(Contact contact, String workflowName, String emailSubject)
     {
-	if (workflowName == null)
-	{
-	    NotificationPrefsUtil.executeNotification(Type.OPENED_EMAIL, contact, null);
-	    return;
-	}
 	try
 	{
-	    // For Campaign Emails
-	    NotificationPrefsUtil.executeNotification(Type.OPENED_EMAIL, contact, new JSONObject().put("custom_value", workflowName));
+	    if (!StringUtils.isEmpty(workflowName))
+	    {
+		NotificationPrefsUtil.executeNotification(Type.OPENED_EMAIL, contact,
+			new JSONObject().put("custom_value", new JSONObject().put("email_opened", "workflow").put("workflow_name", workflowName)));
+		return;
+	    }
+
+	    NotificationPrefsUtil.executeNotification(Type.OPENED_EMAIL, contact,
+		    new JSONObject().put("custom_value", new JSONObject().put("email_opened", "personal").put("email_subject", emailSubject)));
+
 	}
 	catch (Exception e)
 	{
