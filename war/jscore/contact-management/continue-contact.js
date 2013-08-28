@@ -538,8 +538,7 @@ $(function () {
           
           if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection.get(model.id) != null)	
           {
-        	  App_Contacts.contactsListView.collection.remove(model.id);
-        	  App_Contacts.contactsListView.collection.add(model); 
+        	  App_Contacts.contactsListView.collection.get(model.id).set(model);
           }
     });
     
