@@ -423,8 +423,6 @@ var Base_Collection_View = Backbone.View
 						getTemplate((this.options.templateKey + '-collection'),
 								this.collection.toJSON()));
 				
-				
-				set_table_column_widths(this.el);
 
 				// If collection is Empty show some help slate
 				if (this.collection.models.length == 0)
@@ -487,32 +485,3 @@ var Base_Collection_View = Backbone.View
 				return this;
 			},
 		});
-
-
-function set_table_column_widths(el)
-{
-	var col_widths = [];
-	var total = 0;
-	
-
-	var element = $(el).find('table');
-	
-	var width = $(element).width();
-	console.log(width);
-	//console.log($(element).css('width', width))	;
-	$(el).find('th').each(function(index, element)
-	{
-		var width = parseInt($(element).attr('w'));
-		if(!width)
-			return;
-		
-		col_widths.push(width);
-		total += parseInt($(element).attr('w'));
-		console.log(element);
-	});
-
-	
-	
-	//col_element = col_element.concat("</colgroup>");
-	$(el).find('table').prepend(build_col_spans(col_widths));
-}
