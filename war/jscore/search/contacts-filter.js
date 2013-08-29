@@ -61,6 +61,7 @@ $(function()
 		// attribute in filter
 		filter_name = $(this).attr('data');
 
+		CONTACTS_HARD_RELOAD=true;
 		App_Contacts.contacts();
 		return;
 		// /removed old code from below,
