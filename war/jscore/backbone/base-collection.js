@@ -363,11 +363,7 @@ var Base_Collection_View = Backbone.View
 				if($('table', this.el).hasClass('onlySorting'))
 					return;
 				
-				// If select all is chosen then all the upcomming models with in table should have checked checkboxes
-				if(SELECT_ALL == true)
-					$('tr:last', this.model_list_element).prepend('<td><input class="tbody_check" type="checkbox" checked="checked"/></td>');
-				else
-					$('tr:last', this.model_list_element).prepend('<td><input class="tbody_check" type="checkbox"/></td>');
+				append_checkboxes(this.model_list_element);			
 					
                 // callback for newly added models
 				var appendItemCallback = this.options.appendItemCallback;
@@ -426,6 +422,9 @@ var Base_Collection_View = Backbone.View
 				$(this.el).html(
 						getTemplate((this.options.templateKey + '-collection'),
 								this.collection.toJSON()));
+				
+				
+				set_table_column_widths(this.el);
 
 				// If collection is Empty show some help slate
 				if (this.collection.models.length == 0)
@@ -488,3 +487,32 @@ var Base_Collection_View = Backbone.View
 				return this;
 			},
 		});
+
+
+function set_table_column_widths(el)
+{
+	var col_widths = [];
+	var total = 0;
+	
+
+	var element = $(el).find('table');
+	
+	var width = $(element).width();
+	console.log(width);
+	//console.log($(element).css('width', width))	;
+	$(el).find('th').each(function(index, element)
+	{
+		var width = parseInt($(element).attr('w'));
+		if(!width)
+			return;
+		
+		col_widths.push(width);
+		total += parseInt($(element).attr('w'));
+		console.log(element);
+	});
+
+	
+	
+	//col_element = col_element.concat("</colgroup>");
+	$(el).find('table').prepend(build_col_spans(col_widths));
+}
