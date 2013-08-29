@@ -3,7 +3,6 @@ package com.agilecrm;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.Collections;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -46,14 +45,12 @@ public class GMailGadgetServlet extends HttpServlet
     {
 	// Get OpenSocial ID
 	String ownerId = req.getParameter("opensocial_owner_id");
-	System.out.println("Owner Id validate -> " + ownerId);
 
 	// Get Domain User with this Social Id
 	DomainUser domainUser = DomainUserUtil.getDomainUserFromGadgetId(ownerId);
 	if (domainUser == null)
 	{
-		System.out.println("Returning false");
-		return false;
+	    return false;
 	}
 
 	NamespaceManager.set(domainUser.domain);
@@ -65,15 +62,11 @@ public class GMailGadgetServlet extends HttpServlet
 	// Get API Key
 	String apiKey = APIKey.getAPIKey().api_key;
 
-	System.out.println("Api Key " + apiKey + " for " + domainUser);
-
 	// Send API Key and domain for the gadget to start using Javascript API
 	JSONObject result = new JSONObject();
 	result.put("user_exists", true);
 	result.put("api_key", apiKey);
 	result.put("domain", domainUser.domain);
-
-	System.out.println("Result [Returning true] -> " + result.toString());
 
 	// Setup API Key
 	resp.getWriter().println(result.toString());
@@ -106,7 +99,6 @@ public class GMailGadgetServlet extends HttpServlet
 	String ownerId = (String) CacheUtil.getCache(oneTimeSessionKey);
 	if (ownerId == null)
 	{
-		System.out.println("save -> ownerId is null");
 	    resp.getWriter()
 		    .println(
 			    "We are unable to find any related session. Either you have waited too long to associate your new gadget. Please refresh your GMail and try again.");
@@ -122,7 +114,6 @@ public class GMailGadgetServlet extends HttpServlet
 	DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(user.getEmail());
 	if (domainUser == null)
 	{
-		System.out.println("save -> domainUser is null");
 	    resp.getWriter().println("We are unable to find any account with this userid");
 	    return false;
 	}
@@ -132,12 +123,10 @@ public class GMailGadgetServlet extends HttpServlet
 	// Save the gadget_id
 	domainUser.gadget_id = ownerId;
 	domainUser.save();
-	
-	if(domainUser.gadget_id !=null)
-		System.out.println("Gadget ID = "+domainUser.gadget_id);
-	else System.out.println("NULL Gadget ID");
 
-	resp.getWriter().println("You have successfully associated your gadget with your AgileCRM account. You can now close the browser.");
+	resp.getWriter()
+		.println(
+			"You have successfully associated your gadget with your AgileCRM account. You can now close the browser.");
 
 	return false;
     }
@@ -154,19 +143,16 @@ public class GMailGadgetServlet extends HttpServlet
     {
 	// Get One Time Key
 	String oneTimeSessionKey = req.getParameter(SESSION_KEY_NAME);
-	System.out.println("Enter -> setup");
 
 	// Check in cache and add to session id
 	if (CacheUtil.getCache(oneTimeSessionKey) == null)
 	{
-		System.out.println("setup -> getCache failed");
 	    resp.getWriter()
 		    .println(
 			    "We are unable to find any related session. Either you have waited too long to associate your new gadget. Please refresh your GMail and try again.");
 	    return;
 	}
 
-	System.out.println("setup -> continue normally");
 	// Return back to this URL with param set to done
 	req.getSession().setAttribute(LoginServlet.RETURN_PATH_SESSION_PARAM_NAME,
 		"/gmail?" + SESSION_KEY_NAME + "=" + oneTimeSessionKey + "&openid=done&hd=" + req.getParameter("hd"));
@@ -185,10 +171,8 @@ public class GMailGadgetServlet extends HttpServlet
      */
     public void generateOneTimeSessionKey(HttpServletRequest req, HttpServletResponse resp) throws Exception
     {
-    	System.out.println("Enter -> generateOneTimeSessionKey");	
 	// Get OpenSocial ID
 	String ownerId = req.getParameter("opensocial_owner_id");
-	System.out.println("Owner Id " + ownerId);
 
 	// Generate One-time session
 	SecureRandom random = new SecureRandom();
@@ -203,8 +187,6 @@ public class GMailGadgetServlet extends HttpServlet
 	JSONObject result = new JSONObject();
 	result.put("user_exists", false);
 	result.put("popup", "https://googleapps.agilecrm.com/gmail?" + SESSION_KEY_NAME + "=" + oneTimeSessionKey);
-
-	System.out.println("Result " + result.toString());
 
 	resp.getWriter().println(result.toString());
     }
@@ -227,30 +209,22 @@ public class GMailGadgetServlet extends HttpServlet
     {
 	try
 	{
-	    System.out.println("doGET = Params");
-	    for (Object param : Collections.list(req.getParameterNames()))
-	    {
-		System.out.println("/t/t"+param+" --> "+req.getParameter((String) param));
-	    }
+	    /*
+	     * System.out.println("doGET = Params"); for (Object param :
+	     * Collections.list(req.getParameterNames()))
+	     * System.out.println("/t/t"+param+" --> "+req.getParameter((String)
+	     * param));
+	     */
 
 	    // If Popup or after openid auth (one time session key will be sent)
 	    if (req.getParameter(SESSION_KEY_NAME) != null)
 	    {
-	    	System.out.println("Yes -> Session Key");
 		// Is it after openid
 		if (req.getParameter("openid") != null)
-		{
-			System.out.println("\t\tEntering Save");
-			save(req, resp);
-		}
+		    save(req, resp);
 		else
-		{
-			System.out.println("\t\tEntering Setup");
-		    // Setup OpenId Authentication
-		    setup(req, resp);
-		}
+		    setup(req, resp); // Setup OpenId Authentication
 
-		System.out.println("Return From doGET");
 		return;
 	    }
 
