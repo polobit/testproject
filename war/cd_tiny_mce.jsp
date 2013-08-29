@@ -152,11 +152,17 @@ function validateInput()
         <option value=''>Add Merge Field</option>
         <option value='{{first_name}}'>First Name</option>
         <option value='{{last_name}}'>Last Name</option>
+        <option value='{{score}}'>Score</option>
+        <option value='{{create_date}}'>Create Date</option>
+        <option value='{{update_date}}'>Update Date</option>
         <option value='{{email}}'>Email</option>
         <option value='{{company}}'>Company</option>
         <option value='{{title}}'>Title</option>
         <option value='{{website}}'>Website</option>
         <option value='{{phone}}'>Phone</option>
+        <option value='{{location.city}}'>City</option>
+        <option value='{{location.state}}'>State</option>
+        <option value='{{location.country}}'>Country</option>
         <option value='{{twitter_id}}'>Twitter Id</option>
         <option value='{{linkedin_id}}'>LinkedIn Id</option>
         <option value='{{owner.name}}'>Owner Name</option>

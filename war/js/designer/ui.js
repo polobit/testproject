@@ -174,7 +174,7 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     
     // Returns select option with onchange EventHandler
     if(selectEventHandler)
-    	return "<select onchange='"+ selectEventHandler+"' name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + selectOptionAttributes + "</select>";
+    	return "<select onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + selectOptionAttributes + "</select>";
      
 	  // retun select field with name and title attributes(Yasin(14-09-10)) 
     return "<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + selectOptionAttributes + "</select>";
@@ -381,7 +381,7 @@ function _generateUIFields(selector, ui) {
         // Options
         if (uiFieldType == "select") {
             addLabel(uiFieldDefinition.label, container);
-            uiField = generateSelectUI(uiFieldDefinition);
+            uiField = generateSelectUI(uiFieldDefinition,uiFieldDefinition.select_event_callback);
             $(uiField).appendTo(container);
             continue;
         }
@@ -425,7 +425,7 @@ function _generateUIFields(selector, ui) {
         if(uiFieldType == "merge_fields")
         {
            addLabel(uiFieldDefinition.label, container);
-           uiField = generateSelectUI(uiFieldDefinition,"insertSelectedMergeField(this,\""+uiFieldDefinition.target_type+"\")");
+           uiField = generateSelectUI(uiFieldDefinition,uiFieldDefinition.select_event_callback);
            $(uiField).appendTo(container);
            continue;
         }
@@ -628,11 +628,17 @@ function getMergeFields()
 		"*Add Merge Field": "",
 		"First Name": "{{first_name}}",
 		"Last Name": "{{last_name}}",
+		"Score": "{{score}}",
+		"Create Date": "{{create_date}}",
+		"Update Date": "{{update_date}}",
 		"Email": "{{email}}",
 		"Company": "{{company}}",
 		"Title": "{{title}}",
 		"Website": "{{website}}",
 		"Phone":"{{phone}}",
+		"City": "{{location.city}}",
+		"State":"{{location.state}}",
+		"Country":"{{location.country}}",
 		"Twitter Id":"{{twitter_id}}",
 		"LinkedIn Id":"{{linkedin_id}}",
 		"Owner Name":"{{owner.name}}",
@@ -642,7 +648,12 @@ function getMergeFields()
 }
 
 /**
- * Function to insert text on cursor position in textarea.
+ * Function to insert text on cursor position in textarea. It inserts 
+ * the supplied text into the textarea of given id. 
+ * 
+ * @param textareaId - Id of textarea.
+ * 
+ * @param text - text to be inserted, here like merge field
  **/
 function insertAtCaret(textareaId,text) {
     var txtarea = document.getElementById(textareaId);

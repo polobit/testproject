@@ -9,6 +9,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.campaignio.reports.DateUtil;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.googlecode.objectify.Key;
@@ -139,6 +140,7 @@ public class AgileTaskletUtil
 
 	    List<ContactField> properties = contact.getProperties();
 
+	    // Contact Properties
 	    for (ContactField field : properties)
 	    {
 		if (field.name != null && field.value != null)
@@ -150,6 +152,13 @@ public class AgileTaskletUtil
 		    // Get LinkedIn id
 		    if (field.name.equals("website") && field.subtype.equals("LINKEDIN"))
 			field.name = "linkedin_id";
+
+		    // Converts address string to JSONObject
+		    if (field.name.equals("address"))
+		    {
+			subscriberJSON.put("location", new JSONObject(field.value));
+			continue;
+		    }
 
 		    subscriberJSON.put(field.name, field.value);
 		}
@@ -168,6 +177,13 @@ public class AgileTaskletUtil
 
 	    // Inserts contact owner-name and owner-email.
 	    subscriberJSON.put("owner", owner);
+
+	    // Score
+	    subscriberJSON.put("score", contact.lead_score);
+
+	    // Returns Created and Updated date in GMT with given format.
+	    subscriberJSON.put("create_date", DateUtil.getGMTDateInGivenFormat(contact.created_time * 1000, "MM/dd/yyyy"));
+	    subscriberJSON.put("update_date", DateUtil.getGMTDateInGivenFormat(contact.updated_time * 1000, "MM/dd/yyyy"));
 
 	    System.out.println("SubscriberJSON in WorkflowUtil: " + subscriberJSON);
 

@@ -76,6 +76,7 @@
 		           "title":"Select required merge field to insert into below Text Field.",
 		           "fieldType":"merge_fields",
 		           "target_type":"text_email",
+		           "select_event_callback":"insertSelectedMergeField",
 		           "type":"select"
 		        },
 		        {
@@ -98,6 +99,7 @@
 		           "title":"Select required merge field to insert into below HTML Field.",
 		           "fieldType":"merge_fields",
 		           "target_type":"tinyMCEhtml_email",
+		           "select_event_callback":"insertSelectedMergeField",
 		           "type":"select"
 		        },
 		         {   
@@ -130,6 +132,9 @@
 					"title": "While tracking clicks, AgileCRM can show a keyword in the URL. Valid only when you are tracking clicks.",
 					"fieldType": "input",
 		            "type": "text" 
+		        },
+		        {
+		            "label": "Simply choose date and time. Agile can schedule your email delivery."
 		        },
 		        {
 		            "label": "Time zone",
