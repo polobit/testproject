@@ -295,6 +295,9 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
         	// Removes disabled attribute of save button
         	enable_save_button($(saveBtn));
+        	
+
+            add_contact_to_view(App_Contacts.contactsListView,data);
 			
         	// Adds the tags to tags collection 
         	if (tags != undefined && tags.length != 0)
@@ -529,14 +532,12 @@ $(function () {
 
     // Continue editing of new-person-modal 
     $('#continue-contact').click(function (e) {
-          var model = serialize_and_save_continue_contact(e, 'personForm','personModal', true, true, this,'tags_source_person_modal');
-          add_contact_to_view(App_Contacts.contactsListView,model);
+          serialize_and_save_continue_contact(e, 'personForm','personModal', true, true, this,'tags_source_person_modal');
     });
 
     // Update button click event in continue-contact form
     $("#update").die().live('click', function (e) {
-          var model=serialize_and_save_continue_contact(e, 'continueform', 'personModal', false, true, this,"tags_source_continue_contact");
-          add_contact_to_view(App_Contacts.contactsListView,model);
+          serialize_and_save_continue_contact(e, 'continueform', 'personModal', false, true, this,"tags_source_continue_contact");
     });
     
     // Close button click event in continue-contact form
@@ -553,49 +554,43 @@ $(function () {
 
     // Continue editing in the new-company-modal (to avoid changing the route event to be prevented.)
     $('#continue-company').click(function (e) {
-        var model = serialize_and_save_continue_contact(e, 'companyForm', 'companyModal', true, false, this);
-        add_company_to_view(App_Contacts.contactsListView,model);
+        serialize_and_save_continue_contact(e, 'companyForm', 'companyModal', true, false, this);
     });
     
- // Update button click event in continue-company
+    // Update button click event in continue-company
     $("#company-update").die().live('click', function (e) {
-        var model=serialize_and_save_continue_contact(e, 'continueCompanyForm', 'companyModal', false, false, this);
-        add_company_to_view(App_Contacts.contactsListView,model);
+        serialize_and_save_continue_contact(e, 'continueCompanyForm', 'companyModal', false, false, this);
     });
 });
 
 /**
- * Adds contact model to view checking if its ok with filters.
- * There should be no company_filter or contact_filter cookie.
- * @param appView - view to add/update model
- * @param model - the model to be added to view
+ * Adds conatct to view, takes care of if its a COMPANY or PERSON.
+ * @param appView - view whose collection to update
+ * @param model - the model contact to add
  */
 function add_contact_to_view(appView,model)
 {
 	if(!appView)return;
 	
 	if(appView.collection.get(model.id) != null) // update existing model
-		appView.collection.get(model.id).set(model);
-	else if(!readCookie('company_filter'))
 	{
-		if(!readCookie('contact_filter')) // add model only if its in plain contact view
-			appView.collection.add(model);
-		else CONTACTS_HARD_RELOAD = true; // custom filter active, make sure to reload from server
-	}	
-}
-
-/**
- * Add Company model to view, only when update necessary or company_filter is set
- * @param appView
- * @param model
- */
-function add_company_to_view(appView,model)
-{
-	if(!appView)return;
-	
-	if(appView.collection.get(model.id) != null) // update existing model
 		appView.collection.get(model.id).set(model);
-	else if(readCookie('company_filter')) // add model only if its in plain contact view
-		appView.collection.add(model);
-	else CONTACTS_HARD_RELOAD = true; // reload contacts next time, because we may have edited Company, so reflect in Contact
+		return;
+	}	
+	
+	if(model.get('type')=='COMPANY')
+	{
+		if(readCookie('company_filter')) // add model only if its in company view
+			appView.collection.add(model);
+		else CONTACTS_HARD_RELOAD = true; // reload contacts next time, because we may have edited Company, so reflect in Contact
+	}	
+	else
+	{
+		if(!readCookie('company_filter')) // check if in contacts view
+		{
+			if(!readCookie('contact_filter')) // add model only if its in plain contact view
+				appView.collection.add(model);
+			else CONTACTS_HARD_RELOAD = true; // custom filter active, make sure to reload from server
+		}
+	}	
 }
