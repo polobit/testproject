@@ -10,8 +10,8 @@ import com.agilecrm.db.util.GoogleSQLUtil;
 
 /**
  * <code>DateUtil</code> is the date utility class for
- * {@link CampaignReportsUtil}. It provides methods to get round values of
- * date. For e.g., if the time is 12:30 AM, it rounds to 12AM. Similarly for the
+ * {@link CampaignReportsUtil}. It provides methods to get round values of date.
+ * For e.g., if the time is 12:30 AM, it rounds to 12AM. Similarly for the
  * weekday and date values. It also provides method to convert date to MySql
  * date format, inorder to interact with mysql.
  * 
@@ -128,6 +128,23 @@ public class DateUtil
 	Date date = new Date(timestamp);
 	DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	format.setTimeZone(TimeZone.getTimeZone("GMT" + GoogleSQLUtil.convertMinutesToTime(timeZoneOffset)));
+	return format.format(date);
+    }
+
+    /**
+     * Returns date in GMT timezone in given format.
+     * 
+     * @param timestamp
+     *            - epoch time
+     * @param dateFormat
+     *            - any date format
+     * @return String
+     */
+    public static String getGMTDateInGivenFormat(long timestamp, String dateFormat)
+    {
+	Date date = new Date(timestamp);
+	DateFormat format = new SimpleDateFormat(dateFormat);
+	format.setTimeZone(TimeZone.getTimeZone("GMT"));
 	return format.format(date);
     }
 }
