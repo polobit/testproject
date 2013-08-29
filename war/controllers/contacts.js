@@ -4,6 +4,9 @@
  * 
  * @module Contact management & filters
  */
+
+CONTACTS_HARD_RELOAD=true;
+
 var ContactsRouter = Backbone.Router
 		.extend({
 
@@ -807,8 +810,7 @@ var ContactsRouter = Backbone.Router
 					url = "core/api/contacts";
 				}
 
-				// if(CONTACTS_HARD_RELOAD == true ||
-				// readCookie('contact_filter'))
+				if(CONTACTS_HARD_RELOAD == true)
 				{ // always hard reload
 					this.contact_custom_view = undefined;
 					CONTACTS_HARD_RELOAD = false;

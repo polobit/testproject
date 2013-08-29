@@ -129,6 +129,7 @@ public class WidgetUtil
 	{
 		try
 		{
+			System.out.println("In get widget bu name ");
 			// Queries on widget name, with current AgileUser Key
 			return getWidget(name, AgileUser.getCurrentAgileUser().id);
 		}
@@ -167,4 +168,19 @@ public class WidgetUtil
 		}
 	}
 
+	public static boolean checkWidgetName(String name)
+	{
+		if (name == null)
+			return false;
+
+		for (Widget defaultWidget : DefaultWidgets.getAvailableDefaultWidgets())
+			if (defaultWidget.name.equals(name))
+				return true;
+
+		for (Widget currentWidget : CustomWidgets.getCustomWidgetsForCurrentUser())
+			if (currentWidget.name.equals(name))
+				return true;
+
+		return false;
+	}
 }

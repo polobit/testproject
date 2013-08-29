@@ -572,15 +572,11 @@ function add_contact_to_view(appView,model)
 {
 	if(!appView)return;
 	
-	if(appView.collection.get(model.id) != null) // update existing model
-	{
-		appView.collection.get(model.id).set(model);
-		return;
-	}	
-	
 	if(model.get('type')=='COMPANY')
 	{
-		if(readCookie('company_filter')) // add model only if its in company view
+		if(appView.collection.get(model.id) != null) // update existing model
+			appView.collection.get(model.id).set(model);
+		else if(readCookie('company_filter')) // add model only if its in company view
 			appView.collection.add(model);
 		else CONTACTS_HARD_RELOAD = true; // reload contacts next time, because we may have edited Company, so reflect in Contact
 	}	
@@ -588,8 +584,12 @@ function add_contact_to_view(appView,model)
 	{
 		if(!readCookie('company_filter')) // check if in contacts view
 		{
-			if(!readCookie('contact_filter')) // add model only if its in plain contact view
-				appView.collection.add(model);
+			if(!readCookie('contact_filter')) // add model only if its in plain contact view, otherwise always hard reload
+			{
+				if(appView.collection.get(model.id) != null) // update existing model
+					appView.collection.get(model.id).set(model);
+				else appView.collection.add(model);
+			}	
 			else CONTACTS_HARD_RELOAD = true; // custom filter active, make sure to reload from server
 		}
 	}	
