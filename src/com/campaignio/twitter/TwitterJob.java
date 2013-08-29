@@ -114,7 +114,7 @@ public class TwitterJob
 	}
 	catch (Exception e)
 	{
-	    LogUtil.addLogToSQL(campaign_id, campaign_id, "Tweeting failed " + e.getMessage(), LogType.TWEET.toString());
+	    LogUtil.addLogToSQL(campaign_id, subscriber_id, "Tweeting failed " + e.getMessage(), LogType.TWEET.toString());
 	    return false;
 	}
     }
