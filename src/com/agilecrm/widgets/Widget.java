@@ -123,6 +123,7 @@ public class Widget
 	@NotSaved(IfDefault.class)
 	public boolean is_added = false;
 
+	@NotSaved
 	@XmlElement(name = "custom_script")
 	public String script;
 

@@ -12,6 +12,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.Widget.WidgetType;
 import com.agilecrm.widgets.util.WidgetUtil;
@@ -73,7 +74,17 @@ public class WidgetsAPI
 			return null;
 
 		System.out.println("In widgets api create");
+
+		/*
+		 * For custom widgets, we fetch the script using HTTP connections from
+		 * the given url for it and store it as a string in script field. If
+		 * widget type is custom, read the script
+		 */
+		if (WidgetType.CUSTOM.equals(widget.widget_type))
+			widget.script = HTTPUtil.accessURLToReadScript(widget.url);
+
 		System.out.println(widget);
+
 		widget.save();
 		return widget;
 	}

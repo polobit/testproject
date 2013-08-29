@@ -43,6 +43,8 @@ public class CustomWidgets
 		if (currentWidgets == null)
 			return new ArrayList<Widget>();
 
+		System.out.println("In skip not added contacts");
+
 		Iterator<Widget> iterator = currentWidgets.iterator();
 
 		/*
@@ -59,6 +61,7 @@ public class CustomWidgets
 					iterator.remove();
 			}
 		}
+		System.out.println(currentWidgets);
 
 		return currentWidgets;
 	}
