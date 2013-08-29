@@ -31,11 +31,29 @@
             "label": "of",
             "required": "required",
             "category": "Settings",
-            "value": "",
             "name": "variable_1",
-            "title": "Variable name (eg: {{variable}}) or value (eg: 5).",
-            "fieldType": "input",
-            "type": "text" 
+            "title": "Select merge field.",
+            "options": {
+                "First Name": "{{first_name}}",
+                "Last Name": "{{last_name}}",
+                "Email": "{{email}}",
+                "Score": "{{score}}",
+                "Create Date": "{{create_date}}",
+                "Update Date": "{{update_date}}",
+                "Company": "{{company}}",
+        		"Title": "{{title}}",
+        		"Website": "{{website}}",
+        		"Phone":"{{phone}}",
+        		"City": "{{location.city}}",
+        		"State":"{{location.state}}",
+        		"Country":"{{location.country}}",
+        		"Twitter Id":"{{twitter_id}}",
+        		"LinkedIn Id":"{{linkedin_id}}",
+        		"Owner Name":"{{owner.name}}",
+        		"Owner Email":"{{owner.email}}"
+            },
+            "fieldType": "select",
+            "type": "select" 
         },
         {
             "label": "compare this",
