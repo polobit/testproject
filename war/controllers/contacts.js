@@ -178,10 +178,9 @@ var ContactsRouter = Backbone.Router
 				 * If collection is already defined and contacts are fetched the
 				 * show results instead of initializing collection again
 				 * 
-				 * Now always Hard-Reload
-				 * 
+				 * Hard Reload when a filter is active, it maybe that filter conditions were modified.
 				 */
-				if (CONTACTS_HARD_RELOAD == true)
+				if (CONTACTS_HARD_RELOAD == true || readCookie('contact_filter'))
 				{
 					this.contactsListView = undefined;
 					CONTACTS_HARD_RELOAD = false;
@@ -811,7 +810,7 @@ var ContactsRouter = Backbone.Router
 				}
 
 				if(CONTACTS_HARD_RELOAD == true)
-				{ // always hard reload
+				{ 
 					this.contact_custom_view = undefined;
 					CONTACTS_HARD_RELOAD = false;
 				}
@@ -851,8 +850,15 @@ var ContactsRouter = Backbone.Router
 
 				}
 
-				this.contact_custom_view = new Base_Collection_View({ url : url, restKey : "contact", modelData : view_data,
-					templateKey : "contacts-custom-view", individual_tag_name : 'tr', cursor : true, page_size : 25, sort_collection : false,
+				this.contact_custom_view = new Base_Collection_View({ 
+					url : url, 
+					restKey : "contact", 
+					modelData : view_data,
+					templateKey : "contacts-custom-view", 
+					individual_tag_name : 'tr', 
+					cursor : true, 
+					page_size : 25, 
+					sort_collection : false,
 					postRenderCallback : function(el)
 					{
 						App_Contacts.contactsListView = App_Contacts.contact_custom_view;
@@ -870,12 +876,13 @@ var ContactsRouter = Backbone.Router
 						// show list of filters dropdown in contacts list
 						setupContactFilterList(el, tag_id);
 					} });
-
+				
 				// Defines appendItem for custom view
 				this.contact_custom_view.appendItem = contactTableView;
 
 				// Fetch collection
 				this.contact_custom_view.collection.fetch();
+				
 				$('#content').html(this.contact_custom_view.el);
 
 				// Activate Contacts Navbar tab

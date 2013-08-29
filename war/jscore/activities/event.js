@@ -71,7 +71,7 @@ $(function()
 		var event_id = $('#updateActivityForm input[name=id]').val()
 		var save_button=$(this);
 		
-		disable_save_button(saveButton);
+		disable_save_button(save_button);
 		/**
 		 * Shows loading symbol until model get saved
 		 */
@@ -80,7 +80,7 @@ $(function()
 		{
 
 			//$('#updateActivityModal').find('span.save-status img').remove();
-			enable_save_button(saveButton);
+			enable_save_button(save_button);
 			$("#updateActivityModal").modal('hide');
 
 			$('#calendar').fullCalendar('removeEvents', event_id);

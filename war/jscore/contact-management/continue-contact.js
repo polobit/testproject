@@ -307,10 +307,6 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         			});
         		}
         	
-        	// Removes loading image
-        	//$('#' + form_id).find('span.save-status img').remove();
-        	//$('#' + modal_id).find('span.save-status img').remove();
-        	
         	// Removes person image form new-person-modal
         	$('#' + modal_id).find('img.person-img').remove();
         	            
