@@ -4,7 +4,6 @@ function addTab(selector, tabName, tabID) {
     // Find tabs element if already present
     var tabsSelector = selector.find('.tabs');
     if ((tabsSelector == undefined) || (tabsSelector.length == 0)) {
-        console.log("Error # no element with id as tabs found");
         return;
     }
 
@@ -16,7 +15,6 @@ function addTab(selector, tabName, tabID) {
     // Add tab - "tab" is added to id automatically with the name.
     var tabsUISelector = selector.find('.tabs ul');
     if ((tabsUISelector == undefined) || (tabsUISelector.length == 0)) {
-        console.log("tabsUISelector id as tabs found");
         return;
     }
 
@@ -173,9 +171,12 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     });
     
     // Returns select option with onchange EventHandler
+    if(selectEventHandler && selectEventHandler.indexOf("insertSelectedMergeField") === 0)
+    	return "<select style='position:relative;float:right;margin-right:9%;cursor:pointer' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + selectOptionAttributes + "</select>";
+     
     if(selectEventHandler)
     	return "<select onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + selectOptionAttributes + "</select>";
-     
+    
 	  // retun select field with name and title attributes(Yasin(14-09-10)) 
     return "<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + selectOptionAttributes + "</select>";
            
@@ -253,7 +254,7 @@ function generateHTMLEditor(uiFieldDefinition, container) {
 	if(uiFieldDefinition.value != undefined)
 		value = uiFieldDefinition.value;
 
-	var htmlDiv = "<br/><label>HTML: <a href='#' onclick='loadTinyMCE(\"tinyMCE" + textAreaName + "\")'>(Load in HTML Editor)</a></label><br/><br/>";	
+	var htmlDiv = "<label>HTML: <a href='#' onclick='loadTinyMCE(\"tinyMCE" + textAreaName + "\")'>(Load in HTML Editor)</a></label><br/><br/>";	
 	htmlDiv += "<textarea  id='tinyMCE" + textAreaName + "' name='" + textAreaName + "' rows='13' cols='75'>" + value + "</textarea>";		
 	htmlDiv += "<br/><p><i>You can leave empty if you do not wish to send html emails. Plain text emails would be sent. Only HTML emails would be tracked.</i></p>";	
 
@@ -324,7 +325,6 @@ function _generateUIFields(selector, ui) {
 	var originalDefinition = ui["org"];
 
 	ui = ui["ui"];
-
     // Build each field
     var length = ui.length;
     for (var i = 0; i < length; i++) {
@@ -335,12 +335,11 @@ function _generateUIFields(selector, ui) {
 
 		
         var tab;
-        
+         
         if(originalDefinition != undefined)
         	tab = getTab(selector, uiFieldDefinition.category, originalDefinition["ui"][i].category);
         else
         	tab = getTab(selector, uiFieldDefinition.category);
-
 
         // Add a container
         var containerID = "container" + i;
@@ -381,7 +380,7 @@ function _generateUIFields(selector, ui) {
         // Options
         if (uiFieldType == "select") {
             addLabel(uiFieldDefinition.label, container);
-            uiField = generateSelectUI(uiFieldDefinition,uiFieldDefinition.select_event_callback);
+            uiField = generateSelectUI(uiFieldDefinition);
             $(uiField).appendTo(container);
             continue;
         }
@@ -421,11 +420,11 @@ function _generateUIFields(selector, ui) {
             continue;
         }
         
-        // MergeFields Select Option
+      // MergeFields Select Option
         if(uiFieldType == "merge_fields")
         {
            addLabel(uiFieldDefinition.label, container);
-           uiField = generateSelectUI(uiFieldDefinition,uiFieldDefinition.select_event_callback);
+           uiField = generateSelectUI(uiFieldDefinition,"insertSelectedMergeField");
            $(uiField).appendTo(container);
            continue;
         }
@@ -492,7 +491,6 @@ function _generateUIFields(selector, ui) {
 
 function constructUI(selector, uiDefinition) {
 
-
     // Iterate through all json keys
     for (var key in uiDefinition) {
         if (uiDefinition.hasOwnProperty(key)) {
@@ -505,7 +503,7 @@ function constructUI(selector, uiDefinition) {
                 _generateUIFields(selector, uiDefinition);
                 continue;
             }
-
+            
             // Top level
             // Replace all #key text values			
             var field = selector.find('#' + key);
@@ -521,7 +519,6 @@ function constructUI(selector, uiDefinition) {
             else field.text(value);            
         }
     }
-
 
     initGridHandlers(selector);
 
@@ -629,8 +626,8 @@ function getMergeFields()
 		"First Name": "{{first_name}}",
 		"Last Name": "{{last_name}}",
 		"Score": "{{score}}",
-		"Create Date": "{{create_date}}",
-		"Update Date": "{{update_date}}",
+		"Created Date": "{{created_date}}",
+		"Modified Date": "{{modified_date}}",
 		"Email": "{{email}}",
 		"Company": "{{company}}",
 		"Title": "{{title}}",

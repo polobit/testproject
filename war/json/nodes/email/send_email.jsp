@@ -69,14 +69,13 @@
 		            "type": "email"	
 				},
 				{
-				   "label": "Merge Fields",
+				   "label": "",
 		           "category": "Text",
 		           "name": "merge_fields",
 		           "id": "merge_fields",
 		           "title":"Select required merge field to insert into below Text Field.",
 		           "fieldType":"merge_fields",
 		           "target_type":"text_email",
-		           "select_event_callback":"insertSelectedMergeField",
 		           "type":"select"
 		        },
 		        {
@@ -92,14 +91,13 @@
 		            "type": "textarea" 
 		        },
 		        {
-				   "label": "Merge Fields",
+				   "label": "",
 		           "category": "HTML",
 		           "name": "merge_fields",
 		           "id": "merge_fields",
 		           "title":"Select required merge field to insert into below HTML Field.",
 		           "fieldType":"merge_fields",
 		           "target_type":"tinyMCEhtml_email",
-		           "select_event_callback":"insertSelectedMergeField",
 		           "type":"select"
 		        },
 		         {   
@@ -134,7 +132,7 @@
 		            "type": "text" 
 		        },
 		        {
-		            "label": "Simply choose date and time. Agile can schedule your email delivery."
+		            "label": "Simply choose timezone, day and time. Agile can schedule your email delivery."
 		        },
 		        {
 		            "label": "Time zone",

@@ -36,6 +36,7 @@ public class UnbounceWebhook extends HttpServlet
 
 	    // Read JSON data
 	    JSONObject obj = new JSONObject(req.getParameter("json.data"));
+	    System.out.println("Obtained data "+ obj.toString());
 
 	    // Iterate over JSON data to get form fields
 	    Iterator<?> keys = obj.keys();

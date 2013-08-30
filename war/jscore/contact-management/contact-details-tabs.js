@@ -414,9 +414,14 @@ $(function(){
 	$('#sendEmail').die().live('click',function(e){
 		e.preventDefault();
 		
+		 if($(this).attr('disabled'))
+	   	     return;
+		 
 		// Is valid
 		if(!isValidForm($('#emailForm')))
 	      	return;
+		
+		$(this).attr('disabled', 'disabled');
 		
 		// serialize form.
 		var json = serializeForm("emailForm");
@@ -436,6 +441,8 @@ $(function(){
 				url: 'core/api/emails/contact/send-email',
 				success:function(){
 					
+					     $('#sendEmail').removeAttr('disabled');
+					     
 					     // Hide Sending email note.
 					     $save_info.hide();
 					     
@@ -443,6 +450,7 @@ $(function(){
 		                 },
 		        error: function()
 		               {
+		        	      $('#sendEmail').removeAttr('disabled');
 		        	      console.log("Error occured while sending email");
 		               }
 		});
@@ -455,6 +463,7 @@ $(function(){
 	 */
 	$('#send-email-close').die().live('click',function(e){
 		e.preventDefault();
+		
 		Backbone.history.navigate("contact/" + App_Contacts.contactDetailView.model.id, {
             trigger: true
         });

@@ -147,14 +147,13 @@ function validateInput()
 
 <!-- Merge Fields List -->
 <div style="margin-bottom:10px">
-    <label><b>Merge Fields:</b> </label>
     <select onchange='insertSelectedMergeField(this,"content")' name='merge_fields' title='Select required merge field to insert into editor.'>
         <option value=''>Add Merge Field</option>
         <option value='{{first_name}}'>First Name</option>
         <option value='{{last_name}}'>Last Name</option>
         <option value='{{score}}'>Score</option>
-        <option value='{{create_date}}'>Create Date</option>
-        <option value='{{update_date}}'>Update Date</option>
+        <option value='{{created_date}}'>Created Date</option>
+        <option value='{{modified_date}}'>Modified Date</option>
         <option value='{{email}}'>Email</option>
         <option value='{{company}}'>Company</option>
         <option value='{{title}}'>Title</option>
