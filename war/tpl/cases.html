@@ -81,13 +81,13 @@
         	{{#each contacts}}
 			<div style="display:inline-block;">
 				{{#if_equals type "PERSON"}}
-          	 	<img class='thumbnail' src="{{gravatarurl properties 50}}" width="40px" height="40px" style=" width:40px; height:40px; " title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
+          	 	<img class='thumbnail' src="{{gravatarurl properties 50}}" width="40px" height="40px" style=" width:40px; height:40px; " title="{{contact_name_necessary this}}" />
 				{{/if_equals}}
 
 				{{#if_equals type "COMPANY"}}
 				<img class='thumbnail' 
 					{{getCompanyImage "40"}} 
-					title="{{getPropertyValue properties "name"}}" />
+					title="{{contact_name_necessary this}}" />
 				{{/if_equals}}
 			</div>
 			{{/each}}
@@ -276,12 +276,12 @@
 					{{#if_equals type "PERSON"}}
                     	<img class="thumbnail" src="{{gravatarurl properties 50}}" width="40px" height="40px" style=" width:40px; height:40px; "/>
                     	<div style="display:inline-block;text-overflow:ellipsis;white-space:nowrap;width:90px;overflow:hidden;">
-                        	{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}
+                        	{{contact_name_necessary this}}
 					{{/if_equals}}
 					{{#if_equals type "COMPANY"}}
                     	<img class="thumbnail" {{getCompanyImage "40"}} />
                     	<div style="display:inline-block;text-overflow:ellipsis;white-space:nowrap;width:90px;overflow:hidden;">
-                        	{{getPropertyValue properties "name"}}
+                        	{{contact_name_necessary this}}
 					{{/if_equals}}
 						{{#if_equals index ../contacts.length}}
 						{{else}}

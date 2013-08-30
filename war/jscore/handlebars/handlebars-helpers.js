@@ -1623,4 +1623,14 @@ $(function()
 		}
 		return "Company";
 	});
+	
+	/**
+	 * Returns full name of contact. Use this when empty value is not acceptable.
+	 * Takes care that, even when no names are defined, returns email(necessary for PERSON) or Company <id>.
+	 * Calls function getContactName defined in agile-typeahead.js. Also typeahead uses this fxn to append values as tags.
+	 */
+	Handlebars.registerHelper('contact_name_necessary',function(contact)
+	{
+		return getContactName(contact);
+	});
 });
