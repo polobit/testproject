@@ -46,7 +46,7 @@
 						<div class="pull-right">:</div>
 					</div>
 							
-					<div class="span6" style="margin-left: 10px;">
+					<div class="span9" style="margin-left: 10px; word-break: break-all;">
                       {{#stringToJSON this "urls_with_time_spent"}}{{/stringToJSON}}
           	          
 					{{#each urls_with_time_spent}}{{url}} - {{convertSecondsToHour time_spent}}<br/> {{/each}}
@@ -60,7 +60,7 @@
 						<div class="pull-right">:</div>
 					</div>
 							
-					<div class="span6" style="margin-left: 10px;">
+					<div class="span9" style="margin-left: 10px;">
 						{{ref}}
 					</div>
 				</li>
@@ -71,7 +71,7 @@
 					<div class="span2"><b>IP Address</b>
 						<div class="pull-right">:</div>
 					</div>		
-					<div class="span6" style="margin-left: 10px;">
+					<div class="span9" style="margin-left: 10px;">
 						{{ip}}
 					</div>
 				</li>
@@ -83,7 +83,7 @@
 						<div class="pull-right">:</div>
 					</div>		
 					{{#stringToJSON this "parsedUserAgent"}}{{/stringToJSON}}
-                    <div class="span6" style="margin-left: 10px;">
+                    <div class="span9" style="margin-left: 10px;">
 						{{parsedUserAgent.browser_name}}, {{titleFromEnums parsedUserAgent.os}}
 					</div>
 				</li>
@@ -95,7 +95,7 @@
 						<div class="pull-right">:</div>
 					</div>		
 					{{#stringToJSON this "parsedUserAgent"}}{{/stringToJSON}}
-                    <div class="span6" style="margin-left: 10px;">
+                    <div class="span9" style="margin-left: 10px;">
 						{{ucfirst parsedUserAgent.device_type}}
 					</div>
 				</li>
@@ -106,7 +106,7 @@
 					<div class="span2"><b>Location</b>
 						<div class="pull-right">:</div>
 					</div>		
-					<div class="span6" style="margin-left: 10px;">
+					<div class="span9" style="margin-left: 10px;">
 						{{ucfirst city}}, {{ucfirst region}}, {{getCountryName country}}
 					</div>
 				</li>
