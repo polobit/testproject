@@ -299,8 +299,9 @@
 	<filter-mapping>
 		<filter-name>JSAPIFilter</filter-name>
 		<url-pattern>/core/js/*</url-pattern>
+		<url-pattern>/core/php/*</url-pattern>
 	</filter-mapping>
-
+	
 	<!-- JSON Filter -->
 	<filter>
 		<filter-name>JSONPFilter</filter-name>
@@ -312,7 +313,7 @@
 		<url-pattern>/core/js/*</url-pattern>
 	</filter-mapping>
 	<!-- JSON Filter -->
-
+	
 	<welcome-file-list>
 		<welcome-file>home</welcome-file>
 	</welcome-file-list>
