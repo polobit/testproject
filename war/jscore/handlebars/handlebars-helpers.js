@@ -1350,7 +1350,7 @@ $(function()
 
 		var icon_json = { "TWITTER" : "icon-twitter-sign", "LINKEDIN" : "icon-linkedin-sign", "URL" : "icon-globe", "GOOGLE-PLUS" : "icon-google-plus-sign",
 			"FACEBOOK" : "icon-facebook-sign", "GITHUB" : "icon-github", "FEED" : "icon-rss", "XING" : "icon-xing-sign", "SKYPE" : "icon-skype",
-			"YOUTUBE" : "icon-youtube-play", "FLICKR" : "icon-flickr" };
+			"YOUTUBE" : "icon-youtube", "FLICKR" : "icon-flickr" };
 
 		name = name.trim();
 
