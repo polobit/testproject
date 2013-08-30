@@ -15,55 +15,60 @@ function loadWidgets(el, contact)
 	// Create Data JSON
 	var data = { contact : contact };
 
-	/*
-	 * If Widgets_View is not defined , creates collection view, collection is
-	 * sorted based on position i.e., set when sorted using jquery ui sortable
-	 */
-	if (!Widgets_View)
-	{
-		Widgets_View = new Base_Collection_View({ url : '/core/api/widgets', restKey : "widget", templateKey : "widgets", individual_tag_name : 'li',
-			sortKey : 'position', modelData : data, postRenderCallback : function(widgets_el)
-			{
-
-			} });
-
-		/*
-		 * Fetch widgets from collection and set_up_widgets (load their scripts)
-		 */
-		Widgets_View.collection.fetch({ success : function(data)
+	// /*
+	// * If Widgets_View is not defined , creates collection view, collection is
+	// * sorted based on position i.e., set when sorted using jquery ui sortable
+	// */
+	// if (!Widgets_View)
+	// {
+	Widgets_View = new Base_Collection_View({ url : '/core/api/widgets', restKey : "widget", templateKey : "widgets", individual_tag_name : 'li',
+		sortKey : 'position', modelData : data, postRenderCallback : function(widgets_el)
 		{
-			set_up_widgets(el, Widgets_View.el);
+
 		} });
 
-		// show widgets
-		var newEl = Widgets_View.render().el;
-		$('#widgets', el).html(newEl);
-	}
-	else
+	/*
+	 * Fetch widgets from collection and set_up_widgets (load their scripts)
+	 */
+	Widgets_View.collection.fetch({ success : function(data)
 	{
-		/*
-		 * Have a flag, which is used to check whether widgets are already
-		 * loaded. This avoid unnecessary loading.
-		 */
-		var flag = false;
+		set_up_widgets(el, Widgets_View.el);
+	} });
 
-		$(el).live('agile_model_loaded', function(e)
-		{
-			if (flag == false)
-			{
-				flag = true;
+	// show widgets
+	var newEl = Widgets_View.render().el;
+	$('#widgets', el).html(newEl);
 
-				// Sort needs to be called as there could be position change
-				Widgets_View.collection.sort();
-
-				$('#widgets', el).html(Widgets_View.render(true).el);
-
-				// Sets up widget
-				set_up_widgets(el, Widgets_View.el);
-			}
-
-		});
-	}
+	// }
+	// else
+	// {
+	// /*
+	// * Have a flag, which is used to check whether widgets are already
+	// * loaded. This avoid unnecessary loading.
+	// */
+	// var flag = false;
+	//
+	// $(el).live('agile_model_loaded', function(e)
+	// {
+	// if (flag == false)
+	// {
+	// flag = true;
+	//
+	// // Sort needs to be called as there could be position change
+	// Widgets_View.collection.sort();
+	//
+	// $('#widgets', el).html(Widgets_View.render(true).el);
+	//				
+	//				
+	// $(el).live('agile_model_loaded', function(){
+	// // Sets up widget
+	// set_up_widgets(el, Widgets_View.el);
+	// });
+	//				
+	// }
+	//
+	// });
+	// }
 
 	/*
 	 * Called on click of icon-minus on widgets, collapsed class is added to it

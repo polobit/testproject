@@ -304,17 +304,31 @@ function contacts_typeahead(data)
 
 function getContactName(contact)
 {
-	var first_name = getPropertyValue(contact.properties, "first_name");
-	var last_name = getPropertyValue(contact.properties, "last_name");
-	last_name = last_name != undefined ? last_name : "";
+	var name="";
 	
-	var name;
+	if(!contact.type || contact.type == 'PERSON')
+	{	
+		var first_name = getPropertyValue(contact.properties, "first_name");
+		var last_name = getPropertyValue(contact.properties, "last_name");
+		last_name = last_name != undefined ? last_name.trim() : "";
+		first_name = first_name != undefined ? first_name.trim() : "";
+		name = (first_name + " " + last_name).trim();
+	}	
+	else if(contact.type == "COMPANY")
+	{
+		var company_name=getPropertyValue(contact.properties, "name");
+		company_name = company_name !=undefined ? company_name.trim():"";
+		name = company_name.trim();
+	}
+	
+	if(name.length)return name;
+	
+	var email=getPropertyValue(contact.properties, "email");
+	email = email!=undefined ? email.trim():"";
+	
+	if(email.length)return email;
 
-    /* If contact type is company then name of the 
-     * company is store in a field name "name"
-     */
-	if(contact.type == "COMPANY")
-		return (getPropertyValue(contact.properties, "name")).trim();
-
-	return (first_name +" "+ last_name).trim();
+	// if nothing found, assume Company and return with id.
+	
+	return 'Company '+contact.id;
 }

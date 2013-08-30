@@ -102,7 +102,7 @@ $(function(){
 function append_checkboxes(el)
 {
 	var checkbox_element = $('tr:last > td.select_checkbox', el);
-	if(checkbox_element)
+	if(checkbox_element.length != 0)
 	{
 		if(SELECT_ALL == true)
 		$('.tbody_check', checkbox_element).attr('checked', 'checked');

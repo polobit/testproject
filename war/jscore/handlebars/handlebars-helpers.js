@@ -1350,7 +1350,7 @@ $(function()
 
 		var icon_json = { "TWITTER" : "icon-twitter-sign", "LINKEDIN" : "icon-linkedin-sign", "URL" : "icon-globe", "GOOGLE-PLUS" : "icon-google-plus-sign",
 			"FACEBOOK" : "icon-facebook-sign", "GITHUB" : "icon-github", "FEED" : "icon-rss", "XING" : "icon-xing-sign", "SKYPE" : "icon-skype",
-			"YOUTUBE" : "icon-youtube-play", "FLICKR" : "icon-flickr" };
+			"YOUTUBE" : "icon-youtube", "FLICKR" : "icon-flickr" };
 
 		name = name.trim();
 
@@ -1622,5 +1622,15 @@ $(function()
 				return contact_properties[i].value;
 		}
 		return "Company";
+	});
+	
+	/**
+	 * Returns full name of contact. Use this when empty value is not acceptable.
+	 * Takes care that, even when no names are defined, returns email(necessary for PERSON) or Company <id>.
+	 * Calls function getContactName defined in agile-typeahead.js. Also typeahead uses this fxn to append values as tags.
+	 */
+	Handlebars.registerHelper('contact_name_necessary',function(contact)
+	{
+		return getContactName(contact);
 	});
 });

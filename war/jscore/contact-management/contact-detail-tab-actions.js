@@ -59,7 +59,7 @@ $(function(){
 		});
 		
     	var json = App_Contacts.contactDetailView.model.toJSON();
-    	var contact_name = (json.type==='COMPANY'? getPropertyValue(json.properties, "name") : getPropertyValue(json.properties, "first_name")+ " " + getPropertyValue(json.properties, "last_name"));
+    	var contact_name = getContactName(json);
     	$('.tags',el).append('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ json.id +'">'+contact_name+'</li>');
 		
 	});
@@ -92,7 +92,7 @@ $(function(){
 			});
 			
         	var json = App_Contacts.contactDetailView.model.toJSON();
-        	var contact_name = (json.type==='COMPANY'? getPropertyValue(json.properties, "name") : getPropertyValue(json.properties, "first_name")+ " " + getPropertyValue(json.properties, "last_name"));
+        	var contact_name = getContactName(json);
         	$('.tags',el).append('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ json.id +'">'+contact_name+'</li>');
 			
 			$("#casesModal").modal('show');
@@ -116,7 +116,7 @@ $(function(){
 		//Prevents user from removing this company from the modal that is shown.
 		//Disables typeahead, as it won't be needed as there will be no Company input text box.
 		var json = App_Contacts.contactDetailView.model.toJSON();
-		forceCompany.name=getPropertyValue(json.properties, "name"); //name of Company
+		forceCompany.name=getContactName(json); //name of Company
 		forceCompany.id=json.id;	// id of Company
 		forceCompany.doit=true;		// yes force it. If this is false the Company won't be forced.
 									// Also after showing modal, it is set to false internally, so 

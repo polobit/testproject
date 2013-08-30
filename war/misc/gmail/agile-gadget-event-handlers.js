@@ -218,26 +218,27 @@ function agile_init_handlers() {
 
 		// Send request if tags are entered.
 		if (tags.tags.length != 0) {
-			$('.tag-waiting', el).show();
-			$("#add_tags_form", el).toggle();
+			
+			$("#add_tags_form", el).hide();
+			$('.tag-waiting', el).show("fast");
+			
 			// Add Tags
 			_agile.add_tag(tags.tags, function(response) {
 
 				$('.tag-waiting', el).hide();
-				$(".toggle-tag", el).toggle();
 				// Merge Server response object with Contact_Json
 				// object.
 				$.extend(Contacts_Json[email.email], response);
 				// Add tag to list.
 				agile_build_tag_ui($("#added_tags_ul", el), response);
-
+				$(".toggle-tag", el).show("medium");
 				agile_gadget_adjust_height();
 			}, email.email);
 		}
 		// If tags are not entered, hide form.
 		else {
-			$("#add_tags_form", el).toggle();
-			$(".toggle-tag", el).show();
+			$("#add_tags_form", el).hide();
+			$(".toggle-tag", el).show("medium");
 		}
 	});
 
@@ -249,20 +250,21 @@ function agile_init_handlers() {
 		var el = $(this).closest("div.add-tag");
 		var email = $(el).find('#add_tags_form input[name="email"]').val();
 		var tag = $(this).prev().text();
-
-		$('.tag-waiting', el).show();
-		$('.toggle-tag', el).hide();
+		
+		$('.toggle-tag', el).hide("fast",function(){
+			$('.tag-waiting', el).show();
+		});
+		
 		// Remove Tag
 		_agile.remove_tag(tag, function(response) {
 
 			$('.tag-waiting', el).hide();
-			$('.toggle-tag', el).show();
 			// Merge Server response object with Contact_Json
 			// object.
 			$.extend(Contacts_Json[email], response);
 			// Removing tag from list.
 			agile_build_tag_ui($("#added_tags_ul", el), response);
-
+			$('.toggle-tag', el).show("medium");
 			agile_gadget_adjust_height();
 		}, email);
 	});
@@ -273,11 +275,12 @@ function agile_init_handlers() {
 		e.preventDefault();
 		// Set context (HTML container where event is triggered).
 		var el = $(this).closest("div.add-tag");
-		$("#add_tags_form", el).toggle();
-		$(".toggle-tag", el).hide();
-		// Focus on text box and clear value.
-		$('form input[name="tags"]', el).val("").focus();
-		agile_gadget_adjust_height();
+		$(".toggle-tag", el).hide("fast", function(){
+			$("#add_tags_form", el).show();
+			// Focus on text box and clear value.
+			$('form input[name="tags"]', el).val("").focus();
+			agile_gadget_adjust_height();
+		});
 	});
 
 	// Enter key press event for tag input box.

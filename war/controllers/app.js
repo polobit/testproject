@@ -45,6 +45,8 @@ function currentRoute(route)
 	console.log("in app/js : " + Current_Route);
 	activateInfiniScroll();
 	set_profile_noty();
+	// Reset it to uncheck checkboxes for bulk actions on route change
+	SELECT_ALL = false;
 	console.log(tour);
 	if (tour)
 	{
