@@ -15,7 +15,8 @@
 		    "label": "URL",
 		    "required": "required",
 		    "category": "Settings",
-		    "name": "url",
+		    "name": "url_value",
+		    "id":"url_value",
 		    "title": "Enter a valid URL.",
 		    "fieldType": "input",
 		    "type": "url" 
@@ -25,13 +26,16 @@
 			"required": "required",
 			"category": "Settings",
 			"name": "type",
+			"id": "type-select",
 			"title": "Select the given URL type.",
 			"options": {
 				"Exact Match": "exact_match",
 		        "Contains": "contains"    
 	          },
 	          "fieldType": "select",
-			  "type": "type"
+			  "type": "select",
+			  "target_type":"url_value",
+			  "select_event_callback":"url_visited_select_callback"
 		},
         {
             "label": "Check if a URL (on your website) has been visited by the contact. This works when you have the tracking code setup on your web page.<br/><br/>The 'Type' option allows you to specify a partial match of url. For example, if you just mention 'product' in the URL field and select Type as 'Contains', then the condition will be evaluated to True if the user visited any page containing 'product' in the URL",

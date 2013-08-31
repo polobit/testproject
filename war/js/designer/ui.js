@@ -175,7 +175,7 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     	return "<select style='position:relative;float:right;margin-right:9%;cursor:pointer' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + selectOptionAttributes + "</select>";
      
     if(selectEventHandler)
-    	return "<select onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + selectOptionAttributes + "</select>";
+    	return "<select onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "' id='" + uiFieldDefinition.id + "'> " + selectOptionAttributes + "</select>";
     
 	  // retun select field with name and title attributes(Yasin(14-09-10)) 
     return "<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + selectOptionAttributes + "</select>";
@@ -380,7 +380,7 @@ function _generateUIFields(selector, ui) {
         // Options
         if (uiFieldType == "select") {
             addLabel(uiFieldDefinition.label, container);
-            uiField = generateSelectUI(uiFieldDefinition);
+            uiField = generateSelectUI(uiFieldDefinition,uiFieldDefinition.select_event_callback);
             $(uiField).appendTo(container);
             continue;
         }
@@ -684,4 +684,38 @@ function insertAtCaret(textareaId,text) {
     	txtarea.focus();
     }
     txtarea.scrollTop = scrollPos;
+}
+
+
+/**
+ * It is onchange event callback for Url Visited url-type select option.
+ * Based on two options available:
+ * 1. Contains - It allows part of the text of url, the type should be text.
+ * 2. Exact Match - It allows complete url.
+ * 
+ * @param ele - select element
+ * @param target_id - id of target element where changes should affect.
+ */
+function url_visited_select_callback(ele, target_id)
+{
+    // current value
+    var curValue = $(ele).find(':selected').val();
+    
+    var tempObj = $('<span />').insertBefore('#' + target_id);
+	 
+    // if 'contains' selected, make type attribute 'text'
+	if(curValue === 'contains')
+    {
+		// replacing type attribute from url to text
+		$('#' + target_id).detach().attr('type', 'text').insertAfter(tempObj).focus();
+    }
+     
+    // if 'exact_match' selected, make type attribute 'url'
+	if(curValue === 'exact_match')
+    {
+		// replacing type attribute to url.
+		$('#' + target_id).detach().attr('type', 'url').insertAfter(tempObj).focus();
+    }
+	
+	tempObj.remove();
 }

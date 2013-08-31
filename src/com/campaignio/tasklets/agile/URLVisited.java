@@ -23,7 +23,7 @@ public class URLVisited extends TaskletAdapter
     /**
      * Given URL
      */
-    public static String URL = "url";
+    public static String URL_VALUE = "url_value";
 
     /**
      * Given URL type
@@ -53,7 +53,7 @@ public class URLVisited extends TaskletAdapter
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
 	// Get URL value and type
-	String url = getStringValue(nodeJSON, subscriberJSON, data, URL);
+	String url = getStringValue(nodeJSON, subscriberJSON, data, URL_VALUE);
 	String type = getStringValue(nodeJSON, subscriberJSON, data, TYPE);
 	String domain = NamespaceManager.get();
 
@@ -64,9 +64,10 @@ public class URLVisited extends TaskletAdapter
 	// Gets URL count from table.
 	int count = AnalyticsSQLUtil.getCountForGivenURL(url, domain, email, type);
 
+	System.out.println("Count obtained for url " + url + " of domain " + domain);
+
 	if (count == 0)
 	{
-	    System.out.println("Node JSON in url visited is: " + nodeJSON);
 	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_NO);
 	    return;
 	}

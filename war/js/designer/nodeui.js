@@ -88,7 +88,11 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
         autoOpen: true,        
         buttons: {
             'Save': function () {
-                $(this).find("form").trigger('submit');
+            	
+            	// Triggers change events of of URL Visited select
+            	$(this).find("form #type-select").trigger('change');
+                
+            	$(this).find("form").trigger('submit');
             }
         }
     });
@@ -172,12 +176,11 @@ function saveNode(e) {
 				}	  
 			  				  	
 		}
-		 templateContinue(nodeId);				
+		 templateContinue(nodeId);
+		 
         // close the dialog after the node is constructed			
         $("#nodeui").dialog('close');
        
-		        
-
 }
 
 
@@ -188,10 +191,6 @@ function checkIsTemplateNode(nodeID,saveFlag){
          templateNodes.push(nodeID);
          
         console.log(templateNodes);
-         
-     
-
-
 }
 
 function templateContinue(nodeID){
