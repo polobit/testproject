@@ -303,7 +303,8 @@ public class DomainUser extends Cursor implements Cloneable
 	    this.is_account_owner = true;
 
 	    if (!is_admin)
-		throw new Exception("Super Admin user can't be disabled.");
+		throw new Exception(user.name + " is the owner of '" + user.domain
+			+ "' domain and should be an <b>admin</b>. You can change the Email and Name instead.");
 	}
     }
 
@@ -317,7 +318,7 @@ public class DomainUser extends Cursor implements Cloneable
 	// User cannot be admin and disabled
 	if (this.is_admin == true && this.is_disabled == true)
 	{
-	    throw new Exception("Can not disable <i>Admin<i/> user. You should remove admin privilege first.");
+	    throw new Exception("Can not disable Admin user. You should remove admin privilege first.");
 	}
     }
 
