@@ -20,8 +20,7 @@ import com.google.appengine.api.utils.SystemProperty;
 
 /**
  * <code>LoginServlet</code> class checks or validates the user who is
- * registered or added under a particular domain and gives access to agile crm
- * account.
+ * registered or added under a particular domain and gives access to home page.
  * 
  * Login page have Open IDs and Sign in options for registered users
  * <p>
@@ -30,7 +29,7 @@ import com.google.appengine.api.utils.SystemProperty;
  * </p>
  * If user is using form based credentials, it will verify.
  * 
- * @author Manohar (badly written doc by Sukanya)
+ * @author Manohar
  * 
  * @since October 2012
  */
@@ -47,8 +46,8 @@ public class LoginServlet extends HttpServlet
     }
 
     /**
-     * It checks type i.e whether the user comes from Oauth(openId) form or from
-     * Agile(form based) login using login-credentials.
+     * Checks type i.e whether the user logs in from Oauth(openId) form or from
+     * Agile(form based) login.
      * 
      * For the first time type is null, so we include login.jsp
      * 
@@ -104,7 +103,8 @@ public class LoginServlet extends HttpServlet
     }
 
     /**
-     * Forwards to openid for authentication
+     * When user wants to login using openid, Forwards them to openid for
+     * authentication
      * 
      * @param request
      * @param response
@@ -137,9 +137,6 @@ public class LoginServlet extends HttpServlet
      * If any error occurs throws exception and with error login.jsp is
      * included.
      * </p>
-     * By marking �Keep me signed in� keeps the users signed for 5 days
-     * without asking for user name and password unless they log out.If
-     * everything fine redirects to home page by setting session.
      * 
      * @param request
      * @param response
