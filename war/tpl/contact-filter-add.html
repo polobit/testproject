@@ -4,11 +4,16 @@
 		<form id="filterContactForm" class="form-horizontal">
 			<div name="rules" class="formsection chainedSelect">	
 					 {{#if id}} 
-                        <legend class="formheading"> Edit Contact Filter</legend>
+                        <legend class="formheading"> Edit Contact Filter<span
+						style="vertical-align: text-top; margin-left: -3px"> <img
+							border="0" src="/img/help.png"
+							style="height: 6px; vertical-align: text-top" rel="popover"
+							data-placement="bottom"
+							data-content="Use filters to sort contacts with a specific criteria to find patterns. You can save your preferred filters and also have daily, weekly or monthly reports sent to you based on the filter."
+							id="element" data-trigger="hover">
+					</span></legend>
                         {{else}}
-                        <legend class="formheading"><i class="icon-plus-sign"></i> Add Contact Filter</legend>
-                        {{/if}}
-				<span> Filter Contacts <span
+                        <legend class="formheading"><i class="icon-plus-sign"></i> Add Contact Filter<span
 						style="vertical-align: text-top; margin-left: -3px"> <img
 							border="0" src="/img/help.png"
 							style="height: 6px; vertical-align: text-top" rel="popover"
@@ -16,7 +21,8 @@
 							data-content="Use filters to sort contacts with a specific criteria to find patterns. You can save your preferred filters and also have daily, weekly or monthly reports sent to you based on the filter."
 							id="element" data-trigger="hover">
 					</span>
-					</span>
+				</legend>
+                        {{/if}}
 				</legend>
 				<fieldset>
 					<div class="control-group">

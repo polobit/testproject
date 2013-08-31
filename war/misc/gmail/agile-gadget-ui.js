@@ -71,7 +71,7 @@ function agile_build_ui(callback) {
 function agile_build_ui_for_emails(Email_Ids) {
 
 	// Clear main HTML container.
-	$('#content').html('')
+	$('#agile_content').html('')
 	// Clear contact data.
 	Contacts_Json = {};
 	
@@ -91,7 +91,7 @@ function agile_build_ui_for_emails(Email_Ids) {
 		
 		// Store user data for future use.
 		Contacts_Json[val.email] = val;
-		agile_fill_individual_template_ui(val, $('#content'));
+		agile_fill_individual_template_ui(val, $('#agile_content'));
 
 	});
 
