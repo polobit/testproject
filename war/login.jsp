@@ -195,7 +195,7 @@ margin-bottom:0px;
 						<input class="input-xlarge required email field" name='email' type="text" maxlength="50" minlength="6" placeholder="User ID (Your Email Address)" autocapitalize="off"
 						<%if(request.getAttribute("agile_email")  != null) {%> value="<%=request.getAttribute("agile_email") %>" <%}%>>
 						
-					    <input class="input-xlarge required field " maxlength="10" minlength="4" name='password' type="password" placeholder="Password" autocapitalize="off">
+					    <input class="input-xlarge required field " maxlength="20" minlength="4" name='password' type="password" placeholder="Password" autocapitalize="off">
 						<div style="margin-top: 15px;">
 							<input type='submit' style="float: right;height:39px" value="Sign In" class='btn btn-large btn-primary agile_btn'>
 							<label class="checkbox" style="">
