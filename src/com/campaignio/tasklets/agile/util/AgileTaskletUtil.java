@@ -182,8 +182,8 @@ public class AgileTaskletUtil
 	    subscriberJSON.put("score", contact.lead_score);
 
 	    // Returns Created and Updated date in GMT with given format.
-	    subscriberJSON.put("create_date", DateUtil.getGMTDateInGivenFormat(contact.created_time * 1000, "MM/dd/yyyy"));
-	    subscriberJSON.put("update_date", DateUtil.getGMTDateInGivenFormat(contact.updated_time * 1000, "MM/dd/yyyy"));
+	    subscriberJSON.put("created_date", DateUtil.getGMTDateInGivenFormat(contact.created_time * 1000, "MM/dd/yyyy"));
+	    subscriberJSON.put("modified_date", DateUtil.getGMTDateInGivenFormat(contact.updated_time * 1000, "MM/dd/yyyy"));
 
 	    System.out.println("SubscriberJSON in WorkflowUtil: " + subscriberJSON);
 

@@ -153,8 +153,10 @@ function show_dashboard_subscription_details(el)
 }
 
 $(function(){
-	$('#dashboard-contacts-model-list > tr').live('click', function(e) {
+	$('#dashboard-contacts-model-list > tr, #dashboard-campaign-logs-model-list > tr').live('click', function(e) {
+		
 		var id = $(this).find(".data").attr("data");
+		
 		App_Contacts.navigate("contact/" + id , {
 			trigger : true
 		});

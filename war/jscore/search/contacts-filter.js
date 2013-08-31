@@ -16,8 +16,9 @@ var filter_name;
 var scrambled_index=0;
 function scramble_input_names(el)
 {
-	el.find("div[name='RHS']>input").each(function(){
+	el.find("input").each(function(){
 		$(this).attr('name','temp-'+scrambled_index);
+		$(this).addClass('required');
 		scrambled_index+=1;
 	});
 }

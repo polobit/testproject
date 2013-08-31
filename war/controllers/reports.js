@@ -31,6 +31,7 @@ var ReportsRouter = Backbone.Router.extend({
 	 */
 	reportAdd : function()
 	{
+		$("#content").html(LOADING_HTML);
 		var report_add = new Base_Model_View({ url : 'core/api/reports', template : "reports-add", window : "reports", isNew : true,
 			postRenderCallback : function(el)
 			{
@@ -54,7 +55,7 @@ var ReportsRouter = Backbone.Router.extend({
 
 				head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 				{
-					scramble_input_names($(el));
+					scramble_input_names($(el).find('div#report-settings'));
 					chainFilters(el);
 					
 					++count;
@@ -66,7 +67,7 @@ var ReportsRouter = Backbone.Router.extend({
 
 		
 		report_add.render();
-		$("#content").html(LOADING_HTML);
+		
 	},
 
 	/**
@@ -77,6 +78,7 @@ var ReportsRouter = Backbone.Router.extend({
 	 */
 	reportEdit : function(id)
 	{
+		$("#content").html(LOADING_HTML);
 		// Counter to set when script is loaded. Used to avoid flash in page
 		var count = 0;
 		
@@ -123,7 +125,7 @@ var ReportsRouter = Backbone.Router.extend({
 
 					chainFilters(el);
 					deserializeChainedSelect($(el).find('form'), report.toJSON().rules);
-					scramble_input_names($(el));
+					scramble_input_names($(el).find('div#report-settings'));
 					
 					++count;
 					if(count > 1)
@@ -133,7 +135,7 @@ var ReportsRouter = Backbone.Router.extend({
 			} });
 
 		report_model.render();
-		$("#content").html(LOADING_HTML);
+		
 	},
 
 	/**

@@ -232,7 +232,19 @@ function showBar(url, selector, name, yaxis_name, stacked)
 			        text: name
 			    },
 			    xAxis: {
-			        categories: categories
+			        categories: categories,
+			        tickPositioner:function()
+		            {
+		                // to overcome x-axis labels overlapping
+			        	if(this.options.categories.length > 30)
+		                {
+		                    this.options.minTickInterval = 5;
+		                }
+		            },
+			        labels:
+			        {
+			        	overflow:'justify'
+			        }
 			    },
 			    yAxis: {
 			        min: 0,
