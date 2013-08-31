@@ -101,9 +101,10 @@ function agile_login() {
 	var Gadget_Cookie = agile_gadget_read_cookie("Agile_Gadget_Cookie");
 	// Convert into object.
 	var User_Data = $.parseJSON(Gadget_Cookie);
+	var User_Domain = gadgets.util.getUrlParameters().pid;
 	
 	// Cookie present, Set account.
-	if (Gadget_Cookie != null && User_Data.api_key) {
+	if (Gadget_Cookie != null && User_Data.api_key && User_Data.mail_domain == User_Domain) {
 		// Download scripts.
 		agile_download_scripts();
 		// Download build UI JavaScript file.
@@ -115,12 +116,13 @@ function agile_login() {
 	}
 	
 	// Cookie present, but new user set domain.
-	else if(Gadget_Cookie != null && !User_Data.user_exists) {
+	else if(Gadget_Cookie != null && !User_Data.user_exists && User_Data.mail_domain == User_Domain) {
 		agile_user_setup_load(User_Data);
 	}
 	
 	// Check for cookie, if not there send login request.
 	else {
+		agile_gadget_erase_cookie('Agile_Gadget_Cookie');
 		// var url = 'https://googleapps.agilecrm.com/gmail';
 		var url = Lib_Path + 'gmail';
 		console.log("Osapi from " + url);
@@ -146,6 +148,8 @@ function agile_login() {
  */
 function agile_handle_load_response(data) {
 
+	var User_Domain = gadgets.util.getUrlParameters().pid;
+	data.content.mail_domain = User_Domain;
 	// Check user exists, OpenID must have occurred previously.
 	if (data.content.user_exists) {
 		// Create cookie

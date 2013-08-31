@@ -23,14 +23,19 @@ function agile_user_setup(data) {
 	var Url_Root = data.popup + "&hd=" + domain;
 
 	// Create UI to let user enter its desired agile domain name.
-	$('#output').html('<p>Associate your account - one time setup</p>'
+	$('#agile_content').append('<div class="well well-small one-time-setup" style="margin:0 0 5px 5px; display:none;">'
+			+'<p>Associate your account - one time setup</p>'
 			+'<input type="text" id="user_domain" placeholder="Enter your Domain." style="margin:0 10px 0 0;" />'
-			+'<input type="button" value="Go" onclick=agile_gadget_open_popup("'+Url_Root+'") >'
-			+'<span id="notify_user" style="display:none; margin-left:20px;">Please enter your domain.</span>');
+			+'<input type="button" value="Associate" onclick=agile_gadget_open_popup("'+Url_Root+'") class="btn btn-primary" style="padding:2px 6px 2px;">'
+			+'<span id="notify_user" style="display:none; margin-left:20px; color:indianred;"><i>Please enter your domain.</i></span>'
+			+'</div>');
 
 	// Hide Loading Icon
-	$('#loading').css('display', 'none');
-	gadgets.window.adjustHeight();
+	$('#loading').hide("fast", function(){
+		$('.one-time-setup').show("medium", function(){
+			gadgets.window.adjustHeight();
+		});
+	});
 }
 
 /**
