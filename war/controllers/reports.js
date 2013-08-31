@@ -34,16 +34,21 @@ var ReportsRouter = Backbone.Router.extend({
 		var report_add = new Base_Model_View({ url : 'core/api/reports', template : "reports-add", window : "reports", isNew : true,
 			postRenderCallback : function(el)
 			{
+				// Counter to set when script is loaded. Used to avoid flash in page
+				var count = 0;
 				fillSelect("custom-fields-optgroup", "core/api/custom-fields", undefined, function()
 				{
 
 					head.js(LIB_PATH + 'lib/jquery.multi-select.js', function()
 					{
 
-						$('#multipleSelect').multiSelect({ selectableOptgroup : true });
+						$('#multipleSelect', el).multiSelect({ selectableOptgroup : true });
 
-						$('.ms-selection').children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id", "fields_set").sortable();
-
+						$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id", "fields_set").sortable();
+						
+						++count;
+						if(count > 1)
+							$("#content").html(report_add.el);
 					});
 				}, '<option value="custom_{{field_label}}">{{field_label}}</option>', true, el);
 
@@ -51,10 +56,17 @@ var ReportsRouter = Backbone.Router.extend({
 				{
 					scramble_input_names($(el));
 					chainFilters(el);
+					
+					++count;
+					if(count > 1)
+						$("#content").html(report_add.el);
 				});
+
 			} });
 
-		$("#content").html(report_add.render().el);
+		
+		report_add.render();
+		$("#content").html(LOADING_HTML);
 	},
 
 	/**
@@ -65,7 +77,9 @@ var ReportsRouter = Backbone.Router.extend({
 	 */
 	reportEdit : function(id)
 	{
-
+		// Counter to set when script is loaded. Used to avoid flash in page
+		var count = 0;
+		
 		// If reports view is not defined, navigates to reports
 		if (!this.reports || !this.reports.collection || this.reports.collection.length == 0 || this.reports.collection.get(id) == null)
 		{
@@ -86,15 +100,21 @@ var ReportsRouter = Backbone.Router.extend({
 					head.js(LIB_PATH + 'lib/jquery.multi-select.js', function()
 					{
 
-						$('#multipleSelect').multiSelect({ selectableOptgroup : true });
-
+						$('#multipleSelect', el).multiSelect({ selectableOptgroup : true });
+						++count;
+						if(count > 1)
+							$("#content").html(report_model.el);
+						
 						$.each(report.toJSON()['fields_set'], function(index, field)
 						{
-							$('#multipleSelect').multiSelect('select', field);
+							$('#multipleSelect', el).multiSelect('select', field);
 						});
 
-						$('.ms-selection').children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id", "fields_set").sortable();
+						$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id", "fields_set").sortable();
 					})
+					
+					
+					
 
 				}, '<option value="custom_{{field_label}}">{{field_label}}</option>', true, el);
 
@@ -103,15 +123,17 @@ var ReportsRouter = Backbone.Router.extend({
 
 					chainFilters(el);
 					deserializeChainedSelect($(el).find('form'), report.toJSON().rules);
-					scramble_input_names($(el));		
+					scramble_input_names($(el));
+					
+					++count;
+					if(count > 1)
+						$("#content").html(report_model.el);
 				});
 
 			} });
 
-		// report_model.render();
-		$("#content").html(report_model.render().el);
-		// report_model.render();
-
+		report_model.render();
+		$("#content").html(LOADING_HTML);
 	},
 
 	/**
