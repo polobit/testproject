@@ -15,60 +15,57 @@ function loadWidgets(el, contact)
 	// Create Data JSON
 	var data = { contact : contact };
 
-	// /*
-	// * If Widgets_View is not defined , creates collection view, collection is
-	// * sorted based on position i.e., set when sorted using jquery ui sortable
-	// */
-	// if (!Widgets_View)
-	// {
-	Widgets_View = new Base_Collection_View({ url : '/core/api/widgets', restKey : "widget", templateKey : "widgets", individual_tag_name : 'li',
-		sortKey : 'position', modelData : data, postRenderCallback : function(widgets_el)
-		{
+	/*
+	 * If Widgets_View is not defined , creates collection view, collection is
+	 * sorted based on position i.e., set when sorted using jquery ui sortable
+	 */
+	if (!Widgets_View)
+	{
+		Widgets_View = new Base_Collection_View({ url : '/core/api/widgets', restKey : "widget", templateKey : "widgets", individual_tag_name : 'li',
+			sortKey : 'position', modelData : data, postRenderCallback : function(widgets_el)
+			{
 
+			} });
+
+		/*
+		 * Fetch widgets from collection and set_up_widgets (load their scripts)
+		 */
+		Widgets_View.collection.fetch({ success : function(data)
+		{
+			set_up_widgets(el, Widgets_View.el);
 		} });
 
-	/*
-	 * Fetch widgets from collection and set_up_widgets (load their scripts)
-	 */
-	Widgets_View.collection.fetch({ success : function(data)
+		// show widgets
+		var newEl = Widgets_View.render().el;
+		$('#widgets', el).html(newEl);
+
+	}
+	else
 	{
-		set_up_widgets(el, Widgets_View.el);
-	} });
+		/*
+		 * Have a flag, which is used to check whether widgets are already
+		 * loaded. This avoid unnecessary loading.
+		 */
+		var flag = false;
 
-	// show widgets
-	var newEl = Widgets_View.render().el;
-	$('#widgets', el).html(newEl);
+		$(el).live('agile_model_loaded', function(e)
+		{
+			if (flag == false)
+			{
+				flag = true;
 
-	// }
-	// else
-	// {
-	// /*
-	// * Have a flag, which is used to check whether widgets are already
-	// * loaded. This avoid unnecessary loading.
-	// */
-	// var flag = false;
-	//
-	// $(el).live('agile_model_loaded', function(e)
-	// {
-	// if (flag == false)
-	// {
-	// flag = true;
-	//
-	// // Sort needs to be called as there could be position change
-	// Widgets_View.collection.sort();
-	//
-	// $('#widgets', el).html(Widgets_View.render(true).el);
-	//				
-	//				
-	// $(el).live('agile_model_loaded', function(){
-	// // Sets up widget
-	// set_up_widgets(el, Widgets_View.el);
-	// });
-	//				
-	// }
-	//
-	// });
-	// }
+				// Sort needs to be called as there could be position change
+				Widgets_View.collection.sort();
+
+				$('#widgets', el).html(Widgets_View.render(true).el);
+
+				// Sets up widget
+				set_up_widgets(el, Widgets_View.el);
+
+			}
+
+		});
+	}
 
 	/*
 	 * Called on click of icon-minus on widgets, collapsed class is added to it
@@ -158,6 +155,10 @@ function loadWidgets(el, contact)
  */
 function set_up_widgets(el, widgets_el)
 {
+	console.log("widgets el");
+	console.log(el);
+	console.log("widgets el");
+	console.log(widgets_el);
 	/*
 	 * Iterates through all the models (widgets) in the collection, and scripts
 	 * are loaded from the URL in the widget
@@ -169,13 +170,12 @@ function set_up_widgets(el, widgets_el)
 		var url = model.get("url");
 
 		console.log(model.get('name'));
-		console.log(model);
-		console.log($('#' + model.get('name'), el));
+
 		/*
 		 * Set the data element in the div so that we can retrieve this in get
 		 * plugin preferences
 		 */
-		$('#' + model.get('name'), el).data('model', model);
+		$('#' + model.get('name'), widgets_el).data('model', model);
 
 		/*
 		 * Checks if widget is minimized, if minimized script is not loaded

@@ -41,7 +41,7 @@ $(function()
 	 * button or to fetch details. If undefined - considering first time usage
 	 * of widget, setupTwilioOAuth is shown and returned
 	 */
-	if (twilio_widget.prefs == undefined)
+	if (twilio_widget.prefs == undefined || twilio_widget.prefs == "{}")
 	{
 		setupTwilioOAuth();
 		return;
