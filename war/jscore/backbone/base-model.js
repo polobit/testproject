@@ -324,9 +324,9 @@ var Base_Model_View = Backbone.View
 										enable_save_button($form.find('.save'));
 										
 										if (saveCallback && typeof (saveCallback) === "function") {
-											console.log(model)
+											console.log(response)
 											// execute the callback, passing parameters as necessary
-											saveCallback(model);
+											saveCallback(response);
 										}
 										// Reload the current page
 										if (reload)
