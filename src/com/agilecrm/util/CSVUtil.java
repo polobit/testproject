@@ -132,8 +132,13 @@ public class CSVUtil
 	// Reads blob data line by line upto first 10 line of file
 	LineIterator iterator = IOUtils.lineIterator(stream, "UTF-8");
 
+	if (!iterator.hasNext())
+	    throw new Exception("Invalid CSV file");
+
 	// Reads the first line
 	String csv = iterator.nextLine();
+
+	System.out.println(csv);
 
 	// Creates csv reader from headings
 	CSVReader reader = new CSVReader(new StringReader(csv.trim()));
@@ -183,8 +188,11 @@ public class CSVUtil
 	contacts.remove(0);
 
 	contact.type = Contact.Type.PERSON;
+
 	LinkedHashSet<String> tags = new LinkedHashSet<String>();
+
 	tags.addAll(contact.tags);
+
 	List<ContactField> properties = contact.properties;
 
 	// Creates domain user key, which is set as a contact owner

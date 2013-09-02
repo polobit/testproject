@@ -2,6 +2,7 @@ package com.agilecrm.core.api.contacts;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,8 +13,10 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -27,6 +30,8 @@ import com.agilecrm.util.CacheUtil;
 import com.google.appengine.api.backends.BackendServiceFactory;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreInputStream;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -48,31 +53,47 @@ public class UploadContactsAPI
     @GET
     public String post(@QueryParam("blob-key") String key)
     {
+	BlobKey blobKey = new BlobKey(key);
+
+	InputStream stream = null;
+
 	try
 	{
-	    BlobKey blobKey = new BlobKey(key);
-
-	    InputStream stream = new BlobstoreInputStream(blobKey);
-
-	    List<String> headings = CSVUtil.getCSVHeadings(stream);
-
-	    Map success = new HashMap();
-	    success.put("success", true);
-	    success.put("blob_key", key);
-
-	    // Heading are stored in data key
-	    success.put("data", new JSONArray(headings));
-
-	    System.out.println(new JSONObject(success));
-
-	    return new JSONObject(success).toString();
+	    stream = new BlobstoreInputStream(blobKey);
+	    System.out.println("available stream" + stream.available());
+	}
+	catch (IOException e1)
+	{
+	    // TODO Auto-generated catch block
+	    e1.printStackTrace();
+	}
+	List<String> headings = new ArrayList<String>();
+	try
+	{
+	    headings = CSVUtil.getCSVHeadings(stream);
 	}
 	catch (Exception e)
 	{
-	    e.printStackTrace();
+	    // Delete blob from store before sending validation exception to
+	    // client
+	    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+	    blobstoreService.delete(blobKey);
+
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
 
-	return null;
+	Map success = new HashMap();
+	success.put("success", true);
+	success.put("blob_key", key);
+
+	// Heading are stored in data key
+	success.put("data", new JSONArray(headings));
+
+	System.out.println(new JSONObject(success));
+
+	return new JSONObject(success).toString();
+
     }
 
     /**

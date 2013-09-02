@@ -44,16 +44,20 @@
 			</th>
 		</thead>
  <tbody id="import-tbody">
-    {{#each data}}
+    {{#each_with_index1 data}}
 	 <tr>
  		<td>
-			{{this}}
+		{{#is_blank this.value}}
+				{{../index}}
+			{{else}}
+				{{this}}		
+		{{/is_blank}}	
         </td>
 		<td class="import-contact-fields">
-			{{setupCSVUploadOptions this ../this}}
+			{{setupCSVUploadOptions this.value ../this}}
 		</td>
 	 </tr>
-	{{/each}}           		          
+	{{/each_with_index1}}           		          
 	</tbody>
 </table>
 </br>

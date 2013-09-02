@@ -365,9 +365,11 @@ $(function()
 		if (!date)
 			return;
 
+		
 		if ((date / 100000000000) > 1)
 		{
-			return new Date(parseInt(date)).format(format);
+			console.log(new Date(parseInt(date)).format(format));
+			return new Date(parseInt(date)).format(format, 0);
 		}
 		// date form milliseconds
 		var d = new Date(parseInt(date) * 1000).format(format);
@@ -1108,6 +1110,19 @@ $(function()
 		else
 			return options.fn(this);
 	});
+	
+
+	/**
+	 * Compares the arguments (value and target) and executes the template based
+	 * on the result (used in contacts typeahead)
+	 */
+	Handlebars.registerHelper('if_less_than', function(value, target, options)
+	{
+		if (target < value)
+			return options.inverse(this);
+		else
+			return options.fn(this);
+	});
 
 	Handlebars.registerHelper('campaigns_heading', function(value, options)
 	{
@@ -1372,6 +1387,7 @@ $(function()
 			// configurable later
 			item.index = i + 1;
 
+			console.log(item);
 			// show the inside of the block
 			buffer += options.fn(item);
 		}
@@ -1633,4 +1649,43 @@ $(function()
 	{
 		return getContactName(contact);
 	});
+	
+	/**
+	 * To check if string is blank
+	 */
+	Handlebars.registerHelper('is_blank', function(value, options){
+		value = value.trim();
+
+		if(value == "")
+			return options.fn(value);
+		else
+			return options.inverse(value);
+	})
+	
+	/**
+	 * Iterate through list of values (not json)
+	 */
+	Handlebars.registerHelper("each_with_index1", function(array, options)
+			{
+				console.log(array);
+				var buffer = "";
+				for ( var i = 0, j = array.length; i < j; i++)
+				{
+					var item = {};
+					item["value"] = array[i];
+
+					console.log(item);
+					// stick an index property onto the item, starting with 1, may make
+					// configurable later
+					item["index"] = i + 1;
+
+					console.log(item);
+					// show the inside of the block
+					buffer += options.fn(item);
+				}
+
+				// return the finished buffer
+				return buffer;
+
+			});
 });
