@@ -102,13 +102,13 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     // Reads custom fields and pushes into properties
     var custom_field_elements =  $('#' + form_id).find('.custom_field');
     var custom_fields_in_template = [];
+   
     $.each(custom_field_elements, function(index, element){
     	var id = $(element).attr('id'), name = $(element).attr('name');
     	custom_fields_in_template.push(name);
-    	
-    	if (isValidField(id)) properties.push(property_JSON(name, form_id+' '+id, 'CUSTOM'));
+    	if (isValidField(id)) properties.push(custom_Property_JSON(name, 'CUSTOM', form_id));
     });
-    
+   
     if(is_person){
     
     	// Stores person's continue editing form template key
@@ -466,28 +466,28 @@ function fill_multi_options(field_element, element) {
 }
 
 /**
- * Creates json object for each field in contact form with name, type and 
+ * Creates json object for each custom field in contact form with name, type and 
  * value as attributes.
  * 
- * @method property_JSON
+ * @method custom_Property_JSON
  * @param name
  * 			name of the field
- * @param id
- * 			id of the field element
+ * @param form_id
+ * 			id of the form
  * @param type
  * 			type of the element
  * @returns property json object
  */
-function property_JSON(name, id, type) {
+function custom_Property_JSON(name, type, form_id) {
     var json = {};
-
-    if (type == undefined) json.type = "SYSTEM";
-    else json.type = type;
 
     // assign value after checking type, its different for checkbox
     json.name = name;
+    json.type = type;
     
-    var elem=$('#' + id), elem_type=elem.attr('type'), elem_value;
+    var elem=$('#' + form_id).find('*[name="' + name + '"]');
+   
+    var elem_type=elem.attr('type'), elem_value;
     
     if(elem_type=='checkbox')elem_value=elem.is(':checked')?'on':'off';
     else elem_value=elem.val();
