@@ -299,7 +299,6 @@
 	<filter-mapping>
 		<filter-name>JSAPIFilter</filter-name>
 		<url-pattern>/core/js/*</url-pattern>
-		<url-pattern>/core/php/*</url-pattern>
 	</filter-mapping>
 	
 	<!-- JSON Filter -->
