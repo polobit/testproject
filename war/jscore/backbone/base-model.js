@@ -81,7 +81,7 @@ var Base_Model_View = Backbone.View
 				 * which includes model object, whenever model is changed render
 				 * is called to update the view.
 				 */
-				this.model.bind("change", this.render, this);
+				this.model.bind("change", this.onChange, this);
 				
 				this.model.bind('error', function(model, response){
 
@@ -135,7 +135,7 @@ var Base_Model_View = Backbone.View
 							 * page, since on change in model i.e., data fetched
 							 * render is called again)
 							 */
-							that.render(true);
+						//	that.render(true);
 						}
 					});
 				}
@@ -397,7 +397,7 @@ var Base_Model_View = Backbone.View
 										// seconds
 										$save_info.show().delay(3000).hide(1);
 									}
-								});
+								}, { silent : true });
 			},
 			/**
 			 * Render function, renders the view object with the model binded
@@ -495,6 +495,14 @@ var Base_Model_View = Backbone.View
 
 				// Returns view object
 				return this;
+			}, 
+			onChange: function()
+			{
+				if(this.options.change == false)
+					return;
+				
+
+				this.render(true);
 			}
 		});
 
