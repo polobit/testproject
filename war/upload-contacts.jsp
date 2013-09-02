@@ -11,7 +11,7 @@
 <head>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Upload Image</title>
+<title>Upload CSV</title>
 <link rel="stylesheet" type="text/css" href="css/bootstrap-<%= UserPrefsUtil.getCurrentUserPrefs().template%>.min.css" />
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
@@ -25,8 +25,6 @@ jQuery.validator.setDefaults({
 </script>
 <script type="text/javascript">
 
-//Get URL
-var url = "https://s3.amazonaws.com/agilecrm/" + unescape(getUrlVars()["key"]) + "?id=" + unescape(getUrlVars()["id"]);
 
 // Get Id
 //Read a page's GET URL variables and return them as an associative array.
@@ -52,7 +50,7 @@ function returnBack(key)
 	if (window.opener)
 	{
 		window.opener.parseCSV(key);
-	   window.close();
+	   	window.close();
 	}
 	return;
 }
