@@ -28,17 +28,24 @@ var TYPEHEAD_TAGS = {};
  * @author Yaswanth
  * 
  */
-function agile_type_ahead(id, el, callback, isSearch,urlParams,noResultText){
+function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, url) {
 
     // Turn off browser default auto complete
     $('#' + id, el).attr("autocomplete", "off");
+    console.log(isSearch + "," + urlParams + ", " + noResultText + ", " + url);
+    console.log(url);
+    if(!url)
+    	url = "core/api/search/"
+    	
 
     var CONTACTS = {};
 
     $('#' + id, el).typeahead({
     	
-        source: function (query, process){
-
+        source: function (query, process) {
+        	
+        	
+        	console.log(url);
         	/* Resets the results before query */
         	CONTACTS = {};
 
@@ -74,7 +81,7 @@ function agile_type_ahead(id, el, callback, isSearch,urlParams,noResultText){
         	
         	if(urlParams && urlParams.length)type_url='&'+urlParams;
         	
-        	$.getJSON("core/api/search/" + query+"?page_size=10"+type_url, function (data){
+        	$.getJSON(url + query+"?page_size=10"+type_url, function (data){
 
         	    /*
         		 * Stores query results to use them in updater and render
@@ -156,6 +163,8 @@ function agile_type_ahead(id, el, callback, isSearch,urlParams,noResultText){
                 		 */
                 			var fullname = getContactName(item) +  "-" +  item.id;
 
+                			console.log(fullname);
+                			
                 		// Sets data-value to name
                 		i = $(that.options.item).attr('data-value', fullname);
 
@@ -185,7 +194,6 @@ function agile_type_ahead(id, el, callback, isSearch,urlParams,noResultText){
          * when search symbol is clicked. 
          */
         updater: function (items) {
-        
             // To verify whether the entity (task, deal etc..) related to same contact twice 
         	var tag_not_exist = true;
 
@@ -212,8 +220,10 @@ function agile_type_ahead(id, el, callback, isSearch,urlParams,noResultText){
                     return this.query; // return text of query to set in input field
                 }
                 
+                console.log(items_temp);
+                
                 // Navigates the item to its detail view
-                isSearch(TYPEHEAD_TAGS[items],items_temp);
+                isSearch(TYPEHEAD_TAGS[items], items_temp);
                 return;
             }
 

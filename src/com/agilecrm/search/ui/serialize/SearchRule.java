@@ -16,50 +16,50 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class SearchRule implements Serializable
 {
-	/**
-	 * Represents the field name
-	 */
-	public String LHS = null;
+    /**
+     * Represents the field name
+     */
+    public String LHS = null;
 
-	public enum RuleCondition
-	{
-		EQUALS, ON, AFTER, BEFORE, BETWEEN, LAST, NEXT, NOTEQUALS
-	}
+    public enum RuleCondition
+    {
+	EQUALS, ON, AFTER, BEFORE, BETWEEN, LAST, NEXT, NOTEQUALS
+    }
 
-	/**
-	 * Condition to be applied on the lhs and rhs fields
-	 */
-	public RuleCondition CONDITION = null;
+    /**
+     * Condition to be applied on the lhs and rhs fields
+     */
+    public RuleCondition CONDITION = null;
 
-	/**
-	 * Represents the field value, used to compare with condition specified on
-	 * lhs
-	 */
-	public String RHS = null;
+    /**
+     * Represents the field value, used to compare with condition specified on
+     * lhs
+     */
+    public String RHS = null;
 
-	/**
-	 * Represents a possible extra condition, used for conditions such as
-	 * "between" condition
-	 */
-	public String RHS_NEW = null;
+    /**
+     * Represents a possible extra condition, used for conditions such as
+     * "between" condition
+     */
+    public String RHS_NEW = null;
 
-	public RuleCondition nested_condition = null;
+    public RuleCondition nested_condition = null;
 
-	public String nested_lhs = null;
+    public String nested_lhs = null;
 
-	public String nested_rhs = null;
+    public String nested_rhs = null;
 
-	/**
-	 * Enum to specify Types of search rule, can be contact, opportunity
-	 */
-	public static enum RuleType
-	{
-		Contact, Opportunity
-	}
+    /**
+     * Enum to specify Types of search rule, can be contact, opportunity
+     */
+    public static enum RuleType
+    {
+	Contact, Opportunity
+    }
 
-	/**
-	 * Specifies the type of search rule i.e., query to be done on contact
-	 * entity or on opportunity entity
-	 */
-	public RuleType ruleType = null;
+    /**
+     * Specifies the type of search rule i.e., query to be done on contact
+     * entity or on opportunity entity
+     */
+    public RuleType ruleType = null;
 }

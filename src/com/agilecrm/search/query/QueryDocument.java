@@ -1,5 +1,6 @@
 package com.agilecrm.search.query;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.search.QueryInterface;
 import com.agilecrm.search.query.util.QueryDocumentUtil;
@@ -20,8 +22,6 @@ import com.google.appengine.api.search.Query;
 import com.google.appengine.api.search.QueryOptions;
 import com.google.appengine.api.search.ScoredDocument;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
 
 /**
  * The <code>QueryDocument</code> builds and process queries based on
@@ -205,16 +205,15 @@ public class QueryDocument<T> implements QueryInterface
 	     */
 	    if (cursor == null)
 
-		options = QueryOptions.newBuilder().setReturningIdsOnly(true).setLimit(page)
+		options = QueryOptions.newBuilder().setFieldsToReturn("type").setLimit(page)
 			.setCursor(Cursor.newBuilder().setPerResult(true).build()).setNumberFoundAccuracy(10000)
 			.build();
 	    else
-	    {
-		options = QueryOptions.newBuilder().setReturningIdsOnly(true).setLimit(page)
+		options = QueryOptions.newBuilder().setFieldsToReturn("type").setLimit(page)
 			.setCursor(Cursor.newBuilder().setPerResult(true).build(cursor)).setNumberFoundAccuracy(10000)
 			.build();
 
-	    }
+	    System.out.println(options);
 
 	    return options;
 	}
@@ -251,7 +250,7 @@ public class QueryDocument<T> implements QueryInterface
 	 * sets of 1000 documents at time
 	 */
 	QueryOptions options = QueryOptions.newBuilder().setLimit(1000)
-		.setCursor(Cursor.newBuilder().setPerResult(true).build()).setReturningIdsOnly(true)
+		.setCursor(Cursor.newBuilder().setPerResult(true).build()).setFieldsToReturn("type")
 		.setNumberFoundAccuracy(10000).build();
 
 	// Builds query on query options
@@ -272,7 +271,7 @@ public class QueryDocument<T> implements QueryInterface
 		    .setCursor(
 			    Cursor.newBuilder().setPerResult(true)
 				    .build(contact_documents.get(999).getCursor().toWebSafeString()))
-		    .setReturningIdsOnly(true).build();
+		    .setFieldsToReturn("type").build();
 
 	    // Build query on query options
 	    query_string = Query.newBuilder().setOptions(options).build(query);
@@ -337,7 +336,6 @@ public class QueryDocument<T> implements QueryInterface
      */
     public List<Long> getDocumentIds(List<SearchRule> rules, Integer count, String cursor)
     {
-
 	String query = QueryDocumentUtil.constructQuery(rules);
 
 	if (StringUtils.isEmpty(query))
@@ -382,7 +380,7 @@ public class QueryDocument<T> implements QueryInterface
      * @param cursor
      * @return
      */
-    public Collection<T> getDatastoreEntities(Map<String, Object> results, Integer page, String cursor)
+    public Collection getDatastoreEntities(Map<String, Object> results, Integer page, String cursor)
     {
 	Collection<ScoredDocument> documents = (Collection<ScoredDocument>) results.get("fetchedDocuments");
 
@@ -396,7 +394,7 @@ public class QueryDocument<T> implements QueryInterface
 
 	// Fetches Entites. It fetches based on the template type on the class
 	// in datastore and returns a list
-	List<T> entities = getDatastoreEntities(documents);
+	List entities = getDatastoreEntities(documents);
 
 	// If list is empty return
 	if (entities.size() == 0)
@@ -406,7 +404,7 @@ public class QueryDocument<T> implements QueryInterface
 	// first entity Cursor object
 	if (cursor == null && page > 0)
 	{
-	    T entity = entities.get(0);
+	    Object entity = entities.get(0);
 	    com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) entity;
 	    agileCursor.count = availableResults.intValue();
 	}
@@ -422,46 +420,54 @@ public class QueryDocument<T> implements QueryInterface
      * @param DocumentList
      * @return
      */
-    public List<T> getDatastoreEntities(Collection<ScoredDocument> DocumentList)
+    public List getDatastoreEntities(Collection<ScoredDocument> DocumentList)
     {
-	List<Long> entity_ids = new ArrayList<Long>();
-
-	List<Key<T>> keys = new ArrayList<Key<T>>();
-
 	String newCursor = null;
+
+	if (clazz != null)
+	    return getGenericEntites(DocumentList);
+
+	Map<Type, List<Long>> typeKeyMap = new HashMap<Type, List<Long>>();
 
 	// Iterate through contact_documents and add document ids(contact ids)
 	// to list
 	for (ScoredDocument doc : DocumentList)
 	{
-	    entity_ids.add(Long.parseLong(doc.getId()));
+	    String type = Type.CONTACT.toString();
+
+	    if (doc.getFieldCount("type") > 0)
+		type = doc.getOnlyField("type").getText();
+
+	    Class entityClazz = QueryInterface.Type.valueOf(type).getClass();
+
+	    if (typeKeyMap.containsKey(Type.valueOf(type)))
+	    {
+		System.out.println();
+		typeKeyMap.get(Type.valueOf(type)).add(Long.parseLong(doc.getId()));
+	    }
+	    else
+	    {
+		List<Long> keys = new ArrayList<Long>();
+		keys.add(Long.parseLong(doc.getId()));
+		typeKeyMap.put(Type.valueOf(type), keys);
+	    }
+
 	    newCursor = doc.getCursor().toWebSafeString();
 	}
 
-	// Add keys
-	for (Long id : entity_ids)
+	List entities = new ArrayList();
+
+	for (Type key : typeKeyMap.keySet())
 	{
-	    try
-	    {
-		// Adds to keys list
-		keys.add(new Key<T>(clazz, id));
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-	    }
+	    List<Long> ids = typeKeyMap.get(key);
+	    entities.addAll(QueryDocumentUtil.getEntities(key, ids));
 	}
 
-	Objectify ofy = ObjectifyService.begin();
-
-	// Fetches entites based on the template type of current class
-	List<T> entities = new ArrayList<T>(ofy.get(clazz, entity_ids).values());
-
-	if (entities.size() == 0)
+	if (entities.isEmpty())
 	    return entities;
 
 	// Gets last entity to set cursor on it
-	T entity = entities.get(entities.size() - 1);
+	Object entity = entities.get(entities.size() - 1);
 
 	if ((entities instanceof com.agilecrm.cursor.Cursor))
 	{
@@ -477,4 +483,38 @@ public class QueryDocument<T> implements QueryInterface
 	return entities;
     }
 
+    /**
+     * Fetches entities based on generic type set on current class.
+     * 
+     * @param DocumentList
+     * @return
+     */
+    public List<T> getGenericEntites(Collection<ScoredDocument> DocumentList)
+    {
+	List<Key<T>> entityKeys = new ArrayList<Key<T>>();
+
+	// Creates keys out of document ids
+	for (ScoredDocument doc : DocumentList)
+	{
+	    Key<T> key = new Key<T>(clazz, Long.parseLong(doc.getId()));
+	    entityKeys.add(key);
+	    System.out.println(key);
+	}
+
+	try
+	{
+	    // Fetches dao field based on class using reflection API
+	    Field o = clazz.getDeclaredField("dao");
+	    ObjectifyGenericDao<T> dao = (ObjectifyGenericDao<T>) o.get(null);
+	    return dao.fetchAllByKeys(entityKeys);
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	return null;
+
+    }
 }

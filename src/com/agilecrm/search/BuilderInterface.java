@@ -1,5 +1,7 @@
 package com.agilecrm.search;
 
+import java.util.List;
+
 import com.google.appengine.api.search.Index;
 
 /**
@@ -14,6 +16,7 @@ import com.google.appengine.api.search.Index;
  */
 public interface BuilderInterface
 {
+
     /**
      * Defines an entity in search, so search is enabled on entity
      * 
@@ -45,4 +48,6 @@ public interface BuilderInterface
      * @return
      */
     public Index getIndex();
+
+    public List getResults(List<Long> ids);
 }

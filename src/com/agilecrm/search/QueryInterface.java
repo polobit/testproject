@@ -3,6 +3,9 @@ package com.agilecrm.search;
 import java.util.Collection;
 import java.util.List;
 
+import com.agilecrm.cases.Case;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.deals.Opportunity;
 import com.agilecrm.search.ui.serialize.SearchRule;
 
 /**
@@ -18,6 +21,24 @@ import com.agilecrm.search.ui.serialize.SearchRule;
  */
 public interface QueryInterface
 {
+    public static enum Type
+    {
+	CONTACT(Contact.class), PERSON(Contact.class), COMPANY(Contact.class), OPPORTUNITY(Opportunity.class), CASES(
+		Case.class);
+
+	private Class clazz;
+
+	Type(Class clazz)
+	{
+	    this.clazz = clazz;
+	}
+
+	public Class getClazz()
+	{
+	    return clazz;
+	}
+    }
+
     /**
      * Declaration of simple search method, takes keyword as an argument and
      * searches based on keyword and returns entities

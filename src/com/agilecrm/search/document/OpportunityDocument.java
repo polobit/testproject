@@ -1,0 +1,91 @@
+package com.agilecrm.search.document;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import com.agilecrm.deals.Opportunity;
+import com.agilecrm.search.BuilderInterface;
+import com.agilecrm.search.QueryInterface.Type;
+import com.agilecrm.search.util.SearchUtil;
+import com.agilecrm.util.StringUtils2;
+import com.google.appengine.api.search.Document;
+import com.google.appengine.api.search.Field;
+import com.google.appengine.api.search.Index;
+import com.googlecode.objectify.Key;
+
+public class OpportunityDocument extends com.agilecrm.search.document.Document implements BuilderInterface
+{
+
+    @Override
+    public void add(Object entity)
+    {
+	Opportunity opportunity = (Opportunity) entity;
+
+	Document.Builder doc = Document.newBuilder();
+
+	Set<String> fields = new HashSet<String>();
+
+	fields.add(opportunity.name);
+	fields.add(opportunity.description);
+
+	doc.addField(Field.newBuilder().setName("search_tokens")
+		.setText(SearchUtil.normalizeSet(StringUtils2.getSearchTokens(fields))));
+
+	doc.addField(Field.newBuilder().setName("type").setText(Type.OPPORTUNITY.toString()));
+
+	// Adds document to Index
+	addToIndex(doc.setId(opportunity.id.toString()).build());
+    }
+
+    @Override
+    public void edit(Object entity)
+    {
+	// TODO Auto-generated method stub
+	add(entity);
+    }
+
+    @Override
+    public void delete(String id)
+    {
+	// TODO Auto-generated method stub
+	index.delete(id);
+    }
+
+    @Override
+    public Index getIndex()
+    {
+	// TODO Auto-generated method stub
+	return index;
+    }
+
+    /**
+     * Adds Document to index
+     * 
+     * @param doc
+     *            {@link Document}
+     */
+    private void addToIndex(Document doc)
+    {
+	// Adds document to index
+	index.put(doc);
+	System.out.println(index.getName());
+	// System.out.println(index.getConsistency());
+	System.out.println(index.getSchema());
+
+    }
+
+    @Override
+    public List getResults(List<Long> ids)
+    {
+	// TODO Auto-generated method stub
+	List<Key<Opportunity>> opportunity_keys = new ArrayList<Key<Opportunity>>();
+	for (Long id : ids)
+	{
+	    opportunity_keys.add(new Key<Opportunity>(Opportunity.class, id));
+	}
+
+	return Opportunity.dao.fetchAllByKeys(opportunity_keys);
+    }
+}

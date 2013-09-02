@@ -9,7 +9,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
@@ -30,7 +32,7 @@ import com.googlecode.objectify.condition.IfDefault;
  * @author Chandan
  */
 @XmlRootElement
-public class Case
+public class Case extends Cursor
 {
     /**
      * Id of entity
@@ -198,6 +200,18 @@ public class Case
      */
     public void save()
     {
+
+	// Enables to build "Document" search on current entity
+	AppengineSearch<Case> search = new AppengineSearch<Case>(Case.class);
+
+	// If contact is new then add it to document else edit document
+	if (id == null)
+	{
+	    search.add(this);
+	    return;
+	}
+	search.edit(this);
+
 	dao.put(this);
     }
 

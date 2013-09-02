@@ -9,7 +9,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.AgileUser;
@@ -46,7 +48,7 @@ import com.googlecode.objectify.condition.IfDefault;
  * 
  */
 @XmlRootElement
-public class Opportunity
+public class Opportunity extends Cursor
 {
     /**
      * Opportunity Id.
@@ -170,7 +172,8 @@ public class Opportunity
      * @param ownerId
      *            - Owner id.
      */
-    public Opportunity(String name, String description, Double expectedValue, String milestone, int probability, String track, String ownerId)
+    public Opportunity(String name, String description, Double expectedValue, String milestone, int probability,
+	    String track, String ownerId)
     {
 	this.name = name;
 	this.description = description;
@@ -322,6 +325,17 @@ public class Opportunity
 
 	dao.put(this);
 
+	// Enables to build "Document" search on current entity
+	AppengineSearch<Opportunity> search = new AppengineSearch<Opportunity>(Opportunity.class);
+
+	// If contact is new then add it to document else edit document
+	if (id == null)
+	{
+	    search.add(this);
+	    return;
+	}
+	search.edit(this);
+
 	// Executes notification for new deal, inorder to get id
 	if (id == null)
 	    DealNotificationPrefsUtil.executeNotificationForNewDeal(this);
@@ -376,7 +390,8 @@ public class Opportunity
      */
     public String toString()
     {
-	return "id: " + id + " relatesto: " + contact_ids + " close date" + close_date + " name: " + name + " description:" + description + " expectedValue: "
-		+ expected_value + " milestone: " + milestone + " probability: " + probability + " Track: " + track + " Owner " + owner_id;
+	return "id: " + id + " relatesto: " + contact_ids + " close date" + close_date + " name: " + name
+		+ " description:" + description + " expectedValue: " + expected_value + " milestone: " + milestone
+		+ " probability: " + probability + " Track: " + track + " Owner " + owner_id;
     }
 }

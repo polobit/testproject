@@ -1,24 +1,59 @@
 <script id="typeahead-contacts-template" type="text/html">
 <div>
-    <div style="display:inline;padding-right:10px;height:auto;">
-        {{#if_equals type "COMPANY"}}
-        <img class="thumbnail pull-left" {{getCompanyImage "40"}} /></img>
-        {{else}}
-        <img class="thumbnail pull-left" src="{{gravatarurl properties 40}}" style="width:40px;height:40px;" /></img>
-        {{/if_equals}}
-    </div>
-    {{#if_equals type "COMPANY"}}
-    <div style="height:50px;display:inline-block;vertical-align:-20px;margin-left:2px;text-overflow: ellipsis; white-space: nowrap; width: 15em; overflow: hidden; vertical-align: top;">
-        <b>{{getPropertyValue properties "name"}}</b><br />
-        {{getPropertyValue properties "email"}}</br>
-        {{getPropertyValue properties "url"}}</br>
-    </div>
-    {{else}}
-    <div style="height:55px;display:inline-block;vertical-align:-20px;margin-left:2px;text-overflow: ellipsis; white-space: nowrap; width: 15em; overflow: hidden; vertical-align: top;">
-        <b>{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</b><br />
-        {{getPropertyValue properties "email"}}</br>
-        {{getPropertyValue properties "company"}}
-    </div>
-    {{/if_equals}}
+	{{#if_equals type "COMPANY"}}
+	<div style="display: inline; padding-right: 10px; height: auto;">
+		<img class="thumbnail pull-left" {{getCompanyImage "40"}} /></img>
+	</div>
+	<div
+		style="height: 50px; display: inline-block; vertical-align: -20px; margin-left: 2px; text-overflow: ellipsis; white-space: nowrap; width: 15em; overflow: hidden; vertical-align: top;">
+		<b>{{getPropertyValue properties "name"}}</b><br />
+		{{getPropertyValue properties "email"}}</br> {{getPropertyValue properties
+		"url"}}</br>
+	</div>
+	{{/if_equals}}
+		{{#if_equals type "PERSON"}}
+	<div style="display: inline; padding-right: 10px; height: auto;">
+		<img class="thumbnail pull-left" src="{{gravatarurl properties 40}}"
+			style="width: 40px; height: 40px;" /></img>
+	</div>
+	<div
+		style="height: 55px; display: inline-block; vertical-align: -20px; margin-left: 2px; text-overflow: ellipsis; white-space: nowrap; width: 15em; overflow: hidden; vertical-align: top;">
+		<b>{{getPropertyValue properties "first_name"}} {{getPropertyValue
+			properties "last_name"}}</b><br /> {{getPropertyValue properties
+		"email"}}</br> {{getPropertyValue properties "company"}}
+	</div>
+	{{/if_equals}} 
+
+<!-- Deals result -->
+
+
+{{#if_equals entity_type "deal"}}
+	<div style="display: inline;margin-top:10px height: auto;">
+		<ul style="display: inline-block; list-style-type: none; margin-left: 0px;">								
+			<li><i class="icon-money icon-3x" id="minus" style="height: 10px; cursor: pointer"></i></li>
+		</ul>
+	</div>
+	<div
+		style="height: 55px; display: inline-block; vertical-align: -20px; margin-left: 2px;margin-top:40px text-overflow: ellipsis; white-space: nowrap; width: 15em; overflow: hidden; vertical-align: top;">
+		 <b>{{name}}</b><br /> {{description}}
+	</div>
+	{{/if_equals}}
+
 </div>
+
+<!-- Case Result -->
+{{#if_equals entity_type "case"}}
+<div style="display: inline;margin-top:10px height: auto;">
+		<ul style="display: inline-block; list-style-type: none; margin-left: 0px;">								
+			<li><i class="icon-money icon-3x" id="minus" style="height: 10px; cursor: pointer"></i></li>
+		</ul>
+	</div>
+	<div
+		style="height: 55px; display: inline-block; vertical-align: -20px; margin-left: 2px;margin-top:40px text-overflow: ellipsis; white-space: nowrap; width: 15em; overflow: hidden; vertical-align: top;">
+		 <b>{{title}}</b><br /> {{description}}
+	</div>
+	{{/if_equals}}
+
+</div>
+
 </script>

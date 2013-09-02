@@ -11,16 +11,12 @@ import org.apache.commons.lang.time.DateUtils;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Tag;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.util.SearchUtil;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Field;
 import com.google.appengine.api.search.Index;
-import com.google.appengine.api.search.IndexSpec;
-import com.google.appengine.api.search.SearchService;
-import com.google.appengine.api.search.SearchServiceFactory;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
 
 /**
  * <code>ContactDocument</code> class represents "Document" created based on app
@@ -53,18 +49,8 @@ import com.googlecode.objectify.ObjectifyService;
  * 
  * @since October 2012
  */
-public class ContactDocument implements BuilderInterface
+public class ContactDocument extends com.agilecrm.search.document.Document implements BuilderInterface
 {
-
-    /**
-     * Initializes/get search service for the app
-     */
-    private SearchService searchService = SearchServiceFactory.getSearchService();
-
-    /**
-     * Index for the contact Document, Required to search on contacts document
-     */
-    private Index index = searchService.getIndex(IndexSpec.newBuilder().setName("contacts"));
 
     /**
      * Describes all the contact field values in the document based on the
@@ -254,12 +240,8 @@ public class ContactDocument implements BuilderInterface
      * @return {@link Collection}
      */
     @SuppressWarnings("rawtypes")
-    public Collection getResults(List doc_ids)
+    public List getResults(List<Long> doc_ids)
     {
-	Objectify ofy = ObjectifyService.begin();
-
-	// Returns contact related to doc_ids
-	return ofy.get(Contact.class, doc_ids).values();
+	return ContactUtil.getContactsBulk(doc_ids);
     }
-
 }
