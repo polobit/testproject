@@ -172,7 +172,7 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     
     // Returns select option with onchange EventHandler
     if(selectEventHandler && selectEventHandler.indexOf("insertSelectedMergeField") === 0)
-    	return "<select style='position:relative;float:right;margin-right:9%;cursor:pointer' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + selectOptionAttributes + "</select>";
+    	return "<select style='position:relative;float:right;cursor:pointer' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + selectOptionAttributes + "</select>";
      
     if(selectEventHandler)
     	return "<select onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "' id='" + uiFieldDefinition.id + "'> " + selectOptionAttributes + "</select>";
