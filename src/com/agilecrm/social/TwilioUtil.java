@@ -85,7 +85,7 @@ public class TwilioUtil
 		 * outgoing numbers
 		 */
 		if (response.isError())
-			throw new Exception("Error in Twilio : " + response.getHttpStatus() + "\n" + response.getResponseText());
+			throwProperException(response);
 
 		JSONObject outgoingCallerIds = XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse")
 				.getJSONObject("OutgoingCallerIds");
@@ -140,7 +140,7 @@ public class TwilioUtil
 		 * response from Twilio
 		 */
 		if (response.isError())
-			throw new Exception("Error in Twilio : " + response.getHttpStatus() + "\n" + response.getResponseText());
+			throwProperException(response);
 
 		return XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse");
 
@@ -177,7 +177,7 @@ public class TwilioUtil
 		 * application SID
 		 */
 		if (response.isError())
-			throw new Exception("Error in Twilio : " + response.getHttpStatus() + "\n" + response.getResponseText());
+			throwProperException(response);
 
 		return new JSONObject(response.getResponseText()).getString("sid");
 
@@ -306,7 +306,7 @@ public class TwilioUtil
 		 * logs
 		 */
 		if (response.isError())
-			throw new Exception("Error in Twilio : " + response.getHttpStatus() + "\n" + response.getResponseText());
+			throwProperException(response);
 
 		JSONArray logs = new JSONArray();
 		try
@@ -352,7 +352,7 @@ public class TwilioUtil
 		 * recordings
 		 */
 		if (response.isError())
-			throw new Exception("Error in Twilio : " + response.getHttpStatus() + "\n" + response.getResponseText());
+			throwProperException(response);
 
 		return XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse").getJSONObject("Recordings");
 	}
@@ -379,7 +379,7 @@ public class TwilioUtil
 		 * logs and return them
 		 */
 		if (response.isError())
-			throw new Exception("Error in Twilio : " + response.getHttpStatus() + "\n" + response.getResponseText());
+			throwProperException(response);
 
 		System.out.println("Twilio calls : " + response.getResponseText());
 		JSONArray logs = new JSONArray();
@@ -430,7 +430,7 @@ public class TwilioUtil
 		 * outgoing numbers
 		 */
 		if (response.isError())
-			throw new Exception("Error in Twilio : " + response.getHttpStatus() + "\n" + response.getResponseText());
+			throwProperException(response);
 
 		JSONObject result = XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse")
 				.getJSONObject("IncomingPhoneNumbers");
@@ -445,4 +445,35 @@ public class TwilioUtil
 
 	}
 
+	/**
+	 * Checks Twilio response and throws proper exception
+	 * 
+	 * @param response
+	 *            {@link TwilioRestResponse}
+	 * @throws Exception
+	 */
+	public static void throwProperException(TwilioRestResponse response) throws Exception
+	{
+		// If account doesn't have balance this error is shown
+		if (response.getHttpStatus() == 401 && response.getResponseText().contains("20006"))
+			throw new Exception("Your Twilio account needs a recharge. Please add credit and refresh.");
+
+		// Proper message is formed out of the given error
+		if (response.getResponseText().startsWith("<?xml "))
+		{
+			try
+			{
+				JSONObject json = XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse")
+						.getJSONObject("RestException");
+				System.out.println(json);
+
+				throw new Exception(json.getString("Code") + " - " + json.getString("Message"));
+			}
+			catch (JSONException e)
+			{
+			}
+		}
+
+		throw new Exception("Error in Twilio : " + response.getHttpStatus() + "\n" + response.getResponseText());
+	}
 }
