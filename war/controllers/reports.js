@@ -91,11 +91,9 @@ var ReportsRouter = Backbone.Router.extend({
 
 		// Gets a report to edit, from reports collection, based on id
 		var report = this.reports.collection.get(id);
-
-		var report_model = new Base_Model_View({ url : 'core/api/reports', model : report, template : "reports-add", window : 'reports',
+		var report_model = new Base_Model_View({ url : 'core/api/reports',change:false, model : report, template : "reports-add", window : 'reports',
 			postRenderCallback : function(el)
 			{
-
 				fillSelect("custom-fields-optgroup", "core/api/custom-fields", undefined, function()
 				{
 
@@ -132,7 +130,7 @@ var ReportsRouter = Backbone.Router.extend({
 						$("#content").html(report_model.el);
 				});
 
-			} });
+			}});
 
 		report_model.render();
 		
