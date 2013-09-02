@@ -2,10 +2,13 @@ package com.agilecrm.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Vector;
 
@@ -158,22 +161,30 @@ public class CSVUtil
      * 
      * Contact is saved only if there is email exists and it is a valid email
      * 
-     * @param csv
+     * @param blobStream
      * @param contact
      * @param ownerId
      * @throws IOException
      */
-    public static void createContactsFromCSV(String csv, Contact contact, String ownerId) throws IOException
+    public static void createContactsFromCSV(InputStream blobStream, Contact contact, String ownerId)
+	    throws IOException
     {
 
-	CSVReader reader = new CSVReader(new StringReader(csv.trim()));
-	// StringWriter s = new StringWriter();
-	// CSVWriter writer = new CSVWriter(new BufferedWriter(s));
-	// writer.
+	// Reads blob data line by line upto first 10 line of file
+	Reader csvStream = new InputStreamReader(blobStream, "UTF-8");
+	System.out.println(contact);
+	CSVReader reader = new CSVReader(csvStream);
 
+	reader.readNext();
 	List<String[]> contacts = reader.readAll();
 
+	if (contacts.isEmpty())
+	    return;
+	contacts.remove(0);
+
 	contact.type = Contact.Type.PERSON;
+	LinkedHashSet<String> tags = new LinkedHashSet<String>();
+	tags.addAll(contact.tags);
 	List<ContactField> properties = contact.properties;
 
 	// Creates domain user key, which is set as a contact owner
@@ -184,12 +195,19 @@ public class CSVUtil
 	// Counters to count number of contacts saved contacts
 	int savedContacts = 0;
 	List<String> emails = new ArrayList<String>();
+
 	for (String[] csvValues : contacts)
 	{
 	    contact.id = null;
 	    contact.created_time = 0l;
 
-	    // Sets owner of contact explicitly. If owner is not set, contact
+	    // Reset tags to avoid previous contact tags getting added to
+	    // current contact
+	    contact.tags.clear();
+	    contact.tagsWithTime.clear();
+
+	    // Sets owner of contact explicitly. If owner is not set,
+	    // contact
 	    // prepersist
 	    // tries to read it from session, and session is not shared with
 	    // backends
@@ -198,25 +216,24 @@ public class CSVUtil
 	    contact.properties = new ArrayList<ContactField>();
 	    for (int j = 0; j < csvValues.length; j++)
 	    {
-		System.out.println(csvValues[j]);
 		if (StringUtils.isBlank(csvValues[j]))
-
 		    continue;
 
 		ContactField field = properties.get(j);
 
-		// To avoid saving ignore field value/ and avoid fields with
-		// empty values
-		if (field == null || field.name == null || StringUtils.isEmpty(field.value))
-		    continue;
-
-		// This is hardcoding but found no way to know how to get tags
+		// This is hardcoding but found no way to know how to get
+		// tags
 		// from the CSV file
 		if (field.name.equals("tags"))
 		{
 		    contact.tags.add(csvValues[j]);
 		    continue;
 		}
+
+		// To avoid saving ignore field value/ and avoid fields with
+		// empty values
+		if (field == null || field.name == null || StringUtils.isEmpty(field.value))
+		    continue;
 
 		field.value = csvValues[j];
 

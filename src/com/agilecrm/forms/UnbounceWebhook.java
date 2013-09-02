@@ -35,7 +35,7 @@ public class UnbounceWebhook extends HttpServlet
 	    List<ContactField> properties = new ArrayList<ContactField>();
 
 	    // Read JSON data
-	    JSONObject obj = new JSONObject(req.getParameter("json.data"));
+	    JSONObject obj = new JSONObject(req.getParameter("data.json"));
 	    System.out.println("Obtained data "+ obj.toString());
 
 	    // Iterate over JSON data to get form fields
