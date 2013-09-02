@@ -21,9 +21,15 @@
 		<!-- Single Sign on -->
 		<Require feature="opensocial-0.9" /> 
 		<Require feature="osapi" />
+		<Require feature="setprefs" />
 
 	</ModulePrefs>
-
+	
+	<UserPref name="agile_user_key" default_value="" datatype="hidden"/>
+	<UserPref name="agile_user_domain" default_value="" datatype="hidden"/>
+	<UserPref name="agile_user_exists" default_value="" datatype="hidden"/>
+	<UserPref name="agile_user_popup" default_value="" datatype="hidden"/>
+	
 	<!-- Define the content type and display location. The settings "html" and 
 		"card" are required for all Gmail contextual gadgets. -->
 	<Content type="html" view="card">
@@ -59,8 +65,7 @@
    	
 	<script src='https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/lib/headjs-min.js'></script>
 	<script src='https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/lib/jquery.min.js'></script>
-	<script src='https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/misc/gmail/agile-gadget-cookie.js'></script>
-	<script src='https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/misc/gmail/agile-gadget-main.js'></script>
+	<script src='https://agile-gadget.appspot.com/dj-js/agile-gadget-main.js'></script>
    	
 	<script id="gadget-template" type="text/html">
 		<div class="well well-small gadget-contact-details-tab" style='margin: 0 0 5px 5px;'>

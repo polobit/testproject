@@ -39,42 +39,12 @@ function agile_init_gadget() {
 		head.js(Lib_Path + 'misc/gmail/agile-gadget-ui.js');
 
 		head.ready(function() {
-			// Set account and generate UI.
-			var Gadget_Cookie = agile_gadget_read_cookie("Agile_Gadget_Cookie");
-			// Convert into object.
-			var User_Data = $.parseJSON(Gadget_Cookie);
 			
-			// Cookie is present, Set account.
-			if (Gadget_Cookie != null && User_Data.api_key) {
-				
-				// Fetch user data from cookie.
-				agile_generate_ui(User_Data.api_key,
-							User_Data.domain);
-				
-			}
-			// Check for cookie, if not present create it then set account.
-			else {
-				/*
-				 * value - user data object, User_Seesion_Cookie - session
-				 * cookie osapi - dummy open social id, Cookie_Data - cookie
-				 * value.
-				 */
-				var value = {};
-				var User_Seesion_Cookie = {};
-				var Cookie_Data = "";
-
-				value.api_key = '51ekokl790t85b11ivhim9ep7i';
-				value.domain = 'localhost';
-
-				// Convert into string.
-				Cookie_Data = JSON.stringify(value);
-				// Create cookie
-				agile_gadget_create_cookie('Agile_Gadget_Cookie', Cookie_Data, 0);
-				// Set account
-				agile_generate_ui(value.api_key, value.domain);
-			}
+			// Fetch user data from cookie.
+			agile_generate_ui("51ekokl790t85b11ivhim9ep7i","localhost");
 		});
 	}
+	
 	// Production version, go for login.
 	else {
 
@@ -97,32 +67,33 @@ function agile_init_gadget() {
  */
 function agile_login() {
 
-	// Cookie
-	var Gadget_Cookie = agile_gadget_read_cookie("Agile_Gadget_Cookie");
-	// Convert into object.
-	var User_Data = $.parseJSON(Gadget_Cookie);
-	var User_Domain = gadgets.util.getUrlParameters().pid;
-	
+	// Get user preferences.
+    var prefs = new gadgets.Prefs();
+    var Agile_User_Exists = prefs.getString("agile_user_exists");
+    
 	// Cookie present, Set account.
-	if (Gadget_Cookie != null && User_Data.api_key && User_Data.mail_domain == User_Domain) {
+	if (Agile_User_Exists == "true") {
+    	var Agile_User_Key = prefs.getString("agile_user_key");
+        var Agile_User_Domain = prefs.getString("agile_user_domain");
 		// Download scripts.
 		agile_download_scripts();
+    	
 		// Download build UI JavaScript file.
 		head.js('https://agile-gadget.appspot.com/dj-js/agile-gadget-ui.js');
 		head.ready(function() {
 			// Set account
-			agile_generate_ui(User_Data.api_key, User_Data.domain);
+			agile_generate_ui(Agile_User_Key, Agile_User_Domain);
 		});
 	}
 	
 	// Cookie present, but new user set domain.
-	else if(Gadget_Cookie != null && !User_Data.user_exists && User_Data.mail_domain == User_Domain) {
-		agile_user_setup_load(User_Data);
+    else if(Agile_User_Exists == "false") {
+    	var Agile_User_Popup = prefs.getString("agile_user_popup");
+		agile_user_setup_load(Agile_User_Popup);
 	}
 	
 	// Check for cookie, if not there send login request.
 	else {
-		agile_gadget_erase_cookie('Agile_Gadget_Cookie');
 		// var url = 'https://googleapps.agilecrm.com/gmail';
 		var url = Lib_Path + 'gmail';
 		console.log("Osapi from " + url);
@@ -148,20 +119,25 @@ function agile_login() {
  */
 function agile_handle_load_response(data) {
 
-	var User_Domain = gadgets.util.getUrlParameters().pid;
-	data.content.mail_domain = User_Domain;
-	// Check user exists, OpenID must have occurred previously.
-	if (data.content.user_exists) {
-		// Create cookie
-		agile_gadget_create_cookie('Agile_Gadget_Cookie', JSON.stringify(data.content), 0);
+	var prefs = new gadgets.Prefs();
+    
+    // Check user exists, OpenID must have occurred previously.
+	if (data.content.user_exists != undefined && data.content.user_exists == true) {
+		data.content.user_exists = "true";
+		// Set user preferences.
+		prefs.set("agile_user_key", data.content.api_key);
+		prefs.set("agile_user_domain", data.content.domain);
+		prefs.set("agile_user_exists", data.content.user_exists);
 		agile_login();
 	}
 
 	// User not exist, go for one time domain registration.
 	else {
-		// Create cookie
-		agile_gadget_create_cookie('Agile_Gadget_Cookie', JSON.stringify(data.content), 0);
-		agile_user_setup_load(data.content);
+		data.content.user_exists = "false";
+		// Set user preferences.
+		prefs.set("agile_user_popup", data.content.popup);
+		prefs.set("agile_user_exists", data.content.user_exists);
+		agile_user_setup_load(prefs.getString("agile_user_popup"));
 	}
 }
 

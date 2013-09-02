@@ -17,10 +17,9 @@
 function agile_user_setup(data) {
 
 	// E-mail from gmail account abc@userdomain.com --> domain = userdomain.com
-	var domain = gadgets.util.getUrlParameters()['parent']
-			.match(/.+\/a\/(.+)\/html/)[1];
+	var domain = gadgets.util.getUrlParameters().pid;
 	// Make URL to set-up user account.
-	var Url_Root = data.popup + "&hd=" + domain;
+	var Url_Root = data + "&hd=" + domain;
 
 	// Create UI to let user enter its desired agile domain name.
 	$('#agile_content').append('<div class="well well-small one-time-setup" style="margin:0 0 5px 5px; display:none;">'
@@ -70,7 +69,11 @@ function agile_gadget_open_popup(url) {
 			 */
 			if (popup.closed) {
 				clearInterval(finished_interval);
-				agile_gadget_erase_cookie('Agile_Gadget_Cookie');
+//				agile_gadget_erase_cookie('Agile_Gadget_Cookie');
+				// Reset user preferences
+			    var prefs = new gadgets.Prefs();
+				prefs.set("agile_user_popup", "");
+				prefs.set("agile_user_exists", "");
 				agile_login();
 			}
 		}, 100);

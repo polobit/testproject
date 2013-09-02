@@ -594,11 +594,10 @@ var ContactsRouter = Backbone.Router
 							head.js(LIB_PATH + 'lib/jquery.multi-select.js', LIB_PATH + 'lib/jquery-ui.min.js', function()
 							{
 
-								$('#multipleSelect', el).multiSelect();
-
 								$("#content").html(el);
+								$('#multipleSelect', el).multiSelect();
+								$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").sortable();
 
-								$('.ms-selection').children('ul').addClass('multiSelect').attr("name", "fields_set").sortable();
 							});
 						}, '<option value="CUSTOM_{{field_label}}">{{field_label}}</option>', true, el);
 
@@ -632,14 +631,13 @@ var ContactsRouter = Backbone.Router
 							head.js(LIB_PATH + 'lib/jquery.multi-select.js', LIB_PATH + 'lib/jquery-ui.min.js', function()
 							{
 
-								$(el)
-								$('#multipleSelect').multiSelect();
+								$('#multipleSelect', el).multiSelect();
 
-								$('.ms-selection').children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id", "fields_set").sortable();
+								$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id", "fields_set").sortable();
 
 								$.each(contact_view_model.toJSON()['fields_set'], function(index, field)
 								{
-									$('#multipleSelect').multiSelect('select', field);
+									$('#multipleSelect', el).multiSelect('select', field);
 								});
 
 							});
