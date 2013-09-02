@@ -2,7 +2,6 @@ package com.agilecrm.widgets;
 
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.json.JSONObject;
@@ -11,9 +10,9 @@ import com.agilecrm.core.api.widgets.WidgetsAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.scribe.ScribeServlet;
 import com.agilecrm.user.AgileUser;
-import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.widgets.util.DefaultWidgets;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.condition.IfDefault;
@@ -72,6 +71,10 @@ public class Widget
 	/** Mini logo URL of the widget to show it in the widget in contact page */
 	public String mini_logo_url = null;
 
+	/** script is saved for custom widgets **/
+	@NotSaved(IfDefault.class)
+	public String script;
+
 	/**
 	 * Contains type of widgets to categorize the widgets based on their type
 	 */
@@ -115,17 +118,14 @@ public class Widget
 	 * are saved with the prefs provided by user
 	 */
 	@Parent
+	@Indexed
 	private Key<AgileUser> user;
 
 	/**
 	 * Stores {@link Boolean} info whether the widget is added
 	 */
-	@NotSaved(IfDefault.class)
-	public boolean is_added = false;
-
 	@NotSaved
-	@XmlElement(name = "custom_script")
-	public String script;
+	public boolean is_added = false;
 
 	// Default constructor
 	Widget()
@@ -254,15 +254,6 @@ public class Widget
 		return null;
 	}
 
-	/**
-	 * For custom widgets, we fetch the script using HTTP connections from the
-	 * given url for it and store it as a string in script field.
-	 * 
-	 * <p>
-	 * This is done to overcome cross domain issue if we are fetching the script
-	 * directly from URL in the client side
-	 * </p>
-	 */
 	@PostLoad
 	private void postLoad()
 	{
@@ -275,11 +266,6 @@ public class Widget
 		if (this.widget_type == null)
 			DefaultWidgets.checkAndFixWidgetType(this);
 
-		// If widget type is custom, read the script
-		if (WidgetType.CUSTOM.equals(this.widget_type))
-			this.script = HTTPUtil.accessURLToReadScript(this.url);
-
-		System.out.println(this);
 	}
 
 	/*

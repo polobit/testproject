@@ -1,5 +1,6 @@
 package com.agilecrm.widgets.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -25,16 +26,18 @@ public class WidgetUtil
 	 */
 	public static List<Widget> getAvailableWidgets()
 	{
-		// Fetch all widgets(default and custom) added by current user
-		List<Widget> currentWidgets = getWidgetsForCurrentUser();
+		List<Widget> allWidgets = new ArrayList<Widget>();
+
+		// Fetch all custom widgets and add it to list
+		allWidgets.addAll(CustomWidgets.getAllCustomWidgets());
 
 		/*
-		 * check in current widgets whether all default widgets are present and
-		 * add them if not present because we need to show all the available
-		 * widgets that Agile provide
+		 * Creates and fetches all default widgets (not from database) add
+		 * default widgets to all widgets
 		 */
-		List<Widget> allWidgets = DefaultWidgets.checkAndAddDefaultWidgets(currentWidgets);
+		allWidgets.addAll(DefaultWidgets.getAvailableDefaultWidgets());
 
+		setIsAddedStatus(allWidgets);
 		System.out.println("In get available widgets");
 		System.out.println(allWidgets);
 
@@ -42,37 +45,30 @@ public class WidgetUtil
 	}
 
 	/**
+	 * Iterates through all the widgets. If widget is present in database,
+	 * returns its is_added status as added
+	 * 
+	 * @param widgets
+	 *            {@link List} of {@link Widget}
+	 * @return {@link List} of {@link Widget}
+	 */
+	public static List<Widget> setIsAddedStatus(List<Widget> widgets)
+	{
+		List<Widget> currentWidgets = getAddedWidgetsForCurrentUser();
+
+		for (Widget widget : widgets)
+			for (Widget currentWidget : currentWidgets)
+				if (currentWidget.name.equals(widget.name))
+					widget.is_added = true;
+
+		return widgets;
+	}
+
+	/**
 	 * Fetches all {@link Widget}s for current {@link AgileUser}
 	 * 
 	 * <p>
 	 * Default widgets - which are added and Custom widgets - which are added
-	 * and also not added. Saves is_added field as true for default widgets
-	 * which are added prior to development of custom widgets as that field is
-	 * later added
-	 * </p>
-	 * 
-	 * @return {@link List} of {@link Widget}s
-	 */
-	public static List<Widget> getWidgetsForCurrentUser()
-	{
-		Objectify ofy = ObjectifyService.begin();
-
-		// Creates Current AgileUser key
-		Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);
-
-		/*
-		 * Fetches list of widgets related to AgileUser key and adds is_added
-		 * field as true to default widgets if not present
-		 */
-		return DefaultWidgets.saveIsAddedStatus(ofy.query(Widget.class).ancestor(userKey).list());
-	}
-
-	/**
-	 * Fetches all {@link Widget}s for current {@link AgileUser} which are added
-	 * 
-	 * <p>
-	 * Custom widgets - which are added and also not added are fetched and are
-	 * filtered to retrieve which are added.
 	 * </p>
 	 * 
 	 * @return {@link List} of {@link Widget}s
@@ -85,10 +81,10 @@ public class WidgetUtil
 		Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);
 
 		/*
-		 * Fetches list of widgets related to AgileUser key and filters custom
-		 * widgets which are added
+		 * Fetches list of widgets related to AgileUser key and adds is_added
+		 * field as true to default widgets if not present
 		 */
-		return CustomWidgets.skipNotAddedCustomWidgets(ofy.query(Widget.class).ancestor(userKey).list());
+		return ofy.query(Widget.class).ancestor(userKey).list();
 	}
 
 	/**
@@ -168,7 +164,24 @@ public class WidgetUtil
 		}
 	}
 
-	public static boolean checkWidgetName(String name)
+	/**
+	 * Removes widget for the Agile users, based on {@link Widget} name
+	 * 
+	 * @param name
+	 *            name of the {@link Widget}
+	 */
+	public static void removeWidgetForAllUsers(String name)
+	{
+		dao.deleteKeys(dao.listKeysByProperty("name", name));
+	}
+
+	/**
+	 * Checks if widget name is alreday in added widgets
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public static boolean checkIfWidgetNameExists(String name)
 	{
 		if (name == null)
 			return false;
@@ -177,9 +190,8 @@ public class WidgetUtil
 			if (defaultWidget.name.equals(name))
 				return true;
 
-		for (Widget currentWidget : CustomWidgets.getCustomWidgetsForCurrentUser())
-			if (currentWidget.name.equals(name))
-				return true;
+		if (CustomWidgets.getCount("name", name) != 0)
+			return true;
 
 		return false;
 	}

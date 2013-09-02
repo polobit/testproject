@@ -168,6 +168,9 @@ function set_up_widgets(el, widgets_el)
 		var id = model.get("id");
 		var url = model.get("url");
 
+		console.log(model.get('name'));
+		console.log(model);
+		console.log($('#' + model.get('name'), el));
 		/*
 		 * Set the data element in the div so that we can retrieve this in get
 		 * plugin preferences
@@ -187,16 +190,49 @@ function set_up_widgets(el, widgets_el)
 		 */
 		if (model.get("widget_type") == "CUSTOM")
 		{
-			var myscript = document.createElement('script');
-			myscript.innerHTML = model.get("script");
-			myscript.type = "text/javascript";
-			document.body.appendChild(myscript);
+			console.log('in widget type custom');
+			console.log(model.get('name'));
+			console.log(model.get('script'));
+			console.log($('#' + model.get('name'), widgets_el));
+
+			if (model.get('script'))
+				$('#' + model.get('name'), widgets_el).html(model.get('script'));
+			else
+				getScript(model, function(data)
+				{
+					console.log(data);
+					$('#' + model.get('name'), widgets_el).html(data);
+				});
+
+			console.log($('#' + model.get('name'), widgets_el));
 		}
 
 	}, this);
 
 	enableWidgetSoring(widgets_el);
 
+}
+
+function getScript(model, callback)
+{
+	// Gets contact id, to save social results of a particular id
+	var contact_id = agile_crm_get_contact()['id'];
+
+	console.log("in get script");
+
+	$.post("core/api/widgets/script/" + contact_id + "/" + model.get("name"), function(data)
+	{
+		console.log("script post");
+
+		// If defined, execute the callback function
+		if (callback && typeof (callback) === "function")
+			callback(data);
+	}).error(function(data)
+	{
+		console.log('in error');
+		console.log(data);
+		console.log(data.responseText);
+	});
 }
 
 /**

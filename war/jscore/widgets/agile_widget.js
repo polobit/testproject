@@ -212,7 +212,7 @@ function agile_crm_update_contact_properties(propertiesArray, callback)
 	}
 
 	// If property is new then new field is created
-	contact_model.set({ "properties" : properties });
+	contact_model.set({ "properties" : properties }, { silent : true });
 	contact_model.url = "core/api/contacts";
 
 	// Save model
@@ -269,11 +269,15 @@ function agile_crm_add_note(subject, description)
  */
 function agile_crm_get_plugin(pluginName)
 {
+	console.log('plugin name ' + pluginName);
 	/*
 	 * Retrieves plugin data from the model data which is set to plugin block
 	 * while loading plugins
 	 */
+	console.log($('#' + pluginName));
 	var model_data = $('#' + pluginName).data('model');
+	
+	console.log(model_data);
 
 	return model_data.toJSON();
 }

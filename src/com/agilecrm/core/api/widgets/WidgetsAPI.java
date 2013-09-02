@@ -12,9 +12,15 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.codehaus.jackson.map.ObjectMapper;
+
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.util.HTTPUtil;
+import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.Widget.WidgetType;
+import com.agilecrm.widgets.util.CustomWidgets;
 import com.agilecrm.widgets.util.WidgetUtil;
 
 /**
@@ -70,23 +76,40 @@ public class WidgetsAPI
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Widget createWidget(Widget widget)
 	{
+		System.out.println("In widgets api create");
+
 		if (widget == null)
 			return null;
 
-		System.out.println("In widgets api create");
-
-		/*
-		 * For custom widgets, we fetch the script using HTTP connections from
-		 * the given url for it and store it as a string in script field. If
-		 * widget type is custom, read the script
-		 */
-		if (WidgetType.CUSTOM.equals(widget.widget_type))
-			widget.script = HTTPUtil.accessURLToReadScript(widget.url);
-
-		System.out.println(widget);
-
 		widget.save();
 		return widget;
+	}
+
+	/**
+	 * Saves a widget, can also save custom widget by specifying script url to
+	 * load and preferences to connect.
+	 * 
+	 * @param customWidget
+	 *            {@link CustomWidget}
+	 * @return {@link CustomWidget}
+	 */
+	@Path("/custom")
+	@POST
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Widget createCustomWidget(CustomWidget customWidget)
+	{
+		System.out.println("In custom widgets api create");
+		if (customWidget == null)
+			return null;
+
+		if (WidgetUtil.checkIfWidgetNameExists(customWidget.name))
+			return null;
+
+		System.out.println(customWidget);
+
+		customWidget.save();
+		return customWidget;
 	}
 
 	/**
@@ -125,24 +148,13 @@ public class WidgetsAPI
 		if (widget == null)
 			return;
 
-		/*
-		 * For custom widgets, we doesn't remove it from database and just make
-		 * is added button as false, as we get the information from database
-		 * every time unlike default widgets
-		 */
-		if (widget != null && widget.widget_type.equals(WidgetType.CUSTOM))
-		{
-			widget.is_added = false;
-			widget.save();
-			return;
-		}
-
 		// default widgets are removed from database on deletion
 		widget.delete();
 	}
 
 	/**
-	 * Removes a custom widget based on widget name from database
+	 * Removes a custom widget based on widget name from database from
+	 * {@link CustomWidget} database and deletes it for all agile users
 	 * 
 	 * @param widget_name
 	 *            {@link String}
@@ -150,18 +162,22 @@ public class WidgetsAPI
 	@Path("/remove/{widget_name}")
 	@DELETE
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public void removeWidget(@PathParam("widget_name") String widget_name)
+	public void removeCustomWidget(@PathParam("widget_name") String widget_name)
 	{
 		// Deletes widget based on name
-		Widget widget = WidgetUtil.getWidget(widget_name);
+		CustomWidget customWidget = CustomWidgets.getCustomWidget(widget_name);
 
-		if (widget == null)
+		if (customWidget == null)
 			return;
 
 		// check if widget is custom widget and delete it
-		if (widget.widget_type.equals(WidgetType.CUSTOM))
+		if (WidgetType.CUSTOM == customWidget.widget_type)
 		{
-			widget.delete();
+			// removes the widget for all agile users
+			WidgetUtil.removeWidgetForAllUsers(widget_name);
+
+			// removes it from custom widgets database
+			customWidget.delete();
 		}
 	}
 
@@ -191,4 +207,37 @@ public class WidgetsAPI
 		}
 	}
 
+	/**
+	 * Connects to the remote object based on the given url and reads the
+	 * response to return
+	 * 
+	 * @param url
+	 * @return response of remote object
+	 */
+	@Path("script/{contact-id}/{widget_name}")
+	@POST
+	public static String accessURLToReadScript(@PathParam("contact-id") Long contactId,
+			@PathParam("widget_name") String widget_name)
+	{
+		// Get contact and widget based on their id
+		Contact contact = ContactUtil.getContact(contactId);
+		System.out.println("In accessURLToReadScript");
+
+		// Deletes widget based on name
+		CustomWidget customWidget = CustomWidgets.getCustomWidget(widget_name);
+		String data = "";
+
+		try
+		{
+			data = new ObjectMapper().writeValueAsString(contact);
+			System.out.println(data);
+		}
+		catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return HTTPUtil.accessURLToReadScript(customWidget.url, "POST", data);
+	}
 }

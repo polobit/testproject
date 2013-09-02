@@ -84,6 +84,7 @@ $(function()
 	$('.add-widget').live('click', function(e)
 	{
 
+		console.log($(this));
 		/*
 		 * We make add button on a widget disabled on click of it. This is done
 		 * to avoid continuous click in a short time, like double click on add
@@ -97,6 +98,9 @@ $(function()
 
 		// Reads the name of the widget to be added
 		var widget_name = $(this).attr('widget-name');
+
+		console.log('In add widget');
+		console.log(widget_name);
 
 		if (Catalog_Widgets_View == null)
 			return;
@@ -113,11 +117,10 @@ $(function()
 		 */
 		var widgetModel = new Backbone.Model();
 
+		console.log(widgetModel);
+
 		// URL to connect with widgets
 		widgetModel.url = '/core/api/widgets';
-
-		// is added is set true to show delete button
-		models[0].set('is_added', true);
 
 		widgetModel.save(models[0].toJSON(), { success : function(data)
 		{
@@ -227,18 +230,44 @@ function update_collection(widget_name)
 function build_custom_widget_form(el)
 {
 	var divClone;
-	
+
 	$('#add-custom-widget').die().live(
 			'click',
 			function(e)
 			{
 				divClone = $("#custom-widget").clone();
-				var widget_custom_view = new Base_Model_View({ url : "/core/api/widgets", template : "add-custom-widget", isNew : false,
+				var widget_custom_view = new Base_Model_View({ url : "/core/api/widgets/custom", template : "add-custom-widget", isNew : true,
 					postRenderCallback : function(el)
 					{
+						console.log('In post render callback');
 						console.log(el);
+
+						$('#script_type').die().live('change', function(e)
+						{
+							var script_type = $('#script_type').val();
+							if (script_type == "script")
+							{
+								$('#script').show();
+								$('#url').hide();
+								return;
+							}
+
+							if (script_type == "url")
+							{
+								$('#script').hide();
+								$('#url').show();
+							}
+						});
+
 					}, saveCallback : function(model)
 					{
+						console.log('In save callback');
+
+						console.log(model);
+
+						if (model == null)
+							alert("A widget with this name exists already. Please choose a different name");
+
 						Catalog_Widgets_View.collection.add(model);
 						$("#custom-widget").replaceWith(divClone);
 					} });
@@ -247,7 +276,9 @@ function build_custom_widget_form(el)
 
 				$('#cancel_custom_widget').die().live('click', function(e)
 				{
-					$("#custom-widget").replaceWith(divClone); // Restore element back to original
+					$("#custom-widget").replaceWith(divClone); // Restore
+					// element back
+					// to original
 				});
 			});
 }

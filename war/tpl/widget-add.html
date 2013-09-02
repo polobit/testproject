@@ -88,7 +88,15 @@
 				<input type="hidden" id="widget_type" class="input-medium required" style="width:90%" value="CUSTOM" name="widget_type"></input>
 				<div class="control-group" style="margin-bottom:0px"><div class="controls"><input type="text" id="name" class="input-medium required widget_input_box" style="width:90%" placeholder="Widget name" value="" name="name"></input></div></div>
 				<div class="control-group" style="margin-bottom:0px"><div class="controls"><input type="text" id="description" class="input-medium required widget_input_box" style="width:90%" placeholder="Description" value="" name="description"></input></div></div>
-				<div class="control-group" style="margin-bottom:0px"><div class="controls"><input type="url" id="url" class="input-medium required widget_input_box" style="width:90%" placeholder="Script URL" value="" name="url"></input></div></div>			
+				<div class="control-group" style="margin-bottom:0px"><div class="controls">
+				<select name="script_type" id="script_type" class="required" style="width:50%" >
+					<option value="script">SCRIPT</option> 
+					<option value="url">URL</option> 
+				</select></div></div>
+				<div class="control-group" style="margin-bottom:0px"><div class="controls">
+					<textarea rows="4" class="required" name="script" id="script" value="" style="" placeholder="Enter your script here"></textarea>
+					<input type="url" id="url" class="input-medium required widget_input_box" style="width:90%;display:none;" placeholder="Script URL" value="" name="url"></input>
+				</div></div>
 				<div class="control-group" style="margin-bottom:0px"><div class="controls"><input type="url" id="logo_url" class="input-medium required widget_input_box" style="width:90%" placeholder="Logo URL" value="" name="logo_url"></input></div></div>
 				<div class="control-group" style="margin-bottom:0px"><div class="controls"><input type="url" id="mini_logo_url" class="input-medium required widget_input_box" style="width:90%" placeholder="Mini logo URL" value="" name="mini_logo_url"></input></div></div>
 				<div class="form-actions" style="padding: 15px 20px 0px;margin-top: 14px;margin-bottom: 0px;">

@@ -1,16 +1,19 @@
 package com.agilecrm.widgets.util;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.Widget.WidgetType;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 
+/**
+ * <code>CustomWidgets</code> class provides static functions to fetch custom
+ * widgets saved in agile account
+ */
 public class CustomWidgets
 {
 
@@ -31,38 +34,37 @@ public class CustomWidgets
 	}
 
 	/**
-	 * Skips the custom widgets which are not added by current user from all
-	 * widgets for the current user
+	 * Fetch all custom widgets in admin account
+	 */
+	public static List<? extends Widget> getAllCustomWidgets()
+	{
+		return CustomWidget.dao.fetchAll();
+	}
+
+	/**
+	 * Fetches custom widget by its name
 	 * 
-	 * @param currentWidgets
-	 *            Current added widgets by current {@link AgileUser}
+	 * @param name
+	 *            {@link String}. Name of the widget
+	 * @return {@link CustomWidget}
+	 */
+	public static CustomWidget getCustomWidget(String name)
+	{
+		return CustomWidget.dao.getByProperty("name", name);
+	}
+
+	/**
+	 * Returns number of custom widgets present in db querying on the given
+	 * property name and its value
+	 * 
+	 * @param propertyName
+	 *            {@link String} name of the {@link CustomWidget} property
+	 * @param propertyValue
+	 *            {@link Object} value of the {@link CustomWidget} property
 	 * @return
 	 */
-	public static List<Widget> skipNotAddedCustomWidgets(List<Widget> currentWidgets)
+	public static int getCount(String propertyName, Object propertyValue)
 	{
-		if (currentWidgets == null)
-			return new ArrayList<Widget>();
-
-		System.out.println("In skip not added contacts");
-
-		Iterator<Widget> iterator = currentWidgets.iterator();
-
-		/*
-		 * From all widgets added by current user, check for custom widget and
-		 * remove the custom widget from list if it is not added
-		 */
-		while (iterator.hasNext())
-		{
-			Widget currentWidget = iterator.next();
-			if (WidgetType.CUSTOM.equals(currentWidget.widget_type))
-			{
-				// If is_added is false, remove it from list
-				if (!currentWidget.is_added)
-					iterator.remove();
-			}
-		}
-		System.out.println(currentWidgets);
-
-		return currentWidgets;
+		return CustomWidget.dao.getCountByProperty(propertyName, propertyValue);
 	}
 }
