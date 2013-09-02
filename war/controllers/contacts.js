@@ -160,11 +160,6 @@ var ContactsRouter = Backbone.Router
 						this.customView(readCookie("contact_view"), undefined, "core/api/filters/query/" + readCookie('contact_filter'), tag_id);
 						return;
 					}
-					/*
-					 * if(readCookie('company_filter')) {
-					 * this.customView(readCookie("contact_view"), undefined,
-					 * "core/api/contacts/companies") return; }
-					 */
 
 					// Else call customView function fetches results from
 					// default url : "core/api/contacts"
@@ -177,10 +172,10 @@ var ContactsRouter = Backbone.Router
 				/**
 				 * If collection is already defined and contacts are fetched the
 				 * show results instead of initializing collection again
-				 * 
-				 * Hard Reload when a filter is active, it maybe that filter conditions were modified.
+
+
 				 */
-				if (CONTACTS_HARD_RELOAD == true || readCookie('contact_filter'))
+				if (CONTACTS_HARD_RELOAD == true)
 				{
 					this.contactsListView = undefined;
 					CONTACTS_HARD_RELOAD = false;
@@ -650,7 +645,17 @@ var ContactsRouter = Backbone.Router
 							});
 
 						}, '<option value="CUSTOM_{{field_label}}">{{field_label}}</option>', true, el);
-					} });
+					},
+					saveCallback:function(data)
+					{
+						var viewValue=readCookie('contact_view');
+						if(viewValue && viewValue==data.id)
+						{
+							CONTACTS_HARD_RELOAD=true;
+							App_Contacts.contactViewModel=undefined;
+						}
+					}});
+
 				$("#content").html(contactView.render().el);
 
 			},
@@ -693,7 +698,8 @@ var ContactsRouter = Backbone.Router
 				var contacts_filter = new Base_Model_View({ url : 'core/api/filters', template : "filter-contacts", isNew : "true", window : "contact-filters",
 					postRenderCallback : function(el)
 					{
-						
+					
+
 						head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 						{
 							chainFilters(el);
@@ -722,12 +728,20 @@ var ContactsRouter = Backbone.Router
 						{
 							chainFilters(el);
 							deserializeChainedSelect($(el).find('form'), contact_filter.toJSON().rules);
+							scramble_input_names($(el).find('#filter-settings'));
 							$("#content").html(el);
 						})
-					} });
+					},
+					saveCallback:function(data)
+					{
+						var filterValue=readCookie('contact_filter');
+						if(filterValue && filterValue==data.id)CONTACTS_HARD_RELOAD=true;
+					}});
+
 
 				$("#content").html(LOADING_HTML);
 				ContactFilter.render();
+
 			},
 
 			/**
@@ -814,6 +828,7 @@ var ContactsRouter = Backbone.Router
 				{ 
 					this.contact_custom_view = undefined;
 					CONTACTS_HARD_RELOAD = false;
+					view_data = undefined;
 				}
 
 				// If id is defined get the respective custom view object
@@ -851,6 +866,27 @@ var ContactsRouter = Backbone.Router
 
 				}
 
+				// If defined
+				if(this.contact_custom_view)
+				{
+					//App_Contacts.contactsListView=this.contact_custom_view;
+					
+					var el=App_Contacts.contactsListView.render(true).el;
+					$('#content').html(el);
+					
+					if (readCookie('company_filter'))
+						$('#contact-heading', el).text('Companies');
+
+					setup_tags(el);
+					pieTags(el);
+					setupViews(el, view_data.name);
+					setupContactFilterList(el, tag_id);
+
+					$(".active").removeClass("active"); // Activate Contacts Navbar tab
+					$("#contactsmenu").addClass("active");
+					return;
+				}
+				
 				this.contact_custom_view = new Base_Collection_View({ 
 					url : url, 
 					restKey : "contact", 

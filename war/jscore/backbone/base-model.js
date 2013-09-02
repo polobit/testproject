@@ -318,30 +318,31 @@ var Base_Model_View = Backbone.View
 									 * specified in the options set when
 									 * creating an view
 									 */
-									success : function(model, response) {
-										
+									success : function(model, response) 
+									{	
 										// Removes disabled attribute of save button
 										enable_save_button($form.find('.save'));
 										
+										if (saveCallback && typeof (saveCallback) === "function") {
+											console.log(model)
+											// execute the callback, passing parameters as necessary
+											saveCallback(model);
+										}
 										// Reload the current page
 										if (reload)
 											location.reload(true);
-										else if (window) {
+										else if (window) 
+										{
 											/*
 											 * If window option is 'back'
 											 * navigate to previews page
 											 */
-											if (window == 'back') {
-												history.back(-1);
-											}
+											if (window == 'back') history.back(-1);
+											
 											// Else navigate to page set in
 											// window attribute
-											else {
-												Backbone.history.navigate(
-														window, {
-															trigger : true
-														});
-											}
+											else Backbone.history.navigate( window, { trigger : true });
+											
 
 											// Reset each element
 											$form.each(function() {
@@ -349,18 +350,8 @@ var Base_Model_View = Backbone.View
 											});
 
 											// Hide modal if enabled
-											if (modal) {
-												$(modal).modal('hide');
-											}
+											if (modal) $(modal).modal('hide');
 										}
-										else if(saveCallback)
-											{
-												if (saveCallback && typeof (saveCallback) === "function") {
-													console.log(model)
-													// execute the callback, passing parameters as necessary
-													saveCallback(model);
-												}
-											}
 										else {
 											/* Hide loading on error
 											if($save_info)
@@ -514,6 +505,8 @@ var Base_Model_View = Backbone.View
  * Also set min width to current width so button can't collapse, but can expand if necessary
  * 
  * Enable by reverse of the above
+ * 
+ * @param elem - jQuery element corresponding to the button.
  */
 function disable_save_button(elem)
 {

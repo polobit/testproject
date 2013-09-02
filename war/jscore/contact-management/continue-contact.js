@@ -296,8 +296,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         	// Removes disabled attribute of save button
         	enable_save_button($(saveBtn));
         	
-
-            add_contact_to_view(App_Contacts.contactsListView,data);
+            add_contact_to_view(App_Contacts.contactsListView,data,obj.id);
 			
         	// Adds the tags to tags collection 
         	if (tags != undefined && tags.length != 0)
@@ -563,8 +562,9 @@ $(function () {
  * Adds conatct to view, takes care of if its a COMPANY or PERSON.
  * @param appView - view whose collection to update
  * @param model - the model contact to add
+ * @param isUpdate - if undefined, implies that its new one, else an update
  */
-function add_contact_to_view(appView,model)
+function add_contact_to_view(appView,model,isUpdate)
 {
 	if(!appView)return;
 	
@@ -574,7 +574,8 @@ function add_contact_to_view(appView,model)
 			appView.collection.get(model.id).set(model);
 		else if(readCookie('company_filter')) // add model only if its in company view
 			appView.collection.add(model);
-		else CONTACTS_HARD_RELOAD = true; // reload contacts next time, because we may have edited Company, so reflect in Contact
+		else if(isUpdate)
+			CONTACTS_HARD_RELOAD = true; // reload contacts next time, because we may have updated Company, so reflect in Contact
 	}	
 	else
 	{
