@@ -33,17 +33,14 @@
 <td>
 	<div style="height:auto;display:inline-block;">
 		{{#each contacts}}
-			{{#if_less_than this.contacts.length "3"}}
-        		{{#if_contact_type "PERSON"}}
-        			<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px;  "  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
-        		{{/if_contact_type}}
-				{{#if_contact_type "COMPANY"}}
-        			<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
-        		{{/if_contact_type}}
-			{{/if_less_than}}
+        	{{#if_contact_type "PERSON"}}
+        		<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px;  "  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+        	{{/if_contact_type}}
+			{{#if_contact_type "COMPANY"}}
+        		<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+        	{{/if_contact_type}}
        {{/each}}
-		{{#if_greater this.contacts.length "3"}}<span>...</span>{{/if_greater}}
-	</div>
+	</div>{{#if_greater this.contacts.length "3"}}<span>...</span>{{/if_greater}}
 </td>
 <td><div style="height:auto;">{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}}{{numberWithCommas expected_value}}</div></td>
 <td><div style="height:auto;">{{milestone}}<br />({{probability}}%) </div></td>
