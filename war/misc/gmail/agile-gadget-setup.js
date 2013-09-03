@@ -30,10 +30,9 @@ function agile_user_setup(data) {
 			+'</div>');
 
 	// Hide Loading Icon
-	$('#loading').hide("fast", function(){
-		$('.one-time-setup').show("medium", function(){
+	$('#loading').hide();
+	$('.one-time-setup').show(function(){
 			gadgets.window.adjustHeight();
-		});
 	});
 }
 
@@ -44,7 +43,7 @@ function agile_user_setup(data) {
  * @param {String}
  *            url URL for domain registration.
  */
-function agile_gadget_open_popup(url) {
+function agile_gadget_open_popup(Agile_Url) {
 
 	var User_Domain = $('#user_domain');
 	// Text box validation for empty box.
@@ -55,27 +54,70 @@ function agile_gadget_open_popup(url) {
 	// Open pop-up.
 	else {
 
-		url += '&domain=' + User_Domain.val();
+		Agile_Url += '&domain=' + User_Domain.val();
 		User_Domain.val("");
-		console.log(url);
-
-		var popup = window.open(url, 'OpenID', 'height=400,width=400');
-		// Check every 100 ms if the popup is closed.
-		finished_interval = setInterval(function() {
-			/*
-			 * If the popup is closed, we've either finished OpenID, or the user
-			 * closed it. Verify with the server in case the user closed the
-			 * popup.
-			 */
-			if (popup.closed) {
-				clearInterval(finished_interval);
-//				agile_gadget_erase_cookie('Agile_Gadget_Cookie');
+		console.log(Agile_Url);
+		
+		// Hide Loading Icon
+		$('.one-time-setup').hide();
+		$('#loading').show(function(){
+			gadgets.window.adjustHeight();
+		});
+		
+		// Send cross domain request.
+		agile_json(Agile_Url, function(response) {
+			
+			var data = response.content;
+			// Associate if user exists.
+			if(data.status != false) {
+				
+				var popup = window.open(Agile_Url, 'OpenID', 'height=400,width=400');
+				// Check every 100 ms if the popup is closed.
+				finished_interval = setInterval(function() {
+					/*
+					 * If the popup is closed, we've either finished OpenID, or the user
+					 * closed it. Verify with the server in case the user closed the
+					 * popup.
+					 */
+					if (popup.closed) {
+						clearInterval(finished_interval);
+						$("#loading").hide();
+						// Reset user preferences
+					    var prefs = new gadgets.Prefs();
+						prefs.set("agile_user_popup", "");
+						prefs.set("agile_user_exists", "");
+						agile_login();
+					}
+				}, 100);
+			}
+			
+			// User does not exists.
+			else {
+				if(data.error_session == true){
+					// Create UI for session error message.
+					$('#agile_content').append('<div class="well well-small resp-status-false" style="margin:0 0 5px 5px; display:none;">'
+							+'<p id="resp_msg">"'+data.error_msg+'"</p>'
+							+'</div>');
+				}
+				
+				else{
+					// Create UI to let user enter its desired agile domain name.
+					$('#agile_content').append('<div class="well well-small resp-status-false" style="margin:0 0 5px 5px; display:none;">'
+							+'<p id="resp_msg">"'+data.error_msg+'"</p>'
+							+'<a class="btn btn-primary" href="https://my.agilecrm.com/choose-domain" target="_blank" style="padding:2px 6px 2px;">Register</a>'
+							+'</div>');
+				}
+				
+				// Hide Loading Icon
+				$('#loading').hide();
+				$('.resp-status-false').show(function(){
+					gadgets.window.adjustHeight();
+				});
 				// Reset user preferences
 			    var prefs = new gadgets.Prefs();
 				prefs.set("agile_user_popup", "");
 				prefs.set("agile_user_exists", "");
-				agile_login();
 			}
-		}, 100);
+		});
 	}
 }

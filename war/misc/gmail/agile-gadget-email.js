@@ -39,7 +39,7 @@ function agile_get_emails(bool) {
 				// Check email sender's name.
 				if (key == "email_name")
 					// Store email sender's name.
-					Sender_Name = matches[match][key];
+					matches[match][key] == (undefined || "" || null) ? Sender_Name = "" : Sender_Name = matches[match][key]; 
 			}
 		}
 	}
@@ -47,7 +47,7 @@ function agile_get_emails(bool) {
 	else {
 		emails = [ "manohar@invox.com", "maruthi.motors@invox.com",
 				"dheeraj@invox.com", "praveen@invox.com",
-				"maruthi.motors@invox.com" ];
+				"maruthi.motors@invox.com", "adi.surendra.mohan.raju.morampudi@gmail.com" ];
 		Sender_Email = "praveen@invox.com";
 		Sender_Name = "Praveen Kumar";
 	}
@@ -88,9 +88,6 @@ function agile_email_formatter(emails, Sender_Email, Sender_Name) {
 
 	// Set sender of email as first mail in the mail list.
 	emails.splice(0, 0, Sender_Email);
-	if (!Is_Localhost)
-		gadgets.window.adjustHeight();
-
 	// Return formatted mail and info array.
 	return [ emails, Sender_Name, Sender_Email ];
 }
