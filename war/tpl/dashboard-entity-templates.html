@@ -235,7 +235,8 @@
 
 <script id="dashboard-campaign-logs-collection-template" type="text/html">
 <div style="margin-left:0px">
-<h2 style="border-bottom:1px solid #f5f5f5; margin-bottom:10px">Current <small>Campaigns</small></h2>
+<h2 style="border-bottom:1px solid #f5f5f5; margin-bottom:10px">Recent Campaign <small>Logs
+</small></h2>
 {{#if this.length}}
     <div class="data">
         <div class="data-container">
@@ -244,6 +245,8 @@
                      <tr style="background-color:#EDF3FE;">
                         <th></th>
                         <th>Contact</th>
+                        <th>Campaign</th>
+                        <th>Type</th>
                         <th>Message</th>
                         <th>Time</th>                    
                     </tr>
@@ -273,7 +276,9 @@
     </div>
     <div style="float:right"></div>
 </td>
-<td style="width:30em;">{{{message}}}</td>
+<td>{{campaign_name}}</td>
+<td>{{titleFromEnums log_type}}</td>
+<td style="width: 30%; word-break: break-all;">{{{message}}}</td>
 <td><small class="edit-hover"> 
 		<time class="log-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
 	</small></td>
