@@ -52,10 +52,6 @@ function agile_build_ui(callback) {
 	console.log("Building UI");
 	agile_build_ui_for_emails(emails);
 
-	// Adjust gadget window height.
-	if (!Is_Localhost)
-		gadgets.window.adjustHeight();
-
 	if (callback && typeof (callback) === "function") {
 		callback();
 	}
@@ -81,23 +77,17 @@ function agile_build_ui_for_emails(Email_Ids) {
 		var val = {};
 
 		// Add sender's first name, last name and email to object.
-		if (email == Email_Ids[2]) {
+		if (email == Email_Ids[2] && Email_Ids[1] != "") {
 			val.fname = Email_Ids[1].split(" ")[0];
 			val.lname = Email_Ids[1].split(" ")[1];
-			val.email = email;
-		} else {
-			val.email = email;
-		}
+		} 
 		
+		val.email = email;
 		// Store user data for future use.
 		Contacts_Json[val.email] = val;
 		agile_fill_individual_template_ui(val, $('#agile_content'));
 
 	});
-
-	// Adjust gadget window height.
-	if (!Is_Localhost)
-		gadgets.window.adjustHeight();
 }
 
 /**
@@ -111,7 +101,7 @@ function agile_build_ui_for_emails(Email_Ids) {
  *            list.
  */
 function agile_fill_individual_template_ui(val, selector) {
-
+	
 	// Compile template and generate UI.
 	var Individual_Template = getTemplate('gadget', val, 'no');
 	// Append contact to container in HTML.
