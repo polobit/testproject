@@ -18,6 +18,7 @@ public class JerseyApplication extends Application
 		s.add(org.codehaus.jackson.jaxrs.JsonMappingExceptionMapper.class);
 		s.add(com.agilecrm.core.api.ObjectMapperProvider.class);
 		s.add(com.agilecrm.core.api.JSAPI.class);
+		s.add(com.agilecrm.core.api.PHPAPI.class);
 		s.add(com.agilecrm.core.api.campaigns.CampaignsAPI.class);
 		s.add(com.agilecrm.core.api.subscription.SubscriptionApi.class);
 		s.add(com.agilecrm.core.api.contacts.TagsAPI.class);
