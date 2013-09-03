@@ -147,12 +147,33 @@ public class GMailGadgetServlet extends HttpServlet
 	// Check in cache and add to session id
 	if (CacheUtil.getCache(oneTimeSessionKey) == null)
 	{
-	    resp.getWriter()
+		JSONObject result = new JSONObject();
+		result.put("status", false);
+		result.put("error_session", true);
+		result.put("error_msg", "We are unable to find any related session. Either you have waited too long to associate your new gadget. Please refresh your GMail and try again.");
+		resp.getWriter().println(result.toString());
+	    
+		resp.getWriter()
 		    .println(
-			    "We are unable to find any related session. Either you have waited too long to associate your new gadget. Please refresh your GMail and try again.");
+			    );
 	    return;
 	}
-
+	
+	// Get domain name from request.
+	String domainName = req.getParameter("domain");
+		
+	// Search Domain User with this domain name.
+	DomainUser domainUser = DomainUserUtil.getDomainUserFromGadgetId(domainName);
+	if (domainUser == null)
+	{
+		JSONObject result = new JSONObject();
+		result.put("status", false);
+		result.put("error_session", false);
+		result.put("error_msg", "Sorry, we were unable to find any users with this domain name. Perhaps, you would like to register.");
+		resp.getWriter().println(result.toString());
+	    return;
+	}
+	
 	// Return back to this URL with param set to done
 	req.getSession().setAttribute(LoginServlet.RETURN_PATH_SESSION_PARAM_NAME,
 		"/gmail?" + SESSION_KEY_NAME + "=" + oneTimeSessionKey + "&openid=done&hd=" + req.getParameter("hd"));
