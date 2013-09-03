@@ -177,6 +177,7 @@ public class CSVUtil
 
 	// Reads blob data line by line upto first 10 line of file
 	Reader csvStream = new InputStreamReader(blobStream, "UTF-8");
+
 	System.out.println(contact);
 	CSVReader reader = new CSVReader(csvStream);
 
@@ -206,35 +207,32 @@ public class CSVUtil
 
 	for (String[] csvValues : contacts)
 	{
-	    contact.id = null;
-	    contact.created_time = 0l;
-
-	    // Reset tags to avoid previous contact tags getting added to
-	    // current contact
-	    contact.tags.clear();
-	    contact.tagsWithTime.clear();
+	    Contact tempContact = new Contact();
+	    tempContact.tags = (LinkedHashSet<String>) contact.tags.clone();
+	    tempContact.properties = contact.properties;
 
 	    // Sets owner of contact explicitly. If owner is not set,
 	    // contact
 	    // prepersist
 	    // tries to read it from session, and session is not shared with
 	    // backends
-	    contact.setContactOwner(ownerKey);
+	    tempContact.setContactOwner(ownerKey);
 
-	    contact.properties = new ArrayList<ContactField>();
+	    tempContact.properties = new ArrayList<ContactField>();
 	    for (int j = 0; j < csvValues.length; j++)
 	    {
 		if (StringUtils.isBlank(csvValues[j]))
 		    continue;
 
+		System.out.println(properties.get(j));
 		ContactField field = properties.get(j);
 
 		// This is hardcoding but found no way to know how to get
 		// tags
 		// from the CSV file
-		if (field.name.equals("tags"))
+		if (field != null && "tags".equals(field.name))
 		{
-		    contact.tags.add(csvValues[j]);
+		    tempContact.tags.add(csvValues[j]);
 		    continue;
 		}
 
@@ -245,15 +243,15 @@ public class CSVUtil
 
 		field.value = csvValues[j];
 
-		contact.properties.add(field);
+		tempContact.properties.add(field);
 	    }
 
-	    if (!ContactUtil.isValidFields(contact))
+	    if (!ContactUtil.isValidFields(tempContact))
 		continue;
 
 	    try
 	    {
-		contact.save();
+		tempContact.save();
 	    }
 	    catch (Exception e)
 	    {
@@ -264,6 +262,7 @@ public class CSVUtil
 	    savedContacts++;
 	}
 
+	System.out.println(savedContacts);
 	// Send notification after contacts save complete
 	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
 
