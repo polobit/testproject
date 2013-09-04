@@ -27,7 +27,7 @@
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                 <div class="caption" style="margin-top:-8px"><i class="{{icons type}}"></i> ({{type}})</div>         
-                <div class="text" style="color: #333333">{{subject}}</div>
+                <div class="text" style="color: #333333">{{{subject}}}</div>
             </div>
         {{/if_entity}}
 
@@ -44,7 +44,7 @@
 			<div id="{{tag}}-tag-timeline-element"></div>
             <div class="timestamp">{{createdTime}}</div>
             <div class="title"><h3><span><a class="no-line"><i class="icon-tag"></i></a></span> Tag Added - {{tag}}</h3></div>
-            <div class="date">{{epochToHumanDate "mmmm d" createdTime}}</div>
+            <div class="date">{{epochToTaskDate createdTime}}</div>
             <div class="body" style="padding:5px">
                 <div class="text" style="color: #333333" >{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" createdTime}}</div>
             </div>
