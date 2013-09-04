@@ -183,6 +183,8 @@ var ContactsRouter = Backbone.Router
 
 				if (this.contactsListView && this.contactsListView.collection)
 				{
+					this.contactsListView.collection.url=url;
+					
 					$('#content').html(this.contactsListView.render(true).el);
 
 					$(".active").removeClass("active");
@@ -304,6 +306,7 @@ var ContactsRouter = Backbone.Router
 				{
 					// Set url to core/api/contacts (If filters are loaded
 					// contacts url is changed so set it back)
+					
 					this.contactsListView.collection.url = "core/api/contacts";
 					contact = this.contactsListView.collection.get(id);
 					contact_collection = this.contactsListView.collection;

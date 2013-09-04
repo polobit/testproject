@@ -111,7 +111,7 @@ public class GMailGadgetServlet extends HttpServlet
 	resp.getWriter().println("Owner Id " + ownerId);
 
 	// Setup Authentication Key
-	DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(user.getEmail());
+	DomainUser domainUser = DomainUserUtil.getDomainUserByEmailFromCurrentAccount(user.getEmail());
 	if (domainUser == null)
 	{
 	    resp.getWriter().println("We are unable to find any account with this userid");
@@ -124,7 +124,9 @@ public class GMailGadgetServlet extends HttpServlet
 	domainUser.gadget_id = ownerId;
 	domainUser.save();
 
-	resp.getWriter().println("You have successfully associated your gadget with your AgileCRM account. You can now close the browser.");
+	resp.getWriter()
+		.println(
+			"You have successfully associated your gadget with your AgileCRM account. You can now close the browser.");
 
 	return false;
     }
@@ -145,28 +147,22 @@ public class GMailGadgetServlet extends HttpServlet
 	// Check in cache and add to session id
 	if (CacheUtil.getCache(oneTimeSessionKey) == null)
 	{
-	    JSONObject result = new JSONObject();
-	    result.put("status", false);
-	    result.put("error_session", true);
-	    result.put("error_msg",
-		    "We are unable to find any related session. Either you have waited too long to associate your new gadget. Please refresh your GMail and try again.");
-	    resp.getWriter().println(result.toString());
-
-	    resp.getWriter().println();
+	    resp.getWriter()
+		    .println(
+			    "We are unable to find any related session. Either you have waited too long to associate your new gadget. Please refresh your GMail and try again.");
 	    return;
 	}
 
-	// Get domain name from request.
-	String domainName = req.getParameter("domain");
-
-	// Search Domain User with this domain name.
-	DomainUser domainUser = DomainUserUtil.getDomainUserFromGadgetId(domainName);
-	if (domainUser == null)
+	// Check if the domain actually exists for the user
+	int numDomainUsers = DomainUserUtil.count();
+	if (numDomainUsers == 0)
 	{
+	    // Send domain exists as false to the client so that it can show
+	    // register message
 	    JSONObject result = new JSONObject();
-	    result.put("status", false);
-	    result.put("error_session", false);
-	    result.put("error_msg", "Sorry, we were unable to find any users with this domain name. Perhaps, you would like to register.");
+	    result.put("domain_exists", false);
+	    result.put("error_msg",
+		    "Sorry, we were unable to find any users with this domain name. Perhaps, you would like to register.");
 	    resp.getWriter().println(result.toString());
 	    return;
 	}
@@ -191,18 +187,6 @@ public class GMailGadgetServlet extends HttpServlet
     {
 	// Get OpenSocial ID
 	String ownerId = req.getParameter("opensocial_owner_id");
-
-	// Check if the domain actually exists for the user
-	int numDomainUsers = DomainUserUtil.count();
-	if (numDomainUsers == 0)
-	{
-	    // Send domain exists as false to the client so that it can show
-	    // register message
-	    JSONObject result = new JSONObject();
-	    result.put("domain_exists", false);
-	    resp.getWriter().println(result.toString());
-	    return;
-	}
 
 	// Generate One-time session
 	SecureRandom random = new SecureRandom();
