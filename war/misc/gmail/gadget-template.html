@@ -2,7 +2,7 @@
 <script id="gadget-contact-list-template" type="text/html">
 	{{#if id}}
 <!-- conteact exist -->			
-		<div class="contact-minified">
+		<div class="contact-minified row-fluid">
 			<a class="gadget-show-contact" style="cursor:pointer; margin:0px 8px 0px 5px; text-decoration:underline; font-weight:bold;"><i class="icon-expand-alt" style="text-decoration:none; margin-right:5px;"></i><span>Show</span></a> {{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}} ({{email}})
 		</div>
 		
@@ -10,86 +10,81 @@
   			
 		</div>
 
-   		<div class="option-tabs" style="display:none;">
+   		<div class="option-tabs row-fluid" style="display:none;">
 
 		</div>
 	{{else}}
 <!--contact not exist, add contact -->
-		{{#if fname}}
-			<div class="gadget-no-contact">
+		<div class="row-fluid">	
+			{{#if fname}}
 				<a class="gadget-add-contact" style="cursor:pointer; margin:0px 8px 0px 5px; text-decoration:underline; font-weight:bold;"><i class="icon-plus" style="text-decoration:none; margin-right:5px;"></i><span>Add</span></a> {{fname}} {{lname}} ({{email}}) to Agile Contacts
-				<div class="show-add-contact-form" style="display:none;">
-	
-				</div>
-			</div>
-		{{else}}
-			<div class="gadget-no-contact">
+			{{else}}
 				<a class="gadget-add-contact" style="cursor:pointer; margin:0px 8px 0px 5px; text-decoration:underline; font-weight:bold;"><i class="icon-plus" style="text-decoration:none; margin-right:5px;"></i><span>Add</span></a> {{email}} to Agile Contacts
-				<div class="show-add-contact-form" style="display:none;">
-	
-				</div>
-			</div>
-
-		{{/if}}
-      	
+			{{/if}}
+			<span class="contact-search-status" style="color:indianred; margin-left:20px; display:none;"><i>Contact not found.</i></span>
+		</div>
+      	<div class="show-add-contact-form row-fluid" style="display:none;">
+			
+		</div>
 	{{/if}}
 </script>
 
 <script id="gadget-add-contact-template" type="text/html">
-<form class='gadget-contact-form' name="gadget_contact_form" method="post">
+<form class="gadget-contact-form form-horizontal" name="gadget_contact_form" method="post" style="margin:0px;">
 	<fieldset>
-	
-	<div class="control-group" style="margin:0px; padding-top:6px; border-top:1px solid #e5e5e5;">
-		<label class="control-label"><b>Name:</b> <span class="field_req">*</span></label>
-  		<div class="row">
-			<span class="controls span3">
-	   			{{#if fname}}
-	   				<input name="first_name" type="text" class="required" id="fname" placeholder="First name" value="{{fname}}"/>
+		<div class="control-group" style="margin:0px; padding-top:15px; border-top:1px solid #e5e5e5;">
+			<label class="control-label" for="fname"><b>First Name</b><span class="field_req">*</span></label>
+  			<div class="controls">
+				{{#if fname}}
+	   				<input name="first_name" id="fname" placeholder="First name" value="{{fname}}" type="text" class="required" />
 				{{else}}
-					<input name="first_name" type="text" class="required" id="fname" placeholder="First name"/>
+					<input name="first_name" id="fname" placeholder="First name" type="text" class="required" />
 				{{/if}}
-			</span>
-    		<span class="controls span2">
-	    		{{#if lname}}
-		    		<input name="last_name" class="required" type="text" id="lname" placeholder="Last name" value="{{lname}}"/>
-				{{else}}
-					<input name="last_name" class="required" type="text" id="lname" placeholder="Last name"/>
-				{{/if}}	
-			</span>
-  		</div>
-	</div>
+			</div>
+		</div>
+		
+		<div class="control-group" style="margin:0px; padding-top:6px;">
+    		<label class="control-label" for="lname"><b>Last Name</b><span class="field_req">*</span></label>
+			<div class="controls">
+	    			{{#if lname}}
+		    			<input name="last_name" id="lname" placeholder="Last name" value="{{lname}}" class="required" type="text" />
+					{{else}}
+						<input name="last_name" id="lname" placeholder="Last name" class="required" type="text" />
+					{{/if}}	
+			</div>
+		</div>
 
-	<div class="row">
-			<div class="span3">
-   			<label class="control-label"><b>Email:</b> </label>
+		<div class="control-group" style="margin:0px; padding-top:6px;">
+			<label class="control-label" for="email"><b>Email</b></label>
 			<div class="controls">
-				 <span><input name="email" type="text" id="email" placeholder="Email" value = "{{email}}"/></span>
+				 <input name="email" id="email" placeholder="Email" value="{{email}}" type="text" />
 			</div>
-			</div>
-  		<div class="span2">
-       		<label class="control-label"><b>Tags:</b> </label>
+		</div>
+  		
+		<div class="control-group" style="margin:0px; padding-top:6px;">
+       		<label class="control-label" for="tags"><b>Tags</b></label>
 			<div class="controls">
-				 <span><input name="tags" type="text" id="tags" placeholder="Tags"/></span>
+				 <input name="tags" id="tags" placeholder="Tags" type="text" />
 			</div>
     	</div>
-	</div>
-	<div class="row">
-		<div class="span3">
-           	<label class="control-label"><b>Company:</b></label>
+	
+		<div class="control-group" style="margin:0px; padding-top:6px;">
+			<label class="control-label" for="company"><b>Company</b></label>
 			<div class="controls">
-				<input name="company" type="text" id="contact_company" placeholder="Company" />
+				<input name="company" id="company" placeholder="Company" type="text" />
 			</div>
   		</div>
-  		<div class="span3">
-       		<label class="control-label"><b>Job Description:</b></label>
+
+		<div class="control-group" style="margin:0px; padding-top:6px;">
+       		<label class="control-label" for="title"><b>Job Description</b></label>
 			<div class="controls">
-				<input name="title" type="text" id="job_title" placeholder="Job title" />
+				<input name="title" id="title" placeholder="Job title" type="text" />
 			</div>
 	  	</div>
 	</div>
-	<div class="form-actions" style="padding:10px 0px 0px 0px; margin:0px;">
+	<div class="form-actions" style="padding-top:10px padding-bottom:10px; margin:10px 0px 0px 0px;">
 		<a type="submit" class="btn btn-primary gadget-contact-validate" style="padding:2px 6px 2px;">Add Contact</a>
-		<a class="cancel btn" style="padding:2px 6px 2px;">Cancel</a>
+		<a class="cancel btn" style="padding:2px 6px 2px; margin-left:5px;">Cancel</a>
 		<img class="contact-add-waiting" style="display:none;width:16px; margin-left:10px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>
 	</div>
 </fieldset>

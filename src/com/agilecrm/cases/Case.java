@@ -201,6 +201,8 @@ public class Case extends Cursor
     public void save()
     {
 
+	dao.put(this);
+
 	// Enables to build "Document" search on current entity
 	AppengineSearch<Case> search = new AppengineSearch<Case>(Case.class);
 
@@ -212,7 +214,6 @@ public class Case extends Cursor
 	}
 	search.edit(this);
 
-	dao.put(this);
     }
 
     public void delete()
