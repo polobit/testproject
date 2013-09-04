@@ -117,3 +117,28 @@ function serializeForm(form_id) {
 	// select').val();
 	return obj;
 }
+
+
+$(function(){
+	//Focus first element
+	$.fn.focus_first = function() {
+		
+		var elem = $(this).find('input:visible').not('.hide').get(0);
+		var textarea = $('textarea:visible', this).get(0);
+		if (textarea && elem) {
+			if (textarea.offsetTop < elem.offsetTop) {
+				elem = textarea;
+			}
+		}
+  
+		console.log(elem);
+		if (elem) {
+			$(elem).focus();
+		}
+		return this;
+	}
+	
+	$('.modal').on('shown', function(event){
+		$('form', this).focus_first();
+	});
+});
