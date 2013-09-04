@@ -173,6 +173,11 @@ public class DomainUserUtil
 	}
     }
 
+    public static DomainUser getDomainUserByEmailFromCurrentAccount(String email)
+    {
+	return dao.getByProperty("email", email);
+    }
+
     /**
      * Gets domain user based on gadget_id
      * 
@@ -253,7 +258,8 @@ public class DomainUserUtil
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set("");
 
-	DomainUser user = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true).get();
+	DomainUser user = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true)
+		.get();
 
 	NamespaceManager.set(oldNamespace);
 	return user;

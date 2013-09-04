@@ -135,7 +135,7 @@ var Base_Model_View = Backbone.View
 							 * page, since on change in model i.e., data fetched
 							 * render is called again)
 							 */
-						//	that.render(true);
+							that.render(true);
 						}
 					});
 				}

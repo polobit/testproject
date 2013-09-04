@@ -275,7 +275,7 @@ function agile_crm_get_plugin(pluginName)
 	 * while loading plugins
 	 */
 	console.log($('#' + pluginName));
-	var model_data = $('#' + pluginName).data('model');
+	var model_data = $('#' + pluginName, App_Contacts.contactDetailView.el).data('model');
 	
 	console.log(model_data);
 
@@ -292,7 +292,7 @@ function agile_crm_get_plugin(pluginName)
 function agile_crm_get_plugin_prefs(pluginName)
 {
 	// Gets data attribute of from the plugin, and return prefs from that object
-	return $('#' + pluginName).data('model').toJSON().prefs;
+	return $('#' + pluginName, App_Contacts.contactDetailView.el).data('model').toJSON().prefs;
 }
 
 /**
@@ -306,7 +306,7 @@ function agile_crm_get_plugin_prefs(pluginName)
 function agile_crm_save_widget_prefs(pluginName, prefs, callback)
 {
 	// Get the model from the the element
-	var widget = $('#' + pluginName).data('model');
+	var widget = $('#' + pluginName, App_Contacts.contactDetailView.el).data('model');
 
 	// Set changed preferences to widget backbone model
 	widget.set("prefs", prefs);
@@ -315,7 +315,7 @@ function agile_crm_save_widget_prefs(pluginName, prefs, callback)
 	widget.url = "core/api/widgets"
 
 	// Set the changed model data to respective plugin div as data
-	$('#' + pluginName).data('model', widget);
+	$('#' + pluginName, App_Contacts.contactDetailView.el).data('model', widget);
 
 	// Save the updated model attributes
 	widget.save(widget, { success : function(data)
@@ -323,6 +323,8 @@ function agile_crm_save_widget_prefs(pluginName, prefs, callback)
 		console.log("Saved widget: " + data.toJSON());
 		if (callback && typeof (callback) === "function")
 		{
+			console.log("in save callback");
+			console.log(data.toJSON());
 			// Execute the callback, passing parameters as necessary
 			callback(data.toJSON());
 		}
