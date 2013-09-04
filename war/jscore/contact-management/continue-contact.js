@@ -325,10 +325,9 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         		if(App_Contacts.contactDetailView)
         			App_Contacts.contactDetailView.model = data;
         		
-            	App_Contacts.navigate("contact/" + data.id, {
-                	trigger: true
-            	});
-            	               
+            	//App_Contacts.contactDetails(data.id,data);
+            	//App_Contacts.navigate("contact/"+data.id);
+        		App_Contacts.navigate("contact/" + data.id, {trigger: true});
             }
         	
         	
@@ -558,6 +557,7 @@ $(function () {
     });
 });
 
+
 /**
  * Adds conatct to view, takes care of if its a COMPANY or PERSON.
  * @param appView - view whose collection to update
@@ -573,7 +573,7 @@ function add_contact_to_view(appView,model,isUpdate)
 		if(appView.collection.get(model.id) != null) // update existing model
 			appView.collection.get(model.id).set(model);
 		else if(readCookie('company_filter')) // add model only if its in company view
-			appView.collection.add(model);
+			add_model_cursor(appView.collection,model);
 		else if(isUpdate)
 			CONTACTS_HARD_RELOAD = true; // reload contacts next time, because we may have updated Company, so reflect in Contact
 	}	
@@ -585,9 +585,21 @@ function add_contact_to_view(appView,model,isUpdate)
 			{
 				if(appView.collection.get(model.id) != null) // update existing model
 					appView.collection.get(model.id).set(model);
-				else appView.collection.add(model);
+				else add_model_cursor(appView.collection,model);
 			}	
 			else CONTACTS_HARD_RELOAD = true; // custom filter active, make sure to reload from server
 		}
 	}	
+}
+
+/**
+ * Adds model to collection at second last position, so cursor is preserved.
+ * @param app_collection - the collection to add to, must exist
+ * @param mdl - the new model to be added
+ */
+function add_model_cursor(app_collection,mdl)
+{
+	if(app_collection.models.length>=1)
+		app_collection.add(mdl,{at:app_collection.models.length-1});
+	else app_collection.add(mdl);
 }
