@@ -186,7 +186,7 @@ public class CSVUtil
 	if (contacts.isEmpty())
 	    return;
 
-	contacts.remove(0);
+	String[] headings = contacts.remove(0);
 
 	contact.type = Contact.Type.PERSON;
 
@@ -232,7 +232,12 @@ public class CSVUtil
 		// from the CSV file
 		if (field != null && "tags".equals(field.name))
 		{
-		    tempContact.tags.add(csvValues[j]);
+		    // Multiple tags are supported. Multiple tags are added
+		    // split at , or ;
+		    String[] tagsArray = csvValues[j].split("[,;]+");
+
+		    for (String tag : tagsArray)
+			tempContact.tags.add(tag);
 		    continue;
 		}
 
@@ -252,6 +257,7 @@ public class CSVUtil
 	    try
 	    {
 		tempContact.save();
+
 	    }
 	    catch (Exception e)
 	    {
