@@ -48,6 +48,9 @@ public class GMailGadgetServlet extends HttpServlet
 
 	// Get Domain User with this Social Id
 	DomainUser domainUser = DomainUserUtil.getDomainUserFromGadgetId(ownerId);
+	System.out.println("owner id : + " + ownerId);
+	System.out.println("domain user : " + domainUser);
+
 	if (domainUser == null)
 	{
 	    return false;
@@ -112,6 +115,7 @@ public class GMailGadgetServlet extends HttpServlet
 
 	// Setup Authentication Key
 	DomainUser domainUser = DomainUserUtil.getDomainUserByEmailFromCurrentAccount(user.getEmail());
+	System.out.println("domain user : " + domainUser);
 	if (domainUser == null)
 	{
 	    resp.getWriter().println("We are unable to find any account with this userid");
@@ -149,9 +153,11 @@ public class GMailGadgetServlet extends HttpServlet
 	{
 	    resp.getWriter()
 		    .println(
-			    "We are unable to find any related session. Either you have waited too long to associate your new gadget. Please refresh your GMail and try again.");
+			    "We are unable to find any related session. Either you have waited too long to associate your new gadget.");
 	    return;
 	}
+
+	String domain = req.getParameter("domain");
 
 	// Check if the domain actually exists for the user
 	int numDomainUsers = DomainUserUtil.count();
@@ -163,7 +169,11 @@ public class GMailGadgetServlet extends HttpServlet
 	    result.put("domain_exists", false);
 	    result.put("error_msg",
 		    "Sorry, we were unable to find any users with this domain name. Perhaps, you would like to register.");
-	    resp.getWriter().println(result.toString());
+	    resp.getWriter()
+		    .println(
+			    "Sorry, we were unable to find any users with this domain name. Perhaps, you would like to register.&nbsp;&nbsp;<a href=\"https://"
+				    + domain + ".agilecrm.com/register\">Click here</a>");
+
 	    return;
 	}
 

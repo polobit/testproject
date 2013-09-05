@@ -289,6 +289,10 @@ function savecases(formId, modalId, saveBtn, json)
 				App_Cases.casesCollectionView.render(true);
 			}
 			else App_Calendar.navigate("cases",{trigger:true}); 
+		},
+		error: function(data,response)
+		{
+			enable_save_button($(saveBtn));
 		}
 	});
 }

@@ -410,31 +410,30 @@
 
 <script id="gadget-note-template" type="text/html">
 <!--  Add Note Form -->
-	<div class="gadget-note" style="padding-left:30px;">
-		<form class='gadget-note-form' name="gadget_note_form" method="post">
+	<div class="gadget-note row-fluid">
+		<form class='gadget-note-form form-horizontal' name="gadget_note_form" method="post" style="margin:0px;">
 			<fieldset style="margin:0px;">
                 <input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
-				<div class="row">
-					<div class="span3">
-                   		<label class="control-label"><b>Subject: </b><span class="field_req">*</span></label>
-						<div class="controls">
-							<input type="text" placeholder="About" name="subject" id="subject" class="required"/>
-						</div>
+
+				<div class="control-group" style="margin:0px; padding-top:6px;">
+					<label class="control-label" for="subject"><b>Subject</b><span class="field_req">*</span></label>
+					<div class="controls">
+						<input name="subject" id="subject" placeholder="About" class="required" type="text" />
 					</div>
 				</div>
-				<div class="row">
-					<div class="span3">
-                   		<label class="control-label"><b>Description:</b> <span class="field_req">*</span></label>
-						<div class="controls">
-							<textarea rows="3" placeholder="Detailed Note" name="description" id="description" class="required"></textarea> 
-						</div>
+				
+				<div class="control-group" style="margin:0px; padding-top:6px;">
+					<label class="control-label" for="description"><b>Description</b><span class="field_req">*</span></label>
+					<div class="controls">
+						<textarea name="description" id="description" rows="3" placeholder="Detailed Note..." class="required"></textarea> 
 					</div>
 				</div>
-                   <div class="form-actions" style="padding: 10px 0px 0px 0px; margin:0px;">
+
+                <div class="form-actions" style="padding-top:10px padding-bottom:10px; margin:10px 0px 0px 0px;">
                    	<a type="submit" class="btn btn-primary gadget-note-validate" style="padding:2px 6px 2px;">Add Note</a>
-	             	<a class="cancel btn" data-tab-identity="notes" style="padding:2px 6px 2px;">Cancel</a>
+	             	<a class="cancel btn" data-tab-identity="notes" style="padding:2px 6px 2px; margin-left:5px;">Cancel</a>
                    	<img class="note-add-waiting" style="display:none;width:16px; margin-left:10px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>
-					</div>
+				</div>
 			</fieldset>
 		</form>
 	</div>
@@ -442,60 +441,57 @@
 
 <script id="gadget-task-template" type="text/html">
 <!--  Add Task Form -->
-  	<div class="gadget-task" style="padding-left:30px;">
-       	<form class='gadget-task-form' name="gadget_task_form" method="post">
+  	<div class="gadget-task row-fluid">
+       	<form class='gadget-task-form form-horizontal' name="gadget_task_form" method="post" style="margin:0px;">
 			<fieldset style="margin:0px;">
               	<input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
-				<div class="row">
-					<div id="addTask" class="span3">
-						<label for="subject" class="control-label"> <b>Task:</b> <span class="field_req">*</span></label>
-						<div class="controls"><span class="input "><input id="subject" type="text" placeholder="Task name"
-					  		  name="subject" size="40" class="required"> </span>
-					  	</div>
-					</div>
-					<div id="taskCategory" class="span2">					
-						<label for="type" class="control-label"><b> Category: </b><span class="field_req">*</span></label>
-						<div class="controls">
-							<span class="input">
-								<select name="type" id="type" size="1" class="input-small required">
-									<option value="">Select</option>
-									<option value="CALL">Call</option>
-									<option value="EMAIL">Email</option>
-									<option value="FOLLOW_UP">Follow-up</option>
-									<option value="MEETING">Meeting</option>
-									<option value="MILESTONE">Milestone</option>
-									<option value="SEND">Send</option>
-									<option value="TWEET">Tweet</option>
-								</select> 
-							</span>
-						</div>
+				
+				<div class="control-group" style="margin:0px; padding-top:6px;">
+					<label class="control-label" for="subject"> <b>Task</b> <span class="field_req">*</span></label>
+					<div class="controls">
+						<input name="subject" id="subject" placeholder="Task name" size="40" class="required" type="text" />
 					</div>
 				</div>
-				<div class="row">
-					<div class="span3">
-						<label for="due" class="control-label"><b>Date (Due): </b><span class="field_req">*</span></label>
-						<div class="controls">
-							<input type="text" name="due" placeholder="MM-DD-YYYY" id="task-date-1" class="required task-calender">
-						</div>
+
+				<div class="control-group" style="margin:0px; padding-top:6px;">					
+					<label class="control-label" for="type"><b>Category</b><span class="field_req">*</span></label>
+					<div class="controls">
+						<select name="type" id="type" class="required" style="width:210px;">
+							<option value="">Select</option>
+							<option value="CALL">Call</option>
+							<option value="EMAIL">Email</option>
+							<option value="FOLLOW_UP">Follow-up</option>
+							<option value="MEETING">Meeting</option>
+							<option value="MILESTONE">Milestone</option>
+							<option value="SEND">Send</option>
+							<option value="TWEET">Tweet</option>
+						</select> 
 					</div>
-					<div class="span2" >
-						<label for="priority_type" class="control-label"><b>Priority: </b></label>
-						<div class="controls"> 
-							<span class="input ">
-								<select	name="priority_type" id="priority_type" size="1" class="input-small">
-									<option value="HIGH">High</option>
-									<option value="NORMAL" selected="selected">Normal</option>
-									<option value="LOW">Low</option>
-								</select> 
-							</span>
-						</div>
+				</div>
+				
+				<div class="control-group" style="margin:0px; padding-top:6px;">
+					<label class="control-label" for="due"><b>Due Date</b><span class="field_req">*</span></label>
+					<div class="controls">
+						<input name="due" id="due" placeholder="MM-DD-YYYY" class="required task-calender" type="text" />
 					</div>
-				</div> 
-	                  <div class="form-actions" style="padding:10px 0px 0px 0px; margin:0px;">
-	                  	<a type="submit" class="btn btn-primary gadget-task-validate" style="padding:2px 6px 2px;">Add Task</a>
-			       		<a class="cancel btn" data-tab-identity="tasks" style="padding:2px 6px 2px;">Cancel</a>
-						<img class="task-add-waiting" style="display:none;width:16px; margin-left:10px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>
-                      </div>
+				</div>
+				
+				<div class="control-group" style="margin:0px; padding-top:6px;">
+					<label class="control-label" for="priority_type"><b>Priority</b></label>
+					<div class="controls"> 
+						<select	name="priority_type" id="priority_type" size="1" style="width:210px;">
+							<option value="HIGH">High</option>
+							<option value="NORMAL" selected="selected">Normal</option>
+							<option value="LOW">Low</option>
+						</select> 
+					</div>
+				</div>
+				 
+	            <div class="form-actions" style="padding-top:10px padding-bottom:10px; margin:10px 0px 0px 0px;">
+	            	<a type="submit" class="btn btn-primary gadget-task-validate" style="padding:2px 6px 2px;">Add Task</a>
+			    	<a class="cancel btn" data-tab-identity="tasks" style="padding:2px 6px 2px; margin-left:5px;">Cancel</a>
+					<img class="task-add-waiting" style="display:none;width:16px; margin-left:10px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>
+                </div>
 			</fieldset>				
 		</form>	
    	</div>
@@ -503,55 +499,55 @@
 
 <script id="gadget-deal-template" type="text/html">
 <!--  Add Deal Form -->
-  	   	<div class="gadget-deal" style="padding-left:30px;">
-			<form class="gadget-deal-form" name="gadget_deal_form" method="post">
+  	   	<div class="gadget-deal row-fluid">
+			<form class="gadget-deal-form form-horizontal" name="gadget_deal_form" method="post" style="margin:0px;">
 				<fieldset style="margin:0px;">
                    	<input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}' />
-					<div class="row">	
-						<div class="span3">		
-							<label class="control-label"><b>Name: </b> <span class="field_req">*</span></label>
-							<div class="controls">
-								<input id="name" name="name" type="text" class=" required" placeholder="Name of deal"/>
-		  					</div>
+					
+					<div class="control-group" style="margin:0px; padding-top:6px;">
+						<label class="control-label" for="name"><b>Name</b> <span class="field_req">*</span></label>
+						<div class="controls">
+							<input name="name" id="name" placeholder="Name of deal" class=" required" type="text" />
+		  				</div>
+					</div>
+					
+                   	<div class="control-group" style="margin:0px; padding-top:6px;">
+						<label class="control-label" for="expected_value"><b>Value</b> <span class="field_req">*</span></label>
+               			<div class="controls"> 
+							<input name="expected_value" id="expected_value" placeholder="Value of deal" class="required  digits" type="text" />
 						</div>
 					</div>
-                   	<div class="row">
-						<div class="span3">
-           					<label class="control-label"><b>Value: </b> <span class="field_req">*</span></label>
-               				<div class="controls"> 
-								<input type="text" name="expected_value" class="input-small required  digits" placeholder="Value of deal"/>
-							</div>
-						</div>
-						<div class="span2">				
-							<label class="control-label"><b>Milestone: </b> <span class="field_req">*</span></label>
-							<div class="controls">
-								<select id="milestone" name="milestone" class="input-small required" style="width:90px">
-									<option value="">Select</option>
-                               		<option value="Open">Open</option>
-									<option value="Won">Won</option>
-                               		<option value="Stage 1">Stage 1</option>
-                               		<option value="Lost">Lost</option>
-								</select>	
-		  					</div>
+					
+					<div class="control-group" style="margin:0px; padding-top:6px;">		
+						<label class="control-label" for="milestone"><b>Milestone</b> <span class="field_req">*</span></label>
+						<div class="controls">
+							<select name="milestone" id="milestone" class="required" style="width:210px;">
+								<option value="">Select</option>
+                            	<option value="Open">Open</option>
+								<option value="Won">Won</option>
+                            	<option value="Stage 1">Stage 1</option>
+                           		<option value="Lost">Lost</option>
+							</select>	
+		  				</div>
+					</div>
+					
+              		<div class="control-group" style="margin:0px; padding-top:6px;">
+						<label class="control-label" for="probability"><b>Probability (%)</b> <span class="field_req">*</span></label>
+						<div class="controls">
+							<input name="probability" id="probability" max="100" placeholder="Probability %" class="required digits" type="text" />				
+		  				</div>
+					</div>
+
+					<div class="control-group" style="margin:0px; padding-top:6px;">
+						<label class="control-label" for="probability"><b>Close Date</b> <span class="field_req">*</span></label>
+						<div class="controls">
+							<input name="close_date" id="close_date" class="required deal-calender" placeholder="MM/DD/YY" type="text"/>				
 						</div>
 					</div>
-              		<div class="row">
-						<div class=" span3">	
-							<label class="control-label"><b>Probability (%): </b> <span class="field_req">*</span></label>
-							<div class="controls">
-								<input type="text" id="probability" name="probability" class="input-small required digits" max="100" placeholder="Probability %"/>				
-		  					</div>
-						</div>
-						<div class=" span2">
-							<label class="control-label"><b>Close Date: </b> <span class="field_req">*</span></label>
-							<div class="controls">
-								<input id="close_date" type="text" name="close_date" class="input-small required deal-calender" placeholder="MM/DD/YY"/>				
-							</div>
-						</div>
-					</div>
-               		<div class="form-actions" style="padding:10px 0px 0px 0px; margin:0px;">
+					
+               		<div class="form-actions" style="padding-top:10px padding-bottom:10px; margin:10px 0px 0px 0px;">
                			<a type="submit" class="btn btn-primary gadget-deal-validate" style="padding:2px 6px 2px;">Add Deal</a> 
-			   			<a class="cancel btn" data-tab-identity="deals" style="padding:2px 6px 2px;">Cancel</a>
+			   			<a class="cancel btn" data-tab-identity="deals" style="padding:2px 6px 2px; margin-left:5px;">Cancel</a>
 						<img class="deal-add-waiting" style="display:none;width:16px; margin-left:10px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>
                    	</div>
 		  		</fieldset>
@@ -561,14 +557,15 @@
 
 <script id="gadget-campaign-template" type="text/html">
 <!--  Add to Campaign Form -->
-	<div class="gadget-campaign" style="padding-left:30px;">
-        <form class="gadget-campaign-form" name="gadget_campaign_form" method="post">
+	<div class="gadget-campaign" row-fluid">
+        <form class="gadget-campaign-form form-horizontal" name="gadget_campaign_form" method="post" style="margin:0px;">
             <fieldset style="margin:0px;">
 				<input type="hidden" name="email" value='{{email}}' />
-                <div class="control-group">         
-                    <label class="control-label span2" style="margin-left:0px;">Select campaign: <span class="field_req">*</span></label>
+                
+				<div class="control-group" style="margin:0px; padding-top:6px;">       
+                    <label class="control-label" for="campaign-select">Select campaign<span class="field_req">*</span></label>
                     <div class="controls">
-                        <select id="campaign-select" name="id" class="required">
+                        <select name="id" id="campaign-select" class="required" style="width:210px;">
 							<option value="">Select..</option>
 							{{#if this.length}}
 								{{#each this}}
@@ -578,9 +575,10 @@
                         </select>
                     </div>
                 </div>
-                <div class="form-actions" style="padding:10px 0px 0px 0px; margin:0px;">          
+
+                <div class="form-actions" style="padding-top:10px padding-bottom:10px; margin:10px 0px 0px 0px;">         
                     <a type="submit" class="btn btn-primary gadget-campaign-validate" style="padding:2px 6px 2px;">Add to Campaign</a> 
-                    <a class="cancel btn " data-tab-identity="campaigns" style="padding:2px 6px 2px;">Cancel</a>
+                    <a class="cancel btn " data-tab-identity="campaigns" style="padding:2px 6px 2px; margin-left:5px;">Cancel</a>
 					<img class="campaign-add-waiting" style="display:none;width:16px; margin-left:10px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>
                 </div>
             </fieldset>
