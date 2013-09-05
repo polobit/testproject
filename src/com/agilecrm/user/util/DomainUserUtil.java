@@ -1,8 +1,11 @@
 package com.agilecrm.user.util;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
@@ -175,7 +178,15 @@ public class DomainUserUtil
 
     public static DomainUser getDomainUserByEmailFromCurrentAccount(String email)
     {
-	return dao.getByProperty("email", email);
+	String namespace = NamespaceManager.get();
+	if (StringUtils.isEmpty(namespace))
+	    return null;
+
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	searchMap.put("email", email);
+	searchMap.put("domain", NamespaceManager.get());
+	return dao.getByProperty(searchMap);
+
     }
 
     /**
