@@ -179,14 +179,23 @@ public class DomainUserUtil
     public static DomainUser getDomainUserByEmailFromCurrentAccount(String email)
     {
 	String namespace = NamespaceManager.get();
+
 	if (StringUtils.isEmpty(namespace))
 	    return null;
 
-	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("email", email);
-	searchMap.put("domain", NamespaceManager.get());
-	return dao.getByProperty(searchMap);
+	NamespaceManager.set("");
 
+	try
+	{
+	    Map<String, Object> searchMap = new HashMap<String, Object>();
+	    searchMap.put("email", email);
+	    searchMap.put("domain", NamespaceManager.get());
+	    return dao.getByProperty(searchMap);
+	}
+	finally
+	{
+	    NamespaceManager.set(namespace);
+	}
     }
 
     /**
