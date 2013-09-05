@@ -20,6 +20,7 @@ $(function()
 	search_string = undefined;
 	search_data = undefined;
 	Twitter_search_details = {};
+	web_url = "";
 
 	// Global twitter id
 	Twitter_id = "";
@@ -45,7 +46,7 @@ $(function()
 	}
 
 	// Get website URL for Twitter from contact to get profile based on it
-	var web_url = agile_crm_get_contact_property_by_subtype('website', 'TWITTER');
+	web_url = agile_crm_get_contact_property_by_subtype('website', 'TWITTER');
 	console.log(web_url);
 
 	// If Twitter URL exists for contact,
@@ -465,8 +466,10 @@ function showTwitterMatchingProfiles(data)
 
 			// Web url of twitter for this profile
 			var url = "@" + $(this).attr('screen_name');
-
+			
+			web_url = url;
 			console.log(url);
+			
 			var propertiesArray = [
 				{ "name" : "website", "value" : url, "subtype" : "TWITTER" }
 			];
