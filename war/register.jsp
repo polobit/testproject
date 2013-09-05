@@ -149,9 +149,9 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 				
 				<div class="clearfix"></div>
 				
-				<form name='agile' id="agile" method='post' onsubmit="return isValid();" style="padding-top:10px;"> 
+				<form name='agile' id="agile" method='post' onsubmit="return isValid();" style="margin:0px;padding-top:10px;"> 
 				 <h3><small>Create Your Free Account</small></h3>	
-				<div id="openid_btns" style="float: left;padding:5px 0 15px;">
+				<div id="openid_btns" style="padding:5px 0 15px;">
 					<input type='hidden' name='type' value='agile'></input>
 					
 					<input class="input-xlarge field required" name='name' type="text" maxlength="50" minlength="3" placeholder="Full Name" autocapitalize="off">
