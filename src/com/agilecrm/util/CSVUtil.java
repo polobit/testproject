@@ -181,11 +181,11 @@ public class CSVUtil
 	System.out.println(contact);
 	CSVReader reader = new CSVReader(csvStream);
 
-	reader.readNext();
 	List<String[]> contacts = reader.readAll();
 
 	if (contacts.isEmpty())
 	    return;
+
 	contacts.remove(0);
 
 	contact.type = Contact.Type.PERSON;

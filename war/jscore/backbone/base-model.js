@@ -417,6 +417,8 @@ var Base_Model_View = Backbone.View
 			 */
 			render : function(isFetched) {
 
+				
+				
 				/**
 				 * Renders and returns the html element of view with model data,
 				 * few conditions are checked render the view according to
@@ -440,6 +442,11 @@ var Base_Model_View = Backbone.View
 				if (!this.model.isNew() || this.options.isNew
 						|| !$.isEmptyObject(this.model.toJSON()) || isFetched) {
 
+					$(this.el).on('DOMNodeInserted', function(e) {
+						$('form', this).focus_first();
+					 });
+					
+					
 					/*
 					 * Uses handlebars js to fill the model data in the template
 					 */
@@ -477,6 +484,8 @@ var Base_Model_View = Backbone.View
 							deserializeForm(this.model.toJSON(), $(this.el)
 									.find('form'));
 					}
+					
+					
 					
 					// Add row-fluid if user prefs are set to fluid
 					if (IS_FLUID)

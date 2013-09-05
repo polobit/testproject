@@ -24,7 +24,8 @@ function agile_user_setup(popup_url, bool) {
 		var domain = gadgets.util.getUrlParameters().pid;
 		// Make URL to set-up user account.
 		var Url_Root = popup_url + "&hd=" + domain;
-		
+		// Clear old UI.
+		$('#agile_content').children().eq(1).remove();
 		// Create UI to let user enter its desired agile domain name.
 		$('#agile_content').append('<div class="well well-small agile-one-time-setup" style="margin:0 0 5px 5px;">'
 				+'<p>Associate your account - one time setup</p>'
