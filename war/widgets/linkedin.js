@@ -22,6 +22,7 @@ $(function()
 	past_search_input = undefined;
 	past_search_data = undefined;
 	Search_details = {};
+	linkedin_web_url = "";
 
 	// Retrieves widget which is fetched using script API
 	var linkedin_widget = agile_crm_get_plugin(LINKEDIN_PLUGIN_NAME);
@@ -48,12 +49,14 @@ $(function()
 	Linkedin_id = "";
 
 	// Get website URL for LinkedIn from contact to get profile based on it
-	var web_url = agile_crm_get_contact_property_by_subtype('website', 'LINKEDIN');
+	linkedin_web_url = agile_crm_get_contact_property_by_subtype('website', 'LINKEDIN');
+	
+	console.log(linkedin_web_url);
 
-	if (web_url)
+	if (linkedin_web_url)
 	{
 		// Get LinkedIn id from URL and show profile
-		getLinkedinIdByUrl(web_url, function(data)
+		getLinkedinIdByUrl(linkedin_web_url, function(data)
 		{
 			Linkedin_id = data;
 			showLinkedinProfile(Linkedin_id);
@@ -70,7 +73,7 @@ $(function()
 	{
 		event.preventDefault();
 
-		agile_crm_delete_contact_property_by_subtype('website', 'LINKEDIN', web_url);
+		agile_crm_delete_contact_property_by_subtype('website', 'LINKEDIN', linkedin_web_url);
 
 	});
 
@@ -289,6 +292,8 @@ function showLinkedinMatchingProfiles(data)
 
 			// Web URL of LinkedIn for this profile
 			var url = $(this).attr('url');
+			
+			linkedin_web_url = url;
 
 			console.log('LinkedIn URL: ' + url);
 
@@ -1011,17 +1016,17 @@ function reSharePost(share_id, message, element)
  * If LinkedIn URL is provided for the contact, gets Linkedin Id of the profile
  * based on which LinkedIn profile of the contact is retrieved
  * 
- * @param web_url
+ * @param linkedin_web_url
  *            URL provided saved for contact
  * @param callback
  *            Callback to be executed to get the profile
  */
-function getLinkedinIdByUrl(web_url, callback)
+function getLinkedinIdByUrl(linkedin_web_url, callback)
 {
 
 	// Store url in a json to post it
 	var url_json = {};
-	url_json['web_url'] = web_url;
+	url_json['web_url'] = linkedin_web_url;
 
 	/*
 	 * Sends post request to URL "/core/api/widgets/social/getidbyurl/" by
@@ -1042,7 +1047,7 @@ function getLinkedinIdByUrl(web_url, callback)
 			 * Delete the LinkedIn URL associated with contact as it is
 			 * incorrect
 			 */
-			agile_crm_delete_contact_property_by_subtype('website', 'LINKEDIN', web_url);
+			agile_crm_delete_contact_property_by_subtype('website', 'LINKEDIN', linkedin_web_url);
 
 			return;
 		}
@@ -1064,7 +1069,7 @@ function getLinkedinIdByUrl(web_url, callback)
 			 * Delete the LinkedIn URL associated with contact as it is
 			 * incorrect
 			 */
-			agile_crm_delete_contact_property_by_subtype('website', 'LINKEDIN', web_url);
+			agile_crm_delete_contact_property_by_subtype('website', 'LINKEDIN', linkedin_web_url);
 			return;
 		}
 
