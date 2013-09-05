@@ -424,7 +424,6 @@ function agile_init_handlers() {
 				// Contact found, show contact summary. 
 				else {
 					$('.gadget-show-contact', el).trigger('click');
-					$('.contact-list', el).css('display', 'inline');
 				}
 			});
 		});

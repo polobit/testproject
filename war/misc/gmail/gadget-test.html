@@ -28,14 +28,13 @@
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div id="agile_content" class="span12">
-				<img class="loading" style="padding-right:5px" src= "/img/21-0.gif"></img>
+				<img id="loading" style="padding-right:5px" src= "/img/21-0.gif"></img>
 			</div>
 		</div>
     </div>
    
 	<script src='http://localhost:8888/lib/headjs-min.js'></script>
 	<script src='http://localhost:8888/lib/jquery.min.js'></script>
-
 	<script src='http://localhost:8888/misc/gmail/agile-gadget-main.js'></script>
 	
    
@@ -44,7 +43,7 @@
 			<div class="show-form" data-content={{email}}>
 <!--email list -->
 				<div class="contact-list">
-					<div class="gadget-no-contact row-fluid">
+					<div class="row-fluid">
 						{{#if fname}}
 							<a class="gadget-search-contact" style="cursor:pointer; margin:0px 8px 0px 5px; text-decoration:underline; font-weight:bold;"><i class="icon-search" style="text-decoration:none; margin-right:5px;"></i><span>Search</span></a> {{fname}} {{lname}} ({{email}}) in Agile Contacts
 						{{else}}
