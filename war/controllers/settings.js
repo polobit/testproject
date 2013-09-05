@@ -225,7 +225,8 @@ var SettingsRouter = Backbone.Router.extend({
 				});	
 				try
 				{
-				$('#notification-switch',el).bootstrapSwitch();}
+				$('#notification-switch',el).bootstrapSwitch();
+				}
 				catch(err)
 				{
 					console.log(err);
