@@ -172,8 +172,7 @@ public class Opportunity extends Cursor
      * @param ownerId
      *            - Owner id.
      */
-    public Opportunity(String name, String description, Double expectedValue, String milestone, int probability,
-	    String track, String ownerId)
+    public Opportunity(String name, String description, Double expectedValue, String milestone, int probability, String track, String ownerId)
     {
 	this.name = name;
 	this.description = description;
@@ -332,13 +331,14 @@ public class Opportunity extends Cursor
 	if (id == null)
 	{
 	    search.add(this);
+
+	    // New Deal Notification
+	    DealNotificationPrefsUtil.executeNotificationForNewDeal(this);
+
 	    return;
 	}
 	search.edit(this);
 
-	// Executes notification for new deal, inorder to get id
-	if (id == null)
-	    DealNotificationPrefsUtil.executeNotificationForNewDeal(this);
     }
 
     /**
@@ -390,8 +390,7 @@ public class Opportunity extends Cursor
      */
     public String toString()
     {
-	return "id: " + id + " relatesto: " + contact_ids + " close date" + close_date + " name: " + name
-		+ " description:" + description + " expectedValue: " + expected_value + " milestone: " + milestone
-		+ " probability: " + probability + " Track: " + track + " Owner " + owner_id;
+	return "id: " + id + " relatesto: " + contact_ids + " close date" + close_date + " name: " + name + " description:" + description + " expectedValue: "
+		+ expected_value + " milestone: " + milestone + " probability: " + probability + " Track: " + track + " Owner " + owner_id;
     }
 }

@@ -13,12 +13,14 @@
  * Global variables:- 1) _agile - Access agile API methods through it, 2)
  * Is_Localhost - Local host identifier, 3) Lib_Path - Set library path based on
  * local host or production. 4) Contacts_Json - holds contact detail object,
- * which helps in loading contacts without sending server request.
+ * which helps in loading contacts without sending server request. 5) Cache_Counter -
+ * Helps in making new Auth request every time. 
  */
 var _agile = _agile || [];
 var Is_Localhost = false;
 var Lib_Path;
 var Contacts_Json = {};
+var Cache_Counter = 0;
 
 /**
  * Initialize gadget for Local host or Production.
@@ -48,8 +50,8 @@ function agile_init_gadget() {
 	// Production version, go for login.
 	else {
 		// Set library path.
-//		Lib_Path = "https://googleapps.agilecrm.com/";
-		Lib_Path = "https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/";
+		Lib_Path = "https://googleapps.agilecrm.com/";
+//		Lib_Path = "https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/";
 
 		// Login
 		agile_login();
@@ -97,8 +99,9 @@ function agile_login() {
 	
 	// Check for cookie, if not there send login request.
 	else {
-		// var url = 'https://googleapps.agilecrm.com/gmail';
-		var url = Lib_Path + 'gmail';
+		// Increase counter and append to request, so that it will not cached.
+		Cache_Counter += 1;
+		var url = Lib_Path + 'gmail?chachecounter=' + Cache_Counter;
 		console.log("Osapi from " + url);
 		/*
 		 * Hit the server, passing in a signed request (and OpenSocial ID), to
