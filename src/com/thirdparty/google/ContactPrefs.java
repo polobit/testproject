@@ -29,177 +29,184 @@ import com.googlecode.objectify.condition.IfDefault;
 @XmlRootElement
 public class ContactPrefs implements Serializable
 {
-    // Key
-    @Id
-    public Long id;
+	// Key
+	@Id
+	public Long id;
 
-    /**
-     * Access token for OAuth or API key
-     */
-    @NotSaved(IfDefault.class)
-    public String token = null;
+	/** Stores user name of the source */
+	@NotSaved(IfDefault.class)
+	public String userName = null;
 
-    /**
-     * Secret token for OAuth
-     */
-    @NotSaved(IfDefault.class)
-    public String secret = null;
+	/** Stores password of the source */
+	@NotSaved(IfDefault.class)
+	public String password = null;
 
-    /**
-     * Refresh token for OAuth to exchange for access token
-     */
-    @NotSaved(IfDefault.class)
-    public String refreshToken = null;
+	/** API key of source */
+	@NotSaved(IfDefault.class)
+	public String apiKey = null;
 
-    /**
-     * If access token expire time is specified, we store it
-     */
-    @NotSaved(IfDefault.class)
-    public Long expires = 0L;
+	/**
+	 * Access token for OAuth
+	 */
+	@NotSaved(IfDefault.class)
+	public String token = null;
 
-    // created time
-    @NotSaved(IfDefault.class)
-    public Long createdAt = 0L;
+	/**
+	 * Secret token for OAuth
+	 */
+	@NotSaved(IfDefault.class)
+	public String secret = null;
 
-    // modified time
-    @NotSaved(IfDefault.class)
-    public Long lastModifedAt = 0L;
+	/**
+	 * Refresh token for OAuth to exchange for access token
+	 */
+	@NotSaved(IfDefault.class)
+	public String refreshToken = null;
 
-    // domain user key
-    @JsonIgnore
-    private Key<DomainUser> domainUser;
+	/**
+	 * If access token expire time is specified, we store it
+	 */
+	@NotSaved(IfDefault.class)
+	public Long expires = 0L;
 
-    public static enum Type
-    {
-	GOOGLE, ZOHO, SUGAR, SALESFORCE
-    }
+	// created time
+	@NotSaved(IfDefault.class)
+	public Long createdAt = 0L;
 
-    /**
-     * Enum type which specifies sources from which we import contacts
-     */
-    @NotSaved(IfDefault.class)
-    public Type type = null;
+	// modified time
+	@NotSaved(IfDefault.class)
+	public Long lastModifedAt = 0L;
 
-    public ContactPrefs()
-    {
-    }
+	// domain user key
+	@JsonIgnore
+	private Key<DomainUser> domainUser;
 
-    public ContactPrefs(Type type, String token, String secret, Long expires,
-	    String refreshToken)
-    {
-	this.type = type;
-	this.token = token;
-	this.secret = secret;
-	this.refreshToken = refreshToken;
-	this.expires = expires;
-    }
-
-    /**
-     * ContactPrefs DAO.
-     */
-    private static ObjectifyGenericDao<ContactPrefs> dao = new ObjectifyGenericDao<ContactPrefs>(
-	    ContactPrefs.class);
-
-    /**
-     * Saves ContactPrefs in database
-     */
-    public void save()
-    {
-	dao.put(this);
-    }
-
-    /**
-     * sets created time,expire time for access token and domain user key
-     */
-    @PrePersist
-    public void prePersist()
-    {
-
-	createdAt = System.currentTimeMillis();
-	if (expires != 0l)
-	    expires = createdAt + expires * 1000;
-
-	if (domainUser == null)
-	    domainUser = new Key<DomainUser>(DomainUser.class, SessionManager
-		    .get().getDomainId());
-    }
-
-    /**
-     * Sets domianUser key.
-     * 
-     * @param domianUser
-     *            - domianUser Key.
-     */
-    public void setDomainUser(Key<DomainUser> domianUser)
-    {
-	this.domainUser = domianUser;
-    }
-
-    /**
-     * Returns domianUser Key.
-     * 
-     * @return domianUser object
-     */
-    public Key<DomainUser> getDomainUser()
-    {
-	System.out.println("domain user key : " + domainUser);
-	return domainUser;
-    }
-
-    /**
-     * Deletes ContactPrefs.
-     */
-    public void delete()
-    {
-	dao.delete(this);
-    }
-
-    /**
-     * Retrieves {@link ContactPrefs} based on its id from database
-     * 
-     * @param id
-     *            {@link Long} id of {@link ContactPrefs}
-     * @return
-     */
-    public static ContactPrefs get(Long id)
-    {
-	try
+	public static enum Type
 	{
-	    return dao.get(id);
+		GOOGLE, ZOHO, SUGAR, SALESFORCE
 	}
-	catch (EntityNotFoundException e)
+
+	/**
+	 * Enum type which specifies sources from which we import contacts
+	 */
+	@NotSaved(IfDefault.class)
+	public Type type = null;
+
+	public ContactPrefs()
 	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	    return null;
 	}
-    }
 
-    /**
-     * Retrieves {@link ContactPrefs} based on enum {@link Type}
-     * 
-     * @param type
-     *            {@link Type} from which contacts are imported
-     * @return
-     */
-    public static ContactPrefs getPrefsByType(Type type)
-    {
+	public ContactPrefs(Type type, String token, String secret, Long expires, String refreshToken)
+	{
+		this.type = type;
+		this.token = token;
+		this.secret = secret;
+		this.refreshToken = refreshToken;
+		this.expires = expires;
+	}
 
-	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("type", type);
-	searchMap.put("domainUser", new Key<DomainUser>(DomainUser.class,
-		SessionManager.get().getDomainId()));
-	return dao.getByProperty(searchMap);
-    }
+	/**
+	 * ContactPrefs DAO.
+	 */
+	private static ObjectifyGenericDao<ContactPrefs> dao = new ObjectifyGenericDao<ContactPrefs>(ContactPrefs.class);
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
-    public String toString()
-    {
-	return "token: " + token + " secret: " + secret + "refreshToken: "
-		+ refreshToken + " expires: " + expires;
-    }
+	/**
+	 * Saves ContactPrefs in database
+	 */
+	public void save()
+	{
+		dao.put(this);
+	}
+
+	/**
+	 * sets created time,expire time for access token and domain user key
+	 */
+	@PrePersist
+	public void prePersist()
+	{
+
+		createdAt = System.currentTimeMillis();
+		if (expires != 0l)
+			expires = createdAt + expires * 1000;
+
+		if (domainUser == null)
+			domainUser = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
+	}
+
+	/**
+	 * Sets domianUser key.
+	 * 
+	 * @param domianUser
+	 *            - domianUser Key.
+	 */
+	public void setDomainUser(Key<DomainUser> domianUser)
+	{
+		this.domainUser = domianUser;
+	}
+
+	/**
+	 * Returns domianUser Key.
+	 * 
+	 * @return domianUser object
+	 */
+	public Key<DomainUser> getDomainUser()
+	{
+		System.out.println("domain user key : " + domainUser);
+		return domainUser;
+	}
+
+	/**
+	 * Deletes ContactPrefs.
+	 */
+	public void delete()
+	{
+		dao.delete(this);
+	}
+
+	/**
+	 * Retrieves {@link ContactPrefs} based on its id from database
+	 * 
+	 * @param id
+	 *            {@link Long} id of {@link ContactPrefs}
+	 * @return
+	 */
+	public static ContactPrefs get(Long id)
+	{
+		try
+		{
+			return dao.get(id);
+		}
+		catch (EntityNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * Retrieves {@link ContactPrefs} based on enum {@link Type}
+	 * 
+	 * @param type
+	 *            {@link Type} from which contacts are imported
+	 * @return
+	 */
+	public static ContactPrefs getPrefsByType(Type type)
+	{
+
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("type", type);
+		searchMap.put("domainUser", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()));
+		return dao.getByProperty(searchMap);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString()
+	{
+		return "token: " + token + " secret: " + secret + "refreshToken: " + refreshToken + " expires: " + expires;
+	}
 }

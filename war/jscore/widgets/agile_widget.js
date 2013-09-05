@@ -276,7 +276,7 @@ function agile_crm_get_plugin(pluginName)
 	 */
 	console.log($('#' + pluginName));
 	var model_data = $('#' + pluginName, App_Contacts.contactDetailView.el).data('model');
-	
+
 	console.log(model_data);
 
 	return model_data.toJSON();
@@ -457,7 +457,7 @@ function agile_crm_get_contact_property_by_subtype(propertyName, subtype)
  * @param value
  *            Value of the property
  */
-function agile_crm_delete_contact_property_by_subtype(propertyName, subtype, value)
+function agile_crm_delete_contact_property_by_subtype(propertyName, subtype, value, callback)
 {
 
 	// Reads current contact model form the contactDetailView
@@ -475,12 +475,18 @@ function agile_crm_delete_contact_property_by_subtype(propertyName, subtype, val
 		if (property.name == propertyName && property.subtype == subtype && property.value == value)
 		{
 			properties.splice(index, 1);
-			contact_model.set("properties", properties);
+			contact_model.set({ "properties" : properties }, { silent : true });
 
 			contact_model.url = "core/api/contacts";
 
 			// Save updated contact model
-			contact_model.save();
+			contact_model.save([], { silent : true, success : function(data)
+			{
+				console.log("in success");
+				if (callback && typeof callback === "function")
+					callback(data);
+
+			} });
 
 			return false;
 		}

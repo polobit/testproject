@@ -30,10 +30,10 @@ public class GoogleContactToAgileContactUtil
 	public final static String GOOGLE_CONTACTS_BASE_URL = "https://www.google.com/m8/feeds/";
 
 	/**
-	 * Bulids contact service object with required parametes for authentication
+	 * Builds contact service object with required parameters for authentication
 	 * 
 	 * @param token
-	 *            {@link String} access token retrieved from oauth
+	 *            {@link String} access token retrieved from OAuth
 	 * @return {@link ContactsService}
 	 * @throws Exception
 	 */
@@ -65,7 +65,7 @@ public class GoogleContactToAgileContactUtil
 		// build service with all the tokens
 		ContactsService contactService = getService(accessToken);
 
-		// Get all the avialable groups in gmail account
+		// Get all the available groups in gmail account
 		ContactFeed resultFeed = getGroups(contactService, accessToken);
 
 		String temp = "";
@@ -97,7 +97,7 @@ public class GoogleContactToAgileContactUtil
 	 * @param contactService
 	 *            {@link ContactsService}
 	 * @param accessToken
-	 *            {@link String} access token retrieved from oauth
+	 *            {@link String} access token retrieved from OAuth
 	 * @return {@link ContactFeed}
 	 * @throws Exception
 	 */

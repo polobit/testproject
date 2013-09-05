@@ -39,254 +39,227 @@ import com.googlecode.objectify.Key;
 public class ContactsImportUtil
 {
 
-    /**
-     * This is called when the user comes second time.Since we have his
-     * preferences, we can initialize backends with the available preferences
-     * 
-     * @param type
-     *            {@link ContactPrefs.Type}
-     */
-    public static void initializeImport(String type)
-    {
-	ContactPrefs contactPrefs = ContactPrefs
-		.getPrefsByType(ContactPrefs.Type.valueOf(type.toUpperCase()));
-
-	System.out.println("in initialize backends");
-	System.out.println(contactPrefs);
-
-	// if no preferences are saved, there might an error while
-	// authenticating
-	if (contactPrefs == null)
+	/**
+	 * This is called when the user comes second time.Since we have his
+	 * preferences, we can initialize backends with the available preferences
+	 * 
+	 * @param type
+	 *            {@link ContactPrefs.Type}
+	 */
+	public static void initializeImport(String type)
 	{
-	    // notifies user after adding contacts
-	    BulkActionNotifications.publishconfirmation(
-		    BulkAction.CONTACTS_IMPORT_MESSAGE,
-		    "Authentication failed. Please import again");
-	    return;
-	}
+		ContactPrefs contactPrefs = ContactPrefs.getPrefsByType(ContactPrefs.Type.valueOf(type.toUpperCase()));
 
-	// if contact preferences exists for google, initialize backends
-	initilaizeImportBackend(contactPrefs);
-    }
+		System.out.println("in initialize backends");
+		System.out.println(contactPrefs);
 
-    /**
-     * Initializes backend with contact preferences and hits
-     * {@link ContactUtilServlet}
-     * 
-     * @param contactPrefs
-     *            {@link ContactPrefs}
-     */
-    public static void initilaizeImportBackend(ContactPrefs contactPrefs)
-    {
-	// notifies user after adding contacts
-	BulkActionNotifications.publishconfirmation(
-		BulkAction.CONTACTS_IMPORT_MESSAGE, "Import scheduled");
-
-	Queue queue = QueueFactory.getQueue("bulk-actions-queue");
-	TaskOptions taskOptions;
-	try
-	{
-	    ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
-	    ObjectOutputStream objectOutputStream = new ObjectOutputStream(
-		    byteArrayStream);
-	    objectOutputStream.writeObject(contactPrefs);
-	    System.out.println("byte array length in initialize backends: "
-		    + byteArrayStream.toByteArray().length);
-	    taskOptions = TaskOptions.Builder
-		    .withUrl("/backend/contactsutilservlet")
-		    .payload(byteArrayStream.toByteArray())
-		    .header("Host",
-			    BackendServiceFactory.getBackendService()
-				    .getBackendAddress("b1"))
-		    .method(Method.POST);
-	    queue.add(taskOptions);
-	}
-	catch (Exception e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
-
-    }
-
-    /**
-     * Maps google contact with agile contact and saves contact in agile.
-     * 
-     * @param entries
-     *            {@link List} of {@link ContactEntry}
-     * @param ownerKey
-     *            domain user key
-     */
-    public static void saveGoogleContactsInAgile(List<ContactEntry> entries,
-	    Key<DomainUser> ownerKey)
-    {
-
-	System.out.println(entries.size());
-
-	int counter = 0;
-	main: for (ContactEntry entry : entries)
-	{
-	    Contact agileContact = new Contact();
-
-	    List<ContactField> fields = new ArrayList<ContactField>();
-
-	    // checks if google contact has email and skips it
-	    if ((!entry.hasEmailAddresses() || entry.getEmailAddresses().size() == 0)
-		    || (entry.getEmailAddresses().size() == 1 && entry
-			    .getEmailAddresses().get(0).getAddress() == null))
-		continue;
-
-	    for (Email email : entry.getEmailAddresses())
-		if (email.getAddress() != null)
+		/*
+		 * If no preferences are saved, there might an error while
+		 * authenticating
+		 */
+		if (contactPrefs == null)
 		{
-		    System.out.println("Email: " + email.getAddress());
-
-		    // checks for duplicate emails and skips contact
-		    if (ContactUtil.isExists(email.getAddress()))
-			continue main;
-
-		    fields.add(new ContactField(Contact.EMAIL, null, email
-			    .getAddress()));
+			// notifies user after adding contacts
+			BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
+					"Authentication failed. Please import again");
+			return;
 		}
 
-	    if (entry.hasName())
-	    {
-		Name name = entry.getName();
+		// if contact preferences exists for google, initialize backends
+		initilaizeImportBackend(contactPrefs);
+	}
 
-		if (name.hasGivenName() && name.hasFamilyName())
+	/**
+	 * Initializes backend with contact preferences and hits
+	 * {@link ContactUtilServlet}
+	 * 
+	 * @param contactPrefs
+	 *            {@link ContactPrefs}
+	 */
+	public static void initilaizeImportBackend(ContactPrefs contactPrefs)
+	{
+		// notifies user after adding contacts
+		BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE, "Import scheduled");
+
+		Queue queue = QueueFactory.getQueue("bulk-actions-queue");
+		TaskOptions taskOptions;
+		try
 		{
-		    if (name.hasFamilyName())
-			fields.add(new ContactField(Contact.LAST_NAME, null,
-				name.getFamilyName().getValue()));
-
-		    if (name.hasGivenName())
-			fields.add(new ContactField(Contact.FIRST_NAME, null,
-				name.getGivenName().getValue()));
+			ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
+			ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayStream);
+			objectOutputStream.writeObject(contactPrefs);
+			System.out.println("byte array length in initialize backends: " + byteArrayStream.toByteArray().length);
+			taskOptions = TaskOptions.Builder.withUrl("/backend/contactsutilservlet")
+					.payload(byteArrayStream.toByteArray())
+					.header("Host", BackendServiceFactory.getBackendService().getBackendAddress("b1"))
+					.method(Method.POST);
+			queue.add(taskOptions);
 		}
-		else if (name.hasFullName())
-		    fields.add(new ContactField(Contact.FIRST_NAME, null, name
-			    .getFullName().getValue()));
-
-	    }
-
-	    if (entry.hasOrganizations())
-		if (entry.getOrganizations().get(0).hasOrgName()
-			&& entry.getOrganizations().get(0).getOrgName()
-				.hasValue())
-		    fields.add(new ContactField(Contact.COMPANY, null, entry
-			    .getOrganizations().get(0).getOrgName().getValue()));
-
-	    if (entry.hasPhoneNumbers())
-		for (PhoneNumber phone : entry.getPhoneNumbers())
-		    if (phone.getPhoneNumber() != null)
-			fields.add(new ContactField("phone", null, entry
-				.getPhoneNumbers().get(0).getPhoneNumber()));
-
-	    if (entry.hasStructuredPostalAddresses())
-		for (StructuredPostalAddress address : entry
-			.getStructuredPostalAddresses())
+		catch (Exception e)
 		{
-		    System.out.println("in structured address");
-
-		    JSONObject json = new JSONObject();
-		    String addr = "";
-		    if (address.hasStreet())
-			addr = addr + address.getStreet().getValue();
-		    if (address.hasSubregion())
-			addr = addr + ", " + address.getSubregion().getValue();
-		    if (address.hasRegion())
-			addr = addr + ", " + address.getRegion().getValue();
-
-		    System.out.println(addr);
-		    try
-		    {
-			if (!StringUtils.isBlank(addr))
-			    json.put("address", addr);
-
-			if (address.hasCity() && address.getCity().hasValue())
-			    json.put("city", address.getCity().getValue());
-
-			if (address.hasCountry()
-				&& address.getCountry().hasValue())
-			    json.put("country", address.getCountry().getValue());
-
-			if (address.hasPostcode()
-				&& address.getPostcode().hasValue())
-			    json.put("zip", address.getPostcode().getValue());
-		    }
-		    catch (JSONException e)
-		    {
-			continue;
-		    }
-
-		    fields.add(new ContactField("address", null, json
-			    .toString()));
-
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
-	    if (entry.hasImAddresses())
-		for (Im im : entry.getImAddresses())
+	}
+
+	/**
+	 * Maps google contact with agile contact and saves contact in agile.
+	 * 
+	 * @param entries
+	 *            {@link List} of {@link ContactEntry}
+	 * @param ownerKey
+	 *            domain user key
+	 */
+	public static void saveGoogleContactsInAgile(List<ContactEntry> entries, Key<DomainUser> ownerKey)
+	{
+
+		System.out.println(entries.size());
+
+		int counter = 0;
+		main: for (ContactEntry entry : entries)
 		{
-		    if (im.hasAddress())
-		    {
-			String subType = "";
-			if (im.hasProtocol() && im.getProtocol() != null)
+			Contact agileContact = new Contact();
+
+			List<ContactField> fields = new ArrayList<ContactField>();
+
+			// checks if google contact has email and skips it
+			if ((!entry.hasEmailAddresses() || entry.getEmailAddresses().size() == 0)
+					|| (entry.getEmailAddresses().size() == 1 && entry.getEmailAddresses().get(0).getAddress() == null))
+				continue;
+
+			for (Email email : entry.getEmailAddresses())
+				if (email.getAddress() != null)
+				{
+					System.out.println("Email: " + email.getAddress());
+
+					// checks for duplicate emails and skips contact
+					if (ContactUtil.isExists(email.getAddress()))
+						continue main;
+
+					fields.add(new ContactField(Contact.EMAIL, null, email.getAddress()));
+				}
+
+			if (entry.hasName())
 			{
-			    if (im.getProtocol().indexOf("#") >= 0
-				    && im.getProtocol()
-					    .substring(
-						    im.getProtocol().indexOf(
-							    "#") + 1)
-					    .equalsIgnoreCase("SKYPE"))
-				subType = "SKYPE";
-			    if (im.getProtocol().indexOf("#") >= 0
-				    && im.getProtocol()
-					    .substring(
-						    im.getProtocol().indexOf(
-							    "#") + 1)
-					    .equalsIgnoreCase("GOOGLE_TALK"))
-				subType = "GOOGLE-PLUS";
-			    System.out.println("subtype: " + subType);
+				Name name = entry.getName();
+
+				if (name.hasGivenName() && name.hasFamilyName())
+				{
+					if (name.hasFamilyName())
+						fields.add(new ContactField(Contact.LAST_NAME, null, name.getFamilyName().getValue()));
+
+					if (name.hasGivenName())
+						fields.add(new ContactField(Contact.FIRST_NAME, null, name.getGivenName().getValue()));
+				}
+				else if (name.hasFullName())
+					fields.add(new ContactField(Contact.FIRST_NAME, null, name.getFullName().getValue()));
+
 			}
 
-			if (!StringUtils.isBlank(subType))
-			    fields.add(new ContactField("website", subType, im
-				    .getAddress()));
-			else
-			    fields.add(new ContactField("website", null, im
-				    .getAddress()));
+			if (entry.hasOrganizations())
+				if (entry.getOrganizations().get(0).hasOrgName()
+						&& entry.getOrganizations().get(0).getOrgName().hasValue())
+					fields.add(new ContactField(Contact.COMPANY, null, entry.getOrganizations().get(0).getOrgName()
+							.getValue()));
 
-		    }
+			if (entry.hasPhoneNumbers())
+				for (PhoneNumber phone : entry.getPhoneNumbers())
+					if (phone.getPhoneNumber() != null)
+						fields.add(new ContactField("phone", null, entry.getPhoneNumbers().get(0).getPhoneNumber()));
 
+			if (entry.hasStructuredPostalAddresses())
+				for (StructuredPostalAddress address : entry.getStructuredPostalAddresses())
+				{
+					System.out.println("in structured address");
+
+					JSONObject json = new JSONObject();
+					String addr = "";
+					if (address.hasStreet())
+						addr = addr + address.getStreet().getValue();
+					if (address.hasSubregion())
+						addr = addr + ", " + address.getSubregion().getValue();
+					if (address.hasRegion())
+						addr = addr + ", " + address.getRegion().getValue();
+
+					System.out.println(addr);
+					try
+					{
+						if (!StringUtils.isBlank(addr))
+							json.put("address", addr);
+
+						if (address.hasCity() && address.getCity().hasValue())
+							json.put("city", address.getCity().getValue());
+
+						if (address.hasCountry() && address.getCountry().hasValue())
+							json.put("country", address.getCountry().getValue());
+
+						if (address.hasPostcode() && address.getPostcode().hasValue())
+							json.put("zip", address.getPostcode().getValue());
+					}
+					catch (JSONException e)
+					{
+						continue;
+					}
+
+					fields.add(new ContactField("address", null, json.toString()));
+
+				}
+
+			if (entry.hasImAddresses())
+				for (Im im : entry.getImAddresses())
+				{
+					if (im.hasAddress())
+					{
+						String subType = "";
+						if (im.hasProtocol() && im.getProtocol() != null)
+						{
+							if (im.getProtocol().indexOf("#") >= 0
+									&& im.getProtocol().substring(im.getProtocol().indexOf("#") + 1)
+											.equalsIgnoreCase("SKYPE"))
+								subType = "SKYPE";
+							if (im.getProtocol().indexOf("#") >= 0
+									&& im.getProtocol().substring(im.getProtocol().indexOf("#") + 1)
+											.equalsIgnoreCase("GOOGLE_TALK"))
+								subType = "GOOGLE-PLUS";
+							System.out.println("subtype: " + subType);
+						}
+
+						if (!StringUtils.isBlank(subType))
+							fields.add(new ContactField("website", subType, im.getAddress()));
+						else
+							fields.add(new ContactField("website", null, im.getAddress()));
+
+					}
+
+				}
+
+			LinkedHashSet<String> tags = new LinkedHashSet<String>();
+			tags.add("Gmail contact");
+
+			agileContact.tags = tags;
+
+			// title is not given as job description instead displaying name
+			// if (entry.getTitle() != null
+			// && entry.getTitle().getPlainText() != null)
+			// {
+			// System.out.println("title " + entry.getTitle().getPlainText());
+			// fields.add(new ContactField("title", null, entry.getTitle()
+			// .getPlainText()));
+			// }
+
+			agileContact.properties = fields;
+
+			System.out.println(agileContact);
+			agileContact.setContactOwner(ownerKey);
+			agileContact.save();
+			counter++;
+			System.out.println("Contact's ETag: " + entry.getEtag());
+			System.out.println("----------------------------------------");
 		}
 
-	    LinkedHashSet<String> tags = new LinkedHashSet<String>();
-	    tags.add("Gmail contact");
+		// notifies user after adding contacts
+		BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT, String.valueOf(counter));
 
-	    agileContact.tags = tags;
-
-	    // title is not given as job description instead displaying name
-	    // if (entry.getTitle() != null
-	    // && entry.getTitle().getPlainText() != null)
-	    // {
-	    // System.out.println("title " + entry.getTitle().getPlainText());
-	    // fields.add(new ContactField("title", null, entry.getTitle()
-	    // .getPlainText()));
-	    // }
-
-	    agileContact.properties = fields;
-
-	    System.out.println(agileContact);
-	    agileContact.setContactOwner(ownerKey);
-	    agileContact.save();
-	    counter++;
-	    System.out.println("Contact's ETag: " + entry.getEtag());
-	    System.out.println("----------------------------------------");
 	}
-
-	// notifies user after adding contacts
-	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT,
-		String.valueOf(counter));
-
-    }
 }

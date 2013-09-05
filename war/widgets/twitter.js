@@ -70,7 +70,11 @@ $(function()
 	{
 		e.preventDefault();
 
-		agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url);
+		agile_crm_delete_contact_property_by_subtype('website', 'TWITTER', web_url, function(data)
+		{
+			console.log("In twitter delete callback");
+			getTwitterMatchingProfiles();
+		});
 
 	});
 
@@ -466,10 +470,10 @@ function showTwitterMatchingProfiles(data)
 
 			// Web url of twitter for this profile
 			var url = "@" + $(this).attr('screen_name');
-			
+
 			web_url = url;
 			console.log(url);
-			
+
 			var propertiesArray = [
 				{ "name" : "website", "value" : url, "subtype" : "TWITTER" }
 			];
@@ -493,7 +497,7 @@ function showTwitterMatchingProfiles(data)
 			console.log(propertiesArray);
 
 			agile_crm_update_contact_properties(propertiesArray);
-			
+
 			// show twitter profile by id
 			showTwitterProfile(Twitter_id);
 
