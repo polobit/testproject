@@ -476,9 +476,9 @@ var Base_Collection_View = Backbone.View
 				}
 
 				// Add checkboxes to specified tables by triggering this event
-				$('body').trigger('agile_collection_loaded');
+				$('body').trigger('agile_collection_loaded', [this.el]);
 				
-				$(this.el).trigger('agile_collection_loaded');
+			//	$(this.el).trigger('agile_collection_loaded', [this.el]);
 
 				// For the first time fetch, disable Scroll bar if results are
 				// lesser
