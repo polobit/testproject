@@ -14,21 +14,24 @@ $(function(){
     * Prepends check-boxes to the tables which are having the class showCheckboxes, 
     * by triggering the event agile_collection_loaded from base-collection render event, while loading the collection.
     */ 	
-	$('body').live('agile_collection_loaded', function(event) {
+	$('body').live('agile_collection_loaded', function(event, el) {
 		
+		console.log(el);
+		var table_element = $('table', el);
+		console.log(table_element.length);
+//		console.log($('table', element).length);
 		
 		  // Adds class to tbody to edit the table by validating the route attribute 
-		if($('table').find('tbody').attr('route'))
-			$('table').find('tbody').addClass('agile-edit-row');
+		if($(table_element).find('tbody').attr('route'))
+			$(table_element).find('tbody').addClass('agile-edit-row');
 		
-		if($('table').hasClass('onlySorting'))
+		if($(table_element).hasClass('onlySorting'))
 		{	
-			var sortingtable = $(this).find('table.onlySorting');
-		    sort_tables(sortingtable);
+		    sort_tables(table_element);
 		    return;
 		}
 		
-		if($('.grid-view').hasClass('showCheckboxes'))
+		if($('.grid-view', el).hasClass('showCheckboxes'))
 		{
 			if($(this).find('#delete-checked-grid').length == 0)
 					var element = $('.showCheckboxes').after('<div class="row-fluid"><div class="span6 select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked-grid" style="margin-bottom: 15px"> Delete</a>');		
@@ -36,10 +39,12 @@ $(function(){
 			return;
 		}
 		
-		var table = $(this).find('table.showCheckboxes');
+		
+		var table = $(el).find('table.showCheckboxes');
 		$(table).removeClass('table-bordered');
 		$(table).closest('div.data-block').removeClass('data-block');
 		
+	
 		//$(table).setAttribute('id', 'sort-table');
 
 		var table_body_row = $(table).find('tbody tr');
@@ -56,13 +61,13 @@ $(function(){
 		if(table_cell.length == 0)
 			$(table_body_row).prepend('<td style="cursor:default;"><input class="tbody_check" type="checkbox"/></td>');	  
 		
-		$(this).find('#delete-checked').remove();
+		$(el).find('#delete-checked').remove();
 		
 
 		$(table).after('<div class="row-fluid"><div class="span6  select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked" style="margin-bottom: 15px"> Delete</a>');
 		
 		// Sorts the tables based on their column values
-		sort_tables(table);
+		sort_tables(table_element);
 	});
 
    /**
