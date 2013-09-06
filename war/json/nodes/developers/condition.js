@@ -81,7 +81,7 @@
             "required": "required",
             "category": "Settings",
             "name": "variable_2",
-            "title": "Variable name (eg: {{variable}}) or value (eg: 5).",
+            "title": "Enter a value.",
             "fieldType": "input",
             "type": "text" 
         },

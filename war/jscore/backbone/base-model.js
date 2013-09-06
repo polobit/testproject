@@ -442,11 +442,6 @@ var Base_Model_View = Backbone.View
 				if (!this.model.isNew() || this.options.isNew
 						|| !$.isEmptyObject(this.model.toJSON()) || isFetched) {
 
-					$(this.el).on('DOMNodeInserted', function(e) {
-						$('form', this).focus_first();
-					 });
-					
-					
 					/*
 					 * Uses handlebars js to fill the model data in the template
 					 */
@@ -454,6 +449,11 @@ var Base_Model_View = Backbone.View
 							getTemplate(this.options.template, this.model
 									.toJSON()));
 
+					$(this.el).on('DOMNodeInserted', function(e) {
+						//$('form', this).focus_first();
+						$(this).trigger('view_loaded');
+					 });
+					
 					/*
 					 * Few operations on the view after rendering the view,
 					 * operations like adding some alerts, graphs etc after the

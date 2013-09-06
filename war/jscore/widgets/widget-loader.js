@@ -48,7 +48,7 @@ function loadWidgets(el, contact)
 		 */
 		var flag = false;
 
-		$(el).live('agile_model_loaded', function(e)
+		$(el).live('view_loaded', function(e)
 		{
 			if (flag == false)
 			{
