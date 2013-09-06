@@ -306,12 +306,13 @@ function agile_init_handlers() {
 		// Set context (HTML container where event is triggered).
 		var el = $(this).closest("div.gadget-contact-details-tab")
 					.find("div.show-form");
-		$('.gadget-notes-tab-list', el).html("");
+		$('.gadget-notes-tab-list', el).hide();
 		// Build notes tab UI to add note.
 		agile_build_form_template($(this), "gadget-note",
 				".gadget-notes-tab-list", function() {
 			// Show notes tab.
 			$('.gadget-notes-tab a', el).tab('show');
+			$('.gadget-notes-tab-list', el).show();
 			// Adjust gadget height.
 			agile_gadget_adjust_height();
 		});
@@ -324,7 +325,7 @@ function agile_init_handlers() {
 		// Set context (HTML container where event is triggered).
 		var el = $(this).closest("div.gadget-contact-details-tab")
 					.find("div.show-form");
-		$('.gadget-tasks-tab-list', el).html("");
+		$('.gadget-tasks-tab-list', el).hide();
 		// Build tasks tab UI to add task.
 		agile_build_form_template($(this), "gadget-task",
 				".gadget-tasks-tab-list", function() {
@@ -334,6 +335,7 @@ function agile_init_handlers() {
 			 */
 			agile_load_datepicker($('.task-calender', el), function() {
 				$('.gadget-tasks-tab a', el).tab('show');
+				$('.gadget-tasks-tab-list', el).show();
 				// Adjust gadget height.
 				agile_gadget_adjust_height();
 			});
@@ -347,7 +349,7 @@ function agile_init_handlers() {
 		// Set context (HTML container where event is triggered).
 		var el = $(this).closest("div.gadget-contact-details-tab")
 					.find("div.show-form");
-		$('.gadget-deals-tab-list', el).html("");
+		$('.gadget-deals-tab-list', el).hide();
 		// Build deals tab UI to add deal.
 		agile_build_form_template($(this), "gadget-deal",
 				".gadget-deals-tab-list", function() {
@@ -357,6 +359,7 @@ function agile_init_handlers() {
 			 */
 			agile_load_datepicker($('.deal-calender', el), function() {
 				$('.gadget-deals-tab a', el).tab('show');
+				$('.gadget-deals-tab-list', el).show();
 				// Adjust gadget height.
 				agile_gadget_adjust_height();
 			});
@@ -371,7 +374,7 @@ function agile_init_handlers() {
 		var el = $(this).closest("div.gadget-contact-details-tab")
 					.find("div.show-form");
 		var that = $(this);
-		$('.gadget-campaigns-tab-list', el).html("");
+		$('.gadget-campaigns-tab-list', el).hide();
 		// Send request for template.
 		agile_get_gadget_template("gadget-campaign-template", function(data) {
 
@@ -384,6 +387,7 @@ function agile_init_handlers() {
 				that.closest(".gadget-contact-details-tab").find(".gadget-campaigns-tab-list")
 						.html($(Handlebars_Template));
 				$('.gadget-campaigns-tab a', el).tab('show');
+				$('.gadget-campaigns-tab-list', el).show();
 				// Adjust gadget height.
 				agile_gadget_adjust_height();
 			});
@@ -399,7 +403,9 @@ function agile_init_handlers() {
 					.find('.show-form');
 		var that = $(this);
 		var email = $(el).data("content");
-
+		
+		// Adjust width of mail list for Process icon.
+		agile_gadget_adjust_width(el, $(".contact-search-waiting", el), true);
 		$('.contact-search-waiting', el).show();
 		// Get contact status based on email.
 		agile_getContact(email, function(val) {
@@ -416,10 +422,12 @@ function agile_init_handlers() {
 			// Build show contact form template.
 			agile_build_form_template(that, "gadget-contact-list", ".contact-list", function() {
 				
-				$('.contact-search-waiting', el).hide();
 				// Contact not found for requested mail, show add contact in mail list.
 				if (val.id == null) {
-					$('.contact-search-status', el).show().delay(4000).hide(1);
+					agile_gadget_adjust_width(el, $(".contact-search-status", el), true);
+					$('.contact-search-status', el).show().delay(4000).hide(1,function(){
+						agile_gadget_adjust_width(el, $(".contact-search-status", el), false);
+					});
 				}	
 				// Contact found, show contact summary. 
 				else {
@@ -638,7 +646,33 @@ function agile_init_handlers() {
 		agile_gadget_adjust_height();
 	});
 }
+/**
+ * Calculates total width of mail list and adjusts max-width of e-mail and/or name.
+ * 
+ * @method agile_gadget_adjust_width
+ * @param {Object} el Jquery object gives the current object.
+ * @param {Object} Text_Width Jquery object of text to be shown.
+ * @param {Boolean} bool Boolean variable.
+ * */
+function agile_gadget_adjust_width(el, Text_Width, bool){
+	if(bool){
+		var Total_Width = $(".agile-no-contact", el).width();
+		var Total_Text_width = parseInt(Text_Width.width(), 10) + parseInt(Text_Width.css("margin-left"), 10) + 10;
+		var Rest_Width = (((Total_Width - Total_Text_width)/Total_Width)*100) + "%";
+		$(".contact-list-width", el).css("max-width", Rest_Width);
+		console.log("Total = "+ Total_Width, "Text = " + Text_Width.width() + " + " + parseInt(Text_Width.css("margin-left"), 10), "Remainig = " + Rest_Width);
+	}
+	else{
+		$(".contact-list-width", el).css("max-width", "95%");
+	}
+}
 
+/**
+ * Adjust height of gadget window.
+ * 
+ * @method agile_gadget_adjust_height
+ * 
+ * */
 function agile_gadget_adjust_height(){
 	if (!Is_Localhost)
 		gadgets.window.adjustHeight();
