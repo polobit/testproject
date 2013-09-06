@@ -139,14 +139,14 @@ function start_tour(key, el)
 	}
 
 	// Tour should be initialized only after page is loaded
-	$(el).live('agile_collection_loaded', function()
+	$('body').live('agile_collection_loaded', function(event, element)
 	{
 		if (tour_flag)
 			return;
 
 		// Initializes the tour and sets tour flag to ensure tour won't load
 		// again
-		initiate_tour(key, el);
+		initiate_tour(key, element);
 		tour_flag = true;
 	});
 }
