@@ -6,9 +6,15 @@
                 <fieldset>
                     <legend>Notifications</legend>
                     <div class="right" style="margin-top:-60px;float:left;margin-left: 158px;">
+                       
                         <div class="switch switch-small" id="notification-switch">
-                            <input type="checkbox" id="control_notifications" class="left" style="" name="control_notifications" value="true" checked="checked">
+                          {{#if control_notifications}}
+                          <input type="checkbox" id="control_notifications" class="left" style="" name="control_notifications" checked="checked">
+                          {{else}}
+                          <input type="checkbox" id="control_notifications" class="left" style="" name="control_notifications">
+                          {{/if}}
                         </div>
+                        
                     </div>
                     {{#if control_notifications}}
                     <span id="desktop-notification-content" class="right" style="margin-top:-52px"></span>
@@ -39,7 +45,7 @@
                                 <option value="CONTACT_ASSIGNED_AND_STARRED">Contact assigned to me & starred</option>
                             </select>
                         </div>
-                        <p class="help-block" style="margin-left:160px; margin-top:8px">Get notified when a contact opens the email sent (via a campaign)</p>
+                        <p class="help-block" style="margin-left:160px; margin-top:8px">Get notified when a contact opens the email sent.</p>
                     </div>
                     <legend></legend>
                     <p></p>
@@ -52,7 +58,7 @@
                                 <option value="CONTACT_ASSIGNED_AND_STARRED">Contact assigned to me & starred</option>
                             </select>
                         </div>
-                        <p class="help-block" style="margin-left:160px; margin-top:8px">Get notified when a contact clicks a link in email.</p>
+                        <p class="help-block" style="margin-left:160px; margin-top:8px">Get notified when a contact clicks a link in email (via a campaign).</p>
                     </div>
                     <legend></legend>
                     <p></p>
@@ -124,7 +130,7 @@
                                 <option value="CONTACT_ASSIGNED_AND_STARRED">Contact assigned to me & starred</option>
                             </select>
                         </div>
-                    <p class="help-block" style="margin-left:160px; margin-top:8px">Get notified when a contact opens the email sent (via a campaign)</p>
+                    <p class="help-block" style="margin-left:160px; margin-top:8px">Get notified when a contact opens the email sent.</p>
                     </div>
                     <legend></legend>
                     <p></p>
@@ -137,7 +143,7 @@
                                 <option value="CONTACT_ASSIGNED_AND_STARRED">Contact assigned to me & starred</option>
                             </select>
                         </div>
-                        <p class="help-block" style="margin-left:160px; margin-top:8px">Get notified when a contact clicks a link in email.</p>
+                        <p class="help-block" style="margin-left:160px; margin-top:8px">Get notified when a contact clicks a link in email (via a campaign).</p>
                     </div>
                     <legend></legend>
                     <p></p>
