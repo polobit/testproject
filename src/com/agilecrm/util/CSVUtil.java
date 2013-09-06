@@ -152,7 +152,7 @@ public class CSVUtil
 	if (headers == null)
 	{
 	    System.out.println("Empty List");
-	    new Exception("Empty List");
+	    throw new Exception("Empty CSV");
 	}
 
 	// Creates list of headings
