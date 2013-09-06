@@ -16,10 +16,7 @@ $(function(){
     */ 	
 	$('body').live('agile_collection_loaded', function(event, el) {
 		
-		console.log(el);
 		var table_element = $('table', el);
-		console.log(table_element.length);
-//		console.log($('table', element).length);
 		
 		  // Adds class to tbody to edit the table by validating the route attribute 
 		if($(table_element).find('tbody').attr('route'))

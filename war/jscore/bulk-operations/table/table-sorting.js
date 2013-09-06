@@ -69,43 +69,70 @@ function sort_tables(table) {
 	        // set type, either numeric or text 
 	        type: 'numeric' 
 	    }); 
+	 
+		
+	    var table_id = $(table).attr('id');
+	    if(table_id == 'deal-list')
+	    	{
+	    		sort_deals(table);
+	    		return;
+	    	}
+	    if(table_id == "task-list")
+	    	{
+	    		sort_tasks(table);
+	    		return;
+	    	}
 	    
-		$(table).tablesorter({
-			// Disable the sorting property to the first column of the table
-			// (first colon contains check-boxes)
-			// pass the headers argument and assign a object
-			headers : {
-				0 : {
-					// disable it by setting the property sorter to false
-					sorter : false
-				}
-			}
-		});
-		
-		$("#task-list", table).tablesorter({ 
-	        headers: {
-	        	0 : {sorter : false},
-	        	1 : {sorter : false},
-	        	2 : {sorter : 'text'},
-	        	3 : {sorter : 'text'},
-	            4: {sorter:'priority'},
-				5 : {sorter : 'time-ago'},
-				6 : {sorter : false}
-	        } 
-	    }); 
-		
-		$("#deal-list", table).tablesorter({ 
-	        headers: { 
-	        	0 : {sorter : false	},
-	        	1 : {sorter : 'text'},
-	        	2 : {sorter : false},
-	        	3 : {sorter : 'money'},
-	        	4 : {sorter : 'text'},
-				5 : {sorter : 'time-ago'},
-	        	6 : {sorter : false}
-	        },
-	    });
+    	basic_table_sort(table);
+
 	});
+}
+
+function basic_table_sort(table)
+{
+	   
+	$(table).tablesorter({
+		// Disable the sorting property to the first column of the table
+		// (first colon contains check-boxes)
+		// pass the headers argument and assign a object
+		headers : {
+			0 : {
+				// disable it by setting the property sorter to false
+				sorter : false
+			}
+		}
+	});
+}
+
+function sort_tasks(table)
+{
+	$(table).tablesorter({ 
+        headers: {
+        	0 : {sorter : false},
+        	1 : {sorter : false},
+        	2 : {sorter : 'text'},
+        	3 : {sorter : 'text'},
+            4: {sorter:'priority'},
+			5 : {sorter : 'time-ago'},
+			6 : {sorter : false}
+        } 
+    }); 
+}
+
+function sort_deals(table)
+{
+	console.log(table);
+	$(table).tablesorter({ 
+        headers: { 
+        	0 : {sorter : false	},
+        	1 : {sorter : 'text'},
+        	2 : {sorter : false},
+        	3 : {sorter : 'money'},
+        	4 : {sorter : 'text'},
+			5 : {sorter : 'time-ago'},
+        	6 : {sorter : false}
+        },
+    });
 }
 
 
