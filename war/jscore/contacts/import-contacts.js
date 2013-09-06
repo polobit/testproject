@@ -181,8 +181,7 @@ $(function()
 							}
 							else
 							{
-								if (name == 'tags')
-									property["name"] = name;
+								property["name"] = name;
 							}
 
 							// Push in to properties array (represents

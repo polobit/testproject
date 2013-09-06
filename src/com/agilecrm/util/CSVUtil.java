@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.Vector;
 
 import org.apache.commons.io.IOUtils;
@@ -22,9 +24,11 @@ import au.com.bytecode.opencsv.CSVReader;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 
@@ -199,6 +203,8 @@ public class CSVUtil
 	// Creates domain user key, which is set as a contact owner
 	Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
 
+	AgileUser user = AgileUser.getCurrentAgileUserFromDomainUser(ownerKey.getId());
+
 	System.out.println(contacts.size());
 
 	// Counters to count number of contacts saved contacts
@@ -207,6 +213,8 @@ public class CSVUtil
 
 	for (String[] csvValues : contacts)
 	{
+	    Set<Integer> notes_positions = new TreeSet<Integer>();
+
 	    Contact tempContact = new Contact();
 	    tempContact.tags = (LinkedHashSet<String>) contact.tags.clone();
 	    tempContact.properties = contact.properties;
@@ -219,18 +227,27 @@ public class CSVUtil
 	    tempContact.setContactOwner(ownerKey);
 
 	    tempContact.properties = new ArrayList<ContactField>();
+
 	    for (int j = 0; j < csvValues.length; j++)
 	    {
+
 		if (StringUtils.isBlank(csvValues[j]))
 		    continue;
+
+		csvValues[j] = csvValues[j].trim();
 
 		System.out.println(properties.get(j));
 		ContactField field = properties.get(j);
 
-		// This is hardcoding but found no way to know how to get
+		// This is hardcoding but found no way to get
 		// tags
 		// from the CSV file
-		if (field != null && "tags".equals(field.name))
+		if (field == null)
+		{
+		    continue;
+		}
+
+		if ("tags".equals(field.name))
 		{
 		    // Multiple tags are supported. Multiple tags are added
 		    // split at , or ;
@@ -240,10 +257,16 @@ public class CSVUtil
 			tempContact.tags.add(tag);
 		    continue;
 		}
+		if ("note".equals(field.name))
+		{
+		    System.out.println("note");
+		    notes_positions.add(j);
+		    continue;
+		}
 
 		// To avoid saving ignore field value/ and avoid fields with
 		// empty values
-		if (field == null || field.name == null || StringUtils.isEmpty(field.value))
+		if (field.name == null || StringUtils.isEmpty(field.value))
 		    continue;
 
 		field.value = csvValues[j];
@@ -257,7 +280,20 @@ public class CSVUtil
 	    try
 	    {
 		tempContact.save();
+		System.out.println(notes_positions);
 
+		// Creates notes, set CSV heading as subject and value as
+		// description.
+		for (Integer i : notes_positions)
+		{
+		    Note note = new Note();
+		    note.subject = headings[i];
+		    note.description = csvValues[i];
+		    note.addRelatedContacts(String.valueOf(tempContact.id));
+
+		    note.setOwner(new Key<AgileUser>(AgileUser.class, tempContact.id));
+		    note.save();
+		}
 	    }
 	    catch (Exception e)
 	    {
