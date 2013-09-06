@@ -15,13 +15,17 @@
 		</div>
 	{{else}}
 <!--contact not exist, add contact -->
-		<div class="row-fluid">	
-			{{#if fname}}
-				<a class="gadget-add-contact" style="cursor:pointer; margin:0px 8px 0px 5px; text-decoration:underline; font-weight:bold;"><i class="icon-plus" style="text-decoration:none; margin-right:5px;"></i><span>Add</span></a> {{fname}} {{lname}} ({{email}}) to Agile Contacts
-			{{else}}
-				<a class="gadget-add-contact" style="cursor:pointer; margin:0px 8px 0px 5px; text-decoration:underline; font-weight:bold;"><i class="icon-plus" style="text-decoration:none; margin-right:5px;"></i><span>Add</span></a> {{email}} to Agile Contacts
-			{{/if}}
-			<span class="contact-search-status" style="color:indianred; margin-left:20px; display:none;"><i>Contact not found.</i></span>
+		<div class="agile-no-contact row-fluid">	
+			<div class="contact-list-width" style="max-width:75%; display:inline-block;">
+				<div style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+					{{#if fname}}
+						<a class="gadget-add-contact" style="cursor:pointer; margin:0px 8px 0px 5px; text-decoration:underline; font-weight:bold;"><i class="icon-plus" style="text-decoration:none; margin-right:5px;"></i><span>Add</span></a><span title="{{fname}} {{lname}} ({{email}})" style="cursor:default;"> {{fname}} {{lname}} ({{email}})</span> to Agile Contacts</span>
+					{{else}}
+						<a class="gadget-add-contact" style="cursor:pointer; margin:0px 8px 0px 5px; text-decoration:underline; font-weight:bold;"><i class="icon-plus" style="text-decoration:none; margin-right:5px;"></i><span>Add</span></a><span title="{{email}}" style="cursor:default;"> {{email}} to Agile Contacts</span>
+					{{/if}}
+				</div>
+			</div>
+			<i class="contact-search-status" style="color:indianred; margin-left:20px; position:absolute;">Contact not found.</i>
 		</div>
       	<div class="show-add-contact-form row-fluid" style="display:none;">
 			
@@ -105,7 +109,7 @@
 <!-- 2nd coloum (conatct details) -->
 				<div class="span8" style="margin-left:0px; min-width:12em; float:left;">
 					<div style="display:inline-block; max-width: 16em;">
-						<div style=" height: auto; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+						<div style="height: auto; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
 							<b>
 								<font size="4">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</font>
 							</b>
@@ -264,7 +268,7 @@
 			<div style="display:block;" class="activity">
 				<div id="notes" class="activity-text-block">
 					<h4 style="display:inline; margin-right:10px;">You have no notes for this contact.</h4>
-					<a class="action-add-note" style="text-decoration:underline; cursor:pointer;"><p style="display:inline;"><i class="icon-plus"></i>Add Note</p></a>
+					<a class="action-add-note" style="display:inline-block; cursor:pointer; margin-left:-3px; text-decoration:underline; line-height:25px;"><i class="icon-plus" style="text-decoration:none; margin-right:2px;"></i><span>Add Note</span></a>
 				</div>
 			</div>
 		</li>
@@ -323,7 +327,7 @@
 			<div style="display:block;" class="activity">
 				<div id="notes" class="activity-text-block">
 					<h4 style="display:inline; margin-right:10px;">You have no tasks for this contact.</h4>
-					<a class="action-add-task" style="text-decoration:underline; cursor:pointer;"><p style="display:inline;"><i class="icon-plus"></i>Add Task</p></a>
+					<a class="action-add-task" style="display:inline-block; cursor:pointer; margin-left:-3px; text-decoration:underline; line-height:25px;"><i class="icon-plus" style="text-decoration:none; margin-right:2px;"></i><span>Add Task</span></a>
 				</div>
 			</div>
 		</li>
@@ -359,7 +363,7 @@
 			<div style="display:block;" class="activity">
 				<div id="notes" class="activity-text-block">
 					<h4 style="display:inline; margin-right:10px;">You have no deals for this contact.</h4>
-					<a class="action-add-deal" style="text-decoration:underline; cursor:pointer;"><p style="display:inline;"><i class="icon-plus"></i>Add Deal</p></a>
+					<a class="action-add-deal" style="display:inline-block; cursor:pointer; margin-left:-3px; text-decoration:underline; line-height:25px;"><i class="icon-plus" style="text-decoration:none; margin-right:2px;"></i><span>Add Deal</span></a>
 				</div>
 			</div>
 		</li>
@@ -400,7 +404,7 @@
 			<div style="display:block;" class="activity">
 				<div id="notes" class="activity-text-block">
 					<h4 style="display:inline; margin-right:10px;">You have no campaigns for this contact.</h4>
-					<a class="action-add-campaign" style="text-decoration:underline; cursor:pointer;"><p style="display:inline;"><i class="icon-plus"></i>Add to Campaign</p></a>
+					<a class="action-add-campaign" style="display:inline-block; cursor:pointer; margin-left:-3px; text-decoration:underline; line-height:25px;"><i class="icon-plus" style="text-decoration:none; margin-right:2px;"></i><span>Add to Campaign</span></a>
 				</div>
 			</div>
 		</li>
