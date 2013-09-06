@@ -73,11 +73,28 @@ $(function()
 		return;
 	} 
 });
+
+$(function()
+		{
+	$("input:file").change(function (){
+	var fileName = $(this).val();
+    $(".filename").html(fileName);
+    
+    // to remove error message while change
+    isValid();
+  });
+		}); 
+		
 function isValid(){
     $("#form").validate({
         rules: {
         		file:{required:true,accept:"csv"}
-               }
+               },
+               submitHandler:function(form)
+               {   
+ 	              form.submit();
+ 	          }
+    
    		});
     return $("#form").valid();
     } 
@@ -106,7 +123,7 @@ function isValid(){
     
 <p><input name="file" id='fileextension' type="file" /></p>
 <br/>
-<input name="submit" id="submit" value="Upload" class='submit btn btn-primary' type="submit" /> 
+<input name="upload" value="Upload" class='submit btn btn-primary' type="submit" /> 
 </form> 
 </div>
 
