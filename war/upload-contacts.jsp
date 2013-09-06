@@ -92,11 +92,16 @@ function isValid(){
                },
                submitHandler:function(form)
                {   
+            	   if($('.submit', form).attr('disabled') != undefined)
+            		   return;
+            	   
+            	   $('.submit', form).attr('disabled', true);
+            	   $('.submit', form).after('<img class="loading" style="padding-right:5px" src= "img/21-0.gif"></img>');
  	              form.submit();
  	          }
     
    		});
-    return $("#form").valid();
+	    return $("#form").valid();
     } 
 
 
