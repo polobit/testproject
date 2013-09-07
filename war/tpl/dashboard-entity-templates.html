@@ -126,10 +126,9 @@
 
 <!-- Contacts Template -->
 <script id="dashboard-contacts-model-template" type="text/html">
-
-	<td class="data" data="{{id}}" >
-		<div class="row-fluid">
-    	<div class="span2" style="display:inline;padding-right:10px;height:auto;">
+	<td class="data" data="{{id}}">
+	<div class="row-fluid">
+    	<div style="display:inline;padding-right:5px;height:auto;">
         	{{#if_contact_type "PERSON"}}
         		<img class="thumbnail" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
         	{{/if_contact_type}}
@@ -138,7 +137,7 @@
         		<img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} />
         	{{/if_contact_type}}
     	</div>
-    	<div  class="span10" style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;">
+    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:70%">
         	{{#if_contact_type "PERSON"}}
         		<b>	{{getPropertyValue properties "first_name"}}
         		{{getPropertyValue properties "last_name"}} </b>
@@ -150,19 +149,20 @@
         		<b>{{getPropertyValue properties "name"}}</b></br>
         		{{getPropertyValue properties "url"}}
         	{{/if_contact_type}}
-    	</div>
+	</div>
 	</div>
 	</td>
-	<td><div style="max-width:96%;height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;">{{getPropertyValue properties "title"}}<br />
+	<td><div style="display:inline-block;vertical-align:top;">{{getPropertyValue properties "title"}}<br />
     	{{getPropertyValue properties "company"}}</div>
 	</td>
 	<td> 
 <!-- <div style="height:auto;display:inline-block;vertical-align:top;text-overflow:clip;white-space:nowrap;width:15em;overflow:hidden;"> --> 
-	  <div class="ellipsis-multiline" style="line-height:20px !important; word-break:keep-all;"> 	 	
-	{{#each tags}}
-    	<span class="label" >{{this}}</span>
-    {{/each}}
-</div>
+	 <div class="ellipsis-multiline" style="line-height:20px !important; word-break:keep-all;"> 	
+		{{#each tags}}
+	    	<span class="label">{{this}}</span>	
+		{{/each}}
+	</div>
+	
 	</td>
 	<td><div>{{lead_score}}</div></td>
 </script>
@@ -176,10 +176,10 @@
 			<table id="contacts" class="table table-striped "
 				url="core/api/contacts/bulk" style="overflow: fixed; width:100%;word-break: break-all;table-layout:fixed">
 				<colgroup>
-					<col width="35%">
-				 	<col width="30%">
-				 	<col width="25%">
-				 	<col width="10%">
+				<col width="41%">
+				<col width="22%">
+				<col width="24%">
+				<col width="14%">
 				</colgroup>
 				<thead>
 					<tr style="background-color:#EDF3FE;">
