@@ -92,12 +92,10 @@ public class GMailGadgetServlet extends HttpServlet
     {
 	// Get Current User
 	UserInfo user = (UserInfo) req.getSession().getAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
-	resp.getWriter().println("Saving user " + user);
-
+	
 	// Get Gadget Id
 	String oneTimeSessionKey = req.getParameter(SESSION_KEY_NAME);
-	resp.getWriter().println("One time session " + oneTimeSessionKey);
-
+	
 	// Get Cache Id
 	String ownerId = (String) CacheUtil.getCache(oneTimeSessionKey);
 	if (ownerId == null)
@@ -111,26 +109,23 @@ public class GMailGadgetServlet extends HttpServlet
 	// Remove from Cache
 	CacheUtil.deleteCache(oneTimeSessionKey);
 
-	resp.getWriter().println("Owner Id " + ownerId);
-
 	// Setup Authentication Key
 	DomainUser domainUser = DomainUserUtil.getDomainUserByEmailFromCurrentAccount(user.getEmail());
 	System.out.println("domain user : " + domainUser);
 	if (domainUser == null)
 	{
-	    resp.getWriter().println("We are unable to find any account with this userid");
+	    resp.getWriter().println("We are unable to find any user in "+NamespaceManager.get()+" domain.");
 	    return false;
 	}
-
-	resp.getWriter().println("Domain User " + domainUser);
-
+	resp.getWriter().println("Saving user " + user.getEmail());
+	
 	// Save the gadget_id
 	domainUser.gadget_id = ownerId;
 	domainUser.save();
 
 	resp.getWriter()
 		.println(
-			"You have successfully associated your gadget with your AgileCRM account. You can now close the browser.");
+			"You have successfully associated your gadget with your AgileCRM account. You can now close the pop-up window.");
 
 	return false;
     }
@@ -165,14 +160,10 @@ public class GMailGadgetServlet extends HttpServlet
 	{
 	    // Send domain exists as false to the client so that it can show
 	    // register message
-	    JSONObject result = new JSONObject();
-	    result.put("domain_exists", false);
-	    result.put("error_msg",
-		    "Sorry, we were unable to find any users with this domain name. Perhaps, you would like to register.");
 	    resp.getWriter()
 		    .println(
-			    "Sorry, we were unable to find any users with this domain name. Perhaps, you would like to register.&nbsp;&nbsp;<a href=\"https://"
-				    + domain + ".agilecrm.com/register\">Click here</a>");
+			    "Domain <b>"+ domain +"</b> does not exist. You can register a new one &nbsp;<a href=\"https://"
+				    + domain + ".agilecrm.com/register\">here.</a>");
 
 	    return;
 	}

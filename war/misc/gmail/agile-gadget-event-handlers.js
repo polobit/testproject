@@ -451,11 +451,6 @@ function agile_init_handlers() {
 			var content = Contacts_Json[$(el).data("content")];
 			// Build tags list.
 			agile_build_tag_ui($("#added_tags_ul", el), content);
-			if($(window).width() <= 611){
-				$('.contact-col-3').each(function(){
-					$('.contact-col-3').css("right", "-10");
-				});
-			}
 			// Hide list view of contact.
 			$(".contact-minified", el).toggle();
 			agile_gadget_adjust_height();
@@ -649,22 +644,6 @@ function agile_init_handlers() {
 		// Toggle add contact UI.
 		$(".show-add-contact-form", el).toggle();
 		agile_gadget_adjust_height();
-	});
-	
-	// Window Resize Event
-	$(window).resize(function(e) {
-		if($(window).width() <= 611){
-			
-			$('.contact-col-3').each(function(){
-				$('.contact-col-3').css("right", "-10");
-			});
-		}
-		
-		else {
-			$('.contact-col-3').each(function(){
-				$('.contact-col-3').css("right", "35");
-			});
-		}
 	});
 }
 /**
