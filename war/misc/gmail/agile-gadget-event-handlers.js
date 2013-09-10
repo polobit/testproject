@@ -451,6 +451,11 @@ function agile_init_handlers() {
 			var content = Contacts_Json[$(el).data("content")];
 			// Build tags list.
 			agile_build_tag_ui($("#added_tags_ul", el), content);
+			if($(window).width() <= 611){
+				$('.contact-col-3').each(function(){
+					$('.contact-col-3').css("right", "-10");
+				});
+			}
 			// Hide list view of contact.
 			$(".contact-minified", el).toggle();
 			agile_gadget_adjust_height();
@@ -645,6 +650,22 @@ function agile_init_handlers() {
 		$(".show-add-contact-form", el).toggle();
 		agile_gadget_adjust_height();
 	});
+	
+	// Window Resize Event
+	$(window).resize(function(e) {
+		if($(window).width() <= 611){
+			
+			$('.contact-col-3').each(function(){
+				$('.contact-col-3').css("right", "-10");
+			});
+		}
+		
+		else {
+			$('.contact-col-3').each(function(){
+				$('.contact-col-3').css("right", "35");
+			});
+		}
+	});
 }
 /**
  * Calculates total width of mail list and adjusts max-width of e-mail and/or name.
@@ -660,7 +681,6 @@ function agile_gadget_adjust_width(el, Text_Width, bool){
 		var Total_Text_width = parseInt(Text_Width.width(), 10) + parseInt(Text_Width.css("margin-left"), 10) + 10;
 		var Rest_Width = (((Total_Width - Total_Text_width)/Total_Width)*100) + "%";
 		$(".contact-list-width", el).css("max-width", Rest_Width);
-		console.log("Total = "+ Total_Width, "Text = " + Text_Width.width() + " + " + parseInt(Text_Width.css("margin-left"), 10), "Remainig = " + Rest_Width);
 	}
 	else{
 		$(".contact-list-width", el).css("max-width", "95%");
