@@ -155,7 +155,7 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     var selectOptionAttributes = "";
 
     // Gets MergeFields Option object
-    if(selectEventHandler !== undefined && selectEventHandler.indexOf("insertSelectedMergeField") === 0)
+    if(uiFieldDefinition.fieldType == "merge_fields")
     	options = getMergeFields();
     	
     // Populate Options
@@ -172,7 +172,10 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     
     // Returns select option with onchange EventHandler
     if(selectEventHandler && selectEventHandler.indexOf("insertSelectedMergeField") === 0)
-    	return "<select style='position:relative;float:right;cursor:pointer' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + selectOptionAttributes + "</select>";
+    	{
+           // Needed right align for Text and Html tab of Send Email node.
+    	   return "<select style='position:relative;float:right;cursor:pointer' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + selectOptionAttributes + "</select>";
+    	}
      
     if(selectEventHandler)
     	return "<select onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "' id='" + uiFieldDefinition.id + "'> " + selectOptionAttributes + "</select>";
@@ -424,7 +427,14 @@ function _generateUIFields(selector, ui) {
         if(uiFieldType == "merge_fields")
         {
            addLabel(uiFieldDefinition.label, container);
-           uiField = generateSelectUI(uiFieldDefinition,"insertSelectedMergeField");
+          
+           // Target element to insert merge field on option selected
+           if("target_type" in uiFieldDefinition)
+        	   uiField = generateSelectUI(uiFieldDefinition,"insertSelectedMergeField");
+           
+           else
+        	   uiField = generateSelectUI(uiFieldDefinition);
+           
            $(uiField).appendTo(container);
            continue;
         }
@@ -622,7 +632,7 @@ function getMergeFields()
 {
 	var options=
 	{
-		"*Add Merge Field": "",
+		"Add Merge Field": "",
 		"First Name": "{{first_name}}",
 		"Last Name": "{{last_name}}",
 		"Score": "{{score}}",
@@ -641,7 +651,56 @@ function getMergeFields()
 		"Owner Name":"{{owner.name}}",
 		"Owner Email":"{{owner.email}}"
 	};
-	return options;
+	
+	// Get Custom Fields in template format
+	var custom_fields = get_custom_fields();
+	
+	console.log("Custom Fields are");
+	console.log(custom_fields);
+	
+	// Merges options json and custom fields json
+	var merged_json = merge_jsons({}, options, custom_fields);
+	
+	return merged_json;
+}
+
+/**
+ * Returns custom fields in format required for merge fields. 
+ * E.g., Nick Name:{{Nick Name}}
+ */
+function get_custom_fields()
+{
+    var url = window.location.protocol + '//' + window.location.host;
+	
+	// Sends GET request for customfields.
+    var msg = $.ajax({type: "GET", url: url+'/core/api/custom-fields', async: false, dataType:'json'}).responseText;
+	
+	// Parse stringify json
+	var data = JSON.parse(msg);
+	
+	var customfields = {};
+	
+	// Iterate over data and get field labels of each custom field
+	$.each(data, function(index,obj)
+			{
+					// Iterate over single custom field to get field-label
+		            $.each(obj, function(key, value){
+						
+						// Needed only field labels for merge fields
+						if(key == 'field_label')
+							customfields[value] = "{{" + value+"}}"
+					});
+			});	
+	
+	return customfields;
+}
+
+/**
+ * Returns merged json of two json objects
+ **/
+function merge_jsons(target, object1, object2)
+{
+	return $.extend(target, object1, object2);
 }
 
 /**

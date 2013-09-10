@@ -96,27 +96,34 @@
 </script>
 
 <script id="gadget-contact-summary-template" type="text/html">
-	<div class="page-header" style="margin: 0px;">
-			<div class="span12">
-
+	
+		
 <!-- 1st coloum (conatct image) -->
-				<div class="span1" style="min-width:5em; float:left;">
-	   				<div style='display:inline; padding-right:10px; height:auto;'>
-    					<img  class='thumbnail' src="{{gravatarurl properties 50}}" width="50" height="50" style='display:inline'/>
-	   				</div>
+				<div class="span1" style="min-width:65px;">
+					<div class="thumbnails">
+	   					<div class="span12">
+    						<img  class='thumbnail' src="{{gravatarurl properties 50}}" width="50" height="50" />
+		   				</div>
+					</div>
     			</div>
 
 <!-- 2nd coloum (conatct details) -->
-				<div class="span8" style="margin-left:0px; min-width:12em; float:left;">
-					<div style="display:inline-block; max-width: 16em;">
-						<div style="height: auto; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-							<b>
-								<font size="4">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</font>
-							</b>
+				<div class="span8" style="margin-left:0;">
+<!-- First row (Name) - Starts -->
+					<div class="row-fluid">
+						<div style="display:inline-block; max-width: 16em;">
+							<div style="height: auto; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+								<b>
+									<font size="4">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</font>
+								</b>
+							</div>
 						</div>
+						<a target="_blank" href="{{ac_path}}#contact/{{id}}" style="margin-left:6px; text-decoration:none;"><i class="icon-external-link" title="Show contact in Agile"></i></a><br/>
 					</div>
-					<a target="_blank" href="{{ac_path}}#contact/{{id}}" style="margin-left:6px; text-decoration:none;"><i class="icon-external-link" title="Show contact in Agile"></i></a><br/>
-					
+<!-- First row (Name) - Ends -->
+
+<!-- Second row (Title, Company) - Starts -->					
+					<div class="row-fluid">
 					{{#if_propertyName "title"}}
 						{{value}}
 					{{/if_propertyName}}
@@ -124,89 +131,98 @@
 					{{#if_propertyName "company"}}
 						{{value}}
 					{{/if_propertyName}}
-						 		
-					<div class="add-tag">
-						<div style="padding-top:4px;">
-							<ul id="added_tags_ul" class="tagsinput" style="display: inline; vertical-align:top; margin-bottom:10px;">
-								<li class="tag" style="display: none; padding:1px 4px;">
-									<span>
-										<span class="anchor tag-name" style="float:left; cursor:default;">lead</span>
-										<a class="close remove-tag remove-tag-icon" style="float:left; line-height:16px;" title="Remove Tag">&times;</a>
-									</span>
-								</li> 
-							</ul>
-							<div style="display: inline-block; vertical-align:top;" >
-								<form id="add_tags_form" name="add_tags_form" method="post" style="display: none; margin-bottom: 0px; margin-top:1px;">
-									<div style="margin-bottom:0px;">
-										<input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}'/>
-										<input class="tags-typeahead ignore-comma-keydown input-small" name="tags" type="text" id="tags" style="margin: 0px;" placeholder="Enter tag" autocomplete="off">
-										<a type="submit" class="btn" id="contact_add_tags" style="margin-left: 10px; padding: 1px 10px;">Add</a>
-									</div>
-								</form>
-								<img class="tag-waiting" style="display:none; width:16px; margin-top:6px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>
-								<i id="add_tags" class="icon-plus toggle-tag" style="cursor:pointer; margin-top:4px; display:block;" title="Add Tag"></i>
+					</div>
+<!-- Second row (Title, Company) - Ends -->
+
+<!-- Third row (tags) - Starts -->					
+					<div class="row-fluid">
+						<div class="span11">	 		
+						<div class="add-tag">
+							<div style="padding-top:4px;">
+								<ul id="added_tags_ul" class="tagsinput">
+									<li class="tag" style="display: none; padding:1px 4px;">
+											<span>
+											<span class="anchor tag-name" style="float:left; cursor:default;">lead</span>
+											<a class="close remove-tag remove-tag-icon" style="float:left; line-height:16px;" title="Remove Tag">&times;</a>
+										</span>
+									</li> 
+								</ul>
+								<div style="display: inline-block; vertical-align:top;" >
+										<form id="add_tags_form" name="add_tags_form" method="post" style="display: none; margin-bottom: 0px; margin-top:1px;">
+										<div style="margin-bottom:0px;">
+											<input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}'/>
+											<input class="tags-typeahead ignore-comma-keydown input-small" name="tags" type="text" id="tags" style="margin: 0px;" placeholder="Enter tag" autocomplete="off">
+											<a type="submit" class="btn" id="contact_add_tags" style="margin-left: 10px; padding: 1px 10px;">Add</a>
+										</div>
+									</form>
+									<img class="tag-waiting" style="display:none; width:16px; margin-top:6px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>
+									<i id="add_tags" class="icon-plus toggle-tag" style="cursor:pointer; margin-top:4px; display:block;" title="Add Tag"></i>
+								</div>
 							</div>
 						</div>
-					</div>
-				</div>
-<!-- 3rd coloum -->				
-				<div class="span2" style="float:right; min-width:11em;">
-
-<!-- 4th coloum (score/task/options) -->
-					<div class="pull-right" style="position:relative; display:inline-block; vertical-align: top;">
-						<div class="pull-right" style="margin-bottom:5px;">
-							<a style="text-decoration:none; cursor:pointer; margin-right:1px;"><i class="icon-collapse-alt icon-large hide-contact-summery" title="Hide Contact Details"></i></a>
-							
-						</div>						
-						<br/>
-						<div class="btn-group" style="display:inline-block;">
-  							<a class="btn dropdown-toggle" data-toggle="dropdown">Action<span class="caret" style="margin-left:5px;"></span></a>
-  							<ul class="dropdown-menu pull-right">
-    							<!-- dropdown menu links -->
-								<li class="action-add-note"><a style="cursor:default;">Add Note</a></li>
-								<li class="action-add-task"><a style="cursor:default;">Add Task</a></li>
-								<li class="action-add-deal"><a style="cursor:default;">Add Deal</a></li>
-								<li class="action-add-campaign"><a style="cursor:default;">Add to Campaign</a></li>
-  							</ul>
 						</div>
-						
 					</div>
-					
-<!-- 3rd coloum (score) -->
-					<div class="unselectable score-scope pull-right" style="margin-right:10%; display:inline-block;" unselectable="on" onselectstart="return false">
-						<ul style="margin:0; list-style-type:none; width:60px; height:auto; display:table; border:1px solid rgba(0, 0, 0, 0.05); box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05); border-radius:3px;">
-							<li style="text-align:center;">
-								<div style="width:56px; margin: 0 auto; border-bottom: 1px solid rgba(0, 0, 0, 0.05);">
-									<span style="font-weight:bold; font-size:13px; cursor:default;">Score</span>
-								</div>
-							</li>
-							<li style="line-height:30px;">
-								<div style="display:inline; height:auto; width:60px; text-align:center;">
-									{{#if lead_score}}
-										<div class="score-value" style="display:inline-block; width:55%; font-size:20px; margin-right:-2px; vertical-align:middle; text-align:right; cursor:default;">
-											{{lead_score}}
-										</div>
-									{{else}}
-										<div class="score-value" style="display:inline-block; width:55%; font-size:20px; margin-right:-2px; vertical-align:middle; text-align:right; cursor:default;">
-											0
-										</div>
-									{{/if}}
-									<ul style="margin:0; list-style-type:none; display:inline-block; width:40%; vertical-align:middle;">
-										<input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}'/>
-										<li style="line-height:8px;"><i class="icon-sort-up add-score" style="font-size:14px; cursor:pointer;"></i></li>
-										<li style="line-height:8px;"><i class="icon-sort-down subtract-score" style="font-size:14px; cursor:pointer;"></i></li>
+<!-- Third row (Tags) - End -->
+				</div>
+
+<!-- 3rd coloum -->				
+					<div class="span3 contact-col-3" style="margin-left:0; position:absolute; right:35;">
+						<div class="row-fluid">
+<!-- 4th coloum (score/task/options) -->
+						<div class="span6" style="min-width:70px; float:right;">
+							<div class="row-fluid">
+									<a class="pull-right" style="text-decoration:none; cursor:pointer; margin-right:1px;"><i class="icon-collapse-alt icon-large hide-contact-summery" title="Hide Contact Details"></i></a>
+							</div>						
+							<br/>
+							<div class="btn-group row-fluid" style="display:inline-block; min-width:72px; margin-bottom:10px;">
+								<div class="pull-right">
+									<a class="btn dropdown-toggle" data-toggle="dropdown">Action<span class="caret" style="margin-left:5px;"></span></a>
+  									<ul class="dropdown-menu pull-right">
+   										<!-- dropdown menu links -->
+										<li class="action-add-note"><a style="cursor:default;">Add Note</a></li>
+										<li class="action-add-task"><a style="cursor:default;">Add Task</a></li>
+										<li class="action-add-deal"><a style="cursor:default;">Add Deal</a></li>
+										<li class="action-add-campaign"><a style="cursor:default;">Add to Campaign</a></li>
 									</ul>
 								</div>
-							</li>
-						</ul>
+							</div>
+						</div>
+
+<!-- 3rd coloum (score) -->
+						<div class="span6 unselectable score-scope" style="min-width:70px; float:right;" unselectable="on" onselectstart="return false">
+							<div class="pull-right">
+								<ul style="margin:0; list-style-type:none; width:70px; height:60px; display:table; border:1px solid rgba(0, 0, 0, 0.05); box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05); border-radius:3px;">
+									<li style="text-align:center; line-height:20px;">
+										<div style="width:60px; margin: 0 auto; border-bottom: 1px solid rgba(0, 0, 0, 0.05);">
+												<span style="font-weight:bold; font-size:13px; cursor:default;">Score</span>
+										</div>
+									</li>
+									<li style="line-height:40px;">
+										<div style="display:inline; height:auto; width:60px; text-align:center;">
+											{{#if lead_score}}
+												<div class="score-value" style="display:inline-block; width:55%; font-size:20px; margin-right:-2px; vertical-align:middle; text-align:right; cursor:default;">
+													{{lead_score}}
+												</div>
+											{{else}}
+												<div class="score-value" style="display:inline-block; width:55%; font-size:20px; margin-right:-2px; vertical-align:middle; text-align:right; cursor:default;">
+													0
+												</div>
+												{{/if}}
+											<ul style="margin:0; list-style-type:none; display:inline-block; width:40%; vertical-align:middle;">
+												<input type="hidden" name="email" value='{{#if_propertyName "email"}}{{value}}{{/if_propertyName}}'/>
+												<li style="line-height:8px;"><i class="icon-sort-up add-score" style="font-size:14px; cursor:pointer;"></i></li>
+												<li style="line-height:8px;"><i class="icon-sort-down subtract-score" style="font-size:14px; cursor:pointer;"></i></li>
+											</ul>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+						</div>
 					</div>
 <!-- 4th coloum (Hide button) -->
-					
-					
 				</div>
 <!-- end of contact info-->
-			</div>
-		</div>
 </script>
 
 <script id="gadget-tabs-template" type="text/html">

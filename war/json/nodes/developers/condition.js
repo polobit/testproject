@@ -33,26 +33,7 @@
             "category": "Settings",
             "name": "variable_1",
             "title": "Select merge field.",
-            "options": {
-                "First Name": "{{first_name}}",
-                "Last Name": "{{last_name}}",
-                "Email": "{{email}}",
-                "Score": "{{score}}",
-                "Created Date": "{{created_date}}",
-                "Modified Date": "{{modified_date}}",
-                "Company": "{{company}}",
-        		"Title": "{{title}}",
-        		"Website": "{{website}}",
-        		"Phone":"{{phone}}",
-        		"City": "{{location.city}}",
-        		"State":"{{location.state}}",
-        		"Country":"{{location.country}}",
-        		"Twitter Id":"{{twitter_id}}",
-        		"LinkedIn Id":"{{linkedin_id}}",
-        		"Owner Name":"{{owner.name}}",
-        		"Owner Email":"{{owner.email}}"
-            },
-            "fieldType": "select",
+            "fieldType": "merge_fields",
             "type": "select" 
         },
         {
@@ -81,7 +62,7 @@
             "required": "required",
             "category": "Settings",
             "name": "variable_2",
-            "title": "Enter a value.",
+            "title": "Enter a value. For Date value enter in 'MM/dd/yyyy'",
             "fieldType": "input",
             "type": "text" 
         },

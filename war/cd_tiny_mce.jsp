@@ -56,6 +56,29 @@ function insertSelectedMergeField(ele,target_id)
 	return false;
 }
 
+// Gets MergeFields
+function getMergeFields()
+{
+	// get merge fields
+	var merge_fields = window.opener.getMergeFields();
+	
+	appendMergeFieldsToSelect(merge_fields);
+	
+}
+
+// Appends merge fields as options
+function appendMergeFieldsToSelect(merge_fields)
+{
+	$.each(merge_fields, function(key, value) {
+		   
+		// Append each option to select
+		$('#merge_fields').append($("<option/>", {
+	        value: value,
+	        text: key
+	    }));
+	});
+}
+
 $(function()
 {	
 	// Load HTML into Tiny MCE
@@ -94,11 +117,14 @@ $(function()
         media_external_list_url : "js/media_list.js"
 	});
 	
+	// Gets MergeFields and append them to select option.
+	getMergeFields();
+	
 	$('#save_html').click(function(e){
 		
 		e.preventDefault();
 		
-		var html = tinyMCE.activeEditor.getContent();
+		var html = tinyMCE.activeEditor.getContent({format : 'text'});
 		html = html.trim();
 		
 		if(isNotValid(html))
@@ -147,25 +173,7 @@ function validateInput()
 
 <!-- Merge Fields List -->
 <div style="margin-bottom:10px">
-    <select onchange='insertSelectedMergeField(this,"content")' name='merge_fields' title='Select required merge field to insert into editor.'>
-        <option value=''>Add Merge Field</option>
-        <option value='{{first_name}}'>First Name</option>
-        <option value='{{last_name}}'>Last Name</option>
-        <option value='{{score}}'>Score</option>
-        <option value='{{created_date}}'>Created Date</option>
-        <option value='{{modified_date}}'>Modified Date</option>
-        <option value='{{email}}'>Email</option>
-        <option value='{{company}}'>Company</option>
-        <option value='{{title}}'>Title</option>
-        <option value='{{website}}'>Website</option>
-        <option value='{{phone}}'>Phone</option>
-        <option value='{{location.city}}'>City</option>
-        <option value='{{location.state}}'>State</option>
-        <option value='{{location.country}}'>Country</option>
-        <option value='{{twitter_id}}'>Twitter Id</option>
-        <option value='{{linkedin_id}}'>LinkedIn Id</option>
-        <option value='{{owner.name}}'>Owner Name</option>
-        <option value='{{owner.email}}'>Owner Email</option>
+    <select onchange='insertSelectedMergeField(this,"content")' name='merge_fields' title='Select required merge field to insert into editor.' id="merge_fields">
     </select>
 </div>
 <!-- End of Merge Fields list -->

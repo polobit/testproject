@@ -379,7 +379,7 @@ var WorkflowsRouter = Backbone.Router
 									$('.trigger-tags', el).live("focus",
 											function(e) {
 												e.preventDefault();
-												setup_tags_typeahead();
+												addTagsDefaultTypeahead($('form#addTriggerForm').find('div#RHS'));
 											});
 
 								var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
