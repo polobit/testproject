@@ -38,7 +38,7 @@ function agile_init_gadget() {
 
 		// Download scripts.
 		agile_download_scripts();
-		head.js(Lib_Path + 'misc/gmail/agile-gadget-ui.js');
+		head.js(Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-ui.min.js');
 
 		head.ready(function() {
 			
@@ -150,7 +150,7 @@ function agile_handle_load_response(data) {
 function agile_user_setup_load(data){
 
 	// Download build UI JavaScript file.
-	head.js(Lib_Path + 'misc/gmail/agile-gadget-setup.js', function() {
+	head.js(Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-setup.min.js', function() {
 		agile_user_setup(data);
 	});
 }
@@ -162,16 +162,7 @@ function agile_user_setup_load(data){
 function agile_download_scripts() {
 
 	console.log("Downloading scripts");
-
-	// Handle bars, util and MD5.
-	head.js(Lib_Path + 'lib/handlebars-1.0.0.beta.6-min.js', Lib_Path
-			+ 'jscore/handlebars/handlebars-agile.js', Lib_Path
-			+ 'jscore/handlebars/handlebars-helpers.js', Lib_Path
-			+ 'jscore/util.js', Lib_Path + 'jscore/md5.js');
-	// JS API
-	head.js(Lib_Path + 'stats/min/agile-min.js');
-	// Gadget supporting JavaScript file.
-	head.js(Lib_Path + 'misc/gmail/agile-gadget-email.js');
+	head.js(Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-lib.min.js');
 }
 
 // Window onload event, call method to initiate gadget.
