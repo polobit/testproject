@@ -78,7 +78,7 @@ function agile_login() {
 		agile_download_scripts();
     	
 		// Download build UI JavaScript file.
-		head.js('https://agile-gadget.appspot.com/dj-js/agile-gadget-ui.js');
+		head.js(Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-ui.min.js');
 		head.ready(function() {
 			// Set account
 			agile_generate_ui(Agile_User_Key, Agile_User_Domain);
