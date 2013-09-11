@@ -60,7 +60,7 @@ function agile_init_gadget() {
 }
 
 /**
- * Login to open gadget or setup user account by registration.
+ * Login to open gadget or setup user account by association.
  * 
  * @method agile_login
  */
@@ -69,7 +69,6 @@ function agile_login() {
 	// Get user preferences.
     var prefs = new gadgets.Prefs();
     var Agile_User_Exists = prefs.getString("agile_user_exists");
-    var Agile_Domain_Exists = prefs.getString("agile_domain_exists");
     
 	// Cookie present, Set account.
 	if (Agile_User_Exists == "true") {
@@ -89,17 +88,12 @@ function agile_login() {
 	// Cookie present, but new user set domain.
     else if(Agile_User_Exists == "false") {
     	var Agile_User_Popup = prefs.getString("agile_user_popup");
-		agile_user_setup_load(Agile_User_Popup, true);
+		agile_user_setup_load(Agile_User_Popup);
 	}
-	
-	// New user, go for registration.
-    else if(Agile_User_Domain == "false"){
-    	agile_user_setup_load(Agile_User_Domain, false);
-    }
-	
+		
 	// Check for cookie, if not there send login request.
 	else {
-		// Increase counter and append to request, so that it will not cached.
+		// Increase counter and append to request, so that it will not be cached.
 		Cache_Counter += 1;
 		var url = Lib_Path + 'gmail?chachecounter=' + Cache_Counter;
 		console.log("Osapi from " + url);
@@ -138,20 +132,12 @@ function agile_handle_load_response(data) {
 	}
 	
 	// User not exist, go for one time domain registration.
-	else if(data.content.user_exists != undefined && data.content.user_exists == false){
+	else {
 		data.content.user_exists = "false";
 		// Set user preferences.
 		prefs.set("agile_user_popup", data.content.popup);
 		prefs.set("agile_user_exists", data.content.user_exists);
-		agile_user_setup_load(data.content.popup, true);
-	}
-	
-	// User not exist, go for one time domain registration.
-	else {
-		data.content.domain_exists = "false";
-		// Set user preferences.
-		prefs.set("agile_domain_exists", data.content.domain_exists);
-		agile_user_setup_load(data.content, false);
+		agile_user_setup_load(data.content.popup);
 	}
 }
 
@@ -161,11 +147,11 @@ function agile_handle_load_response(data) {
  * @method agile_user_setup_load
  * @param {Object} data accepts data used to setup user domain.
  * */
-function agile_user_setup_load(data, bool){
+function agile_user_setup_load(data){
 
 	// Download build UI JavaScript file.
 	head.js(Lib_Path + 'misc/gmail/agile-gadget-setup.js', function() {
-		agile_user_setup(data, bool);
+		agile_user_setup(data);
 	});
 }
 /**

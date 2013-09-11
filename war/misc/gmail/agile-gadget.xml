@@ -29,7 +29,6 @@
 	<UserPref name="agile_user_domain" default_value="" datatype="hidden"/>
 	<UserPref name="agile_user_exists" default_value="" datatype="hidden"/>
 	<UserPref name="agile_user_popup" default_value="" datatype="hidden"/>
-	<UserPref name="agile_domain_exists" default_value="" datatype="hidden"/>
 	
 	<!-- Define the content type and display location. The settings "html" and 
 		"card" are required for all Gmail contextual gadgets. -->
