@@ -102,7 +102,7 @@ public class GMailGadgetServlet extends HttpServlet
 	{
 	    resp.getWriter()
 		    .println(
-			    "We are unable to find any related session. Either you have waited too long to associate your new gadget. Please refresh your GMail and try again.");
+			    "We are unable to find any related session. Either you have waited too long to associate your new gadget. Please close this popup and try again.");
 	    return false;
 	}
 
@@ -148,7 +148,7 @@ public class GMailGadgetServlet extends HttpServlet
 	{
 	    resp.getWriter()
 		    .println(
-			    "We are unable to find any related session. Either you have waited too long to associate your new gadget.");
+			    "We are unable to find any related session. Either you have waited too long to associate your new gadget. Please close this popup and try again.");
 	    return;
 	}
 
