@@ -660,7 +660,6 @@ function agile_gadget_adjust_width(el, Text_Width, bool){
 		var Total_Text_width = parseInt(Text_Width.width(), 10) + parseInt(Text_Width.css("margin-left"), 10) + 10;
 		var Rest_Width = (((Total_Width - Total_Text_width)/Total_Width)*100) + "%";
 		$(".contact-list-width", el).css("max-width", Rest_Width);
-		console.log("Total = "+ Total_Width, "Text = " + Text_Width.width() + " + " + parseInt(Text_Width.css("margin-left"), 10), "Remainig = " + Rest_Width);
 	}
 	else{
 		$(".contact-list-width", el).css("max-width", "95%");

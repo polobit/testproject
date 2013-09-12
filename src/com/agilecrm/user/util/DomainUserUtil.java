@@ -189,7 +189,7 @@ public class DomainUserUtil
 	{
 	    Map<String, Object> searchMap = new HashMap<String, Object>();
 	    searchMap.put("email", email);
-	    searchMap.put("domain", NamespaceManager.get());
+	    searchMap.put("domain", namespace);
 	    return dao.getByProperty(searchMap);
 	}
 	finally

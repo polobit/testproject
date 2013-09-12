@@ -18,6 +18,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -257,6 +258,35 @@ public class CSVUtil
 			tempContact.tags.add(tag);
 		    continue;
 		}
+		if (Contact.ADDRESS.equals(field.name))
+		{
+		    ContactField addressField = tempContact.getContactField(contact.ADDRESS);
+
+		    JSONObject addressJSON = new JSONObject();
+
+		    try
+		    {
+			if (addressField != null && addressField.value != null)
+			{
+			    addressJSON = new JSONObject(addressField.value);
+			    addressJSON.put(field.value, csvValues[j]);
+			    addressField.value = addressJSON.toString();
+			}
+			else
+			{
+			    addressJSON.put(field.value, csvValues[j]);
+			    tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
+				    field.type.toString()));
+			}
+
+		    }
+		    catch (JSONException e)
+		    {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		    }
+		    continue;
+		}
 		if ("note".equals(field.name))
 		{
 		    System.out.println("note");
@@ -279,6 +309,7 @@ public class CSVUtil
 
 	    try
 	    {
+		System.out.println(tempContact.getProperties());
 		tempContact.save();
 		System.out.println(notes_positions);
 

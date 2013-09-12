@@ -533,6 +533,13 @@ $(function(){
 	 */
 	$('.activity-delete').die().live('click', function(e){
 		e.preventDefault();
+		
+		var model = $(this).parents('li').data();
+		
+		if(model && model.collection)
+		{
+			model.collection.remove(model);
+		}
 
 		// Gets the id of the entity
 		var entity_id = $(this).attr('id');

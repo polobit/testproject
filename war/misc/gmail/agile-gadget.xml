@@ -14,7 +14,7 @@
 			the manifest, but is still expected to be present. -->
 		<Require feature="google.contentmatch">
 			<Param name="extractors">
-				863502773390:Agile,google.com:EmailAddressExtractor
+				555292128199:Agile,google.com:EmailAddressExtractor
 			</Param>
 		</Require>
 
@@ -29,16 +29,14 @@
 	<UserPref name="agile_user_domain" default_value="" datatype="hidden"/>
 	<UserPref name="agile_user_exists" default_value="" datatype="hidden"/>
 	<UserPref name="agile_user_popup" default_value="" datatype="hidden"/>
-	<UserPref name="agile_domain_exists" default_value="" datatype="hidden"/>
 	
 	<!-- Define the content type and display location. The settings "html" and 
 		"card" are required for all Gmail contextual gadgets. -->
 	<Content type="html" view="card">
     <![CDATA[
       
-    <link rel="stylesheet" type="text/css" href="https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/css/bootstrap-red.min.css" />
+    <link media="screen" rel="stylesheet" type="text/css" href="https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/css/bootstrap-red.min.css" />
     <link rel="stylesheet" type="text/css" href="https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/css/lib/datepicker-min.css" />
-    <link rel="stylesheet" type="text/css" href="https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/css/bootstrap-responsive.min.css" />
     <style>
 		.error{color:red;}
 		.field_req {color: red;}
@@ -68,7 +66,7 @@
    	
 	<script src='https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/lib/headjs-min.js'></script>
 	<script src='https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/lib/jquery.min.js'></script>
-	<script src='https://agile-gadget.appspot.com/dj-js/agile-gadget-main.js'></script>
+	<script src='https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/misc/gmail/gadget-js-all/min/agile-gadget-main.min.js'></script>
    	
 	<script id="gadget-template" type="text/html">
 		<div class="well well-small gadget-contact-details-tab" style='margin: 0 0 5px 0px;'>

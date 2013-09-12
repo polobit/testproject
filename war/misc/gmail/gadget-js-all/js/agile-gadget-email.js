@@ -45,9 +45,10 @@ function agile_get_emails(bool) {
 	}
 	// Take email and sender's info for local host.
 	else {
-		emails = [ "manohar@invox.com", "maruthi.motors@invox.com",
-				"dheeraj@invox.com", "praveen@invox.com",
-				"maruthi.motors@invox.com", "adi.surendra.mohan.raju.morampudi@gmail.com", "theboss@apple.com" ];
+//		emails = [ "manohar@invox.com", "maruthi.motors@invox.com",
+//				"dheeraj@invox.com", "praveen@invox.com", "theboss@apple.com",
+//				"maruthi.motors@invox.com", "adi.surendra.mohan.raju.morampudi@gmail.com"];
+		emails = [ "dheeraj@invox.com", "praveen@invox.com", "theboss@apple.com"];
 		Sender_Email = "praveen@invox.com";
 		Sender_Name = "Praveen Kumar";
 	}
