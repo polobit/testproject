@@ -167,9 +167,12 @@ public class Mandrill
 	    // returns To JSONArray of recipient json objects
 	    messageJSON.put(MANDRILL_TO, getRecipientsJSON(to));
 
-	    messageJSON.put(MANDRILL_SUBJECT, subject);
-	    messageJSON.put(MANDRILL_HTML, html);
-	    messageJSON.put(MANDRILL_TEXT, text);
+	    // Mandrill throws validation error if mail json consists of
+	    // non-unicode characters
+	    messageJSON.put(MANDRILL_SUBJECT, EmailUtil.removeNonASCIICharacters(subject));
+
+	    messageJSON.put(MANDRILL_HTML, EmailUtil.removeNonASCIICharacters(html));
+	    messageJSON.put(MANDRILL_TEXT, EmailUtil.removeNonASCIICharacters(text));
 	}
 	catch (Exception e)
 	{
@@ -230,6 +233,7 @@ public class Mandrill
 	try
 	{
 	    headersJSON.put(MANDRILL_REPLY_TO, replyTo);
+	    headersJSON.put("Content-Type", "application/json; charset=utf-8");
 	}
 	catch (Exception e)
 	{
