@@ -427,7 +427,7 @@ $(function(){
 		var json = serializeForm("emailForm");
 		
 		json.body = json.body.replace(/\r\n/g,"<br/>");
-		json.signature = json.signature.replace(/\s/g,"&nbsp;");
+		json.signature = json.signature.replace(/\r\n/g,"<br/>");
 
 		// Shows message Sending email.
 	    $save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><p class="text-success" style="color:#008000; font-size:15px; display:inline-block"> <i>Sending mail...</i></p></span>');
