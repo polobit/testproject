@@ -18,7 +18,7 @@ function add_custom_fields_to_our_domain()
 	var date = date_object.getUTCMonth() + "/" + date_object.getUTCDay() + "/" + date_object.getUTCFullYear();
 
 	// Gets logged in time property.
-	var loggedin_time_property = getProperty(Agile_Contact.properties, 'last_loggedin');
+	var loggedin_time_property = getProperty(Agile_Contact.properties, 'Last Login');
 
 	// If loggedin time is defined and it is not equal to current date then it is updated
 	if (loggedin_time_property && loggedin_time_property.value == date)
@@ -26,7 +26,7 @@ function add_custom_fields_to_our_domain()
 	
 	if(!loggedin_time_property)
 	{
-		loggedin_time_property = create_contact_custom_field("last_loggedin", date, 'CUSTOM'); 
+		loggedin_time_property = create_contact_custom_field("Last Login", date, 'CUSTOM'); 
 	} 
 	
 	_agile.add_property(loggedin_time_property);
