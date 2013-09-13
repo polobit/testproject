@@ -63,6 +63,20 @@ $(function(){
 		})
 		
 	});	
+	
+	// To create toggle collapse for contact-detail web-stats tab. 
+	$('.page-visit').die().live('click', function(e) {
+		e.preventDefault();
+		var href = $(this).attr("href");
+		var id = $(this).attr('id');
+		$(".collapse-" + id).hide();
+		$(href).collapse('toggle');
+		
+		$(href).on("hidden", function(){
+			$(".collapse-" + id).show();
+		})
+		
+	});	
 /*	
 	$('.ativity-block-ul > li')
 	.live('mouseenter',function(){
