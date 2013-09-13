@@ -33,16 +33,16 @@ function isModalVisible()
  */
 function keyHandler(e)
 {
-	if(e.target && e.target.tagName=='INPUT')return;
+	if(e.target && e.target.tagName=='INPUT' || isModalVisible())return;
 	// focussed on input, so return default, as user is typing text.
 	
 	if(e.shiftKey)
 	{
 		if(e.keyCode==CodeASCII.P)
 			App_Settings.navigate("user-prefs",{trigger:true}); 	// Shift+P : preferences
-		else if(e.keyCode==CodeASCII.N && !isModalVisible())
+		else if(e.keyCode==CodeASCII.N)
 			$('#personModal').modal('show');                    	// Shift+N : new contact person
-		else if(e.keyCode==CodeASCII.T && !isModalVisible())
+		else if(e.keyCode==CodeASCII.T)
 			$('#activityModal').modal('show');						// Shift+T : new task
 		else if(isRoute("contact/"))
 		{
@@ -64,17 +64,17 @@ function keyHandler(e)
 		}
 		else if(e.keyCode==CodeASCII.N)								// N : new current thing
 		{
-			if(isRoute('contact') && !isModalVisible())
+			if(isRoute('contact'))
 				$('#personModal').modal('show');
-			else if(isRoute('cases') && !isModalVisible())
+			else if(isRoute('cases'))
 				showCases();
-			else if(isRoute('deals') && !isModalVisible())
+			else if(isRoute('deals'))
 				show_deal();
 			else if(isRoute('workflow'))
 				App_Workflows.navigate("workflow-add",{trigger:true});
 			else if(isRoute('report'))
 				App_Reports.navigate("report-add",{trigger:true});
-			else if((isRoute('task') || isRoute('calendar'))  && !isModalVisible())
+			else if(isRoute('task') || isRoute('calendar'))
 				$('#activityModal').modal('show');	
 			e.preventDefault();
 		}
