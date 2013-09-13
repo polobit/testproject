@@ -148,7 +148,7 @@ public class Case extends Cursor
      *             when Domain User not exists with respect to id.
      */
     @XmlElement(name = "owner")
-    public DomainUser getOwner() throws Exception
+    public DomainUser getOwner()
     {
 	if (owner_key != null)
 	{
@@ -161,6 +161,7 @@ public class Case extends Cursor
 		e.printStackTrace();
 	    }
 	}
+
 	return null;
     }
 

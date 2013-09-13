@@ -9,6 +9,7 @@ import com.agilecrm.cases.Case;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.QueryInterface.Type;
 import com.agilecrm.search.util.SearchUtil;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.StringUtils2;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Field;
@@ -35,6 +36,12 @@ public class CaseDocument extends com.agilecrm.search.document.Document implemen
 
 	doc.addField(Field.newBuilder().setName("type").setText(Type.CASES.toString()));
 
+	// Get owner of the case
+	DomainUser caseOwner = caseEntity.getOwner();
+
+	// Sets owner of the task
+	if (caseOwner != null)
+	    doc.addField(Field.newBuilder().setName("owner_id").setText(caseOwner.id.toString()));
 	// Adds document to Index
 	addToIndex(doc.setId(caseEntity.id.toString()).build());
 

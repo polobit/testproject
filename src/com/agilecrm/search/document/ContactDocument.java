@@ -125,6 +125,9 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 	doc.addField(Field.newBuilder().setName("search_tokens")
 		.setText(SearchUtil.getSearchTokens(contact.properties)));
 
+	// Add owner to document
+	doc.addField(Field.newBuilder().setName("owner_id").setText(String.valueOf(contact.getOwner().id)));
+
 	// Adds document to Index
 	addToIndex(doc.setId(contact.id.toString()).build());
     }
