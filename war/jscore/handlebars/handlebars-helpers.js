@@ -64,6 +64,33 @@ $(function()
 		return options.fn(fields);
 
 	});
+	
+	
+	/**
+	 * Returns custom fields without few fields like LINKEDIN or TWITTER or title fields
+	 */
+	Handlebars.registerHelper('getContactCustomPropertiesExclusively', function(items, options)
+	{
+		var exclude_by_subtype = ["LINKEDIN", "TWITTER"];
+		var exclude_by_name = ["title"];
+		
+		var fields = getContactCustomProperties(items);
+		var exclusive_fields = [];
+		
+		for(var i =0 ; i < fields.length ; i++)
+		{
+			if(jQuery.inArray(fields[i].name, exclude_by_name) != -1 || (fields[i].subtype && jQuery.inArray(fields[i].subtype, exclude_by_subtype) != -1))
+			{
+				continue;
+			}
+			exclusive_fields.push(fields[i]);
+		}
+
+		if (exclusive_fields.length == 0)
+			return options.inverse(exclusive_fields);
+
+		return options.fn(exclusive_fields);
+	});
 
 	Handlebars.registerHelper('urlEncode', function(url, key, data)
 	{
@@ -1105,7 +1132,10 @@ $(function()
 	 */
 	Handlebars.registerHelper('if_greater', function(value, target, options)
 	{
-		if (target > value)
+		console.log(value);
+		console.log(parseInt(target));
+		console.log(parseInt(target) > value);
+		if (parseInt(target) > value)
 			return options.inverse(this);
 		else
 			return options.fn(this);
