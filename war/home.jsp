@@ -384,7 +384,6 @@
 						// Creates a new contact and assigns it to global value 
 						 _agile.create_contact({"email": CURRENT_DOMAIN_USER['email'], "first_name" : first_name, "last_name": last_name, "tags":"Signup"}, function(data){
 							 Agile_Contact = data;
-							 add_custom_fields_to_our_domain();
 						 });
 						return;
 					}
@@ -395,7 +394,6 @@
 								Agile_Contact = data;
 							});
 						}
-					add_custom_fields_to_our_domain();
 				});
 			} catch(err)
 			{
@@ -404,7 +402,9 @@
 	});
 	
 	head.ready(function() {	
-		head.js('jscore/min/js-all-min.js');
+		head.js('jscore/min/js-all-min.js', function(){
+			 add_custom_fields_to_our_domain();
+		});
 		
 		// Remove the loading image
 		$('body').css('background-image', 'none');
