@@ -28,12 +28,27 @@ function isModalVisible()
 }
 
 /**
+ * Check if tg is any input tag
+ * @param tg - tag name to test.
+ * @returns
+ */
+function isInputTag(tg)
+{
+	var tagList=[ "INPUT", "TEXTAREA" ];
+	
+	for(var i=0;i<tagList.length;++i)
+		if(tg==tagList[i])return true;
+	
+	return false;
+}
+
+/**
  * Handler function fired when any key is pressed.
  * @param e
  */
 function keyHandler(e)
 {
-	if(e.target && e.target.tagName=='INPUT' || isModalVisible())return;
+	if((e.target && isInputTag(e.target.tagName)) || isModalVisible())return;
 	// focussed on input, so return default, as user is typing text.
 	
 	if(e.shiftKey)
