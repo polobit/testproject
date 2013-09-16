@@ -20,9 +20,9 @@ function agile_generate_ui(Api_Key, domain) {
 	// Build mail list UI and call callback.
 	agile_build_ui(function() {
 		// Load validation, event handlers and util JS files.
-		head.js(Lib_Path + 'misc/gmail/agile-gadget-event-handlers.js',
-				Lib_Path + 'misc/gmail/agile-gadget-util.js', Lib_Path
-						+ 'lib/jquery.validate.min.js', function() {
+		head.js(Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-event-handlers.min.js',
+				Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-util.min.js', 
+				Lib_Path + 'lib/jquery.validate.min.js', function() {
 					/*
 					 * User generated events (click, key press, etc.) will be
 					 * available after handlers file loading.

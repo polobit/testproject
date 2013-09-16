@@ -215,7 +215,7 @@ public class Contact extends Cursor
     public static final String NAME = "name";
     public static final String URL = "url";
     public static final String WEBSITE = "website";
-
+    public static final String ADDRESS = "address";
     // Dao
     public static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
 

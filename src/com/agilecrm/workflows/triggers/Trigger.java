@@ -1,8 +1,5 @@
 package com.agilecrm.workflows.triggers;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -82,7 +79,7 @@ public class Trigger
      * types.
      */
     @NotSaved(IfDefault.class)
-    public Set<String> custom_tags = new HashSet<String>();
+    public String custom_tags = null;
 
     /**
      * Initialize DataAccessObject.

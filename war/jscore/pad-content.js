@@ -23,7 +23,7 @@ var CONTENT_JSON = {
 	},
 	"companies" : {
 		"title" : "You do not have any companies currently.",
-		"description" : "compaines are prospects that you interact with using Agile.",
+		"description" : "companies are prospects that you interact with using Agile.",
 		//"learn_more" : "click here to learn more",
 		"button_text" : "Add Companies",
 		"route" : "#",

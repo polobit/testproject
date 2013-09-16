@@ -586,7 +586,6 @@ var ContactsRouter = Backbone.Router
 				var view = new Base_Model_View({ url : 'core/api/contact-view', isNew : true, window : "contact-views", template : "contact-view",
 					postRenderCallback : function(el)
 					{
-
 						// Check if model is new or not. If it is not new then
 						// there is no need to perform post render
 						if (view.model && view.model.get('id'))
@@ -594,9 +593,8 @@ var ContactsRouter = Backbone.Router
 						fillSelect("custom-fields-optgroup", "core/api/custom-fields", undefined, function(data)
 						{
 							console.log(data);
-							head.js(LIB_PATH + 'lib/jquery.multi-select.js', LIB_PATH + 'lib/jquery-ui.min.js', function()
+							head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/jquery.multi-select.js', function()
 							{
-
 								$("#content").html(el);
 								$('#multipleSelect', el).multiSelect();
 								$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").sortable();
@@ -631,7 +629,7 @@ var ContactsRouter = Backbone.Router
 					{
 						fillSelect("custom-fields-optgroup", "core/api/custom-fields", undefined, function(data)
 						{
-							head.js(LIB_PATH + 'lib/jquery.multi-select.js', LIB_PATH + 'lib/jquery-ui.min.js', function()
+							head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/jquery.multi-select.js', function()
 							{
 
 								$('#multipleSelect', el).multiSelect();

@@ -38,7 +38,7 @@ function agile_init_gadget() {
 
 		// Download scripts.
 		agile_download_scripts();
-		head.js(Lib_Path + 'misc/gmail/agile-gadget-ui.js');
+		head.js(Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-ui.min.js');
 
 		head.ready(function() {
 			
@@ -50,8 +50,8 @@ function agile_init_gadget() {
 	// Production version, go for login.
 	else {
 		// Set library path.
-		Lib_Path = "https://googleapps.agilecrm.com/";
-//		Lib_Path = "https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/";
+//		Lib_Path = "https://googleapps.agilecrm.com/";
+		Lib_Path = "https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/";
 
 		// Login
 		agile_login();
@@ -60,7 +60,7 @@ function agile_init_gadget() {
 }
 
 /**
- * Login to open gadget or setup user account by registration.
+ * Login to open gadget or setup user account by association.
  * 
  * @method agile_login
  */
@@ -69,7 +69,6 @@ function agile_login() {
 	// Get user preferences.
     var prefs = new gadgets.Prefs();
     var Agile_User_Exists = prefs.getString("agile_user_exists");
-    var Agile_Domain_Exists = prefs.getString("agile_domain_exists");
     
 	// Cookie present, Set account.
 	if (Agile_User_Exists == "true") {
@@ -79,7 +78,7 @@ function agile_login() {
 		agile_download_scripts();
     	
 		// Download build UI JavaScript file.
-		head.js('https://agile-gadget.appspot.com/dj-js/agile-gadget-ui.js');
+		head.js(Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-ui.min.js');
 		head.ready(function() {
 			// Set account
 			agile_generate_ui(Agile_User_Key, Agile_User_Domain);
@@ -89,17 +88,12 @@ function agile_login() {
 	// Cookie present, but new user set domain.
     else if(Agile_User_Exists == "false") {
     	var Agile_User_Popup = prefs.getString("agile_user_popup");
-		agile_user_setup_load(Agile_User_Popup, true);
+		agile_user_setup_load(Agile_User_Popup);
 	}
-	
-	// New user, go for registration.
-    else if(Agile_User_Domain == "false"){
-    	agile_user_setup_load(Agile_User_Domain, false);
-    }
-	
+		
 	// Check for cookie, if not there send login request.
 	else {
-		// Increase counter and append to request, so that it will not cached.
+		// Increase counter and append to request, so that it will not be cached.
 		Cache_Counter += 1;
 		var url = Lib_Path + 'gmail?chachecounter=' + Cache_Counter;
 		console.log("Osapi from " + url);
@@ -138,20 +132,12 @@ function agile_handle_load_response(data) {
 	}
 	
 	// User not exist, go for one time domain registration.
-	else if(data.content.user_exists != undefined && data.content.user_exists == false){
+	else {
 		data.content.user_exists = "false";
 		// Set user preferences.
 		prefs.set("agile_user_popup", data.content.popup);
 		prefs.set("agile_user_exists", data.content.user_exists);
-		agile_user_setup_load(data.content.popup, true);
-	}
-	
-	// User not exist, go for one time domain registration.
-	else {
-		data.content.domain_exists = "false";
-		// Set user preferences.
-		prefs.set("agile_domain_exists", data.content.domain_exists);
-		agile_user_setup_load(data.content, false);
+		agile_user_setup_load(data.content.popup);
 	}
 }
 
@@ -161,11 +147,11 @@ function agile_handle_load_response(data) {
  * @method agile_user_setup_load
  * @param {Object} data accepts data used to setup user domain.
  * */
-function agile_user_setup_load(data, bool){
+function agile_user_setup_load(data){
 
 	// Download build UI JavaScript file.
-	head.js(Lib_Path + 'misc/gmail/agile-gadget-setup.js', function() {
-		agile_user_setup(data, bool);
+	head.js(Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-setup.min.js', function() {
+		agile_user_setup(data);
 	});
 }
 /**
@@ -176,16 +162,7 @@ function agile_user_setup_load(data, bool){
 function agile_download_scripts() {
 
 	console.log("Downloading scripts");
-
-	// Handle bars, util and MD5.
-	head.js(Lib_Path + 'lib/handlebars-1.0.0.beta.6-min.js', Lib_Path
-			+ 'jscore/handlebars/handlebars-agile.js', Lib_Path
-			+ 'jscore/handlebars/handlebars-helpers.js', Lib_Path
-			+ 'jscore/util.js', Lib_Path + 'jscore/md5.js');
-	// JS API
-	head.js(Lib_Path + 'stats/min/agile-min.js');
-	// Gadget supporting JavaScript file.
-	head.js(Lib_Path + 'misc/gmail/agile-gadget-email.js');
+	head.js(Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-lib.min.js');
 }
 
 // Window onload event, call method to initiate gadget.

@@ -162,8 +162,20 @@ $(function()
 							if (name.indexOf("properties_") != -1)
 							{
 								name = name.split("properties_")[1];
+								
+								if(name.indexOf('address-') != -1)
+								{
+									var splits = name.split("-");
+									name = "address";
+									property["subtype"] = "home";
+									property["type"] = type;
+									console.log(splits);
+									// Set the value and name fields
+									property["value"] = splits[1];
+								}
+								
 								// Reads the sub type of the fields
-								if (name.indexOf("-") != -1)
+								else if (name.indexOf("-") != -1)
 								{
 									var splits = name.split("-");
 									name = splits[1];
@@ -172,17 +184,20 @@ $(function()
 									console.log($(select).attr('class'));
 									property["type"] = type;
 								}
-
+								
+								
 								// Set the value and name fields
+								if(!property["value"])
 								property["value"] = name;
+								
 								property["name"] = name;
+								console.log(property);
 								if (name.indexOf("_ignore_") != -1)
 									property = {};
 							}
 							else
 							{
-								if (name == 'tags')
-									property["name"] = name;
+								property["name"] = name;
 							}
 
 							// Push in to properties array (represents

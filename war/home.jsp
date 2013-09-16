@@ -402,7 +402,9 @@
 	});
 	
 	head.ready(function() {	
-		head.js('jscore/min/js-all-min.js');
+		head.js('jscore/min/js-all-min.js', function(){
+			 add_custom_fields_to_our_domain();
+		});
 		
 		// Remove the loading image
 		$('body').css('background-image', 'none');

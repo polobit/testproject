@@ -36,10 +36,26 @@
 <script id="stats-model-template" type="text/html">
 <div style="display:block;" class="activity">
 	<div id="notes" class="activity-text-block">
-		<span class="activity-block-owner">
-		</span><br>
-		<h4><a style="text-decoration: none"><b>Page View Analytics</b></a></h4></br>
+		<br>
+		<h4><a class="page-visit" style="font-weight:bold;" id={{sid}} href="#collapse-{{sid}}"><b>Page View Analytics</b></a></h4></br>
 
+        <div style="height:70px;margin-bottom:5px" class="ellipsis-multi-line collapse-{{sid}}">
+		    <ul style="list-style: none;">
+			    <li class="row-fluid">	
+					<div class="span2"><b>Pages Visted</b>
+						<div class="pull-right">:</div>
+					</div>
+							
+					<div class="span9" style="margin-left: 10px; word-break: break-all;">
+                    {{#stringToJSON this "urls_with_time_spent"}}{{/stringToJSON}}
+          	          
+					{{#each urls_with_time_spent}}{{url}} - {{convertSecondsToHour time_spent}}<br/> {{/each}}
+					</div>
+				</li>
+             </ul>  
+      	</div>
+
+<div id="collapse-{{sid}}" class="collapse activity-email-collapse" style="margin-left:-25px;">
 		<ul style="list-style: none;">
 			<li class="row-fluid">	
 					<div class="span2"><b>Pages Visted</b>
@@ -112,7 +128,7 @@
 				</li>
                {{/if}}
 		</ul>
-
+</div>
 	<div class="clear">
 		<small class="edit-hover" style="margin-right:10px">
 			<time class="stats-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>

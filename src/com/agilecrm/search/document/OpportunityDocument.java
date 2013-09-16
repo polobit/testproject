@@ -9,6 +9,7 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.QueryInterface.Type;
 import com.agilecrm.search.util.SearchUtil;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.StringUtils2;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Field;
@@ -34,6 +35,25 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 		.setText(SearchUtil.normalizeSet(StringUtils2.getSearchTokens(fields))));
 
 	doc.addField(Field.newBuilder().setName("type").setText(Type.OPPORTUNITY.toString()));
+
+	DomainUser opportunityOwner = null;
+
+	try
+	{
+	    opportunityOwner = opportunity.getOwner();
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	// Sets owner of the opportunity
+	if (opportunityOwner != null)
+	    doc.addField(Field.newBuilder().setName("owner_id").setText(opportunity.id.toString()));
+
+	// Adds document to Index
+	addToIndex(doc.setId(opportunity.id.toString()).build());
 
 	// Adds document to Index
 	addToIndex(doc.setId(opportunity.id.toString()).build());

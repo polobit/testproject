@@ -73,13 +73,35 @@ $(function()
 		return;
 	} 
 });
+
+$(function()
+		{
+	$("input:file").change(function (){
+	var fileName = $(this).val();
+    $(".filename").html(fileName);
+    
+    // to remove error message while change
+    isValid();
+  });
+		}); 
+		
 function isValid(){
     $("#form").validate({
         rules: {
         		file:{required:true,accept:"csv"}
-               }
+               },
+               submitHandler:function(form)
+               {   
+            	   if($('.submit', form).attr('disabled') != undefined)
+            		   return;
+            	   
+            	   $('.submit', form).attr('disabled', true);
+            	   $('.submit', form).after('<img class="loading" style="padding-right:5px" src= "img/21-0.gif"></img>');
+ 	              form.submit();
+ 	          }
+    
    		});
-    return $("#form").valid();
+	    return $("#form").valid();
     } 
 
 
@@ -106,7 +128,7 @@ function isValid(){
     
 <p><input name="file" id='fileextension' type="file" /></p>
 <br/>
-<input name="submit" id="submit" value="Upload" class='submit btn btn-primary' type="submit" /> 
+<input name="upload" value="Upload" class='submit btn btn-primary' type="submit" /> 
 </form> 
 </div>
 

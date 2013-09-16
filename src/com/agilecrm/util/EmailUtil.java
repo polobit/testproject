@@ -133,4 +133,27 @@ public class EmailUtil
     {
 	Mandrill.sendMail(fromEmail, fromName, to, subject, replyTo, html, text);
     }
+
+    /**
+     * Removes all Non-ASCII characters of a string.
+     * 
+     * @param str
+     *            - string that contains non-ascii characters.
+     * @return String
+     */
+    public static String removeNonASCIICharacters(String str)
+    {
+	// if empty or null
+	if (StringUtils.isEmpty(str))
+	    return str;
+
+	// Removes all of the non-ASCII characters
+	str = str.replaceAll("[^\\x20-\\x7e]", "");
+
+	// Removes all non-four-byte-UTF-8 characters like black diamond with
+	// question mark
+	str = str.replaceAll("[^\\u0000-\\uFFFF]", "");
+
+	return str;
+    }
 }

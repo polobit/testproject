@@ -1,5 +1,8 @@
 package com.campaignio.tasklets.agile;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.json.JSONObject;
 
 import com.campaignio.tasklets.TaskletAdapter;
@@ -126,40 +129,71 @@ public class Condition extends TaskletAdapter
 	    // Do the required operation. If matches send to yes
 	    if (comparator.equalsIgnoreCase(COMPARATOR_LESS_THAN))
 	    {
-		// Convert the string into Integer and check
-		if (Long.parseLong(variable1) < Long.parseLong(variable2))
-		    branch = "yes";
+
+		if (variable1.contains("/") && variable2.contains("/"))
+		{
+		    if (compareDateValues(variable1, variable2) < 0)
+		    {
+			branch = "yes";
+		    }
+		}
+		else
+		{
+		    // Convert the string into Integer and check
+		    if (Long.parseLong(variable1) < Long.parseLong(variable2))
+			branch = "yes";
+		}
 	    }
 
 	    if (comparator.equalsIgnoreCase(COMPARATOR_LESS_THAN_OR_EQUAL_TO))
 	    {
-		// Convert the string into Integer and check
-		if (Long.parseLong(variable1) <= Long.parseLong(variable2))
-		    branch = "yes";
+
+		if (variable1.contains("/") && variable2.contains("/"))
+		{
+		    if (compareDateValues(variable1, variable2) <= 0)
+		    {
+			branch = "yes";
+		    }
+		}
+		else
+		{
+		    // Convert the string into Integer and check
+		    if (Long.parseLong(variable1) <= Long.parseLong(variable2))
+			branch = "yes";
+		}
 	    }
 
 	    if (comparator.equalsIgnoreCase(COMPARATOR_GREATER_THAN))
 	    {
-		if (Long.parseLong(variable1) > Long.parseLong(variable2))
-		    branch = "yes";
+		if (variable1.contains("/") && variable2.contains("/"))
+		{
+		    if (compareDateValues(variable1, variable2) > 0)
+		    {
+			branch = "yes";
+		    }
+		}
+		else
+		{
+
+		    if (Long.parseLong(variable1) > Long.parseLong(variable2))
+			branch = "yes";
+		}
 	    }
 
 	    if (comparator.equalsIgnoreCase(COMPARATOR_GREATER_THAN_OR_EQUAL_TO))
 	    {
-		if (Long.parseLong(variable1) >= Long.parseLong(variable2))
-		    branch = "yes";
-	    }
-
-	    if (comparator.equalsIgnoreCase(COMPARATOR_GREATER_THAN))
-	    {
-		if (Long.parseLong(variable1) > Long.parseLong(variable2))
-		    branch = "yes";
-	    }
-
-	    if (comparator.equalsIgnoreCase(COMPARATOR_GREATER_THAN_OR_EQUAL_TO))
-	    {
-		if (Long.parseLong(variable1) >= Long.parseLong(variable2))
-		    branch = "yes";
+		if (variable1.contains("/") && variable2.contains("/"))
+		{
+		    if (compareDateValues(variable1, variable2) >= 0)
+		    {
+			branch = "yes";
+		    }
+		}
+		else
+		{
+		    if (Long.parseLong(variable1) >= Long.parseLong(variable2))
+			branch = "yes";
+		}
 	    }
 
 	    if (comparator.equalsIgnoreCase(COMPARATOR_NOT_EQUAL_TO))
@@ -187,5 +221,31 @@ public class Condition extends TaskletAdapter
 
 	// Go to next tasks
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, branch);
+    }
+
+    /**
+     * Compares Date values in fixed format.
+     * 
+     * @param sourceDate
+     *            - Value of existing date like Created Date of contact.
+     * @param targetDate
+     *            - Given date in condition node.
+     * @return Integer
+     */
+    public static Integer compareDateValues(String sourceDate, String targetDate)
+    {
+	try
+	{
+	    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+	    Date sd = sdf.parse(sourceDate);
+	    Date td = sdf.parse(targetDate);
+
+	    return sd.compareTo(td);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
     }
 }

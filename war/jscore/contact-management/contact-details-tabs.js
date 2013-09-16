@@ -63,6 +63,20 @@ $(function(){
 		})
 		
 	});	
+	
+	// To create toggle collapse for contact-detail web-stats tab. 
+	$('.page-visit').die().live('click', function(e) {
+		e.preventDefault();
+		var href = $(this).attr("href");
+		var id = $(this).attr('id');
+		$(".collapse-" + id).hide();
+		$(href).collapse('toggle');
+		
+		$(href).on("hidden", function(){
+			$(".collapse-" + id).show();
+		})
+		
+	});	
 /*	
 	$('.ativity-block-ul > li')
 	.live('mouseenter',function(){
@@ -427,7 +441,7 @@ $(function(){
 		var json = serializeForm("emailForm");
 		
 		json.body = json.body.replace(/\r\n/g,"<br/>");
-		json.signature = json.signature.replace(/\s/g,"&nbsp;");
+		json.signature = json.signature.replace(/\r\n/g,"<br/>");
 
 		// Shows message Sending email.
 	    $save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><p class="text-success" style="color:#008000; font-size:15px; display:inline-block"> <i>Sending mail...</i></p></span>');
@@ -533,6 +547,13 @@ $(function(){
 	 */
 	$('.activity-delete').die().live('click', function(e){
 		e.preventDefault();
+		
+		var model = $(this).parents('li').data();
+		
+		if(model && model.collection)
+		{
+			model.collection.remove(model);
+		}
 
 		// Gets the id of the entity
 		var entity_id = $(this).attr('id');
