@@ -15,8 +15,10 @@ $(function()
 	Twitter_current_profile_user_name = "";
 	Twitter_current_update_id = "";
 	Twitter_current_profile_screen_name = "";
-	var Twitter_follower_ids;
-	var Twitter_following_ids;
+	console.log(Twitter_follower_ids);
+	console.log(Twitter_following_ids);
+	var Twitter_follower_ids = undefined;
+	var Twitter_following_ids = undefined;
 	search_string = undefined;
 	search_data = undefined;
 	Twitter_search_details = {};
@@ -29,6 +31,9 @@ $(function()
 	var twitter_widget = agile_crm_get_plugin(TWITTER_PLUGIN_NAME);
 
 	console.log('In Twitter');
+	console.log(Twitter_follower_ids);
+	console.log(Twitter_following_ids);
+	
 	console.log(twitter_widget);
 
 	// ID of the Twitter widget as global variable
@@ -183,6 +188,9 @@ $(function()
 
 		if (Twitter_follower_ids)
 			return;
+		
+		console.log("In twit folowers");
+		console.log(Twitter_follower_ids);
 
 		Twitter_follower_ids = [];
 
@@ -206,7 +214,6 @@ $(function()
 
 			// Get 20 from array and remove 20 from array
 			var temp = Twitter_follower_ids.splice(0, 20);
-			// var temp = Twitter_follower_ids;
 			console.log(temp);
 
 			// Get the Twitter profile for 20 Twitter IDs
@@ -233,9 +240,7 @@ $(function()
 			{
 				Twitter_follower_ids = undefined;
 				$('#tweet_load').remove();
-				$('#follower-error-panel').html(error.responseText);
-				$('#follower-error-panel').show();
-				$('#follower-error-panel').fadeOut(10000);
+				tweetError("follower-error-panel", error.responseText);
 			});
 
 			$('#more_followers').die().live('click', function(e2)
@@ -247,6 +252,8 @@ $(function()
 
 				$('#spinner-followers').show();
 
+				console.log(Twitter_follower_ids);
+				
 				// Get 20 from array and remove 20 from array
 				var temp = Twitter_follower_ids.splice(0, 20);
 				console.log(temp);
@@ -255,7 +262,6 @@ $(function()
 				getListOfProfilesByIDsinTwitter(temp, function(result)
 				{
 
-					// $('#tweet_load').remove();
 					$('#spinner-followers').hide();
 
 					// Show matching profiles in Twitter panel
@@ -263,9 +269,7 @@ $(function()
 				}, function(error)
 				{
 					$('#spinner-followers').hide();
-					$('#follower-error-panel').html(error.responseText);
-					$('#follower-error-panel').show();
-					$('#follower-error-panel').fadeOut(10000);
+					tweetError("follower-error-panel", error.responseText);
 				});
 			});
 
@@ -326,9 +330,7 @@ $(function()
 			{
 				Twitter_following_ids = undefined;
 				$('#tweet_load').remove();
-				$('#following-error-panel').html(error.responseText);
-				$('#following-error-panel').show();
-				$('#following-error-panel').fadeOut(10000);
+				tweetError("following-error-panel", error.responseText);
 			});
 
 			$('#more_following').die().live('click', function(e2)
@@ -356,9 +358,7 @@ $(function()
 				}, function(error)
 				{
 					$('#spinner-following').hide();
-					$('#following-error-panel').html(error.responseText);
-					$('#following-error-panel').show();
-					$('#following-error-panel').fadeOut(10000);
+					tweetError("following-error-panel", error.responseText);
 				});
 
 			});
@@ -499,7 +499,7 @@ function showTwitterMatchingProfiles(data)
 			agile_crm_update_contact_properties(propertiesArray);
 
 			// show twitter profile by id
-			showTwitterProfile(Twitter_id);
+			 showTwitterProfile(Twitter_id);
 
 		});
 	});
@@ -1115,36 +1115,43 @@ function sendFollowRequest(Twitter_id)
 	 * Sends post request to url "core/api/widgets/social/connect/" and Calls
 	 * WidgetsAPI with plugin id and Twitter id as path parameters
 	 */
-	$.post("/core/api/widgets/social/connect/" + Twitter_Plugin_Id + "/" + Twitter_id, function(data)
-	{
-		// Checks whether data is true, followed successfully in Twitter
-		if (data == "true")
-		{
-			/*
-			 * Compose a new tweet and unfollow buttons are shown and follow
-			 * hidden
-			 */
-			$('#twitter_follow').hide();
-			$('#twitter_unfollow').show();
-		}
-		else
-		{
-			$('#twitter_follow').text("Follow Request Sent").attr("disabled", "disabled").show();
-			return;
-		}
+	$
+			.post("/core/api/widgets/social/connect/" + Twitter_Plugin_Id + "/" + Twitter_id, function(data)
+			{
+				// Checks whether data is true, followed successfully in Twitter
+				if (data == "true")
+				{
+					/*
+					 * Compose a new tweet and unfollow buttons are shown and
+					 * follow hidden
+					 */
+					$('#twitter_follow').hide();
+					$('#twitter_unfollow').show();
+				}
+				else
+				{
+					$('#twitter_follow').text("Follow Request Sent").attr("disabled", "disabled").show();
+					return;
+				}
 
-		// If current activity is undefined, then no updates can be retrieved
-		if (!Twitter_current_update_id)
-			return;
+				// If current activity is undefined, then no updates can be
+				// retrieved
+				if (!Twitter_current_update_id)
+					return;
 
-		// Show recent updates after following
-		getFirstFiveNetworkUpdates(Twitter_id);
+				// Show recent updates after following
+				getFirstFiveNetworkUpdates(Twitter_id);
 
-	}).error(function(data)
-	{
-		// Error message is shown if error occurs
-		tweetError("twitter-error-panel", data.responseText);
-	});
+			})
+			.error(
+					function(data)
+					{
+						if (data.responseText.indexOf("401:Authentication credentials") != 0)
+							data.responseText = "Only confirmed followers have access to " + Twitter_current_profile_user_name + " Tweets and complete profile. Click the \"Follow\" button to send a follow request.";
+
+						// Error message is shown if error occurs
+						tweetError("twitter-error-panel", data.responseText);
+					});
 }
 
 /**
@@ -1395,26 +1402,39 @@ function getFollowerIdsInTwitter(Twitter_id, callback)
 	 * Sends get request to URL "/core/api/widgets/social/followers/" by sending
 	 * plugin id and twitter id as path parameter
 	 */
-	$.getJSON("/core/api/widgets/social/followers/" + Twitter_Plugin_Id + "/" + Twitter_id, function(data)
-	{
-		// If data is undefined, return
-		if (!data)
-			return;
+	$
+			.getJSON("/core/api/widgets/social/followers/" + Twitter_Plugin_Id + "/" + Twitter_id, function(data)
+			{
+				// If data is undefined, return
+				if (!data)
+					return;
 
-		// If defined, execute the callback function
-		if (callback && typeof (callback) === "function")
-		{
-			callback(data);
-		}
+				// If defined, execute the callback function
+				if (callback && typeof (callback) === "function")
+				{
+					callback(data);
+				}
 
-	}).error(function(data)
-	{
-		// Show the error message
-		tweetError('follower-error-panel', data.responseText);
+			})
+			.error(
+					function(data)
+					{
+						// Remove loading
+						$('#tweet_load').remove();
+						
+						if (data.responseText.indexOf("401:Authentication credentials") != -1)
+						{
+							var message = "Only confirmed followers have access to " + Twitter_current_profile_user_name + " Tweets, Followers, Following and complete profile. Click the \"Follow\" button to send a follow request.";
+							twitterMainError("twitter_follower_panel", message, true);
+							$("#twitter_follower_panel").css("padding","0px");
+							return;
+						}
+						
+						// Show the error message
+						tweetError('follower-error-panel', data.responseText);
 
-		// Remove loading
-		$('#tweet_load').remove();
-	});
+						
+					});
 }
 
 /**
@@ -1432,24 +1452,37 @@ function getFollowingIdsInTwitter(Twitter_id, callback)
 	 * Sends get request to URL "/core/api/widgets/social/followers/" by sending
 	 * plugin id and twitter id as path parameter
 	 */
-	$.getJSON("/core/api/widgets/social/following/" + Twitter_Plugin_Id + "/" + Twitter_id, function(data)
-	{
-		// If data is undefined, return
-		if (!data)
-			return;
+	$
+			.getJSON("/core/api/widgets/social/following/" + Twitter_Plugin_Id + "/" + Twitter_id, function(data)
+			{
+				// If data is undefined, return
+				if (!data)
+					return;
 
-		// If defined, execute the callback function
-		if (callback && typeof (callback) === "function")
-			callback(data);
+				// If defined, execute the callback function
+				if (callback && typeof (callback) === "function")
+					callback(data);
 
-	}).error(function(data)
-	{
-		// Show the error message
-		tweetError('following-error-panel', data.responseText);
+			})
+			.error(
+					function(data)
+					{
+						// Remove loading
+						$('#tweet_load').remove();
+						
+						if (data.responseText.indexOf("401:Authentication credentials") != -1)
+						{
+							var message = "Only confirmed followers have access to " + Twitter_current_profile_user_name + " Tweets, Followers, Following and complete profile. Click the \"Follow\" button to send a follow request.";
+							twitterMainError("twitter_following_panel", message, true);
+							$("#twitter_following_panel").css("padding","0px");
+							return;
+						}
+						
+						// Show the error message
+						tweetError('following-error-panel', data.responseText);
 
-		// Remove loading
-		$('#tweet_load').remove();
-	});
+					
+					});
 }
 
 /**
@@ -1531,7 +1564,6 @@ function tweetError(id, error, disable_check)
  */
 function twitterMainError(id, error, disable_check)
 {
-	// build JSON with error message
 	// build JSON with error message
 	var error_json = {};
 	error_json['message'] = error;

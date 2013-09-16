@@ -54,7 +54,7 @@
 		<ul class="widget_tab_content" id="twitter_follower_panel" style="padding:10px">
 						
 		</ul>
-		<div class="widget_content" id="follower-error-panel" style="display:none;height: 140px;overflow-y: scroll;line-height:160%;word-wrap: break-word;" >
+		<div id="follower-error-panel" style="display:none;" >
 		</div>
 		<div class="widget_tab_footer" align="center">
 			<a href="#more" id="more_followers" rel="tooltip" title="Click to see more persons">Show More</a>
@@ -65,7 +65,7 @@
 		<ul class="widget_tab_content" id="twitter_following_panel" style="padding:10px">
 			
 		</ul>
-		<div class="widget_content" id="following-error-panel" style="display:none;height: 140px;overflow-y: scroll;line-height:160%;word-wrap: break-word;" >
+		<div id="following-error-panel" style="display:none;" >
 		</div>
 		<div class="widget_tab_footer" align="center">
 			<a href="#more" id="more_following" rel="tooltip" title="Click to see more persons">Show More</a>
@@ -151,7 +151,7 @@
 	</div>
 {{else}}
 	{{#check_length message "140"}}
-		<div class="ellipsis-multi-line collapse-25" title="{{message}}" style="height:110px;overflow: hidden;line-height:160%;word-wrap: break-word;padding:10px">
+		<div class="ellipsis-multiline" title="{{message}}" style="height: 100px !important;-webkit-line-clamp: 5;line-height:160%;word-wrap: break-word;word-break: normal;">
 			{{{message}}}
 		</div>
 	{{else}}
