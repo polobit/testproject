@@ -33,7 +33,7 @@ $(function()
 	console.log('In Twitter');
 	console.log(Twitter_follower_ids);
 	console.log(Twitter_following_ids);
-	
+
 	console.log(twitter_widget);
 
 	// ID of the Twitter widget as global variable
@@ -188,7 +188,7 @@ $(function()
 
 		if (Twitter_follower_ids)
 			return;
-		
+
 		console.log("In twit folowers");
 		console.log(Twitter_follower_ids);
 
@@ -242,37 +242,36 @@ $(function()
 				$('#tweet_load').remove();
 				tweetError("follower-error-panel", error.responseText);
 			});
+		});
+	});
 
-			$('#more_followers').die().live('click', function(e2)
-			{
-				e2.preventDefault();
+	$('#more_followers').die().live('click', function(e2)
+	{
+		e2.preventDefault();
 
-				if (!Twitter_follower_ids)
-					return;
+		if (!Twitter_follower_ids)
+			return;
 
-				$('#spinner-followers').show();
+		$('#spinner-followers').show();
 
-				console.log(Twitter_follower_ids);
-				
-				// Get 20 from array and remove 20 from array
-				var temp = Twitter_follower_ids.splice(0, 20);
-				console.log(temp);
+		console.log(Twitter_follower_ids);
 
-				// Get the Twitter profile for 20 Twitter IDs
-				getListOfProfilesByIDsinTwitter(temp, function(result)
-				{
+		// Get 20 from array and remove 20 from array
+		var temp = Twitter_follower_ids.splice(0, 20);
+		console.log(temp);
 
-					$('#spinner-followers').hide();
+		// Get the Twitter profile for 20 Twitter IDs
+		getListOfProfilesByIDsinTwitter(temp, function(result)
+		{
 
-					// Show matching profiles in Twitter panel
-					$('#twitter_follower_panel').append(getTemplate('twitter-follower-following', result));
-				}, function(error)
-				{
-					$('#spinner-followers').hide();
-					tweetError("follower-error-panel", error.responseText);
-				});
-			});
+			$('#spinner-followers').hide();
 
+			// Show matching profiles in Twitter panel
+			$('#twitter_follower_panel').append(getTemplate('twitter-follower-following', result));
+		}, function(error)
+		{
+			$('#spinner-followers').hide();
+			tweetError("follower-error-panel", error.responseText);
 		});
 	});
 
@@ -332,37 +331,37 @@ $(function()
 				$('#tweet_load').remove();
 				tweetError("following-error-panel", error.responseText);
 			});
-
-			$('#more_following').die().live('click', function(e2)
-			{
-				e2.preventDefault();
-
-				if (!Twitter_following_ids)
-					return;
-
-				$('#spinner-following').show();
-
-				// Get 20 from array and remove 20 from array
-				var temp = Twitter_following_ids.splice(0, 20);
-				console.log(temp);
-
-				// Get the Twitter profile for 20 Twitter IDs
-				getListOfProfilesByIDsinTwitter(temp, function(result)
-				{
-
-					// $('#tweet_load').remove();
-					$('#spinner-following').hide();
-
-					// Show matching profiles in Twitter panel
-					$('#twitter_following_panel').append(getTemplate('twitter-follower-following', result));
-				}, function(error)
-				{
-					$('#spinner-following').hide();
-					tweetError("following-error-panel", error.responseText);
-				});
-
-			});
 		});
+	});
+
+	$('#more_following').die().live('click', function(e2)
+	{
+		e2.preventDefault();
+
+		if (!Twitter_following_ids)
+			return;
+
+		$('#spinner-following').show();
+
+		// Get 20 from array and remove 20 from array
+		var temp = Twitter_following_ids.splice(0, 20);
+		console.log(temp);
+
+		// Get the Twitter profile for 20 Twitter IDs
+		getListOfProfilesByIDsinTwitter(temp, function(result)
+		{
+
+			// $('#tweet_load').remove();
+			$('#spinner-following').hide();
+
+			// Show matching profiles in Twitter panel
+			$('#twitter_following_panel').append(getTemplate('twitter-follower-following', result));
+		}, function(error)
+		{
+			$('#spinner-following').hide();
+			tweetError("following-error-panel", error.responseText);
+		});
+
 	});
 });
 
@@ -499,7 +498,7 @@ function showTwitterMatchingProfiles(data)
 			agile_crm_update_contact_properties(propertiesArray);
 
 			// show twitter profile by id
-			 showTwitterProfile(Twitter_id);
+			showTwitterProfile(Twitter_id);
 
 		});
 	});
@@ -1421,19 +1420,18 @@ function getFollowerIdsInTwitter(Twitter_id, callback)
 					{
 						// Remove loading
 						$('#tweet_load').remove();
-						
+
 						if (data.responseText.indexOf("401:Authentication credentials") != -1)
 						{
 							var message = "Only confirmed followers have access to " + Twitter_current_profile_user_name + " Tweets, Followers, Following and complete profile. Click the \"Follow\" button to send a follow request.";
 							twitterMainError("twitter_follower_panel", message, true);
-							$("#twitter_follower_panel").css("padding","0px");
+							$("#twitter_follower_panel").css("padding", "0px");
 							return;
 						}
-						
+
 						// Show the error message
 						tweetError('follower-error-panel', data.responseText);
 
-						
 					});
 }
 
@@ -1469,19 +1467,18 @@ function getFollowingIdsInTwitter(Twitter_id, callback)
 					{
 						// Remove loading
 						$('#tweet_load').remove();
-						
+
 						if (data.responseText.indexOf("401:Authentication credentials") != -1)
 						{
 							var message = "Only confirmed followers have access to " + Twitter_current_profile_user_name + " Tweets, Followers, Following and complete profile. Click the \"Follow\" button to send a follow request.";
 							twitterMainError("twitter_following_panel", message, true);
-							$("#twitter_following_panel").css("padding","0px");
+							$("#twitter_following_panel").css("padding", "0px");
 							return;
 						}
-						
+
 						// Show the error message
 						tweetError('following-error-panel', data.responseText);
 
-					
 					});
 }
 
