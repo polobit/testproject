@@ -30,14 +30,14 @@ public class TwitterProfile
 	{
 		// Creates a twitter object to connect with twitter
 		Twitter twitter = TwitterUtil.getTwitter(widget);
-	
+
 		try
 		{
 			// Fetch Twitter user profile based on twitter Id
 			User user = twitter.showUser(Long.parseLong(twitterId));
-	
+
 			SocialSearchResult result = new SocialSearchResult();
-	
+
 			// Map user details to SocialSearchResult
 			result.id = user.getId() + "";
 			result.name = user.getName();
@@ -48,13 +48,13 @@ public class TwitterProfile
 			result.num_connections = user.getFollowersCount() + "";
 			result.tweet_count = user.getStatusesCount() + "";
 			result.friends_count = user.getFriendsCount() + "";
-	
+
 			result.url = "https://twitter.com/" + user.getScreenName();
 			result.is_follow_request_sent = user.isFollowRequestSent();
 			result.is_connected = twitter.showFriendship(twitter.getId(), user.getId()).isSourceFollowingTarget();
 			result.is_followed_by_target = twitter.showFriendship(twitter.getId(), user.getId())
 					.isSourceFollowedByTarget();
-	
+
 			/*
 			 * If current status is not null, get network updates Assuming
 			 * current id as new status, 5 recent statuses are retrieved
@@ -63,17 +63,18 @@ public class TwitterProfile
 			{
 				result.current_update = user.getStatus().getText();
 				result.current_update_id = user.getStatus().getId();
-	
-				result.updateStream = TwitterUpdates.getNetworkUpdates(widget, user.getId(), result.current_update_id, 5);
+
+				result.updateStream = TwitterUpdates.getNetworkUpdates(widget, user.getId(), result.current_update_id,
+						5);
 			}
 			return result;
 		}
 		catch (TwitterRuntimeException e)
 		{
 			System.out.println("In get profile twitter exception");
-			throw new Exception(TwitterUtil.getErrorMessage(e.getMessage()));
+			throw TwitterUtil.getErrorMessage(e);
 		}
-	
+
 	}
 
 }

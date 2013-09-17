@@ -37,7 +37,7 @@ public class TwitterFollowing
 			IDs ids;
 			List<Long> listOfIds = new ArrayList<Long>();
 			long cursor = -1;
-	
+
 			/*
 			 * Creates a twitter object to connect with twitter and retrieves
 			 * following Twitter Ids based on Twitter ID. If more than 5000
@@ -48,13 +48,13 @@ public class TwitterFollowing
 			listOfIds.addAll(Arrays.asList(ArrayUtils.toObject(ids.getIDs())));
 			System.out.println("List of Ids: " + listOfIds);
 			// } while ((cursor = ids.getNextCursor()) != 0);
-	
+
 			return listOfIds;
 		}
 		catch (TwitterRuntimeException e)
 		{
 			System.out.println("In following Ids twitter exception ");
-			throw new Exception(TwitterUtil.getErrorMessage(e.getMessage()));
+			throw TwitterUtil.getErrorMessage(e);
 		}
 	}
 

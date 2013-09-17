@@ -31,14 +31,15 @@ public class TwitterTweet
 		try
 		{
 			// Get twitter object and tweet in twitter
-			Status status = TwitterUtil.getTwitter(widget).updateStatus(message + TwitterUtil.AGILE_TWITTER_SOURCE_MESSAGE);
+			Status status = TwitterUtil.getTwitter(widget).updateStatus(
+					message + TwitterUtil.AGILE_TWITTER_SOURCE_MESSAGE);
 			System.out.println("Tweet: " + JSONUtil.toJSONString(status));
 			return "Successful";
 		}
 		catch (TwitterRuntimeException e)
 		{
 			System.out.println("In tweet twitter exception");
-			throw new Exception(TwitterUtil.getErrorMessage(e.getMessage()));
+			throw TwitterUtil.getErrorMessage(e);
 		}
 	}
 
@@ -65,7 +66,7 @@ public class TwitterTweet
 		catch (TwitterRuntimeException e)
 		{
 			System.out.println("In retweet twitter exception");
-			throw new Exception(TwitterUtil.getErrorMessage(e.getMessage()));
+			throw TwitterUtil.getErrorMessage(e);
 		}
 	}
 

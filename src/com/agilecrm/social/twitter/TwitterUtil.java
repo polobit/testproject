@@ -16,6 +16,7 @@ import twitter4j.auth.AccessToken;
 
 import com.agilecrm.Globals;
 import com.agilecrm.core.api.widgets.WidgetsAPI;
+import com.agilecrm.social.linkedin.LinkedInUtil;
 import com.agilecrm.social.stubs.SocialSearchResult;
 import com.agilecrm.widgets.Widget;
 
@@ -69,7 +70,7 @@ public class TwitterUtil
 		catch (TwitterRuntimeException e)
 		{
 			System.out.println("In get twitter exception");
-			throw new Exception(getErrorMessage(e.getMessage()));
+			throw getErrorMessage(e);
 		}
 	}
 
@@ -116,7 +117,7 @@ public class TwitterUtil
 				throw new Exception("Sorry, that page doesn't exist! @" + screenName);
 
 			System.out.println("In get Twitter id exception");
-			throw new Exception(getErrorMessage(e.getMessage()));
+			throw getErrorMessage(e);
 
 		}
 
@@ -217,7 +218,7 @@ public class TwitterUtil
 		catch (TwitterRuntimeException e)
 		{
 			System.out.println("In list of profiles twitter exception");
-			throw new Exception(getErrorMessage(e.getMessage()));
+			throw getErrorMessage(e);
 		}
 	}
 
@@ -228,9 +229,10 @@ public class TwitterUtil
 	 *            {@link String} error message
 	 * @return {@link String} proper error message
 	 */
-	public static String getErrorMessage(String error)
+	public static Exception getErrorMessage(Exception exception)
 	{
 
+		String error = exception.getMessage();
 		System.out.println("Before changing error: " + error);
 
 		/*
@@ -241,9 +243,9 @@ public class TwitterUtil
 		{
 			error = error.substring(error.indexOf("message - ") + 10, error.indexOf("code - "));
 			System.out.println("After changing error: " + error);
-			return error;
+			return new Exception(error);
 		}
 
-		return error;
+		return LinkedInUtil.extractException(exception);
 	}
 }

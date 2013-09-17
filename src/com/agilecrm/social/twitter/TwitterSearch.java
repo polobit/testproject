@@ -43,18 +43,18 @@ public class TwitterSearch
 			// Gets first name and last name of the contact to search profiles
 			String firstName = contact.getContactFieldValue(Contact.FIRST_NAME);
 			String lastName = contact.getContactFieldValue(Contact.LAST_NAME);
-	
+
 			// returns empty if first name and last name both are null
 			if (StringUtils.isBlank(firstName) && StringUtils.isBlank(lastName))
 				return new ArrayList<SocialSearchResult>();
-	
+
 			/*
 			 * check first name and last name, if null put it as empty for
 			 * search
 			 */
 			firstName = (firstName != null) ? firstName : "";
 			lastName = (lastName != null) ? lastName : "";
-	
+
 			/*
 			 * Creates a twitter object to connect with twitter and searches
 			 * twitter profiles based on first name and last name
@@ -64,7 +64,7 @@ public class TwitterSearch
 		catch (TwitterRuntimeException e)
 		{
 			System.out.println("In search twitter exception");
-			throw new Exception(TwitterUtil.getErrorMessage(e.getMessage()));
+			throw TwitterUtil.getErrorMessage(e);
 		}
 	}
 
@@ -90,24 +90,24 @@ public class TwitterSearch
 	{
 		try
 		{
-	
+
 			// returns empty list if String to be searched is null
 			if (StringUtils.isBlank(searchString))
 				return new ArrayList<SocialSearchResult>();
-	
+
 			/*
 			 * Creates a twitter object to connect with twitter Searches twitter
 			 * profiles based on the search string
 			 */
 			ResponseList<User> users = TwitterUtil.getTwitter(widget).searchUsers(searchString, 1);
-	
+
 			// Fill user details in list and return
 			return TwitterUtil.fillUsersDetailsInList(users);
 		}
 		catch (TwitterRuntimeException e)
 		{
 			System.out.println("In modified search twitter exception");
-			throw new Exception(TwitterUtil.getErrorMessage(e.getMessage()));
+			throw TwitterUtil.getErrorMessage(e);
 		}
 	}
 
