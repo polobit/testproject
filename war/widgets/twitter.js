@@ -186,7 +186,7 @@ $(function()
 	{
 		e1.preventDefault();
 
-		if (Twitter_follower_ids)
+		if (Twitter_follower_ids && Twitter_follower_ids.length != 0)
 			return;
 
 		console.log("In twit folowers");
@@ -280,7 +280,7 @@ $(function()
 	{
 		e1.preventDefault();
 
-		if (Twitter_following_ids)
+		if (Twitter_following_ids && Twitter_following_ids.length != 0)
 			return;
 
 		Twitter_following_ids = [];
