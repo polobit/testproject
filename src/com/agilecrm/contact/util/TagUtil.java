@@ -22,8 +22,7 @@ import com.googlecode.objectify.Key;
 public class TagUtil
 {
     // Dao
-    private static ObjectifyGenericDao<Tag> dao = new ObjectifyGenericDao<Tag>(
-	    Tag.class);
+    private static ObjectifyGenericDao<Tag> dao = new ObjectifyGenericDao<Tag>(Tag.class);
 
     /**
      * Creates a tag in database, by verifying its existence in database.
@@ -64,6 +63,9 @@ public class TagUtil
 	// Add to tags Library
 	for (String tagName : tags)
 	{
+	    if (StringUtils.isBlank(tagName))
+		continue;
+
 	    // Check if there is any contact with this tag
 	    int count = ContactUtil.getContactsCountForTag(tagName);
 	    if (count == 0)
