@@ -47,7 +47,7 @@ public class TwitterUpdates
 		catch (TwitterRuntimeException e)
 		{
 			System.out.println("In network updates twitter exception");
-			throw new Exception(TwitterUtil.getErrorMessage(e.getMessage()));
+			throw TwitterUtil.getErrorMessage(e);
 		}
 	}
 
@@ -80,23 +80,23 @@ public class TwitterUpdates
 			Twitter twitter = TwitterUtil.getTwitter(widget);
 			User user = twitter.showUser(twitterId);
 			Query query = new Query("from:" + user.getScreenName());
-	
+
 			// set max id if statusId is not zero
 			if (statusId != 0)
 				query.maxId(statusId);
-	
+
 			// set max id if count is not zero
 			if (count != 0)
 				query.setCount(count);
-	
+
 			QueryResult queryResult = twitter.search(query);
-	
+
 			return TwitterUpdates.getListOfSocialUpdateStream(user, twitter, queryResult.getTweets());
 		}
 		catch (TwitterRuntimeException e)
 		{
 			System.out.println("In network updates twitter exception");
-			throw new Exception(TwitterUtil.getErrorMessage(e.getMessage()));
+			throw TwitterUtil.getErrorMessage(e);
 		}
 	}
 
@@ -118,7 +118,7 @@ public class TwitterUpdates
 			throws SocketTimeoutException, IOException, Exception
 	{
 		List<SocialUpdateStream> updateStream = new ArrayList<SocialUpdateStream>();
-	
+
 		/*
 		 * For each tweet, retrieve the information and make it into proper
 		 * string with links to display it
@@ -127,13 +127,13 @@ public class TwitterUpdates
 			try
 			{
 				SocialUpdateStream stream = new SocialUpdateStream();
-	
+
 				stream.id = String.valueOf(tweet.getId());
 				stream.message = tweet.getText();
 				stream.is_retweet = tweet.isRetweet();
 				stream.is_retweeted = tweet.isRetweetedByMe();
 				stream.created_time = tweet.getCreatedAt().getTime() / 1000;
-	
+
 				/*
 				 * If tweet is a retweet, get the picture URL and profile URL of
 				 * person who actually tweeted it, else get picture URL and
@@ -150,7 +150,7 @@ public class TwitterUpdates
 					stream.tweeted_person_pic_url = user.getBiggerProfileImageURLHttps();
 					stream.tweeted_person_profile_url = "https://twitter.com/" + user.getScreenName();
 				}
-	
+
 				/*
 				 * For every user who retweeted the tweet, make its screen name
 				 * as link in the tweet string which can be redirected to
@@ -160,7 +160,7 @@ public class TwitterUpdates
 					stream.message = stream.message.replace("@" + entity.getScreenName(),
 							"<a href='https://twitter.com/" + entity.getScreenName()
 									+ "' target='_blank' class='cd_hyperlink'>@" + entity.getScreenName() + "</a>");
-	
+
 				/*
 				 * For every hash tag, make its name as link in the tweet string
 				 * which can be redirected to twitter profile of it
@@ -171,7 +171,7 @@ public class TwitterUpdates
 					stream.message = stream.message.replace("#" + entity.getText(), "<a href='" + url
 							+ "' target='_blank' class='cd_hyperlink'>#" + entity.getText() + "</a>");
 				}
-	
+
 				/*
 				 * If tweet contains links, replacing the link with its display
 				 * content returned from Twitter, which redirects with the
@@ -180,28 +180,28 @@ public class TwitterUpdates
 				for (URLEntity entity : tweet.getURLEntities())
 					stream.message = stream.message.replace(entity.getURL(), "<a href='" + entity.getURL()
 							+ "' target='_blank' class='cd_hyperlink'>" + entity.getDisplayURL() + "</a>");
-	
+
 				/*
 				 * If still tweet contains URL, showing it as hyper link and
 				 * linking it with its own URL
 				 */
 				String[] words = stream.message.split(" ");
 				String exp = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
-	
+
 				for (String word : words)
 					if (word.matches(exp))
 						stream.message = stream.message.replace(word, "<a href='" + word
 								+ "' target='_blank' class='cd_hyperlink'>" + word + "</a>");
-	
+
 				System.out.println("Tweet after showing links: " + stream.message);
-	
+
 				// Each tweet is added in a list
 				updateStream.add(stream);
 			}
 			catch (TwitterRuntimeException e)
 			{
 				System.out.println("In list of updates twitter exception");
-				throw new Exception(TwitterUtil.getErrorMessage(e.getMessage()));
+				throw TwitterUtil.getErrorMessage(e);
 			}
 		return updateStream;
 	}

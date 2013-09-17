@@ -40,7 +40,7 @@ public class TwitterFollow
 		catch (TwitterRuntimeException e)
 		{
 			System.out.println("In follow twitter exception");
-			throw new Exception(TwitterUtil.getErrorMessage(e.getMessage()));
+			throw TwitterUtil.getErrorMessage(e);
 		}
 	}
 
@@ -66,7 +66,7 @@ public class TwitterFollow
 		catch (TwitterRuntimeException e)
 		{
 			System.out.println("In unfollow twitter exception");
-			throw new Exception(TwitterUtil.getErrorMessage(e.getMessage()));
+			throw TwitterUtil.getErrorMessage(e);
 		}
 	}
 

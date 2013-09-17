@@ -255,7 +255,6 @@ public class LinkedInUtil
 	public static Exception handleExceptionInLinkedIn(Exception exception)
 	{
 		System.out.println("Exception message: " + exception.getMessage());
-		Exception innerException = null;
 
 		if (exception.getMessage().contains("The token used in the OAuth request is not valid"))
 			return new Exception("Access granted to your linkedin account has expired.");
@@ -265,6 +264,21 @@ public class LinkedInUtil
 		 * returned as string and make the exception out of string and throw
 		 * proper exception like (TimeoutException, IOException..)
 		 */
+		return extractException(exception);
+	}
+
+	/**
+	 * Extracts the inner exception from Exception and throw proper exception
+	 * like (TimeoutException, IOException..)
+	 * 
+	 * @param exception
+	 *            {@link Exception}
+	 * @return {@link Exception} with proper exception extracted
+	 */
+	public static Exception extractException(Exception exception)
+	{
+		Exception innerException = null;
+
 		if (exception.getMessage().contains(":"))
 			try
 			{
@@ -284,5 +298,4 @@ public class LinkedInUtil
 			return exception;
 		return innerException;
 	}
-
 }

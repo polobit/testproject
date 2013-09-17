@@ -38,11 +38,11 @@ public class TwitterFollowers
 	{
 		try
 		{
-	
+
 			IDs ids;
 			List<Long> listOfIds = new ArrayList<Long>();
 			long cursor = -1;
-	
+
 			/*
 			 * Creates a twitter object to connect with twitter and retrieves
 			 * follower Twitter Ids based on Twitter ID. If more than 5000
@@ -53,13 +53,13 @@ public class TwitterFollowers
 			listOfIds.addAll(Arrays.asList(ArrayUtils.toObject(ids.getIDs())));
 			System.out.println("List of Ids: " + listOfIds);
 			// } while ((cursor = ids.getNextCursor()) != 0);
-	
+
 			return listOfIds;
 		}
 		catch (TwitterRuntimeException e)
 		{
 			System.out.println("In follower Ids twitter exception ");
-			throw new Exception(TwitterUtil.getErrorMessage(e.getMessage()));
+			throw TwitterUtil.getErrorMessage(e);
 		}
 	}
 
