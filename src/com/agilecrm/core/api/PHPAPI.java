@@ -7,12 +7,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
@@ -35,11 +38,13 @@ public class PHPAPI
 {
 	@POST
 	@Path("contact")
-	@Produces("application / x-javascript")
+	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public String createContact(String data, @QueryParam("id") String apiKey)
 	{
 		try
 		{
+			System.out.println("entering create contact");
 			Contact contact = new Contact();
 			List<ContactField> properties = new ArrayList<ContactField>();
 			String[] tags = new String[0];
@@ -89,13 +94,15 @@ public class PHPAPI
 
 	@DELETE
 	@Path("contact")
-	@Produces("application / x-javascript")
-	public String deleteContact(String data)
+	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String deleteContact(@QueryParam("email") String email)
 	{
 		try
 		{
-			JSONObject obj = new JSONObject(data);
-			Contact contact = ContactUtil.searchContactByEmail(obj.getString("email"));
+			System.out.println("entering delete contact");
+			System.out.println("email"+email);
+			Contact contact = ContactUtil.searchContactByEmail(email);
 			if (contact == null)
 				return null;
 			contact.delete();
@@ -112,7 +119,8 @@ public class PHPAPI
 
 	@POST
 	@Path("note")
-	@Produces("application / x-javascript")
+	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public String addNote(String data)
 	{
 		try
@@ -147,7 +155,8 @@ public class PHPAPI
 
 	@POST
 	@Path("score")
-	@Produces("application / x-javascript")
+	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public String addScore(String data)
 	{
 		try
@@ -181,7 +190,8 @@ public class PHPAPI
 
 	@POST
 	@Path("task")
-	@Produces("application / x-javascript")
+	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public String addTask(String data, @QueryParam("id") String apikey)
 	{
 		try
@@ -218,7 +228,8 @@ public class PHPAPI
 
 	@POST
 	@Path("deal")
-	@Produces("application / x-javascript")
+	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public String addDeal(String data, @QueryParam("id") String apikey)
 	{
 		try
@@ -253,7 +264,8 @@ public class PHPAPI
 
 	@POST
 	@Path("tags")
-	@Produces("application / x-javascript")
+	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public String addTags(String data)
 	{
 		try
@@ -291,9 +303,10 @@ public class PHPAPI
 		}
 	}
 
-	@DELETE
+	@PUT
 	@Path("tags")
-	@Produces("application / x-javascript")
+	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public String removeTags(String data)
 	{
 		try
@@ -331,9 +344,10 @@ public class PHPAPI
 		}
 	}
 
-	@DELETE
+	@PUT
 	@Path("score")
-	@Produces("application / x-javascript")
+	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public String subtractScore(String data)
 	{
 		try
@@ -368,13 +382,13 @@ public class PHPAPI
 
 	@GET
 	@Path("tags")
-	@Produces("application / x-javascript")
-	public String getTags(String data)
+	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getTags(@QueryParam("email") String email)
 	{
 		try
 		{
-			JSONObject obj = new JSONObject(data);
-			Contact contact = ContactUtil.searchContactByEmail(obj.getString("email"));
+			Contact contact = ContactUtil.searchContactByEmail(email);
 			if (contact == null)
 				return null;
 
@@ -390,13 +404,13 @@ public class PHPAPI
 
 	@GET
 	@Path("score")
-	@Produces("application / x-javascript")
-	public String getScore(String data)
+	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getScore(@QueryParam("email") String email)
 	{
 		try
 		{
-			JSONObject obj = new JSONObject(data);
-			Contact contact = ContactUtil.searchContactByEmail(obj.getString("email"));
+			Contact contact = ContactUtil.searchContactByEmail(email);
 			if (contact == null)
 				return null;
 			ObjectMapper mapper = new ObjectMapper();
@@ -411,13 +425,13 @@ public class PHPAPI
 
 	@GET
 	@Path("note")
-	@Produces("application / x-javascript")
-	public String getNotes(String data)
+	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getNotes(@QueryParam("email") String email)
 	{
 		try
 		{
-			JSONObject obj = new JSONObject(data);
-			Contact contact = ContactUtil.searchContactByEmail(obj.getString("email"));
+			Contact contact = ContactUtil.searchContactByEmail(email);
 			if (contact == null)
 				return null;
 			List<Note> Notes = new ArrayList<Note>();
@@ -439,13 +453,13 @@ public class PHPAPI
 
 	@GET
 	@Path("deal")
-	@Produces("application / x-javascript")
-	public String getDeals(String data)
+	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getDeals(@QueryParam("email") String email)
 	{
 		try
 		{
-			JSONObject obj = new JSONObject(data);
-			Contact contact = ContactUtil.searchContactByEmail(obj.getString("email"));
+			Contact contact = ContactUtil.searchContactByEmail(email);
 			if (contact == null)
 				return null;
 			List<Opportunity> deals = new ArrayList<Opportunity>();
@@ -467,13 +481,13 @@ public class PHPAPI
 
 	@GET
 	@Path("task")
-	@Produces("application / x-javascript")
-	public String getTasks(String data)
+	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getTasks(@QueryParam("email") String email)
 	{
 		try
 		{
-			JSONObject obj = new JSONObject(data);
-			Contact contact = ContactUtil.searchContactByEmail(obj.getString("email"));
+			Contact contact = ContactUtil.searchContactByEmail(email);
 			if (contact == null)
 				return null;
 			List<Task> tasks = new ArrayList<Task>();
@@ -495,13 +509,15 @@ public class PHPAPI
 
 	@GET
 	@Path("contact")
-	@Produces("application / x-javascript")
-	public String getContact(String data)
+	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getContact(@QueryParam("email") String email)
 	{
 		try
 		{
-			JSONObject obj = new JSONObject(data);
-			Contact contact = ContactUtil.searchContactByEmail(obj.getString("email"));
+			System.out.println("entering get contact");
+			System.out.println("email"+email);
+			Contact contact = ContactUtil.searchContactByEmail(email);
 			if (contact == null)
 				return null;
 			ObjectMapper mapper = new ObjectMapper();
