@@ -123,7 +123,7 @@ function customize_bulk_delete(id_array, data_array){
 			}	
 		});
 		if(id_array.length == 0){
-			$('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">�</a>Sorry, you can not delete user who is admin.</div>').show().delay(3000).hide(1);
+			$('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry, can not delete user with <i>admin</i> privilege.</div>').show().delay(5000).hide(1);
 			return false;
 		}
 	}
