@@ -37,19 +37,25 @@
 	  <!-- End of Sounds -->
 	  
 	  <!-- CSS -->
-	  <include path="/**.css" expiration="10m"/>
+	  <include path="/**.css" expiration="7d"/>
 	  <exclude path="/css/agilecrm.css" />
 	  <exclude path="/css/all.css" />
+	 
 	  <!-- CSS -->
 	
 	  <!-- JS -->
-	  <include path="/**.js" />
+	  <include path="/**.js" expiration="7d"/>
+	  <exclude path="/jscore/min/**.js" />
+	  <exclude path="/tpl/min/**.js" />
 	  <!-- End of JS -->
 	
 	  <!-- Error handlers -->
 	  <include path="error/**.html" />
 	  
 	  <!-- End of Error handlers -->
+	  
+	  
+	
 	  
 	 </static-files>
 	 <!-- End of static files configuration -->
