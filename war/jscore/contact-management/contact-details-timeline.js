@@ -864,11 +864,10 @@ $(function () {
 	$("#tl-log-popover").live('click',function(e){
 		e.preventDefault();
 		
-		var string = $(this).closest('div.text').text();
-        string = string.replace("From:", "</br>From:").replace("To:", "</br>To:").replace("Subject:", "</br>Subject:").replace("Text:", "</br>Text:").replace("HTML:", "</br>HTML:");
+		var string = $(this).closest('div').attr("data");
 
-		// Add pre tag to the string to consider white spaces
-		$("#log-in-detail").html("<pre style='background:none;border:none;'>" + string + "</pre>");
+		// Add div tag to the string to consider white spaces
+		$("#log-in-detail").html("<div style='background:none;border:none;'>" + string + "</div>");
 		
 		$("#timelineLogModal").modal("show");
     });
