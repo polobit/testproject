@@ -8,9 +8,6 @@ function setup_dashboard(el)
 	// Sets up subscription details
 	show_dashboard_subscription_details(el);
 
-	// Shows noty
-	set_profile_noty();
-	
 	// Show recently view contacts by current user
 	show_dashboard_contacts(el);
 
@@ -18,6 +15,9 @@ function setup_dashboard(el)
 	show_dashboard_tasks(el);
 	show_dashboard_deals(el);
 	show_dashboard_workflows(el);
+	
+	// Shows noty
+	set_profile_noty();
 }
 
 
