@@ -1022,22 +1022,22 @@ $(function()
 	 * Converts string to JSON
 	 */
 	Handlebars.registerHelper('stringToJSON', function(object, key, options)
-	{
-		if (key)
-		{
-			try
 			{
-				object[key] = JSON.parse(object[key]);
-				return options.fn(object[key]);
-			}
-			catch (err)
-			{
-				return options.fn(object[key]);
-			}
-		}
+				if (key)
+				{
+					try
+					{
+						object[key] = JSON.parse(object[key]);
+						return options.fn(object[key]);
+					}
+					catch (err)
+					{
+						return options.fn(object[key]);
+					}
+				}
 
-		return options.fn(JSON.parse(object));
-	});
+				return options.fn(JSON.parse(object));
+			});
 
 	/**
 	 * Convert string to lower case
@@ -1662,10 +1662,10 @@ $(function()
 		}
 
 		// COMPANY type
-		for ( var i = 0; i < contact_properties.length; i++)
+		for ( var i = 0; i < properties.length; i++)
 		{
-			if (contact_properties[i].name === "name")
-				return contact_properties[i].value;
+			if (properties[i].name === "name")
+				return properties[i].value;
 		}
 		return "Company";
 	});
@@ -1718,4 +1718,57 @@ $(function()
 				return buffer;
 
 			});
+	
+	/**
+	 * Identifies EMAIL_SENT campaign-log string and splits the log string based on 
+	 * '_aGiLeCrM' delimiter into To, From, Subject and Body.
+	 * 
+	 **/
+	Handlebars.registerHelper("if_email_sent",function(object,key,options){
+		
+		// delimiter for campaign send-email log
+		var _AGILE_CRM_DELIMITER = "_aGiLeCrM";
+		
+		// if log_type is EMAIL_SENT
+		if(object[key] === "EMAIL_SENT")
+		{
+			// Splits logs message
+			var email_fields = object["message"].split(_AGILE_CRM_DELIMITER, 4);
+			
+			// Json to apply for handlebar template
+			var json = {};
+			
+			if(email_fields === undefined)
+				return options.inverse(object);
+			
+			// Iterates inorder to insert each field into json
+			for(var i=0;i<email_fields.length;i++)
+			{
+				// Splits based on colon. E.g "To: naresh@agilecrm.com"
+				var arrcolon = email_fields[i].split(":");
+				
+				// Inserts LHS of colon as key. E.g., To
+				var key = arrcolon[0];
+				key=key.trim(); // if key starts with space, it can't accessible
+				
+				// Inserts RHS of colon as value. E.g., naresh@agilecrm.com
+				var value = arrcolon.slice(1).join(":"); // join the remaining string based on colon, 
+				                                        //only first occurence of colon is needed
+				value = value.trim();
+				
+				json[key] = value;
+			}
+			
+			// inserts time into json
+			json.time = object["time"];
+
+			// apply customized json to template.
+			return options.fn(json);
+		}	
+		
+		// if not EMAIL_SENT log, goto else in the template
+		return options.inverse(object);
+		
+	});
+	
 });

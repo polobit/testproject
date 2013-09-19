@@ -147,9 +147,6 @@ public class EmailUtil
 	if (StringUtils.isEmpty(str))
 	    return str;
 
-	// Removes all of the non-ASCII characters
-	str = str.replaceAll("[^\\x20-\\x7e]", "");
-
 	// Removes all non-four-byte-UTF-8 characters like black diamond with
 	// question mark
 	str = str.replaceAll("[^\\u0000-\\uFFFF]", "");
