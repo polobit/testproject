@@ -59,8 +59,8 @@
 %>
 
 <%
-	String CSS_PATH = "/";
-	//] String CSS_PATH = "//d13pkp0ru5xuwf.cloudfront.net/";
+	//String CSS_PATH = "/";
+ 	String CSS_PATH = "//da4o37ei6ybbh.cloudfront.net/";
 %>
 <%
 	String logoutURL = "/login";
