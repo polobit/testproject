@@ -101,7 +101,18 @@ $(function()
 	 * Activates time picker for start time to the fields with class
 	 * start-timepicker
 	 */
-	$('.start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false, template : 'modal' });
+	$('.start-timepicker').timepicker({ defaultTime : 'current', showMeridian : false, template : 'modal' })
+						.on('hide.timepicker',function(e){
+								
+							if($('#activityModal #allDay').is(':checked'))
+							{
+								$('#event-time-1').closest('.control-group').hide();
+								$('#event-date-2').closest('.row').hide();
+							}	
+							
+								e.stopImmediatePropagation();
+								return false;
+							});
 
 	/**
 	 * Activates time picker for end time to the fields with class
@@ -161,7 +172,7 @@ $(function()
 	/**
 	 * To avoid showing previous errors of the modal.
 	 */
-	$('#activityModal').on('show', function()
+	$('#activityModal').on('show', function(e)
 	{
 
 		// Removes alert message of error related date and time.
@@ -169,7 +180,7 @@ $(function()
 
 		// Removes error class of input fields
 		$('#' + this.id).find('.error').removeClass('error');
-
+		
 	});
 
 	/**
@@ -293,6 +304,8 @@ function save_event(formId, modalName, isUpdate, saveBtn)
 	console.log(json);
 	console.log(JSON.stringify(json));
 
+	if(json.allDay){ json.end=json.start; json.start_time="00:00"; json.end_time="23:45"; }// for all day, assume ending in last of that day.
+	
 	// For validation
 	if (!is_valid_range(json.start * 1000, json.end * 1000, (json.start_time).split(":"), (json.end_time).split(":"), modalName))
 	{

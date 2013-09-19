@@ -134,8 +134,20 @@ function showCalendar() {
             $("#update-event-date-1").val((event.start).format(dateFormat));
             $("#update-event-date-2").val((event.end).format(dateFormat));
             
-   	    	// Show edit modal for the event
-   	    	$("#updateActivityModal").modal('show');
+   	    	// hide end date & time for all day events
+            if(event.allDay)
+            {
+            	$("#update-event-date-2").closest('.row').hide();
+            	$('#update-event-time-1').closest('.control-group').hide();
+            }
+            else 
+            {
+            	$('#update-event-time-1').closest('.control-group').show();
+            	$("#update-event-date-2").closest('.row').show();
+            }
+   	    	
+         // Show edit modal for the event
+            $("#updateActivityModal").modal('show');
    	    	return false;
    	    }
    	    

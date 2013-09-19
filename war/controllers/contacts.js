@@ -52,8 +52,15 @@ var ContactsRouter = Backbone.Router
 
 				$(".active").removeClass("active");
 
-				var el = $(getTemplate('dashboard1', {}));
-				$("#content").html(el)
+				var time_int=parseInt($('meta[name="last-login-time"]').attr('content'));
+				var time_date=new Date(time_int*1000);
+				
+				var el = $(getTemplate('dashboard1', { time_sec: (time_date).toString().toLowerCase(), time_format: ""}));
+				$("#content").html(el);
+				
+				head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){	 
+					$("span#last-login-time").timeago();
+		        });
 				setup_dashboard(el);
 				// loadDynamicTimeline("my-timeline", el);
 			},
@@ -313,6 +320,8 @@ var ContactsRouter = Backbone.Router
 
 				}
 
+				add_recent_view(contact);
+				
 				// If contact is of type company , go to company details page
 				if (contact.get('type') == 'COMPANY')
 				{
