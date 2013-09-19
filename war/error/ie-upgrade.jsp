@@ -36,7 +36,7 @@
 			</div> 
 		</div>
 	</div>
-	<div class="container">
+	<div class="container" style="margin-left:20px;">
 		<div class="row">
 			<div class="error-container">
 				<h1>Oops!</h1> 
