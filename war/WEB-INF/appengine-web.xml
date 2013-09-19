@@ -37,7 +37,9 @@
 	  <!-- End of Sounds -->
 	  
 	  <!-- CSS -->
-	  <include path="/**.css"/>
+	  <include path="/**.css" expiration="10m"/>
+	  <exclude path="/css/agilecrm.css" />
+	  <exclude path="/css/all.css" />
 	  <!-- CSS -->
 	
 	  <!-- JS -->
