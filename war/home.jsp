@@ -58,6 +58,9 @@
 	boolean is_fluid = !width.isEmpty();
 %>
 
+
+<meta name="last-login-time" content="<%=domainUser.getInfo(DomainUser.LOGGED_IN_TIME) %>"/>
+
 <%
 	//String CSS_PATH = "/";
  	String CSS_PATH = "//da4o37ei6ybbh.cloudfront.net/";

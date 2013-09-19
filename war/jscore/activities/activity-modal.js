@@ -33,12 +33,52 @@ $(function() {
 	 * Removes appended contacts from related-to field of task form and
 	 * validation error messages if any.
 	 */
-	$('#activityModal').on('hidden', function() {
+	$('#activityModal').on('hidden', function(e) {
 
 		// Remove appended contacts from related-to
 		$("#taskForm").find("li").remove();
 
 		// Remove validation error messages
 		remove_validation_errors('activityModal');
+		
+		
+		if(e.target.id=='activityModal')
+		{
+			$('#activityForm #allDay').removeAttr('checked');
+			$('#activityForm #event-time-1').closest('.control-group').show();
+			$('#activityForm #event-date-2').closest('.row').show(); // only of modal, no inside modal
+		}
+		
+	});
+	
+	/**
+	 * Hide end-date & time for all day events.
+	 */
+	$('#activityForm #allDay').live('click',function(e){
+		
+		if($(this).is(':checked'))
+		{	
+			$('#activityForm #event-time-1').closest('.control-group').hide();
+			$('#activityForm #event-date-2').closest('.row').hide();
+		}
+		else 
+		{
+			$('#activityForm #event-time-1').closest('.control-group').show();
+			$('#activityForm #event-date-2').closest('.row').show();
+		}
+	});
+	
+	$('#updateActivityForm #allDay').live('click',function(e){
+		
+		if($(this).is(':checked'))
+		{
+			$('#updateActivityForm #update-event-time-1').closest('.control-group').hide();
+			$('#updateActivityForm #update-event-date-2').closest('.row').hide();
+		}
+		else 
+		{
+			$('#updateActivityForm #update-event-time-1').closest('.control-group').show();
+			$('#updateActivityForm #update-event-date-2').closest('.row').show();
+		}
 	});
 });
