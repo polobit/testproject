@@ -364,7 +364,7 @@
 		//$('#content').html('ready');
 		$("img.init-loading", $('#content')).attr("src", "/img/ajax-loader-cursor.gif"); 
 		
-		head.js('jscore/min/js-all-min.js', function() {
+		head.js('jscore/min/js-all-min.js', 'stats/min/agile-min.js', function() {
 
 		
 	}); 
