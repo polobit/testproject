@@ -3,25 +3,20 @@
  */
 function add_custom_fields_to_our_domain()
 {
-	console.log(Agile_Contact.properties);
 	// Gets domain property from contact
 	var domain_custom_field = getProperty(Agile_Contact.properties, 'Domain');
 
-	console.log(domain_custom_field);
-	console.log(domain_custom_field.value)
 	// If domain custom field doesn't exists or value of  and its value is not current domain
 	if (!domain_custom_field || domain_custom_field.value != CURRENT_DOMAIN_USER["Domain"])
 	{
 		// Add custom property to contact
-		_agile.add_property(create_contact_custom_field("Domain", CURRENT_DOMAIN_USER["domain"], "CUSTOM"));
+		_agile.add_property(create_contact_custom_field("Domain", CURRENT_DOMAIN_USER["Domain"], "CUSTOM"));
 	}
 
 	// Gets current time, and updates the last loggedin time.
 	var date_object = new Date();
 	var date = date_object.getUTCMonth() + "/" + date_object.getUTCDate() + "/" + date_object.getUTCFullYear();
 
-	console.log(date);
-	
 	// Gets logged in time property.
 	var loggedin_time_property = getProperty(Agile_Contact.properties, 'Last login');
 
@@ -48,6 +43,7 @@ function create_contact_custom_field(name, value, type, subtype)
 	json["type"] = type;
 	json["subtype"] = subtype;
 
+	console.log(value);
 	return json;
 
 }
@@ -103,6 +99,9 @@ function our_domain_sync()
 								Agile_Contact = data;
 							});
 						}
+					
+					// Shows noty
+					set_profile_noty();
 				});
 			} catch(err)
 			{
@@ -112,7 +111,5 @@ function our_domain_sync()
 
 function setup_our_domain_sync()
 {	
-	head.js('stats/min/agile-min.js', function() {
 		our_domain_sync(); 
-	});	
 }
