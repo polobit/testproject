@@ -5,10 +5,10 @@ var isAdmintemplate;
 $(function() {
 	this.adminView = new Base_Model_View({
 		url : "/core/api/users/current-user",
+		data : CURRENT_DOMAIN_USER,
 		template : "admin-settings"
 	});
-	this.adminView.model.fetch();
-	isAdmintemplate = this.adminView.render().el;
+	isAdmintemplate = this.adminView.render(true).el;
 });
 
 /**
@@ -18,19 +18,16 @@ $(function() {
 function getAdminSettings(callback){
 	App_Admin_Settings.adminViewTemp = new Base_Model_View({
 		url : "/core/api/users/current-user",
+		data : CURRENT_DOMAIN_USER,
 		template : "admin-settings"
 	});
 
-	App_Admin_Settings.adminViewTemp.model.fetch({
-		success : function() {
-				if (callback && typeof (callback) === "function") {
-					// execute the callback, passing parameters as
-					// necessary
-					$('#content').html(App_Admin_Settings.adminViewTemp.render().el);
-					callback();
-				}
-		}
-	});
+	if (callback && typeof (callback) === "function") {
+		// execute the callback, passing parameters as
+		// necessary
+		$('#content').html(App_Admin_Settings.adminViewTemp.render(true).el);
+		callback();
+	}
 }
 
 

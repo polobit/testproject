@@ -15,9 +15,6 @@ function setup_dashboard(el)
 	show_dashboard_tasks(el);
 	show_dashboard_deals(el);
 	show_dashboard_workflows(el);
-	
-	// Shows noty
-	set_profile_noty();
 }
 
 

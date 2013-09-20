@@ -90,6 +90,10 @@ function calculate_profile()
  */
 function set_profile_noty()
 {
+	console.log(Agile_Contact);
+	if(jQuery.isEmptyObject(Agile_Contact))
+		return;
+	
 	// Gets profile stats
 	var profile_stats = calculate_profile();
 
@@ -98,6 +102,7 @@ function set_profile_noty()
 
 	$.each(profile_stats, function(key, value)
 	{
+		console.log(profile_stats);
 		// If value is false, then noty is built with that respective message
 		if (value == false)
 		{

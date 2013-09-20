@@ -15,7 +15,7 @@ $(function()
 {
 
 	// wait for 2secs
-	setTimeout(downloadAndRegisterForNotifications, 2000);
+	setTimeout(downloadAndRegisterForNotifications, 10000);
 
 });
 
@@ -46,17 +46,12 @@ function downloadAndRegisterForNotifications()
  */
 function getDomainFromCurrentUser()
 {
-	var domain_user = Backbone.Model.extend({ url : 'core/api/users/current-user' });
-	var user = new domain_user();
-	user.fetch({ success : function(data)
-	{
-		var domain = data.get('domain');
+		var domain = CURRENT_DOMAIN_USER['domain'];
 		subscribeToPubNub(domain, function(message)
 		{
 
 			_setupNotification(message);
 		});
-	} });
 }
 
 /**
