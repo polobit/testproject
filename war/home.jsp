@@ -146,7 +146,7 @@
 									//Styling enable/disable navbar tabs(add display:none to diable)
 																																																							
 									NavSetting navSetting = NavSettingUtil.getNavSetting();
-									String style_calendar = "", style_cases = "", style_deals = "", style_campaign = "";
+									String style_calendar = "", style_cases = "", style_deals = "", style_campaign = "", style_reports = "";
 									//style for calendar,cases,deals,campaign resp.
 									
 									if (!navSetting.calendar)
@@ -157,6 +157,8 @@
 										style_deals = " display:none;";
 									if (!navSetting.campaign)
 										style_campaign = " display:none;";
+									if (!navSetting.reports)
+										style_reports = " display:none;";
 							%>
 							<li id="contactsmenu"><a href="#contacts"><i
 									class="icon-user icon-white"></i> Contacts</a></li>		
@@ -168,7 +170,7 @@
 									class="icon-money icon-white"></i> Deals</a></li>
 							<li id="workflowsmenu" style="<%=style_campaign %>" ><a href="#workflows"><i
 									class="icon-sitemap icon-white"></i> Campaigns</a></li>
-							<li id="reportsmenu"><a href="#reports"><i
+							<li id="reportsmenu" style="<%=style_reports %>" ><a href="#reports"><i
 									class="icon-bar-chart icon-white"></i> Reports</a></li>
 
 							<li>

@@ -67,7 +67,7 @@ function agile_build_ui(callback) {
 function agile_build_ui_for_emails(Email_Ids) {
 
 	// Clear main HTML container.
-	$('#agile_content').html('')
+	$('#agile_content').html('');
 	// Clear contact data.
 	Contacts_Json = {};
 	
@@ -75,19 +75,17 @@ function agile_build_ui_for_emails(Email_Ids) {
 	$.each(Email_Ids[0], function(index, email) {
 
 		var val = {};
-
-		// Add sender's first name, last name and email to object.
-		if (email == Email_Ids[2] && Email_Ids[1] != "") {
-			val.fname = Email_Ids[1].split(" ")[0];
-			val.lname = Email_Ids[1].split(" ")[1];
-		} 
-		
+		var Full_Name = (Email_Ids[1][index]).trim();
+		val.fname = (Full_Name).split(" ")[0];
+		val.lname = (Full_Name).split(" ")[1] == undefined ? "" : (Full_Name).split(" ")[1];
 		val.email = email;
+		
 		// Store user data for future use.
 		Contacts_Json[val.email] = val;
 		agile_fill_individual_template_ui(val, $('#agile_content'));
-
 	});
+	console.log(Contacts_Json);
+	
 }
 
 /**

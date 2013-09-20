@@ -28,9 +28,10 @@ function agile_user_setup(popup_url) {
 	// Create UI to let user enter its desired agile domain name.
 	$('#agile_content').append('<div class="well well-small agile-one-time-setup" style="margin:0 0 5px 5px;">'
 			+'<p>Associate your account - one time setup</p>'
-			+'<input type="text" id="user_domain" placeholder="Enter your Domain." style="margin:0 10px 0 0;" />'
-			+'<input type="button" value="Associate" onclick=agile_gadget_open_popup("'+Url_Root+'") class="btn btn-primary" style="padding:2px 6px 2px;">'
-			+'<span id="notify_user" style="display:none; margin-left:20px; color:indianred;"><i>Please enter your domain.</i></span>'
+			+'<input id="user_domain" class="input-medium" placeholder="my domain" style="vertical-align:baseline;" type="text" />'
+			+'<span style="font-weight:bold;">.agilecrm.com</span>'
+			+'<P style="margin:0px;"><input type="button" value="Associate" onclick=agile_gadget_open_popup("'+Url_Root+'") class="btn btn-primary" style="padding:2px 6px 2px;">'
+			+'<span id="notify_user" style="display:none; margin-left:20px; color:indianred;"><i>Please enter your domain.</i></span></P>'
 			+'</div>');
 	
 	// Adjust gadget height.
@@ -48,7 +49,7 @@ function agile_gadget_open_popup(Agile_Url) {
 
 	var User_Domain = $('#user_domain');
 	// Text box validation for empty box.
-	if (User_Domain.val() == 'Enter your Domain' || User_Domain.val() == '') {
+	if (User_Domain.val() == 'my domain' || User_Domain.val() == '') {
 		$('#notify_user').fadeIn().delay(3000).hide(1);
 		User_Domain.focus();
 	}

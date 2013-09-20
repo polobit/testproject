@@ -357,6 +357,33 @@ $(function()
 		return options.fn(fields);
 
 	});
+	
+	
+	/**
+	 * Returns custom fields without few fields like LINKEDIN or TWITTER or title fields
+	 */
+	Handlebars.registerHelper('getContactCustomPropertiesExclusively', function(items, options)
+	{
+		var exclude_by_subtype = ["LINKEDIN", "TWITTER"];
+		var exclude_by_name = ["title"];
+		
+		var fields = getContactCustomProperties(items);
+		var exclusive_fields = [];
+		
+		for(var i =0 ; i < fields.length ; i++)
+		{
+			if(jQuery.inArray(fields[i].name, exclude_by_name) != -1 || (fields[i].subtype && jQuery.inArray(fields[i].subtype, exclude_by_subtype) != -1))
+			{
+				continue;
+			}
+			exclusive_fields.push(fields[i]);
+		}
+
+		if (exclusive_fields.length == 0)
+			return options.inverse(exclusive_fields);
+
+		return options.fn(exclusive_fields);
+	});
 
 	Handlebars.registerHelper('urlEncode', function(url, key, data)
 	{
@@ -1288,22 +1315,22 @@ $(function()
 	 * Converts string to JSON
 	 */
 	Handlebars.registerHelper('stringToJSON', function(object, key, options)
-	{
-		if (key)
-		{
-			try
 			{
-				object[key] = JSON.parse(object[key]);
-				return options.fn(object[key]);
-			}
-			catch (err)
-			{
-				return options.fn(object[key]);
-			}
-		}
+				if (key)
+				{
+					try
+					{
+						object[key] = JSON.parse(object[key]);
+						return options.fn(object[key]);
+					}
+					catch (err)
+					{
+						return options.fn(object[key]);
+					}
+				}
 
-		return options.fn(JSON.parse(object));
-	});
+				return options.fn(JSON.parse(object));
+			});
 
 	/**
 	 * Convert string to lower case
@@ -1398,7 +1425,10 @@ $(function()
 	 */
 	Handlebars.registerHelper('if_greater', function(value, target, options)
 	{
-		if (target > value)
+		console.log(value);
+		console.log(parseInt(target));
+		console.log(parseInt(target) > value);
+		if (parseInt(target) > value)
 			return options.inverse(this);
 		else
 			return options.fn(this);
@@ -1925,10 +1955,10 @@ $(function()
 		}
 
 		// COMPANY type
-		for ( var i = 0; i < contact_properties.length; i++)
+		for ( var i = 0; i < properties.length; i++)
 		{
-			if (contact_properties[i].name === "name")
-				return contact_properties[i].value;
+			if (properties[i].name === "name")
+				return properties[i].value;
 		}
 		return "Company";
 	});
@@ -1981,6 +2011,59 @@ $(function()
 				return buffer;
 
 			});
+	
+	/**
+	 * Identifies EMAIL_SENT campaign-log string and splits the log string based on 
+	 * '_aGiLeCrM' delimiter into To, From, Subject and Body.
+	 * 
+	 **/
+	Handlebars.registerHelper("if_email_sent",function(object,key,options){
+		
+		// delimiter for campaign send-email log
+		var _AGILE_CRM_DELIMITER = "_aGiLeCrM";
+		
+		// if log_type is EMAIL_SENT
+		if(object[key] === "EMAIL_SENT")
+		{
+			// Splits logs message
+			var email_fields = object["message"].split(_AGILE_CRM_DELIMITER, 4);
+			
+			// Json to apply for handlebar template
+			var json = {};
+			
+			if(email_fields === undefined)
+				return options.inverse(object);
+			
+			// Iterates inorder to insert each field into json
+			for(var i=0;i<email_fields.length;i++)
+			{
+				// Splits based on colon. E.g "To: naresh@agilecrm.com"
+				var arrcolon = email_fields[i].split(":");
+				
+				// Inserts LHS of colon as key. E.g., To
+				var key = arrcolon[0];
+				key=key.trim(); // if key starts with space, it can't accessible
+				
+				// Inserts RHS of colon as value. E.g., naresh@agilecrm.com
+				var value = arrcolon.slice(1).join(":"); // join the remaining string based on colon, 
+				                                        //only first occurence of colon is needed
+				value = value.trim();
+				
+				json[key] = value;
+			}
+			
+			// inserts time into json
+			json.time = object["time"];
+
+			// apply customized json to template.
+			return options.fn(json);
+		}	
+		
+		// if not EMAIL_SENT log, goto else in the template
+		return options.inverse(object);
+		
+	});
+	
 });
 /**
  * Loading spinner shown while loading
@@ -2543,78 +2626,53 @@ var MD5 = function (string) {
 function agile_get_emails(bool) {
 
 	var emails = [];
-	var Sender_Name, Sender_Email = "";
-
+	var names = [];
+	var matches = [];
+	
 	// Generate mails from gmail.
 	if (bool) {
 		// Fetch the array of content matches.
 		matches = google.contentmatch.getContentMatches();
-
-		// Iterate through the array and display output for each match.
-		for ( var match in matches) {
-			for ( var key in matches[match]) {
+	}
+	
+	// Take email and sender's info for local host.
+	else {
+		matches = [{email_from: "dheeraj@invox.com"},{name_from: " Dheeraj Patidar "},{email_to: "dj.mtech11@gmail.com"}, 
+		       		{name_to: "Jack "},{email_cc: "chandan@agilecrm.com;gashok@gashok.mygbiz.com;yaswanth@agilecrm.com"},
+					{name_cc: "Chandan Kumar;;Yaswanth Praveen"}, 
+		       		{email: "Subject1@gmail.com"},{email: "subject2@gmail.com"},{email: "tutu@gmaill.com"},
+		       		{email: "meme@bhiya.com"},{email: "pohe@jirawan.com"}]
+	}
+	
+	// Iterate through the array and display output for each match.
+	for ( var match in matches) {
+		for ( var key in matches[match]) {
+			
+			var Common_Key = (key).split("_");
+			var Stringed_Mail_Data = (matches[match][key]).split(";");
+			for(var loop in Stringed_Mail_Data){
 				// Check emails
-				if (key == "email" || key == "email_sender") {
-					// Ignore sender's email, don't add to mail array.
-					if (key != "email_sender")
-						emails.push(matches[match][key]);
-					else
-						// Store email sender's mail.
-						Sender_Email = matches[match][key];
+				if (Common_Key[0] == "email") {
+					emails.push(Stringed_Mail_Data[loop]);
 				}
-				// Check email sender's name.
-				if (key == "email_name")
-					// Store email sender's name.
-					matches[match][key] == (undefined || "" || null) ? Sender_Name = "" : Sender_Name = matches[match][key]; 
+				// Check names
+				else {
+					names.push(Stringed_Mail_Data[loop]);
+				}
 			}
 		}
 	}
-	// Take email and sender's info for local host.
-	else {
-//		emails = [ "manohar@invox.com", "maruthi.motors@invox.com",
-//				"dheeraj@invox.com", "praveen@invox.com", "theboss@apple.com",
-//				"maruthi.motors@invox.com", "adi.surendra.mohan.raju.morampudi@gmail.com"];
-		emails = [ "dheeraj@invox.com", "praveen@invox.com", "theboss@apple.com"];
-		Sender_Email = "praveen@invox.com";
-		Sender_Name = "Praveen Kumar";
+	
+	var emailLength = emails.length;
+	var nameLength = names.length;
+	
+	for(var loop = nameLength; loop <= emailLength; loop++){
+		names[loop] = "";
 	}
-
+	
+	console.log(emails);
+	console.log(names);
+	
 	// Return formatted mail and info array.
-	return agile_email_formatter(emails, Sender_Email, Sender_Name);
-}
-
-/**
- * Check for duplicate emails and put email sender's email-id at first position
- * in array.
- * 
- * @method agile_email_formatter
- * @param {Array}
- *            emails Unsorted mail list.
- * @param {String}
- *            sender_email Email sender's mail-id.
- * @param {String}
- *            sender_name Email sender's name.
- */
-function agile_email_formatter(emails, Sender_Email, Sender_Name) {
-
-	var index = {};
-	index[Sender_Email] = true;
-	/*
-	 * Traverse array from end to start, so removing the current item from the
-	 * array, doesn't mess up the traversal.
-	 */
-	for ( var i = emails.length - 1; i >= 0; i--) {
-		if (emails[i] in index) {
-			// remove this item
-			emails.splice(i, 1);
-		} else {
-			// add this value index
-			index[emails[i]] = true;
-		}
-	}
-
-	// Set sender of email as first mail in the mail list.
-	emails.splice(0, 0, Sender_Email);
-	// Return formatted mail and info array.
-	return [ emails, Sender_Name, Sender_Email ];
+	return [emails, names];
 }

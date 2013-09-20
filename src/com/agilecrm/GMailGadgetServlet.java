@@ -114,7 +114,7 @@ public class GMailGadgetServlet extends HttpServlet
 	System.out.println("domain user : " + domainUser);
 	if (domainUser == null)
 	{
-	    resp.getWriter().println("We are unable to find any user in "+NamespaceManager.get()+" domain.");
+	    resp.getWriter().println("Sorry, you do not have access to "+NamespaceManager.get()+".agilecrm.com. Please contact your Agile CRM administrator to get a User account.");
 	    return false;
 	}
 	resp.getWriter().println("Saving user " + user.getEmail());
@@ -125,7 +125,7 @@ public class GMailGadgetServlet extends HttpServlet
 
 	resp.getWriter()
 		.println(
-			"You have successfully associated your gadget with your AgileCRM account. You can now close the pop-up window.");
+			"You have successfully associated your gadget with your AgileCRM account. Please close this popup and signout from Gmail and signin again to start using it.");
 
 	return false;
     }
@@ -163,7 +163,7 @@ public class GMailGadgetServlet extends HttpServlet
 	    resp.getWriter()
 		    .println(
 			    "Domain <b>"+ domain +"</b> does not exist. You can register a new one &nbsp;<a href=\"https://"
-				    + domain + ".agilecrm.com/register\">here.</a>");
+				    + "my.agilecrm.com/choose-domain\">here</a>.");
 
 	    return;
 	}

@@ -17,78 +17,53 @@
 function agile_get_emails(bool) {
 
 	var emails = [];
-	var Sender_Name, Sender_Email = "";
-
+	var names = [];
+	var matches = [];
+	
 	// Generate mails from gmail.
 	if (bool) {
 		// Fetch the array of content matches.
 		matches = google.contentmatch.getContentMatches();
-
-		// Iterate through the array and display output for each match.
-		for ( var match in matches) {
-			for ( var key in matches[match]) {
+	}
+	
+	// Take email and sender's info for local host.
+	else {
+		matches = [{email_from: "dheeraj@invox.com"},{name_from: " Dheeraj Patidar "},{email_to: "dj.mtech11@gmail.com"}, 
+		       		{name_to: "Jack "},{email_cc: "chandan@agilecrm.com;gashok@gashok.mygbiz.com;yaswanth@agilecrm.com"},
+					{name_cc: "Chandan Kumar;;Yaswanth Praveen"}, 
+		       		{email: "Subject1@gmail.com"},{email: "subject2@gmail.com"},{email: "tutu@gmaill.com"},
+		       		{email: "meme@bhiya.com"},{email: "pohe@jirawan.com"}]
+	}
+	
+	// Iterate through the array and display output for each match.
+	for ( var match in matches) {
+		for ( var key in matches[match]) {
+			
+			var Common_Key = (key).split("_");
+			var Stringed_Mail_Data = (matches[match][key]).split(";");
+			for(var loop in Stringed_Mail_Data){
 				// Check emails
-				if (key == "email" || key == "email_sender") {
-					// Ignore sender's email, don't add to mail array.
-					if (key != "email_sender")
-						emails.push(matches[match][key]);
-					else
-						// Store email sender's mail.
-						Sender_Email = matches[match][key];
+				if (Common_Key[0] == "email") {
+					emails.push(Stringed_Mail_Data[loop]);
 				}
-				// Check email sender's name.
-				if (key == "email_name")
-					// Store email sender's name.
-					matches[match][key] == (undefined || "" || null) ? Sender_Name = "" : Sender_Name = matches[match][key]; 
+				// Check names
+				else {
+					names.push(Stringed_Mail_Data[loop]);
+				}
 			}
 		}
 	}
-	// Take email and sender's info for local host.
-	else {
-//		emails = [ "manohar@invox.com", "maruthi.motors@invox.com",
-//				"dheeraj@invox.com", "praveen@invox.com", "theboss@apple.com",
-//				"maruthi.motors@invox.com", "adi.surendra.mohan.raju.morampudi@gmail.com"];
-		emails = [ "dheeraj@invox.com", "praveen@invox.com", "theboss@apple.com"];
-		Sender_Email = "praveen@invox.com";
-		Sender_Name = "Praveen Kumar";
+	
+	var emailLength = emails.length;
+	var nameLength = names.length;
+	
+	for(var loop = nameLength; loop <= emailLength; loop++){
+		names[loop] = "";
 	}
-
+	
+	console.log(emails);
+	console.log(names);
+	
 	// Return formatted mail and info array.
-	return agile_email_formatter(emails, Sender_Email, Sender_Name);
-}
-
-/**
- * Check for duplicate emails and put email sender's email-id at first position
- * in array.
- * 
- * @method agile_email_formatter
- * @param {Array}
- *            emails Unsorted mail list.
- * @param {String}
- *            sender_email Email sender's mail-id.
- * @param {String}
- *            sender_name Email sender's name.
- */
-function agile_email_formatter(emails, Sender_Email, Sender_Name) {
-
-	var index = {};
-	index[Sender_Email] = true;
-	/*
-	 * Traverse array from end to start, so removing the current item from the
-	 * array, doesn't mess up the traversal.
-	 */
-	for ( var i = emails.length - 1; i >= 0; i--) {
-		if (emails[i] in index) {
-			// remove this item
-			emails.splice(i, 1);
-		} else {
-			// add this value index
-			index[emails[i]] = true;
-		}
-	}
-
-	// Set sender of email as first mail in the mail list.
-	emails.splice(0, 0, Sender_Email);
-	// Return formatted mail and info array.
-	return [ emails, Sender_Name, Sender_Email ];
+	return [emails, names];
 }
