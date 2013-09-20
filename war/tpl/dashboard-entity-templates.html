@@ -284,7 +284,7 @@
 </td>
 <td>{{campaign_name}}</td>
 <td>{{titleFromEnums log_type}}</td>
-<td style="width: 30%; word-break: break-all;">{{{message}}}</td>
+<td style="width: 30%; word-break: break-all;">{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}</td>
 <td><small class="edit-hover"> 
 		<time class="log-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
 	</small></td>
