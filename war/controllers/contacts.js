@@ -320,7 +320,7 @@ var ContactsRouter = Backbone.Router
 
 				}
 
-				add_recent_view(contact);
+				//add_recent_view(contact);
 				
 				// If contact is of type company , go to company details page
 				if (contact.get('type') == 'COMPANY')
