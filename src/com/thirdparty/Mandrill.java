@@ -169,10 +169,10 @@ public class Mandrill
 
 	    // Mandrill throws validation error if mail json consists of
 	    // non-unicode characters
-	    messageJSON.put(MANDRILL_SUBJECT, EmailUtil.removeNonASCIICharacters(subject));
+	    messageJSON.put(MANDRILL_SUBJECT, subject);
 
-	    messageJSON.put(MANDRILL_HTML, EmailUtil.removeNonASCIICharacters(html));
-	    messageJSON.put(MANDRILL_TEXT, EmailUtil.removeNonASCIICharacters(text));
+	    messageJSON.put(MANDRILL_HTML, html);
+	    messageJSON.put(MANDRILL_TEXT, text);
 	}
 	catch (Exception e)
 	{
