@@ -14,6 +14,7 @@ import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.util.SearchUtil;
+import com.agilecrm.user.DomainUser;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Field;
 import com.google.appengine.api.search.Index;
@@ -125,8 +126,11 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 	doc.addField(Field.newBuilder().setName("search_tokens")
 		.setText(SearchUtil.getSearchTokens(contact.properties)));
 
+	DomainUser user = contact.getOwner();
+
 	// Add owner to document
-	doc.addField(Field.newBuilder().setName("owner_id").setText(String.valueOf(contact.getOwner().id)));
+	if (user != null)
+	    doc.addField(Field.newBuilder().setName("owner_id").setText(String.valueOf(user.id)));
 
 	// Adds document to Index
 	addToIndex(doc.setId(contact.id.toString()).build());

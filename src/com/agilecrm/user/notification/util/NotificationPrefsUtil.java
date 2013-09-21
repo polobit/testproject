@@ -75,8 +75,8 @@ public class NotificationPrefsUtil
      */
     private static NotificationPrefs getDefaultNotifications(AgileUser agileUser)
     {
-	NotificationPrefs notifications = new NotificationPrefs(agileUser.id, true, "ANY_CONTACT", "ANY_CONTACT", "ANY_CONTACT", false, true, false, false,
-		false, false, "alert_1");
+	NotificationPrefs notifications = new NotificationPrefs(agileUser.id, true, "ANY_CONTACT", "ANY_CONTACT",
+		"ANY_CONTACT", false, true, false, false, false, false, "alert_1");
 	notifications.save();
 	return notifications;
     }
@@ -238,7 +238,10 @@ public class NotificationPrefsUtil
 	    // PERSON or COMPANY
 	    json.put("type", contactJSON.getString("type"));
 	    json.put("properties", getContactProperties(contactJSON));
-	    json.put("owner_name", contactJSON.getJSONObject("owner").getString("name"));
+
+	    if (contactJSON.has("owner") && !contactJSON.isNull("owner"))
+		json.put("owner_name", contactJSON.getJSONObject("owner").getString("name"));
+
 	    return json;
 	}
 	catch (JSONException e)
@@ -270,7 +273,8 @@ public class NotificationPrefsUtil
 		// Contact properties of type PERSON
 		if (contactJSON.getString("type").equals("PERSON"))
 		{
-		    if (property.getString("name").equals("first_name") || property.getString("name").equals("last_name")
+		    if (property.getString("name").equals("first_name")
+			    || property.getString("name").equals("last_name")
 			    || property.getString("name").equals("email") || property.getString("name").equals("image"))
 			propertyArray.put(property);
 		}

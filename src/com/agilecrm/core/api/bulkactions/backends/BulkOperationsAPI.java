@@ -56,7 +56,7 @@ public class BulkOperationsAPI
 	{
 	    contacts = BulkActionUtil.getFilterContacts(filter, current_user_id);
 
-	    ContactUtil.deleteContactsbyList(contacts);
+	    ContactUtil.deleteContactsbyListSupressNotification(contacts);
 	    count = contacts.size();
 	}
 
@@ -64,7 +64,7 @@ public class BulkOperationsAPI
 	{
 	    contacts = ContactUtil.getContactsBulk(new JSONArray(model_ids));
 
-	    ContactUtil.deleteContactsbyList(contacts);
+	    ContactUtil.deleteContactsbyListSupressNotification(contacts);
 	    count = contacts.size();
 	}
 
