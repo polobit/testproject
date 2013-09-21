@@ -429,6 +429,12 @@ public class ContactUtil
 	    contact.delete();
     }
 
+    public static void deleteContactsbyListSupressNotification(List<Contact> contacts)
+    {
+	for (Contact contact : contacts)
+	    contact.delete(false);
+    }
+
     /**
      * Returns Key of a company by its name.
      * 
@@ -441,6 +447,26 @@ public class ContactUtil
 	return dao.ofy().query(Contact.class).filter("type", "COMPANY").filter("properties.name", "name")
 		.filter("properties.value", companyName).getKey();
 
+    }
+
+    /**
+     * Checks if company with given name exists.
+     * 
+     * @param companyName
+     * @return
+     */
+    public static boolean companyExists(String companyName)
+    {
+
+	Map<String, Object> searchFields = new HashMap<String, Object>();
+	searchFields.put("properties.name", Contact.NAME);
+	searchFields.put("properties.value", companyName);
+	System.out.println("contact count" + dao.getCountByProperty(searchFields));
+
+	if (dao.getCountByProperty(searchFields) != 0)
+	    return true;
+
+	return false;
     }
 
     /**

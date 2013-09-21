@@ -310,7 +310,7 @@ public class Contact extends Cursor
      * Saves (new) or updates (existing) a contact and executes trigger,
      * notification and also adds to search document
      */
-    public void save()
+    public void save(boolean... args)
     {
 	// Stores current contact id in to a temporary variable, to check
 	// whether contact is newly created or being edited.
@@ -320,11 +320,32 @@ public class Contact extends Cursor
 
 	if (id != null)
 	{
+
 	    oldContact = ContactUtil.getContact(id);
+
+	    if (Type.COMPANY == type
+		    && !getContactFieldValue(NAME).equalsIgnoreCase(oldContact.getContactFieldValue(NAME))
+		    && ContactUtil.companyExists(getContactFieldValue(NAME)))
+	    {
+		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+			.entity("Sorry, a company with name \'" + getContactFieldValue(NAME) + "\' already exists ")
+			.build());
+	    }
 
 	    // Sets tags into tags, so they can be compared in
 	    // notifications/triggers with new tags
 	    oldContact.tags = oldContact.getContactTags();
+	}
+	else
+	{
+	    System.out.println("company name : " + getContactFieldValue(NAME));
+	    System.out.println("company name : " + ContactUtil.companyExists(getContactFieldValue(NAME)));
+	    if (Type.COMPANY == type && ContactUtil.companyExists(getContactFieldValue(NAME)))
+	    {
+		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+			.entity("Sorry, a company with name \'" + getContactFieldValue(NAME) + "\' already exists ")
+			.build());
+	    }
 	}
 
 	// Check for already existing email if any,
@@ -354,8 +375,17 @@ public class Contact extends Cursor
 	// Execute trigger for contacts
 	ContactTriggerUtil.executeTriggerToContact(oldContact, this);
 
-	// Execute notification for contacts
-	ContactNotificationPrefsUtil.executeNotificationToContact(oldContact, this);
+	// Boolean value to check whether to avoid notification on each contact.
+	boolean notification_condition = true;
+
+	// Reads arguments from method. If it is not null and then reading first
+	// parameter will judge whether to send notification or not
+	if (args != null && (args.length > 0))
+	    notification_condition = args[0];
+
+	if (notification_condition)
+	    // Execute notification for contacts
+	    ContactNotificationPrefsUtil.executeNotificationToContact(oldContact, this);
 
 	if (oldContact != null && isDocumentUpdateRequired(oldContact))
 	    return;
@@ -631,10 +661,17 @@ public class Contact extends Cursor
      * Deletes a contact from database and search document by executing a
      * notification and deleting its related notes and tags.
      */
-    public void delete()
+    public void delete(boolean... args)
     {
-	// Execute notification when contact is deleted
-	ContactNotificationPrefsUtil.executeNotificationForDeleteContact(this);
+	boolean execute_notification = true;
+
+	if (args != null && args.length > 0)
+	    execute_notification = args[0];
+
+	// Execute notification when contact is deleted. Condition is to check
+	// whether to send notification or not
+	if (execute_notification)
+	    ContactNotificationPrefsUtil.executeNotificationForDeleteContact(this);
 
 	dao.delete(this);
 

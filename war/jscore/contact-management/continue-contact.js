@@ -354,7 +354,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         		var dupEmail=response.responseText.split('|')[1];
         		if(!dupEmail)dupEmail="";
         		// get the already existing email from response text.
-        		show_error(modal_id,form_id,'duplicate-email','Please change email. A contact already exists with the email '+dupEmail);
+        		show_error(modal_id,form_id,'duplicate-email', response.responseText);
         	}
         	else
         		show_error(modal_id,form_id,'duplicate-email','Server Error - '+response.status+' :<br/>'+response.responseText);
