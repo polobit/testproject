@@ -50,8 +50,8 @@ function agile_init_gadget() {
 	// Production version, go for login.
 	else {
 		// Set library path.
-//		Lib_Path = "https://googleapps.agilecrm.com/";
-		Lib_Path = "https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/";
+		Lib_Path = "https://googleapps.agilecrm.com/";
+//		Lib_Path = "https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/";
 
 		// Login
 		agile_login();

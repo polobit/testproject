@@ -35,8 +35,8 @@
 	<Content type="html" view="card">
     <![CDATA[
       
-    <link media="screen" rel="stylesheet" type="text/css" href="https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/css/bootstrap-red.min.css" />
-    <link rel="stylesheet" type="text/css" href="https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/css/lib/datepicker-min.css" />
+    <link media="screen" rel="stylesheet" type="text/css" href="https://googleapps.agilecrm.com/css/bootstrap-red.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://googleapps.agilecrm.com/css/lib/datepicker-min.css" />
     <style>
 		.error{color:red;}
 		.field_req {color: red;}
@@ -64,9 +64,9 @@
 		</div>
     </div>
    	
-	<script src='https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/lib/headjs-min.js'></script>
-	<script src='https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/lib/jquery.min.js'></script>
-	<script src='https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/misc/gmail/gadget-js-all/min/agile-gadget-main.min.js'></script>
+	<script src='https://googleapps.agilecrm.com/lib/headjs-min.js'></script>
+	<script src='https://googleapps.agilecrm.com/lib/jquery.min.js'></script>
+	<script src='https://googleapps.agilecrm.com/misc/gmail/gadget-js-all/min/agile-gadget-main.min.js'></script>
    	
 	<script id="gadget-template" type="text/html">
 		<div class="well well-small gadget-contact-details-tab" style='margin: 0 0 5px 0px;'>
