@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -15,6 +16,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -22,6 +24,7 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.TaskUtil;
@@ -35,6 +38,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.util.HTTPUtil;
 
 /**
  * <code>ContactsAPI</code> includes REST calls to interact with {@link Contact}
@@ -82,7 +86,8 @@ public class ContactsAPI
     @Path("/related/{id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Contact> getContactsOfCompany(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count, @PathParam("id") String id)
+    public List<Contact> getContactsOfCompany(@QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count, @PathParam("id") String id)
     {
 	if (count != null)
 	{
@@ -158,7 +163,6 @@ public class ContactsAPI
 	// Throw non-200 if it exists
 	if (isDuplicate)
 	{
-
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 		    .entity("Sorry, duplicate contact found with the same email address.").build());
 	}
@@ -327,8 +331,8 @@ public class ContactsAPI
     @PUT
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Contact changeOwnerToContacts(Contact contact, @PathParam("new_owner") String new_owner, @PathParam("contact_id") Long contact_id)
-	    throws JSONException
+    public Contact changeOwnerToContacts(Contact contact, @PathParam("new_owner") String new_owner,
+	    @PathParam("contact_id") Long contact_id) throws JSONException
     {
 	List<Contact> contacts = new ArrayList<Contact>();
 	contacts.add(contact);
@@ -396,17 +400,28 @@ public class ContactsAPI
     @Path("/email/tags/add")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void addTagsToContactsBasedOnEmail(@FormParam("email") String email, @FormParam("tags") String tagsString) throws JSONException
+    public void addTagsToContactsBasedOnEmail(@FormParam("email") String email, @FormParam("tags") String tagsString,
+	    @Context HttpServletResponse response) throws JSONException
     {
 
 	System.out.println("email to search on" + email);
-	Contact contact = ContactUtil.searchContactByEmail(email);
-
-	if (contact == null)
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("No contact found with provided email address").build());
+	JSONObject object = new JSONObject();
 
 	if (StringUtils.isEmpty(tagsString))
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("No tags to add").build());
+	{
+
+	    object.put("error", "No tags to add");
+	    HTTPUtil.writeResonse(response, object.toString());
+	    return;
+	}
+
+	Contact contact = ContactUtil.searchContactByEmail(email);
+	if (contact == null)
+	{
+	    object.put("error", "No contact found with email address \'" + email + "\'");
+	    HTTPUtil.writeResonse(response, object.toString());
+	    return;
+	}
 
 	JSONArray tagsJSONArray = new JSONArray(tagsString);
 	Tag[] tagsArray = null;
@@ -439,16 +454,28 @@ public class ContactsAPI
     @Path("/email/tags/delete")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteTagsToContactsBasedOnEmail(@FormParam("email") String email, @FormParam("tags") String tagsString) throws JSONException
+    public void deleteTagsToContactsBasedOnEmail(@FormParam("email") String email,
+	    @FormParam("tags") String tagsString, @Context HttpServletResponse response) throws JSONException
     {
 
-	Contact contact = ContactUtil.searchContactByEmail(email);
-
-	if (contact == null)
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("No contact found with provided email address").build());
+	System.out.println("email to search on" + email);
+	JSONObject object = new JSONObject();
 
 	if (StringUtils.isEmpty(tagsString))
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("No tags to delete").build());
+	{
+
+	    object.put("error", "No tags to delete");
+	    HTTPUtil.writeResonse(response, object.toString());
+	    return;
+	}
+
+	Contact contact = ContactUtil.searchContactByEmail(email);
+	if (contact == null)
+	{
+	    object.put("error", "No contact found with email address \'" + email + "\'");
+	    HTTPUtil.writeResonse(response, object.toString());
+	    return;
+	}
 
 	JSONArray tagsJSONArray = new JSONArray(tagsString);
 	Tag[] tagsArray = null;
