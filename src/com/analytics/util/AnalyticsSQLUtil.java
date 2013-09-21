@@ -102,14 +102,17 @@ public class AnalyticsSQLUtil
     {
 	String domain = NamespaceManager.get();
 
+	String q1 = "SELECT p1.*, UNIX_TIMESTAMP(stats_time) AS created_time FROM page_views p1";
+
 	// Gets sessions based on Email from database
 	String sessions = "(SELECT sid FROM page_views WHERE email =" + GoogleSQLUtil.encodeSQLColumnValue(email) + " AND domain = "
-		+ GoogleSQLUtil.encodeSQLColumnValue(domain) + ")";
+		+ GoogleSQLUtil.encodeSQLColumnValue(domain) + ") p2";
+
+	String joinQuery = q1 + " INNER JOIN " + sessions + " ON p1.sid=p2.sid";
+
+	String pageViews = "SELECT DISTINCT * FROM (" + joinQuery + ") pg";
 
 	System.out.println("sids query is: " + sessions);
-
-	// Gets all Sessions based on above obtained sids and required email
-	String pageViews = "SELECT *, UNIX_TIMESTAMP(stats_time) AS created_time FROM page_views WHERE sid IN " + sessions + " ORDER BY stats_time";
 
 	System.out.println("Select query: " + pageViews);
 
